@@ -679,7 +679,7 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 	else
 		tip->addText(powers->powers[power_cells[slot_num].id].name);
 
-	if (powers->powers[power_cells[slot_num].id].passive) tip->addText("Passive");
+	if (powers->powers[power_cells[slot_num].id].passive) tip->addText(msg->get("Passive"));
 	tip->addColoredText(substituteVarsInString(powers->powers[power_cells[slot_num].id].description, pc), color_flavor);
 
 	// add mana cost

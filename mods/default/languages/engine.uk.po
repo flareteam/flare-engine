@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-09 23:19-0500\n"
+"POT-Creation-Date: 2018-01-17 12:21-0500\n"
 "PO-Revision-Date: 2013-03-16 11:05+0300\n"
 "Last-Translator: Igor Paliychuk <mansonigor@gmail.com>\n"
 "Language-Team: Ukrainian <LL@li.org>\n"
@@ -16,21 +16,21 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../../src/Avatar.cpp:354
+#: ../../../src/Avatar.cpp:355
 #, c-format
 msgid "Congratulations, you have reached level %d!"
 msgstr "Ура, ви перейшли на рівень %d!"
 
-#: ../../../src/Avatar.cpp:356
+#: ../../../src/Avatar.cpp:357
 msgid "You may increase one attribute through the Character Menu."
 msgstr "Ви можете покращити характеристику в Меню Персонажа."
 
-#: ../../../src/Avatar.cpp:578
+#: ../../../src/Avatar.cpp:579
 #, fuzzy
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
 msgstr "Вас перемогли. Кінець гри! Натисніть Enter щоб повернутись до меню."
 
-#: ../../../src/Avatar.cpp:581
+#: ../../../src/Avatar.cpp:582
 #, fuzzy
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
 msgstr "Вас перемогли. Натисніть Enter щоб продовжити."
@@ -93,7 +93,7 @@ msgstr "Здоров'я та Мана відновлені, шкідливі е�
 msgid "miss"
 msgstr "промах"
 
-#: ../../../src/Entity.cpp:468 ../../../src/PowerManager.cpp:1004
+#: ../../../src/Entity.cpp:468 ../../../src/PowerManager.cpp:1006
 #: ../../../src/StatBlock.cpp:785 ../../../src/StatBlock.cpp:791
 #, c-format
 msgid "+%d HP"
@@ -142,11 +142,11 @@ msgstr "Інтерфейс"
 msgid "Mods"
 msgstr "Моди"
 
-#: ../../../src/GameStateConfigBase.cpp:239 ../../../src/MenuExit.cpp:64
+#: ../../../src/GameStateConfigBase.cpp:239 ../../../src/MenuExit.cpp:65
 msgid "Music Volume"
 msgstr "Гучність музики"
 
-#: ../../../src/GameStateConfigBase.cpp:243 ../../../src/MenuExit.cpp:69
+#: ../../../src/GameStateConfigBase.cpp:243 ../../../src/MenuExit.cpp:70
 msgid "Sound Volume"
 msgstr "Гучність звуків"
 
@@ -317,51 +317,47 @@ msgstr "Кнопка %d"
 msgid "Loading..."
 msgstr "Завантаження..."
 
-#: ../../../src/GameStateLoad.cpp:78 ../../../src/GameStateLoad.cpp:91
+#: ../../../src/GameStateLoad.cpp:79 ../../../src/GameStateLoad.cpp:92
 msgid "Delete Save"
 msgstr "Видалити"
 
-#: ../../../src/GameStateLoad.cpp:78
+#: ../../../src/GameStateLoad.cpp:79
 msgid "Delete this save?"
 msgstr "Видалити цього персонажа?"
 
-#: ../../../src/GameStateLoad.cpp:80
+#: ../../../src/GameStateLoad.cpp:81
 msgid "Exit to Title"
 msgstr "Головне меню"
 
-#: ../../../src/GameStateLoad.cpp:83
+#: ../../../src/GameStateLoad.cpp:84
 msgid "New Game"
 msgstr "Нова гра"
 
-#: ../../../src/GameStateLoad.cpp:87 ../../../src/GameStateLoad.cpp:573
+#: ../../../src/GameStateLoad.cpp:88 ../../../src/GameStateLoad.cpp:577
 msgid "Choose a Slot"
 msgstr "Виберіть слот"
 
-#: ../../../src/GameStateLoad.cpp:546 ../../../src/GameStateLoad.cpp:567
+#: ../../../src/GameStateLoad.cpp:550 ../../../src/GameStateLoad.cpp:571
 msgid "Enable a story mod to continue"
 msgstr "Увімкніть мод повісті щоб продовжити"
 
-#: ../../../src/GameStateLoad.cpp:562
+#: ../../../src/GameStateLoad.cpp:566
 msgid "Load Game"
 msgstr "Завантажити"
 
-#: ../../../src/GameStateLoad.cpp:663
+#: ../../../src/GameStateLoad.cpp:667
 msgid "Entering game world..."
 msgstr "Входжу в ігровий світ..."
 
-#: ../../../src/GameStateLoad.cpp:666
+#: ../../../src/GameStateLoad.cpp:670
 msgid "Loading saved game..."
 msgstr "Завантажую збереження..."
 
-#: ../../../src/GameStateLoad.cpp:710 ../../../src/ItemManager.cpp:672
+#: ../../../src/GameStateLoad.cpp:714 ../../../src/ItemManager.cpp:672
 #: ../../../src/MenuPowers.cpp:678 ../../../src/MenuPowers.cpp:1037
 #, c-format
 msgid "Level %d"
 msgstr "Рівень %d"
-
-#: ../../../src/GameStateLoad.cpp:712
-msgid "Permadeath"
-msgstr "Не воскресає"
 
 #: ../../../src/GameStateNew.cpp:62
 msgid "Create"
@@ -464,7 +460,7 @@ msgid "Bar0"
 msgstr "Слот0"
 
 #: ../../../src/InputState.cpp:310 ../../../src/MenuActionBar.cpp:383
-#: ../../../src/MenuActionBar.cpp:385 ../../../src/MenuCharacter.cpp:244
+#: ../../../src/MenuActionBar.cpp:385 ../../../src/MenuCharacter.cpp:238
 msgid "Character"
 msgstr "Персонаж"
 
@@ -570,7 +566,7 @@ msgstr "%d%% Швидкості"
 msgid "%d%% Attack Speed"
 msgstr "%d%% Швидкості"
 
-#: ../../../src/ItemManager.cpp:607 ../../../src/MenuCharacter.cpp:339
+#: ../../../src/ItemManager.cpp:607 ../../../src/MenuCharacter.cpp:338
 #: ../../../src/MenuPowers.cpp:729
 #, c-format
 msgid "%s Resistance"
@@ -663,15 +659,15 @@ msgstr "очок залишилось"
 msgid "x%d stacks"
 msgstr ""
 
-#: ../../../src/MenuCharacter.cpp:44
+#: ../../../src/MenuCharacter.cpp:52
 msgid "Name"
 msgstr "Ім'я"
 
-#: ../../../src/MenuCharacter.cpp:45
+#: ../../../src/MenuCharacter.cpp:53
 msgid "Level"
 msgstr "Рівень"
 
-#: ../../../src/MenuCharacter.cpp:298
+#: ../../../src/MenuCharacter.cpp:297
 msgid "points remaining"
 msgstr "очок залишилось"
 
@@ -833,19 +829,19 @@ msgstr "Мертвий"
 msgid "%s level %d"
 msgstr "%s рівень %d"
 
-#: ../../../src/MenuExit.cpp:81
+#: ../../../src/MenuExit.cpp:82
 msgid "Save & Exit"
 msgstr "Зберегти і Вийти"
 
-#: ../../../src/MenuExit.cpp:83
+#: ../../../src/MenuExit.cpp:84
 msgid "Exit"
 msgstr "Вийти"
 
-#: ../../../src/MenuExit.cpp:85
+#: ../../../src/MenuExit.cpp:86
 msgid "Continue"
 msgstr ""
 
-#: ../../../src/MenuExit.cpp:109
+#: ../../../src/MenuExit.cpp:110 ../../../src/MenuExit.cpp:129
 msgid "Paused"
 msgstr ""
 
@@ -947,6 +943,10 @@ msgstr "Торгувати"
 
 #: ../../../src/MenuNumPicker.cpp:118
 msgid "Enter amount:"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:682
+msgid "Passive"
 msgstr ""
 
 #: ../../../src/MenuPowers.cpp:687
@@ -1125,20 +1125,20 @@ msgstr "Зворотня покупка"
 msgid "Vendor"
 msgstr "Торговець"
 
-#: ../../../src/PowerManager.cpp:988
+#: ../../../src/PowerManager.cpp:990
 #, c-format
 msgid "+%d Shield"
 msgstr "+%d Захисту"
 
-#: ../../../src/PowerManager.cpp:1244
+#: ../../../src/PowerManager.cpp:1246
 msgid "You are already transformed, untransform first."
 msgstr "Ви вже трансформовані, спершу відновіть початкову форму."
 
-#: ../../../src/PowerManager.cpp:1256
+#: ../../../src/PowerManager.cpp:1258
 msgid "Could not untransform at this position."
 msgstr "Не можу змінити форму в цьому місці."
 
-#: ../../../src/SaveLoad.cpp:207 ../../../src/SaveLoad.cpp:208
+#: ../../../src/SaveLoad.cpp:208 ../../../src/SaveLoad.cpp:209
 msgid "Game saved."
 msgstr "Гру збережено."
 
@@ -1172,7 +1172,7 @@ msgstr ""
 msgid "%s on enemy"
 msgstr ""
 
-#: ../../../src/Settings.cpp:743
+#: ../../../src/Settings.cpp:751
 msgid "Adventurer"
 msgstr "Шукач пригод"
 
@@ -1318,6 +1318,9 @@ msgstr "Перезарядка: %s секунд"
 #, fuzzy, c-format
 msgid "%s seconds"
 msgstr "Перезарядка: %s секунд"
+
+#~ msgid "Permadeath"
+#~ msgstr "Не воскресає"
 
 #~ msgid "Physical"
 #~ msgstr "Фізика"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-09 23:19-0500\n"
+"POT-Creation-Date: 2018-01-17 12:21-0500\n"
 "PO-Revision-Date: 2013-11-25 13:11+0300\n"
 "Last-Translator: Μιχάλης Παπαγεωργίου <werdanith@yahoo.gr>\n"
 "Language-Team: Μιχάλης Παπαγεωργίου\n"
@@ -18,21 +18,21 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Virtaal 0.7.1\n"
 
-#: ../../../src/Avatar.cpp:354
+#: ../../../src/Avatar.cpp:355
 #, c-format
 msgid "Congratulations, you have reached level %d!"
 msgstr "Συγχαρητήρια, έφτασες στο επίπεδο %d!"
 
-#: ../../../src/Avatar.cpp:356
+#: ../../../src/Avatar.cpp:357
 msgid "You may increase one attribute through the Character Menu."
 msgstr "Μπορείς να αυξήσεις μία ικανότητα μέσω του Μενού Χαρακτήρα."
 
-#: ../../../src/Avatar.cpp:578
+#: ../../../src/Avatar.cpp:579
 #, fuzzy
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
 msgstr "Ηττήθηκες. Τέλος παιχνιδιού! Πάτησε Enter για να επιστρέψεις στον Τίτλο."
 
-#: ../../../src/Avatar.cpp:581
+#: ../../../src/Avatar.cpp:582
 #, fuzzy
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
 msgstr "Ηττήθηκες. Πάτησε Enter για να συνεχίσεις."
@@ -95,7 +95,7 @@ msgstr "HP και MP αναζωογονήθηκαν, αρνητικές επιδ
 msgid "miss"
 msgstr "αστοχία"
 
-#: ../../../src/Entity.cpp:468 ../../../src/PowerManager.cpp:1004
+#: ../../../src/Entity.cpp:468 ../../../src/PowerManager.cpp:1006
 #: ../../../src/StatBlock.cpp:785 ../../../src/StatBlock.cpp:791
 #, c-format
 msgid "+%d HP"
@@ -144,11 +144,11 @@ msgstr "Περιβάλλον"
 msgid "Mods"
 msgstr "Πρόσθετα"
 
-#: ../../../src/GameStateConfigBase.cpp:239 ../../../src/MenuExit.cpp:64
+#: ../../../src/GameStateConfigBase.cpp:239 ../../../src/MenuExit.cpp:65
 msgid "Music Volume"
 msgstr "Ένταση Μουσικής"
 
-#: ../../../src/GameStateConfigBase.cpp:243 ../../../src/MenuExit.cpp:69
+#: ../../../src/GameStateConfigBase.cpp:243 ../../../src/MenuExit.cpp:70
 msgid "Sound Volume"
 msgstr "Ένταση Ήχου"
 
@@ -321,51 +321,47 @@ msgstr ""
 msgid "Loading..."
 msgstr "Φόρτωση..."
 
-#: ../../../src/GameStateLoad.cpp:78 ../../../src/GameStateLoad.cpp:91
+#: ../../../src/GameStateLoad.cpp:79 ../../../src/GameStateLoad.cpp:92
 msgid "Delete Save"
 msgstr "Διαγραφή"
 
-#: ../../../src/GameStateLoad.cpp:78
+#: ../../../src/GameStateLoad.cpp:79
 msgid "Delete this save?"
 msgstr "Διαγραφή παιχνιδιού;"
 
-#: ../../../src/GameStateLoad.cpp:80
+#: ../../../src/GameStateLoad.cpp:81
 msgid "Exit to Title"
 msgstr "Έξοδος προς Τίτλο"
 
-#: ../../../src/GameStateLoad.cpp:83
+#: ../../../src/GameStateLoad.cpp:84
 msgid "New Game"
 msgstr "Νέο Παιχνίδι"
 
-#: ../../../src/GameStateLoad.cpp:87 ../../../src/GameStateLoad.cpp:573
+#: ../../../src/GameStateLoad.cpp:88 ../../../src/GameStateLoad.cpp:577
 msgid "Choose a Slot"
 msgstr "Επέλεξε μία Θέση"
 
-#: ../../../src/GameStateLoad.cpp:546 ../../../src/GameStateLoad.cpp:567
+#: ../../../src/GameStateLoad.cpp:550 ../../../src/GameStateLoad.cpp:571
 msgid "Enable a story mod to continue"
 msgstr "Ενεργοποίησε ένα πρόσθετο με σενάριο για να συνεχίσεις"
 
-#: ../../../src/GameStateLoad.cpp:562
+#: ../../../src/GameStateLoad.cpp:566
 msgid "Load Game"
 msgstr "Φόρτωση Παιχνιδιού"
 
-#: ../../../src/GameStateLoad.cpp:663
+#: ../../../src/GameStateLoad.cpp:667
 msgid "Entering game world..."
 msgstr "Είσοδος στο παιχνίδι..."
 
-#: ../../../src/GameStateLoad.cpp:666
+#: ../../../src/GameStateLoad.cpp:670
 msgid "Loading saved game..."
 msgstr "Φόρτωση αποθηκευμένου παιχνιδιού..."
 
-#: ../../../src/GameStateLoad.cpp:710 ../../../src/ItemManager.cpp:672
+#: ../../../src/GameStateLoad.cpp:714 ../../../src/ItemManager.cpp:672
 #: ../../../src/MenuPowers.cpp:678 ../../../src/MenuPowers.cpp:1037
 #, c-format
 msgid "Level %d"
 msgstr "Επίπεδο %d"
-
-#: ../../../src/GameStateLoad.cpp:712
-msgid "Permadeath"
-msgstr "Μόνιμος θάνατος"
 
 #: ../../../src/GameStateNew.cpp:62
 msgid "Create"
@@ -468,7 +464,7 @@ msgid "Bar0"
 msgstr "Μπάρα 0"
 
 #: ../../../src/InputState.cpp:310 ../../../src/MenuActionBar.cpp:383
-#: ../../../src/MenuActionBar.cpp:385 ../../../src/MenuCharacter.cpp:244
+#: ../../../src/MenuActionBar.cpp:385 ../../../src/MenuCharacter.cpp:238
 msgid "Character"
 msgstr "Χαρακτήρας"
 
@@ -579,7 +575,7 @@ msgstr "%d% Ταχύτητα"
 msgid "%d%% Attack Speed"
 msgstr "%d% Ταχύτητα"
 
-#: ../../../src/ItemManager.cpp:607 ../../../src/MenuCharacter.cpp:339
+#: ../../../src/ItemManager.cpp:607 ../../../src/MenuCharacter.cpp:338
 #: ../../../src/MenuPowers.cpp:729
 #, c-format
 msgid "%s Resistance"
@@ -671,15 +667,15 @@ msgstr "εναπομείναντες πόντοι"
 msgid "x%d stacks"
 msgstr ""
 
-#: ../../../src/MenuCharacter.cpp:44
+#: ../../../src/MenuCharacter.cpp:52
 msgid "Name"
 msgstr "Όνομα"
 
-#: ../../../src/MenuCharacter.cpp:45
+#: ../../../src/MenuCharacter.cpp:53
 msgid "Level"
 msgstr "Επίπεδο"
 
-#: ../../../src/MenuCharacter.cpp:298
+#: ../../../src/MenuCharacter.cpp:297
 msgid "points remaining"
 msgstr "εναπομείναντες πόντοι"
 
@@ -838,19 +834,19 @@ msgstr "Νεκρός"
 msgid "%s level %d"
 msgstr "%s επιπέδου %d"
 
-#: ../../../src/MenuExit.cpp:81
+#: ../../../src/MenuExit.cpp:82
 msgid "Save & Exit"
 msgstr ""
 
-#: ../../../src/MenuExit.cpp:83
+#: ../../../src/MenuExit.cpp:84
 msgid "Exit"
 msgstr "Έξοδος"
 
-#: ../../../src/MenuExit.cpp:85
+#: ../../../src/MenuExit.cpp:86
 msgid "Continue"
 msgstr ""
 
-#: ../../../src/MenuExit.cpp:109
+#: ../../../src/MenuExit.cpp:110 ../../../src/MenuExit.cpp:129
 msgid "Paused"
 msgstr ""
 
@@ -950,6 +946,10 @@ msgstr "Εμπόριο"
 
 #: ../../../src/MenuNumPicker.cpp:118
 msgid "Enter amount:"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:682
+msgid "Passive"
 msgstr ""
 
 #: ../../../src/MenuPowers.cpp:687
@@ -1131,20 +1131,20 @@ msgstr "Επαναγορά"
 msgid "Vendor"
 msgstr "Πωλητής"
 
-#: ../../../src/PowerManager.cpp:988
+#: ../../../src/PowerManager.cpp:990
 #, c-format
 msgid "+%d Shield"
 msgstr "+%d Άμυνα"
 
-#: ../../../src/PowerManager.cpp:1244
+#: ../../../src/PowerManager.cpp:1246
 msgid "You are already transformed, untransform first."
 msgstr "Έχεις ήδη μεταμορφωθεί, απομεταμορφώσου πρώτα."
 
-#: ../../../src/PowerManager.cpp:1256
+#: ../../../src/PowerManager.cpp:1258
 msgid "Could not untransform at this position."
 msgstr ""
 
-#: ../../../src/SaveLoad.cpp:207 ../../../src/SaveLoad.cpp:208
+#: ../../../src/SaveLoad.cpp:208 ../../../src/SaveLoad.cpp:209
 msgid "Game saved."
 msgstr ""
 
@@ -1178,7 +1178,7 @@ msgstr ""
 msgid "%s on enemy"
 msgstr ""
 
-#: ../../../src/Settings.cpp:743
+#: ../../../src/Settings.cpp:751
 msgid "Adventurer"
 msgstr "Τυχοδιώκτης"
 
@@ -1341,6 +1341,9 @@ msgstr "Επανάκτηση: %d δευτερόλεπτα"
 #, fuzzy, c-format
 msgid "%s seconds"
 msgstr "Επανάκτηση: %d δευτερόλεπτα"
+
+#~ msgid "Permadeath"
+#~ msgstr "Μόνιμος θάνατος"
 
 #~ msgid "Physical"
 #~ msgstr "Πυγμή"

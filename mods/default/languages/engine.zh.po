@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-09 23:19-0500\n"
+"POT-Creation-Date: 2018-01-17 12:21-0500\n"
 "PO-Revision-Date: 2013-04-09 18:55+0800\n"
 "Last-Translator: lonsine <lonsine@qq.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,21 +16,21 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../../src/Avatar.cpp:354
+#: ../../../src/Avatar.cpp:355
 #, c-format
 msgid "Congratulations, you have reached level %d!"
 msgstr "恭喜！你到到了等级 %d!"
 
-#: ../../../src/Avatar.cpp:356
+#: ../../../src/Avatar.cpp:357
 msgid "You may increase one attribute through the Character Menu."
 msgstr "你可以在角色菜单增加一点属性"
 
-#: ../../../src/Avatar.cpp:578
+#: ../../../src/Avatar.cpp:579
 #, fuzzy
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
 msgstr "角色死亡，游戏结束！按下回车键返回游戏开戏。"
 
-#: ../../../src/Avatar.cpp:581
+#: ../../../src/Avatar.cpp:582
 #, fuzzy
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
 msgstr "角色死亡，你失去了一般的 %s.  按下回车键继续。"
@@ -93,7 +93,7 @@ msgstr "HP 和MP 已恢复, 负面影响已消除"
 msgid "miss"
 msgstr "未击中"
 
-#: ../../../src/Entity.cpp:468 ../../../src/PowerManager.cpp:1004
+#: ../../../src/Entity.cpp:468 ../../../src/PowerManager.cpp:1006
 #: ../../../src/StatBlock.cpp:785 ../../../src/StatBlock.cpp:791
 #, c-format
 msgid "+%d HP"
@@ -142,11 +142,11 @@ msgstr "界面"
 msgid "Mods"
 msgstr "模块"
 
-#: ../../../src/GameStateConfigBase.cpp:239 ../../../src/MenuExit.cpp:64
+#: ../../../src/GameStateConfigBase.cpp:239 ../../../src/MenuExit.cpp:65
 msgid "Music Volume"
 msgstr "背景音乐音量"
 
-#: ../../../src/GameStateConfigBase.cpp:243 ../../../src/MenuExit.cpp:69
+#: ../../../src/GameStateConfigBase.cpp:243 ../../../src/MenuExit.cpp:70
 msgid "Sound Volume"
 msgstr "游戏音乐音量"
 
@@ -321,52 +321,47 @@ msgstr ""
 msgid "Loading..."
 msgstr "载入中..."
 
-#: ../../../src/GameStateLoad.cpp:78 ../../../src/GameStateLoad.cpp:91
+#: ../../../src/GameStateLoad.cpp:79 ../../../src/GameStateLoad.cpp:92
 msgid "Delete Save"
 msgstr "删除角色"
 
-#: ../../../src/GameStateLoad.cpp:78
+#: ../../../src/GameStateLoad.cpp:79
 msgid "Delete this save?"
 msgstr "确定删除角色?"
 
-#: ../../../src/GameStateLoad.cpp:80
+#: ../../../src/GameStateLoad.cpp:81
 msgid "Exit to Title"
 msgstr "回到游戏开始"
 
-#: ../../../src/GameStateLoad.cpp:83
+#: ../../../src/GameStateLoad.cpp:84
 msgid "New Game"
 msgstr "新游戏"
 
-#: ../../../src/GameStateLoad.cpp:87 ../../../src/GameStateLoad.cpp:573
+#: ../../../src/GameStateLoad.cpp:88 ../../../src/GameStateLoad.cpp:577
 msgid "Choose a Slot"
 msgstr "选择一个人物"
 
-#: ../../../src/GameStateLoad.cpp:546 ../../../src/GameStateLoad.cpp:567
+#: ../../../src/GameStateLoad.cpp:550 ../../../src/GameStateLoad.cpp:571
 msgid "Enable a story mod to continue"
 msgstr "使用故事模式继续"
 
-#: ../../../src/GameStateLoad.cpp:562
+#: ../../../src/GameStateLoad.cpp:566
 msgid "Load Game"
 msgstr "载入游戏"
 
-#: ../../../src/GameStateLoad.cpp:663
+#: ../../../src/GameStateLoad.cpp:667
 msgid "Entering game world..."
 msgstr "进入游戏..."
 
-#: ../../../src/GameStateLoad.cpp:666
+#: ../../../src/GameStateLoad.cpp:670
 msgid "Loading saved game..."
 msgstr "载入游戏..."
 
-#: ../../../src/GameStateLoad.cpp:710 ../../../src/ItemManager.cpp:672
+#: ../../../src/GameStateLoad.cpp:714 ../../../src/ItemManager.cpp:672
 #: ../../../src/MenuPowers.cpp:678 ../../../src/MenuPowers.cpp:1037
 #, c-format
 msgid "Level %d"
 msgstr "级别 %d"
-
-#: ../../../src/GameStateLoad.cpp:712
-#, fuzzy
-msgid "Permadeath"
-msgstr "死亡后不可复活?"
 
 #: ../../../src/GameStateNew.cpp:62
 msgid "Create"
@@ -469,7 +464,7 @@ msgid "Bar0"
 msgstr "槽0"
 
 #: ../../../src/InputState.cpp:310 ../../../src/MenuActionBar.cpp:383
-#: ../../../src/MenuActionBar.cpp:385 ../../../src/MenuCharacter.cpp:244
+#: ../../../src/MenuActionBar.cpp:385 ../../../src/MenuCharacter.cpp:238
 msgid "Character"
 msgstr "角色"
 
@@ -580,7 +575,7 @@ msgstr "%d%% 速度"
 msgid "%d%% Attack Speed"
 msgstr "%d%% 速度"
 
-#: ../../../src/ItemManager.cpp:607 ../../../src/MenuCharacter.cpp:339
+#: ../../../src/ItemManager.cpp:607 ../../../src/MenuCharacter.cpp:338
 #: ../../../src/MenuPowers.cpp:729
 #, c-format
 msgid "%s Resistance"
@@ -673,15 +668,15 @@ msgstr "未用点数"
 msgid "x%d stacks"
 msgstr ""
 
-#: ../../../src/MenuCharacter.cpp:44
+#: ../../../src/MenuCharacter.cpp:52
 msgid "Name"
 msgstr "名字"
 
-#: ../../../src/MenuCharacter.cpp:45
+#: ../../../src/MenuCharacter.cpp:53
 msgid "Level"
 msgstr "级别"
 
-#: ../../../src/MenuCharacter.cpp:298
+#: ../../../src/MenuCharacter.cpp:297
 msgid "points remaining"
 msgstr "未用点数"
 
@@ -840,19 +835,19 @@ msgstr "死亡"
 msgid "%s level %d"
 msgstr "%s 级别 %d"
 
-#: ../../../src/MenuExit.cpp:81
+#: ../../../src/MenuExit.cpp:82
 msgid "Save & Exit"
 msgstr ""
 
-#: ../../../src/MenuExit.cpp:83
+#: ../../../src/MenuExit.cpp:84
 msgid "Exit"
 msgstr "退出"
 
-#: ../../../src/MenuExit.cpp:85
+#: ../../../src/MenuExit.cpp:86
 msgid "Continue"
 msgstr ""
 
-#: ../../../src/MenuExit.cpp:109
+#: ../../../src/MenuExit.cpp:110 ../../../src/MenuExit.cpp:129
 msgid "Paused"
 msgstr ""
 
@@ -952,6 +947,10 @@ msgstr "交易"
 
 #: ../../../src/MenuNumPicker.cpp:118
 msgid "Enter amount:"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:682
+msgid "Passive"
 msgstr ""
 
 #: ../../../src/MenuPowers.cpp:687
@@ -1131,20 +1130,20 @@ msgstr "购回"
 msgid "Vendor"
 msgstr "商人"
 
-#: ../../../src/PowerManager.cpp:988
+#: ../../../src/PowerManager.cpp:990
 #, c-format
 msgid "+%d Shield"
 msgstr "+%d Shield"
 
-#: ../../../src/PowerManager.cpp:1244
+#: ../../../src/PowerManager.cpp:1246
 msgid "You are already transformed, untransform first."
 msgstr "You are already transformed, untransform first."
 
-#: ../../../src/PowerManager.cpp:1256
+#: ../../../src/PowerManager.cpp:1258
 msgid "Could not untransform at this position."
 msgstr ""
 
-#: ../../../src/SaveLoad.cpp:207 ../../../src/SaveLoad.cpp:208
+#: ../../../src/SaveLoad.cpp:208 ../../../src/SaveLoad.cpp:209
 msgid "Game saved."
 msgstr ""
 
@@ -1178,7 +1177,7 @@ msgstr ""
 msgid "%s on enemy"
 msgstr ""
 
-#: ../../../src/Settings.cpp:743
+#: ../../../src/Settings.cpp:751
 msgid "Adventurer"
 msgstr "玩家"
 
@@ -1339,6 +1338,10 @@ msgstr "冷却时间: %d 秒"
 #, fuzzy, c-format
 msgid "%s seconds"
 msgstr "冷却时间: %d 秒"
+
+#, fuzzy
+#~ msgid "Permadeath"
+#~ msgstr "死亡后不可复活?"
 
 #~ msgid "Physical"
 #~ msgstr "体力"

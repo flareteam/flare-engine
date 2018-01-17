@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.16\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-09 23:19-0500\n"
+"POT-Creation-Date: 2018-01-17 12:21-0500\n"
 "PO-Revision-Date: 2012-08-23 21:23+0200\n"
 "Last-Translator: Bas Doodeman <bas.doodeman@basdoodeman.nl>\n"
 "Language-Team: Dutch; Flemish <>\n"
@@ -17,21 +17,21 @@ msgstr ""
 "Content-Transfer-Encoding: 8bits\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
-#: ../../../src/Avatar.cpp:354
+#: ../../../src/Avatar.cpp:355
 #, c-format
 msgid "Congratulations, you have reached level %d!"
 msgstr "Gefeliciteerd, je hebt niveau %d bereikt!"
 
-#: ../../../src/Avatar.cpp:356
+#: ../../../src/Avatar.cpp:357
 msgid "You may increase one attribute through the Character Menu."
 msgstr "Je kunt één eigenschap in het karakter menu verhogen."
 
-#: ../../../src/Avatar.cpp:578
+#: ../../../src/Avatar.cpp:579
 #, fuzzy
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
 msgstr "Je bent verslagen. Spel afgelopen! Druk op Enter, om naar het hoofdmenu terug te keren."
 
-#: ../../../src/Avatar.cpp:581
+#: ../../../src/Avatar.cpp:582
 #, fuzzy
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
 msgstr "Je bent verslagen.  Je verliest de helft van je goud.  Druk op Enter om verder te gaan."
@@ -94,7 +94,7 @@ msgstr ""
 msgid "miss"
 msgstr ""
 
-#: ../../../src/Entity.cpp:468 ../../../src/PowerManager.cpp:1004
+#: ../../../src/Entity.cpp:468 ../../../src/PowerManager.cpp:1006
 #: ../../../src/StatBlock.cpp:785 ../../../src/StatBlock.cpp:791
 #, c-format
 msgid "+%d HP"
@@ -144,11 +144,11 @@ msgstr "Omgeving"
 msgid "Mods"
 msgstr "Mods"
 
-#: ../../../src/GameStateConfigBase.cpp:239 ../../../src/MenuExit.cpp:64
+#: ../../../src/GameStateConfigBase.cpp:239 ../../../src/MenuExit.cpp:65
 msgid "Music Volume"
 msgstr "Muziekvolume"
 
-#: ../../../src/GameStateConfigBase.cpp:243 ../../../src/MenuExit.cpp:69
+#: ../../../src/GameStateConfigBase.cpp:243 ../../../src/MenuExit.cpp:70
 msgid "Sound Volume"
 msgstr "Geluidsvolume"
 
@@ -327,52 +327,47 @@ msgstr ""
 msgid "Loading..."
 msgstr "Laden opgeslagen spel..."
 
-#: ../../../src/GameStateLoad.cpp:78 ../../../src/GameStateLoad.cpp:91
+#: ../../../src/GameStateLoad.cpp:79 ../../../src/GameStateLoad.cpp:92
 msgid "Delete Save"
 msgstr "Spel verwijderen"
 
-#: ../../../src/GameStateLoad.cpp:78
+#: ../../../src/GameStateLoad.cpp:79
 msgid "Delete this save?"
 msgstr "Dit spel werkelijk verwijderen?"
 
-#: ../../../src/GameStateLoad.cpp:80
+#: ../../../src/GameStateLoad.cpp:81
 msgid "Exit to Title"
 msgstr "Terug naar het menu"
 
-#: ../../../src/GameStateLoad.cpp:83
+#: ../../../src/GameStateLoad.cpp:84
 msgid "New Game"
 msgstr "New Spel"
 
-#: ../../../src/GameStateLoad.cpp:87 ../../../src/GameStateLoad.cpp:573
+#: ../../../src/GameStateLoad.cpp:88 ../../../src/GameStateLoad.cpp:577
 msgid "Choose a Slot"
 msgstr "Kies een Slot"
 
-#: ../../../src/GameStateLoad.cpp:546 ../../../src/GameStateLoad.cpp:567
+#: ../../../src/GameStateLoad.cpp:550 ../../../src/GameStateLoad.cpp:571
 msgid "Enable a story mod to continue"
 msgstr ""
 
-#: ../../../src/GameStateLoad.cpp:562
+#: ../../../src/GameStateLoad.cpp:566
 msgid "Load Game"
 msgstr "Spel Laden"
 
-#: ../../../src/GameStateLoad.cpp:663
+#: ../../../src/GameStateLoad.cpp:667
 msgid "Entering game world..."
 msgstr "Betreden spelwereld..."
 
-#: ../../../src/GameStateLoad.cpp:666
+#: ../../../src/GameStateLoad.cpp:670
 msgid "Loading saved game..."
 msgstr "Laden opgeslagen spel..."
 
-#: ../../../src/GameStateLoad.cpp:710 ../../../src/ItemManager.cpp:672
+#: ../../../src/GameStateLoad.cpp:714 ../../../src/ItemManager.cpp:672
 #: ../../../src/MenuPowers.cpp:678 ../../../src/MenuPowers.cpp:1037
 #, c-format
 msgid "Level %d"
 msgstr "Niveau %d"
-
-#: ../../../src/GameStateLoad.cpp:712
-#, fuzzy
-msgid "Permadeath"
-msgstr "Permanente dood?"
 
 #: ../../../src/GameStateNew.cpp:62
 #, fuzzy
@@ -478,7 +473,7 @@ msgid "Bar0"
 msgstr ""
 
 #: ../../../src/InputState.cpp:310 ../../../src/MenuActionBar.cpp:383
-#: ../../../src/MenuActionBar.cpp:385 ../../../src/MenuCharacter.cpp:244
+#: ../../../src/MenuActionBar.cpp:385 ../../../src/MenuCharacter.cpp:238
 msgid "Character"
 msgstr "Karakter"
 
@@ -586,7 +581,7 @@ msgstr ""
 msgid "%d%% Attack Speed"
 msgstr ""
 
-#: ../../../src/ItemManager.cpp:607 ../../../src/MenuCharacter.cpp:339
+#: ../../../src/ItemManager.cpp:607 ../../../src/MenuCharacter.cpp:338
 #: ../../../src/MenuPowers.cpp:729
 #, fuzzy, c-format
 msgid "%s Resistance"
@@ -679,15 +674,15 @@ msgstr "Punten resterend"
 msgid "x%d stacks"
 msgstr ""
 
-#: ../../../src/MenuCharacter.cpp:44
+#: ../../../src/MenuCharacter.cpp:52
 msgid "Name"
 msgstr "Naam"
 
-#: ../../../src/MenuCharacter.cpp:45
+#: ../../../src/MenuCharacter.cpp:53
 msgid "Level"
 msgstr "Niveau"
 
-#: ../../../src/MenuCharacter.cpp:298
+#: ../../../src/MenuCharacter.cpp:297
 msgid "points remaining"
 msgstr "Punten resterend"
 
@@ -846,19 +841,19 @@ msgstr "Dood"
 msgid "%s level %d"
 msgstr "%s niveau %d"
 
-#: ../../../src/MenuExit.cpp:81
+#: ../../../src/MenuExit.cpp:82
 msgid "Save & Exit"
 msgstr ""
 
-#: ../../../src/MenuExit.cpp:83
+#: ../../../src/MenuExit.cpp:84
 msgid "Exit"
 msgstr "Stoppen"
 
-#: ../../../src/MenuExit.cpp:85
+#: ../../../src/MenuExit.cpp:86
 msgid "Continue"
 msgstr ""
 
-#: ../../../src/MenuExit.cpp:109
+#: ../../../src/MenuExit.cpp:110 ../../../src/MenuExit.cpp:129
 msgid "Paused"
 msgstr ""
 
@@ -958,6 +953,10 @@ msgstr "Handelen"
 
 #: ../../../src/MenuNumPicker.cpp:118
 msgid "Enter amount:"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:682
+msgid "Passive"
 msgstr ""
 
 #: ../../../src/MenuPowers.cpp:687
@@ -1139,20 +1138,20 @@ msgstr ""
 msgid "Vendor"
 msgstr "Verkoper"
 
-#: ../../../src/PowerManager.cpp:988
+#: ../../../src/PowerManager.cpp:990
 #, c-format
 msgid "+%d Shield"
 msgstr ""
 
-#: ../../../src/PowerManager.cpp:1244
+#: ../../../src/PowerManager.cpp:1246
 msgid "You are already transformed, untransform first."
 msgstr ""
 
-#: ../../../src/PowerManager.cpp:1256
+#: ../../../src/PowerManager.cpp:1258
 msgid "Could not untransform at this position."
 msgstr ""
 
-#: ../../../src/SaveLoad.cpp:207 ../../../src/SaveLoad.cpp:208
+#: ../../../src/SaveLoad.cpp:208 ../../../src/SaveLoad.cpp:209
 msgid "Game saved."
 msgstr ""
 
@@ -1186,7 +1185,7 @@ msgstr ""
 msgid "%s on enemy"
 msgstr ""
 
-#: ../../../src/Settings.cpp:743
+#: ../../../src/Settings.cpp:751
 msgid "Adventurer"
 msgstr "Avonturier"
 
@@ -1341,6 +1340,10 @@ msgstr "Afkoeltijd: %d seconden"
 #, fuzzy, c-format
 msgid "%s seconds"
 msgstr "Afkoeltijd: %d seconden"
+
+#, fuzzy
+#~ msgid "Permadeath"
+#~ msgstr "Permanente dood?"
 
 #~ msgid "Physical"
 #~ msgstr "Fysiek"
