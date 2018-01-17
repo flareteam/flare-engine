@@ -39,10 +39,12 @@ class WidgetScrollBox;
 class CutsceneSettings {
 public:
 	FPoint caption_margins;
+	Color caption_background;
 	bool scale_graphics;
 	float vscroll_speed;
 	CutsceneSettings()
-		: scale_graphics(false)
+		: caption_background(0,0,0,200)
+		, scale_graphics(false)
 		, vscroll_speed(4.0)
 	{}
 };

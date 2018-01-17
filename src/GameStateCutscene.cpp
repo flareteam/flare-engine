@@ -221,20 +221,25 @@ void Scene::refreshWidgets() {
 		if (!caption.empty()) {
 			int caption_width = VIEW_W - static_cast<int>(VIEW_W * (settings.caption_margins.x * 2.0f));
 			font->setFont("font_captions");
+			int padding = font->getLineHeight()/4;
 			Point caption_size = font->calc_size(caption, caption_width);
+			Point caption_size_padded(caption_size.x + padding*2, caption_size.y + padding*2);
 
 			if (!caption_box) {
-				caption_box = new WidgetScrollBox(VIEW_W, caption_size.y);
+				caption_box = new WidgetScrollBox(caption_size_padded.x, caption_size_padded.y);
 				caption_box->setBasePos(0, 0, ALIGN_BOTTOM);
+				caption_box->bg = settings.caption_background;
+				caption_box->transparent = false;
+				caption_box->resize(caption_size_padded.x, caption_size_padded.y);
 			}
 			else {
-				caption_box->pos.h = caption_size.y;
-				caption_box->resize(VIEW_W, caption_size.y);
+				caption_box->pos.h = caption_size_padded.y;
+				caption_box->resize(caption_size_padded.x, caption_size_padded.y);
 			}
 
 			caption_box->setPos(0, static_cast<int>(static_cast<float>(VIEW_H) * settings.caption_margins.y) * (-1));
 
-			font->renderShadowed(caption, VIEW_W / 2, 0,
+			font->renderShadowed(caption, (padding / 2) + (caption_size_padded.x / 2), padding,
 								 JUSTIFY_CENTER,
 								 caption_box->contents->getGraphics(),
 								 caption_width,
@@ -402,6 +407,10 @@ bool GameStateCutscene::load(const std::string& filename) {
 				// @ATTR caption_margins|float, float : X margin, Y margin|Percentage-based margins for the caption text based on screen size
 				settings.caption_margins.x = toFloat(popFirstString(infile.val))/100.0f;
 				settings.caption_margins.y = toFloat(popFirstString(infile.val))/100.0f;
+			}
+			else if (infile.key == "caption_background") {
+				// @ATTR caption_background|color, int : Color, Alpha|Color (RGBA) of the caption area background.
+				settings.caption_background = toRGBA(infile.val);
 			}
 			else if (infile.key == "vscroll_speed") {
 				// @ATTR vscroll_speed|float|The speed at which elements will scroll in 'vscroll' scenes.
