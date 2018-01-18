@@ -943,7 +943,7 @@ msgstr "量の入力:"
 
 #: ../../../src/MenuPowers.cpp:682
 msgid "Passive"
-msgstr ""
+msgstr "パッシブ スキル"
 
 #: ../../../src/MenuPowers.cpp:687
 #, c-format
