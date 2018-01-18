@@ -415,7 +415,7 @@ bool GameStateCutscene::load(const std::string& filename) {
 			else if (infile.section == "vscroll") {
 				// if the previous scene was also a vertical scroller, don't create a new scene
 				// instead, the previous scene will be extended
-				if (scenes.empty() || scenes.front()->cutscene_type != CUTSCENE_VSCROLL) {
+				if (scenes.empty() || scenes.back()->cutscene_type != CUTSCENE_VSCROLL) {
 					scenes.push(new Scene(settings, CUTSCENE_VSCROLL));
 				}
 			}
