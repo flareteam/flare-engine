@@ -116,11 +116,15 @@ public:
 
 class GameStateCutscene : public GameState {
 private:
+	void init();
+
 	GameState *previous_gamestate;
 	std::string dest_map;
 	Point dest_pos;
 
 	std::queue<Scene*> scenes;
+	std::string music;
+	bool initialized;
 
 public:
 	explicit GameStateCutscene(GameState *game_state);

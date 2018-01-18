@@ -341,15 +341,32 @@ void Scene::render() {
 
 GameStateCutscene::GameStateCutscene(GameState *game_state)
 	: previous_gamestate(game_state)
+	, initialized(false)
 	, game_slot(-1)
 {
 	has_background = false;
 }
 
 GameStateCutscene::~GameStateCutscene() {
+	if (!music.empty())
+		snd->stopMusic();
+}
+
+void GameStateCutscene::init() {
+	if (initialized)
+		return;
+
+	if (MUSIC_VOLUME > 0 && !music.empty()) {
+		// restart music so that game devs can sync with cutscene playback
+		snd->stopMusic();
+		snd->loadMusic(music);
+	}
+
+	initialized = true;
 }
 
 void GameStateCutscene::logic() {
+	init();
 
 	if (scenes.empty()) {
 		if (game_slot != -1) {
@@ -421,6 +438,11 @@ bool GameStateCutscene::load(const std::string& filename) {
 			else if (infile.key == "menu_backgrounds") {
 				// @ATTR menu_backgrounds|bool|This cutscene will use a random fullscreen background image, like the title screen does
 				has_background = true;
+			}
+			else if (infile.key == "music") {
+				// @ATTR music|filename|The music file that will play during this cutscene.
+				music = infile.val;
+				hasMusic = true;
 			}
 			else {
 				infile.error("GameStateCutscene: '%s' is not a valid key.", infile.key.c_str());
