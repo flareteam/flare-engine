@@ -439,8 +439,6 @@ body {
 
 <p>Description of cutscenes in cutscenes/</p>
 
-<p><strong>scale_gfx</strong> | <code>bool</code> | The graphics will be scaled to fit screen width</p>
-
 <p><strong>caption_margins</strong> | <code>float, float : X margin, Y margin</code> | Percentage-based margins for the caption text based on screen size</p>
 
 <p><strong>caption_background</strong> | <code>color, int : Color, Alpha</code> | Color (RGBA) of the caption area background.</p>
@@ -451,7 +449,7 @@ body {
 
 <p><strong>scene.caption</strong> | <code>string</code> | A caption that will be shown.</p>
 
-<p><strong>scene.image</strong> | <code>filename</code> | Filename of an image that will be shown.</p>
+<p><strong>scene.image</strong> | <code>filename, int : Filename, Scaling type</code> | Filename of an image that will be shown. The scaling type is a value between 0-2, corresponding to  none, fit height, fit screen.</p>
 
 <p><strong>scene.pause</strong> | <code>duration</code> | Pause before next component in &lsquo;ms&rsquo; or &rsquo;s'.</p>
 

@@ -34,17 +34,21 @@ enum {
 	CUTSCENE_VSCROLL = 1
 };
 
+enum {
+	CUTSCENE_SCALE_NONE = 0,
+	CUTSCENE_SCALE_HEIGHT = 1,
+	CUTSCENE_SCALE_SCREEN = 2
+};
+
 class WidgetScrollBox;
 
 class CutsceneSettings {
 public:
 	FPoint caption_margins;
 	Color caption_background;
-	bool scale_graphics;
 	float vscroll_speed;
 	CutsceneSettings()
 		: caption_background(0,0,0,200)
-		, scale_graphics(false)
 		, vscroll_speed(4.0)
 	{}
 };
@@ -86,6 +90,7 @@ private:
 	std::string caption;
 	Sprite *art;
 	Sprite *art_scaled;
+	int art_scale_type;
 	Point art_size;
 	SoundManager::SoundID sid;
 	WidgetScrollBox *caption_box;

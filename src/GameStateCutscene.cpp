@@ -32,6 +32,7 @@ Scene::Scene(const CutsceneSettings& _settings, short _cutscene_type)
 	, caption("")
 	, art(NULL)
 	, art_scaled(NULL)
+	, art_scale_type(CUTSCENE_SCALE_NONE)
 	, sid(-1)
 	, caption_box(NULL)
 	, button_next(new WidgetButton("images/menus/buttons/right.png"))
@@ -121,6 +122,8 @@ bool Scene::logic() {
 					art_size.y = art->getGraphicsHeight();
 					graphics->unref();
 				}
+
+				art_scale_type = components.front().x;
 			}
 			else if (components.front().type == "soundfx") {
 				if (sid != 0)
@@ -248,8 +251,11 @@ void Scene::refreshWidgets() {
 
 		if (art) {
 			Rect art_dest;
-			if (settings.scale_graphics) {
-				art_dest = resizeToScreen(art_size.x, art_size.y, false, ALIGN_CENTER);
+			if (art_scale_type != CUTSCENE_SCALE_NONE) {
+				if (art_scale_type == CUTSCENE_SCALE_SCREEN)
+					art_dest = resizeToScreen(art_size.x, art_size.y, false, ALIGN_CENTER);
+				else if (art_scale_type == CUTSCENE_SCALE_HEIGHT)
+					art_dest = resizeToScreen(art_size.x, art_size.y, true, ALIGN_CENTER);
 
 				art->getGraphics()->ref(); // resize unref's our image (which we want to keep), so counter that here
 				Image *resized = art->getGraphics()->resize(art_dest.w, art_dest.h);
@@ -399,11 +405,7 @@ bool GameStateCutscene::load(const std::string& filename) {
 		}
 
 		if (infile.section.empty()) {
-			if (infile.key == "scale_gfx") {
-				// @ATTR scale_gfx|bool|The graphics will be scaled to fit screen width
-				settings.scale_graphics = toBool(infile.val);
-			}
-			else if (infile.key == "caption_margins") {
+			if (infile.key == "caption_margins") {
 				// @ATTR caption_margins|float, float : X margin, Y margin|Percentage-based margins for the caption text based on screen size
 				settings.caption_margins.x = toFloat(popFirstString(infile.val))/100.0f;
 				settings.caption_margins.y = toFloat(popFirstString(infile.val))/100.0f;
@@ -433,9 +435,14 @@ bool GameStateCutscene::load(const std::string& filename) {
 				sc.s = msg->get(infile.val);
 			}
 			else if (infile.key == "image") {
-				// @ATTR scene.image|filename|Filename of an image that will be shown.
+				// @ATTR scene.image|filename, int : Filename, Scaling type|Filename of an image that will be shown. The scaling type is a value between 0-2, corresponding to: none, fit height, fit screen.
 				sc.type = infile.key;
-				sc.s = infile.val;
+				sc.s = popFirstString(infile.val);
+				sc.x = popFirstInt(infile.val);
+				if (sc.x < CUTSCENE_SCALE_NONE || sc.x > CUTSCENE_SCALE_SCREEN) {
+					infile.error("GameStateCutscene: '%d' is not a valid scaling type.", sc.x);
+					sc.x = CUTSCENE_SCALE_NONE;
+				}
 			}
 			else if (infile.key == "pause") {
 				// @ATTR scene.pause|duration|Pause before next component in 'ms' or 's'.

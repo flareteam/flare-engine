@@ -2,12 +2,9 @@
 # Use it for displaying developer logos, age ratings, etc.
 # This is an example, so everything has been commented out
 
-#this scales art to width of flare window
-#scale_gfx=true
-
 [scene]
 pause=0
-#image=images/menus/logo.png
+#image=images/menus/logo.png,0
 #caption=Flare, the...
 #soundfx=soundfx/level_up.ogg
 #pause=2s
