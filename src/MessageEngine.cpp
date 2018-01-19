@@ -40,8 +40,10 @@ MessageEngine::MessageEngine() {
 
 	for (unsigned i = 0; i < engineFiles.size(); ++i) {
 		if (infile.open(engineFiles[i])) {
-			while (infile.next() && !infile.fuzzy)
-				messages.insert(std::pair<std::string, std::string>(infile.key, infile.val));
+			while (infile.next()) {
+				if (!infile.fuzzy)
+					messages.insert(std::pair<std::string, std::string>(infile.key, infile.val));
+			}
 			infile.close();
 		}
 	}
@@ -52,8 +54,10 @@ MessageEngine::MessageEngine() {
 
 	for (unsigned i = 0; i < dataFiles.size(); ++i) {
 		if (infile.open(dataFiles[i])) {
-			while (infile.next() && !infile.fuzzy)
-				messages.insert(std::pair<std::string, std::string>(infile.key, infile.val));
+			while (infile.next()) {
+				if (!infile.fuzzy)
+					messages.insert(std::pair<std::string, std::string>(infile.key, infile.val));
+			}
 			infile.close();
 		}
 	}

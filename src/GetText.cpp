@@ -64,7 +64,7 @@ bool GetText::next() {
 		line = getLine(infile);
 
 		// check if comment and if fuzzy
-		if (line.compare(0,2,"#,") && line.find("fuzzy") == 0)
+		if (line.compare(0,2,"#,") == 0 && line.find("fuzzy") != std::string::npos)
 			fuzzy = true;
 
 		// this is a key
