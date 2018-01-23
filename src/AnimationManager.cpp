@@ -31,7 +31,8 @@ AnimationSet *AnimationManager::getAnimationSet(const std::string& filename) {
 		return sets[index];
 	}
 	else {
-		logError("AnimationManager::getAnimationSet: %s not found", filename.c_str());
+		logError("AnimationManager::getAnimationSet(): %s not found", filename.c_str());
+		logErrorDialog("AnimationManager::getAnimationSet(): %s not found", filename.c_str());
 		mods->resetModConfig();
 		Exit(1);
 		return NULL;
@@ -76,7 +77,8 @@ void AnimationManager::decreaseCount(const std::string &name) {
 		counts[index]--;
 	}
 	else {
-		logError("AnimationManager::decreaseCount: %s not found", name.c_str());
+		logError("AnimationManager::decreaseCount(): %s not found", name.c_str());
+		logErrorDialog("AnimationManager::decreaseCount(): %s not found", name.c_str());
 		Exit(1);
 	}
 }

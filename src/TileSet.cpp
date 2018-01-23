@@ -31,8 +31,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "Settings.h"
 
-#include <cstdio>
-
 TileSet::TileSet()
 	: sprites(NULL) {
 	reset();
@@ -98,7 +96,8 @@ void TileSet::load(const std::string& filename) {
 
 				// Verify that we have graphics for tiles
 				if (!sprites) {
-					std::cerr << "No graphics for tileset definition '" << filename << "', aborting." << std::endl;
+					infile.error("Tileset: No 'img' defined. Aborting.");
+					logErrorDialog("Tileset: No 'img' defined. Aborting.");
 					mods->resetModConfig();
 					Exit(1);
 				}

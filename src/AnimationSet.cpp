@@ -114,6 +114,7 @@ void AnimationSet::load() {
 				// @ATTR image|filename|Filename of sprite-sheet image.
 				if (sprite != NULL) {
 					parser.error("AnimationSet: Multiple images specified. Dragons be here!");
+					logErrorDialog("AnimationSet: Multiple images specified. Dragons be here!");
 					mods->resetModConfig();
 					Exit(128);
 				}

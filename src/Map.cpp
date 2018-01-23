@@ -200,7 +200,8 @@ void Map::loadLayer(FileParser &infile) {
 	else if (infile.key == "format") {
 		// @ATTR layer.format|string|Format for map layer, must be 'dec'
 		if (infile.val != "dec") {
-			infile.error("Map: The format of a layer must be \"dec\"!");
+			infile.error("Map: The format of a layer must be 'dec'!");
+			logErrorDialog("Map: The format of a layer must be 'dec'!");
 			mods->resetModConfig();
 			Exit(1);
 		}

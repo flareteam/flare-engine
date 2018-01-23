@@ -60,6 +60,7 @@ void GameSlotPreview::loadLayerDefinitions() {
 				unsigned dir = parse_direction(popFirstString(infile.val));
 				if (dir>7) {
 					infile.error("GameSlotPreview: Hero layer direction must be in range [0,7]");
+					logErrorDialog("GameSlotPreview: Hero layer direction must be in range [0,7]");
 					mods->resetModConfig();
 					Exit(1);
 				}

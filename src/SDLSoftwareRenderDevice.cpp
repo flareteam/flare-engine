@@ -237,6 +237,7 @@ int SDLSoftwareRenderDevice::createContext(bool allow_fallback) {
 						// If this is the first attempt and it failed we are not
 						// getting anywhere.
 						logError("SDLSoftwareRenderDevice: createContext() failed: %s", SDL_GetError());
+						logErrorDialog("SDLSoftwareRenderDevice: createContext() failed: %s", SDL_GetError());
 						Exit(1);
 					}
 					return last_resort;
@@ -585,6 +586,8 @@ Image *SDLSoftwareRenderDevice::loadImage(const std::string& filename, const std
 		if (!errormessage.empty())
 			logError("SDLSoftwareRenderDevice: [%s] %s: %s", filename.c_str(), errormessage.c_str(), IMG_GetError());
 		if (IfNotFoundExit) {
+			if (!errormessage.empty())
+				logErrorDialog("SDLSoftwareRenderDevice: [%s] %s: %s", filename.c_str(), errormessage.c_str(), IMG_GetError());
 			mods->resetModConfig();
 			Exit(1);
 		}

@@ -36,6 +36,7 @@ SDLFontEngine::SDLFontEngine() : FontEngine(), active_font(NULL) {
 	// Initiate SDL_ttf
 	if(!TTF_WasInit() && TTF_Init()==-1) {
 		logError("SDLFontEngine: TTF_Init: %s", TTF_GetError());
+		logErrorDialog("SDLFontEngine: TTF_Init: %s", TTF_GetError());
 		mods->resetModConfig();
 		Exit(2);
 	}
@@ -125,6 +126,7 @@ SDLFontEngine::SDLFontEngine() : FontEngine(), active_font(NULL) {
 	setFont("font_regular");
 	if (!active_font) {
 		logError("FontEngine: Unable to determine default font!");
+		logErrorDialog("FontEngine: Unable to determine default font!");
 		mods->resetModConfig();
 		Exit(1);
 	}

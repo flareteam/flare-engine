@@ -172,6 +172,7 @@ void Avatar::loadLayerDefinitions() {
 				unsigned dir = parse_direction(popFirstString(infile.val));
 				if (dir>7) {
 					infile.error("Avatar: Hero layer direction must be in range [0,7]");
+					logErrorDialog("Avatar: Hero layer direction must be in range [0,7]");
 					mods->resetModConfig();
 					Exit(1);
 				}
