@@ -227,6 +227,7 @@ void alignFPoint(FPoint *pos);
 void logInfo(const char* format, ...);
 void logError(const char* format, ...);
 void logErrorDialog(const char* dialog_text, ...);
+void createLogFile();
 void Exit(int code);
 
 void createSaveDir(int slot);

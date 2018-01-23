@@ -31,6 +31,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <ctype.h>
 #include <iomanip>
 
+bool LOG_FILE_INIT = false;
+bool LOG_FILE_CREATED = false;
+std::string LOG_PATH;
+std::queue<std::pair<SDL_LogPriority, std::string> > LOG_MSG;
+
 Point FPointToPoint(const FPoint& fp) {
 	Point result;
 	result.x = int(fp.x);
@@ -253,20 +258,53 @@ void logInfo(const char* format, ...) {
 	va_list args;
 
 	va_start(args, format);
-
 	SDL_LogMessageV(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, format, args);
-
 	va_end(args);
+
+	char file_buf[BUFSIZ];
+	va_start(args, format);
+	vsnprintf(file_buf, BUFSIZ, format, args);
+	va_end(args);
+
+	if (!LOG_FILE_INIT) {
+		LOG_MSG.push(std::pair<SDL_LogPriority, std::string>(SDL_LOG_PRIORITY_INFO, std::string(file_buf)));
+	}
+	else if (LOG_FILE_CREATED) {
+		FILE *log_file = fopen(LOG_PATH.c_str(), "a");
+		if (log_file) {
+			fprintf(log_file, "INFO: ");
+			fprintf(log_file, file_buf);
+			fprintf(log_file, "\n");
+			fclose(log_file);
+		}
+	}
+
 }
 
 void logError(const char* format, ...) {
 	va_list args;
 
 	va_start(args, format);
-
 	SDL_LogMessageV(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_ERROR, format, args);
-
 	va_end(args);
+
+	char file_buf[BUFSIZ];
+	va_start(args, format);
+	vsnprintf(file_buf, BUFSIZ, format, args);
+	va_end(args);
+
+	if (!LOG_FILE_INIT) {
+		LOG_MSG.push(std::pair<SDL_LogPriority, std::string>(SDL_LOG_PRIORITY_ERROR, std::string(file_buf)));
+	}
+	else if (LOG_FILE_CREATED) {
+		FILE *log_file = fopen(LOG_PATH.c_str(), "a");
+		if (log_file) {
+			fprintf(log_file, "ERROR: ");
+			fprintf(log_file, file_buf);
+			fprintf(log_file, "\n");
+			fclose(log_file);
+		}
+	}
 }
 
 void logErrorDialog(const char* dialog_text, ...) {
@@ -275,14 +313,46 @@ void logErrorDialog(const char* dialog_text, ...) {
 	snprintf(pre_buf, BUFSIZ, "%s%s", "FLARE Error\n", dialog_text);
 
 	va_list args;
-
 	va_start(args, dialog_text);
-
 	vsnprintf(buf, BUFSIZ, pre_buf, args);
-
 	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "FLARE Error", buf, NULL);
-
 	va_end(args);
+}
+
+void createLogFile() {
+	LOG_PATH = PATH_CONF + "/flare_log.txt";
+
+	// always create a new log file on each launch
+	if (fileExists(LOG_PATH)) {
+		removeFile(LOG_PATH);
+	}
+
+	FILE *log_file = fopen(LOG_PATH.c_str(), "w+");
+	if (log_file) {
+		LOG_FILE_CREATED = true;
+		fprintf(log_file, "### Flare log file\n\n");
+
+		while (!LOG_MSG.empty()) {
+			if (LOG_MSG.front().first == SDL_LOG_PRIORITY_INFO)
+				fprintf(log_file, "INFO: ");
+			else if (LOG_MSG.front().first == SDL_LOG_PRIORITY_ERROR)
+				fprintf(log_file, "ERROR: ");
+
+			fprintf(log_file, LOG_MSG.front().second.c_str());
+			fprintf(log_file, "\n");
+
+			LOG_MSG.pop();
+		}
+		fclose(log_file);
+	}
+	else {
+		while (!LOG_MSG.empty())
+			LOG_MSG.pop();
+
+		logError("Utils: Could not create log file.");
+	}
+
+	LOG_FILE_INIT = true;
 }
 
 void Exit(int code) {

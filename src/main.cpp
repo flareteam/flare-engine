@@ -73,6 +73,9 @@ static void init(const CmdLineArgs& cmd_line_args) {
 	 */
 	PlatformSetPaths();
 
+	createLogFile();
+	logInfo(getVersionString().c_str());
+
 	// SDL Inits
 	if ( SDL_Init (SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK) < 0 ) {
 		logError("main: Could not initialize SDL: %s", SDL_GetError());
