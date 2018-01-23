@@ -76,7 +76,7 @@ static void init(const CmdLineArgs& cmd_line_args) {
 	// SDL Inits
 	if ( SDL_Init (SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK) < 0 ) {
 		logError("main: Could not initialize SDL: %s", SDL_GetError());
-		logErrorDialog("ERROR: Could not initialize SDL.");
+		logErrorDialog("main: Could not initialize SDL: %s", SDL_GetError());
 		Exit(1);
 	}
 
@@ -91,13 +91,13 @@ static void init(const CmdLineArgs& cmd_line_args) {
 		logError("A copy of the default mod is in the \"mods\" directory of the flare-engine repo.");
 		logError("The repo is located at: https://github.com/clintbellanger/flare-engine");
 		logError("Try again after copying the default mod to one of the above directories. Exiting.");
-		logErrorDialog("ERROR: No \"default\" mod found.");
+		logErrorDialog("main: Could not find the 'default' mod in the following locations:\n\n%smods/\n%smods/", PATH_DATA.c_str(), PATH_USER.c_str());
 		Exit(1);
 	}
 
 	if (!loadSettings()) {
 		logError("main: Could not load settings file: '%s'.", (PATH_CONF + FILE_SETTINGS).c_str());
-		logErrorDialog("ERROR: Could not load settings file.");
+		logErrorDialog("main: Could not load settings file: '%s'.", (PATH_CONF + FILE_SETTINGS).c_str());
 		Exit(1);
 	}
 
@@ -135,7 +135,7 @@ static void init(const CmdLineArgs& cmd_line_args) {
 
 	if (status == -1) {
 		logError("main: Could not create rendering context: %s", SDL_GetError());
-		logErrorDialog("ERROR: Could not create rendering context");
+		logErrorDialog("main: Could not create rendering context: %s", SDL_GetError());
 		Exit(1);
 	}
 

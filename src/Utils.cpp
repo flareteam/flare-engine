@@ -269,8 +269,20 @@ void logError(const char* format, ...) {
 	va_end(args);
 }
 
-void logErrorDialog(const char* dialog_text) {
-	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "FLARE", dialog_text, NULL);
+void logErrorDialog(const char* dialog_text, ...) {
+	char pre_buf[BUFSIZ];
+	char buf[BUFSIZ];
+	snprintf(pre_buf, BUFSIZ, "%s%s", "FLARE Error\n", dialog_text);
+
+	va_list args;
+
+	va_start(args, dialog_text);
+
+	vsnprintf(buf, BUFSIZ, pre_buf, args);
+
+	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "FLARE Error", buf, NULL);
+
+	va_end(args);
 }
 
 void Exit(int code) {
