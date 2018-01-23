@@ -72,7 +72,7 @@ public:
 	std::string getText() {
 		return text;
 	}
-	void setText(std::string _text) {
+	void setText(const std::string& _text) {
 		text = _text;
 		cursor_pos = text.length();
 		trimText();

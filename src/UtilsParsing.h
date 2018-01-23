@@ -24,7 +24,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Utils.h"
 #include <typeinfo>
 
-std::string trim(std::string s, const std::string& delimiters = " \f\n\r\t\v");
+std::string trim(const std::string& s, const std::string& delimiters = " \f\n\r\t\v");
 std::string trim_left_inplace(std::string s, const std::string& delimiters = " \f\n\r\t\v");
 std::string trim_right_inplace(std::string s, const std::string& delimiters = " \f\n\r\t\v");
 int parse_duration(const std::string& s);

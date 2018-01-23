@@ -25,7 +25,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <typeinfo>
 #include <math.h>
 
-std::string trim(std::string s, const std::string& delimiters) {
+std::string trim(const std::string& s, const std::string& delimiters) {
 	return trim_left_inplace(trim_right_inplace(s, delimiters), delimiters);
 }
 

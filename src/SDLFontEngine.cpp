@@ -43,9 +43,9 @@ SDLFontEngine::SDLFontEngine() : FontEngine(), active_font(NULL) {
 
 	// load the fonts
 	// @CLASS SDLFontEngine: Font settings|Description of engine/font_settings.txt
-	bool is_fallback = false;
 	FileParser infile;
 	if (infile.open("engine/font_settings.txt")) {
+		bool is_fallback = false;
 		while (infile.next()) {
 			if (infile.new_section && infile.section == "font") {
 				font_styles.push_back(SDLFontStyle());

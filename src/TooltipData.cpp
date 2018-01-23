@@ -31,13 +31,12 @@ TooltipData::~TooltipData() {
 }
 
 TooltipData::TooltipData(const TooltipData &tdSource)
-	: tip_buffer(NULL) {
+	: default_color(tdSource.default_color)
+	, tip_buffer(NULL) {
 
 	// DO NOT copy the buffered text render
 	// Allow the new copy to create its own buffer
 	// Otherwise the same buffer will be deleted twice, causing a mem error
-
-	default_color = tdSource.default_color;
 
 	lines.clear();
 	colors.clear();

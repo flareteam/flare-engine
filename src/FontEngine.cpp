@@ -237,7 +237,7 @@ std::string FontEngine::popTokenByWidth(std::string& text, int width) {
 	size_t new_length = 0;
 
 	for (size_t i = 0; i <= text.length(); ++i) {
-		if ((text[i] & 0xc0) == 0x80)
+		if (i < text.length() && (text[i] & 0xc0) == 0x80)
 			continue;
 
 		if (calc_width(text.substr(0, i)) > width)

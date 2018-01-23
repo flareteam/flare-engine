@@ -202,7 +202,7 @@ void SDLSoundManager::unload(SoundManager::SoundID sid) {
 
 
 
-void SDLSoundManager::play(SoundManager::SoundID sid, std::string channel, const FPoint& pos, bool loop) {
+void SDLSoundManager::play(SoundManager::SoundID sid, const std::string& channel, const FPoint& pos, bool loop) {
 
 	SoundMapIterator it;
 	VirtualChannelMapIterator vcit = channels.end();

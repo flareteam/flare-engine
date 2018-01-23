@@ -35,7 +35,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class Action {
 public:
-	Action(std::string _id = "", std::string _label = "")
+	Action(const std::string& _id = "", std::string _label = "")
 		: id(_id)
 		, label(id != "" ? new WidgetLabel() : NULL) {
 		if (label)

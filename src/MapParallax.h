@@ -33,6 +33,7 @@ public:
 
 	MapParallaxLayer()
 		: sprite(NULL)
+		, speed(0)
 		, map_layer("")
 	{}
 };

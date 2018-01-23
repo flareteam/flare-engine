@@ -853,7 +853,7 @@ bool StatBlock::canUsePower(const Power &power, int powerid) const {
 			&& !power.meta_power
 			&& !effects.stun
 			&& (power.sacrifice || hp > power.requires_hp)
-			&& (!power.requires_corpse || (power.requires_corpse && ((target_corpse && target_corpse->corpse_ticks > 0) || (target_nearest_corpse && powers->checkNearestTargeting(power, this, true) && target_nearest_corpse->corpse_ticks > 0))))
+			&& (!power.requires_corpse || (target_corpse && target_corpse->corpse_ticks > 0) || (target_nearest_corpse && powers->checkNearestTargeting(power, this, true) && target_nearest_corpse->corpse_ticks > 0))
 			&& (checkRequiredSpawns(power.requires_spawns))
 			&& (menu_powers && menu_powers->meetsUsageStats(powerid))
 			&& (power.type == POWTYPE_SPAWN ? !summonLimitReached(powerid) : true)

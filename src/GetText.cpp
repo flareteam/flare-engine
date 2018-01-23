@@ -64,11 +64,11 @@ bool GetText::next() {
 		line = getLine(infile);
 
 		// check if comment and if fuzzy
-		if (line.compare(0,2,"#,") == 0 && line.find("fuzzy") != std::string::npos)
+		if (line.compare(0, 2, "#,") == 0 && line.find("fuzzy") != std::string::npos)
 			fuzzy = true;
 
 		// this is a key
-		if (line.find("msgid") == 0) {
+		if (line.compare(0, 5, "msgid") == 0) {
 			// grab only what's contained in the quotes
 			key = line.substr(6);
 			key = key.substr(1, key.length()-2); //strips off "s
@@ -80,7 +80,7 @@ bool GetText::next() {
 				// It is a multi-line value, unless it is the first msgid, in which case it will be empty
 				// and it will be ignored when finding the matching msgstr, so no big deal.
 				line = getLine(infile);
-				while(line.find("\"") == 0) {
+				while(line.find("\"") != std::string::npos) {
 					// We remove the double quotes.
 					key += line.substr(1, line.length()-2);
 					line = getLine(infile);
@@ -89,7 +89,7 @@ bool GetText::next() {
 		}
 
 		// this is a value
-		if (line.find("msgstr") == 0) {
+		if (line.compare(0, 6, "msgstr") == 0) {
 			// grab only what's contained in the quotes
 			val = line.substr(7);
 			val = val.substr(1, val.length()-2); //strips off "s
@@ -102,7 +102,7 @@ bool GetText::next() {
 				}
 				else { // Might be a multi-line value.
 					line = getLine(infile);
-					while(line.find("\"") == 0) {
+					while(line.find("\"") != std::string::npos) {
 						// We remove the double quotes.
 						val += line.substr(1, line.length()-2);
 						line = getLine(infile);

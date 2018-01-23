@@ -96,7 +96,7 @@ public:
 	std::vector<std::string> requires_status;
 	std::vector<std::string> requires_not_status;
 
-	Map_Enemy(std::string _type="", FPoint _pos=FPoint())
+	Map_Enemy(const std::string& _type="", FPoint _pos=FPoint())
 		: type(_type)
 		, pos(_pos)
 		, direction(rand() % 8)
