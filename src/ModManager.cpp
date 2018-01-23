@@ -76,6 +76,15 @@ ModManager::ModManager(const std::vector<std::string> *_cmd_line_mods)
 
 	loadModList();
 	applyDepends();
+
+	std::stringstream ss;
+	ss << "Active mods: ";
+	for (size_t i = 0; i < mod_list.size(); ++i) {
+		ss << mod_list[i].name;
+		if (i < mod_list.size()-1)
+			ss << ",";
+	}
+	logInfo(ss.str().c_str());
 }
 
 /**
