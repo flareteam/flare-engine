@@ -846,7 +846,7 @@ void loadMiscSettings() {
 	}
 }
 
-bool loadSettings() {
+void loadSettings() {
 
 	// init defaults
 	for (int i = 0; i < config_size; i++) {
@@ -860,7 +860,7 @@ bool loadSettings() {
 		loadMobileDefaults();
 		if (!infile.open("engine/default_settings.txt", true, "")) {
 			saveSettings();
-			return true;
+			return;
 		}
 		else saveSettings();
 	}
@@ -875,8 +875,6 @@ bool loadSettings() {
 	infile.close();
 
 	loadMobileDefaults();
-
-	return true;
 }
 
 /**

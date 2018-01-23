@@ -228,7 +228,7 @@ extern std::string LOAD_SCRIPT;
 
 void loadTilesetSettings();
 void loadMiscSettings();
-bool loadSettings();
+void loadSettings();
 bool saveSettings();
 bool loadDefaults();
 void loadMobileDefaults();

@@ -95,11 +95,7 @@ static void init(const CmdLineArgs& cmd_line_args) {
 		Exit(1);
 	}
 
-	if (!loadSettings()) {
-		logError("main: Could not load settings file: '%s'.", (PATH_CONF + FILE_SETTINGS).c_str());
-		logErrorDialog("main: Could not load settings file: '%s'.", (PATH_CONF + FILE_SETTINGS).c_str());
-		Exit(1);
-	}
+	loadSettings();
 
 	save_load = new SaveLoad();
 	msg = new MessageEngine();
