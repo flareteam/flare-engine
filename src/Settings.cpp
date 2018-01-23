@@ -937,6 +937,9 @@ std::string getVersionString() {
 		ss << VERSION_NAME << " v" << VERSION_MAJOR << "." << VERSION_MINOR/10;
 	else
 		ss << VERSION_NAME << " v" << VERSION_MAJOR << "." << std::setfill('0') << std::setw(2) << VERSION_MINOR;
+
+	ss << " (" << SDL_GetPlatform() << ")";
+
 	return ss.str();
 }
 
