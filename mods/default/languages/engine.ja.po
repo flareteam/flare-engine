@@ -289,14 +289,12 @@ msgid "Mouse aim"
 msgstr "マウスの狙い"
 
 #: ../../../src/GameStateConfigDesktop.cpp:260
-#, fuzzy
 msgid "Do not use mouse"
 msgstr "マウスの不利用"
 
 #: ../../../src/GameStateConfigDesktop.cpp:264
-#, fuzzy
 msgid "Joystick Deadzone"
-msgstr "ジョイスティックのDeadzone"
+msgstr "Joystick Deadzone
 
 #: ../../../src/GameStateConfigDesktop.cpp:269
 msgid "For handheld devices"
@@ -561,12 +559,12 @@ msgid "Unknown Item"
 msgstr "不明なアイテム"
 
 #: ../../../src/ItemManager.cpp:581 ../../../src/MenuPowers.cpp:784
-#, fuzzy, c-format
+#, c-format
 msgid "%d%% Speed"
 msgstr "%d%% スピード"
 
 #: ../../../src/ItemManager.cpp:585 ../../../src/MenuPowers.cpp:787
-#, fuzzy, c-format
+#, c-format
 msgid "%d%% Attack Speed"
 msgstr "%d%% スピード"
 
@@ -976,7 +974,6 @@ msgid "Immobilize"
 msgstr "動けなくする"
 
 #: ../../../src/MenuPowers.cpp:790
-#, fuzzy
 msgid "Immunity"
 msgstr "まぬがれ"
 
@@ -1178,7 +1175,6 @@ msgid "HP Regen"
 msgstr "HP再生"
 
 #: ../../../src/Stats.cpp:42
-#, fuzzy
 msgid "Ticks of HP regen per minute."
 msgstr "HPは、毎分生成。"
 
@@ -1191,7 +1187,6 @@ msgid "MP Regen"
 msgstr "MP再生"
 
 #: ../../../src/Stats.cpp:52
-#, fuzzy
 msgid "Ticks of MP regen per minute."
 msgstr "MPは、毎分生成。"
 
