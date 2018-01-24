@@ -51,6 +51,17 @@ public:
 		rect = r.rect;
 	}
 
+	Action& operator=(const Action &r) {
+		id = r.id;
+		label = (id != "") ? new WidgetLabel() : NULL;
+		if (label)
+			label->set(r.label->get());
+
+		rect = r.rect;
+
+		return *this;
+	}
+
 	virtual ~Action() {
 		delete label;
 	}
