@@ -55,7 +55,7 @@ Entity::Entity()
 	, animationSet(NULL) {
 }
 
-Entity::Entity(const Entity &e)
+Entity::Entity(const Entity& e)
 	: sprites(e.sprites)
 	, sound_attack(e.sound_attack)
 	, sound_hit(e.sound_hit)
@@ -66,6 +66,21 @@ Entity::Entity(const Entity &e)
 	, activeAnimation(new Animation(*e.activeAnimation))
 	, animationSet(e.animationSet)
 	, stats(StatBlock(e.stats)) {
+}
+
+Entity& Entity::operator=(const Entity& e) {
+	sprites = e.sprites;
+	sound_attack = e.sound_attack;
+	sound_hit = e.sound_hit;
+	sound_die = e.sound_die;
+	sound_critdie = e.sound_critdie;
+	sound_block = e.sound_block;
+	sound_levelup = e.sound_levelup;
+	activeAnimation = new Animation(*e.activeAnimation);
+	animationSet = e.animationSet;
+	stats = StatBlock(e.stats);
+
+	return *this;
 }
 
 void Entity::loadSounds(StatBlock *src_stats) {

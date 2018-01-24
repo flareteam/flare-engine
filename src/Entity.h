@@ -50,7 +50,8 @@ protected:
 
 public:
 	Entity();
-	Entity(const Entity&);
+	Entity(const Entity& e);
+	Entity& operator=(const Entity& e);
 	virtual ~Entity();
 
 	void loadSounds(StatBlock *src_stats = NULL);
