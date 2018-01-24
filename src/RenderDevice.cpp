@@ -177,7 +177,11 @@ RenderDevice::RenderDevice()
 	, texture_filter(false)
 	, min_screen(640, 480)
 	, is_initialized(false)
-	, reload_graphics(false) {
+	, reload_graphics(false)
+{
+	// don't bother initializing gamma_r, gamma_g, gamma_b
+	// it is up to the implemented render device to initialize them
+	// for example, SDL_GetWindowGammaRamp() can fill them in
 }
 
 RenderDevice::~RenderDevice() {

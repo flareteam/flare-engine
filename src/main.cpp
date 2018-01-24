@@ -377,6 +377,7 @@ int main(int argc, char *argv[]) {
 	if (!done) {
 		srand(static_cast<unsigned int>(time(NULL)));
 #ifdef __EMSCRIPTEN__
+		// TODO handle debug_event for Emscripten?
 		PlatformFSInit();
 		emscripten_set_main_loop(EmscriptenMainLoop, 0, 1);
 #else
