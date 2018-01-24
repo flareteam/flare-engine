@@ -145,7 +145,7 @@ void SDLSoundManager::reset() {
 
 		++it;
 	}
-	logic(Point(0,0));
+	logic(FPoint(0,0));
 }
 
 SoundManager::SoundID SDLSoundManager::load(const std::string& filename, const std::string& errormessage) {

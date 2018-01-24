@@ -407,7 +407,7 @@ bool MapCollision::compute_path(const FPoint& start_pos, const FPoint& end_pos, 
 	Point current = start;
 	AStarNode* node = new AStarNode(start);
 	node->setActualCost(0);
-	node->setEstimatedCost(static_cast<float>(calcDist(start,end)));
+	node->setEstimatedCost(static_cast<float>(calcDist(FPoint(start),FPoint(end))));
 	node->setParent(current);
 
 	AStarContainer open(map_size.x, map_size.y, limit);
@@ -448,18 +448,18 @@ bool MapCollision::compute_path(const FPoint& start_pos, const FPoint& end_pos, 
 			// if neighbour isn't inside open, add it as a new Node
 			if(!open.exists(neighbour)) {
 				AStarNode* newNode = new AStarNode(neighbour);
-				newNode->setActualCost(node->getActualCost() + static_cast<float>(calcDist(current,neighbour)));
+				newNode->setActualCost(node->getActualCost() + static_cast<float>(calcDist(FPoint(current),FPoint(neighbour))));
 				newNode->setParent(current);
-				newNode->setEstimatedCost(static_cast<float>(calcDist(neighbour,end)));
+				newNode->setEstimatedCost(static_cast<float>(calcDist(FPoint(neighbour),FPoint(end))));
 				open.add(newNode);
 			}
 			// else, update it's cost if better
 			else {
 				AStarNode* i = open.get(neighbour.x, neighbour.y);
-				if (node->getActualCost() + static_cast<float>(calcDist(current,neighbour)) < i->getActualCost()) {
+				if (node->getActualCost() + static_cast<float>(calcDist(FPoint(current),FPoint(neighbour))) < i->getActualCost()) {
 					Point pos(i->getX(), i->getY());
 					Point parent_pos(node->getX(), node->getY());
-					open.updateParent(pos, parent_pos, node->getActualCost() + static_cast<float>(calcDist(current,neighbour)));
+					open.updateParent(pos, parent_pos, node->getActualCost() + static_cast<float>(calcDist(FPoint(current),FPoint(neighbour))));
 				}
 			}
 		}
@@ -519,7 +519,7 @@ void MapCollision::unblock(const float& map_x, const float& map_y) {
  * Returns the retargeted position on success, returns the original position on failure
  */
 FPoint MapCollision::get_random_neighbor(const Point& target, int range, bool ignore_blocked) {
-	FPoint new_target = target;
+	FPoint new_target(target);
 	std::vector<FPoint> valid_tiles;
 
 	for (int i=-range; i<=range; i++) {
@@ -535,7 +535,7 @@ FPoint MapCollision::get_random_neighbor(const Point& target, int range, bool ig
 	if (!valid_tiles.empty())
 		return valid_tiles[rand() % valid_tiles.size()];
 	else
-		return target;
+		return FPoint(target);
 }
 
 MapCollision::~MapCollision() {

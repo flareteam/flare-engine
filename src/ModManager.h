@@ -60,7 +60,7 @@ private:
 	const std::vector<std::string> *cmd_line_mods;
 
 public:
-	ModManager(const std::vector<std::string> *_cmd_line_mods);
+	explicit ModManager(const std::vector<std::string> *_cmd_line_mods);
 	~ModManager();
 	Mod loadMod(const std::string& name);
 	void applyDepends();

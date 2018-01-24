@@ -381,7 +381,7 @@ void BehaviorStandard::checkMove() {
 					recalculate_path = true;
 
 				//if the target moved more than 1 tile away, recalculate
-				if(calcDist(map_to_collision(prev_target), map_to_collision(pursue_pos)) > 1.f)
+				if(calcDist(FPoint(map_to_collision(prev_target)), FPoint(map_to_collision(pursue_pos))) > 1.f)
 					recalculate_path = true;
 
 				//if a collision ocurred then recalculate

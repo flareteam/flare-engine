@@ -500,7 +500,7 @@ bool MenuInventory::drop(const Point& position, ItemStack stack) {
  */
 void MenuInventory::activate(const Point& position) {
 	ItemStack stack;
-	Point nullpt;
+	FPoint nullpt;
 	nullpt.x = nullpt.y = 0;
 
 	// clicked a carried item

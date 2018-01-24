@@ -765,7 +765,7 @@ void GameStatePlay::checkCutscene() {
 
 	}
 	else {
-		mapr->respawn_point = FPointToPoint(pc->stats.pos);
+		mapr->respawn_point = pc->stats.pos;
 	}
 
 	if (SAVE_ONLOAD)
@@ -776,7 +776,7 @@ void GameStatePlay::checkCutscene() {
 
 void GameStatePlay::checkSaveEvent() {
 	if (mapr->save_game) {
-		mapr->respawn_point = FPointToPoint(pc->stats.pos);
+		mapr->respawn_point = pc->stats.pos;
 		save_load->saveGame();
 		mapr->save_game = false;
 	}

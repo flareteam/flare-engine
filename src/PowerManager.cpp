@@ -1208,7 +1208,7 @@ bool PowerManager::spawn(int power_index, StatBlock *src_stats, const FPoint& ta
 	}
 
 	if (target_neighbor > 0) {
-		espawn.pos = FPointToPoint(collider->get_random_neighbor(FPointToPoint(src_stats->pos), target_neighbor));
+		espawn.pos = collider->get_random_neighbor(FPointToPoint(src_stats->pos), target_neighbor);
 	}
 
 	// can't spawn on a blocked tile

@@ -44,7 +44,7 @@ class WidgetTooltip;
 
 class GameStateConfigDesktop : public GameStateConfigBase {
 public:
-	GameStateConfigDesktop(bool _enable_video_tab);
+	explicit GameStateConfigDesktop(bool _enable_video_tab);
 	~GameStateConfigDesktop();
 
 private:
