@@ -191,14 +191,6 @@ void HazardManager::checkNewHazards() {
 		h.push_back(pc->haz);
 		pc->haz = NULL;
 	}
-
-	// check monster hazards
-	for (unsigned int eindex = 0; eindex < enemym->enemies.size(); eindex++) {
-		if (enemym->enemies[eindex]->haz != NULL) {
-			h.push_back(enemym->enemies[eindex]->haz);
-			enemym->enemies[eindex]->haz = NULL;
-		}
-	}
 }
 
 /**

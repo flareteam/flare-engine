@@ -25,7 +25,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "EnemyBehavior.h"
 #include "Enemy.h"
-#include "Hazard.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "UtilsMath.h"
@@ -40,8 +39,6 @@ Enemy::Enemy() : Entity() {
 	stats.in_combat = false;
 	stats.join_combat = false;
 
-	haz = NULL;
-
 	reward_xp = false;
 	instant_power = false;
 	kill_source_type = SOURCE_TYPE_NEUTRAL;
@@ -51,12 +48,10 @@ Enemy::Enemy() : Entity() {
 Enemy::Enemy(const Enemy& e)
 	: Entity(e)
 	, type(e.type)
-	, haz(NULL) // do not copy hazard. This constructor is used during mapload, so no hazard should be active.
 	, reward_xp(e.reward_xp)
 	, instant_power(e.instant_power)
 	, kill_source_type(e.kill_source_type) {
 	eb = new BehaviorStandard(this); // Putting a 'this' into the init list will make MSVS complain, hence it's in the body of the ctor
-	assert(e.haz == NULL);
 }
 
 /**
@@ -169,7 +164,6 @@ Renderable Enemy::getRender() {
 }
 
 Enemy::~Enemy() {
-	delete haz;
 	delete eb;
 }
 

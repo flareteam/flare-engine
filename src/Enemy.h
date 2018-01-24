@@ -30,7 +30,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Utils.h"
 
 class EnemyBehavior;
-class Hazard;
 
 class Enemy : public Entity {
 
@@ -46,7 +45,6 @@ public:
 
 	Renderable getRender();
 
-	Hazard *haz;
 	EnemyBehavior *eb;
 
 	// other flags
