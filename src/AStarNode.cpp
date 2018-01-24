@@ -36,14 +36,6 @@ AStarNode::AStarNode(const Point &p)
 	, parent(Point()) {
 }
 
-AStarNode::AStarNode(const AStarNode& copy)
-	: x(copy.x)
-	, y(copy.y)
-	, g(copy.g)
-	, h(copy.h)
-	, parent(copy.parent) {
-}
-
 int AStarNode::getX() const {
 	return x;
 }
