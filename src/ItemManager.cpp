@@ -49,10 +49,11 @@ ItemManager::ItemManager()
 	, color_bonus(font->getColor("item_bonus"))
 	, color_penalty(font->getColor("item_penalty"))
 	, color_requirements_not_met(font->getColor("requirements_not_met"))
-	, color_flavor(font->getColor("item_flavor")) {
-	// NB: 20 is arbitrary picked number, but it looks like good start.
-	items.reserve(20);
-	item_sets.reserve(5);
+	, color_flavor(font->getColor("item_flavor"))
+{
+	// These values are a bit arbitrary, but they should be a good starting point.
+	items.reserve(1000);
+	item_sets.reserve(100);
 
 	loadAll();
 
@@ -84,11 +85,11 @@ void ItemManager::loadAll() {
 	 * so we can free it.
 	 */
 	if (items.capacity() != items.size())
-		items.swap(items);
+		std::vector<Item>(items).swap(items);
 	if (item_sets.capacity() != item_sets.size())
-		item_sets.swap(item_sets);
+		std::vector<ItemSet>(item_sets).swap(item_sets);
 
-	// do we need to print these messages?
+	// TODO do we need to print these messages?
 	if (items.empty()) logInfo("ItemManager: No items were found.");
 	if (item_sets.empty()) logInfo("ItemManager: No item sets were found.");
 }
