@@ -54,6 +54,17 @@ Enemy::Enemy(const Enemy& e)
 	eb = new BehaviorStandard(this); // Putting a 'this' into the init list will make MSVS complain, hence it's in the body of the ctor
 }
 
+Enemy& Enemy::operator=(const Enemy& e) {
+	Entity::operator=(e);
+	type = e.type;
+	reward_xp = e.reward_xp;
+	instant_power = e.instant_power;
+	kill_source_type = e.kill_source_type;
+	eb = new BehaviorStandard(this);
+
+	return *this;
+}
+
 /**
  * The current direction leads to a wall.  Try the next best direction, if one is available.
  */
