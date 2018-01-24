@@ -24,6 +24,100 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EffectManager.h"
 #include "Settings.h"
 
+Effect::Effect()
+	: id("")
+	, name("")
+	, icon(-1)
+	, ticks(0)
+	, duration(-1)
+	, type(EFFECT_NONE)
+	, magnitude(0)
+	, magnitude_max(0)
+	, animation_name("")
+	, animation(NULL)
+	, item(false)
+	, trigger(-1)
+	, render_above(false)
+	, passive_id(0)
+	, source_type(SOURCE_TYPE_HERO)
+	, group_stack(false)
+	, color_mod(255, 255, 255)
+	, alpha_mod(255)
+	, attack_speed_anim("") {
+}
+
+Effect::Effect(const Effect& other)
+	: id(other.id)
+	, name(other.name)
+	, icon(other.icon)
+	, ticks(other.ticks)
+	, duration(other.duration)
+	, type(other.type)
+	, magnitude(other.magnitude)
+	, magnitude_max(other.magnitude_max)
+	, animation_name(other.animation_name)
+	, animation(NULL)
+	, item(other.item)
+	, trigger(other.trigger)
+	, render_above(other.render_above)
+	, passive_id(other.passive_id)
+	, source_type(other.source_type)
+	, group_stack(other.group_stack)
+	, color_mod(other.color_mod)
+	, alpha_mod(other.alpha_mod)
+	, attack_speed_anim(other.attack_speed_anim)
+{
+	loadAnimation(animation_name);
+}
+
+Effect& Effect::operator=(const Effect& other) {
+	unloadAnimation();
+
+	id = other.id;
+	name = other.name;
+	icon = other.icon;
+	ticks = other.ticks;
+	duration = other.duration;
+	type = other.type;
+	magnitude = other.magnitude;
+	magnitude_max = other.magnitude_max;
+	animation_name = other.animation_name;
+	loadAnimation(animation_name);
+	item = other.item;
+	trigger = other.trigger;
+	render_above = other.render_above;
+	passive_id = other.passive_id;
+	source_type = other.source_type;
+	group_stack = other.group_stack;
+	color_mod = other.color_mod;
+	alpha_mod = other.alpha_mod;
+	attack_speed_anim = other.attack_speed_anim;
+
+	return *this;
+}
+
+Effect::~Effect() {
+	unloadAnimation();
+}
+
+void Effect::loadAnimation(const std::string &s) {
+	if (!s.empty()) {
+		animation_name = s;
+		anim->increaseCount(animation_name);
+		AnimationSet *animationSet = anim->getAnimationSet(animation_name);
+		animation = animationSet->getAnimation("");
+	}
+}
+
+void Effect::unloadAnimation() {
+	if (animation) {
+		if (!animation_name.empty())
+			anim->decreaseCount(animation_name);
+		delete animation;
+		animation = NULL;
+	}
+}
+
 EffectManager::EffectManager()
 	: bonus(std::vector<int>(STAT_COUNT + DAMAGE_TYPES_COUNT, 0))
 	, bonus_resist(std::vector<int>(ELEMENTS.size(), 0))
@@ -39,80 +133,6 @@ EffectManager::EffectManager()
 }
 
 EffectManager::~EffectManager() {
-	for (size_t i=0; i<effect_list.size(); i++) {
-		removeAnimation(i);
-	}
-}
-
-EffectManager& EffectManager::operator= (const EffectManager &emSource) {
-	effect_list.resize(emSource.effect_list.size());
-
-	for (unsigned i=0; i<effect_list.size(); i++) {
-		effect_list[i].id = emSource.effect_list[i].id;
-		effect_list[i].name = emSource.effect_list[i].name;
-		effect_list[i].icon = emSource.effect_list[i].icon;
-		effect_list[i].ticks = emSource.effect_list[i].ticks;
-		effect_list[i].duration = emSource.effect_list[i].duration;
-		effect_list[i].type = emSource.effect_list[i].type;
-		effect_list[i].magnitude = emSource.effect_list[i].magnitude;
-		effect_list[i].magnitude_max = emSource.effect_list[i].magnitude_max;
-		effect_list[i].item = emSource.effect_list[i].item;
-		effect_list[i].trigger = emSource.effect_list[i].trigger;
-		effect_list[i].render_above = emSource.effect_list[i].render_above;
-		effect_list[i].passive_id = emSource.effect_list[i].passive_id;
-		effect_list[i].source_type = emSource.effect_list[i].source_type;
-		effect_list[i].group_stack = emSource.effect_list[i].group_stack;
-		effect_list[i].color_mod = emSource.effect_list[i].color_mod;
-		effect_list[i].alpha_mod = emSource.effect_list[i].alpha_mod;
-		effect_list[i].attack_speed_anim = emSource.effect_list[i].attack_speed_anim;
-
-		if (emSource.effect_list[i].animation_name != "") {
-			effect_list[i].animation_name = emSource.effect_list[i].animation_name;
-			anim->increaseCount(effect_list[i].animation_name);
-			effect_list[i].animation = loadAnimation(effect_list[i].animation_name);
-		}
-	}
-	damage = emSource.damage;
-	damage_percent = emSource.damage_percent;
-	hpot = emSource.hpot;
-	hpot_percent = emSource.hpot_percent;
-	mpot = emSource.mpot;
-	mpot_percent = emSource.mpot_percent;
-	speed = emSource.speed;
-	immunity_damage = emSource.immunity_damage;
-	immunity_slow = emSource.immunity_slow;
-	immunity_stun = emSource.immunity_stun;
-	immunity_hp_steal = emSource.immunity_hp_steal;
-	immunity_mp_steal = emSource.immunity_mp_steal;
-	immunity_knockback = emSource.immunity_knockback;
-	immunity_damage_reflect = emSource.immunity_damage_reflect;
-	immunity_stat_debuff = emSource.immunity_stat_debuff;
-	stun = emSource.stun;
-	revive = emSource.revive;
-	convert = emSource.convert;
-	death_sentence = emSource.death_sentence;
-	fear = emSource.fear;
-	knockback_speed = emSource.knockback_speed;
-
-	for (size_t i=0; i<emSource.bonus.size(); i++) {
-		bonus[i] = emSource.bonus[i];
-	}
-	for (size_t i=0; i<emSource.bonus_resist.size(); i++) {
-		bonus_resist[i] = emSource.bonus_resist[i];
-	}
-	for (size_t i=0; i<emSource.bonus_primary.size(); i++) {
-		bonus_primary[i] = emSource.bonus_primary[i];
-	}
-
-	triggered_others = emSource.triggered_others;
-	triggered_block = emSource.triggered_block;
-	triggered_hit = emSource.triggered_hit;
-	triggered_halfdeath = emSource.triggered_halfdeath;
-	triggered_joincombat = emSource.triggered_joincombat;
-	triggered_death = emSource.triggered_death;
-	refresh_stats = emSource.refresh_stats;
-
-	return *this;
 }
 
 void EffectManager::clearStatus() {
@@ -359,9 +379,7 @@ void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, bo
 	e.attack_speed_anim = effect.attack_speed_anim;
 
 	if (effect.animation != "") {
-		anim->increaseCount(effect.animation);
-		e.animation = loadAnimation(effect.animation);
-		e.animation_name = effect.animation;
+		e.loadAnimation(effect.animation);
 	}
 
 	e.ticks = e.duration = duration;
@@ -386,18 +404,8 @@ void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, bo
 }
 
 void EffectManager::removeEffect(size_t id) {
-	removeAnimation(id);
 	effect_list.erase(effect_list.begin()+id);
 	refresh_stats = true;
-}
-
-void EffectManager::removeAnimation(size_t id) {
-	if (effect_list[id].animation && effect_list[id].animation_name != "") {
-		anim->decreaseCount(effect_list[id].animation_name);
-		delete effect_list[id].animation;
-		effect_list[id].animation = NULL;
-		effect_list[id].animation_name = "";
-	}
 }
 
 void EffectManager::removeEffectType(const int type) {
@@ -486,14 +494,6 @@ int EffectManager::damageShields(int dmg) {
 	}
 
 	return over_dmg;
-}
-
-Animation* EffectManager::loadAnimation(const std::string &s) {
-	if (s != "") {
-		AnimationSet *animationSet = anim->getAnimationSet(s);
-		return animationSet->getAnimation("");
-	}
-	return NULL;
 }
 
 int EffectManager::getType(const std::string& type) {
