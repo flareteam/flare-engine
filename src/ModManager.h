@@ -35,7 +35,6 @@ class Mod {
 public:
 	Mod();
 	~Mod();
-	Mod(const Mod &mod);
 	bool operator== (const Mod &mod) const;
 	bool operator!= (const Mod &mod) const;
 

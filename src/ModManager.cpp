@@ -38,17 +38,6 @@ Mod::Mod()
 Mod::~Mod() {
 }
 
-Mod::Mod(const Mod &mod)
-	: name(mod.name)
-	, description(mod.description)
-	, game(mod.game)
-	, min_version_major(mod.min_version_major)
-	, min_version_minor(mod.min_version_minor)
-	, max_version_major(mod.max_version_major)
-	, max_version_minor(mod.max_version_minor)
-	, depends(mod.depends) {
-}
-
 bool Mod::operator== (const Mod &mod) const {
 	return this->name == mod.name;
 }
