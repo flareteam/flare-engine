@@ -27,6 +27,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class GameState {
 public:
 	GameState();
+	GameState(const GameState& other);
+	GameState& operator=(const GameState& other);
 	virtual ~GameState();
 
 	virtual void logic();
