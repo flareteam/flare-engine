@@ -60,31 +60,6 @@ Animation::Animation(const std::string &_name, const std::string &_type, Image *
 		logError("Animation: Type %s is unknown", _type.c_str());
 }
 
-Animation::Animation(const Animation& a)
-	: name(a.name)
-	, type(a.type)
-	, sprite(a.sprite)
-	, blend_mode(a.blend_mode)
-	, alpha_mod(a.alpha_mod)
-	, color_mod(a.color_mod)
-	, number_frames(a.number_frames)
-	, cur_frame(0)
-	, cur_frame_index(a.cur_frame_index)
-	, cur_frame_duration(a.cur_frame_duration)
-	, cur_frame_index_f(a.cur_frame_index_f)
-	, max_kinds(a.max_kinds)
-	, additional_data(a.additional_data)
-	, times_played(0)
-	, gfx(std::vector<Rect>(a.gfx))
-	, render_offset(std::vector<Point>(a.render_offset))
-	, frames(std::vector<unsigned short>(a.frames))
-	, active_frames(std::vector<short>(a.active_frames))
-	, active_frame_triggered(false)
-	, elapsed_frames(0)
-	, frame_count(0)
-	, speed(a.speed) {
-}
-
 void Animation::setupUncompressed(const Point& _render_size, const Point& _render_offset, unsigned short _position, unsigned short _frames, unsigned short _duration, unsigned short _maxkinds) {
 	setup(_frames, _duration, _maxkinds);
 

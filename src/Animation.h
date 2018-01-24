@@ -88,9 +88,6 @@ protected:
 public:
 	Animation(const std::string &_name, const std::string &_type, Image *_sprite, uint8_t _blend_mode, uint8_t _alpha_mod, Color _color_mod);
 
-	// returns a copy of this:
-	Animation(const Animation&);
-
 	// Traditional way to create an animation.
 	// The frames are stored in a grid like fashion, so the individual frame
 	// position can be calculated based on a few things.
