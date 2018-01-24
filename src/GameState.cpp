@@ -48,6 +48,9 @@ GameState::GameState(const GameState& other)
 }
 
 GameState& GameState::operator=(const GameState& other) {
+	if (this == &other)
+		return *this;
+
 	hasMusic = other.hasMusic;
 	has_background = other.has_background;
 	reload_music = other.reload_music;

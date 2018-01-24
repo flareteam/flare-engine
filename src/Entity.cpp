@@ -69,6 +69,9 @@ Entity::Entity(const Entity& e)
 }
 
 Entity& Entity::operator=(const Entity& e) {
+	if (this == &e)
+		return *this;
+
 	sprites = e.sprites;
 	sound_attack = e.sound_attack;
 	sound_hit = e.sound_hit;

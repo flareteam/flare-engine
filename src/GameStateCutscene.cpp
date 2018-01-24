@@ -68,6 +68,9 @@ Scene::Scene(const Scene& other)
 }
 
 Scene& Scene::operator=(const Scene& other) {
+	if (this == &other)
+		return *this;
+
 	settings = other.settings;
 	frame_counter = other.frame_counter;
 	pause_frames = other.pause_frames;

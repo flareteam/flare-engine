@@ -55,6 +55,9 @@ Enemy::Enemy(const Enemy& e)
 }
 
 Enemy& Enemy::operator=(const Enemy& e) {
+	if (this == &e)
+		return *this;
+
 	Entity::operator=(e);
 	type = e.type;
 	reward_xp = e.reward_xp;
