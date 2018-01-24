@@ -103,7 +103,10 @@ private:
 
 public:
 	Scene(const CutsceneSettings& _settings, short _cutscene_type);
+	Scene(const Scene& other);
+	Scene& operator=(const Scene& other);
 	~Scene();
+
 	void refreshWidgets();
 	bool logic();
 	void render();

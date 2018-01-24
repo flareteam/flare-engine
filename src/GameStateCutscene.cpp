@@ -46,6 +46,49 @@ Scene::Scene(const CutsceneSettings& _settings, short _cutscene_type)
 {
 }
 
+Scene::Scene(const Scene& other)
+	: settings(other.settings)
+	, frame_counter(other.frame_counter)
+	, pause_frames(other.pause_frames)
+	, caption(other.caption)
+	, art(NULL)
+	, art_scaled(NULL)
+	, art_scale_type(other.art_scale_type)
+	, sid(other.sid)
+	, caption_box(NULL)
+	, button_next(new WidgetButton("images/menus/buttons/right.png"))
+	, button_close(new WidgetButton("images/menus/buttons/button_x.png"))
+	, button_advance(NULL)
+	, done(other.done)
+	, vscroll_offset(other.vscroll_offset)
+	, vscroll_ticks(other.vscroll_ticks)
+	, cutscene_type(other.cutscene_type)
+	, is_last_scene(other.is_last_scene)
+{
+}
+
+Scene& Scene::operator=(const Scene& other) {
+	settings = other.settings;
+	frame_counter = other.frame_counter;
+	pause_frames = other.pause_frames;
+	caption = other.caption;
+	art = NULL;
+	art_scaled = NULL;
+	art_scale_type = other.art_scale_type;
+	sid = other.sid;
+	caption_box = NULL;
+	button_next = new WidgetButton("images/menus/buttons/right.png");
+	button_close = new WidgetButton("images/menus/buttons/button_x.png");
+	button_advance = NULL;
+	done = other.done;
+	vscroll_offset = other.vscroll_offset;
+	vscroll_ticks = other.vscroll_ticks;
+	cutscene_type = other.cutscene_type;
+	is_last_scene = other.is_last_scene;
+
+	return *this;
+}
+
 Scene::~Scene() {
 	if (art) delete art;
 	if (art_scaled) delete art_scaled;
