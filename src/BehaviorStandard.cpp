@@ -680,12 +680,13 @@ void BehaviorStandard::updateState() {
 			if (e->activeAnimation->isFirstFrame()) {
 				e->playSound(ENTITY_SOUND_DIE);
 				e->stats.corpse_ticks = CORPSE_TIMEOUT;
-				e->stats.effects.clearEffects();
 			}
 			if (e->activeAnimation->isSecondLastFrame()) {
 				AIPower* ai_power = e->stats.getAIPower(AI_POWER_DEATH);
 				if (ai_power != NULL)
 					powers->activate(ai_power->id, &e->stats, e->stats.pos);
+
+				e->stats.effects.clearEffects();
 			}
 			if (e->activeAnimation->isLastFrame() || e->activeAnimation->getName() != "die") {
 				// puts renderable under object layer
@@ -711,12 +712,13 @@ void BehaviorStandard::updateState() {
 			if (e->activeAnimation->isFirstFrame()) {
 				e->playSound(ENTITY_SOUND_CRITDIE);
 				e->stats.corpse_ticks = CORPSE_TIMEOUT;
-				e->stats.effects.clearEffects();
 			}
 			if (e->activeAnimation->isSecondLastFrame()) {
 				AIPower* ai_power = e->stats.getAIPower(AI_POWER_DEATH);
 				if (ai_power != NULL)
 					powers->activate(ai_power->id, &e->stats, e->stats.pos);
+
+				e->stats.effects.clearEffects();
 			}
 			if (e->activeAnimation->isLastFrame() || e->activeAnimation->getName() != "critdie") {
 				// puts renderable under object layer
