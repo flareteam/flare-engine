@@ -537,7 +537,7 @@ void GameStateConfigBase::logic() {
 		tablist.setNextTabList(&tablist_interface);
 		logicInterface();
 
-		if (PlatformOptions.force_hardware_cursor) {
+		if (platform_options.force_hardware_cursor) {
 			// for some platforms, hardware mouse cursor can not be turned off
 			hardware_cursor_cb->Check();
 			HARDWARE_CURSOR = true;

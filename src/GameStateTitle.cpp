@@ -155,9 +155,9 @@ void GameStateTitle::logic() {
 	}
 	else if (button_cfg->checkClick()) {
 		showLoading();
-		if (PlatformOptions.config_menu_type == CONFIG_MENU_TYPE_DESKTOP_NO_VIDEO)
+		if (platform_options.config_menu_type == CONFIG_MENU_TYPE_DESKTOP_NO_VIDEO)
 			setRequestedGameState(new GameStateConfigDesktop(false));
-		else if (PlatformOptions.config_menu_type == CONFIG_MENU_TYPE_DESKTOP)
+		else if (platform_options.config_menu_type == CONFIG_MENU_TYPE_DESKTOP)
 			setRequestedGameState(new GameStateConfigDesktop(true));
 		else
 			setRequestedGameState(new GameStateConfigBase());
@@ -175,7 +175,7 @@ void GameStateTitle::logic() {
 			setRequestedGameState(credits);
 		}
 	}
-	else if (PlatformOptions.has_exit_button && button_exit->checkClick()) {
+	else if (platform_options.has_exit_button && button_exit->checkClick()) {
 		exitRequested = true;
 	}
 }
@@ -209,7 +209,7 @@ void GameStateTitle::render() {
 	button_cfg->render();
 	button_credits->render();
 
-	if (PlatformOptions.has_exit_button)
+	if (platform_options.has_exit_button)
 		button_exit->render();
 
 	// version number

@@ -957,7 +957,7 @@ bool compareVersions(int maj0, int min0, int maj1, int min1) {
  * Set required settings for Mobile devices
  */
 void loadMobileDefaults() {
-	if (PlatformOptions.is_mobile_device) {
+	if (platform_options.is_mobile_device) {
 		MOUSE_MOVE = true;
 		MOUSE_AIM = true;
 		NO_MOUSE = false;

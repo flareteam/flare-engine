@@ -31,7 +31,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <unistd.h>
 #include <sys/stat.h>
 
-PlatformOptions_t PlatformOptions = {};
+PlatformOptions platform_options;
+platform_options.has_exit_button = false;
+platform_options.is_mobile_device = true;
+platform_options.force_hardware_cursor = true;
+platform_options.config_menu_type = CONFIG_MENU_TYPE_BASE;
+platform_options.default_renderer = "sdl_hardware";
 
 int IPhoneOSIsExitEvent(void* userdata, SDL_Event* event) {
 	if (userdata) {}; // avoid unused var compile warning
@@ -43,14 +48,6 @@ int IPhoneOSIsExitEvent(void* userdata, SDL_Event* event) {
 		return 0;
 	}
 	return 1;
-}
-
-void PlatformInit(struct PlatformOptions_t *options) {
-	options->has_exit_button = false;
-	options->is_mobile_device = true;
-	options->force_hardware_cursor = true;
-	options->config_menu_type = CONFIG_MENU_TYPE_BASE;
-	options->default_renderer="sdl_hardware";
 }
 
 // TODO This was copied from the Linux platform

@@ -26,15 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <stdlib.h>
 
-PlatformOptions_t PlatformOptions = {};
-
-void PlatformInit(struct PlatformOptions_t *options) {
-	options->has_exit_button = true;
-	options->is_mobile_device = false;
-	options->force_hardware_cursor = false;
-	options->config_menu_type = CONFIG_MENU_TYPE_DESKTOP;
-	options->default_renderer="";
-}
+PlatformOptions platform_options;
 
 void PlatformSetPaths() {
 	// handle Windows-specific path options

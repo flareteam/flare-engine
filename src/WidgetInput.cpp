@@ -216,7 +216,7 @@ void WidgetInput::render() {
 	}
 
 	// handle on-screen keyboard
-	if (PlatformOptions.is_mobile_device && edit_mode) {
+	if (platform_options.is_mobile_device && edit_mode) {
 		osk_buf.clear();
 		osk_buf.addText(trimmed_text_cursor);
 		osk_tip.render(osk_buf, Point(VIEW_W_HALF + pos.w/2, 0), STYLE_FLOAT);

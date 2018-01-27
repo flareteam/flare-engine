@@ -63,8 +63,6 @@ bool init_finished = false;
  * Game initialization.
  */
 static void init(const CmdLineArgs& cmd_line_args) {
-	PlatformInit(&PlatformOptions);
-
 	/**
 	 * Set system paths
 	 * PATH_CONF is for user-configurable settings files (e.g. keybindings)
@@ -123,8 +121,8 @@ static void init(const CmdLineArgs& cmd_line_args) {
 #endif
 
 	// Create render Device and Rendering Context.
-	if (PlatformOptions.default_renderer != "")
-		render_device = getRenderDevice(PlatformOptions.default_renderer);
+	if (platform_options.default_renderer != "")
+		render_device = getRenderDevice(platform_options.default_renderer);
 	else if (cmd_line_args.render_device_name != "")
 		render_device = getRenderDevice(cmd_line_args.render_device_name);
 	else

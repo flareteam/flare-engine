@@ -35,15 +35,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <emscripten.h>
 
-PlatformOptions_t PlatformOptions = {};
-
-void PlatformInit(struct PlatformOptions_t *options) {
-	options->has_exit_button = false;
-	options->is_mobile_device = false;
-	options->force_hardware_cursor = false;
-	options->config_menu_type = CONFIG_MENU_TYPE_DESKTOP_NO_VIDEO;
-	options->default_renderer="sdl_hardware";
-}
+PlatformOptions platform_options;
+platform_options.has_exit_button = false;
+platform_options.config_menu_type = CONFIG_MENU_TYPE_DESKTOP_NO_VIDEO;
+platform_options.default_renderer = "sdl_hardware";
 
 void PlatformSetPaths() {
 	PATH_CONF = "/flare_data/config/";

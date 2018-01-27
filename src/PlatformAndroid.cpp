@@ -34,7 +34,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <jni.h>
 
-PlatformOptions_t PlatformOptions = {};
+PlatformOptions platform_options;
+platform_options.is_mobile_device = true;
+platform_options.force_hardware_cursor = true;
+platform_options.config_menu_type = CONFIG_MENU_TYPE_BASE;
+platform_options.default_renderer = "sdl_hardware";
 
 std::string AndroidGetPackageName()
 {
@@ -65,14 +69,6 @@ int AndroidIsExitEvent(void* userdata, SDL_Event* event) {
 		return 0;
 	}
 	return 1;
-}
-
-void PlatformInit(struct PlatformOptions_t *options) {
-	options->has_exit_button = true;
-	options->is_mobile_device = true;
-	options->force_hardware_cursor = true;
-	options->config_menu_type = CONFIG_MENU_TYPE_BASE;
-	options->default_renderer="sdl_hardware";
 }
 
 void PlatformSetPaths() {

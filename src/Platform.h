@@ -24,17 +24,26 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define CONFIG_MENU_TYPE_DESKTOP 1
 #define CONFIG_MENU_TYPE_DESKTOP_NO_VIDEO 2
 
-struct PlatformOptions_t {
+class PlatformOptions {
+public:
 	bool has_exit_button;
 	bool is_mobile_device;
 	bool force_hardware_cursor;
 	unsigned char config_menu_type;
 	std::string default_renderer;
+
+	PlatformOptions()
+		: has_exit_button(true)
+		, is_mobile_device(false)
+		, force_hardware_cursor(false)
+		, config_menu_type(CONFIG_MENU_TYPE_DESKTOP)
+		, default_renderer("")
+	{}
+	~PlatformOptions() {}
 };
 
-extern struct PlatformOptions_t PlatformOptions;
+extern PlatformOptions platform_options;
 
-void PlatformInit(struct PlatformOptions_t *options);
 void PlatformSetPaths();
 void PlatformSetExitEventFilter();
 bool PlatformDirCreate(const std::string& path);
