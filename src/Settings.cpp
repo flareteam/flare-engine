@@ -88,7 +88,7 @@ ConfigEntry config[] = {
 	{ "auto_equip",        &typeid(AUTO_EQUIP),         "1",   &AUTO_EQUIP,         "automatically equip items. 1 enable, 0 disable"},
 	{ "subtitles",         &typeid(SUBTITLES),          "0",   &SUBTITLES,          "displays subtitles. 1 enable, 0 disable"}
 };
-const int config_size = sizeof(config) / sizeof(ConfigEntry);
+const size_t config_size = sizeof(config) / sizeof(ConfigEntry);
 
 // Paths
 std::string PATH_CONF = "";
@@ -242,7 +242,7 @@ float CAMERA_SPEED;
 
 static ConfigEntry * getConfigEntry(const char * name) {
 
-	for (int i = 0; i < config_size; i++) {
+	for (size_t i = 0; i < config_size; i++) {
 		if (std::strcmp(config[i].name, name) == 0) return config + i;
 	}
 
@@ -850,7 +850,7 @@ void loadMiscSettings() {
 void loadSettings() {
 
 	// init defaults
-	for (int i = 0; i < config_size; i++) {
+	for (size_t i = 0; i < config_size; i++) {
 		ConfigEntry * entry = config + i;
 		tryParseValue(*entry->type, entry->default_val, entry->storage);
 	}
@@ -891,7 +891,7 @@ bool saveSettings() {
 		// comment
 		outfile << "## flare-engine settings file ##" << "\n";
 
-		for (int i = 0; i < config_size; i++) {
+		for (size_t i = 0; i < config_size; i++) {
 
 			// write additional newline before the next section
 			if (i != 0 && config[i].comment != NULL)
@@ -918,7 +918,7 @@ bool saveSettings() {
 bool loadDefaults() {
 
 	// HACK init defaults except video
-	for (int i = 3; i < config_size; i++) {
+	for (size_t i = 3; i < config_size; i++) {
 		ConfigEntry * entry = config + i;
 		tryParseValue(*entry->type, entry->default_val, entry->storage);
 	}

@@ -273,7 +273,7 @@ void logInfo(const char* format, ...) {
 		FILE *log_file = fopen(LOG_PATH.c_str(), "a");
 		if (log_file) {
 			fprintf(log_file, "INFO: ");
-			fprintf(log_file, file_buf);
+			fprintf(log_file, "%s", file_buf);
 			fprintf(log_file, "\n");
 			fclose(log_file);
 		}
@@ -300,7 +300,7 @@ void logError(const char* format, ...) {
 		FILE *log_file = fopen(LOG_PATH.c_str(), "a");
 		if (log_file) {
 			fprintf(log_file, "ERROR: ");
-			fprintf(log_file, file_buf);
+			fprintf(log_file, "%s", file_buf);
 			fprintf(log_file, "\n");
 			fclose(log_file);
 		}
@@ -338,7 +338,7 @@ void createLogFile() {
 			else if (LOG_MSG.front().first == SDL_LOG_PRIORITY_ERROR)
 				fprintf(log_file, "ERROR: ");
 
-			fprintf(log_file, LOG_MSG.front().second.c_str());
+			fprintf(log_file, "%s", LOG_MSG.front().second.c_str());
 			fprintf(log_file, "\n");
 
 			LOG_MSG.pop();
