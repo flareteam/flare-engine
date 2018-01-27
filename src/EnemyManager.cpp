@@ -355,7 +355,7 @@ void EnemyManager::handleSpawn() {
 
 		enemies.push_back(e);
 
-		mapr->collider.block(espawn.pos.x, espawn.pos.y, e->stats.hero_ally);
+		mapr->collider.block(e->stats.pos.x, e->stats.pos.y, e->stats.hero_ally);
 	}
 }
 
