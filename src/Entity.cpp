@@ -473,9 +473,7 @@ bool Entity::takeHit(Hazard &h) {
 		// damage always breaks stun
 		stats.effects.removeEffectType(EFFECT_STUN);
 
-		if (stats.hp > 0) {
-			powers->effect(&stats, h.src_stats, h.power_index,h.source_type);
-		}
+		powers->effect(&stats, h.src_stats, h.power_index,h.source_type);
 
 		// HP/MP steal is cumulative between stat bonus and power bonus
 		// TODO should hp_steal and mp_steal be capped at 100?

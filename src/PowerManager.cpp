@@ -470,8 +470,9 @@ void PowerManager::loadPowers() {
 		else if (infile.key == "buff_party_power_id")
 			// @ATTR power.buff_party_power_id|power_id|Only party members that were spawned with this power ID are affected by "buff_party=true". Setting this to 0 will affect all party members.
 			powers[input_id].buff_party_power_id = toInt(infile.val);
-		else if (infile.key == "post_effect") {
-			// @ATTR power.post_effect|predefined_string, int, duration , int: Effect ID, Magnitude, Duration, Chance to apply|Post effect. Duration is in 'ms' or 's'.
+		else if (infile.key == "post_effect" || infile.key == "post_effect_src") {
+			// @ATTR power.post_effect|predefined_string, int, duration , int: Effect ID, Magnitude, Duration, Chance to apply|Post effect to apply to target. Duration is in 'ms' or 's'.
+			// @ATTR power.post_effect_src|predefined_string, int, duration , int: Effect ID, Magnitude, Duration, Chance to apply|Post effect to apply to caster. Duration is in 'ms' or 's'.
 			if (clear_post_effects) {
 				powers[input_id].post_effects.clear();
 				clear_post_effects = false;
@@ -482,6 +483,9 @@ void PowerManager::loadPowers() {
 				infile.error("PowerManager: Unknown effect '%s'", pe.id.c_str());
 			}
 			else {
+				if (infile.key == "post_effect_src")
+					pe.target_src = true;
+
 				pe.magnitude = popFirstInt(infile.val);
 				pe.duration = parse_duration(popFirstString(infile.val));
 				std::string chance = popFirstString(infile.val);
@@ -958,73 +962,80 @@ void PowerManager::playSound(int power_index) {
 		snd->play(sfx[powers[power_index].sfx_index]);
 }
 
-bool PowerManager::effect(StatBlock *src_stats, StatBlock *caster_stats, int power_index, int source_type) {
+bool PowerManager::effect(StatBlock *target_stats, StatBlock *caster_stats, int power_index, int source_type) {
+	const Power& pwr = powers[power_index];
 	for (unsigned i=0; i<powers[power_index].post_effects.size(); i++) {
-		if (!percentChance(powers[power_index].post_effects[i].chance))
+		const PostEffect& pe = pwr.post_effects[i];
+
+		if (!percentChance(pe.chance))
 			continue;
 
 		EffectDef effect_data;
-		EffectDef* effect_ptr = getEffectDef(powers[power_index].post_effects[i].id);
+		EffectDef* effect_ptr = getEffectDef(pe.id);
 
-		int magnitude = powers[power_index].post_effects[i].magnitude;
-		int duration = powers[power_index].post_effects[i].duration;
+		int magnitude = pe.magnitude;
+		int duration = pe.duration;
+
+		StatBlock *dest_stats = pe.target_src ? caster_stats : target_stats;
+		if (dest_stats->hp <= 0)
+			continue;
 
 		if (effect_ptr != NULL) {
 			// effects loaded from powers/effects.txt
 			effect_data = (*effect_ptr);
 
 			if (effect_data.type == "shield") {
-				if (powers[power_index].base_damage == DAMAGE_TYPES.size())
+				if (pwr.base_damage == DAMAGE_TYPES.size())
 					continue;
 
 				// charge shield to max ment weapon damage * damage multiplier
-				if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY)
-					magnitude = caster_stats->getDamageMax(powers[power_index].base_damage) * powers[power_index].mod_damage_value_min / 100;
-				else if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_ADD)
-					magnitude = caster_stats->getDamageMax(powers[power_index].base_damage) + powers[power_index].mod_damage_value_min;
-				else if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_ABSOLUTE)
-					magnitude = randBetween(powers[power_index].mod_damage_value_min, powers[power_index].mod_damage_value_max);
+				if(pwr.mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY)
+					magnitude = caster_stats->getDamageMax(pwr.base_damage) * pwr.mod_damage_value_min / 100;
+				else if(pwr.mod_damage_mode == STAT_MODIFIER_MODE_ADD)
+					magnitude = caster_stats->getDamageMax(pwr.base_damage) + pwr.mod_damage_value_min;
+				else if(pwr.mod_damage_mode == STAT_MODIFIER_MODE_ABSOLUTE)
+					magnitude = randBetween(pwr.mod_damage_value_min, pwr.mod_damage_value_max);
 				else
-					magnitude = caster_stats->getDamageMax(powers[power_index].base_damage);
+					magnitude = caster_stats->getDamageMax(pwr.base_damage);
 
-				comb->addString(msg->get("+%d Shield",magnitude), src_stats->pos, COMBAT_MESSAGE_BUFF);
+				comb->addString(msg->get("+%d Shield",magnitude), dest_stats->pos, COMBAT_MESSAGE_BUFF);
 			}
 			else if (effect_data.type == "heal") {
-				if (powers[power_index].base_damage == DAMAGE_TYPES.size())
+				if (pwr.base_damage == DAMAGE_TYPES.size())
 					continue;
 
 				// heal for ment weapon damage * damage multiplier
-				magnitude = randBetween(caster_stats->getDamageMin(powers[power_index].base_damage), caster_stats->getDamageMax(powers[power_index].base_damage));
+				magnitude = randBetween(caster_stats->getDamageMin(pwr.base_damage), caster_stats->getDamageMax(pwr.base_damage));
 
-				if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY)
-					magnitude = magnitude * powers[power_index].mod_damage_value_min / 100;
-				else if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_ADD)
-					magnitude += powers[power_index].mod_damage_value_min;
-				else if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_ABSOLUTE)
-					magnitude = randBetween(powers[power_index].mod_damage_value_min, powers[power_index].mod_damage_value_max);
+				if(pwr.mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY)
+					magnitude = magnitude * pwr.mod_damage_value_min / 100;
+				else if(pwr.mod_damage_mode == STAT_MODIFIER_MODE_ADD)
+					magnitude += pwr.mod_damage_value_min;
+				else if(pwr.mod_damage_mode == STAT_MODIFIER_MODE_ABSOLUTE)
+					magnitude = randBetween(pwr.mod_damage_value_min, pwr.mod_damage_value_max);
 
-				comb->addString(msg->get("+%d HP",magnitude), src_stats->pos, COMBAT_MESSAGE_BUFF);
-				src_stats->hp += magnitude;
-				if (src_stats->hp > src_stats->get(STAT_HP_MAX)) src_stats->hp = src_stats->get(STAT_HP_MAX);
+				comb->addString(msg->get("+%d HP",magnitude), dest_stats->pos, COMBAT_MESSAGE_BUFF);
+				dest_stats->hp += magnitude;
+				if (dest_stats->hp > dest_stats->get(STAT_HP_MAX)) dest_stats->hp = dest_stats->get(STAT_HP_MAX);
 			}
 			else if (effect_data.type == "knockback") {
-				if (src_stats->speed_default == 0) {
+				if (dest_stats->speed_default == 0) {
 					// enemies that can't move can't be knocked back
 					continue;
 				}
-				src_stats->knockback_srcpos = caster_stats->pos;
-				src_stats->knockback_destpos = src_stats->pos;
+				dest_stats->knockback_srcpos = pe.target_src ? target_stats->pos : caster_stats->pos;
+				dest_stats->knockback_destpos = pe.target_src ? caster_stats->pos : target_stats->pos;
 			}
 		}
 		else {
 			// all other effects
-			effect_data.id = effect_data.type = powers[power_index].post_effects[i].id;
+			effect_data.id = effect_data.type = pe.id;
 		}
 
 		int passive_id = 0;
-		if (powers[power_index].passive) passive_id = power_index;
+		if (pwr.passive) passive_id = power_index;
 
-		src_stats->effects.addEffect(effect_data, duration, magnitude, false, powers[power_index].passive_trigger, passive_id, source_type);
+		dest_stats->effects.addEffect(effect_data, duration, magnitude, false, pwr.passive_trigger, passive_id, source_type);
 	}
 
 	return true;

@@ -1395,7 +1395,9 @@ body {
 
 <p><strong>power.buff_party_power_id</strong> | <code>power_id</code> | Only party members that were spawned with this power ID are affected by &ldquo;buff_party=true&rdquo;. Setting this to 0 will affect all party members.</p>
 
-<p><strong>power.post_effect</strong> | <code>predefined_string, int, duration , int : Effect ID, Magnitude, Duration, Chance to apply</code> | Post effect. Duration is in &lsquo;ms&rsquo; or &rsquo;s'.</p>
+<p><strong>power.post_effect</strong> | <code>predefined_string, int, duration , int : Effect ID, Magnitude, Duration, Chance to apply</code> | Post effect to apply to target. Duration is in &lsquo;ms&rsquo; or &rsquo;s'.</p>
+
+<p><strong>power.post_effect_src</strong> | <code>predefined_string, int, duration , int : Effect ID, Magnitude, Duration, Chance to apply</code> | Post effect to apply to caster. Duration is in &lsquo;ms&rsquo; or &rsquo;s'.</p>
 
 <p><strong>power.pre_power</strong> | <code>power_id, int : Power, Chance to cast</code> | Trigger a power immediately when casting this one.</p>
 

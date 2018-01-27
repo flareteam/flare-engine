@@ -80,12 +80,14 @@ public:
 	int magnitude;
 	int duration;
 	int chance;
+	bool target_src;
 
 	PostEffect()
 		: id("")
 		, magnitude(0)
 		, duration(0)
-		, chance(100) {
+		, chance(100)
+		, target_src(false) {
 	}
 };
 
@@ -429,7 +431,7 @@ public:
 	bool activate(int power_index, StatBlock *src_stats, const FPoint& target);
 	bool canUsePower(unsigned id) const;
 	bool hasValidTarget(int power_index, StatBlock *src_stats, const FPoint& target);
-	bool effect(StatBlock *src_stats, StatBlock *caster_stats, int power_index, int source_type);
+	bool effect(StatBlock *target_stats, StatBlock *caster_stats, int power_index, int source_type);
 	void activatePassives(StatBlock *src_stats);
 	void activateSinglePassive(StatBlock *src_stats, int id);
 	int verifyID(int power_id, FileParser* infile = NULL, bool allow_zero = true);
