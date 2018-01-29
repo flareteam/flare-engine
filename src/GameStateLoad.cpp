@@ -251,7 +251,8 @@ void GameStateLoad::loadPortrait(int slot) {
 		portrait = NULL;
 	}
 
-	if (slot < 0) return;
+	if (slot < 0 || static_cast<size_t>(slot) >= game_slots.size() || !game_slots[slot])
+		return;
 
 	if (game_slots[slot]->stats.name == "") return;
 
@@ -391,6 +392,9 @@ void GameStateLoad::logic() {
 		refreshWidgets();
 
 	for (size_t i = 0; i < game_slots.size(); ++i) {
+		if (!game_slots[i])
+			continue;
+
 		if (static_cast<int>(i) == selected_slot) {
 			if (game_slots[i]->preview_turn_ticks > 0)
 				game_slots[i]->preview_turn_ticks--;
@@ -553,7 +557,7 @@ void GameStateLoad::updateButtons() {
 		button_new->tooltip = msg->get("Enable a story mod to continue");
 	}
 
-	if (selected_slot >= 0) {
+	if (selected_slot >= 0 && game_slots[selected_slot]) {
 		// slot selected: we can load/delete
 		if (button_load->enabled == false) {
 			button_load->enabled = true;
@@ -700,6 +704,15 @@ void GameStateLoad::render() {
 		}
 		Point slot_dest = FPointToPoint(background->getDest());
 
+		if (!game_slots[off_slot]) {
+			label.x = slot_pos[slot].x + name_pos.x;
+			label.y = slot_pos[slot].y + name_pos.y;
+			WidgetLabel slot_error;
+			slot_error.set(label.x, label.y, name_pos.justify, name_pos.valign, msg->get("Invalid save"), font->getColor("widget_disabled"), name_pos.font_style);
+			slot_error.render();
+			continue;
+		}
+
 		Color color_used = game_slots[off_slot]->stats.permadeath ? color_permadeath_enabled : color_normal;
 
 		// name
@@ -777,13 +790,13 @@ void GameStateLoad::render() {
 }
 
 void GameStateLoad::setSelectedSlot(int slot) {
-	if (selected_slot != -1 && static_cast<size_t>(selected_slot) < game_slots.size()) {
+	if (selected_slot != -1 && static_cast<size_t>(selected_slot) < game_slots.size() && game_slots[selected_slot]) {
 		game_slots[selected_slot]->stats.direction = 6;
 		game_slots[selected_slot]->preview_turn_ticks = GAMESLOT_PREVIEW_TURN_DURATION;
 		game_slots[selected_slot]->preview.setAnimation("stance");
 	}
 
-	if (slot != -1 && static_cast<size_t>(slot) < game_slots.size()) {
+	if (slot != -1 && static_cast<size_t>(slot) < game_slots.size() && game_slots[slot]) {
 		game_slots[slot]->stats.direction = 6;
 		game_slots[slot]->preview_turn_ticks = GAMESLOT_PREVIEW_TURN_DURATION;
 		game_slots[slot]->preview.setAnimation("run");
@@ -794,7 +807,7 @@ void GameStateLoad::setSelectedSlot(int slot) {
 
 void GameStateLoad::refreshSavePaths() {
 	for (size_t i = 0; i < game_slots.size(); ++i) {
-		if (game_slots[i]->id != i+1) {
+		if (game_slots[i] && game_slots[i]->id != i+1) {
 			std::stringstream oldpath, newpath;
 			oldpath << PATH_USER << "saves/" << SAVE_PREFIX << "/" << game_slots[i]->id;
 			newpath << PATH_USER << "saves/" << SAVE_PREFIX << "/" << i+1;
