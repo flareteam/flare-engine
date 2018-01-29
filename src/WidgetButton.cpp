@@ -93,7 +93,7 @@ bool WidgetButton::checkClick(int x, int y) {
 	if (inpt->lock[ACCEPT]) return false;
 
 	// main click released, so the button state goes back to unpressed
-	if (pressed && !inpt->lock[MAIN1] && !inpt->lock[ACCEPT]) {
+	if (pressed && !inpt->lock[MAIN1] && !inpt->lock[ACCEPT] && isWithinRect(pos, mouse)) {
 		pressed = false;
 		return true;
 	}

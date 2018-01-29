@@ -83,11 +83,13 @@ bool WidgetCheckBox::checkClick (int x, int y) {
 	if (inpt->lock[MAIN1]) return false;
 	if (inpt->lock[ACCEPT]) return false;
 
-	if (pressed && !inpt->lock[MAIN1] && !inpt->lock[ACCEPT]) { // this is a button release
+	if (pressed && !inpt->lock[MAIN1] && !inpt->lock[ACCEPT] && isWithinRect(pos, mouse)) { // this is a button release
 		pressed = false;
 		toggleCheck();
 		return true;
 	}
+
+	pressed = false;
 
 	if (inpt->pressing[MAIN1]) {
 		if (isWithinRect(pos, mouse)) {
