@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-17 12:21-0500\n"
+"POT-Creation-Date: 2018-01-29 17:55-0500\n"
 "PO-Revision-Date: 2013-11-25 13:11+0300\n"
 "Last-Translator: Μιχάλης Παπαγεωργίου <werdanith@yahoo.gr>\n"
 "Language-Team: Μιχάλης Παπαγεωργίου\n"
@@ -18,26 +18,26 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Virtaal 0.7.1\n"
 
-#: ../../../src/Avatar.cpp:355
+#: ../../../src/Avatar.cpp:356
 #, c-format
 msgid "Congratulations, you have reached level %d!"
 msgstr "Συγχαρητήρια, έφτασες στο επίπεδο %d!"
 
-#: ../../../src/Avatar.cpp:357
+#: ../../../src/Avatar.cpp:358
 msgid "You may increase one attribute through the Character Menu."
 msgstr "Μπορείς να αυξήσεις μία ικανότητα μέσω του Μενού Χαρακτήρα."
 
-#: ../../../src/Avatar.cpp:579
+#: ../../../src/Avatar.cpp:580
 #, fuzzy
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
 msgstr "Ηττήθηκες. Τέλος παιχνιδιού! Πάτησε Enter για να επιστρέψεις στον Τίτλο."
 
-#: ../../../src/Avatar.cpp:582
+#: ../../../src/Avatar.cpp:583
 #, fuzzy
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
 msgstr "Ηττήθηκες. Πάτησε Enter για να συνεχίσεις."
 
-#: ../../../src/Avatar.cpp:835
+#: ../../../src/Avatar.cpp:836
 msgid "Transformation expired. You have been moved back to a safe place."
 msgstr ""
 
@@ -91,17 +91,17 @@ msgstr "Αρνητικές επιδράσεις αφαιρέθηκαν."
 msgid "HP and MP restored, negative effects removed"
 msgstr "HP και MP αναζωογονήθηκαν, αρνητικές επιδράσεις αφαιρέθηκαν."
 
-#: ../../../src/Entity.cpp:428
+#: ../../../src/Entity.cpp:446
 msgid "miss"
 msgstr "αστοχία"
 
-#: ../../../src/Entity.cpp:468 ../../../src/PowerManager.cpp:1006
+#: ../../../src/Entity.cpp:484 ../../../src/PowerManager.cpp:1017
 #: ../../../src/StatBlock.cpp:785 ../../../src/StatBlock.cpp:791
 #, c-format
 msgid "+%d HP"
 msgstr "+%d HP"
 
-#: ../../../src/Entity.cpp:475 ../../../src/StatBlock.cpp:796
+#: ../../../src/Entity.cpp:491 ../../../src/StatBlock.cpp:796
 #: ../../../src/StatBlock.cpp:802
 #, c-format
 msgid "+%d MP"
@@ -125,7 +125,7 @@ msgid "OK"
 msgstr "Εντάξει"
 
 #: ../../../src/GameStateConfigBase.cpp:110 ../../../src/GameStateNew.cpp:59
-#: ../../../src/InputState.cpp:294 ../../../src/MenuNPCActions.cpp:72
+#: ../../../src/InputState.cpp:294 ../../../src/MenuNPCActions.cpp:83
 msgid "Cancel"
 msgstr "Ακύρωση"
 
@@ -317,7 +317,8 @@ msgstr ""
 msgid "Button %d"
 msgstr ""
 
-#: ../../../src/GameState.cpp:33
+#: ../../../src/GameState.cpp:33 ../../../src/GameState.cpp:47
+#: ../../../src/GameState.cpp:63
 msgid "Loading..."
 msgstr "Φόρτωση..."
 
@@ -337,27 +338,31 @@ msgstr "Έξοδος προς Τίτλο"
 msgid "New Game"
 msgstr "Νέο Παιχνίδι"
 
-#: ../../../src/GameStateLoad.cpp:88 ../../../src/GameStateLoad.cpp:577
+#: ../../../src/GameStateLoad.cpp:88 ../../../src/GameStateLoad.cpp:584
 msgid "Choose a Slot"
 msgstr "Επέλεξε μία Θέση"
 
-#: ../../../src/GameStateLoad.cpp:550 ../../../src/GameStateLoad.cpp:571
+#: ../../../src/GameStateLoad.cpp:557 ../../../src/GameStateLoad.cpp:578
 msgid "Enable a story mod to continue"
 msgstr "Ενεργοποίησε ένα πρόσθετο με σενάριο για να συνεχίσεις"
 
-#: ../../../src/GameStateLoad.cpp:566
+#: ../../../src/GameStateLoad.cpp:573
 msgid "Load Game"
 msgstr "Φόρτωση Παιχνιδιού"
 
-#: ../../../src/GameStateLoad.cpp:667
+#: ../../../src/GameStateLoad.cpp:674
 msgid "Entering game world..."
 msgstr "Είσοδος στο παιχνίδι..."
 
-#: ../../../src/GameStateLoad.cpp:670
+#: ../../../src/GameStateLoad.cpp:677
 msgid "Loading saved game..."
 msgstr "Φόρτωση αποθηκευμένου παιχνιδιού..."
 
-#: ../../../src/GameStateLoad.cpp:714 ../../../src/ItemManager.cpp:672
+#: ../../../src/GameStateLoad.cpp:711
+msgid "Invalid save"
+msgstr ""
+
+#: ../../../src/GameStateLoad.cpp:730 ../../../src/ItemManager.cpp:673
 #: ../../../src/MenuPowers.cpp:678 ../../../src/MenuPowers.cpp:1037
 #, c-format
 msgid "Level %d"
@@ -561,87 +566,87 @@ msgstr "Σκόπευση με το ποντίκι"
 msgid "Mouse X2"
 msgstr "Σκόπευση με το ποντίκι"
 
-#: ../../../src/ItemManager.cpp:406 ../../../src/ItemManager.cpp:409
+#: ../../../src/ItemManager.cpp:407 ../../../src/ItemManager.cpp:410
 msgid "Unknown Item"
 msgstr ""
 
-#: ../../../src/ItemManager.cpp:581 ../../../src/MenuPowers.cpp:784
+#: ../../../src/ItemManager.cpp:582 ../../../src/MenuPowers.cpp:784
 #, fuzzy, c-format
 msgid "%d%% Speed"
 msgstr "%d% Ταχύτητα"
 
-#: ../../../src/ItemManager.cpp:585 ../../../src/MenuPowers.cpp:787
+#: ../../../src/ItemManager.cpp:586 ../../../src/MenuPowers.cpp:787
 #, fuzzy, c-format
 msgid "%d%% Attack Speed"
 msgstr "%d% Ταχύτητα"
 
-#: ../../../src/ItemManager.cpp:607 ../../../src/MenuCharacter.cpp:338
+#: ../../../src/ItemManager.cpp:608 ../../../src/MenuCharacter.cpp:338
 #: ../../../src/MenuPowers.cpp:729
 #, c-format
 msgid "%s Resistance"
 msgstr ""
 
-#: ../../../src/ItemManager.cpp:658
+#: ../../../src/ItemManager.cpp:659
 msgid "Quest Item"
 msgstr "Αντικείμενο Αποστολής"
 
-#: ../../../src/ItemManager.cpp:685
+#: ../../../src/ItemManager.cpp:686
 #, c-format
 msgid "Quality: %s"
 msgstr "Ποιότητα: %s"
 
-#: ../../../src/ItemManager.cpp:710
+#: ../../../src/ItemManager.cpp:711
 #, c-format
 msgid "Absorb: %d-%d"
 msgstr "Απορρόφηση: %d-%d"
 
-#: ../../../src/ItemManager.cpp:712
+#: ../../../src/ItemManager.cpp:713
 #, c-format
 msgid "Absorb: %d"
 msgstr "Απορρόφηση: %d"
 
-#: ../../../src/ItemManager.cpp:749 ../../../src/MenuPowers.cpp:1023
+#: ../../../src/ItemManager.cpp:750 ../../../src/MenuPowers.cpp:1023
 #: ../../../src/MenuPowers.cpp:1026
 #, c-format
 msgid "Requires Level %d"
 msgstr "Χρειάζεται Επίπεδο %d"
 
-#: ../../../src/ItemManager.cpp:760 ../../../src/MenuPowers.cpp:1015
+#: ../../../src/ItemManager.cpp:761 ../../../src/MenuPowers.cpp:1015
 #: ../../../src/MenuPowers.cpp:1017
 #, fuzzy, c-format
 msgid "Requires %s %d"
 msgstr "Χρειάζεται ένα %s"
 
-#: ../../../src/ItemManager.cpp:768
+#: ../../../src/ItemManager.cpp:769
 #, fuzzy, c-format
 msgid "Requires Class: %s"
 msgstr "Χρειάζεται ένα %s"
 
-#: ../../../src/ItemManager.cpp:780 ../../../src/ItemManager.cpp:789
+#: ../../../src/ItemManager.cpp:781 ../../../src/ItemManager.cpp:790
 #, c-format
 msgid "Buy Price: %d %s"
 msgstr "Τιμή Αγοράς: %d %s"
 
-#: ../../../src/ItemManager.cpp:782 ../../../src/ItemManager.cpp:791
+#: ../../../src/ItemManager.cpp:783 ../../../src/ItemManager.cpp:792
 #, c-format
 msgid "Buy Price: %d %s each"
 msgstr "Τιμή Αγοράς: %d %s έκαστο"
 
-#: ../../../src/ItemManager.cpp:797
+#: ../../../src/ItemManager.cpp:798
 #, c-format
 msgid "Sell Price: %d %s"
 msgstr "Τιμή Πώλησης: %d %s"
 
-#: ../../../src/ItemManager.cpp:799
+#: ../../../src/ItemManager.cpp:800
 #, c-format
 msgid "Sell Price: %d %s each"
 msgstr "Τιμή Πώλησης: %d %s έκαστο"
 
-#: ../../../src/ItemManager.cpp:808
+#: ../../../src/ItemManager.cpp:809
 msgid "Set: "
 msgstr "Σύνολο: "
 
-#: ../../../src/ItemManager.cpp:815
+#: ../../../src/ItemManager.cpp:816
 #, c-format
 msgid "%d items: "
 msgstr "%d αντικείμενα: "
@@ -940,7 +945,7 @@ msgstr "XP: %d/%d"
 msgid "This item can not be dropped."
 msgstr "Αυτό το αντικείμενο μπορεί να χρησιμοποιηθεί μόνο από την μπάρα ενεργειών."
 
-#: ../../../src/MenuNPCActions.cpp:71
+#: ../../../src/MenuNPCActions.cpp:82
 msgid "Trade"
 msgstr "Εμπόριο"
 
@@ -1131,16 +1136,16 @@ msgstr "Επαναγορά"
 msgid "Vendor"
 msgstr "Πωλητής"
 
-#: ../../../src/PowerManager.cpp:990
+#: ../../../src/PowerManager.cpp:1001
 #, c-format
 msgid "+%d Shield"
 msgstr "+%d Άμυνα"
 
-#: ../../../src/PowerManager.cpp:1246
+#: ../../../src/PowerManager.cpp:1257
 msgid "You are already transformed, untransform first."
 msgstr "Έχεις ήδη μεταμορφωθεί, απομεταμορφώσου πρώτα."
 
-#: ../../../src/PowerManager.cpp:1258
+#: ../../../src/PowerManager.cpp:1269
 msgid "Could not untransform at this position."
 msgstr ""
 
@@ -1178,7 +1183,7 @@ msgstr ""
 msgid "%s on enemy"
 msgstr ""
 
-#: ../../../src/Settings.cpp:751
+#: ../../../src/Settings.cpp:752
 msgid "Adventurer"
 msgstr "Τυχοδιώκτης"
 
@@ -1328,16 +1333,16 @@ msgstr ""
 msgid "Base MP"
 msgstr ""
 
-#: ../../../src/Utils.cpp:193
+#: ../../../src/Utils.cpp:198
 msgid "k"
 msgstr "κ"
 
-#: ../../../src/Utils.cpp:360
+#: ../../../src/Utils.cpp:442
 #, fuzzy, c-format
 msgid "%s second"
 msgstr "Επανάκτηση: %d δευτερόλεπτα"
 
-#: ../../../src/Utils.cpp:363
+#: ../../../src/Utils.cpp:445
 #, fuzzy, c-format
 msgid "%s seconds"
 msgstr "Επανάκτηση: %d δευτερόλεπτα"

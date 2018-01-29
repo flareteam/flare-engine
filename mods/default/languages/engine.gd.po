@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: flare-engine\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-17 12:21-0500\n"
+"POT-Creation-Date: 2018-01-29 17:55-0500\n"
 "PO-Revision-Date: 2017-05-17 14:53+0100\n"
 "Last-Translator: GunChleoc <fios@foramnagaidhlig.net>\n"
 "Language-Team: Fòram na Gàidhlig\n"
@@ -17,24 +17,24 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n==1 || n==11) ? 0 : (n==2 || n==12) ? 1 : (n > 2 && n < 20) ? 2 : 3;\n"
 "X-Generator: Virtaal 0.7.1\n"
 
-#: ../../../src/Avatar.cpp:355
+#: ../../../src/Avatar.cpp:356
 #, c-format
 msgid "Congratulations, you have reached level %d!"
 msgstr "Meal do naidheachd, ràinig thu leibheil %d!"
 
-#: ../../../src/Avatar.cpp:357
+#: ../../../src/Avatar.cpp:358
 msgid "You may increase one attribute through the Character Menu."
 msgstr "Faodaidh tu aon bhuadh àrdachadh tro clàr-taice a' charactair."
 
-#: ../../../src/Avatar.cpp:579
+#: ../../../src/Avatar.cpp:580
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
 msgstr "Chaidh do ruaig. Crìoch a' gheama! ${INPUT_CONTINUE} gus fàgail gun tiotal."
 
-#: ../../../src/Avatar.cpp:582
+#: ../../../src/Avatar.cpp:583
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
 msgstr "Chaidh do ruaig. ${INPUT_CONTINUE} gus leantainn air adhart."
 
-#: ../../../src/Avatar.cpp:835
+#: ../../../src/Avatar.cpp:836
 msgid "Transformation expired. You have been moved back to a safe place."
 msgstr "Dh'fhalbh an ùine air a' chruth-atharrachadh. Chaidh do ghluasad air ais gu ionad sàbhailte."
 
@@ -88,17 +88,17 @@ msgstr "Chaidh èifeachdan dona a thoirt air falbh."
 msgid "HP and MP restored, negative effects removed"
 msgstr "Chaidh PB is PG a leigheas is èifeachdan dona a thoirt air falbh."
 
-#: ../../../src/Entity.cpp:428
+#: ../../../src/Entity.cpp:446
 msgid "miss"
 msgstr "mearachdadh"
 
-#: ../../../src/Entity.cpp:468 ../../../src/PowerManager.cpp:1006
+#: ../../../src/Entity.cpp:484 ../../../src/PowerManager.cpp:1017
 #: ../../../src/StatBlock.cpp:785 ../../../src/StatBlock.cpp:791
 #, c-format
 msgid "+%d HP"
 msgstr "+%d PB"
 
-#: ../../../src/Entity.cpp:475 ../../../src/StatBlock.cpp:796
+#: ../../../src/Entity.cpp:491 ../../../src/StatBlock.cpp:796
 #: ../../../src/StatBlock.cpp:802
 #, c-format
 msgid "+%d MP"
@@ -122,7 +122,7 @@ msgid "OK"
 msgstr "Ceart ma-thà"
 
 #: ../../../src/GameStateConfigBase.cpp:110 ../../../src/GameStateNew.cpp:59
-#: ../../../src/InputState.cpp:294 ../../../src/MenuNPCActions.cpp:72
+#: ../../../src/InputState.cpp:294 ../../../src/MenuNPCActions.cpp:83
 msgid "Cancel"
 msgstr "Sguir dheth"
 
@@ -311,7 +311,8 @@ msgstr "(chan eil gin)"
 msgid "Button %d"
 msgstr "Putan %d"
 
-#: ../../../src/GameState.cpp:33
+#: ../../../src/GameState.cpp:33 ../../../src/GameState.cpp:47
+#: ../../../src/GameState.cpp:63
 msgid "Loading..."
 msgstr "'Ga luchdadh..."
 
@@ -331,27 +332,31 @@ msgstr "Fàg gun tiotal"
 msgid "New Game"
 msgstr "Geama ùr"
 
-#: ../../../src/GameStateLoad.cpp:88 ../../../src/GameStateLoad.cpp:577
+#: ../../../src/GameStateLoad.cpp:88 ../../../src/GameStateLoad.cpp:584
 msgid "Choose a Slot"
 msgstr "Tagh slot"
 
-#: ../../../src/GameStateLoad.cpp:550 ../../../src/GameStateLoad.cpp:571
+#: ../../../src/GameStateLoad.cpp:557 ../../../src/GameStateLoad.cpp:578
 msgid "Enable a story mod to continue"
 msgstr "Cuir tuilleadan sgeulachd an comas gus leantainn air adhart"
 
-#: ../../../src/GameStateLoad.cpp:566
+#: ../../../src/GameStateLoad.cpp:573
 msgid "Load Game"
 msgstr "Luchdaich geama"
 
-#: ../../../src/GameStateLoad.cpp:667
+#: ../../../src/GameStateLoad.cpp:674
 msgid "Entering game world..."
 msgstr "A' dol a-steach do shaoghal a' gheama..."
 
-#: ../../../src/GameStateLoad.cpp:670
+#: ../../../src/GameStateLoad.cpp:677
 msgid "Loading saved game..."
 msgstr "A' luchdadh geama air a shàbhaladh..."
 
-#: ../../../src/GameStateLoad.cpp:714 ../../../src/ItemManager.cpp:672
+#: ../../../src/GameStateLoad.cpp:711
+msgid "Invalid save"
+msgstr ""
+
+#: ../../../src/GameStateLoad.cpp:730 ../../../src/ItemManager.cpp:673
 #: ../../../src/MenuPowers.cpp:678 ../../../src/MenuPowers.cpp:1037
 #, c-format
 msgid "Level %d"
@@ -550,87 +555,87 @@ msgstr "X1 na luchaige"
 msgid "Mouse X2"
 msgstr "X2 na luchaige"
 
-#: ../../../src/ItemManager.cpp:406 ../../../src/ItemManager.cpp:409
+#: ../../../src/ItemManager.cpp:407 ../../../src/ItemManager.cpp:410
 msgid "Unknown Item"
 msgstr "Nì nach aithne dhuinn"
 
-#: ../../../src/ItemManager.cpp:581 ../../../src/MenuPowers.cpp:784
+#: ../../../src/ItemManager.cpp:582 ../../../src/MenuPowers.cpp:784
 #, c-format
 msgid "%d%% Speed"
 msgstr "Luaths de %d%%"
 
-#: ../../../src/ItemManager.cpp:585 ../../../src/MenuPowers.cpp:787
+#: ../../../src/ItemManager.cpp:586 ../../../src/MenuPowers.cpp:787
 #, fuzzy, c-format
 msgid "%d%% Attack Speed"
 msgstr "Luaths de %d%%"
 
-#: ../../../src/ItemManager.cpp:607 ../../../src/MenuCharacter.cpp:338
+#: ../../../src/ItemManager.cpp:608 ../../../src/MenuCharacter.cpp:338
 #: ../../../src/MenuPowers.cpp:729
 #, c-format
 msgid "%s Resistance"
 msgstr "Comas-seasaimh an aghaidh %s"
 
-#: ../../../src/ItemManager.cpp:658
+#: ../../../src/ItemManager.cpp:659
 msgid "Quest Item"
 msgstr "Nì cinn-turais"
 
-#: ../../../src/ItemManager.cpp:685
+#: ../../../src/ItemManager.cpp:686
 #, c-format
 msgid "Quality: %s"
 msgstr "Càileachd: %s"
 
-#: ../../../src/ItemManager.cpp:710
+#: ../../../src/ItemManager.cpp:711
 #, c-format
 msgid "Absorb: %d-%d"
 msgstr "Ceapadh: %d-%d"
 
-#: ../../../src/ItemManager.cpp:712
+#: ../../../src/ItemManager.cpp:713
 #, c-format
 msgid "Absorb: %d"
 msgstr "Ceapadh: %d"
 
-#: ../../../src/ItemManager.cpp:749 ../../../src/MenuPowers.cpp:1023
+#: ../../../src/ItemManager.cpp:750 ../../../src/MenuPowers.cpp:1023
 #: ../../../src/MenuPowers.cpp:1026
 #, c-format
 msgid "Requires Level %d"
 msgstr "Feum air leibheil %d"
 
-#: ../../../src/ItemManager.cpp:760 ../../../src/MenuPowers.cpp:1015
+#: ../../../src/ItemManager.cpp:761 ../../../src/MenuPowers.cpp:1015
 #: ../../../src/MenuPowers.cpp:1017
 #, c-format
 msgid "Requires %s %d"
 msgstr "Feum air %s %d"
 
-#: ../../../src/ItemManager.cpp:768
+#: ../../../src/ItemManager.cpp:769
 #, c-format
 msgid "Requires Class: %s"
 msgstr "Feum air a' chlas: %s"
 
-#: ../../../src/ItemManager.cpp:780 ../../../src/ItemManager.cpp:789
+#: ../../../src/ItemManager.cpp:781 ../../../src/ItemManager.cpp:790
 #, c-format
 msgid "Buy Price: %d %s"
 msgstr "Prìs ceannaich: %d %s"
 
-#: ../../../src/ItemManager.cpp:782 ../../../src/ItemManager.cpp:791
+#: ../../../src/ItemManager.cpp:783 ../../../src/ItemManager.cpp:792
 #, c-format
 msgid "Buy Price: %d %s each"
 msgstr "Prìs ceannaich: %d %s an urra"
 
-#: ../../../src/ItemManager.cpp:797
+#: ../../../src/ItemManager.cpp:798
 #, c-format
 msgid "Sell Price: %d %s"
 msgstr "Prìs reic: %d %s"
 
-#: ../../../src/ItemManager.cpp:799
+#: ../../../src/ItemManager.cpp:800
 #, c-format
 msgid "Sell Price: %d %s each"
 msgstr "Prìs reic: %d %s an urra"
 
-#: ../../../src/ItemManager.cpp:808
+#: ../../../src/ItemManager.cpp:809
 msgid "Set: "
 msgstr "Seata: "
 
-#: ../../../src/ItemManager.cpp:815
+#: ../../../src/ItemManager.cpp:816
 #, c-format
 msgid "%d items: "
 msgstr "%d nithean: "
@@ -928,7 +933,7 @@ msgstr "PE: %d/%d"
 msgid "This item can not be dropped."
 msgstr "Chan urrainn dhan an nì seo tuiteam."
 
-#: ../../../src/MenuNPCActions.cpp:71
+#: ../../../src/MenuNPCActions.cpp:82
 msgid "Trade"
 msgstr "Malart"
 
@@ -1111,16 +1116,16 @@ msgstr "Ceannach air ais"
 msgid "Vendor"
 msgstr "Reiceadair"
 
-#: ../../../src/PowerManager.cpp:990
+#: ../../../src/PowerManager.cpp:1001
 #, c-format
 msgid "+%d Shield"
 msgstr "Sgiath +%d"
 
-#: ../../../src/PowerManager.cpp:1246
+#: ../../../src/PowerManager.cpp:1257
 msgid "You are already transformed, untransform first."
 msgstr "Tha thu air cruth-atharrachadh mar-thà, feumaidh tu an cruth tùsail agad a ghabhail an toiseach."
 
-#: ../../../src/PowerManager.cpp:1258
+#: ../../../src/PowerManager.cpp:1269
 msgid "Could not untransform at this position."
 msgstr "Cha b' urrainn dhut neo-chruth-atharrachadh air an ionad seo."
 
@@ -1158,7 +1163,7 @@ msgstr "%s air an làr"
 msgid "%s on enemy"
 msgstr "%s air an nàmhaid"
 
-#: ../../../src/Settings.cpp:751
+#: ../../../src/Settings.cpp:752
 msgid "Adventurer"
 msgstr "Baoghlair"
 
@@ -1290,16 +1295,16 @@ msgstr "PB bunasach"
 msgid "Base MP"
 msgstr "PG bunasach"
 
-#: ../../../src/Utils.cpp:193
+#: ../../../src/Utils.cpp:198
 msgid "k"
 msgstr "k"
 
-#: ../../../src/Utils.cpp:360
+#: ../../../src/Utils.cpp:442
 #, c-format
 msgid "%s second"
 msgstr "%s diog"
 
-#: ../../../src/Utils.cpp:363
+#: ../../../src/Utils.cpp:445
 #, c-format
 msgid "%s seconds"
 msgstr "%s diog(an)"

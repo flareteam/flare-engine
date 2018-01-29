@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Flare v0.18\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-17 12:21-0500\n"
+"POT-Creation-Date: 2018-01-29 17:55-0500\n"
 "PO-Revision-Date: 2013-03-17 20:57+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -17,26 +17,26 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.5.4\n"
 
-#: ../../../src/Avatar.cpp:355
+#: ../../../src/Avatar.cpp:356
 #, c-format
 msgid "Congratulations, you have reached level %d!"
 msgstr "Felicidades, has alcanzado el nivel %d!"
 
-#: ../../../src/Avatar.cpp:357
+#: ../../../src/Avatar.cpp:358
 msgid "You may increase one attribute through the Character Menu."
 msgstr "Usted puede aumentar un atributo a través del Menú de Personaje."
 
-#: ../../../src/Avatar.cpp:579
+#: ../../../src/Avatar.cpp:580
 #, fuzzy
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
 msgstr "Usted está derrotado. Se acabó el juego! Pulse Enter para salir al Título."
 
-#: ../../../src/Avatar.cpp:582
+#: ../../../src/Avatar.cpp:583
 #, fuzzy
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
 msgstr "Usted está derrotado. Pierde la mitad de su %s. Pulse Intro para continuar."
 
-#: ../../../src/Avatar.cpp:835
+#: ../../../src/Avatar.cpp:836
 msgid "Transformation expired. You have been moved back to a safe place."
 msgstr ""
 
@@ -90,17 +90,17 @@ msgstr "Efectos negativos removidos."
 msgid "HP and MP restored, negative effects removed"
 msgstr "Restaurados PV y PM, efectos negativos removidos"
 
-#: ../../../src/Entity.cpp:428
+#: ../../../src/Entity.cpp:446
 msgid "miss"
 msgstr "Falla"
 
-#: ../../../src/Entity.cpp:468 ../../../src/PowerManager.cpp:1006
+#: ../../../src/Entity.cpp:484 ../../../src/PowerManager.cpp:1017
 #: ../../../src/StatBlock.cpp:785 ../../../src/StatBlock.cpp:791
 #, c-format
 msgid "+%d HP"
 msgstr "+%d PV"
 
-#: ../../../src/Entity.cpp:475 ../../../src/StatBlock.cpp:796
+#: ../../../src/Entity.cpp:491 ../../../src/StatBlock.cpp:796
 #: ../../../src/StatBlock.cpp:802
 #, c-format
 msgid "+%d MP"
@@ -124,7 +124,7 @@ msgid "OK"
 msgstr "ACEPTAR"
 
 #: ../../../src/GameStateConfigBase.cpp:110 ../../../src/GameStateNew.cpp:59
-#: ../../../src/InputState.cpp:294 ../../../src/MenuNPCActions.cpp:72
+#: ../../../src/InputState.cpp:294 ../../../src/MenuNPCActions.cpp:83
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -318,7 +318,8 @@ msgstr ""
 msgid "Button %d"
 msgstr ""
 
-#: ../../../src/GameState.cpp:33
+#: ../../../src/GameState.cpp:33 ../../../src/GameState.cpp:47
+#: ../../../src/GameState.cpp:63
 msgid "Loading..."
 msgstr "Cargando..."
 
@@ -338,27 +339,31 @@ msgstr "Salir al Título"
 msgid "New Game"
 msgstr "Nuevo Juego"
 
-#: ../../../src/GameStateLoad.cpp:88 ../../../src/GameStateLoad.cpp:577
+#: ../../../src/GameStateLoad.cpp:88 ../../../src/GameStateLoad.cpp:584
 msgid "Choose a Slot"
 msgstr "Elija una ranura"
 
-#: ../../../src/GameStateLoad.cpp:550 ../../../src/GameStateLoad.cpp:571
+#: ../../../src/GameStateLoad.cpp:557 ../../../src/GameStateLoad.cpp:578
 msgid "Enable a story mod to continue"
 msgstr "Habilitar un mod historia para continuar"
 
-#: ../../../src/GameStateLoad.cpp:566
+#: ../../../src/GameStateLoad.cpp:573
 msgid "Load Game"
 msgstr "Cargar Juego"
 
-#: ../../../src/GameStateLoad.cpp:667
+#: ../../../src/GameStateLoad.cpp:674
 msgid "Entering game world..."
 msgstr "Entrando en mundo del juego..."
 
-#: ../../../src/GameStateLoad.cpp:670
+#: ../../../src/GameStateLoad.cpp:677
 msgid "Loading saved game..."
 msgstr "Cargando partida guardada..."
 
-#: ../../../src/GameStateLoad.cpp:714 ../../../src/ItemManager.cpp:672
+#: ../../../src/GameStateLoad.cpp:711
+msgid "Invalid save"
+msgstr ""
+
+#: ../../../src/GameStateLoad.cpp:730 ../../../src/ItemManager.cpp:673
 #: ../../../src/MenuPowers.cpp:678 ../../../src/MenuPowers.cpp:1037
 #, c-format
 msgid "Level %d"
@@ -562,88 +567,88 @@ msgstr "Ratón para apuntar"
 msgid "Mouse X2"
 msgstr "Ratón para apuntar"
 
-#: ../../../src/ItemManager.cpp:406 ../../../src/ItemManager.cpp:409
+#: ../../../src/ItemManager.cpp:407 ../../../src/ItemManager.cpp:410
 msgid "Unknown Item"
 msgstr ""
 
-#: ../../../src/ItemManager.cpp:581 ../../../src/MenuPowers.cpp:784
+#: ../../../src/ItemManager.cpp:582 ../../../src/MenuPowers.cpp:784
 #, fuzzy, c-format
 msgid "%d%% Speed"
 msgstr "%d\\% Velocidad"
 
-#: ../../../src/ItemManager.cpp:585 ../../../src/MenuPowers.cpp:787
+#: ../../../src/ItemManager.cpp:586 ../../../src/MenuPowers.cpp:787
 #, fuzzy, c-format
 msgid "%d%% Attack Speed"
 msgstr "%d\\% Velocidad"
 
-#: ../../../src/ItemManager.cpp:607 ../../../src/MenuCharacter.cpp:338
+#: ../../../src/ItemManager.cpp:608 ../../../src/MenuCharacter.cpp:338
 #: ../../../src/MenuPowers.cpp:729
 #, c-format
 msgid "%s Resistance"
 msgstr ""
 
-#: ../../../src/ItemManager.cpp:658
+#: ../../../src/ItemManager.cpp:659
 #, fuzzy
 msgid "Quest Item"
 msgstr "Misiones"
 
-#: ../../../src/ItemManager.cpp:685
+#: ../../../src/ItemManager.cpp:686
 #, c-format
 msgid "Quality: %s"
 msgstr ""
 
-#: ../../../src/ItemManager.cpp:710
+#: ../../../src/ItemManager.cpp:711
 #, c-format
 msgid "Absorb: %d-%d"
 msgstr "Absorber: %d-%d"
 
-#: ../../../src/ItemManager.cpp:712
+#: ../../../src/ItemManager.cpp:713
 #, c-format
 msgid "Absorb: %d"
 msgstr "Absorber: %d"
 
-#: ../../../src/ItemManager.cpp:749 ../../../src/MenuPowers.cpp:1023
+#: ../../../src/ItemManager.cpp:750 ../../../src/MenuPowers.cpp:1023
 #: ../../../src/MenuPowers.cpp:1026
 #, c-format
 msgid "Requires Level %d"
 msgstr "Necesitas ser de Nivel %d"
 
-#: ../../../src/ItemManager.cpp:760 ../../../src/MenuPowers.cpp:1015
+#: ../../../src/ItemManager.cpp:761 ../../../src/MenuPowers.cpp:1015
 #: ../../../src/MenuPowers.cpp:1017
 #, fuzzy, c-format
 msgid "Requires %s %d"
 msgstr "Requiere Mental %d"
 
-#: ../../../src/ItemManager.cpp:768
+#: ../../../src/ItemManager.cpp:769
 #, fuzzy, c-format
 msgid "Requires Class: %s"
 msgstr "Requiere Mental %d"
 
-#: ../../../src/ItemManager.cpp:780 ../../../src/ItemManager.cpp:789
+#: ../../../src/ItemManager.cpp:781 ../../../src/ItemManager.cpp:790
 #, c-format
 msgid "Buy Price: %d %s"
 msgstr "Precio de Compra: %d %s"
 
-#: ../../../src/ItemManager.cpp:782 ../../../src/ItemManager.cpp:791
+#: ../../../src/ItemManager.cpp:783 ../../../src/ItemManager.cpp:792
 #, c-format
 msgid "Buy Price: %d %s each"
 msgstr "Precio de Compra: %d %s cada"
 
-#: ../../../src/ItemManager.cpp:797
+#: ../../../src/ItemManager.cpp:798
 #, c-format
 msgid "Sell Price: %d %s"
 msgstr "Precio de Venta: %d %s"
 
-#: ../../../src/ItemManager.cpp:799
+#: ../../../src/ItemManager.cpp:800
 #, c-format
 msgid "Sell Price: %d %s each"
 msgstr "Precio de Venta: %d %s cada"
 
-#: ../../../src/ItemManager.cpp:808
+#: ../../../src/ItemManager.cpp:809
 msgid "Set: "
 msgstr "Conjunto:"
 
-#: ../../../src/ItemManager.cpp:815
+#: ../../../src/ItemManager.cpp:816
 #, c-format
 msgid "%d items: "
 msgstr "%d artículos: "
@@ -942,7 +947,7 @@ msgstr "Experiencia: %d/%d"
 msgid "This item can not be dropped."
 msgstr "Este elemento sólo se puede utilizar en la barra de acción."
 
-#: ../../../src/MenuNPCActions.cpp:71
+#: ../../../src/MenuNPCActions.cpp:82
 msgid "Trade"
 msgstr ""
 
@@ -1131,16 +1136,16 @@ msgstr "Recompra"
 msgid "Vendor"
 msgstr "Vendedor"
 
-#: ../../../src/PowerManager.cpp:990
+#: ../../../src/PowerManager.cpp:1001
 #, c-format
 msgid "+%d Shield"
 msgstr "+%d Escudo"
 
-#: ../../../src/PowerManager.cpp:1246
+#: ../../../src/PowerManager.cpp:1257
 msgid "You are already transformed, untransform first."
 msgstr "Usted ya está transformado, destransformase primero."
 
-#: ../../../src/PowerManager.cpp:1258
+#: ../../../src/PowerManager.cpp:1269
 msgid "Could not untransform at this position."
 msgstr ""
 
@@ -1178,7 +1183,7 @@ msgstr ""
 msgid "%s on enemy"
 msgstr ""
 
-#: ../../../src/Settings.cpp:751
+#: ../../../src/Settings.cpp:752
 msgid "Adventurer"
 msgstr "Aventurero"
 
@@ -1326,17 +1331,17 @@ msgstr ""
 msgid "Base MP"
 msgstr ""
 
-#: ../../../src/Utils.cpp:193
+#: ../../../src/Utils.cpp:198
 #, fuzzy
 msgid "k"
 msgstr "Aceptar"
 
-#: ../../../src/Utils.cpp:360
+#: ../../../src/Utils.cpp:442
 #, fuzzy, c-format
 msgid "%s second"
 msgstr "Reutilización: %d seconds"
 
-#: ../../../src/Utils.cpp:363
+#: ../../../src/Utils.cpp:445
 #, fuzzy, c-format
 msgid "%s seconds"
 msgstr "Reutilización: %d seconds"
