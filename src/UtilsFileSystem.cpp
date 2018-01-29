@@ -200,3 +200,13 @@ std::string path(const std::stringstream* ss) {
 
 	return path;
 }
+
+bool renameFile(const std::string &oldfile, const std::string &newfile) {
+	if (rename(oldfile.c_str(), newfile.c_str()) != 0) {
+		std::string error_msg = "renameFile (" + oldfile + " -> " + newfile + ")";
+		perror(error_msg.c_str());
+		return false;
+	}
+	return true;
+}
+

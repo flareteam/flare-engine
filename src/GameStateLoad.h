@@ -82,6 +82,8 @@ private:
 	void refreshScrollBar();
 	void setSelectedSlot(int slot);
 
+	void refreshSavePaths();
+
 	TabList tablist;
 
 	WidgetButton *button_exit;

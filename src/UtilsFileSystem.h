@@ -43,4 +43,6 @@ bool removeDirRecursive(const std::string &dir);
 
 std::string path(const std::stringstream* ss);
 
+bool renameFile(const std::string &oldfile, const std::string &newfile);
+
 #endif

@@ -197,6 +197,7 @@ GameStateLoad::GameStateLoad() : GameState()
 
 	loadGraphics();
 	readGameSlots();
+	refreshSavePaths();
 
 	color_normal = font->getColor("menu_normal");
 
@@ -522,6 +523,8 @@ void GameStateLoad::logic() {
 
 			confirm->visible = false;
 			confirm->confirmClicked = false;
+
+			refreshSavePaths();
 		}
 	}
 }
@@ -787,6 +790,19 @@ void GameStateLoad::setSelectedSlot(int slot) {
 	}
 
 	selected_slot = slot;
+}
+
+void GameStateLoad::refreshSavePaths() {
+	for (size_t i = 0; i < game_slots.size(); ++i) {
+		if (game_slots[i]->id != i+1) {
+			std::stringstream oldpath, newpath;
+			oldpath << PATH_USER << "saves/" << SAVE_PREFIX << "/" << game_slots[i]->id;
+			newpath << PATH_USER << "saves/" << SAVE_PREFIX << "/" << i+1;
+			if (renameFile(oldpath.str(), newpath.str())) {
+				game_slots[i]->id = static_cast<unsigned>(i+1);
+			}
+		}
+	}
 }
 
 GameStateLoad::~GameStateLoad() {
