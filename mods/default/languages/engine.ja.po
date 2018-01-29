@@ -294,7 +294,7 @@ msgstr "マウスの不利用"
 
 #: ../../../src/GameStateConfigDesktop.cpp:264
 msgid "Joystick Deadzone"
-msgstr "Joystick Deadzone
+msgstr "Joystick Deadzone"
 
 #: ../../../src/GameStateConfigDesktop.cpp:269
 msgid "For handheld devices"
