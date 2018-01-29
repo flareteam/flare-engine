@@ -35,10 +35,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <jni.h>
 
 PlatformOptions platform_options;
-platform_options.is_mobile_device = true;
-platform_options.force_hardware_cursor = true;
-platform_options.config_menu_type = CONFIG_MENU_TYPE_BASE;
-platform_options.default_renderer = "sdl_hardware";
+
+void PlatformInit() {
+	platform_options.is_mobile_device = true;
+	platform_options.force_hardware_cursor = true;
+	platform_options.config_menu_type = CONFIG_MENU_TYPE_BASE;
+	platform_options.default_renderer = "sdl_hardware";
+}
 
 std::string AndroidGetPackageName()
 {

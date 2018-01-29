@@ -35,6 +35,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 PlatformOptions platform_options;
 
+void PlatformInit() {
+	// defaults
+}
+
 void PlatformSetPaths() {
 
 	// attempting to follow this spec:

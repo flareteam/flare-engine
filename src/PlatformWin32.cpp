@@ -28,6 +28,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 PlatformOptions platform_options;
 
+void PlatformInit() {
+	// defaults
+}
+
 void PlatformSetPaths() {
 	// handle Windows-specific path options
 	if (getenv("APPDATA") != NULL) {

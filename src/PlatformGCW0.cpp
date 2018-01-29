@@ -34,8 +34,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <sys/stat.h>
 
 PlatformOptions platform_options;
-platform_options.force_hardware_cursor = true;
-platform_options.config_menu_type = CONFIG_MENU_TYPE_BASE;
+
+void PlatformInit() {
+	platform_options.force_hardware_cursor = true;
+	platform_options.config_menu_type = CONFIG_MENU_TYPE_BASE;
+}
 
 void PlatformSetPaths() {
 

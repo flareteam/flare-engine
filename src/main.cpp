@@ -63,6 +63,8 @@ bool init_finished = false;
  * Game initialization.
  */
 static void init(const CmdLineArgs& cmd_line_args) {
+	PlatformInit();
+
 	/**
 	 * Set system paths
 	 * PATH_CONF is for user-configurable settings files (e.g. keybindings)
