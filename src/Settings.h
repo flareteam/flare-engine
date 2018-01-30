@@ -27,10 +27,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 
-const std::string VERSION_NAME = "Flare";
-const int VERSION_MAJOR = 1;
-const int VERSION_MINOR = 0;
-
 class Element {
 public:
 	std::string id;
@@ -237,6 +233,5 @@ size_t getPrimaryStatIndex(const std::string& id_str);
 
 // version information
 std::string getVersionString();
-bool compareVersions(int maj0, int min0, int maj1, int min1);
 
 #endif

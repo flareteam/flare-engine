@@ -38,6 +38,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Stats.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
+#include "Version.h"
 #include "WidgetButton.h"
 #include "WidgetCheckBox.h"
 #include "WidgetListBox.h"
@@ -900,24 +901,10 @@ bool GameStateConfigBase::setMods() {
 std::string GameStateConfigBase::createModTooltip(Mod *mod) {
 	std::string ret = "";
 	if (mod) {
-		std::string min_version = "";
-		std::string max_version = "";
-		std::stringstream ss;
+		std::string min_version = (*mod->engine_min_version == Version(0, 0, 0)) ? "" : versionToString(*mod->engine_min_version);
+		std::string max_version = (*mod->engine_max_version == Version(USHRT_MAX, USHRT_MAX, USHRT_MAX)) ? "" : versionToString(*mod->engine_max_version);
 
 		ret = mod->name + "\n\n";
-
-		if (mod->min_version_major > 0 || mod->min_version_minor > 0) {
-			ss << mod->min_version_major << "." << std::setfill('0') << std::setw(2) << mod->min_version_minor;
-			min_version = ss.str();
-			ss.str("");
-		}
-
-
-		if (mod->max_version_major < INT_MAX || mod->max_version_minor < INT_MAX) {
-			ss << mod->max_version_major << "." << std::setfill('0') << std::setw(2) << mod->max_version_minor;
-			max_version = ss.str();
-			ss.str("");
-		}
 
 		ret += mod->description;
 		if (mod->game != "" && mod->game != FALLBACK_GAME) {

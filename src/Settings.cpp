@@ -35,6 +35,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "UtilsFileSystem.h"
 #include "SharedResources.h"
+#include "Version.h"
 
 
 HeroClass::HeroClass()
@@ -933,24 +934,9 @@ bool loadDefaults() {
  */
 std::string getVersionString() {
 	std::stringstream ss;
-	if (VERSION_MAJOR > 0 && VERSION_MINOR < 100 && VERSION_MINOR % 10 == 0)
-		ss << VERSION_NAME << " v" << VERSION_MAJOR << "." << VERSION_MINOR/10;
-	else
-		ss << VERSION_NAME << " v" << VERSION_MAJOR << "." << std::setfill('0') << std::setw(2) << VERSION_MINOR;
-
+	ss << VERSION_NAME << ' ' << versionToString(ENGINE_VERSION);
 	ss << " (" << SDL_GetPlatform() << ")";
-
 	return ss.str();
-}
-
-/**
- * Compare version numbers. Returns true if the first number is larger than the second
- */
-bool compareVersions(int maj0, int min0, int maj1, int min1) {
-	if (maj0 == maj1)
-		return min0 > min1;
-	else
-		return maj0 > maj1;
 }
 
 /**

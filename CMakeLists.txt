@@ -185,6 +185,7 @@ Set (FLARE_SOURCES
 	./src/UtilsDebug.cpp
 	./src/UtilsFileSystem.cpp
 	./src/UtilsParsing.cpp
+	./src/Version.cpp
 	./src/Widget.cpp
 	./src/WidgetCheckBox.cpp
 	./src/WidgetButton.cpp
@@ -296,6 +297,7 @@ Set (FLARE_HEADERS
 	./src/UtilsFileSystem.h
 	./src/UtilsMath.h
 	./src/UtilsParsing.h
+	./src/Version.h
 	./src/Widget.h
 	./src/WidgetCheckBox.h
 	./src/WidgetButton.h

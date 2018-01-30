@@ -31,20 +31,22 @@ mods in priority order when loading data files.
 
 #include "CommonIncludes.h"
 
+class Version;
+
 class Mod {
 public:
 	Mod();
 	~Mod();
+	Mod(const Mod &mod);
+	Mod& operator=(const Mod &mod);
 	bool operator== (const Mod &mod) const;
 	bool operator!= (const Mod &mod) const;
 
 	std::string name;
 	std::string description;
 	std::string game;
-	int min_version_major;
-	int min_version_minor;
-	int max_version_major;
-	int max_version_minor;
+	Version* engine_min_version;
+	Version* engine_max_version;
 	std::vector<std::string> depends;
 };
 

@@ -32,6 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetScrollBox.h"
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
+#include "Version.h"
 
 GameStateTitle::GameStateTitle()
 	: GameState()

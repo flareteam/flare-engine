@@ -22,6 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
+#include "Version.h"
 
 #include <limits.h>
 
@@ -29,13 +30,33 @@ Mod::Mod()
 	: name("")
 	, description("")
 	, game("")
-	, min_version_major(0)
-	, min_version_minor(0)
-	, max_version_major(INT_MAX)
-	, max_version_minor(INT_MAX) {
+	, engine_min_version(new Version(0, 0, 0))
+	, engine_max_version(new Version(USHRT_MAX, USHRT_MAX, USHRT_MAX)) {
 }
 
 Mod::~Mod() {
+	delete engine_min_version;
+	delete engine_max_version;
+}
+
+Mod::Mod(const Mod &mod) {
+	name = mod.name;
+	description = mod.description;
+	game = mod.game;
+	engine_min_version = new Version(mod.engine_min_version->x, mod.engine_min_version->y, mod.engine_min_version->z);
+	engine_max_version = new Version(mod.engine_max_version->x, mod.engine_max_version->y, mod.engine_max_version->z);
+	depends = mod.depends;
+}
+
+Mod& Mod::operator=(const Mod &mod) {
+	name = mod.name;
+	description = mod.description;
+	game = mod.game;
+	engine_min_version = new Version(mod.engine_min_version->x, mod.engine_min_version->y, mod.engine_min_version->z);
+	engine_max_version = new Version(mod.engine_max_version->x, mod.engine_max_version->y, mod.engine_max_version->z);
+	depends = mod.depends;
+
+	return *this;
 }
 
 bool Mod::operator== (const Mod &mod) const {
@@ -301,15 +322,11 @@ Mod ModManager::loadMod(const std::string& name) {
 			}
 			else if (key == "version_min") {
 				// @ATTR version_min|string|The minimum engine version required to use this mod (e.g. 1.01).
-				val = val + '.';
-				mod.min_version_major = popFirstInt(val, '.');
-				mod.min_version_minor = popFirstInt(val, '.');
+				*mod.engine_min_version = stringToVersion(val);
 			}
 			else if (key == "version_max") {
 				// @ATTR version_max|string|The maximum engine version required to use this mod (e.g. 2.01).
-				val = val + '.';
-				mod.max_version_major = popFirstInt(val, '.');
-				mod.max_version_minor = popFirstInt(val, '.');
+				*mod.engine_max_version = stringToVersion(val);
 			}
 		}
 		if (infile.good()) {
@@ -341,10 +358,8 @@ void ModManager::applyDepends() {
 		}
 
 		// skip the mod if it's incompatible with this engine version
-		if (compareVersions(mod_list[i].min_version_major, mod_list[i].min_version_minor, VERSION_MAJOR, VERSION_MINOR) ||
-		    compareVersions(VERSION_MAJOR, VERSION_MINOR, mod_list[i].max_version_major, mod_list[i].max_version_minor)) {
-
-			logError("ModManager: Tried to enable \"%s\", but failed. Not compatible with engine version %d.%02d.", mod_list[i].name.c_str(), VERSION_MAJOR, VERSION_MINOR);
+		if (*mod_list[i].engine_min_version > ENGINE_VERSION || ENGINE_VERSION > *mod_list[i].engine_max_version) {
+			logError("ModManager: Tried to enable \"%s\", but failed. Not compatible with engine version %s.", mod_list[i].name.c_str(), versionToString(ENGINE_VERSION).c_str());
 			continue;
 		}
 
@@ -372,10 +387,8 @@ void ModManager::applyDepends() {
 							depends_met = false;
 							break;
 						}
-						else if (compareVersions(new_depend.min_version_major, new_depend.min_version_minor, VERSION_MAJOR, VERSION_MINOR) ||
-						         compareVersions(VERSION_MAJOR, VERSION_MINOR, new_depend.max_version_major, new_depend.max_version_minor)) {
-
-							logError("ModManager: Tried to enable dependency \"%s\" for \"%s\", but failed. Not compatible with engine version %d.%02d.", new_depend.name.c_str(), mod_list[i].name.c_str(), VERSION_MAJOR, VERSION_MINOR);
+						else if (*new_depend.engine_min_version > ENGINE_VERSION || ENGINE_VERSION > *new_depend.engine_max_version) {
+							logError("ModManager: Tried to enable dependency \"%s\" for \"%s\", but failed. Not compatible with engine version %s.", new_depend.name.c_str(), mod_list[i].name.c_str(), versionToString(ENGINE_VERSION).c_str());
 							depends_met = false;
 							break;
 						}
