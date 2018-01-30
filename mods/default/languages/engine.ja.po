@@ -214,19 +214,16 @@ msgid "or older"
 msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:935
-#, fuzzy
 msgid "Game:"
-msgstr "ゲーム: "
+msgstr "ゲーム:"
 
 #: ../../../src/GameStateConfigBase.cpp:940
-#, fuzzy
 msgid "Engine version:"
-msgstr "必要バージョン: "
+msgstr "必要バージョン:"
 
 #: ../../../src/GameStateConfigBase.cpp:945
-#, fuzzy
 msgid "Requires mods:"
-msgstr "必要モッズ: "
+msgstr "必要モッズ:"
 
 #: ../../../src/GameStateConfigDesktop.cpp:77
 #: ../../../src/GameStateConfigDesktop.cpp:720
@@ -235,9 +232,8 @@ msgstr "クリア"
 
 #: ../../../src/GameStateConfigDesktop.cpp:77
 #: ../../../src/GameStateConfigDesktop.cpp:718
-#, fuzzy
 msgid "Assign:"
-msgstr "割り当て: "
+msgstr "割り当て:"
 
 #: ../../../src/GameStateConfigDesktop.cpp:120
 msgid "Video"
@@ -552,22 +548,18 @@ msgid "Right Mouse"
 msgstr "右マウス"
 
 #: ../../../src/InputState.cpp:329
-#, fuzzy
 msgid "Wheel Up"
 msgstr "マウスホイール アップ"
 
 #: ../../../src/InputState.cpp:330
-#, fuzzy
 msgid "Wheel Down"
 msgstr "マウスホイール ダウン"
 
 #: ../../../src/InputState.cpp:331
-#, fuzzy
 msgid "Mouse X1"
 msgstr "マウス X1"
 
 #: ../../../src/InputState.cpp:332
-#, fuzzy
 msgid "Mouse X2"
 msgstr "マウス X2"
 
@@ -648,14 +640,13 @@ msgid "Sell Price: %d %s each"
 msgstr "売却価格: %d %s ひとつあたり"
 
 #: ../../../src/ItemManager.cpp:809
-#, fuzzy
 msgid "Set:"
-msgstr "組合わせ: "
+msgstr "組合わせ:"
 
 #: ../../../src/ItemManager.cpp:816
-#, fuzzy, c-format
+#, c-format
 msgid "%d items:"
-msgstr "%d アイテム: "
+msgstr "%d アイテム:"
 
 #: ../../../src/MenuActionBar.cpp:195 ../../../src/MenuActionBar.cpp:201
 #: ../../../src/MenuActionBar.cpp:206
@@ -709,14 +700,14 @@ msgid "Related stats:"
 msgstr "関連する統計:"
 
 #: ../../../src/MenuCharacter.cpp:388 ../../../src/MenuCharacter.cpp:412
-#, fuzzy, c-format
+#, c-format
 msgid "Each level grants %d."
-msgstr "レベルごとに %d が付与されます。 "
+msgstr "レベルごとに %d が付与されます。"
 
 #: ../../../src/MenuCharacter.cpp:392 ../../../src/MenuCharacter.cpp:416
-#, fuzzy, c-format
+#, c-format
 msgid "Each point of %s grants %d."
-msgstr "%s の各点ごとに %d が付与されます。 "
+msgstr "%s の各点ごとに %d が付与されます。"
 
 #: ../../../src/MenuDevConsole.cpp:47
 msgid "Execute"
@@ -830,7 +821,7 @@ msgstr ""
 #: ../../../src/MenuDevHUD.cpp:67
 #, fuzzy
 msgid "Mouse (x,y):"
-msgstr "マウス X1"
+msgstr "マウス (x,y):"
 
 #: ../../../src/MenuDevHUD.cpp:72
 msgid "Target distance:"
@@ -862,19 +853,19 @@ msgid "Paused"
 msgstr "ポーズ"
 
 #: ../../../src/MenuInventory.cpp:155
-#, fuzzy, c-format
+#, c-format
 msgid "Lost %d%% of %s."
-msgstr "%s を %d%% 失った。 "
+msgstr "%s を %d%% 失った。"
 
 #: ../../../src/MenuInventory.cpp:162
-#, fuzzy, c-format
+#, c-format
 msgid "Lost %d%% of total XP."
 msgstr "合計XPを %d%% 失った。"
 
 #: ../../../src/MenuInventory.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "Lost %d%% of current level XP."
-msgstr "現在レベルXPを %d%% 失った。 "
+msgstr "現在レベルXPを %d%% 失った。"
 
 #: ../../../src/MenuInventory.cpp:193
 #, c-format
@@ -946,7 +937,6 @@ msgid "XP: %d/%d"
 msgstr "XP: %d/%d"
 
 #: ../../../src/MenuManager.cpp:810
-#, fuzzy
 msgid "This item can not be dropped."
 msgstr "この項目は、アクションバーから使用することができます。"
 
@@ -1141,7 +1131,7 @@ msgstr "+%d シールド"
 #: ../../../src/PowerManager.cpp:1257
 #, fuzzy
 msgid "You are already transformed, untransform first."
-msgstr "あなたは、すでに最初の非変換、変換されます"
+msgstr "あなたは、すでに変身しているので、まず戻ってください。"
 
 #: ../../../src/PowerManager.cpp:1269
 msgid "Could not untransform at this position."
@@ -1154,7 +1144,7 @@ msgstr "ゲームをセーブしました。"
 #: ../../../src/SDLInputState.cpp:562 ../../../src/SDLInputState.cpp:576
 #, fuzzy, c-format
 msgid "Mouse %d"
-msgstr "マウスの狙い"
+msgstr "マウス %d"
 
 #: ../../../src/SDLInputState.cpp:588
 #, c-format
