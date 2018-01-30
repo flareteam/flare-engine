@@ -154,19 +154,27 @@ void Entity::playAttackSound(const std::string& attack_name) {
 void Entity::playSound(int sound_type) {
 	if (sound_type == ENTITY_SOUND_HIT && !sound_hit.empty()) {
 		size_t rand_index = rand() % sound_hit.size();
-		snd->play(sound_hit[rand_index]);
+		std::stringstream channel_name;
+		channel_name << "entity_hit_" << sound_hit[rand_index];
+		snd->play(sound_hit[rand_index], channel_name.str());
 	}
 	else if (sound_type == ENTITY_SOUND_DIE && !sound_die.empty()) {
 		size_t rand_index = rand() % sound_die.size();
-		snd->play(sound_die[rand_index]);
+		std::stringstream channel_name;
+		channel_name << "entity_die_" << sound_die[rand_index];
+		snd->play(sound_die[rand_index], channel_name.str());
 	}
 	else if (sound_type == ENTITY_SOUND_CRITDIE && !sound_critdie.empty()) {
 		size_t rand_index = rand() % sound_critdie.size();
-		snd->play(sound_critdie[rand_index]);
+		std::stringstream channel_name;
+		channel_name << "entity_critdie_" << sound_critdie[rand_index];
+		snd->play(sound_critdie[rand_index], channel_name.str());
 	}
 	else if (sound_type == ENTITY_SOUND_BLOCK && !sound_block.empty()) {
 		size_t rand_index = rand() % sound_block.size();
-		snd->play(sound_block[rand_index]);
+		std::stringstream channel_name;
+		channel_name << "entity_block_" << sound_block[rand_index];
+		snd->play(sound_block[rand_index], channel_name.str());
 	}
 }
 
