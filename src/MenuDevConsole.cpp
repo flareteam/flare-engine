@@ -119,7 +119,7 @@ void MenuDevConsole::logic() {
 			first_open = true;
 			log_history->add("exec \"msg=Hello World\"");
 			log_history->add(msg->get("Arguments with spaces should be enclosed with double quotes. Example:"));
-			log_history->add(msg->get("Type 'help' to get a list of commands. "));
+			log_history->add(msg->get("Type 'help' to get a list of commands.") + ' ');
 		}
 
 		if (!input_box->edit_mode) {
@@ -405,7 +405,7 @@ void MenuDevConsole::execute() {
 	else if (args[0] == "add_power") {
 		if (args.size() != 2) {
 			log_history->add(msg->get("ERROR: Incorrect number of arguments"), false, &color_error);
-			log_history->add(msg->get("HINT: ") + args[0] + msg->get(" <id>"), false, &color_hint);
+			log_history->add(msg->get("HINT:") + ' ' + args[0] + ' ' + msg->get("<id>"), false, &color_hint);
 		}
 		else {
 			menu->act->addPower(toInt(args[1]));
@@ -430,7 +430,7 @@ void MenuDevConsole::execute() {
 		}
 		else {
 			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
-			log_history->add(msg->get("HINT: ") + args[0] + msg->get(" <key>=<val> <key>=<val> ..."), false, &color_hint);
+			log_history->add(msg->get("HINT:") + ' ' + args[0] + ' ' + msg->get("<key>=<val> <key>=<val> ..."), false, &color_hint);
 		}
 	}
 	else {

@@ -909,12 +909,12 @@ std::string GameStateConfigBase::createModTooltip(Mod *mod) {
 		ret += mod->description;
 		if (mod->game != "" && mod->game != FALLBACK_GAME) {
 			if (ret != "") ret += '\n';
-			ret += msg->get("Game: ");
+			ret += msg->get("Game:") + ' ';
 			ret += mod->game;
 		}
 		if (min_version != "" || max_version != "") {
 			if (ret != "") ret += '\n';
-			ret += msg->get("Requires version: ");
+			ret += msg->get("Requires version:") + ' ';
 			if (min_version != "" && min_version != max_version) {
 				ret += min_version;
 				if (max_version != "") {
@@ -928,7 +928,7 @@ std::string GameStateConfigBase::createModTooltip(Mod *mod) {
 		}
 		if (!mod->depends.empty()) {
 			if (ret != "") ret += '\n';
-			ret += msg->get("Requires mods: ");
+			ret += msg->get("Requires mods:") + ' ';
 			for (unsigned i=0; i<mod->depends.size(); ++i) {
 				ret += mod->depends[i];
 				if (i < mod->depends.size()-1)

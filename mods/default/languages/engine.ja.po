@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.17\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-29 17:55-0500\n"
+"POT-Creation-Date: 2018-01-29 22:41-0500\n"
 "PO-Revision-Date: 2017-10-31 03:03+0900\n"
 "Last-Translator: \n"
 "Language-Team: Paul Wortmann <www.physhexgames.co.nr>\n"
@@ -107,114 +107,117 @@ msgstr "+%d MP"
 msgid "Unknown destination"
 msgstr "未知の目的地"
 
-#: ../../../src/GameStateConfigBase.cpp:90
-#: ../../../src/GameStateConfigBase.cpp:109
+#: ../../../src/GameStateConfigBase.cpp:91
+#: ../../../src/GameStateConfigBase.cpp:110
 msgid "Defaults"
 msgstr "デフォルト"
 
-#: ../../../src/GameStateConfigBase.cpp:90
+#: ../../../src/GameStateConfigBase.cpp:91
 msgid "Reset ALL settings?"
 msgstr "すべての設定をリセット?"
 
-#: ../../../src/GameStateConfigBase.cpp:108 ../../../src/MenuNumPicker.cpp:45
+#: ../../../src/GameStateConfigBase.cpp:109 ../../../src/MenuNumPicker.cpp:45
 msgid "OK"
 msgstr "オーケー"
 
-#: ../../../src/GameStateConfigBase.cpp:110 ../../../src/GameStateNew.cpp:59
+#: ../../../src/GameStateConfigBase.cpp:111 ../../../src/GameStateNew.cpp:59
 #: ../../../src/InputState.cpp:294 ../../../src/MenuNPCActions.cpp:83
 msgid "Cancel"
 msgstr "キャンセル"
 
-#: ../../../src/GameStateConfigBase.cpp:159
+#: ../../../src/GameStateConfigBase.cpp:160
 #: ../../../src/GameStateConfigDesktop.cpp:122
 msgid "Audio"
 msgstr "オーディオ"
 
-#: ../../../src/GameStateConfigBase.cpp:160
+#: ../../../src/GameStateConfigBase.cpp:161
 #: ../../../src/GameStateConfigDesktop.cpp:123
 msgid "Interface"
 msgstr "インタフェース"
 
-#: ../../../src/GameStateConfigBase.cpp:161
+#: ../../../src/GameStateConfigBase.cpp:162
 #: ../../../src/GameStateConfigDesktop.cpp:126
 msgid "Mods"
 msgstr "モッズ"
 
-#: ../../../src/GameStateConfigBase.cpp:239 ../../../src/MenuExit.cpp:65
+#: ../../../src/GameStateConfigBase.cpp:240 ../../../src/MenuExit.cpp:65
 msgid "Music Volume"
 msgstr "音楽の音量"
 
-#: ../../../src/GameStateConfigBase.cpp:243 ../../../src/MenuExit.cpp:70
+#: ../../../src/GameStateConfigBase.cpp:244 ../../../src/MenuExit.cpp:70
 msgid "Sound Volume"
 msgstr "効果音の音量"
 
-#: ../../../src/GameStateConfigBase.cpp:247
+#: ../../../src/GameStateConfigBase.cpp:248
 msgid "Language"
 msgstr "言語"
 
-#: ../../../src/GameStateConfigBase.cpp:251
+#: ../../../src/GameStateConfigBase.cpp:252
 msgid "Show combat text"
 msgstr "戦闘のテキストを表示"
 
-#: ../../../src/GameStateConfigBase.cpp:255
+#: ../../../src/GameStateConfigBase.cpp:256
 msgid "Show FPS"
 msgstr "FPSを表示"
 
-#: ../../../src/GameStateConfigBase.cpp:259
+#: ../../../src/GameStateConfigBase.cpp:260
 msgid "Colorblind Mode"
 msgstr "色盲モード"
 
-#: ../../../src/GameStateConfigBase.cpp:263
+#: ../../../src/GameStateConfigBase.cpp:264
 #, fuzzy
 msgid "Hardware mouse cursor"
 msgstr "ハードウェアマウスカーソル"
 
-#: ../../../src/GameStateConfigBase.cpp:267
+#: ../../../src/GameStateConfigBase.cpp:268
 msgid "Developer Mode"
 msgstr ""
 
-#: ../../../src/GameStateConfigBase.cpp:271
+#: ../../../src/GameStateConfigBase.cpp:272
 msgid "Always show loot labels"
 msgstr ""
 
-#: ../../../src/GameStateConfigBase.cpp:275
+#: ../../../src/GameStateConfigBase.cpp:276
 msgid "Always show stat bar labels"
 msgstr ""
 
-#: ../../../src/GameStateConfigBase.cpp:279
+#: ../../../src/GameStateConfigBase.cpp:280
 msgid "Automatically equip items"
 msgstr ""
 
-#: ../../../src/GameStateConfigBase.cpp:283
+#: ../../../src/GameStateConfigBase.cpp:284
 msgid "Subtitles"
 msgstr "字幕"
 
-#: ../../../src/GameStateConfigBase.cpp:287
+#: ../../../src/GameStateConfigBase.cpp:288
 msgid "Active Mods"
 msgstr "アクティブモッズ"
 
-#: ../../../src/GameStateConfigBase.cpp:291
+#: ../../../src/GameStateConfigBase.cpp:292
 msgid "Available Mods"
 msgstr "利用可能モッズ"
 
-#: ../../../src/GameStateConfigBase.cpp:305
+#: ../../../src/GameStateConfigBase.cpp:306
 msgid "<< Disable"
 msgstr "<< 無効"
 
-#: ../../../src/GameStateConfigBase.cpp:311
+#: ../../../src/GameStateConfigBase.cpp:312
 msgid "Enable >>"
 msgstr "有効 >>"
 
-#: ../../../src/GameStateConfigBase.cpp:925
-msgid "Game: "
+#: ../../../src/GameStateConfigBase.cpp:912
+#, fuzzy
+msgid "Game:"
 msgstr "ゲーム: "
 
-#: ../../../src/GameStateConfigBase.cpp:930
-msgid "Requires version: "
+#: ../../../src/GameStateConfigBase.cpp:917
+#, fuzzy
+msgid "Requires version:"
 msgstr "必要バージョン: "
 
-#: ../../../src/GameStateConfigBase.cpp:944
-msgid "Requires mods: "
+#: ../../../src/GameStateConfigBase.cpp:931
+#, fuzzy
+msgid "Requires mods:"
 msgstr "必要モッズ: "
 
 #: ../../../src/GameStateConfigDesktop.cpp:77
@@ -224,7 +227,8 @@ msgstr "クリア"
 
 #: ../../../src/GameStateConfigDesktop.cpp:77
 #: ../../../src/GameStateConfigDesktop.cpp:718
-msgid "Assign: "
+#, fuzzy
+msgid "Assign:"
 msgstr "割り当て: "
 
 #: ../../../src/GameStateConfigDesktop.cpp:120
@@ -382,23 +386,23 @@ msgstr "永久に死亡させますか?"
 msgid "Choose a Class"
 msgstr "クラスを選択"
 
-#: ../../../src/GameStateTitle.cpp:101
+#: ../../../src/GameStateTitle.cpp:102
 msgid "Play Game"
 msgstr "ゲームをプレイ"
 
-#: ../../../src/GameStateTitle.cpp:104
+#: ../../../src/GameStateTitle.cpp:105
 msgid "Enable a core mod to continue"
 msgstr "コアモッズを有効にして続行"
 
-#: ../../../src/GameStateTitle.cpp:108
+#: ../../../src/GameStateTitle.cpp:109
 msgid "Configuration"
 msgstr "設定"
 
-#: ../../../src/GameStateTitle.cpp:111
+#: ../../../src/GameStateTitle.cpp:112
 msgid "Credits"
 msgstr "クレジット"
 
-#: ../../../src/GameStateTitle.cpp:114
+#: ../../../src/GameStateTitle.cpp:115
 msgid "Exit Game"
 msgstr "ゲームを終了"
 
@@ -636,12 +640,13 @@ msgid "Sell Price: %d %s each"
 msgstr "売却価格: %d %s ひとつあたり"
 
 #: ../../../src/ItemManager.cpp:809
-msgid "Set: "
+#, fuzzy
+msgid "Set:"
 msgstr "組合わせ: "
 
 #: ../../../src/ItemManager.cpp:816
-#, c-format
-msgid "%d items: "
+#, fuzzy, c-format
+msgid "%d items:"
 msgstr "%d アイテム: "
 
 #: ../../../src/MenuActionBar.cpp:195 ../../../src/MenuActionBar.cpp:201
@@ -696,13 +701,13 @@ msgid "Related stats:"
 msgstr "関連する統計:"
 
 #: ../../../src/MenuCharacter.cpp:388 ../../../src/MenuCharacter.cpp:412
-#, c-format
-msgid "Each level grants %d. "
+#, fuzzy, c-format
+msgid "Each level grants %d."
 msgstr "レベルごとに %d が付与されます。 "
 
 #: ../../../src/MenuCharacter.cpp:392 ../../../src/MenuCharacter.cpp:416
-#, c-format
-msgid "Each point of %s grants %d. "
+#, fuzzy, c-format
+msgid "Each point of %s grants %d."
 msgstr "%s の各点ごとに %d が付与されます。 "
 
 #: ../../../src/MenuDevConsole.cpp:47
@@ -718,7 +723,7 @@ msgid "Arguments with spaces should be enclosed with double quotes. Example:"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:122
-msgid "Type 'help' to get a list of commands. "
+msgid "Type 'help' to get a list of commands."
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:223
@@ -778,11 +783,11 @@ msgid "ERROR: Incorrect number of arguments"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:408 ../../../src/MenuDevConsole.cpp:433
-msgid "HINT: "
+msgid "HINT:"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:408
-msgid " <id>"
+msgid "<id>"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:423
@@ -795,7 +800,7 @@ msgid "ERROR: Too few arguments"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:433
-msgid " <key>=<val> <key>=<val> ..."
+msgid "<key>=<val> <key>=<val> ..."
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:437
@@ -807,19 +812,20 @@ msgid "HINT: Type help"
 msgstr ""
 
 #: ../../../src/MenuDevHUD.cpp:56
-msgid "Player (x,y): "
+msgid "Player (x,y):"
 msgstr ""
 
 #: ../../../src/MenuDevHUD.cpp:62
-msgid "Target (x,y): "
+msgid "Target (x,y):"
 msgstr ""
 
 #: ../../../src/MenuDevHUD.cpp:67
-msgid "Mouse (x,y): "
-msgstr ""
+#, fuzzy
+msgid "Mouse (x,y):"
+msgstr "マウス X1"
 
 #: ../../../src/MenuDevHUD.cpp:72
-msgid "Target distance: "
+msgid "Target distance:"
 msgstr ""
 
 #: ../../../src/MenuEnemy.cpp:137
@@ -848,18 +854,18 @@ msgid "Paused"
 msgstr "ポーズ"
 
 #: ../../../src/MenuInventory.cpp:155
-#, c-format
-msgid "Lost %d%% of %s. "
+#, fuzzy, c-format
+msgid "Lost %d%% of %s."
 msgstr "%s を %d%% 失った。 "
 
 #: ../../../src/MenuInventory.cpp:162
-#, c-format
-msgid "Lost %d%% of total XP. "
+#, fuzzy, c-format
+msgid "Lost %d%% of total XP."
 msgstr "合計XPを %d%% 失った。"
 
 #: ../../../src/MenuInventory.cpp:167
-#, c-format
-msgid "Lost %d%% of current level XP. "
+#, fuzzy, c-format
+msgid "Lost %d%% of current level XP."
 msgstr "現在レベルXPを %d%% 失った。 "
 
 #: ../../../src/MenuInventory.cpp:193
@@ -1167,7 +1173,7 @@ msgstr ""
 msgid "%s on enemy"
 msgstr ""
 
-#: ../../../src/Settings.cpp:752
+#: ../../../src/Settings.cpp:753
 msgid "Adventurer"
 msgstr "冒険家"
 

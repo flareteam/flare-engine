@@ -74,7 +74,7 @@ GameStateConfigDesktop::GameStateConfigDesktop(bool _enable_video_tab)
 	, joystick_deadzone_lb(new WidgetLabel())
 	, handheld_note_lb(new WidgetLabel())
 	, input_scrollbox(NULL)
-	, input_confirm(new MenuConfirm(msg->get("Clear"),msg->get("Assign: ")))
+	, input_confirm(new MenuConfirm(msg->get("Clear"),msg->get("Assign:")))
 	, input_confirm_ticks(0)
 	, input_key(0)
 	, key_count(0)
@@ -715,7 +715,7 @@ void GameStateConfigDesktop::logicKeybinds() {
 		Point mouse = input_scrollbox->input_assist(inpt->mouse);
 		if (keybinds_btn[i]->checkClick(mouse.x,mouse.y)) {
 			std::string confirm_msg;
-			confirm_msg = msg->get("Assign: ") + inpt->binding_name[i%key_count];
+			confirm_msg = msg->get("Assign:") + ' ' + inpt->binding_name[i%key_count];
 			delete input_confirm;
 			input_confirm = new MenuConfirm(msg->get("Clear"),confirm_msg);
 			input_confirm_ticks = MAX_FRAMES_PER_SEC * 10; // 10 seconds

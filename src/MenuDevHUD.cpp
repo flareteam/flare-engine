@@ -53,23 +53,23 @@ void MenuDevHUD::align() {
 	int line_height = font->getLineHeight();
 
 	ss.str("");
-	ss << msg->get("Player (x,y): ") << pc->stats.pos.x << ", " << pc->stats.pos.y;
+	ss << msg->get("Player (x,y):") << ' ' << pc->stats.pos.x << ", " << pc->stats.pos.y;
 	player_pos.set(window_area.x, window_area.y, JUSTIFY_LEFT, VALIGN_TOP, ss.str(), font->getColor("menu_normal"));
 	line_width = std::max(line_width, player_pos.bounds.w);
 
 	FPoint target = screen_to_map(inpt->mouse.x,  inpt->mouse.y, pc->stats.pos.x, pc->stats.pos.y);
 	ss.str("");
-	ss << msg->get("Target (x,y): ") << target.x << ", " << target.y;
+	ss << msg->get("Target (x,y):") << ' ' << target.x << ", " << target.y;
 	target_pos.set(window_area.x, window_area.y+line_height, JUSTIFY_LEFT, VALIGN_TOP, ss.str(), font->getColor("menu_normal"));
 	line_width = std::max(line_width, target_pos.bounds.w);
 
 	ss.str("");
-	ss << msg->get("Mouse (x,y): ") << inpt->mouse.x << ", " << inpt->mouse.y;
+	ss << msg->get("Mouse (x,y):") << ' ' << inpt->mouse.x << ", " << inpt->mouse.y;
 	mouse_pos.set(window_area.x, window_area.y+line_height*2, JUSTIFY_LEFT, VALIGN_TOP, ss.str(), font->getColor("menu_normal"));
 	line_width = std::max(line_width, mouse_pos.bounds.w);
 
 	ss.str("");
-	ss << msg->get("Target distance: ") << calcDist(pc->stats.pos, target);
+	ss << msg->get("Target distance:") << ' ' << calcDist(pc->stats.pos, target);
 	target_distance.set(window_area.x, window_area.y+line_height*3, JUSTIFY_LEFT, VALIGN_TOP, ss.str(), font->getColor("menu_normal"));
 	line_width = std::max(line_width, mouse_pos.bounds.w);
 

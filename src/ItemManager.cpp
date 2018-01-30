@@ -806,14 +806,14 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 		ItemSet set = item_sets[items[stack.item].set];
 		bonus_counter = 0;
 
-		tip.addColoredText("\n" + msg->get("Set: ") + msg->get(item_sets[items[stack.item].set].name), set.color);
+		tip.addColoredText("\n" + msg->get("Set:") + ' ' + msg->get(item_sets[items[stack.item].set].name), set.color);
 
 		while (bonus_counter < set.bonus.size()) {
 			ss.str("");
 
 			Set_bonus* bdata = &set.bonus[bonus_counter];
 
-			ss << msg->get("%d items: ", bdata->requirement);
+			ss << msg->get("%d items:", bdata->requirement) << ' ';
 
 			getBonusString(ss, bdata);
 			tip.addColoredText(ss.str(), set.color);

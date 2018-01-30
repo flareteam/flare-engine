@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: flare-engine 1.00\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-29 17:55-0500\n"
+"POT-Creation-Date: 2018-01-29 22:41-0500\n"
 "PO-Revision-Date: 2016-09-15 09:50+0200\n"
 "Last-Translator: Pavel Maryanov <acid@jack.kiev.ua>\n"
 "Language-Team: Russian <gnu@dn07.ru>\n"
@@ -111,113 +111,116 @@ msgstr "+%d маны"
 msgid "Unknown destination"
 msgstr "Неизвестное место назначения"
 
-#: ../../../src/GameStateConfigBase.cpp:90
-#: ../../../src/GameStateConfigBase.cpp:109
+#: ../../../src/GameStateConfigBase.cpp:91
+#: ../../../src/GameStateConfigBase.cpp:110
 msgid "Defaults"
 msgstr "По умолчанию"
 
-#: ../../../src/GameStateConfigBase.cpp:90
+#: ../../../src/GameStateConfigBase.cpp:91
 msgid "Reset ALL settings?"
 msgstr "Сбросить ВСЕ настройки?"
 
-#: ../../../src/GameStateConfigBase.cpp:108 ../../../src/MenuNumPicker.cpp:45
+#: ../../../src/GameStateConfigBase.cpp:109 ../../../src/MenuNumPicker.cpp:45
 msgid "OK"
 msgstr "ОК"
 
-#: ../../../src/GameStateConfigBase.cpp:110 ../../../src/GameStateNew.cpp:59
+#: ../../../src/GameStateConfigBase.cpp:111 ../../../src/GameStateNew.cpp:59
 #: ../../../src/InputState.cpp:294 ../../../src/MenuNPCActions.cpp:83
 msgid "Cancel"
 msgstr "Отмена"
 
-#: ../../../src/GameStateConfigBase.cpp:159
+#: ../../../src/GameStateConfigBase.cpp:160
 #: ../../../src/GameStateConfigDesktop.cpp:122
 msgid "Audio"
 msgstr "Аудио"
 
-#: ../../../src/GameStateConfigBase.cpp:160
+#: ../../../src/GameStateConfigBase.cpp:161
 #: ../../../src/GameStateConfigDesktop.cpp:123
 msgid "Interface"
 msgstr "Интерфейс"
 
-#: ../../../src/GameStateConfigBase.cpp:161
+#: ../../../src/GameStateConfigBase.cpp:162
 #: ../../../src/GameStateConfigDesktop.cpp:126
 msgid "Mods"
 msgstr "Дополнения"
 
-#: ../../../src/GameStateConfigBase.cpp:239 ../../../src/MenuExit.cpp:65
+#: ../../../src/GameStateConfigBase.cpp:240 ../../../src/MenuExit.cpp:65
 msgid "Music Volume"
 msgstr "Громкость музыки"
 
-#: ../../../src/GameStateConfigBase.cpp:243 ../../../src/MenuExit.cpp:70
+#: ../../../src/GameStateConfigBase.cpp:244 ../../../src/MenuExit.cpp:70
 msgid "Sound Volume"
 msgstr "Громкость звука"
 
-#: ../../../src/GameStateConfigBase.cpp:247
+#: ../../../src/GameStateConfigBase.cpp:248
 msgid "Language"
 msgstr "Язык"
 
-#: ../../../src/GameStateConfigBase.cpp:251
+#: ../../../src/GameStateConfigBase.cpp:252
 msgid "Show combat text"
 msgstr "Сообщения битвы"
 
-#: ../../../src/GameStateConfigBase.cpp:255
+#: ../../../src/GameStateConfigBase.cpp:256
 msgid "Show FPS"
 msgstr "Показывать FPS"
 
-#: ../../../src/GameStateConfigBase.cpp:259
+#: ../../../src/GameStateConfigBase.cpp:260
 msgid "Colorblind Mode"
 msgstr "Режим цветовой слепоты"
 
-#: ../../../src/GameStateConfigBase.cpp:263
+#: ../../../src/GameStateConfigBase.cpp:264
 msgid "Hardware mouse cursor"
 msgstr "Аппаратный курсор мыши"
 
-#: ../../../src/GameStateConfigBase.cpp:267
+#: ../../../src/GameStateConfigBase.cpp:268
 msgid "Developer Mode"
 msgstr "Режим разработчика"
 
-#: ../../../src/GameStateConfigBase.cpp:271
+#: ../../../src/GameStateConfigBase.cpp:272
 msgid "Always show loot labels"
 msgstr "Метки сокровищ"
 
-#: ../../../src/GameStateConfigBase.cpp:275
+#: ../../../src/GameStateConfigBase.cpp:276
 msgid "Always show stat bar labels"
 msgstr "Метки в строке состояния"
 
-#: ../../../src/GameStateConfigBase.cpp:279
+#: ../../../src/GameStateConfigBase.cpp:280
 msgid "Automatically equip items"
 msgstr "Сразу надевать предметы"
 
-#: ../../../src/GameStateConfigBase.cpp:283
+#: ../../../src/GameStateConfigBase.cpp:284
 msgid "Subtitles"
 msgstr ""
 
-#: ../../../src/GameStateConfigBase.cpp:287
+#: ../../../src/GameStateConfigBase.cpp:288
 msgid "Active Mods"
 msgstr "Активные дополнения"
 
-#: ../../../src/GameStateConfigBase.cpp:291
+#: ../../../src/GameStateConfigBase.cpp:292
 msgid "Available Mods"
 msgstr "Доступные дополнения"
 
-#: ../../../src/GameStateConfigBase.cpp:305
+#: ../../../src/GameStateConfigBase.cpp:306
 msgid "<< Disable"
 msgstr "<< Отключить"
 
-#: ../../../src/GameStateConfigBase.cpp:311
+#: ../../../src/GameStateConfigBase.cpp:312
 msgid "Enable >>"
 msgstr "Включить >>"
 
-#: ../../../src/GameStateConfigBase.cpp:925
-msgid "Game: "
+#: ../../../src/GameStateConfigBase.cpp:912
+#, fuzzy
+msgid "Game:"
 msgstr "Игра: "
 
-#: ../../../src/GameStateConfigBase.cpp:930
-msgid "Requires version: "
+#: ../../../src/GameStateConfigBase.cpp:917
+#, fuzzy
+msgid "Requires version:"
 msgstr "Требуется версия:  "
 
-#: ../../../src/GameStateConfigBase.cpp:944
-msgid "Requires mods: "
+#: ../../../src/GameStateConfigBase.cpp:931
+#, fuzzy
+msgid "Requires mods:"
 msgstr "Требуются дополнения: "
 
 #: ../../../src/GameStateConfigDesktop.cpp:77
@@ -227,7 +230,8 @@ msgstr "Очистить"
 
 #: ../../../src/GameStateConfigDesktop.cpp:77
 #: ../../../src/GameStateConfigDesktop.cpp:718
-msgid "Assign: "
+#, fuzzy
+msgid "Assign:"
 msgstr "Назначить: "
 
 #: ../../../src/GameStateConfigDesktop.cpp:120
@@ -385,23 +389,23 @@ msgstr "Одна жизнь?"
 msgid "Choose a Class"
 msgstr "Выберите класс"
 
-#: ../../../src/GameStateTitle.cpp:101
+#: ../../../src/GameStateTitle.cpp:102
 msgid "Play Game"
 msgstr "Играть"
 
-#: ../../../src/GameStateTitle.cpp:104
+#: ../../../src/GameStateTitle.cpp:105
 msgid "Enable a core mod to continue"
 msgstr "Включите основное дополнение для продолжения"
 
-#: ../../../src/GameStateTitle.cpp:108
+#: ../../../src/GameStateTitle.cpp:109
 msgid "Configuration"
 msgstr "Настройки"
 
-#: ../../../src/GameStateTitle.cpp:111
+#: ../../../src/GameStateTitle.cpp:112
 msgid "Credits"
 msgstr "Авторы"
 
-#: ../../../src/GameStateTitle.cpp:114
+#: ../../../src/GameStateTitle.cpp:115
 msgid "Exit Game"
 msgstr "Выйти"
 
@@ -635,12 +639,13 @@ msgid "Sell Price: %d %s each"
 msgstr "Цена продажи: %d %s каждый"
 
 #: ../../../src/ItemManager.cpp:809
-msgid "Set: "
+#, fuzzy
+msgid "Set:"
 msgstr "Задать: "
 
 #: ../../../src/ItemManager.cpp:816
-#, c-format
-msgid "%d items: "
+#, fuzzy, c-format
+msgid "%d items:"
 msgstr "%d предметов:  "
 
 #: ../../../src/MenuActionBar.cpp:195 ../../../src/MenuActionBar.cpp:201
@@ -695,13 +700,13 @@ msgid "Related stats:"
 msgstr "Связанные атрибуты:"
 
 #: ../../../src/MenuCharacter.cpp:388 ../../../src/MenuCharacter.cpp:412
-#, c-format
-msgid "Each level grants %d. "
+#, fuzzy, c-format
+msgid "Each level grants %d."
 msgstr "Каждый уровень даёт %d.  "
 
 #: ../../../src/MenuCharacter.cpp:392 ../../../src/MenuCharacter.cpp:416
 #, fuzzy, c-format
-msgid "Each point of %s grants %d. "
+msgid "Each point of %s grants %d."
 msgstr "Каждое очко ловкости даёт %d.  "
 
 #: ../../../src/MenuDevConsole.cpp:47
@@ -717,7 +722,8 @@ msgid "Arguments with spaces should be enclosed with double quotes. Example:"
 msgstr "Аргументы с пробелами должны быть заключены в двойные кавычки. Пример:"
 
 #: ../../../src/MenuDevConsole.cpp:122
-msgid "Type 'help' to get a list of commands. "
+#, fuzzy
+msgid "Type 'help' to get a list of commands."
 msgstr "Введите 'help', чтобы получить список команд. "
 
 #: ../../../src/MenuDevConsole.cpp:223
@@ -779,11 +785,12 @@ msgid "ERROR: Incorrect number of arguments"
 msgstr "ОШИБКА: недостаточно аргументов"
 
 #: ../../../src/MenuDevConsole.cpp:408 ../../../src/MenuDevConsole.cpp:433
-msgid "HINT: "
+#, fuzzy
+msgid "HINT:"
 msgstr "ПОДСКАЗКА: "
 
 #: ../../../src/MenuDevConsole.cpp:408
-msgid " <id>"
+msgid "<id>"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:423
@@ -796,7 +803,8 @@ msgid "ERROR: Too few arguments"
 msgstr "ОШИБКА: недостаточно аргументов"
 
 #: ../../../src/MenuDevConsole.cpp:433
-msgid " <key>=<val> <key>=<val> ..."
+#, fuzzy
+msgid "<key>=<val> <key>=<val> ..."
 msgstr " <ключ>=<значение> <ключ>=<значение> ..."
 
 #: ../../../src/MenuDevConsole.cpp:437
@@ -808,19 +816,22 @@ msgid "HINT: Type help"
 msgstr "ПОДСКАЗКА: наберите help"
 
 #: ../../../src/MenuDevHUD.cpp:56
-msgid "Player (x,y): "
+#, fuzzy
+msgid "Player (x,y):"
 msgstr "Игрок (x,y): "
 
 #: ../../../src/MenuDevHUD.cpp:62
-msgid "Target (x,y): "
+#, fuzzy
+msgid "Target (x,y):"
 msgstr "Цель (x,y): "
 
 #: ../../../src/MenuDevHUD.cpp:67
-msgid "Mouse (x,y): "
+#, fuzzy
+msgid "Mouse (x,y):"
 msgstr "Мышь (x,y): "
 
 #: ../../../src/MenuDevHUD.cpp:72
-msgid "Target distance: "
+msgid "Target distance:"
 msgstr ""
 
 #: ../../../src/MenuEnemy.cpp:137
@@ -849,18 +860,18 @@ msgid "Paused"
 msgstr "Пауза"
 
 #: ../../../src/MenuInventory.cpp:155
-#, c-format
-msgid "Lost %d%% of %s. "
+#, fuzzy, c-format
+msgid "Lost %d%% of %s."
 msgstr "Потеряно %d%% %s. "
 
 #: ../../../src/MenuInventory.cpp:162
-#, c-format
-msgid "Lost %d%% of total XP. "
+#, fuzzy, c-format
+msgid "Lost %d%% of total XP."
 msgstr "Потеряно %d%% полного опыта. "
 
 #: ../../../src/MenuInventory.cpp:167
-#, c-format
-msgid "Lost %d%% of current level XP. "
+#, fuzzy, c-format
+msgid "Lost %d%% of current level XP."
 msgstr "Потеряно %d%% опыта текущего уровня. "
 
 #: ../../../src/MenuInventory.cpp:193
@@ -1166,7 +1177,7 @@ msgstr "%s по земле"
 msgid "%s on enemy"
 msgstr "%s по врагу"
 
-#: ../../../src/Settings.cpp:752
+#: ../../../src/Settings.cpp:753
 msgid "Adventurer"
 msgstr "авантюрист"
 

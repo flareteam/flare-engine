@@ -385,11 +385,11 @@ std::string MenuCharacter::statTooltip(int stat) {
 	std::string tooltip_text;
 
 	if (stats->per_level[stat] > 0)
-		tooltip_text += msg->get("Each level grants %d. ", stats->per_level[stat]);
+		tooltip_text += msg->get("Each level grants %d.", stats->per_level[stat]) + ' ';
 
 	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
 		if (stats->per_primary[i][stat] > 0)
-			tooltip_text += msg->get("Each point of %s grants %d. ", stats->per_primary[i][stat], PRIMARY_STATS[i].name.c_str());
+			tooltip_text += msg->get("Each point of %s grants %d.", stats->per_primary[i][stat], PRIMARY_STATS[i].name.c_str()) + ' ';
 	}
 
 	std::string full_tooltip = "";
@@ -409,11 +409,11 @@ std::string MenuCharacter::damageTooltip(size_t dmg_type) {
 	std::string tooltip_text;
 
 	if (stats->per_level[STAT_COUNT + dmg_type] > 0)
-		tooltip_text += msg->get("Each level grants %d. ", stats->per_level[STAT_COUNT + dmg_type]);
+		tooltip_text += msg->get("Each level grants %d.", stats->per_level[STAT_COUNT + dmg_type]) + ' ';
 
 	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
 		if (stats->per_primary[i][STAT_COUNT + dmg_type] > 0)
-			tooltip_text += msg->get("Each point of %s grants %d. ", stats->per_primary[i][STAT_COUNT + dmg_type], PRIMARY_STATS[i].name.c_str());
+			tooltip_text += msg->get("Each point of %s grants %d.", stats->per_primary[i][STAT_COUNT + dmg_type], PRIMARY_STATS[i].name.c_str()) + ' ';
 	}
 
 	size_t real_dmg_type = dmg_type / 2;

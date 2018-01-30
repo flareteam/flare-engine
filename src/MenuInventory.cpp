@@ -152,19 +152,19 @@ void MenuInventory::logic() {
 		if (DEATH_PENALTY_CURRENCY > 0) {
 			if (currency > 0)
 				removeCurrency((currency * DEATH_PENALTY_CURRENCY) / 100);
-			death_message += msg->get("Lost %d%% of %s. ", DEATH_PENALTY_CURRENCY, CURRENCY);
+			death_message += msg->get("Lost %d%% of %s.", DEATH_PENALTY_CURRENCY, CURRENCY) + ' ';
 		}
 
 		// remove a % of either total xp or xp since the last level
 		if (DEATH_PENALTY_XP > 0) {
 			if (stats->xp > 0)
 				stats->xp -= (stats->xp * DEATH_PENALTY_XP) / 100;
-			death_message += msg->get("Lost %d%% of total XP. ", DEATH_PENALTY_XP);
+			death_message += msg->get("Lost %d%% of total XP.", DEATH_PENALTY_XP) + ' ';
 		}
 		else if (DEATH_PENALTY_XP_CURRENT > 0) {
 			if (stats->xp - stats->xp_table[stats->level-1] > 0)
 				stats->xp -= ((stats->xp - stats->xp_table[stats->level-1]) * DEATH_PENALTY_XP_CURRENT) / 100;
-			death_message += msg->get("Lost %d%% of current level XP. ", DEATH_PENALTY_XP_CURRENT);
+			death_message += msg->get("Lost %d%% of current level XP.", DEATH_PENALTY_XP_CURRENT) + ' ';
 		}
 
 		// prevent down-leveling from removing too much xp
