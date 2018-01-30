@@ -32,7 +32,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsFileSystem.h"
 #include "SDLFontEngine.h"
 #include "UtilsParsing.h"
-#include "Version.h"
 
 GameSwitcher *gswitch;
 
@@ -318,8 +317,6 @@ void EmscriptenMainLoop() {
 #endif
 
 int main(int argc, char *argv[]) {
-	setEngineVersion();
-
 	bool debug_event = false;
 	bool done = false;
 	CmdLineArgs cmd_line_args;

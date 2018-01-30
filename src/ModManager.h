@@ -49,6 +49,8 @@ public:
 	Version* engine_min_version;
 	Version* engine_max_version;
 	std::vector<std::string> depends;
+	std::vector<Version*> depends_min;
+	std::vector<Version*> depends_max;
 };
 
 class ModManager {

@@ -19,19 +19,17 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Version number
  */
 
+#include "SharedResources.h"
 #include "UtilsParsing.h"
 #include "Version.h"
 
+#include <limits.h>
 #include <sstream>
 #include <iomanip>
 
-Version ENGINE_VERSION;
-
-void setEngineVersion() {
-	ENGINE_VERSION.x = 1;
-	ENGINE_VERSION.y = 0;
-	ENGINE_VERSION.z = 0;
-}
+Version ENGINE_VERSION(1, 0, 0);
+Version VERSION_MIN(0, 0, 0);
+Version VERSION_MAX(USHRT_MAX, USHRT_MAX, USHRT_MAX);
 
 Version::Version(unsigned short _x, unsigned short _y, unsigned short _z)
 	: x(_x)
@@ -66,7 +64,7 @@ bool Version::operator>=(const Version& v) {
 }
 
 bool Version::operator<(const Version& v) {
-	return !(*this == v && *this > v);
+	return !(*this >= v);
 }
 
 bool Version::operator<=(const Version& v) {
@@ -130,3 +128,27 @@ Version stringToVersion(const std::string& s) {
 
 	return v;
 }
+
+std::string createVersionReqString(Version& v1, Version& v2) {
+	std::string min_version = (v1 == VERSION_MIN) ? "" : versionToString(v1);
+	std::string max_version = (v2 == VERSION_MAX) ? "" : versionToString(v2);
+	std::string ret;
+
+	if (min_version != "" || max_version != "") {
+		if (min_version == max_version) {
+			ret += min_version;
+		}
+		else if (min_version != "" && max_version != "") {
+			ret += min_version + " - " + max_version;
+		}
+		else if (min_version != "") {
+			ret += min_version + ' ' + (msg ? msg->get("or newer") : "or newer");
+		}
+		else if (max_version != "") {
+			ret += max_version + ' ' + (msg ? msg->get("or older") : "or older");
+		}
+	}
+
+	return ret;
+}
+

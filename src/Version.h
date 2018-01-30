@@ -43,10 +43,12 @@ public:
 
 const std::string VERSION_NAME = "Flare Beta";
 extern Version ENGINE_VERSION;
+extern Version VERSION_MIN;
+extern Version VERSION_MAX;
 
-void setEngineVersion();
 std::string versionToString(const Version& v);
 Version stringToVersion(const std::string& s);
+std::string createVersionReqString(Version& v1, Version& v2);
 
 #endif
 

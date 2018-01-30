@@ -24,21 +24,29 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "Version.h"
 
-#include <limits.h>
+#include <cassert>
 
 Mod::Mod()
 	: name("")
 	, description("")
 	, game("")
 	, version(new Version())
-	, engine_min_version(new Version(0, 0, 0))
-	, engine_max_version(new Version(USHRT_MAX, USHRT_MAX, USHRT_MAX)) {
+	, engine_min_version(new Version(VERSION_MIN))
+	, engine_max_version(new Version(VERSION_MAX)) {
 }
 
 Mod::~Mod() {
 	delete version;
 	delete engine_min_version;
 	delete engine_max_version;
+
+	for (size_t i = 0; i < depends_min.size(); ++i) {
+		delete depends_min[i];
+	}
+
+	for (size_t i = 0; i < depends_max.size(); ++i) {
+		delete depends_max[i];
+	}
 }
 
 Mod::Mod(const Mod &mod) {
@@ -49,6 +57,19 @@ Mod::Mod(const Mod &mod) {
 	engine_min_version = new Version(*mod.engine_min_version);
 	engine_max_version = new Version(*mod.engine_max_version);
 	depends = mod.depends;
+
+	depends_min.resize(mod.depends_min.size());
+	for (size_t i = 0; i < depends_min.size(); ++i) {
+		depends_min[i] = new Version(*mod.depends_min[i]);
+	}
+
+	depends_max.resize(mod.depends_max.size());
+	for (size_t i = 0; i < depends_max.size(); ++i) {
+		depends_max[i] = new Version(*mod.depends_max[i]);
+	}
+
+	assert(depends.size() == depends_min.size());
+	assert(depends.size() == depends_max.size());
 }
 
 Mod& Mod::operator=(const Mod &mod) {
@@ -59,6 +80,19 @@ Mod& Mod::operator=(const Mod &mod) {
 	engine_min_version = new Version(*mod.engine_min_version);
 	engine_max_version = new Version(*mod.engine_max_version);
 	depends = mod.depends;
+
+	depends_min.resize(mod.depends_min.size());
+	for (size_t i = 0; i < depends_min.size(); ++i) {
+		depends_min[i] = new Version(*mod.depends_min[i]);
+	}
+
+	depends_max.resize(mod.depends_max.size());
+	for (size_t i = 0; i < depends_max.size(); ++i) {
+		depends_max[i] = new Version(*mod.depends_max[i]);
+	}
+
+	assert(depends.size() == depends_min.size());
+	assert(depends.size() == depends_max.size());
 
 	return *this;
 }
@@ -317,11 +351,30 @@ Mod ModManager::loadMod(const std::string& name) {
 				*mod.version = stringToVersion(val);
 			}
 			else if (key == "requires") {
-				// @ATTR requires|list(string)|A comma-separated list of the mods that are required in order to use this mod.
+				// @ATTR requires|list(string)|A comma-separated list of the mods that are required in order to use this mod. The dependency version requirements can also be specified and separated by colons (e.g. fantasycore:0.1:2.0).
 				std::string dep;
 				val = val + ',';
 				while ((dep = popFirstString(val)) != "") {
-					mod.depends.push_back(dep);
+					std::string dep_full = dep + "::";
+
+					mod.depends.push_back(popFirstString(dep_full, ':'));
+
+					Version dep_min = stringToVersion(popFirstString(dep_full, ':'));
+					Version dep_max = stringToVersion(popFirstString(dep_full, ':'));
+
+					if (dep_min != VERSION_MIN && dep_max != VERSION_MIN && dep_min > dep_max)
+						dep_max = dep_min;
+
+					// empty min version also happens to be the default for min
+					mod.depends_min.push_back(new Version(dep_min));
+
+					if (dep_max == VERSION_MIN)
+						mod.depends_max.push_back(new Version(VERSION_MAX));
+					else
+						mod.depends_max.push_back(new Version(dep_max));
+
+					assert(mod.depends.size() == mod.depends_min.size());
+					assert(mod.depends.size() == mod.depends_max.size());
 				}
 			}
 			else if (key == "game") {
@@ -350,6 +403,10 @@ Mod ModManager::loadMod(const std::string& name) {
 			infile.clear();
 		}
 	}
+
+	// ensure that engine min version <= engine max version
+	if (*mod.engine_min_version != VERSION_MIN && *mod.engine_min_version > *mod.engine_max_version)
+		*mod.engine_max_version = *mod.engine_min_version;
 
 	return mod;
 }
@@ -400,6 +457,18 @@ void ModManager::applyDepends() {
 						}
 						else if (*new_depend.engine_min_version > ENGINE_VERSION || ENGINE_VERSION > *new_depend.engine_max_version) {
 							logError("ModManager: Tried to enable dependency \"%s\" for \"%s\", but failed. Not compatible with engine version %s.", new_depend.name.c_str(), mod_list[i].name.c_str(), versionToString(ENGINE_VERSION).c_str());
+							depends_met = false;
+							break;
+						}
+						else if (*new_depend.version < *mod_list[i].depends_min[j] || *new_depend.version > *mod_list[i].depends_max[j]) {
+							logError("ModManager: Tried to enable dependency \"%s\" for \"%s\", but failed. Version \"%s\" is required, but only version \"%s\" is available.",
+									new_depend.name.c_str(),
+									mod_list[i].name.c_str(),
+									createVersionReqString(*mod_list[i].depends_min[j], *mod_list[i].depends_max[j]).c_str(),
+									// versionToString(*mod_list[i].depends_min[j]).c_str(),
+									// versionToString(*mod_list[i].depends_max[j]).c_str(),
+									versionToString(*new_depend.version).c_str()
+							);
 							depends_met = false;
 							break;
 						}

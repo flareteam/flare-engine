@@ -29,14 +29,14 @@ Created and destroyed by main.cpp
 
 #include "SharedResources.h"
 
-AnimationManager *anim;
-CombatText *comb;
-CursorManager *curs;
-FontEngine *font;
-IconManager *icons;
-InputState *inpt;
-MessageEngine *msg;
-ModManager *mods;
-RenderDevice *render_device;
-SoundManager *snd;
-SaveLoad *save_load;
+AnimationManager *anim = NULL;
+CombatText *comb = NULL;
+CursorManager *curs = NULL;
+FontEngine *font = NULL;
+IconManager *icons = NULL;
+InputState *inpt = NULL;
+MessageEngine *msg = NULL;
+ModManager *mods = NULL;
+RenderDevice *render_device = NULL;
+SoundManager *snd = NULL;
+SaveLoad *save_load = NULL;

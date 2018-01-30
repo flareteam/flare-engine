@@ -46,9 +46,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetTabControl.h"
 #include "WidgetTooltip.h"
 
-#include <limits.h>
-#include <iomanip>
-
 GameStateConfigBase::GameStateConfigBase (bool do_init)
 	: GameState()
 	, child_widget()
@@ -898,33 +895,10 @@ bool GameStateConfigBase::setMods() {
 		return false;
 }
 
-std::string GameStateConfigBase::createVersionReqString(Version& v1, Version& v2) {
-	std::string min_version = (v1 == Version(0, 0, 0)) ? "" : versionToString(v1);
-	std::string max_version = (v2 == Version(USHRT_MAX, USHRT_MAX, USHRT_MAX)) ? "" : versionToString(v2);
-	std::string ret;
-
-	if (min_version != "" || max_version != "") {
-		if (min_version == max_version) {
-			ret += min_version;
-		}
-		else if (min_version != "" && max_version != "") {
-			ret += min_version + " - " + max_version;
-		}
-		else if (min_version != "") {
-			ret += min_version + ' ' + msg->get("or newer");
-		}
-		else if (max_version != "") {
-			ret += max_version + ' ' + msg->get("or older");
-		}
-	}
-
-	return ret;
-}
-
 std::string GameStateConfigBase::createModTooltip(Mod *mod) {
 	std::string ret = "";
 	if (mod) {
-		std::string mod_ver = (*mod->version == Version(0, 0, 0)) ? "" : versionToString(*mod->version);
+		std::string mod_ver = (*mod->version == VERSION_MIN) ? "" : versionToString(*mod->version);
 		std::string engine_ver = createVersionReqString(*mod->engine_min_version, *mod->engine_max_version);
 
 		ret = mod->name + "\n\n";
@@ -945,11 +919,14 @@ std::string GameStateConfigBase::createModTooltip(Mod *mod) {
 		}
 		if (!mod->depends.empty()) {
 			if (ret != "") ret += '\n';
-			ret += msg->get("Requires mods:") + ' ';
+			ret += msg->get("Requires mods:") + '\n';
 			for (unsigned i=0; i<mod->depends.size(); ++i) {
-				ret += mod->depends[i];
+				ret += "-  " + mod->depends[i];
+				std::string depend_ver = createVersionReqString(*mod->depends_min[i], *mod->depends_max[i]);
+				if (depend_ver != "")
+					ret += " (" + depend_ver + ")";
 				if (i < mod->depends.size()-1)
-					ret += ", ";
+					ret += '\n';
 			}
 		}
 	}
