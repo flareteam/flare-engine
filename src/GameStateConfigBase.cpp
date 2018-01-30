@@ -901,24 +901,35 @@ std::string GameStateConfigBase::createModTooltip(Mod *mod) {
 		std::string mod_ver = (*mod->version == VERSION_MIN) ? "" : versionToString(*mod->version);
 		std::string engine_ver = createVersionReqString(*mod->engine_min_version, *mod->engine_max_version);
 
-		ret = mod->name + "\n\n";
+		ret = mod->name + '\n';
 
-		ret += mod->description;
+		if (mod->description != "") {
+			ret += '\n';
+			ret += mod->description + '\n';
+		}
+
+		bool middle_section = false;
 		if (mod_ver != "") {
-			if (ret != "") ret += '\n';
+			middle_section = true;
+			ret += '\n';
 			ret += msg->get("Version:") + ' ' + mod_ver;
 		}
 		if (mod->game != "" && mod->game != FALLBACK_GAME) {
-			if (ret != "") ret += '\n';
-			ret += msg->get("Game:") + ' ';
-			ret += mod->game;
+			middle_section = true;
+			ret += '\n';
+			ret += msg->get("Game:") + ' ' + mod->game;
 		}
 		if (engine_ver != "") {
-			if (ret != "") ret += '\n';
+			middle_section = true;
+			ret += '\n';
 			ret += msg->get("Engine version:") + ' ' + engine_ver;
 		}
+
+		if (middle_section)
+			ret += '\n';
+
 		if (!mod->depends.empty()) {
-			if (ret != "") ret += '\n';
+			ret += '\n';
 			ret += msg->get("Requires mods:") + '\n';
 			for (unsigned i=0; i<mod->depends.size(); ++i) {
 				ret += "-  " + mod->depends[i];
