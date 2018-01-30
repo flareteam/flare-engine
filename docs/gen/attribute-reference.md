@@ -47,5 +47,7 @@ Attribute descriptions are in the following format: section.attributename, `valu
 
 `loot`, defined as: `filename` **or** `["currency", item_id], ["fixed", int], int, int : Item, Drop chance, Min quantity, Max quantity`. There is a limitation when defining as part of a list(...): filenames can only be used in the first list element.
 
+`version`, defined as: a string of three numbers, separated by dots (e.g. "1.2.03")
+
 `raw`, This is plain text, including line breaks. It is used only for map layer data.
 

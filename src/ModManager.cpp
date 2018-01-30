@@ -30,11 +30,13 @@ Mod::Mod()
 	: name("")
 	, description("")
 	, game("")
+	, version(new Version())
 	, engine_min_version(new Version(0, 0, 0))
 	, engine_max_version(new Version(USHRT_MAX, USHRT_MAX, USHRT_MAX)) {
 }
 
 Mod::~Mod() {
+	delete version;
 	delete engine_min_version;
 	delete engine_max_version;
 }
@@ -43,8 +45,9 @@ Mod::Mod(const Mod &mod) {
 	name = mod.name;
 	description = mod.description;
 	game = mod.game;
-	engine_min_version = new Version(mod.engine_min_version->x, mod.engine_min_version->y, mod.engine_min_version->z);
-	engine_max_version = new Version(mod.engine_max_version->x, mod.engine_max_version->y, mod.engine_max_version->z);
+	version = new Version(*mod.version);
+	engine_min_version = new Version(*mod.engine_min_version);
+	engine_max_version = new Version(*mod.engine_max_version);
 	depends = mod.depends;
 }
 
@@ -52,8 +55,9 @@ Mod& Mod::operator=(const Mod &mod) {
 	name = mod.name;
 	description = mod.description;
 	game = mod.game;
-	engine_min_version = new Version(mod.engine_min_version->x, mod.engine_min_version->y, mod.engine_min_version->z);
-	engine_max_version = new Version(mod.engine_max_version->x, mod.engine_max_version->y, mod.engine_max_version->z);
+	version = new Version(*mod.version);
+	engine_min_version = new Version(*mod.engine_min_version);
+	engine_max_version = new Version(*mod.engine_max_version);
 	depends = mod.depends;
 
 	return *this;
@@ -308,6 +312,10 @@ Mod ModManager::loadMod(const std::string& name) {
 				// @ATTR description|string|Some text describing the mod.
 				mod.description = val;
 			}
+			else if (key == "version") {
+				// @ATTR version|version|The version number of this mod.
+				*mod.version = stringToVersion(val);
+			}
 			else if (key == "requires") {
 				// @ATTR requires|list(string)|A comma-separated list of the mods that are required in order to use this mod.
 				std::string dep;
@@ -320,13 +328,16 @@ Mod ModManager::loadMod(const std::string& name) {
 				// @ATTR game|string|The game which this mod belongs to (e.g. flare-game).
 				mod.game = val;
 			}
-			else if (key == "version_min") {
-				// @ATTR version_min|string|The minimum engine version required to use this mod (e.g. 1.01).
+			else if (key == "engine_version_min") {
+				// @ATTR engine_version_min|version|The minimum engine version required to use this mod.
 				*mod.engine_min_version = stringToVersion(val);
 			}
-			else if (key == "version_max") {
-				// @ATTR version_max|string|The maximum engine version required to use this mod (e.g. 2.01).
+			else if (key == "engine_version_max") {
+				// @ATTR engine_version_max|version|The maximum engine version required to use this mod.
 				*mod.engine_max_version = stringToVersion(val);
+			}
+			else {
+				logError("ModManager: Mod '%s' contains invalid key: '%s'", name.c_str(), key.c_str());
 			}
 		}
 		if (infile.good()) {

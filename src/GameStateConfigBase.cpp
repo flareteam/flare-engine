@@ -924,11 +924,16 @@ std::string GameStateConfigBase::createVersionReqString(Version& v1, Version& v2
 std::string GameStateConfigBase::createModTooltip(Mod *mod) {
 	std::string ret = "";
 	if (mod) {
+		std::string mod_ver = (*mod->version == Version(0, 0, 0)) ? "" : versionToString(*mod->version);
 		std::string engine_ver = createVersionReqString(*mod->engine_min_version, *mod->engine_max_version);
 
 		ret = mod->name + "\n\n";
 
 		ret += mod->description;
+		if (mod_ver != "") {
+			if (ret != "") ret += '\n';
+			ret += msg->get("Version:") + ' ' + mod_ver;
+		}
 		if (mod->game != "" && mod->game != FALLBACK_GAME) {
 			if (ret != "") ret += '\n';
 			ret += msg->get("Game:") + ' ';

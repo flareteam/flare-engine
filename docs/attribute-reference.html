@@ -80,6 +80,8 @@ body {
 
 <p><code>loot</code>, defined as: <code>filename</code> <strong>or</strong> <code>["currency", item_id], ["fixed", int], int, int : Item, Drop chance, Min quantity, Max quantity</code>. There is a limitation when defining as part of a list(&hellip;): filenames can only be used in the first list element.</p>
 
+<p><code>version</code>, defined as: a string of three numbers, separated by dots (e.g. &ldquo;1.2.03&rdquo;)</p>
+
 <p><code>raw</code>, This is plain text, including line breaks. It is used only for map layer data.</p>
 <hr />
 
@@ -1175,13 +1177,15 @@ body {
 
 <p><strong>description</strong> | <code>string</code> | Some text describing the mod.</p>
 
+<p><strong>version</strong> | <code>version</code> | The version number of this mod.</p>
+
 <p><strong>requires</strong> | <code>list(string)</code> | A comma-separated list of the mods that are required in order to use this mod.</p>
 
 <p><strong>game</strong> | <code>string</code> | The game which this mod belongs to (e.g. flare-game).</p>
 
-<p><strong>version_min</strong> | <code>string</code> | The minimum engine version required to use this mod (e.g. 1.01).</p>
+<p><strong>engine_version_min</strong> | <code>version</code> | The minimum engine version required to use this mod.</p>
 
-<p><strong>version_max</strong> | <code>string</code> | The maximum engine version required to use this mod (e.g. 2.01).</p>
+<p><strong>engine_version_max</strong> | <code>version</code> | The maximum engine version required to use this mod.</p>
 
 <hr />
 

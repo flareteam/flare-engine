@@ -45,6 +45,7 @@ public:
 	std::string name;
 	std::string description;
 	std::string game;
+	Version* version;
 	Version* engine_min_version;
 	Version* engine_max_version;
 	std::vector<std::string> depends;
