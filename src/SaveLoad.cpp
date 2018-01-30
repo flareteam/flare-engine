@@ -28,14 +28,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  *
  */
 
-#include "SaveLoad.h"
 #include "CommonIncludes.h"
 #include "FileParser.h"
 #include "GameStatePlay.h"
 #include "MapRenderer.h"
+#include "Menu.h"
 #include "MenuActionBar.h"
 #include "MenuCharacter.h"
-#include "Menu.h"
 #include "MenuHUDLog.h"
 #include "MenuInventory.h"
 #include "MenuLog.h"
@@ -43,11 +42,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuStash.h"
 #include "MenuTalker.h"
 #include "Platform.h"
+#include "SaveLoad.h"
 #include "Settings.h"
+#include "SharedGameResources.h"
 #include "Utils.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
-#include "SharedGameResources.h"
+#include "Version.h"
 
 SaveLoad::SaveLoad()
 	: game_slot(0) {
@@ -169,6 +170,9 @@ void SaveLoad::saveGame() {
 
 		outfile << "time_played=" << pc->time_played << "\n";
 
+		// save the engine version for troubleshooting purposes
+		outfile << "engine_version=" << versionToString(ENGINE_VERSION) << "\n";
+
 		outfile << std::endl;
 
 		if (outfile.bad()) logError("SaveLoad: Unable to save the game. No write access or disk is full!");
@@ -218,6 +222,7 @@ void SaveLoad::loadGame() {
 	int saved_hp = 0;
 	int saved_mp = 0;
 	int currency = 0;
+	Version save_version(VERSION_MIN);
 
 	FileParser infile;
 	std::vector<int> hotkeys(ACTIONBAR_MAX, -1);
@@ -322,6 +327,7 @@ void SaveLoad::loadGame() {
 			}
 			else if (infile.key == "campaign") camp->setAll(infile.val);
 			else if (infile.key == "time_played") pc->time_played = toUnsignedLong(infile.val);
+			else if (infile.key == "engine_version") save_version = stringToVersion(infile.val);
 		}
 
 		infile.close();
@@ -353,6 +359,9 @@ void SaveLoad::loadGame() {
 		pc->stats.hp = pc->stats.get(STAT_HP_MAX);
 		pc->stats.mp = pc->stats.get(STAT_MP_MAX);
 	}
+
+	if (save_version != ENGINE_VERSION)
+		logInfo("SaveLoad: Warning! Engine version of save file (%s) does not match current engine version (%s). Be on the lookout for bugs.", versionToString(save_version).c_str(), versionToString(ENGINE_VERSION).c_str());
 
 	// reset character menu
 	menu->chr->refreshStats();
