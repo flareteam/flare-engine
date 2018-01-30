@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-29 22:41-0500\n"
+"POT-Creation-Date: 2018-01-29 23:15-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -205,15 +205,23 @@ msgstr ""
 msgid "Enable >>"
 msgstr ""
 
-#: ../../../src/GameStateConfigBase.cpp:912
-msgid "Game:"
+#: ../../../src/GameStateConfigBase.cpp:914
+msgid "or newer"
 msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:917
-msgid "Requires version:"
+msgid "or older"
 msgstr ""
 
-#: ../../../src/GameStateConfigBase.cpp:931
+#: ../../../src/GameStateConfigBase.cpp:935
+msgid "Game:"
+msgstr ""
+
+#: ../../../src/GameStateConfigBase.cpp:940
+msgid "Engine version:"
+msgstr ""
+
+#: ../../../src/GameStateConfigBase.cpp:945
 msgid "Requires mods:"
 msgstr ""
 

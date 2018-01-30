@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-29 22:41-0500\n"
+"POT-Creation-Date: 2018-01-29 23:15-0500\n"
 "PO-Revision-Date: 2014-10-26 20:31+0100\n"
 "Last-Translator: Adrián Chaves Fernández <adriyetichaves@gmail.com>\n"
 "Language-Team: Galician <proxecto@trasno.net>\n"
@@ -207,17 +207,25 @@ msgstr "← Desactivar"
 msgid "Enable >>"
 msgstr "Activar →"
 
-#: ../../../src/GameStateConfigBase.cpp:912
+#: ../../../src/GameStateConfigBase.cpp:914
+msgid "or newer"
+msgstr ""
+
+#: ../../../src/GameStateConfigBase.cpp:917
+msgid "or older"
+msgstr ""
+
+#: ../../../src/GameStateConfigBase.cpp:935
 #, fuzzy
 msgid "Game:"
 msgstr "Xogo: "
 
-#: ../../../src/GameStateConfigBase.cpp:917
+#: ../../../src/GameStateConfigBase.cpp:940
 #, fuzzy
-msgid "Requires version:"
+msgid "Engine version:"
 msgstr "Require a versión: "
 
-#: ../../../src/GameStateConfigBase.cpp:931
+#: ../../../src/GameStateConfigBase.cpp:945
 #, fuzzy
 msgid "Requires mods:"
 msgstr "Require as modificacións: "

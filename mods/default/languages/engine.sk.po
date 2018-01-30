@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.15\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-29 22:41-0500\n"
+"POT-Creation-Date: 2018-01-29 23:15-0500\n"
 "PO-Revision-Date: 2012-01-03+GMT+1\n"
 "Last-Translator: Miro Janosik <miro.jano.sik@gmail.com>\n"
 "Language-Team: Slovak <LL@li.org>\n"
@@ -205,17 +205,25 @@ msgstr ""
 msgid "Enable >>"
 msgstr ""
 
-#: ../../../src/GameStateConfigBase.cpp:912
+#: ../../../src/GameStateConfigBase.cpp:914
+msgid "or newer"
+msgstr ""
+
+#: ../../../src/GameStateConfigBase.cpp:917
+msgid "or older"
+msgstr ""
+
+#: ../../../src/GameStateConfigBase.cpp:935
 #, fuzzy
 msgid "Game:"
 msgstr "Nová Hra"
 
-#: ../../../src/GameStateConfigBase.cpp:917
+#: ../../../src/GameStateConfigBase.cpp:940
 #, fuzzy
-msgid "Requires version:"
+msgid "Engine version:"
 msgstr "Vyžaduje Psychiku %d"
 
-#: ../../../src/GameStateConfigBase.cpp:931
+#: ../../../src/GameStateConfigBase.cpp:945
 #, fuzzy
 msgid "Requires mods:"
 msgstr "Vyžaduje Psychiku %d"

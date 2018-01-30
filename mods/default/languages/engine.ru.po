@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: flare-engine 1.00\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-29 22:41-0500\n"
+"POT-Creation-Date: 2018-01-29 23:15-0500\n"
 "PO-Revision-Date: 2016-09-15 09:50+0200\n"
 "Last-Translator: Pavel Maryanov <acid@jack.kiev.ua>\n"
 "Language-Team: Russian <gnu@dn07.ru>\n"
@@ -208,17 +208,25 @@ msgstr "<< Отключить"
 msgid "Enable >>"
 msgstr "Включить >>"
 
-#: ../../../src/GameStateConfigBase.cpp:912
+#: ../../../src/GameStateConfigBase.cpp:914
+msgid "or newer"
+msgstr ""
+
+#: ../../../src/GameStateConfigBase.cpp:917
+msgid "or older"
+msgstr ""
+
+#: ../../../src/GameStateConfigBase.cpp:935
 #, fuzzy
 msgid "Game:"
 msgstr "Игра: "
 
-#: ../../../src/GameStateConfigBase.cpp:917
+#: ../../../src/GameStateConfigBase.cpp:940
 #, fuzzy
-msgid "Requires version:"
+msgid "Engine version:"
 msgstr "Требуется версия:  "
 
-#: ../../../src/GameStateConfigBase.cpp:931
+#: ../../../src/GameStateConfigBase.cpp:945
 #, fuzzy
 msgid "Requires mods:"
 msgstr "Требуются дополнения: "

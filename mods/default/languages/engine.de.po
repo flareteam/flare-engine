@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.18\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-29 22:41-0500\n"
+"POT-Creation-Date: 2018-01-29 23:15-0500\n"
 "PO-Revision-Date: 2013-11-28 01:17+0100\n"
 "Last-Translator: Wuzzy <almikes@aol.com>\n"
 "Language-Team: \n"
@@ -209,17 +209,25 @@ msgstr "<< Deaktivieren"
 msgid "Enable >>"
 msgstr "Aktivieren >>"
 
-#: ../../../src/GameStateConfigBase.cpp:912
+#: ../../../src/GameStateConfigBase.cpp:914
+msgid "or newer"
+msgstr ""
+
+#: ../../../src/GameStateConfigBase.cpp:917
+msgid "or older"
+msgstr ""
+
+#: ../../../src/GameStateConfigBase.cpp:935
 #, fuzzy
 msgid "Game:"
 msgstr "Neues Spiel"
 
-#: ../../../src/GameStateConfigBase.cpp:917
+#: ../../../src/GameStateConfigBase.cpp:940
 #, fuzzy
-msgid "Requires version:"
+msgid "Engine version:"
 msgstr "Benötigt Fähigkeit: %s"
 
-#: ../../../src/GameStateConfigBase.cpp:931
+#: ../../../src/GameStateConfigBase.cpp:945
 #, fuzzy
 msgid "Requires mods:"
 msgstr "Benötigt Fähigkeit: %s"

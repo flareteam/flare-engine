@@ -898,11 +898,33 @@ bool GameStateConfigBase::setMods() {
 		return false;
 }
 
+std::string GameStateConfigBase::createVersionReqString(Version& v1, Version& v2) {
+	std::string min_version = (v1 == Version(0, 0, 0)) ? "" : versionToString(v1);
+	std::string max_version = (v2 == Version(USHRT_MAX, USHRT_MAX, USHRT_MAX)) ? "" : versionToString(v2);
+	std::string ret;
+
+	if (min_version != "" || max_version != "") {
+		if (min_version == max_version) {
+			ret += min_version;
+		}
+		else if (min_version != "" && max_version != "") {
+			ret += min_version + " - " + max_version;
+		}
+		else if (min_version != "") {
+			ret += min_version + ' ' + msg->get("or newer");
+		}
+		else if (max_version != "") {
+			ret += max_version + ' ' + msg->get("or older");
+		}
+	}
+
+	return ret;
+}
+
 std::string GameStateConfigBase::createModTooltip(Mod *mod) {
 	std::string ret = "";
 	if (mod) {
-		std::string min_version = (*mod->engine_min_version == Version(0, 0, 0)) ? "" : versionToString(*mod->engine_min_version);
-		std::string max_version = (*mod->engine_max_version == Version(USHRT_MAX, USHRT_MAX, USHRT_MAX)) ? "" : versionToString(*mod->engine_max_version);
+		std::string engine_ver = createVersionReqString(*mod->engine_min_version, *mod->engine_max_version);
 
 		ret = mod->name + "\n\n";
 
@@ -912,19 +934,9 @@ std::string GameStateConfigBase::createModTooltip(Mod *mod) {
 			ret += msg->get("Game:") + ' ';
 			ret += mod->game;
 		}
-		if (min_version != "" || max_version != "") {
+		if (engine_ver != "") {
 			if (ret != "") ret += '\n';
-			ret += msg->get("Requires version:") + ' ';
-			if (min_version != "" && min_version != max_version) {
-				ret += min_version;
-				if (max_version != "") {
-					ret += " - ";
-					ret += max_version;
-				}
-			}
-			else if (max_version != "") {
-				ret += max_version;
-			}
+			ret += msg->get("Engine version:") + ' ' + engine_ver;
 		}
 		if (!mod->depends.empty()) {
 			if (ret != "") ret += '\n';

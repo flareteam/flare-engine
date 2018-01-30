@@ -150,6 +150,9 @@ public:
 
 	Rect frame;
 	std::vector<std::string> language_ISO;
+
+private:
+	std::string createVersionReqString(Version& v1, Version& v2);
 };
 
 #endif
