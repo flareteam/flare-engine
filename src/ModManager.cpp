@@ -264,6 +264,7 @@ Mod ModManager::loadMod(const std::string& name) {
 
 	mod.name = name;
 
+	// @CLASS ModManager|Description of mod settings.txt
 	for (unsigned i=0; i<mod_paths.size(); ++i) {
 		std::string path = mod_paths[i] + "mods/" + name + "/settings.txt";
 		infile.open(path.c_str(), std::ios::in);
@@ -283,9 +284,11 @@ Mod ModManager::loadMod(const std::string& name) {
 			parse_key_pair(line, key, val);
 
 			if (key == "description") {
+				// @ATTR description|string|Some text describing the mod.
 				mod.description = val;
 			}
 			else if (key == "requires") {
+				// @ATTR requires|list(string)|A comma-separated list of the mods that are required in order to use this mod.
 				std::string dep;
 				val = val + ',';
 				while ((dep = popFirstString(val)) != "") {
@@ -293,14 +296,17 @@ Mod ModManager::loadMod(const std::string& name) {
 				}
 			}
 			else if (key == "game") {
+				// @ATTR game|string|The game which this mod belongs to (e.g. flare-game).
 				mod.game = val;
 			}
 			else if (key == "version_min") {
+				// @ATTR version_min|string|The minimum engine version required to use this mod (e.g. 1.01).
 				val = val + '.';
 				mod.min_version_major = popFirstInt(val, '.');
 				mod.min_version_minor = popFirstInt(val, '.');
 			}
 			else if (key == "version_max") {
+				// @ATTR version_max|string|The maximum engine version required to use this mod (e.g. 2.01).
 				val = val + '.';
 				mod.max_version_major = popFirstInt(val, '.');
 				mod.max_version_minor = popFirstInt(val, '.');

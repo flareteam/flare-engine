@@ -58,7 +58,7 @@ PowerManager::PowerManager()
 void PowerManager::loadEffects() {
 	FileParser infile;
 
-	// @CLASS Effects|Description of powers/effects.txt
+	// @CLASS PowerManager: Effects|Description of powers/effects.txt
 	if (!infile.open("powers/effects.txt"))
 		return;
 
@@ -141,7 +141,7 @@ void PowerManager::loadEffects() {
 void PowerManager::loadPowers() {
 	FileParser infile;
 
-	// @CLASS Powers|Description of powers/powers.txt
+	// @CLASS PowerManager: Powers|Description of powers/powers.txt
 	if (!infile.open("powers/powers.txt"))
 		return;
 
