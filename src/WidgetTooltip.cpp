@@ -89,10 +89,9 @@ Point WidgetTooltip::calcPosition(STYLE style, const Point& pos, const Point& si
 }
 
 /**
- * Tooltip position depends on the screen quadrant of the source.
- * Draw the buffered tooltip if it exists, else render the tooltip and buffer it
+ * Creates the cached text buffer if needed and sets the position & bounds of the tooltip
  */
-void WidgetTooltip::render(TooltipData &tip, const Point& pos, STYLE style) {
+void WidgetTooltip::prerender(TooltipData&tip, const Point& pos, STYLE style) {
 	if (tip.tip_buffer == NULL) {
 		if (!createBuffer(tip)) return;
 	}
@@ -110,7 +109,14 @@ void WidgetTooltip::render(TooltipData &tip, const Point& pos, STYLE style) {
 	bounds.y = tip_pos.y;
 	bounds.w = size.x;
 	bounds.h = size.y;
+}
 
+/**
+ * Tooltip position depends on the screen quadrant of the source.
+ * Draw the buffered tooltip if it exists, else render the tooltip and buffer it
+ */
+void WidgetTooltip::render(TooltipData &tip, const Point& pos, STYLE style) {
+	prerender(tip, pos, style);
 	render_device->render(tip.tip_buffer);
 }
 

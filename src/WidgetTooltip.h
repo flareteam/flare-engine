@@ -41,6 +41,7 @@ public:
 	WidgetTooltip();
 	~WidgetTooltip();
 	Point calcPosition(STYLE style, const Point& pos, const Point& size);
+	void prerender(TooltipData&tip, const Point& pos, STYLE style);
 	void render(TooltipData &tip, const Point& pos, STYLE style);
 	bool createBuffer(TooltipData &tip);
 

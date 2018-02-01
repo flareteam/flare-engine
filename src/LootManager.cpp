@@ -162,6 +162,7 @@ void LootManager::renderTooltips(const FPoint& cam) {
 	if (!SHOW_HUD) return;
 
 	Point dest;
+	bool tooltip_below = true;
 
 	std::vector<Loot>::iterator it;
 	for (it = loot.begin(); it != loot.end(); ) {
@@ -192,6 +193,22 @@ void LootManager::renderTooltips(const FPoint& cam) {
 					}
 				}
 
+				// try to prevent tooltips from overlapping
+				tip->prerender(it->tip, dest, STYLE_TOPLABEL);
+				std::vector<Loot>::iterator test_it;
+				for (test_it = loot.begin(); test_it != it; ) {
+					if (rectsOverlap(test_it->tip_bounds, tip->bounds)) {
+						if (tooltip_below)
+							dest.y = test_it->tip_bounds.y + test_it->tip_bounds.h + TOOLTIP_OFFSET;
+						else
+							dest.y = test_it->tip_bounds.y - test_it->tip_bounds.h + TOOLTIP_OFFSET;
+
+						tip->bounds.y = dest.y;
+					}
+
+					++test_it;
+				}
+
 				tip->render(it->tip, dest, STYLE_TOPLABEL);
 				it->tip_bounds = tip->bounds;
 
@@ -200,6 +217,8 @@ void LootManager::renderTooltips(const FPoint& cam) {
 					break;
 			}
 		}
+
+		tooltip_below = !tooltip_below;
 
 		++it;
 	}
