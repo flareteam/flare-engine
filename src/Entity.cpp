@@ -189,8 +189,10 @@ void Entity::move_from_offending_tile() {
 	// offending tile. The idea is simple: We can only be stuck on a tile by accident,
 	// so we got here somehow. We'll try to push this entity to the nearest valid place
 	while (!mapr->collider.is_valid_position(stats.pos.x, stats.pos.y, stats.movement_type, stats.hero)) {
-		logError("Entity: %s got stuck on an invalid tile. Please report this bug, if you're able to reproduce it!",
-				stats.hero ? "The hero" : "An entity");
+		logError("Entity: %s got stuck at (%g, %g) on an invalid tile. Please report this bug, if you're able to reproduce it!",
+				stats.hero ? "The hero" : stats.name.c_str(),
+				stats.pos.x,
+				stats.pos.y);
 
 		float pushx = 0;
 		float pushy = 0;
@@ -215,10 +217,30 @@ void Entity::move_from_offending_tile() {
 		// just blink away. This will seriously irritate the player, but there
 		// is probably no other easy way to repair the game
 		if (pushx == 0 && pushy == 0) {
-			stats.pos.x = static_cast<float>(randBetween(1, mapr->w-1)) + 0.5f;
-			stats.pos.y = static_cast<float>(randBetween(1, mapr->h-1)) + 0.5f;
-			logError("Entity: %s got stuck on an invalid tile. Please report this bug, if you're able to reproduce it!",
-					stats.hero ? "The hero" : "An entity");
+			Point src_pos = FPointToPoint(stats.pos);
+			FPoint shortest_pos;
+			float shortest_dist = 0;
+			int radius = 1;
+
+			while (radius <= std::max(mapr->w, mapr->h)) {
+				for (int i = src_pos.x - radius; i <= src_pos.y + radius; ++i) {
+					for (int j = src_pos.y - radius; j <= src_pos.y + radius; ++j) {
+						if (mapr->collider.is_valid_position(static_cast<float>(i), static_cast<float>(j), stats.movement_type, stats.hero)) {
+							float test_dist = calcDist(stats.pos, shortest_pos);
+							if (shortest_dist == 0 || test_dist < shortest_dist) {
+								shortest_dist = test_dist;
+								shortest_pos.x = static_cast<float>(i) + 0.5f;
+								shortest_pos.y = static_cast<float>(j) + 0.5f;
+							}
+						}
+					}
+				}
+				if (shortest_dist != 0) {
+					stats.pos = shortest_pos;
+					break;
+				}
+				radius++;
+			}
 		}
 	}
 }
