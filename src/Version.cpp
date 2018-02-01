@@ -27,7 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <sstream>
 #include <iomanip>
 
-Version ENGINE_VERSION(0, 90, 4);
+Version ENGINE_VERSION(0, 90, 5);
 Version VERSION_MIN(0, 0, 0);
 Version VERSION_MAX(USHRT_MAX, USHRT_MAX, USHRT_MAX);
 
@@ -78,15 +78,12 @@ std::string versionToString(const Version& v) {
 	ss << v.x << '.';
 
 	// minor
-	if (v.y >= 100) {
-		ss << v.y;
-	}
-	else if (v.y % 10 != 0) {
-		ss << std::setfill('0') << std::setw(2);
+	if (v.y >= 100 || v.y == 0) {
 		ss << v.y;
 	}
 	else {
-		ss << v.y / 10;
+		ss << std::setfill('0') << std::setw(2);
+		ss << v.y;
 	}
 
 	// don't bother printing if there's no patch version
@@ -96,15 +93,12 @@ std::string versionToString(const Version& v) {
 	ss << '.';
 
 	// patch
-	if (v.z >= 100) {
-		ss << v.z;
-	}
-	else if (v.z % 10 != 0) {
-		ss << std::setfill('0') << std::setw(2);
+	if (v.z >= 100 || v.z == 0) {
 		ss << v.z;
 	}
 	else {
-		ss << v.z / 10;
+		ss << std::setfill('0') << std::setw(2);
+		ss << v.z;
 	}
 
 	return ss.str();
