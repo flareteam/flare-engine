@@ -260,10 +260,12 @@ void BehaviorAlly::checkMoveStateMove() {
 			if(enemym->player_blocked && !e->stats.in_combat) {
 				e->stats.direction = pc->stats.direction;
 				if (!e->move()) {
+					e->stats.cur_state = ENEMY_STANCE;
 					e->stats.direction = prev_direction;
 				}
 			}
 			else {
+				e->stats.cur_state = ENEMY_STANCE;
 				e->stats.direction = prev_direction;
 			}
 		}
