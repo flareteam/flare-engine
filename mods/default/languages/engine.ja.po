@@ -921,7 +921,7 @@ msgstr "%s が足りない。"
 
 #: ../../../src/MenuInventory.cpp:773 ../../../src/MenuInventory.cpp:780
 msgid "This item can not be sold."
-msgstr "このアイテムは売れません。"
+msgstr "このアイテムは売れない。"
 
 #: ../../../src/MenuLog.cpp:85
 msgid "Notes"
@@ -938,7 +938,7 @@ msgstr "XP: %d/%d"
 
 #: ../../../src/MenuManager.cpp:810
 msgid "This item can not be dropped."
-msgstr "この項目は、アクションバーから使用することができます。"
+msgstr "このアイテムを すてることは、できない。"
 
 #: ../../../src/MenuNPCActions.cpp:82
 msgid "Trade"
