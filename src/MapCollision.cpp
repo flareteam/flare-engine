@@ -385,8 +385,9 @@ bool MapCollision::compute_path(const FPoint& start_pos, const FPoint& end_pos, 
 
 	if (is_outside_map(end_pos.x, end_pos.y)) return false;
 
+	// default limit set to 10% of the total map size
 	if (limit == 0)
-		limit = std::max(map_size.x, map_size.y);
+		limit = (map_size.x * map_size.y) / 10;
 
 	// path must be empty
 	if (!path.empty())
