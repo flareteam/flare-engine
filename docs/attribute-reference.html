@@ -1229,9 +1229,9 @@ body {
 
 <p><strong>vendor_requires_not_status</strong> | <code>list(string)</code> | The player must not have these statuses in order to use this NPC as a vendor.</p>
 
-<p><strong>constant_stock</strong> | <code>repeatable(list(item_id))</code> | A list of items this vendor has for sale.</p>
+<p><strong>constant_stock</strong> | <code>repeatable(list(item_id))</code> | A list of items this vendor has for sale. Quantity can be specified by appending &ldquo; Q&rdquo; to the item_id, where Q is an integer.</p>
 
-<p><strong>status_stock</strong> | <code>repeatable(string, list(item_id)) : Required status, Item(s)</code> | A list of items this vendor will have for sale if the required status is met.</p>
+<p><strong>status_stock</strong> | <code>repeatable(string, list(item_id)) : Required status, Item(s)</code> | A list of items this vendor will have for sale if the required status is met. Quantity can be specified by appending &ldquo; Q&rdquo; to the item_id, where Q is an integer.</p>
 
 <p><strong>random_stock</strong> | <code>list(loot)</code> | Use a loot table to add random items to the stock; either a filename or an inline definition.</p>
 

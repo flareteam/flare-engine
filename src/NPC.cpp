@@ -184,19 +184,27 @@ void NPC::load(const std::string& npc_id) {
 					}
 				}
 				else if (infile.key == "constant_stock") {
-					// @ATTR constant_stock|repeatable(list(item_id))|A list of items this vendor has for sale.
-					stack.quantity = 1;
+					// @ATTR constant_stock|repeatable(list(item_id))|A list of items this vendor has for sale. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.
 					while (infile.val != "") {
-						stack.item = popFirstInt(infile.val);
+						std::string temp = popFirstString(infile.val);
+						temp += ':';
+						stack.item = popFirstInt(temp, ':');
+						stack.quantity = popFirstInt(temp, ':');
+						if (stack.quantity == 0)
+							stack.quantity = 1;
 						stock.add(stack);
 					}
 				}
 				else if (infile.key == "status_stock") {
-					// @ATTR status_stock|repeatable(string, list(item_id)) : Required status, Item(s)|A list of items this vendor will have for sale if the required status is met.
+					// @ATTR status_stock|repeatable(string, list(item_id)) : Required status, Item(s)|A list of items this vendor will have for sale if the required status is met. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.
 					if (camp->checkStatus(popFirstString(infile.val))) {
-						stack.quantity = 1;
 						while (infile.val != "") {
-							stack.item = popFirstInt(infile.val);
+							std::string temp = popFirstString(infile.val);
+							temp += ':';
+							stack.item = popFirstInt(temp, ':');
+							stack.quantity = popFirstInt(temp, ':');
+							if (stack.quantity == 0)
+								stack.quantity = 1;
 							stock.add(stack);
 						}
 					}
