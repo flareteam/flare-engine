@@ -600,10 +600,6 @@ void GameStateConfigBase::logicDefaults() {
 }
 
 void GameStateConfigBase::logicAccept() {
-	delete msg;
-	msg = new MessageEngine();
-	inpt->saveKeyBindings();
-	inpt->setKeybindNames();
 	if (setMods()) {
 		snd->unloadMusic();
 		reload_music = true;
@@ -612,6 +608,10 @@ void GameStateConfigBase::logicAccept() {
 		mods = new ModManager(NULL);
 		loadTilesetSettings();
 	}
+	delete msg;
+	msg = new MessageEngine();
+	inpt->saveKeyBindings();
+	inpt->setKeybindNames();
 	loadMiscSettings();
 	setStatNames();
 	refreshFont();
@@ -638,8 +638,10 @@ void GameStateConfigBase::logicCancel() {
 	inpt->loadKeyBindings();
 	delete msg;
 	msg = new MessageEngine();
+	inpt->setKeybindNames();
 	loadMiscSettings();
 	setStatNames();
+	refreshFont();
 	update();
 	cleanup();
 	render_device->windowResize();
