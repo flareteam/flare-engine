@@ -111,7 +111,7 @@ SDLHardwareRenderDevice::SDLHardwareRenderDevice()
 	, title(NULL)
 	, background_color(0,0,0,0)
 {
-	logInfo("Using Render Device: SDLHardwareRenderDevice (hardware, SDL 2)");
+	logInfo("Using Render Device: SDLHardwareRenderDevice (hardware, SDL 2, %s)", SDL_GetCurrentVideoDriver());
 
 	fullscreen = FULLSCREEN;
 	hwsurface = HWSURFACE;
@@ -120,6 +120,12 @@ SDLHardwareRenderDevice::SDLHardwareRenderDevice()
 
 	min_screen.x = MIN_SCREEN_W;
 	min_screen.y = MIN_SCREEN_H;
+
+	SDL_DisplayMode desktop;
+	if (SDL_GetDesktopDisplayMode(0, &desktop) == 0) {
+		// we only support display #0
+		logInfo("RenderDevice: %d display(s), using display 0 (%dx%d @ %dhz)", SDL_GetNumVideoDisplays(), desktop.w, desktop.h, desktop.refresh_rate);
+	}
 }
 
 int SDLHardwareRenderDevice::createContext(bool allow_fallback) {
@@ -215,6 +221,7 @@ int SDLHardwareRenderDevice::createContext(bool allow_fallback) {
 			if (!is_initialized) {
 				// save the system gamma levels if we just created the window
 				SDL_GetWindowGammaRamp(window, gamma_r, gamma_g, gamma_b);
+				logInfo("RenderDevice: Window size is %dx%d", SCREEN_W, SCREEN_H);
 			}
 
 			fullscreen = FULLSCREEN;
@@ -222,6 +229,8 @@ int SDLHardwareRenderDevice::createContext(bool allow_fallback) {
 			vsync = VSYNC;
 			texture_filter = TEXTURE_FILTER;
 			is_initialized = true;
+
+			logInfo("RenderDevice: Fullscreen=%d, Hardward surfaces=%d, Vsync=%d, Texture Filter=%d", fullscreen, hwsurface, vsync, texture_filter);
 		}
 	}
 

@@ -60,17 +60,17 @@ SDLInputState::SDLInputState(void)
 
 	// print some information to the console about connected joysticks
 	if(SDL_NumJoysticks() > 0) {
-		logInfo("%d joystick(s) found.", SDL_NumJoysticks());
+		logInfo("InputState: %d joystick(s) found.", SDL_NumJoysticks());
 		joy_num = SDL_NumJoysticks();
 	}
 	else {
-		logInfo("No joysticks were found.");
+		logInfo("InputState: No joysticks were found.");
 		ENABLE_JOYSTICK = false;
 		return;
 	}
 
 	for(int i = 0; i < SDL_NumJoysticks(); i++) {
-		logInfo("  Joy %d) %s", i, getJoystickName(i).c_str());
+		logInfo("InputState: Joystick %d, %s", i, getJoystickName(i).c_str());
 	}
 }
 
@@ -84,7 +84,7 @@ void SDLInputState::initJoystick() {
 	joy_num = SDL_NumJoysticks();
 	if (ENABLE_JOYSTICK && joy_num > 0) {
 		joy = SDL_JoystickOpen(JOYSTICK_DEVICE);
-		logInfo("Using joystick #%d.", JOYSTICK_DEVICE);
+		logInfo("InputState: Using joystick %d.", JOYSTICK_DEVICE);
 	}
 
 	if (joy) {
@@ -221,7 +221,7 @@ void SDLInputState::handle() {
 				else if (platform_options.is_mobile_device) {
 					// detect restoring hidden Mobile app to bypass frameskip
 					if (event.window.event == SDL_WINDOWEVENT_MINIMIZED) {
-						logInfo("Minimizing app, saving...");
+						logInfo("InputState: Minimizing app, saving...");
 						save_load->saveGame();
 						logInfo("Game saved");
 						window_minimized = true;
@@ -473,13 +473,13 @@ void SDLInputState::handle() {
 					joystick_init = true;
 				}
 				else {
-					logInfo("SDLInputState: Joystick added.");
+					logInfo("InputState: Joystick added.");
 					joysticks_changed = true;
 					initJoystick();
 				}
 				break;
 			case SDL_JOYDEVICEREMOVED:
-				logInfo("SDLInputState: Joystick removed.");
+				logInfo("InputState: Joystick removed.");
 				joysticks_changed = true;
 				ENABLE_JOYSTICK = false;
 				initJoystick();

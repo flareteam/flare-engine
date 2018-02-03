@@ -52,6 +52,10 @@ SDLSoundManager::SDLSoundManager()
 		AUDIO = false;
 	}
 
+	if (AUDIO) {
+		logInfo("SoundManager: Using SDLSoundManager (SDL2, %s)", SDL_GetCurrentAudioDriver());
+	}
+
 	Mix_AllocateChannels(128);
 	setVolumeSFX(SOUND_VOLUME);
 }

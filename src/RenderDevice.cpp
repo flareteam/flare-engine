@@ -298,6 +298,9 @@ void RenderDevice::freeImage(Image *image) {
 }
 
 void RenderDevice::windowResizeInternal() {
+	unsigned short old_screen_w = SCREEN_W;
+	unsigned short old_screen_h = SCREEN_H;
+
 	getWindowSize(&SCREEN_W, &SCREEN_H);
 
 	if (!VIRTUAL_HEIGHTS.empty()) {
@@ -323,6 +326,9 @@ void RenderDevice::windowResizeInternal() {
 	}
 
 	VIEW_W_HALF = VIEW_W/2;
+
+	if (SCREEN_W != old_screen_w || SCREEN_H != old_screen_h)
+		logInfo("RenderDevice: Window size changed to %dx%d", SCREEN_W, SCREEN_H);
 }
 
 void RenderDevice::setBackgroundColor(Color color) {
