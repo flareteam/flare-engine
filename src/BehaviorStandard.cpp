@@ -362,12 +362,26 @@ void BehaviorStandard::checkMove() {
 		return;
 	}
 
+	float real_speed = e->stats.speed * speedMultiplyer[e->stats.direction] * e->stats.effects.speed / 100;
+
+	int real_turn_delay = e->stats.turn_delay;
+
+	// If an enemy's turn_delay is too long compared to their speed, they will be unable to follow a path properly.
+	// So here, we get how many frames it takes to traverse a single tile and then compare it to the turn delay time.
+	// We then cap the turn delay the time at the number of frames we calculated for tile traversal.
+	// There may be other solutions to this problem, such as having the enemy pause when they reach a path point,
+	// but I was unable to get anything else working as cleanly/bug-free as this.
+	int max_turn_ticks = static_cast<int>(1.f / real_speed);
+	if (real_turn_delay > max_turn_ticks) {
+		real_turn_delay = max_turn_ticks;
+	}
+
 	// clear current space to allow correct movement
 	mapr->collider.unblock(e->stats.pos.x, e->stats.pos.y);
 
 	// update direction
 	if (e->stats.facing) {
-		if (++e->stats.turn_ticks > e->stats.turn_delay) {
+		if (++e->stats.turn_ticks > real_turn_delay) {
 
 			// if blocked, face in pathfinder direction instead
 			if (!mapr->collider.line_of_movement(e->stats.pos.x, e->stats.pos.y, pursue_pos.x, pursue_pos.y, e->stats.movement_type)) {
@@ -449,7 +463,6 @@ void BehaviorStandard::checkMove() {
 	if (!e->stats.waypoints.empty()) {
 		// if the patroller is close to the waypoint
 		FPoint waypoint = e->stats.waypoints.front();
-		float real_speed = e->stats.speed * speedMultiplyer[e->stats.direction] * e->stats.effects.speed / 100;
 		float waypoint_dist = calcDist(waypoint, e->stats.pos);
 
 		FPoint saved_pos = e->stats.pos;
