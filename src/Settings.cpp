@@ -240,6 +240,7 @@ bool SAVE_ONLOAD = true;
 bool SAVE_ONEXIT = true;
 float ENCOUNTER_DIST;
 float CAMERA_SPEED;
+bool SAVE_BUYBACK = true;
 
 static ConfigEntry * getConfigEntry(const char * name) {
 
@@ -376,6 +377,7 @@ void loadMiscSettings() {
 	SAVE_ONLOAD = true;
 	SAVE_ONEXIT = true;
 	CAMERA_SPEED = 10.f;
+	SAVE_BUYBACK = true;
 	TOOLTIP_OFFSET = 0;
 	TOOLTIP_WIDTH = 1;
 	TOOLTIP_MARGIN = 0;
@@ -442,6 +444,9 @@ void loadMiscSettings() {
 				if (CAMERA_SPEED <= 0)
 					CAMERA_SPEED = 1;
 			}
+			// @ATTR save_buyback|bool|Saves the vendor buyback stock whenever the game is saved.
+			else if (infile.key == "save_buyback")
+				SAVE_BUYBACK = toBool(infile.val);
 
 			else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
 		}

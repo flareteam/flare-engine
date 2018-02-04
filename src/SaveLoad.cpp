@@ -41,6 +41,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuManager.h"
 #include "MenuStash.h"
 #include "MenuTalker.h"
+#include "MenuVendor.h"
 #include "Platform.h"
 #include "SaveLoad.h"
 #include "Settings.h"
@@ -172,6 +173,12 @@ void SaveLoad::saveGame() {
 
 		// save the engine version for troubleshooting purposes
 		outfile << "engine_version=" << versionToString(ENGINE_VERSION) << "\n";
+
+		// save the vendor buyback
+		if (SAVE_BUYBACK) {
+			outfile << "buyback_item=" << menu->vendor->buyback_stock.getItems() << "\n";
+			outfile << "buyback_quantity=" << menu->vendor->buyback_stock.getQuantities() << "\n";
+		}
 
 		outfile << std::endl;
 
@@ -328,6 +335,8 @@ void SaveLoad::loadGame() {
 			else if (infile.key == "campaign") camp->setAll(infile.val);
 			else if (infile.key == "time_played") pc->time_played = toUnsignedLong(infile.val);
 			else if (infile.key == "engine_version") save_version = stringToVersion(infile.val);
+			else if (SAVE_BUYBACK && infile.key == "buyback_item") menu->vendor->buyback_stock.setItems(infile.val);
+			else if (SAVE_BUYBACK && infile.key == "buyback_quantity") menu->vendor->buyback_stock.setQuantities(infile.val);
 		}
 
 		infile.close();

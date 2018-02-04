@@ -157,6 +157,7 @@ extern bool SAVE_ONLOAD;
 extern bool SAVE_ONEXIT;
 extern float ENCOUNTER_DIST;
 extern float CAMERA_SPEED;
+extern bool SAVE_BUYBACK;
 
 // Tile Settings
 extern float UNITS_PER_PIXEL_X;
