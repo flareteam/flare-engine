@@ -73,6 +73,7 @@ GameStatePlay::GameStatePlay()
 	, nearest_npc(-1)
 	, menu_enemy_timeout(MAX_FRAMES_PER_SEC*10)
 	, second_ticks(0)
+	, is_first_map_load(true)
 {
 	hasMusic = true;
 	has_background = false;
@@ -341,7 +342,10 @@ void GameStatePlay::checkTeleport() {
 				setRequestedGameState(new GameStateTitle());
 			}
 			else if (SAVE_ONLOAD) {
-				save_load->saveGame();
+				if (!is_first_map_load)
+					save_load->saveGame();
+				else
+					is_first_map_load = false;
 			}
 
 			// switch off teleport flag so we can check if an on_load event has teleportation
