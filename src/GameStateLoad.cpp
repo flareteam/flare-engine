@@ -273,6 +273,13 @@ void GameStateLoad::readGameSlots() {
 
 	getDirList(PATH_USER + "saves/" + SAVE_PREFIX, save_dirs);
 	std::sort(save_dirs.begin(), save_dirs.end(), compareSaveDirs);
+
+	// save dirs can only be >= 1
+	for (size_t i=save_dirs.size(); i>0; --i) {
+		if (toInt(save_dirs[i-1]) < 1)
+			save_dirs.erase(save_dirs.begin() + (i-1));
+	}
+
 	game_slots.resize(save_dirs.size(), NULL);
 
 	visible_slots = (game_slot_max > static_cast<int>(game_slots.size()) ? static_cast<int>(game_slots.size()) : game_slot_max);
