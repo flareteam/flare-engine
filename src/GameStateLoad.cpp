@@ -214,7 +214,7 @@ GameStateLoad::GameStateLoad() : GameState()
 			loading_requested = true;
 		}
 	}
-	else if (PREV_SAVE_SLOT >= 0) {
+	else if (PREV_SAVE_SLOT >= 0 && static_cast<size_t>(PREV_SAVE_SLOT) < game_slots.size()) {
 		setSelectedSlot(PREV_SAVE_SLOT);
 		scroll_offset = std::max(0, selected_slot-visible_slots+1);
 		updateButtons();
@@ -541,6 +541,8 @@ void GameStateLoad::logic() {
 			confirm->confirmClicked = false;
 
 			refreshSavePaths();
+
+			PREV_SAVE_SLOT = -1;
 		}
 	}
 }
