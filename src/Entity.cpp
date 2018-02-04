@@ -223,7 +223,7 @@ void Entity::move_from_offending_tile() {
 			int radius = 1;
 
 			while (radius <= std::max(mapr->w, mapr->h)) {
-				for (int i = src_pos.x - radius; i <= src_pos.y + radius; ++i) {
+				for (int i = src_pos.x - radius; i <= src_pos.x + radius; ++i) {
 					for (int j = src_pos.y - radius; j <= src_pos.y + radius; ++j) {
 						if (mapr->collider.is_valid_position(static_cast<float>(i), static_cast<float>(j), stats.movement_type, stats.hero)) {
 							float test_dist = calcDist(stats.pos, shortest_pos);
