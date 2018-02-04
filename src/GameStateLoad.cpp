@@ -214,6 +214,11 @@ GameStateLoad::GameStateLoad() : GameState()
 			loading_requested = true;
 		}
 	}
+	else if (PREV_SAVE_SLOT >= 0) {
+		setSelectedSlot(PREV_SAVE_SLOT);
+		scroll_offset = std::max(0, selected_slot-visible_slots+1);
+		updateButtons();
+	}
 
 	render_device->setBackgroundColor(Color(0,0,0,0));
 }

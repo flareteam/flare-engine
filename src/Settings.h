@@ -223,6 +223,9 @@ extern int TOOLTIP_BACKGROUND_BORDER;
 extern std::string LOAD_SLOT;
 extern std::string LOAD_SCRIPT;
 
+// Misc
+extern int PREV_SAVE_SLOT;
+
 void loadTilesetSettings();
 void loadMiscSettings();
 void loadSettings();

@@ -87,7 +87,8 @@ ConfigEntry config[] = {
 	{ "loot_tooltips",     &typeid(LOOT_TOOLTIPS),      "1",   &LOOT_TOOLTIPS,      "always show loot tooltips. 1 enable, 0 disable"},
 	{ "statbar_labels",    &typeid(STATBAR_LABELS),     "0",   &STATBAR_LABELS,     "always show labels on HP/MP/XP bars. 1 enable, 0 disable"},
 	{ "auto_equip",        &typeid(AUTO_EQUIP),         "1",   &AUTO_EQUIP,         "automatically equip items. 1 enable, 0 disable"},
-	{ "subtitles",         &typeid(SUBTITLES),          "0",   &SUBTITLES,          "displays subtitles. 1 enable, 0 disable"}
+	{ "subtitles",         &typeid(SUBTITLES),          "0",   &SUBTITLES,          "displays subtitles. 1 enable, 0 disable"},
+	{ "prev_save_slot",    &typeid(PREV_SAVE_SLOT),     "-1",  &PREV_SAVE_SLOT,     "index of the last used save slot"}
 };
 const size_t config_size = sizeof(config) / sizeof(ConfigEntry);
 
@@ -241,6 +242,7 @@ bool SAVE_ONEXIT = true;
 float ENCOUNTER_DIST;
 float CAMERA_SPEED;
 bool SAVE_BUYBACK = true;
+int PREV_SAVE_SLOT = -1;
 
 static ConfigEntry * getConfigEntry(const char * name) {
 

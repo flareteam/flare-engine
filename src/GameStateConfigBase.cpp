@@ -607,6 +607,7 @@ void GameStateConfigBase::logicAccept() {
 		delete mods;
 		mods = new ModManager(NULL);
 		loadTilesetSettings();
+		PREV_SAVE_SLOT = -1;
 	}
 	delete msg;
 	msg = new MessageEngine();
