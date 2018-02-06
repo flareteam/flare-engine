@@ -1222,15 +1222,18 @@ bool PowerManager::spawn(int power_index, StatBlock *src_stats, const FPoint& ta
 		espawn.pos = collider->get_random_neighbor(FPointToPoint(src_stats->pos), target_neighbor);
 	}
 
-	// can't spawn on a blocked tile
-	if (!collider->is_empty(espawn.pos.x, espawn.pos.y)) {
-		return false;
-	}
-
 	espawn.direction = calcDirection(src_stats->pos.x, src_stats->pos.y, target.x, target.y);
 	espawn.summon_power_index = power_index;
 	espawn.hero_ally = src_stats->hero || src_stats->hero_ally;
 	espawn.enemy_ally = !src_stats->hero;
+
+	// can't spawn on a blocked tile
+	if (!collider->is_empty(espawn.pos.x, espawn.pos.y)) {
+		return false;
+	}
+	else {
+		collider->block(espawn.pos.x, espawn.pos.y, espawn.hero_ally);
+	}
 
 	for (int i=0; i < powers[power_index].count; i++) {
 		map_enemies.push(espawn);

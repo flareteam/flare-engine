@@ -237,6 +237,8 @@ void EnemyManager::handleSpawn() {
 		espawn = powers->map_enemies.front();
 		powers->map_enemies.pop();
 
+		mapr->collider.unblock(espawn.pos.x, espawn.pos.y);
+
 		Enemy *e = new Enemy();
 		// factory
 		if(espawn.hero_ally)
@@ -317,14 +319,15 @@ void EnemyManager::handleSpawn() {
 			e->stats.hp = e->stats.get(STAT_HP_MAX);
 		}
 
-		if (mapr->collider.is_valid_position(espawn.pos.x + 0.5f, espawn.pos.y + 0.5f, e->stats.movement_type, false) || !e->stats.hero_ally) {
-			e->stats.pos.x = espawn.pos.x + 0.5f;
-			e->stats.pos.y = espawn.pos.y + 0.5f;
+		if (mapr->collider.is_valid_position(espawn.pos.x, espawn.pos.y, e->stats.movement_type, false) || !e->stats.hero_ally) {
+			e->stats.pos.x = espawn.pos.x;
+			e->stats.pos.y = espawn.pos.y;
 		}
 		else {
 			e->stats.pos.x = pc->stats.pos.x;
 			e->stats.pos.y = pc->stats.pos.y;
 		}
+
 		// special animation state for spawning enemies
 		e->stats.cur_state = ENEMY_SPAWN;
 
@@ -473,9 +476,18 @@ void EnemyManager::spawn(const std::string& enemy_type, const Point& target) {
 
 	espawn.type = enemy_type;
 	espawn.pos = FPoint(target);
+	espawn.pos.x += 0.5f;
+	espawn.pos.y += 0.5f;
 
 	// quick spawns start facing a random direction
 	espawn.direction = rand() % 8;
+
+	if (!mapr->collider.is_empty(espawn.pos.x, espawn.pos.y)) {
+		return;
+	}
+	else {
+		mapr->collider.block(espawn.pos.x, espawn.pos.y, false);
+	}
 
 	powers->map_enemies.push(espawn);
 }
