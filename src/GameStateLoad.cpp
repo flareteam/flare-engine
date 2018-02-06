@@ -436,8 +436,6 @@ void GameStateLoad::logic() {
 			logicLoading();
 		}
 
-		bool outside_scrollbar = true;
-
 		if (button_new->checkClick()) {
 			// create a new game
 			showLoading();
@@ -480,28 +478,19 @@ void GameStateLoad::logic() {
 				switch (scrollbar->checkClick(inpt->mouse.x, inpt->mouse.y)) {
 					case 1:
 						scrollUp();
-						outside_scrollbar = false;
 						break;
 					case 2:
 						scrollDown();
-						outside_scrollbar = false;
 						break;
 					case 3:
 						scroll_offset = scrollbar->getValue();
 						if (scroll_offset >= static_cast<int>(game_slots.size()) - visible_slots) {
 							scroll_offset = static_cast<int>(game_slots.size()) - visible_slots;
 						}
-						outside_scrollbar = false;
 						break;
 					default:
 						break;
 				}
-			}
-
-			if (outside_scrollbar && inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
-				inpt->lock[MAIN1] = true;
-				setSelectedSlot(-1);
-				updateButtons();
 			}
 
 			// Allow characters to be navigateable via up/down keys
