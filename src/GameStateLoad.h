@@ -79,6 +79,7 @@ private:
 
 	void scrollUp();
 	void scrollDown();
+	void scrollToSelected();
 	void refreshScrollBar();
 	void setSelectedSlot(int slot);
 

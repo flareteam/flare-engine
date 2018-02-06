@@ -216,7 +216,7 @@ GameStateLoad::GameStateLoad() : GameState()
 	}
 	else if (PREV_SAVE_SLOT >= 0 && static_cast<size_t>(PREV_SAVE_SLOT) < game_slots.size()) {
 		setSelectedSlot(PREV_SAVE_SLOT);
-		scroll_offset = std::max(0, selected_slot-visible_slots+1);
+		scrollToSelected();
 		updateButtons();
 	}
 
@@ -494,16 +494,16 @@ void GameStateLoad::logic() {
 			}
 
 			// Allow characters to be navigateable via up/down keys
-			if (inpt->pressing[UP] && !inpt->lock[UP]) {
+			if (inpt->pressing[UP] && !inpt->lock[UP] && selected_slot > 0) {
 				inpt->lock[UP] = true;
-				setSelectedSlot((selected_slot - 1 < 0) ? static_cast<int>(game_slots.size()) - 1 : selected_slot - 1);
-				scroll_offset = std::min(static_cast<int>(game_slots.size()) - visible_slots, selected_slot);
+				setSelectedSlot(selected_slot - 1);
+				scrollToSelected();
 				updateButtons();
 			}
-			else if (inpt->pressing[DOWN] && !inpt->lock[DOWN]) {
+			else if (inpt->pressing[DOWN] && !inpt->lock[DOWN] && selected_slot < static_cast<int>(game_slots.size()) - 1) {
 				inpt->lock[DOWN] = true;
-				setSelectedSlot((selected_slot + 1 == static_cast<int>(game_slots.size())) ? 0 : selected_slot + 1);
-				scroll_offset = std::max(0, selected_slot-visible_slots+1);
+				setSelectedSlot(selected_slot + 1);
+				scrollToSelected();
 				updateButtons();
 			}
 		}
@@ -636,6 +636,18 @@ void GameStateLoad::scrollDown() {
 		scroll_offset++;
 
 	refreshScrollBar();
+}
+
+void GameStateLoad::scrollToSelected() {
+	if (visible_slots == 0)
+		return;
+
+	scroll_offset = selected_slot - (selected_slot % visible_slots);
+
+	if (scroll_offset < 0)
+		scroll_offset = 0;
+	else if (scroll_offset > static_cast<int>(game_slots.size()) - visible_slots)
+		scroll_offset = selected_slot - visible_slots + 1;
 }
 
 void GameStateLoad::refreshScrollBar() {
