@@ -32,6 +32,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 
 MessageEngine::MessageEngine() {
+	logInfo("MessageEngine: Using language '%s'", LANGUAGE.c_str());
+
 	GetText infile;
 
 	std::vector<std::string> engineFiles = mods->list("languages/engine." + LANGUAGE + ".po");
