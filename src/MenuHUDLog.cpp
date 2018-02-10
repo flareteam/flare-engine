@@ -152,12 +152,14 @@ void MenuHUDLog::renderOverlay() {
 			temp->fillWithColor(bg_color);
 
 			overlay_bg = temp->createSprite();
-			overlay_bg->setDest(window_area.x, window_area.y + window_area.h - msg_height);
 			temp->unref();
 		}
 	}
 
-	render_device->render(overlay_bg);
+	if (overlay_bg) {
+		overlay_bg->setDest(window_area.x, window_area.y + window_area.h - msg_height);
+		render_device->render(overlay_bg);
+	}
 
 	Rect dest;
 	dest.x = window_area.x + paragraph_spacing;
