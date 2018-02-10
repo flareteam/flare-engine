@@ -1199,6 +1199,9 @@ void MenuManager::render() {
 	if (stash->visible && rectsOverlap(hudlog->window_area, stash->window_area)) {
 		hudlog_overlapped = true;
 	}
+	if (talker->visible && rectsOverlap(hudlog->window_area, talker->window_area)) {
+		hudlog_overlapped = true;
+	}
 
 	for (size_t i=0; i<menus.size(); i++) {
 		if (menus[i] == hudlog && hudlog_overlapped && !hudlog->hide_overlay) {
