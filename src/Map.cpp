@@ -249,7 +249,7 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 	else if (infile.key == "level") {
 		// @ATTR enemygroup.level|int, int : Min, Max|Defines the level range of enemies in group. If only one number is given, it's the exact level.
 		group->levelmin = std::max(0, popFirstInt(infile.val));
-		group->levelmax = std::max(0, toInt(popFirstString(infile.val), group->levelmin));
+		group->levelmax = std::max(std::max(0, toInt(popFirstString(infile.val))), group->levelmin);
 	}
 	else if (infile.key == "location") {
 		// @ATTR enemygroup.location|rectangle|Location area for enemygroup
@@ -261,7 +261,7 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 	else if (infile.key == "number") {
 		// @ATTR enemygroup.number|int, int : Min, Max|Defines the range of enemies in group. If only one number is given, it's the exact amount.
 		group->numbermin = std::max(0, popFirstInt(infile.val));
-		group->numbermax = std::max(0, toInt(popFirstString(infile.val), group->numbermin));
+		group->numbermax = std::max(std::max(0, toInt(popFirstString(infile.val))), group->numbermin);
 	}
 	else if (infile.key == "chance") {
 		// @ATTR enemygroup.chance|int|Percentage of chance

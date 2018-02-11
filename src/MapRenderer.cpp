@@ -106,7 +106,7 @@ void MapRenderer::pushEnemyGroup(Map_Group &g) {
 	// pick an upper bound, which is definitely larger than threetimes the enemy number to spawn.
 	int allowed_misses = 5 * g.numbermax;
 
-	while (enemies_to_spawn && allowed_misses) {
+	while (enemies_to_spawn > 0 && allowed_misses > 0) {
 
 		float x = (g.area.x == 0) ? (static_cast<float>(g.pos.x) + 0.5f) : (static_cast<float>(g.pos.x + (rand() % g.area.x))) + 0.5f;
 		float y = (g.area.y == 0) ? (static_cast<float>(g.pos.y) + 0.5f) : (static_cast<float>(g.pos.y + (rand() % g.area.y))) + 0.5f;
@@ -116,12 +116,12 @@ void MapRenderer::pushEnemyGroup(Map_Group &g) {
 		else
 			allowed_misses--;
 	}
-	if (enemies_to_spawn) {
+	if (enemies_to_spawn > 0) {
 		// now that the fast method of spawning enemies doesn't work, but we
 		// still have enemies to place, do not place them randomly, but at the
 		// first free spot
-		for (int x = g.pos.x; x < g.pos.x + g.area.x && enemies_to_spawn; x++) {
-			for (int y = g.pos.y; y < g.pos.y + g.area.y && enemies_to_spawn; y++) {
+		for (int x = g.pos.x; x < g.pos.x + g.area.x && enemies_to_spawn > 0; x++) {
+			for (int y = g.pos.y; y < g.pos.y + g.area.y && enemies_to_spawn > 0; y++) {
 				float xpos = static_cast<float>(x) + 0.5f;
 				float ypos = static_cast<float>(y) + 0.5f;
 				if (enemyGroupPlaceEnemy(xpos, ypos, g))
@@ -130,7 +130,7 @@ void MapRenderer::pushEnemyGroup(Map_Group &g) {
 		}
 
 	}
-	if (enemies_to_spawn) {
+	if (enemies_to_spawn > 0) {
 		logError("MapRenderer: Could not spawn all enemies in group at %s (x=%d,y=%d,w=%d,h=%d), %d missing (min=%d max=%d)",
 				filename.c_str(), g.pos.x, g.pos.y, g.area.x, g.area.y, enemies_to_spawn, g.numbermin, g.numbermax);
 	}
