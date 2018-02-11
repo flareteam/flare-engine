@@ -451,6 +451,8 @@ bool GameStateCutscene::load(const std::string& filename) {
 	if (!infile.open(filename))
 		return false;
 
+	logInfo("GameStateCutscene: Loading cutscene '%s'", filename.c_str());
+
 	// parse the cutscene file
 	while (infile.next()) {
 

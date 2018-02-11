@@ -129,8 +129,10 @@ ModManager::ModManager(const std::vector<std::string> *_cmd_line_mods)
 	ss << "Active mods: ";
 	for (size_t i = 0; i < mod_list.size(); ++i) {
 		ss << mod_list[i].name;
+		if (*mod_list[i].version != VERSION_MIN)
+			ss << " (" << versionToString(*mod_list[i].version) << ")";
 		if (i < mod_list.size()-1)
-			ss << ",";
+			ss << ", ";
 	}
 	logInfo(ss.str().c_str());
 }

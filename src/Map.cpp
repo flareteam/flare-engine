@@ -81,6 +81,8 @@ int Map::load(const std::string& fname) {
 	if (!infile.open(fname))
 		return 0;
 
+	logInfo("Map: Loading map '%s'", fname.c_str());
+
 	this->filename = fname;
 
 	while (infile.next()) {
