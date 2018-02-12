@@ -631,8 +631,37 @@ bool MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound, bo
 	if (area == CARRIED) {
 		ItemStack leftover = inventory[CARRIED].add(stack, slot);
 		if (!leftover.empty()) {
+			if (items->items[stack.item].quest_item) {
+				// quest items can't be dropped, so find a non-quest item in the inventory to drop
+				const int max_q = items->items[stack.item].max_quantity;
+				int slots_to_clear = 1;
+				if (max_q > 0)
+					slots_to_clear = leftover.quantity + (leftover.quantity % max_q) / max_q;
+
+				for (int i = MAX_CARRIED-1; i >=0; --i) {
+					if (items->items[inventory[CARRIED].storage[i].item].quest_item)
+						continue;
+
+					drop_stack.push(inventory[CARRIED].storage[i]);
+					inventory[CARRIED].storage[i].clear();
+
+					slots_to_clear--;
+					if (slots_to_clear <= 0)
+						break;
+				}
+
+				if (slots_to_clear > 0) {
+					// inventory is full of quest items! we have to drop this now...
+					drop_stack.push(leftover);
+				}
+				else {
+					add(leftover, CARRIED, slot, false, false);
+				}
+			}
+			else {
+				drop_stack.push(leftover);
+			}
 			pc->logMsg(msg->get("Inventory is full."), true);
-			drop_stack.push(leftover);
 			success = false;
 		}
 	}
