@@ -25,7 +25,7 @@ msgstr "Интелект"
 
 #: ../engine/primary_stats.txt:11
 msgid "Offense"
-msgstr "Нападение"
+msgstr "Ловкость"
 
 #: ../engine/primary_stats.txt:15
 msgid "Defense"
@@ -37,11 +37,11 @@ msgstr "Урон в ближнем бою"
 
 #: ../engine/damage_types.txt:4
 msgid "Melee Damage Min"
-msgstr "Минимальный Урон"
+msgstr "Мин. Урон"
 
 #: ../engine/damage_types.txt:5
 msgid "Melee Damage Max"
-msgstr "Максимальный Урон"
+msgstr "Макс. Урон"
 
 #: ../engine/damage_types.txt:11
 msgid "Ranged Damage"
@@ -49,23 +49,23 @@ msgstr "Урон в дальнем бою"
 
 #: ../engine/damage_types.txt:12
 msgid "Ranged Damage Min"
-msgstr "Минимальный Урон"
+msgstr "Мин. Урон"
 
 #: ../engine/damage_types.txt:13
 msgid "Ranged Damage Max"
-msgstr "Максимальный Урон"
+msgstr "Макс. Урон"
 
 #: ../engine/damage_types.txt:19
 msgid "Mental Damage"
-msgstr "Магический Урон"
+msgstr "Ментальный Урон"
 
 #: ../engine/damage_types.txt:20
 msgid "Mental Damage Min"
-msgstr "Минимальный Урон"
+msgstr "Мин. Урон"
 
 #: ../engine/damage_types.txt:21
 msgid "Mental Damage Max"
-msgstr "Максимальный Урон"
+msgstr "Макс. Урон"
 
 #: ../cutscenes/credits.txt:7
 msgid "Flare Engine Credits"
