@@ -884,7 +884,7 @@ Event_Component EventManager::getRandomMapFromFile(const std::string& fname) {
 			if (infile.key == "map") {
 				Event_Component ec;
 				ec.s = popFirstString(infile.val);
-				if (ec.s != mapr->getFilename()) {
+				if (ec_list.empty() || ec.s != mapr->getFilename()) {
 					ec.x = -1;
 					ec.y = -1;
 
