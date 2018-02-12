@@ -1,4 +1,11 @@
-# If default font should be overriden, specify it in mod_name/engine/font_settings.txt
+# IMPORTANT note to modders: Do not overwrite this file.
+# Instead, use APPEND if your mod provides a new language:
+#
+#     APPEND
+#     zz=My new language
+#
+# If default font should be overriden, specify it in engine/font_settings.txt
+
 be=Беларуская
 cs=Čeština
 de=Deutsch
