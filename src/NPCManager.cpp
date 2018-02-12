@@ -72,6 +72,7 @@ void NPCManager::handleNewMap() {
 		for (unsigned i = 0; i < mn.requires_not_status.size(); ++i)
 			if (camp->checkStatus(mn.requires_not_status[i]))
 				status_reqs_met = false;
+
 		if(!status_reqs_met)
 			continue;
 
@@ -82,6 +83,8 @@ void NPCManager::handleNewMap() {
 
 		// npc->stock.sort();
 		npcs.push_back(npc);
+
+		mapr->collider.block(npc->pos.x, npc->pos.y, false);
 
 		// create a map event for this npc
 		Event ev;

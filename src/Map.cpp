@@ -344,16 +344,6 @@ void Map::loadNPC(FileParser &infile) {
 		// @ATTR npc.location|point|Location of NPC
 		npcs.back().pos.x = static_cast<float>(popFirstInt(infile.val)) + 0.5f;
 		npcs.back().pos.y = static_cast<float>(popFirstInt(infile.val)) + 0.5f;
-
-		// make sure this NPC has a collision tile
-		// otherwise, it becomes possible for the player to stand "inside" the npc, which will trigger their event infinitely
-		if (collision_layer != -1) {
-			unsigned tile_x = static_cast<unsigned>(npcs.back().pos.x);
-			unsigned tile_y = static_cast<unsigned>(npcs.back().pos.y);
-			if (tile_x < static_cast<unsigned>(w) && tile_y < static_cast<unsigned>(h)) {
-				layers[collision_layer][tile_x][tile_y] = BLOCKS_ENTITIES;
-			}
-		}
 	}
 	else {
 		infile.error("Map: '%s' is not a valid key.", infile.key.c_str());
