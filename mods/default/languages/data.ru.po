@@ -17,55 +17,55 @@ msgstr ""
 
 #: ../engine/primary_stats.txt:3
 msgid "Physical"
-msgstr ""
+msgstr "Сила"
 
 #: ../engine/primary_stats.txt:7
 msgid "Mental"
-msgstr ""
+msgstr "Интелект"
 
 #: ../engine/primary_stats.txt:11
 msgid "Offense"
-msgstr ""
+msgstr "Нападение"
 
 #: ../engine/primary_stats.txt:15
 msgid "Defense"
-msgstr ""
+msgstr "Защита"
 
 #: ../engine/damage_types.txt:3
 msgid "Melee Damage"
-msgstr ""
+msgstr "Урон в ближнем бою"
 
 #: ../engine/damage_types.txt:4
 msgid "Melee Damage Min"
-msgstr ""
+msgstr "Минимальный Урон"
 
 #: ../engine/damage_types.txt:5
 msgid "Melee Damage Max"
-msgstr ""
+msgstr "Максимальный Урон"
 
 #: ../engine/damage_types.txt:11
 msgid "Ranged Damage"
-msgstr ""
+msgstr "Урон в дальнем бою"
 
 #: ../engine/damage_types.txt:12
 msgid "Ranged Damage Min"
-msgstr ""
+msgstr "Минимальный Урон"
 
 #: ../engine/damage_types.txt:13
 msgid "Ranged Damage Max"
-msgstr ""
+msgstr "Максимальный Урон"
 
 #: ../engine/damage_types.txt:19
 msgid "Mental Damage"
-msgstr ""
+msgstr "Магический Урон"
 
 #: ../engine/damage_types.txt:20
 msgid "Mental Damage Min"
-msgstr ""
+msgstr "Минимальный Урон"
 
 #: ../engine/damage_types.txt:21
 msgid "Mental Damage Max"
-msgstr ""
+msgstr "Максимальный Урон"
 
 #: ../cutscenes/credits.txt:7
 msgid "Flare Engine Credits"
@@ -73,7 +73,7 @@ msgstr "Авторы Flare Engine"
 
 #: ../cutscenes/credits.txt:10
 msgid "Lead Programmers"
-msgstr "Ведущие программисты"
+msgstr "Ведущие Программисты"
 
 #: ../cutscenes/credits.txt:12
 msgid "Clint Bellanger"
@@ -283,7 +283,7 @@ msgstr "Stefan Beller"
 
 #: ../cutscenes/credits.txt:77
 msgid "sujiniku"
-msgstr ""
+msgstr "sujiniku"
 
 #: ../cutscenes/credits.txt:78
 msgid "Thomas Glamsch"
