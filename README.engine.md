@@ -32,6 +32,7 @@ Flare's default mod (includes engine translations) is released under GNU GPL v3 
 Later versions are permitted.
 
 The default mod contains the Liberation Sans font which is released under the SIL Open Font License, Version 1.1.
+In addition, the GNU Unifont included for Japanese and Chinese support is released under the [GNU GPL v2 license](http://unifoundry.com/LICENSE.txt).
 
 ## Links
 
