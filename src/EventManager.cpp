@@ -35,6 +35,8 @@ Event::Event()
 	, hotspot(Rect())
 	, cooldown(0)
 	, cooldown_ticks(0)
+	, delay(0)
+	, delay_ticks(0)
 	, keep_after_trigger(true)
 	, center(FPoint(-1, -1))
 	, reachable_from(Rect()) {
@@ -141,6 +143,10 @@ void EventManager::loadEvent(FileParser &infile, Event* evnt) {
 	else if (infile.key == "cooldown") {
 		// @ATTR event.cooldown|duration|Duration for event cooldown in 'ms' or 's'.
 		evnt->cooldown = parse_duration(infile.val);
+	}
+	else if (infile.key == "delay") {
+		// @ATTR event.delay|duration|Event will execute after a specified duration.
+		evnt->delay = parse_duration(infile.val);
 	}
 	else if (infile.key == "reachable_from") {
 		// @ATTR event.reachable_from|rectangle|If the hero is inside this rectangle, they can activate the event.
@@ -609,6 +615,25 @@ bool EventManager::executeEvent(Event &ev) {
 	// skip executing events that are on cooldown
 	if (ev.cooldown_ticks > 0) return false;
 
+	// need to know this for early returns
+	Event_Component *ec_repeat = ev.getComponent(EC_REPEAT);
+	if (ec_repeat) {
+		ev.keep_after_trigger = ec_repeat->x == 0 ? false : true;
+	}
+
+	// delay event execution
+	if (ev.delay > 0) {
+		ev.delay_ticks = ev.delay;
+
+		mapr->delayed_events.push_back(ev);
+		mapr->delayed_events.back().delay_ticks = ev.delay;
+		mapr->delayed_events.back().delay = 0;
+
+		ev.cooldown_ticks = ev.cooldown + ev.delay;
+
+		return !ev.keep_after_trigger;
+	}
+
 	// set cooldown
 	ev.cooldown_ticks = ev.cooldown;
 
@@ -616,10 +641,6 @@ bool EventManager::executeEvent(Event &ev) {
 	// we respect the value of "repeat", even if the event doesn't execute
 	Event_Component *ec_chance_exec = ev.getComponent(EC_CHANCE_EXEC);
 	if (ec_chance_exec && !percentChance(ec_chance_exec->x)) {
-		Event_Component *ec_repeat = ev.getComponent(EC_REPEAT);
-		if (ec_repeat) {
-			ev.keep_after_trigger = ec_repeat->x == 0 ? false : true;
-		}
 		return !ev.keep_after_trigger;
 	}
 

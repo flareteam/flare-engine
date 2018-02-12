@@ -155,6 +155,7 @@ public:
 
 	// map events
 	std::vector<Event> events;
+	std::vector<Event> delayed_events;
 
 	// vars
 	std::string title;

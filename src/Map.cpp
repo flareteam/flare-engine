@@ -53,6 +53,7 @@ void Map::clearQueues() {
 
 void Map::clearEvents() {
 	events.clear();
+	delayed_events.clear();
 	statblocks.clear();
 }
 

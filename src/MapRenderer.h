@@ -164,7 +164,6 @@ public:
 	 * before that are painted below objects; Layers after are painted on top.
 	 */
 	unsigned index_objectlayer;
-
 };
 
 

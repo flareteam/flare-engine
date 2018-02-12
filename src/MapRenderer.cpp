@@ -256,6 +256,18 @@ void MapRenderer::logic() {
 		if ((*it).cooldown_ticks > 0) (*it).cooldown_ticks--;
 	}
 
+	// handle delayed events
+	for (it = delayed_events.end(); it != delayed_events.begin(); ) {
+		--it;
+
+		if (it->delay_ticks > 0) {
+			it->delay_ticks--;
+		}
+		else {
+			EventManager::executeEvent(*it);
+			it = delayed_events.erase(it);
+		}
+	}
 }
 
 bool priocompare(const Renderable &r1, const Renderable &r2) {

@@ -44,6 +44,8 @@ public:
 	Rect hotspot;
 	int cooldown; // events that run multiple times pause this long in frames
 	int cooldown_ticks;
+	int delay;
+	int delay_ticks;
 	bool keep_after_trigger; // if this event has been triggered once, should this event be kept? If so, this event can be triggered multiple times.
 	FPoint center;
 	Rect reachable_from;
