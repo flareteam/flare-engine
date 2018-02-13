@@ -88,7 +88,7 @@ public:
 	MapRenderer(const MapRenderer &copy); // not implemented
 
 	int load(const std::string& filename);
-	void logic();
+	void logic(bool paused);
 	void render(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
 
 	void checkEvents(const FPoint& loc);

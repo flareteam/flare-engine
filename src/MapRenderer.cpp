@@ -237,13 +237,18 @@ void MapRenderer::loadMusic() {
 	}
 }
 
-void MapRenderer::logic() {
-
-	// handle camera shaking timer
-	if (shaky_cam_ticks > 0) shaky_cam_ticks--;
+void MapRenderer::logic(bool paused) {
 
 	// handle tile set logic e.g. animations
 	tset.logic();
+
+	// TODO there's a bit too much "logic" here for a class that's supposed to be dedicated to rendering
+	// some of these timers should be moved out at some point
+	if (paused)
+		return;
+
+	// handle camera shaking timer
+	if (shaky_cam_ticks > 0) shaky_cam_ticks--;
 
 	// handle statblock logic for map powers
 	for (unsigned i=0; i<statblocks.size(); ++i) {
