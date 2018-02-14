@@ -743,6 +743,16 @@ void loadMiscSettings() {
 				// @ATTR power_tree|string|Power tree that will be loaded by MenuPowers
 				else if (infile.key == "power_tree") HERO_CLASSES.back().power_tree = infile.val;
 
+				else if (infile.key == "hero_options") {
+					// @ATTR hero_options|list(int)|A list of indicies of the hero options this class can use.
+					std::string hero_option;
+					while ( (hero_option = popFirstString(infile.val)) != "") {
+						HERO_CLASSES.back().options.push_back(toInt(hero_option));
+					}
+
+					std::sort(HERO_CLASSES.back().options.begin(), HERO_CLASSES.back().options.end());
+				}
+
 				else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
 			}
 		}

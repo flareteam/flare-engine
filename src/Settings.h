@@ -59,6 +59,7 @@ public:
 	std::vector<int> powers;
 	std::vector<std::string> statuses;
 	std::string power_tree;
+	std::vector<int> options;
 
 	HeroClass();
 };

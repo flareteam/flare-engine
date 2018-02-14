@@ -58,6 +58,7 @@ private:
 	void loadOptions(const std::string& option_filename);
 	std::string getClassTooltip(int index);
 	void setName(const std::string& default_name);
+	void setHeroOption(int dir);
 	void refreshWidgets();
 
 	std::vector<HeroOption> hero_options;
@@ -91,6 +92,8 @@ private:
 	bool delete_items;
 
 	Color color_normal;
+
+	std::vector<int> all_options;
 
 public:
 	GameStateNew();
