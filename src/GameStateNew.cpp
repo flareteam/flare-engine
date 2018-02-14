@@ -196,11 +196,8 @@ GameStateNew::GameStateNew()
 	loadGraphics();
 	loadOptions("hero_options.txt");
 
-	if (portrait.empty()) portrait.push_back("");
-	if (name.empty()) name.push_back("");
-
-	loadPortrait(portrait[0]);
-	setName(name[0]);
+	loadPortrait(hero_options[0].portrait);
+	setName(hero_options[0].name);
 
 	// Set up tab list
 	tablist.add(button_exit);
@@ -256,13 +253,18 @@ void GameStateNew::loadOptions(const std::string& filename) {
 	while (fin.next()) {
 		// @ATTR option|string, string, filename, string : Base, Head, Portrait, Name|A default body, head, portrait, and name for a hero.
 		if (fin.key == "option") {
-			base.push_back(popFirstString(fin.val));
-			head.push_back(popFirstString(fin.val));
-			portrait.push_back(popFirstString(fin.val));
-			name.push_back(msg->get(popFirstString(fin.val)));
+			hero_options.resize(hero_options.size() + 1);
+			hero_options.back().base = popFirstString(fin.val);
+			hero_options.back().head = popFirstString(fin.val);
+			hero_options.back().portrait = popFirstString(fin.val);
+			hero_options.back().name = msg->get(popFirstString(fin.val));
 		}
 	}
 	fin.close();
+
+	if (hero_options.empty()) {
+		hero_options.resize(1);
+	}
 }
 
 /**
@@ -319,9 +321,9 @@ void GameStateNew::logic() {
 		showLoading();
 		GameStatePlay* play = new GameStatePlay();
 		Avatar *avatar = pc;
-		avatar->stats.gfx_base = base[current_option];
-		avatar->stats.gfx_head = head[current_option];
-		avatar->stats.gfx_portrait = portrait[current_option];
+		avatar->stats.gfx_base = hero_options[current_option].base;
+		avatar->stats.gfx_head = hero_options[current_option].head;
+		avatar->stats.gfx_portrait = hero_options[current_option].portrait;
 		avatar->stats.name = input_name->getText();
 		avatar->stats.permadeath = button_permadeath->isChecked();
 		save_load->setGameSlot(game_slot);
@@ -333,18 +335,19 @@ void GameStateNew::logic() {
 	// scroll through portrait options
 	if (button_next->checkClick()) {
 		current_option++;
-		if (static_cast<unsigned>(current_option) == portrait.size()) current_option = 0;
-		loadPortrait(portrait[current_option]);
-		setName(name[current_option]);
+		if (static_cast<unsigned>(current_option) == hero_options.size()) current_option = 0;
+		loadPortrait(hero_options[current_option].portrait);
+		setName(hero_options[current_option].name);
 	}
 	else if (button_prev->checkClick()) {
 		current_option--;
-		if (current_option == -1) current_option = static_cast<int>(portrait.size())-1;
-		loadPortrait(portrait[current_option]);
-		setName(name[current_option]);
+		if (current_option == -1) current_option = static_cast<int>(hero_options.size())-1;
+		loadPortrait(hero_options[current_option].portrait);
+		setName(hero_options[current_option].name);
 	}
 
-	if (input_name->getText() != name[current_option]) modified_name = true;
+	if (input_name->getText() != hero_options[current_option].name)
+		modified_name = true;
 }
 
 void GameStateNew::refreshWidgets() {
