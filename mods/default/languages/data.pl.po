@@ -1,7 +1,7 @@
 # Copyright (C) 2011 Clint Bellanger
 # This file is distributed under the same license as the FLARE package.
 #
-# PAWEŁ PUSZCZYŃSKI <pawonashi@gmail.com>, 2017.
+# PAWEŁ PUSZCZYŃSKI <pawonashi@gmail.com>, 2018.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -32,46 +32,40 @@ msgid "Defense"
 msgstr "Obrona"
 
 #: ../engine/damage_types.txt:3
-#, fuzzy
 msgid "Melee Damage"
-msgstr "Minimalne Obrażenia w Zwarciu"
+msgstr "Obrażenia w zwarciu"
 
 #: ../engine/damage_types.txt:4
 msgid "Melee Damage Min"
 msgstr "Minimalne Obrażenia w Zwarciu"
 
 #: ../engine/damage_types.txt:5
-#, fuzzy
 msgid "Melee Damage Max"
-msgstr "Minimalne Obrażenia w Zwarciu"
+msgstr "Maksymalne Obrażenia w Zwarciu"
 
 #: ../engine/damage_types.txt:11
-#, fuzzy
 msgid "Ranged Damage"
-msgstr "Minimalne Obrażenia Dystansowe"
+msgstr "Obrażenia Dystansowe"
 
 #: ../engine/damage_types.txt:12
 msgid "Ranged Damage Min"
 msgstr "Minimalne Obrażenia Dystansowe"
 
 #: ../engine/damage_types.txt:13
-#, fuzzy
 msgid "Ranged Damage Max"
-msgstr "Minimalne Obrażenia Dystansowe"
+msgstr "Maksymalne Obrażenia Dystansowe"
 
 #: ../engine/damage_types.txt:19
-#, fuzzy
 msgid "Mental Damage"
-msgstr "Minimalne Obrażenia Umysłowe"
+msgstr "Obrażenia Umysłowe"
 
 #: ../engine/damage_types.txt:20
 msgid "Mental Damage Min"
 msgstr "Minimalne Obrażenia Umysłowe"
 
 #: ../engine/damage_types.txt:21
-#, fuzzy
 msgid "Mental Damage Max"
-msgstr "Minimalne Obrażenia Umysłowe"
+msgstr "Maksymalne Obrażenia Umysłowe"
 
 #: ../cutscenes/credits.txt:7
 msgid "Flare Engine Credits"
