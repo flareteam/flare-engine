@@ -55,10 +55,7 @@ pacman -S --asdeps sdl2 sdl2_image sdl2_mixer libogg libvorbis hicolor-icon-them
 ```
 
 There are also AUR PKGBUILDs available,
-for both stable([engine][arch_stable_engine] and [game][arch_stable_game]) and development([engine][arch_dev_engine] and [game][arch_dev_game]) versions.
-
-[arch_stable_engine]: https://aur.archlinux.org/packages/flare-engine/
-[arch_stable_game]: https://aur.archlinux.org/packages/flare-game/
+for development([engine][arch_dev_engine] and [game][arch_dev_game]) versions.
 
 [arch_dev_engine]: https://aur.archlinux.org/packages/flare-engine-git/
 [arch_dev_game]: https://aur.archlinux.org/packages/flare-game-git/
@@ -72,10 +69,6 @@ sudo apt-get install libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf
 # for development you'll also need:
 sudo apt-get install cmake make g++ git
 ```
-
-There is also a [flare build][flare_ubuntu] in the Ubuntu (universe), which actually is flare-game.
-
-[flare_ubuntu]:http://packages.ubuntu.com/source/precise/flare
 
 ### Fedora
 
@@ -93,10 +86,6 @@ Installing dependencies on openSUSE:
 sudo zypper in make cmake gcc-c++ libSDL2-devel libSDL2_image-devel libSDL2_mixer-devel libSDL2_ttf-devel
 ```
 
-There is also a flare build at the [openSUSE games repo][suse_repo].
-
-[suse_repo]: http://software.opensuse.org/download.html?project=games&package=flare
-
 ### OS X
 
 Installing dependencies using [Homebrew]:
@@ -112,10 +101,8 @@ brew install cmake libvorbis sdl2 sdl2_image sdl2_mixer sdl2_ttf
 #### Microsoft Visual C++
 
 If you want to build flare under Microsoft Visual C++,
-you should get [dirent.h header file][dirent.h]
-and copy it to `$MICROSOFT_VISUAL_CPP_FOLDER\VC\include\`.
-
-[dirent.h]: http://softagalleria.net/dirent.php
+you should get dirent.h header file
+and copy it to `$MICROSOFT_VISUAL_CPP_FOLDER\VC\in
 
 <a name="install_system_wide"></a>
 ## Install Flare system-wide
