@@ -54,11 +54,7 @@ Installing dependencies on Arch Linux:
 pacman -S --asdeps sdl2 sdl2_image sdl2_mixer libogg libvorbis hicolor-icon-theme python sdl2_ttf
 ```
 
-There are also AUR PKGBUILDs available,
-for both stable([engine][arch_stable_engine] and [game][arch_stable_game]) and development([engine][arch_dev_engine] and [game][arch_dev_game]) versions.
-
-[arch_stable_engine]: https://aur.archlinux.org/packages/flare-engine/
-[arch_stable_game]: https://aur.archlinux.org/packages/flare-game/
+There are also AUR PKGBUILDs available for the latest ([engine][arch_dev_engine] and [game][arch_dev_game]) versions.
 
 [arch_dev_engine]: https://aur.archlinux.org/packages/flare-engine-git/
 [arch_dev_game]: https://aur.archlinux.org/packages/flare-game-git/
@@ -75,7 +71,7 @@ sudo apt-get install cmake make g++ git
 
 There is also a [flare build][flare_ubuntu] in the Ubuntu (universe), which actually is flare-game.
 
-[flare_ubuntu]:http://packages.ubuntu.com/source/precise/flare
+[flare_ubuntu]:https://packages.ubuntu.com/artful/flare
 
 ### Fedora
 
@@ -95,7 +91,7 @@ sudo zypper in make cmake gcc-c++ libSDL2-devel libSDL2_image-devel libSDL2_mixe
 
 There is also a flare build at the [openSUSE games repo][suse_repo].
 
-[suse_repo]: http://software.opensuse.org/download.html?project=games&package=flare
+[suse_repo]: https://software.opensuse.org/package/flare
 
 ### OS X
 
@@ -115,7 +111,7 @@ If you want to build flare under Microsoft Visual C++,
 you should get [dirent.h header file][dirent.h]
 and copy it to `$MICROSOFT_VISUAL_CPP_FOLDER\VC\include\`.
 
-[dirent.h]: http://softagalleria.net/dirent.php
+[dirent.h]: https://github.com/tronkko/dirent
 
 <a name="install_system_wide"></a>
 ## Install Flare system-wide
