@@ -82,7 +82,7 @@ There is also a [flare build][flare_ubuntu] in the Ubuntu (universe), which actu
 Installing dependencies on Fedora:
 
 ```sh
-yum install git make cmake gcc-c++ SDL2-devel SDL2_image-devel SDL2_mixer-devel SDL2_ttf-devel
+sudo dnf install git make cmake gcc-c++ SDL2-devel SDL2_image-devel SDL2_mixer-devel SDL2_ttf-devel
 ```
 
 ### OpenSuse
