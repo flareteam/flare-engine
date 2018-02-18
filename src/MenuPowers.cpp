@@ -463,7 +463,8 @@ bool MenuPowers::checkUnlocked(int pci) {
 		return true;
 
 	// Check the rest requirements
-	if (!power_cell_all[pci].requires_point && checkRequirements(pci))
+	// only check base level; upgrades are checked in logic()
+	if (!power_cell_all[pci].requires_point && power_cell_all[pci].upgrade_level <= 1 && checkRequirements(pci))
 		return true;
 
 	return false;
@@ -502,9 +503,6 @@ bool MenuPowers::checkUnlock(int pci) {
 }
 
 bool MenuPowers::checkUpgrade(int pci) {
-	if (points_left < 1)
-		return false;
-
 	int id = getCellByPowerIndex(power_cell[pci].id, power_cell_all);
 	if (!checkUnlocked(id))
 		return false;
@@ -512,7 +510,7 @@ bool MenuPowers::checkUpgrade(int pci) {
 	int next_index = getNextLevelCell(pci);
 	if (next_index == -1)
 		return false;
-	if (!power_cell_upgrade[next_index].requires_point)
+	if (power_cell_upgrade[next_index].requires_point && points_left < 1)
 		return false;
 
 	int id_upgrade = getCellByPowerIndex(power_cell_upgrade[next_index].id, power_cell_all);
@@ -1168,6 +1166,19 @@ void MenuPowers::logic() {
 			}
 			if ((!tab_control || power_cell[i].tab == tab_control->getActiveTab()) && upgradeButtons[i]->checkClick()) {
 				upgradePower(static_cast<int>(i));
+			}
+
+			// automatically apply upgrades when requires_point = false
+			if (upgradeButtons[i]->enabled) {
+				int next_index;
+				while ((next_index = getNextLevelCell(static_cast<int>(i))) != -1) {
+					if (!power_cell_upgrade[next_index].requires_point) {
+						upgradePower(static_cast<int>(i));
+					}
+					else {
+						break;
+					}
+				}
 			}
 		}
 	}
