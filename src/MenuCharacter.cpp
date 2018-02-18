@@ -438,29 +438,9 @@ void MenuCharacter::logic() {
 		snd->play(sfx_close);
 	}
 
-	int spent = 0;
-	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
-		spent += stats->primary[i];
-	}
-	// players start with 1 point in each stat, so we nullify that here
-	spent -= static_cast<int>(PRIMARY_STATS.size());
+	bool have_skill_points = checkSkillPoints();
 
-	skill_points = (stats->level * stats->stat_points_per_level) - spent;
-
-	if (skill_points == 0) {
-		// upgrade buttons
-		for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
-			upgradeButton[i]->enabled = false;
-			tablist.remove(upgradeButton[i]);
-		}
-
-		if (tablist.getCurrent() >= static_cast<int>(tablist.size())) {
-			tablist.defocus();
-			tablist.getNext();
-		}
-	}
-
-	if (stats->hp > 0 && spent < (stats->level * stats->stat_points_per_level) && spent < stats->max_spendable_stat_points) {
+	if (stats->hp > 0 && have_skill_points) {
 		for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
 			if (stats->primary[i] < stats->max_points_per_stat) {
 				upgradeButton[i]->enabled = true;
@@ -471,11 +451,23 @@ void MenuCharacter::logic() {
 				tablist.remove(upgradeButton[i]);
 			}
 		}
-	}
 
-	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
-		if (upgradeButton[i]->checkClick())
-			primary_up[i] = true;
+		for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+			if (upgradeButton[i]->checkClick())
+				primary_up[i] = true;
+		}
+	}
+	else {
+		// no skill points to allocate; remove upgrade buttons
+		for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+			upgradeButton[i]->enabled = false;
+			tablist.remove(upgradeButton[i]);
+		}
+
+		if (tablist.getCurrent() >= static_cast<int>(tablist.size())) {
+			tablist.defocus();
+			tablist.getNext();
+		}
 	}
 
 	statList->checkClick();
@@ -535,18 +527,8 @@ TooltipData MenuCharacter::checkTooltip() {
  * Return true if a stat was upgraded.
  */
 bool MenuCharacter::checkUpgrade() {
-	int spent = 0;
-	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
-		spent += stats->primary[i];
-	}
-	// players start with 1 point in each stat, so we nullify that here
-	spent -= static_cast<int>(PRIMARY_STATS.size());
-
-	skill_points = (stats->level * stats->stat_points_per_level) - spent;
-
 	// check to see if there are skill points available
-	if (spent < (stats->level * stats->stat_points_per_level) && spent < stats->max_spendable_stat_points) {
-
+	if (stats->hp > 0 && checkSkillPoints()) {
 		for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
 			if (primary_up[i]) {
 				stats->primary[i]++;
@@ -558,6 +540,17 @@ bool MenuCharacter::checkUpgrade() {
 	}
 
 	return false;
+}
+
+bool MenuCharacter::checkSkillPoints() {
+	int spent = 0;
+	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+		spent += stats->primary[i] - stats->primary_starting[i];
+	}
+
+	skill_points = ((stats->level - 1) * stats->stat_points_per_level) - spent;
+
+	return (spent < ((stats->level - 1) * stats->stat_points_per_level) && spent < stats->max_spendable_stat_points);
 }
 
 MenuCharacter::~MenuCharacter() {

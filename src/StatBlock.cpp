@@ -169,6 +169,7 @@ StatBlock::StatBlock()
 	, attacking(false)
 {
 	primary.resize(PRIMARY_STATS.size(), 0);
+	primary_starting.resize(PRIMARY_STATS.size(), 0);
 	primary_additional.resize(PRIMARY_STATS.size(), 0);
 	per_primary.resize(PRIMARY_STATS.size());
 

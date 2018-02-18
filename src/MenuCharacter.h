@@ -69,6 +69,7 @@ private:
 	Color bonusColor(int stat);
 	std::string statTooltip(int stat);
 	std::string damageTooltip(size_t dmg_type);
+	bool checkSkillPoints();
 	int skill_points;
 	std::vector<bool> primary_up;
 

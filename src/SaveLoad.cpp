@@ -345,6 +345,17 @@ void SaveLoad::loadGame() {
 	}
 	else logError("SaveLoad: Unable to open %s!", ss.str().c_str());
 
+	// set starting values for primary stats based on class
+	if (!pc->stats.character_class.empty()) {
+		for (size_t i = 0; i < HERO_CLASSES.size(); ++i) {
+			if (HERO_CLASSES[i].name == pc->stats.character_class) {
+				for (size_t j = 0; j < PRIMARY_STATS.size(); ++j) {
+					pc->stats.primary_starting[j] = HERO_CLASSES[i].primary[j] + 1;
+				}
+			}
+		}
+	}
+
 	// add legacy currency to inventory
 	menu->inv->addCurrency(currency);
 
@@ -393,7 +404,9 @@ void SaveLoad::loadClass(int index) {
 
 	pc->stats.character_class = HERO_CLASSES[index].name;
 	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+		// Avatar::init() sets primary stats to 1, so we add to that here
 		pc->stats.primary[i] += HERO_CLASSES[index].primary[i];
+		pc->stats.primary_starting[i] = pc->stats.primary[i];
 	}
 	menu->inv->addCurrency(HERO_CLASSES[index].currency);
 	menu->inv->inventory[EQUIPMENT].setItems(HERO_CLASSES[index].equipment);

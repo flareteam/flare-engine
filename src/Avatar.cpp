@@ -119,7 +119,7 @@ void Avatar::init() {
 	stats.level = 1;
 	stats.xp = 0;
 	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
-		stats.primary[i] = 1;
+		stats.primary[i] = stats.primary_starting[i] = 1;
 		stats.primary_additional[i] = 0;
 	}
 	stats.speed = 0.2f;

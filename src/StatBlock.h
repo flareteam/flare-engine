@@ -145,6 +145,7 @@ public:
 
 	// base stats ("attributes")
 	std::vector<int> primary;
+	std::vector<int> primary_starting;
 
 	// combat stats
 	std::vector<int> starting; // default level 1 values per stat. Read from file and never changes at runtime.
