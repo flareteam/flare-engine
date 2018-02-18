@@ -949,9 +949,9 @@ void GameStatePlay::logic() {
 		menu->inv->applyEquipment();
 		menu->inv->changed_equipment = true;
 		checkEquipmentChange();
-		powers->activatePassives(&pc->stats);
 		pc->stats.logic();
 		pc->stats.recalc();
+		powers->activatePassives(&pc->stats);
 		pc->respawn = false;
 	}
 
