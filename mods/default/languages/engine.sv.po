@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Flare 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-29 23:15-0500\n"
+"POT-Creation-Date: 2018-02-19 18:51-0500\n"
 "PO-Revision-Date: 2014-01-24 17:00+0100\n"
 "Last-Translator: Henrik Andersson <hean01@users.sourceforge.net>\n"
 "Language-Team: SWEDISH <LL@li.org>\n"
@@ -89,142 +89,139 @@ msgstr "Negativa effekter borttagna."
 msgid "HP and MP restored, negative effects removed"
 msgstr "HP och MP återställt, negativa effekter borttagna"
 
-#: ../../../src/Entity.cpp:446
+#: ../../../src/Entity.cpp:476
 msgid "miss"
 msgstr "miss"
 
-#: ../../../src/Entity.cpp:484 ../../../src/PowerManager.cpp:1017
-#: ../../../src/StatBlock.cpp:785 ../../../src/StatBlock.cpp:791
+#: ../../../src/Entity.cpp:514 ../../../src/PowerManager.cpp:1017
+#: ../../../src/StatBlock.cpp:786 ../../../src/StatBlock.cpp:792
 #, c-format
 msgid "+%d HP"
 msgstr "+%d HP"
 
-#: ../../../src/Entity.cpp:491 ../../../src/StatBlock.cpp:796
-#: ../../../src/StatBlock.cpp:802
+#: ../../../src/Entity.cpp:521 ../../../src/StatBlock.cpp:797
+#: ../../../src/StatBlock.cpp:803
 #, c-format
 msgid "+%d MP"
 msgstr "+%d MP"
 
-#: ../../../src/EventManager.cpp:655
+#: ../../../src/EventManager.cpp:676
 msgid "Unknown destination"
 msgstr "Okänd destination"
 
-#: ../../../src/GameStateConfigBase.cpp:91
-#: ../../../src/GameStateConfigBase.cpp:110
+#: ../../../src/GameStateConfigBase.cpp:88
+#: ../../../src/GameStateConfigBase.cpp:107
 msgid "Defaults"
 msgstr "Standard"
 
-#: ../../../src/GameStateConfigBase.cpp:91
+#: ../../../src/GameStateConfigBase.cpp:88
 msgid "Reset ALL settings?"
 msgstr "Återställ samtliga inställningar?"
 
-#: ../../../src/GameStateConfigBase.cpp:109 ../../../src/MenuNumPicker.cpp:45
+#: ../../../src/GameStateConfigBase.cpp:106 ../../../src/MenuNumPicker.cpp:45
 msgid "OK"
 msgstr "OK"
 
-#: ../../../src/GameStateConfigBase.cpp:111 ../../../src/GameStateNew.cpp:59
+#: ../../../src/GameStateConfigBase.cpp:108 ../../../src/GameStateNew.cpp:59
 #: ../../../src/InputState.cpp:294 ../../../src/MenuNPCActions.cpp:83
 msgid "Cancel"
 msgstr "Avbryt"
 
-#: ../../../src/GameStateConfigBase.cpp:160
+#: ../../../src/GameStateConfigBase.cpp:157
 #: ../../../src/GameStateConfigDesktop.cpp:122
 msgid "Audio"
 msgstr "Ljud"
 
-#: ../../../src/GameStateConfigBase.cpp:161
+#: ../../../src/GameStateConfigBase.cpp:158
 #: ../../../src/GameStateConfigDesktop.cpp:123
 msgid "Interface"
 msgstr "Gränssnitt"
 
-#: ../../../src/GameStateConfigBase.cpp:162
+#: ../../../src/GameStateConfigBase.cpp:159
 #: ../../../src/GameStateConfigDesktop.cpp:126
 msgid "Mods"
 msgstr "Mods"
 
-#: ../../../src/GameStateConfigBase.cpp:240 ../../../src/MenuExit.cpp:65
+#: ../../../src/GameStateConfigBase.cpp:237 ../../../src/MenuExit.cpp:65
 msgid "Music Volume"
 msgstr "Musikvolym"
 
-#: ../../../src/GameStateConfigBase.cpp:244 ../../../src/MenuExit.cpp:70
+#: ../../../src/GameStateConfigBase.cpp:241 ../../../src/MenuExit.cpp:70
 msgid "Sound Volume"
 msgstr "Ljudvolym"
 
-#: ../../../src/GameStateConfigBase.cpp:248
+#: ../../../src/GameStateConfigBase.cpp:245
 msgid "Language"
 msgstr "Språk"
 
-#: ../../../src/GameStateConfigBase.cpp:252
+#: ../../../src/GameStateConfigBase.cpp:249
 msgid "Show combat text"
 msgstr "Visa text vid strid"
 
-#: ../../../src/GameStateConfigBase.cpp:256
+#: ../../../src/GameStateConfigBase.cpp:253
 msgid "Show FPS"
 msgstr "Visa FPS"
 
-#: ../../../src/GameStateConfigBase.cpp:260
+#: ../../../src/GameStateConfigBase.cpp:257
 msgid "Colorblind Mode"
 msgstr "Läge för färgblinda"
 
-#: ../../../src/GameStateConfigBase.cpp:264
+#: ../../../src/GameStateConfigBase.cpp:261
 msgid "Hardware mouse cursor"
 msgstr ""
 
-#: ../../../src/GameStateConfigBase.cpp:268
+#: ../../../src/GameStateConfigBase.cpp:265
 msgid "Developer Mode"
 msgstr ""
 
-#: ../../../src/GameStateConfigBase.cpp:272
+#: ../../../src/GameStateConfigBase.cpp:269
 msgid "Always show loot labels"
 msgstr ""
 
-#: ../../../src/GameStateConfigBase.cpp:276
+#: ../../../src/GameStateConfigBase.cpp:273
 msgid "Always show stat bar labels"
 msgstr ""
 
-#: ../../../src/GameStateConfigBase.cpp:280
+#: ../../../src/GameStateConfigBase.cpp:277
 msgid "Automatically equip items"
 msgstr ""
 
-#: ../../../src/GameStateConfigBase.cpp:284
+#: ../../../src/GameStateConfigBase.cpp:281
 msgid "Subtitles"
 msgstr ""
 
-#: ../../../src/GameStateConfigBase.cpp:288
+#: ../../../src/GameStateConfigBase.cpp:285
 msgid "Active Mods"
 msgstr "Aktiva Mods"
 
-#: ../../../src/GameStateConfigBase.cpp:292
+#: ../../../src/GameStateConfigBase.cpp:289
 msgid "Available Mods"
 msgstr "Tillgängliga Mods"
 
-#: ../../../src/GameStateConfigBase.cpp:306
+#: ../../../src/GameStateConfigBase.cpp:303
 msgid "<< Disable"
 msgstr "<< Inaktivera"
 
-#: ../../../src/GameStateConfigBase.cpp:312
+#: ../../../src/GameStateConfigBase.cpp:309
 msgid "Enable >>"
 msgstr "Aktivera >>"
 
-#: ../../../src/GameStateConfigBase.cpp:914
-msgid "or newer"
-msgstr ""
+#: ../../../src/GameStateConfigBase.cpp:918
+#, fuzzy
+msgid "Version:"
+msgstr "Kräver styrka: %s"
 
-#: ../../../src/GameStateConfigBase.cpp:917
-msgid "or older"
-msgstr ""
-
-#: ../../../src/GameStateConfigBase.cpp:935
+#: ../../../src/GameStateConfigBase.cpp:923
 #, fuzzy
 msgid "Game:"
 msgstr "Nytt spel"
 
-#: ../../../src/GameStateConfigBase.cpp:940
+#: ../../../src/GameStateConfigBase.cpp:928
 #, fuzzy
 msgid "Engine version:"
 msgstr "Kräver styrka: %s"
 
-#: ../../../src/GameStateConfigBase.cpp:945
+#: ../../../src/GameStateConfigBase.cpp:936
 #, fuzzy
 msgid "Requires mods:"
 msgstr "Kräver styrka: %s"
@@ -345,32 +342,32 @@ msgstr "Avsluta och gå till huvudmenyn"
 msgid "New Game"
 msgstr "Nytt spel"
 
-#: ../../../src/GameStateLoad.cpp:88 ../../../src/GameStateLoad.cpp:584
+#: ../../../src/GameStateLoad.cpp:88 ../../../src/GameStateLoad.cpp:587
 msgid "Choose a Slot"
 msgstr "Välj en plats"
 
-#: ../../../src/GameStateLoad.cpp:557 ../../../src/GameStateLoad.cpp:578
+#: ../../../src/GameStateLoad.cpp:560 ../../../src/GameStateLoad.cpp:581
 msgid "Enable a story mod to continue"
 msgstr "Aktivera en story mod för att fortsätta"
 
-#: ../../../src/GameStateLoad.cpp:573
+#: ../../../src/GameStateLoad.cpp:576
 msgid "Load Game"
 msgstr "Ladda spel"
 
-#: ../../../src/GameStateLoad.cpp:674
+#: ../../../src/GameStateLoad.cpp:689
 msgid "Entering game world..."
 msgstr "Öppnar spelvärlden..."
 
-#: ../../../src/GameStateLoad.cpp:677
+#: ../../../src/GameStateLoad.cpp:692
 msgid "Loading saved game..."
 msgstr "Läser in sparat spel..."
 
-#: ../../../src/GameStateLoad.cpp:711
+#: ../../../src/GameStateLoad.cpp:726
 msgid "Invalid save"
 msgstr ""
 
-#: ../../../src/GameStateLoad.cpp:730 ../../../src/ItemManager.cpp:673
-#: ../../../src/MenuPowers.cpp:678 ../../../src/MenuPowers.cpp:1037
+#: ../../../src/GameStateLoad.cpp:745 ../../../src/ItemManager.cpp:673
+#: ../../../src/MenuPowers.cpp:676 ../../../src/MenuPowers.cpp:1035
 #, c-format
 msgid "Level %d"
 msgstr "Nivå %d"
@@ -575,18 +572,18 @@ msgstr "Sikta med muspekaren"
 msgid "Unknown Item"
 msgstr ""
 
-#: ../../../src/ItemManager.cpp:582 ../../../src/MenuPowers.cpp:784
+#: ../../../src/ItemManager.cpp:582 ../../../src/MenuPowers.cpp:782
 #, fuzzy, c-format
 msgid "%d%% Speed"
 msgstr "%d%% Hastighet"
 
-#: ../../../src/ItemManager.cpp:586 ../../../src/MenuPowers.cpp:787
+#: ../../../src/ItemManager.cpp:586 ../../../src/MenuPowers.cpp:785
 #, fuzzy, c-format
 msgid "%d%% Attack Speed"
 msgstr "%d%% Hastighet"
 
 #: ../../../src/ItemManager.cpp:608 ../../../src/MenuCharacter.cpp:338
-#: ../../../src/MenuPowers.cpp:729
+#: ../../../src/MenuPowers.cpp:727
 #, fuzzy, c-format
 msgid "%s Resistance"
 msgstr "Motståndskraft mot is"
@@ -610,14 +607,14 @@ msgstr "Absorberar: %d-%d"
 msgid "Absorb: %d"
 msgstr "Absorberar: %d"
 
-#: ../../../src/ItemManager.cpp:750 ../../../src/MenuPowers.cpp:1023
-#: ../../../src/MenuPowers.cpp:1026
+#: ../../../src/ItemManager.cpp:750 ../../../src/MenuPowers.cpp:1021
+#: ../../../src/MenuPowers.cpp:1024
 #, c-format
 msgid "Requires Level %d"
 msgstr "Kräver nivå %d"
 
-#: ../../../src/ItemManager.cpp:761 ../../../src/MenuPowers.cpp:1015
-#: ../../../src/MenuPowers.cpp:1017
+#: ../../../src/ItemManager.cpp:761 ../../../src/MenuPowers.cpp:1013
+#: ../../../src/MenuPowers.cpp:1015
 #, fuzzy, c-format
 msgid "Requires %s %d"
 msgstr "Kräver %s"
@@ -704,16 +701,16 @@ msgstr "Nästa: %d"
 msgid "base (%d), bonus (%d)"
 msgstr "bas (%d), bonus (%d)"
 
-#: ../../../src/MenuCharacter.cpp:362
+#: ../../../src/MenuCharacter.cpp:365 ../../../src/MenuCharacter.cpp:379
 msgid "Related stats:"
 msgstr ""
 
-#: ../../../src/MenuCharacter.cpp:388 ../../../src/MenuCharacter.cpp:412
+#: ../../../src/MenuCharacter.cpp:405 ../../../src/MenuCharacter.cpp:429
 #, fuzzy, c-format
 msgid "Each level grants %d."
 msgstr "Varje nivå ger %d."
 
-#: ../../../src/MenuCharacter.cpp:392 ../../../src/MenuCharacter.cpp:416
+#: ../../../src/MenuCharacter.cpp:409 ../../../src/MenuCharacter.cpp:433
 #, fuzzy, c-format
 msgid "Each point of %s grants %d."
 msgstr "Varje poäng i Anfall ger %d."
@@ -919,16 +916,16 @@ msgstr ""
 msgid "This item can only be used from the action bar."
 msgstr "Det här föremålet kan bara användas från handlingslisten."
 
-#: ../../../src/MenuInventory.cpp:634
+#: ../../../src/MenuInventory.cpp:664
 msgid "Inventory is full."
 msgstr "Du har inte plats för fler föremål."
 
-#: ../../../src/MenuInventory.cpp:753
+#: ../../../src/MenuInventory.cpp:782
 #, c-format
 msgid "Not enough %s."
 msgstr "Inte tillräckligt med %s."
 
-#: ../../../src/MenuInventory.cpp:773 ../../../src/MenuInventory.cpp:780
+#: ../../../src/MenuInventory.cpp:802 ../../../src/MenuInventory.cpp:809
 #, fuzzy
 msgid "This item can not be sold."
 msgstr "Det här föremålet kan bara användas från handlingslisten."
@@ -959,163 +956,163 @@ msgstr "Handel"
 msgid "Enter amount:"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:682
+#: ../../../src/MenuPowers.cpp:680
 msgid "Passive"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:687
+#: ../../../src/MenuPowers.cpp:685
 #, c-format
 msgid "Costs %d MP"
 msgstr "Kostar %d MP"
 
-#: ../../../src/MenuPowers.cpp:691
+#: ../../../src/MenuPowers.cpp:689
 #, c-format
 msgid "Costs %d HP"
 msgstr "Kostar %d HP"
 
-#: ../../../src/MenuPowers.cpp:696
+#: ../../../src/MenuPowers.cpp:694
 #, fuzzy
 msgid "Cooldown:"
 msgstr "Svalnar av: %d sekunder"
 
-#: ../../../src/MenuPowers.cpp:763 ../../../src/MenuPowers.cpp:766
+#: ../../../src/MenuPowers.cpp:761 ../../../src/MenuPowers.cpp:764
 msgid "Damage per second"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:769 ../../../src/MenuPowers.cpp:772
+#: ../../../src/MenuPowers.cpp:767 ../../../src/MenuPowers.cpp:770
 msgid "HP per second"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:775 ../../../src/MenuPowers.cpp:778
+#: ../../../src/MenuPowers.cpp:773 ../../../src/MenuPowers.cpp:776
 msgid "MP per second"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:782
+#: ../../../src/MenuPowers.cpp:780
 msgid "Immobilize"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:790
+#: ../../../src/MenuPowers.cpp:788
 msgid "Immunity"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:793
+#: ../../../src/MenuPowers.cpp:791
 msgid "Immunity to damage over time"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:796
+#: ../../../src/MenuPowers.cpp:794
 msgid "Immunity to slow"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:799
+#: ../../../src/MenuPowers.cpp:797
 msgid "Immunity to stun"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:802
+#: ../../../src/MenuPowers.cpp:800
 msgid "Immunity to HP steal"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:805
+#: ../../../src/MenuPowers.cpp:803
 msgid "Immunity to MP steal"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:808
+#: ../../../src/MenuPowers.cpp:806
 msgid "Immunity to knockback"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:811
+#: ../../../src/MenuPowers.cpp:809
 msgid "Immunity to damage reflection"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:814
+#: ../../../src/MenuPowers.cpp:812
 msgid "Stun"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:817
+#: ../../../src/MenuPowers.cpp:815
 msgid "Automatic revive on death"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:820
+#: ../../../src/MenuPowers.cpp:818
 msgid "Convert"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:823
+#: ../../../src/MenuPowers.cpp:821
 msgid "Fear"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:826
+#: ../../../src/MenuPowers.cpp:824
 msgid "Lifespan"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:850
+#: ../../../src/MenuPowers.cpp:848
 msgid "Magical Shield"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:879
+#: ../../../src/MenuPowers.cpp:877
 msgid "Healing"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:882
+#: ../../../src/MenuPowers.cpp:880
 msgid "Knockback"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:902
+#: ../../../src/MenuPowers.cpp:900
 #, c-format
 msgid "%d%% chance"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:954
+#: ../../../src/MenuPowers.cpp:952
 #, fuzzy
 msgid "Base Accuracy"
 msgstr "Noggrannhet:"
 
-#: ../../../src/MenuPowers.cpp:974
+#: ../../../src/MenuPowers.cpp:972
 #, fuzzy
 msgid "Base Critical Chance"
 msgstr "Kritisk chans"
 
-#: ../../../src/MenuPowers.cpp:982
+#: ../../../src/MenuPowers.cpp:980
 msgid "Ignores Absorbtion"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:987
+#: ../../../src/MenuPowers.cpp:985
 #, fuzzy
 msgid "Ignores Avoidance"
 msgstr "Undvikande:"
 
-#: ../../../src/MenuPowers.cpp:992
+#: ../../../src/MenuPowers.cpp:990
 #, c-format
 msgid "%d%% Chance to crit slowed targets"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:997
+#: ../../../src/MenuPowers.cpp:995
 #, fuzzy, c-format
 msgid "%s Elemental Damage"
 msgstr "Mental skada:"
 
-#: ../../../src/MenuPowers.cpp:1006
+#: ../../../src/MenuPowers.cpp:1004
 #, c-format
 msgid "Requires a %s"
 msgstr "Kräver %s"
 
-#: ../../../src/MenuPowers.cpp:1045 ../../../src/MenuPowers.cpp:1048
+#: ../../../src/MenuPowers.cpp:1043 ../../../src/MenuPowers.cpp:1046
 #, c-format
 msgid "Requires Power: %s"
 msgstr "Kräver styrka: %s"
 
-#: ../../../src/MenuPowers.cpp:1057
+#: ../../../src/MenuPowers.cpp:1055
 msgid "Click to Unlock (uses 1 Skill Point)"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:1061 ../../../src/MenuPowers.cpp:1063
+#: ../../../src/MenuPowers.cpp:1059 ../../../src/MenuPowers.cpp:1061
 #, fuzzy
 msgid "Requires 1 Skill Point"
 msgstr "Kräver %d skicklighetspoäng"
 
-#: ../../../src/MenuPowers.cpp:1272
+#: ../../../src/MenuPowers.cpp:1291
 msgid "Unspent skill points:"
 msgstr "Outnyttjade skicklighetspoäng:"
 
-#: ../../../src/MenuPowers.cpp:1300
+#: ../../../src/MenuPowers.cpp:1319
 #, fuzzy
 msgid "Next Level:"
 msgstr ""
@@ -1148,15 +1145,15 @@ msgstr "Tillverkare"
 msgid "+%d Shield"
 msgstr "+%d Sköld"
 
-#: ../../../src/PowerManager.cpp:1257
+#: ../../../src/PowerManager.cpp:1260
 msgid "You are already transformed, untransform first."
 msgstr "Du är redan i omvandlad form, omvandla dig tillbaka först."
 
-#: ../../../src/PowerManager.cpp:1269
+#: ../../../src/PowerManager.cpp:1272
 msgid "Could not untransform at this position."
 msgstr ""
 
-#: ../../../src/SaveLoad.cpp:208 ../../../src/SaveLoad.cpp:209
+#: ../../../src/SaveLoad.cpp:221 ../../../src/SaveLoad.cpp:222
 msgid "Game saved."
 msgstr ""
 
@@ -1190,7 +1187,7 @@ msgstr ""
 msgid "%s on enemy"
 msgstr ""
 
-#: ../../../src/Settings.cpp:753
+#: ../../../src/Settings.cpp:770
 msgid "Adventurer"
 msgstr "Äventyrare"
 
@@ -1355,6 +1352,14 @@ msgstr "Svalnar av: %d sekunder"
 #, fuzzy, c-format
 msgid "%s seconds"
 msgstr "Svalnar av: %d sekunder"
+
+#: ../../../src/Version.cpp:139
+msgid "or newer"
+msgstr ""
+
+#: ../../../src/Version.cpp:142
+msgid "or older"
+msgstr ""
 
 #~ msgid "Permadeath"
 #~ msgstr "Permanent död"
