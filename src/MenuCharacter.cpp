@@ -356,7 +356,24 @@ void MenuCharacter::refreshStats() {
 		cstat[j].tip.addText(cstat[j].label_text);
 		cstat[j].tip.addText(msg->get("base (%d), bonus (%d)", *(base_stats[j-2]), *(base_stats_add[j-2])));
 		bool have_bonus = false;
-		for (unsigned i=0; i<STAT_COUNT; ++i) {
+		for (size_t i = 0; i < STAT_COUNT; ++i) {
+			// damage types are displayed before absorb
+			if (i == STAT_ABS_MIN) {
+				for (size_t k = 0; k < DAMAGE_TYPES_COUNT; ++k) {
+					if (base_bonus[j-2]->at(STAT_COUNT + k) > 0) {
+						if (!have_bonus) {
+							cstat[j].tip.addText("\n" + msg->get("Related stats:"));
+							have_bonus = true;
+						}
+						if (k % 2 == 0)
+							cstat[j].tip.addText(DAMAGE_TYPES[k / 2].name_min);
+						else
+							cstat[j].tip.addText(DAMAGE_TYPES[k / 2].name_max);
+					}
+				}
+			}
+
+			// non-damage bonuses
 			if (base_bonus[j-2]->at(i) > 0) {
 				if (!have_bonus) {
 					cstat[j].tip.addText("\n" + msg->get("Related stats:"));
