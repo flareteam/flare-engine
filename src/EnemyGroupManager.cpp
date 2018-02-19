@@ -38,6 +38,7 @@ EnemyGroupManager::EnemyGroupManager() {
 			return;
 
 		Enemy_Level new_enemy;
+		std::string category_str;
 		infile.new_section = true;
 		bool first = true;
 		while (infile.next()) {
@@ -56,13 +57,15 @@ EnemyGroupManager::EnemyGroupManager() {
 			}
 			else if (infile.key == "categories") {
 				// @ATTR categories|list(predefined_string)|Comma separated list of enemy categories
-				std::string cat;
-				while ( (cat = popFirstString(infile.val)) != "") {
-					_categories[cat].push_back(new_enemy);
-				}
+				category_str = infile.val;
 			}
 		}
 		infile.close();
+
+		std::string cat;
+		while ( (cat = popFirstString(category_str)) != "") {
+			_categories[cat].push_back(new_enemy);
+		}
 	}
 }
 
