@@ -202,7 +202,7 @@ void PowerManager::loadPowers() {
 			powers[input_id].state_duration = parse_duration(infile.val);
 		}
 		else if (infile.key == "prevent_interrupt") {
-			// @ATTR prevent_interrupt|bool|Prevents the caster from being interrupted by a hit when casting this power.
+			// @ATTR power.prevent_interrupt|bool|Prevents the caster from being interrupted by a hit when casting this power.
 			powers[input_id].prevent_interrupt = toBool(infile.val);
 		}
 		else if (infile.key == "face")
