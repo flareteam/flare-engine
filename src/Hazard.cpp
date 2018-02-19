@@ -93,6 +93,164 @@ Hazard::Hazard(MapCollision *_collider)
 	, script("") {
 }
 
+Hazard::Hazard(const Hazard& other) {
+	collider = other.collider;
+	entitiesCollided = other.entitiesCollided;
+
+	if (!other.animation_name.empty()) {
+		animation_name = other.animation_name;
+		loadAnimation(animation_name);
+	}
+
+	src_stats = other.src_stats;
+
+	dmg_min = other.dmg_min;
+	dmg_max = other.dmg_max;
+	crit_chance = other.crit_chance;
+	accuracy = other.accuracy;
+	source_type = other.source_type;
+	target_party = other.target_party;
+
+	pos = other.pos;
+	speed = other.speed;
+	pos_offset = other.pos_offset;
+	relative_pos = other.relative_pos;
+	base_speed = other.base_speed;
+	angle = other.angle;
+	base_lifespan = other.base_lifespan;
+	lifespan = other.lifespan;
+	radius = other.radius;
+	power_index = other.power_index;
+	movement_type = other.movement_type;
+
+	animationKind = other.animationKind;
+
+	on_floor = other.on_floor;
+	delay_frames = other.delay_frames;
+	complete_animation = other.complete_animation;
+
+	multitarget = other.multitarget;
+	active = other.active;
+
+	multihit = other.multihit;
+	expire_with_caster = other.expire_with_caster;
+	remove_now = other.remove_now;
+	hit_wall = other.hit_wall;
+
+	hp_steal = other.hp_steal;
+	mp_steal = other.mp_steal;
+
+	trait_armor_penetration = other.trait_armor_penetration;
+	trait_crits_impaired = other.trait_crits_impaired;
+	trait_elemental = other.trait_elemental;
+	beacon = other.beacon;
+	missile = other.missile;
+	directional = other.directional;
+
+	post_power = other.post_power;
+	post_power_chance = other.post_power_chance;
+	wall_power = other.wall_power;
+	wall_power_chance = other.wall_power_chance;
+
+	wall_reflect = other.wall_reflect;
+
+	target_movement_normal = other.target_movement_normal;
+	target_movement_flying = other.target_movement_flying;
+	target_movement_intangible = other.target_movement_intangible;
+
+	walls_block_aoe = other.walls_block_aoe;
+
+	sfx_hit = other.sfx_hit;
+	sfx_hit_enable = sfx_hit_enable;
+	sfx_hit_played = sfx_hit_played;
+
+	parent = other.parent;
+	children = other.children;
+
+	script_trigger = other.script_trigger;
+	script = other.script;
+}
+
+Hazard& Hazard::operator=(const Hazard& other) {
+	collider = other.collider;
+	entitiesCollided = other.entitiesCollided;
+
+	if (!other.animation_name.empty()) {
+		animation_name = other.animation_name;
+		loadAnimation(animation_name);
+	}
+
+	src_stats = other.src_stats;
+
+	dmg_min = other.dmg_min;
+	dmg_max = other.dmg_max;
+	crit_chance = other.crit_chance;
+	accuracy = other.accuracy;
+	source_type = other.source_type;
+	target_party = other.target_party;
+
+	pos = other.pos;
+	speed = other.speed;
+	pos_offset = other.pos_offset;
+	relative_pos = other.relative_pos;
+	base_speed = other.base_speed;
+	angle = other.angle;
+	base_lifespan = other.base_lifespan;
+	lifespan = other.lifespan;
+	radius = other.radius;
+	power_index = other.power_index;
+	movement_type = other.movement_type;
+
+	animationKind = other.animationKind;
+
+	on_floor = other.on_floor;
+	delay_frames = other.delay_frames;
+	complete_animation = other.complete_animation;
+
+	multitarget = other.multitarget;
+	active = other.active;
+
+	multihit = other.multihit;
+	expire_with_caster = other.expire_with_caster;
+	remove_now = other.remove_now;
+	hit_wall = other.hit_wall;
+
+	hp_steal = other.hp_steal;
+	mp_steal = other.mp_steal;
+
+	trait_armor_penetration = other.trait_armor_penetration;
+	trait_crits_impaired = other.trait_crits_impaired;
+	trait_elemental = other.trait_elemental;
+	beacon = other.beacon;
+	missile = other.missile;
+	directional = other.directional;
+
+	post_power = other.post_power;
+	post_power_chance = other.post_power_chance;
+	wall_power = other.wall_power;
+	wall_power_chance = other.wall_power_chance;
+
+	wall_reflect = other.wall_reflect;
+
+	target_movement_normal = other.target_movement_normal;
+	target_movement_flying = other.target_movement_flying;
+	target_movement_intangible = other.target_movement_intangible;
+
+	walls_block_aoe = other.walls_block_aoe;
+
+	sfx_hit = other.sfx_hit;
+	sfx_hit_enable = sfx_hit_enable;
+	sfx_hit_played = sfx_hit_played;
+
+	parent = other.parent;
+	children = other.children;
+
+	script_trigger = other.script_trigger;
+	script = other.script;
+
+	return (*this);
+}
+
 Hazard::~Hazard() {
 	if (!parent && !children.empty()) {
 		// make the next child the parent for the existing children

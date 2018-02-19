@@ -60,8 +60,8 @@ private:
 public:
 	explicit Hazard(MapCollision *_collider);
 
-	Hazard(const Hazard&); // not implemented! If you implement this, take care to create a real copy of the pointers, such as Animation.
-	Hazard & operator= (const Hazard & other); // same as copy constructor!
+	Hazard(const Hazard& other);
+	Hazard & operator= (const Hazard& other);
 
 	~Hazard();
 
