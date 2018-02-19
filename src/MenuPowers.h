@@ -99,7 +99,7 @@ private:
 	int getNextLevelCell(int pci);
 
 	void replaceCellWithUpgrade(int pci, int uci);
-	void upgradePower(int pci);
+	void upgradePower(int pci, bool ignore_tab = false);
 
 	void setUnlockedPowers();
 	int getPointsUsed();

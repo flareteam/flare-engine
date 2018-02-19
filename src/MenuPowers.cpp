@@ -551,8 +551,8 @@ int MenuPowers::getNextLevelCell(int pci) {
 		return getCellByPowerIndex(index, power_cell_upgrade);
 	}
 	// current power is an upgrade, take next upgrade if avaliable
-	int index = static_cast<int>(std::distance(power_cell[pci].upgrades.begin(), level_it));
-	if (static_cast<int>(power_cell[pci].upgrades.size()) > index + 1) {
+	size_t index = std::distance(power_cell[pci].upgrades.begin(), level_it);
+	if (power_cell[pci].upgrades.size() > index + 1) {
 		return getCellByPowerIndex(*(++level_it), power_cell_upgrade);
 	}
 	else {
@@ -579,7 +579,7 @@ void MenuPowers::replaceCellWithUpgrade(int pci, int uci) {
 /**
  * Upgrade power cell "pci" to the next level
  */
-void MenuPowers::upgradePower(int pci) {
+void MenuPowers::upgradePower(int pci, bool ignore_tab) {
 	int i = getNextLevelCell(pci);
 	if (i == -1)
 		return;
@@ -590,7 +590,7 @@ void MenuPowers::upgradePower(int pci) {
 	// if we have tab_control
 	if (tab_control) {
 		int active_tab = tab_control->getActiveTab();
-		if (power_cell[pci].tab == active_tab) {
+		if (power_cell[pci].tab == active_tab || ignore_tab) {
 			replaceCellWithUpgrade(pci, i);
 			stats->powers_list.push_back(power_cell_upgrade[i].id);
 			stats->check_title = true;
@@ -1171,13 +1171,21 @@ void MenuPowers::logic() {
 			// automatically apply upgrades when requires_point = false
 			if (upgradeButtons[i]->enabled) {
 				int next_index;
+				int prev_index = -1;
 				while ((next_index = getNextLevelCell(static_cast<int>(i))) != -1) {
+					if (prev_index == next_index) {
+						// this should never happen, but if it ever does, it would be an infinite loop
+						break;
+					}
+
 					if (!power_cell_upgrade[next_index].requires_point) {
-						upgradePower(static_cast<int>(i));
+						upgradePower(static_cast<int>(i), true);
 					}
 					else {
 						break;
 					}
+
+					prev_index = next_index;
 				}
 			}
 		}
