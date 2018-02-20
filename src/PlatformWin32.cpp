@@ -26,6 +26,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <stdlib.h>
 
+#include <direct.h>
+
 PlatformOptions platform_options;
 
 void PlatformInit() {
@@ -69,8 +71,7 @@ void PlatformSetExitEventFilter() {
 }
 
 bool PlatformDirCreate(const std::string& path) {
-	std::string syscmd = std::string("mkdir \"") + path + std::string("\"");
-	if (system(syscmd.c_str()) != 0) {
+	if (_mkdir(path.c_str()) != 0) {
 		std::string error_msg = "createDir (" + path + ")";
 		perror(error_msg.c_str());
 		return false;
@@ -79,8 +80,7 @@ bool PlatformDirCreate(const std::string& path) {
 }
 
 bool PlatformDirRemove(const std::string& path) {
-	std::string syscmd = std::string("rmdir \"") + path + std::string("\"");
-	if (system(syscmd.c_str()) != 0) {
+	if (_rmdir(path.c_str()) != 0) {
 		std::string error_msg = "removeDir (" + path + ")";
 		perror(error_msg.c_str());
 		return false;
