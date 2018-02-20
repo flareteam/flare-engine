@@ -250,6 +250,16 @@ void MapRenderer::logic(bool paused) {
 	// handle camera shaking timer
 	if (shaky_cam_ticks > 0) shaky_cam_ticks--;
 
+	if (shaky_cam_ticks == 0) {
+		shakycam.x = cam.x;
+		shakycam.y = cam.y;
+	}
+	else {
+		shakycam.x = cam.x + static_cast<float>((rand() % 16 - 8)) * 0.0078125f;
+		shakycam.y = cam.y + static_cast<float>((rand() % 16 - 8)) * 0.0078125f;
+	}
+
+
 	// handle statblock logic for map powers
 	for (unsigned i=0; i<statblocks.size(); ++i) {
 		statblocks[i].logic();
@@ -303,15 +313,6 @@ void calculatePriosOrtho(std::vector<Renderable> &r) {
 }
 
 void MapRenderer::render(std::vector<Renderable> &r, std::vector<Renderable> &r_dead) {
-
-	if (shaky_cam_ticks == 0) {
-		shakycam.x = cam.x;
-		shakycam.y = cam.y;
-	}
-	else {
-		shakycam.x = cam.x + static_cast<float>((rand() % 16 - 8)) * 0.0078125f;
-		shakycam.y = cam.y + static_cast<float>((rand() % 16 - 8)) * 0.0078125f;
-	}
 
 	map_parallax.render(shakycam, "");
 
