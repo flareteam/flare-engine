@@ -1132,7 +1132,7 @@ msgstr "あなたは、すでに変身しているので、まず戻ってくだ
 
 #: ../../../src/PowerManager.cpp:1272
 msgid "Could not untransform at this position."
-msgstr ""
+msgstr "この位置では、変身をとくことは、できない。"
 
 #: ../../../src/SaveLoad.cpp:221 ../../../src/SaveLoad.cpp:222
 msgid "Game saved."
