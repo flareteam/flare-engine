@@ -89,7 +89,7 @@ Section "Flare engine" SecEngine
   File "COPYING"
   File "CREDITS.txt"
   File "CREDITS.engine.txt"
-  File /oname=README.md "README"
+  File "README.md"
   File "README.engine.md"
   File "RELEASE_NOTES.txt"
 
