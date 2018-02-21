@@ -1178,7 +1178,7 @@ void MenuPowers::logic() {
 						break;
 					}
 
-					if (!power_cell_upgrade[next_index].requires_point) {
+					if (!power_cell_upgrade[next_index].requires_point && checkUpgrade(static_cast<int>(i))) {
 						upgradePower(static_cast<int>(i), true);
 					}
 					else {
