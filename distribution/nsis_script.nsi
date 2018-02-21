@@ -2,17 +2,20 @@
 ;
 ; IMPORTANT! This script is not to be run in this distribution directory
 ; It is to be copied to an empty directory along with the following files:
-; 
+;
 ; flare.exe
 ; *.dll (These are the SDL libs, and are not included here)
 ; COPYING
-; CREDITS.txt
+; CREDITS.txt (part of flare-game)
+; CREDITS.engine.txt
+; README.md (part of flare-game)
 ; README.engine.md
 ; RELEASE_NOTES.txt
 ; mods/mods.txt
 ; mods/default/
 ; mods/fantasycore/ (part of flare-game)
 ; mods/empyrean_campaign/ (part of flare-game)
+; mods/centered_statbars/ (part of flare-game)
 ; distribution/Flare.ico
 ; distribution/Flare.bmp
 ;
@@ -45,7 +48,7 @@ OutFile "flare_install.exe"
 ; The default installation directory
 InstallDir $PROGRAMFILES\Flare
 
-; Registry key to check for directory (so if you install again, it will 
+; Registry key to check for directory (so if you install again, it will
 ; overwrite the old one automatically)
 InstallDirRegKey HKLM "Software\Flare" "Install_Dir"
 
@@ -61,58 +64,61 @@ RequestExecutionLevel admin
   !insertmacro MUI_PAGE_DIRECTORY
   !insertmacro MUI_PAGE_INSTFILES
   !insertmacro MUI_PAGE_FINISH
-  
+
   !insertmacro MUI_UNPAGE_CONFIRM
   !insertmacro MUI_UNPAGE_INSTFILES
-  
+
 ;--------------------------------
 ;Languages
- 
+
   !insertmacro MUI_LANGUAGE "English"
-  
+
 ;--------------------------------
 
 ; The stuff to install
 Section "Flare engine" SecEngine
 
   SectionIn RO
-  
+
   ; Set output path to the installation directory.
   SetOutPath $INSTDIR
-  
+
   ; Put file there
   File "flare.exe"
   File "*.dll"
   File "COPYING"
   File "CREDITS.txt"
+  File "CREDITS.engine.txt"
+  File /oname=README.md "README"
   File "README.engine.md"
   File "RELEASE_NOTES.txt"
-  
+
   CreateDirectory "$INSTDIR\mods\default"
   SetOutPath "$INSTDIR\mods"
   File "mods\mods.txt"
   File /r "mods\default"
-  
+
   ; Write the installation path into the registry
   WriteRegStr HKLM SOFTWARE\Flare "Install_Dir" "$INSTDIR"
-  
+
   ; Write the uninstall keys for Windows
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Flare" "DisplayName" "Flare"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Flare" "UninstallString" '"$INSTDIR\uninstall.exe"'
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Flare" "NoModify" 1
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Flare" "NoRepair" 1
   WriteUninstaller "uninstall.exe"
-  
+
 SectionEnd
 
 Section "Flare: Empyrean Campaign" SecGame
   SetOutPath $INSTDIR
-  
+
   CreateDirectory "$INSTDIR\mods\fantasycore"
   CreateDirectory "$INSTDIR\mods\empyrean_campaign"
   SetOutPath "$INSTDIR\mods"
   File /r "mods\fantasycore"
   File /r "mods\empyrean_campaign"
+  File /r "mods\centered_statbars"
 SectionEnd
 
 ; Optional section (can be disabled by the user)
@@ -147,7 +153,7 @@ SectionEnd
 ; Uninstaller
 
 Section "Uninstall"
-  
+
   ; Remove registry keys
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Flare"
   DeleteRegKey HKLM SOFTWARE\Flare
@@ -155,8 +161,10 @@ Section "Uninstall"
   ; Remove files and uninstaller
   Delete "$INSTDIR\flare.exe"
   Delete "$INSTDIR\COPYING"
+  Delete "$INSTDIR\CREDITS.engine.txt"
   Delete "$INSTDIR\CREDITS.txt"
   Delete "$INSTDIR\README.engine.md"
+  Delete "$INSTDIR\README.md"
   Delete "$INSTDIR\RELEASE_NOTES.txt"
   Delete "$INSTDIR\*.dll"
   Delete "$INSTDIR\uninstall.exe"
