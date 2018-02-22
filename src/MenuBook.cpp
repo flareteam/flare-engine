@@ -206,6 +206,7 @@ void MenuBook::clearBook() {
 	textFont.clear();
 	size.clear();
 	image_dest.clear();
+	justify.clear();
 
 	for (unsigned i=0; i<image.size(); i++) {
 		delete image[i];
