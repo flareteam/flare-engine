@@ -227,12 +227,10 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 	}
 	else if (key == "intermap_random") {
 		// @ATTR event.intermap_random|filename|Pick a random map from a map list file and teleport to it.
-		Event_Component random_ec = getRandomMapFromFile(popFirstString(val));
-
 		e->type = EC_INTERMAP;
-		e->s = random_ec.s;
-		e->x = random_ec.x;
-		e->y = random_ec.y;
+
+		e->s = popFirstString(val);
+		e->z = 1; // flag that tells an intermap event that it contains a map list
 	}
 	else if (key == "intramap") {
 		// @ATTR event.intramap|int, int : X, Y|Jump to specific position within current map.
@@ -655,6 +653,15 @@ bool EventManager::executeEvent(Event &ev) {
 			camp->unsetStatus(ec->s);
 		}
 		else if (ec->type == EC_INTERMAP) {
+			if (ec->z == 1) {
+				// this is intermap_random
+				std::string map_list = ec->s;
+				Event_Component random_ec = getRandomMapFromFile(map_list);
+
+				ec->s = random_ec.s;
+				ec->x = random_ec.x;
+				ec->y = random_ec.y;
+			}
 
 			if (fileExists(mods->locate(ec->s))) {
 				mapr->teleportation = true;
@@ -894,6 +901,18 @@ void EventManager::executeScript(const std::string& filename, float x, float y) 
 }
 
 Event_Component EventManager::getRandomMapFromFile(const std::string& fname) {
+	// map pool is the same, so pick the next one in the "playlist"
+	if (fname == mapr->intermap_random_filename && !mapr->intermap_random_queue.empty()) {
+		Event_Component ec = mapr->intermap_random_queue.front();
+		mapr->intermap_random_queue.pop();
+		return ec;
+	}
+
+	// starting a new map pool, so clear the queue
+	while (!mapr->intermap_random_queue.empty()) {
+		mapr->intermap_random_queue.pop();
+	}
+
 	FileParser infile;
 	std::vector<Event_Component> ec_list;
 
@@ -922,8 +941,21 @@ Event_Component EventManager::getRandomMapFromFile(const std::string& fname) {
 		infile.close();
 	}
 
-	if (ec_list.empty())
+	if (ec_list.empty()) {
+		mapr->intermap_random_filename = "";
 		return Event_Component();
-	else
-		return ec_list[rand() % ec_list.size()];
+	}
+	else {
+		mapr->intermap_random_filename = fname;
+
+		while (!ec_list.empty()) {
+			size_t index = rand() % ec_list.size();
+			mapr->intermap_random_queue.push(ec_list[index]);
+			ec_list.erase(ec_list.begin() + index);
+		}
+
+		Event_Component ec = mapr->intermap_random_queue.front();
+		mapr->intermap_random_queue.pop();
+		return ec;
+	}
 }

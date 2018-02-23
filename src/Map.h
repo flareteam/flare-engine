@@ -157,6 +157,10 @@ public:
 	std::vector<Event> events;
 	std::vector<Event> delayed_events;
 
+	// intemap_random queue
+	std::string intermap_random_filename;
+	std::queue<Event_Component> intermap_random_queue;
+
 	// vars
 	std::string title;
 	unsigned short w;
