@@ -863,7 +863,6 @@ void StatBlock::logic() {
 
 		effects.triggered_death = true;
 		cur_state = ENEMY_DEAD;
-		mapr->collider.unblock(pos.x, pos.y);
 	}
 	else if (hp <= 0 && hero && cur_state != AVATAR_DEAD) {
 		effects.triggered_death = true;
