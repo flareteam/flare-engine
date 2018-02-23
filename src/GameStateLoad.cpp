@@ -298,6 +298,7 @@ void GameStateLoad::readGameSlots() {
 
 		game_slots[i] = new GameSlot();
 		game_slots[i]->id = toInt(save_dirs[i]);
+		game_slots[i]->stats.hero = true;
 
 		while (infile.next()) {
 
