@@ -255,42 +255,13 @@ void GameStateNew::loadOptions(const std::string& filename) {
 	while (fin.next()) {
 		// @ATTR option|int, string, string, filename, string : Index, Base, Head, Portrait, Name|A default body, head, portrait, and name for a hero.
 		if (fin.key == "option") {
-			std::string test_first = popFirstString(fin.val);
-			int first_index = toInt(test_first, -1);
-			bool first_is_index = false;
-
-			// TODO we're temporarily remaining forwards-compatible here, allowing the omission of the index
-			// this compatibility will be deprecated before release! So fix your mods
-			if (first_index == -1) {
-				if (test_first == "-1") {
-					fin.error("GameStateNew: Hero option index is negative. Setting to 0.");
-					cur_index = 0;
-					first_is_index = true;
-				}
-				else {
-					cur_index++;
-					fin.error("GameStateNew: Hero option does not have index. Automatically setting to %d.", cur_index);
-				}
-			}
-			else if (first_index < -1) {
-				fin.error("GameStateNew: Hero option index is negative. Setting to 0.");
-				cur_index = 0;
-				first_is_index = true;
-			}
-			else {
-				cur_index = first_index;
-				first_is_index = true;
-			}
+			cur_index = std::max(0, popFirstInt(fin.val));
 
 			if (static_cast<size_t>(cur_index + 1) > hero_options.size()) {
 				hero_options.resize(cur_index + 1);
 			}
 
-			if (first_is_index)
-				hero_options[cur_index].base = popFirstString(fin.val);
-			else
-				hero_options[cur_index].base = test_first;
-
+			hero_options[cur_index].base = popFirstString(fin.val);
 			hero_options[cur_index].head = popFirstString(fin.val);
 			hero_options[cur_index].portrait = popFirstString(fin.val);
 			hero_options[cur_index].name = msg->get(popFirstString(fin.val));
