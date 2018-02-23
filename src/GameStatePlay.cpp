@@ -903,14 +903,17 @@ void GameStatePlay::logic() {
 		}
 		int count = ACTIONBAR_MAIN;
 		// put creature powers on action bar
-		// TODO What if creature has more powers than the size of the action bar?
 		for (size_t i=0; i<pc->charmed_stats->powers_ai.size(); i++) {
 			if (pc->charmed_stats->powers_ai[i].id != 0 && powers->powers[pc->charmed_stats->powers_ai[i].id].beacon != true) {
 				menu->act->hotkeys[count] = pc->charmed_stats->powers_ai[i].id;
 				menu->act->locked[count] = true;
 				count++;
 			}
-			if (count == ACTIONBAR_MAX) count = 0;
+			if (count == ACTIONBAR_MAX)
+				count = 0;
+			else if (count == ACTIONBAR_MAIN)
+				// we've filled the actionbar, stop adding powers to it
+				break;
 		}
 		if (pc->stats.manual_untransform && pc->untransform_power > 0) {
 			menu->act->hotkeys[count] = pc->untransform_power;
