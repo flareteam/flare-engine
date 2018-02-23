@@ -177,6 +177,7 @@ bool PlatformDirRemove(const std::string& path) {
 void PlatformFSInit() {}
 bool PlatformFSCheckReady() { return true; }
 void PlatformFSCommit() {}
+void PlatformSetScreenSize() {}
 
 #endif // PLATFORM_CPP
 #endif // PLATFORM_CPP_INCLUDE

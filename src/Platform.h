@@ -53,4 +53,6 @@ void PlatformFSInit();
 bool PlatformFSCheckReady();
 void PlatformFSCommit();
 
+void PlatformSetScreenSize();
+
 #endif

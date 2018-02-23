@@ -138,5 +138,11 @@ void PlatformFSCommit() {
     );
 }
 
+void PlatformSetScreenSize() {
+	// can't change window size dynamically with Emscripten, so default to 16:9 aspect ratio
+	SCREEN_W = 854;
+	SCREEN_H = 480;
+}
+
 #endif // PLATFORM_CPP
 #endif // PLATFORM_CPP_INCLUDE
