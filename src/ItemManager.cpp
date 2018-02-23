@@ -89,9 +89,8 @@ void ItemManager::loadAll() {
 	if (item_sets.capacity() != item_sets.size())
 		std::vector<ItemSet>(item_sets).swap(item_sets);
 
-	// TODO do we need to print these messages?
-	if (items.empty()) logInfo("ItemManager: No items were found.");
-	if (item_sets.empty()) logInfo("ItemManager: No item sets were found.");
+	if (items.empty())
+		logInfo("ItemManager: No items were found.");
 }
 
 /**
