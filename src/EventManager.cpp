@@ -211,7 +211,6 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		e->a = popFirstInt(val);
 		e->b = popFirstInt(val);
 	}
-	// TODO should intermap and intramap be combined?
 	else if (key == "intermap") {
 		// @ATTR event.intermap|filename, int, int : Map file, X, Y|Jump to specific map at location specified.
 		e->type = EC_INTERMAP;

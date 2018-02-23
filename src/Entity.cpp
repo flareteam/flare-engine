@@ -506,7 +506,6 @@ bool Entity::takeHit(Hazard &h) {
 		powers->effect(&stats, h.src_stats, h.power_index,h.source_type);
 
 		// HP/MP steal is cumulative between stat bonus and power bonus
-		// TODO should hp_steal and mp_steal be capped at 100?
 		int hp_steal = h.hp_steal + h.src_stats->get(STAT_HP_STEAL);
 		if (!stats.effects.immunity_hp_steal && hp_steal != 0) {
 			int steal_amt = (std::min(dmg, prev_hp) * hp_steal) / 100;

@@ -53,7 +53,6 @@ void createDir(const std::string &path) {
 	if (isDirectory(path, false))
 		return;
 
-	// TODO check return value?
 	PlatformDirCreate(path);
 }
 

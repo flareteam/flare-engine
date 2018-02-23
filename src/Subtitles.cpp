@@ -113,7 +113,6 @@ void Subtitles::setTextByID(unsigned long id) {
 			updateLabelAndBackground();
 
 			// 1 second per 10 letters
-			// TODO is this too short?
 			visible_ticks = static_cast<int>(current_text.length()) * (MAX_FRAMES_PER_SEC/10);
 
 			return;
