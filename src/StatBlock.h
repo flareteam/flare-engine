@@ -46,21 +46,31 @@ typedef enum {
 	AI_POWER_DEBUFF = 7
 } AI_POWER;
 
-// active states
-const int ENEMY_STANCE = 0;
-const int ENEMY_MOVE = 1;
-const int ENEMY_POWER = 2;
-const int ENEMY_SPAWN = 3;
-// interrupt states
-const int ENEMY_BLOCK = 4;
-const int ENEMY_HIT = 5;
-const int ENEMY_DEAD = 6;
-const int ENEMY_CRITDEAD = 7;
+enum AvatarState {
+	AVATAR_STANCE = 0,
+	AVATAR_RUN = 1,
+	AVATAR_BLOCK = 2,
+	AVATAR_HIT = 3,
+	AVATAR_DEAD = 4,
+	AVATAR_ATTACK = 5
+};
 
-// combat styles; enemy only
-const int COMBAT_DEFAULT = 0;
-const int COMBAT_AGGRESSIVE = 1;
-const int COMBAT_PASSIVE = 2;
+enum EnemyState {
+	ENEMY_STANCE = 0,
+	ENEMY_MOVE = 1,
+	ENEMY_POWER = 2,
+	ENEMY_SPAWN = 3,
+	ENEMY_BLOCK = 4,
+	ENEMY_HIT = 5,
+	ENEMY_DEAD = 6,
+	ENEMY_CRITDEAD = 7
+};
+
+enum CombatStyle {
+	COMBAT_DEFAULT = 0,
+	COMBAT_AGGRESSIVE = 1,
+	COMBAT_PASSIVE = 2
+};
 
 class AIPower {
 public:
@@ -319,6 +329,8 @@ public:
 	bool attacking;
 
 	std::vector<int> power_filter;
+
+	int bleed_source_type;
 };
 
 #endif

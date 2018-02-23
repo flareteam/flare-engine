@@ -311,12 +311,8 @@ void EnemyManager::handleSpawn() {
 				}
 			}
 
-			if(e->stats.level < 1) e->stats.level = 1;
-
-			e->stats.applyEffects();
-
-			// TODO move this to StatBlock?
-			e->stats.hp = e->stats.get(STAT_HP_MAX);
+			// apply Effects and set HP to max HP
+			e->stats.recalc();
 		}
 
 		if (mapr->collider.is_valid_position(espawn.pos.x, espawn.pos.y, e->stats.movement_type, false) || !e->stats.hero_ally) {

@@ -327,8 +327,11 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 	mapr->collider.unblock(stats.pos.x, stats.pos.y);
 
 	// turn on all passive powers
-	if ((stats.hp > 0 || stats.effects.triggered_death) && !respawn && !transform_triggered) powers->activatePassives(&stats);
-	if (transform_triggered) transform_triggered = false;
+	if ((stats.hp > 0 || stats.effects.triggered_death) && !respawn && !transform_triggered)
+		powers->activatePassives(&stats);
+
+	if (transform_triggered)
+		transform_triggered = false;
 
 	// handle when the player stops blocking
 	if (stats.effects.triggered_block && !stats.blocking) {
@@ -339,14 +342,6 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 	}
 
 	stats.logic();
-
-	// check for revive
-	if (stats.hp <= 0 && stats.effects.revive) {
-		stats.hp = stats.get(STAT_HP_MAX);
-		stats.alive = true;
-		stats.corpse = false;
-		stats.cur_state = AVATAR_STANCE;
-	}
 
 	// check level up
 	if (stats.level < static_cast<int>(stats.xp_table.size()) && stats.xp >= stats.xp_table[stats.level]) {
@@ -366,12 +361,6 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 		if (stats.cur_state == AVATAR_DEAD) {
 			stats.cur_state = AVATAR_STANCE;
 		}
-	}
-
-	// check for bleeding to death
-	if (stats.hp == 0 && !(stats.cur_state == AVATAR_DEAD)) {
-		stats.effects.triggered_death = true;
-		stats.cur_state = AVATAR_DEAD;
 	}
 
 	// assist mouse movement

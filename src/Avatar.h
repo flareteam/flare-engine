@@ -38,18 +38,6 @@ class Entity;
 class Hazard;
 class StatBlock;
 
-/**
- * Avatar State enum
- */
-enum AvatarState {
-	AVATAR_STANCE = 0,
-	AVATAR_RUN = 1,
-	AVATAR_BLOCK = 2,
-	AVATAR_HIT = 3,
-	AVATAR_DEAD = 4,
-	AVATAR_ATTACK = 5,
-};
-
 class Layer_gfx {
 public:
 	std::string gfx;

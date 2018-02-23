@@ -167,6 +167,7 @@ StatBlock::StatBlock()
 	, summons()
 	, summoner(NULL)
 	, attacking(false)
+	, bleed_source_type(-1)
 {
 	primary.resize(PRIMARY_STATS.size(), 0);
 	primary_starting.resize(PRIMARY_STATS.size(), 0);
@@ -578,20 +579,25 @@ void StatBlock::takeDamage(int dmg) {
  */
 void StatBlock::recalc() {
 
-	if (!statsLoaded) loadHeroStats();
+	if (hero) {
+		if (!statsLoaded) loadHeroStats();
 
-	refresh_stats = true;
+		refresh_stats = true;
 
-	level = 0;
-	for (unsigned i=0; i<xp_table.size(); i++) {
-		if (xp >= xp_table[i]) {
-			level=i+1;
-			check_title = true;
+		level = 0;
+		for (unsigned i=0; i<xp_table.size(); i++) {
+			if (xp >= xp_table[i]) {
+				level=i+1;
+				check_title = true;
+			}
 		}
+
+		if (xp >= xp_table.back())
+			xp = xp_table.back();
 	}
 
-	if (xp >= xp_table.back())
-		xp = xp_table.back();
+	if (level < 1)
+		level = 1;
 
 	applyEffects();
 
@@ -616,16 +622,6 @@ void StatBlock::calcBase() {
 	}
 
 	// add damage from equipment and increase to minimum amounts
-	// for (size_t i = 0; i < DAMAGE_TYPES_COUNT; ++i) {
-	// 	size_t dmg_id = i / 2;
-    //
-	// 	if (i % 2 == 0) {
-	// 		base[STAT_COUNT + i] += dmg_min_add[dmg_id];
-	// 	}
-	// 	else {
-	// 		base[STAT_COUNT + i] += dmg_max_add[dmg_id];
-	// 	}
-	// }
 	for (size_t i = 0; i < DAMAGE_TYPES.size(); ++i) {
 		base[STAT_COUNT + (i*2)] += dmg_min_add[i];
 		base[STAT_COUNT + (i*2) + 1] += dmg_max_add[i];
@@ -683,8 +679,7 @@ void StatBlock::applyEffects() {
  * Process per-frame actions
  */
 void StatBlock::logic() {
-	if (hp <= 0 && !effects.triggered_death && !effects.revive) alive = false;
-	else alive = true;
+	alive = !(hp <= 0 && !effects.triggered_death && !effects.revive);
 
 	// handle party buffs
 	if (enemym && powers) {
@@ -831,6 +826,48 @@ void StatBlock::logic() {
 		mapr->collider.unblock(pos.x, pos.y);
 		mapr->collider.move(pos.x, pos.y, dx, dy, movement_type, hero);
 		mapr->collider.block(pos.x, pos.y, hero_ally);
+	}
+
+
+	// enemies heal rapidly while not in combat
+	if (!in_combat && !hero_ally && !hero) {
+		if (alive && pc->stats.alive) {
+			hp++;
+			if (hp > get(STAT_HP_MAX))
+				hp = get(STAT_HP_MAX);
+		}
+	}
+
+	if (waypoint_pause_ticks > 0)
+		waypoint_pause_ticks--;
+
+	// check for revive
+	if (hp <= 0 && effects.revive) {
+		hp = get(STAT_HP_MAX);
+		alive = true;
+		corpse = false;
+		if (hero)
+			cur_state = AVATAR_STANCE;
+		else
+			cur_state = ENEMY_STANCE;
+	}
+
+	// check for bleeding to death
+	if (hp <= 0 && !hero && cur_state != ENEMY_DEAD && cur_state != ENEMY_CRITDEAD) {
+		for (size_t i = 0; i < effects.effect_list.size(); ++i) {
+			if (effects.effect_list[i].type == EFFECT_DAMAGE || effects.effect_list[i].type == EFFECT_DAMAGE_PERCENT) {
+				bleed_source_type = effects.effect_list[i].source_type;
+				break;
+			}
+		}
+
+		effects.triggered_death = true;
+		cur_state = ENEMY_DEAD;
+		mapr->collider.unblock(pos.x, pos.y);
+	}
+	else if (hp <= 0 && hero && cur_state != AVATAR_DEAD) {
+		effects.triggered_death = true;
+		cur_state = AVATAR_DEAD;
 	}
 }
 

@@ -75,50 +75,18 @@ void BehaviorStandard::logic() {
 
 /**
  * Various upkeep on stats
- * TODO: some of these actions could be moved to StatBlock::logic()
  */
 void BehaviorStandard::doUpkeep() {
 	// activate all passive powers
-	if (e->stats.hp > 0 || e->stats.effects.triggered_death) powers->activatePassives(&e->stats);
+	if (e->stats.hp > 0 || e->stats.effects.triggered_death)
+		powers->activatePassives(&e->stats);
 
 	e->stats.logic();
 
-	// heal rapidly while not in combat
-	if (!e->stats.in_combat && !e->stats.hero_ally) {
-		if (e->stats.alive && pc->stats.alive) {
-			e->stats.hp++;
-			if (e->stats.hp > e->stats.get(STAT_HP_MAX)) e->stats.hp = e->stats.get(STAT_HP_MAX);
-		}
-	}
-
-	if (e->stats.waypoint_pause_ticks > 0)
-		e->stats.waypoint_pause_ticks--;
-
-	// check for revive
-	if (e->stats.hp <= 0 && e->stats.effects.revive) {
-		e->stats.hp = e->stats.get(STAT_HP_MAX);
-		e->stats.alive = true;
-		e->stats.corpse = false;
-		e->stats.cur_state = ENEMY_STANCE;
-	}
-
-	// check for bleeding to death
-	if (e->stats.hp <= 0 && !(e->stats.cur_state == ENEMY_DEAD || e->stats.cur_state == ENEMY_CRITDEAD)) {
-		//work out who the kill is attributed to
-		int bleed_source_type = -1;
-
-		for (size_t i = 0; i < e->stats.effects.effect_list.size(); ++i) {
-			if (e->stats.effects.effect_list[i].type == EFFECT_DAMAGE || e->stats.effects.effect_list[i].type == EFFECT_DAMAGE_PERCENT) {
-				bleed_source_type = e->stats.effects.effect_list[i].source_type;
-				break;
-			}
-		}
-
-		e->doRewards(bleed_source_type);
-
-		e->stats.effects.triggered_death = true;
-		e->stats.cur_state = ENEMY_DEAD;
-		mapr->collider.unblock(e->stats.pos.x,e->stats.pos.y);
+	// bleeding to death
+	if (e->stats.bleed_source_type != -1) {
+		e->doRewards(e->stats.bleed_source_type);
+		e->stats.bleed_source_type = -1;
 	}
 
 	// check for teleport powers
