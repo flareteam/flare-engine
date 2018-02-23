@@ -393,6 +393,9 @@ int Map::addEventStatBlock(Event &evnt) {
 	immunity_effect.type = "immunity";
 	statb->effects.addEffect(immunity_effect, 0, 0, false, -1, 0, SOURCE_TYPE_ENEMY);
 
+	// ensure the statblock will be alive
+	statb->hp = statb->starting[STAT_HP_MAX] = statb->current[STAT_HP_MAX] = 1;
+
 	// ensure that stats are ready to be used by running logic once
 	statb->logic();
 
