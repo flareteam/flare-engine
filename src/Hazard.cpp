@@ -161,8 +161,8 @@ Hazard::Hazard(const Hazard& other) {
 	walls_block_aoe = other.walls_block_aoe;
 
 	sfx_hit = other.sfx_hit;
-	sfx_hit_enable = sfx_hit_enable;
-	sfx_hit_played = sfx_hit_played;
+	sfx_hit_enable = other.sfx_hit_enable;
+	sfx_hit_played = other.sfx_hit_played;
 
 	parent = other.parent;
 	children = other.children;
@@ -239,8 +239,8 @@ Hazard& Hazard::operator=(const Hazard& other) {
 	walls_block_aoe = other.walls_block_aoe;
 
 	sfx_hit = other.sfx_hit;
-	sfx_hit_enable = sfx_hit_enable;
-	sfx_hit_played = sfx_hit_played;
+	sfx_hit_enable = other.sfx_hit_enable;
+	sfx_hit_played = other.sfx_hit_played;
 
 	parent = other.parent;
 	children = other.children;
