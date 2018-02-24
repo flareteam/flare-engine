@@ -389,7 +389,7 @@ void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, bo
 	e.passive_id = passive_id;
 	e.source_type = source_type;
 
-	if(effect.max_stacks != -1 && stacks_applied >= effect.max_stacks){
+	if(insert_effect && effect.max_stacks != -1 && stacks_applied >= effect.max_stacks){
 		//Remove the oldest effect of the type
 		removeEffect(insert_pos-stacks_applied);
 
