@@ -280,6 +280,8 @@ Hazard::~Hazard() {
 		anim->decreaseCount(animation_name);
 		delete activeAnimation;
 	}
+
+	anim->cleanUp();
 }
 
 void Hazard::logic() {
@@ -359,7 +361,7 @@ void Hazard::loadAnimation(const std::string &s) {
 	if (activeAnimation) {
 		anim->decreaseCount(animation_name);
 		delete activeAnimation;
-		activeAnimation = 0;
+		activeAnimation = NULL;
 	}
 	animation_name = s;
 	if (animation_name != "") {
@@ -367,6 +369,8 @@ void Hazard::loadAnimation(const std::string &s) {
 		AnimationSet *animationSet = anim->getAnimationSet(animation_name);
 		activeAnimation = animationSet->getAnimation("");
 	}
+
+	anim->cleanUp();
 }
 
 bool Hazard::isDangerousNow() {
