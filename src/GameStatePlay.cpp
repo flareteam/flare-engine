@@ -908,12 +908,12 @@ void GameStatePlay::logic() {
 				menu->act->hotkeys[count] = pc->charmed_stats->powers_ai[i].id;
 				menu->act->locked[count] = true;
 				count++;
+				if (count == ACTIONBAR_MAX)
+					count = 0;
+				else if (count == ACTIONBAR_MAIN)
+					// we've filled the actionbar, stop adding powers to it
+					break;
 			}
-			if (count == ACTIONBAR_MAX)
-				count = 0;
-			else if (count == ACTIONBAR_MAIN)
-				// we've filled the actionbar, stop adding powers to it
-				break;
 		}
 		if (pc->stats.manual_untransform && pc->untransform_power > 0) {
 			menu->act->hotkeys[count] = pc->untransform_power;
