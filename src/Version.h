@@ -41,7 +41,7 @@ public:
 	bool operator<=(const Version&v);
 };
 
-const std::string VERSION_NAME = "Flare Beta";
+const std::string VERSION_NAME = "Flare";
 extern Version ENGINE_VERSION;
 extern Version VERSION_MIN;
 extern Version VERSION_MAX;
