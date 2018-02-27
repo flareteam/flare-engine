@@ -24,7 +24,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <cmath>
 #include <ctime>
 #include <limits.h>
+#include <iostream>
 
+#include "FileParser.h"
 #include "Settings.h"
 #include "Stats.h"
 #include "GameSwitcher.h"
@@ -34,6 +36,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 
 GameSwitcher *gswitch;
+int LOCK_INDEX;
 
 class CmdLineArgs {
 public:
@@ -59,6 +62,80 @@ bool init_finished = false;
 #include "PlatformLinux.cpp"
 #endif
 
+static void readLockFile() {
+	if (!platform_options.has_lock_file)
+		return;
+
+	std::string lock_file_path = PATH_CONF + "flare_lock";
+
+	FileParser infile;
+	if (infile.open(lock_file_path, false)) {
+		while(infile.next()) {
+			if (infile.key == "i")
+				LOCK_INDEX = toInt(infile.val);
+		}
+		infile.close();
+	}
+}
+
+static void writeLockFile(int increment) {
+	if (!platform_options.has_lock_file)
+		return;
+
+	std::string lock_file_path = PATH_CONF + "flare_lock";
+
+	if (increment < 0) {
+		if (LOCK_INDEX == 0)
+			return;
+
+		// refresh LOCK_INDEX in case any other instances were closed while this instance was running
+		readLockFile();
+	}
+
+	std::ofstream outfile;
+	outfile.open(lock_file_path.c_str(), std::ios::out);
+	if (outfile.is_open()) {
+		LOCK_INDEX += increment;
+		outfile << "# Flare lock file. Counts instances of Flare" << std::endl;
+		outfile << "i=" << LOCK_INDEX << std::endl;
+		outfile.close();
+		outfile.clear();
+	}
+}
+
+static void checkLockFile() {
+	if (!platform_options.has_lock_file)
+		return;
+
+	std::string lock_file_path = PATH_CONF + "flare_lock";
+	LOCK_INDEX = 0;
+
+	readLockFile();
+
+	if (LOCK_INDEX > 0){
+		const SDL_MessageBoxButtonData buttons[] = {
+			{ SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT|SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "no" },
+			{ 0, 1, "yes" },
+		};
+		const SDL_MessageBoxData messageboxdata = {
+			SDL_MESSAGEBOX_INFORMATION,
+			NULL,
+			"Flare",
+			"Flare appears to already be running.\nDo you wish to run another instance? (not recommended)",
+			SDL_arraysize(buttons),
+			buttons,
+			NULL
+		};
+		int buttonid = 0;
+		SDL_ShowMessageBox(&messageboxdata, &buttonid);
+		if (buttonid == 0) {
+			Exit(1);
+		}
+	}
+
+	writeLockFile(1);
+}
+
 /**
  * Game initialization.
  */
@@ -72,6 +149,8 @@ static void init(const CmdLineArgs& cmd_line_args) {
 	 * PATH_DATA is for common game data (e.g. images, music)
 	 */
 	PlatformSetPaths();
+
+	checkLockFile();
 
 	createLogFile();
 	logInfo(getVersionString().c_str());
@@ -243,6 +322,8 @@ static void mainLoop () {
 }
 
 static void cleanup() {
+	writeLockFile(-1);
+
 	delete gswitch;
 
 	delete anim;

@@ -29,6 +29,7 @@ public:
 	bool has_exit_button;
 	bool is_mobile_device;
 	bool force_hardware_cursor;
+	bool has_lock_file;
 	unsigned char config_menu_type;
 	std::string default_renderer;
 
@@ -36,6 +37,7 @@ public:
 		: has_exit_button(true)
 		, is_mobile_device(false)
 		, force_hardware_cursor(false)
+		, has_lock_file(true)
 		, config_menu_type(CONFIG_MENU_TYPE_DESKTOP)
 		, default_renderer("")
 	{}

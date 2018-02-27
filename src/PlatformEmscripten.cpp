@@ -40,6 +40,7 @@ PlatformOptions platform_options;
 void PlatformInit() {
 	platform_options.has_exit_button = false;
 	platform_options.config_menu_type = CONFIG_MENU_TYPE_DESKTOP_NO_VIDEO;
+	platform_options.has_lock_file = false;
 	platform_options.default_renderer = "sdl_hardware";
 }
 
