@@ -18,7 +18,7 @@ msgstr ""
 
 #: ../engine/primary_stats.txt:3
 msgid "Physical"
-msgstr "Kraft"
+msgstr "Physisch"
 
 #: ../engine/primary_stats.txt:7
 msgid "Mental"
@@ -38,35 +38,35 @@ msgstr "Nahkampf Schaden"
 
 #: ../engine/damage_types.txt:4
 msgid "Melee Damage Min"
-msgstr "Nahkampf Schaden Min"
+msgstr "Nahkampf-Schaden Min"
 
 #: ../engine/damage_types.txt:5
 msgid "Melee Damage Max"
-msgstr "Nahkampf Schaden Max"
+msgstr "Nahkampf-Schaden Max"
 
 #: ../engine/damage_types.txt:11
 msgid "Ranged Damage"
-msgstr "Distanzschaden"
+msgstr "Distanz-Schaden"
 
 #: ../engine/damage_types.txt:12
 msgid "Ranged Damage Min"
-msgstr "Distanzschaden Min"
+msgstr "Distanz-Schaden Min"
 
 #: ../engine/damage_types.txt:13
 msgid "Ranged Damage Max"
-msgstr "Distanzschaden Max"
+msgstr "Distanz-Schaden Max"
 
 #: ../engine/damage_types.txt:19
 msgid "Mental Damage"
-msgstr "Magieschaden"
+msgstr "Magie-Schaden"
 
 #: ../engine/damage_types.txt:20
 msgid "Mental Damage Min"
-msgstr "Magieschaden Min"
+msgstr "Magie-Schaden Min"
 
 #: ../engine/damage_types.txt:21
 msgid "Mental Damage Max"
-msgstr "Magieschaden Max"
+msgstr "Magie-Schaden Max"
 
 #: ../cutscenes/credits.txt:7
 msgid "Flare Engine Credits"
@@ -77,7 +77,6 @@ msgid "Lead Programmers"
 msgstr "Hauptprogrammierer"
 
 #: ../cutscenes/credits.txt:12
-#, fuzzy
 msgid "Clint Bellanger"
 msgstr ""
 
@@ -187,7 +186,7 @@ msgstr ""
 
 #: ../cutscenes/credits.txt:48
 msgid "Translators"
-msgstr ""
+msgstr "Übersetzer"
 
 #: ../cutscenes/credits.txt:50
 msgid "Adrian Chaves Fernandez"
@@ -303,7 +302,7 @@ msgstr ""
 
 #: ../cutscenes/credits.txt:84
 msgid "Distributors"
-msgstr ""
+msgstr "Distributoren"
 
 #: ../cutscenes/credits.txt:86
 msgid "Ablu"
@@ -323,11 +322,11 @@ msgstr ""
 
 #: ../cutscenes/credits.txt:93
 msgid "Special Thanks"
-msgstr ""
+msgstr "Besonderer Dank ergeht"
 
 #: ../cutscenes/credits.txt:97
 msgid "For giving constant feedback and testing:"
-msgstr ""
+msgstr "Für Feedback und Testen:"
 
 #: ../cutscenes/credits.txt:98
 msgid "Bart Kelsey"
@@ -339,7 +338,7 @@ msgstr ""
 
 #: ../cutscenes/credits.txt:103
 msgid "For Tiled and the Flare map exporter:"
-msgstr ""
+msgstr "An Tiled und Map Experten:"
 
 #: ../cutscenes/credits.txt:104
 msgid "Thorbjørn Lindeijer"
