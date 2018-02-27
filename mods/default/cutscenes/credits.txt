@@ -61,6 +61,7 @@ text=Giovanni Dalla Torre
 text=gunchleoc
 text=Hans Joachim Desserud
 text=Igor Paliychuk
+text=Janet Hunt
 text=Juan Pablo Tamayo
 text=losine
 text=Michael Papageorgiou
