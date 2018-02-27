@@ -1,0 +1,371 @@
+# Copyright (C) 2011 Clint Bellanger
+# This file is distributed under the same license as the FLARE package.
+#
+# Igor Paliychuk <mansonigor@gmail.com>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.19\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-01-29 17:55+\n"
+"PO-Revision-Date: 2013-10-12 16:38+0200\n"
+"Last-Translator: Igor Paliychuk <mansonigor@gmail.com>\n"
+"Language-Team: Ukrainian <LL@li.org>\n"
+"Language: Ukrainian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.5\n"
+
+#: ../engine/primary_stats.txt:3
+msgid "Physical"
+msgstr "Kraft"
+
+#: ../engine/primary_stats.txt:7
+msgid "Mental"
+msgstr "Geistig"
+
+#: ../engine/primary_stats.txt:11
+msgid "Offense"
+msgstr "Angriff"
+
+#: ../engine/primary_stats.txt:15
+msgid "Defense"
+msgstr "Verteidigung"
+
+#: ../engine/damage_types.txt:3
+msgid "Melee Damage"
+msgstr "Nahkampf Schaden"
+
+#: ../engine/damage_types.txt:4
+msgid "Melee Damage Min"
+msgstr "Nahkampf Schaden Min"
+
+#: ../engine/damage_types.txt:5
+msgid "Melee Damage Max"
+msgstr "Nahkampf Schaden Max"
+
+#: ../engine/damage_types.txt:11
+msgid "Ranged Damage"
+msgstr "Distanzschaden"
+
+#: ../engine/damage_types.txt:12
+msgid "Ranged Damage Min"
+msgstr "Distanzschaden Min"
+
+#: ../engine/damage_types.txt:13
+msgid "Ranged Damage Max"
+msgstr "Distanzschaden Max"
+
+#: ../engine/damage_types.txt:19
+msgid "Mental Damage"
+msgstr "Magieschaden"
+
+#: ../engine/damage_types.txt:20
+msgid "Mental Damage Min"
+msgstr "Magieschaden Min"
+
+#: ../engine/damage_types.txt:21
+msgid "Mental Damage Max"
+msgstr "Magieschaden Max"
+
+#: ../cutscenes/credits.txt:7
+msgid "Flare Engine Credits"
+msgstr "Mitwirkende bei Flare Engine"
+
+#: ../cutscenes/credits.txt:10
+msgid "Lead Programmers"
+msgstr "Hauptprogrammierer"
+
+#: ../cutscenes/credits.txt:12
+#, fuzzy
+msgid "Clint Bellanger"
+msgstr ""
+
+#: ../cutscenes/credits.txt:13
+msgid "Henrik Andersson"
+msgstr ""
+
+#: ../cutscenes/credits.txt:14
+msgid "Igor Paliychuk"
+msgstr ""
+
+#: ../cutscenes/credits.txt:15
+msgid "Justin Jacobs"
+msgstr ""
+
+#: ../cutscenes/credits.txt:16
+msgid "Stefan Beller"
+msgstr ""
+
+#: ../cutscenes/credits.txt:17
+msgid "Thane Brimhall"
+msgstr ""
+
+#: ../cutscenes/credits.txt:20
+msgid "Programmers"
+msgstr "Programmierer"
+
+#: ../cutscenes/credits.txt:22
+msgid "Anton Golov"
+msgstr ""
+
+#: ../cutscenes/credits.txt:23
+msgid "Artur Rojek"
+msgstr ""
+
+#: ../cutscenes/credits.txt:24
+msgid "blazindragon"
+msgstr ""
+
+#: ../cutscenes/credits.txt:25
+msgid "Bonbadil"
+msgstr ""
+
+#: ../cutscenes/credits.txt:26
+msgid "Chris Oelmueller"
+msgstr ""
+
+#: ../cutscenes/credits.txt:27
+msgid "David Bariod"
+msgstr ""
+
+#: ../cutscenes/credits.txt:28
+msgid "Daniel Santos"
+msgstr ""
+
+#: ../cutscenes/credits.txt:29
+msgid "Gallaecio"
+msgstr ""
+
+#: ../cutscenes/credits.txt:30
+msgid "Joseph Bleu"
+msgstr ""
+
+#: ../cutscenes/credits.txt:31
+msgid "Juan PabloTamayo"
+msgstr ""
+
+#: ../cutscenes/credits.txt:32
+msgid "Kitano"
+msgstr ""
+
+#: ../cutscenes/credits.txt:33
+msgid "Kyle Belanger"
+msgstr ""
+
+#: ../cutscenes/credits.txt:34
+msgid "LongerDev"
+msgstr ""
+
+#: ../cutscenes/credits.txt:35
+msgid "Manuel A. Fernandez Montecelo"
+msgstr ""
+
+#: ../cutscenes/credits.txt:36
+msgid "Matthew Krohn"
+msgstr ""
+
+#: ../cutscenes/credits.txt:37
+msgid "Nojan"
+msgstr ""
+
+#: ../cutscenes/credits.txt:38
+msgid "Pavel Kirpichyov"
+msgstr ""
+
+#: ../cutscenes/credits.txt:39
+msgid "runtime-x86"
+msgstr ""
+
+#: ../cutscenes/credits.txt:40
+msgid "Ryan Dansie"
+msgstr ""
+
+#: ../cutscenes/credits.txt:43
+msgid "Default Art"
+msgstr ""
+
+#: ../cutscenes/credits.txt:48
+msgid "Translators"
+msgstr ""
+
+#: ../cutscenes/credits.txt:50
+msgid "Adrian Chaves Fernandez"
+msgstr ""
+
+#: ../cutscenes/credits.txt:51
+msgid "Andrea Ranaldi"
+msgstr ""
+
+#: ../cutscenes/credits.txt:52
+msgid "Andreas Berheim Brudin"
+msgstr ""
+
+#: ../cutscenes/credits.txt:53
+msgid "Bas Doodeman"
+msgstr ""
+
+#: ../cutscenes/credits.txt:55
+msgid "Carlos Sanchez"
+msgstr ""
+
+#: ../cutscenes/credits.txt:57
+msgid "Christoph J. Thompson"
+msgstr ""
+
+#: ../cutscenes/credits.txt:58
+msgid "Evgen Pavlov"
+msgstr ""
+
+#: ../cutscenes/credits.txt:59
+msgid "Gianfranco Del Borrello"
+msgstr ""
+
+#: ../cutscenes/credits.txt:60
+msgid "Giovanni Dalla Torre"
+msgstr ""
+
+#: ../cutscenes/credits.txt:61
+msgid "gunchleoc"
+msgstr ""
+
+#: ../cutscenes/credits.txt:62
+msgid "Hans Joachim Desserud"
+msgstr ""
+
+#: ../cutscenes/credits.txt:64
+msgid "Juan Pablo Tamayo"
+msgstr ""
+
+#: ../cutscenes/credits.txt:65
+msgid "losine"
+msgstr ""
+
+#: ../cutscenes/credits.txt:66
+msgid "Michael Papageorgiou"
+msgstr ""
+
+#: ../cutscenes/credits.txt:67
+msgid "Mikhail Karalevich"
+msgstr ""
+
+#: ../cutscenes/credits.txt:68
+msgid "Miro Jánošík"
+msgstr ""
+
+#: ../cutscenes/credits.txt:69
+msgid "Morgan Strauss"
+msgstr ""
+
+#: ../cutscenes/credits.txt:70
+msgid "Nikita Vanku"
+msgstr ""
+
+#: ../cutscenes/credits.txt:71
+msgid "Paul Wortmann"
+msgstr ""
+
+#: ../cutscenes/credits.txt:72
+msgid "Pawel Puszczynski"
+msgstr ""
+
+#: ../cutscenes/credits.txt:73
+msgid "Quentin Stievenart"
+msgstr ""
+
+#: ../cutscenes/credits.txt:74
+msgid "Sergey Basalaev"
+msgstr ""
+
+#: ../cutscenes/credits.txt:76
+msgid "Stefano Peris"
+msgstr ""
+
+#: ../cutscenes/credits.txt:77
+msgid "sujiniku"
+msgstr ""
+
+#: ../cutscenes/credits.txt:78
+msgid "Thomas Glamsch"
+msgstr ""
+
+#: ../cutscenes/credits.txt:79
+msgid "Timo Sievänen"
+msgstr ""
+
+#: ../cutscenes/credits.txt:80
+msgid "Wuzzy2"
+msgstr ""
+
+#: ../cutscenes/credits.txt:81
+msgid "Yannis Anthymidis"
+msgstr ""
+
+#: ../cutscenes/credits.txt:84
+msgid "Distributors"
+msgstr ""
+
+#: ../cutscenes/credits.txt:86
+msgid "Ablu"
+msgstr ""
+
+#: ../cutscenes/credits.txt:87
+msgid "Feillyne"
+msgstr ""
+
+#: ../cutscenes/credits.txt:88
+msgid "Jan-Hendrik Peters"
+msgstr ""
+
+#: ../cutscenes/credits.txt:90
+msgid "miffe"
+msgstr ""
+
+#: ../cutscenes/credits.txt:93
+msgid "Special Thanks"
+msgstr ""
+
+#: ../cutscenes/credits.txt:97
+msgid "For giving constant feedback and testing:"
+msgstr ""
+
+#: ../cutscenes/credits.txt:98
+msgid "Bart Kelsey"
+msgstr ""
+
+#: ../cutscenes/credits.txt:99
+msgid "The community at OpenGameArt"
+msgstr ""
+
+#: ../cutscenes/credits.txt:103
+msgid "For Tiled and the Flare map exporter:"
+msgstr ""
+
+#: ../cutscenes/credits.txt:104
+msgid "Thorbjørn Lindeijer"
+msgstr ""
+
+#: ../cutscenes/credits.txt:106
+msgid "Ranie Jade Ramiso"
+msgstr ""
+
+#~ msgid "Lead Programmers - Clint Bellanger, Henrik Andersson, Igor Paliychuk, Justin Jacobs, Stefan Beller, and Thane Brimhall"
+#~ msgstr "Основні програмісти - Clint Bellanger, Henrik Andersson, Igor Paliychuk, Justin Jacobs, Stefan Beller та Thane Brimhall"
+
+#~ msgid "Programmers - Anton Golov, Artur Rojek, blazindragon, Bonbadil, Chris Oelmueller, David Bariod, Daniel Santos, Gallaecio, Joseph Bleu, Juan PabloTamayo, Kitano, Kyle Belanger, LongerDev, Manuel A. Fernandez Montecelo, Matthew Krohn, Nojan, Pavel Kirpichyov, runtime-x86, and Ryan Dansie"
+#~ msgstr "Програмісти - Anton Golov, Artur Rojek, blazindragon, Bonbadil, Chris Oelmueller, David Bariod, Daniel Santos, Gallaecio, Joseph Bleu, Juan PabloTamayo, Kitano, Kyle Belanger, LongerDev, Manuel A. Fernandez Montecelo, Matthew Krohn, Nojan, Pavel Kirpichyov, runtime-x86 та Ryan Dansie"
+
+#~ msgid "Translators - Adrian Chaves Fernandez, Andrea Ranaldi, Andreas Berheim Brudin, Bas Doodeman, Bonbadil, Carlos Sanchez, Chris Oelmueller, Christoph J. Thompson, Evgen Pavlov, Giovanni Dalla Torre, gunchleoc, Hans Joachim Desserud, Igor Paliychuk, Juan Pablo Tamayo, losine, Michael Papageorgiou, Mikhail Karalevich, Miro Jánošík, Morgan Strauss, Nikita Vanku, Paul Wortmann, Pawel Puszczynski, Quentin Stievenart, Sergey Basalaev, Stefan Beller, Thomas Glamsch, Timo Sievänen, Wuzzy2, and Yannis Anthymidis"
+#~ msgstr "Перекладачі - Adrian Chaves Fernandez, Andrea Ranaldi, Andreas Berheim Brudin, Bas Doodeman, Bonbadil, Carlos Sanchez, Chris Oelmueller, Christoph J. Thompson, Evgen Pavlov, Giovanni Dalla Torre, gunchleoc, Hans Joachim Desserud, Igor Paliychuk, Juan Pablo Tamayo, losine, Michael Papageorgiou, Mikhail Karalevich, Miro Jánošík, Morgan Strauss, Nikita Vanku, Paul Wortmann, Pawel Puszczynski, Quentin Stievenart, Sergey Basalaev, Stefan Beller, Thomas Glamsch, Timo Sievänen, Wuzzy2 та Yannis Anthymidis"
+
+#~ msgid "Distributors - Ablu, Feillyne, Jan-Hendrik Peters, Manuel A. Fernandez Montecelo, miffe"
+#~ msgstr "Розповсюджувачі - Ablu, Feillyne, Jan-Hendrik Peters, Manuel A. Fernandez Montecelo, miffe"
+
+#~ msgid "Special Thanks - Bart Kelsey and the community at OpenGameArt, for giving constant feedback and testing. Thorbjørn Lindeijer, Stefan Beller, and Ranie Jade Ramiso for Tiled and the Flare map exporter."
+#~ msgstr "Окрема вдячність - Bart Kelsey та спільноті OpenGameArt, за постійні відгуки та тестування. Thorbjørn Lindeijer, Stefan Beller та Ranie Jade Ramiso за Tiled і експортер карт Flare."
+
+#~ msgid "Flare, the..."
+#~ msgstr "Flare"
+
+#~ msgid "Free Libre Action Roleplaying Engine"
+#~ msgstr "Вільний двигун рольових ігор"

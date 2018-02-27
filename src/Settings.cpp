@@ -967,6 +967,7 @@ void loadMobileDefaults() {
 		ENABLE_JOYSTICK = false;
 		HARDWARE_CURSOR = true;
 		TOUCHSCREEN = true;
+		FULLSCREEN = true;
 	}
 }
 

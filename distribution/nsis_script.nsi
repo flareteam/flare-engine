@@ -108,6 +108,9 @@ Section "Flare engine" SecEngine
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Flare" "NoRepair" 1
   WriteUninstaller "uninstall.exe"
 
+  ; Create the user mods directory so we can link to it in the start menu
+  CreateDirectory "$APPDATA\flare\userdata\mods"
+
 SectionEnd
 
 Section "Flare: Empyrean Campaign" SecGame
@@ -133,6 +136,7 @@ Section "Start Menu Shortcuts"
   CreateDirectory "$SMPROGRAMS\Flare"
   CreateShortcut "$SMPROGRAMS\Flare\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
   CreateShortcut "$SMPROGRAMS\Flare\Flare.lnk" "$INSTDIR\flare.exe" "" "$INSTDIR\flare.exe" 0
+  CreateShortcut "$SMPROGRAMS\Flare\Flare Mods.lnk" "$APPDATA\flare\userdata\mods" "" "$APPDATA\flare\userdata\mods" 0
 SectionEnd
 
 ;--------------------------------

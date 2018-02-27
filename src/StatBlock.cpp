@@ -853,20 +853,19 @@ void StatBlock::logic() {
 	}
 
 	// check for bleeding to death
-	if (hp <= 0 && !hero && cur_state != ENEMY_DEAD && cur_state != ENEMY_CRITDEAD) {
-		for (size_t i = 0; i < effects.effect_list.size(); ++i) {
-			if (effects.effect_list[i].type == EFFECT_DAMAGE || effects.effect_list[i].type == EFFECT_DAMAGE_PERCENT) {
+	for (size_t i = 0; i < effects.effect_list.size(); ++i) {
+		if (effects.effect_list[i].type == EFFECT_DAMAGE || effects.effect_list[i].type == EFFECT_DAMAGE_PERCENT) {
+			if (hp <= 0 && !hero && cur_state != ENEMY_DEAD && cur_state != ENEMY_CRITDEAD) {
 				bleed_source_type = effects.effect_list[i].source_type;
-				break;
+				effects.triggered_death = true;
+				cur_state = ENEMY_DEAD;
 			}
+			else if (hp <= 0 && hero && cur_state != AVATAR_DEAD) {
+				effects.triggered_death = true;
+				cur_state = AVATAR_DEAD;
+			}
+			break;
 		}
-
-		effects.triggered_death = true;
-		cur_state = ENEMY_DEAD;
-	}
-	else if (hp <= 0 && hero && cur_state != AVATAR_DEAD) {
-		effects.triggered_death = true;
-		cur_state = AVATAR_DEAD;
 	}
 }
 

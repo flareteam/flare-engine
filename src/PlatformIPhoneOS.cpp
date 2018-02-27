@@ -37,6 +37,7 @@ void PlatformInit() {
 	platform_options.has_exit_button = false;
 	platform_options.is_mobile_device = true;
 	platform_options.force_hardware_cursor = true;
+	platform_options.has_lock_file = false;
 	platform_options.config_menu_type = CONFIG_MENU_TYPE_BASE;
 	platform_options.default_renderer = "sdl_hardware";
 }
