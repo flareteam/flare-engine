@@ -89,12 +89,12 @@ static void init(const CmdLineArgs& cmd_line_args) {
 
 	if (!mods->haveFallbackMod()) {
 		logError("main: Could not find the default mod in the following locations:");
-		if (dirExists(PATH_DATA + "mods")) logError("%smods/", PATH_DATA.c_str());
 		if (dirExists(PATH_USER + "mods")) logError("%smods/", PATH_USER.c_str());
+		if (dirExists(PATH_DATA + "mods")) logError("%smods/", PATH_DATA.c_str());
 		logError("A copy of the default mod is in the \"mods\" directory of the flare-engine repo.");
 		logError("The repo is located at: https://github.com/clintbellanger/flare-engine");
 		logError("Try again after copying the default mod to one of the above directories. Exiting.");
-		logErrorDialog("main: Could not find the 'default' mod in the following locations:\n\n%smods/\n%smods/", PATH_DATA.c_str(), PATH_USER.c_str());
+		logErrorDialog("main: Could not find the 'default' mod in the following locations:\n\n%smods/\n%smods/", PATH_USER.c_str(), PATH_DATA.c_str());
 		Exit(1);
 	}
 

@@ -75,68 +75,71 @@ int AndroidIsExitEvent(void* userdata, SDL_Event* event) {
 }
 
 void PlatformSetPaths() {
+	/*
+	 * PATH_CONF
+	 * 1. INTERNAL_SD_CARD/Flare
+	 * 2. EXTERNAL_SD_CARD/Flare
+	 * 3. App internal storage (/data/...)
+	 *
+	 * PATH_DATA
+	 * 1. App external storage (usually internal sd card)
+	 * 2. INTERNAL_SD_CARD/Flare
+	 *
+	 * PATH_USER
+	 * 1. INTERNAL_SD_CARD/Flare
+	 * 2. EXTERNAL_SD_CARD/Flare
+	 */
+	std::vector<std::string> internalSDList;
+	internalSDList.push_back("/sdcard");
+	internalSDList.push_back("/mnt/sdcard");
+	internalSDList.push_back("/storage/sdcard0");
+	internalSDList.push_back("/storage/emulated/0");
+	internalSDList.push_back("/storage/emulated/legacy");
+	internalSDList.push_back("/mnt/m_internal_storage");
+
 	std::vector<std::string> externalSDList;
-	externalSDList.push_back("/mnt/extSdCard/Android");
-	externalSDList.push_back("/storage/extSdCard/Android");
-	externalSDList.push_back("/mnt/m_external_sd/Android");
+	externalSDList.push_back("/mnt/extSdCard");
+	externalSDList.push_back("/storage/extSdCard");
+	externalSDList.push_back("/mnt/m_external_sd");
 
 	PATH_CONF = std::string(SDL_AndroidGetInternalStoragePath()) + "/config";
 
 	const std::string package_name = AndroidGetPackageName();
-	const std::string user_folder = "data/" + package_name + "/files";
+	const std::string user_folder = "Android/data/" + package_name + "/files";
 
-	if (SDL_AndroidGetExternalStorageState() != 0)
-	{
-		PATH_USER = std::string(SDL_AndroidGetExternalStoragePath());
-	}
-	// NOTE: Next condition shouldn't be needed, but in theory SDL_AndroidGetExternalStoragePath() can fail.
-	else
-	{
-		std::vector<std::string> internalSDList;
-		internalSDList.push_back("/sdcard/Android");
-		internalSDList.push_back("/mnt/sdcard/Android");
-		internalSDList.push_back("/storage/sdcard0/Android");
-		internalSDList.push_back("/storage/emulated/0/Android");
-		internalSDList.push_back("/storage/emulated/legacy/Android");
-		internalSDList.push_back("/mnt/m_internal_storage/Android");
-
-		for (int i = 0; i < internalSDList.size(); i++)
-		{
-			if (dirExists(internalSDList[i]))
-			{
-				PATH_USER = internalSDList[i] + "/" + user_folder;
-				break;
-			}
-		}
-	}
-	if (PATH_USER.empty())
-	{
-		logError("Settings: Android external storage unavailable: %s", SDL_GetError());
+	if (SDL_AndroidGetExternalStorageState() != 0) {
+		PATH_DATA = std::string(SDL_AndroidGetExternalStoragePath());
 	}
 
-	for (int i = 0; i < externalSDList.size(); i++)
-	{
-		if (dirExists(externalSDList[i]))
-		{
-			PATH_DATA = externalSDList[i] + "/" + user_folder;
-			if (!dirExists(PATH_DATA))
-			{
-				createDir(externalSDList[i] + "/data" + package_name);
-				createDir(externalSDList[i] + "/data" + package_name + "/files");
-			}
+	for (int i = 0; i < internalSDList.size(); i++) {
+		if (dirExists(internalSDList[i])) {
+			PATH_USER = internalSDList[i] + "/Flare";
+			PATH_CONF = PATH_USER + "/config";
+
+			if (PATH_DATA.empty())
+				PATH_DATA = internalSDList[i] + "/" + user_folder;
+
 			break;
 		}
 	}
 
-	if (PATH_DATA.empty())
-	{
-		PATH_DATA = PATH_USER + "/userdata/mods";
+	if (PATH_DATA.empty()) {
+		logError("Settings: Android external storage unavailable: %s", SDL_GetError());
 	}
 
-	PATH_USER += "/userdata";
+	if (PATH_USER.empty() || !dirExists(PATH_USER)) {
+		for (int i = 0; i < externalSDList.size(); i++) {
+			if (dirExists(externalSDList[i])) {
+				PATH_USER = externalSDList[i] + "/Flare";
+				PATH_CONF = PATH_USER + "/config";
 
-	createDir(PATH_CONF);
+				break;
+			}
+		}
+	}
+
 	createDir(PATH_USER);
+	createDir(PATH_CONF);
 	createDir(PATH_USER + "/mods");
 	createDir(PATH_USER + "/saves");
 
