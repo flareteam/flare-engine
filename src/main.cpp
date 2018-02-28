@@ -408,8 +408,26 @@ int main(int argc, char *argv[]) {
 		}
 		else if (arg == "data-path") {
 			CUSTOM_PATH_DATA = parseArgValue(arg_full);
+
+			// Expand leading tilde as home directory
+			if (CUSTOM_PATH_DATA == "~") {
+				CUSTOM_PATH_DATA = std::string(getenv("HOME")) + "/";
+			}
+			else if (!CUSTOM_PATH_DATA.empty() && CUSTOM_PATH_DATA.substr(0,2) == "~/") {
+				std::string path_end = CUSTOM_PATH_DATA.substr(2);
+				CUSTOM_PATH_DATA = std::string(getenv("HOME")) + "/" + path_end;
+			}
+
 			if (!CUSTOM_PATH_DATA.empty() && CUSTOM_PATH_DATA.at(CUSTOM_PATH_DATA.length()-1) != '/')
 				CUSTOM_PATH_DATA += "/";
+
+			if (dirExists(CUSTOM_PATH_DATA)) {
+				logInfo("Custom data path: \"%s\"", CUSTOM_PATH_DATA.c_str());
+			}
+			else {
+				logError("Invalid custom data path: \"%s\"", CUSTOM_PATH_DATA.c_str());
+				CUSTOM_PATH_DATA.clear();
+			}
 		}
 		else if (arg == "version") {
 			printf("%s\n", getVersionString().c_str());
