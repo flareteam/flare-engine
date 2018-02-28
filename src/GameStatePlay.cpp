@@ -1091,15 +1091,16 @@ GameStatePlay::~GameStatePlay() {
 	delete enemyg;
 
 	// NULL-ify shared game resources
-	menu_powers = NULL;
-	loot = NULL;
-	enemyg = NULL;
-	powers = NULL;
-	mapr = NULL;
-	enemym = NULL;
-	camp = NULL;
-	items = NULL;
 	pc = NULL;
 	menu = NULL;
+	camp = NULL;
+	enemyg = NULL;
+	enemym = NULL;
+	items = NULL;
+	loot = NULL;
+	mapr = NULL;
+	menu_act = NULL;
+	menu_powers = NULL;
+	powers = NULL;
 }
 

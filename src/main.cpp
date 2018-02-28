@@ -251,8 +251,9 @@ static void mainLoop () {
 			SDL_PumpEvents();
 			inpt->handle();
 
-			// Skip game logic when minimized on Mobile device
-			if (inpt->window_minimized && !inpt->window_restored)
+			// Skip game logic when minimized
+			// *except* if the player closes the window when minimized. We then continue with the logic to properly exit
+			if (inpt->window_minimized && !inpt->window_restored && !inpt->done)
 				break;
 
 			gswitch->logic();
@@ -265,8 +266,7 @@ static void mainLoop () {
 			logic_ticks += static_cast<uint64_t>(seconds_per_frame * static_cast<float>(SDL_GetPerformanceFrequency()));
 			loops++;
 
-			// Android and IOS only
-			// When the app is minimized on Mobile device, no logic gets processed.
+			// When the app is minimized, no logic gets processed.
 			// As a result, the delta time when restoring the app is large, so the game will skip frames and appear to be running fast.
 			// To counter this, we reset our delta time here when restoring the app
 			if (inpt->window_minimized && inpt->window_restored) {
@@ -282,28 +282,30 @@ static void mainLoop () {
 			}
 		}
 
-		render_device->blankScreen();
-		gswitch->render();
+		if (!inpt->window_minimized) {
+			render_device->blankScreen();
+			gswitch->render();
 
-		// display the FPS counter
-		if (last_fps != -1) {
-		    gswitch->showFPS(last_fps);
-		}
+			// display the FPS counter
+			if (last_fps != -1) {
+				gswitch->showFPS(last_fps);
+			}
 
-		render_device->commitFrame();
+			render_device->commitFrame();
 
-		// calculate the FPS
-		// if the frame completed quickly, we estimate the delay here
-		float fps_delay;
-		if (getSecondsElapsed(prev_ticks, SDL_GetPerformanceCounter()) < seconds_per_frame) {
-			fps_delay = seconds_per_frame;
-		} else {
-			fps_delay = getSecondsElapsed(prev_ticks, SDL_GetPerformanceCounter());
-		}
-		if (fps_delay != 0) {
-			last_fps = (1000.f / fps_delay) / 1000.f;
-		} else {
-			last_fps = -1;
+			// calculate the FPS
+			// if the frame completed quickly, we estimate the delay here
+			float fps_delay;
+			if (getSecondsElapsed(prev_ticks, SDL_GetPerformanceCounter()) < seconds_per_frame) {
+				fps_delay = seconds_per_frame;
+			} else {
+				fps_delay = getSecondsElapsed(prev_ticks, SDL_GetPerformanceCounter());
+			}
+			if (fps_delay != 0) {
+				last_fps = (1000.f / fps_delay) / 1000.f;
+			} else {
+				last_fps = -1;
+			}
 		}
 
 		// delay quick frames

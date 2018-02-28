@@ -24,6 +24,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "CommonIncludes.h"
+#include "MenuManager.h"
 #include "Platform.h"
 #include "SDLInputState.h"
 #include "SaveLoad.h"
@@ -218,19 +219,21 @@ void SDLInputState::handle() {
 				if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
 					resize_ticks = MAX_FRAMES_PER_SEC/4;
 				}
-				else if (platform_options.is_mobile_device) {
-					// detect restoring hidden Mobile app to bypass frameskip
-					if (event.window.event == SDL_WINDOWEVENT_MINIMIZED) {
+				else if (event.window.event == SDL_WINDOWEVENT_MINIMIZED) {
+					if (platform_options.is_mobile_device) {
+						// on mobile, we the user could kill the app, so save the game beforehand
 						logInfo("InputState: Minimizing app, saving...");
 						save_load->saveGame();
-						logInfo("Game saved");
-						window_minimized = true;
-						snd->pauseAll();
+						logInfo("InputState: Game saved");
 					}
-					else if (event.window.event == SDL_WINDOWEVENT_RESTORED) {
-						window_restored = true;
-						snd->resumeAll();
-					}
+					window_minimized = true;
+					snd->pauseAll();
+					if (menu)
+						menu->showExitMenu();
+				}
+				else if (event.window.event == SDL_WINDOWEVENT_RESTORED) {
+					window_restored = true;
+					snd->resumeAll();
 				}
 				break;
 

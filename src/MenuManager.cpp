@@ -1443,6 +1443,14 @@ bool MenuManager::isDragging() {
 bool MenuManager::isNPCMenuVisible() {
 	return npc->visible || talker->visible || vendor->visible;
 }
+
+void MenuManager::showExitMenu() {
+	pause = true;
+	closeAll();
+	if (exit)
+		exit->visible = true;
+}
+
 MenuManager::~MenuManager() {
 
 	tip_buf.clear();

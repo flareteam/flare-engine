@@ -142,6 +142,7 @@ public:
 		return done;
 	}
 	bool isNPCMenuVisible();
+	void showExitMenu();
 };
 
 #endif
