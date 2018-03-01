@@ -413,7 +413,7 @@ int main(int argc, char *argv[]) {
 			if (CUSTOM_PATH_DATA == "~") {
 				CUSTOM_PATH_DATA = std::string(getenv("HOME")) + "/";
 			}
-			else if (!CUSTOM_PATH_DATA.empty() && CUSTOM_PATH_DATA.substr(0,2) == "~/") {
+			else if (CUSTOM_PATH_DATA.size() >= 2 && CUSTOM_PATH_DATA.substr(0,2) == "~/") {
 				std::string path_end = CUSTOM_PATH_DATA.substr(2);
 				CUSTOM_PATH_DATA = std::string(getenv("HOME")) + "/" + path_end;
 			}
