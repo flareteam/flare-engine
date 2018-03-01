@@ -889,10 +889,10 @@ bool StatBlock::canUsePower(const Power &power, int powerid) const {
 			&& !power.meta_power
 			&& !effects.stun
 			&& (power.sacrifice || hp > power.requires_hp)
-			&& (!power.requires_max_hp || hp == current[STAT_HP_MAX])
-			&& (!power.requires_not_max_hp || hp < current[STAT_HP_MAX])
-			&& (!power.requires_max_mp || mp == current[STAT_MP_MAX])
-			&& (!power.requires_not_max_mp || mp < current[STAT_MP_MAX])
+			&& (power.requires_max_hp == -1 || (power.requires_max_hp >= 0 && hp >= (current[STAT_HP_MAX] * power.requires_max_hp) / 100))
+			&& (power.requires_not_max_hp == -1 || (power.requires_not_max_hp >= 0 && hp < (current[STAT_HP_MAX] * power.requires_not_max_hp) / 100))
+			&& (power.requires_max_mp  == -1 || (power.requires_max_mp >= 0 && mp >= (current[STAT_MP_MAX] * power.requires_max_mp) / 100))
+			&& (power.requires_not_max_mp == -1 || (power.requires_not_max_mp >= 0 && mp < (current[STAT_MP_MAX]) * power.requires_not_max_mp / 100))
 			&& (!power.requires_corpse || (target_corpse && target_corpse->corpse_ticks > 0) || (target_nearest_corpse && powers->checkNearestTargeting(power, this, true) && target_nearest_corpse->corpse_ticks > 0))
 			&& (checkRequiredSpawns(power.requires_spawns))
 			&& (menu_powers && menu_powers->meetsUsageStats(powerid))

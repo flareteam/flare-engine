@@ -149,10 +149,10 @@ public:
 	bool requires_targeting; // power only makes sense when using click-to-target
 	int requires_spawns;
 	int cooldown; // milliseconds before you can use the power again
-	bool requires_max_hp;
-	bool requires_max_mp;
-	bool requires_not_max_hp;
-	bool requires_not_max_mp;
+	int requires_max_hp;
+	int requires_max_mp;
+	int requires_not_max_hp;
+	int requires_not_max_mp;
 
 	// animation info
 	std::string animation_name;
@@ -299,10 +299,10 @@ public:
 		, requires_targeting(false)
 		, requires_spawns(0)
 		, cooldown(0)
-		, requires_max_hp(false)
-		, requires_max_mp(false)
-		, requires_not_max_hp(false)
-		, requires_not_max_mp(false)
+		, requires_max_hp(-1)
+		, requires_max_mp(-1)
+		, requires_not_max_hp(-1)
+		, requires_not_max_mp(-1)
 
 		, animation_name("")
 		, sfx_index(-1)
