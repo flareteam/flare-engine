@@ -20,16 +20,21 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 #include "Avatar.h"
+#include "Platform.h"
 #include "Settings.h"
 #include "SharedResources.h"
 #include "Utils.h"
 #include "UtilsFileSystem.h"
 #include "UtilsMath.h"
+#include "UtilsParsing.h"
 
 #include <cmath>
 #include <stdarg.h>
 #include <ctype.h>
 #include <iomanip>
+#include <iostream>
+
+int LOCK_INDEX = 0;
 
 bool LOG_FILE_INIT = false;
 bool LOG_FILE_CREATED = false;
@@ -357,6 +362,7 @@ void createLogFile() {
 
 void Exit(int code) {
 	SDL_Quit();
+	lockFileWrite(-1);
 	exit(code);
 }
 void createSaveDir(int slot) {
@@ -556,3 +562,92 @@ std::string getTimeString(const unsigned long time, bool show_seconds) {
 
 	return ss.str();
 }
+
+void lockFileRead() {
+	if (!platform_options.has_lock_file)
+		return;
+
+	std::string lock_file_path = PATH_CONF + "flare_lock";
+
+	std::ifstream infile;
+	infile.open(lock_file_path, std::ios::in);
+
+	while (infile.good()) {
+		std::string line = getLine(infile);
+
+		if (line.length() == 0 || line.at(0) == '#')
+			continue;
+
+		LOCK_INDEX = toInt(line);
+	}
+
+	infile.close();
+	infile.clear();
+
+	if (LOCK_INDEX < 0)
+		LOCK_INDEX = 0;
+}
+
+void lockFileWrite(int increment) {
+	if (!platform_options.has_lock_file)
+		return;
+
+	std::string lock_file_path = PATH_CONF + "flare_lock";
+
+	if (increment < 0) {
+		if (LOCK_INDEX == 0)
+			return;
+
+		// refresh LOCK_INDEX in case any other instances were closed while this instance was running
+		lockFileRead();
+	}
+
+	std::ofstream outfile;
+	outfile.open(lock_file_path.c_str(), std::ios::out);
+	if (outfile.is_open()) {
+		LOCK_INDEX += increment;
+		outfile << "# Flare lock file. Counts instances of Flare" << std::endl;
+		outfile << LOCK_INDEX << std::endl;
+		outfile.close();
+		outfile.clear();
+	}
+}
+
+void lockFileCheck() {
+	if (!platform_options.has_lock_file)
+		return;
+
+	std::string lock_file_path = PATH_CONF + "flare_lock";
+	LOCK_INDEX = 0;
+
+	lockFileRead();
+
+	if (LOCK_INDEX > 0){
+		const SDL_MessageBoxButtonData buttons[] = {
+			{ SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT|SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Quit" },
+			{ 0, 1, "Continue" },
+			{ 0, 2, "Reset Lock File" },
+		};
+		const SDL_MessageBoxData messageboxdata = {
+			SDL_MESSAGEBOX_INFORMATION,
+			NULL,
+			"Flare",
+			"Flare appears to already be running.\nYou may either 'Quit' Flare (recommended) or 'Continue' to launch a new instance.\n\nIf Flare is NOT already running, you can use 'Reset Lock File' to fix it.",
+			SDL_arraysize(buttons),
+			buttons,
+			NULL
+		};
+		int buttonid = 0;
+		SDL_ShowMessageBox(&messageboxdata, &buttonid);
+		if (buttonid == 0) {
+			lockFileWrite(1);
+			Exit(1);
+		}
+		else if (buttonid == 2) {
+			LOCK_INDEX = 0;
+		}
+	}
+
+	lockFileWrite(1);
+}
+

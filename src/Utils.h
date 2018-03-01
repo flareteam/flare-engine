@@ -250,4 +250,8 @@ int rotateDirection(int direction, int val);
 
 std::string getTimeString(const unsigned long time, bool show_seconds = false);
 
+void lockFileRead();
+void lockFileWrite(int increment);
+void lockFileCheck();
+
 #endif
