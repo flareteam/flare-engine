@@ -570,7 +570,7 @@ void lockFileRead() {
 	std::string lock_file_path = PATH_CONF + "flare_lock";
 
 	std::ifstream infile;
-	infile.open(lock_file_path, std::ios::in);
+	infile.open(lock_file_path.c_str(), std::ios::in);
 
 	while (infile.good()) {
 		std::string line = getLine(infile);
@@ -633,7 +633,7 @@ void lockFileCheck() {
 			NULL,
 			"Flare",
 			"Flare appears to already be running.\nYou may either 'Quit' Flare (recommended) or 'Continue' to launch a new instance.\n\nIf Flare is NOT already running, you can use 'Reset Lock File' to fix it.",
-			SDL_arraysize(buttons),
+			static_cast<int>(SDL_arraysize(buttons)),
 			buttons,
 			NULL
 		};
