@@ -290,6 +290,41 @@ void PowerManager::loadPowers() {
 		else if (infile.key == "cooldown")
 			// @ATTR power.cooldown|duration|Specify the duration for cooldown of the power in 'ms' or 's'.
 			powers[input_id].cooldown = parse_duration(infile.val);
+		else if (infile.key == "requires_hpmp_state") {
+			// @ATTR power.requires_hpmp_state|["hp", "mp"], ["full", "not_full", "ignore"] : Stat, Current state|Power can only be used when HP/MP matches the specified state
+			std::string stat = popFirstString(infile.val);
+			std::string cur_state = popFirstString(infile.val);
+
+			bool is_req = false;
+			bool is_full = false;
+			if (cur_state == "full") {
+				is_req = true;
+				is_full = true;
+			}
+			else if (cur_state == "not_full") {
+				is_req = true;
+				is_full = false;
+			}
+			else if (cur_state == "ignore") {
+				is_req = false;
+			}
+			else {
+				is_req = false;
+				infile.error("PowerManager: '%s' is not a valid hp/mp state. Use 'full', 'not_full', or 'ignore'.", cur_state.c_str());
+			}
+
+			if (stat == "hp") {
+				powers[input_id].requires_max_hp = is_req && is_full;
+				powers[input_id].requires_not_max_hp = is_req && !is_full;
+			}
+			else if (stat == "mp") {
+				powers[input_id].requires_max_mp = is_req && is_full;
+				powers[input_id].requires_not_max_mp = is_req && !is_full;
+			}
+			else {
+				infile.error("PowerManager: Please specify 'hp' or 'mp'.");
+			}
+		}
 		// animation info
 		else if (infile.key == "animation") {
 			// @ATTR power.animation|filename|The filename of the power animation.
