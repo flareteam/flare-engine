@@ -557,18 +557,21 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 						power_cast_ticks[i] = 0;
 					}
 
-					// raise the death penalty flag.  Another module will read this and reset.
-					stats.death_penalty = true;
-
 					// close menus in GameStatePlay
 					close_menus = true;
 
 					playSound(ENTITY_SOUND_DIE);
 
 					if (stats.permadeath) {
+						// ignore death penalty on permadeath, as the player's save is getting deleted anyway
+						stats.death_penalty = false;
+
 						logMsg(substituteVarsInString(msg->get("You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."), this), true);
 					}
 					else {
+						// raise the death penalty flag.  This is handled in MenuInventory
+						stats.death_penalty = true;
+
 						logMsg(substituteVarsInString(msg->get("You are defeated. ${INPUT_CONTINUE} to continue."), this), true);
 					}
 
