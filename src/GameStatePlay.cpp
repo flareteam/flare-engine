@@ -334,9 +334,7 @@ void GameStatePlay::checkTeleport() {
 			}
 
 			// return to title (permadeath) OR auto-save
-			if (pc->stats.permadeath && pc->stats.corpse) {
-				removeSaveDir(save_load->getGameSlot());
-
+			if (pc->stats.permadeath && pc->stats.cur_state == AVATAR_DEAD) {
 				snd->stopMusic();
 				showLoading();
 				setRequestedGameState(new GameStateTitle());
@@ -377,10 +375,11 @@ void GameStatePlay::checkTeleport() {
  * Also check closing the game window entirely.
  */
 void GameStatePlay::checkCancel() {
+	bool save_on_exit = SAVE_ONEXIT && !(pc->stats.permadeath && pc->stats.cur_state == AVATAR_DEAD);
 
 	// if user has clicked exit game from exit menu
 	if (menu->requestingExit()) {
-		if (SAVE_ONEXIT)
+		if (save_on_exit)
 			save_load->saveGame();
 
 		// audio levels can be changed in the pause menu, so update our settings file
@@ -395,7 +394,7 @@ void GameStatePlay::checkCancel() {
 
 	// if user closes the window
 	if (inpt->done) {
-		if (SAVE_ONEXIT)
+		if (save_on_exit)
 			save_load->saveGame();
 
 		snd->stopMusic();

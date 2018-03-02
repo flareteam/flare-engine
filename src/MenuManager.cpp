@@ -438,7 +438,7 @@ void MenuManager::logic() {
 	}
 
 	// exit menu toggle
-	if ((!key_lock && !mouse_dragging && !keyboard_dragging) && !(stats->corpse && stats->permadeath)) {
+	if (!key_lock && !mouse_dragging && !keyboard_dragging) {
 		if (inpt->pressing[CANCEL] && !inpt->lock[CANCEL]) {
 			inpt->lock[CANCEL] = true;
 			key_lock = true;

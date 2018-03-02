@@ -78,10 +78,10 @@ MenuExit::MenuExit() : Menu() {
 	exitClicked = false;
 	reload_music = false;
 
-	if (SAVE_ONEXIT)
-		buttonExit->label = msg->get("Save & Exit");
-	else
-		buttonExit->label = msg->get("Exit");
+	exit_msg1 = msg->get("Save & Exit");
+	exit_msg2 = msg->get("Exit");
+
+	buttonExit->label = SAVE_ONEXIT ? exit_msg1 : exit_msg2;
 
 	buttonClose->label = msg->get("Continue");
 
@@ -181,6 +181,13 @@ void MenuExit::placeOptionWidgets(WidgetLabel *lb, Widget *w, int x1, int y1, in
 		lb->set(str);
 		lb->setJustify(JUSTIFY_CENTER);
 		option_labels.push_back(lb);
+	}
+}
+
+void MenuExit::disableSave() {
+	if (buttonExit) {
+		buttonExit->label = exit_msg2;
+		buttonExit->refresh();
 	}
 }
 

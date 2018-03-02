@@ -38,6 +38,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
 #include "SharedGameResources.h"
+#include "MenuManager.h"
+#include "MenuExit.h"
 
 Avatar::Avatar()
 	: Entity()
@@ -563,8 +565,10 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 					playSound(ENTITY_SOUND_DIE);
 
 					if (stats.permadeath) {
-						// ignore death penalty on permadeath, as the player's save is getting deleted anyway
+						// ignore death penalty on permadeath and instead delete the player's saved game
 						stats.death_penalty = false;
+						removeSaveDir(save_load->getGameSlot());
+						menu->exit->disableSave();
 
 						logMsg(substituteVarsInString(msg->get("You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."), this), true);
 					}
@@ -585,7 +589,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 				}
 
 				// allow respawn with Accept if not permadeath
-				if (inpt->pressing[ACCEPT] || (TOUCHSCREEN && inpt->pressing[MAIN1] && !inpt->lock[MAIN1])) {
+				if ((inpt->pressing[ACCEPT] || (TOUCHSCREEN && inpt->pressing[MAIN1] && !inpt->lock[MAIN1])) && stats.corpse) {
 					if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
 					if (TOUCHSCREEN && inpt->pressing[MAIN1]) inpt->lock[MAIN1] = true;
 					mapr->teleportation = true;

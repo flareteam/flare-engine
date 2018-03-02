@@ -49,6 +49,9 @@ protected:
 	std::vector<WidgetLabel*> option_labels;
 	std::vector<Widget*> option_widgets;
 
+	std::string exit_msg1;
+	std::string exit_msg2;
+
 public:
 	MenuExit();
 	~MenuExit();
@@ -60,6 +63,8 @@ public:
 	bool isExitRequested() {
 		return exitClicked;
 	}
+
+	void disableSave();
 
 	bool reload_music;
 };
