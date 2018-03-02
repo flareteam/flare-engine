@@ -97,7 +97,7 @@ In addition, there is a `mods` directory in this location, which can be used to 
 | `--version`       | Prints the release version.
 | `--data-path`     | Specifies an exact path to look for mod data.
 | `--debug-event`   | Prints verbose hardware input information.
-| `--renderer`      | Specifies the rendering backend to use. The default is 'sdl'. Also available is 'sdl\_hardware', which is a GPU-based renderer.
+| `--renderer`      | Specifies the rendering backend to use. The default is 'sdl\_hardware'. Also available is 'sdl', which is a software-based renderer.
 | `--no-audio`      | Disables sound effects and music.
 | `--mods`          | Starts the game with only these mods enabled.
 | `--load-slot`     | Loads a save slot by numerical index.
