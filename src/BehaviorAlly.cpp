@@ -35,6 +35,9 @@ BehaviorAlly::~BehaviorAlly() {
 }
 
 void BehaviorAlly::findTarget() {
+	// dying enemies can't target anything
+	if (e->stats.cur_state == ENEMY_DEAD || e->stats.cur_state == ENEMY_CRITDEAD) return;
+
 	// stunned minions can't act
 	if (e->stats.effects.stun) return;
 

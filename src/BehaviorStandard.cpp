@@ -107,6 +107,9 @@ void BehaviorStandard::doUpkeep() {
  * Locate the player and set various targeting info
  */
 void BehaviorStandard::findTarget() {
+	// dying enemies can't target anything
+	if (e->stats.cur_state == ENEMY_DEAD || e->stats.cur_state == ENEMY_CRITDEAD) return;
+
 	float stealth_threat_range = (e->stats.threat_range * (100 - static_cast<float>(e->stats.hero_stealth))) / 100;
 
 	// stunned enemies can't act
