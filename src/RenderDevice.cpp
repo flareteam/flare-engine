@@ -303,15 +303,14 @@ void RenderDevice::windowResizeInternal() {
 
 	getWindowSize(&SCREEN_W, &SCREEN_H);
 
-	if (!VIRTUAL_HEIGHTS.empty()) {
-		// default to the smallest VIRTUAL_HEIGHT
-		VIEW_H = VIRTUAL_HEIGHTS.front();
-	}
+	VIEW_H = SCREEN_H;
 
-	for (size_t i = 0; i < VIRTUAL_HEIGHTS.size(); ++i) {
-		if (SCREEN_H >= VIRTUAL_HEIGHTS[i]) {
-			VIEW_H = VIRTUAL_HEIGHTS[i];
-		}
+	// scale virtual height when outside of VIRTUAL_HEIGHTS range
+	if (!VIRTUAL_HEIGHTS.empty()) {
+		if (SCREEN_H < VIRTUAL_HEIGHTS.front())
+			VIEW_H = VIRTUAL_HEIGHTS.front();
+		else if (SCREEN_H >= VIRTUAL_HEIGHTS.back())
+			VIEW_H = VIRTUAL_HEIGHTS.back();
 	}
 
 	VIEW_H_HALF = VIEW_H / 2;
