@@ -59,7 +59,7 @@ void BehaviorAlly::findTarget() {
 	bool enemies_in_combat = false;
 	//enter combat because enemy is targeting the player or a summon
 	for (unsigned int i=0; i < enemym->enemies.size(); i++) {
-		if(enemym->enemies[i]->stats.in_combat && !enemym->enemies[i]->stats.hero_ally) {
+		if(enemym->enemies[i]->stats.in_combat && !enemym->enemies[i]->stats.hero_ally && enemym->enemies[i]->stats.hp > 0) {
 			Enemy* enemy = enemym->enemies[i];
 
 			//now work out the distance to the enemy and compare it to the distance to the current targer (we want to target the closest enemy)
