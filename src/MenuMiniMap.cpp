@@ -38,7 +38,9 @@ MenuMiniMap::MenuMiniMap()
 	: color_wall(128,128,128,255)
 	, color_obst(64,64,64,255)
 	, color_hero(255,255,255,255)
-	, map_surface(NULL) {
+	, map_surface(NULL)
+{
+	std::string bg_filename;
 
 	createMapSurface();
 
@@ -58,6 +60,10 @@ MenuMiniMap::MenuMiniMap()
 			else if(infile.key == "text_pos") {
 				text_pos = eatLabelInfo(infile.val);
 			}
+			// @ATTR background|filename|Optional background image.
+			else if (infile.key == "background") {
+				bg_filename = infile.val;
+			}
 			else {
 				infile.error("MenuMiniMap: '%s' is not a valid key.", infile.key.c_str());
 			}
@@ -68,6 +74,9 @@ MenuMiniMap::MenuMiniMap()
 	// label for map name
 	label = new WidgetLabel();
 	label->setBasePos(text_pos.x, text_pos.y);
+
+	if (!bg_filename.empty())
+		setBackground(bg_filename);
 
 	align();
 }
@@ -100,6 +109,8 @@ void MenuMiniMap::render() {
 
 void MenuMiniMap::render(const FPoint& hero_pos) {
 	if (!SHOW_HUD) return;
+
+	Menu::render();
 
 	if (!text_pos.hidden) label->render();
 

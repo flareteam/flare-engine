@@ -31,6 +31,7 @@ Engine changes:
 * Add GUI for selecting quantity when shift-clicking on items (Justin Jacobs)
 * Refactor configuration menu code to support alternative platforms (Justin Jacobs)
 * Improved pause menu with volume sliders. (Justin Jacobs)
+* Support adding a background image to the minimap. (Justin Jacobs)
 
 * Don't autopickup items dropped by the player (Justin Jacobs)
 * Allow multiple items to drop at the same time (Justin Jacobs)
