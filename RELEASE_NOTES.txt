@@ -1,3 +1,120 @@
+Flare v1.0 (link soon)
+
+Engine changes:
+
+* Add dependency checking and metadata to mods; remove --game command line flag (Justin Jacobs)
+* Engine and mod version checking. Mods can require specific engine & dependency versions. (Justin Jacobs)
+* Add --mods command line option. (Justin Jacobs)
+* Allow mod files to "append" their contents instead of replacing the target file (Justin Jacobs)
+* Print filename & line number when file parsing errors occur (Justin Jacobs)
+
+* Switch to using SDL 2 (Justin Jacobs)
+* Refactored rendering system to support alternate backends (Henrik Andersson, Igor Paliychuk, Justin Jacobs)
+* Implement automatic frame skipping for slow systems (Justin Jacobs)
+* Refactor animation system to support higher framerates (Justin Jacobs)
+* Change default maximum framerate to 60 FPS (Justin Jacobs)
+* Resizable game window (Justin Jacobs)
+* Scaled rendering that always fills the window (Justin Jacobs)
+* Add --renderer command line flag (Justin Jacobs)
+
+* Fix engine failing to read fast inputs (Andrew Engelbrect)
+* Joystick buttons can be re-mapped (Justin Jacobs)
+* Allow mapping of joystick axes (Justin Jacobs)
+* Support binding all mouse buttons (Justin Jacobs)
+
+* Log console message to file (Justin Jacobs)
+* Warn when trying to run multiple instances of Flare (Justin Jacobs)
+* Add --help and --version command line flags (Justin Jacobs)
+
+* Add developer console and HUD (Justin Jacobs)
+* Add book GUI (Igor Paliychuk)
+* Add GUI for selecting quantity when shift-clicking on items (Justin Jacobs)
+* Refactor configuration menu code to support alternative platforms (Justin Jacobs)
+* Improved pause menu with volume sliders. (Justin Jacobs)
+
+* Don't autopickup items dropped by the player (Justin Jacobs)
+* Allow multiple items to drop at the same time (Justin Jacobs)
+* Missing items due to mod configuration are now marked as "Unknown Item" (Justin Jacobs)
+* Smoother movement around 1x1 tile objects (Justin Jacobs)
+* Map rendering performance improvements (Stefan Beller)
+* Enemies can wander randomly when not in combat (Justin Jacobs)
+* Better support for using targeted powers when right-clicking on action bar icons (Justin Jacobs)
+* Implement action queue, allowing potions to be used while attacking (Justin Jacobs)
+* Added configuration option to always show HP/MP/XP bar text. (Justin Jacobs)
+* Add option to hide loot labels; show them by pressing ALT (Justin Jacobs)
+* Prevent loot labels from overlapping eachother. (Justin Jacobs)
+* Refactor AI power system to support unlimited powers instead of just four (Justin Jacobs)
+* Display bonuses in power tooltips (Justin Jacobs)
+* Allow more than 4 save slots (Justin Jacobs)
+* Enemy minions can now receive party buffs. (Justin Jacobs)
+* Add option to automatically equip items (Justin Jacobs)
+* The last HUD log message is now displayed on top of open menus that might have previously obsurced them. (Justin Jacobs)
+* "Repeater" powers no longer hit the same target multiple times. (Justin Jacobs)
+* Status effect icons now have tooltips to show effect name and duration. (Justin Jacobs)
+* More varied enemy movement patterns with the addition of random fleeing (Justin Jacobs)
+* Add subtitle support. (Justin Jacobs)
+* Usuability improvments to WidgetInput. (Justin Jacobs)
+* Interpolate camera movement during intermap/power teleporting. (Justin Jacobs)
+* Added in-game timer, display time played on load game screen and pause menu. (Justin Jacobs)
+
+* Events can now be run from "script" files. (Justin Jacobs)
+* Add "static" activation type to map events. (Justin Jacobs)
+* Mouse cursor modding support (Justin Jacobs)
+* Add ability to save game through Events (Justin Jacobs)
+* Add Event property to teleport to a random map from a list of maps (Justin Jacobs)
+* Allow equipped items to disable other equipment slots (Justin Jacobs)
+* Add support for loot table files (Justin Jacobs)
+* Randomized item drops and trader inventories via loot tables (Justin Jacobs)
+* Allow powers to spawn loot (Justin Jacobs)
+* Added knockback effect (Justin Jacobs)
+* New stats: Missile Reflect Chance, Damage Reflection (Justin Jacobs)
+* Allow powers to have no effect on targets with different movement types (Justin Jacobs)
+* Added ability for hazards to move relative to the caster (Justin Jacobs)
+* Add Power option to have caster "charge" forward/backward in a straight line (Justin Jacobs)
+* Support miss & "overhit" damage multipliers. (Justin Jacobs)
+* The primary stats (Physical, Mental, etc) can now be defined in a mod file. (Justin Jacobs)
+* Damage types (Melee, Ranged, Mental) can now be defined in a mod file. (Justin Jacobs)
+* Support grouping active effect icons. (DoKel)
+* Add "wall_reflect" option for powers. (Clint Bellanger)
+* Add support for changing attack animation speed. (Justin Jacobs)
+* Add "color_mod", "alpha_mod", and "blend_mode" options to animations. (Justin Jacobs)
+* Add parallax map backgrounds/foregrounds. (Justin Jacobs)
+* Add support for map background color as used in Tiled. (Justin Jacobs)
+* Icons can now be loaded from multiple image files. (Justin Jacobs)
+* Added "movie credits"-style scrolling to cutscenes. (Justin Jacobs)
+* Cutscene improvements: music support and individual scaling of graphics. (Justin Jacobs)
+* Support for background artwork in main menus (Justin Jacobs)
+
+* Add MapSaver API (Igor Paliychuk)
+
+* Several new properties for powers, effects, events, etc. I forgot to list here to support new game content. (Justin Jacobs)
+* Mod syntax improvements; generated wiki page defining mod files (everyone)
+* MANY small bug, crash, and static analysis fixes (everyone)
+
+New Ports:
+
+* Android port (Igor Paliychuk)
+* Emscripten port (Justin Jacobs)
+
+Translation Updates:
+
+* Galician (gl) update (Adrián Chaves Fernández)
+* German (de) update (Janet Hunt)
+* Italian (it) update (Jeffry84)
+* Japanese (jp) update (Paul Wortmann, sujiniku)
+* Norwegian (nb) update (Hans Joachim Desserud)
+* Polish (pl) update (Pawonashi)
+* Portuguese (pt) translation (Phillippe Caetano)
+* Russian (ru) update (Sergey Basalaev)
+* Scottish Gaelic (gd) update (GunChleoc)
+* Swedish (sv) update (Henrik Andersson)
+
+Game changes:
+
+* Entirely new game to replace the alpha demo, the Empyrean Campaign!
+
+
+
 Flare v0.19 http://flarerpg.org/blog/20131203
 
 Engine changes:
@@ -37,6 +154,8 @@ Game Changes:
 * Gold is now a stackable item and can safely be stored in the shared stash
 * Heroic Swing and Greater Channel are now upgrades of starting powers
 * New powers Ember Shot and Thunderstrike
+
+
 
 Flare v0.18 http://flarerpg.org/blog/20130331
 
