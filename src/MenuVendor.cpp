@@ -93,7 +93,6 @@ MenuVendor::MenuVendor(StatBlock *_stats)
 
 	stock[VENDOR_BUY].initGrid(VENDOR_SLOTS, slots_area, slots_cols);
 	stock[VENDOR_SELL].initGrid(VENDOR_SLOTS, slots_area, slots_cols);
-	buyback_stock.init(NPC_VENDOR_MAX_STOCK);
 
 	tablist.add(tabControl);
 	tablist_buy.setPrevTabList(&tablist);
@@ -241,7 +240,7 @@ TooltipData MenuVendor::checkTooltip(const Point& position) {
 void MenuVendor::saveInventory() {
 	for (unsigned i=0; i<VENDOR_SLOTS; i++) {
 		if (npc) npc->stock[i] = stock[VENDOR_BUY][i];
-		buyback_stock[i] = stock[VENDOR_SELL][i];
+		buyback_stock[npc->filename][i] = stock[VENDOR_SELL][i];
 	}
 
 }
@@ -270,9 +269,11 @@ void MenuVendor::setNPC(NPC* _npc) {
 
 	setTab(VENDOR_BUY);
 
+	buyback_stock[npc->filename].init(NPC_VENDOR_MAX_STOCK);
+
 	for (unsigned i=0; i<VENDOR_SLOTS; i++) {
 		stock[VENDOR_BUY][i] = npc->stock[i];
-		stock[VENDOR_SELL][i] = buyback_stock[i];
+		stock[VENDOR_SELL][i] = buyback_stock[npc->filename][i];
 	}
 	sort(VENDOR_BUY);
 	sort(VENDOR_SELL);

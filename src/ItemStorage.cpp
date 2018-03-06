@@ -28,8 +28,19 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <limits.h>
 
+ItemStorage::ItemStorage()
+	: slot_number(0)
+	, storage(NULL)
+{}
+
 void ItemStorage::init(int _slot_number) {
+	if (storage && slot_number == _slot_number)
+		return; // already initialized
+
 	slot_number = _slot_number;
+
+	if (storage)
+		delete storage;
 
 	storage = new ItemStack[slot_number];
 
@@ -293,6 +304,21 @@ void ItemStorage::clean() {
 			storage[i].clear();
 		}
 	}
+}
+
+/**
+ * Returns true if the storage is empty
+ */
+bool ItemStorage::empty() {
+	if (!storage)
+		return true;
+
+	for (int i = 0; i < slot_number; ++i) {
+		if (!storage[i].empty())
+			return false;
+	}
+
+	return true;
 }
 
 ItemStorage::~ItemStorage() {

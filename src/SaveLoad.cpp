@@ -42,6 +42,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuStash.h"
 #include "MenuTalker.h"
 #include "MenuVendor.h"
+#include "NPC.h"
 #include "Platform.h"
 #include "SaveLoad.h"
 #include "Settings.h"
@@ -176,8 +177,15 @@ void SaveLoad::saveGame() {
 
 		// save the vendor buyback
 		if (SAVE_BUYBACK) {
-			outfile << "buyback_item=" << menu->vendor->buyback_stock.getItems() << "\n";
-			outfile << "buyback_quantity=" << menu->vendor->buyback_stock.getQuantities() << "\n";
+			std::map<std::string, ItemStorage>::iterator it;
+
+			for (it = menu->vendor->buyback_stock.begin(); it != menu->vendor->buyback_stock.end(); ++it) {
+				if (it->second.empty())
+					continue;
+
+				outfile << "buyback_item=" << it->first << ";" << it->second.getItems() << "\n";
+				outfile << "buyback_quantity=" << it->first << ";" << it->second.getQuantities() << "\n";
+			}
 		}
 
 		outfile << std::endl;
@@ -337,8 +345,20 @@ void SaveLoad::loadGame() {
 			else if (infile.key == "campaign") camp->setAll(infile.val);
 			else if (infile.key == "time_played") pc->time_played = toUnsignedLong(infile.val);
 			else if (infile.key == "engine_version") save_version = stringToVersion(infile.val);
-			else if (SAVE_BUYBACK && infile.key == "buyback_item") menu->vendor->buyback_stock.setItems(infile.val);
-			else if (SAVE_BUYBACK && infile.key == "buyback_quantity") menu->vendor->buyback_stock.setQuantities(infile.val);
+			else if (SAVE_BUYBACK && infile.key == "buyback_item") {
+				std::string npc_filename = popFirstString(infile.val, ';');
+				if (!npc_filename.empty()) {
+					menu->vendor->buyback_stock[npc_filename].init(NPC_VENDOR_MAX_STOCK);
+					menu->vendor->buyback_stock[npc_filename].setItems(infile.val);
+				}
+			}
+			else if (SAVE_BUYBACK && infile.key == "buyback_quantity") {
+				std::string npc_filename = popFirstString(infile.val, ';');
+				if (!npc_filename.empty()) {
+					menu->vendor->buyback_stock[npc_filename].init(NPC_VENDOR_MAX_STOCK);
+					menu->vendor->buyback_stock[npc_filename].setQuantities(infile.val);
+				}
+			}
 		}
 
 		infile.close();

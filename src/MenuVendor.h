@@ -56,7 +56,7 @@ public:
 	void align();
 
 	NPC *npc;
-	ItemStorage buyback_stock;
+	std::map<std::string, ItemStorage> buyback_stock;
 	MenuItemStorage stock[2]; // items the vendor currently has in stock
 
 	void logic();

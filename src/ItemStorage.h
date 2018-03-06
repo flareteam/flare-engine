@@ -33,8 +33,9 @@ protected:
 	int slot_number;
 
 public:
-	void init(int _slot_number);
+	ItemStorage();
 	~ItemStorage();
+	void init(int _slot_number);
 
 	ItemStack & operator [] (int slot);
 
@@ -49,6 +50,7 @@ public:
 	void sort();
 	void clear();
 	void clean();
+	bool empty();
 
 	bool full(ItemStack stack);
 	int count(int item);
