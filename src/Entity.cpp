@@ -317,10 +317,6 @@ bool Entity::takeHit(Hazard &h) {
 	if (h.walls_block_aoe && !mapr->collider.line_of_movement(stats.pos.x, stats.pos.y, h.pos.x, h.pos.y, MOVEMENT_NORMAL))
 		return false;
 
-	// entity can't be damaged when in hit state, be it animation or cooldown
-	if (stats.cooldown_hit_ticks > 0)
-		return false;
-
 	//if the target is an enemy and they are not already in combat, activate a beacon to draw other enemies into battle
 	if (!stats.in_combat && !stats.hero && !stats.hero_ally) {
 		stats.join_combat = true;
