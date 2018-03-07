@@ -559,8 +559,9 @@ bool Entity::takeHit(Hazard &h) {
 			return true;
 		}
 
-		// play hit sound effect
-		playSound(ENTITY_SOUND_HIT);
+		// play hit sound effect, but only if the hit cooldown is done
+		if (stats.cooldown_hit_ticks == 0)
+			playSound(ENTITY_SOUND_HIT);
 
 		// if this hit caused a debuff, activate an on_debuff power
 		if (!was_debuffed && stats.effects.isDebuffed()) {
