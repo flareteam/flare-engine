@@ -10,40 +10,36 @@ button_cancel=0,0,bottom
 listbox_scrollbar_offset=2
 
 [video]
-fullscreen=240,36,256,32
-hwsurface=240,68,256,64
-vsync=240,100,256,96
-texture_filter=240,132,256,128
-hws_note=288,68
-dbuf_note=288,100
-change_gamma=240,164,256,160
-gamma=240,200,256,192
-test_note=288,164
+fullscreen=568,36,584,32
+hwsurface=568,68,584,64
+vsync=568,100,584,96
+texture_filter=568,132,584,128
+change_gamma=568,164,584,160
+gamma=368,200,384,192
 
 [audio]
-music_volume=240,40,256,32
-sound_volume=240,72,256,64
+music_volume=368,40,384,32
+sound_volume=368,72,384,64
 
 [interface]
-language=64,16,32,32
-combat_text=368,36,384,32
-show_fps=368,68,384,64
-colorblind=368,100,384,96
-hardware_cursor=368,132,384,128
-dev_mode=368,164,384,160
-loot_tooltips=368,196,384,192
-statbar_labels=368,228,384,224
-auto_equip=368,260,384,256
-subtitles=368,292,384,288
+language=104,16,32,32
+combat_text=568,36,584,32
+show_fps=568,68,584,64
+colorblind=568,100,584,96
+hardware_cursor=568,132,584,128
+dev_mode=568,164,584,160
+loot_tooltips=568,196,584,192
+statbar_labels=568,228,584,224
+auto_equip=568,260,584,256
+subtitles=568,292,584,288
 
 [input]
-joystick_device=64,16,32,32
-enable_joystick=368,36,384,32
-mouse_move=368,68,384,64
-mouse_aim=368,100,384,96
-no_mouse=368,132,384,128
-joystick_deadzone=368,164,384,160
-handheld_note=416,132
+joystick_device=104,16,32,32
+enable_joystick=568,36,584,32
+mouse_move=568,68,584,64
+mouse_aim=568,100,584,96
+no_mouse=568,132,584,128
+joystick_deadzone=368,168,384,160
 
 [key_bindings]
 
@@ -89,8 +85,8 @@ developer_menu=120,914,138,910
 secondary_offset=145,0
 
 [mods]
-activemods=416,16,384,32
-inactivemods=88,16,64,32
+activemods=456,16,384,32
+inactivemods=136,16,64,32
 activemods_shiftup=544,128
 activemods_shiftdown=544,160
 activemods_deactivate=224,160

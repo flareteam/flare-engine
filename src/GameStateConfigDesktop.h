@@ -100,9 +100,6 @@ private:
 	WidgetLabel         * change_gamma_lb;
 	WidgetSlider        * gamma_sl;
 	WidgetLabel         * gamma_lb;
-	WidgetLabel         * hws_note_lb;
-	WidgetLabel         * dbuf_note_lb;
-	WidgetLabel         * test_note_lb;
 	WidgetListBox       * joystick_device_lstb;
 	WidgetLabel         * joystick_device_lb;
 	WidgetCheckBox      * enable_joystick_cb;
@@ -115,7 +112,6 @@ private:
 	WidgetLabel         * no_mouse_lb;
 	WidgetSlider        * joystick_deadzone_sl;
 	WidgetLabel         * joystick_deadzone_lb;
-	WidgetLabel         * handheld_note_lb;
 
 	std::vector<Rect> video_modes;
 

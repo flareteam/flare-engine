@@ -31,7 +31,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class WidgetLabel;
 class WidgetScrollBar;
-class WidgetTooltip;
 
 class ListBoxItem {
 public:
@@ -60,7 +59,6 @@ private:
 	std::vector<ListBoxItem> items;
 	std::vector<WidgetLabel> vlabels;
 	std::vector<Rect> rows;
-	WidgetTooltip *tip;
 	WidgetScrollBar *scrollbar;
 	Color color_normal;
 	Color color_disabled;

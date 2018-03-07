@@ -57,9 +57,6 @@ GameStateConfigDesktop::GameStateConfigDesktop(bool _enable_video_tab)
 	, change_gamma_lb(new WidgetLabel())
 	, gamma_sl(new WidgetSlider())
 	, gamma_lb(new WidgetLabel())
-	, hws_note_lb(new WidgetLabel())
-	, dbuf_note_lb(new WidgetLabel())
-	, test_note_lb(new WidgetLabel())
 	, joystick_device_lstb(new WidgetListBox(10))
 	, joystick_device_lb(new WidgetLabel())
 	, enable_joystick_cb(new WidgetCheckBox())
@@ -72,7 +69,6 @@ GameStateConfigDesktop::GameStateConfigDesktop(bool _enable_video_tab)
 	, no_mouse_lb(new WidgetLabel())
 	, joystick_deadzone_sl(new WidgetSlider())
 	, joystick_deadzone_lb(new WidgetLabel())
-	, handheld_note_lb(new WidgetLabel())
 	, input_scrollbox(NULL)
 	, input_confirm(new MenuConfirm(msg->get("Clear"),msg->get("Assign:")))
 	, input_confirm_ticks(0)
@@ -180,6 +176,11 @@ void GameStateConfigDesktop::readConfig() {
 		}
 		infile.close();
 	}
+
+	hwsurface_cb->tooltip = msg->get("Disable for performance");
+	vsync_cb->tooltip = msg->get("Disable for performance");
+	change_gamma_cb->tooltip = msg->get("Experimental");
+	no_mouse_cb->tooltip = msg->get("For handheld devices");
 }
 
 bool GameStateConfigDesktop::parseKeyDesktop(FileParser &infile, int &x1, int &y1, int &x2, int &y2) {
@@ -222,21 +223,6 @@ bool GameStateConfigDesktop::parseKeyDesktop(FileParser &infile, int &x1, int &y
 		// @ATTR gamma|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Gamma" slider relative to the frame.
 		placeLabeledWidget(gamma_lb, gamma_sl, x1, y1, x2, y2, msg->get("Gamma"), JUSTIFY_RIGHT);
 	}
-	else if (infile.key == "hws_note") {
-		// @ATTR hws_note|point|Position of the "Disable for performance" label (next to Hardware surfaces) relative to the frame.
-		hws_note_lb->setBasePos(x1, y1);
-		hws_note_lb->set(msg->get("Disable for performance"));
-	}
-	else if (infile.key == "dbuf_note") {
-		// @ATTR dbuf_note|point|Position of the "Disable for performance" label (next to Double buffering) relative to the frame.
-		dbuf_note_lb->setBasePos(x1, y1);
-		dbuf_note_lb->set(msg->get("Disable for performance"));
-	}
-	else if (infile.key == "test_note") {
-		// @ATTR test_note|point|Position of the "Experimental" label relative to the frame.
-		test_note_lb->setBasePos(x1, y1);
-		test_note_lb->set(msg->get("Experimental"));
-	}
 	else if (infile.key == "enable_joystick") {
 		// @ATTR enable_joystick|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Use joystick" checkbox relative to the frame.
 		placeLabeledWidget(enable_joystick_lb, enable_joystick_cb, x1, y1, x2, y2, msg->get("Use joystick"), JUSTIFY_RIGHT);
@@ -250,6 +236,8 @@ bool GameStateConfigDesktop::parseKeyDesktop(FileParser &infile, int &x1, int &y
 			if (joystick_name != "")
 				joystick_device_lstb->append(joystick_name, joystick_name);
 		}
+
+		joystick_device_lb->setJustify(JUSTIFY_CENTER);
 	}
 	else if (infile.key == "mouse_aim") {
 		// @ATTR mouse_aim|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Mouse aim" checkbox relative to the frame.
@@ -262,11 +250,6 @@ bool GameStateConfigDesktop::parseKeyDesktop(FileParser &infile, int &x1, int &y
 	else if (infile.key == "joystick_deadzone") {
 		// @ATTR joystick_deadzone|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Joystick Deadzone" slider relative to the frame.
 		placeLabeledWidget(joystick_deadzone_lb, joystick_deadzone_sl, x1, y1, x2, y2, msg->get("Joystick Deadzone"), JUSTIFY_RIGHT);
-	}
-	else if (infile.key == "handheld_note") {
-		// @ATTR handheld_note|point|Position of the "For handheld devices" label relative to the frame.
-		handheld_note_lb->setBasePos(x1, y1);
-		handheld_note_lb->set(msg->get("For handheld devices"));
 	}
 	else if (infile.key == "secondary_offset") {
 		// @ATTR secondary_offset|point|Offset of the second (and third) columns of keybinds.
@@ -381,9 +364,6 @@ void GameStateConfigDesktop::addChildWidgetsDesktop() {
 		addChildWidget(change_gamma_lb, VIDEO_TAB);
 		addChildWidget(gamma_sl, VIDEO_TAB);
 		addChildWidget(gamma_lb, VIDEO_TAB);
-		addChildWidget(hws_note_lb, VIDEO_TAB);
-		addChildWidget(dbuf_note_lb, VIDEO_TAB);
-		addChildWidget(test_note_lb, VIDEO_TAB);
 	}
 
 	addChildWidget(mouse_move_cb, INPUT_TAB);
@@ -398,7 +378,6 @@ void GameStateConfigDesktop::addChildWidgetsDesktop() {
 	addChildWidget(joystick_deadzone_lb, INPUT_TAB);
 	addChildWidget(joystick_device_lstb, INPUT_TAB);
 	addChildWidget(joystick_device_lb, INPUT_TAB);
-	addChildWidget(handheld_note_lb, INPUT_TAB);
 
 	for (unsigned int i = 0; i < keybinds_btn.size(); i++) {
 		input_scrollbox->addChildWidget(keybinds_btn[i]);
@@ -756,7 +735,11 @@ void GameStateConfigDesktop::renderDialogs() {
 void GameStateConfigDesktop::renderTooltips(TooltipData& tip_new) {
 	GameStateConfigBase::renderTooltips(tip_new);
 
+	if (active_tab == VIDEO_TAB && tip_new.isEmpty()) tip_new = hwsurface_cb->checkTooltip(inpt->mouse);
+	if (active_tab == VIDEO_TAB && tip_new.isEmpty()) tip_new = vsync_cb->checkTooltip(inpt->mouse);
+	if (active_tab == VIDEO_TAB && tip_new.isEmpty()) tip_new = change_gamma_cb->checkTooltip(inpt->mouse);
 	if (active_tab == INPUT_TAB && tip_new.isEmpty()) tip_new = joystick_device_lstb->checkTooltip(inpt->mouse);
+	if (active_tab == INPUT_TAB && tip_new.isEmpty()) tip_new = no_mouse_cb->checkTooltip(inpt->mouse);
 }
 
 void GameStateConfigDesktop::refreshWidgets() {

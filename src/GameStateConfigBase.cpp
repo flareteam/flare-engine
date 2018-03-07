@@ -243,6 +243,7 @@ bool GameStateConfigBase::parseKey(FileParser &infile, int &x1, int &y1, int &x2
 	else if (infile.key == "language") {
 		// @ATTR language|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Language" list box relative to the frame.
 		placeLabeledWidget(language_lb, language_lstb, x1, y1, x2, y2, msg->get("Language"));
+		language_lb->setJustify(JUSTIFY_CENTER);
 	}
 	else if (infile.key == "combat_text") {
 		// @ATTR combat_text|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Show combat text" checkbox relative to the frame.
@@ -283,10 +284,12 @@ bool GameStateConfigBase::parseKey(FileParser &infile, int &x1, int &y1, int &x2
 	else if (infile.key == "activemods") {
 		// @ATTR activemods|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Active Mods" list box relative to the frame.
 		placeLabeledWidget(activemods_lb, activemods_lstb, x1, y1, x2, y2, msg->get("Active Mods"));
+		activemods_lb->setJustify(JUSTIFY_CENTER);
 	}
 	else if (infile.key == "inactivemods") {
 		// @ATTR inactivemods|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Available Mods" list box relative to the frame.
 		placeLabeledWidget(inactivemods_lb, inactivemods_lstb, x1, y1, x2, y2, msg->get("Available Mods"));
+		inactivemods_lb->setJustify(JUSTIFY_CENTER);
 	}
 	else if (infile.key == "activemods_shiftup") {
 		// @ATTR activemods_shiftup|point|Position of the button to shift mods up in "Active Mods" relative to the frame.

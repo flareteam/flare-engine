@@ -23,10 +23,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "SharedResources.h"
+#include "TooltipData.h"
 #include "WidgetLabel.h"
 #include "WidgetListBox.h"
 #include "WidgetScrollBar.h"
-#include "WidgetTooltip.h"
 
 WidgetListBox::WidgetListBox(int height, const std::string& _fileName)
 	: Widget()
@@ -37,7 +37,6 @@ WidgetListBox::WidgetListBox(int height, const std::string& _fileName)
 	, any_selected(false)
 	, vlabels(std::vector<WidgetLabel>(height,WidgetLabel()))
 	, rows(std::vector<Rect>(height,Rect()))
-	, tip(new WidgetTooltip())
 	, scrollbar(new WidgetScrollBar())
 	, color_normal(font->getColor("widget_normal"))
 	, color_disabled(font->getColor("widget_disabled"))
@@ -515,7 +514,6 @@ void WidgetListBox::sort() {
 
 WidgetListBox::~WidgetListBox() {
 	if (listboxs) delete listboxs;
-	if (tip) delete tip;
 	if (scrollbar) delete scrollbar;
 }
 

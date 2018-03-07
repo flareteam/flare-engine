@@ -25,14 +25,17 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "SharedResources.h"
-#include "WidgetCheckBox.h"
+#include "TooltipData.h"
 #include "Widget.h"
+#include "WidgetCheckBox.h"
 
 WidgetCheckBox::WidgetCheckBox (const std::string &fname)
 	: enabled(true)
+	, tooltip("")
 	, cb(NULL)
 	, checked(false)
-	, pressed(false) {
+	, pressed(false)
+{
 	focusable = true;
 
 	Image *graphics;
@@ -137,5 +140,20 @@ void WidgetCheckBox::render() {
 			render_device->drawRectangle(topLeft, bottomRight, color);
 		}
 	}
+}
+
+/**
+ * If mousing-over an item with a tooltip, return that tooltip data.
+ *
+ * @param mouse The x,y screen coordinates of the mouse cursor
+ */
+TooltipData WidgetCheckBox::checkTooltip(const Point& mouse) {
+	TooltipData _tip;
+
+	if (inpt->usingMouse() && isWithinRect(pos, mouse) && tooltip != "") {
+		_tip.addText(tooltip);
+	}
+
+	return _tip;
 }
 
