@@ -162,8 +162,8 @@ StatBlock::StatBlock()
 	, max_points_per_stat(0)
 	, prev_maxhp(0)
 	, prev_maxmp(0)
-	, pres_hp(0)
-	, pres_mp(0)
+	, prev_hp(0)
+	, prev_mp(0)
 	, summons()
 	, summoner(NULL)
 	, attacking(false)
@@ -642,10 +642,11 @@ void StatBlock::calcBase() {
 void StatBlock::applyEffects() {
 
 	// preserve hp/mp states
-	prev_maxhp = get(STAT_HP_MAX);
-	prev_maxmp = get(STAT_MP_MAX);
-	pres_hp = hp;
-	pres_mp = mp;
+	// max HP and MP can't drop below 1
+	prev_maxhp = std::max(get(STAT_HP_MAX), 1);
+	prev_maxmp = std::max(get(STAT_MP_MAX), 1);
+	prev_hp = hp;
+	prev_mp = mp;
 
 	// calculate primary stats
 	// refresh the character menu if there has been a change
@@ -668,6 +669,10 @@ void StatBlock::applyEffects() {
 
 	current[STAT_HP_MAX] += (current[STAT_HP_MAX] * current[STAT_HP_PERCENT]) / 100;
 	current[STAT_MP_MAX] += (current[STAT_MP_MAX] * current[STAT_MP_PERCENT]) / 100;
+
+	// max HP and MP can't drop below 1
+	current[STAT_HP_MAX] = std::max(get(STAT_HP_MAX), 1);
+	current[STAT_MP_MAX] = std::max(get(STAT_MP_MAX), 1);
 
 	if (hp > get(STAT_HP_MAX)) hp = get(STAT_HP_MAX);
 	if (mp > get(STAT_MP_MAX)) mp = get(STAT_MP_MAX);
@@ -713,11 +718,11 @@ void StatBlock::logic() {
 	// preserve ratio on maxmp and maxhp changes
 	float ratio;
 	if (prev_maxhp != get(STAT_HP_MAX)) {
-		ratio = static_cast<float>(pres_hp) / static_cast<float>(prev_maxhp);
+		ratio = static_cast<float>(prev_hp) / static_cast<float>(prev_maxhp);
 		hp = static_cast<int>(ratio * static_cast<float>(get(STAT_HP_MAX)));
 	}
 	if (prev_maxmp != get(STAT_MP_MAX)) {
-		ratio = static_cast<float>(pres_mp) / static_cast<float>(prev_maxmp);
+		ratio = static_cast<float>(prev_mp) / static_cast<float>(prev_maxmp);
 		mp = static_cast<int>(ratio * static_cast<float>(get(STAT_MP_MAX)));
 	}
 
