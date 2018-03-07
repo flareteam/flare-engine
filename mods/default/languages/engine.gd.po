@@ -24,11 +24,11 @@ msgstr "Meal do naidheachd, ràinig thu leibheil %d!"
 
 #: ../../../src/Avatar.cpp:358
 msgid "You may increase one attribute through the Character Menu."
-msgstr "Faodaidh tu aon bhuadh àrdachadh tro clàr-taice a' charactair."
+msgstr "Faodaidh tu aon bhuadh àrdachadh tro clàr-taice a’ charactair."
 
 #: ../../../src/Avatar.cpp:580
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
-msgstr "Chaidh do ruaig. Crìoch a' gheama! ${INPUT_CONTINUE} gus fàgail gun tiotal."
+msgstr "Chaidh do ruaig. Crìoch a’ gheama! ${INPUT_CONTINUE} gus fàgail gun tiotal."
 
 #: ../../../src/Avatar.cpp:583
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
@@ -36,7 +36,7 @@ msgstr "Chaidh do ruaig. ${INPUT_CONTINUE} gus leantainn air adhart."
 
 #: ../../../src/Avatar.cpp:836
 msgid "Transformation expired. You have been moved back to a safe place."
-msgstr "Dh'fhalbh an ùine air a' chruth-atharrachadh. Chaidh do ghluasad air ais gu ionad sàbhailte."
+msgstr "Dh’fhalbh an ùine air a’ chruth-atharrachadh. Chaidh do ghluasad air ais gu ionad sàbhailte."
 
 #: ../../../src/CampaignManager.cpp:124
 #, c-format
@@ -46,12 +46,12 @@ msgstr "Chaidh %d %s a thoirt air falbh."
 #: ../../../src/CampaignManager.cpp:133
 #, c-format
 msgid "%s removed."
-msgstr "Chaidh %s a thoirt air falbh."
+msgstr "Chaidh %d %s a thoirt air falbh."
 
 #: ../../../src/CampaignManager.cpp:146
 #, c-format
 msgid "You receive %s."
-msgstr "Fhuair thu %s."
+msgstr "Gheibh thu %s."
 
 #: ../../../src/CampaignManager.cpp:148
 #, c-format
@@ -143,7 +143,7 @@ msgstr "Tuilleadain"
 
 #: ../../../src/GameStateConfigBase.cpp:237 ../../../src/MenuExit.cpp:65
 msgid "Music Volume"
-msgstr "Àirde a' chiùil"
+msgstr "Àirde a’ chiùil"
 
 #: ../../../src/GameStateConfigBase.cpp:241 ../../../src/MenuExit.cpp:70
 msgid "Sound Volume"
@@ -187,7 +187,7 @@ msgstr "Uidheamaich nithean gu fèin-obrachail"
 
 #: ../../../src/GameStateConfigBase.cpp:281
 msgid "Subtitles"
-msgstr ""
+msgstr "Fo-thiotalan"
 
 #: ../../../src/GameStateConfigBase.cpp:285
 msgid "Active Mods"
@@ -208,7 +208,7 @@ msgstr "Cuir an comas >>"
 #: ../../../src/GameStateConfigBase.cpp:918
 #, fuzzy
 msgid "Version:"
-msgstr "Feum air tionndadh:"
+msgstr "Tionndadh:"
 
 #: ../../../src/GameStateConfigBase.cpp:923
 #, fuzzy
@@ -218,7 +218,7 @@ msgstr "Geama:"
 #: ../../../src/GameStateConfigBase.cpp:928
 #, fuzzy
 msgid "Engine version:"
-msgstr "Feum air tionndadh:"
+msgstr "Tionndadh an einnsein:"
 
 #: ../../../src/GameStateConfigBase.cpp:936
 #, fuzzy
@@ -246,7 +246,7 @@ msgstr "Ion-chur"
 
 #: ../../../src/GameStateConfigDesktop.cpp:125
 msgid "Keybindings"
-msgstr "Iuchraichean"
+msgstr "Nasgadh iuchraichean"
 
 #: ../../../src/GameStateConfigDesktop.cpp:199
 msgid "Full Screen Mode"
@@ -323,7 +323,7 @@ msgstr "Putan %d"
 #: ../../../src/GameState.cpp:33 ../../../src/GameState.cpp:47
 #: ../../../src/GameState.cpp:63
 msgid "Loading..."
-msgstr "'Ga luchdadh..."
+msgstr "’Ga luchdadh…"
 
 #: ../../../src/GameStateLoad.cpp:79 ../../../src/GameStateLoad.cpp:92
 msgid "Delete Save"
@@ -355,15 +355,15 @@ msgstr "Luchdaich geama"
 
 #: ../../../src/GameStateLoad.cpp:689
 msgid "Entering game world..."
-msgstr "A' dol a-steach do shaoghal a' gheama..."
+msgstr "A’ dol a-steach do shaoghal a’ gheama…"
 
 #: ../../../src/GameStateLoad.cpp:692
 msgid "Loading saved game..."
-msgstr "A' luchdadh geama air a shàbhaladh..."
+msgstr "A’ luchdadh geama air a shàbhaladh…"
 
 #: ../../../src/GameStateLoad.cpp:726
 msgid "Invalid save"
-msgstr ""
+msgstr "Geama air a shàbhaladh mì-dhligheach"
 
 #: ../../../src/GameStateLoad.cpp:745 ../../../src/ItemManager.cpp:673
 #: ../../../src/MenuPowers.cpp:676 ../../../src/MenuPowers.cpp:1035
@@ -397,7 +397,7 @@ msgstr "Cluich geama"
 
 #: ../../../src/GameStateTitle.cpp:105
 msgid "Enable a core mod to continue"
-msgstr "Cuir bun-sgeulachd an comas gus leantainn air adhart"
+msgstr "Cuir bun-thuilleadan an comas gus leantainn air adhart"
 
 #: ../../../src/GameStateTitle.cpp:109
 msgid "Configuration"
@@ -405,11 +405,11 @@ msgstr "Rèiteachadh"
 
 #: ../../../src/GameStateTitle.cpp:112
 msgid "Credits"
-msgstr "Cliù"
+msgstr "Urram"
 
 #: ../../../src/GameStateTitle.cpp:115
 msgid "Exit Game"
-msgstr "Fàg an-seo"
+msgstr "Fàg an geama"
 
 #: ../../../src/InputState.cpp:295
 msgid "Accept"
@@ -514,23 +514,23 @@ msgstr "Alt"
 
 #: ../../../src/InputState.cpp:319
 msgid "Delete"
-msgstr "Sguab às"
+msgstr "Delete"
 
 #: ../../../src/InputState.cpp:320
 msgid "ActionBar Accept"
-msgstr "Bàr-ghnìomh - Gabh ris"
+msgstr "Bàr-ghnìomh – Gabh ris"
 
 #: ../../../src/InputState.cpp:321
 msgid "ActionBar Left"
-msgstr "Bàr-ghnìomh - Gu clì"
+msgstr "Bàr-ghnìomh – Gu clì"
 
 #: ../../../src/InputState.cpp:322
 msgid "ActionBar Right"
-msgstr "Bàr-ghnìomh - Gu deas"
+msgstr "Bàr-ghnìomh – Gu deas"
 
 #: ../../../src/InputState.cpp:323
 msgid "ActionBar Use"
-msgstr "Bàr-ghnìomh - Cleachd"
+msgstr "Bàr-ghnìomh – Cleachd"
 
 #: ../../../src/InputState.cpp:324
 msgid "Developer Menu"
@@ -576,7 +576,7 @@ msgstr "Luaths de %d%%"
 #: ../../../src/ItemManager.cpp:586 ../../../src/MenuPowers.cpp:785
 #, fuzzy, c-format
 msgid "%d%% Attack Speed"
-msgstr "Luaths de %d%%"
+msgstr "Luaths ionnsaighe de %d%%"
 
 #: ../../../src/ItemManager.cpp:608 ../../../src/MenuCharacter.cpp:338
 #: ../../../src/MenuPowers.cpp:727
@@ -586,7 +586,7 @@ msgstr "Comas-seasaimh an aghaidh %s"
 
 #: ../../../src/ItemManager.cpp:659
 msgid "Quest Item"
-msgstr "Nì cinn-turais"
+msgstr "Nì cinn-thurais"
 
 #: ../../../src/ItemManager.cpp:686
 #, c-format
@@ -618,7 +618,7 @@ msgstr "Feum air %s %d"
 #: ../../../src/ItemManager.cpp:769
 #, c-format
 msgid "Requires Class: %s"
-msgstr "Feum air a' chlas: %s"
+msgstr "Feum air a’ chlas: %s"
 
 #: ../../../src/ItemManager.cpp:781 ../../../src/ItemManager.cpp:790
 #, c-format
@@ -659,7 +659,7 @@ msgstr "Grad-iuchair: %s"
 #: ../../../src/MenuActiveEffects.cpp:119
 #, c-format
 msgid "x%d"
-msgstr ""
+msgstr "x%d"
 
 #: ../../../src/MenuActiveEffects.cpp:214
 msgid "Remaining:"
@@ -668,7 +668,7 @@ msgstr "Air fhàgail:"
 #: ../../../src/MenuActiveEffects.cpp:220
 #, c-format
 msgid "x%d stacks"
-msgstr ""
+msgstr "x%d cruach(an)"
 
 #: ../../../src/MenuCharacter.cpp:52
 msgid "Name"
@@ -713,11 +713,11 @@ msgstr "Bheir gach puing dhe %s %d dhut. "
 
 #: ../../../src/MenuDevConsole.cpp:47
 msgid "Execute"
-msgstr "Ruith"
+msgstr "Gnìomhaich"
 
 #: ../../../src/MenuDevConsole.cpp:113
 msgid "Developer Console"
-msgstr "Consoil an luchd-leasachaidh"
+msgstr "Modh an luchd-leasachaidh"
 
 #: ../../../src/MenuDevConsole.cpp:121
 msgid "Arguments with spaces should be enclosed with double quotes. Example:"
@@ -726,15 +726,15 @@ msgstr "Bu chòir dhut comharran-labhairt dùbailte a chur timcheall air argamai
 #: ../../../src/MenuDevConsole.cpp:122
 #, fuzzy
 msgid "Type 'help' to get a list of commands."
-msgstr "Sgrìobh \"help\" gus liosta dhe na h-àitheantan fhaighinn. "
+msgstr "Sgrìobh “help” gus liosta de na h-àitheantan fhaighinn. "
 
 #: ../../../src/MenuDevConsole.cpp:223
 msgid "adds a power to the action bar"
-msgstr ""
+msgstr "cuiridh seo cumhachd ri bàr nan gnìomh"
 
 #: ../../../src/MenuDevConsole.cpp:224
 msgid "turns on/off all of the HUD elements"
-msgstr "cuiridh seo a h-uile nì a' HUD air no dheth"
+msgstr "cuiridh seo a h-uile nì a’ HUD air no dheth"
 
 #: ../../../src/MenuDevConsole.cpp:225
 msgid "turns on/off the developer hud"
@@ -742,16 +742,16 @@ msgstr "cuiridh seo HUD an luchd-leasachaidh air no dheth"
 
 #: ../../../src/MenuDevConsole.cpp:226
 msgid "resets the player to level 1, with no stat or skill points spent"
-msgstr "ath-suidhichidh seo leibheil a' chluicheadair air 1 gun stadastaireachd is gun phuingean air an caitheamh"
+msgstr "ath-shuidhichidh seo leibheil a’ chluicheadair air 1 gun stadastaireachd is gun phuingean air an caitheamh"
 
 #: ../../../src/MenuDevConsole.cpp:227
 #, fuzzy
 msgid "Prints a list of powers that match a search term. No search term will list all items"
-msgstr "Seallaidh seo liosta nan nithean a fhreagras ris an fhacal-luirg. Mur eil facal-luirg ann, thèid gach nì a shealltainn"
+msgstr "Seallaidh seo liosta nan cumhachdan a fhreagras ris an fhacal-luirg. Mur eil facal-luirg ann, thèid gach nì a shealltainn"
 
 #: ../../../src/MenuDevConsole.cpp:228
 msgid "Prints out all the map filenames located in the \"maps/\" directory."
-msgstr ""
+msgstr "Seallaidh seo ainmean faidhle nam mapaichean uile a tha sa phasgan “maps/”."
 
 #: ../../../src/MenuDevConsole.cpp:229
 msgid "Prints out the active campaign statuses that match a search term. No search term will list all active statuses"
@@ -789,16 +789,16 @@ msgstr "MEARACHD: Chan eil argamaidean gu leòr ann"
 #: ../../../src/MenuDevConsole.cpp:408 ../../../src/MenuDevConsole.cpp:433
 #, fuzzy
 msgid "HINT:"
-msgstr "GLIOCAS: "
+msgstr "OIDHEAM: "
 
 #: ../../../src/MenuDevConsole.cpp:408
 msgid "<id>"
-msgstr ""
+msgstr "<id>"
 
 #: ../../../src/MenuDevConsole.cpp:423
 #, c-format
 msgid "ERROR: '%s' is not a valid event key"
-msgstr "MEARACHD: Chan eil \"%s\" 'na h-iuchair tachartais dhligheach"
+msgstr "MEARACHD: Chan eil “%s” ’na h-iuchair tachartais dhligheach"
 
 #: ../../../src/MenuDevConsole.cpp:432
 msgid "ERROR: Too few arguments"
@@ -807,7 +807,7 @@ msgstr "MEARACHD: Chan eil argamaidean gu leòr ann"
 #: ../../../src/MenuDevConsole.cpp:433
 #, fuzzy
 msgid "<key>=<val> <key>=<val> ..."
-msgstr " <key>=<val> <key>=<val> ..."
+msgstr " <key>=<val> <key>=<val> …"
 
 #: ../../../src/MenuDevConsole.cpp:437
 msgid "ERROR: Unknown command"
@@ -815,7 +815,7 @@ msgstr "MEARACHD: Àithne nach aithne dhuinn"
 
 #: ../../../src/MenuDevConsole.cpp:438
 msgid "HINT: Type help"
-msgstr "GLIOCAS: Sgrìobh \"help\""
+msgstr "OIDHEAM: Sgrìobh “help”"
 
 #: ../../../src/MenuDevHUD.cpp:56
 #, fuzzy
@@ -834,7 +834,7 @@ msgstr "Luchag (x,y): "
 
 #: ../../../src/MenuDevHUD.cpp:72
 msgid "Target distance:"
-msgstr ""
+msgstr "Astar an amais:"
 
 #: ../../../src/MenuEnemy.cpp:137
 msgid "Dead"
@@ -847,7 +847,7 @@ msgstr "%s leibheil %d"
 
 #: ../../../src/MenuExit.cpp:82
 msgid "Save & Exit"
-msgstr "Sàbhail ⁊ fàg an-seo"
+msgstr "Sàbhail is fàg an-seo"
 
 #: ../../../src/MenuExit.cpp:84
 msgid "Exit"
@@ -859,12 +859,12 @@ msgstr "Lean air adhart"
 
 #: ../../../src/MenuExit.cpp:110 ../../../src/MenuExit.cpp:129
 msgid "Paused"
-msgstr "'Na stad"
+msgstr "‘Na stad"
 
 #: ../../../src/MenuInventory.cpp:155
 #, fuzzy, c-format
 msgid "Lost %d%% of %s."
-msgstr "Chaill thu %d%% de %s. "
+msgstr "Chaill thu %d%% dhe %s. "
 
 #: ../../../src/MenuInventory.cpp:162
 #, fuzzy, c-format
@@ -938,7 +938,7 @@ msgstr "Nòtaichean"
 
 #: ../../../src/MenuLog.cpp:86
 msgid "Quests"
-msgstr "Cinn-turais"
+msgstr "Cinn-thurais"
 
 #: ../../../src/MenuManager.cpp:300
 #, c-format
@@ -947,7 +947,7 @@ msgstr "PE: %d/%d"
 
 #: ../../../src/MenuManager.cpp:810
 msgid "This item can not be dropped."
-msgstr "Chan urrainn dhan an nì seo tuiteam."
+msgstr "Chan urrainn dhut an nì seo a leigeil às."
 
 #: ../../../src/MenuNPCActions.cpp:82
 msgid "Trade"
@@ -959,7 +959,7 @@ msgstr "Cuir a-steach àireamh:"
 
 #: ../../../src/MenuPowers.cpp:680
 msgid "Passive"
-msgstr ""
+msgstr "Fulangach"
 
 #: ../../../src/MenuPowers.cpp:685
 #, c-format
@@ -1058,7 +1058,7 @@ msgstr "Bualadh air ais"
 #: ../../../src/MenuPowers.cpp:900
 #, c-format
 msgid "%d%% chance"
-msgstr ""
+msgstr "teans de %d%%"
 
 #: ../../../src/MenuPowers.cpp:952
 msgid "Base Accuracy"
@@ -1118,7 +1118,7 @@ msgstr "Stòr co-roinnte"
 
 #: ../../../src/MenuStash.cpp:199
 msgid "Can not store quest items in the stash."
-msgstr "Cha ghabh nithean cinn-turais a chur dhan stòr."
+msgstr "Cha ghabh nithean cinn-thurais a chur dhan stòr."
 
 #: ../../../src/MenuStash.cpp:209
 msgid "Stash is full."
@@ -1143,7 +1143,7 @@ msgstr "Tha thu air cruth-atharrachadh mar-thà, feumaidh tu an cruth tùsail ag
 
 #: ../../../src/PowerManager.cpp:1272
 msgid "Could not untransform at this position."
-msgstr "Cha b' urrainn dhut neo-chruth-atharrachadh air an ionad seo."
+msgstr "Cha b’ urrainn dhut neo-chruth-atharrachadh air an ionad seo."
 
 #: ../../../src/SaveLoad.cpp:221 ../../../src/SaveLoad.cpp:222
 msgid "Game saved."
@@ -1243,7 +1243,7 @@ msgstr "Duais %s"
 #: ../../../src/Stats.cpp:87
 #, c-format
 msgid "Increases the %s found per drop."
-msgstr "Lorgaidh tu %s a bharrachd leis gach tuiteam."
+msgstr "Lorgaidh tu %s a bharrachd leis gach leigeil às."
 
 #: ../../../src/Stats.cpp:91
 msgid "Item Find Chance"
@@ -1251,7 +1251,7 @@ msgstr "Duais lorg nan nithean"
 
 #: ../../../src/Stats.cpp:92
 msgid "Increases the chance that an enemy will drop an item."
-msgstr "Bidh barrachd teans gun leig nàmhaid nì a thuiteam nuair a mharbhas tu e."
+msgstr "Bidh barrachd teans gun leig nàmhaid nì às nuair a mharbhas tu e."
 
 #: ../../../src/Stats.cpp:96
 msgid "Stealth"
@@ -1288,20 +1288,20 @@ msgstr "Nì seo cuid dhen dochann a fhuair thu air an ionnsaighear."
 #: ../../../src/Stats.cpp:116
 #, fuzzy
 msgid "HP Steal"
-msgstr "Tàisleachadh"
+msgstr "Goid PB"
 
 #: ../../../src/Stats.cpp:117
 msgid "Percentage of HP stolen per hit."
-msgstr ""
+msgstr "An ceudad de phuingean-beatha a thèid a ghoid le gach buille."
 
 #: ../../../src/Stats.cpp:121
 #, fuzzy
 msgid "MP Steal"
-msgstr "Tàisleachadh"
+msgstr "Goid PG"
 
 #: ../../../src/Stats.cpp:122
 msgid "Percentage of MP stolen per hit."
-msgstr ""
+msgstr "An ceudad de phuingean-gluasaid a thèid a ghoid le gach buille."
 
 #: ../../../src/Stats.cpp:126
 msgid "Base HP"
@@ -1327,11 +1327,11 @@ msgstr "%s diog(an)"
 
 #: ../../../src/Version.cpp:139
 msgid "or newer"
-msgstr ""
+msgstr "no nas ùire"
 
 #: ../../../src/Version.cpp:142
 msgid "or older"
-msgstr ""
+msgstr "no nas sine"
 
 #~ msgid "Permadeath"
 #~ msgstr "Bàs maireannach"
