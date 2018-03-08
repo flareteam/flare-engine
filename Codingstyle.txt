@@ -10,7 +10,7 @@ Is my code non-trivial? If it touches multiple functions or files, probably so.
 
 Ways to discuss a desired code change:
 
-* Open an Issue at http://github.com/clintbellanger/flare-engine/
+* Open an Issue at https://github.com/clintbellanger/flare-engine
 * Email clintbellanger@gmail.com
 
 ## Pull Requests
