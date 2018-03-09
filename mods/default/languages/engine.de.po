@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: 0.18\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-02-19 18:51-0500\n"
-"PO-Revision-Date: 2013-11-28 01:17+0100\n"
-"Last-Translator: Wuzzy <almikes@aol.com>\n"
+"PO-Revision-Date: 2018-03-08 00:00+\n"
+"Last-Translator: Janet Hunt <jane.hunt@fantasymail.de>\n"
 "Language-Team: \n"
-"Language: de\n"
+"Language: German\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -156,7 +156,7 @@ msgstr "Sprache"
 
 #: ../../../src/GameStateConfigBase.cpp:249
 msgid "Show combat text"
-msgstr "Schwebender Kampftext"
+msgstr "Schwebende Kampftexte"
 
 #: ../../../src/GameStateConfigBase.cpp:253
 msgid "Show FPS"
@@ -553,14 +553,12 @@ msgid "Wheel Down"
 msgstr "Mausrad Ab"
 
 #: ../../../src/InputState.cpp:331
-#, fuzzy
 msgid "Mouse X1"
-msgstr ""
+msgstr "Maus X1"
 
 #: ../../../src/InputState.cpp:332
-#, fuzzy
 msgid "Mouse X2"
-msgstr ""
+msgstr "Maus X2"
 
 #: ../../../src/ItemManager.cpp:407 ../../../src/ItemManager.cpp:410
 msgid "Unknown Item"
@@ -637,9 +635,8 @@ msgid "Sell Price: %d %s each"
 msgstr "Verkaufspreis: je %d %s"
 
 #: ../../../src/ItemManager.cpp:809
-#, fuzzy
 msgid "Set:"
-msgstr ""
+msgstr "Set:"
 
 #: ../../../src/ItemManager.cpp:816
 msgid "%d items:"
@@ -854,7 +851,7 @@ msgstr "%d%% an %s verloren."
 
 #: ../../../src/MenuInventory.cpp:162
 msgid "Lost %d%% of total XP."
-msgstr "%d%% der EP verloren."
+msgstr "%d%% der gesamten EP verloren."
 
 #: ../../../src/MenuInventory.cpp:167
 msgid "Lost %d%% of current level XP."
@@ -1046,7 +1043,7 @@ msgstr "%d%% Wahrscheinlichkeit"
 
 #: ../../../src/MenuPowers.cpp:952
 msgid "Base Accuracy"
-msgstr "Basis Genauigkeit:"
+msgstr "Basis-Genauigkeit:"
 
 #: ../../../src/MenuPowers.cpp:972
 msgid "Base Critical Chance"
@@ -1179,7 +1176,7 @@ msgstr "TP-Regenerierung pro Minute."
 
 #: ../../../src/Stats.cpp:46
 msgid "Max. MP"
-msgstr "Max MP"
+msgstr "Max. MP"
 
 #: ../../../src/Stats.cpp:51
 msgid "MP Regen"
