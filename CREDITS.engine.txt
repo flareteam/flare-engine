@@ -2,6 +2,7 @@ Flare Engine Credits
 
 Programming
 
+Andrew Engelbrecht | https://n0r.co
 Anton Golov | http://jesyspa.blogspot.com/
 Artur "Zear" Rojek
 blazindragon
