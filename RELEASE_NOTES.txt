@@ -85,6 +85,7 @@ Engine changes:
 * Added "movie credits"-style scrolling to cutscenes. (Justin Jacobs)
 * Cutscene improvements: music support and individual scaling of graphics. (Justin Jacobs)
 * Support for background artwork in main menus (Justin Jacobs)
+* Vendor buyback can now be stored per-NPC across sessions (Justin Jacobs)
 
 * Add MapSaver API (Igor Paliychuk)
 
@@ -99,6 +100,7 @@ New Ports:
 
 Translation Updates:
 
+* Scottish Gaelic (gd) update (GunChleoc)
 * Galician (gl) update (Adrián Chaves Fernández)
 * German (de) update (Janet Hunt)
 * Italian (it) update (Jeffry84)
@@ -107,7 +109,6 @@ Translation Updates:
 * Polish (pl) update (Pawonashi)
 * Portuguese (pt) translation (Phillippe Caetano)
 * Russian (ru) update (Sergey Basalaev)
-* Scottish Gaelic (gd) update (GunChleoc)
 * Swedish (sv) update (Henrik Andersson)
 
 Game changes:
