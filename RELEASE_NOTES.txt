@@ -147,7 +147,7 @@ New Translators:
 
 * German (de) update by Wuzzy2
 * Greek (el) update by Michael Papageorgiou
-* Scottish Gaelic (gd) by gunchleoc
+* Scottish Gaelic (gd) by GunChleoc
 * Chinese (zh) by lonsine
 
 Game Changes:
