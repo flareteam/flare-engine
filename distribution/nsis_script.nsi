@@ -36,6 +36,7 @@
 !define MUI_FINISHPAGE_RUN_FUNCTION "LaunchLink"
 
 Function LaunchLink
+  SetOutPath $INSTDIR
   ExecShell "" "$INSTDIR\flare.exe"
 FunctionEnd
 
