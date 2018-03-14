@@ -1130,22 +1130,22 @@ void MenuPowers::logic() {
 
 	for (size_t i=0; i<power_cell_unlocked.size(); i++) {
 		if (static_cast<size_t>(power_cell_unlocked[i].id) < powers->powers.size() && powers->powers[power_cell_unlocked[i].id].passive) {
-			bool unlocked_power = std::find(stats->powers_list.begin(), stats->powers_list.end(), power_cell_unlocked[i].id) != stats->powers_list.end();
-			std::vector<int>::iterator it = std::find(stats->powers_passive.begin(), stats->powers_passive.end(), power_cell_unlocked[i].id);
+			std::vector<int>::iterator passive_it = std::find(stats->powers_passive.begin(), stats->powers_passive.end(), power_cell_unlocked[i].id);
 
 			int cell_index = getCellByPowerIndex(power_cell_unlocked[i].id, power_cell_all);
 			bool is_current_upgrade_max = (getCellByPowerIndex(power_cell_unlocked[i].id, power_cell) != -1);
 
-			if (it != stats->powers_passive.end()) {
+			if (passive_it != stats->powers_passive.end()) {
 				if (!is_current_upgrade_max || (!checkRequirements(cell_index) && power_cell_unlocked[i].passive_on)) {
 					// passive power is activated, but does not meet requirements, so remove it
-					stats->powers_passive.erase(it);
+					stats->powers_passive.erase(passive_it);
 					stats->effects.removeEffectPassive(power_cell_unlocked[i].id);
 					power_cell[i].passive_on = false;
+					power_cell_unlocked[i].passive_on = false;
 					stats->refresh_stats = true;
 				}
 			}
-			else if (is_current_upgrade_max && ((checkRequirements(cell_index) && !power_cell_unlocked[i].requires_point) || unlocked_power) && !power_cell_unlocked[i].passive_on) {
+			else if (is_current_upgrade_max && checkRequirements(cell_index) && !power_cell_unlocked[i].passive_on) {
 				// passive power has not been activated, so activate it here
 				stats->powers_passive.push_back(power_cell_unlocked[i].id);
 				power_cell_unlocked[i].passive_on = true;
