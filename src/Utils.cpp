@@ -626,13 +626,13 @@ void lockFileCheck() {
 		const SDL_MessageBoxButtonData buttons[] = {
 			{ SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT|SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Quit" },
 			{ 0, 1, "Continue" },
-			{ 0, 2, "Reset Lock File" },
+			{ 0, 2, "Reset" },
 		};
 		const SDL_MessageBoxData messageboxdata = {
 			SDL_MESSAGEBOX_INFORMATION,
 			NULL,
 			"Flare",
-			"Flare appears to already be running.\nYou may either 'Quit' Flare (recommended) or 'Continue' to launch a new instance.\n\nIf Flare is NOT already running, you can use 'Reset Lock File' to fix it.",
+			"Flare appears to already be running.\n\nYou may either:\n- 'Quit' Flare (safe, recommended)\n- 'Continue' to launch another copy of Flare.\n- 'Reset' the counter which tracks the number of copies of Flare that are currently running.\n  If this dialog is shown every time you launch Flare, this option should fix it.",
 			static_cast<int>(SDL_arraysize(buttons)),
 			buttons,
 			NULL
