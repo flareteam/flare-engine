@@ -115,7 +115,9 @@ void BehaviorAlly::findTarget() {
 			enemym->player_blocked_ticks = BLOCK_TICKS;
 		}
 
-		if(enemym->player_blocked && !e->stats.in_combat
+		bool player_closer_than_target = calcDist(e->stats.pos, pursue_pos) > calcDist(e->stats.pos, pc->stats.pos);
+
+		if(enemym->player_blocked && (!e->stats.in_combat || player_closer_than_target)
 				&& mapr->collider.is_facing(pc->stats.pos.x,pc->stats.pos.y,pc->stats.direction,e->stats.pos.x,e->stats.pos.y)) {
 			fleeing = true;
 			pursue_pos = pc->stats.pos;
