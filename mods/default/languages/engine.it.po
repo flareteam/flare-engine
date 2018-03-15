@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-19 18:51-0500\n"
+"POT-Creation-Date: 2018-03-15 13:36-0400\n"
 "PO-Revision-Date: 2012-07-02 19:21+0100\n"
 "Last-Translator: Stefano Peris <lordstephen77@gmail.com>\n"
 "Language-Team: Italiano <it@li.org>\n"
@@ -20,26 +20,26 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../../src/Avatar.cpp:356
+#: ../../../src/Avatar.cpp:353
 #, c-format
 msgid "Congratulations, you have reached level %d!"
 msgstr "Congratulazioni, hai raggiunto il livello %d!"
 
-#: ../../../src/Avatar.cpp:358
+#: ../../../src/Avatar.cpp:355
 msgid "You may increase one attribute through the Character Menu."
 msgstr "Puoi aumentare un attributo nel Menu Personaggio."
 
-#: ../../../src/Avatar.cpp:580
+#: ../../../src/Avatar.cpp:573
 #, fuzzy
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
 msgstr "Sei stato sconfitto. Partita finita! Premi Invio per tornare al Titolo."
 
-#: ../../../src/Avatar.cpp:583
+#: ../../../src/Avatar.cpp:579
 #, fuzzy
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
 msgstr "Sei stato sconfitto. Premi Invio per continuare."
 
-#: ../../../src/Avatar.cpp:836
+#: ../../../src/Avatar.cpp:832
 msgid "Transformation expired. You have been moved back to a safe place."
 msgstr "Trasformazione finita. Sei stato riportato in un luogo sicuro."
 
@@ -93,28 +93,42 @@ msgstr "Effetti negativi rimossi."
 msgid "HP and MP restored, negative effects removed"
 msgstr "HP e MP ripristinati, effetti negativi rimossi"
 
-#: ../../../src/Entity.cpp:476
+#: ../../../src/DeviceList.cpp:55
+msgid ""
+"SDL software renderer\n"
+"\n"
+"Often slower, but less likely to have issues."
+msgstr ""
+
+#: ../../../src/DeviceList.cpp:58
+msgid ""
+"SDL hardware renderer\n"
+"\n"
+"The default renderer that is often faster than the SDL software renderer."
+msgstr ""
+
+#: ../../../src/Entity.cpp:472
 msgid "miss"
 msgstr "mancato"
 
-#: ../../../src/Entity.cpp:514 ../../../src/PowerManager.cpp:1017
+#: ../../../src/Entity.cpp:509 ../../../src/PowerManager.cpp:1053
 #: ../../../src/StatBlock.cpp:786 ../../../src/StatBlock.cpp:792
 #, c-format
 msgid "+%d HP"
 msgstr "+%d HP"
 
-#: ../../../src/Entity.cpp:521 ../../../src/StatBlock.cpp:797
+#: ../../../src/Entity.cpp:516 ../../../src/StatBlock.cpp:797
 #: ../../../src/StatBlock.cpp:803
 #, c-format
 msgid "+%d MP"
 msgstr "+%d MP"
 
-#: ../../../src/EventManager.cpp:676
+#: ../../../src/EventManager.cpp:682
 msgid "Unknown destination"
 msgstr "Destinazione sconosciuta"
 
 #: ../../../src/GameStateConfigBase.cpp:88
-#: ../../../src/GameStateConfigBase.cpp:107
+#: ../../../src/GameStateConfigBase.cpp:108
 msgid "Defaults"
 msgstr "Predefiniti"
 
@@ -123,212 +137,216 @@ msgstr "Predefiniti"
 msgid "Reset ALL settings?"
 msgstr "Ripristinare TUTTE le impostazioni?"
 
-#: ../../../src/GameStateConfigBase.cpp:106 ../../../src/MenuNumPicker.cpp:45
+#: ../../../src/GameStateConfigBase.cpp:107 ../../../src/MenuNumPicker.cpp:45
 msgid "OK"
 msgstr "OK"
 
-#: ../../../src/GameStateConfigBase.cpp:108 ../../../src/GameStateNew.cpp:59
+#: ../../../src/GameStateConfigBase.cpp:109 ../../../src/GameStateNew.cpp:59
 #: ../../../src/InputState.cpp:294 ../../../src/MenuNPCActions.cpp:83
 msgid "Cancel"
 msgstr "Annulla"
 
-#: ../../../src/GameStateConfigBase.cpp:157
-#: ../../../src/GameStateConfigDesktop.cpp:122
+#: ../../../src/GameStateConfigBase.cpp:158
+#: ../../../src/GameStateConfigDesktop.cpp:120
 msgid "Audio"
 msgstr "Audio"
 
-#: ../../../src/GameStateConfigBase.cpp:158
-#: ../../../src/GameStateConfigDesktop.cpp:123
+#: ../../../src/GameStateConfigBase.cpp:159
+#: ../../../src/GameStateConfigDesktop.cpp:121
 msgid "Interface"
 msgstr "Interfaccia"
 
-#: ../../../src/GameStateConfigBase.cpp:159
-#: ../../../src/GameStateConfigDesktop.cpp:126
+#: ../../../src/GameStateConfigBase.cpp:160
+#: ../../../src/GameStateConfigDesktop.cpp:124
 msgid "Mods"
 msgstr "Mods"
 
-#: ../../../src/GameStateConfigBase.cpp:237 ../../../src/MenuExit.cpp:65
+#: ../../../src/GameStateConfigBase.cpp:238 ../../../src/MenuExit.cpp:65
 msgid "Music Volume"
 msgstr "Volume Musica"
 
-#: ../../../src/GameStateConfigBase.cpp:241 ../../../src/MenuExit.cpp:70
+#: ../../../src/GameStateConfigBase.cpp:242 ../../../src/MenuExit.cpp:70
 msgid "Sound Volume"
 msgstr "Volume Sonoro"
 
-#: ../../../src/GameStateConfigBase.cpp:245
+#: ../../../src/GameStateConfigBase.cpp:246
 msgid "Language"
 msgstr "Lingua"
 
-#: ../../../src/GameStateConfigBase.cpp:249
+#: ../../../src/GameStateConfigBase.cpp:251
 msgid "Show combat text"
 msgstr "Mostra testo combattimento"
 
-#: ../../../src/GameStateConfigBase.cpp:253
+#: ../../../src/GameStateConfigBase.cpp:255
 msgid "Show FPS"
 msgstr "Mostra FPS"
 
-#: ../../../src/GameStateConfigBase.cpp:257
+#: ../../../src/GameStateConfigBase.cpp:259
 msgid "Colorblind Mode"
 msgstr "Modalità per daltonici"
 
-#: ../../../src/GameStateConfigBase.cpp:261
+#: ../../../src/GameStateConfigBase.cpp:263
 #, fuzzy
 msgid "Hardware mouse cursor"
 msgstr "Cursore mouse hardware"
 
-#: ../../../src/GameStateConfigBase.cpp:265
+#: ../../../src/GameStateConfigBase.cpp:267
 msgid "Developer Mode"
 msgstr "Modalità Sviluppatore"
 
-#: ../../../src/GameStateConfigBase.cpp:269
+#: ../../../src/GameStateConfigBase.cpp:271
 msgid "Always show loot labels"
 msgstr "Mostra sempre etichette bottino"
 
-#: ../../../src/GameStateConfigBase.cpp:273
+#: ../../../src/GameStateConfigBase.cpp:275
 #, fuzzy
 msgid "Always show stat bar labels"
 msgstr "Mostra sempre etichette bottino"
 
-#: ../../../src/GameStateConfigBase.cpp:277
+#: ../../../src/GameStateConfigBase.cpp:279
 msgid "Automatically equip items"
 msgstr "Equipaggia gli oggetti automaticamente"
 
-#: ../../../src/GameStateConfigBase.cpp:281
+#: ../../../src/GameStateConfigBase.cpp:283
 msgid "Subtitles"
 msgstr ""
 
-#: ../../../src/GameStateConfigBase.cpp:285
+#: ../../../src/GameStateConfigBase.cpp:287
 msgid "Active Mods"
 msgstr "Mod attive"
 
-#: ../../../src/GameStateConfigBase.cpp:289
+#: ../../../src/GameStateConfigBase.cpp:292
 #, fuzzy
 msgid "Available Mods"
 msgstr "Mod disponibili"
 
-#: ../../../src/GameStateConfigBase.cpp:303
+#: ../../../src/GameStateConfigBase.cpp:307
 #, fuzzy
 msgid "<< Disable"
 msgstr "<< Disabilita"
 
-#: ../../../src/GameStateConfigBase.cpp:309
+#: ../../../src/GameStateConfigBase.cpp:313
 msgid "Enable >>"
 msgstr "Abilita >>"
 
-#: ../../../src/GameStateConfigBase.cpp:918
+#: ../../../src/GameStateConfigBase.cpp:929
 #, fuzzy
 msgid "Version:"
 msgstr "Richiede versione: "
 
-#: ../../../src/GameStateConfigBase.cpp:923
+#: ../../../src/GameStateConfigBase.cpp:934
 #, fuzzy
 msgid "Game:"
 msgstr "Gioco: "
 
-#: ../../../src/GameStateConfigBase.cpp:928
+#: ../../../src/GameStateConfigBase.cpp:939
 #, fuzzy
 msgid "Engine version:"
 msgstr "Richiede versione: "
 
-#: ../../../src/GameStateConfigBase.cpp:936
+#: ../../../src/GameStateConfigBase.cpp:947
 #, fuzzy
 msgid "Requires mods:"
 msgstr "Richiede mod: "
 
-#: ../../../src/GameStateConfigDesktop.cpp:77
-#: ../../../src/GameStateConfigDesktop.cpp:720
+#: ../../../src/GameStateConfigDesktop.cpp:75
+#: ../../../src/GameStateConfigDesktop.cpp:723
 msgid "Clear"
 msgstr "Pulisci"
 
-#: ../../../src/GameStateConfigDesktop.cpp:77
-#: ../../../src/GameStateConfigDesktop.cpp:718
+#: ../../../src/GameStateConfigDesktop.cpp:75
+#: ../../../src/GameStateConfigDesktop.cpp:721
 #, fuzzy
 msgid "Assign:"
 msgstr "Assegnazioni:"
 
-#: ../../../src/GameStateConfigDesktop.cpp:120
+#: ../../../src/GameStateConfigDesktop.cpp:118
 msgid "Video"
 msgstr "Video"
 
-#: ../../../src/GameStateConfigDesktop.cpp:124
+#: ../../../src/GameStateConfigDesktop.cpp:122
 msgid "Input"
 msgstr "Input"
 
-#: ../../../src/GameStateConfigDesktop.cpp:125
+#: ../../../src/GameStateConfigDesktop.cpp:123
 msgid "Keybindings"
 msgstr "Scorciatoie da tastiera"
 
-#: ../../../src/GameStateConfigDesktop.cpp:199
-msgid "Full Screen Mode"
-msgstr "Modalità schermo intero"
-
-#: ../../../src/GameStateConfigDesktop.cpp:203
-msgid "Move hero using mouse"
-msgstr "Muovi Eroe tramite mouse"
-
-#: ../../../src/GameStateConfigDesktop.cpp:207
-msgid "Hardware surfaces"
-msgstr "Superfici solide"
-
-#: ../../../src/GameStateConfigDesktop.cpp:211
-msgid "V-Sync"
-msgstr "V-Sync"
-
-#: ../../../src/GameStateConfigDesktop.cpp:215
-msgid "Texture Filtering"
-msgstr "Filtro texture"
-
-#: ../../../src/GameStateConfigDesktop.cpp:219
-msgid "Allow changing gamma"
-msgstr "Permetti cambio di gamma"
-
-#: ../../../src/GameStateConfigDesktop.cpp:223
-msgid "Gamma"
-msgstr "Gamma"
-
-#: ../../../src/GameStateConfigDesktop.cpp:228
-#: ../../../src/GameStateConfigDesktop.cpp:233
+#: ../../../src/GameStateConfigDesktop.cpp:182
+#: ../../../src/GameStateConfigDesktop.cpp:183
 #, fuzzy
 msgid "Disable for performance"
 msgstr "Disabilita per aumentare le prestazioni"
 
-#: ../../../src/GameStateConfigDesktop.cpp:238
+#: ../../../src/GameStateConfigDesktop.cpp:184
 msgid "Experimental"
 msgstr "Sperimentale"
 
-#: ../../../src/GameStateConfigDesktop.cpp:242
+#: ../../../src/GameStateConfigDesktop.cpp:185
+msgid "For handheld devices"
+msgstr "Per dispositivi tascabili"
+
+#: ../../../src/GameStateConfigDesktop.cpp:203
+msgid "Renderer"
+msgstr ""
+
+#: ../../../src/GameStateConfigDesktop.cpp:215
+msgid "Full Screen Mode"
+msgstr "Modalità schermo intero"
+
+#: ../../../src/GameStateConfigDesktop.cpp:219
+msgid "Move hero using mouse"
+msgstr "Muovi Eroe tramite mouse"
+
+#: ../../../src/GameStateConfigDesktop.cpp:223
+msgid "Hardware surfaces"
+msgstr "Superfici solide"
+
+#: ../../../src/GameStateConfigDesktop.cpp:227
+msgid "V-Sync"
+msgstr "V-Sync"
+
+#: ../../../src/GameStateConfigDesktop.cpp:231
+msgid "Texture Filtering"
+msgstr "Filtro texture"
+
+#: ../../../src/GameStateConfigDesktop.cpp:235
+msgid "Allow changing gamma"
+msgstr "Permetti cambio di gamma"
+
+#: ../../../src/GameStateConfigDesktop.cpp:239
+msgid "Gamma"
+msgstr "Gamma"
+
+#: ../../../src/GameStateConfigDesktop.cpp:243
 msgid "Use joystick"
 msgstr "Usa joystick"
 
-#: ../../../src/GameStateConfigDesktop.cpp:246
+#: ../../../src/GameStateConfigDesktop.cpp:247
 msgid "Joystick"
 msgstr "Joystick"
 
-#: ../../../src/GameStateConfigDesktop.cpp:256
+#: ../../../src/GameStateConfigDesktop.cpp:259
 msgid "Mouse aim"
 msgstr "Mira via mouse"
 
-#: ../../../src/GameStateConfigDesktop.cpp:260
+#: ../../../src/GameStateConfigDesktop.cpp:263
 #, fuzzy
 msgid "Do not use mouse"
 msgstr "Non usare il mouse"
 
-#: ../../../src/GameStateConfigDesktop.cpp:264
+#: ../../../src/GameStateConfigDesktop.cpp:267
 #, fuzzy
 msgid "Joystick Deadzone"
 msgstr "Zona neutra Joystick"
 
-#: ../../../src/GameStateConfigDesktop.cpp:269
-msgid "For handheld devices"
-msgstr "Per dispositivi tascabili"
-
-#: ../../../src/GameStateConfigDesktop.cpp:780
-#: ../../../src/SDLInputState.cpp:551
+#: ../../../src/GameStateConfigDesktop.cpp:788
+#: ../../../src/SDLInputState.cpp:554
 msgid "(none)"
 msgstr "(nessuno)"
 
-#: ../../../src/GameStateConfigDesktop.cpp:825
-#: ../../../src/SDLInputState.cpp:593
+#: ../../../src/GameStateConfigDesktop.cpp:833
+#: ../../../src/SDLInputState.cpp:596
 #, c-format
 msgid "Button %d"
 msgstr "Tasto %d"
@@ -355,31 +373,31 @@ msgstr "Torna al Titolo"
 msgid "New Game"
 msgstr "Nuova Partita"
 
-#: ../../../src/GameStateLoad.cpp:88 ../../../src/GameStateLoad.cpp:587
+#: ../../../src/GameStateLoad.cpp:88 ../../../src/GameStateLoad.cpp:588
 msgid "Choose a Slot"
 msgstr "Scegli Slot"
 
-#: ../../../src/GameStateLoad.cpp:560 ../../../src/GameStateLoad.cpp:581
+#: ../../../src/GameStateLoad.cpp:561 ../../../src/GameStateLoad.cpp:582
 msgid "Enable a story mod to continue"
 msgstr "Abilita una mod storia per continuare"
 
-#: ../../../src/GameStateLoad.cpp:576
+#: ../../../src/GameStateLoad.cpp:577
 msgid "Load Game"
 msgstr "Carica Partita"
 
-#: ../../../src/GameStateLoad.cpp:689
+#: ../../../src/GameStateLoad.cpp:690
 msgid "Entering game world..."
 msgstr "Entrata nel mondo di gioco..."
 
-#: ../../../src/GameStateLoad.cpp:692
+#: ../../../src/GameStateLoad.cpp:693
 msgid "Loading saved game..."
 msgstr "Caricamento partita salvata..."
 
-#: ../../../src/GameStateLoad.cpp:726
+#: ../../../src/GameStateLoad.cpp:727
 msgid "Invalid save"
 msgstr ""
 
-#: ../../../src/GameStateLoad.cpp:745 ../../../src/ItemManager.cpp:673
+#: ../../../src/GameStateLoad.cpp:746 ../../../src/ItemManager.cpp:672
 #: ../../../src/MenuPowers.cpp:676 ../../../src/MenuPowers.cpp:1035
 #, c-format
 msgid "Level %d"
@@ -587,88 +605,88 @@ msgstr "Mouse X2"
 msgid "Mouse X2"
 msgstr "Mouse X2"
 
-#: ../../../src/ItemManager.cpp:407 ../../../src/ItemManager.cpp:410
+#: ../../../src/ItemManager.cpp:406 ../../../src/ItemManager.cpp:409
 msgid "Unknown Item"
 msgstr "Oggetto sconosciuto"
 
-#: ../../../src/ItemManager.cpp:582 ../../../src/MenuPowers.cpp:782
+#: ../../../src/ItemManager.cpp:581 ../../../src/MenuPowers.cpp:782
 #, fuzzy, c-format
 msgid "%d%% Speed"
 msgstr "%d%% Velocità"
 
-#: ../../../src/ItemManager.cpp:586 ../../../src/MenuPowers.cpp:785
+#: ../../../src/ItemManager.cpp:585 ../../../src/MenuPowers.cpp:785
 #, fuzzy, c-format
 msgid "%d%% Attack Speed"
 msgstr "%d%% Velocità"
 
-#: ../../../src/ItemManager.cpp:608 ../../../src/MenuCharacter.cpp:338
+#: ../../../src/ItemManager.cpp:607 ../../../src/MenuCharacter.cpp:338
 #: ../../../src/MenuPowers.cpp:727
 #, fuzzy, c-format
 msgid "%s Resistance"
 msgstr "Resistenza al Freddo"
 
-#: ../../../src/ItemManager.cpp:659
+#: ../../../src/ItemManager.cpp:658
 msgid "Quest Item"
 msgstr "Oggetto della missione"
 
-#: ../../../src/ItemManager.cpp:686
+#: ../../../src/ItemManager.cpp:685
 #, c-format
 msgid "Quality: %s"
 msgstr "Qualità: %s"
 
-#: ../../../src/ItemManager.cpp:711
+#: ../../../src/ItemManager.cpp:710
 #, c-format
 msgid "Absorb: %d-%d"
 msgstr "Assorbimento: %d-%d"
 
-#: ../../../src/ItemManager.cpp:713
+#: ../../../src/ItemManager.cpp:712
 #, c-format
 msgid "Absorb: %d"
 msgstr "Assorbimento: %d"
 
-#: ../../../src/ItemManager.cpp:750 ../../../src/MenuPowers.cpp:1021
+#: ../../../src/ItemManager.cpp:749 ../../../src/MenuPowers.cpp:1021
 #: ../../../src/MenuPowers.cpp:1024
 #, fuzzy, c-format
 msgid "Requires Level %d"
 msgstr "Richiede Livello %d"
 
-#: ../../../src/ItemManager.cpp:761 ../../../src/MenuPowers.cpp:1013
+#: ../../../src/ItemManager.cpp:760 ../../../src/MenuPowers.cpp:1013
 #: ../../../src/MenuPowers.cpp:1015
 #, fuzzy, c-format
 msgid "Requires %s %d"
 msgstr "Richiede %s"
 
-#: ../../../src/ItemManager.cpp:769
+#: ../../../src/ItemManager.cpp:768
 #, fuzzy, c-format
 msgid "Requires Class: %s"
 msgstr "Richiede Classe %d"
 
-#: ../../../src/ItemManager.cpp:781 ../../../src/ItemManager.cpp:790
+#: ../../../src/ItemManager.cpp:780 ../../../src/ItemManager.cpp:789
 #, fuzzy, c-format
 msgid "Buy Price: %d %s"
 msgstr "Prezzo d'acquisto: %d %s"
 
-#: ../../../src/ItemManager.cpp:783 ../../../src/ItemManager.cpp:792
+#: ../../../src/ItemManager.cpp:782 ../../../src/ItemManager.cpp:791
 #, fuzzy, c-format
 msgid "Buy Price: %d %s each"
 msgstr "Prezzo d'acquisto: %d %s ciascuno"
 
-#: ../../../src/ItemManager.cpp:798
+#: ../../../src/ItemManager.cpp:797
 #, fuzzy, c-format
 msgid "Sell Price: %d %s"
 msgstr "Prezzo di vendita: %d %s"
 
-#: ../../../src/ItemManager.cpp:800
+#: ../../../src/ItemManager.cpp:799
 #, fuzzy, c-format
 msgid "Sell Price: %d %s each"
 msgstr "Prezzo di vendita: %d %s ciascuno"
 
-#: ../../../src/ItemManager.cpp:809
+#: ../../../src/ItemManager.cpp:808
 #, fuzzy
 msgid "Set:"
 msgstr "Imposta: "
 
-#: ../../../src/ItemManager.cpp:816
+#: ../../../src/ItemManager.cpp:815
 #, fuzzy, c-format
 msgid "%d items:"
 msgstr "%d oggetti: "
@@ -870,11 +888,11 @@ msgstr "Morte"
 msgid "%s level %d"
 msgstr "%s livello %d"
 
-#: ../../../src/MenuExit.cpp:82
+#: ../../../src/MenuExit.cpp:81
 msgid "Save & Exit"
 msgstr "Salva ed esci"
 
-#: ../../../src/MenuExit.cpp:84
+#: ../../../src/MenuExit.cpp:82
 msgid "Exit"
 msgstr "Esci"
 
@@ -1165,58 +1183,58 @@ msgstr "L'inventario è pieno."
 msgid "Buyback"
 msgstr "Ricompra"
 
-#: ../../../src/MenuVendor.cpp:184
+#: ../../../src/MenuVendor.cpp:183
 msgid "Vendor"
 msgstr "Venditore"
 
-#: ../../../src/PowerManager.cpp:1001
+#: ../../../src/PowerManager.cpp:1037
 #, c-format
 msgid "+%d Shield"
 msgstr "+%d Scudo"
 
-#: ../../../src/PowerManager.cpp:1260
+#: ../../../src/PowerManager.cpp:1296
 msgid "You are already transformed, untransform first."
 msgstr "Sei già trasformato, annulla trasformazione prima."
 
-#: ../../../src/PowerManager.cpp:1272
+#: ../../../src/PowerManager.cpp:1308
 msgid "Could not untransform at this position."
 msgstr "Impossibile detrasformarsi da questa posizione."
 
-#: ../../../src/SaveLoad.cpp:221 ../../../src/SaveLoad.cpp:222
+#: ../../../src/SaveLoad.cpp:229 ../../../src/SaveLoad.cpp:230
 msgid "Game saved."
 msgstr "Partita salvata."
 
-#: ../../../src/SDLInputState.cpp:562 ../../../src/SDLInputState.cpp:576
+#: ../../../src/SDLInputState.cpp:565 ../../../src/SDLInputState.cpp:579
 #, fuzzy, c-format
 msgid "Mouse %d"
 msgstr "Mouse X2"
 
-#: ../../../src/SDLInputState.cpp:588
+#: ../../../src/SDLInputState.cpp:591
 #, c-format
 msgid "Axis %d -"
 msgstr "Asse %d -"
 
-#: ../../../src/SDLInputState.cpp:590
+#: ../../../src/SDLInputState.cpp:593
 #, c-format
 msgid "Axis %d +"
 msgstr "Asse %d +"
 
-#: ../../../src/SDLInputState.cpp:612 ../../../src/SDLInputState.cpp:636
-#: ../../../src/SDLInputState.cpp:654
+#: ../../../src/SDLInputState.cpp:615 ../../../src/SDLInputState.cpp:639
+#: ../../../src/SDLInputState.cpp:657
 msgid "Tap"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:612 ../../../src/SDLInputState.cpp:615
+#: ../../../src/SDLInputState.cpp:615 ../../../src/SDLInputState.cpp:618
 #, c-format
 msgid "%s on ground"
 msgstr "%s a terra"
 
-#: ../../../src/SDLInputState.cpp:636 ../../../src/SDLInputState.cpp:639
+#: ../../../src/SDLInputState.cpp:639 ../../../src/SDLInputState.cpp:642
 #, c-format
 msgid "%s on enemy"
 msgstr "%s sul nemico"
 
-#: ../../../src/Settings.cpp:770
+#: ../../../src/Settings.cpp:771
 msgid "Adventurer"
 msgstr "Avventuriero"
 
@@ -1368,17 +1386,17 @@ msgstr "HP base"
 msgid "Base MP"
 msgstr "MP base"
 
-#: ../../../src/Utils.cpp:198
+#: ../../../src/Utils.cpp:203
 #, fuzzy
 msgid "k"
 msgstr "m"
 
-#: ../../../src/Utils.cpp:442
+#: ../../../src/Utils.cpp:448
 #, fuzzy, c-format
 msgid "%s second"
 msgstr "Raffreddamento: %s secondi"
 
-#: ../../../src/Utils.cpp:445
+#: ../../../src/Utils.cpp:451
 #, fuzzy, c-format
 msgid "%s seconds"
 msgstr "Raffreddamento: %s secondi"

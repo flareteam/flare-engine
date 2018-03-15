@@ -45,6 +45,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 GameStateConfigDesktop::GameStateConfigDesktop(bool _enable_video_tab)
 	: GameStateConfigBase(false)
+	, renderer_lstb(new WidgetListBox(4))
+	, renderer_lb(new WidgetLabel())
 	, fullscreen_cb(new WidgetCheckBox())
 	, fullscreen_lb(new WidgetLabel())
 	, hwsurface_cb(new WidgetCheckBox())
@@ -190,10 +192,23 @@ bool GameStateConfigDesktop::parseKeyDesktop(FileParser &infile, int &x1, int &y
 
 	if (infile.key == "listbox_scrollbar_offset") {
 		// overrides same key in GameStateConfigBase
+		renderer_lstb->scrollbar_offset = x1;
 		joystick_device_lstb->scrollbar_offset = x1;
 		activemods_lstb->scrollbar_offset = x1;
 		inactivemods_lstb->scrollbar_offset = x1;
 		language_lstb->scrollbar_offset = x1;
+	}
+	else if (infile.key == "renderer") {
+		// @ATTR renderer|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Renderer" list box relative to the frame.
+		placeLabeledWidget(renderer_lb, renderer_lstb, x1, y1, x2, y2, msg->get("Renderer"));
+
+		renderer_lstb->can_select = true;
+		renderer_lstb->multi_select = false;
+		renderer_lstb->can_deselect = false;
+
+		refreshRenderers();
+
+		renderer_lb->setJustify(JUSTIFY_CENTER);
 	}
 	else if (infile.key == "fullscreen") {
 		// @ATTR fullscreen|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Full Screen Mode" checkbox relative to the frame.
@@ -352,6 +367,8 @@ bool GameStateConfigDesktop::parseKeyDesktop(FileParser &infile, int &x1, int &y
 
 void GameStateConfigDesktop::addChildWidgetsDesktop() {
 	if (enable_video_tab) {
+		addChildWidget(renderer_lstb, VIDEO_TAB);
+		addChildWidget(renderer_lb, VIDEO_TAB);
 		addChildWidget(fullscreen_cb, VIDEO_TAB);
 		addChildWidget(fullscreen_lb, VIDEO_TAB);
 		addChildWidget(hwsurface_cb, VIDEO_TAB);
@@ -402,6 +419,7 @@ void GameStateConfigDesktop::setupTabList() {
 		tablist_video.add(texture_filter_cb);
 		tablist_video.add(change_gamma_cb);
 		tablist_video.add(gamma_sl);
+		tablist_video.add(renderer_lstb);
 		tablist_video.setPrevTabList(&tablist);
 		tablist_video.setNextTabList(&tablist_main);
 		tablist_video.lock();
@@ -468,6 +486,7 @@ void GameStateConfigDesktop::updateVideo() {
 	else vsync_cb->unCheck();
 	if (TEXTURE_FILTER) texture_filter_cb->Check();
 	else texture_filter_cb->unCheck();
+
 	if (CHANGE_GAMMA) {
 		change_gamma_cb->Check();
 		render_device->setGamma(GAMMA);
@@ -479,6 +498,8 @@ void GameStateConfigDesktop::updateVideo() {
 		render_device->resetGamma();
 	}
 	gamma_sl->set(5, 20, static_cast<int>(GAMMA*10.0));
+
+	refreshRenderers();
 }
 
 void GameStateConfigDesktop::updateInput() {
@@ -618,6 +639,9 @@ void GameStateConfigDesktop::logicVideo() {
 			render_device->setGamma(GAMMA);
 		}
 	}
+	else if (renderer_lstb->checkClick()) {
+		new_render_device = renderer_lstb->getValue();
+	}
 }
 
 void GameStateConfigDesktop::logicInput() {
@@ -735,6 +759,7 @@ void GameStateConfigDesktop::renderDialogs() {
 void GameStateConfigDesktop::renderTooltips(TooltipData& tip_new) {
 	GameStateConfigBase::renderTooltips(tip_new);
 
+	if (active_tab == VIDEO_TAB && tip_new.isEmpty()) tip_new = renderer_lstb->checkTooltip(inpt->mouse);
 	if (active_tab == VIDEO_TAB && tip_new.isEmpty()) tip_new = hwsurface_cb->checkTooltip(inpt->mouse);
 	if (active_tab == VIDEO_TAB && tip_new.isEmpty()) tip_new = vsync_cb->checkTooltip(inpt->mouse);
 	if (active_tab == VIDEO_TAB && tip_new.isEmpty()) tip_new = change_gamma_cb->checkTooltip(inpt->mouse);
@@ -884,4 +909,18 @@ void GameStateConfigDesktop::disableJoystickOptions() {
 
 	if (inpt->getNumJoysticks() > 0)
 		joystick_device_lstb->refresh();
+}
+
+void GameStateConfigDesktop::refreshRenderers() {
+	renderer_lstb->clear();
+
+	std::vector<std::string> rd_name, rd_desc;
+	createRenderDeviceList(msg, rd_name, rd_desc);
+
+	for (size_t i = 0; i < rd_name.size(); ++i) {
+		renderer_lstb->append(rd_name[i], rd_desc[i]);
+		if (rd_name[i] == RENDER_DEVICE) {
+			renderer_lstb->select(static_cast<int>(i));
+		}
+	}
 }

@@ -89,6 +89,7 @@ GameStateConfigBase::GameStateConfigBase (bool do_init)
 	, tip(new WidgetTooltip())
 	, tip_buf()
 	, active_tab(0)
+	, new_render_device(RENDER_DEVICE)
 {
 
 	// don't save settings if we close the game while in this menu
@@ -629,6 +630,13 @@ void GameStateConfigBase::logicAccept() {
 	if (loading_tip) {
 		delete loading_tip;
 		loading_tip = NULL;
+	}
+
+	// we can't replace the render device in-place, so soft-reset the game
+	if (new_render_device != RENDER_DEVICE) {
+		RENDER_DEVICE = new_render_device;
+		inpt->done = true;
+		SOFT_RESET = true;
 	}
 
 	render_device->createContext();

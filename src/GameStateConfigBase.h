@@ -150,6 +150,8 @@ public:
 
 	Rect frame;
 	std::vector<std::string> language_ISO;
+
+	std::string new_render_device;
 };
 
 #endif

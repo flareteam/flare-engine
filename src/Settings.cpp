@@ -243,6 +243,7 @@ float ENCOUNTER_DIST;
 float CAMERA_SPEED;
 bool SAVE_BUYBACK = true;
 int PREV_SAVE_SLOT = -1;
+bool SOFT_RESET = false;
 
 static ConfigEntry * getConfigEntry(const char * name) {
 

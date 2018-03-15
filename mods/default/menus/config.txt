@@ -10,6 +10,7 @@ button_cancel=0,0,bottom
 listbox_scrollbar_offset=2
 
 [video]
+renderer=104,16,32,32
 fullscreen=568,36,584,32
 hwsurface=568,68,584,64
 vsync=568,100,584,96

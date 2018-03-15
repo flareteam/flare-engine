@@ -226,6 +226,7 @@ extern std::string LOAD_SCRIPT;
 
 // Misc
 extern int PREV_SAVE_SLOT;
+extern bool SOFT_RESET;
 
 void loadTilesetSettings();
 void loadMiscSettings();

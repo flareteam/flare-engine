@@ -395,6 +395,7 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
+soft_reset:
 	if (!done) {
 		srand(static_cast<unsigned int>(time(NULL)));
 #ifdef __EMSCRIPTEN__
@@ -413,6 +414,14 @@ int main(int argc, char *argv[]) {
 			gswitch->saveUserSettings();
 
 		cleanup();
+	}
+
+	if (SOFT_RESET) {
+		logInfo("main: Restarting Flare...");
+		SOFT_RESET = false;
+		done = false;
+		cmd_line_args = CmdLineArgs();
+		goto soft_reset;
 	}
 
 	return 0;

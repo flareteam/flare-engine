@@ -23,10 +23,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "RenderDevice.h"
 
 class FontEngine;
-class SoundManager;
 class InputState;
+class MessageEngine;
+class SoundManager;
 
 RenderDevice* getRenderDevice(const std::string& name);
+void createRenderDeviceList(MessageEngine* msg, std::vector<std::string> &rd_name, std::vector<std::string> &rd_desc);
 
 FontEngine* getFontEngine();
 SoundManager* getSoundManager();

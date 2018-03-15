@@ -87,7 +87,10 @@ private:
 	void enableMouseOptions();
 	void disableMouseOptions();
 	void disableJoystickOptions();
+	void refreshRenderers();
 
+	WidgetListBox       * renderer_lstb;
+	WidgetLabel         * renderer_lb;
 	WidgetCheckBox      * fullscreen_cb;
 	WidgetLabel         * fullscreen_lb;
 	WidgetCheckBox      * hwsurface_cb;
