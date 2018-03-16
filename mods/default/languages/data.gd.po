@@ -1,18 +1,21 @@
 # Copyright (C) 2011 Clint Bellanger
 # This file is distributed under the same license as the FLARE package.
-# GunChleoc <fios@foramnagaidhlig.net>, 2013, 2015, 2016, 2017.
+#
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Translators:
+# GunChleoc, 2018
 msgid ""
 msgstr ""
-"Project-Id-Version: flare-engine data\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-15 13:33+\n"
-"PO-Revision-Date: 2018-03-10 15:59+0000\n"
+"POT-Creation-Date: 2018-03-15 13:36+\n"
+"PO-Revision-Date: 2018-03-16 10:31+0000\n"
 "Last-Translator: GunChleoc <fios@foranagaidhlig.net>\n"
-"Language-Team: Fòram na Gàidhlig\n"
-"Language: gd\n"
+"Language-Team: Gaelic, Scottish (https://www.transifex.com/gunchleoc/teams/12769/gd/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: gd\n"
 "Plural-Forms: nplurals=4; plural=(n==1 || n==11) ? 0 : (n==2 || n==12) ? 1 : (n > 2 && n < 20) ? 2 : 3;\n"
 "X-Generator: Poedit 2.0.6\n"
 
@@ -106,7 +109,7 @@ msgstr "Luchd-prògramachaidh"
 
 #: ../cutscenes/credits.txt:22
 msgid "Andrew Engelbrecht"
-msgstr ""
+msgstr "Andrew Engelbrecht"
 
 #: ../cutscenes/credits.txt:23
 msgid "Anton Golov"
@@ -229,9 +232,8 @@ msgid "Giovanni Dalla Torre"
 msgstr "Giovanni Dalla Torre"
 
 #: ../cutscenes/credits.txt:62
-#, fuzzy
 msgid "GunChleoc"
-msgstr "gunchleoc"
+msgstr "GunChleoc"
 
 #: ../cutscenes/credits.txt:63
 msgid "Hans Joachim Desserud"
@@ -239,7 +241,7 @@ msgstr "Hans Joachim Desserud"
 
 #: ../cutscenes/credits.txt:65
 msgid "Janet Hunt"
-msgstr ""
+msgstr "Janet Hunt"
 
 #: ../cutscenes/credits.txt:66
 msgid "Juan Pablo Tamayo"
@@ -356,24 +358,3 @@ msgstr "Thorbjørn Lindeijer"
 #: ../cutscenes/credits.txt:108
 msgid "Ranie Jade Ramiso"
 msgstr "Ranie Jade Ramiso"
-
-#~ msgid "Lead Programmers - Clint Bellanger, Henrik Andersson, Igor Paliychuk, Justin Jacobs, Stefan Beller, and Thane Brimhall"
-#~ msgstr "Prìomh-phrògramairean - Clint Bellanger, Henrik Andersson, Igor Paliychuk, Justin Jacobs, Stefan Beller agus Thane Brimhall"
-
-#~ msgid "Programmers - Anton Golov, Artur Rojek, blazindragon, Bonbadil, Chris Oelmueller, David Bariod, Daniel Santos, Gallaecio, Joseph Bleu, Juan PabloTamayo, Kitano, Kyle Belanger, LongerDev, Manuel A. Fernandez Montecelo, Matthew Krohn, Nojan, Pavel Kirpichyov, runtime-x86, and Ryan Dansie"
-#~ msgstr "Luchd-prògramaidh - Anton Golov, Artur Rojek, blazindragon, Bonbadil, Chris Oelmueller, David Bariod, Daniel Santos, Gallaecio, Joseph Bleu, Juan PabloTamayo, Kitano, Kyle Belanger, LongerDev, Manuel A. Fernandez Montecelo, Matthew Krohn, Nojan, Pavel Kirpichyov, runtime-x86, and Ryan Dansie"
-
-#~ msgid "Translators - Adrian Chaves Fernandez, Andrea Ranaldi, Andreas Berheim Brudin, Bas Doodeman, Bonbadil, Carlos Sanchez, Chris Oelmueller, Christoph J. Thompson, Evgen Pavlov, Giovanni Dalla Torre, gunchleoc, Hans Joachim Desserud, Igor Paliychuk, Juan Pablo Tamayo, losine, Michael Papageorgiou, Mikhail Karalevich, Miro Jánošík, Morgan Strauss, Nikita Vanku, Paul Wortmann, Pawel Puszczynski, Quentin Stievenart, Sergey Basalaev, Stefan Beller, Thomas Glamsch, Timo Sievänen, Wuzzy2, and Yannis Anthymidis"
-#~ msgstr "Eadar-theangadairean - Adrian Chaves Fernandez, Andrea Ranaldi, Andreas Berheim Brudin, Bas Doodeman, Bonbadil, Carlos Sanchez, Chris Oelmueller, Christoph J. Thompson, Evgen Pavlov, Giovanni Dalla Torre, gunchleoc, Hans Joachim Desserud, Igor Paliychuk, Juan Pablo Tamayo, losine, Michael Papageorgiou, Mikhail Karalevich, Miro Jánošík, Morgan Strauss, Nikita Vanku, Paul Wortmann, Pawel Puszczynski, Quentin Stievenart, Sergey Basalaev, Stefan Beller, Thomas Glamsch, Timo Sievänen, Wuzzy2, and Yannis Anthymidis"
-
-#~ msgid "Distributors - Ablu, Feillyne, Jan-Hendrik Peters, Manuel A. Fernandez Montecelo, miffe"
-#~ msgstr "Sgaoileadairean - Ablu, Feillyne, Jan-Hendrik Peters, Manuel A. Fernandez Montecelo, miffe"
-
-#~ msgid "Special Thanks - Bart Kelsey and the community at OpenGameArt, for giving constant feedback and testing. Thorbjørn Lindeijer, Stefan Beller, and Ranie Jade Ramiso for Tiled and the Flare map exporter."
-#~ msgstr "Taing shònraichte - Bart Kelsey is a' choimhearsnachd aig OpenGameArt airson beachdan is deuchainnean gun sgur. Thorbjørn Lindeijer, Stefan Beller is Ranie Jade Ramiso airson leacan is an t-às-phortachadh aig mapaichean Flare."
-
-#~ msgid "Flare, the..."
-#~ msgstr "Flare, an..."
-
-#~ msgid "Free Libre Action Roleplaying Engine"
-#~ msgstr "Einnsean saor airson cluich ghnìomhan mas fhìor"

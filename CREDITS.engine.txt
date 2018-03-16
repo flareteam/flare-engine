@@ -15,7 +15,7 @@ Gallaecio
 Henrik Andersson | https://github.com/hean01
 Igor Paliychuk
 Joseph Bleu
-Juan PabloTamayo "morris989"
+Juan Pablo Tamayo "morris989"
 Justin Jacobs | https://github.com/dorkster
 Kitano
 Kyle Belanger
