@@ -448,14 +448,14 @@ void SDLHardwareRenderDevice::destroyContext() {
 	SDL_FreeSurface(titlebar_icon);
 	titlebar_icon = NULL;
 
+	SDL_DestroyTexture(texture);
+	texture = NULL;
+
 	SDL_DestroyRenderer(renderer);
 	renderer = NULL;
 
 	SDL_DestroyWindow(window);
 	window = NULL;
-
-	SDL_DestroyTexture(texture);
-	texture = NULL;
 
 	if (title) {
 		free(title);
