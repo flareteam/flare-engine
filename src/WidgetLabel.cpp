@@ -83,6 +83,10 @@ WidgetLabel::WidgetLabel()
  * Draw the buffered string surface to the screen
  */
 void WidgetLabel::render() {
+	if (inpt->window_resized) {
+		recacheTextSprite();
+	}
+
 	if (label) {
 		label->local_frame = local_frame;
 		label->setOffset(local_offset);
