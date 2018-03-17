@@ -83,10 +83,6 @@ WidgetLabel::WidgetLabel()
  * Draw the buffered string surface to the screen
  */
 void WidgetLabel::render() {
-	if (inpt->window_resized) {
-		recacheTextSprite();
-	}
-
 	if (label) {
 		label->local_frame = local_frame;
 		label->setOffset(local_offset);
@@ -202,7 +198,11 @@ void WidgetLabel::setJustify(int _justify) {
 /**
  * Apply horizontal justify and vertical alignment to label position
  */
-void WidgetLabel::applyOffsets() {
+void WidgetLabel::applyOffsets(bool recache) {
+	if (inpt->window_resized && recache) {
+		recacheTextSprite(false);
+	}
+
 	// apply JUSTIFY
 	if (justify == JUSTIFY_LEFT)
 		bounds.x = pos.x;
@@ -242,7 +242,7 @@ void WidgetLabel::set(const std::string& _text) {
  * We buffer the rendered text instead of calculating it each frame
  * This function refreshes the buffer.
  */
-void WidgetLabel::recacheTextSprite() {
+void WidgetLabel::recacheTextSprite(bool apply_offsets) {
 	Image *image;
 
 	if (label) {
@@ -271,7 +271,8 @@ void WidgetLabel::recacheTextSprite() {
 	label = image->createSprite();
 	image->unref();
 
-	applyOffsets();
+	if (apply_offsets)
+		applyOffsets(false);
 }
 
 WidgetLabel::~WidgetLabel() {

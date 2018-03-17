@@ -50,8 +50,8 @@ LabelInfo eatLabelInfo(std::string val);
 class WidgetLabel : public Widget {
 private:
 
-	void recacheTextSprite();
-	void applyOffsets();
+	void recacheTextSprite(bool apply_offsets = true);
+	void applyOffsets(bool recache = true);
 
 	int justify;
 	int valign;
