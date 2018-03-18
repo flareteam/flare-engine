@@ -24,7 +24,8 @@ WidgetTabControl::WidgetTabControl()
 	: active_tab_surface(NULL)
 	, inactive_tab_surface(NULL)
 	, active_tab(0)
-	, tab_padding(8,4) {
+	, tab_padding(8,4) // TODO get from config file
+{
 
 	loadGraphics();
 
@@ -96,9 +97,9 @@ void WidgetTabControl::setMainArea(int x, int y, int width, int height) {
 	tabs_area.h = active_tab_surface->getGraphicsHeight();
 
 	// Set content area.
-	content_area.x = x + 8;
-	content_area.y = y + tabs_area.h+8;
-	content_area.w = width - 16;
+	content_area.x = x + tab_padding.x;
+	content_area.y = y + tabs_area.h + (tab_padding.y *2);
+	content_area.w = width - (tab_padding.x * 2);
 	content_area.h = height - tabs_area.h;
 }
 
@@ -197,7 +198,7 @@ void WidgetTabControl::render() {
 		topLeft.y = tabs[active_tab].y;
 		bottomRight.x = topLeft.x + tabs[active_tab].w;
 		bottomRight.y = topLeft.y + tabs[active_tab].h;
-		Color color = Color(255,248,220,255);
+		Color color = Color(255,248,220,255); // TODO load from config file
 
 		render_device->drawRectangle(topLeft, bottomRight, color);
 	}
@@ -215,7 +216,7 @@ void WidgetTabControl::renderTab(unsigned number) {
 	src.x = src.y = 0;
 	dest.x = tabs[i].x;
 	dest.y = tabs[i].y;
-	src.w = tabs[i].w;
+	src.w = tabs[i].w - tab_padding.x; // don't draw the right edge yet
 	src.h = tabs[i].h;
 
 	if (i == active_tab) {
