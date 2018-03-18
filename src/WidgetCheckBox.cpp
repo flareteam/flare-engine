@@ -35,6 +35,7 @@ WidgetCheckBox::WidgetCheckBox (const std::string &fname)
 	, cb(NULL)
 	, checked(false)
 	, pressed(false)
+	, activated(false)
 {
 	focusable = true;
 
@@ -52,6 +53,7 @@ WidgetCheckBox::WidgetCheckBox (const std::string &fname)
 
 void WidgetCheckBox::activate() {
 	pressed = true;
+	activated = true;
 }
 
 WidgetCheckBox::~WidgetCheckBox () {
@@ -86,7 +88,8 @@ bool WidgetCheckBox::checkClick (int x, int y) {
 	if (inpt->lock[MAIN1]) return false;
 	if (inpt->lock[ACCEPT]) return false;
 
-	if (pressed && !inpt->lock[MAIN1] && !inpt->lock[ACCEPT] && isWithinRect(pos, mouse)) { // this is a button release
+	if (pressed && !inpt->lock[MAIN1] && !inpt->lock[ACCEPT] && (isWithinRect(pos, mouse) || activated)) { // this is a button release
+		activated = false;
 		pressed = false;
 		toggleCheck();
 		return true;

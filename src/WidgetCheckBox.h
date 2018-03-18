@@ -52,6 +52,7 @@ private:
 	Sprite *cb;
 	bool checked;
 	bool pressed;
+	bool activated;
 };
 
 #endif

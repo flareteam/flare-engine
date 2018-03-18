@@ -37,6 +37,7 @@ WidgetButton::WidgetButton(const std::string& _fileName)
 	, tip_buf()
 	, tip_new()
 	, tip(new WidgetTooltip())
+	, activated(false)
 	, label("")
 	, tooltip("")
 	, enabled(true)
@@ -48,6 +49,7 @@ WidgetButton::WidgetButton(const std::string& _fileName)
 
 void WidgetButton::activate() {
 	pressed = true;
+	activated = true;
 }
 
 void WidgetButton::setPos(int offset_x, int offset_y) {
@@ -93,7 +95,8 @@ bool WidgetButton::checkClick(int x, int y) {
 	if (inpt->lock[ACCEPT]) return false;
 
 	// main click released, so the button state goes back to unpressed
-	if (pressed && !inpt->lock[MAIN1] && !inpt->lock[ACCEPT] && isWithinRect(pos, mouse)) {
+	if (pressed && !inpt->lock[MAIN1] && !inpt->lock[ACCEPT] && (isWithinRect(pos, mouse) || activated)) {
+		activated = false;
 		pressed = false;
 		return true;
 	}
