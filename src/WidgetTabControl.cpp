@@ -213,21 +213,44 @@ void WidgetTabControl::renderTab(unsigned number) {
 	Rect dest;
 
 	// Draw tab’s background.
+	int max_main_width = active_tab_surface->getGraphicsWidth() - tab_padding.x;
+	int width_to_render = tabs[i].w - tab_padding.x; // don't draw the right edge yet
+	int render_cursor = 0;
+
 	src.x = src.y = 0;
+	src.h = tabs[i].h;
 	dest.x = tabs[i].x;
 	dest.y = tabs[i].y;
-	src.w = tabs[i].w - tab_padding.x; // don't draw the right edge yet
-	src.h = tabs[i].h;
 
-	if (i == active_tab) {
-		active_tab_surface->setClip(src);
-		active_tab_surface->setDest(dest);
-		render_device->render(active_tab_surface);
-	}
-	else {
-		inactive_tab_surface->setClip(src);
-		inactive_tab_surface->setDest(dest);
-		render_device->render(inactive_tab_surface);
+	// repeat the middle part of the image for long tabs
+	while (render_cursor < width_to_render) {
+		dest.x = tabs[i].x + render_cursor;
+		if (render_cursor == 0) {
+			// left edge + middle
+			src.x = 0;
+			src.w = tabs[i].w - tab_padding.x;
+		}
+		else {
+			// only middle
+			src.x = tab_padding.x;
+			src.w = tabs[i].w - (tab_padding.x * 2);
+		}
+
+		if (src.w > max_main_width)
+			src.w = max_main_width;
+
+		render_cursor += src.w;
+
+		if (i == active_tab) {
+			active_tab_surface->setClip(src);
+			active_tab_surface->setDest(dest);
+			render_device->render(active_tab_surface);
+		}
+		else {
+			inactive_tab_surface->setClip(src);
+			inactive_tab_surface->setDest(dest);
+			render_device->render(inactive_tab_surface);
+		}
 	}
 
 	// Draw tab’s right edge.
