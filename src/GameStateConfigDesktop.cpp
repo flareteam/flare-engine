@@ -43,6 +43,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <limits.h>
 #include <iomanip>
 
+#define GAMMA_MIN 5
+#define GAMMA_MAX 15
+
 GameStateConfigDesktop::GameStateConfigDesktop(bool _enable_video_tab)
 	: GameStateConfigBase(false)
 	, renderer_lstb(new WidgetListBox(4))
@@ -497,7 +500,7 @@ void GameStateConfigDesktop::updateVideo() {
 		gamma_sl->enabled = false;
 		render_device->resetGamma();
 	}
-	gamma_sl->set(5, 20, static_cast<int>(GAMMA*10.0));
+	gamma_sl->set(GAMMA_MIN, GAMMA_MAX, static_cast<int>(GAMMA*10.0));
 
 	refreshRenderers();
 }
@@ -628,7 +631,7 @@ void GameStateConfigDesktop::logicVideo() {
 			CHANGE_GAMMA = false;
 			GAMMA = 1.0;
 			gamma_sl->enabled = false;
-			gamma_sl->set(5, 20, static_cast<int>(GAMMA*10.0));
+			gamma_sl->set(GAMMA_MIN, GAMMA_MAX, static_cast<int>(GAMMA*10.0));
 			render_device->resetGamma();
 		}
 	}
