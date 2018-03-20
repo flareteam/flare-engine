@@ -358,6 +358,7 @@ bool GameStateConfigBase::parseStub(FileParser &infile) {
 	else if (infile.key == "handheld_note");
 	else if (infile.key == "secondary_offset");
 	else if (infile.key == "keybinds_bg_color");
+	else if (infile.key == "keybinds_bg_alpha");
 	else if (infile.key == "scrollpane");
 	else if (infile.key == "scrollpane_contents");
 	else if (infile.key == "cancel");

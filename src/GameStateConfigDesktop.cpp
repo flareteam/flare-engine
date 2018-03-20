@@ -132,10 +132,7 @@ void GameStateConfigDesktop::init() {
 	// Allocate KeyBindings ScrollBox
 	input_scrollbox = new WidgetScrollBox(scrollpane.w, scrollpane.h);
 	input_scrollbox->setBasePos(scrollpane.x, scrollpane.y);
-	input_scrollbox->bg.r = scrollpane_color.r;
-	input_scrollbox->bg.g = scrollpane_color.g;
-	input_scrollbox->bg.b = scrollpane_color.b;
-	input_scrollbox->transparent = false;
+	input_scrollbox->bg = scrollpane_color;
 	input_scrollbox->resize(scrollpane.w, scrollpane_contents);
 
 	// Set positions of secondary key bindings
@@ -287,6 +284,10 @@ bool GameStateConfigDesktop::parseKeyDesktop(FileParser &infile, int &x1, int &y
 		scrollpane_color.r = static_cast<Uint8>(x1);
 		scrollpane_color.g = static_cast<Uint8>(y1);
 		scrollpane_color.b = static_cast<Uint8>(x2);
+	}
+	else if (infile.key == "keybinds_bg_alpha") {
+		// @ATTR keybinds_bg_alpha|int|Alpha value for the keybindings scrollbox background color.
+		scrollpane_color.a = static_cast<Uint8>(x1);
 	}
 	else if (infile.key == "scrollpane") {
 		// @ATTR scrollpane|rectangle|Position of the keybinding scrollbox relative to the frame.

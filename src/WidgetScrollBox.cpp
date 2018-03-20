@@ -32,12 +32,11 @@ WidgetScrollBox::WidgetScrollBox(int width, int height)
 	pos.h = height;
 	cursor = 0;
 	bg.r = bg.g = bg.b = 0;
-	bg.a = 255;
+	bg.a = 0;
 	currentChild = -1;
 	scrollbar = new WidgetScrollBar();
 	update = true;
 	render_to_alpha = false;
-	transparent = true;
 	line_height = 20;
 	resize(width, height);
 	tablist = TabList(VERTICAL);
@@ -172,7 +171,7 @@ void WidgetScrollBox::resize(int w, int h) {
 		graphics->unref();
 	}
 
-	if (contents && !transparent) {
+	if (contents) {
 		contents->getGraphics()->fillWithColor(bg);
 	}
 
@@ -199,7 +198,7 @@ void WidgetScrollBox::refresh() {
 			graphics->unref();
 		}
 
-		if (contents && !transparent) {
+		if (contents) {
 			contents->getGraphics()->fillWithColor(bg);
 		}
 	}

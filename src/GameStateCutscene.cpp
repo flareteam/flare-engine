@@ -278,7 +278,6 @@ void Scene::refreshWidgets() {
 				caption_box = new WidgetScrollBox(caption_size_padded.x, caption_size_padded.y);
 				caption_box->setBasePos(0, 0, ALIGN_BOTTOM);
 				caption_box->bg = settings.caption_background;
-				caption_box->transparent = false;
 				caption_box->resize(caption_size_padded.x, caption_size_padded.y);
 			}
 			else {
