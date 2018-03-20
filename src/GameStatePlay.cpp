@@ -124,7 +124,6 @@ void GameStatePlay::resetGame() {
 	menu->questlog->clear();
 	quests->createQuestList();
 	menu->hudlog->clear();
-	save_load->loadStash();
 
 	// Finalize new character settings
 	menu->talker->setHero(pc->stats);

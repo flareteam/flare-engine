@@ -468,7 +468,7 @@ void SaveLoad::loadStash() {
 	else
 		ss << PATH_USER << "saves/" << SAVE_PREFIX << "/stash.txt";
 
-	if (infile.open(path(&ss), false)) {
+	if (infile.open(path(&ss), false, "")) {
 		while (infile.next()) {
 			if (infile.key == "item") {
 				menu->stash->stock.setItems(infile.val);
@@ -479,7 +479,7 @@ void SaveLoad::loadStash() {
 		}
 		infile.close();
 	}
-	else logError("SaveLoad: Unable to open %s!", ss.str().c_str());
+	else logInfo("SaveLoad: Could not open stash file '%s'. This may be because it hasn't been created yet.", ss.str().c_str());
 
 	menu->stash->stock.clean();
 }

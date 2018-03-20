@@ -13,6 +13,7 @@ Engine changes:
 * Fix incorrect dimensions of SVG icon. (Alexander Wilms)
 * Add documentation for creating Mac OS build. (Thomas Leavitt)
 * Fix Windows installer not using the correct working directory for launching Flare after install. (Justin Jacobs)
+* Clean up error messages that are displayed when the stash hasn't been created. (Justin Jacobs)
 
 Translation Updates:
 
