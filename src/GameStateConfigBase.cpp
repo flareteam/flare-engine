@@ -246,6 +246,10 @@ bool GameStateConfigBase::parseKey(FileParser &infile, int &x1, int &y1, int &x2
 		placeLabeledWidget(language_lb, language_lstb, x1, y1, x2, y2, msg->get("Language"));
 		language_lb->setJustify(JUSTIFY_CENTER);
 	}
+	else if (infile.key == "language_height") {
+		// @ATTR language_height|int|Number of visible rows for the "Language" list box.
+		language_lstb->setHeight(x1);
+	}
 	else if (infile.key == "combat_text") {
 		// @ATTR combat_text|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Show combat text" checkbox relative to the frame.
 		placeLabeledWidget(combat_text_lb, combat_text_cb, x1, y1, x2, y2, msg->get("Show combat text"), JUSTIFY_RIGHT);
@@ -287,10 +291,18 @@ bool GameStateConfigBase::parseKey(FileParser &infile, int &x1, int &y1, int &x2
 		placeLabeledWidget(activemods_lb, activemods_lstb, x1, y1, x2, y2, msg->get("Active Mods"));
 		activemods_lb->setJustify(JUSTIFY_CENTER);
 	}
+	else if (infile.key == "activemods_height") {
+		// @ATTR activemods_height|int|Number of visible rows for the "Active Mods" list box.
+		activemods_lstb->setHeight(x1);
+	}
 	else if (infile.key == "inactivemods") {
 		// @ATTR inactivemods|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Available Mods" list box relative to the frame.
 		placeLabeledWidget(inactivemods_lb, inactivemods_lstb, x1, y1, x2, y2, msg->get("Available Mods"));
 		inactivemods_lb->setJustify(JUSTIFY_CENTER);
+	}
+	else if (infile.key == "inactivemods_height") {
+		// @ATTR inactivemods_height|int|Number of visible rows for the "Available Mods" list box.
+		inactivemods_lstb->setHeight(x1);
 	}
 	else if (infile.key == "activemods_shiftup") {
 		// @ATTR activemods_shiftup|point|Position of the button to shift mods up in "Active Mods" relative to the frame.
@@ -324,7 +336,9 @@ bool GameStateConfigBase::parseKey(FileParser &infile, int &x1, int &y1, int &x2
 bool GameStateConfigBase::parseStub(FileParser &infile) {
 	// not used for base configuration
 	// checking them here prevents getting an "invalid key" warning
-	if (infile.key == "fullscreen");
+	if (infile.key == "renderer");
+	else if (infile.key == "renderer_height");
+	else if (infile.key == "fullscreen");
 	else if (infile.key == "mouse_move");
 	else if (infile.key == "hwsurface");
 	else if (infile.key == "vsync");
@@ -337,6 +351,7 @@ bool GameStateConfigBase::parseStub(FileParser &infile) {
 	else if (infile.key == "joystick_deadzone");
 	else if (infile.key == "resolution");
 	else if (infile.key == "joystick_device");
+	else if (infile.key == "joystick_device_height");
 	else if (infile.key == "hws_note");
 	else if (infile.key == "dbuf_note");
 	else if (infile.key == "test_note");

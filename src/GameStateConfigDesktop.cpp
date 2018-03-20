@@ -213,6 +213,10 @@ bool GameStateConfigDesktop::parseKeyDesktop(FileParser &infile, int &x1, int &y
 
 		renderer_lb->setJustify(JUSTIFY_CENTER);
 	}
+	else if (infile.key == "renderer_height") {
+		// @ATTR renderer_height|int|Number of visible rows for the "Renderer" list box.
+		renderer_lstb->setHeight(x1);
+	}
 	else if (infile.key == "fullscreen") {
 		// @ATTR fullscreen|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Full Screen Mode" checkbox relative to the frame.
 		placeLabeledWidget(fullscreen_lb, fullscreen_cb, x1, y1, x2, y2, msg->get("Full Screen Mode"), JUSTIFY_RIGHT);
@@ -256,6 +260,10 @@ bool GameStateConfigDesktop::parseKeyDesktop(FileParser &infile, int &x1, int &y
 		}
 
 		joystick_device_lb->setJustify(JUSTIFY_CENTER);
+	}
+	else if (infile.key == "joystick_device_height") {
+		// @ATTR joystick_device_height|int|Number of visible rows for the "Joystick" list box.
+		joystick_device_lstb->setHeight(x1);
 	}
 	else if (infile.key == "mouse_aim") {
 		// @ATTR mouse_aim|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Mouse aim" checkbox relative to the frame.

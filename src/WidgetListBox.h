@@ -96,6 +96,8 @@ public:
 	void deselect(int index);
 	bool isSelected(int index);
 
+	void setHeight(int new_size);
+
 	Rect pos_scroll;
 	bool pressed;
 	bool multi_select;
