@@ -14,7 +14,8 @@ Engine changes:
 * Add documentation for creating Mac OS build. (Thomas Leavitt)
 * Fix Windows installer not using the correct working directory for launching Flare after install. (Justin Jacobs)
 * Clean up error messages that are displayed when the stash hasn't been created. (Justin Jacobs)
-* Add support for changing list box heights in menus/config.txt. (Justin Jacobs)
+* Support loading some hard-coded Configuration menu values from menus/config.txt. (Justin Jacobs)
+* Add WidgetSettings class for loading previously hard-coded properties of some Widgets. (Justin Jacobs)
 
 Translation Updates:
 
