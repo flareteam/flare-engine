@@ -38,6 +38,8 @@ public:
 	void showCursor();
 	std::string getJoystickName(int index);
 	std::string getKeyName(int key);
+	std::string getMouseButtonName(int button);
+	std::string getJoystickButtonName(int button);
 	std::string getBindingString(int key, int bindings_list = INPUT_BINDING_DEFAULT);
 	std::string getMovementString();
 	std::string getAttackString();
@@ -46,6 +48,7 @@ public:
 	bool usingMouse();
 	void startTextInput();
 	void stopTextInput();
+	void setKeybind(int key, int binding_button, int bindings_list, std::string& keybind_msg);
 
 private:
 	SDL_Joystick* joy;

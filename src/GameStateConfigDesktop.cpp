@@ -81,6 +81,8 @@ GameStateConfigDesktop::GameStateConfigDesktop(bool _enable_video_tab)
 	, key_count(0)
 	, scrollpane_contents(0)
 	, enable_video_tab(_enable_video_tab)
+	, keybind_tip_ticks(0)
+	, keybind_tip(new WidgetTooltip())
 {
 	// Allocate KeyBindings
 	for (int i = 0; i < inpt->key_count; i++) {
@@ -98,6 +100,7 @@ GameStateConfigDesktop::GameStateConfigDesktop(bool _enable_video_tab)
 }
 
 GameStateConfigDesktop::~GameStateConfigDesktop() {
+	delete keybind_tip;
 }
 
 void GameStateConfigDesktop::init() {
@@ -766,6 +769,27 @@ void GameStateConfigDesktop::renderDialogs() {
 
 	if (input_confirm->visible)
 		input_confirm->render();
+
+	if (active_tab == KEYBINDS_TAB && !keybind_msg.empty()) {
+		TooltipData keybind_tip_data;
+		keybind_tip_data.addText(keybind_msg);
+
+		if (keybind_tip_ticks == 0)
+			keybind_tip_ticks = MAX_FRAMES_PER_SEC * 5;
+
+		if (keybind_tip_ticks > 0) {
+			keybind_tip->render(keybind_tip_data, Point(VIEW_W, 0), STYLE_FLOAT);
+			keybind_tip_ticks--;
+		}
+
+		if (keybind_tip_ticks == 0) {
+			keybind_msg.clear();
+		}
+	}
+	else {
+		keybind_msg.clear();
+		keybind_tip_ticks = 0;
+	}
 }
 
 void GameStateConfigDesktop::renderTooltips(TooltipData& tip_new) {
@@ -787,73 +811,49 @@ void GameStateConfigDesktop::refreshWidgets() {
 	input_confirm->align();
 }
 
+void GameStateConfigDesktop::confirmKey(int button) {
+	inpt->pressing[button] = false;
+	inpt->lock[button] = false;
+
+	input_confirm->visible = false;
+	input_confirm_ticks = 0;
+
+	updateKeybinds();
+}
+
 void GameStateConfigDesktop::scanKey(int button) {
-	// clear the keybind if the user presses CTRL+Delete
+	int column = button / key_count;
+	int real_button = button % key_count;
+
+	// clear the keybind if the user clicks "Clear" in the dialog
 	if (input_confirm->visible && input_confirm->confirmClicked) {
-		if (static_cast<unsigned>(button) < key_count) inpt->binding[button] = -1;
-		else if (static_cast<unsigned>(button) < key_count*2) inpt->binding_alt[button%key_count] = -1;
-		else if (static_cast<unsigned>(button) < key_count*3) inpt->binding_joy[button%key_count] = -1;
-
-		inpt->pressing[button%key_count] = false;
-		inpt->lock[button%key_count] = false;
-
-		keybinds_btn[button]->label = msg->get("(none)");
-		input_confirm->visible = false;
-		input_confirm_ticks = 0;
-		keybinds_btn[button]->refresh();
+		inpt->setKeybind(-1, real_button, column, keybind_msg);
+		confirmKey(real_button);
 		return;
 	}
 
 	if (input_confirm->visible && !input_confirm->isWithinButtons) {
 		// keyboard & mouse
-		if (static_cast<unsigned>(button) < key_count*2) {
+		if (column == INPUT_BINDING_DEFAULT || column == INPUT_BINDING_ALT) {
 			if (inpt->last_button != -1) {
-				if (static_cast<unsigned>(button) < key_count) inpt->binding[button] = inpt->last_button;
-				else inpt->binding_alt[button-key_count] = inpt->last_button;
-
-				inpt->pressing[button%key_count] = false;
-				inpt->lock[button%key_count] = false;
-
-				if (static_cast<unsigned>(button) < key_count)
-					keybinds_btn[button]->label = inpt->getBindingString(button%key_count, INPUT_BINDING_DEFAULT);
-				else if (static_cast<unsigned>(button) < key_count*2)
-					keybinds_btn[button]->label = inpt->getBindingString(button%key_count, INPUT_BINDING_ALT);
-
-				input_confirm->visible = false;
-				input_confirm_ticks = 0;
-				keybinds_btn[button]->refresh();
-				return;
+				// mouse
+				inpt->setKeybind(inpt->last_button, real_button, column, keybind_msg);
+				confirmKey(real_button);
 			}
-			if (inpt->last_key != -1) {
-				if (static_cast<unsigned>(button) < key_count) inpt->binding[button] = inpt->last_key;
-				else inpt->binding_alt[button-key_count] = inpt->last_key;
-
-				inpt->pressing[button%key_count] = false;
-				inpt->lock[button%key_count] = false;
-
-				keybinds_btn[button]->label = inpt->getKeyName(inpt->last_key);
-				input_confirm->visible = false;
-				input_confirm_ticks = 0;
-				keybinds_btn[button]->refresh();
-				return;
+			else if (inpt->last_key != -1) {
+				// keyboard
+				inpt->setKeybind(inpt->last_key, real_button, column, keybind_msg);
+				confirmKey(real_button);
 			}
 		}
 		// joystick
-		else if (static_cast<unsigned>(button) >= key_count*2 && inpt->last_joybutton != -1) {
-			inpt->binding_joy[button-(key_count*2)] = inpt->last_joybutton;
-
-			keybinds_btn[button]->label = msg->get("Button %d", inpt->binding_joy[button-(key_count*2)]);
-			input_confirm->visible = false;
-			input_confirm_ticks = 0;
-			keybinds_btn[button]->refresh();
+		else if (column == INPUT_BINDING_JOYSTICK && inpt->last_joybutton != -1) {
+			inpt->setKeybind(inpt->last_joybutton, real_button, column, keybind_msg);
+			confirmKey(real_button);
 		}
-		else if (static_cast<unsigned>(button) >= key_count*2 && inpt->last_joyaxis != -1) {
-			inpt->binding_joy[button-(key_count*2)] = inpt->last_joyaxis;
-
-			keybinds_btn[button]->label = inpt->getBindingString(button%key_count, INPUT_BINDING_JOYSTICK);
-			input_confirm->visible = false;
-			input_confirm_ticks = 0;
-			keybinds_btn[button]->refresh();
+		else if (column == INPUT_BINDING_JOYSTICK && inpt->last_joyaxis != -1) {
+			inpt->setKeybind(inpt->last_joyaxis, real_button, column, keybind_msg);
+			confirmKey(real_button);
 		}
 	}
 }

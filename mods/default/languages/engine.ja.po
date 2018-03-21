@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.17\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-15 13:36-0400\n"
+"POT-Creation-Date: 2018-03-21 16:02-0400\n"
 "PO-Revision-Date: 2017-10-31 03:03+0900\n"
 "Last-Translator: \n"
 "Language-Team: Paul Wortmann <www.physhexgames.co.nr>\n"
@@ -122,7 +122,7 @@ msgid "Unknown destination"
 msgstr "未知の目的地"
 
 #: ../../../src/GameStateConfigBase.cpp:88
-#: ../../../src/GameStateConfigBase.cpp:108
+#: ../../../src/GameStateConfigBase.cpp:111
 msgid "Defaults"
 msgstr "デフォルト"
 
@@ -130,209 +130,198 @@ msgstr "デフォルト"
 msgid "Reset ALL settings?"
 msgstr "すべての設定をリセット?"
 
-#: ../../../src/GameStateConfigBase.cpp:107 ../../../src/MenuNumPicker.cpp:45
+#: ../../../src/GameStateConfigBase.cpp:110 ../../../src/MenuNumPicker.cpp:45
 msgid "OK"
 msgstr "オーケー"
 
-#: ../../../src/GameStateConfigBase.cpp:109 ../../../src/GameStateNew.cpp:59
+#: ../../../src/GameStateConfigBase.cpp:112 ../../../src/GameStateNew.cpp:59
 #: ../../../src/InputState.cpp:294 ../../../src/MenuNPCActions.cpp:83
 msgid "Cancel"
 msgstr "キャンセル"
 
-#: ../../../src/GameStateConfigBase.cpp:158
-#: ../../../src/GameStateConfigDesktop.cpp:120
+#: ../../../src/GameStateConfigBase.cpp:161
+#: ../../../src/GameStateConfigDesktop.cpp:126
 msgid "Audio"
 msgstr "オーディオ"
 
-#: ../../../src/GameStateConfigBase.cpp:159
-#: ../../../src/GameStateConfigDesktop.cpp:121
+#: ../../../src/GameStateConfigBase.cpp:162
+#: ../../../src/GameStateConfigDesktop.cpp:127
 msgid "Interface"
 msgstr "インタフェース"
 
-#: ../../../src/GameStateConfigBase.cpp:160
-#: ../../../src/GameStateConfigDesktop.cpp:124
+#: ../../../src/GameStateConfigBase.cpp:163
+#: ../../../src/GameStateConfigDesktop.cpp:130
 msgid "Mods"
 msgstr "モッズ"
 
-#: ../../../src/GameStateConfigBase.cpp:238 ../../../src/MenuExit.cpp:65
+#: ../../../src/GameStateConfigBase.cpp:251 ../../../src/MenuExit.cpp:65
 msgid "Music Volume"
 msgstr "音楽の音量"
 
-#: ../../../src/GameStateConfigBase.cpp:242 ../../../src/MenuExit.cpp:70
+#: ../../../src/GameStateConfigBase.cpp:255 ../../../src/MenuExit.cpp:70
 msgid "Sound Volume"
 msgstr "効果音の音量"
 
-#: ../../../src/GameStateConfigBase.cpp:246
+#: ../../../src/GameStateConfigBase.cpp:259
 msgid "Language"
 msgstr "言語"
 
-#: ../../../src/GameStateConfigBase.cpp:251
+#: ../../../src/GameStateConfigBase.cpp:268
 msgid "Show combat text"
 msgstr "戦闘のテキストを表示"
 
-#: ../../../src/GameStateConfigBase.cpp:255
+#: ../../../src/GameStateConfigBase.cpp:272
 msgid "Show FPS"
 msgstr "FPSを表示"
 
-#: ../../../src/GameStateConfigBase.cpp:259
+#: ../../../src/GameStateConfigBase.cpp:276
 msgid "Colorblind Mode"
 msgstr "色盲モード"
 
-#: ../../../src/GameStateConfigBase.cpp:263
+#: ../../../src/GameStateConfigBase.cpp:280
 #, fuzzy
 msgid "Hardware mouse cursor"
 msgstr "ハードウェアマウスカーソル"
 
-#: ../../../src/GameStateConfigBase.cpp:267
+#: ../../../src/GameStateConfigBase.cpp:284
 msgid "Developer Mode"
 msgstr ""
 
-#: ../../../src/GameStateConfigBase.cpp:271
+#: ../../../src/GameStateConfigBase.cpp:288
 msgid "Always show loot labels"
 msgstr ""
 
-#: ../../../src/GameStateConfigBase.cpp:275
+#: ../../../src/GameStateConfigBase.cpp:292
 msgid "Always show stat bar labels"
 msgstr ""
 
-#: ../../../src/GameStateConfigBase.cpp:279
+#: ../../../src/GameStateConfigBase.cpp:296
 msgid "Automatically equip items"
 msgstr ""
 
-#: ../../../src/GameStateConfigBase.cpp:283
+#: ../../../src/GameStateConfigBase.cpp:300
 msgid "Subtitles"
 msgstr "字幕"
 
-#: ../../../src/GameStateConfigBase.cpp:287
+#: ../../../src/GameStateConfigBase.cpp:304
 msgid "Active Mods"
 msgstr "アクティブモッズ"
 
-#: ../../../src/GameStateConfigBase.cpp:292
+#: ../../../src/GameStateConfigBase.cpp:313
 msgid "Available Mods"
 msgstr "利用可能モッズ"
 
-#: ../../../src/GameStateConfigBase.cpp:307
+#: ../../../src/GameStateConfigBase.cpp:332
 msgid "<< Disable"
 msgstr "<< 無効"
 
-#: ../../../src/GameStateConfigBase.cpp:313
+#: ../../../src/GameStateConfigBase.cpp:338
 msgid "Enable >>"
 msgstr "有効 >>"
 
-#: ../../../src/GameStateConfigBase.cpp:929
+#: ../../../src/GameStateConfigBase.cpp:959
 #, fuzzy
 msgid "Version:"
 msgstr "必要バージョン:"
 
-#: ../../../src/GameStateConfigBase.cpp:934
+#: ../../../src/GameStateConfigBase.cpp:964
 msgid "Game:"
 msgstr "ゲーム:"
 
-#: ../../../src/GameStateConfigBase.cpp:939
+#: ../../../src/GameStateConfigBase.cpp:969
 msgid "Engine version:"
 msgstr "必要バージョン:"
 
-#: ../../../src/GameStateConfigBase.cpp:947
+#: ../../../src/GameStateConfigBase.cpp:977
 msgid "Requires mods:"
 msgstr "必要モッズ:"
 
-#: ../../../src/GameStateConfigDesktop.cpp:75
-#: ../../../src/GameStateConfigDesktop.cpp:723
+#: ../../../src/GameStateConfigDesktop.cpp:78
+#: ../../../src/GameStateConfigDesktop.cpp:738
 msgid "Clear"
 msgstr "クリア"
 
-#: ../../../src/GameStateConfigDesktop.cpp:75
-#: ../../../src/GameStateConfigDesktop.cpp:721
+#: ../../../src/GameStateConfigDesktop.cpp:78
+#: ../../../src/GameStateConfigDesktop.cpp:736
 msgid "Assign:"
 msgstr "割り当て:"
 
-#: ../../../src/GameStateConfigDesktop.cpp:118
+#: ../../../src/GameStateConfigDesktop.cpp:124
 msgid "Video"
 msgstr "ビデオ"
 
-#: ../../../src/GameStateConfigDesktop.cpp:122
+#: ../../../src/GameStateConfigDesktop.cpp:128
 msgid "Input"
 msgstr "入力"
 
-#: ../../../src/GameStateConfigDesktop.cpp:123
+#: ../../../src/GameStateConfigDesktop.cpp:129
 msgid "Keybindings"
 msgstr "キー設定"
 
-#: ../../../src/GameStateConfigDesktop.cpp:182
-#: ../../../src/GameStateConfigDesktop.cpp:183
+#: ../../../src/GameStateConfigDesktop.cpp:185
+#: ../../../src/GameStateConfigDesktop.cpp:186
 msgid "Disable for performance"
 msgstr "パフォーマンスのために無効にする"
 
-#: ../../../src/GameStateConfigDesktop.cpp:184
+#: ../../../src/GameStateConfigDesktop.cpp:187
 msgid "Experimental"
 msgstr "実験的"
 
-#: ../../../src/GameStateConfigDesktop.cpp:185
+#: ../../../src/GameStateConfigDesktop.cpp:188
 msgid "For handheld devices"
 msgstr "携帯電話モード"
 
-#: ../../../src/GameStateConfigDesktop.cpp:203
+#: ../../../src/GameStateConfigDesktop.cpp:206
 msgid "Renderer"
 msgstr ""
 
-#: ../../../src/GameStateConfigDesktop.cpp:215
+#: ../../../src/GameStateConfigDesktop.cpp:222
 msgid "Full Screen Mode"
 msgstr "フルスクリーンモード"
 
-#: ../../../src/GameStateConfigDesktop.cpp:219
+#: ../../../src/GameStateConfigDesktop.cpp:226
 msgid "Move hero using mouse"
 msgstr "マウスでキャラクターを動かす"
 
-#: ../../../src/GameStateConfigDesktop.cpp:223
+#: ../../../src/GameStateConfigDesktop.cpp:230
 msgid "Hardware surfaces"
 msgstr "ハードウェアサーフェス"
 
-#: ../../../src/GameStateConfigDesktop.cpp:227
+#: ../../../src/GameStateConfigDesktop.cpp:234
 msgid "V-Sync"
 msgstr ""
 
-#: ../../../src/GameStateConfigDesktop.cpp:231
+#: ../../../src/GameStateConfigDesktop.cpp:238
 msgid "Texture Filtering"
 msgstr ""
 
-#: ../../../src/GameStateConfigDesktop.cpp:235
+#: ../../../src/GameStateConfigDesktop.cpp:242
 msgid "Allow changing gamma"
 msgstr "ガンマの変更許可"
 
-#: ../../../src/GameStateConfigDesktop.cpp:239
+#: ../../../src/GameStateConfigDesktop.cpp:246
 msgid "Gamma"
 msgstr "ガンマ"
 
-#: ../../../src/GameStateConfigDesktop.cpp:243
+#: ../../../src/GameStateConfigDesktop.cpp:250
 msgid "Use joystick"
 msgstr "ジョイスティックを使用する"
 
-#: ../../../src/GameStateConfigDesktop.cpp:247
+#: ../../../src/GameStateConfigDesktop.cpp:254
 msgid "Joystick"
 msgstr "ジョイスティック"
 
-#: ../../../src/GameStateConfigDesktop.cpp:259
+#: ../../../src/GameStateConfigDesktop.cpp:270
 msgid "Mouse aim"
 msgstr "マウスの狙い"
 
-#: ../../../src/GameStateConfigDesktop.cpp:263
+#: ../../../src/GameStateConfigDesktop.cpp:274
 msgid "Do not use mouse"
 msgstr "マウスの不利用"
 
-#: ../../../src/GameStateConfigDesktop.cpp:267
+#: ../../../src/GameStateConfigDesktop.cpp:278
 msgid "Joystick Deadzone"
 msgstr "Joystick Deadzone"
-
-#: ../../../src/GameStateConfigDesktop.cpp:788
-#: ../../../src/SDLInputState.cpp:554
-msgid "(none)"
-msgstr ""
-
-#: ../../../src/GameStateConfigDesktop.cpp:833
-#: ../../../src/SDLInputState.cpp:596
-#, c-format
-msgid "Button %d"
-msgstr ""
 
 #: ../../../src/GameState.cpp:33 ../../../src/GameState.cpp:47
 #: ../../../src/GameState.cpp:63
@@ -380,7 +369,7 @@ msgid "Invalid save"
 msgstr ""
 
 #: ../../../src/GameStateLoad.cpp:746 ../../../src/ItemManager.cpp:672
-#: ../../../src/MenuPowers.cpp:676 ../../../src/MenuPowers.cpp:1035
+#: ../../../src/MenuPowers.cpp:675 ../../../src/MenuPowers.cpp:1034
 #, c-format
 msgid "Level %d"
 msgstr "レベル %d"
@@ -502,7 +491,7 @@ msgid "Powers"
 msgstr "能力"
 
 #: ../../../src/InputState.cpp:313 ../../../src/MenuActionBar.cpp:410
-#: ../../../src/MenuActionBar.cpp:412 ../../../src/MenuLog.cpp:101
+#: ../../../src/MenuActionBar.cpp:412 ../../../src/MenuLog.cpp:100
 msgid "Log"
 msgstr "ログ"
 
@@ -582,18 +571,18 @@ msgstr "マウス X2"
 msgid "Unknown Item"
 msgstr "不明なアイテム"
 
-#: ../../../src/ItemManager.cpp:581 ../../../src/MenuPowers.cpp:782
+#: ../../../src/ItemManager.cpp:581 ../../../src/MenuPowers.cpp:781
 #, c-format
 msgid "%d%% Speed"
 msgstr "%d%% スピード"
 
-#: ../../../src/ItemManager.cpp:585 ../../../src/MenuPowers.cpp:785
+#: ../../../src/ItemManager.cpp:585 ../../../src/MenuPowers.cpp:784
 #, c-format
 msgid "%d%% Attack Speed"
 msgstr "%d%% スピード"
 
 #: ../../../src/ItemManager.cpp:607 ../../../src/MenuCharacter.cpp:338
-#: ../../../src/MenuPowers.cpp:727
+#: ../../../src/MenuPowers.cpp:726
 #, c-format
 msgid "%s Resistance"
 msgstr "%s への抵抗"
@@ -617,14 +606,14 @@ msgstr "吸収: %d-%d"
 msgid "Absorb: %d"
 msgstr "吸収: %d"
 
-#: ../../../src/ItemManager.cpp:749 ../../../src/MenuPowers.cpp:1021
-#: ../../../src/MenuPowers.cpp:1024
+#: ../../../src/ItemManager.cpp:749 ../../../src/MenuPowers.cpp:1020
+#: ../../../src/MenuPowers.cpp:1023
 #, c-format
 msgid "Requires Level %d"
 msgstr "レベル %d が必要です"
 
-#: ../../../src/ItemManager.cpp:760 ../../../src/MenuPowers.cpp:1013
-#: ../../../src/MenuPowers.cpp:1015
+#: ../../../src/ItemManager.cpp:760 ../../../src/MenuPowers.cpp:1012
+#: ../../../src/MenuPowers.cpp:1014
 #, c-format
 msgid "Requires %s %d"
 msgstr "%s %d が必要です"
@@ -963,158 +952,158 @@ msgstr "売買"
 msgid "Enter amount:"
 msgstr "量の入力:"
 
-#: ../../../src/MenuPowers.cpp:680
+#: ../../../src/MenuPowers.cpp:679
 msgid "Passive"
 msgstr "パッシブ スキル"
 
-#: ../../../src/MenuPowers.cpp:685
+#: ../../../src/MenuPowers.cpp:684
 #, c-format
 msgid "Costs %d MP"
 msgstr "費用は %d MP"
 
-#: ../../../src/MenuPowers.cpp:689
+#: ../../../src/MenuPowers.cpp:688
 #, c-format
 msgid "Costs %d HP"
 msgstr "費用は %d HP"
 
-#: ../../../src/MenuPowers.cpp:694
+#: ../../../src/MenuPowers.cpp:693
 msgid "Cooldown:"
 msgstr "クールダウン:"
 
-#: ../../../src/MenuPowers.cpp:761 ../../../src/MenuPowers.cpp:764
+#: ../../../src/MenuPowers.cpp:760 ../../../src/MenuPowers.cpp:763
 msgid "Damage per second"
 msgstr "ダメージ毎秒"
 
-#: ../../../src/MenuPowers.cpp:767 ../../../src/MenuPowers.cpp:770
+#: ../../../src/MenuPowers.cpp:766 ../../../src/MenuPowers.cpp:769
 msgid "HP per second"
 msgstr "HP毎秒"
 
-#: ../../../src/MenuPowers.cpp:773 ../../../src/MenuPowers.cpp:776
+#: ../../../src/MenuPowers.cpp:772 ../../../src/MenuPowers.cpp:775
 msgid "MP per second"
 msgstr "MP毎秒"
 
-#: ../../../src/MenuPowers.cpp:780
+#: ../../../src/MenuPowers.cpp:779
 msgid "Immobilize"
 msgstr "動けなくする"
 
-#: ../../../src/MenuPowers.cpp:788
+#: ../../../src/MenuPowers.cpp:787
 msgid "Immunity"
 msgstr "まぬがれ"
 
-#: ../../../src/MenuPowers.cpp:791
+#: ../../../src/MenuPowers.cpp:790
 msgid "Immunity to damage over time"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:794
+#: ../../../src/MenuPowers.cpp:793
 msgid "Immunity to slow"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:797
+#: ../../../src/MenuPowers.cpp:796
 msgid "Immunity to stun"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:800
+#: ../../../src/MenuPowers.cpp:799
 msgid "Immunity to HP steal"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:803
+#: ../../../src/MenuPowers.cpp:802
 msgid "Immunity to MP steal"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:806
+#: ../../../src/MenuPowers.cpp:805
 msgid "Immunity to knockback"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:809
+#: ../../../src/MenuPowers.cpp:808
 msgid "Immunity to damage reflection"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:812
+#: ../../../src/MenuPowers.cpp:811
 msgid "Stun"
 msgstr "スタン"
 
-#: ../../../src/MenuPowers.cpp:815
+#: ../../../src/MenuPowers.cpp:814
 msgid "Automatic revive on death"
 msgstr "死からの自動復帰"
 
-#: ../../../src/MenuPowers.cpp:818
+#: ../../../src/MenuPowers.cpp:817
 msgid "Convert"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:821
+#: ../../../src/MenuPowers.cpp:820
 msgid "Fear"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:824
+#: ../../../src/MenuPowers.cpp:823
 msgid "Lifespan"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:848
+#: ../../../src/MenuPowers.cpp:847
 msgid "Magical Shield"
 msgstr "魔法シールド"
 
-#: ../../../src/MenuPowers.cpp:877
+#: ../../../src/MenuPowers.cpp:876
 msgid "Healing"
 msgstr "ヒーリング"
 
-#: ../../../src/MenuPowers.cpp:880
+#: ../../../src/MenuPowers.cpp:879
 msgid "Knockback"
 msgstr "はね返し"
 
-#: ../../../src/MenuPowers.cpp:900
+#: ../../../src/MenuPowers.cpp:899
 #, c-format
 msgid "%d%% chance"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:952
+#: ../../../src/MenuPowers.cpp:951
 msgid "Base Accuracy"
 msgstr "ベース精度"
 
-#: ../../../src/MenuPowers.cpp:972
+#: ../../../src/MenuPowers.cpp:971
 msgid "Base Critical Chance"
 msgstr "ベースのクリティカル機会"
 
-#: ../../../src/MenuPowers.cpp:980
+#: ../../../src/MenuPowers.cpp:979
 msgid "Ignores Absorbtion"
 msgstr "吸収を無視"
 
-#: ../../../src/MenuPowers.cpp:985
+#: ../../../src/MenuPowers.cpp:984
 msgid "Ignores Avoidance"
 msgstr "回避を無視"
 
-#: ../../../src/MenuPowers.cpp:990
+#: ../../../src/MenuPowers.cpp:989
 #, c-format
 msgid "%d%% Chance to crit slowed targets"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:995
+#: ../../../src/MenuPowers.cpp:994
 #, c-format
 msgid "%s Elemental Damage"
 msgstr "%s エレメンタルダメージ"
 
-#: ../../../src/MenuPowers.cpp:1004
+#: ../../../src/MenuPowers.cpp:1003
 #, c-format
 msgid "Requires a %s"
 msgstr "%s が必要です"
 
-#: ../../../src/MenuPowers.cpp:1043 ../../../src/MenuPowers.cpp:1046
+#: ../../../src/MenuPowers.cpp:1042 ../../../src/MenuPowers.cpp:1045
 #, c-format
 msgid "Requires Power: %s"
 msgstr "必要な能力: %s"
 
-#: ../../../src/MenuPowers.cpp:1055
+#: ../../../src/MenuPowers.cpp:1054
 msgid "Click to Unlock (uses 1 Skill Point)"
 msgstr "クリックすると解放（スキルポイントを1消費）"
 
-#: ../../../src/MenuPowers.cpp:1059 ../../../src/MenuPowers.cpp:1061
+#: ../../../src/MenuPowers.cpp:1058 ../../../src/MenuPowers.cpp:1060
 msgid "Requires 1 Skill Point"
 msgstr "スキルポイント 1 個が 必要です"
 
-#: ../../../src/MenuPowers.cpp:1291
+#: ../../../src/MenuPowers.cpp:1290
 msgid "Unspent skill points:"
 msgstr "未使用のスキルポイント:"
 
-#: ../../../src/MenuPowers.cpp:1319
+#: ../../../src/MenuPowers.cpp:1318
 msgid "Next Level:"
 msgstr "次のレベル:"
 
@@ -1134,7 +1123,7 @@ msgstr "スタッシュは満杯です。"
 msgid "Buyback"
 msgstr "買い戻し"
 
-#: ../../../src/MenuVendor.cpp:183
+#: ../../../src/MenuVendor.cpp:181
 msgid "Vendor"
 msgstr "売り手"
 
@@ -1156,37 +1145,52 @@ msgstr "この位置では、変身をとくことは、できない。"
 msgid "Game saved."
 msgstr "ゲームをセーブしました。"
 
-#: ../../../src/SDLInputState.cpp:565 ../../../src/SDLInputState.cpp:579
+#: ../../../src/SDLInputState.cpp:559
 #, fuzzy, c-format
 msgid "Mouse %d"
 msgstr "マウス %d"
 
-#: ../../../src/SDLInputState.cpp:591
+#: ../../../src/SDLInputState.cpp:567
 #, c-format
 msgid "Axis %d -"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:593
+#: ../../../src/SDLInputState.cpp:569
 #, c-format
 msgid "Axis %d +"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:615 ../../../src/SDLInputState.cpp:639
-#: ../../../src/SDLInputState.cpp:657
+#: ../../../src/SDLInputState.cpp:572
+#, c-format
+msgid "Button %d"
+msgstr ""
+
+#: ../../../src/SDLInputState.cpp:576
+msgid "(none)"
+msgstr ""
+
+#: ../../../src/SDLInputState.cpp:617 ../../../src/SDLInputState.cpp:641
+#: ../../../src/SDLInputState.cpp:659
 msgid "Tap"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:615 ../../../src/SDLInputState.cpp:618
+#: ../../../src/SDLInputState.cpp:617 ../../../src/SDLInputState.cpp:620
 #, c-format
 msgid "%s on ground"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:639 ../../../src/SDLInputState.cpp:642
+#: ../../../src/SDLInputState.cpp:641 ../../../src/SDLInputState.cpp:644
 #, c-format
 msgid "%s on enemy"
 msgstr ""
 
-#: ../../../src/Settings.cpp:771
+#: ../../../src/SDLInputState.cpp:703 ../../../src/SDLInputState.cpp:707
+#: ../../../src/SDLInputState.cpp:711
+#, c-format
+msgid "'%s' is no longer bound to:"
+msgstr ""
+
+#: ../../../src/Settings.cpp:772
 msgid "Adventurer"
 msgstr "冒険家"
 

@@ -550,50 +550,52 @@ std::string SDLInputState::getKeyName(int key) {
 	return std::string(SDL_GetKeyName((SDL_Keycode)key));
 }
 
+std::string SDLInputState::getMouseButtonName(int button) {
+	int real_button = (button + MOUSE_BIND_OFFSET) * (-1);
+
+	if (real_button > 0 && real_button <= MOUSE_BUTTON_NAME_COUNT)
+		return mouse_button[real_button - 1];
+	else
+		return msg->get("Mouse %d", real_button);
+}
+
+std::string SDLInputState::getJoystickButtonName(int button) {
+	if (button < -1) {
+		int axis = (button + JOY_AXIS_OFFSET) * (-1);
+
+		if (axis % 2 == 0)
+			return msg->get("Axis %d -", axis/2);
+		else
+			return msg->get("Axis %d +", axis/2);
+	}
+	else
+		return msg->get("Button %d", button);
+}
+
 std::string SDLInputState::getBindingString(int key, int bindings_list) {
 	std::string none = msg->get("(none)");
 
 	if (bindings_list == INPUT_BINDING_DEFAULT) {
-		if (inpt->binding[key] == 0 || inpt->binding[key] == -1)
+		if (binding[key] == 0 || binding[key] == -1)
 			return none;
-		else if (inpt->binding[key] < -1) {
-			int real_button = (inpt->binding[key] + MOUSE_BIND_OFFSET) * (-1);
-
-			if (real_button > 0 && real_button <= MOUSE_BUTTON_NAME_COUNT)
-				return mouse_button[real_button - 1];
-			else
-				return msg->get("Mouse %d", real_button);
-		}
+		else if (binding[key] < -1)
+			return getMouseButtonName(binding[key]);
 		else
-			return getKeyName(inpt->binding[key]);
+			return getKeyName(binding[key]);
 	}
 	else if (bindings_list == INPUT_BINDING_ALT) {
-		if (inpt->binding_alt[key] == 0 || inpt->binding_alt[key] == -1)
+		if (binding_alt[key] == 0 || binding_alt[key] == -1)
 			return none;
-		else if (inpt->binding_alt[key] < -1) {
-			int real_button = (inpt->binding_alt[key] + MOUSE_BIND_OFFSET) * (-1);
-
-			if (real_button > 0 && real_button <= MOUSE_BUTTON_NAME_COUNT)
-				return mouse_button[real_button - 1];
-			else
-				return msg->get("Mouse %d", real_button);
-		}
+		else if (binding_alt[key] < -1)
+			return getMouseButtonName(binding_alt[key]);
 		else
-			return getKeyName(inpt->binding_alt[key]);
+			return getKeyName(binding_alt[key]);
 	}
 	else if (bindings_list == INPUT_BINDING_JOYSTICK) {
-		if (inpt->binding_joy[key] == -1)
+		if (binding_joy[key] == -1)
 			return none;
-		else if (inpt->binding_joy[key] < -1) {
-			int axis = (inpt->binding_joy[key] + JOY_AXIS_OFFSET) * (-1);
-
-			if (axis % 2 == 0)
-				return msg->get("Axis %d -", axis/2);
-			else
-				return msg->get("Axis %d +", axis/2);
-		}
 		else
-			return msg->get("Button %d", inpt->binding_joy[key]);
+			return getJoystickButtonName(binding_joy[key]);
 	}
 	else {
 		return none;
@@ -606,22 +608,22 @@ std::string SDLInputState::getMovementString() {
 
 	if (ENABLE_JOYSTICK) {
 		// can't rebind joystick axes
-		ss << inpt->getBindingString(LEFT, INPUT_BINDING_JOYSTICK) <<  "/";
-		ss << inpt->getBindingString(RIGHT, INPUT_BINDING_JOYSTICK) << "/";
-		ss << inpt->getBindingString(UP, INPUT_BINDING_JOYSTICK) << "/";
-		ss << inpt->getBindingString(DOWN, INPUT_BINDING_JOYSTICK);
+		ss << getBindingString(LEFT, INPUT_BINDING_JOYSTICK) <<  "/";
+		ss << getBindingString(RIGHT, INPUT_BINDING_JOYSTICK) << "/";
+		ss << getBindingString(UP, INPUT_BINDING_JOYSTICK) << "/";
+		ss << getBindingString(DOWN, INPUT_BINDING_JOYSTICK);
 	}
 	else if (TOUCHSCREEN) {
 		ss << msg->get("%s on ground", msg->get("Tap"));
 	}
 	else if (MOUSE_MOVE) {
-		ss << msg->get("%s on ground", inpt->getBindingString(MAIN1));
+		ss << msg->get("%s on ground", getBindingString(MAIN1));
 	}
 	else {
-		ss << inpt->getBindingString(LEFT) <<  "/";
-		ss << inpt->getBindingString(RIGHT) << "/";
-		ss << inpt->getBindingString(UP) << "/";
-		ss << inpt->getBindingString(DOWN);
+		ss << getBindingString(LEFT) <<  "/";
+		ss << getBindingString(RIGHT) << "/";
+		ss << getBindingString(UP) << "/";
+		ss << getBindingString(DOWN);
 	}
 
 	ss << "]";
@@ -633,16 +635,16 @@ std::string SDLInputState::getAttackString() {
 	ss << "[";
 
 	if (ENABLE_JOYSTICK) {
-		ss << inpt->getBindingString(ACTIONBAR_USE, INPUT_BINDING_JOYSTICK);
+		ss << getBindingString(ACTIONBAR_USE, INPUT_BINDING_JOYSTICK);
 	}
 	else if (TOUCHSCREEN) {
 		ss << msg->get("%s on enemy", msg->get("Tap"));
 	}
 	else if (MOUSE_MOVE) {
-		ss << msg->get("%s on enemy", inpt->getBindingString(MAIN1));
+		ss << msg->get("%s on enemy", getBindingString(MAIN1));
 	}
 	else {
-		ss << inpt->getBindingString(MAIN1);
+		ss << getBindingString(MAIN1);
 	}
 
 	ss << "]";
@@ -685,6 +687,39 @@ void SDLInputState::stopTextInput() {
 		SDL_StopTextInput();
 		text_input = false;
 	}
+}
+
+void SDLInputState::setKeybind(int key, int binding_button, int bindings_list, std::string& keybind_msg) {
+	keybind_msg = "";
+
+	// unbind duplicate bindings for this key
+	if (key != -1) {
+		for (int i = 0; i < key_count; ++i) {
+			// the same key can be bound to both default & alt binding lists for the same action
+			if (bindings_list != INPUT_BINDING_JOYSTICK && i == binding_button)
+				continue;
+
+			if ((bindings_list == INPUT_BINDING_DEFAULT && binding[i] == key && i != binding_button) || (bindings_list == INPUT_BINDING_ALT && binding[i] == key)) {
+				keybind_msg = msg->get("'%s' is no longer bound to:", getBindingString(i, INPUT_BINDING_DEFAULT).c_str()) + " '" + binding_name[i] + "'";
+				binding[i] = -1;
+			}
+			if ((bindings_list == INPUT_BINDING_DEFAULT && binding_alt[i] == key) || (bindings_list == INPUT_BINDING_ALT && binding_alt[i] == key && i != binding_button)) {
+				keybind_msg = msg->get("'%s' is no longer bound to:", getBindingString(i, INPUT_BINDING_ALT).c_str()) + " '" + binding_name[i] + "'";
+				binding_alt[i] = -1;
+			}
+			if (bindings_list == INPUT_BINDING_JOYSTICK && binding_joy[i] == key && i != binding_button) {
+				keybind_msg = msg->get("'%s' is no longer bound to:", getBindingString(i, INPUT_BINDING_JOYSTICK).c_str()) + " '" + binding_name[i] + "'";
+				binding_joy[i] = -1;
+			}
+		}
+	}
+
+	if (bindings_list == INPUT_BINDING_DEFAULT)
+		binding[binding_button] = key;
+	else if (bindings_list == INPUT_BINDING_ALT)
+		binding_alt[binding_button] = key;
+	else if (bindings_list == INPUT_BINDING_JOYSTICK)
+		binding_joy[binding_button] = key;
 }
 
 SDLInputState::~SDLInputState() {

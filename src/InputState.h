@@ -111,6 +111,8 @@ public:
 	virtual void showCursor() = 0;
 	virtual std::string getJoystickName(int index) = 0;
 	virtual std::string getKeyName(int key) = 0;
+	virtual std::string getMouseButtonName(int button) = 0;
+	virtual std::string getJoystickButtonName(int button) = 0;
 	virtual std::string getBindingString(int key, int bindings_list = INPUT_BINDING_DEFAULT) = 0;
 	virtual std::string getMovementString() = 0;
 	virtual std::string getAttackString() = 0;
@@ -119,6 +121,7 @@ public:
 	virtual bool usingMouse() = 0;
 	virtual void startTextInput() = 0;
 	virtual void stopTextInput() = 0;
+	virtual void setKeybind(int key, int binding_button, int bindings_list, std::string& keybind_msg) = 0;
 
 	void enableEventLog();
 

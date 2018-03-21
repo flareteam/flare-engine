@@ -82,6 +82,7 @@ private:
 	TabList tablist_input;
 	TabList tablist_keybinds;
 
+	void confirmKey(int button);
 	void scanKey(int button);
 
 	void enableMouseOptions();
@@ -134,6 +135,10 @@ private:
 	Point secondary_offset;
 
 	bool enable_video_tab;
+
+	std::string keybind_msg;
+	int keybind_tip_ticks;
+	WidgetTooltip* keybind_tip;
 };
 
 #endif
