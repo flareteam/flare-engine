@@ -16,15 +16,15 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
-#include "WidgetTabControl.h"
 #include "WidgetLabel.h"
+#include "WidgetSettings.h"
+#include "WidgetTabControl.h"
 
 
 WidgetTabControl::WidgetTabControl()
 	: active_tab_surface(NULL)
 	, inactive_tab_surface(NULL)
 	, active_tab(0)
-	, tab_padding(8,4) // TODO get from config file
 {
 
 	loadGraphics();
@@ -86,21 +86,15 @@ void WidgetTabControl::setActiveTab(unsigned tab) {
  *
  * @param x       X coordinate of the top-left corner of the widget.
  * @param y       Y coordinate of the top-left corner of the widget.
- * @param width   Width of the widget.
- * @param height  Height of the widget.
  */
-void WidgetTabControl::setMainArea(int x, int y, int width, int height) {
+void WidgetTabControl::setMainArea(int x, int y) {
 	// Set tabs area.
 	tabs_area.x = x;
 	tabs_area.y = y;
-	tabs_area.w = width;
-	tabs_area.h = active_tab_surface->getGraphicsHeight();
+	tabs_area.w = 0; // calculated in updateHeader();
+	tabs_area.h = getTabHeight();
 
-	// Set content area.
-	content_area.x = x + tab_padding.x;
-	content_area.y = y + tabs_area.h + (tab_padding.y *2);
-	content_area.w = width - (tab_padding.x * 2);
-	content_area.h = height - tabs_area.h;
+	updateHeader();
 }
 
 /**
@@ -109,6 +103,8 @@ void WidgetTabControl::setMainArea(int x, int y, int width, int height) {
  * Use it right after you set the area and tab titles of the tab control.
  */
 void WidgetTabControl::updateHeader() {
+	tabs_area.w = 0;
+
 	for (unsigned i=0; i<tabs.size(); i++) {
 		tabs[i].y = tabs_area.y;
 		tabs[i].h = tabs_area.h;
@@ -116,19 +112,20 @@ void WidgetTabControl::updateHeader() {
 		if (i==0) tabs[i].x = tabs_area.x;
 		else tabs[i].x = tabs[i-1].x + tabs[i-1].w;
 
-		tabs[i].w = tab_padding.x + font->calc_width(titles[i]) + tab_padding.x;
+		tabs[i].w = widget_settings.tab_padding.x + font->calc_width(titles[i]) + widget_settings.tab_padding.x;
+		tabs_area.w += tabs[i].w;
 
 		active_labels[i].set(
-			tabs[i].x + tab_padding.x,
-			tabs[i].y + tabs[i].h/2,
+			tabs[i].x + widget_settings.tab_padding.x,
+			tabs[i].y + tabs[i].h/2 + widget_settings.tab_padding.y,
 			JUSTIFY_LEFT,
 			VALIGN_CENTER,
 			titles[i],
 			color_normal);
 
 		inactive_labels[i].set(
-			tabs[i].x + tab_padding.x,
-			tabs[i].y + tabs[i].h/2,
+			tabs[i].x + widget_settings.tab_padding.x,
+			tabs[i].y + tabs[i].h/2 + widget_settings.tab_padding.y,
 			JUSTIFY_LEFT,
 			VALIGN_CENTER,
 			titles[i],
@@ -198,9 +195,8 @@ void WidgetTabControl::render() {
 		topLeft.y = tabs[active_tab].y;
 		bottomRight.x = topLeft.x + tabs[active_tab].w;
 		bottomRight.y = topLeft.y + tabs[active_tab].h;
-		Color color = Color(255,248,220,255); // TODO load from config file
 
-		render_device->drawRectangle(topLeft, bottomRight, color);
+		render_device->drawRectangle(topLeft, bottomRight, widget_settings.selection_rect_color);
 	}
 }
 
@@ -213,8 +209,8 @@ void WidgetTabControl::renderTab(unsigned number) {
 	Rect dest;
 
 	// Draw tab’s background.
-	int max_main_width = active_tab_surface->getGraphicsWidth() - tab_padding.x;
-	int width_to_render = tabs[i].w - tab_padding.x; // don't draw the right edge yet
+	int max_main_width = active_tab_surface->getGraphicsWidth() - widget_settings.tab_padding.x;
+	int width_to_render = tabs[i].w - widget_settings.tab_padding.x; // don't draw the right edge yet
 	int render_cursor = 0;
 
 	src.x = src.y = 0;
@@ -228,12 +224,12 @@ void WidgetTabControl::renderTab(unsigned number) {
 		if (render_cursor == 0) {
 			// left edge + middle
 			src.x = 0;
-			src.w = tabs[i].w - tab_padding.x;
+			src.w = tabs[i].w - widget_settings.tab_padding.x;
 		}
 		else {
 			// only middle
-			src.x = tab_padding.x;
-			src.w = tabs[i].w - (tab_padding.x * 2);
+			src.x = widget_settings.tab_padding.x;
+			src.w = tabs[i].w - (widget_settings.tab_padding.x * 2);
 		}
 
 		if (src.w > max_main_width)
@@ -254,9 +250,9 @@ void WidgetTabControl::renderTab(unsigned number) {
 	}
 
 	// Draw tab’s right edge.
-	src.x = active_tab_surface->getGraphicsWidth() - tab_padding.x;
-	src.w = tab_padding.x;
-	dest.x = tabs[i].x + tabs[i].w - tab_padding.x;
+	src.x = active_tab_surface->getGraphicsWidth() - widget_settings.tab_padding.x;
+	src.w = widget_settings.tab_padding.x;
+	dest.x = tabs[i].x + tabs[i].w - widget_settings.tab_padding.x;
 
 	if (i == active_tab) {
 		active_tab_surface->setClip(src);
@@ -276,13 +272,6 @@ void WidgetTabControl::renderTab(unsigned number) {
 	else {
 		inactive_labels[i].render();
 	}
-}
-
-/**
- * Returns the height in pixels of the widget.
- */
-Rect WidgetTabControl::getContentArea() {
-	return content_area;
 }
 
 bool WidgetTabControl::getNext() {

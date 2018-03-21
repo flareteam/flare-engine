@@ -93,8 +93,7 @@ MenuLog::MenuLog() {
 void MenuLog::align() {
 	Menu::align();
 
-	tabControl->setMainArea(window_area.x + tab_area.x, window_area.y + tab_area.y, tab_area.w, tab_area.h);
-	tabControl->updateHeader();
+	tabControl->setMainArea(window_area.x + tab_area.x, window_area.y + tab_area.y);
 
 	closeButton->setPos(window_area.x, window_area.y);
 

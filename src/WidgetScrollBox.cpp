@@ -24,6 +24,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Settings.h"
 #include "WidgetScrollBox.h"
+#include "WidgetSettings.h"
 
 WidgetScrollBox::WidgetScrollBox(int width, int height)
 	: contents(NULL) {
@@ -246,7 +247,6 @@ void WidgetScrollBox::render() {
 		topLeft.y = dest.y + local_frame.y - local_offset.y;
 		bottomRight.x = topLeft.x + dest.w;
 		bottomRight.y = topLeft.y + dest.h;
-		Color color = Color(255,248,220,255);
 
 		// Only draw rectangle if it fits in local frame
 		bool draw = true;
@@ -259,7 +259,7 @@ void WidgetScrollBox::render() {
 			draw = false;
 		}
 		if (draw) {
-			render_device->drawRectangle(topLeft, bottomRight, color);
+			render_device->drawRectangle(topLeft, bottomRight, widget_settings.selection_rect_color);
 		}
 	}
 }

@@ -830,9 +830,12 @@ void GameStateConfigBase::placeLabeledWidget(WidgetLabel *lb, Widget *w, int x1,
 }
 
 void GameStateConfigBase::refreshWidgets() {
-	tab_control->setMainArea(((VIEW_W - FRAME_W)/2)+3, (VIEW_H - FRAME_H)/2, FRAME_W, FRAME_H);
-	tab_control->updateHeader();
-	frame = tab_control->getContentArea();
+	// TODO move the x offset to config file; add y offset as well
+	tab_control->setMainArea(((VIEW_W - FRAME_W)/2)+3, (VIEW_H - FRAME_H)/2);
+
+	// TODO load from config
+	frame.x = ((VIEW_W - FRAME_W)/2) + 3 + 8;
+	frame.y = ((VIEW_H - FRAME_H)/2) + tab_control->getTabHeight() + 8;
 
 	for (unsigned i=0; i<child_widget.size(); ++i) {
 		child_widget[i]->setPos(frame.x, frame.y);

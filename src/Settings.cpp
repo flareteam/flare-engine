@@ -36,6 +36,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsFileSystem.h"
 #include "SharedResources.h"
 #include "Version.h"
+#include "WidgetSettings.h"
 
 
 HeroClass::HeroClass()
@@ -864,6 +865,8 @@ void loadMiscSettings() {
 		}
 		infile.close();
 	}
+
+	widget_settings.load();
 }
 
 void loadSettings() {

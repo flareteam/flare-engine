@@ -27,6 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetLabel.h"
 #include "WidgetListBox.h"
 #include "WidgetScrollBar.h"
+#include "WidgetSettings.h"
 
 WidgetListBox::WidgetListBox(int height, const std::string& _fileName)
 	: Widget()
@@ -362,7 +363,6 @@ void WidgetListBox::render() {
 		topLeft.y = rows[0].y + local_frame.y - local_offset.y;
 		bottomRight.x = rows[rows.size() - 1].x + rows[0].w + local_frame.x - local_offset.x;
 		bottomRight.y = rows[rows.size() - 1].y + rows[0].h + local_frame.y - local_offset.y;
-		Color color = Color(255,248,220,255);
 
 		// Only draw rectangle if it fits in local frame
 		bool draw = true;
@@ -375,7 +375,7 @@ void WidgetListBox::render() {
 			draw = false;
 		}
 		if (draw) {
-			render_device->drawRectangle(topLeft, bottomRight, color);
+			render_device->drawRectangle(topLeft, bottomRight, widget_settings.selection_rect_color);
 		}
 	}
 

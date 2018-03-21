@@ -41,8 +41,6 @@ private:
 
 	unsigned active_tab;    // Index of the currently active tab.
 	Rect tabs_area;    // Area the tab titles are displayed.
-	Rect content_area; // Area where the content of the active tab is displayed.
-	Point tab_padding; // Padding between tab titles.
 
 	Color color_normal;
 	Color color_disabled;
@@ -53,14 +51,13 @@ public:
 	~WidgetTabControl();
 
 	void setTabTitle(unsigned index, const std::string& title);
-	void setMainArea(int x, int y, int width, int height);
+	void setMainArea(int x, int y);
 
 	int getActiveTab();
 	void setActiveTab(unsigned tab);
 
-	Rect getContentArea();
 	int getTabHeight() {
-		return active_tab_surface->getGraphicsHeight();
+		return (active_tab_surface ? active_tab_surface->getGraphicsHeight() : 0);
 	}
 
 	void updateHeader();
