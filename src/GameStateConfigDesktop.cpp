@@ -730,6 +730,9 @@ void GameStateConfigDesktop::logicInput() {
 void GameStateConfigDesktop::logicKeybinds() {
 	input_scrollbox->logic();
 	for (unsigned int i = 0; i < keybinds_btn.size(); i++) {
+		if (i >= static_cast<unsigned int>(inpt->key_count * 2)) {
+			keybinds_btn[i]->enabled = ENABLE_JOYSTICK;
+		}
 		Point mouse = input_scrollbox->input_assist(inpt->mouse);
 		if (keybinds_btn[i]->checkClick(mouse.x,mouse.y)) {
 			std::string confirm_msg;
