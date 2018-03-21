@@ -100,7 +100,6 @@ GameStateConfigDesktop::GameStateConfigDesktop(bool _enable_video_tab)
 }
 
 GameStateConfigDesktop::~GameStateConfigDesktop() {
-	delete keybind_tip;
 }
 
 void GameStateConfigDesktop::init() {
@@ -897,6 +896,10 @@ void GameStateConfigDesktop::cleanupDialogs() {
 	if (input_confirm != NULL) {
 		delete input_confirm;
 		input_confirm = NULL;
+	}
+	if (keybind_tip != NULL) {
+		delete keybind_tip;
+		keybind_tip = NULL;
 	}
 }
 
