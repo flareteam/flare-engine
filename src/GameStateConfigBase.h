@@ -148,7 +148,9 @@ public:
 
 	int active_tab;
 
-	Rect frame;
+	Point frame;
+	Point frame_offset;
+	Point tab_offset;
 	std::vector<std::string> language_ISO;
 
 	std::string new_render_device;

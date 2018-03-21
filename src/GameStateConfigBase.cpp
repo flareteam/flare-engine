@@ -89,6 +89,9 @@ GameStateConfigBase::GameStateConfigBase (bool do_init)
 	, tip(new WidgetTooltip())
 	, tip_buf()
 	, active_tab(0)
+	, frame(0,0)
+	, frame_offset(11,8)
+	, tab_offset(3,0)
 	, new_render_device(RENDER_DEVICE)
 {
 
@@ -232,6 +235,16 @@ bool GameStateConfigBase::parseKey(FileParser &infile, int &x1, int &y1, int &x2
 		activemods_lstb->scrollbar_offset = x1;
 		inactivemods_lstb->scrollbar_offset = x1;
 		language_lstb->scrollbar_offset = x1;
+	}
+	else if (infile.key == "frame_offset") {
+		// @ATTR frame_offset|point|Offset for all the widgets contained under each tab.
+		frame_offset.x = x1;
+		frame_offset.y = y1;
+	}
+	else if (infile.key == "tab_offset") {
+		// @ATTR tab_offset|point|Offset for the row of tabs.
+		tab_offset.x = x1;
+		tab_offset.y = y1;
 	}
 	else if (infile.key == "music_volume") {
 		// @ATTR music_volume|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Music Volume" slider relative to the frame.
@@ -830,12 +843,10 @@ void GameStateConfigBase::placeLabeledWidget(WidgetLabel *lb, Widget *w, int x1,
 }
 
 void GameStateConfigBase::refreshWidgets() {
-	// TODO move the x offset to config file; add y offset as well
-	tab_control->setMainArea(((VIEW_W - FRAME_W)/2)+3, (VIEW_H - FRAME_H)/2);
+	tab_control->setMainArea(((VIEW_W - FRAME_W)/2) + tab_offset.x, ((VIEW_H - FRAME_H)/2) + tab_offset.y);
 
-	// TODO load from config
-	frame.x = ((VIEW_W - FRAME_W)/2) + 3 + 8;
-	frame.y = ((VIEW_H - FRAME_H)/2) + tab_control->getTabHeight() + 8;
+	frame.x = ((VIEW_W - FRAME_W)/2) + frame_offset.x;
+	frame.y = ((VIEW_H - FRAME_H)/2) + tab_control->getTabHeight() + frame_offset.y;
 
 	for (unsigned i=0; i<child_widget.size(); ++i) {
 		child_widget[i]->setPos(frame.x, frame.y);
