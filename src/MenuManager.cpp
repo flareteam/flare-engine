@@ -679,8 +679,10 @@ void MenuManager::logic() {
 					else {
 						// The vendor could have a limited amount of currency in the future. It will be tested here.
 						if ((SELL_WITHOUT_VENDOR || vendor->visible) && inv->sell(stack)) {
-							vendor->setTab(VENDOR_SELL);
-							vendor->add(stack);
+							if (vendor->visible) {
+								vendor->setTab(VENDOR_SELL);
+								vendor->add(stack);
+							}
 						}
 						else {
 							inv->itemReturn(stack);
