@@ -19,10 +19,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EnemyManager.h"
 #include "EventManager.h"
 #include "FileParser.h"
-#include "UtilsParsing.h"
+#include "Menu.h"
+#include "MenuInventory.h"
+#include "MenuPowers.h"
+#include "MenuManager.h"
 #include "SharedGameResources.h"
 #include "UtilsFileSystem.h"
 #include "UtilsMath.h"
+#include "UtilsParsing.h"
 
 /**
  * Class: Event
@@ -594,6 +598,26 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 
 		e->x = popFirstInt(val);
 	}
+	else if (key == "respec") {
+		// @ATTR event.respec|["xp", "stats", "powers"], bool : Respec mode, Ignore class defaults|Resets various aspects of the character's progression. Resetting "xp" also resets "stats". Resetting "stats" also resets "powers".
+		e->type = EC_RESPEC;
+
+		std::string mode = popFirstString(val);
+		std::string use_engine_defaults = popFirstString(val);
+
+		if (mode == "xp") {
+			e->x = 3;
+		}
+		else if (mode == "stats") {
+			e->x = 2;
+		}
+		else if (mode == "powers") {
+			e->x = 1;
+		}
+
+		if (!use_engine_defaults.empty())
+			e->y = static_cast<int>(toBool(use_engine_defaults));
+	}
 	else {
 		return false;
 	}
@@ -841,6 +865,54 @@ bool EventManager::executeEvent(Event &ev) {
 				executeScript(ec->s, ev.center.x, ev.center.y);
 			else
 				executeScript(ec->s, pc->stats.pos.x, pc->stats.pos.y);
+		}
+		else if (ec->type == EC_RESPEC) {
+			bool use_engine_defaults = static_cast<bool>(ec->y);
+			HeroClass* pc_class = getHeroClassByName(pc->stats.character_class);
+
+			if (ec->x == 3) {
+				// xp
+				pc->stats.level = 1;
+				pc->stats.xp = 0;
+			}
+			if (ec->x >= 2) {
+				// stats
+				for (size_t j = 0; j < PRIMARY_STATS.size(); ++j) {
+					pc->stats.primary[j] = 1;
+					pc->stats.primary_additional[j] = 0;
+
+					if (pc_class && !use_engine_defaults) {
+						pc->stats.primary[j] += pc_class->primary[j];
+						pc->stats.primary_starting[j] = pc->stats.primary[j];
+					}
+				}
+
+				pc->stats.recalc();
+				menu->inv->applyEquipment();
+				pc->stats.logic();
+			}
+			if (ec->x >= 1) {
+				// powers
+				pc->stats.powers_list.clear();
+				pc->stats.powers_passive.clear();
+				pc->stats.effects.clearEffects();
+				menu_powers->resetToBasePowers();
+				if (pc_class && !use_engine_defaults) {
+					for (size_t j=0; j < pc_class->powers.size(); j++) {
+						pc->stats.powers_list.push_back(pc_class->powers[j]);
+					}
+				}
+				menu_powers->applyPowerUpgrades();
+
+				menu_act->clear();
+				if (pc_class && !use_engine_defaults) {
+					menu->act->set(pc_class->hotkeys);
+				}
+				menu->pow->newPowerNotification = false;
+
+				pc->respawn = true; // re-applies equipment, also revives the player
+				pc->stats.refresh_stats = true;
+			}
 		}
 	}
 	return !ev.keep_after_trigger;

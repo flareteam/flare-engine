@@ -223,7 +223,6 @@ void MenuDevConsole::execute() {
 		log_history->add("add_power - " + msg->get("adds a power to the action bar"), false);
 		log_history->add("toggle_hud - " + msg->get("turns on/off all of the HUD elements"), false);
 		log_history->add("toggle_devhud - " + msg->get("turns on/off the developer hud"), false);
-		log_history->add("respec - " + msg->get("resets the player to level 1, with no stat or skill points spent"), false);
 		log_history->add("list_powers - " + msg->get("Prints a list of powers that match a search term. No search term will list all items"), false);
 		log_history->add("list_maps - " + msg->get("Prints out all the map filenames located in the \"maps/\" directory."), false);
 		log_history->add("list_status - " + msg->get("Prints out the active campaign statuses that match a search term. No search term will list all active statuses"), false);
@@ -242,22 +241,6 @@ void MenuDevConsole::execute() {
 	else if (args[0] == "toggle_hud") {
 		SHOW_HUD = !SHOW_HUD;
 		log_history->add(msg->get("Toggled the hud"), false);
-	}
-	else if (args[0] == "respec") {
-		pc->stats.level = 1;
-		pc->stats.xp = 0;
-		for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
-			pc->stats.primary[i] = 1;
-			pc->stats.primary_additional[i] = 0;
-		}
-		pc->stats.powers_list.clear();
-		pc->stats.powers_passive.clear();
-		pc->stats.effects.clearEffects();
-		menu_powers->resetToBasePowers();
-		menu_powers->applyPowerUpgrades();
-		menu_act->clear();
-		pc->respawn = true; // re-applies equipment, also revives the player
-		pc->stats.refresh_stats = true;
 	}
 	else if (args[0] == "list_status") {
 		std::string search_terms;
