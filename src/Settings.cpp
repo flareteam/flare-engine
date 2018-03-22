@@ -203,6 +203,7 @@ size_t DAMAGE_TYPES_COUNT;
 // Currency settings
 std::string CURRENCY;
 float VENDOR_RATIO;
+float VENDOR_RATIO_BUYBACK;
 
 // Death penalty settings
 bool DEATH_PENALTY;
@@ -358,6 +359,7 @@ void loadMiscSettings() {
 	MAX_OVERHIT_DAMAGE = 100;
 	CURRENCY = "Gold";
 	VENDOR_RATIO = 0.25;
+	VENDOR_RATIO_BUYBACK = 0;
 	DEATH_PENALTY = true;
 	DEATH_PENALTY_PERMADEATH = false;
 	DEATH_PENALTY_CURRENCY = 50;

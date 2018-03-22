@@ -74,6 +74,7 @@ public:
 
 	// vendor info
 	bool vendor;
+	bool reset_buyback;
 	ItemStorage stock;
 	int stock_count;
 	std::vector<std::string> vendor_requires_status;

@@ -763,10 +763,12 @@ bool MenuInventory::buy(ItemStack stack, int tab, bool dragging) {
 
 	int value_each;
 	if (tab == VENDOR_BUY) value_each = items->items[stack.item].getPrice();
-	else value_each = items->items[stack.item].getSellPrice();
+	else value_each = items->items[stack.item].getSellPrice(stack.can_buyback);
 
 	int count = value_each * stack.quantity;
 	if( inventory[CARRIED].count(CURRENCY_ID) >= count) {
+		stack.can_buyback = false;
+
 		if (dragging) {
 			drop(inpt->mouse, stack);
 		}
@@ -1098,11 +1100,11 @@ void MenuInventory::fillEquipmentSlots() {
 	delete [] equip_quantity;
 }
 
-int MenuInventory::getMaxPurchasable(int item, int vendor_tab) {
+int MenuInventory::getMaxPurchasable(ItemStack item, int vendor_tab) {
 	if (vendor_tab == VENDOR_BUY)
-		return currency / items->items[item].getPrice();
+		return currency / items->items[item.item].getPrice();
 	else if (vendor_tab == VENDOR_SELL)
-		return currency / items->items[item].getSellPrice();
+		return currency / items->items[item.item].getSellPrice(item.can_buyback);
 	else
 		return 0;
 }

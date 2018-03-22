@@ -623,7 +623,7 @@ void MenuManager::logic() {
 						drag_src = DRAG_SRC_VENDOR;
 					}
 					if (drag_stack.quantity > 1 && (inpt->pressing[SHIFT] || !inpt->usingMouse() || inpt->touch_locked)) {
-						int max_quantity = std::min(inv->getMaxPurchasable(drag_stack.item, vendor->getTab()), drag_stack.quantity);
+						int max_quantity = std::min(inv->getMaxPurchasable(drag_stack, vendor->getTab()), drag_stack.quantity);
 						if (max_quantity >= 1) {
 							num_picker->setValueBounds(1, max_quantity);
 							num_picker->visible = true;
@@ -974,7 +974,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 				vendor->lockTabControl();
 			}
 			if (drag_stack.quantity > 1) {
-				int max_quantity = std::min(inv->getMaxPurchasable(drag_stack.item, vendor->getTab()), drag_stack.quantity);
+				int max_quantity = std::min(inv->getMaxPurchasable(drag_stack, vendor->getTab()), drag_stack.quantity);
 				if (max_quantity >= 1) {
 					num_picker->setValueBounds(1, max_quantity);
 					num_picker->visible = true;

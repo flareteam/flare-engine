@@ -204,6 +204,7 @@ extern size_t DAMAGE_TYPES_COUNT; // DAMAGE_TYPES.size() * 2, to account for min
 // Currency settings
 extern std::string CURRENCY;
 extern float VENDOR_RATIO;
+extern float VENDOR_RATIO_BUYBACK;
 
 // Death penalty settings
 extern bool DEATH_PENALTY;

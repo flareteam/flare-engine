@@ -782,7 +782,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 				tip.addColoredText(msg->get("Buy Price: %d %s each", price_per_unit, CURRENCY), color);
 		}
 		else if (context == VENDOR_SELL) {
-			price_per_unit = items[stack.item].getSellPrice();
+			price_per_unit = items[stack.item].getSellPrice(stack.can_buyback);
 			if (stats->currency < price_per_unit) color = color_requirements_not_met;
 			else color = color_normal;
 			if (items[stack.item].max_quantity <= 1)
@@ -878,11 +878,11 @@ bool ItemStack::empty() {
 	}
 	else if (item == 0 && quantity != 0) {
 		logError("ItemStack: Item id is zero, but quantity is %d.", quantity);
-		quantity = 0;
+		clear();
 	}
 	else if (item != 0 && quantity == 0) {
 		logError("ItemStack: Item id is %d, but quantity is zero.", item);
-		item = 0;
+		clear();
 	}
 	return true;
 }
@@ -890,18 +890,24 @@ bool ItemStack::empty() {
 void ItemStack::clear() {
 	item = 0;
 	quantity = 0;
+	can_buyback = false;
 }
 
 int Item::getPrice() {
 	return price + (price_per_level * (pc->stats.level - 1));
 }
 
-int Item::getSellPrice() {
+int Item::getSellPrice(bool is_new_buyback) {
 	int new_price = 0;
-	if (price_sell != 0)
-		new_price = price_sell;
-	else
-		new_price = static_cast<int>(static_cast<float>(getPrice()) * VENDOR_RATIO);
+	if (is_new_buyback || VENDOR_RATIO_BUYBACK == 0) {
+		if (price_sell != 0)
+			new_price = price_sell;
+		else
+			new_price = static_cast<int>(static_cast<float>(getPrice()) * VENDOR_RATIO);
+	}
+	else {
+		new_price = static_cast<int>(static_cast<float>(getPrice()) * VENDOR_RATIO_BUYBACK);
+	}
 	if (new_price == 0) new_price = 1;
 
 	return new_price;

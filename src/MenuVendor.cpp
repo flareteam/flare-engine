@@ -215,6 +215,8 @@ void MenuVendor::itemReturn(ItemStack stack) {
 }
 
 void MenuVendor::add(ItemStack stack) {
+	stack.can_buyback = true;
+
 	// Remove the first item stack to make room
 	if (stock[VENDOR_SELL].full(stack)) {
 		stock[VENDOR_SELL][0].clear();
@@ -245,15 +247,10 @@ void MenuVendor::saveInventory() {
 
 void MenuVendor::sort(int type) {
 	for (unsigned i=0; i<VENDOR_SLOTS; i++) {
-		if (stock[type][i].empty()) {
-			for (unsigned j=i; j<VENDOR_SLOTS; j++) {
-				if (!stock[type][j].empty()) {
-					stock[type][i] = stock[type][j];
-					stock[type][j].clear();
-					break;
-				}
-			}
-		}
+		ItemStack temp = stock[type][i];
+		stock[type][i].clear();
+		if (!temp.empty())
+			stock[type].add(temp);
 	}
 }
 
@@ -271,8 +268,13 @@ void MenuVendor::setNPC(NPC* _npc) {
 
 	for (unsigned i=0; i<VENDOR_SLOTS; i++) {
 		stock[VENDOR_BUY][i] = npc->stock[i];
+		if (npc->reset_buyback) {
+			buyback_stock[npc->filename][i].can_buyback = false;
+		}
 		stock[VENDOR_SELL][i] = buyback_stock[npc->filename][i];
 	}
+	npc->reset_buyback = false;
+
 	sort(VENDOR_BUY);
 	sort(VENDOR_SELL);
 

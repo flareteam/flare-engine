@@ -73,8 +73,12 @@ LootManager::LootManager()
 				// This key is parsed in loadMiscSettings() in Settings.cpp
 			}
 			else if (infile.key == "vendor_ratio") {
-				// @ATTR vendor_ratio|int|Prices ratio for vendors
+				// @ATTR vendor_ratio|int|Percentage of item buying price to use as selling price. Also used as the buyback price until the player leaves the map.
 				VENDOR_RATIO = static_cast<float>(toInt(infile.val)) / 100.0f;
+			}
+			else if (infile.key == "vendor_ratio_buyback") {
+				// @ATTR vendor_ratio_buyback|int|Percentage of item buying price to use as the buying price for previously sold items.
+				VENDOR_RATIO_BUYBACK = static_cast<float>(toInt(infile.val)) / 100.0f;
 			}
 			else if (infile.key == "sfx_loot") {
 				// @ATTR sfx_loot|filename|Filename of a sound effect to play for dropping loot.

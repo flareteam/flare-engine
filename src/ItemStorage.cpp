@@ -147,7 +147,7 @@ ItemStack ItemStorage::add( ItemStack stack, int slot) {
 			// first search of stack to complete if the item is stackable
 			int i = 0;
 			while (max_quantity > 1 && slot == -1 && i < slot_number) {
-				if (storage[i].item == stack.item && storage[i].quantity < max_quantity) {
+				if (storage[i].item == stack.item && storage[i].quantity < max_quantity && storage[i].can_buyback == stack.can_buyback) {
 					slot = i;
 				}
 				i++;
@@ -165,6 +165,7 @@ ItemStack ItemStorage::add( ItemStack stack, int slot) {
 			// Add
 			int quantity_added = std::min( stack.quantity, max_quantity - storage[slot].quantity);
 			storage[slot].item = stack.item;
+			storage[slot].can_buyback = stack.can_buyback;
 			storage[slot].quantity += quantity_added;
 			stack.quantity -= quantity_added;
 			// Add back the remaining, recursivly, until there's no more left to add or we run out of space.

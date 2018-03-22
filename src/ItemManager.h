@@ -135,7 +135,7 @@ public:
 	bool quest_item;
 
 	int getPrice();
-	int getSellPrice();
+	int getSellPrice(bool is_new_buyback = true);
 
 	Item()
 		: name("")
@@ -192,11 +192,13 @@ class ItemStack {
 public:
 	ItemStack()
 		: item(0)
-		, quantity(0) {
+		, quantity(0)
+		, can_buyback(false) {
 	}
 	~ItemStack() {}
 	int item;
 	int quantity;
+	bool can_buyback;
 	bool operator > (const ItemStack &param) const;
 	bool empty();
 	void clear();
