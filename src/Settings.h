@@ -59,6 +59,7 @@ public:
 	std::vector<int> powers;
 	std::vector<std::string> statuses;
 	std::string power_tree;
+	int default_power_tab;
 	std::vector<int> options;
 
 	HeroClass();
@@ -237,6 +238,7 @@ bool loadDefaults();
 void loadMobileDefaults();
 void updateScreenVars();
 size_t getPrimaryStatIndex(const std::string& id_str);
+HeroClass* getHeroClassByName(const std::string& name);
 
 // version information
 std::string getVersionString();

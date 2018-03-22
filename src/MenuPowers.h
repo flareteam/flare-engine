@@ -143,6 +143,8 @@ private:
 
 	size_t prev_powers_list_size;
 
+	int default_power_tab;
+
 public:
 	MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar);
 	~MenuPowers();

@@ -366,13 +366,10 @@ void SaveLoad::loadGame() {
 	else logError("SaveLoad: Unable to open %s!", ss.str().c_str());
 
 	// set starting values for primary stats based on class
-	if (!pc->stats.character_class.empty()) {
-		for (size_t i = 0; i < HERO_CLASSES.size(); ++i) {
-			if (HERO_CLASSES[i].name == pc->stats.character_class) {
-				for (size_t j = 0; j < PRIMARY_STATS.size(); ++j) {
-					pc->stats.primary_starting[j] = HERO_CLASSES[i].primary[j] + 1;
-				}
-			}
+	HeroClass* pc_class = getHeroClassByName(pc->stats.character_class);
+	if (pc_class) {
+		for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+			pc->stats.primary_starting[i] = pc_class->primary[i] + 1;
 		}
 	}
 
@@ -517,15 +514,10 @@ void SaveLoad::applyPlayerData() {
 }
 
 void SaveLoad::loadPowerTree() {
-	for (unsigned i=0; i<HERO_CLASSES.size(); ++i) {
-		if (pc->stats.character_class == HERO_CLASSES[i].name) {
-			if (HERO_CLASSES[i].power_tree != "") {
-				menu->pow->loadPowerTree(HERO_CLASSES[i].power_tree);
-				return;
-			}
-			else
-				break;
-		}
+	HeroClass* pc_class = getHeroClassByName(pc->stats.character_class);
+	if (pc_class && !pc_class->power_tree.empty()) {
+		menu->pow->loadPowerTree(pc_class->power_tree);
+		return;
 	}
 
 	// fall back to the default power tree

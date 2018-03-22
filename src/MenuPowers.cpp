@@ -49,6 +49,7 @@ MenuPowers::MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar)
 	, tab_control(NULL)
 	, tree_loaded(false)
 	, prev_powers_list_size(0)
+	, default_power_tab(-1)
 	, newPowerNotification(false)
 {
 
@@ -294,6 +295,12 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 	}
 
 	applyPowerUpgrades();
+
+	// set the default tab from character class setting
+	HeroClass* pc_class = getHeroClassByName(pc->stats.character_class);
+	if (pc_class) {
+		default_power_tab = pc_class->default_power_tab;
+	}
 
 	tree_loaded = true;
 
@@ -1125,6 +1132,10 @@ void MenuPowers::renderPowers(int tab_num) {
 }
 
 void MenuPowers::logic() {
+	if (!visible && tab_control && default_power_tab > -1) {
+		tab_control->setActiveTab(static_cast<unsigned>(default_power_tab));
+	}
+
 	setUnlockedPowers();
 
 	for (size_t i=0; i<power_cell_unlocked.size(); i++) {

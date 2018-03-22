@@ -47,7 +47,8 @@ HeroClass::HeroClass()
 	, carried("")
 	, primary(PRIMARY_STATS.size(), 0)
 	, hotkeys(std::vector<int>(ACTIONBAR_MAX, 0))
-	, power_tree("") {
+	, power_tree("")
+	, default_power_tab(-1) {
 }
 
 class ConfigEntry {
@@ -744,9 +745,10 @@ void loadMiscSettings() {
 						HERO_CLASSES.back().statuses.push_back(status);
 					}
 				}
-				// @ATTR power_tree|string|Power tree that will be loaded by MenuPowers
-				else if (infile.key == "power_tree") HERO_CLASSES.back().power_tree = infile.val;
-
+				else if (infile.key == "power_tree") {
+					// @ATTR power_tree|string|Power tree that will be loaded by MenuPowers
+					HERO_CLASSES.back().power_tree = infile.val;
+				}
 				else if (infile.key == "hero_options") {
 					// @ATTR hero_options|list(int)|A list of indicies of the hero options this class can use.
 					std::string hero_option;
@@ -755,6 +757,10 @@ void loadMiscSettings() {
 					}
 
 					std::sort(HERO_CLASSES.back().options.begin(), HERO_CLASSES.back().options.end());
+				}
+				else if (infile.key == "default_power_tab") {
+					// @ATTR default_power_tab|int|Index of the tab to switch to when opening the Powers menu
+					HERO_CLASSES.back().default_power_tab = toInt(infile.val);
 				}
 
 				else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
@@ -996,4 +1002,17 @@ size_t getPrimaryStatIndex(const std::string& id_str) {
 	}
 
 	return PRIMARY_STATS.size();
+}
+
+HeroClass* getHeroClassByName(const std::string& name) {
+	if (name.empty())
+		return NULL;
+
+	for (size_t i = 0; i < HERO_CLASSES.size(); ++i) {
+		if (name == HERO_CLASSES[i].name) {
+			return &HERO_CLASSES[i];
+		}
+	}
+
+	return NULL;
 }
