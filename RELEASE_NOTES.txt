@@ -10,12 +10,18 @@ Engine changes:
 * Fix rendering of tabs when individual tabs are too short or too long. (Justin Jacobs)
 * Add "Renderer" option to the Video section of the Configuration menu. (Justin Jacobs)
 * Adjust gamma slider range so that the default value is in the middle. (Justin Jacobs)
-* Fix incorrect dimensions of SVG icon. (Alexander Wilms)
-* Add documentation for creating Mac OS build. (Thomas Leavitt)
-* Fix Windows installer not using the correct working directory for launching Flare after install. (Justin Jacobs)
 * Clean up error messages that are displayed when the stash hasn't been created. (Justin Jacobs)
 * Support loading some hard-coded Configuration menu values from menus/config.txt. (Justin Jacobs)
 * Add WidgetSettings class for loading previously hard-coded properties of some Widgets. (Justin Jacobs)
+* Prevent the same key from getting bound to multiple actions. (Justin Jacobs)
+* Prevent editing joystick bindings when joystick is not in use. (Justin Jacobs)
+* Don't try to send items to buyback when using SELL_WITHOUT_VENDOR. (Justin Jacobs)
+* Add support for changing the buyback price after the player leaves the map. (Justin Jacobs)
+* Add ability for certain classes to open a specific tab of the Powers menu automatically. (Justin Jacobs)
+* Add 'respec' Event component for resetting XP/stats/powers. (Justin Jacobs)
+* Fix incorrect dimensions of SVG icon. (Alexander Wilms)
+* Add documentation for creating Mac OS build. (Thomas Leavitt)
+* Fix Windows installer not using the correct working directory for launching Flare after install. (Justin Jacobs)
 
 Translation Updates:
 
@@ -24,6 +30,8 @@ Translation Updates:
 Game changes:
 
 * Redesign final Fort Nasu puzzle, in response to the frustrations of many players. (Justin Jacobs)
+* Increase elemental ring bonuses by 10%. (Justin Jacobs)
+* Tweak slingshot stone graphics to make it more visible on some maps. (Justin Jacobs)
 * Add appdata.xml for use with various package managers. (Alexander Wilms)
 
 
