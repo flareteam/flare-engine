@@ -885,6 +885,11 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 			else if (effect_ptr->type == "knockback") {
 				ss << pwr.post_effects[i].magnitude << " " << msg->get("Knockback");
 			}
+			else if (!effect_ptr->name.empty() && pwr.post_effects[i].magnitude > 0) {
+				if (effect_ptr->can_stack)
+					ss << "+";
+				ss << pwr.post_effects[i].magnitude << " " << msg->get(effect_ptr->name);
+			}
 			else if (pwr.post_effects[i].magnitude == 0) {
 				// nothing
 			}
