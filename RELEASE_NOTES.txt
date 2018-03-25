@@ -25,6 +25,7 @@ Engine fixes:
 * Fix named Effects not showing up in Power menu tooltips. (Justin Jacobs)
 * Fix passive powers not respecting some power usage requirements. (Justin Jacobs)
 * Fix some events being activated when they shouldn't if the player was inside of their location rect. (Justin Jacobs)
+* Fix Power attribute pre_power not working for AI creatures. (Justin Jacobs)
 * Fix incorrect dimensions of SVG icon. (Alexander Wilms)
 * Fix Windows installer not using the correct working directory for launching Flare after install. (Justin Jacobs)
 

@@ -585,6 +585,10 @@ void BehaviorStandard::updateState() {
 
 			// sound effect based on power type
 			if (e->activeAnimation->isFirstFrame()) {
+				if (powers->powers[power_id].pre_power > 0 && percentChance(powers->powers[power_id].pre_power_chance)) {
+					powers->activate(powers->powers[power_id].pre_power, &e->stats, pursue_pos);
+				}
+
 				float attack_speed = (e->stats.effects.getAttackSpeed(powers->powers[power_id].attack_anim) * powers->powers[power_id].attack_speed) / 100.0f;
 				e->activeAnimation->setSpeed(attack_speed);
 				e->playAttackSound(powers->powers[power_id].attack_anim);
