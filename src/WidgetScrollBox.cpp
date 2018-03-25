@@ -38,7 +38,6 @@ WidgetScrollBox::WidgetScrollBox(int width, int height)
 	scrollbar = new WidgetScrollBar();
 	update = true;
 	render_to_alpha = false;
-	line_height = 20;
 	resize(width, height);
 	tablist = TabList(VERTICAL);
 
@@ -97,11 +96,13 @@ void WidgetScrollBox::scrollTo(int amount) {
 }
 
 void WidgetScrollBox::scrollDown() {
-	scroll(line_height);
+	int contents_height = (contents ? contents->getGraphicsHeight() : 0);
+	scroll((contents_height * 5) / 100);
 }
 
 void WidgetScrollBox::scrollUp() {
-	scroll(-line_height);
+	int contents_height = (contents ? contents->getGraphicsHeight() : 0);
+	scroll(-((contents_height * 5) / 100));
 }
 
 Point WidgetScrollBox::input_assist(const Point& mouse) {

@@ -47,7 +47,6 @@ public:
 	Sprite *contents;
 	bool update;
 	Color bg;
-	int line_height;
 
 	TabList tablist;
 	bool getNext();

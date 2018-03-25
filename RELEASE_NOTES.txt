@@ -27,6 +27,7 @@ Engine fixes:
 * Fix passive powers not respecting some power usage requirements. (Justin Jacobs)
 * Fix some events being activated when they shouldn't if the player was inside of their location rect. (Justin Jacobs)
 * Fix Power attribute pre_power not working for AI creatures. (Justin Jacobs)
+* WidgetScrollBox now scrolls in 5% increments based on the size of its contents, as opposed to a hard-coded pixel amount. (Justin Jacobs)
 * Fix incorrect dimensions of SVG icon. (Alexander Wilms)
 * Fix Windows installer not using the correct working directory for launching Flare after install. (Justin Jacobs)
 
