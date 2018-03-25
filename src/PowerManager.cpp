@@ -392,6 +392,9 @@ void PowerManager::loadPowers() {
 		else if (infile.key == "no_attack")
 			// @ATTR power.no_attack|bool|Hazard won't affect other entities.
 			powers[input_id].no_attack = toBool(infile.val);
+		else if (infile.key == "no_aggro")
+			// @ATTR power.no_aggro|bool|If true, the Hazard won't put its target in a combat state.
+			powers[input_id].no_aggro = toBool(infile.val);
 		else if (infile.key == "radius")
 			// @ATTR power.radius|float|Radius in pixels
 			powers[input_id].radius = toFloat(infile.val);

@@ -173,6 +173,7 @@ public:
 	// hazard traits
 	bool use_hazard;
 	bool no_attack;
+	bool no_aggro;
 	float radius;
 	size_t base_damage;
 	int starting_pos; // enum. (source, target, or melee)
@@ -321,6 +322,7 @@ public:
 
 		, use_hazard(false)
 		, no_attack(false)
+		, no_aggro(false)
 		, radius(0)
 		, base_damage(DAMAGE_TYPES.size())
 		, starting_pos(STARTING_POS_SOURCE)

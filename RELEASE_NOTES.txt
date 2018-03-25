@@ -8,6 +8,7 @@ Engine features:
 * Add support for changing the buyback price after the player leaves the map. (Justin Jacobs)
 * Add ability for certain classes to open a specific tab of the Powers menu automatically. (Justin Jacobs)
 * Add 'respec' Event component for resetting XP/stats/powers. (Justin Jacobs)
+* Add 'no_aggro' Power attribute. (Justin Jacobs)
 
 Engine fixes:
 
