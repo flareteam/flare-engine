@@ -1,6 +1,15 @@
 Flare v1.01 (WIP, link soon)
 
-Engine changes:
+Engine features:
+
+* Add "Renderer" option to the Video section of the Configuration menu. (Justin Jacobs)
+* Support loading some hard-coded Configuration menu values from menus/config.txt. (Justin Jacobs)
+* Add WidgetSettings class for loading previously hard-coded properties of some Widgets. (Justin Jacobs)
+* Add support for changing the buyback price after the player leaves the map. (Justin Jacobs)
+* Add ability for certain classes to open a specific tab of the Powers menu automatically. (Justin Jacobs)
+* Add 'respec' Event component for resetting XP/stats/powers. (Justin Jacobs)
+
+Engine fixes:
 
 * Fix bug where if minions were blocking the player, they couldn't be moved out of the way. Minions are now forced to move out of the way if the player is close enough. (Justin Jacobs)
 * Fix bug where removing a primary stat bonus would break passive powers that relied upon said bonus. (Justin Jacobs)
@@ -8,20 +17,20 @@ Engine changes:
 * Fix disappearing text caused be resizing the window in some cases. (Justin Jacobs)
 * Fix a regression in button and checkbox logic that prevented them from working with keyboard and controller input. (Justin Jacobs)
 * Fix rendering of tabs when individual tabs are too short or too long. (Justin Jacobs)
-* Add "Renderer" option to the Video section of the Configuration menu. (Justin Jacobs)
 * Adjust gamma slider range so that the default value is in the middle. (Justin Jacobs)
 * Clean up error messages that are displayed when the stash hasn't been created. (Justin Jacobs)
-* Support loading some hard-coded Configuration menu values from menus/config.txt. (Justin Jacobs)
-* Add WidgetSettings class for loading previously hard-coded properties of some Widgets. (Justin Jacobs)
 * Prevent the same key from getting bound to multiple actions. (Justin Jacobs)
 * Prevent editing joystick bindings when joystick is not in use. (Justin Jacobs)
 * Don't try to send items to buyback when using SELL_WITHOUT_VENDOR. (Justin Jacobs)
-* Add support for changing the buyback price after the player leaves the map. (Justin Jacobs)
-* Add ability for certain classes to open a specific tab of the Powers menu automatically. (Justin Jacobs)
-* Add 'respec' Event component for resetting XP/stats/powers. (Justin Jacobs)
+* Fix named Effects not showing up in Power menu tooltips. (Justin Jacobs)
+* Fix passive powers not respecting some power usage requirements. (Justin Jacobs)
+* Fix some events being activated when they shouldn't if the player was inside of their location rect. (Justin Jacobs)
 * Fix incorrect dimensions of SVG icon. (Alexander Wilms)
-* Add documentation for creating Mac OS build. (Thomas Leavitt)
 * Fix Windows installer not using the correct working directory for launching Flare after install. (Justin Jacobs)
+
+Documentation:
+
+* Add documentation for creating Mac OS build. (Thomas Leavitt)
 
 Translation Updates:
 
