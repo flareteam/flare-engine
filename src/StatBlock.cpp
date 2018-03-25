@@ -878,7 +878,7 @@ StatBlock::~StatBlock() {
 	removeFromSummons();
 }
 
-bool StatBlock::canUsePower(const Power &power, int powerid) const {
+bool StatBlock::canUsePower(const Power &power, int powerid, bool allow_passive) const {
 	if (!alive) {
 		// can't use powers when dead
 		return false;
@@ -890,9 +890,9 @@ bool StatBlock::canUsePower(const Power &power, int powerid) const {
 	else {
 		return (
 			mp >= power.requires_mp
-			&& !power.passive
+			&& (!power.passive || allow_passive)
 			&& !power.meta_power
-			&& !effects.stun
+			&& (!effects.stun || (allow_passive && power.passive))
 			&& (power.sacrifice || hp > power.requires_hp)
 			&& (power.requires_max_hp == -1 || (power.requires_max_hp >= 0 && hp >= (current[STAT_HP_MAX] * power.requires_max_hp) / 100))
 			&& (power.requires_not_max_hp == -1 || (power.requires_not_max_hp >= 0 && hp < (current[STAT_HP_MAX] * power.requires_not_max_hp) / 100))

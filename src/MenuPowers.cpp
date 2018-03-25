@@ -449,6 +449,12 @@ bool MenuPowers::checkRequirements(int pci) {
 			return false;
 	}
 
+	const Power& power = powers->powers[power_cell_all[pci].id];
+	if (power.passive) {
+		if (!stats->canUsePower(power, power_cell_all[pci].id, true))
+			return false;
+	}
+
 	return true;
 }
 
