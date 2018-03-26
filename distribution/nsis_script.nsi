@@ -8,6 +8,7 @@
 ; COPYING
 ; CREDITS.txt (part of flare-game)
 ; CREDITS.engine.txt
+; LICENSE.txt (part of flare-game)
 ; README.md (part of flare-game)
 ; README.engine.md
 ; RELEASE_NOTES.txt
@@ -90,6 +91,7 @@ Section "Flare engine" SecEngine
   File "COPYING"
   File "CREDITS.txt"
   File "CREDITS.engine.txt"
+  File "LICENSE.txt"
   File "README.md"
   File "README.engine.md"
   File "RELEASE_NOTES.txt"
