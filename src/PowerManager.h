@@ -433,6 +433,9 @@ private:
 
 	void activatePassiveByTrigger(int power_id, StatBlock *src_stats, bool& triggered_others);
 
+	std::vector<Animation*> power_animations;
+	std::vector<Animation*> effect_animations;
+
 public:
 	explicit PowerManager();
 	~PowerManager();

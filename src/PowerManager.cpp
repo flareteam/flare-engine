@@ -70,6 +70,7 @@ void PowerManager::loadEffects() {
 					effects.pop_back();
 				}
 				effects.resize(effects.size()+1);
+				effect_animations.resize(effects.size());
 			}
 		}
 
@@ -96,7 +97,7 @@ void PowerManager::loadEffects() {
 			// @ATTR effect.animation|filename|The filename of effect animation.
 			effects.back().animation = infile.val;
 			anim->increaseCount(effects.back().animation);
-			anim->getAnimationSet(effects.back().animation)->getAnimation("");
+			effect_animations.back() = anim->getAnimationSet(effects.back().animation)->getAnimation("");
 		}
 		else if (infile.key == "can_stack") {
 			// @ATTR effect.can_stack|bool|Allows multiple instances of this effect
@@ -336,7 +337,8 @@ void PowerManager::loadPowers() {
 			if (!infile.val.empty()) {
 				powers[input_id].animation_name = infile.val;
 				anim->increaseCount(powers[input_id].animation_name);
-				anim->getAnimationSet(powers[input_id].animation_name)->getAnimation("");
+				power_animations.resize(powers.size());
+				power_animations[input_id] = anim->getAnimationSet(powers[input_id].animation_name)->getAnimation("");
 			}
 		}
 		else if (infile.key == "soundfx")
@@ -1576,6 +1578,9 @@ PowerManager::~PowerManager() {
 			continue;
 
 		anim->decreaseCount(powers[i].animation_name);
+
+		if (power_animations[i])
+			delete power_animations[i];
 	}
 
 	for (size_t i = 0; i < effects.size(); ++i) {
@@ -1583,6 +1588,9 @@ PowerManager::~PowerManager() {
 			continue;
 
 		anim->decreaseCount(effects[i].animation);
+
+		if (effect_animations[i])
+			delete effect_animations[i];
 	}
 
 	for (unsigned i=0; i<sfx.size(); i++) {
