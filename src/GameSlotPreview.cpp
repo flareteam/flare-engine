@@ -140,6 +140,9 @@ void GameSlotPreview::setAnimation(std::string name) {
 	if (name == activeAnimation->getName())
 		return;
 
+	if (activeAnimation)
+		delete activeAnimation;
+
 	activeAnimation = animationSet->getAnimation(name);
 
 	for (unsigned i=0; i < animsets.size(); i++) {
@@ -189,6 +192,8 @@ void GameSlotPreview::render() {
 
 GameSlotPreview::~GameSlotPreview() {
 	anim->decreaseCount("animations/hero.txt");
+	if (activeAnimation)
+		delete activeAnimation;
 
 	for (unsigned int i=0; i<animsets.size(); i++) {
 		if (animsets[i])
