@@ -76,6 +76,8 @@ private:
 	// we block tiles that have loot dropped on them
 	std::vector<Point> tiles_to_unblock;
 
+	std::vector< std::vector<Animation*> > animations;
+
 public:
 	LootManager();
 	LootManager(const LootManager &copy); // not implemented

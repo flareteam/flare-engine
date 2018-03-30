@@ -112,14 +112,17 @@ LootManager::LootManager()
  * Here we load all the animations used by the item database.
  */
 void LootManager::loadGraphics() {
+	animations.resize(items->items.size());
 
 	// check all items in the item database
 	for (unsigned int i=0; i < items->items.size(); i++) {
 		if (items->items[i].loot_animation.empty()) continue;
 
+		animations[i].resize(items->items[i].loot_animation.size());
+
 		for (unsigned int j=0; j<items->items[i].loot_animation.size(); j++) {
 			anim->increaseCount(items->items[i].loot_animation[j].name);
-			anim->getAnimationSet(items->items[i].loot_animation[j].name)->getAnimation("");
+			animations[i][j] = anim->getAnimationSet(items->items[i].loot_animation[j].name)->getAnimation("");
 		}
 	}
 }
@@ -736,6 +739,7 @@ LootManager::~LootManager() {
 
 		for (unsigned int j=0; j<items->items[i].loot_animation.size(); j++) {
 			anim->decreaseCount(items->items[i].loot_animation[j].name);
+			delete animations[i][j];
 		}
 	}
 
