@@ -276,8 +276,11 @@ Hazard::~Hazard() {
 		}
 	}
 
-	if (activeAnimation) {
+	if (!animation_name.empty()) {
 		anim->decreaseCount(animation_name);
+	}
+
+	if (activeAnimation) {
 		delete activeAnimation;
 	}
 
@@ -358,11 +361,13 @@ void Hazard::reflect() {
 }
 
 void Hazard::loadAnimation(const std::string &s) {
-	if (activeAnimation) {
+	if (!animation_name.empty()) {
 		anim->decreaseCount(animation_name);
-		delete activeAnimation;
-		activeAnimation = NULL;
 	}
+	if (activeAnimation) {
+		delete activeAnimation;
+	}
+	activeAnimation = NULL;
 	animation_name = s;
 	if (animation_name != "") {
 		anim->increaseCount(animation_name);
