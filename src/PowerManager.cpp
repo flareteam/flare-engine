@@ -1594,9 +1594,14 @@ PowerManager::~PowerManager() {
 			delete effect_animations[i];
 	}
 
-	for (unsigned i=0; i<sfx.size(); i++) {
+	for (size_t i = 0; i < sfx.size(); i++) {
 		snd->unload(sfx[i]);
 	}
 	sfx.clear();
+
+	while (!hazards.empty()) {
+		delete hazards.front();
+		hazards.pop();
+	}
 }
 
