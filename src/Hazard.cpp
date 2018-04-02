@@ -99,6 +99,7 @@ Hazard::Hazard(const Hazard& other) {
 
 	if (!other.animation_name.empty()) {
 		animation_name = other.animation_name;
+		activeAnimation = NULL;
 		loadAnimation(animation_name);
 	}
 
