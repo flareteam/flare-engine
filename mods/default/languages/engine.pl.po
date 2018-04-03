@@ -1,14 +1,14 @@
 # Copyright (C) 2016 Paweł Puszczyński
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Paweł Puszczyński <pawonashi@gmail.com>, 2016.
+# Paweł Puszczyński <pawonashi@gmail.com>, 2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: 0.19\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-28 15:02-0400\n"
-"PO-Revision-Date: 2017-12-10 17:50+0100\n"
+"PO-Revision-Date: 2018-04-03 22:56+0100\n"
 "Last-Translator: Paweł Puszczyński <pawonashi@gmail.com>\n"
 "Language-Team: \n"
 "Language: Polish\n"
@@ -93,6 +93,9 @@ msgid ""
 "\n"
 "Often slower, but less likely to have issues."
 msgstr ""
+"renderer programowy SDL\n"
+"\n"
+"Często wolniejszy, ale mniej podatny na błędy."
 
 #: ../../../src/DeviceList.cpp:58
 msgid ""
@@ -100,6 +103,9 @@ msgid ""
 "\n"
 "The default renderer that is often faster than the SDL software renderer."
 msgstr ""
+"renderer sprzętowy SDL\n"
+"\n"
+"Domyślny renderer, który zwykle jest szybszy niż programowy renderer SDL."
 
 #: ../../../src/Entity.cpp:472
 msgid "miss"
@@ -219,24 +225,20 @@ msgid "Enable >>"
 msgstr "Włącz >>"
 
 #: ../../../src/GameStateConfigBase.cpp:959
-#, fuzzy
 msgid "Version:"
-msgstr "Wymaga wersji: "
+msgstr "Wersja:"
 
 #: ../../../src/GameStateConfigBase.cpp:964
-#, fuzzy
 msgid "Game:"
-msgstr "Gra: "
+msgstr "Gra:"
 
 #: ../../../src/GameStateConfigBase.cpp:969
-#, fuzzy
 msgid "Engine version:"
-msgstr "Wymaga wersji: "
+msgstr "Wersja silnika:"
 
 #: ../../../src/GameStateConfigBase.cpp:977
-#, fuzzy
 msgid "Requires mods:"
-msgstr "Wymaga modów: "
+msgstr "Wymaga modów:"
 
 #: ../../../src/GameStateConfigDesktop.cpp:78
 #: ../../../src/GameStateConfigDesktop.cpp:740
@@ -245,9 +247,8 @@ msgstr "Wyczyść"
 
 #: ../../../src/GameStateConfigDesktop.cpp:78
 #: ../../../src/GameStateConfigDesktop.cpp:738
-#, fuzzy
 msgid "Assign:"
-msgstr "Przypisz: "
+msgstr "Przypisz:"
 
 #: ../../../src/GameStateConfigDesktop.cpp:123
 msgid "Video"
@@ -276,7 +277,7 @@ msgstr "Dla urządzeń przenośnych"
 
 #: ../../../src/GameStateConfigDesktop.cpp:205
 msgid "Renderer"
-msgstr ""
+msgstr "Renderer"
 
 #: ../../../src/GameStateConfigDesktop.cpp:221
 msgid "Full Screen Mode"
@@ -369,7 +370,7 @@ msgstr "Wczytywanie stanu gry..."
 
 #: ../../../src/GameStateLoad.cpp:727
 msgid "Invalid save"
-msgstr ""
+msgstr "Nieprawidłowy zapis"
 
 #: ../../../src/GameStateLoad.cpp:746 ../../../src/ItemManager.cpp:672
 #: ../../../src/MenuPowers.cpp:688 ../../../src/MenuPowers.cpp:1052
@@ -617,27 +618,22 @@ msgstr "Wymaga %d poziomu"
 
 #: ../../../src/ItemManager.cpp:760 ../../../src/MenuPowers.cpp:1030
 #: ../../../src/MenuPowers.cpp:1032
-#, fuzzy, c-format
 msgid "Requires %s %d"
-msgstr "Wymaga: %d %s"
+msgstr "Wymaga: %s %d"
 
 #: ../../../src/ItemManager.cpp:768
-#, c-format
 msgid "Requires Class: %s"
 msgstr "Wymagana Klasa: %s"
 
 #: ../../../src/ItemManager.cpp:780 ../../../src/ItemManager.cpp:789
-#, c-format
 msgid "Buy Price: %d %s"
 msgstr "Cena kupna: %d %s"
 
 #: ../../../src/ItemManager.cpp:782 ../../../src/ItemManager.cpp:791
-#, c-format
 msgid "Buy Price: %d %s each"
 msgstr "Cena kupna: %d %s za sztukę"
 
 #: ../../../src/ItemManager.cpp:797
-#, c-format
 msgid "Sell Price: %d %s"
 msgstr "Wartość sprzedaży: %d %s"
 
@@ -647,14 +643,12 @@ msgid "Sell Price: %d %s each"
 msgstr "Wartość sprzedaży: %d %s za sztukę"
 
 #: ../../../src/ItemManager.cpp:808
-#, fuzzy
 msgid "Set:"
-msgstr "Zestaw: "
+msgstr "Zestaw:"
 
 #: ../../../src/ItemManager.cpp:815
-#, fuzzy, c-format
 msgid "%d items:"
-msgstr "%d przedmioty: "
+msgstr "%d przedmioty:"
 
 #: ../../../src/MenuActionBar.cpp:195 ../../../src/MenuActionBar.cpp:201
 #: ../../../src/MenuActionBar.cpp:206
@@ -708,14 +702,12 @@ msgid "Related stats:"
 msgstr "Powiązane statystyki:"
 
 #: ../../../src/MenuCharacter.cpp:405 ../../../src/MenuCharacter.cpp:429
-#, fuzzy, c-format
 msgid "Each level grants %d."
-msgstr "Każdy poziom zapewnia %d punktów. "
+msgstr "Każdy poziom zapewnia %d punktów."
 
 #: ../../../src/MenuCharacter.cpp:409 ../../../src/MenuCharacter.cpp:433
-#, fuzzy, c-format
 msgid "Each point of %s grants %d."
-msgstr "Każdy punkt atrybutu %s dodaje %d punktów. "
+msgstr "Każdy punkt atrybutu %s dodaje %d punktów."
 
 #: ../../../src/MenuDevConsole.cpp:47
 msgid "Execute"
@@ -730,9 +722,8 @@ msgid "Arguments with spaces should be enclosed with double quotes. Example:"
 msgstr "Argumenty zawierające spacje powinny zamknięte w cudzysłowie. Przykład:"
 
 #: ../../../src/MenuDevConsole.cpp:122
-#, fuzzy
 msgid "Type 'help' to get a list of commands."
-msgstr "Wpisz 'help' aby uzyskać listę komend. "
+msgstr "Wpisz 'help' aby uzyskać listę komend."
 
 #: ../../../src/MenuDevConsole.cpp:223
 msgid "adds a power to the action bar"
@@ -787,14 +778,12 @@ msgid "ERROR: Incorrect number of arguments"
 msgstr "BŁĄD: Nieprawidłowa liczba argumentów."
 
 #: ../../../src/MenuDevConsole.cpp:391 ../../../src/MenuDevConsole.cpp:416
-#, fuzzy
 msgid "HINT:"
-msgstr "WSKAZÓWKA: "
+msgstr "WSKAZÓWKA:"
 
 #: ../../../src/MenuDevConsole.cpp:391
-#, fuzzy
 msgid "<id>"
-msgstr " <id>"
+msgstr "<id>"
 
 #: ../../../src/MenuDevConsole.cpp:406
 #, c-format
@@ -806,9 +795,8 @@ msgid "ERROR: Too few arguments"
 msgstr "BŁĄD: Za mało argumentów"
 
 #: ../../../src/MenuDevConsole.cpp:416
-#, fuzzy
 msgid "<key>=<val> <key>=<val> ..."
-msgstr " <key>=<val> <key>=<val> ..."
+msgstr "<key>=<val> <key>=<val> ..."
 
 #: ../../../src/MenuDevConsole.cpp:420
 msgid "ERROR: Unknown command"
@@ -819,23 +807,20 @@ msgid "HINT: Type help"
 msgstr "WSKAZÓWKA: Wpisz help"
 
 #: ../../../src/MenuDevHUD.cpp:56
-#, fuzzy
 msgid "Player (x,y):"
-msgstr "Gracz (x,y): "
+msgstr "Gracz (x,y):"
 
 #: ../../../src/MenuDevHUD.cpp:62
-#, fuzzy
 msgid "Target (x,y):"
-msgstr "Cel (x,y): "
+msgstr "Cel (x,y):"
 
 #: ../../../src/MenuDevHUD.cpp:67
-#, fuzzy
 msgid "Mouse (x,y):"
-msgstr "Mysz (x,y): "
+msgstr "Mysz (x,y):"
 
 #: ../../../src/MenuDevHUD.cpp:72
 msgid "Target distance:"
-msgstr ""
+msgstr "Odległość do celu:"
 
 #: ../../../src/MenuEnemy.cpp:137
 msgid "Dead"
@@ -863,27 +848,22 @@ msgid "Paused"
 msgstr "Pauza"
 
 #: ../../../src/MenuInventory.cpp:155
-#, fuzzy, c-format
 msgid "Lost %d%% of %s."
-msgstr "Utracono %d%% %s. "
+msgstr "Utracono %d%% %s."
 
 #: ../../../src/MenuInventory.cpp:162
-#, fuzzy, c-format
 msgid "Lost %d%% of total XP."
-msgstr "Utracono %d%% PD. "
+msgstr "Utracono %d%% PD."
 
 #: ../../../src/MenuInventory.cpp:167
-#, fuzzy, c-format
 msgid "Lost %d%% of current level XP."
-msgstr "Utracono %d%% PD z obecnego poziomu doświadczenia. "
+msgstr "Utracono %d%% PD z obecnego poziomu doświadczenia."
 
 #: ../../../src/MenuInventory.cpp:193
-#, c-format
 msgid "Lost %s."
 msgstr "Utracono %s."
 
 #: ../../../src/MenuInventory.cpp:236 ../../../src/MenuStash.cpp:136
-#, c-format
 msgid "%d %s"
 msgstr "%d %s"
 
@@ -960,7 +940,7 @@ msgstr "Podaj ilość:"
 
 #: ../../../src/MenuPowers.cpp:692
 msgid "Passive"
-msgstr ""
+msgstr "Pasywna"
 
 #: ../../../src/MenuPowers.cpp:697
 #, c-format
@@ -1193,7 +1173,7 @@ msgstr "%s na przeciwniku"
 #: ../../../src/SDLInputState.cpp:711
 #, c-format
 msgid "'%s' is no longer bound to:"
-msgstr ""
+msgstr "'%s' już nie jest przypisany do:"
 
 #: ../../../src/Settings.cpp:780
 msgid "Adventurer"
@@ -1341,11 +1321,11 @@ msgstr "%s sekund"
 
 #: ../../../src/Version.cpp:139
 msgid "or newer"
-msgstr ""
+msgstr "lub nowsza"
 
 #: ../../../src/Version.cpp:142
 msgid "or older"
-msgstr ""
+msgstr "lub starsza"
 
 #~ msgid "resets the player to level 1, with no stat or skill points spent"
 #~ msgstr "resetuje poziom gracza do 1, bez rozdanych punktów statystyk bądź umiejętności"
