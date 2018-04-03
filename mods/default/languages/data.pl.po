@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-15 13:33+\n"
-"PO-Revision-Date: 2016-12-10 16:35+0100\n"
+"PO-Revision-Date: 2018-04-03 22:34+0100\n"
 "Last-Translator: Paweł Puszczyński <pawonashi@gmail.com>\n"
 "Language-Team: Polish <LL@li.org>\n"
 "Language: pl\n"
@@ -105,7 +105,7 @@ msgstr "Programiści"
 
 #: ../cutscenes/credits.txt:22
 msgid "Andrew Engelbrecht"
-msgstr ""
+msgstr "Andrew Engelbrecht"
 
 #: ../cutscenes/credits.txt:23
 msgid "Anton Golov"
@@ -228,9 +228,8 @@ msgid "Giovanni Dalla Torre"
 msgstr "Giovanni Dalla Torre"
 
 #: ../cutscenes/credits.txt:62
-#, fuzzy
 msgid "GunChleoc"
-msgstr "gunchleoc"
+msgstr "GunChleoc"
 
 #: ../cutscenes/credits.txt:63
 msgid "Hans Joachim Desserud"
@@ -238,7 +237,7 @@ msgstr "Hans Joachim Desserud"
 
 #: ../cutscenes/credits.txt:65
 msgid "Janet Hunt"
-msgstr ""
+msgstr "Janet Hunt"
 
 #: ../cutscenes/credits.txt:66
 msgid "Juan Pablo Tamayo"
