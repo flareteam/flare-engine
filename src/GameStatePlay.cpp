@@ -451,18 +451,36 @@ void GameStatePlay::loadTitles() {
 
 			if (titles.empty()) continue;
 
-			// @ATTR title.title|string|The displayed title.
-			if (infile.key == "title") titles.back().title = infile.val;
-			// @ATTR title.level|int|Requires level.
-			else if (infile.key == "level") titles.back().level = toInt(infile.val);
-			// @ATTR title.power|power_id|Requires power.
-			else if (infile.key == "power") titles.back().power = toInt(infile.val);
-			// @ATTR title.requires_status|string|Requires status.
-			else if (infile.key == "requires_status") titles.back().requires_status = infile.val;
-			// @ATTR title.requires_not_status|string|Requires not status.
-			else if (infile.key == "requires_not_status") titles.back().requires_not = infile.val;
-			// @ATTR title.primary_stat|predefined_string, predefined_string : Primary stat, Lesser primary stat|Required primary stat(s). The lesser stat is optional.
+			if (infile.key == "title") {
+				// @ATTR title.title|string|The displayed title.
+				titles.back().title = infile.val;
+			}
+			else if (infile.key == "level") {
+				// @ATTR title.level|int|Requires level.
+				titles.back().level = toInt(infile.val);
+			}
+			else if (infile.key == "power") {
+				// @ATTR title.power|power_id|Requires power.
+				titles.back().power = toInt(infile.val);
+			}
+			else if (infile.key == "requires_status") {
+				// @ATTR title.requires_status|list(string)|Requires status.
+				std::string repeat_val = popFirstString(infile.val);
+				while (repeat_val != "") {
+					titles.back().requires_status.push_back(repeat_val);
+					repeat_val = popFirstString(infile.val);
+				}
+			}
+			else if (infile.key == "requires_not_status") {
+				// @ATTR title.requires_not_status|list(string)|Requires not status.
+				std::string repeat_val = popFirstString(infile.val);
+				while (repeat_val != "") {
+					titles.back().requires_not_status.push_back(repeat_val);
+					repeat_val = popFirstString(infile.val);
+				}
+			}
 			else if (infile.key == "primary_stat") {
+				// @ATTR title.primary_stat|predefined_string, predefined_string : Primary stat, Lesser primary stat|Required primary stat(s). The lesser stat is optional.
 				titles.back().primary_stat_1 = popFirstString(infile.val);
 				titles.back().primary_stat_2 = popFirstString(infile.val);
 			}
@@ -486,11 +504,24 @@ void GameStatePlay::checkTitle() {
 			continue;
 		if (titles[i].power > 0 && std::find(pc->stats.powers_list.begin(), pc->stats.powers_list.end(), titles[i].power) == pc->stats.powers_list.end())
 			continue;
-		if (!titles[i].requires_status.empty() && !camp->checkStatus(titles[i].requires_status))
-			continue;
-		if (!titles[i].requires_not.empty() && camp->checkStatus(titles[i].requires_not))
-			continue;
 		if (!titles[i].primary_stat_1.empty() && !checkPrimaryStat(titles[i].primary_stat_1, titles[i].primary_stat_2))
+			continue;
+
+		bool status_failed = false;
+		for (size_t j = 0; j < titles[i].requires_status.size(); ++j) {
+			if (!camp->checkStatus(titles[i].requires_status[j])) {
+				status_failed = true;
+				break;
+			}
+		}
+		for (size_t j = 0; j < titles[i].requires_not_status.size(); ++j) {
+			if (camp->checkStatus(titles[i].requires_not_status[j])) {
+				status_failed = true;
+				break;
+			}
+		}
+
+		if (status_failed)
 			continue;
 
 		// Title meets the requirements
