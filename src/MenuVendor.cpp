@@ -239,8 +239,10 @@ TooltipData MenuVendor::checkTooltip(const Point& position) {
  */
 void MenuVendor::saveInventory() {
 	for (unsigned i=0; i<VENDOR_SLOTS; i++) {
-		if (npc) npc->stock[i] = stock[VENDOR_BUY][i];
-		buyback_stock[npc->filename][i] = stock[VENDOR_SELL][i];
+		if (npc) {
+			npc->stock[i] = stock[VENDOR_BUY][i];
+			buyback_stock[npc->filename][i] = stock[VENDOR_SELL][i];
+		}
 	}
 
 }
