@@ -617,7 +617,6 @@ void lockFileCheck() {
 	if (!platform_options.has_lock_file)
 		return;
 
-	std::string lock_file_path = PATH_CONF + "flare_lock";
 	LOCK_INDEX = 0;
 
 	lockFileRead();
