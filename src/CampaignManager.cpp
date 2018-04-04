@@ -99,9 +99,9 @@ void CampaignManager::unsetStatus(const std::string& s) {
 		--it;
 		if ((*it) == s) {
 			it = status.erase(it);
+			pc->stats.check_title = true;
 			return;
 		}
-		pc->stats.check_title = true;
 	}
 }
 
