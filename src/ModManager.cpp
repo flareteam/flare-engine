@@ -81,14 +81,20 @@ Mod& Mod::operator=(const Mod &mod) {
 	*engine_max_version = *mod.engine_max_version;
 	depends = mod.depends;
 
-	depends_min.resize(mod.depends_min.size());
+	depends_min.resize(mod.depends_min.size(), NULL);
 	for (size_t i = 0; i < depends_min.size(); ++i) {
-		*depends_min[i] = *mod.depends_min[i];
+		if (depends_min[i])
+			*depends_min[i] = *mod.depends_min[i];
+		else
+			depends_min[i] = new Version(*mod.depends_min[i]);
 	}
 
-	depends_max.resize(mod.depends_max.size());
+	depends_max.resize(mod.depends_max.size(), NULL);
 	for (size_t i = 0; i < depends_max.size(); ++i) {
-		*depends_max[i] = *mod.depends_max[i];
+		if (depends_max[i])
+			*depends_max[i] = *mod.depends_max[i];
+		else
+			depends_max[i] = new Version(*mod.depends_max[i]);
 	}
 
 	assert(depends.size() == depends_min.size());
