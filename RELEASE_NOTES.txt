@@ -1,4 +1,26 @@
-Flare v1.01 (WIP, link soon)
+Flare v1.02 (WIP, link soon)
+
+Engine features:
+
+* Support multiple campaign statuses for requirements in engine/titles.txt. (Justin Jacobs)
+
+Engine fixes:
+
+* Fix crash on exit caused by not clearing the Hazard queue. (Justin Jacobs)
+* Fix regression that caused a crash when configuring mods in the wrong order. (Justin Jacobs)
+* Fix bug where player title wouldn't update after "unset_status". (Justin Jacobs)
+* Fix potential NULL dereference in vendor window. (Justin Jacobs)
+
+Translation updates:
+
+* Scottish Gaelic (gd) update (GunChleoc)
+* Polish (pl) update (Pawonashi)
+* Russian (ru) fix (Igor Paliychuk)
+* Ukranian (uk) update (Микола Франчук)
+
+
+
+Flare v1.01 (http://flarerpg.org/index.php/2018/03/31/flare-1-01/)
 
 Engine features:
 
