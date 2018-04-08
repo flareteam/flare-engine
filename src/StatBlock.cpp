@@ -248,6 +248,10 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 		// @ATTR stat_per_primary|predefined_string, predefined_string, int : Primary Stat, Stat name, Value|The value for this stat added for every point allocated to this primary stat.
 		std::string prim_stat = popFirstString(infile->val);
 		size_t prim_stat_index = getPrimaryStatIndex(prim_stat);
+		if (prim_stat_index == PRIMARY_STATS.size()) {
+			infile->error("StatBlock: '%s' is not a valid primary stat.", prim_stat.c_str());
+			return true;
+		}
 
 		std::string stat = popFirstString(infile->val);
 		int value = popFirstInt(infile->val);
