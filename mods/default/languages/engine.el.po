@@ -1,22 +1,22 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Γιάννης <yannanth@gmail.com>, 2012.
-# Μιχάλης Παπαγεωργίου <werdanith@yahoo.gr>, 2013.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-28 15:02-0400\n"
-"PO-Revision-Date: 2013-11-25 13:11+0300\n"
-"Last-Translator: Μιχάλης Παπαγεωργίου <werdanith@yahoo.gr>\n"
-"Language-Team: Μιχάλης Παπαγεωργίου\n"
-"Language: el\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
+"Language-Team: Greek (https://www.transifex.com/flareorg/teams/84925/el/)\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: el\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Virtaal 0.7.1\n"
 
 #: ../../../src/Avatar.cpp:353
 #, c-format
@@ -28,14 +28,12 @@ msgid "You may increase one attribute through the Character Menu."
 msgstr "Μπορείς να αυξήσεις μία ικανότητα μέσω του Μενού Χαρακτήρα."
 
 #: ../../../src/Avatar.cpp:573
-#, fuzzy
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
-msgstr "Ηττήθηκες. Τέλος παιχνιδιού! Πάτησε Enter για να επιστρέψεις στον Τίτλο."
+msgstr ""
 
 #: ../../../src/Avatar.cpp:579
-#, fuzzy
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
-msgstr "Ηττήθηκες. Πάτησε Enter για να συνεχίσεις."
+msgstr ""
 
 #: ../../../src/Avatar.cpp:832
 msgid "Transformation expired. You have been moved back to a safe place."
@@ -183,9 +181,8 @@ msgid "Colorblind Mode"
 msgstr "Ρύθμιση Δυσχρωματοψίας"
 
 #: ../../../src/GameStateConfigBase.cpp:280
-#, fuzzy
 msgid "Hardware mouse cursor"
-msgstr "Χρήση κάρτας γραφικών για επιφάνειες"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:284
 msgid "Developer Mode"
@@ -205,7 +202,7 @@ msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:300
 msgid "Subtitles"
-msgstr ""
+msgstr "Υπότιτλοι"
 
 #: ../../../src/GameStateConfigBase.cpp:304
 msgid "Active Mods"
@@ -224,24 +221,20 @@ msgid "Enable >>"
 msgstr "Ενεργοποίηση >>"
 
 #: ../../../src/GameStateConfigBase.cpp:959
-#, fuzzy
 msgid "Version:"
-msgstr "Χρειάζεται Δύναμη: %s"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:964
-#, fuzzy
 msgid "Game:"
-msgstr "Νέο Παιχνίδι"
+msgstr "Παιχνίδι:"
 
 #: ../../../src/GameStateConfigBase.cpp:969
-#, fuzzy
 msgid "Engine version:"
-msgstr "Χρειάζεται Δύναμη: %s"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:977
-#, fuzzy
 msgid "Requires mods:"
-msgstr "Χρειάζεται Δύναμη: %s"
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:78
 #: ../../../src/GameStateConfigDesktop.cpp:740
@@ -250,9 +243,8 @@ msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:78
 #: ../../../src/GameStateConfigDesktop.cpp:738
-#, fuzzy
 msgid "Assign:"
-msgstr "Ανάθεση: "
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:123
 msgid "Video"
@@ -305,7 +297,7 @@ msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:241
 msgid "Allow changing gamma"
-msgstr "Επιτρέπετε η αλλαγή Φωτεινότητας"
+msgstr "Επιτρέπεται η αλλαγή Φωτεινότητας"
 
 #: ../../../src/GameStateConfigDesktop.cpp:245
 msgid "Gamma"
@@ -354,7 +346,7 @@ msgstr "Νέο Παιχνίδι"
 
 #: ../../../src/GameStateLoad.cpp:88 ../../../src/GameStateLoad.cpp:588
 msgid "Choose a Slot"
-msgstr "Επέλεξε μία Θέση"
+msgstr "Επίλεξε μία Θέση"
 
 #: ../../../src/GameStateLoad.cpp:561 ../../../src/GameStateLoad.cpp:582
 msgid "Enable a story mod to continue"
@@ -521,7 +513,7 @@ msgstr "Shift"
 
 #: ../../../src/InputState.cpp:318
 msgid "Alt"
-msgstr ""
+msgstr "Alt"
 
 #: ../../../src/InputState.cpp:319
 msgid "Delete"
@@ -556,43 +548,38 @@ msgid "Middle Mouse"
 msgstr ""
 
 #: ../../../src/InputState.cpp:328
-#, fuzzy
 msgid "Right Mouse"
-msgstr "Δεξιά"
+msgstr ""
 
 #: ../../../src/InputState.cpp:329
-#, fuzzy
 msgid "Wheel Up"
-msgstr "Ροδέλα προς τα πάνω"
+msgstr ""
 
 #: ../../../src/InputState.cpp:330
-#, fuzzy
 msgid "Wheel Down"
-msgstr "Ροδέλα προς τα κάτω"
+msgstr ""
 
 #: ../../../src/InputState.cpp:331
-#, fuzzy
 msgid "Mouse X1"
-msgstr "Σκόπευση με το ποντίκι"
+msgstr ""
 
 #: ../../../src/InputState.cpp:332
-#, fuzzy
 msgid "Mouse X2"
-msgstr "Σκόπευση με το ποντίκι"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:406 ../../../src/ItemManager.cpp:409
 msgid "Unknown Item"
 msgstr ""
 
 #: ../../../src/ItemManager.cpp:581 ../../../src/MenuPowers.cpp:794
-#, fuzzy, c-format
+#, c-format
 msgid "%d%% Speed"
-msgstr "%d% Ταχύτητα"
+msgstr "%d%%Ταχύτητα"
 
 #: ../../../src/ItemManager.cpp:585 ../../../src/MenuPowers.cpp:797
-#, fuzzy, c-format
+#, c-format
 msgid "%d%% Attack Speed"
-msgstr "%d% Ταχύτητα"
+msgstr "%d%%Ταχύτητα Επίθεσης"
 
 #: ../../../src/ItemManager.cpp:607 ../../../src/MenuCharacter.cpp:338
 #: ../../../src/MenuPowers.cpp:739
@@ -627,14 +614,14 @@ msgstr "Χρειάζεται Επίπεδο %d"
 
 #: ../../../src/ItemManager.cpp:760 ../../../src/MenuPowers.cpp:1030
 #: ../../../src/MenuPowers.cpp:1032
-#, fuzzy, c-format
+#, c-format
 msgid "Requires %s %d"
-msgstr "Χρειάζεται ένα %s"
+msgstr "Χρειάζεται %s%d"
 
 #: ../../../src/ItemManager.cpp:768
-#, fuzzy, c-format
+#, c-format
 msgid "Requires Class: %s"
-msgstr "Χρειάζεται ένα %s"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:780 ../../../src/ItemManager.cpp:789
 #, c-format
@@ -657,14 +644,13 @@ msgid "Sell Price: %d %s each"
 msgstr "Τιμή Πώλησης: %d %s έκαστο"
 
 #: ../../../src/ItemManager.cpp:808
-#, fuzzy
 msgid "Set:"
-msgstr "Σύνολο: "
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:815
-#, fuzzy, c-format
+#, c-format
 msgid "%d items:"
-msgstr "%d αντικείμενα: "
+msgstr ""
 
 #: ../../../src/MenuActionBar.cpp:195 ../../../src/MenuActionBar.cpp:201
 #: ../../../src/MenuActionBar.cpp:206
@@ -678,9 +664,8 @@ msgid "x%d"
 msgstr ""
 
 #: ../../../src/MenuActiveEffects.cpp:214
-#, fuzzy
 msgid "Remaining:"
-msgstr "εναπομείναντες πόντοι"
+msgstr ""
 
 #: ../../../src/MenuActiveEffects.cpp:220
 #, c-format
@@ -719,14 +704,14 @@ msgid "Related stats:"
 msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:405 ../../../src/MenuCharacter.cpp:429
-#, fuzzy, c-format
+#, c-format
 msgid "Each level grants %d."
-msgstr "Κάθε επίπεδο παρέχει %d. "
+msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:409 ../../../src/MenuCharacter.cpp:433
-#, fuzzy, c-format
+#, c-format
 msgid "Each point of %s grants %d."
-msgstr "Κάθε πόντος Επιδεξιότητας παρέχει %d. "
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:47
 msgid "Execute"
@@ -757,7 +742,9 @@ msgid "turns on/off the developer hud"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:226
-msgid "Prints a list of powers that match a search term. No search term will list all items"
+msgid ""
+"Prints a list of powers that match a search term. No search term will list "
+"all items"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:227
@@ -765,15 +752,20 @@ msgid "Prints out all the map filenames located in the \"maps/\" directory."
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:228
-msgid "Prints out the active campaign statuses that match a search term. No search term will list all active statuses"
+msgid ""
+"Prints out the active campaign statuses that match a search term. No search "
+"term will list all active statuses"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:229
-msgid "Prints a list of items that match a search term. No search term will list all items"
+msgid ""
+"Prints a list of items that match a search term. No search term will list "
+"all items"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:230
-msgid "parses a series of event components and executes them as a single event"
+msgid ""
+"parses a series of event components and executes them as a single event"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:231
@@ -815,7 +807,7 @@ msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:416
 msgid "<key>=<val> <key>=<val> ..."
-msgstr ""
+msgstr "<key>=<val><key>=<val>..."
 
 #: ../../../src/MenuDevConsole.cpp:420
 msgid "ERROR: Unknown command"
@@ -834,9 +826,8 @@ msgid "Target (x,y):"
 msgstr ""
 
 #: ../../../src/MenuDevHUD.cpp:67
-#, fuzzy
 msgid "Mouse (x,y):"
-msgstr "Σκόπευση με το ποντίκι"
+msgstr ""
 
 #: ../../../src/MenuDevHUD.cpp:72
 msgid "Target distance:"
@@ -853,7 +844,7 @@ msgstr "%s επιπέδου %d"
 
 #: ../../../src/MenuExit.cpp:81
 msgid "Save & Exit"
-msgstr ""
+msgstr "Αποθήκευση & Έξοδος"
 
 #: ../../../src/MenuExit.cpp:82
 msgid "Exit"
@@ -861,26 +852,26 @@ msgstr "Έξοδος"
 
 #: ../../../src/MenuExit.cpp:86
 msgid "Continue"
-msgstr ""
+msgstr "Συνέχιση"
 
 #: ../../../src/MenuExit.cpp:110 ../../../src/MenuExit.cpp:129
 msgid "Paused"
 msgstr ""
 
 #: ../../../src/MenuInventory.cpp:155
-#, fuzzy, c-format
+#, c-format
 msgid "Lost %d%% of %s."
-msgstr "Έχασες %d%% από τα %s. "
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:162
-#, fuzzy, c-format
+#, c-format
 msgid "Lost %d%% of total XP."
-msgstr "Έχασες %d%% του συνολικού XP. "
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "Lost %d%% of current level XP."
-msgstr "Έχασες %d%% του XP αυτού του επιπέδου. "
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:193
 #, c-format
@@ -923,7 +914,8 @@ msgstr ""
 
 #: ../../../src/MenuInventory.cpp:559
 msgid "This item can only be used from the action bar."
-msgstr "Αυτό το αντικείμενο μπορεί να χρησιμοποιηθεί μόνο από την μπάρα ενεργειών."
+msgstr ""
+"Αυτό το αντικείμενο μπορεί να χρησιμοποιηθεί μόνο από την μπάρα ενεργειών."
 
 #: ../../../src/MenuInventory.cpp:664
 msgid "Inventory is full."
@@ -935,9 +927,8 @@ msgid "Not enough %s."
 msgstr "Έλλειψη από %s."
 
 #: ../../../src/MenuInventory.cpp:804 ../../../src/MenuInventory.cpp:811
-#, fuzzy
 msgid "This item can not be sold."
-msgstr "Αυτό το αντικείμενο μπορεί να χρησιμοποιηθεί μόνο από την μπάρα ενεργειών."
+msgstr ""
 
 #: ../../../src/MenuLog.cpp:85
 msgid "Notes"
@@ -953,9 +944,8 @@ msgid "XP: %d/%d"
 msgstr "XP: %d/%d"
 
 #: ../../../src/MenuManager.cpp:812
-#, fuzzy
 msgid "This item can not be dropped."
-msgstr "Αυτό το αντικείμενο μπορεί να χρησιμοποιηθεί μόνο από την μπάρα ενεργειών."
+msgstr ""
 
 #: ../../../src/MenuNPCActions.cpp:82
 msgid "Trade"
@@ -980,9 +970,8 @@ msgid "Costs %d HP"
 msgstr "Κοστίζει %d ΗP"
 
 #: ../../../src/MenuPowers.cpp:706
-#, fuzzy
 msgid "Cooldown:"
-msgstr "Επανάκτηση: %d δευτερόλεπτα"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:773 ../../../src/MenuPowers.cpp:776
 msgid "Damage per second"
@@ -1070,9 +1059,8 @@ msgid "%d%% chance"
 msgstr ""
 
 #: ../../../src/MenuPowers.cpp:969
-#, fuzzy
 msgid "Base Accuracy"
-msgstr "Σημάδι:"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:989
 msgid "Base Critical Chance"
@@ -1083,9 +1071,8 @@ msgid "Ignores Absorbtion"
 msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1002
-#, fuzzy
 msgid "Ignores Avoidance"
-msgstr "Αποφυγή:"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1007
 #, c-format
@@ -1093,9 +1080,9 @@ msgid "%d%% Chance to crit slowed targets"
 msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1012
-#, fuzzy, c-format
+#, c-format
 msgid "%s Elemental Damage"
-msgstr "Πνευματική ζημιά:"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1021
 #, c-format
@@ -1112,20 +1099,16 @@ msgid "Click to Unlock (uses 1 Skill Point)"
 msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1076 ../../../src/MenuPowers.cpp:1078
-#, fuzzy
 msgid "Requires 1 Skill Point"
-msgstr "Χρειάζεται %d Πόντο Ικανότητας"
+msgstr "Χρειάζεται 1 Πόντο Ικανότητας"
 
 #: ../../../src/MenuPowers.cpp:1312
 msgid "Unspent skill points:"
 msgstr "Εναπομείναντες πόντοι ικανότητας:"
 
 #: ../../../src/MenuPowers.cpp:1340
-#, fuzzy
 msgid "Next Level:"
-msgstr ""
-"\n"
-"Επόμενο Επίπεδο:"
+msgstr "Επόμενο Επίπεδο:"
 
 #: ../../../src/MenuStash.cpp:132
 msgid "Shared Stash"
@@ -1136,9 +1119,8 @@ msgid "Can not store quest items in the stash."
 msgstr ""
 
 #: ../../../src/MenuStash.cpp:209
-#, fuzzy
 msgid "Stash is full."
-msgstr "Έχεις παραφορτωθεί."
+msgstr ""
 
 #: ../../../src/MenuVendor.cpp:51
 msgid "Buyback"
@@ -1166,19 +1148,19 @@ msgid "Game saved."
 msgstr ""
 
 #: ../../../src/SDLInputState.cpp:559
-#, fuzzy, c-format
+#, c-format
 msgid "Mouse %d"
-msgstr "Σκόπευση με το ποντίκι"
+msgstr "Ποντίκι %d"
 
 #: ../../../src/SDLInputState.cpp:567
 #, c-format
 msgid "Axis %d -"
-msgstr ""
+msgstr "Άξονας %d -"
 
 #: ../../../src/SDLInputState.cpp:569
 #, c-format
 msgid "Axis %d +"
-msgstr ""
+msgstr "Άξονας %d +"
 
 #: ../../../src/SDLInputState.cpp:572
 #, c-format
@@ -1215,108 +1197,90 @@ msgid "Adventurer"
 msgstr "Τυχοδιώκτης"
 
 #: ../../../src/Stats.cpp:36
-#, fuzzy
 msgid "Max HP"
-msgstr "Μέγιστα ΗΡ (πόντοι ζωής):"
+msgstr ""
 
 #: ../../../src/Stats.cpp:41
-#, fuzzy
 msgid "HP Regen"
-msgstr "Αναγέννηση ΗΡ:"
+msgstr ""
 
 #: ../../../src/Stats.cpp:42
-#, fuzzy
 msgid "Ticks of HP regen per minute."
-msgstr "Επαναλήψεις αναγέννησης ΗΡ ανά λεπτό. "
+msgstr ""
 
 #: ../../../src/Stats.cpp:46
-#, fuzzy
 msgid "Max MP"
-msgstr "Μέγιστα ΜΡ (πόντοι μαγείας):"
+msgstr ""
 
 #: ../../../src/Stats.cpp:51
-#, fuzzy
 msgid "MP Regen"
-msgstr "Αναγέννηση ΜΡ:"
+msgstr ""
 
 #: ../../../src/Stats.cpp:52
-#, fuzzy
 msgid "Ticks of MP regen per minute."
-msgstr "Επαναλήψεις αναγέννησης ΜΡ ανά λεπτό. "
+msgstr ""
 
 #: ../../../src/Stats.cpp:56
-#, fuzzy
 msgid "Accuracy"
-msgstr "Σημάδι:"
+msgstr ""
 
 #: ../../../src/Stats.cpp:61
-#, fuzzy
 msgid "Avoidance"
-msgstr "Αποφυγή:"
+msgstr ""
 
 #: ../../../src/Stats.cpp:66
-#, fuzzy
 msgid "Absorb Min"
-msgstr "Απορρόφηση:"
+msgstr ""
 
 #: ../../../src/Stats.cpp:71
-#, fuzzy
 msgid "Absorb Max"
-msgstr "Απορρόφηση:"
+msgstr ""
 
 #: ../../../src/Stats.cpp:76
 msgid "Critical Hit Chance"
 msgstr ""
 
 #: ../../../src/Stats.cpp:81
-#, fuzzy
 msgid "Bonus XP"
-msgstr "Μπόνους ΧΡ: "
+msgstr ""
 
 #: ../../../src/Stats.cpp:82
-#, fuzzy
 msgid "Increases the XP gained per kill."
-msgstr "Αυξάνει τα ΧΡ που αποκτάς ανά σκοτωμό"
+msgstr ""
 
 #: ../../../src/Stats.cpp:86
-#, fuzzy, c-format
+#, c-format
 msgid "Bonus %s"
-msgstr "Μπόνους"
+msgstr ""
 
 #: ../../../src/Stats.cpp:87
-#, fuzzy, c-format
+#, c-format
 msgid "Increases the %s found per drop."
-msgstr "Αυξάνει τα %s που βρίσκεις στα πτώματα"
+msgstr ""
 
 #: ../../../src/Stats.cpp:91
-#, fuzzy
 msgid "Item Find Chance"
-msgstr "Μπόνους Εύρεσης Αντικειμένων: "
+msgstr ""
 
 #: ../../../src/Stats.cpp:92
-#, fuzzy
 msgid "Increases the chance that an enemy will drop an item."
-msgstr "Αυξάνει το ενδεχόμενο να ρίξει ένα αντικείμενο ο εχθρός όταν σκοτωθεί"
+msgstr ""
 
 #: ../../../src/Stats.cpp:96
-#, fuzzy
 msgid "Stealth"
-msgstr "Δολιότητα: "
+msgstr ""
 
 #: ../../../src/Stats.cpp:97
-#, fuzzy
 msgid "Increases your ability to move undetected."
-msgstr "Αυξάνει την ικανότητά σου να περνάς απαρατήρητος"
+msgstr ""
 
 #: ../../../src/Stats.cpp:101
-#, fuzzy
 msgid "Poise"
-msgstr "Ισορροπία: "
+msgstr "Ευστάθεια"
 
 #: ../../../src/Stats.cpp:102
-#, fuzzy
 msgid "Reduces your chance of stumbling when hit."
-msgstr "Μειώνει το ενδεχόμενο να παραπατήσεις όταν χτυπηθείς"
+msgstr "Μειώνει την πιθανότητα να σκοντάψεις όταν χτυπηθείς."
 
 #: ../../../src/Stats.cpp:106
 msgid "Missile Reflect Chance"
@@ -1335,18 +1299,16 @@ msgid "Deals a percentage of damage taken back to the attacker."
 msgstr ""
 
 #: ../../../src/Stats.cpp:116
-#, fuzzy
 msgid "HP Steal"
-msgstr "Δολιότητα: "
+msgstr ""
 
 #: ../../../src/Stats.cpp:117
 msgid "Percentage of HP stolen per hit."
 msgstr ""
 
 #: ../../../src/Stats.cpp:121
-#, fuzzy
 msgid "MP Steal"
-msgstr "Δολιότητα: "
+msgstr ""
 
 #: ../../../src/Stats.cpp:122
 msgid "Percentage of MP stolen per hit."
@@ -1365,14 +1327,14 @@ msgid "k"
 msgstr "κ"
 
 #: ../../../src/Utils.cpp:448
-#, fuzzy, c-format
+#, c-format
 msgid "%s second"
-msgstr "Επανάκτηση: %d δευτερόλεπτα"
+msgstr "%s δευτερόλεπτο"
 
 #: ../../../src/Utils.cpp:451
-#, fuzzy, c-format
+#, c-format
 msgid "%s seconds"
-msgstr "Επανάκτηση: %d δευτερόλεπτα"
+msgstr "%s δευτερόλεπτα"
 
 #: ../../../src/Version.cpp:139
 msgid "or newer"
@@ -1381,292 +1343,3 @@ msgstr ""
 #: ../../../src/Version.cpp:142
 msgid "or older"
 msgstr ""
-
-#~ msgid "Permadeath"
-#~ msgstr "Μόνιμος θάνατος"
-
-#~ msgid "Physical"
-#~ msgstr "Πυγμή"
-
-#~ msgid "Mental"
-#~ msgstr "Πνεύμα"
-
-#~ msgid "Offense"
-#~ msgstr "Επιδεξιότητα"
-
-#~ msgid "Defense"
-#~ msgstr "Άμυνα"
-
-#~ msgid "Melee damage: %d-%d"
-#~ msgstr "Ζημιά εξ επαφής: %d-%d"
-
-#~ msgid "Melee damage: %d"
-#~ msgstr "Ζημιά εξ επαφής: %d"
-
-#~ msgid "Ranged damage: %d-%d"
-#~ msgstr "Ζημιά από απόσταση: %d-%d"
-
-#~ msgid "Ranged damage: %d"
-#~ msgstr "Ζημιά από απόσταση: %d"
-
-#~ msgid "Mental damage: %d-%d"
-#~ msgstr "Πνευματική ζημιά: %d-%d"
-
-#~ msgid "Mental damage: %d"
-#~ msgstr "Πνευματική ζημιά: %d"
-
-#, fuzzy
-#~ msgid "Melee Damage"
-#~ msgstr "Ζημιά εξ επαφής:"
-
-#, fuzzy
-#~ msgid "Ranged Damage"
-#~ msgstr "Ζημιά από απόσταση:"
-
-#, fuzzy
-#~ msgid "Mental Damage"
-#~ msgstr "Πνευματική ζημιά:"
-
-#, fuzzy
-#~ msgid "Melee Damage Min"
-#~ msgstr "Ζημιά εξ επαφής:"
-
-#, fuzzy
-#~ msgid "Melee Damage Max"
-#~ msgstr "Ζημιά εξ επαφής:"
-
-#, fuzzy
-#~ msgid "Ranged Damage Min"
-#~ msgstr "Ζημιά από απόσταση:"
-
-#, fuzzy
-#~ msgid "Ranged Damage Max"
-#~ msgstr "Ζημιά από απόσταση:"
-
-#, fuzzy
-#~ msgid "Mental Damage Min"
-#~ msgstr "Πνευματική ζημιά:"
-
-#, fuzzy
-#~ msgid "Mental Damage Max"
-#~ msgstr "Πνευματική ζημιά:"
-
-#~ msgid "Requires Physical %d"
-#~ msgstr "Χρειάζεται %d Πυγμή"
-
-#~ msgid "Requires Mental %d"
-#~ msgstr "Χρειάζεται %d Πνεύμα"
-
-#~ msgid "Requires Offense %d"
-#~ msgstr "Χρειάζεται %d Επιδεξιότητα"
-
-#~ msgid "Requires Defense %d"
-#~ msgstr "Χρειάζεται %d Άμυνα"
-
-#~ msgid "Each point of Physical grants %d. "
-#~ msgstr "Κάθε πόντος Πυγμής παρέχει %d. "
-
-#~ msgid "Each point of Mental grants %d. "
-#~ msgstr "Κάθε πόντος Πνεύματος παρέχει %d. "
-
-#~ msgid "Each point of Defense grants %d. "
-#~ msgstr "Κάθε πόντος Άμυνας παρέχει %d. "
-
-#~ msgid "Requires Physical Offense %d"
-#~ msgstr "Χρειάζεται %d Υλική Επίθεση"
-
-#~ msgid "Requires Physical Defense %d"
-#~ msgstr "Χρειάζεται %d Υλική Άμυνα"
-
-#~ msgid "Requires Mental Offense %d"
-#~ msgstr "Χρειάζεται %d Πνευματική Επίθεση"
-
-#~ msgid "Requires Mental Defense %d"
-#~ msgstr "Χρειάζεται %d Πνευματική Άμυνα"
-
-#, fuzzy
-#~ msgid "Added item: "
-#~ msgstr "%d αντικείμενα: "
-
-#, fuzzy
-#~ msgid "Removed item: "
-#~ msgstr "%d αντικείμενα: "
-
-#, fuzzy
-#~ msgid "Exit to title?"
-#~ msgstr "Έξοδος προς Τίτλο"
-
-#~ msgid "Empty Slot"
-#~ msgstr "Κενή Θέση"
-
-#, fuzzy
-#~ msgid "Move only one item:"
-#~ msgstr "Πάτα το SHIFT για να μετακινήσεις μόνο ένα αντικείμενο."
-
-#~ msgid "CTRL-click a carried item to sell it."
-#~ msgstr "CTRL-κλικ ποντικιού σε ένα αντικείμενο που κουβαλάς για να το πουλήσεις."
-
-#~ msgid "Use this resolution?"
-#~ msgstr "Χρήση αυτής της ανάλυσης;"
-
-#~ msgid "Double buffering"
-#~ msgstr "Διπλή ενδιάμεση μνήμη"
-
-#~ msgid "High Quality Textures"
-#~ msgstr "Υφές Υψηλής Ποιότητας"
-
-#~ msgid "Animated tiles"
-#~ msgstr "Κινούμενα πλακίδια"
-
-#~ msgid "Show Hotkeys Labels"
-#~ msgstr "Εμφάνιση Ετικετών Πλήκτρων"
-
-#~ msgid "Resolution"
-#~ msgstr "Ανάλυση"
-
-#~ msgid "Level %d %s"
-#~ msgstr "Επίπεδο %d %s"
-
-#~ msgid "lmb"
-#~ msgstr "ακπ"
-
-#~ msgid "mmb"
-#~ msgstr "μκπ"
-
-#~ msgid "rmb"
-#~ msgstr "δκπ"
-
-#~ msgid "mbx1"
-#~ msgstr "εκπ1"
-
-#~ msgid "mbx2"
-#~ msgstr "εκπ2"
-
-#~ msgid "Low"
-#~ msgstr "Χαμηλή"
-
-#~ msgid "Normal"
-#~ msgstr "Κανονική"
-
-#~ msgid "High"
-#~ msgstr "Υψηλή"
-
-#~ msgid "Epic"
-#~ msgstr "Επική"
-
-#~ msgid "Increases %s by %d"
-#~ msgstr "Αυξάνει %s κατά %d"
-
-#~ msgid "Decreases %s by %d"
-#~ msgstr "Μειώνει %s κατά %d"
-
-#~ msgid "Crit:"
-#~ msgstr "Πιθανότητα Κρίσιμου Χτυπήματος:"
-
-#~ msgid "Physical (P) increases melee weapon proficiency and total HP."
-#~ msgstr "Η Πυγμή (Π) αυξάνει την εξοικείωση με κοντινά όπλα και τα συνολικά ΗΡ."
-
-#~ msgid "Mental (M) increases mental weapon proficiency and total MP."
-#~ msgstr "Το Πνεύμα (Μ) αυξάνει την εξοικείωση με τα πνευματικά όπλα και τα συνολικά ΜΡ."
-
-#~ msgid "Offense (O) increases ranged weapon proficiency and accuracy."
-#~ msgstr "Η Επιδεξιότητα (Ε) αυξάνει την εξοικείωση με μακρινά όπλα και το σημάδι."
-
-#~ msgid "Defense (D) increases armor proficiency and avoidance."
-#~ msgstr "Η Άμυνα (Α) αυξάνει την εξοικείωση με πανοπλίες και την αποφυγή."
-
-#~ msgid "Save and exit to title?"
-#~ msgstr "Αποθήκευση και έξοδος;"
-
-#~ msgid "Click to Unlock"
-#~ msgstr "Κάντε κλικ για Ξεκλείδωμα"
-
-#~ msgid "Character Menu (C)"
-#~ msgstr "Μενού Χαρακτήρα (C)"
-
-#~ msgid "Power Menu (P)"
-#~ msgstr "Μενού Δυνάμεων (P)"
-
-#~ msgid "Log Menu (L)"
-#~ msgstr "Μενού Ημερολογίου (L)"
-
-#, fuzzy
-#~ msgid "Stats"
-#~ msgstr "Στατιστικά"
-
-#~ msgid "Warrior"
-#~ msgstr "Πολεμιστής"
-
-#~ msgid "Wizard"
-#~ msgstr "Μάγος"
-
-#~ msgid "Knight"
-#~ msgstr "Ιππότης"
-
-#~ msgid "Shaman"
-#~ msgstr "Σαμάνος"
-
-#~ msgid "Cleric"
-#~ msgstr "Κληρικός"
-
-#~ msgid "Battle Mage"
-#~ msgstr "Μαχόμενος Μάγος"
-
-#~ msgid "Heavy Archer"
-#~ msgstr "Βαριά Οπλισμένος Τοξότης"
-
-#~ msgid "You receive %d gold."
-#~ msgstr "Λαμβάνετε %d χρυσάφι."
-
-#~ msgid "Press a key to assign: "
-#~ msgstr "Πατήστε ένα πλήκτρο για ανάθεση:"
-
-#~ msgid "Activate >>"
-#~ msgstr "Ενεργοποίηση >>"
-
-#~ msgid "Create Character"
-#~ msgstr "Δημιουργία Χαρακτήρα"
-
-#~ msgid "Main Hand"
-#~ msgstr "Κύριο Χέρι"
-
-#~ msgid "Body"
-#~ msgstr "Σώμα"
-
-#~ msgid "Off Hand"
-#~ msgstr "Εκτός Χεριού"
-
-#~ msgid "%d Gold"
-#~ msgstr "%d Χρυσάφι"
-
-#, fuzzy
-#~ msgid "Total HP"
-#~ msgstr "Συνολική Ζωη"
-
-#, fuzzy
-#~ msgid "Total MP"
-#~ msgstr "Συνολική Ζωη"
-
-#~ msgid "Main Weapon"
-#~ msgstr "Κύριο Όπλο"
-
-#~ msgid "Wand Proficiency"
-#~ msgstr "Ικανότητα Ράβδου"
-
-#~ msgid "Slingshot Proficiency"
-#~ msgstr "Ικανότητα Σφεντόνας"
-
-#~ msgid "Light Armor Proficiency"
-#~ msgstr "Ικανότητα Ελαφριάς Πανοπλίας"
-
-#~ msgid "Light Shield Proficiency"
-#~ msgstr "Ικανότητα Ελαφριάς Ασπίδας"
-
-#~ msgid "Heavy Armor Proficiency"
-#~ msgstr "Ικανότητα Βαρεάς Πανοπλίας"
-
-#~ msgid "Heavy Shield Proficiency"
-#~ msgstr "Ικανότητα Βαρεάς Ασπίδας"
-
-#~ msgid "Messages"
-#~ msgstr "Μηνύματα"

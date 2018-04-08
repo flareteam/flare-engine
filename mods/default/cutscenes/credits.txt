@@ -69,6 +69,7 @@ text=Michael Papageorgiou
 text=Mikhail Karalevich
 text=Miro Jánošík
 text=Morgan Strauss
+text=Nea Retrogamer
 text=Nikita Vanku
 text=Paul Wortmann
 text=Pawel Puszczynski
