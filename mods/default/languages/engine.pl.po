@@ -1,20 +1,22 @@
-# Copyright (C) 2016 Paweł Puszczyński
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
-# Paweł Puszczyński <pawonashi@gmail.com>, 2018.
-#
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: 0.19\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-28 15:02-0400\n"
-"PO-Revision-Date: 2018-04-03 22:56+0100\n"
-"Last-Translator: Paweł Puszczyński <pawonashi@gmail.com>\n"
-"Language-Team: \n"
-"Language: Polish\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
+"Language-Team: Polish (https://www.transifex.com/flareorg/teams/84925/pl/)\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: pl\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
 
 #: ../../../src/Avatar.cpp:353
 #, c-format
@@ -27,11 +29,15 @@ msgstr "Możesz zwiększyć jeden ze swoich atrybutów w Menu Postaci."
 
 #: ../../../src/Avatar.cpp:573
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
-msgstr "Pokonano Cię. Koniec gry! ${INPUT_CONTINUE} spowoduje powrót do Menu Głównego."
+msgstr ""
+"Pokonano Cię. Koniec gry! ${INPUT_CONTINUE} spowoduje powrót do Menu "
+"Głównego."
 
 #: ../../../src/Avatar.cpp:579
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
-msgstr "Pokonano Cię. ${INPUT_CONTINUE} sprawi, że odrodzisz się w ostatnim punkcie kontrolnym."
+msgstr ""
+"Pokonano Cię. ${INPUT_CONTINUE} sprawi, że odrodzisz się w ostatnim punkcie "
+"kontrolnym."
 
 #: ../../../src/Avatar.cpp:832
 msgid "Transformation expired. You have been moved back to a safe place."
@@ -618,22 +624,27 @@ msgstr "Wymaga %d poziomu"
 
 #: ../../../src/ItemManager.cpp:760 ../../../src/MenuPowers.cpp:1030
 #: ../../../src/MenuPowers.cpp:1032
+#, c-format
 msgid "Requires %s %d"
 msgstr "Wymaga: %s %d"
 
 #: ../../../src/ItemManager.cpp:768
+#, c-format
 msgid "Requires Class: %s"
 msgstr "Wymagana Klasa: %s"
 
 #: ../../../src/ItemManager.cpp:780 ../../../src/ItemManager.cpp:789
+#, c-format
 msgid "Buy Price: %d %s"
 msgstr "Cena kupna: %d %s"
 
 #: ../../../src/ItemManager.cpp:782 ../../../src/ItemManager.cpp:791
+#, c-format
 msgid "Buy Price: %d %s each"
 msgstr "Cena kupna: %d %s za sztukę"
 
 #: ../../../src/ItemManager.cpp:797
+#, c-format
 msgid "Sell Price: %d %s"
 msgstr "Wartość sprzedaży: %d %s"
 
@@ -647,6 +658,7 @@ msgid "Set:"
 msgstr "Zestaw:"
 
 #: ../../../src/ItemManager.cpp:815
+#, c-format
 msgid "%d items:"
 msgstr "%d przedmioty:"
 
@@ -702,10 +714,12 @@ msgid "Related stats:"
 msgstr "Powiązane statystyki:"
 
 #: ../../../src/MenuCharacter.cpp:405 ../../../src/MenuCharacter.cpp:429
+#, c-format
 msgid "Each level grants %d."
 msgstr "Każdy poziom zapewnia %d punktów."
 
 #: ../../../src/MenuCharacter.cpp:409 ../../../src/MenuCharacter.cpp:433
+#, c-format
 msgid "Each point of %s grants %d."
 msgstr "Każdy punkt atrybutu %s dodaje %d punktów."
 
@@ -719,7 +733,8 @@ msgstr "Konsola deweloperska"
 
 #: ../../../src/MenuDevConsole.cpp:121
 msgid "Arguments with spaces should be enclosed with double quotes. Example:"
-msgstr "Argumenty zawierające spacje powinny zamknięte w cudzysłowie. Przykład:"
+msgstr ""
+"Argumenty zawierające spacje powinny zamknięte w cudzysłowie. Przykład:"
 
 #: ../../../src/MenuDevConsole.cpp:122
 msgid "Type 'help' to get a list of commands."
@@ -738,23 +753,36 @@ msgid "turns on/off the developer hud"
 msgstr "włącza/wyłącza interfejs dewelopera"
 
 #: ../../../src/MenuDevConsole.cpp:226
-msgid "Prints a list of powers that match a search term. No search term will list all items"
-msgstr "Wyświetla listę mocy pasujących do podanego wyrażenia. Brak wyrażenia spowoduje wyświelenie wszystkich pozycji."
+msgid ""
+"Prints a list of powers that match a search term. No search term will list "
+"all items"
+msgstr ""
+"Wyświetla listę mocy pasujących do podanego wyrażenia. Brak wyrażenia "
+"spowoduje wyświelenie wszystkich pozycji."
 
 #: ../../../src/MenuDevConsole.cpp:227
 msgid "Prints out all the map filenames located in the \"maps/\" directory."
 msgstr "Wypisuje nazwy wszystkich plików map zawartych w katalogu \"maps/\"."
 
 #: ../../../src/MenuDevConsole.cpp:228
-msgid "Prints out the active campaign statuses that match a search term. No search term will list all active statuses"
-msgstr "Wyświetla listę aktywnych statusów kampanii pasujących do podanego wyrażenia. Brak wyrażenia spowoduje wyświetlanie wszystkich statusów."
+msgid ""
+"Prints out the active campaign statuses that match a search term. No search "
+"term will list all active statuses"
+msgstr ""
+"Wyświetla listę aktywnych statusów kampanii pasujących do podanego "
+"wyrażenia. Brak wyrażenia spowoduje wyświetlanie wszystkich statusów."
 
 #: ../../../src/MenuDevConsole.cpp:229
-msgid "Prints a list of items that match a search term. No search term will list all items"
-msgstr "Wyświetla listę przedmiotów pasujących do podanego wyrażenia. Brak wyrażenia spowoduje wyświelenie wszystkich przedmiotów."
+msgid ""
+"Prints a list of items that match a search term. No search term will list "
+"all items"
+msgstr ""
+"Wyświetla listę przedmiotów pasujących do podanego wyrażenia. Brak wyrażenia"
+" spowoduje wyświelenie wszystkich przedmiotów."
 
 #: ../../../src/MenuDevConsole.cpp:230
-msgid "parses a series of event components and executes them as a single event"
+msgid ""
+"parses a series of event components and executes them as a single event"
 msgstr "parsuje ciąg komponentów zdarzeń i wykonuje je jako jedno zdarzenie"
 
 #: ../../../src/MenuDevConsole.cpp:231
@@ -848,22 +876,27 @@ msgid "Paused"
 msgstr "Pauza"
 
 #: ../../../src/MenuInventory.cpp:155
+#, c-format
 msgid "Lost %d%% of %s."
 msgstr "Utracono %d%% %s."
 
 #: ../../../src/MenuInventory.cpp:162
+#, c-format
 msgid "Lost %d%% of total XP."
 msgstr "Utracono %d%% PD."
 
 #: ../../../src/MenuInventory.cpp:167
+#, c-format
 msgid "Lost %d%% of current level XP."
 msgstr "Utracono %d%% PD z obecnego poziomu doświadczenia."
 
 #: ../../../src/MenuInventory.cpp:193
+#, c-format
 msgid "Lost %s."
 msgstr "Utracono %s."
 
 #: ../../../src/MenuInventory.cpp:236 ../../../src/MenuStash.cpp:136
+#, c-format
 msgid "%d %s"
 msgstr "%d %s"
 
@@ -1326,306 +1359,3 @@ msgstr "lub nowsza"
 #: ../../../src/Version.cpp:142
 msgid "or older"
 msgstr "lub starsza"
-
-#~ msgid "resets the player to level 1, with no stat or skill points spent"
-#~ msgstr "resetuje poziom gracza do 1, bez rozdanych punktów statystyk bądź umiejętności"
-
-#~ msgid "Permadeath"
-#~ msgstr "Tryb hardkorowy"
-
-#~ msgid "Physical"
-#~ msgstr "Siła fizyczna"
-
-#~ msgid "Mental"
-#~ msgstr "Siła umysłu"
-
-#~ msgid "Offense"
-#~ msgstr "Atak"
-
-#~ msgid "Defense"
-#~ msgstr "Obrona"
-
-#~ msgid "Melee damage: %d-%d"
-#~ msgstr "Obrażenia w zwarciu: %d-%d"
-
-#~ msgid "Melee damage: %d"
-#~ msgstr "Obrażenia w zwarciu: %d"
-
-#~ msgid "Ranged damage: %d-%d"
-#~ msgstr "Obrażenia dystansowe: %d-%d"
-
-#~ msgid "Ranged damage: %d"
-#~ msgstr "Obrażenia dystansowe: %d"
-
-#~ msgid "Mental damage: %d-%d"
-#~ msgstr "Obrażenia umysłowe: %d-%d"
-
-#~ msgid "Mental damage: %d"
-#~ msgstr "Obrażenia umysłowe: %d"
-
-#~ msgid "Damage"
-#~ msgstr "Obrażenia"
-
-#~ msgid "Melee Damage"
-#~ msgstr "Obrażenia w zwarciu"
-
-#~ msgid "Ranged Damage"
-#~ msgstr "Obrażenia dystansowe"
-
-#~ msgid "Mental Damage"
-#~ msgstr "Obrażenia umysłowe"
-
-#~ msgid "Melee Damage Min"
-#~ msgstr "Minimalne obrażenia w zwarciu"
-
-#~ msgid "Melee Damage Max"
-#~ msgstr "Maksymalne obrażenia w zwarciu"
-
-#~ msgid "Ranged Damage Min"
-#~ msgstr "Minimalne obrażenia dystansowe"
-
-#~ msgid "Ranged Damage Max"
-#~ msgstr "Maksymalne obrażenia dystansowe"
-
-#~ msgid "Mental Damage Min"
-#~ msgstr "Minimalne obrażenia umysłowe"
-
-#~ msgid "Mental Damage Max"
-#~ msgstr "Maksymalne obrażenia umysłowe"
-
-#~ msgid "Requires Physical %d"
-#~ msgstr "Wymaga Siła Fizyczna: %d"
-
-#~ msgid "Requires Mental %d"
-#~ msgstr "Wymagana Siła Umysłu: %d"
-
-#~ msgid "Requires Offense %d"
-#~ msgstr "Wymagany Atak: %d"
-
-#~ msgid "Requires Defense %d"
-#~ msgstr "Wymagana Obrona: %d"
-
-#~ msgid "Each point of Physical grants %d. "
-#~ msgstr "Każdy punkt Siły Fizycznej dodaje %d. "
-
-#~ msgid "Each point of Mental grants %d. "
-#~ msgstr "Każdy punkt Siły Umysłu dodaje %d. "
-
-#~ msgid "Each point of Defense grants %d. "
-#~ msgstr "Każdy punkt Obrony dodaje %d. "
-
-#~ msgid "Requires Physical Offense %d"
-#~ msgstr "Wymaga %d Fizycznego ataku"
-
-#~ msgid "Requires Physical Defense %d"
-#~ msgstr "Wymaga %d Fizycznej obrony"
-
-#~ msgid "Requires Mental Offense %d"
-#~ msgstr "Wymaga %d Umysłowego ataku"
-
-#~ msgid "Requires Mental Defense %d"
-#~ msgstr "Wymaga %d Umysłowej obrony"
-
-#~ msgid "Show targeting animation"
-#~ msgstr "Pokaż animację namierzania"
-
-#~ msgid "Removes an item of a given ID from the player's inventory"
-#~ msgstr "Usuwa przedmiot o danym ID z ekwipunku gracza."
-
-#~ msgid "teleports the player to a specific tile, and optionally, a specific map"
-#~ msgstr "przenosi gracza na konkretne pole i ewentualnie na konkretną mapę"
-
-#~ msgid "unsets the given campaign statuses if they are set"
-#~ msgstr "usuwa statusy kampanii, jeśli zostały nadane"
-
-#~ msgid "sets the given campaign statuses"
-#~ msgstr "ustawia wskazane statusy kampanii"
-
-#~ msgid "rewards the player with the specified amount of experience points"
-#~ msgstr "nagradza gracza wskazaną ilością punktów doświadczenia"
-
-#~ msgid "adds the specified amount of currency to the player's inventory"
-#~ msgstr "dodaje wskazaną ilość waluty do ekwipunku gracza"
-
-#~ msgid "adds an item to the player's inventory"
-#~ msgstr "dodaje przedmiot do ekwipunku gracza"
-
-#~ msgid "spawns an enemy matching the given category next to the player"
-#~ msgstr "przywołuje obok gracza przeciwnika pasującego do danej kategorii"
-
-#~ msgid "Spawning enemy from category: "
-#~ msgstr "Przywoływanie przeciwnika z kategorii: "
-
-#~ msgid "ERROR: Invalid enemy category"
-#~ msgstr "BŁĄD: Niewłaściwa kategoria przeciwnika"
-
-#~ msgid " <category> [<x> <y>]"
-#~ msgstr " <kategoria> [<x> <y>]"
-
-#~ msgid "ERROR: Invalid item ID"
-#~ msgstr "BŁĄD: Niewłaściwe ID przedmiotu"
-
-#~ msgid "Added item: "
-#~ msgstr "Dodany przedmiot: "
-
-#~ msgid " <item_id> [<quantity>]"
-#~ msgstr " <id_przedmiotu> [<ilość>]"
-
-#~ msgid "Added currency: "
-#~ msgstr "Dodano ilość waluty: "
-
-#~ msgid " <quantity>"
-#~ msgstr " <ilość>"
-
-#~ msgid "Added XP: "
-#~ msgstr "Dodano PD: "
-
-#~ msgid "Set campaign status: "
-#~ msgstr "Ustawiony status kampanii: "
-
-#~ msgid " <status_1> [<status_2> <status_3> ...]"
-#~ msgstr " <status_1> [<status_2> <status_3> ...]"
-
-#~ msgid "Unset campaign status: "
-#~ msgstr "Usunięto status kampanii: "
-
-#~ msgid "ERROR: Unknown campaign status: "
-#~ msgstr "BŁĄD: Nieznany status kampanii: "
-
-#~ msgid "Teleporting to: "
-#~ msgstr "Teleportowanie do: "
-
-#~ msgid "ERROR: Unknown map: "
-#~ msgstr "BŁĄD: Nieznana mapa: "
-
-#~ msgid " <x> <y> [<map>]"
-#~ msgstr " <x> <y> [<mapa>]"
-
-#~ msgid "Removed item: "
-#~ msgstr "Usunięty przedmiot: "
-
-#~ msgid "Exit to title?"
-#~ msgstr "Wyjść do menu głównego?"
-
-#~ msgid "Empty Slot"
-#~ msgstr "Puste miejsce"
-
-#~ msgid "Prints out all of the campaign status that are set"
-#~ msgstr "Wyświetla wszystkie statusy przypisane do kampanii"
-
-#~ msgid "Move only one item:"
-#~ msgstr "Przenieś tylko jeden przedmiot:"
-
-#~ msgid "CTRL-click a carried item to sell it."
-#~ msgstr "CTRL-kliknij na przedmiot, by go sprzedać"
-
-#~ msgid "Use this resolution?"
-#~ msgstr "Pozostawić tą rozdzielczość?"
-
-#~ msgid "Double buffering"
-#~ msgstr "Podwójne buforowanie"
-
-#~ msgid "High Quality Textures"
-#~ msgstr "Tekstury Wysokiej Jakości"
-
-#~ msgid "Animated tiles"
-#~ msgstr "Animowane pola"
-
-#~ msgid "Show Hotkeys Labels"
-#~ msgstr "Pokaż etykiety klawiszy szybkiego dostępu"
-
-#~ msgid "Resolution"
-#~ msgstr "Rozdzielczość"
-
-#~ msgid "Level %d %s"
-#~ msgstr "Poziom %d %s"
-
-#~ msgid "Flare Alpha v0.19"
-#~ msgstr "Flare Alpha v0.19"
-
-#~ msgid "lmb"
-#~ msgstr "lpm"
-
-#~ msgid "mmb"
-#~ msgstr "śpm"
-
-#~ msgid "rmb"
-#~ msgstr "ppm"
-
-#~ msgid "mbx1"
-#~ msgstr "mbx1"
-
-#~ msgid "mbx2"
-#~ msgstr "mbx2"
-
-#~ msgid "Low"
-#~ msgstr "Niski"
-
-#~ msgid "Normal"
-#~ msgstr "Normalny"
-
-#~ msgid "High"
-#~ msgstr "Trudny"
-
-#~ msgid "Epic"
-#~ msgstr "Epicki"
-
-#~ msgid "Increases %s by %d"
-#~ msgstr "%s zwiększona o %d"
-
-#~ msgid "Decreases %s by %d"
-#~ msgstr "%s zmniejszona o %d"
-
-#~ msgid "Crit:"
-#~ msgstr "Szansa na atak krytyczny"
-
-#~ msgid "Physical (P) increases melee weapon proficiency and total HP."
-#~ msgstr "Siła Fizyczna (P) zwiększa skuteczność walki wręcz i maksymalną liczbę PŻ."
-
-#~ msgid "Mental (M) increases mental weapon proficiency and total MP."
-#~ msgstr "Siła Umysłu (M) zwiększa skuteczność posługiwania się bronią magiczną i maksymalną liczbę PM"
-
-#~ msgid "Offense (O) increases ranged weapon proficiency and accuracy."
-#~ msgstr "Atak (O) zwiększa skuteczność posługiwania się bronią dystansową i celność."
-
-#~ msgid "Defense (D) increases armor proficiency and avoidance."
-#~ msgstr "Obrona (D) zwiększa skuteczność działania zbroi i szansę na unik."
-
-#~ msgid "Save and exit to title?"
-#~ msgstr "Zapisać i wyjść do menu?"
-
-#~ msgid "Click to Unlock"
-#~ msgstr "Naciśnij, by odblokować"
-
-#~ msgid "Character Menu (C)"
-#~ msgstr "Menu Postaci (C)"
-
-#~ msgid "Inventory Menu (I)"
-#~ msgstr "Menu Ekwipunku (I)"
-
-#~ msgid "Power Menu (P)"
-#~ msgstr "Menu Umiejętności (P)"
-
-#~ msgid "Log Menu (L)"
-#~ msgstr "Menu Dziennika (L)"
-
-#~ msgid "Ticks of HP regen per minute. Each point of Physical grants +%d HP regen. Each level grants +%d HP regen"
-#~ msgstr "PŻ uzupełniane na minutę. Każdy punkt Siły Fizycznej przyspiesza regenerację PŻ o +%d. Każdy poziom przyspiesza regenerację PŻ o +%d"
-
-#~ msgid "Ticks of MP regen per minute. Each point of Mental grants +%d MP regen. Each level grants +%d MP regen"
-#~ msgstr "PM uzupełniane na minutę. Każdy punkt Siły Umysłu przyspiesza regenerację PM o +%d. Każdy poziom przyspiesza regenerację PM o +%d"
-
-#~ msgid "Each point of Offense grants +%d accuracy. Each level grants +%d accuracy"
-#~ msgstr "Każdy punkt Ataku dodaje +%d do celności. Każdy poziom dodaje +%d do celności"
-
-#~ msgid "Each point of Defense grants +%d avoidance. Each level grants +%d avoidance"
-#~ msgstr "Każdy punkt Obrony dodaje +%d do szansy na unik. Każdy poziom dodaje +%d do szansy na unik"
-
-#~ msgid "Requires a physical weapon"
-#~ msgstr "Wymaga broni do walki wręcz"
-
-#~ msgid "Requires a mental weapon"
-#~ msgstr "Wymaga broni magicznej"
-
-#~ msgid "Requires an offense weapon"
-#~ msgstr "Wymaga broni dystansowej"

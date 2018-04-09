@@ -1,21 +1,22 @@
-# Copyright (C) 2012 Bas Doodeman
-# This file is distributed under the same license as the Flare package.
-#
-# Bas Doodeman <bas.doodeman@basdoodeman.nl>, 2012.
-#
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: 0.16\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-28 15:02-0400\n"
-"PO-Revision-Date: 2012-08-23 21:23+0200\n"
-"Last-Translator: Bas Doodeman <bas.doodeman@basdoodeman.nl>\n"
-"Language-Team: Dutch; Flemish <>\n"
-"Language: Dutch\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
+"Language-Team: Dutch (https://www.transifex.com/flareorg/teams/84925/nl/)\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bits\n"
-"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: nl\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../../../src/Avatar.cpp:353
 #, c-format
@@ -27,14 +28,12 @@ msgid "You may increase one attribute through the Character Menu."
 msgstr "Je kunt één eigenschap in het karakter menu verhogen."
 
 #: ../../../src/Avatar.cpp:573
-#, fuzzy
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
-msgstr "Je bent verslagen. Spel afgelopen! Druk op Enter, om naar het hoofdmenu terug te keren."
+msgstr ""
 
 #: ../../../src/Avatar.cpp:579
-#, fuzzy
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
-msgstr "Je bent verslagen.  Je verliest de helft van je goud.  Druk op Enter om verder te gaan."
+msgstr ""
 
 #: ../../../src/Avatar.cpp:832
 msgid "Transformation expired. You have been moved back to a safe place."
@@ -61,9 +60,9 @@ msgid "You receive %s x%d."
 msgstr "Je ontvangt %s x%d."
 
 #: ../../../src/CampaignManager.cpp:157
-#, fuzzy, c-format
+#, c-format
 msgid "You receive %d %s."
-msgstr "Je ontvangt %s."
+msgstr ""
 
 #: ../../../src/CampaignManager.cpp:166
 #, c-format
@@ -130,9 +129,8 @@ msgid "Defaults"
 msgstr "Standaardwaarden"
 
 #: ../../../src/GameStateConfigBase.cpp:88
-#, fuzzy
 msgid "Reset ALL settings?"
-msgstr "ALLE instellingen terugzetten op de standaardwaarden?"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:110 ../../../src/MenuNumPicker.cpp:45
 msgid "OK"
@@ -183,9 +181,8 @@ msgid "Colorblind Mode"
 msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:280
-#, fuzzy
 msgid "Hardware mouse cursor"
-msgstr "Hardware oppervlakken"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:284
 msgid "Developer Mode"
@@ -212,38 +209,32 @@ msgid "Active Mods"
 msgstr "Actieve Mods"
 
 #: ../../../src/GameStateConfigBase.cpp:313
-#, fuzzy
 msgid "Available Mods"
-msgstr "Beschikbare Mods"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:332
-#, fuzzy
 msgid "<< Disable"
-msgstr "<< Deactiveren"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:338
 msgid "Enable >>"
 msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:959
-#, fuzzy
 msgid "Version:"
-msgstr "Vereist %d Mentaal"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:964
-#, fuzzy
 msgid "Game:"
-msgstr "New Spel"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:969
-#, fuzzy
 msgid "Engine version:"
-msgstr "Vereist %d Mentaal"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:977
-#, fuzzy
 msgid "Requires mods:"
-msgstr "Vereist %d Mentaal"
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:78
 #: ../../../src/GameStateConfigDesktop.cpp:740
@@ -269,9 +260,8 @@ msgstr "Sneltoetsen"
 
 #: ../../../src/GameStateConfigDesktop.cpp:184
 #: ../../../src/GameStateConfigDesktop.cpp:185
-#, fuzzy
 msgid "Disable for performance"
-msgstr "Uitschakelen kan presaties verbeteren"
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:186
 msgid "Experimental"
@@ -326,20 +316,17 @@ msgid "Mouse aim"
 msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:273
-#, fuzzy
 msgid "Do not use mouse"
-msgstr "Muisbesturing"
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:277
-#, fuzzy
 msgid "Joystick Deadzone"
-msgstr "Joystick"
+msgstr ""
 
 #: ../../../src/GameState.cpp:33 ../../../src/GameState.cpp:47
 #: ../../../src/GameState.cpp:63
-#, fuzzy
 msgid "Loading..."
-msgstr "Laden opgeslagen spel..."
+msgstr ""
 
 #: ../../../src/GameStateLoad.cpp:79 ../../../src/GameStateLoad.cpp:92
 msgid "Delete Save"
@@ -388,9 +375,8 @@ msgid "Level %d"
 msgstr "Niveau %d"
 
 #: ../../../src/GameStateNew.cpp:62
-#, fuzzy
 msgid "Create"
-msgstr "Karakter"
+msgstr ""
 
 #: ../../../src/GameStateNew.cpp:174
 msgid "Choose a Portrait"
@@ -405,9 +391,8 @@ msgid "Permadeath?"
 msgstr "Permanente dood?"
 
 #: ../../../src/GameStateNew.cpp:186
-#, fuzzy
 msgid "Choose a Class"
-msgstr "Kies een Slot"
+msgstr ""
 
 #: ../../../src/GameStateTitle.cpp:102
 msgid "Play Game"
@@ -446,9 +431,8 @@ msgid "Left"
 msgstr ""
 
 #: ../../../src/InputState.cpp:299
-#, fuzzy
 msgid "Right"
-msgstr "Ridder"
+msgstr ""
 
 #: ../../../src/InputState.cpp:300
 msgid "Bar1"
@@ -532,9 +516,8 @@ msgid "Alt"
 msgstr ""
 
 #: ../../../src/InputState.cpp:319
-#, fuzzy
 msgid "Delete"
-msgstr "Spel verwijderen"
+msgstr ""
 
 #: ../../../src/InputState.cpp:320
 msgid "ActionBar Accept"
@@ -565,9 +548,8 @@ msgid "Middle Mouse"
 msgstr ""
 
 #: ../../../src/InputState.cpp:328
-#, fuzzy
 msgid "Right Mouse"
-msgstr "Ridder"
+msgstr ""
 
 #: ../../../src/InputState.cpp:329
 msgid "Wheel Up"
@@ -601,9 +583,9 @@ msgstr ""
 
 #: ../../../src/ItemManager.cpp:607 ../../../src/MenuCharacter.cpp:338
 #: ../../../src/MenuPowers.cpp:739
-#, fuzzy, c-format
+#, c-format
 msgid "%s Resistance"
-msgstr "IJsweerstand"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:658
 msgid "Quest Item"
@@ -626,45 +608,44 @@ msgstr "Absorbtie: %d"
 
 #: ../../../src/ItemManager.cpp:749 ../../../src/MenuPowers.cpp:1038
 #: ../../../src/MenuPowers.cpp:1041
-#, fuzzy, c-format
+#, c-format
 msgid "Requires Level %d"
-msgstr "Vereist %d Mentaal"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:760 ../../../src/MenuPowers.cpp:1030
 #: ../../../src/MenuPowers.cpp:1032
-#, fuzzy, c-format
+#, c-format
 msgid "Requires %s %d"
-msgstr "Vereist %d Mentaal"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:768
-#, fuzzy, c-format
+#, c-format
 msgid "Requires Class: %s"
-msgstr "Vereist %d Mentaal"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:780 ../../../src/ItemManager.cpp:789
-#, fuzzy, c-format
+#, c-format
 msgid "Buy Price: %d %s"
-msgstr "Aankoopprijs: %d goud"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:782 ../../../src/ItemManager.cpp:791
-#, fuzzy, c-format
+#, c-format
 msgid "Buy Price: %d %s each"
-msgstr "Aankoopprijs: %d goud per stuk"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:797
-#, fuzzy, c-format
+#, c-format
 msgid "Sell Price: %d %s"
-msgstr "Verkoopprijs: %d goud"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:799
-#, fuzzy, c-format
+#, c-format
 msgid "Sell Price: %d %s each"
-msgstr "Verkoopprijs: %d goud per stuk"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:808
-#, fuzzy
 msgid "Set:"
-msgstr "Volgende: %d"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:815
 #, c-format
@@ -683,9 +664,8 @@ msgid "x%d"
 msgstr ""
 
 #: ../../../src/MenuActiveEffects.cpp:214
-#, fuzzy
 msgid "Remaining:"
-msgstr "Punten resterend"
+msgstr ""
 
 #: ../../../src/MenuActiveEffects.cpp:220
 #, c-format
@@ -724,14 +704,14 @@ msgid "Related stats:"
 msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:405 ../../../src/MenuCharacter.cpp:429
-#, fuzzy, c-format
+#, c-format
 msgid "Each level grants %d."
-msgstr "Ieder niveau verhoogd TP met 2"
+msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:409 ../../../src/MenuCharacter.cpp:433
-#, fuzzy, c-format
+#, c-format
 msgid "Each point of %s grants %d."
-msgstr "Ieder punt Mentaal verhoogd MP met 8"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:47
 msgid "Execute"
@@ -762,7 +742,9 @@ msgid "turns on/off the developer hud"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:226
-msgid "Prints a list of powers that match a search term. No search term will list all items"
+msgid ""
+"Prints a list of powers that match a search term. No search term will list "
+"all items"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:227
@@ -770,15 +752,20 @@ msgid "Prints out all the map filenames located in the \"maps/\" directory."
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:228
-msgid "Prints out the active campaign statuses that match a search term. No search term will list all active statuses"
+msgid ""
+"Prints out the active campaign statuses that match a search term. No search "
+"term will list all active statuses"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:229
-msgid "Prints a list of items that match a search term. No search term will list all items"
+msgid ""
+"Prints a list of items that match a search term. No search term will list "
+"all items"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:230
-msgid "parses a series of event components and executes them as a single event"
+msgid ""
+"parses a series of event components and executes them as a single event"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:231
@@ -892,9 +879,9 @@ msgid "Lost %s."
 msgstr ""
 
 #: ../../../src/MenuInventory.cpp:236 ../../../src/MenuStash.cpp:136
-#, fuzzy, c-format
+#, c-format
 msgid "%d %s"
-msgstr "Niveau %d %s"
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:277
 msgid "Pick up item(s):"
@@ -939,9 +926,8 @@ msgid "Not enough %s."
 msgstr ""
 
 #: ../../../src/MenuInventory.cpp:804 ../../../src/MenuInventory.cpp:811
-#, fuzzy
 msgid "This item can not be sold."
-msgstr "Dit artikel kan alleen vanaf de actiebalk gebruikt worden."
+msgstr ""
 
 #: ../../../src/MenuLog.cpp:85
 msgid "Notes"
@@ -957,9 +943,8 @@ msgid "XP: %d/%d"
 msgstr "EP: %d/%d"
 
 #: ../../../src/MenuManager.cpp:812
-#, fuzzy
 msgid "This item can not be dropped."
-msgstr "Dit artikel kan alleen vanaf de actiebalk gebruikt worden."
+msgstr ""
 
 #: ../../../src/MenuNPCActions.cpp:82
 msgid "Trade"
@@ -979,14 +964,13 @@ msgid "Costs %d MP"
 msgstr "Kost %d MP"
 
 #: ../../../src/MenuPowers.cpp:701
-#, fuzzy, c-format
+#, c-format
 msgid "Costs %d HP"
-msgstr "Kost %d MP"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:706
-#, fuzzy
 msgid "Cooldown:"
-msgstr "Afkoeltijd: %d seconden"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:773 ../../../src/MenuPowers.cpp:776
 msgid "Damage per second"
@@ -1074,23 +1058,20 @@ msgid "%d%% chance"
 msgstr ""
 
 #: ../../../src/MenuPowers.cpp:969
-#, fuzzy
 msgid "Base Accuracy"
-msgstr "Nwkeurigh tov. Verdg 1"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:989
-#, fuzzy
 msgid "Base Critical Chance"
-msgstr "Fataal Kans"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:997
 msgid "Ignores Absorbtion"
 msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1002
-#, fuzzy
 msgid "Ignores Avoidance"
-msgstr "Ontweiking. tov. Aanv 1"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1007
 #, c-format
@@ -1098,38 +1079,35 @@ msgid "%d%% Chance to crit slowed targets"
 msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1012
-#, fuzzy, c-format
+#, c-format
 msgid "%s Elemental Damage"
-msgstr "Mentale schade: %d"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1021
-#, fuzzy, c-format
+#, c-format
 msgid "Requires a %s"
-msgstr "Vereist %d Mentaal"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1060 ../../../src/MenuPowers.cpp:1063
-#, fuzzy, c-format
+#, c-format
 msgid "Requires Power: %s"
-msgstr "Vereist %d Mentaal"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1072
 msgid "Click to Unlock (uses 1 Skill Point)"
 msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1076 ../../../src/MenuPowers.cpp:1078
-#, fuzzy
 msgid "Requires 1 Skill Point"
-msgstr "Vereist een fysiek wapen"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1312
-#, fuzzy
 msgid "Unspent skill points:"
-msgstr "Ongebruikte eigenschapspunten"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1340
-#, fuzzy
 msgid "Next Level:"
-msgstr "Niveau"
+msgstr ""
 
 #: ../../../src/MenuStash.cpp:132
 msgid "Shared Stash"
@@ -1140,9 +1118,8 @@ msgid "Can not store quest items in the stash."
 msgstr ""
 
 #: ../../../src/MenuStash.cpp:209
-#, fuzzy
 msgid "Stash is full."
-msgstr "Geen ruimte meer."
+msgstr ""
 
 #: ../../../src/MenuVendor.cpp:51
 msgid "Buyback"
@@ -1223,62 +1200,52 @@ msgid "Max HP"
 msgstr ""
 
 #: ../../../src/Stats.cpp:41
-#, fuzzy
 msgid "HP Regen"
-msgstr "Herstel"
+msgstr ""
 
 #: ../../../src/Stats.cpp:42
-#, fuzzy
 msgid "Ticks of HP regen per minute."
-msgstr "Herstel van TP per minuut"
+msgstr ""
 
 #: ../../../src/Stats.cpp:46
 msgid "Max MP"
 msgstr ""
 
 #: ../../../src/Stats.cpp:51
-#, fuzzy
 msgid "MP Regen"
-msgstr "Herstel"
+msgstr ""
 
 #: ../../../src/Stats.cpp:52
-#, fuzzy
 msgid "Ticks of MP regen per minute."
-msgstr "MP herstel per minuut"
+msgstr ""
 
 #: ../../../src/Stats.cpp:56
-#, fuzzy
 msgid "Accuracy"
-msgstr "Nwkeurigh tov. Verdg 1"
+msgstr ""
 
 #: ../../../src/Stats.cpp:61
-#, fuzzy
 msgid "Avoidance"
-msgstr "Ontweiking. tov. Aanv 1"
+msgstr ""
 
 #: ../../../src/Stats.cpp:66
-#, fuzzy
 msgid "Absorb Min"
-msgstr "Absorbtie"
+msgstr ""
 
 #: ../../../src/Stats.cpp:71
-#, fuzzy
 msgid "Absorb Max"
-msgstr "Absorbtie"
+msgstr ""
 
 #: ../../../src/Stats.cpp:76
-#, fuzzy
 msgid "Critical Hit Chance"
-msgstr "Fataal Kans"
+msgstr ""
 
 #: ../../../src/Stats.cpp:81
 msgid "Bonus XP"
 msgstr ""
 
 #: ../../../src/Stats.cpp:82
-#, fuzzy
 msgid "Increases the XP gained per kill."
-msgstr "Verhoogd %s met %d"
+msgstr ""
 
 #: ../../../src/Stats.cpp:86
 #, c-format
@@ -1286,9 +1253,9 @@ msgid "Bonus %s"
 msgstr ""
 
 #: ../../../src/Stats.cpp:87
-#, fuzzy, c-format
+#, c-format
 msgid "Increases the %s found per drop."
-msgstr "Verhoogd %s met %d"
+msgstr ""
 
 #: ../../../src/Stats.cpp:91
 msgid "Item Find Chance"
@@ -1315,9 +1282,8 @@ msgid "Reduces your chance of stumbling when hit."
 msgstr ""
 
 #: ../../../src/Stats.cpp:106
-#, fuzzy
 msgid "Missile Reflect Chance"
-msgstr "Fataal Kans"
+msgstr ""
 
 #: ../../../src/Stats.cpp:107
 msgid "Increases your chance of reflecting missiles back at enemies."
@@ -1356,19 +1322,18 @@ msgid "Base MP"
 msgstr ""
 
 #: ../../../src/Utils.cpp:203
-#, fuzzy
 msgid "k"
-msgstr "Accepteren"
+msgstr ""
 
 #: ../../../src/Utils.cpp:448
-#, fuzzy, c-format
+#, c-format
 msgid "%s second"
-msgstr "Afkoeltijd: %d seconden"
+msgstr ""
 
 #: ../../../src/Utils.cpp:451
-#, fuzzy, c-format
+#, c-format
 msgid "%s seconds"
-msgstr "Afkoeltijd: %d seconden"
+msgstr ""
 
 #: ../../../src/Version.cpp:139
 msgid "or newer"
@@ -1377,385 +1342,3 @@ msgstr ""
 #: ../../../src/Version.cpp:142
 msgid "or older"
 msgstr ""
-
-#, fuzzy
-#~ msgid "Permadeath"
-#~ msgstr "Permanente dood?"
-
-#~ msgid "Physical"
-#~ msgstr "Fysiek"
-
-#~ msgid "Mental"
-#~ msgstr "Mentaal"
-
-#~ msgid "Offense"
-#~ msgstr "Aanval"
-
-#~ msgid "Defense"
-#~ msgstr "Verdediging"
-
-#~ msgid "Melee damage: %d-%d"
-#~ msgstr "Mêleeschade: %d-%d"
-
-#~ msgid "Melee damage: %d"
-#~ msgstr "Mêleeschade: %d"
-
-#~ msgid "Ranged damage: %d-%d"
-#~ msgstr "Bereiksschade: %d-%d"
-
-#~ msgid "Ranged damage: %d"
-#~ msgstr "Bereiksschade: %d"
-
-#~ msgid "Mental damage: %d-%d"
-#~ msgstr "Mentale schade: %d-%d"
-
-#~ msgid "Mental damage: %d"
-#~ msgstr "Mentale schade: %d"
-
-#, fuzzy
-#~ msgid "Melee Damage"
-#~ msgstr "Mêleeschade: %d"
-
-#, fuzzy
-#~ msgid "Ranged Damage"
-#~ msgstr "Bereiksschade: %d"
-
-#, fuzzy
-#~ msgid "Mental Damage"
-#~ msgstr "Mentale schade: %d"
-
-#, fuzzy
-#~ msgid "Melee Damage Min"
-#~ msgstr "Mêleeschade: %d"
-
-#, fuzzy
-#~ msgid "Melee Damage Max"
-#~ msgstr "Mêleeschade: %d"
-
-#, fuzzy
-#~ msgid "Ranged Damage Min"
-#~ msgstr "Bereiksschade: %d"
-
-#, fuzzy
-#~ msgid "Ranged Damage Max"
-#~ msgstr "Bereiksschade: %d"
-
-#, fuzzy
-#~ msgid "Mental Damage Min"
-#~ msgstr "Mentale schade: %d"
-
-#, fuzzy
-#~ msgid "Mental Damage Max"
-#~ msgstr "Mentale schade: %d"
-
-#~ msgid "Requires Physical %d"
-#~ msgstr "Vereist %d Fysiek"
-
-#~ msgid "Requires Mental %d"
-#~ msgstr "Vereist %d Mentaal"
-
-#~ msgid "Requires Offense %d"
-#~ msgstr "Vereist %d Aanval"
-
-#~ msgid "Requires Defense %d"
-#~ msgstr "Vereist %d Verdediging"
-
-#, fuzzy
-#~ msgid "Each point of Physical grants %d. "
-#~ msgstr "Ieder punt Fysiek verhoogd TP met 8"
-
-#, fuzzy
-#~ msgid "Each point of Mental grants %d. "
-#~ msgstr "Ieder punt Mentaal verhoogd MP met 8"
-
-#, fuzzy
-#~ msgid "Each point of Defense grants %d. "
-#~ msgstr "Ieder punt Mentaal verhoogd MP met 8"
-
-#~ msgid "Requires Physical Offense %d"
-#~ msgstr "Vereist %d Fysieke Aanval"
-
-#~ msgid "Requires Physical Defense %d"
-#~ msgstr "Vereist %d Fysieke Verdediging"
-
-#~ msgid "Requires Mental Offense %d"
-#~ msgstr "Vereist %d Mentale Aanval"
-
-#~ msgid "Requires Mental Defense %d"
-#~ msgstr "Vereist %d Mentale Verdediging"
-
-#, fuzzy
-#~ msgid "Exit to title?"
-#~ msgstr "Terug naar het menu"
-
-#~ msgid "Empty Slot"
-#~ msgstr "Leeg Slot"
-
-#, fuzzy
-#~ msgid "Move only one item:"
-#~ msgstr "Houd SHIFT ingedrukt, om slechts één artikel te verplaatsen."
-
-#~ msgid "CTRL-click a carried item to sell it."
-#~ msgstr "Houd CTRL ingedrukt en klik op een artikel om het te verkopen."
-
-#, fuzzy
-#~ msgid "Use this resolution?"
-#~ msgstr "Resolutie"
-
-#~ msgid "Double buffering"
-#~ msgstr "Dubbele buffering"
-
-#~ msgid "Resolution"
-#~ msgstr "Resolutie"
-
-#~ msgid "Level %d %s"
-#~ msgstr "Niveau %d %s"
-
-#, fuzzy
-#~ msgid "Flare Alpha v0.19"
-#~ msgstr "Flare Alpha v0.18"
-
-#, fuzzy
-#~ msgid "Low"
-#~ msgstr "Log"
-
-#~ msgid "Increases %s by %d"
-#~ msgstr "Verhoogd %s met %d"
-
-#~ msgid "Decreases %s by %d"
-#~ msgstr "Verlaagd %s met %d"
-
-#~ msgid "Physical (P) increases melee weapon proficiency and total HP."
-#~ msgstr "Fysiek (P) verhoogd beheersing van mêlee wapens en maximale TP."
-
-#~ msgid "Mental (M) increases mental weapon proficiency and total MP."
-#~ msgstr "Mentaal (M) verhoogd beheersing van mentale wapens en maximale MP"
-
-#~ msgid "Offense (O) increases ranged weapon proficiency and accuracy."
-#~ msgstr "Aanval (A) verhoogd beheersing van bereikswapens en nauwkeurigheid."
-
-#~ msgid "Defense (D) increases armor proficiency and avoidance."
-#~ msgstr "Verdediging (V) verhoogd beheersing van wapenuitrusting en ontwijken."
-
-#~ msgid "Save and exit to title?"
-#~ msgstr "Opslaan en naar het hoofdmenu"
-
-#~ msgid "Character Menu (C)"
-#~ msgstr "Karakter Menu (C)"
-
-#~ msgid "Inventory Menu (I)"
-#~ msgstr "Voorraad Menu (I)"
-
-#~ msgid "Power Menu (P)"
-#~ msgstr "Vaardigheden Menu (P)"
-
-#~ msgid "Log Menu (L)"
-#~ msgstr "Log Menu (L)"
-
-#, fuzzy
-#~ msgid "Each point of Physical grants +%d HP. Each level grants +%d HP"
-#~ msgstr "Ieder punt Fysiek verhoogd TP herstel met 4"
-
-#, fuzzy
-#~ msgid "Each point of Mental grants +%d MP. Each level grants +%d MP"
-#~ msgstr "Ieder punt mentaal verhoogd MP-herstel met 4"
-
-#, fuzzy
-#~ msgid "Each point of Offense grants +%d accuracy. Each level grants +%d accuracy"
-#~ msgstr "Ieder punt Aanval verhoogd nauwkeurigheid met 5"
-
-#, fuzzy
-#~ msgid "Each point of Defense grants +%d avoidance. Each level grants +%d avoidance"
-#~ msgstr "Ieder punt Verdediging verhoogd ontwijken met 5"
-
-#~ msgid "Requires a physical weapon"
-#~ msgstr "Vereist een fysiek wapen"
-
-#~ msgid "Requires a mental weapon"
-#~ msgstr "Vereist een mentaal wapen"
-
-#~ msgid "Requires an offense weapon"
-#~ msgstr "Vereist een aanvallend wapen"
-
-#~ msgid "Flare"
-#~ msgstr "Flare"
-
-#, fuzzy
-#~ msgid "Accuracy (vs lvl 5):"
-#~ msgstr "Nwkeurigh tov. Verdg 1"
-
-#, fuzzy
-#~ msgid "Avoidance (vs lvl 5):"
-#~ msgstr "Ontweiking. tov. Aanv 1"
-
-#, fuzzy
-#~ msgid "Stats"
-#~ msgstr "Statistieken"
-
-#~ msgid "Grand Master"
-#~ msgstr "Grootmeester"
-
-#~ msgid "Master"
-#~ msgstr "Meester"
-
-#~ msgid "Warrior"
-#~ msgstr "Strijder"
-
-#~ msgid "Wizard"
-#~ msgstr "Magiër"
-
-#~ msgid "Ranger"
-#~ msgstr "Woudloper"
-
-#~ msgid "Paladin"
-#~ msgstr "Paladin"
-
-#~ msgid "Rogue"
-#~ msgstr "Schurk"
-
-#~ msgid "Knight"
-#~ msgstr "Ridder"
-
-#~ msgid "Shaman"
-#~ msgstr "Sjaman"
-
-#~ msgid "Cleric"
-#~ msgstr "Priester"
-
-#~ msgid "Battle Mage"
-#~ msgstr "Strijdmagiër"
-
-#~ msgid "Heavy Archer"
-#~ msgstr "Scherpschutter"
-
-#~ msgid "You receive %d gold."
-#~ msgstr "Je ontvangt %d goud."
-
-#~ msgid "Press a key to assign: "
-#~ msgstr "Druk een toets om toe te kennen: "
-
-#~ msgid "Activate >>"
-#~ msgstr "Activeren >>"
-
-#~ msgid "Create Character"
-#~ msgstr "Karakter Aanmaken"
-
-#~ msgid "Main Hand"
-#~ msgstr "Wapenhand"
-
-#~ msgid "Body"
-#~ msgstr "Lichaam"
-
-#~ msgid "Off Hand"
-#~ msgstr "Schildhand"
-
-#~ msgid "Artifact"
-#~ msgstr "Artefact"
-
-#~ msgid "Consumable"
-#~ msgstr "Verbruiksartikel"
-
-#~ msgid "Gem"
-#~ msgstr "Edelsteen"
-
-#~ msgid "%d Gold"
-#~ msgstr "%d Goud"
-
-#~ msgid "Total HP"
-#~ msgstr "Totale TP"
-
-#~ msgid "Total MP"
-#~ msgstr "Totale MP"
-
-#~ msgid "vs. Def 5"
-#~ msgstr "tov. Verdg 5"
-
-#~ msgid "vs. Off 5"
-#~ msgstr "tov. Aanv 5"
-
-#~ msgid "Main Weapon"
-#~ msgstr "Hoofdwapen"
-
-#~ msgid "Ranged Weapon"
-#~ msgstr "Bereikswapen"
-
-#~ msgid "Fire Resist"
-#~ msgstr "Vuurweerstand"
-
-#~ msgid "Each level grants +1 HP regen"
-#~ msgstr "Ieder niveau verhoogd TP herstel met 1"
-
-#~ msgid "Each level grants +2 MP"
-#~ msgstr "Ieder niveau verhoogd MP met 2"
-
-#~ msgid "Each level grants +1 MP regen"
-#~ msgstr "Ieder niveau verhoogd MP herstel met 1"
-
-#~ msgid "Each level grants +1 accuracy"
-#~ msgstr "Ieder niveai verhoogd nauwkeurigheid met 1"
-
-#~ msgid "Each level grants +1 avoidance"
-#~ msgstr "Ieder niveau verhoogd ontwijken met 1"
-
-#~ msgid "Dagger Proficiency"
-#~ msgstr "Bekwaamheid: Dolk"
-
-#~ msgid "Shortsword Proficiency"
-#~ msgstr "Bekwaamheid: Kort Zwaard"
-
-#~ msgid "Longsword Proficiency"
-#~ msgstr "Bekwaamheid: Lang Zwaard"
-
-#~ msgid "Greatsword Proficiency"
-#~ msgstr "Bekwaamheid: Grootzwaard"
-
-#~ msgid "Wand Proficiency"
-#~ msgstr "Bekwaamheid: Toverstok"
-
-#~ msgid "Rod Proficiency"
-#~ msgstr "Bekwaamheid: Staaf"
-
-#~ msgid "Staff Proficiency"
-#~ msgstr "Bekwaamheid: Staf"
-
-#~ msgid "Greatstaff Proficiency"
-#~ msgstr "Bekwaamheid: Grootstaf"
-
-#~ msgid "Slingshot Proficiency"
-#~ msgstr "Bekwaamheid: Katapult"
-
-#~ msgid "Shortbow Proficiency"
-#~ msgstr "Bekwaamheid: Korte Boog"
-
-#~ msgid "Longbow Proficiency"
-#~ msgstr "Bekwaamheid: Lange boog"
-
-#~ msgid "Greatbow Proficiency"
-#~ msgstr "Bekwaamheid: Grote Boog"
-
-#~ msgid "Light Armor Proficiency"
-#~ msgstr "Bekwaamheid: Lichte Wapenuitrusting"
-
-#~ msgid "Light Shield Proficiency"
-#~ msgstr "Bekwaamheid: Licht schild"
-
-#~ msgid "Heavy Armor Proficiency"
-#~ msgstr "Bekwaamheid: Zware Wapenuitrusting"
-
-#~ msgid "Heavy Shield Proficiency"
-#~ msgstr "Bekwaamheid: Zwaar Schild"
-
-#~ msgid "Messages"
-#~ msgstr "Berichten"
-
-#~ msgid "Physical + Offense grants melee and ranged attacks"
-#~ msgstr "Fysiek + Aanval geeft mêlee- en bereiksaanvallen."
-
-#~ msgid "Physical + Defense grants melee protection"
-#~ msgstr "Fysiek + Verdediging geeft mêlee bescherming"
-
-#~ msgid "Mental + Offense grants elemental spell attacks"
-#~ msgstr "Mentaal + Aanval geeft aanvallende element magie"
-
-#~ msgid "Mental + Defense grants healing and magical protection"
-#~ msgstr "Mentaal + Verdediging geeft genezen en magische bescherming"

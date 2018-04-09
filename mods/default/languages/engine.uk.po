@@ -1,20 +1,22 @@
-# Ukrainian language for FLARE.
+# SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Igor Paliychuk <mansonigor@gmail.com>, 2011, 2012.
-#
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: 0.19\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-28 15:02-0400\n"
-"PO-Revision-Date: 2013-03-16 11:05+0300\n"
-"Last-Translator: Igor Paliychuk <mansonigor@gmail.com>\n"
-"Language-Team: Ukrainian <LL@li.org>\n"
-"Language: Ukrainian\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
+"Language-Team: Ukrainian (https://www.transifex.com/flareorg/teams/84925/uk/)\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: uk\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: ../../../src/Avatar.cpp:353
 #, c-format
@@ -26,14 +28,12 @@ msgid "You may increase one attribute through the Character Menu."
 msgstr "Ви можете покращити характеристику в Меню Персонажа."
 
 #: ../../../src/Avatar.cpp:573
-#, fuzzy
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
-msgstr "Вас перемогли. Кінець гри! Натисніть Enter щоб повернутись до меню."
+msgstr ""
 
 #: ../../../src/Avatar.cpp:579
-#, fuzzy
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
-msgstr "Вас перемогли. Натисніть Enter щоб продовжити."
+msgstr ""
 
 #: ../../../src/Avatar.cpp:832
 msgid "Transformation expired. You have been moved back to a safe place."
@@ -193,9 +193,8 @@ msgid "Always show loot labels"
 msgstr "Завжди видимі мітки речей"
 
 #: ../../../src/GameStateConfigBase.cpp:292
-#, fuzzy
 msgid "Always show stat bar labels"
-msgstr "Завжди видимі мітки речей"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:296
 msgid "Automatically equip items"
@@ -222,24 +221,20 @@ msgid "Enable >>"
 msgstr "Ввімкнути >>"
 
 #: ../../../src/GameStateConfigBase.cpp:959
-#, fuzzy
 msgid "Version:"
-msgstr "Вимагає версію: "
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:964
-#, fuzzy
 msgid "Game:"
-msgstr "Гра: "
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:969
-#, fuzzy
 msgid "Engine version:"
-msgstr "Вимагає версію: "
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:977
-#, fuzzy
 msgid "Requires mods:"
-msgstr "Вимагає моди: "
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:78
 #: ../../../src/GameStateConfigDesktop.cpp:740
@@ -248,9 +243,8 @@ msgstr "Очистити"
 
 #: ../../../src/GameStateConfigDesktop.cpp:78
 #: ../../../src/GameStateConfigDesktop.cpp:738
-#, fuzzy
 msgid "Assign:"
-msgstr "Задати: "
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:123
 msgid "Video"
@@ -583,9 +577,9 @@ msgid "%d%% Speed"
 msgstr "%d%% Швидкості"
 
 #: ../../../src/ItemManager.cpp:585 ../../../src/MenuPowers.cpp:797
-#, fuzzy, c-format
+#, c-format
 msgid "%d%% Attack Speed"
-msgstr "%d%% Швидкості"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:607 ../../../src/MenuCharacter.cpp:338
 #: ../../../src/MenuPowers.cpp:739
@@ -594,9 +588,8 @@ msgid "%s Resistance"
 msgstr ""
 
 #: ../../../src/ItemManager.cpp:658
-#, fuzzy
 msgid "Quest Item"
-msgstr "Квести"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:685
 #, c-format
@@ -621,9 +614,9 @@ msgstr "Вимагає Рівень %d"
 
 #: ../../../src/ItemManager.cpp:760 ../../../src/MenuPowers.cpp:1030
 #: ../../../src/MenuPowers.cpp:1032
-#, fuzzy, c-format
+#, c-format
 msgid "Requires %s %d"
-msgstr "Вимагає %s"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:768
 #, c-format
@@ -651,14 +644,13 @@ msgid "Sell Price: %d %s each"
 msgstr "Вартість продажу: %d %s кожен"
 
 #: ../../../src/ItemManager.cpp:808
-#, fuzzy
 msgid "Set:"
-msgstr "Набір: "
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:815
-#, fuzzy, c-format
+#, c-format
 msgid "%d items:"
-msgstr "%d предмети: "
+msgstr ""
 
 #: ../../../src/MenuActionBar.cpp:195 ../../../src/MenuActionBar.cpp:201
 #: ../../../src/MenuActionBar.cpp:206
@@ -672,9 +664,8 @@ msgid "x%d"
 msgstr ""
 
 #: ../../../src/MenuActiveEffects.cpp:214
-#, fuzzy
 msgid "Remaining:"
-msgstr "очок залишилось"
+msgstr ""
 
 #: ../../../src/MenuActiveEffects.cpp:220
 #, c-format
@@ -713,14 +704,14 @@ msgid "Related stats:"
 msgstr "Пов'язані характеристики:"
 
 #: ../../../src/MenuCharacter.cpp:405 ../../../src/MenuCharacter.cpp:429
-#, fuzzy, c-format
+#, c-format
 msgid "Each level grants %d."
-msgstr "Кожен рівень додає %d. "
+msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:409 ../../../src/MenuCharacter.cpp:433
-#, fuzzy, c-format
+#, c-format
 msgid "Each point of %s grants %d."
-msgstr "Кожне очко Нападу додає %d. "
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:47
 msgid "Execute"
@@ -743,16 +734,17 @@ msgid "adds a power to the action bar"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:224
-#, fuzzy
 msgid "turns on/off all of the HUD elements"
-msgstr "вмикає/вимикає панель розробника"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:225
 msgid "turns on/off the developer hud"
 msgstr "вмикає/вимикає панель розробника"
 
 #: ../../../src/MenuDevConsole.cpp:226
-msgid "Prints a list of powers that match a search term. No search term will list all items"
+msgid ""
+"Prints a list of powers that match a search term. No search term will list "
+"all items"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:227
@@ -760,15 +752,20 @@ msgid "Prints out all the map filenames located in the \"maps/\" directory."
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:228
-msgid "Prints out the active campaign statuses that match a search term. No search term will list all active statuses"
+msgid ""
+"Prints out the active campaign statuses that match a search term. No search "
+"term will list all active statuses"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:229
-msgid "Prints a list of items that match a search term. No search term will list all items"
+msgid ""
+"Prints a list of items that match a search term. No search term will list "
+"all items"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:230
-msgid "parses a series of event components and executes them as a single event"
+msgid ""
+"parses a series of event components and executes them as a single event"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:231
@@ -784,19 +781,16 @@ msgid "Toggled the developer hud"
 msgstr "Стан панелі розробника змінено"
 
 #: ../../../src/MenuDevConsole.cpp:243
-#, fuzzy
 msgid "Toggled the hud"
-msgstr "Стан панелі розробника змінено"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:390
-#, fuzzy
 msgid "ERROR: Incorrect number of arguments"
-msgstr "ПОМИЛКА: Замало параметрів"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:391 ../../../src/MenuDevConsole.cpp:416
-#, fuzzy
 msgid "HINT:"
-msgstr "ПІДКАЗКА: "
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:391
 msgid "<id>"
@@ -824,19 +818,16 @@ msgid "HINT: Type help"
 msgstr "ПІДКАЗКА: Введіть help"
 
 #: ../../../src/MenuDevHUD.cpp:56
-#, fuzzy
 msgid "Player (x,y):"
-msgstr "Гравець (x,y): "
+msgstr ""
 
 #: ../../../src/MenuDevHUD.cpp:62
-#, fuzzy
 msgid "Target (x,y):"
-msgstr "Ціль (x,y): "
+msgstr ""
 
 #: ../../../src/MenuDevHUD.cpp:67
-#, fuzzy
 msgid "Mouse (x,y):"
-msgstr "Мишка (x,y): "
+msgstr ""
 
 #: ../../../src/MenuDevHUD.cpp:72
 msgid "Target distance:"
@@ -868,19 +859,19 @@ msgid "Paused"
 msgstr ""
 
 #: ../../../src/MenuInventory.cpp:155
-#, fuzzy, c-format
+#, c-format
 msgid "Lost %d%% of %s."
-msgstr "Втрачено %d%% %s. "
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:162
-#, fuzzy, c-format
+#, c-format
 msgid "Lost %d%% of total XP."
-msgstr "Втрачено %d%% загального Досвіду. "
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "Lost %d%% of current level XP."
-msgstr "Втрачено %d%% Досвіду поточного рівня. "
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:193
 #, c-format
@@ -910,14 +901,12 @@ msgid "Select a quantity of item:"
 msgstr ""
 
 #: ../../../src/MenuInventory.cpp:283
-#, fuzzy
 msgid "Stash item stack:"
-msgstr "Продати або сховати предмет(и):"
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:285
-#, fuzzy
 msgid "Sell item stack:"
-msgstr "Пов'язані характеристики:"
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:541
 msgid "You don't have enough of the required item."
@@ -937,9 +926,8 @@ msgid "Not enough %s."
 msgstr "Недостатньо %s."
 
 #: ../../../src/MenuInventory.cpp:804 ../../../src/MenuInventory.cpp:811
-#, fuzzy
 msgid "This item can not be sold."
-msgstr "Цей предмет може бути використаний лише з панелі дій."
+msgstr ""
 
 #: ../../../src/MenuLog.cpp:85
 msgid "Notes"
@@ -955,9 +943,8 @@ msgid "XP: %d/%d"
 msgstr "Досвід: %d/%d"
 
 #: ../../../src/MenuManager.cpp:812
-#, fuzzy
 msgid "This item can not be dropped."
-msgstr "Цей предмет може бути використаний лише з панелі дій."
+msgstr ""
 
 #: ../../../src/MenuNPCActions.cpp:82
 msgid "Trade"
@@ -982,9 +969,8 @@ msgid "Costs %d HP"
 msgstr "Коштує %d Здоров'я"
 
 #: ../../../src/MenuPowers.cpp:706
-#, fuzzy
 msgid "Cooldown:"
-msgstr "Перезарядка: %s секунд"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:773 ../../../src/MenuPowers.cpp:776
 msgid "Damage per second"
@@ -1072,23 +1058,20 @@ msgid "%d%% chance"
 msgstr ""
 
 #: ../../../src/MenuPowers.cpp:969
-#, fuzzy
 msgid "Base Accuracy"
-msgstr "Точність"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:989
-#, fuzzy
 msgid "Base Critical Chance"
-msgstr "Шанс Критичного Удару"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:997
 msgid "Ignores Absorbtion"
 msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1002
-#, fuzzy
 msgid "Ignores Avoidance"
-msgstr "Ухилення"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1007
 #, c-format
@@ -1096,9 +1079,9 @@ msgid "%d%% Chance to crit slowed targets"
 msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1012
-#, fuzzy, c-format
+#, c-format
 msgid "%s Elemental Damage"
-msgstr "Мінімальна Психічна шкода"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1021
 #, c-format
@@ -1135,9 +1118,8 @@ msgid "Can not store quest items in the stash."
 msgstr ""
 
 #: ../../../src/MenuStash.cpp:209
-#, fuzzy
 msgid "Stash is full."
-msgstr "Інвентар заповнений."
+msgstr ""
 
 #: ../../../src/MenuVendor.cpp:51
 msgid "Buyback"
@@ -1165,9 +1147,9 @@ msgid "Game saved."
 msgstr "Гру збережено."
 
 #: ../../../src/SDLInputState.cpp:559
-#, fuzzy, c-format
+#, c-format
 msgid "Mouse %d"
-msgstr "Мишка X1"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:567
 #, c-format
@@ -1281,7 +1263,8 @@ msgstr "Шанс знайти предмети"
 
 #: ../../../src/Stats.cpp:92
 msgid "Increases the chance that an enemy will drop an item."
-msgstr "Збільшує ймовірність того, що ворог впустить предмет, коли буде вбитий."
+msgstr ""
+"Збільшує ймовірність того, що ворог впустить предмет, коли буде вбитий."
 
 #: ../../../src/Stats.cpp:96
 msgid "Stealth"
@@ -1300,9 +1283,8 @@ msgid "Reduces your chance of stumbling when hit."
 msgstr "Знижує ймовірність спотикання при попаданні."
 
 #: ../../../src/Stats.cpp:106
-#, fuzzy
 msgid "Missile Reflect Chance"
-msgstr "Шанс відбиття"
+msgstr ""
 
 #: ../../../src/Stats.cpp:107
 msgid "Increases your chance of reflecting missiles back at enemies."
@@ -1317,18 +1299,16 @@ msgid "Deals a percentage of damage taken back to the attacker."
 msgstr ""
 
 #: ../../../src/Stats.cpp:116
-#, fuzzy
 msgid "HP Steal"
-msgstr "Хитрість"
+msgstr ""
 
 #: ../../../src/Stats.cpp:117
 msgid "Percentage of HP stolen per hit."
 msgstr ""
 
 #: ../../../src/Stats.cpp:121
-#, fuzzy
 msgid "MP Steal"
-msgstr "Хитрість"
+msgstr ""
 
 #: ../../../src/Stats.cpp:122
 msgid "Percentage of MP stolen per hit."
@@ -1347,14 +1327,14 @@ msgid "k"
 msgstr "к"
 
 #: ../../../src/Utils.cpp:448
-#, fuzzy, c-format
+#, c-format
 msgid "%s second"
-msgstr "Перезарядка: %s секунд"
+msgstr ""
 
 #: ../../../src/Utils.cpp:451
-#, fuzzy, c-format
+#, c-format
 msgid "%s seconds"
-msgstr "Перезарядка: %s секунд"
+msgstr ""
 
 #: ../../../src/Version.cpp:139
 msgid "or newer"
@@ -1363,279 +1343,3 @@ msgstr ""
 #: ../../../src/Version.cpp:142
 msgid "or older"
 msgstr ""
-
-#~ msgid "resets the player to level 1, with no stat or skill points spent"
-#~ msgstr "скидає гравця до рівня 1, без використаних очків статистики та умінь"
-
-#~ msgid "Permadeath"
-#~ msgstr "Не воскресає"
-
-#~ msgid "Physical"
-#~ msgstr "Фізика"
-
-#~ msgid "Mental"
-#~ msgstr "Психіка"
-
-#~ msgid "Offense"
-#~ msgstr "Напад"
-
-#~ msgid "Defense"
-#~ msgstr "Захист"
-
-#~ msgid "Melee damage: %d-%d"
-#~ msgstr "Ближня шкода: %d-%d"
-
-#~ msgid "Melee damage: %d"
-#~ msgstr "Ближня шкода: %d"
-
-#~ msgid "Ranged damage: %d-%d"
-#~ msgstr "Дальня шкода: %d-%d"
-
-#~ msgid "Ranged damage: %d"
-#~ msgstr "Дальня шкода: %d"
-
-#~ msgid "Mental damage: %d-%d"
-#~ msgstr "Психічна шкода: %d-%d"
-
-#~ msgid "Mental damage: %d"
-#~ msgstr "Психічна шкода: %d"
-
-#, fuzzy
-#~ msgid "Melee Damage"
-#~ msgstr "Мінімальна Ближня шкода"
-
-#, fuzzy
-#~ msgid "Ranged Damage"
-#~ msgstr "Мінімальна Дальня шкода"
-
-#, fuzzy
-#~ msgid "Mental Damage"
-#~ msgstr "Мінімальна Психічна шкода"
-
-#~ msgid "Melee Damage Min"
-#~ msgstr "Мінімальна Ближня шкода"
-
-#~ msgid "Melee Damage Max"
-#~ msgstr "Максимальна Ближня шкода"
-
-#~ msgid "Ranged Damage Min"
-#~ msgstr "Мінімальна Дальня шкода"
-
-#~ msgid "Ranged Damage Max"
-#~ msgstr "Максимальна Дальня шкода"
-
-#~ msgid "Mental Damage Min"
-#~ msgstr "Мінімальна Психічна шкода"
-
-#~ msgid "Mental Damage Max"
-#~ msgstr "Максимальна Психічна шкода"
-
-#~ msgid "Requires Physical %d"
-#~ msgstr "Вимагає %d Фізики"
-
-#~ msgid "Requires Mental %d"
-#~ msgstr "Вимагає %d Психіки"
-
-#~ msgid "Requires Offense %d"
-#~ msgstr "Вимагає %d Нападу"
-
-#~ msgid "Requires Defense %d"
-#~ msgstr "Вимагає %d Захисту"
-
-#~ msgid "Each point of Physical grants %d. "
-#~ msgstr "Кожне очко Фізики додає %d. "
-
-#~ msgid "Each point of Mental grants %d. "
-#~ msgstr "Кожне очко Психіки додає %d. "
-
-#~ msgid "Each point of Defense grants %d. "
-#~ msgstr "Кожне очко Захисту додає %d. "
-
-#~ msgid "Requires Physical Offense %d"
-#~ msgstr "Потрібен Фізичний Напад %d"
-
-#~ msgid "Requires Physical Defense %d"
-#~ msgstr "Потрібен Фізичний Захист %d"
-
-#~ msgid "Requires Mental Offense %d"
-#~ msgstr "Потрібен Психічний Напад %d"
-
-#~ msgid "Requires Mental Defense %d"
-#~ msgstr "Потрібен Психічний Захист %d"
-
-#~ msgid "Show targeting animation"
-#~ msgstr "Показ анімаціі цілі"
-
-#, fuzzy
-#~ msgid "Removes an item of a given ID from the player's inventory"
-#~ msgstr "додає предмет до інвентаря гравця"
-
-#~ msgid "teleports the player to a specific tile, and optionally, a specific map"
-#~ msgstr "телепортує гравця до вказаного місця, і, якщо вказано, до карти"
-
-#~ msgid "unsets the given campaign statuses if they are set"
-#~ msgstr "скидає задані статуси кампанії, якщо вони встановлені"
-
-#~ msgid "sets the given campaign statuses"
-#~ msgstr "встановлює вказані статуси кампанії"
-
-#~ msgid "rewards the player with the specified amount of experience points"
-#~ msgstr "нагороджує гравця вказаною кількістю очків досвіду"
-
-#~ msgid "adds the specified amount of currency to the player's inventory"
-#~ msgstr "додає до інвентаря гравця вказану кількість грошей"
-
-#~ msgid "adds an item to the player's inventory"
-#~ msgstr "додає предмет до інвентаря гравця"
-
-#~ msgid "spawns an enemy matching the given category next to the player"
-#~ msgstr "породжує ворога вказаної категорії поряд з гравцем"
-
-#~ msgid "Spawning enemy from category: "
-#~ msgstr "Породжує ворога категорії: "
-
-#~ msgid "ERROR: Invalid enemy category"
-#~ msgstr "ПОМИЛКА: Невірна категорія ворога"
-
-#~ msgid " <category> [<x> <y>]"
-#~ msgstr " <категорія> [<x> <y>]"
-
-#~ msgid "ERROR: Invalid item ID"
-#~ msgstr "ПОМИЛКА: Невірний ID предмета"
-
-#~ msgid "Added item: "
-#~ msgstr "Додано предмет: "
-
-#~ msgid " <item_id> [<quantity>]"
-#~ msgstr " <id_предмета> [<кількість>]"
-
-#~ msgid "Added currency: "
-#~ msgstr "Додано грошей: "
-
-#~ msgid " <quantity>"
-#~ msgstr " <кількість>"
-
-#~ msgid "Added XP: "
-#~ msgstr "Додано досвіду: "
-
-#~ msgid "Set campaign status: "
-#~ msgstr "Встановлено статус кампанії: "
-
-#~ msgid " <status_1> [<status_2> <status_3> ...]"
-#~ msgstr " <статус_1> [<статус_2> <статус_3> ...]"
-
-#~ msgid "Unset campaign status: "
-#~ msgstr "Скинуто статус кампанії: "
-
-#~ msgid "ERROR: Unknown campaign status: "
-#~ msgstr "ПОМИЛКА: Невідомий статус кампанії: "
-
-#~ msgid "Teleporting to: "
-#~ msgstr "Телепортую до: "
-
-#~ msgid "ERROR: Unknown map: "
-#~ msgstr "ПОМИЛКА: Невідома карта: "
-
-#~ msgid " <x> <y> [<map>]"
-#~ msgstr " <x> <y> [<карта>]"
-
-#, fuzzy
-#~ msgid "Removed item: "
-#~ msgstr "Додано предмет: "
-
-#~ msgid "Exit to title?"
-#~ msgstr "Вийти в Головне меню?"
-
-#~ msgid "Empty Slot"
-#~ msgstr "Порожній слот"
-
-#, fuzzy
-#~ msgid "Prints out all of the campaign status that are set"
-#~ msgstr "скидає задані статуси кампанії, якщо вони встановлені"
-
-#~ msgid "Move only one item:"
-#~ msgstr "Перемістити лише один предмет:"
-
-#~ msgid "CTRL-click a carried item to sell it."
-#~ msgstr "CTRL-клік на предметі щоб його продати."
-
-#~ msgid "Show Hotkeys Labels"
-#~ msgstr "Мітки гарячих клавіш"
-
-#~ msgid "Level %d %s"
-#~ msgstr "Рівень %d %s"
-
-#~ msgid "lmb"
-#~ msgstr "лкм"
-
-#~ msgid "mmb"
-#~ msgstr "скм"
-
-#~ msgid "rmb"
-#~ msgstr "пкм"
-
-#~ msgid "mbx1"
-#~ msgstr "кмx1"
-
-#~ msgid "mbx2"
-#~ msgstr "кмx2"
-
-#~ msgid "Physical (P) increases melee weapon proficiency and total HP."
-#~ msgstr "Фізика (P) збільшує володіння зброєю ближнього бою та значення Життя."
-
-#~ msgid "Mental (M) increases mental weapon proficiency and total MP."
-#~ msgstr "Психіка (M) збільшує володіння психічною зброєю та значення Мани."
-
-#~ msgid "Offense (O) increases ranged weapon proficiency and accuracy."
-#~ msgstr "Напад (O) збільшує володіння зброєю дальноього бою та точність."
-
-#~ msgid "Defense (D) increases armor proficiency and avoidance."
-#~ msgstr "Захист (D) збільшує володіння обладунками та ухилення."
-
-#~ msgid "Low"
-#~ msgstr "Низька"
-
-#~ msgid "Normal"
-#~ msgstr "Звичайна"
-
-#~ msgid "High"
-#~ msgstr "Висока"
-
-#~ msgid "Epic"
-#~ msgstr "Епічна"
-
-#~ msgid "Increases %s by %d"
-#~ msgstr "Збільшує %s на %d"
-
-#~ msgid "Decreases %s by %d"
-#~ msgstr "Зменшує %s на %d"
-
-#~ msgid "Crit:"
-#~ msgstr "Критична шкода:"
-
-#~ msgid "Click to Unlock"
-#~ msgstr "Клацніть для вивчення"
-
-#~ msgid "Double buffering"
-#~ msgstr "Подвійна буферизація"
-
-#~ msgid "Ticks of HP regen per minute. Each point of Physical grants +%d HP regen. Each level grants +%d HP regen"
-#~ msgstr "Відновлення Здоров'я за хвилину. Кожне очко Фізики додає +%d відновлення Здоров'я. Кожен рівень додає +%d відновлення Здоров'я"
-
-#~ msgid "Ticks of MP regen per minute. Each point of Mental grants +%d MP regen. Each level grants +%d MP regen"
-#~ msgstr "Відновлення Мани за хвилину. Кожне очко Психіки додає +%d відновлення Мани. Кожен рівень додає +%d відновлення Мани"
-
-#~ msgid "Each point of Offense grants +%d accuracy. Each level grants +%d accuracy"
-#~ msgstr "Кожне очко Нападу додає +%d точності. Кожен рівень додає +%d точності"
-
-#~ msgid "Each point of Defense grants +%d avoidance. Each level grants +%d avoidance"
-#~ msgstr "Кожне очко Захисту додає +%d ухилення. Кожен рівень додає +%d ухилення"
-
-#~ msgid "Requires a physical weapon"
-#~ msgstr "Вимагає фізичну зброю"
-
-#~ msgid "Requires a mental weapon"
-#~ msgstr "Вимагає психічну зброю"
-
-#~ msgid "Requires an offense weapon"
-#~ msgstr "Вимагає зброю нападу"

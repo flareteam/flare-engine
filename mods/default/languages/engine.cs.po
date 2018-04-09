@@ -1,20 +1,22 @@
-# Copyright (C) 2011 Clint Bellanger
-# This file is distributed under the same license as Flare package.
-# Nikita Vaňků <zarakaangel@gmail.com>, 2013.
-#
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: 0.18\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-28 15:02-0400\n"
-"PO-Revision-Date: 2013-03-25 10:03+ZONE\n"
-"Last-Translator: Nikita Vaňků <ZarakaAngel@gmail.com>\n"
-"Language-Team:\n"
-"Language: cs\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
+"Language-Team: Czech (https://www.transifex.com/flareorg/teams/84925/cs/)\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: cs\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
 #: ../../../src/Avatar.cpp:353
 #, c-format
@@ -26,14 +28,12 @@ msgid "You may increase one attribute through the Character Menu."
 msgstr "Můžete zvýšit jeden atribtu v Menu Postavy"
 
 #: ../../../src/Avatar.cpp:573
-#, fuzzy
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
-msgstr "Jsi poražen. Game over! Stiskni Enter pro odchod do Menu."
+msgstr ""
 
 #: ../../../src/Avatar.cpp:579
-#, fuzzy
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
-msgstr "Jsi poražen. Ztrácíš polovinu tvých %s. Pro pokračování stiskni Enter."
+msgstr ""
 
 #: ../../../src/Avatar.cpp:832
 msgid "Transformation expired. You have been moved back to a safe place."
@@ -181,9 +181,8 @@ msgid "Colorblind Mode"
 msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:280
-#, fuzzy
 msgid "Hardware mouse cursor"
-msgstr "Hardwarové povrchy"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:284
 msgid "Developer Mode"
@@ -222,24 +221,20 @@ msgid "Enable >>"
 msgstr "Povolit >>"
 
 #: ../../../src/GameStateConfigBase.cpp:959
-#, fuzzy
 msgid "Version:"
-msgstr "Potřebuje Schopnost: %s"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:964
-#, fuzzy
 msgid "Game:"
-msgstr "Nová Hra"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:969
-#, fuzzy
 msgid "Engine version:"
-msgstr "Potřebuje Schopnost: %s"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:977
-#, fuzzy
 msgid "Requires mods:"
-msgstr "Potřebuje Schopnost: %s"
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:78
 #: ../../../src/GameStateConfigDesktop.cpp:740
@@ -248,9 +243,8 @@ msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:78
 #: ../../../src/GameStateConfigDesktop.cpp:738
-#, fuzzy
 msgid "Assign:"
-msgstr "Přiřadit: "
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:123
 msgid "Video"
@@ -322,9 +316,8 @@ msgid "Mouse aim"
 msgstr "Míření myší"
 
 #: ../../../src/GameStateConfigDesktop.cpp:273
-#, fuzzy
 msgid "Do not use mouse"
-msgstr "Chůze pomocí myši"
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:277
 msgid "Joystick Deadzone"
@@ -555,43 +548,38 @@ msgid "Middle Mouse"
 msgstr ""
 
 #: ../../../src/InputState.cpp:328
-#, fuzzy
 msgid "Right Mouse"
-msgstr "Doprava"
+msgstr ""
 
 #: ../../../src/InputState.cpp:329
-#, fuzzy
 msgid "Wheel Up"
-msgstr "kolečko nahoru"
+msgstr ""
 
 #: ../../../src/InputState.cpp:330
-#, fuzzy
 msgid "Wheel Down"
-msgstr "kolečko dolů"
+msgstr ""
 
 #: ../../../src/InputState.cpp:331
-#, fuzzy
 msgid "Mouse X1"
-msgstr "Míření myší"
+msgstr ""
 
 #: ../../../src/InputState.cpp:332
-#, fuzzy
 msgid "Mouse X2"
-msgstr "Míření myší"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:406 ../../../src/ItemManager.cpp:409
 msgid "Unknown Item"
 msgstr ""
 
 #: ../../../src/ItemManager.cpp:581 ../../../src/MenuPowers.cpp:794
-#, fuzzy, c-format
+#, c-format
 msgid "%d%% Speed"
-msgstr "%d\\% Rychlost"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:585 ../../../src/MenuPowers.cpp:797
-#, fuzzy, c-format
+#, c-format
 msgid "%d%% Attack Speed"
-msgstr "%d\\% Rychlost"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:607 ../../../src/MenuCharacter.cpp:338
 #: ../../../src/MenuPowers.cpp:739
@@ -600,9 +588,8 @@ msgid "%s Resistance"
 msgstr ""
 
 #: ../../../src/ItemManager.cpp:658
-#, fuzzy
 msgid "Quest Item"
-msgstr "Úkoly"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:685
 #, c-format
@@ -627,14 +614,14 @@ msgstr "Potřebuje Level %d"
 
 #: ../../../src/ItemManager.cpp:760 ../../../src/MenuPowers.cpp:1030
 #: ../../../src/MenuPowers.cpp:1032
-#, fuzzy, c-format
+#, c-format
 msgid "Requires %s %d"
-msgstr "Potřebuje Mentální sílu %d"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:768
-#, fuzzy, c-format
+#, c-format
 msgid "Requires Class: %s"
-msgstr "Potřebuje Mentální sílu %d"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:780 ../../../src/ItemManager.cpp:789
 #, c-format
@@ -657,14 +644,13 @@ msgid "Sell Price: %d %s each"
 msgstr "Prodejní Cena: %d %s každý"
 
 #: ../../../src/ItemManager.cpp:808
-#, fuzzy
 msgid "Set:"
-msgstr "Nastavit: "
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:815
-#, fuzzy, c-format
+#, c-format
 msgid "%d items:"
-msgstr "%d předměty: "
+msgstr ""
 
 #: ../../../src/MenuActionBar.cpp:195 ../../../src/MenuActionBar.cpp:201
 #: ../../../src/MenuActionBar.cpp:206
@@ -678,9 +664,8 @@ msgid "x%d"
 msgstr ""
 
 #: ../../../src/MenuActiveEffects.cpp:214
-#, fuzzy
 msgid "Remaining:"
-msgstr "zbývající body"
+msgstr ""
 
 #: ../../../src/MenuActiveEffects.cpp:220
 #, c-format
@@ -719,14 +704,14 @@ msgid "Related stats:"
 msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:405 ../../../src/MenuCharacter.cpp:429
-#, fuzzy, c-format
+#, c-format
 msgid "Each level grants %d."
-msgstr "Každý bod Mentální síly přidá +%d MP. Každý level se zvýší +%d MP"
+msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:409 ../../../src/MenuCharacter.cpp:433
-#, fuzzy, c-format
+#, c-format
 msgid "Each point of %s grants %d."
-msgstr "Každý bod Mentální síly přidá +%d MP. Každý level se zvýší +%d MP"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:47
 msgid "Execute"
@@ -757,7 +742,9 @@ msgid "turns on/off the developer hud"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:226
-msgid "Prints a list of powers that match a search term. No search term will list all items"
+msgid ""
+"Prints a list of powers that match a search term. No search term will list "
+"all items"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:227
@@ -765,15 +752,20 @@ msgid "Prints out all the map filenames located in the \"maps/\" directory."
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:228
-msgid "Prints out the active campaign statuses that match a search term. No search term will list all active statuses"
+msgid ""
+"Prints out the active campaign statuses that match a search term. No search "
+"term will list all active statuses"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:229
-msgid "Prints a list of items that match a search term. No search term will list all items"
+msgid ""
+"Prints a list of items that match a search term. No search term will list "
+"all items"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:230
-msgid "parses a series of event components and executes them as a single event"
+msgid ""
+"parses a series of event components and executes them as a single event"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:231
@@ -834,9 +826,8 @@ msgid "Target (x,y):"
 msgstr ""
 
 #: ../../../src/MenuDevHUD.cpp:67
-#, fuzzy
 msgid "Mouse (x,y):"
-msgstr "Míření myší"
+msgstr ""
 
 #: ../../../src/MenuDevHUD.cpp:72
 msgid "Target distance:"
@@ -930,14 +921,13 @@ msgid "Inventory is full."
 msgstr "Inventář je plný."
 
 #: ../../../src/MenuInventory.cpp:784
-#, fuzzy, c-format
+#, c-format
 msgid "Not enough %s."
-msgstr "Nedostatek peněz."
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:804 ../../../src/MenuInventory.cpp:811
-#, fuzzy
 msgid "This item can not be sold."
-msgstr "Tento předmět může být použit pouze z akčního menu"
+msgstr ""
 
 #: ../../../src/MenuLog.cpp:85
 msgid "Notes"
@@ -953,9 +943,8 @@ msgid "XP: %d/%d"
 msgstr ""
 
 #: ../../../src/MenuManager.cpp:812
-#, fuzzy
 msgid "This item can not be dropped."
-msgstr "Tento předmět může být použit pouze z akčního menu"
+msgstr ""
 
 #: ../../../src/MenuNPCActions.cpp:82
 msgid "Trade"
@@ -980,9 +969,8 @@ msgid "Costs %d HP"
 msgstr "Stojí %d HP"
 
 #: ../../../src/MenuPowers.cpp:706
-#, fuzzy
 msgid "Cooldown:"
-msgstr "Obnovení: %d sekund"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:773 ../../../src/MenuPowers.cpp:776
 msgid "Damage per second"
@@ -1070,9 +1058,8 @@ msgid "%d%% chance"
 msgstr ""
 
 #: ../../../src/MenuPowers.cpp:969
-#, fuzzy
 msgid "Base Accuracy"
-msgstr "Přesnost:"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:989
 msgid "Base Critical Chance"
@@ -1083,9 +1070,8 @@ msgid "Ignores Absorbtion"
 msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1002
-#, fuzzy
 msgid "Ignores Avoidance"
-msgstr "Vyhýbání se:"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1007
 #, c-format
@@ -1093,14 +1079,14 @@ msgid "%d%% Chance to crit slowed targets"
 msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1012
-#, fuzzy, c-format
+#, c-format
 msgid "%s Elemental Damage"
-msgstr "Mentální poškození:"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1021
-#, fuzzy, c-format
+#, c-format
 msgid "Requires a %s"
-msgstr "Potřebuje Mentální sílu %d"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1060 ../../../src/MenuPowers.cpp:1063
 #, c-format
@@ -1112,9 +1098,8 @@ msgid "Click to Unlock (uses 1 Skill Point)"
 msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1076 ../../../src/MenuPowers.cpp:1078
-#, fuzzy
 msgid "Requires 1 Skill Point"
-msgstr "Potřebuje %d Bodu Schopnosti"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1312
 msgid "Unspent skill points:"
@@ -1133,9 +1118,8 @@ msgid "Can not store quest items in the stash."
 msgstr ""
 
 #: ../../../src/MenuStash.cpp:209
-#, fuzzy
 msgid "Stash is full."
-msgstr "Inventář je plný."
+msgstr ""
 
 #: ../../../src/MenuVendor.cpp:51
 msgid "Buyback"
@@ -1163,9 +1147,9 @@ msgid "Game saved."
 msgstr ""
 
 #: ../../../src/SDLInputState.cpp:559
-#, fuzzy, c-format
+#, c-format
 msgid "Mouse %d"
-msgstr "Míření myší"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:567
 #, c-format
@@ -1216,9 +1200,8 @@ msgid "Max HP"
 msgstr ""
 
 #: ../../../src/Stats.cpp:41
-#, fuzzy
 msgid "HP Regen"
-msgstr "HP Regenerace"
+msgstr ""
 
 #: ../../../src/Stats.cpp:42
 msgid "Ticks of HP regen per minute."
@@ -1229,33 +1212,28 @@ msgid "Max MP"
 msgstr ""
 
 #: ../../../src/Stats.cpp:51
-#, fuzzy
 msgid "MP Regen"
-msgstr "MP Regenerace:"
+msgstr ""
 
 #: ../../../src/Stats.cpp:52
 msgid "Ticks of MP regen per minute."
 msgstr ""
 
 #: ../../../src/Stats.cpp:56
-#, fuzzy
 msgid "Accuracy"
-msgstr "Přesnost:"
+msgstr ""
 
 #: ../../../src/Stats.cpp:61
-#, fuzzy
 msgid "Avoidance"
-msgstr "Vyhýbání se:"
+msgstr ""
 
 #: ../../../src/Stats.cpp:66
-#, fuzzy
 msgid "Absorb Min"
-msgstr "Absorbovat:"
+msgstr ""
 
 #: ../../../src/Stats.cpp:71
-#, fuzzy
 msgid "Absorb Max"
-msgstr "Absorbovat:"
+msgstr ""
 
 #: ../../../src/Stats.cpp:76
 msgid "Critical Hit Chance"
@@ -1266,9 +1244,8 @@ msgid "Bonus XP"
 msgstr ""
 
 #: ../../../src/Stats.cpp:82
-#, fuzzy
 msgid "Increases the XP gained per kill."
-msgstr "Zvyšuje XP získane zabitím"
+msgstr ""
 
 #: ../../../src/Stats.cpp:86
 #, c-format
@@ -1276,36 +1253,33 @@ msgid "Bonus %s"
 msgstr ""
 
 #: ../../../src/Stats.cpp:87
-#, fuzzy, c-format
+#, c-format
 msgid "Increases the %s found per drop."
-msgstr "Zvyšuje šanci nalezení %s"
+msgstr ""
 
 #: ../../../src/Stats.cpp:91
 msgid "Item Find Chance"
 msgstr ""
 
 #: ../../../src/Stats.cpp:92
-#, fuzzy
 msgid "Increases the chance that an enemy will drop an item."
-msgstr "Zvyšuje šanci, že nepřítel bude po smrti u sebe mít předmět"
+msgstr ""
 
 #: ../../../src/Stats.cpp:96
 msgid "Stealth"
 msgstr ""
 
 #: ../../../src/Stats.cpp:97
-#, fuzzy
 msgid "Increases your ability to move undetected."
-msgstr "Zvyšuje schopnost pohybovat se nepozorovaně."
+msgstr ""
 
 #: ../../../src/Stats.cpp:101
 msgid "Poise"
 msgstr ""
 
 #: ../../../src/Stats.cpp:102
-#, fuzzy
 msgid "Reduces your chance of stumbling when hit."
-msgstr "Snižuje tvou šanci ochromení při zásahu"
+msgstr ""
 
 #: ../../../src/Stats.cpp:106
 msgid "Missile Reflect Chance"
@@ -1352,14 +1326,14 @@ msgid "k"
 msgstr ""
 
 #: ../../../src/Utils.cpp:448
-#, fuzzy, c-format
+#, c-format
 msgid "%s second"
-msgstr "Obnovení: %d sekund"
+msgstr ""
 
 #: ../../../src/Utils.cpp:451
-#, fuzzy, c-format
+#, c-format
 msgid "%s seconds"
-msgstr "Obnovení: %d sekund"
+msgstr ""
 
 #: ../../../src/Version.cpp:139
 msgid "or newer"
@@ -1368,200 +1342,3 @@ msgstr ""
 #: ../../../src/Version.cpp:142
 msgid "or older"
 msgstr ""
-
-#, fuzzy
-#~ msgid "Permadeath"
-#~ msgstr "Pernamentní smrt?"
-
-#~ msgid "Physical"
-#~ msgstr "Fyzická Sílá"
-
-#~ msgid "Mental"
-#~ msgstr "Mentální Síla"
-
-#~ msgid "Offense"
-#~ msgstr "Útok"
-
-#~ msgid "Defense"
-#~ msgstr "Obrana"
-
-#~ msgid "Melee damage: %d-%d"
-#~ msgstr "Poškození zblízka: %d-%d"
-
-#~ msgid "Melee damage: %d"
-#~ msgstr "Poškození zblízka: %d-%d"
-
-#~ msgid "Ranged damage: %d-%d"
-#~ msgstr "Střelné poškození: %d-%d"
-
-#~ msgid "Ranged damage: %d"
-#~ msgstr "Střelné poškození: %d"
-
-#~ msgid "Mental damage: %d-%d"
-#~ msgstr "Psychické poškození: %d-%d"
-
-#~ msgid "Mental damage: %d"
-#~ msgstr "Psychické poškození: %d"
-
-#, fuzzy
-#~ msgid "Melee Damage"
-#~ msgstr "Poškození chladnými zbraněmi:"
-
-#, fuzzy
-#~ msgid "Ranged Damage"
-#~ msgstr "Poškození střelnými zbraněmi:"
-
-#, fuzzy
-#~ msgid "Mental Damage"
-#~ msgstr "Mentální poškození:"
-
-#, fuzzy
-#~ msgid "Melee Damage Min"
-#~ msgstr "Poškození chladnými zbraněmi:"
-
-#, fuzzy
-#~ msgid "Melee Damage Max"
-#~ msgstr "Poškození chladnými zbraněmi:"
-
-#, fuzzy
-#~ msgid "Ranged Damage Min"
-#~ msgstr "Poškození střelnými zbraněmi:"
-
-#, fuzzy
-#~ msgid "Ranged Damage Max"
-#~ msgstr "Poškození střelnými zbraněmi:"
-
-#, fuzzy
-#~ msgid "Mental Damage Min"
-#~ msgstr "Mentální poškození:"
-
-#, fuzzy
-#~ msgid "Mental Damage Max"
-#~ msgstr "Mentální poškození:"
-
-#~ msgid "Requires Physical %d"
-#~ msgstr "Potřebuje Fyzickou sílu %d"
-
-#~ msgid "Requires Mental %d"
-#~ msgstr "Potřebuje Mentální sílu %d"
-
-#~ msgid "Requires Offense %d"
-#~ msgstr "Potřebuje Útok %d"
-
-#~ msgid "Requires Defense %d"
-#~ msgstr "Potřebuje Obranu %d"
-
-#, fuzzy
-#~ msgid "Each point of Physical grants %d. "
-#~ msgstr "Každý bod Fyzické Síly přidá +%d HP. Každý level se zvýší +%d HP"
-
-#, fuzzy
-#~ msgid "Each point of Defense grants %d. "
-#~ msgstr "Každý bod Mentální síly přidá +%d MP. Každý level se zvýší +%d MP"
-
-#, fuzzy
-#~ msgid "Added item: "
-#~ msgstr "%d předměty: "
-
-#, fuzzy
-#~ msgid "Removed item: "
-#~ msgstr "%d předměty: "
-
-#, fuzzy
-#~ msgid "Exit to title?"
-#~ msgstr "Ukončit do menu"
-
-#~ msgid "Empty Slot"
-#~ msgstr "Volná pozice"
-
-#, fuzzy
-#~ msgid "Move only one item:"
-#~ msgstr "Použíjte SHIFT k přesunu pouze jediné věci"
-
-#~ msgid "CTRL-click a carried item to sell it."
-#~ msgstr "CTRL-kliknutí na předmět v inventáři k jeho prodání."
-
-#~ msgid "Use this resolution?"
-#~ msgstr "Použít toto rozlišení?"
-
-#~ msgid "Double buffering"
-#~ msgstr "Dvojitý buffering"
-
-#~ msgid "High Quality Textures"
-#~ msgstr "Textury Vysoké kvality"
-
-#~ msgid "Animated tiles"
-#~ msgstr "Animované dlaždice"
-
-#~ msgid "Resolution"
-#~ msgstr "Rozlišení"
-
-#~ msgid "lmb"
-#~ msgstr "L. tl. myši"
-
-#~ msgid "mmb"
-#~ msgstr "Pros. tl. myši"
-
-#~ msgid "rmb"
-#~ msgstr "P. tl. myši."
-
-#, fuzzy
-#~ msgid "Low"
-#~ msgstr "Deník"
-
-#~ msgid "Increases %s by %d"
-#~ msgstr "Zvyšuje %s o %d"
-
-#~ msgid "Decreases %s by %d"
-#~ msgstr "Snižuje %s o %d"
-
-#~ msgid "Physical (P) increases melee weapon proficiency and total HP."
-#~ msgstr "Fyzická Síla (P) zvyšuje účinnost chladných zbraní a maximální HP."
-
-#~ msgid "Mental (M) increases mental weapon proficiency and total MP."
-#~ msgstr "Mentální síla (M) zvyšuje účinnost mentální zbraní a maximální MP."
-
-#~ msgid "Offense (O) increases ranged weapon proficiency and accuracy."
-#~ msgstr "Útok (O) zvyšuje účinnost a přesnost střelných zbrnaí."
-
-#~ msgid "Defense (D) increases armor proficiency and avoidance."
-#~ msgstr "Obrana (D) zvyšuje účinnost zbroje a šanci úniku."
-
-#~ msgid "Save and exit to title?"
-#~ msgstr "Uložit a ukončit do menu?"
-
-#~ msgid "Click to Unlock"
-#~ msgstr "Kliknutím odemknete"
-
-#~ msgid "Character Menu (C)"
-#~ msgstr "Postava (C)"
-
-#~ msgid "Inventory Menu (I)"
-#~ msgstr "Inventář (I)"
-
-#~ msgid "Power Menu (P)"
-#~ msgstr "Schopnosti (P)"
-
-#~ msgid "Log Menu (L)"
-#~ msgstr "Deník (L)"
-
-#~ msgid "Ticks of HP regen per minute. Each point of Physical grants +%d HP regen. Each level grants +%d HP regen"
-#~ msgstr "Regenerace HP za minutu. Každý bod Fyzické síly zvýší +%d HP regeneraci. Každý level se zvýší +%d HP regenerace."
-
-#~ msgid "Ticks of MP regen per minute. Each point of Mental grants +%d MP regen. Each level grants +%d MP regen"
-#~ msgstr "Regenerace MP za minutu. Každý bod Mentální síly zvýší +%d HP regeneraci. Každý level se zvýši +%d MP regenerace."
-
-#~ msgid "Each point of Offense grants +%d accuracy. Each level grants +%d accuracy"
-#~ msgstr "Každý bod Útoku přidá +%d k přesnosti. Každý level zvýší  +%d přesnosti"
-
-#~ msgid "Each point of Defense grants +%d avoidance. Each level grants +%d avoidance"
-#~ msgstr "Každý bod Obrany zvýší schopnost vyhýbání se +%d. Každý level zvýší schopnost vyhýbání se +%d."
-
-#~ msgid "Requires a physical weapon"
-#~ msgstr "Potřebuje fyzickou zbraň"
-
-#~ msgid "Requires a mental weapon"
-#~ msgstr "Potřebuje psychickou zbraň"
-
-#~ msgid "Requires an offense weapon"
-#~ msgstr "Potřebuješ střelnou zbraň"

@@ -2,19 +2,21 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-28 15:02-0400\n"
-"PO-Revision-Date: 2013-04-09 18:55+0800\n"
-"Last-Translator: lonsine <lonsine@qq.com>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
+"Language-Team: Chinese (https://www.transifex.com/flareorg/teams/84925/zh/)\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: zh\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../../../src/Avatar.cpp:353
 #, c-format
@@ -26,14 +28,12 @@ msgid "You may increase one attribute through the Character Menu."
 msgstr "你可以在角色菜单增加一点属性"
 
 #: ../../../src/Avatar.cpp:573
-#, fuzzy
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
-msgstr "角色死亡，游戏结束！按下回车键返回游戏开戏。"
+msgstr ""
 
 #: ../../../src/Avatar.cpp:579
-#, fuzzy
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
-msgstr "角色死亡，你失去了一般的 %s.  按下回车键继续。"
+msgstr ""
 
 #: ../../../src/Avatar.cpp:832
 msgid "Transformation expired. You have been moved back to a safe place."
@@ -181,9 +181,8 @@ msgid "Colorblind Mode"
 msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:280
-#, fuzzy
 msgid "Hardware mouse cursor"
-msgstr "硬件加速"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:284
 msgid "Developer Mode"
@@ -222,24 +221,20 @@ msgid "Enable >>"
 msgstr " 启用>>"
 
 #: ../../../src/GameStateConfigBase.cpp:959
-#, fuzzy
 msgid "Version:"
-msgstr "需要技能点: %s"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:964
-#, fuzzy
 msgid "Game:"
-msgstr "新游戏"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:969
-#, fuzzy
 msgid "Engine version:"
-msgstr "需要技能点: %s"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:977
-#, fuzzy
 msgid "Requires mods:"
-msgstr "需要技能点: %s"
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:78
 #: ../../../src/GameStateConfigDesktop.cpp:740
@@ -248,9 +243,8 @@ msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:78
 #: ../../../src/GameStateConfigDesktop.cpp:738
-#, fuzzy
 msgid "Assign:"
-msgstr "分配"
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:123
 msgid "Video"
@@ -322,14 +316,12 @@ msgid "Mouse aim"
 msgstr "使用鼠标瞄准敌人"
 
 #: ../../../src/GameStateConfigDesktop.cpp:273
-#, fuzzy
 msgid "Do not use mouse"
-msgstr "使用鼠标移动人物"
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:277
-#, fuzzy
 msgid "Joystick Deadzone"
-msgstr "Joystick"
+msgstr ""
 
 #: ../../../src/GameState.cpp:33 ../../../src/GameState.cpp:47
 #: ../../../src/GameState.cpp:63
@@ -556,43 +548,38 @@ msgid "Middle Mouse"
 msgstr ""
 
 #: ../../../src/InputState.cpp:328
-#, fuzzy
 msgid "Right Mouse"
-msgstr "右"
+msgstr ""
 
 #: ../../../src/InputState.cpp:329
-#, fuzzy
 msgid "Wheel Up"
-msgstr "向上滚轮"
+msgstr ""
 
 #: ../../../src/InputState.cpp:330
-#, fuzzy
 msgid "Wheel Down"
-msgstr "向下滚轮"
+msgstr ""
 
 #: ../../../src/InputState.cpp:331
-#, fuzzy
 msgid "Mouse X1"
-msgstr "使用鼠标瞄准敌人"
+msgstr ""
 
 #: ../../../src/InputState.cpp:332
-#, fuzzy
 msgid "Mouse X2"
-msgstr "使用鼠标瞄准敌人"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:406 ../../../src/ItemManager.cpp:409
 msgid "Unknown Item"
 msgstr ""
 
 #: ../../../src/ItemManager.cpp:581 ../../../src/MenuPowers.cpp:794
-#, fuzzy, c-format
+#, c-format
 msgid "%d%% Speed"
-msgstr "%d%% 速度"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:585 ../../../src/MenuPowers.cpp:797
-#, fuzzy, c-format
+#, c-format
 msgid "%d%% Attack Speed"
-msgstr "%d%% 速度"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:607 ../../../src/MenuCharacter.cpp:338
 #: ../../../src/MenuPowers.cpp:739
@@ -601,9 +588,8 @@ msgid "%s Resistance"
 msgstr ""
 
 #: ../../../src/ItemManager.cpp:658
-#, fuzzy
 msgid "Quest Item"
-msgstr "任务"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:685
 #, c-format
@@ -628,14 +614,14 @@ msgstr "需要级别 %d"
 
 #: ../../../src/ItemManager.cpp:760 ../../../src/MenuPowers.cpp:1030
 #: ../../../src/MenuPowers.cpp:1032
-#, fuzzy, c-format
+#, c-format
 msgid "Requires %s %d"
-msgstr "需要精神 %d"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:768
-#, fuzzy, c-format
+#, c-format
 msgid "Requires Class: %s"
-msgstr "需要精神 %d"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:780 ../../../src/ItemManager.cpp:789
 #, c-format
@@ -658,14 +644,13 @@ msgid "Sell Price: %d %s each"
 msgstr "出售单价: %d %s "
 
 #: ../../../src/ItemManager.cpp:808
-#, fuzzy
 msgid "Set:"
-msgstr "设置: "
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:815
-#, fuzzy, c-format
+#, c-format
 msgid "%d items:"
-msgstr "%d 物品: "
+msgstr ""
 
 #: ../../../src/MenuActionBar.cpp:195 ../../../src/MenuActionBar.cpp:201
 #: ../../../src/MenuActionBar.cpp:206
@@ -679,9 +664,8 @@ msgid "x%d"
 msgstr ""
 
 #: ../../../src/MenuActiveEffects.cpp:214
-#, fuzzy
 msgid "Remaining:"
-msgstr "未用点数"
+msgstr ""
 
 #: ../../../src/MenuActiveEffects.cpp:220
 #, c-format
@@ -720,14 +704,14 @@ msgid "Related stats:"
 msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:405 ../../../src/MenuCharacter.cpp:429
-#, fuzzy, c-format
+#, c-format
 msgid "Each level grants %d."
-msgstr "每点精神增加 +%d MP. 每升一级增加 +%d MP"
+msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:409 ../../../src/MenuCharacter.cpp:433
-#, fuzzy, c-format
+#, c-format
 msgid "Each point of %s grants %d."
-msgstr "每点精神增加 +%d MP. 每升一级增加 +%d MP"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:47
 msgid "Execute"
@@ -758,7 +742,9 @@ msgid "turns on/off the developer hud"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:226
-msgid "Prints a list of powers that match a search term. No search term will list all items"
+msgid ""
+"Prints a list of powers that match a search term. No search term will list "
+"all items"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:227
@@ -766,15 +752,20 @@ msgid "Prints out all the map filenames located in the \"maps/\" directory."
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:228
-msgid "Prints out the active campaign statuses that match a search term. No search term will list all active statuses"
+msgid ""
+"Prints out the active campaign statuses that match a search term. No search "
+"term will list all active statuses"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:229
-msgid "Prints a list of items that match a search term. No search term will list all items"
+msgid ""
+"Prints a list of items that match a search term. No search term will list "
+"all items"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:230
-msgid "parses a series of event components and executes them as a single event"
+msgid ""
+"parses a series of event components and executes them as a single event"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:231
@@ -835,9 +826,8 @@ msgid "Target (x,y):"
 msgstr ""
 
 #: ../../../src/MenuDevHUD.cpp:67
-#, fuzzy
 msgid "Mouse (x,y):"
-msgstr "使用鼠标瞄准敌人"
+msgstr ""
 
 #: ../../../src/MenuDevHUD.cpp:72
 msgid "Target distance:"
@@ -931,14 +921,13 @@ msgid "Inventory is full."
 msgstr "背包已满"
 
 #: ../../../src/MenuInventory.cpp:784
-#, fuzzy, c-format
+#, c-format
 msgid "Not enough %s."
-msgstr "金钱不足"
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:804 ../../../src/MenuInventory.cpp:811
-#, fuzzy
 msgid "This item can not be sold."
-msgstr "此物品只能从动作槽使用"
+msgstr ""
 
 #: ../../../src/MenuLog.cpp:85
 msgid "Notes"
@@ -954,9 +943,8 @@ msgid "XP: %d/%d"
 msgstr "XP: %d/%d"
 
 #: ../../../src/MenuManager.cpp:812
-#, fuzzy
 msgid "This item can not be dropped."
-msgstr "此物品只能从动作槽使用"
+msgstr ""
 
 #: ../../../src/MenuNPCActions.cpp:82
 msgid "Trade"
@@ -981,9 +969,8 @@ msgid "Costs %d HP"
 msgstr "消耗 %d HP"
 
 #: ../../../src/MenuPowers.cpp:706
-#, fuzzy
 msgid "Cooldown:"
-msgstr "冷却时间: %d 秒"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:773 ../../../src/MenuPowers.cpp:776
 msgid "Damage per second"
@@ -1071,9 +1058,8 @@ msgid "%d%% chance"
 msgstr ""
 
 #: ../../../src/MenuPowers.cpp:969
-#, fuzzy
 msgid "Base Accuracy"
-msgstr "准确:"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:989
 msgid "Base Critical Chance"
@@ -1084,9 +1070,8 @@ msgid "Ignores Absorbtion"
 msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1002
-#, fuzzy
 msgid "Ignores Avoidance"
-msgstr "敏捷:"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1007
 #, c-format
@@ -1094,14 +1079,14 @@ msgid "%d%% Chance to crit slowed targets"
 msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1012
-#, fuzzy, c-format
+#, c-format
 msgid "%s Elemental Damage"
-msgstr "精神伤害:"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1021
-#, fuzzy, c-format
+#, c-format
 msgid "Requires a %s"
-msgstr "需要精神 %d"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1060 ../../../src/MenuPowers.cpp:1063
 #, c-format
@@ -1113,18 +1098,16 @@ msgid "Click to Unlock (uses 1 Skill Point)"
 msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1076 ../../../src/MenuPowers.cpp:1078
-#, fuzzy
 msgid "Requires 1 Skill Point"
-msgstr "需要 %d 技能点"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1312
 msgid "Unspent skill points:"
 msgstr "未用点数"
 
 #: ../../../src/MenuPowers.cpp:1340
-#, fuzzy
 msgid "Next Level:"
-msgstr "级别"
+msgstr ""
 
 #: ../../../src/MenuStash.cpp:132
 msgid "Shared Stash"
@@ -1135,9 +1118,8 @@ msgid "Can not store quest items in the stash."
 msgstr ""
 
 #: ../../../src/MenuStash.cpp:209
-#, fuzzy
 msgid "Stash is full."
-msgstr "背包已满"
+msgstr ""
 
 #: ../../../src/MenuVendor.cpp:51
 msgid "Buyback"
@@ -1165,9 +1147,9 @@ msgid "Game saved."
 msgstr ""
 
 #: ../../../src/SDLInputState.cpp:559
-#, fuzzy, c-format
+#, c-format
 msgid "Mouse %d"
-msgstr "使用鼠标瞄准敌人"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:567
 #, c-format
@@ -1214,106 +1196,90 @@ msgid "Adventurer"
 msgstr "玩家"
 
 #: ../../../src/Stats.cpp:36
-#, fuzzy
 msgid "Max HP"
-msgstr "最大 HP:"
+msgstr ""
 
 #: ../../../src/Stats.cpp:41
-#, fuzzy
 msgid "HP Regen"
-msgstr "HP 恢复:"
+msgstr ""
 
 #: ../../../src/Stats.cpp:42
 msgid "Ticks of HP regen per minute."
 msgstr ""
 
 #: ../../../src/Stats.cpp:46
-#, fuzzy
 msgid "Max MP"
-msgstr "最大 MP:"
+msgstr ""
 
 #: ../../../src/Stats.cpp:51
-#, fuzzy
 msgid "MP Regen"
-msgstr "MP 恢复:"
+msgstr ""
 
 #: ../../../src/Stats.cpp:52
 msgid "Ticks of MP regen per minute."
 msgstr ""
 
 #: ../../../src/Stats.cpp:56
-#, fuzzy
 msgid "Accuracy"
-msgstr "准确:"
+msgstr ""
 
 #: ../../../src/Stats.cpp:61
-#, fuzzy
 msgid "Avoidance"
-msgstr "敏捷:"
+msgstr ""
 
 #: ../../../src/Stats.cpp:66
-#, fuzzy
 msgid "Absorb Min"
-msgstr "抵消:"
+msgstr ""
 
 #: ../../../src/Stats.cpp:71
-#, fuzzy
 msgid "Absorb Max"
-msgstr "抵消:"
+msgstr ""
 
 #: ../../../src/Stats.cpp:76
 msgid "Critical Hit Chance"
 msgstr ""
 
 #: ../../../src/Stats.cpp:81
-#, fuzzy
 msgid "Bonus XP"
-msgstr "奖励 XP: "
+msgstr ""
 
 #: ../../../src/Stats.cpp:82
-#, fuzzy
 msgid "Increases the XP gained per kill."
-msgstr "增加 XP "
+msgstr ""
 
 #: ../../../src/Stats.cpp:86
-#, fuzzy, c-format
+#, c-format
 msgid "Bonus %s"
-msgstr "奖励"
+msgstr ""
 
 #: ../../../src/Stats.cpp:87
-#, fuzzy, c-format
+#, c-format
 msgid "Increases the %s found per drop."
-msgstr "爆出金钱增加 %s "
+msgstr ""
 
 #: ../../../src/Stats.cpp:91
-#, fuzzy
 msgid "Item Find Chance"
-msgstr "爆出物品概率"
+msgstr ""
 
 #: ../../../src/Stats.cpp:92
-#, fuzzy
 msgid "Increases the chance that an enemy will drop an item."
-msgstr "增加敌人死亡后爆出物品的概率"
+msgstr ""
 
 #: ../../../src/Stats.cpp:96
-#, fuzzy
 msgid "Stealth"
-msgstr "潜行: "
+msgstr ""
 
 #: ../../../src/Stats.cpp:97
-#, fuzzy
 msgid "Increases your ability to move undetected."
-msgstr "提升移动时不被发现的能力"
+msgstr ""
 
 #: ../../../src/Stats.cpp:101
-#, fuzzy
 msgid "Poise"
-msgstr "平衡: "
+msgstr ""
 
 #: ../../../src/Stats.cpp:102
-#, fuzzy
 msgid "Reduces your chance of stumbling when hit."
-msgstr "减少被击中后跌倒的可能"
+msgstr ""
 
 #: ../../../src/Stats.cpp:106
 msgid "Missile Reflect Chance"
@@ -1332,18 +1298,16 @@ msgid "Deals a percentage of damage taken back to the attacker."
 msgstr ""
 
 #: ../../../src/Stats.cpp:116
-#, fuzzy
 msgid "HP Steal"
-msgstr "潜行: "
+msgstr ""
 
 #: ../../../src/Stats.cpp:117
 msgid "Percentage of HP stolen per hit."
 msgstr ""
 
 #: ../../../src/Stats.cpp:121
-#, fuzzy
 msgid "MP Steal"
-msgstr "潜行: "
+msgstr ""
 
 #: ../../../src/Stats.cpp:122
 msgid "Percentage of MP stolen per hit."
@@ -1362,14 +1326,14 @@ msgid "k"
 msgstr ""
 
 #: ../../../src/Utils.cpp:448
-#, fuzzy, c-format
+#, c-format
 msgid "%s second"
-msgstr "冷却时间: %d 秒"
+msgstr ""
 
 #: ../../../src/Utils.cpp:451
-#, fuzzy, c-format
+#, c-format
 msgid "%s seconds"
-msgstr "冷却时间: %d 秒"
+msgstr ""
 
 #: ../../../src/Version.cpp:139
 msgid "or newer"
@@ -1378,228 +1342,3 @@ msgstr ""
 #: ../../../src/Version.cpp:142
 msgid "or older"
 msgstr ""
-
-#, fuzzy
-#~ msgid "Permadeath"
-#~ msgstr "死亡后不可复活?"
-
-#~ msgid "Physical"
-#~ msgstr "体力"
-
-#~ msgid "Mental"
-#~ msgstr "精神"
-
-#~ msgid "Offense"
-#~ msgstr "攻击"
-
-#~ msgid "Defense"
-#~ msgstr "防御"
-
-#~ msgid "Melee damage: %d-%d"
-#~ msgstr "近战伤害: %d-%d"
-
-#~ msgid "Melee damage: %d"
-#~ msgstr "近战伤害 : %d"
-
-#~ msgid "Ranged damage: %d-%d"
-#~ msgstr "远程伤害: %d-%d"
-
-#~ msgid "Ranged damage: %d"
-#~ msgstr "远程伤害: %d"
-
-#~ msgid "Mental damage: %d-%d"
-#~ msgstr "精神伤害: %d-%d"
-
-#~ msgid "Mental damage: %d"
-#~ msgstr "精神伤害: %d"
-
-#, fuzzy
-#~ msgid "Melee Damage"
-#~ msgstr "近战伤害:"
-
-#, fuzzy
-#~ msgid "Ranged Damage"
-#~ msgstr "远程伤害:"
-
-#, fuzzy
-#~ msgid "Mental Damage"
-#~ msgstr "精神伤害:"
-
-#, fuzzy
-#~ msgid "Melee Damage Min"
-#~ msgstr "近战伤害:"
-
-#, fuzzy
-#~ msgid "Melee Damage Max"
-#~ msgstr "近战伤害:"
-
-#, fuzzy
-#~ msgid "Ranged Damage Min"
-#~ msgstr "远程伤害:"
-
-#, fuzzy
-#~ msgid "Ranged Damage Max"
-#~ msgstr "远程伤害:"
-
-#, fuzzy
-#~ msgid "Mental Damage Min"
-#~ msgstr "精神伤害:"
-
-#, fuzzy
-#~ msgid "Mental Damage Max"
-#~ msgstr "精神伤害:"
-
-#~ msgid "Requires Physical %d"
-#~ msgstr "需要体力 %d"
-
-#~ msgid "Requires Mental %d"
-#~ msgstr "需要精神 %d"
-
-#~ msgid "Requires Offense %d"
-#~ msgstr "需要攻击 %d"
-
-#~ msgid "Requires Defense %d"
-#~ msgstr "需要防御 %d"
-
-#, fuzzy
-#~ msgid "Each point of Physical grants %d. "
-#~ msgstr "每点体力增加 +%d HP. 每升一级增加 +%d HP"
-
-#, fuzzy
-#~ msgid "Each point of Defense grants %d. "
-#~ msgstr "每点精神增加 +%d MP. 每升一级增加 +%d MP"
-
-#~ msgid "Requires Physical Offense %d"
-#~ msgstr "需要体力+攻击 %d"
-
-#~ msgid "Requires Physical Defense %d"
-#~ msgstr "需要体力+防御 %d"
-
-#~ msgid "Requires Mental Offense %d"
-#~ msgstr "需要精神+攻击 %d"
-
-#~ msgid "Requires Mental Defense %d"
-#~ msgstr "需要精神+防御 %d"
-
-#, fuzzy
-#~ msgid "Added item: "
-#~ msgstr "%d 物品: "
-
-#, fuzzy
-#~ msgid "Removed item: "
-#~ msgstr "%d 物品: "
-
-#, fuzzy
-#~ msgid "Exit to title?"
-#~ msgstr "回到游戏开始"
-
-#~ msgid "Empty Slot"
-#~ msgstr "空"
-
-#, fuzzy
-#~ msgid "Move only one item:"
-#~ msgstr "使用SHIFT移动单个物品"
-
-#~ msgid "CTRL-click a carried item to sell it."
-#~ msgstr "按住CTRL点击物品出售"
-
-#~ msgid "Use this resolution?"
-#~ msgstr "使用此分辨率"
-
-#~ msgid "Double buffering"
-#~ msgstr "双缓冲"
-
-#~ msgid "High Quality Textures"
-#~ msgstr "高质量背景"
-
-#~ msgid "Animated tiles"
-#~ msgstr "动画拼图"
-
-#~ msgid "Resolution"
-#~ msgstr "分辨率"
-
-#~ msgid "Level %d %s"
-#~ msgstr "级别 %d %s"
-
-#, fuzzy
-#~ msgid "Flare Alpha v0.19"
-#~ msgstr "Flare 测试版 v0.18"
-
-#~ msgid "lmb"
-#~ msgstr "左键"
-
-#~ msgid "mmb"
-#~ msgstr "mmb"
-
-#~ msgid "rmb"
-#~ msgstr "右键"
-
-#~ msgid "mbx1"
-#~ msgstr "mbx1"
-
-#~ msgid "mbx2"
-#~ msgstr "mbx2"
-
-#, fuzzy
-#~ msgid "Low"
-#~ msgstr "说明"
-
-#~ msgid "Increases %s by %d"
-#~ msgstr "增加 %s 量 %d"
-
-#~ msgid "Decreases %s by %d"
-#~ msgstr "减少 %s 量 %d"
-
-#~ msgid "Crit:"
-#~ msgstr "暴击:"
-
-#~ msgid "Physical (P) increases melee weapon proficiency and total HP."
-#~ msgstr "体力 (P)增加近战武器熟练度和总l HP."
-
-#~ msgid "Mental (M) increases mental weapon proficiency and total MP."
-#~ msgstr "精神 (M)增加精神武器熟练度和总 MP."
-
-#~ msgid "Offense (O) increases ranged weapon proficiency and accuracy."
-#~ msgstr "攻击(O)增加远程武器熟练度和准确度."
-
-#~ msgid "Defense (D) increases armor proficiency and avoidance."
-#~ msgstr "防御 (D) 增加盾牌熟练度和敏捷度."
-
-#~ msgid "Save and exit to title?"
-#~ msgstr "保存并回到游戏开始菜单?"
-
-#~ msgid "Click to Unlock"
-#~ msgstr "点击解锁"
-
-#~ msgid "Character Menu (C)"
-#~ msgstr "角色菜单 (C)"
-
-#~ msgid "Inventory Menu (I)"
-#~ msgstr "背包菜单 (I)"
-
-#~ msgid "Power Menu (P)"
-#~ msgstr "技能菜单 (P)"
-
-#~ msgid "Log Menu (L)"
-#~ msgstr "说明菜单 (L)"
-
-#~ msgid "Ticks of HP regen per minute. Each point of Physical grants +%d HP regen. Each level grants +%d HP regen"
-#~ msgstr "每分钟恢复HP量. 每点体力增加 +%d HP恢复. 每升一级 +%d HP恢复"
-
-#~ msgid "Ticks of MP regen per minute. Each point of Mental grants +%d MP regen. Each level grants +%d MP regen"
-#~ msgstr "每分钟恢复MP量. 每点体力增加 +%d MP恢复. 每升一级 +%d MP恢复"
-
-#~ msgid "Each point of Offense grants +%d accuracy. Each level grants +%d accuracy"
-#~ msgstr "每点攻击增加 +%d 准确度. 每升一级增加 +%d 准确度"
-
-#~ msgid "Each point of Defense grants +%d avoidance. Each level grants +%d avoidance"
-#~ msgstr "每点防御增加 +%d 敏捷度. 每升一级增加 +%d 敏捷度"
-
-#~ msgid "Requires a physical weapon"
-#~ msgstr "需要近战武器"
-
-#~ msgid "Requires a mental weapon"
-#~ msgstr "需要精神武器"
-
-#~ msgid "Requires an offense weapon"
-#~ msgstr "需要远程武器"

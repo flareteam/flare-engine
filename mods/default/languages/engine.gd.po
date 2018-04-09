@@ -1,21 +1,22 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# GunChleoc <fios@foramnagaidhlig.net>, 2018.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-28 15:02-0400\n"
-"PO-Revision-Date: 2018-03-28 10:08+0100\n"
-"Last-Translator: GunChleoc <fios@foramnagaidhlig.net>\n"
-"Language-Team: Fòram na Gàidhlig\n"
-"Language: gd\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
+"Language-Team: Gaelic, Scottish (https://www.transifex.com/flareorg/teams/84925/gd/)\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: gd\n"
 "Plural-Forms: nplurals=4; plural=(n==1 || n==11) ? 0 : (n==2 || n==12) ? 1 : (n > 2 && n < 20) ? 2 : 3;\n"
-"X-Generator: Virtaal 0.7.1\n"
 
 #: ../../../src/Avatar.cpp:353
 #, c-format
@@ -28,7 +29,8 @@ msgstr "Faodaidh tu buadh àrdachadh air clàr-taice a’ phearsa."
 
 #: ../../../src/Avatar.cpp:573
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
-msgstr "Chaidh do ruaig. Crìoch a’ gheama! ${INPUT_CONTINUE} gus fàgail gun tiotal."
+msgstr ""
+"Chaidh do ruaig. Crìoch a’ gheama! ${INPUT_CONTINUE} gus fàgail gun tiotal."
 
 #: ../../../src/Avatar.cpp:579
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
@@ -36,7 +38,9 @@ msgstr "Chaidh do ruaig. ${INPUT_CONTINUE} gus leantainn air adhart."
 
 #: ../../../src/Avatar.cpp:832
 msgid "Transformation expired. You have been moved back to a safe place."
-msgstr "Dh’fhalbh an ùine air a’ chruth-atharrachadh. Chaidh do ghluasad air ais gu ionad sàbhailte."
+msgstr ""
+"Dh’fhalbh an ùine air a’ chruth-atharrachadh. Chaidh do ghluasad air ais gu "
+"ionad sàbhailte."
 
 #: ../../../src/CampaignManager.cpp:124
 #, c-format
@@ -86,7 +90,9 @@ msgstr "Chaidh èifeachdan dona a thoirt air falbh."
 
 #: ../../../src/CampaignManager.cpp:191
 msgid "HP and MP restored, negative effects removed"
-msgstr "Chaidh puingean-beatha is puingean-gluasaid a leigheas is èifeachdan dona a thoirt air falbh."
+msgstr ""
+"Chaidh puingean-beatha is puingean-gluasaid a leigheas is èifeachdan dona a "
+"thoirt air falbh."
 
 #: ../../../src/DeviceList.cpp:55
 msgid ""
@@ -728,7 +734,9 @@ msgstr "Modh an luchd-leasachaidh"
 
 #: ../../../src/MenuDevConsole.cpp:121
 msgid "Arguments with spaces should be enclosed with double quotes. Example:"
-msgstr "Bu chòir dhut comharran-labhairt dùbailte a chur timcheall air argamaidean sa bheil geal-spàs. Mar eisimpleir:"
+msgstr ""
+"Bu chòir dhut comharran-labhairt dùbailte a chur timcheall air argamaidean "
+"sa bheil geal-spàs. Mar eisimpleir:"
 
 #: ../../../src/MenuDevConsole.cpp:122
 msgid "Type 'help' to get a list of commands."
@@ -747,24 +755,40 @@ msgid "turns on/off the developer hud"
 msgstr "cuiridh seo HUD an luchd-leasachaidh air no dheth"
 
 #: ../../../src/MenuDevConsole.cpp:226
-msgid "Prints a list of powers that match a search term. No search term will list all items"
-msgstr "Seallaidh seo liosta nan cumhachdan a fhreagras ris an fhacal-luirg. Mur eil facal-luirg ann, thèid gach nì a shealltainn"
+msgid ""
+"Prints a list of powers that match a search term. No search term will list "
+"all items"
+msgstr ""
+"Seallaidh seo liosta nan cumhachdan a fhreagras ris an fhacal-luirg. Mur eil"
+" facal-luirg ann, thèid gach nì a shealltainn"
 
 #: ../../../src/MenuDevConsole.cpp:227
 msgid "Prints out all the map filenames located in the \"maps/\" directory."
-msgstr "Seallaidh seo ainmean faidhle nam mapaichean uile a tha sa phasgan “maps/”."
+msgstr ""
+"Seallaidh seo ainmean faidhle nam mapaichean uile a tha sa phasgan “maps/”."
 
 #: ../../../src/MenuDevConsole.cpp:228
-msgid "Prints out the active campaign statuses that match a search term. No search term will list all active statuses"
-msgstr "Seallaidh seo staidean gnìomhach nan iomairtean a fhreagras ris an fhacal-luirg. Mur eil facal-luirg ann, thèid gach staid ghnìomhach a shealltainn"
+msgid ""
+"Prints out the active campaign statuses that match a search term. No search "
+"term will list all active statuses"
+msgstr ""
+"Seallaidh seo staidean gnìomhach nan iomairtean a fhreagras ris an fhacal-"
+"luirg. Mur eil facal-luirg ann, thèid gach staid ghnìomhach a shealltainn"
 
 #: ../../../src/MenuDevConsole.cpp:229
-msgid "Prints a list of items that match a search term. No search term will list all items"
-msgstr "Seallaidh seo liosta nan nithean a fhreagras ris an fhacal-luirg. Mur eil facal-luirg ann, thèid gach nì a shealltainn"
+msgid ""
+"Prints a list of items that match a search term. No search term will list "
+"all items"
+msgstr ""
+"Seallaidh seo liosta nan nithean a fhreagras ris an fhacal-luirg. Mur eil "
+"facal-luirg ann, thèid gach nì a shealltainn"
 
 #: ../../../src/MenuDevConsole.cpp:230
-msgid "parses a series of event components and executes them as a single event"
-msgstr "parsaidh seo sreath dhe cho-phàirtean thachartasan agus ruithidh e ann an aon tachartas iad"
+msgid ""
+"parses a series of event components and executes them as a single event"
+msgstr ""
+"parsaidh seo sreath dhe cho-phàirtean thachartasan agus ruithidh e ann an "
+"aon tachartas iad"
 
 #: ../../../src/MenuDevConsole.cpp:231
 msgid "clears the command history"
@@ -1134,7 +1158,9 @@ msgstr "Sgiath +%d"
 
 #: ../../../src/PowerManager.cpp:1299
 msgid "You are already transformed, untransform first."
-msgstr "Tha thu air cruth-atharrachadh mar-thà, feumaidh tu an cruth tùsail agad a ghabhail an toiseach."
+msgstr ""
+"Tha thu air cruth-atharrachadh mar-thà, feumaidh tu an cruth tùsail agad a "
+"ghabhail an toiseach."
 
 #: ../../../src/PowerManager.cpp:1311
 msgid "Could not untransform at this position."
@@ -1340,6 +1366,3 @@ msgstr "no nas ùire"
 #: ../../../src/Version.cpp:142
 msgid "or older"
 msgstr "no nas sine"
-
-#~ msgid "resets the player to level 1, with no stat or skill points spent"
-#~ msgstr "ath-shuidhichidh seo leibheil a’ chluicheadair air 1 gun stadastaireachd is gun phuingean air an caitheamh"

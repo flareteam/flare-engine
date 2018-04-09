@@ -1,19 +1,21 @@
-# Norwegian Bokmal translations for FLARE (Free/Libre Action RPG Engine).
-# Copyright (C) 2012 Clint Bellanger
-# This file is distributed under the same license as the FLARE package.
-# Hans Joachim Desserud <github@desserud.org>, 2012.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Flare 0.19\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-28 15:02-0400\n"
-"PO-Revision-Date: 2012-12-24 14:36+0100\n"
-"Last-Translator: Hans Joachim Desserud <github@desserud.org>\n"
-"Language-Team: Norwegian Bokmal\n"
-"Language: nb\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
+"Language-Team: Norwegian Bokmål (https://www.transifex.com/flareorg/teams/84925/nb/)\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: nb\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../../../src/Avatar.cpp:353
@@ -27,7 +29,9 @@ msgstr ""
 
 #: ../../../src/Avatar.cpp:573
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
-msgstr "Du har blitt beseiret. Spillet er slutt! Trykk ${INPUT_CONTINUE} for å gå til hovedmenyen."
+msgstr ""
+"Du har blitt beseiret. Spillet er slutt! Trykk ${INPUT_CONTINUE} for å gå "
+"til hovedmenyen."
 
 #: ../../../src/Avatar.cpp:579
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
@@ -219,24 +223,20 @@ msgid "Enable >>"
 msgstr "Aktiver >>"
 
 #: ../../../src/GameStateConfigBase.cpp:959
-#, fuzzy
 msgid "Version:"
-msgstr "Krever versjon: "
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:964
-#, fuzzy
 msgid "Game:"
-msgstr "Spill: "
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:969
-#, fuzzy
 msgid "Engine version:"
-msgstr "Krever versjon: "
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:977
-#, fuzzy
 msgid "Requires mods:"
-msgstr "Krever en %s"
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:78
 #: ../../../src/GameStateConfigDesktop.cpp:740
@@ -245,9 +245,8 @@ msgstr "Nullstill"
 
 #: ../../../src/GameStateConfigDesktop.cpp:78
 #: ../../../src/GameStateConfigDesktop.cpp:738
-#, fuzzy
 msgid "Assign:"
-msgstr "Tildel: "
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:123
 msgid "Video"
@@ -647,14 +646,13 @@ msgid "Sell Price: %d %s each"
 msgstr "Selg for: %d %s hver"
 
 #: ../../../src/ItemManager.cpp:808
-#, fuzzy
 msgid "Set:"
-msgstr "Sett: "
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:815
-#, fuzzy, c-format
+#, c-format
 msgid "%d items:"
-msgstr "%d gjenstander: "
+msgstr ""
 
 #: ../../../src/MenuActionBar.cpp:195 ../../../src/MenuActionBar.cpp:201
 #: ../../../src/MenuActionBar.cpp:206
@@ -708,14 +706,14 @@ msgid "Related stats:"
 msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:405 ../../../src/MenuCharacter.cpp:429
-#, fuzzy, c-format
+#, c-format
 msgid "Each level grants %d."
-msgstr "Hvert nivå gir %d. "
+msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:409 ../../../src/MenuCharacter.cpp:433
-#, fuzzy, c-format
+#, c-format
 msgid "Each point of %s grants %d."
-msgstr "Hvert nivå av %s gir %d. "
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:47
 msgid "Execute"
@@ -746,7 +744,9 @@ msgid "turns on/off the developer hud"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:226
-msgid "Prints a list of powers that match a search term. No search term will list all items"
+msgid ""
+"Prints a list of powers that match a search term. No search term will list "
+"all items"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:227
@@ -754,15 +754,20 @@ msgid "Prints out all the map filenames located in the \"maps/\" directory."
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:228
-msgid "Prints out the active campaign statuses that match a search term. No search term will list all active statuses"
+msgid ""
+"Prints out the active campaign statuses that match a search term. No search "
+"term will list all active statuses"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:229
-msgid "Prints a list of items that match a search term. No search term will list all items"
+msgid ""
+"Prints a list of items that match a search term. No search term will list "
+"all items"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:230
-msgid "parses a series of event components and executes them as a single event"
+msgid ""
+"parses a series of event components and executes them as a single event"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:231
@@ -786,14 +791,12 @@ msgid "ERROR: Incorrect number of arguments"
 msgstr "FEIL: Feil antall argumenter"
 
 #: ../../../src/MenuDevConsole.cpp:391 ../../../src/MenuDevConsole.cpp:416
-#, fuzzy
 msgid "HINT:"
-msgstr "HINT: "
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:391
-#, fuzzy
 msgid "<id>"
-msgstr " <id>"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:406
 #, c-format
@@ -805,9 +808,8 @@ msgid "ERROR: Too few arguments"
 msgstr "FEIL: For få argumenter"
 
 #: ../../../src/MenuDevConsole.cpp:416
-#, fuzzy
 msgid "<key>=<val> <key>=<val> ..."
-msgstr " <nøkkel>=<verdi> <nøkkel>=<verdi> ..."
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:420
 msgid "ERROR: Unknown command"
@@ -818,19 +820,16 @@ msgid "HINT: Type help"
 msgstr "HINT: Skriv help"
 
 #: ../../../src/MenuDevHUD.cpp:56
-#, fuzzy
 msgid "Player (x,y):"
-msgstr "Spiller (x,y): "
+msgstr ""
 
 #: ../../../src/MenuDevHUD.cpp:62
-#, fuzzy
 msgid "Target (x,y):"
-msgstr "Mål (x,y): "
+msgstr ""
 
 #: ../../../src/MenuDevHUD.cpp:67
-#, fuzzy
 msgid "Mouse (x,y):"
-msgstr "Mus (x,y): "
+msgstr ""
 
 #: ../../../src/MenuDevHUD.cpp:72
 msgid "Target distance:"
@@ -862,14 +861,14 @@ msgid "Paused"
 msgstr "Pauset"
 
 #: ../../../src/MenuInventory.cpp:155
-#, fuzzy, c-format
+#, c-format
 msgid "Lost %d%% of %s."
-msgstr "Mistet %d%% av %s. "
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:162
-#, fuzzy, c-format
+#, c-format
 msgid "Lost %d%% of total XP."
-msgstr "Mistet %d%% av %s. "
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:167
 #, c-format
@@ -1345,6 +1344,3 @@ msgstr ""
 #: ../../../src/Version.cpp:142
 msgid "or older"
 msgstr ""
-
-#~ msgid "Permadeath"
-#~ msgstr "Permanent død"

@@ -1,20 +1,22 @@
-# FLARE (Free/Libre Action RPG Engine)
-# Copyright (C) 2011 Clint Bellanger
-# This file is distributed under the same license as the FLARE package.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Flare 0.19\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-28 15:02-0400\n"
-"PO-Revision-Date: 2014-01-24 17:00+0100\n"
-"Last-Translator: Henrik Andersson <hean01@users.sourceforge.net>\n"
-"Language-Team: SWEDISH <LL@li.org>\n"
-"Language: sv_SE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
+"Language-Team: Swedish (https://www.transifex.com/flareorg/teams/84925/sv/)\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.4\n"
+"Language: sv\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../../../src/Avatar.cpp:353
 #, c-format
@@ -26,14 +28,12 @@ msgid "You may increase one attribute through the Character Menu."
 msgstr "Du får nu öka på en egenskap i karaktärsmenyn."
 
 #: ../../../src/Avatar.cpp:573
-#, fuzzy
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
-msgstr "Du är besegrad. Spelet är över! Tryck Retur för att gå till titelmenyn."
+msgstr ""
 
 #: ../../../src/Avatar.cpp:579
-#, fuzzy
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
-msgstr "Du är besegrad. Tryck Retur för att fortsätta."
+msgstr ""
 
 #: ../../../src/Avatar.cpp:832
 msgid "Transformation expired. You have been moved back to a safe place."
@@ -221,24 +221,20 @@ msgid "Enable >>"
 msgstr "Aktivera >>"
 
 #: ../../../src/GameStateConfigBase.cpp:959
-#, fuzzy
 msgid "Version:"
-msgstr "Kräver styrka: %s"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:964
-#, fuzzy
 msgid "Game:"
-msgstr "Nytt spel"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:969
-#, fuzzy
 msgid "Engine version:"
-msgstr "Kräver styrka: %s"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:977
-#, fuzzy
 msgid "Requires mods:"
-msgstr "Kräver styrka: %s"
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:78
 #: ../../../src/GameStateConfigDesktop.cpp:740
@@ -247,9 +243,8 @@ msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:78
 #: ../../../src/GameStateConfigDesktop.cpp:738
-#, fuzzy
 msgid "Assign:"
-msgstr "Tilldela:"
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:123
 msgid "Video"
@@ -553,9 +548,8 @@ msgid "Middle Mouse"
 msgstr ""
 
 #: ../../../src/InputState.cpp:328
-#, fuzzy
 msgid "Right Mouse"
-msgstr "Höger"
+msgstr ""
 
 #: ../../../src/InputState.cpp:329
 msgid "Wheel Up"
@@ -566,34 +560,32 @@ msgid "Wheel Down"
 msgstr ""
 
 #: ../../../src/InputState.cpp:331
-#, fuzzy
 msgid "Mouse X1"
-msgstr "Sikta med muspekaren"
+msgstr ""
 
 #: ../../../src/InputState.cpp:332
-#, fuzzy
 msgid "Mouse X2"
-msgstr "Sikta med muspekaren"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:406 ../../../src/ItemManager.cpp:409
 msgid "Unknown Item"
 msgstr ""
 
 #: ../../../src/ItemManager.cpp:581 ../../../src/MenuPowers.cpp:794
-#, fuzzy, c-format
+#, c-format
 msgid "%d%% Speed"
-msgstr "%d%% Hastighet"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:585 ../../../src/MenuPowers.cpp:797
-#, fuzzy, c-format
+#, c-format
 msgid "%d%% Attack Speed"
-msgstr "%d%% Hastighet"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:607 ../../../src/MenuCharacter.cpp:338
 #: ../../../src/MenuPowers.cpp:739
-#, fuzzy, c-format
+#, c-format
 msgid "%s Resistance"
-msgstr "Motståndskraft mot is"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:658
 msgid "Quest Item"
@@ -622,14 +614,14 @@ msgstr "Kräver nivå %d"
 
 #: ../../../src/ItemManager.cpp:760 ../../../src/MenuPowers.cpp:1030
 #: ../../../src/MenuPowers.cpp:1032
-#, fuzzy, c-format
+#, c-format
 msgid "Requires %s %d"
-msgstr "Kräver %s"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:768
-#, fuzzy, c-format
+#, c-format
 msgid "Requires Class: %s"
-msgstr "Kräver %s"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:780 ../../../src/ItemManager.cpp:789
 #, c-format
@@ -656,9 +648,9 @@ msgid "Set:"
 msgstr ""
 
 #: ../../../src/ItemManager.cpp:815
-#, fuzzy, c-format
+#, c-format
 msgid "%d items:"
-msgstr "%d föremål:"
+msgstr ""
 
 #: ../../../src/MenuActionBar.cpp:195 ../../../src/MenuActionBar.cpp:201
 #: ../../../src/MenuActionBar.cpp:206
@@ -672,9 +664,8 @@ msgid "x%d"
 msgstr ""
 
 #: ../../../src/MenuActiveEffects.cpp:214
-#, fuzzy
 msgid "Remaining:"
-msgstr "återstående poäng"
+msgstr ""
 
 #: ../../../src/MenuActiveEffects.cpp:220
 #, c-format
@@ -713,14 +704,14 @@ msgid "Related stats:"
 msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:405 ../../../src/MenuCharacter.cpp:429
-#, fuzzy, c-format
+#, c-format
 msgid "Each level grants %d."
-msgstr "Varje nivå ger %d."
+msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:409 ../../../src/MenuCharacter.cpp:433
-#, fuzzy, c-format
+#, c-format
 msgid "Each point of %s grants %d."
-msgstr "Varje poäng i Anfall ger %d."
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:47
 msgid "Execute"
@@ -751,7 +742,9 @@ msgid "turns on/off the developer hud"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:226
-msgid "Prints a list of powers that match a search term. No search term will list all items"
+msgid ""
+"Prints a list of powers that match a search term. No search term will list "
+"all items"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:227
@@ -759,15 +752,20 @@ msgid "Prints out all the map filenames located in the \"maps/\" directory."
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:228
-msgid "Prints out the active campaign statuses that match a search term. No search term will list all active statuses"
+msgid ""
+"Prints out the active campaign statuses that match a search term. No search "
+"term will list all active statuses"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:229
-msgid "Prints a list of items that match a search term. No search term will list all items"
+msgid ""
+"Prints a list of items that match a search term. No search term will list "
+"all items"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:230
-msgid "parses a series of event components and executes them as a single event"
+msgid ""
+"parses a series of event components and executes them as a single event"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:231
@@ -828,9 +826,8 @@ msgid "Target (x,y):"
 msgstr ""
 
 #: ../../../src/MenuDevHUD.cpp:67
-#, fuzzy
 msgid "Mouse (x,y):"
-msgstr "Sikta med muspekaren"
+msgstr ""
 
 #: ../../../src/MenuDevHUD.cpp:72
 msgid "Target distance:"
@@ -862,19 +859,19 @@ msgid "Paused"
 msgstr ""
 
 #: ../../../src/MenuInventory.cpp:155
-#, fuzzy, c-format
+#, c-format
 msgid "Lost %d%% of %s."
-msgstr "Förlorade %d%% utav %s"
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:162
-#, fuzzy, c-format
+#, c-format
 msgid "Lost %d%% of total XP."
-msgstr "Förlorade %d%% av total XP"
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "Lost %d%% of current level XP."
-msgstr "Förlorade %d%% av nuvarande XP."
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:193
 #, c-format
@@ -929,9 +926,8 @@ msgid "Not enough %s."
 msgstr "Inte tillräckligt med %s."
 
 #: ../../../src/MenuInventory.cpp:804 ../../../src/MenuInventory.cpp:811
-#, fuzzy
 msgid "This item can not be sold."
-msgstr "Det här föremålet kan bara användas från handlingslisten."
+msgstr ""
 
 #: ../../../src/MenuLog.cpp:85
 msgid "Notes"
@@ -947,9 +943,8 @@ msgid "XP: %d/%d"
 msgstr "XP: %d/%d"
 
 #: ../../../src/MenuManager.cpp:812
-#, fuzzy
 msgid "This item can not be dropped."
-msgstr "Det här föremålet kan bara användas från handlingslisten."
+msgstr ""
 
 #: ../../../src/MenuNPCActions.cpp:82
 msgid "Trade"
@@ -974,9 +969,8 @@ msgid "Costs %d HP"
 msgstr "Kostar %d HP"
 
 #: ../../../src/MenuPowers.cpp:706
-#, fuzzy
 msgid "Cooldown:"
-msgstr "Svalnar av: %d sekunder"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:773 ../../../src/MenuPowers.cpp:776
 msgid "Damage per second"
@@ -1064,23 +1058,20 @@ msgid "%d%% chance"
 msgstr ""
 
 #: ../../../src/MenuPowers.cpp:969
-#, fuzzy
 msgid "Base Accuracy"
-msgstr "Noggrannhet:"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:989
-#, fuzzy
 msgid "Base Critical Chance"
-msgstr "Kritisk chans"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:997
 msgid "Ignores Absorbtion"
 msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1002
-#, fuzzy
 msgid "Ignores Avoidance"
-msgstr "Undvikande:"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1007
 #, c-format
@@ -1088,9 +1079,9 @@ msgid "%d%% Chance to crit slowed targets"
 msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1012
-#, fuzzy, c-format
+#, c-format
 msgid "%s Elemental Damage"
-msgstr "Mental skada:"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1021
 #, c-format
@@ -1107,20 +1098,16 @@ msgid "Click to Unlock (uses 1 Skill Point)"
 msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1076 ../../../src/MenuPowers.cpp:1078
-#, fuzzy
 msgid "Requires 1 Skill Point"
-msgstr "Kräver %d skicklighetspoäng"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1312
 msgid "Unspent skill points:"
 msgstr "Outnyttjade skicklighetspoäng:"
 
 #: ../../../src/MenuPowers.cpp:1340
-#, fuzzy
 msgid "Next Level:"
 msgstr ""
-"\n"
-"Nästa Nivå:"
 
 #: ../../../src/MenuStash.cpp:132
 msgid "Shared Stash"
@@ -1131,9 +1118,8 @@ msgid "Can not store quest items in the stash."
 msgstr ""
 
 #: ../../../src/MenuStash.cpp:209
-#, fuzzy
 msgid "Stash is full."
-msgstr "Du har inte plats för fler föremål."
+msgstr ""
 
 #: ../../../src/MenuVendor.cpp:51
 msgid "Buyback"
@@ -1161,9 +1147,9 @@ msgid "Game saved."
 msgstr ""
 
 #: ../../../src/SDLInputState.cpp:559
-#, fuzzy, c-format
+#, c-format
 msgid "Mouse %d"
-msgstr "Sikta med muspekaren"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:567
 #, c-format
@@ -1210,114 +1196,94 @@ msgid "Adventurer"
 msgstr "Äventyrare"
 
 #: ../../../src/Stats.cpp:36
-#, fuzzy
 msgid "Max HP"
-msgstr "Max HP:"
+msgstr ""
 
 #: ../../../src/Stats.cpp:41
-#, fuzzy
 msgid "HP Regen"
-msgstr "HP Regenerering:"
+msgstr ""
 
 #: ../../../src/Stats.cpp:42
-#, fuzzy
 msgid "Ticks of HP regen per minute."
-msgstr "HP-regenereringar per minut"
+msgstr ""
 
 #: ../../../src/Stats.cpp:46
-#, fuzzy
 msgid "Max MP"
-msgstr "Max MP:"
+msgstr ""
 
 #: ../../../src/Stats.cpp:51
-#, fuzzy
 msgid "MP Regen"
-msgstr "MP Regenerering:"
+msgstr ""
 
 #: ../../../src/Stats.cpp:52
-#, fuzzy
 msgid "Ticks of MP regen per minute."
-msgstr "MP-regenereringar per minut"
+msgstr ""
 
 #: ../../../src/Stats.cpp:56
-#, fuzzy
 msgid "Accuracy"
-msgstr "Noggrannhet:"
+msgstr ""
 
 #: ../../../src/Stats.cpp:61
-#, fuzzy
 msgid "Avoidance"
-msgstr "Undvikande:"
+msgstr ""
 
 #: ../../../src/Stats.cpp:66
-#, fuzzy
 msgid "Absorb Min"
-msgstr "Absorberar:"
+msgstr ""
 
 #: ../../../src/Stats.cpp:71
-#, fuzzy
 msgid "Absorb Max"
-msgstr "Absorberar:"
+msgstr ""
 
 #: ../../../src/Stats.cpp:76
-#, fuzzy
 msgid "Critical Hit Chance"
-msgstr "Kritisk chans"
+msgstr ""
 
 #: ../../../src/Stats.cpp:81
-#, fuzzy
 msgid "Bonus XP"
-msgstr "Bonus XP:"
+msgstr ""
 
 #: ../../../src/Stats.cpp:82
-#, fuzzy
 msgid "Increases the XP gained per kill."
-msgstr "Ökar erhållet XP per död fiende"
+msgstr ""
 
 #: ../../../src/Stats.cpp:86
-#, fuzzy, c-format
+#, c-format
 msgid "Bonus %s"
-msgstr "Bonus"
+msgstr ""
 
 #: ../../../src/Stats.cpp:87
-#, fuzzy, c-format
+#, c-format
 msgid "Increases the %s found per drop."
-msgstr "Ökar %s som fiende lämnar efter sig när de dör"
+msgstr ""
 
 #: ../../../src/Stats.cpp:91
-#, fuzzy
 msgid "Item Find Chance"
-msgstr "Bonus objekt funnet:"
+msgstr ""
 
 #: ../../../src/Stats.cpp:92
-#, fuzzy
 msgid "Increases the chance that an enemy will drop an item."
-msgstr "Ökar chansen att fienden lämnar efter sig något när de dör"
+msgstr ""
 
 #: ../../../src/Stats.cpp:96
-#, fuzzy
 msgid "Stealth"
-msgstr "List:"
+msgstr ""
 
 #: ../../../src/Stats.cpp:97
-#, fuzzy
 msgid "Increases your ability to move undetected."
-msgstr "Ökar din förmåga att röra dig oupptäckt"
+msgstr ""
 
 #: ../../../src/Stats.cpp:101
-#, fuzzy
 msgid "Poise"
-msgstr "Balans:"
+msgstr ""
 
 #: ../../../src/Stats.cpp:102
-#, fuzzy
 msgid "Reduces your chance of stumbling when hit."
-msgstr "Minskar din chans att snava när du blir träffad"
+msgstr ""
 
 #: ../../../src/Stats.cpp:106
-#, fuzzy
 msgid "Missile Reflect Chance"
-msgstr "Kritisk chans"
+msgstr ""
 
 #: ../../../src/Stats.cpp:107
 msgid "Increases your chance of reflecting missiles back at enemies."
@@ -1332,18 +1298,16 @@ msgid "Deals a percentage of damage taken back to the attacker."
 msgstr ""
 
 #: ../../../src/Stats.cpp:116
-#, fuzzy
 msgid "HP Steal"
-msgstr "List:"
+msgstr ""
 
 #: ../../../src/Stats.cpp:117
 msgid "Percentage of HP stolen per hit."
 msgstr ""
 
 #: ../../../src/Stats.cpp:121
-#, fuzzy
 msgid "MP Steal"
-msgstr "List:"
+msgstr ""
 
 #: ../../../src/Stats.cpp:122
 msgid "Percentage of MP stolen per hit."
@@ -1362,14 +1326,14 @@ msgid "k"
 msgstr "k"
 
 #: ../../../src/Utils.cpp:448
-#, fuzzy, c-format
+#, c-format
 msgid "%s second"
-msgstr "Svalnar av: %d sekunder"
+msgstr ""
 
 #: ../../../src/Utils.cpp:451
-#, fuzzy, c-format
+#, c-format
 msgid "%s seconds"
-msgstr "Svalnar av: %d sekunder"
+msgstr ""
 
 #: ../../../src/Version.cpp:139
 msgid "or newer"
@@ -1378,400 +1342,3 @@ msgstr ""
 #: ../../../src/Version.cpp:142
 msgid "or older"
 msgstr ""
-
-#~ msgid "Permadeath"
-#~ msgstr "Permanent död"
-
-#~ msgid "Physical"
-#~ msgstr "Fysisk"
-
-#~ msgid "Mental"
-#~ msgstr "Mental"
-
-#~ msgid "Offense"
-#~ msgstr "Anfall"
-
-#~ msgid "Defense"
-#~ msgstr "Försvar"
-
-#~ msgid "Melee damage: %d-%d"
-#~ msgstr "Närstridsskada: %d-%d"
-
-#~ msgid "Melee damage: %d"
-#~ msgstr "Närstridsskada: %d"
-
-#~ msgid "Ranged damage: %d-%d"
-#~ msgstr "Distansskada: %d-%d"
-
-#~ msgid "Ranged damage: %d"
-#~ msgstr "Distansskada: %d"
-
-#~ msgid "Mental damage: %d-%d"
-#~ msgstr "Mental skada: %d-%d"
-
-#~ msgid "Mental damage: %d"
-#~ msgstr "Mental skada: %d"
-
-#, fuzzy
-#~ msgid "Melee Damage"
-#~ msgstr "Närstridsskada:"
-
-#, fuzzy
-#~ msgid "Ranged Damage"
-#~ msgstr "Distansskada:"
-
-#, fuzzy
-#~ msgid "Mental Damage"
-#~ msgstr "Mental skada:"
-
-#, fuzzy
-#~ msgid "Melee Damage Min"
-#~ msgstr "Närstridsskada:"
-
-#, fuzzy
-#~ msgid "Melee Damage Max"
-#~ msgstr "Närstridsskada:"
-
-#, fuzzy
-#~ msgid "Ranged Damage Min"
-#~ msgstr "Distansskada:"
-
-#, fuzzy
-#~ msgid "Ranged Damage Max"
-#~ msgstr "Distansskada:"
-
-#, fuzzy
-#~ msgid "Mental Damage Min"
-#~ msgstr "Mental skada:"
-
-#, fuzzy
-#~ msgid "Mental Damage Max"
-#~ msgstr "Mental skada:"
-
-#~ msgid "Requires Physical %d"
-#~ msgstr "Kräver fysik %d"
-
-#~ msgid "Requires Mental %d"
-#~ msgstr "Kräver mental styrka %d"
-
-#~ msgid "Requires Offense %d"
-#~ msgstr "Kräver anfall %d"
-
-#~ msgid "Requires Defense %d"
-#~ msgstr "Kräver försvar %d"
-
-#~ msgid "Each point of Physical grants %d. "
-#~ msgstr "Varje poäng i Fysisk styrka ger %d."
-
-#~ msgid "Each point of Mental grants %d. "
-#~ msgstr "Varje poäng i Mental styrka ger %d."
-
-#~ msgid "Each point of Defense grants %d. "
-#~ msgstr "Varje poäng i Försvar ger %d."
-
-#~ msgid "Requires Physical Offense %d"
-#~ msgstr "Kräver fysiskt anfall %d"
-
-#~ msgid "Requires Physical Defense %d"
-#~ msgstr "Kräver fysiskt försvar %d"
-
-#~ msgid "Requires Mental Offense %d"
-#~ msgstr "Kräver mentalt anfall %d"
-
-#~ msgid "Requires Mental Defense %d"
-#~ msgstr "Kräver mentalt försvar %d"
-
-#, fuzzy
-#~ msgid "Added item: "
-#~ msgstr "%d föremål:"
-
-#, fuzzy
-#~ msgid "Removed item: "
-#~ msgstr "%d föremål:"
-
-#, fuzzy
-#~ msgid "Exit to title?"
-#~ msgstr "Avsluta och gå till huvudmenyn"
-
-#~ msgid "Empty Slot"
-#~ msgstr "Ledig plats"
-
-#, fuzzy
-#~ msgid "Move only one item:"
-#~ msgstr "Använd SHIFT för att flytta enstaka föremål."
-
-#~ msgid "CTRL-click a carried item to sell it."
-#~ msgstr "CTRL-klicka på ett föremål för att sälja det."
-
-#~ msgid "Use this resolution?"
-#~ msgstr "Använd denna upplösning?"
-
-#~ msgid "Double buffering"
-#~ msgstr "Dubbelbuffring"
-
-#~ msgid "High Quality Textures"
-#~ msgstr "Högkvalitativa texturer"
-
-#~ msgid "Animated tiles"
-#~ msgstr "Animerade tiles"
-
-#~ msgid "Resolution"
-#~ msgstr "Upplösning"
-
-#~ msgid "Level %d %s"
-#~ msgstr "Nivå %d %s"
-
-#~ msgid "Flare Alpha v0.19"
-#~ msgstr "Flare Alpha v0.19"
-
-#~ msgid "Low"
-#~ msgstr "Låg"
-
-#~ msgid "Normal"
-#~ msgstr "Normal"
-
-#~ msgid "High"
-#~ msgstr "Hög"
-
-#~ msgid "Epic"
-#~ msgstr "Episk"
-
-#~ msgid "Increases %s by %d"
-#~ msgstr "Ökar %s med %d"
-
-#~ msgid "Decreases %s by %d"
-#~ msgstr "Minskar %s med %d"
-
-#~ msgid "Crit:"
-#~ msgstr "Kritisk:"
-
-#~ msgid "Physical (P) increases melee weapon proficiency and total HP."
-#~ msgstr "Fysik (P) ökar skickligheten i närstrid och total HP."
-
-#~ msgid "Mental (M) increases mental weapon proficiency and total MP."
-#~ msgstr "Mental styrka (M) ökar färdighet med mentala vapen och total MP."
-
-#~ msgid "Offense (O) increases ranged weapon proficiency and accuracy."
-#~ msgstr "Anfall ökar färdigheten och noggrannheten med distanssvapen."
-
-#~ msgid "Defense (D) increases armor proficiency and avoidance."
-#~ msgstr "Försvar (D) ökar färdighet med rustning och undvikande."
-
-#~ msgid "Save and exit to title?"
-#~ msgstr "Spara och gå till titelmenyn?"
-
-#~ msgid "Click to Unlock"
-#~ msgstr "Klicka för att låsa upp"
-
-#~ msgid "Character Menu (C)"
-#~ msgstr "Karaktärsmenyn (C)"
-
-#~ msgid "Inventory Menu (I)"
-#~ msgstr "Föremålsmenyn (I)"
-
-#~ msgid "Power Menu (P)"
-#~ msgstr "Kraftmenyn (P)"
-
-#~ msgid "Log Menu (L)"
-#~ msgstr "Loggmenyn (L)"
-
-#~ msgid "Each point of Physical grants +%d HP. Each level grants +%d HP"
-#~ msgstr "Varje poäng i fysik ger +%d HP. Varje nivå ger +%d HP"
-
-#~ msgid "Ticks of HP regen per minute. Each point of Physical grants +%d HP regen. Each level grants +%d HP regen"
-#~ msgstr "Mängd av HP regenerering per minut. Varje poäng av fysisk styrka ger +%d HP regenerering. Varje nivå ger +%d HP regenerering"
-
-#~ msgid "Each point of Mental grants +%d MP. Each level grants +%d MP"
-#~ msgstr "Varje poäng i mental styrka ger +%d MP regenerering. Varje nivå ger +%d MP"
-
-#~ msgid "Ticks of MP regen per minute. Each point of Mental grants +%d MP regen. Each level grants +%d MP regen"
-#~ msgstr "Mängd av MP regenerering per minut, Varje poäng av mental styrka ger +%d MP regenerering. Varje nivå ger +%d MP regenerering"
-
-#~ msgid "Each point of Offense grants +%d accuracy. Each level grants +%d accuracy"
-#~ msgstr "Varje poäng i anfall ger +%d i noggrannhet. Varje nivå ger +%d i noggrannhet"
-
-#~ msgid "Each point of Defense grants +%d avoidance. Each level grants +%d avoidance"
-#~ msgstr "Varje poäng i försvar ger +%d i undvikande. Varje nivå ger +%d i undvikande."
-
-#~ msgid "Requires a physical weapon"
-#~ msgstr "Kräver ett fysiskt vapen"
-
-#~ msgid "Requires a mental weapon"
-#~ msgstr "Kräver ett mentalt vapen"
-
-#~ msgid "Requires an offense weapon"
-#~ msgstr "Kräver ett anfallsvapen"
-
-#~ msgid "Flare"
-#~ msgstr "Flare"
-
-#~ msgid "Accuracy (vs lvl 5):"
-#~ msgstr "Noggrannhet (vs lvl 5):"
-
-#~ msgid "Avoidance (vs lvl 5):"
-#~ msgstr "Undvikande (vs. lvl 4)"
-
-#~ msgid "Stats"
-#~ msgstr "Statistik"
-
-#~ msgid "Grand Master"
-#~ msgstr "Stormästare"
-
-#~ msgid "Master"
-#~ msgstr "Mästare"
-
-#~ msgid "Warrior"
-#~ msgstr "Krigare"
-
-#~ msgid "Wizard"
-#~ msgstr "Trollkarl"
-
-#~ msgid "Ranger"
-#~ msgstr "Vandrare"
-
-#~ msgid "Paladin"
-#~ msgstr "Paladin"
-
-#~ msgid "Rogue"
-#~ msgstr "Landstrykare"
-
-#~ msgid "Knight"
-#~ msgstr "Riddare"
-
-#~ msgid "Shaman"
-#~ msgstr "Shaman"
-
-#~ msgid "Cleric"
-#~ msgstr "Klerk"
-
-#~ msgid "Battle Mage"
-#~ msgstr "Stridsmagiker"
-
-#~ msgid "Heavy Archer"
-#~ msgstr "Pilbågsskytt"
-
-#~ msgid "You receive %d gold."
-#~ msgstr "Du får %d guld."
-
-#~ msgid "Create Character"
-#~ msgstr "Skapa karaktär"
-
-#~ msgid "Main Hand"
-#~ msgstr "Stark hand"
-
-#~ msgid "Body"
-#~ msgstr "Kropp"
-
-#~ msgid "Off Hand"
-#~ msgstr "Svag hand"
-
-#~ msgid "Artifact"
-#~ msgstr "Artefakt"
-
-#~ msgid "Consumable"
-#~ msgstr "Ätbart"
-
-#~ msgid "Gem"
-#~ msgstr "Ädelsten"
-
-#~ msgid "%d Gold"
-#~ msgstr "%d guld"
-
-#~ msgid "Total HP"
-#~ msgstr "Totala HP"
-
-#~ msgid "Total MP"
-#~ msgstr "Totala MP"
-
-#~ msgid "vs. Def 5"
-#~ msgstr "vs. försvar 5"
-
-#~ msgid "vs. Off 5"
-#~ msgstr "vs. anfall 5"
-
-#~ msgid "Main Weapon"
-#~ msgstr "Huvudvapen"
-
-#~ msgid "Ranged Weapon"
-#~ msgstr "Avståndsvapen"
-
-#~ msgid "Fire Resist"
-#~ msgstr "Motståndskraft mot eld"
-
-#~ msgid "Each level grants +1 HP regen"
-#~ msgstr "Varje nivå ger +1 HP regenerering"
-
-#~ msgid "Each level grants +2 MP"
-#~ msgstr "Varje nivå ger +2 MP"
-
-#~ msgid "Each level grants +1 MP regen"
-#~ msgstr "Varje nivå ger +1 MP regenerering"
-
-#~ msgid "Each level grants +1 accuracy"
-#~ msgstr "Varje nivå ger +1 i noggrannhet"
-
-#~ msgid "Each level grants +1 avoidance"
-#~ msgstr "Varje nivå ger +1 i undvikande"
-
-#~ msgid "Dagger Proficiency"
-#~ msgstr "Skicklighet med kniv"
-
-#~ msgid "Shortsword Proficiency"
-#~ msgstr "Skicklighet med svärd"
-
-#~ msgid "Longsword Proficiency"
-#~ msgstr "Skicklighet med långsvärd"
-
-#~ msgid "Greatsword Proficiency"
-#~ msgstr "Skicklighet med stort svärd"
-
-#~ msgid "Wand Proficiency"
-#~ msgstr "Skicklighet med trollstav"
-
-#~ msgid "Rod Proficiency"
-#~ msgstr "Skicklighet med käpp"
-
-#~ msgid "Staff Proficiency"
-#~ msgstr "Skicklighet med stav"
-
-#~ msgid "Greatstaff Proficiency"
-#~ msgstr "Skicklighet med stor stav"
-
-#~ msgid "Slingshot Proficiency"
-#~ msgstr "Skicklighet med slangbella"
-
-#~ msgid "Shortbow Proficiency"
-#~ msgstr "Skicklighet i pilpåge"
-
-#~ msgid "Longbow Proficiency"
-#~ msgstr "Skicklighet i långbåge"
-
-#~ msgid "Greatbow Proficiency"
-#~ msgstr "Skicklighet i stor pilbåge"
-
-#~ msgid "Light Armor Proficiency"
-#~ msgstr "Skicklighet med lätt rustning"
-
-#~ msgid "Light Shield Proficiency"
-#~ msgstr "Skicklighet med lätt sköld"
-
-#~ msgid "Heavy Armor Proficiency"
-#~ msgstr "Skicklighet med tung rustning"
-
-#~ msgid "Heavy Shield Proficiency"
-#~ msgstr "Skicklighet med tung sköld"
-
-#~ msgid "Messages"
-#~ msgstr "Meddelanden"
-
-#~ msgid "Physical + Offense grants melee and ranged attacks"
-#~ msgstr "Fysik + anfall möjliggör närstrid och avståndsattacker"
-
-#~ msgid "Physical + Defense grants melee protection"
-#~ msgstr "Fysik + försvar möjliggör skydd i närstrid"
-
-#~ msgid "Mental + Offense grants elemental spell attacks"
-#~ msgstr "Mental styrka + anfall möjliggör enkla trollformelsattacker"
-
-#~ msgid "Mental + Defense grants healing and magical protection"
-#~ msgstr "Mental styrka + försvar möjliggör helande och magiskt skydd"

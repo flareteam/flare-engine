@@ -1,22 +1,22 @@
-# Copyright (C) 2011 Thomas Glamsch
-# This file is distributed under the same license as the Flare package.
-# Thomas 'CruzR' Glamsch <thomas-glamsch@gmx.de>, 2011.
-# Chris Oelmueller <chris.oelmueller@gmail.com>, 2012.
-# Stefan Beller <stefanbeller@googlemail.com>, 2013
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: 0.18\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-28 15:02-0400\n"
-"PO-Revision-Date: 2018-03-08 00:00+\n"
-"Last-Translator: Janet Hunt <jane.hunt@fantasymail.de>\n"
-"Language-Team: \n"
-"Language: German\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
+"Language-Team: German (https://www.transifex.com/flareorg/teams/84925/de/)\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.5.7\n"
 
 #: ../../../src/Avatar.cpp:353
 #, c-format
@@ -29,7 +29,8 @@ msgstr "Du kannst ein Attribut im Charaktermenü erhöhen."
 
 #: ../../../src/Avatar.cpp:573
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
-msgstr "Du wurdest besiegt, das Spiel ist vorbei! Beende mit ${INPUT_CONTINUE}."
+msgstr ""
+"Du wurdest besiegt, das Spiel ist vorbei! Beende mit ${INPUT_CONTINUE}."
 
 #: ../../../src/Avatar.cpp:579
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
@@ -37,7 +38,8 @@ msgstr "Du wurdest besiegt. Drücke ${INPUT_CONTINUE} um fortzufahren"
 
 #: ../../../src/Avatar.cpp:832
 msgid "Transformation expired. You have been moved back to a safe place."
-msgstr "Transformation ist aufgehoben. Du wurdest an einen sicheren Ort gebracht."
+msgstr ""
+"Transformation ist aufgehoben. Du wurdest an einen sicheren Ort gebracht."
 
 #: ../../../src/CampaignManager.cpp:124
 #, c-format
@@ -723,7 +725,9 @@ msgstr "Entwickler-Konsole"
 
 #: ../../../src/MenuDevConsole.cpp:121
 msgid "Arguments with spaces should be enclosed with double quotes. Example:"
-msgstr "Argumente mit Leerzeichen sollten in doppelte Anführungszeichen gesetzt sein. Beispiel: "
+msgstr ""
+"Argumente mit Leerzeichen sollten in doppelte Anführungszeichen gesetzt "
+"sein. Beispiel: "
 
 #: ../../../src/MenuDevConsole.cpp:122
 msgid "Type 'help' to get a list of commands."
@@ -742,7 +746,9 @@ msgid "turns on/off the developer hud"
 msgstr "schaltet das Entwickler-HUD an/aus"
 
 #: ../../../src/MenuDevConsole.cpp:226
-msgid "Prints a list of powers that match a search term. No search term will list all items"
+msgid ""
+"Prints a list of powers that match a search term. No search term will list "
+"all items"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:227
@@ -750,15 +756,20 @@ msgid "Prints out all the map filenames located in the \"maps/\" directory."
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:228
-msgid "Prints out the active campaign statuses that match a search term. No search term will list all active statuses"
+msgid ""
+"Prints out the active campaign statuses that match a search term. No search "
+"term will list all active statuses"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:229
-msgid "Prints a list of items that match a search term. No search term will list all items"
+msgid ""
+"Prints a list of items that match a search term. No search term will list "
+"all items"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:230
-msgid "parses a series of event components and executes them as a single event"
+msgid ""
+"parses a series of event components and executes them as a single event"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:231
@@ -1201,9 +1212,8 @@ msgid "Ticks of HP regen per minute."
 msgstr "TP-Regenerierung pro Minute."
 
 #: ../../../src/Stats.cpp:46
-#, fuzzy
 msgid "Max MP"
-msgstr "Max. TP"
+msgstr ""
 
 #: ../../../src/Stats.cpp:51
 msgid "MP Regen"
@@ -1273,7 +1283,8 @@ msgstr "Gleichgewicht"
 
 #: ../../../src/Stats.cpp:102
 msgid "Reduces your chance of stumbling when hit."
-msgstr "Reduziert die Wahrscheinlichkeit, bei einem Treffer ins Taumeln zu geraten."
+msgstr ""
+"Reduziert die Wahrscheinlichkeit, bei einem Treffer ins Taumeln zu geraten."
 
 #: ../../../src/Stats.cpp:106
 msgid "Missile Reflect Chance"
@@ -1336,433 +1347,3 @@ msgstr "oder neuer"
 #: ../../../src/Version.cpp:142
 msgid "or older"
 msgstr "oder älter"
-
-#~ msgid "resets the player to level 1, with no stat or skill points spent"
-#~ msgstr "setzt den Spieler auf Stufe 1 zurück ohne Stat oder Skill-Punkte zu verlieren"
-
-#~ msgid "Max. MP"
-#~ msgstr "Max. MP"
-
-#~ msgid "Permadeath"
-#~ msgstr "Dauerhafter Tod?"
-
-#~ msgid "Physical"
-#~ msgstr "Kraft"
-
-#~ msgid "Mental"
-#~ msgstr "Geist"
-
-#~ msgid "Offense"
-#~ msgstr "Angriff"
-
-#~ msgid "Defense"
-#~ msgstr "Verteidigung"
-
-#~ msgid "Melee damage: %d-%d"
-#~ msgstr "Nahkampfschaden: %d-%d"
-
-#~ msgid "Melee damage: %d"
-#~ msgstr "Nahkampfschaden: %d"
-
-#~ msgid "Ranged damage: %d-%d"
-#~ msgstr "Fernkampfschaden: %d-%d"
-
-#~ msgid "Ranged damage: %d"
-#~ msgstr "Fernkampfschaden: %d"
-
-#~ msgid "Mental damage: %d-%d"
-#~ msgstr "Magieschaden: %d-%d"
-
-#~ msgid "Mental damage: %d"
-#~ msgstr "Magieschaden: %d"
-
-#, fuzzy
-#~ msgid "Melee Damage"
-#~ msgstr "Nahkampfschaden:"
-
-#, fuzzy
-#~ msgid "Ranged Damage"
-#~ msgstr "Fernkampfschaden:"
-
-#, fuzzy
-#~ msgid "Mental Damage"
-#~ msgstr "Magieschaden:"
-
-#, fuzzy
-#~ msgid "Melee Damage Min"
-#~ msgstr "Nahkampfschaden:"
-
-#, fuzzy
-#~ msgid "Melee Damage Max"
-#~ msgstr "Nahkampfschaden:"
-
-#, fuzzy
-#~ msgid "Ranged Damage Min"
-#~ msgstr "Fernkampfschaden:"
-
-#, fuzzy
-#~ msgid "Ranged Damage Max"
-#~ msgstr "Fernkampfschaden:"
-
-#, fuzzy
-#~ msgid "Mental Damage Min"
-#~ msgstr "Magieschaden:"
-
-#, fuzzy
-#~ msgid "Mental Damage Max"
-#~ msgstr "Magieschaden:"
-
-#~ msgid "Requires Physical %d"
-#~ msgstr "Benötigt %d Kraft"
-
-#~ msgid "Requires Mental %d"
-#~ msgstr "Benötigt %d Geist"
-
-#~ msgid "Requires Offense %d"
-#~ msgstr "Benötigt %d Angriff"
-
-#~ msgid "Requires Defense %d"
-#~ msgstr "Benötigt %d Verteidigung"
-
-#~ msgid "Each point of Physical grants %d. "
-#~ msgstr "Jeder Punkt in Kraft gewährt %d. "
-
-#~ msgid "Each point of Mental grants %d. "
-#~ msgstr "Jeder Punkt in Geist gewährt %d. "
-
-#~ msgid "Each point of Defense grants %d. "
-#~ msgstr "Jeder Punkt in Verteidigung gewährt %d. "
-
-#~ msgid "Requires Physical Offense %d"
-#~ msgstr "Benötigt %d Kraft-Angriff"
-
-#~ msgid "Requires Physical Defense %d"
-#~ msgstr "Benötigt %d Körper-Verteidigung"
-
-#~ msgid "Requires Mental Offense %d"
-#~ msgstr "Benötigt %d Geist-Angriff"
-
-#~ msgid "Requires Mental Defense %d"
-#~ msgstr "Benötigt %d Magie-Verteidigung"
-
-#, fuzzy
-#~ msgid "Added item: "
-#~ msgstr "Gegenstand hinzugefügt: "
-
-#, fuzzy
-#~ msgid "Removed item: "
-#~ msgstr "Gegenstand entfernt: "
-
-#, fuzzy
-#~ msgid "Exit to title?"
-#~ msgstr "Zurück zum Hauptmenü?"
-
-#~ msgid "Empty Slot"
-#~ msgstr "Leerer Speicherplatz"
-
-#, fuzzy
-#~ msgid "Move only one item:"
-#~ msgstr "Halte Umschalt gedrückt, um nur einen Gegenstand zu nehmen."
-
-#~ msgid "CTRL-click a carried item to sell it."
-#~ msgstr "Halte CTRL gedrückt und klicke auf einen deiner Gegenstände, um ihn zu verkaufen."
-
-#~ msgid "Use this resolution?"
-#~ msgstr "Diese Auflösung verwenden?"
-
-#~ msgid "Double buffering"
-#~ msgstr "Doppel-Pufferung"
-
-#~ msgid "High Quality Textures"
-#~ msgstr "Hochauflösende Texturen"
-
-#~ msgid "Animated tiles"
-#~ msgstr "Animierter Untergrund"
-
-#~ msgid "Show Hotkeys Labels"
-#~ msgstr "Schnelltasten anzeigen"
-
-#~ msgid "Resolution"
-#~ msgstr "Auflösung"
-
-#~ msgid "Level %d %s"
-#~ msgstr "Stufe %d %s"
-
-#~ msgid "Flare Alpha v0.19"
-#~ msgstr "Flare Alpha v0.19"
-
-#~ msgid "lmb"
-#~ msgstr "lMt"
-
-#~ msgid "mmb"
-#~ msgstr "mMt"
-
-#~ msgid "rmb"
-#~ msgstr "rMt"
-
-#~ msgid "mbx1"
-#~ msgstr "Maus-Zusatztaste 1"
-
-#~ msgid "mbx2"
-#~ msgstr "Maus-Zusatztaste 2"
-
-#~ msgid "Low"
-#~ msgstr "Niedrig"
-
-#~ msgid "Normal"
-#~ msgstr "Normal"
-
-#~ msgid "High"
-#~ msgstr "Hoch"
-
-#~ msgid "Epic"
-#~ msgstr "Monumental"
-
-#~ msgid "Increases %s by %d"
-#~ msgstr "Erhöht %s um %d"
-
-#~ msgid "Decreases %s by %d"
-#~ msgstr "Verringert %s um %d"
-
-#~ msgid "Crit:"
-#~ msgstr "Krit. Trefferchance:"
-
-#~ msgid "Physical (P) increases melee weapon proficiency and total HP."
-#~ msgstr "Kraft (K) erhöht Nahkampffertigkeiten und maximale LP."
-
-#~ msgid "Mental (M) increases mental weapon proficiency and total MP."
-#~ msgstr "Geist (G) erhöht die Fertigkeit für magische Waffen und maximale MP."
-
-#~ msgid "Offense (O) increases ranged weapon proficiency and accuracy."
-#~ msgstr "Angriff (A) erhöht die Fertigkeit für Fernkampfwaffen und Genauigkeit."
-
-#~ msgid "Defense (D) increases armor proficiency and avoidance."
-#~ msgstr "Verteidigung (V) erhöht die Rüstungskenntnis und Ausweichen."
-
-#~ msgid "Save and exit to title?"
-#~ msgstr "Speichern und zum Hauptmenü?"
-
-#~ msgid "Click to Unlock"
-#~ msgstr "Zum Freischalten klicken"
-
-#~ msgid "Character Menu (C)"
-#~ msgstr "Charakter (C)"
-
-#~ msgid "Inventory Menu (I)"
-#~ msgstr "Inventar (I)"
-
-#~ msgid "Power Menu (P)"
-#~ msgstr "Fähigkeiten (P)"
-
-#~ msgid "Log Menu (L)"
-#~ msgstr "Log (L)"
-
-#~ msgid "Each point of Physical grants +%d HP. Each level grants +%d HP"
-#~ msgstr "Jeder Punkt in Kraft erhöht TP um %d, jedes Level um weitere %d."
-
-#~ msgid "Ticks of HP regen per minute. Each point of Physical grants +%d HP regen. Each level grants +%d HP regen"
-#~ msgstr "Pro Minute regenerierte TP. Jeder Punkt in Kraft erhöht TP-Regeneration um %d, jede Stufe um weitere %d."
-
-#~ msgid "Each point of Mental grants +%d MP. Each level grants +%d MP"
-#~ msgstr "Jeder Punkt in Geist erhöht MP um %d, jede Stufe um weitere %d."
-
-#~ msgid "Ticks of MP regen per minute. Each point of Mental grants +%d MP regen. Each level grants +%d MP regen"
-#~ msgstr "Pro Minute regenerierte MP. Jeder Punkt in Geist erhöht MP-Regeneration um %d, jede Stufe um weitere %d."
-
-#~ msgid "Each point of Offense grants +%d accuracy. Each level grants +%d accuracy"
-#~ msgstr "Jeder Punkt in Angriff erhöht Genauigkeit um %d, jede Stufe um weitere %d."
-
-#~ msgid "Each point of Defense grants +%d avoidance. Each level grants +%d avoidance"
-#~ msgstr "Jeder Punkt in Verteidigung erhöht Ausweichen um %d, jede Stufe um weitere %d."
-
-#~ msgid "Requires a physical weapon"
-#~ msgstr "Benötigt eine physische Waffe"
-
-#~ msgid "Requires a mental weapon"
-#~ msgstr "Benötigt eine magische Waffe"
-
-#~ msgid "Requires an offense weapon"
-#~ msgstr "Benötigt eine Fernwaffe"
-
-#~ msgid "Flare"
-#~ msgstr "Flare"
-
-#~ msgid "Accuracy (vs lvl 5):"
-#~ msgstr "Genauigkeit (gegen V 5):"
-
-#~ msgid "Avoidance (vs lvl 5):"
-#~ msgstr "Ausweichen (gegen A 5):"
-
-#~ msgid "Unspent attribute points"
-#~ msgstr "Ungenutzte Attributpunkte"
-
-#~ msgid "Stats"
-#~ msgstr "Statistik"
-
-#~ msgid "Grand Master"
-#~ msgstr "Großmeister"
-
-#~ msgid "Master"
-#~ msgstr "Meister"
-
-#~ msgid "Warrior"
-#~ msgstr "Krieger"
-
-#~ msgid "Wizard"
-#~ msgstr "Zauberer"
-
-#~ msgid "Ranger"
-#~ msgstr "Waldläufer"
-
-#~ msgid "Paladin"
-#~ msgstr "Paladin"
-
-#~ msgid "Rogue"
-#~ msgstr "Schurke"
-
-#~ msgid "Knight"
-#~ msgstr "Ritter"
-
-#~ msgid "Shaman"
-#~ msgstr "Schamane"
-
-#~ msgid "Cleric"
-#~ msgstr "Priester"
-
-#~ msgid "Battle Mage"
-#~ msgstr "Kampfmagier"
-
-#~ msgid "Heavy Archer"
-#~ msgstr "Schwerer Bogenschütze"
-
-#~ msgid "You receive %d gold."
-#~ msgstr "Du erhältst %d Gold."
-
-#~ msgid "Press a key to assign: "
-#~ msgstr "Eine Taste zum Zuweisen drücken: "
-
-#~ msgid "Activate >>"
-#~ msgstr "Aktivieren >>"
-
-#~ msgid "Create Character"
-#~ msgstr "Charakter erstellen"
-
-#~ msgid "Main Hand"
-#~ msgstr "Waffenhand"
-
-#~ msgid "Body"
-#~ msgstr "Körper"
-
-#~ msgid "Off Hand"
-#~ msgstr "Schildhand"
-
-#~ msgid "Artifact"
-#~ msgstr "Artefakt"
-
-#~ msgid "Consumable"
-#~ msgstr "Verbrauchbar"
-
-#~ msgid "Gem"
-#~ msgstr "Edelstein"
-
-#~ msgid "%d Gold"
-#~ msgstr "%d Gold"
-
-#~ msgid "Total HP"
-#~ msgstr "Gesamte LP"
-
-#~ msgid "Total MP"
-#~ msgstr "Gesamte MP"
-
-#~ msgid "vs. Def 5"
-#~ msgstr "gg. Ver 5"
-
-#~ msgid "vs. Off 5"
-#~ msgstr "gg. Ang 5"
-
-#~ msgid "Main Weapon"
-#~ msgstr "Hauptwaffe"
-
-#~ msgid "Ranged Weapon"
-#~ msgstr "Fernwaffe"
-
-#~ msgid "Fire Resist"
-#~ msgstr "Feuerwiderst."
-
-#~ msgid "Each level grants +1 HP regen"
-#~ msgstr "Jedes Level erhöht LP-Regenerierung um 1"
-
-#~ msgid "Each level grants +2 MP"
-#~ msgstr "Jedes Level erhöht MP um 2"
-
-#~ msgid "Each level grants +1 MP regen"
-#~ msgstr "Jedes Level erhöht MP-Regenerierung um 1"
-
-#~ msgid "Each level grants +1 accuracy"
-#~ msgstr "Jedes Level erhöht Genauigkeit um 1"
-
-#~ msgid "Each level grants +1 avoidance"
-#~ msgstr "Jedes Level erhöht Ausweichen um 1"
-
-#~ msgid "Dagger Proficiency"
-#~ msgstr "Fertigkeit: Dolch"
-
-#~ msgid "Shortsword Proficiency"
-#~ msgstr "Fertigkeit: Kurzschwert"
-
-#~ msgid "Longsword Proficiency"
-#~ msgstr "Fertigkeit: Langschwert"
-
-#~ msgid "Greatsword Proficiency"
-#~ msgstr "Fertigkeit: Breitschwert"
-
-#~ msgid "Wand Proficiency"
-#~ msgstr "Fertigkeit: Zauberstab"
-
-#~ msgid "Rod Proficiency"
-#~ msgstr "Fertigkeit: Zauberrute"
-
-#~ msgid "Staff Proficiency"
-#~ msgstr "Fertigkeit: Stab"
-
-#~ msgid "Greatstaff Proficiency"
-#~ msgstr "Fertigkeit: Langstab"
-
-#~ msgid "Slingshot Proficiency"
-#~ msgstr "Fertigkeit: Schleuder"
-
-#~ msgid "Shortbow Proficiency"
-#~ msgstr "Fertigkeit: Kurzbogen"
-
-#~ msgid "Longbow Proficiency"
-#~ msgstr "Fertigkeit: Langbogen"
-
-#~ msgid "Greatbow Proficiency"
-#~ msgstr "Fertigkeit: Kompositbogen"
-
-#~ msgid "Light Armor Proficiency"
-#~ msgstr "Fertigkeit: Leichte Rüstung"
-
-#~ msgid "Light Shield Proficiency"
-#~ msgstr "Fertigkeit: Leichter Schild"
-
-#~ msgid "Heavy Armor Proficiency"
-#~ msgstr "Fertigkeit: Schwere Rüstung"
-
-#~ msgid "Heavy Shield Proficiency"
-#~ msgstr "Fertigkeit: Schwerer Schild"
-
-#~ msgid "Messages"
-#~ msgstr "Nachrichten"
-
-#~ msgid "Physical + Offense grants melee and ranged attacks"
-#~ msgstr "Physisch + Angriff erlaubt Nah- und Fernkampfattacken"
-
-#~ msgid "Physical + Defense grants melee protection"
-#~ msgstr "Physisch + Verteidigung bietet Nahkampfschutz"
-
-#~ msgid "Mental + Offense grants elemental spell attacks"
-#~ msgstr "Mental + Angriff erlaubt offensive Elementarzauber"
-
-#~ msgid "Mental + Defense grants healing and magical protection"
-#~ msgstr "Mental + Verteidigung erlaubt Heilen und magischen Schutz"

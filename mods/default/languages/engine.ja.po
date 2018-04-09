@@ -1,20 +1,22 @@
-# FLARE (Free/Libre Action RPG Engine)
-# Copyright (C) 2011 Clint Bellanger
-# This file is distributed under the same license as the FLARE package.
-# Paul Wortmann <paul.wortmann@gmail.com>, 2011-2014.
-#
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: 0.17\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-28 15:02-0400\n"
-"PO-Revision-Date: 2017-10-31 03:03+0900\n"
-"Last-Translator: \n"
-"Language-Team: Paul Wortmann <www.physhexgames.co.nr>\n"
-"Language: Japanese\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
+"Language-Team: Japanese (https://www.transifex.com/flareorg/teams/84925/ja/)\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../../../src/Avatar.cpp:353
 #, c-format
@@ -179,9 +181,8 @@ msgid "Colorblind Mode"
 msgstr "色盲モード"
 
 #: ../../../src/GameStateConfigBase.cpp:280
-#, fuzzy
 msgid "Hardware mouse cursor"
-msgstr "ハードウェアマウスカーソル"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:284
 msgid "Developer Mode"
@@ -220,9 +221,8 @@ msgid "Enable >>"
 msgstr "有効 >>"
 
 #: ../../../src/GameStateConfigBase.cpp:959
-#, fuzzy
 msgid "Version:"
-msgstr "必要バージョン:"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:964
 msgid "Game:"
@@ -742,7 +742,9 @@ msgid "turns on/off the developer hud"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:226
-msgid "Prints a list of powers that match a search term. No search term will list all items"
+msgid ""
+"Prints a list of powers that match a search term. No search term will list "
+"all items"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:227
@@ -750,15 +752,20 @@ msgid "Prints out all the map filenames located in the \"maps/\" directory."
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:228
-msgid "Prints out the active campaign statuses that match a search term. No search term will list all active statuses"
+msgid ""
+"Prints out the active campaign statuses that match a search term. No search "
+"term will list all active statuses"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:229
-msgid "Prints a list of items that match a search term. No search term will list all items"
+msgid ""
+"Prints a list of items that match a search term. No search term will list "
+"all items"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:230
-msgid "parses a series of event components and executes them as a single event"
+msgid ""
+"parses a series of event components and executes them as a single event"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:231
@@ -819,9 +826,8 @@ msgid "Target (x,y):"
 msgstr ""
 
 #: ../../../src/MenuDevHUD.cpp:67
-#, fuzzy
 msgid "Mouse (x,y):"
-msgstr "マウス (x,y):"
+msgstr ""
 
 #: ../../../src/MenuDevHUD.cpp:72
 msgid "Target distance:"
@@ -1129,9 +1135,8 @@ msgid "+%d Shield"
 msgstr "+%d シールド"
 
 #: ../../../src/PowerManager.cpp:1299
-#, fuzzy
 msgid "You are already transformed, untransform first."
-msgstr "あなたは、すでに変身しているので、まず戻ってください。"
+msgstr ""
 
 #: ../../../src/PowerManager.cpp:1311
 msgid "Could not untransform at this position."
@@ -1142,9 +1147,9 @@ msgid "Game saved."
 msgstr "ゲームをセーブしました。"
 
 #: ../../../src/SDLInputState.cpp:559
-#, fuzzy, c-format
+#, c-format
 msgid "Mouse %d"
-msgstr "マウス %d"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:567
 #, c-format
@@ -1273,9 +1278,8 @@ msgid "Poise"
 msgstr "ポイズ"
 
 #: ../../../src/Stats.cpp:102
-#, fuzzy
 msgid "Reduces your chance of stumbling when hit."
-msgstr "打ったときつまずきのあなたのチャンスを低減します。"
+msgstr ""
 
 #: ../../../src/Stats.cpp:106
 msgid "Missile Reflect Chance"
@@ -1338,6 +1342,3 @@ msgstr ""
 #: ../../../src/Version.cpp:142
 msgid "or older"
 msgstr ""
-
-#~ msgid "Permadeath"
-#~ msgstr "永久に死亡"

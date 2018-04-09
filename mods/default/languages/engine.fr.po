@@ -1,23 +1,22 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2011 Clint Bellanger
-# This file is distributed under the same license as the FLARE package.
-# Sang-froid <remi.millerat@gmail.com>, 2017
-# Christoph J. Thompson <cjsthompson@gmail.com>, 2013
-# Quentin 'acieroid' Stievenart <quentin.stievenart@gmail.com>, 2011
-#
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-28 15:02-0400\n"
-"PO-Revision-Date: 2012-10-15 HO:MI+ZONE\n"
-"Last-Translator: Nubux<strauss.morgan@gmail.com>\n"
-"Language-Team:\n"
-"Language:French \n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
+"Language-Team: French (https://www.transifex.com/flareorg/teams/84925/fr/)\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: ../../../src/Avatar.cpp:353
 #, c-format
@@ -29,14 +28,12 @@ msgid "You may increase one attribute through the Character Menu."
 msgstr "Vous pouvez améliorer un attribut via le menu Personnage."
 
 #: ../../../src/Avatar.cpp:573
-#, fuzzy
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
-msgstr "Vous êtes vaincu. Votre personnage est mort ! Pressez Entrée pour revenir au menu."
+msgstr ""
 
 #: ../../../src/Avatar.cpp:579
-#, fuzzy
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
-msgstr "Vous êtes vaincu.  Vous perdez la moitié de votre Or. Appuyez sur Entrée pour continuer."
+msgstr ""
 
 #: ../../../src/Avatar.cpp:832
 msgid "Transformation expired. You have been moved back to a safe place."
@@ -184,9 +181,8 @@ msgid "Colorblind Mode"
 msgstr "Mode daltonien"
 
 #: ../../../src/GameStateConfigBase.cpp:280
-#, fuzzy
 msgid "Hardware mouse cursor"
-msgstr "Hardware surfaces"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:284
 msgid "Developer Mode"
@@ -225,24 +221,20 @@ msgid "Enable >>"
 msgstr "Activer >>"
 
 #: ../../../src/GameStateConfigBase.cpp:959
-#, fuzzy
 msgid "Version:"
-msgstr "Nécessite la version: "
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:964
-#, fuzzy
 msgid "Game:"
-msgstr "Jeu : "
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:969
-#, fuzzy
 msgid "Engine version:"
-msgstr "Nécessite la version: "
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:977
-#, fuzzy
 msgid "Requires mods:"
-msgstr "Nécessite les mods: "
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:78
 #: ../../../src/GameStateConfigDesktop.cpp:740
@@ -251,9 +243,8 @@ msgstr "Effacer"
 
 #: ../../../src/GameStateConfigDesktop.cpp:78
 #: ../../../src/GameStateConfigDesktop.cpp:738
-#, fuzzy
 msgid "Assign:"
-msgstr "Assigner: "
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:123
 msgid "Video"
@@ -325,14 +316,12 @@ msgid "Mouse aim"
 msgstr "Visée à la souris"
 
 #: ../../../src/GameStateConfigDesktop.cpp:273
-#, fuzzy
 msgid "Do not use mouse"
-msgstr "Sans la souris"
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:277
-#, fuzzy
 msgid "Joystick Deadzone"
-msgstr "Zone morte de la Manette"
+msgstr ""
 
 #: ../../../src/GameState.cpp:33 ../../../src/GameState.cpp:47
 #: ../../../src/GameState.cpp:63
@@ -559,43 +548,38 @@ msgid "Middle Mouse"
 msgstr "Clic molette"
 
 #: ../../../src/InputState.cpp:328
-#, fuzzy
 msgid "Right Mouse"
-msgstr "Clic droit"
+msgstr ""
 
 #: ../../../src/InputState.cpp:329
-#, fuzzy
 msgid "Wheel Up"
-msgstr "Roulette haut"
+msgstr ""
 
 #: ../../../src/InputState.cpp:330
-#, fuzzy
 msgid "Wheel Down"
-msgstr "Roulette bas"
+msgstr ""
 
 #: ../../../src/InputState.cpp:331
-#, fuzzy
 msgid "Mouse X1"
-msgstr "Visée à la souris"
+msgstr ""
 
 #: ../../../src/InputState.cpp:332
-#, fuzzy
 msgid "Mouse X2"
-msgstr "Visée à la souris"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:406 ../../../src/ItemManager.cpp:409
 msgid "Unknown Item"
 msgstr "Objet inconnu"
 
 #: ../../../src/ItemManager.cpp:581 ../../../src/MenuPowers.cpp:794
-#, fuzzy, c-format
+#, c-format
 msgid "%d%% Speed"
-msgstr "%d%% Vitesse"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:585 ../../../src/MenuPowers.cpp:797
-#, fuzzy, c-format
+#, c-format
 msgid "%d%% Attack Speed"
-msgstr "%d%% Vitesse"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:607 ../../../src/MenuCharacter.cpp:338
 #: ../../../src/MenuPowers.cpp:739
@@ -604,9 +588,8 @@ msgid "%s Resistance"
 msgstr "%s Resistance"
 
 #: ../../../src/ItemManager.cpp:658
-#, fuzzy
 msgid "Quest Item"
-msgstr "Objet de quête"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:685
 #, c-format
@@ -631,14 +614,14 @@ msgstr "Nécessite le niveau %d"
 
 #: ../../../src/ItemManager.cpp:760 ../../../src/MenuPowers.cpp:1030
 #: ../../../src/MenuPowers.cpp:1032
-#, fuzzy, c-format
+#, c-format
 msgid "Requires %s %d"
-msgstr "Nécessite %d de %s"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:768
-#, fuzzy, c-format
+#, c-format
 msgid "Requires Class: %s"
-msgstr "Nécessite: %s"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:780 ../../../src/ItemManager.cpp:789
 #, c-format
@@ -661,14 +644,13 @@ msgid "Sell Price: %d %s each"
 msgstr "Prix de vente : %d %s par pièce"
 
 #: ../../../src/ItemManager.cpp:808
-#, fuzzy
 msgid "Set:"
-msgstr "État : "
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:815
-#, fuzzy, c-format
+#, c-format
 msgid "%d items:"
-msgstr "%d objets :"
+msgstr ""
 
 #: ../../../src/MenuActionBar.cpp:195 ../../../src/MenuActionBar.cpp:201
 #: ../../../src/MenuActionBar.cpp:206
@@ -682,9 +664,8 @@ msgid "x%d"
 msgstr ""
 
 #: ../../../src/MenuActiveEffects.cpp:214
-#, fuzzy
 msgid "Remaining:"
-msgstr "Restants:"
+msgstr ""
 
 #: ../../../src/MenuActiveEffects.cpp:220
 #, c-format
@@ -723,14 +704,14 @@ msgid "Related stats:"
 msgstr "Statistiques liées: "
 
 #: ../../../src/MenuCharacter.cpp:405 ../../../src/MenuCharacter.cpp:429
-#, fuzzy, c-format
+#, c-format
 msgid "Each level grants %d."
-msgstr "Chaque niveau donne %d"
+msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:409 ../../../src/MenuCharacter.cpp:433
-#, fuzzy, c-format
+#, c-format
 msgid "Each point of %s grants %d."
-msgstr "Chaque point de %s donne %d."
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:47
 msgid "Execute"
@@ -742,12 +723,13 @@ msgstr "Console de développement"
 
 #: ../../../src/MenuDevConsole.cpp:121
 msgid "Arguments with spaces should be enclosed with double quotes. Example:"
-msgstr "Les arguments contenants des espaces devraient être mis entre guillemets. Exemple :"
+msgstr ""
+"Les arguments contenants des espaces devraient être mis entre guillemets. "
+"Exemple :"
 
 #: ../../../src/MenuDevConsole.cpp:122
-#, fuzzy
 msgid "Type 'help' to get a list of commands."
-msgstr "Tapez 'help' pour avoir une liste des commandes."
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:223
 msgid "adds a power to the action bar"
@@ -762,25 +744,38 @@ msgid "turns on/off the developer hud"
 msgstr "Activer/Désactiver l'affichage HUD"
 
 #: ../../../src/MenuDevConsole.cpp:226
-#, fuzzy
-msgid "Prints a list of powers that match a search term. No search term will list all items"
-msgstr "Affiche une liste des objets qui correspondent au terme recherché. L'absence de terme de recherche affichera tous les objets"
+msgid ""
+"Prints a list of powers that match a search term. No search term will list "
+"all items"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:227
 msgid "Prints out all the map filenames located in the \"maps/\" directory."
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:228
-msgid "Prints out the active campaign statuses that match a search term. No search term will list all active statuses"
-msgstr "Affiche les états de la campagne active qui correspondent au terme recherché. L'absence de terme de recherche affichera la liste de tous les états actifs"
+msgid ""
+"Prints out the active campaign statuses that match a search term. No search "
+"term will list all active statuses"
+msgstr ""
+"Affiche les états de la campagne active qui correspondent au terme "
+"recherché. L'absence de terme de recherche affichera la liste de tous les "
+"états actifs"
 
 #: ../../../src/MenuDevConsole.cpp:229
-msgid "Prints a list of items that match a search term. No search term will list all items"
-msgstr "Affiche une liste des objets qui correspondent au terme recherché. L'absence de terme de recherche affichera tous les objets"
+msgid ""
+"Prints a list of items that match a search term. No search term will list "
+"all items"
+msgstr ""
+"Affiche une liste des objets qui correspondent au terme recherché. L'absence"
+" de terme de recherche affichera tous les objets"
 
 #: ../../../src/MenuDevConsole.cpp:230
-msgid "parses a series of event components and executes them as a single event"
-msgstr "parcourt une série de composants d'événements et les exécutent en tant qu'événement unique"
+msgid ""
+"parses a series of event components and executes them as a single event"
+msgstr ""
+"parcourt une série de composants d'événements et les exécutent en tant "
+"qu'événement unique"
 
 #: ../../../src/MenuDevConsole.cpp:231
 msgid "clears the command history"
@@ -799,14 +794,12 @@ msgid "Toggled the hud"
 msgstr "Affichage HUD basculé"
 
 #: ../../../src/MenuDevConsole.cpp:390
-#, fuzzy
 msgid "ERROR: Incorrect number of arguments"
-msgstr "ERREUR: Trop peu d'arguments"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:391 ../../../src/MenuDevConsole.cpp:416
-#, fuzzy
 msgid "HINT:"
-msgstr "SUGGESTION : "
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:391
 msgid "<id>"
@@ -834,19 +827,16 @@ msgid "HINT: Type help"
 msgstr "SUGGESTION : tapez help"
 
 #: ../../../src/MenuDevHUD.cpp:56
-#, fuzzy
 msgid "Player (x,y):"
-msgstr "Joueur (x,y): "
+msgstr ""
 
 #: ../../../src/MenuDevHUD.cpp:62
-#, fuzzy
 msgid "Target (x,y):"
-msgstr "Cible (x,y): "
+msgstr ""
 
 #: ../../../src/MenuDevHUD.cpp:67
-#, fuzzy
 msgid "Mouse (x,y):"
-msgstr "Souris (x,y): "
+msgstr ""
 
 #: ../../../src/MenuDevHUD.cpp:72
 msgid "Target distance:"
@@ -878,19 +868,19 @@ msgid "Paused"
 msgstr "En pause"
 
 #: ../../../src/MenuInventory.cpp:155
-#, fuzzy, c-format
+#, c-format
 msgid "Lost %d%% of %s."
-msgstr "Perdu %d%% de %s. "
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:162
-#, fuzzy, c-format
+#, c-format
 msgid "Lost %d%% of total XP."
-msgstr "Perdu %d%% du total d'XP. "
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "Lost %d%% of current level XP."
-msgstr "Perdu %d%% du niveau d'XP actuel. "
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:193
 #, c-format
@@ -940,14 +930,13 @@ msgid "Inventory is full."
 msgstr "L'inventaire est complet."
 
 #: ../../../src/MenuInventory.cpp:784
-#, fuzzy, c-format
+#, c-format
 msgid "Not enough %s."
-msgstr "Pas assez de %s."
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:804 ../../../src/MenuInventory.cpp:811
-#, fuzzy
 msgid "This item can not be sold."
-msgstr "Cet objet ne peut être vendu."
+msgstr ""
 
 #: ../../../src/MenuLog.cpp:85
 msgid "Notes"
@@ -963,9 +952,8 @@ msgid "XP: %d/%d"
 msgstr "XP: %d/%d"
 
 #: ../../../src/MenuManager.cpp:812
-#, fuzzy
 msgid "This item can not be dropped."
-msgstr "Cet objet ne peut être jeté."
+msgstr ""
 
 #: ../../../src/MenuNPCActions.cpp:82
 msgid "Trade"
@@ -990,9 +978,8 @@ msgid "Costs %d HP"
 msgstr "Consomme %d PV"
 
 #: ../../../src/MenuPowers.cpp:706
-#, fuzzy
 msgid "Cooldown:"
-msgstr "Récupération:"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:773 ../../../src/MenuPowers.cpp:776
 msgid "Damage per second"
@@ -1080,9 +1067,8 @@ msgid "%d%% chance"
 msgstr ""
 
 #: ../../../src/MenuPowers.cpp:969
-#, fuzzy
 msgid "Base Accuracy"
-msgstr "Précision de base"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:989
 msgid "Base Critical Chance"
@@ -1093,9 +1079,8 @@ msgid "Ignores Absorbtion"
 msgstr "Ignore l'Absorption"
 
 #: ../../../src/MenuPowers.cpp:1002
-#, fuzzy
 msgid "Ignores Avoidance"
-msgstr "Ignore l'Esquive"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1007
 #, c-format
@@ -1103,14 +1088,14 @@ msgid "%d%% Chance to crit slowed targets"
 msgstr "%d%% chances de coup critique sur les cibles lentes"
 
 #: ../../../src/MenuPowers.cpp:1012
-#, fuzzy, c-format
+#, c-format
 msgid "%s Elemental Damage"
-msgstr "%s dégâts Élémentaux"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1021
-#, fuzzy, c-format
+#, c-format
 msgid "Requires a %s"
-msgstr "Nécessite un %s"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1060 ../../../src/MenuPowers.cpp:1063
 #, c-format
@@ -1122,18 +1107,16 @@ msgid "Click to Unlock (uses 1 Skill Point)"
 msgstr "Cliquez pour débloquer (utilise 1 point de compétence)"
 
 #: ../../../src/MenuPowers.cpp:1076 ../../../src/MenuPowers.cpp:1078
-#, fuzzy
 msgid "Requires 1 Skill Point"
-msgstr "Nécessite 1 point de compétence"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1312
 msgid "Unspent skill points:"
 msgstr "Points de compétence non dépensés:"
 
 #: ../../../src/MenuPowers.cpp:1340
-#, fuzzy
 msgid "Next Level:"
-msgstr "Niveau suivant:"
+msgstr ""
 
 #: ../../../src/MenuStash.cpp:132
 msgid "Shared Stash"
@@ -1144,9 +1127,8 @@ msgid "Can not store quest items in the stash."
 msgstr "Impossible de stocker l'objet d'une quête dans le coffre."
 
 #: ../../../src/MenuStash.cpp:209
-#, fuzzy
 msgid "Stash is full."
-msgstr "Le coffre est complet."
+msgstr ""
 
 #: ../../../src/MenuVendor.cpp:51
 msgid "Buyback"
@@ -1174,9 +1156,9 @@ msgid "Game saved."
 msgstr "Jeu sauvegardé."
 
 #: ../../../src/SDLInputState.cpp:559
-#, fuzzy, c-format
+#, c-format
 msgid "Mouse %d"
-msgstr "Souris %d"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:567
 #, c-format
@@ -1223,106 +1205,90 @@ msgid "Adventurer"
 msgstr "Aventurier"
 
 #: ../../../src/Stats.cpp:36
-#, fuzzy
 msgid "Max HP"
-msgstr "PV max"
+msgstr ""
 
 #: ../../../src/Stats.cpp:41
-#, fuzzy
 msgid "HP Regen"
-msgstr "Régén. PV"
+msgstr ""
 
 #: ../../../src/Stats.cpp:42
 msgid "Ticks of HP regen per minute."
 msgstr "Quantité de PV regénérés par minute."
 
 #: ../../../src/Stats.cpp:46
-#, fuzzy
 msgid "Max MP"
-msgstr "PM max"
+msgstr ""
 
 #: ../../../src/Stats.cpp:51
-#, fuzzy
 msgid "MP Regen"
-msgstr "Régén. PM"
+msgstr ""
 
 #: ../../../src/Stats.cpp:52
 msgid "Ticks of MP regen per minute."
 msgstr "Quanité de PM regénérés par minute."
 
 #: ../../../src/Stats.cpp:56
-#, fuzzy
 msgid "Accuracy"
-msgstr "Précision"
+msgstr ""
 
 #: ../../../src/Stats.cpp:61
-#, fuzzy
 msgid "Avoidance"
-msgstr "Esquive"
+msgstr ""
 
 #: ../../../src/Stats.cpp:66
-#, fuzzy
 msgid "Absorb Min"
-msgstr "Absorbe Min"
+msgstr ""
 
 #: ../../../src/Stats.cpp:71
-#, fuzzy
 msgid "Absorb Max"
-msgstr "Absorbe Max"
+msgstr ""
 
 #: ../../../src/Stats.cpp:76
 msgid "Critical Hit Chance"
 msgstr "Chance de coups critiques"
 
 #: ../../../src/Stats.cpp:81
-#, fuzzy
 msgid "Bonus XP"
-msgstr "Bonus d'XP"
+msgstr ""
 
 #: ../../../src/Stats.cpp:82
-#, fuzzy
 msgid "Increases the XP gained per kill."
-msgstr "Augmente l'XP recupérée par ennemi abattu"
+msgstr ""
 
 #: ../../../src/Stats.cpp:86
-#, fuzzy, c-format
+#, c-format
 msgid "Bonus %s"
-msgstr "Bonus %s"
+msgstr ""
 
 #: ../../../src/Stats.cpp:87
-#, fuzzy, c-format
+#, c-format
 msgid "Increases the %s found per drop."
-msgstr "Augmente les %s trouvés par lâcher"
+msgstr ""
 
 #: ../../../src/Stats.cpp:91
-#, fuzzy
 msgid "Item Find Chance"
-msgstr "Probailité de découverte d'objets"
+msgstr ""
 
 #: ../../../src/Stats.cpp:92
-#, fuzzy
 msgid "Increases the chance that an enemy will drop an item."
-msgstr "Augmente les chances qu'un enemi abattu lâchera un objet"
+msgstr ""
 
 #: ../../../src/Stats.cpp:96
-#, fuzzy
 msgid "Stealth"
-msgstr "Furtivité"
+msgstr ""
 
 #: ../../../src/Stats.cpp:97
-#, fuzzy
 msgid "Increases your ability to move undetected."
-msgstr "Augmente votre aptitude au déplacement sans détection."
+msgstr ""
 
 #: ../../../src/Stats.cpp:101
-#, fuzzy
 msgid "Poise"
-msgstr "Aplomb"
+msgstr ""
 
 #: ../../../src/Stats.cpp:102
-#, fuzzy
 msgid "Reduces your chance of stumbling when hit."
-msgstr "Réduit vos chances de trébucher quand vous êtes touché."
+msgstr ""
 
 #: ../../../src/Stats.cpp:106
 msgid "Missile Reflect Chance"
@@ -1341,18 +1307,16 @@ msgid "Deals a percentage of damage taken back to the attacker."
 msgstr "Inflige à l'attaquant un pourcentage des dommages reçus."
 
 #: ../../../src/Stats.cpp:116
-#, fuzzy
 msgid "HP Steal"
-msgstr "Furtivité"
+msgstr ""
 
 #: ../../../src/Stats.cpp:117
 msgid "Percentage of HP stolen per hit."
 msgstr ""
 
 #: ../../../src/Stats.cpp:121
-#, fuzzy
 msgid "MP Steal"
-msgstr "Furtivité"
+msgstr ""
 
 #: ../../../src/Stats.cpp:122
 msgid "Percentage of MP stolen per hit."
@@ -1367,19 +1331,18 @@ msgid "Base MP"
 msgstr "PM de base"
 
 #: ../../../src/Utils.cpp:203
-#, fuzzy
 msgid "k"
-msgstr "Ok"
+msgstr ""
 
 #: ../../../src/Utils.cpp:448
-#, fuzzy, c-format
+#, c-format
 msgid "%s second"
-msgstr "%s seconde"
+msgstr ""
 
 #: ../../../src/Utils.cpp:451
-#, fuzzy, c-format
+#, c-format
 msgid "%s seconds"
-msgstr "%s secondes"
+msgstr ""
 
 #: ../../../src/Version.cpp:139
 msgid "or newer"
@@ -1388,280 +1351,3 @@ msgstr ""
 #: ../../../src/Version.cpp:142
 msgid "or older"
 msgstr ""
-
-#~ msgid "resets the player to level 1, with no stat or skill points spent"
-#~ msgstr "Rétablir le joueur au niveau 1, sans statistiques ni dépense de points de compétences"
-
-#, fuzzy
-#~ msgid "Permadeath"
-#~ msgstr "Mort permanente"
-
-#~ msgid "Physical"
-#~ msgstr "Physique"
-
-#~ msgid "Mental"
-#~ msgstr "Mental"
-
-#~ msgid "Offense"
-#~ msgstr "Attaque"
-
-#~ msgid "Defense"
-#~ msgstr "Défense"
-
-#~ msgid "Melee damage: %d-%d"
-#~ msgstr "Dégâts en corps à corps : %d-%d"
-
-#~ msgid "Melee damage: %d"
-#~ msgstr "Dégâts en corps à corps : %d"
-
-#~ msgid "Ranged damage: %d-%d"
-#~ msgstr "Dégâts à distance : %d-%d"
-
-#~ msgid "Ranged damage: %d"
-#~ msgstr "Dégâts à distance : %d"
-
-#~ msgid "Mental damage: %d-%d"
-#~ msgstr "Dégâts mentaux : %d-%d"
-
-#~ msgid "Mental damage: %d"
-#~ msgstr "Dégâts mentaux : %d"
-
-#~ msgid "Damage"
-#~ msgstr "Dommage"
-
-#, fuzzy
-#~ msgid "Melee Damage"
-#~ msgstr "Dégâts en corps à corps"
-
-#, fuzzy
-#~ msgid "Ranged Damage"
-#~ msgstr "Dégâts à distance"
-
-#, fuzzy
-#~ msgid "Mental Damage"
-#~ msgstr "Dégâts mentaux"
-
-#, fuzzy
-#~ msgid "Melee Damage Min"
-#~ msgstr "Dégâts en corps à corps Min"
-
-#, fuzzy
-#~ msgid "Melee Damage Max"
-#~ msgstr "Dégâts en corps à corps Max"
-
-#, fuzzy
-#~ msgid "Ranged Damage Min"
-#~ msgstr "Dégâts à distance Min"
-
-#, fuzzy
-#~ msgid "Ranged Damage Max"
-#~ msgstr "Dégâts à distance Max"
-
-#, fuzzy
-#~ msgid "Mental Damage Min"
-#~ msgstr "Dégâts mentaux Min"
-
-#, fuzzy
-#~ msgid "Mental Damage Max"
-#~ msgstr "Dégâts mentaux Max"
-
-#~ msgid "Requires Physical %d"
-#~ msgstr "Nécéssite %d de Physique"
-
-#~ msgid "Requires Mental %d"
-#~ msgstr "Nécessite %d de Mental"
-
-#~ msgid "Requires Offense %d"
-#~ msgstr "Nécessite %d d'Attaque"
-
-#~ msgid "Requires Defense %d"
-#~ msgstr "Nécessite %d de Défense"
-
-#, fuzzy
-#~ msgid "Each point of Physical grants %d. "
-#~ msgstr "Chaque point de Physique donne %d."
-
-#, fuzzy
-#~ msgid "Each point of Mental grants %d. "
-#~ msgstr "Chaque point de Mental donne %d."
-
-#, fuzzy
-#~ msgid "Each point of Defense grants %d. "
-#~ msgstr "Chaque point de Mental donne %d."
-
-#~ msgid "Requires Physical Offense %d"
-#~ msgstr "Nécessite Attaque Physique %d"
-
-#~ msgid "Requires Physical Defense %d"
-#~ msgstr "Nécessite Défense Physique %d"
-
-#~ msgid "Requires Mental Offense %d"
-#~ msgstr "Nécessite Attaque Mentale %d"
-
-#~ msgid "Requires Mental Defense %d"
-#~ msgstr "Nécessite Défense Mentale %d"
-
-#, fuzzy
-#~ msgid "Added item: "
-#~ msgstr "Objet ajouté: "
-
-#, fuzzy
-#~ msgid "Removed item: "
-#~ msgstr "Objet supprimé: "
-
-#, fuzzy
-#~ msgid "Exit to title?"
-#~ msgstr "Retour au menu ?"
-
-#~ msgid "Empty Slot"
-#~ msgstr "Pas de partie"
-
-#, fuzzy
-#~ msgid "Move only one item:"
-#~ msgstr "Déplacer un seul objet:"
-
-#~ msgid "CTRL-click a carried item to sell it."
-#~ msgstr "Cliquez sur un objet de l'inventaire avec CTRL enfoncé pour le vendre."
-
-#~ msgid "Use this resolution?"
-#~ msgstr "Utiliser cette résolution ?"
-
-#~ msgid "Double buffering"
-#~ msgstr "Double buffering"
-
-#~ msgid "High Quality Textures"
-#~ msgstr "Textures haute qualité"
-
-#~ msgid "Animated tiles"
-#~ msgstr "Décors animés"
-
-#~ msgid "Resolution"
-#~ msgstr "Résolution"
-
-#~ msgid "Level %d %s"
-#~ msgstr "%s de niveau %d"
-
-#, fuzzy
-#~ msgid "Flare Alpha v0.19"
-#~ msgstr "Flare Alpha v0.19"
-
-#~ msgid "lmb"
-#~ msgstr "bgs"
-
-#~ msgid "mmb"
-#~ msgstr "bms"
-
-#~ msgid "rmb"
-#~ msgstr "bds"
-
-#, fuzzy
-#~ msgid "Low"
-#~ msgstr "Bas"
-
-#~ msgid "Increases %s by %d"
-#~ msgstr "Augmente %s de %d"
-
-#~ msgid "Decreases %s by %d"
-#~ msgstr "Diminue %s de %d"
-
-#~ msgid "Crit:"
-#~ msgstr "Crit :"
-
-#~ msgid "Physical (P) increases melee weapon proficiency and total HP."
-#~ msgstr "Le Physique (P) augmente la compétence avec des armes de corps à corps ainsi que les points de vie totaux."
-
-#~ msgid "Mental (M) increases mental weapon proficiency and total MP."
-#~ msgstr "Le Mental (M) augmente la compétence avec des armes mentales ainsi que les points de magie totaux."
-
-#~ msgid "Offense (O) increases ranged weapon proficiency and accuracy."
-#~ msgstr "L'Attaque (O) augmente la compétence avec des armes de jet ainsi que la précision."
-
-#~ msgid "Defense (D) increases armor proficiency and avoidance."
-#~ msgstr "La Défense (D) augmente la compétence avec des armures et l'esquive."
-
-#~ msgid "Save and exit to title?"
-#~ msgstr "Sauver et retourner au menu ?"
-
-#~ msgid "Click to Unlock"
-#~ msgstr "Cliquer pour débloquer"
-
-#~ msgid "Character Menu (C)"
-#~ msgstr "Menu Personnage (C)"
-
-#~ msgid "Inventory Menu (I)"
-#~ msgstr "Menu Inventaire (I)"
-
-#~ msgid "Power Menu (P)"
-#~ msgstr "Menu Pouvoirs (P)"
-
-#~ msgid "Log Menu (L)"
-#~ msgstr "Menu Journal (L)"
-
-#~ msgid "Ticks of HP regen per minute. Each point of Physical grants +%d HP regen. Each level grants +%d HP regen"
-#~ msgstr "Augmente la régénération de PV par minute. Chaque point de Physique régénère +%d PV. Chaque niveau régénère +%d PV"
-
-#~ msgid "Ticks of MP regen per minute. Each point of Mental grants +%d MP regen. Each level grants +%d MP regen"
-#~ msgstr "Augmente la régénération de PM par minute. Chaque point de Mental régénère +%d PM. Chaque niveau régénère +%d PM"
-
-#~ msgid "Each point of Offense grants +%d accuracy. Each level grants +%d accuracy"
-#~ msgstr "Chaque point d'Attaque donne +%d en précision. Chaque niveau donne +%d en précision"
-
-#~ msgid "Each point of Defense grants +%d avoidance. Each level grants +%d avoidance"
-#~ msgstr "Chaque point de Défense donne +%d en esquive. Chaque niveau donne +%d d'esquive"
-
-#~ msgid "Requires a physical weapon"
-#~ msgstr "Nécessite une arme physique"
-
-#~ msgid "Requires a mental weapon"
-#~ msgstr "Nécessite une arme mentale"
-
-#~ msgid "Requires an offense weapon"
-#~ msgstr "Nécessite une arme d'attaque"
-
-#~ msgid "Flare"
-#~ msgstr "Flare"
-
-#~ msgid "Accuracy (vs lvl 5):"
-#~ msgstr "Précision (vs niv.5):"
-
-#~ msgid "Avoidance (vs lvl 5):"
-#~ msgstr "Esquive (vs niv5):"
-
-#~ msgid "Stats"
-#~ msgstr "Statistiques"
-
-#~ msgid "Grand Master"
-#~ msgstr "Grand maître"
-
-#~ msgid "Master"
-#~ msgstr "Maître"
-
-#~ msgid "Warrior"
-#~ msgstr "Guerrier"
-
-#~ msgid "Wizard"
-#~ msgstr "Mage"
-
-#~ msgid "Ranger"
-#~ msgstr "Rôdeur"
-
-#~ msgid "Paladin"
-#~ msgstr "Paladin"
-
-#~ msgid "Rogue"
-#~ msgstr "Voleur"
-
-#~ msgid "Knight"
-#~ msgstr "Chevalier"
-
-#~ msgid "Shaman"
-#~ msgstr "Chamane"
-
-#~ msgid "Cleric"
-#~ msgstr "Clerc"
-
-#~ msgid "Battle Mage"
-#~ msgstr "Mage de guerre"
-
-#~ msgid "Heavy Archer"
-#~ msgstr "Archer lourd"
