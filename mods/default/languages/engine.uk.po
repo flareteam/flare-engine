@@ -31,11 +31,11 @@ msgstr "Ви можете покращити характеристику в М�
 
 #: ../../../src/Avatar.cpp:573
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
-msgstr ""
+msgstr "Вас побороли. Гра завершена! ${INPUT_CONTINUE} щоб вийти до головної."
 
 #: ../../../src/Avatar.cpp:579
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
-msgstr ""
+msgstr "Вас побороли. ${INPUT_CONTINUE} щоб продовжити."
 
 #: ../../../src/Avatar.cpp:832
 msgid "Transformation expired. You have been moved back to a safe place."
@@ -132,7 +132,7 @@ msgstr "Типово"
 
 #: ../../../src/GameStateConfigBase.cpp:88
 msgid "Reset ALL settings?"
-msgstr "Скинути ВСЕ?"
+msgstr "Скинути ВСІ налаштування?"
 
 #: ../../../src/GameStateConfigBase.cpp:110 ../../../src/MenuNumPicker.cpp:45
 msgid "OK"
@@ -196,15 +196,15 @@ msgstr "Завжди видимі мітки речей"
 
 #: ../../../src/GameStateConfigBase.cpp:292
 msgid "Always show stat bar labels"
-msgstr ""
+msgstr "Завжди показувати мітки з смужками статів"
 
 #: ../../../src/GameStateConfigBase.cpp:296
 msgid "Automatically equip items"
-msgstr ""
+msgstr "Автоматично одягати предмети"
 
 #: ../../../src/GameStateConfigBase.cpp:300
 msgid "Subtitles"
-msgstr ""
+msgstr "Субтитри"
 
 #: ../../../src/GameStateConfigBase.cpp:304
 msgid "Active Mods"
@@ -220,23 +220,23 @@ msgstr "<< Вимкнути"
 
 #: ../../../src/GameStateConfigBase.cpp:338
 msgid "Enable >>"
-msgstr "Ввімкнути >>"
+msgstr "Увімкнути >>"
 
 #: ../../../src/GameStateConfigBase.cpp:959
 msgid "Version:"
-msgstr ""
+msgstr "Версія:"
 
 #: ../../../src/GameStateConfigBase.cpp:964
 msgid "Game:"
-msgstr ""
+msgstr "Гра:"
 
 #: ../../../src/GameStateConfigBase.cpp:969
 msgid "Engine version:"
-msgstr ""
+msgstr "Версія движку:"
 
 #: ../../../src/GameStateConfigBase.cpp:977
 msgid "Requires mods:"
-msgstr ""
+msgstr "Необхідні моди:"
 
 #: ../../../src/GameStateConfigDesktop.cpp:78
 #: ../../../src/GameStateConfigDesktop.cpp:740
@@ -246,7 +246,7 @@ msgstr "Очистити"
 #: ../../../src/GameStateConfigDesktop.cpp:78
 #: ../../../src/GameStateConfigDesktop.cpp:738
 msgid "Assign:"
-msgstr ""
+msgstr "Призначити:"
 
 #: ../../../src/GameStateConfigDesktop.cpp:123
 msgid "Video"
@@ -275,7 +275,7 @@ msgstr "Для портативних пристроїв"
 
 #: ../../../src/GameStateConfigDesktop.cpp:205
 msgid "Renderer"
-msgstr ""
+msgstr "Рендерер"
 
 #: ../../../src/GameStateConfigDesktop.cpp:221
 msgid "Full Screen Mode"
@@ -283,7 +283,7 @@ msgstr "На весь екран"
 
 #: ../../../src/GameStateConfigDesktop.cpp:225
 msgid "Move hero using mouse"
-msgstr "Переміщення мишкою"
+msgstr "Керувати рухом героя використовуючи мишку"
 
 #: ../../../src/GameStateConfigDesktop.cpp:229
 msgid "Hardware surfaces"
@@ -307,7 +307,7 @@ msgstr "Гама"
 
 #: ../../../src/GameStateConfigDesktop.cpp:249
 msgid "Use joystick"
-msgstr "Ввімк. джойстик"
+msgstr "Увімк. джойстик"
 
 #: ../../../src/GameStateConfigDesktop.cpp:253
 msgid "Joystick"
@@ -684,7 +684,7 @@ msgstr "Рівень"
 
 #: ../../../src/MenuCharacter.cpp:297
 msgid "points remaining"
-msgstr "очок залишилось"
+msgstr "залишилось очок"
 
 #: ../../../src/MenuCharacter.cpp:349 ../../../src/MenuManager.cpp:298
 #, c-format
@@ -1023,11 +1023,11 @@ msgstr ""
 
 #: ../../../src/MenuPowers.cpp:824
 msgid "Stun"
-msgstr ""
+msgstr "Оглушити"
 
 #: ../../../src/MenuPowers.cpp:827
 msgid "Automatic revive on death"
-msgstr ""
+msgstr "Автоматичне відродження при смерті"
 
 #: ../../../src/MenuPowers.cpp:830
 msgid "Convert"
@@ -1035,7 +1035,7 @@ msgstr ""
 
 #: ../../../src/MenuPowers.cpp:833
 msgid "Fear"
-msgstr ""
+msgstr "Страх"
 
 #: ../../../src/MenuPowers.cpp:836
 msgid "Lifespan"
@@ -1043,11 +1043,11 @@ msgstr ""
 
 #: ../../../src/MenuPowers.cpp:860
 msgid "Magical Shield"
-msgstr ""
+msgstr "Магічний Щит"
 
 #: ../../../src/MenuPowers.cpp:889
 msgid "Healing"
-msgstr ""
+msgstr "Лікування"
 
 #: ../../../src/MenuPowers.cpp:892
 msgid "Knockback"
@@ -1056,33 +1056,33 @@ msgstr ""
 #: ../../../src/MenuPowers.cpp:917
 #, c-format
 msgid "%d%% chance"
-msgstr ""
+msgstr "%d%% шанс"
 
 #: ../../../src/MenuPowers.cpp:969
 msgid "Base Accuracy"
-msgstr ""
+msgstr "Базова Точність"
 
 #: ../../../src/MenuPowers.cpp:989
 msgid "Base Critical Chance"
-msgstr ""
+msgstr "Базовий Критичний Шанс"
 
 #: ../../../src/MenuPowers.cpp:997
 msgid "Ignores Absorbtion"
-msgstr ""
+msgstr "Ігнорує Поглинання"
 
 #: ../../../src/MenuPowers.cpp:1002
 msgid "Ignores Avoidance"
-msgstr ""
+msgstr "Ігнорує Уникнення"
 
 #: ../../../src/MenuPowers.cpp:1007
 #, c-format
 msgid "%d%% Chance to crit slowed targets"
-msgstr ""
+msgstr "%d%% Шанс на кріт по сповільненим цілям"
 
 #: ../../../src/MenuPowers.cpp:1012
 #, c-format
 msgid "%s Elemental Damage"
-msgstr ""
+msgstr "%s Стихійного Урону"
 
 #: ../../../src/MenuPowers.cpp:1021
 #, c-format
@@ -1116,11 +1116,11 @@ msgstr "Загальний тайник"
 
 #: ../../../src/MenuStash.cpp:199
 msgid "Can not store quest items in the stash."
-msgstr ""
+msgstr "Неможливо зберігати квестові речі в тайнику."
 
 #: ../../../src/MenuStash.cpp:209
 msgid "Stash is full."
-msgstr ""
+msgstr "Тайник заповнений."
 
 #: ../../../src/MenuVendor.cpp:51
 msgid "Buyback"
@@ -1150,7 +1150,7 @@ msgstr "Гру збережено."
 #: ../../../src/SDLInputState.cpp:559
 #, c-format
 msgid "Mouse %d"
-msgstr ""
+msgstr "Мишка %d"
 
 #: ../../../src/SDLInputState.cpp:567
 #, c-format
@@ -1179,18 +1179,18 @@ msgstr ""
 #: ../../../src/SDLInputState.cpp:617 ../../../src/SDLInputState.cpp:620
 #, c-format
 msgid "%s on ground"
-msgstr ""
+msgstr "%s на землі"
 
 #: ../../../src/SDLInputState.cpp:641 ../../../src/SDLInputState.cpp:644
 #, c-format
 msgid "%s on enemy"
-msgstr ""
+msgstr "%s на ворогу"
 
 #: ../../../src/SDLInputState.cpp:703 ../../../src/SDLInputState.cpp:707
 #: ../../../src/SDLInputState.cpp:711
 #, c-format
 msgid "'%s' is no longer bound to:"
-msgstr ""
+msgstr "'%s' більше не повязаний з:"
 
 #: ../../../src/Settings.cpp:780
 msgid "Adventurer"
@@ -1264,8 +1264,7 @@ msgstr "Шанс знайти предмети"
 
 #: ../../../src/Stats.cpp:92
 msgid "Increases the chance that an enemy will drop an item."
-msgstr ""
-"Збільшує ймовірність того, що ворог впустить предмет, коли буде вбитий."
+msgstr "Збільшує ймовірність того, що ворог впустить предмет, коли буде вбитий."
 
 #: ../../../src/Stats.cpp:96
 msgid "Stealth"
@@ -1285,35 +1284,35 @@ msgstr "Знижує ймовірність спотикання при попа
 
 #: ../../../src/Stats.cpp:106
 msgid "Missile Reflect Chance"
-msgstr ""
+msgstr "Відсоток повернення снарядів"
 
 #: ../../../src/Stats.cpp:107
 msgid "Increases your chance of reflecting missiles back at enemies."
-msgstr "Збільшує ймовірність відбиття снарядів назад на ворога."
+msgstr "Збільшує ймовірність повернення снарядів назад на ворога."
 
 #: ../../../src/Stats.cpp:111
 msgid "Damage Reflection"
-msgstr ""
+msgstr "Повернення урону"
 
 #: ../../../src/Stats.cpp:112
 msgid "Deals a percentage of damage taken back to the attacker."
-msgstr ""
+msgstr "Відсоток урону який повертається атакуючому."
 
 #: ../../../src/Stats.cpp:116
 msgid "HP Steal"
-msgstr ""
+msgstr "Крадіжка Здоров'я"
 
 #: ../../../src/Stats.cpp:117
 msgid "Percentage of HP stolen per hit."
-msgstr ""
+msgstr "Відсоток Здоров'я вкраденого за удар"
 
 #: ../../../src/Stats.cpp:121
 msgid "MP Steal"
-msgstr ""
+msgstr "Крадіжка Мани"
 
 #: ../../../src/Stats.cpp:122
 msgid "Percentage of MP stolen per hit."
-msgstr ""
+msgstr "Відсоток Мани вкраденої за удар"
 
 #: ../../../src/Stats.cpp:126
 msgid "Base HP"
@@ -1330,17 +1329,17 @@ msgstr "к"
 #: ../../../src/Utils.cpp:448
 #, c-format
 msgid "%s second"
-msgstr ""
+msgstr "%s секунда"
 
 #: ../../../src/Utils.cpp:451
 #, c-format
 msgid "%s seconds"
-msgstr ""
+msgstr "%s секунд"
 
 #: ../../../src/Version.cpp:139
 msgid "or newer"
-msgstr ""
+msgstr "або новіша"
 
 #: ../../../src/Version.cpp:142
 msgid "or older"
-msgstr ""
+msgstr "або старіша"
