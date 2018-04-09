@@ -56,6 +56,7 @@ text=Bonbadil
 text=Carlos Sanchez
 text=Chris Oelmueller
 text=Christoph J. Thompson
+text=Denis Lysenko
 text=Evgen Pavlov
 text=Gianfranco Del Borrello
 text=Giovanni Dalla Torre
