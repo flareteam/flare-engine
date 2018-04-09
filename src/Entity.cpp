@@ -188,11 +188,12 @@ void Entity::move_from_offending_tile() {
 	// we don't need to care about nice graphical effects, so we may just jump out of the
 	// offending tile. The idea is simple: We can only be stuck on a tile by accident,
 	// so we got here somehow. We'll try to push this entity to the nearest valid place
+
+	FPoint original_pos = stats.pos;
+	bool original_pos_is_bad = false;
+
 	while (!mapr->collider.is_valid_position(stats.pos.x, stats.pos.y, stats.movement_type, stats.hero)) {
-		logError("Entity: %s got stuck at (%g, %g) on an invalid tile. Please report this bug, if you're able to reproduce it!",
-				stats.hero ? "The hero" : stats.name.c_str(),
-				stats.pos.x,
-				stats.pos.y);
+		original_pos_is_bad = true;
 
 		float pushx = 0;
 		float pushy = 0;
@@ -242,6 +243,15 @@ void Entity::move_from_offending_tile() {
 				radius++;
 			}
 		}
+	}
+
+	if (original_pos_is_bad) {
+		logInfo("Entity: '%s' was stuck and has been moved: (%g, %g) -> (%g, %g)",
+				stats.name.c_str(),
+				original_pos.x,
+				original_pos.y,
+				stats.pos.x,
+				stats.pos.y);
 	}
 }
 
