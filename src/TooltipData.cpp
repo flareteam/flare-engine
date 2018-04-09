@@ -77,14 +77,19 @@ void TooltipData::clear() {
 void TooltipData::addColoredText(const std::string &text, const Color& color) {
 	lines.push_back("");
 	colors.push_back(color);
-	for (unsigned int i=0; i<lines.size(); i++) {
+	for (size_t i=0; i<lines.size(); i++) {
 		if (lines[i] == "") {
 			colors[i] = color;
-			for (unsigned int j=0; j<text.length(); j++) {
+			for (size_t j=0; j<text.length(); j++) {
 				if (text[j] == '\n') {
 					// insert a space so intentionally blank lines are counted
-					if (lines.back() == "") lines.back() += ' ';
-					lines.push_back("");
+					if (lines.back().empty()) {
+						lines.back() = " ";
+						lines.push_back("");
+					}
+					else {
+						lines.push_back(" ");
+					}
 					colors.push_back(color);
 				}
 				else {
