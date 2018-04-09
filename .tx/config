@@ -1,0 +1,17 @@
+[main]
+host = https://www.transifex.com
+
+[flare-engine.engine-pot]
+file_filter = mods/default/languages/engine.<lang>.po
+minimum_perc = 0
+source_file = mods/default/languages/engine.pot
+source_lang = en
+type = PO
+
+[flare-engine.data-pot]
+file_filter = mods/default/languages/data.<lang>.po
+minimum_perc = 0
+source_file = mods/default/languages/data.pot
+source_lang = en
+type = PO
+
