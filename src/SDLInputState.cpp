@@ -547,6 +547,37 @@ std::string SDLInputState::getJoystickName(int index) {
 }
 
 std::string SDLInputState::getKeyName(int key) {
+	// first, we try to provide a translation of the key
+	switch ((SDL_Keycode)key) {
+		case SDLK_BACKSPACE:    return msg->get("Backspace");
+		case SDLK_CAPSLOCK:     return msg->get("CapsLock");
+		case SDLK_DELETE:       return msg->get("Delete");
+		case SDLK_DOWN:         return msg->get("Down");
+		case SDLK_END:          return msg->get("End");
+		case SDLK_ESCAPE:       return msg->get("Escape");
+		case SDLK_HOME:         return msg->get("Home");
+		case SDLK_INSERT:       return msg->get("Insert");
+		case SDLK_LALT:         return msg->get("Left Alt");
+		case SDLK_LCTRL:        return msg->get("Left Ctrl");
+		case SDLK_LEFT:         return msg->get("Left");
+		case SDLK_LSHIFT:       return msg->get("Left Shift");
+		case SDLK_NUMLOCKCLEAR: return msg->get("NumLock");
+		case SDLK_PAGEDOWN:     return msg->get("PageDown");
+		case SDLK_PAGEUP:       return msg->get("PageUp");
+		case SDLK_PAUSE:        return msg->get("Pause");
+		case SDLK_PRINTSCREEN:  return msg->get("PrintScreen");
+		case SDLK_RALT:         return msg->get("Right Alt");
+		case SDLK_RCTRL:        return msg->get("Right Ctrl");
+		case SDLK_RETURN:       return msg->get("Return");
+		case SDLK_RIGHT:        return msg->get("Right");
+		case SDLK_RSHIFT:       return msg->get("Right Shift");
+		case SDLK_SCROLLLOCK:   return msg->get("ScrollLock");
+		case SDLK_SPACE:        return msg->get("Space");
+		case SDLK_TAB:          return msg->get("Tab");
+		case SDLK_UP:           return msg->get("Up");
+	}
+
+	// no translation for this key, so just get the name straight from SDL
 	return std::string(SDL_GetKeyName((SDL_Keycode)key));
 }
 
