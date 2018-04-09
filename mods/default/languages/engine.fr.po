@@ -2,20 +2,20 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-28 15:02-0400\n"
+"POT-Creation-Date: 2018-04-09 13:54-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
 "Language-Team: French (https://www.transifex.com/flareorg/teams/84925/fr/)\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: ../../../src/Avatar.cpp:353
@@ -107,14 +107,14 @@ msgstr ""
 msgid "miss"
 msgstr "manqué"
 
-#: ../../../src/Entity.cpp:509 ../../../src/PowerManager.cpp:1056
-#: ../../../src/StatBlock.cpp:786 ../../../src/StatBlock.cpp:792
+#: ../../../src/Entity.cpp:509 ../../../src/PowerManager.cpp:1059
+#: ../../../src/StatBlock.cpp:790 ../../../src/StatBlock.cpp:796
 #, c-format
 msgid "+%d HP"
 msgstr "+%d PV"
 
-#: ../../../src/Entity.cpp:516 ../../../src/StatBlock.cpp:797
-#: ../../../src/StatBlock.cpp:803
+#: ../../../src/Entity.cpp:516 ../../../src/StatBlock.cpp:801
+#: ../../../src/StatBlock.cpp:807
 #, c-format
 msgid "+%d MP"
 msgstr "+%d PM"
@@ -767,12 +767,11 @@ msgid ""
 "Prints a list of items that match a search term. No search term will list "
 "all items"
 msgstr ""
-"Affiche une liste des objets qui correspondent au terme recherché. L'absence"
-" de terme de recherche affichera tous les objets"
+"Affiche une liste des objets qui correspondent au terme recherché. L'absence "
+"de terme de recherche affichera tous les objets"
 
 #: ../../../src/MenuDevConsole.cpp:230
-msgid ""
-"parses a series of event components and executes them as a single event"
+msgid "parses a series of event components and executes them as a single event"
 msgstr ""
 "parcourt une série de composants d'événements et les exécutent en tant "
 "qu'événement unique"
@@ -1138,16 +1137,16 @@ msgstr "Racheter"
 msgid "Vendor"
 msgstr "Vendeur"
 
-#: ../../../src/PowerManager.cpp:1040
+#: ../../../src/PowerManager.cpp:1043
 #, c-format
 msgid "+%d Shield"
 msgstr "Bouclier +%d"
 
-#: ../../../src/PowerManager.cpp:1299
+#: ../../../src/PowerManager.cpp:1302
 msgid "You are already transformed, untransform first."
 msgstr "Vous êtes deja transformé, reprenez forme humaine avant."
 
-#: ../../../src/PowerManager.cpp:1311
+#: ../../../src/PowerManager.cpp:1314
 msgid "Could not untransform at this position."
 msgstr "Vous ne pouvez pas reprendre forme humaine à cette position."
 

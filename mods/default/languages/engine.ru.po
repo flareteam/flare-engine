@@ -2,21 +2,23 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-28 15:02-0400\n"
+"POT-Creation-Date: 2018-04-09 13:54-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
 "Language-Team: Russian (https://www.transifex.com/flareorg/teams/84925/ru/)\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ru\n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
+"%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #: ../../../src/Avatar.cpp:353
 #, c-format
@@ -109,14 +111,14 @@ msgstr ""
 msgid "miss"
 msgstr "промах"
 
-#: ../../../src/Entity.cpp:509 ../../../src/PowerManager.cpp:1056
-#: ../../../src/StatBlock.cpp:786 ../../../src/StatBlock.cpp:792
+#: ../../../src/Entity.cpp:509 ../../../src/PowerManager.cpp:1059
+#: ../../../src/StatBlock.cpp:790 ../../../src/StatBlock.cpp:796
 #, c-format
 msgid "+%d HP"
 msgstr "+%d Жизни"
 
-#: ../../../src/Entity.cpp:516 ../../../src/StatBlock.cpp:797
-#: ../../../src/StatBlock.cpp:803
+#: ../../../src/Entity.cpp:516 ../../../src/StatBlock.cpp:801
+#: ../../../src/StatBlock.cpp:807
 #, c-format
 msgid "+%d MP"
 msgstr "+%d Маны"
@@ -725,8 +727,7 @@ msgstr "Консоль Девелопера"
 
 #: ../../../src/MenuDevConsole.cpp:121
 msgid "Arguments with spaces should be enclosed with double quotes. Example:"
-msgstr ""
-"Аргументы с пробелами должны быть заключены в двойные кавычки. Пример:"
+msgstr "Аргументы с пробелами должны быть заключены в двойные кавычки. Пример:"
 
 #: ../../../src/MenuDevConsole.cpp:122
 msgid "Type 'help' to get a list of commands."
@@ -771,8 +772,7 @@ msgstr ""
 "предметы."
 
 #: ../../../src/MenuDevConsole.cpp:230
-msgid ""
-"parses a series of event components and executes them as a single event"
+msgid "parses a series of event components and executes them as a single event"
 msgstr "анализирует набор компонентов событий и выполняет их как одно событие"
 
 #: ../../../src/MenuDevConsole.cpp:231
@@ -1136,16 +1136,16 @@ msgstr "Выкуп"
 msgid "Vendor"
 msgstr "Торговец"
 
-#: ../../../src/PowerManager.cpp:1040
+#: ../../../src/PowerManager.cpp:1043
 #, c-format
 msgid "+%d Shield"
 msgstr "+%d Щит"
 
-#: ../../../src/PowerManager.cpp:1299
+#: ../../../src/PowerManager.cpp:1302
 msgid "You are already transformed, untransform first."
 msgstr "Вы уже трансформированы, сперва растрансформируйтесь."
 
-#: ../../../src/PowerManager.cpp:1311
+#: ../../../src/PowerManager.cpp:1314
 msgid "Could not untransform at this position."
 msgstr "Здесь нельзя растрансформироваться."
 

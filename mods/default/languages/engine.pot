@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-28 15:02-0400\n"
+"POT-Creation-Date: 2018-04-09 14:10-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -106,14 +106,14 @@ msgstr ""
 msgid "miss"
 msgstr ""
 
-#: ../../../src/Entity.cpp:509 ../../../src/PowerManager.cpp:1056
-#: ../../../src/StatBlock.cpp:786 ../../../src/StatBlock.cpp:792
+#: ../../../src/Entity.cpp:509 ../../../src/PowerManager.cpp:1059
+#: ../../../src/StatBlock.cpp:790 ../../../src/StatBlock.cpp:796
 #, c-format
 msgid "+%d HP"
 msgstr ""
 
-#: ../../../src/Entity.cpp:516 ../../../src/StatBlock.cpp:797
-#: ../../../src/StatBlock.cpp:803
+#: ../../../src/Entity.cpp:516 ../../../src/StatBlock.cpp:801
+#: ../../../src/StatBlock.cpp:807
 #, c-format
 msgid "+%d MP"
 msgstr ""
@@ -741,7 +741,9 @@ msgid "turns on/off the developer hud"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:226
-msgid "Prints a list of powers that match a search term. No search term will list all items"
+msgid ""
+"Prints a list of powers that match a search term. No search term will list "
+"all items"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:227
@@ -749,11 +751,15 @@ msgid "Prints out all the map filenames located in the \"maps/\" directory."
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:228
-msgid "Prints out the active campaign statuses that match a search term. No search term will list all active statuses"
+msgid ""
+"Prints out the active campaign statuses that match a search term. No search "
+"term will list all active statuses"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:229
-msgid "Prints a list of items that match a search term. No search term will list all items"
+msgid ""
+"Prints a list of items that match a search term. No search term will list "
+"all items"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:230
@@ -1121,16 +1127,16 @@ msgstr ""
 msgid "Vendor"
 msgstr ""
 
-#: ../../../src/PowerManager.cpp:1040
+#: ../../../src/PowerManager.cpp:1043
 #, c-format
 msgid "+%d Shield"
 msgstr ""
 
-#: ../../../src/PowerManager.cpp:1299
+#: ../../../src/PowerManager.cpp:1302
 msgid "You are already transformed, untransform first."
 msgstr ""
 
-#: ../../../src/PowerManager.cpp:1311
+#: ../../../src/PowerManager.cpp:1314
 msgid "Could not untransform at this position."
 msgstr ""
 
