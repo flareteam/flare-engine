@@ -55,6 +55,8 @@ private:
 	public:
 		Sprite* image;
 		Point dest;
+		std::vector<std::string> requires_status;
+		std::vector<std::string> requires_not_status;
 
 		BookImage()
 			: image(NULL)

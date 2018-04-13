@@ -171,6 +171,22 @@ void MenuBook::loadImage(FileParser &infile, BookImage& bimage) {
 		  graphics->unref();
 		}
 	}
+	// @ATTR image.requires_status|list(string)|Image requires these campaign statuses in order to be visible.
+	else if (infile.key == "requires_status") {
+		std::string temp = popFirstString(infile.val);
+		while (!temp.empty()) {
+			bimage.requires_status.push_back(temp);
+			temp = popFirstString(infile.val);
+		}
+	}
+	// @ATTR image.requires_not_status|list(string)|Image must not have any of these campaign statuses in order to be visible.
+	else if (infile.key == "requires_not_status") {
+		std::string temp = popFirstString(infile.val);
+		while (!temp.empty()) {
+			bimage.requires_not_status.push_back(temp);
+			temp = popFirstString(infile.val);
+		}
+	}
 	else {
 		infile.error("MenuBook: '%s' is not a valid key.", infile.key.c_str());
 	}
@@ -322,6 +338,21 @@ void MenuBook::render() {
 		render_device->render(text[i].sprite);
 	}
 	for (size_t i = 0; i < images.size(); ++i) {
+		bool skip = false;
+
+		for (size_t j = 0; j < images[i].requires_status.size(); ++j) {
+			if (!camp->checkStatus(images[i].requires_status[j]))
+				skip = true;
+		}
+
+		for (size_t j = 0; j < images[i].requires_not_status.size(); ++j) {
+			if (camp->checkStatus(images[i].requires_not_status[j]))
+				skip = true;
+		}
+
+		if (skip)
+			continue;
+
 		render_device->render(images[i].image);
 	}
 	for (size_t i = 0; i < buttons.size(); ++i) {
