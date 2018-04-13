@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-04-09 19:36-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
+"Last-Translator: GunChleoc, 2018\n"
 "Language-Team: Gaelic, Scottish (https://www.transifex.com/flareorg/teams/84925/gd/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1172,87 +1172,87 @@ msgstr "Chaidh an geama a shàbhaladh."
 
 #: ../../../src/SDLInputState.cpp:552
 msgid "Backspace"
-msgstr ""
+msgstr "Backspace"
 
 #: ../../../src/SDLInputState.cpp:553
 msgid "CapsLock"
-msgstr ""
+msgstr "CapsLock"
 
 #: ../../../src/SDLInputState.cpp:556
 msgid "End"
-msgstr ""
+msgstr "End"
 
 #: ../../../src/SDLInputState.cpp:557
 msgid "Escape"
-msgstr ""
+msgstr "Escape"
 
 #: ../../../src/SDLInputState.cpp:558
 msgid "Home"
-msgstr ""
+msgstr "Home"
 
 #: ../../../src/SDLInputState.cpp:559
 msgid "Insert"
-msgstr ""
+msgstr "Insert"
 
 #: ../../../src/SDLInputState.cpp:560
 msgid "Left Alt"
-msgstr ""
+msgstr "Alt clì"
 
 #: ../../../src/SDLInputState.cpp:561
 msgid "Left Ctrl"
-msgstr ""
+msgstr "Ctrl clì"
 
 #: ../../../src/SDLInputState.cpp:563
 msgid "Left Shift"
-msgstr ""
+msgstr "Shift clì"
 
 #: ../../../src/SDLInputState.cpp:564
 msgid "NumLock"
-msgstr ""
+msgstr "NumLock"
 
 #: ../../../src/SDLInputState.cpp:565
 msgid "PageDown"
-msgstr ""
+msgstr "PageDown"
 
 #: ../../../src/SDLInputState.cpp:566
 msgid "PageUp"
-msgstr ""
+msgstr "PageUp"
 
 #: ../../../src/SDLInputState.cpp:567
 msgid "Pause"
-msgstr ""
+msgstr "Pause"
 
 #: ../../../src/SDLInputState.cpp:568
 msgid "PrintScreen"
-msgstr ""
+msgstr "PrintScreen"
 
 #: ../../../src/SDLInputState.cpp:569
 msgid "Right Alt"
-msgstr ""
+msgstr "Alt deas"
 
 #: ../../../src/SDLInputState.cpp:570
 msgid "Right Ctrl"
-msgstr ""
+msgstr "Ctrl deas"
 
 #: ../../../src/SDLInputState.cpp:571
 msgid "Return"
-msgstr ""
+msgstr "Return"
 
 #: ../../../src/SDLInputState.cpp:573
 msgid "Right Shift"
-msgstr ""
+msgstr "Shift deas"
 
 #: ../../../src/SDLInputState.cpp:574
 msgid "ScrollLock"
-msgstr ""
+msgstr "ScrollLock"
 
 #: ../../../src/SDLInputState.cpp:575
 msgid "Space"
-msgstr ""
+msgstr "Space"
 
 #: ../../../src/SDLInputState.cpp:576
 msgid "Tab"
-msgstr ""
+msgstr "Tab"
 
 #: ../../../src/SDLInputState.cpp:590
 #, c-format

@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-04-09 19:36-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Fabio MOB2 <thewattyk@gmail.com>, 2018\n"
+"Last-Translator: MOB2 <thewattyk@gmail.com>, 2018\n"
 "Language-Team: Italian (https://www.transifex.com/flareorg/teams/84925/it/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -162,7 +162,7 @@ msgstr "Interfaccia"
 #: ../../../src/GameStateConfigBase.cpp:163
 #: ../../../src/GameStateConfigDesktop.cpp:129
 msgid "Mods"
-msgstr "Mods"
+msgstr "Mod"
 
 #: ../../../src/GameStateConfigBase.cpp:251 ../../../src/MenuExit.cpp:65
 msgid "Music Volume"
@@ -653,7 +653,7 @@ msgstr "Prezzo di vendita: %d %s ciascuno"
 
 #: ../../../src/ItemManager.cpp:808
 msgid "Set:"
-msgstr "Imposta:"
+msgstr "Completo:"
 
 #: ../../../src/ItemManager.cpp:815
 #, c-format
