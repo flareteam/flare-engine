@@ -10,10 +10,14 @@ Engine fixes:
 * Fix regression that caused a crash when configuring mods in the wrong order. (Justin Jacobs)
 * Fix bug where player title wouldn't update after "unset_status". (Justin Jacobs)
 * Fix potential NULL dereference in vendor window. (Justin Jacobs)
+* Fix crash when using invalid primary stat in stat_per_primary. (Justin Jacobs)
+* Don't spam "Entity stuck" message while pushing an entity out of a bad tile. (Justin Jacobs)
+* Keyboard key names such as "Backspace" and "Left Ctrl" can now be translated. (Justin Jacobs)
 
 Translation updates:
 
 * Scottish Gaelic (gd) update (GunChleoc)
+* Italian (it) update (MOB2)
 * Polish (pl) update (Pawonashi)
 * Russian (ru) fix (Igor Paliychuk)
 * Ukranian (uk) update (Микола Франчук)
