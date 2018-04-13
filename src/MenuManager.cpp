@@ -1406,7 +1406,7 @@ void MenuManager::closeLeft() {
 	questlog->visible = false;
 	exit->visible = false;
 	stash->visible = false;
-	book->visible = false;
+	book->closeWindow();
 	book->book_name = "";
 	num_picker->visible = false;
 
@@ -1425,7 +1425,7 @@ void MenuManager::closeRight() {
 	inv->visible = false;
 	pow->visible = false;
 	exit->visible = false;
-	book->visible = false;
+	book->closeWindow();
 	book->book_name = "";
 	num_picker->visible = false;
 

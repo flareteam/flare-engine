@@ -24,6 +24,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define MENU_BOOK_H
 
 #include "CommonIncludes.h"
+#include "EventManager.h"
 #include "FileParser.h"
 #include "Menu.h"
 #include "Utils.h"
@@ -43,6 +44,7 @@ public:
 	void loadGraphics();
 	void logic();
 	void render();
+	void closeWindow();
 
 	std::string book_name;
 	std::string last_book_name;
@@ -74,14 +76,29 @@ private:
 		{}
 	};
 
+	class BookButton {
+	public:
+		WidgetButton* button;
+		Point dest;
+		std::string image;
+		std::string label;
+		Event event;
+
+		BookButton()
+			: button(NULL)
+		{}
+	};
+
 	WidgetButton *closeButton;
 	std::vector<BookImage> images;
 	std::vector<BookText> text;
+	std::vector<BookButton> buttons;
 
 	void loadBook();
 	void alignElements();
 	void loadImage(FileParser &infile, BookImage& bimage);
 	void loadText(FileParser &infile, BookText& btext);
+	void loadButton(FileParser &infile, BookButton& bbutton);
 	void clearBook();
 };
 

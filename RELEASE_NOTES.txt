@@ -3,6 +3,7 @@ Flare v1.02 (WIP, link soon)
 Engine features:
 
 * Support multiple campaign statuses for requirements in engine/titles.txt. (Justin Jacobs)
+* Buttons that trigger Events can now be added to books. (Justin Jacobs)
 
 Engine fixes:
 

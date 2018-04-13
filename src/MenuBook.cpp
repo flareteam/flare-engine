@@ -21,13 +21,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuBook
  */
 
+#include "EventManager.h"
 #include "FileParser.h"
 #include "MenuBook.h"
+#include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "StatBlock.h"
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
-#include "SharedGameResources.h"
 
 #include <climits>
 
@@ -39,7 +40,6 @@ MenuBook::MenuBook()
 	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
 
 	tablist = TabList();
-	tablist.add(closeButton);
 }
 
 void MenuBook::loadBook() {
@@ -50,6 +50,8 @@ void MenuBook::loadBook() {
 	}
 
 	if (book_loaded) return;
+
+	tablist.add(closeButton);
 
 	// Read data from config file
 	FileParser infile;
@@ -86,12 +88,17 @@ void MenuBook::loadBook() {
 				else if (infile.section == "image") {
 					images.resize(images.size() + 1);
 				}
+				else if (infile.section == "button") {
+					buttons.resize(buttons.size() + 1);
+				}
 
 			}
 			if (infile.section == "text" && !text.empty())
 				loadText(infile, text.back());
 			else if (infile.section == "image" && !images.empty())
 				loadImage(infile, images.back());
+			else if (infile.section == "button" && !buttons.empty())
+				loadButton(infile, buttons.back());
 		}
 
 		infile.close();
@@ -128,6 +135,21 @@ void MenuBook::loadBook() {
 
 		if (!graphics || !text[i].sprite)
 			text.erase(text.begin() + i);
+	}
+
+	for (size_t i = buttons.size(); i > 0;) {
+		i--;
+
+		if (buttons[i].image.empty())
+			buttons[i].button = new WidgetButton();
+		else
+			buttons[i].button = new WidgetButton(buttons[i].image);
+
+		buttons[i].button->setBasePos(buttons[i].dest.x, buttons[i].dest.y);
+		buttons[i].button->label = msg->get(buttons[i].label);
+		buttons[i].button->refresh();
+
+		tablist.add(buttons[i].button);
 	}
 
 	align();
@@ -183,6 +205,30 @@ void MenuBook::loadText(FileParser &infile, BookText& btext) {
 	}
 }
 
+void MenuBook::loadButton(FileParser &infile, BookButton& bbutton) {
+	// @ATTR button.button_pos|point|Position of the button.
+	if (infile.key == "button_pos") {
+		bbutton.dest.x = popFirstInt(infile.val);
+		bbutton.dest.y = popFirstInt(infile.val);
+	}
+	// @ATTR button.button_image|filename|Image file to use for this button. Default is the normal menu button.
+	else if (infile.key == "button_image") {
+		bbutton.image = popFirstString(infile.val);
+	}
+	// @ATTR button.text|string|Optional text label for the button.
+	else if (infile.key == "text") {
+		bbutton.label = popFirstString(infile.val);
+	}
+	else {
+		// we use substr here to remove the trailing comma that was added in loadBook()
+		std::string trimmed = infile.val.substr(0, infile.val.length() - 1);
+
+		if (!EventManager::loadEventComponentString(infile.key, trimmed, &bbutton.event, NULL)) {
+			infile.error("MenuBook: '%s' is not a valid key.", infile.key.c_str());
+		}
+	}
+}
+
 void MenuBook::align() {
 	Menu::align();
 
@@ -196,6 +242,9 @@ void MenuBook::align() {
 		images[i].image->setDestX(images[i].dest.x + window_area.x);
 		images[i].image->setDestY(images[i].dest.y + window_area.y);
 	}
+	for (size_t i = 0; i < buttons.size(); ++i) {
+		buttons[i].button->setPos(window_area.x, window_area.y);
+	}
 }
 
 void MenuBook::clearBook() {
@@ -208,6 +257,22 @@ void MenuBook::clearBook() {
 		delete images[i].image;
 	}
 	images.clear();
+
+	for (size_t i = 0; i < buttons.size(); ++i) {
+		delete buttons[i].button;
+	}
+	buttons.clear();
+
+	tablist.clear();
+}
+
+void MenuBook::closeWindow() {
+	clearBook();
+
+	visible = false;
+	book_name.clear();
+	last_book_name.clear();
+	book_loaded = false;
 }
 
 void MenuBook::logic() {
@@ -222,17 +287,28 @@ void MenuBook::logic() {
 
 	tablist.logic();
 
-	if (closeButton->checkClick() || (inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT])) {
+	if (closeButton->checkClick() || (inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT] && tablist.getCurrent() == -1)) {
 		if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
 
-		clearBook();
-
+		closeWindow();
 		snd->play(sfx_close);
+	}
 
-		visible = false;
-		book_name.clear();
-		last_book_name.clear();
-		book_loaded = false;
+	for (size_t i = 0; i < buttons.size(); ++i) {
+		if (buttons[i].event.components.empty() || !EventManager::isActive(buttons[i].event)) {
+			buttons[i].button->enabled = false;
+			buttons[i].button->refresh();
+		}
+		else {
+			buttons[i].button->enabled = true;
+			buttons[i].button->refresh();
+		}
+
+		if (buttons[i].button->checkClick()) {
+			if (EventManager::executeEvent(buttons[i].event)) {
+				buttons[i].event = Event();
+			}
+		}
 	}
 }
 
@@ -247,6 +323,9 @@ void MenuBook::render() {
 	}
 	for (size_t i = 0; i < images.size(); ++i) {
 		render_device->render(images[i].image);
+	}
+	for (size_t i = 0; i < buttons.size(); ++i) {
+		buttons[i].button->render();
 	}
 }
 
