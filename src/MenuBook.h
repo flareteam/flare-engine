@@ -49,21 +49,39 @@ public:
 	bool book_loaded;
 
 private:
-	WidgetButton *closeButton;
-	std::vector<Sprite*> image;
-	std::vector<Point> image_dest;
+	class BookImage {
+	public:
+		Sprite* image;
+		Point dest;
 
-	std::vector<Sprite*> text;
-	std::vector<std::string> textData;
-	std::vector<Color> textColor;
-	std::vector<int> justify;
-	std::vector<std::string> textFont;
-	std::vector<Rect> size;
+		BookImage()
+			: image(NULL)
+		{}
+	};
+
+	class BookText {
+	public:
+		Sprite* sprite;
+		std::string text;
+		std::string font;
+		Color color;
+		Rect size;
+		int justify;
+
+		BookText()
+			: sprite(NULL)
+			, justify(0)
+		{}
+	};
+
+	WidgetButton *closeButton;
+	std::vector<BookImage> images;
+	std::vector<BookText> text;
 
 	void loadBook();
 	void alignElements();
-	void loadImage(FileParser &infile);
-	void loadText(FileParser &infile);
+	void loadImage(FileParser &infile, BookImage& bimage);
+	void loadText(FileParser &infile, BookText& btext);
 	void clearBook();
 };
 

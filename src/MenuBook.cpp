@@ -44,7 +44,7 @@ MenuBook::MenuBook()
 
 void MenuBook::loadBook() {
 	if (last_book_name != book_name) {
-		last_book_name = "";
+		last_book_name.clear();
 		book_loaded = false;
 		clearBook();
 	}
@@ -79,50 +79,55 @@ void MenuBook::loadBook() {
 			}
 
 			if (infile.new_section) {
-
 				// for sections that are stored in collections, add a new object here
 				if (infile.section == "text") {
-					text.push_back(NULL);
-					textData.push_back("");
-					textColor.push_back(Color());
-					justify.push_back(0);
-					textFont.push_back("");
-					size.push_back(Rect());
+					text.resize(text.size() + 1);
 				}
 				else if (infile.section == "image") {
-					image.push_back(NULL);
-					image_dest.push_back(Point());
+					images.resize(images.size() + 1);
 				}
 
 			}
-			if (infile.section == "text")
-				loadText(infile);
-			else if (infile.section == "image")
-				loadImage(infile);
+			if (infile.section == "text" && !text.empty())
+				loadText(infile, text.back());
+			else if (infile.section == "image" && !images.empty())
+				loadImage(infile, images.back());
 		}
 
 		infile.close();
 	}
 
-	// setup image dest
-	for (unsigned i=0; i < image.size(); i++) {
-	       image[i]->setDest(image_dest[i]);
+	for (size_t i = images.size(); i > 0;) {
+		i--;
+
+		if (images[i].image)
+			images[i].image->setDest(images[i].dest);
+		else
+			images.erase(images.begin() + i);
 	}
 
 	// render text to surface
-	for (unsigned i=0; i<text.size(); i++) {
-		font->setFont(textFont[i]);
-		Point pSize = font->calc_size(textData[i], size[i].w);
-		Image *graphics = render_device->createImage(size[i].w, pSize.y);
+	for (size_t i = text.size(); i > 0;) {
+		i--;
 
-		if (justify[i] == JUSTIFY_CENTER)
-			font->render(textData[i], size[i].w/2, 0, justify[i], graphics, size[i].w, textColor[i]);
-		else if (justify[i] == JUSTIFY_RIGHT)
-			font->render(textData[i], size[i].w, 0, justify[i], graphics, size[i].w, textColor[i]);
-		else
-			font->render(textData[i], 0, 0, justify[i], graphics, size[i].w, textColor[i]);
-		text[i] = graphics->createSprite();
-		graphics->unref();
+		font->setFont(text[i].font);
+		Point pSize = font->calc_size(text[i].text, text[i].size.w);
+		Image *graphics = render_device->createImage(pSize.x, pSize.y);
+
+		if (graphics) {
+			int x_offset = 0;
+			if (text[i].justify == JUSTIFY_CENTER)
+				x_offset = text[i].size.w / 2;
+			else if (text[i].justify == JUSTIFY_RIGHT)
+				x_offset = text[i].size.w;
+
+			font->render(text[i].text, x_offset, 0, text[i].justify, graphics, text[i].size.w, text[i].color);
+			text[i].sprite = graphics->createSprite();
+			graphics->unref();
+		}
+
+		if (!graphics || !text[i].sprite)
+			text.erase(text.begin() + i);
 	}
 
 	align();
@@ -130,17 +135,17 @@ void MenuBook::loadBook() {
 	book_loaded = true;
 }
 
-void MenuBook::loadImage(FileParser &infile) {
+void MenuBook::loadImage(FileParser &infile, BookImage& bimage) {
 	// @ATTR image.image_pos|point|Position of the image.
 	if (infile.key == "image_pos") {
-		image_dest.back() = toPoint(infile.val);
+		bimage.dest = toPoint(infile.val);
 	}
 	// @ATTR image.image|filename|Filename of the image.
 	else if (infile.key == "image") {
 		Image *graphics;
 		graphics = render_device->loadImage(popFirstString(infile.val));
 		if (graphics) {
-		  image.back() = graphics->createSprite();
+		  bimage.image = graphics->createSprite();
 		  graphics->unref();
 		}
 	}
@@ -149,31 +154,29 @@ void MenuBook::loadImage(FileParser &infile) {
 	}
 }
 
-void MenuBook::loadText(FileParser &infile) {
+void MenuBook::loadText(FileParser &infile, BookText& btext) {
 	// @ATTR text.text_pos|int, int, int, ["left", "center", "right"] : X, Y, Width, Text justify|Position of the text.
 	if (infile.key == "text_pos") {
-		size.back().x = popFirstInt(infile.val);
-		size.back().y = popFirstInt(infile.val);
-		size.back().w = popFirstInt(infile.val);
+		btext.size.x = popFirstInt(infile.val);
+		btext.size.y = popFirstInt(infile.val);
+		btext.size.w = popFirstInt(infile.val);
 		std::string _justify = popFirstString(infile.val);
 
-		if (_justify == "left") justify.back() = JUSTIFY_LEFT;
-		else if (_justify == "center") justify.back() = JUSTIFY_CENTER;
-		else if (_justify == "right") justify.back() = JUSTIFY_RIGHT;
+		if (_justify == "left") btext.justify = JUSTIFY_LEFT;
+		else if (_justify == "center") btext.justify = JUSTIFY_CENTER;
+		else if (_justify == "right") btext.justify = JUSTIFY_RIGHT;
 	}
 	// @ATTR text.text_font|color, string : Font color, Font style|Font color and style.
 	else if (infile.key == "text_font") {
-		Color color;
-		color.r = static_cast<Uint8>(popFirstInt(infile.val));
-		color.g = static_cast<Uint8>(popFirstInt(infile.val));
-		color.b = static_cast<Uint8>(popFirstInt(infile.val));
-		textColor.back() = color;
-		textFont.back() = popFirstString(infile.val);
+		btext.color.r = static_cast<Uint8>(popFirstInt(infile.val));
+		btext.color.g = static_cast<Uint8>(popFirstInt(infile.val));
+		btext.color.b = static_cast<Uint8>(popFirstInt(infile.val));
+		btext.font= popFirstString(infile.val);
 	}
 	// @ATTR text.text|string|The text to be displayed.
 	else if (infile.key == "text") {
-		// we use substr here to remove the comma from the end
-		textData.back() = msg->get(infile.val.substr(0, infile.val.length() - 1));
+		// we use substr here to remove the trailing comma that was added in loadBook()
+		btext.text = msg->get(infile.val.substr(0, infile.val.length() - 1));
 	}
 	else {
 		infile.error("MenuBook: '%s' is not a valid key.", infile.key.c_str());
@@ -186,36 +189,29 @@ void MenuBook::align() {
 	closeButton->setPos(window_area.x, window_area.y);
 
 	for (unsigned i=0; i<text.size(); i++) {
-		text[i]->setDestX(size[i].x + window_area.x);
-		text[i]->setDestY(size[i].y + window_area.y);
+		text[i].sprite->setDestX(text[i].size.x + window_area.x);
+		text[i].sprite->setDestY(text[i].size.y + window_area.y);
 	}
-	for (unsigned i=0; i<image.size(); i++) {
-		image[i]->setDestX(image_dest[i].x + window_area.x);
-		image[i]->setDestY(image_dest[i].y + window_area.y);
+	for (size_t i = 0; i < images.size(); ++i) {
+		images[i].image->setDestX(images[i].dest.x + window_area.x);
+		images[i].image->setDestY(images[i].dest.y + window_area.y);
 	}
 }
 
 void MenuBook::clearBook() {
-	for (unsigned i=0; i<text.size(); i++) {
-		delete text[i];
+	for (size_t i = 0; i < text.size(); ++i) {
+		delete text[i].sprite;
 	}
 	text.clear();
 
-	textData.clear();
-	textColor.clear();
-	textFont.clear();
-	size.clear();
-	image_dest.clear();
-	justify.clear();
-
-	for (unsigned i=0; i<image.size(); i++) {
-		delete image[i];
+	for (size_t i = 0; i < images.size(); ++i) {
+		delete images[i].image;
 	}
-	image.clear();
+	images.clear();
 }
 
 void MenuBook::logic() {
-	if (book_name == "") return;
+	if (book_name.empty()) return;
 	else {
 		loadBook();
 		visible = true;
@@ -234,8 +230,8 @@ void MenuBook::logic() {
 		snd->play(sfx_close);
 
 		visible = false;
-		book_name = "";
-		last_book_name = "";
+		book_name.clear();
+		last_book_name.clear();
 		book_loaded = false;
 	}
 }
@@ -247,10 +243,10 @@ void MenuBook::render() {
 
 	closeButton->render();
 	for (unsigned i=0; i<text.size(); i++) {
-		render_device->render(text[i]);
+		render_device->render(text[i].sprite);
 	}
-	for (unsigned i=0; i<image.size(); i++) {
-		render_device->render(image[i]);
+	for (size_t i = 0; i < images.size(); ++i) {
+		render_device->render(images[i].image);
 	}
 }
 

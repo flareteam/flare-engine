@@ -11,6 +11,7 @@ Engine fixes:
 * Fix bug where player title wouldn't update after "unset_status". (Justin Jacobs)
 * Fix potential NULL dereference in vendor window. (Justin Jacobs)
 * Fix crash when using invalid primary stat in stat_per_primary. (Justin Jacobs)
+* Fix crash when a book contains an invalid image filename. (Justin Jacobs)
 * Don't spam "Entity stuck" message while pushing an entity out of a bad tile. (Justin Jacobs)
 * Keyboard key names such as "Backspace" and "Left Ctrl" can now be translated. (Justin Jacobs)
 
