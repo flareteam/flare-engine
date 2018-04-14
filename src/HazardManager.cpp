@@ -25,31 +25,36 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Avatar.h"
 #include "Animation.h"
+#include "Enemy.h"
 #include "EnemyManager.h"
 #include "EventManager.h"
 #include "Hazard.h"
 #include "HazardManager.h"
+#include "PowerManager.h"
+#include "RenderDevice.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
+#include "SoundManager.h"
 #include "UtilsMath.h"
 
 HazardManager::HazardManager()
-	: last_enemy(NULL)
+	: dev_marker(new Renderable)
+	, last_enemy(NULL)
 {
 	Color mark_color(255, 0, 0, 255);
 
 	int marker_size = TILE_H_HALF+1;
-	dev_marker.image = render_device->createImage(marker_size, marker_size);
+	dev_marker->image = render_device->createImage(marker_size, marker_size);
 	for (int i = 0; i < marker_size; ++i) {
-		dev_marker.image->drawPixel(i, (marker_size-1)/2, mark_color);
-		dev_marker.image->drawPixel((marker_size-1)/2, i, mark_color);
+		dev_marker->image->drawPixel(i, (marker_size-1)/2, mark_color);
+		dev_marker->image->drawPixel((marker_size-1)/2, i, mark_color);
 	}
-	dev_marker.src.x = 0;
-	dev_marker.src.y = 0;
-	dev_marker.src.w = marker_size;
-	dev_marker.src.h = marker_size;
-	dev_marker.offset.x = (marker_size-1)/2;
-	dev_marker.offset.y = (marker_size-1)/2;
+	dev_marker->src.x = 0;
+	dev_marker->src.y = 0;
+	dev_marker->src.w = marker_size;
+	dev_marker->src.h = marker_size;
+	dev_marker->offset.x = (marker_size-1)/2;
+	dev_marker->offset.y = (marker_size-1)/2;
 }
 
 void HazardManager::logic() {
@@ -214,9 +219,9 @@ void HazardManager::addRenders(std::vector<Renderable> &r, std::vector<Renderabl
 		h[i]->addRenderable(r, r_dead);
 
 		if (DEV_MODE && DEV_HUD && h[i]->delay_frames == 0) {
-			dev_marker.map_pos = h[i]->pos;
-			dev_marker.prio = 3;
-			r.push_back(dev_marker);
+			dev_marker->map_pos = h[i]->pos;
+			dev_marker->prio = 3;
+			r.push_back(*dev_marker);
 		}
 	}
 }
@@ -227,5 +232,6 @@ HazardManager::~HazardManager() {
 	// h.clear(); not needed in destructor
 	last_enemy = NULL;
 
-	dev_marker.image->unref();
+	dev_marker->image->unref();
+	delete dev_marker;
 }

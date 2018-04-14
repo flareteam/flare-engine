@@ -28,6 +28,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "GetText.h"
+#include "MessageEngine.h"
+#include "ModManager.h"
+#include "RenderDevice.h"
 #include "SharedResources.h"
 #include "Settings.h"
 

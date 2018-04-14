@@ -25,7 +25,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef UTILS_FILE_SYSTEM_H
 #define UTILS_FILE_SYSTEM_H
 
-#include "CommonIncludes.h"
+#include <string>
 
 bool dirExists(const std::string &path);
 bool pathExists(const std::string &path);

@@ -16,7 +16,11 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
+#include "AnimationManager.h"
+#include "AnimationSet.h"
 #include "CommonIncludes.h"
+#include "ModManager.h"
+#include "RenderDevice.h"
 #include "SharedResources.h"
 
 #include <cassert>

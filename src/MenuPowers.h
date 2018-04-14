@@ -27,18 +27,18 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define MENU_POWERS_H
 
 #include "CommonIncludes.h"
-#include "FileParser.h"
 #include "Menu.h"
 #include "Settings.h"
 #include "Utils.h"
-#include "WidgetButton.h"
-#include "WidgetLabel.h"
-#include "WidgetTabControl.h"
 
+class LabelInfo;
+class MenuActionBar;
 class StatBlock;
 class TooltipData;
+class WidgetButton;
+class WidgetLabel;
 class WidgetSlot;
-class MenuActionBar;
+class WidgetTabControl;
 
 class Power_Menu_Tab {
 public:
@@ -122,8 +122,8 @@ private:
 	std::vector<Sprite *> tree_surf;
 	WidgetButton *closeButton;
 
-	LabelInfo title;
-	LabelInfo unspent_points;
+	LabelInfo* title;
+	LabelInfo* unspent_points;
 	Point close_pos;
 	Rect tab_area;
 
@@ -131,8 +131,8 @@ private:
 	std::vector<Power_Menu_Tab> tabs;
 	std::string default_background;
 
-	WidgetLabel label_powers;
-	WidgetLabel stat_up;
+	WidgetLabel *label_powers;
+	WidgetLabel *stat_up;
 	WidgetTabControl *tab_control;
 
 	Color color_bonus;

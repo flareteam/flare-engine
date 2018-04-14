@@ -28,12 +28,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define MENU_ACTION_BAR_H
 
 #include "CommonIncludes.h"
-#include "Avatar.h"
 #include "Menu.h"
-#include "PowerManager.h"
 #include "Utils.h"
-#include "WidgetLabel.h"
 
+class ActionData;
+class Power;
 class StatBlock;
 class TooltipData;
 class WidgetLabel;

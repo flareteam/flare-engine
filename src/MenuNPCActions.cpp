@@ -22,12 +22,17 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 #include "CommonIncludes.h"
 #include "FileParser.h"
+#include "FontEngine.h"
+#include "InputState.h"
 #include "Menu.h"
 #include "MenuNPCActions.h"
+#include "MessageEngine.h"
 #include "NPC.h"
+#include "RenderDevice.h"
 #include "Settings.h"
 #include "SharedResources.h"
 #include "UtilsParsing.h"
+#include "WidgetLabel.h"
 
 #define SEPARATOR_HEIGHT 2
 #define ITEM_SPACING 2

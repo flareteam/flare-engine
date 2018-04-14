@@ -25,11 +25,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define GAMESTATECONFIGDESKTOP_H
 
 #include "CommonIncludes.h"
-#include "FileParser.h"
 #include "GameState.h"
 #include "GameStateConfigBase.h"
-#include "TooltipData.h"
 
+class FileParser;
 class MenuConfirm;
 class Widget;
 class WidgetButton;

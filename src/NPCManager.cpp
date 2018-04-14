@@ -25,9 +25,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "Animation.h"
+#include "CampaignManager.h"
+#include "EventManager.h"
 #include "ItemManager.h"
+#include "MapRenderer.h"
 #include "NPC.h"
 #include "NPCManager.h"
+#include "RenderDevice.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "StatBlock.h"

@@ -24,6 +24,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "CommonIncludes.h"
+#include "InputState.h"
+#include "RenderDevice.h"
 #include "SharedResources.h"
 #include "TooltipData.h"
 #include "Widget.h"

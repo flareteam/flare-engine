@@ -20,9 +20,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define MENU_TAB_CONTROL_H
 
 #include "CommonIncludes.h"
-#include "SharedResources.h"
-#include "Widget.h"
-#include "WidgetLabel.h"
+
+class WidgetLabel;
 
 class WidgetTabControl : public Widget {
 private:
@@ -56,9 +55,7 @@ public:
 	int getActiveTab();
 	void setActiveTab(unsigned tab);
 
-	int getTabHeight() {
-		return (active_tab_surface ? active_tab_surface->getGraphicsHeight() : 0);
-	}
+	int getTabHeight();
 
 	void updateHeader();
 

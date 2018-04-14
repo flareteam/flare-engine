@@ -24,13 +24,17 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "CommonIncludes.h"
+#include "CursorManager.h"
 #include "MenuManager.h"
+#include "MessageEngine.h"
 #include "Platform.h"
+#include "RenderDevice.h"
 #include "SDLInputState.h"
 #include "SaveLoad.h"
 #include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
+#include "SoundManager.h"
 #include "UtilsDebug.h"
 #include "UtilsParsing.h"
 

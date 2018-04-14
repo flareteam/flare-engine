@@ -20,12 +20,18 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 #include "CampaignManager.h"
+#include "CombatText.h"
 #include "CommonIncludes.h"
+#include "CursorManager.h"
 #include "EnemyGroupManager.h"
+#include "EventManager.h"
+#include "InputState.h"
 #include "MapRenderer.h"
 #include "PowerManager.h"
+#include "RenderDevice.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
+#include "SoundManager.h"
 #include "StatBlock.h"
 #include "UtilsFileSystem.h"
 #include "UtilsMath.h"

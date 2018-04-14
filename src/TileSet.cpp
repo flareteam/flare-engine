@@ -25,11 +25,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * TileSet storage and file loading
  */
 
-#include "TileSet.h"
-#include "SharedResources.h"
 #include "FileParser.h"
-#include "UtilsParsing.h"
+#include "ModManager.h"
+#include "RenderDevice.h"
 #include "Settings.h"
+#include "SharedResources.h"
+#include "TileSet.h"
+#include "UtilsParsing.h"
 
 TileSet::TileSet()
 	: sprites(NULL) {

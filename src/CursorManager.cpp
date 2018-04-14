@@ -18,6 +18,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CursorManager.h"
 #include "FileParser.h"
+#include "InputState.h"
+#include "RenderDevice.h"
 #include "Settings.h"
 #include "SharedResources.h"
 #include "UtilsParsing.h"

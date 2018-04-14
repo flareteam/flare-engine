@@ -19,6 +19,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Version number
  */
 
+#include "MessageEngine.h"
 #include "SharedResources.h"
 #include "UtilsParsing.h"
 #include "Version.h"

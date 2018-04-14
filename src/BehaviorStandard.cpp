@@ -18,13 +18,16 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 #include "Animation.h"
+#include "Avatar.h"
 #include "BehaviorStandard.h"
 #include "CommonIncludes.h"
 #include "Enemy.h"
+#include "EnemyManager.h"
 #include "MapRenderer.h"
+#include "PowerManager.h"
+#include "SharedGameResources.h"
 #include "StatBlock.h"
 #include "UtilsMath.h"
-#include "SharedGameResources.h"
 
 BehaviorStandard::BehaviorStandard(Enemy *_e)
 	: EnemyBehavior(_e)

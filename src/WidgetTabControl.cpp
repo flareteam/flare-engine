@@ -16,6 +16,10 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
+#include "FontEngine.h"
+#include "InputState.h"
+#include "RenderDevice.h"
+#include "SharedResources.h"
 #include "WidgetLabel.h"
 #include "WidgetSettings.h"
 #include "WidgetTabControl.h"
@@ -282,4 +286,8 @@ bool WidgetTabControl::getNext() {
 bool WidgetTabControl::getPrev() {
 	setActiveTab(--active_tab);
 	return true;
+}
+
+int WidgetTabControl::getTabHeight() {
+	return (active_tab_surface ? active_tab_surface->getGraphicsHeight() : 0);
 }

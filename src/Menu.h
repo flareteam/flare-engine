@@ -27,7 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define MENU_H
 
 #include "CommonIncludes.h"
-#include "SoundManager.h"
+#include "Utils.h"
 #include "Widget.h"
 
 class Menu {
@@ -48,8 +48,8 @@ public:
 
 	virtual bool parseMenuKey(const std::string &key, const std::string &val);
 
-	SoundManager::SoundID sfx_open;
-	SoundManager::SoundID sfx_close;
+	SoundID sfx_open;
+	SoundID sfx_close;
 
 	TabList tablist;
 	virtual TabList* getCurrentTabList();

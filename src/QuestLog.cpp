@@ -23,16 +23,20 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Helper text to remind the player of active quests
  */
 
+#include "CampaignManager.h"
 #include "CommonIncludes.h"
+#include "EventManager.h"
 #include "FileParser.h"
 #include "Menu.h"
 #include "MenuLog.h"
+#include "MessageEngine.h"
+#include "ModManager.h"
 #include "QuestLog.h"
 #include "Settings.h"
+#include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
-#include "SharedGameResources.h"
 
 QuestLog::QuestLog(MenuLog *_log) {
 	log = _log;

@@ -25,10 +25,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <string>
 
 #include "FileParser.h"
+#include "FontEngine.h"
+#include "InputState.h"
 #include "Menu.h"
 #include "MenuCharacter.h"
-#include "SharedResources.h"
+#include "MessageEngine.h"
 #include "Settings.h"
+#include "SharedResources.h"
+#include "SoundManager.h"
 #include "StatBlock.h"
 #include "UtilsParsing.h"
 #include "WidgetButton.h"

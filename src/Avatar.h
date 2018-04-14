@@ -29,14 +29,26 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "Entity.h"
-#include "PowerManager.h"
-#include "SharedResources.h"
-#include "SoundManager.h"
 #include "Utils.h"
 
 class Entity;
 class Hazard;
 class StatBlock;
+
+class ActionData {
+public:
+	int power;
+	unsigned hotkey;
+	bool instant_item;
+	FPoint target;
+
+	ActionData()
+		: power(0)
+		, hotkey(0)
+		, instant_item(false)
+		, target(FPoint()) {
+	}
+};
 
 class Layer_gfx {
 public:
@@ -67,7 +79,7 @@ private:
 
 	std::vector<Step_sfx> step_def;
 
-	std::vector<SoundManager::SoundID> sound_steps;
+	std::vector<SoundID> sound_steps;
 
 	std::vector<AnimationSet*> animsets; // hold the animations for all equipped items in the right order of drawing.
 	std::vector<Animation*> anims; // hold the animations for all equipped items in the right order of drawing.

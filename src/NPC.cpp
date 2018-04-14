@@ -22,18 +22,22 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class NPC
  */
 
-#include "NPC.h"
-
 #include "Animation.h"
-#include "AnimationSet.h"
 #include "AnimationManager.h"
+#include "AnimationSet.h"
 #include "CampaignManager.h"
+#include "EventManager.h"
 #include "FileParser.h"
 #include "ItemManager.h"
-#include "SharedResources.h"
-#include "UtilsParsing.h"
+#include "LootManager.h"
+#include "MessageEngine.h"
+#include "NPC.h"
+#include "RenderDevice.h"
 #include "SharedGameResources.h"
+#include "SharedResources.h"
+#include "SoundManager.h"
 #include "UtilsMath.h"
+#include "UtilsParsing.h"
 
 NPC::NPC()
 	: Entity()
@@ -288,7 +292,7 @@ void NPC::loadGraphics() {
  */
 int NPC::loadSound(const std::string& fname, int vox_type) {
 
-	SoundManager::SoundID a = snd->load(fname, "NPC voice");
+	SoundID a = snd->load(fname, "NPC voice");
 
 	if (!a)
 		return -1;

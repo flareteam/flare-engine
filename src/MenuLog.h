@@ -30,7 +30,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetLog.h"
 
 class WidgetButton;
-class WidgetLog;
 class WidgetTabControl;
 
 const unsigned LOG_TYPE_COUNT = 2;

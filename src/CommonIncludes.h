@@ -31,6 +31,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <vector>
 
 #include <SDL.h>
-#include "DeviceList.h"
+
+class Image;
+class Sprite;
+class Renderable;
 
 #endif

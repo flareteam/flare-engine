@@ -23,7 +23,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "Utils.h"
-#include <map>
 
 const int JUSTIFY_LEFT = 0;
 const int JUSTIFY_RIGHT = 1;

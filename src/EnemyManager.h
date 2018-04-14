@@ -26,10 +26,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef ENEMY_MANAGER_H
 #define ENEMY_MANAGER_H
 
-#include "Settings.h"
-#include "Enemy.h"
+#include "CommonIncludes.h"
 #include "Utils.h"
-#include "CampaignManager.h"
+
+class Animation;
+class Enemy;
 
 class EnemyManager {
 private:

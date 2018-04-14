@@ -27,17 +27,16 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define ITEM_MANAGER_H
 
 #include "CommonIncludes.h"
-#include "FileParser.h"
 #include "Settings.h"
-#include "TooltipData.h"
-
-#include <stdint.h>
+#include "Utils.h"
 
 #define VENDOR_BUY 0
 #define VENDOR_SELL 1
 #define PLAYER_INV 2
 
+class FileParser;
 class StatBlock;
+class TooltipData;
 
 class LootAnimation {
 public:
@@ -119,7 +118,7 @@ public:
 	std::string requires_class;
 	std::vector<BonusData> bonus;   // stat to increase/decrease e.g. hp, accuracy, speed
 	std::string sfx;           // the item sound when it hits the floor or inventory, etc
-	SoundManager::SoundID sfx_id;
+	SoundID sfx_id;
 	std::string gfx;           // the sprite layer shown when this item is equipped
 	std::vector<LootAnimation> loot_animation;// the flying loot animation for this item
 	int power;            // this item can be dragged to the action bar and used as a power

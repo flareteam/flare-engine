@@ -19,8 +19,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef SOUND_MANAGER_H
 #define SOUND_MANAGER_H
 
+#include "CommonIncludes.h"
 #include "Utils.h"
-#include <stdint.h>
 
 const std::string GLOBAL_VIRTUAL_CHANNEL = "__global__";
 
@@ -34,13 +34,11 @@ const std::string GLOBAL_VIRTUAL_CHANNEL = "__global__";
 **/
 class SoundManager {
 public:
-	typedef unsigned long SoundID;
-
 	virtual ~SoundManager() {};
 
-	virtual SoundManager::SoundID load(const std::string& filename, const std::string& errormessage) = 0;
-	virtual void unload(SoundManager::SoundID) = 0;
-	virtual void play(SoundManager::SoundID, const std::string& channel = GLOBAL_VIRTUAL_CHANNEL, const FPoint& pos = FPoint(0,0), bool loop = false) = 0;
+	virtual SoundID load(const std::string& filename, const std::string& errormessage) = 0;
+	virtual void unload(SoundID) = 0;
+	virtual void play(SoundID, const std::string& channel = GLOBAL_VIRTUAL_CHANNEL, const FPoint& pos = FPoint(0,0), bool loop = false) = 0;
 	virtual void pauseAll() = 0;
 	virtual void resumeAll() = 0;
 	virtual void setVolumeSFX(int value) = 0;
@@ -75,7 +73,7 @@ public:
 		, finished(false) {
 	}
 
-	SoundManager::SoundID sid;
+	SoundID sid;
 	std::string virtual_channel;
 	FPoint location;
 	bool loop;

@@ -27,8 +27,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef ENEMY_BEHAVIOR_H
 #define ENEMY_BEHAVIOR_H
 
-#include "EnemyManager.h"
-
 class Enemy;
 
 class EnemyBehavior {

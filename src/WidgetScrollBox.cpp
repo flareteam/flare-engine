@@ -22,6 +22,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class WidgetScrollBox
  */
 
+#include "InputState.h"
+#include "RenderDevice.h"
 #include "Settings.h"
 #include "WidgetScrollBox.h"
 #include "WidgetSettings.h"

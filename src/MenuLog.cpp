@@ -22,11 +22,15 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "FileParser.h"
+#include "FontEngine.h"
 #include "Menu.h"
 #include "MenuLog.h"
+#include "MessageEngine.h"
 #include "ModManager.h"
 #include "Settings.h"
 #include "SharedGameResources.h"
+#include "SharedResources.h"
+#include "SoundManager.h"
 #include "Utils.h"
 #include "UtilsParsing.h"
 #include "WidgetButton.h"

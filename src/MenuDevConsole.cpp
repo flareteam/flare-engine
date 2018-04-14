@@ -19,15 +19,26 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuDevConsole
  */
 
+#include "CampaignManager.h"
 #include "EnemyManager.h"
+#include "EventManager.h"
 #include "FileParser.h"
+#include "FontEngine.h"
+#include "InputState.h"
+#include "MenuActionBar.h"
 #include "MenuDevConsole.h"
 #include "MenuManager.h"
+#include "MessageEngine.h"
+#include "ModManager.h"
+#include "PowerManager.h"
+#include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
-#include "Settings.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
+#include "WidgetButton.h"
+#include "WidgetInput.h"
+#include "WidgetLog.h"
 
 #include <limits>
 

@@ -23,8 +23,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef EVENT_MANAGER_H
 #define EVENT_MANAGER_H
 
-#include "FileParser.h"
+#include "CommonIncludes.h"
 #include "Utils.h"
+
+class FileParser;
 
 enum EVENT_ACTIVATE_TYPE {
 	EVENT_ON_TRIGGER = 0,

@@ -27,7 +27,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define MENU_ENEMY_H
 
 #include "CommonIncludes.h"
-#include "Settings.h"
 #include "WidgetLabel.h"
 
 class Enemy;

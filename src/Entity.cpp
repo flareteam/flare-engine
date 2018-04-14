@@ -27,11 +27,17 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Animation.h"
 #include "AnimationManager.h"
 #include "AnimationSet.h"
+#include "CombatText.h"
 #include "CommonIncludes.h"
 #include "Entity.h"
-#include "SharedResources.h"
-#include "UtilsMath.h"
+#include "Hazard.h"
+#include "MapRenderer.h"
+#include "MessageEngine.h"
+#include "PowerManager.h"
 #include "SharedGameResources.h"
+#include "SharedResources.h"
+#include "SoundManager.h"
+#include "UtilsMath.h"
 
 #include <math.h>
 
@@ -93,10 +99,10 @@ void Entity::loadSounds(StatBlock *src_stats) {
 
 	for (size_t i = 0; i < src_stats->sfx_attack.size(); ++i) {
 		std::string anim_name = src_stats->sfx_attack[i].first;
-		sound_attack.push_back(std::pair<std::string, std::vector<SoundManager::SoundID> >());
+		sound_attack.push_back(std::pair<std::string, std::vector<SoundID> >());
 		sound_attack.back().first = anim_name;
 		for (size_t j = 0; j  < src_stats->sfx_attack[i].second.size(); ++j) {
-			SoundManager::SoundID sid = snd->load(src_stats->sfx_attack[i].second[j], "Entity attack");
+			SoundID sid = snd->load(src_stats->sfx_attack[i].second[j], "Entity attack");
 			sound_attack.back().second.push_back(sid);
 		}
 	}

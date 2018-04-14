@@ -30,6 +30,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuItemStorage.h"
 #include "WidgetLabel.h"
 
+class BonusData;
 class StatBlock;
 class WidgetButton;
 

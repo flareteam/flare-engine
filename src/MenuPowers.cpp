@@ -23,18 +23,28 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuPowers
  */
 
+#include "Avatar.h"
+#include "CampaignManager.h"
 #include "CommonIncludes.h"
+#include "FileParser.h"
+#include "FontEngine.h"
 #include "Menu.h"
+#include "MenuActionBar.h"
 #include "MenuPowers.h"
+#include "MessageEngine.h"
+#include "PowerManager.h"
+#include "RenderDevice.h"
 #include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
+#include "SoundManager.h"
 #include "StatBlock.h"
+#include "TooltipData.h"
 #include "UtilsParsing.h"
+#include "WidgetButton.h"
 #include "WidgetLabel.h"
 #include "WidgetSlot.h"
-#include "TooltipData.h"
-#include "MenuActionBar.h"
+#include "WidgetTabControl.h"
 
 #include <climits>
 
@@ -44,8 +54,12 @@ MenuPowers::MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar)
 	, skip_section(false)
 	, powers_unlock(NULL)
 	, overlay_disabled(NULL)
+	, title(new LabelInfo)
+	, unspent_points(new LabelInfo)
 	, points_left(0)
 	, default_background("")
+	, label_powers(new WidgetLabel)
+	, stat_up(new WidgetLabel)
 	, tab_control(NULL)
 	, tree_loaded(false)
 	, prev_powers_list_size(0)
@@ -64,9 +78,9 @@ MenuPowers::MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar)
 				continue;
 
 			// @ATTR label_title|label|Position of the "Powers" text.
-			if (infile.key == "label_title") title = eatLabelInfo(infile.val);
+			if (infile.key == "label_title") *title = eatLabelInfo(infile.val);
 			// @ATTR unspent_points|label|Position of the text that displays the amount of unused power points.
-			else if (infile.key == "unspent_points") unspent_points = eatLabelInfo(infile.val);
+			else if (infile.key == "unspent_points") *unspent_points = eatLabelInfo(infile.val);
 			// @ATTR close|point|Position of the close button.
 			else if (infile.key == "close") close_pos = toPoint(infile.val);
 			// @ATTR tab_area|rectangle|Position and dimensions of the tree pages.
@@ -105,23 +119,28 @@ MenuPowers::~MenuPowers() {
 	delete closeButton;
 	if (tab_control) delete tab_control;
 	menu_powers = NULL;
+
+	delete title;
+	delete unspent_points;
+	delete label_powers;
+	delete stat_up;
 }
 
 void MenuPowers::align() {
 	Menu::align();
 
-	label_powers.set(window_area.x+title.x, window_area.y+title.y, title.justify, title.valign, msg->get("Powers"), font->getColor("menu_normal"), title.font_style);
+	label_powers->set(window_area.x + title->x, window_area.y + title->y, title->justify, title->valign, msg->get("Powers"), font->getColor("menu_normal"), title->font_style);
 
 	closeButton->pos.x = window_area.x+close_pos.x;
 	closeButton->pos.y = window_area.y+close_pos.y;
 
-	stat_up.set(window_area.x+unspent_points.x, window_area.y+unspent_points.y, unspent_points.justify, unspent_points.valign, "", font->getColor("menu_bonus"), unspent_points.font_style);
+	stat_up->set(window_area.x + unspent_points->x, window_area.y + unspent_points->y, unspent_points->justify, unspent_points->valign, "", font->getColor("menu_bonus"), unspent_points->font_style);
 
 	if (tab_control) {
-		tab_control->setMainArea(window_area.x+tab_area.x, window_area.y+tab_area.y);
+		tab_control->setMainArea(window_area.x + tab_area.x, window_area.y + tab_area.y);
 	}
 
-	for (size_t i=0; i<slots.size(); i++) {
+	for (size_t i = 0; i < slots.size(); i++) {
 		if (!slots[i]) continue;
 
 		slots[i]->setPos(window_area.x, window_area.y);
@@ -1301,18 +1320,18 @@ void MenuPowers::render() {
 	closeButton->render();
 
 	// text overlay
-	if (!title.hidden) label_powers.render();
+	if (!title->hidden) label_powers->render();
 
 	// stats
-	if (!unspent_points.hidden) {
+	if (!unspent_points->hidden) {
 		std::stringstream ss;
 
 		ss.str("");
 		if (points_left !=0) {
 			ss << msg->get("Unspent skill points:") << " " << points_left;
 		}
-		stat_up.set(ss.str());
-		stat_up.render();
+		stat_up->set(ss.str());
+		stat_up->render();
 	}
 }
 

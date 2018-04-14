@@ -25,16 +25,25 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Character stats and calculations
  */
 
-#include "StatBlock.h"
+#include "Avatar.h"
+#include "CombatText.h"
+#include "Enemy.h"
+#include "EnemyManager.h"
 #include "FileParser.h"
+#include "Hazard.h"
+#include "LootManager.h"
+#include "MapCollision.h"
+#include "MapRenderer.h"
+#include "MenuPowers.h"
+#include "MessageEngine.h"
+#include "PowerManager.h"
+#include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
-#include "Settings.h"
-#include "UtilsParsing.h"
-#include "MapCollision.h"
-#include "MenuPowers.h"
-#include "EnemyManager.h"
+#include "StatBlock.h"
 #include "UtilsMath.h"
+#include "UtilsParsing.h"
+
 #include <limits>
 
 StatBlock::StatBlock()

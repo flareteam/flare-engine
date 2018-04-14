@@ -28,14 +28,15 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef POWER_MANAGER_H
 #define POWER_MANAGER_H
 
-#include "FileParser.h"
 #include "MapCollision.h"
-#include "MapRenderer.h"
-#include "Map.h"
 #include "Settings.h"
+#include "Utils.h"
 
+class Animation;
 class AnimationSet;
 class Hazard;
+class MapCollision;
+class Map_Enemy;
 
 const int POWTYPE_FIXED = 0;
 const int POWTYPE_MISSILE = 1;
@@ -91,21 +92,6 @@ public:
 	}
 };
 
-class ActionData {
-public:
-	int power;
-	unsigned hotkey;
-	bool instant_item;
-	FPoint target;
-
-	ActionData()
-		: power(0)
-		, hotkey(0)
-		, instant_item(false)
-		, target(FPoint()) {
-	}
-};
-
 class PowerReplaceByEffect {
 public:
 	int power_id;
@@ -157,7 +143,7 @@ public:
 	// animation info
 	std::string animation_name;
 	int sfx_index;
-	unsigned long sfx_hit;
+	SoundID sfx_hit;
 	bool sfx_hit_enable;
 	bool directional; // sprite sheet contains options for 8 directions, one per row
 	int visual_random; // sprite sheet contains rows of random options
@@ -458,7 +444,7 @@ public:
 	std::queue<Map_Enemy> map_enemies; // output; read by PowerManager
 
 	// shared sounds for power special effects
-	std::vector<SoundManager::SoundID> sfx;
+	std::vector<SoundID> sfx;
 
 	std::vector<int> used_items;
 	std::vector<int> used_equipped_items;

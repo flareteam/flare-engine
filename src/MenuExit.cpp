@@ -22,12 +22,18 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuExit
  */
 
+#include "Avatar.h"
 #include "FileParser.h"
+#include "FontEngine.h"
 #include "MenuExit.h"
+#include "MessageEngine.h"
 #include "SharedResources.h"
 #include "SharedGameResources.h"
 #include "Settings.h"
+#include "SoundManager.h"
 #include "UtilsParsing.h"
+#include "WidgetButton.h"
+#include "WidgetSlider.h"
 
 MenuExit::MenuExit() : Menu() {
 

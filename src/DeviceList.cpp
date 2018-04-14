@@ -21,6 +21,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "DeviceList.h"
 
 #include "MessageEngine.h"
+#include "RenderDevice.h"
 
 #include "SDLSoftwareRenderDevice.h"
 #include "SDLHardwareRenderDevice.h"

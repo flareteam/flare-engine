@@ -24,11 +24,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Contains data for story mode
  */
 
+#include "Avatar.h"
 #include "CampaignManager.h"
 #include "CommonIncludes.h"
 #include "Menu.h"
 #include "MenuManager.h"
 #include "MenuInventory.h"
+#include "MessageEngine.h"
 #include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"

@@ -25,13 +25,22 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <ctime>
 #include <limits.h>
 
-#include "Settings.h"
-#include "Stats.h"
+#include "AnimationManager.h"
+#include "CombatText.h"
+#include "DeviceList.h"
 #include "GameSwitcher.h"
-#include "SharedResources.h"
-#include "UtilsFileSystem.h"
+#include "InputState.h"
+#include "MessageEngine.h"
+#include "ModManager.h"
+#include "RenderDevice.h"
+#include "SaveLoad.h"
 #include "SDLFontEngine.h"
+#include "Settings.h"
+#include "SharedResources.h"
+#include "SoundManager.h"
+#include "Stats.h"
 #include "Utils.h"
+#include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
 
 GameSwitcher *gswitch;

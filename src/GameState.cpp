@@ -17,7 +17,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 #include "GameState.h"
+#include "MessageEngine.h"
+#include "RenderDevice.h"
 #include "Settings.h"
+#include "SharedResources.h"
 
 GameState::GameState()
 	: hasMusic(false)

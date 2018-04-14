@@ -25,6 +25,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "SDLFontEngine.h"
 #include "FileParser.h"
+#include "ModManager.h"
+#include "RenderDevice.h"
 #include "SharedResources.h"
 #include "Settings.h"
 #include "UtilsParsing.h"

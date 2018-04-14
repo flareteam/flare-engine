@@ -22,8 +22,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class WidgetScrollBar
  */
 
-#include "WidgetScrollBar.h"
+#include "InputState.h"
+#include "RenderDevice.h"
 #include "SharedResources.h"
+#include "WidgetScrollBar.h"
 
 WidgetScrollBar::WidgetScrollBar(const std::string& _fileName)
 	: Widget()

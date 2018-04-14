@@ -19,11 +19,16 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 
-#include "Map.h"
-
+#include "EventManager.h"
 #include "FileParser.h"
-#include "UtilsParsing.h"
+#include "Hazard.h"
+#include "Map.h"
+#include "MessageEngine.h"
+#include "ModManager.h"
 #include "Settings.h"
+#include "SharedResources.h"
+#include "StatBlock.h"
+#include "UtilsParsing.h"
 
 Map::Map()
 	: filename("")

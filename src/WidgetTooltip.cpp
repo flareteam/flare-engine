@@ -23,9 +23,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class WidgetTooltip
  */
 
-#include "WidgetTooltip.h"
+#include "FontEngine.h"
+#include "RenderDevice.h"
 #include "Settings.h"
+#include "SharedResources.h"
 #include "Utils.h"
+#include "WidgetTooltip.h"
 
 int TOOLTIP_CONTEXT = TOOLTIP_NONE;
 

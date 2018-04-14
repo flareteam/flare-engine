@@ -31,17 +31,18 @@ Created and destroyed by main.cpp
 #define SHARED_RESOURCES_H
 
 #include "CommonIncludes.h"
-#include "AnimationManager.h"
-#include "CombatText.h"
-#include "CursorManager.h"
-#include "FontEngine.h"
-#include "IconManager.h"
-#include "InputState.h"
-#include "MessageEngine.h"
-#include "ModManager.h"
-#include "SoundManager.h"
-#include "RenderDevice.h"
-#include "SaveLoad.h"
+
+class AnimationManager;
+class CombatText;
+class CursorManager;
+class FontEngine;
+class IconManager;
+class InputState;
+class MessageEngine;
+class ModManager;
+class RenderDevice;
+class SaveLoad;
+class SoundManager;
 
 extern AnimationManager *anim;
 extern CombatText *comb;
@@ -51,8 +52,8 @@ extern IconManager *icons;
 extern InputState *inpt;
 extern MessageEngine *msg;
 extern ModManager *mods;
-extern SoundManager *snd;
 extern RenderDevice *render_device;
 extern SaveLoad *save_load;
+extern SoundManager *snd;
 
 #endif

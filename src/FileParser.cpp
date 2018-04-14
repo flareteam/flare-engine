@@ -17,9 +17,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 #include "FileParser.h"
-#include "UtilsParsing.h"
-#include "UtilsFileSystem.h"
+#include "ModManager.h"
 #include "SharedResources.h"
+#include "UtilsFileSystem.h"
+#include "UtilsParsing.h"
 
 #include <stdarg.h>
 

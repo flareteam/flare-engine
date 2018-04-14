@@ -29,8 +29,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "Utils.h"
 
-#include <cstdlib>
-
 typedef std::vector< std::vector<unsigned short> > Map_Layer;
 
 // collision tile types

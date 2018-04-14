@@ -18,8 +18,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef ICON_MANAGER_H
 #define ICON_MANAGER_H
 
-#include "RenderDevice.h"
 #include "Utils.h"
+
+class Sprite;
 
 class IconSet {
 public:

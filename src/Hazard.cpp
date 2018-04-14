@@ -28,6 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "AnimationManager.h"
 #include "Hazard.h"
 #include "MapCollision.h"
+#include "RenderDevice.h"
 #include "SharedResources.h"
 #include "StatBlock.h"
 #include "Settings.h"

@@ -21,7 +21,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef TOOLTIPDATA_H
 #define TOOLTIPDATA_H
 
-#include "SharedResources.h"
 #include "Utils.h"
 
 enum STYLE {

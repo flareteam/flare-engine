@@ -29,6 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "Animation.h"
+#include "RenderDevice.h"
 
 Animation::Animation(const std::string &_name, const std::string &_type, Image *_sprite, uint8_t _blend_mode, uint8_t _alpha_mod, Color _color_mod)
 	: name(_name)

@@ -23,11 +23,15 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "BehaviorStandard.h"
 #include "CampaignManager.h"
 #include "CommonIncludes.h"
-#include "EnemyBehavior.h"
 #include "Enemy.h"
+#include "EnemyBehavior.h"
+#include "Hazard.h"
+#include "LootManager.h"
+#include "RenderDevice.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "UtilsMath.h"
+
 #include <math.h>
 #include <cassert>
 

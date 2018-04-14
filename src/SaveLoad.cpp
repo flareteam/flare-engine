@@ -28,6 +28,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  *
  */
 
+#include "Avatar.h"
+#include "CampaignManager.h"
 #include "CommonIncludes.h"
 #include "FileParser.h"
 #include "GameStatePlay.h"
@@ -39,14 +41,19 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuInventory.h"
 #include "MenuLog.h"
 #include "MenuManager.h"
+#include "MenuPowers.h"
 #include "MenuStash.h"
 #include "MenuTalker.h"
 #include "MenuVendor.h"
+#include "MessageEngine.h"
+#include "ModManager.h"
 #include "NPC.h"
 #include "Platform.h"
+#include "PowerManager.h"
 #include "SaveLoad.h"
 #include "Settings.h"
 #include "SharedGameResources.h"
+#include "SharedResources.h"
 #include "Utils.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"

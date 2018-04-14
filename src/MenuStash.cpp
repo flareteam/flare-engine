@@ -23,14 +23,20 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuStash
  */
 
+#include "Avatar.h"
 #include "FileParser.h"
+#include "FontEngine.h"
+#include "ItemManager.h"
 #include "Menu.h"
 #include "MenuStash.h"
+#include "MessageEngine.h"
 #include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
+#include "SoundManager.h"
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
+#include "WidgetSlot.h"
 
 MenuStash::MenuStash(StatBlock *_stats)
 	: Menu()

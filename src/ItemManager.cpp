@@ -24,14 +24,19 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class ItemManager
  */
 
+#include "Avatar.h"
 #include "CommonIncludes.h"
 #include "FileParser.h"
+#include "FontEngine.h"
 #include "ItemManager.h"
+#include "MessageEngine.h"
 #include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
+#include "SoundManager.h"
 #include "StatBlock.h"
 #include "Stats.h"
+#include "TooltipData.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
 #include "WidgetLabel.h"

@@ -20,11 +20,16 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "FileParser.h"
+#include "FontEngine.h"
+#include "InputState.h"
 #include "MenuNumPicker.h"
+#include "MessageEngine.h"
 #include "SharedResources.h"
 #include "Settings.h"
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
+#include "WidgetButton.h"
+#include "WidgetInput.h"
 
 #include <limits.h>
 

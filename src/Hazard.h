@@ -34,7 +34,6 @@ class Entity;
 
 class Animation;
 class StatBlock;
-class MapCollision;
 
 // the spell/power's source type: eg. which team did it come from?
 const int SOURCE_TYPE_HERO = 0;
@@ -145,7 +144,7 @@ public:
 	bool walls_block_aoe;
 
 	// soundfx
-	unsigned long sfx_hit;
+	SoundID sfx_hit;
 	bool sfx_hit_enable;
 	bool sfx_hit_played;
 

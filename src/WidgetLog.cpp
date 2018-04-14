@@ -20,6 +20,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "CommonIncludes.h"
+#include "FontEngine.h"
+#include "RenderDevice.h"
 #include "SharedResources.h"
 #include "Widget.h"
 #include "WidgetLog.h"

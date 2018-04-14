@@ -21,14 +21,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef MAP_H
 #define MAP_H
 
-#include <vector>
-#include <queue>
-
-#include "EventManager.h"
-#include "FileParser.h"
+#include "CommonIncludes.h"
 #include "MapCollision.h"
-#include "StatBlock.h"
 #include "Utils.h"
+
+class Event;
+class StatBlock;
 
 class Map_Group {
 public:

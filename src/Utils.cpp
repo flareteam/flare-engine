@@ -20,6 +20,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 #include "Avatar.h"
+#include "InputState.h"
+#include "MessageEngine.h"
 #include "Platform.h"
 #include "Settings.h"
 #include "SharedResources.h"

@@ -20,8 +20,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef UTILS_PARSING_H
 #define UTILS_PARSING_H
 
-#include "CommonIncludes.h"
 #include "Utils.h"
+
+#include <string>
 #include <typeinfo>
 
 std::string trim(const std::string& s, const std::string& delimiters = " \f\n\r\t\v");

@@ -28,10 +28,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "Menu.h"
-#include "TooltipData.h"
 #include "Utils.h"
 
 class StatBlock;
+class TooltipData;
+class WidgetLabel;
 
 class EffectIcon {
 public:

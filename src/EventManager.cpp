@@ -16,14 +16,23 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
+#include "Avatar.h"
+#include "CampaignManager.h"
 #include "EnemyManager.h"
 #include "EventManager.h"
 #include "FileParser.h"
+#include "LootManager.h"
+#include "MapRenderer.h"
 #include "Menu.h"
+#include "MenuActionBar.h"
 #include "MenuInventory.h"
 #include "MenuPowers.h"
 #include "MenuManager.h"
+#include "MessageEngine.h"
+#include "ModManager.h"
 #include "SharedGameResources.h"
+#include "SharedResources.h"
+#include "SoundManager.h"
 #include "UtilsFileSystem.h"
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
@@ -751,7 +760,7 @@ bool EventManager::executeEvent(Event &ev) {
 			if (ev.activate_type == EVENT_ON_LOAD || ec->z != 0)
 				loop = true;
 
-			SoundManager::SoundID sid = snd->load(ec->s, "MapRenderer background soundfx");
+			SoundID sid = snd->load(ec->s, "MapRenderer background soundfx");
 
 			snd->play(sid, GLOBAL_VIRTUAL_CHANNEL, pos, loop);
 			mapr->sids.push_back(sid);

@@ -29,7 +29,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "GameState.h"
-#include "PowerManager.h"
 #include "Utils.h"
 
 class Avatar;

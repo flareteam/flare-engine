@@ -32,6 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "ItemManager.h"
 #include "Loot.h"
 #include "Settings.h"
+#include "Utils.h"
 
 class Animation;
 
@@ -57,7 +58,7 @@ private:
 	void loadLootTables();
 	void getLootTable(const std::string &filename, std::vector<Event_Component> *ec_list);
 
-	SoundManager::SoundID sfx_loot;
+	SoundID sfx_loot;
 
 	int drop_max;
 	int drop_radius;

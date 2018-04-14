@@ -16,6 +16,13 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
+#include "Avatar.h"
+#include "CampaignManager.h"
+#include "EnemyGroupManager.h"
+#include "LootManager.h"
+#include "MenuActionBar.h"
+#include "MenuPowers.h"
+#include "PowerManager.h"
 #include "SharedGameResources.h"
 
 Avatar *pc = NULL;

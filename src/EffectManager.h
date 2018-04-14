@@ -25,9 +25,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define EFFECT_MANAGER_H
 
 #include "CommonIncludes.h"
-#include "Hazard.h"
-#include "SharedResources.h"
-#include "Stats.h"
 #include "Utils.h"
 
 class Animation;

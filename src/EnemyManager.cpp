@@ -18,16 +18,25 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
-#include "EnemyManager.h"
-
+#include "Animation.h"
 #include "AnimationManager.h"
 #include "AnimationSet.h"
-#include "Animation.h"
-#include "SharedResources.h"
-#include "EnemyBehavior.h"
-#include "BehaviorStandard.h"
+#include "Avatar.h"
 #include "BehaviorAlly.h"
+#include "BehaviorStandard.h"
+#include "CampaignManager.h"
+#include "Enemy.h"
+#include "EnemyBehavior.h"
+#include "EnemyGroupManager.h"
+#include "EnemyManager.h"
+#include "EventManager.h"
+#include "Hazard.h"
+#include "MapRenderer.h"
+#include "MenuActionBar.h"
+#include "PowerManager.h"
+#include "RenderDevice.h"
 #include "SharedGameResources.h"
+#include "SharedResources.h"
 
 #include <limits>
 

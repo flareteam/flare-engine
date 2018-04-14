@@ -21,8 +21,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Animation.h"
 #include "AnimationSet.h"
 #include "AnimationManager.h"
-
 #include "FileParser.h"
+#include "ModManager.h"
+#include "RenderDevice.h"
 #include "SharedResources.h"
 #include "Settings.h"
 #include "Utils.h"

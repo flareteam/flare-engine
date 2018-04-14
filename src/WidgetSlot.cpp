@@ -24,9 +24,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "CommonIncludes.h"
-#include "WidgetSlot.h"
-#include "SharedResources.h"
+#include "FontEngine.h"
+#include "IconManager.h"
+#include "RenderDevice.h"
 #include "Settings.h"
+#include "SharedResources.h"
+#include "WidgetSlot.h"
 
 WidgetSlot::WidgetSlot(int _icon_id, int _ACTIVATE)
 	: Widget()

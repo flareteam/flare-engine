@@ -21,7 +21,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define GAMESTATE_H
 
 #include "CommonIncludes.h"
-#include "SharedResources.h"
 #include "WidgetTooltip.h"
 
 class GameState {

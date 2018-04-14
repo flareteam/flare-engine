@@ -24,10 +24,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "FileParser.h"
+#include "FontEngine.h"
+#include "InputState.h"
 #include "Menu.h"
 #include "MenuNPCActions.h"
 #include "MenuTalker.h"
 #include "NPC.h"
+#include "RenderDevice.h"
 #include "Settings.h"
 #include "SharedResources.h"
 #include "SharedGameResources.h"

@@ -23,12 +23,17 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Avatar.h"
 #include "FileParser.h"
+#include "FontEngine.h"
 #include "GameStateLoad.h"
 #include "GameStateTitle.h"
 #include "GameStatePlay.h"
 #include "GameStateNew.h"
+#include "InputState.h"
 #include "ItemManager.h"
 #include "MenuConfirm.h"
+#include "MessageEngine.h"
+#include "ModManager.h"
+#include "RenderDevice.h"
 #include "SaveLoad.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
@@ -36,6 +41,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsFileSystem.h"
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
+#include "WidgetButton.h"
 #include "WidgetScrollBar.h"
 
 bool compareSaveDirs(const std::string& dir1, const std::string& dir2) {

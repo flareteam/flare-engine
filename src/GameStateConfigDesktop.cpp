@@ -22,11 +22,16 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "CommonIncludes.h"
+#include "DeviceList.h"
 #include "FileParser.h"
+#include "FontEngine.h"
 #include "GameStateConfigBase.h"
 #include "GameStateConfigDesktop.h"
 #include "GameStateTitle.h"
+#include "InputState.h"
 #include "MenuConfirm.h"
+#include "MessageEngine.h"
+#include "RenderDevice.h"
 #include "Settings.h"
 #include "SharedResources.h"
 #include "Stats.h"

@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
+#include "InputState.h"
 #include "SharedResources.h"
 #include "Settings.h"
 #include "Widget.h"

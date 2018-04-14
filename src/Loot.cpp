@@ -18,7 +18,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 #include "Animation.h"
+#include "AnimationManager.h"
+#include "AnimationSet.h"
 #include "Loot.h"
+#include "SharedResources.h"
 
 Loot::Loot()
 	: gfx("")

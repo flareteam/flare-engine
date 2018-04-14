@@ -24,16 +24,25 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuInventory
  */
 
+#include "Avatar.h"
 #include "CommonIncludes.h"
 #include "FileParser.h"
+#include "FontEngine.h"
+#include "Hazard.h"
+#include "ItemManager.h"
 #include "Menu.h"
+#include "MenuActionBar.h"
 #include "MenuInventory.h"
+#include "MessageEngine.h"
+#include "PowerManager.h"
 #include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
+#include "SoundManager.h"
 #include "StatBlock.h"
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
+#include "WidgetSlot.h"
 
 MenuInventory::MenuInventory(StatBlock *_stats)
 	: stats(_stats)

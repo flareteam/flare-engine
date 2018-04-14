@@ -27,8 +27,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define CAMPAIGN_MANAGER_H
 
 #include "CommonIncludes.h"
-#include "ItemManager.h"
 
+class Event_Component;
+class ItemStack;
 class StatBlock;
 
 class CampaignManager {

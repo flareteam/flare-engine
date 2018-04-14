@@ -20,8 +20,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define MAPPARALLAX_H
 
 #include "CommonIncludes.h"
-#include "RenderDevice.h"
 #include "Utils.h"
+
+class Sprite;
 
 class MapParallaxLayer {
 public:

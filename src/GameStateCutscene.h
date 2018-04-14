@@ -22,12 +22,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "GameState.h"
-#include "Settings.h"
-#include "SharedResources.h"
 #include "Utils.h"
-#include "UtilsParsing.h"
-#include "WidgetButton.h"
-#include "WidgetLabel.h"
+
+class WidgetButton;
+class WidgetLabel;
+class WidgetScrollBox;
 
 enum {
 	CUTSCENE_STATIC = 0,
@@ -39,8 +38,6 @@ enum {
 	CUTSCENE_SCALE_HEIGHT = 1,
 	CUTSCENE_SCALE_SCREEN = 2
 };
-
-class WidgetScrollBox;
 
 class CutsceneSettings {
 public:
@@ -92,7 +89,7 @@ private:
 	Sprite *art_scaled;
 	int art_scale_type;
 	Point art_size;
-	SoundManager::SoundID sid;
+	SoundID sid;
 	WidgetScrollBox *caption_box;
 	WidgetButton *button_next;
 	WidgetButton *button_close;

@@ -29,6 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define WIDGET_LABEL_H
 
 #include "CommonIncludes.h"
+#include "Utils.h"
 #include "Widget.h"
 
 const int VALIGN_CENTER = 0;

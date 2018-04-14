@@ -19,8 +19,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef ANIMATION_MANAGER_H
 #define ANIMATION_MANAGER_H
 
-#include "AnimationSet.h"
 #include "CommonIncludes.h"
+
+class AnimationSet;
 
 class AnimationManager {
 private:

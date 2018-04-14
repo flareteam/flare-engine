@@ -29,11 +29,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define GAMESTATECONFIGBASE_H
 
 #include "CommonIncludes.h"
-#include "FileParser.h"
 #include "GameState.h"
 #include "TooltipData.h"
+#include "Widget.h"
 
+class FileParser;
 class MenuConfirm;
+class Mod;
 class Widget;
 class WidgetButton;
 class WidgetCheckBox;
@@ -79,7 +81,7 @@ public:
 	virtual void renderDialogs();
 	virtual void renderTooltips(TooltipData& tip_new);
 
-	void placeLabeledWidget(WidgetLabel* lb, Widget* w, int x1, int y1, int x2, int y2, std::string const& str, int justify = JUSTIFY_LEFT);
+	void placeLabeledWidget(WidgetLabel* lb, Widget* w, int x1, int y1, int x2, int y2, std::string const& str, int justify = 0);
 	virtual void refreshWidgets();
 	void addChildWidget(Widget *w, int tab);
 	void refreshLanguages();

@@ -26,13 +26,16 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "Enemy.h"
+#include "FileParser.h"
+#include "FontEngine.h"
 #include "Menu.h"
 #include "MenuEnemy.h"
+#include "MessageEngine.h"
+#include "RenderDevice.h"
 #include "SharedResources.h"
-#include "WidgetLabel.h"
-#include "FileParser.h"
-#include "UtilsParsing.h"
 #include "UtilsFileSystem.h"
+#include "UtilsParsing.h"
+#include "WidgetLabel.h"
 
 MenuEnemy::MenuEnemy()
 	: bar_hp(NULL)

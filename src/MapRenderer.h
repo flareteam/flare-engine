@@ -29,15 +29,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define MAP_RENDERER_H
 
 #include "CommonIncludes.h"
-#include "GameStatePlay.h"
 #include "Map.h"
-#include "MapParallax.h"
 #include "MapCollision.h"
-#include "Settings.h"
+#include "MapParallax.h"
 #include "TileSet.h"
-#include "Utils.h"
-#include "StatBlock.h"
 #include "TooltipData.h"
+#include "Utils.h"
 
 class FileParser;
 class WidgetTooltip;
@@ -149,7 +146,7 @@ public:
 	bool save_game;
 
 	// map soundids
-	std::vector<SoundManager::SoundID> sids;
+	std::vector<SoundID> sids;
 
 	// npc handling
 	int npc_id;

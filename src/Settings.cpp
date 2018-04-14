@@ -29,6 +29,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "FileParser.h"
+#include "MessageEngine.h"
+#include "ModManager.h"
 #include "Platform.h"
 #include "Settings.h"
 #include "Utils.h"

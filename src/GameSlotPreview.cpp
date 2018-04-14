@@ -25,10 +25,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Contains logic and rendering routines for the previews in GameStateLoad.
  */
 
+#include "Animation.h"
 #include "AnimationManager.h"
+#include "AnimationSet.h"
 #include "CommonIncludes.h"
 #include "GameSlotPreview.h"
 #include "FileParser.h"
+#include "ModManager.h"
+#include "RenderDevice.h"
 #include "SharedResources.h"
 #include "StatBlock.h"
 #include "Utils.h"

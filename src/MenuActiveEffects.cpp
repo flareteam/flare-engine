@@ -25,14 +25,19 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "FileParser.h"
+#include "IconManager.h"
 #include "MenuActiveEffects.h"
 #include "Menu.h"
 #include "ModManager.h"
+#include "MessageEngine.h"
+#include "RenderDevice.h"
 #include "Settings.h"
 #include "SharedResources.h"
 #include "StatBlock.h"
+#include "TooltipData.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
+#include "WidgetLabel.h"
 
 MenuActiveEffects::MenuActiveEffects(StatBlock *_stats)
 	: timer(NULL)

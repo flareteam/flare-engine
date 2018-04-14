@@ -27,7 +27,18 @@ Generic objects only. Game-specific objects don't belong here.
 Created and destroyed by main.cpp
 **/
 
+#include "AnimationManager.h"
+#include "CombatText.h"
+#include "CursorManager.h"
+#include "FontEngine.h"
+#include "IconManager.h"
+#include "InputState.h"
+#include "MessageEngine.h"
+#include "ModManager.h"
+#include "RenderDevice.h"
+#include "SaveLoad.h"
 #include "SharedResources.h"
+#include "SoundManager.h"
 
 AnimationManager *anim = NULL;
 CombatText *comb = NULL;
@@ -38,5 +49,5 @@ InputState *inpt = NULL;
 MessageEngine *msg = NULL;
 ModManager *mods = NULL;
 RenderDevice *render_device = NULL;
-SoundManager *snd = NULL;
 SaveLoad *save_load = NULL;
+SoundManager *snd = NULL;

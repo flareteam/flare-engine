@@ -23,16 +23,21 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "FileParser.h"
+#include "FontEngine.h"
+#include "ItemManager.h"
 #include "ItemStorage.h"
 #include "Menu.h"
 #include "MenuVendor.h"
+#include "MessageEngine.h"
 #include "NPC.h"
 #include "Settings.h"
+#include "SharedGameResources.h"
 #include "SharedResources.h"
+#include "SoundManager.h"
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
+#include "WidgetSlot.h"
 #include "WidgetTabControl.h"
-#include "SharedGameResources.h"
 
 MenuVendor::MenuVendor(StatBlock *_stats)
 	: Menu()

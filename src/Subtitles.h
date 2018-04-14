@@ -25,7 +25,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define SUBTITLES_H
 
 #include "CommonIncludes.h"
-#include "RenderDevice.h"
 #include "WidgetLabel.h"
 
 class Subtitles {

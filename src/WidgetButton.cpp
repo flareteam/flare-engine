@@ -23,6 +23,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class WidgetButton
  */
 
+#include "FontEngine.h"
+#include "InputState.h"
+#include "RenderDevice.h"
 #include "SharedResources.h"
 #include "WidgetButton.h"
 #include "WidgetTooltip.h"

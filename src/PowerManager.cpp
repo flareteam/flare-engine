@@ -27,15 +27,21 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Animation.h"
 #include "AnimationManager.h"
 #include "AnimationSet.h"
+#include "Avatar.h"
+#include "CombatText.h"
 #include "EnemyManager.h"
 #include "EventManager.h"
 #include "FileParser.h"
 #include "Hazard.h"
+#include "InputState.h"
 #include "MapCollision.h"
+#include "MapRenderer.h"
+#include "MessageEngine.h"
 #include "PowerManager.h"
 #include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
+#include "SoundManager.h"
 #include "StatBlock.h"
 #include "Utils.h"
 #include "UtilsFileSystem.h"
@@ -779,8 +785,8 @@ bool PowerManager::isValidEffect(const std::string& type) {
  */
 int PowerManager::loadSFX(const std::string& filename) {
 
-	SoundManager::SoundID sid = snd->load(filename, "PowerManager sfx");
-	std::vector<SoundManager::SoundID>::iterator it = std::find(sfx.begin(), sfx.end(), sid);
+	SoundID sid = snd->load(filename, "PowerManager sfx");
+	std::vector<SoundID>::iterator it = std::find(sfx.begin(), sfx.end(), sid);
 	if (it == sfx.end()) {
 		sfx.push_back(sid);
 		return static_cast<int>(sfx.size()) - 1;

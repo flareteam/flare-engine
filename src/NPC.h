@@ -81,8 +81,8 @@ public:
 	std::vector<std::string> vendor_requires_not_status;
 
 	// vocals
-	std::vector<SoundManager::SoundID> vox_intro;
-	std::vector<SoundManager::SoundID> vox_quests;
+	std::vector<SoundID> vox_intro;
+	std::vector<SoundID> vox_quests;
 
 	// story and dialog options
 	// outer vector is addressing the dialog and the inner vector is

@@ -34,7 +34,7 @@ class Hazard;
 class HazardManager {
 private:
 	void hitEntity(size_t index, const bool hit);
-	Renderable dev_marker;
+	Renderable* dev_marker;
 
 public:
 	HazardManager();

@@ -26,8 +26,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define WIDGET_TOOLTIP_H
 
 #include "CommonIncludes.h"
-#include "RenderDevice.h"
-#include "SharedResources.h"
 #include "TooltipData.h"
 #include "Utils.h"
 

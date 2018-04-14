@@ -23,7 +23,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "Menu.h"
-#include "WidgetButton.h"
+#include "WidgetLabel.h"
+
+class WidgetButton;
 
 class MenuConfirm : public Menu {
 protected:

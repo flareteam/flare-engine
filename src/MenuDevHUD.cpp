@@ -19,8 +19,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuDevHUD
  */
 
+#include "Avatar.h"
 #include "FileParser.h"
+#include "FontEngine.h"
+#include "InputState.h"
 #include "MenuDevHUD.h"
+#include "MessageEngine.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "Settings.h"

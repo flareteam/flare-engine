@@ -32,6 +32,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <stdint.h>
 #include <string>
 
+typedef unsigned long SoundID;
+
 class Avatar;
 
 class Point {

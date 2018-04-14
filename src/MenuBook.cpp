@@ -21,11 +21,17 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuBook
  */
 
+#include "CampaignManager.h"
 #include "EventManager.h"
 #include "FileParser.h"
+#include "FontEngine.h"
+#include "InputState.h"
 #include "MenuBook.h"
+#include "MessageEngine.h"
+#include "RenderDevice.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
+#include "SoundManager.h"
 #include "StatBlock.h"
 #include "UtilsParsing.h"
 #include "WidgetButton.h"

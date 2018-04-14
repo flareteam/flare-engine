@@ -30,7 +30,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "Utils.h"
-#include "WidgetLabel.h"
+
+class WidgetLabel;
 
 #define COMBAT_MESSAGE_GIVEDMG 0
 #define COMBAT_MESSAGE_TAKEDMG 1

@@ -25,11 +25,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "EventManager.h"
-#include "FileParser.h"
 #include "Menu.h"
 #include "Utils.h"
-#include "Widget.h"
-#include "WidgetLabel.h"
 
 class StatBlock;
 class WidgetButton;

@@ -36,9 +36,9 @@ public:
 	SDLSoundManager();
 	~SDLSoundManager();
 
-	SoundManager::SoundID load(const std::string& filename, const std::string& errormessage);
-	void unload(SoundManager::SoundID);
-	void play(SoundManager::SoundID, const std::string& channel = GLOBAL_VIRTUAL_CHANNEL, const FPoint& pos = FPoint(0,0), bool loop = false);
+	SoundID load(const std::string& filename, const std::string& errormessage);
+	void unload(SoundID);
+	void play(SoundID, const std::string& channel = GLOBAL_VIRTUAL_CHANNEL, const FPoint& pos = FPoint(0,0), bool loop = false);
 	void pauseAll();
 	void resumeAll();
 	void setVolumeSFX(int value);
@@ -53,7 +53,7 @@ public:
 	void logic(const FPoint& center);
 	void reset();
 
-	SoundManager::SoundID getLastPlayedSID();
+	SoundID getLastPlayedSID();
 
 private:
 	typedef std::map<std::string, int> VirtualChannelMap;

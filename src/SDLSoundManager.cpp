@@ -24,6 +24,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 **/
 
 #include "CommonIncludes.h"
+#include "ModManager.h"
 #include "Settings.h"
 #include "SharedResources.h"
 #include "SDLSoundManager.h"
@@ -152,7 +153,7 @@ void SDLSoundManager::reset() {
 	logic(FPoint(0,0));
 }
 
-SoundManager::SoundID SDLSoundManager::load(const std::string& filename, const std::string& errormessage) {
+SoundID SDLSoundManager::load(const std::string& filename, const std::string& errormessage) {
 
 	Sound lsnd;
 	SoundID sid = 0;
@@ -190,7 +191,7 @@ SoundManager::SoundID SDLSoundManager::load(const std::string& filename, const s
 	return sid;
 }
 
-void SDLSoundManager::unload(SoundManager::SoundID sid) {
+void SDLSoundManager::unload(SoundID sid) {
 
 	SoundMapIterator it;
 	it = sounds.find(sid);
@@ -206,7 +207,7 @@ void SDLSoundManager::unload(SoundManager::SoundID sid) {
 
 
 
-void SDLSoundManager::play(SoundManager::SoundID sid, const std::string& channel, const FPoint& pos, bool loop) {
+void SDLSoundManager::play(SoundID sid, const std::string& channel, const FPoint& pos, bool loop) {
 
 	SoundMapIterator it;
 	VirtualChannelMapIterator vcit = channels.end();
@@ -358,8 +359,8 @@ int SDLSoundManager::SetChannelPosition(int channel, Sint16 angle, Uint8 distanc
 #endif
 }
 
-SoundManager::SoundID SDLSoundManager::getLastPlayedSID() {
-	SoundManager::SoundID ret = last_played_sid;
+SoundID SDLSoundManager::getLastPlayedSID() {
+	SoundID ret = last_played_sid;
 	last_played_sid = -1;
 	return ret;
 }

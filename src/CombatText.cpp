@@ -29,9 +29,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CombatText.h"
 #include "CommonIncludes.h"
 #include "FileParser.h"
+#include "FontEngine.h"
 #include "Settings.h"
 #include "SharedResources.h"
 #include "UtilsParsing.h"
+#include "WidgetLabel.h"
 
 Combat_Text_Item::Combat_Text_Item()
 	: label(NULL)

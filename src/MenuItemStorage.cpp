@@ -23,10 +23,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuItemStorage
  */
 
+#include "ItemManager.h"
 #include "MenuItemStorage.h"
 #include "Settings.h"
+#include "RenderDevice.h"
 #include "SharedResources.h"
 #include "SharedGameResources.h"
+#include "TooltipData.h"
+#include "WidgetSlot.h"
 
 MenuItemStorage::MenuItemStorage()
 	: grid_area()

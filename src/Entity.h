@@ -28,8 +28,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define ENTITY_H
 
 #include "CommonIncludes.h"
-#include "SoundManager.h"
 #include "StatBlock.h"
+#include "Utils.h"
 
 class Animation;
 class AnimationSet;
@@ -63,12 +63,12 @@ public:
 	virtual void doRewards(int) {}
 
 	// sound effects
-	std::vector<std::pair<std::string, std::vector<SoundManager::SoundID> > > sound_attack;
-	std::vector<SoundManager::SoundID> sound_hit;
-	std::vector<SoundManager::SoundID> sound_die;
-	std::vector<SoundManager::SoundID> sound_critdie;
-	std::vector<SoundManager::SoundID> sound_block;
-	SoundManager::SoundID sound_levelup;
+	std::vector<std::pair<std::string, std::vector<SoundID> > > sound_attack;
+	std::vector<SoundID> sound_hit;
+	std::vector<SoundID> sound_die;
+	std::vector<SoundID> sound_critdie;
+	std::vector<SoundID> sound_block;
+	SoundID sound_levelup;
 
 	bool setAnimation(const std::string& animation);
 	Animation *activeAnimation;

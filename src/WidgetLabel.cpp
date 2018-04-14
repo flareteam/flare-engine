@@ -24,6 +24,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * A simple text display for menus
  */
 
+#include "FontEngine.h"
+#include "InputState.h"
+#include "RenderDevice.h"
 #include "WidgetLabel.h"
 #include "SharedResources.h"
 #include "UtilsParsing.h"

@@ -22,6 +22,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class WidgetListBox
  */
 
+#include "FontEngine.h"
+#include "InputState.h"
+#include "RenderDevice.h"
 #include "SharedResources.h"
 #include "TooltipData.h"
 #include "WidgetLabel.h"

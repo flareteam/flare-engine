@@ -19,7 +19,10 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
+#include "FontEngine.h"
+#include "InputState.h"
 #include "Platform.h"
+#include "RenderDevice.h"
 #include "Settings.h"
 #include "SharedResources.h"
 #include "WidgetInput.h"

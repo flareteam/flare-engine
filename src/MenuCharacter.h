@@ -24,7 +24,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define MENU_CHARACTER_H
 
 #include "CommonIncludes.h"
-#include "Stats.h"
 #include "TooltipData.h"
 #include "WidgetLabel.h"
 

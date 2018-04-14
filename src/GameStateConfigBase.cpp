@@ -27,14 +27,22 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Handle game Settings Menu
  */
 
+#include "CombatText.h"
 #include "CommonIncludes.h"
+#include "DeviceList.h"
 #include "FileParser.h"
+#include "FontEngine.h"
 #include "GameStateConfigBase.h"
 #include "GameStateTitle.h"
+#include "InputState.h"
 #include "MenuConfirm.h"
+#include "MessageEngine.h"
+#include "ModManager.h"
 #include "Platform.h"
+#include "RenderDevice.h"
 #include "Settings.h"
 #include "SharedResources.h"
+#include "SoundManager.h"
 #include "Stats.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"

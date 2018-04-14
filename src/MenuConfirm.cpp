@@ -19,11 +19,15 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
-#include <string>
 #include "FileParser.h"
+#include "FontEngine.h"
+#include "InputState.h"
 #include "MenuConfirm.h"
 #include "Settings.h"
 #include "SharedResources.h"
+#include "WidgetButton.h"
+
+#include <string>
 
 MenuConfirm::MenuConfirm(const std::string& _buttonMsg, const std::string& _boxMsg)
 	: Menu()

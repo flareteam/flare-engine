@@ -26,6 +26,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <stdlib.h>
 #include <string.h>
 
+#include "CursorManager.h"
+#include "IconManager.h"
+#include "InputState.h"
+#include "MessageEngine.h"
+#include "ModManager.h"
 #include "SharedResources.h"
 #include "Settings.h"
 

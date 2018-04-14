@@ -18,12 +18,22 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 #include "CommonIncludes.h"
+#include "FileParser.h"
+#include "FontEngine.h"
 #include "GameStateCutscene.h"
 #include "GameStatePlay.h"
-#include "FileParser.h"
-#include "WidgetScrollBox.h"
-#include "SharedGameResources.h"
+#include "InputState.h"
+#include "MessageEngine.h"
+#include "RenderDevice.h"
 #include "SaveLoad.h"
+#include "Settings.h"
+#include "SharedResources.h"
+#include "SharedGameResources.h"
+#include "SoundManager.h"
+#include "UtilsParsing.h"
+#include "WidgetButton.h"
+#include "WidgetLabel.h"
+#include "WidgetScrollBox.h"
 
 Scene::Scene(const CutsceneSettings& _settings, short _cutscene_type)
 	: settings(_settings)

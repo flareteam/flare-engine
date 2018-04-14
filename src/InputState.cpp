@@ -25,6 +25,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "FileParser.h"
 #include "InputState.h"
+#include "MessageEngine.h"
 #include "Platform.h"
 #include "Settings.h"
 #include "SharedResources.h"

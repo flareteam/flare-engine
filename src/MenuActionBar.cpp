@@ -25,12 +25,17 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Handles the config, display, and usage of the 0-9 hotkeys, mouse buttons, and menu calls
  */
 
+#include "Avatar.h"
 #include "CommonIncludes.h"
 #include "FileParser.h"
+#include "FontEngine.h"
 #include "Menu.h"
 #include "MenuActionBar.h"
 #include "MenuInventory.h"
 #include "MenuManager.h"
+#include "MessageEngine.h"
+#include "PowerManager.h"
+#include "RenderDevice.h"
 #include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"

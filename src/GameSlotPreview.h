@@ -27,12 +27,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef AVATAR_GRAPHICS_H
 #define AVATAR_GRAPHICS_H
 
-#include "Animation.h"
-#include "AnimationSet.h"
 #include "CommonIncludes.h"
-#include "SharedResources.h"
 #include "Utils.h"
 
+class Animation;
+class AnimationSet;
 class StatBlock;
 
 class GameSlotPreview {

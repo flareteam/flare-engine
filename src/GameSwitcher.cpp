@@ -32,14 +32,20 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * - maybe full-video cutscenes
  */
 
-#include "GameSwitcher.h"
-#include "GameStateTitle.h"
-#include "GameStateCutscene.h"
-#include "SharedResources.h"
-#include "Settings.h"
+#include "CursorManager.h"
 #include "FileParser.h"
+#include "FontEngine.h"
+#include "GameStateCutscene.h"
+#include "GameStateTitle.h"
+#include "GameSwitcher.h"
+#include "InputState.h"
+#include "RenderDevice.h"
+#include "Settings.h"
+#include "SharedResources.h"
+#include "SoundManager.h"
 #include "Utils.h"
 #include "UtilsParsing.h"
+#include "WidgetLabel.h"
 
 GameSwitcher::GameSwitcher()
 	: background(NULL)
