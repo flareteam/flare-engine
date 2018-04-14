@@ -984,6 +984,9 @@ std::string GameStateConfigBase::createModTooltip(Mod *mod) {
 					ret += '\n';
 			}
 		}
+
+		if (!ret.empty() && ret.back() == '\n')
+			ret.erase(ret.begin() + ret.size() - 1);
 	}
 	return ret;
 }
