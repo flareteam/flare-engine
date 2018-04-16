@@ -21,7 +21,7 @@ Translation updates:
 * French (fr) update (sang-froid)
 * Italian (it) update (MOB2)
 * Portuguese (pt) update (Rui)
-* Ukranian (uk) update (Микола Франчук, Pharmasolin)
+* Ukranian (uk) update (Denis Lysenko, Микола Франчук)
 
 
 

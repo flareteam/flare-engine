@@ -77,7 +77,6 @@ text=Nea Retrogamer
 text=Nikita Vanku
 text=Paul Wortmann
 text=Pawel Puszczynski
-text=Pharmasolin
 text=Quentin Stievenart
 text=Rui
 text=Sergey Basalaev

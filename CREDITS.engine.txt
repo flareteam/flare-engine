@@ -58,7 +58,7 @@ Translations
 (ru) Russian by Sergey Basalaev and Evgen Pavlov
 (sk) Slovak by Miro Jánošík
 (sv) Swedish by Andreas Berheim Brudin
-(uk) Ukrainian by Igor Paliychuk, Denis Lysenko, Микола Франчук and Pharmasolin
+(uk) Ukrainian by Igor Paliychuk, Denis Lysenko, Микола Франчук
 (zh) Chinese by lonsine
 
 Full Credits
