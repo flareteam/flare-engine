@@ -18,6 +18,7 @@ Translation updates:
 * Scottish Gaelic (gd) update (GunChleoc)
 * Greek (el) update (Nea Retrogamer)
 * Spanish (es) update (Diego J. Romero López)
+* French (fr) update (sang-froid)
 * Italian (it) update (MOB2)
 * Portuguese (pt) update (Rui)
 * Ukranian (uk) update (Микола Франчук, Pharmasolin)
