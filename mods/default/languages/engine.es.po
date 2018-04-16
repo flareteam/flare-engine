@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-04-09 19:36-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
+"Last-Translator: Diego J. Romero López <diegojromerolopez@gmail.com>, 2018\n"
 "Language-Team: Spanish (https://www.transifex.com/flareorg/teams/84925/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,73 +21,75 @@ msgstr ""
 #: ../../../src/Avatar.cpp:353
 #, c-format
 msgid "Congratulations, you have reached level %d!"
-msgstr "Felicidades, has alcanzado el nivel %d!"
+msgstr "¡Felicidades, has alcanzado el nivel %d!"
 
 #: ../../../src/Avatar.cpp:355
 msgid "You may increase one attribute through the Character Menu."
-msgstr "Usted puede aumentar un atributo a través del Menú de Personaje."
+msgstr "Puedes aumentar un atributo a través del Menú de Personaje."
 
 #: ../../../src/Avatar.cpp:573
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
 msgstr ""
+"Has sido derrotado y el juego ha terminado. Pulsa ${INPUT_CONTINUE} para "
+"salir al título."
 
 #: ../../../src/Avatar.cpp:579
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
-msgstr ""
+msgstr "Has sido derrotado. Pulsa ${INPUT_CONTINUE} para continuar."
 
 #: ../../../src/Avatar.cpp:832
 msgid "Transformation expired. You have been moved back to a safe place."
-msgstr ""
+msgstr "La transformación ha expirado. Se te ha movido a un lugar seguro."
 
 #: ../../../src/CampaignManager.cpp:124
 #, c-format
 msgid "%d %s removed."
-msgstr ""
+msgstr "%d %s quitado."
 
 #: ../../../src/CampaignManager.cpp:133
 #, c-format
 msgid "%s removed."
-msgstr ""
+msgstr "%s quitado."
 
 #: ../../../src/CampaignManager.cpp:146
 #, c-format
 msgid "You receive %s."
-msgstr "Recibe %s."
+msgstr "Recibes %s."
 
 #: ../../../src/CampaignManager.cpp:148
 #, c-format
 msgid "You receive %s x%d."
-msgstr "Recibe %s x%d."
+msgstr "Recibes %s x%d."
 
 #: ../../../src/CampaignManager.cpp:157
 #, c-format
 msgid "You receive %d %s."
-msgstr "Recibe %d %s."
+msgstr "Recibes %d %s."
 
 #: ../../../src/CampaignManager.cpp:166
 #, c-format
 msgid "You receive %d XP."
-msgstr "Recibe %d XP."
+msgstr "Recibes %d XP."
 
 #: ../../../src/CampaignManager.cpp:172
 msgid "HP restored."
-msgstr "Restaurado PV"
+msgstr "PV restaurados."
 
 #: ../../../src/CampaignManager.cpp:176
 msgid "MP restored."
-msgstr "Restaurado PM"
+msgstr "PM restaurados."
 
 #: ../../../src/CampaignManager.cpp:181
 msgid "HP and MP restored."
-msgstr "Restaurados PV y PM"
+msgstr "PV y PM restaurados."
 
 #: ../../../src/CampaignManager.cpp:185
 msgid "Negative effects removed."
-msgstr "Efectos negativos removidos."
+msgstr "Efectos negativos eliminados."
 
 #: ../../../src/CampaignManager.cpp:191
 msgid "HP and MP restored, negative effects removed"
-msgstr "Restaurados PV y PM, efectos negativos removidos"
+msgstr "Restaurados PV y PM, efectos negativos eliminados"
 
 #: ../../../src/DeviceList.cpp:55
 msgid ""
@@ -95,6 +97,9 @@ msgid ""
 "\n"
 "Often slower, but less likely to have issues."
 msgstr ""
+"Renderizador SDL por software\n"
+"\n"
+"Suele ser más lento, pero sin incidencias."
 
 #: ../../../src/DeviceList.cpp:58
 msgid ""
@@ -102,10 +107,13 @@ msgid ""
 "\n"
 "The default renderer that is often faster than the SDL software renderer."
 msgstr ""
+"Renderizador SDL por hardware\n"
+"\n"
+"El renderizador predeterminado que suele ser más rápido que el renderizador SDL por software."
 
 #: ../../../src/Entity.cpp:482
 msgid "miss"
-msgstr "Falla"
+msgstr "fallo"
 
 #: ../../../src/Entity.cpp:519 ../../../src/PowerManager.cpp:1059
 #: ../../../src/StatBlock.cpp:790 ../../../src/StatBlock.cpp:796
@@ -158,11 +166,11 @@ msgstr "Mods"
 
 #: ../../../src/GameStateConfigBase.cpp:251 ../../../src/MenuExit.cpp:65
 msgid "Music Volume"
-msgstr "Volumen de Música"
+msgstr "Volumen de música"
 
 #: ../../../src/GameStateConfigBase.cpp:255 ../../../src/MenuExit.cpp:70
 msgid "Sound Volume"
-msgstr "Volumen de Sonido"
+msgstr "Volumen de sonido"
 
 #: ../../../src/GameStateConfigBase.cpp:259
 msgid "Language"
@@ -178,31 +186,31 @@ msgstr "Mostrar FPS"
 
 #: ../../../src/GameStateConfigBase.cpp:276
 msgid "Colorblind Mode"
-msgstr ""
+msgstr "Modo para daltónicos"
 
 #: ../../../src/GameStateConfigBase.cpp:280
 msgid "Hardware mouse cursor"
-msgstr ""
+msgstr "Cursor del ratón por hardware"
 
 #: ../../../src/GameStateConfigBase.cpp:284
 msgid "Developer Mode"
-msgstr ""
+msgstr "Modo desarrollador"
 
 #: ../../../src/GameStateConfigBase.cpp:288
 msgid "Always show loot labels"
-msgstr ""
+msgstr "Mostrar siempre las etiquetas del botín"
 
 #: ../../../src/GameStateConfigBase.cpp:292
 msgid "Always show stat bar labels"
-msgstr ""
+msgstr "Mostrar siempre las etiquetas en las barras de estadísticas"
 
 #: ../../../src/GameStateConfigBase.cpp:296
 msgid "Automatically equip items"
-msgstr ""
+msgstr "Automáticamente equipar con objetos"
 
 #: ../../../src/GameStateConfigBase.cpp:300
 msgid "Subtitles"
-msgstr ""
+msgstr "Subtítulos"
 
 #: ../../../src/GameStateConfigBase.cpp:304
 msgid "Active Mods"
@@ -222,29 +230,29 @@ msgstr "Habilitar >>"
 
 #: ../../../src/GameStateConfigBase.cpp:959
 msgid "Version:"
-msgstr ""
+msgstr "Versión:"
 
 #: ../../../src/GameStateConfigBase.cpp:964
 msgid "Game:"
-msgstr ""
+msgstr "Juego:"
 
 #: ../../../src/GameStateConfigBase.cpp:969
 msgid "Engine version:"
-msgstr ""
+msgstr "Versión del motor de juego:"
 
 #: ../../../src/GameStateConfigBase.cpp:977
 msgid "Requires mods:"
-msgstr ""
+msgstr "Mods requeridos:"
 
 #: ../../../src/GameStateConfigDesktop.cpp:78
 #: ../../../src/GameStateConfigDesktop.cpp:740
 msgid "Clear"
-msgstr ""
+msgstr "Limpiar"
 
 #: ../../../src/GameStateConfigDesktop.cpp:78
 #: ../../../src/GameStateConfigDesktop.cpp:738
 msgid "Assign:"
-msgstr ""
+msgstr "Asignar:"
 
 #: ../../../src/GameStateConfigDesktop.cpp:123
 msgid "Video"
@@ -269,15 +277,15 @@ msgstr "Experimental"
 
 #: ../../../src/GameStateConfigDesktop.cpp:187
 msgid "For handheld devices"
-msgstr ""
+msgstr "Para dispositivos móviles"
 
 #: ../../../src/GameStateConfigDesktop.cpp:205
 msgid "Renderer"
-msgstr ""
+msgstr "Renderizador"
 
 #: ../../../src/GameStateConfigDesktop.cpp:221
 msgid "Full Screen Mode"
-msgstr "Modo Pantalla Completa"
+msgstr "Modo de pantalla completa"
 
 #: ../../../src/GameStateConfigDesktop.cpp:225
 msgid "Move hero using mouse"
@@ -289,11 +297,11 @@ msgstr "Superficies de hardware"
 
 #: ../../../src/GameStateConfigDesktop.cpp:233
 msgid "V-Sync"
-msgstr ""
+msgstr "V-Sync"
 
 #: ../../../src/GameStateConfigDesktop.cpp:237
 msgid "Texture Filtering"
-msgstr ""
+msgstr "Filtro de textura"
 
 #: ../../../src/GameStateConfigDesktop.cpp:241
 msgid "Allow changing gamma"
@@ -305,11 +313,11 @@ msgstr "Gama"
 
 #: ../../../src/GameStateConfigDesktop.cpp:249
 msgid "Use joystick"
-msgstr "Usar control de mando"
+msgstr "Usar joystick"
 
 #: ../../../src/GameStateConfigDesktop.cpp:253
 msgid "Joystick"
-msgstr "Control de mando"
+msgstr "Joystick"
 
 #: ../../../src/GameStateConfigDesktop.cpp:269
 msgid "Mouse aim"
@@ -317,11 +325,11 @@ msgstr "Ratón para apuntar"
 
 #: ../../../src/GameStateConfigDesktop.cpp:273
 msgid "Do not use mouse"
-msgstr ""
+msgstr "No usar ratón"
 
 #: ../../../src/GameStateConfigDesktop.cpp:277
 msgid "Joystick Deadzone"
-msgstr ""
+msgstr "Zona sin joystick"
 
 #: ../../../src/GameState.cpp:33 ../../../src/GameState.cpp:47
 #: ../../../src/GameState.cpp:63
@@ -334,7 +342,7 @@ msgstr "Eliminar"
 
 #: ../../../src/GameStateLoad.cpp:79
 msgid "Delete this save?"
-msgstr "¿Eliminar este guardado?"
+msgstr "¿Eliminar esta partida guardada?"
 
 #: ../../../src/GameStateLoad.cpp:81
 msgid "Exit to Title"
@@ -350,7 +358,7 @@ msgstr "Elija una ranura"
 
 #: ../../../src/GameStateLoad.cpp:561 ../../../src/GameStateLoad.cpp:582
 msgid "Enable a story mod to continue"
-msgstr "Habilitar un mod historia para continuar"
+msgstr "Habilitar un mod de historia para continuar"
 
 #: ../../../src/GameStateLoad.cpp:577
 msgid "Load Game"
@@ -366,7 +374,7 @@ msgstr "Cargando partida guardada..."
 
 #: ../../../src/GameStateLoad.cpp:727
 msgid "Invalid save"
-msgstr ""
+msgstr "Partida guardada inválida"
 
 #: ../../../src/GameStateLoad.cpp:746 ../../../src/ItemManager.cpp:672
 #: ../../../src/MenuPowers.cpp:688 ../../../src/MenuPowers.cpp:1052
@@ -380,11 +388,11 @@ msgstr "Crear"
 
 #: ../../../src/GameStateNew.cpp:174
 msgid "Choose a Portrait"
-msgstr "Elija un Retrato"
+msgstr "Elige un retrato"
 
 #: ../../../src/GameStateNew.cpp:178
 msgid "Choose a Name"
-msgstr "Elija un Nombre"
+msgstr "Elija un nombre"
 
 #: ../../../src/GameStateNew.cpp:182
 msgid "Permadeath?"
@@ -392,7 +400,7 @@ msgstr "¿Muerte permanente?"
 
 #: ../../../src/GameStateNew.cpp:186
 msgid "Choose a Class"
-msgstr "Elija una Clase"
+msgstr "Elige una clase"
 
 #: ../../../src/GameStateTitle.cpp:102
 msgid "Play Game"
@@ -400,7 +408,7 @@ msgstr "Jugar"
 
 #: ../../../src/GameStateTitle.cpp:105
 msgid "Enable a core mod to continue"
-msgstr "Habilitar un mod núcleo para continuar"
+msgstr "Habilitar un mod de núcleo para continuar"
 
 #: ../../../src/GameStateTitle.cpp:109
 msgid "Configuration"
@@ -408,7 +416,7 @@ msgstr "Configuración"
 
 #: ../../../src/GameStateTitle.cpp:112
 msgid "Credits"
-msgstr ""
+msgstr "Créditos"
 
 #: ../../../src/GameStateTitle.cpp:115
 msgid "Exit Game"
@@ -513,88 +521,88 @@ msgstr "Shift"
 
 #: ../../../src/InputState.cpp:318
 msgid "Alt"
-msgstr ""
+msgstr "Alt"
 
 #: ../../../src/InputState.cpp:319 ../../../src/SDLInputState.cpp:554
 msgid "Delete"
-msgstr "Borrar"
+msgstr "Suprimir"
 
 #: ../../../src/InputState.cpp:320
 msgid "ActionBar Accept"
-msgstr ""
+msgstr "Aceptación de la barra de acción"
 
 #: ../../../src/InputState.cpp:321
 msgid "ActionBar Left"
-msgstr ""
+msgstr "Barra de acción izquierda"
 
 #: ../../../src/InputState.cpp:322
 msgid "ActionBar Right"
-msgstr ""
+msgstr "Barra de acción derecha"
 
 #: ../../../src/InputState.cpp:323
 msgid "ActionBar Use"
-msgstr ""
+msgstr "Uso de la barra de acción"
 
 #: ../../../src/InputState.cpp:324
 msgid "Developer Menu"
-msgstr ""
+msgstr "Menú de desarrolladores"
 
 #: ../../../src/InputState.cpp:326
 msgid "Left Mouse"
-msgstr ""
+msgstr "Botón izquierdo del ratón"
 
 #: ../../../src/InputState.cpp:327
 msgid "Middle Mouse"
-msgstr ""
+msgstr "Botón central del ratón"
 
 #: ../../../src/InputState.cpp:328
 msgid "Right Mouse"
-msgstr ""
+msgstr "Botón derecho del ratón"
 
 #: ../../../src/InputState.cpp:329
 msgid "Wheel Up"
-msgstr ""
+msgstr "Rueda hacia arriba"
 
 #: ../../../src/InputState.cpp:330
 msgid "Wheel Down"
-msgstr ""
+msgstr "Rueda hacia abajo"
 
 #: ../../../src/InputState.cpp:331
 msgid "Mouse X1"
-msgstr ""
+msgstr "Ratón X1"
 
 #: ../../../src/InputState.cpp:332
 msgid "Mouse X2"
-msgstr ""
+msgstr "Ratón X2"
 
 #: ../../../src/ItemManager.cpp:406 ../../../src/ItemManager.cpp:409
 msgid "Unknown Item"
-msgstr ""
+msgstr "Objeto desconocido"
 
 #: ../../../src/ItemManager.cpp:581 ../../../src/MenuPowers.cpp:794
 #, c-format
 msgid "%d%% Speed"
-msgstr ""
+msgstr "%d%% velocidad"
 
 #: ../../../src/ItemManager.cpp:585 ../../../src/MenuPowers.cpp:797
 #, c-format
 msgid "%d%% Attack Speed"
-msgstr ""
+msgstr "%d%% velocidad de ataque"
 
 #: ../../../src/ItemManager.cpp:607 ../../../src/MenuCharacter.cpp:338
 #: ../../../src/MenuPowers.cpp:739
 #, c-format
 msgid "%s Resistance"
-msgstr ""
+msgstr "%s Resistencia"
 
 #: ../../../src/ItemManager.cpp:658
 msgid "Quest Item"
-msgstr ""
+msgstr "Objeto de gesta"
 
 #: ../../../src/ItemManager.cpp:685
 #, c-format
 msgid "Quality: %s"
-msgstr ""
+msgstr "Calidad: %s"
 
 #: ../../../src/ItemManager.cpp:710
 #, c-format
@@ -610,67 +618,67 @@ msgstr "Absorber: %d"
 #: ../../../src/MenuPowers.cpp:1041
 #, c-format
 msgid "Requires Level %d"
-msgstr "Necesitas ser de Nivel %d"
+msgstr "Requiere nivel %d"
 
 #: ../../../src/ItemManager.cpp:760 ../../../src/MenuPowers.cpp:1030
 #: ../../../src/MenuPowers.cpp:1032
 #, c-format
 msgid "Requires %s %d"
-msgstr ""
+msgstr "Requiere %s %d"
 
 #: ../../../src/ItemManager.cpp:768
 #, c-format
 msgid "Requires Class: %s"
-msgstr ""
+msgstr "Requiere clase: %s"
 
 #: ../../../src/ItemManager.cpp:780 ../../../src/ItemManager.cpp:789
 #, c-format
 msgid "Buy Price: %d %s"
-msgstr "Precio de Compra: %d %s"
+msgstr "Precio de compra: %d %s"
 
 #: ../../../src/ItemManager.cpp:782 ../../../src/ItemManager.cpp:791
 #, c-format
 msgid "Buy Price: %d %s each"
-msgstr "Precio de Compra: %d %s cada"
+msgstr "Precio de compra: %d %s cada"
 
 #: ../../../src/ItemManager.cpp:797
 #, c-format
 msgid "Sell Price: %d %s"
-msgstr "Precio de Venta: %d %s"
+msgstr "Precio de venta: %d %s"
 
 #: ../../../src/ItemManager.cpp:799
 #, c-format
 msgid "Sell Price: %d %s each"
-msgstr "Precio de Venta: %d %s cada"
+msgstr "Precio de venta: %d %s cada"
 
 #: ../../../src/ItemManager.cpp:808
 msgid "Set:"
-msgstr ""
+msgstr "Conjunto:"
 
 #: ../../../src/ItemManager.cpp:815
 #, c-format
 msgid "%d items:"
-msgstr ""
+msgstr "%d objetos:"
 
 #: ../../../src/MenuActionBar.cpp:195 ../../../src/MenuActionBar.cpp:201
 #: ../../../src/MenuActionBar.cpp:206
 #, c-format
 msgid "Hotkey: %s"
-msgstr ""
+msgstr "Atajo: %s"
 
 #: ../../../src/MenuActiveEffects.cpp:119
 #, c-format
 msgid "x%d"
-msgstr ""
+msgstr "x%d"
 
 #: ../../../src/MenuActiveEffects.cpp:214
 msgid "Remaining:"
-msgstr ""
+msgstr "Restantes:"
 
 #: ../../../src/MenuActiveEffects.cpp:220
 #, c-format
 msgid "x%d stacks"
-msgstr ""
+msgstr "x%d pilas"
 
 #: ../../../src/MenuCharacter.cpp:52
 msgid "Name"
@@ -701,137 +709,147 @@ msgstr "base (%d), bonus (%d)"
 
 #: ../../../src/MenuCharacter.cpp:365 ../../../src/MenuCharacter.cpp:379
 msgid "Related stats:"
-msgstr ""
+msgstr "Estadísticas relacionadas:"
 
 #: ../../../src/MenuCharacter.cpp:405 ../../../src/MenuCharacter.cpp:429
 #, c-format
 msgid "Each level grants %d."
-msgstr ""
+msgstr "Cada nivel otorga %d."
 
 #: ../../../src/MenuCharacter.cpp:409 ../../../src/MenuCharacter.cpp:433
 #, c-format
 msgid "Each point of %s grants %d."
-msgstr ""
+msgstr "Cada punto de %s otorga %d."
 
 #: ../../../src/MenuDevConsole.cpp:47
 msgid "Execute"
-msgstr ""
+msgstr "Ejecutar"
 
 #: ../../../src/MenuDevConsole.cpp:113
 msgid "Developer Console"
-msgstr ""
+msgstr "Consola de desarrollador"
 
 #: ../../../src/MenuDevConsole.cpp:121
 msgid "Arguments with spaces should be enclosed with double quotes. Example:"
 msgstr ""
+"Los argumentos con espacios deben estar entre comillas dobles. Ejemplo:"
 
 #: ../../../src/MenuDevConsole.cpp:122
 msgid "Type 'help' to get a list of commands."
-msgstr ""
+msgstr "Escriba 'help' para una lista de las órdenes disponibles."
 
 #: ../../../src/MenuDevConsole.cpp:223
 msgid "adds a power to the action bar"
-msgstr ""
+msgstr "añade poder a la barra de acción"
 
 #: ../../../src/MenuDevConsole.cpp:224
 msgid "turns on/off all of the HUD elements"
-msgstr ""
+msgstr "Activa/Desactiva todos los elementos con información en pantalla"
 
 #: ../../../src/MenuDevConsole.cpp:225
 msgid "turns on/off the developer hud"
 msgstr ""
+"Activa/Desactiva todos la información en pantalla para desarrolladores"
 
 #: ../../../src/MenuDevConsole.cpp:226
 msgid ""
 "Prints a list of powers that match a search term. No search term will list "
 "all items"
 msgstr ""
+"Muestra una lista de poderes que se emparejan con un término de búsqueda. Si"
+" no hay ningún término, se listarán todos los elementos"
 
 #: ../../../src/MenuDevConsole.cpp:227
 msgid "Prints out all the map filenames located in the \"maps/\" directory."
-msgstr ""
+msgstr "Muestra todos los ficheros de mapa del directorio \"maps/\"."
 
 #: ../../../src/MenuDevConsole.cpp:228
 msgid ""
 "Prints out the active campaign statuses that match a search term. No search "
 "term will list all active statuses"
 msgstr ""
+"Muestra los estados de la campaña activa que emparejan con un término de "
+"búsqueda. Si no hay ningún término, se listarán todos los estados activos"
 
 #: ../../../src/MenuDevConsole.cpp:229
 msgid ""
 "Prints a list of items that match a search term. No search term will list "
 "all items"
 msgstr ""
+"Muestra una lista de todos los objetos que emparejan con un término de "
+"búsqueda. Si no hay ningún término de búsqueda, listará todos los objetos"
 
 #: ../../../src/MenuDevConsole.cpp:230
 msgid ""
 "parses a series of event components and executes them as a single event"
 msgstr ""
+"analiza una serie de componentes de eventos y los ejecuta como un solo "
+"evento"
 
 #: ../../../src/MenuDevConsole.cpp:231
 msgid "clears the command history"
-msgstr ""
+msgstr "limpia el histórico de órdenes"
 
 #: ../../../src/MenuDevConsole.cpp:232
 msgid "displays this text"
-msgstr ""
+msgstr "muestra este texto"
 
 #: ../../../src/MenuDevConsole.cpp:239
 msgid "Toggled the developer hud"
-msgstr ""
+msgstr "Activar/Desactivar información para desarrolladores"
 
 #: ../../../src/MenuDevConsole.cpp:243
 msgid "Toggled the hud"
-msgstr ""
+msgstr "Estado de información en pantalla cambiado"
 
 #: ../../../src/MenuDevConsole.cpp:390
 msgid "ERROR: Incorrect number of arguments"
-msgstr ""
+msgstr "ERROR: número de argumentos incorrecto"
 
 #: ../../../src/MenuDevConsole.cpp:391 ../../../src/MenuDevConsole.cpp:416
 msgid "HINT:"
-msgstr ""
+msgstr "CONSEJO:"
 
 #: ../../../src/MenuDevConsole.cpp:391
 msgid "<id>"
-msgstr ""
+msgstr "<id>"
 
 #: ../../../src/MenuDevConsole.cpp:406
 #, c-format
 msgid "ERROR: '%s' is not a valid event key"
-msgstr ""
+msgstr "ERROR: '%s' no es una clave válida de evento"
 
 #: ../../../src/MenuDevConsole.cpp:415
 msgid "ERROR: Too few arguments"
-msgstr ""
+msgstr "ERROR: muy pocos argumentos"
 
 #: ../../../src/MenuDevConsole.cpp:416
 msgid "<key>=<val> <key>=<val> ..."
-msgstr ""
+msgstr "<key>=<val> <key>=<val> ..."
 
 #: ../../../src/MenuDevConsole.cpp:420
 msgid "ERROR: Unknown command"
-msgstr ""
+msgstr "ERROR: orden desconocida"
 
 #: ../../../src/MenuDevConsole.cpp:421
 msgid "HINT: Type help"
-msgstr ""
+msgstr "CONSEJO: escribe help"
 
 #: ../../../src/MenuDevHUD.cpp:56
 msgid "Player (x,y):"
-msgstr ""
+msgstr "Jugador (x,y):"
 
 #: ../../../src/MenuDevHUD.cpp:62
 msgid "Target (x,y):"
-msgstr ""
+msgstr "Objetivo (x,y):"
 
 #: ../../../src/MenuDevHUD.cpp:67
 msgid "Mouse (x,y):"
-msgstr ""
+msgstr "Ratón (x,y):"
 
 #: ../../../src/MenuDevHUD.cpp:72
 msgid "Target distance:"
-msgstr ""
+msgstr "Distancia a objetivo:"
 
 #: ../../../src/MenuEnemy.cpp:137
 msgid "Dead"
@@ -844,7 +862,7 @@ msgstr "%s nivel%d"
 
 #: ../../../src/MenuExit.cpp:81
 msgid "Save & Exit"
-msgstr ""
+msgstr "Guardar y salir"
 
 #: ../../../src/MenuExit.cpp:82
 msgid "Exit"
@@ -852,31 +870,31 @@ msgstr "Salir"
 
 #: ../../../src/MenuExit.cpp:86
 msgid "Continue"
-msgstr ""
+msgstr "Continuar"
 
 #: ../../../src/MenuExit.cpp:110 ../../../src/MenuExit.cpp:129
 msgid "Paused"
-msgstr ""
+msgstr "Pausado"
 
 #: ../../../src/MenuInventory.cpp:155
 #, c-format
 msgid "Lost %d%% of %s."
-msgstr ""
+msgstr "Perdió %d%% de %s."
 
 #: ../../../src/MenuInventory.cpp:162
 #, c-format
 msgid "Lost %d%% of total XP."
-msgstr ""
+msgstr "Perdió %d%% de PX."
 
 #: ../../../src/MenuInventory.cpp:167
 #, c-format
 msgid "Lost %d%% of current level XP."
-msgstr ""
+msgstr "Perdió %d%% del nivel de PX actual."
 
 #: ../../../src/MenuInventory.cpp:193
 #, c-format
 msgid "Lost %s."
-msgstr ""
+msgstr "Perdió %s."
 
 #: ../../../src/MenuInventory.cpp:236 ../../../src/MenuStash.cpp:136
 #, c-format
@@ -885,32 +903,32 @@ msgstr "%d %s"
 
 #: ../../../src/MenuInventory.cpp:277
 msgid "Pick up item(s):"
-msgstr ""
+msgstr "Coger objeto/s:"
 
 #: ../../../src/MenuInventory.cpp:278
 msgid "Use or equip item:"
-msgstr ""
+msgstr "Usar o equiparse con objeto:"
 
 #: ../../../src/MenuInventory.cpp:279
 #, c-format
 msgid "%s modifiers"
-msgstr ""
+msgstr "modificadores %s"
 
 #: ../../../src/MenuInventory.cpp:280
 msgid "Select a quantity of item:"
-msgstr ""
+msgstr "Selecciona la cantidad de elementos:"
 
 #: ../../../src/MenuInventory.cpp:283
 msgid "Stash item stack:"
-msgstr ""
+msgstr "Devolver un objeto a la pila:"
 
 #: ../../../src/MenuInventory.cpp:285
 msgid "Sell item stack:"
-msgstr ""
+msgstr "Vender pila de objetos:"
 
 #: ../../../src/MenuInventory.cpp:541
 msgid "You don't have enough of the required item."
-msgstr ""
+msgstr "No tienes suficiente del objeto requerido."
 
 #: ../../../src/MenuInventory.cpp:559
 msgid "This item can only be used from the action bar."
@@ -923,11 +941,11 @@ msgstr "El inventario esta completo."
 #: ../../../src/MenuInventory.cpp:784
 #, c-format
 msgid "Not enough %s."
-msgstr ""
+msgstr "No hay suficientes %s."
 
 #: ../../../src/MenuInventory.cpp:804 ../../../src/MenuInventory.cpp:811
 msgid "This item can not be sold."
-msgstr ""
+msgstr "Este objeto no se puede vender."
 
 #: ../../../src/MenuLog.cpp:85
 msgid "Notes"
@@ -935,7 +953,7 @@ msgstr "Notas"
 
 #: ../../../src/MenuLog.cpp:86
 msgid "Quests"
-msgstr "Misiones"
+msgstr "Gestas"
 
 #: ../../../src/MenuManager.cpp:300
 #, c-format
@@ -944,19 +962,19 @@ msgstr "Experiencia: %d/%d"
 
 #: ../../../src/MenuManager.cpp:812
 msgid "This item can not be dropped."
-msgstr ""
+msgstr "Este objeto no se puede soltar."
 
 #: ../../../src/MenuNPCActions.cpp:82
 msgid "Trade"
-msgstr ""
+msgstr "Comerciar"
 
 #: ../../../src/MenuNumPicker.cpp:118
 msgid "Enter amount:"
-msgstr ""
+msgstr "Introduce cantidad:"
 
 #: ../../../src/MenuPowers.cpp:692
 msgid "Passive"
-msgstr ""
+msgstr "Pasivo"
 
 #: ../../../src/MenuPowers.cpp:697
 #, c-format
@@ -970,123 +988,123 @@ msgstr "Costos %d HP"
 
 #: ../../../src/MenuPowers.cpp:706
 msgid "Cooldown:"
-msgstr ""
+msgstr "Enfriar:"
 
 #: ../../../src/MenuPowers.cpp:773 ../../../src/MenuPowers.cpp:776
 msgid "Damage per second"
-msgstr ""
+msgstr "Daño por segundo"
 
 #: ../../../src/MenuPowers.cpp:779 ../../../src/MenuPowers.cpp:782
 msgid "HP per second"
-msgstr ""
+msgstr "PV por segundo"
 
 #: ../../../src/MenuPowers.cpp:785 ../../../src/MenuPowers.cpp:788
 msgid "MP per second"
-msgstr ""
+msgstr "PM por segundo"
 
 #: ../../../src/MenuPowers.cpp:792
 msgid "Immobilize"
-msgstr ""
+msgstr "Inmovilizar"
 
 #: ../../../src/MenuPowers.cpp:800
 msgid "Immunity"
-msgstr ""
+msgstr "Inmunidad"
 
 #: ../../../src/MenuPowers.cpp:803
 msgid "Immunity to damage over time"
-msgstr ""
+msgstr "Inmunidad al daño durante un tiempo"
 
 #: ../../../src/MenuPowers.cpp:806
 msgid "Immunity to slow"
-msgstr ""
+msgstr "Inmunidad a la lentidud"
 
 #: ../../../src/MenuPowers.cpp:809
 msgid "Immunity to stun"
-msgstr ""
+msgstr "Inmunidad al aturdimiento"
 
 #: ../../../src/MenuPowers.cpp:812
 msgid "Immunity to HP steal"
-msgstr ""
+msgstr "Inmunidad al robo de PV"
 
 #: ../../../src/MenuPowers.cpp:815
 msgid "Immunity to MP steal"
-msgstr ""
+msgstr "Inmunidad al robo de PM"
 
 #: ../../../src/MenuPowers.cpp:818
 msgid "Immunity to knockback"
-msgstr ""
+msgstr "Inmunidad al contragolpe"
 
 #: ../../../src/MenuPowers.cpp:821
 msgid "Immunity to damage reflection"
-msgstr ""
+msgstr "Inmunidad a la reflexión de daño"
 
 #: ../../../src/MenuPowers.cpp:824
 msgid "Stun"
-msgstr ""
+msgstr "Aturdir"
 
 #: ../../../src/MenuPowers.cpp:827
 msgid "Automatic revive on death"
-msgstr ""
+msgstr "Revivir automáticamente al morir"
 
 #: ../../../src/MenuPowers.cpp:830
 msgid "Convert"
-msgstr ""
+msgstr "Convertir"
 
 #: ../../../src/MenuPowers.cpp:833
 msgid "Fear"
-msgstr ""
+msgstr "Miedo"
 
 #: ../../../src/MenuPowers.cpp:836
 msgid "Lifespan"
-msgstr ""
+msgstr "Vida"
 
 #: ../../../src/MenuPowers.cpp:860
 msgid "Magical Shield"
-msgstr ""
+msgstr "Armadura mágica"
 
 #: ../../../src/MenuPowers.cpp:889
 msgid "Healing"
-msgstr ""
+msgstr "Sanación"
 
 #: ../../../src/MenuPowers.cpp:892
 msgid "Knockback"
-msgstr ""
+msgstr "Contragolpe"
 
 #: ../../../src/MenuPowers.cpp:917
 #, c-format
 msgid "%d%% chance"
-msgstr ""
+msgstr "%d%% probabilidad "
 
 #: ../../../src/MenuPowers.cpp:969
 msgid "Base Accuracy"
-msgstr ""
+msgstr "Exactitud base"
 
 #: ../../../src/MenuPowers.cpp:989
 msgid "Base Critical Chance"
-msgstr ""
+msgstr "Probabilidad base de crítico"
 
 #: ../../../src/MenuPowers.cpp:997
 msgid "Ignores Absorbtion"
-msgstr ""
+msgstr "Ignora absorción"
 
 #: ../../../src/MenuPowers.cpp:1002
 msgid "Ignores Avoidance"
-msgstr ""
+msgstr "Ignora evitación"
 
 #: ../../../src/MenuPowers.cpp:1007
 #, c-format
 msgid "%d%% Chance to crit slowed targets"
-msgstr ""
+msgstr "%d%% Probabilidad de crítico en objetivos lentos"
 
 #: ../../../src/MenuPowers.cpp:1012
 #, c-format
 msgid "%s Elemental Damage"
-msgstr ""
+msgstr "%s daño elemental"
 
 #: ../../../src/MenuPowers.cpp:1021
 #, c-format
 msgid "Requires a %s"
-msgstr ""
+msgstr "Requiere un/a %s"
 
 #: ../../../src/MenuPowers.cpp:1060 ../../../src/MenuPowers.cpp:1063
 #, c-format
@@ -1095,11 +1113,11 @@ msgstr "Requiere Poder: %s"
 
 #: ../../../src/MenuPowers.cpp:1072
 msgid "Click to Unlock (uses 1 Skill Point)"
-msgstr ""
+msgstr "Pulsa para desbloquear (usa 1 punto de habilidad)"
 
 #: ../../../src/MenuPowers.cpp:1076 ../../../src/MenuPowers.cpp:1078
 msgid "Requires 1 Skill Point"
-msgstr ""
+msgstr "Requiere 1 punto de habilidad"
 
 #: ../../../src/MenuPowers.cpp:1312
 msgid "Unspent skill points:"
@@ -1107,19 +1125,19 @@ msgstr "Puntos de habilidad no utilizados:"
 
 #: ../../../src/MenuPowers.cpp:1340
 msgid "Next Level:"
-msgstr ""
+msgstr "Siguiente nivel:"
 
 #: ../../../src/MenuStash.cpp:132
 msgid "Shared Stash"
-msgstr "Esconder compartido"
+msgstr "Almacén compartido"
 
 #: ../../../src/MenuStash.cpp:199
 msgid "Can not store quest items in the stash."
-msgstr ""
+msgstr "No puedes guardar objetos de gesta en tu almacén."
 
 #: ../../../src/MenuStash.cpp:209
 msgid "Stash is full."
-msgstr ""
+msgstr "Almacén lleno."
 
 #: ../../../src/MenuVendor.cpp:51
 msgid "Buyback"
@@ -1140,140 +1158,140 @@ msgstr "Usted ya está transformado, destransformase primero."
 
 #: ../../../src/PowerManager.cpp:1314
 msgid "Could not untransform at this position."
-msgstr ""
+msgstr "No se puede quitar la transformación en esta posición."
 
 #: ../../../src/SaveLoad.cpp:229 ../../../src/SaveLoad.cpp:230
 msgid "Game saved."
-msgstr ""
+msgstr "Partida guardada."
 
 #: ../../../src/SDLInputState.cpp:552
 msgid "Backspace"
-msgstr ""
+msgstr "Retroceso"
 
 #: ../../../src/SDLInputState.cpp:553
 msgid "CapsLock"
-msgstr ""
+msgstr "BloqMayús"
 
 #: ../../../src/SDLInputState.cpp:556
 msgid "End"
-msgstr ""
+msgstr "Fin"
 
 #: ../../../src/SDLInputState.cpp:557
 msgid "Escape"
-msgstr ""
+msgstr "Escape"
 
 #: ../../../src/SDLInputState.cpp:558
 msgid "Home"
-msgstr ""
+msgstr "Inicio"
 
 #: ../../../src/SDLInputState.cpp:559
 msgid "Insert"
-msgstr ""
+msgstr "Insertar"
 
 #: ../../../src/SDLInputState.cpp:560
 msgid "Left Alt"
-msgstr ""
+msgstr "Alt Izquierdo"
 
 #: ../../../src/SDLInputState.cpp:561
 msgid "Left Ctrl"
-msgstr ""
+msgstr "Ctrl Izquierdo"
 
 #: ../../../src/SDLInputState.cpp:563
 msgid "Left Shift"
-msgstr ""
+msgstr "Mayús Izquierdo"
 
 #: ../../../src/SDLInputState.cpp:564
 msgid "NumLock"
-msgstr ""
+msgstr "BloqueoDeNúmeros"
 
 #: ../../../src/SDLInputState.cpp:565
 msgid "PageDown"
-msgstr ""
+msgstr "Avanzar Página"
 
 #: ../../../src/SDLInputState.cpp:566
 msgid "PageUp"
-msgstr ""
+msgstr "Retroceder Página"
 
 #: ../../../src/SDLInputState.cpp:567
 msgid "Pause"
-msgstr ""
+msgstr "Pausar"
 
 #: ../../../src/SDLInputState.cpp:568
 msgid "PrintScreen"
-msgstr ""
+msgstr "Imprimir Pantalla"
 
 #: ../../../src/SDLInputState.cpp:569
 msgid "Right Alt"
-msgstr ""
+msgstr "Alt Derecho"
 
 #: ../../../src/SDLInputState.cpp:570
 msgid "Right Ctrl"
-msgstr ""
+msgstr "Ctrl Derecho"
 
 #: ../../../src/SDLInputState.cpp:571
 msgid "Return"
-msgstr ""
+msgstr "Retorno"
 
 #: ../../../src/SDLInputState.cpp:573
 msgid "Right Shift"
-msgstr ""
+msgstr "Mayús. derecho"
 
 #: ../../../src/SDLInputState.cpp:574
 msgid "ScrollLock"
-msgstr ""
+msgstr "BloqDesplazamiento"
 
 #: ../../../src/SDLInputState.cpp:575
 msgid "Space"
-msgstr ""
+msgstr "Espacio"
 
 #: ../../../src/SDLInputState.cpp:576
 msgid "Tab"
-msgstr ""
+msgstr "Tabulador"
 
 #: ../../../src/SDLInputState.cpp:590
 #, c-format
 msgid "Mouse %d"
-msgstr ""
+msgstr "Ratón %d"
 
 #: ../../../src/SDLInputState.cpp:598
 #, c-format
 msgid "Axis %d -"
-msgstr ""
+msgstr "Eje %d -"
 
 #: ../../../src/SDLInputState.cpp:600
 #, c-format
 msgid "Axis %d +"
-msgstr ""
+msgstr "Eje %d +"
 
 #: ../../../src/SDLInputState.cpp:603
 #, c-format
 msgid "Button %d"
-msgstr ""
+msgstr "Botón %d"
 
 #: ../../../src/SDLInputState.cpp:607
 msgid "(none)"
-msgstr ""
+msgstr "(ninguno)"
 
 #: ../../../src/SDLInputState.cpp:648 ../../../src/SDLInputState.cpp:672
 #: ../../../src/SDLInputState.cpp:690
 msgid "Tap"
-msgstr ""
+msgstr "Palmadita"
 
 #: ../../../src/SDLInputState.cpp:648 ../../../src/SDLInputState.cpp:651
 #, c-format
 msgid "%s on ground"
-msgstr ""
+msgstr "%s en el suelo"
 
 #: ../../../src/SDLInputState.cpp:672 ../../../src/SDLInputState.cpp:675
 #, c-format
 msgid "%s on enemy"
-msgstr ""
+msgstr "%s en enemigo"
 
 #: ../../../src/SDLInputState.cpp:734 ../../../src/SDLInputState.cpp:738
 #: ../../../src/SDLInputState.cpp:742
 #, c-format
 msgid "'%s' is no longer bound to:"
-msgstr ""
+msgstr "'%s' no está ligado más a:"
 
 #: ../../../src/Settings.cpp:780
 msgid "Adventurer"
@@ -1281,148 +1299,148 @@ msgstr "Aventurero"
 
 #: ../../../src/Stats.cpp:36
 msgid "Max HP"
-msgstr ""
+msgstr "PV máx."
 
 #: ../../../src/Stats.cpp:41
 msgid "HP Regen"
-msgstr ""
+msgstr "PV reg."
 
 #: ../../../src/Stats.cpp:42
 msgid "Ticks of HP regen per minute."
-msgstr ""
+msgstr "PV regenerables por minuto."
 
 #: ../../../src/Stats.cpp:46
 msgid "Max MP"
-msgstr ""
+msgstr "PM máx."
 
 #: ../../../src/Stats.cpp:51
 msgid "MP Regen"
-msgstr ""
+msgstr "PM reg."
 
 #: ../../../src/Stats.cpp:52
 msgid "Ticks of MP regen per minute."
-msgstr ""
+msgstr "PM regenerables por minuto."
 
 #: ../../../src/Stats.cpp:56
 msgid "Accuracy"
-msgstr ""
+msgstr "Exactitud"
 
 #: ../../../src/Stats.cpp:61
 msgid "Avoidance"
-msgstr ""
+msgstr "Evitación"
 
 #: ../../../src/Stats.cpp:66
 msgid "Absorb Min"
-msgstr ""
+msgstr "Mín. absorción"
 
 #: ../../../src/Stats.cpp:71
 msgid "Absorb Max"
-msgstr ""
+msgstr "Máx. absorción"
 
 #: ../../../src/Stats.cpp:76
 msgid "Critical Hit Chance"
-msgstr ""
+msgstr "Prob. de golpe crítico"
 
 #: ../../../src/Stats.cpp:81
 msgid "Bonus XP"
-msgstr ""
+msgstr "PX por bonus"
 
 #: ../../../src/Stats.cpp:82
 msgid "Increases the XP gained per kill."
-msgstr ""
+msgstr "Incrementa los PX ganados por cada combate ganado."
 
 #: ../../../src/Stats.cpp:86
 #, c-format
 msgid "Bonus %s"
-msgstr ""
+msgstr "Bonus %s"
 
 #: ../../../src/Stats.cpp:87
 #, c-format
 msgid "Increases the %s found per drop."
-msgstr ""
+msgstr "Incrementa las %s encontradas por pérdida."
 
 #: ../../../src/Stats.cpp:91
 msgid "Item Find Chance"
-msgstr ""
+msgstr "Probabilidad de encontrar objeto"
 
 #: ../../../src/Stats.cpp:92
 msgid "Increases the chance that an enemy will drop an item."
-msgstr ""
+msgstr "Incrementa la probabilidad de que el enemigo suelte un objeto."
 
 #: ../../../src/Stats.cpp:96
 msgid "Stealth"
-msgstr ""
+msgstr "Sigilo"
 
 #: ../../../src/Stats.cpp:97
 msgid "Increases your ability to move undetected."
-msgstr ""
+msgstr "Incrementa tu habilidad de moverte sin ser detectado."
 
 #: ../../../src/Stats.cpp:101
 msgid "Poise"
-msgstr ""
+msgstr "Equilibrio"
 
 #: ../../../src/Stats.cpp:102
 msgid "Reduces your chance of stumbling when hit."
-msgstr ""
+msgstr "Reduce tu probabilidad de tropezar al golpear."
 
 #: ../../../src/Stats.cpp:106
 msgid "Missile Reflect Chance"
-msgstr ""
+msgstr "Probabilidad de reflejar los misiles"
 
 #: ../../../src/Stats.cpp:107
 msgid "Increases your chance of reflecting missiles back at enemies."
-msgstr ""
+msgstr "Incrementa tu probabilidad de devolver los misiles a tus enemigos."
 
 #: ../../../src/Stats.cpp:111
 msgid "Damage Reflection"
-msgstr ""
+msgstr "Reflexión de daño"
 
 #: ../../../src/Stats.cpp:112
 msgid "Deals a percentage of damage taken back to the attacker."
-msgstr ""
+msgstr "Da un porcentaje del daño al atacante."
 
 #: ../../../src/Stats.cpp:116
 msgid "HP Steal"
-msgstr ""
+msgstr "Robar PV"
 
 #: ../../../src/Stats.cpp:117
 msgid "Percentage of HP stolen per hit."
-msgstr ""
+msgstr "Porcentaje de PV robados por golpe."
 
 #: ../../../src/Stats.cpp:121
 msgid "MP Steal"
-msgstr ""
+msgstr "Robar PM"
 
 #: ../../../src/Stats.cpp:122
 msgid "Percentage of MP stolen per hit."
-msgstr ""
+msgstr "Porcentaje de PM robados por golpe."
 
 #: ../../../src/Stats.cpp:126
 msgid "Base HP"
-msgstr ""
+msgstr "PV base"
 
 #: ../../../src/Stats.cpp:131
 msgid "Base MP"
-msgstr ""
+msgstr "PM base"
 
 #: ../../../src/Utils.cpp:203
 msgid "k"
-msgstr ""
+msgstr "Aceptar"
 
 #: ../../../src/Utils.cpp:448
 #, c-format
 msgid "%s second"
-msgstr ""
+msgstr "%s segundo"
 
 #: ../../../src/Utils.cpp:451
 #, c-format
 msgid "%s seconds"
-msgstr ""
+msgstr "%s segundos"
 
 #: ../../../src/Version.cpp:139
 msgid "or newer"
-msgstr ""
+msgstr "o más nuevo"
 
 #: ../../../src/Version.cpp:142
 msgid "or older"
-msgstr ""
+msgstr "o más viejo"
