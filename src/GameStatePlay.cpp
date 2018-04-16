@@ -389,6 +389,8 @@ void GameStatePlay::checkCancel() {
 
 	// if user has clicked exit game from exit menu
 	if (menu->requestingExit()) {
+		menu->closeAll();
+
 		if (save_on_exit)
 			save_load->saveGame();
 
@@ -404,6 +406,8 @@ void GameStatePlay::checkCancel() {
 
 	// if user closes the window
 	if (inpt->done) {
+		menu->closeAll();
+
 		if (save_on_exit)
 			save_load->saveGame();
 

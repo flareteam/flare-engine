@@ -4,6 +4,7 @@ Engine features:
 
 * Buttons that trigger Events can now be added to books. (Justin Jacobs)
 * Add ability to control image display in books via campaign status. (Justin Jacobs)
+* Add ability to execute Events upon opening/closing a book. (Justin Jacobs)
 
 Engine fixes:
 

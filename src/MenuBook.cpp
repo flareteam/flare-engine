@@ -41,10 +41,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 MenuBook::MenuBook()
 	: book_name("")
 	, last_book_name("")
-	, book_loaded(false) {
-
-	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
-
+	, book_loaded(false)
+	, closeButton(new WidgetButton("images/menus/buttons/button_x.png"))
+	, event_open(NULL)
+	, event_close(NULL)
+{
 	tablist = TabList();
 }
 
@@ -97,6 +98,12 @@ void MenuBook::loadBook() {
 				else if (infile.section == "button") {
 					buttons.resize(buttons.size() + 1);
 				}
+				else if (infile.section == "event_open" && !event_open) {
+					event_open = new Event();
+				}
+				else if (infile.section == "event_close" && !event_close) {
+					event_close = new Event();
+				}
 
 			}
 			if (infile.section == "text" && !text.empty())
@@ -105,6 +112,10 @@ void MenuBook::loadBook() {
 				loadImage(infile, images.back());
 			else if (infile.section == "button" && !buttons.empty())
 				loadButton(infile, buttons.back());
+			else if (infile.section == "event_open")
+				loadBookEvent(infile, *event_open);
+			else if (infile.section == "event_close")
+				loadBookEvent(infile, *event_close);
 		}
 
 		infile.close();
@@ -159,6 +170,10 @@ void MenuBook::loadBook() {
 	}
 
 	align();
+
+	if (event_open && EventManager::isActive(*event_open)) {
+		EventManager::executeEvent(*event_open);
+	}
 
 	book_loaded = true;
 }
@@ -242,12 +257,16 @@ void MenuBook::loadButton(FileParser &infile, BookButton& bbutton) {
 		bbutton.label = popFirstString(infile.val);
 	}
 	else {
-		// we use substr here to remove the trailing comma that was added in loadBook()
-		std::string trimmed = infile.val.substr(0, infile.val.length() - 1);
+		loadBookEvent(infile, bbutton.event);
+	}
+}
 
-		if (!EventManager::loadEventComponentString(infile.key, trimmed, &bbutton.event, NULL)) {
-			infile.error("MenuBook: '%s' is not a valid key.", infile.key.c_str());
-		}
+void MenuBook::loadBookEvent(FileParser &infile, Event& ev) {
+	// we use substr here to remove the trailing comma that was added in loadBook()
+	std::string trimmed = infile.val.substr(0, infile.val.length() - 1);
+
+	if (!EventManager::loadEventComponentString(infile.key, trimmed, &ev, NULL)) {
+		infile.error("MenuBook: '%s' is not a valid key.", infile.key.c_str());
 	}
 }
 
@@ -286,9 +305,19 @@ void MenuBook::clearBook() {
 	buttons.clear();
 
 	tablist.clear();
+
+	delete event_open;
+	event_open = NULL;
+
+	delete event_close;
+	event_close = NULL;
 }
 
 void MenuBook::closeWindow() {
+	if (event_close && EventManager::isActive(*event_close)) {
+		EventManager::executeEvent(*event_close);
+	}
+
 	clearBook();
 
 	visible = false;
@@ -368,6 +397,5 @@ void MenuBook::render() {
 
 MenuBook::~MenuBook() {
 	delete closeButton;
-	clearBook();
-
+	closeWindow();
 }

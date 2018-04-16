@@ -92,12 +92,15 @@ private:
 	std::vector<BookImage> images;
 	std::vector<BookText> text;
 	std::vector<BookButton> buttons;
+	Event* event_open;
+	Event* event_close;
 
 	void loadBook();
 	void alignElements();
 	void loadImage(FileParser &infile, BookImage& bimage);
 	void loadText(FileParser &infile, BookText& btext);
 	void loadButton(FileParser &infile, BookButton& bbutton);
+	void loadBookEvent(FileParser &infile, Event& ev);
 	void clearBook();
 };
 
