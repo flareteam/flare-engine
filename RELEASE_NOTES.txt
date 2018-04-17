@@ -13,6 +13,7 @@ Engine fixes:
 * Fix incorrect handling of newlines in tooltips. (Justin Jacobs)
 * Don't spam "Entity stuck" message while pushing an entity out of a bad tile. (Justin Jacobs)
 * Keyboard key names such as "Backspace" and "Left Ctrl" can now be translated. (Justin Jacobs)
+* Fix HP/MP/XP bar meter from exceeding the size of the bar. (Justin Jacobs)
 
 Translation updates:
 

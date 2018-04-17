@@ -139,9 +139,11 @@ void MenuStatBar::render() {
 	setBackgroundDest(dest);
 	Menu::render();
 
+	unsigned long stat_cur_clamped = std::min(stat_cur, stat_max);
+
 	// draw bar progress based on orientation
 	if (orientation == 0) {
-		unsigned long bar_length = (stat_max == 0) ? 0 : (stat_cur * static_cast<unsigned long>(bar_pos.w)) / stat_max;
+		unsigned long bar_length = (stat_max == 0) ? 0 : (stat_cur_clamped * static_cast<unsigned long>(bar_pos.w)) / stat_max;
 		src.x = 0;
 		src.y = 0;
 		src.w = static_cast<int>(bar_length);
@@ -150,7 +152,7 @@ void MenuStatBar::render() {
 		dest.y = bar_dest.y;
 	}
 	else if (orientation == 1) {
-		unsigned long bar_length = (stat_max == 0) ? 0 : (stat_cur * static_cast<unsigned long>(bar_pos.h)) / stat_max;
+		unsigned long bar_length = (stat_max == 0) ? 0 : (stat_cur_clamped * static_cast<unsigned long>(bar_pos.h)) / stat_max;
 		src.x = 0;
 		src.y = bar_pos.h-static_cast<int>(bar_length);
 		src.w = bar_pos.w;
