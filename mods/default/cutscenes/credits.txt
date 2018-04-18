@@ -80,6 +80,7 @@ text=Pawel Puszczynski
 text=Quentin Stievenart
 text=Rui
 text=Sergey Basalaev
+text=Sergiy Borodych
 text=Stefan Beller
 text=Stefano Peris
 text=sujiniku
