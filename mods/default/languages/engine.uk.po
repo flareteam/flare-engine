@@ -21,11 +21,11 @@ msgstr ""
 #: ../../../src/Avatar.cpp:353
 #, c-format
 msgid "Congratulations, you have reached level %d!"
-msgstr "Ура, ви перейшли на рівень %d!"
+msgstr "Вітаємо, ви перейшли на рівень %d!"
 
 #: ../../../src/Avatar.cpp:355
 msgid "You may increase one attribute through the Character Menu."
-msgstr "Ви можете покращити характеристику в Меню Персонажа."
+msgstr "Ви можете покращити одну характеристику в Меню Персонажа."
 
 #: ../../../src/Avatar.cpp:573
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
@@ -366,7 +366,7 @@ msgstr "Завантажую збереження..."
 
 #: ../../../src/GameStateLoad.cpp:727
 msgid "Invalid save"
-msgstr ""
+msgstr "Невірне збереження"
 
 #: ../../../src/GameStateLoad.cpp:746 ../../../src/ItemManager.cpp:672
 #: ../../../src/MenuPowers.cpp:688 ../../../src/MenuPowers.cpp:1052
@@ -585,11 +585,11 @@ msgstr ""
 #: ../../../src/MenuPowers.cpp:739
 #, c-format
 msgid "%s Resistance"
-msgstr ""
+msgstr "%sОпір "
 
 #: ../../../src/ItemManager.cpp:658
 msgid "Quest Item"
-msgstr ""
+msgstr "Квестовий предмет"
 
 #: ../../../src/ItemManager.cpp:685
 #, c-format
@@ -650,7 +650,7 @@ msgstr ""
 #: ../../../src/ItemManager.cpp:815
 #, c-format
 msgid "%d items:"
-msgstr ""
+msgstr "%d предмети:"
 
 #: ../../../src/MenuActionBar.cpp:195 ../../../src/MenuActionBar.cpp:201
 #: ../../../src/MenuActionBar.cpp:206
