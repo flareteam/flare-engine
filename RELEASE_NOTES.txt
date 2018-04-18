@@ -1,4 +1,17 @@
-Flare v1.03 (WIP, link soon)
+Flare v1.04 (WIP, link soon)
+
+Engine fixes:
+
+* Fix a regression that caused book text that was not left-aligned to be cut off. (Justin Jacobs)
+* Fix a crash when teleporting to the default position of map with a summoned creature. (Justin Jacobs)
+
+Game changes:
+
+* Fall back to Liberation Sans when fancy fonts lack the appropriate glyphs for the current language. (Justin Jacobs)
+
+
+
+Flare v1.03 (http://flarerpg.org/index.php/2018/04/17/flare-1-03/)
 
 Engine features:
 
@@ -13,7 +26,7 @@ Engine fixes:
 * Fix incorrect handling of newlines in tooltips. (Justin Jacobs)
 * Don't spam "Entity stuck" message while pushing an entity out of a bad tile. (Justin Jacobs)
 * Keyboard key names such as "Backspace" and "Left Ctrl" can now be translated. (Justin Jacobs)
-* Fix HP/MP/XP bar meter from exceeding the size of the bar. (Justin Jacobs)
+* Prevent HP/MP/XP bar meter from exceeding the size of the bar. (Justin Jacobs)
 
 Translation updates:
 
@@ -23,7 +36,7 @@ Translation updates:
 * French (fr) update (sang-froid)
 * Italian (it) update (MOB2)
 * Portuguese (pt) update (Rui)
-* Ukranian (uk) update (Denis Lysenko, Микола Франчук)
+* Ukrainian (uk) update (Denis Lysenko, Микола Франчук)
 
 
 
