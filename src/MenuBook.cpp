@@ -136,7 +136,7 @@ void MenuBook::loadBook() {
 
 		font->setFont(text[i].font);
 		Point pSize = font->calc_size(text[i].text, text[i].size.w);
-		Image *graphics = render_device->createImage(pSize.x, pSize.y);
+		Image *graphics = render_device->createImage(text[i].size.w, pSize.y);
 
 		if (graphics) {
 			int x_offset = 0;
