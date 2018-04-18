@@ -317,16 +317,6 @@ void GameStatePlay::checkTeleport() {
 			showLoading();
 			mapr->load(teleport_mapname);
 			setLoadingFrame();
-			enemym->handleNewMap();
-			hazards->handleNewMap();
-			loot->handleNewMap();
-			powers->handleNewMap(&mapr->collider);
-			menu->enemy->handleNewMap();
-			npcs->handleNewMap();
-			resetNPC();
-			menu->stash->visible = false;
-			menu->mini->prerender(&mapr->collider, mapr->w, mapr->h);
-			npc_id = nearest_npc = -1;
 
 			// use the default hero spawn position for this map
 			if (mapr->teleport_destination.x == -1 && mapr->teleport_destination.y == -1) {
@@ -342,6 +332,17 @@ void GameStatePlay::checkTeleport() {
 			else {
 				logError("GameStatePlay: Spawn position (%d, %d) is blocked.", static_cast<int>(pc->stats.pos.x), static_cast<int>(pc->stats.pos.y));
 			}
+
+			enemym->handleNewMap();
+			hazards->handleNewMap();
+			loot->handleNewMap();
+			powers->handleNewMap(&mapr->collider);
+			menu->enemy->handleNewMap();
+			npcs->handleNewMap();
+			resetNPC();
+			menu->stash->visible = false;
+			menu->mini->prerender(&mapr->collider, mapr->w, mapr->h);
+			npc_id = nearest_npc = -1;
 
 			// return to title (permadeath) OR auto-save
 			if (pc->stats.permadeath && pc->stats.cur_state == AVATAR_DEAD) {
