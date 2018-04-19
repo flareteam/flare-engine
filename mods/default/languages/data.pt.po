@@ -1,6 +1,6 @@
 # Copyright (C) 2011 Clint Bellanger
 # This file is distributed under the same license as the FLARE package.
-#
+# 
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # Translators:
 # Rui <xymarior@yandex.com>, 2018
@@ -11,12 +11,11 @@ msgstr ""
 "POT-Creation-Date: 2018-04-18 18:48+\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Rui <xymarior@yandex.com>, 2018\n"
-"Language-Team: Portuguese (https://www.transifex.com/flareorg/teams/84925/"
-"pt/)\n"
-"Language: pt\n"
+"Language-Team: Portuguese (https://www.transifex.com/flareorg/teams/84925/pt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: pt\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../engine/primary_stats.txt:3
@@ -61,19 +60,19 @@ msgstr ""
 
 #: ../engine/damage_types.txt:19
 msgid "Mental Damage"
-msgstr ""
+msgstr "Dano Mental"
 
 #: ../engine/damage_types.txt:20
 msgid "Mental Damage Min"
-msgstr ""
+msgstr "Dano Mental Mín"
 
 #: ../engine/damage_types.txt:21
 msgid "Mental Damage Max"
-msgstr ""
+msgstr "Dano Mental Máx"
 
 #: ../cutscenes/credits.txt:7
 msgid "Flare Engine Credits"
-msgstr ""
+msgstr "Créditos do Motor do Jogo Flare"
 
 #: ../cutscenes/credits.txt:10
 msgid "Lead Programmers"
