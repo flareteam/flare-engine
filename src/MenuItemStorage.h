@@ -27,9 +27,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define MENU_ITEM_STORAGE_H
 
 #include "CommonIncludes.h"
+#include "ItemManager.h"
 #include "ItemStorage.h"
 
-class ItemStack;
 class StatBlock;
 class TooltipData;
 class WidgetSlot;

@@ -28,6 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef POWER_MANAGER_H
 #define POWER_MANAGER_H
 
+#include "Map.h"
 #include "MapCollision.h"
 #include "Settings.h"
 #include "Utils.h"
@@ -35,8 +36,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class Animation;
 class AnimationSet;
 class Hazard;
-class MapCollision;
-class Map_Enemy;
 
 const int POWTYPE_FIXED = 0;
 const int POWTYPE_MISSILE = 1;
