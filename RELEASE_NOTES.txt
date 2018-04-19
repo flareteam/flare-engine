@@ -12,6 +12,8 @@ Game changes:
 
 Translation update:
 
+* Scottish Gaelic (gd) update (GunChleoc)
+* Portuguese (pt) update (Rui)
 * Ukrainian (uk) update (Sergiy Borodych)
 
 
