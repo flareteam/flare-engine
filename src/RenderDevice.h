@@ -138,7 +138,7 @@ private:
 	uint32_t ref_counter;
 };
 
-struct Renderable {
+class Renderable {
 public:
 	Image *image; // image to be used
 	Rect src; // location on the sprite in pixel coordinates.
