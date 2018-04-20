@@ -28,6 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "FileParser.h"
 #include "FontEngine.h"
+#include "InputState.h"
 #include "ItemManager.h"
 #include "MessageEngine.h"
 #include "Settings.h"
@@ -822,6 +823,18 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 			getBonusString(ss, bdata);
 			tip.addColoredText(ss.str(), set.color);
 			bonus_counter++;
+		}
+	}
+
+	// input hint for consumables/books
+	// TODO hint when not using mouse control. The action for using an item there is hard to describe
+	if (context == PLAYER_INV && !NO_MOUSE) {
+		int power_id = items[stack.item].power;
+		if (power_id > 0 && items[stack.item].type == "consumable") {
+			tip.addColoredText('\n' + msg->get("Press [%s] to use", inpt->getBindingString(MAIN2).c_str()), color_bonus);
+		}
+		else if (!items[stack.item].book.empty()) {
+			tip.addColoredText('\n' + msg->get("Press [%s] to read", inpt->getBindingString(MAIN2).c_str()), color_bonus);
 		}
 	}
 
