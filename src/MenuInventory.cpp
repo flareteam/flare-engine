@@ -552,12 +552,12 @@ void MenuInventory::activate(const Point& position) {
 		}
 
 		// check power & item requirements
-		if (!stats->canUsePower(powers->powers[power_id], power_id))
+		if (!stats->canUsePower(powers->powers[power_id], power_id) || pc->hero_cooldown[power_id] > 0) {
+			pc->logMsg(msg->get("You can't use this item right now."), true);
 			return;
+		}
 
-		//check for power cooldown
-		if (pc->hero_cooldown[power_id] > 0) return;
-		else pc->hero_cooldown[power_id] = powers->powers[power_id].cooldown;
+		pc->hero_cooldown[power_id] = powers->powers[power_id].cooldown;
 
 		// if this item requires targeting it can't be used this way
 		if (!powers->powers[power_id].requires_targeting) {
