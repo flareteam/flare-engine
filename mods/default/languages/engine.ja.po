@@ -2,21 +2,20 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-18 18:48-0400\n"
+"POT-Creation-Date: 2018-04-19 20:31-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
-"Language-Team: Japanese (https://www.transifex.com/flareorg/teams/84925/"
-"ja/)\n"
-"Language: ja\n"
+"Language-Team: Japanese (https://www.transifex.com/flareorg/teams/84925/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../../../src/Avatar.cpp:363
@@ -30,9 +29,7 @@ msgstr "キャラクターメニューを介して 1つの属性を高めるこ�
 
 #: ../../../src/Avatar.cpp:583
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
-msgstr ""
-"あなたは負けてしまった。 ゲームオーバー！ ${INPUT_CONTINUE} を押すと終了して"
-"タイトル画面に戻ります。"
+msgstr "あなたは負けてしまった。 ゲームオーバー！ ${INPUT_CONTINUE} を押すと終了してタイトル画面に戻ります。"
 
 #: ../../../src/Avatar.cpp:589
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
@@ -371,7 +368,7 @@ msgstr "セーブデータをロードしています..."
 msgid "Invalid save"
 msgstr ""
 
-#: ../../../src/GameStateLoad.cpp:752 ../../../src/ItemManager.cpp:677
+#: ../../../src/GameStateLoad.cpp:752 ../../../src/ItemManager.cpp:678
 #: ../../../src/MenuPowers.cpp:707 ../../../src/MenuPowers.cpp:1071
 #, c-format
 msgid "Level %d"
@@ -570,90 +567,100 @@ msgstr "マウス X1"
 msgid "Mouse X2"
 msgstr "マウス X2"
 
-#: ../../../src/ItemManager.cpp:411 ../../../src/ItemManager.cpp:414
+#: ../../../src/ItemManager.cpp:412 ../../../src/ItemManager.cpp:415
 msgid "Unknown Item"
 msgstr "不明なアイテム"
 
-#: ../../../src/ItemManager.cpp:586 ../../../src/MenuPowers.cpp:813
+#: ../../../src/ItemManager.cpp:587 ../../../src/MenuPowers.cpp:813
 #, c-format
 msgid "%d%% Speed"
 msgstr "%d%% スピード"
 
-#: ../../../src/ItemManager.cpp:590 ../../../src/MenuPowers.cpp:816
+#: ../../../src/ItemManager.cpp:591 ../../../src/MenuPowers.cpp:816
 #, c-format
 msgid "%d%% Attack Speed"
 msgstr "%d%% スピード"
 
-#: ../../../src/ItemManager.cpp:612 ../../../src/MenuCharacter.cpp:342
+#: ../../../src/ItemManager.cpp:613 ../../../src/MenuCharacter.cpp:342
 #: ../../../src/MenuPowers.cpp:758
 #, c-format
 msgid "%s Resistance"
 msgstr "%s への抵抗"
 
-#: ../../../src/ItemManager.cpp:663
+#: ../../../src/ItemManager.cpp:664
 msgid "Quest Item"
 msgstr "クエスト品"
 
-#: ../../../src/ItemManager.cpp:690
+#: ../../../src/ItemManager.cpp:691
 #, c-format
 msgid "Quality: %s"
 msgstr "品質: %s"
 
-#: ../../../src/ItemManager.cpp:715
+#: ../../../src/ItemManager.cpp:716
 #, c-format
 msgid "Absorb: %d-%d"
 msgstr "吸収: %d-%d"
 
-#: ../../../src/ItemManager.cpp:717
+#: ../../../src/ItemManager.cpp:718
 #, c-format
 msgid "Absorb: %d"
 msgstr "吸収: %d"
 
-#: ../../../src/ItemManager.cpp:754 ../../../src/MenuPowers.cpp:1057
+#: ../../../src/ItemManager.cpp:755 ../../../src/MenuPowers.cpp:1057
 #: ../../../src/MenuPowers.cpp:1060
 #, c-format
 msgid "Requires Level %d"
 msgstr "レベル %d が必要です"
 
-#: ../../../src/ItemManager.cpp:765 ../../../src/MenuPowers.cpp:1049
+#: ../../../src/ItemManager.cpp:766 ../../../src/MenuPowers.cpp:1049
 #: ../../../src/MenuPowers.cpp:1051
 #, c-format
 msgid "Requires %s %d"
 msgstr "%s %d が必要です"
 
-#: ../../../src/ItemManager.cpp:773
+#: ../../../src/ItemManager.cpp:774
 #, c-format
 msgid "Requires Class: %s"
 msgstr "必要なクラス: %s"
 
-#: ../../../src/ItemManager.cpp:785 ../../../src/ItemManager.cpp:794
+#: ../../../src/ItemManager.cpp:786 ../../../src/ItemManager.cpp:795
 #, c-format
 msgid "Buy Price: %d %s"
 msgstr "購入価格: %d %s"
 
-#: ../../../src/ItemManager.cpp:787 ../../../src/ItemManager.cpp:796
+#: ../../../src/ItemManager.cpp:788 ../../../src/ItemManager.cpp:797
 #, c-format
 msgid "Buy Price: %d %s each"
 msgstr "購入価格: %d %s ひとつあたり"
 
-#: ../../../src/ItemManager.cpp:802
+#: ../../../src/ItemManager.cpp:803
 #, c-format
 msgid "Sell Price: %d %s"
 msgstr "売却価格: %d %s"
 
-#: ../../../src/ItemManager.cpp:804
+#: ../../../src/ItemManager.cpp:805
 #, c-format
 msgid "Sell Price: %d %s each"
 msgstr "売却価格: %d %s ひとつあたり"
 
-#: ../../../src/ItemManager.cpp:813
+#: ../../../src/ItemManager.cpp:814
 msgid "Set:"
 msgstr "組合わせ:"
 
-#: ../../../src/ItemManager.cpp:820
+#: ../../../src/ItemManager.cpp:821
 #, c-format
 msgid "%d items:"
 msgstr "%d アイテム:"
+
+#: ../../../src/ItemManager.cpp:834
+#, c-format
+msgid "Press [%s] to use"
+msgstr ""
+
+#: ../../../src/ItemManager.cpp:837
+#, c-format
+msgid "Press [%s] to read"
+msgstr ""
 
 #: ../../../src/MenuActionBar.cpp:200 ../../../src/MenuActionBar.cpp:206
 #: ../../../src/MenuActionBar.cpp:211
@@ -767,7 +774,8 @@ msgid ""
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:241
-msgid "parses a series of event components and executes them as a single event"
+msgid ""
+"parses a series of event components and executes them as a single event"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:242
@@ -913,6 +921,10 @@ msgstr "各アイテムの売買:"
 #: ../../../src/MenuInventory.cpp:550
 msgid "You don't have enough of the required item."
 msgstr "必要なアイテムが充分ではない。"
+
+#: ../../../src/MenuInventory.cpp:556
+msgid "You can't use this item right now."
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:568
 msgid "This item can only be used from the action bar."

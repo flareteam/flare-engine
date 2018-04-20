@@ -2,20 +2,20 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-18 18:48-0400\n"
+"POT-Creation-Date: 2018-04-19 20:31-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: MOB2 <thewattyk@gmail.com>, 2018\n"
 "Language-Team: Italian (https://www.transifex.com/flareorg/teams/84925/it/)\n"
-"Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: it\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../../../src/Avatar.cpp:363
@@ -376,7 +376,7 @@ msgstr "Caricamento partita..."
 msgid "Invalid save"
 msgstr "Salvataggio corrotto"
 
-#: ../../../src/GameStateLoad.cpp:752 ../../../src/ItemManager.cpp:677
+#: ../../../src/GameStateLoad.cpp:752 ../../../src/ItemManager.cpp:678
 #: ../../../src/MenuPowers.cpp:707 ../../../src/MenuPowers.cpp:1071
 #, c-format
 msgid "Level %d"
@@ -575,90 +575,100 @@ msgstr "Mouse X1"
 msgid "Mouse X2"
 msgstr "Mouse X2"
 
-#: ../../../src/ItemManager.cpp:411 ../../../src/ItemManager.cpp:414
+#: ../../../src/ItemManager.cpp:412 ../../../src/ItemManager.cpp:415
 msgid "Unknown Item"
 msgstr "Oggetto sconosciuto"
 
-#: ../../../src/ItemManager.cpp:586 ../../../src/MenuPowers.cpp:813
+#: ../../../src/ItemManager.cpp:587 ../../../src/MenuPowers.cpp:813
 #, c-format
 msgid "%d%% Speed"
 msgstr "%d%% Velocità"
 
-#: ../../../src/ItemManager.cpp:590 ../../../src/MenuPowers.cpp:816
+#: ../../../src/ItemManager.cpp:591 ../../../src/MenuPowers.cpp:816
 #, c-format
 msgid "%d%% Attack Speed"
 msgstr "%d%% Velocità di Attacco"
 
-#: ../../../src/ItemManager.cpp:612 ../../../src/MenuCharacter.cpp:342
+#: ../../../src/ItemManager.cpp:613 ../../../src/MenuCharacter.cpp:342
 #: ../../../src/MenuPowers.cpp:758
 #, c-format
 msgid "%s Resistance"
 msgstr "Resistenza a: %s"
 
-#: ../../../src/ItemManager.cpp:663
+#: ../../../src/ItemManager.cpp:664
 msgid "Quest Item"
 msgstr "Oggetto della missione"
 
-#: ../../../src/ItemManager.cpp:690
+#: ../../../src/ItemManager.cpp:691
 #, c-format
 msgid "Quality: %s"
 msgstr "Qualità: %s"
 
-#: ../../../src/ItemManager.cpp:715
+#: ../../../src/ItemManager.cpp:716
 #, c-format
 msgid "Absorb: %d-%d"
 msgstr "Assorbimento: %d-%d"
 
-#: ../../../src/ItemManager.cpp:717
+#: ../../../src/ItemManager.cpp:718
 #, c-format
 msgid "Absorb: %d"
 msgstr "Assorbimento: %d"
 
-#: ../../../src/ItemManager.cpp:754 ../../../src/MenuPowers.cpp:1057
+#: ../../../src/ItemManager.cpp:755 ../../../src/MenuPowers.cpp:1057
 #: ../../../src/MenuPowers.cpp:1060
 #, c-format
 msgid "Requires Level %d"
 msgstr "Richiede Livello %d"
 
-#: ../../../src/ItemManager.cpp:765 ../../../src/MenuPowers.cpp:1049
+#: ../../../src/ItemManager.cpp:766 ../../../src/MenuPowers.cpp:1049
 #: ../../../src/MenuPowers.cpp:1051
 #, c-format
 msgid "Requires %s %d"
 msgstr "Richiede %s %d"
 
-#: ../../../src/ItemManager.cpp:773
+#: ../../../src/ItemManager.cpp:774
 #, c-format
 msgid "Requires Class: %s"
 msgstr "Richiede Classe %s"
 
-#: ../../../src/ItemManager.cpp:785 ../../../src/ItemManager.cpp:794
+#: ../../../src/ItemManager.cpp:786 ../../../src/ItemManager.cpp:795
 #, c-format
 msgid "Buy Price: %d %s"
 msgstr "Prezzo d'acquisto: %d %s"
 
-#: ../../../src/ItemManager.cpp:787 ../../../src/ItemManager.cpp:796
+#: ../../../src/ItemManager.cpp:788 ../../../src/ItemManager.cpp:797
 #, c-format
 msgid "Buy Price: %d %s each"
 msgstr "Prezzo d'acquisto: %d %s ciascuno"
 
-#: ../../../src/ItemManager.cpp:802
+#: ../../../src/ItemManager.cpp:803
 #, c-format
 msgid "Sell Price: %d %s"
 msgstr "Prezzo di vendita: %d %s"
 
-#: ../../../src/ItemManager.cpp:804
+#: ../../../src/ItemManager.cpp:805
 #, c-format
 msgid "Sell Price: %d %s each"
 msgstr "Prezzo di vendita: %d %s ciascuno"
 
-#: ../../../src/ItemManager.cpp:813
+#: ../../../src/ItemManager.cpp:814
 msgid "Set:"
 msgstr "Completo:"
 
-#: ../../../src/ItemManager.cpp:820
+#: ../../../src/ItemManager.cpp:821
 #, c-format
 msgid "%d items:"
 msgstr "%d oggetti:"
+
+#: ../../../src/ItemManager.cpp:834
+#, c-format
+msgid "Press [%s] to use"
+msgstr ""
+
+#: ../../../src/ItemManager.cpp:837
+#, c-format
+msgid "Press [%s] to read"
+msgstr ""
 
 #: ../../../src/MenuActionBar.cpp:200 ../../../src/MenuActionBar.cpp:206
 #: ../../../src/MenuActionBar.cpp:211
@@ -756,8 +766,8 @@ msgid ""
 "Prints a list of powers that match a search term. No search term will list "
 "all items"
 msgstr ""
-"Mostra un elenco di poteri che corrispondono a un termine di ricerca. Nessun "
-"termine di ricerca elenca tutti gli oggetti"
+"Mostra un elenco di poteri che corrispondono a un termine di ricerca. Nessun"
+" termine di ricerca elenca tutti gli oggetti"
 
 #: ../../../src/MenuDevConsole.cpp:238
 msgid "Prints out all the map filenames located in the \"maps/\" directory."
@@ -782,9 +792,11 @@ msgstr ""
 "Nessun termine di ricerca elenca tutti gli elementi"
 
 #: ../../../src/MenuDevConsole.cpp:241
-msgid "parses a series of event components and executes them as a single event"
+msgid ""
+"parses a series of event components and executes them as a single event"
 msgstr ""
-"Analizza una serie di componenti di evento e li esegue come un singolo evento"
+"Analizza una serie di componenti di evento e li esegue come un singolo "
+"evento"
 
 #: ../../../src/MenuDevConsole.cpp:242
 msgid "clears the command history"
@@ -929,6 +941,10 @@ msgstr "Vendi gruppo di oggetti:"
 #: ../../../src/MenuInventory.cpp:550
 msgid "You don't have enough of the required item."
 msgstr "Non ne hai a sufficienza."
+
+#: ../../../src/MenuInventory.cpp:556
+msgid "You can't use this item right now."
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:568
 msgid "This item can only be used from the action bar."

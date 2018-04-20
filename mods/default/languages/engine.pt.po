@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-18 18:48-0400\n"
+"POT-Creation-Date: 2018-04-19 20:31-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
 "Language-Team: Portuguese (https://www.transifex.com/flareorg/teams/84925/pt/)\n"
@@ -376,7 +376,7 @@ msgstr "Carregando jogo salvo..."
 msgid "Invalid save"
 msgstr "Salvamento inválido"
 
-#: ../../../src/GameStateLoad.cpp:752 ../../../src/ItemManager.cpp:677
+#: ../../../src/GameStateLoad.cpp:752 ../../../src/ItemManager.cpp:678
 #: ../../../src/MenuPowers.cpp:707 ../../../src/MenuPowers.cpp:1071
 #, c-format
 msgid "Level %d"
@@ -575,90 +575,100 @@ msgstr ""
 msgid "Mouse X2"
 msgstr ""
 
-#: ../../../src/ItemManager.cpp:411 ../../../src/ItemManager.cpp:414
+#: ../../../src/ItemManager.cpp:412 ../../../src/ItemManager.cpp:415
 msgid "Unknown Item"
 msgstr "Item Desconhecido"
 
-#: ../../../src/ItemManager.cpp:586 ../../../src/MenuPowers.cpp:813
+#: ../../../src/ItemManager.cpp:587 ../../../src/MenuPowers.cpp:813
 #, c-format
 msgid "%d%% Speed"
 msgstr "%d%% Velocidade"
 
-#: ../../../src/ItemManager.cpp:590 ../../../src/MenuPowers.cpp:816
+#: ../../../src/ItemManager.cpp:591 ../../../src/MenuPowers.cpp:816
 #, c-format
 msgid "%d%% Attack Speed"
 msgstr "%d%% Velocidade de Ataque"
 
-#: ../../../src/ItemManager.cpp:612 ../../../src/MenuCharacter.cpp:342
+#: ../../../src/ItemManager.cpp:613 ../../../src/MenuCharacter.cpp:342
 #: ../../../src/MenuPowers.cpp:758
 #, c-format
 msgid "%s Resistance"
 msgstr "%s Resistência"
 
-#: ../../../src/ItemManager.cpp:663
+#: ../../../src/ItemManager.cpp:664
 msgid "Quest Item"
 msgstr ""
 
-#: ../../../src/ItemManager.cpp:690
+#: ../../../src/ItemManager.cpp:691
 #, c-format
 msgid "Quality: %s"
 msgstr "Qualidade: %s"
 
-#: ../../../src/ItemManager.cpp:715
+#: ../../../src/ItemManager.cpp:716
 #, c-format
 msgid "Absorb: %d-%d"
 msgstr "Absorve: %d-%d"
 
-#: ../../../src/ItemManager.cpp:717
+#: ../../../src/ItemManager.cpp:718
 #, c-format
 msgid "Absorb: %d"
 msgstr "Absorve: %d"
 
-#: ../../../src/ItemManager.cpp:754 ../../../src/MenuPowers.cpp:1057
+#: ../../../src/ItemManager.cpp:755 ../../../src/MenuPowers.cpp:1057
 #: ../../../src/MenuPowers.cpp:1060
 #, c-format
 msgid "Requires Level %d"
 msgstr "Requer Nível %d"
 
-#: ../../../src/ItemManager.cpp:765 ../../../src/MenuPowers.cpp:1049
+#: ../../../src/ItemManager.cpp:766 ../../../src/MenuPowers.cpp:1049
 #: ../../../src/MenuPowers.cpp:1051
 #, c-format
 msgid "Requires %s %d"
 msgstr "Necessita %s %d"
 
-#: ../../../src/ItemManager.cpp:773
+#: ../../../src/ItemManager.cpp:774
 #, c-format
 msgid "Requires Class: %s"
 msgstr "Necessita da Classe: %s"
 
-#: ../../../src/ItemManager.cpp:785 ../../../src/ItemManager.cpp:794
+#: ../../../src/ItemManager.cpp:786 ../../../src/ItemManager.cpp:795
 #, c-format
 msgid "Buy Price: %d %s"
 msgstr "Preço de Compra: %d %s"
 
-#: ../../../src/ItemManager.cpp:787 ../../../src/ItemManager.cpp:796
+#: ../../../src/ItemManager.cpp:788 ../../../src/ItemManager.cpp:797
 #, c-format
 msgid "Buy Price: %d %s each"
 msgstr "Preço de Compra: %d %s cada"
 
-#: ../../../src/ItemManager.cpp:802
+#: ../../../src/ItemManager.cpp:803
 #, c-format
 msgid "Sell Price: %d %s"
 msgstr "Preço de Venda: %d %s"
 
-#: ../../../src/ItemManager.cpp:804
+#: ../../../src/ItemManager.cpp:805
 #, c-format
 msgid "Sell Price: %d %s each"
 msgstr "Preço de Venda: %d %s cada"
 
-#: ../../../src/ItemManager.cpp:813
+#: ../../../src/ItemManager.cpp:814
 msgid "Set:"
 msgstr ""
 
-#: ../../../src/ItemManager.cpp:820
+#: ../../../src/ItemManager.cpp:821
 #, c-format
 msgid "%d items:"
 msgstr "%d itens:"
+
+#: ../../../src/ItemManager.cpp:834
+#, c-format
+msgid "Press [%s] to use"
+msgstr ""
+
+#: ../../../src/ItemManager.cpp:837
+#, c-format
+msgid "Press [%s] to read"
+msgstr ""
 
 #: ../../../src/MenuActionBar.cpp:200 ../../../src/MenuActionBar.cpp:206
 #: ../../../src/MenuActionBar.cpp:211
@@ -919,6 +929,10 @@ msgstr ""
 #: ../../../src/MenuInventory.cpp:550
 msgid "You don't have enough of the required item."
 msgstr "Não tens que chegue do item necessário."
+
+#: ../../../src/MenuInventory.cpp:556
+msgid "You can't use this item right now."
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:568
 msgid "This item can only be used from the action bar."
