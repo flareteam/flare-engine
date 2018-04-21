@@ -11,6 +11,13 @@ Engine fixes:
 * Removed unused color key attribute parsing from tileset definitions. (Justin Jacobs)
 * Fixed building on FreeBSD. (Justin Jacobs)
 
+Translation updates:
+
+* Scottish Gaelic (gd) update (GunChleoc)
+* Polish (pl) update (Pawonashi)
+* Portuguese (pt) update (Rui)
+* Ukrainian (uk) update (Sergiy Borodych)
+
 
 
 Flare v1.04 (http://flarerpg.org/index.php/2018/04/19/flare-1-04/)
