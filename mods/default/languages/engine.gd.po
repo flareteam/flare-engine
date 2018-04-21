@@ -666,12 +666,12 @@ msgstr "%d nithean:"
 #: ../../../src/ItemManager.cpp:834
 #, c-format
 msgid "Press [%s] to use"
-msgstr ""
+msgstr "Brùth air [%s] gus a chleachdadh"
 
 #: ../../../src/ItemManager.cpp:837
 #, c-format
 msgid "Press [%s] to read"
-msgstr ""
+msgstr "Brùth air [%s] gus a leughadh"
 
 #: ../../../src/MenuActionBar.cpp:200 ../../../src/MenuActionBar.cpp:206
 #: ../../../src/MenuActionBar.cpp:211
@@ -946,7 +946,7 @@ msgstr "Chan eil gu leòr dhen nì riatanach agad."
 
 #: ../../../src/MenuInventory.cpp:556
 msgid "You can't use this item right now."
-msgstr ""
+msgstr "Chan urrainn dhut an nì seo a chleachdadh an-dràsta."
 
 #: ../../../src/MenuInventory.cpp:568
 msgid "This item can only be used from the action bar."

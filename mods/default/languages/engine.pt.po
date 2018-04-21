@@ -663,12 +663,12 @@ msgstr "%d itens:"
 #: ../../../src/ItemManager.cpp:834
 #, c-format
 msgid "Press [%s] to use"
-msgstr ""
+msgstr "Pressionar [%s] para usar"
 
 #: ../../../src/ItemManager.cpp:837
 #, c-format
 msgid "Press [%s] to read"
-msgstr ""
+msgstr "Pressionar [%s] para ler"
 
 #: ../../../src/MenuActionBar.cpp:200 ../../../src/MenuActionBar.cpp:206
 #: ../../../src/MenuActionBar.cpp:211
@@ -932,7 +932,7 @@ msgstr "Não tens que chegue do item necessário."
 
 #: ../../../src/MenuInventory.cpp:556
 msgid "You can't use this item right now."
-msgstr ""
+msgstr "Não pode usar este item agora."
 
 #: ../../../src/MenuInventory.cpp:568
 msgid "This item can only be used from the action bar."

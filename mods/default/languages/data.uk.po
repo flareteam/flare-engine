@@ -4,13 +4,14 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # Translators:
 # Justin Jacobs <jajdorkster@gmail.com>, 2018
+# Sergiy Borodych, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-18 18:48+\n"
+"POT-Creation-Date: 2018-04-19 20:31+\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
+"Last-Translator: Sergiy Borodych, 2018\n"
 "Language-Team: Ukrainian (https://www.transifex.com/flareorg/teams/84925/uk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,15 +29,15 @@ msgstr ""
 
 #: ../engine/primary_stats.txt:11
 msgid "Offense"
-msgstr ""
+msgstr "Напад"
 
 #: ../engine/primary_stats.txt:15
 msgid "Defense"
-msgstr ""
+msgstr "Захист"
 
 #: ../engine/damage_types.txt:3
 msgid "Melee Damage"
-msgstr ""
+msgstr "Врата від ближнього бою"
 
 #: ../engine/damage_types.txt:4
 msgid "Melee Damage Min"
@@ -76,7 +77,7 @@ msgstr "Автори Flare Engine"
 
 #: ../cutscenes/credits.txt:10
 msgid "Lead Programmers"
-msgstr ""
+msgstr "Провідні програмісти"
 
 #: ../cutscenes/credits.txt:12
 msgid "Clint Bellanger"
@@ -104,7 +105,7 @@ msgstr ""
 
 #: ../cutscenes/credits.txt:20
 msgid "Programmers"
-msgstr ""
+msgstr "Програмісти"
 
 #: ../cutscenes/credits.txt:22
 msgid "Andrew Engelbrecht"
@@ -360,7 +361,7 @@ msgstr ""
 
 #: ../cutscenes/credits.txt:102
 msgid "Special Thanks"
-msgstr ""
+msgstr "Особлива подяка"
 
 #: ../cutscenes/credits.txt:106
 msgid "For giving constant feedback and testing:"
@@ -372,7 +373,7 @@ msgstr ""
 
 #: ../cutscenes/credits.txt:108
 msgid "The community at OpenGameArt"
-msgstr ""
+msgstr "Товариство в OpenGameArt"
 
 #: ../cutscenes/credits.txt:112
 msgid "For Tiled and the Flare map exporter:"

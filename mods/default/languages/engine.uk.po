@@ -655,12 +655,12 @@ msgstr "%d предмети:"
 #: ../../../src/ItemManager.cpp:834
 #, c-format
 msgid "Press [%s] to use"
-msgstr ""
+msgstr "Натисніть [%s] для використання"
 
 #: ../../../src/ItemManager.cpp:837
 #, c-format
 msgid "Press [%s] to read"
-msgstr ""
+msgstr "Натисніть [%s] щоб прочитати"
 
 #: ../../../src/MenuActionBar.cpp:200 ../../../src/MenuActionBar.cpp:206
 #: ../../../src/MenuActionBar.cpp:211
@@ -671,7 +671,7 @@ msgstr "Гаряча клавіша: %s"
 #: ../../../src/MenuActiveEffects.cpp:124
 #, c-format
 msgid "x%d"
-msgstr ""
+msgstr "x %d"
 
 #: ../../../src/MenuActiveEffects.cpp:219
 msgid "Remaining:"
@@ -800,7 +800,7 @@ msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:402 ../../../src/MenuDevConsole.cpp:427
 msgid "HINT:"
-msgstr ""
+msgstr "НАТЯК:"
 
 #: ../../../src/MenuDevConsole.cpp:402
 msgid "<id>"
@@ -862,11 +862,11 @@ msgstr "Вийти"
 
 #: ../../../src/MenuExit.cpp:92
 msgid "Continue"
-msgstr ""
+msgstr "Продовжити"
 
 #: ../../../src/MenuExit.cpp:116 ../../../src/MenuExit.cpp:135
 msgid "Paused"
-msgstr ""
+msgstr "Призупинено"
 
 #: ../../../src/MenuInventory.cpp:164
 #, c-format
@@ -1004,7 +1004,7 @@ msgstr ""
 
 #: ../../../src/MenuPowers.cpp:819
 msgid "Immunity"
-msgstr ""
+msgstr "Імунітет"
 
 #: ../../../src/MenuPowers.cpp:822
 msgid "Immunity to damage over time"
