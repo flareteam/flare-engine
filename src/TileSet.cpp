@@ -49,11 +49,6 @@ void TileSet::reset() {
 		if (tiles[i].tile) delete tiles[i].tile;
 	}
 
-	alpha_background = true;
-	trans_r = 255;
-	trans_g = 0;
-	trans_b = 255;
-
 	tiles.clear();
 	anim.clear();
 
@@ -80,7 +75,7 @@ void TileSet::loadGraphics(const std::string& filename) {
 }
 
 void TileSet::load(const std::string& filename) {
-	if (current_map == filename) return;
+	if (current_filename == filename) return;
 
 	reset();
 
@@ -120,15 +115,6 @@ void TileSet::load(const std::string& filename) {
 				max_size_x = std::max(max_size_x, (tiles[index].tile->getClip().w / TILE_W) + 1);
 				max_size_y = std::max(max_size_y, (tiles[index].tile->getClip().h / TILE_H) + 1);
 			}
-			else if (infile.key == "transparency") {
-				// @ATTR transparency|color|An RGB color to key out and treat as transparent.
-				alpha_background = false;
-
-				trans_r = (Uint8)popFirstInt(infile.val);
-				trans_g = (Uint8)popFirstInt(infile.val);
-				trans_b = (Uint8)popFirstInt(infile.val);
-
-			}
 			else if (infile.key == "animation") {
 				// @ATTR animation|list(int, int, int, duration) : Tile index, X, Y, duration|An animation for a tile. Durations are in 'ms' or 's'.
 				int frame = 0;
@@ -157,7 +143,7 @@ void TileSet::load(const std::string& filename) {
 		infile.close();
 	}
 
-	current_map = filename;
+	current_filename = filename;
 }
 
 void TileSet::logic() {

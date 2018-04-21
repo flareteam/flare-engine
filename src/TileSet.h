@@ -65,11 +65,7 @@ private:
 	void loadGraphics(const std::string& filename);
 	void reset();
 
-	Uint8 trans_r;
-	Uint8 trans_g;
-	Uint8 trans_b;
-	bool alpha_background;
-	std::string current_map;
+	std::string current_filename;
 
 public:
 	// functions
