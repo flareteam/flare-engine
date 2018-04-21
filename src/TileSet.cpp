@@ -33,20 +33,20 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "TileSet.h"
 #include "UtilsParsing.h"
 
-TileSet::TileSet()
-	: sprites(NULL) {
+TileSet::TileSet() {
 	reset();
 }
 
 void TileSet::reset() {
-
-	if (sprites) {
-		delete sprites;
-		sprites = NULL;
+	for (size_t i = 0; i < sprites.size(); ++i) {
+		if (sprites[i])
+			delete sprites[i];
 	}
+	sprites.clear();
 
-	for (unsigned i = 0; i < tiles.size(); i++) {
-		if (tiles[i].tile) delete tiles[i].tile;
+	for (size_t i = 0; i < tiles.size(); ++i) {
+		if (tiles[i].tile)
+			delete tiles[i].tile;
 	}
 
 	tiles.clear();
@@ -56,20 +56,18 @@ void TileSet::reset() {
 	max_size_y = 0;
 }
 
-void TileSet::loadGraphics(const std::string& filename) {
-	if (sprites) {
-		delete sprites;
-		sprites = NULL;
+void TileSet::loadGraphics(const std::string& filename, Sprite** sprite) {
+	if (*sprite) {
+		delete *sprite;
+		*sprite = NULL;
 	}
 
-	for (unsigned i = 0; i < tiles.size(); i++) {
-		if (tiles[i].tile) delete tiles[i].tile;
-	}
-	tiles.clear();
+	if (filename.empty())
+		return;
 
 	Image *graphics = render_device->loadImage(filename);
 	if (graphics) {
-		sprites = graphics->createSprite();
+		*sprite = graphics->createSprite();
 		graphics->unref();
 	}
 }
@@ -79,58 +77,68 @@ void TileSet::load(const std::string& filename) {
 
 	reset();
 
+	std::vector<std::string> image_filenames;
+	std::vector<size_t> tile_images;
+	std::vector<Rect> tile_clips;
+	std::vector<Point> tile_offsets;
+
 	FileParser infile;
 
 	// @CLASS TileSet|Description of tilesets in tilesets/
 	if (infile.open(filename)) {
 		while (infile.next()) {
+			if ((infile.new_section && infile.section == "tileset") || (sprites.empty() && infile.section.empty())) {
+				image_filenames.resize(image_filenames.size() + 1);
+				sprites.resize(sprites.size() + 1, NULL);
+			}
+
 			if (infile.key == "img") {
-				// @ATTR img|filename|Filename of a tile sheet image.
-				loadGraphics(infile.val);
+				// @ATTR tileset.img|filename|Filename of a tile sheet image.
+				image_filenames.back() = infile.val;
 			}
 			else if (infile.key == "tile") {
-				// @ATTR tile|int, int, int, int, int, int, int : Index, X, Y, Width, Height, X offset, Y offset|A single tile definition.
+				// @ATTR tileset.tile|int, int, int, int, int, int, int : Index, X, Y, Width, Height, X offset, Y offset|A single tile definition.
 
-				// Verify that we have graphics for tiles
-				if (!sprites) {
-					infile.error("Tileset: No 'img' defined. Aborting.");
-					logErrorDialog("Tileset: No 'img' defined. Aborting.");
-					mods->resetModConfig();
-					Exit(1);
+				size_t index = popFirstInt(infile.val);
+
+				if (index >= tiles.size()) {
+					tiles.resize(index + 1);
+					tile_images.resize(index + 1);
+					tile_clips.resize(index + 1);
+					tile_offsets.resize(index + 1);
 				}
 
-				unsigned index = popFirstInt(infile.val);
+				Rect clip;
+				clip.x = popFirstInt(infile.val);
+				clip.y = popFirstInt(infile.val);
+				clip.w = popFirstInt(infile.val);
+				clip.h = popFirstInt(infile.val);
 
-				if (index >= tiles.size())
-					tiles.resize(index + 1);
+				Point offset;
+				offset.x = popFirstInt(infile.val);
+				offset.y = popFirstInt(infile.val);
 
-				tiles[index].tile = sprites->getGraphics()->createSprite();
-
-				tiles[index].tile->setClipX(popFirstInt(infile.val));
-				tiles[index].tile->setClipY(popFirstInt(infile.val));
-				tiles[index].tile->setClipW(popFirstInt(infile.val));
-				tiles[index].tile->setClipH(popFirstInt(infile.val));
-				tiles[index].offset.x = popFirstInt(infile.val);
-				tiles[index].offset.y = popFirstInt(infile.val);
-				max_size_x = std::max(max_size_x, (tiles[index].tile->getClip().w / TILE_W) + 1);
-				max_size_y = std::max(max_size_y, (tiles[index].tile->getClip().h / TILE_H) + 1);
+				tile_images[index] = image_filenames.size() - 1;
+				tile_clips[index] = clip;
+				tile_offsets[index] = offset;
 			}
 			else if (infile.key == "animation") {
-				// @ATTR animation|list(int, int, int, duration) : Tile index, X, Y, duration|An animation for a tile. Durations are in 'ms' or 's'.
-				int frame = 0;
-				unsigned TILE_ID = popFirstInt(infile.val);
+				// @ATTR tileset.animation|list(int, int, int, duration) : Tile index, X, Y, duration|An animation for a tile. Durations are in 'ms' or 's'.
 
-				if (TILE_ID >= anim.size())
-					anim.resize(TILE_ID + 1);
+				unsigned short frame = 0;
+				size_t index = popFirstInt(infile.val);
+
+				if (index >= anim.size())
+					anim.resize(index + 1);
 
 				std::string repeat_val = popFirstString(infile.val);
 				while (repeat_val != "") {
-					anim[TILE_ID].frames++;
-					anim[TILE_ID].pos.resize(frame + 1);
-					anim[TILE_ID].frame_duration.resize(frame + 1);
-					anim[TILE_ID].pos[frame].x = toInt(repeat_val);
-					anim[TILE_ID].pos[frame].y = popFirstInt(infile.val);
-					anim[TILE_ID].frame_duration[frame] = static_cast<unsigned short>(parse_duration(popFirstString(infile.val)));
+					anim[index].frames++;
+					anim[index].pos.resize(frame + 1);
+					anim[index].frame_duration.resize(frame + 1);
+					anim[index].pos[frame].x = toInt(repeat_val);
+					anim[index].pos[frame].y = popFirstInt(infile.val);
+					anim[index].frame_duration[frame] = static_cast<unsigned short>(parse_duration(popFirstString(infile.val)));
 
 					frame++;
 					repeat_val = popFirstString(infile.val);
@@ -143,15 +151,33 @@ void TileSet::load(const std::string& filename) {
 		infile.close();
 	}
 
+	// load tileset images
+	for (size_t i = 0; i < image_filenames.size(); ++i) {
+		loadGraphics(image_filenames[i], &sprites[i]);
+	}
+
+	// set up individual tile sprites
+	for (size_t i = 0; i < tiles.size(); ++i) {
+		if (!sprites[tile_images[i]])
+			continue;
+
+		tiles[i].tile = sprites[tile_images[i]]->getGraphics()->createSprite();
+		tiles[i].tile->setClip(tile_clips[i]);
+		tiles[i].offset = tile_offsets[i];
+
+		max_size_x = std::max(max_size_x, (tiles[i].tile->getClip().w / TILE_W) + 1);
+		max_size_y = std::max(max_size_y, (tiles[i].tile->getClip().h / TILE_H) + 1);
+	}
+
 	current_filename = filename;
 }
 
 void TileSet::logic() {
-	for (unsigned i = 0; i < anim.size() ; i++) {
+	for (size_t i = 0; i < anim.size(); ++i) {
 		Tile_Anim &an = anim[i];
 		if (!an.frames)
 			continue;
-		if (an.duration >= an.frame_duration[an.current_frame]) {
+		if (tiles[i].tile && an.duration >= an.frame_duration[an.current_frame]) {
 			tiles[i].tile->setClipX(an.pos[an.current_frame].x);
 			tiles[i].tile->setClipY(an.pos[an.current_frame].y);
 			an.duration = 0;
@@ -162,8 +188,13 @@ void TileSet::logic() {
 }
 
 TileSet::~TileSet() {
-	if (sprites) delete sprites;
-	for (unsigned i = 0; i < tiles.size(); i++) {
-		if (tiles[i].tile) delete tiles[i].tile;
+	for (size_t i = 0; i < sprites.size(); ++i) {
+		if (sprites[i])
+			delete sprites[i];
+	}
+
+	for (size_t i = 0; i < tiles.size(); ++i) {
+		if (tiles[i].tile)
+			delete tiles[i].tile;
 	}
 }
