@@ -220,11 +220,11 @@ msgstr "Christoph J. Thompson"
 
 #: ../cutscenes/credits.txt:59
 msgid "Denis Lysenko"
-msgstr ""
+msgstr "Denis Lysenko"
 
 #: ../cutscenes/credits.txt:60
 msgid "Diego J. Romero López"
-msgstr ""
+msgstr "Diego J. Romero López"
 
 #: ../cutscenes/credits.txt:61
 msgid "Evgen Pavlov"
@@ -272,11 +272,11 @@ msgstr "Miro Jánošík"
 
 #: ../cutscenes/credits.txt:73
 msgid "Микола Франчук"
-msgstr ""
+msgstr "Микола Франчук"
 
 #: ../cutscenes/credits.txt:74
 msgid "MOB2"
-msgstr ""
+msgstr "MOB2"
 
 #: ../cutscenes/credits.txt:75
 msgid "Morgan Strauss"
@@ -284,7 +284,7 @@ msgstr "Morgan Strauss"
 
 #: ../cutscenes/credits.txt:76
 msgid "Nea Retrogamer"
-msgstr ""
+msgstr "Nea Retrogamer"
 
 #: ../cutscenes/credits.txt:77
 msgid "Nikita Vanku"
@@ -304,7 +304,7 @@ msgstr "Quentin Stievenart"
 
 #: ../cutscenes/credits.txt:81
 msgid "Rui"
-msgstr ""
+msgstr "Rui"
 
 #: ../cutscenes/credits.txt:82
 msgid "Sergey Basalaev"
@@ -312,7 +312,7 @@ msgstr "Sergey Basalaev"
 
 #: ../cutscenes/credits.txt:83
 msgid "Sergiy Borodych"
-msgstr ""
+msgstr "Sergiy Borodych"
 
 #: ../cutscenes/credits.txt:85
 msgid "Stefano Peris"
