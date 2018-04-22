@@ -665,12 +665,12 @@ msgstr "%d przedmioty:"
 #: ../../../src/ItemManager.cpp:834
 #, c-format
 msgid "Press [%s] to use"
-msgstr ""
+msgstr "Wciśnij [%s] aby użyć"
 
 #: ../../../src/ItemManager.cpp:837
 #, c-format
 msgid "Press [%s] to read"
-msgstr ""
+msgstr "Wciśnij [%s] aby przeczytać"
 
 #: ../../../src/MenuActionBar.cpp:200 ../../../src/MenuActionBar.cpp:206
 #: ../../../src/MenuActionBar.cpp:211
@@ -941,7 +941,7 @@ msgstr "Nie masz wystarczająco wymaganych przedmiotów."
 
 #: ../../../src/MenuInventory.cpp:556
 msgid "You can't use this item right now."
-msgstr ""
+msgstr "Nie możesz użyć tego przedmiotu w tej chwili."
 
 #: ../../../src/MenuInventory.cpp:568
 msgid "This item can only be used from the action bar."
@@ -1179,87 +1179,87 @@ msgstr "Gra zapisana."
 
 #: ../../../src/SDLInputState.cpp:556
 msgid "Backspace"
-msgstr ""
+msgstr "Backspace"
 
 #: ../../../src/SDLInputState.cpp:557
 msgid "CapsLock"
-msgstr ""
+msgstr "CapsLock"
 
 #: ../../../src/SDLInputState.cpp:560
 msgid "End"
-msgstr ""
+msgstr "End"
 
 #: ../../../src/SDLInputState.cpp:561
 msgid "Escape"
-msgstr ""
+msgstr "Escape"
 
 #: ../../../src/SDLInputState.cpp:562
 msgid "Home"
-msgstr ""
+msgstr "Home"
 
 #: ../../../src/SDLInputState.cpp:563
 msgid "Insert"
-msgstr ""
+msgstr "Insert"
 
 #: ../../../src/SDLInputState.cpp:564
 msgid "Left Alt"
-msgstr ""
+msgstr "Lewy Alt"
 
 #: ../../../src/SDLInputState.cpp:565
 msgid "Left Ctrl"
-msgstr ""
+msgstr "Lewy Ctrl"
 
 #: ../../../src/SDLInputState.cpp:567
 msgid "Left Shift"
-msgstr ""
+msgstr "Lewy Shift"
 
 #: ../../../src/SDLInputState.cpp:568
 msgid "NumLock"
-msgstr ""
+msgstr "NumLock"
 
 #: ../../../src/SDLInputState.cpp:569
 msgid "PageDown"
-msgstr ""
+msgstr "PageDown"
 
 #: ../../../src/SDLInputState.cpp:570
 msgid "PageUp"
-msgstr ""
+msgstr "PageUp"
 
 #: ../../../src/SDLInputState.cpp:571
 msgid "Pause"
-msgstr ""
+msgstr "Pause"
 
 #: ../../../src/SDLInputState.cpp:572
 msgid "PrintScreen"
-msgstr ""
+msgstr "PrintScreen"
 
 #: ../../../src/SDLInputState.cpp:573
 msgid "Right Alt"
-msgstr ""
+msgstr "Prawy Alt"
 
 #: ../../../src/SDLInputState.cpp:574
 msgid "Right Ctrl"
-msgstr ""
+msgstr "Prawy Ctrl"
 
 #: ../../../src/SDLInputState.cpp:575
 msgid "Return"
-msgstr ""
+msgstr "Return"
 
 #: ../../../src/SDLInputState.cpp:577
 msgid "Right Shift"
-msgstr ""
+msgstr "Prawy Shift"
 
 #: ../../../src/SDLInputState.cpp:578
 msgid "ScrollLock"
-msgstr ""
+msgstr "ScrollLock"
 
 #: ../../../src/SDLInputState.cpp:579
 msgid "Space"
-msgstr ""
+msgstr "Space"
 
 #: ../../../src/SDLInputState.cpp:580
 msgid "Tab"
-msgstr ""
+msgstr "Tab"
 
 #: ../../../src/SDLInputState.cpp:594
 #, c-format
