@@ -473,9 +473,96 @@ void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 			}
 
 			// some renderable entities go in this layer
-			while (r_cursor != r_end && (static_cast<int>(r_cursor->map_pos.x) == i && static_cast<int>(r_cursor->map_pos.y) == j)) { // implicit floor by int cast
-				drawRenderable(r_cursor);
-				++r_cursor;
+			while (r_cursor != r_end) {
+				// implicit floor by int cast
+				int r_cursor_x = static_cast<int>(r_cursor->map_pos.x);
+				int r_cursor_y = static_cast<int>(r_cursor->map_pos.y);
+
+				bool skip_render = false;
+
+				// r_cursor left/right side
+				Point r_cursor_left = map_to_screen(r_cursor->map_pos.x, r_cursor->map_pos.y, shakycam.x, shakycam.y);
+				r_cursor_left.y -= r_cursor->offset.y;
+				Point r_cursor_right = r_cursor_left;
+				r_cursor_left.x -= r_cursor->offset.x;
+				r_cursor_right.x += r_cursor->src.w - r_cursor->offset.x;
+
+				if (DEV_HUD)
+					render_device->drawRectangle(Point(r_cursor_left.x, r_cursor_left.y), Point(r_cursor_right.x, r_cursor_right.y + r_cursor->src.h), Color(0,0,255,255));
+
+				// south-west tile bounds
+				if (r_cursor_x-1 >= 0 && r_cursor_y+1 < h-1) {
+					if (const uint_fast16_t tile_SW_index = current_layer[r_cursor_x-1][r_cursor_y+1]) {
+						const Tile_Def &tile_SW = tset.tiles[tile_SW_index];
+						Point tile_SW_center = centerTile(map_to_screen(float(r_cursor_x-1), float(r_cursor_y+1), shakycam.x, shakycam.y));
+						Rect tile_SW_bounds;
+						tile_SW_bounds.x = tile_SW_center.x - tile_SW.offset.x;
+						tile_SW_bounds.y = tile_SW_center.y - tile_SW.offset.y;
+						tile_SW_bounds.w = tile_SW.tile->getClip().w;
+						tile_SW_bounds.h = tile_SW.tile->getClip().h;
+
+						// south tile bounds
+						if (const uint_fast16_t tile_S_index = current_layer[r_cursor_x][r_cursor_y+1]) {
+							const Tile_Def &tile_S = tset.tiles[tile_S_index];
+							Point tile_S_center = centerTile(map_to_screen(float(r_cursor_x), float(r_cursor_y+1), shakycam.x, shakycam.y));
+							Rect tile_S_bounds;
+							tile_S_bounds.x = tile_S_center.x - tile_S.offset.x;
+							tile_S_bounds.y = tile_S_center.y - tile_S.offset.y;
+							tile_S_bounds.w = tile_S.tile->getClip().w;
+							tile_S_bounds.h = tile_S.tile->getClip().h;
+
+							if (isWithinRect(tile_S_bounds, r_cursor_right) && isWithinRect(tile_SW_bounds, r_cursor_left)) {
+								skip_render = true;
+							}
+							if (DEV_HUD) {
+								render_device->drawRectangle(Point(tile_SW_bounds.x, tile_SW_bounds.y), Point(tile_SW_bounds.x + tile_SW_bounds.w, tile_SW_bounds.y + tile_SW_bounds.h), Color(255,0,0,255));
+								render_device->drawRectangle(Point(tile_S_bounds.x, tile_S_bounds.y), Point(tile_S_bounds.x + tile_S_bounds.w, tile_S_bounds.y + tile_S_bounds.h), Color(0,255,0,255));
+							}
+						}
+					}
+				}
+
+				// north-east tile bounds
+				if (!skip_render && r_cursor_x+1 < w-1 && r_cursor_y-1 >= 0) {
+					if (const uint_fast16_t tile_NE_index = current_layer[r_cursor_x+1][r_cursor_y-1]) {
+						const Tile_Def &tile_NE = tset.tiles[tile_NE_index];
+						Point tile_NE_center = centerTile(map_to_screen(float(r_cursor_x+1), float(r_cursor_y-1), shakycam.x, shakycam.y));
+						Rect tile_NE_bounds;
+						tile_NE_bounds.x = tile_NE_center.x - tile_NE.offset.x;
+						tile_NE_bounds.y = tile_NE_center.y - tile_NE.offset.y;
+						tile_NE_bounds.w = tile_NE.tile->getClip().w;
+						tile_NE_bounds.h = tile_NE.tile->getClip().h;
+
+						// east tile bounds
+						if (const uint_fast16_t tile_E_index = current_layer[r_cursor_x+1][r_cursor_y]) {
+							const Tile_Def &tile_E = tset.tiles[tile_E_index];
+							Point tile_E_center = centerTile(map_to_screen(float(r_cursor_x+1), float(r_cursor_y), shakycam.x, shakycam.y));
+							Rect tile_E_bounds;
+							tile_E_bounds.x = tile_E_center.x - tile_E.offset.x;
+							tile_E_bounds.y = tile_E_center.y - tile_E.offset.y;
+							tile_E_bounds.w = tile_E.tile->getClip().w;
+							tile_E_bounds.h = tile_E.tile->getClip().h;
+
+							if (isWithinRect(tile_E_bounds, r_cursor_left) && isWithinRect(tile_NE_bounds, r_cursor_right)) {
+								skip_render = true;
+							}
+							if (DEV_HUD) {
+								render_device->drawRectangle(Point(tile_NE_bounds.x, tile_NE_bounds.y), Point(tile_NE_bounds.x + tile_NE_bounds.w, tile_NE_bounds.y + tile_NE_bounds.h), Color(255,0,0,255));
+								render_device->drawRectangle(Point(tile_E_bounds.x, tile_E_bounds.y), Point(tile_E_bounds.x + tile_E_bounds.w, tile_E_bounds.y + tile_E_bounds.h), Color(0,255,0,255));
+							}
+						}
+					}
+				}
+
+				if (r_cursor_x+1 == i && r_cursor_y-1 == j) {
+					if (!skip_render) {
+						drawRenderable(r_cursor);
+					}
+					++r_cursor;
+				}
+				else {
+					break;
+				}
 			}
 		}
 		j = static_cast<int_fast16_t>(j + tiles_width);
