@@ -437,6 +437,12 @@ void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 	if (index_objectlayer >= layers.size())
 		return;
 
+	std::queue<std::vector<Renderable>::iterator> render_behind_SW;
+	std::queue<std::vector<Renderable>::iterator> render_behind_NE;
+	std::queue<std::vector<Renderable>::iterator> render_behind_none;
+
+	Map_Layer drawn_tiles(w, std::vector<unsigned short>(h, 0));
+
 	for (uint_fast16_t y = max_tiles_height ; y; --y) {
 		int_fast16_t tiles_width = 0;
 
@@ -458,111 +464,165 @@ void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 		Point p = map_to_screen(float(i), float(j), shakycam.x, shakycam.y);
 		p = centerTile(p);
 		const Map_Layer &current_layer = layers[index_objectlayer];
+		bool is_last_NE_tile = false;
 		while (j > j_end) {
 			--j;
 			++i;
 			++tiles_width;
 			p.x += TILE_W;
 
-			if (const uint_fast16_t current_tile = current_layer[i][j]) {
-				const Tile_Def &tile = tset.tiles[current_tile];
-				dest.x = p.x - tile.offset.x;
-				dest.y = p.y - tile.offset.y;
-				tile.tile->setDest(dest);
-				render_device->render(tile.tile);
+			bool draw_tile = true;
+
+			std::vector<Renderable>::iterator r_pre_cursor = r_cursor;
+			while (r_pre_cursor != r_end) {
+				int r_cursor_x = static_cast<int>(r_pre_cursor->map_pos.x);
+				int r_cursor_y = static_cast<int>(r_pre_cursor->map_pos.y);
+
+				if ((r_cursor_x-1 == i && r_cursor_y+1 == j) || (r_cursor_x+1 == i && r_cursor_y-1 == j)) {
+					draw_tile = false;
+					break;
+				}
+				++r_pre_cursor;
 			}
 
+			if (draw_tile && !drawn_tiles[i][j]) {
+				if (const uint_fast16_t current_tile = current_layer[i][j]) {
+					const Tile_Def &tile = tset.tiles[current_tile];
+					dest.x = p.x - tile.offset.x;
+					dest.y = p.y - tile.offset.y;
+					tile.tile->setDest(dest);
+					render_device->render(tile.tile);
+					drawn_tiles[i][j] = 1;
+				}
+			}
+
+			if (r_cursor == r_end)
+				continue;
+
+do_last_NE_tile:
 			// some renderable entities go in this layer
+
+			// calculate south/south-west tile bounds
+			Rect tile_SW_bounds, tile_S_bounds;
+			Point tile_SW_center, tile_S_center;
+			getTileBounds(i-2, j+2, current_layer, tile_SW_bounds, tile_SW_center);
+			getTileBounds(i-1, j+2, current_layer, tile_S_bounds, tile_S_center);
+
+			// calculate east/north-east tile bounds
+			Rect tile_NE_bounds, tile_E_bounds;
+			Point tile_NE_center, tile_E_center;
+			getTileBounds(i, j, current_layer, tile_NE_bounds, tile_NE_center);
+			getTileBounds(i, j+1, current_layer, tile_E_bounds, tile_E_center);
+
+			bool draw_SW_tile = false;
+			bool draw_NE_tile = false;
+
 			while (r_cursor != r_end) {
 				// implicit floor by int cast
 				int r_cursor_x = static_cast<int>(r_cursor->map_pos.x);
 				int r_cursor_y = static_cast<int>(r_cursor->map_pos.y);
 
-				bool skip_render = false;
-
-				// r_cursor left/right side
-				Point r_cursor_left = map_to_screen(r_cursor->map_pos.x, r_cursor->map_pos.y, shakycam.x, shakycam.y);
-				r_cursor_left.y -= r_cursor->offset.y;
-				Point r_cursor_right = r_cursor_left;
-				r_cursor_left.x -= r_cursor->offset.x;
-				r_cursor_right.x += r_cursor->src.w - r_cursor->offset.x;
-
-				if (DEV_HUD)
-					render_device->drawRectangle(Point(r_cursor_left.x, r_cursor_left.y), Point(r_cursor_right.x, r_cursor_right.y + r_cursor->src.h), Color(0,0,255,255));
-
-				// south-west tile bounds
-				if (r_cursor_x-1 >= 0 && r_cursor_y+1 < h-1) {
-					if (const uint_fast16_t tile_SW_index = current_layer[r_cursor_x-1][r_cursor_y+1]) {
-						const Tile_Def &tile_SW = tset.tiles[tile_SW_index];
-						Point tile_SW_center = centerTile(map_to_screen(float(r_cursor_x-1), float(r_cursor_y+1), shakycam.x, shakycam.y));
-						Rect tile_SW_bounds;
-						tile_SW_bounds.x = tile_SW_center.x - tile_SW.offset.x;
-						tile_SW_bounds.y = tile_SW_center.y - tile_SW.offset.y;
-						tile_SW_bounds.w = tile_SW.tile->getClip().w;
-						tile_SW_bounds.h = tile_SW.tile->getClip().h;
-
-						// south tile bounds
-						if (const uint_fast16_t tile_S_index = current_layer[r_cursor_x][r_cursor_y+1]) {
-							const Tile_Def &tile_S = tset.tiles[tile_S_index];
-							Point tile_S_center = centerTile(map_to_screen(float(r_cursor_x), float(r_cursor_y+1), shakycam.x, shakycam.y));
-							Rect tile_S_bounds;
-							tile_S_bounds.x = tile_S_center.x - tile_S.offset.x;
-							tile_S_bounds.y = tile_S_center.y - tile_S.offset.y;
-							tile_S_bounds.w = tile_S.tile->getClip().w;
-							tile_S_bounds.h = tile_S.tile->getClip().h;
-
-							if (isWithinRect(tile_S_bounds, r_cursor_right) && isWithinRect(tile_SW_bounds, r_cursor_left)) {
-								skip_render = true;
-							}
-							if (DEV_HUD) {
-								render_device->drawRectangle(Point(tile_SW_bounds.x, tile_SW_bounds.y), Point(tile_SW_bounds.x + tile_SW_bounds.w, tile_SW_bounds.y + tile_SW_bounds.h), Color(255,0,0,255));
-								render_device->drawRectangle(Point(tile_S_bounds.x, tile_S_bounds.y), Point(tile_S_bounds.x + tile_S_bounds.w, tile_S_bounds.y + tile_S_bounds.h), Color(0,255,0,255));
-							}
-						}
-					}
-				}
-
-				// north-east tile bounds
-				if (!skip_render && r_cursor_x+1 < w-1 && r_cursor_y-1 >= 0) {
-					if (const uint_fast16_t tile_NE_index = current_layer[r_cursor_x+1][r_cursor_y-1]) {
-						const Tile_Def &tile_NE = tset.tiles[tile_NE_index];
-						Point tile_NE_center = centerTile(map_to_screen(float(r_cursor_x+1), float(r_cursor_y-1), shakycam.x, shakycam.y));
-						Rect tile_NE_bounds;
-						tile_NE_bounds.x = tile_NE_center.x - tile_NE.offset.x;
-						tile_NE_bounds.y = tile_NE_center.y - tile_NE.offset.y;
-						tile_NE_bounds.w = tile_NE.tile->getClip().w;
-						tile_NE_bounds.h = tile_NE.tile->getClip().h;
-
-						// east tile bounds
-						if (const uint_fast16_t tile_E_index = current_layer[r_cursor_x+1][r_cursor_y]) {
-							const Tile_Def &tile_E = tset.tiles[tile_E_index];
-							Point tile_E_center = centerTile(map_to_screen(float(r_cursor_x+1), float(r_cursor_y), shakycam.x, shakycam.y));
-							Rect tile_E_bounds;
-							tile_E_bounds.x = tile_E_center.x - tile_E.offset.x;
-							tile_E_bounds.y = tile_E_center.y - tile_E.offset.y;
-							tile_E_bounds.w = tile_E.tile->getClip().w;
-							tile_E_bounds.h = tile_E.tile->getClip().h;
-
-							if (isWithinRect(tile_E_bounds, r_cursor_left) && isWithinRect(tile_NE_bounds, r_cursor_right)) {
-								skip_render = true;
-							}
-							if (DEV_HUD) {
-								render_device->drawRectangle(Point(tile_NE_bounds.x, tile_NE_bounds.y), Point(tile_NE_bounds.x + tile_NE_bounds.w, tile_NE_bounds.y + tile_NE_bounds.h), Color(255,0,0,255));
-								render_device->drawRectangle(Point(tile_E_bounds.x, tile_E_bounds.y), Point(tile_E_bounds.x + tile_E_bounds.w, tile_E_bounds.y + tile_E_bounds.h), Color(0,255,0,255));
-							}
-						}
-					}
-				}
-
 				if (r_cursor_x+1 == i && r_cursor_y-1 == j) {
-					if (!skip_render) {
-						drawRenderable(r_cursor);
+					draw_SW_tile = true;
+					draw_NE_tile = !is_last_NE_tile;
+
+					// r_cursor left/right side
+					Point r_cursor_left = map_to_screen(r_cursor->map_pos.x, r_cursor->map_pos.y, shakycam.x, shakycam.y);
+					r_cursor_left.y -= r_cursor->offset.y;
+					Point r_cursor_right = r_cursor_left;
+					r_cursor_left.x -= r_cursor->offset.x;
+					r_cursor_right.x += r_cursor->src.w - r_cursor->offset.x;
+
+					if (DEV_HUD)
+						render_device->drawRectangle(Point(r_cursor_left.x, r_cursor_left.y), Point(r_cursor_right.x, r_cursor_right.y + r_cursor->src.h), Color(0,0,255,255));
+
+					bool is_behind_SW = false;
+					bool is_behind_NE = false;
+
+					// check left of r_cursor
+					if (isWithinRect(tile_S_bounds, r_cursor_right) && isWithinRect(tile_SW_bounds, r_cursor_left)) {
+						is_behind_SW = true;
 					}
+						if (DEV_HUD) {
+							render_device->drawRectangle(Point(tile_SW_bounds.x, tile_SW_bounds.y), Point(tile_SW_bounds.x + tile_SW_bounds.w, tile_SW_bounds.y + tile_SW_bounds.h), Color(255,0,0,255));
+							render_device->drawRectangle(Point(tile_S_bounds.x, tile_S_bounds.y), Point(tile_S_bounds.x + tile_S_bounds.w, tile_S_bounds.y + tile_S_bounds.h), Color(0,255,0,255));
+						}
+
+					// check right of r_cursor
+					if (draw_NE_tile && isWithinRect(tile_E_bounds, r_cursor_left) && isWithinRect(tile_NE_bounds, r_cursor_right)) {
+						is_behind_NE = true;
+						if (DEV_HUD) {
+							render_device->drawRectangle(Point(tile_NE_bounds.x, tile_NE_bounds.y), Point(tile_NE_bounds.x + tile_NE_bounds.w, tile_NE_bounds.y + tile_NE_bounds.h), Color(255,0,0,255));
+							render_device->drawRectangle(Point(tile_E_bounds.x, tile_E_bounds.y), Point(tile_E_bounds.x + tile_E_bounds.w, tile_E_bounds.y + tile_E_bounds.h), Color(0,255,0,255));
+						}
+					}
+
+					if (is_behind_SW)
+						render_behind_SW.push(r_cursor);
+					else if (!is_behind_SW && is_behind_NE)
+						render_behind_NE.push(r_cursor);
+					else
+						render_behind_none.push(r_cursor);
+
 					++r_cursor;
 				}
 				else {
 					break;
 				}
+			}
+
+			while (!render_behind_SW.empty()) {
+				drawRenderable(render_behind_SW.front());
+				render_behind_SW.pop();
+			}
+
+			// draw the south-west tile
+			if (draw_SW_tile && i-2 >= 0 && j+2 < h && !drawn_tiles[i-2][j+2]) {
+				if (const uint_fast16_t current_tile = current_layer[i-2][j+2]) {
+					const Tile_Def &tile = tset.tiles[current_tile];
+					dest.x = tile_SW_center.x - tile.offset.x;
+					dest.y = tile_SW_center.y - tile.offset.y;
+					tile.tile->setDest(dest);
+					render_device->render(tile.tile);
+					drawn_tiles[i-2][j+2] = 1;
+				}
+			}
+
+			while (!render_behind_NE.empty()) {
+				drawRenderable(render_behind_NE.front());
+				render_behind_NE.pop();
+			}
+
+			// draw the north-east tile
+			if (draw_NE_tile && !draw_tile && !drawn_tiles[i][j]) {
+				if (const uint_fast16_t current_tile = current_layer[i][j]) {
+					const Tile_Def &tile = tset.tiles[current_tile];
+					dest.x = tile_NE_center.x - tile.offset.x;
+					dest.y = tile_NE_center.y - tile.offset.y;
+					tile.tile->setDest(dest);
+					render_device->render(tile.tile);
+					drawn_tiles[i][j] = 1;
+				}
+			}
+
+			while (!render_behind_none.empty()) {
+				drawRenderable(render_behind_none.front());
+				render_behind_none.pop();
+			}
+
+			// Okay, this is a bit of a HACK
+			// In order to properly render the first row and last column of the map, we need to advance to an imaginary tile
+			// Care must be taken in the code after the "do_last_NE_tile" goto label to avoid accessing map data with these coordinates
+			if (is_last_NE_tile) {
+				++j;
+				--i;
+				is_last_NE_tile = false;
+			}
+			else if (i == w-1 || j == 0) {
+				--j;
+				++i;
+				is_last_NE_tile = true;
+				goto do_last_NE_tile;
 			}
 		}
 		j = static_cast<int_fast16_t>(j + tiles_width);
@@ -1026,6 +1086,21 @@ Point MapRenderer::centerTile(const Point& p) {
 	else //TILESET_ISOMETRIC
 		r.y += TILE_H_HALF;
 	return r;
+}
+
+void MapRenderer::getTileBounds(const int_fast16_t x, const int_fast16_t y, const Map_Layer& layerdata, Rect& bounds, Point& center) {
+	if (x >= 0 && x < w && y >= 0 && y < h) {
+		if (const uint_fast16_t tile_index = layerdata[x][y]) {
+			const Tile_Def &tile = tset.tiles[tile_index];
+			if (!tile.tile)
+				return;
+			center = centerTile(map_to_screen(float(x), float(y), shakycam.x, shakycam.y));
+			bounds.x = center.x - tile.offset.x;
+			bounds.y = center.y - tile.offset.y;
+			bounds.w = tile.tile->getClip().w;
+			bounds.h = tile.tile->getClip().h;
+		}
+	}
 }
 
 MapRenderer::~MapRenderer() {

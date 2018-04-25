@@ -72,6 +72,8 @@ private:
 
 	void createTooltip(Event_Component *ec);
 
+	void getTileBounds(const int_fast16_t x, const int_fast16_t y, const Map_Layer& layerdata, Rect& bounds, Point& center);
+
 	FPoint shakycam;
 	TileSet tset;
 
