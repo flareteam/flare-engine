@@ -918,7 +918,7 @@ bool StatBlock::canUsePower(const Power &power, int powerid, bool allow_passive)
 			&& !(power.spawn_type == "untransform" && !transformed)
 			&& std::includes(equip_flags.begin(), equip_flags.end(), power.requires_flags.begin(), power.requires_flags.end())
 			&& (!power.buff_party || (power.buff_party && enemym && enemym->checkPartyMembers()))
-			&& (power.requires_item == -1 || (power.requires_item > 0 && items->requirementsMet(this, power.requires_item)))
+			&& powers->checkRequiredItems(power, this)
 		);
 	}
 

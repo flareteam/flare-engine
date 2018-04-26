@@ -436,6 +436,7 @@ public:
 	void activateSinglePassive(StatBlock *src_stats, int id);
 	int verifyID(int power_id, FileParser* infile = NULL, bool allow_zero = true);
 	bool checkNearestTargeting(const Power &pow, const StatBlock *src_stats, bool check_corpses);
+	bool checkRequiredItems(const Power &pow, const StatBlock *src_stats);
 
 	EffectDef* getEffectDef(const std::string& id);
 

@@ -36,6 +36,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "InputState.h"
 #include "MapCollision.h"
 #include "MapRenderer.h"
+#include "Menu.h"
+#include "MenuInventory.h"
+#include "MenuManager.h"
 #include "MessageEngine.h"
 #include "PowerManager.h"
 #include "Settings.h"
@@ -1581,6 +1584,24 @@ bool PowerManager::checkNearestTargeting(const Power &pow, const StatBlock *src_
 		return true;
 
 	return false;
+}
+
+bool PowerManager::checkRequiredItems(const Power &pow, const StatBlock *src_stats) {
+	if (pow.requires_item > 0) {
+		if (!items->requirementsMet(src_stats, pow.requires_item)) {
+			return false;
+		}
+		if (!menu->inv->inventory[CARRIED].contain(pow.requires_item, pow.requires_item_quantity)) {
+			return false;
+		}
+	}
+	if (pow.requires_equipped_item > 0) {
+		if (!menu->inv->inventory[EQUIPMENT].contain(pow.requires_equipped_item)) {
+			return false;
+		}
+	}
+
+	return true;
 }
 
 PowerManager::~PowerManager() {
