@@ -1032,7 +1032,7 @@ bool PowerManager::effect(StatBlock *target_stats, StatBlock *caster_stats, int 
 		int duration = pe.duration;
 
 		StatBlock *dest_stats = pe.target_src ? caster_stats : target_stats;
-		if (dest_stats->hp <= 0)
+		if (dest_stats->hp <= 0 && !(effect_data.type == "revive" || (effect_data.type.empty() && pe.id == "revive")))
 			continue;
 
 		if (effect_ptr != NULL) {
