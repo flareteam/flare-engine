@@ -117,6 +117,7 @@ public:
 	bool passive; // if unlocked when the user spawns, automatically cast it
 	int passive_trigger; // only activate passive powers under certain conditions (block, hit, death, etc)
 	bool meta_power; // this power can't be used on its own and must be replaced via equipment
+	bool no_actionbar; // prevents this power from being placed on the actionbar
 
 	// power requirements
 	std::set<std::string> requires_flags; // checked against equip_flags granted from items
@@ -270,6 +271,7 @@ public:
 		, passive(false)
 		, passive_trigger(-1)
 		, meta_power(false)
+		, no_actionbar(false)
 
 		, requires_mp(0)
 		, requires_hp(0)

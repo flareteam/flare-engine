@@ -436,7 +436,7 @@ TooltipData MenuActionBar::checkTooltip(const Point& mouse) {
  */
 void MenuActionBar::drop(const Point& mouse, int power_index, bool rearranging) {
 	for (unsigned i = 0; i < slots_count; i++) {
-		if (slots[i] && isWithinRect(slots[i]->pos, mouse)) {
+		if (slots[i] && !powers->powers[power_index].no_actionbar && isWithinRect(slots[i]->pos, mouse)) {
 			if (rearranging) {
 				if (prevent_changing[i]) {
 					actionReturn(power_index);
@@ -660,6 +660,9 @@ void MenuActionBar::set(std::vector<int> power_id) {
 		if (static_cast<unsigned>(power_id[i]) >= powers->powers.size())
 			continue;
 
+		if (powers->powers[power_id[i]].no_actionbar)
+			continue;
+
 		hotkeys[i] = power_id[i];
 	}
 	updated = true;
@@ -745,6 +748,10 @@ bool MenuActionBar::isWithinMenus(const Point& mouse) {
  */
 void MenuActionBar::addPower(const int id, const int target_id) {
 	if (static_cast<unsigned>(id) >= powers->powers.size())
+		return;
+
+	// some powers are explicitly prevented from being placed on the actionbar
+	if (powers->powers[id].no_actionbar)
 		return;
 
 	// can't put passive powers on the action bar

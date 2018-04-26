@@ -5,6 +5,7 @@ Engine features:
 * Tileset definitions now support multiple images. (Justin Jacobs)
 * Display a message when unable to use a consumable item from the inventory. (Justin Jacobs)
 * Add a hint to consumable/book tooltips to expose their interactable nature. (Justin Jacobs)
+* Add ability to prevent certain powers from being placed on the actionbar. (Justin Jacobs)
 
 Engine fixes:
 

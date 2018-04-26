@@ -246,6 +246,10 @@ void PowerManager::loadPowers() {
 			// @ATTR power.meta_power|bool|If true, this power can not be used on it's own. Instead, it should be replaced via an item with a replace_power entry.
 			powers[input_id].meta_power = toBool(infile.val);
 		}
+		else if (infile.key == "no_actionbar") {
+			// @ATTR power.no_actionbar|bool|If true, this power is prevented from being placed on the actionbar.
+			powers[input_id].no_actionbar = toBool(infile.val);
+		}
 		// power requirements
 		else if (infile.key == "requires_flags") {
 			// @ATTR power.requires_flags|list(predefined_string)|A comma separated list of equip flags that are required to use this power. See engine/equip_flags.txt
