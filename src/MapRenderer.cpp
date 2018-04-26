@@ -533,9 +533,6 @@ do_last_NE_tile:
 					r_cursor_left.x -= r_cursor->offset.x;
 					r_cursor_right.x += r_cursor->src.w - r_cursor->offset.x;
 
-					if (DEV_HUD)
-						render_device->drawRectangle(Point(r_cursor_left.x, r_cursor_left.y), Point(r_cursor_right.x, r_cursor_right.y + r_cursor->src.h), Color(0,0,255,255));
-
 					bool is_behind_SW = false;
 					bool is_behind_NE = false;
 
@@ -543,18 +540,10 @@ do_last_NE_tile:
 					if (isWithinRect(tile_S_bounds, r_cursor_right) && isWithinRect(tile_SW_bounds, r_cursor_left)) {
 						is_behind_SW = true;
 					}
-						if (DEV_HUD) {
-							render_device->drawRectangle(Point(tile_SW_bounds.x, tile_SW_bounds.y), Point(tile_SW_bounds.x + tile_SW_bounds.w, tile_SW_bounds.y + tile_SW_bounds.h), Color(255,0,0,255));
-							render_device->drawRectangle(Point(tile_S_bounds.x, tile_S_bounds.y), Point(tile_S_bounds.x + tile_S_bounds.w, tile_S_bounds.y + tile_S_bounds.h), Color(0,255,0,255));
-						}
 
 					// check right of r_cursor
 					if (draw_NE_tile && isWithinRect(tile_E_bounds, r_cursor_left) && isWithinRect(tile_NE_bounds, r_cursor_right)) {
 						is_behind_NE = true;
-						if (DEV_HUD) {
-							render_device->drawRectangle(Point(tile_NE_bounds.x, tile_NE_bounds.y), Point(tile_NE_bounds.x + tile_NE_bounds.w, tile_NE_bounds.y + tile_NE_bounds.h), Color(255,0,0,255));
-							render_device->drawRectangle(Point(tile_E_bounds.x, tile_E_bounds.y), Point(tile_E_bounds.x + tile_E_bounds.w, tile_E_bounds.y + tile_E_bounds.h), Color(0,255,0,255));
-						}
 					}
 
 					if (is_behind_SW)
