@@ -9,6 +9,8 @@ Engine features:
 Engine fixes:
 
 * Fixed incorrect render order for some objects; aka "character partly hidden by front of tent". (Justin Jacobs)
+* Fix stats/powers not updating when changing equipment in some cases. (Justin Jacobs)
+* Prevent auto-equipping items if they would cause existing items to be unequipped. (Justin Jacobs)
 * Removed unused color key attribute parsing from tileset definitions. (Justin Jacobs)
 * Fixed building on FreeBSD. (Justin Jacobs)
 

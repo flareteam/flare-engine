@@ -416,6 +416,7 @@ bool MenuInventory::drop(const Point& position, ItemStack stack) {
 					itemReturn(inventory[area][slot]);
 				inventory[area][slot] = stack;
 				updateEquipment(slot);
+				applyEquipment();
 
 				// if this item has a power, place it on the action bar if possible
 				if (items->items[stack.item].power > 0) {
@@ -427,6 +428,7 @@ bool MenuInventory::drop(const Point& position, ItemStack stack) {
 			// equippable items only belong to one slot, for the moment
 			itemReturn(stack); // cancel
 			updateEquipment(slot);
+			applyEquipment();
 		}
 	}
 	else if (area == CARRIED) {
@@ -490,6 +492,8 @@ bool MenuInventory::drop(const Point& position, ItemStack stack) {
 				}
 
 				inventory[area][slot] = stack;
+
+				applyEquipment();
 			}
 			else {
 				itemReturn(stack); // cancel
@@ -603,6 +607,8 @@ void MenuInventory::activate(const Point& position) {
 			if (items->items[stack.item].power > 0) {
 				menu_act->addPower(items->items[stack.item].power, 0);
 			}
+
+			applyEquipment();
 		}
 		else if (equip_slot == -1) {
 			logError("MenuInventory: Can't find equip slot, corresponding to type %s", items->items[inventory[CARRIED][slot].item].type.c_str());
@@ -630,11 +636,22 @@ bool MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound, bo
 
 	if (auto_equip && AUTO_EQUIP) {
 		int equip_slot = getEquipSlotFromItem(stack.item, true);
+		bool disabled_slots_empty = true;
 
-		if (equip_slot >= 0 && inventory[EQUIPMENT].slots[equip_slot]->enabled) {
+		// if this item would disable non-empty slots, don't auto-equip it
+		for (size_t i = 0; i < items->items[stack.item].disable_slots.size(); ++i) {
+			for (int j = 0; j < MAX_EQUIPPED; ++j) {
+				if (!inventory[EQUIPMENT].storage[j].empty() && slot_type[j] == items->items[stack.item].disable_slots[i]) {
+					disabled_slots_empty = false;
+				}
+			}
+		}
+
+		if (equip_slot >= 0 && inventory[EQUIPMENT].slots[equip_slot]->enabled && disabled_slots_empty) {
 			area = EQUIPMENT;
 			slot = equip_slot;
 		}
+
 	}
 
 	if (area == CARRIED) {
@@ -940,8 +957,12 @@ void MenuInventory::applyEquipment() {
 		for (unsigned j=0; j<items->items[id].disable_slots.size(); ++j) {
 			for (int k=0; k<MAX_EQUIPPED; ++k) {
 				if (slot_type[k] == items->items[id].disable_slots[j]) {
-					add(inventory[EQUIPMENT].storage[k], CARRIED, -1, true, false);
-					inventory[EQUIPMENT].storage[k].clear();
+					if (!inventory[EQUIPMENT].storage[k].empty()) {
+						add(inventory[EQUIPMENT].storage[k], CARRIED, -1, true, false);
+						inventory[EQUIPMENT].storage[k].clear();
+						updateEquipment(k);
+						applyEquipment();
+					}
 					inventory[EQUIPMENT].slots[k]->enabled = false;
 				}
 			}
