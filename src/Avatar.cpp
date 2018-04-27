@@ -156,7 +156,7 @@ void Avatar::init() {
 	// Find untransform power index to use for manual untransfrom ability
 	untransform_power = 0;
 	for (unsigned id=0; id<powers->powers.size(); id++) {
-		if (powers->powers[id].spawn_type == "untransform" && powers->powers[id].requires_item == -1) {
+		if (powers->powers[id].spawn_type == "untransform" && powers->powers[id].required_items.empty()) {
 			untransform_power = id;
 			break;
 		}

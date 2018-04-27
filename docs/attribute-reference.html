@@ -1347,9 +1347,9 @@ body {
 
 <p><strong>power.requires_empty_target</strong> | <code>bool</code> | The power can only be cast when target tile is empty.</p>
 
-<p><strong>power.requires_item</strong> | <code>item_id, int : Item, Quantity</code> | Requires a specific item of a specific quantity in inventory.</p>
+<p><strong>power.requires_item</strong> | <code>repeatable(item_id, int) : Item, Quantity</code> | Requires a specific item of a specific quantity in inventory. If quantity &gt; 0, then the item will be removed.</p>
 
-<p><strong>power.requires_equipped_item</strong> | <code>item_id, int : Item, Quantity</code> | Requires a specific item of a specific quantity to be equipped on hero.</p>
+<p><strong>power.requires_equipped_item</strong> | <code>repeatable(item_id, int) : Item, Quantity</code> | Requires a specific item of a specific quantity to be equipped on hero. If quantity &gt; 0, then the item will be removed.</p>
 
 <p><strong>power.requires_targeting</strong> | <code>bool</code> | Power is only used when targeting using click-to-target.</p>
 

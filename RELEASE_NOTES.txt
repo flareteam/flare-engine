@@ -6,6 +6,7 @@ Engine features:
 * Display a message when unable to use a consumable item from the inventory. (Justin Jacobs)
 * Add a hint to consumable/book tooltips to expose their interactable nature. (Justin Jacobs)
 * Add ability to prevent certain powers from being placed on the actionbar. (Justin Jacobs)
+* Multiple entries of "requires_item" and "requires_equipped_item" are now supported for Powers. (Justin Jacobs)
 
 Engine fixes:
 

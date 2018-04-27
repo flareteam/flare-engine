@@ -271,29 +271,38 @@ void MenuActionBar::logic() {
 		if (hotkeys[i] > 0 && static_cast<unsigned>(hotkeys_mod[i]) < powers->powers.size()) {
 			const Power &power = powers->powers[hotkeys_mod[i]];
 
-			int item_id = power.requires_item;
-			int equipped_item_id = power.requires_equipped_item;
-
-			if (equipped_item_id > 0) {
-				// if a non-consumable item power is unequipped, disable that slot
-				if (!menu->inv->inventory[EQUIPMENT].contain(equipped_item_id)) {
-					setItemCount(i, 0, true);
-				}
-				else {
-					setItemCount(i, 1, true);
-				}
-			}
-			else if (item_id > 0) {
-				setItemCount(i, menu->inv->inventory[CARRIED].count(item_id));
+			if (power.required_items.empty()) {
+				setItemCount(i, -1);
 			}
 			else {
-				setItemCount(i, -1);
+				for (size_t j = 0; j < power.required_items.size(); ++j) {
+					if (power.required_items[j].equipped) {
+						if (!menu->inv->inventory[EQUIPMENT].contain(power.required_items[j].id))
+							setItemCount(i, 0, true);
+						else
+							setItemCount(i, 1, true);
+					}
+					else {
+						if (power.required_items[j].quantity == 0) {
+							if (!menu->inv->inventory[CARRIED].contain(power.required_items[j].id))
+								setItemCount(i, 0, true);
+							else
+								setItemCount(i, 1, true);
+						}
+						else {
+							setItemCount(i, menu->inv->inventory[CARRIED].count(power.required_items[j].id));
+						}
+					}
+
+					if (power.required_items[j].quantity > 0)
+						break;
+				}
 			}
 
 			//see if the slot should be greyed out
 			slot_enabled[i] = (pc->hero_cooldown[hotkeys_mod[i]] == 0)
 							  && (pc->power_cast_ticks[hotkeys_mod[i]] == 0)
-							  && (slot_item_count[i] == -1 || (slot_item_count[i] > 0 && power.requires_item_quantity <= slot_item_count[i]))
+							  // && (slot_item_count[i] == -1 || (slot_item_count[i] > 0 && power.requires_item_quantity <= slot_item_count[i]))
 							  && pc->stats.canUsePower(power, hotkeys_mod[i])
 							  && (twostep_slot == -1 || static_cast<unsigned>(twostep_slot) == i);
 
@@ -555,7 +564,15 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 		if (action.power > 0 && static_cast<unsigned>(action.power) < powers->powers.size()) {
 			const Power &power = powers->powers[action.power];
 			bool can_use_power = true;
-			action.instant_item = (power.new_state == POWSTATE_INSTANT && power.requires_item > 0);
+			action.instant_item = false;
+			if (power.new_state == POWSTATE_INSTANT) {
+				for (size_t j = 0; j < power.required_items.size(); ++j) {
+					if (power.required_items[j].id > 0 && !power.required_items[j].equipped) {
+						action.instant_item = true;
+						break;
+					}
+				}
+			}
 
 			// check if we can add this power to the action queue
 			for (unsigned j=0; j<action_queue.size(); j++) {

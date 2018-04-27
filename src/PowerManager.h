@@ -98,6 +98,19 @@ public:
 	std::string effect_id;
 };
 
+class PowerRequiredItem {
+public:
+	int id;
+	int quantity;
+	bool equipped;
+
+	PowerRequiredItem()
+		: id(0)
+		, quantity(0)
+		, equipped(false)
+	{}
+};
+
 class Power {
 public:
 	// base info
@@ -127,10 +140,7 @@ public:
 	bool requires_los; // line of sight
 	bool requires_los_default;
 	bool requires_empty_target; // target square must be empty
-	int requires_item;
-	int requires_item_quantity;
-	int requires_equipped_item;
-	int requires_equipped_item_quantity;
+	std::vector<PowerRequiredItem> required_items;
 	bool consumable;
 	bool requires_targeting; // power only makes sense when using click-to-target
 	int requires_spawns;
@@ -279,10 +289,6 @@ public:
 		, requires_los(false)
 		, requires_los_default(true)
 		, requires_empty_target(false)
-		, requires_item(-1)
-		, requires_item_quantity(0)
-		, requires_equipped_item(-1)
-		, requires_equipped_item_quantity(0)
 		, consumable(false)
 		, requires_targeting(false)
 		, requires_spawns(0)

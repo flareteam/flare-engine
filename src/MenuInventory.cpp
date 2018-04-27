@@ -550,9 +550,13 @@ void MenuInventory::activate(const Point& position) {
 		}
 
 		// if the power consumes items, make sure we have enough
-		if (powers->powers[power_id].requires_item > 0 && powers->powers[power_id].requires_item_quantity > inventory[CARRIED].count(powers->powers[power_id].requires_item)) {
-			pc->logMsg(msg->get("You don't have enough of the required item."), true);
-			return;
+		for (size_t i = 0; i < powers->powers[power_id].required_items.size(); ++i) {
+			if (powers->powers[power_id].required_items[i].id > 0 &&
+			    powers->powers[power_id].required_items[i].quantity > inventory[CARRIED].count(powers->powers[power_id].required_items[i].id))
+			{
+				pc->logMsg(msg->get("You don't have enough of the required item."), true);
+				return;
+			}
 		}
 
 		// check power & item requirements
