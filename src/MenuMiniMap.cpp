@@ -163,12 +163,9 @@ void MenuMiniMap::renderOrtho(const FPoint& hero_pos) {
 		render_device->render(map_surface);
 	}
 
-	render_device->drawPixel(window_area.x + pos.x + pos.w/2, window_area.y + pos.y + pos.h/2, color_hero);
-	render_device->drawPixel(window_area.x + pos.x + pos.w/2 + 1, window_area.y + pos.y + pos.h/2, color_hero);
-	render_device->drawPixel(window_area.x + pos.x + pos.w/2 - 1, window_area.y + pos.y + pos.h/2, color_hero);
-	render_device->drawPixel(window_area.x + pos.x + pos.w/2, window_area.y + pos.y + pos.h/2 + 1, color_hero);
-	render_device->drawPixel(window_area.x + pos.x + pos.w/2, window_area.y + pos.y + pos.h/2 - 1, color_hero);
-
+	Point center(window_area.x + pos.x + pos.w/2, window_area.y + pos.y + pos.h/2);
+	render_device->drawLine(center.x-1, center.y, center.x+1, center.y, color_hero);
+	render_device->drawLine(center.x, center.y-1, center.x, center.y+1, color_hero);
 }
 
 /**
@@ -199,11 +196,9 @@ void MenuMiniMap::renderIso(const FPoint& hero_pos) {
 		render_device->render(map_surface);
 	}
 
-	render_device->drawPixel(window_area.x + pos.x + pos.w/2 + 1, window_area.y + pos.y + pos.h/2, color_hero);
-	render_device->drawPixel(window_area.x + pos.x + pos.w/2 - 1, window_area.y + pos.y + pos.h/2, color_hero);
-	render_device->drawPixel(window_area.x + pos.x + pos.w/2, window_area.y + pos.y + pos.h/2 + 1, color_hero);
-	render_device->drawPixel(window_area.x + pos.x + pos.w/2, window_area.y + pos.y + pos.h/2 - 1, color_hero);
-	render_device->drawPixel(window_area.x + pos.x + pos.w/2, window_area.y + pos.y + pos.h/2, color_hero);
+	Point center(window_area.x + pos.x + pos.w/2, window_area.y + pos.y + pos.h/2);
+	render_device->drawLine(center.x-1, center.y, center.x+1, center.y, color_hero);
+	render_device->drawLine(center.x, center.y-1, center.x, center.y+1, color_hero);
 }
 
 void MenuMiniMap::prerenderOrtho(MapCollision *collider) {
