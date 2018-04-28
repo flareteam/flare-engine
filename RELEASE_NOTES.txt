@@ -9,6 +9,7 @@ Engine features:
 * Multiple entries of "requires_item" and "requires_equipped_item" are now supported for Powers. (Justin Jacobs)
 * Add "keep_buyback_on_map_change" to engine/misc.txt to disable saving the buyback between maps. (Justin Jacobs)
 * Add "reward_loot" and "reward_loot_count" to Events for rewarding via loot tables. (Justin Jacobs)
+* Support hidding the developer console title label. (Justin Jacobs)
 
 Engine fixes:
 

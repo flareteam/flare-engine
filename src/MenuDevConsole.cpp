@@ -131,6 +131,8 @@ void MenuDevConsole::logic() {
 			log_history->add("exec \"msg=Hello World\"");
 			log_history->add(msg->get("Arguments with spaces should be enclosed with double quotes. Example:"));
 			log_history->add(msg->get("Type 'help' to get a list of commands.") + ' ');
+			if (title.hidden)
+				log_history->add(msg->get("Developer Console"));
 		}
 
 		if (!input_box->edit_mode) {
@@ -180,7 +182,8 @@ void MenuDevConsole::render() {
 		// background
 		Menu::render();
 
-		label.render();
+		if (!title.hidden)
+			label.render();
 		button_close->render();
 		button_confirm->render();
 		input_box->render();
