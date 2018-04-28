@@ -160,6 +160,7 @@ extern bool SAVE_ONEXIT;
 extern float ENCOUNTER_DIST;
 extern float CAMERA_SPEED;
 extern bool SAVE_BUYBACK;
+extern bool KEEP_BUYBACK_ON_MAP_CHANGE;
 
 // Tile Settings
 extern float UNITS_PER_PIXEL_X;

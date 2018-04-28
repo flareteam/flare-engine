@@ -276,7 +276,11 @@ void MenuVendor::setNPC(NPC* _npc) {
 	for (unsigned i=0; i<VENDOR_SLOTS; i++) {
 		stock[VENDOR_BUY][i] = npc->stock[i];
 		if (npc->reset_buyback) {
-			buyback_stock[npc->filename][i].can_buyback = false;
+			// this occurs on the first interaction with an NPC after map load
+			if (KEEP_BUYBACK_ON_MAP_CHANGE)
+				buyback_stock[npc->filename][i].can_buyback = false;
+			else
+				buyback_stock[npc->filename][i].clear();
 		}
 		stock[VENDOR_SELL][i] = buyback_stock[npc->filename][i];
 	}

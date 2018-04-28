@@ -247,6 +247,7 @@ bool SAVE_ONEXIT = true;
 float ENCOUNTER_DIST;
 float CAMERA_SPEED;
 bool SAVE_BUYBACK = true;
+bool KEEP_BUYBACK_ON_MAP_CHANGE = true;
 int PREV_SAVE_SLOT = -1;
 bool SOFT_RESET = false;
 
@@ -387,6 +388,7 @@ void loadMiscSettings() {
 	SAVE_ONEXIT = true;
 	CAMERA_SPEED = 10.f;
 	SAVE_BUYBACK = true;
+	KEEP_BUYBACK_ON_MAP_CHANGE = true;
 	TOOLTIP_OFFSET = 0;
 	TOOLTIP_WIDTH = 1;
 	TOOLTIP_MARGIN = 0;
@@ -456,6 +458,9 @@ void loadMiscSettings() {
 			// @ATTR save_buyback|bool|Saves the vendor buyback stock whenever the game is saved.
 			else if (infile.key == "save_buyback")
 				SAVE_BUYBACK = toBool(infile.val);
+			// @ATTR keep_buyback_on_map_change|bool|If true, NPC buyback stocks will persist when the map changes. If false, save_buyback is disabled.
+			else if (infile.key == "keep_buyback_on_map_change")
+				KEEP_BUYBACK_ON_MAP_CHANGE = toBool(infile.val);
 
 			else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
 		}
@@ -465,6 +470,11 @@ void loadMiscSettings() {
 	if (SAVE_PREFIX == "") {
 		logError("Settings: save_prefix not found in engine/misc.txt, setting to 'default'. This may cause save file conflicts between games that have no save_prefix.");
 		SAVE_PREFIX = "default";
+	}
+
+	if (SAVE_BUYBACK && !KEEP_BUYBACK_ON_MAP_CHANGE) {
+		logError("Settings: Warning, save_buyback=true is ignored when keep_buyback_on_map_change=false.");
+		SAVE_BUYBACK = false;
 	}
 
 	// @CLASS Settings: Resolution|Description of engine/resolutions.txt
