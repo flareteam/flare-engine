@@ -517,6 +517,19 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		e->x = popFirstInt(val);
 		e->y = std::max(popFirstInt(val), 1);
 	}
+	else if (key == "reward_loot") {
+		// @ATTR event.reward_loot|list(loot)|Reward hero with random loot.
+		e->type = EC_REWARD_LOOT;
+
+		e->s = val;
+	}
+	else if (key == "reward_loot_count") {
+		// @ATTR event.reward_loot_count|int, int : Min, Max|Sets the minimum (and optionally, the maximum) amount of loot that reward_loot can give the hero. Defaults to 1.
+		e->type = EC_REWARD_LOOT_COUNT;
+
+		e->x = std::max(popFirstInt(val), 1);
+		e->y = std::max(popFirstInt(val), e->x);
+	}
 	else if (key == "restore") {
 		// @ATTR event.restore|["hp", "mp", "hpmp", "status", "all"]|Restore the hero's HP, MP, and/or status.
 		e->type = EC_RESTORE;
@@ -803,6 +816,31 @@ bool EventManager::executeEvent(Event &ev) {
 			istack.item = ec->x;
 			istack.quantity = ec->y;
 			camp->rewardItem(istack);
+		}
+		else if (ec->type == EC_REWARD_LOOT) {
+			std::vector<Event_Component> random_table;
+			Point random_table_count(1,1);
+
+			Event_Component *ec_lootcount = ev.getComponent(EC_REWARD_LOOT_COUNT);
+			if (ec_lootcount) {
+				random_table_count.x = ec_lootcount->x;
+				random_table_count.y = ec_lootcount->y;
+			}
+
+			random_table.push_back(Event_Component());
+			loot->parseLoot(ec->s, &random_table.back(), &random_table);
+
+			unsigned rand_count = randBetween(random_table_count.x, random_table_count.y);
+			std::vector<ItemStack> rand_itemstacks;
+			for (unsigned j = 0; j < rand_count; ++j) {
+				loot->checkLoot(random_table, NULL, &rand_itemstacks);
+			}
+			for (size_t j = 0; j < rand_itemstacks.size(); ++j) {
+				if (rand_itemstacks[j].item == CURRENCY_ID)
+					camp->rewardCurrency(rand_itemstacks[j].quantity);
+				else
+					camp->rewardItem(rand_itemstacks[j]);
+			}
 		}
 		else if (ec->type == EC_RESTORE) {
 			camp->restoreHPMP(ec->s);

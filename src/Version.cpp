@@ -28,7 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <sstream>
 #include <iomanip>
 
-Version ENGINE_VERSION(1, 4, 10);
+Version ENGINE_VERSION(1, 4, 11);
 Version VERSION_MIN(0, 0, 0);
 Version VERSION_MAX(USHRT_MAX, USHRT_MAX, USHRT_MAX);
 
