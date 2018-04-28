@@ -155,6 +155,7 @@ public:
 
 protected:
 	Point scaleMouse(unsigned int x, unsigned int y);
+	virtual int getKeyFromName(const std::string& key_name) = 0;
 
 	bool un_press[key_count];
 	Point current_touch;

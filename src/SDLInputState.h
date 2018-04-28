@@ -51,6 +51,8 @@ public:
 	void setKeybind(int key, int binding_button, int bindings_list, std::string& keybind_msg);
 
 private:
+	int getKeyFromName(const std::string& key_name);
+
 	SDL_Joystick* joy;
 	int joy_num;
 	int joy_axis_num;

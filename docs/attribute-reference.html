@@ -247,6 +247,10 @@ body {
 
 <p><strong>event.reward_item</strong> | <code>item_id, int : Item, Quantity</code> | Reward hero with y number of item x.</p>
 
+<p><strong>event.reward_loot</strong> | <code>list(loot)</code> | Reward hero with random loot.</p>
+
+<p><strong>event.reward_loot_count</strong> | <code>int, int : Min, Max</code> | Sets the minimum (and optionally, the maximum) amount of loot that reward_loot can give the hero. Defaults to 1.</p>
+
 <p><strong>event.restore</strong> | <code>["hp", "mp", "hpmp", "status", "all"]</code> | Restore the hero&rsquo;s HP, MP, and/or status.</p>
 
 <p><strong>event.power</strong> | <code>power_id</code> | Specify power coupled with event.</p>
@@ -624,6 +628,74 @@ body {
 <p><strong>icon_set</strong> | <code>repeatable(icon_id, filename) : First ID, Image file</code> | Defines an icon graphics file to load, as well as the index of the first icon.</p>
 
 <p><strong>text_offset</strong> | <code>point</code> | A pixel offset from the top-left to place item quantity text on icons.</p>
+
+<hr />
+
+<h4>InputState: Default Keybindings</h4>
+
+<p>Description of engine/default_keybindings.txt. Use <strong>-1</strong> for no binding. Keyboard values can be any of the key names listed in the <a href="https://wiki.libsdl.org/SDL_Keycode">SDL docs</a>. Mouse values are in the format <strong>mouse_0</strong>. Joystick buttons are in the format <strong>joy_0</strong>. Joystick axis are in the format <strong>axis_0-</strong> or <strong>axis_0+</strong>.</p>
+
+<p><strong>default.cancel</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for &ldquo;Cancel&rdquo;.</p>
+
+<p><strong>default.accept</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for &ldquo;Accept&rdquo;.</p>
+
+<p><strong>default.up</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for &ldquo;Up&rdquo;.</p>
+
+<p><strong>default.down</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for &ldquo;Down&rdquo;.</p>
+
+<p><strong>default.left</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for &ldquo;Left&rdquo;.</p>
+
+<p><strong>default.right</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for &ldquo;Right&rdquo;.</p>
+
+<p><strong>default.bar1</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for &ldquo;Bar1&rdquo;.</p>
+
+<p><strong>default.bar2</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for &ldquo;Bar2&rdquo;.</p>
+
+<p><strong>default.bar3</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for &ldquo;Bar3&rdquo;.</p>
+
+<p><strong>default.bar4</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for &ldquo;Bar4&rdquo;.</p>
+
+<p><strong>default.bar5</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for &ldquo;Bar5&rdquo;.</p>
+
+<p><strong>default.bar6</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for &ldquo;Bar6&rdquo;.</p>
+
+<p><strong>default.bar7</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for &ldquo;Bar7&rdquo;.</p>
+
+<p><strong>default.bar8</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for &ldquo;Bar8&rdquo;.</p>
+
+<p><strong>default.bar9</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for &ldquo;Bar9&rdquo;.</p>
+
+<p><strong>default.bar0</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for &ldquo;Bar0&rdquo;.</p>
+
+<p><strong>default.main1</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for &ldquo;Main1&rdquo;.</p>
+
+<p><strong>default.main2</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for &ldquo;Main2&rdquo;.</p>
+
+<p><strong>default.character</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for &ldquo;Character&rdquo;.</p>
+
+<p><strong>default.inventory</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for &ldquo;Inventory&rdquo;.</p>
+
+<p><strong>default.powers</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for &ldquo;Powers&rdquo;.</p>
+
+<p><strong>default.log</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for &ldquo;Log&rdquo;.</p>
+
+<p><strong>default.ctrl</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for &ldquo;Ctrl&rdquo;.</p>
+
+<p><strong>default.shift</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for &ldquo;Shift&rdquo;.</p>
+
+<p><strong>default.alt</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for &ldquo;Alt&rdquo;.</p>
+
+<p><strong>default.delete</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for &ldquo;Delete&rdquo;.</p>
+
+<p><strong>default.actionbar</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for &ldquo;Actionbar Accept&rdquo;.</p>
+
+<p><strong>default.actionbar_back</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for &ldquo;Actionbar Left&rdquo;.</p>
+
+<p><strong>default.actionbar_forward</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for &ldquo;Actionbar Right&rdquo;.</p>
+
+<p><strong>default.actionbar_use</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for &ldquo;Actionbar Use&rdquo;.</p>
+
+<p><strong>default.developer_menu</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for &ldquo;Developer Menu&rdquo;.</p>
 
 <hr />
 

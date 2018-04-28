@@ -26,6 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FileParser.h"
 #include "InputState.h"
 #include "MessageEngine.h"
+#include "ModManager.h"
 #include "Platform.h"
 #include "Settings.h"
 #include "SharedResources.h"
@@ -94,33 +95,102 @@ void InputState::defaultJoystickBindings () {
 void InputState::loadKeyBindings() {
 
 	FileParser infile;
+	bool opened_file = false;
 
-	if (!infile.open(PATH_CONF + FILE_KEYBINDINGS, false, "")) {
-		if (!infile.open("engine/default_keybindings.txt", true, "")) {
-			saveKeyBindings();
-			return;
+	// first check for mod keybinds
+	if (mods->locate("engine/default_keybindings.txt") != "") {
+		if (infile.open(PATH_USER + "saves/" + SAVE_PREFIX + "/" + FILE_KEYBINDINGS, false, "")) {
+			opened_file = true;
 		}
-		else saveKeyBindings();
+		else if (infile.open("engine/default_keybindings.txt", true, "")) {
+			opened_file = true;
+		}
+	}
+	// if there are no mod keybinds, fall back to global config
+	else if (infile.open(PATH_CONF + FILE_KEYBINDINGS, false, "")) {
+		opened_file = true;
+	}
+
+	if (!opened_file) {
+		saveKeyBindings();
+		return;
 	}
 
 	while (infile.next()) {
-		int key1 = popFirstInt(infile.val);
-		int key2 = popFirstInt(infile.val);
-
-		// if we're loading an older keybindings file, convert greater than 0 mouse binds to negative
-		if (key1 > 0 && key1 < 8) {
-			key1 = (key1 + MOUSE_BIND_OFFSET) * (-1);
-		}
-		if (key2 > 0 && key2 < 8) {
-			key2 = (key2 + MOUSE_BIND_OFFSET) * (-1);
-		}
-
-		// if we're loading an older keybindings file, we need to unbind all joystick bindings
+		int key1 = -1;
+		int key2 = -1;
 		int key3 = -1;
-		std::string temp = infile.val;
-		if (popFirstString(temp) != "") {
-			key3 = popFirstInt(infile.val);
+
+		if (infile.section.empty()) {
+			// this is a traditional keybindings file that has been written by the engine via saveKeyBindings()
+			key1 = toInt(popFirstString(infile.val), -1);
+			key2 = toInt(popFirstString(infile.val), -1);
+			key3 = toInt(popFirstString(infile.val), -1);
 		}
+		else if (infile.section == "default") {
+			// this is a set of default keybindings located in a mod
+			std::string str1 = popFirstString(infile.val);
+			std::string str2 = popFirstString(infile.val);
+			std::string str3 = popFirstString(infile.val);
+
+			if (str1.length() > 6 && str1.substr(0, 6) == "mouse_")
+				key1 = (toInt(str1.substr(6))+ 1 + MOUSE_BIND_OFFSET) * (-1);
+			else if (str1 != "-1")
+				key1 = getKeyFromName(str1);
+
+			if (str2.length() > 6 && str2.substr(0, 6) == "mouse_")
+				key2 = (toInt(str1.substr(6))+ 1 + MOUSE_BIND_OFFSET) * (-1);
+			else if (str2 != "-1")
+				key2 = getKeyFromName(str2);
+
+			if (str3.length() > 5 && str3.substr(0, 5) == "axis_") {
+				size_t pos_minus = str3.find('-');
+				size_t pos_plus = str3.find('+');
+				if (pos_minus != std::string::npos) {
+					key3 = ((toInt(str3.substr(5, pos_minus)) * 2) + JOY_AXIS_OFFSET) * (-1);
+				}
+				else if (pos_plus != std::string::npos) {
+					key3 = ((toInt(str3.substr(5, pos_plus)) * 2) + 1 + JOY_AXIS_OFFSET) * (-1);
+				}
+			}
+			else if (str3.length() > 4 && str3.substr(0, 4) == "joy_")
+				key3 = toInt(str3.substr(4));
+		}
+		else
+			continue;
+
+		// @CLASS InputState: Default Keybindings|Description of engine/default_keybindings.txt. Use **-1** for no binding. Keyboard values can be any of the key names listed in the [SDL docs](https://wiki.libsdl.org/SDL_Keycode). Mouse values are in the format **mouse_0**. Joystick buttons are in the format **joy_0**. Joystick axis are in the format **axis_0-** or **axis_0+**.
+		// @ATTR default.cancel|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Cancel".
+		// @ATTR default.accept|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Accept".
+		// @ATTR default.up|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Up".
+		// @ATTR default.down|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Down".
+		// @ATTR default.left|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Left".
+		// @ATTR default.right|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Right".
+		// @ATTR default.bar1|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Bar1".
+		// @ATTR default.bar2|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Bar2".
+		// @ATTR default.bar3|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Bar3".
+		// @ATTR default.bar4|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Bar4".
+		// @ATTR default.bar5|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Bar5".
+		// @ATTR default.bar6|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Bar6".
+		// @ATTR default.bar7|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Bar7".
+		// @ATTR default.bar8|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Bar8".
+		// @ATTR default.bar9|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Bar9".
+		// @ATTR default.bar0|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Bar0".
+		// @ATTR default.main1|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Main1".
+		// @ATTR default.main2|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Main2".
+		// @ATTR default.character|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Character".
+		// @ATTR default.inventory|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Inventory".
+		// @ATTR default.powers|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Powers".
+		// @ATTR default.log|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Log".
+		// @ATTR default.ctrl|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Ctrl".
+		// @ATTR default.shift|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Shift".
+		// @ATTR default.alt|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Alt".
+		// @ATTR default.delete|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Delete".
+		// @ATTR default.actionbar|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Actionbar Accept".
+		// @ATTR default.actionbar_back|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Actionbar Left".
+		// @ATTR default.actionbar_forward|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Actionbar Right".
+		// @ATTR default.actionbar_use|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Actionbar Use".
+		// @ATTR default.developer_menu|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Developer Menu".
 
 		int cursor = -1;
 
@@ -170,8 +240,15 @@ void InputState::loadKeyBindings() {
  * Write current key bindings to config file
  */
 void InputState::saveKeyBindings() {
+	std::string out_path;
+	if (mods->locate("engine/default_keybindings.txt") != "") {
+		out_path = PATH_USER + "saves/" + SAVE_PREFIX + "/" + FILE_KEYBINDINGS;
+	}
+	else {
+		out_path = PATH_CONF + FILE_KEYBINDINGS;
+	}
 	std::ofstream outfile;
-	outfile.open((PATH_CONF + FILE_KEYBINDINGS).c_str(), std::ios::out);
+	outfile.open(out_path.c_str(), std::ios::out);
 
 	if (outfile.is_open()) {
 		outfile << "# Keybindings\n";

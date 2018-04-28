@@ -10,6 +10,7 @@ Engine features:
 * Add "keep_buyback_on_map_change" to engine/misc.txt to disable saving the buyback between maps. (Justin Jacobs)
 * Add "reward_loot" and "reward_loot_count" to Events for rewarding via loot tables. (Justin Jacobs)
 * Support hidding the developer console title label. (Justin Jacobs)
+* Mod-level default keybinding support added. (Justin Jacobs)
 
 Engine fixes:
 
