@@ -211,6 +211,7 @@ public:
 	virtual void blankScreen() = 0;
 	virtual void commitFrame() = 0;
 	virtual void drawPixel(int x, int y, const Color& color) = 0;
+	virtual void drawLine(int x0, int y0, int x1, int y1, const Color& color) = 0;
 	virtual void drawRectangle(const Point& p0, const Point& p1, const Color& color) = 0;
 	virtual void windowResize() = 0;
 	virtual void setBackgroundColor(Color color);
@@ -251,7 +252,6 @@ private:
 
 	IMAGE_CACHE_CONTAINER cache;
 
-	virtual void drawLine(int x0, int y0, int x1, int y1, const Color& color) = 0;
 	virtual void getWindowSize(short unsigned *screen_w, short unsigned *screen_h) = 0;
 };
 

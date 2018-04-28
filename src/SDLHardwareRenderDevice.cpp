@@ -412,10 +412,13 @@ void SDLHardwareRenderDevice::drawLine(int x0, int y0, int x1, int y1, const Col
 }
 
 void SDLHardwareRenderDevice::drawRectangle(const Point& p0, const Point& p1, const Color& color) {
-	drawLine(p0.x, p0.y, p1.x, p0.y, color);
-	drawLine(p1.x, p0.y, p1.x, p1.y, color);
-	drawLine(p0.x, p0.y, p0.x, p1.y, color);
-	drawLine(p0.x, p1.y, p1.x, p1.y, color);
+	SDL_Rect r;
+	r.x = p0.x;
+	r.y = p0.y;
+	r.w = p1.x - p0.x;
+	r.h = p1.y - p0.y;
+	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+	SDL_RenderDrawRect(renderer, &r);
 }
 
 void SDLHardwareRenderDevice::blankScreen() {

@@ -72,6 +72,7 @@ public:
 	int renderText(FontStyle *font_style, const std::string& text, const Color& color, Rect& dest);
 	Image *renderTextToImage(FontStyle* font_style, const std::string& text, const Color& color, bool blended = true);
 	void drawPixel(int x, int y, const Color& color);
+	void drawLine(int x0, int y0, int x1, int y1, const Color& color);
 	void drawRectangle(const Point& p0, const Point& p1, const Color& color);
 	void blankScreen();
 	void commitFrame();
@@ -87,7 +88,6 @@ public:
 					 const std::string& errormessage = "Couldn't load image",
 					 bool IfNotFoundExit = false);
 private:
-	void drawLine(int x0, int y0, int x1, int y1, const Color& color);
 	void getWindowSize(short unsigned *screen_w, short unsigned *screen_h);
 
 	SDL_Window *window;
