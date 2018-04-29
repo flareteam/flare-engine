@@ -2,20 +2,21 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-19 20:31-0400\n"
+"POT-Creation-Date: 2018-04-29 18:39-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
-"Language-Team: Norwegian Bokmål (https://www.transifex.com/flareorg/teams/84925/nb/)\n"
+"Language-Team: Norwegian Bokmål (https://www.transifex.com/flareorg/"
+"teams/84925/nb/)\n"
+"Language: nb\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: nb\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../../../src/Avatar.cpp:363
@@ -109,7 +110,7 @@ msgstr ""
 msgid "miss"
 msgstr "bom"
 
-#: ../../../src/Entity.cpp:525 ../../../src/PowerManager.cpp:1065
+#: ../../../src/Entity.cpp:525 ../../../src/PowerManager.cpp:1079
 #: ../../../src/StatBlock.cpp:799 ../../../src/StatBlock.cpp:805
 #, c-format
 msgid "+%d HP"
@@ -121,7 +122,7 @@ msgstr ""
 msgid "+%d MP"
 msgstr ""
 
-#: ../../../src/EventManager.cpp:715
+#: ../../../src/EventManager.cpp:728
 msgid "Unknown destination"
 msgstr "Ukjent destinasjon"
 
@@ -139,7 +140,7 @@ msgid "OK"
 msgstr "Ok"
 
 #: ../../../src/GameStateConfigBase.cpp:120 ../../../src/GameStateNew.cpp:64
-#: ../../../src/InputState.cpp:295 ../../../src/MenuNPCActions.cpp:88
+#: ../../../src/InputState.cpp:372 ../../../src/MenuNPCActions.cpp:88
 msgid "Cancel"
 msgstr "Avbryt"
 
@@ -416,156 +417,156 @@ msgstr ""
 msgid "Exit Game"
 msgstr "Avslutt spill"
 
-#: ../../../src/InputState.cpp:296
+#: ../../../src/InputState.cpp:373
 msgid "Accept"
 msgstr "Godta"
 
-#: ../../../src/InputState.cpp:297 ../../../src/SDLInputState.cpp:581
+#: ../../../src/InputState.cpp:374 ../../../src/SDLInputState.cpp:581
 msgid "Up"
 msgstr "Opp"
 
-#: ../../../src/InputState.cpp:298 ../../../src/SDLInputState.cpp:559
+#: ../../../src/InputState.cpp:375 ../../../src/SDLInputState.cpp:559
 msgid "Down"
 msgstr "Ned"
 
-#: ../../../src/InputState.cpp:299 ../../../src/SDLInputState.cpp:566
+#: ../../../src/InputState.cpp:376 ../../../src/SDLInputState.cpp:566
 msgid "Left"
 msgstr "Venstre"
 
-#: ../../../src/InputState.cpp:300 ../../../src/SDLInputState.cpp:576
+#: ../../../src/InputState.cpp:377 ../../../src/SDLInputState.cpp:576
 msgid "Right"
 msgstr "Høyre"
 
-#: ../../../src/InputState.cpp:301
+#: ../../../src/InputState.cpp:378
 msgid "Bar1"
 msgstr ""
 
-#: ../../../src/InputState.cpp:302
+#: ../../../src/InputState.cpp:379
 msgid "Bar2"
 msgstr ""
 
-#: ../../../src/InputState.cpp:303
+#: ../../../src/InputState.cpp:380
 msgid "Bar3"
 msgstr ""
 
-#: ../../../src/InputState.cpp:304
+#: ../../../src/InputState.cpp:381
 msgid "Bar4"
 msgstr ""
 
-#: ../../../src/InputState.cpp:305
+#: ../../../src/InputState.cpp:382
 msgid "Bar5"
 msgstr ""
 
-#: ../../../src/InputState.cpp:306
+#: ../../../src/InputState.cpp:383
 msgid "Bar6"
 msgstr ""
 
-#: ../../../src/InputState.cpp:307
+#: ../../../src/InputState.cpp:384
 msgid "Bar7"
 msgstr ""
 
-#: ../../../src/InputState.cpp:308
+#: ../../../src/InputState.cpp:385
 msgid "Bar8"
 msgstr ""
 
-#: ../../../src/InputState.cpp:309
+#: ../../../src/InputState.cpp:386
 msgid "Bar9"
 msgstr ""
 
-#: ../../../src/InputState.cpp:310
+#: ../../../src/InputState.cpp:387
 msgid "Bar0"
 msgstr ""
 
-#: ../../../src/InputState.cpp:311 ../../../src/MenuActionBar.cpp:388
-#: ../../../src/MenuActionBar.cpp:390 ../../../src/MenuCharacter.cpp:242
+#: ../../../src/InputState.cpp:388 ../../../src/MenuActionBar.cpp:397
+#: ../../../src/MenuActionBar.cpp:399 ../../../src/MenuCharacter.cpp:242
 msgid "Character"
 msgstr "Karakter"
 
-#: ../../../src/InputState.cpp:312 ../../../src/MenuActionBar.cpp:397
-#: ../../../src/MenuActionBar.cpp:399 ../../../src/MenuInventory.cpp:151
+#: ../../../src/InputState.cpp:389 ../../../src/MenuActionBar.cpp:406
+#: ../../../src/MenuActionBar.cpp:408 ../../../src/MenuInventory.cpp:151
 #: ../../../src/MenuVendor.cpp:55
 msgid "Inventory"
 msgstr ""
 
-#: ../../../src/InputState.cpp:313 ../../../src/MenuActionBar.cpp:406
-#: ../../../src/MenuActionBar.cpp:408 ../../../src/MenuPowers.cpp:132
+#: ../../../src/InputState.cpp:390 ../../../src/MenuActionBar.cpp:415
+#: ../../../src/MenuActionBar.cpp:417 ../../../src/MenuPowers.cpp:132
 msgid "Powers"
 msgstr "Krefter"
 
-#: ../../../src/InputState.cpp:314 ../../../src/MenuActionBar.cpp:415
-#: ../../../src/MenuActionBar.cpp:417 ../../../src/MenuLog.cpp:104
+#: ../../../src/InputState.cpp:391 ../../../src/MenuActionBar.cpp:424
+#: ../../../src/MenuActionBar.cpp:426 ../../../src/MenuLog.cpp:104
 msgid "Log"
 msgstr "Logg"
 
-#: ../../../src/InputState.cpp:315
+#: ../../../src/InputState.cpp:392
 msgid "Main1"
 msgstr "Hoved1"
 
-#: ../../../src/InputState.cpp:316
+#: ../../../src/InputState.cpp:393
 msgid "Main2"
 msgstr "Hoved2"
 
-#: ../../../src/InputState.cpp:317
+#: ../../../src/InputState.cpp:394
 msgid "Ctrl"
 msgstr "Ctrl"
 
-#: ../../../src/InputState.cpp:318
+#: ../../../src/InputState.cpp:395
 msgid "Shift"
 msgstr "Shift"
 
-#: ../../../src/InputState.cpp:319
+#: ../../../src/InputState.cpp:396
 msgid "Alt"
 msgstr "Alt"
 
-#: ../../../src/InputState.cpp:320 ../../../src/SDLInputState.cpp:558
+#: ../../../src/InputState.cpp:397 ../../../src/SDLInputState.cpp:558
 msgid "Delete"
 msgstr "Delete"
 
-#: ../../../src/InputState.cpp:321
+#: ../../../src/InputState.cpp:398
 msgid "ActionBar Accept"
 msgstr ""
 
-#: ../../../src/InputState.cpp:322
+#: ../../../src/InputState.cpp:399
 msgid "ActionBar Left"
 msgstr ""
 
-#: ../../../src/InputState.cpp:323
+#: ../../../src/InputState.cpp:400
 msgid "ActionBar Right"
 msgstr ""
 
-#: ../../../src/InputState.cpp:324
+#: ../../../src/InputState.cpp:401
 msgid "ActionBar Use"
 msgstr ""
 
-#: ../../../src/InputState.cpp:325
+#: ../../../src/InputState.cpp:402
 msgid "Developer Menu"
 msgstr "Utviklermeny"
 
-#: ../../../src/InputState.cpp:327
+#: ../../../src/InputState.cpp:404
 msgid "Left Mouse"
 msgstr ""
 
-#: ../../../src/InputState.cpp:328
+#: ../../../src/InputState.cpp:405
 msgid "Middle Mouse"
 msgstr ""
 
-#: ../../../src/InputState.cpp:329
+#: ../../../src/InputState.cpp:406
 msgid "Right Mouse"
 msgstr ""
 
-#: ../../../src/InputState.cpp:330
+#: ../../../src/InputState.cpp:407
 msgid "Wheel Up"
 msgstr "Hjul Opp"
 
-#: ../../../src/InputState.cpp:331
+#: ../../../src/InputState.cpp:408
 msgid "Wheel Down"
 msgstr "Hjul Ned"
 
-#: ../../../src/InputState.cpp:332
+#: ../../../src/InputState.cpp:409
 msgid "Mouse X1"
 msgstr ""
 
-#: ../../../src/InputState.cpp:333
+#: ../../../src/InputState.cpp:410
 msgid "Mouse X2"
 msgstr ""
 
@@ -696,7 +697,7 @@ msgstr "Nivå"
 msgid "points remaining"
 msgstr "ubrukte poeng"
 
-#: ../../../src/MenuCharacter.cpp:353 ../../../src/MenuManager.cpp:307
+#: ../../../src/MenuCharacter.cpp:353 ../../../src/MenuManager.cpp:303
 #, c-format
 msgid "XP: %d"
 msgstr ""
@@ -725,125 +726,153 @@ msgstr ""
 msgid "Each point of %s grants %d."
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:58
+#: ../../../src/MenuDevConsole.cpp:62
 msgid "Execute"
 msgstr "Utfør"
 
-#: ../../../src/MenuDevConsole.cpp:124
+#: ../../../src/MenuDevConsole.cpp:128 ../../../src/MenuDevConsole.cpp:144
 msgid "Developer Console"
 msgstr "Utviklerkonsoll"
 
-#: ../../../src/MenuDevConsole.cpp:132
+#: ../../../src/MenuDevConsole.cpp:139
+#, c-format
+msgid "Use '%s' to inspect with the cursor."
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:141
 msgid "Arguments with spaces should be enclosed with double quotes. Example:"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:133
+#: ../../../src/MenuDevConsole.cpp:142
 msgid "Type 'help' to get a list of commands."
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:234
+#: ../../../src/MenuDevConsole.cpp:201 ../../../src/MenuDevConsole.cpp:205
+msgid "px"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:216
+msgid "Distance"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:231 ../../../src/MenuDevConsole.cpp:277
+msgid "Entity"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:252 ../../../src/MenuDevConsole.cpp:259
+msgid "none"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:253 ../../../src/MenuDevConsole.cpp:255
+msgid "wall"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:254
+msgid "short wall / pit"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:256
+msgid "pit"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:257
+msgid "entity"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:258
+msgid "entity, ally"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:265
+msgid "Tile"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:343
 msgid "adds a power to the action bar"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:235
+#: ../../../src/MenuDevConsole.cpp:344
 msgid "turns on/off all of the HUD elements"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:236
+#: ../../../src/MenuDevConsole.cpp:345
 msgid "turns on/off the developer hud"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:237
+#: ../../../src/MenuDevConsole.cpp:346
 msgid ""
 "Prints a list of powers that match a search term. No search term will list "
 "all items"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:238
+#: ../../../src/MenuDevConsole.cpp:347
 msgid "Prints out all the map filenames located in the \"maps/\" directory."
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:239
+#: ../../../src/MenuDevConsole.cpp:348
 msgid ""
 "Prints out the active campaign statuses that match a search term. No search "
 "term will list all active statuses"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:240
+#: ../../../src/MenuDevConsole.cpp:349
 msgid ""
 "Prints a list of items that match a search term. No search term will list "
 "all items"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:241
-msgid ""
-"parses a series of event components and executes them as a single event"
+#: ../../../src/MenuDevConsole.cpp:350
+msgid "parses a series of event components and executes them as a single event"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:242
+#: ../../../src/MenuDevConsole.cpp:351
 msgid "clears the command history"
 msgstr "tømmer kommando-historikk"
 
-#: ../../../src/MenuDevConsole.cpp:243
+#: ../../../src/MenuDevConsole.cpp:352
 msgid "displays this text"
 msgstr "viser denne teksten"
 
-#: ../../../src/MenuDevConsole.cpp:250
+#: ../../../src/MenuDevConsole.cpp:359
 msgid "Toggled the developer hud"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:254
+#: ../../../src/MenuDevConsole.cpp:363
 msgid "Toggled the hud"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:401
+#: ../../../src/MenuDevConsole.cpp:510
 msgid "ERROR: Incorrect number of arguments"
 msgstr "FEIL: Feil antall argumenter"
 
-#: ../../../src/MenuDevConsole.cpp:402 ../../../src/MenuDevConsole.cpp:427
+#: ../../../src/MenuDevConsole.cpp:511 ../../../src/MenuDevConsole.cpp:536
 msgid "HINT:"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:402
+#: ../../../src/MenuDevConsole.cpp:511
 msgid "<id>"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:417
+#: ../../../src/MenuDevConsole.cpp:526
 #, c-format
 msgid "ERROR: '%s' is not a valid event key"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:426
+#: ../../../src/MenuDevConsole.cpp:535
 msgid "ERROR: Too few arguments"
 msgstr "FEIL: For få argumenter"
 
-#: ../../../src/MenuDevConsole.cpp:427
+#: ../../../src/MenuDevConsole.cpp:536
 msgid "<key>=<val> <key>=<val> ..."
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:431
+#: ../../../src/MenuDevConsole.cpp:540
 msgid "ERROR: Unknown command"
 msgstr "FEIL: Ukjent kommando"
 
-#: ../../../src/MenuDevConsole.cpp:432
+#: ../../../src/MenuDevConsole.cpp:541
 msgid "HINT: Type help"
 msgstr "HINT: Skriv help"
-
-#: ../../../src/MenuDevHUD.cpp:60
-msgid "Player (x,y):"
-msgstr ""
-
-#: ../../../src/MenuDevHUD.cpp:66
-msgid "Target (x,y):"
-msgstr ""
-
-#: ../../../src/MenuDevHUD.cpp:71
-msgid "Mouse (x,y):"
-msgstr ""
-
-#: ../../../src/MenuDevHUD.cpp:76
-msgid "Target distance:"
-msgstr ""
 
 #: ../../../src/MenuEnemy.cpp:140
 msgid "Dead"
@@ -920,28 +949,28 @@ msgstr ""
 msgid "Sell item stack:"
 msgstr ""
 
-#: ../../../src/MenuInventory.cpp:550
+#: ../../../src/MenuInventory.cpp:557
 msgid "You don't have enough of the required item."
 msgstr ""
 
-#: ../../../src/MenuInventory.cpp:556
+#: ../../../src/MenuInventory.cpp:564
 msgid "You can't use this item right now."
 msgstr ""
 
-#: ../../../src/MenuInventory.cpp:568
+#: ../../../src/MenuInventory.cpp:576
 msgid "This item can only be used from the action bar."
 msgstr ""
 
-#: ../../../src/MenuInventory.cpp:673
+#: ../../../src/MenuInventory.cpp:694
 msgid "Inventory is full."
 msgstr "Du har ikke plass til flere gjenstander."
 
-#: ../../../src/MenuInventory.cpp:793
+#: ../../../src/MenuInventory.cpp:814
 #, c-format
 msgid "Not enough %s."
 msgstr "Ikke nok %s."
 
-#: ../../../src/MenuInventory.cpp:813 ../../../src/MenuInventory.cpp:820
+#: ../../../src/MenuInventory.cpp:834 ../../../src/MenuInventory.cpp:841
 msgid "This item can not be sold."
 msgstr "Du kan ikke selge denne gjenstanden."
 
@@ -953,12 +982,12 @@ msgstr "Notater"
 msgid "Quests"
 msgstr "Oppdrag"
 
-#: ../../../src/MenuManager.cpp:309
+#: ../../../src/MenuManager.cpp:305
 #, c-format
 msgid "XP: %d/%d"
 msgstr ""
 
-#: ../../../src/MenuManager.cpp:821
+#: ../../../src/MenuManager.cpp:815
 msgid "This item can not be dropped."
 msgstr ""
 
@@ -1145,16 +1174,16 @@ msgstr ""
 msgid "Vendor"
 msgstr ""
 
-#: ../../../src/PowerManager.cpp:1049
+#: ../../../src/PowerManager.cpp:1063
 #, c-format
 msgid "+%d Shield"
 msgstr "+%d Skjold"
 
-#: ../../../src/PowerManager.cpp:1308
+#: ../../../src/PowerManager.cpp:1322
 msgid "You are already transformed, untransform first."
 msgstr ""
 
-#: ../../../src/PowerManager.cpp:1320
+#: ../../../src/PowerManager.cpp:1334
 msgid "Could not untransform at this position."
 msgstr ""
 
@@ -1291,7 +1320,7 @@ msgstr "%s på fiende"
 msgid "'%s' is no longer bound to:"
 msgstr ""
 
-#: ../../../src/Settings.cpp:782
+#: ../../../src/Settings.cpp:792
 msgid "Adventurer"
 msgstr "Eventyrer"
 
