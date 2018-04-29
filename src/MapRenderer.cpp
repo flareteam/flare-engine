@@ -19,6 +19,7 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
+#include "Avatar.h"
 #include "CampaignManager.h"
 #include "CombatText.h"
 #include "CommonIncludes.h"
@@ -27,6 +28,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EventManager.h"
 #include "InputState.h"
 #include "MapRenderer.h"
+#include "MenuDevConsole.h"
+#include "MenuManager.h"
 #include "PowerManager.h"
 #include "RenderDevice.h"
 #include "SharedGameResources.h"
@@ -646,6 +649,30 @@ void MapRenderer::renderIso(std::vector<Renderable> &r, std::vector<Renderable> 
 	}
 
 	checkTooltip();
+
+	// Developer mode only: draw red cursor around tile under mouse pointer
+	if (DEV_MODE && menu->devconsole->visible) {
+		Color dev_cursor_color = Color(255,0,0,255);
+		FPoint target = screen_to_map(inpt->mouse.x,  inpt->mouse.y, shakycam.x, shakycam.y);
+		if (!collider.is_outside_map(floor(target.x), floor(target.y))) {
+			Point p_left = map_to_screen(floor(target.x), floor(target.y+1), mapr->cam.x, mapr->cam.y);
+			Point p_top(p_left.x + TILE_W_HALF, p_left.y - TILE_H_HALF);
+			Point p_right(p_left.x + TILE_W, p_left.y);
+			Point p_bottom(p_left.x + TILE_W_HALF, p_left.y + TILE_H_HALF);
+
+			render_device->drawLine(p_left.x, p_left.y, p_top.x, p_top.y, dev_cursor_color);
+			render_device->drawLine(p_top.x, p_top.y, p_right.x, p_right.y, dev_cursor_color);
+			render_device->drawLine(p_right.x, p_right.y, p_bottom.x, p_bottom.y, dev_cursor_color);
+			render_device->drawLine(p_bottom.x, p_bottom.y, p_left.x, p_left.y, dev_cursor_color);
+
+			// draw distance line
+			if (menu->devconsole->distance_ticks >= MAX_FRAMES_PER_SEC) {
+				Point p0 = map_to_screen(menu->devconsole->target.x, menu->devconsole->target.y, mapr->cam.x, mapr->cam.y);
+				Point p1 = map_to_screen(pc->stats.pos.x, pc->stats.pos.y, mapr->cam.x, mapr->cam.y);
+				render_device->drawLine(p0.x, p0.y, p1.x, p1.y, dev_cursor_color);
+			}
+		}
+	}
 }
 
 void MapRenderer::renderOrthoLayer(const Map_Layer& layerdata) {
@@ -752,6 +779,25 @@ void MapRenderer::renderOrtho(std::vector<Renderable> &r, std::vector<Renderable
 	}
 
 	checkTooltip();
+
+	// Developer mode only: draw red cursor around tile under mouse pointer
+	if (DEV_MODE && menu->devconsole->visible) {
+		Color dev_cursor_color = Color(255,0,0,255);
+		FPoint target = screen_to_map(inpt->mouse.x,  inpt->mouse.y, shakycam.x, shakycam.y);
+		if (!collider.is_outside_map(floor(target.x), floor(target.y))) {
+			Point p_topleft = map_to_screen(floor(target.x), floor(target.y), mapr->cam.x, mapr->cam.y);
+			Point p_bottomright(p_topleft.x + TILE_W, p_topleft.y + TILE_H);
+
+			render_device->drawRectangle(p_topleft, p_bottomright, dev_cursor_color);
+
+			// draw distance line
+			if (menu->devconsole->distance_ticks >= MAX_FRAMES_PER_SEC) {
+				Point p0 = map_to_screen(menu->devconsole->target.x, menu->devconsole->target.y, mapr->cam.x, mapr->cam.y);
+				Point p1 = map_to_screen(pc->stats.pos.x, pc->stats.pos.y, mapr->cam.x, mapr->cam.y);
+				render_device->drawLine(p0.x, p0.y, p1.x, p1.y, dev_cursor_color);
+			}
+		}
+	}
 }
 
 void MapRenderer::executeOnLoadEvents() {
@@ -1016,7 +1062,7 @@ void MapRenderer::checkNearestEvent() {
 }
 
 void MapRenderer::checkTooltip() {
-	if (show_tooltip && SHOW_HUD)
+	if (show_tooltip && SHOW_HUD && !(DEV_MODE && menu->devconsole->visible))
 		tip->render(tip_buf, tip_pos, STYLE_TOPLABEL);
 }
 

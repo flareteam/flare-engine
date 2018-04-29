@@ -73,6 +73,7 @@ public:
 	void clear();
 	void setMaxMessages(unsigned count = 50);
 	void addSeparator();
+	bool isEmpty();
 };
 
 #endif

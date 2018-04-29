@@ -34,6 +34,9 @@ class MenuDevConsole : public Menu {
 protected:
 	void loadGraphics();
 	void execute();
+	void getPlayerInfo();
+	void getTileInfo();
+	void getEnemyInfo();
 
 	WidgetButton *button_close;
 	WidgetButton *button_confirm;
@@ -64,6 +67,9 @@ public:
 
 	bool inputFocus();
 	void reset();
+
+	FPoint target;
+	unsigned distance_ticks;
 };
 
 #endif

@@ -171,3 +171,7 @@ void WidgetLog::addSeparator() {
 	separators.back() = true;
 	updated = true;
 }
+
+bool WidgetLog::isEmpty() {
+	return messages.empty();
+}

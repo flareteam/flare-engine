@@ -19,12 +19,15 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuDevConsole
  */
 
+#include "Avatar.h"
 #include "CampaignManager.h"
+#include "Enemy.h"
 #include "EnemyManager.h"
 #include "EventManager.h"
 #include "FileParser.h"
 #include "FontEngine.h"
 #include "InputState.h"
+#include "MapRenderer.h"
 #include "MenuActionBar.h"
 #include "MenuDevConsole.h"
 #include "MenuManager.h"
@@ -46,6 +49,7 @@ MenuDevConsole::MenuDevConsole()
 	: Menu()
 	, first_open(false)
 	, input_scrollback_pos(0)
+	, distance_ticks(0)
 {
 
 	button_close = new WidgetButton("images/menus/buttons/button_x.png");
@@ -125,14 +129,19 @@ void MenuDevConsole::align() {
 }
 
 void MenuDevConsole::logic() {
+	if (!visible && first_open && log_history->isEmpty()) {
+		first_open = false;
+	}
+
 	if (visible) {
 		if (!first_open) {
 			first_open = true;
-			log_history->add("exec \"msg=Hello World\"");
+			log_history->add(msg->get("Use '%s' to inspect with the cursor.", inpt->getBindingString(MAIN2).c_str()));
+			log_history->add("exec \"msg=Hello World\"", true, &color_hint);
 			log_history->add(msg->get("Arguments with spaces should be enclosed with double quotes. Example:"));
 			log_history->add(msg->get("Type 'help' to get a list of commands.") + ' ');
 			if (title.hidden)
-				log_history->add(msg->get("Developer Console"));
+				log_history->add(msg->get("Developer Console"), true, NULL, WIDGETLOG_FONT_BOLD);
 		}
 
 		if (!input_box->edit_mode) {
@@ -174,21 +183,117 @@ void MenuDevConsole::logic() {
 				}
 			}
 		}
+
+		if (inpt->pressing[MAIN2] && !inpt->lock[MAIN2]) {
+			inpt->lock[MAIN2] = true;
+			target = screen_to_map(inpt->mouse.x,  inpt->mouse.y, pc->stats.pos.x, pc->stats.pos.y);
+
+			log_history->addSeparator();
+
+			// print cursor position in map units & pixels
+			std::stringstream ss;
+			if (!mapr->collider.is_outside_map(floor(target.x), floor(target.y))) {
+				getTileInfo();
+				getEnemyInfo();
+				getPlayerInfo();
+
+				ss << "X=" << target.x << ", Y=" << target.y;
+				ss << "  |  X=" << inpt->mouse.x << msg->get("px") << ", Y=" << inpt->mouse.y << msg->get("px");
+				log_history->add(ss.str());
+			}
+			else {
+				ss << "X=" << inpt->mouse.x << msg->get("px") << ", Y=" << inpt->mouse.y << msg->get("px");
+				log_history->add(ss.str());
+			}
+		}
+
+		if (inpt->pressing[MAIN2]) {
+			distance_ticks++;
+
+			// print target distance from the player
+			if (distance_ticks == MAX_FRAMES_PER_SEC) {
+				std::stringstream ss;
+				ss << msg->get("Distance") << ": " << calcDist(target, pc->stats.pos);
+				log_history->add(ss.str());
+			}
+		}
+		else {
+			distance_ticks = 0;
+		}
+	}
+}
+
+void MenuDevConsole::getPlayerInfo() {
+	if (!(static_cast<int>(target.x) == static_cast<int>(pc->stats.pos.x) && static_cast<int>(target.y) == static_cast<int>(pc->stats.pos.y)))
+		return;
+
+	std::stringstream ss;
+	ss << msg->get("Entity") << ": " << pc->stats.name << "  |  X=" << pc->stats.pos.x << ", Y=" << pc->stats.pos.y;
+	log_history->add(ss.str(), true, &color_hint);
+
+	// TODO print more player data
+}
+
+void MenuDevConsole::getTileInfo() {
+	Point tile = FPointToPoint(target);
+
+	std::stringstream ss;
+	for (size_t i = 0; i < mapr->layers.size(); ++i) {
+		if (mapr->layers[i][tile.x][tile.y] == 0)
+			continue;
+		ss.str("");
+		ss << "    " << mapr->layernames[i] << "=" << mapr->layers[i][tile.x][tile.y];
+		log_history->add(ss.str());
+	}
+
+	ss.str("");
+	ss << "    " << "collision=" << mapr->collider.colmap[tile.x][tile.y] << " (";
+	switch(mapr->collider.colmap[tile.x][tile.y]) {
+		case BLOCKS_NONE: ss << msg->get("none"); break;
+		case BLOCKS_ALL: ss << msg->get("wall"); break;
+		case BLOCKS_MOVEMENT: ss << msg->get("short wall / pit"); break;
+		case BLOCKS_ALL_HIDDEN: ss << msg->get("wall"); break;
+		case BLOCKS_MOVEMENT_HIDDEN: ss << msg->get("pit"); break;
+		case BLOCKS_ENTITIES: ss << msg->get("entity"); break;
+		case BLOCKS_ENEMIES: ss << msg->get("entity, ally"); break;
+		default: ss << msg->get("none");
+	}
+	ss << ")";
+	log_history->add(ss.str());
+
+	ss.str("");
+	ss << msg->get("Tile") << ": X=" << tile.x <<  ", Y=" << tile.y;
+	log_history->add(ss.str());
+}
+
+void MenuDevConsole::getEnemyInfo() {
+	std::stringstream ss;
+	for (size_t i = 0; i < enemym->enemies.size(); ++i) {
+		const Enemy* e = enemym->enemies[i];
+		if (!(static_cast<int>(target.x) == static_cast<int>(e->stats.pos.x) && static_cast<int>(target.y) == static_cast<int>(e->stats.pos.y)))
+			continue;
+
+		ss.str("");
+		ss << msg->get("Entity") << ": " << e->stats.name << "  |  X=" << e->stats.pos.x << ", Y=" << e->stats.pos.y;
+		log_history->add(ss.str(), true, &color_hint);
+
+		// TODO print more enemy data
 	}
 }
 
 void MenuDevConsole::render() {
-	if (visible) {
-		// background
-		Menu::render();
+	if (!visible)
+		return;
 
-		if (!title.hidden)
-			label.render();
-		button_close->render();
-		button_confirm->render();
-		input_box->render();
-		log_history->render();
-	}
+	// background
+	Menu::render();
+
+	if (!title.hidden)
+		label.render();
+	button_close->render();
+	button_confirm->render();
+	input_box->render();
+	log_history->render();
 }
 
 bool MenuDevConsole::inputFocus() {
@@ -209,6 +314,7 @@ void MenuDevConsole::execute() {
 	input_scrollback_pos = static_cast<unsigned long>(input_scrollback.size());
 	input_box->setText("");
 
+	log_history->addSeparator();
 	log_history->add(command, false, &color_echo);
 
 	std::vector<std::string> args;
