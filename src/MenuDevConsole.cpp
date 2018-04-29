@@ -192,7 +192,7 @@ void MenuDevConsole::logic() {
 
 			// print cursor position in map units & pixels
 			std::stringstream ss;
-			if (!mapr->collider.is_outside_map(floor(target.x), floor(target.y))) {
+			if (!mapr->collider.is_outside_map(static_cast<float>(floor(target.x)), static_cast<float>(floor(target.y)))) {
 				getTileInfo();
 				getEnemyInfo();
 				getPlayerInfo();

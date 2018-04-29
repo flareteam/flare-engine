@@ -1113,15 +1113,15 @@ void MapRenderer::drawDevCursor() {
 	Color dev_cursor_color = Color(255,255,0,255);
 	FPoint target = screen_to_map(inpt->mouse.x,  inpt->mouse.y, shakycam.x, shakycam.y);
 
-	if (!collider.is_outside_map(floor(target.x), floor(target.y))) {
+	if (!collider.is_outside_map(static_cast<float>(floor(target.x)), static_cast<float>(floor(target.y)))) {
 		if (TILESET_ORIENTATION == TILESET_ORTHOGONAL) {
-			Point p_topleft = map_to_screen(floor(target.x), floor(target.y), shakycam.x, shakycam.y);
+			Point p_topleft = map_to_screen(static_cast<float>(floor(target.x)), static_cast<float>(floor(target.y)), shakycam.x, shakycam.y);
 			Point p_bottomright(p_topleft.x + TILE_W, p_topleft.y + TILE_H);
 
 			render_device->drawRectangle(p_topleft, p_bottomright, dev_cursor_color);
 		}
 		else {
-			Point p_left = map_to_screen(floor(target.x), floor(target.y+1), shakycam.x, shakycam.y);
+			Point p_left = map_to_screen(static_cast<float>(floor(target.x)), static_cast<float>(floor(target.y+1)), shakycam.x, shakycam.y);
 			Point p_top(p_left.x + TILE_W_HALF, p_left.y - TILE_H_HALF);
 			Point p_right(p_left.x + TILE_W, p_left.y);
 			Point p_bottom(p_left.x + TILE_W_HALF, p_left.y + TILE_H_HALF);
