@@ -32,6 +32,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "StatBlock.h"
 #include "UtilsMath.h"
 
+const int CHANCE_RANDOM_BEHAVIOR = 1;
+
 BehaviorStandard::BehaviorStandard(Enemy *_e)
 	: EnemyBehavior(_e)
 	, path()
@@ -68,6 +70,7 @@ void BehaviorStandard::logic() {
 	}
 
 	doUpkeep();
+	doRandomBehavior();
 	findTarget();
 	checkPower();
 	checkMove();
@@ -752,5 +755,48 @@ FPoint BehaviorStandard::getWanderPoint() {
 	else {
 		// didn't get a valid waypoint, so keep our current position
 		return e->stats.pos;
+	}
+}
+
+void BehaviorStandard::doRandomBehavior() {
+	// randomly change behavior
+	if(percentChance(CHANCE_RANDOM_BEHAVIOR)) {
+		int behaviorChoice = randBetween(1,4);
+
+		//logInfo("BehaviorStandard: Chose Random Behavior with choice '%d'.", behaviorChoice);
+
+		switch(behaviorChoice) {
+			// toggle join combat
+			case 1:
+				e->stats.join_combat = !e->stats.join_combat;
+				break;
+			// toggle combat_style
+			case 2:
+				switch (e->stats.combat_style) {
+					case COMBAT_AGGRESSIVE:
+						e->stats.combat_style = COMBAT_PASSIVE;
+						break;
+					case COMBAT_PASSIVE:
+						e->stats.combat_style = COMBAT_DEFAULT;
+						break;
+					case COMBAT_DEFAULT:
+						e->stats.combat_style = COMBAT_AGGRESSIVE;
+						break;
+				}
+				break;
+			// toggle wander
+			case 3:
+				e->stats.wander = !e->stats.wander;
+				break;
+			// modulate fleeing
+			case 4:
+				e->stats.chance_flee = randBetween(0,100);
+				e->stats.flee_range = randBetween(0,100);
+				break;
+			// chill out
+			case 5:
+				e->stats.cur_state = ENEMY_STANCE;
+				break;
+		}
 	}
 }

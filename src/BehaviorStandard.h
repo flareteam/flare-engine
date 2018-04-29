@@ -37,6 +37,7 @@ private:
 	virtual void checkMoveStateMove();
 	void updateState();
 	FPoint getWanderPoint();
+	void doRandomBehavior();
 
 protected:
 	//variables for patfinding
