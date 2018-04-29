@@ -24,9 +24,12 @@ Engine fixes:
 
 Translation updates:
 
+* Spanish (es) update (Eric R)
 * Scottish Gaelic (gd) update (GunChleoc)
+* Italian (it) update (MOB2)
 * Polish (pl) update (Pawonashi)
 * Portuguese (pt) update (Rui)
+* Russian (ru) update (Ademaro)
 * Ukrainian (uk) update (Sergiy Borodych)
 
 

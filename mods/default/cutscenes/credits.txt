@@ -48,6 +48,7 @@ separator=32
 
 text=Translators
 separator=16
+text=Ademaro
 text=Adrian Chaves Fernandez
 text=Andrea Ranaldi
 text=Andreas Berheim Brudin
@@ -58,6 +59,7 @@ text=Chris Oelmueller
 text=Christoph J. Thompson
 text=Denis Lysenko
 text=Diego J. Romero López
+text=Eric R
 text=Evgen Pavlov
 text=Gianfranco Del Borrello
 text=Giovanni Dalla Torre
