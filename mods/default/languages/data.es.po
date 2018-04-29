@@ -4,13 +4,14 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # Translators:
 # Diego J. Romero López <diegojromerolopez@gmail.com>, 2018
+# Eric R, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-18 18:48+\n"
+"POT-Creation-Date: 2018-04-19 20:31+\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Diego J. Romero López <diegojromerolopez@gmail.com>, 2018\n"
+"Last-Translator: Eric R, 2018\n"
 "Language-Team: Spanish (https://www.transifex.com/flareorg/teams/84925/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -224,7 +225,7 @@ msgstr "Denis Lysenko"
 
 #: ../cutscenes/credits.txt:60
 msgid "Diego J. Romero López"
-msgstr ""
+msgstr "Diego J. Romero López"
 
 #: ../cutscenes/credits.txt:61
 msgid "Evgen Pavlov"
@@ -276,7 +277,7 @@ msgstr ""
 
 #: ../cutscenes/credits.txt:74
 msgid "MOB2"
-msgstr ""
+msgstr "MOB2"
 
 #: ../cutscenes/credits.txt:75
 msgid "Morgan Strauss"
@@ -304,7 +305,7 @@ msgstr "Quentin Stievenart"
 
 #: ../cutscenes/credits.txt:81
 msgid "Rui"
-msgstr ""
+msgstr "Rui"
 
 #: ../cutscenes/credits.txt:82
 msgid "Sergey Basalaev"

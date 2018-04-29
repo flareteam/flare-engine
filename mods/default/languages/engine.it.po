@@ -663,12 +663,12 @@ msgstr "%d oggetti:"
 #: ../../../src/ItemManager.cpp:834
 #, c-format
 msgid "Press [%s] to use"
-msgstr ""
+msgstr "Premi [%s] per usare"
 
 #: ../../../src/ItemManager.cpp:837
 #, c-format
 msgid "Press [%s] to read"
-msgstr ""
+msgstr "Premi [%s] per leggere"
 
 #: ../../../src/MenuActionBar.cpp:200 ../../../src/MenuActionBar.cpp:206
 #: ../../../src/MenuActionBar.cpp:211
@@ -944,7 +944,7 @@ msgstr "Non ne hai a sufficienza."
 
 #: ../../../src/MenuInventory.cpp:556
 msgid "You can't use this item right now."
-msgstr ""
+msgstr "Adesso non puoi usare questo oggetto."
 
 #: ../../../src/MenuInventory.cpp:568
 msgid "This item can only be used from the action bar."
@@ -1194,7 +1194,7 @@ msgstr "Fine"
 
 #: ../../../src/SDLInputState.cpp:561
 msgid "Escape"
-msgstr "Fuga"
+msgstr "Esc"
 
 #: ../../../src/SDLInputState.cpp:562
 msgid "Home"
@@ -1246,7 +1246,7 @@ msgstr "Ctrl destro"
 
 #: ../../../src/SDLInputState.cpp:575
 msgid "Return"
-msgstr "Riprendi"
+msgstr "Invio"
 
 #: ../../../src/SDLInputState.cpp:577
 msgid "Right Shift"

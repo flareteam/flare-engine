@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-18 18:48+\n"
+"POT-Creation-Date: 2018-04-19 20:31+\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Rui <xymarior@yandex.com>, 2018\n"
 "Language-Team: Portuguese (https://www.transifex.com/flareorg/teams/84925/pt/)\n"
@@ -36,27 +36,27 @@ msgstr "Defensivo"
 
 #: ../engine/damage_types.txt:3
 msgid "Melee Damage"
-msgstr ""
+msgstr "Dano corpo-a-corpo"
 
 #: ../engine/damage_types.txt:4
 msgid "Melee Damage Min"
-msgstr ""
+msgstr "Dano mín. corpo-a-corpo"
 
 #: ../engine/damage_types.txt:5
 msgid "Melee Damage Max"
-msgstr ""
+msgstr "Dano máx. corpo-a-corpo"
 
 #: ../engine/damage_types.txt:11
 msgid "Ranged Damage"
-msgstr ""
+msgstr "Dano à distância"
 
 #: ../engine/damage_types.txt:12
 msgid "Ranged Damage Min"
-msgstr ""
+msgstr "Dano mín. à distância"
 
 #: ../engine/damage_types.txt:13
 msgid "Ranged Damage Max"
-msgstr ""
+msgstr "Dano máx. à distância"
 
 #: ../engine/damage_types.txt:19
 msgid "Mental Damage"
@@ -120,7 +120,7 @@ msgstr "Artur Rojek"
 
 #: ../cutscenes/credits.txt:25
 msgid "blazindragon"
-msgstr ""
+msgstr "blazindragon"
 
 #: ../cutscenes/credits.txt:26
 msgid "Bonbadil"
@@ -160,7 +160,7 @@ msgstr "Kyle Belanger"
 
 #: ../cutscenes/credits.txt:35
 msgid "LongerDev"
-msgstr ""
+msgstr "LongerDev"
 
 #: ../cutscenes/credits.txt:36
 msgid "Manuel A. Fernandez Montecelo"
@@ -180,7 +180,7 @@ msgstr "Pavel Kirpichyov"
 
 #: ../cutscenes/credits.txt:40
 msgid "runtime-x86"
-msgstr ""
+msgstr "runtime-x86"
 
 #: ../cutscenes/credits.txt:41
 msgid "Ryan Dansie"
@@ -224,7 +224,7 @@ msgstr "Denis Lysenko"
 
 #: ../cutscenes/credits.txt:60
 msgid "Diego J. Romero López"
-msgstr ""
+msgstr "Diego J. Romero López"
 
 #: ../cutscenes/credits.txt:61
 msgid "Evgen Pavlov"
@@ -272,11 +272,11 @@ msgstr "Miro Jánošík"
 
 #: ../cutscenes/credits.txt:73
 msgid "Микола Франчук"
-msgstr ""
+msgstr "Микола Франчук"
 
 #: ../cutscenes/credits.txt:74
 msgid "MOB2"
-msgstr ""
+msgstr "MOB2"
 
 #: ../cutscenes/credits.txt:75
 msgid "Morgan Strauss"
@@ -304,7 +304,7 @@ msgstr "Quentin Stievenart"
 
 #: ../cutscenes/credits.txt:81
 msgid "Rui"
-msgstr ""
+msgstr "Rui (xendez)"
 
 #: ../cutscenes/credits.txt:82
 msgid "Sergey Basalaev"
@@ -312,7 +312,7 @@ msgstr "Sergey Basalaev"
 
 #: ../cutscenes/credits.txt:83
 msgid "Sergiy Borodych"
-msgstr ""
+msgstr "Sergiy Borodych"
 
 #: ../cutscenes/credits.txt:85
 msgid "Stefano Peris"
@@ -364,7 +364,7 @@ msgstr "Agradecimento Especial"
 
 #: ../cutscenes/credits.txt:106
 msgid "For giving constant feedback and testing:"
-msgstr ""
+msgstr "Por fornecer opiniões constantes e testes:"
 
 #: ../cutscenes/credits.txt:107
 msgid "Bart Kelsey"
@@ -376,7 +376,7 @@ msgstr "A comunidade do OpenGameArt"
 
 #: ../cutscenes/credits.txt:112
 msgid "For Tiled and the Flare map exporter:"
-msgstr ""
+msgstr "Pelo Tiled e o exportador de mapas do Flare:"
 
 #: ../cutscenes/credits.txt:113
 msgid "Thorbjørn Lindeijer"
