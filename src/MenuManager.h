@@ -47,7 +47,6 @@ class MenuTalker;
 class MenuExit;
 class MenuActiveEffects;
 class MenuStash;
-class MenuDevHUD;
 class MenuDevConsole;
 class StatBlock;
 class Subtitles;
@@ -129,7 +128,6 @@ public:
 	MenuActiveEffects *effects;
 	MenuStash *stash;
 
-	MenuDevHUD *devhud;
 	MenuDevConsole *devconsole;
 
 	Subtitles *subtitles;
