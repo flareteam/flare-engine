@@ -38,23 +38,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsMath.h"
 
 HazardManager::HazardManager()
-	: dev_marker(new Renderable)
-	, last_enemy(NULL)
+	: last_enemy(NULL)
 {
-	Color mark_color(255, 0, 0, 255);
-
-	int marker_size = TILE_H_HALF+1;
-	dev_marker->image = render_device->createImage(marker_size, marker_size);
-	for (int i = 0; i < marker_size; ++i) {
-		dev_marker->image->drawPixel(i, (marker_size-1)/2, mark_color);
-		dev_marker->image->drawPixel((marker_size-1)/2, i, mark_color);
-	}
-	dev_marker->src.x = 0;
-	dev_marker->src.y = 0;
-	dev_marker->src.w = marker_size;
-	dev_marker->src.h = marker_size;
-	dev_marker->offset.x = (marker_size-1)/2;
-	dev_marker->offset.y = (marker_size-1)/2;
 }
 
 void HazardManager::logic() {
@@ -217,12 +202,6 @@ void HazardManager::handleNewMap() {
 void HazardManager::addRenders(std::vector<Renderable> &r, std::vector<Renderable> &r_dead) {
 	for (unsigned int i=0; i<h.size(); i++) {
 		h[i]->addRenderable(r, r_dead);
-
-		if (DEV_MODE && DEV_HUD && h[i]->delay_frames == 0) {
-			dev_marker->map_pos = h[i]->pos;
-			dev_marker->prio = 3;
-			r.push_back(*dev_marker);
-		}
 	}
 }
 
@@ -231,7 +210,4 @@ HazardManager::~HazardManager() {
 		delete h[i];
 	// h.clear(); not needed in destructor
 	last_enemy = NULL;
-
-	dev_marker->image->unref();
-	delete dev_marker;
 }

@@ -213,6 +213,7 @@ public:
 	virtual void drawPixel(int x, int y, const Color& color) = 0;
 	virtual void drawLine(int x0, int y0, int x1, int y1, const Color& color) = 0;
 	virtual void drawRectangle(const Point& p0, const Point& p1, const Color& color) = 0;
+	void drawEllipse(int x0, int y0, int x1, int y1, const Color& color, float step = 1);
 	virtual void windowResize() = 0;
 	virtual void setBackgroundColor(Color color);
 

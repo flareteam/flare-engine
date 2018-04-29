@@ -335,3 +335,26 @@ void RenderDevice::setBackgroundColor(Color color) {
 	logInfo("RenderDevice: Trying to set background color to (%d,%d,%d,%d).", color.r, color.g, color.b, color.a);
 	logError("RenderDevice: Renderer does not support setting background color!");
 }
+
+void RenderDevice::drawEllipse(int x0, int y0, int x1, int y1, const Color& color, float step) {
+	float rx = static_cast<float>(x1 - x0) / 2.f;
+	float ry = static_cast<float>(y1 - y0) / 2.f;
+	float cx = static_cast<float>(x1 + x0) / 2.f;
+	float cy = static_cast<float>(y1 + y0) / 2.f;
+
+	float rad = (step/180) * static_cast<float>(M_PI);
+
+	float lastx = 0;
+	float lasty = 0;
+
+	for (float i = 0; i < M_PI*2; i+=rad) {
+		float curx = cx + cos(i) * rx;
+		float cury = cy + sin(i) * ry;
+
+		if (i > 0)
+			drawLine(static_cast<int>(lastx), static_cast<int>(lasty), static_cast<int>(curx), static_cast<int>(cury), color);
+
+		lastx = curx;
+		lasty = cury;
+	}
+}

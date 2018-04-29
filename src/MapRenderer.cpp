@@ -24,8 +24,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CombatText.h"
 #include "CommonIncludes.h"
 #include "CursorManager.h"
+#include "Enemy.h"
 #include "EnemyGroupManager.h"
+#include "EnemyManager.h"
 #include "EventManager.h"
+#include "Hazard.h"
+#include "HazardManager.h"
 #include "InputState.h"
 #include "MapRenderer.h"
 #include "MenuDevConsole.h"
@@ -650,29 +654,8 @@ void MapRenderer::renderIso(std::vector<Renderable> &r, std::vector<Renderable> 
 
 	checkTooltip();
 
-	// Developer mode only: draw red cursor around tile under mouse pointer
-	if (DEV_MODE && menu->devconsole->visible) {
-		Color dev_cursor_color = Color(255,0,0,255);
-		FPoint target = screen_to_map(inpt->mouse.x,  inpt->mouse.y, shakycam.x, shakycam.y);
-		if (!collider.is_outside_map(floor(target.x), floor(target.y))) {
-			Point p_left = map_to_screen(floor(target.x), floor(target.y+1), mapr->cam.x, mapr->cam.y);
-			Point p_top(p_left.x + TILE_W_HALF, p_left.y - TILE_H_HALF);
-			Point p_right(p_left.x + TILE_W, p_left.y);
-			Point p_bottom(p_left.x + TILE_W_HALF, p_left.y + TILE_H_HALF);
-
-			render_device->drawLine(p_left.x, p_left.y, p_top.x, p_top.y, dev_cursor_color);
-			render_device->drawLine(p_top.x, p_top.y, p_right.x, p_right.y, dev_cursor_color);
-			render_device->drawLine(p_right.x, p_right.y, p_bottom.x, p_bottom.y, dev_cursor_color);
-			render_device->drawLine(p_bottom.x, p_bottom.y, p_left.x, p_left.y, dev_cursor_color);
-
-			// draw distance line
-			if (menu->devconsole->distance_ticks >= MAX_FRAMES_PER_SEC) {
-				Point p0 = map_to_screen(menu->devconsole->target.x, menu->devconsole->target.y, mapr->cam.x, mapr->cam.y);
-				Point p1 = map_to_screen(pc->stats.pos.x, pc->stats.pos.y, mapr->cam.x, mapr->cam.y);
-				render_device->drawLine(p0.x, p0.y, p1.x, p1.y, dev_cursor_color);
-			}
-		}
-	}
+	drawDevHUD();
+	drawDevCursor();
 }
 
 void MapRenderer::renderOrthoLayer(const Map_Layer& layerdata) {
@@ -780,24 +763,8 @@ void MapRenderer::renderOrtho(std::vector<Renderable> &r, std::vector<Renderable
 
 	checkTooltip();
 
-	// Developer mode only: draw red cursor around tile under mouse pointer
-	if (DEV_MODE && menu->devconsole->visible) {
-		Color dev_cursor_color = Color(255,0,0,255);
-		FPoint target = screen_to_map(inpt->mouse.x,  inpt->mouse.y, shakycam.x, shakycam.y);
-		if (!collider.is_outside_map(floor(target.x), floor(target.y))) {
-			Point p_topleft = map_to_screen(floor(target.x), floor(target.y), mapr->cam.x, mapr->cam.y);
-			Point p_bottomright(p_topleft.x + TILE_W, p_topleft.y + TILE_H);
-
-			render_device->drawRectangle(p_topleft, p_bottomright, dev_cursor_color);
-
-			// draw distance line
-			if (menu->devconsole->distance_ticks >= MAX_FRAMES_PER_SEC) {
-				Point p0 = map_to_screen(menu->devconsole->target.x, menu->devconsole->target.y, mapr->cam.x, mapr->cam.y);
-				Point p1 = map_to_screen(pc->stats.pos.x, pc->stats.pos.y, mapr->cam.x, mapr->cam.y);
-				render_device->drawLine(p0.x, p0.y, p1.x, p1.y, dev_cursor_color);
-			}
-		}
-	}
+	drawDevHUD();
+	drawDevCursor();
 }
 
 void MapRenderer::executeOnLoadEvents() {
@@ -1135,6 +1102,82 @@ void MapRenderer::getTileBounds(const int_fast16_t x, const int_fast16_t y, cons
 			bounds.w = tile.tile->getClip().w;
 			bounds.h = tile.tile->getClip().h;
 		}
+	}
+}
+
+void MapRenderer::drawDevCursor() {
+	// Developer mode only: draw colored cursor around tile under mouse pointer
+	if (!(DEV_MODE && menu->devconsole->visible))
+		return;
+
+	Color dev_cursor_color = Color(255,255,0,255);
+	FPoint target = screen_to_map(inpt->mouse.x,  inpt->mouse.y, shakycam.x, shakycam.y);
+
+	if (!collider.is_outside_map(floor(target.x), floor(target.y))) {
+		if (TILESET_ORIENTATION == TILESET_ORTHOGONAL) {
+			Point p_topleft = map_to_screen(floor(target.x), floor(target.y), shakycam.x, shakycam.y);
+			Point p_bottomright(p_topleft.x + TILE_W, p_topleft.y + TILE_H);
+
+			render_device->drawRectangle(p_topleft, p_bottomright, dev_cursor_color);
+		}
+		else {
+			Point p_left = map_to_screen(floor(target.x), floor(target.y+1), shakycam.x, shakycam.y);
+			Point p_top(p_left.x + TILE_W_HALF, p_left.y - TILE_H_HALF);
+			Point p_right(p_left.x + TILE_W, p_left.y);
+			Point p_bottom(p_left.x + TILE_W_HALF, p_left.y + TILE_H_HALF);
+
+			render_device->drawLine(p_left.x, p_left.y, p_top.x, p_top.y, dev_cursor_color);
+			render_device->drawLine(p_top.x, p_top.y, p_right.x, p_right.y, dev_cursor_color);
+			render_device->drawLine(p_right.x, p_right.y, p_bottom.x, p_bottom.y, dev_cursor_color);
+			render_device->drawLine(p_bottom.x, p_bottom.y, p_left.x, p_left.y, dev_cursor_color);
+		}
+
+		// draw distance line
+		if (menu->devconsole->distance_ticks >= MAX_FRAMES_PER_SEC) {
+			Point p0 = map_to_screen(menu->devconsole->target.x, menu->devconsole->target.y, shakycam.x, shakycam.y);
+			Point p1 = map_to_screen(pc->stats.pos.x, pc->stats.pos.y, shakycam.x, shakycam.y);
+			render_device->drawLine(p0.x, p0.y, p1.x, p1.y, dev_cursor_color);
+		}
+	}
+}
+
+void MapRenderer::drawDevHUD() {
+	if (!(DEV_MODE && DEV_HUD))
+		return;
+
+	Color color_hazard(255,0,0,255);
+	Color color_entity(0,255,0,255);
+	int cross_size = TILE_H_HALF / 4;
+
+	// ellipses are distorted for isometric tilesets
+	int distort = TILESET_ORIENTATION == TILESET_ORTHOGONAL ? 0 : 2;
+
+	// player
+	{
+		Point p0 = map_to_screen(pc->stats.pos.x, pc->stats.pos.y, shakycam.x, shakycam.y);
+		render_device->drawLine(p0.x - cross_size, p0.y, p0.x + cross_size, p0.y, color_entity);
+		render_device->drawLine(p0.x, p0.y - cross_size, p0.x, p0.y + cross_size, color_entity);
+	}
+
+	// enemies
+	for (size_t i = 0; i < enemym->enemies.size(); ++i) {
+		Point p0 = map_to_screen(enemym->enemies[i]->stats.pos.x, enemym->enemies[i]->stats.pos.y, shakycam.x, shakycam.y);
+		render_device->drawLine(p0.x - cross_size, p0.y, p0.x + cross_size, p0.y, color_entity);
+		render_device->drawLine(p0.x, p0.y - cross_size, p0.x, p0.y + cross_size, color_entity);
+	}
+
+	// hazards
+	for (size_t i = 0; i < hazards->h.size(); ++i) {
+		if (hazards->h[i]->delay_frames != 0)
+			continue;
+
+		Point p0 = map_to_screen(hazards->h[i]->pos.x, hazards->h[i]->pos.y, shakycam.x, shakycam.y);
+		Point p1 = map_to_screen(hazards->h[i]->pos.x + hazards->h[i]->radius, hazards->h[i]->pos.y, shakycam.x, shakycam.y);
+		int radius = p1.x - p0.x;
+		render_device->drawLine(p0.x - cross_size, p0.y, p0.x + cross_size, p0.y, color_hazard);
+		render_device->drawLine(p0.x, p0.y - cross_size, p0.x, p0.y + cross_size, color_hazard);
+
+		render_device->drawEllipse(p0.x - radius/2, p0.y - radius/(2*distort), p0.x + radius/2, p0.y + radius/(2*distort), color_hazard, 15);
 	}
 }
 

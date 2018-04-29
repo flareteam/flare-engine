@@ -33,7 +33,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class Avatar;
 class Enemy;
-class HazardManager;
 class MenuManager;
 class NPCManager;
 class QuestLog;
@@ -66,7 +65,6 @@ class GameStatePlay : public GameState {
 private:
 	Enemy *enemy;
 
-	HazardManager *hazards;
 	NPCManager *npcs;
 	QuestLog *quests;
 

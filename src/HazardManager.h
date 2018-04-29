@@ -29,12 +29,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Utils.h"
 
 class Avatar;
+class Enemy;
 class Hazard;
 
 class HazardManager {
 private:
 	void hitEntity(size_t index, const bool hit);
-	Renderable* dev_marker;
 
 public:
 	HazardManager();
