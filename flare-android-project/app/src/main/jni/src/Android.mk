@@ -64,7 +64,7 @@ LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c \
 	../../../../../../src/MenuBook.cpp \
 	../../../../../../src/MenuCharacter.cpp \
 	../../../../../../src/MenuConfirm.cpp \
-	../../../../../../src/MenuDevHUD.cpp \
+	../../../../../../src/MenuDevConsole.cpp \
 	../../../../../../src/MenuEnemy.cpp \
 	../../../../../../src/MenuExit.cpp \
 	../../../../../../src/MenuHUDLog.cpp \
