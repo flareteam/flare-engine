@@ -2,21 +2,23 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-29 18:39-0400\n"
+"POT-Creation-Date: 2018-04-30 13:30-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Ademaro <ademaro@ya.ru>, 2018\n"
 "Language-Team: Russian (https://www.transifex.com/flareorg/teams/84925/ru/)\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ru\n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
+"%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #: ../../../src/Avatar.cpp:363
 #, c-format
@@ -109,14 +111,14 @@ msgstr ""
 msgid "miss"
 msgstr "промах"
 
-#: ../../../src/Entity.cpp:525 ../../../src/PowerManager.cpp:1079
-#: ../../../src/StatBlock.cpp:799 ../../../src/StatBlock.cpp:805
+#: ../../../src/Entity.cpp:525 ../../../src/PowerManager.cpp:1082
+#: ../../../src/StatBlock.cpp:809 ../../../src/StatBlock.cpp:815
 #, c-format
 msgid "+%d HP"
 msgstr "+%d Жизни"
 
-#: ../../../src/Entity.cpp:532 ../../../src/StatBlock.cpp:810
-#: ../../../src/StatBlock.cpp:816
+#: ../../../src/Entity.cpp:532 ../../../src/StatBlock.cpp:820
+#: ../../../src/StatBlock.cpp:826
 #, c-format
 msgid "+%d MP"
 msgstr "+%d Маны"
@@ -476,24 +478,24 @@ msgstr "Меню9"
 msgid "Bar0"
 msgstr "Меню0"
 
-#: ../../../src/InputState.cpp:388 ../../../src/MenuActionBar.cpp:397
-#: ../../../src/MenuActionBar.cpp:399 ../../../src/MenuCharacter.cpp:242
+#: ../../../src/InputState.cpp:388 ../../../src/MenuActionBar.cpp:396
+#: ../../../src/MenuActionBar.cpp:398 ../../../src/MenuCharacter.cpp:242
 msgid "Character"
 msgstr "Персонаж"
 
-#: ../../../src/InputState.cpp:389 ../../../src/MenuActionBar.cpp:406
-#: ../../../src/MenuActionBar.cpp:408 ../../../src/MenuInventory.cpp:151
+#: ../../../src/InputState.cpp:389 ../../../src/MenuActionBar.cpp:405
+#: ../../../src/MenuActionBar.cpp:407 ../../../src/MenuInventory.cpp:151
 #: ../../../src/MenuVendor.cpp:55
 msgid "Inventory"
 msgstr "Инвентарь"
 
-#: ../../../src/InputState.cpp:390 ../../../src/MenuActionBar.cpp:415
-#: ../../../src/MenuActionBar.cpp:417 ../../../src/MenuPowers.cpp:132
+#: ../../../src/InputState.cpp:390 ../../../src/MenuActionBar.cpp:414
+#: ../../../src/MenuActionBar.cpp:416 ../../../src/MenuPowers.cpp:132
 msgid "Powers"
 msgstr "Силы"
 
-#: ../../../src/InputState.cpp:391 ../../../src/MenuActionBar.cpp:424
-#: ../../../src/MenuActionBar.cpp:426 ../../../src/MenuLog.cpp:104
+#: ../../../src/InputState.cpp:391 ../../../src/MenuActionBar.cpp:423
+#: ../../../src/MenuActionBar.cpp:425 ../../../src/MenuLog.cpp:104
 msgid "Log"
 msgstr "Журнал"
 
@@ -740,8 +742,7 @@ msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:141
 msgid "Arguments with spaces should be enclosed with double quotes. Example:"
-msgstr ""
-"Аргументы с пробелами должны быть заключены в двойные кавычки. Пример:"
+msgstr "Аргументы с пробелами должны быть заключены в двойные кавычки. Пример:"
 
 #: ../../../src/MenuDevConsole.cpp:142
 msgid "Type 'help' to get a list of commands."
@@ -767,12 +768,8 @@ msgstr ""
 msgid "wall"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:254
+#: ../../../src/MenuDevConsole.cpp:254 ../../../src/MenuDevConsole.cpp:256
 msgid "short wall / pit"
-msgstr ""
-
-#: ../../../src/MenuDevConsole.cpp:256
-msgid "pit"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:257
@@ -826,8 +823,7 @@ msgstr ""
 "предметы."
 
 #: ../../../src/MenuDevConsole.cpp:350
-msgid ""
-"parses a series of event components and executes them as a single event"
+msgid "parses a series of event components and executes them as a single event"
 msgstr "анализирует набор компонентов событий и выполняет их как одно событие"
 
 #: ../../../src/MenuDevConsole.cpp:351
@@ -1179,16 +1175,16 @@ msgstr "Выкуп"
 msgid "Vendor"
 msgstr "Торговец"
 
-#: ../../../src/PowerManager.cpp:1063
+#: ../../../src/PowerManager.cpp:1066
 #, c-format
 msgid "+%d Shield"
 msgstr "+%d Щит"
 
-#: ../../../src/PowerManager.cpp:1322
+#: ../../../src/PowerManager.cpp:1325
 msgid "You are already transformed, untransform first."
 msgstr "Вы уже трансформированы, сперва растрансформируйтесь."
 
-#: ../../../src/PowerManager.cpp:1334
+#: ../../../src/PowerManager.cpp:1337
 msgid "Could not untransform at this position."
 msgstr "Здесь нельзя растрансформироваться."
 

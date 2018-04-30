@@ -2,21 +2,23 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-29 18:39-0400\n"
+"POT-Creation-Date: 2018-04-30 13:30-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: GunChleoc, 2018\n"
-"Language-Team: Gaelic, Scottish (https://www.transifex.com/flareorg/teams/84925/gd/)\n"
+"Language-Team: Gaelic, Scottish (https://www.transifex.com/flareorg/"
+"teams/84925/gd/)\n"
+"Language: gd\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: gd\n"
-"Plural-Forms: nplurals=4; plural=(n==1 || n==11) ? 0 : (n==2 || n==12) ? 1 : (n > 2 && n < 20) ? 2 : 3;\n"
+"Plural-Forms: nplurals=4; plural=(n==1 || n==11) ? 0 : (n==2 || n==12) ? 1 : "
+"(n > 2 && n < 20) ? 2 : 3;\n"
 
 #: ../../../src/Avatar.cpp:363
 #, c-format
@@ -112,20 +114,21 @@ msgid ""
 msgstr ""
 "Inneal-reandaraidh bathair-chruaidh SDL\n"
 "\n"
-"An t-inneal-reandaraidh tùsail a bhios nas luaithe mar as trice na an t-inneal-reandaraidh bathair-bhog SDL."
+"An t-inneal-reandaraidh tùsail a bhios nas luaithe mar as trice na an t-"
+"inneal-reandaraidh bathair-bhog SDL."
 
 #: ../../../src/Entity.cpp:488
 msgid "miss"
 msgstr "mì-amais"
 
-#: ../../../src/Entity.cpp:525 ../../../src/PowerManager.cpp:1079
-#: ../../../src/StatBlock.cpp:799 ../../../src/StatBlock.cpp:805
+#: ../../../src/Entity.cpp:525 ../../../src/PowerManager.cpp:1082
+#: ../../../src/StatBlock.cpp:809 ../../../src/StatBlock.cpp:815
 #, c-format
 msgid "+%d HP"
 msgstr "+%d puingean-beatha"
 
-#: ../../../src/Entity.cpp:532 ../../../src/StatBlock.cpp:810
-#: ../../../src/StatBlock.cpp:816
+#: ../../../src/Entity.cpp:532 ../../../src/StatBlock.cpp:820
+#: ../../../src/StatBlock.cpp:826
 #, c-format
 msgid "+%d MP"
 msgstr "+%d puingean-gluasaid"
@@ -485,24 +488,24 @@ msgstr "Bàr 9"
 msgid "Bar0"
 msgstr "Bàr 0"
 
-#: ../../../src/InputState.cpp:388 ../../../src/MenuActionBar.cpp:397
-#: ../../../src/MenuActionBar.cpp:399 ../../../src/MenuCharacter.cpp:242
+#: ../../../src/InputState.cpp:388 ../../../src/MenuActionBar.cpp:396
+#: ../../../src/MenuActionBar.cpp:398 ../../../src/MenuCharacter.cpp:242
 msgid "Character"
 msgstr "Pearsa"
 
-#: ../../../src/InputState.cpp:389 ../../../src/MenuActionBar.cpp:406
-#: ../../../src/MenuActionBar.cpp:408 ../../../src/MenuInventory.cpp:151
+#: ../../../src/InputState.cpp:389 ../../../src/MenuActionBar.cpp:405
+#: ../../../src/MenuActionBar.cpp:407 ../../../src/MenuInventory.cpp:151
 #: ../../../src/MenuVendor.cpp:55
 msgid "Inventory"
 msgstr "Tasgadh"
 
-#: ../../../src/InputState.cpp:390 ../../../src/MenuActionBar.cpp:415
-#: ../../../src/MenuActionBar.cpp:417 ../../../src/MenuPowers.cpp:132
+#: ../../../src/InputState.cpp:390 ../../../src/MenuActionBar.cpp:414
+#: ../../../src/MenuActionBar.cpp:416 ../../../src/MenuPowers.cpp:132
 msgid "Powers"
 msgstr "Cumhachdan"
 
-#: ../../../src/InputState.cpp:391 ../../../src/MenuActionBar.cpp:424
-#: ../../../src/MenuActionBar.cpp:426 ../../../src/MenuLog.cpp:104
+#: ../../../src/InputState.cpp:391 ../../../src/MenuActionBar.cpp:423
+#: ../../../src/MenuActionBar.cpp:425 ../../../src/MenuLog.cpp:104
 msgid "Log"
 msgstr "Leabhar-latha"
 
@@ -777,13 +780,9 @@ msgstr "chan eil gin"
 msgid "wall"
 msgstr "balla"
 
-#: ../../../src/MenuDevConsole.cpp:254
+#: ../../../src/MenuDevConsole.cpp:254 ../../../src/MenuDevConsole.cpp:256
 msgid "short wall / pit"
 msgstr "balla goirid / sloc"
-
-#: ../../../src/MenuDevConsole.cpp:256
-msgid "pit"
-msgstr "sloc"
 
 #: ../../../src/MenuDevConsole.cpp:257
 msgid "entity"
@@ -814,8 +813,8 @@ msgid ""
 "Prints a list of powers that match a search term. No search term will list "
 "all items"
 msgstr ""
-"Seallaidh seo liosta nan cumhachdan a fhreagras ris an fhacal-luirg. Mur eil"
-" facal-luirg ann, thèid gach nì a shealltainn"
+"Seallaidh seo liosta nan cumhachdan a fhreagras ris an fhacal-luirg. Mur eil "
+"facal-luirg ann, thèid gach nì a shealltainn"
 
 #: ../../../src/MenuDevConsole.cpp:347
 msgid "Prints out all the map filenames located in the \"maps/\" directory."
@@ -839,8 +838,7 @@ msgstr ""
 "facal-luirg ann, thèid gach nì a shealltainn"
 
 #: ../../../src/MenuDevConsole.cpp:350
-msgid ""
-"parses a series of event components and executes them as a single event"
+msgid "parses a series of event components and executes them as a single event"
 msgstr ""
 "parsaidh seo sreath dhe cho-phàirtean thachartasan agus ruithidh e ann an "
 "aon tachartas iad"
@@ -1194,18 +1192,18 @@ msgstr "Na reic thu roimhe"
 msgid "Vendor"
 msgstr "Reiceadair"
 
-#: ../../../src/PowerManager.cpp:1063
+#: ../../../src/PowerManager.cpp:1066
 #, c-format
 msgid "+%d Shield"
 msgstr "Sgiath +%d"
 
-#: ../../../src/PowerManager.cpp:1322
+#: ../../../src/PowerManager.cpp:1325
 msgid "You are already transformed, untransform first."
 msgstr ""
 "Tha thu air cruth-atharrachadh mar-thà, feumaidh tu an cruth tùsail agad a "
 "ghabhail an toiseach."
 
-#: ../../../src/PowerManager.cpp:1334
+#: ../../../src/PowerManager.cpp:1337
 msgid "Could not untransform at this position."
 msgstr "Cha b’ urrainn dhut neo-chruth-atharrachadh air an ionad seo."
 
@@ -1493,3 +1491,6 @@ msgstr "no nas ùire"
 #: ../../../src/Version.cpp:143
 msgid "or older"
 msgstr "no nas sine"
+
+#~ msgid "pit"
+#~ msgstr "sloc"
