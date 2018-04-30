@@ -1171,13 +1171,14 @@ void MapRenderer::drawDevHUD() {
 		if (hazards->h[i]->delay_frames != 0)
 			continue;
 
+		float radius_c = sqrtf(powf(hazards->h[i]->radius, 2) + powf(hazards->h[i]->radius, 2));
 		Point p0 = map_to_screen(hazards->h[i]->pos.x, hazards->h[i]->pos.y, shakycam.x, shakycam.y);
-		Point p1 = map_to_screen(hazards->h[i]->pos.x + hazards->h[i]->radius, hazards->h[i]->pos.y, shakycam.x, shakycam.y);
+		Point p1 = map_to_screen(hazards->h[i]->pos.x + radius_c, hazards->h[i]->pos.y, shakycam.x, shakycam.y);
 		int radius = p1.x - p0.x;
 		render_device->drawLine(p0.x - cross_size, p0.y, p0.x + cross_size, p0.y, color_hazard);
 		render_device->drawLine(p0.x, p0.y - cross_size, p0.x, p0.y + cross_size, color_hazard);
 
-		render_device->drawEllipse(p0.x - radius/2, p0.y - radius/(2*distort), p0.x + radius/2, p0.y + radius/(2*distort), color_hazard, 15);
+		render_device->drawEllipse(p0.x - radius, p0.y - radius/distort, p0.x + radius, p0.y + radius/distort, color_hazard, 15);
 	}
 }
 
