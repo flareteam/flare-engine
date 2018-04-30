@@ -906,6 +906,10 @@ bool StatBlock::canUsePower(const Power &power, int powerid, bool allow_passive)
 		// can't use powers when dead
 		return false;
 	}
+	else if (!hero) {
+		// AI can always use their powers
+		return true;
+	}
 	else if (transformed) {
 		// needed to unlock shapeshifter powers
 		return mp >= power.requires_mp;
