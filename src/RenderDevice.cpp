@@ -348,8 +348,8 @@ void RenderDevice::drawEllipse(int x0, int y0, int x1, int y1, const Color& colo
 	float lasty = 0;
 
 	for (float i = 0; i < M_PI*2; i+=rad) {
-		float curx = cx + cos(i) * rx;
-		float cury = cy + sin(i) * ry;
+		float curx = cx + cosf(i) * rx;
+		float cury = cy + sinf(i) * ry;
 
 		if (i > 0)
 			drawLine(static_cast<int>(lastx), static_cast<int>(lasty), static_cast<int>(curx), static_cast<int>(cury), color);
