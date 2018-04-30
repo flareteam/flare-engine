@@ -489,6 +489,9 @@ void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 					draw_tile = false;
 					break;
 				}
+				else if (r_cursor_x+1 > i || r_cursor_y+1 > j) {
+					break;
+				}
 				++r_pre_cursor;
 			}
 
