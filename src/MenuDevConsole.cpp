@@ -306,6 +306,13 @@ void MenuDevConsole::reset() {
 	// log_history->clear();
 }
 
+void MenuDevConsole::closeWindow() {
+	visible = false;
+	input_box->edit_mode = false;
+	input_box->logic();
+	reset();
+}
+
 void MenuDevConsole::execute() {
 	std::string command = input_box->getText();
 	if (command == "") return;

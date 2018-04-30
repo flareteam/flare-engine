@@ -37,6 +37,7 @@ protected:
 	void getPlayerInfo();
 	void getTileInfo();
 	void getEnemyInfo();
+	void reset();
 
 	WidgetButton *button_close;
 	WidgetButton *button_confirm;
@@ -61,12 +62,12 @@ public:
 	MenuDevConsole();
 	~MenuDevConsole();
 	void align();
+	void closeWindow();
 
 	void logic();
 	virtual void render();
 
 	bool inputFocus();
-	void reset();
 
 	FPoint target;
 	unsigned distance_ticks;
