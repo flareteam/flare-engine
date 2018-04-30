@@ -21,6 +21,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "RenderDevice.h"
 #include "Settings.h"
 
+#include <math.h>
 
 /*
  * Image

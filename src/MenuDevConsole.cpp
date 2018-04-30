@@ -44,6 +44,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetLog.h"
 
 #include <limits>
+#include <math.h>
 
 MenuDevConsole::MenuDevConsole()
 	: Menu()
