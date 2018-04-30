@@ -55,7 +55,7 @@ int parse_duration(const std::string& s) {
 	else {
 		if (suffix != "ms")
 			logError("UtilsParsing: Duration of '%d' does not have a suffix. Assuming 'ms'.", val);
-		val = static_cast<int>(floor((static_cast<float>(val*MAX_FRAMES_PER_SEC) / 1000.f) + 0.5f));
+		val = static_cast<int>(floorf((static_cast<float>(val*MAX_FRAMES_PER_SEC) / 1000.f) + 0.5f));
 	}
 
 	// round back up to 1 if we rounded down to 0 for ms

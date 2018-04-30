@@ -1075,8 +1075,8 @@ bool StatBlock::summonLimitReached(int power_id) const {
 }
 
 void StatBlock::setWanderArea(int r) {
-	wander_area.x = int(floor(pos.x)) - r;
-	wander_area.y = int(floor(pos.y)) - r;
+	wander_area.x = int(floorf(pos.x)) - r;
+	wander_area.y = int(floorf(pos.y)) - r;
 	wander_area.w = wander_area.h = (r*2) + 1;
 }
 

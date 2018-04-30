@@ -100,7 +100,7 @@ bool MapCollision::small_step_forced_slide(float &x, float &y, float step_x, flo
 	const float epsilon = 0.01f;
 	if (step_x != 0) {
 		assert(step_y == 0);
-		float dy = y - static_cast<float>(floor(y));
+		float dy = y - floorf(y);
 
 		if (is_valid_tile(int(x), int(y) + 1, movement_type, is_hero)
 				&& is_valid_tile(int(x) + sgn(step_x), int(y) + 1, movement_type, is_hero)
@@ -119,7 +119,7 @@ bool MapCollision::small_step_forced_slide(float &x, float &y, float step_x, flo
 	}
 	else if (step_y != 0) {
 		assert(step_x == 0);
-		float dx = x - static_cast<float>(floor(x));
+		float dx = x - floorf(x);
 
 		if (is_valid_tile(int(x) + 1, int(y), movement_type, is_hero)
 				&& is_valid_tile(int(x) + 1, int(y) + sgn(step_y), movement_type, is_hero)
@@ -157,22 +157,22 @@ bool MapCollision::move(float &x, float &y, float _step_x, float _step_y, MOVEME
 		float step_x = 0;
 		if (_step_x > 0) {
 			// find next interesting value, which is either the whole step, or the transition to the next tile
-			step_x = std::min(static_cast<float>(ceil(x)) - x, _step_x);
-			// if we are standing on the edge of a tile (ceil(x) - x == 0), we need to look one tile ahead
+			step_x = std::min(ceilf(x) - x, _step_x);
+			// if we are standing on the edge of a tile (ceilf(x) - x == 0), we need to look one tile ahead
 			if (step_x <= MIN_TILE_GAP) step_x = std::min(1.f, _step_x);
 		}
 		else if (_step_x < 0) {
-			step_x = std::max(static_cast<float>(floor(x)) - x, _step_x);
+			step_x = std::max(floorf(x) - x, _step_x);
 			if (step_x == 0) step_x = std::max(-1.f, _step_x);
 		}
 
 		float step_y = 0;
 		if (_step_y > 0) {
-			step_y = std::min(static_cast<float>(ceil(y)) - y, _step_y);
+			step_y = std::min(ceilf(y) - y, _step_y);
 			if (step_y <= MIN_TILE_GAP) step_y = std::min(1.f, _step_y);
 		}
 		else if (_step_y < 0) {
-			step_y = std::max(static_cast<float>(floor(y)) - y, _step_y);
+			step_y = std::max(floorf(y) - y, _step_y);
 			if (step_y == 0) step_y	= std::max(-1.f, _step_y);
 		}
 

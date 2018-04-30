@@ -393,7 +393,7 @@ void PowerManager::loadPowers() {
 			powers[input_id].lifespan = parse_duration(infile.val);
 		else if (infile.key == "floor")
 			// @ATTR power.floor|bool|The hazard is drawn between the background and the object layer.
-			powers[input_id].floor = toBool(infile.val);
+			powers[input_id].on_floor = toBool(infile.val);
 		else if (infile.key == "complete_animation")
 			// @ATTR power.complete_animation|bool|For hazards; Play the entire animation, even if the hazard has hit a target.
 			powers[input_id].complete_animation = toBool(infile.val);
@@ -895,7 +895,7 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, const FPoin
 	}
 
 	haz->base_lifespan = haz->lifespan = powers[power_index].lifespan;
-	haz->on_floor = powers[power_index].floor;
+	haz->on_floor = powers[power_index].on_floor;
 	haz->base_speed = powers[power_index].speed;
 	haz->complete_animation = powers[power_index].complete_animation;
 
@@ -978,7 +978,7 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, const FPoint& tar
 		FPoint limit_target = clampDistance(powers[power_index].target_range,src_stats->pos,target);
 		if (powers[power_index].target_neighbor > 0) {
 			FPoint new_target = collider->get_random_neighbor(FPointToPoint(limit_target), powers[power_index].target_neighbor);
-			if (floor(new_target.x) == floor(limit_target.x) && floor(new_target.y) == floor(limit_target.y)) {
+			if (floorf(new_target.x) == floorf(limit_target.x) && floorf(new_target.y) == floorf(limit_target.y)) {
 				src_stats->teleportation = false;
 			}
 			else {

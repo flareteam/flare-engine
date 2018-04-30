@@ -161,7 +161,7 @@ public:
 	bool aim_assist;
 	float speed; // for missile hazards, tiles per frame
 	int lifespan; // how long the hazard/animation lasts
-	bool floor; // the hazard is drawn between the background and object layers
+	bool on_floor; // the hazard is drawn between the background and object layers
 	bool complete_animation;
 	float charge_speed;
 	float attack_speed;
@@ -308,7 +308,7 @@ public:
 		, aim_assist(false)
 		, speed(0)
 		, lifespan(0)
-		, floor(false)
+		, on_floor(false)
 		, complete_animation(false)
 		, charge_speed(0.0f)
 		, attack_speed(100.0f)

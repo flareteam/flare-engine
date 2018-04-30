@@ -79,8 +79,8 @@ Point map_to_screen(float x, float y, float camx, float camy) {
 	float adjust_y = (VIEW_H_HALF + 0.5f) * UNITS_PER_PIXEL_Y;
 
 	if (TILESET_ORIENTATION == TILESET_ISOMETRIC) {
-		r.x = int(floor(((x - camx - y + camy + adjust_x)/UNITS_PER_PIXEL_X)+0.5f));
-		r.y = int(floor(((x - camx + y - camy + adjust_y)/UNITS_PER_PIXEL_Y)+0.5f));
+		r.x = int(floorf(((x - camx - y + camy + adjust_x)/UNITS_PER_PIXEL_X)+0.5f));
+		r.y = int(floorf(((x - camx + y - camy + adjust_y)/UNITS_PER_PIXEL_Y)+0.5f));
 	}
 	else { //TILESET_ORTHOGONAL
 		r.x = int((x - camx + adjust_x)/UNITS_PER_PIXEL_X);
@@ -168,7 +168,7 @@ bool isWithinRect(const Rect& r, const Point& target) {
 unsigned char calcDirection(float x0, float y0, float x1, float y1) {
 	float theta = calcTheta(x0, y0, x1, y1);
 	float val = theta / (static_cast<float>(M_PI)/4);
-	int dir = static_cast<int>(((val < 0) ? ceil(val-0.5) : floor(val+0.5)) + 4);
+	int dir = static_cast<int>(((val < 0) ? ceilf(val-0.5f) : floorf(val+0.5f)) + 4);
 	dir = (dir + 1) % 8;
 	if (dir >= 0 && dir < 8)
 		return static_cast<unsigned char>(dir);
@@ -253,8 +253,8 @@ void alignToScreenEdge(ALIGNMENT alignment, Rect *r) {
 void alignFPoint(FPoint *pos) {
 	if (!pos) return;
 
-	pos->x = static_cast<float>(floor(pos->x / 0.0625f) * 0.0625f);
-	pos->y = static_cast<float>(floor(pos->y / 0.0625f) * 0.0625f);
+	pos->x = floorf(pos->x / 0.0625f) * 0.0625f;
+	pos->y = floorf(pos->y / 0.0625f) * 0.0625f;
 }
 
 

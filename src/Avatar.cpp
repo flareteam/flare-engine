@@ -843,13 +843,13 @@ void Avatar::untransform() {
 		if (transform_map != mapr->getFilename()) {
 			mapr->teleportation = true;
 			mapr->teleport_mapname = transform_map;
-			mapr->teleport_destination.x = static_cast<float>(floor(transform_pos.x)) + 0.5f;
-			mapr->teleport_destination.y = static_cast<float>(floor(transform_pos.y)) + 0.5f;
+			mapr->teleport_destination.x = floorf(transform_pos.x) + 0.5f;
+			mapr->teleport_destination.y = floorf(transform_pos.y) + 0.5f;
 			transform_map = "";
 		}
 		else {
-			stats.pos.x = static_cast<float>(floor(transform_pos.x)) + 0.5f;
-			stats.pos.y = static_cast<float>(floor(transform_pos.y)) + 0.5f;
+			stats.pos.x = floorf(transform_pos.x) + 0.5f;
+			stats.pos.y = floorf(transform_pos.y) + 0.5f;
 		}
 	}
 	mapr->collider.block(stats.pos.x, stats.pos.y, false);
