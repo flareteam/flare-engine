@@ -560,7 +560,7 @@ void MenuInventory::activate(const Point& position) {
 		}
 
 		// check power & item requirements
-		if (!stats->canUsePower(powers->powers[power_id], power_id) || pc->hero_cooldown[power_id] > 0) {
+		if (!stats->canUsePower(power_id) || pc->hero_cooldown[power_id] > 0) {
 			pc->logMsg(msg->get("You can't use this item right now."), true);
 			return;
 		}

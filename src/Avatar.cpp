@@ -641,7 +641,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 					// check requirements
 					if ((stats.cur_state == AVATAR_ATTACK || stats.cur_state == AVATAR_HIT) && !action.instant_item)
 						continue;
-					if (!stats.canUsePower(power, action.power))
+					if (!stats.canUsePower(action.power))
 						continue;
 					if (power.requires_los && !mapr->collider.line_of_sight(stats.pos.x, stats.pos.y, target.x, target.y))
 						continue;

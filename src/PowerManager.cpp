@@ -1581,7 +1581,7 @@ void PowerManager::activatePassivePostPowers(StatBlock *src_stats) {
 		if (powers[post_power].new_state != POWSTATE_INSTANT)
 			continue;
 
-		if (src_stats->getPowerCooldown(post_power) == 0 && src_stats->canUsePower(powers[post_power], post_power)) {
+		if (src_stats->getPowerCooldown(post_power) == 0 && src_stats->canUsePower(post_power)) {
 			if (percentChance(powers[src_stats->powers_passive[i]].post_power_chance)) {
 				activate(post_power, src_stats, src_stats->pos);
 				src_stats->setPowerCooldown(post_power, powers[post_power].cooldown);

@@ -470,7 +470,7 @@ bool MenuPowers::checkRequirements(int pci) {
 
 	const Power& power = powers->powers[power_cell_all[pci].id];
 	if (power.passive) {
-		if (!stats->canUsePower(power, power_cell_all[pci].id, true))
+		if (!stats->canUsePower(power_cell_all[pci].id, true))
 			return false;
 	}
 

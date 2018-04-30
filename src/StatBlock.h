@@ -32,7 +32,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Stats.h"
 #include "Utils.h"
 
-class Power;
 class FileParser;
 
 typedef enum {
@@ -255,7 +254,7 @@ public:
 	std::vector<int> powers_passive;
 	std::vector<AIPower> powers_ai;
 
-	bool canUsePower(const Power &power, int powerid, bool allow_passive = false) const;
+	bool canUsePower(int powerid, bool allow_passive = false) const;
 
 	float melee_range;
 	float threat_range;

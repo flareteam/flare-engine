@@ -302,8 +302,7 @@ void MenuActionBar::logic() {
 			//see if the slot should be greyed out
 			slot_enabled[i] = (pc->hero_cooldown[hotkeys_mod[i]] == 0)
 							  && (pc->power_cast_ticks[hotkeys_mod[i]] == 0)
-							  // && (slot_item_count[i] == -1 || (slot_item_count[i] > 0 && power.requires_item_quantity <= slot_item_count[i]))
-							  && pc->stats.canUsePower(power, hotkeys_mod[i])
+							  && pc->stats.canUsePower(hotkeys_mod[i])
 							  && (twostep_slot == -1 || static_cast<unsigned>(twostep_slot) == i);
 
 			slots[i]->setIcon(power.icon);
