@@ -43,7 +43,8 @@ typedef enum {
 	AI_POWER_DEATH = 4,
 	AI_POWER_HALF_DEAD = 5,
 	AI_POWER_JOIN_COMBAT = 6,
-	AI_POWER_DEBUFF = 7
+	AI_POWER_DEBUFF = 7,
+	AI_POWER_PASSIVE_POST = 8
 } AI_POWER;
 
 enum AvatarState {
@@ -114,6 +115,8 @@ public:
 	std::string getLongClass();
 	void addXP(int amount);
 	AIPower* getAIPower(AI_POWER ai_type);
+	int getPowerCooldown(int power_id);
+	void setPowerCooldown(int power_id, int power_cooldown);
 
 	bool alive;
 	bool corpse; // creature is dead and done animating

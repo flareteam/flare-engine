@@ -508,6 +508,16 @@ void StatBlock::load(const std::string& filename) {
 			while (p != "") {
 				powers_passive.push_back(toInt(p));
 				p = popFirstString(infile.val);
+
+				// if a passive power has a post power, add it to the AI power list so we can track its cooldown
+				int post_power = powers->powers[powers_passive.back()].post_power;
+				if (post_power > 0) {
+					AIPower passive_post_power;
+					passive_post_power.type = AI_POWER_PASSIVE_POST;
+					passive_post_power.id = post_power;
+					passive_post_power.chance = 0; // post_power chance is used instead
+					powers_ai.push_back(passive_post_power);
+				}
 			}
 		}
 
@@ -1160,3 +1170,30 @@ bool StatBlock::checkRequiredSpawns(int req_amount) const {
 	return true;
 }
 
+int StatBlock::getPowerCooldown(int power_id) {
+	if (hero) {
+		return pc->hero_cooldown[power_id];
+	}
+	else {
+		for (size_t i = 0; i < powers_ai.size(); ++i) {
+			if (power_id == powers_ai[i].id)
+				return powers_ai[i].ticks;
+		}
+	}
+
+	return 0;
+}
+
+void StatBlock::setPowerCooldown(int power_id, int power_cooldown) {
+	if (hero) {
+		pc->hero_cooldown[power_id] = power_cooldown;
+	}
+	else {
+		for (size_t i = 0; i < powers_ai.size(); ++i) {
+			if (power_id == powers_ai[i].id) {
+				powers_ai[i].ticks = power_cooldown;
+				break;
+			}
+		}
+	}
+}

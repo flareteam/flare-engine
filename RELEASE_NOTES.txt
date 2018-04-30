@@ -12,6 +12,7 @@ Engine features:
 * Support hidding the developer console title label. (Justin Jacobs)
 * Mod-level default keybinding support added. (Justin Jacobs)
 * Improved developer mode with inspection cursor. (Justin Jacobs)
+* Passive powers can now continuously cast their post_power. (Justin Jacobs)
 
 Engine fixes:
 

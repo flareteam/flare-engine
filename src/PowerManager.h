@@ -425,6 +425,7 @@ private:
 	void payPowerCost(int power_index, StatBlock *src_stats);
 
 	void activatePassiveByTrigger(int power_id, StatBlock *src_stats, bool& triggered_others);
+	void activatePassivePostPowers(StatBlock *src_stats);
 
 	std::vector<Animation*> power_animations;
 	std::vector<Animation*> effect_animations;

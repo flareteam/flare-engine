@@ -1009,8 +1009,11 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, const FPoint& tar
 	// this is also where Effects are removed for non-hazard powers
 	if (!powers[power_index].use_hazard) {
 		src_stats->effects.removeEffectID(powers[power_index].remove_effects);
-		if (percentChance(powers[power_index].post_power_chance)) {
-			activate(powers[power_index].post_power, src_stats, src_stats->pos);
+
+		if (!powers[power_index].passive) {
+			if (percentChance(powers[power_index].post_power_chance)) {
+				activate(powers[power_index].post_power, src_stats, src_stats->pos);
+			}
 		}
 	}
 }
@@ -1513,6 +1516,8 @@ void PowerManager::activatePassives(StatBlock *src_stats) {
 	// the block trigger is handled in the Avatar class
 	src_stats->effects.triggered_hit = false;
 	src_stats->effects.triggered_death = false;
+
+	activatePassivePostPowers(src_stats);
 }
 
 void PowerManager::activatePassiveByTrigger(int power_id, StatBlock *src_stats, bool& triggered_others) {
@@ -1537,6 +1542,11 @@ void PowerManager::activatePassiveByTrigger(int power_id, StatBlock *src_stats, 
 
 		activate(power_id, src_stats, src_stats->pos);
 		src_stats->refresh_stats = true;
+
+		int post_power = powers[power_id].post_power;
+		if (post_power > 0) {
+			src_stats->setPowerCooldown(post_power, powers[post_power].cooldown);
+		}
 	}
 }
 
@@ -1551,6 +1561,32 @@ void PowerManager::activateSinglePassive(StatBlock *src_stats, int id) {
 		activate(id, src_stats, src_stats->pos);
 		src_stats->refresh_stats = true;
 		src_stats->effects.triggered_others = true;
+
+		int post_power = powers[id].post_power;
+		if (post_power > 0) {
+			src_stats->setPowerCooldown(post_power, powers[post_power].cooldown);
+		}
+	}
+}
+
+/**
+ * Continually activates post_power for each active passive power
+ */
+void PowerManager::activatePassivePostPowers(StatBlock *src_stats) {
+	for (size_t i = 0; i < src_stats->powers_passive.size(); ++i) {
+		const int post_power = powers[src_stats->powers_passive[i]].post_power;
+		if (post_power <= 0)
+			continue;
+
+		if (powers[post_power].new_state != POWSTATE_INSTANT)
+			continue;
+
+		if (src_stats->getPowerCooldown(post_power) == 0) {
+			if (percentChance(powers[src_stats->powers_passive[i]].post_power_chance)) {
+				activate(post_power, src_stats, src_stats->pos);
+				src_stats->setPowerCooldown(post_power, powers[post_power].cooldown);
+			}
+		}
 	}
 }
 
