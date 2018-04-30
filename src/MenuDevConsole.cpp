@@ -253,7 +253,7 @@ void MenuDevConsole::getTileInfo() {
 		case BLOCKS_ALL: ss << msg->get("wall"); break;
 		case BLOCKS_MOVEMENT: ss << msg->get("short wall / pit"); break;
 		case BLOCKS_ALL_HIDDEN: ss << msg->get("wall"); break;
-		case BLOCKS_MOVEMENT_HIDDEN: ss << msg->get("pit"); break;
+		case BLOCKS_MOVEMENT_HIDDEN: ss << msg->get("short wall / pit"); break;
 		case BLOCKS_ENTITIES: ss << msg->get("entity"); break;
 		case BLOCKS_ENEMIES: ss << msg->get("entity, ally"); break;
 		default: ss << msg->get("none");
