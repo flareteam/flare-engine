@@ -2,7 +2,7 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
@@ -12,13 +12,11 @@ msgstr ""
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Ademaro <ademaro@ya.ru>, 2018\n"
 "Language-Team: Russian (https://www.transifex.com/flareorg/teams/84925/ru/)\n"
-"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
-"%100>=11 && n%100<=14)? 2 : 3);\n"
+"Language: ru\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #: ../../../src/Avatar.cpp:363
 #, c-format
@@ -742,7 +740,8 @@ msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:141
 msgid "Arguments with spaces should be enclosed with double quotes. Example:"
-msgstr "Аргументы с пробелами должны быть заключены в двойные кавычки. Пример:"
+msgstr ""
+"Аргументы с пробелами должны быть заключены в двойные кавычки. Пример:"
 
 #: ../../../src/MenuDevConsole.cpp:142
 msgid "Type 'help' to get a list of commands."
@@ -827,7 +826,8 @@ msgstr ""
 "предметы."
 
 #: ../../../src/MenuDevConsole.cpp:350
-msgid "parses a series of event components and executes them as a single event"
+msgid ""
+"parses a series of event components and executes them as a single event"
 msgstr "анализирует набор компонентов событий и выполняет их как одно событие"
 
 #: ../../../src/MenuDevConsole.cpp:351
@@ -1476,6 +1476,3 @@ msgstr "или выше"
 #: ../../../src/Version.cpp:143
 msgid "or older"
 msgstr "или ниже"
-
-#~ msgid "Target distance:"
-#~ msgstr "Расстояние до цели:"

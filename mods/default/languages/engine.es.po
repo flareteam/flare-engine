@@ -2,7 +2,7 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
@@ -12,10 +12,10 @@ msgstr ""
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Eric R, 2018\n"
 "Language-Team: Spanish (https://www.transifex.com/flareorg/teams/84925/es/)\n"
-"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../../../src/Avatar.cpp:363
@@ -109,8 +109,7 @@ msgid ""
 msgstr ""
 "Renderizador SDL por hardware\n"
 "\n"
-"El renderizador predeterminado que suele ser más rápido que el renderizador "
-"SDL por software."
+"El renderizador predeterminado que suele ser más rápido que el renderizador SDL por software."
 
 #: ../../../src/Entity.cpp:488
 msgid "miss"
@@ -804,15 +803,16 @@ msgstr "Activa/Desactiva todos los elementos con información en pantalla"
 
 #: ../../../src/MenuDevConsole.cpp:345
 msgid "turns on/off the developer hud"
-msgstr "Activa/Desactiva todos la información en pantalla para desarrolladores"
+msgstr ""
+"Activa/Desactiva todos la información en pantalla para desarrolladores"
 
 #: ../../../src/MenuDevConsole.cpp:346
 msgid ""
 "Prints a list of powers that match a search term. No search term will list "
 "all items"
 msgstr ""
-"Muestra una lista de poderes que se emparejan con un término de búsqueda. Si "
-"no hay ningún término, se listarán todos los elementos"
+"Muestra una lista de poderes que se emparejan con un término de búsqueda. Si"
+" no hay ningún término, se listarán todos los elementos"
 
 #: ../../../src/MenuDevConsole.cpp:347
 msgid "Prints out all the map filenames located in the \"maps/\" directory."
@@ -835,9 +835,11 @@ msgstr ""
 "búsqueda. Si no hay ningún término de búsqueda, listará todos los objetos"
 
 #: ../../../src/MenuDevConsole.cpp:350
-msgid "parses a series of event components and executes them as a single event"
+msgid ""
+"parses a series of event components and executes them as a single event"
 msgstr ""
-"analiza una serie de componentes de eventos y los ejecuta como un solo evento"
+"analiza una serie de componentes de eventos y los ejecuta como un solo "
+"evento"
 
 #: ../../../src/MenuDevConsole.cpp:351
 msgid "clears the command history"
@@ -1485,15 +1487,3 @@ msgstr "o más nuevo"
 #: ../../../src/Version.cpp:143
 msgid "or older"
 msgstr "o más viejo"
-
-#~ msgid "Player (x,y):"
-#~ msgstr "Jugador (x,y):"
-
-#~ msgid "Target (x,y):"
-#~ msgstr "Objetivo (x,y):"
-
-#~ msgid "Mouse (x,y):"
-#~ msgstr "Ratón (x,y):"
-
-#~ msgid "Target distance:"
-#~ msgstr "Distancia a objetivo:"

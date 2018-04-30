@@ -2,7 +2,7 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
@@ -12,10 +12,10 @@ msgstr ""
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: MOB2 <thewattyk@gmail.com>, 2018\n"
 "Language-Team: Italian (https://www.transifex.com/flareorg/teams/84925/it/)\n"
-"Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: it\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../../../src/Avatar.cpp:363
@@ -811,8 +811,8 @@ msgid ""
 "Prints a list of powers that match a search term. No search term will list "
 "all items"
 msgstr ""
-"Mostra un elenco di poteri che corrispondono a un termine di ricerca. Nessun "
-"termine di ricerca elenca tutti gli oggetti"
+"Mostra un elenco di poteri che corrispondono a un termine di ricerca. Nessun"
+" termine di ricerca elenca tutti gli oggetti"
 
 #: ../../../src/MenuDevConsole.cpp:347
 msgid "Prints out all the map filenames located in the \"maps/\" directory."
@@ -837,9 +837,11 @@ msgstr ""
 "Nessun termine di ricerca elenca tutti gli elementi"
 
 #: ../../../src/MenuDevConsole.cpp:350
-msgid "parses a series of event components and executes them as a single event"
+msgid ""
+"parses a series of event components and executes them as a single event"
 msgstr ""
-"Analizza una serie di componenti di evento e li esegue come un singolo evento"
+"Analizza una serie di componenti di evento e li esegue come un singolo "
+"evento"
 
 #: ../../../src/MenuDevConsole.cpp:351
 msgid "clears the command history"
@@ -1487,15 +1489,3 @@ msgstr "o più recente"
 #: ../../../src/Version.cpp:143
 msgid "or older"
 msgstr "o più vecchio"
-
-#~ msgid "Player (x,y):"
-#~ msgstr "Giocatore (x,y):"
-
-#~ msgid "Target (x,y):"
-#~ msgstr "Bersaglio (x,y):"
-
-#~ msgid "Mouse (x,y):"
-#~ msgstr "Mouse (x,y):"
-
-#~ msgid "Target distance:"
-#~ msgstr "Distanza del bersaglio:"

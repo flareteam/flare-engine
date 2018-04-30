@@ -2,7 +2,7 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
@@ -12,10 +12,10 @@ msgstr ""
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
 "Language-Team: French (https://www.transifex.com/flareorg/teams/84925/fr/)\n"
-"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: ../../../src/Avatar.cpp:363
@@ -822,11 +822,12 @@ msgid ""
 "Prints a list of items that match a search term. No search term will list "
 "all items"
 msgstr ""
-"Affiche une liste des objets qui correspondent au terme recherché. L'absence "
-"de terme de recherche affichera tous les objets"
+"Affiche une liste des objets qui correspondent au terme recherché. L'absence"
+" de terme de recherche affichera tous les objets"
 
 #: ../../../src/MenuDevConsole.cpp:350
-msgid "parses a series of event components and executes them as a single event"
+msgid ""
+"parses a series of event components and executes them as a single event"
 msgstr ""
 "parcourt une série de composants d'événements et les exécutent en tant "
 "qu'événement unique"
