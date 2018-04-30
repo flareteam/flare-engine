@@ -102,3 +102,7 @@ void GameState::showLoading() {
 	render_device->commitFrame();
 }
 
+std::map<std::string, std::string> GameState::logGameState() {
+	std::map<std::string, std::string> out;
+	return out;
+}

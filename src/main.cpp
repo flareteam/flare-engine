@@ -173,6 +173,14 @@ static void mainLoop () {
 
 	float last_fps = -1;
 
+	// set GameState logging filename
+	char log_state_file_name [66];
+	struct tm *timenow;
+	time_t now = time(NULL);
+	timenow = gmtime(&now);
+	strftime(log_state_file_name, sizeof(log_state_file_name),
+					 "/Users/lpekelis/flare/flare-ai/log/GAME_STATES_%Y-%m-%d_%H_%M_%S", timenow);
+
 	while ( !done ) {
 		int loops = 0;
 		uint64_t now_ticks = SDL_GetPerformanceCounter();
@@ -245,6 +253,8 @@ static void mainLoop () {
 			} else {
 				last_fps = -1;
 			}
+
+			gswitch->logGameState(log_state_file_name);
 		}
 
 		// delay quick frames

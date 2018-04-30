@@ -6,6 +6,8 @@ Set (VERSION "1.09.01")
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
+set (CMAKE_CXX_STANDARD 11)
+
 # Default definitions
 if (NOT MSVC)
   set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wunused -Wshadow -Woverloaded-virtual -Wunreachable-code -Wconversion -Wno-sign-conversion -Wformat-security ${CMAKE_CXX_FLAGS}")

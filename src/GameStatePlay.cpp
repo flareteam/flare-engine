@@ -1106,6 +1106,30 @@ bool GameStatePlay::checkPrimaryStat(const std::string& first, const std::string
 	return true;
 }
 
+std::map<std::string, std::string> GameStatePlay::logGameState() {
+	std::map<std::string, std::string> out;
+
+	out["pc->stats.pos.x"] = std::to_string(pc->stats.pos.x);
+	out["pc->stats.pos.y"] = std::to_string(pc->stats.pos.y);
+	out["pc->stats.hp"]    = std::to_string(pc->stats.hp);
+	out["pc->stats.mp"]    = std::to_string(pc->stats.mp);
+
+	for (unsigned int i=0; i < enemym->enemies.size(); i++) {
+
+		std::string eid = "e" + std::to_string(i);
+
+		out[eid + "->stats.hero_ally"] = std::to_string(enemym->enemies[i]->stats.hero_ally);
+		out[eid + "->stats.alive"]     = std::to_string(enemym->enemies[i]->stats.alive);
+		out[eid + "->stats.pos.x"]     = std::to_string(enemym->enemies[i]->stats.pos.x);
+		out[eid + "->stats.pos.y"]     = std::to_string(enemym->enemies[i]->stats.pos.y);
+		out[eid + "->stats.hp"]        = std::to_string(enemym->enemies[i]->stats.hp);
+		out[eid + "->stats.mp"]        = std::to_string(enemym->enemies[i]->stats.mp);
+		out[eid + "->stats.cur_state"] = std::to_string(enemym->enemies[i]->stats.cur_state);
+	}
+
+	return out;
+}
+
 GameStatePlay::~GameStatePlay() {
 	curs->setLowHP(false);
 
@@ -1136,4 +1160,3 @@ GameStatePlay::~GameStatePlay() {
 	menu_powers = NULL;
 	powers = NULL;
 }
-

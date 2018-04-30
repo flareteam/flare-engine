@@ -73,8 +73,8 @@ public:
 	void render();
 	void showFPS(float fps);
 	void saveUserSettings();
+	void logGameState(char * fname);
 	bool done;
 };
 
 #endif
-

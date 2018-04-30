@@ -110,7 +110,8 @@ public:
 	void logic();
 	void render();
 	void resetGame();
+
+	std::map<std::string, std::string> logGameState();
 };
 
 #endif
-

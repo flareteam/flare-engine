@@ -43,6 +43,8 @@ public:
 	virtual bool isPaused();
 	void showLoading();
 
+	virtual std::map<std::string, std::string> logGameState();
+
 	bool hasMusic;
 	bool has_background;
 	bool reload_music;
