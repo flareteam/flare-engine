@@ -236,6 +236,9 @@ int SDLHardwareRenderDevice::createContext(bool allow_fallback) {
 			is_initialized = true;
 
 			logInfo("RenderDevice: Fullscreen=%d, Hardward surfaces=%d, Vsync=%d, Texture Filter=%d", fullscreen, hwsurface, vsync, texture_filter);
+
+			SDL_GetDisplayDPI(0, &ddpi, 0, 0);
+			logInfo("RenderDevice: Display DPI is %f", ddpi);
 		}
 	}
 

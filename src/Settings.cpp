@@ -144,6 +144,7 @@ bool CHANGE_GAMMA;
 float GAMMA;
 std::string RENDER_DEVICE;
 std::vector<unsigned short> VIRTUAL_HEIGHTS;
+float VIRTUAL_DPI = 0;
 
 // Audio Settings
 bool AUDIO = true;
@@ -345,6 +346,7 @@ void loadMiscSettings() {
 	FRAME_W = 0;
 	FRAME_H = 0;
 	IGNORE_TEXTURE_FILTER = false;
+	VIRTUAL_DPI = 0;
 	ICON_SIZE = 0;
 	AUTOPICKUP_CURRENCY = false;
 	MAX_ABSORB = 100;
@@ -513,6 +515,10 @@ void loadMiscSettings() {
 				}
 
 				VIEW_H_HALF = VIEW_H / 2;
+			}
+			// @ATTR virtual_dpi|float|A target diagonal screen DPI used to determine how much to scale the internal render resolution.
+			else if (infile.key == "virtual_dpi") {
+				VIRTUAL_DPI = toFloat(infile.val);
 			}
 			// @ATTR ignore_texture_filter|bool|If true, this ignores the "Texture Filtering" video setting and uses only nearest-neighbor scaling. This is good for games that use pixel art assets.
 			else if (infile.key == "ignore_texture_filter") {

@@ -16,12 +16,12 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
-#include <assert.h>
-#include <stdio.h>
 #include "RenderDevice.h"
 #include "Settings.h"
 
+#include <assert.h>
 #include <math.h>
+#include <stdio.h>
 
 /*
  * Image
@@ -179,6 +179,7 @@ RenderDevice::RenderDevice()
 	, min_screen(640, 480)
 	, is_initialized(false)
 	, reload_graphics(false)
+	, ddpi(0)
 {
 	// don't bother initializing gamma_r, gamma_g, gamma_b
 	// it is up to the implemented render device to initialize them
@@ -299,18 +300,27 @@ void RenderDevice::freeImage(Image *image) {
 }
 
 void RenderDevice::windowResizeInternal() {
+	unsigned short old_view_w = VIEW_W;
+	unsigned short old_view_h = VIEW_H;
 	unsigned short old_screen_w = SCREEN_W;
 	unsigned short old_screen_h = SCREEN_H;
 
 	getWindowSize(&SCREEN_W, &SCREEN_H);
 
-	VIEW_H = SCREEN_H;
+	unsigned short temp_screen_h;
+	if (ddpi > 0 && VIRTUAL_DPI > 0) {
+		temp_screen_h = static_cast<unsigned short>(static_cast<float>(SCREEN_H) * (VIRTUAL_DPI / ddpi));
+	}
+	else {
+		temp_screen_h = SCREEN_H;
+	}
+	VIEW_H = temp_screen_h;
 
 	// scale virtual height when outside of VIRTUAL_HEIGHTS range
 	if (!VIRTUAL_HEIGHTS.empty()) {
-		if (SCREEN_H < VIRTUAL_HEIGHTS.front())
+		if (temp_screen_h < VIRTUAL_HEIGHTS.front())
 			VIEW_H = VIRTUAL_HEIGHTS.front();
-		else if (SCREEN_H >= VIRTUAL_HEIGHTS.back())
+		else if (temp_screen_h >= VIRTUAL_HEIGHTS.back())
 			VIEW_H = VIRTUAL_HEIGHTS.back();
 	}
 
@@ -327,8 +337,12 @@ void RenderDevice::windowResizeInternal() {
 
 	VIEW_W_HALF = VIEW_W/2;
 
-	if (SCREEN_W != old_screen_w || SCREEN_H != old_screen_h)
+	if (VIEW_W != old_view_w || VIEW_H != old_view_h) {
+		logInfo("RenderDevice: Internal render size is %dx%d", VIEW_W, VIEW_H);
+	}
+	if (SCREEN_W != old_screen_w || SCREEN_H != old_screen_h) {
 		logInfo("RenderDevice: Window size changed to %dx%d", SCREEN_W, SCREEN_H);
+	}
 }
 
 void RenderDevice::setBackgroundColor(Color color) {

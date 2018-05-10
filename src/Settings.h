@@ -116,6 +116,7 @@ extern bool CHANGE_GAMMA;
 extern float GAMMA;
 extern std::string RENDER_DEVICE;
 extern std::vector<unsigned short> VIRTUAL_HEIGHTS;
+extern float VIRTUAL_DPI;
 
 // Input Settings
 extern bool MOUSE_MOVE;
