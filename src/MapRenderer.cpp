@@ -308,19 +308,19 @@ bool priocompare(const Renderable &r1, const Renderable &r2) {
  */
 void calculatePriosIso(std::vector<Renderable> &r) {
 	for (std::vector<Renderable>::iterator it = r.begin(); it != r.end(); ++it) {
-		const unsigned tilex = static_cast<const unsigned>(floorf(it->map_pos.x));
-		const unsigned tiley = static_cast<const unsigned>(floorf(it->map_pos.y));
-		const int commax = static_cast<const int>((it->map_pos.x - static_cast<float>(tilex)) * (2<<16));
-		const int commay = static_cast<const int>((it->map_pos.y - static_cast<float>(tiley)) * (2<<16));
+		const unsigned tilex = static_cast<unsigned>(floorf(it->map_pos.x));
+		const unsigned tiley = static_cast<unsigned>(floorf(it->map_pos.y));
+		const int commax = static_cast<int>((it->map_pos.x - static_cast<float>(tilex)) * (2<<16));
+		const int commay = static_cast<int>((it->map_pos.y - static_cast<float>(tiley)) * (2<<16));
 		it->prio += (static_cast<uint64_t>(tilex + tiley) << 54) + (static_cast<uint64_t>(tilex) << 42) + (static_cast<uint64_t>(commax + commay) << 16);
 	}
 }
 
 void calculatePriosOrtho(std::vector<Renderable> &r) {
 	for (std::vector<Renderable>::iterator it = r.begin(); it != r.end(); ++it) {
-		const unsigned tilex = static_cast<const unsigned>(floorf(it->map_pos.x));
-		const unsigned tiley = static_cast<const unsigned>(floorf(it->map_pos.y));
-		const int commay = static_cast<const int>(1024 * it->map_pos.y);
+		const unsigned tilex = static_cast<unsigned>(floorf(it->map_pos.x));
+		const unsigned tiley = static_cast<unsigned>(floorf(it->map_pos.y));
+		const int commay = static_cast<int>(1024 * it->map_pos.y);
 		it->prio += (static_cast<uint64_t>(tiley) << 48) + (static_cast<uint64_t>(tilex) << 32) + (static_cast<uint64_t>(commay) << 16);
 	}
 }
