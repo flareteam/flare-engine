@@ -273,13 +273,12 @@ int SDLSoftwareRenderDevice::createContext(bool allow_fallback) {
 
 			logInfo("RenderDevice: Fullscreen=%d, Hardware surfaces=%d, Vsync=%d, Texture Filter=%d", fullscreen, hwsurface, vsync, texture_filter);
 
-			if (SDL_VERSION_ATLEAST(2, 0, 4)) {
-				SDL_GetDisplayDPI(0, &ddpi, 0, 0);
-				logInfo("RenderDevice: Display DPI is %f", ddpi);
-			}
-			else {
-				logError("RenderDevice: The SDL version used to compile Flare does not support SDL_GetDisplayDPI(). The virtual_dpi setting will be ignored.");
-			}
+#if SDL_VERSION_ATLEAST(2, 0, 4)
+			SDL_GetDisplayDPI(0, &ddpi, 0, 0);
+			logInfo("RenderDevice: Display DPI is %f", ddpi);
+#else
+			logError("RenderDevice: The SDL version used to compile Flare does not support SDL_GetDisplayDPI(). The virtual_dpi setting will be ignored.");
+#endif
 		}
 	}
 
