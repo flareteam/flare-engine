@@ -26,12 +26,12 @@
     </application>
 
     <!-- Android 3.2 -->
-    <uses-sdk android:minSdkVersion="13" android:targetSdkVersion="13" />
+    <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="14" />
 
     <!-- OpenGL ES 2.0 -->
-    <uses-feature android:glEsVersion="0x00020000" /> 
+    <uses-feature android:glEsVersion="0x00020000" />
 
     <!-- Allow writing to external storage -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.INTERNET" />
-</manifest> 
+</manifest>

@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId "org.flare.app"
-        minSdkVersion 13
+        minSdkVersion 14
         targetSdkVersion 22
     }
 
