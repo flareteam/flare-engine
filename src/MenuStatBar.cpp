@@ -112,9 +112,8 @@ void MenuStatBar::loadGraphics() {
 	}
 }
 
-void MenuStatBar::update(unsigned long _stat_cur, unsigned long _stat_max, const Point& _mouse, const std::string& _custom_string) {
-	if (_custom_string != "") custom_string = _custom_string;
-	mouse = _mouse;
+void MenuStatBar::update(unsigned long _stat_cur, unsigned long _stat_max, const std::string& _custom_string) {
+	if (!_custom_string.empty()) custom_string = _custom_string;
 	stat_cur = _stat_cur;
 	stat_max = _stat_max;
 }
@@ -169,18 +168,19 @@ void MenuStatBar::render() {
 
 	// if mouseover, draw text
 	if (!text_pos.hidden) {
-		if (custom_text_pos)
-			label->set(bar_dest.x+text_pos.x, bar_dest.y+text_pos.y, text_pos.justify, text_pos.valign, "", color_normal, text_pos.font_style);
-		else
-			label->set(bar_dest.x+bar_pos.w/2, bar_dest.y+bar_pos.h/2, JUSTIFY_CENTER, VALIGN_CENTER, "", color_normal);
 
-		if (STATBAR_LABELS || (inpt->usingMouse() && isWithinRect(bar_dest,mouse))) {
+		if (STATBAR_LABELS || (inpt->usingMouse() && isWithinRect(bar_dest, inpt->mouse))) {
 			std::stringstream ss;
-			if (custom_string != "")
+			if (!custom_string.empty())
 				ss << custom_string;
 			else
 				ss << stat_cur << "/" << stat_max;
-			label->set(ss.str());
+
+			if (custom_text_pos)
+				label->set(bar_dest.x+text_pos.x, bar_dest.y+text_pos.y, text_pos.justify, text_pos.valign, ss.str(), color_normal, text_pos.font_style);
+			else
+				label->set(bar_dest.x+bar_pos.w/2, bar_dest.y+bar_pos.h/2, JUSTIFY_CENTER, VALIGN_CENTER, ss.str(), color_normal);
+			// label->set(ss.str());
 			label->render();
 		}
 	}

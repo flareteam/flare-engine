@@ -296,13 +296,13 @@ void MenuManager::logic() {
 
 	subtitles->logic(snd->getLastPlayedSID());
 
-	hp->update(stats->hp, stats->get(STAT_HP_MAX), inpt->mouse);
-	mp->update(stats->mp, stats->get(STAT_MP_MAX), inpt->mouse);
+	hp->update(stats->hp, stats->get(STAT_HP_MAX));
+	mp->update(stats->mp, stats->get(STAT_MP_MAX));
 
 	if (stats->level == static_cast<int>(stats->xp_table.size()))
-		xp->update((stats->xp - stats->xp_table[stats->level-1]), (stats->xp - stats->xp_table[stats->level-1]), inpt->mouse, msg->get("XP: %d", stats->xp));
+		xp->update((stats->xp - stats->xp_table[stats->level-1]), (stats->xp - stats->xp_table[stats->level-1]), msg->get("XP: %d", stats->xp));
 	else
-		xp->update((stats->xp - stats->xp_table[stats->level-1]), (stats->xp_table[stats->level] - stats->xp_table[stats->level-1]), inpt->mouse, msg->get("XP: %d/%d", stats->xp, stats->xp_table[stats->level]));
+		xp->update((stats->xp - stats->xp_table[stats->level-1]), (stats->xp_table[stats->level] - stats->xp_table[stats->level-1]), msg->get("XP: %d/%d", stats->xp, stats->xp_table[stats->level]));
 
 	// when selecting item quantities, don't process other menus
 	if (num_picker->visible) {

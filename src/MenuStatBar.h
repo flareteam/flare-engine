@@ -38,7 +38,6 @@ private:
 	WidgetLabel *label;
 	unsigned long stat_cur;
 	unsigned long stat_max;
-	Point mouse;
 	Rect bar_pos;
 	LabelInfo text_pos;
 	bool orientation;
@@ -52,7 +51,7 @@ public:
 	explicit MenuStatBar(const std::string& type);
 	~MenuStatBar();
 	void loadGraphics();
-	void update(unsigned long _stat_cur, unsigned long _stat_max, const Point& _mouse, const std::string& _custom_string = "");
+	void update(unsigned long _stat_cur, unsigned long _stat_max, const std::string& _custom_string = "");
 	void render();
 };
 

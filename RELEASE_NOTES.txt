@@ -4,6 +4,10 @@ Engine features:
 
 * Allow modders to define a target screen DPI for resolution scaling.
 
+Engine fixes:
+
+* Fixed performance flaw when "always show statbar labels" was enabled.
+
 
 
 Flare v1.05 (http://flarerpg.org/index.php/2018/04/30/flare-1-05/)
