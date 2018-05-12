@@ -1477,22 +1477,22 @@ bool MenuPowers::isTabListSelected() {
 }
 
 int MenuPowers::getSelectedCellIndex() {
-	int current = getCurrentTabList()->getCurrent();
+	TabList* cur_tablist = getCurrentTabList();
+	int current = cur_tablist->getCurrent();
 
 	if (tabs.empty()) {
 		return current;
 	}
 	else {
-		int active_tab = tab_control->getActiveTab();
-		int index_offset = 0;
+		WidgetSlot *cur_slot = static_cast<WidgetSlot*>(cur_tablist->getWidgetByIndex(current));
 
-		for (int i=0; i<active_tab; ++i) {
-			index_offset += static_cast<int>(tablist_pow[active_tab].size());
+		for (size_t i = 0; i < slots.size(); ++i) {
+			if (slots[i] == cur_slot)
+				return static_cast<int>(i);
 		}
 
-		index_offset += current;
-
-		return index_offset;
+		// we should never hit this return statement
+		return 0;
 	}
 }
 

@@ -8,6 +8,7 @@ Engine features:
 Engine fixes:
 
 * Fixed performance flaw when "always show statbar labels" was enabled.
+* Fix bug where incorrect Power menu tooltip was fetched when not using a mouse.
 
 
 

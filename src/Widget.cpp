@@ -140,6 +140,15 @@ int TabList::getCurrent() {
 	return current;
 }
 
+Widget* TabList::getWidgetByIndex(int index) {
+	if (static_cast<size_t>(index) < widgets.size()) {
+		return widgets[index];
+	}
+	else {
+		return NULL;
+	}
+}
+
 unsigned TabList::size() {
 	return static_cast<unsigned>(widgets.size());
 }

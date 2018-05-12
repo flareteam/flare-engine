@@ -86,6 +86,7 @@ public:
 	void clear();						// Remove all widgets
 	void setCurrent(Widget* widget);
 	int getCurrent();
+	Widget* getWidgetByIndex(int index);
 	unsigned size();
 	Widget* getNext(bool inner = true, WidgetRelSelect dir = WIDGET_SELECT_AUTO);	// Increment current selected, return widget
 	Widget* getPrev(bool inner = true, WidgetRelSelect dir = WIDGET_SELECT_AUTO);	// Decrement current selected, return widget
