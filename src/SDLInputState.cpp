@@ -254,6 +254,13 @@ void SDLInputState::handle() {
 					} else if (event.tfinger.dy < 0) {
 						scroll_down = true;
 					}
+
+					for (size_t i = 0; i < touch_fingers.size(); ++i) {
+						if (touch_fingers[i].id == event.tfinger.fingerId) {
+							touch_fingers[i].pos.x = mouse.x;
+							touch_fingers[i].pos.y = mouse.y;
+						}
+					}
 				}
 				break;
 			case SDL_FINGERDOWN:
@@ -264,14 +271,32 @@ void SDLInputState::handle() {
 					mouse.y = static_cast<int>(event.tfinger.y * VIEW_H);
 					pressing[MAIN1] = true;
 					un_press[MAIN1] = false;
+
+					FingerData fd;
+					fd.id = event.tfinger.fingerId;
+					fd.pos.x = mouse.x;
+					fd.pos.y = mouse.y;
+					touch_fingers.push_back(fd);
 				}
 				break;
 			case SDL_FINGERUP:
 				last_is_joystick = false;
 				if (platform_options.is_mobile_device) {
-					touch_locked = false;
-					un_press[MAIN1] = true;
-					last_button = binding[MAIN1];
+					for (size_t i = 0; i < touch_fingers.size(); ++i) {
+						if (touch_fingers[i].id == event.tfinger.fingerId) {
+							touch_fingers.erase(touch_fingers.begin() + i);
+							break;
+						}
+					}
+					if (touch_fingers.empty()) {
+						touch_locked = false;
+						un_press[MAIN1] = true;
+						last_button = binding[MAIN1];
+					}
+					else {
+						mouse.x = touch_fingers.back().pos.x;
+						mouse.y = touch_fingers.back().pos.y;
+					}
 				}
 				break;
 

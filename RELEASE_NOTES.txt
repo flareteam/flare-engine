@@ -3,6 +3,7 @@ Flare v1.06 (WIP, link soon)
 Engine features:
 
 * Allow modders to define a target screen DPI for resolution scaling.
+* Add virtual joystick buttons for touchscreen devices.
 
 Engine fixes:
 

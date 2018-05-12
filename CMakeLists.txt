@@ -158,6 +158,7 @@ Set (FLARE_SOURCES
 	./src/MenuStash.cpp
 	./src/MenuStatBar.cpp
 	./src/MenuTalker.cpp
+	./src/MenuTouchControls.cpp
 	./src/MenuVendor.cpp
 	./src/MessageEngine.cpp
 	./src/ModManager.cpp
@@ -269,6 +270,7 @@ Set (FLARE_HEADERS
 	./src/MenuStash.h
 	./src/MenuStatBar.h
 	./src/MenuTalker.h
+	./src/MenuTouchControls.h
 	./src/MenuVendor.h
 	./src/MessageEngine.h
 	./src/ModManager.h

@@ -991,8 +991,8 @@ std::string getVersionString() {
  */
 void loadMobileDefaults() {
 	if (platform_options.is_mobile_device) {
-		MOUSE_MOVE = true;
-		MOUSE_AIM = true;
+		MOUSE_MOVE = false;
+		MOUSE_AIM = false;
 		NO_MOUSE = false;
 		ENABLE_JOYSTICK = false;
 		HARDWARE_CURSOR = true;

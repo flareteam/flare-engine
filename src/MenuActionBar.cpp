@@ -33,7 +33,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuActionBar.h"
 #include "MenuInventory.h"
 #include "MenuManager.h"
+#include "MenuTouchControls.h"
 #include "MessageEngine.h"
+#include "Platform.h"
 #include "PowerManager.h"
 #include "RenderDevice.h"
 #include "Settings.h"
@@ -495,6 +497,9 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 		slots[10]->in_focus = true;
 	}
 
+	// bool enable_main1 = false;
+	bool enable_main1 = !platform_options.is_mobile_device || (!menu->menus_open && menu->touch_controls->checkAllowMain1());
+
 	// check click and hotkey actions
 	for (unsigned i = 0; i < slots_count; i++) {
 		ActionData action;
@@ -547,7 +552,7 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 				action.power = hotkeys_mod[i];
 				twostep_slot = -1;
 			}
-			else if (i==10 && inpt->pressing[MAIN1] && !inpt->lock[MAIN1] && !isWithinRect(window_area, inpt->mouse)) {
+			else if (i==10 && inpt->pressing[MAIN1] && !inpt->lock[MAIN1] && !isWithinRect(window_area, inpt->mouse) && enable_main1) {
 				have_aim = inpt->usingMouse();
 				action.power = hotkeys_mod[10];
 				twostep_slot = -1;

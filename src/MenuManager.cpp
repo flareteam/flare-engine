@@ -45,6 +45,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuStash.h"
 #include "MenuStatBar.h"
 #include "MenuTalker.h"
+#include "MenuTouchControls.h"
 #include "MenuVendor.h"
 #include "MessageEngine.h"
 #include "ModManager.h"
@@ -101,6 +102,7 @@ MenuManager::MenuManager(StatBlock *_stats)
 	, effects(NULL)
 	, stash(NULL)
 	, devconsole(NULL)
+	, touch_controls(NULL)
 	, subtitles(NULL)
 	, pause(false)
 	, menus_open(false) {
@@ -149,6 +151,8 @@ MenuManager::MenuManager(StatBlock *_stats)
 		devconsole = new MenuDevConsole();
 	}
 
+	touch_controls = new MenuTouchControls();
+
 	subtitles = new Subtitles();
 
 	tip = new WidgetTooltip();
@@ -166,6 +170,8 @@ void MenuManager::alignAll() {
 	if (DEV_MODE) {
 		devconsole->align();
 	}
+
+	touch_controls->align();
 }
 
 void MenuManager::renderIcon(int x, int y) {
@@ -382,6 +388,8 @@ void MenuManager::logic() {
 		devconsole->logic();
 	}
 
+	touch_controls->logic();
+
 	if (chr->checkUpgrade() || stats->level_up) {
 		// apply equipment and max hp/mp
 		inv->applyEquipment();
@@ -557,6 +565,8 @@ void MenuManager::logic() {
 	bool console_open = DEV_MODE && devconsole->visible;
 	menus_open = (inv->visible || pow->visible || chr->visible || questlog->visible || vendor->visible || talker->visible || npc->visible || book->visible || console_open);
 	pause = (MENUS_PAUSE && menus_open) || exit->visible || console_open || book->visible;
+
+	touch_controls->visible = !menus_open;
 
 	if (stats->alive) {
 
@@ -1217,6 +1227,8 @@ void MenuManager::render() {
 
 	subtitles->render();
 
+	touch_controls->render();
+
 	if (!num_picker->visible && !mouse_dragging && !sticky_dragging) {
 		if (!inpt->usingMouse() || TOUCHSCREEN)
 			handleKeyboardTooltips();
@@ -1477,6 +1489,8 @@ MenuManager::~MenuManager() {
 	if (DEV_MODE) {
 		delete devconsole;
 	}
+
+	delete touch_controls;
 
 	delete subtitles;
 

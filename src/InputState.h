@@ -160,6 +160,13 @@ protected:
 	bool un_press[key_count];
 	Point current_touch;
 	bool dump_event;
+
+	class FingerData {
+	public:
+		long int id;
+		Point pos;
+	};
+	std::vector<FingerData> touch_fingers;
 };
 
 #endif

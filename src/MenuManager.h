@@ -48,6 +48,7 @@ class MenuExit;
 class MenuActiveEffects;
 class MenuStash;
 class MenuDevConsole;
+class MenuTouchControls;
 class StatBlock;
 class Subtitles;
 class WidgetTooltip;
@@ -129,6 +130,7 @@ public:
 	MenuStash *stash;
 
 	MenuDevConsole *devconsole;
+	MenuTouchControls *touch_controls;
 
 	Subtitles *subtitles;
 
