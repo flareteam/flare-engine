@@ -497,7 +497,6 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 		slots[10]->in_focus = true;
 	}
 
-	// bool enable_main1 = false;
 	bool enable_main1 = !platform_options.is_mobile_device || (!menu->menus_open && menu->touch_controls->checkAllowMain1());
 
 	// check click and hotkey actions
