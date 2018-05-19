@@ -77,7 +77,7 @@ GameStateNew::GameStateNew()
 	button_permadeath = new WidgetCheckBox();
 	if (DEATH_PENALTY_PERMADEATH) {
 		button_permadeath->enabled = false;
-		button_permadeath->Check();
+		button_permadeath->setChecked(true);
 	}
 
 	class_list = new WidgetListBox (12);

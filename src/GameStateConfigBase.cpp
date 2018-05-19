@@ -516,32 +516,15 @@ void GameStateConfigBase::updateAudio() {
 }
 
 void GameStateConfigBase::updateInterface() {
-	if (COMBAT_TEXT) combat_text_cb->Check();
-	else combat_text_cb->unCheck();
-
-	if (SHOW_FPS) show_fps_cb->Check();
-	else show_fps_cb->unCheck();
-
-	if (COLORBLIND) colorblind_cb->Check();
-	else colorblind_cb->unCheck();
-
-	if (HARDWARE_CURSOR) hardware_cursor_cb->Check();
-	else hardware_cursor_cb->unCheck();
-
-	if (DEV_MODE) dev_mode_cb->Check();
-	else dev_mode_cb->unCheck();
-
-	if (LOOT_TOOLTIPS) loot_tooltips_cb->Check();
-	else loot_tooltips_cb->unCheck();
-
-	if (STATBAR_LABELS) statbar_labels_cb->Check();
-	else statbar_labels_cb->unCheck();
-
-	if (AUTO_EQUIP) auto_equip_cb->Check();
-	else auto_equip_cb->unCheck();
-
-	if (SUBTITLES) subtitles_cb->Check();
-	else subtitles_cb->unCheck();
+	combat_text_cb->setChecked(COMBAT_TEXT);
+	show_fps_cb->setChecked(SHOW_FPS);
+	colorblind_cb->setChecked(COLORBLIND);
+	hardware_cursor_cb->setChecked(HARDWARE_CURSOR);
+	dev_mode_cb->setChecked(DEV_MODE);
+	loot_tooltips_cb->setChecked(LOOT_TOOLTIPS);
+	statbar_labels_cb->setChecked(STATBAR_LABELS);
+	auto_equip_cb->setChecked(AUTO_EQUIP);
+	subtitles_cb->setChecked(SUBTITLES);
 
 	refreshLanguages();
 }
@@ -578,8 +561,8 @@ void GameStateConfigBase::logic() {
 
 		if (platform_options.force_hardware_cursor) {
 			// for some platforms, hardware mouse cursor can not be turned off
-			hardware_cursor_cb->Check();
 			HARDWARE_CURSOR = true;
+			hardware_cursor_cb->setChecked(HARDWARE_CURSOR);
 		}
 	}
 	else if (active_tab == MODS_TAB) {
@@ -716,8 +699,7 @@ void GameStateConfigBase::logicAudio() {
 
 void GameStateConfigBase::logicInterface() {
 	if (combat_text_cb->checkClick()) {
-		if (combat_text_cb->isChecked()) COMBAT_TEXT=true;
-		else COMBAT_TEXT=false;
+		COMBAT_TEXT = combat_text_cb->isChecked();
 	}
 	else if (language_lstb->checkClick()) {
 		int lang_id = language_lstb->getSelected();
@@ -725,36 +707,28 @@ void GameStateConfigBase::logicInterface() {
 			LANGUAGE = language_ISO[lang_id];
 	}
 	else if (show_fps_cb->checkClick()) {
-		if (show_fps_cb->isChecked()) SHOW_FPS=true;
-		else SHOW_FPS=false;
+		SHOW_FPS = show_fps_cb->isChecked();
 	}
 	else if (colorblind_cb->checkClick()) {
-		if (colorblind_cb->isChecked()) COLORBLIND=true;
-		else COLORBLIND=false;
+		COLORBLIND = colorblind_cb->isChecked();
 	}
 	else if (hardware_cursor_cb->checkClick()) {
-		if (hardware_cursor_cb->isChecked()) HARDWARE_CURSOR=true;
-		else HARDWARE_CURSOR=false;
+		HARDWARE_CURSOR = hardware_cursor_cb->isChecked();
 	}
 	else if (dev_mode_cb->checkClick()) {
-		if (dev_mode_cb->isChecked()) DEV_MODE=true;
-		else DEV_MODE=false;
+		DEV_MODE = dev_mode_cb->isChecked();
 	}
 	else if (loot_tooltips_cb->checkClick()) {
-		if (loot_tooltips_cb->isChecked()) LOOT_TOOLTIPS=true;
-		else LOOT_TOOLTIPS=false;
+		LOOT_TOOLTIPS = loot_tooltips_cb->isChecked();
 	}
 	else if (statbar_labels_cb->checkClick()) {
-		if (statbar_labels_cb->isChecked()) STATBAR_LABELS=true;
-		else STATBAR_LABELS=false;
+		STATBAR_LABELS = statbar_labels_cb->isChecked();
 	}
 	else if (auto_equip_cb->checkClick()) {
-		if (auto_equip_cb->isChecked()) AUTO_EQUIP=true;
-		else AUTO_EQUIP=false;
+		AUTO_EQUIP = auto_equip_cb->isChecked();
 	}
 	else if (subtitles_cb->checkClick()) {
-		if (subtitles_cb->isChecked()) SUBTITLES=true;
-		else SUBTITLES=false;
+		SUBTITLES = subtitles_cb->isChecked();
 	}
 }
 

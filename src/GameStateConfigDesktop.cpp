@@ -507,23 +507,17 @@ void GameStateConfigDesktop::update() {
 }
 
 void GameStateConfigDesktop::updateVideo() {
-	if (FULLSCREEN) fullscreen_cb->Check();
-	else fullscreen_cb->unCheck();
-	if (HWSURFACE) hwsurface_cb->Check();
-	else hwsurface_cb->unCheck();
-	if (VSYNC) vsync_cb->Check();
-	else vsync_cb->unCheck();
-	if (TEXTURE_FILTER) texture_filter_cb->Check();
-	else texture_filter_cb->unCheck();
-	if (DPI_SCALING) dpi_scaling_cb->Check();
-	else dpi_scaling_cb->unCheck();
+	fullscreen_cb->setChecked(FULLSCREEN);
+	hwsurface_cb->setChecked(HWSURFACE);
+	vsync_cb->setChecked(VSYNC);
+	texture_filter_cb->setChecked(TEXTURE_FILTER);
+	dpi_scaling_cb->setChecked(DPI_SCALING);
+	change_gamma_cb->setChecked(CHANGE_GAMMA);
 
 	if (CHANGE_GAMMA) {
-		change_gamma_cb->Check();
 		render_device->setGamma(GAMMA);
 	}
 	else {
-		change_gamma_cb->unCheck();
 		GAMMA = 1.0;
 		gamma_sl->enabled = false;
 		render_device->resetGamma();
@@ -534,14 +528,10 @@ void GameStateConfigDesktop::updateVideo() {
 }
 
 void GameStateConfigDesktop::updateInput() {
-	if (ENABLE_JOYSTICK) enable_joystick_cb->Check();
-	else enable_joystick_cb->unCheck();
-	if (MOUSE_AIM) mouse_aim_cb->Check();
-	else mouse_aim_cb->unCheck();
-	if (NO_MOUSE) no_mouse_cb->Check();
-	else no_mouse_cb->unCheck();
-	if (MOUSE_MOVE) mouse_move_cb->Check();
-	else mouse_move_cb->unCheck();
+	enable_joystick_cb->setChecked(ENABLE_JOYSTICK);
+	mouse_aim_cb->setChecked(MOUSE_AIM);
+	no_mouse_cb->setChecked(NO_MOUSE);
+	mouse_move_cb->setChecked(MOUSE_MOVE);
 
 	if (ENABLE_JOYSTICK && inpt->getNumJoysticks() > 0) {
 		inpt->initJoystick();
@@ -635,20 +625,16 @@ bool GameStateConfigDesktop::logicMain() {
 
 void GameStateConfigDesktop::logicVideo() {
 	if (fullscreen_cb->checkClick()) {
-		if (fullscreen_cb->isChecked()) FULLSCREEN=true;
-		else FULLSCREEN=false;
+		FULLSCREEN = fullscreen_cb->isChecked();
 	}
 	else if (hwsurface_cb->checkClick()) {
-		if (hwsurface_cb->isChecked()) HWSURFACE=true;
-		else HWSURFACE=false;
+		HWSURFACE = hwsurface_cb->isChecked();
 	}
 	else if (vsync_cb->checkClick()) {
-		if (vsync_cb->isChecked()) VSYNC=true;
-		else VSYNC=false;
+		VSYNC = vsync_cb->isChecked();
 	}
 	else if (texture_filter_cb->checkClick()) {
-		if (texture_filter_cb->isChecked()) TEXTURE_FILTER=true;
-		else TEXTURE_FILTER=false;
+		TEXTURE_FILTER = texture_filter_cb->isChecked();
 	}
 	else if (dpi_scaling_cb->checkClick()) {
 		DPI_SCALING = dpi_scaling_cb->isChecked();
@@ -657,24 +643,20 @@ void GameStateConfigDesktop::logicVideo() {
 		force_refresh_background = true;
 	}
 	else if (change_gamma_cb->checkClick()) {
-		if (change_gamma_cb->isChecked()) {
-			CHANGE_GAMMA = true;
+		CHANGE_GAMMA = change_gamma_cb->isChecked();
+		if (CHANGE_GAMMA) {
 			gamma_sl->enabled = true;
 		}
 		else {
-			CHANGE_GAMMA = false;
 			GAMMA = 1.0;
 			gamma_sl->enabled = false;
 			gamma_sl->set(GAMMA_MIN, GAMMA_MAX, static_cast<int>(GAMMA*10.0));
 			render_device->resetGamma();
 		}
 	}
-	else if (CHANGE_GAMMA) {
-		gamma_sl->enabled = true;
-		if (gamma_sl->checkClick()) {
-			GAMMA = static_cast<float>(gamma_sl->getValue())*0.1f;
-			render_device->setGamma(GAMMA);
-		}
+	else if (gamma_sl->checkClick()) {
+		GAMMA = static_cast<float>(gamma_sl->getValue())*0.1f;
+		render_device->setGamma(GAMMA);
 	}
 	else if (renderer_lstb->checkClick()) {
 		new_render_device = renderer_lstb->getValue();
@@ -736,16 +718,15 @@ void GameStateConfigDesktop::logicInput() {
 	else if (joystick_device_lstb->checkClick()) {
 		JOYSTICK_DEVICE = joystick_device_lstb->getSelected();
 		if (JOYSTICK_DEVICE != -1) {
-			enable_joystick_cb->Check();
 			ENABLE_JOYSTICK=true;
 			if (inpt->getNumJoysticks() > 0) {
 				inpt->initJoystick();
 			}
 		}
 		else {
-			enable_joystick_cb->unCheck();
 			ENABLE_JOYSTICK = false;
 		}
+		enable_joystick_cb->setChecked(ENABLE_JOYSTICK);
 	}
 }
 
@@ -929,23 +910,24 @@ void GameStateConfigDesktop::cleanupDialogs() {
 }
 
 void GameStateConfigDesktop::enableMouseOptions() {
-	no_mouse_cb->unCheck();
 	NO_MOUSE = false;
+	no_mouse_cb->setChecked(NO_MOUSE);
 }
 
 void GameStateConfigDesktop::disableMouseOptions() {
-	mouse_aim_cb->unCheck();
 	MOUSE_AIM=false;
-	mouse_move_cb->unCheck();
-	MOUSE_MOVE=false;
+	mouse_aim_cb->setChecked(MOUSE_AIM);
 
-	no_mouse_cb->Check();
+	MOUSE_MOVE=false;
+	mouse_move_cb->setChecked(MOUSE_MOVE);
+
 	NO_MOUSE = true;
+	no_mouse_cb->setChecked(NO_MOUSE);
 }
 
 void GameStateConfigDesktop::disableJoystickOptions() {
-	enable_joystick_cb->unCheck();
 	ENABLE_JOYSTICK=false;
+	enable_joystick_cb->setChecked(ENABLE_JOYSTICK);
 
 	for (int i=0; i<joystick_device_lstb->getSize(); i++)
 		joystick_device_lstb->deselect(i);

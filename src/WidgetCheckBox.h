@@ -37,9 +37,7 @@ public:
 	~WidgetCheckBox ();
 
 	void activate();
-	void Check();
-	void unCheck();
-	void toggleCheck();
+	void setChecked(const bool status);
 	bool checkClick();
 	bool checkClick(int x, int y);
 	bool isChecked() const;

@@ -63,19 +63,11 @@ WidgetCheckBox::~WidgetCheckBox () {
 	if (cb) delete cb;
 }
 
-void WidgetCheckBox::Check () {
-	checked = true;
-	if (cb) cb->setClip(0,pos.h,pos.w,pos.h);
-}
-
-void WidgetCheckBox::unCheck () {
-	checked = false;
-	if (cb)	cb->setClip(0,0,pos.w,pos.h);
-}
-
-void WidgetCheckBox::toggleCheck () {
-	checked = !checked;
-	if (cb)	cb->setClip(0,(checked ? pos.h : 0), pos.w, pos.h);
+void WidgetCheckBox::setChecked(const bool status) {
+	checked = status;
+	if (cb)	{
+		cb->setClip(0,(checked ? pos.h : 0), pos.w, pos.h);
+	}
 }
 
 bool WidgetCheckBox::checkClick() {
@@ -94,7 +86,7 @@ bool WidgetCheckBox::checkClick (int x, int y) {
 	if (pressed && !inpt->lock[MAIN1] && !inpt->lock[ACCEPT] && (isWithinRect(pos, mouse) || activated)) { // this is a button release
 		activated = false;
 		pressed = false;
-		toggleCheck();
+		setChecked(!checked);
 		return true;
 	}
 
