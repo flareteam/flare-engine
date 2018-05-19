@@ -112,6 +112,7 @@ extern bool VSYNC;
 extern bool HWSURFACE;
 extern bool TEXTURE_FILTER;
 extern bool IGNORE_TEXTURE_FILTER;
+extern bool DPI_SCALING;
 extern bool CHANGE_GAMMA;
 extern float GAMMA;
 extern std::string RENDER_DEVICE;

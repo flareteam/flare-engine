@@ -47,6 +47,7 @@ public:
 	bool has_background;
 	bool reload_music;
 	bool reload_backgrounds;
+	bool force_refresh_background;
 	bool save_settings_on_exit;
 
 	int load_counter;

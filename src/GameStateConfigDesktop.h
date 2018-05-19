@@ -99,6 +99,8 @@ private:
 	WidgetLabel         * vsync_lb;
 	WidgetCheckBox      * texture_filter_cb;
 	WidgetLabel         * texture_filter_lb;
+	WidgetCheckBox      * dpi_scaling_cb;
+	WidgetLabel         * dpi_scaling_lb;
 	WidgetCheckBox      * change_gamma_cb;
 	WidgetLabel         * change_gamma_lb;
 	WidgetSlider        * gamma_sl;

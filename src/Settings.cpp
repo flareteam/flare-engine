@@ -73,6 +73,7 @@ ConfigEntry config[] = {
 	{ "hwsurface",         &typeid(HWSURFACE),          "1",            &HWSURFACE,          "hardware surfaces, v-sync. Try disabling for performance. 1 enable, 0 disable."},
 	{ "vsync",             &typeid(VSYNC),              "1",            &VSYNC,              NULL},
 	{ "texture_filter",    &typeid(TEXTURE_FILTER),     "1",            &TEXTURE_FILTER,     "texture filter quality. 0 nearest neighbor (worst), 1 linear (best)"},
+	{ "dpi_scaling",       &typeid(DPI_SCALING),        "0",            &DPI_SCALING,        "toggle DPI-based render scaling. 1 enable, 0 disable"},
 	{ "max_fps",           &typeid(MAX_FRAMES_PER_SEC), "60",           &MAX_FRAMES_PER_SEC, "maximum frames per second. default is 60"},
 	{ "renderer",          &typeid(RENDER_DEVICE),      "sdl_hardware", &RENDER_DEVICE,      "default render device. 'sdl' is the default setting"},
 	{ "enable_joystick",   &typeid(ENABLE_JOYSTICK),    "0",            &ENABLE_JOYSTICK,    "joystick settings."},
@@ -140,6 +141,7 @@ bool VSYNC;
 bool HWSURFACE;
 bool TEXTURE_FILTER;
 bool IGNORE_TEXTURE_FILTER = false;
+bool DPI_SCALING;
 bool CHANGE_GAMMA;
 float GAMMA;
 std::string RENDER_DEVICE;
@@ -998,6 +1000,7 @@ void loadMobileDefaults() {
 		HARDWARE_CURSOR = true;
 		TOUCHSCREEN = true;
 		FULLSCREEN = true;
+		DPI_SCALING = true;
 	}
 }
 

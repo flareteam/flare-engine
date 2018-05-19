@@ -365,6 +365,8 @@ body {
 
 <p><strong>texture_filter</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Texture Filtering&rdquo; checkbox relative to the frame.</p>
 
+<p><strong>dpi_scaling</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;DPI scaling&rdquo; checkbox relative to the frame.</p>
+
 <p><strong>change_gamma</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Allow changing gamma&rdquo; checkbox relative to the frame.</p>
 
 <p><strong>gamma</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Gamma&rdquo; slider relative to the frame.</p>
@@ -1709,7 +1711,7 @@ body {
 
 <p><strong>virtual_height</strong> | <code>list(int)</code> | A list of heights (in pixels) that the game can use for its actual rendering area. The virtual height chosen is based on the current window height. The width will be resized to match the window&rsquo;s aspect ratio, and everything will be scaled up to fill the window.</p>
 
-<p><strong>virtual_dpi</strong> | <code>float</code> | A target diagonal screen DPI used to determine how much to scale the internal render resolution. Currently only affects mobile devices.</p>
+<p><strong>virtual_dpi</strong> | <code>float</code> | A target diagonal screen DPI used to determine how much to scale the internal render resolution.</p>
 
 <p><strong>ignore_texture_filter</strong> | <code>bool</code> | If true, this ignores the &ldquo;Texture Filtering&rdquo; video setting and uses only nearest-neighbor scaling. This is good for games that use pixel art assets.</p>
 

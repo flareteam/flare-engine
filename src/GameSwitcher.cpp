@@ -190,8 +190,9 @@ void GameSwitcher::logic() {
 	}
 
 	// resize background image when window is resized
-	if (inpt->window_resized && currentState->has_background) {
+	if ((inpt->window_resized || currentState->force_refresh_background) && currentState->has_background) {
 		refreshBackground();
+		currentState->force_refresh_background = false;
 	}
 
 	currentState->logic();

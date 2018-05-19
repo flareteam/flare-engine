@@ -308,7 +308,7 @@ void RenderDevice::windowResizeInternal() {
 	getWindowSize(&SCREEN_W, &SCREEN_H);
 
 	unsigned short temp_screen_h;
-	if (ddpi > 0 && VIRTUAL_DPI > 0) {
+	if (DPI_SCALING && ddpi > 0 && VIRTUAL_DPI > 0) {
 		temp_screen_h = static_cast<unsigned short>(static_cast<float>(SCREEN_H) * (VIRTUAL_DPI / ddpi));
 	}
 	else {

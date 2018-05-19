@@ -63,6 +63,8 @@ GameStateConfigDesktop::GameStateConfigDesktop(bool _enable_video_tab)
 	, vsync_lb(new WidgetLabel())
 	, texture_filter_cb(new WidgetCheckBox())
 	, texture_filter_lb(new WidgetLabel())
+	, dpi_scaling_cb(new WidgetCheckBox())
+	, dpi_scaling_lb(new WidgetLabel())
 	, change_gamma_cb(new WidgetCheckBox())
 	, change_gamma_lb(new WidgetLabel())
 	, gamma_sl(new WidgetSlider())
@@ -188,6 +190,7 @@ void GameStateConfigDesktop::readConfig() {
 
 	hwsurface_cb->tooltip = msg->get("Disable for performance");
 	vsync_cb->tooltip = msg->get("Disable for performance");
+	dpi_scaling_cb->tooltip = msg->get("When enabled, this uses the screen DPI in addition to the window dimensions to scale the rendering resolution. Otherwise, only the window dimensions are used.");
 	change_gamma_cb->tooltip = msg->get("Experimental");
 	no_mouse_cb->tooltip = msg->get("For handheld devices");
 }
@@ -240,6 +243,10 @@ bool GameStateConfigDesktop::parseKeyDesktop(FileParser &infile, int &x1, int &y
 	else if (infile.key == "texture_filter") {
 		// @ATTR texture_filter|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Texture Filtering" checkbox relative to the frame.
 		placeLabeledWidget(texture_filter_lb, texture_filter_cb, x1, y1, x2, y2, msg->get("Texture Filtering"), JUSTIFY_RIGHT);
+	}
+	else if (infile.key == "dpi_scaling") {
+		// @ATTR dpi_scaling|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "DPI scaling" checkbox relative to the frame.
+		placeLabeledWidget(dpi_scaling_lb, dpi_scaling_cb, x1, y1, x2, y2, msg->get("DPI scaling"), JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "change_gamma") {
 		// @ATTR change_gamma|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Allow changing gamma" checkbox relative to the frame.
@@ -396,6 +403,8 @@ void GameStateConfigDesktop::addChildWidgetsDesktop() {
 		addChildWidget(vsync_lb, VIDEO_TAB);
 		addChildWidget(texture_filter_cb, VIDEO_TAB);
 		addChildWidget(texture_filter_lb, VIDEO_TAB);
+		addChildWidget(dpi_scaling_cb, VIDEO_TAB);
+		addChildWidget(dpi_scaling_lb, VIDEO_TAB);
 		addChildWidget(change_gamma_cb, VIDEO_TAB);
 		addChildWidget(change_gamma_lb, VIDEO_TAB);
 		addChildWidget(gamma_sl, VIDEO_TAB);
@@ -436,6 +445,7 @@ void GameStateConfigDesktop::setupTabList() {
 		tablist_video.add(hwsurface_cb);
 		tablist_video.add(vsync_cb);
 		tablist_video.add(texture_filter_cb);
+		tablist_video.add(dpi_scaling_cb);
 		tablist_video.add(change_gamma_cb);
 		tablist_video.add(gamma_sl);
 		tablist_video.add(renderer_lstb);
@@ -505,6 +515,8 @@ void GameStateConfigDesktop::updateVideo() {
 	else vsync_cb->unCheck();
 	if (TEXTURE_FILTER) texture_filter_cb->Check();
 	else texture_filter_cb->unCheck();
+	if (DPI_SCALING) dpi_scaling_cb->Check();
+	else dpi_scaling_cb->unCheck();
 
 	if (CHANGE_GAMMA) {
 		change_gamma_cb->Check();
@@ -637,6 +649,12 @@ void GameStateConfigDesktop::logicVideo() {
 	else if (texture_filter_cb->checkClick()) {
 		if (texture_filter_cb->isChecked()) TEXTURE_FILTER=true;
 		else TEXTURE_FILTER=false;
+	}
+	else if (dpi_scaling_cb->checkClick()) {
+		DPI_SCALING = dpi_scaling_cb->isChecked();
+		render_device->windowResize();
+		refreshWidgets();
+		force_refresh_background = true;
 	}
 	else if (change_gamma_cb->checkClick()) {
 		if (change_gamma_cb->isChecked()) {
@@ -806,6 +824,7 @@ void GameStateConfigDesktop::renderTooltips(TooltipData& tip_new) {
 	if (active_tab == VIDEO_TAB && tip_new.isEmpty()) tip_new = renderer_lstb->checkTooltip(inpt->mouse);
 	if (active_tab == VIDEO_TAB && tip_new.isEmpty()) tip_new = hwsurface_cb->checkTooltip(inpt->mouse);
 	if (active_tab == VIDEO_TAB && tip_new.isEmpty()) tip_new = vsync_cb->checkTooltip(inpt->mouse);
+	if (active_tab == VIDEO_TAB && tip_new.isEmpty()) tip_new = dpi_scaling_cb->checkTooltip(inpt->mouse);
 	if (active_tab == VIDEO_TAB && tip_new.isEmpty()) tip_new = change_gamma_cb->checkTooltip(inpt->mouse);
 	if (active_tab == INPUT_TAB && tip_new.isEmpty()) tip_new = joystick_device_lstb->checkTooltip(inpt->mouse);
 	if (active_tab == INPUT_TAB && tip_new.isEmpty()) tip_new = no_mouse_cb->checkTooltip(inpt->mouse);
