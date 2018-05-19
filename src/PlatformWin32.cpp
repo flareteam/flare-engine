@@ -57,7 +57,7 @@ void PlatformSetPaths() {
 	createDir(PATH_USER + "\\saves");
 
 	PATH_DATA = "";
-	if (dirExists(CUSTOM_PATH_DATA)) PATH_DATA = CUSTOM_PATH_DATA;
+	if (pathExists(CUSTOM_PATH_DATA)) PATH_DATA = CUSTOM_PATH_DATA;
 	else if (!CUSTOM_PATH_DATA.empty()) {
 		logError("Settings: Could not find specified game data directory.");
 		CUSTOM_PATH_DATA = "";

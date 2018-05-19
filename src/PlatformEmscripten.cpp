@@ -59,7 +59,7 @@ void PlatformSetPaths() {
 	bool path_data = false;
 
 	// Check for the local data before trying installed ones.
-	if (dirExists("./mods")) {
+	if (pathExists("./mods")) {
 		if (!path_data) PATH_DATA = "./";
 		path_data = true;
 	}

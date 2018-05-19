@@ -27,7 +27,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <string>
 
-bool dirExists(const std::string &path);
 bool pathExists(const std::string &path);
 void createDir(const std::string &path);
 bool fileExists(const std::string &filename);

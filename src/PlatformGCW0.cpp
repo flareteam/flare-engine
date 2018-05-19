@@ -98,7 +98,7 @@ void PlatformSetPaths() {
 	bool path_data = false;
 
 	// if the user specified a data path, try to use it
-	if (dirExists(CUSTOM_PATH_DATA)) {
+	if (pathExists(CUSTOM_PATH_DATA)) {
 		if (!path_data) PATH_DATA = CUSTOM_PATH_DATA;
 		path_data = true;
 	}
@@ -108,7 +108,7 @@ void PlatformSetPaths() {
 	}
 
 	// Check for the local data before trying installed ones.
-	if (dirExists("./mods")) {
+	if (pathExists("./mods")) {
 		if (!path_data) PATH_DATA = "./";
 		path_data = true;
 	}
@@ -122,7 +122,7 @@ void PlatformSetPaths() {
 		while (pathtest != "") {
 			if (!path_data) {
 				PATH_DATA = pathtest + "/flare/";
-				if (dirExists(PATH_DATA)) path_data = true;
+				if (pathExists(PATH_DATA)) path_data = true;
 			}
 			if (path_data) break;
 			pathtest = popFirstString(pathlist,':');
@@ -131,22 +131,22 @@ void PlatformSetPaths() {
 
 #if defined DATA_INSTALL_DIR
 	if (!path_data) PATH_DATA = DATA_INSTALL_DIR "/";
-	if (!path_data && dirExists(PATH_DATA)) path_data = true;
+	if (!path_data && pathExists(PATH_DATA)) path_data = true;
 #endif
 
 	// check /usr/local/share/flare/ and /usr/share/flare/ next
 	if (!path_data) PATH_DATA = "/usr/local/share/flare/";
-	if (!path_data && dirExists(PATH_DATA)) path_data = true;
+	if (!path_data && pathExists(PATH_DATA)) path_data = true;
 
 	if (!path_data) PATH_DATA = "/usr/share/flare/";
-	if (!path_data && dirExists(PATH_DATA)) path_data = true;
+	if (!path_data && pathExists(PATH_DATA)) path_data = true;
 
 	// check "games" variants of these
 	if (!path_data) PATH_DATA = "/usr/local/share/games/flare/";
-	if (!path_data && dirExists(PATH_DATA)) path_data = true;
+	if (!path_data && pathExists(PATH_DATA)) path_data = true;
 
 	if (!path_data) PATH_DATA = "/usr/share/games/flare/";
-	if (!path_data && dirExists(PATH_DATA)) path_data = true;
+	if (!path_data && pathExists(PATH_DATA)) path_data = true;
 
 	// finally assume the local folder
 	if (!path_data)	PATH_DATA = "./";

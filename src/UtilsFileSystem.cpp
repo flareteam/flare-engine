@@ -35,11 +35,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 /**
  * Check to see if a directory/folder exists
  */
-bool dirExists(const std::string &path) {
-	struct stat st;
-	return (stat(path.c_str(), &st) == 0);
-}
-
 bool pathExists(const std::string &path) {
 	struct stat st;
 	return (stat(path.c_str(), &st) == 0);

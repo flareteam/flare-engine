@@ -101,8 +101,8 @@ static void init(const CmdLineArgs& cmd_line_args) {
 
 	if (!mods->haveFallbackMod()) {
 		logError("main: Could not find the default mod in the following locations:");
-		if (dirExists(PATH_USER + "mods")) logError("%smods/", PATH_USER.c_str());
-		if (dirExists(PATH_DATA + "mods")) logError("%smods/", PATH_DATA.c_str());
+		if (pathExists(PATH_USER + "mods")) logError("%smods/", PATH_USER.c_str());
+		if (pathExists(PATH_DATA + "mods")) logError("%smods/", PATH_DATA.c_str());
 		logError("A copy of the default mod is in the \"mods\" directory of the flare-engine repo.");
 		logError("The repo is located at: https://github.com/clintbellanger/flare-engine");
 		logError("Try again after copying the default mod to one of the above directories. Exiting.");
@@ -354,7 +354,7 @@ int main(int argc, char *argv[]) {
 			if (!CUSTOM_PATH_DATA.empty() && CUSTOM_PATH_DATA.at(CUSTOM_PATH_DATA.length()-1) != '/')
 				CUSTOM_PATH_DATA += "/";
 
-			if (dirExists(CUSTOM_PATH_DATA)) {
+			if (pathExists(CUSTOM_PATH_DATA)) {
 				logInfo("Custom data path: \"%s\"", CUSTOM_PATH_DATA.c_str());
 			}
 			else {

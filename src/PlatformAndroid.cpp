@@ -113,7 +113,7 @@ void PlatformSetPaths() {
 	}
 
 	for (int i = 0; i < internalSDList.size(); i++) {
-		if (dirExists(internalSDList[i])) {
+		if (pathExists(internalSDList[i])) {
 			PATH_USER = internalSDList[i] + "/Flare";
 			PATH_CONF = PATH_USER + "/config";
 
@@ -128,9 +128,9 @@ void PlatformSetPaths() {
 		logError("Settings: Android external storage unavailable: %s", SDL_GetError());
 	}
 
-	if (PATH_USER.empty() || !dirExists(PATH_USER)) {
+	if (PATH_USER.empty() || !pathExists(PATH_USER)) {
 		for (int i = 0; i < externalSDList.size(); i++) {
-			if (dirExists(externalSDList[i])) {
+			if (pathExists(externalSDList[i])) {
 				PATH_USER = externalSDList[i] + "/Flare";
 				PATH_CONF = PATH_USER + "/config";
 
