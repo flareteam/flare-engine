@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-30 13:30-0400\n"
+"POT-Creation-Date: 2018-05-21 16:45-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
 "Language-Team: Czech (https://www.transifex.com/flareorg/teams/84925/cs/)\n"
@@ -103,17 +103,17 @@ msgid ""
 "The default renderer that is often faster than the SDL software renderer."
 msgstr ""
 
-#: ../../../src/Entity.cpp:488
+#: ../../../src/Entity.cpp:513
 msgid "miss"
 msgstr "minout"
 
-#: ../../../src/Entity.cpp:525 ../../../src/PowerManager.cpp:1082
+#: ../../../src/Entity.cpp:550 ../../../src/PowerManager.cpp:1082
 #: ../../../src/StatBlock.cpp:809 ../../../src/StatBlock.cpp:815
 #, c-format
 msgid "+%d HP"
 msgstr ""
 
-#: ../../../src/Entity.cpp:532 ../../../src/StatBlock.cpp:820
+#: ../../../src/Entity.cpp:557 ../../../src/StatBlock.cpp:820
 #: ../../../src/StatBlock.cpp:826
 #, c-format
 msgid "+%d MP"
@@ -142,17 +142,17 @@ msgid "Cancel"
 msgstr "Zrušit"
 
 #: ../../../src/GameStateConfigBase.cpp:169
-#: ../../../src/GameStateConfigDesktop.cpp:130
+#: ../../../src/GameStateConfigDesktop.cpp:132
 msgid "Audio"
 msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:170
-#: ../../../src/GameStateConfigDesktop.cpp:131
+#: ../../../src/GameStateConfigDesktop.cpp:133
 msgid "Interface"
 msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:171
-#: ../../../src/GameStateConfigDesktop.cpp:134
+#: ../../../src/GameStateConfigDesktop.cpp:136
 msgid "Mods"
 msgstr "Mody"
 
@@ -220,111 +220,129 @@ msgstr "<< Zakázat"
 msgid "Enable >>"
 msgstr "Povolit >>"
 
-#: ../../../src/GameStateConfigBase.cpp:967
+#: ../../../src/GameStateConfigBase.cpp:941
 msgid "Version:"
 msgstr ""
 
-#: ../../../src/GameStateConfigBase.cpp:972
+#: ../../../src/GameStateConfigBase.cpp:946
 msgid "Game:"
 msgstr ""
 
-#: ../../../src/GameStateConfigBase.cpp:977
+#: ../../../src/GameStateConfigBase.cpp:951
 msgid "Engine version:"
 msgstr ""
 
-#: ../../../src/GameStateConfigBase.cpp:985
+#: ../../../src/GameStateConfigBase.cpp:959
 msgid "Requires mods:"
 msgstr ""
 
-#: ../../../src/GameStateConfigDesktop.cpp:83
-#: ../../../src/GameStateConfigDesktop.cpp:746
+#: ../../../src/GameStateConfigDesktop.cpp:85
+#: ../../../src/GameStateConfigDesktop.cpp:745
 msgid "Clear"
 msgstr ""
 
-#: ../../../src/GameStateConfigDesktop.cpp:83
-#: ../../../src/GameStateConfigDesktop.cpp:744
+#: ../../../src/GameStateConfigDesktop.cpp:85
+#: ../../../src/GameStateConfigDesktop.cpp:743
 msgid "Assign:"
 msgstr ""
 
-#: ../../../src/GameStateConfigDesktop.cpp:128
+#: ../../../src/GameStateConfigDesktop.cpp:130
 msgid "Video"
 msgstr ""
 
-#: ../../../src/GameStateConfigDesktop.cpp:132
+#: ../../../src/GameStateConfigDesktop.cpp:134
 msgid "Input"
 msgstr "Vstup"
 
-#: ../../../src/GameStateConfigDesktop.cpp:133
+#: ../../../src/GameStateConfigDesktop.cpp:135
 msgid "Keybindings"
 msgstr "Nastavení kláves"
 
-#: ../../../src/GameStateConfigDesktop.cpp:189
-#: ../../../src/GameStateConfigDesktop.cpp:190
-msgid "Disable for performance"
-msgstr "Zakážte pro rychlejší vykreslování"
-
 #: ../../../src/GameStateConfigDesktop.cpp:191
+msgid ""
+"Will try to store surfaces in video memory versus system memory. The effect "
+"this has on performance depends on the renderer."
+msgstr ""
+
+#: ../../../src/GameStateConfigDesktop.cpp:192
+msgid ""
+"Prevents screen tearing. Disable if you experience \"stuttering\" in "
+"windowed mode or input lag."
+msgstr ""
+
+#: ../../../src/GameStateConfigDesktop.cpp:193
+msgid ""
+"When enabled, this uses the screen DPI in addition to the window dimensions "
+"to scale the rendering resolution. Otherwise, only the window dimensions are "
+"used."
+msgstr ""
+
+#: ../../../src/GameStateConfigDesktop.cpp:194
 msgid "Experimental"
 msgstr "Experimentální"
 
-#: ../../../src/GameStateConfigDesktop.cpp:192
+#: ../../../src/GameStateConfigDesktop.cpp:195
 msgid "For handheld devices"
 msgstr ""
 
-#: ../../../src/GameStateConfigDesktop.cpp:210
+#: ../../../src/GameStateConfigDesktop.cpp:213
 msgid "Renderer"
 msgstr ""
 
-#: ../../../src/GameStateConfigDesktop.cpp:226
+#: ../../../src/GameStateConfigDesktop.cpp:229
 msgid "Full Screen Mode"
 msgstr "Mod plné obrazovky"
 
-#: ../../../src/GameStateConfigDesktop.cpp:230
+#: ../../../src/GameStateConfigDesktop.cpp:233
 msgid "Move hero using mouse"
 msgstr "Chůze pomocí myši"
 
-#: ../../../src/GameStateConfigDesktop.cpp:234
+#: ../../../src/GameStateConfigDesktop.cpp:237
 msgid "Hardware surfaces"
 msgstr "Hardwarové povrchy"
 
-#: ../../../src/GameStateConfigDesktop.cpp:238
+#: ../../../src/GameStateConfigDesktop.cpp:241
 msgid "V-Sync"
 msgstr ""
 
-#: ../../../src/GameStateConfigDesktop.cpp:242
+#: ../../../src/GameStateConfigDesktop.cpp:245
 msgid "Texture Filtering"
 msgstr ""
 
-#: ../../../src/GameStateConfigDesktop.cpp:246
+#: ../../../src/GameStateConfigDesktop.cpp:249
+msgid "DPI scaling"
+msgstr ""
+
+#: ../../../src/GameStateConfigDesktop.cpp:253
 msgid "Allow changing gamma"
 msgstr "Povolit změnu gammy"
 
-#: ../../../src/GameStateConfigDesktop.cpp:250
+#: ../../../src/GameStateConfigDesktop.cpp:257
 msgid "Gamma"
 msgstr ""
 
-#: ../../../src/GameStateConfigDesktop.cpp:254
+#: ../../../src/GameStateConfigDesktop.cpp:261
 msgid "Use joystick"
 msgstr "Použít joystick"
 
-#: ../../../src/GameStateConfigDesktop.cpp:258
+#: ../../../src/GameStateConfigDesktop.cpp:265
 msgid "Joystick"
 msgstr ""
 
-#: ../../../src/GameStateConfigDesktop.cpp:274
+#: ../../../src/GameStateConfigDesktop.cpp:281
 msgid "Mouse aim"
 msgstr "Míření myší"
 
-#: ../../../src/GameStateConfigDesktop.cpp:278
+#: ../../../src/GameStateConfigDesktop.cpp:285
 msgid "Do not use mouse"
 msgstr ""
 
-#: ../../../src/GameStateConfigDesktop.cpp:282
+#: ../../../src/GameStateConfigDesktop.cpp:289
 msgid "Joystick Deadzone"
 msgstr ""
 
-#: ../../../src/GameState.cpp:36 ../../../src/GameState.cpp:50
-#: ../../../src/GameState.cpp:66
+#: ../../../src/GameState.cpp:37 ../../../src/GameState.cpp:51
+#: ../../../src/GameState.cpp:67
 msgid "Loading..."
 msgstr "Nahrávám..."
 
@@ -418,19 +436,19 @@ msgstr "Ukončit Hru"
 msgid "Accept"
 msgstr "Příjmout"
 
-#: ../../../src/InputState.cpp:374 ../../../src/SDLInputState.cpp:581
+#: ../../../src/InputState.cpp:374 ../../../src/SDLInputState.cpp:606
 msgid "Up"
 msgstr "Nahoru"
 
-#: ../../../src/InputState.cpp:375 ../../../src/SDLInputState.cpp:559
+#: ../../../src/InputState.cpp:375 ../../../src/SDLInputState.cpp:584
 msgid "Down"
 msgstr "Dolů"
 
-#: ../../../src/InputState.cpp:376 ../../../src/SDLInputState.cpp:566
+#: ../../../src/InputState.cpp:376 ../../../src/SDLInputState.cpp:591
 msgid "Left"
 msgstr "Doleva"
 
-#: ../../../src/InputState.cpp:377 ../../../src/SDLInputState.cpp:576
+#: ../../../src/InputState.cpp:377 ../../../src/SDLInputState.cpp:601
 msgid "Right"
 msgstr "Doprava"
 
@@ -474,24 +492,24 @@ msgstr ""
 msgid "Bar0"
 msgstr ""
 
-#: ../../../src/InputState.cpp:388 ../../../src/MenuActionBar.cpp:396
-#: ../../../src/MenuActionBar.cpp:398 ../../../src/MenuCharacter.cpp:242
+#: ../../../src/InputState.cpp:388 ../../../src/MenuActionBar.cpp:398
+#: ../../../src/MenuActionBar.cpp:400 ../../../src/MenuCharacter.cpp:242
 msgid "Character"
 msgstr "Postava"
 
-#: ../../../src/InputState.cpp:389 ../../../src/MenuActionBar.cpp:405
-#: ../../../src/MenuActionBar.cpp:407 ../../../src/MenuInventory.cpp:151
+#: ../../../src/InputState.cpp:389 ../../../src/MenuActionBar.cpp:407
+#: ../../../src/MenuActionBar.cpp:409 ../../../src/MenuInventory.cpp:151
 #: ../../../src/MenuVendor.cpp:55
 msgid "Inventory"
 msgstr "Inventář"
 
-#: ../../../src/InputState.cpp:390 ../../../src/MenuActionBar.cpp:414
-#: ../../../src/MenuActionBar.cpp:416 ../../../src/MenuPowers.cpp:132
+#: ../../../src/InputState.cpp:390 ../../../src/MenuActionBar.cpp:416
+#: ../../../src/MenuActionBar.cpp:418 ../../../src/MenuPowers.cpp:132
 msgid "Powers"
 msgstr "Schopnosti"
 
-#: ../../../src/InputState.cpp:391 ../../../src/MenuActionBar.cpp:423
-#: ../../../src/MenuActionBar.cpp:425 ../../../src/MenuLog.cpp:104
+#: ../../../src/InputState.cpp:391 ../../../src/MenuActionBar.cpp:425
+#: ../../../src/MenuActionBar.cpp:427 ../../../src/MenuLog.cpp:104
 msgid "Log"
 msgstr "Deník"
 
@@ -515,7 +533,7 @@ msgstr ""
 msgid "Alt"
 msgstr ""
 
-#: ../../../src/InputState.cpp:397 ../../../src/SDLInputState.cpp:558
+#: ../../../src/InputState.cpp:397 ../../../src/SDLInputState.cpp:583
 msgid "Delete"
 msgstr ""
 
@@ -662,8 +680,8 @@ msgstr ""
 msgid "Press [%s] to read"
 msgstr ""
 
-#: ../../../src/MenuActionBar.cpp:200 ../../../src/MenuActionBar.cpp:206
-#: ../../../src/MenuActionBar.cpp:211
+#: ../../../src/MenuActionBar.cpp:202 ../../../src/MenuActionBar.cpp:208
+#: ../../../src/MenuActionBar.cpp:213
 #, c-format
 msgid "Hotkey: %s"
 msgstr ""
@@ -694,7 +712,7 @@ msgstr ""
 msgid "points remaining"
 msgstr "zbývající body"
 
-#: ../../../src/MenuCharacter.cpp:353 ../../../src/MenuManager.cpp:303
+#: ../../../src/MenuCharacter.cpp:353 ../../../src/MenuManager.cpp:309
 #, c-format
 msgid "XP: %d"
 msgstr ""
@@ -723,147 +741,147 @@ msgstr ""
 msgid "Each point of %s grants %d."
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:62
+#: ../../../src/MenuDevConsole.cpp:63
 msgid "Execute"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:128 ../../../src/MenuDevConsole.cpp:144
+#: ../../../src/MenuDevConsole.cpp:129 ../../../src/MenuDevConsole.cpp:145
 msgid "Developer Console"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:139
+#: ../../../src/MenuDevConsole.cpp:140
 #, c-format
 msgid "Use '%s' to inspect with the cursor."
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:141
+#: ../../../src/MenuDevConsole.cpp:142
 msgid "Arguments with spaces should be enclosed with double quotes. Example:"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:142
+#: ../../../src/MenuDevConsole.cpp:143
 msgid "Type 'help' to get a list of commands."
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:201 ../../../src/MenuDevConsole.cpp:205
+#: ../../../src/MenuDevConsole.cpp:202 ../../../src/MenuDevConsole.cpp:206
 msgid "px"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:216
+#: ../../../src/MenuDevConsole.cpp:217
 msgid "Distance"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:231 ../../../src/MenuDevConsole.cpp:277
+#: ../../../src/MenuDevConsole.cpp:232 ../../../src/MenuDevConsole.cpp:278
 msgid "Entity"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:252 ../../../src/MenuDevConsole.cpp:259
+#: ../../../src/MenuDevConsole.cpp:253 ../../../src/MenuDevConsole.cpp:260
 msgid "none"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:253 ../../../src/MenuDevConsole.cpp:255
+#: ../../../src/MenuDevConsole.cpp:254 ../../../src/MenuDevConsole.cpp:256
 msgid "wall"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:254 ../../../src/MenuDevConsole.cpp:256
+#: ../../../src/MenuDevConsole.cpp:255 ../../../src/MenuDevConsole.cpp:257
 msgid "short wall / pit"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:257
+#: ../../../src/MenuDevConsole.cpp:258
 msgid "entity"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:258
+#: ../../../src/MenuDevConsole.cpp:259
 msgid "entity, ally"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:265
+#: ../../../src/MenuDevConsole.cpp:266
 msgid "Tile"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:343
+#: ../../../src/MenuDevConsole.cpp:351
 msgid "adds a power to the action bar"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:344
+#: ../../../src/MenuDevConsole.cpp:352
 msgid "turns on/off all of the HUD elements"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:345
+#: ../../../src/MenuDevConsole.cpp:353
 msgid "turns on/off the developer hud"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:346
+#: ../../../src/MenuDevConsole.cpp:354
 msgid ""
 "Prints a list of powers that match a search term. No search term will list "
 "all items"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:347
+#: ../../../src/MenuDevConsole.cpp:355
 msgid "Prints out all the map filenames located in the \"maps/\" directory."
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:348
+#: ../../../src/MenuDevConsole.cpp:356
 msgid ""
 "Prints out the active campaign statuses that match a search term. No search "
 "term will list all active statuses"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:349
+#: ../../../src/MenuDevConsole.cpp:357
 msgid ""
 "Prints a list of items that match a search term. No search term will list "
 "all items"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:350
+#: ../../../src/MenuDevConsole.cpp:358
 msgid "parses a series of event components and executes them as a single event"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:351
+#: ../../../src/MenuDevConsole.cpp:359
 msgid "clears the command history"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:352
+#: ../../../src/MenuDevConsole.cpp:360
 msgid "displays this text"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:359
+#: ../../../src/MenuDevConsole.cpp:367
 msgid "Toggled the developer hud"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:363
+#: ../../../src/MenuDevConsole.cpp:371
 msgid "Toggled the hud"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:510
+#: ../../../src/MenuDevConsole.cpp:518
 msgid "ERROR: Incorrect number of arguments"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:511 ../../../src/MenuDevConsole.cpp:536
+#: ../../../src/MenuDevConsole.cpp:519 ../../../src/MenuDevConsole.cpp:544
 msgid "HINT:"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:511
+#: ../../../src/MenuDevConsole.cpp:519
 msgid "<id>"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:526
+#: ../../../src/MenuDevConsole.cpp:534
 #, c-format
 msgid "ERROR: '%s' is not a valid event key"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:535
+#: ../../../src/MenuDevConsole.cpp:543
 msgid "ERROR: Too few arguments"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:536
+#: ../../../src/MenuDevConsole.cpp:544
 msgid "<key>=<val> <key>=<val> ..."
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:540
+#: ../../../src/MenuDevConsole.cpp:548
 msgid "ERROR: Unknown command"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:541
+#: ../../../src/MenuDevConsole.cpp:549
 msgid "HINT: Type help"
 msgstr ""
 
@@ -975,12 +993,12 @@ msgstr "Poznámky"
 msgid "Quests"
 msgstr "Úkoly"
 
-#: ../../../src/MenuManager.cpp:305
+#: ../../../src/MenuManager.cpp:311
 #, c-format
 msgid "XP: %d/%d"
 msgstr ""
 
-#: ../../../src/MenuManager.cpp:815
+#: ../../../src/MenuManager.cpp:825
 msgid "This item can not be dropped."
 msgstr ""
 
@@ -1184,136 +1202,136 @@ msgstr ""
 msgid "Game saved."
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:556
+#: ../../../src/SDLInputState.cpp:581
 msgid "Backspace"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:557
+#: ../../../src/SDLInputState.cpp:582
 msgid "CapsLock"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:560
+#: ../../../src/SDLInputState.cpp:585
 msgid "End"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:561
+#: ../../../src/SDLInputState.cpp:586
 msgid "Escape"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:562
+#: ../../../src/SDLInputState.cpp:587
 msgid "Home"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:563
+#: ../../../src/SDLInputState.cpp:588
 msgid "Insert"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:564
+#: ../../../src/SDLInputState.cpp:589
 msgid "Left Alt"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:565
+#: ../../../src/SDLInputState.cpp:590
 msgid "Left Ctrl"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:567
+#: ../../../src/SDLInputState.cpp:592
 msgid "Left Shift"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:568
+#: ../../../src/SDLInputState.cpp:593
 msgid "NumLock"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:569
+#: ../../../src/SDLInputState.cpp:594
 msgid "PageDown"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:570
+#: ../../../src/SDLInputState.cpp:595
 msgid "PageUp"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:571
+#: ../../../src/SDLInputState.cpp:596
 msgid "Pause"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:572
+#: ../../../src/SDLInputState.cpp:597
 msgid "PrintScreen"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:573
+#: ../../../src/SDLInputState.cpp:598
 msgid "Right Alt"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:574
+#: ../../../src/SDLInputState.cpp:599
 msgid "Right Ctrl"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:575
+#: ../../../src/SDLInputState.cpp:600
 msgid "Return"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:577
+#: ../../../src/SDLInputState.cpp:602
 msgid "Right Shift"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:578
+#: ../../../src/SDLInputState.cpp:603
 msgid "ScrollLock"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:579
+#: ../../../src/SDLInputState.cpp:604
 msgid "Space"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:580
+#: ../../../src/SDLInputState.cpp:605
 msgid "Tab"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:594
+#: ../../../src/SDLInputState.cpp:619
 #, c-format
 msgid "Mouse %d"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:602
+#: ../../../src/SDLInputState.cpp:627
 #, c-format
 msgid "Axis %d -"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:604
+#: ../../../src/SDLInputState.cpp:629
 #, c-format
 msgid "Axis %d +"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:607
+#: ../../../src/SDLInputState.cpp:632
 #, c-format
 msgid "Button %d"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:611
+#: ../../../src/SDLInputState.cpp:636
 msgid "(none)"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:652 ../../../src/SDLInputState.cpp:676
-#: ../../../src/SDLInputState.cpp:694
+#: ../../../src/SDLInputState.cpp:677 ../../../src/SDLInputState.cpp:701
+#: ../../../src/SDLInputState.cpp:719
 msgid "Tap"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:652 ../../../src/SDLInputState.cpp:655
+#: ../../../src/SDLInputState.cpp:677 ../../../src/SDLInputState.cpp:680
 #, c-format
 msgid "%s on ground"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:676 ../../../src/SDLInputState.cpp:679
+#: ../../../src/SDLInputState.cpp:701 ../../../src/SDLInputState.cpp:704
 #, c-format
 msgid "%s on enemy"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:738 ../../../src/SDLInputState.cpp:742
-#: ../../../src/SDLInputState.cpp:746
+#: ../../../src/SDLInputState.cpp:763 ../../../src/SDLInputState.cpp:767
+#: ../../../src/SDLInputState.cpp:771
 #, c-format
 msgid "'%s' is no longer bound to:"
 msgstr ""
 
-#: ../../../src/Settings.cpp:792
+#: ../../../src/Settings.cpp:800
 msgid "Adventurer"
 msgstr "Dobrodruh"
 
@@ -1464,3 +1482,6 @@ msgstr ""
 #: ../../../src/Version.cpp:143
 msgid "or older"
 msgstr ""
+
+#~ msgid "Disable for performance"
+#~ msgstr "Zakážte pro rychlejší vykreslování"
