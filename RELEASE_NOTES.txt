@@ -16,7 +16,12 @@ Game changes:
 
 * Fix Torture Chambers quest breaking if the player skips the switch at the end.
 * Fix being able to attack imprisoned enemies in Torture Chambers by making them invincible while the barriers are up.
+* Reset Torture Chambers quest if it was finished without opening the barriers.
 
+Translation updates:
+
+* Spanish (es) update (Diego J. Romero López)
+* Scottish Gaelic (gd) update (GunChleoc)
 
 
 Flare v1.05 (http://flarerpg.org/index.php/2018/04/30/flare-1-05/)
