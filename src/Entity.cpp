@@ -27,6 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Animation.h"
 #include "AnimationManager.h"
 #include "AnimationSet.h"
+#include "CampaignManager.h"
 #include "CombatText.h"
 #include "CommonIncludes.h"
 #include "Entity.h"
@@ -332,6 +333,30 @@ bool Entity::takeHit(Hazard &h) {
 	// prevent hazard aoe from hitting targets behind walls
 	if (h.walls_block_aoe && !mapr->collider.line_of_movement(stats.pos.x, stats.pos.y, h.pos.x, h.pos.y, MOVEMENT_NORMAL))
 		return false;
+
+	// some enemies can be invicible based on campaign status
+	if (!stats.hero && !stats.hero_ally && h.source_type != SOURCE_TYPE_ENEMY) {
+		bool invincible = false;
+		for (size_t i = 0; i < stats.invincible_requires_status.size(); ++i) {
+			if (!camp->checkStatus(stats.invincible_requires_status[i])) {
+				invincible = false;
+				break;
+			}
+			invincible = true;
+		}
+		if (invincible)
+			return false;
+
+		for (size_t i = 0; i < stats.invincible_requires_not_status.size(); ++i) {
+			if (camp->checkStatus(stats.invincible_requires_not_status[i])) {
+				invincible = false;
+				break;
+			}
+			invincible = true;
+		}
+		if (invincible)
+			return false;
+	}
 
 	//if the target is an enemy and they are not already in combat, activate a beacon to draw other enemies into battle
 	if (!stats.in_combat && !stats.hero && !stats.hero_ally && !powers->powers[h.power_index].no_aggro) {

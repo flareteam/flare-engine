@@ -333,6 +333,9 @@ public:
 	std::vector<int> power_filter;
 
 	int bleed_source_type;
+
+	std::vector<std::string> invincible_requires_status;
+	std::vector<std::string> invincible_requires_not_status;
 };
 
 #endif

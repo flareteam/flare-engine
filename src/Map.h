@@ -44,6 +44,8 @@ public:
 	int wander_radius;
 	std::vector<std::string> requires_status;
 	std::vector<std::string> requires_not_status;
+	std::vector<std::string> invincible_requires_status;
+	std::vector<std::string> invincible_requires_not_status;
 
 	Map_Group()
 		: type("")
@@ -59,7 +61,9 @@ public:
 		, waypoints(std::queue<FPoint>())
 		, wander_radius(4)
 		, requires_status()
-		, requires_not_status() {
+		, requires_not_status()
+		, invincible_requires_status()
+		, invincible_requires_not_status() {
 	}
 };
 
@@ -93,6 +97,8 @@ public:
 	StatBlock* summoner;
 	std::vector<std::string> requires_status;
 	std::vector<std::string> requires_not_status;
+	std::vector<std::string> invincible_requires_status;
+	std::vector<std::string> invincible_requires_not_status;
 
 	Map_Enemy(const std::string& _type="", FPoint _pos=FPoint())
 		: type(_type)
@@ -105,7 +111,9 @@ public:
 		, summon_power_index(0)
 		, summoner(NULL)
 		, requires_status()
-		, requires_not_status() {
+		, requires_not_status()
+		, invincible_requires_status()
+		, invincible_requires_not_status() {
 	}
 };
 

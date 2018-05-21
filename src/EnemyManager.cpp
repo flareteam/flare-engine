@@ -169,6 +169,8 @@ void EnemyManager::handleNewMap () {
 		e->stats.direction = static_cast<unsigned char>(me.direction);
 		e->stats.wander = me.wander_radius > 0;
 		e->stats.setWanderArea(me.wander_radius);
+		e->stats.invincible_requires_status = me.invincible_requires_status;
+		e->stats.invincible_requires_not_status = me.invincible_requires_not_status;
 
 		enemies.push_back(e);
 

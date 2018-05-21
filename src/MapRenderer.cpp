@@ -87,6 +87,8 @@ bool MapRenderer::enemyGroupPlaceEnemy(float x, float y, Map_Group &g) {
 			group_member.wander_radius = g.wander_radius;
 			group_member.requires_status = g.requires_status;
 			group_member.requires_not_status = g.requires_not_status;
+			group_member.invincible_requires_status = g.invincible_requires_status;
+			group_member.invincible_requires_not_status = g.invincible_requires_not_status;
 
 			if (g.area.x == 1 && g.area.y == 1) {
 				// this is a single enemy

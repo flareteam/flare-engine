@@ -3,12 +3,19 @@ Flare v1.06 (WIP, link soon)
 Engine features:
 
 * Allow modders to define a target screen DPI for resolution scaling.
+* Added video option to toggle using DPI scaling.
 * Add virtual joystick buttons for touchscreen devices.
+* Add ability to make groups of map enemies invincible based on campaign status.
 
 Engine fixes:
 
 * Fixed performance flaw when "always show statbar labels" was enabled.
 * Fix bug where incorrect Power menu tooltip was fetched when not using a mouse.
+
+Game changes:
+
+* Fix Torture Chambers quest breaking if the player skips the switch at the end.
+* Fix being able to attack imprisoned enemies in Torture Chambers by making them invincible while the barriers are up.
 
 
 

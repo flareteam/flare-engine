@@ -321,6 +321,20 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 			group->requires_not_status.push_back(s);
 		}
 	}
+	else if (infile.key == "invincible_requires_status") {
+		// @ATTR enemygroup.invincible_requires_status|list(string)|Enemies in this group are invincible to hero attacks when these statuses are set.
+		std::string s;
+		while ((s = popFirstString(infile.val)) != "") {
+			group->invincible_requires_status.push_back(s);
+		}
+	}
+	else if (infile.key == "invincible_requires_not_status") {
+		// @ATTR enemygroup.invincible_requires_not_status|list(string)|Enemies in this group are invincible to hero attacks when these statuses are not set.
+		std::string s;
+		while ((s = popFirstString(infile.val)) != "") {
+			group->invincible_requires_not_status.push_back(s);
+		}
+	}
 	else {
 		infile.error("Map: '%s' is not a valid key.", infile.key.c_str());
 	}
