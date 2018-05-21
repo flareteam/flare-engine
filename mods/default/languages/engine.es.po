@@ -2,20 +2,20 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-30 13:30-0400\n"
+"POT-Creation-Date: 2018-04-30 13:27-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Eric R, 2018\n"
 "Language-Team: Spanish (https://www.transifex.com/flareorg/teams/84925/es/)\n"
-"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../../../src/Avatar.cpp:363
@@ -109,8 +109,7 @@ msgid ""
 msgstr ""
 "Renderizador SDL por hardware\n"
 "\n"
-"El renderizador predeterminado que suele ser más rápido que el renderizador "
-"SDL por software."
+"El renderizador predeterminado que suele ser más rápido que el renderizador SDL por software."
 
 #: ../../../src/Entity.cpp:488
 msgid "miss"
@@ -743,7 +742,7 @@ msgstr "Consola de desarrollador"
 #: ../../../src/MenuDevConsole.cpp:139
 #, c-format
 msgid "Use '%s' to inspect with the cursor."
-msgstr ""
+msgstr "Usa '%s' para inspeccionar con el cursor."
 
 #: ../../../src/MenuDevConsole.cpp:141
 msgid "Arguments with spaces should be enclosed with double quotes. Example:"
@@ -756,39 +755,39 @@ msgstr "Escriba 'help' para una lista de las órdenes disponibles."
 
 #: ../../../src/MenuDevConsole.cpp:201 ../../../src/MenuDevConsole.cpp:205
 msgid "px"
-msgstr ""
+msgstr "px"
 
 #: ../../../src/MenuDevConsole.cpp:216
 msgid "Distance"
-msgstr ""
+msgstr "Distancia"
 
 #: ../../../src/MenuDevConsole.cpp:231 ../../../src/MenuDevConsole.cpp:277
 msgid "Entity"
-msgstr ""
+msgstr "Entidad"
 
 #: ../../../src/MenuDevConsole.cpp:252 ../../../src/MenuDevConsole.cpp:259
 msgid "none"
-msgstr ""
+msgstr "ninguno"
 
 #: ../../../src/MenuDevConsole.cpp:253 ../../../src/MenuDevConsole.cpp:255
 msgid "wall"
-msgstr ""
+msgstr "muro"
 
 #: ../../../src/MenuDevConsole.cpp:254 ../../../src/MenuDevConsole.cpp:256
 msgid "short wall / pit"
-msgstr ""
+msgstr "muro bajo/pozo"
 
 #: ../../../src/MenuDevConsole.cpp:257
 msgid "entity"
-msgstr ""
+msgstr "entidad"
 
 #: ../../../src/MenuDevConsole.cpp:258
 msgid "entity, ally"
-msgstr ""
+msgstr "entidad, aliado"
 
 #: ../../../src/MenuDevConsole.cpp:265
 msgid "Tile"
-msgstr ""
+msgstr "Título"
 
 #: ../../../src/MenuDevConsole.cpp:343
 msgid "adds a power to the action bar"
@@ -800,15 +799,16 @@ msgstr "Activa/Desactiva todos los elementos con información en pantalla"
 
 #: ../../../src/MenuDevConsole.cpp:345
 msgid "turns on/off the developer hud"
-msgstr "Activa/Desactiva todos la información en pantalla para desarrolladores"
+msgstr ""
+"Activa/Desactiva todos la información en pantalla para desarrolladores"
 
 #: ../../../src/MenuDevConsole.cpp:346
 msgid ""
 "Prints a list of powers that match a search term. No search term will list "
 "all items"
 msgstr ""
-"Muestra una lista de poderes que se emparejan con un término de búsqueda. Si "
-"no hay ningún término, se listarán todos los elementos"
+"Muestra una lista de poderes que se emparejan con un término de búsqueda. Si"
+" no hay ningún término, se listarán todos los elementos"
 
 #: ../../../src/MenuDevConsole.cpp:347
 msgid "Prints out all the map filenames located in the \"maps/\" directory."
@@ -831,9 +831,11 @@ msgstr ""
 "búsqueda. Si no hay ningún término de búsqueda, listará todos los objetos"
 
 #: ../../../src/MenuDevConsole.cpp:350
-msgid "parses a series of event components and executes them as a single event"
+msgid ""
+"parses a series of event components and executes them as a single event"
 msgstr ""
-"analiza una serie de componentes de eventos y los ejecuta como un solo evento"
+"analiza una serie de componentes de eventos y los ejecuta como un solo "
+"evento"
 
 #: ../../../src/MenuDevConsole.cpp:351
 msgid "clears the command history"

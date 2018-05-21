@@ -1,6 +1,6 @@
 # Copyright (C) 2011 Clint Bellanger
 # This file is distributed under the same license as the FLARE package.
-#
+# 
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # Translators:
 # Diego J. Romero López <diegojromerolopez@gmail.com>, 2018
@@ -9,14 +9,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-30 13:30+\n"
+"POT-Creation-Date: 2018-04-30 13:27+\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Eric R, 2018\n"
 "Language-Team: Spanish (https://www.transifex.com/flareorg/teams/84925/es/)\n"
-"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../engine/primary_stats.txt:3
@@ -197,7 +197,7 @@ msgstr "Traductores"
 
 #: ../cutscenes/credits.txt:51
 msgid "Ademaro"
-msgstr ""
+msgstr "Ademaro"
 
 #: ../cutscenes/credits.txt:52
 msgid "Adrian Chaves Fernandez"
@@ -233,7 +233,7 @@ msgstr "Diego J. Romero López"
 
 #: ../cutscenes/credits.txt:62
 msgid "Eric R"
-msgstr ""
+msgstr "Eric R"
 
 #: ../cutscenes/credits.txt:63
 msgid "Evgen Pavlov"
@@ -281,7 +281,7 @@ msgstr "Miro Jánošík"
 
 #: ../cutscenes/credits.txt:75
 msgid "Микола Франчук"
-msgstr ""
+msgstr "Микола Франчук"
 
 #: ../cutscenes/credits.txt:76
 msgid "MOB2"
@@ -321,7 +321,7 @@ msgstr "Sergey Basalaev"
 
 #: ../cutscenes/credits.txt:85
 msgid "Sergiy Borodych"
-msgstr ""
+msgstr "Sergiy Borodych"
 
 #: ../cutscenes/credits.txt:87
 msgid "Stefano Peris"
