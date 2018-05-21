@@ -188,8 +188,8 @@ void GameStateConfigDesktop::readConfig() {
 		infile.close();
 	}
 
-	hwsurface_cb->tooltip = msg->get("Disable for performance");
-	vsync_cb->tooltip = msg->get("Disable for performance");
+	hwsurface_cb->tooltip = msg->get("Will try to store surfaces in video memory versus system memory. The effect this has on performance depends on the renderer.");
+	vsync_cb->tooltip = msg->get("Prevents screen tearing. Disable if you experience \"stuttering\" in windowed mode or input lag.");
 	dpi_scaling_cb->tooltip = msg->get("When enabled, this uses the screen DPI in addition to the window dimensions to scale the rendering resolution. Otherwise, only the window dimensions are used.");
 	change_gamma_cb->tooltip = msg->get("Experimental");
 	no_mouse_cb->tooltip = msg->get("For handheld devices");
