@@ -24,7 +24,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class MenuTouchControls : public Menu {
 private:
-	void alignInput(Point& center, const Point& center_base, const int radius, const ALIGNMENT align);
+	void alignInput(Point& center, const Point& center_base, const int radius, const ALIGNMENT _align);
 	void renderInput(const Point& center, const int radius, const Color& color);
 
 	int move_radius;

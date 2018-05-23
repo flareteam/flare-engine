@@ -43,13 +43,13 @@ MenuTouchControls::MenuTouchControls()
 	align();
 }
 
-void MenuTouchControls::alignInput(Point& center, const Point& center_base, const int radius, const ALIGNMENT align) {
+void MenuTouchControls::alignInput(Point& center, const Point& center_base, const int radius, const ALIGNMENT _align) {
 	Rect input_rect;
 	input_rect.x = center_base.x - radius;
 	input_rect.y = center_base.y - radius;
 	input_rect.w = input_rect.h = radius;
 
-	alignToScreenEdge(align, &input_rect);
+	alignToScreenEdge(_align, &input_rect);
 	center.x = input_rect.x + radius;
 	center.y = input_rect.y + radius;
 }
