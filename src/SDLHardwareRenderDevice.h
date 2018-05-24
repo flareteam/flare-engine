@@ -69,7 +69,6 @@ public:
 	virtual int render(Sprite* r);
 	virtual int renderToImage(Image* src_image, Rect& src, Image* dest_image, Rect& dest);
 
-	int renderText(FontStyle *font_style, const std::string& text, const Color& color, Rect& dest);
 	Image *renderTextToImage(FontStyle* font_style, const std::string& text, const Color& color, bool blended = true);
 	void drawPixel(int x, int y, const Color& color);
 	void drawLine(int x0, int y0, int x1, int y1, const Color& color);

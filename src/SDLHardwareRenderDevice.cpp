@@ -348,44 +348,6 @@ int SDLHardwareRenderDevice::renderToImage(Image* src_image, Rect& src, Image* d
 	return 0;
 }
 
-int SDLHardwareRenderDevice::renderText(
-	FontStyle *font_style,
-	const std::string& text,
-	const Color& color,
-	Rect& dest
-) {
-	int ret = 0;
-	SDL_Texture *surface = NULL;
-
-	SDL_Surface *cleanup = TTF_RenderUTF8_Blended(static_cast<SDLFontStyle *>(font_style)->ttfont, text.c_str(), color);
-	if (cleanup) {
-		surface = SDL_CreateTextureFromSurface(renderer,cleanup);
-		SDL_FreeSurface(cleanup);
-	}
-
-	if (surface == NULL)
-		return -1;
-
-	SDL_Rect clip;
-	int w, h;
-	SDL_QueryTexture(surface, NULL, NULL, &w, &h);
-
-	clip.x = clip.y = 0;
-	clip.w = w;
-	clip.h = h;
-
-	dest.w = clip.w;
-	dest.h = clip.h;
-	SDL_Rect _dest = dest;
-
-	SDL_SetRenderTarget(renderer, texture);
-	ret = SDL_RenderCopy(renderer, surface, &clip, &_dest);
-
-	SDL_DestroyTexture(surface);
-
-	return ret;
-}
-
 Image * SDLHardwareRenderDevice::renderTextToImage(FontStyle* font_style, const std::string& text, const Color& color, bool blended) {
 	SDLHardwareImage *image = new SDLHardwareImage(this, renderer);
 

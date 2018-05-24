@@ -357,28 +357,6 @@ int SDLSoftwareRenderDevice::renderToImage(Image* src_image, Rect& src, Image* d
 						   static_cast<SDLSoftwareImage *>(dest_image)->surface, &_dest);
 }
 
-int SDLSoftwareRenderDevice::renderText(
-	FontStyle *font_style,
-	const std::string& text,
-	const Color& color,
-	Rect& dest
-) {
-	int ret = 0;
-	SDL_Color _color = color;
-
-	SDL_Surface *surface = TTF_RenderUTF8_Blended(static_cast<SDLFontStyle *>(font_style)->ttfont, text.c_str(), _color);
-
-	if (surface == NULL)
-		return -1;
-
-	SDL_Rect _dest = dest;
-	ret = SDL_BlitSurface(surface, NULL, screen, &_dest);
-
-	SDL_FreeSurface(surface);
-
-	return ret;
-}
-
 Image* SDLSoftwareRenderDevice::renderTextToImage(FontStyle* font_style, const std::string& text, const Color& color, bool blended) {
 	SDLSoftwareImage *image = new SDLSoftwareImage(this);
 	if (!image) return NULL;

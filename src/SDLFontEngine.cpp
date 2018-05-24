@@ -257,19 +257,23 @@ void SDLFontEngine::renderInternal(const std::string& text, int x, int y, int ju
 
 	Rect dest_rect = position(text, x, y, justify);
 
-	// Render text directly onto screen
-	if (!target) {
-		render_device->renderText(active_font, text, color, dest_rect);
-		return;
-	}
-
 	// Render text into target
 	graphics = render_device->renderTextToImage(active_font, text, color, active_font->blend);
 	if (graphics) {
 		Rect clip;
 		clip.w = graphics->getWidth();
 		clip.h = graphics->getHeight();
-		render_device->renderToImage(graphics, clip, target, dest_rect);
+		if (target) {
+			render_device->renderToImage(graphics, clip, target, dest_rect);
+		}
+		else {
+			Sprite* temp_sprite = graphics->createSprite();
+			if (temp_sprite) {
+				temp_sprite->setDest(dest_rect);
+				render_device->render(temp_sprite);
+				delete temp_sprite;
+			}
+		}
 
 		// text is cached, we can free temp resource
 		graphics->unref();
