@@ -260,10 +260,10 @@ void SDLFontEngine::renderInternal(const std::string& text, int x, int y, int ju
 	// Render text into target
 	graphics = render_device->renderTextToImage(active_font, text, color, active_font->blend);
 	if (graphics) {
-		Rect clip;
-		clip.w = graphics->getWidth();
-		clip.h = graphics->getHeight();
 		if (target) {
+			Rect clip;
+			clip.w = graphics->getWidth();
+			clip.h = graphics->getHeight();
 			render_device->renderToImage(graphics, clip, target, dest_rect);
 		}
 		else {
