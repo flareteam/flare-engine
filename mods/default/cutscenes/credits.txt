@@ -88,6 +88,7 @@ text=Stefano Peris
 text=sujiniku
 text=Thomas Glamsch
 text=Timo Sievänen
+text=Vicente Monteiro
 text=Wuzzy2
 text=Yannis Anthymidis
 separator=32
