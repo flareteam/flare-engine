@@ -2,7 +2,8 @@ Flare v1.07 (WIP, link soon)
 
 Engine fixes:
 
-Fixed GetText bug where fuzzy state from header wasn't being unset properly.
+* Fixed GetText bug where fuzzy state from header wasn't being unset properly.
+* Fixed rendering bug in WidgetTabControl
 
 Translation updates:
 
