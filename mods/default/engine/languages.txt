@@ -22,6 +22,7 @@ nb=Norsk Bokmål
 nl=Nederlands
 pl=Polski
 pt=Português
+pt_BR=Português (BR)
 ru=Русский
 sk=Slovenčina
 sv=Svenska
