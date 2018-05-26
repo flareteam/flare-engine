@@ -34,19 +34,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "Utils.h"
 
-enum animation_type {
-	NONE       = 0,
-	PLAY_ONCE  = 1, // just iterates over the images one time. it holds the final image when finished.
-	LOOPED     = 2, // going over the images again and again.
-	BACK_FORTH = 3  // iterate from index=0 to maxframe and back again. keeps holding the first image afterwards.
-};
-
 class Animation {
 protected:
 	unsigned short getLastFrameIndex(const short &frame); // given a frame, gets the last index of frames that matches
 
 	const std::string name;
-	const animation_type type;
+	const int type;
 	Image *sprite;
 	uint8_t blend_mode;
 	uint8_t alpha_mod;
@@ -84,6 +77,13 @@ protected:
 	unsigned frame_count; // the frame count as it appears in the data files (i.e. not converted to engine frames)
 
 	float speed; // how fast the animation plays
+
+	enum {
+		ANIMTYPE_NONE       = 0,
+		ANIMTYPE_PLAY_ONCE  = 1, // just iterates over the images one time. it holds the final image when finished.
+		ANIMTYPE_LOOPED     = 2, // going over the images again and again.
+		ANIMTYPE_BACK_FORTH = 3  // iterate from index=0 to maxframe and back again. keeps holding the first image afterwards.
+	};
 
 public:
 	Animation(const std::string &_name, const std::string &_type, Image *_sprite, uint8_t _blend_mode, uint8_t _alpha_mod, Color _color_mod);
