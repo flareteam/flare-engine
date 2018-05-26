@@ -48,11 +48,11 @@ Combat_Text_Item::~Combat_Text_Item() {
 }
 
 CombatText::CombatText() {
-	msg_color[COMBAT_MESSAGE_GIVEDMG] = font->getColor("combat_givedmg");
-	msg_color[COMBAT_MESSAGE_TAKEDMG] = font->getColor("combat_takedmg");
-	msg_color[COMBAT_MESSAGE_CRIT] = font->getColor("combat_crit");
-	msg_color[COMBAT_MESSAGE_BUFF] = font->getColor("combat_buff");
-	msg_color[COMBAT_MESSAGE_MISS] = font->getColor("combat_miss");
+	msg_color[MSG_GIVEDMG] = font->getColor("combat_givedmg");
+	msg_color[MSG_TAKEDMG] = font->getColor("combat_takedmg");
+	msg_color[MSG_CRIT] = font->getColor("combat_crit");
+	msg_color[MSG_BUFF] = font->getColor("combat_buff");
+	msg_color[MSG_MISS] = font->getColor("combat_miss");
 
 	duration = MAX_FRAMES_PER_SEC; // 1 second
 	speed = 60.f / MAX_FRAMES_PER_SEC;

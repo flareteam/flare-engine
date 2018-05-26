@@ -33,14 +33,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class WidgetLabel;
 
-#define COMBAT_MESSAGE_GIVEDMG 0
-#define COMBAT_MESSAGE_TAKEDMG 1
-#define COMBAT_MESSAGE_CRIT 2
-#define COMBAT_MESSAGE_MISS 3
-#define COMBAT_MESSAGE_BUFF 4
-
-class WidgetLabel;
-
 class Combat_Text_Item {
 public:
 	Combat_Text_Item();
@@ -65,6 +57,13 @@ public:
 	void addInt(int num, const FPoint& location, int displaytype);
 	void clear();
 
+	enum {
+		MSG_GIVEDMG = 0,
+		MSG_TAKEDMG = 1,
+		MSG_CRIT = 2,
+		MSG_MISS = 3,
+		MSG_BUFF = 4
+	};
 private:
 	FPoint cam;
 	std::vector<Combat_Text_Item> combat_text;

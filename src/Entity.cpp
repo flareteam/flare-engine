@@ -511,18 +511,18 @@ bool Entity::takeHit(Hazard &h) {
 
 	if (!powers->powers[h.power_index].ignore_zero_damage) {
 		if (dmg == 0) {
-			combat_text->addString(msg->get("miss"), stats.pos, COMBAT_MESSAGE_MISS);
+			combat_text->addString(msg->get("miss"), stats.pos, CombatText::MSG_MISS);
 			return false;
 		}
 		else if(stats.hero)
-			combat_text->addInt(dmg, stats.pos, COMBAT_MESSAGE_TAKEDMG);
+			combat_text->addInt(dmg, stats.pos, CombatText::MSG_TAKEDMG);
 		else {
 			if(crit || is_overhit)
-				combat_text->addInt(dmg, stats.pos, COMBAT_MESSAGE_CRIT);
+				combat_text->addInt(dmg, stats.pos, CombatText::MSG_CRIT);
 			else if (missed)
-				combat_text->addInt(dmg, stats.pos, COMBAT_MESSAGE_MISS);
+				combat_text->addInt(dmg, stats.pos, CombatText::MSG_MISS);
 			else
-				combat_text->addInt(dmg, stats.pos, COMBAT_MESSAGE_GIVEDMG);
+				combat_text->addInt(dmg, stats.pos, CombatText::MSG_GIVEDMG);
 		}
 	}
 
@@ -548,14 +548,14 @@ bool Entity::takeHit(Hazard &h) {
 		if (!stats.effects.immunity_hp_steal && hp_steal != 0) {
 			int steal_amt = (std::min(dmg, prev_hp) * hp_steal) / 100;
 			if (steal_amt == 0) steal_amt = 1;
-			combat_text->addString(msg->get("+%d HP",steal_amt), h.src_stats->pos, COMBAT_MESSAGE_BUFF);
+			combat_text->addString(msg->get("+%d HP",steal_amt), h.src_stats->pos, CombatText::MSG_BUFF);
 			h.src_stats->hp = std::min(h.src_stats->hp + steal_amt, h.src_stats->get(STAT_HP_MAX));
 		}
 		int mp_steal = h.mp_steal + h.src_stats->get(STAT_MP_STEAL);
 		if (!stats.effects.immunity_mp_steal && mp_steal != 0) {
 			int steal_amt = (std::min(dmg, prev_hp) * mp_steal) / 100;
 			if (steal_amt == 0) steal_amt = 1;
-			combat_text->addString(msg->get("+%d MP",steal_amt), h.src_stats->pos, COMBAT_MESSAGE_BUFF);
+			combat_text->addString(msg->get("+%d MP",steal_amt), h.src_stats->pos, CombatText::MSG_BUFF);
 			h.src_stats->mp = std::min(h.src_stats->mp + steal_amt, h.src_stats->get(STAT_MP_MAX));
 		}
 
@@ -567,7 +567,7 @@ bool Entity::takeHit(Hazard &h) {
 				dmg_return = 1;
 
 			h.src_stats->takeDamage(dmg_return);
-			comb->addInt(dmg_return, h.src_stats->pos, COMBAT_MESSAGE_GIVEDMG);
+			comb->addInt(dmg_return, h.src_stats->pos, CombatText::MSG_GIVEDMG);
 		}
 	}
 
