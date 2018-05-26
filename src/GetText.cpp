@@ -80,7 +80,7 @@ bool GetText::next() {
 				// It is a multi-line value, unless it is the first msgid, in which case it will be empty
 				// and it will be ignored when finding the matching msgstr, so no big deal.
 				line = getLine(infile);
-				while(line.find("\"") != std::string::npos && line.compare(0, 6, "msgstr") != 0) {
+				while(!line.empty() && line[0] == '\"') {
 					// We remove the double quotes.
 					key += line.substr(1, line.length()-2);
 					line = getLine(infile);
@@ -102,7 +102,7 @@ bool GetText::next() {
 				}
 				else { // Might be a multi-line value.
 					line = getLine(infile);
-					while(line.find("\"") != std::string::npos) {
+					while(!line.empty() && line[0] == '\"') {
 						// We remove the double quotes.
 						val += line.substr(1, line.length()-2);
 						line = getLine(infile);
@@ -111,6 +111,11 @@ bool GetText::next() {
 						return true;
 					}
 				}
+			}
+			else {
+				// key is empty; likely the po header
+				// reset the fuzzy state for the next msgid
+				fuzzy = false;
 			}
 		}
 	}
