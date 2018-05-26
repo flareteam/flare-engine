@@ -203,7 +203,7 @@ void MenuInventory::logic() {
 			}
 		}
 
-		pc->logMsg(death_message, true);
+		pc->logMsg(death_message, Avatar::LOG_PREVENT_SPAM);
 
 		stats->death_penalty = false;
 	}
@@ -554,14 +554,14 @@ void MenuInventory::activate(const Point& position) {
 			if (powers->powers[power_id].required_items[i].id > 0 &&
 			    powers->powers[power_id].required_items[i].quantity > inventory[CARRIED].count(powers->powers[power_id].required_items[i].id))
 			{
-				pc->logMsg(msg->get("You don't have enough of the required item."), true);
+				pc->logMsg(msg->get("You don't have enough of the required item."), Avatar::LOG_PREVENT_SPAM);
 				return;
 			}
 		}
 
 		// check power & item requirements
 		if (!stats->canUsePower(power_id) || pc->hero_cooldown[power_id] > 0) {
-			pc->logMsg(msg->get("You can't use this item right now."), true);
+			pc->logMsg(msg->get("You can't use this item right now."), Avatar::LOG_PREVENT_SPAM);
 			return;
 		}
 
@@ -573,7 +573,7 @@ void MenuInventory::activate(const Point& position) {
 		}
 		else {
 			// let player know this can only be used from the action bar
-			pc->logMsg(msg->get("This item can only be used from the action bar."), true);
+			pc->logMsg(msg->get("This item can only be used from the action bar."), Avatar::LOG_PREVENT_SPAM);
 		}
 
 	}
@@ -691,7 +691,7 @@ bool MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound, bo
 			else {
 				drop_stack.push(leftover);
 			}
-			pc->logMsg(msg->get("Inventory is full."), true);
+			pc->logMsg(msg->get("Inventory is full."), Avatar::LOG_PREVENT_SPAM);
 			success = false;
 		}
 	}
@@ -811,7 +811,7 @@ bool MenuInventory::buy(ItemStack stack, int tab, bool dragging) {
 		return true;
 	}
 	else {
-		pc->logMsg(msg->get("Not enough %s.", CURRENCY), true);
+		pc->logMsg(msg->get("Not enough %s.", CURRENCY), Avatar::LOG_PREVENT_SPAM);
 		drop_stack.push(stack);
 		return false;
 	}
@@ -831,14 +831,14 @@ bool MenuInventory::sell(ItemStack stack) {
 	// items that have no price cannot be sold
 	if (items->items[stack.item].getPrice() == 0) {
 		items->playSound(stack.item);
-		pc->logMsg(msg->get("This item can not be sold."), true);
+		pc->logMsg(msg->get("This item can not be sold."), Avatar::LOG_PREVENT_SPAM);
 		return false;
 	}
 
 	// quest items can not be sold
 	if (items->items[stack.item].quest_item) {
 		items->playSound(stack.item);
-		pc->logMsg(msg->get("This item can not be sold."), true);
+		pc->logMsg(msg->get("This item can not be sold."), Avatar::LOG_PREVENT_SPAM);
 		return false;
 	}
 

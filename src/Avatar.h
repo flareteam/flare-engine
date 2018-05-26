@@ -50,24 +50,14 @@ public:
 	}
 };
 
-class Layer_gfx {
-public:
-	std::string gfx;
-	std::string type;
-	Layer_gfx()
-		: gfx("")
-		, type("") {
-	}
-};
-
-class Step_sfx {
-public:
-	std::string id;
-	std::vector<std::string> steps;
-};
-
 class Avatar : public Entity {
 private:
+	class Step_sfx {
+	public:
+		std::string id;
+		std::vector<std::string> steps;
+	};
+
 	void loadLayerDefinitions();
 	bool pressing_move();
 	void set_direction();
@@ -95,6 +85,14 @@ protected:
 	virtual void resetActiveAnimation();
 
 public:
+	class Layer_gfx {
+	public:
+		std::string gfx;
+		std::string type;
+	};
+
+	static const bool LOG_PREVENT_SPAM = true;
+
 	Avatar();
 	~Avatar();
 

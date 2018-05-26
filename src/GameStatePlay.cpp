@@ -559,10 +559,10 @@ void GameStatePlay::checkEquipmentChange() {
 	if (menu->inv->changed_equipment) {
 
 		int feet_index = -1;
-		std::vector<Layer_gfx> img_gfx;
+		std::vector<Avatar::Layer_gfx> img_gfx;
 		// load only displayable layers
 		for (unsigned int j=0; j<pc->layer_reference_order.size(); j++) {
-			Layer_gfx gfx;
+			Avatar::Layer_gfx gfx;
 			gfx.gfx = "";
 			gfx.type = pc->layer_reference_order[j];
 			for (int i=0; i<menu->inv->inventory[EQUIPMENT].getSlotNumber(); i++) {
