@@ -505,7 +505,7 @@ ItemStack LootManager::checkPickup(const Point& mouse, const FPoint& cam, const 
 
 				// clicked in pickup hotspot?
 				if ((it->tip_visible && isWithinRect(it->tip_bounds, mouse)) || isWithinRect(r, mouse)) {
-					curs->setCursor(CURSOR_INTERACT);
+					curs->setCursor(CursorManager::CURSOR_INTERACT);
 					if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
 						inpt->lock[MAIN1] = true;
 						if (!it->stack.empty()) {

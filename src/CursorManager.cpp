@@ -126,7 +126,7 @@ void CursorManager::render() {
 	}
 }
 
-void CursorManager::setCursor(CURSOR_TYPE type) {
+void CursorManager::setCursor(int type) {
 	if (HARDWARE_CURSOR) return;
 
 	if (type == CURSOR_INTERACT && cursor_interact) {

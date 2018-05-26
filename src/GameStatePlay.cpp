@@ -178,7 +178,7 @@ void GameStatePlay::checkEnemyFocus() {
 		}
 		else {
 			enemy = enemym->enemyFocus(inpt->mouse, mapr->cam, EnemyManager::IS_ALIVE);
-			if (enemy) curs->setCursor(CURSOR_ATTACK);
+			if (enemy) curs->setCursor(CursorManager::CURSOR_ATTACK);
 			src_pos = screen_to_map(inpt->mouse.x, inpt->mouse.y, mapr->cam.x, mapr->cam.y);
 
 		}
@@ -1007,7 +1007,7 @@ void GameStatePlay::logic() {
 
 	// use a normal mouse cursor is menus are open
 	if (menu->menus_open) {
-		curs->setCursor(CURSOR_NORMAL);
+		curs->setCursor(CursorManager::CURSOR_NORMAL);
 	}
 
 	// update the action bar as it may have been changed by items

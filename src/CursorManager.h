@@ -22,22 +22,22 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "Utils.h"
 
-typedef	enum {
-	CURSOR_NORMAL,
-	CURSOR_INTERACT,
-	CURSOR_TALK,
-	CURSOR_ATTACK
-} CURSOR_TYPE;
-
 class CursorManager {
 public:
 	CursorManager ();
 	~CursorManager ();
 	void logic();
 	void render();
-	void setCursor(CURSOR_TYPE type);
+	void setCursor(int type);
 
 	bool show_cursor;
+
+	enum {
+		CURSOR_NORMAL,
+		CURSOR_INTERACT,
+		CURSOR_TALK,
+		CURSOR_ATTACK
+	};
 
 private:
 	Sprite *cursor_normal;

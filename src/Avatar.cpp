@@ -487,7 +487,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 				setAnimation(attack_anim);
 
 				if (attack_cursor) {
-					curs->setCursor(CURSOR_ATTACK);
+					curs->setCursor(CursorManager::CURSOR_ATTACK);
 				}
 
 				if (MOUSE_MOVE) lockAttack = true;
