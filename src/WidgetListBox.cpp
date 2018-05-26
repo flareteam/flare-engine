@@ -393,7 +393,14 @@ void WidgetListBox::render() {
  * Create the text buffer
  * Also, toggle the scrollbar based on the size of the list
  */
-void WidgetListBox::refresh() {
+void WidgetListBox::refresh(bool go_to_selected) {
+	if (go_to_selected) {
+		int index = getSelected();
+		int index_offset = static_cast<int>(rows.size() / 2) - 1;
+		int max_index = static_cast<int>(items.size() - rows.size());
+
+		cursor = std::max(0, max_index - std::max(0, max_index + index_offset - index));
+	}
 
 	std::string temp;
 	int right_margin = 0;

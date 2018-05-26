@@ -869,7 +869,7 @@ void GameStateConfigBase::refreshLanguages() {
 		infile.close();
 	}
 
-	language_lstb->refresh();
+	language_lstb->refresh(WidgetListBox::GOTO_SELECTED);
 }
 
 void GameStateConfigBase::refreshFont() {

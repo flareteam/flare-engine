@@ -537,7 +537,7 @@ void GameStateConfigDesktop::updateInput() {
 		inpt->initJoystick();
 		joystick_device_lstb->select(JOYSTICK_DEVICE);
 	}
-	joystick_device_lstb->refresh();
+	joystick_device_lstb->refresh(WidgetListBox::GOTO_SELECTED);
 
 	joystick_deadzone_sl->set(0,32768,JOY_DEADZONE);
 }
@@ -706,7 +706,7 @@ void GameStateConfigDesktop::logicInput() {
 			}
 
 			if (inpt->getNumJoysticks() > 0)
-				joystick_device_lstb->refresh();
+				joystick_device_lstb->refresh(WidgetListBox::GOTO_SELECTED);
 		}
 		else {
 			disableJoystickOptions();
@@ -948,4 +948,6 @@ void GameStateConfigDesktop::refreshRenderers() {
 			renderer_lstb->select(static_cast<int>(i));
 		}
 	}
+
+	renderer_lstb->refresh(WidgetListBox::GOTO_SELECTED);
 }

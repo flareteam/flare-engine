@@ -68,6 +68,8 @@ public:
 	~WidgetListBox();
 	void setPos(int offset_x = 0, int offset_y = 0);
 
+	static const bool GOTO_SELECTED = true;
+
 	bool checkClick();
 	bool checkClick(int x, int y);
 	TooltipData checkTooltip(const Point& mouse);
@@ -85,7 +87,7 @@ public:
 	void scrollUp();
 	void scrollDown();
 	void render();
-	void refresh();
+	void refresh(bool go_to_selected = false);
 	void sort();
 
 	bool getNext();
