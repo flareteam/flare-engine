@@ -267,7 +267,7 @@ void LootManager::checkEnemiesForLoot() {
 			}
 
 			for (unsigned j=0; j<drops; ++j) {
-				checkLoot(e->stats.loot_table, &e->stats.pos);
+				checkLoot(e->stats.loot_table, &e->stats.pos, NULL);
 			}
 
 			e->stats.loot_table.clear();
@@ -290,7 +290,7 @@ void LootManager::checkMapForLoot() {
 		}
 
 		for (unsigned i=0; i<drops; ++i) {
-			checkLoot(mapr->loot);
+			checkLoot(mapr->loot, NULL, NULL);
 		}
 
 		mapr->loot.clear();
@@ -360,7 +360,7 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 			if (itemstack_vec)
 				itemstack_vec->push_back(new_loot);
 			else
-				addLoot(new_loot, p);
+				addLoot(new_loot, p, !DROPPED_BY_HERO);
 
 			loot_table.erase(loot_table.begin()+i-1);
 		}
@@ -438,7 +438,7 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 		if (itemstack_vec)
 			itemstack_vec->push_back(new_loot);
 		else
-			addLoot(new_loot, p);
+			addLoot(new_loot, p, !DROPPED_BY_HERO);
 	}
 }
 

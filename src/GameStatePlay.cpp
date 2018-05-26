@@ -601,7 +601,7 @@ void GameStatePlay::checkLootDrop() {
 	// if the player has dropped an item from the inventory
 	while (!menu->drop_stack.empty()) {
 		if (!menu->drop_stack.front().empty()) {
-			loot->addLoot(menu->drop_stack.front(), pc->stats.pos, true);
+			loot->addLoot(menu->drop_stack.front(), pc->stats.pos, LootManager::DROPPED_BY_HERO);
 		}
 		menu->drop_stack.pop();
 	}
@@ -609,7 +609,7 @@ void GameStatePlay::checkLootDrop() {
 	// if the player has dropped a quest reward because inventory full
 	while (!camp->drop_stack.empty()) {
 		if (!camp->drop_stack.front().empty()) {
-			loot->addLoot(camp->drop_stack.front(), pc->stats.pos, true);
+			loot->addLoot(camp->drop_stack.front(), pc->stats.pos, LootManager::DROPPED_BY_HERO);
 		}
 		camp->drop_stack.pop();
 	}
@@ -618,7 +618,7 @@ void GameStatePlay::checkLootDrop() {
 	// this happens when adding currency from older save files
 	while (!menu->inv->drop_stack.empty()) {
 		if (!menu->inv->drop_stack.front().empty()) {
-			loot->addLoot(menu->inv->drop_stack.front(), pc->stats.pos, true);
+			loot->addLoot(menu->inv->drop_stack.front(), pc->stats.pos, LootManager::DROPPED_BY_HERO);
 		}
 		menu->inv->drop_stack.pop();
 	}

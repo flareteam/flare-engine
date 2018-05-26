@@ -39,13 +39,6 @@ class Animation;
 class EnemyManager;
 class WidgetTooltip;
 
-// this means that normal items are 10x more common than epic items
-// these numbers have to be balanced by various factors
-const int RARITY_LOW = 7;
-const int RARITY_NORMAL = 10;
-const int RARITY_HIGH = 3;
-const int RARITY_EPIC = 1;
-
 class LootManager {
 private:
 
@@ -80,6 +73,8 @@ private:
 	std::vector< std::vector<Animation*> > animations;
 
 public:
+	static const bool DROPPED_BY_HERO = true;
+
 	LootManager();
 	LootManager(const LootManager &copy); // not implemented
 	~LootManager();
@@ -90,8 +85,8 @@ public:
 
 	// called by enemy, who definitly wants to drop loot.
 	void addEnemyLoot(Enemy *e);
-	void addLoot(ItemStack stack, const FPoint& pos, bool dropped_by_hero = false);
-	void checkLoot(std::vector<Event_Component> &loot_table, FPoint *pos = NULL, std::vector<ItemStack> *itemstack_vec = NULL);
+	void addLoot(ItemStack stack, const FPoint& pos, bool dropped_by_hero);
+	void checkLoot(std::vector<Event_Component> &loot_table, FPoint *pos, std::vector<ItemStack> *itemstack_vec);
 	ItemStack checkPickup(const Point& mouse, const FPoint& cam, const FPoint& hero_pos);
 	ItemStack checkAutoPickup(const FPoint& hero_pos);
 	ItemStack checkNearestPickup(const FPoint& hero_pos);
