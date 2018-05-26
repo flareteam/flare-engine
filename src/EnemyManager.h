@@ -60,7 +60,7 @@ public:
 	bool isCleared();
 	void spawn(const std::string& enemy_type, const Point& target);
 	Enemy *enemyFocus(const Point& mouse, const FPoint& cam, bool alive_only);
-	Enemy* getNearestEnemy(const FPoint& pos, bool get_corpse = false, float *saved_distance = NULL);
+	Enemy* getNearestEnemy(const FPoint& pos, bool get_corpse, float *saved_distance);
 
 	// vars
 	std::vector<Enemy*> enemies;
@@ -68,6 +68,9 @@ public:
 
 	bool player_blocked;
 	int player_blocked_ticks;
+
+	static const bool GET_CORPSE = true;
+	static const bool IS_ALIVE = true;
 };
 
 
