@@ -1,4 +1,16 @@
-Flare v1.06 (WIP, link soon)
+Flare v1.07 (WIP, link soon)
+
+Engine fixes:
+
+Fixed GetText bug where fuzzy state from header wasn't being unset properly.
+
+Translation updates:
+
+* Brazilian Portuguese (pt_BR) by Vicente Monteiro
+
+
+
+Flare v1.06 (http://flarerpg.org/index.php/2018/05/23/flare-1-06/)
 
 Engine features:
 
@@ -22,6 +34,7 @@ Translation updates:
 
 * Spanish (es) update (Diego J. Romero López)
 * Scottish Gaelic (gd) update (GunChleoc)
+
 
 
 Flare v1.05 (http://flarerpg.org/index.php/2018/04/30/flare-1-05/)
