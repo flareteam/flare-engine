@@ -399,7 +399,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 	}
 
 	// save a valid tile position in the event that we untransform on an invalid tile
-	if (stats.transformed && mapr->collider.is_valid_position(stats.pos.x,stats.pos.y,MOVEMENT_NORMAL, true)) {
+	if (stats.transformed && mapr->collider.is_valid_position(stats.pos.x, stats.pos.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_HERO)) {
 		transform_pos = stats.pos;
 		transform_map = mapr->getFilename();
 	}
@@ -504,7 +504,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 				if (activeAnimation->isActiveFrame() && !stats.hold_state) {
 					// some powers check if the caster is blocking a tile
 					// so we block the player tile prematurely here
-					mapr->collider.block(stats.pos.x, stats.pos.y, false);
+					mapr->collider.block(stats.pos.x, stats.pos.y, !MapCollision::IS_ALLY);
 
 					powers->activate(current_power, &stats, act_target);
 					hero_cooldown[current_power] = powers->powers[current_power].cooldown;
@@ -756,7 +756,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 	}
 
 	// make the current square solid
-	mapr->collider.block(stats.pos.x, stats.pos.y, false);
+	mapr->collider.block(stats.pos.x, stats.pos.y, !MapCollision::IS_ALLY);
 
 	if (stats.state_ticks == 0 && stats.hold_state)
 		stats.hold_state = false;
@@ -839,7 +839,7 @@ void Avatar::untransform() {
 
 	// For timed transformations, move the player to the last valid tile when untransforming
 	mapr->collider.unblock(stats.pos.x, stats.pos.y);
-	if (!mapr->collider.is_valid_position(stats.pos.x,stats.pos.y,MOVEMENT_NORMAL, true)) {
+	if (!mapr->collider.is_valid_position(stats.pos.x, stats.pos.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_HERO)) {
 		logMsg(msg->get("Transformation expired. You have been moved back to a safe place."), true);
 		if (transform_map != mapr->getFilename()) {
 			mapr->teleportation = true;
@@ -853,7 +853,7 @@ void Avatar::untransform() {
 			stats.pos.y = floorf(transform_pos.y) + 0.5f;
 		}
 	}
-	mapr->collider.block(stats.pos.x, stats.pos.y, false);
+	mapr->collider.block(stats.pos.x, stats.pos.y, !MapCollision::IS_ALLY);
 
 	stats.transformed = false;
 	transform_triggered = true;

@@ -56,7 +56,7 @@ void BehaviorAlly::findTarget() {
 		mapr->collider.unblock(e->stats.pos.x, e->stats.pos.y);
 		e->stats.pos.x = pc->stats.pos.x;
 		e->stats.pos.y = pc->stats.pos.y;
-		mapr->collider.block(e->stats.pos.x, e->stats.pos.y, true);
+		mapr->collider.block(e->stats.pos.x, e->stats.pos.y, MapCollision::IS_ALLY);
 		hero_dist = 0;
 	}
 
@@ -155,7 +155,7 @@ void BehaviorAlly::findTarget() {
 			int test_dir = rotateDirection(middle_dir, i);
 
 			FPoint test_pos = calcVector(e->stats.pos, test_dir, 1);
-			if (mapr->collider.is_valid_position(test_pos.x, test_pos.y, e->stats.movement_type, false)) {
+			if (mapr->collider.is_valid_position(test_pos.x, test_pos.y, e->stats.movement_type, MapCollision::COLLIDE_NORMAL)) {
 				if (test_dir == e->stats.direction) {
 					// if we're already moving in a good direction, favor it over other directions
 					flee_dirs.clear();

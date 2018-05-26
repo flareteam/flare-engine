@@ -28,7 +28,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "EffectManager.h"
-#include "MapCollision.h"
 #include "Stats.h"
 #include "Utils.h"
 
@@ -138,7 +137,7 @@ public:
 	float target_nearest_corpse_dist;
 	int block_power;
 
-	MOVEMENTTYPE movement_type;
+	int movement_type;
 	bool flying;
 	bool intangible;
 	bool facing; // does this creature turn to face the hero

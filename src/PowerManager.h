@@ -179,7 +179,7 @@ public:
 	bool expire_with_caster;
 	bool ignore_zero_damage;
 	bool lock_target_to_direction;
-	MOVEMENTTYPE movement_type;
+	int movement_type;
 	float target_range;
 	bool target_party;
 	std::vector<std::string> target_categories;
@@ -325,7 +325,7 @@ public:
 		, expire_with_caster(false)
 		, ignore_zero_damage(false)
 		, lock_target_to_direction(false)
-		, movement_type(MOVEMENT_FLYING)
+		, movement_type(MapCollision::MOVE_FLYING)
 		, target_range(0)
 		, target_party(false)
 		, mod_accuracy_mode(-1)

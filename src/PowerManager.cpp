@@ -462,9 +462,9 @@ void PowerManager::loadPowers() {
 			powers[input_id].lock_target_to_direction = toBool(infile.val);
 		else if (infile.key == "movement_type") {
 			// @ATTR power.movement_type|["ground", "flying", "intangible"]|For moving hazards (missile/repeater), this defines which parts of the map it can collide with. The default is "flying".
-			if (infile.val == "ground")         powers[input_id].movement_type = MOVEMENT_NORMAL;
-			else if (infile.val == "flying")    powers[input_id].movement_type = MOVEMENT_FLYING;
-			else if (infile.val == "intangible") powers[input_id].movement_type = MOVEMENT_INTANGIBLE;
+			if (infile.val == "ground")         powers[input_id].movement_type = MapCollision::MOVE_NORMAL;
+			else if (infile.val == "flying")    powers[input_id].movement_type = MapCollision::MOVE_FLYING;
+			else if (infile.val == "intangible") powers[input_id].movement_type = MapCollision::MOVE_INTANGIBLE;
 			else infile.error("PowerManager: Unknown movement_type '%s'", infile.val.c_str());
 		}
 		else if (infile.key == "trait_armor_penetration")
@@ -928,7 +928,7 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, const FPoin
 	}
 
 	if (powers[power_index].target_neighbor > 0) {
-		haz->pos = collider->get_random_neighbor(FPointToPoint(src_stats->pos), powers[power_index].target_neighbor, true);
+		haz->pos = collider->get_random_neighbor(FPointToPoint(src_stats->pos), powers[power_index].target_neighbor, MapCollision::IGNORE_BLOCKED);
 	}
 
 	if (powers[power_index].relative_pos) {
@@ -977,7 +977,7 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, const FPoint& tar
 	if (powers[power_index].buff_teleport) {
 		FPoint limit_target = clampDistance(powers[power_index].target_range,src_stats->pos,target);
 		if (powers[power_index].target_neighbor > 0) {
-			FPoint new_target = collider->get_random_neighbor(FPointToPoint(limit_target), powers[power_index].target_neighbor);
+			FPoint new_target = collider->get_random_neighbor(FPointToPoint(limit_target), powers[power_index].target_neighbor, !MapCollision::IGNORE_BLOCKED);
 			if (floorf(new_target.x) == floorf(limit_target.x) && floorf(new_target.y) == floorf(limit_target.y)) {
 				src_stats->teleportation = false;
 			}
@@ -1231,7 +1231,7 @@ bool PowerManager::repeater(int power_index, StatBlock *src_stats, const FPoint&
 		location_iterator.y += speed.y;
 
 		// only travels until it hits a wall
-		if (!collider->is_valid_position(location_iterator.x, location_iterator.y, powers[power_index].movement_type, false, false)) {
+		if (!collider->is_valid_position(location_iterator.x, location_iterator.y, powers[power_index].movement_type, MapCollision::COLLIDE_NO_ENTITY)) {
 			break; // no more hazards
 		}
 
@@ -1284,7 +1284,7 @@ bool PowerManager::spawn(int power_index, StatBlock *src_stats, const FPoint& ta
 	}
 
 	if (target_neighbor > 0) {
-		espawn.pos = collider->get_random_neighbor(FPointToPoint(src_stats->pos), target_neighbor);
+		espawn.pos = collider->get_random_neighbor(FPointToPoint(src_stats->pos), target_neighbor, !MapCollision::IGNORE_BLOCKED);
 	}
 
 	espawn.direction = calcDirection(src_stats->pos.x, src_stats->pos.y, target.x, target.y);
@@ -1329,7 +1329,7 @@ bool PowerManager::transform(int power_index, StatBlock *src_stats, const FPoint
 	// execute untransform powers
 	if (powers[power_index].spawn_type == "untransform" && src_stats->transformed) {
 		collider->unblock(src_stats->pos.x, src_stats->pos.y);
-		if (collider->is_valid_position(src_stats->pos.x, src_stats->pos.y, MOVEMENT_NORMAL, true)) {
+		if (collider->is_valid_position(src_stats->pos.x, src_stats->pos.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_HERO)) {
 			src_stats->transform_duration = 0;
 			src_stats->transform_type = "untransform"; // untransform() is called only if type !=""
 		}

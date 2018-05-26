@@ -331,17 +331,17 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 			p.x = static_cast<float>(src.x) + 0.5f;
 			p.y = static_cast<float>(src.y) + 0.5f;
 
-			if (!mapr->collider.is_valid_position(p.x, p.y, MOVEMENT_NORMAL, false)) {
-				p = mapr->collider.get_random_neighbor(src, drop_radius);
+			if (!mapr->collider.is_valid_position(p.x, p.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_NORMAL)) {
+				p = mapr->collider.get_random_neighbor(src, drop_radius, !MapCollision::IGNORE_BLOCKED);
 
-				if (!mapr->collider.is_valid_position(p.x, p.y, MOVEMENT_NORMAL, false)) {
+				if (!mapr->collider.is_valid_position(p.x, p.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_NORMAL)) {
 					p = hero->pos;
 				}
 				else {
 					if (src.x == static_cast<int>(p.x) && src.y == static_cast<int>(p.y))
 						p = hero->pos;
 
-					mapr->collider.block(p.x, p.y, false);
+					mapr->collider.block(p.x, p.y, !MapCollision::IS_ALLY);
 					tiles_to_unblock.push_back(FPointToPoint(p));
 				}
 			}
@@ -409,17 +409,17 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 		p.x = static_cast<float>(src.x) + 0.5f;
 		p.y = static_cast<float>(src.y) + 0.5f;
 
-		if (!mapr->collider.is_valid_position(p.x, p.y, MOVEMENT_NORMAL, false)) {
-			p = mapr->collider.get_random_neighbor(src, drop_radius);
+		if (!mapr->collider.is_valid_position(p.x, p.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_NORMAL)) {
+			p = mapr->collider.get_random_neighbor(src, drop_radius, !MapCollision::IGNORE_BLOCKED);
 
-			if (!mapr->collider.is_valid_position(p.x, p.y, MOVEMENT_NORMAL, false)) {
+			if (!mapr->collider.is_valid_position(p.x, p.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_NORMAL)) {
 				p = hero->pos;
 			}
 			else {
 				if (src.x == static_cast<int>(p.x) && src.y == static_cast<int>(p.y))
 					p = hero->pos;
 
-				mapr->collider.block(p.x, p.y, false);
+				mapr->collider.block(p.x, p.y, !MapCollision::IS_ALLY);
 				tiles_to_unblock.push_back(FPointToPoint(p));
 			}
 		}

@@ -231,7 +231,7 @@ void BehaviorStandard::findTarget() {
 			int test_dir = rotateDirection(middle_dir, i);
 
 			FPoint test_pos = calcVector(e->stats.pos, test_dir, 1);
-			if (mapr->collider.is_valid_position(test_pos.x, test_pos.y, e->stats.movement_type, false)) {
+			if (mapr->collider.is_valid_position(test_pos.x, test_pos.y, e->stats.movement_type, MapCollision::COLLIDE_NORMAL)) {
 				if (test_dir == e->stats.direction) {
 					// if we're already moving in a good direction, favor it over other directions
 					flee_dirs.clear();
@@ -687,7 +687,7 @@ void BehaviorStandard::updateState() {
 				mapr->collider.unblock(e->stats.pos.x, e->stats.pos.y);
 
 				// remove corpses that land on blocked tiles, such as water or pits
-				if (!mapr->collider.is_valid_position(e->stats.pos.x, e->stats.pos.y, MOVEMENT_NORMAL, false)) {
+				if (!mapr->collider.is_valid_position(e->stats.pos.x, e->stats.pos.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_NORMAL)) {
 					e->stats.corpse_ticks = 0;
 				}
 
@@ -740,7 +740,7 @@ FPoint BehaviorStandard::getWanderPoint() {
 	waypoint.x = static_cast<float>(e->stats.wander_area.x) + static_cast<float>(rand() % (e->stats.wander_area.w)) + 0.5f;
 	waypoint.y = static_cast<float>(e->stats.wander_area.y) + static_cast<float>(rand() % (e->stats.wander_area.h)) + 0.5f;
 
-	if (mapr->collider.is_valid_position(waypoint.x, waypoint.y, e->stats.movement_type, e->stats.hero) &&
+	if (mapr->collider.is_valid_position(waypoint.x, waypoint.y, e->stats.movement_type, mapr->collider.getCollideType(e->stats.hero)) &&
 	    mapr->collider.line_of_movement(e->stats.pos.x, e->stats.pos.y, waypoint.x, waypoint.y, e->stats.movement_type))
 	{
 		return waypoint;

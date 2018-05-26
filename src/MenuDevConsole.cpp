@@ -250,13 +250,13 @@ void MenuDevConsole::getTileInfo() {
 	ss.str("");
 	ss << "    " << "collision=" << mapr->collider.colmap[tile.x][tile.y] << " (";
 	switch(mapr->collider.colmap[tile.x][tile.y]) {
-		case BLOCKS_NONE: ss << msg->get("none"); break;
-		case BLOCKS_ALL: ss << msg->get("wall"); break;
-		case BLOCKS_MOVEMENT: ss << msg->get("short wall / pit"); break;
-		case BLOCKS_ALL_HIDDEN: ss << msg->get("wall"); break;
-		case BLOCKS_MOVEMENT_HIDDEN: ss << msg->get("short wall / pit"); break;
-		case BLOCKS_ENTITIES: ss << msg->get("entity"); break;
-		case BLOCKS_ENEMIES: ss << msg->get("entity, ally"); break;
+		case MapCollision::BLOCKS_NONE: ss << msg->get("none"); break;
+		case MapCollision::BLOCKS_ALL: ss << msg->get("wall"); break;
+		case MapCollision::BLOCKS_MOVEMENT: ss << msg->get("short wall / pit"); break;
+		case MapCollision::BLOCKS_ALL_HIDDEN: ss << msg->get("wall"); break;
+		case MapCollision::BLOCKS_MOVEMENT_HIDDEN: ss << msg->get("short wall / pit"); break;
+		case MapCollision::BLOCKS_ENTITIES: ss << msg->get("entity"); break;
+		case MapCollision::BLOCKS_ENEMIES: ss << msg->get("entity, ally"); break;
 		default: ss << msg->get("none");
 	}
 	ss << ")";

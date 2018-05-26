@@ -296,12 +296,12 @@ void GameStatePlay::checkTeleport() {
 		// if we're not changing map, move allies to a the player's new position
 		// when changing maps, enemym->handleNewMap() does something similar to this
 		if (mapr->teleport_mapname.empty()) {
-			FPoint spawn_pos = mapr->collider.get_random_neighbor(FPointToPoint(pc->stats.pos), 1, false);
+			FPoint spawn_pos = mapr->collider.get_random_neighbor(FPointToPoint(pc->stats.pos), 1, !MapCollision::IGNORE_BLOCKED);
 			for (unsigned int i=0; i < enemym->enemies.size(); i++) {
 				if(enemym->enemies[i]->stats.hero_ally && enemym->enemies[i]->stats.alive) {
 					mapr->collider.unblock(enemym->enemies[i]->stats.pos.x, enemym->enemies[i]->stats.pos.y);
 					enemym->enemies[i]->stats.pos = spawn_pos;
-					mapr->collider.block(enemym->enemies[i]->stats.pos.x, enemym->enemies[i]->stats.pos.y, true);
+					mapr->collider.block(enemym->enemies[i]->stats.pos.x, enemym->enemies[i]->stats.pos.y, MapCollision::IS_ALLY);
 				}
 			}
 		}
@@ -325,7 +325,7 @@ void GameStatePlay::checkTeleport() {
 			}
 
 			// store this as the new respawn point (provided the tile is open)
-			if (mapr->collider.is_valid_position(pc->stats.pos.x, pc->stats.pos.y, MOVEMENT_NORMAL, true)) {
+			if (mapr->collider.is_valid_position(pc->stats.pos.x, pc->stats.pos.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_HERO)) {
 				mapr->respawn_map = teleport_mapname;
 				mapr->respawn_point = pc->stats.pos;
 			}
@@ -371,7 +371,7 @@ void GameStatePlay::checkTeleport() {
 			pc->stats.pos.y = 0.5f;
 		}
 
-		mapr->collider.block(pc->stats.pos.x, pc->stats.pos.y, false);
+		mapr->collider.block(pc->stats.pos.x, pc->stats.pos.y, !MapCollision::IS_ALLY);
 
 		pc->stats.teleportation = false;
 

@@ -88,7 +88,7 @@ void NPCManager::handleNewMap() {
 		// npc->stock.sort();
 		npcs.push_back(npc);
 
-		mapr->collider.block(npc->pos.x, npc->pos.y, false);
+		mapr->collider.block(npc->pos.x, npc->pos.y, !MapCollision::IS_ALLY);
 
 		// create a map event for this npc
 		Event ev;

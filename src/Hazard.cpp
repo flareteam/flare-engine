@@ -58,7 +58,7 @@ Hazard::Hazard(MapCollision *_collider)
 	, lifespan(1)
 	, radius(0)
 	, power_index(0)
-	, movement_type(MOVEMENT_FLYING)
+	, movement_type(MapCollision::MOVE_FLYING)
 	, animationKind(0)
 	, on_floor(false)
 	, delay_frames(0)
@@ -326,7 +326,7 @@ void Hazard::logic() {
 	if (check_collide) {
 		// very simplified collider, could skim around corners
 		// or even pass through thin walls if speed > tilesize
-		if (!collider->is_valid_position(pos.x, pos.y, movement_type, false, false)) {
+		if (!collider->is_valid_position(pos.x, pos.y, movement_type, MapCollision::COLLIDE_NO_ENTITY)) {
 
 			hit_wall = true;
 

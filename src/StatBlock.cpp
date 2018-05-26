@@ -68,7 +68,7 @@ StatBlock::StatBlock()
 	, target_nearest_dist(0) // hero only
 	, target_nearest_corpse_dist(0) // hero only
 	, block_power(0)
-	, movement_type(MOVEMENT_NORMAL)
+	, movement_type(MapCollision::MOVE_NORMAL)
 	, flying(false)
 	, intangible(false)
 	, facing(true)
@@ -830,9 +830,9 @@ void StatBlock::logic() {
 
 	// set movement type
 	// some creatures may shift between movement types
-	if (intangible) movement_type = MOVEMENT_INTANGIBLE;
-	else if (flying) movement_type = MOVEMENT_FLYING;
-	else movement_type = MOVEMENT_NORMAL;
+	if (intangible) movement_type = MapCollision::MOVE_INTANGIBLE;
+	else if (flying) movement_type = MapCollision::MOVE_FLYING;
+	else movement_type = MapCollision::MOVE_NORMAL;
 
 	if (hp == 0)
 		removeSummons();
@@ -843,7 +843,7 @@ void StatBlock::logic() {
 		knockback_speed.y = effects.knockback_speed * sinf(theta);
 
 		mapr->collider.unblock(pos.x, pos.y);
-		mapr->collider.move(pos.x, pos.y, knockback_speed.x, knockback_speed.y, movement_type, hero);
+		mapr->collider.move(pos.x, pos.y, knockback_speed.x, knockback_speed.y, movement_type, mapr->collider.getCollideType(hero));
 		mapr->collider.block(pos.x, pos.y, hero_ally);
 	}
 	else if (charge_speed != 0.0f) {
@@ -852,7 +852,7 @@ void StatBlock::logic() {
 		float dy = tmp_speed * static_cast<float>(directionDeltaY[direction]);
 
 		mapr->collider.unblock(pos.x, pos.y);
-		mapr->collider.move(pos.x, pos.y, dx, dy, movement_type, hero);
+		mapr->collider.move(pos.x, pos.y, dx, dy, movement_type, mapr->collider.getCollideType(hero));
 		mapr->collider.block(pos.x, pos.y, hero_ally);
 	}
 
