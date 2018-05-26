@@ -461,7 +461,7 @@ void EnemyManager::checkEnemiesforXP() {
 			if(enemies[i]->kill_source_type == SOURCE_TYPE_ALLY)
 				xp_multiplier = static_cast<float>(PARTY_EXP_PERCENTAGE) / 100.0f;
 
-			camp->rewardXP(static_cast<int>((static_cast<float>(enemies[i]->stats.xp) * xp_multiplier)), false);
+			camp->rewardXP(static_cast<int>((static_cast<float>(enemies[i]->stats.xp) * xp_multiplier)), !CampaignManager::XP_SHOW_MSG);
 			enemies[i]->reward_xp = false; // clear flag
 		}
 	}

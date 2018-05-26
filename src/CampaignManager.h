@@ -56,6 +56,8 @@ public:
 	std::queue<ItemStack> drop_stack;
 
 	float bonus_xp;		// Fractional XP points not yet awarded (e.g. killing 1 XP enemies with a +25% ring)
+
+	static const bool XP_SHOW_MSG = true;
 };
 
 

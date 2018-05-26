@@ -806,7 +806,7 @@ bool EventManager::executeEvent(Event &ev) {
 			camp->removeItem(ec->x);
 		}
 		else if (ec->type == EC_REWARD_XP) {
-			camp->rewardXP(ec->x, true);
+			camp->rewardXP(ec->x, CampaignManager::XP_SHOW_MSG);
 		}
 		else if (ec->type == EC_REWARD_CURRENCY) {
 			camp->rewardCurrency(ec->x);
