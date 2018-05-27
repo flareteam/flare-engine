@@ -26,6 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Utils.h"
 
 class Event;
+class FileParser;
 class StatBlock;
 
 class Map_Group {

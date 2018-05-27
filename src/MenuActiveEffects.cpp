@@ -99,9 +99,9 @@ void MenuActiveEffects::logic() {
 
 				effect_icons[most_recent_id].stacks++;
 
-				if(ed.type == EFFECT_SHIELD){
+				if(ed.type == Effect::SHIELD){
 					//Shields stacks in momment of addition, we never have to reach that
-				}else if (ed.type == EFFECT_HEAL){
+				}else if (ed.type == Effect::HEAL){
 					//No special behavior
 				}else{
 					if(ed.ticks < effect_icons[most_recent_id].current){
@@ -148,12 +148,12 @@ void MenuActiveEffects::logic() {
 		ei.overlay.x = 0;
 		ei.overlay.w = ICON_SIZE;
 
-		if (ed.type == EFFECT_SHIELD) {
+		if (ed.type == Effect::SHIELD) {
 			ei.overlay.y = (ICON_SIZE * ed.magnitude) / ed.magnitude_max;
 			ei.current = ed.magnitude;
 			ei.max = ed.magnitude_max;
 		}
-		else if (ed.type == EFFECT_HEAL) {
+		else if (ed.type == Effect::HEAL) {
 			ei.overlay.y = ICON_SIZE;
 			// current and max are ignored
 		}
@@ -207,11 +207,11 @@ TooltipData MenuActiveEffects::checkTooltip(const Point& mouse) {
 			if (!effect_icons[i].name.empty())
 				tip.addText(msg->get(effect_icons[i].name));
 
-			if (effect_icons[i].type == EFFECT_HEAL)
+			if (effect_icons[i].type == Effect::HEAL)
 				continue;
 
 			std::stringstream ss;
-			if (effect_icons[i].type == EFFECT_SHIELD) {
+			if (effect_icons[i].type == Effect::SHIELD) {
 				ss << "(" << effect_icons[i].current << "/" << effect_icons[i].max << ")";
 				tip.addText(ss.str());
 			}
@@ -220,7 +220,7 @@ TooltipData MenuActiveEffects::checkTooltip(const Point& mouse) {
 				tip.addText(ss.str());
 			}
 
-			if(effect_icons[i].type != EFFECT_SHIELD){
+			if(effect_icons[i].type != Effect::SHIELD){
 				if(effect_icons[i].stacks > 1){
 					tip.addText(msg->get("x%d stacks", effect_icons[i].stacks));
 				}

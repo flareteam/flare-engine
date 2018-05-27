@@ -539,7 +539,7 @@ bool Entity::takeHit(Hazard &h) {
 	if (dmg > 0 || powers->powers[h.power_index].ignore_zero_damage) {
 
 		// damage always breaks stun
-		stats.effects.removeEffectType(EFFECT_STUN);
+		stats.effects.removeEffectType(Effect::STUN);
 
 		powers->effect(&stats, h.src_stats, h.power_index,h.source_type);
 

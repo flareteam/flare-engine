@@ -1077,7 +1077,7 @@ void MenuInventory::applyBonus(const BonusData* bdata) {
 		ed.id = ed.type = PRIMARY_STATS[bdata->base_index].id;
 	}
 
-	stats->effects.addEffect(ed, 0, bdata->value, true, -1, 0, SOURCE_TYPE_HERO);
+	stats->effects.addItemEffect(ed, 0, bdata->value);
 }
 
 int MenuInventory::getEquippedCount() {

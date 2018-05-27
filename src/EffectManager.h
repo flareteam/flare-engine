@@ -30,39 +30,38 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class Animation;
 class Hazard;
 
-#define EFFECT_COUNT 26
-
-enum EFFECT_TYPE {
-	EFFECT_NONE = 0,
-	EFFECT_DAMAGE = 1,
-	EFFECT_DAMAGE_PERCENT = 2,
-	EFFECT_HPOT = 3,
-	EFFECT_HPOT_PERCENT = 4,
-	EFFECT_MPOT = 5,
-	EFFECT_MPOT_PERCENT = 6,
-	EFFECT_SPEED = 7,
-	EFFECT_ATTACK_SPEED = 8,
-	EFFECT_IMMUNITY = 9,
-	EFFECT_IMMUNITY_DAMAGE = 10,
-	EFFECT_IMMUNITY_SLOW = 11,
-	EFFECT_IMMUNITY_STUN = 12,
-	EFFECT_IMMUNITY_HP_STEAL = 13,
-	EFFECT_IMMUNITY_MP_STEAL = 14,
-	EFFECT_IMMUNITY_KNOCKBACK = 15,
-	EFFECT_IMMUNITY_DAMAGE_REFLECT = 16,
-	EFFECT_IMMUNITY_STAT_DEBUFF = 17,
-	EFFECT_STUN = 18,
-	EFFECT_REVIVE = 19,
-	EFFECT_CONVERT = 20,
-	EFFECT_FEAR = 21,
-	EFFECT_DEATH_SENTENCE = 22,
-	EFFECT_SHIELD = 23,
-	EFFECT_HEAL = 24,
-	EFFECT_KNOCKBACK = 25
-};
-
 class Effect {
 public:
+	static const int TYPE_COUNT = 26;
+	enum {
+		NONE = 0,
+		DAMAGE = 1,
+		DAMAGE_PERCENT = 2,
+		HPOT = 3,
+		HPOT_PERCENT = 4,
+		MPOT = 5,
+		MPOT_PERCENT = 6,
+		SPEED = 7,
+		ATTACK_SPEED = 8,
+		IMMUNITY = 9,
+		IMMUNITY_DAMAGE = 10,
+		IMMUNITY_SLOW = 11,
+		IMMUNITY_STUN = 12,
+		IMMUNITY_HP_STEAL = 13,
+		IMMUNITY_MP_STEAL = 14,
+		IMMUNITY_KNOCKBACK = 15,
+		IMMUNITY_DAMAGE_REFLECT = 16,
+		IMMUNITY_STAT_DEBUFF = 17,
+		STUN = 18,
+		REVIVE = 19,
+		CONVERT = 20,
+		FEAR = 21,
+		DEATH_SENTENCE = 22,
+		SHIELD = 23,
+		HEAL = 24,
+		KNOCKBACK = 25
+	};
+
 	Effect();
 	Effect(const Effect& other);
 	Effect& operator=(const Effect& other);
@@ -84,7 +83,7 @@ public:
 	bool item;
 	int trigger;
 	bool render_above;
-	int passive_id;
+	size_t passive_id;
 	int source_type;
 	bool group_stack;
 	Color color_mod;
@@ -97,14 +96,16 @@ private:
 	void removeEffect(size_t id);
 	void clearStatus();
 	int getType(const std::string& type);
+	void addEffectInternal(EffectDef &effect, int duration, int magnitude, int source_type, bool item, size_t power_id);
 
 public:
 	EffectManager();
 	~EffectManager();
 	void logic();
-	void addEffect(EffectDef &effect, int duration, int magnitude, bool item, int trigger, int passive_id, int source_type);
+	void addEffect(EffectDef &effect, int duration, int magnitude, int source_type, size_t power_id);
+	void addItemEffect(EffectDef &effect, int duration, int magnitude);
 	void removeEffectType(const int type);
-	void removeEffectPassive(int id);
+	void removeEffectPassive(size_t id);
 	void removeEffectID(const std::vector< std::pair<std::string, int> >& remove_effects);
 	void clearEffects();
 	void clearNegativeEffects(int type = -1);
@@ -153,6 +154,8 @@ public:
 	bool triggered_death;
 
 	bool refresh_stats;
+
+	static const int NO_POWER = 0;
 };
 
 #endif

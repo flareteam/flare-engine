@@ -883,7 +883,7 @@ void StatBlock::logic() {
 	// check for bleeding to death
 	if (hp <= 0 && !hero && cur_state != ENEMY_DEAD && cur_state != ENEMY_CRITDEAD) {
 		for (size_t i = 0; i < effects.effect_list.size(); ++i) {
-			if (effects.effect_list[i].type == EFFECT_DAMAGE || effects.effect_list[i].type == EFFECT_DAMAGE_PERCENT) {
+			if (effects.effect_list[i].type == Effect::DAMAGE || effects.effect_list[i].type == Effect::DAMAGE_PERCENT) {
 				bleed_source_type = effects.effect_list[i].source_type;
 				break;
 			}

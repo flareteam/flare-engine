@@ -1097,10 +1097,7 @@ bool PowerManager::effect(StatBlock *target_stats, StatBlock *caster_stats, int 
 			effect_data.id = effect_data.type = pe.id;
 		}
 
-		int passive_id = 0;
-		if (pwr.passive) passive_id = power_index;
-
-		dest_stats->effects.addEffect(effect_data, duration, magnitude, false, pwr.passive_trigger, passive_id, source_type);
+		dest_stats->effects.addEffect(effect_data, duration, magnitude, source_type, power_index);
 	}
 
 	return true;
