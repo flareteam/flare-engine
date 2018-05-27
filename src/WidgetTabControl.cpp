@@ -122,7 +122,7 @@ void WidgetTabControl::updateHeader() {
 		active_labels[i].set(
 			tabs[i].x + widget_settings.tab_padding.x,
 			tabs[i].y + tabs[i].h/2 + widget_settings.tab_padding.y,
-			JUSTIFY_LEFT,
+			FontEngine::JUSTIFY_LEFT,
 			VALIGN_CENTER,
 			titles[i],
 			color_normal);
@@ -130,7 +130,7 @@ void WidgetTabControl::updateHeader() {
 		inactive_labels[i].set(
 			tabs[i].x + widget_settings.tab_padding.x,
 			tabs[i].y + tabs[i].h/2 + widget_settings.tab_padding.y,
-			JUSTIFY_LEFT,
+			FontEngine::JUSTIFY_LEFT,
 			VALIGN_CENTER,
 			titles[i],
 			color_disabled);

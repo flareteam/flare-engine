@@ -112,7 +112,7 @@ void WidgetLog::refresh() {
 
 			y2 += paragraph_spacing;
 		}
-		font->renderShadowed(messages[i-1], padding, y2, JUSTIFY_LEFT, render_target, content_width, colors[i-1]);
+		font->renderShadowed(messages[i-1], padding, y2, FontEngine::JUSTIFY_LEFT, render_target, content_width, colors[i-1]);
 		y2 += size.y+paragraph_spacing;
 
 	}

@@ -31,7 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "UtilsParsing.h"
 
-LabelInfo::LabelInfo() : x(0), y(0), justify(JUSTIFY_LEFT), valign(VALIGN_TOP), hidden(false), font_style("font_regular") {
+LabelInfo::LabelInfo() : x(0), y(0), justify(FontEngine::JUSTIFY_LEFT), valign(VALIGN_TOP), hidden(false), font_style("font_regular") {
 }
 
 /**
@@ -53,9 +53,9 @@ LabelInfo eatLabelInfo(std::string val) {
 		valign = popFirstString(val);
 		style = popFirstString(val);
 
-		if (justify == "left") info.justify = JUSTIFY_LEFT;
-		else if (justify == "center") info.justify = JUSTIFY_CENTER;
-		else if (justify == "right") info.justify = JUSTIFY_RIGHT;
+		if (justify == "left") info.justify = FontEngine::JUSTIFY_LEFT;
+		else if (justify == "center") info.justify = FontEngine::JUSTIFY_CENTER;
+		else if (justify == "right") info.justify = FontEngine::JUSTIFY_RIGHT;
 
 		if (valign == "top") info.valign = VALIGN_TOP;
 		else if (valign == "center") info.valign = VALIGN_CENTER;
@@ -68,7 +68,7 @@ LabelInfo eatLabelInfo(std::string val) {
 }
 
 WidgetLabel::WidgetLabel()
-	: justify(JUSTIFY_LEFT)
+	: justify(FontEngine::JUSTIFY_LEFT)
 	, valign(VALIGN_TOP)
 	, max_width(0)
 	, label(NULL)
@@ -207,11 +207,11 @@ void WidgetLabel::applyOffsets(bool recache) {
 	}
 
 	// apply JUSTIFY
-	if (justify == JUSTIFY_LEFT)
+	if (justify == FontEngine::JUSTIFY_LEFT)
 		bounds.x = pos.x;
-	else if (justify == JUSTIFY_RIGHT)
+	else if (justify == FontEngine::JUSTIFY_RIGHT)
 		bounds.x = pos.x - bounds.w;
-	else if (justify == JUSTIFY_CENTER)
+	else if (justify == FontEngine::JUSTIFY_CENTER)
 		bounds.x = pos.x - bounds.w/2;
 
 	// apply VALIGN
@@ -270,7 +270,7 @@ void WidgetLabel::recacheTextSprite(bool apply_offsets) {
 	image = render_device->createImage(bounds.w, bounds.h);
 	if (!image) return;
 
-	font->renderShadowed(temp_text, 0, 0, JUSTIFY_LEFT, image, 0, color);
+	font->renderShadowed(temp_text, 0, 0, FontEngine::JUSTIFY_LEFT, image, 0, color);
 	label = image->createSprite();
 	image->unref();
 

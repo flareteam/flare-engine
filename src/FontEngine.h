@@ -24,12 +24,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "Utils.h"
 
-const int JUSTIFY_LEFT = 0;
-const int JUSTIFY_RIGHT = 1;
-const int JUSTIFY_CENTER = 2;
-
-const Color FONT_WHITE = Color(255,255,255);
-const Color FONT_BLACK = Color(0,0,0);
+namespace FontColor {
+	const Color WHITE = Color(255,255,255);
+	const Color BLACK = Color(0,0,0);
+}
 
 class FontStyle {
 public:
@@ -51,8 +49,13 @@ public:
  *
  */
 class FontEngine {
-
 public:
+	enum {
+		JUSTIFY_LEFT = 0,
+		JUSTIFY_RIGHT = 1,
+		JUSTIFY_CENTER = 2
+	};
+
 	FontEngine();
 	virtual ~FontEngine() {};
 

@@ -38,7 +38,7 @@ Color FontEngine::getColor(const std::string& _color) {
 		if (_color.compare(it->first) == 0) return it->second;
 	}
 	// If all else fails, return white;
-	return FONT_WHITE;
+	return FontColor::WHITE;
 }
 
 /**
@@ -224,7 +224,7 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, Imag
 }
 
 void FontEngine::renderShadowed(const std::string& text, int x, int y, int justify, Image *target, int width, const Color& color) {
-	render(text, x+1, y+1, justify, target, width, FONT_BLACK);
+	render(text, x+1, y+1, justify, target, width, FontColor::BLACK);
 	render(text, x, y, justify, target, width, color);
 }
 

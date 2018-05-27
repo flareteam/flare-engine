@@ -380,7 +380,7 @@ void MenuActionBar::render() {
 			// put an asterisk on this icon if in colorblind mode
 			if (COLORBLIND) {
 				WidgetLabel label;
-				label.set(menus[i]->pos.x + 2, menus[i]->pos.y + 2, JUSTIFY_LEFT, VALIGN_TOP, "*", font->getColor("menu_normal"));
+				label.set(menus[i]->pos.x + 2, menus[i]->pos.y + 2, FontEngine::JUSTIFY_LEFT, VALIGN_TOP, "*", font->getColor("menu_normal"));
 				label.render();
 			}
 		}

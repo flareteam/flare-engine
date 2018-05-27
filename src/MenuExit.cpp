@@ -185,7 +185,7 @@ void MenuExit::placeOptionWidgets(WidgetLabel *lb, Widget *w, int x1, int y1, in
 	if (lb) {
 		lb->setBasePos(x1, y1);
 		lb->set(str);
-		lb->setJustify(JUSTIFY_CENTER);
+		lb->setJustify(FontEngine::JUSTIFY_CENTER);
 		option_labels.push_back(lb);
 	}
 }

@@ -172,9 +172,9 @@ void WidgetButton::refresh() {
 		int font_y = pos.y + (pos.h/2);
 
 		if (enabled)
-			wlabel.set(font_x, font_y, JUSTIFY_CENTER, VALIGN_CENTER, label, color_normal);
+			wlabel.set(font_x, font_y, FontEngine::JUSTIFY_CENTER, VALIGN_CENTER, label, color_normal);
 		else
-			wlabel.set(font_x, font_y, JUSTIFY_CENTER, VALIGN_CENTER, label, color_disabled);
+			wlabel.set(font_x, font_y, FontEngine::JUSTIFY_CENTER, VALIGN_CENTER, label, color_disabled);
 	}
 }
 

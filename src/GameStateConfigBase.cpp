@@ -256,16 +256,16 @@ bool GameStateConfigBase::parseKey(FileParser &infile, int &x1, int &y1, int &x2
 	}
 	else if (infile.key == "music_volume") {
 		// @ATTR music_volume|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Music Volume" slider relative to the frame.
-		placeLabeledWidget(music_volume_lb, music_volume_sl, x1, y1, x2, y2, msg->get("Music Volume"), JUSTIFY_RIGHT);
+		placeLabeledWidget(music_volume_lb, music_volume_sl, x1, y1, x2, y2, msg->get("Music Volume"), FontEngine::JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "sound_volume") {
 		// @ATTR sound_volume|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Sound Volume" slider relative to the frame.
-		placeLabeledWidget(sound_volume_lb, sound_volume_sl, x1, y1, x2, y2, msg->get("Sound Volume"), JUSTIFY_RIGHT);
+		placeLabeledWidget(sound_volume_lb, sound_volume_sl, x1, y1, x2, y2, msg->get("Sound Volume"), FontEngine::JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "language") {
 		// @ATTR language|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Language" list box relative to the frame.
 		placeLabeledWidget(language_lb, language_lstb, x1, y1, x2, y2, msg->get("Language"));
-		language_lb->setJustify(JUSTIFY_CENTER);
+		language_lb->setJustify(FontEngine::JUSTIFY_CENTER);
 	}
 	else if (infile.key == "language_height") {
 		// @ATTR language_height|int|Number of visible rows for the "Language" list box.
@@ -273,44 +273,44 @@ bool GameStateConfigBase::parseKey(FileParser &infile, int &x1, int &y1, int &x2
 	}
 	else if (infile.key == "combat_text") {
 		// @ATTR combat_text|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Show combat text" checkbox relative to the frame.
-		placeLabeledWidget(combat_text_lb, combat_text_cb, x1, y1, x2, y2, msg->get("Show combat text"), JUSTIFY_RIGHT);
+		placeLabeledWidget(combat_text_lb, combat_text_cb, x1, y1, x2, y2, msg->get("Show combat text"), FontEngine::JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "show_fps") {
 		// @ATTR show_fps|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Show FPS" checkbox relative to the frame.
-		placeLabeledWidget(show_fps_lb, show_fps_cb, x1, y1, x2, y2, msg->get("Show FPS"), JUSTIFY_RIGHT);
+		placeLabeledWidget(show_fps_lb, show_fps_cb, x1, y1, x2, y2, msg->get("Show FPS"), FontEngine::JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "colorblind") {
 		// @ATTR colorblind|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Colorblind Mode" checkbox relative to the frame.
-		placeLabeledWidget(colorblind_lb, colorblind_cb, x1, y1, x2, y2, msg->get("Colorblind Mode"), JUSTIFY_RIGHT);
+		placeLabeledWidget(colorblind_lb, colorblind_cb, x1, y1, x2, y2, msg->get("Colorblind Mode"), FontEngine::JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "hardware_cursor") {
 		// @ATTR hardware_cursor|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Hardware mouse cursor" checkbox relative to the frame.
-		placeLabeledWidget(hardware_cursor_lb, hardware_cursor_cb, x1, y1, x2, y2, msg->get("Hardware mouse cursor"), JUSTIFY_RIGHT);
+		placeLabeledWidget(hardware_cursor_lb, hardware_cursor_cb, x1, y1, x2, y2, msg->get("Hardware mouse cursor"), FontEngine::JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "dev_mode") {
 		// @ATTR dev_mode|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Developer Mode" checkbox relative to the frame.
-		placeLabeledWidget(dev_mode_lb, dev_mode_cb, x1, y1, x2, y2, msg->get("Developer Mode"), JUSTIFY_RIGHT);
+		placeLabeledWidget(dev_mode_lb, dev_mode_cb, x1, y1, x2, y2, msg->get("Developer Mode"), FontEngine::JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "loot_tooltips") {
 		// @ATTR loot_tooltips|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Always show loot labels" checkbox relative to the frame.
-		placeLabeledWidget(loot_tooltips_lb, loot_tooltips_cb, x1, y1, x2, y2, msg->get("Always show loot labels"), JUSTIFY_RIGHT);
+		placeLabeledWidget(loot_tooltips_lb, loot_tooltips_cb, x1, y1, x2, y2, msg->get("Always show loot labels"), FontEngine::JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "statbar_labels") {
 		// @ATTR statbar_labels|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Always show stat bar labels" checkbox relative to the frame.
-		placeLabeledWidget(statbar_labels_lb, statbar_labels_cb, x1, y1, x2, y2, msg->get("Always show stat bar labels"), JUSTIFY_RIGHT);
+		placeLabeledWidget(statbar_labels_lb, statbar_labels_cb, x1, y1, x2, y2, msg->get("Always show stat bar labels"), FontEngine::JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "auto_equip") {
 		// @ATTR auto_equip|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Automatically equip items" checkbox relative to the frame.
-		placeLabeledWidget(auto_equip_lb, auto_equip_cb, x1, y1, x2, y2, msg->get("Automatically equip items"), JUSTIFY_RIGHT);
+		placeLabeledWidget(auto_equip_lb, auto_equip_cb, x1, y1, x2, y2, msg->get("Automatically equip items"), FontEngine::JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "subtitles") {
 		// @ATTR subtitles|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Subtitles" checkbox relative to the frame.
-		placeLabeledWidget(subtitles_lb, subtitles_cb, x1, y1, x2, y2, msg->get("Subtitles"), JUSTIFY_RIGHT);
+		placeLabeledWidget(subtitles_lb, subtitles_cb, x1, y1, x2, y2, msg->get("Subtitles"), FontEngine::JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "activemods") {
 		// @ATTR activemods|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Active Mods" list box relative to the frame.
 		placeLabeledWidget(activemods_lb, activemods_lstb, x1, y1, x2, y2, msg->get("Active Mods"));
-		activemods_lb->setJustify(JUSTIFY_CENTER);
+		activemods_lb->setJustify(FontEngine::JUSTIFY_CENTER);
 	}
 	else if (infile.key == "activemods_height") {
 		// @ATTR activemods_height|int|Number of visible rows for the "Active Mods" list box.
@@ -319,7 +319,7 @@ bool GameStateConfigBase::parseKey(FileParser &infile, int &x1, int &y1, int &x2
 	else if (infile.key == "inactivemods") {
 		// @ATTR inactivemods|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Available Mods" list box relative to the frame.
 		placeLabeledWidget(inactivemods_lb, inactivemods_lstb, x1, y1, x2, y2, msg->get("Available Mods"));
-		inactivemods_lb->setJustify(JUSTIFY_CENTER);
+		inactivemods_lb->setJustify(FontEngine::JUSTIFY_CENTER);
 	}
 	else if (infile.key == "inactivemods_height") {
 		// @ATTR inactivemods_height|int|Number of visible rows for the "Available Mods" list box.

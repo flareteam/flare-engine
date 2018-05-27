@@ -103,7 +103,7 @@ void CombatText::addString(const std::string& message, const FPoint& location, i
 		c->lifespan = duration;
 		c->displaytype = displaytype;
 
-		c->label->set(static_cast<int>(c->pos.x), static_cast<int>(c->pos.y), JUSTIFY_CENTER, VALIGN_BOTTOM, c->text, msg_color[c->displaytype]);
+		c->label->set(static_cast<int>(c->pos.x), static_cast<int>(c->pos.y), FontEngine::JUSTIFY_CENTER, VALIGN_BOTTOM, c->text, msg_color[c->displaytype]);
 		combat_text.push_back(*c);
 		delete c;
 	}

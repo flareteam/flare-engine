@@ -95,7 +95,7 @@ GameStateConfigDesktop::GameStateConfigDesktop(bool _enable_video_tab)
 	for (int i = 0; i < inpt->key_count; i++) {
 		keybinds_lb.push_back(new WidgetLabel());
 		keybinds_lb[i]->set(inpt->binding_name[i]);
-		keybinds_lb[i]->setJustify(JUSTIFY_RIGHT);
+		keybinds_lb[i]->setJustify(FontEngine::JUSTIFY_RIGHT);
 	}
 	for (int i = 0; i < inpt->key_count * 3; i++) {
 		keybinds_btn.push_back(new WidgetButton());
@@ -218,7 +218,7 @@ bool GameStateConfigDesktop::parseKeyDesktop(FileParser &infile, int &x1, int &y
 
 		refreshRenderers();
 
-		renderer_lb->setJustify(JUSTIFY_CENTER);
+		renderer_lb->setJustify(FontEngine::JUSTIFY_CENTER);
 	}
 	else if (infile.key == "renderer_height") {
 		// @ATTR renderer_height|int|Number of visible rows for the "Renderer" list box.
@@ -226,39 +226,39 @@ bool GameStateConfigDesktop::parseKeyDesktop(FileParser &infile, int &x1, int &y
 	}
 	else if (infile.key == "fullscreen") {
 		// @ATTR fullscreen|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Full Screen Mode" checkbox relative to the frame.
-		placeLabeledWidget(fullscreen_lb, fullscreen_cb, x1, y1, x2, y2, msg->get("Full Screen Mode"), JUSTIFY_RIGHT);
+		placeLabeledWidget(fullscreen_lb, fullscreen_cb, x1, y1, x2, y2, msg->get("Full Screen Mode"), FontEngine::JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "mouse_move") {
 		// @ATTR mouse_move|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Move hero using mouse" checkbox relative to the frame.
-		placeLabeledWidget(mouse_move_lb, mouse_move_cb, x1, y1, x2, y2, msg->get("Move hero using mouse"), JUSTIFY_RIGHT);
+		placeLabeledWidget(mouse_move_lb, mouse_move_cb, x1, y1, x2, y2, msg->get("Move hero using mouse"), FontEngine::JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "hwsurface") {
 		// @ATTR hwsurface|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Hardware surfaces" checkbox relative to the frame.
-		placeLabeledWidget(hwsurface_lb, hwsurface_cb, x1, y1, x2, y2, msg->get("Hardware surfaces"), JUSTIFY_RIGHT);
+		placeLabeledWidget(hwsurface_lb, hwsurface_cb, x1, y1, x2, y2, msg->get("Hardware surfaces"), FontEngine::JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "vsync") {
 		// @ATTR vsync|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "V-Sync" checkbox relative to the frame.
-		placeLabeledWidget(vsync_lb, vsync_cb, x1, y1, x2, y2, msg->get("V-Sync"), JUSTIFY_RIGHT);
+		placeLabeledWidget(vsync_lb, vsync_cb, x1, y1, x2, y2, msg->get("V-Sync"), FontEngine::JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "texture_filter") {
 		// @ATTR texture_filter|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Texture Filtering" checkbox relative to the frame.
-		placeLabeledWidget(texture_filter_lb, texture_filter_cb, x1, y1, x2, y2, msg->get("Texture Filtering"), JUSTIFY_RIGHT);
+		placeLabeledWidget(texture_filter_lb, texture_filter_cb, x1, y1, x2, y2, msg->get("Texture Filtering"), FontEngine::JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "dpi_scaling") {
 		// @ATTR dpi_scaling|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "DPI scaling" checkbox relative to the frame.
-		placeLabeledWidget(dpi_scaling_lb, dpi_scaling_cb, x1, y1, x2, y2, msg->get("DPI scaling"), JUSTIFY_RIGHT);
+		placeLabeledWidget(dpi_scaling_lb, dpi_scaling_cb, x1, y1, x2, y2, msg->get("DPI scaling"), FontEngine::JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "change_gamma") {
 		// @ATTR change_gamma|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Allow changing gamma" checkbox relative to the frame.
-		placeLabeledWidget(change_gamma_lb, change_gamma_cb, x1, y1, x2, y2, msg->get("Allow changing gamma"), JUSTIFY_RIGHT);
+		placeLabeledWidget(change_gamma_lb, change_gamma_cb, x1, y1, x2, y2, msg->get("Allow changing gamma"), FontEngine::JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "gamma") {
 		// @ATTR gamma|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Gamma" slider relative to the frame.
-		placeLabeledWidget(gamma_lb, gamma_sl, x1, y1, x2, y2, msg->get("Gamma"), JUSTIFY_RIGHT);
+		placeLabeledWidget(gamma_lb, gamma_sl, x1, y1, x2, y2, msg->get("Gamma"), FontEngine::JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "enable_joystick") {
 		// @ATTR enable_joystick|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Use joystick" checkbox relative to the frame.
-		placeLabeledWidget(enable_joystick_lb, enable_joystick_cb, x1, y1, x2, y2, msg->get("Use joystick"), JUSTIFY_RIGHT);
+		placeLabeledWidget(enable_joystick_lb, enable_joystick_cb, x1, y1, x2, y2, msg->get("Use joystick"), FontEngine::JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "joystick_device") {
 		// @ATTR joystick_device|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Joystick" list box relative to the frame.
@@ -270,7 +270,7 @@ bool GameStateConfigDesktop::parseKeyDesktop(FileParser &infile, int &x1, int &y
 				joystick_device_lstb->append(joystick_name, joystick_name);
 		}
 
-		joystick_device_lb->setJustify(JUSTIFY_CENTER);
+		joystick_device_lb->setJustify(FontEngine::JUSTIFY_CENTER);
 	}
 	else if (infile.key == "joystick_device_height") {
 		// @ATTR joystick_device_height|int|Number of visible rows for the "Joystick" list box.
@@ -278,15 +278,15 @@ bool GameStateConfigDesktop::parseKeyDesktop(FileParser &infile, int &x1, int &y
 	}
 	else if (infile.key == "mouse_aim") {
 		// @ATTR mouse_aim|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Mouse aim" checkbox relative to the frame.
-		placeLabeledWidget(mouse_aim_lb, mouse_aim_cb, x1, y1, x2, y2, msg->get("Mouse aim"), JUSTIFY_RIGHT);
+		placeLabeledWidget(mouse_aim_lb, mouse_aim_cb, x1, y1, x2, y2, msg->get("Mouse aim"), FontEngine::JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "no_mouse") {
 		// @ATTR no_mouse|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Do not use mouse" checkbox relative to the frame.
-		placeLabeledWidget(no_mouse_lb, no_mouse_cb, x1, y1, x2, y2, msg->get("Do not use mouse"), JUSTIFY_RIGHT);
+		placeLabeledWidget(no_mouse_lb, no_mouse_cb, x1, y1, x2, y2, msg->get("Do not use mouse"), FontEngine::JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "joystick_deadzone") {
 		// @ATTR joystick_deadzone|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Joystick Deadzone" slider relative to the frame.
-		placeLabeledWidget(joystick_deadzone_lb, joystick_deadzone_sl, x1, y1, x2, y2, msg->get("Joystick Deadzone"), JUSTIFY_RIGHT);
+		placeLabeledWidget(joystick_deadzone_lb, joystick_deadzone_sl, x1, y1, x2, y2, msg->get("Joystick Deadzone"), FontEngine::JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "secondary_offset") {
 		// @ATTR secondary_offset|point|Offset of the second (and third) columns of keybinds.

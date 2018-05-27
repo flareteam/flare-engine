@@ -72,10 +72,10 @@ void MenuConfirm::align() {
 		buttonConfirm->pos.x = window_area.x + window_area.w/2 - buttonConfirm->pos.w/2;
 		buttonConfirm->pos.y = window_area.y + window_area.h/2;
 		buttonConfirm->refresh();
-		label.set(window_area.x + window_area.w/2, window_area.y + window_area.h - (buttonConfirm->pos.h * 2), JUSTIFY_CENTER, VALIGN_TOP, boxMsg, font->getColor("menu_normal"));
+		label.set(window_area.x + window_area.w/2, window_area.y + window_area.h - (buttonConfirm->pos.h * 2), FontEngine::JUSTIFY_CENTER, VALIGN_TOP, boxMsg, font->getColor("menu_normal"));
 	}
 	else {
-		label.set(window_area.x + window_area.w/2, window_area.y + (window_area.h / 4), JUSTIFY_CENTER, VALIGN_TOP, boxMsg, font->getColor("menu_normal"));
+		label.set(window_area.x + window_area.w/2, window_area.y + (window_area.h / 4), FontEngine::JUSTIFY_CENTER, VALIGN_TOP, boxMsg, font->getColor("menu_normal"));
 	}
 
 	buttonClose->pos.x = window_area.x + window_area.w;

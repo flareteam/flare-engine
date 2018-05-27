@@ -202,7 +202,7 @@ void MenuTalker::createBuffer() {
 		who = hero_name;
 	}
 
-	label_name->set(window_area.x+text_pos.x+text_offset.x, window_area.y+text_pos.y+text_offset.y, JUSTIFY_LEFT, VALIGN_TOP, who, color_normal, font_who);
+	label_name->set(window_area.x+text_pos.x+text_offset.x, window_area.y+text_pos.y+text_offset.y, FontEngine::JUSTIFY_LEFT, VALIGN_TOP, who, color_normal, font_who);
 
 
 	line = substituteVarsInString(npc->dialog[dialog_node][event_cursor].s, pc);
@@ -215,7 +215,7 @@ void MenuTalker::createBuffer() {
 		line,
 		text_offset.x,
 		0,
-		JUSTIFY_LEFT,
+		FontEngine::JUSTIFY_LEFT,
 		textbox->contents->getGraphics(),
 		text_pos.w - text_offset.x*2,
 		color_normal

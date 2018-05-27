@@ -285,16 +285,16 @@ void MenuCharacter::refreshStats() {
 		trimmed_name = font->trimTextToWidth(stats->name, name_max_width, true, 0);
 	else
 		trimmed_name = stats->name;
-	cstat[CSTAT_NAME].value->set(cstat[CSTAT_NAME].value->pos.x, cstat[CSTAT_NAME].value->pos.y, JUSTIFY_LEFT, VALIGN_CENTER, trimmed_name, font->getColor("menu_normal"));
+	cstat[CSTAT_NAME].value->set(cstat[CSTAT_NAME].value->pos.x, cstat[CSTAT_NAME].value->pos.y, FontEngine::JUSTIFY_LEFT, VALIGN_CENTER, trimmed_name, font->getColor("menu_normal"));
 
 	ss.str("");
 	ss << stats->level;
-	cstat[CSTAT_LEVEL].value->set(cstat[CSTAT_LEVEL].value->pos.x, cstat[CSTAT_LEVEL].value->pos.y, JUSTIFY_CENTER, VALIGN_CENTER, ss.str(), font->getColor("menu_normal"));
+	cstat[CSTAT_LEVEL].value->set(cstat[CSTAT_LEVEL].value->pos.x, cstat[CSTAT_LEVEL].value->pos.y, FontEngine::JUSTIFY_CENTER, VALIGN_CENTER, ss.str(), font->getColor("menu_normal"));
 
 	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
 		ss.str("");
 		ss << stats->get_primary(i);
-		cstat[i+2].value->set(cstat[i+2].value->pos.x, cstat[i+2].value->pos.y, JUSTIFY_CENTER, VALIGN_CENTER, ss.str(), bonusColor(stats->primary_additional[i]));
+		cstat[i+2].value->set(cstat[i+2].value->pos.x, cstat[i+2].value->pos.y, FontEngine::JUSTIFY_CENTER, VALIGN_CENTER, ss.str(), bonusColor(stats->primary_additional[i]));
 	}
 
 	ss.str("");

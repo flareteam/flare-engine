@@ -167,7 +167,7 @@ void MenuNPCActions::update() {
 
 				npc_actions[i].label->set(MENU_BORDER + (w/2),
 										  yoffs + (npc_actions[i].rect.h/2) ,
-										  JUSTIFY_CENTER, VALIGN_CENTER,
+										  FontEngine::JUSTIFY_CENTER, VALIGN_CENTER,
 										  npc_actions[i].label->get(), text_color);
 			}
 			else {
@@ -180,7 +180,7 @@ void MenuNPCActions::update() {
 
 				npc_actions[i].label->set(MENU_BORDER + (w/2),
 										  yoffs + (npc_actions[i].rect.h/2),
-										  JUSTIFY_CENTER, VALIGN_CENTER,
+										  FontEngine::JUSTIFY_CENTER, VALIGN_CENTER,
 										  npc_actions[i].label->get(), text_color);
 			}
 

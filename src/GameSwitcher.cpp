@@ -217,7 +217,7 @@ void GameSwitcher::showFPS(float fps) {
 			std::string sfps = floatToString(avg_fps, 2) + std::string (" fps");
 			Rect pos = fps_position;
 			alignToScreenEdge(fps_corner, &pos);
-			label_fps->set(pos.x, pos.y, JUSTIFY_LEFT, VALIGN_TOP, sfps, fps_color);
+			label_fps->set(pos.x, pos.y, FontEngine::JUSTIFY_LEFT, VALIGN_TOP, sfps, fps_color);
 		}
 		label_fps->render();
 		fps_ticks--;

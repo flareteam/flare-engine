@@ -451,10 +451,10 @@ void WidgetListBox::refresh(bool go_to_selected) {
 		}
 
 		if(i+cursor < items.size() && items[i+cursor].selected) {
-			vlabels[i].set(font_x, font_y, JUSTIFY_LEFT, VALIGN_CENTER, temp, color_normal);
+			vlabels[i].set(font_x, font_y, FontEngine::JUSTIFY_LEFT, VALIGN_CENTER, temp, color_normal);
 		}
 		else if (i < items.size()) {
-			vlabels[i].set(font_x, font_y, JUSTIFY_LEFT, VALIGN_CENTER, temp, color_disabled);
+			vlabels[i].set(font_x, font_y, FontEngine::JUSTIFY_LEFT, VALIGN_CENTER, temp, color_disabled);
 		}
 	}
 

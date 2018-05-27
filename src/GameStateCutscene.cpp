@@ -214,7 +214,7 @@ bool Scene::logic() {
 
 				vsc.text = new WidgetLabel();
 				if (vsc.text) {
-					vsc.text->set(vsc.pos.x, vsc.pos.y, JUSTIFY_CENTER, VALIGN_TOP, components.front().s, font->getColor("widget_normal"), "font_captions");
+					vsc.text->set(vsc.pos.x, vsc.pos.y, FontEngine::JUSTIFY_CENTER, VALIGN_TOP, components.front().s, font->getColor("widget_normal"), "font_captions");
 					next_y += vsc.text->bounds.h;
 				}
 
@@ -298,10 +298,10 @@ void Scene::refreshWidgets() {
 			caption_box->setPos(0, static_cast<int>(static_cast<float>(VIEW_H) * settings.caption_margins.y) * (-1));
 
 			font->renderShadowed(caption, (padding / 2) + (caption_size_padded.x / 2), padding,
-								 JUSTIFY_CENTER,
+								 FontEngine::JUSTIFY_CENTER,
 								 caption_box->contents->getGraphics(),
 								 caption_width,
-								 FONT_WHITE);
+								 FontColor::WHITE);
 		}
 
 		if (art) {

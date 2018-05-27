@@ -140,9 +140,9 @@ void MenuBook::loadBook() {
 
 		if (graphics) {
 			int x_offset = 0;
-			if (text[i].justify == JUSTIFY_CENTER)
+			if (text[i].justify == FontEngine::JUSTIFY_CENTER)
 				x_offset = text[i].size.w / 2;
-			else if (text[i].justify == JUSTIFY_RIGHT)
+			else if (text[i].justify == FontEngine::JUSTIFY_RIGHT)
 				x_offset = text[i].size.w;
 
 			font->render(text[i].text, x_offset, 0, text[i].justify, graphics, text[i].size.w, text[i].color);
@@ -221,9 +221,9 @@ void MenuBook::loadText(FileParser &infile, BookText& btext) {
 		btext.size.w = popFirstInt(infile.val);
 		std::string _justify = popFirstString(infile.val);
 
-		if (_justify == "left") btext.justify = JUSTIFY_LEFT;
-		else if (_justify == "center") btext.justify = JUSTIFY_CENTER;
-		else if (_justify == "right") btext.justify = JUSTIFY_RIGHT;
+		if (_justify == "left") btext.justify = FontEngine::JUSTIFY_LEFT;
+		else if (_justify == "center") btext.justify = FontEngine::JUSTIFY_CENTER;
+		else if (_justify == "right") btext.justify = FontEngine::JUSTIFY_RIGHT;
 	}
 	// @ATTR text.text_font|color, string : Font color, Font style|Font color and style.
 	else if (infile.key == "text_font") {

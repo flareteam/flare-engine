@@ -179,7 +179,7 @@ void MenuStatBar::render() {
 			if (custom_text_pos)
 				label->set(bar_dest.x+text_pos.x, bar_dest.y+text_pos.y, text_pos.justify, text_pos.valign, ss.str(), color_normal, text_pos.font_style);
 			else
-				label->set(bar_dest.x+bar_pos.w/2, bar_dest.y+bar_pos.h/2, JUSTIFY_CENTER, VALIGN_CENTER, ss.str(), color_normal);
+				label->set(bar_dest.x+bar_pos.w/2, bar_dest.y+bar_pos.h/2, FontEngine::JUSTIFY_CENTER, VALIGN_CENTER, ss.str(), color_normal);
 			// label->set(ss.str());
 			label->render();
 		}

@@ -145,11 +145,11 @@ void MenuEnemy::render() {
 			label_text.set(window_area.x+text_pos.x, window_area.y+text_pos.y, text_pos.justify, text_pos.valign, msg->get("%s level %d", enemy->stats.level, enemy->stats.name), color_normal, text_pos.font_style);
 		}
 		else {
-			label_text.set(window_area.x+bar_pos.x+bar_pos.w/2, window_area.y+bar_pos.y, JUSTIFY_CENTER, VALIGN_BOTTOM, msg->get("%s level %d", enemy->stats.level, enemy->stats.name), color_normal);
+			label_text.set(window_area.x+bar_pos.x+bar_pos.w/2, window_area.y+bar_pos.y, FontEngine::JUSTIFY_CENTER, VALIGN_BOTTOM, msg->get("%s level %d", enemy->stats.level, enemy->stats.name), color_normal);
 		}
 		label_text.render();
 
-		label_stats.set(window_area.x+bar_pos.x+bar_pos.w/2, window_area.y+bar_pos.y+bar_pos.h/2, JUSTIFY_CENTER, VALIGN_CENTER, ss.str(), color_normal);
+		label_stats.set(window_area.x+bar_pos.x+bar_pos.w/2, window_area.y+bar_pos.y+bar_pos.h/2, FontEngine::JUSTIFY_CENTER, VALIGN_CENTER, ss.str(), color_normal);
 		label_stats.render();
 	}
 }
