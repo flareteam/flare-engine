@@ -28,35 +28,35 @@ msgstr "Mental"
 
 #: ../engine/primary_stats.txt:11
 msgid "Offense"
-msgstr "Ataque"
+msgstr "Ofensivo"
 
 #: ../engine/primary_stats.txt:15
 msgid "Defense"
-msgstr "Defesa"
+msgstr "Defensivo"
 
 #: ../engine/damage_types.txt:3
 msgid "Melee Damage"
-msgstr "Dano Corpo a corpo"
+msgstr "Dano corpo a corpo"
 
 #: ../engine/damage_types.txt:4
 msgid "Melee Damage Min"
-msgstr "Dano Corpo a corpo Mínimo"
+msgstr "Dano mín. corpo a corpo "
 
 #: ../engine/damage_types.txt:5
 msgid "Melee Damage Max"
-msgstr "Dano Corpo a corpo Máximo"
+msgstr "Dano máx. corpo a corpo "
 
 #: ../engine/damage_types.txt:11
 msgid "Ranged Damage"
-msgstr "Dano em Distância"
+msgstr "Dano à distância"
 
 #: ../engine/damage_types.txt:12
 msgid "Ranged Damage Min"
-msgstr "Dano em Distância Mínimo"
+msgstr "Dano mín. à distância"
 
 #: ../engine/damage_types.txt:13
 msgid "Ranged Damage Max"
-msgstr "Dano em Distância Máximo"
+msgstr "Dano máx. à distância"
 
 #: ../engine/damage_types.txt:19
 msgid "Mental Damage"
@@ -64,11 +64,11 @@ msgstr "Dano Mental"
 
 #: ../engine/damage_types.txt:20
 msgid "Mental Damage Min"
-msgstr "Dano Mental Mínimo"
+msgstr "Dano mín. mental "
 
 #: ../engine/damage_types.txt:21
 msgid "Mental Damage Max"
-msgstr "Dano Mental Máximo"
+msgstr "Dano máx. mental"
 
 #: ../cutscenes/credits.txt:7
 msgid "Flare Engine Credits"
@@ -76,7 +76,7 @@ msgstr "Créditos do Motor Flare"
 
 #: ../cutscenes/credits.txt:10
 msgid "Lead Programmers"
-msgstr "Programadores Lideres"
+msgstr "Programadores Principais"
 
 #: ../cutscenes/credits.txt:12
 msgid "Clint Bellanger"
@@ -348,7 +348,7 @@ msgstr "Yannis Anthymidis"
 
 #: ../cutscenes/credits.txt:95
 msgid "Distributors"
-msgstr "Distributors"
+msgstr "Distribuidores"
 
 #: ../cutscenes/credits.txt:97
 msgid "Ablu"
@@ -372,7 +372,7 @@ msgstr "Agradecimento Especial"
 
 #: ../cutscenes/credits.txt:108
 msgid "For giving constant feedback and testing:"
-msgstr "Por nos dar constantes sugestões e testes:"
+msgstr "Por constantes sugestões e testes:"
 
 #: ../cutscenes/credits.txt:109
 msgid "Bart Kelsey"
@@ -384,7 +384,7 @@ msgstr "A comunidade do OpenGameArt:"
 
 #: ../cutscenes/credits.txt:114
 msgid "For Tiled and the Flare map exporter:"
-msgstr "Por 'Tiled' e o exportador de mapas do Flare:"
+msgstr "Pelo Tiled editor e exportador de mapas do Flare:"
 
 #: ../cutscenes/credits.txt:115
 msgid "Thorbjørn Lindeijer"

@@ -271,12 +271,16 @@ msgid ""
 "Will try to store surfaces in video memory versus system memory. The effect "
 "this has on performance depends on the renderer."
 msgstr ""
+"Intentará almacenar las superficies en la memoria de vídeo en vez de en la "
+"memoria del sistema. Esto afectará de forma distinta según el renderizador."
 
 #: ../../../src/GameStateConfigDesktop.cpp:192
 msgid ""
 "Prevents screen tearing. Disable if you experience \"stuttering\" in "
 "windowed mode or input lag."
 msgstr ""
+"Evita que la pantalla se muestre rota. Se puede desactivar si se detectan "
+"\"parpadeos\" de imagen en el modo ventana o retraso en las entradas"
 
 #: ../../../src/GameStateConfigDesktop.cpp:193
 msgid ""
@@ -284,6 +288,9 @@ msgid ""
 "to scale the rendering resolution. Otherwise, only the window dimensions are"
 " used."
 msgstr ""
+"Cuando está activo, usa los PPP de la pantalla, junto con las las "
+"dimensiones de la ventana para escalar la resolución. De lo contrario, sólo "
+"se usarán las dimensiones de la ventana."
 
 #: ../../../src/GameStateConfigDesktop.cpp:194
 msgid "Experimental"
@@ -319,7 +326,7 @@ msgstr "Filtro de textura"
 
 #: ../../../src/GameStateConfigDesktop.cpp:249
 msgid "DPI scaling"
-msgstr ""
+msgstr "Escalado por PPP"
 
 #: ../../../src/GameStateConfigDesktop.cpp:253
 msgid "Allow changing gamma"
