@@ -28,17 +28,17 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class FileParser;
 
-enum EVENT_ACTIVATE_TYPE {
-	EVENT_ON_TRIGGER = 0,
-	EVENT_ON_MAPEXIT = 1,
-	EVENT_ON_LEAVE = 2,
-	EVENT_ON_LOAD = 3,
-	EVENT_ON_CLEAR = 4,
-	EVENT_STATIC = 5
-};
-
 class Event {
 public:
+	enum {
+		ACTIVATE_ON_TRIGGER = 0,
+		ACTIVATE_ON_MAPEXIT = 1,
+		ACTIVATE_ON_LEAVE = 2,
+		ACTIVATE_ON_LOAD = 3,
+		ACTIVATE_ON_CLEAR = 4,
+		ACTIVATE_STATIC = 5
+	};
+
 	std::string type;
 	int activate_type;
 	std::vector<Event_Component> components;

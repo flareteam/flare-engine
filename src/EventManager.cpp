@@ -99,25 +99,25 @@ void EventManager::loadEvent(FileParser &infile, Event* evnt) {
 	else if (infile.key == "activate") {
 		// @ATTR event.activate|["on_trigger", "on_load", "on_leave", "on_mapexit", "on_clear", "static"]|Set the state in which the event will be activated (map events only).
 		if (infile.val == "on_trigger") {
-			evnt->activate_type = EVENT_ON_TRIGGER;
+			evnt->activate_type = Event::ACTIVATE_ON_TRIGGER;
 		}
 		else if (infile.val == "on_mapexit") {
 			// no need to set keep_after_trigger to false correctly, it's ignored anyway
-			evnt->activate_type = EVENT_ON_MAPEXIT;
+			evnt->activate_type = Event::ACTIVATE_ON_MAPEXIT;
 		}
 		else if (infile.val == "on_leave") {
-			evnt->activate_type = EVENT_ON_LEAVE;
+			evnt->activate_type = Event::ACTIVATE_ON_LEAVE;
 		}
 		else if (infile.val == "on_load") {
-			evnt->activate_type = EVENT_ON_LOAD;
+			evnt->activate_type = Event::ACTIVATE_ON_LOAD;
 			evnt->keep_after_trigger = false;
 		}
 		else if (infile.val == "on_clear") {
-			evnt->activate_type = EVENT_ON_CLEAR;
+			evnt->activate_type = Event::ACTIVATE_ON_CLEAR;
 			evnt->keep_after_trigger = false;
 		}
 		else if (infile.val == "static") {
-			evnt->activate_type = EVENT_STATIC;
+			evnt->activate_type = Event::ACTIVATE_STATIC;
 		}
 		else {
 			infile.error("EventManager: Event activation type '%s' unknown, change to \"on_trigger\" to suppress this warning.", infile.val.c_str());
@@ -770,7 +770,7 @@ bool EventManager::executeEvent(Event &ev) {
 				pos.y = static_cast<float>(ev.location.y) + 0.5f;
 			}
 
-			if (ev.activate_type == EVENT_ON_LOAD || ec->z != 0)
+			if (ev.activate_type == Event::ACTIVATE_ON_LOAD || ec->z != 0)
 				loop = true;
 
 			SoundID sid = snd->load(ec->s, "MapRenderer background soundfx");
