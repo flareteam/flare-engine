@@ -283,7 +283,7 @@ void loadTilesetSettings() {
 	FileParser infile;
 	// load tileset settings from engine config
 	// @CLASS Settings: Tileset config|Description of engine/tileset_config.txt
-	if (infile.open("engine/tileset_config.txt", true, "Unable to open engine/tileset_config.txt! Defaulting to 64x32 isometric tiles.")) {
+	if (infile.open("engine/tileset_config.txt")) {
 		while (infile.next()) {
 			if (infile.key == "tile_size") {
 				// @ATTR tile_size|int, int : Width, Height|The width and height of a tile.
@@ -304,6 +304,9 @@ void loadTilesetSettings() {
 			}
 		}
 		infile.close();
+	}
+	else {
+		logError("Unable to open engine/tileset_config.txt! Defaulting to 64x32 isometric tiles.");
 	}
 
 	// Init automatically calculated parameters
@@ -907,9 +910,9 @@ void loadSettings() {
 
 	// try read from file
 	FileParser infile;
-	if (!infile.open(PATH_CONF + FILE_SETTINGS, false, "")) {
+	if (!infile.open(PATH_CONF + FILE_SETTINGS, (FileParser::FULL_PATH | FileParser::NO_ERROR))) {
 		loadMobileDefaults();
-		if (!infile.open("engine/default_settings.txt", true, "")) {
+		if (!infile.open("engine/default_settings.txt", FileParser::NO_ERROR)) {
 			saveSettings();
 			return;
 		}

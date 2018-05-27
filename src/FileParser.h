@@ -33,7 +33,7 @@ private:
 
 	std::vector<std::string> filenames;
 	unsigned current_index;
-	std::string errormessage;
+	unsigned char flags;
 
 	std::ifstream infile;
 	std::string line;
@@ -43,6 +43,11 @@ private:
 	FileParser* include_fp;
 
 public:
+	enum OPEN_FLAGS : unsigned char {
+		FULL_PATH = 0x1,
+		NO_ERROR = 0x2
+	};
+
 	FileParser();
 	~FileParser();
 
@@ -53,20 +58,15 @@ public:
 	 * by the ModManager.
 	 * If this is a directory, all files in this directory will be opened.
 	 *
-	 * @param errormessage
-	 * Optional parameter, will be printed to stderr together with the filename
-	 * if an error occurs. If errormessage is empty, there will be no output to
-	 * stderr in any case.
-	 *
-	 * @param locateFileName
-	 * If this parameter is set to true, the filename will not be interpreted as
-	 * a generic locatable filename and the ModManager is used to locate the
-	 * actual filename before opening the file. It is true by default.
-	 * If this is set to false, then the filename is interpreted as is.
+	 * @param flags
+	 * Optional parameter, has two bits which can be changed:
+	 * FULL_PATH - when enabled, filename won't be located by the ModManager
+	 * NO_ERROR - when enabled, suppresses the error message when a file can't
+	 * be opened
 	 *
 	 * @return true if file could be opened successfully for reading.
 	 */
-	bool open(const std::string& filename, bool locateFileName = true, const std::string &errormessage = "Could not open text file");
+	bool open(const std::string& filename, unsigned char _flags = 0);
 
 	void close();
 	bool next();

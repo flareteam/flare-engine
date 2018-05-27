@@ -26,6 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 FileParser::FileParser()
 	: current_index(0)
+	, flags(0)
 	, line("")
 	, line_number(0)
 	, include_fp(NULL)
@@ -35,9 +36,11 @@ FileParser::FileParser()
 	, val("") {
 }
 
-bool FileParser::open(const std::string& _filename, bool locateFileName, const std::string &_errormessage) {
+bool FileParser::open(const std::string& _filename, unsigned char _flags) {
+	flags = _flags;
+
 	filenames.clear();
-	if (locateFileName) {
+	if (!(flags & FULL_PATH)) {
 		filenames = mods->list(_filename);
 	}
 	else {
@@ -45,10 +48,10 @@ bool FileParser::open(const std::string& _filename, bool locateFileName, const s
 	}
 	current_index = 0;
 	line_number = 0;
-	this->errormessage = _errormessage;
 
-	if (filenames.empty() && !errormessage.empty()) {
-		logError("FileParser: %s: %s: No such file or directory!", _filename.c_str(), errormessage.c_str());
+	if (filenames.empty()) {
+		if (!(flags & NO_ERROR))
+			logError("FileParser: Could not open text file: %s: No such file or directory!", _filename.c_str());
 		return false;
 	}
 
@@ -87,8 +90,8 @@ bool FileParser::open(const std::string& _filename, bool locateFileName, const s
 			}
 		}
 		else {
-			if (!errormessage.empty())
-				logError("FileParser: %s: %s", errormessage.c_str(), filenames[i-1].c_str());
+			if (!(flags & NO_ERROR))
+				logError("FileParser: Could not open text file: %s", filenames[i-1].c_str());
 			infile.clear();
 		}
 	}
@@ -197,8 +200,8 @@ bool FileParser::next() {
 		const std::string current_filename = filenames[current_index];
 		infile.open(current_filename.c_str(), std::ios::in);
 		if (!infile.is_open()) {
-			if (!errormessage.empty())
-				logError("FileParser: %s: %s", errormessage.c_str(), current_filename.c_str());
+			if (!(flags & NO_ERROR))
+				logError("FileParser: Could not open text file: %s", current_filename.c_str());
 			infile.clear();
 			return false;
 		}

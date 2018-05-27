@@ -300,7 +300,7 @@ void GameStateLoad::readGameSlots() {
 		filename.str("");
 		filename << PATH_USER << "saves/" << SAVE_PREFIX << "/" << save_dirs[i] << "/avatar.txt";
 
-		if (!infile.open(filename.str(),false)) continue;
+		if (!infile.open(filename.str(), FileParser::FULL_PATH)) continue;
 
 		game_slots[i] = new GameSlot();
 		game_slots[i]->id = toInt(save_dirs[i]);
@@ -356,7 +356,9 @@ void GameStateLoad::readGameSlots() {
 
 std::string GameStateLoad::getMapName(const std::string& map_filename) {
 	FileParser infile;
-	if (!infile.open(map_filename, true, "")) return "";
+	if (!infile.open(map_filename, FileParser::NO_ERROR))
+		return "";
+
 	std::string map_name = "";
 
 	while (map_name == "" && infile.next()) {

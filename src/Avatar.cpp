@@ -90,7 +90,7 @@ Avatar::Avatar()
 	// load foot-step definitions
 	// @CLASS Avatar: Step sounds|Description of items/step_sounds.txt
 	FileParser infile;
-	if (infile.open("items/step_sounds.txt", true, "")) {
+	if (infile.open("items/step_sounds.txt", FileParser::NO_ERROR)) {
 		while (infile.next()) {
 			if (infile.key == "id") {
 				// @ATTR id|string|An identifier name for a set of step sounds.

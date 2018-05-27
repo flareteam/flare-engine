@@ -36,7 +36,7 @@ IconManager::IconManager()
 	FileParser infile;
 
 	// @CLASS IconManager|Description of engine/icons.txt
-	if (infile.open("engine/icons.txt", true, "")) {
+	if (infile.open("engine/icons.txt", FileParser::NO_ERROR)) {
 		while (infile.next()) {
 			if (infile.key == "icon_set") {
 				// @ATTR icon_set|repeatable(icon_id, filename) : First ID, Image file|Defines an icon graphics file to load, as well as the index of the first icon.

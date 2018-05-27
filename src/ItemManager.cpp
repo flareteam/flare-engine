@@ -104,11 +104,11 @@ void ItemManager::loadAll() {
  *
  * @param filename The (full) path and name of the file to load
  */
-void ItemManager::loadItems(const std::string& filename, bool locateFileName) {
+void ItemManager::loadItems(const std::string& filename) {
 	FileParser infile;
 
 	// @CLASS ItemManager: Items|Description about the class and it usage, items/items.txt...
-	if (!infile.open(filename, locateFileName))
+	if (!infile.open(filename))
 		return;
 
 	// used to clear vectors when overriding items
@@ -326,11 +326,11 @@ void ItemManager::loadItems(const std::string& filename, bool locateFileName) {
  *
  * @param filename The (full) path and name of the file to load
  */
-void ItemManager::loadTypes(const std::string& filename, bool locateFileName) {
+void ItemManager::loadTypes(const std::string& filename) {
 	FileParser infile;
 
 	// @CLASS ItemManager: Types|Definition of a item types, items/types.txt...
-	if (infile.open(filename, locateFileName)) {
+	if (infile.open(filename)) {
 		while (infile.next()) {
 			if (infile.new_section) {
 				if (infile.section == "type") {
@@ -368,11 +368,11 @@ void ItemManager::loadTypes(const std::string& filename, bool locateFileName) {
  *
  * @param filename The (full) path and name of the file to load
  */
-void ItemManager::loadQualities(const std::string& filename, bool locateFileName) {
+void ItemManager::loadQualities(const std::string& filename) {
 	FileParser infile;
 
 	// @CLASS ItemManager: Qualities|Definition of a item qualities, items/types.txt...
-	if (infile.open(filename, locateFileName)) {
+	if (infile.open(filename)) {
 		while (infile.next()) {
 			if (infile.new_section) {
 				if (infile.section == "quality") {
@@ -456,11 +456,11 @@ void ItemManager::addUnknownItem(unsigned id) {
  *
  * @param filename The (full) path and name of the file to load
  */
-void ItemManager::loadSets(const std::string& filename, bool locateFileName) {
+void ItemManager::loadSets(const std::string& filename) {
 	FileParser infile;
 
 	// @CLASS ItemManager: Sets|Definition of a item sets, items/sets.txt...
-	if (!infile.open(filename, locateFileName))
+	if (!infile.open(filename))
 		return;
 
 	bool clear_bonus = true;

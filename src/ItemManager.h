@@ -217,10 +217,10 @@ public:
 
 class ItemManager {
 protected:
-	void loadItems(const std::string& filename, bool locateFileName = true);
-	void loadTypes(const std::string& filename, bool locateFileName = true);
-	void loadSets(const std::string& filename, bool locateFileName = true);
-	void loadQualities(const std::string& filename, bool locateFileName = true);
+	void loadItems(const std::string& filename);
+	void loadTypes(const std::string& filename);
+	void loadSets(const std::string& filename);
+	void loadQualities(const std::string& filename);
 private:
 	void loadAll();
 	void parseBonus(BonusData& bdata, FileParser& infile);

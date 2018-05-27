@@ -1008,7 +1008,7 @@ void StatBlock::loadHeroStats() {
 void StatBlock::loadHeroSFX() {
 	// load the paths to base sound effects
 	FileParser infile;
-	if (infile.open("engine/avatar/"+gfx_base+".txt", true, "")) {
+	if (infile.open("engine/avatar/"+gfx_base+".txt", FileParser::NO_ERROR)) {
 		while(infile.next()) {
 			loadSfxStat(&infile);
 		}

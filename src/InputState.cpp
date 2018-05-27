@@ -99,15 +99,15 @@ void InputState::loadKeyBindings() {
 
 	// first check for mod keybinds
 	if (mods->locate("engine/default_keybindings.txt") != "") {
-		if (infile.open(PATH_USER + "saves/" + SAVE_PREFIX + "/" + FILE_KEYBINDINGS, false, "")) {
+		if (infile.open(PATH_USER + "saves/" + SAVE_PREFIX + "/" + FILE_KEYBINDINGS, (FileParser::FULL_PATH | FileParser::NO_ERROR))) {
 			opened_file = true;
 		}
-		else if (infile.open("engine/default_keybindings.txt", true, "")) {
+		else if (infile.open("engine/default_keybindings.txt", FileParser::NO_ERROR)) {
 			opened_file = true;
 		}
 	}
 	// if there are no mod keybinds, fall back to global config
-	else if (infile.open(PATH_CONF + FILE_KEYBINDINGS, false, "")) {
+	else if (infile.open(PATH_CONF + FILE_KEYBINDINGS, (FileParser::FULL_PATH | FileParser::NO_ERROR))) {
 		opened_file = true;
 	}
 

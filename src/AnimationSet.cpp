@@ -70,7 +70,7 @@ void AnimationSet::load() {
 
 	FileParser parser;
 	// @CLASS AnimationSet|Description of animations in animations/
-	if (!parser.open(name, true, "Error loading animation definition: " + name))
+	if (!parser.open(name))
 		return;
 
 	std::string _name = "";
