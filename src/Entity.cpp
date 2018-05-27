@@ -62,17 +62,8 @@ Entity::Entity()
 	, animationSet(NULL) {
 }
 
-Entity::Entity(const Entity& e)
-	: sprites(e.sprites)
-	, sound_attack(e.sound_attack)
-	, sound_hit(e.sound_hit)
-	, sound_die(e.sound_die)
-	, sound_critdie(e.sound_critdie)
-	, sound_block(e.sound_block)
-	, sound_levelup(e.sound_levelup)
-	, activeAnimation(new Animation(*e.activeAnimation))
-	, animationSet(e.animationSet)
-	, stats(StatBlock(e.stats)) {
+Entity::Entity(const Entity& e) {
+	*this = e;
 }
 
 Entity& Entity::operator=(const Entity& e) {
@@ -93,7 +84,11 @@ Entity& Entity::operator=(const Entity& e) {
 	return *this;
 }
 
-void Entity::loadSounds(StatBlock *src_stats) {
+void Entity::loadSounds() {
+	loadSoundsFromStatBlock(NULL);
+}
+
+void Entity::loadSoundsFromStatBlock(StatBlock *src_stats) {
 	unloadSounds();
 
 	if (!src_stats) src_stats = &stats;
@@ -159,25 +154,25 @@ void Entity::playAttackSound(const std::string& attack_name) {
 }
 
 void Entity::playSound(int sound_type) {
-	if (sound_type == ENTITY_SOUND_HIT && !sound_hit.empty()) {
+	if (sound_type == Entity::SOUND_HIT && !sound_hit.empty()) {
 		size_t rand_index = rand() % sound_hit.size();
 		std::stringstream channel_name;
 		channel_name << "entity_hit_" << sound_hit[rand_index];
 		snd->play(sound_hit[rand_index], channel_name.str());
 	}
-	else if (sound_type == ENTITY_SOUND_DIE && !sound_die.empty()) {
+	else if (sound_type == Entity::SOUND_DIE && !sound_die.empty()) {
 		size_t rand_index = rand() % sound_die.size();
 		std::stringstream channel_name;
 		channel_name << "entity_die_" << sound_die[rand_index];
 		snd->play(sound_die[rand_index], channel_name.str());
 	}
-	else if (sound_type == ENTITY_SOUND_CRITDIE && !sound_critdie.empty()) {
+	else if (sound_type == Entity::SOUND_CRITDIE && !sound_critdie.empty()) {
 		size_t rand_index = rand() % sound_critdie.size();
 		std::stringstream channel_name;
 		channel_name << "entity_critdie_" << sound_critdie[rand_index];
 		snd->play(sound_critdie[rand_index], channel_name.str());
 	}
-	else if (sound_type == ENTITY_SOUND_BLOCK && !sound_block.empty()) {
+	else if (sound_type == Entity::SOUND_BLOCK && !sound_block.empty()) {
 		size_t rand_index = rand() % sound_block.size();
 		std::stringstream channel_name;
 		channel_name << "entity_block_" << sound_block[rand_index];
@@ -385,7 +380,7 @@ bool Entity::takeHit(Hazard &h) {
 		h.lifespan = h.base_lifespan;
 
 		if (activeAnimation->getName() == "block") {
-			playSound(ENTITY_SOUND_BLOCK);
+			playSound(Entity::SOUND_BLOCK);
 		}
 
 		return false;
@@ -472,7 +467,7 @@ bool Entity::takeHit(Hazard &h) {
 					if (MAX_RESIST < 100) dmg = 1;
 				}
 				if (activeAnimation->getName() == "block") {
-					playSound(ENTITY_SOUND_BLOCK);
+					playSound(Entity::SOUND_BLOCK);
 					resetActiveAnimation();
 				}
 			}
@@ -603,7 +598,7 @@ bool Entity::takeHit(Hazard &h) {
 
 		// play hit sound effect, but only if the hit cooldown is done
 		if (stats.cooldown_hit_ticks == 0)
-			playSound(ENTITY_SOUND_HIT);
+			playSound(Entity::SOUND_HIT);
 
 		// if this hit caused a debuff, activate an on_debuff power
 		if (!was_debuffed && stats.effects.isDebuffed()) {

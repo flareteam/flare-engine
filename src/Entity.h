@@ -34,13 +34,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class Animation;
 class AnimationSet;
 
-enum {
-	ENTITY_SOUND_HIT,
-	ENTITY_SOUND_DIE,
-	ENTITY_SOUND_CRITDIE,
-	ENTITY_SOUND_BLOCK
-};
-
 class Entity {
 protected:
 	Image *sprites;
@@ -49,12 +42,20 @@ protected:
 	virtual void resetActiveAnimation();
 
 public:
+	enum {
+		SOUND_HIT = 0,
+		SOUND_DIE = 1,
+		SOUND_CRITDIE = 2,
+		SOUND_BLOCK = 3
+	};
+
 	Entity();
 	Entity(const Entity& e);
 	Entity& operator=(const Entity& e);
 	virtual ~Entity();
 
-	void loadSounds(StatBlock *src_stats = NULL);
+	void loadSounds();
+	void loadSoundsFromStatBlock(StatBlock *src_stats);
 	void unloadSounds();
 	void playAttackSound(const std::string& attack_name);
 	void playSound(int sound_type);

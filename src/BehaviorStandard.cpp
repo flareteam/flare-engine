@@ -669,7 +669,7 @@ void BehaviorStandard::updateState() {
 
 			e->setAnimation("die");
 			if (e->activeAnimation->isFirstFrame()) {
-				e->playSound(ENTITY_SOUND_DIE);
+				e->playSound(Entity::SOUND_DIE);
 				e->stats.corpse_ticks = CORPSE_TIMEOUT;
 			}
 			if (e->activeAnimation->isSecondLastFrame()) {
@@ -701,7 +701,7 @@ void BehaviorStandard::updateState() {
 
 			e->setAnimation("critdie");
 			if (e->activeAnimation->isFirstFrame()) {
-				e->playSound(ENTITY_SOUND_CRITDIE);
+				e->playSound(Entity::SOUND_CRITDIE);
 				e->stats.corpse_ticks = CORPSE_TIMEOUT;
 			}
 			if (e->activeAnimation->isSecondLastFrame()) {

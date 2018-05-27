@@ -573,7 +573,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 					// close menus in GameStatePlay
 					close_menus = true;
 
-					playSound(ENTITY_SOUND_DIE);
+					playSound(Entity::SOUND_DIE);
 
 					if (stats.permadeath) {
 						// ignore death penalty on permadeath and instead delete the player's saved game
@@ -824,7 +824,7 @@ void Avatar::transform() {
 		stats.vulnerable[i] = std::min(stats.vulnerable[i], charmed_stats->vulnerable[i]);
 	}
 
-	loadSounds(charmed_stats);
+	loadSoundsFromStatBlock(charmed_stats);
 	loadStepFX("NULL");
 
 	stats.applyEffects();
