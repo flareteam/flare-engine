@@ -8,6 +8,7 @@ Engine fixes:
 Translation updates:
 
 * Spanish (es) update (Diego J. Romero López)
+* Scottish Gaelic (gd) update (GunChleoc)
 * Brazilian Portuguese (pt_BR) by Vicente Monteiro
 
 
