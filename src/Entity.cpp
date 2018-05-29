@@ -319,15 +319,15 @@ bool Entity::takeHit(Hazard &h) {
 		return false;
 
 	// some attacks will always miss enemies of a certain movement type
-	if (stats.movement_type == MapCollision::MOVE_NORMAL && !h.target_movement_normal)
+	if (stats.movement_type == MapCollision::MOVE_NORMAL && !h.power->target_movement_normal)
 		return false;
-	else if (stats.movement_type == MapCollision::MOVE_FLYING && !h.target_movement_flying)
+	else if (stats.movement_type == MapCollision::MOVE_FLYING && !h.power->target_movement_flying)
 		return false;
-	else if (stats.movement_type == MapCollision::MOVE_INTANGIBLE && !h.target_movement_intangible)
+	else if (stats.movement_type == MapCollision::MOVE_INTANGIBLE && !h.power->target_movement_intangible)
 		return false;
 
 	// prevent hazard aoe from hitting targets behind walls
-	if (h.walls_block_aoe && !mapr->collider.line_of_movement(stats.pos.x, stats.pos.y, h.pos.x, h.pos.y, MapCollision::MOVE_NORMAL))
+	if (h.power->walls_block_aoe && !mapr->collider.line_of_movement(stats.pos.x, stats.pos.y, h.pos.x, h.pos.y, MapCollision::MOVE_NORMAL))
 		return false;
 
 	// some enemies can be invicible based on campaign status
@@ -365,7 +365,7 @@ bool Entity::takeHit(Hazard &h) {
 	// prepare the combat text
 	CombatText *combat_text = comb;
 
-	if (h.missile && percentChance(stats.get(STAT_REFLECT))) {
+	if (h.power->type == POWTYPE_MISSILE && percentChance(stats.get(STAT_REFLECT))) {
 		// reflect the missile 180 degrees
 		h.setAngle(h.angle+static_cast<float>(M_PI));
 
@@ -377,7 +377,7 @@ bool Entity::takeHit(Hazard &h) {
 			h.source_type = stats.hero ? SOURCE_TYPE_HERO : SOURCE_TYPE_ALLY;
 
 		// reset the hazard ticks
-		h.lifespan = h.base_lifespan;
+		h.lifespan = h.power->lifespan;
 
 		if (activeAnimation->getName() == "block") {
 			playSound(Entity::SOUND_BLOCK);
@@ -420,8 +420,8 @@ bool Entity::takeHit(Hazard &h) {
 		dmg = randBetween(powers->powers[h.power_index].mod_damage_value_min, powers->powers[h.power_index].mod_damage_value_max);
 
 	// apply elemental resistance
-	if (h.trait_elemental >= 0 && unsigned(h.trait_elemental) < stats.vulnerable.size()) {
-		unsigned i = h.trait_elemental;
+	if (h.power->trait_elemental >= 0 && static_cast<size_t>(h.power->trait_elemental) < stats.vulnerable.size()) {
+		size_t i = h.power->trait_elemental;
 
 		int vulnerable = std::max(stats.vulnerable[i], MIN_RESIST);
 		if (stats.vulnerable[i] < 100)
@@ -430,7 +430,7 @@ bool Entity::takeHit(Hazard &h) {
 		dmg = (dmg * vulnerable) / 100;
 	}
 
-	if (!h.trait_armor_penetration) { // armor penetration ignores all absorption
+	if (!h.power->trait_armor_penetration) { // armor penetration ignores all absorption
 		// subtract absorption from armor
 		int absorption = randBetween(stats.get(STAT_ABS_MIN), stats.get(STAT_ABS_MAX));
 
@@ -459,7 +459,7 @@ bool Entity::takeHit(Hazard &h) {
 		if (dmg <= 0) {
 			dmg = 0;
 			if (!powers->powers[h.power_index].ignore_zero_damage) {
-				if (h.trait_elemental < 0) {
+				if (h.power->trait_elemental < 0) {
 					if (stats.effects.triggered_block && MAX_BLOCK < 100) dmg = 1;
 					else if (!stats.effects.triggered_block && MAX_ABSORB < 100) dmg = 1;
 				}
@@ -485,7 +485,7 @@ bool Entity::takeHit(Hazard &h) {
 		true_crit_chance = powers->powers[h.power_index].mod_crit_value;
 
 	if (stats.effects.stun || stats.effects.speed < 100)
-		true_crit_chance += h.trait_crits_impaired;
+		true_crit_chance += h.power->trait_crits_impaired;
 
 	bool crit = percentChance(true_crit_chance);
 	if (crit) {
@@ -536,17 +536,17 @@ bool Entity::takeHit(Hazard &h) {
 		// damage always breaks stun
 		stats.effects.removeEffectType(Effect::STUN);
 
-		powers->effect(&stats, h.src_stats, h.power_index,h.source_type);
+		powers->effect(&stats, h.src_stats, static_cast<int>(h.power_index), h.source_type);
 
 		// HP/MP steal is cumulative between stat bonus and power bonus
-		int hp_steal = h.hp_steal + h.src_stats->get(STAT_HP_STEAL);
+		int hp_steal = h.power->hp_steal + h.src_stats->get(STAT_HP_STEAL);
 		if (!stats.effects.immunity_hp_steal && hp_steal != 0) {
 			int steal_amt = (std::min(dmg, prev_hp) * hp_steal) / 100;
 			if (steal_amt == 0) steal_amt = 1;
 			combat_text->addString(msg->get("+%d HP",steal_amt), h.src_stats->pos, CombatText::MSG_BUFF);
 			h.src_stats->hp = std::min(h.src_stats->hp + steal_amt, h.src_stats->get(STAT_HP_MAX));
 		}
-		int mp_steal = h.mp_steal + h.src_stats->get(STAT_MP_STEAL);
+		int mp_steal = h.power->mp_steal + h.src_stats->get(STAT_MP_STEAL);
 		if (!stats.effects.immunity_mp_steal && mp_steal != 0) {
 			int steal_amt = (std::min(dmg, prev_hp) * mp_steal) / 100;
 			if (steal_amt == 0) steal_amt = 1;
@@ -571,8 +571,8 @@ bool Entity::takeHit(Hazard &h) {
 		stats.effects.removeEffectID(powers->powers[h.power_index].remove_effects);
 
 		// post power
-		if (h.post_power > 0 && percentChance(h.post_power_chance)) {
-			powers->activate(h.post_power, h.src_stats, stats.pos);
+		if (h.power->post_power > 0 && percentChance(h.power->post_power_chance)) {
+			powers->activate(h.power->post_power, h.src_stats, stats.pos);
 		}
 	}
 

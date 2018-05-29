@@ -28,6 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "AnimationManager.h"
 #include "Hazard.h"
 #include "MapCollision.h"
+#include "PowerManager.h"
 #include "RenderDevice.h"
 #include "SharedResources.h"
 #include "StatBlock.h"
@@ -38,217 +39,73 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <cmath>
 
 Hazard::Hazard(MapCollision *_collider)
-	: collider(_collider)
-	, activeAnimation(NULL)
-	, animation_name("")
-	, src_stats(NULL)
+	: active(true)
+	, remove_now(false)
+	, hit_wall(false)
+	, relative_pos(false)
+	, sfx_hit_played(false)
 	, dmg_min(0)
 	, dmg_max(0)
 	, crit_chance(0)
 	, accuracy(0)
 	, source_type(0)
-	, target_party(false)
-	, pos()
-	, speed()
-	, pos_offset()
-	, relative_pos(false)
-	, base_speed(0)
-	, angle(0)
-	, base_lifespan(1)
 	, lifespan(1)
-	, radius(0)
-	, power_index(0)
-	, movement_type(MapCollision::MOVE_FLYING)
 	, animationKind(0)
-	, on_floor(false)
 	, delay_frames(0)
-	, complete_animation(false)
-	, multitarget(false)
-	, active(true)
-	, multihit(false)
-	, expire_with_caster(false)
-	, remove_now(false)
-	, hit_wall(false)
-	, hp_steal(0)
-	, mp_steal(0)
-	, trait_armor_penetration(false)
-	, trait_crits_impaired(0)
-	, trait_elemental(-1)
-	, beacon(false)
-	, missile(false)
-	, directional(false)
-	, post_power(0)
-	, post_power_chance(100)
-	, wall_power(0)
-	, wall_power_chance(100)
-	, wall_reflect(false)
-	, target_movement_normal(true)
-	, target_movement_flying(true)
-	, target_movement_intangible(true)
-	, walls_block_aoe(false)
-	, sfx_hit(0)
-	, sfx_hit_enable(false)
-	, sfx_hit_played(false)
+	, angle(0)
+	, src_stats(NULL)
+	, power(NULL)
+	, power_index(0)
 	, parent(NULL)
-	, script_trigger(-1)
-	, script("") {
+	, collider(_collider)
+	, activeAnimation(NULL)
+	, animation_name("")
+{
 }
 
 Hazard::Hazard(const Hazard& other) {
-	collider = other.collider;
-	entitiesCollided = other.entitiesCollided;
-
-	if (!other.animation_name.empty()) {
-		animation_name = other.animation_name;
-		activeAnimation = NULL;
-		loadAnimation(animation_name);
-	}
-
-	src_stats = other.src_stats;
-
-	dmg_min = other.dmg_min;
-	dmg_max = other.dmg_max;
-	crit_chance = other.crit_chance;
-	accuracy = other.accuracy;
-	source_type = other.source_type;
-	target_party = other.target_party;
-
-	pos = other.pos;
-	speed = other.speed;
-	pos_offset = other.pos_offset;
-	relative_pos = other.relative_pos;
-	base_speed = other.base_speed;
-	angle = other.angle;
-	base_lifespan = other.base_lifespan;
-	lifespan = other.lifespan;
-	radius = other.radius;
-	power_index = other.power_index;
-	movement_type = other.movement_type;
-
-	animationKind = other.animationKind;
-
-	on_floor = other.on_floor;
-	delay_frames = other.delay_frames;
-	complete_animation = other.complete_animation;
-
-	multitarget = other.multitarget;
-	active = other.active;
-
-	multihit = other.multihit;
-	expire_with_caster = other.expire_with_caster;
-	remove_now = other.remove_now;
-	hit_wall = other.hit_wall;
-
-	hp_steal = other.hp_steal;
-	mp_steal = other.mp_steal;
-
-	trait_armor_penetration = other.trait_armor_penetration;
-	trait_crits_impaired = other.trait_crits_impaired;
-	trait_elemental = other.trait_elemental;
-	beacon = other.beacon;
-	missile = other.missile;
-	directional = other.directional;
-
-	post_power = other.post_power;
-	post_power_chance = other.post_power_chance;
-	wall_power = other.wall_power;
-	wall_power_chance = other.wall_power_chance;
-
-	wall_reflect = other.wall_reflect;
-
-	target_movement_normal = other.target_movement_normal;
-	target_movement_flying = other.target_movement_flying;
-	target_movement_intangible = other.target_movement_intangible;
-
-	walls_block_aoe = other.walls_block_aoe;
-
-	sfx_hit = other.sfx_hit;
-	sfx_hit_enable = other.sfx_hit_enable;
-	sfx_hit_played = other.sfx_hit_played;
-
-	parent = other.parent;
-	children = other.children;
-
-	script_trigger = other.script_trigger;
-	script = other.script;
+	activeAnimation = NULL;
+	*this = other;
 }
 
 Hazard& Hazard::operator=(const Hazard& other) {
-	collider = other.collider;
-	entitiesCollided = other.entitiesCollided;
+	if (this == &other)
+		return *this;
 
-	if (!other.animation_name.empty()) {
-		animation_name = other.animation_name;
-		loadAnimation(animation_name);
-	}
-
-	src_stats = other.src_stats;
+	active = other.active;
+	remove_now = other.remove_now;
+	hit_wall = other.hit_wall;
+	relative_pos = other.relative_pos;
+	sfx_hit_played = other.sfx_hit_played;
 
 	dmg_min = other.dmg_min;
 	dmg_max = other.dmg_max;
 	crit_chance = other.crit_chance;
 	accuracy = other.accuracy;
 	source_type = other.source_type;
-	target_party = other.target_party;
+	lifespan = other.lifespan;
+	animationKind = other.animationKind;
+	delay_frames = other.delay_frames;
+	angle = other.angle;
+
+	src_stats = other.src_stats;
+	power = other.power;
+	power_index = other.power_index;
 
 	pos = other.pos;
 	speed = other.speed;
 	pos_offset = other.pos_offset;
-	relative_pos = other.relative_pos;
-	base_speed = other.base_speed;
-	angle = other.angle;
-	base_lifespan = other.base_lifespan;
-	lifespan = other.lifespan;
-	radius = other.radius;
-	power_index = other.power_index;
-	movement_type = other.movement_type;
-
-	animationKind = other.animationKind;
-
-	on_floor = other.on_floor;
-	delay_frames = other.delay_frames;
-	complete_animation = other.complete_animation;
-
-	multitarget = other.multitarget;
-	active = other.active;
-
-	multihit = other.multihit;
-	expire_with_caster = other.expire_with_caster;
-	remove_now = other.remove_now;
-	hit_wall = other.hit_wall;
-
-	hp_steal = other.hp_steal;
-	mp_steal = other.mp_steal;
-
-	trait_armor_penetration = other.trait_armor_penetration;
-	trait_crits_impaired = other.trait_crits_impaired;
-	trait_elemental = other.trait_elemental;
-	beacon = other.beacon;
-	missile = other.missile;
-	directional = other.directional;
-
-	post_power = other.post_power;
-	post_power_chance = other.post_power_chance;
-	wall_power = other.wall_power;
-	wall_power_chance = other.wall_power_chance;
-
-	wall_reflect = other.wall_reflect;
-
-	target_movement_normal = other.target_movement_normal;
-	target_movement_flying = other.target_movement_flying;
-	target_movement_intangible = other.target_movement_intangible;
-
-	walls_block_aoe = other.walls_block_aoe;
-
-	sfx_hit = other.sfx_hit;
-	sfx_hit_enable = other.sfx_hit_enable;
-	sfx_hit_played = other.sfx_hit_played;
 
 	parent = other.parent;
 	children = other.children;
 
-	script_trigger = other.script_trigger;
-	script = other.script;
+	if (!other.animation_name.empty()) {
+		animation_name = other.animation_name;
+		loadAnimation(animation_name);
+	}
+
+	collider = other.collider;
+	entitiesCollided = other.entitiesCollided;
 
 	return (*this);
 }
@@ -300,7 +157,7 @@ void Hazard::logic() {
 	// handle tickers
 	if (lifespan > 0) lifespan--;
 
-	if (expire_with_caster && !src_stats->alive)
+	if (power->expire_with_caster && !src_stats->alive)
 		lifespan = 0;
 
 	if (activeAnimation)
@@ -326,11 +183,11 @@ void Hazard::logic() {
 	if (check_collide) {
 		// very simplified collider, could skim around corners
 		// or even pass through thin walls if speed > tilesize
-		if (!collider->is_valid_position(pos.x, pos.y, movement_type, MapCollision::COLLIDE_NO_ENTITY)) {
+		if (!collider->is_valid_position(pos.x, pos.y, power->movement_type, MapCollision::COLLIDE_NO_ENTITY)) {
 
 			hit_wall = true;
 
-			if (wall_reflect) {
+			if (power->wall_reflect) {
 				this->reflect();
 			}
 			else {
@@ -358,7 +215,7 @@ void Hazard::reflect() {
 	pos.y += speed.y;
   }
 
-  if (directional)
+  if (power->directional)
 	animationKind = calcDirection(pos.x, pos.y, pos.x + speed.x, pos.y + speed.y);
 }
 
@@ -387,7 +244,7 @@ bool Hazard::isDangerousNow() {
 }
 
 bool Hazard::hasEntity(Entity *ent) {
-	if (multihit) {
+	if (power->multihit) {
 		return false;
 	}
 
@@ -415,8 +272,8 @@ void Hazard::addRenderable(std::vector<Renderable> &r, std::vector<Renderable> &
 		Renderable re = activeAnimation->getCurrentFrame(animationKind);
 		re.map_pos.x = pos.x;
 		re.map_pos.y = pos.y;
-		re.prio = (on_floor ? 0 : 2);
-		(on_floor ? r_dead : r).push_back(re);
+		re.prio = (power->on_floor ? 0 : 2);
+		(power->on_floor ? r_dead : r).push_back(re);
 	}
 }
 
@@ -425,9 +282,9 @@ void Hazard::setAngle(const float& _angle) {
 	while (angle >= static_cast<float>(M_PI)*2) angle -= static_cast<float>(M_PI)*2;
 	while (angle < 0.0) angle += static_cast<float>(M_PI)*2;
 
-	speed.x = base_speed * cosf(angle);
-	speed.y = base_speed * sinf(angle);
+	speed.x = power->speed * cosf(angle);
+	speed.y = power->speed * sinf(angle);
 
-	if (directional)
+	if (power->directional)
 		animationKind = calcDirection(pos.x, pos.y, pos.x + speed.x, pos.y + speed.y);
 }

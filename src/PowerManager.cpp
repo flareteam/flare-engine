@@ -853,6 +853,7 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, const FPoin
 	haz->src_stats = src_stats;
 
 	haz->power_index = power_index;
+	haz->power = &powers[power_index];
 
 	if (powers[power_index].source_type == -1) {
 		if (src_stats->hero) haz->source_type = SOURCE_TYPE_HERO;
@@ -862,8 +863,6 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, const FPoin
 	else {
 		haz->source_type = powers[power_index].source_type;
 	}
-
-	haz->target_party = powers[power_index].target_party;
 
 	// Hazard attributes based on power source
 	haz->crit_chance = src_stats->get(STAT_CRIT);
@@ -883,7 +882,6 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, const FPoin
 	}
 
 	if (powers[power_index].directional) {
-		haz->directional = powers[power_index].directional;
 		haz->animationKind = calcDirection(src_stats->pos.x, src_stats->pos.y, target.x, target.y);
 	}
 	else if (powers[power_index].visual_random) {
@@ -894,27 +892,9 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, const FPoin
 		haz->animationKind = powers[power_index].visual_option;
 	}
 
-	haz->base_lifespan = haz->lifespan = powers[power_index].lifespan;
-	haz->on_floor = powers[power_index].on_floor;
-	haz->base_speed = powers[power_index].speed;
-	haz->complete_animation = powers[power_index].complete_animation;
-
 	// combat traits
-	haz->radius = powers[power_index].radius;
-	haz->trait_elemental = powers[power_index].trait_elemental;
+	haz->lifespan = powers[power_index].lifespan;
 	haz->active = !powers[power_index].no_attack;
-
-	haz->multitarget = powers[power_index].multitarget;
-	haz->multihit = powers[power_index].multihit;
-	haz->expire_with_caster = powers[power_index].expire_with_caster;
-	haz->trait_armor_penetration = powers[power_index].trait_armor_penetration;
-	haz->trait_crits_impaired += powers[power_index].trait_crits_impaired;
-
-	haz->beacon = powers[power_index].beacon;
-
-	// steal effects
-	haz->hp_steal += powers[power_index].hp_steal;
-	haz->mp_steal += powers[power_index].mp_steal;
 
 	// hazard starting position
 	if (powers[power_index].starting_pos == STARTING_POS_SOURCE) {
@@ -936,35 +916,6 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, const FPoin
 		haz->pos_offset.x = src_stats->pos.x - haz->pos.x;
 		haz->pos_offset.y = src_stats->pos.y - haz->pos.y;
 	}
-
-	// pre/post power effects
-	haz->post_power = powers[power_index].post_power;
-	haz->post_power_chance = powers[power_index].post_power_chance;
-	haz->wall_power = powers[power_index].wall_power;
-	haz->wall_power_chance = powers[power_index].wall_power_chance;
-	haz->wall_reflect = powers[power_index].wall_reflect;
-
-	// flag missile powers for reflection
-	haz->missile = (powers[power_index].type == POWTYPE_MISSILE);
-
-	// targeting by movement type
-	haz->target_movement_normal = powers[power_index].target_movement_normal;
-	haz->target_movement_flying = powers[power_index].target_movement_flying;
-	haz->target_movement_intangible = powers[power_index].target_movement_intangible;
-
-	haz->walls_block_aoe = powers[power_index].walls_block_aoe;
-
-	if (powers[power_index].sfx_hit_enable) {
-		haz->sfx_hit = powers[power_index].sfx_hit;
-		haz->sfx_hit_enable = powers[power_index].sfx_hit_enable;
-	}
-
-	if (powers[power_index].script_trigger != -1) {
-		haz->script_trigger = powers[power_index].script_trigger;
-		haz->script = powers[power_index].script;
-	}
-
-	haz->movement_type = powers[power_index].movement_type;
 }
 
 /**
@@ -1183,7 +1134,7 @@ bool PowerManager::missile(int power_index, StatBlock *src_stats, const FPoint& 
 		}
 
 		// set speed and angle
-		haz->base_speed += speed_var;
+		haz->power->speed += speed_var;
 		haz->setAngle(alpha);
 
 		// add optional delay

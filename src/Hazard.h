@@ -33,6 +33,7 @@ class Entity;
 
 class Animation;
 class MapCollision;
+class Power;
 class StatBlock;
 
 // the spell/power's source type: eg. which team did it come from?
@@ -48,113 +49,58 @@ const int SCRIPT_TRIGGER_HIT = 1;
 const int SCRIPT_TRIGGER_WALL = 2;
 
 class Hazard {
-private:
-	const MapCollision *collider;
-	// Keeps track of entities already hit
-	std::vector<Entity*> entitiesCollided;
-	Animation *activeAnimation;
-	std::string animation_name;
-    void reflect();
-
 public:
 	explicit Hazard(MapCollision *_collider);
-
 	Hazard(const Hazard& other);
 	Hazard & operator= (const Hazard& other);
-
 	~Hazard();
 
-	StatBlock *src_stats;
-
 	void logic();
-
 	bool hasEntity(Entity*);
 	void addEntity(Entity*);
-
 	void loadAnimation(const std::string &s);
-
 	void setAngle(const float& _angle);
+	bool isDangerousNow();
+	void addRenderable(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
+	void setPower(size_t power_index);
+
+	bool active;
+	bool remove_now;
+	bool hit_wall;
+	bool relative_pos;
+	bool sfx_hit_played;
 
 	int dmg_min;
 	int dmg_max;
 	int crit_chance;
 	int accuracy;
 	int source_type;
-	bool target_party;
+	int lifespan; // ticks down to zero
+	int animationKind;	// either a direction or option/random
+	int delay_frames;
+	float angle; // in radians
+
+	StatBlock *src_stats;
+	Power *power;
+	size_t power_index;
 
 	FPoint pos;
 	FPoint speed;
 	FPoint pos_offset;
-	bool relative_pos;
-	float base_speed;
-	float angle; // in radians
-	int base_lifespan;
-	int lifespan; // ticks down to zero
-	float radius;
-	int power_index;
-	int movement_type;
-
-	int animationKind;	// direction or other, it is a specific value according to
-	// some hazard animations are 8-directional
-	// some hazard animations have random/varietal options
-
-	bool isDangerousNow();
-	void addRenderable(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
-
-	bool on_floor; // rendererable goes on the floor layer
-	int delay_frames;
-	bool complete_animation; // if not multitarget but hitting a creature, still complete the animation?
-
-	// these work in conjunction
-	// if the attack is not multitarget, set active=false
-	// only process active hazards for collision
-	bool multitarget;
-	bool active;
-
-	bool multihit;
-	bool expire_with_caster;
-
-	bool remove_now;
-	bool hit_wall;
-
-	// after effects of various powers
-	int hp_steal;
-	int mp_steal;
-
-	bool trait_armor_penetration;
-	int trait_crits_impaired;
-	int trait_elemental;
-	bool beacon;
-	bool missile;
-	bool directional;
-
-	// pre/post power effects
-	int post_power;
-	int post_power_chance;
-	int wall_power;
-	int wall_power_chance;
-
-	bool wall_reflect;
-
-	// targeting by movement type
-	bool target_movement_normal;
-	bool target_movement_flying;
-	bool target_movement_intangible;
-
-	bool walls_block_aoe;
-
-	// soundfx
-	SoundID sfx_hit;
-	bool sfx_hit_enable;
-	bool sfx_hit_played;
 
 	// for linking hazards together, e.g. repeaters
 	Hazard* parent;
 	std::vector<Hazard*> children;
 
-	// event scripts
-	int script_trigger;
-	std::string script;
+private:
+    void reflect();
+
+	const MapCollision *collider;
+	Animation *activeAnimation;
+	std::string animation_name;
+
+	// Keeps track of entities already hit
+	std::vector<Entity*> entitiesCollided;
 };
 
 #endif

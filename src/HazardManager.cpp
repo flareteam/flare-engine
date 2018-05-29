@@ -68,14 +68,14 @@ void HazardManager::logic() {
 
 		// if a moving hazard hits a wall, check for an after-effect
 		if (h[i-1]->hit_wall) {
-			if (h[i-1]->script_trigger == SCRIPT_TRIGGER_WALL) {
-				EventManager::executeScript(h[i-1]->script, h[i-1]->pos.x, h[i-1]->pos.y);
+			if (h[i-1]->power->script_trigger == SCRIPT_TRIGGER_WALL) {
+				EventManager::executeScript(h[i-1]->power->script, h[i-1]->pos.x, h[i-1]->pos.y);
 			}
 
-			if (h[i-1]->wall_power > 0 && percentChance(h[i-1]->wall_power_chance)) {
-				powers->activate(h[i-1]->wall_power, h[i-1]->src_stats, h[i-1]->pos);
+			if (h[i-1]->power->wall_power > 0 && percentChance(h[i-1]->power->wall_power_chance)) {
+				powers->activate(h[i-1]->power->wall_power, h[i-1]->src_stats, h[i-1]->pos);
 
-				if (powers->powers[h[i-1]->wall_power].directional) {
+				if (powers->powers[h[i-1]->power->wall_power].directional) {
 					powers->hazards.back()->animationKind = h[i-1]->animationKind;
 				}
 			}
@@ -97,11 +97,11 @@ void HazardManager::logic() {
 				for (unsigned int eindex = 0; eindex < enemym->enemies.size(); eindex++) {
 
 					// only check living enemies
-					if (enemym->enemies[eindex]->stats.hp > 0 && h[i]->active && (enemym->enemies[eindex]->stats.hero_ally == h[i]->target_party)) {
-						if (isWithinRadius(h[i]->pos, h[i]->radius, enemym->enemies[eindex]->stats.pos)) {
+					if (enemym->enemies[eindex]->stats.hp > 0 && h[i]->active && (enemym->enemies[eindex]->stats.hero_ally == h[i]->power->target_party)) {
+						if (isWithinRadius(h[i]->pos, h[i]->power->radius, enemym->enemies[eindex]->stats.pos)) {
 							if (!h[i]->hasEntity(enemym->enemies[eindex])) {
 								h[i]->addEntity(enemym->enemies[eindex]);
-								if (!h[i]->beacon) last_enemy = enemym->enemies[eindex];
+								if (!h[i]->power->beacon) last_enemy = enemym->enemies[eindex];
 								// hit!
 								hit = enemym->enemies[eindex]->takeHit(*h[i]);
 								hitEntity(i, hit);
@@ -115,7 +115,7 @@ void HazardManager::logic() {
 			// process hazards that can hurt the hero
 			if (h[i]->source_type != SOURCE_TYPE_HERO && h[i]->source_type != SOURCE_TYPE_ALLY) { //enemy or neutral sources
 				if (pc->stats.hp > 0 && h[i]->active) {
-					if (isWithinRadius(h[i]->pos, h[i]->radius, pc->stats.pos)) {
+					if (isWithinRadius(h[i]->pos, h[i]->power->radius, pc->stats.pos)) {
 						if (!h[i]->hasEntity(pc)) {
 							h[i]->addEntity(pc);
 							// hit!
@@ -129,7 +129,7 @@ void HazardManager::logic() {
 				for (unsigned int eindex = 0; eindex < enemym->enemies.size(); eindex++) {
 					// only check living allies
 					if (enemym->enemies[eindex]->stats.hp > 0 && h[i]->active && enemym->enemies[eindex]->stats.hero_ally) {
-						if (isWithinRadius(h[i]->pos, h[i]->radius, enemym->enemies[eindex]->stats.pos)) {
+						if (isWithinRadius(h[i]->pos, h[i]->power->radius, enemym->enemies[eindex]->stats.pos)) {
 							if (!h[i]->hasEntity(enemym->enemies[eindex])) {
 								h[i]->addEntity(enemym->enemies[eindex]);
 								// hit!
@@ -149,17 +149,17 @@ void HazardManager::logic() {
 void HazardManager::hitEntity(size_t index, const bool hit) {
 	if (!hit) return;
 
-	if (!h[index]->multitarget) {
+	if (!h[index]->power->multitarget) {
 		h[index]->active = false;
-		if (!h[index]->complete_animation) h[index]->lifespan = 0;
+		if (!h[index]->power->complete_animation) h[index]->lifespan = 0;
 	}
-	if (h[index]->sfx_hit_enable && !h[index]->sfx_hit_played) {
-		snd->play(h[index]->sfx_hit);
+	if (h[index]->power->sfx_hit_enable && !h[index]->sfx_hit_played) {
+		snd->play(h[index]->power->sfx_hit);
 		h[index]->sfx_hit_played = true;
 	}
 
-	if (h[index]->script_trigger == SCRIPT_TRIGGER_HIT) {
-		EventManager::executeScript(h[index]->script, h[index]->pos.x, h[index]->pos.y);
+	if (h[index]->power->script_trigger == SCRIPT_TRIGGER_HIT) {
+		EventManager::executeScript(h[index]->power->script, h[index]->pos.x, h[index]->pos.y);
 	}
 }
 
