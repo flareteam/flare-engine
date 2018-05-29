@@ -23,11 +23,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "Utils.h"
 
-const int GAME_STATE_TITLE = 0;
-const int GAME_STATE_PLAY = 1;
-const int GAME_STATE_LOAD = 2;
-const int GAME_STATE_NEW = 3;
-
 class GameState;
 class WidgetLabel;
 /**
@@ -36,11 +31,11 @@ class WidgetLabel;
  * State machine handler between main game modes that take up the entire view/control
  *
  * Examples:
- * - the main gameplay (GameEngine class)
- * - title screen
- * - new game screen (character create)
- * - load game screen
- * - maybe full-video cutscenes
+ * - the main gameplay (GameStatePlay)
+ * - title screen (GameStateTitle)
+ * - new game screen (GameStateNew)
+ * - load game screen (GameStateLoad)
+ * - cutscenes (GameStateCutscene)
  */
 
 class GameSwitcher {
