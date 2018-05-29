@@ -308,12 +308,12 @@ void MenuNPCActions::logic() {
 	if (!visible) return;
 
 	if (!inpt->usingMouse()) {
-		if (inpt->lock[ACCEPT])
+		if (inpt->lock[Input::ACCEPT])
 			return;
 		keyboardLogic();
 	}
 	else {
-		if (inpt->lock[MAIN1])
+		if (inpt->lock[Input::MAIN1])
 			return;
 
 		/* get action under mouse */
@@ -342,9 +342,9 @@ void MenuNPCActions::logic() {
 	}
 
 	/* is main1 pressed */
-	if (static_cast<int>(current_action) > -1 && ((inpt->pressing[MAIN1] && inpt->usingMouse()) || (inpt->pressing[ACCEPT] && NO_MOUSE))) {
-		if (inpt->pressing[MAIN1]) inpt->lock[MAIN1] = true;
-		if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
+	if (static_cast<int>(current_action) > -1 && ((inpt->pressing[Input::MAIN1] && inpt->usingMouse()) || (inpt->pressing[Input::ACCEPT] && NO_MOUSE))) {
+		if (inpt->pressing[Input::MAIN1]) inpt->lock[Input::MAIN1] = true;
+		if (inpt->pressing[Input::ACCEPT]) inpt->lock[Input::ACCEPT] = true;
 
 
 		if (npc_actions[current_action].label == NULL)
@@ -370,11 +370,11 @@ void MenuNPCActions::logic() {
 }
 
 void MenuNPCActions::keyboardLogic() {
-	if (inpt->pressing[LEFT]) inpt->lock[LEFT] = true;
-	if (inpt->pressing[RIGHT]) inpt->lock[RIGHT] = true;
+	if (inpt->pressing[Input::LEFT]) inpt->lock[Input::LEFT] = true;
+	if (inpt->pressing[Input::RIGHT]) inpt->lock[Input::RIGHT] = true;
 
-	if (inpt->pressing[UP] && !inpt->lock[UP]) {
-		inpt->lock[UP] = true;
+	if (inpt->pressing[Input::UP] && !inpt->lock[Input::UP]) {
+		inpt->lock[Input::UP] = true;
 		do {
 			current_action--;
 			if (static_cast<int>(current_action) < 0)
@@ -382,8 +382,8 @@ void MenuNPCActions::keyboardLogic() {
 		}
 		while (npc_actions[current_action].label == NULL);
 	}
-	if (inpt->pressing[DOWN] && !inpt->lock[DOWN]) {
-		inpt->lock[DOWN] = true;
+	if (inpt->pressing[Input::DOWN] && !inpt->lock[Input::DOWN]) {
+		inpt->lock[Input::DOWN] = true;
 		do {
 			current_action++;
 			if (current_action >= npc_actions.size())

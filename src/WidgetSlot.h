@@ -51,7 +51,7 @@ private:
 	int ACTIVATE;
 
 public:
-	WidgetSlot(int _icon_id = -1, int _ACTIVATE = ACCEPT);
+	WidgetSlot(int _icon_id = -1, int _ACTIVATE = Input::ACCEPT);
 	~WidgetSlot();
 
 	void activate();

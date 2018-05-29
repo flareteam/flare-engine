@@ -83,7 +83,7 @@ void MenuHUDLog::logic() {
 
 	// click to dismiss messages when rendered on top of other menus
 	if (overlay_bg && click_to_dismiss) {
-		if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
+		if (inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1]) {
 			Rect overlay_area;
 			overlay_area.x = static_cast<int>(overlay_bg->getDest().x);
 			overlay_area.y = static_cast<int>(overlay_bg->getDest().y);
@@ -91,7 +91,7 @@ void MenuHUDLog::logic() {
 			overlay_area.h = overlay_bg->getGraphicsHeight();
 
 			if (isWithinRect(overlay_area, inpt->mouse)) {
-				inpt->lock[MAIN1] = true;
+				inpt->lock[Input::MAIN1] = true;
 				hide_overlay = true;
 			}
 		}

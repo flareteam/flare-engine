@@ -68,17 +68,17 @@ int WidgetScrollBar::checkClick(int x, int y) {
 	Point mouse = Point(x,y);
 
 	// main ScrollBar already in use, new click not allowed
-	//if (inpt->lock[MAIN1]) return 0;
+	//if (inpt->lock[Input::MAIN1]) return 0;
 
 	// main click released, so the ScrollBar state goes back to unpressed
-	if (pressed_up && !inpt->lock[MAIN1]) {
+	if (pressed_up && !inpt->lock[Input::MAIN1]) {
 		pressed_up = false;
 		if (isWithinRect(pos_up, mouse)) {
 			// activate upon release
 			return 1;
 		}
 	}
-	if (pressed_down && !inpt->lock[MAIN1]) {
+	if (pressed_down && !inpt->lock[Input::MAIN1]) {
 		pressed_down = false;
 		if (isWithinRect(pos_down, mouse)) {
 			// activate upon release
@@ -86,7 +86,7 @@ int WidgetScrollBar::checkClick(int x, int y) {
 		}
 	}
 	if (pressed_knob) {
-		if (!inpt->lock[MAIN1]) {
+		if (!inpt->lock[Input::MAIN1]) {
 			pressed_knob = false;
 		}
 		int tmp = mouse.y - pos_up.y - pos_up.h;
@@ -103,17 +103,17 @@ int WidgetScrollBar::checkClick(int x, int y) {
 	pressed_knob = false;
 
 	// detect new click
-	if (inpt->pressing[MAIN1]) {
+	if (inpt->pressing[Input::MAIN1]) {
 		if (isWithinRect(pos_up, mouse)) {
-			inpt->lock[MAIN1] = true;
+			inpt->lock[Input::MAIN1] = true;
 			pressed_up = true;
 		}
 		else if (isWithinRect(pos_down, mouse)) {
-			inpt->lock[MAIN1] = true;
+			inpt->lock[Input::MAIN1] = true;
 			pressed_down = true;
 		}
 		else if (isWithinRect(pos_knob, mouse)) {
-			inpt->lock[MAIN1] = true;
+			inpt->lock[Input::MAIN1] = true;
 			pressed_knob = true;
 		}
 

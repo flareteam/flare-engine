@@ -291,13 +291,13 @@ bool Avatar::pressing_move() {
 		return false;
 	}
 	else if (MOUSE_MOVE) {
-		return inpt->pressing[MAIN1];
+		return inpt->pressing[Input::MAIN1];
 	}
 	else {
-		return (inpt->pressing[UP] && !inpt->lock[UP]) ||
-			   (inpt->pressing[DOWN] && !inpt->lock[DOWN]) ||
-			   (inpt->pressing[LEFT] && !inpt->lock[LEFT]) ||
-			   (inpt->pressing[RIGHT] && !inpt->lock[RIGHT]);
+		return (inpt->pressing[Input::UP] && !inpt->lock[Input::UP]) ||
+			   (inpt->pressing[Input::DOWN] && !inpt->lock[Input::DOWN]) ||
+			   (inpt->pressing[Input::LEFT] && !inpt->lock[Input::LEFT]) ||
+			   (inpt->pressing[Input::RIGHT] && !inpt->lock[Input::RIGHT]);
 	}
 }
 
@@ -308,18 +308,18 @@ void Avatar::set_direction() {
 		stats.direction = calcDirection(stats.pos.x, stats.pos.y, target.x, target.y);
 	}
 	else {
-		if (inpt->pressing[UP] && !inpt->lock[UP] && inpt->pressing[LEFT] && !inpt->lock[LEFT]) stats.direction = 1;
-		else if (inpt->pressing[UP] && !inpt->lock[UP] && inpt->pressing[RIGHT] && !inpt->lock[RIGHT]) stats.direction = 3;
-		else if (inpt->pressing[DOWN] && !inpt->lock[DOWN] && inpt->pressing[RIGHT] && !inpt->lock[RIGHT]) stats.direction = 5;
-		else if (inpt->pressing[DOWN] && !inpt->lock[DOWN] && inpt->pressing[LEFT] && !inpt->lock[LEFT]) stats.direction = 7;
-		else if (inpt->pressing[LEFT] && !inpt->lock[LEFT]) stats.direction = 0;
-		else if (inpt->pressing[UP] && !inpt->lock[UP]) stats.direction = 2;
-		else if (inpt->pressing[RIGHT] && !inpt->lock[RIGHT]) stats.direction = 4;
-		else if (inpt->pressing[DOWN] && !inpt->lock[DOWN]) stats.direction = 6;
+		if (inpt->pressing[Input::UP] && !inpt->lock[Input::UP] && inpt->pressing[Input::LEFT] && !inpt->lock[Input::LEFT]) stats.direction = 1;
+		else if (inpt->pressing[Input::UP] && !inpt->lock[Input::UP] && inpt->pressing[Input::RIGHT] && !inpt->lock[Input::RIGHT]) stats.direction = 3;
+		else if (inpt->pressing[Input::DOWN] && !inpt->lock[Input::DOWN] && inpt->pressing[Input::RIGHT] && !inpt->lock[Input::RIGHT]) stats.direction = 5;
+		else if (inpt->pressing[Input::DOWN] && !inpt->lock[Input::DOWN] && inpt->pressing[Input::LEFT] && !inpt->lock[Input::LEFT]) stats.direction = 7;
+		else if (inpt->pressing[Input::LEFT] && !inpt->lock[Input::LEFT]) stats.direction = 0;
+		else if (inpt->pressing[Input::UP] && !inpt->lock[Input::UP]) stats.direction = 2;
+		else if (inpt->pressing[Input::RIGHT] && !inpt->lock[Input::RIGHT]) stats.direction = 4;
+		else if (inpt->pressing[Input::DOWN] && !inpt->lock[Input::DOWN]) stats.direction = 6;
 		// Adjust for ORTHO tilesets
 		if (TILESET_ORIENTATION == TILESET_ORTHOGONAL &&
-				((inpt->pressing[UP] && !inpt->lock[UP]) || (inpt->pressing[DOWN] && !inpt->lock[UP]) ||
-				 (inpt->pressing[LEFT] && !inpt->lock[LEFT]) || (inpt->pressing[RIGHT] && !inpt->lock[RIGHT])))
+				((inpt->pressing[Input::UP] && !inpt->lock[Input::UP]) || (inpt->pressing[Input::DOWN] && !inpt->lock[Input::UP]) ||
+				 (inpt->pressing[Input::LEFT] && !inpt->lock[Input::LEFT]) || (inpt->pressing[Input::RIGHT] && !inpt->lock[Input::RIGHT])))
 			stats.direction = static_cast<unsigned char>((stats.direction == 7) ? 0 : stats.direction + 1);
 	}
 }
@@ -377,15 +377,15 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 	}
 
 	// assist mouse movement
-	if (!inpt->pressing[MAIN1]) {
+	if (!inpt->pressing[Input::MAIN1]) {
 		drag_walking = false;
 	}
 
 	// block some interactions when attacking
-	if (!inpt->pressing[MAIN1] && !inpt->pressing[MAIN2]) {
+	if (!inpt->pressing[Input::MAIN1] && !inpt->pressing[Input::MAIN2]) {
 		stats.attacking = false;
 	}
-	else if((inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) || (inpt->pressing[MAIN2] && !inpt->lock[MAIN2])) {
+	else if((inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1]) || (inpt->pressing[Input::MAIN2] && !inpt->lock[Input::MAIN2])) {
 		stats.attacking = true;
 	}
 
@@ -415,7 +415,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 				// allowed to move or use powers?
 				if (MOUSE_MOVE) {
-					allowed_to_move = restrict_power_use && (!inpt->lock[MAIN1] || drag_walking) && !lockAttack && !npc;
+					allowed_to_move = restrict_power_use && (!inpt->lock[Input::MAIN1] || drag_walking) && !lockAttack && !npc;
 					allowed_to_use_power = !allowed_to_move;
 				}
 				else {
@@ -428,8 +428,8 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 					set_direction();
 
 				if (pressing_move() && allowed_to_move) {
-					if (MOUSE_MOVE && inpt->pressing[MAIN1]) {
-						inpt->lock[MAIN1] = true;
+					if (MOUSE_MOVE && inpt->pressing[Input::MAIN1]) {
+						inpt->lock[Input::MAIN1] = true;
 						drag_walking = true;
 					}
 
@@ -438,8 +438,8 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 					}
 				}
 
-				if (MOUSE_MOVE && !inpt->pressing[MAIN1]) {
-					inpt->lock[MAIN1] = false;
+				if (MOUSE_MOVE && !inpt->pressing[Input::MAIN1]) {
+					inpt->lock[Input::MAIN1] = false;
 					lockAttack = false;
 				}
 
@@ -458,7 +458,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 				// allowed to move or use powers?
 				if (MOUSE_MOVE) {
-					allowed_to_use_power = !(restrict_power_use && !inpt->lock[MAIN1]);
+					allowed_to_use_power = !(restrict_power_use && !inpt->lock[Input::MAIN1]);
 				}
 				else {
 					allowed_to_use_power = true;
@@ -591,8 +591,8 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 					}
 
 					// if the player is attacking, we need to block further input
-					if (inpt->pressing[MAIN1])
-						inpt->lock[MAIN1] = true;
+					if (inpt->pressing[Input::MAIN1])
+						inpt->lock[Input::MAIN1] = true;
 				}
 
 				if (activeAnimation->getTimesPlayed() >= 1 || activeAnimation->getName() != "die") {
@@ -600,9 +600,9 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 				}
 
 				// allow respawn with Accept if not permadeath
-				if ((inpt->pressing[ACCEPT] || (TOUCHSCREEN && inpt->pressing[MAIN1] && !inpt->lock[MAIN1])) && stats.corpse) {
-					if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
-					if (TOUCHSCREEN && inpt->pressing[MAIN1]) inpt->lock[MAIN1] = true;
+				if ((inpt->pressing[Input::ACCEPT] || (TOUCHSCREEN && inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1])) && stats.corpse) {
+					if (inpt->pressing[Input::ACCEPT]) inpt->lock[Input::ACCEPT] = true;
+					if (TOUCHSCREEN && inpt->pressing[Input::MAIN1]) inpt->lock[Input::MAIN1] = true;
 					mapr->teleportation = true;
 					mapr->teleport_mapname = mapr->respawn_map;
 					if (stats.permadeath) {

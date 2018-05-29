@@ -63,10 +63,10 @@ MenuActionBar::MenuActionBar()
 
 	menu_labels.resize(4);
 
-	tablist = TabList(HORIZONTAL, ACTIONBAR_BACK, ACTIONBAR_FORWARD, ACTIONBAR);
+	tablist = TabList(HORIZONTAL, Input::ACTIONBAR_BACK, Input::ACTIONBAR_FORWARD, Input::ACTIONBAR);
 
 	for (unsigned int i=0; i<4; i++) {
-		menus[i] = new WidgetSlot(-1, ACTIONBAR);
+		menus[i] = new WidgetSlot(-1, Input::ACTIONBAR);
 	}
 
 	// Read data from config file
@@ -173,7 +173,7 @@ void MenuActionBar::addSlot(unsigned index, int x, int y, bool is_locked) {
 		slots.resize(index+1, NULL);
 	}
 
-	slots[index] = new WidgetSlot(-1, ACTIONBAR);
+	slots[index] = new WidgetSlot(-1, Input::ACTIONBAR);
 	slots[index]->setBasePos(x, y);
 	slots[index]->pos.w = slots[index]->pos.h = ICON_SIZE;
 	slots[index]->continuous = true;
@@ -199,18 +199,18 @@ void MenuActionBar::align() {
 	// set keybinding labels
 	for (unsigned int i = 0; i < static_cast<unsigned int>(ACTIONBAR_MAIN); i++) {
 		if (i < slots.size() && slots[i]) {
-			labels[i] = msg->get("Hotkey: %s", inpt->getBindingString(i+BAR_1));
+			labels[i] = msg->get("Hotkey: %s", inpt->getBindingString(i + Input::BAR_1));
 		}
 	}
 
-	for (unsigned int i=ACTIONBAR_MAIN; i < static_cast<unsigned int>(ACTIONBAR_MAX); i++) {
+	for (unsigned int i = ACTIONBAR_MAIN; i < static_cast<unsigned int>(ACTIONBAR_MAX); i++) {
 		if (i < slots.size() && slots[i]) {
-			labels[i] = msg->get("Hotkey: %s", inpt->getBindingString(i - ACTIONBAR_MAIN + MAIN1));
+			labels[i] = msg->get("Hotkey: %s", inpt->getBindingString(i - ACTIONBAR_MAIN + Input::MAIN1));
 		}
 	}
 	for (unsigned int i=0; i<menu_labels.size(); i++) {
 		menus[i]->setPos(window_area.x, window_area.y);
-		menu_labels[i] = msg->get("Hotkey: %s", inpt->getBindingString(i + CHARACTER));
+		menu_labels[i] = msg->get("Hotkey: %s", inpt->getBindingString(i + Input::CHARACTER));
 	}
 }
 
@@ -492,7 +492,7 @@ void MenuActionBar::remove(const Point& mouse) {
  * add that power to the action queue
  */
 void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
-	if (inpt->pressing[ACTIONBAR_USE] && tablist.getCurrent() == -1 && slots_count > 10) {
+	if (inpt->pressing[Input::ACTIONBAR_USE] && tablist.getCurrent() == -1 && slots_count > 10) {
 		tablist.setCurrent(slots[10]);
 		slots[10]->in_focus = true;
 	}
@@ -510,11 +510,11 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 
 		if (slot_enabled[i]) {
 			// part two of two step activation
-			if (static_cast<unsigned>(twostep_slot) == i && inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
+			if (static_cast<unsigned>(twostep_slot) == i && inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1]) {
 				have_aim = true;
 				action.power = hotkeys_mod[i];
 				twostep_slot = -1;
-				inpt->lock[MAIN1] = true;
+				inpt->lock[Input::MAIN1] = true;
 			}
 
 			// mouse/touch click
@@ -538,7 +538,7 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 			}
 
 			// joystick/keyboard action button
-			else if (inpt->pressing[ACTIONBAR_USE] && static_cast<unsigned>(tablist.getCurrent()) == i) {
+			else if (inpt->pressing[Input::ACTIONBAR_USE] && static_cast<unsigned>(tablist.getCurrent()) == i) {
 				have_aim = false;
 				slot_activated[i] = true;
 				action.power = hotkeys_mod[i];
@@ -546,17 +546,17 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 			}
 
 			// pressing hotkey
-			else if (i<10 && inpt->pressing[i+BAR_1]) {
+			else if (i<10 && inpt->pressing[i + Input::BAR_1]) {
 				have_aim = inpt->usingMouse();
 				action.power = hotkeys_mod[i];
 				twostep_slot = -1;
 			}
-			else if (i==10 && inpt->pressing[MAIN1] && !inpt->lock[MAIN1] && !isWithinRect(window_area, inpt->mouse) && enable_main1) {
+			else if (i==10 && inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1] && !isWithinRect(window_area, inpt->mouse) && enable_main1) {
 				have_aim = inpt->usingMouse();
 				action.power = hotkeys_mod[10];
 				twostep_slot = -1;
 			}
-			else if (i==11 && inpt->pressing[MAIN2] && !inpt->lock[MAIN2] && !isWithinRect(window_area, inpt->mouse)) {
+			else if (i==11 && inpt->pressing[Input::MAIN2] && !inpt->lock[Input::MAIN2] && !isWithinRect(window_area, inpt->mouse)) {
 				have_aim = inpt->usingMouse();
 				action.power = hotkeys_mod[11];
 				twostep_slot = -1;
@@ -656,8 +656,8 @@ void MenuActionBar::checkMenu(bool &menu_c, bool &menu_i, bool &menu_p, bool &me
 	}
 
 	// also allow ACTIONBAR_USE to open menus
-	if (inpt->pressing[ACTIONBAR_USE] && !inpt->lock[ACTIONBAR_USE]) {
-		inpt->lock[ACTIONBAR_USE] = true;
+	if (inpt->pressing[Input::ACTIONBAR_USE] && !inpt->lock[Input::ACTIONBAR_USE]) {
+		inpt->lock[Input::ACTIONBAR_USE] = true;
 
 		unsigned cur_slot = static_cast<unsigned>(tablist.getCurrent());
 

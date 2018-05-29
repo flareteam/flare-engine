@@ -22,60 +22,42 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "Utils.h"
 
-#define JOY_POS_CENTER	0
-#define JOY_POS_LEFT	-1
-#define JOY_POS_RIGHT	1
-#define JOY_POS_UP	-1
-#define JOY_POS_DOWN	1
-
-enum INPUT_BINDINGS {
-	INPUT_BINDING_DEFAULT = 0,
-	INPUT_BINDING_ALT = 1,
-	INPUT_BINDING_JOYSTICK = 2
-};
-
-// Input commands enum
-const int CANCEL = 0;
-const int ACCEPT = 1;
-const int UP = 2;
-const int DOWN = 3;
-const int LEFT = 4;
-const int RIGHT = 5;
-const int BAR_1 = 6;
-const int BAR_2 = 7;
-const int BAR_3 = 8;
-const int BAR_4 = 9;
-const int BAR_5 = 10;
-const int BAR_6 = 11;
-const int BAR_7 = 12;
-const int BAR_8 = 13;
-const int BAR_9 = 14;
-const int BAR_0 = 15;
-const int CHARACTER = 16;
-const int INVENTORY = 17;
-const int POWERS = 18;
-const int LOG = 19;
-const int MAIN1 = 20;
-const int MAIN2 = 21;
-const int CTRL = 22;
-const int SHIFT = 23;
-const int ALT = 24;
-const int DEL = 25;
-const int ACTIONBAR = 26;
-const int ACTIONBAR_BACK = 27;
-const int ACTIONBAR_FORWARD = 28;
-const int ACTIONBAR_USE = 29;
-const int DEVELOPER_MENU = 30;
-
-// we store mouse bindings and keyboard bindings together
-// keyboard keycodes are all positive integers, so we use negative integers for mouse buttons
-// -1 is reserved for unbound keys, so we start mouse bindings at -2
-// adding MOUSE_BIND_OFFSET to a mouse bind gives us the appropriate mouse button (mouse buttons start at 1)
-const int MOUSE_BIND_OFFSET = 2;
-const int JOY_AXIS_OFFSET = 2;
-
-// some mouse buttons are named (e.g. "Left Mouse")
-const int MOUSE_BUTTON_NAME_COUNT = 7;
+namespace Input {
+	// Input action enum
+	enum {
+		CANCEL = 0,
+		ACCEPT = 1,
+		UP = 2,
+		DOWN = 3,
+		LEFT = 4,
+		RIGHT = 5,
+		BAR_1 = 6,
+		BAR_2 = 7,
+		BAR_3 = 8,
+		BAR_4 = 9,
+		BAR_5 = 10,
+		BAR_6 = 11,
+		BAR_7 = 12,
+		BAR_8 = 13,
+		BAR_9 = 14,
+		BAR_0 = 15,
+		CHARACTER = 16,
+		INVENTORY = 17,
+		POWERS = 18,
+		LOG = 19,
+		MAIN1 = 20,
+		MAIN2 = 21,
+		CTRL = 22,
+		SHIFT = 23,
+		ALT = 24,
+		DEL = 25,
+		ACTIONBAR = 26,
+		ACTIONBAR_BACK = 27,
+		ACTIONBAR_FORWARD = 28,
+		ACTIONBAR_USE = 29,
+		DEVELOPER_MENU = 30
+	};
+}
 
 /**
  * class InputState
@@ -84,11 +66,28 @@ const int MOUSE_BUTTON_NAME_COUNT = 7;
  */
 
 class InputState {
+protected:
+	// we store mouse bindings and keyboard bindings together
+	// keyboard keycodes are all positive integers, so we use negative integers for mouse buttons
+	// -1 is reserved for unbound keys, so we start mouse bindings at -2
+	// adding MOUSE_BIND_OFFSET to a mouse bind gives us the appropriate mouse button (mouse buttons start at 1)
+	static const int MOUSE_BIND_OFFSET = 2;
+	static const int JOY_AXIS_OFFSET = 2;
+
+	// some mouse buttons are named (e.g. "Left Mouse")
+	static const int MOUSE_BUTTON_NAME_COUNT = 7;
+
 public:
-	static const int key_count = 31;
-	int binding[key_count];
-	int binding_alt[key_count];
-	int binding_joy[key_count];
+	enum {
+		BINDING_DEFAULT = 0,
+		BINDING_ALT = 1,
+		BINDING_JOYSTICK = 2
+	};
+
+	static const int KEY_COUNT = 31;
+	int binding[KEY_COUNT];
+	int binding_alt[KEY_COUNT];
+	int binding_joy[KEY_COUNT];
 
 	std::string binding_name[31];
 	std::string mouse_button[MOUSE_BUTTON_NAME_COUNT];
@@ -113,7 +112,7 @@ public:
 	virtual std::string getKeyName(int key) = 0;
 	virtual std::string getMouseButtonName(int button) = 0;
 	virtual std::string getJoystickButtonName(int button) = 0;
-	virtual std::string getBindingString(int key, int bindings_list = INPUT_BINDING_DEFAULT) = 0;
+	virtual std::string getBindingString(int key, int bindings_list = BINDING_DEFAULT) = 0;
 	virtual std::string getMovementString() = 0;
 	virtual std::string getAttackString() = 0;
 	virtual std::string getContinueString() = 0;
@@ -125,13 +124,13 @@ public:
 
 	void enableEventLog();
 
-	bool pressing[key_count];
-	bool lock[key_count];
+	bool pressing[KEY_COUNT];
+	bool lock[KEY_COUNT];
 
 	// handle repeating keys, such as when holding Backspace to delete text in WidgetInput
-	bool slow_repeat[key_count];
-	int repeat_ticks[key_count];
-	int max_repeat_ticks[key_count];
+	bool slow_repeat[KEY_COUNT];
+	int repeat_ticks[KEY_COUNT];
+	int max_repeat_ticks[KEY_COUNT];
 
 	bool done;
 	Point mouse;
@@ -157,7 +156,7 @@ protected:
 	Point scaleMouse(unsigned int x, unsigned int y);
 	virtual int getKeyFromName(const std::string& key_name) = 0;
 
-	bool un_press[key_count];
+	bool un_press[KEY_COUNT];
 	Point current_touch;
 	bool dump_event;
 

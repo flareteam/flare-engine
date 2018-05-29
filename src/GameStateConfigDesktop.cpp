@@ -92,12 +92,12 @@ GameStateConfigDesktop::GameStateConfigDesktop(bool _enable_video_tab)
 	, keybind_tip(new WidgetTooltip())
 {
 	// Allocate KeyBindings
-	for (int i = 0; i < inpt->key_count; i++) {
+	for (int i = 0; i < inpt->KEY_COUNT; i++) {
 		keybinds_lb.push_back(new WidgetLabel());
 		keybinds_lb[i]->set(inpt->binding_name[i]);
 		keybinds_lb[i]->setJustify(FontEngine::JUSTIFY_RIGHT);
 	}
-	for (int i = 0; i < inpt->key_count * 3; i++) {
+	for (int i = 0; i < inpt->KEY_COUNT * 3; i++) {
 		keybinds_btn.push_back(new WidgetButton());
 	}
 
@@ -316,67 +316,67 @@ bool GameStateConfigDesktop::parseKeyDesktop(FileParser &infile, int &x1, int &y
 	}
 
 	// @ATTR cancel|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Cancel" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "cancel") keybind_num = CANCEL;
+	else if (infile.key == "cancel") keybind_num = Input::CANCEL;
 	// @ATTR accept|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Accept" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "accept") keybind_num = ACCEPT;
+	else if (infile.key == "accept") keybind_num = Input::ACCEPT;
 	// @ATTR up|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Up" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "up") keybind_num = UP;
+	else if (infile.key == "up") keybind_num = Input::UP;
 	// @ATTR down|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Down" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "down") keybind_num = DOWN;
+	else if (infile.key == "down") keybind_num = Input::DOWN;
 	// @ATTR left|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Left" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "left") keybind_num = LEFT;
+	else if (infile.key == "left") keybind_num = Input::LEFT;
 	// @ATTR right|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Right" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "right") keybind_num = RIGHT;
+	else if (infile.key == "right") keybind_num = Input::RIGHT;
 	// @ATTR bar1|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Bar1" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "bar1") keybind_num = BAR_1;
+	else if (infile.key == "bar1") keybind_num = Input::BAR_1;
 	// @ATTR bar2|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Bar2" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "bar2") keybind_num = BAR_2;
+	else if (infile.key == "bar2") keybind_num = Input::BAR_2;
 	// @ATTR bar3|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Bar3" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "bar3") keybind_num = BAR_3;
+	else if (infile.key == "bar3") keybind_num = Input::BAR_3;
 	// @ATTR bar4|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Bar4" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "bar4") keybind_num = BAR_4;
+	else if (infile.key == "bar4") keybind_num = Input::BAR_4;
 	// @ATTR bar5|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Bar5" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "bar5") keybind_num = BAR_5;
+	else if (infile.key == "bar5") keybind_num = Input::BAR_5;
 	// @ATTR bar6|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Bar6" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "bar6") keybind_num = BAR_6;
+	else if (infile.key == "bar6") keybind_num = Input::BAR_6;
 	// @ATTR bar7|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Bar7" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "bar7") keybind_num = BAR_7;
+	else if (infile.key == "bar7") keybind_num = Input::BAR_7;
 	// @ATTR Bar8|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Bar8" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "bar8") keybind_num = BAR_8;
+	else if (infile.key == "bar8") keybind_num = Input::BAR_8;
 	// @ATTR bar9|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Bar9" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "bar9") keybind_num = BAR_9;
+	else if (infile.key == "bar9") keybind_num = Input::BAR_9;
 	// @ATTR bar0|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Bar0" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "bar0") keybind_num = BAR_0;
+	else if (infile.key == "bar0") keybind_num = Input::BAR_0;
 	// @ATTR main1|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Main1" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "main1") keybind_num = MAIN1;
+	else if (infile.key == "main1") keybind_num = Input::MAIN1;
 	// @ATTR main2|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Main2" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "main2") keybind_num = MAIN2;
+	else if (infile.key == "main2") keybind_num = Input::MAIN2;
 	// @ATTR character|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Character" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "character") keybind_num = CHARACTER;
+	else if (infile.key == "character") keybind_num = Input::CHARACTER;
 	// @ATTR inventory|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Inventory" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "inventory") keybind_num = INVENTORY;
+	else if (infile.key == "inventory") keybind_num = Input::INVENTORY;
 	// @ATTR powers|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Powers" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "powers") keybind_num = POWERS;
+	else if (infile.key == "powers") keybind_num = Input::POWERS;
 	// @ATTR log|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Log" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "log") keybind_num = LOG;
+	else if (infile.key == "log") keybind_num = Input::LOG;
 	// @ATTR ctrl|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Ctrl" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "ctrl") keybind_num = CTRL;
+	else if (infile.key == "ctrl") keybind_num = Input::CTRL;
 	// @ATTR shift|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Shift" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "shift") keybind_num = SHIFT;
+	else if (infile.key == "shift") keybind_num = Input::SHIFT;
 	// @ATTR alt|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Alt" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "alt") keybind_num = ALT;
+	else if (infile.key == "alt") keybind_num = Input::ALT;
 	// @ATTR delete|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Delete" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "delete") keybind_num = DEL;
+	else if (infile.key == "delete") keybind_num = Input::DEL;
 	// @ATTR actionbar|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "ActionBar Accept" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "actionbar") keybind_num = ACTIONBAR;
+	else if (infile.key == "actionbar") keybind_num = Input::ACTIONBAR;
 	// @ATTR actionbar_back|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "ActionBar Left" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "actionbar_back") keybind_num = ACTIONBAR_BACK;
+	else if (infile.key == "actionbar_back") keybind_num = Input::ACTIONBAR_BACK;
 	// @ATTR actionbar_forward|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "ActionBar Right" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "actionbar_forward") keybind_num = ACTIONBAR_FORWARD;
+	else if (infile.key == "actionbar_forward") keybind_num = Input::ACTIONBAR_FORWARD;
 	// @ATTR actionbar_use|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "ActionBar Use" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "actionbar_use") keybind_num = ACTIONBAR_USE;
+	else if (infile.key == "actionbar_use") keybind_num = Input::ACTIONBAR_USE;
 	// @ATTR developer_menu|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Developer Menu" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "developer_menu") keybind_num = DEVELOPER_MENU;
+	else if (infile.key == "developer_menu") keybind_num = Input::DEVELOPER_MENU;
 
 	else return false;
 
@@ -549,11 +549,11 @@ void GameStateConfigDesktop::updateKeybinds() {
 		keybinds_btn[i]->refresh();
 	}
 	for (unsigned int i = key_count; i < key_count*2; i++) {
-		keybinds_btn[i]->label = inpt->getBindingString(i-key_count, INPUT_BINDING_ALT);
+		keybinds_btn[i]->label = inpt->getBindingString(i-key_count, InputState::BINDING_ALT);
 		keybinds_btn[i]->refresh();
 	}
 	for (unsigned int i = key_count*2; i < keybinds_btn.size(); i++) {
-		keybinds_btn[i]->label = inpt->getBindingString(i-(key_count*2), INPUT_BINDING_JOYSTICK);
+		keybinds_btn[i]->label = inpt->getBindingString(i-(key_count*2), InputState::BINDING_JOYSTICK);
 		keybinds_btn[i]->refresh();
 	}
 	input_scrollbox->refresh();
@@ -733,7 +733,7 @@ void GameStateConfigDesktop::logicInput() {
 void GameStateConfigDesktop::logicKeybinds() {
 	input_scrollbox->logic();
 	for (unsigned int i = 0; i < keybinds_btn.size(); i++) {
-		if (i >= static_cast<unsigned int>(inpt->key_count * 2)) {
+		if (i >= static_cast<unsigned int>(inpt->KEY_COUNT * 2)) {
 			keybinds_btn[i]->enabled = ENABLE_JOYSTICK;
 			keybinds_btn[i]->refresh();
 		}
@@ -842,7 +842,7 @@ void GameStateConfigDesktop::scanKey(int button) {
 
 	if (input_confirm->visible && !input_confirm->isWithinButtons) {
 		// keyboard & mouse
-		if (column == INPUT_BINDING_DEFAULT || column == INPUT_BINDING_ALT) {
+		if (column == InputState::BINDING_DEFAULT || column == InputState::BINDING_ALT) {
 			if (inpt->last_button != -1) {
 				// mouse
 				inpt->setKeybind(inpt->last_button, real_button, column, keybind_msg);
@@ -855,11 +855,11 @@ void GameStateConfigDesktop::scanKey(int button) {
 			}
 		}
 		// joystick
-		else if (column == INPUT_BINDING_JOYSTICK && inpt->last_joybutton != -1) {
+		else if (column == InputState::BINDING_JOYSTICK && inpt->last_joybutton != -1) {
 			inpt->setKeybind(inpt->last_joybutton, real_button, column, keybind_msg);
 			confirmKey(real_button);
 		}
-		else if (column == INPUT_BINDING_JOYSTICK && inpt->last_joyaxis != -1) {
+		else if (column == InputState::BINDING_JOYSTICK && inpt->last_joyaxis != -1) {
 			inpt->setKeybind(inpt->last_joyaxis, real_button, column, keybind_msg);
 			confirmKey(real_button);
 		}

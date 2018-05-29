@@ -133,15 +133,15 @@ void MenuNumPicker::logic() {
 
 		input_box->logic();
 
-		if (inpt->pressing[CANCEL] && !inpt->lock[CANCEL]) {
-			inpt->lock[CANCEL] = true;
+		if (inpt->pressing[Input::CANCEL] && !inpt->lock[Input::CANCEL]) {
+			inpt->lock[Input::CANCEL] = true;
 			cancel_clicked = true;
 		}
 		else if (button_close->checkClick()) {
 			cancel_clicked = true;
 		}
-		else if (inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
-			inpt->lock[ACCEPT] = true;
+		else if (inpt->pressing[Input::ACCEPT] && !inpt->lock[Input::ACCEPT]) {
+			inpt->lock[Input::ACCEPT] = true;
 			confirm_clicked = true;
 		}
 		else if (button_ok->checkClick()) {

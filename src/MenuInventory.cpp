@@ -283,15 +283,15 @@ TooltipData MenuInventory::checkTooltip(const Point& position) {
 	area = areaOver(position);
 	if (area < 0) {
 		if (position.x >= window_area.x + help_pos.x && position.y >= window_area.y+help_pos.y && position.x < window_area.x+help_pos.x+help_pos.w && position.y < window_area.y+help_pos.y+help_pos.h) {
-			tip.addText(msg->get("Pick up item(s):") + " " + inpt->getBindingString(MAIN1));
-			tip.addText(msg->get("Use or equip item:") + " " + inpt->getBindingString(MAIN2) + "\n");
-			tip.addText(msg->get("%s modifiers", inpt->getBindingString(MAIN1).c_str()));
-			tip.addText(msg->get("Select a quantity of item:") + " " + inpt->getBindingString(SHIFT) + " / " + inpt->getBindingString(SHIFT, INPUT_BINDING_ALT));
+			tip.addText(msg->get("Pick up item(s):") + " " + inpt->getBindingString(Input::MAIN1));
+			tip.addText(msg->get("Use or equip item:") + " " + inpt->getBindingString(Input::MAIN2) + "\n");
+			tip.addText(msg->get("%s modifiers", inpt->getBindingString(Input::MAIN1).c_str()));
+			tip.addText(msg->get("Select a quantity of item:") + " " + inpt->getBindingString(Input::SHIFT) + " / " + inpt->getBindingString(Input::SHIFT, InputState::BINDING_ALT));
 
 			if (inv_ctrl == INV_CTRL_STASH)
-				tip.addText(msg->get("Stash item stack:") + " " + inpt->getBindingString(CTRL) + " / " + inpt->getBindingString(CTRL, INPUT_BINDING_ALT));
+				tip.addText(msg->get("Stash item stack:") + " " + inpt->getBindingString(Input::CTRL) + " / " + inpt->getBindingString(Input::CTRL, InputState::BINDING_ALT));
 			else if (inv_ctrl == INV_CTRL_VENDOR || (SELL_WITHOUT_VENDOR && inv_ctrl != INV_CTRL_STASH))
-				tip.addText(msg->get("Sell item stack:") + " " + inpt->getBindingString(CTRL) + " / " + inpt->getBindingString(CTRL, INPUT_BINDING_ALT));
+				tip.addText(msg->get("Sell item stack:") + " " + inpt->getBindingString(Input::CTRL) + " / " + inpt->getBindingString(Input::CTRL, InputState::BINDING_ALT));
 		}
 		return tip;
 	}

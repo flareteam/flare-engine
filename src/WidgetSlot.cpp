@@ -107,15 +107,15 @@ CLICK_TYPE WidgetSlot::checkClick(int x, int y) {
 	// disabled slots can't be clicked;
 	if (!enabled) return NO_CLICK;
 
-	if (continuous && pressed && checked && (inpt->lock[MAIN2] || inpt->lock[ACTIVATE] || (inpt->touch_locked && isWithinRect(pos, mouse))))
+	if (continuous && pressed && checked && (inpt->lock[Input::MAIN2] || inpt->lock[ACTIVATE] || (inpt->touch_locked && isWithinRect(pos, mouse))))
 		return ACTIVATED;
 
 	// main button already in use, new click not allowed
-	if (inpt->lock[MAIN1]) return NO_CLICK;
-	if (inpt->lock[MAIN2]) return NO_CLICK;
+	if (inpt->lock[Input::MAIN1]) return NO_CLICK;
+	if (inpt->lock[Input::MAIN2]) return NO_CLICK;
 	if (inpt->lock[ACTIVATE]) return NO_CLICK;
 
-	if (pressed && !inpt->lock[MAIN1] && !inpt->lock[MAIN2] && !inpt->lock[ACTIVATE]) { // this is a button release
+	if (pressed && !inpt->lock[Input::MAIN1] && !inpt->lock[Input::MAIN2] && !inpt->lock[ACTIVATE]) { // this is a button release
 		pressed = false;
 
 		checked = !checked;
@@ -129,19 +129,19 @@ CLICK_TYPE WidgetSlot::checkClick(int x, int y) {
 
 	// detect new click
 	// use MAIN1 only for selecting
-	if (inpt->pressing[MAIN1]) {
+	if (inpt->pressing[Input::MAIN1]) {
 		if (isWithinRect(pos, mouse)) {
 
-			inpt->lock[MAIN1] = true;
+			inpt->lock[Input::MAIN1] = true;
 			pressed = true;
 			checked = false;
 		}
 	}
 	// use MAIN2 only for activating
-	if (inpt->pressing[MAIN2]) {
+	if (inpt->pressing[Input::MAIN2]) {
 		if (isWithinRect(pos, mouse)) {
 
-			inpt->lock[MAIN2] = true;
+			inpt->lock[Input::MAIN2] = true;
 			pressed = true;
 			checked = true;
 		}

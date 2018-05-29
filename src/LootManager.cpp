@@ -197,7 +197,7 @@ void LootManager::renderTooltips(const FPoint& cam) {
 			hover.w = TILE_W;
 			hover.h = TILE_H;
 
-			if ((LOOT_TOOLTIPS && !inpt->pressing[ALT]) || (!LOOT_TOOLTIPS && inpt->pressing[ALT]) || isWithinRect(hover, inpt->mouse)) {
+			if ((LOOT_TOOLTIPS && !inpt->pressing[Input::ALT]) || (!LOOT_TOOLTIPS && inpt->pressing[Input::ALT]) || isWithinRect(hover, inpt->mouse)) {
 				it->tip_visible = true;
 
 				// create tooltip data if needed
@@ -227,7 +227,7 @@ void LootManager::renderTooltips(const FPoint& cam) {
 				it->tip_bounds = tip->bounds;
 
 				// only display one tooltip if we got it from hovering
-				if (!LOOT_TOOLTIPS && !inpt->pressing[ALT])
+				if (!LOOT_TOOLTIPS && !inpt->pressing[Input::ALT])
 					break;
 			}
 		}
@@ -506,8 +506,8 @@ ItemStack LootManager::checkPickup(const Point& mouse, const FPoint& cam, const 
 				// clicked in pickup hotspot?
 				if ((it->tip_visible && isWithinRect(it->tip_bounds, mouse)) || isWithinRect(r, mouse)) {
 					curs->setCursor(CursorManager::CURSOR_INTERACT);
-					if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
-						inpt->lock[MAIN1] = true;
+					if (inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1]) {
+						inpt->lock[Input::MAIN1] = true;
 						if (!it->stack.empty()) {
 							loot_stack = it->stack;
 							it = loot.erase(it);
@@ -520,10 +520,10 @@ ItemStack LootManager::checkPickup(const Point& mouse, const FPoint& cam, const 
 	}
 
 	// check pressing Enter/Return
-	if (inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
+	if (inpt->pressing[Input::ACCEPT] && !inpt->lock[Input::ACCEPT]) {
 		loot_stack = checkNearestPickup(hero_pos);
 		if (!loot_stack.empty()) {
-			inpt->lock[ACCEPT] = true;
+			inpt->lock[Input::ACCEPT] = true;
 		}
 	}
 

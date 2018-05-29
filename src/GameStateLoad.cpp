@@ -434,8 +434,8 @@ void GameStateLoad::logic() {
 
 	if (!confirm->visible) {
 		tablist.logic(true);
-		if (button_exit->checkClick() || (inpt->pressing[CANCEL] && !inpt->lock[CANCEL])) {
-			inpt->lock[CANCEL] = true;
+		if (button_exit->checkClick() || (inpt->pressing[Input::CANCEL] && !inpt->lock[Input::CANCEL])) {
+			inpt->lock[Input::CANCEL] = true;
 			showLoading();
 			setRequestedGameState(new GameStateTitle());
 		}
@@ -467,10 +467,10 @@ void GameStateLoad::logic() {
 			scroll_area.h = slot_pos[0].h * game_slot_max;
 
 			if (isWithinRect(scroll_area, inpt->mouse)) {
-				if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
+				if (inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1]) {
 					for (int i=0; i<visible_slots; ++i) {
 						if (isWithinRect(slot_pos[i], inpt->mouse)) {
-							inpt->lock[MAIN1] = true;
+							inpt->lock[Input::MAIN1] = true;
 							setSelectedSlot(i + scroll_offset);
 							updateButtons();
 							break;
@@ -504,14 +504,14 @@ void GameStateLoad::logic() {
 			}
 
 			// Allow characters to be navigateable via up/down keys
-			if (inpt->pressing[UP] && !inpt->lock[UP] && selected_slot > 0) {
-				inpt->lock[UP] = true;
+			if (inpt->pressing[Input::UP] && !inpt->lock[Input::UP] && selected_slot > 0) {
+				inpt->lock[Input::UP] = true;
 				setSelectedSlot(selected_slot - 1);
 				scrollToSelected();
 				updateButtons();
 			}
-			else if (inpt->pressing[DOWN] && !inpt->lock[DOWN] && selected_slot < static_cast<int>(game_slots.size()) - 1) {
-				inpt->lock[DOWN] = true;
+			else if (inpt->pressing[Input::DOWN] && !inpt->lock[Input::DOWN] && selected_slot < static_cast<int>(game_slots.size()) - 1) {
+				inpt->lock[Input::DOWN] = true;
 				setSelectedSlot(selected_slot + 1);
 				scrollToSelected();
 				updateButtons();

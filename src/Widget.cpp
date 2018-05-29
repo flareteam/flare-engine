@@ -323,16 +323,16 @@ void TabList::logic(bool allow_keyboard) {
 		}
 
 		if (scrolltype == VERTICAL || scrolltype == TWO_DIRECTIONS) {
-			if (inpt->pressing[DOWN] && !inpt->lock[DOWN]) {
-				inpt->lock[DOWN] = true;
+			if (inpt->pressing[Input::DOWN] && !inpt->lock[Input::DOWN]) {
+				inpt->lock[Input::DOWN] = true;
 
 				if (inner_scrolltype == VERTICAL)
 					getNext(true, WIDGET_SELECT_DOWN);
 				else if (inner_scrolltype == HORIZONTAL)
 					getNext(false, WIDGET_SELECT_DOWN);
 			}
-			else if (inpt->pressing[UP] && !inpt->lock[UP]) {
-				inpt->lock[UP] = true;
+			else if (inpt->pressing[Input::UP] && !inpt->lock[Input::UP]) {
+				inpt->lock[Input::UP] = true;
 
 				if (inner_scrolltype == VERTICAL)
 					getPrev(true, WIDGET_SELECT_UP);
@@ -368,7 +368,7 @@ void TabList::logic(bool allow_keyboard) {
 	}
 
 	// If mouse is clicked, defocus current tabindex item
-	if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1] && current_is_valid() && !isWithinRect(widgets[getCurrent()]->pos, inpt->mouse)) {
+	if (inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1] && current_is_valid() && !isWithinRect(widgets[getCurrent()]->pos, inpt->mouse)) {
 		defocus();
 	}
 

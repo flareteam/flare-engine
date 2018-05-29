@@ -225,7 +225,7 @@ void GameStatePlay::checkEnemyFocus() {
  */
 bool GameStatePlay::restrictPowerUse() {
 	if(MOUSE_MOVE) {
-		if(inpt->pressing[MAIN1] && !inpt->pressing[SHIFT] && !menu->act->isWithinSlots(inpt->mouse) && !menu->act->isWithinMenus(inpt->mouse)) {
+		if(inpt->pressing[Input::MAIN1] && !inpt->pressing[Input::SHIFT] && !menu->act->isWithinSlots(inpt->mouse) && !menu->act->isWithinMenus(inpt->mouse)) {
 			if(enemy == NULL) {
 				return true;
 			}
@@ -724,8 +724,8 @@ void GameStatePlay::checkNPCInteraction() {
 
 		if (interact_with_npc) {
 			if (!menu->isNPCMenuVisible()) {
-				if (inpt->pressing[MAIN1] && inpt->usingMouse()) inpt->lock[MAIN1] = true;
-				if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
+				if (inpt->pressing[Input::MAIN1] && inpt->usingMouse()) inpt->lock[Input::MAIN1] = true;
+				if (inpt->pressing[Input::ACCEPT]) inpt->lock[Input::ACCEPT] = true;
 
 				menu->npc->setNPC(npcs->npcs[npc_id]);
 

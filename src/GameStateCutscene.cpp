@@ -118,16 +118,16 @@ bool Scene::logic() {
 		skip_scroll = true;
 	}
 	if (!button_advance->pressed) {
-		if (inpt->pressing[MAIN1] && (!inpt->lock[MAIN1] || cutscene_type == CUTSCENE_VSCROLL)) {
-			inpt->lock[MAIN1] = true;
+		if (inpt->pressing[Input::MAIN1] && (!inpt->lock[Input::MAIN1] || cutscene_type == CUTSCENE_VSCROLL)) {
+			inpt->lock[Input::MAIN1] = true;
 			skip = true;
 		}
-		if (inpt->pressing[ACCEPT] && (!inpt->lock[ACCEPT] || cutscene_type == CUTSCENE_VSCROLL)) {
-			inpt->lock[ACCEPT] = true;
+		if (inpt->pressing[Input::ACCEPT] && (!inpt->lock[Input::ACCEPT] || cutscene_type == CUTSCENE_VSCROLL)) {
+			inpt->lock[Input::ACCEPT] = true;
 			skip = true;
 		}
-		if (inpt->pressing[CANCEL] && !inpt->lock[CANCEL]) {
-			inpt->lock[CANCEL] = true;
+		if (inpt->pressing[Input::CANCEL] && !inpt->lock[Input::CANCEL]) {
+			inpt->lock[Input::CANCEL] = true;
 			done = true;
 		}
 	}

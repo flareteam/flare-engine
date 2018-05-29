@@ -81,10 +81,10 @@ bool WidgetSlider::checkClick (int x, int y) {
 	//
 	//	We are just grabbing the knob
 	//
-	if (!pressed && inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
+	if (!pressed && inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1]) {
 		if (isWithinRect(pos_knob, mouse)) {
 			pressed = true;
-			inpt->lock[MAIN1] = true;
+			inpt->lock[Input::MAIN1] = true;
 			return true;
 		}
 		return false;
@@ -97,8 +97,8 @@ bool WidgetSlider::checkClick (int x, int y) {
 	}
 
 	// buttons already in use, new click not allowed
-	if (inpt->lock[UP]) return false;
-	if (inpt->lock[DOWN]) return false;
+	if (inpt->lock[Input::UP]) return false;
+	if (inpt->lock[Input::DOWN]) return false;
 
 	if (pressed) {
 		//
@@ -115,7 +115,7 @@ bool WidgetSlider::checkClick (int x, int y) {
 			pressed = false;
 			return false;
 		}
-		if (!inpt->lock[MAIN1]) {
+		if (!inpt->lock[Input::MAIN1]) {
 			pressed = false;
 		}
 

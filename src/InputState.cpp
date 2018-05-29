@@ -69,24 +69,24 @@ InputState::InputState(void)
 
 void InputState::defaultJoystickBindings () {
 	// most joystick buttons are unbound by default
-	for (int key=0; key<key_count; key++) {
+	for (int key=0; key<KEY_COUNT; key++) {
 		binding_joy[key] = -1;
 	}
 
-	binding_joy[CANCEL] = 0;
-	binding_joy[ACCEPT] = 1;
-	binding_joy[ACTIONBAR] = 2;
-	binding_joy[ACTIONBAR_USE] = 3;
-	binding_joy[ACTIONBAR_BACK] = 4;
-	binding_joy[ACTIONBAR_FORWARD] = 5;
+	binding_joy[Input::CANCEL] = 0;
+	binding_joy[Input::ACCEPT] = 1;
+	binding_joy[Input::ACTIONBAR] = 2;
+	binding_joy[Input::ACTIONBAR_USE] = 3;
+	binding_joy[Input::ACTIONBAR_BACK] = 4;
+	binding_joy[Input::ACTIONBAR_FORWARD] = 5;
 
 	// axis 0
-	binding_joy[LEFT] = JOY_AXIS_OFFSET * (-1);
-	binding_joy[RIGHT] = (JOY_AXIS_OFFSET+1) * (-1);
+	binding_joy[Input::LEFT] = JOY_AXIS_OFFSET * (-1);
+	binding_joy[Input::RIGHT] = (JOY_AXIS_OFFSET+1) * (-1);
 
 	// axis 1
-	binding_joy[UP] = (JOY_AXIS_OFFSET+2) * (-1);
-	binding_joy[DOWN] = (JOY_AXIS_OFFSET+3) * (-1);
+	binding_joy[Input::UP] = (JOY_AXIS_OFFSET+2) * (-1);
+	binding_joy[Input::DOWN] = (JOY_AXIS_OFFSET+3) * (-1);
 }
 
 /**
@@ -194,37 +194,37 @@ void InputState::loadKeyBindings() {
 
 		int cursor = -1;
 
-		if (infile.key == "cancel") cursor = CANCEL;
-		else if (infile.key == "accept") cursor = ACCEPT;
-		else if (infile.key == "up") cursor = UP;
-		else if (infile.key == "down") cursor = DOWN;
-		else if (infile.key == "left") cursor = LEFT;
-		else if (infile.key == "right") cursor = RIGHT;
-		else if (infile.key == "bar1") cursor = BAR_1;
-		else if (infile.key == "bar2") cursor = BAR_2;
-		else if (infile.key == "bar3") cursor = BAR_3;
-		else if (infile.key == "bar4") cursor = BAR_4;
-		else if (infile.key == "bar5") cursor = BAR_5;
-		else if (infile.key == "bar6") cursor = BAR_6;
-		else if (infile.key == "bar7") cursor = BAR_7;
-		else if (infile.key == "bar8") cursor = BAR_8;
-		else if (infile.key == "bar9") cursor = BAR_9;
-		else if (infile.key == "bar0") cursor = BAR_0;
-		else if (infile.key == "main1") cursor = MAIN1;
-		else if (infile.key == "main2") cursor = MAIN2;
-		else if (infile.key == "character") cursor = CHARACTER;
-		else if (infile.key == "inventory") cursor = INVENTORY;
-		else if (infile.key == "powers") cursor = POWERS;
-		else if (infile.key == "log") cursor = LOG;
-		else if (infile.key == "ctrl") cursor = CTRL;
-		else if (infile.key == "shift") cursor = SHIFT;
-		else if (infile.key == "alt") cursor = ALT;
-		else if (infile.key == "delete") cursor = DEL;
-		else if (infile.key == "actionbar") cursor = ACTIONBAR;
-		else if (infile.key == "actionbar_back") cursor = ACTIONBAR_BACK;
-		else if (infile.key == "actionbar_forward") cursor = ACTIONBAR_FORWARD;
-		else if (infile.key == "actionbar_use") cursor = ACTIONBAR_USE;
-		else if (infile.key == "developer_menu") cursor = DEVELOPER_MENU;
+		if (infile.key == "cancel") cursor = Input::CANCEL;
+		else if (infile.key == "accept") cursor = Input::ACCEPT;
+		else if (infile.key == "up") cursor = Input::UP;
+		else if (infile.key == "down") cursor = Input::DOWN;
+		else if (infile.key == "left") cursor = Input::LEFT;
+		else if (infile.key == "right") cursor = Input::RIGHT;
+		else if (infile.key == "bar1") cursor = Input::BAR_1;
+		else if (infile.key == "bar2") cursor = Input::BAR_2;
+		else if (infile.key == "bar3") cursor = Input::BAR_3;
+		else if (infile.key == "bar4") cursor = Input::BAR_4;
+		else if (infile.key == "bar5") cursor = Input::BAR_5;
+		else if (infile.key == "bar6") cursor = Input::BAR_6;
+		else if (infile.key == "bar7") cursor = Input::BAR_7;
+		else if (infile.key == "bar8") cursor = Input::BAR_8;
+		else if (infile.key == "bar9") cursor = Input::BAR_9;
+		else if (infile.key == "bar0") cursor = Input::BAR_0;
+		else if (infile.key == "main1") cursor = Input::MAIN1;
+		else if (infile.key == "main2") cursor = Input::MAIN2;
+		else if (infile.key == "character") cursor = Input::CHARACTER;
+		else if (infile.key == "inventory") cursor = Input::INVENTORY;
+		else if (infile.key == "powers") cursor = Input::POWERS;
+		else if (infile.key == "log") cursor = Input::LOG;
+		else if (infile.key == "ctrl") cursor = Input::CTRL;
+		else if (infile.key == "shift") cursor = Input::SHIFT;
+		else if (infile.key == "alt") cursor = Input::ALT;
+		else if (infile.key == "delete") cursor = Input::DEL;
+		else if (infile.key == "actionbar") cursor = Input::ACTIONBAR;
+		else if (infile.key == "actionbar_back") cursor = Input::ACTIONBAR_BACK;
+		else if (infile.key == "actionbar_forward") cursor = Input::ACTIONBAR_FORWARD;
+		else if (infile.key == "actionbar_use") cursor = Input::ACTIONBAR_USE;
+		else if (infile.key == "developer_menu") cursor = Input::DEVELOPER_MENU;
 
 		if (cursor != -1) {
 			binding[cursor] = key1;
@@ -258,37 +258,37 @@ void InputState::saveKeyBindings() {
 		outfile << "# For BIND and BIND_ALT, any value less than -1 is a mouse button\n";
 		outfile << "# As an example, mouse button 1 would be -3 here. Button 2 would be -4, etc.\n\n";
 
-		outfile << "cancel=" << binding[CANCEL] << "," << binding_alt[CANCEL] << "," << binding_joy[CANCEL] << "\n";
-		outfile << "accept=" << binding[ACCEPT] << "," << binding_alt[ACCEPT] << "," << binding_joy[ACCEPT] << "\n";
-		outfile << "up=" << binding[UP] << "," << binding_alt[UP] << "," << binding_joy[UP] << "\n";
-		outfile << "down=" << binding[DOWN] << "," << binding_alt[DOWN] << "," << binding_joy[DOWN] << "\n";
-		outfile << "left=" << binding[LEFT] << "," << binding_alt[LEFT] << "," << binding_joy[LEFT] << "\n";
-		outfile << "right=" << binding[RIGHT] << "," << binding_alt[RIGHT] << "," << binding_joy[RIGHT] << "\n";
-		outfile << "bar1=" << binding[BAR_1] << "," << binding_alt[BAR_1] << "," << binding_joy[BAR_1] << "\n";
-		outfile << "bar2=" << binding[BAR_2] << "," << binding_alt[BAR_2] << "," << binding_joy[BAR_2] << "\n";
-		outfile << "bar3=" << binding[BAR_3] << "," << binding_alt[BAR_3] << "," << binding_joy[BAR_3] << "\n";
-		outfile << "bar4=" << binding[BAR_4] << "," << binding_alt[BAR_4] << "," << binding_joy[BAR_4] << "\n";
-		outfile << "bar5=" << binding[BAR_5] << "," << binding_alt[BAR_5] << "," << binding_joy[BAR_5] << "\n";
-		outfile << "bar6=" << binding[BAR_6] << "," << binding_alt[BAR_6] << "," << binding_joy[BAR_6] << "\n";
-		outfile << "bar7=" << binding[BAR_7] << "," << binding_alt[BAR_7] << "," << binding_joy[BAR_7] << "\n";
-		outfile << "bar8=" << binding[BAR_8] << "," << binding_alt[BAR_8] << "," << binding_joy[BAR_8] << "\n";
-		outfile << "bar9=" << binding[BAR_9] << "," << binding_alt[BAR_9] << "," << binding_joy[BAR_9] << "\n";
-		outfile << "bar0=" << binding[BAR_0] << "," << binding_alt[BAR_0] << "," << binding_joy[BAR_0] << "\n";
-		outfile << "main1=" << binding[MAIN1] << "," << binding_alt[MAIN1] << "," << binding_joy[MAIN1] << "\n";
-		outfile << "main2=" << binding[MAIN2] << "," << binding_alt[MAIN2] << "," << binding_joy[MAIN2] << "\n";
-		outfile << "character=" << binding[CHARACTER] << "," << binding_alt[CHARACTER] << "," << binding_joy[CHARACTER] << "\n";
-		outfile << "inventory=" << binding[INVENTORY] << "," << binding_alt[INVENTORY] << "," << binding_joy[INVENTORY] << "\n";
-		outfile << "powers=" << binding[POWERS] << "," << binding_alt[POWERS] << "," << binding_joy[POWERS] << "\n";
-		outfile << "log=" << binding[LOG] << "," << binding_alt[LOG] << "," << binding_joy[LOG] << "\n";
-		outfile << "ctrl=" << binding[CTRL] << "," << binding_alt[CTRL] << "," << binding_joy[CTRL] << "\n";
-		outfile << "shift=" << binding[SHIFT] << "," << binding_alt[SHIFT] << "," << binding_joy[SHIFT] << "\n";
-		outfile << "alt=" << binding[ALT] << "," << binding_alt[ALT] << "," << binding_joy[ALT] << "\n";
-		outfile << "delete=" << binding[DEL] << "," << binding_alt[DEL] << "," << binding_joy[DEL] << "\n";
-		outfile << "actionbar=" << binding[ACTIONBAR] << "," << binding_alt[ACTIONBAR] << "," << binding_joy[ACTIONBAR] << "\n";
-		outfile << "actionbar_back=" << binding[ACTIONBAR_BACK] << "," << binding_alt[ACTIONBAR_BACK] << "," << binding_joy[ACTIONBAR_BACK] << "\n";
-		outfile << "actionbar_forward=" << binding[ACTIONBAR_FORWARD] << "," << binding_alt[ACTIONBAR_FORWARD] << "," << binding_joy[ACTIONBAR_FORWARD] << "\n";
-		outfile << "actionbar_use=" << binding[ACTIONBAR_USE] << "," << binding_alt[ACTIONBAR_USE] << "," << binding_joy[ACTIONBAR_USE] << "\n";
-		outfile << "developer_menu=" << binding[DEVELOPER_MENU] << "," << binding_alt[DEVELOPER_MENU] << "," << binding_joy[DEVELOPER_MENU] << "\n";
+		outfile << "cancel=" << binding[Input::CANCEL] << "," << binding_alt[Input::CANCEL] << "," << binding_joy[Input::CANCEL] << "\n";
+		outfile << "accept=" << binding[Input::ACCEPT] << "," << binding_alt[Input::ACCEPT] << "," << binding_joy[Input::ACCEPT] << "\n";
+		outfile << "up=" << binding[Input::UP] << "," << binding_alt[Input::UP] << "," << binding_joy[Input::UP] << "\n";
+		outfile << "down=" << binding[Input::DOWN] << "," << binding_alt[Input::DOWN] << "," << binding_joy[Input::DOWN] << "\n";
+		outfile << "left=" << binding[Input::LEFT] << "," << binding_alt[Input::LEFT] << "," << binding_joy[Input::LEFT] << "\n";
+		outfile << "right=" << binding[Input::RIGHT] << "," << binding_alt[Input::RIGHT] << "," << binding_joy[Input::RIGHT] << "\n";
+		outfile << "bar1=" << binding[Input::BAR_1] << "," << binding_alt[Input::BAR_1] << "," << binding_joy[Input::BAR_1] << "\n";
+		outfile << "bar2=" << binding[Input::BAR_2] << "," << binding_alt[Input::BAR_2] << "," << binding_joy[Input::BAR_2] << "\n";
+		outfile << "bar3=" << binding[Input::BAR_3] << "," << binding_alt[Input::BAR_3] << "," << binding_joy[Input::BAR_3] << "\n";
+		outfile << "bar4=" << binding[Input::BAR_4] << "," << binding_alt[Input::BAR_4] << "," << binding_joy[Input::BAR_4] << "\n";
+		outfile << "bar5=" << binding[Input::BAR_5] << "," << binding_alt[Input::BAR_5] << "," << binding_joy[Input::BAR_5] << "\n";
+		outfile << "bar6=" << binding[Input::BAR_6] << "," << binding_alt[Input::BAR_6] << "," << binding_joy[Input::BAR_6] << "\n";
+		outfile << "bar7=" << binding[Input::BAR_7] << "," << binding_alt[Input::BAR_7] << "," << binding_joy[Input::BAR_7] << "\n";
+		outfile << "bar8=" << binding[Input::BAR_8] << "," << binding_alt[Input::BAR_8] << "," << binding_joy[Input::BAR_8] << "\n";
+		outfile << "bar9=" << binding[Input::BAR_9] << "," << binding_alt[Input::BAR_9] << "," << binding_joy[Input::BAR_9] << "\n";
+		outfile << "bar0=" << binding[Input::BAR_0] << "," << binding_alt[Input::BAR_0] << "," << binding_joy[Input::BAR_0] << "\n";
+		outfile << "main1=" << binding[Input::MAIN1] << "," << binding_alt[Input::MAIN1] << "," << binding_joy[Input::MAIN1] << "\n";
+		outfile << "main2=" << binding[Input::MAIN2] << "," << binding_alt[Input::MAIN2] << "," << binding_joy[Input::MAIN2] << "\n";
+		outfile << "character=" << binding[Input::CHARACTER] << "," << binding_alt[Input::CHARACTER] << "," << binding_joy[Input::CHARACTER] << "\n";
+		outfile << "inventory=" << binding[Input::INVENTORY] << "," << binding_alt[Input::INVENTORY] << "," << binding_joy[Input::INVENTORY] << "\n";
+		outfile << "powers=" << binding[Input::POWERS] << "," << binding_alt[Input::POWERS] << "," << binding_joy[Input::POWERS] << "\n";
+		outfile << "log=" << binding[Input::LOG] << "," << binding_alt[Input::LOG] << "," << binding_joy[Input::LOG] << "\n";
+		outfile << "ctrl=" << binding[Input::CTRL] << "," << binding_alt[Input::CTRL] << "," << binding_joy[Input::CTRL] << "\n";
+		outfile << "shift=" << binding[Input::SHIFT] << "," << binding_alt[Input::SHIFT] << "," << binding_joy[Input::SHIFT] << "\n";
+		outfile << "alt=" << binding[Input::ALT] << "," << binding_alt[Input::ALT] << "," << binding_joy[Input::ALT] << "\n";
+		outfile << "delete=" << binding[Input::DEL] << "," << binding_alt[Input::DEL] << "," << binding_joy[Input::DEL] << "\n";
+		outfile << "actionbar=" << binding[Input::ACTIONBAR] << "," << binding_alt[Input::ACTIONBAR] << "," << binding_joy[Input::ACTIONBAR] << "\n";
+		outfile << "actionbar_back=" << binding[Input::ACTIONBAR_BACK] << "," << binding_alt[Input::ACTIONBAR_BACK] << "," << binding_joy[Input::ACTIONBAR_BACK] << "\n";
+		outfile << "actionbar_forward=" << binding[Input::ACTIONBAR_FORWARD] << "," << binding_alt[Input::ACTIONBAR_FORWARD] << "," << binding_joy[Input::ACTIONBAR_FORWARD] << "\n";
+		outfile << "actionbar_use=" << binding[Input::ACTIONBAR_USE] << "," << binding_alt[Input::ACTIONBAR_USE] << "," << binding_joy[Input::ACTIONBAR_USE] << "\n";
+		outfile << "developer_menu=" << binding[Input::DEVELOPER_MENU] << "," << binding_alt[Input::DEVELOPER_MENU] << "," << binding_joy[Input::DEVELOPER_MENU] << "\n";
 
 		if (outfile.bad()) logError("InputState: Unable to write keybindings config file. No write access or disk is full!");
 		outfile.close();
@@ -309,7 +309,7 @@ void InputState::handle() {
 	// resetting of their states (done here) until the next frame. this
 	// loop also resets the states of other inputs that are no longer being
 	// pressed. (joysticks are a little more complex.)
-	for (int key=0; key < key_count; key++) {
+	for (int key=0; key < KEY_COUNT; key++) {
 		if (un_press[key] == true) {
 			pressing[key] = false;
 			un_press[key] = false;
@@ -324,82 +324,82 @@ void InputState::resetScroll() {
 }
 
 void InputState::lockActionBar() {
-	pressing[BAR_1] = false;
-	pressing[BAR_2] = false;
-	pressing[BAR_3] = false;
-	pressing[BAR_4] = false;
-	pressing[BAR_5] = false;
-	pressing[BAR_6] = false;
-	pressing[BAR_7] = false;
-	pressing[BAR_8] = false;
-	pressing[BAR_9] = false;
-	pressing[BAR_0] = false;
-	pressing[MAIN1] = false;
-	pressing[MAIN2] = false;
-	pressing[ACTIONBAR_USE] = false;
-	lock[BAR_1] = true;
-	lock[BAR_2] = true;
-	lock[BAR_3] = true;
-	lock[BAR_4] = true;
-	lock[BAR_5] = true;
-	lock[BAR_6] = true;
-	lock[BAR_7] = true;
-	lock[BAR_8] = true;
-	lock[BAR_9] = true;
-	lock[BAR_0] = true;
-	lock[MAIN1] = true;
-	lock[MAIN2] = true;
-	lock[ACTIONBAR_USE] = true;
+	pressing[Input::BAR_1] = false;
+	pressing[Input::BAR_2] = false;
+	pressing[Input::BAR_3] = false;
+	pressing[Input::BAR_4] = false;
+	pressing[Input::BAR_5] = false;
+	pressing[Input::BAR_6] = false;
+	pressing[Input::BAR_7] = false;
+	pressing[Input::BAR_8] = false;
+	pressing[Input::BAR_9] = false;
+	pressing[Input::BAR_0] = false;
+	pressing[Input::MAIN1] = false;
+	pressing[Input::MAIN2] = false;
+	pressing[Input::ACTIONBAR_USE] = false;
+	lock[Input::BAR_1] = true;
+	lock[Input::BAR_2] = true;
+	lock[Input::BAR_3] = true;
+	lock[Input::BAR_4] = true;
+	lock[Input::BAR_5] = true;
+	lock[Input::BAR_6] = true;
+	lock[Input::BAR_7] = true;
+	lock[Input::BAR_8] = true;
+	lock[Input::BAR_9] = true;
+	lock[Input::BAR_0] = true;
+	lock[Input::MAIN1] = true;
+	lock[Input::MAIN2] = true;
+	lock[Input::ACTIONBAR_USE] = true;
 }
 
 void InputState::unlockActionBar() {
-	lock[BAR_1] = false;
-	lock[BAR_2] = false;
-	lock[BAR_3] = false;
-	lock[BAR_4] = false;
-	lock[BAR_5] = false;
-	lock[BAR_6] = false;
-	lock[BAR_7] = false;
-	lock[BAR_8] = false;
-	lock[BAR_9] = false;
-	lock[BAR_0] = false;
-	lock[MAIN1] = false;
-	lock[MAIN2] = false;
-	lock[ACTIONBAR_USE] = false;
+	lock[Input::BAR_1] = false;
+	lock[Input::BAR_2] = false;
+	lock[Input::BAR_3] = false;
+	lock[Input::BAR_4] = false;
+	lock[Input::BAR_5] = false;
+	lock[Input::BAR_6] = false;
+	lock[Input::BAR_7] = false;
+	lock[Input::BAR_8] = false;
+	lock[Input::BAR_9] = false;
+	lock[Input::BAR_0] = false;
+	lock[Input::MAIN1] = false;
+	lock[Input::MAIN2] = false;
+	lock[Input::ACTIONBAR_USE] = false;
 }
 
 void InputState::setKeybindNames() {
-	binding_name[0] = msg->get("Cancel");
-	binding_name[1] = msg->get("Accept");
-	binding_name[2] = msg->get("Up");
-	binding_name[3] = msg->get("Down");
-	binding_name[4] = msg->get("Left");
-	binding_name[5] = msg->get("Right");
-	binding_name[6] = msg->get("Bar1");
-	binding_name[7] = msg->get("Bar2");
-	binding_name[8] = msg->get("Bar3");
-	binding_name[9] = msg->get("Bar4");
-	binding_name[10] = msg->get("Bar5");
-	binding_name[11] = msg->get("Bar6");
-	binding_name[12] = msg->get("Bar7");
-	binding_name[13] = msg->get("Bar8");
-	binding_name[14] = msg->get("Bar9");
-	binding_name[15] = msg->get("Bar0");
-	binding_name[16] = msg->get("Character");
-	binding_name[17] = msg->get("Inventory");
-	binding_name[18] = msg->get("Powers");
-	binding_name[19] = msg->get("Log");
-	binding_name[20] = msg->get("Main1");
-	binding_name[21] = msg->get("Main2");
-	binding_name[22] = msg->get("Ctrl");
-	binding_name[23] = msg->get("Shift");
-	binding_name[24] = msg->get("Alt");
-	binding_name[25] = msg->get("Delete");
-	binding_name[26] = msg->get("ActionBar Accept");
-	binding_name[27] = msg->get("ActionBar Left");
-	binding_name[28] = msg->get("ActionBar Right");
-	binding_name[29] = msg->get("ActionBar Use");
-	binding_name[30] = msg->get("Developer Menu");
+	binding_name[Input::CANCEL] = msg->get("Cancel");
+	binding_name[Input::ACCEPT] = msg->get("Accept");
+	binding_name[Input::UP] = msg->get("Up");
+	binding_name[Input::DOWN] = msg->get("Down");
+	binding_name[Input::LEFT] = msg->get("Left");
+	binding_name[Input::RIGHT] = msg->get("Right");
+	binding_name[Input::BAR_1] = msg->get("Bar1");
+	binding_name[Input::BAR_2] = msg->get("Bar2");
+	binding_name[Input::BAR_3] = msg->get("Bar3");
+	binding_name[Input::BAR_4] = msg->get("Bar4");
+	binding_name[Input::BAR_5] = msg->get("Bar5");
+	binding_name[Input::BAR_6] = msg->get("Bar6");
+	binding_name[Input::BAR_7] = msg->get("Bar7");
+	binding_name[Input::BAR_8] = msg->get("Bar8");
+	binding_name[Input::BAR_9] = msg->get("Bar9");
+	binding_name[Input::BAR_0] = msg->get("Bar0");
+	binding_name[Input::CHARACTER] = msg->get("Character");
+	binding_name[Input::INVENTORY] = msg->get("Inventory");
+	binding_name[Input::POWERS] = msg->get("Powers");
+	binding_name[Input::LOG] = msg->get("Log");
+	binding_name[Input::MAIN1] = msg->get("Main1");
+	binding_name[Input::MAIN2] = msg->get("Main2");
+	binding_name[Input::CTRL] = msg->get("Ctrl");
+	binding_name[Input::SHIFT] = msg->get("Shift");
+	binding_name[Input::ALT] = msg->get("Alt");
+	binding_name[Input::DEL] = msg->get("Delete");
+	binding_name[Input::ACTIONBAR] = msg->get("ActionBar Accept");
+	binding_name[Input::ACTIONBAR_BACK] = msg->get("ActionBar Left");
+	binding_name[Input::ACTIONBAR_FORWARD] = msg->get("ActionBar Right");
+	binding_name[Input::ACTIONBAR_USE] = msg->get("ActionBar Use");
+	binding_name[Input::DEVELOPER_MENU] = msg->get("Developer Menu");
 
 	mouse_button[0] = msg->get("Left Mouse");
 	mouse_button[1] = msg->get("Middle Mouse");

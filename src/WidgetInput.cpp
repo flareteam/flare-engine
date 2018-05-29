@@ -94,16 +94,16 @@ bool WidgetInput::logic(int x, int y) {
 	}
 
 	// if clicking elsewhere unfocus the text box
-	if (inpt->pressing[MAIN1]) {
+	if (inpt->pressing[Input::MAIN1]) {
 		if (!isWithinRect(pos, inpt->mouse)) {
 			edit_mode = false;
 		}
 	}
 
 	if (edit_mode) {
-		inpt->slow_repeat[DEL] = true;
-		inpt->slow_repeat[LEFT] = true;
-		inpt->slow_repeat[RIGHT] = true;
+		inpt->slow_repeat[Input::DEL] = true;
+		inpt->slow_repeat[Input::LEFT] = true;
+		inpt->slow_repeat[Input::RIGHT] = true;
 		inpt->startTextInput();
 
 		if (inpt->inkeys != "") {
@@ -116,7 +116,7 @@ bool WidgetInput::logic(int x, int y) {
 			}
 
 			// HACK: this prevents normal keys from triggering common menu shortcuts
-			for (size_t i = 0; i < inpt->key_count; ++i) {
+			for (size_t i = 0; i < inpt->KEY_COUNT; ++i) {
 				if (inpt->pressing[i]) {
 					inpt->lock[i] = true;
 					inpt->repeat_ticks[i] = 1;
@@ -125,7 +125,7 @@ bool WidgetInput::logic(int x, int y) {
 		}
 
 		// handle backspaces
-		if (inpt->pressing[DEL] && inpt->repeat_ticks[DEL] == 0) {
+		if (inpt->pressing[Input::DEL] && inpt->repeat_ticks[Input::DEL] == 0) {
 			if (!text.empty() && cursor_pos > 0) {
 				// remove utf-8 character
 				// size_t old_cursor_pos = cursor_pos;
@@ -140,30 +140,30 @@ bool WidgetInput::logic(int x, int y) {
 		}
 
 		// cursor movement
-		if (!text.empty() && cursor_pos > 0 && inpt->pressing[LEFT] && inpt->repeat_ticks[LEFT] == 0) {
+		if (!text.empty() && cursor_pos > 0 && inpt->pressing[Input::LEFT] && inpt->repeat_ticks[Input::LEFT] == 0) {
 			cursor_pos--;
 			trimText();
 		}
-		else if (!text.empty() && cursor_pos < text.length() && inpt->pressing[RIGHT] && inpt->repeat_ticks[RIGHT] == 0) {
-			inpt->lock[RIGHT] = true;
+		else if (!text.empty() && cursor_pos < text.length() && inpt->pressing[Input::RIGHT] && inpt->repeat_ticks[Input::RIGHT] == 0) {
+			inpt->lock[Input::RIGHT] = true;
 			cursor_pos++;
 			trimText();
 		}
 
 		// defocus with Enter or Escape
-		if (accept_to_defocus && inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
-			inpt->lock[ACCEPT] = true;
+		if (accept_to_defocus && inpt->pressing[Input::ACCEPT] && !inpt->lock[Input::ACCEPT]) {
+			inpt->lock[Input::ACCEPT] = true;
 			edit_mode = false;
 		}
-		else if (inpt->pressing[CANCEL] && !inpt->lock[CANCEL]) {
-			inpt->lock[CANCEL] = true;
+		else if (inpt->pressing[Input::CANCEL] && !inpt->lock[Input::CANCEL]) {
+			inpt->lock[Input::CANCEL] = true;
 			edit_mode = false;
 		}
 	}
 	else {
-		inpt->slow_repeat[DEL] = false;
-		inpt->slow_repeat[LEFT] = false;
-		inpt->slow_repeat[RIGHT] = false;
+		inpt->slow_repeat[Input::DEL] = false;
+		inpt->slow_repeat[Input::LEFT] = false;
+		inpt->slow_repeat[Input::RIGHT] = false;
 		inpt->stopTextInput();
 	}
 
@@ -241,10 +241,10 @@ bool WidgetInput::checkClick() {
 	if (!enabled) return false;
 
 	// main button already in use, new click not allowed
-	if (inpt->lock[MAIN1]) return false;
+	if (inpt->lock[Input::MAIN1]) return false;
 
 	// main click released, so the button state goes back to unpressed
-	if (pressed && !inpt->lock[MAIN1]) {
+	if (pressed && !inpt->lock[Input::MAIN1]) {
 		pressed = false;
 
 		if (isWithinRect(pos, inpt->mouse)) {
@@ -257,10 +257,10 @@ bool WidgetInput::checkClick() {
 	pressed = false;
 
 	// detect new click
-	if (inpt->pressing[MAIN1]) {
+	if (inpt->pressing[Input::MAIN1]) {
 		if (isWithinRect(pos, inpt->mouse)) {
 
-			inpt->lock[MAIN1] = true;
+			inpt->lock[Input::MAIN1] = true;
 			pressed = true;
 
 		}

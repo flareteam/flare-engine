@@ -967,10 +967,10 @@ void MapRenderer::checkHotspots() {
 						else {
 							curs->setCursor(CursorManager::CURSOR_INTERACT);
 						}
-						if (!inpt->pressing[MAIN1]) return;
-						else if (inpt->lock[MAIN1]) return;
+						if (!inpt->pressing[Input::MAIN1]) return;
+						else if (inpt->lock[Input::MAIN1]) return;
 
-						inpt->lock[MAIN1] = true;
+						inpt->lock[Input::MAIN1] = true;
 						if (EventManager::executeEvent(*it))
 							it = events.erase(it);
 					}
@@ -1024,8 +1024,8 @@ void MapRenderer::checkNearestEvent() {
 			}
 		}
 
-		if (inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
-			if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
+		if (inpt->pressing[Input::ACCEPT] && !inpt->lock[Input::ACCEPT]) {
+			if (inpt->pressing[Input::ACCEPT]) inpt->lock[Input::ACCEPT] = true;
 
 			if(EventManager::executeEvent(*nearest))
 				events.erase(nearest);

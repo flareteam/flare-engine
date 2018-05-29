@@ -598,7 +598,7 @@ bool GameStateConfigBase::logicMain() {
 		defaults_confirm->visible = true;
 		return true;
 	}
-	else if (cancel_button->checkClick() || (inpt->pressing[CANCEL] && !inpt->lock[CANCEL])) {
+	else if (cancel_button->checkClick() || (inpt->pressing[Input::CANCEL] && !inpt->lock[Input::CANCEL])) {
 		logicCancel();
 
 		// GameStateConfigBase deconstructed, proceed with caution
@@ -665,7 +665,7 @@ void GameStateConfigBase::logicAccept() {
 }
 
 void GameStateConfigBase::logicCancel() {
-	inpt->lock[CANCEL] = true;
+	inpt->lock[Input::CANCEL] = true;
 	loadSettings();
 	inpt->loadKeyBindings();
 	delete msg;

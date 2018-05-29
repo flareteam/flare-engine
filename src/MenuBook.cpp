@@ -338,8 +338,8 @@ void MenuBook::logic() {
 
 	tablist.logic();
 
-	if (closeButton->checkClick() || (inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT] && tablist.getCurrent() == -1)) {
-		if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
+	if (closeButton->checkClick() || (inpt->pressing[Input::ACCEPT] && !inpt->lock[Input::ACCEPT] && tablist.getCurrent() == -1)) {
+		if (inpt->pressing[Input::ACCEPT]) inpt->lock[Input::ACCEPT] = true;
 
 		closeWindow();
 		snd->play(sfx_close);

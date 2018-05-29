@@ -64,29 +64,29 @@ void MenuTouchControls::logic() {
 	if (!visible || !platform_options.is_mobile_device)
 		return;
 
-	inpt->pressing[LEFT] = inpt->pressing[RIGHT] = inpt->pressing[UP] = inpt->pressing[DOWN] = false;
-	inpt->pressing[MAIN2] = false;
+	inpt->pressing[Input::LEFT] = inpt->pressing[Input::RIGHT] = inpt->pressing[Input::UP] = inpt->pressing[Input::DOWN] = false;
+	inpt->pressing[Input::MAIN2] = false;
 
 	FPoint mv_center(static_cast<float>(move_center.x), static_cast<float>(move_center.y));
 	FPoint m2_center(static_cast<float>(main2_center.x), static_cast<float>(main2_center.y));
 
 	FPoint mouse(static_cast<float>(inpt->mouse.x), static_cast<float>(inpt->mouse.y));
 
-	if (inpt->pressing[MAIN1] && isWithinRadius(mv_center, static_cast<float>(move_radius), mouse)) {
+	if (inpt->pressing[Input::MAIN1] && isWithinRadius(mv_center, static_cast<float>(move_radius), mouse)) {
 		if (inpt->mouse.x < move_center.x - move_deadzone)
-			inpt->pressing[LEFT] = true;
+			inpt->pressing[Input::LEFT] = true;
 		if (inpt->mouse.x > move_center.x + move_deadzone)
-			inpt->pressing[RIGHT] = true;
+			inpt->pressing[Input::RIGHT] = true;
 		if (inpt->mouse.y < move_center.y - move_deadzone)
-			inpt->pressing[UP] = true;
+			inpt->pressing[Input::UP] = true;
 		if (inpt->mouse.y > move_center.y + move_deadzone)
-			inpt->pressing[DOWN] = true;
+			inpt->pressing[Input::DOWN] = true;
 	}
 
 	// checking for MAIN1 is redundant, as the touch event itself triggers that
 
-	if (inpt->pressing[MAIN1] && isWithinRadius(m2_center, static_cast<float>(main2_radius), mouse)) {
-		inpt->pressing[MAIN2] = true;
+	if (inpt->pressing[Input::MAIN1] && isWithinRadius(m2_center, static_cast<float>(main2_radius), mouse)) {
+		inpt->pressing[Input::MAIN2] = true;
 	}
 }
 

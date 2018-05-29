@@ -370,9 +370,9 @@ void GameStateNew::logic() {
 		}
 	}
 
-	if ((inpt->pressing[CANCEL] && !inpt->lock[CANCEL]) || button_exit->checkClick()) {
-		if (inpt->pressing[CANCEL])
-			inpt->lock[CANCEL] = true;
+	if ((inpt->pressing[Input::CANCEL] && !inpt->lock[Input::CANCEL]) || button_exit->checkClick()) {
+		if (inpt->pressing[Input::CANCEL])
+			inpt->lock[Input::CANCEL] = true;
 		delete_items = false;
 		showLoading();
 		setRequestedGameState(new GameStateLoad());

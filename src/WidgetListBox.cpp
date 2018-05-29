@@ -119,10 +119,10 @@ bool WidgetListBox::checkClick(int x, int y) {
 	}
 
 	// main ListBox already in use, new click not allowed
-	if (inpt->lock[MAIN1]) return false;
+	if (inpt->lock[Input::MAIN1]) return false;
 
 	// main click released, so the ListBox state goes back to unpressed
-	if (pressed && !inpt->lock[MAIN1] && can_select) {
+	if (pressed && !inpt->lock[Input::MAIN1] && can_select) {
 		pressed = false;
 
 		for(unsigned i=0; i<rows.size(); i++) {
@@ -152,11 +152,11 @@ bool WidgetListBox::checkClick(int x, int y) {
 	pressed = false;
 
 	// detect new click
-	if (inpt->pressing[MAIN1]) {
+	if (inpt->pressing[Input::MAIN1]) {
 		for (unsigned i=0; i<rows.size(); i++) {
 			if (isWithinRect(rows[i], mouse)) {
 
-				inpt->lock[MAIN1] = true;
+				inpt->lock[Input::MAIN1] = true;
 				pressed = true;
 
 			}

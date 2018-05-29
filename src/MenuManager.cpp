@@ -287,14 +287,14 @@ void MenuManager::handleKeyboardNavigation() {
 	if (!inv->visible) inv->tablist.unlock();
 
 	// position the drag hover icon depending on the last key press
-	if (!act_drag_hover && (inpt->pressing[ACTIONBAR_BACK] || inpt->pressing[ACTIONBAR_FORWARD] || inpt->pressing[ACTIONBAR]))
+	if (!act_drag_hover && (inpt->pressing[Input::ACTIONBAR_BACK] || inpt->pressing[Input::ACTIONBAR_FORWARD] || inpt->pressing[Input::ACTIONBAR]))
 		act_drag_hover = true;
-	else if (act_drag_hover && (inpt->pressing[LEFT] || inpt->pressing[RIGHT] || inpt->pressing[UP] || inpt->pressing[DOWN]) && !(inpt->pressing[ACTIONBAR_BACK] || inpt->pressing[ACTIONBAR_FORWARD]))
+	else if (act_drag_hover && (inpt->pressing[Input::LEFT] || inpt->pressing[Input::RIGHT] || inpt->pressing[Input::UP] || inpt->pressing[Input::DOWN]) && !(inpt->pressing[Input::ACTIONBAR_BACK] || inpt->pressing[Input::ACTIONBAR_FORWARD]))
 		act_drag_hover = false;
 
 	// don't allow dropping actionbar items in other menus
 	if (keyboard_dragging && drag_src == DRAG_SRC_ACTIONBAR) {
-		inpt->lock[ACCEPT] = true;
+		inpt->lock[Input::ACCEPT] = true;
 	}
 }
 void MenuManager::logic() {
@@ -366,8 +366,8 @@ void MenuManager::logic() {
 			(talker->visible && isWithinRect(talker->window_area, inpt->mouse)) ||
 			(stash->visible && isWithinRect(stash->window_area, inpt->mouse)))
 		{
-			inpt->pressing[MAIN1] = false;
-			inpt->pressing[MAIN2] = false;
+			inpt->pressing[Input::MAIN1] = false;
+			inpt->pressing[Input::MAIN2] = false;
 		}
 	}
 
@@ -415,7 +415,7 @@ void MenuManager::logic() {
 		inv->inv_ctrl = INV_CTRL_NONE;
 	}
 
-	if (!inpt->pressing[INVENTORY] && !inpt->pressing[POWERS] && !inpt->pressing[CHARACTER] && !inpt->pressing[LOG])
+	if (!inpt->pressing[Input::INVENTORY] && !inpt->pressing[Input::POWERS] && !inpt->pressing[Input::CHARACTER] && !inpt->pressing[Input::LOG])
 		key_lock = false;
 
 	if (DEV_MODE && devconsole->inputFocus())
@@ -427,21 +427,21 @@ void MenuManager::logic() {
 	}
 
 	// cancel dragging and defocus menu tablists
-	if (!key_lock && inpt->pressing[CANCEL] && !inpt->lock[CANCEL] && !stats->corpse) {
+	if (!key_lock && inpt->pressing[Input::CANCEL] && !inpt->lock[Input::CANCEL] && !stats->corpse) {
 		if (keyboard_dragging || mouse_dragging) {
-			inpt->lock[CANCEL] = true;
+			inpt->lock[Input::CANCEL] = true;
 			resetDrag();
 		}
 		for (size_t i=0; i<menus.size(); i++) {
 			TabList *tablist = menus[i]->getCurrentTabList();
 			if (tablist) {
-				inpt->lock[CANCEL] = true;
+				inpt->lock[Input::CANCEL] = true;
 				menus[i]->defocusTabLists();
 			}
 			if (DEV_MODE) {
 				tablist = devconsole->getCurrentTabList();
 				if (tablist) {
-					inpt->lock[CANCEL] = true;
+					inpt->lock[Input::CANCEL] = true;
 					devconsole->defocusTabLists();
 				}
 			}
@@ -450,8 +450,8 @@ void MenuManager::logic() {
 
 	// exit menu toggle
 	if (!key_lock && !mouse_dragging && !keyboard_dragging) {
-		if (inpt->pressing[CANCEL] && !inpt->lock[CANCEL]) {
-			inpt->lock[CANCEL] = true;
+		if (inpt->pressing[Input::CANCEL] && !inpt->lock[Input::CANCEL]) {
+			inpt->lock[Input::CANCEL] = true;
 			key_lock = true;
 			if (act->twostep_slot != -1) {
 				act->twostep_slot = -1;
@@ -484,7 +484,7 @@ void MenuManager::logic() {
 		act->checkMenu(clicking_character, clicking_inventory, clicking_powers, clicking_log);
 
 		// inventory menu toggle
-		if ((inpt->pressing[INVENTORY] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_inventory) {
+		if ((inpt->pressing[Input::INVENTORY] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_inventory) {
 			key_lock = true;
 			if (inv->visible) {
 				snd->play(inv->sfx_close);
@@ -500,7 +500,7 @@ void MenuManager::logic() {
 		}
 
 		// powers menu toggle
-		if (((inpt->pressing[POWERS] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_powers) && !stats->transformed) {
+		if (((inpt->pressing[Input::POWERS] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_powers) && !stats->transformed) {
 			key_lock = true;
 			if (pow->visible) {
 				snd->play(pow->sfx_close);
@@ -515,7 +515,7 @@ void MenuManager::logic() {
 		}
 
 		// character menu toggleggle
-		if ((inpt->pressing[CHARACTER] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_character) {
+		if ((inpt->pressing[Input::CHARACTER] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_character) {
 			key_lock = true;
 			if (chr->visible) {
 				snd->play(chr->sfx_close);
@@ -532,7 +532,7 @@ void MenuManager::logic() {
 		}
 
 		// log menu toggle
-		if ((inpt->pressing[LOG] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_log) {
+		if ((inpt->pressing[Input::LOG] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_log) {
 			key_lock = true;
 			if (questlog->visible) {
 				snd->play(questlog->sfx_close);
@@ -549,8 +549,8 @@ void MenuManager::logic() {
 		}
 
 		//developer console
-		if (DEV_MODE && inpt->pressing[DEVELOPER_MENU] && !inpt->lock[DEVELOPER_MENU] && !mouse_dragging && !keyboard_dragging) {
-			inpt->lock[DEVELOPER_MENU] = true;
+		if (DEV_MODE && inpt->pressing[Input::DEVELOPER_MENU] && !inpt->lock[Input::DEVELOPER_MENU] && !mouse_dragging && !keyboard_dragging) {
+			inpt->lock[Input::DEVELOPER_MENU] = true;
 			if (devconsole->visible) {
 				closeAll();
 				key_lock = false;
@@ -571,20 +571,20 @@ void MenuManager::logic() {
 	if (stats->alive) {
 
 		// handle right-click
-		if (!mouse_dragging && inpt->pressing[MAIN2] && !inpt->lock[MAIN2]) {
+		if (!mouse_dragging && inpt->pressing[Input::MAIN2] && !inpt->lock[Input::MAIN2]) {
 			// exit menu
 			if (exit->visible && isWithinRect(exit->window_area, inpt->mouse)) {
-				inpt->lock[MAIN2] = true;
+				inpt->lock[Input::MAIN2] = true;
 			}
 
 			// book menu
 			if (book->visible && isWithinRect(book->window_area, inpt->mouse)) {
-				inpt->lock[MAIN2] = true;
+				inpt->lock[Input::MAIN2] = true;
 			}
 
 			// activate inventory item
 			else if (inv->visible && isWithinRect(inv->window_area, inpt->mouse)) {
-				inpt->lock[MAIN2] = true;
+				inpt->lock[Input::MAIN2] = true;
 				if (isWithinRect(inv->carried_area, inpt->mouse)) {
 					inv->activate(inpt->mouse);
 				}
@@ -592,14 +592,14 @@ void MenuManager::logic() {
 		}
 
 		// handle left-click for book menu first
-		if (!mouse_dragging && inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
+		if (!mouse_dragging && inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1]) {
 			if (book->visible && isWithinRect(book->window_area, inpt->mouse)) {
-				inpt->lock[MAIN1] = true;
+				inpt->lock[Input::MAIN1] = true;
 			}
 		}
 
 		// handle left-click
-		if (!mouse_dragging && inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
+		if (!mouse_dragging && inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1]) {
 			resetDrag();
 
 			for (size_t i=0; i<menus.size(); ++i) {
@@ -610,17 +610,17 @@ void MenuManager::logic() {
 
 			// exit menu
 			if (exit->visible && isWithinRect(exit->window_area, inpt->mouse)) {
-				inpt->lock[MAIN1] = true;
+				inpt->lock[Input::MAIN1] = true;
 			}
 
 
 			if (chr->visible && isWithinRect(chr->window_area, inpt->mouse)) {
-				inpt->lock[MAIN1] = true;
+				inpt->lock[Input::MAIN1] = true;
 			}
 
 			if (vendor->visible && isWithinRect(vendor->window_area,inpt->mouse)) {
-				inpt->lock[MAIN1] = true;
-				if (inpt->pressing[CTRL]) {
+				inpt->lock[Input::MAIN1] = true;
+				if (inpt->pressing[Input::CTRL]) {
 					// buy item from a vendor
 					stack = vendor->click(inpt->mouse);
 					if (!inv->buy(stack, vendor->getTab(), false)) {
@@ -635,7 +635,7 @@ void MenuManager::logic() {
 						mouse_dragging = true;
 						drag_src = DRAG_SRC_VENDOR;
 					}
-					if (drag_stack.quantity > 1 && (inpt->pressing[SHIFT] || !inpt->usingMouse() || inpt->touch_locked)) {
+					if (drag_stack.quantity > 1 && (inpt->pressing[Input::SHIFT] || !inpt->usingMouse() || inpt->touch_locked)) {
 						int max_quantity = std::min(inv->getMaxPurchasable(drag_stack, vendor->getTab()), drag_stack.quantity);
 						if (max_quantity >= 1) {
 							num_picker->setValueBounds(1, max_quantity);
@@ -650,8 +650,8 @@ void MenuManager::logic() {
 			}
 
 			if (stash->visible && isWithinRect(stash->window_area,inpt->mouse)) {
-				inpt->lock[MAIN1] = true;
-				if (inpt->pressing[CTRL]) {
+				inpt->lock[Input::MAIN1] = true;
+				if (inpt->pressing[Input::CTRL]) {
 					// take an item from the stash
 					stack = stash->click(inpt->mouse);
 					if (!inv->add(stack, CARRIED, -1, true, true)) {
@@ -667,7 +667,7 @@ void MenuManager::logic() {
 						mouse_dragging = true;
 						drag_src = DRAG_SRC_STASH;
 					}
-					if (drag_stack.quantity > 1 && (inpt->pressing[SHIFT] || !inpt->usingMouse() || inpt->touch_locked)) {
+					if (drag_stack.quantity > 1 && (inpt->pressing[Input::SHIFT] || !inpt->usingMouse() || inpt->touch_locked)) {
 						num_picker->setValueBounds(1, drag_stack.quantity);
 						num_picker->visible = true;
 					}
@@ -675,13 +675,13 @@ void MenuManager::logic() {
 			}
 
 			if (questlog->visible && isWithinRect(questlog->window_area,inpt->mouse)) {
-				inpt->lock[MAIN1] = true;
+				inpt->lock[Input::MAIN1] = true;
 			}
 
 			// pick up an inventory item
 			if (inv->visible && isWithinRect(inv->window_area,inpt->mouse)) {
-				if (inpt->pressing[CTRL]) {
-					inpt->lock[MAIN1] = true;
+				if (inpt->pressing[Input::CTRL]) {
+					inpt->lock[Input::MAIN1] = true;
 					stack = inv->click(inpt->mouse);
 					if (stash->visible) {
 						if (!stash->add(stack, -1, true)) {
@@ -703,13 +703,13 @@ void MenuManager::logic() {
 					}
 				}
 				else {
-					inpt->lock[MAIN1] = true;
+					inpt->lock[Input::MAIN1] = true;
 					drag_stack = inv->click(inpt->mouse);
 					if (!drag_stack.empty()) {
 						mouse_dragging = true;
 						drag_src = DRAG_SRC_INVENTORY;
 					}
-					if (drag_stack.quantity > 1 && (inpt->pressing[SHIFT] || !inpt->usingMouse() || inpt->touch_locked)) {
+					if (drag_stack.quantity > 1 && (inpt->pressing[Input::SHIFT] || !inpt->usingMouse() || inpt->touch_locked)) {
 						num_picker->setValueBounds(1, drag_stack.quantity);
 						num_picker->visible = true;
 					}
@@ -717,7 +717,7 @@ void MenuManager::logic() {
 			}
 			// pick up a power
 			if (pow->visible && isWithinRect(pow->window_area,inpt->mouse)) {
-				inpt->lock[MAIN1] = true;
+				inpt->lock[Input::MAIN1] = true;
 
 				// check for unlock/dragging
 				drag_power = pow->click(inpt->mouse);
@@ -729,10 +729,10 @@ void MenuManager::logic() {
 			}
 			// action bar
 			if (!inpt->touch_locked && (act->isWithinSlots(inpt->mouse) || act->isWithinMenus(inpt->mouse))) {
-				inpt->lock[MAIN1] = true;
+				inpt->lock[Input::MAIN1] = true;
 
 				// ctrl-click action bar to clear that slot
-				if (inpt->pressing[CTRL]) {
+				if (inpt->pressing[Input::CTRL]) {
 					act->remove(inpt->mouse);
 				}
 				// allow drag-to-rearrange action bar
@@ -757,9 +757,9 @@ void MenuManager::logic() {
 		}
 
 		// handle dropping
-		if (mouse_dragging && ((sticky_dragging && inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) || (!sticky_dragging && !inpt->pressing[MAIN1]))) {
+		if (mouse_dragging && ((sticky_dragging && inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1]) || (!sticky_dragging && !inpt->pressing[Input::MAIN1]))) {
 			if (sticky_dragging) {
-				inpt->lock[MAIN1] = true;
+				inpt->lock[Input::MAIN1] = true;
 				sticky_dragging = false;
 			}
 
@@ -1131,7 +1131,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 			drag_src = 0;
 			drag_power = 0;
 			keyboard_dragging = false;
-			inpt->lock[ACCEPT] = false;
+			inpt->lock[Input::ACCEPT] = false;
 		}
 	}
 }
@@ -1156,7 +1156,7 @@ void MenuManager::resetDrag() {
 	drag_power = 0;
 
 	if (keyboard_dragging && DRAG_SRC_ACTIONBAR) {
-		inpt->lock[ACCEPT] = false;
+		inpt->lock[Input::ACCEPT] = false;
 	}
 
 	if (drag_icon) {

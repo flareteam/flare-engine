@@ -137,7 +137,7 @@ void MenuDevConsole::logic() {
 	if (visible) {
 		if (!first_open) {
 			first_open = true;
-			log_history->add(msg->get("Use '%s' to inspect with the cursor.", inpt->getBindingString(MAIN2).c_str()));
+			log_history->add(msg->get("Use '%s' to inspect with the cursor.", inpt->getBindingString(Input::MAIN2).c_str()));
 			log_history->add("exec \"msg=Hello World\"", true, &color_hint);
 			log_history->add(msg->get("Arguments with spaces should be enclosed with double quotes. Example:"));
 			log_history->add(msg->get("Type 'help' to get a list of commands.") + ' ');
@@ -159,8 +159,8 @@ void MenuDevConsole::logic() {
 		else if (button_confirm->checkClick()) {
 			execute();
 		}
-		else if (input_box->edit_mode && inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
-			inpt->lock[ACCEPT] = true;
+		else if (input_box->edit_mode && inpt->pressing[Input::ACCEPT] && !inpt->lock[Input::ACCEPT]) {
+			inpt->lock[Input::ACCEPT] = true;
 			execute();
 		}
 		else if (input_box->edit_mode && inpt->pressing_up) {
@@ -185,8 +185,8 @@ void MenuDevConsole::logic() {
 			}
 		}
 
-		if (inpt->pressing[MAIN2] && !inpt->lock[MAIN2]) {
-			inpt->lock[MAIN2] = true;
+		if (inpt->pressing[Input::MAIN2] && !inpt->lock[Input::MAIN2]) {
+			inpt->lock[Input::MAIN2] = true;
 			target = screen_to_map(inpt->mouse.x,  inpt->mouse.y, pc->stats.pos.x, pc->stats.pos.y);
 
 			log_history->addSeparator();
@@ -208,7 +208,7 @@ void MenuDevConsole::logic() {
 			}
 		}
 
-		if (inpt->pressing[MAIN2]) {
+		if (inpt->pressing[Input::MAIN2]) {
 			distance_ticks++;
 
 			// print target distance from the player

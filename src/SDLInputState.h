@@ -40,7 +40,7 @@ public:
 	std::string getKeyName(int key);
 	std::string getMouseButtonName(int button);
 	std::string getJoystickButtonName(int button);
-	std::string getBindingString(int key, int bindings_list = INPUT_BINDING_DEFAULT);
+	std::string getBindingString(int key, int bindings_list = InputState::BINDING_DEFAULT);
 	std::string getMovementString();
 	std::string getAttackString();
 	std::string getContinueString();
