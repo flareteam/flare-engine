@@ -1019,7 +1019,7 @@ void GameStatePlay::logic() {
 			menu->act->hotkeys_mod[i] = menu->act->hotkeys[i];
 		}
 
-		updateActionBar();
+		updateActionBar(UPDATE_ACTIONBAR_ALL);
 	}
 
 	// reload music if changed in the pause menu
