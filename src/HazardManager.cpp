@@ -86,8 +86,6 @@ void HazardManager::logic() {
 
 	}
 
-	bool hit;
-
 	// handle collisions
 	for (size_t i=0; i<h.size(); i++) {
 		if (h[i]->isDangerousNow()) {
@@ -100,11 +98,12 @@ void HazardManager::logic() {
 					if (enemym->enemies[eindex]->stats.hp > 0 && h[i]->active && (enemym->enemies[eindex]->stats.hero_ally == h[i]->power->target_party)) {
 						if (isWithinRadius(h[i]->pos, h[i]->power->radius, enemym->enemies[eindex]->stats.pos)) {
 							if (!h[i]->hasEntity(enemym->enemies[eindex])) {
-								h[i]->addEntity(enemym->enemies[eindex]);
-								if (!h[i]->power->beacon) last_enemy = enemym->enemies[eindex];
 								// hit!
-								hit = enemym->enemies[eindex]->takeHit(*h[i]);
-								hitEntity(i, hit);
+								h[i]->addEntity(enemym->enemies[eindex]);
+								hitEntity(i, enemym->enemies[eindex]->takeHit(*h[i]));
+								if (!h[i]->power->beacon) {
+									last_enemy = enemym->enemies[eindex];
+								}
 							}
 						}
 					}
@@ -117,10 +116,9 @@ void HazardManager::logic() {
 				if (pc->stats.hp > 0 && h[i]->active) {
 					if (isWithinRadius(h[i]->pos, h[i]->power->radius, pc->stats.pos)) {
 						if (!h[i]->hasEntity(pc)) {
-							h[i]->addEntity(pc);
 							// hit!
-							hit = pc->takeHit(*h[i]);
-							hitEntity(i, hit);
+							h[i]->addEntity(pc);
+							hitEntity(i, pc->takeHit(*h[i]));
 						}
 					}
 				}
@@ -131,10 +129,9 @@ void HazardManager::logic() {
 					if (enemym->enemies[eindex]->stats.hp > 0 && h[i]->active && enemym->enemies[eindex]->stats.hero_ally) {
 						if (isWithinRadius(h[i]->pos, h[i]->power->radius, enemym->enemies[eindex]->stats.pos)) {
 							if (!h[i]->hasEntity(enemym->enemies[eindex])) {
-								h[i]->addEntity(enemym->enemies[eindex]);
 								// hit!
-								hit = enemym->enemies[eindex]->takeHit(*h[i]);
-								hitEntity(i, hit);
+								h[i]->addEntity(enemym->enemies[eindex]);
+								hitEntity(i, enemym->enemies[eindex]->takeHit(*h[i]));
 							}
 						}
 					}
