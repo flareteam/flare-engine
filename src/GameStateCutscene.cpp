@@ -56,25 +56,8 @@ Scene::Scene(const CutsceneSettings& _settings, short _cutscene_type)
 {
 }
 
-Scene::Scene(const Scene& other)
-	: settings(other.settings)
-	, frame_counter(other.frame_counter)
-	, pause_frames(other.pause_frames)
-	, caption(other.caption)
-	, art(NULL)
-	, art_scaled(NULL)
-	, art_scale_type(other.art_scale_type)
-	, sid(other.sid)
-	, caption_box(NULL)
-	, button_next(new WidgetButton("images/menus/buttons/right.png"))
-	, button_close(new WidgetButton("images/menus/buttons/button_x.png"))
-	, button_advance(NULL)
-	, done(other.done)
-	, vscroll_offset(other.vscroll_offset)
-	, vscroll_ticks(other.vscroll_ticks)
-	, cutscene_type(other.cutscene_type)
-	, is_last_scene(other.is_last_scene)
-{
+Scene::Scene(const Scene& other) {
+	*this = other;
 }
 
 Scene& Scene::operator=(const Scene& other) {
@@ -467,13 +450,13 @@ bool GameStateCutscene::load(const std::string& filename) {
 
 		if (infile.new_section) {
 			if (infile.section == "scene") {
-				scenes.push(new Scene(settings, CUTSCENE_STATIC));
+				scenes.push(new Scene(settings, Scene::CUTSCENE_STATIC));
 			}
 			else if (infile.section == "vscroll") {
 				// if the previous scene was also a vertical scroller, don't create a new scene
 				// instead, the previous scene will be extended
-				if (scenes.empty() || scenes.back()->cutscene_type != CUTSCENE_VSCROLL) {
-					scenes.push(new Scene(settings, CUTSCENE_VSCROLL));
+				if (scenes.empty() || scenes.back()->cutscene_type != Scene::CUTSCENE_VSCROLL) {
+					scenes.push(new Scene(settings, Scene::CUTSCENE_VSCROLL));
 				}
 			}
 		}
@@ -518,9 +501,9 @@ bool GameStateCutscene::load(const std::string& filename) {
 				sc.type = infile.key;
 				sc.s = popFirstString(infile.val);
 				sc.x = popFirstInt(infile.val);
-				if (sc.x < CUTSCENE_SCALE_NONE || sc.x > CUTSCENE_SCALE_SCREEN) {
+				if (sc.x < Scene::CUTSCENE_SCALE_NONE || sc.x > Scene::CUTSCENE_SCALE_SCREEN) {
 					infile.error("GameStateCutscene: '%d' is not a valid scaling type.", sc.x);
-					sc.x = CUTSCENE_SCALE_NONE;
+					sc.x = Scene::CUTSCENE_SCALE_NONE;
 				}
 			}
 			else if (infile.key == "pause") {

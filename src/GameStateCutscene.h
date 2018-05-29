@@ -28,17 +28,6 @@ class WidgetButton;
 class WidgetLabel;
 class WidgetScrollBox;
 
-enum {
-	CUTSCENE_STATIC = 0,
-	CUTSCENE_VSCROLL = 1
-};
-
-enum {
-	CUTSCENE_SCALE_NONE = 0,
-	CUTSCENE_SCALE_HEIGHT = 1,
-	CUTSCENE_SCALE_SCREEN = 2
-};
-
 class CutsceneSettings {
 public:
 	FPoint caption_margins;
@@ -112,6 +101,18 @@ public:
 	bool is_last_scene;
 	std::queue<SceneComponent> components;
 	std::vector<VScrollComponent> vscroll_components;
+
+	enum {
+		CUTSCENE_SCALE_NONE = 0,
+		CUTSCENE_SCALE_HEIGHT = 1,
+		CUTSCENE_SCALE_SCREEN = 2
+	};
+
+	enum {
+		CUTSCENE_STATIC = 0,
+		CUTSCENE_VSCROLL = 1
+	};
+
 };
 
 class GameStateCutscene : public GameState {
