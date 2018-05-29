@@ -43,6 +43,8 @@ class WidgetTooltip;
 
 class GameStateConfigDesktop : public GameStateConfigBase {
 public:
+	static const bool ENABLE_VIDEO_TAB = true;
+
 	explicit GameStateConfigDesktop(bool _enable_video_tab);
 	~GameStateConfigDesktop();
 

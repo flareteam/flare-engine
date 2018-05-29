@@ -52,7 +52,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define GAMMA_MAX 15
 
 GameStateConfigDesktop::GameStateConfigDesktop(bool _enable_video_tab)
-	: GameStateConfigBase(false)
+	: GameStateConfigBase(!GameStateConfigBase::DO_INIT)
 	, renderer_lstb(new WidgetListBox(4))
 	, renderer_lb(new WidgetLabel())
 	, fullscreen_cb(new WidgetCheckBox())

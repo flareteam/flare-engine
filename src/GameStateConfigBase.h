@@ -46,12 +46,16 @@ class WidgetTabControl;
 class WidgetTooltip;
 
 class GameStateConfigBase : public GameState {
+protected:
+
 public:
 	short AUDIO_TAB;
 	short INTERFACE_TAB;
 	short MODS_TAB;
 
-	explicit GameStateConfigBase(bool do_init = true);
+	static const bool DO_INIT = true;
+
+	explicit GameStateConfigBase(bool do_init);
 	~GameStateConfigBase();
 
 	virtual void init();
