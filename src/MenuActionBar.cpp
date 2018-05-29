@@ -527,7 +527,7 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 				// the first step is to mark the slot that was clicked on
 				if (action.power > 0) {
 					const Power &power = powers->powers[action.power];
-					if (power.starting_pos == STARTING_POS_TARGET || power.buff_teleport) {
+					if (power.starting_pos == Power::STARTING_POS_TARGET || power.buff_teleport) {
 						twostep_slot = i;
 						action.power = 0;
 					}
@@ -568,7 +568,7 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 			const Power &power = powers->powers[action.power];
 			bool can_use_power = true;
 			action.instant_item = false;
-			if (power.new_state == POWSTATE_INSTANT) {
+			if (power.new_state == Power::STATE_INSTANT) {
 				for (size_t j = 0; j < power.required_items.size(); ++j) {
 					if (power.required_items[j].id > 0 && !power.required_items[j].equipped) {
 						action.instant_item = true;

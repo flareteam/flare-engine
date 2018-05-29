@@ -21,10 +21,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "EventManager.h"
 #include "FileParser.h"
-#include "Hazard.h"
 #include "Map.h"
 #include "MessageEngine.h"
 #include "ModManager.h"
+#include "PowerManager.h"
 #include "Settings.h"
 #include "SharedResources.h"
 #include "StatBlock.h"
@@ -410,7 +410,7 @@ int Map::addEventStatBlock(Event &evnt) {
 	EffectDef immunity_effect;
 	immunity_effect.id = "MAP_EVENT_IMMUNITY";
 	immunity_effect.type = "immunity";
-	statb->effects.addEffect(immunity_effect, 0, 0, SOURCE_TYPE_ENEMY, EffectManager::NO_POWER);
+	statb->effects.addEffect(immunity_effect, 0, 0, Power::SOURCE_TYPE_ENEMY, EffectManager::NO_POWER);
 
 	// ensure the statblock will be alive
 	statb->hp = statb->starting[STAT_HP_MAX] = statb->current[STAT_HP_MAX] = 1;

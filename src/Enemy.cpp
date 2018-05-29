@@ -25,8 +25,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "Enemy.h"
 #include "EnemyBehavior.h"
-#include "Hazard.h"
 #include "LootManager.h"
+#include "PowerManager.h"
 #include "RenderDevice.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
@@ -45,7 +45,7 @@ Enemy::Enemy() : Entity() {
 
 	reward_xp = false;
 	instant_power = false;
-	kill_source_type = SOURCE_TYPE_NEUTRAL;
+	kill_source_type = Power::SOURCE_TYPE_NEUTRAL;
 	eb = NULL;
 }
 

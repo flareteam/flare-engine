@@ -350,7 +350,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 	if (stats.effects.triggered_block && !stats.blocking) {
 		stats.cur_state = AVATAR_STANCE;
 		stats.effects.triggered_block = false;
-		stats.effects.clearTriggerEffects(TRIGGER_BLOCK);
+		stats.effects.clearTriggerEffects(Power::TRIGGER_BLOCK);
 		stats.refresh_stats = true;
 	}
 
@@ -633,7 +633,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 				ActionData &action = action_queue[i];
 				const Power &power = powers->powers[action.power];
 
-				if (power.type == POWTYPE_BLOCK)
+				if (power.type == Power::TYPE_BLOCK)
 					blocking = true;
 
 				if (action.power != 0 && (stats.cooldown_ticks == 0 || action.instant_item)) {
@@ -654,7 +654,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 						continue;
 
 					// automatically target the selected enemy with melee attacks
-					if (inpt->usingMouse() && power.type == POWTYPE_FIXED && power.starting_pos == STARTING_POS_MELEE && enemy_pos.x != -1 && enemy_pos.y != -1) {
+					if (inpt->usingMouse() && power.type == Power::TYPE_FIXED && power.starting_pos == Power::STARTING_POS_MELEE && enemy_pos.x != -1 && enemy_pos.y != -1) {
 						target = enemy_pos;
 					}
 
@@ -663,7 +663,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 						stats.direction = calcDirection(stats.pos.x, stats.pos.y, target.x, target.y);
 					}
 
-					if (power.new_state != POWSTATE_INSTANT) {
+					if (power.new_state != Power::STATE_INSTANT) {
 						current_power = action.power;
 						act_target = target;
 						attack_anim = power.attack_anim;
@@ -682,17 +682,17 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 					}
 
 					switch (power.new_state) {
-						case POWSTATE_ATTACK:	// handle attack powers
+						case Power::STATE_ATTACK:	// handle attack powers
 							stats.cur_state = AVATAR_ATTACK;
 							break;
 
-						case POWSTATE_INSTANT:	// handle instant powers
+						case Power::STATE_INSTANT:	// handle instant powers
 							powers->activate(action.power, &stats, target);
 							hero_cooldown[action.power] = power.cooldown;
 							break;
 
 						default:
-							if (power.type == POWTYPE_BLOCK) {
+							if (power.type == Power::TYPE_BLOCK) {
 								stats.cur_state = AVATAR_BLOCK;
 								powers->activate(action.power, &stats, target);
 								stats.refresh_stats = true;
@@ -704,9 +704,9 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 					attack_cursor = (
 						stats.cur_state == AVATAR_ATTACK &&
 						!power.buff && !power.buff_teleport &&
-						power.type != POWTYPE_TRANSFORM &&
-						power.type != POWTYPE_BLOCK &&
-						!(power.starting_pos == STARTING_POS_SOURCE && power.speed == 0)
+						power.type != Power::TYPE_TRANSFORM &&
+						power.type != Power::TYPE_BLOCK &&
+						!(power.starting_pos == Power::STARTING_POS_SOURCE && power.speed == 0)
 					);
 
 				}

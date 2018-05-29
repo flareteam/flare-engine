@@ -581,9 +581,9 @@ void BehaviorStandard::updateState() {
 			e->stats.prevent_interrupt = powers->powers[power_id].prevent_interrupt;
 
 			// animation based on power type
-			if (power_state == POWSTATE_INSTANT)
+			if (power_state == Power::STATE_INSTANT)
 				e->instant_power = true;
-			else if (power_state == POWSTATE_ATTACK)
+			else if (power_state == Power::STATE_ATTACK)
 				e->setAnimation(powers->powers[power_id].attack_anim);
 
 			// sound effect based on power type
@@ -626,7 +626,7 @@ void BehaviorStandard::updateState() {
 
 			// animation is finished
 			if ((e->activeAnimation->isLastFrame() && e->stats.state_ticks == 0) ||
-			    (power_state == POWSTATE_ATTACK && e->activeAnimation->getName() != powers->powers[power_id].attack_anim) ||
+			    (power_state == Power::STATE_ATTACK && e->activeAnimation->getName() != powers->powers[power_id].attack_anim) ||
 			    e->instant_power)
 			{
 				if (!e->instant_power)

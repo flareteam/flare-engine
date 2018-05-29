@@ -297,17 +297,17 @@ void EnemyManager::handleSpawn() {
 
 		//Set level
 		if(e->stats.summoned_power_index != 0) {
-			if(powers->powers[e->stats.summoned_power_index].spawn_level_mode == SPAWN_LEVEL_MODE_FIXED)
+			if(powers->powers[e->stats.summoned_power_index].spawn_level_mode == Power::SPAWN_LEVEL_MODE_FIXED)
 				e->stats.level = powers->powers[e->stats.summoned_power_index].spawn_level_qty;
 
-			if(powers->powers[e->stats.summoned_power_index].spawn_level_mode == SPAWN_LEVEL_MODE_LEVEL) {
+			if(powers->powers[e->stats.summoned_power_index].spawn_level_mode == Power::SPAWN_LEVEL_MODE_LEVEL) {
 				if(e->stats.summoner != NULL && powers->powers[e->stats.summoned_power_index].spawn_level_every != 0) {
 					e->stats.level = powers->powers[e->stats.summoned_power_index].spawn_level_qty
 									 * (e->stats.summoner->level / powers->powers[e->stats.summoned_power_index].spawn_level_every);
 				}
 			}
 
-			if(powers->powers[e->stats.summoned_power_index].spawn_level_mode == SPAWN_LEVEL_MODE_STAT) {
+			if(powers->powers[e->stats.summoned_power_index].spawn_level_mode == Power::SPAWN_LEVEL_MODE_STAT) {
 				if(e->stats.summoner != NULL && powers->powers[e->stats.summoned_power_index].spawn_level_every != 0) {
 					int stat_val = 0;
 					for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
@@ -340,7 +340,7 @@ void EnemyManager::handleSpawn() {
 
 		//now apply post effects to the spawned enemy
 		if(e->stats.summoned_power_index > 0)
-			powers->effect(&e->stats, (espawn.summoner != NULL ? espawn.summoner : &e->stats), e->stats.summoned_power_index, e->stats.hero_ally ? SOURCE_TYPE_HERO : SOURCE_TYPE_ENEMY);
+			powers->effect(&e->stats, (espawn.summoner != NULL ? espawn.summoner : &e->stats), e->stats.summoned_power_index, e->stats.hero_ally ? Power::SOURCE_TYPE_HERO : Power::SOURCE_TYPE_ENEMY);
 
 		//apply party passives
 		//synchronise tha party passives in the pc stat block with the passives in the allies stat blocks
@@ -458,7 +458,7 @@ void EnemyManager::checkEnemiesforXP() {
 		if (enemies[i]->reward_xp) {
 			//adjust for party exp if necessary
 			float xp_multiplier = 1;
-			if(enemies[i]->kill_source_type == SOURCE_TYPE_ALLY)
+			if(enemies[i]->kill_source_type == Power::SOURCE_TYPE_ALLY)
 				xp_multiplier = static_cast<float>(PARTY_EXP_PERCENTAGE) / 100.0f;
 
 			camp->rewardXP(static_cast<int>((static_cast<float>(enemies[i]->stats.xp) * xp_multiplier)), !CampaignManager::XP_SHOW_MSG);

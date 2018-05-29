@@ -68,7 +68,7 @@ void HazardManager::logic() {
 
 		// if a moving hazard hits a wall, check for an after-effect
 		if (h[i-1]->hit_wall) {
-			if (h[i-1]->power->script_trigger == SCRIPT_TRIGGER_WALL) {
+			if (h[i-1]->power->script_trigger == Power::SCRIPT_TRIGGER_WALL) {
 				EventManager::executeScript(h[i-1]->power->script, h[i-1]->pos.x, h[i-1]->pos.y);
 			}
 
@@ -93,7 +93,7 @@ void HazardManager::logic() {
 		if (h[i]->isDangerousNow()) {
 
 			// process hazards that can hurt enemies
-			if (h[i]->source_type != SOURCE_TYPE_ENEMY) { //hero or neutral sources
+			if (h[i]->source_type != Power::SOURCE_TYPE_ENEMY) { //hero or neutral sources
 				for (unsigned int eindex = 0; eindex < enemym->enemies.size(); eindex++) {
 
 					// only check living enemies
@@ -113,7 +113,7 @@ void HazardManager::logic() {
 			}
 
 			// process hazards that can hurt the hero
-			if (h[i]->source_type != SOURCE_TYPE_HERO && h[i]->source_type != SOURCE_TYPE_ALLY) { //enemy or neutral sources
+			if (h[i]->source_type != Power::SOURCE_TYPE_HERO && h[i]->source_type != Power::SOURCE_TYPE_ALLY) { //enemy or neutral sources
 				if (pc->stats.hp > 0 && h[i]->active) {
 					if (isWithinRadius(h[i]->pos, h[i]->power->radius, pc->stats.pos)) {
 						if (!h[i]->hasEntity(pc)) {
@@ -158,7 +158,7 @@ void HazardManager::hitEntity(size_t index, const bool hit) {
 		h[index]->sfx_hit_played = true;
 	}
 
-	if (h[index]->power->script_trigger == SCRIPT_TRIGGER_HIT) {
+	if (h[index]->power->script_trigger == Power::SCRIPT_TRIGGER_HIT) {
 		EventManager::executeScript(h[index]->power->script, h[index]->pos.x, h[index]->pos.y);
 	}
 }

@@ -331,7 +331,7 @@ bool Entity::takeHit(Hazard &h) {
 		return false;
 
 	// some enemies can be invicible based on campaign status
-	if (!stats.hero && !stats.hero_ally && h.source_type != SOURCE_TYPE_ENEMY) {
+	if (!stats.hero && !stats.hero_ally && h.source_type != Power::SOURCE_TYPE_ENEMY) {
 		bool invincible = false;
 		for (size_t i = 0; i < stats.invincible_requires_status.size(); ++i) {
 			if (!camp->checkStatus(stats.invincible_requires_status[i])) {
@@ -365,16 +365,16 @@ bool Entity::takeHit(Hazard &h) {
 	// prepare the combat text
 	CombatText *combat_text = comb;
 
-	if (h.power->type == POWTYPE_MISSILE && percentChance(stats.get(STAT_REFLECT))) {
+	if (h.power->type == Power::TYPE_MISSILE && percentChance(stats.get(STAT_REFLECT))) {
 		// reflect the missile 180 degrees
 		h.setAngle(h.angle+static_cast<float>(M_PI));
 
 		// change hazard source to match the reflector's type
 		// maybe we should change the source stats pointer to the reflector's StatBlock
-		if (h.source_type == SOURCE_TYPE_HERO || h.source_type == SOURCE_TYPE_ALLY)
-			h.source_type = SOURCE_TYPE_ENEMY;
-		else if (h.source_type == SOURCE_TYPE_ENEMY)
-			h.source_type = stats.hero ? SOURCE_TYPE_HERO : SOURCE_TYPE_ALLY;
+		if (h.source_type == Power::SOURCE_TYPE_HERO || h.source_type == Power::SOURCE_TYPE_ALLY)
+			h.source_type = Power::SOURCE_TYPE_ENEMY;
+		else if (h.source_type == Power::SOURCE_TYPE_ENEMY)
+			h.source_type = stats.hero ? Power::SOURCE_TYPE_HERO : Power::SOURCE_TYPE_ALLY;
 
 		// reset the hazard ticks
 		h.lifespan = h.power->lifespan;
@@ -388,11 +388,11 @@ bool Entity::takeHit(Hazard &h) {
 
 	// if it's a miss, do nothing
 	int accuracy = h.accuracy;
-	if(powers->powers[h.power_index].mod_accuracy_mode == STAT_MODIFIER_MODE_MULTIPLY)
+	if(powers->powers[h.power_index].mod_accuracy_mode == Power::STAT_MODIFIER_MODE_MULTIPLY)
 		accuracy = (accuracy * powers->powers[h.power_index].mod_accuracy_value) / 100;
-	else if(powers->powers[h.power_index].mod_accuracy_mode == STAT_MODIFIER_MODE_ADD)
+	else if(powers->powers[h.power_index].mod_accuracy_mode == Power::STAT_MODIFIER_MODE_ADD)
 		accuracy += powers->powers[h.power_index].mod_accuracy_value;
-	else if(powers->powers[h.power_index].mod_accuracy_mode == STAT_MODIFIER_MODE_ABSOLUTE)
+	else if(powers->powers[h.power_index].mod_accuracy_mode == Power::STAT_MODIFIER_MODE_ABSOLUTE)
 		accuracy = powers->powers[h.power_index].mod_accuracy_value;
 
 	int avoidance = 0;
@@ -412,11 +412,11 @@ bool Entity::takeHit(Hazard &h) {
 	// calculate base damage
 	int dmg = randBetween(h.dmg_min, h.dmg_max);
 
-	if(powers->powers[h.power_index].mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY)
+	if(powers->powers[h.power_index].mod_damage_mode == Power::STAT_MODIFIER_MODE_MULTIPLY)
 		dmg = dmg * powers->powers[h.power_index].mod_damage_value_min / 100;
-	else if(powers->powers[h.power_index].mod_damage_mode == STAT_MODIFIER_MODE_ADD)
+	else if(powers->powers[h.power_index].mod_damage_mode == Power::STAT_MODIFIER_MODE_ADD)
 		dmg += powers->powers[h.power_index].mod_damage_value_min;
-	else if(powers->powers[h.power_index].mod_damage_mode == STAT_MODIFIER_MODE_ABSOLUTE)
+	else if(powers->powers[h.power_index].mod_damage_mode == Power::STAT_MODIFIER_MODE_ABSOLUTE)
 		dmg = randBetween(powers->powers[h.power_index].mod_damage_value_min, powers->powers[h.power_index].mod_damage_value_max);
 
 	// apply elemental resistance
@@ -477,11 +477,11 @@ bool Entity::takeHit(Hazard &h) {
 	// check for crits
 	int true_crit_chance = h.crit_chance;
 
-	if(powers->powers[h.power_index].mod_crit_mode == STAT_MODIFIER_MODE_MULTIPLY)
+	if(powers->powers[h.power_index].mod_crit_mode == Power::STAT_MODIFIER_MODE_MULTIPLY)
 		true_crit_chance = true_crit_chance * powers->powers[h.power_index].mod_crit_value / 100;
-	else if(powers->powers[h.power_index].mod_crit_mode == STAT_MODIFIER_MODE_ADD)
+	else if(powers->powers[h.power_index].mod_crit_mode == Power::STAT_MODIFIER_MODE_ADD)
 		true_crit_chance += powers->powers[h.power_index].mod_crit_value;
-	else if(powers->powers[h.power_index].mod_crit_mode == STAT_MODIFIER_MODE_ABSOLUTE)
+	else if(powers->powers[h.power_index].mod_crit_mode == Power::STAT_MODIFIER_MODE_ABSOLUTE)
 		true_crit_chance = powers->powers[h.power_index].mod_crit_value;
 
 	if (stats.effects.stun || stats.effects.speed < 100)

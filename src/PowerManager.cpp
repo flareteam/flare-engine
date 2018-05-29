@@ -184,12 +184,12 @@ void PowerManager::loadPowers() {
 
 		if (infile.key == "type") {
 			// @ATTR power.type|["fixed", "missile", "repeater", "spawn", "transform", "block"]|Defines the type of power definiton
-			if (infile.val == "fixed") powers[input_id].type = POWTYPE_FIXED;
-			else if (infile.val == "missile") powers[input_id].type = POWTYPE_MISSILE;
-			else if (infile.val == "repeater") powers[input_id].type = POWTYPE_REPEATER;
-			else if (infile.val == "spawn") powers[input_id].type = POWTYPE_SPAWN;
-			else if (infile.val == "transform") powers[input_id].type = POWTYPE_TRANSFORM;
-			else if (infile.val == "block") powers[input_id].type = POWTYPE_BLOCK;
+			if (infile.val == "fixed") powers[input_id].type = Power::TYPE_FIXED;
+			else if (infile.val == "missile") powers[input_id].type = Power::TYPE_MISSILE;
+			else if (infile.val == "repeater") powers[input_id].type = Power::TYPE_REPEATER;
+			else if (infile.val == "spawn") powers[input_id].type = Power::TYPE_SPAWN;
+			else if (infile.val == "transform") powers[input_id].type = Power::TYPE_TRANSFORM;
+			else if (infile.val == "block") powers[input_id].type = Power::TYPE_BLOCK;
 			else infile.error("PowerManager: Unknown type '%s'", infile.val.c_str());
 		}
 		else if (infile.key == "name")
@@ -203,9 +203,9 @@ void PowerManager::loadPowers() {
 			powers[input_id].icon = toInt(infile.val);
 		else if (infile.key == "new_state") {
 			// @ATTR power.new_state|predefined_string|When power is used, hero or enemy will change to this state. Must be one of the states ["instant", user defined]
-			if (infile.val == "instant") powers[input_id].new_state = POWSTATE_INSTANT;
+			if (infile.val == "instant") powers[input_id].new_state = Power::STATE_INSTANT;
 			else {
-				powers[input_id].new_state = POWSTATE_ATTACK;
+				powers[input_id].new_state = Power::STATE_ATTACK;
 				powers[input_id].attack_anim = infile.val;
 			}
 		}
@@ -222,9 +222,9 @@ void PowerManager::loadPowers() {
 			powers[input_id].face = toBool(infile.val);
 		else if (infile.key == "source_type") {
 			// @ATTR power.source_type|["hero", "neutral", "enemy"]|Determines which entities the power can effect.
-			if (infile.val == "hero") powers[input_id].source_type = SOURCE_TYPE_HERO;
-			else if (infile.val == "neutral") powers[input_id].source_type = SOURCE_TYPE_NEUTRAL;
-			else if (infile.val == "enemy") powers[input_id].source_type = SOURCE_TYPE_ENEMY;
+			if (infile.val == "hero") powers[input_id].source_type = Power::SOURCE_TYPE_HERO;
+			else if (infile.val == "neutral") powers[input_id].source_type = Power::SOURCE_TYPE_NEUTRAL;
+			else if (infile.val == "enemy") powers[input_id].source_type = Power::SOURCE_TYPE_ENEMY;
 			else infile.error("PowerManager: Unknown source_type '%s'", infile.val.c_str());
 		}
 		else if (infile.key == "beacon")
@@ -238,11 +238,11 @@ void PowerManager::loadPowers() {
 			powers[input_id].passive = toBool(infile.val);
 		else if (infile.key == "passive_trigger") {
 			// @ATTR power.passive_trigger|["on_block", "on_hit", "on_halfdeath", "on_joincombat", "on_death"]|This will only activate a passive power under a certain condition.
-			if (infile.val == "on_block") powers[input_id].passive_trigger = TRIGGER_BLOCK;
-			else if (infile.val == "on_hit") powers[input_id].passive_trigger = TRIGGER_HIT;
-			else if (infile.val == "on_halfdeath") powers[input_id].passive_trigger = TRIGGER_HALFDEATH;
-			else if (infile.val == "on_joincombat") powers[input_id].passive_trigger = TRIGGER_JOINCOMBAT;
-			else if (infile.val == "on_death") powers[input_id].passive_trigger = TRIGGER_DEATH;
+			if (infile.val == "on_block") powers[input_id].passive_trigger = Power::TRIGGER_BLOCK;
+			else if (infile.val == "on_hit") powers[input_id].passive_trigger = Power::TRIGGER_HIT;
+			else if (infile.val == "on_halfdeath") powers[input_id].passive_trigger = Power::TRIGGER_HALFDEATH;
+			else if (infile.val == "on_joincombat") powers[input_id].passive_trigger = Power::TRIGGER_JOINCOMBAT;
+			else if (infile.val == "on_death") powers[input_id].passive_trigger = Power::TRIGGER_DEATH;
 			else infile.error("PowerManager: Unknown passive trigger '%s'", infile.val.c_str());
 		}
 		else if (infile.key == "meta_power") {
@@ -436,9 +436,9 @@ void PowerManager::loadPowers() {
 		}
 		else if (infile.key == "starting_pos") {
 			// @ATTR power.starting_pos|["source", "target", "melee"]|Start position for hazard
-			if (infile.val == "source")      powers[input_id].starting_pos = STARTING_POS_SOURCE;
-			else if (infile.val == "target") powers[input_id].starting_pos = STARTING_POS_TARGET;
-			else if (infile.val == "melee")  powers[input_id].starting_pos = STARTING_POS_MELEE;
+			if (infile.val == "source")      powers[input_id].starting_pos = Power::STARTING_POS_SOURCE;
+			else if (infile.val == "target") powers[input_id].starting_pos = Power::STARTING_POS_TARGET;
+			else if (infile.val == "melee")  powers[input_id].starting_pos = Power::STARTING_POS_MELEE;
 			else infile.error("PowerManager: Unknown starting_pos '%s'", infile.val.c_str());
 		}
 		else if (infile.key == "relative_pos") {
@@ -596,15 +596,15 @@ void PowerManager::loadPowers() {
 		else if (infile.key == "spawn_limit") {
 			// @ATTR power.spawn_limit|["fixed", "stat", "unlimited"], [int, predefined_string] : Mode, Value|The maximum number of creatures that can be spawned and alive from this power. "fixed" takes an integer. "stat" takes a primary stat as a string (e.g. "physical").
 			std::string mode = popFirstString(infile.val);
-			if (mode == "fixed") powers[input_id].spawn_limit_mode = SPAWN_LIMIT_MODE_FIXED;
-			else if (mode == "stat") powers[input_id].spawn_limit_mode = SPAWN_LIMIT_MODE_STAT;
-			else if (mode == "unlimited") powers[input_id].spawn_limit_mode = SPAWN_LIMIT_MODE_UNLIMITED;
+			if (mode == "fixed") powers[input_id].spawn_limit_mode = Power::SPAWN_LIMIT_MODE_FIXED;
+			else if (mode == "stat") powers[input_id].spawn_limit_mode = Power::SPAWN_LIMIT_MODE_STAT;
+			else if (mode == "unlimited") powers[input_id].spawn_limit_mode = Power::SPAWN_LIMIT_MODE_UNLIMITED;
 			else infile.error("PowerManager: Unknown spawn_limit_mode '%s'", mode.c_str());
 
-			if(powers[input_id].spawn_limit_mode != SPAWN_LIMIT_MODE_UNLIMITED) {
+			if(powers[input_id].spawn_limit_mode != Power::SPAWN_LIMIT_MODE_UNLIMITED) {
 				powers[input_id].spawn_limit_qty = popFirstInt(infile.val);
 
-				if(powers[input_id].spawn_limit_mode == SPAWN_LIMIT_MODE_STAT) {
+				if(powers[input_id].spawn_limit_mode == Power::SPAWN_LIMIT_MODE_STAT) {
 					powers[input_id].spawn_limit_every = popFirstInt(infile.val);
 
 					std::string stat = popFirstString(infile.val);
@@ -622,19 +622,19 @@ void PowerManager::loadPowers() {
 		else if (infile.key == "spawn_level") {
 			// @ATTR power.spawn_level|["default", "fixed", "stat", "level"], [int, predefined_string] : Mode, Value|The level of spawned creatures. "fixed" and "level" take an integer. "stat" takes a primary stat as a string (e.g. "physical").
 			std::string mode = popFirstString(infile.val);
-			if (mode == "default") powers[input_id].spawn_level_mode = SPAWN_LEVEL_MODE_DEFAULT;
-			else if (mode == "fixed") powers[input_id].spawn_level_mode = SPAWN_LEVEL_MODE_FIXED;
-			else if (mode == "stat") powers[input_id].spawn_level_mode = SPAWN_LEVEL_MODE_STAT;
-			else if (mode == "level") powers[input_id].spawn_level_mode = SPAWN_LEVEL_MODE_LEVEL;
+			if (mode == "default") powers[input_id].spawn_level_mode = Power::SPAWN_LEVEL_MODE_DEFAULT;
+			else if (mode == "fixed") powers[input_id].spawn_level_mode = Power::SPAWN_LEVEL_MODE_FIXED;
+			else if (mode == "stat") powers[input_id].spawn_level_mode = Power::SPAWN_LEVEL_MODE_STAT;
+			else if (mode == "level") powers[input_id].spawn_level_mode = Power::SPAWN_LEVEL_MODE_LEVEL;
 			else infile.error("PowerManager: Unknown spawn_level_mode '%s'", mode.c_str());
 
-			if(powers[input_id].spawn_level_mode != SPAWN_LEVEL_MODE_DEFAULT) {
+			if(powers[input_id].spawn_level_mode != Power::SPAWN_LEVEL_MODE_DEFAULT) {
 				powers[input_id].spawn_level_qty = popFirstInt(infile.val);
 
-				if(powers[input_id].spawn_level_mode != SPAWN_LEVEL_MODE_FIXED) {
+				if(powers[input_id].spawn_level_mode != Power::SPAWN_LEVEL_MODE_FIXED) {
 					powers[input_id].spawn_level_every = popFirstInt(infile.val);
 
-					if(powers[input_id].spawn_level_mode == SPAWN_LEVEL_MODE_STAT) {
+					if(powers[input_id].spawn_level_mode == Power::SPAWN_LEVEL_MODE_STAT) {
 						std::string stat = popFirstString(infile.val);
 						size_t prim_stat_index = getPrimaryStatIndex(stat);
 
@@ -662,9 +662,9 @@ void PowerManager::loadPowers() {
 		else if (infile.key == "modifier_accuracy") {
 			// @ATTR power.modifier_accuracy|["multiply", "add", "absolute"], int : Mode, Value|Changes this power's accuracy.
 			std::string mode = popFirstString(infile.val);
-			if(mode == "multiply") powers[input_id].mod_accuracy_mode = STAT_MODIFIER_MODE_MULTIPLY;
-			else if(mode == "add") powers[input_id].mod_accuracy_mode = STAT_MODIFIER_MODE_ADD;
-			else if(mode == "absolute") powers[input_id].mod_accuracy_mode = STAT_MODIFIER_MODE_ABSOLUTE;
+			if(mode == "multiply") powers[input_id].mod_accuracy_mode = Power::STAT_MODIFIER_MODE_MULTIPLY;
+			else if(mode == "add") powers[input_id].mod_accuracy_mode = Power::STAT_MODIFIER_MODE_ADD;
+			else if(mode == "absolute") powers[input_id].mod_accuracy_mode = Power::STAT_MODIFIER_MODE_ABSOLUTE;
 			else infile.error("PowerManager: Unknown stat_modifier_mode '%s'", mode.c_str());
 
 			powers[input_id].mod_accuracy_value = popFirstInt(infile.val);
@@ -672,9 +672,9 @@ void PowerManager::loadPowers() {
 		else if (infile.key == "modifier_damage") {
 			// @ATTR power.modifier_damage|["multiply", "add", "absolute"], int, int : Mode, Min, Max|Changes this power's damage. The "Max" value is ignored, except in the case of "absolute" modifiers.
 			std::string mode = popFirstString(infile.val);
-			if(mode == "multiply") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_MULTIPLY;
-			else if(mode == "add") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_ADD;
-			else if(mode == "absolute") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_ABSOLUTE;
+			if(mode == "multiply") powers[input_id].mod_damage_mode = Power::STAT_MODIFIER_MODE_MULTIPLY;
+			else if(mode == "add") powers[input_id].mod_damage_mode = Power::STAT_MODIFIER_MODE_ADD;
+			else if(mode == "absolute") powers[input_id].mod_damage_mode = Power::STAT_MODIFIER_MODE_ABSOLUTE;
 			else infile.error("PowerManager: Unknown stat_modifier_mode '%s'", mode.c_str());
 
 			powers[input_id].mod_damage_value_min = popFirstInt(infile.val);
@@ -683,9 +683,9 @@ void PowerManager::loadPowers() {
 		else if (infile.key == "modifier_critical") {
 			// @ATTR power.modifier_critical|["multiply", "add", "absolute"], int : Mode, Value|Changes the chance that this power will land a critical hit.
 			std::string mode = popFirstString(infile.val);
-			if(mode == "multiply") powers[input_id].mod_crit_mode = STAT_MODIFIER_MODE_MULTIPLY;
-			else if(mode == "add") powers[input_id].mod_crit_mode = STAT_MODIFIER_MODE_ADD;
-			else if(mode == "absolute") powers[input_id].mod_crit_mode = STAT_MODIFIER_MODE_ABSOLUTE;
+			if(mode == "multiply") powers[input_id].mod_crit_mode = Power::STAT_MODIFIER_MODE_MULTIPLY;
+			else if(mode == "add") powers[input_id].mod_crit_mode = Power::STAT_MODIFIER_MODE_ADD;
+			else if(mode == "absolute") powers[input_id].mod_crit_mode = Power::STAT_MODIFIER_MODE_ABSOLUTE;
 			else infile.error("PowerManager: Unknown stat_modifier_mode '%s'", mode.c_str());
 
 			powers[input_id].mod_crit_value = popFirstInt(infile.val);
@@ -709,9 +709,9 @@ void PowerManager::loadPowers() {
 		else if (infile.key == "script") {
 			// @ATTR power.script|["on_cast", "on_hit", "on_wall"], filename : Trigger, Filename|Loads and executes a script file when the trigger is activated.
 			std::string trigger = popFirstString(infile.val);
-			if (trigger == "on_cast") powers[input_id].script_trigger = SCRIPT_TRIGGER_CAST;
-			else if (trigger == "on_hit") powers[input_id].script_trigger = SCRIPT_TRIGGER_HIT;
-			else if (trigger == "on_wall") powers[input_id].script_trigger = SCRIPT_TRIGGER_WALL;
+			if (trigger == "on_cast") powers[input_id].script_trigger = Power::SCRIPT_TRIGGER_CAST;
+			else if (trigger == "on_hit") powers[input_id].script_trigger = Power::SCRIPT_TRIGGER_HIT;
+			else if (trigger == "on_wall") powers[input_id].script_trigger = Power::SCRIPT_TRIGGER_WALL;
 			else infile.error("PowerManager: Unknown script trigger '%s'", trigger.c_str());
 
 			powers[input_id].script = popFirstString(infile.val);
@@ -856,9 +856,9 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, const FPoin
 	haz->power = &powers[power_index];
 
 	if (powers[power_index].source_type == -1) {
-		if (src_stats->hero) haz->source_type = SOURCE_TYPE_HERO;
-		else if (src_stats->hero_ally) haz->source_type = SOURCE_TYPE_ALLY;
-		else haz->source_type = SOURCE_TYPE_ENEMY;
+		if (src_stats->hero) haz->source_type = Power::SOURCE_TYPE_HERO;
+		else if (src_stats->hero_ally) haz->source_type = Power::SOURCE_TYPE_ALLY;
+		else haz->source_type = Power::SOURCE_TYPE_ENEMY;
 	}
 	else {
 		haz->source_type = powers[power_index].source_type;
@@ -897,13 +897,13 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, const FPoin
 	haz->active = !powers[power_index].no_attack;
 
 	// hazard starting position
-	if (powers[power_index].starting_pos == STARTING_POS_SOURCE) {
+	if (powers[power_index].starting_pos == Power::STARTING_POS_SOURCE) {
 		haz->pos = src_stats->pos;
 	}
-	else if (powers[power_index].starting_pos == STARTING_POS_TARGET) {
+	else if (powers[power_index].starting_pos == Power::STARTING_POS_TARGET) {
 		haz->pos = clampDistance(powers[power_index].target_range,src_stats->pos,target);
 	}
-	else if (powers[power_index].starting_pos == STARTING_POS_MELEE) {
+	else if (powers[power_index].starting_pos == Power::STARTING_POS_MELEE) {
 		haz->pos = calcVector(src_stats->pos, src_stats->direction, src_stats->melee_range);
 	}
 
@@ -947,7 +947,7 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, const FPoint& tar
 
 	// handle all other effects
 	if (powers[power_index].buff || (powers[power_index].buff_party && (src_stats->hero_ally || src_stats->enemy_ally))) {
-		int source_type = src_stats->hero ? SOURCE_TYPE_HERO : (src_stats->hero_ally ? SOURCE_TYPE_ALLY : SOURCE_TYPE_ENEMY);
+		int source_type = src_stats->hero ? Power::SOURCE_TYPE_HERO : (src_stats->hero_ally ? Power::SOURCE_TYPE_ALLY : Power::SOURCE_TYPE_ENEMY);
 		effect(src_stats, src_stats, power_index, source_type);
 	}
 
@@ -1005,11 +1005,11 @@ bool PowerManager::effect(StatBlock *target_stats, StatBlock *caster_stats, int 
 					continue;
 
 				// charge shield to max ment weapon damage * damage multiplier
-				if(pwr.mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY)
+				if(pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_MULTIPLY)
 					magnitude = caster_stats->getDamageMax(pwr.base_damage) * pwr.mod_damage_value_min / 100;
-				else if(pwr.mod_damage_mode == STAT_MODIFIER_MODE_ADD)
+				else if(pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_ADD)
 					magnitude = caster_stats->getDamageMax(pwr.base_damage) + pwr.mod_damage_value_min;
-				else if(pwr.mod_damage_mode == STAT_MODIFIER_MODE_ABSOLUTE)
+				else if(pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_ABSOLUTE)
 					magnitude = randBetween(pwr.mod_damage_value_min, pwr.mod_damage_value_max);
 				else
 					magnitude = caster_stats->getDamageMax(pwr.base_damage);
@@ -1023,11 +1023,11 @@ bool PowerManager::effect(StatBlock *target_stats, StatBlock *caster_stats, int 
 				// heal for ment weapon damage * damage multiplier
 				magnitude = randBetween(caster_stats->getDamageMin(pwr.base_damage), caster_stats->getDamageMax(pwr.base_damage));
 
-				if(pwr.mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY)
+				if(pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_MULTIPLY)
 					magnitude = magnitude * pwr.mod_damage_value_min / 100;
-				else if(pwr.mod_damage_mode == STAT_MODIFIER_MODE_ADD)
+				else if(pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_ADD)
 					magnitude += pwr.mod_damage_value_min;
-				else if(pwr.mod_damage_mode == STAT_MODIFIER_MODE_ABSOLUTE)
+				else if(pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_ABSOLUTE)
 					magnitude = randBetween(pwr.mod_damage_value_min, pwr.mod_damage_value_max);
 
 				comb->addString(msg->get("+%d HP",magnitude), dest_stats->pos, CombatText::MSG_BUFF);
@@ -1100,7 +1100,7 @@ bool PowerManager::fixed(int power_index, StatBlock *src_stats, const FPoint& ta
  */
 bool PowerManager::missile(int power_index, StatBlock *src_stats, const FPoint& target) {
 	FPoint src;
-	if (powers[power_index].starting_pos == STARTING_POS_TARGET) {
+	if (powers[power_index].starting_pos == Power::STARTING_POS_TARGET) {
 		src = target;
 	}
 	else {
@@ -1215,13 +1215,13 @@ bool PowerManager::spawn(int power_index, StatBlock *src_stats, const FPoint& ta
 	espawn.summoner = src_stats;
 
 	// enemy spawning position
-	if (powers[power_index].starting_pos == STARTING_POS_SOURCE) {
+	if (powers[power_index].starting_pos == Power::STARTING_POS_SOURCE) {
 		espawn.pos = src_stats->pos;
 	}
-	else if (powers[power_index].starting_pos == STARTING_POS_TARGET) {
+	else if (powers[power_index].starting_pos == Power::STARTING_POS_TARGET) {
 		espawn.pos = target;
 	}
-	else if (powers[power_index].starting_pos == STARTING_POS_MELEE) {
+	else if (powers[power_index].starting_pos == Power::STARTING_POS_MELEE) {
 		espawn.pos = calcVector(src_stats->pos, src_stats->direction, src_stats->melee_range);
 	}
 
@@ -1330,9 +1330,9 @@ bool PowerManager::block(int power_index, StatBlock *src_stats) {
 	src_stats->block_power = power_index;
 
 	// apply any attached effects
-	// passive_trigger MUST be "TRIGGER_BLOCK", since that is how we will later remove effects added by blocking
-	powers[power_index].passive_trigger = TRIGGER_BLOCK;
-	effect(src_stats, src_stats, power_index, SOURCE_TYPE_HERO);
+	// passive_trigger MUST be "Power::TRIGGER_BLOCK", since that is how we will later remove effects added by blocking
+	powers[power_index].passive_trigger = Power::TRIGGER_BLOCK;
+	effect(src_stats, src_stats, power_index, Power::SOURCE_TYPE_HERO);
 
 	// If there's a sound effect, play it here
 	playSound(power_index);
@@ -1369,10 +1369,10 @@ bool PowerManager::activate(int power_index, StatBlock *src_stats, const FPoint&
 	if (src_stats->hp > 0 && powers[power_index].sacrifice == false && powers[power_index].requires_hp >= src_stats->hp)
 		return false;
 
-	if (powers[power_index].type == POWTYPE_BLOCK)
+	if (powers[power_index].type == Power::TYPE_BLOCK)
 		return block(power_index, src_stats);
 
-	if (powers[power_index].script_trigger == SCRIPT_TRIGGER_CAST) {
+	if (powers[power_index].script_trigger == Power::SCRIPT_TRIGGER_CAST) {
 		EventManager::executeScript(powers[power_index].script, src_stats->pos.x, src_stats->pos.y);
 	}
 
@@ -1387,15 +1387,15 @@ bool PowerManager::activate(int power_index, StatBlock *src_stats, const FPoint&
 	// logic for different types of powers are very different.  We allow these
 	// separate functions to handle the details.
 	switch(powers[power_index].type) {
-		case POWTYPE_FIXED:
+		case Power::TYPE_FIXED:
 			return fixed(power_index, src_stats, new_target);
-		case POWTYPE_MISSILE:
+		case Power::TYPE_MISSILE:
 			return missile(power_index, src_stats, new_target);
-		case POWTYPE_REPEATER:
+		case Power::TYPE_REPEATER:
 			return repeater(power_index, src_stats, new_target);
-		case POWTYPE_SPAWN:
+		case Power::TYPE_SPAWN:
 			return spawn(power_index, src_stats, new_target);
-		case POWTYPE_TRANSFORM:
+		case Power::TYPE_TRANSFORM:
 			return transform(power_index, src_stats, new_target);
 	}
 
@@ -1476,17 +1476,17 @@ void PowerManager::activatePassiveByTrigger(int power_id, StatBlock *src_stats, 
 			if (src_stats->effects.triggered_others) return;
 			else triggered_others = true;
 		}
-		else if (trigger == TRIGGER_BLOCK && !src_stats->effects.triggered_block) return;
-		else if (trigger == TRIGGER_HIT && !src_stats->effects.triggered_hit) return;
-		else if (trigger == TRIGGER_HALFDEATH && !src_stats->effects.triggered_halfdeath) {
+		else if (trigger == Power::TRIGGER_BLOCK && !src_stats->effects.triggered_block) return;
+		else if (trigger == Power::TRIGGER_HIT && !src_stats->effects.triggered_hit) return;
+		else if (trigger == Power::TRIGGER_HALFDEATH && !src_stats->effects.triggered_halfdeath) {
 			if (src_stats->hp > src_stats->get(STAT_HP_MAX)/2) return;
 			else src_stats->effects.triggered_halfdeath = true;
 		}
-		else if (trigger == TRIGGER_JOINCOMBAT && !src_stats->effects.triggered_joincombat) {
+		else if (trigger == Power::TRIGGER_JOINCOMBAT && !src_stats->effects.triggered_joincombat) {
 			if (!src_stats->in_combat) return;
 			else src_stats->effects.triggered_joincombat = true;
 		}
-		else if (trigger == TRIGGER_DEATH && !src_stats->effects.triggered_death) return;
+		else if (trigger == Power::TRIGGER_DEATH && !src_stats->effects.triggered_death) return;
 
 		activate(power_id, src_stats, src_stats->pos);
 		src_stats->refresh_stats = true;
@@ -1526,7 +1526,7 @@ void PowerManager::activatePassivePostPowers(StatBlock *src_stats) {
 		if (post_power <= 0)
 			continue;
 
-		if (powers[post_power].new_state != POWSTATE_INSTANT)
+		if (powers[post_power].new_state != Power::STATE_INSTANT)
 			continue;
 
 		if (src_stats->getPowerCooldown(post_power) == 0 && src_stats->canUsePower(post_power)) {

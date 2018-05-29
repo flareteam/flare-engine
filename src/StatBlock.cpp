@@ -721,7 +721,7 @@ void StatBlock::logic() {
 				   ((enemym->enemies[i]->stats.hero_ally && hero) || (enemym->enemies[i]->stats.enemy_ally && enemym->enemies[i]->stats.summoner == this)) &&
 				   (buff_power->buff_party_power_id == 0 || buff_power->buff_party_power_id == enemym->enemies[i]->stats.summoned_power_index)
 				) {
-					powers->effect(&enemym->enemies[i]->stats, this, power_index, (hero ? SOURCE_TYPE_HERO : SOURCE_TYPE_ENEMY));
+					powers->effect(&enemym->enemies[i]->stats, this, power_index, (hero ? Power::SOURCE_TYPE_HERO : Power::SOURCE_TYPE_ENEMY));
 				}
 			}
 		}
@@ -930,7 +930,7 @@ bool StatBlock::canUsePower(int powerid, bool allow_passive) const {
 			&& (!power.requires_corpse || (target_corpse && target_corpse->corpse_ticks > 0) || (target_nearest_corpse && powers->checkNearestTargeting(power, this, true) && target_nearest_corpse->corpse_ticks > 0))
 			&& (checkRequiredSpawns(power.requires_spawns))
 			&& (menu_powers && menu_powers->meetsUsageStats(powerid))
-			&& (power.type == POWTYPE_SPAWN ? !summonLimitReached(powerid) : true)
+			&& (power.type == Power::TYPE_SPAWN ? !summonLimitReached(powerid) : true)
 			&& !(power.spawn_type == "untransform" && !transformed)
 			&& std::includes(equip_flags.begin(), equip_flags.end(), power.requires_flags.begin(), power.requires_flags.end())
 			&& (!power.buff_party || (power.buff_party && enemym && enemym->checkPartyMembers()))
@@ -1056,9 +1056,9 @@ bool StatBlock::summonLimitReached(int power_id) const {
 
 	int max_summons = 0;
 
-	if(spawn_power->spawn_limit_mode == SPAWN_LIMIT_MODE_FIXED)
+	if(spawn_power->spawn_limit_mode == Power::SPAWN_LIMIT_MODE_FIXED)
 		max_summons = spawn_power->spawn_limit_qty;
-	else if(spawn_power->spawn_limit_mode == SPAWN_LIMIT_MODE_STAT) {
+	else if(spawn_power->spawn_limit_mode == Power::SPAWN_LIMIT_MODE_STAT) {
 		int stat_val = 1;
 		for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
 			if (spawn_power->spawn_limit_stat == i) {
@@ -1140,7 +1140,7 @@ AIPower* StatBlock::getAIPower(AI_POWER ai_type) {
 		if (powers_ai[i].ticks > 0)
 			continue;
 
-		if (powers->powers[powers_ai[i].id].type == POWTYPE_SPAWN) {
+		if (powers->powers[powers_ai[i].id].type == Power::TYPE_SPAWN) {
 			if (summonLimitReached(powers_ai[i].id))
 				continue;
 		}

@@ -37,43 +37,6 @@ class Animation;
 class AnimationSet;
 class Hazard;
 
-const int POWTYPE_FIXED = 0;
-const int POWTYPE_MISSILE = 1;
-const int POWTYPE_REPEATER = 2;
-const int POWTYPE_SPAWN = 3;
-const int POWTYPE_TRANSFORM = 4;
-const int POWTYPE_EFFECT = 5;
-const int POWTYPE_BLOCK = 6;
-
-const int POWSTATE_INSTANT = 1;
-const int POWSTATE_ATTACK = 2;
-
-// when casting a spell/power, the hazard starting position is
-// either the source (the avatar or enemy), the target (mouse click position),
-// or melee range in the direction that the source is facing
-const int STARTING_POS_SOURCE = 0;
-const int STARTING_POS_TARGET = 1;
-const int STARTING_POS_MELEE = 2;
-
-const int TRIGGER_BLOCK = 0;
-const int TRIGGER_HIT = 1;
-const int TRIGGER_HALFDEATH = 2;
-const int TRIGGER_JOINCOMBAT = 3;
-const int TRIGGER_DEATH = 4;
-
-const int SPAWN_LIMIT_MODE_FIXED = 0;
-const int SPAWN_LIMIT_MODE_STAT = 1;
-const int SPAWN_LIMIT_MODE_UNLIMITED = 2;
-
-const int SPAWN_LEVEL_MODE_DEFAULT = 0;
-const int SPAWN_LEVEL_MODE_FIXED = 1;
-const int SPAWN_LEVEL_MODE_STAT = 2;
-const int SPAWN_LEVEL_MODE_LEVEL = 3;
-
-const int STAT_MODIFIER_MODE_MULTIPLY = 0;
-const int STAT_MODIFIER_MODE_ADD = 1;
-const int STAT_MODIFIER_MODE_ABSOLUTE = 2;
-
 class PostEffect {
 public:
 	std::string id;
@@ -113,6 +76,67 @@ public:
 
 class Power {
 public:
+	enum {
+		TYPE_FIXED = 0,
+		TYPE_MISSILE = 1,
+		TYPE_REPEATER = 2,
+		TYPE_SPAWN = 3,
+		TYPE_TRANSFORM = 4,
+		TYPE_EFFECT = 5,
+		TYPE_BLOCK = 6
+	};
+
+	enum {
+		STATE_INSTANT = 1,
+		STATE_ATTACK = 2
+	};
+
+	enum {
+		STARTING_POS_SOURCE = 0,
+		STARTING_POS_TARGET = 1,
+		STARTING_POS_MELEE = 2
+	};
+
+	enum {
+		TRIGGER_BLOCK = 0,
+		TRIGGER_HIT = 1,
+		TRIGGER_HALFDEATH = 2,
+		TRIGGER_JOINCOMBAT = 3,
+		TRIGGER_DEATH = 4
+	};
+
+	enum {
+		SPAWN_LIMIT_MODE_FIXED = 0,
+		SPAWN_LIMIT_MODE_STAT = 1,
+		SPAWN_LIMIT_MODE_UNLIMITED = 2
+	};
+
+	enum {
+		SPAWN_LEVEL_MODE_DEFAULT = 0,
+		SPAWN_LEVEL_MODE_FIXED = 1,
+		SPAWN_LEVEL_MODE_STAT = 2,
+		SPAWN_LEVEL_MODE_LEVEL = 3
+	};
+
+	enum {
+		STAT_MODIFIER_MODE_MULTIPLY = 0,
+		STAT_MODIFIER_MODE_ADD = 1,
+		STAT_MODIFIER_MODE_ABSOLUTE = 2
+	};
+
+	enum {
+		SOURCE_TYPE_HERO = 0,
+		SOURCE_TYPE_NEUTRAL = 1,
+		SOURCE_TYPE_ENEMY = 2,
+		SOURCE_TYPE_ALLY = 3
+	};
+
+	enum {
+		SCRIPT_TRIGGER_CAST = 0,
+		SCRIPT_TRIGGER_HIT = 1,
+		SCRIPT_TRIGGER_WALL = 2
+	};
+
 	// base info
 	bool is_empty;
 	int type; // what kind of activate() this is

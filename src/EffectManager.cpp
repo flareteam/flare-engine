@@ -45,7 +45,7 @@ Effect::Effect()
 	, trigger(-1)
 	, render_above(false)
 	, passive_id(0)
-	, source_type(SOURCE_TYPE_HERO)
+	, source_type(Power::SOURCE_TYPE_HERO)
 	, group_stack(false)
 	, color_mod(255, 255, 255)
 	, alpha_mod(255)
@@ -285,8 +285,8 @@ void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, in
 }
 
 void EffectManager::addItemEffect(EffectDef &effect, int duration, int magnitude) {
-	// only the hero can wear items, so use SOURCE_TYPE_HERO
-	addEffectInternal(effect, duration, magnitude, SOURCE_TYPE_HERO, true, NO_POWER);
+	// only the hero can wear items, so use Power::SOURCE_TYPE_HERO
+	addEffectInternal(effect, duration, magnitude, Power::SOURCE_TYPE_HERO, true, NO_POWER);
 }
 
 void EffectManager::addEffectInternal(EffectDef &effect, int duration, int magnitude, int source_type, bool item, size_t power_id) {

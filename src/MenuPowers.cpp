@@ -858,15 +858,15 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 				if (pwr.base_damage == DAMAGE_TYPES.size())
 					continue;
 
-				if (pwr.mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY) {
+				if (pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_MULTIPLY) {
 					int magnitude = stats->getDamageMax(pwr.base_damage) * pwr.mod_damage_value_min / 100;
 					ss << magnitude;
 				}
-				else if (pwr.mod_damage_mode == STAT_MODIFIER_MODE_ADD) {
+				else if (pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_ADD) {
 					int magnitude = stats->getDamageMax(pwr.base_damage) + pwr.mod_damage_value_min;
 					ss << magnitude;
 				}
-				else if (pwr.mod_damage_mode == STAT_MODIFIER_MODE_ABSOLUTE) {
+				else if (pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_ABSOLUTE) {
 					if (pwr.mod_damage_value_max == 0 || pwr.mod_damage_value_min == pwr.mod_damage_value_max)
 						ss << pwr.mod_damage_value_min;
 					else
@@ -885,17 +885,17 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 				int mag_min = stats->getDamageMin(pwr.base_damage);
 				int mag_max = stats->getDamageMax(pwr.base_damage);
 
-				if (pwr.mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY) {
+				if (pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_MULTIPLY) {
 					mag_min = mag_min * pwr.mod_damage_value_min / 100;
 					mag_max = mag_max * pwr.mod_damage_value_min / 100;
 					ss << mag_min << "-" << mag_max;
 				}
-				else if (pwr.mod_damage_mode == STAT_MODIFIER_MODE_ADD) {
+				else if (pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_ADD) {
 					mag_min = mag_min + pwr.mod_damage_value_min;
 					mag_max = mag_max + pwr.mod_damage_value_min;
 					ss << mag_min << "-" << mag_max;
 				}
-				else if (pwr.mod_damage_mode == STAT_MODIFIER_MODE_ABSOLUTE) {
+				else if (pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_ABSOLUTE) {
 					if (pwr.mod_damage_value_max == 0 || pwr.mod_damage_value_min == pwr.mod_damage_value_max)
 						ss << pwr.mod_damage_value_min;
 					else
@@ -940,12 +940,12 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 		}
 	}
 
-	if (pwr.use_hazard || pwr.type == POWTYPE_REPEATER) {
+	if (pwr.use_hazard || pwr.type == Power::TYPE_REPEATER) {
 		std::stringstream ss;
 
 		// modifier_damage
 		if (pwr.mod_damage_mode > -1) {
-			if (pwr.mod_damage_mode == STAT_MODIFIER_MODE_ADD && pwr.mod_damage_value_min > 0)
+			if (pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_ADD && pwr.mod_damage_value_min > 0)
 				ss << "+";
 
 			if (pwr.mod_damage_value_max == 0 || pwr.mod_damage_value_min == pwr.mod_damage_value_max) {
@@ -955,7 +955,7 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 				ss << pwr.mod_damage_value_min << "-" << pwr.mod_damage_value_max;
 			}
 
-			if (pwr.mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY) {
+			if (pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_MULTIPLY) {
 				ss << "%";
 			}
 			ss << " ";
@@ -964,7 +964,7 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 				ss << DAMAGE_TYPES[pwr.base_damage].name;
 			}
 
-			if (pwr.count > 1 && pwr.type != POWTYPE_REPEATER)
+			if (pwr.count > 1 && pwr.type != Power::TYPE_REPEATER)
 				ss << " (x" << pwr.count << ")";
 
 			if (!ss.str().empty())
@@ -975,12 +975,12 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 		if (pwr.mod_accuracy_mode > -1) {
 			ss.str("");
 
-			if (pwr.mod_accuracy_mode == STAT_MODIFIER_MODE_ADD && pwr.mod_accuracy_value > 0)
+			if (pwr.mod_accuracy_mode == Power::STAT_MODIFIER_MODE_ADD && pwr.mod_accuracy_value > 0)
 				ss << "+";
 
 			ss << pwr.mod_accuracy_value;
 
-			if (pwr.mod_accuracy_mode == STAT_MODIFIER_MODE_MULTIPLY) {
+			if (pwr.mod_accuracy_mode == Power::STAT_MODIFIER_MODE_MULTIPLY) {
 				ss << "%";
 			}
 			ss << " ";
@@ -995,12 +995,12 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 		if (pwr.mod_crit_mode > -1) {
 			ss.str("");
 
-			if (pwr.mod_crit_mode == STAT_MODIFIER_MODE_ADD && pwr.mod_crit_value > 0)
+			if (pwr.mod_crit_mode == Power::STAT_MODIFIER_MODE_ADD && pwr.mod_crit_value > 0)
 				ss << "+";
 
 			ss << pwr.mod_crit_value;
 
-			if (pwr.mod_crit_mode == STAT_MODIFIER_MODE_MULTIPLY) {
+			if (pwr.mod_crit_mode == Power::STAT_MODIFIER_MODE_MULTIPLY) {
 				ss << "%";
 			}
 			ss << " ";
