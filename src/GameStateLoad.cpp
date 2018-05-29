@@ -54,7 +54,8 @@ bool compareSaveDirs(const std::string& dir1, const std::string& dir2) {
 GameSlot::GameSlot()
 	: id(0)
 	, time_played(0)
-	, preview_turn_ticks(GAMESLOT_PREVIEW_TURN_DURATION) {
+	, preview_turn_duration(MAX_FRAMES_PER_SEC/2)
+	, preview_turn_ticks(preview_turn_duration) {
 }
 
 GameSlot::~GameSlot() {
@@ -421,7 +422,7 @@ void GameStateLoad::logic() {
 				game_slots[i]->preview_turn_ticks--;
 
 			if (game_slots[i]->preview_turn_ticks == 0) {
-				game_slots[i]->preview_turn_ticks = GAMESLOT_PREVIEW_TURN_DURATION;
+				game_slots[i]->preview_turn_ticks = game_slots[i]->preview_turn_duration;
 
 				game_slots[i]->stats.direction++;
 				if (game_slots[i]->stats.direction > 7)
@@ -816,13 +817,13 @@ void GameStateLoad::render() {
 void GameStateLoad::setSelectedSlot(int slot) {
 	if (selected_slot != -1 && static_cast<size_t>(selected_slot) < game_slots.size() && game_slots[selected_slot]) {
 		game_slots[selected_slot]->stats.direction = 6;
-		game_slots[selected_slot]->preview_turn_ticks = GAMESLOT_PREVIEW_TURN_DURATION;
+		game_slots[selected_slot]->preview_turn_ticks = game_slots[selected_slot]->preview_turn_duration;
 		game_slots[selected_slot]->preview.setAnimation("stance");
 	}
 
 	if (slot != -1 && static_cast<size_t>(slot) < game_slots.size() && game_slots[slot]) {
 		game_slots[slot]->stats.direction = 6;
-		game_slots[slot]->preview_turn_ticks = GAMESLOT_PREVIEW_TURN_DURATION;
+		game_slots[slot]->preview_turn_ticks = game_slots[slot]->preview_turn_duration;
 		game_slots[slot]->preview.setAnimation("run");
 	}
 
