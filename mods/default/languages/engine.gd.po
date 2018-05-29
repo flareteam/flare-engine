@@ -274,12 +274,17 @@ msgid ""
 "Will try to store surfaces in video memory versus system memory. The effect "
 "this has on performance depends on the renderer."
 msgstr ""
+"Feuchaidh sinn ri uachdaran a stòradh ann an cuimhne a’ video seach an "
+"t-siostaim. Tha a’ bhuaidh a th’ aige air an dèanadas a-rèir an inneil-"
+"reandaraidh."
 
 #: ../../../src/GameStateConfigDesktop.cpp:192
 msgid ""
 "Prevents screen tearing. Disable if you experience \"stuttering\" in "
 "windowed mode or input lag."
 msgstr ""
+"Tha seo an aghaidh reubadh na sgrìn. cuir à comas e ma tha a modh uinneagach"
+" “stadach” no ma tha maille air an ion-chur."
 
 #: ../../../src/GameStateConfigDesktop.cpp:193
 msgid ""
@@ -287,6 +292,9 @@ msgid ""
 "to scale the rendering resolution. Otherwise, only the window dimensions are"
 " used."
 msgstr ""
+"Nuair a bhios seo an comas, cleachdaidh e DPI na sgrìn a bharrachd air meud "
+"na h-uinneige airson dùmhlachd-bhreacaidh an reandaraidh a sgèileadh. Mur "
+"eil, cha dèid ach meud na h-uinneige a chleachdadh."
 
 #: ../../../src/GameStateConfigDesktop.cpp:194
 msgid "Experimental"
@@ -322,7 +330,7 @@ msgstr "Criathrag innich"
 
 #: ../../../src/GameStateConfigDesktop.cpp:249
 msgid "DPI scaling"
-msgstr ""
+msgstr "Sgèileadh DPI"
 
 #: ../../../src/GameStateConfigDesktop.cpp:253
 msgid "Allow changing gamma"
