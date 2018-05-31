@@ -32,30 +32,32 @@ class WidgetButton;
 class WidgetLabel;
 class WidgetListBox;
 
-const int CSTAT_NAME = 0;
-const int CSTAT_LEVEL = 1;
-
-class CharStat {
-public:
-	WidgetLabel *label;
-	WidgetLabel *value;
-	Rect hover;
-	TooltipData tip;
-	bool visible;
-	LabelInfo label_info;
-	std::string label_text;
-	Rect value_pos;
-
-	void setHover(int x, int y, int w, int h) {
-		hover.x=x;
-		hover.y=y;
-		hover.w=w;
-		hover.h=h;
-	}
-};
-
 class MenuCharacter : public Menu {
 private:
+	class CharStat {
+	public:
+		WidgetLabel *label;
+		WidgetLabel *value;
+		Rect hover;
+		TooltipData tip;
+		bool visible;
+		LabelInfo label_info;
+		std::string label_text;
+		Rect value_pos;
+
+		void setHover(int x, int y, int w, int h) {
+			hover.x=x;
+			hover.y=y;
+			hover.w=w;
+			hover.h=h;
+		}
+	};
+
+	enum {
+		CSTAT_NAME = 0,
+		CSTAT_LEVEL = 1
+	};
+
 	StatBlock *stats;
 
 	WidgetButton *closeButton;
