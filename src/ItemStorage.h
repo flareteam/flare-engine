@@ -33,6 +33,7 @@ protected:
 	int slot_number;
 
 public:
+	static const int NO_SLOT = -1;
 	ItemStorage();
 	~ItemStorage();
 	void init(int _slot_number);
@@ -44,9 +45,9 @@ public:
 	int getSlotNumber();
 	std::string getItems();
 	std::string getQuantities();
-	ItemStack add(ItemStack stack, int slot = -1);
-	void subtract(int slot, int quantity = 1);
-	bool remove(int item, int quantity = 1);
+	ItemStack add(ItemStack stack, int slot);
+	void subtract(int slot, int quantity);
+	bool remove(int item, int quantity);
 	void sort();
 	void clear();
 	void clean();
@@ -54,7 +55,7 @@ public:
 
 	bool full(ItemStack stack);
 	int count(int item);
-	bool contain(int item, int quantity = 1);
+	bool contain(int item, int quantity);
 
 	ItemStack * storage;
 };

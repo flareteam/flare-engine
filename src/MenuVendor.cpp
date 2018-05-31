@@ -228,7 +228,7 @@ void MenuVendor::add(ItemStack stack) {
 		sort(ItemManager::VENDOR_SELL);
 	}
 	items->playSound(stack.item);
-	stock[ItemManager::VENDOR_SELL].add(stack);
+	stock[ItemManager::VENDOR_SELL].add(stack, ItemStorage::NO_SLOT);
 	saveInventory();
 }
 
@@ -257,7 +257,7 @@ void MenuVendor::sort(int type) {
 		ItemStack temp = stock[type][i];
 		stock[type][i].clear();
 		if (!temp.empty())
-			stock[type].add(temp);
+			stock[type].add(temp, ItemStorage::NO_SLOT);
 	}
 }
 

@@ -170,7 +170,7 @@ ItemStack ItemStorage::add( ItemStack stack, int slot) {
 			stack.quantity -= quantity_added;
 			// Add back the remaining, recursivly, until there's no more left to add or we run out of space.
 			if (stack.quantity > 0) {
-				return add(stack);
+				return add(stack, NO_SLOT);
 			}
 			// everything added successfully, so return an empty ItemStack
 			return ItemStack();

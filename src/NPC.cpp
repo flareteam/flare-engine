@@ -197,7 +197,7 @@ void NPC::load(const std::string& npc_id) {
 						stack.quantity = popFirstInt(temp, ':');
 						if (stack.quantity == 0)
 							stack.quantity = 1;
-						stock.add(stack);
+						stock.add(stack, ItemStorage::NO_SLOT);
 					}
 				}
 				else if (infile.key == "status_stock") {
@@ -210,7 +210,7 @@ void NPC::load(const std::string& npc_id) {
 							stack.quantity = popFirstInt(temp, ':');
 							if (stack.quantity == 0)
 								stack.quantity = 1;
-							stock.add(stack);
+							stock.add(stack, ItemStorage::NO_SLOT);
 						}
 					}
 				}
@@ -258,7 +258,7 @@ void NPC::load(const std::string& npc_id) {
 	}
 	std::sort(rand_itemstacks.begin(), rand_itemstacks.end(), compareItemStack);
 	for (size_t i=0; i<rand_itemstacks.size(); ++i) {
-		stock.add(rand_itemstacks[i]);
+		stock.add(rand_itemstacks[i], ItemStorage::NO_SLOT);
 	}
 }
 

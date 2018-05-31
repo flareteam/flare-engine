@@ -112,10 +112,10 @@ bool CampaignManager::checkCurrency(int quantity) {
 }
 
 bool CampaignManager::checkItem(int item_id) {
-	if (menu->inv->inventory[CARRIED].contain(item_id))
+	if (menu->inv->inventory[CARRIED].contain(item_id, 1))
 		return true;
 	else
-		return menu->inv->inventory[EQUIPMENT].contain(item_id);
+		return menu->inv->inventory[EQUIPMENT].contain(item_id, 1);
 }
 
 void CampaignManager::removeCurrency(int quantity) {

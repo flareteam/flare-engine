@@ -632,7 +632,7 @@ void GameStatePlay::checkUsedItems() {
 		menu->inv->remove(powers->used_items[i]);
 	}
 	for (unsigned i=0; i<powers->used_equipped_items.size(); i++) {
-		menu->inv->inventory[EQUIPMENT].remove(powers->used_equipped_items[i]);
+		menu->inv->inventory[EQUIPMENT].remove(powers->used_equipped_items[i], 1);
 		menu->inv->applyEquipment();
 	}
 	powers->used_items.clear();

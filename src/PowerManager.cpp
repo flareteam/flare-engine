@@ -1579,7 +1579,7 @@ bool PowerManager::checkRequiredItems(const Power &pow, const StatBlock *src_sta
 	for (size_t i = 0; i < pow.required_items.size(); ++i) {
 		if (pow.required_items[i].id > 0) {
 			if (pow.required_items[i].equipped) {
-				if (!menu->inv->inventory[EQUIPMENT].contain(pow.required_items[i].id)) {
+				if (!menu->inv->inventory[EQUIPMENT].contain(pow.required_items[i].id, 1)) {
 					return false;
 				}
 			}
