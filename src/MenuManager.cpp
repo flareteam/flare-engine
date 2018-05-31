@@ -693,7 +693,7 @@ void MenuManager::logic() {
 						// The vendor could have a limited amount of currency in the future. It will be tested here.
 						if ((SELL_WITHOUT_VENDOR || vendor->visible) && inv->sell(stack)) {
 							if (vendor->visible) {
-								vendor->setTab(VENDOR_SELL);
+								vendor->setTab(ItemManager::VENDOR_SELL);
 								vendor->add(stack);
 							}
 						}
@@ -800,7 +800,7 @@ void MenuManager::logic() {
 				}
 				else if (vendor->visible && isWithinRect(vendor->window_area, inpt->mouse)) {
 					if (inv->sell( drag_stack)) {
-						vendor->setTab(VENDOR_SELL);
+						vendor->setTab(ItemManager::VENDOR_SELL);
 						vendor->add( drag_stack);
 					}
 					else {
@@ -940,7 +940,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 		// sell, stash, or use item
 		else if (slotClick == ACTIVATED && !drag_stack.empty()) {
 			if (vendor->visible && inv->sell(drag_stack)) {
-				vendor->setTab(VENDOR_SELL);
+				vendor->setTab(ItemManager::VENDOR_SELL);
 				vendor->add(drag_stack);
 			}
 			else if (stash->visible) {
@@ -969,10 +969,10 @@ void MenuManager::dragAndDropWithKeyboard() {
 		Point src_slot;
 		WidgetSlot * vendor_slot;
 
-		if (vendor->getTab() == VENDOR_SELL)
-			vendor_slot = vendor->stock[VENDOR_SELL].slots[slot_index];
+		if (vendor->getTab() == ItemManager::VENDOR_SELL)
+			vendor_slot = vendor->stock[ItemManager::VENDOR_SELL].slots[slot_index];
 		else
-			vendor_slot = vendor->stock[VENDOR_BUY].slots[slot_index];
+			vendor_slot = vendor->stock[ItemManager::VENDOR_BUY].slots[slot_index];
 
 		src_slot.x = vendor_slot->pos.x;
 		src_slot.y = vendor_slot->pos.y;
@@ -1164,8 +1164,8 @@ void MenuManager::resetDrag() {
 		drag_icon = NULL;
 	}
 
-	vendor->stock[VENDOR_BUY].drag_prev_slot = -1;
-	vendor->stock[VENDOR_SELL].drag_prev_slot = -1;
+	vendor->stock[ItemManager::VENDOR_BUY].drag_prev_slot = -1;
+	vendor->stock[ItemManager::VENDOR_SELL].drag_prev_slot = -1;
 	stash->stock.drag_prev_slot = -1;
 	inv->drag_prev_src = -1;
 	inv->inventory[EQUIPMENT].drag_prev_slot = -1;
@@ -1316,13 +1316,13 @@ void MenuManager::handleKeyboardTooltips() {
 	if (vendor->visible && vendor->getCurrentTabList() && vendor->getCurrentTabList() != (&vendor->tablist)) {
 		int slot_index = vendor->getCurrentTabList()->getCurrent();
 
-		if (vendor->getTab() == VENDOR_BUY) {
-			keydrag_pos.x = vendor->stock[VENDOR_BUY].slots[slot_index]->pos.x;
-			keydrag_pos.y = vendor->stock[VENDOR_BUY].slots[slot_index]->pos.y;
+		if (vendor->getTab() == ItemManager::VENDOR_BUY) {
+			keydrag_pos.x = vendor->stock[ItemManager::VENDOR_BUY].slots[slot_index]->pos.x;
+			keydrag_pos.y = vendor->stock[ItemManager::VENDOR_BUY].slots[slot_index]->pos.y;
 		}
-		else if (vendor->getTab() == VENDOR_SELL) {
-			keydrag_pos.x = vendor->stock[VENDOR_SELL].slots[slot_index]->pos.x;
-			keydrag_pos.y = vendor->stock[VENDOR_SELL].slots[slot_index]->pos.y;
+		else if (vendor->getTab() == ItemManager::VENDOR_SELL) {
+			keydrag_pos.x = vendor->stock[ItemManager::VENDOR_SELL].slots[slot_index]->pos.x;
+			keydrag_pos.y = vendor->stock[ItemManager::VENDOR_SELL].slots[slot_index]->pos.y;
 		}
 
 		keyb_tip_new_vendor = vendor->checkTooltip(keydrag_pos);

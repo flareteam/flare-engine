@@ -243,7 +243,7 @@ void MenuStash::itemReturn(ItemStack stack) {
 }
 
 TooltipData MenuStash::checkTooltip(const Point& position) {
-	return stock.checkTooltip(position, stats, PLAYER_INV);
+	return stock.checkTooltip(position, stats, ItemManager::PLAYER_INV);
 }
 
 void MenuStash::removeFromPrevSlot(int quantity) {

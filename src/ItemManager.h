@@ -30,10 +30,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 #include "Utils.h"
 
-#define VENDOR_BUY 0
-#define VENDOR_SELL 1
-#define PLAYER_INV 2
-
 class FileParser;
 class StatBlock;
 class TooltipData;
@@ -236,6 +232,12 @@ private:
 	Color color_flavor;
 
 public:
+	enum {
+		VENDOR_BUY = 0,
+		VENDOR_SELL = 1,
+		PLAYER_INV = 2
+	};
+
 	ItemManager();
 	~ItemManager();
 	void playSound(int item, const Point& pos = Point(0,0));

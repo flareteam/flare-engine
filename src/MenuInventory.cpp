@@ -301,7 +301,7 @@ TooltipData MenuInventory::checkTooltip(const Point& position) {
 		return tip;
 
 	if (inventory[area][slot].item > 0) {
-		tip = inventory[area].checkTooltip(position, stats, PLAYER_INV);
+		tip = inventory[area].checkTooltip(position, stats, ItemManager::PLAYER_INV);
 	}
 	else if (area == EQUIPMENT && inventory[area][slot].empty()) {
 		tip.addText(msg->get(items->getItemType(slot_type[slot])));
@@ -792,7 +792,7 @@ bool MenuInventory::buy(ItemStack stack, int tab, bool dragging) {
 	}
 
 	int value_each;
-	if (tab == VENDOR_BUY) value_each = items->items[stack.item].getPrice();
+	if (tab == ItemManager::VENDOR_BUY) value_each = items->items[stack.item].getPrice();
 	else value_each = items->items[stack.item].getSellPrice(stack.can_buyback);
 
 	int count = value_each * stack.quantity;
@@ -1135,9 +1135,9 @@ void MenuInventory::fillEquipmentSlots() {
 }
 
 int MenuInventory::getMaxPurchasable(ItemStack item, int vendor_tab) {
-	if (vendor_tab == VENDOR_BUY)
+	if (vendor_tab == ItemManager::VENDOR_BUY)
 		return currency / items->items[item.item].getPrice();
-	else if (vendor_tab == VENDOR_SELL)
+	else if (vendor_tab == ItemManager::VENDOR_SELL)
 		return currency / items->items[item.item].getSellPrice(item.can_buyback);
 	else
 		return 0;

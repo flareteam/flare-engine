@@ -46,14 +46,14 @@ MenuVendor::MenuVendor(StatBlock *_stats)
 	, tabControl(new WidgetTabControl())
 	, slots_cols(1)
 	, slots_rows(1)
-	, activetab(VENDOR_BUY)
+	, activetab(ItemManager::VENDOR_BUY)
 	, color_normal(font->getColor("menu_normal"))
 	, npc(NULL)
 	, buyback_stock() {
 	setBackground("images/menus/vendor.png");
 
-	tabControl->setTabTitle(VENDOR_BUY, msg->get("Inventory"));
-	tabControl->setTabTitle(VENDOR_SELL, msg->get("Buyback"));
+	tabControl->setTabTitle(ItemManager::VENDOR_BUY, msg->get("Inventory"));
+	tabControl->setTabTitle(ItemManager::VENDOR_SELL, msg->get("Buyback"));
 
 	// Load config settings
 	FileParser infile;
@@ -96,8 +96,8 @@ MenuVendor::MenuVendor(StatBlock *_stats)
 	slots_area.w = slots_cols*ICON_SIZE;
 	slots_area.h = slots_rows*ICON_SIZE;
 
-	stock[VENDOR_BUY].initGrid(VENDOR_SLOTS, slots_area, slots_cols);
-	stock[VENDOR_SELL].initGrid(VENDOR_SLOTS, slots_area, slots_cols);
+	stock[ItemManager::VENDOR_BUY].initGrid(VENDOR_SLOTS, slots_area, slots_cols);
+	stock[ItemManager::VENDOR_SELL].initGrid(VENDOR_SLOTS, slots_area, slots_cols);
 
 	tablist.add(tabControl);
 	tablist_buy.setPrevTabList(&tablist);
@@ -107,10 +107,10 @@ MenuVendor::MenuVendor(StatBlock *_stats)
 	tablist_sell.lock();
 
 	for (unsigned i = 0; i < VENDOR_SLOTS; i++) {
-		tablist_buy.add(stock[VENDOR_BUY].slots[i]);
+		tablist_buy.add(stock[ItemManager::VENDOR_BUY].slots[i]);
 	}
 	for (unsigned i = 0; i < VENDOR_SLOTS; i++) {
-		tablist_sell.add(stock[VENDOR_SELL].slots[i]);
+		tablist_sell.add(stock[ItemManager::VENDOR_SELL].slots[i]);
 	}
 
 	align();
@@ -127,8 +127,8 @@ void MenuVendor::align() {
 
 	closeButton->setPos(window_area.x, window_area.y);
 
-	stock[VENDOR_BUY].setPos(window_area.x, window_area.y);
-	stock[VENDOR_SELL].setPos(window_area.x, window_area.y);
+	stock[ItemManager::VENDOR_BUY].setPos(window_area.x, window_area.y);
+	stock[ItemManager::VENDOR_SELL].setPos(window_area.x, window_area.y);
 }
 
 void MenuVendor::logic() {
@@ -145,16 +145,16 @@ void MenuVendor::logic() {
 	}
 	activetab = tabControl->getActiveTab();
 
-	if (activetab == VENDOR_BUY)
+	if (activetab == ItemManager::VENDOR_BUY)
 		tablist.setNextTabList(&tablist_buy);
-	else if (activetab == VENDOR_SELL)
+	else if (activetab == ItemManager::VENDOR_SELL)
 		tablist.setNextTabList(&tablist_sell);
 
 	if (TOUCHSCREEN) {
-		if (activetab == VENDOR_BUY && tablist_buy.getCurrent() == -1)
-			stock[VENDOR_BUY].current_slot = NULL;
-		else if (activetab == VENDOR_SELL && tablist_sell.getCurrent() == -1)
-			stock[VENDOR_SELL].current_slot = NULL;
+		if (activetab == ItemManager::VENDOR_BUY && tablist_buy.getCurrent() == -1)
+			stock[ItemManager::VENDOR_BUY].current_slot = NULL;
+		else if (activetab == ItemManager::VENDOR_SELL && tablist_sell.getCurrent() == -1)
+			stock[ItemManager::VENDOR_SELL].current_slot = NULL;
 	}
 
 	if (closeButton->checkClick()) {
@@ -202,9 +202,9 @@ ItemStack MenuVendor::click(const Point& position) {
 	ItemStack stack = stock[activetab].click(position);
 	saveInventory();
 	if (TOUCHSCREEN) {
-		if (activetab == VENDOR_BUY)
+		if (activetab == ItemManager::VENDOR_BUY)
 			tablist_buy.setCurrent(stock[activetab].current_slot);
-		else if (activetab == VENDOR_SELL)
+		else if (activetab == ItemManager::VENDOR_SELL)
 			tablist_sell.setCurrent(stock[activetab].current_slot);
 	}
 	return stack;
@@ -223,17 +223,17 @@ void MenuVendor::add(ItemStack stack) {
 	stack.can_buyback = true;
 
 	// Remove the first item stack to make room
-	if (stock[VENDOR_SELL].full(stack)) {
-		stock[VENDOR_SELL][0].clear();
-		sort(VENDOR_SELL);
+	if (stock[ItemManager::VENDOR_SELL].full(stack)) {
+		stock[ItemManager::VENDOR_SELL][0].clear();
+		sort(ItemManager::VENDOR_SELL);
 	}
 	items->playSound(stack.item);
-	stock[VENDOR_SELL].add(stack);
+	stock[ItemManager::VENDOR_SELL].add(stack);
 	saveInventory();
 }
 
 TooltipData MenuVendor::checkTooltip(const Point& position) {
-	int vendor_view = (activetab == VENDOR_BUY) ? VENDOR_BUY : VENDOR_SELL;
+	int vendor_view = (activetab == ItemManager::VENDOR_BUY) ? ItemManager::VENDOR_BUY : ItemManager::VENDOR_SELL;
 	return stock[activetab].checkTooltip(position, stats, vendor_view);
 }
 
@@ -245,8 +245,8 @@ TooltipData MenuVendor::checkTooltip(const Point& position) {
 void MenuVendor::saveInventory() {
 	for (unsigned i=0; i<VENDOR_SLOTS; i++) {
 		if (npc) {
-			npc->stock[i] = stock[VENDOR_BUY][i];
-			buyback_stock[npc->filename][i] = stock[VENDOR_SELL][i];
+			npc->stock[i] = stock[ItemManager::VENDOR_BUY][i];
+			buyback_stock[npc->filename][i] = stock[ItemManager::VENDOR_SELL][i];
 		}
 	}
 
@@ -269,12 +269,12 @@ void MenuVendor::setNPC(NPC* _npc) {
 		return;
 	}
 
-	setTab(VENDOR_BUY);
+	setTab(ItemManager::VENDOR_BUY);
 
 	buyback_stock[npc->filename].init(NPC_VENDOR_MAX_STOCK);
 
 	for (unsigned i=0; i<VENDOR_SLOTS; i++) {
-		stock[VENDOR_BUY][i] = npc->stock[i];
+		stock[ItemManager::VENDOR_BUY][i] = npc->stock[i];
 		if (npc->reset_buyback) {
 			// this occurs on the first interaction with an NPC after map load
 			if (KEEP_BUYBACK_ON_MAP_CHANGE)
@@ -282,12 +282,12 @@ void MenuVendor::setNPC(NPC* _npc) {
 			else
 				buyback_stock[npc->filename][i].clear();
 		}
-		stock[VENDOR_SELL][i] = buyback_stock[npc->filename][i];
+		stock[ItemManager::VENDOR_SELL][i] = buyback_stock[npc->filename][i];
 	}
 	npc->reset_buyback = false;
 
-	sort(VENDOR_BUY);
-	sort(VENDOR_SELL);
+	sort(ItemManager::VENDOR_BUY);
+	sort(ItemManager::VENDOR_SELL);
 
 	if (!visible) {
 		visible = true;
