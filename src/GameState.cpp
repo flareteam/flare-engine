@@ -37,18 +37,8 @@ GameState::GameState()
 	loading_tip_buf.addText(msg->get("Loading..."));
 }
 
-GameState::GameState(const GameState& other)
-	: hasMusic(other.hasMusic)
-	, has_background(other.has_background)
-	, reload_music(other.reload_music)
-	, reload_backgrounds(other.reload_backgrounds)
-	, save_settings_on_exit(other.save_settings_on_exit)
-	, load_counter(other.load_counter)
-	, requestedGameState(other.requestedGameState)
-	, exitRequested(other.exitRequested)
-	, loading_tip(new WidgetTooltip())
-{
-	loading_tip_buf.addText(msg->get("Loading..."));
+GameState::GameState(const GameState& other) {
+	*this = other;
 }
 
 GameState& GameState::operator=(const GameState& other) {
