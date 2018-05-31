@@ -10,7 +10,10 @@ UNAME=`uname`
 ARCH=`uname -m`
 
 # Set the libpath and pick the proper binary
-if [ "$UNAME" == "Linux" ]; then
+if [ "$UNAME" == "Darwin" ]; then
+    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:./lib/
+    ./flare
+elif [ "$UNAME" == "Linux" ]; then
     if [ "$ARCH" == "x86_64" ]; then
         export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./x86_64/
         ./x86_64/flare.x86_64
