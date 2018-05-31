@@ -492,7 +492,7 @@ void MenuManager::logic() {
 			}
 			else {
 				closeRight();
-				act->requires_attention[MENU_INVENTORY] = false;
+				act->requires_attention[MenuActionBar::MENU_INVENTORY] = false;
 				inv->visible = true;
 				snd->play(inv->sfx_open);
 			}
@@ -508,7 +508,7 @@ void MenuManager::logic() {
 			}
 			else {
 				closeRight();
-				act->requires_attention[MENU_POWERS] = false;
+				act->requires_attention[MenuActionBar::MENU_POWERS] = false;
 				pow->visible = true;
 				snd->play(pow->sfx_open);
 			}
@@ -523,7 +523,7 @@ void MenuManager::logic() {
 			}
 			else {
 				closeLeft();
-				act->requires_attention[MENU_CHARACTER] = false;
+				act->requires_attention[MenuActionBar::MENU_CHARACTER] = false;
 				chr->visible = true;
 				snd->play(chr->sfx_open);
 				// Make sure the stat list isn't scrolled when we open the character menu
@@ -540,7 +540,7 @@ void MenuManager::logic() {
 			}
 			else {
 				closeLeft();
-				act->requires_attention[MENU_LOG] = false;
+				act->requires_attention[MenuActionBar::MENU_LOG] = false;
 				questlog->visible = true;
 				snd->play(questlog->sfx_open);
 				// Make sure the log isn't scrolled when we open the log menu

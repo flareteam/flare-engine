@@ -38,17 +38,13 @@ class TooltipData;
 class WidgetLabel;
 class WidgetSlot;
 
-const int MENU_CHARACTER = 0;
-const int MENU_INVENTORY = 1;
-const int MENU_POWERS = 2;
-const int MENU_LOG = 3;
-
-const int ACTIONBAR_MAIN = 10;
-
 class MenuActionBar : public Menu {
 private:
+	static const bool IS_EQUIPPED = true;
+
 	FPoint setTarget(bool have_aim, const Power& pow);
 	void addSlot(unsigned index, int x, int y, bool is_locked);
+	void setItemCount(unsigned index, int count, bool is_equipped);
 
 	Sprite *sprite_emptyslot;
 	Sprite *sprite_disabled;
@@ -62,6 +58,17 @@ private:
 	Point last_mouse;
 
 public:
+	enum {
+		MENU_CHARACTER = 0,
+		MENU_INVENTORY = 1,
+		MENU_POWERS = 2,
+		MENU_LOG = 3
+	};
+
+	static const int SLOT_MAIN1 = 10;
+	static const int SLOT_MAX = 12; // maximum number of slots in MenuActionBar
+
+	static const int USE_EMPTY_SLOT = 0;
 
 	MenuActionBar();
 	~MenuActionBar();
@@ -78,13 +85,12 @@ public:
 	void set(std::vector<int> power_id);
 	void clear();
 	void resetSlots();
-	void setItemCount(unsigned index, int count, bool is_equipped = false);
 	Point getSlotPos(int slot);
 
 	TooltipData checkTooltip(const Point& mouse);
 	bool isWithinSlots(const Point& mouse);
 	bool isWithinMenus(const Point& mouse);
-	void addPower(const int id, const int target_id = 0);
+	void addPower(const int id, const int target_id);
 
 	unsigned slots_count;
 	std::vector<int> hotkeys; // refer to power_index in PowerManager

@@ -132,7 +132,7 @@ void SaveLoad::saveGame() {
 
 		// action bar
 		outfile << "actionbar=";
-		for (unsigned i = 0; i < static_cast<unsigned>(ACTIONBAR_MAX); i++) {
+		for (unsigned i = 0; i < static_cast<unsigned>(MenuActionBar::SLOT_MAX); i++) {
 			if (i < menu->act->slots_count)
 			{
 				if (pc->stats.transformed) outfile << menu->act->hotkeys_temp[i];
@@ -142,7 +142,7 @@ void SaveLoad::saveGame() {
 			{
 				outfile << 0;
 			}
-			if (i < ACTIONBAR_MAX - 1) outfile << ",";
+			if (i < MenuActionBar::SLOT_MAX - 1) outfile << ",";
 		}
 		outfile << "\n";
 
@@ -195,7 +195,7 @@ void SaveLoad::saveGame() {
 			}
 		}
 
-		outfile << "questlog_dismissed=" << !menu->act->requires_attention[MENU_LOG];
+		outfile << "questlog_dismissed=" << !menu->act->requires_attention[MenuActionBar::MENU_LOG];
 
 		outfile << std::endl;
 
@@ -251,7 +251,7 @@ void SaveLoad::loadGame() {
 	Version save_version(VERSION_MIN);
 
 	FileParser infile;
-	std::vector<int> hotkeys(ACTIONBAR_MAX, -1);
+	std::vector<int> hotkeys(MenuActionBar::SLOT_MAX, -1);
 
 	std::stringstream ss;
 	ss << PATH_USER << "saves/" << SAVE_PREFIX << "/" << game_slot << "/avatar.txt";
@@ -320,7 +320,7 @@ void SaveLoad::loadGame() {
 				}
 			}
 			else if (infile.key == "actionbar") {
-				for (int i = 0; i < ACTIONBAR_MAX; i++) {
+				for (int i = 0; i < MenuActionBar::SLOT_MAX; i++) {
 					hotkeys[i] = popFirstInt(infile.val);
 					if (hotkeys[i] < 0) {
 						logError("SaveLoad: Hotkey power on position %d has negative id, skipping", i);

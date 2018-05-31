@@ -197,15 +197,15 @@ void MenuActionBar::align() {
 	}
 
 	// set keybinding labels
-	for (unsigned int i = 0; i < static_cast<unsigned int>(ACTIONBAR_MAIN); i++) {
+	for (unsigned int i = 0; i < static_cast<unsigned int>(SLOT_MAIN1); i++) {
 		if (i < slots.size() && slots[i]) {
 			labels[i] = msg->get("Hotkey: %s", inpt->getBindingString(i + Input::BAR_1));
 		}
 	}
 
-	for (unsigned int i = ACTIONBAR_MAIN; i < static_cast<unsigned int>(ACTIONBAR_MAX); i++) {
+	for (unsigned int i = SLOT_MAIN1; i < static_cast<unsigned int>(SLOT_MAIN1); i++) {
 		if (i < slots.size() && slots[i]) {
-			labels[i] = msg->get("Hotkey: %s", inpt->getBindingString(i - ACTIONBAR_MAIN + Input::MAIN1));
+			labels[i] = msg->get("Hotkey: %s", inpt->getBindingString(i - SLOT_MAIN1 + Input::MAIN1));
 		}
 	}
 	for (unsigned int i=0; i<menu_labels.size(); i++) {
@@ -274,25 +274,25 @@ void MenuActionBar::logic() {
 			const Power &power = powers->powers[hotkeys_mod[i]];
 
 			if (power.required_items.empty()) {
-				setItemCount(i, -1);
+				setItemCount(i, -1, !IS_EQUIPPED);
 			}
 			else {
 				for (size_t j = 0; j < power.required_items.size(); ++j) {
 					if (power.required_items[j].equipped) {
 						if (!menu->inv->inventory[EQUIPMENT].contain(power.required_items[j].id, 1))
-							setItemCount(i, 0, true);
+							setItemCount(i, 0, IS_EQUIPPED);
 						else
-							setItemCount(i, 1, true);
+							setItemCount(i, 1, IS_EQUIPPED);
 					}
 					else {
 						if (power.required_items[j].quantity == 0) {
 							if (!menu->inv->inventory[CARRIED].contain(power.required_items[j].id, 1))
-								setItemCount(i, 0, true);
+								setItemCount(i, 0, IS_EQUIPPED);
 							else
-								setItemCount(i, 1, true);
+								setItemCount(i, 1, IS_EQUIPPED);
 						}
 						else {
-							setItemCount(i, menu->inv->inventory[CARRIED].count(power.required_items[j].id));
+							setItemCount(i, menu->inv->inventory[CARRIED].count(power.required_items[j].id), !IS_EQUIPPED);
 						}
 					}
 
@@ -780,7 +780,7 @@ void MenuActionBar::addPower(const int id, const int target_id) {
 
 	// if we're not replacing an existing power, avoid placing duplicate powers
 	if (target_id == 0) {
-		for (unsigned i=0; i<12; ++i) {
+		for (unsigned i = 0; i < static_cast<unsigned>(SLOT_MAX); ++i) {
 			if (hotkeys[i] == id)
 				return;
 		}

@@ -29,6 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "FileParser.h"
+#include "MenuActionBar.h"
 #include "MessageEngine.h"
 #include "ModManager.h"
 #include "Platform.h"
@@ -48,7 +49,7 @@ HeroClass::HeroClass()
 	, equipment("")
 	, carried("")
 	, primary(PRIMARY_STATS.size(), 0)
-	, hotkeys(std::vector<int>(ACTIONBAR_MAX, 0))
+	, hotkeys(std::vector<int>(MenuActionBar::SLOT_MAX, 0))
 	, power_tree("")
 	, default_power_tab(-1) {
 }

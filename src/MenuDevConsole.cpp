@@ -519,7 +519,7 @@ void MenuDevConsole::execute() {
 			log_history->add(msg->get("HINT:") + ' ' + args[0] + ' ' + msg->get("<id>"), false, &color_hint);
 		}
 		else {
-			menu->act->addPower(toInt(args[1]));
+			menu->act->addPower(toInt(args[1]), MenuActionBar::USE_EMPTY_SLOT);
 		}
 	}
 	else if (args[0] == "exec") {

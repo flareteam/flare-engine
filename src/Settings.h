@@ -39,8 +39,6 @@ public:
 	std::string name;
 };
 
-const int ACTIONBAR_MAX = 12; // maximum number of slots in MenuActionBar
-
 class PrimaryStat {
 public:
 	std::string id;

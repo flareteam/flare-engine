@@ -230,7 +230,7 @@ bool GameStatePlay::restrictPowerUse() {
 				return true;
 			}
 			else {
-				if(static_cast<unsigned>(ACTIONBAR_MAIN) < menu->act->slots_count && menu->act->slot_enabled[ACTIONBAR_MAIN] && (powers->powers[menu->act->hotkeys[ACTIONBAR_MAIN]].target_party != enemy->stats.hero_ally))
+				if(static_cast<unsigned>(MenuActionBar::SLOT_MAIN1) < menu->act->slots_count && menu->act->slot_enabled[MenuActionBar::SLOT_MAIN1] && (powers->powers[menu->act->hotkeys[MenuActionBar::SLOT_MAIN1]].target_party != enemy->stats.hero_ally))
 					return true;
 			}
 		}
@@ -645,21 +645,21 @@ void GameStatePlay::checkUsedItems() {
 void GameStatePlay::checkNotifications() {
 	if (pc->newLevelNotification || menu->chr->getUnspent() > 0) {
 		pc->newLevelNotification = false;
-		menu->act->requires_attention[MENU_CHARACTER] = !menu->chr->visible;
+		menu->act->requires_attention[MenuActionBar::MENU_CHARACTER] = !menu->chr->visible;
 	}
 	if (menu->pow->newPowerNotification) {
 		menu->pow->newPowerNotification = false;
-		menu->act->requires_attention[MENU_POWERS] = !menu->pow->visible;
+		menu->act->requires_attention[MenuActionBar::MENU_POWERS] = !menu->pow->visible;
 	}
 	if (quests->newQuestNotification) {
 		quests->newQuestNotification = false;
-		menu->act->requires_attention[MENU_LOG] = !menu->questlog->visible && !pc->questlog_dismissed;
+		menu->act->requires_attention[MenuActionBar::MENU_LOG] = !menu->questlog->visible && !pc->questlog_dismissed;
 		pc->questlog_dismissed = false;
 	}
 
 	// if the player is transformed into a creature, don't notifications for the powers menu
 	if (pc->stats.transformed) {
-		menu->act->requires_attention[MENU_POWERS] = false;
+		menu->act->requires_attention[MenuActionBar::MENU_POWERS] = false;
 	}
 }
 
@@ -943,20 +943,20 @@ void GameStatePlay::logic() {
 		pc->setPowers = false;
 		if (!pc->stats.humanoid && menu->pow->visible) menu->closeRight();
 		// save ActionBar state and lock slots from removing/replacing power
-		for (int i=0; i<ACTIONBAR_MAX ; i++) {
+		for (int i = 0; i < MenuActionBar::SLOT_MAX ; i++) {
 			menu->act->hotkeys_temp[i] = menu->act->hotkeys[i];
 			menu->act->hotkeys[i] = 0;
 		}
-		int count = ACTIONBAR_MAIN;
+		int count = MenuActionBar::SLOT_MAIN1;
 		// put creature powers on action bar
 		for (size_t i=0; i<pc->charmed_stats->powers_ai.size(); i++) {
 			if (pc->charmed_stats->powers_ai[i].id != 0 && powers->powers[pc->charmed_stats->powers_ai[i].id].beacon != true) {
 				menu->act->hotkeys[count] = pc->charmed_stats->powers_ai[i].id;
 				menu->act->locked[count] = true;
 				count++;
-				if (count == ACTIONBAR_MAX)
+				if (count == MenuActionBar::SLOT_MAX)
 					count = 0;
-				else if (count == ACTIONBAR_MAIN)
+				else if (count == MenuActionBar::SLOT_MAIN1)
 					// we've filled the actionbar, stop adding powers to it
 					break;
 			}
@@ -979,7 +979,7 @@ void GameStatePlay::logic() {
 		pc->revertPowers = false;
 
 		// restore ActionBar state
-		for (int i=0; i<ACTIONBAR_MAX; i++) {
+		for (int i = 0; i < MenuActionBar::SLOT_MAX; i++) {
 			menu->act->hotkeys[i] = menu->act->hotkeys_temp[i];
 			menu->act->locked[i] = false;
 		}
