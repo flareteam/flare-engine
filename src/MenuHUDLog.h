@@ -43,12 +43,13 @@ private:
 	bool click_to_dismiss;
 
 public:
+	static const bool PREVENT_SPAM = true;
 
 	MenuHUDLog();
 	~MenuHUDLog();
 	void logic();
 	void render();
-	void add(const std::string& s, bool prevent_spam = true);
+	void add(const std::string& s, bool prevent_spam);
 	void remove(int msg_index);
 	void clear();
 	void renderOverlay();
