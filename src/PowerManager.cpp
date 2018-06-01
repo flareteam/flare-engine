@@ -1579,7 +1579,7 @@ bool PowerManager::checkRequiredItems(const Power &pow, const StatBlock *src_sta
 	for (size_t i = 0; i < pow.required_items.size(); ++i) {
 		if (pow.required_items[i].id > 0) {
 			if (pow.required_items[i].equipped) {
-				if (!menu->inv->inventory[EQUIPMENT].contain(pow.required_items[i].id, 1)) {
+				if (!menu->inv->inventory[MenuInventory::EQUIPMENT].contain(pow.required_items[i].id, 1)) {
 					return false;
 				}
 			}
@@ -1587,7 +1587,7 @@ bool PowerManager::checkRequiredItems(const Power &pow, const StatBlock *src_sta
 				if (!items->requirementsMet(src_stats, pow.required_items[i].id)) {
 					return false;
 				}
-				if (!menu->inv->inventory[CARRIED].contain(pow.required_items[i].id, pow.required_items[i].quantity)) {
+				if (!menu->inv->inventory[MenuInventory::CARRIED].contain(pow.required_items[i].id, pow.required_items[i].quantity)) {
 					return false;
 				}
 			}

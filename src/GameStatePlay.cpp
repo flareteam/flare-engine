@@ -256,7 +256,7 @@ void GameStatePlay::checkLoot() {
 	if (AUTOPICKUP_CURRENCY) {
 		pickup = loot->checkAutoPickup(pc->stats.pos);
 		if (!pickup.empty()) {
-			menu->inv->add(pickup, CARRIED, -1, true, true);
+			menu->inv->add(pickup, MenuInventory::CARRIED, ItemStorage::NO_SLOT, MenuInventory::ADD_PLAY_SOUND, MenuInventory::ADD_AUTO_EQUIP);
 			pickup.clear();
 		}
 	}
@@ -267,7 +267,7 @@ void GameStatePlay::checkLoot() {
 	}
 
 	if (!pickup.empty()) {
-		menu->inv->add(pickup, CARRIED, -1, true, true);
+		menu->inv->add(pickup, MenuInventory::CARRIED, ItemStorage::NO_SLOT, MenuInventory::ADD_PLAY_SOUND, MenuInventory::ADD_AUTO_EQUIP);
 		camp->setStatus(items->items[pickup.item].pickup_status);
 		pickup.clear();
 	}
@@ -565,12 +565,12 @@ void GameStatePlay::checkEquipmentChange() {
 			Avatar::Layer_gfx gfx;
 			gfx.gfx = "";
 			gfx.type = pc->layer_reference_order[j];
-			for (int i=0; i<menu->inv->inventory[EQUIPMENT].getSlotNumber(); i++) {
-				if (pc->layer_reference_order[j] == menu->inv->inventory[EQUIPMENT].slot_type[i]) {
-					gfx.gfx = items->items[menu->inv->inventory[EQUIPMENT][i].item].gfx;
-					gfx.type = menu->inv->inventory[EQUIPMENT].slot_type[i];
+			for (int i=0; i<menu->inv->inventory[MenuInventory::EQUIPMENT].getSlotNumber(); i++) {
+				if (pc->layer_reference_order[j] == menu->inv->inventory[MenuInventory::EQUIPMENT].slot_type[i]) {
+					gfx.gfx = items->items[menu->inv->inventory[MenuInventory::EQUIPMENT][i].item].gfx;
+					gfx.type = menu->inv->inventory[MenuInventory::EQUIPMENT].slot_type[i];
 				}
-				if (menu->inv->inventory[EQUIPMENT].slot_type[i] == "feet") {
+				if (menu->inv->inventory[MenuInventory::EQUIPMENT].slot_type[i] == "feet") {
 					feet_index = i;
 				}
 			}
@@ -590,7 +590,7 @@ void GameStatePlay::checkEquipmentChange() {
 		pc->loadGraphics(img_gfx);
 
 		if (feet_index != -1)
-			pc->loadStepFX(items->items[menu->inv->inventory[EQUIPMENT][feet_index].item].stepfx);
+			pc->loadStepFX(items->items[menu->inv->inventory[MenuInventory::EQUIPMENT][feet_index].item].stepfx);
 	}
 
 	menu->inv->changed_equipment = false;
@@ -632,7 +632,7 @@ void GameStatePlay::checkUsedItems() {
 		menu->inv->remove(powers->used_items[i]);
 	}
 	for (unsigned i=0; i<powers->used_equipped_items.size(); i++) {
-		menu->inv->inventory[EQUIPMENT].remove(powers->used_equipped_items[i], 1);
+		menu->inv->inventory[MenuInventory::EQUIPMENT].remove(powers->used_equipped_items[i], 1);
 		menu->inv->applyEquipment();
 	}
 	powers->used_items.clear();
@@ -843,8 +843,8 @@ void GameStatePlay::updateActionBar(unsigned index) {
 	for (unsigned i = index; i < menu->act->slots_count; i++) {
 		if (menu->act->hotkeys[i] == 0) continue;
 
-		for (int j=0; j<menu->inv->inventory[EQUIPMENT].getSlotNumber(); j++) {
-			int id = menu->inv->inventory[EQUIPMENT][j].item;
+		for (int j=0; j<menu->inv->inventory[MenuInventory::EQUIPMENT].getSlotNumber(); j++) {
+			int id = menu->inv->inventory[MenuInventory::EQUIPMENT][j].item;
 
 			for (unsigned k=0; k<items->items[id].replace_power.size(); k++) {
 				if (items->items[id].replace_power[k].x == menu->act->hotkeys_mod[i] &&

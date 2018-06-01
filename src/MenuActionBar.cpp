@@ -279,20 +279,20 @@ void MenuActionBar::logic() {
 			else {
 				for (size_t j = 0; j < power.required_items.size(); ++j) {
 					if (power.required_items[j].equipped) {
-						if (!menu->inv->inventory[EQUIPMENT].contain(power.required_items[j].id, 1))
+						if (!menu->inv->inventory[MenuInventory::EQUIPMENT].contain(power.required_items[j].id, 1))
 							setItemCount(i, 0, IS_EQUIPPED);
 						else
 							setItemCount(i, 1, IS_EQUIPPED);
 					}
 					else {
 						if (power.required_items[j].quantity == 0) {
-							if (!menu->inv->inventory[CARRIED].contain(power.required_items[j].id, 1))
+							if (!menu->inv->inventory[MenuInventory::CARRIED].contain(power.required_items[j].id, 1))
 								setItemCount(i, 0, IS_EQUIPPED);
 							else
 								setItemCount(i, 1, IS_EQUIPPED);
 						}
 						else {
-							setItemCount(i, menu->inv->inventory[CARRIED].count(power.required_items[j].id), !IS_EQUIPPED);
+							setItemCount(i, menu->inv->inventory[MenuInventory::CARRIED].count(power.required_items[j].id), !IS_EQUIPPED);
 						}
 					}
 

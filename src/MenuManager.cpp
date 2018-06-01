@@ -406,13 +406,13 @@ void MenuManager::logic() {
 
 	// context-sensistive help tooltip in inventory menu
 	if (inv->visible && vendor->visible) {
-		inv->inv_ctrl = INV_CTRL_VENDOR;
+		inv->inv_ctrl = MenuInventory::CTRL_VENDOR;
 	}
 	else if (inv->visible && stash->visible) {
-		inv->inv_ctrl = INV_CTRL_STASH;
+		inv->inv_ctrl = MenuInventory::CTRL_STASH;
 	}
 	else {
-		inv->inv_ctrl = INV_CTRL_NONE;
+		inv->inv_ctrl = MenuInventory::CTRL_NONE;
 	}
 
 	if (!inpt->pressing[Input::INVENTORY] && !inpt->pressing[Input::POWERS] && !inpt->pressing[Input::CHARACTER] && !inpt->pressing[Input::LOG])
@@ -623,7 +623,7 @@ void MenuManager::logic() {
 				if (inpt->pressing[Input::CTRL]) {
 					// buy item from a vendor
 					stack = vendor->click(inpt->mouse);
-					if (!inv->buy(stack, vendor->getTab(), false)) {
+					if (!inv->buy(stack, vendor->getTab(), !MenuInventory::IS_DRAGGING)) {
 						vendor->itemReturn(inv->drop_stack.front());
 						inv->drop_stack.pop();
 					}
@@ -654,7 +654,7 @@ void MenuManager::logic() {
 				if (inpt->pressing[Input::CTRL]) {
 					// take an item from the stash
 					stack = stash->click(inpt->mouse);
-					if (!inv->add(stack, CARRIED, -1, true, true)) {
+					if (!inv->add(stack, MenuInventory::CARRIED, ItemStorage::NO_SLOT, MenuInventory::ADD_PLAY_SOUND, MenuInventory::ADD_AUTO_EQUIP)) {
 						stash->itemReturn(inv->drop_stack.front());
 						inv->drop_stack.pop();
 					}
@@ -753,7 +753,7 @@ void MenuManager::logic() {
 
 		// highlight matching inventory slots based on what we're dragging
 		if (inv->visible && (mouse_dragging || keyboard_dragging)) {
-			inv->inventory[EQUIPMENT].highlightMatching(items->items[drag_stack.item].type);
+			inv->inventory[MenuInventory::EQUIPMENT].highlightMatching(items->items[drag_stack.item].type);
 		}
 
 		// handle dropping
@@ -835,7 +835,7 @@ void MenuManager::logic() {
 
 				// dropping an item from vendor (we only allow to drop into the carried area)
 				if (inv->visible && isWithinRect(inv->window_area, inpt->mouse)) {
-					if (!inv->buy(drag_stack, vendor->getTab(), true)) {
+					if (!inv->buy(drag_stack, vendor->getTab(), MenuInventory::IS_DRAGGING)) {
 						vendor->itemReturn(inv->drop_stack.front());
 						inv->drop_stack.pop();
 					}
@@ -908,9 +908,9 @@ void MenuManager::dragAndDropWithKeyboard() {
 		WidgetSlot * inv_slot;
 
 		if (slot_index < inv->getEquippedCount())
-			inv_slot = inv->inventory[EQUIPMENT].slots[slot_index];
+			inv_slot = inv->inventory[MenuInventory::EQUIPMENT].slots[slot_index];
 		else
-			inv_slot = inv->inventory[CARRIED].slots[slot_index - inv->getEquippedCount()];
+			inv_slot = inv->inventory[MenuInventory::CARRIED].slots[slot_index - inv->getEquippedCount()];
 
 		src_slot.x = inv_slot->pos.x;
 		src_slot.y = inv_slot->pos.y;
@@ -1002,7 +1002,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 		// if we selected a single item buy it imediately
 		// otherwise, wait until we get a result from num_picker
 		if (vendor_slot->checked && !drag_stack.empty() && !num_picker->visible) {
-			if (!inv->buy(drag_stack, vendor->getTab(), false)) {
+			if (!inv->buy(drag_stack, vendor->getTab(), !MenuInventory::IS_DRAGGING)) {
 				vendor->itemReturn(inv->drop_stack.front());
 				inv->drop_stack.pop();
 			}
@@ -1047,7 +1047,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 		}
 		// send to inventory
 		else if (slotClick == ACTIVATED && !drag_stack.empty()) {
-			if (!inv->add(drag_stack, CARRIED, -1, true, true)) {
+			if (!inv->add(drag_stack, MenuInventory::CARRIED, ItemStorage::NO_SLOT, MenuInventory::ADD_PLAY_SOUND, MenuInventory::ADD_AUTO_EQUIP)) {
 				stash->itemReturn(inv->drop_stack.front());
 				inv->drop_stack.pop();
 			}
@@ -1112,9 +1112,9 @@ void MenuManager::dragAndDropWithKeyboard() {
 			}
 			else if (drag_src == DRAG_SRC_INVENTORY) {
 				if (slot_index< inv->getEquippedCount())
-					inv->inventory[EQUIPMENT].slots[slot_index]->checked = false;
+					inv->inventory[MenuInventory::EQUIPMENT].slots[slot_index]->checked = false;
 				else
-					inv->inventory[CARRIED].slots[slot_index - inv->getEquippedCount()]->checked = false;
+					inv->inventory[MenuInventory::CARRIED].slots[slot_index - inv->getEquippedCount()]->checked = false;
 
 				if (items->items[drag_stack.item].power != 0) {
 					act->drop(dest_slot, items->items[drag_stack.item].power, false);
@@ -1168,8 +1168,8 @@ void MenuManager::resetDrag() {
 	vendor->stock[ItemManager::VENDOR_SELL].drag_prev_slot = -1;
 	stash->stock.drag_prev_slot = -1;
 	inv->drag_prev_src = -1;
-	inv->inventory[EQUIPMENT].drag_prev_slot = -1;
-	inv->inventory[CARRIED].drag_prev_slot = -1;
+	inv->inventory[MenuInventory::EQUIPMENT].drag_prev_slot = -1;
+	inv->inventory[MenuInventory::CARRIED].drag_prev_slot = -1;
 
 	keyboard_dragging = false;
 	mouse_dragging = false;
@@ -1371,12 +1371,12 @@ void MenuManager::handleKeyboardTooltips() {
 		int slot_index = inv->getCurrentTabList()->getCurrent();
 
 		if (slot_index < inv->getEquippedCount()) {
-			keydrag_pos.x = inv->inventory[EQUIPMENT].slots[slot_index]->pos.x;
-			keydrag_pos.y = inv->inventory[EQUIPMENT].slots[slot_index]->pos.y;
+			keydrag_pos.x = inv->inventory[MenuInventory::EQUIPMENT].slots[slot_index]->pos.x;
+			keydrag_pos.y = inv->inventory[MenuInventory::EQUIPMENT].slots[slot_index]->pos.y;
 		}
 		else {
-			keydrag_pos.x = inv->inventory[CARRIED].slots[slot_index - inv->getEquippedCount()]->pos.x;
-			keydrag_pos.y = inv->inventory[CARRIED].slots[slot_index - inv->getEquippedCount()]->pos.y;
+			keydrag_pos.x = inv->inventory[MenuInventory::CARRIED].slots[slot_index - inv->getEquippedCount()]->pos.x;
+			keydrag_pos.y = inv->inventory[MenuInventory::CARRIED].slots[slot_index - inv->getEquippedCount()]->pos.y;
 		}
 
 		keyb_tip_new_inv = inv->checkTooltip(keydrag_pos);

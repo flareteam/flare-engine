@@ -108,14 +108,14 @@ void CampaignManager::unsetStatus(const std::string& s) {
 }
 
 bool CampaignManager::checkCurrency(int quantity) {
-	return menu->inv->inventory[CARRIED].contain(CURRENCY_ID, quantity);
+	return menu->inv->inventory[MenuInventory::CARRIED].contain(CURRENCY_ID, quantity);
 }
 
 bool CampaignManager::checkItem(int item_id) {
-	if (menu->inv->inventory[CARRIED].contain(item_id, 1))
+	if (menu->inv->inventory[MenuInventory::CARRIED].contain(item_id, 1))
 		return true;
 	else
-		return menu->inv->inventory[EQUIPMENT].contain(item_id, 1);
+		return menu->inv->inventory[MenuInventory::EQUIPMENT].contain(item_id, 1);
 }
 
 void CampaignManager::removeCurrency(int quantity) {
@@ -141,7 +141,7 @@ void CampaignManager::rewardItem(ItemStack istack) {
 	if (istack.empty())
 		return;
 
-	menu->inv->add(istack, CARRIED, -1, true, true);
+	menu->inv->add(istack, MenuInventory::CARRIED, ItemStorage::NO_SLOT, MenuInventory::ADD_PLAY_SOUND, MenuInventory::ADD_AUTO_EQUIP);
 
 	if (istack.item != CURRENCY_ID) {
 		if (istack.quantity <= 1)

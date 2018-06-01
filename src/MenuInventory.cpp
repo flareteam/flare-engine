@@ -54,7 +54,7 @@ MenuInventory::MenuInventory(StatBlock *_stats)
 	, currency(0)
 	, drag_prev_src(-1)
 	, changed_equipment(true)
-	, inv_ctrl(INV_CTRL_NONE)
+	, inv_ctrl(CTRL_NONE)
 	, show_book("")
 {
 	visible = false;
@@ -264,7 +264,7 @@ int MenuInventory::areaOver(const Point& position) {
 
 	// point is inside the inventory menu, but not over a slot
 	if (isWithinRect(window_area, position)) {
-		return INV_WINDOW;
+		return NO_AREA;
 	}
 
 	return -2;
@@ -288,9 +288,9 @@ TooltipData MenuInventory::checkTooltip(const Point& position) {
 			tip.addText(msg->get("%s modifiers", inpt->getBindingString(Input::MAIN1).c_str()));
 			tip.addText(msg->get("Select a quantity of item:") + " " + inpt->getBindingString(Input::SHIFT) + " / " + inpt->getBindingString(Input::SHIFT, InputState::BINDING_ALT));
 
-			if (inv_ctrl == INV_CTRL_STASH)
+			if (inv_ctrl == CTRL_STASH)
 				tip.addText(msg->get("Stash item stack:") + " " + inpt->getBindingString(Input::CTRL) + " / " + inpt->getBindingString(Input::CTRL, InputState::BINDING_ALT));
-			else if (inv_ctrl == INV_CTRL_VENDOR || (SELL_WITHOUT_VENDOR && inv_ctrl != INV_CTRL_STASH))
+			else if (inv_ctrl == CTRL_VENDOR || (SELL_WITHOUT_VENDOR && inv_ctrl != CTRL_STASH))
 				tip.addText(msg->get("Sell item stack:") + " " + inpt->getBindingString(Input::CTRL) + " / " + inpt->getBindingString(Input::CTRL, InputState::BINDING_ALT));
 		}
 		return tip;
@@ -350,7 +350,7 @@ ItemStack MenuInventory::click(const Point& position) {
  */
 void MenuInventory::itemReturn(ItemStack stack) {
 	if (drag_prev_src == -1) {
-		add(stack, CARRIED, -1, false, false);
+		add(stack, CARRIED, ItemStorage::NO_SLOT, !ADD_PLAY_SOUND, !ADD_AUTO_EQUIP);
 	}
 	else {
 		int prev_slot = inventory[drag_prev_src].drag_prev_slot;
@@ -375,7 +375,7 @@ bool MenuInventory::drop(const Point& position, ItemStack stack) {
 	int area = areaOver(position);
 	if (area < 0) {
 		if (drag_prev_src == -1) {
-			success = add(stack, CARRIED, -1, false, true);
+			success = add(stack, CARRIED, ItemStorage::NO_SLOT, !ADD_PLAY_SOUND, ADD_AUTO_EQUIP);
 		}
 		else {
 			// not dropped into a slot. Just return it to the previous slot.
@@ -387,7 +387,7 @@ bool MenuInventory::drop(const Point& position, ItemStack stack) {
 	int slot = inventory[area].slotOver(position);
 	if (slot == -1) {
 		if (drag_prev_src == -1) {
-			success = add(stack, CARRIED, -1, false, true);
+			success = add(stack, CARRIED, ItemStorage::NO_SLOT, !ADD_PLAY_SOUND, ADD_AUTO_EQUIP);
 		}
 		else {
 			// not dropped into a slot. Just return it to the previous slot.
@@ -408,7 +408,7 @@ bool MenuInventory::drop(const Point& position, ItemStack stack) {
 		if (slot_type[slot] == items->items[stack.item].type && items->requirementsMet(stats, stack.item) && stats->humanoid && inventory[EQUIPMENT].slots[slot]->enabled) {
 			if (inventory[area][slot].item == stack.item) {
 				// Merge the stacks
-				success = add(stack, area, slot, false, false);
+				success = add(stack, area, slot, !ADD_PLAY_SOUND, !ADD_AUTO_EQUIP);
 			}
 			else {
 				// Swap the two stacks
@@ -438,7 +438,7 @@ bool MenuInventory::drop(const Point& position, ItemStack stack) {
 			if (slot != drag_prev_slot) {
 				if (inventory[area][slot].item == stack.item) {
 					// Merge the stacks
-					success = add(stack, area, slot, false, false);
+					success = add(stack, area, slot, !ADD_PLAY_SOUND, !ADD_AUTO_EQUIP);
 				}
 				else if (inventory[area][slot].empty()) {
 					// Drop the stack
@@ -470,7 +470,7 @@ bool MenuInventory::drop(const Point& position, ItemStack stack) {
 		else {
 			if (inventory[area][slot].item == stack.item || drag_prev_src == -1) {
 				// Merge the stacks
-				success = add(stack, area, slot, false, false);
+				success = add(stack, area, slot, !ADD_PLAY_SOUND, !ADD_AUTO_EQUIP);
 			}
 			else if (inventory[area][slot].empty()) {
 				// Drop the stack
@@ -579,14 +579,14 @@ void MenuInventory::activate(const Point& position) {
 	}
 	// equip an item
 	else if (stats->humanoid && items->items[inventory[CARRIED][slot].item].type != "") {
-		int equip_slot = getEquipSlotFromItem(inventory[CARRIED].storage[slot].item, false);
+		int equip_slot = getEquipSlotFromItem(inventory[CARRIED].storage[slot].item, !ONLY_EMPTY_SLOTS);
 
 		if (equip_slot >= 0) {
 			stack = click(position);
 
 			if (inventory[EQUIPMENT][equip_slot].item == stack.item) {
 				// Merge the stacks
-				add(stack, EQUIPMENT, equip_slot, false, false);
+				add(stack, EQUIPMENT, equip_slot, !ADD_PLAY_SOUND, !ADD_AUTO_EQUIP);
 			}
 			else if (inventory[EQUIPMENT][equip_slot].empty()) {
 				// Drop the stack
@@ -599,7 +599,7 @@ void MenuInventory::activate(const Point& position) {
 				}
 				else {
 					// Drop the equipped item anywhere
-					add(inventory[EQUIPMENT][equip_slot], CARRIED, -1, true, false);
+					add(inventory[EQUIPMENT][equip_slot], CARRIED, ItemStorage::NO_SLOT, ADD_PLAY_SOUND, !ADD_AUTO_EQUIP);
 				}
 				inventory[EQUIPMENT][equip_slot] = stack;
 			}
@@ -639,7 +639,7 @@ bool MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound, bo
 		items->playSound(stack.item);
 
 	if (auto_equip && AUTO_EQUIP) {
-		int equip_slot = getEquipSlotFromItem(stack.item, true);
+		int equip_slot = getEquipSlotFromItem(stack.item, ONLY_EMPTY_SLOTS);
 		bool disabled_slots_empty = true;
 
 		// if this item would disable non-empty slots, don't auto-equip it
@@ -685,7 +685,7 @@ bool MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound, bo
 					drop_stack.push(leftover);
 				}
 				else {
-					add(leftover, CARRIED, slot, false, false);
+					add(leftover, CARRIED, slot, !ADD_PLAY_SOUND, !ADD_AUTO_EQUIP);
 				}
 			}
 			else {
@@ -709,7 +709,7 @@ bool MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound, bo
 			leftover.quantity = dest.quantity + stack.quantity - items->items[stack.item].max_quantity;
 			stack.quantity = items->items[stack.item].max_quantity - dest.quantity;
 			if (stack.quantity > 0) {
-				add(stack, EQUIPMENT, slot, false, false);
+				add(stack, EQUIPMENT, slot, !ADD_PLAY_SOUND, !ADD_AUTO_EQUIP);
 			}
 		}
 		else {
@@ -720,7 +720,7 @@ bool MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound, bo
 		}
 
 		if (!leftover.empty()) {
-			add(leftover, CARRIED, -1, false, false);
+			add(leftover, CARRIED, ItemStorage::NO_SLOT, !ADD_PLAY_SOUND, !ADD_AUTO_EQUIP);
 		}
 
 		applyEquipment();
@@ -771,7 +771,7 @@ void MenuInventory::addCurrency(int count) {
 		ItemStack stack;
 		stack.item = CURRENCY_ID;
 		stack.quantity = count;
-		add(stack, CARRIED, -1, false, false);
+		add(stack, CARRIED, ItemStorage::NO_SLOT, !ADD_PLAY_SOUND, !ADD_AUTO_EQUIP);
 	}
 }
 
@@ -803,7 +803,7 @@ bool MenuInventory::buy(ItemStack stack, int tab, bool dragging) {
 			drop(inpt->mouse, stack);
 		}
 		else {
-			add(stack, CARRIED, -1, true, true);
+			add(stack, CARRIED, ItemStorage::NO_SLOT, ADD_PLAY_SOUND, ADD_AUTO_EQUIP);
 		}
 
 		removeCurrency(count);
@@ -925,7 +925,7 @@ void MenuInventory::applyEquipment() {
 		// check that each equipped item fit requirements
 		for (int i = 0; i < MAX_EQUIPPED; i++) {
 			if (!items->requirementsMet(stats, inventory[EQUIPMENT].storage[i].item)) {
-				add(inventory[EQUIPMENT].storage[i], CARRIED, -1, true, false);
+				add(inventory[EQUIPMENT].storage[i], CARRIED, ItemStorage::NO_SLOT, ADD_PLAY_SOUND, !ADD_AUTO_EQUIP);
 				inventory[EQUIPMENT].storage[i].clear();
 				checkRequired = true;
 			}
@@ -962,7 +962,7 @@ void MenuInventory::applyEquipment() {
 			for (int k=0; k<MAX_EQUIPPED; ++k) {
 				if (slot_type[k] == items->items[id].disable_slots[j]) {
 					if (!inventory[EQUIPMENT].storage[k].empty()) {
-						add(inventory[EQUIPMENT].storage[k], CARRIED, -1, true, false);
+						add(inventory[EQUIPMENT].storage[k], CARRIED, ItemStorage::NO_SLOT, ADD_PLAY_SOUND, !ADD_AUTO_EQUIP);
 						inventory[EQUIPMENT].storage[k].clear();
 						updateEquipment(k);
 						applyEquipment();
@@ -1127,7 +1127,7 @@ void MenuInventory::fillEquipmentSlots() {
 			ItemStack stack;
 			stack.item = equip_item[i];
 			stack.quantity = (equip_quantity[i] > 0) ? equip_quantity[i] : 1;
-			add(stack, CARRIED, -1, false, false);
+			add(stack, CARRIED, ItemStorage::NO_SLOT, !ADD_PLAY_SOUND, !ADD_AUTO_EQUIP);
 		}
 	}
 	delete [] equip_item;
