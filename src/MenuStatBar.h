@@ -51,7 +51,8 @@ public:
 	explicit MenuStatBar(const std::string& type);
 	~MenuStatBar();
 	void loadGraphics();
-	void update(unsigned long _stat_cur, unsigned long _stat_max, const std::string& _custom_string = "");
+	void update(unsigned long _stat_cur, unsigned long _stat_max);
+	void updateCustomString(unsigned long _stat_cur, unsigned long _stat_max, const std::string& _custom_string = "");
 	void render();
 };
 

@@ -112,7 +112,11 @@ void MenuStatBar::loadGraphics() {
 	}
 }
 
-void MenuStatBar::update(unsigned long _stat_cur, unsigned long _stat_max, const std::string& _custom_string) {
+void MenuStatBar::update(unsigned long _stat_cur, unsigned long _stat_max) {
+	updateCustomString(_stat_cur, _stat_max, "");
+}
+
+void MenuStatBar::updateCustomString(unsigned long _stat_cur, unsigned long _stat_max, const std::string& _custom_string) {
 	if (!_custom_string.empty()) custom_string = _custom_string;
 	stat_cur = _stat_cur;
 	stat_max = _stat_max;
