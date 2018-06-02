@@ -124,7 +124,7 @@ GameStateConfigBase::GameStateConfigBase (bool do_init)
 	// Finish Mods ListBoxes setup
 	activemods_lstb->multi_select = true;
 	for (unsigned int i = 0; i < mods->mod_list.size() ; i++) {
-		if (mods->mod_list[i].name != FALLBACK_MOD)
+		if (mods->mod_list[i].name != mods->FALLBACK_MOD)
 			activemods_lstb->append(mods->mod_list[i].name,createModTooltip(&mods->mod_list[i]));
 	}
 
@@ -137,7 +137,7 @@ GameStateConfigBase::GameStateConfigBase (bool do_init)
 				break;
 			}
 		}
-		if (!skip_mod && mods->mod_dirs[i] != FALLBACK_MOD) {
+		if (!skip_mod && mods->mod_dirs[i] != mods->FALLBACK_MOD) {
 			Mod temp_mod = mods->loadMod(mods->mod_dirs[i]);
 			inactivemods_lstb->append(mods->mod_dirs[i],createModTooltip(&temp_mod));
 		}
@@ -891,7 +891,7 @@ void GameStateConfigBase::enableMods() {
 
 void GameStateConfigBase::disableMods() {
 	for (int i=0; i<activemods_lstb->getSize(); i++) {
-		if (activemods_lstb->isSelected(i) && activemods_lstb->getValue(i) != FALLBACK_MOD) {
+		if (activemods_lstb->isSelected(i) && activemods_lstb->getValue(i) != mods->FALLBACK_MOD) {
 			inactivemods_lstb->append(activemods_lstb->getValue(i),activemods_lstb->getTooltip(i));
 			activemods_lstb->remove(i);
 			i--;
@@ -905,7 +905,7 @@ bool GameStateConfigBase::setMods() {
 
 	std::vector<Mod> temp_list = mods->mod_list;
 	mods->mod_list.clear();
-	mods->mod_list.push_back(mods->loadMod(FALLBACK_MOD));
+	mods->mod_list.push_back(mods->loadMod(mods->FALLBACK_MOD));
 
 	for (int i=0; i<activemods_lstb->getSize(); i++) {
 		if (activemods_lstb->getValue(i) != "")
@@ -940,7 +940,7 @@ std::string GameStateConfigBase::createModTooltip(Mod *mod) {
 			ret += '\n';
 			ret += msg->get("Version:") + ' ' + mod_ver;
 		}
-		if (mod->game != "" && mod->game != FALLBACK_GAME) {
+		if (mod->game != "" && mod->game != mods->FALLBACK_GAME) {
 			middle_section = true;
 			ret += '\n';
 			ret += msg->get("Game:") + ' ' + mod->game;

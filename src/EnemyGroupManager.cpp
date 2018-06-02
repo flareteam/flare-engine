@@ -29,7 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <cassert>
 
 EnemyGroupManager::EnemyGroupManager() {
-	std::vector<std::string> enemy_paths = mods->list("enemies", false);
+	std::vector<std::string> enemy_paths = mods->list("enemies", !ModManager::LIST_FULL_PATHS);
 
 	for (unsigned i=0; i<enemy_paths.size(); ++i) {
 		FileParser infile;

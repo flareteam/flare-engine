@@ -41,7 +41,7 @@ bool FileParser::open(const std::string& _filename, unsigned char _flags) {
 
 	filenames.clear();
 	if (!(flags & FULL_PATH)) {
-		filenames = mods->list(_filename);
+		filenames = mods->list(_filename, ModManager::LIST_FULL_PATHS);
 	}
 	else {
 		filenames.push_back(_filename);

@@ -438,7 +438,7 @@ void MenuDevConsole::execute() {
 		}
 	}
 	else if (args[0] == "list_maps") {
-		std::vector<std::string> map_filenames = mods->list("maps", false);
+		std::vector<std::string> map_filenames = mods->list("maps", !ModManager::LIST_FULL_PATHS);
 
 		for (size_t i=0; i<map_filenames.size(); ++i) {
 			// Remove "maps/" from all of the filenames so that it doesn't affect search results

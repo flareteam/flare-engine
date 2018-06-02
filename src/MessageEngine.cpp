@@ -39,7 +39,7 @@ MessageEngine::MessageEngine() {
 
 	GetText infile;
 
-	std::vector<std::string> engineFiles = mods->list("languages/engine." + LANGUAGE + ".po");
+	std::vector<std::string> engineFiles = mods->list("languages/engine." + LANGUAGE + ".po", ModManager::LIST_FULL_PATHS);
 	if (engineFiles.empty() && LANGUAGE != "en")
 		logError("MessageEngine: Unable to open basic translation files located in languages/engine.%s.po", LANGUAGE.c_str());
 
@@ -53,7 +53,7 @@ MessageEngine::MessageEngine() {
 		}
 	}
 
-	std::vector<std::string> dataFiles = mods->list("languages/data." + LANGUAGE + ".po");
+	std::vector<std::string> dataFiles = mods->list("languages/data." + LANGUAGE + ".po", ModManager::LIST_FULL_PATHS);
 	if (dataFiles.empty() && LANGUAGE != "en")
 		logError("MessageEngine: Unable to open basic translation files located in languages/data.%s.po", LANGUAGE.c_str());
 

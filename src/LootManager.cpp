@@ -664,7 +664,7 @@ void LootManager::parseLoot(std::string &val, Event_Component *e, std::vector<Ev
 }
 
 void LootManager::loadLootTables() {
-	std::vector<std::string> filenames = mods->list("loot", false);
+	std::vector<std::string> filenames = mods->list("loot", !ModManager::LIST_FULL_PATHS);
 
 	for (unsigned i=0; i<filenames.size(); i++) {
 		FileParser infile;
