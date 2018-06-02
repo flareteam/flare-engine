@@ -132,7 +132,7 @@ void GameStatePlay::resetGame() {
 	menu->inv->inventory[1].clear();
 	menu->inv->changed_equipment = true;
 	menu->inv->currency = 0;
-	menu->questlog->clear();
+	menu->questlog->clearAll();
 	quests->createQuestList();
 	menu->hudlog->clear();
 
@@ -431,7 +431,7 @@ void GameStatePlay::checkLog() {
 		const std::string& str = pc->log_msg.front().first;
 		const bool prevent_spam = pc->log_msg.front().second;
 
-		menu->questlog->add(str, LOG_TYPE_MESSAGES, prevent_spam);
+		menu->questlog->add(str, MenuLog::TYPE_MESSAGES, prevent_spam, MenuLog::DEFAULT_STYLE);
 		menu->hudlog->add(str, prevent_spam);
 
 		pc->log_msg.pop();

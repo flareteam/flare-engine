@@ -235,7 +235,7 @@ void SaveLoad::saveGame() {
 	PREV_SAVE_SLOT = game_slot-1;
 
 	// display a log message saying that we saved the game
-	menu->questlog->add(msg->get("Game saved."), LOG_TYPE_MESSAGES);
+	menu->questlog->add(msg->get("Game saved."), MenuLog::TYPE_MESSAGES, MenuLog::PREVENT_SPAM, MenuLog::DEFAULT_STYLE);
 	menu->hudlog->add(msg->get("Game saved."), MenuHUDLog::PREVENT_SPAM);
 }
 

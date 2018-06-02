@@ -32,38 +32,27 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class WidgetButton;
 class WidgetTabControl;
 
-const unsigned LOG_TYPE_COUNT = 2;
-const int LOG_TYPE_QUESTS = 0;
-const int LOG_TYPE_MESSAGES = 1;
-const int LOG_TYPE_ALL = -1;
-
 class MenuLog : public Menu {
-private:
-
-	WidgetLabel label_log;
-	WidgetButton *closeButton;
-	WidgetTabControl *tabControl;
-
-	void loadGraphics();
-
-	WidgetLog *log[LOG_TYPE_COUNT];
-	std::string tab_labels[LOG_TYPE_COUNT];
-	Rect tab_rect[LOG_TYPE_COUNT];
-
-	LabelInfo title;
-	Rect tab_area;
-	Color tab_bg;
-
 public:
+	enum {
+		TYPE_QUESTS = 0,
+		TYPE_MESSAGES = 1
+	};
+	static const int TYPE_COUNT = 2;
+
+	static const bool PREVENT_SPAM = true;
+	static const int DEFAULT_STYLE = WIDGETLOG_FONT_REGULAR;
+
 	MenuLog();
 	~MenuLog();
 	void align();
 
 	void logic();
 	void render();
-	void add(const std::string& s, int log_type, bool prevent_spam = true, Color* color = NULL, int style = WIDGETLOG_FONT_REGULAR);
+	void add(const std::string& s, int log_type, bool prevent_spam, int style);
 	void remove(int msg_index, int log_type);
-	void clear(int log_type = LOG_TYPE_ALL);
+	void clear(int log_type);
+	void clearAll();
 	void addSeparator(int log_type);
 	void setNextTabList(TabList *tl);
 
@@ -71,6 +60,21 @@ public:
 
 	TabList* getCurrentTabList();
 	void defocusTabLists();
+
+private:
+	WidgetLabel label_log;
+	WidgetButton *closeButton;
+	WidgetTabControl *tabControl;
+
+	void loadGraphics();
+
+	WidgetLog *log[TYPE_COUNT];
+	std::string tab_labels[TYPE_COUNT];
+	Rect tab_rect[TYPE_COUNT];
+
+	LabelInfo title;
+	Rect tab_area;
+	Color tab_bg;
 };
 
 #endif

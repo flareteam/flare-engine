@@ -75,8 +75,8 @@ MenuLog::MenuLog() {
 	tablist.add(tabControl);
 
 	// Store the amount of displayed log messages on each log, and the maximum.
-	tablist_log.resize(LOG_TYPE_COUNT);
-	for (unsigned i=0; i<LOG_TYPE_COUNT; i++) {
+	tablist_log.resize(TYPE_COUNT);
+	for (size_t i = 0; i < TYPE_COUNT; ++i) {
 		log[i] = new WidgetLog(tab_area.w,tab_area.h);
 		log[i]->setBasePos(tab_area.x, tab_area.y + tabControl->getTabHeight());
 
@@ -86,8 +86,8 @@ MenuLog::MenuLog() {
 	}
 
 	// Define the header.
-	tabControl->setTabTitle(LOG_TYPE_MESSAGES, msg->get("Notes"));
-	tabControl->setTabTitle(LOG_TYPE_QUESTS, msg->get("Quests"));
+	tabControl->setTabTitle(TYPE_MESSAGES, msg->get("Notes"));
+	tabControl->setTabTitle(TYPE_QUESTS, msg->get("Quests"));
 
 	setBackground("images/menus/log.png");
 
@@ -103,7 +103,7 @@ void MenuLog::align() {
 
 	label_log.set(window_area.x+title.x, window_area.y+title.y, title.justify, title.valign, msg->get("Log"), font->getColor("menu_normal"), title.font_style);
 
-	for (unsigned i=0; i<LOG_TYPE_COUNT; i++) {
+	for (size_t i = 0; i < TYPE_COUNT; ++i) {
 		log[i]->setPos(window_area.x, window_area.y);
 	}
 }
@@ -116,7 +116,7 @@ void MenuLog::logic() {
 
 	tablist.logic();
 	// make shure keyboard navigation leads us to correct tab
-	for (unsigned i = 0; i < LOG_TYPE_COUNT; i++) {
+	for (size_t i = 0; i < TYPE_COUNT; ++i) {
 		if (tabControl->getActiveTab() == static_cast<int>(i)) {
 			tablist.setNextTabList(&tablist_log[i]);
 		}
@@ -160,8 +160,8 @@ void MenuLog::render() {
 /**
  * Add a new message to the log.
  */
-void MenuLog::add(const std::string& s, int log_type, bool prevent_spam, Color* color, int style) {
-	log[log_type]->add(substituteVarsInString(s, pc), prevent_spam, color, style);
+void MenuLog::add(const std::string& s, int log_type, bool prevent_spam, int style) {
+	log[log_type]->add(substituteVarsInString(s, pc), prevent_spam, NULL, style);
 }
 
 /**
@@ -172,13 +172,14 @@ void MenuLog::remove(int msg_index, int log_type) {
 }
 
 void MenuLog::clear(int log_type) {
-	if (log_type == LOG_TYPE_ALL) {
-		for (unsigned i=0; i<LOG_TYPE_COUNT; i++) {
-			log[i]->clear();
-		}
-	}
-	else {
+	if (log_type >= 0 && log_type < TYPE_COUNT) {
 		log[log_type]->clear();
+	}
+}
+
+void MenuLog::clearAll() {
+	for (size_t i = 0; i < TYPE_COUNT; ++i) {
+		log[i]->clear();
 	}
 }
 
@@ -187,7 +188,7 @@ void MenuLog::addSeparator(int log_type) {
 }
 
 void MenuLog::setNextTabList(TabList *tl) {
-	for (unsigned i=0; i<LOG_TYPE_COUNT; ++i) {
+	for (size_t i = 0; i < TYPE_COUNT; ++i) {
 		tablist_log[i].setNextTabList(tl);
 	}
 }
@@ -197,7 +198,7 @@ TabList* MenuLog::getCurrentTabList() {
 		return (&tablist);
 	}
 	else {
-		for (unsigned i=0; i<LOG_TYPE_COUNT; ++i) {
+		for (size_t i = 0; i < TYPE_COUNT; ++i) {
 			if (tablist_log[i].getCurrent() != -1)
 				return (&tablist_log[i]);
 		}
@@ -208,13 +209,13 @@ TabList* MenuLog::getCurrentTabList() {
 
 void MenuLog::defocusTabLists() {
 	tablist.defocus();
-	for (unsigned i=0; i<LOG_TYPE_COUNT; ++i) {
+	for (size_t i = 0; i < TYPE_COUNT; ++i) {
 		tablist_log[i].defocus();
 	}
 }
 
 MenuLog::~MenuLog() {
-	for (unsigned i=0; i<LOG_TYPE_COUNT; i++) {
+	for (size_t i = 0; i < TYPE_COUNT; ++i) {
 		delete log[i];
 	}
 

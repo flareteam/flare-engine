@@ -213,7 +213,7 @@ void QuestLog::createQuestList() {
 		active_quest_ids = temp_quest_ids;
 		newQuestNotification = true;
 
-		log->clear(LOG_TYPE_QUESTS);
+		log->clear(MenuLog::TYPE_QUESTS);
 
 		for (size_t i=active_quest_ids.size(); i>0; i--) {
 			size_t k = active_quest_ids[i-1];
@@ -232,17 +232,17 @@ void QuestLog::createQuestList() {
 
 			for (size_t j=0; j<quests[k].size(); j++) {
 				if (quests[k][j].type == EC_QUEST_TEXT) {
-					log->add(quests[k][j].s, LOG_TYPE_QUESTS, false);
+					log->add(quests[k][j].s, MenuLog::TYPE_QUESTS, !MenuLog::PREVENT_SPAM, MenuLog::DEFAULT_STYLE);
 
 					if (next_quest_id != quests[k][j].x) {
 						if (quest_names[quests[k][j].x] != "")
-							log->add(quest_names[quests[k][j].x], LOG_TYPE_QUESTS, false, NULL, WIDGETLOG_FONT_BOLD);
+							log->add(quest_names[quests[k][j].x], MenuLog::TYPE_QUESTS, !MenuLog::PREVENT_SPAM, WIDGETLOG_FONT_BOLD);
 
-						log->addSeparator(LOG_TYPE_QUESTS);
+						log->addSeparator(MenuLog::TYPE_QUESTS);
 					}
 					else if (i == 1) {
 						if (quest_names[quests[k][j].x] != "")
-							log->add(quest_names[quests[k][j].x], LOG_TYPE_QUESTS, false, NULL, WIDGETLOG_FONT_BOLD);
+							log->add(quest_names[quests[k][j].x], MenuLog::TYPE_QUESTS, !MenuLog::PREVENT_SPAM, WIDGETLOG_FONT_BOLD);
 					}
 
 					break;
