@@ -75,7 +75,7 @@ MenuManager::MenuManager(StatBlock *_stats)
 	, sticky_dragging(false)
 	, drag_stack()
 	, drag_power(0)
-	, drag_src(0)
+	, drag_src(DRAG_SRC_NONE)
 	, drag_icon(NULL)
 	, done(false)
 	, act_drag_hover(false)
@@ -237,7 +237,7 @@ void MenuManager::handleKeyboardNavigation() {
 			pow->tablist.unlock();
 	}
 
-	if (drag_src == 0) {
+	if (drag_src == DRAG_SRC_NONE) {
 		if (inv->visible) {
 			stash->tablist.setNextTabList(&inv->tablist);
 			vendor->tablist_buy.setNextTabList(&inv->tablist);
@@ -869,7 +869,7 @@ void MenuManager::logic() {
 
 			drag_stack.clear();
 			drag_power = 0;
-			drag_src = 0;
+			drag_src = DRAG_SRC_NONE;
 			mouse_dragging = false;
 		}
 		if (!inpt->usingMouse())
@@ -932,7 +932,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 		else if (slotClick == CHECKED && !drag_stack.empty()) {
 			inv->drop(src_slot, drag_stack);
 			inv_slot->checked = false;
-			drag_src = 0;
+			drag_src = DRAG_SRC_NONE;
 			drag_stack.clear();
 			keyboard_dragging = false;
 			sticky_dragging = false;
@@ -955,7 +955,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 					inv->activate(src_slot);
 			}
 			inv->clearHighlight();
-			drag_src = 0;
+			drag_src = DRAG_SRC_NONE;
 			drag_stack.clear();
 			keyboard_dragging = false;
 			sticky_dragging = false;
@@ -1006,7 +1006,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 				vendor->itemReturn(inv->drop_stack.front());
 				inv->drop_stack.pop();
 			}
-			drag_src = 0;
+			drag_src = DRAG_SRC_NONE;
 			drag_stack.clear();
 			keyboard_dragging = false;
 			sticky_dragging = false;
@@ -1040,7 +1040,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 				drop_stack.push(stash->drop_stack.front());
 				stash->drop_stack.pop();
 			}
-			drag_src = 0;
+			drag_src = DRAG_SRC_NONE;
 			drag_stack.clear();
 			keyboard_dragging = false;
 			sticky_dragging = false;
@@ -1051,7 +1051,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 				stash->itemReturn(inv->drop_stack.front());
 				inv->drop_stack.pop();
 			}
-			drag_src = 0;
+			drag_src = DRAG_SRC_NONE;
 			drag_stack.clear();
 			keyboard_dragging = false;
 			sticky_dragging = false;
@@ -1081,7 +1081,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 			if (drag_power > 0) {
 				pow->upgradeByCell(slot_index);
 			}
-			drag_src = 0;
+			drag_src = DRAG_SRC_NONE;
 			drag_power = 0;
 			keyboard_dragging = false;
 		}
@@ -1128,7 +1128,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 		else if ((slotClick == CHECKED || slotClick == ACTIVATED) && drag_src == DRAG_SRC_ACTIONBAR && drag_power > 0) {
 			if (slotClick == CHECKED) act->slots[slot_index]->checked = false;
 			act->drop(dest_slot, drag_power, 1);
-			drag_src = 0;
+			drag_src = DRAG_SRC_NONE;
 			drag_power = 0;
 			keyboard_dragging = false;
 			inpt->lock[Input::ACCEPT] = false;
@@ -1151,11 +1151,11 @@ void MenuManager::resetDrag() {
 		inv->clearHighlight();
 	}
 	else if (drag_src == DRAG_SRC_ACTIONBAR) act->actionReturn(drag_power);
-	drag_src = 0;
+	drag_src = DRAG_SRC_NONE;
 	drag_stack.clear();
 	drag_power = 0;
 
-	if (keyboard_dragging && DRAG_SRC_ACTIONBAR) {
+	if (keyboard_dragging && drag_src == DRAG_SRC_ACTIONBAR) {
 		inpt->lock[Input::ACCEPT] = false;
 	}
 
@@ -1447,7 +1447,7 @@ void MenuManager::closeRight() {
 }
 
 bool MenuManager::isDragging() {
-	return drag_src != 0;
+	return drag_src != DRAG_SRC_NONE;
 }
 
 bool MenuManager::isNPCMenuVisible() {
