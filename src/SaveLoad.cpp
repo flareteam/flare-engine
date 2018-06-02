@@ -357,14 +357,14 @@ void SaveLoad::loadGame() {
 			else if (SAVE_BUYBACK && infile.key == "buyback_item") {
 				std::string npc_filename = popFirstString(infile.val, ';');
 				if (!npc_filename.empty()) {
-					menu->vendor->buyback_stock[npc_filename].init(NPC_VENDOR_MAX_STOCK);
+					menu->vendor->buyback_stock[npc_filename].init(NPC::VENDOR_MAX_STOCK);
 					menu->vendor->buyback_stock[npc_filename].setItems(infile.val);
 				}
 			}
 			else if (SAVE_BUYBACK && infile.key == "buyback_quantity") {
 				std::string npc_filename = popFirstString(infile.val, ';');
 				if (!npc_filename.empty()) {
-					menu->vendor->buyback_stock[npc_filename].init(NPC_VENDOR_MAX_STOCK);
+					menu->vendor->buyback_stock[npc_filename].init(NPC::VENDOR_MAX_STOCK);
 					menu->vendor->buyback_stock[npc_filename].setQuantities(infile.val);
 				}
 			}

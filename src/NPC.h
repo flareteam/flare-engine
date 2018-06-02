@@ -29,27 +29,40 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "ItemStorage.h"
 #include "Utils.h"
 
-const int NPC_VENDOR_MAX_STOCK = 80;
-const int NPC_VOX_INTRO = 0;
-const int NPC_VOX_QUEST = 1;
-
 class NPC : public Entity {
 private:
+	enum {
+		VOX_INTRO = 0,
+		VOX_QUEST = 1,
+	};
+
+	void loadGraphics();
+	int loadSound(const std::string& fname, int vox_type);
 	bool isDialogType(const EVENT_COMPONENT_TYPE &event_type);
+	bool playSoundQuest(int id);
+
+	std::string gfx; // filename of sprite.
 
 	std::vector<Event_Component> random_table;
 	Point random_table_count;
 
+	std::vector<std::string> vendor_requires_status;
+	std::vector<std::string> vendor_requires_not_status;
+
 	std::vector<std::string> portrait_filenames;
 
+	// vocals
+	std::vector<SoundID> vox_intro;
+	std::vector<SoundID> vox_quests;
+
 public:
+	static const int VENDOR_MAX_STOCK = 80;
+
 	NPC();
 	~NPC();
 	void load(const std::string& npc_id);
-	void loadGraphics();
-	int loadSound(const std::string& fname, int vox_type);
 	void logic();
-	bool playSound(int vox_type, int id=-1);
+	bool playSoundIntro();
 	void getDialogNodes(std::vector<int> &result);
 	std::string getDialogTopic(unsigned int dialog_node);
 	bool checkMovement(unsigned int dialog_node);
@@ -61,7 +74,6 @@ public:
 	// general info
 	std::string name;
 	std::string filename;
-	std::string gfx; // filename of sprite.
 	FPoint pos; // map position
 
 	int direction;
@@ -76,13 +88,6 @@ public:
 	bool vendor;
 	bool reset_buyback;
 	ItemStorage stock;
-	int stock_count;
-	std::vector<std::string> vendor_requires_status;
-	std::vector<std::string> vendor_requires_not_status;
-
-	// vocals
-	std::vector<SoundID> vox_intro;
-	std::vector<SoundID> vox_quests;
 
 	// story and dialog options
 	// outer vector is addressing the dialog and the inner vector is

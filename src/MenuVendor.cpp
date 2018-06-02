@@ -271,7 +271,7 @@ void MenuVendor::setNPC(NPC* _npc) {
 
 	setTab(ItemManager::VENDOR_BUY);
 
-	buyback_stock[npc->filename].init(NPC_VENDOR_MAX_STOCK);
+	buyback_stock[npc->filename].init(NPC::VENDOR_MAX_STOCK);
 
 	for (unsigned i=0; i<VENDOR_SLOTS; i++) {
 		stock[ItemManager::VENDOR_BUY][i] = npc->stock[i];
@@ -292,7 +292,7 @@ void MenuVendor::setNPC(NPC* _npc) {
 	if (!visible) {
 		visible = true;
 		snd->play(sfx_open);
-		npc->playSound(NPC_VOX_INTRO);
+		npc->playSoundIntro();
 	}
 }
 

@@ -41,21 +41,15 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 NPC::NPC()
 	: Entity()
-	, name("")
 	, gfx("")
-	, pos()
+	, name("")
 	, direction(0)
 	, npc_portrait(NULL)
 	, hero_portrait(NULL)
 	, talker(false)
 	, vendor(false)
-	, reset_buyback(true)
-	, stock()
-	, stock_count(0)
-	, vox_intro()
-	, vox_quests()
-	, dialog() {
-	stock.init(NPC_VENDOR_MAX_STOCK);
+	, reset_buyback(true) {
+	stock.init(VENDOR_MAX_STOCK);
 }
 
 /**
@@ -95,7 +89,7 @@ void NPC::load(const std::string& npc_id) {
 				else if (infile.key == "voice") {
 					// @ATTR dialog.voice|repeatable(string)|Filename of a voice sound file to play.
 					e.type = EC_NPC_VOICE;
-					e.x = loadSound(infile.val, NPC_VOX_QUEST);
+					e.x = loadSound(infile.val, VOX_QUEST);
 				}
 				else if (infile.key == "topic") {
 					// @ATTR dialog.topic|string|The name of this dialog topic. Displayed when picking a dialog tree.
@@ -237,7 +231,7 @@ void NPC::load(const std::string& npc_id) {
 				// handle vocals
 				else if (infile.key == "vox_intro") {
 					// @ATTR vox_intro|repeatable(filename)|Filename of a sound file to play when initially interacting with the NPC.
-					loadSound(infile.val, NPC_VOX_INTRO);
+					loadSound(infile.val, VOX_INTRO);
 				}
 
 				else {
@@ -297,12 +291,12 @@ int NPC::loadSound(const std::string& fname, int vox_type) {
 	if (!a)
 		return -1;
 
-	if (vox_type == NPC_VOX_INTRO) {
+	if (vox_type == VOX_INTRO) {
 		vox_intro.push_back(a);
 		return static_cast<int>(vox_intro.size()) - 1;
 	}
 
-	if (vox_type == NPC_VOX_QUEST) {
+	if (vox_type == VOX_QUEST) {
 		vox_quests.push_back(a);
 		return static_cast<int>(vox_quests.size()) - 1;
 	}
@@ -313,23 +307,21 @@ void NPC::logic() {
 	activeAnimation->advanceFrame();
 }
 
-/**
- * vox_type is a const int enum, see NPC.h
- */
-bool NPC::playSound(int vox_type, int id) {
-	if (vox_type == NPC_VOX_INTRO) {
-		int roll;
-		if (vox_intro.empty()) return false;
-		roll = rand() % static_cast<int>(vox_intro.size());
-		snd->play(vox_intro[roll], "NPC_VOX");
-		return true;
-	}
-	if (vox_type == NPC_VOX_QUEST) {
-		if (id < 0 || id >= static_cast<int>(vox_quests.size())) return false;
-		snd->play(vox_quests[id], "NPC_VOX");
-		return true;
-	}
-	return false;
+bool NPC::playSoundIntro() {
+	if (vox_intro.empty())
+		return false;
+
+	size_t roll = static_cast<size_t>(rand()) % vox_intro.size();
+	snd->play(vox_intro[roll], "NPC_VOX");
+	return true;
+}
+
+bool NPC::playSoundQuest(int id) {
+	if (id < 0 || id >= static_cast<int>(vox_quests.size()))
+		return false;
+
+	snd->play(vox_quests[id], "NPC_VOX");
+	return true;
 }
 
 /**
@@ -487,7 +479,7 @@ bool NPC::processDialog(unsigned int dialog_node, unsigned int &event_cursor) {
 			return true;
 		}
 		else if (dialog[dialog_node][event_cursor].type == EC_NPC_VOICE) {
-			playSound(NPC_VOX_QUEST, dialog[dialog_node][event_cursor].x);
+			playSoundQuest(dialog[dialog_node][event_cursor].x);
 		}
 		else if (dialog[dialog_node][event_cursor].type == EC_NPC_PORTRAIT_THEM) {
 			npc_portrait = portraits[0];
