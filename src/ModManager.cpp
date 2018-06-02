@@ -539,7 +539,7 @@ void ModManager::saveMods() {
 	outfile.close();
 	outfile.clear();
 
-	PlatformFSCommit();
+	PLATFORM.FSCommit();
 
 }
 

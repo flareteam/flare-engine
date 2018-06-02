@@ -73,15 +73,13 @@ bool init_finished = false;
  * Game initialization.
  */
 static void init(const CmdLineArgs& cmd_line_args) {
-	PlatformInit();
-
 	/**
 	 * Set system paths
 	 * PATH_CONF is for user-configurable settings files (e.g. keybindings)
 	 * PATH_USER is for user-specific data (e.g. save games)
 	 * PATH_DATA is for common game data (e.g. images, music)
 	 */
-	PlatformSetPaths();
+	PLATFORM.setPaths();
 
 	lockFileCheck();
 
@@ -128,11 +126,11 @@ static void init(const CmdLineArgs& cmd_line_args) {
 	setStatNames();
 
 	// platform-specific default screen size
-	PlatformSetScreenSize();
+	PLATFORM.setScreenSize();
 
 	// Create render Device and Rendering Context.
-	if (platform_options.default_renderer != "")
-		render_device = getRenderDevice(platform_options.default_renderer);
+	if (PLATFORM.default_renderer != "")
+		render_device = getRenderDevice(PLATFORM.default_renderer);
 	else if (cmd_line_args.render_device_name != "")
 		render_device = getRenderDevice(cmd_line_args.render_device_name);
 	else

@@ -294,7 +294,7 @@ void InputState::saveKeyBindings() {
 		outfile.close();
 		outfile.clear();
 
-		PlatformFSCommit();
+		PLATFORM.FSCommit();
 	}
 
 }

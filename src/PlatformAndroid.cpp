@@ -34,17 +34,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <jni.h>
 
-PlatformOptions platform_options;
+Platform PLATFORM;
 
-void PlatformInit() {
-	platform_options.is_mobile_device = true;
-	platform_options.force_hardware_cursor = true;
-	platform_options.config_menu_type = CONFIG_MENU_TYPE_BASE;
-	platform_options.has_lock_file = false;
-	platform_options.default_renderer = "sdl_hardware";
-}
+namespace PlatformAndroid {
+	std::string getPackageName();
+	int isExitEvent(void *userdata, SDL_Event* event);
+};
 
-std::string AndroidGetPackageName()
+std::string PlatformAndroid::getPackageName()
 {
 	JNIEnv* env = (JNIEnv*)SDL_AndroidGetJNIEnv();
 
@@ -63,7 +60,7 @@ std::string AndroidGetPackageName()
 	return result;
 }
 
-int AndroidIsExitEvent(void* userdata, SDL_Event* event) {
+int PlatformAndroid::isExitEvent(void* userdata, SDL_Event* event) {
 	if (userdata) {}; // avoid unused var compile warning
 
 	if (event->type == SDL_APP_TERMINATING) {
@@ -75,7 +72,19 @@ int AndroidIsExitEvent(void* userdata, SDL_Event* event) {
 	return 1;
 }
 
-void PlatformSetPaths() {
+Platform::Platform()
+	: has_exit_button(true)
+	, is_mobile_device(true)
+	, force_hardware_cursor(true)
+	, has_lock_file(false)
+	, config_menu_type(CONFIG_MENU_TYPE_BASE)
+	, default_renderer("sdl_hardware") {
+}
+
+Platform::~Platform() {
+}
+
+void Platform::setPaths() {
 	/*
 	 * PATH_CONF
 	 * 1. INTERNAL_SD_CARD/Flare
@@ -105,7 +114,7 @@ void PlatformSetPaths() {
 
 	PATH_CONF = std::string(SDL_AndroidGetInternalStoragePath()) + "/config";
 
-	const std::string package_name = AndroidGetPackageName();
+	const std::string package_name = PlatformAndroid::getPackageName();
 	const std::string user_folder = "Android/data/" + package_name + "/files";
 
 	if (SDL_AndroidGetExternalStorageState() != 0) {
@@ -149,11 +158,11 @@ void PlatformSetPaths() {
 	PATH_DATA += "/";
 }
 
-void PlatformSetExitEventFilter() {
-	SDL_SetEventFilter(AndroidIsExitEvent, NULL);
+void Platform::setExitEventFilter() {
+	SDL_SetEventFilter(PlatformAndroid::isExitEvent, NULL);
 }
 
-bool PlatformDirCreate(const std::string& path) {
+bool Platform::dirCreate(const std::string& path) {
 	if (mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IRWXO) == -1) {
 		std::string error_msg = "createDir (" + path + ")";
 		perror(error_msg.c_str());
@@ -162,7 +171,7 @@ bool PlatformDirCreate(const std::string& path) {
 	return true;
 }
 
-bool PlatformDirRemove(const std::string& path) {
+bool Platform::dirRemove(const std::string& path) {
 	if (rmdir(path.c_str()) == -1) {
 		std::string error_msg = "removeDir (" + path + ")";
 		perror(error_msg.c_str());
@@ -172,10 +181,10 @@ bool PlatformDirRemove(const std::string& path) {
 }
 
 // unused
-void PlatformFSInit() {}
-bool PlatformFSCheckReady() { return true; }
-void PlatformFSCommit() {}
-void PlatformSetScreenSize() {}
+void Platform::FSInit() {}
+bool Platform::FSCheckReady() { return true; }
+void Platform::FSCommit() {}
+void Platform::setScreenSize() {}
 
 #endif // PLATFORM_CPP
 #endif // PLATFORM_CPP_INCLUDE

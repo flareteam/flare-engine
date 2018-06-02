@@ -566,7 +566,7 @@ std::string getTimeString(const unsigned long time, bool show_seconds) {
 }
 
 void lockFileRead() {
-	if (!platform_options.has_lock_file)
+	if (!PLATFORM.has_lock_file)
 		return;
 
 	std::string lock_file_path = PATH_CONF + "flare_lock";
@@ -591,7 +591,7 @@ void lockFileRead() {
 }
 
 void lockFileWrite(int increment) {
-	if (!platform_options.has_lock_file)
+	if (!PLATFORM.has_lock_file)
 		return;
 
 	std::string lock_file_path = PATH_CONF + "flare_lock";
@@ -616,7 +616,7 @@ void lockFileWrite(int increment) {
 }
 
 void lockFileCheck() {
-	if (!platform_options.has_lock_file)
+	if (!PLATFORM.has_lock_file)
 		return;
 
 	LOCK_INDEX = 0;

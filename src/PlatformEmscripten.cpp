@@ -35,16 +35,21 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <emscripten.h>
 
-PlatformOptions platform_options;
+Platform PLATFORM;
 
-void PlatformInit() {
-	platform_options.has_exit_button = false;
-	platform_options.config_menu_type = CONFIG_MENU_TYPE_DESKTOP_NO_VIDEO;
-	platform_options.has_lock_file = false;
-	platform_options.default_renderer = "sdl_hardware";
+Platform::Platform()
+	: has_exit_button(false)
+	, is_mobile_device(false)
+	, force_hardware_cursor(false)
+	, has_lock_file(false)
+	, config_menu_type(CONFIG_MENU_TYPE_DESKTOP_NO_VIDEO)
+	, default_renderer("sdl_hardware") {
 }
 
-void PlatformSetPaths() {
+Platform::~Platform() {
+}
+
+void Platform::setPaths() {
 	PATH_CONF = "/flare_data/config/";
 	createDir(PATH_CONF);
 
@@ -68,10 +73,10 @@ void PlatformSetPaths() {
 	if (!path_data)	PATH_DATA = "./";
 }
 
-void PlatformSetExitEventFilter() {
+void Platform::setExitEventFilter() {
 }
 
-bool PlatformDirCreate(const std::string& path) {
+bool Platform::dirCreate(const std::string& path) {
 	if (mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IRWXO) == -1) {
 		std::string error_msg = "createDir (" + path + ")";
 		perror(error_msg.c_str());
@@ -80,7 +85,7 @@ bool PlatformDirCreate(const std::string& path) {
 	return true;
 }
 
-bool PlatformDirRemove(const std::string& path) {
+bool Platform::dirRemove(const std::string& path) {
 	if (rmdir(path.c_str()) == -1) {
 		std::string error_msg = "removeDir (" + path + ")";
 		perror(error_msg.c_str());
@@ -89,7 +94,7 @@ bool PlatformDirRemove(const std::string& path) {
 	return true;
 }
 
-void PlatformFSInit() {
+void Platform::FSInit() {
     EM_ASM(
         FS.mkdir('/flare_data');
         FS.mount(IDBFS,{},'/flare_data');
@@ -105,7 +110,7 @@ void PlatformFSInit() {
     );
 }
 
-bool PlatformFSCheckReady() {
+bool Platform::FSCheckReady() {
     if(emscripten_run_script_int("Module.syncdone") == 1) {
         FILE *config_file = fopen(std::string(PATH_CONF + FILE_SETTINGS).c_str(),"r");
         if (config_file == NULL) {
@@ -130,7 +135,7 @@ bool PlatformFSCheckReady() {
 	return false;
 }
 
-void PlatformFSCommit() {
+void Platform::FSCommit() {
     EM_ASM(
         //persist changes
         FS.syncfs(false,function (err) {
@@ -139,7 +144,7 @@ void PlatformFSCommit() {
     );
 }
 
-void PlatformSetScreenSize() {
+void Platform::setScreenSize() {
 	// can't change window size dynamically with Emscripten, so default to 16:9 aspect ratio
 	SCREEN_W = 854;
 	SCREEN_H = 480;

@@ -203,7 +203,7 @@ void SaveLoad::saveGame() {
 		outfile.close();
 		outfile.clear();
 
-		PlatformFSCommit();
+		PLATFORM.FSCommit();
 	}
 
 	// Save stash
@@ -229,7 +229,7 @@ void SaveLoad::saveGame() {
 		outfile.close();
 		outfile.clear();
 
-		PlatformFSCommit();
+		PLATFORM.FSCommit();
 	}
 
 	PREV_SAVE_SLOT = game_slot-1;

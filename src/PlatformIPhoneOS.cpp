@@ -31,18 +31,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <unistd.h>
 #include <sys/stat.h>
 
-PlatformOptions platform_options;
+Platform PLATFORM;
 
-void PlatformInit() {
-	platform_options.has_exit_button = false;
-	platform_options.is_mobile_device = true;
-	platform_options.force_hardware_cursor = true;
-	platform_options.has_lock_file = false;
-	platform_options.config_menu_type = CONFIG_MENU_TYPE_BASE;
-	platform_options.default_renderer = "sdl_hardware";
-}
+namespace PlatformIPhoneOS {
+	int isExitEvent(void* userdata, SDL_Event* event);
+};
 
-int IPhoneOSIsExitEvent(void* userdata, SDL_Event* event) {
+int PlatformIPhoneOS::isExitEvent(void* userdata, SDL_Event* event) {
 	if (userdata) {}; // avoid unused var compile warning
 
 	if (event->type == SDL_APP_TERMINATING) {
@@ -54,9 +49,21 @@ int IPhoneOSIsExitEvent(void* userdata, SDL_Event* event) {
 	return 1;
 }
 
+Platform::Platform()
+	: has_exit_button(false)
+	, is_mobile_device(true)
+	, force_hardware_cursor(true)
+	, has_lock_file(false)
+	, config_menu_type(CONFIG_MENU_TYPE_BASE)
+	, default_renderer("sdl_hardware") {
+}
+
+Platform::~Platform() {
+}
+
 // NOTE This was copied from the Linux platform
 // That probably isn't right, but its what the codepath was before in Settings.cpp
-void PlatformSetPaths() {
+void Platform::setPaths() {
 
 	// attempting to follow this spec:
 	// http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
@@ -168,11 +175,11 @@ void PlatformSetPaths() {
 	if (!path_data)	PATH_DATA = "./";
 }
 
-void PlatformSetExitEventFilter() {
-	SDL_SetEventFilter(IPhoneOSIsExitEvent, NULL);
+void Platform::setExitEventFilter() {
+	SDL_SetEventFilter(PlatformIPhoneOS::isExitEvent, NULL);
 }
 
-bool PlatformDirCreate(const std::string& path) {
+bool Platform::dirCreate(const std::string& path) {
 	if (mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IRWXO) == -1) {
 		std::string error_msg = "createDir (" + path + ")";
 		perror(error_msg.c_str());
@@ -181,7 +188,7 @@ bool PlatformDirCreate(const std::string& path) {
 	return true;
 }
 
-bool PlatformDirRemove(const std::string& path) {
+bool Platform::dirRemove(const std::string& path) {
 	if (rmdir(path.c_str()) == -1) {
 		std::string error_msg = "removeDir (" + path + ")";
 		perror(error_msg.c_str());
@@ -191,10 +198,10 @@ bool PlatformDirRemove(const std::string& path) {
 }
 
 // unused
-void PlatformFSInit() {}
-bool PlatformFSCheckReady() { return true; }
-void PlatformFSCommit() {}
-void PlatformSetScreenSize() {}
+void Platform::FSInit() {}
+bool Platform::FSCheckReady() { return true; }
+void Platform::FSCommit() {}
+void Platform::setScreenSize() {}
 
 #endif // PLATFORM_CPP
 #endif // PLATFORM_CPP_INCLUDE

@@ -48,7 +48,7 @@ void createDir(const std::string &path) {
 	if (isDirectory(path, false))
 		return;
 
-	PlatformDirCreate(path);
+	PLATFORM.dirCreate(path);
 }
 
 bool isDirectory(const std::string &path, bool show_error) {
@@ -143,7 +143,7 @@ bool removeDir(const std::string &dir) {
 	if (!isDirectory(dir))
 		return false;
 
-	return PlatformDirRemove(dir);
+	return PLATFORM.dirRemove(dir);
 }
 
 bool removeDirRecursive(const std::string &dir) {

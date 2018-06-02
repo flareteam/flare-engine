@@ -61,7 +61,7 @@ void MenuTouchControls::align() {
 }
 
 void MenuTouchControls::logic() {
-	if (!visible || !platform_options.is_mobile_device)
+	if (!visible || !PLATFORM.is_mobile_device)
 		return;
 
 	inpt->pressing[Input::LEFT] = inpt->pressing[Input::RIGHT] = inpt->pressing[Input::UP] = inpt->pressing[Input::DOWN] = false;
@@ -91,7 +91,7 @@ void MenuTouchControls::logic() {
 }
 
 bool MenuTouchControls::checkAllowMain1() {
-	if (!visible || !platform_options.is_mobile_device)
+	if (!visible || !PLATFORM.is_mobile_device)
 		return true;
 
 	FPoint m1_center(static_cast<float>(main1_center.x), static_cast<float>(main1_center.y));
@@ -105,7 +105,7 @@ void MenuTouchControls::renderInput(const Point& center, const int radius, const
 }
 
 void MenuTouchControls::render() {
-	if (!visible || !platform_options.is_mobile_device)
+	if (!visible || !PLATFORM.is_mobile_device)
 		return;
 
 	Color color_normal(255,255,255,255);

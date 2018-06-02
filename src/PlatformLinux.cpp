@@ -33,13 +33,21 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <unistd.h>
 #include <sys/stat.h>
 
-PlatformOptions platform_options;
+Platform PLATFORM;
 
-void PlatformInit() {
-	// defaults
+Platform::Platform()
+	: has_exit_button(true)
+	, is_mobile_device(false)
+	, force_hardware_cursor(false)
+	, has_lock_file(true)
+	, config_menu_type(CONFIG_MENU_TYPE_DESKTOP)
+	, default_renderer("") {
 }
 
-void PlatformSetPaths() {
+Platform::~Platform() {
+}
+
+void Platform::setPaths() {
 
 	// attempting to follow this spec:
 	// http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
@@ -151,10 +159,7 @@ void PlatformSetPaths() {
 	if (!path_data)	PATH_DATA = "./";
 }
 
-void PlatformSetExitEventFilter() {
-}
-
-bool PlatformDirCreate(const std::string& path) {
+bool Platform::dirCreate(const std::string& path) {
 	if (mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IRWXO) == -1) {
 		std::string error_msg = "createDir (" + path + ")";
 		perror(error_msg.c_str());
@@ -163,7 +168,7 @@ bool PlatformDirCreate(const std::string& path) {
 	return true;
 }
 
-bool PlatformDirRemove(const std::string& path) {
+bool Platform::dirRemove(const std::string& path) {
 	if (rmdir(path.c_str()) == -1) {
 		std::string error_msg = "removeDir (" + path + ")";
 		perror(error_msg.c_str());
@@ -173,10 +178,11 @@ bool PlatformDirRemove(const std::string& path) {
 }
 
 // unused
-void PlatformFSInit() {}
-bool PlatformFSCheckReady() { return true; }
-void PlatformFSCommit() {}
-void PlatformSetScreenSize() {}
+void Platform::FSInit() {}
+bool Platform::FSCheckReady() { return true; }
+void Platform::FSCommit() {}
+void Platform::setScreenSize() {}
+void Platform::setExitEventFilter() {}
 
 #endif // PLATFORM_CPP
 #endif // PLATFORM_CPP_INCLUDE

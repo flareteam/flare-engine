@@ -961,7 +961,7 @@ bool saveSettings() {
 		outfile.close();
 		outfile.clear();
 
-		PlatformFSCommit();
+		PLATFORM.FSCommit();
 	}
 	return true;
 }
@@ -996,7 +996,7 @@ std::string getVersionString() {
  * Set required settings for Mobile devices
  */
 void loadMobileDefaults() {
-	if (platform_options.is_mobile_device) {
+	if (PLATFORM.is_mobile_device) {
 		MOUSE_MOVE = false;
 		MOUSE_AIM = false;
 		NO_MOUSE = false;
