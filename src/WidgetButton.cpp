@@ -63,7 +63,7 @@ void WidgetButton::setPos(int offset_x, int offset_y) {
 void WidgetButton::loadArt() {
 	// load button images
 	Image *graphics;
-	graphics = render_device->loadImage(fileName, "Couldn't load button image", true);
+	graphics = render_device->loadImage(fileName, RenderDevice::ERROR_EXIT);
 	if (graphics) {
 		buttons = graphics->createSprite();
 		pos.w = buttons->getGraphicsWidth();

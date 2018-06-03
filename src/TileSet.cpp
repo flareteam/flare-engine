@@ -65,7 +65,7 @@ void TileSet::loadGraphics(const std::string& filename, Sprite** sprite) {
 	if (filename.empty())
 		return;
 
-	Image *graphics = render_device->loadImage(filename);
+	Image *graphics = render_device->loadImage(filename, RenderDevice::ERROR_NORMAL);
 	if (graphics) {
 		*sprite = graphics->createSprite();
 		graphics->unref();

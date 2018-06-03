@@ -60,7 +60,7 @@ AnimationSet::AnimationSet(const std::string &animationname)
 	, parent(NULL)
 	, animations()
 	, sprite(NULL) {
-	defaultAnimation = new Animation("default", "play_once", NULL, RENDERABLE_BLEND_NORMAL, 255, Color(255,255,255));
+	defaultAnimation = new Animation("default", "play_once", NULL, Renderable::BLEND_NORMAL, 255, Color(255,255,255));
 	defaultAnimation->setupUncompressed(Point(), Point(), 0, 1, 0);
 }
 
@@ -77,7 +77,7 @@ void AnimationSet::load() {
 	unsigned short position = 0;
 	unsigned short frames = 0;
 	unsigned short duration = 0;
-	uint8_t blend_mode = RENDERABLE_BLEND_NORMAL;
+	uint8_t blend_mode = Renderable::BLEND_NORMAL;
 	uint8_t alpha_mod = 255;
 	Color color_mod = Color(255,255,255);
 	Point render_size;
@@ -120,7 +120,7 @@ void AnimationSet::load() {
 					Exit(128);
 				}
 
-				sprite = render_device->loadImage(parser.val);
+				sprite = render_device->loadImage(parser.val, RenderDevice::ERROR_NORMAL);
 			}
 			else if (parser.key == "render_size") {
 				// @ATTR render_size|int, int : Width, Height|Width and height of animation.
@@ -136,12 +136,12 @@ void AnimationSet::load() {
 				// @ATTR blend_mode|["normal", "add"]|The type of blending used when rendering this animation.
 				std::string bmode_str = popFirstString(parser.val);
 				if (bmode_str == "normal")
-					blend_mode = RENDERABLE_BLEND_NORMAL;
+					blend_mode = Renderable::BLEND_NORMAL;
 				else if (bmode_str == "add")
-					blend_mode = RENDERABLE_BLEND_ADD;
+					blend_mode = Renderable::BLEND_ADD;
 				else {
 					parser.error("AnimationSet: '%s' is not a valid blend mode.", parser.key.c_str());
-					blend_mode = RENDERABLE_BLEND_NORMAL;
+					blend_mode = Renderable::BLEND_NORMAL;
 				}
 			}
 			else if (parser.key == "alpha_mod") {

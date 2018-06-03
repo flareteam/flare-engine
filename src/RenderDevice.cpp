@@ -58,11 +58,10 @@ int Image::getHeight() const {
 	return 0;
 }
 
-Sprite *Image::createSprite(bool clipToSize) {
+Sprite *Image::createSprite() {
 	Sprite *sprite;
 	sprite = new Sprite(this);
-	if (clipToSize)
-		sprite->setClip(0, 0, this->getWidth(), this->getHeight());
+	sprite->setClip(0, 0, this->getWidth(), this->getHeight());
 	return sprite;
 }
 
@@ -187,6 +186,38 @@ RenderDevice::RenderDevice()
 }
 
 RenderDevice::~RenderDevice() {
+}
+
+int RenderDevice::createContext() {
+	int status = createContextInternal();
+
+	if (status == -1) {
+		// try previous setting first
+		FULLSCREEN = fullscreen;
+		HWSURFACE = hwsurface;
+		VSYNC = vsync;
+		TEXTURE_FILTER = texture_filter;
+
+		status = createContextInternal();
+	}
+
+	if (status == -1) {
+		// last resort, try turning everything off
+		FULLSCREEN = false;
+		HWSURFACE = false;
+		VSYNC = false;
+		TEXTURE_FILTER = false;
+
+		status = createContextInternal();
+	}
+
+	if (status == -1) {
+		// all attempts have failed, abort!
+		createContextError();
+		Exit(1);
+	}
+
+	return status;
 }
 
 void RenderDevice::destroyContext() {

@@ -233,21 +233,19 @@ GameStateLoad::GameStateLoad() : GameState()
 void GameStateLoad::loadGraphics() {
 	Image *graphics;
 
-	graphics = render_device->loadImage("images/menus/game_slots.png");
+	graphics = render_device->loadImage("images/menus/game_slots.png", RenderDevice::ERROR_NORMAL);
 	if (graphics) {
 		background = graphics->createSprite();
 		graphics->unref();
 	}
 
-	graphics = render_device->loadImage("images/menus/game_slot_select.png",
-			   "Couldn't load image", false);
+	graphics = render_device->loadImage("images/menus/game_slot_select.png", RenderDevice::ERROR_NORMAL);
 	if (graphics) {
 		selection = graphics->createSprite();
 		graphics->unref();
 	}
 
-	graphics = render_device->loadImage("images/menus/portrait_border.png",
-			   "Couldn't load image", false);
+	graphics = render_device->loadImage("images/menus/portrait_border.png", RenderDevice::ERROR_NORMAL);
 	if (graphics) {
 		portrait_border = graphics->createSprite();
 		graphics->unref();
@@ -268,7 +266,7 @@ void GameStateLoad::loadPortrait(int slot) {
 
 	if (game_slots[slot]->stats.name == "") return;
 
-	graphics = render_device->loadImage(game_slots[slot]->stats.gfx_portrait);
+	graphics = render_device->loadImage(game_slots[slot]->stats.gfx_portrait, RenderDevice::ERROR_NORMAL);
 	if (graphics) {
 		portrait = graphics->createSprite();
 		portrait->setClipW(portrait_dest.w);

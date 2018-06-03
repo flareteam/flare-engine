@@ -39,7 +39,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 
-/** SDL Image */
 class SDLSoftwareImage : public Image {
 public:
 	explicit SDLSoftwareImage(RenderDevice *device);
@@ -58,17 +57,15 @@ private:
 };
 
 class SDLSoftwareRenderDevice : public RenderDevice {
-
 public:
 
 	SDLSoftwareRenderDevice();
-	int createContext(bool allow_fallback = true);
 
 	virtual int render(Renderable& r, Rect& dest);
 	virtual int render(Sprite* r);
 	virtual int renderToImage(Image* src_image, Rect& src, Image* dest_image, Rect& dest);
 
-	Image* renderTextToImage(FontStyle* font_style, const std::string& text, const Color& color, bool blended = true);
+	Image* renderTextToImage(FontStyle* font_style, const std::string& text, const Color& color, bool blended);
 	void drawPixel(int x, int y, const Color& color);
 	void drawLine(int x0, int y0, int x1, int y1, const Color& color);
 	void drawRectangle(const Point& p0, const Point& p1, const Color& color);
@@ -82,9 +79,12 @@ public:
 	void resetGamma();
 	void updateTitleBar();
 
-	Image* loadImage(const std::string& filename,
-					 const std::string& errormessage = "Couldn't load image",
-					 bool IfNotFoundExit = false);
+	Image* loadImage(const std::string& filename, int error_type);
+
+protected:
+	int createContextInternal();
+	void createContextError();
+
 private:
 	Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 	void getWindowSize(short unsigned *screen_w, short unsigned *screen_h);

@@ -107,7 +107,7 @@ GameStateConfigBase::GameStateConfigBase (bool do_init)
 	save_settings_on_exit = false;
 
 	Image *graphics;
-	graphics = render_device->loadImage("images/menus/config.png");
+	graphics = render_device->loadImage("images/menus/config.png", RenderDevice::ERROR_NORMAL);
 	if (graphics) {
 		background = graphics->createSprite();
 		graphics->unref();

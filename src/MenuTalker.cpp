@@ -309,7 +309,7 @@ void MenuTalker::setHero(StatBlock &stats) {
 	if (stats.gfx_portrait == "") return;
 
 	Image *graphics;
-	graphics = render_device->loadImage(stats.gfx_portrait, "Couldn't load portrait");
+	graphics = render_device->loadImage(stats.gfx_portrait, RenderDevice::ERROR_NORMAL);
 	if (graphics) {
 		portrait = graphics->createSprite();
 		graphics->unref();

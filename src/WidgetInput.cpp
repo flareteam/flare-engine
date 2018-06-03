@@ -53,7 +53,7 @@ void WidgetInput::setPos(int offset_x, int offset_y) {
 void WidgetInput::loadGraphics(const std::string& filename) {
 	// load input background image
 	Image *graphics;
-	graphics = render_device->loadImage(filename, "Couldn't load image", true);
+	graphics = render_device->loadImage(filename, RenderDevice::ERROR_EXIT);
 	if (graphics) {
 		background = graphics->createSprite();
 		pos.w = background->getGraphicsWidth();

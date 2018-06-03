@@ -33,7 +33,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 int TOOLTIP_CONTEXT = TOOLTIP_NONE;
 
 WidgetTooltip::WidgetTooltip() {
-	background = render_device->loadImage("images/menus/tooltips.png", "", false);
+	background = render_device->loadImage("images/menus/tooltips.png", RenderDevice::ERROR_NONE);
 }
 
 WidgetTooltip::~WidgetTooltip() {

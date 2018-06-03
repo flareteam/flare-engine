@@ -55,14 +55,14 @@ WidgetSlot::WidgetSlot(int _icon_id, int _ACTIVATE)
 
 
 	Image *graphics;
-	graphics = render_device->loadImage("images/menus/slot_selected.png");
+	graphics = render_device->loadImage("images/menus/slot_selected.png", RenderDevice::ERROR_NORMAL);
 	if (graphics) {
 		slot_selected = graphics->createSprite();
 		slot_selected->setClip(src);
 		graphics->unref();
 	}
 
-	graphics = render_device->loadImage("images/menus/slot_checked.png");
+	graphics = render_device->loadImage("images/menus/slot_checked.png", RenderDevice::ERROR_NORMAL);
 	if (graphics) {
 		slot_checked = graphics->createSprite();
 		slot_checked->setClip(src);

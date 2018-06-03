@@ -125,7 +125,7 @@ void GameSwitcher::loadBackgroundImage() {
 	// load the background image
 	size_t index = static_cast<size_t>(rand()) % background_list.size();
 	background_filename = background_list[index];
-	background_image = render_device->loadImage(background_filename);
+	background_image = render_device->loadImage(background_filename, RenderDevice::ERROR_NORMAL);
 	refreshBackground();
 }
 

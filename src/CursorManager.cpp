@@ -39,7 +39,7 @@ CursorManager::CursorManager()
 		while (infile.next()) {
 			if (infile.key == "normal") {
 				// @ATTR normal|filename|Filename of an image for the normal cursor.
-				graphics = render_device->loadImage(popFirstString(infile.val));
+				graphics = render_device->loadImage(popFirstString(infile.val), RenderDevice::ERROR_NORMAL);
 				if (graphics) {
 					cursor_normal = graphics->createSprite();
 					graphics->unref();
@@ -48,7 +48,7 @@ CursorManager::CursorManager()
 			}
 			else if (infile.key == "interact") {
 				// @ATTR interact|filename|Filename of an image for the object interaction cursor.
-				graphics = render_device->loadImage(popFirstString(infile.val));
+				graphics = render_device->loadImage(popFirstString(infile.val), RenderDevice::ERROR_NORMAL);
 				if (graphics) {
 					cursor_interact = graphics->createSprite();
 					graphics->unref();
@@ -57,7 +57,7 @@ CursorManager::CursorManager()
 			}
 			else if (infile.key == "talk") {
 				// @ATTR talk|filename|Filename of an image for the NPC interaction cursor.
-				graphics = render_device->loadImage(popFirstString(infile.val));
+				graphics = render_device->loadImage(popFirstString(infile.val), RenderDevice::ERROR_NORMAL);
 				if (graphics) {
 					cursor_talk = graphics->createSprite();
 					graphics->unref();
@@ -66,7 +66,7 @@ CursorManager::CursorManager()
 			}
 			else if (infile.key == "attack") {
 				// @ATTR attack|filename|Filename of an image for the cursor when attacking enemies.
-				graphics = render_device->loadImage(popFirstString(infile.val));
+				graphics = render_device->loadImage(popFirstString(infile.val), RenderDevice::ERROR_NORMAL);
 				if (graphics) {
 					cursor_attack = graphics->createSprite();
 					graphics->unref();

@@ -142,15 +142,13 @@ void WidgetTabControl::updateHeader() {
  */
 void WidgetTabControl::loadGraphics() {
 	Image *graphics;
-	graphics = render_device->loadImage("images/menus/tab_active.png",
-			   "loading tab_active.png", true);
+	graphics = render_device->loadImage("images/menus/tab_active.png", RenderDevice::ERROR_EXIT);
 	if (graphics) {
 		active_tab_surface = graphics->createSprite();
 		graphics->unref();
 	}
 
-	graphics = render_device->loadImage("images/menus/tab_inactive.png",
-			   "loading tab_inactive.png", true);
+	graphics = render_device->loadImage("images/menus/tab_inactive.png", RenderDevice::ERROR_EXIT);
 	if (graphics) {
 		inactive_tab_surface = graphics->createSprite();
 		graphics->unref();

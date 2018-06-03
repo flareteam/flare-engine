@@ -104,7 +104,7 @@ void MenuStatBar::loadGraphics() {
 	}
 
 	if (bar_gfx != "") {
-		graphics = render_device->loadImage(bar_gfx);
+		graphics = render_device->loadImage(bar_gfx, RenderDevice::ERROR_NORMAL);
 		if (graphics) {
 			bar = graphics->createSprite();
 			graphics->unref();

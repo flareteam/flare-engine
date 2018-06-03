@@ -173,7 +173,7 @@ SDLSoftwareRenderDevice::SDLSoftwareRenderDevice()
 	}
 }
 
-int SDLSoftwareRenderDevice::createContext(bool allow_fallback) {
+int SDLSoftwareRenderDevice::createContextInternal() {
 	bool settings_changed = (fullscreen != FULLSCREEN || hwsurface != HWSURFACE || vsync != VSYNC || texture_filter != TEXTURE_FILTER);
 
 	Uint32 w_flags = 0;
@@ -228,37 +228,7 @@ int SDLSoftwareRenderDevice::createContext(bool allow_fallback) {
 			SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 		}
 
-		bool window_created = window != NULL && renderer != NULL && screen != NULL && texture != NULL;
-
-		if (!window_created) {
-			if (allow_fallback) {
-				// try previous setting first
-				FULLSCREEN = fullscreen;
-				HWSURFACE = hwsurface;
-				VSYNC = vsync;
-				TEXTURE_FILTER = texture_filter;
-				if (createContext(false) == -1) {
-					// last resort, try turning everything off
-					FULLSCREEN = false;
-					HWSURFACE = false;
-					VSYNC = false;
-					TEXTURE_FILTER = false;
-					int last_resort = createContext(false);
-					if (last_resort == -1 && !is_initialized) {
-						// If this is the first attempt and it failed we are not
-						// getting anywhere.
-						logError("SDLSoftwareRenderDevice: createContext() failed: %s", SDL_GetError());
-						logErrorDialog("SDLSoftwareRenderDevice: createContext() failed: %s", SDL_GetError());
-						Exit(1);
-					}
-					return last_resort;
-				}
-				else {
-					return 0;
-				}
-			}
-		}
-		else {
+		if (window && renderer && screen && texture) {
 			if (!is_initialized) {
 				// save the system gamma levels if we just created the window
 				SDL_GetWindowGammaRamp(window, gamma_r, gamma_g, gamma_b);
@@ -314,16 +284,21 @@ int SDLSoftwareRenderDevice::createContext(bool allow_fallback) {
 	return (is_initialized ? 0 : -1);
 }
 
+void SDLSoftwareRenderDevice::createContextError() {
+	logError("SDLSoftwareRenderDevice: createContext() failed: %s", SDL_GetError());
+	logErrorDialog("SDLSoftwareRenderDevice: createContext() failed: %s", SDL_GetError());
+}
+
 int SDLSoftwareRenderDevice::render(Renderable& r, Rect& dest) {
 	SDL_Rect src = r.src;
 	SDL_Rect _dest = dest;
 
 	SDL_Surface *surface = static_cast<SDLSoftwareImage *>(r.image)->surface;
 
-	if (r.blend_mode == RENDERABLE_BLEND_ADD) {
+	if (r.blend_mode == Renderable::BLEND_ADD) {
 		SDL_SetSurfaceBlendMode(surface, SDL_BLENDMODE_ADD);
 	}
-	else { // RENDERABLE_BLEND_NORMAL
+	else { // Renderable::BLEND_NORMAL
 		SDL_SetSurfaceBlendMode(surface, SDL_BLENDMODE_BLEND);
 	}
 
@@ -571,7 +546,7 @@ void SDLSoftwareRenderDevice::updateTitleBar() {
 	if (titlebar_icon) SDL_SetWindowIcon(window, titlebar_icon);
 }
 
-Image *SDLSoftwareRenderDevice::loadImage(const std::string& filename, const std::string& errormessage, bool IfNotFoundExit) {
+Image *SDLSoftwareRenderDevice::loadImage(const std::string& filename, int error_type) {
 	// lookup image in cache
 	Image *img;
 	img = cacheLookup(filename);
@@ -582,14 +557,16 @@ Image *SDLSoftwareRenderDevice::loadImage(const std::string& filename, const std
 	image = NULL;
 	SDL_Surface *cleanup = IMG_Load(mods->locate(filename).c_str());
 	if(!cleanup) {
-		if (!errormessage.empty())
-			logError("SDLSoftwareRenderDevice: [%s] %s: %s", filename.c_str(), errormessage.c_str(), IMG_GetError());
-		if (IfNotFoundExit) {
-			if (!errormessage.empty())
-				logErrorDialog("SDLSoftwareRenderDevice: [%s] %s: %s", filename.c_str(), errormessage.c_str(), IMG_GetError());
+		if (error_type != ERROR_NONE)
+			logError("SDLSoftwareRenderDevice: Couldn't load image: '%s'. %s", filename.c_str(), IMG_GetError());
+
+		if (error_type == ERROR_EXIT) {
+			logErrorDialog("SDLSoftwareRenderDevice: Couldn't load image: '%s'.\n%s", filename.c_str(), IMG_GetError());
 			mods->resetModConfig();
 			Exit(1);
 		}
+
+		return NULL;
 	}
 	else {
 		image = new SDLSoftwareImage(this);

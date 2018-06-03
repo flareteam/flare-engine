@@ -59,7 +59,7 @@ GameStateTitle::GameStateTitle()
 		while (infile.next()) {
 			// @ATTR logo|filename, int, int, alignment : Image file, X, Y, Alignment|Filename and position of the main logo image.
 			if (infile.key == "logo") {
-				Image *graphics = render_device->loadImage(popFirstString(infile.val), "");
+				Image *graphics = render_device->loadImage(popFirstString(infile.val), RenderDevice::ERROR_NONE);
 				if (graphics) {
  				    logo = graphics->createSprite();
 					graphics->unref();

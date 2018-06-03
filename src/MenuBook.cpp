@@ -186,7 +186,7 @@ void MenuBook::loadImage(FileParser &infile, BookImage& bimage) {
 	// @ATTR image.image|filename|Filename of the image.
 	else if (infile.key == "image") {
 		Image *graphics;
-		graphics = render_device->loadImage(popFirstString(infile.val));
+		graphics = render_device->loadImage(popFirstString(infile.val), RenderDevice::ERROR_NORMAL);
 		if (graphics) {
 		  bimage.image = graphics->createSprite();
 		  graphics->unref();

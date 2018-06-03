@@ -69,7 +69,7 @@ MenuActiveEffects::MenuActiveEffects(StatBlock *_stats)
 
 void MenuActiveEffects::loadGraphics() {
 	Image *graphics;
-	graphics = render_device->loadImage("images/menus/disabled.png");
+	graphics = render_device->loadImage("images/menus/disabled.png", RenderDevice::ERROR_NORMAL);
 	if (graphics) {
 		timer = graphics->createSprite();
 		graphics->unref();

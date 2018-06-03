@@ -158,13 +158,13 @@ void MenuPowers::loadGraphics() {
 
 	setBackground("images/menus/powers.png");
 
-	graphics = render_device->loadImage("images/menus/powers_unlock.png");
+	graphics = render_device->loadImage("images/menus/powers_unlock.png", RenderDevice::ERROR_NORMAL);
 	if (graphics) {
 		powers_unlock = graphics->createSprite();
 		graphics->unref();
 	}
 
-	graphics = render_device->loadImage("images/menus/disabled.png");
+	graphics = render_device->loadImage("images/menus/disabled.png", RenderDevice::ERROR_NORMAL);
 	if (graphics) {
 		overlay_disabled = graphics->createSprite();
 		graphics->unref();
@@ -246,7 +246,7 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 	// load any specified graphics into the tree_surf vector
 	Image *graphics;
 	if (tabs.empty() && default_background != "") {
-		graphics = render_device->loadImage(default_background);
+		graphics = render_device->loadImage(default_background, RenderDevice::ERROR_NORMAL);
 		if (graphics) {
 			tree_surf.push_back(graphics->createSprite());
 			graphics->unref();
@@ -262,7 +262,7 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 				continue;
 			}
 
-			graphics = render_device->loadImage(tabs[i].background);
+			graphics = render_device->loadImage(tabs[i].background, RenderDevice::ERROR_NORMAL);
 			if (graphics) {
 				tree_surf.push_back(graphics->createSprite());
 				graphics->unref();

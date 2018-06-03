@@ -154,7 +154,7 @@ bool Scene::logic() {
 					delete art_scaled;
 					art_scaled = NULL;
 				}
-				Image *graphics = render_device->loadImage(components.front().s);
+				Image *graphics = render_device->loadImage(components.front().s, RenderDevice::ERROR_NORMAL);
 				if (graphics != NULL) {
 					art = graphics->createSprite();
 					art_size.x = art->getGraphicsWidth();
@@ -206,7 +206,7 @@ bool Scene::logic() {
 			else if (components.front().type == "image") {
 				VScrollComponent vsc;
 
-				Image *graphics = render_device->loadImage(components.front().s);
+				Image *graphics = render_device->loadImage(components.front().s, RenderDevice::ERROR_NORMAL);
 				if (graphics != NULL) {
 					vsc.image = graphics->createSprite();
 					if (vsc.image) {

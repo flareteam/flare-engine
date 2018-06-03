@@ -75,7 +75,7 @@ bool IconManager::loadIconSet(IconSet& iset, const std::string& filename, int fi
 	if (!render_device || ICON_SIZE == 0)
 		return false;
 
-	Image *graphics = render_device->loadImage(filename, "Couldn't load icon graphics file", false);
+	Image *graphics = render_device->loadImage(filename, RenderDevice::ERROR_NORMAL);
 	if (graphics) {
 		iset.gfx = graphics->createSprite();
 		graphics->unref();

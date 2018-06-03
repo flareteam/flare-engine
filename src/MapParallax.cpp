@@ -58,7 +58,7 @@ void MapParallax::load(const std::string& filename) {
 
 			if (infile.key == "image") {
 				// @ATTR layer.image|filename|Image file to use as a scrolling background.
-				Image *graphics = render_device->loadImage(infile.val);
+				Image *graphics = render_device->loadImage(infile.val, RenderDevice::ERROR_NORMAL);
 				if (graphics) {
 					layers.back().sprite = graphics->createSprite();
 					graphics->unref();

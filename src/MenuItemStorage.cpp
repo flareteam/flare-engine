@@ -94,14 +94,13 @@ void MenuItemStorage::setPos(int x, int y) {
 
 void MenuItemStorage::loadGraphics() {
 	Image *graphics;
-	graphics = render_device->loadImage("images/menus/attention_glow.png",
-			   "Couldn't load icon highlight image");
+	graphics = render_device->loadImage("images/menus/attention_glow.png", RenderDevice::ERROR_NORMAL);
 	if (graphics) {
 		highlight_image = graphics->createSprite();
 		graphics->unref();
 	}
 
-	graphics = render_device->loadImage("images/menus/disabled.png");
+	graphics = render_device->loadImage("images/menus/disabled.png", RenderDevice::ERROR_NORMAL);
 	if (graphics) {
 		overlay_disabled = graphics->createSprite();
 		graphics->unref();

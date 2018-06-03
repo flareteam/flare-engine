@@ -44,7 +44,7 @@ WidgetSlider::WidgetSlider (const std::string& fname)
 	, tip(new WidgetTooltip()) {
 
 	Image *graphics;
-	graphics = render_device->loadImage(fname, "loading slider graphics", true);
+	graphics = render_device->loadImage(fname, RenderDevice::ERROR_EXIT);
 	if (graphics) {
 		sl = graphics->createSprite();
 		pos.w = sl->getGraphicsWidth();

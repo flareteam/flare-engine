@@ -239,21 +239,21 @@ void MenuActionBar::loadGraphics() {
 
 	setBackground("images/menus/actionbar_trim.png");
 
-	graphics = render_device->loadImage("images/menus/slot_empty.png");
+	graphics = render_device->loadImage("images/menus/slot_empty.png", RenderDevice::ERROR_NORMAL);
 	if (graphics) {
 		sprite_emptyslot = graphics->createSprite();
 		sprite_emptyslot->setClip(0,0,ICON_SIZE,ICON_SIZE);
 		graphics->unref();
 	}
 
-	graphics = render_device->loadImage("images/menus/disabled.png");
+	graphics = render_device->loadImage("images/menus/disabled.png", RenderDevice::ERROR_NORMAL);
 	if (graphics) {
 		sprite_disabled = graphics->createSprite();
 		sprite_disabled->setClip(0,0,ICON_SIZE,ICON_SIZE);
 		graphics->unref();
 	}
 
-	graphics = render_device->loadImage("images/menus/attention_glow.png");
+	graphics = render_device->loadImage("images/menus/attention_glow.png", RenderDevice::ERROR_NORMAL);
 	if (graphics) {
 		sprite_attention = graphics->createSprite();
 		graphics->unref();

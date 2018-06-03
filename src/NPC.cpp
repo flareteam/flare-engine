@@ -269,7 +269,7 @@ void NPC::loadGraphics() {
 	for (size_t i = 0; i < portrait_filenames.size(); ++i) {
 		if (!portrait_filenames[i].empty()) {
 			Image *graphics;
-			graphics = render_device->loadImage(portrait_filenames[i], "Couldn't load NPC portrait", false);
+			graphics = render_device->loadImage(portrait_filenames[i], RenderDevice::ERROR_NORMAL);
 			if (graphics) {
 				portraits[i] = graphics->createSprite();
 				graphics->unref();
