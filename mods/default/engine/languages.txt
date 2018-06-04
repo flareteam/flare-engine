@@ -27,5 +27,6 @@ ru=Русский
 sk=Slovenčina
 sv=Svenska
 uk=Українська
+vi=Tiếng Việt
 zh=Chinese
 
