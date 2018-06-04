@@ -60,7 +60,8 @@ Translations
 (sk) Slovak by Miro Jánošík
 (sv) Swedish by Andreas Berheim Brudin
 (uk) Ukrainian by Igor Paliychuk, Denis Lysenko, Микола Франчук, Sergiy Borodych
-(zh) Chinese by lonsine
+(vi) Vietnamese by Nguyễn Gia Phong
+(zh) Chinese by lonsine, dumaosen
 
 Full Credits
 

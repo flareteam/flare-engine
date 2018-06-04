@@ -5,11 +5,17 @@ Engine fixes:
 * Fixed GetText bug where fuzzy state from header wasn't being unset properly.
 * Fixed rendering bug in WidgetTabControl
 
+New translations:
+
+* Brazilian Portuguese (pt_BR) by Vicente Monteiro
+* Vietnamese (vi) by Nguyễn Gia Phong
+
 Translation updates:
 
 * Spanish (es) update (Diego J. Romero López)
 * Scottish Gaelic (gd) update (GunChleoc)
-* Brazilian Portuguese (pt_BR) by Vicente Monteiro
+* Russian (ru) update (Sam Vo)
+* Chinese (zh) update (dumaosen)
 
 
 
