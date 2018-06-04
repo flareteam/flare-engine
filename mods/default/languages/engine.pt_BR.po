@@ -138,7 +138,7 @@ msgstr "Padrões"
 
 #: ../../../src/GameStateConfigBase.cpp:96
 msgid "Reset ALL settings?"
-msgstr "Restaurar TODAS configurações?"
+msgstr "Restaurar padrões?"
 
 #: ../../../src/GameStateConfigBase.cpp:118 ../../../src/MenuNumPicker.cpp:50
 msgid "OK"
@@ -166,11 +166,11 @@ msgstr "Mods"
 
 #: ../../../src/GameStateConfigBase.cpp:259 ../../../src/MenuExit.cpp:71
 msgid "Music Volume"
-msgstr "Volume da Musica"
+msgstr "Volume das músicas"
 
 #: ../../../src/GameStateConfigBase.cpp:263 ../../../src/MenuExit.cpp:76
 msgid "Sound Volume"
-msgstr "Volume dos Efeitos"
+msgstr "Volume dos efeitos"
 
 #: ../../../src/GameStateConfigBase.cpp:267
 msgid "Language"
@@ -178,15 +178,15 @@ msgstr "Idioma"
 
 #: ../../../src/GameStateConfigBase.cpp:276
 msgid "Show combat text"
-msgstr "Exibir texto de combate"
+msgstr "Exibir rótulos de combate"
 
 #: ../../../src/GameStateConfigBase.cpp:280
 msgid "Show FPS"
-msgstr "Exibir FPS"
+msgstr "Exibir quadros por segundo"
 
 #: ../../../src/GameStateConfigBase.cpp:284
 msgid "Colorblind Mode"
-msgstr "Modo Daltônico"
+msgstr "Modo daltônico"
 
 #: ../../../src/GameStateConfigBase.cpp:288
 msgid "Hardware mouse cursor"
@@ -194,15 +194,15 @@ msgstr "Renderizar cursor do mouse por hardware"
 
 #: ../../../src/GameStateConfigBase.cpp:292
 msgid "Developer Mode"
-msgstr "Modo Desenvolvedor"
+msgstr "Modo desenvolvedor"
 
 #: ../../../src/GameStateConfigBase.cpp:296
 msgid "Always show loot labels"
-msgstr "Sempre exibir informação de saque"
+msgstr "Exibir rótulos de saque"
 
 #: ../../../src/GameStateConfigBase.cpp:300
 msgid "Always show stat bar labels"
-msgstr "Sempre exibir"
+msgstr "Exibir rótulos na barra de status"
 
 #: ../../../src/GameStateConfigBase.cpp:304
 msgid "Automatically equip items"
@@ -264,7 +264,7 @@ msgstr "Entrada"
 
 #: ../../../src/GameStateConfigDesktop.cpp:135
 msgid "Keybindings"
-msgstr "Combinação de teclas"
+msgstr "Teclas de Atalho"
 
 #: ../../../src/GameStateConfigDesktop.cpp:191
 msgid ""
@@ -306,7 +306,7 @@ msgstr "Renderizador"
 
 #: ../../../src/GameStateConfigDesktop.cpp:229
 msgid "Full Screen Mode"
-msgstr "Modo Tela Cheia"
+msgstr "Tela Cheia"
 
 #: ../../../src/GameStateConfigDesktop.cpp:233
 msgid "Move hero using mouse"
@@ -322,7 +322,7 @@ msgstr "V-Sync"
 
 #: ../../../src/GameStateConfigDesktop.cpp:245
 msgid "Texture Filtering"
-msgstr "Filtragem das Texturas"
+msgstr "Filtragem"
 
 #: ../../../src/GameStateConfigDesktop.cpp:249
 msgid "DPI scaling"
@@ -330,7 +330,7 @@ msgstr "DPI scaling"
 
 #: ../../../src/GameStateConfigDesktop.cpp:253
 msgid "Allow changing gamma"
-msgstr "Permitir alteração no gamma"
+msgstr "Alterar gamma"
 
 #: ../../../src/GameStateConfigDesktop.cpp:257
 msgid "Gamma"
@@ -363,19 +363,19 @@ msgstr "Carregando..."
 
 #: ../../../src/GameStateLoad.cpp:85 ../../../src/GameStateLoad.cpp:98
 msgid "Delete Save"
-msgstr "Remover jogo salvo"
+msgstr "Excluir"
 
 #: ../../../src/GameStateLoad.cpp:85
 msgid "Delete this save?"
-msgstr "Remover jogo salvo?"
+msgstr "Excluir jogo salvo?"
 
 #: ../../../src/GameStateLoad.cpp:87
 msgid "Exit to Title"
-msgstr "Sair para tela principal"
+msgstr "Voltar"
 
 #: ../../../src/GameStateLoad.cpp:90
 msgid "New Game"
-msgstr "Novo Jogo"
+msgstr "Novo"
 
 #: ../../../src/GameStateLoad.cpp:94 ../../../src/GameStateLoad.cpp:594
 msgid "Choose a Slot"
@@ -387,7 +387,7 @@ msgstr "Ative o mod de campanha para continuar"
 
 #: ../../../src/GameStateLoad.cpp:583
 msgid "Load Game"
-msgstr "Carregar Jogo"
+msgstr "Continuar"
 
 #: ../../../src/GameStateLoad.cpp:696
 msgid "Entering game world..."
@@ -413,23 +413,23 @@ msgstr "Criar"
 
 #: ../../../src/GameStateNew.cpp:179
 msgid "Choose a Portrait"
-msgstr "Escolha um Retrato"
+msgstr "Escolha um retrato"
 
 #: ../../../src/GameStateNew.cpp:183
 msgid "Choose a Name"
-msgstr "Escolha um Nome"
+msgstr "Digite um nome"
 
 #: ../../../src/GameStateNew.cpp:187
 msgid "Permadeath?"
-msgstr "Morte Permanente?"
+msgstr "Morte permanente?"
 
 #: ../../../src/GameStateNew.cpp:191
 msgid "Choose a Class"
-msgstr "Escolha uma Classe"
+msgstr "Escolha uma classe"
 
 #: ../../../src/GameStateTitle.cpp:107
 msgid "Play Game"
-msgstr "Jogar o Jogo"
+msgstr "Jogar"
 
 #: ../../../src/GameStateTitle.cpp:110
 msgid "Enable a core mod to continue"
@@ -437,15 +437,15 @@ msgstr "Ative o mod core para continuar"
 
 #: ../../../src/GameStateTitle.cpp:114
 msgid "Configuration"
-msgstr "Configurações"
+msgstr "Opções "
 
 #: ../../../src/GameStateTitle.cpp:117
 msgid "Credits"
-msgstr "Créditos"
+msgstr "Sobre"
 
 #: ../../../src/GameStateTitle.cpp:120
 msgid "Exit Game"
-msgstr "Sair do Jogo"
+msgstr "Sair"
 
 #: ../../../src/InputState.cpp:373
 msgid "Accept"
@@ -570,11 +570,11 @@ msgstr "Barra de Ação Usar"
 
 #: ../../../src/InputState.cpp:402
 msgid "Developer Menu"
-msgstr "Menu do Desenvolvedor"
+msgstr "Menu do desenvolvedor"
 
 #: ../../../src/InputState.cpp:404
 msgid "Left Mouse"
-msgstr "Mouse Esquerdo"
+msgstr "Mouse esq."
 
 #: ../../../src/InputState.cpp:405
 msgid "Middle Mouse"
@@ -582,7 +582,7 @@ msgstr "Mouse do Meio"
 
 #: ../../../src/InputState.cpp:406
 msgid "Right Mouse"
-msgstr "Mouse Direito"
+msgstr "Mouse dir."
 
 #: ../../../src/InputState.cpp:407
 msgid "Wheel Up"
@@ -1332,7 +1332,7 @@ msgstr "Botão %d"
 
 #: ../../../src/SDLInputState.cpp:636
 msgid "(none)"
-msgstr "(nada)"
+msgstr "(nenhum)"
 
 #: ../../../src/SDLInputState.cpp:677 ../../../src/SDLInputState.cpp:701
 #: ../../../src/SDLInputState.cpp:719

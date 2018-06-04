@@ -1,19 +1,22 @@
 # Copyright (C) 2011 Clint Bellanger
 # This file is distributed under the same license as the FLARE package.
-#
-# Nguyễn Gia Phong <vn.mcsinyx@gmail.com>, 2018.
+# 
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Translators:
+# Justin Jacobs <jajdorkster@gmail.com>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-31 15:57+\n"
+"POT-Creation-Date: 2018-05-21 16:45+\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Nguyễn Gia Phong <vn.mcsinyx@gmail.com>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: vi\n"
+"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
+"Language-Team: Vietnamese (https://www.transifex.com/flareorg/teams/84925/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: vi\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../engine/primary_stats.txt:3
 msgid "Physical"
@@ -336,61 +339,57 @@ msgid "Timo Sievänen"
 msgstr ""
 
 #: ../cutscenes/credits.txt:91
-msgid "Vicente Monteiro"
-msgstr ""
-
-#: ../cutscenes/credits.txt:92
 msgid "Wuzzy2"
 msgstr ""
 
-#: ../cutscenes/credits.txt:93
+#: ../cutscenes/credits.txt:92
 msgid "Yannis Anthymidis"
 msgstr ""
 
-#: ../cutscenes/credits.txt:96
+#: ../cutscenes/credits.txt:95
 msgid "Distributors"
 msgstr "Các nhà phân phối"
 
-#: ../cutscenes/credits.txt:98
+#: ../cutscenes/credits.txt:97
 msgid "Ablu"
 msgstr ""
 
-#: ../cutscenes/credits.txt:99
+#: ../cutscenes/credits.txt:98
 msgid "Feillyne"
 msgstr ""
 
-#: ../cutscenes/credits.txt:100
+#: ../cutscenes/credits.txt:99
 msgid "Jan-Hendrik Peters"
 msgstr ""
 
-#: ../cutscenes/credits.txt:102
+#: ../cutscenes/credits.txt:101
 msgid "miffe"
 msgstr ""
 
-#: ../cutscenes/credits.txt:105
+#: ../cutscenes/credits.txt:104
 msgid "Special Thanks"
 msgstr "Đặc biệt cảm ơn"
 
-#: ../cutscenes/credits.txt:109
+#: ../cutscenes/credits.txt:108
 msgid "For giving constant feedback and testing:"
 msgstr "Về việc thử nghiệm và phản hồi thường xuyên:"
 
-#: ../cutscenes/credits.txt:110
+#: ../cutscenes/credits.txt:109
 msgid "Bart Kelsey"
 msgstr ""
 
-#: ../cutscenes/credits.txt:111
+#: ../cutscenes/credits.txt:110
 msgid "The community at OpenGameArt"
 msgstr "Cộng đồng ở OpenGameArt"
 
-#: ../cutscenes/credits.txt:115
+#: ../cutscenes/credits.txt:114
 msgid "For Tiled and the Flare map exporter:"
 msgstr "Về Tiled và công cụ kết xuất bản đồ cho Flare:"
 
-#: ../cutscenes/credits.txt:116
+#: ../cutscenes/credits.txt:115
 msgid "Thorbjørn Lindeijer"
 msgstr ""
 
-#: ../cutscenes/credits.txt:118
+#: ../cutscenes/credits.txt:117
 msgid "Ranie Jade Ramiso"
 msgstr ""

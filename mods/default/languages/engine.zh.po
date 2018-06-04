@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-21 16:45-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
+"Last-Translator: 茂森 杜 <dumaosen_main01@outlook.com>, 2018\n"
 "Language-Team: Chinese (https://www.transifex.com/flareorg/teams/84925/zh/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,7 +21,7 @@ msgstr ""
 #: ../../../src/Avatar.cpp:363
 #, c-format
 msgid "Congratulations, you have reached level %d!"
-msgstr "恭喜！你到到了等级 %d!"
+msgstr "恭喜！你达到了等级 %d!you have reached level"
 
 #: ../../../src/Avatar.cpp:365
 msgid "You may increase one attribute through the Character Menu."
@@ -29,25 +29,25 @@ msgstr "你可以在角色菜单增加一点属性"
 
 #: ../../../src/Avatar.cpp:583
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
-msgstr ""
+msgstr "你被打败了，游戏结束！按下${INPUT_CONTINUE}返回游戏开始界面。"
 
 #: ../../../src/Avatar.cpp:589
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
-msgstr ""
+msgstr "你被打败了。按下${INPUT_CONTINUE}以继续。"
 
 #: ../../../src/Avatar.cpp:842
 msgid "Transformation expired. You have been moved back to a safe place."
-msgstr ""
+msgstr "转换已过期。 你已回到一个安全的地方。"
 
 #: ../../../src/CampaignManager.cpp:126
 #, c-format
 msgid "%d %s removed."
-msgstr ""
+msgstr "%d %s 已移除"
 
 #: ../../../src/CampaignManager.cpp:135
 #, c-format
 msgid "%s removed."
-msgstr ""
+msgstr "%s已移除"
 
 #: ../../../src/CampaignManager.cpp:148
 #, c-format
@@ -95,6 +95,8 @@ msgid ""
 "\n"
 "Often slower, but less likely to have issues."
 msgstr ""
+"SDL软件渲染器\n"
+"通常较慢，但不太可能出现问题。"
 
 #: ../../../src/DeviceList.cpp:59
 msgid ""
@@ -102,6 +104,8 @@ msgid ""
 "\n"
 "The default renderer that is often faster than the SDL software renderer."
 msgstr ""
+"SDL硬件渲染器\n"
+"默认渲染器，通常比SDL软件渲染器更快。"
 
 #: ../../../src/Entity.cpp:513
 msgid "miss"
@@ -178,31 +182,31 @@ msgstr "显示画面每秒帧数"
 
 #: ../../../src/GameStateConfigBase.cpp:284
 msgid "Colorblind Mode"
-msgstr ""
+msgstr "色盲模式"
 
 #: ../../../src/GameStateConfigBase.cpp:288
 msgid "Hardware mouse cursor"
-msgstr ""
+msgstr "硬件鼠标光标"
 
 #: ../../../src/GameStateConfigBase.cpp:292
 msgid "Developer Mode"
-msgstr ""
+msgstr "开发者模式"
 
 #: ../../../src/GameStateConfigBase.cpp:296
 msgid "Always show loot labels"
-msgstr ""
+msgstr "始终显示战利品标签"
 
 #: ../../../src/GameStateConfigBase.cpp:300
 msgid "Always show stat bar labels"
-msgstr ""
+msgstr "始终显示进度条标签"
 
 #: ../../../src/GameStateConfigBase.cpp:304
 msgid "Automatically equip items"
-msgstr ""
+msgstr "自动装备物品"
 
 #: ../../../src/GameStateConfigBase.cpp:308
 msgid "Subtitles"
-msgstr ""
+msgstr "字幕"
 
 #: ../../../src/GameStateConfigBase.cpp:312
 msgid "Active Mods"
@@ -222,29 +226,29 @@ msgstr " 启用>>"
 
 #: ../../../src/GameStateConfigBase.cpp:941
 msgid "Version:"
-msgstr ""
+msgstr "版本号："
 
 #: ../../../src/GameStateConfigBase.cpp:946
 msgid "Game:"
-msgstr ""
+msgstr "游戏："
 
 #: ../../../src/GameStateConfigBase.cpp:951
 msgid "Engine version:"
-msgstr ""
+msgstr "引擎版本号："
 
 #: ../../../src/GameStateConfigBase.cpp:959
 msgid "Requires mods:"
-msgstr ""
+msgstr "需要的模组："
 
 #: ../../../src/GameStateConfigDesktop.cpp:85
 #: ../../../src/GameStateConfigDesktop.cpp:745
 msgid "Clear"
-msgstr ""
+msgstr "清空"
 
 #: ../../../src/GameStateConfigDesktop.cpp:85
 #: ../../../src/GameStateConfigDesktop.cpp:743
 msgid "Assign:"
-msgstr ""
+msgstr "分配："
 
 #: ../../../src/GameStateConfigDesktop.cpp:130
 msgid "Video"
@@ -262,20 +266,20 @@ msgstr "快捷键"
 msgid ""
 "Will try to store surfaces in video memory versus system memory. The effect "
 "this has on performance depends on the renderer."
-msgstr ""
+msgstr "将尝试在视频内存中存储表面与系统内存。 这对性能的影响取决于渲染器。"
 
 #: ../../../src/GameStateConfigDesktop.cpp:192
 msgid ""
 "Prevents screen tearing. Disable if you experience \"stuttering\" in "
 "windowed mode or input lag."
-msgstr ""
+msgstr "防止画面撕裂。 如果在窗口模式或输入时卡顿则禁用。"
 
 #: ../../../src/GameStateConfigDesktop.cpp:193
 msgid ""
 "When enabled, this uses the screen DPI in addition to the window dimensions "
 "to scale the rendering resolution. Otherwise, only the window dimensions are"
 " used."
-msgstr ""
+msgstr "启用后，除了窗口尺寸外，还会使用屏幕DPI来调整渲染分辨率。 否则，只使用窗口尺寸。"
 
 #: ../../../src/GameStateConfigDesktop.cpp:194
 msgid "Experimental"
@@ -283,11 +287,11 @@ msgstr "实验功能"
 
 #: ../../../src/GameStateConfigDesktop.cpp:195
 msgid "For handheld devices"
-msgstr ""
+msgstr "对于手持设备"
 
 #: ../../../src/GameStateConfigDesktop.cpp:213
 msgid "Renderer"
-msgstr ""
+msgstr "渲染"
 
 #: ../../../src/GameStateConfigDesktop.cpp:229
 msgid "Full Screen Mode"
@@ -303,15 +307,15 @@ msgstr "硬件加速"
 
 #: ../../../src/GameStateConfigDesktop.cpp:241
 msgid "V-Sync"
-msgstr ""
+msgstr "垂直同步"
 
 #: ../../../src/GameStateConfigDesktop.cpp:245
 msgid "Texture Filtering"
-msgstr ""
+msgstr "纹理过滤"
 
 #: ../../../src/GameStateConfigDesktop.cpp:249
 msgid "DPI scaling"
-msgstr ""
+msgstr "DPI缩放"
 
 #: ../../../src/GameStateConfigDesktop.cpp:253
 msgid "Allow changing gamma"
@@ -335,11 +339,11 @@ msgstr "使用鼠标瞄准敌人"
 
 #: ../../../src/GameStateConfigDesktop.cpp:285
 msgid "Do not use mouse"
-msgstr ""
+msgstr "不要使用鼠标"
 
 #: ../../../src/GameStateConfigDesktop.cpp:289
 msgid "Joystick Deadzone"
-msgstr ""
+msgstr "操纵杆灵敏度"
 
 #: ../../../src/GameState.cpp:37 ../../../src/GameState.cpp:51
 #: ../../../src/GameState.cpp:67
@@ -384,7 +388,7 @@ msgstr "载入游戏..."
 
 #: ../../../src/GameStateLoad.cpp:733
 msgid "Invalid save"
-msgstr ""
+msgstr "保存无效"
 
 #: ../../../src/GameStateLoad.cpp:752 ../../../src/ItemManager.cpp:678
 #: ../../../src/MenuPowers.cpp:707 ../../../src/MenuPowers.cpp:1071
@@ -426,7 +430,7 @@ msgstr "配置"
 
 #: ../../../src/GameStateTitle.cpp:117
 msgid "Credits"
-msgstr ""
+msgstr "参与人员"
 
 #: ../../../src/GameStateTitle.cpp:120
 msgid "Exit Game"
@@ -531,7 +535,7 @@ msgstr "Shift"
 
 #: ../../../src/InputState.cpp:396
 msgid "Alt"
-msgstr ""
+msgstr "其他"
 
 #: ../../../src/InputState.cpp:397 ../../../src/SDLInputState.cpp:583
 msgid "Delete"
@@ -539,11 +543,11 @@ msgstr "删除"
 
 #: ../../../src/InputState.cpp:398
 msgid "ActionBar Accept"
-msgstr ""
+msgstr "操作栏 接受"
 
 #: ../../../src/InputState.cpp:399
 msgid "ActionBar Left"
-msgstr ""
+msgstr "操作栏 左"
 
 #: ../../../src/InputState.cpp:400
 msgid "ActionBar Right"
@@ -715,7 +719,7 @@ msgstr "未用点数"
 #: ../../../src/MenuCharacter.cpp:353 ../../../src/MenuManager.cpp:309
 #, c-format
 msgid "XP: %d"
-msgstr "XP: %d"
+msgstr "经验值: %d"
 
 #: ../../../src/MenuCharacter.cpp:355
 #, c-format
@@ -997,7 +1001,7 @@ msgstr "任务"
 #: ../../../src/MenuManager.cpp:311
 #, c-format
 msgid "XP: %d/%d"
-msgstr "XP: %d/%d"
+msgstr "经验值： %d/%d"
 
 #: ../../../src/MenuManager.cpp:825
 msgid "This item can not be dropped."
