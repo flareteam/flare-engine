@@ -72,7 +72,7 @@ MenuPowers::MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar)
 	// Read powers data from config file
 	FileParser infile;
 	// @CLASS MenuPowers: Menu layout|Description of menus/powers.txt
-	if (infile.open("menus/powers.txt")) {
+	if (infile.open("menus/powers.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
@@ -184,7 +184,7 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 
 	FileParser infile;
 	// @CLASS MenuPowers: Power tree layout|Description of powers/trees/
-	if (infile.open(filename)) {
+	if (infile.open(filename, FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			if (infile.new_section) {
 				// for sections that are stored in collections, add a new object here

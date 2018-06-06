@@ -58,7 +58,7 @@ MenuVendor::MenuVendor(StatBlock *_stats)
 	// Load config settings
 	FileParser infile;
 	// @CLASS MenuVendor|Description of menus/vendor.txt
-	if(infile.open("menus/vendor.txt")) {
+	if(infile.open("menus/vendor.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while(infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;

@@ -66,7 +66,7 @@ MenuDevConsole::MenuDevConsole()
 	// Load config settings
 	FileParser infile;
 	// @CLASS MenuDevConsole|Description of menus/devconsole.txt
-	if(infile.open("menus/devconsole.txt")) {
+	if(infile.open("menus/devconsole.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while(infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;

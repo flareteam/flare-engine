@@ -440,7 +440,7 @@ bool GameStateCutscene::load(const std::string& filename) {
 	FileParser infile;
 
 	// @CLASS Cutscene|Description of cutscenes in cutscenes/
-	if (!infile.open(filename))
+	if (!infile.open(filename, FileParser::MOD_FILE, FileParser::ERROR_NORMAL))
 		return false;
 
 	logInfo("GameStateCutscene: Loading cutscene '%s'", filename.c_str());

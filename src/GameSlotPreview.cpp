@@ -58,7 +58,7 @@ void GameSlotPreview::loadLayerDefinitions() {
 
 	// NOTE: This is documented in Avatar.cpp
 	FileParser infile;
-	if (infile.open("engine/hero_layers.txt")) {
+	if (infile.open("engine/hero_layers.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while(infile.next()) {
 			if (infile.key == "layer") {
 				unsigned dir = parse_direction(popFirstString(infile.val));

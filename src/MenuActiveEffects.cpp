@@ -47,7 +47,7 @@ MenuActiveEffects::MenuActiveEffects(StatBlock *_stats)
 	// Load config settings
 	FileParser infile;
 	// @CLASS MenuActiveEffects|Description of menus/activeeffects.txt
-	if(infile.open("menus/activeeffects.txt")) {
+	if(infile.open("menus/activeeffects.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while(infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;

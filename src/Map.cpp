@@ -84,7 +84,7 @@ int Map::load(const std::string& fname) {
 	hero_pos.y = 0;
 
 	// @CLASS Map|Description of maps/
-	if (!infile.open(fname))
+	if (!infile.open(fname, FileParser::MOD_FILE, FileParser::ERROR_NORMAL))
 		return 0;
 
 	logInfo("Map: Loading map '%s'", fname.c_str());

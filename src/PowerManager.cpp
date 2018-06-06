@@ -68,7 +68,7 @@ void PowerManager::loadEffects() {
 	FileParser infile;
 
 	// @CLASS PowerManager: Effects|Description of powers/effects.txt
-	if (!infile.open("powers/effects.txt"))
+	if (!infile.open("powers/effects.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL))
 		return;
 
 	while (infile.next()) {
@@ -152,7 +152,7 @@ void PowerManager::loadPowers() {
 	FileParser infile;
 
 	// @CLASS PowerManager: Powers|Description of powers/powers.txt
-	if (!infile.open("powers/powers.txt"))
+	if (!infile.open("powers/powers.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL))
 		return;
 
 	bool clear_post_effects = true;

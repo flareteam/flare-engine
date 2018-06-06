@@ -61,7 +61,7 @@ CombatText::CombatText() {
 	// Load config settings
 	FileParser infile;
 	// @CLASS CombatText|Description of engine/combat_text.txt
-	if(infile.open("engine/combat_text.txt")) {
+	if(infile.open("engine/combat_text.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while(infile.next()) {
 			if(infile.key == "duration") {
 				// @ATTR duration|duration|Duration of the combat text in 'ms' or 's'.

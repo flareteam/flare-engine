@@ -978,7 +978,7 @@ void EventManager::executeScript(const std::string& filename, float x, float y) 
 	FileParser script_file;
 	std::queue<Event> script_evnt;
 
-	if (script_file.open(filename)) {
+	if (script_file.open(filename, FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (script_file.next()) {
 			if (script_file.new_section && script_file.section == "event") {
 				Event tmp_evnt;
@@ -1036,7 +1036,7 @@ Event_Component EventManager::getRandomMapFromFile(const std::string& fname) {
 	std::vector<Event_Component> ec_list;
 
 	// @CLASS EventManager: Random Map List|Description of maps/random/lists/
-	if (infile.open(fname)) {
+	if (infile.open(fname, FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			// @ATTR map|filename, int, int : Map file, X, Y|Adds a map and optional spawn position to the random list of maps to teleport to.
 			if (infile.key == "map") {

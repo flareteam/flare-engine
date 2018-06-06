@@ -40,7 +40,7 @@ MenuConfirm::MenuConfirm(const std::string& _buttonMsg, const std::string& _boxM
 
 	// Load config settings
 	FileParser infile;
-	if(infile.open("menus/confirm.txt")) {
+	if(infile.open("menus/confirm.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while(infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;

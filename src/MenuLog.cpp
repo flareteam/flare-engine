@@ -45,7 +45,7 @@ MenuLog::MenuLog() {
 	// Load config settings
 	FileParser infile;
 	// @CLASS MenuLog|Description of menus/log.txt
-	if(infile.open("menus/log.txt")) {
+	if(infile.open("menus/log.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while(infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;

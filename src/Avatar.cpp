@@ -90,7 +90,7 @@ Avatar::Avatar()
 	// load foot-step definitions
 	// @CLASS Avatar: Step sounds|Description of items/step_sounds.txt
 	FileParser infile;
-	if (infile.open("items/step_sounds.txt", FileParser::NO_ERROR)) {
+	if (infile.open("items/step_sounds.txt", FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
 		while (infile.next()) {
 			if (infile.key == "id") {
 				// @ATTR id|string|An identifier name for a set of step sounds.
@@ -178,7 +178,7 @@ void Avatar::loadLayerDefinitions() {
 
 	FileParser infile;
 	// @CLASS Avatar: Hero layers|Description of engine/hero_layers.txt
-	if (infile.open("engine/hero_layers.txt")) {
+	if (infile.open("engine/hero_layers.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while(infile.next()) {
 			if (infile.key == "layer") {
 				// @ATTR layer|direction, list(string) : Direction, Layer name(s)|Defines the hero avatar sprite layer

@@ -68,7 +68,7 @@ void QuestLog::loadAll() {
 void QuestLog::load(const std::string& filename) {
 	FileParser infile;
 	// @CLASS QuestLog|Description of quest files in quests/
-	if (!infile.open(filename))
+	if (!infile.open(filename, FileParser::MOD_FILE, FileParser::ERROR_NORMAL))
 		return;
 
 	quest_names.resize(quest_names.size()+1);

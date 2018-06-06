@@ -47,7 +47,7 @@ MenuExit::MenuExit() : Menu() {
 	// Load config settings
 	FileParser infile;
 	// @CLASS MenuExit|Description of menus/exit.txt
-	if(infile.open("menus/exit.txt")) {
+	if(infile.open("menus/exit.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while(infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;

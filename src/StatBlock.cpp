@@ -387,7 +387,7 @@ bool StatBlock::loadSfxStat(FileParser *infile) {
 void StatBlock::load(const std::string& filename) {
 	// @CLASS StatBlock: Enemies|Description of enemies in enemies/
 	FileParser infile;
-	if (!infile.open(filename))
+	if (!infile.open(filename, FileParser::MOD_FILE, FileParser::ERROR_NORMAL))
 		return;
 
 	bool clear_loot = true;
@@ -947,7 +947,7 @@ void StatBlock::loadHeroStats() {
 	// Redefine numbers from config file if present
 	FileParser infile;
 	// @CLASS StatBlock: Hero stats|Description of engine/stats.txt
-	if (infile.open("engine/stats.txt")) {
+	if (infile.open("engine/stats.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			int value = toInt(infile.val);
 
@@ -981,7 +981,7 @@ void StatBlock::loadHeroStats() {
 
 	// load the XP table
 	// @CLASS StatBlock: XP table|Description of engine/xp_table.txt
-	if (infile.open("engine/xp_table.txt")) {
+	if (infile.open("engine/xp_table.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while(infile.next()) {
 			if (infile.key == "level") {
 				// @ATTR level|int, int : Level, XP|The amount of XP required for this level.
@@ -1008,7 +1008,7 @@ void StatBlock::loadHeroStats() {
 void StatBlock::loadHeroSFX() {
 	// load the paths to base sound effects
 	FileParser infile;
-	if (infile.open("engine/avatar/"+gfx_base+".txt", FileParser::NO_ERROR)) {
+	if (infile.open("engine/avatar/"+gfx_base+".txt", FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
 		while(infile.next()) {
 			loadSfxStat(&infile);
 		}

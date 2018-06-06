@@ -58,7 +58,7 @@ MenuTalker::MenuTalker(MenuNPCActions *_npc_menu)
 	// Load config settings
 	FileParser infile;
 	// @CLASS MenuTalker|Description of menus/talker.txt
-	if(infile.open("menus/talker.txt")) {
+	if(infile.open("menus/talker.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while(infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;

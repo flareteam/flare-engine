@@ -89,7 +89,7 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 	// Load config settings
 	FileParser infile;
 	// @CLASS MenuCharacter|Description of menus/character.txt
-	if (infile.open("menus/character.txt")) {
+	if (infile.open("menus/character.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while(infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;

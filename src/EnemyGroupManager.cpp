@@ -35,7 +35,7 @@ EnemyGroupManager::EnemyGroupManager() {
 		FileParser infile;
 
 		// @CLASS EnemyGroupManager|Description of enemies in enemies/
-		if (!infile.open(enemy_paths[i]))
+		if (!infile.open(enemy_paths[i], FileParser::MOD_FILE, FileParser::ERROR_NORMAL))
 			return;
 
 		Enemy_Level new_enemy;

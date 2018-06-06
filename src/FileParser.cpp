@@ -26,7 +26,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 FileParser::FileParser()
 	: current_index(0)
-	, flags(0)
+	, is_mod_file(false)
+	, error_mode(ERROR_NORMAL)
 	, line("")
 	, line_number(0)
 	, include_fp(NULL)
@@ -36,11 +37,12 @@ FileParser::FileParser()
 	, val("") {
 }
 
-bool FileParser::open(const std::string& _filename, unsigned char _flags) {
-	flags = _flags;
+bool FileParser::open(const std::string& _filename, bool _is_mod_file, int _error_mode) {
+	is_mod_file = _is_mod_file;
+	error_mode = _error_mode;
 
 	filenames.clear();
-	if (!(flags & FULL_PATH)) {
+	if (is_mod_file) {
 		filenames = mods->list(_filename, ModManager::LIST_FULL_PATHS);
 	}
 	else {
@@ -50,7 +52,7 @@ bool FileParser::open(const std::string& _filename, unsigned char _flags) {
 	line_number = 0;
 
 	if (filenames.empty()) {
-		if (!(flags & NO_ERROR))
+		if (error_mode != ERROR_NONE)
 			logError("FileParser: Could not open text file: %s: No such file or directory!", _filename.c_str());
 		return false;
 	}
@@ -90,7 +92,7 @@ bool FileParser::open(const std::string& _filename, unsigned char _flags) {
 			}
 		}
 		else {
-			if (!(flags & NO_ERROR))
+			if (error_mode != ERROR_NONE)
 				logError("FileParser: Could not open text file: %s", filenames[i-1].c_str());
 			infile.clear();
 		}
@@ -173,7 +175,7 @@ bool FileParser::next() {
 					std::string tmp = line.substr(first_space+1);
 
 					include_fp = new FileParser();
-					if (!include_fp || !include_fp->open(tmp)) {
+					if (!include_fp || !include_fp->open(tmp, is_mod_file, error_mode)) {
 						delete include_fp;
 						include_fp = NULL;
 					}
@@ -200,7 +202,7 @@ bool FileParser::next() {
 		const std::string current_filename = filenames[current_index];
 		infile.open(current_filename.c_str(), std::ios::in);
 		if (!infile.is_open()) {
-			if (!(flags & NO_ERROR))
+			if (error_mode != ERROR_NONE)
 				logError("FileParser: Could not open text file: %s", current_filename.c_str());
 			infile.clear();
 			return false;

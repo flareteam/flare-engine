@@ -64,7 +64,7 @@ void MenuBook::loadBook() {
 	FileParser infile;
 
 	// @CLASS MenuBook|Description of books in books/
-	if (infile.open(book_name)) {
+	if (infile.open(book_name, FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		last_book_name = book_name;
 
 		while (infile.next()) {

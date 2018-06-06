@@ -60,7 +60,7 @@ MenuNumPicker::MenuNumPicker()
 	// Load config settings
 	FileParser infile;
 	// @CLASS MenuNumPicker|Description of menus/num_picker.txt
-	if(infile.open("menus/num_picker.txt")) {
+	if(infile.open("menus/num_picker.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while(infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;

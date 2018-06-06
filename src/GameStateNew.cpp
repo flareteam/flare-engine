@@ -89,7 +89,7 @@ GameStateNew::GameStateNew()
 	FileParser infile;
 
 	// @CLASS GameStateNew: Layout|Description of menus/gamenew.txt
-	if (infile.open("menus/gamenew.txt")) {
+	if (infile.open("menus/gamenew.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			// @ATTR button_prev|int, int, alignment : X, Y, Alignment|Position of button to choose the previous preset hero.
 			if (infile.key == "button_prev") {
@@ -253,7 +253,7 @@ void GameStateNew::loadPortrait(const std::string& portrait_filename) {
 void GameStateNew::loadOptions(const std::string& filename) {
 	FileParser fin;
 	// @CLASS GameStateNew: Hero options|Description of engine/hero_options.txt
-	if (!fin.open("engine/" + filename)) return;
+	if (!fin.open("engine/" + filename, FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) return;
 
 	int cur_index = -1;
 	while (fin.next()) {

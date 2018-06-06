@@ -38,7 +38,7 @@ void WidgetSettings::load() {
 
 	FileParser infile;
 	// @CLASS WidgetSettings|Description of engine/widget_settings.txt
-	if (infile.open("engine/widget_settings.txt", FileParser::NO_ERROR)) {
+	if (infile.open("engine/widget_settings.txt", FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
 		while (infile.next()) {
 			if (infile.section == "misc") {
 				if (infile.key == "selection_rect_color") {

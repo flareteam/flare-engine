@@ -47,7 +47,7 @@ void MapParallax::load(const std::string& filename) {
 
 	// @CLASS MapParallax|Description of maps/parallax/
 	FileParser infile;
-	if (infile.open(filename)) {
+	if (infile.open(filename, FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			if (infile.new_section && infile.section == "layer") {
 				layers.resize(layers.size()+1);

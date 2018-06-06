@@ -256,7 +256,7 @@ void SaveLoad::loadGame() {
 	std::stringstream ss;
 	ss << PATH_USER << "saves/" << SAVE_PREFIX << "/" << game_slot << "/avatar.txt";
 
-	if (infile.open(path(&ss), FileParser::FULL_PATH)) {
+	if (infile.open(path(&ss), !FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			if (infile.key == "name") pc->stats.name = infile.val;
 			else if (infile.key == "permadeath") {
@@ -475,7 +475,7 @@ void SaveLoad::loadStash() {
 	else
 		ss << PATH_USER << "saves/" << SAVE_PREFIX << "/stash.txt";
 
-	if (infile.open(path(&ss), (FileParser::FULL_PATH | FileParser::NO_ERROR))) {
+	if (infile.open(path(&ss), !FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
 		while (infile.next()) {
 			if (infile.key == "item") {
 				menu->stash->stock.setItems(infile.val);

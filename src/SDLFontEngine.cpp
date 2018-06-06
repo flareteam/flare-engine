@@ -46,7 +46,7 @@ SDLFontEngine::SDLFontEngine() : FontEngine(), active_font(NULL) {
 	// load the fonts
 	// @CLASS SDLFontEngine: Font settings|Description of engine/font_settings.txt
 	FileParser infile;
-	if (infile.open("engine/font_settings.txt")) {
+	if (infile.open("engine/font_settings.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		bool is_fallback = false;
 		while (infile.next()) {
 			if (infile.new_section && infile.section == "font") {
@@ -105,7 +105,7 @@ SDLFontEngine::SDLFontEngine() : FontEngine(), active_font(NULL) {
 	// set the font colors
 	// @CLASS SDLFontEngine: Font colors|Description of engine/font_colors.txt
 	Color color;
-	if (infile.open("engine/font_colors.txt")) {
+	if (infile.open("engine/font_colors.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			// @ATTR menu_normal|color|Basic menu text color. Recommended: white.
 			// @ATTR menu_bonus|color|Positive menu text color. Recommended: green.

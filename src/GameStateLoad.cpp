@@ -110,7 +110,7 @@ GameStateLoad::GameStateLoad() : GameState()
 	FileParser infile;
 
 	// @CLASS GameStateLoad|Description of menus/gameload.txt
-	if (infile.open("menus/gameload.txt")) {
+	if (infile.open("menus/gameload.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			// @ATTR button_new|int, int, alignment : X, Y, Alignment|Position of the "New Game" button.
 			if (infile.key == "button_new") {
@@ -299,7 +299,7 @@ void GameStateLoad::readGameSlots() {
 		filename.str("");
 		filename << PATH_USER << "saves/" << SAVE_PREFIX << "/" << save_dirs[i] << "/avatar.txt";
 
-		if (!infile.open(filename.str(), FileParser::FULL_PATH)) continue;
+		if (!infile.open(filename.str(), !FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) continue;
 
 		game_slots[i] = new GameSlot();
 		game_slots[i]->id = toInt(save_dirs[i]);
@@ -355,7 +355,7 @@ void GameStateLoad::readGameSlots() {
 
 std::string GameStateLoad::getMapName(const std::string& map_filename) {
 	FileParser infile;
-	if (!infile.open(map_filename, FileParser::NO_ERROR))
+	if (!infile.open(map_filename, FileParser::MOD_FILE, FileParser::ERROR_NONE))
 		return "";
 
 	std::string map_name = "";

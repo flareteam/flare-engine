@@ -46,7 +46,7 @@ MenuEnemy::MenuEnemy()
 	// Load config settings
 	FileParser infile;
 	// @CLASS MenuEnemy|Description of menus/enemy.txt
-	if(infile.open("menus/enemy.txt")) {
+	if(infile.open("menus/enemy.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while(infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;

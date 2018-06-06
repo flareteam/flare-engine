@@ -167,7 +167,7 @@ void GameStateConfigDesktop::init() {
 
 void GameStateConfigDesktop::readConfig() {
 	FileParser infile;
-	if (infile.open("menus/config.txt")) {
+	if (infile.open("menus/config.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			if (parseKeyButtons(infile))
 				continue;

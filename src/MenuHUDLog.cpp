@@ -42,7 +42,7 @@ MenuHUDLog::MenuHUDLog()
 
 	// Load config settings
 	FileParser infile;
-	if(infile.open("menus/hudlog.txt")) {
+	if(infile.open("menus/hudlog.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while(infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;

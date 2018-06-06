@@ -44,7 +44,7 @@ Subtitles::Subtitles()
 {
 	FileParser infile;
 	// @CLASS Subtitles|Description of soundfx/subtitles.txt
-	if (infile.open("soundfx/subtitles.txt")) {
+	if (infile.open("soundfx/subtitles.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			if (infile.new_section && infile.section == "subtitle") {
 				filename.resize(filename.size()+1);

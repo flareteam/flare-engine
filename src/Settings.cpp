@@ -284,7 +284,7 @@ void loadTilesetSettings() {
 	FileParser infile;
 	// load tileset settings from engine config
 	// @CLASS Settings: Tileset config|Description of engine/tileset_config.txt
-	if (infile.open("engine/tileset_config.txt")) {
+	if (infile.open("engine/tileset_config.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			if (infile.key == "tile_size") {
 				// @ATTR tile_size|int, int : Width, Height|The width and height of a tile.
@@ -405,7 +405,7 @@ void loadMiscSettings() {
 
 	FileParser infile;
 	// @CLASS Settings: Misc|Description of engine/misc.txt
-	if (infile.open("engine/misc.txt")) {
+	if (infile.open("engine/misc.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			// @ATTR save_hpmp|bool|When saving the game, keep the hero's current HP and MP.
 			if (infile.key == "save_hpmp")
@@ -486,7 +486,7 @@ void loadMiscSettings() {
 	}
 
 	// @CLASS Settings: Resolution|Description of engine/resolutions.txt
-	if (infile.open("engine/resolutions.txt")) {
+	if (infile.open("engine/resolutions.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			// @ATTR menu_frame_width|int|Width of frame for New Game, Configuration, etc. menus.
 			if (infile.key == "menu_frame_width")
@@ -554,7 +554,7 @@ void loadMiscSettings() {
 	}
 
 	// @CLASS Settings: Gameplay|Description of engine/gameplay.txt
-	if (infile.open("engine/gameplay.txt")) {
+	if (infile.open("engine/gameplay.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			if (infile.key == "enable_playgame") {
 				// @ATTR enable_playgame|bool|Enables the "Play Game" button on the main menu.
@@ -566,7 +566,7 @@ void loadMiscSettings() {
 	}
 
 	// @CLASS Settings: Combat|Description of engine/combat.txt
-	if (infile.open("engine/combat.txt")) {
+	if (infile.open("engine/combat.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			if (infile.key == "absorb_percent") {
 				// @ATTR absorb_percent|int, int : Minimum, Maximum|Limits the percentage of damage that can be absorbed.
@@ -617,7 +617,7 @@ void loadMiscSettings() {
 	}
 
 	// @CLASS Settings: Elements|Description of engine/elements.txt
-	if (infile.open("engine/elements.txt")) {
+	if (infile.open("engine/elements.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			if (infile.new_section) {
 				if (infile.section == "element") {
@@ -648,7 +648,7 @@ void loadMiscSettings() {
 	}
 
 	// @CLASS Settings: Equip flags|Description of engine/equip_flags.txt
-	if (infile.open("engine/equip_flags.txt")) {
+	if (infile.open("engine/equip_flags.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			if (infile.new_section) {
 				if (infile.section == "flag") {
@@ -679,7 +679,7 @@ void loadMiscSettings() {
 	}
 
 	// @CLASS Settings: Primary Stats|Description of engine/primary_stats.txt
-	if (infile.open("engine/primary_stats.txt")) {
+	if (infile.open("engine/primary_stats.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			if (infile.new_section) {
 				if (infile.section == "stat") {
@@ -710,7 +710,7 @@ void loadMiscSettings() {
 	}
 
 	// @CLASS Settings: Classes|Description of engine/classes.txt
-	if (infile.open("engine/classes.txt")) {
+	if (infile.open("engine/classes.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			if (infile.new_section) {
 				if (infile.section == "class") {
@@ -806,7 +806,7 @@ void loadMiscSettings() {
 	}
 
 	// @CLASS Settings: Damage Types|Description of engine/damage_types.txt
-	if (infile.open("engine/damage_types.txt")) {
+	if (infile.open("engine/damage_types.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			if (infile.new_section) {
 				if (infile.section == "damage_type") {
@@ -845,7 +845,7 @@ void loadMiscSettings() {
 	DAMAGE_TYPES_COUNT = DAMAGE_TYPES.size() * 2;
 
 	// @CLASS Settings: Death penalty|Description of engine/death_penalty.txt
-	if (infile.open("engine/death_penalty.txt")) {
+	if (infile.open("engine/death_penalty.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			// @ATTR enable|bool|Enable the death penalty.
 			if (infile.key == "enable") DEATH_PENALTY = toBool(infile.val);
@@ -866,7 +866,7 @@ void loadMiscSettings() {
 	}
 
 	// @CLASS Settings: Tooltips|Description of engine/tooltips.txt
-	if (infile.open("engine/tooltips.txt")) {
+	if (infile.open("engine/tooltips.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			// @ATTR tooltip_offset|int|Offset in pixels from the origin point (usually mouse cursor).
 			if (infile.key == "tooltip_offset")
@@ -888,7 +888,7 @@ void loadMiscSettings() {
 	}
 
 	// @CLASS Settings: Loot|Description of engine/loot.txt
-	if (infile.open("engine/loot.txt")) {
+	if (infile.open("engine/loot.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			if (infile.key == "currency_name") {
 				// @ATTR currency_name|string|Define the name of currency in game
@@ -911,9 +911,9 @@ void loadSettings() {
 
 	// try read from file
 	FileParser infile;
-	if (!infile.open(PATH_CONF + FILE_SETTINGS, (FileParser::FULL_PATH | FileParser::NO_ERROR))) {
+	if (!infile.open(PATH_CONF + FILE_SETTINGS, !FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
 		loadMobileDefaults();
-		if (!infile.open("engine/default_settings.txt", FileParser::NO_ERROR)) {
+		if (!infile.open("engine/default_settings.txt", FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
 			saveSettings();
 			return;
 		}

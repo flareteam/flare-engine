@@ -66,7 +66,7 @@ MenuInventory::MenuInventory(StatBlock *_stats)
 	// Load config settings
 	FileParser infile;
 	// @CLASS MenuInventory|Description of menus/inventory.txt
-	if (infile.open("menus/inventory.txt")) {
+	if (infile.open("menus/inventory.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while(infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;

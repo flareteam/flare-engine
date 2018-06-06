@@ -185,7 +185,7 @@ void GameStateConfigBase::readConfig() {
 	//Load the menu configuration from file
 
 	FileParser infile;
-	if (infile.open("menus/config.txt")) {
+	if (infile.open("menus/config.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			if (parseKeyButtons(infile))
 				continue;
@@ -851,7 +851,7 @@ void GameStateConfigBase::refreshLanguages() {
 	language_lstb->clear();
 
 	FileParser infile;
-	if (infile.open("engine/languages.txt")) {
+	if (infile.open("engine/languages.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		int i = 0;
 		while (infile.next()) {
 			std::string key = infile.key;

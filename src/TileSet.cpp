@@ -85,7 +85,7 @@ void TileSet::load(const std::string& filename) {
 	FileParser infile;
 
 	// @CLASS TileSet|Description of tilesets in tilesets/
-	if (infile.open(filename)) {
+	if (infile.open(filename, FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			if ((infile.new_section && infile.section == "tileset") || (sprites.empty() && infile.section.empty())) {
 				image_filenames.resize(image_filenames.size() + 1);

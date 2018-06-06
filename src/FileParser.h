@@ -33,7 +33,8 @@ private:
 
 	std::vector<std::string> filenames;
 	unsigned current_index;
-	unsigned char flags;
+	bool is_mod_file;
+	int error_mode;
 
 	std::ifstream infile;
 	std::string line;
@@ -43,10 +44,11 @@ private:
 	FileParser* include_fp;
 
 public:
-	enum OPEN_FLAGS : unsigned char {
-		FULL_PATH = 0x1,
-		NO_ERROR = 0x2
+	enum {
+		ERROR_NONE = 0,
+		ERROR_NORMAL = 1
 	};
+	static const bool MOD_FILE = true;
 
 	FileParser();
 	~FileParser();
@@ -66,7 +68,7 @@ public:
 	 *
 	 * @return true if file could be opened successfully for reading.
 	 */
-	bool open(const std::string& filename, unsigned char _flags = 0);
+	bool open(const std::string& filename, bool _is_mod_file, int _error_mode);
 
 	void close();
 	bool next();

@@ -55,7 +55,7 @@ GameStateTitle::GameStateTitle()
 
 	FileParser infile;
 	// @CLASS GameStateTitle|Description of menus/gametitle.txt
-	if (infile.open("menus/gametitle.txt")) {
+	if (infile.open("menus/gametitle.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			// @ATTR logo|filename, int, int, alignment : Image file, X, Y, Alignment|Filename and position of the main logo image.
 			if (infile.key == "logo") {

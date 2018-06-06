@@ -73,7 +73,7 @@ MenuActionBar::MenuActionBar()
 	FileParser infile;
 
 	// @CLASS MenuActionBar|Description of menus/actionbar.txt
-	if (infile.open("menus/actionbar.txt")) {
+	if (infile.open("menus/actionbar.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;

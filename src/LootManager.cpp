@@ -62,7 +62,7 @@ LootManager::LootManager()
 	FileParser infile;
 	// load loot animation settings from engine config file
 	// @CLASS Loot|Description of engine/loot.txt
-	if (infile.open("engine/loot.txt")) {
+	if (infile.open("engine/loot.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			if (infile.key == "tooltip_margin") {
 				// @ATTR tooltip_margin|int|Vertical offset of the loot tooltip from the loot itself.
@@ -668,7 +668,7 @@ void LootManager::loadLootTables() {
 
 	for (unsigned i=0; i<filenames.size(); i++) {
 		FileParser infile;
-		if (!infile.open(filenames[i]))
+		if (!infile.open(filenames[i], FileParser::MOD_FILE, FileParser::ERROR_NORMAL))
 			continue;
 
 		std::vector<Event_Component> *ec_list = &loot_tables[filenames[i]];

@@ -84,7 +84,7 @@ void GameSwitcher::loadMusic() {
 		std::string music_filename = "";
 		FileParser infile;
 		// @CLASS GameSwitcher: Default music|Description of engine/default_music.txt
-		if (infile.open("engine/default_music.txt", FileParser::NO_ERROR)) {
+		if (infile.open("engine/default_music.txt", FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
 			while (infile.next()) {
 				// @ATTR music|filename|Filename of a music file to play during game states that don't already have music.
 				if (infile.key == "music") music_filename = infile.val;
@@ -107,7 +107,7 @@ void GameSwitcher::loadBackgroundList() {
 
 	FileParser infile;
 	// @CLASS GameSwitcher: Background images|Description of engine/menu_backgrounds.txt
-	if (infile.open("engine/menu_backgrounds.txt", FileParser::NO_ERROR)) {
+	if (infile.open("engine/menu_backgrounds.txt", FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
 		while (infile.next()) {
 			// @ATTR background|repeatable(filename)|Filename of a background image to be added to the pool of random menu backgrounds
 			if (infile.key == "background") background_list.push_back(infile.val);
@@ -228,7 +228,7 @@ void GameSwitcher::loadFPS() {
 	// Load FPS rendering settings
 	FileParser infile;
 	// @CLASS GameSwitcher: FPS counter|Description of menus/fps.txt
-	if (infile.open("menus/fps.txt")) {
+	if (infile.open("menus/fps.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while(infile.next()) {
 			// @ATTR position|int, int, alignment : X, Y, Alignment|Position of the fps counter.
 			if(infile.key == "position") {

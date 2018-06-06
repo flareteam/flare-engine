@@ -65,7 +65,7 @@ void NPC::load(const std::string& npc_id) {
 	portrait_filenames.resize(1);
 
 	// @CLASS NPC|Description of NPCs in npcs/
-	if (infile.open(npc_id)) {
+	if (infile.open(npc_id, FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		bool clear_random_table = true;
 
 		while (infile.next()) {

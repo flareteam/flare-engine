@@ -49,7 +49,7 @@ MenuMiniMap::MenuMiniMap()
 	// Load config settings
 	FileParser infile;
 	// @CLASS MenuMiniMap|Description of menus/minimap.txt
-	if (infile.open("menus/minimap.txt")) {
+	if (infile.open("menus/minimap.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while(infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;

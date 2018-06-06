@@ -108,7 +108,7 @@ void ItemManager::loadItems(const std::string& filename) {
 	FileParser infile;
 
 	// @CLASS ItemManager: Items|Description about the class and it usage, items/items.txt...
-	if (!infile.open(filename))
+	if (!infile.open(filename, FileParser::MOD_FILE, FileParser::ERROR_NORMAL))
 		return;
 
 	// used to clear vectors when overriding items
@@ -330,7 +330,7 @@ void ItemManager::loadTypes(const std::string& filename) {
 	FileParser infile;
 
 	// @CLASS ItemManager: Types|Definition of a item types, items/types.txt...
-	if (infile.open(filename)) {
+	if (infile.open(filename, FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			if (infile.new_section) {
 				if (infile.section == "type") {
@@ -372,7 +372,7 @@ void ItemManager::loadQualities(const std::string& filename) {
 	FileParser infile;
 
 	// @CLASS ItemManager: Qualities|Definition of a item qualities, items/types.txt...
-	if (infile.open(filename)) {
+	if (infile.open(filename, FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			if (infile.new_section) {
 				if (infile.section == "quality") {
@@ -460,7 +460,7 @@ void ItemManager::loadSets(const std::string& filename) {
 	FileParser infile;
 
 	// @CLASS ItemManager: Sets|Definition of a item sets, items/sets.txt...
-	if (!infile.open(filename))
+	if (!infile.open(filename, FileParser::MOD_FILE, FileParser::ERROR_NORMAL))
 		return;
 
 	bool clear_bonus = true;

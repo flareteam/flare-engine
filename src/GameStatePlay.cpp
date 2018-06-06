@@ -458,7 +458,7 @@ void GameStatePlay::checkBook() {
 void GameStatePlay::loadTitles() {
 	FileParser infile;
 	// @CLASS GameStatePlay: Titles|Description of engine/titles.txt
-	if (infile.open("engine/titles.txt")) {
+	if (infile.open("engine/titles.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			if (infile.new_section && infile.section == "title") {
 				Title t;
