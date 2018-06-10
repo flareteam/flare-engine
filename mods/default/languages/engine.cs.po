@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-21 16:45-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
+"Last-Translator: a hark <vit.hrachovy@sandbox.cz>, 2018\n"
 "Language-Team: Czech (https://www.transifex.com/flareorg/teams/84925/cs/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1469,17 +1469,17 @@ msgstr ""
 #: ../../../src/Utils.cpp:450
 #, c-format
 msgid "%s second"
-msgstr ""
+msgstr "1%s sekunda"
 
 #: ../../../src/Utils.cpp:453
 #, c-format
 msgid "%s seconds"
-msgstr ""
+msgstr "1%s sekundy"
 
 #: ../../../src/Version.cpp:140
 msgid "or newer"
-msgstr ""
+msgstr "nebo novější"
 
 #: ../../../src/Version.cpp:143
 msgid "or older"
-msgstr ""
+msgstr "nebo starší"
