@@ -12,6 +12,7 @@ New translations:
 
 Translation updates:
 
+* Czech (cs) update (hark34)
 * Spanish (es) update (Diego J. Romero López)
 * Scottish Gaelic (gd) update (GunChleoc)
 * Russian (ru) update (Sam Vo)
