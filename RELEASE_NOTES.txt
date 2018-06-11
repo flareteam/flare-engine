@@ -7,7 +7,7 @@ Engine fixes:
 
 New translations:
 
-* Brazilian Portuguese (pt_BR) by Vicente Monteiro
+* Brazilian Portuguese (pt_BR) by Vicente Monteiro, Gabriel Iasi
 * Vietnamese (vi) by Nguyễn Gia Phong
 
 Translation updates:
