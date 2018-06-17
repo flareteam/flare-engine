@@ -235,7 +235,7 @@ void WidgetListBox::clear() {
  */
 void WidgetListBox::shiftUp() {
 	any_selected = false;
-	if (!items[0].selected) {
+	if (!items.empty() && !items[0].selected) {
 		for (unsigned i=1; i < items.size(); i++) {
 			if (items[i].selected) {
 				any_selected = true;
@@ -256,7 +256,7 @@ void WidgetListBox::shiftUp() {
  */
 void WidgetListBox::shiftDown() {
 	any_selected = false;
-	if (!items[items.size()-1].selected) {
+	if (!items.empty() && !items[items.size()-1].selected) {
 		for (int i=static_cast<int>(items.size())-2; i >= 0; i--) {
 			if (items[i].selected) {
 				any_selected = true;
@@ -291,6 +291,9 @@ std::string WidgetListBox::getValue() {
  * Get the item name at a specific index
  */
 std::string WidgetListBox::getValue(int index) {
+	if (items.empty())
+		return "";
+
 	return items[index].value;
 }
 
@@ -298,6 +301,9 @@ std::string WidgetListBox::getValue(int index) {
  * Get the item tooltip at a specific index
  */
 std::string WidgetListBox::getTooltip(int index) {
+	if (items.empty())
+		return "";
+
 	return items[index].tooltip;
 }
 
@@ -507,14 +513,23 @@ void WidgetListBox::defocus() {
 }
 
 void WidgetListBox::select(int index) {
+	if (items.empty())
+		return;
+
 	items[index].selected = true;
 }
 
 void WidgetListBox::deselect(int index) {
+	if (items.empty())
+		return;
+
 	items[index].selected = false;
 }
 
 bool WidgetListBox::isSelected(int index) {
+	if (items.empty())
+		return false;
+
 	return items[index].selected;
 }
 
