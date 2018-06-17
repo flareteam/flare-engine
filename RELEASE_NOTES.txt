@@ -4,6 +4,8 @@ Engine fixes:
 
 * Fixed GetText bug where fuzzy state from header wasn't being unset properly.
 * Fixed rendering bug in WidgetTabControl
+* Fixed crashes when using an empty WidgetListBox
+* Fixed GetText bug where strings weren't being sanitized
 
 New translations:
 
