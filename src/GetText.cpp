@@ -39,11 +39,15 @@ void GetText::close() {
 }
 
 // Turns all \" into just "
+// Turns all \n into a newline char
 std::string GetText::sanitize(const std::string& message) {
 	std::string new_message = message;
 	size_t pos = 0;
 	while ((pos = new_message.find("\\\"")) != std::string::npos) {
 		new_message = new_message.substr(0, pos) + new_message.substr(pos+1);
+	}
+	while ((pos = new_message.find("\\n")) != std::string::npos) {
+		new_message = new_message.substr(0, pos) + '\n' + new_message.substr(pos+2);
 	}
 	return new_message;
 }
@@ -83,6 +87,7 @@ bool GetText::next() {
 				while(!line.empty() && line[0] == '\"') {
 					// We remove the double quotes.
 					key += line.substr(1, line.length()-2);
+					key = sanitize(key);
 					line = getLine(infile);
 				}
 			}
@@ -105,6 +110,7 @@ bool GetText::next() {
 					while(!line.empty() && line[0] == '\"') {
 						// We remove the double quotes.
 						val += line.substr(1, line.length()-2);
+						val = sanitize(val);
 						line = getLine(infile);
 					}
 					if(val != "") { // It was a multi-line value indeed.
