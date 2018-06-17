@@ -27,6 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Enemy.h"
 #include "EnemyGroupManager.h"
 #include "EnemyManager.h"
+#include "EngineSettings.h"
 #include "EventManager.h"
 #include "Hazard.h"
 #include "HazardManager.h"
@@ -36,6 +37,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuManager.h"
 #include "PowerManager.h"
 #include "RenderDevice.h"
+#include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "SoundManager.h"
@@ -331,7 +333,7 @@ void MapRenderer::render(std::vector<Renderable> &r, std::vector<Renderable> &r_
 
 	map_parallax.render(shakycam, "");
 
-	if (TILESET_ORIENTATION == TILESET_ORTHOGONAL) {
+	if (eset->tileset.orientation == eset->tileset.TILESET_ORTHOGONAL) {
 		calculatePriosOrtho(r);
 		calculatePriosOrtho(r_dead);
 		std::sort(r.begin(), r.end(), priocompare);
@@ -362,8 +364,8 @@ void MapRenderer::renderIsoLayer(const Map_Layer& layerdata) {
 	int_fast16_t j; // second index of the map array
 	Point dest;
 	const Point upperleft = FPointToPoint(screen_to_map(0, 0, shakycam.x, shakycam.y));
-	const int_fast16_t max_tiles_width =   static_cast<int_fast16_t>((VIEW_W / TILE_W) + 2*tset.max_size_x);
-	const int_fast16_t max_tiles_height = static_cast<int_fast16_t>((2 * VIEW_H / TILE_H) + 2*(tset.max_size_y+1));
+	const int_fast16_t max_tiles_width =   static_cast<int_fast16_t>((VIEW_W / eset->tileset.tile_w) + 2*tset.max_size_x);
+	const int_fast16_t max_tiles_height = static_cast<int_fast16_t>((2 * VIEW_H / eset->tileset.tile_h) + 2*(tset.max_size_y+1));
 
 	j = static_cast<int_fast16_t>(upperleft.y - tset.max_size_y/2 + tset.max_size_x);
 	i = static_cast<int_fast16_t>(upperleft.x - tset.max_size_y/2 - tset.max_size_x);
@@ -398,7 +400,7 @@ void MapRenderer::renderIsoLayer(const Map_Layer& layerdata) {
 			--j;
 			++i;
 			++tiles_width;
-			p.x += TILE_W;
+			p.x += eset->tileset.tile_w;
 
 			if (const uint_fast16_t current_tile = layerdata[i][j]) {
 				const Tile_Def &tile = tset.tiles[current_tile];
@@ -430,8 +432,8 @@ void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 	Point dest;
 
 	const Point upperleft = FPointToPoint(screen_to_map(0, 0, shakycam.x, shakycam.y));
-	const int_fast16_t max_tiles_width = static_cast<int_fast16_t>((VIEW_W / TILE_W) + 2 * tset.max_size_x);
-	const int_fast16_t max_tiles_height = static_cast<int_fast16_t>(((VIEW_H / TILE_H) + 2 * tset.max_size_y)*2);
+	const int_fast16_t max_tiles_width = static_cast<int_fast16_t>((VIEW_W / eset->tileset.tile_w) + 2 * tset.max_size_x);
+	const int_fast16_t max_tiles_height = static_cast<int_fast16_t>(((VIEW_H / eset->tileset.tile_h) + 2 * tset.max_size_y)*2);
 
 	std::vector<Renderable>::iterator r_cursor = r.begin();
 	std::vector<Renderable>::iterator r_end = r.end();
@@ -478,7 +480,7 @@ void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 			--j;
 			++i;
 			++tiles_width;
-			p.x += TILE_W;
+			p.x += eset->tileset.tile_w;
 
 			bool draw_tile = true;
 
@@ -670,8 +672,8 @@ void MapRenderer::renderOrthoLayer(const Map_Layer& layerdata) {
 
 	short int startj = static_cast<short int>(std::max(0, upperleft.y));
 	short int starti = static_cast<short int>(std::max(0, upperleft.x));
-	const short max_tiles_width =  std::min(w, static_cast<short unsigned int>(starti + (VIEW_W / TILE_W) + 2 * tset.max_size_x));
-	const short max_tiles_height = std::min(h, static_cast<short unsigned int>(startj + (VIEW_H / TILE_H) + 2 * tset.max_size_y));
+	const short max_tiles_width =  std::min(w, static_cast<short unsigned int>(starti + (VIEW_W / eset->tileset.tile_w) + 2 * tset.max_size_x));
+	const short max_tiles_height = std::min(h, static_cast<short unsigned int>(startj + (VIEW_H / eset->tileset.tile_h) + 2 * tset.max_size_y));
 
 	short int i;
 	short int j;
@@ -688,7 +690,7 @@ void MapRenderer::renderOrthoLayer(const Map_Layer& layerdata) {
 				tile.tile->setDest(dest);
 				render_device->render(tile.tile);
 			}
-			p.x += TILE_W;
+			p.x += eset->tileset.tile_w;
 		}
 	}
 }
@@ -712,8 +714,8 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 
 	short int startj = static_cast<short int>(std::max(0, upperleft.y));
 	short int starti = static_cast<short int>(std::max(0, upperleft.x));
-	const short max_tiles_width  = std::min(w, static_cast<short unsigned int>(starti + (VIEW_W / TILE_W) + 2 * tset.max_size_x));
-	const short max_tiles_height = std::min(h, static_cast<short unsigned int>(startj + (VIEW_H / TILE_H) + 2 * tset.max_size_y));
+	const short max_tiles_width  = std::min(w, static_cast<short unsigned int>(starti + (VIEW_W / eset->tileset.tile_w) + 2 * tset.max_size_x));
+	const short max_tiles_height = std::min(h, static_cast<short unsigned int>(startj + (VIEW_H / eset->tileset.tile_h) + 2 * tset.max_size_y));
 
 	while (r_cursor != r_end && static_cast<int>(r_cursor->map_pos.y) < startj)
 		++r_cursor;
@@ -733,7 +735,7 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 				tile.tile->setDest(dest);
 				render_device->render(tile.tile);
 			}
-			p.x += TILE_W;
+			p.x += eset->tileset.tile_w;
 
 			while (r_cursor != r_end && static_cast<int>(r_cursor->map_pos.y) == j && static_cast<int>(r_cursor->map_pos.x) < i) // implicit floor
 				++r_cursor;
@@ -879,7 +881,7 @@ void MapRenderer::checkEvents(const FPoint& loc) {
  * Some events have a hotspot (rectangle screen area) where the user can click
  * to trigger the event.
  *
- * The hero must be within range (INTERACT_RANGE) to activate an event.
+ * The hero must be within range (eset->misc.interact_range) to activate an event.
  *
  * This function checks valid mouse clicks against all clickable events, and
  * executes
@@ -917,7 +919,7 @@ void MapRenderer::checkHotspots() {
 					if (isWithinRect(dest, inpt->mouse)) {
 						matched = true;
 						tip_pos.x = dest.x + dest.w/2;
-						tip_pos.y = p.y - TOOLTIP_MARGIN_NPC;
+						tip_pos.y = p.y - eset->tooltips.margin_npc;
 					}
 				}
 				else {
@@ -937,7 +939,7 @@ void MapRenderer::checkHotspots() {
 							if (isWithinRect(dest, inpt->mouse)) {
 								matched = true;
 								tip_pos = map_to_screen(it->center.x, it->center.y, shakycam.x, shakycam.y);
-								tip_pos.y -= TILE_H;
+								tip_pos.y -= eset->tileset.tile_h;
 							}
 						}
 					}
@@ -957,7 +959,7 @@ void MapRenderer::checkHotspots() {
 					createTooltip((*it).getComponent(EC_TOOLTIP));
 
 					if ((((*it).reachable_from.w == 0 && (*it).reachable_from.h == 0) || isWithinRect((*it).reachable_from, FPointToPoint(cam)))
-							&& calcDist(cam, (*it).center) < INTERACT_RANGE) {
+							&& calcDist(cam, (*it).center) < eset->misc.interact_range) {
 
 						// only check events if the player is clicking
 						// and allowed to click
@@ -1004,7 +1006,7 @@ void MapRenderer::checkNearestEvent() {
 
 		float distance = calcDist(cam, (*it).center);
 		if ((((*it).reachable_from.w == 0 && (*it).reachable_from.h == 0) || isWithinRect((*it).reachable_from, FPointToPoint(cam)))
-				&& distance < INTERACT_RANGE && distance < best_distance) {
+				&& distance < eset->misc.interact_range && distance < best_distance) {
 			best_distance = distance;
 			nearest = it;
 		}
@@ -1017,10 +1019,10 @@ void MapRenderer::checkNearestEvent() {
 			createTooltip((*nearest).getComponent(EC_TOOLTIP));
 			tip_pos = map_to_screen((*nearest).center.x, (*nearest).center.y, shakycam.x, shakycam.y);
 			if ((*nearest).getComponent(EC_NPC_HOTSPOT)) {
-				tip_pos.y -= TOOLTIP_MARGIN_NPC;
+				tip_pos.y -= eset->tooltips.margin_npc;
 			}
 			else {
-				tip_pos.y -= TILE_H;
+				tip_pos.y -= eset->tileset.tile_h;
 			}
 		}
 
@@ -1086,12 +1088,12 @@ bool MapRenderer::isValidTile(const unsigned &tile) {
 Point MapRenderer::centerTile(const Point& p) {
 	Point r = p;
 
-	if (TILESET_ORIENTATION == TILESET_ORTHOGONAL) {
-		r.x += TILE_W_HALF;
-		r.y += TILE_H_HALF;
+	if (eset->tileset.orientation == eset->tileset.TILESET_ORTHOGONAL) {
+		r.x += eset->tileset.tile_w_half;
+		r.y += eset->tileset.tile_h_half;
 	}
-	else //TILESET_ISOMETRIC
-		r.y += TILE_H_HALF;
+	else //eset->tileset.TILESET_ISOMETRIC
+		r.y += eset->tileset.tile_h_half;
 	return r;
 }
 
@@ -1119,17 +1121,17 @@ void MapRenderer::drawDevCursor() {
 	FPoint target = screen_to_map(inpt->mouse.x,  inpt->mouse.y, shakycam.x, shakycam.y);
 
 	if (!collider.is_outside_map(floorf(target.x), floorf(target.y))) {
-		if (TILESET_ORIENTATION == TILESET_ORTHOGONAL) {
+		if (eset->tileset.orientation == eset->tileset.TILESET_ORTHOGONAL) {
 			Point p_topleft = map_to_screen(floorf(target.x), floorf(target.y), shakycam.x, shakycam.y);
-			Point p_bottomright(p_topleft.x + TILE_W, p_topleft.y + TILE_H);
+			Point p_bottomright(p_topleft.x + eset->tileset.tile_w, p_topleft.y + eset->tileset.tile_h);
 
 			render_device->drawRectangle(p_topleft, p_bottomright, dev_cursor_color);
 		}
 		else {
 			Point p_left = map_to_screen(floorf(target.x), floorf(target.y+1), shakycam.x, shakycam.y);
-			Point p_top(p_left.x + TILE_W_HALF, p_left.y - TILE_H_HALF);
-			Point p_right(p_left.x + TILE_W, p_left.y);
-			Point p_bottom(p_left.x + TILE_W_HALF, p_left.y + TILE_H_HALF);
+			Point p_top(p_left.x + eset->tileset.tile_w_half, p_left.y - eset->tileset.tile_h_half);
+			Point p_right(p_left.x + eset->tileset.tile_w, p_left.y);
+			Point p_bottom(p_left.x + eset->tileset.tile_w_half, p_left.y + eset->tileset.tile_h_half);
 
 			render_device->drawLine(p_left.x, p_left.y, p_top.x, p_top.y, dev_cursor_color);
 			render_device->drawLine(p_top.x, p_top.y, p_right.x, p_right.y, dev_cursor_color);
@@ -1152,10 +1154,10 @@ void MapRenderer::drawDevHUD() {
 
 	Color color_hazard(255,0,0,255);
 	Color color_entity(0,255,0,255);
-	int cross_size = TILE_H_HALF / 4;
+	int cross_size = eset->tileset.tile_h_half / 4;
 
 	// ellipses are distorted for isometric tilesets
-	int distort = TILESET_ORIENTATION == TILESET_ORTHOGONAL ? 0 : 2;
+	int distort = eset->tileset.orientation == eset->tileset.TILESET_ORTHOGONAL ? 0 : 2;
 
 	// player
 	{

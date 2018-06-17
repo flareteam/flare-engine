@@ -27,6 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Avatar.h"
 #include "CommonIncludes.h"
+#include "EngineSettings.h"
 #include "FileParser.h"
 #include "FontEngine.h"
 #include "Menu.h"
@@ -58,8 +59,8 @@ MenuActionBar::MenuActionBar()
 	, updated(false)
 	, twostep_slot(-1) {
 
-	src.w = ICON_SIZE;
-	src.h = ICON_SIZE;
+	src.w = eset->resolutions.icon_size;
+	src.h = eset->resolutions.icon_size;
 
 	menu_labels.resize(4);
 
@@ -114,28 +115,28 @@ MenuActionBar::MenuActionBar()
 				int x = popFirstInt(infile.val);
 				int y = popFirstInt(infile.val);
 				menus[MENU_CHARACTER]->setBasePos(x, y);
-				menus[MENU_CHARACTER]->pos.w = menus[MENU_CHARACTER]->pos.h = ICON_SIZE;
+				menus[MENU_CHARACTER]->pos.w = menus[MENU_CHARACTER]->pos.h = eset->resolutions.icon_size;
 			}
 			// @ATTR inv_menu|point|Position for the Inventory menu button.
 			else if (infile.key == "inv_menu") {
 				int x = popFirstInt(infile.val);
 				int y = popFirstInt(infile.val);
 				menus[MENU_INVENTORY]->setBasePos(x, y);
-				menus[MENU_INVENTORY]->pos.w = menus[MENU_INVENTORY]->pos.h = ICON_SIZE;
+				menus[MENU_INVENTORY]->pos.w = menus[MENU_INVENTORY]->pos.h = eset->resolutions.icon_size;
 			}
 			// @ATTR powers_menu|point|Position for the Powers menu button.
 			else if (infile.key == "powers_menu") {
 				int x = popFirstInt(infile.val);
 				int y = popFirstInt(infile.val);
 				menus[MENU_POWERS]->setBasePos(x, y);
-				menus[MENU_POWERS]->pos.w = menus[MENU_POWERS]->pos.h = ICON_SIZE;
+				menus[MENU_POWERS]->pos.w = menus[MENU_POWERS]->pos.h = eset->resolutions.icon_size;
 			}
 			// @ATTR log_menu|point|Position for the Log menu button.
 			else if (infile.key == "log_menu") {
 				int x = popFirstInt(infile.val);
 				int y = popFirstInt(infile.val);
 				menus[MENU_LOG]->setBasePos(x, y);
-				menus[MENU_LOG]->pos.w = menus[MENU_LOG]->pos.h = ICON_SIZE;
+				menus[MENU_LOG]->pos.w = menus[MENU_LOG]->pos.h = eset->resolutions.icon_size;
 			}
 
 			else infile.error("MenuActionBar: '%s' is not a valid key.", infile.key.c_str());
@@ -175,7 +176,7 @@ void MenuActionBar::addSlot(unsigned index, int x, int y, bool is_locked) {
 
 	slots[index] = new WidgetSlot(-1, Input::ACTIONBAR);
 	slots[index]->setBasePos(x, y);
-	slots[index]->pos.w = slots[index]->pos.h = ICON_SIZE;
+	slots[index]->pos.w = slots[index]->pos.h = eset->resolutions.icon_size;
 	slots[index]->continuous = true;
 
 	prevent_changing.resize(slots.size());
@@ -242,14 +243,14 @@ void MenuActionBar::loadGraphics() {
 	graphics = render_device->loadImage("images/menus/slot_empty.png", RenderDevice::ERROR_NORMAL);
 	if (graphics) {
 		sprite_emptyslot = graphics->createSprite();
-		sprite_emptyslot->setClip(0,0,ICON_SIZE,ICON_SIZE);
+		sprite_emptyslot->setClip(0,0,eset->resolutions.icon_size,eset->resolutions.icon_size);
 		graphics->unref();
 	}
 
 	graphics = render_device->loadImage("images/menus/disabled.png", RenderDevice::ERROR_NORMAL);
 	if (graphics) {
 		sprite_disabled = graphics->createSprite();
-		sprite_disabled->setClip(0,0,ICON_SIZE,ICON_SIZE);
+		sprite_disabled->setClip(0,0,eset->resolutions.icon_size,eset->resolutions.icon_size);
 		graphics->unref();
 	}
 
@@ -314,13 +315,13 @@ void MenuActionBar::logic() {
 		}
 
 		if (pc->power_cast_ticks[hotkeys_mod[i]] > 0 && pc->power_cast_duration[hotkeys_mod[i]] > 0) {
-			slot_cooldown_size[i] = (ICON_SIZE * pc->power_cast_ticks[hotkeys_mod[i]]) / pc->power_cast_duration[hotkeys_mod[i]];
+			slot_cooldown_size[i] = (eset->resolutions.icon_size * pc->power_cast_ticks[hotkeys_mod[i]]) / pc->power_cast_duration[hotkeys_mod[i]];
 		}
 		else if (pc->hero_cooldown[hotkeys_mod[i]] > 0 && powers->powers[hotkeys_mod[i]].cooldown > 0) {
-			slot_cooldown_size[i] = (ICON_SIZE * pc->hero_cooldown[hotkeys_mod[i]]) / powers->powers[hotkeys_mod[i]].cooldown;
+			slot_cooldown_size[i] = (eset->resolutions.icon_size * pc->hero_cooldown[hotkeys_mod[i]]) / powers->powers[hotkeys_mod[i]].cooldown;
 		}
 		else {
-			slot_cooldown_size[i] = (slot_enabled[i] ? 0 : ICON_SIZE);;
+			slot_cooldown_size[i] = (slot_enabled[i] ? 0 : eset->resolutions.icon_size);;
 		}
 	}
 
@@ -348,7 +349,7 @@ void MenuActionBar::render() {
 		if (!slot_enabled[i]) {
 			Rect clip;
 			clip.x = clip.y = 0;
-			clip.w = clip.h = ICON_SIZE;
+			clip.w = clip.h = eset->resolutions.icon_size;
 
 			// Wipe from bottom to top
 			if (twostep_slot == -1 || static_cast<unsigned>(twostep_slot) == i) {
@@ -704,7 +705,7 @@ FPoint MenuActionBar::setTarget(bool have_aim, const Power& pow) {
 	if (have_aim && MOUSE_AIM) {
 		FPoint map_pos;
 		if (pow.aim_assist)
-			map_pos = screen_to_map(inpt->mouse.x,  inpt->mouse.y + AIM_ASSIST, pc->stats.pos.x, pc->stats.pos.y);
+			map_pos = screen_to_map(inpt->mouse.x,  inpt->mouse.y + eset->misc.aim_assist, pc->stats.pos.x, pc->stats.pos.y);
 		else
 			map_pos = screen_to_map(inpt->mouse.x,  inpt->mouse.y, pc->stats.pos.x, pc->stats.pos.y);
 

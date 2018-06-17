@@ -23,6 +23,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuItemStorage
  */
 
+#include "EngineSettings.h"
 #include "ItemManager.h"
 #include "MenuItemStorage.h"
 #include "Settings.h"
@@ -57,9 +58,9 @@ void MenuItemStorage::initGrid(int _slot_number, const Rect& _area, int _nb_cols
 	highlight = new bool[_slot_number];
 	for (int i=0; i<_slot_number; i++) {
 		highlight[i] = false;
-		slots[i]->pos.x = grid_area.x + (i % nb_cols * ICON_SIZE);
-		slots[i]->pos.y = grid_area.y + (i / nb_cols * ICON_SIZE);
-		slots[i]->pos.h = slots[i]->pos.w = ICON_SIZE;
+		slots[i]->pos.x = grid_area.x + (i % nb_cols * eset->resolutions.icon_size);
+		slots[i]->pos.y = grid_area.y + (i / nb_cols * eset->resolutions.icon_size);
+		slots[i]->pos.h = slots[i]->pos.w = eset->resolutions.icon_size;
 		slots[i]->setBasePos(slots[i]->pos.x, slots[i]->pos.y);
 	}
 	loadGraphics();
@@ -111,7 +112,7 @@ void MenuItemStorage::loadGraphics() {
 void MenuItemStorage::render() {
 	Rect disabled_src;
 	disabled_src.x = disabled_src.y = 0;
-	disabled_src.w = disabled_src.h = ICON_SIZE;
+	disabled_src.w = disabled_src.h = eset->resolutions.icon_size;
 
 	for (int i=0; i<slot_number; i++) {
 		if (storage[i].item > 0) {

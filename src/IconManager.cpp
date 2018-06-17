@@ -15,6 +15,7 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
+#include "EngineSettings.h"
 #include "FileParser.h"
 #include "IconManager.h"
 #include "RenderDevice.h"
@@ -72,7 +73,7 @@ IconManager::~IconManager() {
 }
 
 bool IconManager::loadIconSet(IconSet& iset, const std::string& filename, int first_id) {
-	if (!render_device || ICON_SIZE == 0)
+	if (!render_device || eset->resolutions.icon_size == 0)
 		return false;
 
 	Image *graphics = render_device->loadImage(filename, RenderDevice::ERROR_NORMAL);
@@ -82,8 +83,8 @@ bool IconManager::loadIconSet(IconSet& iset, const std::string& filename, int fi
 	}
 
 	if (iset.gfx) {
-		int rows = iset.gfx->getGraphicsHeight() / ICON_SIZE;
-		iset.columns = iset.gfx->getGraphicsWidth() / ICON_SIZE;
+		int rows = iset.gfx->getGraphicsHeight() / eset->resolutions.icon_size;
+		iset.columns = iset.gfx->getGraphicsWidth() / eset->resolutions.icon_size;
 
 		if (iset.columns == 0) {
 			// prevent divide-by-zero
@@ -119,9 +120,9 @@ void IconManager::setIcon(int icon_id, Point dest_pos) {
 	}
 
 	int offset_id = icon_id - current_set->id_begin;
-	current_src.x = (offset_id % current_set->columns) * ICON_SIZE;
-	current_src.y = (offset_id / current_set->columns) * ICON_SIZE;
-	current_src.w = current_src.h = ICON_SIZE;
+	current_src.x = (offset_id % current_set->columns) * eset->resolutions.icon_size;
+	current_src.y = (offset_id / current_set->columns) * eset->resolutions.icon_size;
+	current_src.w = current_src.h = eset->resolutions.icon_size;
 	current_set->gfx->setClip(current_src);
 
 	current_dest.x = dest_pos.x;

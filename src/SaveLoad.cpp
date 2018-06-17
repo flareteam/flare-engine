@@ -31,6 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Avatar.h"
 #include "CampaignManager.h"
 #include "CommonIncludes.h"
+#include "EngineSettings.h"
 #include "FileParser.h"
 #include "GameStatePlay.h"
 #include "MapRenderer.h"
@@ -83,7 +84,7 @@ void SaveLoad::saveGame() {
 	std::ofstream outfile;
 
 	std::stringstream ss;
-	ss << PATH_USER << "saves/" << SAVE_PREFIX << "/" << game_slot << "/avatar.txt";
+	ss << PATH_USER << "saves/" << eset->misc.save_prefix << "/" << game_slot << "/avatar.txt";
 
 	outfile.open(path(&ss).c_str(), std::ios::out);
 
@@ -108,13 +109,13 @@ void SaveLoad::saveGame() {
 		outfile << "xp=" << pc->stats.xp << "\n";
 
 		// hp and mp
-		if (SAVE_HPMP) outfile << "hpmp=" << pc->stats.hp << "," << pc->stats.mp << "\n";
+		if (eset->misc.save_hpmp) outfile << "hpmp=" << pc->stats.hp << "," << pc->stats.mp << "\n";
 
 		// stat spec
 		outfile << "build=";
-		for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+		for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 			outfile << pc->stats.primary[i];
-			if (i < PRIMARY_STATS.size() - 1)
+			if (i < eset->primary_stats.list.size() - 1)
 				outfile << ",";
 		}
 		outfile << "\n";
@@ -183,7 +184,7 @@ void SaveLoad::saveGame() {
 		outfile << "engine_version=" << versionToString(ENGINE_VERSION) << "\n";
 
 		// save the vendor buyback
-		if (SAVE_BUYBACK) {
+		if (eset->misc.save_buyback) {
 			std::map<std::string, ItemStorage>::iterator it;
 
 			for (it = menu->vendor->buyback_stock.begin(); it != menu->vendor->buyback_stock.end(); ++it) {
@@ -209,9 +210,9 @@ void SaveLoad::saveGame() {
 	// Save stash
 	ss.str("");
 	if (pc->stats.permadeath)
-		ss << PATH_USER << "saves/" << SAVE_PREFIX << "/" << game_slot << "/stash_HC.txt";
+		ss << PATH_USER << "saves/" << eset->misc.save_prefix << "/" << game_slot << "/stash_HC.txt";
 	else
-		ss << PATH_USER << "saves/" << SAVE_PREFIX << "/stash.txt";
+		ss << PATH_USER << "saves/" << eset->misc.save_prefix << "/stash.txt";
 
 	outfile.open(path(&ss).c_str(), std::ios::out);
 
@@ -254,7 +255,7 @@ void SaveLoad::loadGame() {
 	std::vector<int> hotkeys(MenuActionBar::SLOT_MAX, -1);
 
 	std::stringstream ss;
-	ss << PATH_USER << "saves/" << SAVE_PREFIX << "/" << game_slot << "/avatar.txt";
+	ss << PATH_USER << "saves/" << eset->misc.save_prefix << "/" << game_slot << "/avatar.txt";
 
 	if (infile.open(path(&ss), !FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
@@ -279,10 +280,10 @@ void SaveLoad::loadGame() {
 				saved_mp = popFirstInt(infile.val);
 			}
 			else if (infile.key == "build") {
-				for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+				for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 					pc->stats.primary[i] = popFirstInt(infile.val);
 					if (pc->stats.primary[i] < 0 || pc->stats.primary[i] > pc->stats.max_points_per_stat) {
-						logInfo("SaveLoad: Primary stat value for '%s' is out of bounds, setting to zero.", PRIMARY_STATS[i].id.c_str());
+						logInfo("SaveLoad: Primary stat value for '%s' is out of bounds, setting to zero.", eset->primary_stats.list[i].id.c_str());
 						pc->stats.primary[i] = 0;
 					}
 				}
@@ -354,14 +355,14 @@ void SaveLoad::loadGame() {
 			else if (infile.key == "campaign") camp->setAll(infile.val);
 			else if (infile.key == "time_played") pc->time_played = toUnsignedLong(infile.val);
 			else if (infile.key == "engine_version") save_version = stringToVersion(infile.val);
-			else if (SAVE_BUYBACK && infile.key == "buyback_item") {
+			else if (eset->misc.save_buyback && infile.key == "buyback_item") {
 				std::string npc_filename = popFirstString(infile.val, ';');
 				if (!npc_filename.empty()) {
 					menu->vendor->buyback_stock[npc_filename].init(NPC::VENDOR_MAX_STOCK);
 					menu->vendor->buyback_stock[npc_filename].setItems(infile.val);
 				}
 			}
-			else if (SAVE_BUYBACK && infile.key == "buyback_quantity") {
+			else if (eset->misc.save_buyback && infile.key == "buyback_quantity") {
 				std::string npc_filename = popFirstString(infile.val, ';');
 				if (!npc_filename.empty()) {
 					menu->vendor->buyback_stock[npc_filename].init(NPC::VENDOR_MAX_STOCK);
@@ -376,9 +377,10 @@ void SaveLoad::loadGame() {
 	else logError("SaveLoad: Unable to open %s!", ss.str().c_str());
 
 	// set starting values for primary stats based on class
-	HeroClass* pc_class = getHeroClassByName(pc->stats.character_class);
+	EngineSettings::HeroClasses::HeroClass* pc_class;
+	pc_class = eset->hero_classes.getByName(pc->stats.character_class);
 	if (pc_class) {
-		for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+		for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 			pc->stats.primary_starting[i] = pc_class->primary[i] + 1;
 		}
 	}
@@ -391,7 +393,7 @@ void SaveLoad::loadGame() {
 
 	// trigger passive effects here? Saved HP/MP values might depend on passively boosted HP/MP
 	// powers->activatePassives(pc->stats);
-	if (SAVE_HPMP && saved_hp != 0) {
+	if (eset->misc.save_hpmp && saved_hp != 0) {
 		if (saved_hp < 0 || saved_hp > pc->stats.get(STAT_HP_MAX)) {
 			logError("SaveLoad: HP value is out of bounds, setting to maximum");
 			pc->stats.hp = pc->stats.get(STAT_HP_MAX);
@@ -424,29 +426,29 @@ void SaveLoad::loadGame() {
 void SaveLoad::loadClass(int index) {
 	if (game_slot <= 0) return;
 
-	if (index < 0 || static_cast<unsigned>(index) >= HERO_CLASSES.size()) {
+	if (index < 0 || static_cast<unsigned>(index) >= eset->hero_classes.list.size()) {
 		logError("SaveLoad: Class index out of bounds.");
 		return;
 	}
 
-	pc->stats.character_class = HERO_CLASSES[index].name;
-	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+	pc->stats.character_class = eset->hero_classes.list[index].name;
+	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 		// Avatar::init() sets primary stats to 1, so we add to that here
-		pc->stats.primary[i] += HERO_CLASSES[index].primary[i];
+		pc->stats.primary[i] += eset->hero_classes.list[index].primary[i];
 		pc->stats.primary_starting[i] = pc->stats.primary[i];
 	}
-	menu->inv->addCurrency(HERO_CLASSES[index].currency);
-	menu->inv->inventory[MenuInventory::EQUIPMENT].setItems(HERO_CLASSES[index].equipment);
-	for (unsigned i=0; i<HERO_CLASSES[index].powers.size(); i++) {
-		pc->stats.powers_list.push_back(HERO_CLASSES[index].powers[i]);
+	menu->inv->addCurrency(eset->hero_classes.list[index].currency);
+	menu->inv->inventory[MenuInventory::EQUIPMENT].setItems(eset->hero_classes.list[index].equipment);
+	for (unsigned i=0; i<eset->hero_classes.list[index].powers.size(); i++) {
+		pc->stats.powers_list.push_back(eset->hero_classes.list[index].powers[i]);
 	}
-	for (unsigned i=0; i<HERO_CLASSES[index].statuses.size(); i++) {
-		camp->setStatus(HERO_CLASSES[index].statuses[i]);
+	for (unsigned i=0; i<eset->hero_classes.list[index].statuses.size(); i++) {
+		camp->setStatus(eset->hero_classes.list[index].statuses[i]);
 	}
-	menu->act->set(HERO_CLASSES[index].hotkeys);
+	menu->act->set(eset->hero_classes.list[index].hotkeys);
 
 	// Add carried items
-	std::string carried = HERO_CLASSES[index].carried;
+	std::string carried = eset->hero_classes.list[index].carried;
 	ItemStack stack;
 	stack.quantity = 1;
 	while (carried != "") {
@@ -471,9 +473,9 @@ void SaveLoad::loadStash() {
 	FileParser infile;
 	std::stringstream ss;
 	if (pc->stats.permadeath)
-		ss << PATH_USER << "saves/" << SAVE_PREFIX << "/" << game_slot << "/stash_HC.txt";
+		ss << PATH_USER << "saves/" << eset->misc.save_prefix << "/" << game_slot << "/stash_HC.txt";
 	else
-		ss << PATH_USER << "saves/" << SAVE_PREFIX << "/stash.txt";
+		ss << PATH_USER << "saves/" << eset->misc.save_prefix << "/stash.txt";
 
 	if (infile.open(path(&ss), !FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
 		while (infile.next()) {
@@ -524,7 +526,8 @@ void SaveLoad::applyPlayerData() {
 }
 
 void SaveLoad::loadPowerTree() {
-	HeroClass* pc_class = getHeroClassByName(pc->stats.character_class);
+	EngineSettings::HeroClasses::HeroClass* pc_class;
+	pc_class = eset->hero_classes.getByName(pc->stats.character_class);
 	if (pc_class && !pc_class->power_tree.empty()) {
 		menu->pow->loadPowerTree(pc_class->power_tree);
 		return;

@@ -25,6 +25,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * TileSet storage and file loading
  */
 
+#include "EngineSettings.h"
 #include "FileParser.h"
 #include "ModManager.h"
 #include "RenderDevice.h"
@@ -165,8 +166,8 @@ void TileSet::load(const std::string& filename) {
 		tiles[i].tile->setClip(tile_clips[i]);
 		tiles[i].offset = tile_offsets[i];
 
-		max_size_x = std::max(max_size_x, (tiles[i].tile->getClip().w / TILE_W) + 1);
-		max_size_y = std::max(max_size_y, (tiles[i].tile->getClip().h / TILE_H) + 1);
+		max_size_x = std::max(max_size_x, (tiles[i].tile->getClip().w / eset->tileset.tile_w) + 1);
+		max_size_y = std::max(max_size_y, (tiles[i].tile->getClip().h / eset->tileset.tile_h) + 1);
 	}
 
 	current_filename = filename;

@@ -16,8 +16,10 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
+#include "EngineSettings.h"
 #include "RenderDevice.h"
 #include "Settings.h"
+#include "SharedResources.h"
 
 #include <assert.h>
 #include <math.h>
@@ -339,8 +341,8 @@ void RenderDevice::windowResizeInternal() {
 	getWindowSize(&SCREEN_W, &SCREEN_H);
 
 	unsigned short temp_screen_h;
-	if (DPI_SCALING && ddpi > 0 && VIRTUAL_DPI > 0) {
-		temp_screen_h = static_cast<unsigned short>(static_cast<float>(SCREEN_H) * (VIRTUAL_DPI / ddpi));
+	if (DPI_SCALING && ddpi > 0 && eset->resolutions.virtual_dpi > 0) {
+		temp_screen_h = static_cast<unsigned short>(static_cast<float>(SCREEN_H) * (eset->resolutions.virtual_dpi / ddpi));
 	}
 	else {
 		temp_screen_h = SCREEN_H;
@@ -348,11 +350,11 @@ void RenderDevice::windowResizeInternal() {
 	VIEW_H = temp_screen_h;
 
 	// scale virtual height when outside of VIRTUAL_HEIGHTS range
-	if (!VIRTUAL_HEIGHTS.empty()) {
-		if (temp_screen_h < VIRTUAL_HEIGHTS.front())
-			VIEW_H = VIRTUAL_HEIGHTS.front();
-		else if (temp_screen_h >= VIRTUAL_HEIGHTS.back())
-			VIEW_H = VIRTUAL_HEIGHTS.back();
+	if (!eset->resolutions.virtual_heights.empty()) {
+		if (temp_screen_h < eset->resolutions.virtual_heights.front())
+			VIEW_H = eset->resolutions.virtual_heights.front();
+		else if (temp_screen_h >= eset->resolutions.virtual_heights.back())
+			VIEW_H = eset->resolutions.virtual_heights.back();
 	}
 
 	VIEW_H_HALF = VIEW_H / 2;
@@ -361,8 +363,8 @@ void RenderDevice::windowResizeInternal() {
 	VIEW_W = static_cast<unsigned short>(static_cast<float>(SCREEN_W) * VIEW_SCALING);
 
 	// letterbox if too tall
-	if (VIEW_W < MIN_SCREEN_W) {
-		VIEW_W = MIN_SCREEN_W;
+	if (VIEW_W < eset->resolutions.min_screen_w) {
+		VIEW_W = eset->resolutions.min_screen_w;
 		VIEW_SCALING = static_cast<float>(VIEW_W) / static_cast<float>(SCREEN_W);
 	}
 

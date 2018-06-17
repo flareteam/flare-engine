@@ -23,6 +23,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Handles keyboard and mouse states
  */
 
+#include "EngineSettings.h"
 #include "FileParser.h"
 #include "InputState.h"
 #include "MessageEngine.h"
@@ -99,7 +100,7 @@ void InputState::loadKeyBindings() {
 
 	// first check for mod keybinds
 	if (mods->locate("engine/default_keybindings.txt") != "") {
-		if (infile.open(PATH_USER + "saves/" + SAVE_PREFIX + "/" + FILE_KEYBINDINGS, !FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
+		if (infile.open(PATH_USER + "saves/" + eset->misc.save_prefix + "/" + FILE_KEYBINDINGS, !FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
 			opened_file = true;
 		}
 		else if (infile.open("engine/default_keybindings.txt", FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
@@ -242,7 +243,7 @@ void InputState::loadKeyBindings() {
 void InputState::saveKeyBindings() {
 	std::string out_path;
 	if (mods->locate("engine/default_keybindings.txt") != "") {
-		out_path = PATH_USER + "saves/" + SAVE_PREFIX + "/" + FILE_KEYBINDINGS;
+		out_path = PATH_USER + "saves/" + eset->misc.save_prefix + "/" + FILE_KEYBINDINGS;
 	}
 	else {
 		out_path = PATH_CONF + FILE_KEYBINDINGS;

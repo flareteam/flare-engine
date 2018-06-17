@@ -22,12 +22,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "CommonIncludes.h"
+#include "EngineSettings.h"
 #include "InputState.h"
 #include "RenderDevice.h"
 #include "SharedResources.h"
 #include "UtilsDebug.h"
 #include "Widget.h"
-#include "WidgetSettings.h"
 #include "WidgetSlider.h"
 
 #include <assert.h>
@@ -193,7 +193,7 @@ void WidgetSlider::render () {
 			draw = false;
 		}
 		if (draw) {
-			render_device->drawRectangle(topLeft, bottomRight, widget_settings.selection_rect_color);
+			render_device->drawRectangle(topLeft, bottomRight, eset->widgets.selection_rect_color);
 		}
 	}
 

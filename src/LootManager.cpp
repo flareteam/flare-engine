@@ -31,6 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CursorManager.h"
 #include "Enemy.h"
 #include "EnemyManager.h"
+#include "EngineSettings.h"
 #include "FileParser.h"
 #include "InputState.h"
 #include "LootManager.h"
@@ -50,67 +51,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <math.h>
 
 LootManager::LootManager()
-	: sfx_loot(0)
-	, drop_max(1)
-	, drop_radius(1)
-	, autopickup_range(INTERACT_RANGE)
+	: tip(new WidgetTooltip())
+	, sfx_loot(snd->load(eset->loot.sfx_loot, "LootManager dropping loot"))
 	, hero(NULL)
-	, tooltip_margin(0)
 {
-	tip = new WidgetTooltip();
-
-	FileParser infile;
-	// load loot animation settings from engine config file
-	// @CLASS Loot|Description of engine/loot.txt
-	if (infile.open("engine/loot.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
-		while (infile.next()) {
-			if (infile.key == "tooltip_margin") {
-				// @ATTR tooltip_margin|int|Vertical offset of the loot tooltip from the loot itself.
-				tooltip_margin = toInt(infile.val);
-			}
-			else if (infile.key == "autopickup_currency") {
-				// @ATTR autopickup_currency|bool|Enable autopickup for currency
-				AUTOPICKUP_CURRENCY = toBool(infile.val);
-			}
-			else if (infile.key == "autopickup_range") {
-				// @ATTR autopickup_range|float|Minimum distance the player must be from loot to trigger autopickup.
-				autopickup_range = toFloat(infile.val);
-			}
-			else if (infile.key == "currency_name") {
-				// This key is parsed in loadMiscSettings() in Settings.cpp
-			}
-			else if (infile.key == "vendor_ratio") {
-				// @ATTR vendor_ratio|int|Percentage of item buying price to use as selling price. Also used as the buyback price until the player leaves the map.
-				VENDOR_RATIO = static_cast<float>(toInt(infile.val)) / 100.0f;
-			}
-			else if (infile.key == "vendor_ratio_buyback") {
-				// @ATTR vendor_ratio_buyback|int|Percentage of item buying price to use as the buying price for previously sold items.
-				VENDOR_RATIO_BUYBACK = static_cast<float>(toInt(infile.val)) / 100.0f;
-			}
-			else if (infile.key == "sfx_loot") {
-				// @ATTR sfx_loot|filename|Filename of a sound effect to play for dropping loot.
-				sfx_loot =  snd->load(infile.val, "LootManager dropping loot");
-			}
-			else if (infile.key == "drop_max") {
-				// @ATTR drop_max|int|The maximum number of random item stacks that can drop at once
-				drop_max = std::max(toInt(infile.val), 1);
-			}
-			else if (infile.key == "drop_radius") {
-				// @ATTR drop_radius|int|The distance (in tiles) away from the origin that loot can drop
-				drop_radius = std::max(toInt(infile.val), 1);
-			}
-			else {
-				infile.error("LootManager: '%s' is not a valid key.", infile.key.c_str());
-			}
-		}
-		infile.close();
-	}
-
-	// reset current map loot
-	loot.clear();
-
 	loadGraphics();
-
 	loadLootTables();
 }
 
@@ -185,17 +130,17 @@ void LootManager::renderTooltips(const FPoint& cam) {
 		if (it->on_ground) {
 			Point p = map_to_screen(it->pos.x, it->pos.y, cam.x, cam.y);
 			dest.x = p.x;
-			dest.y = p.y + TILE_H_HALF;
+			dest.y = p.y + eset->tileset.tile_h_half;
 
 			// adjust dest.y so that the tooltip floats above the item
-			dest.y -= tooltip_margin;
+			dest.y -= eset->loot.tooltip_margin;
 
 			// set hitbox for mouse hover
 			Rect hover;
-			hover.x = p.x - TILE_W_HALF;
-			hover.y = p.y - TILE_H_HALF;
-			hover.w = TILE_W;
-			hover.h = TILE_H;
+			hover.x = p.x - eset->tileset.tile_w_half;
+			hover.y = p.y - eset->tileset.tile_h_half;
+			hover.w = eset->tileset.tile_w;
+			hover.h = eset->tileset.tile_h;
 
 			if ((LOOT_TOOLTIPS && !inpt->pressing[Input::ALT]) || (!LOOT_TOOLTIPS && inpt->pressing[Input::ALT]) || isWithinRect(hover, inpt->mouse)) {
 				it->tip_visible = true;
@@ -213,9 +158,9 @@ void LootManager::renderTooltips(const FPoint& cam) {
 				for (test_it = loot.begin(); test_it != it; ) {
 					if (rectsOverlap(test_it->tip_bounds, tip->bounds)) {
 						if (tooltip_below)
-							dest.y = test_it->tip_bounds.y + test_it->tip_bounds.h + TOOLTIP_OFFSET;
+							dest.y = test_it->tip_bounds.y + test_it->tip_bounds.h + eset->tooltips.offset;
 						else
-							dest.y = test_it->tip_bounds.y - test_it->tip_bounds.h + TOOLTIP_OFFSET;
+							dest.y = test_it->tip_bounds.y - test_it->tip_bounds.h + eset->tooltips.offset;
 
 						tip->bounds.y = dest.y;
 					}
@@ -263,7 +208,7 @@ void LootManager::checkEnemiesForLoot() {
 				drops = randBetween(e->stats.loot_count.x, e->stats.loot_count.y);
 			}
 			else {
-				drops = randBetween(1, drop_max);
+				drops = randBetween(1, eset->loot.drop_max);
 			}
 
 			for (unsigned j=0; j<drops; ++j) {
@@ -286,7 +231,7 @@ void LootManager::checkMapForLoot() {
 			drops = randBetween(mapr->loot_count.x, mapr->loot_count.y);
 		}
 		else {
-			drops = randBetween(1, drop_max);
+			drops = randBetween(1, eset->loot.drop_max);
 		}
 
 		for (unsigned i=0; i<drops; ++i) {
@@ -332,7 +277,7 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 			p.y = static_cast<float>(src.y) + 0.5f;
 
 			if (!mapr->collider.is_valid_position(p.x, p.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_NORMAL)) {
-				p = mapr->collider.get_random_neighbor(src, drop_radius, !MapCollision::IGNORE_BLOCKED);
+				p = mapr->collider.get_random_neighbor(src, eset->loot.drop_radius, !MapCollision::IGNORE_BLOCKED);
 
 				if (!mapr->collider.is_valid_position(p.x, p.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_NORMAL)) {
 					p = hero->pos;
@@ -349,8 +294,8 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 			new_loot.quantity = randBetween(ec->a,ec->b);
 
 			// an item id of 0 means we should drop currency instead
-			if (ec->c == 0 || ec->c == CURRENCY_ID) {
-				new_loot.item = CURRENCY_ID;
+			if (ec->c == 0 || ec->c == eset->misc.currency_id) {
+				new_loot.item = eset->misc.currency_id;
 				new_loot.quantity = new_loot.quantity * (100 + hero->get(STAT_CURRENCY_FIND)) / 100;
 			}
 			else {
@@ -373,7 +318,7 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 
 		int real_chance = ec->z;
 
-		if (ec->c != 0 && ec->c != CURRENCY_ID) {
+		if (ec->c != 0 && ec->c != eset->misc.currency_id) {
 			real_chance = static_cast<int>(static_cast<float>(ec->z) * static_cast<float>(hero->get(STAT_ITEM_FIND) + 100) / 100.f);
 		}
 
@@ -410,7 +355,7 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 		p.y = static_cast<float>(src.y) + 0.5f;
 
 		if (!mapr->collider.is_valid_position(p.x, p.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_NORMAL)) {
-			p = mapr->collider.get_random_neighbor(src, drop_radius, !MapCollision::IGNORE_BLOCKED);
+			p = mapr->collider.get_random_neighbor(src, eset->loot.drop_radius, !MapCollision::IGNORE_BLOCKED);
 
 			if (!mapr->collider.is_valid_position(p.x, p.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_NORMAL)) {
 				p = hero->pos;
@@ -427,8 +372,8 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 		new_loot.quantity = randBetween(ec->a,ec->b);
 
 		// an item id of 0 means we should drop currency instead
-		if (ec->c == 0 || ec->c == CURRENCY_ID) {
-			new_loot.item = CURRENCY_ID;
+		if (ec->c == 0 || ec->c == eset->misc.currency_id) {
+			new_loot.item = eset->misc.currency_id;
 			new_loot.quantity = new_loot.quantity * (100 + hero->get(STAT_CURRENCY_FIND)) / 100;
 		}
 		else {
@@ -495,13 +440,13 @@ ItemStack LootManager::checkPickup(const Point& mouse, const FPoint& cam, const 
 			--it;
 
 			// loot close enough to pickup?
-			if (fabs(hero_pos.x - it->pos.x) < INTERACT_RANGE && fabs(hero_pos.y - it->pos.y) < INTERACT_RANGE && !it->isFlying()) {
+			if (fabs(hero_pos.x - it->pos.x) < eset->misc.interact_range && fabs(hero_pos.y - it->pos.y) < eset->misc.interact_range && !it->isFlying()) {
 				Point p = map_to_screen(it->pos.x, it->pos.y, cam.x, cam.y);
 
-				r.x = p.x - TILE_W_HALF;
-				r.y = p.y - TILE_H_HALF;
-				r.w = TILE_W;
-				r.h = TILE_H;
+				r.x = p.x - eset->tileset.tile_w_half;
+				r.y = p.y - eset->tileset.tile_h_half;
+				r.w = eset->tileset.tile_w;
+				r.h = eset->tileset.tile_h;
 
 				// clicked in pickup hotspot?
 				if ((it->tip_visible && isWithinRect(it->tip_bounds, mouse)) || isWithinRect(r, mouse)) {
@@ -540,8 +485,8 @@ ItemStack LootManager::checkAutoPickup(const FPoint& hero_pos) {
 	std::vector<Loot>::iterator it;
 	for (it = loot.end(); it != loot.begin(); ) {
 		--it;
-		if (!it->dropped_by_hero && fabs(hero_pos.x - it->pos.x) < autopickup_range && fabs(hero_pos.y - it->pos.y) < autopickup_range && !it->isFlying()) {
-			if (it->stack.item == CURRENCY_ID && AUTOPICKUP_CURRENCY) {
+		if (!it->dropped_by_hero && fabs(hero_pos.x - it->pos.x) < eset->loot.autopickup_range && fabs(hero_pos.y - it->pos.y) < eset->loot.autopickup_range && !it->isFlying()) {
+			if (it->stack.item == eset->misc.currency_id && eset->loot.autopickup_currency) {
 				loot_stack = it->stack;
 				it = loot.erase(it);
 				return loot_stack;
@@ -563,7 +508,7 @@ ItemStack LootManager::checkNearestPickup(const FPoint& hero_pos) {
 		--it;
 
 		float distance = calcDist(hero_pos, it->pos);
-		if (distance < INTERACT_RANGE && distance < best_distance) {
+		if (distance < eset->misc.interact_range && distance < best_distance) {
 			best_distance = distance;
 			nearest = it;
 		}
@@ -599,7 +544,7 @@ void LootManager::parseLoot(std::string &val, Event_Component *e, std::vector<Ev
 	e->s = popFirstString(val);
 
 	if (e->s == "currency")
-		e->c = CURRENCY_ID;
+		e->c = eset->misc.currency_id;
 	else if (toInt(e->s, -1) != -1)
 		e->c = toInt(e->s);
 	else if (ec_list) {
@@ -638,7 +583,7 @@ void LootManager::parseLoot(std::string &val, Event_Component *e, std::vector<Ev
 
 			ec->s = repeat_val;
 			if (ec->s == "currency")
-				ec->c = CURRENCY_ID;
+				ec->c = eset->misc.currency_id;
 			else if (toInt(ec->s, -1) != -1)
 				ec->c = toInt(ec->s);
 			else {
@@ -698,7 +643,7 @@ void LootManager::loadLootTables() {
 					ec->s = infile.val;
 
 					if (ec->s == "currency")
-						ec->c = CURRENCY_ID;
+						ec->c = eset->misc.currency_id;
 					else if (toInt(ec->s, -1) != -1)
 						ec->c = toInt(ec->s);
 					else {

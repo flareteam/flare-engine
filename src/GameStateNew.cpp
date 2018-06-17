@@ -27,6 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "Avatar.h"
+#include "EngineSettings.h"
 #include "FileParser.h"
 #include "FontEngine.h"
 #include "GameStateNew.h"
@@ -75,7 +76,7 @@ GameStateNew::GameStateNew()
 	input_name->max_length = 20;
 
 	button_permadeath = new WidgetCheckBox();
-	if (DEATH_PENALTY_PERMADEATH) {
+	if (eset->death_penalty.permadeath) {
 		button_permadeath->enabled = false;
 		button_permadeath->setChecked(true);
 	}
@@ -191,11 +192,11 @@ GameStateNew::GameStateNew()
 	label_classlist->set(classlist_label.x, classlist_label.y, classlist_label.justify, classlist_label.valign, msg->get("Choose a Class"), color_normal, classlist_label.font_style);
 
 	// set up class list
-	for (unsigned i=0; i<HERO_CLASSES.size(); i++) {
-		class_list->append(msg->get(HERO_CLASSES[i].name),getClassTooltip(i));
+	for (unsigned i = 0; i < eset->hero_classes.list.size(); i++) {
+		class_list->append(msg->get(eset->hero_classes.list[i].name), getClassTooltip(i));
 	}
 
-	if (!HERO_CLASSES.empty())
+	if (!eset->hero_classes.list.empty())
 		class_list->select(0);
 
 	loadGraphics();
@@ -300,8 +301,8 @@ void GameStateNew::setHeroOption(int dir) {
 	// get the available options from the currently selected class
 	int class_index;
 	if ( (class_index = class_list->getSelected()) != -1) {
-		if (static_cast<size_t>(class_index) < HERO_CLASSES.size() && !HERO_CLASSES[class_index].options.empty()) {
-			available_options = &(HERO_CLASSES[class_index].options);
+		if (static_cast<size_t>(class_index) < eset->hero_classes.list.size() && !eset->hero_classes.list[class_index].options.empty()) {
+			available_options = &(eset->hero_classes.list[class_index].options);
 		}
 	}
 
@@ -411,17 +412,17 @@ void GameStateNew::refreshWidgets() {
 	button_exit->setPos();
 	button_create->setPos();
 
-	button_prev->setPos((VIEW_W-FRAME_W)/2, (VIEW_H-FRAME_H)/2);
-	button_next->setPos((VIEW_W-FRAME_W)/2, (VIEW_H-FRAME_H)/2);
-	button_permadeath->setPos((VIEW_W-FRAME_W)/2, (VIEW_H-FRAME_H)/2);
-	class_list->setPos((VIEW_W-FRAME_W)/2, (VIEW_H-FRAME_H)/2);
+	button_prev->setPos((VIEW_W - eset->resolutions.frame_w)/2, (VIEW_H - eset->resolutions.frame_h)/2);
+	button_next->setPos((VIEW_W - eset->resolutions.frame_w)/2, (VIEW_H - eset->resolutions.frame_h)/2);
+	button_permadeath->setPos((VIEW_W - eset->resolutions.frame_w)/2, (VIEW_H - eset->resolutions.frame_h)/2);
+	class_list->setPos((VIEW_W - eset->resolutions.frame_w)/2, (VIEW_H - eset->resolutions.frame_h)/2);
 
-	label_portrait->setPos((VIEW_W-FRAME_W)/2, (VIEW_H-FRAME_H)/2);
-	label_name->setPos((VIEW_W-FRAME_W)/2, (VIEW_H-FRAME_H)/2);
-	label_permadeath->setPos((VIEW_W-FRAME_W)/2, (VIEW_H-FRAME_H)/2);
-	label_classlist->setPos((VIEW_W-FRAME_W)/2, (VIEW_H-FRAME_H)/2);
+	label_portrait->setPos((VIEW_W - eset->resolutions.frame_w)/2, (VIEW_H - eset->resolutions.frame_h)/2);
+	label_name->setPos((VIEW_W - eset->resolutions.frame_w)/2, (VIEW_H - eset->resolutions.frame_h)/2);
+	label_permadeath->setPos((VIEW_W - eset->resolutions.frame_w)/2, (VIEW_H - eset->resolutions.frame_h)/2);
+	label_classlist->setPos((VIEW_W - eset->resolutions.frame_w)/2, (VIEW_H - eset->resolutions.frame_h)/2);
 
-	input_name->setPos((VIEW_W-FRAME_W)/2, (VIEW_H-FRAME_H)/2);
+	input_name->setPos((VIEW_W - eset->resolutions.frame_w)/2, (VIEW_H - eset->resolutions.frame_h)/2);
 }
 
 void GameStateNew::render() {
@@ -441,8 +442,8 @@ void GameStateNew::render() {
 	src.w = dest.w = portrait_pos.w;
 	src.h = dest.h = portrait_pos.h;
 	src.x = src.y = 0;
-	dest.x = portrait_pos.x + (VIEW_W - FRAME_W)/2;
-	dest.y = portrait_pos.y + (VIEW_H - FRAME_H)/2;
+	dest.x = portrait_pos.x + (VIEW_W - eset->resolutions.frame_w)/2;
+	dest.y = portrait_pos.y + (VIEW_H - eset->resolutions.frame_h)/2;
 
 	if (portrait_image) {
 		portrait_image->setClip(src);
@@ -482,7 +483,7 @@ void GameStateNew::render() {
 
 std::string GameStateNew::getClassTooltip(int index) {
 	std::string tooltip;
-	if (HERO_CLASSES[index].description != "") tooltip += msg->get(HERO_CLASSES[index].description);
+	if (eset->hero_classes.list[index].description != "") tooltip += msg->get(eset->hero_classes.list[index].description);
 	return tooltip;
 }
 

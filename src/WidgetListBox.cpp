@@ -22,6 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class WidgetListBox
  */
 
+#include "EngineSettings.h"
 #include "FontEngine.h"
 #include "InputState.h"
 #include "RenderDevice.h"
@@ -30,7 +31,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetLabel.h"
 #include "WidgetListBox.h"
 #include "WidgetScrollBar.h"
-#include "WidgetSettings.h"
 
 WidgetListBox::WidgetListBox(int height, const std::string& _fileName)
 	: Widget()
@@ -384,7 +384,7 @@ void WidgetListBox::render() {
 			draw = false;
 		}
 		if (draw) {
-			render_device->drawRectangle(topLeft, bottomRight, widget_settings.selection_rect_color);
+			render_device->drawRectangle(topLeft, bottomRight, eset->widgets.selection_rect_color);
 		}
 	}
 

@@ -30,7 +30,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Map.h"
 #include "MapCollision.h"
-#include "Settings.h"
 #include "Utils.h"
 
 class Animation;
@@ -288,140 +287,9 @@ public:
 
 	float target_nearest;
 
-	Power()
-		: is_empty(true)
-		, type(-1)
-		, name("")
-		, description("")
-		, icon(-1)
-		, new_state(-1)
-		, state_duration(0)
-		, prevent_interrupt(false)
-		, attack_anim("")
-		, face(false)
-		, source_type(-1)
-		, beacon(false)
-		, count(1)
-		, passive(false)
-		, passive_trigger(-1)
-		, meta_power(false)
-		, no_actionbar(false)
-
-		, requires_mp(0)
-		, requires_hp(0)
-		, sacrifice(false)
-		, requires_los(false)
-		, requires_los_default(true)
-		, requires_empty_target(false)
-		, consumable(false)
-		, requires_targeting(false)
-		, requires_spawns(0)
-		, cooldown(0)
-		, requires_max_hp(-1)
-		, requires_max_mp(-1)
-		, requires_not_max_hp(-1)
-		, requires_not_max_mp(-1)
-
-		, animation_name("")
-		, sfx_index(-1)
-		, sfx_hit(0)
-		, sfx_hit_enable(false)
-		, directional(false)
-		, visual_random(0)
-		, visual_option(0)
-		, aim_assist(false)
-		, speed(0)
-		, lifespan(0)
-		, on_floor(false)
-		, complete_animation(false)
-		, charge_speed(0.0f)
-		, attack_speed(100.0f)
-
-		, use_hazard(false)
-		, no_attack(false)
-		, no_aggro(false)
-		, radius(0)
-		, base_damage(DAMAGE_TYPES.size())
-		, starting_pos(STARTING_POS_SOURCE)
-		, relative_pos(false)
-		, multitarget(false)
-		, multihit(false)
-		, expire_with_caster(false)
-		, ignore_zero_damage(false)
-		, lock_target_to_direction(false)
-		, movement_type(MapCollision::MOVE_FLYING)
-		, target_range(0)
-		, target_party(false)
-		, mod_accuracy_mode(-1)
-		, mod_accuracy_value(100)
-		, mod_crit_mode(-1)
-		, mod_crit_value(100)
-		, mod_damage_mode(-1)
-		, mod_damage_value_min(100)
-		, mod_damage_value_max(0)
-
-		, hp_steal(0)
-		, mp_steal(0)
-
-		, missile_angle(0)
-		, angle_variance(0)
-		, speed_variance(0)
-
-		, delay(0)
-
-		, trait_elemental(-1)
-		, trait_armor_penetration(false)
-		, trait_crits_impaired(0)
-		, trait_avoidance_ignore(false)
-
-		, transform_duration(0)
-		, manual_untransform(false)
-		, keep_equipment(false)
-		, untransform_on_hit(false)
-
-		, buff(false)
-		, buff_teleport(false)
-		, buff_party(false)
-		, buff_party_power_id(0)
-
-		, pre_power(0)
-		, pre_power_chance(100)
-		, post_power(0)
-		, post_power_chance(100)
-		, wall_power(0)
-		, wall_power_chance(100)
-		, wall_reflect(false)
-
-		, spawn_type("")
-		, target_neighbor(0)
-		, spawn_limit_mode(SPAWN_LIMIT_MODE_UNLIMITED)
-		, spawn_limit_qty(1)
-		, spawn_limit_every(1)
-		, spawn_limit_stat(0)
-		, spawn_level_mode(SPAWN_LEVEL_MODE_DEFAULT)
-		, spawn_level_qty(0)
-		, spawn_level_every(0)
-		, spawn_level_stat(0)
-
-		, target_movement_normal(true)
-		, target_movement_flying(true)
-		, target_movement_intangible(true)
-
-		, walls_block_aoe(false)
-
-		, script_trigger(-1)
-		, script("")
-
-		, remove_effects()
-
-		, replace_by_effect()
-
-		, requires_corpse(false)
-		, remove_corpse(false)
-
-		, target_nearest(0) {
+	Power();
+	~Power() {
 	}
-
 };
 
 class PowerManager {

@@ -19,6 +19,7 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
+#include "EngineSettings.h"
 #include "FontEngine.h"
 #include "InputState.h"
 #include "Platform.h"
@@ -26,7 +27,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 #include "SharedResources.h"
 #include "WidgetInput.h"
-#include "WidgetSettings.h"
 
 WidgetInput::WidgetInput(const std::string& filename)
 	: background(NULL)
@@ -214,7 +214,7 @@ void WidgetInput::render() {
 			draw = false;
 		}
 		if (draw) {
-			render_device->drawRectangle(topLeft, bottomRight, widget_settings.selection_rect_color);
+			render_device->drawRectangle(topLeft, bottomRight, eset->widgets.selection_rect_color);
 		}
 	}
 

@@ -24,6 +24,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "CommonIncludes.h"
+#include "EngineSettings.h"
 #include "FileParser.h"
 #include "FontEngine.h"
 #include "MapCollision.h"
@@ -117,9 +118,9 @@ void MenuMiniMap::render(const FPoint& hero_pos) {
 	if (!text_pos.hidden) label->render();
 
 	if (map_surface) {
-		if (TILESET_ORIENTATION == TILESET_ISOMETRIC)
+		if (eset->tileset.orientation == eset->tileset.TILESET_ISOMETRIC)
 			renderIso(hero_pos);
-		else // TILESET_ORTHOGONAL
+		else // eset->tileset.TILESET_ORTHOGONAL
 			renderOrtho(hero_pos);
 	}
 }
@@ -131,9 +132,9 @@ void MenuMiniMap::prerender(MapCollision *collider, int map_w, int map_h) {
 	map_size.y = map_h;
 	map_surface->getGraphics()->fillWithColor(Color(0,0,0,0));
 
-	if (TILESET_ORIENTATION == TILESET_ISOMETRIC)
+	if (eset->tileset.orientation == eset->tileset.TILESET_ISOMETRIC)
 		prerenderIso(collider);
-	else // TILESET_ORTHOGONAL
+	else // eset->tileset.TILESET_ORTHOGONAL
 		prerenderOrtho(collider);
 }
 

@@ -15,6 +15,7 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
+#include "EngineSettings.h"
 #include "MessageEngine.h"
 #include "Settings.h"
 #include "SharedResources.h"
@@ -84,8 +85,8 @@ void setStatNames() {
 	STAT_PERCENT[STAT_XP_GAIN] = true;
 	// @TYPE currency_find|Percentage boost to the amount of gold dropped per loot event.
 	STAT_KEY[STAT_CURRENCY_FIND] = "currency_find";
-	STAT_NAME[STAT_CURRENCY_FIND] = msg->get("Bonus %s", CURRENCY);
-	STAT_DESC[STAT_CURRENCY_FIND] = msg->get("Increases the %s found per drop.", CURRENCY);
+	STAT_NAME[STAT_CURRENCY_FIND] = msg->get("Bonus %s", eset->loot.currency);
+	STAT_DESC[STAT_CURRENCY_FIND] = msg->get("Increases the %s found per drop.", eset->loot.currency);
 	STAT_PERCENT[STAT_CURRENCY_FIND] = true;
 	// @TYPE item_find|Increases the chance of finding items in loot.
 	STAT_KEY[STAT_ITEM_FIND] = "item_find";

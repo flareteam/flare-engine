@@ -19,6 +19,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 
+#include "EngineSettings.h"
 #include "EventManager.h"
 #include "FileParser.h"
 #include "Map.h"
@@ -390,7 +391,7 @@ int Map::addEventStatBlock(Event &evnt) {
 
 	Event_Component *ec_damage = evnt.getComponent(EC_POWER_DAMAGE);
 	if (ec_damage) {
-		for (size_t i = 0; i < DAMAGE_TYPES_COUNT; ++i) {
+		for (size_t i = 0; i < eset->damage_types.count; ++i) {
 			if (i % 2 == 0) {
 				statb->starting[STAT_COUNT + i] = ec_damage->a; // min
 			}

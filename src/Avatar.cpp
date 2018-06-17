@@ -33,6 +33,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CursorManager.h"
 #include "EnemyGroupManager.h"
 #include "EnemyManager.h"
+#include "EngineSettings.h"
 #include "FileParser.h"
 #include "Hazard.h"
 #include "InputState.h"
@@ -44,6 +45,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "PowerManager.h"
 #include "RenderDevice.h"
 #include "SaveLoad.h"
+#include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "SoundManager.h"
@@ -131,7 +133,7 @@ void Avatar::init() {
 	stats.humanoid = true;
 	stats.level = 1;
 	stats.xp = 0;
-	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 		stats.primary[i] = stats.primary_starting[i] = 1;
 		stats.primary_additional[i] = 0;
 	}
@@ -317,7 +319,7 @@ void Avatar::set_direction() {
 		else if (inpt->pressing[Input::RIGHT] && !inpt->lock[Input::RIGHT]) stats.direction = 4;
 		else if (inpt->pressing[Input::DOWN] && !inpt->lock[Input::DOWN]) stats.direction = 6;
 		// Adjust for ORTHO tilesets
-		if (TILESET_ORIENTATION == TILESET_ORTHOGONAL &&
+		if (eset->tileset.orientation == eset->tileset.TILESET_ORTHOGONAL &&
 				((inpt->pressing[Input::UP] && !inpt->lock[Input::UP]) || (inpt->pressing[Input::DOWN] && !inpt->lock[Input::UP]) ||
 				 (inpt->pressing[Input::LEFT] && !inpt->lock[Input::LEFT]) || (inpt->pressing[Input::RIGHT] && !inpt->lock[Input::RIGHT])))
 			stats.direction = static_cast<unsigned char>((stats.direction == 7) ? 0 : stats.direction + 1);
@@ -719,8 +721,8 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 	// calc new cam position from player position
 	// cam is focused at player position
-	float cam_dx = (calcDist(FPoint(mapr->cam.x, stats.pos.y), stats.pos)) / CAMERA_SPEED;
-	float cam_dy = (calcDist(FPoint(stats.pos.x, mapr->cam.y), stats.pos)) / CAMERA_SPEED;
+	float cam_dx = (calcDist(FPoint(mapr->cam.x, stats.pos.y), stats.pos)) / eset->misc.camera_speed;
+	float cam_dy = (calcDist(FPoint(stats.pos.x, mapr->cam.y), stats.pos)) / eset->misc.camera_speed;
 
 	if (mapr->cam.x < stats.pos.x) {
 		mapr->cam.x += cam_dx;

@@ -111,6 +111,7 @@ Set (FLARE_SOURCES
 	./src/EnemyBehavior.cpp
 	./src/EnemyGroupManager.cpp
 	./src/EnemyManager.cpp
+	./src/EngineSettings.cpp
 	./src/EventManager.cpp
 	./src/FileParser.cpp
 	./src/FontEngine.cpp
@@ -193,7 +194,6 @@ Set (FLARE_SOURCES
  	./src/WidgetLabel.cpp
  	./src/WidgetListBox.cpp
 	./src/WidgetLog.cpp
-	./src/WidgetSettings.cpp
 	./src/WidgetScrollBar.cpp
 	./src/WidgetScrollBox.cpp
 	./src/WidgetSlider.cpp
@@ -223,6 +223,7 @@ Set (FLARE_HEADERS
 	./src/EnemyBehavior.h
 	./src/EnemyGroupManager.h
 	./src/EnemyManager.h
+	./src/EngineSettings.h
 	./src/EventManager.h
 	./src/FileParser.h
 	./src/FontEngine.h
@@ -306,7 +307,6 @@ Set (FLARE_HEADERS
  	./src/WidgetLabel.h
  	./src/WidgetListBox.h
 	./src/WidgetLog.h
-	./src/WidgetSettings.h
 	./src/WidgetScrollBar.h
 	./src/WidgetScrollBox.h
 	./src/WidgetSlider.h

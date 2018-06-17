@@ -28,6 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "AnimationManager.h"
 #include "CombatText.h"
 #include "DeviceList.h"
+#include "EngineSettings.h"
 #include "GameSwitcher.h"
 #include "InputState.h"
 #include "MessageEngine.h"
@@ -118,11 +119,9 @@ static void init(const CmdLineArgs& cmd_line_args) {
 	inpt = getInputManager();
 	icons = NULL;
 
-	// Load tileset options (must be after ModManager is initialized)
-	loadTilesetSettings();
-
 	// Load miscellaneous settings
-	loadMiscSettings();
+	eset = new EngineSettings();
+	eset->load();
 	setStatNames();
 
 	// platform-specific default screen size
@@ -267,6 +266,7 @@ static void cleanup() {
 	delete msg;
 	delete snd;
 	delete save_load;
+	delete eset;
 
 	if (render_device)
 		render_device->destroyContext();

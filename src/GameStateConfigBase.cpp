@@ -30,6 +30,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CombatText.h"
 #include "CommonIncludes.h"
 #include "DeviceList.h"
+#include "EngineSettings.h"
 #include "FileParser.h"
 #include "FontEngine.h"
 #include "GameStateConfigBase.h"
@@ -613,7 +614,7 @@ void GameStateConfigBase::logicDefaults() {
 	if (defaults_confirm->confirmClicked) {
 		FULLSCREEN = false;
 		loadDefaults();
-		loadMiscSettings();
+		eset->load();
 		inpt->defaultQwertyKeyBindings();
 		inpt->defaultJoystickBindings();
 		update();
@@ -630,14 +631,13 @@ void GameStateConfigBase::logicAccept() {
 		reload_backgrounds = true;
 		delete mods;
 		mods = new ModManager(NULL);
-		loadTilesetSettings();
 		PREV_SAVE_SLOT = -1;
 	}
 	delete msg;
 	msg = new MessageEngine();
 	inpt->saveKeyBindings();
 	inpt->setKeybindNames();
-	loadMiscSettings();
+	eset->load();
 	setStatNames();
 	refreshFont();
 	if ((ENABLE_JOYSTICK) && (inpt->getNumJoysticks() > 0)) {
@@ -671,7 +671,7 @@ void GameStateConfigBase::logicCancel() {
 	delete msg;
 	msg = new MessageEngine();
 	inpt->setKeybindNames();
-	loadMiscSettings();
+	eset->load();
 	setStatNames();
 	refreshFont();
 	update();
@@ -761,8 +761,8 @@ void GameStateConfigBase::render() {
 
 	int tabheight = tab_control->getTabHeight();
 	Rect	pos;
-	pos.x = (VIEW_W-FRAME_W)/2;
-	pos.y = (VIEW_H-FRAME_H)/2 + tabheight - tabheight/16;
+	pos.x = (VIEW_W - eset->resolutions.frame_w)/2;
+	pos.y = (VIEW_H - eset->resolutions.frame_h)/2 + tabheight - tabheight/16;
 
 	if (background) {
 		background->setDest(pos);
@@ -825,10 +825,10 @@ void GameStateConfigBase::placeLabeledWidget(WidgetLabel *lb, Widget *w, int x1,
 }
 
 void GameStateConfigBase::refreshWidgets() {
-	tab_control->setMainArea(((VIEW_W - FRAME_W)/2) + tab_offset.x, ((VIEW_H - FRAME_H)/2) + tab_offset.y);
+	tab_control->setMainArea(((VIEW_W - eset->resolutions.frame_w)/2) + tab_offset.x, ((VIEW_H - eset->resolutions.frame_h)/2) + tab_offset.y);
 
-	frame.x = ((VIEW_W - FRAME_W)/2) + frame_offset.x;
-	frame.y = ((VIEW_H - FRAME_H)/2) + tab_control->getTabHeight() + frame_offset.y;
+	frame.x = ((VIEW_W - eset->resolutions.frame_w)/2) + frame_offset.x;
+	frame.y = ((VIEW_H - eset->resolutions.frame_h)/2) + tab_control->getTabHeight() + frame_offset.y;
 
 	for (unsigned i=0; i<child_widget.size(); ++i) {
 		child_widget[i]->setPos(frame.x, frame.y);

@@ -116,7 +116,6 @@ LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c \
  	../../../../../../src/WidgetLog.cpp \
 	../../../../../../src/WidgetScrollBar.cpp \
 	../../../../../../src/WidgetScrollBox.cpp \
-	../../../../../../src/WidgetSettings.cpp \
 	../../../../../../src/WidgetSlider.cpp \
 	../../../../../../src/WidgetSlot.cpp \
  	../../../../../../src/WidgetTabControl.cpp \

@@ -34,6 +34,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Enemy.h"
 #include "EnemyGroupManager.h"
 #include "EnemyManager.h"
+#include "EngineSettings.h"
 #include "FileParser.h"
 #include "GameState.h"
 #include "GameStateCutscene.h"
@@ -253,7 +254,7 @@ void GameStatePlay::checkLoot() {
 	ItemStack pickup;
 
 	// Autopickup
-	if (AUTOPICKUP_CURRENCY) {
+	if (eset->loot.autopickup_currency) {
 		pickup = loot->checkAutoPickup(pc->stats.pos);
 		if (!pickup.empty()) {
 			menu->inv->add(pickup, MenuInventory::CARRIED, ItemStorage::NO_SLOT, MenuInventory::ADD_PLAY_SOUND, MenuInventory::ADD_AUTO_EQUIP);
@@ -350,7 +351,7 @@ void GameStatePlay::checkTeleport() {
 				showLoading();
 				setRequestedGameState(new GameStateTitle());
 			}
-			else if (SAVE_ONLOAD) {
+			else if (eset->misc.save_onload) {
 				if (!is_first_map_load)
 					save_load->saveGame();
 				else
@@ -386,7 +387,7 @@ void GameStatePlay::checkTeleport() {
  * Also check closing the game window entirely.
  */
 void GameStatePlay::checkCancel() {
-	bool save_on_exit = SAVE_ONEXIT && !(pc->stats.permadeath && pc->stats.cur_state == AVATAR_DEAD);
+	bool save_on_exit = eset->misc.save_onexit && !(pc->stats.permadeath && pc->stats.cur_state == AVATAR_DEAD);
 
 	// if user has clicked exit game from exit menu
 	if (menu->requestingExit()) {
@@ -707,7 +708,7 @@ void GameStatePlay::checkNPCInteraction() {
 		if (npc_from_map) {
 			float interact_distance = calcDist(pc->stats.pos, npcs->npcs[npc_id]->pos);
 
-			if (interact_distance < INTERACT_RANGE) {
+			if (interact_distance < eset->misc.interact_range) {
 				interact_with_npc = true;
 			}
 			else {
@@ -776,7 +777,7 @@ void GameStatePlay::checkStash() {
 
 		// If the player walks away from the stash, close its menu
 		float interact_distance = calcDist(pc->stats.pos, mapr->stash_pos);
-		if (interact_distance > INTERACT_RANGE || !pc->stats.alive) {
+		if (interact_distance > eset->misc.interact_range || !pc->stats.alive) {
 			menu->resetDrag();
 			menu->stash->visible = false;
 		}
@@ -818,7 +819,7 @@ void GameStatePlay::checkCutscene() {
 		mapr->respawn_point = pc->stats.pos;
 	}
 
-	if (SAVE_ONLOAD)
+	if (eset->misc.save_onload)
 		save_load->saveGame();
 
 	setRequestedGameState(cutscene);
@@ -1085,32 +1086,32 @@ void GameStatePlay::resetNPC() {
 
 bool GameStatePlay::checkPrimaryStat(const std::string& first, const std::string& second) {
 	int high = 0;
-	size_t high_index = PRIMARY_STATS.size();
-	size_t low_index = PRIMARY_STATS.size();
+	size_t high_index = eset->primary_stats.list.size();
+	size_t low_index = eset->primary_stats.list.size();
 
-	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 		int stat = pc->stats.get_primary(i);
 		if (stat > high) {
-			if (high_index != PRIMARY_STATS.size()) {
+			if (high_index != eset->primary_stats.list.size()) {
 				low_index = high_index;
 			}
 			high = stat;
 			high_index = i;
 		}
-		else if (stat == high && low_index == PRIMARY_STATS.size()) {
+		else if (stat == high && low_index == eset->primary_stats.list.size()) {
 			low_index = i;
 		}
-		else if (low_index == PRIMARY_STATS.size() || (low_index < PRIMARY_STATS.size() && stat > pc->stats.get_primary(low_index))) {
+		else if (low_index == eset->primary_stats.list.size() || (low_index < eset->primary_stats.list.size() && stat > pc->stats.get_primary(low_index))) {
 			low_index = i;
 		}
 	}
 
 	// if the first primary stat doesn't match, we don't care about the second one
-	if (high_index != PRIMARY_STATS.size() && first != PRIMARY_STATS[high_index].id)
+	if (high_index != eset->primary_stats.list.size() && first != eset->primary_stats.list[high_index].id)
 		return false;
 
 	if (!second.empty()) {
-		if (low_index != PRIMARY_STATS.size() && second != PRIMARY_STATS[low_index].id)
+		if (low_index != eset->primary_stats.list.size() && second != eset->primary_stats.list[low_index].id)
 			return false;
 	}
 	else if (second.empty() && pc->stats.get_primary(high_index) == pc->stats.get_primary(low_index)) {

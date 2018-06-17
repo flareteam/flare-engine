@@ -53,10 +53,6 @@ private:
 
 	SoundID sfx_loot;
 
-	int drop_max;
-	int drop_radius;
-	float autopickup_range;
-
 	// loot refers to ItemManager indices
 	std::vector<Loot> loot;
 
@@ -96,7 +92,6 @@ public:
 	void parseLoot(std::string &val, Event_Component *e, std::vector<Event_Component> *ec_list);
 
 	StatBlock *hero;
-	int tooltip_margin; // pixels between loot drop center and label
 };
 
 #endif

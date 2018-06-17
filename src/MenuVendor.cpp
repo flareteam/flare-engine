@@ -22,6 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuVendor
  */
 
+#include "EngineSettings.h"
 #include "FileParser.h"
 #include "FontEngine.h"
 #include "ItemManager.h"
@@ -93,8 +94,8 @@ MenuVendor::MenuVendor(StatBlock *_stats)
 	}
 
 	VENDOR_SLOTS = slots_cols * slots_rows;
-	slots_area.w = slots_cols*ICON_SIZE;
-	slots_area.h = slots_rows*ICON_SIZE;
+	slots_area.w = slots_cols * eset->resolutions.icon_size;
+	slots_area.h = slots_rows * eset->resolutions.icon_size;
 
 	stock[ItemManager::VENDOR_BUY].initGrid(VENDOR_SLOTS, slots_area, slots_cols);
 	stock[ItemManager::VENDOR_SELL].initGrid(VENDOR_SLOTS, slots_area, slots_cols);
@@ -277,7 +278,7 @@ void MenuVendor::setNPC(NPC* _npc) {
 		stock[ItemManager::VENDOR_BUY][i] = npc->stock[i];
 		if (npc->reset_buyback) {
 			// this occurs on the first interaction with an NPC after map load
-			if (KEEP_BUYBACK_ON_MAP_CHANGE)
+			if (eset->misc.keep_buyback_on_map_change)
 				buyback_stock[npc->filename][i].can_buyback = false;
 			else
 				buyback_stock[npc->filename][i].clear();

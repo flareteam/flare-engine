@@ -35,6 +35,7 @@ Created and destroyed by main.cpp
 class AnimationManager;
 class CombatText;
 class CursorManager;
+class EngineSettings;
 class FontEngine;
 class IconManager;
 class InputState;
@@ -47,6 +48,7 @@ class SoundManager;
 extern AnimationManager *anim;
 extern CombatText *comb;
 extern CursorManager *curs;
+extern EngineSettings *eset;
 extern FontEngine *font;
 extern IconManager *icons;
 extern InputState *inpt;

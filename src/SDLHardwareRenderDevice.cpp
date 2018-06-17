@@ -26,6 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <string.h>
 
 #include "CursorManager.h"
+#include "EngineSettings.h"
 #include "IconManager.h"
 #include "InputState.h"
 #include "MessageEngine.h"
@@ -123,8 +124,8 @@ SDLHardwareRenderDevice::SDLHardwareRenderDevice()
 	vsync = VSYNC;
 	texture_filter = TEXTURE_FILTER;
 
-	min_screen.x = MIN_SCREEN_W;
-	min_screen.y = MIN_SCREEN_H;
+	min_screen.x = eset->resolutions.min_screen_w;
+	min_screen.y = eset->resolutions.min_screen_h;
 
 	SDL_DisplayMode desktop;
 	if (SDL_GetDesktopDisplayMode(0, &desktop) == 0) {
@@ -153,8 +154,8 @@ int SDLHardwareRenderDevice::createContextInternal() {
 	}
 	else if (fullscreen && is_initialized) {
 		// if the game was previously in fullscreen, resize the window when returning to windowed mode
-		window_w = MIN_SCREEN_W;
-		window_h = MIN_SCREEN_H;
+		window_w = eset->resolutions.min_screen_w;
+		window_h = eset->resolutions.min_screen_h;
 		w_flags = w_flags | SDL_WINDOW_SHOWN;
 	}
 	else {
@@ -179,7 +180,7 @@ int SDLHardwareRenderDevice::createContextInternal() {
 		if (window) {
 			renderer = SDL_CreateRenderer(window, -1, r_flags);
 			if (renderer) {
-				if (TEXTURE_FILTER && !IGNORE_TEXTURE_FILTER)
+				if (TEXTURE_FILTER && !eset->resolutions.ignore_texture_filter)
 					SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
 				else
 					SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0");
@@ -187,7 +188,7 @@ int SDLHardwareRenderDevice::createContextInternal() {
 				windowResize();
 			}
 
-			SDL_SetWindowMinimumSize(window, MIN_SCREEN_W, MIN_SCREEN_H);
+			SDL_SetWindowMinimumSize(window, eset->resolutions.min_screen_w, eset->resolutions.min_screen_h);
 			// setting minimum size might move the window, so set position again
 			SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 		}
@@ -218,10 +219,10 @@ int SDLHardwareRenderDevice::createContextInternal() {
 
 	if (is_initialized) {
 		// update minimum window size if it has changed
-		if (min_screen.x != MIN_SCREEN_W || min_screen.y != MIN_SCREEN_H) {
-			min_screen.x = MIN_SCREEN_W;
-			min_screen.y = MIN_SCREEN_H;
-			SDL_SetWindowMinimumSize(window, MIN_SCREEN_W, MIN_SCREEN_H);
+		if (min_screen.x != eset->resolutions.min_screen_w || min_screen.y != eset->resolutions.min_screen_h) {
+			min_screen.x = eset->resolutions.min_screen_w;
+			min_screen.y = eset->resolutions.min_screen_h;
+			SDL_SetWindowMinimumSize(window, eset->resolutions.min_screen_w, eset->resolutions.min_screen_h);
 			SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 		}
 
@@ -459,7 +460,7 @@ void SDLHardwareRenderDevice::updateTitleBar() {
 
 	if (!window) return;
 
-	title = strdup(msg->get(WINDOW_TITLE).c_str());
+	title = strdup(msg->get(eset->misc.window_title).c_str());
 	titlebar_icon = IMG_Load(mods->locate("images/logo/icon.png").c_str());
 
 	if (title) SDL_SetWindowTitle(window, title);

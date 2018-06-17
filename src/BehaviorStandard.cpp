@@ -23,9 +23,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "Enemy.h"
 #include "EnemyManager.h"
+#include "EngineSettings.h"
 #include "MapRenderer.h"
 #include "PowerManager.h"
+#include "Settings.h"
 #include "SharedGameResources.h"
+#include "SharedResources.h"
 #include "StatBlock.h"
 #include "UtilsMath.h"
 
@@ -670,7 +673,7 @@ void BehaviorStandard::updateState() {
 			e->setAnimation("die");
 			if (e->activeAnimation->isFirstFrame()) {
 				e->playSound(Entity::SOUND_DIE);
-				e->stats.corpse_ticks = CORPSE_TIMEOUT;
+				e->stats.corpse_ticks = eset->misc.corpse_timeout;
 			}
 			if (e->activeAnimation->isSecondLastFrame()) {
 				AIPower* ai_power = e->stats.getAIPower(AI_POWER_DEATH);
@@ -702,7 +705,7 @@ void BehaviorStandard::updateState() {
 			e->setAnimation("critdie");
 			if (e->activeAnimation->isFirstFrame()) {
 				e->playSound(Entity::SOUND_CRITDIE);
-				e->stats.corpse_ticks = CORPSE_TIMEOUT;
+				e->stats.corpse_ticks = eset->misc.corpse_timeout;
 			}
 			if (e->activeAnimation->isSecondLastFrame()) {
 				AIPower* ai_power = e->stats.getAIPower(AI_POWER_DEATH);

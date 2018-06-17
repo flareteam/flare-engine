@@ -18,6 +18,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 #include "CommonIncludes.h"
+#include "EngineSettings.h"
 #include "FileParser.h"
 #include "FontEngine.h"
 #include "GameStateConfigBase.h"
@@ -105,7 +106,7 @@ GameStateTitle::GameStateTitle()
 	}
 
 	button_play->label = msg->get("Play Game");
-	if (!ENABLE_PLAYGAME) {
+	if (!eset->gameplay.enable_playgame) {
 		button_play->enabled = false;
 		button_play->tooltip = msg->get("Enable a core mod to continue");
 	}
@@ -132,7 +133,7 @@ GameStateTitle::GameStateTitle()
 
 	refreshWidgets();
 
-	if (ENABLE_PLAYGAME && !LOAD_SLOT.empty()) {
+	if (eset->gameplay.enable_playgame && !LOAD_SLOT.empty()) {
 		showLoading();
 		setRequestedGameState(new GameStateLoad());
 	}
@@ -144,7 +145,7 @@ void GameStateTitle::logic() {
 	if (inpt->window_resized)
 		refreshWidgets();
 
-	button_play->enabled = ENABLE_PLAYGAME;
+	button_play->enabled = eset->gameplay.enable_playgame;
 
 	snd->logic(FPoint(0,0));
 

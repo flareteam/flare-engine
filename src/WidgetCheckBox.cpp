@@ -24,13 +24,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "CommonIncludes.h"
+#include "EngineSettings.h"
 #include "InputState.h"
 #include "RenderDevice.h"
 #include "SharedResources.h"
 #include "TooltipData.h"
 #include "Widget.h"
 #include "WidgetCheckBox.h"
-#include "WidgetSettings.h"
 
 WidgetCheckBox::WidgetCheckBox (const std::string &fname)
 	: enabled(true)
@@ -134,7 +134,7 @@ void WidgetCheckBox::render() {
 			draw = false;
 		}
 		if (draw) {
-			render_device->drawRectangle(topLeft, bottomRight, widget_settings.selection_rect_color);
+			render_device->drawRectangle(topLeft, bottomRight, eset->widgets.selection_rect_color);
 		}
 	}
 }

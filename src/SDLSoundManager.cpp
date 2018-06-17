@@ -24,6 +24,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 **/
 
 #include "CommonIncludes.h"
+#include "EngineSettings.h"
 #include "ModManager.h"
 #include "Settings.h"
 #include "SharedResources.h"
@@ -97,7 +98,7 @@ void SDLSoundManager::logic(const FPoint& center) {
 		}
 
 		/* control mixing playback depending on distance */
-		float v = calcDist(center, it->second.location) / static_cast<float>(SOUND_FALLOFF);
+		float v = calcDist(center, it->second.location) / static_cast<float>(eset->misc.sound_falloff);
 		if (it->second.loop) {
 			if (v < 1.0 && it->second.paused) {
 				Mix_Resume(it->first);
@@ -254,7 +255,7 @@ void SDLSoundManager::play(SoundID sid, const std::string& channel, const FPoint
 	// precalculate mixing volume if sound has a location
 	Uint8 d = 0;
 	if (p.location.x != 0 || p.location.y != 0) {
-		float v = 255.0f * (calcDist(lastPos, p.location) / static_cast<float>(SOUND_FALLOFF));
+		float v = 255.0f * (calcDist(lastPos, p.location) / static_cast<float>(eset->misc.sound_falloff));
 		v = std::min<float>(std::max<float>(v, 0.0f), 255.0f);
 		d = Uint8(v);
 	}

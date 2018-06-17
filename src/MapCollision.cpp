@@ -30,10 +30,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define NDEBUG
 #endif
 
+#include "AStarContainer.h"
 #include "AStarNode.h"
+#include "EngineSettings.h"
 #include "MapCollision.h"
 #include "Settings.h"
-#include "AStarContainer.h"
+#include "SharedResources.h"
+
 #include <cfloat>
 #include <math.h>
 #include <cassert>
@@ -246,7 +249,7 @@ bool MapCollision::is_valid_tile(const int& tile_x, const int& tile_y, int movem
 			return false;
 	}
 	else if (collide_type == COLLIDE_HERO) {
-		if (colmap[tile_x][tile_y] == BLOCKS_ENEMIES && !ENABLE_ALLY_COLLISION)
+		if (colmap[tile_x][tile_y] == BLOCKS_ENEMIES && !eset->misc.enable_ally_collision)
 			return true;
 	}
 

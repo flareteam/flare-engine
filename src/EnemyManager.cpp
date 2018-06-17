@@ -29,6 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EnemyBehavior.h"
 #include "EnemyGroupManager.h"
 #include "EnemyManager.h"
+#include "EngineSettings.h"
 #include "EventManager.h"
 #include "Hazard.h"
 #include "MapRenderer.h"
@@ -37,6 +38,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "RenderDevice.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
+
+#include "Settings.h"
 
 #include <limits>
 
@@ -310,7 +313,7 @@ void EnemyManager::handleSpawn() {
 			if(powers->powers[e->stats.summoned_power_index].spawn_level_mode == Power::SPAWN_LEVEL_MODE_STAT) {
 				if(e->stats.summoner != NULL && powers->powers[e->stats.summoned_power_index].spawn_level_every != 0) {
 					int stat_val = 0;
-					for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+					for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 						if (powers->powers[e->stats.summoned_power_index].spawn_level_stat == i) {
 							stat_val = e->stats.summoner->get_primary(i);
 							break;
@@ -444,7 +447,7 @@ Enemy* EnemyManager::getNearestEnemy(const FPoint& pos, bool get_corpse, float *
 	if (nearest && saved_distance)
 		*saved_distance = best_distance;
 
-	if (!saved_distance && best_distance > INTERACT_RANGE)
+	if (!saved_distance && best_distance > eset->misc.interact_range)
 		nearest = NULL;
 
 	return nearest;
@@ -459,7 +462,7 @@ void EnemyManager::checkEnemiesforXP() {
 			//adjust for party exp if necessary
 			float xp_multiplier = 1;
 			if(enemies[i]->kill_source_type == Power::SOURCE_TYPE_ALLY)
-				xp_multiplier = static_cast<float>(PARTY_EXP_PERCENTAGE) / 100.0f;
+				xp_multiplier = static_cast<float>(eset->misc.party_exp_percentage) / 100.0f;
 
 			camp->rewardXP(static_cast<int>((static_cast<float>(enemies[i]->stats.xp) * xp_multiplier)), !CampaignManager::XP_SHOW_MSG);
 			enemies[i]->reward_xp = false; // clear flag
@@ -515,7 +518,7 @@ void EnemyManager::addRenders(std::vector<Renderable> &r, std::vector<Renderable
 			(*it)->stats.effects.getCurrentAlpha(re.alpha_mod);
 
 			// fade out corpses
-			int fade_time = (CORPSE_TIMEOUT > MAX_FRAMES_PER_SEC) ? MAX_FRAMES_PER_SEC : CORPSE_TIMEOUT;
+			int fade_time = (eset->misc.corpse_timeout > MAX_FRAMES_PER_SEC) ? MAX_FRAMES_PER_SEC : eset->misc.corpse_timeout;
 			if (dead && fade_time != 0 && (*it)->stats.corpse_ticks <= fade_time) {
 				re.alpha_mod = static_cast<uint8_t>(static_cast<float>((*it)->stats.corpse_ticks) * (re.alpha_mod / static_cast<float>(fade_time)));
 			}

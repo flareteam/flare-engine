@@ -23,6 +23,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "Avatar.h"
+#include "EngineSettings.h"
 #include "FontEngine.h"
 #include "IconManager.h"
 #include "InputState.h"
@@ -185,7 +186,7 @@ void MenuManager::setDragIcon(int icon_id) {
 	if (!icons) return;
 
 	if (!drag_icon) {
-		Image *graphics = render_device->createImage(ICON_SIZE, ICON_SIZE);
+		Image *graphics = render_device->createImage(eset->resolutions.icon_size, eset->resolutions.icon_size);
 
 		if (!graphics) return;
 		drag_icon = graphics->createSprite();
@@ -564,7 +565,7 @@ void MenuManager::logic() {
 
 	bool console_open = DEV_MODE && devconsole->visible;
 	menus_open = (inv->visible || pow->visible || chr->visible || questlog->visible || vendor->visible || talker->visible || npc->visible || book->visible || console_open);
-	pause = (MENUS_PAUSE && menus_open) || exit->visible || console_open || book->visible;
+	pause = (eset->misc.menus_pause && menus_open) || exit->visible || console_open || book->visible;
 
 	touch_controls->visible = !menus_open && !exit->visible;
 
@@ -691,7 +692,7 @@ void MenuManager::logic() {
 					}
 					else {
 						// The vendor could have a limited amount of currency in the future. It will be tested here.
-						if ((SELL_WITHOUT_VENDOR || vendor->visible) && inv->sell(stack)) {
+						if ((eset->misc.sell_without_vendor || vendor->visible) && inv->sell(stack)) {
 							if (vendor->visible) {
 								vendor->setTab(ItemManager::VENDOR_SELL);
 								vendor->add(stack);
@@ -1286,9 +1287,9 @@ void MenuManager::render() {
 			setDragIcon(powers->powers[drag_power].icon);
 
 		if (TOUCHSCREEN && sticky_dragging)
-			renderIcon(keydrag_pos.x - ICON_SIZE/2, keydrag_pos.y - ICON_SIZE/2);
+			renderIcon(keydrag_pos.x - eset->resolutions.icon_size/2, keydrag_pos.y - eset->resolutions.icon_size/2);
 		else
-			renderIcon(inpt->mouse.x - ICON_SIZE/2, inpt->mouse.y - ICON_SIZE/2);
+			renderIcon(inpt->mouse.x - eset->resolutions.icon_size/2, inpt->mouse.y - eset->resolutions.icon_size/2);
 	}
 	else if (keyboard_dragging && !num_picker->visible) {
 		if (drag_src == DRAG_SRC_INVENTORY || drag_src == DRAG_SRC_VENDOR || drag_src == DRAG_SRC_STASH)
@@ -1296,7 +1297,7 @@ void MenuManager::render() {
 		else if (drag_src == DRAG_SRC_POWERS || drag_src == DRAG_SRC_ACTIONBAR)
 			setDragIcon(powers->powers[drag_power].icon);
 
-		renderIcon(keydrag_pos.x - ICON_SIZE/2, keydrag_pos.y - ICON_SIZE/2);
+		renderIcon(keydrag_pos.x - eset->resolutions.icon_size/2, keydrag_pos.y - eset->resolutions.icon_size/2);
 	}
 
 	// render the dev console above everything else

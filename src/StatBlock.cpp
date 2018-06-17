@@ -29,6 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CombatText.h"
 #include "Enemy.h"
 #include "EnemyManager.h"
+#include "EngineSettings.h"
 #include "FileParser.h"
 #include "Hazard.h"
 #include "LootManager.h"
@@ -79,10 +80,10 @@ StatBlock::StatBlock()
 	, check_title(false)
 	, stat_points_per_level(1)
 	, power_points_per_level(1)
-	, starting(std::vector<int>(STAT_COUNT + DAMAGE_TYPES_COUNT, 0))
-	, base(std::vector<int>(STAT_COUNT + DAMAGE_TYPES_COUNT, 0))
-	, current(std::vector<int>(STAT_COUNT + DAMAGE_TYPES_COUNT, 0))
-	, per_level(std::vector<int>(STAT_COUNT + DAMAGE_TYPES_COUNT, 0))
+	, starting(STAT_COUNT + eset->damage_types.count, 0)
+	, base(STAT_COUNT + eset->damage_types.count, 0)
+	, current(STAT_COUNT + eset->damage_types.count, 0)
+	, per_level(STAT_COUNT + eset->damage_types.count, 0)
 	, character_class("")
 	, character_subclass("")
 	, hp(0)
@@ -90,14 +91,14 @@ StatBlock::StatBlock()
 	, mp(0)
 	, mp_ticker(0)
 	, speed_default(0.1f)
-	, dmg_min_add(std::vector<int>(DAMAGE_TYPES.size(), 0))
-	, dmg_max_add(std::vector<int>(DAMAGE_TYPES.size(), 0))
+	, dmg_min_add(eset->damage_types.list.size(), 0)
+	, dmg_max_add(eset->damage_types.list.size(), 0)
 	, absorb_min_add(0)
 	, absorb_max_add(0)
 	, speed(0.1f)
 	, charge_speed(0.0f)
-	, vulnerable(ELEMENTS.size(), 100)
-	, vulnerable_base(ELEMENTS.size(), 100)
+	, vulnerable(eset->elements.list.size(), 100)
+	, vulnerable_base(eset->elements.list.size(), 100)
 	, transform_duration(0)
 	, transform_duration_total(0)
 	, manual_untransform(false)
@@ -178,13 +179,13 @@ StatBlock::StatBlock()
 	, attacking(false)
 	, bleed_source_type(-1)
 {
-	primary.resize(PRIMARY_STATS.size(), 0);
-	primary_starting.resize(PRIMARY_STATS.size(), 0);
-	primary_additional.resize(PRIMARY_STATS.size(), 0);
-	per_primary.resize(PRIMARY_STATS.size());
+	primary.resize(eset->primary_stats.list.size(), 0);
+	primary_starting.resize(eset->primary_stats.list.size(), 0);
+	primary_additional.resize(eset->primary_stats.list.size(), 0);
+	per_primary.resize(eset->primary_stats.list.size());
 
 	for (size_t i = 0; i < per_primary.size(); ++i) {
-		per_primary[i].resize(STAT_COUNT + DAMAGE_TYPES_COUNT, 0);
+		per_primary[i].resize(STAT_COUNT + eset->damage_types.count, 0);
 	}
 }
 
@@ -219,12 +220,12 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 			}
 		}
 
-		for (size_t i = 0; i < DAMAGE_TYPES.size(); ++i) {
-			if (DAMAGE_TYPES[i].min == stat) {
+		for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
+			if (eset->damage_types.list[i].min == stat) {
 				starting[STAT_COUNT + (i*2)] = value;
 				return true;
 			}
-			else if (DAMAGE_TYPES[i].max == stat) {
+			else if (eset->damage_types.list[i].max == stat) {
 				starting[STAT_COUNT + (i*2) + 1] = value;
 				return true;
 			}
@@ -242,12 +243,12 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 			}
 		}
 
-		for (size_t i = 0; i < DAMAGE_TYPES.size(); ++i) {
-			if (DAMAGE_TYPES[i].min == stat) {
+		for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
+			if (eset->damage_types.list[i].min == stat) {
 				per_level[STAT_COUNT + (i*2)] = value;
 				return true;
 			}
-			else if (DAMAGE_TYPES[i].max == stat) {
+			else if (eset->damage_types.list[i].max == stat) {
 				per_level[STAT_COUNT + (i*2) + 1] = value;
 				return true;
 			}
@@ -256,8 +257,8 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 	else if (infile->key == "stat_per_primary") {
 		// @ATTR stat_per_primary|predefined_string, predefined_string, int : Primary Stat, Stat name, Value|The value for this stat added for every point allocated to this primary stat.
 		std::string prim_stat = popFirstString(infile->val);
-		size_t prim_stat_index = getPrimaryStatIndex(prim_stat);
-		if (prim_stat_index == PRIMARY_STATS.size()) {
+		size_t prim_stat_index = eset->primary_stats.getIndexByID(prim_stat);
+		if (prim_stat_index == eset->primary_stats.list.size()) {
 			infile->error("StatBlock: '%s' is not a valid primary stat.", prim_stat.c_str());
 			return true;
 		}
@@ -272,12 +273,12 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 			}
 		}
 
-		for (size_t i = 0; i < DAMAGE_TYPES.size(); ++i) {
-			if (DAMAGE_TYPES[i].min == stat) {
+		for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
+			if (eset->damage_types.list[i].min == stat) {
 				per_primary[prim_stat_index][STAT_COUNT + (i*2)] = value;
 				return true;
 			}
-			else if (DAMAGE_TYPES[i].max == stat) {
+			else if (eset->damage_types.list[i].max == stat) {
 				per_primary[prim_stat_index][STAT_COUNT + (i*2) + 1] = value;
 				return true;
 			}
@@ -288,8 +289,8 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 		std::string element = popFirstString(infile->val);
 		int value = popFirstInt(infile->val);
 
-		for (unsigned int i=0; i<ELEMENTS.size(); i++) {
-			if (element == ELEMENTS[i].id) {
+		for (unsigned int i=0; i<eset->elements.list.size(); i++) {
+			if (element == eset->elements.list[i].id) {
 				vulnerable[i] = vulnerable_base[i] = value;
 				return true;
 			}
@@ -636,7 +637,7 @@ void StatBlock::calcBase() {
 	// bonuses are skipped for the default level 1 of a stat
 	int lev0 = std::max(level - 1, 0);
 
-	for (size_t i = 0; i < STAT_COUNT + DAMAGE_TYPES_COUNT; ++i) {
+	for (size_t i = 0; i < STAT_COUNT + eset->damage_types.count; ++i) {
 		base[i] = starting[i];
 		base[i] += lev0 * per_level[i];
 		for (size_t j = 0; j < per_primary.size(); ++j) {
@@ -645,7 +646,7 @@ void StatBlock::calcBase() {
 	}
 
 	// add damage from equipment and increase to minimum amounts
-	for (size_t i = 0; i < DAMAGE_TYPES.size(); ++i) {
+	for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
 		base[STAT_COUNT + (i*2)] += dmg_min_add[i];
 		base[STAT_COUNT + (i*2) + 1] += dmg_max_add[i];
 		base[STAT_COUNT + (i*2)] = std::max(base[STAT_COUNT + (i*2)], 0);
@@ -682,7 +683,7 @@ void StatBlock::applyEffects() {
 
 	calcBase();
 
-	for (size_t i=0; i<STAT_COUNT + DAMAGE_TYPES_COUNT; i++) {
+	for (size_t i=0; i<STAT_COUNT + eset->damage_types.count; i++) {
 		current[i] = base[i] + effects.bonus[i];
 	}
 
@@ -1026,7 +1027,7 @@ void StatBlock::removeSummons() {
 		(*it)->effects.clearEffects();
 		if (!(*it)->hero && !(*it)->corpse) {
 			(*it)->cur_state = ENEMY_DEAD;
-			(*it)->corpse_ticks = CORPSE_TIMEOUT;
+			(*it)->corpse_ticks = eset->misc.corpse_timeout;
 		}
 		(*it)->removeSummons();
 		(*it)->summoner = NULL;
@@ -1060,7 +1061,7 @@ bool StatBlock::summonLimitReached(int power_id) const {
 		max_summons = spawn_power->spawn_limit_qty;
 	else if(spawn_power->spawn_limit_mode == Power::SPAWN_LIMIT_MODE_STAT) {
 		int stat_val = 1;
-		for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+		for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 			if (spawn_power->spawn_limit_stat == i) {
 				stat_val = get_primary(i);
 				break;

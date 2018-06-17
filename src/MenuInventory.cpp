@@ -26,6 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Avatar.h"
 #include "CommonIncludes.h"
+#include "EngineSettings.h"
 #include "FileParser.h"
 #include "FontEngine.h"
 #include "Hazard.h"
@@ -83,7 +84,7 @@ MenuInventory::MenuInventory(StatBlock *_stats)
 
 				pos.x = area.x = popFirstInt(infile.val);
 				pos.y = area.y = popFirstInt(infile.val);
-				area.w = area.h = ICON_SIZE;
+				area.w = area.h = eset->resolutions.icon_size;
 				equipped_area.push_back(area);
 				equipped_pos.push_back(pos);
 				slot_type.push_back(popFirstString(infile.val));
@@ -113,8 +114,8 @@ MenuInventory::MenuInventory(StatBlock *_stats)
 	MAX_EQUIPPED = static_cast<int>(equipped_area.size());
 	MAX_CARRIED = carried_cols * carried_rows;
 
-	carried_area.w = carried_cols*ICON_SIZE;
-	carried_area.h = carried_rows*ICON_SIZE;
+	carried_area.w = carried_cols * eset->resolutions.icon_size;
+	carried_area.h = carried_rows * eset->resolutions.icon_size;
 
 	color_normal = font->getColor("menu_normal");
 	color_high = font->getColor("menu_bonus");
@@ -154,26 +155,26 @@ void MenuInventory::align() {
 void MenuInventory::logic() {
 
 	// if the player has just died, the penalty is half his current currency.
-	if (stats->death_penalty && DEATH_PENALTY) {
+	if (stats->death_penalty && eset->death_penalty.enabled) {
 		std::string death_message = "";
 
 		// remove a % of currency
-		if (DEATH_PENALTY_CURRENCY > 0) {
+		if (eset->death_penalty.currency > 0) {
 			if (currency > 0)
-				removeCurrency((currency * DEATH_PENALTY_CURRENCY) / 100);
-			death_message += msg->get("Lost %d%% of %s.", DEATH_PENALTY_CURRENCY, CURRENCY) + ' ';
+				removeCurrency((currency * eset->death_penalty.currency) / 100);
+			death_message += msg->get("Lost %d%% of %s.", eset->death_penalty.currency, eset->loot.currency) + ' ';
 		}
 
 		// remove a % of either total xp or xp since the last level
-		if (DEATH_PENALTY_XP > 0) {
+		if (eset->death_penalty.xp > 0) {
 			if (stats->xp > 0)
-				stats->xp -= (stats->xp * DEATH_PENALTY_XP) / 100;
-			death_message += msg->get("Lost %d%% of total XP.", DEATH_PENALTY_XP) + ' ';
+				stats->xp -= (stats->xp * eset->death_penalty.xp) / 100;
+			death_message += msg->get("Lost %d%% of total XP.", eset->death_penalty.xp) + ' ';
 		}
-		else if (DEATH_PENALTY_XP_CURRENT > 0) {
+		else if (eset->death_penalty.xp_current > 0) {
 			if (stats->xp - stats->xp_table[stats->level-1] > 0)
-				stats->xp -= ((stats->xp - stats->xp_table[stats->level-1]) * DEATH_PENALTY_XP_CURRENT) / 100;
-			death_message += msg->get("Lost %d%% of current level XP.", DEATH_PENALTY_XP_CURRENT) + ' ';
+				stats->xp -= ((stats->xp - stats->xp_table[stats->level-1]) * eset->death_penalty.xp_current) / 100;
+			death_message += msg->get("Lost %d%% of current level XP.", eset->death_penalty.xp_current) + ' ';
 		}
 
 		// prevent down-leveling from removing too much xp
@@ -181,7 +182,7 @@ void MenuInventory::logic() {
 			stats->xp = stats->xp_table[stats->level-1];
 
 		// remove a random carried item
-		if (DEATH_PENALTY_ITEM) {
+		if (eset->death_penalty.item) {
 			std::vector<int> removable_items;
 			removable_items.clear();
 			for (int i=0; i < MAX_EQUIPPED; i++) {
@@ -209,7 +210,7 @@ void MenuInventory::logic() {
 	}
 
 	// a copy of currency is kept in stats, to help with various situations
-	stats->currency = currency = inventory[CARRIED].count(CURRENCY_ID);
+	stats->currency = currency = inventory[CARRIED].count(eset->misc.currency_id);
 
 	// check close button
 	if (visible) {
@@ -242,7 +243,7 @@ void MenuInventory::render() {
 	if (!title.hidden) label_inventory.render();
 
 	if (!currency_lbl.hidden) {
-		label_currency.set(window_area.x+currency_lbl.x, window_area.y+currency_lbl.y, currency_lbl.justify, currency_lbl.valign, msg->get("%d %s", currency, CURRENCY), color_normal, currency_lbl.font_style);
+		label_currency.set(window_area.x+currency_lbl.x, window_area.y+currency_lbl.y, currency_lbl.justify, currency_lbl.valign, msg->get("%d %s", currency, eset->loot.currency), color_normal, currency_lbl.font_style);
 		label_currency.render();
 	}
 
@@ -290,7 +291,7 @@ TooltipData MenuInventory::checkTooltip(const Point& position) {
 
 			if (inv_ctrl == CTRL_STASH)
 				tip.addText(msg->get("Stash item stack:") + " " + inpt->getBindingString(Input::CTRL) + " / " + inpt->getBindingString(Input::CTRL, InputState::BINDING_ALT));
-			else if (inv_ctrl == CTRL_VENDOR || (SELL_WITHOUT_VENDOR && inv_ctrl != CTRL_STASH))
+			else if (inv_ctrl == CTRL_VENDOR || (eset->misc.sell_without_vendor && inv_ctrl != CTRL_STASH))
 				tip.addText(msg->get("Sell item stack:") + " " + inpt->getBindingString(Input::CTRL) + " / " + inpt->getBindingString(Input::CTRL, InputState::BINDING_ALT));
 		}
 		return tip;
@@ -769,7 +770,7 @@ void MenuInventory::removeFromPrevSlot(int quantity) {
 void MenuInventory::addCurrency(int count) {
 	if (count > 0) {
 		ItemStack stack;
-		stack.item = CURRENCY_ID;
+		stack.item = eset->misc.currency_id;
 		stack.quantity = count;
 		add(stack, CARRIED, ItemStorage::NO_SLOT, !ADD_PLAY_SOUND, !ADD_AUTO_EQUIP);
 	}
@@ -779,7 +780,7 @@ void MenuInventory::addCurrency(int count) {
  * Remove currency item
  */
 void MenuInventory::removeCurrency(int count) {
-	inventory[CARRIED].remove(CURRENCY_ID, count);
+	inventory[CARRIED].remove(eset->misc.currency_id, count);
 }
 
 /**
@@ -796,7 +797,7 @@ bool MenuInventory::buy(ItemStack stack, int tab, bool dragging) {
 	else value_each = items->items[stack.item].getSellPrice(stack.can_buyback);
 
 	int count = value_each * stack.quantity;
-	if( inventory[CARRIED].count(CURRENCY_ID) >= count) {
+	if( inventory[CARRIED].count(eset->misc.currency_id) >= count) {
 		stack.can_buyback = false;
 
 		if (dragging) {
@@ -807,11 +808,11 @@ bool MenuInventory::buy(ItemStack stack, int tab, bool dragging) {
 		}
 
 		removeCurrency(count);
-		items->playSound(CURRENCY_ID);
+		items->playSound(eset->misc.currency_id);
 		return true;
 	}
 	else {
-		pc->logMsg(msg->get("Not enough %s.", CURRENCY), Avatar::LOG_PREVENT_SPAM);
+		pc->logMsg(msg->get("Not enough %s.", eset->loot.currency), Avatar::LOG_PREVENT_SPAM);
 		drop_stack.push(stack);
 		return false;
 	}
@@ -826,7 +827,7 @@ bool MenuInventory::sell(ItemStack stack) {
 	}
 
 	// can't sell currency
-	if (stack.item == CURRENCY_ID) return false;
+	if (stack.item == eset->misc.currency_id) return false;
 
 	// items that have no price cannot be sold
 	if (items->items[stack.item].getPrice() == 0) {
@@ -845,7 +846,7 @@ bool MenuInventory::sell(ItemStack stack) {
 	int value_each = items->items[stack.item].getSellPrice();
 	int value = value_each * stack.quantity;
 	addCurrency(value);
-	items->playSound(CURRENCY_ID);
+	items->playSound(eset->misc.currency_id);
 	drag_prev_src = -1;
 	return true;
 }
@@ -875,7 +876,7 @@ void MenuInventory::applyEquipment() {
 	while(checkRequired) {
 		checkRequired = false;
 
-		for (size_t j = 0; j < PRIMARY_STATS.size(); ++j) {
+		for (size_t j = 0; j < eset->primary_stats.list.size(); ++j) {
 			stats->primary_additional[j] = 0;
 		}
 
@@ -884,7 +885,7 @@ void MenuInventory::applyEquipment() {
 			const Item &item = items->items[item_id];
 			unsigned bonus_counter = 0;
 			while (bonus_counter < item.bonus.size()) {
-				for (size_t j = 0; j < PRIMARY_STATS.size(); ++j) {
+				for (size_t j = 0; j < eset->primary_stats.list.size(); ++j) {
 					if (item.bonus[bonus_counter].base_index == static_cast<int>(j))
 						stats->primary_additional[j] += item.bonus[bonus_counter].value;
 				}
@@ -916,7 +917,7 @@ void MenuInventory::applyEquipment() {
 			for (unsigned bonus_counter=0; bonus_counter<temp_set.bonus.size(); bonus_counter++) {
 				if (temp_set.bonus[bonus_counter].requirement != quantity[k]) continue;
 
-				for (size_t j = 0; j < PRIMARY_STATS.size(); ++j) {
+				for (size_t j = 0; j < eset->primary_stats.list.size(); ++j) {
 					if (temp_set.bonus[bonus_counter].base_index == static_cast<int>(j))
 						stats->primary_additional[j] += temp_set.bonus[bonus_counter].value;
 				}
@@ -981,7 +982,7 @@ void MenuInventory::applyItemStats() {
 		return;
 
 	// reset additional values
-	for (size_t i = 0; i < DAMAGE_TYPES.size(); ++i) {
+	for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
 		stats->dmg_min_add[i] = stats->dmg_max_add[i] = 0;
 	}
 	stats->absorb_min_add = stats->absorb_max_add = 0;
@@ -992,7 +993,7 @@ void MenuInventory::applyItemStats() {
 		const Item &item = items->items[item_id];
 
 		// apply base stats
-		for (size_t j = 0; j < DAMAGE_TYPES.size(); ++j) {
+		for (size_t j = 0; j < eset->damage_types.list.size(); ++j) {
 			stats->dmg_min_add[j] += item.dmg_min[j];
 			stats->dmg_max_add[j] += item.dmg_max[j];
 		}
@@ -1065,16 +1066,16 @@ void MenuInventory::applyBonus(const BonusData* bdata) {
 		ed.id = ed.type = STAT_KEY[bdata->stat_index];
 	}
 	else if (bdata->damage_index_min != -1) {
-		ed.id = ed.type = DAMAGE_TYPES[bdata->damage_index_min].min;
+		ed.id = ed.type = eset->damage_types.list[bdata->damage_index_min].min;
 	}
 	else if (bdata->damage_index_max != -1) {
-		ed.id = ed.type = DAMAGE_TYPES[bdata->damage_index_max].max;
+		ed.id = ed.type = eset->damage_types.list[bdata->damage_index_max].max;
 	}
 	else if (bdata->resist_index != -1) {
-		ed.id = ed.type = ELEMENTS[bdata->resist_index].id + "_resist";
+		ed.id = ed.type = eset->elements.list[bdata->resist_index].id + "_resist";
 	}
-	else if (bdata->base_index > -1 && static_cast<size_t>(bdata->base_index) < PRIMARY_STATS.size()) {
-		ed.id = ed.type = PRIMARY_STATS[bdata->base_index].id;
+	else if (bdata->base_index > -1 && static_cast<size_t>(bdata->base_index) < eset->primary_stats.list.size()) {
+		ed.id = ed.type = eset->primary_stats.list[bdata->base_index].id;
 	}
 
 	stats->effects.addItemEffect(ed, 0, bdata->value);

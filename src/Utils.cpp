@@ -20,6 +20,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 #include "Avatar.h"
+#include "EngineSettings.h"
 #include "InputState.h"
 #include "MessageEngine.h"
 #include "Platform.h"
@@ -52,16 +53,16 @@ Point FPointToPoint(const FPoint& fp) {
 
 FPoint screen_to_map(int x, int y, float camx, float camy) {
 	FPoint r;
-	if (TILESET_ORIENTATION == TILESET_ISOMETRIC) {
+	if (eset->tileset.orientation == eset->tileset.TILESET_ISOMETRIC) {
 		float scrx = float(x - VIEW_W_HALF) * 0.5f;
 		float scry = float(y - VIEW_H_HALF) * 0.5f;
 
-		r.x = (UNITS_PER_PIXEL_X * scrx) + (UNITS_PER_PIXEL_Y * scry) + camx;
-		r.y = (UNITS_PER_PIXEL_Y * scry) - (UNITS_PER_PIXEL_X * scrx) + camy;
+		r.x = (eset->tileset.units_per_pixel_x * scrx) + (eset->tileset.units_per_pixel_y * scry) + camx;
+		r.y = (eset->tileset.units_per_pixel_y * scry) - (eset->tileset.units_per_pixel_x * scrx) + camy;
 	}
 	else {
-		r.x = static_cast<float>(x - VIEW_W_HALF) * (UNITS_PER_PIXEL_X) + camx;
-		r.y = static_cast<float>(y - VIEW_H_HALF) * (UNITS_PER_PIXEL_Y) + camy;
+		r.x = static_cast<float>(x - VIEW_W_HALF) * (eset->tileset.units_per_pixel_x) + camx;
+		r.y = static_cast<float>(y - VIEW_H_HALF) * (eset->tileset.units_per_pixel_y) + camy;
 	}
 	return r;
 }
@@ -75,16 +76,16 @@ Point map_to_screen(float x, float y, float camx, float camy) {
 
 	// adjust to the center of the viewport
 	// we do this calculation first to avoid negative integer division
-	float adjust_x = (VIEW_W_HALF + 0.5f) * UNITS_PER_PIXEL_X;
-	float adjust_y = (VIEW_H_HALF + 0.5f) * UNITS_PER_PIXEL_Y;
+	float adjust_x = (VIEW_W_HALF + 0.5f) * eset->tileset.units_per_pixel_x;
+	float adjust_y = (VIEW_H_HALF + 0.5f) * eset->tileset.units_per_pixel_y;
 
-	if (TILESET_ORIENTATION == TILESET_ISOMETRIC) {
-		r.x = int(floorf(((x - camx - y + camy + adjust_x)/UNITS_PER_PIXEL_X)+0.5f));
-		r.y = int(floorf(((x - camx + y - camy + adjust_y)/UNITS_PER_PIXEL_Y)+0.5f));
+	if (eset->tileset.orientation == eset->tileset.TILESET_ISOMETRIC) {
+		r.x = int(floorf(((x - camx - y + camy + adjust_x)/eset->tileset.units_per_pixel_x)+0.5f));
+		r.y = int(floorf(((x - camx + y - camy + adjust_y)/eset->tileset.units_per_pixel_y)+0.5f));
 	}
-	else { //TILESET_ORTHOGONAL
-		r.x = int((x - camx + adjust_x)/UNITS_PER_PIXEL_X);
-		r.y = int((y - camy + adjust_y)/UNITS_PER_PIXEL_Y);
+	else if (eset->tileset.orientation == eset->tileset.TILESET_ORTHOGONAL) {
+		r.x = int((x - camx + adjust_x)/eset->tileset.units_per_pixel_x);
+		r.y = int((y - camy + adjust_y)/eset->tileset.units_per_pixel_y);
 	}
 	return r;
 }
@@ -372,7 +373,7 @@ void createSaveDir(int slot) {
 	if (slot == 0) return;
 
 	std::stringstream ss;
-	ss << PATH_USER << "saves/" << SAVE_PREFIX << "/";
+	ss << PATH_USER << "saves/" << eset->misc.save_prefix << "/";
 
 	createDir(path(&ss));
 
@@ -385,7 +386,7 @@ void removeSaveDir(int slot) {
 	if (slot == 0) return;
 
 	std::stringstream ss;
-	ss << PATH_USER << "saves/" << SAVE_PREFIX << "/" << slot;
+	ss << PATH_USER << "saves/" << eset->misc.save_prefix << "/" << slot;
 
 	if (isDirectory(path(&ss))) {
 		removeDirRecursive(path(&ss));

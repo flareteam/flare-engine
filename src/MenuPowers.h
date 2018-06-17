@@ -53,6 +53,8 @@ public:
 
 class Power_Menu_Cell {
 public:
+	Power_Menu_Cell();
+
 	int id;
 	int tab;
 	Point pos;
@@ -68,18 +70,6 @@ public:
 	bool passive_on;
 	std::vector<std::string> visible_requires_status;
 	std::vector<std::string> visible_requires_not;
-	Power_Menu_Cell()
-		: id(-1)
-		, tab(0)
-		, pos(Point())
-		, requires_primary(PRIMARY_STATS.size(), 0)
-		, requires_level(0)
-		, upgrade_level(0)
-		, upgrades()
-		, requires_power()
-		, requires_point(false)
-		, passive_on(false) {
-	}
 };
 
 class MenuPowers : public Menu {

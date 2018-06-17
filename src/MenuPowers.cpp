@@ -24,8 +24,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "Avatar.h"
+#include "EngineSettings.h"
 #include "CampaignManager.h"
 #include "CommonIncludes.h"
+#include "EngineSettings.h"
 #include "FileParser.h"
 #include "FontEngine.h"
 #include "Menu.h"
@@ -47,6 +49,19 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetTabControl.h"
 
 #include <climits>
+
+Power_Menu_Cell::Power_Menu_Cell()
+	: id(-1)
+	, tab(0)
+	, pos(Point())
+	, requires_primary(eset->primary_stats.list.size(), 0)
+	, requires_level(0)
+	, upgrade_level(0)
+	, upgrades()
+	, requires_power()
+	, requires_point(false)
+	, passive_on(false) {
+}
 
 MenuPowers::MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar)
 	: stats(_stats)
@@ -308,7 +323,7 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 			}
 
 			if (upgradeButtons[i] != NULL) {
-				upgradeButtons[i]->setBasePos(power_cell[i].pos.x + ICON_SIZE, power_cell[i].pos.y);
+				upgradeButtons[i]->setBasePos(power_cell[i].pos.x + eset->resolutions.icon_size, power_cell[i].pos.y);
 			}
 		}
 	}
@@ -316,7 +331,8 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 	applyPowerUpgrades();
 
 	// set the default tab from character class setting
-	HeroClass* pc_class = getHeroClassByName(pc->stats.character_class);
+	EngineSettings::HeroClasses::HeroClass* pc_class;
+	pc_class = eset->hero_classes.getByName(pc->stats.character_class);
 	if (pc_class) {
 		default_power_tab = pc_class->default_power_tab;
 	}
@@ -366,9 +382,9 @@ void MenuPowers::loadPower(FileParser &infile) {
 	// @ATTR power.requires_primary|predefined_string, int : Primary stat name, Required value|Power requires this primary stat to be at least the specificed value.
 	else if (infile.key == "requires_primary") {
 		std::string prim_stat = popFirstString(infile.val);
-		size_t prim_stat_index = getPrimaryStatIndex(prim_stat);
+		size_t prim_stat_index = eset->primary_stats.getIndexByID(prim_stat);
 
-		if (prim_stat_index != PRIMARY_STATS.size()) {
+		if (prim_stat_index != eset->primary_stats.list.size()) {
 			power_cell.back().requires_primary[prim_stat_index] = toInt(infile.val);
 		}
 		else {
@@ -428,9 +444,9 @@ void MenuPowers::loadUpgrade(FileParser &infile) {
 	// @ATTR upgrade.requires_primary|predefined_string, int : Primary stat name, Required value|Upgrade requires this primary stat to be at least the specificed value.
 	if (infile.key == "requires_primary") {
 		std::string prim_stat = popFirstString(infile.val);
-		size_t prim_stat_index = getPrimaryStatIndex(prim_stat);
+		size_t prim_stat_index = eset->primary_stats.getIndexByID(prim_stat);
 
-		if (prim_stat_index != PRIMARY_STATS.size()) {
+		if (prim_stat_index != eset->primary_stats.list.size()) {
 			power_cell_upgrade.back().requires_primary[prim_stat_index] = toInt(infile.val);
 		}
 		else {
@@ -463,7 +479,7 @@ bool MenuPowers::checkRequirements(int pci) {
 	if (stats->level < power_cell_all[pci].requires_level)
 		return false;
 
-	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 		if (stats->get_primary(i) < power_cell_all[pci].requires_primary[i])
 			return false;
 	}
@@ -593,7 +609,7 @@ int MenuPowers::getNextLevelCell(int pci) {
 
 void MenuPowers::replaceCellWithUpgrade(int pci, int uci) {
 	power_cell[pci].id = power_cell_upgrade[uci].id;
-	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 		power_cell[pci].requires_primary[i] = power_cell_upgrade[uci].requires_primary[i];
 	}
 	power_cell[pci].requires_level = power_cell_upgrade[uci].requires_level;
@@ -753,9 +769,9 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 			}
 
 			if (!found_key) {
-				for (size_t j=0; j<ELEMENTS.size(); ++j) {
-					if (pwr.post_effects[i].id == ELEMENTS[j].id + "_resist") {
-						ss << "% " << msg->get("%s Resistance", ELEMENTS[j].name.c_str());
+				for (size_t j=0; j<eset->elements.list.size(); ++j) {
+					if (pwr.post_effects[i].id == eset->elements.list[j].id + "_resist") {
+						ss << "% " << msg->get("%s Resistance", eset->elements.list[j].name.c_str());
 						found_key = true;
 						break;
 					}
@@ -763,9 +779,9 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 			}
 
 			if (!found_key) {
-				for (size_t j=0; j<PRIMARY_STATS.size(); ++j) {
-					if (pwr.post_effects[i].id == PRIMARY_STATS[j].id) {
-						ss << " " << PRIMARY_STATS[j].name;
+				for (size_t j=0; j<eset->primary_stats.list.size(); ++j) {
+					if (pwr.post_effects[i].id == eset->primary_stats.list[j].id) {
+						ss << " " << eset->primary_stats.list[j].name;
 						found_key = true;
 						break;
 					}
@@ -773,14 +789,14 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 			}
 
 			if (!found_key) {
-				for (size_t j=0; j<DAMAGE_TYPES.size(); ++j) {
-					if (pwr.post_effects[i].id == DAMAGE_TYPES[j].min) {
-						ss << " " << DAMAGE_TYPES[j].name_min;
+				for (size_t j=0; j<eset->damage_types.list.size(); ++j) {
+					if (pwr.post_effects[i].id == eset->damage_types.list[j].min) {
+						ss << " " << eset->damage_types.list[j].name_min;
 						found_key = true;
 						break;
 					}
-					else if (pwr.post_effects[i].id == DAMAGE_TYPES[j].max) {
-						ss << " " << DAMAGE_TYPES[j].name_max;
+					else if (pwr.post_effects[i].id == eset->damage_types.list[j].max) {
+						ss << " " << eset->damage_types.list[j].name_max;
 						found_key = true;
 						break;
 					}
@@ -855,7 +871,7 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 				ss << msg->get("Lifespan");
 			}
 			else if (effect_ptr->type == "shield") {
-				if (pwr.base_damage == DAMAGE_TYPES.size())
+				if (pwr.base_damage == eset->damage_types.list.size())
 					continue;
 
 				if (pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_MULTIPLY) {
@@ -879,7 +895,7 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 				ss << " " << msg->get("Magical Shield");
 			}
 			else if (effect_ptr->type == "heal") {
-				if (pwr.base_damage == DAMAGE_TYPES.size())
+				if (pwr.base_damage == eset->damage_types.list.size())
 					continue;
 
 				int mag_min = stats->getDamageMin(pwr.base_damage);
@@ -960,8 +976,8 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 			}
 			ss << " ";
 
-			if (pwr.base_damage != DAMAGE_TYPES.size()) {
-				ss << DAMAGE_TYPES[pwr.base_damage].name;
+			if (pwr.base_damage != eset->damage_types.list.size()) {
+				ss << eset->damage_types.list[pwr.base_damage].name;
 			}
 
 			if (pwr.count > 1 && pwr.type != Power::TYPE_REPEATER)
@@ -1028,27 +1044,27 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 		}
 		if (pwr.trait_elemental > -1) {
 			ss.str("");
-			ss << msg->get("%s Elemental Damage", ELEMENTS[pwr.trait_elemental].name.c_str());
+			ss << msg->get("%s Elemental Damage", eset->elements.list[pwr.trait_elemental].name.c_str());
 			tip->addColoredText(ss.str(), color_bonus);
 		}
 	}
 
 	std::set<std::string>::iterator it;
 	for (it = powers->powers[power_cells[slot_num].id].requires_flags.begin(); it != powers->powers[power_cells[slot_num].id].requires_flags.end(); ++it) {
-		for (size_t i=0; i<EQUIP_FLAGS.size(); ++i) {
-			if ((*it) == EQUIP_FLAGS[i].id) {
-				tip->addText(msg->get("Requires a %s", msg->get(EQUIP_FLAGS[i].name)));
+		for (size_t i = 0; i < eset->equip_flags.list.size(); ++i) {
+			if ((*it) == eset->equip_flags.list[i].id) {
+				tip->addText(msg->get("Requires a %s", msg->get(eset->equip_flags.list[i].name)));
 			}
 		}
 	}
 
 	// add requirement
-	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 		if (power_cells[slot_num].requires_primary[i] > 0) {
 			if (stats->get_primary(i) < power_cells[slot_num].requires_primary[i])
-				tip->addColoredText(msg->get("Requires %s %d", power_cells[slot_num].requires_primary[i], PRIMARY_STATS[i].name.c_str()), color_penalty);
+				tip->addColoredText(msg->get("Requires %s %d", power_cells[slot_num].requires_primary[i], eset->primary_stats.list[i].name.c_str()), color_penalty);
 			else
-				tip->addText(msg->get("Requires %s %d", power_cells[slot_num].requires_primary[i], PRIMARY_STATS[i].name.c_str()));
+				tip->addText(msg->get("Requires %s %d", power_cells[slot_num].requires_primary[i], eset->primary_stats.list[i].name.c_str()));
 		}
 	}
 
@@ -1103,7 +1119,7 @@ void MenuPowers::renderPowers(int tab_num) {
 
 	Rect disabled_src;
 	disabled_src.x = disabled_src.y = 0;
-	disabled_src.w = disabled_src.h = ICON_SIZE;
+	disabled_src.w = disabled_src.h = eset->resolutions.icon_size;
 
 	for (size_t i=0; i<power_cell.size(); i++) {
 		bool power_in_vector = false;
@@ -1125,8 +1141,8 @@ void MenuPowers::renderPowers(int tab_num) {
 
 			src_unlock.x = 0;
 			src_unlock.y = 0;
-			src_unlock.w = ICON_SIZE;
-			src_unlock.h = ICON_SIZE;
+			src_unlock.w = eset->resolutions.icon_size;
+			src_unlock.h = eset->resolutions.icon_size;
 
 			int selected_slot = -1;
 			if (isTabListSelected()) {
@@ -1467,7 +1483,7 @@ bool MenuPowers::meetsUsageStats(int power_index) {
 	// If we didn't find power in power_menu, than it has no stats requirements
 	if (id == -1) return true;
 
-	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 		if (stats->get_primary(i) < power_cell[id].requires_primary[i])
 			return false;
 	}

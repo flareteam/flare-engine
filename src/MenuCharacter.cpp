@@ -24,6 +24,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <string>
 
+#include "EngineSettings.h"
 #include "FileParser.h"
 #include "FontEngine.h"
 #include "InputState.h"
@@ -50,13 +51,13 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 	, name_max_width(0)
 {
 	// 2 is added here to account for CSTAT_NAME and CSTAT_LEVEL
-	cstat.resize(PRIMARY_STATS.size() + 2);
+	cstat.resize(eset->primary_stats.list.size() + 2);
 
 	// Labels for major stats
 	cstat[CSTAT_NAME].label_text = msg->get("Name");
 	cstat[CSTAT_LEVEL].label_text = msg->get("Level");
-	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
-		cstat[i+2].label_text = PRIMARY_STATS[i].name;
+	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
+		cstat[i+2].label_text = eset->primary_stats.list[i].name;
 	}
 
 	for (size_t i = 0; i < cstat.size(); ++i) {
@@ -67,8 +68,8 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 		cstat[i].visible = true;
 	}
 
-	show_stat.resize(STAT_COUNT + DAMAGE_TYPES_COUNT);
-	for (size_t i = 0; i < STAT_COUNT + DAMAGE_TYPES_COUNT; i++) {
+	show_stat.resize(STAT_COUNT + eset->damage_types.count);
+	for (size_t i = 0; i < STAT_COUNT + eset->damage_types.count; i++) {
 		show_stat[i] = true;
 	}
 
@@ -77,10 +78,10 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 	show_stat[STAT_MP_PERCENT] = false;
 
 	// Upgrade buttons
-	primary_up.resize(PRIMARY_STATS.size());
-	upgradeButton.resize(PRIMARY_STATS.size());
+	primary_up.resize(eset->primary_stats.list.size());
+	upgradeButton.resize(eset->primary_stats.list.size());
 
-	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 		primary_up[i] = false;
 		upgradeButton[i] = new WidgetButton("images/menus/buttons/upgrade.png");
 		upgradeButton[i]->enabled = false;
@@ -104,9 +105,9 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 			// @ATTR upgrade_primary|predefined_string, point : Primary stat name, Button position|Position of the button used to add a stat point to this primary stat.
 			else if(infile.key == "upgrade_primary") {
 				std::string prim_stat = popFirstString(infile.val);
-				size_t prim_stat_index = getPrimaryStatIndex(prim_stat);
+				size_t prim_stat_index = eset->primary_stats.getIndexByID(prim_stat);
 
-				if (prim_stat_index != PRIMARY_STATS.size()) {
+				if (prim_stat_index != eset->primary_stats.list.size()) {
 					Point pos = toPoint(infile.val);
 					upgradeButton[prim_stat_index]->setBasePos(pos.x, pos.y);
 				}
@@ -134,9 +135,9 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 			// @ATTR label_primary|predefined_string, label : Primary stat name, Text positioning|Position of the text label for this primary stat.
 			else if(infile.key == "label_primary") {
 				std::string prim_stat = popFirstString(infile.val);
-				size_t prim_stat_index = getPrimaryStatIndex(prim_stat);
+				size_t prim_stat_index = eset->primary_stats.getIndexByID(prim_stat);
 
-				if (prim_stat_index != PRIMARY_STATS.size()) {
+				if (prim_stat_index != eset->primary_stats.list.size()) {
 					cstat[prim_stat_index+2].label_info = eatLabelInfo(infile.val);
 					cstat[prim_stat_index+2].visible = !cstat[prim_stat_index+2].label_info.hidden;
 				}
@@ -158,9 +159,9 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 			// @ATTR primary|predefined_string, rectangle : Primary stat name, Hotspot position|Position of this primary stat value display and dimensions of its tooltip hotspot.
 			else if(infile.key == "primary") {
 				std::string prim_stat = popFirstString(infile.val);
-				size_t prim_stat_index = getPrimaryStatIndex(prim_stat);
+				size_t prim_stat_index = eset->primary_stats.getIndexByID(prim_stat);
 
-				if (prim_stat_index != PRIMARY_STATS.size()) {
+				if (prim_stat_index != eset->primary_stats.list.size()) {
 					Rect r = toRect(infile.val);
 					cstat[prim_stat_index+2].value_pos = r;
 					cstat[prim_stat_index+2].value->setBasePos(r.x + (r.w/2), r.y + (r.h/2));
@@ -186,11 +187,11 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 						break;
 					}
 				}
-				for (size_t i = 0; i < DAMAGE_TYPES.size(); ++i) {
-					if (stat_name == DAMAGE_TYPES[i].min) {
+				for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
+					if (stat_name == eset->damage_types.list[i].min) {
 						show_stat[STAT_COUNT + (i*2)] = toBool(popFirstString(infile.val));
 					}
-					else if (stat_name == DAMAGE_TYPES[i].max) {
+					else if (stat_name == eset->damage_types.list[i].max) {
 						show_stat[STAT_COUNT + (i*2) + 1] = toBool(popFirstString(infile.val));
 					}
 				}
@@ -221,11 +222,11 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 
 	align();
 
-	base_stats.resize(PRIMARY_STATS.size());
-	base_stats_add.resize(PRIMARY_STATS.size());
-	base_bonus.resize(PRIMARY_STATS.size());
+	base_stats.resize(eset->primary_stats.list.size());
+	base_stats_add.resize(eset->primary_stats.list.size());
+	base_bonus.resize(eset->primary_stats.list.size());
 
-	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 		base_stats[i] = &stats->primary[i];
 		base_stats_add[i] = &stats->primary_additional[i];
 		base_bonus[i] = &stats->per_primary[i];
@@ -242,7 +243,7 @@ void MenuCharacter::align() {
 	labelCharacter->set(window_area.x+title.x, window_area.y+title.y, title.justify, title.valign, msg->get("Character"), font->getColor("menu_normal"), title.font_style);
 
 	// upgrade buttons
-	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 		upgradeButton[i]->setPos(window_area.x, window_area.y);
 	}
 
@@ -291,7 +292,7 @@ void MenuCharacter::refreshStats() {
 	ss << stats->level;
 	cstat[CSTAT_LEVEL].value->set(cstat[CSTAT_LEVEL].value->pos.x, cstat[CSTAT_LEVEL].value->pos.y, FontEngine::JUSTIFY_CENTER, VALIGN_CENTER, ss.str(), font->getColor("menu_normal"));
 
-	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 		ss.str("");
 		ss << stats->get_primary(i);
 		cstat[i+2].value->set(cstat[i+2].value->pos.x, cstat[i+2].value->pos.y, FontEngine::JUSTIFY_CENTER, VALIGN_CENTER, ss.str(), bonusColor(stats->primary_additional[i]));
@@ -313,11 +314,11 @@ void MenuCharacter::refreshStats() {
 
 		// insert damage stats before absorb min
 		if (i == STAT_ABS_MIN) {
-			for (size_t j = 0; j < DAMAGE_TYPES.size(); ++j) {
+			for (size_t j = 0; j < eset->damage_types.list.size(); ++j) {
 				if (show_stat[STAT_COUNT + (j*2)]) {
 					// min
 					ss.str("");
-					ss << DAMAGE_TYPES[j].name_min << ": " << stats->getDamageMin(j);
+					ss << eset->damage_types.list[j].name_min << ": " << stats->getDamageMin(j);
 					statList->set(stat_index, ss.str(), damageTooltip(j*2));
 					stat_index++;
 				}
@@ -325,7 +326,7 @@ void MenuCharacter::refreshStats() {
 				if (show_stat[STAT_COUNT + (j*2) + 1]) {
 					// max
 					ss.str("");
-					ss << DAMAGE_TYPES[j].name_max << ": " << stats->getDamageMax(j);
+					ss << eset->damage_types.list[j].name_max << ": " << stats->getDamageMax(j);
 					statList->set(stat_index, ss.str(), damageTooltip((j*2) + 1));
 					stat_index++;
 				}
@@ -343,8 +344,8 @@ void MenuCharacter::refreshStats() {
 	if (show_resists) {
 		for (unsigned int j=0; j<stats->vulnerable.size(); ++j) {
 			ss.str("");
-			ss << msg->get("%s Resistance", ELEMENTS[j].name.c_str()) << ": " << (100 - stats->vulnerable[j]) << "%";
-			statList->set(j+stat_index, ss.str(), msg->get("Reduces the damage taken from \"%s\" elemental attacks.", ELEMENTS[j].name.c_str()));
+			ss << msg->get("%s Resistance", eset->elements.list[j].name.c_str()) << ": " << (100 - stats->vulnerable[j]) << "%";
+			statList->set(j+stat_index, ss.str(), msg->get("Reduces the damage taken from \"%s\" elemental attacks.", eset->elements.list[j].name.c_str()));
 		}
 	}
 
@@ -367,16 +368,16 @@ void MenuCharacter::refreshStats() {
 		for (size_t i = 0; i < STAT_COUNT; ++i) {
 			// damage types are displayed before absorb
 			if (i == STAT_ABS_MIN) {
-				for (size_t k = 0; k < DAMAGE_TYPES_COUNT; ++k) {
+				for (size_t k = 0; k < eset->damage_types.count; ++k) {
 					if (base_bonus[j-2]->at(STAT_COUNT + k) > 0) {
 						if (!have_bonus) {
 							cstat[j].tip.addText("\n" + msg->get("Related stats:"));
 							have_bonus = true;
 						}
 						if (k % 2 == 0)
-							cstat[j].tip.addText(DAMAGE_TYPES[k / 2].name_min);
+							cstat[j].tip.addText(eset->damage_types.list[k / 2].name_min);
 						else
-							cstat[j].tip.addText(DAMAGE_TYPES[k / 2].name_max);
+							cstat[j].tip.addText(eset->damage_types.list[k / 2].name_max);
 					}
 				}
 			}
@@ -412,9 +413,9 @@ std::string MenuCharacter::statTooltip(int stat) {
 	if (stats->per_level[stat] > 0)
 		tooltip_text += msg->get("Each level grants %d.", stats->per_level[stat]) + ' ';
 
-	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 		if (stats->per_primary[i][stat] > 0)
-			tooltip_text += msg->get("Each point of %s grants %d.", stats->per_primary[i][stat], PRIMARY_STATS[i].name.c_str()) + ' ';
+			tooltip_text += msg->get("Each point of %s grants %d.", stats->per_primary[i][stat], eset->primary_stats.list[i].name.c_str()) + ' ';
 	}
 
 	std::string full_tooltip = "";
@@ -436,16 +437,16 @@ std::string MenuCharacter::damageTooltip(size_t dmg_type) {
 	if (stats->per_level[STAT_COUNT + dmg_type] > 0)
 		tooltip_text += msg->get("Each level grants %d.", stats->per_level[STAT_COUNT + dmg_type]) + ' ';
 
-	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 		if (stats->per_primary[i][STAT_COUNT + dmg_type] > 0)
-			tooltip_text += msg->get("Each point of %s grants %d.", stats->per_primary[i][STAT_COUNT + dmg_type], PRIMARY_STATS[i].name.c_str()) + ' ';
+			tooltip_text += msg->get("Each point of %s grants %d.", stats->per_primary[i][STAT_COUNT + dmg_type], eset->primary_stats.list[i].name.c_str()) + ' ';
 	}
 
 	size_t real_dmg_type = dmg_type / 2;
 
 	std::string full_tooltip = "";
-	if (DAMAGE_TYPES[real_dmg_type].description != "")
-		full_tooltip += DAMAGE_TYPES[real_dmg_type].description;
+	if (eset->damage_types.list[real_dmg_type].description != "")
+		full_tooltip += eset->damage_types.list[real_dmg_type].description;
 	if (full_tooltip != "" && tooltip_text != "")
 		full_tooltip += "\n";
 	full_tooltip += tooltip_text;
@@ -466,7 +467,7 @@ void MenuCharacter::logic() {
 	bool have_skill_points = checkSkillPoints();
 
 	if (stats->hp > 0 && have_skill_points) {
-		for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+		for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 			if (stats->primary[i] < stats->max_points_per_stat) {
 				upgradeButton[i]->enabled = true;
 				tablist.add(upgradeButton[i]);
@@ -477,14 +478,14 @@ void MenuCharacter::logic() {
 			}
 		}
 
-		for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+		for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 			if (upgradeButton[i]->checkClick())
 				primary_up[i] = true;
 		}
 	}
 	else {
 		// no skill points to allocate; remove upgrade buttons
-		for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+		for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 			upgradeButton[i]->enabled = false;
 			tablist.remove(upgradeButton[i]);
 		}
@@ -526,7 +527,7 @@ void MenuCharacter::render() {
 	}
 
 	// upgrade buttons
-	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 		if (upgradeButton[i]->enabled) upgradeButton[i]->render();
 	}
 
@@ -554,7 +555,7 @@ TooltipData MenuCharacter::checkTooltip() {
 bool MenuCharacter::checkUpgrade() {
 	// check to see if there are skill points available
 	if (stats->hp > 0 && checkSkillPoints()) {
-		for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+		for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 			if (primary_up[i]) {
 				stats->primary[i]++;
 				stats->recalc(); // equipment applied by MenuManager
@@ -569,7 +570,7 @@ bool MenuCharacter::checkUpgrade() {
 
 bool MenuCharacter::checkSkillPoints() {
 	int spent = 0;
-	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 		spent += stats->primary[i] - stats->primary_starting[i];
 	}
 

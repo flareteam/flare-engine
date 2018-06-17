@@ -27,7 +27,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define ITEM_MANAGER_H
 
 #include "CommonIncludes.h"
-#include "Settings.h"
 #include "Utils.h"
 
 class FileParser;
@@ -132,35 +131,7 @@ public:
 	int getPrice();
 	int getSellPrice(bool is_new_buyback = true);
 
-	Item()
-		: name("")
-		, has_name(false)
-		, flavor("")
-		, level(0)
-		, set(0)
-		, quality("")
-		, type("")
-		, icon(0)
-		, dmg_min(DAMAGE_TYPES.size(), 0)
-		, dmg_max(DAMAGE_TYPES.size(), 0)
-		, abs_min(0)
-		, abs_max(0)
-		, requires_level(0)
-		, requires_class("")
-		, sfx("")
-		, sfx_id(0)
-		, gfx("")
-		, power(0)
-		, power_desc("")
-		, price(0)
-		, price_per_level(0)
-		, price_sell(0)
-		, max_quantity(1)
-		, pickup_status("")
-		, stepfx("")
-		, quest_item(false) {
-	}
-
+	Item();
 	~Item() {
 	}
 };

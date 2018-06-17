@@ -24,6 +24,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "Avatar.h"
+#include "EngineSettings.h"
 #include "FileParser.h"
 #include "FontEngine.h"
 #include "ItemManager.h"
@@ -94,8 +95,8 @@ MenuStash::MenuStash(StatBlock *_stats)
 	}
 
 	STASH_SLOTS = slots_cols * slots_rows;
-	slots_area.w = slots_cols*ICON_SIZE;
-	slots_area.h = slots_rows*ICON_SIZE;
+	slots_area.w = slots_cols * eset->resolutions.icon_size;
+	slots_area.h = slots_rows * eset->resolutions.icon_size;
 
 	stock.initGrid(STASH_SLOTS, slots_area, slots_cols);
 	for (int i = 0; i < STASH_SLOTS; i++) {
@@ -139,7 +140,7 @@ void MenuStash::render() {
 		label.render();
 	}
 	if (!currency.hidden) {
-		label.set(window_area.x+currency.x, window_area.y+currency.y, currency.justify, currency.valign, msg->get("%d %s", stock.count(CURRENCY_ID), CURRENCY), color_normal, currency.font_style);
+		label.set(window_area.x+currency.x, window_area.y+currency.y, currency.justify, currency.valign, msg->get("%d %s", stock.count(eset->misc.currency_id), eset->loot.currency), color_normal, currency.font_style);
 		label.render();
 	}
 

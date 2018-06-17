@@ -19,6 +19,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Avatar.h"
 #include "CampaignManager.h"
 #include "EnemyManager.h"
+#include "EngineSettings.h"
 #include "EventManager.h"
 #include "FileParser.h"
 #include "LootManager.h"
@@ -836,7 +837,7 @@ bool EventManager::executeEvent(Event &ev) {
 				loot->checkLoot(random_table, NULL, &rand_itemstacks);
 			}
 			for (size_t j = 0; j < rand_itemstacks.size(); ++j) {
-				if (rand_itemstacks[j].item == CURRENCY_ID)
+				if (rand_itemstacks[j].item == eset->misc.currency_id)
 					camp->rewardCurrency(rand_itemstacks[j].quantity);
 				else
 					camp->rewardItem(rand_itemstacks[j]);
@@ -915,7 +916,8 @@ bool EventManager::executeEvent(Event &ev) {
 		}
 		else if (ec->type == EC_RESPEC) {
 			bool use_engine_defaults = static_cast<bool>(ec->y);
-			HeroClass* pc_class = getHeroClassByName(pc->stats.character_class);
+			EngineSettings::HeroClasses::HeroClass* pc_class;
+			pc_class = eset->hero_classes.getByName(pc->stats.character_class);
 
 			if (ec->x == 3) {
 				// xp
@@ -924,7 +926,7 @@ bool EventManager::executeEvent(Event &ev) {
 			}
 			if (ec->x >= 2) {
 				// stats
-				for (size_t j = 0; j < PRIMARY_STATS.size(); ++j) {
+				for (size_t j = 0; j < eset->primary_stats.list.size(); ++j) {
 					pc->stats.primary[j] = 1;
 					pc->stats.primary_additional[j] = 0;
 

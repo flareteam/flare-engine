@@ -22,8 +22,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Animation.h"
 #include "AnimationManager.h"
 #include "AnimationSet.h"
-#include "Hazard.h"
 #include "EffectManager.h"
+#include "EngineSettings.h"
+#include "Hazard.h"
 #include "PowerManager.h"
 #include "Settings.h"
 #include "SharedGameResources.h"
@@ -109,9 +110,9 @@ void Effect::unloadAnimation() {
 }
 
 EffectManager::EffectManager()
-	: bonus(std::vector<int>(STAT_COUNT + DAMAGE_TYPES_COUNT, 0))
-	, bonus_resist(std::vector<int>(ELEMENTS.size(), 0))
-	, bonus_primary(std::vector<int>(PRIMARY_STATS.size(), 0))
+	: bonus(std::vector<int>(STAT_COUNT + eset->damage_types.count, 0))
+	, bonus_resist(std::vector<int>(eset->elements.list.size(), 0))
+	, bonus_primary(std::vector<int>(eset->primary_stats.list.size(), 0))
 	, triggered_others(false)
 	, triggered_block(false)
 	, triggered_hit(false)
@@ -148,7 +149,7 @@ void EffectManager::clearStatus() {
 	fear = false;
 	knockback_speed = 0;
 
-	for (unsigned i=0; i<STAT_COUNT + DAMAGE_TYPES_COUNT; i++) {
+	for (unsigned i=0; i<STAT_COUNT + eset->damage_types.count; i++) {
 		bonus[i] = 0;
 	}
 
@@ -238,19 +239,19 @@ void EffectManager::logic() {
 
 			// @TYPE ${STATNAME}|Increases ${STATNAME}, where ${STATNAME} is any of the base stats. Examples: hp, avoidance, xp_gain
 			// @TYPE ${DAMAGE_TYPE}|Increases a damage min or max, where ${DAMAGE_TYPE} is any 'min' or 'max' value found in engine/damage_types.txt. Example: dmg_melee_min
-			else if (effect_list[i].type >= Effect::TYPE_COUNT && effect_list[i].type < Effect::TYPE_COUNT + STAT_COUNT + static_cast<int>(DAMAGE_TYPES_COUNT)) {
+			else if (effect_list[i].type >= Effect::TYPE_COUNT && effect_list[i].type < Effect::TYPE_COUNT + STAT_COUNT + static_cast<int>(eset->damage_types.count)) {
 				bonus[effect_list[i].type - Effect::TYPE_COUNT] += effect_list[i].magnitude;
 			}
-			// else if (effect_list[i].type >= Effect::TYPE_COUNT + STAT_COUNT && effect_list[i].type < Effect::TYPE_COUNT + STAT_COUNT + static_cast<int>(DAMAGE_TYPES_COUNT)) {
+			// else if (effect_list[i].type >= Effect::TYPE_COUNT + STAT_COUNT && effect_list[i].type < Effect::TYPE_COUNT + STAT_COUNT + static_cast<int>(eset->damage_types.count)) {
 			// 	bonus[effect_list[i].type - Effect::TYPE_COUNT] += effect_list[i].magnitude;
 			// }
 			// @TYPE ${ELEMENT}_resist|Increase Resistance % to ${ELEMENT}, where ${ELEMENT} is any found in engine/elements.txt. Example: fire_resist
-			else if (effect_list[i].type >= Effect::TYPE_COUNT + STAT_COUNT + static_cast<int>(DAMAGE_TYPES_COUNT) && effect_list[i].type < Effect::TYPE_COUNT + STAT_COUNT + static_cast<int>(DAMAGE_TYPES_COUNT) + static_cast<int>(ELEMENTS.size())) {
-				bonus_resist[effect_list[i].type - Effect::TYPE_COUNT - STAT_COUNT - DAMAGE_TYPES_COUNT] += effect_list[i].magnitude;
+			else if (effect_list[i].type >= Effect::TYPE_COUNT + STAT_COUNT + static_cast<int>(eset->damage_types.count) && effect_list[i].type < Effect::TYPE_COUNT + STAT_COUNT + static_cast<int>(eset->damage_types.count) + static_cast<int>(eset->elements.list.size())) {
+				bonus_resist[effect_list[i].type - Effect::TYPE_COUNT - STAT_COUNT - eset->damage_types.count] += effect_list[i].magnitude;
 			}
 			// @TYPE ${PRIMARYSTAT}|Increases ${PRIMARYSTAT}, where ${PRIMARYSTAT} is any of the primary stats defined in engine/primary_stats.txt. Example: physical
 			else if (effect_list[i].type >= Effect::TYPE_COUNT) {
-				bonus_primary[effect_list[i].type - Effect::TYPE_COUNT - STAT_COUNT - DAMAGE_TYPES_COUNT - ELEMENTS.size()] += effect_list[i].magnitude;
+				bonus_primary[effect_list[i].type - Effect::TYPE_COUNT - STAT_COUNT - eset->damage_types.count - eset->elements.list.size()] += effect_list[i].magnitude;
 			}
 		}
 		// expire shield effects
@@ -532,24 +533,24 @@ int EffectManager::getType(const std::string& type) {
 			}
 		}
 
-		for (unsigned i=0; i<DAMAGE_TYPES.size(); i++) {
-			if (type == DAMAGE_TYPES[i].min) {
+		for (unsigned i=0; i<eset->damage_types.list.size(); i++) {
+			if (type == eset->damage_types.list[i].min) {
 				return Effect::TYPE_COUNT + STAT_COUNT + (i*2);
 			}
-			else if (type == DAMAGE_TYPES[i].max) {
+			else if (type == eset->damage_types.list[i].max) {
 				return Effect::TYPE_COUNT + STAT_COUNT + (i*2) + 1;
 			}
 		}
 
 		for (unsigned i=0; i<bonus_resist.size(); i++) {
-			if (type == ELEMENTS[i].id + "_resist") {
-				return Effect::TYPE_COUNT + STAT_COUNT + static_cast<int>(DAMAGE_TYPES_COUNT) + i;
+			if (type == eset->elements.list[i].id + "_resist") {
+				return Effect::TYPE_COUNT + STAT_COUNT + static_cast<int>(eset->damage_types.count) + i;
 			}
 		}
 
 		for (unsigned i=0; i<bonus_primary.size(); i++) {
-			if (type == PRIMARY_STATS[i].id) {
-				return Effect::TYPE_COUNT + STAT_COUNT + static_cast<int>(DAMAGE_TYPES_COUNT) + static_cast<int>(ELEMENTS.size()) + i;
+			if (type == eset->primary_stats.list[i].id) {
+				return Effect::TYPE_COUNT + STAT_COUNT + static_cast<int>(eset->damage_types.count) + static_cast<int>(eset->elements.list.size()) + i;
 			}
 		}
 	}

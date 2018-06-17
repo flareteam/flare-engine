@@ -23,6 +23,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "Avatar.h"
+#include "EngineSettings.h"
 #include "FileParser.h"
 #include "FontEngine.h"
 #include "MenuExit.h"
@@ -87,7 +88,7 @@ MenuExit::MenuExit() : Menu() {
 	exit_msg1 = msg->get("Save & Exit");
 	exit_msg2 = msg->get("Exit");
 
-	buttonExit->label = SAVE_ONEXIT ? exit_msg1 : exit_msg2;
+	buttonExit->label = eset->misc.save_onexit ? exit_msg1 : exit_msg2;
 
 	buttonClose->label = msg->get("Continue");
 

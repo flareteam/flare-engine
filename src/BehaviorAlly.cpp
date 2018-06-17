@@ -20,9 +20,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "BehaviorAlly.h"
 #include "Enemy.h"
 #include "EnemyManager.h"
+#include "EngineSettings.h"
 #include "MapRenderer.h"
 #include "Settings.h"
 #include "SharedGameResources.h"
+#include "SharedResources.h"
 #include "UtilsMath.h"
 
 const float ALLY_FLEE_DISTANCE = 2;
@@ -112,7 +114,7 @@ void BehaviorAlly::findTarget() {
 	//if the player is blocked, all summons which the player is facing to move away for the specified frames
 	//need to set the flag player_blocked so that other allies know to get out of the way as well
 	//if hero is facing the summon
-	if(ENABLE_ALLY_COLLISION_AI) {
+	if(eset->misc.enable_ally_collision_ai) {
 		if(!enemym->player_blocked && hero_dist < ALLY_FLEE_DISTANCE
 				&& mapr->collider.is_facing(pc->stats.pos.x,pc->stats.pos.y,pc->stats.direction,e->stats.pos.x,e->stats.pos.y)) {
 			enemym->player_blocked = true;

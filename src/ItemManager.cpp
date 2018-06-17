@@ -26,6 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Avatar.h"
 #include "CommonIncludes.h"
+#include "EngineSettings.h"
 #include "FileParser.h"
 #include "FontEngine.h"
 #include "InputState.h"
@@ -48,6 +49,35 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 bool compareItemStack(const ItemStack &stack1, const ItemStack &stack2) {
 	return stack1.item < stack2.item;
+}
+
+Item::Item()
+	: name("")
+	, has_name(false)
+	, flavor("")
+	, level(0)
+	, set(0)
+	, quality("")
+	, type("")
+	, icon(0)
+	, dmg_min((eset ? eset->damage_types.list.size() : 0), 0)
+	, dmg_max((eset ? eset->damage_types.list.size() : 0), 0)
+	, abs_min(0)
+	, abs_max(0)
+	, requires_level(0)
+	, requires_class("")
+	, sfx("")
+	, sfx_id(0)
+	, gfx("")
+	, power(0)
+	, power_desc("")
+	, price(0)
+	, price_per_level(0)
+	, price_sell(0)
+	, max_quantity(1)
+	, pickup_status("")
+	, stepfx("")
+	, quest_item(false) {
 }
 
 ItemManager::ItemManager()
@@ -182,15 +212,15 @@ void ItemManager::loadItems(const std::string& filename) {
 			// @ATTR dmg|predefined_string, int, int : Damage type, Min, Max|Defines the item's base damage type and range. Max may be ommitted and will default to Min.
 			std::string dmg_type_str = popFirstString(infile.val);
 
-			size_t dmg_type = DAMAGE_TYPES.size();
-			for (size_t i = 0; i < DAMAGE_TYPES.size(); ++i) {
-				if (dmg_type_str == DAMAGE_TYPES[i].id) {
+			size_t dmg_type = eset->damage_types.list.size();
+			for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
+				if (dmg_type_str == eset->damage_types.list[i].id) {
 					dmg_type = i;
 					break;
 				}
 			}
 
-			if (dmg_type == DAMAGE_TYPES.size()) {
+			if (dmg_type == eset->damage_types.list.size()) {
 				infile.error("ItemManager: '%s' is not a known damage type id.", dmg_type_str.c_str());
 			}
 			else {
@@ -221,8 +251,8 @@ void ItemManager::loadItems(const std::string& filename) {
 				clear_req_stat = false;
 			}
 			std::string s = popFirstString(infile.val);
-			size_t req_stat_index = getPrimaryStatIndex(s);
-			if (req_stat_index != PRIMARY_STATS.size())
+			size_t req_stat_index = eset->primary_stats.getIndexByID(s);
+			if (req_stat_index != eset->primary_stats.list.size())
 				items[id].req_stat.push_back(req_stat_index);
 			else
 				infile.error("ItemManager: '%s' is not a valid primary stat.", s.c_str());
@@ -554,26 +584,26 @@ void ItemManager::parseBonus(BonusData& bdata, FileParser& infile) {
 		}
 	}
 
-	for (size_t i = 0; i < DAMAGE_TYPES.size(); ++i) {
-		if (bonus_str == DAMAGE_TYPES[i].min) {
+	for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
+		if (bonus_str == eset->damage_types.list[i].min) {
 			bdata.damage_index_min = static_cast<int>(i);
 			return;
 		}
-		else if (bonus_str == DAMAGE_TYPES[i].max) {
+		else if (bonus_str == eset->damage_types.list[i].max) {
 			bdata.damage_index_max = static_cast<int>(i);
 			return;
 		}
 	}
 
-	for (unsigned i=0; i<ELEMENTS.size(); ++i) {
-		if (bonus_str == ELEMENTS[i].id + "_resist") {
+	for (unsigned i=0; i<eset->elements.list.size(); ++i) {
+		if (bonus_str == eset->elements.list[i].id + "_resist") {
 			bdata.resist_index = i;
 			return;
 		}
 	}
 
-	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
-		if (bonus_str == PRIMARY_STATS[i].id) {
+	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
+		if (bonus_str == eset->primary_stats.list[i].id) {
 			bdata.base_index = static_cast<int>(i);
 			return;
 		}
@@ -604,16 +634,16 @@ void ItemManager::getBonusString(std::stringstream& ss, BonusData* bdata) {
 		ss << " " << STAT_NAME[bdata->stat_index];
 	}
 	else if (bdata->damage_index_min != -1) {
-		ss << " " << DAMAGE_TYPES[bdata->damage_index_min].name_min;
+		ss << " " << eset->damage_types.list[bdata->damage_index_min].name_min;
 	}
 	else if (bdata->damage_index_max != -1) {
-		ss << " " << DAMAGE_TYPES[bdata->damage_index_max].name_max;
+		ss << " " << eset->damage_types.list[bdata->damage_index_max].name_max;
 	}
 	else if (bdata->resist_index != -1) {
-		ss << "% " << msg->get("%s Resistance", ELEMENTS[bdata->resist_index].name.c_str());
+		ss << "% " << msg->get("%s Resistance", eset->elements.list[bdata->resist_index].name.c_str());
 	}
-	else if (bdata->base_index > -1 && static_cast<size_t>(bdata->base_index) < PRIMARY_STATS.size()) {
-		ss << " " << PRIMARY_STATS[bdata->base_index].name;
+	else if (bdata->base_index > -1 && static_cast<size_t>(bdata->base_index) < eset->primary_stats.list.size()) {
+		ss << " " << eset->primary_stats.list[bdata->base_index].name;
 	}
 }
 
@@ -665,7 +695,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	}
 
 	// only show the name of the currency item
-	if (stack.item == CURRENCY_ID)
+	if (stack.item == eset->misc.currency_id)
 		return tip;
 
 	// flavor text
@@ -695,10 +725,10 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	}
 
 	// damage
-	for (size_t i = 0; i < DAMAGE_TYPES.size(); ++i) {
+	for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
 		if (items[stack.item].dmg_max[i] > 0) {
 			std::stringstream dmg_str;
-			dmg_str << DAMAGE_TYPES[i].name;
+			dmg_str << eset->damage_types.list[i].name;
 			if (items[stack.item].dmg_min[i] < items[stack.item].dmg_max[i]) {
 				dmg_str << ": " << items[stack.item].dmg_min[i] << "-" << items[stack.item].dmg_max[i];
 				tip.addText(dmg_str.str());
@@ -763,7 +793,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 			else
 				color = color_normal;
 
-			tip.addColoredText(msg->get("Requires %s %d", items[stack.item].req_val[i], PRIMARY_STATS[items[stack.item].req_stat[i]].name.c_str()), color);
+			tip.addColoredText(msg->get("Requires %s %d", items[stack.item].req_val[i], eset->primary_stats.list[items[stack.item].req_stat[i]].name.c_str()), color);
 		}
 	}
 
@@ -775,7 +805,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	}
 
 	// buy or sell price
-	if (items[stack.item].getPrice() > 0 && stack.item != CURRENCY_ID) {
+	if (items[stack.item].getPrice() > 0 && stack.item != eset->misc.currency_id) {
 
 		int price_per_unit;
 		if (context == VENDOR_BUY) {
@@ -783,26 +813,26 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 			if (stats->currency < price_per_unit) color = color_requirements_not_met;
 			else color = color_normal;
 			if (items[stack.item].max_quantity <= 1)
-				tip.addColoredText(msg->get("Buy Price: %d %s", price_per_unit, CURRENCY), color);
+				tip.addColoredText(msg->get("Buy Price: %d %s", price_per_unit, eset->loot.currency), color);
 			else
-				tip.addColoredText(msg->get("Buy Price: %d %s each", price_per_unit, CURRENCY), color);
+				tip.addColoredText(msg->get("Buy Price: %d %s each", price_per_unit, eset->loot.currency), color);
 		}
 		else if (context == VENDOR_SELL) {
 			price_per_unit = items[stack.item].getSellPrice(stack.can_buyback);
 			if (stats->currency < price_per_unit) color = color_requirements_not_met;
 			else color = color_normal;
 			if (items[stack.item].max_quantity <= 1)
-				tip.addColoredText(msg->get("Buy Price: %d %s", price_per_unit, CURRENCY), color);
+				tip.addColoredText(msg->get("Buy Price: %d %s", price_per_unit, eset->loot.currency), color);
 			else
-				tip.addColoredText(msg->get("Buy Price: %d %s each", price_per_unit, CURRENCY), color);
+				tip.addColoredText(msg->get("Buy Price: %d %s each", price_per_unit, eset->loot.currency), color);
 		}
 		else if (context == PLAYER_INV) {
 			price_per_unit = items[stack.item].getSellPrice();
 			if (price_per_unit == 0) price_per_unit = 1;
 			if (items[stack.item].max_quantity <= 1)
-				tip.addText(msg->get("Sell Price: %d %s", price_per_unit, CURRENCY));
+				tip.addText(msg->get("Sell Price: %d %s", price_per_unit, eset->loot.currency));
 			else
-				tip.addText(msg->get("Sell Price: %d %s each", price_per_unit, CURRENCY));
+				tip.addText(msg->get("Sell Price: %d %s each", price_per_unit, eset->loot.currency));
 		}
 	}
 
@@ -917,14 +947,14 @@ int Item::getPrice() {
 
 int Item::getSellPrice(bool is_new_buyback) {
 	int new_price = 0;
-	if (is_new_buyback || VENDOR_RATIO_BUYBACK == 0) {
+	if (is_new_buyback || eset->loot.vendor_ratio_buyback == 0) {
 		if (price_sell != 0)
 			new_price = price_sell;
 		else
-			new_price = static_cast<int>(static_cast<float>(getPrice()) * VENDOR_RATIO);
+			new_price = static_cast<int>(static_cast<float>(getPrice()) * eset->loot.vendor_ratio);
 	}
 	else {
-		new_price = static_cast<int>(static_cast<float>(getPrice()) * VENDOR_RATIO_BUYBACK);
+		new_price = static_cast<int>(static_cast<float>(getPrice()) * eset->loot.vendor_ratio_buyback);
 	}
 	if (new_price == 0) new_price = 1;
 

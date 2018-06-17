@@ -22,11 +22,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class WidgetScrollBox
  */
 
+#include "EngineSettings.h"
 #include "InputState.h"
 #include "RenderDevice.h"
 #include "Settings.h"
 #include "WidgetScrollBox.h"
-#include "WidgetSettings.h"
 
 WidgetScrollBox::WidgetScrollBox(int width, int height)
 	: contents(NULL) {
@@ -262,7 +262,7 @@ void WidgetScrollBox::render() {
 			draw = false;
 		}
 		if (draw) {
-			render_device->drawRectangle(topLeft, bottomRight, widget_settings.selection_rect_color);
+			render_device->drawRectangle(topLeft, bottomRight, eset->widgets.selection_rect_color);
 		}
 	}
 }

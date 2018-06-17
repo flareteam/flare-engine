@@ -30,6 +30,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Avatar.h"
 #include "CombatText.h"
 #include "EnemyManager.h"
+#include "EngineSettings.h"
 #include "EventManager.h"
 #include "FileParser.h"
 #include "Hazard.h"
@@ -52,6 +53,122 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include <cmath>
 #include <climits>
+
+Power::Power()
+	: is_empty(true)
+	, type(-1)
+	, name("")
+	, description("")
+	, icon(-1)
+	, new_state(-1)
+	, state_duration(0)
+	, prevent_interrupt(false)
+	, attack_anim("")
+	, face(false)
+	, source_type(-1)
+	, beacon(false)
+	, count(1)
+	, passive(false)
+	, passive_trigger(-1)
+	, meta_power(false)
+	, no_actionbar(false)
+	, requires_mp(0)
+	, requires_hp(0)
+	, sacrifice(false)
+	, requires_los(false)
+	, requires_los_default(true)
+	, requires_empty_target(false)
+	, consumable(false)
+	, requires_targeting(false)
+	, requires_spawns(0)
+	, cooldown(0)
+	, requires_max_hp(-1)
+	, requires_max_mp(-1)
+	, requires_not_max_hp(-1)
+	, requires_not_max_mp(-1)
+	, animation_name("")
+	, sfx_index(-1)
+	, sfx_hit(0)
+	, sfx_hit_enable(false)
+	, directional(false)
+	, visual_random(0)
+	, visual_option(0)
+	, aim_assist(false)
+	, speed(0)
+	, lifespan(0)
+	, on_floor(false)
+	, complete_animation(false)
+	, charge_speed(0.0f)
+	, attack_speed(100.0f)
+	, use_hazard(false)
+	, no_attack(false)
+	, no_aggro(false)
+	, radius(0)
+	, base_damage(eset ? eset->damage_types.list.size() : 0)
+	, starting_pos(STARTING_POS_SOURCE)
+	, relative_pos(false)
+	, multitarget(false)
+	, multihit(false)
+	, expire_with_caster(false)
+	, ignore_zero_damage(false)
+	, lock_target_to_direction(false)
+	, movement_type(MapCollision::MOVE_FLYING)
+	, target_range(0)
+	, target_party(false)
+	, mod_accuracy_mode(-1)
+	, mod_accuracy_value(100)
+	, mod_crit_mode(-1)
+	, mod_crit_value(100)
+	, mod_damage_mode(-1)
+	, mod_damage_value_min(100)
+	, mod_damage_value_max(0)
+	, hp_steal(0)
+	, mp_steal(0)
+	, missile_angle(0)
+	, angle_variance(0)
+	, speed_variance(0)
+	, delay(0)
+	, trait_elemental(-1)
+	, trait_armor_penetration(false)
+	, trait_crits_impaired(0)
+	, trait_avoidance_ignore(false)
+	, transform_duration(0)
+	, manual_untransform(false)
+	, keep_equipment(false)
+	, untransform_on_hit(false)
+	, buff(false)
+	, buff_teleport(false)
+	, buff_party(false)
+	, buff_party_power_id(0)
+	, pre_power(0)
+	, pre_power_chance(100)
+	, post_power(0)
+	, post_power_chance(100)
+	, wall_power(0)
+	, wall_power_chance(100)
+	, wall_reflect(false)
+	, spawn_type("")
+	, target_neighbor(0)
+	, spawn_limit_mode(SPAWN_LIMIT_MODE_UNLIMITED)
+	, spawn_limit_qty(1)
+	, spawn_limit_every(1)
+	, spawn_limit_stat(0)
+	, spawn_level_mode(SPAWN_LEVEL_MODE_DEFAULT)
+	, spawn_level_qty(0)
+	, spawn_level_every(0)
+	, spawn_level_stat(0)
+	, target_movement_normal(true)
+	, target_movement_flying(true)
+	, target_movement_intangible(true)
+	, walls_block_aoe(false)
+	, script_trigger(-1)
+	, script("")
+	, remove_effects()
+	, replace_by_effect()
+	, requires_corpse(false)
+	, remove_corpse(false)
+	, target_nearest(0) {
+}
 
 /**
  * PowerManager constructor
@@ -423,14 +540,14 @@ void PowerManager::loadPowers() {
 			powers[input_id].radius = toFloat(infile.val);
 		else if (infile.key == "base_damage") {
 			// @ATTR power.base_damage|predefined_string : Damage type ID|Determines which damage stat will be used to calculate damage.
-			for (size_t i = 0; i < DAMAGE_TYPES.size(); ++i) {
-				if (infile.val == DAMAGE_TYPES[i].id) {
+			for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
+				if (infile.val == eset->damage_types.list[i].id) {
 					powers[input_id].base_damage = i;
 					break;
 				}
 			}
 
-			if (powers[input_id].base_damage == DAMAGE_TYPES.size()) {
+			if (powers[input_id].base_damage == eset->damage_types.list.size()) {
 				infile.error("PowerManager: Unknown base_damage '%s'", infile.val.c_str());
 			}
 		}
@@ -478,8 +595,8 @@ void PowerManager::loadPowers() {
 			powers[input_id].trait_crits_impaired = toInt(infile.val);
 		else if (infile.key == "trait_elemental") {
 			// @ATTR power.trait_elemental|predefined_string|Damage done is elemental. See engine/elements.txt
-			for (unsigned int i=0; i<ELEMENTS.size(); i++) {
-				if (infile.val == ELEMENTS[i].id) powers[input_id].trait_elemental = i;
+			for (unsigned int i=0; i<eset->elements.list.size(); i++) {
+				if (infile.val == eset->elements.list[i].id) powers[input_id].trait_elemental = i;
 			}
 		}
 		else if (infile.key == "target_range")
@@ -608,9 +725,9 @@ void PowerManager::loadPowers() {
 					powers[input_id].spawn_limit_every = popFirstInt(infile.val);
 
 					std::string stat = popFirstString(infile.val);
-					size_t prim_stat_index = getPrimaryStatIndex(stat);
+					size_t prim_stat_index = eset->primary_stats.getIndexByID(stat);
 
-					if (prim_stat_index != PRIMARY_STATS.size()) {
+					if (prim_stat_index != eset->primary_stats.list.size()) {
 						powers[input_id].spawn_limit_stat = prim_stat_index;
 					}
 					else {
@@ -636,9 +753,9 @@ void PowerManager::loadPowers() {
 
 					if(powers[input_id].spawn_level_mode == Power::SPAWN_LEVEL_MODE_STAT) {
 						std::string stat = popFirstString(infile.val);
-						size_t prim_stat_index = getPrimaryStatIndex(stat);
+						size_t prim_stat_index = eset->primary_stats.getIndexByID(stat);
 
-						if (prim_stat_index != PRIMARY_STATS.size()) {
+						if (prim_stat_index != eset->primary_stats.list.size()) {
 							powers[input_id].spawn_level_stat = prim_stat_index;
 						}
 						else {
@@ -763,15 +880,15 @@ bool PowerManager::isValidEffect(const std::string& type) {
 	if (type == "attack_speed")
 		return true;
 
-	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
-		if (type == PRIMARY_STATS[i].id)
+	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
+		if (type == eset->primary_stats.list[i].id)
 			return true;
 	}
 
-	for (size_t i = 0; i < DAMAGE_TYPES.size(); ++i) {
-		if (type == DAMAGE_TYPES[i].min)
+	for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
+		if (type == eset->damage_types.list[i].min)
 			return true;
-		else if (type == DAMAGE_TYPES[i].max)
+		else if (type == eset->damage_types.list[i].max)
 			return true;
 	}
 
@@ -780,8 +897,8 @@ bool PowerManager::isValidEffect(const std::string& type) {
 			return true;
 	}
 
-	for (unsigned i=0; i<ELEMENTS.size(); ++i) {
-		if (type == ELEMENTS[i].id + "_resist")
+	for (unsigned i=0; i<eset->elements.list.size(); ++i) {
+		if (type == eset->elements.list[i].id + "_resist")
 			return true;
 	}
 
@@ -870,7 +987,7 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, const FPoin
 
 	// If the hazard's damage isn't default (0), we are applying an item-based power mod.
 	// We don't allow equipment power mods to alter damage (mainly to preserve the base power's multiplier).
-	if (haz->dmg_max == 0 && powers[power_index].base_damage != DAMAGE_TYPES.size()) {
+	if (haz->dmg_max == 0 && powers[power_index].base_damage != eset->damage_types.list.size()) {
 		// base damage is by equipped item
 		haz->dmg_min = src_stats->getDamageMin(powers[power_index].base_damage);
 		haz->dmg_max = src_stats->getDamageMax(powers[power_index].base_damage);
@@ -1001,7 +1118,7 @@ bool PowerManager::effect(StatBlock *target_stats, StatBlock *caster_stats, int 
 			effect_data = (*effect_ptr);
 
 			if (effect_data.type == "shield") {
-				if (pwr.base_damage == DAMAGE_TYPES.size())
+				if (pwr.base_damage == eset->damage_types.list.size())
 					continue;
 
 				// charge shield to max ment weapon damage * damage multiplier
@@ -1017,7 +1134,7 @@ bool PowerManager::effect(StatBlock *target_stats, StatBlock *caster_stats, int 
 				comb->addString(msg->get("+%d Shield",magnitude), dest_stats->pos, CombatText::MSG_BUFF);
 			}
 			else if (effect_data.type == "heal") {
-				if (pwr.base_damage == DAMAGE_TYPES.size())
+				if (pwr.base_damage == eset->damage_types.list.size())
 					continue;
 
 				// heal for ment weapon damage * damage multiplier

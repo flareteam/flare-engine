@@ -27,6 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Avatar.h"
 #include "CampaignManager.h"
 #include "CommonIncludes.h"
+#include "EngineSettings.h"
 #include "Menu.h"
 #include "MenuManager.h"
 #include "MenuInventory.h"
@@ -108,7 +109,7 @@ void CampaignManager::unsetStatus(const std::string& s) {
 }
 
 bool CampaignManager::checkCurrency(int quantity) {
-	return menu->inv->inventory[MenuInventory::CARRIED].contain(CURRENCY_ID, quantity);
+	return menu->inv->inventory[MenuInventory::CARRIED].contain(eset->misc.currency_id, quantity);
 }
 
 bool CampaignManager::checkItem(int item_id) {
@@ -123,8 +124,8 @@ void CampaignManager::removeCurrency(int quantity) {
 
 	if (max_amount > 0) {
 		menu->inv->removeCurrency(max_amount);
-		pc->logMsg(msg->get("%d %s removed.", max_amount, CURRENCY), !Avatar::LOG_PREVENT_SPAM);
-		items->playSound(CURRENCY_ID);
+		pc->logMsg(msg->get("%d %s removed.", max_amount, eset->loot.currency), !Avatar::LOG_PREVENT_SPAM);
+		items->playSound(eset->misc.currency_id);
 	}
 }
 
@@ -143,7 +144,7 @@ void CampaignManager::rewardItem(ItemStack istack) {
 
 	menu->inv->add(istack, MenuInventory::CARRIED, ItemStorage::NO_SLOT, MenuInventory::ADD_PLAY_SOUND, MenuInventory::ADD_AUTO_EQUIP);
 
-	if (istack.item != CURRENCY_ID) {
+	if (istack.item != eset->misc.currency_id) {
 		if (istack.quantity <= 1)
 			pc->logMsg(msg->get("You receive %s.", items->getItemName(istack.item)), !Avatar::LOG_PREVENT_SPAM);
 		if (istack.quantity > 1)
@@ -153,10 +154,10 @@ void CampaignManager::rewardItem(ItemStack istack) {
 
 void CampaignManager::rewardCurrency(int amount) {
 	ItemStack stack;
-	stack.item = CURRENCY_ID;
+	stack.item = eset->misc.currency_id;
 	stack.quantity = amount;
 
-	pc->logMsg(msg->get("You receive %d %s.", amount, CURRENCY), !Avatar::LOG_PREVENT_SPAM);
+	pc->logMsg(msg->get("You receive %d %s.", amount, eset->loot.currency), !Avatar::LOG_PREVENT_SPAM);
 	rewardItem(stack);
 }
 

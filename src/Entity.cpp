@@ -30,6 +30,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CampaignManager.h"
 #include "CombatText.h"
 #include "CommonIncludes.h"
+#include "EngineSettings.h"
 #include "Entity.h"
 #include "Hazard.h"
 #include "MapRenderer.h"
@@ -39,6 +40,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "SoundManager.h"
 #include "UtilsMath.h"
+
+#include "Settings.h"
 
 #include <math.h>
 
@@ -402,7 +405,7 @@ bool Entity::takeHit(Hazard &h) {
 
 	int true_avoidance = 100 - (accuracy - avoidance);
 	bool is_overhit = (true_avoidance < 0 && !h.src_stats->perfect_accuracy) ? percentChance(abs(true_avoidance)) : false;
-	true_avoidance = std::min(std::max(true_avoidance, MIN_AVOIDANCE), MAX_AVOIDANCE);
+	true_avoidance = std::min(std::max(true_avoidance, eset->combat.min_avoidance), eset->combat.max_avoidance);
 
 	bool missed = false;
 	if (!h.src_stats->perfect_accuracy && percentChance(true_avoidance)) {
@@ -423,9 +426,9 @@ bool Entity::takeHit(Hazard &h) {
 	if (h.power->trait_elemental >= 0 && static_cast<size_t>(h.power->trait_elemental) < stats.vulnerable.size()) {
 		size_t i = h.power->trait_elemental;
 
-		int vulnerable = std::max(stats.vulnerable[i], MIN_RESIST);
+		int vulnerable = std::max(stats.vulnerable[i], eset->combat.min_resist);
 		if (stats.vulnerable[i] < 100)
-			vulnerable = std::min(vulnerable, MAX_RESIST);
+			vulnerable = std::min(vulnerable, eset->combat.max_resist);
 
 		dmg = (dmg * vulnerable) / 100;
 	}
@@ -437,16 +440,16 @@ bool Entity::takeHit(Hazard &h) {
 		if (absorption > 0 && dmg > 0) {
 			int abs = absorption;
 			if (stats.effects.triggered_block) {
-				if ((abs*100)/dmg < MIN_BLOCK)
-					absorption = (dmg * MIN_BLOCK) /100;
-				if ((abs*100)/dmg > MAX_BLOCK)
-					absorption = (dmg * MAX_BLOCK) /100;
+				if ((abs*100)/dmg < eset->combat.min_block)
+					absorption = (dmg * eset->combat.min_block) /100;
+				if ((abs*100)/dmg > eset->combat.max_block)
+					absorption = (dmg * eset->combat.max_block) /100;
 				}
 			else {
-				if ((abs*100)/dmg < MIN_ABSORB)
-					absorption = (dmg * MIN_ABSORB) /100;
-				if ((abs*100)/dmg > MAX_ABSORB)
-					absorption = (dmg * MAX_ABSORB) /100;
+				if ((abs*100)/dmg < eset->combat.min_absorb)
+					absorption = (dmg * eset->combat.min_absorb) /100;
+				if ((abs*100)/dmg > eset->combat.max_absorb)
+					absorption = (dmg * eset->combat.max_absorb) /100;
 			}
 
 			// Sometimes, the absorb limits cause absorbtion to drop to 1
@@ -460,11 +463,11 @@ bool Entity::takeHit(Hazard &h) {
 			dmg = 0;
 			if (!powers->powers[h.power_index].ignore_zero_damage) {
 				if (h.power->trait_elemental < 0) {
-					if (stats.effects.triggered_block && MAX_BLOCK < 100) dmg = 1;
-					else if (!stats.effects.triggered_block && MAX_ABSORB < 100) dmg = 1;
+					if (stats.effects.triggered_block && eset->combat.max_block < 100) dmg = 1;
+					else if (!stats.effects.triggered_block && eset->combat.max_absorb < 100) dmg = 1;
 				}
 				else {
-					if (MAX_RESIST < 100) dmg = 1;
+					if (eset->combat.max_resist < 100) dmg = 1;
 				}
 				if (activeAnimation->getName() == "block") {
 					playSound(Entity::SOUND_BLOCK);
@@ -490,18 +493,18 @@ bool Entity::takeHit(Hazard &h) {
 	bool crit = percentChance(true_crit_chance);
 	if (crit) {
 		// default is dmg * 2
-		dmg = (dmg * randBetween(MIN_CRIT_DAMAGE, MAX_CRIT_DAMAGE)) / 100;
+		dmg = (dmg * randBetween(eset->combat.min_crit_damage, eset->combat.max_crit_damage)) / 100;
 		if(!stats.hero)
 			mapr->shaky_cam_ticks = MAX_FRAMES_PER_SEC/2;
 	}
 	else if (is_overhit) {
-		dmg = (dmg * randBetween(MIN_OVERHIT_DAMAGE, MAX_OVERHIT_DAMAGE)) / 100;
+		dmg = (dmg * randBetween(eset->combat.min_overhit_damage, eset->combat.max_overhit_damage)) / 100;
 		// Should we use shakycam for overhits?
 	}
 
 	// misses cause reduced damage
 	if (missed) {
-		dmg = (dmg * randBetween(MIN_MISS_DAMAGE, MAX_MISS_DAMAGE)) / 100;
+		dmg = (dmg * randBetween(eset->combat.min_miss_damage, eset->combat.max_miss_damage)) / 100;
 	}
 
 	if (!powers->powers[h.power_index].ignore_zero_damage) {

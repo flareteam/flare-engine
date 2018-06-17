@@ -30,6 +30,7 @@ Created and destroyed by main.cpp
 #include "AnimationManager.h"
 #include "CombatText.h"
 #include "CursorManager.h"
+#include "EngineSettings.h"
 #include "FontEngine.h"
 #include "IconManager.h"
 #include "InputState.h"
@@ -43,6 +44,7 @@ Created and destroyed by main.cpp
 AnimationManager *anim = NULL;
 CombatText *comb = NULL;
 CursorManager *curs = NULL;
+EngineSettings *eset = NULL;
 FontEngine *font = NULL;
 IconManager *icons = NULL;
 InputState *inpt = NULL;

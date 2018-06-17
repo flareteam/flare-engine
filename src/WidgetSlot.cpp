@@ -20,10 +20,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 /**
- * class WidgetButton
+ * class WidgetSlot
  */
 
 #include "CommonIncludes.h"
+#include "EngineSettings.h"
 #include "FontEngine.h"
 #include "IconManager.h"
 #include "RenderDevice.h"
@@ -46,12 +47,12 @@ WidgetSlot::WidgetSlot(int _icon_id, int _ACTIVATE)
 	, continuous(false) {
 	focusable = true;
 	pos.x = pos.y = 0;
-	pos.w = ICON_SIZE;
-	pos.h = ICON_SIZE;
+	pos.w = eset->resolutions.icon_size;
+	pos.h = eset->resolutions.icon_size;
 
 	Rect src;
 	src.x = src.y = 0;
-	src.w = src.h = ICON_SIZE;
+	src.w = src.h = eset->resolutions.icon_size;
 
 
 	Image *graphics;
