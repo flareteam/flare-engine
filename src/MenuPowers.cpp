@@ -1327,8 +1327,11 @@ void MenuPowers::render() {
 		std::stringstream ss;
 
 		ss.str("");
-		if (points_left !=0) {
-			ss << msg->get("Unspent skill points:") << " " << points_left;
+		if (points_left == 1) {
+			ss << msg->get("%d unspent skill point", points_left);
+		}
+		else if (points_left > 1) {
+			ss << msg->get("%d unspent skill points", points_left);
 		}
 		stat_up->set(ss.str());
 		stat_up->render();

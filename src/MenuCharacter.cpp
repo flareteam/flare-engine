@@ -298,8 +298,12 @@ void MenuCharacter::refreshStats() {
 	}
 
 	ss.str("");
-	if (skill_points > 0) ss << skill_points << " " << msg->get("points remaining");
-	else ss.str("");
+	if (skill_points == 1) {
+		ss << msg->get("%d unspent stat point", skill_points);
+	}
+	else if (skill_points > 1) {
+		ss << msg->get("%d unspent stat points", skill_points);
+	}
 	labelUnspent->set(window_area.x+unspent_pos.x, window_area.y+unspent_pos.y, unspent_pos.justify, unspent_pos.valign, ss.str(), font->getColor("menu_bonus"), unspent_pos.font_style);
 
 	// scrolling stat list
