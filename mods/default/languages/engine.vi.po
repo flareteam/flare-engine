@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-21 16:45-0400\n"
+"POT-Creation-Date: 2018-06-18 12:53-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
 "Language-Team: Vietnamese (https://www.transifex.com/flareorg/teams/84925/vi/)\n"
@@ -607,7 +607,7 @@ msgstr "%d%% tốc độ"
 msgid "%d%% Attack Speed"
 msgstr "%d%% tốc độ tấn công"
 
-#: ../../../src/ItemManager.cpp:613 ../../../src/MenuCharacter.cpp:342
+#: ../../../src/ItemManager.cpp:613 ../../../src/MenuCharacter.cpp:346
 #: ../../../src/MenuPowers.cpp:758
 #, c-format
 msgid "%s Resistance"
@@ -716,35 +716,41 @@ msgstr "Tên"
 msgid "Level"
 msgstr "Cấp độ"
 
-#: ../../../src/MenuCharacter.cpp:301
-msgid "points remaining"
-msgstr "điểm còn lại"
+#: ../../../src/MenuCharacter.cpp:302
+#, c-format
+msgid "%d unspent stat point"
+msgstr ""
 
-#: ../../../src/MenuCharacter.cpp:353 ../../../src/MenuManager.cpp:309
+#: ../../../src/MenuCharacter.cpp:305
+#, c-format
+msgid "%d unspent stat points"
+msgstr ""
+
+#: ../../../src/MenuCharacter.cpp:357 ../../../src/MenuManager.cpp:309
 #, c-format
 msgid "XP: %d"
 msgstr "Điểm kinh nghiệm: %d"
 
-#: ../../../src/MenuCharacter.cpp:355
+#: ../../../src/MenuCharacter.cpp:359
 #, c-format
 msgid "Next: %d"
 msgstr "Tiếp: %d"
 
-#: ../../../src/MenuCharacter.cpp:361
+#: ../../../src/MenuCharacter.cpp:365
 #, c-format
 msgid "base (%d), bonus (%d)"
 msgstr "gốc %d, thêm %d"
 
-#: ../../../src/MenuCharacter.cpp:369 ../../../src/MenuCharacter.cpp:383
+#: ../../../src/MenuCharacter.cpp:373 ../../../src/MenuCharacter.cpp:387
 msgid "Related stats:"
 msgstr "Thuộc tính liên quan:"
 
-#: ../../../src/MenuCharacter.cpp:409 ../../../src/MenuCharacter.cpp:433
+#: ../../../src/MenuCharacter.cpp:413 ../../../src/MenuCharacter.cpp:437
 #, c-format
 msgid "Each level grants %d."
 msgstr "Mỗi cấp độ tăng %d."
 
-#: ../../../src/MenuCharacter.cpp:413 ../../../src/MenuCharacter.cpp:437
+#: ../../../src/MenuCharacter.cpp:417 ../../../src/MenuCharacter.cpp:441
 #, c-format
 msgid "Each point of %s grants %d."
 msgstr "Mỗi điểm của %s tăng %d."
@@ -1175,10 +1181,16 @@ msgid "Requires 1 Skill Point"
 msgstr "Yêu cầu 1 điểm kĩ năng"
 
 #: ../../../src/MenuPowers.cpp:1331
-msgid "Unspent skill points:"
-msgstr "Số điểm kĩ năng chưa dùng:"
+#, c-format
+msgid "%d unspent skill point"
+msgstr ""
 
-#: ../../../src/MenuPowers.cpp:1359
+#: ../../../src/MenuPowers.cpp:1334
+#, c-format
+msgid "%d unspent skill points"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:1362
 msgid "Next Level:"
 msgstr "Cấp độ tiếp:"
 
