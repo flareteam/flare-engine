@@ -21,7 +21,7 @@ msgstr ""
 
 #: ../engine/primary_stats.txt:3
 msgid "Physical"
-msgstr "Physisch"
+msgstr "Körperlich"
 
 #: ../engine/primary_stats.txt:7
 msgid "Mental"
@@ -37,43 +37,43 @@ msgstr "Verteidigung"
 
 #: ../engine/damage_types.txt:3
 msgid "Melee Damage"
-msgstr "Nahkampf-Schaden"
+msgstr "Nahkampfschaden"
 
 #: ../engine/damage_types.txt:4
 msgid "Melee Damage Min"
-msgstr "Nahkampf-Schaden Min."
+msgstr "Nahkampfschaden min."
 
 #: ../engine/damage_types.txt:5
 msgid "Melee Damage Max"
-msgstr "Nahkampf-Schaden Max."
+msgstr "Nahkampfschaden max."
 
 #: ../engine/damage_types.txt:11
 msgid "Ranged Damage"
-msgstr "Distanz-Schaden"
+msgstr "Fernkampfschaden"
 
 #: ../engine/damage_types.txt:12
 msgid "Ranged Damage Min"
-msgstr "Distanz-Schaden Min."
+msgstr "Fernkampfschaden min."
 
 #: ../engine/damage_types.txt:13
 msgid "Ranged Damage Max"
-msgstr "Distanz-Schaden Max."
+msgstr "Fernkampfschaden max."
 
 #: ../engine/damage_types.txt:19
 msgid "Mental Damage"
-msgstr "Magie-Schaden"
+msgstr "Magieschaden"
 
 #: ../engine/damage_types.txt:20
 msgid "Mental Damage Min"
-msgstr "Magie-Schaden Min."
+msgstr "Magieschaden min."
 
 #: ../engine/damage_types.txt:21
 msgid "Mental Damage Max"
-msgstr "Magie-Schaden Max."
+msgstr "Magieschaden max."
 
 #: ../cutscenes/credits.txt:7
 msgid "Flare Engine Credits"
-msgstr "Mitwirkende bei Flare Engine"
+msgstr "Mitwirkende für die Flare-Engine"
 
 #: ../cutscenes/credits.txt:10
 msgid "Lead Programmers"
@@ -369,7 +369,7 @@ msgstr "miffe"
 
 #: ../cutscenes/credits.txt:104
 msgid "Special Thanks"
-msgstr "Besonderer Dank ergeht"
+msgstr "Besonderer Dank geht an"
 
 #: ../cutscenes/credits.txt:108
 msgid "For giving constant feedback and testing:"

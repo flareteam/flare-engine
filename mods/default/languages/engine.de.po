@@ -178,7 +178,7 @@ msgstr "Sprache"
 
 #: ../../../src/GameStateConfigBase.cpp:276
 msgid "Show combat text"
-msgstr "Schwebende Kampftexte"
+msgstr "Kampftexte anzeigen"
 
 #: ../../../src/GameStateConfigBase.cpp:280
 msgid "Show FPS"
@@ -190,19 +190,19 @@ msgstr "Modus für Farbblinde"
 
 #: ../../../src/GameStateConfigBase.cpp:288
 msgid "Hardware mouse cursor"
-msgstr "Hardware Maus-Cursor"
+msgstr "Hardware-Mauszeiger"
 
 #: ../../../src/GameStateConfigBase.cpp:292
 msgid "Developer Mode"
-msgstr "Entwickler-Modus"
+msgstr "Entwicklermodus"
 
 #: ../../../src/GameStateConfigBase.cpp:296
 msgid "Always show loot labels"
-msgstr "Beutenamen anzeigen"
+msgstr "Immer Beutenamen anzeigen"
 
 #: ../../../src/GameStateConfigBase.cpp:300
 msgid "Always show stat bar labels"
-msgstr "Statistiktexte anzeigen"
+msgstr "Immer Werteleistenbeschriftung anzeigen"
 
 #: ../../../src/GameStateConfigBase.cpp:304
 msgid "Automatically equip items"
@@ -238,7 +238,7 @@ msgstr "Spiel:"
 
 #: ../../../src/GameStateConfigBase.cpp:951
 msgid "Engine version:"
-msgstr "Engine Version:"
+msgstr "Engine-Version:"
 
 #: ../../../src/GameStateConfigBase.cpp:959
 msgid "Requires mods:"
@@ -279,7 +279,7 @@ msgid ""
 "Prevents screen tearing. Disable if you experience \"stuttering\" in "
 "windowed mode or input lag."
 msgstr ""
-"Verhindert Screen Tearing Deaktivieren, wenn du im Fenstermodus ein "
+"Verhindert Screen Tearing. Deaktivieren, wenn du im Fenstermodus ein "
 "„Stottern“ oder Eingabeverzögerungen bemerkst."
 
 #: ../../../src/GameStateConfigDesktop.cpp:193
@@ -379,7 +379,7 @@ msgstr "Neues Spiel"
 
 #: ../../../src/GameStateLoad.cpp:94 ../../../src/GameStateLoad.cpp:594
 msgid "Choose a Slot"
-msgstr "Speicherplatz wählen"
+msgstr "Eintrag wählen"
 
 #: ../../../src/GameStateLoad.cpp:567 ../../../src/GameStateLoad.cpp:588
 msgid "Enable a story mod to continue"
@@ -574,15 +574,15 @@ msgstr "Entwicklermenü"
 
 #: ../../../src/InputState.cpp:404
 msgid "Left Mouse"
-msgstr "Maus Links"
+msgstr "Maus links"
 
 #: ../../../src/InputState.cpp:405
 msgid "Middle Mouse"
-msgstr "Maus Mitte"
+msgstr "Maus mittig"
 
 #: ../../../src/InputState.cpp:406
 msgid "Right Mouse"
-msgstr "Maus Rechts"
+msgstr "Maus rechts"
 
 #: ../../../src/InputState.cpp:407
 msgid "Wheel Up"
@@ -618,11 +618,11 @@ msgstr "%d%% Angriffsgeschwindigkeit"
 #: ../../../src/MenuPowers.cpp:758
 #, c-format
 msgid "%s Resistance"
-msgstr "%s Widerstand"
+msgstr "%s-Widerstand"
 
 #: ../../../src/ItemManager.cpp:664
 msgid "Quest Item"
-msgstr "Questgegenstand"
+msgstr "Aufgabengegenstand"
 
 #: ../../../src/ItemManager.cpp:691
 #, c-format
@@ -735,7 +735,7 @@ msgstr "EP: %d"
 #: ../../../src/MenuCharacter.cpp:355
 #, c-format
 msgid "Next: %d"
-msgstr "Nächstes: %d"
+msgstr "Nächste: %d"
 
 #: ../../../src/MenuCharacter.cpp:361
 #, c-format
@@ -744,7 +744,7 @@ msgstr "Basis (%d), Bonus (%d)"
 
 #: ../../../src/MenuCharacter.cpp:369 ../../../src/MenuCharacter.cpp:383
 msgid "Related stats:"
-msgstr "Statistik: "
+msgstr "Verwandte Werte: "
 
 #: ../../../src/MenuCharacter.cpp:409 ../../../src/MenuCharacter.cpp:433
 #, c-format
@@ -762,7 +762,7 @@ msgstr "Ausführen"
 
 #: ../../../src/MenuDevConsole.cpp:129 ../../../src/MenuDevConsole.cpp:145
 msgid "Developer Console"
-msgstr "Entwickler-Konsole"
+msgstr "Entwicklerkonsole"
 
 #: ../../../src/MenuDevConsole.cpp:140
 #, c-format
@@ -864,7 +864,7 @@ msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:359
 msgid "clears the command history"
-msgstr "löscht die Kommandogeschichte"
+msgstr "löscht die Befehlshistorie"
 
 #: ../../../src/MenuDevConsole.cpp:360
 msgid "displays this text"
@@ -884,7 +884,7 @@ msgstr "FEHLER: Ungültige Anzahl Argumente"
 
 #: ../../../src/MenuDevConsole.cpp:519 ../../../src/MenuDevConsole.cpp:544
 msgid "HINT:"
-msgstr "HINWEIS:"
+msgstr "TIPP:"
 
 #: ../../../src/MenuDevConsole.cpp:519
 msgid "<id>"
@@ -913,7 +913,7 @@ msgstr "TIPP: Gib „help“ ein"
 
 #: ../../../src/MenuEnemy.cpp:140
 msgid "Dead"
-msgstr "Verstorben"
+msgstr "Tot"
 
 #: ../../../src/MenuEnemy.cpp:145 ../../../src/MenuEnemy.cpp:148
 #, c-format
@@ -972,15 +972,15 @@ msgstr "Ausrüsten:"
 #: ../../../src/MenuInventory.cpp:288
 #, c-format
 msgid "%s modifiers"
-msgstr "%s Kombination"
+msgstr "Tastenkombinationen mit %s:"
 
 #: ../../../src/MenuInventory.cpp:289
 msgid "Select a quantity of item:"
-msgstr "Wähle eine Menge:"
+msgstr "Anzahl wählen:"
 
 #: ../../../src/MenuInventory.cpp:292
 msgid "Stash item stack:"
-msgstr "Verstaue Stapel:"
+msgstr "Stapel einlagern:"
 
 #: ../../../src/MenuInventory.cpp:294
 msgid "Sell item stack:"
@@ -1017,7 +1017,7 @@ msgstr "Aufzeichnungen"
 
 #: ../../../src/MenuLog.cpp:90
 msgid "Quests"
-msgstr "Queste"
+msgstr "Aufgaben"
 
 #: ../../../src/MenuManager.cpp:311
 #, c-format
@@ -1088,11 +1088,11 @@ msgstr "Immunität gegen Schock"
 
 #: ../../../src/MenuPowers.cpp:831
 msgid "Immunity to HP steal"
-msgstr "Immunität gegen TP-Raub"
+msgstr "Immunität gegen TP-Stehlen"
 
 #: ../../../src/MenuPowers.cpp:834
 msgid "Immunity to MP steal"
-msgstr "Immunität gegen MP-Raub"
+msgstr "Immunität gegen MP-Stehlen"
 
 #: ../../../src/MenuPowers.cpp:837
 msgid "Immunity to knockback"
@@ -1145,7 +1145,7 @@ msgstr "Basis-Genauigkeit:"
 
 #: ../../../src/MenuPowers.cpp:1008
 msgid "Base Critical Chance"
-msgstr "Basis-Chance für Krit. Treffer"
+msgstr "Basis-Chance für krit. Treffer"
 
 #: ../../../src/MenuPowers.cpp:1016
 msgid "Ignores Absorbtion"
@@ -1177,7 +1177,7 @@ msgstr "Benötigt Fähigkeit: %s"
 
 #: ../../../src/MenuPowers.cpp:1091
 msgid "Click to Unlock (uses 1 Skill Point)"
-msgstr "Klicken, um 1 Fertigkeitspunkt freizugeben"
+msgstr "Klicken zum Freischalten (benutzt 1 Fertigungspunkt)"
 
 #: ../../../src/MenuPowers.cpp:1095 ../../../src/MenuPowers.cpp:1097
 msgid "Requires 1 Skill Point"
@@ -1193,15 +1193,15 @@ msgstr "Nächste Stufe:"
 
 #: ../../../src/MenuStash.cpp:138
 msgid "Shared Stash"
-msgstr "Gemeinsame Truhe"
+msgstr "Gemeinschaftslager"
 
 #: ../../../src/MenuStash.cpp:205
 msgid "Can not store quest items in the stash."
-msgstr "Quest-Gegenstände können nicht gelagert werden."
+msgstr "Aufgabengegenstände können nicht eingelagert werden."
 
 #: ../../../src/MenuStash.cpp:215
 msgid "Stash is full."
-msgstr "Stauraum ist voll."
+msgstr "Lagerraum ist voll."
 
 #: ../../../src/MenuVendor.cpp:56
 msgid "Buyback"
@@ -1330,7 +1330,7 @@ msgstr "Achse %d +"
 #: ../../../src/SDLInputState.cpp:632
 #, c-format
 msgid "Button %d"
-msgstr "Schalter %d"
+msgstr "Taste %d"
 
 #: ../../../src/SDLInputState.cpp:636
 msgid "(none)"
@@ -1395,15 +1395,15 @@ msgstr "Ausweichen"
 
 #: ../../../src/Stats.cpp:67
 msgid "Absorb Min"
-msgstr "Absorbieren Min."
+msgstr "Absorbieren min."
 
 #: ../../../src/Stats.cpp:72
 msgid "Absorb Max"
-msgstr "Absorbieren Max."
+msgstr "Absorbieren max."
 
 #: ../../../src/Stats.cpp:77
 msgid "Critical Hit Chance"
-msgstr "Wahrsch. für krit. Treffer"
+msgstr "Wahrsch. für kritischen Treffer"
 
 #: ../../../src/Stats.cpp:82
 msgid "Bonus XP"
@@ -1416,7 +1416,7 @@ msgstr "Erhöht die EP für getötete Gegner"
 #: ../../../src/Stats.cpp:87
 #, c-format
 msgid "Bonus %s"
-msgstr "Bonus %s"
+msgstr "Bonus-%s"
 
 #: ../../../src/Stats.cpp:88
 #, c-format
@@ -1437,7 +1437,7 @@ msgstr "Verborgenheit"
 
 #: ../../../src/Stats.cpp:98
 msgid "Increases your ability to move undetected."
-msgstr "Erhöht die Fähigkeit sich unbemerkt zu bewegen."
+msgstr "Erhöht die Fähigkeit, sich unbemerkt zu bewegen."
 
 #: ../../../src/Stats.cpp:102
 msgid "Poise"
@@ -1466,19 +1466,19 @@ msgstr "Wirft einen Teil des Schadens zum Angreifer zurück."
 
 #: ../../../src/Stats.cpp:117
 msgid "HP Steal"
-msgstr "TP-Rauben"
+msgstr "TP-Stehlen"
 
 #: ../../../src/Stats.cpp:118
 msgid "Percentage of HP stolen per hit."
-msgstr "Prozent an TP, die bei Treffern geraubt werden."
+msgstr "Prozent an TP, die bei Treffern gestohlen werden."
 
 #: ../../../src/Stats.cpp:122
 msgid "MP Steal"
-msgstr "MP-Raub"
+msgstr "MP-Stehlen"
 
 #: ../../../src/Stats.cpp:123
 msgid "Percentage of MP stolen per hit."
-msgstr "Prozent an MP, die bei Treffern geraubt werden."
+msgstr "Prozent an MP, die bei Treffern gestohlen werden."
 
 #: ../../../src/Stats.cpp:127
 msgid "Base HP"
