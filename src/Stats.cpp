@@ -35,7 +35,7 @@ void setStatNames() {
 	// @TYPE hp|Hit points
 	STAT_KEY[STAT_HP_MAX] = "hp";
 	STAT_NAME[STAT_HP_MAX] = msg->get("Max HP");
-	STAT_DESC[STAT_HP_MAX] = "";
+	STAT_DESC[STAT_HP_MAX] = msg->get("Total amount of HP.");
 	STAT_PERCENT[STAT_HP_MAX] = false;
 	// @TYPE hp_regen|HP restored per minute
 	STAT_KEY[STAT_HP_REGEN] = "hp_regen";
@@ -45,7 +45,7 @@ void setStatNames() {
 	// @TYPE mp|Magic points
 	STAT_KEY[STAT_MP_MAX] = "mp";
 	STAT_NAME[STAT_MP_MAX] = msg->get("Max MP");
-	STAT_DESC[STAT_MP_MAX] = "";
+	STAT_DESC[STAT_MP_MAX] = msg->get("Total amount of MP.");
 	STAT_PERCENT[STAT_MP_MAX] = false;
 	// @TYPE mp_regen|MP restored per minute
 	STAT_KEY[STAT_MP_REGEN] = "mp_regen";
@@ -55,27 +55,27 @@ void setStatNames() {
 	// @TYPE accuracy|Accuracy %. Higher values mean less likely to miss.
 	STAT_KEY[STAT_ACCURACY] = "accuracy";
 	STAT_NAME[STAT_ACCURACY] = msg->get("Accuracy");
-	STAT_DESC[STAT_ACCURACY] = "";
+	STAT_DESC[STAT_ACCURACY] = msg->get("Accuracy rating. The enemy's Avoidance rating is subtracted from this value to calculate your likeliness to land a direct hit.");
 	STAT_PERCENT[STAT_ACCURACY] = true;
 	// @TYPE avoidance|Avoidance %. Higher values means more likely to not get hit.
 	STAT_KEY[STAT_AVOIDANCE] = "avoidance";
 	STAT_NAME[STAT_AVOIDANCE] = msg->get("Avoidance");
-	STAT_DESC[STAT_AVOIDANCE] = "";
+	STAT_DESC[STAT_AVOIDANCE] = msg->get("Avoidance rating. This value is subtracted from the enemy's Accuracy rating to calculate their likeliness to land a direct hit.");
 	STAT_PERCENT[STAT_AVOIDANCE] = true;
 	// @TYPE absorb_min|Minimum damage absorption
 	STAT_KEY[STAT_ABS_MIN] = "absorb_min";
 	STAT_NAME[STAT_ABS_MIN] = msg->get("Absorb Min");
-	STAT_DESC[STAT_ABS_MIN] = "";
+	STAT_DESC[STAT_ABS_MIN] = msg->get("Reduces the amount of damage taken.");
 	STAT_PERCENT[STAT_ABS_MIN] = false;
 	// @TYPE absorb_max|Maximum damage absorption
 	STAT_KEY[STAT_ABS_MAX] = "absorb_max";
 	STAT_NAME[STAT_ABS_MAX] = msg->get("Absorb Max");
-	STAT_DESC[STAT_ABS_MAX] = "";
+	STAT_DESC[STAT_ABS_MAX] = msg->get("Reduces the amount of damage taken.");
 	STAT_PERCENT[STAT_ABS_MAX] = false;
 	// @TYPE crit|Critical hit chance %
 	STAT_KEY[STAT_CRIT] = "crit";
 	STAT_NAME[STAT_CRIT] = msg->get("Critical Hit Chance");
-	STAT_DESC[STAT_CRIT] = "";
+	STAT_DESC[STAT_CRIT] = msg->get("Chance for an attack to do extra damage.");
 	STAT_PERCENT[STAT_CRIT] = true;
 	// @TYPE xp_gain|Percentage boost to the amount of experience points gained per kill.
 	STAT_KEY[STAT_XP_GAIN] = "xp_gain";

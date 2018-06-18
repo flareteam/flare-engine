@@ -1,6 +1,7 @@
 [damage_type]
 id=melee
 name=Melee Damage
+description=Increases the damage done with swords and other melee weapons.
 name_min=Melee Damage Min
 name_max=Melee Damage Max
 min=dmg_melee_min
@@ -9,6 +10,7 @@ max=dmg_melee_max
 [damage_type]
 id=ranged
 name=Ranged Damage
+description=Increases the damage done with bows and other ranged weapons.
 name_min=Ranged Damage Min
 name_max=Ranged Damage Max
 min=dmg_ranged_min
@@ -17,6 +19,7 @@ max=dmg_ranged_max
 [damage_type]
 id=ment
 name=Mental Damage
+description=Increases the damage done with staves and other mental weapons.
 name_min=Mental Damage Min
 name_max=Mental Damage Max
 min=dmg_ment_min

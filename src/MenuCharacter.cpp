@@ -344,7 +344,7 @@ void MenuCharacter::refreshStats() {
 		for (unsigned int j=0; j<stats->vulnerable.size(); ++j) {
 			ss.str("");
 			ss << msg->get("%s Resistance", ELEMENTS[j].name.c_str()) << ": " << (100 - stats->vulnerable[j]) << "%";
-			statList->set(j+stat_index, ss.str(),"");
+			statList->set(j+stat_index, ss.str(), msg->get("Reduces the damage taken from \"%s\" elemental attacks.", ELEMENTS[j].name.c_str()));
 		}
 	}
 
