@@ -195,6 +195,8 @@ void SaveLoad::saveGame() {
 			}
 		}
 
+		outfile << "questlog_dismissed=" << !menu->act->requires_attention[MENU_LOG];
+
 		outfile << std::endl;
 
 		if (outfile.bad()) logError("SaveLoad: Unable to save the game. No write access or disk is full!");
@@ -366,6 +368,7 @@ void SaveLoad::loadGame() {
 					menu->vendor->buyback_stock[npc_filename].setQuantities(infile.val);
 				}
 			}
+			else if (infile.key == "questlog_dismissed") pc->questlog_dismissed = toBool(infile.val);
 		}
 
 		infile.close();

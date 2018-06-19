@@ -653,7 +653,8 @@ void GameStatePlay::checkNotifications() {
 	}
 	if (quests->newQuestNotification) {
 		quests->newQuestNotification = false;
-		menu->act->requires_attention[MENU_LOG] = !menu->questlog->visible;
+		menu->act->requires_attention[MENU_LOG] = !menu->questlog->visible && !pc->questlog_dismissed;
+		pc->questlog_dismissed = false;
 	}
 
 	// if the player is transformed into a creature, don't notifications for the powers menu

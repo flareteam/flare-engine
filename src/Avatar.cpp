@@ -63,7 +63,8 @@ Avatar::Avatar()
 	, close_menus(false)
 	, allow_movement(true)
 	, enemy_pos(FPoint(-1,-1))
-	, time_played(0) {
+	, time_played(0)
+	, questlog_dismissed(false) {
 
 	init();
 
