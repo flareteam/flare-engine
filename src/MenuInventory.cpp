@@ -162,7 +162,7 @@ void MenuInventory::logic() {
 		if (eset->death_penalty.currency > 0) {
 			if (currency > 0)
 				removeCurrency((currency * eset->death_penalty.currency) / 100);
-			death_message += msg->get("Lost %d%% of %s.", eset->death_penalty.currency, eset->loot.currency) + ' ';
+			death_message += msg->get("Lost %d%% of %s.", eset->death_penalty.currency, eset->loot.currency.c_str()) + ' ';
 		}
 
 		// remove a % of either total xp or xp since the last level
@@ -200,7 +200,7 @@ void MenuInventory::logic() {
 			if (!removable_items.empty()) {
 				size_t random_item = static_cast<size_t>(rand()) % removable_items.size();
 				remove(removable_items[random_item]);
-				death_message += msg->get("Lost %s.",items->getItemName(removable_items[random_item]));
+				death_message += msg->get("Lost %s.",items->getItemName(removable_items[random_item]).c_str());
 			}
 		}
 
@@ -243,7 +243,7 @@ void MenuInventory::render() {
 	if (!title.hidden) label_inventory.render();
 
 	if (!currency_lbl.hidden) {
-		label_currency.set(window_area.x+currency_lbl.x, window_area.y+currency_lbl.y, currency_lbl.justify, currency_lbl.valign, msg->get("%d %s", currency, eset->loot.currency), color_normal, currency_lbl.font_style);
+		label_currency.set(window_area.x+currency_lbl.x, window_area.y+currency_lbl.y, currency_lbl.justify, currency_lbl.valign, msg->get("%d %s", currency, eset->loot.currency.c_str()), color_normal, currency_lbl.font_style);
 		label_currency.render();
 	}
 
@@ -812,7 +812,7 @@ bool MenuInventory::buy(ItemStack stack, int tab, bool dragging) {
 		return true;
 	}
 	else {
-		pc->logMsg(msg->get("Not enough %s.", eset->loot.currency), Avatar::LOG_PREVENT_SPAM);
+		pc->logMsg(msg->get("Not enough %s.", eset->loot.currency.c_str()), Avatar::LOG_PREVENT_SPAM);
 		drop_stack.push(stack);
 		return false;
 	}

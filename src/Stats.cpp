@@ -85,8 +85,8 @@ void setStatNames() {
 	STAT_PERCENT[STAT_XP_GAIN] = true;
 	// @TYPE currency_find|Percentage boost to the amount of gold dropped per loot event.
 	STAT_KEY[STAT_CURRENCY_FIND] = "currency_find";
-	STAT_NAME[STAT_CURRENCY_FIND] = msg->get("Bonus %s", eset->loot.currency);
-	STAT_DESC[STAT_CURRENCY_FIND] = msg->get("Increases the %s found per drop.", eset->loot.currency);
+	STAT_NAME[STAT_CURRENCY_FIND] = msg->get("Bonus %s", eset->loot.currency.c_str());
+	STAT_DESC[STAT_CURRENCY_FIND] = msg->get("Increases the %s found per drop.", eset->loot.currency.c_str());
 	STAT_PERCENT[STAT_CURRENCY_FIND] = true;
 	// @TYPE item_find|Increases the chance of finding items in loot.
 	STAT_KEY[STAT_ITEM_FIND] = "item_find";

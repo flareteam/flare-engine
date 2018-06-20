@@ -415,7 +415,7 @@ std::string MenuCharacter::statTooltip(int stat) {
 
 	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 		if (stats->per_primary[i][stat] > 0)
-			tooltip_text += msg->get("Each point of %s grants %d.", stats->per_primary[i][stat], eset->primary_stats.list[i].name.c_str()) + ' ';
+			tooltip_text += msg->get("Each point of %s grants %d.", eset->primary_stats.list[i].name.c_str(), stats->per_primary[i][stat]) + ' ';
 	}
 
 	std::string full_tooltip = "";
@@ -439,7 +439,7 @@ std::string MenuCharacter::damageTooltip(size_t dmg_type) {
 
 	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 		if (stats->per_primary[i][STAT_COUNT + dmg_type] > 0)
-			tooltip_text += msg->get("Each point of %s grants %d.", stats->per_primary[i][STAT_COUNT + dmg_type], eset->primary_stats.list[i].name.c_str()) + ' ';
+			tooltip_text += msg->get("Each point of %s grants %d.", eset->primary_stats.list[i].name.c_str(), stats->per_primary[i][STAT_COUNT + dmg_type]) + ' ';
 	}
 
 	size_t real_dmg_type = dmg_type / 2;

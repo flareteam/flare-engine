@@ -200,18 +200,18 @@ void MenuActionBar::align() {
 	// set keybinding labels
 	for (unsigned int i = 0; i < static_cast<unsigned int>(SLOT_MAIN1); i++) {
 		if (i < slots.size() && slots[i]) {
-			labels[i] = msg->get("Hotkey: %s", inpt->getBindingString(i + Input::BAR_1));
+			labels[i] = msg->get("Hotkey: %s", inpt->getBindingString(i + Input::BAR_1).c_str());
 		}
 	}
 
 	for (unsigned int i = SLOT_MAIN1; i < static_cast<unsigned int>(SLOT_MAIN1); i++) {
 		if (i < slots.size() && slots[i]) {
-			labels[i] = msg->get("Hotkey: %s", inpt->getBindingString(i - SLOT_MAIN1 + Input::MAIN1));
+			labels[i] = msg->get("Hotkey: %s", inpt->getBindingString(i - SLOT_MAIN1 + Input::MAIN1).c_str());
 		}
 	}
 	for (unsigned int i=0; i<menu_labels.size(); i++) {
 		menus[i]->setPos(window_area.x, window_area.y);
-		menu_labels[i] = msg->get("Hotkey: %s", inpt->getBindingString(i + Input::CHARACTER));
+		menu_labels[i] = msg->get("Hotkey: %s", inpt->getBindingString(i + Input::CHARACTER).c_str());
 	}
 }
 

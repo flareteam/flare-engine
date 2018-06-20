@@ -1053,7 +1053,7 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 	for (it = powers->powers[power_cells[slot_num].id].requires_flags.begin(); it != powers->powers[power_cells[slot_num].id].requires_flags.end(); ++it) {
 		for (size_t i = 0; i < eset->equip_flags.list.size(); ++i) {
 			if ((*it) == eset->equip_flags.list[i].id) {
-				tip->addText(msg->get("Requires a %s", msg->get(eset->equip_flags.list[i].name)));
+				tip->addText(msg->get("Requires a %s", msg->get(eset->equip_flags.list[i].name).c_str()));
 			}
 		}
 	}
@@ -1062,9 +1062,9 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 		if (power_cells[slot_num].requires_primary[i] > 0) {
 			if (stats->get_primary(i) < power_cells[slot_num].requires_primary[i])
-				tip->addColoredText(msg->get("Requires %s %d", power_cells[slot_num].requires_primary[i], eset->primary_stats.list[i].name.c_str()), color_penalty);
+				tip->addColoredText(msg->get("Requires %s %d", eset->primary_stats.list[i].name.c_str(), power_cells[slot_num].requires_primary[i]), color_penalty);
 			else
-				tip->addText(msg->get("Requires %s %d", power_cells[slot_num].requires_primary[i], eset->primary_stats.list[i].name.c_str()));
+				tip->addText(msg->get("Requires %s %d", eset->primary_stats.list[i].name.c_str(), power_cells[slot_num].requires_primary[i]));
 		}
 	}
 
@@ -1092,10 +1092,10 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 		// Required Power Tooltip
 		int req_cell_index = getCellByPowerIndex(power_cells[slot_num].requires_power[j], power_cell_all);
 		if (!checkUnlocked(req_cell_index)) {
-			tip->addColoredText(msg->get("Requires Power: %s", req_power_name), color_penalty);
+			tip->addColoredText(msg->get("Requires Power: %s", req_power_name.c_str()), color_penalty);
 		}
 		else {
-			tip->addText(msg->get("Requires Power: %s", req_power_name));
+			tip->addText(msg->get("Requires Power: %s", req_power_name.c_str()));
 		}
 
 	}

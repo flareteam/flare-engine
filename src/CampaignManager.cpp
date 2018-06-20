@@ -124,7 +124,7 @@ void CampaignManager::removeCurrency(int quantity) {
 
 	if (max_amount > 0) {
 		menu->inv->removeCurrency(max_amount);
-		pc->logMsg(msg->get("%d %s removed.", max_amount, eset->loot.currency), !Avatar::LOG_PREVENT_SPAM);
+		pc->logMsg(msg->get("%d %s removed.", max_amount, eset->loot.currency.c_str()), !Avatar::LOG_PREVENT_SPAM);
 		items->playSound(eset->misc.currency_id);
 	}
 }
@@ -133,7 +133,7 @@ void CampaignManager::removeItem(int item_id) {
 	if (item_id < 0 || static_cast<unsigned>(item_id) >= items->items.size()) return;
 
 	if (menu->inv->remove(item_id)) {
-		pc->logMsg(msg->get("%s removed.", items->getItemName(item_id)), !Avatar::LOG_PREVENT_SPAM);
+		pc->logMsg(msg->get("%s removed.", items->getItemName(item_id).c_str()), !Avatar::LOG_PREVENT_SPAM);
 		items->playSound(item_id);
 	}
 }
@@ -146,9 +146,9 @@ void CampaignManager::rewardItem(ItemStack istack) {
 
 	if (istack.item != eset->misc.currency_id) {
 		if (istack.quantity <= 1)
-			pc->logMsg(msg->get("You receive %s.", items->getItemName(istack.item)), !Avatar::LOG_PREVENT_SPAM);
+			pc->logMsg(msg->get("You receive %s.", items->getItemName(istack.item).c_str()), !Avatar::LOG_PREVENT_SPAM);
 		if (istack.quantity > 1)
-			pc->logMsg(msg->get("You receive %s x%d.", istack.quantity, items->getItemName(istack.item)), !Avatar::LOG_PREVENT_SPAM);
+			pc->logMsg(msg->get("You receive %s x%d.", items->getItemName(istack.item).c_str(), istack.quantity), !Avatar::LOG_PREVENT_SPAM);
 	}
 }
 
@@ -157,7 +157,7 @@ void CampaignManager::rewardCurrency(int amount) {
 	stack.item = eset->misc.currency_id;
 	stack.quantity = amount;
 
-	pc->logMsg(msg->get("You receive %d %s.", amount, eset->loot.currency), !Avatar::LOG_PREVENT_SPAM);
+	pc->logMsg(msg->get("You receive %d %s.", amount, eset->loot.currency.c_str()), !Avatar::LOG_PREVENT_SPAM);
 	rewardItem(stack);
 }
 

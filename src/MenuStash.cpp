@@ -140,7 +140,7 @@ void MenuStash::render() {
 		label.render();
 	}
 	if (!currency.hidden) {
-		label.set(window_area.x+currency.x, window_area.y+currency.y, currency.justify, currency.valign, msg->get("%d %s", stock.count(eset->misc.currency_id), eset->loot.currency), color_normal, currency.font_style);
+		label.set(window_area.x+currency.x, window_area.y+currency.y, currency.justify, currency.valign, msg->get("%d %s", stock.count(eset->misc.currency_id), eset->loot.currency.c_str()), color_normal, currency.font_style);
 		label.render();
 	}
 

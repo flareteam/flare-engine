@@ -718,7 +718,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 		color = color_normal;
 		for (size_t i=0; i<item_qualities.size(); ++i) {
 			if (item_qualities[i].id == items[stack.item].quality) {
-				tip.addColoredText(msg->get("Quality: %s", msg->get(item_qualities[i].name)), color);
+				tip.addColoredText(msg->get("Quality: %s", msg->get(item_qualities[i].name.c_str())), color);
 				break;
 			}
 		}
@@ -793,7 +793,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 			else
 				color = color_normal;
 
-			tip.addColoredText(msg->get("Requires %s %d", items[stack.item].req_val[i], eset->primary_stats.list[items[stack.item].req_stat[i]].name.c_str()), color);
+			tip.addColoredText(msg->get("Requires %s %d", eset->primary_stats.list[items[stack.item].req_stat[i]].name.c_str(), items[stack.item].req_val[i]), color);
 		}
 	}
 
@@ -801,7 +801,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	if (items[stack.item].requires_class != "") {
 		if (items[stack.item].requires_class != stats->character_class) color = color_requirements_not_met;
 		else color = color_normal;
-		tip.addColoredText(msg->get("Requires Class: %s", msg->get(items[stack.item].requires_class)), color);
+		tip.addColoredText(msg->get("Requires Class: %s", msg->get(items[stack.item].requires_class).c_str()), color);
 	}
 
 	// buy or sell price
@@ -813,26 +813,26 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 			if (stats->currency < price_per_unit) color = color_requirements_not_met;
 			else color = color_normal;
 			if (items[stack.item].max_quantity <= 1)
-				tip.addColoredText(msg->get("Buy Price: %d %s", price_per_unit, eset->loot.currency), color);
+				tip.addColoredText(msg->get("Buy Price: %d %s", price_per_unit, eset->loot.currency.c_str()), color);
 			else
-				tip.addColoredText(msg->get("Buy Price: %d %s each", price_per_unit, eset->loot.currency), color);
+				tip.addColoredText(msg->get("Buy Price: %d %s each", price_per_unit, eset->loot.currency.c_str()), color);
 		}
 		else if (context == VENDOR_SELL) {
 			price_per_unit = items[stack.item].getSellPrice(stack.can_buyback);
 			if (stats->currency < price_per_unit) color = color_requirements_not_met;
 			else color = color_normal;
 			if (items[stack.item].max_quantity <= 1)
-				tip.addColoredText(msg->get("Buy Price: %d %s", price_per_unit, eset->loot.currency), color);
+				tip.addColoredText(msg->get("Buy Price: %d %s", price_per_unit, eset->loot.currency.c_str()), color);
 			else
-				tip.addColoredText(msg->get("Buy Price: %d %s each", price_per_unit, eset->loot.currency), color);
+				tip.addColoredText(msg->get("Buy Price: %d %s each", price_per_unit, eset->loot.currency.c_str()), color);
 		}
 		else if (context == PLAYER_INV) {
 			price_per_unit = items[stack.item].getSellPrice();
 			if (price_per_unit == 0) price_per_unit = 1;
 			if (items[stack.item].max_quantity <= 1)
-				tip.addText(msg->get("Sell Price: %d %s", price_per_unit, eset->loot.currency));
+				tip.addText(msg->get("Sell Price: %d %s", price_per_unit, eset->loot.currency.c_str()));
 			else
-				tip.addText(msg->get("Sell Price: %d %s each", price_per_unit, eset->loot.currency));
+				tip.addText(msg->get("Sell Price: %d %s each", price_per_unit, eset->loot.currency.c_str()));
 		}
 	}
 

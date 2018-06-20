@@ -142,10 +142,10 @@ void MenuEnemy::render() {
 	if (!text_pos.hidden) {
 
 		if (custom_text_pos) {
-			label_text.set(window_area.x+text_pos.x, window_area.y+text_pos.y, text_pos.justify, text_pos.valign, msg->get("%s level %d", enemy->stats.level, enemy->stats.name), color_normal, text_pos.font_style);
+			label_text.set(window_area.x+text_pos.x, window_area.y+text_pos.y, text_pos.justify, text_pos.valign, msg->get("%s level %d", enemy->stats.name.c_str(), enemy->stats.level), color_normal, text_pos.font_style);
 		}
 		else {
-			label_text.set(window_area.x+bar_pos.x+bar_pos.w/2, window_area.y+bar_pos.y, FontEngine::JUSTIFY_CENTER, VALIGN_BOTTOM, msg->get("%s level %d", enemy->stats.level, enemy->stats.name), color_normal);
+			label_text.set(window_area.x+bar_pos.x+bar_pos.w/2, window_area.y+bar_pos.y, FontEngine::JUSTIFY_CENTER, VALIGN_BOTTOM, msg->get("%s level %d", enemy->stats.name.c_str(), enemy->stats.level), color_normal);
 		}
 		label_text.render();
 
