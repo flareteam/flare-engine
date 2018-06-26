@@ -19,6 +19,7 @@ New translations:
 
 Translation updates:
 
+* Belarussian (be) update (Zmicer Turok)
 * Czech (cs) update (hark34)
 * German (de) update (Wuzzy2)
 * Spanish (es) update (Diego J. Romero López)

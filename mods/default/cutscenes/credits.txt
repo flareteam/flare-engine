@@ -94,6 +94,7 @@ text=Timo Sievänen
 text=Vicente Monteiro
 text=Wuzzy2
 text=Yannis Anthymidis
+text=Zmicer Turok
 separator=32
 
 text=Distributors
