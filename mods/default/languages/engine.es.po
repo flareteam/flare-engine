@@ -202,7 +202,7 @@ msgstr "Mostrar siempre las etiquetas del botín"
 
 #: ../../../src/GameStateConfigBase.cpp:300
 msgid "Always show stat bar labels"
-msgstr "Mostrar siempre las etiquetas en las barras de estadísticas"
+msgstr "Mostrar etiquetas en las barra de atributos"
 
 #: ../../../src/GameStateConfigBase.cpp:304
 msgid "Automatically equip items"
@@ -726,12 +726,12 @@ msgstr "Nivel"
 #: ../../../src/MenuCharacter.cpp:302
 #, c-format
 msgid "%d unspent stat point"
-msgstr ""
+msgstr "%d punto de atributo restante"
 
 #: ../../../src/MenuCharacter.cpp:305
 #, c-format
 msgid "%d unspent stat points"
-msgstr ""
+msgstr "%d puntos de atributos restantes"
 
 #: ../../../src/MenuCharacter.cpp:357 ../../../src/MenuManager.cpp:309
 #, c-format
@@ -750,7 +750,7 @@ msgstr "base (%d), bonus (%d)"
 
 #: ../../../src/MenuCharacter.cpp:373 ../../../src/MenuCharacter.cpp:387
 msgid "Related stats:"
-msgstr "Estadísticas relacionadas:"
+msgstr "Atributos relacionadas:"
 
 #: ../../../src/MenuCharacter.cpp:413 ../../../src/MenuCharacter.cpp:437
 #, c-format
@@ -1192,12 +1192,12 @@ msgstr "Requiere 1 punto de habilidad"
 #: ../../../src/MenuPowers.cpp:1331
 #, c-format
 msgid "%d unspent skill point"
-msgstr ""
+msgstr "%d punto de habilidad restante"
 
 #: ../../../src/MenuPowers.cpp:1334
 #, c-format
 msgid "%d unspent skill points"
-msgstr ""
+msgstr "%d puntos de habilidad restantes"
 
 #: ../../../src/MenuPowers.cpp:1362
 msgid "Next Level:"
