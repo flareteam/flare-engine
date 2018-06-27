@@ -102,7 +102,4 @@ bool loadDefaults();
 void loadMobileDefaults();
 void updateScreenVars();
 
-// version information
-std::string getVersionString();
-
 #endif

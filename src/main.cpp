@@ -43,6 +43,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Utils.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
+#include "Version.h"
 
 GameSwitcher *gswitch;
 
@@ -85,7 +86,7 @@ static void init(const CmdLineArgs& cmd_line_args) {
 	lockFileCheck();
 
 	createLogFile();
-	logInfo(getVersionString().c_str());
+	logInfo(createVersionStringFull().c_str());
 
 	// SDL Inits
 	if ( SDL_Init (SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK) < 0 ) {
@@ -361,7 +362,7 @@ int main(int argc, char *argv[]) {
 			}
 		}
 		else if (arg == "version") {
-			printf("%s\n", getVersionString().c_str());
+			printf("%s\n", createVersionStringFull().c_str());
 			done = true;
 		}
 		else if (arg == "renderer") {

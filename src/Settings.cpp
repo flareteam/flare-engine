@@ -251,16 +251,6 @@ bool loadDefaults() {
 }
 
 /**
- * Return a string of version name + version number
- */
-std::string getVersionString() {
-	std::stringstream ss;
-	ss << VERSION_NAME << ' ' << versionToString(ENGINE_VERSION);
-	ss << " (" << SDL_GetPlatform() << ")";
-	return ss.str();
-}
-
-/**
  * Set required settings for Mobile devices
  */
 void loadMobileDefaults() {

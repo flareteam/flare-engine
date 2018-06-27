@@ -49,6 +49,7 @@ extern Version VERSION_MAX;
 std::string versionToString(const Version& v);
 Version stringToVersion(const std::string& s);
 std::string createVersionReqString(Version& v1, Version& v2);
+std::string createVersionStringFull();
 
 #endif
 
