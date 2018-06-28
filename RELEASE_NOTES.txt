@@ -14,12 +14,12 @@ Engine fixes:
 
 New translations:
 
-* Brazilian Portuguese (pt_BR) by Vicente Monteiro, Gabriel Iasi
+* Brazilian Portuguese (pt_BR) by Gabriel Iasi, Vicente Monteiro
 * Vietnamese (vi) by Nguyễn Gia Phong
 
 Translation updates:
 
-* Belarussian (be) update (Zmicer Turok)
+* Belarussian (be) update (Mikalai Valer'evich Sakalouski, Zmicer Turok)
 * Czech (cs) update (hark34)
 * German (de) update (Wuzzy2)
 * Spanish (es) update (Diego J. Romero López)
