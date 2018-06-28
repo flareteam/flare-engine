@@ -730,12 +730,12 @@ msgstr "Leibheil"
 #: ../../../src/MenuCharacter.cpp:302
 #, c-format
 msgid "%d unspent stat point"
-msgstr ""
+msgstr "%d phuing-pearsa nach deach a chleachdadh"
 
 #: ../../../src/MenuCharacter.cpp:305
 #, c-format
 msgid "%d unspent stat points"
-msgstr ""
+msgstr "%d puing(ean)-pearsa nach deach a chleachdadh"
 
 #: ../../../src/MenuCharacter.cpp:357 ../../../src/MenuManager.cpp:309
 #, c-format
@@ -1197,12 +1197,12 @@ msgstr "Feum air 1 phuing-sgil"
 #: ../../../src/MenuPowers.cpp:1331
 #, c-format
 msgid "%d unspent skill point"
-msgstr ""
+msgstr "%dphuing-sgil nach deach a chleachdadh"
 
 #: ../../../src/MenuPowers.cpp:1334
 #, c-format
 msgid "%d unspent skill points"
-msgstr ""
+msgstr "%d puing(ean)-sgil nach deach a chleachdadh"
 
 #: ../../../src/MenuPowers.cpp:1362
 msgid "Next Level:"
