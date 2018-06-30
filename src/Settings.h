@@ -33,16 +33,11 @@ extern std::string PATH_USER; // important per-user data (saves)
 extern std::string PATH_DATA; // common game data
 extern std::string CUSTOM_PATH_DATA; // user-defined replacement for PATH_DATA
 
-// Filenames
-extern std::string FILE_SETTINGS;     // Name of the settings file (e.g. "settings.txt").
-extern std::string FILE_KEYBINDINGS;  // Name of the key bindings file (e.g. "keybindings.txt").
-
 // Audio and Video Settings
 extern bool AUDIO;					// initialize the audio subsystem at all?
 extern unsigned short MUSIC_VOLUME;
 extern unsigned short SOUND_VOLUME;
 extern bool FULLSCREEN;
-extern unsigned char BITS_PER_PIXEL;
 extern unsigned short MAX_FRAMES_PER_SEC;
 extern unsigned short VIEW_W;
 extern unsigned short VIEW_H;

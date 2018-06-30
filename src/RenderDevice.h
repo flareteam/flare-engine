@@ -223,6 +223,8 @@ public:
 	bool reloadGraphics();
 
 protected:
+	const unsigned char BITS_PER_PIXEL = 32;
+
 	/* Compute clipping and global position from local frame. */
 	bool localToGlobal(Sprite *r);
 

@@ -100,7 +100,7 @@ void InputState::loadKeyBindings() {
 
 	// first check for mod keybinds
 	if (mods->locate("engine/default_keybindings.txt") != "") {
-		if (infile.open(PATH_USER + "saves/" + eset->misc.save_prefix + "/" + FILE_KEYBINDINGS, !FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
+		if (infile.open(PATH_USER + "saves/" + eset->misc.save_prefix + "/keybindings.txt", !FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
 			opened_file = true;
 		}
 		else if (infile.open("engine/default_keybindings.txt", FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
@@ -108,7 +108,7 @@ void InputState::loadKeyBindings() {
 		}
 	}
 	// if there are no mod keybinds, fall back to global config
-	else if (infile.open(PATH_CONF + FILE_KEYBINDINGS, !FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
+	else if (infile.open(PATH_CONF + "keybindings.txt", !FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
 		opened_file = true;
 	}
 
@@ -243,10 +243,10 @@ void InputState::loadKeyBindings() {
 void InputState::saveKeyBindings() {
 	std::string out_path;
 	if (mods->locate("engine/default_keybindings.txt") != "") {
-		out_path = PATH_USER + "saves/" + eset->misc.save_prefix + "/" + FILE_KEYBINDINGS;
+		out_path = PATH_USER + "saves/" + eset->misc.save_prefix + "/keybindings.txt";
 	}
 	else {
-		out_path = PATH_CONF + FILE_KEYBINDINGS;
+		out_path = PATH_CONF + "keybindings.txt";
 	}
 	std::ofstream outfile;
 	outfile.open(out_path.c_str(), std::ios::out);

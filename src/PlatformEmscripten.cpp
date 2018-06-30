@@ -112,7 +112,7 @@ void Platform::FSInit() {
 
 bool Platform::FSCheckReady() {
     if(emscripten_run_script_int("Module.syncdone") == 1) {
-        FILE *config_file = fopen(std::string(PATH_CONF + FILE_SETTINGS).c_str(),"r");
+        FILE *config_file = fopen(std::string(PATH_CONF + "settings.txt").c_str(),"r");
         if (config_file == NULL) {
             //persist Emscripten current data to Indexed Db
             EM_ASM(

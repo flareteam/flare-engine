@@ -92,14 +92,9 @@ std::string PATH_USER = "";
 std::string PATH_DATA = "";
 std::string CUSTOM_PATH_DATA = "";
 
-// Filenames
-std::string FILE_SETTINGS	= "settings.txt";
-std::string FILE_KEYBINDINGS = "keybindings.txt";
-
 // Video Settings
 bool FULLSCREEN;
-unsigned char BITS_PER_PIXEL = 32;
-unsigned short MAX_FRAMES_PER_SEC;
+unsigned short MAX_FRAMES_PER_SEC = 60;
 unsigned short VIEW_W = 0;
 unsigned short VIEW_H = 0;
 unsigned short VIEW_W_HALF = 0;
@@ -165,10 +160,6 @@ static ConfigEntry * getConfigEntry(const char * name) {
 	return NULL;
 }
 
-static ConfigEntry * getConfigEntry(const std::string & name) {
-	return getConfigEntry(name.c_str());
-}
-
 void loadSettings() {
 
 	// init defaults
@@ -179,7 +170,7 @@ void loadSettings() {
 
 	// try read from file
 	FileParser infile;
-	if (!infile.open(PATH_CONF + FILE_SETTINGS, !FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
+	if (!infile.open(PATH_CONF + "settings.txt", !FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
 		loadMobileDefaults();
 		if (!infile.open("engine/default_settings.txt", FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
 			saveSettings();
@@ -190,7 +181,7 @@ void loadSettings() {
 
 	while (infile.next()) {
 
-		ConfigEntry * entry = getConfigEntry(infile.key);
+		ConfigEntry * entry = getConfigEntry(infile.key.c_str());
 		if (entry) {
 			tryParseValue(*entry->type, infile.val, entry->storage);
 		}
@@ -206,7 +197,7 @@ void loadSettings() {
 bool saveSettings() {
 
 	std::ofstream outfile;
-	outfile.open((PATH_CONF + FILE_SETTINGS).c_str(), std::ios::out);
+	outfile.open((PATH_CONF + "settings.txt").c_str(), std::ios::out);
 
 	if (outfile.is_open()) {
 
