@@ -16,9 +16,9 @@ if [ "$UNAME" == "Darwin" ]; then
 elif [ "$UNAME" == "Linux" ]; then
     if [ "$ARCH" == "x86_64" ]; then
         export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./x86_64/
-        ./x86_64/flare.x86_64
+        ./x86_64/flare.x86_64 $@
     #else
     #    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./x86/
-    #    ./x86/flare.x86
+    #    ./x86/flare.x86 $@
     fi
 fi
