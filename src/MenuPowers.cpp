@@ -1395,7 +1395,7 @@ int MenuPowers::click(const Point& mouse) {
 
 	for (size_t i=0; i<power_cell.size(); i++) {
 		if (slots[i] && isWithinRect(slots[i]->pos, mouse) && (power_cell[i].tab == active_tab)) {
-			if (TOUCHSCREEN) {
+			if (settings->touchscreen) {
 				if (!slots[i]->in_focus) {
 					slots[i]->in_focus = true;
 					if (!tabs.empty()) {

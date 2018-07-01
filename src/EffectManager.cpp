@@ -182,17 +182,17 @@ void EffectManager::logic() {
 			}
 
 			// @TYPE damage|Damage per second
-			if (effect_list[i].type == Effect::DAMAGE && effect_list[i].ticks % MAX_FRAMES_PER_SEC == 1) damage += effect_list[i].magnitude;
+			if (effect_list[i].type == Effect::DAMAGE && effect_list[i].ticks % settings->max_frames_per_sec == 1) damage += effect_list[i].magnitude;
 			// @TYPE damage_percent|Damage per second (percentage of max HP)
-			else if (effect_list[i].type == Effect::DAMAGE_PERCENT && effect_list[i].ticks % MAX_FRAMES_PER_SEC == 1) damage_percent += effect_list[i].magnitude;
+			else if (effect_list[i].type == Effect::DAMAGE_PERCENT && effect_list[i].ticks % settings->max_frames_per_sec == 1) damage_percent += effect_list[i].magnitude;
 			// @TYPE hpot|HP restored per second
-			else if (effect_list[i].type == Effect::HPOT && effect_list[i].ticks % MAX_FRAMES_PER_SEC == 1) hpot += effect_list[i].magnitude;
+			else if (effect_list[i].type == Effect::HPOT && effect_list[i].ticks % settings->max_frames_per_sec == 1) hpot += effect_list[i].magnitude;
 			// @TYPE hpot_percent|HP restored per second (percentage of max HP)
-			else if (effect_list[i].type == Effect::HPOT_PERCENT && effect_list[i].ticks % MAX_FRAMES_PER_SEC == 1) hpot_percent += effect_list[i].magnitude;
+			else if (effect_list[i].type == Effect::HPOT_PERCENT && effect_list[i].ticks % settings->max_frames_per_sec == 1) hpot_percent += effect_list[i].magnitude;
 			// @TYPE mpot|MP restored per second
-			else if (effect_list[i].type == Effect::MPOT && effect_list[i].ticks % MAX_FRAMES_PER_SEC == 1) mpot += effect_list[i].magnitude;
+			else if (effect_list[i].type == Effect::MPOT && effect_list[i].ticks % settings->max_frames_per_sec == 1) mpot += effect_list[i].magnitude;
 			// @TYPE mpot_percent|MP restored per second (percentage of max MP)
-			else if (effect_list[i].type == Effect::MPOT_PERCENT && effect_list[i].ticks % MAX_FRAMES_PER_SEC == 1) mpot_percent += effect_list[i].magnitude;
+			else if (effect_list[i].type == Effect::MPOT_PERCENT && effect_list[i].ticks % settings->max_frames_per_sec == 1) mpot_percent += effect_list[i].magnitude;
 			// @TYPE speed|Changes movement speed. A magnitude of 100 is 100% speed (aka normal speed).
 			else if (effect_list[i].type == Effect::SPEED) speed = (static_cast<float>(effect_list[i].magnitude) * speed) / 100.f;
 			// @TYPE attack_speed|Changes attack speed. A magnitude of 100 is 100% speed (aka normal speed).
@@ -235,7 +235,7 @@ void EffectManager::logic() {
 			// @TYPE fear|Causes enemies to run away
 			else if (effect_list[i].type == Effect::FEAR) fear = true;
 			// @TYPE knockback|Pushes the target away from the source caster. Speed is the given value divided by the framerate cap.
-			else if (effect_list[i].type == Effect::KNOCKBACK) knockback_speed = static_cast<float>(effect_list[i].magnitude)/static_cast<float>(MAX_FRAMES_PER_SEC);
+			else if (effect_list[i].type == Effect::KNOCKBACK) knockback_speed = static_cast<float>(effect_list[i].magnitude)/static_cast<float>(settings->max_frames_per_sec);
 
 			// @TYPE ${STATNAME}|Increases ${STATNAME}, where ${STATNAME} is any of the base stats. Examples: hp, avoidance, xp_gain
 			// @TYPE ${DAMAGE_TYPE}|Increases a damage min or max, where ${DAMAGE_TYPE} is any 'min' or 'max' value found in engine/damage_types.txt. Example: dmg_melee_min

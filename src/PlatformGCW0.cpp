@@ -55,46 +55,46 @@ void Platform::setPaths() {
 	// set config path (settings, keybindings)
 	// $XDG_CONFIG_HOME/flare/
 	if (getenv("XDG_CONFIG_HOME") != NULL) {
-		PATH_CONF = (std::string)getenv("XDG_CONFIG_HOME") + "/flare/";
+		settings->path_conf = (std::string)getenv("XDG_CONFIG_HOME") + "/flare/";
 	}
 	// $HOME/.config/flare/
 	else if (getenv("HOME") != NULL) {
-		PATH_CONF = (std::string)getenv("HOME") + "/.config/";
-		createDir(PATH_CONF);
-		PATH_CONF += "flare/";
+		settings->path_conf = (std::string)getenv("HOME") + "/.config/";
+		createDir(settings->path_conf);
+		settings->path_conf += "flare/";
 	}
 	// ./config/
 	else {
-		PATH_CONF = "./config/";
+		settings->path_conf = "./config/";
 	}
 
-	createDir(PATH_CONF);
+	createDir(settings->path_conf);
 
 	// set user path (save games)
 	// $XDG_DATA_HOME/flare/
 	if (getenv("XDG_DATA_HOME") != NULL) {
-		PATH_USER = (std::string)getenv("XDG_DATA_HOME") + "/flare/";
+		settings->path_user = (std::string)getenv("XDG_DATA_HOME") + "/flare/";
 	}
 	// $HOME/.local/share/flare/
 	else if (getenv("HOME") != NULL) {
-		PATH_USER = (std::string)getenv("HOME") + "/.local/";
-		createDir(PATH_USER);
-		PATH_USER += "share/";
-		createDir(PATH_USER);
-		PATH_USER += "flare/";
+		settings->path_user = (std::string)getenv("HOME") + "/.local/";
+		createDir(settings->path_user);
+		settings->path_user += "share/";
+		createDir(settings->path_user);
+		settings->path_user += "flare/";
 	}
 	// ./saves/
 	else {
-		PATH_USER = "./userdata/";
+		settings->path_user = "./userdata/";
 	}
 
-	createDir(PATH_USER);
-	createDir(PATH_USER + "mods/");
-	createDir(PATH_USER + "saves/");
+	createDir(settings->path_user);
+	createDir(settings->path_user + "mods/");
+	createDir(settings->path_user + "saves/");
 
 	// data folder
-	// while PATH_CONF and PATH_USER are created if not found,
-	// PATH_DATA must already have the game data for the game to work.
+	// while settings->path_conf and settings->path_user are created if not found,
+	// settings->path_data must already have the game data for the game to work.
 	// in most releases the data will be in the same folder as the executable
 	// - Windows apps are released as a simple folder
 	// - OSX apps are released in a .app folder
@@ -105,18 +105,18 @@ void Platform::setPaths() {
 	bool path_data = false;
 
 	// if the user specified a data path, try to use it
-	if (pathExists(CUSTOM_PATH_DATA)) {
-		if (!path_data) PATH_DATA = CUSTOM_PATH_DATA;
+	if (pathExists(settings->custom_path_data)) {
+		if (!path_data) settings->path_data = settings->custom_path_data;
 		path_data = true;
 	}
-	else if (!CUSTOM_PATH_DATA.empty()) {
+	else if (!settings->custom_path_data.empty()) {
 		logError("Settings: Could not find specified game data directory.");
-		CUSTOM_PATH_DATA = "";
+		settings->custom_path_data = "";
 	}
 
 	// Check for the local data before trying installed ones.
 	if (pathExists("./mods")) {
-		if (!path_data) PATH_DATA = "./";
+		if (!path_data) settings->path_data = "./";
 		path_data = true;
 	}
 
@@ -128,8 +128,8 @@ void Platform::setPaths() {
 		pathtest = popFirstString(pathlist,':');
 		while (pathtest != "") {
 			if (!path_data) {
-				PATH_DATA = pathtest + "/flare/";
-				if (pathExists(PATH_DATA)) path_data = true;
+				settings->path_data = pathtest + "/flare/";
+				if (pathExists(settings->path_data)) path_data = true;
 			}
 			if (path_data) break;
 			pathtest = popFirstString(pathlist,':');
@@ -137,26 +137,26 @@ void Platform::setPaths() {
 	}
 
 #if defined DATA_INSTALL_DIR
-	if (!path_data) PATH_DATA = DATA_INSTALL_DIR "/";
-	if (!path_data && pathExists(PATH_DATA)) path_data = true;
+	if (!path_data) settings->path_data = DATA_INSTALL_DIR "/";
+	if (!path_data && pathExists(settings->path_data)) path_data = true;
 #endif
 
 	// check /usr/local/share/flare/ and /usr/share/flare/ next
-	if (!path_data) PATH_DATA = "/usr/local/share/flare/";
-	if (!path_data && pathExists(PATH_DATA)) path_data = true;
+	if (!path_data) settings->path_data = "/usr/local/share/flare/";
+	if (!path_data && pathExists(settings->path_data)) path_data = true;
 
-	if (!path_data) PATH_DATA = "/usr/share/flare/";
-	if (!path_data && pathExists(PATH_DATA)) path_data = true;
+	if (!path_data) settings->path_data = "/usr/share/flare/";
+	if (!path_data && pathExists(settings->path_data)) path_data = true;
 
 	// check "games" variants of these
-	if (!path_data) PATH_DATA = "/usr/local/share/games/flare/";
-	if (!path_data && pathExists(PATH_DATA)) path_data = true;
+	if (!path_data) settings->path_data = "/usr/local/share/games/flare/";
+	if (!path_data && pathExists(settings->path_data)) path_data = true;
 
-	if (!path_data) PATH_DATA = "/usr/share/games/flare/";
-	if (!path_data && pathExists(PATH_DATA)) path_data = true;
+	if (!path_data) settings->path_data = "/usr/share/games/flare/";
+	if (!path_data && pathExists(settings->path_data)) path_data = true;
 
 	// finally assume the local folder
-	if (!path_data)	PATH_DATA = "./";
+	if (!path_data)	settings->path_data = "./";
 }
 
 void Platform::setExitEventFilter() {

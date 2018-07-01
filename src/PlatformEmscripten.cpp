@@ -50,13 +50,13 @@ Platform::~Platform() {
 }
 
 void Platform::setPaths() {
-	PATH_CONF = "/flare_data/config/";
-	createDir(PATH_CONF);
+	settings->path_conf = "/flare_data/config/";
+	createDir(settings->path_conf);
 
-	PATH_USER = "/flare_data/userdata/";
-	createDir(PATH_USER);
-	createDir(PATH_USER + "mods/");
-	createDir(PATH_USER + "saves/");
+	settings->path_user = "/flare_data/userdata/";
+	createDir(settings->path_user);
+	createDir(settings->path_user + "mods/");
+	createDir(settings->path_user + "saves/");
 
 	// data folder
 
@@ -65,12 +65,12 @@ void Platform::setPaths() {
 
 	// Check for the local data before trying installed ones.
 	if (pathExists("./mods")) {
-		if (!path_data) PATH_DATA = "./";
+		if (!path_data) settings->path_data = "./";
 		path_data = true;
 	}
 
 	// finally assume the local folder
-	if (!path_data)	PATH_DATA = "./";
+	if (!path_data)	settings->path_data = "./";
 }
 
 void Platform::setExitEventFilter() {
@@ -112,7 +112,7 @@ void Platform::FSInit() {
 
 bool Platform::FSCheckReady() {
     if(emscripten_run_script_int("Module.syncdone") == 1) {
-        FILE *config_file = fopen(std::string(PATH_CONF + "settings.txt").c_str(),"r");
+        FILE *config_file = fopen(std::string(settings->path_conf + "settings.txt").c_str(),"r");
         if (config_file == NULL) {
             //persist Emscripten current data to Indexed Db
             EM_ASM(
@@ -124,7 +124,7 @@ bool Platform::FSCheckReady() {
                     Module.syncdone = 1;
                 });
             );
-			saveSettings();
+			settings->saveSettings();
 			return false;
         }
         else {
@@ -146,8 +146,8 @@ void Platform::FSCommit() {
 
 void Platform::setScreenSize() {
 	// can't change window size dynamically with Emscripten, so default to 16:9 aspect ratio
-	SCREEN_W = 854;
-	SCREEN_H = 480;
+	settings->screen_w = 854;
+	settings->screen_h = 480;
 }
 
 #endif // PLATFORM_CPP

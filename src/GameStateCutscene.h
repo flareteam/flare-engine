@@ -70,7 +70,7 @@ public:
 
 class Scene {
 private:
-	CutsceneSettings settings;
+	CutsceneSettings cutscene_settings;
 	int frame_counter;
 	int pause_frames;
 	std::string caption;

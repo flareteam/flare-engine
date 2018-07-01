@@ -68,6 +68,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "QuestLog.h"
 #include "RenderDevice.h"
 #include "SaveLoad.h"
+#include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "SoundManager.h"
@@ -83,7 +84,7 @@ GameStatePlay::GameStatePlay()
 	, npc_id(-1)
 	, npc_from_map(true)
 	, nearest_npc(-1)
-	, menu_enemy_timeout(MAX_FRAMES_PER_SEC*10)
+	, menu_enemy_timeout(settings->max_frames_per_sec * 10)
 	, second_ticks(0)
 	, is_first_map_load(true)
 {
@@ -225,7 +226,7 @@ void GameStatePlay::checkEnemyFocus() {
  * Do not allow power use with button MAIN1
  */
 bool GameStatePlay::restrictPowerUse() {
-	if(MOUSE_MOVE) {
+	if (settings->mouse_move) {
 		if(inpt->pressing[Input::MAIN1] && !inpt->pressing[Input::SHIFT] && !menu->act->isWithinSlots(inpt->mouse) && !menu->act->isWithinMenus(inpt->mouse)) {
 			if(enemy == NULL) {
 				return true;
@@ -397,7 +398,7 @@ void GameStatePlay::checkCancel() {
 			save_load->saveGame();
 
 		// audio levels can be changed in the pause menu, so update our settings file
-		saveSettings();
+		settings->saveSettings();
 
 		snd->stopMusic();
 		showLoading();
@@ -872,9 +873,9 @@ void GameStatePlay::logic() {
 	menu->logic();
 
 	if (!isPaused()) {
-		if (second_ticks < MAX_FRAMES_PER_SEC)
+		if (second_ticks < settings->max_frames_per_sec)
 			second_ticks++;
-		else if (second_ticks == MAX_FRAMES_PER_SEC) {
+		else if (second_ticks == settings->max_frames_per_sec) {
 			pc->time_played++;
 			second_ticks = 0;
 		}

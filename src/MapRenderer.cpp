@@ -243,9 +243,9 @@ int MapRenderer::load(const std::string& fname) {
 }
 
 void MapRenderer::loadMusic() {
-	if (!AUDIO) return;
+	if (!settings->audio) return;
 
-	if (MUSIC_VOLUME > 0) {
+	if (settings->music_volume > 0) {
 		// load and play music
 		snd->loadMusic(music_filename);
 	}
@@ -364,8 +364,8 @@ void MapRenderer::renderIsoLayer(const Map_Layer& layerdata) {
 	int_fast16_t j; // second index of the map array
 	Point dest;
 	const Point upperleft = FPointToPoint(screen_to_map(0, 0, shakycam.x, shakycam.y));
-	const int_fast16_t max_tiles_width =   static_cast<int_fast16_t>((VIEW_W / eset->tileset.tile_w) + 2*tset.max_size_x);
-	const int_fast16_t max_tiles_height = static_cast<int_fast16_t>((2 * VIEW_H / eset->tileset.tile_h) + 2*(tset.max_size_y+1));
+	const int_fast16_t max_tiles_width =   static_cast<int_fast16_t>((settings->view_w / eset->tileset.tile_w) + 2*tset.max_size_x);
+	const int_fast16_t max_tiles_height = static_cast<int_fast16_t>((2 * settings->view_h / eset->tileset.tile_h) + 2*(tset.max_size_y+1));
 
 	j = static_cast<int_fast16_t>(upperleft.y - tset.max_size_y/2 + tset.max_size_x);
 	i = static_cast<int_fast16_t>(upperleft.x - tset.max_size_y/2 - tset.max_size_x);
@@ -432,8 +432,8 @@ void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 	Point dest;
 
 	const Point upperleft = FPointToPoint(screen_to_map(0, 0, shakycam.x, shakycam.y));
-	const int_fast16_t max_tiles_width = static_cast<int_fast16_t>((VIEW_W / eset->tileset.tile_w) + 2 * tset.max_size_x);
-	const int_fast16_t max_tiles_height = static_cast<int_fast16_t>(((VIEW_H / eset->tileset.tile_h) + 2 * tset.max_size_y)*2);
+	const int_fast16_t max_tiles_width = static_cast<int_fast16_t>((settings->view_w / eset->tileset.tile_w) + 2 * tset.max_size_x);
+	const int_fast16_t max_tiles_height = static_cast<int_fast16_t>(((settings->view_h / eset->tileset.tile_h) + 2 * tset.max_size_y)*2);
 
 	std::vector<Renderable>::iterator r_cursor = r.begin();
 	std::vector<Renderable>::iterator r_end = r.end();
@@ -672,8 +672,8 @@ void MapRenderer::renderOrthoLayer(const Map_Layer& layerdata) {
 
 	short int startj = static_cast<short int>(std::max(0, upperleft.y));
 	short int starti = static_cast<short int>(std::max(0, upperleft.x));
-	const short max_tiles_width =  std::min(w, static_cast<short unsigned int>(starti + (VIEW_W / eset->tileset.tile_w) + 2 * tset.max_size_x));
-	const short max_tiles_height = std::min(h, static_cast<short unsigned int>(startj + (VIEW_H / eset->tileset.tile_h) + 2 * tset.max_size_y));
+	const short max_tiles_width =  std::min(w, static_cast<short unsigned int>(starti + (settings->view_w / eset->tileset.tile_w) + 2 * tset.max_size_x));
+	const short max_tiles_height = std::min(h, static_cast<short unsigned int>(startj + (settings->view_h / eset->tileset.tile_h) + 2 * tset.max_size_y));
 
 	short int i;
 	short int j;
@@ -714,8 +714,8 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 
 	short int startj = static_cast<short int>(std::max(0, upperleft.y));
 	short int starti = static_cast<short int>(std::max(0, upperleft.x));
-	const short max_tiles_width  = std::min(w, static_cast<short unsigned int>(starti + (VIEW_W / eset->tileset.tile_w) + 2 * tset.max_size_x));
-	const short max_tiles_height = std::min(h, static_cast<short unsigned int>(startj + (VIEW_H / eset->tileset.tile_h) + 2 * tset.max_size_y));
+	const short max_tiles_width  = std::min(w, static_cast<short unsigned int>(starti + (settings->view_w / eset->tileset.tile_w) + 2 * tset.max_size_x));
+	const short max_tiles_height = std::min(h, static_cast<short unsigned int>(startj + (settings->view_h / eset->tileset.tile_h) + 2 * tset.max_size_y));
 
 	while (r_cursor != r_end && static_cast<int>(r_cursor->map_pos.y) < startj)
 		++r_cursor;
@@ -776,13 +776,13 @@ void MapRenderer::renderOrtho(std::vector<Renderable> &r, std::vector<Renderable
 
 void MapRenderer::executeOnLoadEvents() {
 	// if set from the command-line, execute a given script if this is our first map load
-	if (!LOAD_SCRIPT.empty() && filename != "maps/spawn.txt") {
+	if (!settings->load_script.empty() && filename != "maps/spawn.txt") {
 		Event evnt;
 		Event_Component ec;
 
 		ec.type = EC_SCRIPT;
-		ec.s = LOAD_SCRIPT;
-		LOAD_SCRIPT.clear();
+		ec.s = settings->load_script;
+		settings->load_script.clear();
 
 		evnt.components.push_back(ec);
 		EventManager::executeEvent(evnt);
@@ -1014,7 +1014,7 @@ void MapRenderer::checkNearestEvent() {
 	}
 
 	if (nearest != events.end()) {
-		if (!inpt->usingMouse() || TOUCHSCREEN) {
+		if (!inpt->usingMouse() || settings->touchscreen) {
 			// new tooltip?
 			createTooltip((*nearest).getComponent(EC_TOOLTIP));
 			tip_pos = map_to_screen((*nearest).center.x, (*nearest).center.y, shakycam.x, shakycam.y);
@@ -1036,7 +1036,7 @@ void MapRenderer::checkNearestEvent() {
 }
 
 void MapRenderer::checkTooltip() {
-	if (show_tooltip && SHOW_HUD && !(DEV_MODE && menu->devconsole->visible))
+	if (show_tooltip && settings->show_hud && !(settings->dev_mode && menu->devconsole->visible))
 		tip->render(tip_buf, tip_pos, STYLE_TOPLABEL);
 }
 
@@ -1114,7 +1114,7 @@ void MapRenderer::getTileBounds(const int_fast16_t x, const int_fast16_t y, cons
 
 void MapRenderer::drawDevCursor() {
 	// Developer mode only: draw colored cursor around tile under mouse pointer
-	if (!(DEV_MODE && menu->devconsole->visible))
+	if (!(settings->dev_mode && menu->devconsole->visible))
 		return;
 
 	Color dev_cursor_color = Color(255,255,0,255);
@@ -1140,7 +1140,7 @@ void MapRenderer::drawDevCursor() {
 		}
 
 		// draw distance line
-		if (menu->devconsole->distance_ticks >= MAX_FRAMES_PER_SEC) {
+		if (menu->devconsole->distance_ticks >= settings->max_frames_per_sec) {
 			Point p0 = map_to_screen(menu->devconsole->target.x, menu->devconsole->target.y, shakycam.x, shakycam.y);
 			Point p1 = map_to_screen(pc->stats.pos.x, pc->stats.pos.y, shakycam.x, shakycam.y);
 			render_device->drawLine(p0.x, p0.y, p1.x, p1.y, dev_cursor_color);
@@ -1149,7 +1149,7 @@ void MapRenderer::drawDevCursor() {
 }
 
 void MapRenderer::drawDevHUD() {
-	if (!(DEV_MODE && DEV_HUD))
+	if (!(settings->dev_mode && settings->dev_hud))
 		return;
 
 	Color color_hazard(255,0,0,255);

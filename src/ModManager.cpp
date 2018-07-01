@@ -20,6 +20,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "ModManager.h"
 #include "Platform.h"
 #include "Settings.h"
+#include "SharedResources.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
 #include "Version.h"
@@ -120,8 +121,8 @@ ModManager::ModManager(const std::vector<std::string> *_cmd_line_mods)
 	setPaths();
 
 	std::vector<std::string> mod_dirs_other;
-	getDirList(PATH_DATA + "mods", mod_dirs_other);
-	getDirList(PATH_USER + "mods", mod_dirs_other);
+	getDirList(settings->path_data + "mods", mod_dirs_other);
+	getDirList(settings->path_user + "mods", mod_dirs_other);
 
 	for (unsigned i=0; i<mod_dirs_other.size(); ++i) {
 		if (find(mod_dirs.begin(), mod_dirs.end(), mod_dirs_other[i]) == mod_dirs.end())
@@ -169,8 +170,8 @@ void ModManager::loadModList() {
 		std::string line;
 		std::string starts_with;
 
-		std::string place1 = PATH_CONF + "mods.txt";
-		std::string place2 = PATH_DATA + "mods/mods.txt";
+		std::string place1 = settings->path_conf + "mods.txt";
+		std::string place2 = settings->path_data + "mods/mods.txt";
 
 		infile.open(place1.c_str(), std::ios::in);
 
@@ -258,7 +259,7 @@ std::string ModManager::locate(const std::string& filename) {
 	}
 
 	// all else failing, simply return the filename if it exists
-	test_path = PATH_DATA + filename;
+	test_path = settings->path_data + filename;
 	if (!fileExists(test_path))
 		test_path = "";
 
@@ -312,16 +313,16 @@ std::vector<std::string> ModManager::list(const std::string &path, bool full_pat
 
 void ModManager::setPaths() {
 	// set some flags if directories are identical
-	bool uniq_path_data = PATH_USER != PATH_DATA;
+	bool uniq_path_data = settings->path_user != settings->path_data;
 
-	if (!CUSTOM_PATH_DATA.empty()) {
+	if (!settings->custom_path_data.empty()) {
 		// if we're using a custom data path, give it priority
 		// in fact, don't use PATH_DATA at all, since the two are equal if CUSTOM_PATH_DATA is set
-		mod_paths.push_back(CUSTOM_PATH_DATA);
+		mod_paths.push_back(settings->custom_path_data);
 		uniq_path_data = false;
 	}
-	mod_paths.push_back(PATH_USER);
-	if (uniq_path_data) mod_paths.push_back(PATH_DATA);
+	mod_paths.push_back(settings->path_user);
+	if (uniq_path_data) mod_paths.push_back(settings->path_data);
 }
 
 Mod ModManager::loadMod(const std::string& name) {
@@ -519,7 +520,7 @@ bool ModManager::haveFallbackMod() {
 
 void ModManager::saveMods() {
 	std::ofstream outfile;
-	outfile.open((PATH_CONF + "mods.txt").c_str(), std::ios::out);
+	outfile.open((settings->path_conf + "mods.txt").c_str(), std::ios::out);
 
 	if (outfile.is_open()) {
 		// comment
@@ -544,7 +545,7 @@ void ModManager::saveMods() {
 }
 
 void ModManager::resetModConfig() {
-	std::string config_path = PATH_CONF + "mods.txt";
+	std::string config_path = settings->path_conf + "mods.txt";
 	logError("ModManager: Game data is either missing or misconfigured. Deleting '%s' in attempt to recover.", config_path.c_str());
 	removeFile(config_path);
 }

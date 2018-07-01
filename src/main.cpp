@@ -75,6 +75,8 @@ bool init_finished = false;
  * Game initialization.
  */
 static void init(const CmdLineArgs& cmd_line_args) {
+	settings = new Settings();
+
 	/**
 	 * Set system paths
 	 * PATH_CONF is for user-configurable settings files (e.g. keybindings)
@@ -101,16 +103,16 @@ static void init(const CmdLineArgs& cmd_line_args) {
 
 	if (!mods->haveFallbackMod()) {
 		logError("main: Could not find the default mod in the following locations:");
-		if (pathExists(PATH_USER + "mods")) logError("%smods/", PATH_USER.c_str());
-		if (pathExists(PATH_DATA + "mods")) logError("%smods/", PATH_DATA.c_str());
+		if (pathExists(settings->path_user + "mods")) logError("%smods/", settings->path_user.c_str());
+		if (pathExists(settings->path_data + "mods")) logError("%smods/", settings->path_data.c_str());
 		logError("A copy of the default mod is in the \"mods\" directory of the flare-engine repo.");
 		logError("The repo is located at: https://github.com/clintbellanger/flare-engine");
 		logError("Try again after copying the default mod to one of the above directories. Exiting.");
-		logErrorDialog("main: Could not find the 'default' mod in the following locations:\n\n%smods/\n%smods/", PATH_USER.c_str(), PATH_DATA.c_str());
+		logErrorDialog("main: Could not find the 'default' mod in the following locations:\n\n%smods/\n%smods/", settings->path_user.c_str(), settings->path_data.c_str());
 		Exit(1);
 	}
 
-	loadSettings();
+	settings->loadSettings();
 
 	save_load = new SaveLoad();
 	msg = new MessageEngine();
@@ -134,7 +136,7 @@ static void init(const CmdLineArgs& cmd_line_args) {
 	else if (cmd_line_args.render_device_name != "")
 		render_device = getRenderDevice(cmd_line_args.render_device_name);
 	else
-		render_device = getRenderDevice(RENDER_DEVICE);
+		render_device = getRenderDevice(settings->render_device_name);
 
 	int status = render_device->createContext();
 
@@ -158,7 +160,7 @@ static float getSecondsElapsed(uint64_t prev_ticks, uint64_t now_ticks) {
 static void mainLoop () {
 	bool done = false;
 
-	float seconds_per_frame = 1.f/static_cast<float>(MAX_FRAMES_PER_SEC);
+	float seconds_per_frame = 1.f/static_cast<float>(settings->max_frames_per_sec);
 
 	uint64_t prev_ticks = SDL_GetPerformanceCounter();
 	uint64_t logic_ticks = SDL_GetPerformanceCounter();
@@ -169,7 +171,7 @@ static void mainLoop () {
 		int loops = 0;
 		uint64_t now_ticks = SDL_GetPerformanceCounter();
 
-		while (now_ticks >= logic_ticks && loops < MAX_FRAMES_PER_SEC) {
+		while (now_ticks >= logic_ticks && loops < settings->max_frames_per_sec) {
 			// Frames where data loading happens (GameState switching and map loading)
 			// take a long time, so our loop here will think that the game "lagged" and
 			// try to compensate. To prevent this compensation, we mark those frames as
@@ -273,6 +275,8 @@ static void cleanup() {
 		render_device->destroyContext();
 	delete render_device;
 
+	delete settings;
+
 	SDL_Quit();
 }
 
@@ -339,26 +343,26 @@ int main(int argc, char *argv[]) {
 			debug_event = true;
 		}
 		else if (arg == "data-path") {
-			CUSTOM_PATH_DATA = parseArgValue(arg_full);
+			settings->custom_path_data = parseArgValue(arg_full);
 
 			// Expand leading tilde as home directory
-			if (CUSTOM_PATH_DATA == "~") {
-				CUSTOM_PATH_DATA = std::string(getenv("HOME")) + "/";
+			if (settings->custom_path_data == "~") {
+				settings->custom_path_data = std::string(getenv("HOME")) + "/";
 			}
-			else if (CUSTOM_PATH_DATA.substr(0,2) == "~/") {
-				std::string path_end = CUSTOM_PATH_DATA.substr(2);
-				CUSTOM_PATH_DATA = std::string(getenv("HOME")) + "/" + path_end;
+			else if (settings->custom_path_data.substr(0,2) == "~/") {
+				std::string path_end = settings->custom_path_data.substr(2);
+				settings->custom_path_data = std::string(getenv("HOME")) + "/" + path_end;
 			}
 
-			if (!CUSTOM_PATH_DATA.empty() && CUSTOM_PATH_DATA.at(CUSTOM_PATH_DATA.length()-1) != '/')
-				CUSTOM_PATH_DATA += "/";
+			if (!settings->custom_path_data.empty() && settings->custom_path_data.at(settings->custom_path_data.length()-1) != '/')
+				settings->custom_path_data += "/";
 
-			if (pathExists(CUSTOM_PATH_DATA)) {
-				logInfo("Custom data path: \"%s\"", CUSTOM_PATH_DATA.c_str());
+			if (pathExists(settings->custom_path_data)) {
+				logInfo("Custom data path: \"%s\"", settings->custom_path_data.c_str());
 			}
 			else {
-				logError("Invalid custom data path: \"%s\"", CUSTOM_PATH_DATA.c_str());
-				CUSTOM_PATH_DATA.clear();
+				logError("Invalid custom data path: \"%s\"", settings->custom_path_data.c_str());
+				settings->custom_path_data.clear();
 			}
 		}
 		else if (arg == "version") {
@@ -369,7 +373,7 @@ int main(int argc, char *argv[]) {
 			cmd_line_args.render_device_name = parseArgValue(arg_full);
 		}
 		else if (arg == "no-audio") {
-			AUDIO = false;
+			settings->audio = false;
 		}
 		else if (arg == "mods") {
 			std::string mod_list_str = parseArgValue(arg_full);
@@ -378,10 +382,10 @@ int main(int argc, char *argv[]) {
 			}
 		}
 		else if (arg == "load-slot") {
-			LOAD_SLOT = parseArgValue(arg_full);
+			settings->load_slot = parseArgValue(arg_full);
 		}
 		else if (arg == "load-script") {
-			LOAD_SCRIPT = parseArgValue(arg_full);
+			settings->load_script = parseArgValue(arg_full);
 		}
 		else if (arg == "help") {
 			printf("\
@@ -424,9 +428,9 @@ soft_reset:
 		cleanup();
 	}
 
-	if (SOFT_RESET) {
+	if (settings->soft_reset) {
 		logInfo("main: Restarting Flare...");
-		SOFT_RESET = false;
+		settings->soft_reset = false;
 		done = false;
 		cmd_line_args = CmdLineArgs();
 		goto soft_reset;

@@ -43,6 +43,7 @@ class MessageEngine;
 class ModManager;
 class RenderDevice;
 class SaveLoad;
+class Settings;
 class SoundManager;
 
 extern AnimationManager *anim;
@@ -56,6 +57,7 @@ extern MessageEngine *msg;
 extern ModManager *mods;
 extern RenderDevice *render_device;
 extern SaveLoad *save_load;
+extern Settings *settings;
 extern SoundManager *snd;
 
 #endif

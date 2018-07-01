@@ -27,74 +27,102 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 
-// Path info
-extern std::string PATH_CONF; // user-configurable settings files
-extern std::string PATH_USER; // important per-user data (saves)
-extern std::string PATH_DATA; // common game data
-extern std::string CUSTOM_PATH_DATA; // user-defined replacement for PATH_DATA
+class Settings {
+public:
+	Settings();
+	void loadSettings();
+	void saveSettings();
+	void loadDefaults();
+	void updateScreenVars();
 
-// Audio and Video Settings
-extern bool AUDIO;					// initialize the audio subsystem at all?
-extern unsigned short MUSIC_VOLUME;
-extern unsigned short SOUND_VOLUME;
-extern bool FULLSCREEN;
-extern unsigned short MAX_FRAMES_PER_SEC;
-extern unsigned short VIEW_W;
-extern unsigned short VIEW_H;
-extern unsigned short VIEW_W_HALF;
-extern unsigned short VIEW_H_HALF;
-extern float VIEW_SCALING;
-extern unsigned short SCREEN_W;
-extern unsigned short SCREEN_H;
-extern bool VSYNC;
-extern bool HWSURFACE;
-extern bool TEXTURE_FILTER;
-extern bool DPI_SCALING;
-extern bool CHANGE_GAMMA;
-extern float GAMMA;
-extern std::string RENDER_DEVICE;
+	// Video Settings
+	bool fullscreen;
+	unsigned short screen_w;
+	unsigned short screen_h;
+	bool hwsurface;
+	bool vsync;
+	bool texture_filter;
+	bool dpi_scaling;
+	unsigned short max_frames_per_sec;
+	std::string render_device_name;
+	bool change_gamma;
+	float gamma;
 
-// Input Settings
-extern bool MOUSE_MOVE;
-extern bool ENABLE_JOYSTICK;
-extern int JOYSTICK_DEVICE;
-extern bool MOUSE_AIM;
-extern bool NO_MOUSE;
-extern int JOY_DEADZONE;
-extern bool TOUCHSCREEN;
-extern bool MOUSE_SCALED; // mouse position is automatically scaled to VIEW_W x VIEW_H resolution
+	// Audio Settings
+	unsigned short music_volume;
+	unsigned short sound_volume;
 
-// Interface Settings
-extern bool COMBAT_TEXT;
-extern bool SHOW_FPS;
-extern bool COLORBLIND;
-extern bool HARDWARE_CURSOR;
-extern bool DEV_MODE;
-extern bool DEV_HUD;
-extern bool LOOT_TOOLTIPS;
-extern bool STATBAR_LABELS;
-extern bool AUTO_EQUIP;
-extern bool SUBTITLES;
-extern bool SHOW_HUD;
+	// Input Settings
+	bool mouse_move;
+	bool enable_joystick;
+	int joystick_device;
+	bool mouse_aim;
+	bool no_mouse;
+	int joy_deadzone;
 
-// Engine Settings
-extern float ENCOUNTER_DIST;
+	// Interface Settings
+	bool combat_text;
+	bool show_fps;
+	bool colorblind;
+	bool hardware_cursor;
+	bool dev_mode;
+	bool dev_hud;
+	bool loot_tooltips;
+	bool statbar_labels;
+	bool auto_equip;
+	bool subtitles;
 
-// Language Settings
-extern std::string LANGUAGE;
+	// Language Settings
+	std::string language;
 
-// Command-line settings
-extern std::string LOAD_SLOT;
-extern std::string LOAD_SCRIPT;
+	// Misc
+	int prev_save_slot;
 
-// Misc
-extern int PREV_SAVE_SLOT;
-extern bool SOFT_RESET;
+	/**
+	 * NOTE Everything below is not part of the user's settings.txt, but somehow ended up here
+	 * TODO Move these to more appropriate locations?
+	 */
 
-void loadSettings();
-bool saveSettings();
-bool loadDefaults();
-void loadMobileDefaults();
-void updateScreenVars();
+	// Path info
+	std::string path_conf; // user-configurable settings files
+	std::string path_user; // important per-user data (saves)
+	std::string path_data; // common game data
+	std::string custom_path_data; // user-defined replacement for PATH_DATA
 
+	// Command-line settings
+	std::string load_slot;
+	std::string load_script;
+
+	// Misc
+	unsigned short view_w;
+	unsigned short view_h;
+	unsigned short view_w_half;
+	unsigned short view_h_half;
+	float view_scaling;
+
+	bool audio;
+
+	bool touchscreen;
+	bool mouse_scaled; // mouse position is automatically scaled to view_w * view_h resolution
+
+	bool show_hud;
+
+	float encounter_dist;
+
+	bool soft_reset;
+
+private:
+	class ConfigEntry {
+	public:
+		const char *name;
+		const std::type_info *type;
+		const char *default_val;
+		void *storage;
+		const char *comment;
+	};
+	std::vector<ConfigEntry> config;
+
+	size_t getConfigEntry(const char *name);
+	void loadMobileDefaults();
+};
 #endif

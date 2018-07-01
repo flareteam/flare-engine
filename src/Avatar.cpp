@@ -292,7 +292,7 @@ bool Avatar::pressing_move() {
 	else if (stats.effects.knockback_speed != 0) {
 		return false;
 	}
-	else if (MOUSE_MOVE) {
+	else if (settings->mouse_move) {
 		return inpt->pressing[Input::MAIN1];
 	}
 	else {
@@ -305,7 +305,7 @@ bool Avatar::pressing_move() {
 
 void Avatar::set_direction() {
 	// handle direction changes
-	if (MOUSE_MOVE) {
+	if (settings->mouse_move) {
 		FPoint target = screen_to_map(inpt->mouse.x, inpt->mouse.y, stats.pos.x, stats.pos.y);
 		stats.direction = calcDirection(stats.pos.x, stats.pos.y, target.x, target.y);
 	}
@@ -416,7 +416,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 				setAnimation("stance");
 
 				// allowed to move or use powers?
-				if (MOUSE_MOVE) {
+				if (settings->mouse_move) {
 					allowed_to_move = restrict_power_use && (!inpt->lock[Input::MAIN1] || drag_walking) && !lockAttack && !npc;
 					allowed_to_use_power = !allowed_to_move;
 				}
@@ -430,7 +430,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 					set_direction();
 
 				if (pressing_move() && allowed_to_move) {
-					if (MOUSE_MOVE && inpt->pressing[Input::MAIN1]) {
+					if (settings->mouse_move && inpt->pressing[Input::MAIN1]) {
 						inpt->lock[Input::MAIN1] = true;
 						drag_walking = true;
 					}
@@ -440,7 +440,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 					}
 				}
 
-				if (MOUSE_MOVE && !inpt->pressing[Input::MAIN1]) {
+				if (settings->mouse_move && !inpt->pressing[Input::MAIN1]) {
 					inpt->lock[Input::MAIN1] = false;
 					lockAttack = false;
 				}
@@ -459,7 +459,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 				}
 
 				// allowed to move or use powers?
-				if (MOUSE_MOVE) {
+				if (settings->mouse_move) {
 					allowed_to_use_power = !(restrict_power_use && !inpt->lock[Input::MAIN1]);
 				}
 				else {
@@ -492,7 +492,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 					curs->setCursor(CursorManager::CURSOR_ATTACK);
 				}
 
-				if (MOUSE_MOVE) lockAttack = true;
+				if (settings->mouse_move) lockAttack = true;
 
 				if (activeAnimation->isFirstFrame()) {
 					float attack_speed = (stats.effects.getAttackSpeed(attack_anim) * powers->powers[current_power].attack_speed) / 100.0f;
@@ -602,9 +602,9 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 				}
 
 				// allow respawn with Accept if not permadeath
-				if ((inpt->pressing[Input::ACCEPT] || (TOUCHSCREEN && inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1])) && stats.corpse) {
+				if ((inpt->pressing[Input::ACCEPT] || (settings->touchscreen && inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1])) && stats.corpse) {
 					if (inpt->pressing[Input::ACCEPT]) inpt->lock[Input::ACCEPT] = true;
-					if (TOUCHSCREEN && inpt->pressing[Input::MAIN1]) inpt->lock[Input::MAIN1] = true;
+					if (settings->touchscreen && inpt->pressing[Input::MAIN1]) inpt->lock[Input::MAIN1] = true;
 					mapr->teleportation = true;
 					mapr->teleport_mapname = mapr->respawn_map;
 					if (stats.permadeath) {

@@ -140,7 +140,7 @@ void MenuVendor::logic() {
 	tablist_sell.logic();
 
 	tabControl->logic();
-	if (TOUCHSCREEN && activetab != tabControl->getActiveTab()) {
+	if (settings->touchscreen && activetab != tabControl->getActiveTab()) {
 		tablist_buy.defocus();
 		tablist_sell.defocus();
 	}
@@ -151,7 +151,7 @@ void MenuVendor::logic() {
 	else if (activetab == ItemManager::VENDOR_SELL)
 		tablist.setNextTabList(&tablist_sell);
 
-	if (TOUCHSCREEN) {
+	if (settings->touchscreen) {
 		if (activetab == ItemManager::VENDOR_BUY && tablist_buy.getCurrent() == -1)
 			stock[ItemManager::VENDOR_BUY].current_slot = NULL;
 		else if (activetab == ItemManager::VENDOR_SELL && tablist_sell.getCurrent() == -1)
@@ -165,7 +165,7 @@ void MenuVendor::logic() {
 }
 
 void MenuVendor::setTab(int tab) {
-	if (TOUCHSCREEN && activetab != tab) {
+	if (settings->touchscreen && activetab != tab) {
 		tablist_buy.defocus();
 		tablist_sell.defocus();
 	}
@@ -202,7 +202,7 @@ void MenuVendor::render() {
 ItemStack MenuVendor::click(const Point& position) {
 	ItemStack stack = stock[activetab].click(position);
 	saveInventory();
-	if (TOUCHSCREEN) {
+	if (settings->touchscreen) {
 		if (activetab == ItemManager::VENDOR_BUY)
 			tablist_buy.setCurrent(stock[activetab].current_slot);
 		else if (activetab == ItemManager::VENDOR_SELL)

@@ -342,7 +342,7 @@ void MenuNPCActions::logic() {
 	}
 
 	/* is main1 pressed */
-	if (static_cast<int>(current_action) > -1 && ((inpt->pressing[Input::MAIN1] && inpt->usingMouse()) || (inpt->pressing[Input::ACCEPT] && NO_MOUSE))) {
+	if (static_cast<int>(current_action) > -1 && ((inpt->pressing[Input::MAIN1] && inpt->usingMouse()) || (inpt->pressing[Input::ACCEPT] && settings->no_mouse))) {
 		if (inpt->pressing[Input::MAIN1]) inpt->lock[Input::MAIN1] = true;
 		if (inpt->pressing[Input::ACCEPT]) inpt->lock[Input::ACCEPT] = true;
 

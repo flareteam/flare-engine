@@ -111,7 +111,7 @@ void MenuMiniMap::render() {
 }
 
 void MenuMiniMap::render(const FPoint& hero_pos) {
-	if (!SHOW_HUD) return;
+	if (!settings->show_hud) return;
 
 	Menu::render();
 

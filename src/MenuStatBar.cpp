@@ -173,7 +173,7 @@ void MenuStatBar::render() {
 	// if mouseover, draw text
 	if (!text_pos.hidden) {
 
-		if (STATBAR_LABELS || (inpt->usingMouse() && isWithinRect(bar_dest, inpt->mouse))) {
+		if (settings->statbar_labels || (inpt->usingMouse() && isWithinRect(bar_dest, inpt->mouse))) {
 			std::stringstream ss;
 			if (!custom_string.empty())
 				ss << custom_string;

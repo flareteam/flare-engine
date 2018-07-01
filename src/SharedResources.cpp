@@ -38,6 +38,7 @@ Created and destroyed by main.cpp
 #include "ModManager.h"
 #include "RenderDevice.h"
 #include "SaveLoad.h"
+#include "Settings.h"
 #include "SharedResources.h"
 #include "SoundManager.h"
 
@@ -52,4 +53,5 @@ MessageEngine *msg = NULL;
 ModManager *mods = NULL;
 RenderDevice *render_device = NULL;
 SaveLoad *save_load = NULL;
+Settings *settings = NULL;
 SoundManager *snd = NULL;

@@ -96,7 +96,7 @@ void GameState::showLoading() {
 	if (!loading_tip)
 		return;
 
-	loading_tip->render(loading_tip_buf, Point(VIEW_W, VIEW_H), STYLE_FLOAT);
+	loading_tip->render(loading_tip_buf, Point(settings->view_w, settings->view_h), STYLE_FLOAT);
 
 	render_device->commitFrame();
 }

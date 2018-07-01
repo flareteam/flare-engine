@@ -133,7 +133,7 @@ GameStateTitle::GameStateTitle()
 
 	refreshWidgets();
 
-	if (eset->gameplay.enable_playgame && !LOAD_SLOT.empty()) {
+	if (eset->gameplay.enable_playgame && !settings->load_slot.empty()) {
 		showLoading();
 		setRequestedGameState(new GameStateLoad());
 	}
@@ -204,7 +204,7 @@ void GameStateTitle::refreshWidgets() {
 	button_credits->setPos();
 	button_exit->setPos();
 
-	label_version->setPos(VIEW_W, 0);
+	label_version->setPos(settings->view_w, 0);
 }
 
 void GameStateTitle::render() {

@@ -230,7 +230,7 @@ bool MenuStash::add(ItemStack stack, int slot, bool play_sound) {
  */
 ItemStack MenuStash::click(const Point& position) {
 	ItemStack stack = stock.click(position);
-	if (TOUCHSCREEN) {
+	if (settings->touchscreen) {
 		tablist.setCurrent(stock.current_slot);
 	}
 	return stack;

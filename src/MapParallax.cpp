@@ -121,13 +121,13 @@ void MapParallax::render(const FPoint& cam, const std::string& map_layer) {
 		center_tile.y -= height/2;
 
 		Point draw_pos;
-		draw_pos.x = center_tile.x - static_cast<int>(ceilf(static_cast<float>(VIEW_W_HALF + center_tile.x) / static_cast<float>(width))) * width;
-		draw_pos.y = center_tile.y - static_cast<int>(ceilf(static_cast<float>(VIEW_H_HALF + center_tile.y) / static_cast<float>(height))) * height;
+		draw_pos.x = center_tile.x - static_cast<int>(ceilf(static_cast<float>(settings->view_w_half + center_tile.x) / static_cast<float>(width))) * width;
+		draw_pos.y = center_tile.y - static_cast<int>(ceilf(static_cast<float>(settings->view_h_half + center_tile.y) / static_cast<float>(height))) * height;
 		Point start_pos = draw_pos;
 
-		while (draw_pos.x < VIEW_W) {
+		while (draw_pos.x < settings->view_w) {
 			draw_pos.y = start_pos.y;
-			while (draw_pos.y < VIEW_H) {
+			while (draw_pos.y < settings->view_h) {
 				layers[i].sprite->setDest(draw_pos.x, draw_pos.y);
 				render_device->render(layers[i].sprite);
 

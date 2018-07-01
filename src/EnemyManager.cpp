@@ -518,7 +518,7 @@ void EnemyManager::addRenders(std::vector<Renderable> &r, std::vector<Renderable
 			(*it)->stats.effects.getCurrentAlpha(re.alpha_mod);
 
 			// fade out corpses
-			int fade_time = (eset->misc.corpse_timeout > MAX_FRAMES_PER_SEC) ? MAX_FRAMES_PER_SEC : eset->misc.corpse_timeout;
+			int fade_time = (eset->misc.corpse_timeout > settings->max_frames_per_sec) ? settings->max_frames_per_sec : eset->misc.corpse_timeout;
 			if (dead && fade_time != 0 && (*it)->stats.corpse_ticks <= fade_time) {
 				re.alpha_mod = static_cast<uint8_t>(static_cast<float>((*it)->stats.corpse_ticks) * (re.alpha_mod / static_cast<float>(fade_time)));
 			}

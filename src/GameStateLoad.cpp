@@ -55,7 +55,7 @@ bool compareSaveDirs(const std::string& dir1, const std::string& dir2) {
 GameSlot::GameSlot()
 	: id(0)
 	, time_played(0)
-	, preview_turn_duration(MAX_FRAMES_PER_SEC/2)
+	, preview_turn_duration(settings->max_frames_per_sec/2)
 	, preview_turn_ticks(preview_turn_duration) {
 }
 
@@ -213,17 +213,17 @@ GameStateLoad::GameStateLoad() : GameState()
 	updateButtons();
 
 	// if we specified a slot to load at launch, load it now
-	if (!LOAD_SLOT.empty()) {
-		size_t load_slot_id = toInt(LOAD_SLOT) - 1;
-		LOAD_SLOT.clear();
+	if (!settings->load_slot.empty()) {
+		size_t load_slot_id = toInt(settings->load_slot) - 1;
+		settings->load_slot.clear();
 
 		if (load_slot_id < game_slots.size()) {
 			setSelectedSlot(static_cast<int>(load_slot_id));
 			loading_requested = true;
 		}
 	}
-	else if (PREV_SAVE_SLOT >= 0 && static_cast<size_t>(PREV_SAVE_SLOT) < game_slots.size()) {
-		setSelectedSlot(PREV_SAVE_SLOT);
+	else if (settings->prev_save_slot >= 0 && static_cast<size_t>(settings->prev_save_slot) < game_slots.size()) {
+		setSelectedSlot(settings->prev_save_slot);
 		scrollToSelected();
 		updateButtons();
 	}
@@ -282,7 +282,7 @@ void GameStateLoad::readGameSlots() {
 	std::stringstream filename;
 	std::vector<std::string> save_dirs;
 
-	getDirList(PATH_USER + "saves/" + eset->misc.save_prefix, save_dirs);
+	getDirList(settings->path_user + "saves/" + eset->misc.save_prefix, save_dirs);
 	std::sort(save_dirs.begin(), save_dirs.end(), compareSaveDirs);
 
 	// save dirs can only be >= 1
@@ -298,7 +298,7 @@ void GameStateLoad::readGameSlots() {
 	for (size_t i=0; i<save_dirs.size(); ++i){
 		// save data is stored in slot#/avatar.txt
 		filename.str("");
-		filename << PATH_USER << "saves/" << eset->misc.save_prefix << "/" << save_dirs[i] << "/avatar.txt";
+		filename << settings->path_user << "saves/" << eset->misc.save_prefix << "/" << save_dirs[i] << "/avatar.txt";
 
 		if (!infile.open(filename.str(), !FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) continue;
 
@@ -540,7 +540,7 @@ void GameStateLoad::logic() {
 
 			refreshSavePaths();
 
-			PREV_SAVE_SLOT = -1;
+			settings->prev_save_slot = -1;
 		}
 	}
 }
@@ -610,22 +610,22 @@ void GameStateLoad::updateButtons() {
 
 void GameStateLoad::refreshWidgets() {
 	button_exit->setPos();
-	button_new->setPos((VIEW_W - eset->resolutions.frame_w)/2, (VIEW_H - eset->resolutions.frame_h)/2);
-	button_load->setPos((VIEW_W - eset->resolutions.frame_w)/2, (VIEW_H - eset->resolutions.frame_h)/2);
-	button_delete->setPos((VIEW_W - eset->resolutions.frame_w)/2, (VIEW_H - eset->resolutions.frame_h)/2);
+	button_new->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);
+	button_load->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);
+	button_delete->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);
 
 	label_loading->setPos();
 
 	if (portrait) {
-		portrait->setDestX(portrait_dest.x + ((VIEW_W - eset->resolutions.frame_w)/2));
-		portrait->setDestY(portrait_dest.y + ((VIEW_H - eset->resolutions.frame_h)/2));
+		portrait->setDestX(portrait_dest.x + ((settings->view_w - eset->resolutions.frame_w)/2));
+		portrait->setDestY(portrait_dest.y + ((settings->view_h - eset->resolutions.frame_h)/2));
 	}
 
 	slot_pos.resize(visible_slots);
 	for (size_t i=0; i<slot_pos.size(); i++) {
-		slot_pos[i].x = gameslot_pos.x + (VIEW_W - eset->resolutions.frame_w)/2;
+		slot_pos[i].x = gameslot_pos.x + (settings->view_w - eset->resolutions.frame_w)/2;
 		slot_pos[i].h = gameslot_pos.h;
-		slot_pos[i].y = gameslot_pos.y + (VIEW_H - eset->resolutions.frame_h)/2 + (static_cast<int>(i) * gameslot_pos.h);
+		slot_pos[i].y = gameslot_pos.y + (settings->view_h - eset->resolutions.frame_h)/2 + (static_cast<int>(i) * gameslot_pos.h);
 		slot_pos[i].w = gameslot_pos.w;
 	}
 
@@ -691,8 +691,8 @@ void GameStateLoad::render() {
 	std::stringstream ss;
 
 	if (loading_requested || loading || loaded) {
-		label.x = loading_pos.x + (VIEW_W - eset->resolutions.frame_w)/2;
-		label.y = loading_pos.y + (VIEW_H - eset->resolutions.frame_h)/2;
+		label.x = loading_pos.x + (settings->view_w - eset->resolutions.frame_w)/2;
+		label.y = loading_pos.y + (settings->view_h - eset->resolutions.frame_h)/2;
 
 		if ( loaded) {
 			label_loading->set(msg->get("Entering game world..."));
@@ -833,8 +833,8 @@ void GameStateLoad::refreshSavePaths() {
 	for (size_t i = 0; i < game_slots.size(); ++i) {
 		if (game_slots[i] && game_slots[i]->id != i+1) {
 			std::stringstream oldpath, newpath;
-			oldpath << PATH_USER << "saves/" << eset->misc.save_prefix << "/" << game_slots[i]->id;
-			newpath << PATH_USER << "saves/" << eset->misc.save_prefix << "/" << i+1;
+			oldpath << settings->path_user << "saves/" << eset->misc.save_prefix << "/" << game_slots[i]->id;
+			newpath << settings->path_user << "saves/" << eset->misc.save_prefix << "/" << i+1;
 			if (renameFile(oldpath.str(), newpath.str())) {
 				game_slots[i]->id = static_cast<unsigned>(i+1);
 			}

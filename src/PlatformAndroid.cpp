@@ -86,16 +86,16 @@ Platform::~Platform() {
 
 void Platform::setPaths() {
 	/*
-	 * PATH_CONF
+	 * settings->path_conf
 	 * 1. INTERNAL_SD_CARD/Flare
 	 * 2. EXTERNAL_SD_CARD/Flare
 	 * 3. App internal storage (/data/...)
 	 *
-	 * PATH_DATA
+	 * settings->path_data
 	 * 1. App external storage (usually internal sd card)
 	 * 2. INTERNAL_SD_CARD/Flare
 	 *
-	 * PATH_USER
+	 * settings->path_user
 	 * 1. INTERNAL_SD_CARD/Flare
 	 * 2. EXTERNAL_SD_CARD/Flare
 	 */
@@ -112,50 +112,50 @@ void Platform::setPaths() {
 	externalSDList.push_back("/storage/extSdCard");
 	externalSDList.push_back("/mnt/m_external_sd");
 
-	PATH_CONF = std::string(SDL_AndroidGetInternalStoragePath()) + "/config";
+	settings->path_conf = std::string(SDL_AndroidGetInternalStoragePath()) + "/config";
 
 	const std::string package_name = PlatformAndroid::getPackageName();
 	const std::string user_folder = "Android/data/" + package_name + "/files";
 
 	if (SDL_AndroidGetExternalStorageState() != 0) {
-		PATH_DATA = std::string(SDL_AndroidGetExternalStoragePath());
+		settings->path_data = std::string(SDL_AndroidGetExternalStoragePath());
 	}
 
 	for (int i = 0; i < internalSDList.size(); i++) {
 		if (pathExists(internalSDList[i])) {
-			PATH_USER = internalSDList[i] + "/Flare";
-			PATH_CONF = PATH_USER + "/config";
+			settings->path_user = internalSDList[i] + "/Flare";
+			settings->path_conf = settings->path_user + "/config";
 
-			if (PATH_DATA.empty())
-				PATH_DATA = internalSDList[i] + "/" + user_folder;
+			if (settings->path_data.empty())
+				settings->path_data = internalSDList[i] + "/" + user_folder;
 
 			break;
 		}
 	}
 
-	if (PATH_DATA.empty()) {
+	if (settings->path_data.empty()) {
 		logError("Settings: Android external storage unavailable: %s", SDL_GetError());
 	}
 
-	if (PATH_USER.empty() || !pathExists(PATH_USER)) {
+	if (settings->path_user.empty() || !pathExists(settings->path_user)) {
 		for (int i = 0; i < externalSDList.size(); i++) {
 			if (pathExists(externalSDList[i])) {
-				PATH_USER = externalSDList[i] + "/Flare";
-				PATH_CONF = PATH_USER + "/config";
+				settings->path_user = externalSDList[i] + "/Flare";
+				settings->path_conf = settings->path_user + "/config";
 
 				break;
 			}
 		}
 	}
 
-	createDir(PATH_USER);
-	createDir(PATH_CONF);
-	createDir(PATH_USER + "/mods");
-	createDir(PATH_USER + "/saves");
+	createDir(settings->path_user);
+	createDir(settings->path_conf);
+	createDir(settings->path_user + "/mods");
+	createDir(settings->path_user + "/saves");
 
-	PATH_CONF += "/";
-	PATH_USER += "/";
-	PATH_DATA += "/";
+	settings->path_conf += "/";
+	settings->path_user += "/";
+	settings->path_data += "/";
 }
 
 void Platform::setExitEventFilter() {

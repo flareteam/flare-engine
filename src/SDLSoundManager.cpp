@@ -49,17 +49,17 @@ SDLSoundManager::SDLSoundManager()
 	, music_filename("")
 	, last_played_sid(-1)
 {
-	if (AUDIO && Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 1024)) {
+	if (settings->audio && Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 1024)) {
 		logError("SDLSoundManager: Error during Mix_OpenAudio: %s", SDL_GetError());
-		AUDIO = false;
+		settings->audio = false;
 	}
 
-	if (AUDIO) {
+	if (settings->audio) {
 		logInfo("SoundManager: Using SDLSoundManager (SDL2, %s)", SDL_GetCurrentAudioDriver());
 	}
 
 	Mix_AllocateChannels(128);
-	setVolumeSFX(SOUND_VOLUME);
+	setVolumeSFX(settings->sound_volume);
 }
 
 SDLSoundManager::~SDLSoundManager() {
@@ -161,7 +161,7 @@ SoundID SDLSoundManager::load(const std::string& filename, const std::string& er
 	SoundMapIterator it;
 	std::locale loc;
 
-	if (!AUDIO)
+	if (!settings->audio)
 		return 0;
 
 	const std::collate<char>& coll = std::use_facet<std::collate<char> >(loc);
@@ -217,7 +217,7 @@ void SDLSoundManager::play(SoundID sid, const std::string& channel, const FPoint
 	if (!loop && sid)
 		last_played_sid = sid;
 
-	if (!sid || !AUDIO || !SOUND_VOLUME)
+	if (!sid || !settings->audio || !settings->sound_volume)
 		return;
 
 	it = sounds.find(sid);
@@ -297,7 +297,7 @@ void SDLSoundManager::setVolumeSFX(int value) {
 }
 
 void SDLSoundManager::loadMusic(const std::string& filename) {
-	if (!AUDIO)
+	if (!settings->audio)
 		return;
 
 	if (filename == music_filename) {
@@ -329,26 +329,26 @@ void SDLSoundManager::unloadMusic() {
 }
 
 void SDLSoundManager::playMusic() {
-	if (!AUDIO || !music) return;
+	if (!settings->audio || !music) return;
 
-	Mix_VolumeMusic(MUSIC_VOLUME);
+	Mix_VolumeMusic(settings->music_volume);
 	Mix_PlayMusic(music, -1);
 }
 
 void SDLSoundManager::stopMusic() {
-	if (!AUDIO || !music) return;
+	if (!settings->audio || !music) return;
 
 	Mix_HaltMusic();
 }
 
 void SDLSoundManager::setVolumeMusic(int value) {
-	if (!AUDIO || !music) return;
+	if (!settings->audio || !music) return;
 
 	Mix_VolumeMusic(value);
 }
 
 bool SDLSoundManager::isPlayingMusic() {
-	return (AUDIO && music && MUSIC_VOLUME > 0 && Mix_PlayingMusic());
+	return (settings->audio && music && settings->music_volume > 0 && Mix_PlayingMusic());
 }
 
 int SDLSoundManager::SetChannelPosition(int channel, Sint16 angle, Uint8 distance) {

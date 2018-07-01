@@ -54,15 +54,15 @@ Point FPointToPoint(const FPoint& fp) {
 FPoint screen_to_map(int x, int y, float camx, float camy) {
 	FPoint r;
 	if (eset->tileset.orientation == eset->tileset.TILESET_ISOMETRIC) {
-		float scrx = float(x - VIEW_W_HALF) * 0.5f;
-		float scry = float(y - VIEW_H_HALF) * 0.5f;
+		float scrx = float(x - settings->view_w_half) * 0.5f;
+		float scry = float(y - settings->view_h_half) * 0.5f;
 
 		r.x = (eset->tileset.units_per_pixel_x * scrx) + (eset->tileset.units_per_pixel_y * scry) + camx;
 		r.y = (eset->tileset.units_per_pixel_y * scry) - (eset->tileset.units_per_pixel_x * scrx) + camy;
 	}
 	else {
-		r.x = static_cast<float>(x - VIEW_W_HALF) * (eset->tileset.units_per_pixel_x) + camx;
-		r.y = static_cast<float>(y - VIEW_H_HALF) * (eset->tileset.units_per_pixel_y) + camy;
+		r.x = static_cast<float>(x - settings->view_w_half) * (eset->tileset.units_per_pixel_x) + camx;
+		r.y = static_cast<float>(y - settings->view_h_half) * (eset->tileset.units_per_pixel_y) + camy;
 	}
 	return r;
 }
@@ -76,8 +76,8 @@ Point map_to_screen(float x, float y, float camx, float camy) {
 
 	// adjust to the center of the viewport
 	// we do this calculation first to avoid negative integer division
-	float adjust_x = (VIEW_W_HALF + 0.5f) * eset->tileset.units_per_pixel_x;
-	float adjust_y = (VIEW_H_HALF + 0.5f) * eset->tileset.units_per_pixel_y;
+	float adjust_x = (settings->view_w_half + 0.5f) * eset->tileset.units_per_pixel_x;
+	float adjust_y = (settings->view_h_half + 0.5f) * eset->tileset.units_per_pixel_y;
 
 	if (eset->tileset.orientation == eset->tileset.TILESET_ISOMETRIC) {
 		r.x = int(floorf(((x - camx - y + camy + adjust_x)/eset->tileset.units_per_pixel_x)+0.5f));
@@ -215,32 +215,32 @@ void alignToScreenEdge(ALIGNMENT alignment, Rect *r) {
 		// do nothing
 	}
 	else if (alignment == ALIGN_TOP) {
-		r->x = (VIEW_W_HALF-r->w/2)+r->x;
+		r->x = (settings->view_w_half - r->w/2) + r->x;
 	}
 	else if (alignment == ALIGN_TOPRIGHT) {
-		r->x = (VIEW_W-r->w)+r->x;
+		r->x = (settings->view_w - r->w) + r->x;
 	}
 	else if (alignment == ALIGN_LEFT) {
-		r->y = (VIEW_H_HALF-r->h/2)+r->y;
+		r->y = (settings->view_h_half - r->h/2) + r->y;
 	}
 	else if (alignment == ALIGN_CENTER) {
-		r->x = (VIEW_W_HALF-r->w/2)+r->x;
-		r->y = (VIEW_H_HALF-r->h/2)+r->y;
+		r->x = (settings->view_w_half - r->w/2) + r->x;
+		r->y = (settings->view_h_half - r->h/2) + r->y;
 	}
 	else if (alignment == ALIGN_RIGHT) {
-		r->x = (VIEW_W-r->w)+r->x;
-		r->y = (VIEW_H_HALF-r->h/2)+r->y;
+		r->x = (settings->view_w - r->w) + r->x;
+		r->y = (settings->view_h_half - r->h/2) + r->y;
 	}
 	else if (alignment == ALIGN_BOTTOMLEFT) {
-		r->y = (VIEW_H-r->h)+r->y;
+		r->y = (settings->view_h - r->h) + r->y;
 	}
 	else if (alignment == ALIGN_BOTTOM) {
-		r->x = (VIEW_W_HALF-r->w/2)+r->x;
-		r->y = (VIEW_H-r->h)+r->y;
+		r->x = (settings->view_w_half - r->w/2) + r->x;
+		r->y = (settings->view_h - r->h) + r->y;
 	}
 	else if (alignment == ALIGN_BOTTOMRIGHT) {
-		r->x = (VIEW_W-r->w)+r->x;
-		r->y = (VIEW_H-r->h)+r->y;
+		r->x = (settings->view_w - r->w) + r->x;
+		r->y = (settings->view_h - r->h) + r->y;
 	}
 	else {
 		// do nothing
@@ -328,7 +328,7 @@ void logErrorDialog(const char* dialog_text, ...) {
 }
 
 void createLogFile() {
-	LOG_PATH = PATH_CONF + "/flare_log.txt";
+	LOG_PATH = settings->path_conf + "/flare_log.txt";
 
 	// always create a new log file on each launch
 	if (fileExists(LOG_PATH)) {
@@ -373,7 +373,7 @@ void createSaveDir(int slot) {
 	if (slot == 0) return;
 
 	std::stringstream ss;
-	ss << PATH_USER << "saves/" << eset->misc.save_prefix << "/";
+	ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/";
 
 	createDir(path(&ss));
 
@@ -386,7 +386,7 @@ void removeSaveDir(int slot) {
 	if (slot == 0) return;
 
 	std::stringstream ss;
-	ss << PATH_USER << "saves/" << eset->misc.save_prefix << "/" << slot;
+	ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/" << slot;
 
 	if (isDirectory(path(&ss))) {
 		removeDirRecursive(path(&ss));
@@ -397,16 +397,16 @@ Rect resizeToScreen(int w, int h, bool crop, ALIGNMENT align) {
 	Rect r;
 
 	// fit to height
-	float ratio = VIEW_H / static_cast<float>(h);
+	float ratio = settings->view_h / static_cast<float>(h);
 	r.w = static_cast<int>(static_cast<float>(w) * ratio);
-	r.h = VIEW_H;
+	r.h = settings->view_h;
 
 	if (!crop) {
 		// fit to width
-		if (r.w > VIEW_W) {
-			ratio = VIEW_W / static_cast<float>(w);
+		if (r.w > settings->view_w) {
+			ratio = settings->view_w / static_cast<float>(w);
 			r.h = static_cast<int>(static_cast<float>(h) * ratio);
-			r.w = VIEW_W;
+			r.w = settings->view_w;
 		}
 	}
 
@@ -444,7 +444,7 @@ std::string floatToString(const float value, size_t precision) {
 }
 
 std::string getDurationString(const int duration, size_t precision) {
-	float real_duration = static_cast<float>(duration) / MAX_FRAMES_PER_SEC;
+	float real_duration = static_cast<float>(duration) / settings->max_frames_per_sec;
 	std::string temp = floatToString(real_duration, precision);
 
 	if (real_duration == 1.f) {
@@ -570,7 +570,7 @@ void lockFileRead() {
 	if (!PLATFORM.has_lock_file)
 		return;
 
-	std::string lock_file_path = PATH_CONF + "flare_lock";
+	std::string lock_file_path = settings->path_conf + "flare_lock";
 
 	std::ifstream infile;
 	infile.open(lock_file_path.c_str(), std::ios::in);
@@ -595,7 +595,7 @@ void lockFileWrite(int increment) {
 	if (!PLATFORM.has_lock_file)
 		return;
 
-	std::string lock_file_path = PATH_CONF + "flare_lock";
+	std::string lock_file_path = settings->path_conf + "flare_lock";
 
 	if (increment < 0) {
 		if (LOCK_INDEX == 0)

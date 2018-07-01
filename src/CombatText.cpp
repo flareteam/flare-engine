@@ -54,8 +54,8 @@ CombatText::CombatText() {
 	msg_color[MSG_BUFF] = font->getColor("combat_buff");
 	msg_color[MSG_MISS] = font->getColor("combat_miss");
 
-	duration = MAX_FRAMES_PER_SEC; // 1 second
-	speed = 60.f / MAX_FRAMES_PER_SEC;
+	duration = settings->max_frames_per_sec; // 1 second
+	speed = 60.f / settings->max_frames_per_sec;
 	offset = 48; // average height of flare-game enemies, so a sensible default
 
 	// Load config settings
@@ -69,7 +69,7 @@ CombatText::CombatText() {
 			}
 			else if(infile.key == "speed") {
 				// @ATTR speed|int|Motion speed of the combat text.
-				speed = static_cast<float>(toInt(infile.val) * 60) / MAX_FRAMES_PER_SEC;
+				speed = static_cast<float>(toInt(infile.val) * 60) / settings->max_frames_per_sec;
 			}
 			else if (infile.key == "offset") {
 				// @ATTR offset|int|The vertical offset for the combat text's starting position.
@@ -92,7 +92,7 @@ CombatText::~CombatText() {
 }
 
 void CombatText::addString(const std::string& message, const FPoint& location, int displaytype) {
-	if (COMBAT_TEXT) {
+	if (settings->combat_text) {
 		Combat_Text_Item *c = new Combat_Text_Item();
 		WidgetLabel *label = new WidgetLabel();
 		c->pos.x = location.x;
@@ -110,7 +110,7 @@ void CombatText::addString(const std::string& message, const FPoint& location, i
 }
 
 void CombatText::addInt(int num, const FPoint& location, int displaytype) {
-	if (COMBAT_TEXT) {
+	if (settings->combat_text) {
 		std::stringstream ss;
 		ss << num;
 		addString(ss.str(), location, displaytype);
@@ -140,7 +140,7 @@ void CombatText::logic(const FPoint& _cam) {
 }
 
 void CombatText::render() {
-	if (!SHOW_HUD) return;
+	if (!settings->show_hud) return;
 
 	for(std::vector<Combat_Text_Item>::iterator it = combat_text.begin(); it != combat_text.end(); ++it) {
 		if (it->lifespan > 0)

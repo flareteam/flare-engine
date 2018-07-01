@@ -101,7 +101,7 @@ GameStateConfigBase::GameStateConfigBase (bool do_init)
 	, frame(0,0)
 	, frame_offset(11,8)
 	, tab_offset(3,0)
-	, new_render_device(RENDER_DEVICE)
+	, new_render_device(settings->render_device_name)
 {
 
 	// don't save settings if we close the game while in this menu
@@ -504,11 +504,11 @@ void GameStateConfigBase::update() {
 }
 
 void GameStateConfigBase::updateAudio() {
-	if (AUDIO) {
-		music_volume_sl->set(0,128,MUSIC_VOLUME);
-		snd->setVolumeMusic(MUSIC_VOLUME);
-		sound_volume_sl->set(0,128,SOUND_VOLUME);
-		snd->setVolumeSFX(SOUND_VOLUME);
+	if (settings->audio) {
+		music_volume_sl->set(0, 128, settings->music_volume);
+		snd->setVolumeMusic(settings->music_volume);
+		sound_volume_sl->set(0, 128, settings->sound_volume);
+		snd->setVolumeSFX(settings->sound_volume);
 	}
 	else {
 		music_volume_sl->set(0,128,0);
@@ -517,15 +517,15 @@ void GameStateConfigBase::updateAudio() {
 }
 
 void GameStateConfigBase::updateInterface() {
-	combat_text_cb->setChecked(COMBAT_TEXT);
-	show_fps_cb->setChecked(SHOW_FPS);
-	colorblind_cb->setChecked(COLORBLIND);
-	hardware_cursor_cb->setChecked(HARDWARE_CURSOR);
-	dev_mode_cb->setChecked(DEV_MODE);
-	loot_tooltips_cb->setChecked(LOOT_TOOLTIPS);
-	statbar_labels_cb->setChecked(STATBAR_LABELS);
-	auto_equip_cb->setChecked(AUTO_EQUIP);
-	subtitles_cb->setChecked(SUBTITLES);
+	combat_text_cb->setChecked(settings->combat_text);
+	show_fps_cb->setChecked(settings->show_fps);
+	colorblind_cb->setChecked(settings->colorblind);
+	hardware_cursor_cb->setChecked(settings->hardware_cursor);
+	dev_mode_cb->setChecked(settings->dev_mode);
+	loot_tooltips_cb->setChecked(settings->loot_tooltips);
+	statbar_labels_cb->setChecked(settings->statbar_labels);
+	auto_equip_cb->setChecked(settings->auto_equip);
+	subtitles_cb->setChecked(settings->subtitles);
 
 	refreshLanguages();
 }
@@ -562,8 +562,8 @@ void GameStateConfigBase::logic() {
 
 		if (PLATFORM.force_hardware_cursor) {
 			// for some platforms, hardware mouse cursor can not be turned off
-			HARDWARE_CURSOR = true;
-			hardware_cursor_cb->setChecked(HARDWARE_CURSOR);
+			settings->hardware_cursor = true;
+			hardware_cursor_cb->setChecked(settings->hardware_cursor);
 		}
 	}
 	else if (active_tab == MODS_TAB) {
@@ -612,8 +612,8 @@ bool GameStateConfigBase::logicMain() {
 void GameStateConfigBase::logicDefaults() {
 	defaults_confirm->logic();
 	if (defaults_confirm->confirmClicked) {
-		FULLSCREEN = false;
-		loadDefaults();
+		settings->fullscreen = false;
+		settings->loadDefaults();
 		eset->load();
 		inpt->defaultQwertyKeyBindings();
 		inpt->defaultJoystickBindings();
@@ -631,7 +631,7 @@ void GameStateConfigBase::logicAccept() {
 		reload_backgrounds = true;
 		delete mods;
 		mods = new ModManager(NULL);
-		PREV_SAVE_SLOT = -1;
+		settings->prev_save_slot = -1;
 	}
 	delete msg;
 	msg = new MessageEngine();
@@ -640,7 +640,7 @@ void GameStateConfigBase::logicAccept() {
 	eset->load();
 	setStatNames();
 	refreshFont();
-	if ((ENABLE_JOYSTICK) && (inpt->getNumJoysticks() > 0)) {
+	if ((settings->enable_joystick) && (inpt->getNumJoysticks() > 0)) {
 		inpt->initJoystick();
 	}
 	cleanup();
@@ -653,20 +653,20 @@ void GameStateConfigBase::logicAccept() {
 	}
 
 	// we can't replace the render device in-place, so soft-reset the game
-	if (new_render_device != RENDER_DEVICE) {
-		RENDER_DEVICE = new_render_device;
+	if (new_render_device != settings->render_device_name) {
+		settings->render_device_name = new_render_device;
 		inpt->done = true;
-		SOFT_RESET = true;
+		settings->soft_reset = true;
 	}
 
 	render_device->createContext();
-	saveSettings();
+	settings->saveSettings();
 	setRequestedGameState(new GameStateTitle());
 }
 
 void GameStateConfigBase::logicCancel() {
 	inpt->lock[Input::CANCEL] = true;
-	loadSettings();
+	settings->loadSettings();
 	inpt->loadKeyBindings();
 	delete msg;
 	msg = new MessageEngine();
@@ -683,52 +683,52 @@ void GameStateConfigBase::logicCancel() {
 }
 
 void GameStateConfigBase::logicAudio() {
-	if (AUDIO) {
+	if (settings->audio) {
 		if (music_volume_sl->checkClick()) {
-			if (MUSIC_VOLUME == 0)
+			if (settings->music_volume == 0)
 				reload_music = true;
-			MUSIC_VOLUME = static_cast<short>(music_volume_sl->getValue());
-			snd->setVolumeMusic(MUSIC_VOLUME);
+			settings->music_volume = static_cast<short>(music_volume_sl->getValue());
+			snd->setVolumeMusic(settings->music_volume);
 		}
 		else if (sound_volume_sl->checkClick()) {
-			SOUND_VOLUME = static_cast<short>(sound_volume_sl->getValue());
-			snd->setVolumeSFX(SOUND_VOLUME);
+			settings->sound_volume = static_cast<short>(sound_volume_sl->getValue());
+			snd->setVolumeSFX(settings->sound_volume);
 		}
 	}
 }
 
 void GameStateConfigBase::logicInterface() {
 	if (combat_text_cb->checkClick()) {
-		COMBAT_TEXT = combat_text_cb->isChecked();
+		settings->combat_text = combat_text_cb->isChecked();
 	}
 	else if (language_lstb->checkClick()) {
 		int lang_id = language_lstb->getSelected();
 		if (lang_id != -1)
-			LANGUAGE = language_ISO[lang_id];
+			settings->language = language_ISO[lang_id];
 	}
 	else if (show_fps_cb->checkClick()) {
-		SHOW_FPS = show_fps_cb->isChecked();
+		settings->show_fps = show_fps_cb->isChecked();
 	}
 	else if (colorblind_cb->checkClick()) {
-		COLORBLIND = colorblind_cb->isChecked();
+		settings->colorblind = colorblind_cb->isChecked();
 	}
 	else if (hardware_cursor_cb->checkClick()) {
-		HARDWARE_CURSOR = hardware_cursor_cb->isChecked();
+		settings->hardware_cursor = hardware_cursor_cb->isChecked();
 	}
 	else if (dev_mode_cb->checkClick()) {
-		DEV_MODE = dev_mode_cb->isChecked();
+		settings->dev_mode = dev_mode_cb->isChecked();
 	}
 	else if (loot_tooltips_cb->checkClick()) {
-		LOOT_TOOLTIPS = loot_tooltips_cb->isChecked();
+		settings->loot_tooltips = loot_tooltips_cb->isChecked();
 	}
 	else if (statbar_labels_cb->checkClick()) {
-		STATBAR_LABELS = statbar_labels_cb->isChecked();
+		settings->statbar_labels = statbar_labels_cb->isChecked();
 	}
 	else if (auto_equip_cb->checkClick()) {
-		AUTO_EQUIP = auto_equip_cb->isChecked();
+		settings->auto_equip = auto_equip_cb->isChecked();
 	}
 	else if (subtitles_cb->checkClick()) {
-		SUBTITLES = subtitles_cb->isChecked();
+		settings->subtitles = subtitles_cb->isChecked();
 	}
 }
 
@@ -761,8 +761,8 @@ void GameStateConfigBase::render() {
 
 	int tabheight = tab_control->getTabHeight();
 	Rect	pos;
-	pos.x = (VIEW_W - eset->resolutions.frame_w)/2;
-	pos.y = (VIEW_H - eset->resolutions.frame_h)/2 + tabheight - tabheight/16;
+	pos.x = (settings->view_w - eset->resolutions.frame_w)/2;
+	pos.y = (settings->view_h - eset->resolutions.frame_h)/2 + tabheight - tabheight/16;
 
 	if (background) {
 		background->setDest(pos);
@@ -825,10 +825,10 @@ void GameStateConfigBase::placeLabeledWidget(WidgetLabel *lb, Widget *w, int x1,
 }
 
 void GameStateConfigBase::refreshWidgets() {
-	tab_control->setMainArea(((VIEW_W - eset->resolutions.frame_w)/2) + tab_offset.x, ((VIEW_H - eset->resolutions.frame_h)/2) + tab_offset.y);
+	tab_control->setMainArea(((settings->view_w - eset->resolutions.frame_w)/2) + tab_offset.x, ((settings->view_h - eset->resolutions.frame_h)/2) + tab_offset.y);
 
-	frame.x = ((VIEW_W - eset->resolutions.frame_w)/2) + frame_offset.x;
-	frame.y = ((VIEW_H - eset->resolutions.frame_h)/2) + tab_control->getTabHeight() + frame_offset.y;
+	frame.x = ((settings->view_w - eset->resolutions.frame_w)/2) + frame_offset.x;
+	frame.y = ((settings->view_h - eset->resolutions.frame_h)/2) + tab_control->getTabHeight() + frame_offset.y;
 
 	for (unsigned i=0; i<child_widget.size(); ++i) {
 		child_widget[i]->setPos(frame.x, frame.y);
@@ -859,7 +859,7 @@ void GameStateConfigBase::refreshLanguages() {
 				language_ISO.push_back(key);
 				language_lstb->append(infile.val, "");
 
-				if (language_ISO.back() == LANGUAGE) {
+				if (language_ISO.back() == settings->language) {
 					language_lstb->select(i);
 				}
 

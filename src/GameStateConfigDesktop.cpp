@@ -507,39 +507,39 @@ void GameStateConfigDesktop::update() {
 }
 
 void GameStateConfigDesktop::updateVideo() {
-	fullscreen_cb->setChecked(FULLSCREEN);
-	hwsurface_cb->setChecked(HWSURFACE);
-	vsync_cb->setChecked(VSYNC);
-	texture_filter_cb->setChecked(TEXTURE_FILTER);
-	dpi_scaling_cb->setChecked(DPI_SCALING);
-	change_gamma_cb->setChecked(CHANGE_GAMMA);
+	fullscreen_cb->setChecked(settings->fullscreen);
+	hwsurface_cb->setChecked(settings->hwsurface);
+	vsync_cb->setChecked(settings->vsync);
+	texture_filter_cb->setChecked(settings->texture_filter);
+	dpi_scaling_cb->setChecked(settings->dpi_scaling);
+	change_gamma_cb->setChecked(settings->change_gamma);
 
-	if (CHANGE_GAMMA) {
-		render_device->setGamma(GAMMA);
+	if (settings->change_gamma) {
+		render_device->setGamma(settings->gamma);
 	}
 	else {
-		GAMMA = 1.0;
+		settings->gamma = 1.0;
 		gamma_sl->enabled = false;
 		render_device->resetGamma();
 	}
-	gamma_sl->set(GAMMA_MIN, GAMMA_MAX, static_cast<int>(GAMMA*10.0));
+	gamma_sl->set(GAMMA_MIN, GAMMA_MAX, static_cast<int>(settings->gamma * 10.0));
 
 	refreshRenderers();
 }
 
 void GameStateConfigDesktop::updateInput() {
-	enable_joystick_cb->setChecked(ENABLE_JOYSTICK);
-	mouse_aim_cb->setChecked(MOUSE_AIM);
-	no_mouse_cb->setChecked(NO_MOUSE);
-	mouse_move_cb->setChecked(MOUSE_MOVE);
+	enable_joystick_cb->setChecked(settings->enable_joystick);
+	mouse_aim_cb->setChecked(settings->mouse_aim);
+	no_mouse_cb->setChecked(settings->no_mouse);
+	mouse_move_cb->setChecked(settings->mouse_move);
 
-	if (ENABLE_JOYSTICK && inpt->getNumJoysticks() > 0) {
+	if (settings->enable_joystick && inpt->getNumJoysticks() > 0) {
 		inpt->initJoystick();
-		joystick_device_lstb->select(JOYSTICK_DEVICE);
+		joystick_device_lstb->select(settings->joystick_device);
 	}
 	joystick_device_lstb->refresh(WidgetListBox::GOTO_SELECTED);
 
-	joystick_deadzone_sl->set(0,32768,JOY_DEADZONE);
+	joystick_deadzone_sl->set(0, 32768, settings->joy_deadzone);
 }
 
 void GameStateConfigDesktop::updateKeybinds() {
@@ -625,38 +625,38 @@ bool GameStateConfigDesktop::logicMain() {
 
 void GameStateConfigDesktop::logicVideo() {
 	if (fullscreen_cb->checkClick()) {
-		FULLSCREEN = fullscreen_cb->isChecked();
+		settings->fullscreen = fullscreen_cb->isChecked();
 	}
 	else if (hwsurface_cb->checkClick()) {
-		HWSURFACE = hwsurface_cb->isChecked();
+		settings->hwsurface = hwsurface_cb->isChecked();
 	}
 	else if (vsync_cb->checkClick()) {
-		VSYNC = vsync_cb->isChecked();
+		settings->vsync = vsync_cb->isChecked();
 	}
 	else if (texture_filter_cb->checkClick()) {
-		TEXTURE_FILTER = texture_filter_cb->isChecked();
+		settings->texture_filter = texture_filter_cb->isChecked();
 	}
 	else if (dpi_scaling_cb->checkClick()) {
-		DPI_SCALING = dpi_scaling_cb->isChecked();
+		settings->dpi_scaling = dpi_scaling_cb->isChecked();
 		render_device->windowResize();
 		refreshWidgets();
 		force_refresh_background = true;
 	}
 	else if (change_gamma_cb->checkClick()) {
-		CHANGE_GAMMA = change_gamma_cb->isChecked();
-		if (CHANGE_GAMMA) {
+		settings->change_gamma = change_gamma_cb->isChecked();
+		if (settings->change_gamma) {
 			gamma_sl->enabled = true;
 		}
 		else {
-			GAMMA = 1.0;
+			settings->gamma = 1.0;
 			gamma_sl->enabled = false;
-			gamma_sl->set(GAMMA_MIN, GAMMA_MAX, static_cast<int>(GAMMA*10.0));
+			gamma_sl->set(GAMMA_MIN, GAMMA_MAX, static_cast<int>(settings->gamma * 10.0));
 			render_device->resetGamma();
 		}
 	}
 	else if (gamma_sl->checkClick()) {
-		GAMMA = static_cast<float>(gamma_sl->getValue())*0.1f;
-		render_device->setGamma(GAMMA);
+		settings->gamma = static_cast<float>(gamma_sl->getValue()) * 0.1f;
+		render_device->setGamma(settings->gamma);
 	}
 	else if (renderer_lstb->checkClick()) {
 		new_render_device = renderer_lstb->getValue();
@@ -677,32 +677,32 @@ void GameStateConfigDesktop::logicInput() {
 
 	if (mouse_move_cb->checkClick()) {
 		if (mouse_move_cb->isChecked()) {
-			MOUSE_MOVE=true;
+			settings->mouse_move = true;
 			enableMouseOptions();
 		}
-		else MOUSE_MOVE=false;
+		else settings->mouse_move=false;
 	}
 	else if (mouse_aim_cb->checkClick()) {
 		if (mouse_aim_cb->isChecked()) {
-			MOUSE_AIM=true;
+			settings->mouse_aim = true;
 			enableMouseOptions();
 		}
-		else MOUSE_AIM=false;
+		else settings->mouse_aim=false;
 	}
 	else if (no_mouse_cb->checkClick()) {
 		if (no_mouse_cb->isChecked()) {
-			NO_MOUSE=true;
+			settings->no_mouse = true;
 			disableMouseOptions();
 		}
-		else NO_MOUSE=false;
+		else settings->no_mouse = false;
 	}
 	else if (enable_joystick_cb->checkClick()) {
 		if (enable_joystick_cb->isChecked()) {
-			ENABLE_JOYSTICK=true;
+			settings->enable_joystick = true;
 			if (inpt->getNumJoysticks() > 0) {
-				JOYSTICK_DEVICE = 0;
+				settings->joystick_device = 0;
 				inpt->initJoystick();
-				joystick_device_lstb->select(JOYSTICK_DEVICE);
+				joystick_device_lstb->select(settings->joystick_device);
 			}
 
 			if (inpt->getNumJoysticks() > 0)
@@ -713,20 +713,20 @@ void GameStateConfigDesktop::logicInput() {
 		}
 	}
 	else if (joystick_deadzone_sl->checkClick()) {
-		JOY_DEADZONE = joystick_deadzone_sl->getValue();
+		settings->joy_deadzone = joystick_deadzone_sl->getValue();
 	}
 	else if (joystick_device_lstb->checkClick()) {
-		JOYSTICK_DEVICE = joystick_device_lstb->getSelected();
-		if (JOYSTICK_DEVICE != -1) {
-			ENABLE_JOYSTICK=true;
+		settings->joystick_device = joystick_device_lstb->getSelected();
+		if (settings->joystick_device != -1) {
+			settings->enable_joystick = true;
 			if (inpt->getNumJoysticks() > 0) {
 				inpt->initJoystick();
 			}
 		}
 		else {
-			ENABLE_JOYSTICK = false;
+			settings->enable_joystick = false;
 		}
-		enable_joystick_cb->setChecked(ENABLE_JOYSTICK);
+		enable_joystick_cb->setChecked(settings->enable_joystick);
 	}
 }
 
@@ -734,7 +734,7 @@ void GameStateConfigDesktop::logicKeybinds() {
 	input_scrollbox->logic();
 	for (unsigned int i = 0; i < keybinds_btn.size(); i++) {
 		if (i >= static_cast<unsigned int>(inpt->KEY_COUNT * 2)) {
-			keybinds_btn[i]->enabled = ENABLE_JOYSTICK;
+			keybinds_btn[i]->enabled = settings->enable_joystick;
 			keybinds_btn[i]->refresh();
 		}
 		Point mouse = input_scrollbox->input_assist(inpt->mouse);
@@ -743,7 +743,7 @@ void GameStateConfigDesktop::logicKeybinds() {
 			confirm_msg = msg->get("Assign:") + ' ' + inpt->binding_name[i%key_count];
 			delete input_confirm;
 			input_confirm = new MenuConfirm(msg->get("Clear"),confirm_msg);
-			input_confirm_ticks = MAX_FRAMES_PER_SEC * 10; // 10 seconds
+			input_confirm_ticks = settings->max_frames_per_sec * 10; // 10 seconds
 			input_confirm->visible = true;
 			input_key = i;
 			inpt->last_button = -1;
@@ -782,10 +782,10 @@ void GameStateConfigDesktop::renderDialogs() {
 		keybind_tip_data.addText(keybind_msg);
 
 		if (keybind_tip_ticks == 0)
-			keybind_tip_ticks = MAX_FRAMES_PER_SEC * 5;
+			keybind_tip_ticks = settings->max_frames_per_sec * 5;
 
 		if (keybind_tip_ticks > 0) {
-			keybind_tip->render(keybind_tip_data, Point(VIEW_W, 0), STYLE_FLOAT);
+			keybind_tip->render(keybind_tip_data, Point(settings->view_w, 0), STYLE_FLOAT);
 			keybind_tip_ticks--;
 		}
 
@@ -910,24 +910,24 @@ void GameStateConfigDesktop::cleanupDialogs() {
 }
 
 void GameStateConfigDesktop::enableMouseOptions() {
-	NO_MOUSE = false;
-	no_mouse_cb->setChecked(NO_MOUSE);
+	settings->no_mouse = false;
+	no_mouse_cb->setChecked(settings->no_mouse);
 }
 
 void GameStateConfigDesktop::disableMouseOptions() {
-	MOUSE_AIM=false;
-	mouse_aim_cb->setChecked(MOUSE_AIM);
+	settings->mouse_aim = false;
+	mouse_aim_cb->setChecked(settings->mouse_aim);
 
-	MOUSE_MOVE=false;
-	mouse_move_cb->setChecked(MOUSE_MOVE);
+	settings->mouse_move = false;
+	mouse_move_cb->setChecked(settings->mouse_move);
 
-	NO_MOUSE = true;
-	no_mouse_cb->setChecked(NO_MOUSE);
+	settings->no_mouse = true;
+	no_mouse_cb->setChecked(settings->no_mouse);
 }
 
 void GameStateConfigDesktop::disableJoystickOptions() {
-	ENABLE_JOYSTICK=false;
-	enable_joystick_cb->setChecked(ENABLE_JOYSTICK);
+	settings->enable_joystick = false;
+	enable_joystick_cb->setChecked(settings->enable_joystick);
 
 	for (int i=0; i<joystick_device_lstb->getSize(); i++)
 		joystick_device_lstb->deselect(i);
@@ -944,7 +944,7 @@ void GameStateConfigDesktop::refreshRenderers() {
 
 	for (size_t i = 0; i < rd_name.size(); ++i) {
 		renderer_lstb->append(rd_name[i], rd_desc[i]);
-		if (rd_name[i] == RENDER_DEVICE) {
+		if (rd_name[i] == settings->render_device_name) {
 			renderer_lstb->select(static_cast<int>(i));
 		}
 	}

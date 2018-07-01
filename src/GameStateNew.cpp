@@ -412,17 +412,17 @@ void GameStateNew::refreshWidgets() {
 	button_exit->setPos();
 	button_create->setPos();
 
-	button_prev->setPos((VIEW_W - eset->resolutions.frame_w)/2, (VIEW_H - eset->resolutions.frame_h)/2);
-	button_next->setPos((VIEW_W - eset->resolutions.frame_w)/2, (VIEW_H - eset->resolutions.frame_h)/2);
-	button_permadeath->setPos((VIEW_W - eset->resolutions.frame_w)/2, (VIEW_H - eset->resolutions.frame_h)/2);
-	class_list->setPos((VIEW_W - eset->resolutions.frame_w)/2, (VIEW_H - eset->resolutions.frame_h)/2);
+	button_prev->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);
+	button_next->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);
+	button_permadeath->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);
+	class_list->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);
 
-	label_portrait->setPos((VIEW_W - eset->resolutions.frame_w)/2, (VIEW_H - eset->resolutions.frame_h)/2);
-	label_name->setPos((VIEW_W - eset->resolutions.frame_w)/2, (VIEW_H - eset->resolutions.frame_h)/2);
-	label_permadeath->setPos((VIEW_W - eset->resolutions.frame_w)/2, (VIEW_H - eset->resolutions.frame_h)/2);
-	label_classlist->setPos((VIEW_W - eset->resolutions.frame_w)/2, (VIEW_H - eset->resolutions.frame_h)/2);
+	label_portrait->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);
+	label_name->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);
+	label_permadeath->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);
+	label_classlist->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);
 
-	input_name->setPos((VIEW_W - eset->resolutions.frame_w)/2, (VIEW_H - eset->resolutions.frame_h)/2);
+	input_name->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);
 }
 
 void GameStateNew::render() {
@@ -442,8 +442,8 @@ void GameStateNew::render() {
 	src.w = dest.w = portrait_pos.w;
 	src.h = dest.h = portrait_pos.h;
 	src.x = src.y = 0;
-	dest.x = portrait_pos.x + (VIEW_W - eset->resolutions.frame_w)/2;
-	dest.y = portrait_pos.y + (VIEW_H - eset->resolutions.frame_h)/2;
+	dest.x = portrait_pos.x + (settings->view_w - eset->resolutions.frame_w)/2;
+	dest.y = portrait_pos.y + (settings->view_h - eset->resolutions.frame_h)/2;
 
 	if (portrait_image) {
 		portrait_image->setClip(src);

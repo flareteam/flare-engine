@@ -118,7 +118,7 @@ StatBlock::StatBlock()
 	, hold_state(false)
 	, prevent_interrupt(false)
 	, waypoints()		// enemy only
-	, waypoint_pause(MAX_FRAMES_PER_SEC)	// enemy only
+	, waypoint_pause(settings->max_frames_per_sec)	// enemy only
 	, waypoint_pause_ticks(0)		// enemy only
 	, wander(false)					// enemy only
 	, wander_area()		// enemy only
@@ -143,8 +143,8 @@ StatBlock::StatBlock()
 	, activated_power(NULL) // enemy only
 	, half_dead_power(false) // enemy only
 	, suppress_hp(false)
-	, flee_duration(MAX_FRAMES_PER_SEC) // enemy only
-	, flee_cooldown(MAX_FRAMES_PER_SEC) // enemy only
+	, flee_duration(settings->max_frames_per_sec) // enemy only
+	, flee_cooldown(settings->max_frames_per_sec) // enemy only
 	, perfect_accuracy(false)
 	, teleportation(false)
 	, teleport_destination()
@@ -195,7 +195,7 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 	if (infile->key == "speed") {
 		// @ATTR speed|float|Movement speed
 		float fvalue = toFloat(infile->val, 0);
-		speed = speed_default = fvalue / MAX_FRAMES_PER_SEC;
+		speed = speed_default = fvalue / settings->max_frames_per_sec;
 		return true;
 	}
 	else if (infile->key == "cooldown") {
@@ -760,7 +760,7 @@ void StatBlock::logic() {
 	// HP regen
 	if (get(STAT_HP_REGEN) > 0 && hp < get(STAT_HP_MAX) && hp > 0) {
 		hp_ticker++;
-		if (hp_ticker >= (60 * MAX_FRAMES_PER_SEC)/get(STAT_HP_REGEN)) {
+		if (hp_ticker >= (60 * settings->max_frames_per_sec) / get(STAT_HP_REGEN)) {
 			hp++;
 			hp_ticker = 0;
 		}
@@ -769,7 +769,7 @@ void StatBlock::logic() {
 	// MP regen
 	if (get(STAT_MP_REGEN) > 0 && mp < get(STAT_MP_MAX) && hp > 0) {
 		mp_ticker++;
-		if (mp_ticker >= (60 * MAX_FRAMES_PER_SEC)/get(STAT_MP_REGEN)) {
+		if (mp_ticker >= (60 * settings->max_frames_per_sec) / get(STAT_MP_REGEN)) {
 			mp++;
 			mp_ticker = 0;
 		}

@@ -28,6 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "LootManager.h"
 #include "PowerManager.h"
 #include "RenderDevice.h"
+#include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "UtilsMath.h"
@@ -38,7 +39,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 Enemy::Enemy() : Entity() {
 
 	stats.cur_state = ENEMY_STANCE;
-	stats.turn_ticks = MAX_FRAMES_PER_SEC;
+	stats.turn_ticks = settings->max_frames_per_sec;
 	stats.cooldown = 0;
 	stats.in_combat = false;
 	stats.join_combat = false;

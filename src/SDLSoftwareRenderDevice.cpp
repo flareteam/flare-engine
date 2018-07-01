@@ -159,10 +159,10 @@ SDLSoftwareRenderDevice::SDLSoftwareRenderDevice()
 	, background_color(0) {
 	logInfo("RenderDevice: Using SDLSoftwareRenderDevice (software, SDL 2, %s)", SDL_GetCurrentVideoDriver());
 
-	fullscreen = FULLSCREEN;
-	hwsurface = HWSURFACE;
-	vsync = VSYNC;
-	texture_filter = TEXTURE_FILTER;
+	fullscreen = settings->fullscreen;
+	hwsurface = settings->hwsurface;
+	vsync = settings->vsync;
+	texture_filter = settings->texture_filter;
 
 	min_screen.x = eset->resolutions.min_screen_w;
 	min_screen.y = eset->resolutions.min_screen_h;
@@ -175,14 +175,14 @@ SDLSoftwareRenderDevice::SDLSoftwareRenderDevice()
 }
 
 int SDLSoftwareRenderDevice::createContextInternal() {
-	bool settings_changed = (fullscreen != FULLSCREEN || hwsurface != HWSURFACE || vsync != VSYNC || texture_filter != TEXTURE_FILTER);
+	bool settings_changed = (fullscreen != settings->fullscreen || hwsurface != settings->hwsurface || vsync != settings->vsync || texture_filter != settings->texture_filter);
 
 	Uint32 w_flags = 0;
 	Uint32 r_flags = 0;
-	int window_w = SCREEN_W;
-	int window_h = SCREEN_H;
+	int window_w = settings->screen_w;
+	int window_h = settings->screen_h;
 
-	if (FULLSCREEN) {
+	if (settings->fullscreen) {
 		w_flags = w_flags | SDL_WINDOW_FULLSCREEN_DESKTOP;
 
 		// make the window the same size as the desktop resolution
@@ -200,14 +200,14 @@ int SDLSoftwareRenderDevice::createContextInternal() {
 
 	w_flags = w_flags | SDL_WINDOW_RESIZABLE;
 
-	if (HWSURFACE) {
+	if (settings->hwsurface) {
 		r_flags = r_flags | SDL_RENDERER_ACCELERATED;
 	}
 	else {
 		r_flags = r_flags | SDL_RENDERER_SOFTWARE;
-		VSYNC = false; // can't have software mode & vsync at the same time
+		settings->vsync = false; // can't have software mode & vsync at the same time
 	}
-	if (VSYNC) r_flags = r_flags | SDL_RENDERER_PRESENTVSYNC;
+	if (settings->vsync) r_flags = r_flags | SDL_RENDERER_PRESENTVSYNC;
 
 	if (settings_changed || !is_initialized) {
 		destroyContext();
@@ -216,7 +216,7 @@ int SDLSoftwareRenderDevice::createContextInternal() {
 		if (window) {
 			renderer = SDL_CreateRenderer(window, -1, r_flags);
 			if (renderer) {
-				if (TEXTURE_FILTER && !eset->resolutions.ignore_texture_filter)
+				if (settings->texture_filter && !eset->resolutions.ignore_texture_filter)
 					SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
 				else
 					SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0");
@@ -233,13 +233,13 @@ int SDLSoftwareRenderDevice::createContextInternal() {
 			if (!is_initialized) {
 				// save the system gamma levels if we just created the window
 				SDL_GetWindowGammaRamp(window, gamma_r, gamma_g, gamma_b);
-				logInfo("RenderDevice: Window size is %dx%d", SCREEN_W, SCREEN_H);
+				logInfo("RenderDevice: Window size is %dx%d", settings->screen_w, settings->screen_h);
 			}
 
-			fullscreen = FULLSCREEN;
-			hwsurface = HWSURFACE;
-			vsync = VSYNC;
-			texture_filter = TEXTURE_FILTER;
+			fullscreen = settings->fullscreen;
+			hwsurface = settings->hwsurface;
+			vsync = settings->vsync;
+			texture_filter = settings->texture_filter;
 			is_initialized = true;
 
 			logInfo("RenderDevice: Fullscreen=%d, Hardware surfaces=%d, Vsync=%d, Texture Filter=%d", fullscreen, hwsurface, vsync, texture_filter);
@@ -273,12 +273,12 @@ int SDLSoftwareRenderDevice::createContextInternal() {
 		delete curs;
 		curs = new CursorManager();
 
-		if (CHANGE_GAMMA)
-			setGamma(GAMMA);
+		if (settings->change_gamma)
+			setGamma(settings->gamma);
 		else {
 			resetGamma();
-			CHANGE_GAMMA = false;
-			GAMMA = 1.0;
+			settings->change_gamma = false;
+			settings->gamma = 1.0;
 		}
 	}
 
@@ -402,7 +402,7 @@ void SDLSoftwareRenderDevice::drawLine(int x0, int y0, int x1, int y1, const Col
 
 	do {
 		//skip draw if outside screen
-		if (x0 > 0 && y0 > 0 && x0 < VIEW_W && y0 < VIEW_H) {
+		if (x0 > 0 && y0 > 0 && x0 < settings->view_w && y0 < settings->view_h) {
 			this->drawPixel(x0,y0,color);
 		}
 
@@ -604,7 +604,7 @@ void SDLSoftwareRenderDevice::getWindowSize(short unsigned *screen_w, short unsi
 void SDLSoftwareRenderDevice::windowResize() {
 	windowResizeInternal();
 
-	SDL_RenderSetLogicalSize(renderer, VIEW_W, VIEW_H);
+	SDL_RenderSetLogicalSize(renderer, settings->view_w, settings->view_h);
 
 	if (texture) SDL_DestroyTexture(texture);
 	if (screen) SDL_FreeSurface(screen);
@@ -612,10 +612,10 @@ void SDLSoftwareRenderDevice::windowResize() {
 	Uint32 rmask, gmask, bmask, amask;
 	int bpp = static_cast<int>(BITS_PER_PIXEL);
 	SDL_PixelFormatEnumToMasks(SDL_PIXELFORMAT_ARGB8888, &bpp, &rmask, &gmask, &bmask, &amask);
-	screen = SDL_CreateRGBSurface(0, VIEW_W, VIEW_H, bpp, rmask, gmask, bmask, amask);
-	texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, VIEW_W, VIEW_H);
+	screen = SDL_CreateRGBSurface(0, settings->view_w, settings->view_h, bpp, rmask, gmask, bmask, amask);
+	texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, settings->view_w, settings->view_h);
 
-	updateScreenVars();
+	settings->updateScreenVars();
 }
 
 void SDLSoftwareRenderDevice::setBackgroundColor(Color color) {

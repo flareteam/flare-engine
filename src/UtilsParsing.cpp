@@ -21,6 +21,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "UtilsParsing.h"
 #include "Settings.h"
+#include "SharedResources.h"
 #include <cstdlib>
 #include <typeinfo>
 #include <math.h>
@@ -51,11 +52,11 @@ int parse_duration(const std::string& s) {
 	if (val == 0)
 		return val;
 	else if (suffix == "s")
-		val *= MAX_FRAMES_PER_SEC;
+		val *= settings->max_frames_per_sec;
 	else {
 		if (suffix != "ms")
 			logError("UtilsParsing: Duration of '%d' does not have a suffix. Assuming 'ms'.", val);
-		val = static_cast<int>(floorf((static_cast<float>(val*MAX_FRAMES_PER_SEC) / 1000.f) + 0.5f));
+		val = static_cast<int>(floorf((static_cast<float>(val * settings->max_frames_per_sec) / 1000.f) + 0.5f));
 	}
 
 	// round back up to 1 if we rounded down to 0 for ms

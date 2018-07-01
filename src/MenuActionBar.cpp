@@ -379,7 +379,7 @@ void MenuActionBar::render() {
 			}
 
 			// put an asterisk on this icon if in colorblind mode
-			if (COLORBLIND) {
+			if (settings->colorblind) {
 				WidgetLabel label;
 				label.set(menus[i]->pos.x + 2, menus[i]->pos.y + 2, FontEngine::JUSTIFY_LEFT, VALIGN_TOP, "*", font->getColor("menu_normal"));
 				label.render();
@@ -395,7 +395,7 @@ TooltipData MenuActionBar::checkTooltip(const Point& mouse) {
 	TooltipData tip;
 
 	if (isWithinRect(menus[MENU_CHARACTER]->pos, mouse)) {
-		if (COLORBLIND && requires_attention[MENU_CHARACTER])
+		if (settings->colorblind && requires_attention[MENU_CHARACTER])
 			tip.addText(msg->get("Character") + " (*)");
 		else
 			tip.addText(msg->get("Character"));
@@ -404,7 +404,7 @@ TooltipData MenuActionBar::checkTooltip(const Point& mouse) {
 		return tip;
 	}
 	if (isWithinRect(menus[MENU_INVENTORY]->pos, mouse)) {
-		if (COLORBLIND && requires_attention[MENU_INVENTORY])
+		if (settings->colorblind && requires_attention[MENU_INVENTORY])
 			tip.addText(msg->get("Inventory") + " (*)");
 		else
 			tip.addText(msg->get("Inventory"));
@@ -413,7 +413,7 @@ TooltipData MenuActionBar::checkTooltip(const Point& mouse) {
 		return tip;
 	}
 	if (isWithinRect(menus[MENU_POWERS]->pos, mouse)) {
-		if (COLORBLIND && requires_attention[MENU_POWERS])
+		if (settings->colorblind && requires_attention[MENU_POWERS])
 			tip.addText(msg->get("Powers") + " (*)");
 		else
 			tip.addText(msg->get("Powers"));
@@ -422,7 +422,7 @@ TooltipData MenuActionBar::checkTooltip(const Point& mouse) {
 		return tip;
 	}
 	if (isWithinRect(menus[MENU_LOG]->pos, mouse)) {
-		if (COLORBLIND && requires_attention[MENU_LOG])
+		if (settings->colorblind && requires_attention[MENU_LOG])
 			tip.addText(msg->get("Log") + " (*)");
 		else
 			tip.addText(msg->get("Log"));
@@ -702,7 +702,7 @@ void MenuActionBar::resetSlots() {
  * Set a target depending on how a power was triggered
  */
 FPoint MenuActionBar::setTarget(bool have_aim, const Power& pow) {
-	if (have_aim && MOUSE_AIM) {
+	if (have_aim && settings->mouse_aim) {
 		FPoint map_pos;
 		if (pow.aim_assist)
 			map_pos = screen_to_map(inpt->mouse.x,  inpt->mouse.y + eset->misc.aim_assist, pc->stats.pos.x, pc->stats.pos.y);

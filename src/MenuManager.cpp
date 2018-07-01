@@ -53,6 +53,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "NPC.h"
 #include "PowerManager.h"
 #include "RenderDevice.h"
+#include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "SoundManager.h"
@@ -148,7 +149,7 @@ MenuManager::MenuManager(StatBlock *_stats)
 	menus.push_back(book); // menus[17]
 	menus.push_back(num_picker); // menus[18]
 
-	if (DEV_MODE) {
+	if (settings->dev_mode) {
 		devconsole = new MenuDevConsole();
 	}
 
@@ -160,7 +161,7 @@ MenuManager::MenuManager(StatBlock *_stats)
 
 	closeAll(); // make sure all togglable menus start closed
 
-	SHOW_HUD = true;
+	settings->show_hud = true;
 }
 
 void MenuManager::alignAll() {
@@ -168,7 +169,7 @@ void MenuManager::alignAll() {
 		menus[i]->align();
 	}
 
-	if (DEV_MODE) {
+	if (settings->dev_mode) {
 		devconsole->align();
 	}
 
@@ -385,7 +386,7 @@ void MenuManager::logic() {
 	talker->logic();
 	stash->logic();
 
-	if (DEV_MODE) {
+	if (settings->dev_mode) {
 		devconsole->logic();
 	}
 
@@ -419,7 +420,7 @@ void MenuManager::logic() {
 	if (!inpt->pressing[Input::INVENTORY] && !inpt->pressing[Input::POWERS] && !inpt->pressing[Input::CHARACTER] && !inpt->pressing[Input::LOG])
 		key_lock = false;
 
-	if (DEV_MODE && devconsole->inputFocus())
+	if (settings->dev_mode && devconsole->inputFocus())
 		key_lock = true;
 
 	// handle npc action menu
@@ -439,7 +440,7 @@ void MenuManager::logic() {
 				inpt->lock[Input::CANCEL] = true;
 				menus[i]->defocusTabLists();
 			}
-			if (DEV_MODE) {
+			if (settings->dev_mode) {
 				tablist = devconsole->getCurrentTabList();
 				if (tablist) {
 					inpt->lock[Input::CANCEL] = true;
@@ -457,7 +458,7 @@ void MenuManager::logic() {
 			if (act->twostep_slot != -1) {
 				act->twostep_slot = -1;
 			}
-			else if (DEV_MODE && devconsole->visible) {
+			else if (settings->dev_mode && devconsole->visible) {
 				devconsole->closeWindow();
 			}
 			else if (menus_open) {
@@ -550,7 +551,7 @@ void MenuManager::logic() {
 		}
 
 		//developer console
-		if (DEV_MODE && inpt->pressing[Input::DEVELOPER_MENU] && !inpt->lock[Input::DEVELOPER_MENU] && !mouse_dragging && !keyboard_dragging) {
+		if (settings->dev_mode && inpt->pressing[Input::DEVELOPER_MENU] && !inpt->lock[Input::DEVELOPER_MENU] && !mouse_dragging && !keyboard_dragging) {
 			inpt->lock[Input::DEVELOPER_MENU] = true;
 			if (devconsole->visible) {
 				closeAll();
@@ -563,7 +564,7 @@ void MenuManager::logic() {
 		}
 	}
 
-	bool console_open = DEV_MODE && devconsole->visible;
+	bool console_open = settings->dev_mode && devconsole->visible;
 	menus_open = (inv->visible || pow->visible || chr->visible || questlog->visible || vendor->visible || talker->visible || npc->visible || book->visible || console_open);
 	pause = (eset->misc.menus_pause && menus_open) || exit->visible || console_open || book->visible;
 
@@ -1178,14 +1179,14 @@ void MenuManager::resetDrag() {
 }
 
 void MenuManager::render() {
-	if (!SHOW_HUD) {
+	if (!settings->show_hud) {
 		// if the hud is disabled, only show a few necessary menus
 
 		// exit menu
 		menus[9]->render();
 
 		// dev console
-		if (DEV_MODE)
+		if (settings->dev_mode)
 			devconsole->render();
 
 		return;
@@ -1231,7 +1232,7 @@ void MenuManager::render() {
 	touch_controls->render();
 
 	if (!num_picker->visible && !mouse_dragging && !sticky_dragging) {
-		if (!inpt->usingMouse() || TOUCHSCREEN)
+		if (!inpt->usingMouse() || settings->touchscreen)
 			handleKeyboardTooltips();
 		else {
 			TooltipData tip_new;
@@ -1286,7 +1287,7 @@ void MenuManager::render() {
 		else if (drag_src == DRAG_SRC_POWERS || drag_src == DRAG_SRC_ACTIONBAR)
 			setDragIcon(powers->powers[drag_power].icon);
 
-		if (TOUCHSCREEN && sticky_dragging)
+		if (settings->touchscreen && sticky_dragging)
 			renderIcon(keydrag_pos.x - eset->resolutions.icon_size/2, keydrag_pos.y - eset->resolutions.icon_size/2);
 		else
 			renderIcon(inpt->mouse.x - eset->resolutions.icon_size/2, inpt->mouse.y - eset->resolutions.icon_size/2);
@@ -1301,7 +1302,7 @@ void MenuManager::render() {
 	}
 
 	// render the dev console above everything else
-	if (DEV_MODE) {
+	if (settings->dev_mode) {
 		devconsole->render();
 	}
 }
@@ -1425,7 +1426,7 @@ void MenuManager::closeLeft() {
 	talker->setNPC(NULL);
 	vendor->setNPC(NULL);
 
-	if (DEV_MODE && devconsole->visible) {
+	if (settings->dev_mode && devconsole->visible) {
 		devconsole->closeWindow();
 	}
 }
@@ -1442,7 +1443,7 @@ void MenuManager::closeRight() {
 	npc->setNPC(NULL);
 	talker->setNPC(NULL);
 
-	if (DEV_MODE && devconsole->visible) {
+	if (settings->dev_mode && devconsole->visible) {
 		devconsole->closeWindow();
 	}
 }
@@ -1487,7 +1488,7 @@ MenuManager::~MenuManager() {
 	delete book;
 	delete num_picker;
 
-	if (DEV_MODE) {
+	if (settings->dev_mode) {
 		delete devconsole;
 	}
 

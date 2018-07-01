@@ -504,7 +504,7 @@ void PowerManager::loadPowers() {
 			powers[input_id].aim_assist = toBool(infile.val);
 		else if (infile.key == "speed")
 			// @ATTR power.speed|float|The speed of missile hazard, the unit is defined as map units per frame.
-			powers[input_id].speed = toFloat(infile.val) / MAX_FRAMES_PER_SEC;
+			powers[input_id].speed = toFloat(infile.val) / settings->max_frames_per_sec;
 		else if (infile.key == "lifespan")
 			// @ATTR power.lifespan|duration|How long the hazard/animation lasts in 'ms' or 's'.
 			powers[input_id].lifespan = parse_duration(infile.val);
@@ -516,7 +516,7 @@ void PowerManager::loadPowers() {
 			powers[input_id].complete_animation = toBool(infile.val);
 		else if (infile.key == "charge_speed")
 			// @ATTR power.charge_speed|float|Moves the caster at this speed in the direction they are facing until the state animation is finished.
-			powers[input_id].charge_speed = toFloat(infile.val) / MAX_FRAMES_PER_SEC;
+			powers[input_id].charge_speed = toFloat(infile.val) / settings->max_frames_per_sec;
 		else if (infile.key == "attack_speed") {
 			// @ATTR power.attack_speed|int|Changes attack animation speed for this Power. A value of 100 is 100% speed (aka normal speed).
 			powers[input_id].attack_speed = static_cast<float>(toInt(infile.val));

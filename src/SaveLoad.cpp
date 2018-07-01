@@ -84,7 +84,7 @@ void SaveLoad::saveGame() {
 	std::ofstream outfile;
 
 	std::stringstream ss;
-	ss << PATH_USER << "saves/" << eset->misc.save_prefix << "/" << game_slot << "/avatar.txt";
+	ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/" << game_slot << "/avatar.txt";
 
 	outfile.open(path(&ss).c_str(), std::ios::out);
 
@@ -210,9 +210,9 @@ void SaveLoad::saveGame() {
 	// Save stash
 	ss.str("");
 	if (pc->stats.permadeath)
-		ss << PATH_USER << "saves/" << eset->misc.save_prefix << "/" << game_slot << "/stash_HC.txt";
+		ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/" << game_slot << "/stash_HC.txt";
 	else
-		ss << PATH_USER << "saves/" << eset->misc.save_prefix << "/stash.txt";
+		ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/stash.txt";
 
 	outfile.open(path(&ss).c_str(), std::ios::out);
 
@@ -233,7 +233,7 @@ void SaveLoad::saveGame() {
 		PLATFORM.FSCommit();
 	}
 
-	PREV_SAVE_SLOT = game_slot-1;
+	settings->prev_save_slot = game_slot-1;
 
 	// display a log message saying that we saved the game
 	menu->questlog->add(msg->get("Game saved."), MenuLog::TYPE_MESSAGES, MenuLog::PREVENT_SPAM, MenuLog::DEFAULT_STYLE);
@@ -255,7 +255,7 @@ void SaveLoad::loadGame() {
 	std::vector<int> hotkeys(MenuActionBar::SLOT_MAX, -1);
 
 	std::stringstream ss;
-	ss << PATH_USER << "saves/" << eset->misc.save_prefix << "/" << game_slot << "/avatar.txt";
+	ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/" << game_slot << "/avatar.txt";
 
 	if (infile.open(path(&ss), !FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
@@ -473,9 +473,9 @@ void SaveLoad::loadStash() {
 	FileParser infile;
 	std::stringstream ss;
 	if (pc->stats.permadeath)
-		ss << PATH_USER << "saves/" << eset->misc.save_prefix << "/" << game_slot << "/stash_HC.txt";
+		ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/" << game_slot << "/stash_HC.txt";
 	else
-		ss << PATH_USER << "saves/" << eset->misc.save_prefix << "/stash.txt";
+		ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/stash.txt";
 
 	if (infile.open(path(&ss), !FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
 		while (infile.next()) {

@@ -39,6 +39,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Menu.h"
 #include "ModManager.h"
 #include "RenderDevice.h"
+#include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "SoundManager.h"
@@ -118,7 +119,7 @@ void LootManager::logic() {
  * Show all tooltips for loot on the floor
  */
 void LootManager::renderTooltips(const FPoint& cam) {
-	if (!SHOW_HUD) return;
+	if (!settings->show_hud) return;
 
 	Point dest;
 	bool tooltip_below = true;
@@ -142,7 +143,7 @@ void LootManager::renderTooltips(const FPoint& cam) {
 			hover.w = eset->tileset.tile_w;
 			hover.h = eset->tileset.tile_h;
 
-			if ((LOOT_TOOLTIPS && !inpt->pressing[Input::ALT]) || (!LOOT_TOOLTIPS && inpt->pressing[Input::ALT]) || isWithinRect(hover, inpt->mouse)) {
+			if ((settings->loot_tooltips && !inpt->pressing[Input::ALT]) || (!settings->loot_tooltips && inpt->pressing[Input::ALT]) || isWithinRect(hover, inpt->mouse)) {
 				it->tip_visible = true;
 
 				// create tooltip data if needed
@@ -172,7 +173,7 @@ void LootManager::renderTooltips(const FPoint& cam) {
 				it->tip_bounds = tip->bounds;
 
 				// only display one tooltip if we got it from hovering
-				if (!LOOT_TOOLTIPS && !inpt->pressing[Input::ALT])
+				if (!settings->loot_tooltips && !inpt->pressing[Input::ALT])
 					break;
 			}
 		}

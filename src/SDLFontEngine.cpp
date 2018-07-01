@@ -82,7 +82,7 @@ SDLFontEngine::SDLFontEngine() : FontEngine(), active_font(NULL) {
 
 				std::string lang = popFirstString(infile.val);
 
-				if ((lang == "default" && style->path == "") || lang == LANGUAGE) {
+				if ((lang == "default" && style->path == "") || lang == settings->language) {
 					style->path = popFirstString(infile.val);
 					style->ptsize = popFirstInt(infile.val);
 					style->blend = toBool(popFirstString(infile.val));

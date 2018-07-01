@@ -63,7 +63,7 @@ void BehaviorStandard::logic() {
 	}
 
 	if (!e->stats.hero_ally) {
-		if (calcDist(e->stats.pos, pc->stats.pos) <= ENCOUNTER_DIST)
+		if (calcDist(e->stats.pos, pc->stats.pos) <= settings->encounter_dist)
 			e->stats.encountered = true;
 
 		if (!e->stats.encountered)

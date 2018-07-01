@@ -181,7 +181,7 @@ ItemStack MenuItemStorage::click(const Point& position) {
 
 	if (drag_prev_slot > -1) {
 		item = storage[drag_prev_slot];
-		if (TOUCHSCREEN) {
+		if (settings->touchscreen) {
 			if (!slots[drag_prev_slot]->in_focus && !item.empty()) {
 				slots[drag_prev_slot]->in_focus = true;
 				current_slot = slots[drag_prev_slot];

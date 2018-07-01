@@ -36,7 +36,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetScrollBox.h"
 
 Scene::Scene(const CutsceneSettings& _settings, short _cutscene_type)
-	: settings(_settings)
+	: cutscene_settings(_settings)
 	, frame_counter(0)
 	, pause_frames(0)
 	, caption("")
@@ -64,7 +64,7 @@ Scene& Scene::operator=(const Scene& other) {
 	if (this == &other)
 		return *this;
 
-	settings = other.settings;
+	cutscene_settings = other.cutscene_settings;
 	frame_counter = other.frame_counter;
 	pause_frames = other.pause_frames;
 	caption = other.caption;
@@ -192,8 +192,8 @@ bool Scene::logic() {
 		while (!components.empty()) {
 			if (components.front().type == "text") {
 				VScrollComponent vsc;
-				vsc.pos.x = VIEW_W/2;
-				vsc.pos.y = VIEW_H/2 + next_y;
+				vsc.pos.x = settings->view_w/2;
+				vsc.pos.y = settings->view_h/2 + next_y;
 
 				vsc.text = new WidgetLabel();
 				if (vsc.text) {
@@ -213,8 +213,8 @@ bool Scene::logic() {
 						vsc.image_size.x = vsc.image->getGraphicsWidth();
 						vsc.image_size.y = vsc.image->getGraphicsHeight();
 
-						vsc.pos.x = VIEW_W/2 - vsc.image_size.x/2;
-						vsc.pos.y = VIEW_H/2 + next_y;
+						vsc.pos.x = settings->view_w/2 - vsc.image_size.x/2;
+						vsc.pos.y = settings->view_h/2 + next_y;
 
 						next_y += vsc.image_size.y;
 
@@ -225,7 +225,7 @@ bool Scene::logic() {
 			}
 			else if (components.front().type == "separator") {
 				VScrollComponent vsc;
-				vsc.pos.y = VIEW_H/2 + next_y + components.front().x/2;
+				vsc.pos.y = settings->view_h/2 + next_y + components.front().x/2;
 				next_y += components.front().x;
 
 				vscroll_components.push_back(vsc);
@@ -233,7 +233,7 @@ bool Scene::logic() {
 			components.pop();
 		}
 
-		vscroll_offset = static_cast<int>(static_cast<float>(vscroll_ticks) * (settings.vscroll_speed * MAX_FRAMES_PER_SEC) / VIEW_H);
+		vscroll_offset = static_cast<int>(static_cast<float>(vscroll_ticks) * (cutscene_settings.vscroll_speed * settings->max_frames_per_sec) / settings->view_h);
 		if (skip_scroll)
 			return false;
 		else if (skip)
@@ -261,7 +261,7 @@ bool Scene::logic() {
 void Scene::refreshWidgets() {
 	if (cutscene_type ==  CUTSCENE_STATIC) {
 		if (!caption.empty()) {
-			int caption_width = VIEW_W - static_cast<int>(VIEW_W * (settings.caption_margins.x * 2.0f));
+			int caption_width = settings->view_w - static_cast<int>(settings->view_w * (cutscene_settings.caption_margins.x * 2.0f));
 			font->setFont("font_captions");
 			int padding = font->getLineHeight()/4;
 			Point caption_size = font->calc_size(caption, caption_width);
@@ -270,7 +270,7 @@ void Scene::refreshWidgets() {
 			if (!caption_box) {
 				caption_box = new WidgetScrollBox(caption_size_padded.x, caption_size_padded.y);
 				caption_box->setBasePos(0, 0, ALIGN_BOTTOM);
-				caption_box->bg = settings.caption_background;
+				caption_box->bg = cutscene_settings.caption_background;
 				caption_box->resize(caption_size_padded.x, caption_size_padded.y);
 			}
 			else {
@@ -278,7 +278,7 @@ void Scene::refreshWidgets() {
 				caption_box->resize(caption_size_padded.x, caption_size_padded.y);
 			}
 
-			caption_box->setPos(0, static_cast<int>(static_cast<float>(VIEW_H) * settings.caption_margins.y) * (-1));
+			caption_box->setPos(0, static_cast<int>(static_cast<float>(settings->view_h) * cutscene_settings.caption_margins.y) * (-1));
 
 			font->renderShadowed(caption, (padding / 2) + (caption_size_padded.x / 2), padding,
 								 FontEngine::JUSTIFY_CENTER,
@@ -321,11 +321,11 @@ void Scene::refreshWidgets() {
 		// position elements relative to the vertical offset
 		for (size_t i = 0; i < vscroll_components.size(); ++i) {
 			if (vscroll_components[i].text) {
-				vscroll_components[i].text->setX(VIEW_W/2);
+				vscroll_components[i].text->setX(settings->view_w/2);
 				vscroll_components[i].text->setY(vscroll_components[i].pos.y - vscroll_offset);
 			}
 			else if (vscroll_components[i].image) {
-				int x = VIEW_W/2 - vscroll_components[i].image_size.x/2;
+				int x = settings->view_w/2 - vscroll_components[i].image_size.x/2;
 				int y = vscroll_components[i].pos.y - vscroll_offset;
 				vscroll_components[i].image->setDest(x, y);
 			}
@@ -361,13 +361,13 @@ void Scene::render() {
 			VScrollComponent& vsc = vscroll_components[i];
 
 			if (vsc.text) {
-				if (vsc.text->bounds.y <= VIEW_H && (vsc.text->bounds.y + vsc.text->bounds.h >= 0)) {
+				if (vsc.text->bounds.y <= settings->view_h && (vsc.text->bounds.y + vsc.text->bounds.h >= 0)) {
 					vsc.text->render();
 				}
 			}
 			else if (vsc.image) {
 				Point dest = FPointToPoint(vsc.image->getDest());
-				if (dest.y <= VIEW_H && (dest.y + vsc.image_size.y >= 0)) {
+				if (dest.y <= settings->view_h && (dest.y + vsc.image_size.y >= 0)) {
 					render_device->render(vsc.image);
 				}
 			}
@@ -394,7 +394,7 @@ void GameStateCutscene::init() {
 	if (initialized)
 		return;
 
-	if (MUSIC_VOLUME > 0 && !music.empty()) {
+	if (settings->music_volume > 0 && !music.empty()) {
 		// restart music so that game devs can sync with cutscene playback
 		snd->stopMusic();
 		snd->loadMusic(music);
@@ -436,7 +436,7 @@ void GameStateCutscene::render() {
 }
 
 bool GameStateCutscene::load(const std::string& filename) {
-	CutsceneSettings settings;
+	CutsceneSettings cutscene_settings;
 	FileParser infile;
 
 	// @CLASS Cutscene|Description of cutscenes in cutscenes/
@@ -450,13 +450,13 @@ bool GameStateCutscene::load(const std::string& filename) {
 
 		if (infile.new_section) {
 			if (infile.section == "scene") {
-				scenes.push(new Scene(settings, Scene::CUTSCENE_STATIC));
+				scenes.push(new Scene(cutscene_settings, Scene::CUTSCENE_STATIC));
 			}
 			else if (infile.section == "vscroll") {
 				// if the previous scene was also a vertical scroller, don't create a new scene
 				// instead, the previous scene will be extended
 				if (scenes.empty() || scenes.back()->cutscene_type != Scene::CUTSCENE_VSCROLL) {
-					scenes.push(new Scene(settings, Scene::CUTSCENE_VSCROLL));
+					scenes.push(new Scene(cutscene_settings, Scene::CUTSCENE_VSCROLL));
 				}
 			}
 		}
@@ -464,16 +464,16 @@ bool GameStateCutscene::load(const std::string& filename) {
 		if (infile.section.empty()) {
 			if (infile.key == "caption_margins") {
 				// @ATTR caption_margins|float, float : X margin, Y margin|Percentage-based margins for the caption text based on screen size
-				settings.caption_margins.x = toFloat(popFirstString(infile.val))/100.0f;
-				settings.caption_margins.y = toFloat(popFirstString(infile.val))/100.0f;
+				cutscene_settings.caption_margins.x = toFloat(popFirstString(infile.val))/100.0f;
+				cutscene_settings.caption_margins.y = toFloat(popFirstString(infile.val))/100.0f;
 			}
 			else if (infile.key == "caption_background") {
 				// @ATTR caption_background|color, int : Color, Alpha|Color (RGBA) of the caption area background.
-				settings.caption_background = toRGBA(infile.val);
+				cutscene_settings.caption_background = toRGBA(infile.val);
 			}
 			else if (infile.key == "vscroll_speed") {
 				// @ATTR vscroll_speed|float|The speed at which elements will scroll in 'vscroll' scenes.
-				settings.vscroll_speed = toFloat(infile.val);
+				cutscene_settings.vscroll_speed = toFloat(infile.val);
 			}
 			else if (infile.key == "menu_backgrounds") {
 				// @ATTR menu_backgrounds|bool|This cutscene will use a random fullscreen background image, like the title screen does

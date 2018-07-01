@@ -714,7 +714,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	}
 
 	// item quality text for colorblind users
-	if (COLORBLIND && items[stack.item].quality != "") {
+	if (settings->colorblind && items[stack.item].quality != "") {
 		color = color_normal;
 		for (size_t i=0; i<item_qualities.size(); ++i) {
 			if (item_qualities[i].id == items[stack.item].quality) {
@@ -858,7 +858,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 
 	// input hint for consumables/books
 	// TODO hint when not using mouse control. The action for using an item there is hard to describe
-	if (context == PLAYER_INV && !NO_MOUSE) {
+	if (context == PLAYER_INV && !settings->no_mouse) {
 		int power_id = items[stack.item].power;
 		if (power_id > 0 && items[stack.item].type == "consumable") {
 			tip.addColoredText('\n' + msg->get("Press [%s] to use", inpt->getBindingString(Input::MAIN2).c_str()), color_bonus);

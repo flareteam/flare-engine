@@ -70,7 +70,7 @@ SDLInputState::SDLInputState(void)
 	}
 	else {
 		logInfo("InputState: No joysticks were found.");
-		ENABLE_JOYSTICK = false;
+		settings->enable_joystick = false;
 		return;
 	}
 
@@ -87,9 +87,9 @@ void SDLInputState::initJoystick() {
 	}
 
 	joy_num = SDL_NumJoysticks();
-	if (ENABLE_JOYSTICK && joy_num > 0) {
-		joy = SDL_JoystickOpen(JOYSTICK_DEVICE);
-		logInfo("InputState: Using joystick %d.", JOYSTICK_DEVICE);
+	if (settings->enable_joystick && joy_num > 0) {
+		joy = SDL_JoystickOpen(settings->joystick_device);
+		logInfo("InputState: Using joystick %d.", settings->joystick_device);
 	}
 
 	if (joy) {
@@ -221,7 +221,7 @@ void SDLInputState::handle() {
 				break;
 			case SDL_WINDOWEVENT:
 				if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
-					resize_ticks = MAX_FRAMES_PER_SEC/4;
+					resize_ticks = settings->max_frames_per_sec / 4;
 				}
 				else if (event.window.event == SDL_WINDOWEVENT_MINIMIZED) {
 					if (PLATFORM.is_mobile_device) {
@@ -246,8 +246,8 @@ void SDLInputState::handle() {
 			case SDL_FINGERMOTION:
 				last_is_joystick = false;
 				if (PLATFORM.is_mobile_device) {
-					mouse.x = static_cast<int>((event.tfinger.x + event.tfinger.dx) * VIEW_W);
-					mouse.y = static_cast<int>((event.tfinger.y + event.tfinger.dy) * VIEW_H);
+					mouse.x = static_cast<int>((event.tfinger.x + event.tfinger.dx) * settings->view_w);
+					mouse.y = static_cast<int>((event.tfinger.y + event.tfinger.dy) * settings->view_h);
 
 					if (event.tfinger.dy > 0) {
 						scroll_up = true;
@@ -267,8 +267,8 @@ void SDLInputState::handle() {
 				last_is_joystick = false;
 				if (PLATFORM.is_mobile_device) {
 					touch_locked = true;
-					mouse.x = static_cast<int>(event.tfinger.x * VIEW_W);
-					mouse.y = static_cast<int>(event.tfinger.y * VIEW_H);
+					mouse.x = static_cast<int>(event.tfinger.x * settings->view_w);
+					mouse.y = static_cast<int>(event.tfinger.y * settings->view_h);
 					pressing[Input::MAIN1] = true;
 					un_press[Input::MAIN1] = false;
 
@@ -301,7 +301,7 @@ void SDLInputState::handle() {
 				break;
 
 			case SDL_KEYDOWN:
-				if (!NO_MOUSE)
+				if (!settings->no_mouse)
 					last_is_joystick = false;
 
 				for (int key=0; key<KEY_COUNT; key++) {
@@ -315,7 +315,7 @@ void SDLInputState::handle() {
 				if (event.key.keysym.sym == SDLK_DOWN) pressing_down = true;
 				break;
 			case SDL_KEYUP:
-				if (!NO_MOUSE)
+				if (!settings->no_mouse)
 					last_is_joystick = false;
 
 				for (int key=0; key<KEY_COUNT; key++) {
@@ -329,7 +329,7 @@ void SDLInputState::handle() {
 				if (event.key.keysym.sym == SDLK_DOWN) pressing_down = false;
 				break;
 			case SDL_JOYHATMOTION:
-				if (joy && SDL_JoystickInstanceID(joy) == event.jhat.which && ENABLE_JOYSTICK) {
+				if (joy && SDL_JoystickInstanceID(joy) == event.jhat.which && settings->enable_joystick) {
 					last_is_joystick = true;
 					curs->show_cursor = false;
 					hideCursor();
@@ -425,7 +425,7 @@ void SDLInputState::handle() {
 				}
 				break;
 			case SDL_JOYBUTTONDOWN:
-				if (joy && SDL_JoystickInstanceID(joy) == event.jbutton.which && ENABLE_JOYSTICK) {
+				if (joy && SDL_JoystickInstanceID(joy) == event.jbutton.which && settings->enable_joystick) {
 					for (int key=0; key<KEY_COUNT; key++) {
 						if (event.jbutton.button == binding_joy[key]) {
 							last_is_joystick = true;
@@ -438,7 +438,7 @@ void SDLInputState::handle() {
 				}
 				break;
 			case SDL_JOYBUTTONUP:
-				if (joy && SDL_JoystickInstanceID(joy) == event.jbutton.which && ENABLE_JOYSTICK) {
+				if (joy && SDL_JoystickInstanceID(joy) == event.jbutton.which && settings->enable_joystick) {
 					for (int key=0; key<KEY_COUNT; key++) {
 						if (event.jbutton.button == binding_joy[key]) {
 							last_is_joystick = true;
@@ -449,7 +449,7 @@ void SDLInputState::handle() {
 				}
 				break;
 			case SDL_JOYAXISMOTION:
-				if(ENABLE_JOYSTICK && joy_axis_num > 0 && !joy_hat_event) {
+				if(settings->enable_joystick && joy_axis_num > 0 && !joy_hat_event) {
 					std::vector<bool> joy_axis_pressed;
 					joy_axis_pressed.resize(joy_axis_num*2, false);
 					last_joyaxis = -1;
@@ -461,15 +461,15 @@ void SDLInputState::handle() {
 						joy_axis_prev[i] = axis;
 
 						if (i % 2 == 0) {
-							if (axis < -JOY_DEADZONE)
+							if (axis < -(settings->joy_deadzone))
 								joy_axis_pressed[i] = true;
-							else if (axis <= JOY_DEADZONE)
+							else if (axis <= settings->joy_deadzone)
 								joy_axis_pressed[i] = false;
 						}
 						else {
-							if (axis > JOY_DEADZONE)
+							if (axis > settings->joy_deadzone)
 								joy_axis_pressed[i] = true;
-							else if (axis >= -JOY_DEADZONE)
+							else if (axis >= -(settings->joy_deadzone))
 								joy_axis_pressed[i] = false;
 						}
 					}
@@ -513,7 +513,7 @@ void SDLInputState::handle() {
 			case SDL_JOYDEVICEREMOVED:
 				logInfo("InputState: Joystick removed.");
 				joysticks_changed = true;
-				ENABLE_JOYSTICK = false;
+				settings->enable_joystick = false;
 				initJoystick();
 				break;
 			case SDL_QUIT:
@@ -543,13 +543,13 @@ void SDLInputState::handle() {
 		if (slow_repeat[i]) {
 			if (!pressing[i]) {
 				// key not pressed, reset delay
-				max_repeat_ticks[i] = MAX_FRAMES_PER_SEC;
+				max_repeat_ticks[i] = settings->max_frames_per_sec;
 			}
 			else if (pressing[i] && !lock[i]) {
 				// lock key and set delay
 				lock[i] = true;
 				repeat_ticks[i] = 0;
-				max_repeat_ticks[i] = std::max(MAX_FRAMES_PER_SEC/10, max_repeat_ticks[i] - (MAX_FRAMES_PER_SEC/2));
+				max_repeat_ticks[i] = std::max(settings->max_frames_per_sec / 10, max_repeat_ticks[i] - (settings->max_frames_per_sec / 2));
 			}
 			else if (pressing[i] && lock[i]) {
 				// delay unlocking key
@@ -666,17 +666,17 @@ std::string SDLInputState::getMovementString() {
 	std::stringstream ss;
 	ss << "[";
 
-	if (ENABLE_JOYSTICK) {
+	if (settings->enable_joystick) {
 		// can't rebind joystick axes
 		ss << getBindingString(Input::LEFT, InputState::BINDING_JOYSTICK) <<  "/";
 		ss << getBindingString(Input::RIGHT, InputState::BINDING_JOYSTICK) << "/";
 		ss << getBindingString(Input::UP, InputState::BINDING_JOYSTICK) << "/";
 		ss << getBindingString(Input::DOWN, InputState::BINDING_JOYSTICK);
 	}
-	else if (TOUCHSCREEN) {
+	else if (settings->touchscreen) {
 		ss << msg->get("%s on ground", msg->get("Tap").c_str());
 	}
-	else if (MOUSE_MOVE) {
+	else if (settings->mouse_move) {
 		ss << msg->get("%s on ground", getBindingString(Input::MAIN1).c_str());
 	}
 	else {
@@ -694,13 +694,13 @@ std::string SDLInputState::getAttackString() {
 	std::stringstream ss;
 	ss << "[";
 
-	if (ENABLE_JOYSTICK) {
+	if (settings->enable_joystick) {
 		ss << getBindingString(Input::ACTIONBAR_USE, InputState::BINDING_JOYSTICK);
 	}
-	else if (TOUCHSCREEN) {
+	else if (settings->touchscreen) {
 		ss << msg->get("%s on enemy", msg->get("Tap").c_str());
 	}
-	else if (MOUSE_MOVE) {
+	else if (settings->mouse_move) {
 		ss << msg->get("%s on enemy", getBindingString(Input::MAIN1).c_str());
 	}
 	else {
@@ -715,11 +715,11 @@ std::string SDLInputState::getContinueString() {
 	std::stringstream ss;
 	ss << "[";
 
-	if (TOUCHSCREEN) {
+	if (settings->touchscreen) {
 		ss << msg->get("Tap");
 	}
 	else {
-		int binding_type = (ENABLE_JOYSTICK ? InputState::BINDING_JOYSTICK : InputState::BINDING_DEFAULT);
+		int binding_type = (settings->enable_joystick ? InputState::BINDING_JOYSTICK : InputState::BINDING_DEFAULT);
 		ss << getBindingString(Input::ACCEPT, binding_type);
 	}
 
@@ -732,7 +732,7 @@ int SDLInputState::getNumJoysticks() {
 }
 
 bool SDLInputState::usingMouse() {
-	return !NO_MOUSE && !last_is_joystick;
+	return !settings->no_mouse && !last_is_joystick;
 }
 
 void SDLInputState::startTextInput() {

@@ -94,9 +94,9 @@ MenuExit::MenuExit() : Menu() {
 
 	setBackground("images/menus/pause_menu.png");
 
-	if (AUDIO) {
-		music_volume_sl->set(0, 128, MUSIC_VOLUME);
-		sound_volume_sl->set(0, 128, SOUND_VOLUME);
+	if (settings->audio) {
+		music_volume_sl->set(0, 128, settings->music_volume);
+		sound_volume_sl->set(0, 128, settings->sound_volume);
 	}
 	else {
 		music_volume_sl->set(0, 128, 0);
@@ -144,15 +144,15 @@ void MenuExit::logic() {
 		else if (buttonClose->checkClick()) {
 			visible = false;
 		}
-		else if (AUDIO && music_volume_sl->checkClick()) {
-			if (MUSIC_VOLUME == 0)
+		else if (settings->audio && music_volume_sl->checkClick()) {
+			if (settings->music_volume == 0)
 				reload_music = true;
-			MUSIC_VOLUME = static_cast<short>(music_volume_sl->getValue());
-			snd->setVolumeMusic(MUSIC_VOLUME);
+			settings->music_volume = static_cast<short>(music_volume_sl->getValue());
+			snd->setVolumeMusic(settings->music_volume);
 		}
-		else if (AUDIO && sound_volume_sl->checkClick()) {
-			SOUND_VOLUME = static_cast<short>(sound_volume_sl->getValue());
-			snd->setVolumeSFX(SOUND_VOLUME);
+		else if (settings->audio && sound_volume_sl->checkClick()) {
+			settings->sound_volume = static_cast<short>(sound_volume_sl->getValue());
+			snd->setVolumeSFX(settings->sound_volume);
 		}
 	}
 }

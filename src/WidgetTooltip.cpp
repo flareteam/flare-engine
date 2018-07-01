@@ -60,22 +60,22 @@ Point WidgetTooltip::calcPosition(STYLE style, const Point& pos, const Point& si
 	//  off the end of the screen)
 	else if (style == STYLE_FLOAT) {
 		// upper left
-		if (pos.x < VIEW_W_HALF && pos.y < VIEW_H_HALF) {
+		if (pos.x < settings->view_w_half && pos.y < settings->view_h_half) {
 			tip_pos.x = pos.x + eset->tooltips.offset;
 			tip_pos.y = pos.y + eset->tooltips.offset;
 		}
 		// upper right
-		else if (pos.x >= VIEW_W_HALF && pos.y < VIEW_H_HALF) {
+		else if (pos.x >= settings->view_w_half && pos.y < settings->view_h_half) {
 			tip_pos.x = pos.x - eset->tooltips.offset - size.x;
 			tip_pos.y = pos.y + eset->tooltips.offset;
 		}
 		// lower left
-		else if (pos.x < VIEW_W_HALF && pos.y >= VIEW_H_HALF) {
+		else if (pos.x < settings->view_w_half && pos.y >= settings->view_h_half) {
 			tip_pos.x = pos.x + eset->tooltips.offset;
 			tip_pos.y = pos.y - eset->tooltips.offset - size.y;
 		}
 		// lower right
-		else if (pos.x >= VIEW_W_HALF && pos.y >= VIEW_H_HALF) {
+		else if (pos.x >= settings->view_w_half && pos.y >= settings->view_h_half) {
 			tip_pos.x = pos.x - eset->tooltips.offset - size.x;
 			tip_pos.y = pos.y - eset->tooltips.offset - size.y;
 		}
@@ -83,8 +83,8 @@ Point WidgetTooltip::calcPosition(STYLE style, const Point& pos, const Point& si
 		// very large tooltips might still be off screen at this point
 		// so we try to constrain them to the screen bounds
 		// we give priority to being able to read the top-left of the tooltip over the bottom-right
-		if (tip_pos.x + size.x > VIEW_W) tip_pos.x = VIEW_W - size.x;
-		if (tip_pos.y + size.y > VIEW_H) tip_pos.y = VIEW_H - size.y;
+		if (tip_pos.x + size.x > settings->view_w) tip_pos.x = settings->view_w - size.x;
+		if (tip_pos.y + size.y > settings->view_h) tip_pos.y = settings->view_h - size.y;
 		if (tip_pos.x < 0) tip_pos.x = 0;
 		if (tip_pos.y < 0) tip_pos.y = 0;
 	}

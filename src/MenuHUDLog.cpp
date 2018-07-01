@@ -66,7 +66,7 @@ MenuHUDLog::MenuHUDLog()
  */
 int MenuHUDLog::calcDuration(const std::string& s) {
 	// 5 seconds plus an extra second per 10 letters
-	return MAX_FRAMES_PER_SEC * 5 + static_cast<int>(s.length()) * (MAX_FRAMES_PER_SEC/10);
+	return settings->max_frames_per_sec * 5 + static_cast<int>(s.length()) * (settings->max_frames_per_sec/10);
 }
 
 /**

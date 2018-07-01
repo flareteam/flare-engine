@@ -117,7 +117,7 @@ void Subtitles::setTextByID(unsigned long id) {
 			updateLabelAndBackground();
 
 			// 1 second per 10 letters
-			visible_ticks = static_cast<int>(current_text.length()) * (MAX_FRAMES_PER_SEC/10);
+			visible_ticks = static_cast<int>(current_text.length()) * (settings->max_frames_per_sec / 10);
 
 			return;
 		}
@@ -125,7 +125,7 @@ void Subtitles::setTextByID(unsigned long id) {
 }
 
 void Subtitles::logic(unsigned long id) {
-	if (!SUBTITLES)
+	if (!settings->subtitles)
 		return;
 
 	setTextByID(id);

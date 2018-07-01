@@ -100,7 +100,7 @@ void InputState::loadKeyBindings() {
 
 	// first check for mod keybinds
 	if (mods->locate("engine/default_keybindings.txt") != "") {
-		if (infile.open(PATH_USER + "saves/" + eset->misc.save_prefix + "/keybindings.txt", !FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
+		if (infile.open(settings->path_user + "saves/" + eset->misc.save_prefix + "/keybindings.txt", !FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
 			opened_file = true;
 		}
 		else if (infile.open("engine/default_keybindings.txt", FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
@@ -108,7 +108,7 @@ void InputState::loadKeyBindings() {
 		}
 	}
 	// if there are no mod keybinds, fall back to global config
-	else if (infile.open(PATH_CONF + "keybindings.txt", !FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
+	else if (infile.open(settings->path_conf + "keybindings.txt", !FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
 		opened_file = true;
 	}
 
@@ -243,10 +243,10 @@ void InputState::loadKeyBindings() {
 void InputState::saveKeyBindings() {
 	std::string out_path;
 	if (mods->locate("engine/default_keybindings.txt") != "") {
-		out_path = PATH_USER + "saves/" + eset->misc.save_prefix + "/keybindings.txt";
+		out_path = settings->path_user + "saves/" + eset->misc.save_prefix + "/keybindings.txt";
 	}
 	else {
-		out_path = PATH_CONF + "keybindings.txt";
+		out_path = settings->path_conf + "keybindings.txt";
 	}
 	std::ofstream outfile;
 	outfile.open(out_path.c_str(), std::ios::out);
@@ -416,15 +416,15 @@ void InputState::enableEventLog() {
 }
 
 Point InputState::scaleMouse(unsigned int x, unsigned int y) {
-	if (MOUSE_SCALED) {
+	if (settings->mouse_scaled) {
 		return Point(x,y);
 	}
 
 	Point scaled_mouse;
-	int offsetY = static_cast<int>(((SCREEN_H - VIEW_H / VIEW_SCALING) / 2) * VIEW_SCALING);
+	int offsetY = static_cast<int>(((settings->screen_h - settings->view_h / settings->view_scaling) / 2) * settings->view_scaling);
 
-	scaled_mouse.x = static_cast<int>(static_cast<float>(x) * VIEW_SCALING);
-	scaled_mouse.y = static_cast<int>(static_cast<float>(y) * VIEW_SCALING) - offsetY;
+	scaled_mouse.x = static_cast<int>(static_cast<float>(x) * settings->view_scaling);
+	scaled_mouse.y = static_cast<int>(static_cast<float>(y) * settings->view_scaling) - offsetY;
 
 	return scaled_mouse;
 }

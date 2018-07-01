@@ -49,7 +49,7 @@ void EngineSettings::load() {
 void EngineSettings::Misc::load() {
 	// reset to defaults
 	save_hpmp = false;
-	corpse_timeout = 60 * MAX_FRAMES_PER_SEC;
+	corpse_timeout = 60 * settings->max_frames_per_sec;
 	sell_without_vendor = true;
 	aim_assist = 0;
 	window_title = "Flare";
@@ -194,10 +194,10 @@ void EngineSettings::Resolutions::load() {
 				std::sort(virtual_heights.begin(), virtual_heights.end());
 
 				if (!virtual_heights.empty()) {
-					VIEW_H = virtual_heights.back();
+					settings->view_h = virtual_heights.back();
 				}
 
-				VIEW_H_HALF = VIEW_H / 2;
+				settings->view_h_half = settings->view_h / 2;
 			}
 			// @ATTR virtual_dpi|float|A target diagonal screen DPI used to determine how much to scale the internal render resolution.
 			else if (infile.key == "virtual_dpi") {
@@ -213,15 +213,15 @@ void EngineSettings::Resolutions::load() {
 	}
 
 	// prevent the window from being too small
-	if (SCREEN_W < min_screen_w) SCREEN_W = min_screen_w;
-	if (SCREEN_H < min_screen_h) SCREEN_H = min_screen_h;
+	if (settings->screen_w < min_screen_w) settings->screen_w = min_screen_w;
+	if (settings->screen_h < min_screen_h) settings->screen_h = min_screen_h;
 
 	// set the default virtual height if it's not defined
-	if (VIEW_H == 0) {
+	if (settings->view_h == 0) {
 		logError("EngineSettings: virtual_height is undefined. Setting it to %d.", min_screen_h);
 		virtual_heights.push_back(min_screen_h);
-		VIEW_H = min_screen_h;
-		VIEW_H_HALF = VIEW_H / 2;
+		settings->view_h = min_screen_h;
+		settings->view_h_half = settings->view_h / 2;
 	}
 
 	// icon size can not be zero, so we set a default of 32x32, which is fantasycore's icon size

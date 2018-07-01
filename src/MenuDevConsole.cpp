@@ -212,7 +212,7 @@ void MenuDevConsole::logic() {
 			distance_ticks++;
 
 			// print target distance from the player
-			if (distance_ticks == MAX_FRAMES_PER_SEC) {
+			if (distance_ticks == settings->max_frames_per_sec) {
 				std::stringstream ss;
 				ss << msg->get("Distance") << ": " << calcDist(target, pc->stats.pos);
 				log_history->add(ss.str());
@@ -363,11 +363,11 @@ void MenuDevConsole::execute() {
 		log_history->clear();
 	}
 	else if (args[0] == "toggle_devhud") {
-		DEV_HUD = !DEV_HUD;
+		settings->dev_hud = !settings->dev_hud;
 		log_history->add(msg->get("Toggled the developer hud"), false);
 	}
 	else if (args[0] == "toggle_hud") {
-		SHOW_HUD = !SHOW_HUD;
+		settings->show_hud = !settings->show_hud;
 		log_history->add(msg->get("Toggled the hud"), false);
 	}
 	else if (args[0] == "list_status") {

@@ -92,7 +92,7 @@ void CursorManager::logic() {
 	if (!show_cursor)
 		return;
 
-	if (HARDWARE_CURSOR) {
+	if (settings->hardware_cursor) {
 		inpt->showCursor();
 		return;
 	}
@@ -112,7 +112,7 @@ void CursorManager::logic() {
 }
 
 void CursorManager::render() {
-	if (HARDWARE_CURSOR || !show_cursor) return;
+	if (settings->hardware_cursor || !show_cursor) return;
 
 	if (cursor_current != NULL) {
 		if (offset_current != NULL) {
@@ -127,7 +127,7 @@ void CursorManager::render() {
 }
 
 void CursorManager::setCursor(int type) {
-	if (HARDWARE_CURSOR) return;
+	if (settings->hardware_cursor) return;
 
 	if (type == CURSOR_INTERACT && cursor_interact) {
 		inpt->hideCursor();

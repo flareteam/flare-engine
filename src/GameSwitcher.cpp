@@ -78,9 +78,9 @@ GameSwitcher::GameSwitcher()
 }
 
 void GameSwitcher::loadMusic() {
-	if (!AUDIO) return;
+	if (!settings->audio) return;
 
-	if (MUSIC_VOLUME > 0) {
+	if (settings->music_volume > 0) {
 		std::string music_filename = "";
 		FileParser infile;
 		// @CLASS GameSwitcher: Default music|Description of engine/default_music.txt
@@ -207,10 +207,10 @@ void GameSwitcher::logic() {
 }
 
 void GameSwitcher::showFPS(float fps) {
-	if (SHOW_FPS && SHOW_HUD) {
+	if (settings->show_fps && settings->show_hud) {
 		if (!label_fps) label_fps = new WidgetLabel();
 		if (fps_ticks == 0) {
-			fps_ticks = MAX_FRAMES_PER_SEC / 4;
+			fps_ticks = settings->max_frames_per_sec / 4;
 
 			float avg_fps = (fps + last_fps) / 2.f;
 			last_fps = fps;
@@ -284,7 +284,7 @@ void GameSwitcher::render() {
 
 void GameSwitcher::saveUserSettings() {
 	if (currentState && currentState->save_settings_on_exit)
-		saveSettings();
+		settings->saveSettings();
 }
 
 GameSwitcher::~GameSwitcher() {

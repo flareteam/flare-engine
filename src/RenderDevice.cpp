@@ -195,20 +195,20 @@ int RenderDevice::createContext() {
 
 	if (status == -1) {
 		// try previous setting first
-		FULLSCREEN = fullscreen;
-		HWSURFACE = hwsurface;
-		VSYNC = vsync;
-		TEXTURE_FILTER = texture_filter;
+		settings->fullscreen = fullscreen;
+		settings->hwsurface = hwsurface;
+		settings->vsync = vsync;
+		settings->texture_filter = texture_filter;
 
 		status = createContextInternal();
 	}
 
 	if (status == -1) {
 		// last resort, try turning everything off
-		FULLSCREEN = false;
-		HWSURFACE = false;
-		VSYNC = false;
-		TEXTURE_FILTER = false;
+		settings->fullscreen = false;
+		settings->hwsurface = false;
+		settings->vsync = false;
+		settings->texture_filter = false;
 
 		status = createContextInternal();
 	}
@@ -333,48 +333,48 @@ void RenderDevice::freeImage(Image *image) {
 }
 
 void RenderDevice::windowResizeInternal() {
-	unsigned short old_view_w = VIEW_W;
-	unsigned short old_view_h = VIEW_H;
-	unsigned short old_screen_w = SCREEN_W;
-	unsigned short old_screen_h = SCREEN_H;
+	unsigned short old_view_w = settings->view_w;
+	unsigned short old_view_h = settings->view_h;
+	unsigned short old_screen_w = settings->screen_w;
+	unsigned short old_screen_h = settings->screen_h;
 
-	getWindowSize(&SCREEN_W, &SCREEN_H);
+	getWindowSize(&settings->screen_w, &settings->screen_h);
 
 	unsigned short temp_screen_h;
-	if (DPI_SCALING && ddpi > 0 && eset->resolutions.virtual_dpi > 0) {
-		temp_screen_h = static_cast<unsigned short>(static_cast<float>(SCREEN_H) * (eset->resolutions.virtual_dpi / ddpi));
+	if (settings->dpi_scaling && ddpi > 0 && eset->resolutions.virtual_dpi > 0) {
+		temp_screen_h = static_cast<unsigned short>(static_cast<float>(settings->screen_h) * (eset->resolutions.virtual_dpi / ddpi));
 	}
 	else {
-		temp_screen_h = SCREEN_H;
+		temp_screen_h = settings->screen_h;
 	}
-	VIEW_H = temp_screen_h;
+	settings->view_h = temp_screen_h;
 
 	// scale virtual height when outside of VIRTUAL_HEIGHTS range
 	if (!eset->resolutions.virtual_heights.empty()) {
 		if (temp_screen_h < eset->resolutions.virtual_heights.front())
-			VIEW_H = eset->resolutions.virtual_heights.front();
+			settings->view_h = eset->resolutions.virtual_heights.front();
 		else if (temp_screen_h >= eset->resolutions.virtual_heights.back())
-			VIEW_H = eset->resolutions.virtual_heights.back();
+			settings->view_h = eset->resolutions.virtual_heights.back();
 	}
 
-	VIEW_H_HALF = VIEW_H / 2;
+	settings->view_h_half = settings->view_h / 2;
 
-	VIEW_SCALING = static_cast<float>(VIEW_H) / static_cast<float>(SCREEN_H);
-	VIEW_W = static_cast<unsigned short>(static_cast<float>(SCREEN_W) * VIEW_SCALING);
+	settings->view_scaling = static_cast<float>(settings->view_h) / static_cast<float>(settings->screen_h);
+	settings->view_w = static_cast<unsigned short>(static_cast<float>(settings->screen_w) * settings->view_scaling);
 
 	// letterbox if too tall
-	if (VIEW_W < eset->resolutions.min_screen_w) {
-		VIEW_W = eset->resolutions.min_screen_w;
-		VIEW_SCALING = static_cast<float>(VIEW_W) / static_cast<float>(SCREEN_W);
+	if (settings->view_w < eset->resolutions.min_screen_w) {
+		settings->view_w = eset->resolutions.min_screen_w;
+		settings->view_scaling = static_cast<float>(settings->view_w) / static_cast<float>(settings->screen_w);
 	}
 
-	VIEW_W_HALF = VIEW_W/2;
+	settings->view_w_half = settings->view_w/2;
 
-	if (VIEW_W != old_view_w || VIEW_H != old_view_h) {
-		logInfo("RenderDevice: Internal render size is %dx%d", VIEW_W, VIEW_H);
+	if (settings->view_w != old_view_w || settings->view_h != old_view_h) {
+		logInfo("RenderDevice: Internal render size is %dx%d", settings->view_w, settings->view_h);
 	}
-	if (SCREEN_W != old_screen_w || SCREEN_H != old_screen_h) {
-		logInfo("RenderDevice: Window size changed to %dx%d", SCREEN_W, SCREEN_H);
+	if (settings->screen_w != old_screen_w || settings->screen_h != old_screen_h) {
+		logInfo("RenderDevice: Window size changed to %dx%d", settings->screen_w, settings->screen_h);
 	}
 }
 

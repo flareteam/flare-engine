@@ -45,34 +45,34 @@ Platform::~Platform() {
 void Platform::setPaths() {
 	// handle Windows-specific path options
 	if (getenv("APPDATA") != NULL) {
-		PATH_CONF = PATH_USER = (std::string)getenv("APPDATA") + "\\flare";
-		createDir(PATH_CONF);
-		createDir(PATH_USER);
+		settings->path_conf = settings->path_user = (std::string)getenv("APPDATA") + "\\flare";
+		createDir(settings->path_conf);
+		createDir(settings->path_user);
 
-		PATH_CONF += "\\config";
-		PATH_USER += "\\userdata";
-		createDir(PATH_CONF);
-		createDir(PATH_USER);
+		settings->path_conf += "\\config";
+		settings->path_user += "\\userdata";
+		createDir(settings->path_conf);
+		createDir(settings->path_user);
 	}
 	else {
-		PATH_CONF = "config";
-		PATH_USER = "userdata";
-		createDir(PATH_CONF);
-		createDir(PATH_USER);
+		settings->path_conf = "config";
+		settings->path_user = "userdata";
+		createDir(settings->path_conf);
+		createDir(settings->path_user);
 	}
 
-	createDir(PATH_USER + "\\mods");
-	createDir(PATH_USER + "\\saves");
+	createDir(settings->path_user + "\\mods");
+	createDir(settings->path_user + "\\saves");
 
-	PATH_DATA = "";
-	if (pathExists(CUSTOM_PATH_DATA)) PATH_DATA = CUSTOM_PATH_DATA;
-	else if (!CUSTOM_PATH_DATA.empty()) {
+	settings->path_data = "";
+	if (pathExists(settings->custom_path_data)) settings->path_data = settings->custom_path_data;
+	else if (!settings->custom_path_data.empty()) {
 		logError("Settings: Could not find specified game data directory.");
-		CUSTOM_PATH_DATA = "";
+		settings->custom_path_data = "";
 	}
 
-	PATH_CONF = PATH_CONF + "/";
-	PATH_USER = PATH_USER + "/";
+	settings->path_conf = settings->path_conf + "/";
+	settings->path_user = settings->path_user + "/";
 }
 
 bool Platform::dirCreate(const std::string& path) {

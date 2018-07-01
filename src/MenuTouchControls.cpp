@@ -24,20 +24,20 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 MenuTouchControls::MenuTouchControls()
 	: Menu()
-	, move_radius(VIEW_H / 4)
+	, move_radius(settings->view_h / 4)
 	, move_center(0,0)
 	, move_center_base(move_radius, -(move_radius / 2))
 	, move_align(ALIGN_BOTTOMLEFT)
-	, move_deadzone(VIEW_H / 20)
-	, main1_radius(VIEW_H / 6)
+	, move_deadzone(settings->view_h / 20)
+	, main1_radius(settings->view_h / 6)
 	, main1_center(0,0)
-	, main1_center_base(-main1_radius - (VIEW_H / 4), -(VIEW_H / 8))
+	, main1_center_base(-main1_radius - (settings->view_h / 4), -(settings->view_h / 8))
 	, main1_align(ALIGN_BOTTOMRIGHT)
-	, main2_radius(VIEW_H / 6)
+	, main2_radius(settings->view_h / 6)
 	, main2_center(0,0)
-	, main2_center_base(0, -(VIEW_H / 6))
+	, main2_center_base(0, -(settings->view_h / 6))
 	, main2_align(ALIGN_BOTTOMRIGHT)
-	, radius_padding(VIEW_H / 20)
+	, radius_padding(settings->view_h / 20)
 {
 	visible = true;
 	align();
