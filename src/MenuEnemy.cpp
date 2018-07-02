@@ -113,10 +113,10 @@ void MenuEnemy::render() {
 	dest.h = bar_pos.h;
 
 	int hp_bar_length = 0;
-	if (enemy->stats.get(STAT_HP_MAX) == 0)
+	if (enemy->stats.get(Stats::HP_MAX) == 0)
 		hp_bar_length = 0;
 	else if (bar_hp)
-		hp_bar_length = (enemy->stats.hp * bar_hp->getGraphics()->getWidth()) / enemy->stats.get(STAT_HP_MAX);
+		hp_bar_length = (enemy->stats.hp * bar_hp->getGraphics()->getWidth()) / enemy->stats.get(Stats::HP_MAX);
 
 	// draw hp bar background
 	setBackgroundClip(src);
@@ -135,7 +135,7 @@ void MenuEnemy::render() {
 	std::stringstream ss;
 	ss.str("");
 	if (enemy->stats.hp > 0)
-		ss << enemy->stats.hp << "/" << enemy->stats.get(STAT_HP_MAX);
+		ss << enemy->stats.hp << "/" << enemy->stats.get(Stats::HP_MAX);
 	else
 		ss << msg->get("Dead");
 

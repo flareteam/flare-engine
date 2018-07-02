@@ -297,7 +297,7 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 			// an item id of 0 means we should drop currency instead
 			if (ec->c == 0 || ec->c == eset->misc.currency_id) {
 				new_loot.item = eset->misc.currency_id;
-				new_loot.quantity = new_loot.quantity * (100 + hero->get(STAT_CURRENCY_FIND)) / 100;
+				new_loot.quantity = new_loot.quantity * (100 + hero->get(Stats::CURRENCY_FIND)) / 100;
 			}
 			else {
 				new_loot.item = ec->c;
@@ -313,14 +313,14 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 	}
 
 	// now pick up to 1 random item to drop
-	int threshold = hero->get(STAT_ITEM_FIND) + 100;
+	int threshold = hero->get(Stats::ITEM_FIND) + 100;
 	for (unsigned i = 0; i < loot_table.size(); i++) {
 		ec = &loot_table[i];
 
 		int real_chance = ec->z;
 
 		if (ec->c != 0 && ec->c != eset->misc.currency_id) {
-			real_chance = static_cast<int>(static_cast<float>(ec->z) * static_cast<float>(hero->get(STAT_ITEM_FIND) + 100) / 100.f);
+			real_chance = static_cast<int>(static_cast<float>(ec->z) * static_cast<float>(hero->get(Stats::ITEM_FIND) + 100) / 100.f);
 		}
 
 		if (real_chance >= chance) {
@@ -375,7 +375,7 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 		// an item id of 0 means we should drop currency instead
 		if (ec->c == 0 || ec->c == eset->misc.currency_id) {
 			new_loot.item = eset->misc.currency_id;
-			new_loot.quantity = new_loot.quantity * (100 + hero->get(STAT_CURRENCY_FIND)) / 100;
+			new_loot.quantity = new_loot.quantity * (100 + hero->get(Stats::CURRENCY_FIND)) / 100;
 		}
 		else {
 			new_loot.item = ec->c;

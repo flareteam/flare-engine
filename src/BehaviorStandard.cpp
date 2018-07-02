@@ -288,7 +288,7 @@ void BehaviorStandard::checkPower() {
 		StatBlock::AIPower* ai_power = NULL;
 
 		// check half dead power use
-		if (e->stats.half_dead_power && e->stats.hp <= e->stats.get(STAT_HP_MAX)/2) {
+		if (e->stats.half_dead_power && e->stats.hp <= e->stats.get(Stats::HP_MAX)/2) {
 			ai_power = e->stats.getAIPower(StatBlock::AI_POWER_HALF_DEAD);
 		}
 		// check ranged power use

@@ -125,7 +125,7 @@ static void init(const CmdLineArgs& cmd_line_args) {
 	// Load miscellaneous settings
 	eset = new EngineSettings();
 	eset->load();
-	setStatNames();
+	Stats::init();
 
 	// platform-specific default screen size
 	PLATFORM.setScreenSize();

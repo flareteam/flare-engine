@@ -167,14 +167,14 @@ public:
 	std::vector<int> per_level; // value increases each level after level 1
 	std::vector< std::vector<int> > per_primary;
 
-	int get(STAT stat) {
+	int get(Stats::STAT stat) {
 		return current[stat];
 	}
 	int getDamageMin(size_t dmg_type) {
-		return current[STAT_COUNT + (dmg_type * 2)];
+		return current[Stats::COUNT + (dmg_type * 2)];
 	}
 	int getDamageMax(size_t dmg_type) {
-		return current[STAT_COUNT + (dmg_type * 2) + 1];
+		return current[Stats::COUNT + (dmg_type * 2) + 1];
 	}
 
 	// additional values to base stats, given by items

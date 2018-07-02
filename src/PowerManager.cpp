@@ -892,8 +892,8 @@ bool PowerManager::isValidEffect(const std::string& type) {
 			return true;
 	}
 
-	for (int i=0; i<STAT_COUNT; ++i) {
-		if (type == STAT_KEY[i])
+	for (int i=0; i<Stats::COUNT; ++i) {
+		if (type == Stats::KEY[i])
 			return true;
 	}
 
@@ -982,8 +982,8 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, const FPoin
 	}
 
 	// Hazard attributes based on power source
-	haz->crit_chance = src_stats->get(STAT_CRIT);
-	haz->accuracy = src_stats->get(STAT_ACCURACY);
+	haz->crit_chance = src_stats->get(Stats::CRIT);
+	haz->accuracy = src_stats->get(Stats::ACCURACY);
 
 	// If the hazard's damage isn't default (0), we are applying an item-based power mod.
 	// We don't allow equipment power mods to alter damage (mainly to preserve the base power's multiplier).
@@ -1149,7 +1149,7 @@ bool PowerManager::effect(StatBlock *target_stats, StatBlock *caster_stats, int 
 
 				comb->addString(msg->get("+%d HP",magnitude), dest_stats->pos, CombatText::MSG_BUFF);
 				dest_stats->hp += magnitude;
-				if (dest_stats->hp > dest_stats->get(STAT_HP_MAX)) dest_stats->hp = dest_stats->get(STAT_HP_MAX);
+				if (dest_stats->hp > dest_stats->get(Stats::HP_MAX)) dest_stats->hp = dest_stats->get(Stats::HP_MAX);
 			}
 			else if (effect_data.type == "knockback") {
 				if (dest_stats->speed_default == 0) {
@@ -1596,7 +1596,7 @@ void PowerManager::activatePassiveByTrigger(int power_id, StatBlock *src_stats, 
 		else if (trigger == Power::TRIGGER_BLOCK && !src_stats->effects.triggered_block) return;
 		else if (trigger == Power::TRIGGER_HIT && !src_stats->effects.triggered_hit) return;
 		else if (trigger == Power::TRIGGER_HALFDEATH && !src_stats->effects.triggered_halfdeath) {
-			if (src_stats->hp > src_stats->get(STAT_HP_MAX)/2) return;
+			if (src_stats->hp > src_stats->get(Stats::HP_MAX)/2) return;
 			else src_stats->effects.triggered_halfdeath = true;
 		}
 		else if (trigger == Power::TRIGGER_JOINCOMBAT && !src_stats->effects.triggered_joincombat) {

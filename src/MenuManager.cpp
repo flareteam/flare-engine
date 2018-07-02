@@ -304,8 +304,8 @@ void MenuManager::logic() {
 
 	subtitles->logic(snd->getLastPlayedSID());
 
-	hp->update(stats->hp, stats->get(STAT_HP_MAX));
-	mp->update(stats->mp, stats->get(STAT_MP_MAX));
+	hp->update(stats->hp, stats->get(Stats::HP_MAX));
+	mp->update(stats->mp, stats->get(Stats::MP_MAX));
 
 	if (stats->level == static_cast<int>(stats->xp_table.size()))
 		xp->updateCustomString((stats->xp - stats->xp_table[stats->level-1]), (stats->xp - stats->xp_table[stats->level-1]), msg->get("XP: %d", stats->xp));
@@ -395,8 +395,8 @@ void MenuManager::logic() {
 	if (chr->checkUpgrade() || stats->level_up) {
 		// apply equipment and max hp/mp
 		inv->applyEquipment();
-		stats->hp = stats->get(STAT_HP_MAX);
-		stats->mp = stats->get(STAT_MP_MAX);
+		stats->hp = stats->get(Stats::HP_MAX);
+		stats->mp = stats->get(Stats::MP_MAX);
 		stats->level_up = false;
 	}
 

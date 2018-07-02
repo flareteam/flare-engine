@@ -162,7 +162,7 @@ void CampaignManager::rewardCurrency(int amount) {
 }
 
 void CampaignManager::rewardXP(int amount, bool show_message) {
-	bonus_xp += (static_cast<float>(amount) * (100.0f + static_cast<float>(pc->stats.get(STAT_XP_GAIN)))) / 100.0f;
+	bonus_xp += (static_cast<float>(amount) * (100.0f + static_cast<float>(pc->stats.get(Stats::XP_GAIN)))) / 100.0f;
 	pc->stats.addXP(static_cast<int>(bonus_xp));
 	bonus_xp -= static_cast<float>(static_cast<int>(bonus_xp));
 	pc->stats.refresh_stats = true;
@@ -171,16 +171,16 @@ void CampaignManager::rewardXP(int amount, bool show_message) {
 
 void CampaignManager::restoreHPMP(const std::string& s) {
 	if (s == "hp") {
-		pc->stats.hp = pc->stats.get(STAT_HP_MAX);
+		pc->stats.hp = pc->stats.get(Stats::HP_MAX);
 		pc->logMsg(msg->get("HP restored."), !Avatar::LOG_PREVENT_SPAM);
 	}
 	else if (s == "mp") {
-		pc->stats.mp = pc->stats.get(STAT_MP_MAX);
+		pc->stats.mp = pc->stats.get(Stats::MP_MAX);
 		pc->logMsg(msg->get("MP restored."), !Avatar::LOG_PREVENT_SPAM);
 	}
 	else if (s == "hpmp") {
-		pc->stats.hp = pc->stats.get(STAT_HP_MAX);
-		pc->stats.mp = pc->stats.get(STAT_MP_MAX);
+		pc->stats.hp = pc->stats.get(Stats::HP_MAX);
+		pc->stats.mp = pc->stats.get(Stats::MP_MAX);
 		pc->logMsg(msg->get("HP and MP restored."), !Avatar::LOG_PREVENT_SPAM);
 	}
 	else if (s == "status") {
@@ -188,8 +188,8 @@ void CampaignManager::restoreHPMP(const std::string& s) {
 		pc->logMsg(msg->get("Negative effects removed."), !Avatar::LOG_PREVENT_SPAM);
 	}
 	else if (s == "all") {
-		pc->stats.hp = pc->stats.get(STAT_HP_MAX);
-		pc->stats.mp = pc->stats.get(STAT_MP_MAX);
+		pc->stats.hp = pc->stats.get(Stats::HP_MAX);
+		pc->stats.mp = pc->stats.get(Stats::MP_MAX);
 		pc->stats.effects.clearNegativeEffects();
 		pc->logMsg(msg->get("HP and MP restored, negative effects removed"), !Avatar::LOG_PREVENT_SPAM);
 	}

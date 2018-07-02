@@ -20,36 +20,38 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 
-#define STAT_COUNT 20
+namespace Stats {
+	static const int COUNT = 20;
 
-enum STAT {
-	STAT_HP_MAX = 0,
-	STAT_HP_REGEN = 1,
-	STAT_MP_MAX = 2,
-	STAT_MP_REGEN = 3,
-	STAT_ACCURACY = 4,
-	STAT_AVOIDANCE = 5,
-	STAT_ABS_MIN = 6,
-	STAT_ABS_MAX = 7,
-	STAT_CRIT = 8,
-	STAT_XP_GAIN = 9,
-	STAT_CURRENCY_FIND = 10,
-	STAT_ITEM_FIND = 11,
-	STAT_STEALTH = 12,
-	STAT_POISE = 13,
-	STAT_REFLECT = 14,
-	STAT_RETURN_DAMAGE = 15,
-	STAT_HP_STEAL = 16,
-	STAT_MP_STEAL = 17,
-	// STAT_HP_PERCENT & STAT_MP_PERCENT aren't displayed in MenuCharacter; new stats should be added above this comment.
-	STAT_HP_PERCENT = 18,
-	STAT_MP_PERCENT = 19
-};
+	enum STAT {
+		HP_MAX = 0,
+		HP_REGEN = 1,
+		MP_MAX = 2,
+		MP_REGEN = 3,
+		ACCURACY = 4,
+		AVOIDANCE = 5,
+		ABS_MIN = 6,
+		ABS_MAX = 7,
+		CRIT = 8,
+		XP_GAIN = 9,
+		CURRENCY_FIND = 10,
+		ITEM_FIND = 11,
+		STEALTH = 12,
+		POISE = 13,
+		REFLECT = 14,
+		RETURN_DAMAGE = 15,
+		HP_STEAL = 16,
+		MP_STEAL = 17,
+		// HP_PERCENT & MP_PERCENT aren't displayed in MenuCharacter; new stats should be added above this comment.
+		HP_PERCENT = 18,
+		MP_PERCENT = 19
+	};
 
-extern std::string STAT_KEY[STAT_COUNT];
-extern std::string STAT_NAME[STAT_COUNT];
-extern std::string STAT_DESC[STAT_COUNT];
-extern bool STAT_PERCENT[STAT_COUNT];
-void setStatNames();
+	extern std::string KEY[COUNT];
+	extern std::string NAME[COUNT];
+	extern std::string DESC[COUNT];
+	extern bool PERCENT[COUNT];
+	void init();
+}
 
 #endif

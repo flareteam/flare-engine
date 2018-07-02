@@ -577,9 +577,9 @@ void ItemManager::parseBonus(BonusData& bdata, FileParser& infile) {
 		return;
 	}
 
-	for (unsigned i=0; i<STAT_COUNT; ++i) {
-		if (bonus_str == STAT_KEY[i]) {
-			bdata.stat_index = (STAT)i;
+	for (unsigned i=0; i<Stats::COUNT; ++i) {
+		if (bonus_str == Stats::KEY[i]) {
+			bdata.stat_index = static_cast<Stats::STAT>(i);
 			return;
 		}
 	}
@@ -628,10 +628,10 @@ void ItemManager::getBonusString(std::stringstream& ss, BonusData* bdata) {
 		ss << bdata->value;
 
 	if (bdata->stat_index != -1) {
-		if (STAT_PERCENT[bdata->stat_index])
+		if (Stats::PERCENT[bdata->stat_index])
 			ss << "%";
 
-		ss << " " << STAT_NAME[bdata->stat_index];
+		ss << " " << Stats::NAME[bdata->stat_index];
 	}
 	else if (bdata->damage_index_min != -1) {
 		ss << " " << eset->damage_types.list[bdata->damage_index_min].name_min;

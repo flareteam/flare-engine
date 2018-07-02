@@ -756,12 +756,12 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 			ss << pwr.post_effects[i].magnitude;
 			bool found_key = false;
 
-			for (size_t j=0; j<STAT_COUNT; ++j) {
-				if (pwr.post_effects[i].id == STAT_KEY[j]) {
-					if (STAT_PERCENT[j])
+			for (size_t j=0; j<Stats::COUNT; ++j) {
+				if (pwr.post_effects[i].id == Stats::KEY[j]) {
+					if (Stats::PERCENT[j])
 						ss << "%";
 
-					ss << " " << STAT_NAME[j];
+					ss << " " << Stats::NAME[j];
 
 					found_key = true;
 					break;

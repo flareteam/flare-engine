@@ -80,10 +80,10 @@ StatBlock::StatBlock()
 	, check_title(false)
 	, stat_points_per_level(1)
 	, power_points_per_level(1)
-	, starting(STAT_COUNT + eset->damage_types.count, 0)
-	, base(STAT_COUNT + eset->damage_types.count, 0)
-	, current(STAT_COUNT + eset->damage_types.count, 0)
-	, per_level(STAT_COUNT + eset->damage_types.count, 0)
+	, starting(Stats::COUNT + eset->damage_types.count, 0)
+	, base(Stats::COUNT + eset->damage_types.count, 0)
+	, current(Stats::COUNT + eset->damage_types.count, 0)
+	, per_level(Stats::COUNT + eset->damage_types.count, 0)
 	, character_class("")
 	, character_subclass("")
 	, hp(0)
@@ -185,7 +185,7 @@ StatBlock::StatBlock()
 	per_primary.resize(eset->primary_stats.list.size());
 
 	for (size_t i = 0; i < per_primary.size(); ++i) {
-		per_primary[i].resize(STAT_COUNT + eset->damage_types.count, 0);
+		per_primary[i].resize(Stats::COUNT + eset->damage_types.count, 0);
 	}
 }
 
@@ -213,8 +213,8 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 		std::string stat = popFirstString(infile->val);
 		int value = popFirstInt(infile->val);
 
-		for (size_t i=0; i<STAT_COUNT; ++i) {
-			if (STAT_KEY[i] == stat) {
+		for (size_t i=0; i<Stats::COUNT; ++i) {
+			if (Stats::KEY[i] == stat) {
 				starting[i] = value;
 				return true;
 			}
@@ -222,11 +222,11 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 
 		for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
 			if (eset->damage_types.list[i].min == stat) {
-				starting[STAT_COUNT + (i*2)] = value;
+				starting[Stats::COUNT + (i*2)] = value;
 				return true;
 			}
 			else if (eset->damage_types.list[i].max == stat) {
-				starting[STAT_COUNT + (i*2) + 1] = value;
+				starting[Stats::COUNT + (i*2) + 1] = value;
 				return true;
 			}
 		}
@@ -236,8 +236,8 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 		std::string stat = popFirstString(infile->val);
 		int value = popFirstInt(infile->val);
 
-		for (unsigned i=0; i<STAT_COUNT; i++) {
-			if (STAT_KEY[i] == stat) {
+		for (unsigned i=0; i<Stats::COUNT; i++) {
+			if (Stats::KEY[i] == stat) {
 				per_level[i] = value;
 				return true;
 			}
@@ -245,11 +245,11 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 
 		for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
 			if (eset->damage_types.list[i].min == stat) {
-				per_level[STAT_COUNT + (i*2)] = value;
+				per_level[Stats::COUNT + (i*2)] = value;
 				return true;
 			}
 			else if (eset->damage_types.list[i].max == stat) {
-				per_level[STAT_COUNT + (i*2) + 1] = value;
+				per_level[Stats::COUNT + (i*2) + 1] = value;
 				return true;
 			}
 		}
@@ -266,8 +266,8 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 		std::string stat = popFirstString(infile->val);
 		int value = popFirstInt(infile->val);
 
-		for (unsigned i=0; i<STAT_COUNT; i++) {
-			if (STAT_KEY[i] == stat) {
+		for (unsigned i=0; i<Stats::COUNT; i++) {
+			if (Stats::KEY[i] == stat) {
 				per_primary[prim_stat_index][i] = value;
 				return true;
 			}
@@ -275,11 +275,11 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 
 		for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
 			if (eset->damage_types.list[i].min == stat) {
-				per_primary[prim_stat_index][STAT_COUNT + (i*2)] = value;
+				per_primary[prim_stat_index][Stats::COUNT + (i*2)] = value;
 				return true;
 			}
 			else if (eset->damage_types.list[i].max == stat) {
-				per_primary[prim_stat_index][STAT_COUNT + (i*2) + 1] = value;
+				per_primary[prim_stat_index][Stats::COUNT + (i*2) + 1] = value;
 				return true;
 			}
 		}
@@ -577,8 +577,8 @@ void StatBlock::load(const std::string& filename) {
 	}
 	infile.close();
 
-	hp = starting[STAT_HP_MAX];
-	mp = starting[STAT_MP_MAX];
+	hp = starting[Stats::HP_MAX];
+	mp = starting[Stats::MP_MAX];
 
 	if (!flee_range_defined)
 		flee_range = threat_range / 2;
@@ -625,8 +625,8 @@ void StatBlock::recalc() {
 
 	applyEffects();
 
-	hp = get(STAT_HP_MAX);
-	mp = get(STAT_MP_MAX);
+	hp = get(Stats::HP_MAX);
+	mp = get(Stats::MP_MAX);
 }
 
 /**
@@ -637,7 +637,7 @@ void StatBlock::calcBase() {
 	// bonuses are skipped for the default level 1 of a stat
 	int lev0 = std::max(level - 1, 0);
 
-	for (size_t i = 0; i < STAT_COUNT + eset->damage_types.count; ++i) {
+	for (size_t i = 0; i < Stats::COUNT + eset->damage_types.count; ++i) {
 		base[i] = starting[i];
 		base[i] += lev0 * per_level[i];
 		for (size_t j = 0; j < per_primary.size(); ++j) {
@@ -647,17 +647,17 @@ void StatBlock::calcBase() {
 
 	// add damage from equipment and increase to minimum amounts
 	for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
-		base[STAT_COUNT + (i*2)] += dmg_min_add[i];
-		base[STAT_COUNT + (i*2) + 1] += dmg_max_add[i];
-		base[STAT_COUNT + (i*2)] = std::max(base[STAT_COUNT + (i*2)], 0);
-		base[STAT_COUNT + (i*2) + 1] = std::max(base[STAT_COUNT + (i*2) + 1], base[STAT_COUNT + (i*2)]);
+		base[Stats::COUNT + (i*2)] += dmg_min_add[i];
+		base[Stats::COUNT + (i*2) + 1] += dmg_max_add[i];
+		base[Stats::COUNT + (i*2)] = std::max(base[Stats::COUNT + (i*2)], 0);
+		base[Stats::COUNT + (i*2) + 1] = std::max(base[Stats::COUNT + (i*2) + 1], base[Stats::COUNT + (i*2)]);
 	}
 
 	// add absorb from equipment and increase to minimum amounts
-	base[STAT_ABS_MIN] += absorb_min_add;
-	base[STAT_ABS_MAX] += absorb_max_add;
-	base[STAT_ABS_MIN] = std::max(base[STAT_ABS_MIN], 0);
-	base[STAT_ABS_MAX] = std::max(base[STAT_ABS_MAX], base[STAT_ABS_MIN]);
+	base[Stats::ABS_MIN] += absorb_min_add;
+	base[Stats::ABS_MAX] += absorb_max_add;
+	base[Stats::ABS_MIN] = std::max(base[Stats::ABS_MIN], 0);
+	base[Stats::ABS_MAX] = std::max(base[Stats::ABS_MAX], base[Stats::ABS_MIN]);
 }
 
 /**
@@ -667,8 +667,8 @@ void StatBlock::applyEffects() {
 
 	// preserve hp/mp states
 	// max HP and MP can't drop below 1
-	prev_maxhp = std::max(get(STAT_HP_MAX), 1);
-	prev_maxmp = std::max(get(STAT_MP_MAX), 1);
+	prev_maxhp = std::max(get(Stats::HP_MAX), 1);
+	prev_maxmp = std::max(get(Stats::MP_MAX), 1);
 	prev_hp = hp;
 	prev_mp = mp;
 
@@ -683,7 +683,7 @@ void StatBlock::applyEffects() {
 
 	calcBase();
 
-	for (size_t i=0; i<STAT_COUNT + eset->damage_types.count; i++) {
+	for (size_t i=0; i<Stats::COUNT + eset->damage_types.count; i++) {
 		current[i] = base[i] + effects.bonus[i];
 	}
 
@@ -691,15 +691,15 @@ void StatBlock::applyEffects() {
 		vulnerable[i] = vulnerable_base[i] - effects.bonus_resist[i];
 	}
 
-	current[STAT_HP_MAX] += (current[STAT_HP_MAX] * current[STAT_HP_PERCENT]) / 100;
-	current[STAT_MP_MAX] += (current[STAT_MP_MAX] * current[STAT_MP_PERCENT]) / 100;
+	current[Stats::HP_MAX] += (current[Stats::HP_MAX] * current[Stats::HP_PERCENT]) / 100;
+	current[Stats::MP_MAX] += (current[Stats::MP_MAX] * current[Stats::MP_PERCENT]) / 100;
 
 	// max HP and MP can't drop below 1
-	current[STAT_HP_MAX] = std::max(get(STAT_HP_MAX), 1);
-	current[STAT_MP_MAX] = std::max(get(STAT_MP_MAX), 1);
+	current[Stats::HP_MAX] = std::max(get(Stats::HP_MAX), 1);
+	current[Stats::MP_MAX] = std::max(get(Stats::MP_MAX), 1);
 
-	if (hp > get(STAT_HP_MAX)) hp = get(STAT_HP_MAX);
-	if (mp > get(STAT_MP_MAX)) mp = get(STAT_MP_MAX);
+	if (hp > get(Stats::HP_MAX)) hp = get(Stats::HP_MAX);
+	if (mp > get(Stats::MP_MAX)) mp = get(Stats::MP_MAX);
 
 	speed = speed_default;
 }
@@ -741,13 +741,13 @@ void StatBlock::logic() {
 
 	// preserve ratio on maxmp and maxhp changes
 	float ratio;
-	if (prev_maxhp != get(STAT_HP_MAX)) {
+	if (prev_maxhp != get(Stats::HP_MAX)) {
 		ratio = static_cast<float>(prev_hp) / static_cast<float>(prev_maxhp);
-		hp = static_cast<int>(ratio * static_cast<float>(get(STAT_HP_MAX)));
+		hp = static_cast<int>(ratio * static_cast<float>(get(Stats::HP_MAX)));
 	}
-	if (prev_maxmp != get(STAT_MP_MAX)) {
+	if (prev_maxmp != get(Stats::MP_MAX)) {
 		ratio = static_cast<float>(prev_mp) / static_cast<float>(prev_maxmp);
-		mp = static_cast<int>(ratio * static_cast<float>(get(STAT_MP_MAX)));
+		mp = static_cast<int>(ratio * static_cast<float>(get(Stats::MP_MAX)));
 	}
 
 	// handle cooldowns
@@ -758,18 +758,18 @@ void StatBlock::logic() {
 	}
 
 	// HP regen
-	if (get(STAT_HP_REGEN) > 0 && hp < get(STAT_HP_MAX) && hp > 0) {
+	if (get(Stats::HP_REGEN) > 0 && hp < get(Stats::HP_MAX) && hp > 0) {
 		hp_ticker++;
-		if (hp_ticker >= (60 * settings->max_frames_per_sec) / get(STAT_HP_REGEN)) {
+		if (hp_ticker >= (60 * settings->max_frames_per_sec) / get(Stats::HP_REGEN)) {
 			hp++;
 			hp_ticker = 0;
 		}
 	}
 
 	// MP regen
-	if (get(STAT_MP_REGEN) > 0 && mp < get(STAT_MP_MAX) && hp > 0) {
+	if (get(Stats::MP_REGEN) > 0 && mp < get(Stats::MP_MAX) && hp > 0) {
 		mp_ticker++;
-		if (mp_ticker >= (60 * settings->max_frames_per_sec) / get(STAT_MP_REGEN)) {
+		if (mp_ticker >= (60 * settings->max_frames_per_sec) / get(Stats::MP_REGEN)) {
 			mp++;
 			mp_ticker = 0;
 		}
@@ -785,7 +785,7 @@ void StatBlock::logic() {
 		comb->addInt(effects.damage, pos, CombatText::MSG_TAKEDMG);
 	}
 	if (effects.damage_percent > 0 && hp > 0) {
-		int damage = (get(STAT_HP_MAX)*effects.damage_percent)/100;
+		int damage = (get(Stats::HP_MAX)*effects.damage_percent)/100;
 		takeDamage(damage);
 		comb->addInt(damage, pos, CombatText::MSG_TAKEDMG);
 	}
@@ -809,24 +809,24 @@ void StatBlock::logic() {
 	if (effects.hpot > 0) {
 		comb->addString(msg->get("+%d HP",effects.hpot), pos, CombatText::MSG_BUFF);
 		hp += effects.hpot;
-		if (hp > get(STAT_HP_MAX)) hp = get(STAT_HP_MAX);
+		if (hp > get(Stats::HP_MAX)) hp = get(Stats::HP_MAX);
 	}
 	if (effects.hpot_percent > 0) {
-		int hpot = (get(STAT_HP_MAX)*effects.hpot_percent)/100;
+		int hpot = (get(Stats::HP_MAX)*effects.hpot_percent)/100;
 		comb->addString(msg->get("+%d HP",hpot), pos, CombatText::MSG_BUFF);
 		hp += hpot;
-		if (hp > get(STAT_HP_MAX)) hp = get(STAT_HP_MAX);
+		if (hp > get(Stats::HP_MAX)) hp = get(Stats::HP_MAX);
 	}
 	if (effects.mpot > 0) {
 		comb->addString(msg->get("+%d MP",effects.mpot), pos, CombatText::MSG_BUFF);
 		mp += effects.mpot;
-		if (mp > get(STAT_MP_MAX)) mp = get(STAT_MP_MAX);
+		if (mp > get(Stats::MP_MAX)) mp = get(Stats::MP_MAX);
 	}
 	if (effects.mpot_percent > 0) {
-		int mpot = (get(STAT_MP_MAX)*effects.mpot_percent)/100;
+		int mpot = (get(Stats::MP_MAX)*effects.mpot_percent)/100;
 		comb->addString(msg->get("+%d MP",mpot), pos, CombatText::MSG_BUFF);
 		mp += mpot;
-		if (mp > get(STAT_MP_MAX)) mp = get(STAT_MP_MAX);
+		if (mp > get(Stats::MP_MAX)) mp = get(Stats::MP_MAX);
 	}
 
 	// set movement type
@@ -862,8 +862,8 @@ void StatBlock::logic() {
 	if (!in_combat && !hero_ally && !hero) {
 		if (alive && pc->stats.alive) {
 			hp++;
-			if (hp > get(STAT_HP_MAX))
-				hp = get(STAT_HP_MAX);
+			if (hp > get(Stats::HP_MAX))
+				hp = get(Stats::HP_MAX);
 		}
 	}
 
@@ -872,7 +872,7 @@ void StatBlock::logic() {
 
 	// check for revive
 	if (hp <= 0 && effects.revive) {
-		hp = get(STAT_HP_MAX);
+		hp = get(Stats::HP_MAX);
 		alive = true;
 		corpse = false;
 		if (hero)
@@ -924,10 +924,10 @@ bool StatBlock::canUsePower(int powerid, bool allow_passive) const {
 			&& !power.meta_power
 			&& (!effects.stun || (allow_passive && power.passive))
 			&& (power.sacrifice || hp > power.requires_hp)
-			&& (power.requires_max_hp == -1 || (power.requires_max_hp >= 0 && hp >= (current[STAT_HP_MAX] * power.requires_max_hp) / 100))
-			&& (power.requires_not_max_hp == -1 || (power.requires_not_max_hp >= 0 && hp < (current[STAT_HP_MAX] * power.requires_not_max_hp) / 100))
-			&& (power.requires_max_mp  == -1 || (power.requires_max_mp >= 0 && mp >= (current[STAT_MP_MAX] * power.requires_max_mp) / 100))
-			&& (power.requires_not_max_mp == -1 || (power.requires_not_max_mp >= 0 && mp < (current[STAT_MP_MAX]) * power.requires_not_max_mp / 100))
+			&& (power.requires_max_hp == -1 || (power.requires_max_hp >= 0 && hp >= (current[Stats::HP_MAX] * power.requires_max_hp) / 100))
+			&& (power.requires_not_max_hp == -1 || (power.requires_not_max_hp >= 0 && hp < (current[Stats::HP_MAX] * power.requires_not_max_hp) / 100))
+			&& (power.requires_max_mp  == -1 || (power.requires_max_mp >= 0 && mp >= (current[Stats::MP_MAX] * power.requires_max_mp) / 100))
+			&& (power.requires_not_max_mp == -1 || (power.requires_not_max_mp >= 0 && mp < (current[Stats::MP_MAX]) * power.requires_not_max_mp / 100))
 			&& (!power.requires_corpse || (target_corpse && target_corpse->corpse_ticks > 0) || (target_nearest_corpse && powers->checkNearestTargeting(power, this, true) && target_nearest_corpse->corpse_ticks > 0))
 			&& (checkRequiredSpawns(power.requires_spawns))
 			&& (menu_powers && menu_powers->meetsUsageStats(powerid))

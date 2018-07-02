@@ -1063,7 +1063,7 @@ void MenuInventory::applyBonus(const BonusData* bdata) {
 		ed.id = ed.type = "attack_speed";
 	}
 	else if (bdata->stat_index != -1) {
-		ed.id = ed.type = STAT_KEY[bdata->stat_index];
+		ed.id = ed.type = Stats::KEY[bdata->stat_index];
 	}
 	else if (bdata->damage_index_min != -1) {
 		ed.id = ed.type = eset->damage_types.list[bdata->damage_index_min].min;

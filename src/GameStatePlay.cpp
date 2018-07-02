@@ -901,8 +901,8 @@ void GameStatePlay::logic() {
 		}
 
 		// transfer hero data to enemies, for AI use
-		if (pc->stats.get(STAT_STEALTH) > 100) enemym->hero_stealth = 100;
-		else enemym->hero_stealth = pc->stats.get(STAT_STEALTH);
+		if (pc->stats.get(Stats::STEALTH) > 100) enemym->hero_stealth = 100;
+		else enemym->hero_stealth = pc->stats.get(Stats::STEALTH);
 
 		enemym->logic();
 		hazards->logic();
@@ -1000,7 +1000,7 @@ void GameStatePlay::logic() {
 		menu->inv->applyEquipment();
 		menu->inv->changed_equipment = true;
 		checkEquipmentChange();
-		pc->stats.hp = pc->stats.get(STAT_HP_MAX);
+		pc->stats.hp = pc->stats.get(Stats::HP_MAX);
 		pc->stats.logic();
 		pc->stats.recalc();
 		powers->activatePassives(&pc->stats);

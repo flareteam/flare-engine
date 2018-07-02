@@ -638,7 +638,7 @@ void GameStateConfigBase::logicAccept() {
 	inpt->saveKeyBindings();
 	inpt->setKeybindNames();
 	eset->load();
-	setStatNames();
+	Stats::init();
 	refreshFont();
 	if ((settings->enable_joystick) && (inpt->getNumJoysticks() > 0)) {
 		inpt->initJoystick();
@@ -672,7 +672,7 @@ void GameStateConfigBase::logicCancel() {
 	msg = new MessageEngine();
 	inpt->setKeybindNames();
 	eset->load();
-	setStatNames();
+	Stats::init();
 	refreshFont();
 	update();
 	cleanup();

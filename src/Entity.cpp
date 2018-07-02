@@ -368,7 +368,7 @@ bool Entity::takeHit(Hazard &h) {
 	// prepare the combat text
 	CombatText *combat_text = comb;
 
-	if (h.power->type == Power::TYPE_MISSILE && percentChance(stats.get(STAT_REFLECT))) {
+	if (h.power->type == Power::TYPE_MISSILE && percentChance(stats.get(Stats::REFLECT))) {
 		// reflect the missile 180 degrees
 		h.setAngle(h.angle+static_cast<float>(M_PI));
 
@@ -400,7 +400,7 @@ bool Entity::takeHit(Hazard &h) {
 
 	int avoidance = 0;
 	if(!powers->powers[h.power_index].trait_avoidance_ignore) {
-		avoidance = stats.get(STAT_AVOIDANCE);
+		avoidance = stats.get(Stats::AVOIDANCE);
 	}
 
 	int true_avoidance = 100 - (accuracy - avoidance);
@@ -435,7 +435,7 @@ bool Entity::takeHit(Hazard &h) {
 
 	if (!h.power->trait_armor_penetration) { // armor penetration ignores all absorption
 		// subtract absorption from armor
-		int absorption = randBetween(stats.get(STAT_ABS_MIN), stats.get(STAT_ABS_MAX));
+		int absorption = randBetween(stats.get(Stats::ABS_MIN), stats.get(Stats::ABS_MAX));
 
 		if (absorption > 0 && dmg > 0) {
 			int abs = absorption;
@@ -542,24 +542,24 @@ bool Entity::takeHit(Hazard &h) {
 		powers->effect(&stats, h.src_stats, static_cast<int>(h.power_index), h.source_type);
 
 		// HP/MP steal is cumulative between stat bonus and power bonus
-		int hp_steal = h.power->hp_steal + h.src_stats->get(STAT_HP_STEAL);
+		int hp_steal = h.power->hp_steal + h.src_stats->get(Stats::HP_STEAL);
 		if (!stats.effects.immunity_hp_steal && hp_steal != 0) {
 			int steal_amt = (std::min(dmg, prev_hp) * hp_steal) / 100;
 			if (steal_amt == 0) steal_amt = 1;
 			combat_text->addString(msg->get("+%d HP",steal_amt), h.src_stats->pos, CombatText::MSG_BUFF);
-			h.src_stats->hp = std::min(h.src_stats->hp + steal_amt, h.src_stats->get(STAT_HP_MAX));
+			h.src_stats->hp = std::min(h.src_stats->hp + steal_amt, h.src_stats->get(Stats::HP_MAX));
 		}
-		int mp_steal = h.power->mp_steal + h.src_stats->get(STAT_MP_STEAL);
+		int mp_steal = h.power->mp_steal + h.src_stats->get(Stats::MP_STEAL);
 		if (!stats.effects.immunity_mp_steal && mp_steal != 0) {
 			int steal_amt = (std::min(dmg, prev_hp) * mp_steal) / 100;
 			if (steal_amt == 0) steal_amt = 1;
 			combat_text->addString(msg->get("+%d MP",steal_amt), h.src_stats->pos, CombatText::MSG_BUFF);
-			h.src_stats->mp = std::min(h.src_stats->mp + steal_amt, h.src_stats->get(STAT_MP_MAX));
+			h.src_stats->mp = std::min(h.src_stats->mp + steal_amt, h.src_stats->get(Stats::MP_MAX));
 		}
 
 		// deal return damage
-		if (!h.src_stats->effects.immunity_damage_reflect && stats.get(STAT_RETURN_DAMAGE) > 0) {
-			int dmg_return = static_cast<int>(static_cast<float>(dmg * stats.get(STAT_RETURN_DAMAGE)) / 100.f);
+		if (!h.src_stats->effects.immunity_damage_reflect && stats.get(Stats::RETURN_DAMAGE) > 0) {
+			int dmg_return = static_cast<int>(static_cast<float>(dmg * stats.get(Stats::RETURN_DAMAGE)) / 100.f);
 
 			if (dmg_return == 0)
 				dmg_return = 1;
@@ -581,7 +581,7 @@ bool Entity::takeHit(Hazard &h) {
 
 	// interrupted to new state
 	if (dmg > 0) {
-		bool chance_poise = percentChance(stats.get(STAT_POISE));
+		bool chance_poise = percentChance(stats.get(Stats::POISE));
 
 		if(stats.hp <= 0) {
 			stats.effects.triggered_death = true;

@@ -393,10 +393,10 @@ int Map::addEventStatBlock(Event &evnt) {
 	if (ec_damage) {
 		for (size_t i = 0; i < eset->damage_types.count; ++i) {
 			if (i % 2 == 0) {
-				statb->starting[STAT_COUNT + i] = ec_damage->a; // min
+				statb->starting[Stats::COUNT + i] = ec_damage->a; // min
 			}
 			else {
-				statb->starting[STAT_COUNT + i] = ec_damage->b; // max
+				statb->starting[Stats::COUNT + i] = ec_damage->b; // max
 			}
 		}
 	}
@@ -414,7 +414,7 @@ int Map::addEventStatBlock(Event &evnt) {
 	statb->effects.addEffect(immunity_effect, 0, 0, Power::SOURCE_TYPE_ENEMY, EffectManager::NO_POWER);
 
 	// ensure the statblock will be alive
-	statb->hp = statb->starting[STAT_HP_MAX] = statb->current[STAT_HP_MAX] = 1;
+	statb->hp = statb->starting[Stats::HP_MAX] = statb->current[Stats::HP_MAX] = 1;
 
 	// ensure that stats are ready to be used by running logic once
 	statb->logic();
