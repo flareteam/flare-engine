@@ -342,7 +342,7 @@ void MenuBook::logic() {
 		if (inpt->pressing[Input::ACCEPT]) inpt->lock[Input::ACCEPT] = true;
 
 		closeWindow();
-		snd->play(sfx_close);
+		snd->play(sfx_close, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
 	}
 
 	for (size_t i = 0; i < buttons.size(); ++i) {

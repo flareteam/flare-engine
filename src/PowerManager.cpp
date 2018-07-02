@@ -1092,7 +1092,7 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, const FPoint& tar
  */
 void PowerManager::playSound(int power_index) {
 	if (powers[power_index].sfx_index != -1)
-		snd->play(sfx[powers[power_index].sfx_index]);
+		snd->play(sfx[powers[power_index].sfx_index], snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
 }
 
 bool PowerManager::effect(StatBlock *target_stats, StatBlock *caster_stats, int power_index, int source_type) {

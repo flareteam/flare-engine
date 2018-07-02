@@ -169,7 +169,7 @@ bool Scene::logic() {
 					snd->unload(sid);
 
 				sid = snd->load(components.front().s, "Cutscenes");
-				snd->play(sid);
+				snd->play(sid, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
 			}
 
 			components.pop();

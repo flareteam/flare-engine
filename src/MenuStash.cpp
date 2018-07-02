@@ -120,7 +120,7 @@ void MenuStash::logic() {
 
 	if (closeButton->checkClick()) {
 		visible = false;
-		snd->play(sfx_close);
+		snd->play(sfx_close, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
 	}
 }
 

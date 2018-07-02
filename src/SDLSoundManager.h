@@ -38,7 +38,7 @@ public:
 
 	SoundID load(const std::string& filename, const std::string& errormessage);
 	void unload(SoundID);
-	void play(SoundID, const std::string& channel = GLOBAL_VIRTUAL_CHANNEL, const FPoint& pos = FPoint(0,0), bool loop = false);
+	void play(SoundID, const std::string& channel, const FPoint& pos, bool loop);
 	void pauseAll();
 	void resumeAll();
 	void setVolumeSFX(int value);

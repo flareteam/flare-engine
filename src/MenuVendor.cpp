@@ -160,7 +160,7 @@ void MenuVendor::logic() {
 
 	if (closeButton->checkClick()) {
 		setNPC(NULL);
-		snd->play(sfx_close);
+		snd->play(sfx_close, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
 	}
 }
 
@@ -292,7 +292,7 @@ void MenuVendor::setNPC(NPC* _npc) {
 
 	if (!visible) {
 		visible = true;
-		snd->play(sfx_open);
+		snd->play(sfx_open, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
 		npc->playSoundIntro();
 	}
 }

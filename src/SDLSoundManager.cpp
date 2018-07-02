@@ -232,7 +232,7 @@ void SDLSoundManager::play(SoundID sid, const std::string& channel, const FPoint
 	p.loop = loop;
 	p.finished = false;
 
-	if (p.virtual_channel != GLOBAL_VIRTUAL_CHANNEL) {
+	if (p.virtual_channel != DEFAULT_CHANNEL) {
 
 		/* if playback exists, stop it befor playin next sound */
 		vcit = channels.find(p.virtual_channel);

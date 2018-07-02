@@ -420,7 +420,7 @@ void LootManager::addLoot(ItemStack stack, const FPoint& pos, bool dropped_by_he
 	}
 
 	loot.push_back(ld);
-	snd->play(sfx_loot, GLOBAL_VIRTUAL_CHANNEL, pos, false);
+	snd->play(sfx_loot, snd->DEFAULT_CHANNEL, pos, false);
 }
 
 /**

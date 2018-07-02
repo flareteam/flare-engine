@@ -776,7 +776,7 @@ bool EventManager::executeEvent(Event &ev) {
 
 			SoundID sid = snd->load(ec->s, "MapRenderer background soundfx");
 
-			snd->play(sid, GLOBAL_VIRTUAL_CHANNEL, pos, loop);
+			snd->play(sid, snd->DEFAULT_CHANNEL, pos, loop);
 			mapr->sids.push_back(sid);
 		}
 		else if (ec->type == EC_LOOT) {

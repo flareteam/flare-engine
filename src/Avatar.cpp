@@ -370,7 +370,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 		}
 		logMsg(ss.str(), LOG_PREVENT_SPAM);
 		stats.recalc();
-		snd->play(sound_levelup);
+		snd->play(sound_levelup, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
 
 		// if the player managed to level up while dead (e.g. via a bleeding creature), restore to life
 		if (stats.cur_state == AVATAR_DEAD) {
@@ -455,7 +455,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 					int stepfx = rand() % static_cast<int>(sound_steps.size());
 
 					if (activeAnimation->isFirstFrame() || activeAnimation->isActiveFrame())
-						snd->play(sound_steps[stepfx]);
+						snd->play(sound_steps[stepfx], snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
 				}
 
 				// allowed to move or use powers?

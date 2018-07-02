@@ -402,7 +402,7 @@ void MenuManager::logic() {
 
 	// only allow the vendor window to be open if the inventory is open
 	if (vendor->visible && !(inv->visible)) {
-		snd->play(vendor->sfx_close);
+		snd->play(vendor->sfx_close, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
 		closeAll();
 	}
 
@@ -489,14 +489,14 @@ void MenuManager::logic() {
 		if ((inpt->pressing[Input::INVENTORY] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_inventory) {
 			key_lock = true;
 			if (inv->visible) {
-				snd->play(inv->sfx_close);
+				snd->play(inv->sfx_close, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
 				closeRight();
 			}
 			else {
 				closeRight();
 				act->requires_attention[MenuActionBar::MENU_INVENTORY] = false;
 				inv->visible = true;
-				snd->play(inv->sfx_open);
+				snd->play(inv->sfx_open, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
 			}
 
 		}
@@ -505,14 +505,14 @@ void MenuManager::logic() {
 		if (((inpt->pressing[Input::POWERS] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_powers) && !stats->transformed) {
 			key_lock = true;
 			if (pow->visible) {
-				snd->play(pow->sfx_close);
+				snd->play(pow->sfx_close, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
 				closeRight();
 			}
 			else {
 				closeRight();
 				act->requires_attention[MenuActionBar::MENU_POWERS] = false;
 				pow->visible = true;
-				snd->play(pow->sfx_open);
+				snd->play(pow->sfx_open, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
 			}
 		}
 
@@ -520,14 +520,14 @@ void MenuManager::logic() {
 		if ((inpt->pressing[Input::CHARACTER] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_character) {
 			key_lock = true;
 			if (chr->visible) {
-				snd->play(chr->sfx_close);
+				snd->play(chr->sfx_close, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
 				closeLeft();
 			}
 			else {
 				closeLeft();
 				act->requires_attention[MenuActionBar::MENU_CHARACTER] = false;
 				chr->visible = true;
-				snd->play(chr->sfx_open);
+				snd->play(chr->sfx_open, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
 				// Make sure the stat list isn't scrolled when we open the character menu
 				inpt->resetScroll();
 			}
@@ -537,14 +537,14 @@ void MenuManager::logic() {
 		if ((inpt->pressing[Input::LOG] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_log) {
 			key_lock = true;
 			if (questlog->visible) {
-				snd->play(questlog->sfx_close);
+				snd->play(questlog->sfx_close, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
 				closeLeft();
 			}
 			else {
 				closeLeft();
 				act->requires_attention[MenuActionBar::MENU_LOG] = false;
 				questlog->visible = true;
-				snd->play(questlog->sfx_open);
+				snd->play(questlog->sfx_open, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
 				// Make sure the log isn't scrolled when we open the log menu
 				inpt->resetScroll();
 			}

@@ -150,7 +150,7 @@ void Entity::playAttackSound(const std::string& attack_name) {
 	for (size_t i = 0; i < sound_attack.size(); ++i) {
 		if (!sound_attack[i].second.empty() && sound_attack[i].first == attack_name) {
 			size_t rand_index = rand() % sound_attack[i].second.size();
-			snd->play(sound_attack[i].second[rand_index]);
+			snd->play(sound_attack[i].second[rand_index], snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
 			return;
 		}
 	}
@@ -161,25 +161,25 @@ void Entity::playSound(int sound_type) {
 		size_t rand_index = rand() % sound_hit.size();
 		std::stringstream channel_name;
 		channel_name << "entity_hit_" << sound_hit[rand_index];
-		snd->play(sound_hit[rand_index], channel_name.str());
+		snd->play(sound_hit[rand_index], channel_name.str(), snd->NO_POS, !snd->LOOP);
 	}
 	else if (sound_type == Entity::SOUND_DIE && !sound_die.empty()) {
 		size_t rand_index = rand() % sound_die.size();
 		std::stringstream channel_name;
 		channel_name << "entity_die_" << sound_die[rand_index];
-		snd->play(sound_die[rand_index], channel_name.str());
+		snd->play(sound_die[rand_index], channel_name.str(), snd->NO_POS, !snd->LOOP);
 	}
 	else if (sound_type == Entity::SOUND_CRITDIE && !sound_critdie.empty()) {
 		size_t rand_index = rand() % sound_critdie.size();
 		std::stringstream channel_name;
 		channel_name << "entity_critdie_" << sound_critdie[rand_index];
-		snd->play(sound_critdie[rand_index], channel_name.str());
+		snd->play(sound_critdie[rand_index], channel_name.str(), snd->NO_POS, !snd->LOOP);
 	}
 	else if (sound_type == Entity::SOUND_BLOCK && !sound_block.empty()) {
 		size_t rand_index = rand() % sound_block.size();
 		std::stringstream channel_name;
 		channel_name << "entity_block_" << sound_block[rand_index];
-		snd->play(sound_block[rand_index], channel_name.str());
+		snd->play(sound_block[rand_index], channel_name.str(), snd->NO_POS, !snd->LOOP);
 	}
 }
 

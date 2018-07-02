@@ -312,7 +312,7 @@ bool NPC::playSoundIntro() {
 		return false;
 
 	size_t roll = static_cast<size_t>(rand()) % vox_intro.size();
-	snd->play(vox_intro[roll], "NPC_VOX");
+	snd->play(vox_intro[roll], "NPC_VOX", snd->NO_POS, !snd->LOOP);
 	return true;
 }
 
@@ -320,7 +320,7 @@ bool NPC::playSoundQuest(int id) {
 	if (id < 0 || id >= static_cast<int>(vox_quests.size()))
 		return false;
 
-	snd->play(vox_quests[id], "NPC_VOX");
+	snd->play(vox_quests[id], "NPC_VOX", snd->NO_POS, !snd->LOOP);
 	return true;
 }
 

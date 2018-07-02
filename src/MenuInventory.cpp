@@ -218,7 +218,7 @@ void MenuInventory::logic() {
 
 		if (closeButton->checkClick()) {
 			visible = false;
-			snd->play(sfx_close);
+			snd->play(sfx_close, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
 		}
 		if (drag_prev_src == -1) {
 			clearHighlight();
@@ -528,7 +528,7 @@ void MenuInventory::activate(const Point& position) {
 
 	// if the item is a book, open it
 	if (items->items[inventory[CARRIED][slot].item].book != "") {
-		snd->play(sfx_open);
+		snd->play(sfx_open, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
 		show_book = items->items[inventory[CARRIED][slot].item].book;
 	}
 	// use a consumable item
