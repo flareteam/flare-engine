@@ -347,7 +347,7 @@ void GameStatePlay::checkTeleport() {
 			npc_id = nearest_npc = -1;
 
 			// return to title (permadeath) OR auto-save
-			if (pc->stats.permadeath && pc->stats.cur_state == AVATAR_DEAD) {
+			if (pc->stats.permadeath && pc->stats.cur_state == StatBlock::AVATAR_DEAD) {
 				snd->stopMusic();
 				showLoading();
 				setRequestedGameState(new GameStateTitle());
@@ -388,7 +388,7 @@ void GameStatePlay::checkTeleport() {
  * Also check closing the game window entirely.
  */
 void GameStatePlay::checkCancel() {
-	bool save_on_exit = eset->misc.save_onexit && !(pc->stats.permadeath && pc->stats.cur_state == AVATAR_DEAD);
+	bool save_on_exit = eset->misc.save_onexit && !(pc->stats.permadeath && pc->stats.cur_state == StatBlock::AVATAR_DEAD);
 
 	// if user has clicked exit game from exit menu
 	if (menu->requestingExit()) {
@@ -996,7 +996,7 @@ void GameStatePlay::logic() {
 	if (pc->respawn) {
 		pc->stats.alive = true;
 		pc->stats.corpse = false;
-		pc->stats.cur_state = AVATAR_STANCE;
+		pc->stats.cur_state = StatBlock::AVATAR_STANCE;
 		menu->inv->applyEquipment();
 		menu->inv->changed_equipment = true;
 		checkEquipmentChange();

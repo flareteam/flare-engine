@@ -33,59 +33,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class FileParser;
 
-typedef enum {
-	AI_POWER_MELEE = 0,
-	AI_POWER_RANGED = 1,
-	AI_POWER_BEACON = 2,
-	AI_POWER_HIT = 3,
-	AI_POWER_DEATH = 4,
-	AI_POWER_HALF_DEAD = 5,
-	AI_POWER_JOIN_COMBAT = 6,
-	AI_POWER_DEBUFF = 7,
-	AI_POWER_PASSIVE_POST = 8
-} AI_POWER;
-
-enum AvatarState {
-	AVATAR_STANCE = 0,
-	AVATAR_RUN = 1,
-	AVATAR_BLOCK = 2,
-	AVATAR_HIT = 3,
-	AVATAR_DEAD = 4,
-	AVATAR_ATTACK = 5
-};
-
-enum EnemyState {
-	ENEMY_STANCE = 0,
-	ENEMY_MOVE = 1,
-	ENEMY_POWER = 2,
-	ENEMY_SPAWN = 3,
-	ENEMY_BLOCK = 4,
-	ENEMY_HIT = 5,
-	ENEMY_DEAD = 6,
-	ENEMY_CRITDEAD = 7
-};
-
-enum CombatStyle {
-	COMBAT_DEFAULT = 0,
-	COMBAT_AGGRESSIVE = 1,
-	COMBAT_PASSIVE = 2
-};
-
-class AIPower {
-public:
-	AI_POWER type;
-	int id;
-	int chance;
-	int ticks;
-
-	AIPower()
-		: type(AI_POWER_MELEE)
-		, id(0)
-		, chance(0)
-		, ticks(0)
-	{}
-};
-
 class StatBlock {
 private:
 	bool loadCoreStat(FileParser *infile);
@@ -95,6 +42,61 @@ private:
 	bool statsLoaded;
 
 public:
+	typedef enum {
+		AI_POWER_MELEE = 0,
+		AI_POWER_RANGED = 1,
+		AI_POWER_BEACON = 2,
+		AI_POWER_HIT = 3,
+		AI_POWER_DEATH = 4,
+		AI_POWER_HALF_DEAD = 5,
+		AI_POWER_JOIN_COMBAT = 6,
+		AI_POWER_DEBUFF = 7,
+		AI_POWER_PASSIVE_POST = 8
+	} AI_POWER;
+
+	enum AvatarState {
+		AVATAR_STANCE = 0,
+		AVATAR_RUN = 1,
+		AVATAR_BLOCK = 2,
+		AVATAR_HIT = 3,
+		AVATAR_DEAD = 4,
+		AVATAR_ATTACK = 5
+	};
+
+	enum EnemyState {
+		ENEMY_STANCE = 0,
+		ENEMY_MOVE = 1,
+		ENEMY_POWER = 2,
+		ENEMY_SPAWN = 3,
+		ENEMY_BLOCK = 4,
+		ENEMY_HIT = 5,
+		ENEMY_DEAD = 6,
+		ENEMY_CRITDEAD = 7
+	};
+
+	enum CombatStyle {
+		COMBAT_DEFAULT = 0,
+		COMBAT_AGGRESSIVE = 1,
+		COMBAT_PASSIVE = 2
+	};
+
+	class AIPower {
+	public:
+		AI_POWER type;
+		int id;
+		int chance;
+		int ticks;
+
+		AIPower()
+			: type(AI_POWER_MELEE)
+			, id(0)
+			, chance(0)
+			, ticks(0)
+		{}
+	};
+
+	static const bool CAN_USE_PASSIVE = true;
+
 	StatBlock();
 	~StatBlock();
 
@@ -253,7 +255,7 @@ public:
 	std::vector<int> powers_passive;
 	std::vector<AIPower> powers_ai;
 
-	bool canUsePower(int powerid, bool allow_passive = false) const;
+	bool canUsePower(int powerid, bool allow_passive) const;
 
 	float melee_range;
 	float threat_range;

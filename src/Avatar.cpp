@@ -119,7 +119,7 @@ void Avatar::init() {
 
 	// other init
 	sprites = 0;
-	stats.cur_state = AVATAR_STANCE;
+	stats.cur_state = StatBlock::AVATAR_STANCE;
 	if (mapr->hero_pos_enabled) {
 		stats.pos.x = mapr->hero_pos.x;
 		stats.pos.y = mapr->hero_pos.y;
@@ -350,7 +350,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 	// handle when the player stops blocking
 	if (stats.effects.triggered_block && !stats.blocking) {
-		stats.cur_state = AVATAR_STANCE;
+		stats.cur_state = StatBlock::AVATAR_STANCE;
 		stats.effects.triggered_block = false;
 		stats.effects.clearTriggerEffects(Power::TRIGGER_BLOCK);
 		stats.refresh_stats = true;
@@ -373,8 +373,8 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 		snd->play(sound_levelup, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
 
 		// if the player managed to level up while dead (e.g. via a bleeding creature), restore to life
-		if (stats.cur_state == AVATAR_DEAD) {
-			stats.cur_state = AVATAR_STANCE;
+		if (stats.cur_state == StatBlock::AVATAR_DEAD) {
+			stats.cur_state = StatBlock::AVATAR_STANCE;
 		}
 	}
 
@@ -411,7 +411,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 		bool allowed_to_use_power = true;
 
 		switch(stats.cur_state) {
-			case AVATAR_STANCE:
+			case StatBlock::AVATAR_STANCE:
 
 				setAnimation("stance");
 
@@ -436,7 +436,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 					}
 
 					if (move()) { // no collision
-						stats.cur_state = AVATAR_RUN;
+						stats.cur_state = StatBlock::AVATAR_RUN;
 					}
 				}
 
@@ -447,7 +447,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 				break;
 
-			case AVATAR_RUN:
+			case StatBlock::AVATAR_RUN:
 
 				setAnimation("run");
 
@@ -471,20 +471,20 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 				// handle transition to STANCE
 				if (!pressing_move()) {
-					stats.cur_state = AVATAR_STANCE;
+					stats.cur_state = StatBlock::AVATAR_STANCE;
 					break;
 				}
 				else if (!move()) { // collide with wall
-					stats.cur_state = AVATAR_STANCE;
+					stats.cur_state = StatBlock::AVATAR_STANCE;
 					break;
 				}
 
 				if (activeAnimation->getName() != "run")
-					stats.cur_state = AVATAR_STANCE;
+					stats.cur_state = StatBlock::AVATAR_STANCE;
 
 				break;
 
-			case AVATAR_ATTACK:
+			case StatBlock::AVATAR_ATTACK:
 
 				setAnimation(attack_anim);
 
@@ -516,7 +516,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 				}
 
 				if ((activeAnimation->isLastFrame() && stats.state_ticks == 0) || activeAnimation->getName() != attack_anim) {
-					stats.cur_state = AVATAR_STANCE;
+					stats.cur_state = StatBlock::AVATAR_STANCE;
 					stats.cooldown_ticks = stats.cooldown;
 					allowed_to_use_power = false;
 					stats.prevent_interrupt = false;
@@ -524,7 +524,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 				break;
 
-			case AVATAR_BLOCK:
+			case StatBlock::AVATAR_BLOCK:
 
 				setAnimation("block");
 
@@ -532,7 +532,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 				break;
 
-			case AVATAR_HIT:
+			case StatBlock::AVATAR_HIT:
 
 				setAnimation("hit");
 
@@ -546,12 +546,12 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 				}
 
 				if (activeAnimation->getTimesPlayed() >= 1 || activeAnimation->getName() != "hit") {
-					stats.cur_state = AVATAR_STANCE;
+					stats.cur_state = StatBlock::AVATAR_STANCE;
 				}
 
 				break;
 
-			case AVATAR_DEAD:
+			case StatBlock::AVATAR_DEAD:
 				allowed_to_use_power = false;
 
 				if (stats.effects.triggered_death) break;
@@ -642,9 +642,9 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 					FPoint target = action.target;
 
 					// check requirements
-					if ((stats.cur_state == AVATAR_ATTACK || stats.cur_state == AVATAR_HIT) && !action.instant_item)
+					if ((stats.cur_state == StatBlock::AVATAR_ATTACK || stats.cur_state == StatBlock::AVATAR_HIT) && !action.instant_item)
 						continue;
-					if (!stats.canUsePower(action.power))
+					if (!stats.canUsePower(action.power, !StatBlock::CAN_USE_PASSIVE))
 						continue;
 					if (power.requires_los && !mapr->collider.line_of_sight(stats.pos.x, stats.pos.y, target.x, target.y))
 						continue;
@@ -685,7 +685,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 					switch (power.new_state) {
 						case Power::STATE_ATTACK:	// handle attack powers
-							stats.cur_state = AVATAR_ATTACK;
+							stats.cur_state = StatBlock::AVATAR_ATTACK;
 							break;
 
 						case Power::STATE_INSTANT:	// handle instant powers
@@ -695,7 +695,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 						default:
 							if (power.type == Power::TYPE_BLOCK) {
-								stats.cur_state = AVATAR_BLOCK;
+								stats.cur_state = StatBlock::AVATAR_BLOCK;
 								powers->activate(action.power, &stats, target);
 								stats.refresh_stats = true;
 							}
@@ -704,7 +704,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 					// if the player is attacking, show the attack cursor
 					attack_cursor = (
-						stats.cur_state == AVATAR_ATTACK &&
+						stats.cur_state == StatBlock::AVATAR_ATTACK &&
 						!power.buff && !power.buff_teleport &&
 						power.type != Power::TYPE_TRANSFORM &&
 						power.type != Power::TYPE_BLOCK &&
@@ -763,7 +763,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 	if (stats.state_ticks == 0 && stats.hold_state)
 		stats.hold_state = false;
 
-	if (stats.cur_state != AVATAR_ATTACK && stats.charge_speed != 0.0f)
+	if (stats.cur_state != StatBlock::AVATAR_ATTACK && stats.charge_speed != 0.0f)
 		stats.charge_speed = 0.0f;
 }
 
@@ -814,7 +814,7 @@ void Avatar::transform() {
 	animationSet = anim->getAnimationSet(charmed_stats->animations);
 	delete activeAnimation;
 	activeAnimation = animationSet->getAnimation("");
-	stats.cur_state = AVATAR_STANCE;
+	stats.cur_state = StatBlock::AVATAR_STANCE;
 
 	// base stats
 	for (unsigned int i=0; i<STAT_COUNT; ++i) {
@@ -878,7 +878,7 @@ void Avatar::untransform() {
 	animationSet = anim->getAnimationSet("animations/hero.txt");
 	delete activeAnimation;
 	activeAnimation = animationSet->getAnimation("");
-	stats.cur_state = AVATAR_STANCE;
+	stats.cur_state = StatBlock::AVATAR_STANCE;
 
 	// This is a bit of a hack.
 	// In order to switch to the stance animation, we can't already be in a stance animation

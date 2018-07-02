@@ -42,7 +42,7 @@ BehaviorAlly::~BehaviorAlly() {
 
 void BehaviorAlly::findTarget() {
 	// dying enemies can't target anything
-	if (e->stats.cur_state == ENEMY_DEAD || e->stats.cur_state == ENEMY_CRITDEAD) return;
+	if (e->stats.cur_state == StatBlock::ENEMY_DEAD || e->stats.cur_state == StatBlock::ENEMY_CRITDEAD) return;
 
 	// stunned minions can't act
 	if (e->stats.effects.stun) return;
@@ -95,7 +95,7 @@ void BehaviorAlly::findTarget() {
 		e->stats.in_combat = false;
 
 	// aggressive creatures are always in combat
-	if (e->stats.combat_style == COMBAT_AGGRESSIVE)
+	if (e->stats.combat_style == StatBlock::COMBAT_AGGRESSIVE)
 		e->stats.in_combat = true;
 
 	//the default target is the player
@@ -135,7 +135,7 @@ void BehaviorAlly::findTarget() {
 	// If we have a successful chance_flee roll, try to move to a safe distance
 	if (
 			e->stats.in_combat &&
-			e->stats.cur_state == ENEMY_STANCE &&
+			e->stats.cur_state == StatBlock::ENEMY_STANCE &&
 			!move_to_safe_dist && hero_dist < e->stats.flee_range &&
 			hero_dist >= e->stats.melee_range &&
 			percentChance(e->stats.chance_flee) &&
@@ -199,12 +199,12 @@ void BehaviorAlly::checkMoveStateStance() {
 	if (should_move_to_target || fleeing) {
 		if(e->stats.in_combat && target_dist > e->stats.melee_range) {
 			if (e->move())
-				e->stats.cur_state = ENEMY_MOVE;
+				e->stats.cur_state = StatBlock::ENEMY_MOVE;
 		}
 
 		if((!e->stats.in_combat && hero_dist > ALLY_FOLLOW_DISTANCE_WALK) || fleeing) {
 			if (e->move()) {
-				e->stats.cur_state = ENEMY_MOVE;
+				e->stats.cur_state = StatBlock::ENEMY_MOVE;
 			}
 			else {
 				collided = true;
@@ -213,7 +213,7 @@ void BehaviorAlly::checkMoveStateStance() {
 				// hit an obstacle, try the next best angle
 				e->stats.direction = e->faceNextBest(pursue_pos.x, pursue_pos.y);
 				if (e->move()) {
-					e->stats.cur_state = ENEMY_MOVE;
+					e->stats.cur_state = StatBlock::ENEMY_MOVE;
 				}
 				else e->stats.direction = prev_direction;
 			}
@@ -255,7 +255,7 @@ void BehaviorAlly::checkMoveStateMove() {
 		if (stop_fleeing) {
 			flee_cooldown = e->stats.flee_cooldown;
 		}
-		e->stats.cur_state = ENEMY_STANCE;
+		e->stats.cur_state = StatBlock::ENEMY_STANCE;
 		move_to_safe_dist = false;
 		fleeing = false;
 	}
@@ -271,12 +271,12 @@ void BehaviorAlly::checkMoveStateMove() {
 			if(enemym->player_blocked && !e->stats.in_combat) {
 				e->stats.direction = pc->stats.direction;
 				if (!e->move()) {
-					e->stats.cur_state = ENEMY_STANCE;
+					e->stats.cur_state = StatBlock::ENEMY_STANCE;
 					e->stats.direction = prev_direction;
 				}
 			}
 			else {
-				e->stats.cur_state = ENEMY_STANCE;
+				e->stats.cur_state = StatBlock::ENEMY_STANCE;
 				e->stats.direction = prev_direction;
 			}
 		}

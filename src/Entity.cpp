@@ -315,10 +315,10 @@ bool Entity::takeHit(Hazard &h) {
 	}
 
 	//if the target is already dead, they cannot be hit
-	if ((stats.cur_state == ENEMY_DEAD || stats.cur_state == ENEMY_CRITDEAD) && !stats.hero)
+	if ((stats.cur_state == StatBlock::ENEMY_DEAD || stats.cur_state == StatBlock::ENEMY_CRITDEAD) && !stats.hero)
 		return false;
 
-	if(stats.cur_state == AVATAR_DEAD && stats.hero)
+	if(stats.cur_state == StatBlock::AVATAR_DEAD && stats.hero)
 		return false;
 
 	// some attacks will always miss enemies of a certain movement type
@@ -586,13 +586,13 @@ bool Entity::takeHit(Hazard &h) {
 		if(stats.hp <= 0) {
 			stats.effects.triggered_death = true;
 			if(stats.hero)
-				stats.cur_state = AVATAR_DEAD;
+				stats.cur_state = StatBlock::AVATAR_DEAD;
 			else {
 				doRewards(h.source_type);
 				if (crit)
-					stats.cur_state = ENEMY_CRITDEAD;
+					stats.cur_state = StatBlock::ENEMY_CRITDEAD;
 				else
-					stats.cur_state = ENEMY_DEAD;
+					stats.cur_state = StatBlock::ENEMY_DEAD;
 				mapr->collider.unblock(stats.pos.x,stats.pos.y);
 			}
 
@@ -605,9 +605,9 @@ bool Entity::takeHit(Hazard &h) {
 
 		// if this hit caused a debuff, activate an on_debuff power
 		if (!was_debuffed && stats.effects.isDebuffed()) {
-			AIPower* ai_power = stats.getAIPower(AI_POWER_DEBUFF);
+			StatBlock::AIPower* ai_power = stats.getAIPower(StatBlock::AI_POWER_DEBUFF);
 			if (ai_power != NULL) {
-				stats.cur_state = ENEMY_POWER;
+				stats.cur_state = StatBlock::ENEMY_POWER;
 				stats.activated_power = ai_power;
 				stats.cooldown_ticks = 0; // ignore global cooldown
 				return true;
@@ -615,9 +615,9 @@ bool Entity::takeHit(Hazard &h) {
 		}
 
 		// roll to see if the enemy's ON_HIT power is casted
-		AIPower* ai_power = stats.getAIPower(AI_POWER_HIT);
+		StatBlock::AIPower* ai_power = stats.getAIPower(StatBlock::AI_POWER_HIT);
 		if (ai_power != NULL) {
-			stats.cur_state = ENEMY_POWER;
+			stats.cur_state = StatBlock::ENEMY_POWER;
 			stats.activated_power = ai_power;
 			stats.cooldown_ticks = 0; // ignore global cooldown
 			return true;
@@ -630,14 +630,14 @@ bool Entity::takeHit(Hazard &h) {
 
 			if (!stats.effects.stun && (!chance_poise || crit) && !stats.prevent_interrupt) {
 				if(stats.hero) {
-					stats.cur_state = AVATAR_HIT;
+					stats.cur_state = StatBlock::AVATAR_HIT;
 				}
 				else {
-					if (stats.cur_state == ENEMY_POWER) {
+					if (stats.cur_state == StatBlock::ENEMY_POWER) {
 						stats.cooldown_ticks = stats.cooldown;
 						stats.activated_power = NULL;
 					}
-					stats.cur_state = ENEMY_HIT;
+					stats.cur_state = StatBlock::ENEMY_HIT;
 				}
 
 				if (stats.untransform_on_hit)

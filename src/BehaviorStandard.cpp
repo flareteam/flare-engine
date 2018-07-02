@@ -114,7 +114,7 @@ void BehaviorStandard::doUpkeep() {
  */
 void BehaviorStandard::findTarget() {
 	// dying enemies can't target anything
-	if (e->stats.cur_state == ENEMY_DEAD || e->stats.cur_state == ENEMY_CRITDEAD) return;
+	if (e->stats.cur_state == StatBlock::ENEMY_DEAD || e->stats.cur_state == StatBlock::ENEMY_CRITDEAD) return;
 
 	float stealth_threat_range = (e->stats.threat_range * (100 - static_cast<float>(e->stats.hero_stealth))) / 100;
 
@@ -129,12 +129,12 @@ void BehaviorStandard::findTarget() {
 
 
 	// aggressive enemies are always in combat
-	if (!e->stats.in_combat && e->stats.combat_style == COMBAT_AGGRESSIVE) {
+	if (!e->stats.in_combat && e->stats.combat_style == StatBlock::COMBAT_AGGRESSIVE) {
 		e->stats.join_combat = true;
 	}
 
 	// check entering combat (because the player got too close)
-	if (e->stats.alive && !e->stats.in_combat && los && hero_dist < stealth_threat_range && e->stats.combat_style != COMBAT_PASSIVE) {
+	if (e->stats.alive && !e->stats.in_combat && los && hero_dist < stealth_threat_range && e->stats.combat_style != StatBlock::COMBAT_PASSIVE) {
 		e->stats.join_combat = true;
 	}
 
@@ -142,14 +142,14 @@ void BehaviorStandard::findTarget() {
 	if (e->stats.join_combat) {
 		e->stats.in_combat = true;
 
-		AIPower* ai_power = e->stats.getAIPower(AI_POWER_BEACON);
+		StatBlock::AIPower* ai_power = e->stats.getAIPower(StatBlock::AI_POWER_BEACON);
 		if (ai_power != NULL) {
 			powers->activate(ai_power->id, &e->stats, e->stats.pos); //emit beacon
 		}
 
-		ai_power = e->stats.getAIPower(AI_POWER_JOIN_COMBAT);
+		ai_power = e->stats.getAIPower(StatBlock::AI_POWER_JOIN_COMBAT);
 		if (ai_power != NULL) {
-			e->stats.cur_state = ENEMY_POWER;
+			e->stats.cur_state = StatBlock::ENEMY_POWER;
 			e->stats.activated_power = ai_power;
 		}
 
@@ -157,12 +157,12 @@ void BehaviorStandard::findTarget() {
 	}
 
 	// check exiting combat (player died or got too far away)
-	if (e->stats.in_combat && hero_dist > (e->stats.threat_range_far) && !e->stats.join_combat && e->stats.combat_style != COMBAT_AGGRESSIVE) {
+	if (e->stats.in_combat && hero_dist > (e->stats.threat_range_far) && !e->stats.join_combat && e->stats.combat_style != StatBlock::COMBAT_AGGRESSIVE) {
 		e->stats.in_combat = false;
 	}
 
 	// check exiting combat (player or enemy died)
-	if ((!e->stats.alive || !pc->stats.alive) && e->stats.combat_style != COMBAT_AGGRESSIVE) {
+	if ((!e->stats.alive || !pc->stats.alive) && e->stats.combat_style != StatBlock::COMBAT_AGGRESSIVE) {
 		e->stats.in_combat = false;
 	}
 
@@ -212,7 +212,7 @@ void BehaviorStandard::findTarget() {
 	// If we have a successful chance_flee roll, try to move to a safe distance
 	if (
 			e->stats.in_combat &&
-			e->stats.cur_state == ENEMY_STANCE &&
+			e->stats.cur_state == StatBlock::ENEMY_STANCE &&
 			!move_to_safe_dist && hero_dist < e->stats.flee_range &&
 			hero_dist >= e->stats.melee_range &&
 			percentChance(e->stats.chance_flee) &&
@@ -284,20 +284,20 @@ void BehaviorStandard::checkPower() {
 	// The second stage occurs in updateState()
 
 	// pick a power from the available powers for this creature
-	if (e->stats.cur_state == ENEMY_STANCE || e->stats.cur_state == ENEMY_MOVE) {
-		AIPower* ai_power = NULL;
+	if (e->stats.cur_state == StatBlock::ENEMY_STANCE || e->stats.cur_state == StatBlock::ENEMY_MOVE) {
+		StatBlock::AIPower* ai_power = NULL;
 
 		// check half dead power use
 		if (e->stats.half_dead_power && e->stats.hp <= e->stats.get(STAT_HP_MAX)/2) {
-			ai_power = e->stats.getAIPower(AI_POWER_HALF_DEAD);
+			ai_power = e->stats.getAIPower(StatBlock::AI_POWER_HALF_DEAD);
 		}
 		// check ranged power use
 		else if (target_dist > e->stats.melee_range) {
-			ai_power = e->stats.getAIPower(AI_POWER_RANGED);
+			ai_power = e->stats.getAIPower(StatBlock::AI_POWER_RANGED);
 		}
 		// check melee power use
 		else {
-			ai_power = e->stats.getAIPower(AI_POWER_MELEE);
+			ai_power = e->stats.getAIPower(StatBlock::AI_POWER_MELEE);
 		}
 
 		if (ai_power != NULL) {
@@ -306,13 +306,13 @@ void BehaviorStandard::checkPower() {
 				ai_power = NULL;
 			}
 			if (ai_power != NULL) {
-				e->stats.cur_state = ENEMY_POWER;
+				e->stats.cur_state = StatBlock::ENEMY_POWER;
 				e->stats.activated_power = ai_power;
 			}
 		}
 	}
 
-	if (e->stats.cur_state != ENEMY_POWER && e->stats.activated_power) {
+	if (e->stats.cur_state != StatBlock::ENEMY_POWER && e->stats.activated_power) {
 		e->stats.activated_power = NULL;
 	}
 }
@@ -323,7 +323,7 @@ void BehaviorStandard::checkPower() {
 void BehaviorStandard::checkMove() {
 
 	// dying enemies can't move
-	if (e->stats.cur_state == ENEMY_DEAD || e->stats.cur_state == ENEMY_CRITDEAD) return;
+	if (e->stats.cur_state == StatBlock::ENEMY_DEAD || e->stats.cur_state == StatBlock::ENEMY_CRITDEAD) return;
 
 	// stunned enemies can't act
 	if (e->stats.effects.stun) return;
@@ -331,8 +331,8 @@ void BehaviorStandard::checkMove() {
 	// handle not being in combat and (not patrolling waypoints or waiting at waypoint)
 	if (!e->stats.hero_ally && !e->stats.in_combat && (e->stats.waypoints.empty() || e->stats.waypoint_pause_ticks > 0)) {
 
-		if (e->stats.cur_state == ENEMY_MOVE) {
-			e->stats.cur_state = ENEMY_STANCE;
+		if (e->stats.cur_state == StatBlock::ENEMY_MOVE) {
+			e->stats.cur_state = StatBlock::ENEMY_STANCE;
 		}
 
 		// currently enemies only move while in combat or patrolling
@@ -427,12 +427,12 @@ void BehaviorStandard::checkMove() {
 		flee_cooldown--;
 
 	// try to start moving
-	if (e->stats.cur_state == ENEMY_STANCE) {
+	if (e->stats.cur_state == StatBlock::ENEMY_STANCE) {
 		checkMoveStateStance();
 	}
 
 	// already moving
-	else if (e->stats.cur_state == ENEMY_MOVE) {
+	else if (e->stats.cur_state == StatBlock::ENEMY_MOVE) {
 		checkMoveStateMove();
 	}
 
@@ -478,7 +478,7 @@ void BehaviorStandard::checkMoveStateStance() {
 	if (should_move_to_target || fleeing) {
 
 		if (e->move()) {
-			e->stats.cur_state = ENEMY_MOVE;
+			e->stats.cur_state = StatBlock::ENEMY_MOVE;
 		}
 		else {
 			collided = true;
@@ -487,7 +487,7 @@ void BehaviorStandard::checkMoveStateStance() {
 			// hit an obstacle, try the next best angle
 			e->stats.direction = e->faceNextBest(pursue_pos.x, pursue_pos.y);
 			if (e->move()) {
-				e->stats.cur_state = ENEMY_MOVE;
+				e->stats.cur_state = StatBlock::ENEMY_MOVE;
 			}
 			else
 				e->stats.direction = prev_direction;
@@ -525,7 +525,7 @@ void BehaviorStandard::checkMoveStateMove() {
 		if (stop_fleeing) {
 			flee_cooldown = e->stats.flee_cooldown;
 		}
-		e->stats.cur_state = ENEMY_STANCE;
+		e->stats.cur_state = StatBlock::ENEMY_STANCE;
 		move_to_safe_dist = false;
 		fleeing = false;
 	}
@@ -537,7 +537,7 @@ void BehaviorStandard::checkMoveStateMove() {
 		// hit an obstacle.  Try the next best angle
 		e->stats.direction = e->faceNextBest(pursue_pos.x, pursue_pos.y);
 		if (!e->move()) {
-			e->stats.cur_state = ENEMY_STANCE;
+			e->stats.cur_state = StatBlock::ENEMY_STANCE;
 			e->stats.direction = prev_direction;
 		}
 	}
@@ -562,20 +562,20 @@ void BehaviorStandard::updateState() {
 
 	switch (e->stats.cur_state) {
 
-		case ENEMY_STANCE:
+		case StatBlock::ENEMY_STANCE:
 
 			e->setAnimation("stance");
 			break;
 
-		case ENEMY_MOVE:
+		case StatBlock::ENEMY_MOVE:
 
 			e->setAnimation("run");
 			break;
 
-		case ENEMY_POWER:
+		case StatBlock::ENEMY_POWER:
 
 			if (e->stats.activated_power == NULL) {
-				e->stats.cur_state = ENEMY_STANCE;
+				e->stats.cur_state = StatBlock::ENEMY_STANCE;
 				break;
 			}
 
@@ -619,7 +619,7 @@ void BehaviorStandard::updateState() {
 					}
 				}
 
-				if (e->stats.activated_power->type == AI_POWER_HALF_DEAD) {
+				if (e->stats.activated_power->type == StatBlock::AI_POWER_HALF_DEAD) {
 					e->stats.half_dead_power = false;
 				}
 
@@ -638,36 +638,36 @@ void BehaviorStandard::updateState() {
 					e->instant_power = false;
 
 				e->stats.activated_power = NULL;
-				e->stats.cur_state = ENEMY_STANCE;
+				e->stats.cur_state = StatBlock::ENEMY_STANCE;
 				e->stats.prevent_interrupt = false;
 			}
 			break;
 
-		case ENEMY_SPAWN:
+		case StatBlock::ENEMY_SPAWN:
 
 			e->setAnimation("spawn");
 			//the second check is needed in case the entity does not have a spawn animation
 			if (e->activeAnimation->isLastFrame() || e->activeAnimation->getName() != "spawn") {
-				e->stats.cur_state = ENEMY_STANCE;
+				e->stats.cur_state = StatBlock::ENEMY_STANCE;
 			}
 			break;
 
-		case ENEMY_BLOCK:
+		case StatBlock::ENEMY_BLOCK:
 
 			e->setAnimation("block");
 			break;
 
-		case ENEMY_HIT:
+		case StatBlock::ENEMY_HIT:
 
 			e->setAnimation("hit");
 			if (e->activeAnimation->isFirstFrame()) {
 				e->stats.effects.triggered_hit = true;
 			}
 			if (e->activeAnimation->isLastFrame() || e->activeAnimation->getName() != "hit")
-				e->stats.cur_state = ENEMY_STANCE;
+				e->stats.cur_state = StatBlock::ENEMY_STANCE;
 			break;
 
-		case ENEMY_DEAD:
+		case StatBlock::ENEMY_DEAD:
 			if (e->stats.effects.triggered_death) break;
 
 			e->setAnimation("die");
@@ -676,7 +676,7 @@ void BehaviorStandard::updateState() {
 				e->stats.corpse_ticks = eset->misc.corpse_timeout;
 			}
 			if (e->activeAnimation->isSecondLastFrame()) {
-				AIPower* ai_power = e->stats.getAIPower(AI_POWER_DEATH);
+				StatBlock::AIPower* ai_power = e->stats.getAIPower(StatBlock::AI_POWER_DEATH);
 				if (ai_power != NULL)
 					powers->activate(ai_power->id, &e->stats, e->stats.pos);
 
@@ -700,7 +700,7 @@ void BehaviorStandard::updateState() {
 
 			break;
 
-		case ENEMY_CRITDEAD:
+		case StatBlock::ENEMY_CRITDEAD:
 
 			e->setAnimation("critdie");
 			if (e->activeAnimation->isFirstFrame()) {
@@ -708,7 +708,7 @@ void BehaviorStandard::updateState() {
 				e->stats.corpse_ticks = eset->misc.corpse_timeout;
 			}
 			if (e->activeAnimation->isSecondLastFrame()) {
-				AIPower* ai_power = e->stats.getAIPower(AI_POWER_DEATH);
+				StatBlock::AIPower* ai_power = e->stats.getAIPower(StatBlock::AI_POWER_DEATH);
 				if (ai_power != NULL)
 					powers->activate(ai_power->id, &e->stats, e->stats.pos);
 
@@ -734,7 +734,7 @@ void BehaviorStandard::updateState() {
 	if (e->stats.state_ticks == 0 && e->stats.hold_state)
 		e->stats.hold_state = false;
 
-	if (e->stats.cur_state != ENEMY_POWER && e->stats.charge_speed != 0.0f)
+	if (e->stats.cur_state != StatBlock::ENEMY_POWER && e->stats.charge_speed != 0.0f)
 		e->stats.charge_speed = 0.0f;
 }
 

@@ -1127,7 +1127,7 @@ void StatBlock::addXP(int amount) {
 		xp = xp_table.back();
 }
 
-AIPower* StatBlock::getAIPower(AI_POWER ai_type) {
+StatBlock::AIPower* StatBlock::getAIPower(StatBlock::AI_POWER ai_type) {
 	std::vector<size_t> possible_ids;
 	int chance = rand() % 100;
 
