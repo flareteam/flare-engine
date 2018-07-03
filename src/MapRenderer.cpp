@@ -403,7 +403,7 @@ void MapRenderer::renderIsoLayer(const Map_Layer& layerdata) {
 			p.x += eset->tileset.tile_w;
 
 			if (const uint_fast16_t current_tile = layerdata[i][j]) {
-				const Tile_Def &tile = tset.tiles[current_tile];
+				const TileSet::Tile_Def &tile = tset.tiles[current_tile];
 				dest.x = p.x - tile.offset.x;
 				dest.y = p.y - tile.offset.y;
 				// no need to set w and h in dest, as it is ignored
@@ -501,7 +501,7 @@ void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 
 			if (draw_tile && !drawn_tiles[i][j]) {
 				if (const uint_fast16_t current_tile = current_layer[i][j]) {
-					const Tile_Def &tile = tset.tiles[current_tile];
+					const TileSet::Tile_Def &tile = tset.tiles[current_tile];
 					dest.x = p.x - tile.offset.x;
 					dest.y = p.y - tile.offset.y;
 					tile.tile->setDest(dest);
@@ -582,7 +582,7 @@ do_last_NE_tile:
 			// draw the south-west tile
 			if (draw_SW_tile && i-2 >= 0 && j+2 < h && !drawn_tiles[i-2][j+2]) {
 				if (const uint_fast16_t current_tile = current_layer[i-2][j+2]) {
-					const Tile_Def &tile = tset.tiles[current_tile];
+					const TileSet::Tile_Def &tile = tset.tiles[current_tile];
 					dest.x = tile_SW_center.x - tile.offset.x;
 					dest.y = tile_SW_center.y - tile.offset.y;
 					tile.tile->setDest(dest);
@@ -599,7 +599,7 @@ do_last_NE_tile:
 			// draw the north-east tile
 			if (draw_NE_tile && !draw_tile && !drawn_tiles[i][j]) {
 				if (const uint_fast16_t current_tile = current_layer[i][j]) {
-					const Tile_Def &tile = tset.tiles[current_tile];
+					const TileSet::Tile_Def &tile = tset.tiles[current_tile];
 					dest.x = tile_NE_center.x - tile.offset.x;
 					dest.y = tile_NE_center.y - tile.offset.y;
 					tile.tile->setDest(dest);
@@ -684,7 +684,7 @@ void MapRenderer::renderOrthoLayer(const Map_Layer& layerdata) {
 		for (i = starti; i < max_tiles_width; i++) {
 
 			if (const unsigned short current_tile = layerdata[i][j]) {
-				const Tile_Def &tile = tset.tiles[current_tile];
+				const TileSet::Tile_Def &tile = tset.tiles[current_tile];
 				dest.x = p.x - tile.offset.x;
 				dest.y = p.y - tile.offset.y;
 				tile.tile->setDest(dest);
@@ -729,7 +729,7 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 		for (i = starti; i<max_tiles_width; i++) {
 
 			if (const unsigned short current_tile = layers[index_objectlayer][i][j]) {
-				const Tile_Def &tile = tset.tiles[current_tile];
+				const TileSet::Tile_Def &tile = tset.tiles[current_tile];
 				dest.x = p.x - tile.offset.x;
 				dest.y = p.y - tile.offset.y;
 				tile.tile->setDest(dest);
@@ -929,7 +929,7 @@ void MapRenderer::checkHotspots() {
 
 						if (const short current_tile = layers[index][x][y]) {
 							// first check if mouse pointer is in rectangle of that tile:
-							const Tile_Def &tile = tset.tiles[current_tile];
+							const TileSet::Tile_Def &tile = tset.tiles[current_tile];
 							Rect dest;
 							dest.x = p.x - tile.offset.x;
 							dest.y = p.y - tile.offset.y;
@@ -1100,7 +1100,7 @@ Point MapRenderer::centerTile(const Point& p) {
 void MapRenderer::getTileBounds(const int_fast16_t x, const int_fast16_t y, const Map_Layer& layerdata, Rect& bounds, Point& center) {
 	if (x >= 0 && x < w && y >= 0 && y < h) {
 		if (const uint_fast16_t tile_index = layerdata[x][y]) {
-			const Tile_Def &tile = tset.tiles[tile_index];
+			const TileSet::Tile_Def &tile = tset.tiles[tile_index];
 			if (!tile.tile)
 				return;
 			center = centerTile(map_to_screen(float(x), float(y), shakycam.x, shakycam.y));
