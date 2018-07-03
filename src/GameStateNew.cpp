@@ -72,7 +72,7 @@ GameStateNew::GameStateNew()
 	button_prev = new WidgetButton("images/menus/buttons/left.png");
 	button_next = new WidgetButton("images/menus/buttons/right.png");
 
-	input_name = new WidgetInput();
+	input_name = new WidgetInput(WidgetInput::DEFAULT_FILE);
 	input_name->max_length = 20;
 
 	button_permadeath = new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE);

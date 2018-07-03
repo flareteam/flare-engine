@@ -54,7 +54,7 @@ MenuNumPicker::MenuNumPicker()
 
 	button_close = new WidgetButton("images/menus/buttons/button_x.png");
 
-	input_box = new WidgetInput();
+	input_box = new WidgetInput(WidgetInput::DEFAULT_FILE);
 	input_box->only_numbers = true;
 
 	// Load config settings

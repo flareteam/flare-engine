@@ -39,12 +39,12 @@ protected:
 
 	void loadGraphics(const std::string& filename);
 	void trimText();
+	bool checkClick(const Point& mouse);
 
 	Sprite *background;
 
 	bool enabled;
 	bool pressed;
-	bool hover;
 
 	std::string text; // the text that has been typed into the box
 	std::string trimmed_text; // a trimmed version of text that is rendered
@@ -60,15 +60,16 @@ protected:
 	WidgetTooltip osk_tip;
 
 public:
-	explicit WidgetInput(const std::string& filename = "images/menus/input.png");
+	static const std::string DEFAULT_FILE;
+
+	explicit WidgetInput(const std::string& filename);
 	~WidgetInput();
-	void setPos(int offset_x = 0, int offset_y = 0);
+	void setPos(int offset_x, int offset_y);
 
 	void activate();
 	void logic();
-	bool logic(int x, int y);
+	bool logicAt(int x, int y);
 	void render();
-	bool checkClick();
 	std::string getText() {
 		return text;
 	}
@@ -77,7 +78,6 @@ public:
 		cursor_pos = text.length();
 		trimText();
 	}
-	void setPosition(int x, int y);
 
 	bool edit_mode;
 	unsigned int max_length;

@@ -28,11 +28,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "WidgetInput.h"
 
+const std::string WidgetInput::DEFAULT_FILE = "images/menus/input.png";
+
 WidgetInput::WidgetInput(const std::string& filename)
 	: background(NULL)
 	, enabled(true)
 	, pressed(false)
-	, hover(false)
 	, cursor_pos(0)
 	, edit_mode(false)
 	, max_length(0)
@@ -47,7 +48,12 @@ WidgetInput::WidgetInput(const std::string& filename)
 }
 
 void WidgetInput::setPos(int offset_x, int offset_y) {
-	setPosition(pos_base.x+offset_x, pos_base.y+offset_y);
+	pos.x = pos_base.x + offset_x + local_frame.x - local_offset.x;
+	pos.y = pos_base.y + offset_y + local_frame.y - local_offset.y;
+
+	font->setFont("font_regular");
+	font_pos.x = pos.x + (font->getFontHeight()/2);
+	font_pos.y = pos.y + (pos.h/2) - (font->getFontHeight()/2);
 }
 
 void WidgetInput::loadGraphics(const std::string& filename) {
@@ -78,24 +84,53 @@ void WidgetInput::activate() {
 		edit_mode = true;
 }
 
+bool WidgetInput::checkClick(const Point& mouse) {
+
+	// disabled buttons can't be clicked;
+	if (!enabled) return false;
+
+	// main button already in use, new click not allowed
+	if (inpt->lock[Input::MAIN1]) return false;
+
+	// main click released, so the button state goes back to unpressed
+	if (pressed && !inpt->lock[Input::MAIN1]) {
+		pressed = false;
+
+		if (isWithinRect(pos, mouse)) {
+			// activate upon release
+			return true;
+		}
+	}
+
+	pressed = false;
+
+	// detect new click
+	if (inpt->pressing[Input::MAIN1]) {
+		if (isWithinRect(pos, mouse)) {
+
+			inpt->lock[Input::MAIN1] = true;
+			pressed = true;
+
+		}
+	}
+	return false;
+}
+
 void WidgetInput::logic() {
-	if (logic(inpt->mouse.x,inpt->mouse.y))
+	if (logicAt(inpt->mouse.x,inpt->mouse.y))
 		return;
 }
 
-bool WidgetInput::logic(int x, int y) {
+bool WidgetInput::logicAt(int x, int y) {
 	Point mouse(x, y);
 
-	// Change the hover state
-	hover = isWithinRect(pos, mouse);
-
-	if (checkClick()) {
+	if (checkClick(mouse)) {
 		edit_mode = true;
 	}
 
 	// if clicking elsewhere unfocus the text box
 	if (inpt->pressing[Input::MAIN1]) {
-		if (!isWithinRect(pos, inpt->mouse)) {
+		if (!isWithinRect(pos, mouse)) {
 			edit_mode = false;
 		}
 	}
@@ -224,48 +259,6 @@ void WidgetInput::render() {
 		osk_buf.addText(trimmed_text_cursor);
 		osk_tip.render(osk_buf, Point(settings->view_w_half + pos.w/2, 0), TooltipData::STYLE_FLOAT);
 	}
-}
-
-void WidgetInput::setPosition(int x, int y) {
-	pos.x = x + local_frame.x - local_offset.x;
-	pos.y = y + local_frame.y - local_offset.y;
-
-	font->setFont("font_regular");
-	font_pos.x = pos.x  + (font->getFontHeight()/2);
-	font_pos.y = pos.y + (pos.h/2) - (font->getFontHeight()/2);
-}
-
-bool WidgetInput::checkClick() {
-
-	// disabled buttons can't be clicked;
-	if (!enabled) return false;
-
-	// main button already in use, new click not allowed
-	if (inpt->lock[Input::MAIN1]) return false;
-
-	// main click released, so the button state goes back to unpressed
-	if (pressed && !inpt->lock[Input::MAIN1]) {
-		pressed = false;
-
-		if (isWithinRect(pos, inpt->mouse)) {
-
-			// activate upon release
-			return true;
-		}
-	}
-
-	pressed = false;
-
-	// detect new click
-	if (inpt->pressing[Input::MAIN1]) {
-		if (isWithinRect(pos, inpt->mouse)) {
-
-			inpt->lock[Input::MAIN1] = true;
-			pressed = true;
-
-		}
-	}
-	return false;
 }
 
 WidgetInput::~WidgetInput() {
