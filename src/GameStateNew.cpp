@@ -61,10 +61,10 @@ GameStateNew::GameStateNew()
 	, game_slot(0)
 {
 	// set up buttons
-	button_exit = new WidgetButton();
+	button_exit = new WidgetButton(WidgetButton::DEFAULT_FILE);
 	button_exit->label = msg->get("Cancel");
 
-	button_create = new WidgetButton();
+	button_create = new WidgetButton(WidgetButton::DEFAULT_FILE);
 	button_create->label = msg->get("Create");
 	button_create->enabled = false;
 	button_create->refresh();
@@ -410,8 +410,8 @@ void GameStateNew::logic() {
 }
 
 void GameStateNew::refreshWidgets() {
-	button_exit->setPos();
-	button_create->setPos();
+	button_exit->setPos(0, 0);
+	button_create->setPos(0, 0);
 
 	button_prev->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);
 	button_next->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);

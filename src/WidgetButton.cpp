@@ -30,6 +30,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetButton.h"
 #include "WidgetTooltip.h"
 
+const std::string WidgetButton::DEFAULT_FILE = "images/menus/buttons/button_default.png";
+
 WidgetButton::WidgetButton(const std::string& _fileName)
 	: Widget()
 	, fileName(_fileName)
@@ -74,14 +76,14 @@ void WidgetButton::loadArt() {
 }
 
 bool WidgetButton::checkClick() {
-	return checkClick(inpt->mouse.x,inpt->mouse.y);
+	return checkClickAt(inpt->mouse.x,inpt->mouse.y);
 }
 
 /**
  * Sets and releases the "pressed" visual state of the button
  * If press and release, activate (return true)
  */
-bool WidgetButton::checkClick(int x, int y) {
+bool WidgetButton::checkClickAt(int x, int y) {
 	Point mouse(x,y);
 
 	// Change the hover state

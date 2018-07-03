@@ -98,7 +98,7 @@ GameStateConfigDesktop::GameStateConfigDesktop(bool _enable_video_tab)
 		keybinds_lb[i]->setJustify(FontEngine::JUSTIFY_RIGHT);
 	}
 	for (int i = 0; i < inpt->KEY_COUNT * 3; i++) {
-		keybinds_btn.push_back(new WidgetButton());
+		keybinds_btn.push_back(new WidgetButton(WidgetButton::DEFAULT_FILE));
 	}
 
 	key_count = static_cast<unsigned>(keybinds_btn.size()/3);
@@ -738,7 +738,7 @@ void GameStateConfigDesktop::logicKeybinds() {
 			keybinds_btn[i]->refresh();
 		}
 		Point mouse = input_scrollbox->input_assist(inpt->mouse);
-		if (keybinds_btn[i]->checkClick(mouse.x,mouse.y)) {
+		if (keybinds_btn[i]->checkClickAt(mouse.x,mouse.y)) {
 			std::string confirm_msg;
 			confirm_msg = msg->get("Assign:") + ' ' + inpt->binding_name[i%key_count];
 			delete input_confirm;

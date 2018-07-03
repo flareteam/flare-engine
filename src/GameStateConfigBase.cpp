@@ -58,9 +58,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 GameStateConfigBase::GameStateConfigBase (bool do_init)
 	: GameState()
 	, child_widget()
-	, ok_button(new WidgetButton())
-	, defaults_button(new WidgetButton())
-	, cancel_button(new WidgetButton())
+	, ok_button(new WidgetButton(WidgetButton::DEFAULT_FILE))
+	, defaults_button(new WidgetButton(WidgetButton::DEFAULT_FILE))
+	, cancel_button(new WidgetButton(WidgetButton::DEFAULT_FILE))
 	, background(NULL)
 	, combat_text_cb(new WidgetCheckBox())
 	, combat_text_lb(new WidgetLabel())
@@ -92,8 +92,8 @@ GameStateConfigBase::GameStateConfigBase (bool do_init)
 	, language_lb(new WidgetLabel())
 	, activemods_shiftup_btn(new WidgetButton("images/menus/buttons/up.png"))
 	, activemods_shiftdown_btn(new WidgetButton("images/menus/buttons/down.png"))
-	, activemods_deactivate_btn(new WidgetButton())
-	, inactivemods_activate_btn(new WidgetButton())
+	, activemods_deactivate_btn(new WidgetButton(WidgetButton::DEFAULT_FILE))
+	, inactivemods_activate_btn(new WidgetButton(WidgetButton::DEFAULT_FILE))
 	, defaults_confirm(new MenuConfirm(msg->get("Defaults"), msg->get("Reset ALL settings?")))
 	, tip(new WidgetTooltip())
 	, tip_buf()
@@ -834,9 +834,9 @@ void GameStateConfigBase::refreshWidgets() {
 		child_widget[i]->setPos(frame.x, frame.y);
 	}
 
-	ok_button->setPos();
-	defaults_button->setPos();
-	cancel_button->setPos();
+	ok_button->setPos(0, 0);
+	defaults_button->setPos(0, 0);
+	cancel_button->setPos(0, 0);
 
 	defaults_confirm->align();
 }

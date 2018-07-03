@@ -32,13 +32,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class WidgetTooltip;
 
-const int BUTTON_GFX_NORMAL = 0;
-const int BUTTON_GFX_PRESSED = 1;
-const int BUTTON_GFX_HOVER = 2;
-const int BUTTON_GFX_DISABLED = 3;
-
 class WidgetButton : public Widget {
 private:
+	enum {
+		BUTTON_GFX_NORMAL = 0,
+		BUTTON_GFX_PRESSED = 1,
+		BUTTON_GFX_HOVER = 2,
+		BUTTON_GFX_DISABLED = 3
+	};
 
 	std::string fileName; // the path to the buttons background image
 
@@ -57,15 +58,17 @@ private:
 	bool activated;
 
 public:
-	explicit WidgetButton(const std::string& _fileName = "images/menus/buttons/button_default.png");
+	static const std::string DEFAULT_FILE;
+
+	explicit WidgetButton(const std::string& _fileName);
 	~WidgetButton();
 
 	void activate();
-	void setPos(int offset_x = 0, int offset_y = 0);
+	void setPos(int offset_x, int offset_y);
 
 	void loadArt();
 	bool checkClick();
-	bool checkClick(int x, int y);
+	bool checkClickAt(int x, int y);
 	void render();
 	void refresh();
 

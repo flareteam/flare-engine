@@ -49,10 +49,10 @@ GameStateTitle::GameStateTitle()
 {
 
 	// set up buttons
-	button_play = new WidgetButton();
-	button_exit = new WidgetButton();
-	button_cfg = new WidgetButton();
-	button_credits = new WidgetButton();
+	button_play = new WidgetButton(WidgetButton::DEFAULT_FILE);
+	button_exit = new WidgetButton(WidgetButton::DEFAULT_FILE);
+	button_cfg = new WidgetButton(WidgetButton::DEFAULT_FILE);
+	button_credits = new WidgetButton(WidgetButton::DEFAULT_FILE);
 
 	FileParser infile;
 	// @CLASS GameStateTitle|Description of menus/gametitle.txt
@@ -200,10 +200,10 @@ void GameStateTitle::refreshWidgets() {
 		logo->setDestY(r.y);
 	}
 
-	button_play->setPos();
-	button_cfg->setPos();
-	button_credits->setPos();
-	button_exit->setPos();
+	button_play->setPos(0, 0);
+	button_cfg->setPos(0, 0);
+	button_credits->setPos(0, 0);
+	button_exit->setPos(0, 0);
 
 	label_version->setPos(settings->view_w, 0);
 }

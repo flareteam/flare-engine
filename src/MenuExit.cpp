@@ -38,8 +38,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 MenuExit::MenuExit() : Menu() {
 
-	buttonExit = new WidgetButton();
-	buttonClose = new WidgetButton();
+	buttonExit = new WidgetButton(WidgetButton::DEFAULT_FILE);
+	buttonClose = new WidgetButton(WidgetButton::DEFAULT_FILE);
 
 	// widgets for game options
 	music_volume_sl = new WidgetSlider();

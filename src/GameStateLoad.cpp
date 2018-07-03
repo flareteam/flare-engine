@@ -85,18 +85,18 @@ GameStateLoad::GameStateLoad() : GameState()
 
 	// Confirmation box to confirm deleting
 	confirm = new MenuConfirm(msg->get("Delete Save"), msg->get("Delete this save?"));
-	button_exit = new WidgetButton();
+	button_exit = new WidgetButton(WidgetButton::DEFAULT_FILE);
 	button_exit->label = msg->get("Exit to Title");
 
-	button_new = new WidgetButton();
+	button_new = new WidgetButton(WidgetButton::DEFAULT_FILE);
 	button_new->label = msg->get("New Game");
 	button_new->enabled = true;
 
-	button_load = new WidgetButton();
+	button_load = new WidgetButton(WidgetButton::DEFAULT_FILE);
 	button_load->label = msg->get("Choose a Slot");
 	button_load->enabled = false;
 
-	button_delete = new WidgetButton();
+	button_delete = new WidgetButton(WidgetButton::DEFAULT_FILE);
 	button_delete->label = msg->get("Delete Save");
 	button_delete->enabled = false;
 
@@ -611,7 +611,7 @@ void GameStateLoad::updateButtons() {
 }
 
 void GameStateLoad::refreshWidgets() {
-	button_exit->setPos();
+	button_exit->setPos(0, 0);
 	button_new->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);
 	button_load->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);
 	button_delete->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);

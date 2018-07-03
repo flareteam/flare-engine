@@ -158,7 +158,7 @@ void MenuBook::loadBook() {
 		i--;
 
 		if (buttons[i].image.empty())
-			buttons[i].button = new WidgetButton();
+			buttons[i].button = new WidgetButton(WidgetButton::DEFAULT_FILE);
 		else
 			buttons[i].button = new WidgetButton(buttons[i].image);
 

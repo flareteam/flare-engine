@@ -55,7 +55,7 @@ MenuConfirm::MenuConfirm(const std::string& _buttonMsg, const std::string& _boxM
 	tablist.ignore_no_mouse = true;
 
 	if (hasConfirmButton) {
-		buttonConfirm = new WidgetButton();
+		buttonConfirm = new WidgetButton(WidgetButton::DEFAULT_FILE);
 		buttonConfirm->label = _buttonMsg;
 		tablist.add(buttonConfirm);
 	}
