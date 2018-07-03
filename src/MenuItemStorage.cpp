@@ -61,7 +61,7 @@ void MenuItemStorage::initGrid(int _slot_number, const Rect& _area, int _nb_cols
 		slots[i]->pos.x = grid_area.x + (i % nb_cols * eset->resolutions.icon_size);
 		slots[i]->pos.y = grid_area.y + (i / nb_cols * eset->resolutions.icon_size);
 		slots[i]->pos.h = slots[i]->pos.w = eset->resolutions.icon_size;
-		slots[i]->setBasePos(slots[i]->pos.x, slots[i]->pos.y);
+		slots[i]->setBasePos(slots[i]->pos.x, slots[i]->pos.y, ALIGN_TOPLEFT);
 	}
 	loadGraphics();
 }
@@ -71,7 +71,7 @@ void MenuItemStorage::initFromList(int _slot_number, const std::vector<Rect>& _a
 	for (int i = 0; i < _slot_number; i++) {
 		WidgetSlot *slot = new WidgetSlot();
 		slot->pos = _area[i];
-		slot->setBasePos(slot->pos.x, slot->pos.y);
+		slot->setBasePos(slot->pos.x, slot->pos.y, ALIGN_TOPLEFT);
 		slots.push_back(slot);
 	}
 	nb_cols = 0;

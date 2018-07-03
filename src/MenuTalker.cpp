@@ -66,12 +66,12 @@ MenuTalker::MenuTalker(MenuNPCActions *_npc_menu)
 			// @ATTR close|point|Position of the close button.
 			if(infile.key == "close") {
 				Point pos = toPoint(infile.val);
-				closeButton->setBasePos(pos.x, pos.y);
+				closeButton->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
 			}
 			// @ATTR advance|point|Position of the button to advance dialog.
 			else if(infile.key == "advance") {
 				Point pos = toPoint(infile.val);
-				advanceButton->setBasePos(pos.x, pos.y);
+				advanceButton->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
 			}
 			// @ATTR dialogbox|rectangle|Position and dimensions of the text box graphics.
 			else if (infile.key == "dialogbox") dialog_pos = toRect(infile.val);
@@ -94,10 +94,10 @@ MenuTalker::MenuTalker(MenuNPCActions *_npc_menu)
 	}
 
 	label_name = new WidgetLabel();
-	label_name->setBasePos(text_pos.x + text_offset.x, text_pos.y + text_offset.y);
+	label_name->setBasePos(text_pos.x + text_offset.x, text_pos.y + text_offset.y, ALIGN_TOPLEFT);
 
 	textbox = new WidgetScrollBox(text_pos.w, text_pos.h-(text_offset.y*2));
-	textbox->setBasePos(text_pos.x, text_pos.y + text_offset.y);
+	textbox->setBasePos(text_pos.x, text_pos.y + text_offset.y, ALIGN_TOPLEFT);
 
 	align();
 }

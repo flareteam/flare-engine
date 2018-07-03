@@ -41,9 +41,10 @@ WidgetScrollBox::WidgetScrollBox(int width, int height)
 	update = true;
 	render_to_alpha = false;
 	resize(width, height);
-	tablist = TabList(VERTICAL);
+	tablist = TabList();
+	tablist.setScrollType(SCROLL_VERTICAL);
 
-	scroll_type = VERTICAL;
+	scroll_type = SCROLL_VERTICAL;
 }
 
 WidgetScrollBox::~WidgetScrollBox() {

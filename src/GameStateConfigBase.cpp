@@ -328,24 +328,24 @@ bool GameStateConfigBase::parseKey(FileParser &infile, int &x1, int &y1, int &x2
 	}
 	else if (infile.key == "activemods_shiftup") {
 		// @ATTR activemods_shiftup|point|Position of the button to shift mods up in "Active Mods" relative to the frame.
-		activemods_shiftup_btn->setBasePos(x1, y1);
+		activemods_shiftup_btn->setBasePos(x1, y1, ALIGN_TOPLEFT);
 		activemods_shiftup_btn->refresh();
 	}
 	else if (infile.key == "activemods_shiftdown") {
 		// @ATTR activemods_shiftdown|point|Position of the button to shift mods down in "Active Mods" relative to the frame.
-		activemods_shiftdown_btn->setBasePos(x1, y1);
+		activemods_shiftdown_btn->setBasePos(x1, y1, ALIGN_TOPLEFT);
 		activemods_shiftdown_btn->refresh();
 	}
 	else if (infile.key == "activemods_deactivate") {
 		// @ATTR activemods_deactivate|point|Position of the "Disable" button relative to the frame.
 		activemods_deactivate_btn->label = msg->get("<< Disable");
-		activemods_deactivate_btn->setBasePos(x1, y1);
+		activemods_deactivate_btn->setBasePos(x1, y1, ALIGN_TOPLEFT);
 		activemods_deactivate_btn->refresh();
 	}
 	else if (infile.key == "inactivemods_activate") {
 		// @ATTR inactivemods_activate|point|Position of the "Enable" button relative to the frame.
 		inactivemods_activate_btn->label = msg->get("Enable >>");
-		inactivemods_activate_btn->setBasePos(x1, y1);
+		inactivemods_activate_btn->setBasePos(x1, y1, ALIGN_TOPLEFT);
 		inactivemods_activate_btn->refresh();
 	}
 	else {
@@ -814,11 +814,11 @@ void GameStateConfigBase::renderTooltips(TooltipData& tip_new) {
 
 void GameStateConfigBase::placeLabeledWidget(WidgetLabel *lb, Widget *w, int x1, int y1, int x2, int y2, std::string const& str, int justify) {
 	if (w) {
-		w->setBasePos(x2, y2);
+		w->setBasePos(x2, y2, ALIGN_TOPLEFT);
 	}
 
 	if (lb) {
-		lb->setBasePos(x1, y1);
+		lb->setBasePos(x1, y1, ALIGN_TOPLEFT);
 		lb->set(str);
 		lb->setJustify(justify);
 	}

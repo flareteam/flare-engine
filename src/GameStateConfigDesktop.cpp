@@ -140,7 +140,7 @@ void GameStateConfigDesktop::init() {
 
 	// Allocate KeyBindings ScrollBox
 	input_scrollbox = new WidgetScrollBox(scrollpane.w, scrollpane.h);
-	input_scrollbox->setBasePos(scrollpane.x, scrollpane.y);
+	input_scrollbox->setBasePos(scrollpane.x, scrollpane.y, ALIGN_TOPLEFT);
 	input_scrollbox->bg = scrollpane_color;
 	input_scrollbox->resize(scrollpane.w, scrollpane_contents);
 

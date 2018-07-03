@@ -311,7 +311,7 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 	for (size_t i=0; i<slots.size(); i++) {
 		if (static_cast<size_t>(power_cell[i].id) < powers->powers.size()) {
 			slots[i] = new WidgetSlot(powers->powers[power_cell[i].id].icon);
-			slots[i]->setBasePos(power_cell[i].pos.x, power_cell[i].pos.y);
+			slots[i]->setBasePos(power_cell[i].pos.x, power_cell[i].pos.y, ALIGN_TOPLEFT);
 
 			if (!tablist_pow.empty()) {
 				tablist_pow[power_cell[i].tab].add(slots[i]);
@@ -323,7 +323,7 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 			}
 
 			if (upgradeButtons[i] != NULL) {
-				upgradeButtons[i]->setBasePos(power_cell[i].pos.x + eset->resolutions.icon_size, power_cell[i].pos.y);
+				upgradeButtons[i]->setBasePos(power_cell[i].pos.x + eset->resolutions.icon_size, power_cell[i].pos.y, ALIGN_TOPLEFT);
 			}
 		}
 	}

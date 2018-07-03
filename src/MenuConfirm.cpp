@@ -52,6 +52,8 @@ MenuConfirm::MenuConfirm(const std::string& _buttonMsg, const std::string& _boxM
 	// Text to display in confirmation box
 	boxMsg = _boxMsg;
 
+	tablist.ignore_no_mouse = true;
+
 	if (hasConfirmButton) {
 		buttonConfirm = new WidgetButton();
 		buttonConfirm->label = _buttonMsg;
@@ -84,7 +86,7 @@ void MenuConfirm::align() {
 
 void MenuConfirm::logic() {
 	if (visible) {
-		tablist.logic(true);
+		tablist.logic();
 		confirmClicked = false;
 
 		if (hasConfirmButton && buttonConfirm->checkClick()) {

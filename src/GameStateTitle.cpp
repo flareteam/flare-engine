@@ -126,6 +126,7 @@ GameStateTitle::GameStateTitle()
 	label_version->set(0, 0, FontEngine::JUSTIFY_RIGHT, VALIGN_TOP, createVersionStringFull(), font->getColor("menu_normal"));
 
 	// Setup tab order
+	tablist.ignore_no_mouse = true;
 	tablist.add(button_play);
 	tablist.add(button_cfg);
 	tablist.add(button_credits);
@@ -154,7 +155,7 @@ void GameStateTitle::logic() {
 		exitRequested = true;
 	}
 
-	tablist.logic(true);
+	tablist.logic();
 
 	if (button_play->checkClick()) {
 		showLoading();

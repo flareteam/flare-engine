@@ -75,7 +75,7 @@ MenuInventory::MenuInventory(StatBlock *_stats)
 			// @ATTR close|point|Position of the close button.
 			if(infile.key == "close") {
 				Point pos = toPoint(infile.val);
-				closeButton->setBasePos(pos.x, pos.y);
+				closeButton->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
 			}
 			// @ATTR equipment_slot|repeatable(int, int, string) : X, Y, Slot Type|Position and item type of an equipment slot.
 			else if(infile.key == "equipment_slot") {

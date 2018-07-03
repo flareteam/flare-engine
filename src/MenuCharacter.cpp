@@ -98,7 +98,7 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 			// @ATTR close|point|Position of the close button.
 			if(infile.key == "close") {
 				Point pos = toPoint(infile.val);
-				closeButton->setBasePos(pos.x, pos.y);
+				closeButton->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
 			}
 			// @ATTR label_title|label|Position of the "Character" text.
 			else if(infile.key == "label_title") title = eatLabelInfo(infile.val);
@@ -109,7 +109,7 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 
 				if (prim_stat_index != eset->primary_stats.list.size()) {
 					Point pos = toPoint(infile.val);
-					upgradeButton[prim_stat_index]->setBasePos(pos.x, pos.y);
+					upgradeButton[prim_stat_index]->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
 				}
 				else {
 					infile.error("MenuCharacter: '%s' is not a valid primary stat.", prim_stat.c_str());
@@ -149,12 +149,12 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 			// @ATTR name|rectangle|Position of the player's name and dimensions of the tooltip hotspot.
 			else if(infile.key == "name") {
 				cstat[CSTAT_NAME].value_pos = toRect(infile.val);
-				cstat[CSTAT_NAME].value->setBasePos(cstat[CSTAT_NAME].value_pos.x, cstat[CSTAT_NAME].value_pos.y + (cstat[CSTAT_NAME].value_pos.h/2));
+				cstat[CSTAT_NAME].value->setBasePos(cstat[CSTAT_NAME].value_pos.x, cstat[CSTAT_NAME].value_pos.y + (cstat[CSTAT_NAME].value_pos.h/2), ALIGN_TOPLEFT);
 			}
 			// @ATTR level|rectangle|Position of the player's level and dimensions of the tooltip hotspot.
 			else if(infile.key == "level") {
 				cstat[CSTAT_LEVEL].value_pos = toRect(infile.val);
-				cstat[CSTAT_LEVEL].value->setBasePos(cstat[CSTAT_LEVEL].value_pos.x + (cstat[CSTAT_LEVEL].value_pos.w/2), cstat[CSTAT_LEVEL].value_pos.y + (cstat[CSTAT_LEVEL].value_pos.h/2));
+				cstat[CSTAT_LEVEL].value->setBasePos(cstat[CSTAT_LEVEL].value_pos.x + (cstat[CSTAT_LEVEL].value_pos.w/2), cstat[CSTAT_LEVEL].value_pos.y + (cstat[CSTAT_LEVEL].value_pos.h/2), ALIGN_TOPLEFT);
 			}
 			// @ATTR primary|predefined_string, rectangle : Primary stat name, Hotspot position|Position of this primary stat value display and dimensions of its tooltip hotspot.
 			else if(infile.key == "primary") {
@@ -164,7 +164,7 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 				if (prim_stat_index != eset->primary_stats.list.size()) {
 					Rect r = toRect(infile.val);
 					cstat[prim_stat_index+2].value_pos = r;
-					cstat[prim_stat_index+2].value->setBasePos(r.x + (r.w/2), r.y + (r.h/2));
+					cstat[prim_stat_index+2].value->setBasePos(r.x + (r.w/2), r.y + (r.h/2), ALIGN_TOPLEFT);
 				}
 				else {
 					infile.error("MenuCharacter: '%s' is not a valid primary stat.", prim_stat.c_str());
@@ -212,7 +212,7 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 	tablist.add(statList);
 	statList->can_select = false;
 	statList->scrollbar_offset = statlist_scrollbar_offset;
-	statList->setBasePos(statlist_pos.x, statlist_pos.y);
+	statList->setBasePos(statlist_pos.x, statlist_pos.y, ALIGN_TOPLEFT);
 
 	// HACK: During gameplay, the stat list can refresh rapidly when the charcter menu is open and the player has certain effects
 	// frequently refreshing trimmed text is slow for Cyrillic characters, so disable it here
@@ -492,7 +492,7 @@ void MenuCharacter::logic() {
 
 		if (tablist.getCurrent() >= static_cast<int>(tablist.size())) {
 			tablist.defocus();
-			tablist.getNext();
+			tablist.getNext(TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
 		}
 	}
 

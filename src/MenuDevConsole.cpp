@@ -74,19 +74,19 @@ MenuDevConsole::MenuDevConsole()
 			// @ATTR close|point|Position of the close button.
 			if(infile.key == "close") {
 				Point pos = toPoint(infile.val);
-				button_close->setBasePos(pos.x, pos.y);
+				button_close->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
 			}
 			// @ATTR label_title|label|Position of the "Developer Console" label.
 			else if(infile.key == "label_title") title = eatLabelInfo(infile.val);
 			// @ATTR confirm|point|Position of the "Execute" button.
 			else if(infile.key == "confirm") {
 				Point pos = toPoint(infile.val);
-				button_confirm->setBasePos(pos.x, pos.y);
+				button_confirm->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
 			}
 			// @ATTR input|point|Position of the command entry widget.
 			else if(infile.key == "input") {
 				Point pos = toPoint(infile.val);
-				input_box->setBasePos(pos.x, pos.y);
+				input_box->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
 			}
 			// @ATTR history|rectangle|Position and dimensions of the command history.
 			else if(infile.key == "history") history_area = toRect(infile.val);
@@ -97,7 +97,7 @@ MenuDevConsole::MenuDevConsole()
 	}
 
 	log_history = new WidgetLog(history_area.w, history_area.h);
-	log_history->setBasePos(history_area.x, history_area.y);
+	log_history->setBasePos(history_area.x, history_area.y, ALIGN_TOPLEFT);
 	tablist.add(log_history->getWidget());
 
 	setBackground("images/menus/dev_console.png");

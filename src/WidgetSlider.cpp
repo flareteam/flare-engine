@@ -56,7 +56,7 @@ WidgetSlider::WidgetSlider (const std::string& fname)
 
 	render_to_alpha = false;
 
-	scroll_type = HORIZONTAL;
+	scroll_type = SCROLL_HORIZONTAL;
 }
 
 WidgetSlider::~WidgetSlider () {

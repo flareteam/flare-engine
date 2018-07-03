@@ -64,7 +64,7 @@ MenuStash::MenuStash(StatBlock *_stats)
 			// @ATTR close|point|Position of the close button.
 			if (infile.key == "close") {
 				Point pos = toPoint(infile.val);
-				closeButton->setBasePos(pos.x, pos.y);
+				closeButton->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
 			}
 			// @ATTR slots_area|point|Position of the top-left slot.
 			else if (infile.key == "slots_area") {

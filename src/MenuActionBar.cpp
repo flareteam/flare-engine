@@ -64,7 +64,9 @@ MenuActionBar::MenuActionBar()
 
 	menu_labels.resize(4);
 
-	tablist = TabList(HORIZONTAL, Input::ACTIONBAR_BACK, Input::ACTIONBAR_FORWARD, Input::ACTIONBAR);
+	tablist = TabList();
+	tablist.setScrollType(Widget::SCROLL_HORIZONTAL);
+	tablist.setInputs(Input::ACTIONBAR_BACK, Input::ACTIONBAR_FORWARD, Input::ACTIONBAR);
 
 	for (unsigned int i=0; i<4; i++) {
 		menus[i] = new WidgetSlot(-1, Input::ACTIONBAR);
@@ -114,28 +116,28 @@ MenuActionBar::MenuActionBar()
 			else if (infile.key == "char_menu") {
 				int x = popFirstInt(infile.val);
 				int y = popFirstInt(infile.val);
-				menus[MENU_CHARACTER]->setBasePos(x, y);
+				menus[MENU_CHARACTER]->setBasePos(x, y, ALIGN_TOPLEFT);
 				menus[MENU_CHARACTER]->pos.w = menus[MENU_CHARACTER]->pos.h = eset->resolutions.icon_size;
 			}
 			// @ATTR inv_menu|point|Position for the Inventory menu button.
 			else if (infile.key == "inv_menu") {
 				int x = popFirstInt(infile.val);
 				int y = popFirstInt(infile.val);
-				menus[MENU_INVENTORY]->setBasePos(x, y);
+				menus[MENU_INVENTORY]->setBasePos(x, y, ALIGN_TOPLEFT);
 				menus[MENU_INVENTORY]->pos.w = menus[MENU_INVENTORY]->pos.h = eset->resolutions.icon_size;
 			}
 			// @ATTR powers_menu|point|Position for the Powers menu button.
 			else if (infile.key == "powers_menu") {
 				int x = popFirstInt(infile.val);
 				int y = popFirstInt(infile.val);
-				menus[MENU_POWERS]->setBasePos(x, y);
+				menus[MENU_POWERS]->setBasePos(x, y, ALIGN_TOPLEFT);
 				menus[MENU_POWERS]->pos.w = menus[MENU_POWERS]->pos.h = eset->resolutions.icon_size;
 			}
 			// @ATTR log_menu|point|Position for the Log menu button.
 			else if (infile.key == "log_menu") {
 				int x = popFirstInt(infile.val);
 				int y = popFirstInt(infile.val);
-				menus[MENU_LOG]->setBasePos(x, y);
+				menus[MENU_LOG]->setBasePos(x, y, ALIGN_TOPLEFT);
 				menus[MENU_LOG]->pos.w = menus[MENU_LOG]->pos.h = eset->resolutions.icon_size;
 			}
 
@@ -175,7 +177,7 @@ void MenuActionBar::addSlot(unsigned index, int x, int y, bool is_locked) {
 	}
 
 	slots[index] = new WidgetSlot(-1, Input::ACTIONBAR);
-	slots[index]->setBasePos(x, y);
+	slots[index]->setBasePos(x, y, ALIGN_TOPLEFT);
 	slots[index]->pos.w = slots[index]->pos.h = eset->resolutions.icon_size;
 	slots[index]->continuous = true;
 

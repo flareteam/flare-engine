@@ -176,19 +176,19 @@ GameStateNew::GameStateNew()
 	color_normal = font->getColor("menu_normal");
 
 	label_portrait = new WidgetLabel();
-	label_portrait->setBasePos(portrait_label.x, portrait_label.y);
+	label_portrait->setBasePos(portrait_label.x, portrait_label.y, ALIGN_TOPLEFT);
 	label_portrait->set(portrait_label.x, portrait_label.y, portrait_label.justify, portrait_label.valign, msg->get("Choose a Portrait"), color_normal, portrait_label.font_style);
 
 	label_name = new WidgetLabel();
-	label_name->setBasePos(name_label.x, name_label.y);
+	label_name->setBasePos(name_label.x, name_label.y, ALIGN_TOPLEFT);
 	label_name->set(name_label.x, name_label.y, name_label.justify, name_label.valign, msg->get("Choose a Name"), color_normal, name_label.font_style);
 
 	label_permadeath = new WidgetLabel();
-	label_permadeath->setBasePos(permadeath_label.x, permadeath_label.y);
+	label_permadeath->setBasePos(permadeath_label.x, permadeath_label.y, ALIGN_TOPLEFT);
 	label_permadeath->set(permadeath_label.x, permadeath_label.y, permadeath_label.justify, permadeath_label.valign, msg->get("Permadeath?"), color_normal, permadeath_label.font_style);
 
 	label_classlist = new WidgetLabel();
-	label_classlist->setBasePos(classlist_label.x, classlist_label.y);
+	label_classlist->setBasePos(classlist_label.x, classlist_label.y, ALIGN_TOPLEFT);
 	label_classlist->set(classlist_label.x, classlist_label.y, classlist_label.justify, classlist_label.valign, msg->get("Choose a Class"), color_normal, classlist_label.font_style);
 
 	// set up class list
@@ -207,6 +207,7 @@ GameStateNew::GameStateNew()
 	setHeroOption(0);
 
 	// Set up tab list
+	tablist.ignore_no_mouse = true;
 	tablist.add(button_exit);
 	tablist.add(button_create);
 	tablist.add(input_name);
@@ -347,7 +348,7 @@ void GameStateNew::logic() {
 		refreshWidgets();
 
 	if (!input_name->edit_mode)
-		tablist.logic(true);
+		tablist.logic();
 
 	input_name->logic();
 

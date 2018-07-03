@@ -62,7 +62,7 @@ WidgetListBox::WidgetListBox(int height, const std::string& _fileName)
 		graphics->unref();
 	}
 
-	scroll_type = VERTICAL;
+	scroll_type = SCROLL_VERTICAL;
 }
 
 bool WidgetListBox::checkClick() {

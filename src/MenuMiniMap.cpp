@@ -76,7 +76,7 @@ MenuMiniMap::MenuMiniMap()
 
 	// label for map name
 	label = new WidgetLabel();
-	label->setBasePos(text_pos.x, text_pos.y);
+	label->setBasePos(text_pos.x, text_pos.y, ALIGN_TOPLEFT);
 
 	if (!bg_filename.empty())
 		setBackground(bg_filename);

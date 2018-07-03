@@ -59,12 +59,12 @@ MenuExit::MenuExit() : Menu() {
 			else if (infile.key == "exit") {
 				// @ATTR exit|point|Position of the "Save and Exit" button.
 				Point p = toPoint(infile.val);
-				buttonExit->setBasePos(p.x, p.y);
+				buttonExit->setBasePos(p.x, p.y, ALIGN_TOPLEFT);
 			}
 			else if (infile.key == "continue") {
 				// @ATTR continue|point|Position of the "Continue" button.
 				Point p = toPoint(infile.val);
-				buttonClose->setBasePos(p.x, p.y);
+				buttonClose->setBasePos(p.x, p.y, ALIGN_TOPLEFT);
 			}
 			else if (infile.key == "music_volume") {
 				// @ATTR music_volume|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Music Volume" slider relative to the frame.
@@ -179,12 +179,12 @@ void MenuExit::render() {
 
 void MenuExit::placeOptionWidgets(WidgetLabel *lb, Widget *w, int x1, int y1, int x2, int y2, std::string const& str) {
 	if (w) {
-		w->setBasePos(x2, y2);
+		w->setBasePos(x2, y2, ALIGN_TOPLEFT);
 		option_widgets.push_back(w);
 	}
 
 	if (lb) {
-		lb->setBasePos(x1, y1);
+		lb->setBasePos(x1, y1, ALIGN_TOPLEFT);
 		lb->set(str);
 		lb->setJustify(FontEngine::JUSTIFY_CENTER);
 		option_labels.push_back(lb);

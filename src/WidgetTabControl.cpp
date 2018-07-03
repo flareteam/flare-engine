@@ -36,7 +36,7 @@ WidgetTabControl::WidgetTabControl()
 	color_normal = font->getColor("widget_normal");
 	color_disabled = font->getColor("widget_disabled");
 
-	scroll_type = HORIZONTAL;
+	scroll_type = SCROLL_HORIZONTAL;
 }
 
 WidgetTabControl::~WidgetTabControl() {

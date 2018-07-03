@@ -57,7 +57,7 @@ MenuLog::MenuLog() {
 			// @ATTR close|point|Position of the close button.
 			else if(infile.key == "close") {
 				Point pos = toPoint(infile.val);
-				closeButton->setBasePos(pos.x, pos.y);
+				closeButton->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
 			}
 			// @ATTR tab_area|rectangle|The position of the row of tabs, followed by the dimensions of the log text area.
 			else if(infile.key == "tab_area") {
