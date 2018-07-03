@@ -33,13 +33,15 @@ class WidgetTooltip;
 
 class WidgetCheckBox : public Widget {
 public:
-	explicit WidgetCheckBox (const std::string &fname = "images/menus/buttons/checkbox_default.png");
+	static const std::string DEFAULT_FILE;
+
+	explicit WidgetCheckBox (const std::string &fname);
 	~WidgetCheckBox ();
 
 	void activate();
 	void setChecked(const bool status);
 	bool checkClick();
-	bool checkClick(int x, int y);
+	bool checkClickAt(int x, int y);
 	bool isChecked() const;
 	void render();
 	TooltipData checkTooltip(const Point& mouse);

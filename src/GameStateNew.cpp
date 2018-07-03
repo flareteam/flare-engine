@@ -75,7 +75,7 @@ GameStateNew::GameStateNew()
 	input_name = new WidgetInput();
 	input_name->max_length = 20;
 
-	button_permadeath = new WidgetCheckBox();
+	button_permadeath = new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE);
 	if (eset->death_penalty.permadeath) {
 		button_permadeath->enabled = false;
 		button_permadeath->setChecked(true);

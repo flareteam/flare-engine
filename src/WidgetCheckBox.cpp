@@ -32,6 +32,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Widget.h"
 #include "WidgetCheckBox.h"
 
+const std::string WidgetCheckBox::DEFAULT_FILE = "images/menus/buttons/checkbox_default.png";
+
 WidgetCheckBox::WidgetCheckBox (const std::string &fname)
 	: enabled(true)
 	, tooltip("")
@@ -71,10 +73,10 @@ void WidgetCheckBox::setChecked(const bool status) {
 }
 
 bool WidgetCheckBox::checkClick() {
-	return checkClick(inpt->mouse.x,inpt->mouse.y);
+	return checkClickAt(inpt->mouse.x,inpt->mouse.y);
 }
 
-bool WidgetCheckBox::checkClick (int x, int y) {
+bool WidgetCheckBox::checkClickAt(int x, int y) {
 	if (!enabled) return false;
 
 	Point mouse(x,y);
