@@ -51,29 +51,17 @@ Mod::~Mod() {
 }
 
 Mod::Mod(const Mod &mod) {
-	name = mod.name;
-	description = mod.description;
-	game = mod.game;
-	version = new Version(*mod.version);
-	engine_min_version = new Version(*mod.engine_min_version);
-	engine_max_version = new Version(*mod.engine_max_version);
-	depends = mod.depends;
+	version = new Version();
+	engine_min_version = new Version();
+	engine_max_version = new Version();
 
-	depends_min.resize(mod.depends_min.size());
-	for (size_t i = 0; i < depends_min.size(); ++i) {
-		depends_min[i] = new Version(*mod.depends_min[i]);
-	}
-
-	depends_max.resize(mod.depends_max.size());
-	for (size_t i = 0; i < depends_max.size(); ++i) {
-		depends_max[i] = new Version(*mod.depends_max[i]);
-	}
-
-	assert(depends.size() == depends_min.size());
-	assert(depends.size() == depends_max.size());
+	*this = mod;
 }
 
 Mod& Mod::operator=(const Mod &mod) {
+	if (this == &mod)
+		return *this;
+
 	name = mod.name;
 	description = mod.description;
 	game = mod.game;
