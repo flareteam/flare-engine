@@ -785,7 +785,7 @@ void GameStateConfigDesktop::renderDialogs() {
 			keybind_tip_ticks = settings->max_frames_per_sec * 5;
 
 		if (keybind_tip_ticks > 0) {
-			keybind_tip->render(keybind_tip_data, Point(settings->view_w, 0), STYLE_FLOAT);
+			keybind_tip->render(keybind_tip_data, Point(settings->view_w, 0), TooltipData::STYLE_FLOAT);
 			keybind_tip_ticks--;
 		}
 

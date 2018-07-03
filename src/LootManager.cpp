@@ -154,7 +154,7 @@ void LootManager::renderTooltips(const FPoint& cam) {
 				}
 
 				// try to prevent tooltips from overlapping
-				tip->prerender(it->tip, dest, STYLE_TOPLABEL);
+				tip->prerender(it->tip, dest, TooltipData::STYLE_TOPLABEL);
 				std::vector<Loot>::iterator test_it;
 				for (test_it = loot.begin(); test_it != it; ) {
 					if (rectsOverlap(test_it->tip_bounds, tip->bounds)) {
@@ -169,7 +169,7 @@ void LootManager::renderTooltips(const FPoint& cam) {
 					++test_it;
 				}
 
-				tip->render(it->tip, dest, STYLE_TOPLABEL);
+				tip->render(it->tip, dest, TooltipData::STYLE_TOPLABEL);
 				it->tip_bounds = tip->bounds;
 
 				// only display one tooltip if we got it from hovering

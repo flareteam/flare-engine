@@ -208,7 +208,7 @@ void WidgetSlider::render () {
 				tip_buf.clear();
 				tip_buf = tip_new;
 			}
-			tip->render(tip_buf, Point(pos_knob.x + pos_knob.w*2, pos_knob.y + (pos_knob.h/2)), STYLE_TOPLABEL);
+			tip->render(tip_buf, Point(pos_knob.x + pos_knob.w*2, pos_knob.y + (pos_knob.h/2)), TooltipData::STYLE_TOPLABEL);
 		}
 	}
 }

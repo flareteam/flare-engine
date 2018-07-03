@@ -46,19 +46,19 @@ WidgetTooltip::~WidgetTooltip() {
  * Knowing the total size of the text and the position of origin,
  * calculate the starting position of the background and text
  */
-Point WidgetTooltip::calcPosition(STYLE style, const Point& pos, const Point& size) {
+Point WidgetTooltip::calcPosition(uint8_t style, const Point& pos, const Point& size) {
 
 	Point tip_pos;
 
 	// TopLabel style is fixed and centered over the origin
-	if (style == STYLE_TOPLABEL) {
+	if (style == TooltipData::STYLE_TOPLABEL) {
 		tip_pos.x = pos.x - size.x/2;
 		tip_pos.y = pos.y - eset->tooltips.offset;
 	}
 	// Float style changes position based on the screen quadrant of the origin
 	// (usually used for tooltips which are long and we don't want them to overflow
 	//  off the end of the screen)
-	else if (style == STYLE_FLOAT) {
+	else if (style == TooltipData::STYLE_FLOAT) {
 		// upper left
 		if (pos.x < settings->view_w_half && pos.y < settings->view_h_half) {
 			tip_pos.x = pos.x + eset->tooltips.offset;
@@ -95,7 +95,7 @@ Point WidgetTooltip::calcPosition(STYLE style, const Point& pos, const Point& si
 /**
  * Creates the cached text buffer if needed and sets the position & bounds of the tooltip
  */
-void WidgetTooltip::prerender(TooltipData&tip, const Point& pos, STYLE style) {
+void WidgetTooltip::prerender(TooltipData&tip, const Point& pos, uint8_t style) {
 	if (tip.tip_buffer == NULL) {
 		if (!createBuffer(tip)) return;
 	}
@@ -119,7 +119,7 @@ void WidgetTooltip::prerender(TooltipData&tip, const Point& pos, STYLE style) {
  * Tooltip position depends on the screen quadrant of the source.
  * Draw the buffered tooltip if it exists, else render the tooltip and buffer it
  */
-void WidgetTooltip::render(TooltipData &tip, const Point& pos, STYLE style) {
+void WidgetTooltip::render(TooltipData &tip, const Point& pos, uint8_t style) {
 	prerender(tip, pos, style);
 	render_device->render(tip.tip_buffer);
 }

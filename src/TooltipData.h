@@ -23,11 +23,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Utils.h"
 
-enum STYLE {
-	STYLE_FLOAT,
-	STYLE_TOPLABEL
-};
-
 /**
  * TooltipData contains the text and line colors for one tool tip.
  * Useful for keeping the data separate from the widget itself, so the data
@@ -40,6 +35,11 @@ enum STYLE {
  */
 class TooltipData {
 public:
+	enum {
+		STYLE_FLOAT = 0,
+		STYLE_TOPLABEL = 1
+	};
+
 	std::vector<std::string> lines;
 	std::vector<Color> colors;
 	Color default_color;

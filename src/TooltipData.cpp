@@ -33,37 +33,20 @@ TooltipData::~TooltipData() {
 	clear();
 }
 
-TooltipData::TooltipData(const TooltipData &tdSource)
-	: default_color(tdSource.default_color)
-	, tip_buffer(NULL) {
-
-	// DO NOT copy the buffered text render
-	// Allow the new copy to create its own buffer
-	// Otherwise the same buffer will be deleted twice, causing a mem error
-
-	lines.clear();
-	colors.clear();
-
-	for (unsigned int i=0; i<tdSource.lines.size(); i++) {
-		lines.push_back(tdSource.lines[i]);
-		colors.push_back(tdSource.colors[i]);
-	}
+TooltipData::TooltipData(const TooltipData &tdSource) {
+	tip_buffer = NULL;
+	*this = tdSource;
 }
 
 TooltipData& TooltipData::operator= (const TooltipData &tdSource) {
+	if (this == &tdSource)
+		return *this;
 
-	// DO NOT copy the buffered text render
-	// Allow the new copy to create its own buffer
-	// Otherwise the same buffer will be deleted twice, causing a mem error
-
-	tip_buffer = NULL;
-	default_color = tdSource.default_color;
 	clear();
 
-	for (unsigned int i=0; i<tdSource.lines.size(); i++) {
-		lines.push_back(tdSource.lines[i]);
-		colors.push_back(tdSource.colors[i]);
-	}
+	default_color = tdSource.default_color;
+	lines = tdSource.lines;
+	colors = tdSource.colors;
 
 	return *this;
 }

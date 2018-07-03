@@ -38,9 +38,9 @@ class WidgetTooltip {
 public:
 	WidgetTooltip();
 	~WidgetTooltip();
-	Point calcPosition(STYLE style, const Point& pos, const Point& size);
-	void prerender(TooltipData&tip, const Point& pos, STYLE style);
-	void render(TooltipData &tip, const Point& pos, STYLE style);
+	Point calcPosition(uint8_t style, const Point& pos, const Point& size);
+	void prerender(TooltipData&tip, const Point& pos, uint8_t style);
+	void render(TooltipData &tip, const Point& pos, uint8_t style);
 	bool createBuffer(TooltipData &tip);
 
 	Rect bounds;

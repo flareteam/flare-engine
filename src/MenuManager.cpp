@@ -1271,7 +1271,7 @@ void MenuManager::render() {
 					tip_buf.clear();
 					tip_buf = tip_new;
 				}
-				tip->render(tip_buf, inpt->mouse, STYLE_FLOAT);
+				tip->render(tip_buf, inpt->mouse, TooltipData::STYLE_FLOAT);
 				TOOLTIP_CONTEXT = TOOLTIP_MENU;
 			}
 			else if (TOOLTIP_CONTEXT != TOOLTIP_MAP) {
@@ -1333,7 +1333,7 @@ void MenuManager::handleKeyboardTooltips() {
 				keyb_tip_buf_vendor.clear();
 				keyb_tip_buf_vendor = keyb_tip_new_vendor;
 			}
-			tip->render(keyb_tip_buf_vendor, keydrag_pos, STYLE_FLOAT);
+			tip->render(keyb_tip_buf_vendor, keydrag_pos, TooltipData::STYLE_FLOAT);
 		}
 	}
 
@@ -1349,7 +1349,7 @@ void MenuManager::handleKeyboardTooltips() {
 				keyb_tip_buf_stash.clear();
 				keyb_tip_buf_stash = keyb_tip_new_stash;
 			}
-			tip->render(keyb_tip_buf_stash, keydrag_pos, STYLE_FLOAT);
+			tip->render(keyb_tip_buf_stash, keydrag_pos, TooltipData::STYLE_FLOAT);
 		}
 	}
 
@@ -1365,7 +1365,7 @@ void MenuManager::handleKeyboardTooltips() {
 				keyb_tip_buf_pow.clear();
 				keyb_tip_buf_pow = keyb_tip_new_pow;
 			}
-			tip->render(keyb_tip_buf_pow, keydrag_pos, STYLE_FLOAT);
+			tip->render(keyb_tip_buf_pow, keydrag_pos, TooltipData::STYLE_FLOAT);
 		}
 	}
 
@@ -1387,7 +1387,7 @@ void MenuManager::handleKeyboardTooltips() {
 				keyb_tip_buf_inv.clear();
 				keyb_tip_buf_inv = keyb_tip_new_inv;
 			}
-			tip->render(keyb_tip_buf_inv, keydrag_pos, STYLE_FLOAT);
+			tip->render(keyb_tip_buf_inv, keydrag_pos, TooltipData::STYLE_FLOAT);
 		}
 	}
 
@@ -1402,7 +1402,7 @@ void MenuManager::handleKeyboardTooltips() {
 				keyb_tip_buf_act.clear();
 				keyb_tip_buf_act = keyb_tip_new_act;
 			}
-			tip->render(keyb_tip_buf_act, keydrag_pos, STYLE_FLOAT);
+			tip->render(keyb_tip_buf_act, keydrag_pos, TooltipData::STYLE_FLOAT);
 		}
 	}
 }

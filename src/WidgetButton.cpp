@@ -158,7 +158,7 @@ void WidgetButton::render() {
 			tip_buf.clear();
 			tip_buf = tip_new;
 		}
-		tip->render(tip_buf, inpt->mouse, STYLE_FLOAT);
+		tip->render(tip_buf, inpt->mouse, TooltipData::STYLE_FLOAT);
 	}
 }
 

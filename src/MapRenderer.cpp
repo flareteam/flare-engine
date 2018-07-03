@@ -1037,7 +1037,7 @@ void MapRenderer::checkNearestEvent() {
 
 void MapRenderer::checkTooltip() {
 	if (show_tooltip && settings->show_hud && !(settings->dev_mode && menu->devconsole->visible))
-		tip->render(tip_buf, tip_pos, STYLE_TOPLABEL);
+		tip->render(tip_buf, tip_pos, TooltipData::STYLE_TOPLABEL);
 }
 
 void MapRenderer::createTooltip(Event_Component *ec) {
