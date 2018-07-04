@@ -100,9 +100,15 @@ MenuInventory::MenuInventory(StatBlock *_stats)
 			// @ATTR carried_rows|int|The number of rows for the normal inventory.
 			else if (infile.key == "carried_rows") carried_rows = std::max(1, toInt(infile.val));
 			// @ATTR label_title|label|Position of the "Inventory" label.
-			else if (infile.key == "label_title") title =  eatLabelInfo(infile.val);
+			else if (infile.key == "label_title") {
+				title =  eatLabelInfo(infile.val);
+				label_inventory.setFromLabelInfo(title);
+			}
 			// @ATTR currency|label|Position of the label that displays the total currency being carried.
-			else if (infile.key == "currency") currency_lbl =  eatLabelInfo(infile.val);
+			else if (infile.key == "currency") {
+				currency_lbl = eatLabelInfo(infile.val);
+				label_currency.setFromLabelInfo(currency_lbl);
+			}
 			// @ATTR help|rectangle|A mouse-over area that displays some help text for inventory shortcuts.
 			else if (infile.key == "help") help_pos = toRect(infile.val);
 
@@ -119,6 +125,11 @@ MenuInventory::MenuInventory(StatBlock *_stats)
 
 	color_normal = font->getColor("menu_normal");
 	color_high = font->getColor("menu_bonus");
+
+	label_inventory.setText(msg->get("Inventory"));
+	label_inventory.setColor(color_normal);
+
+	label_currency.setColor(color_normal);
 
 	inventory[EQUIPMENT].initFromList(MAX_EQUIPPED, equipped_area, slot_type);
 	inventory[CARRIED].initGrid(MAX_CARRIED, carried_area, carried_cols);
@@ -149,7 +160,8 @@ void MenuInventory::align() {
 
 	closeButton->setPos(window_area.x, window_area.y);
 
-	label_inventory.set(window_area.x+title.x, window_area.y+title.y, title.justify, title.valign, msg->get("Inventory"), color_normal, title.font_style);
+	label_inventory.setPos(window_area.x, window_area.y);
+	label_currency.setPos(window_area.x, window_area.y);
 }
 
 void MenuInventory::logic() {
@@ -243,7 +255,7 @@ void MenuInventory::render() {
 	if (!title.hidden) label_inventory.render();
 
 	if (!currency_lbl.hidden) {
-		label_currency.set(window_area.x+currency_lbl.x, window_area.y+currency_lbl.y, currency_lbl.justify, currency_lbl.valign, msg->get("%d %s", currency, eset->loot.currency.c_str()), color_normal, currency_lbl.font_style);
+		label_currency.setText(msg->get("%d %s", currency, eset->loot.currency.c_str()));
 		label_currency.render();
 	}
 

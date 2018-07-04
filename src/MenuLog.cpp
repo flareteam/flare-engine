@@ -53,6 +53,7 @@ MenuLog::MenuLog() {
 			// @ATTR label_title|label|Position of the "Log" text.
 			if(infile.key == "label_title") {
 				title = eatLabelInfo(infile.val);
+				label_log.setFromLabelInfo(title);
 			}
 			// @ATTR close|point|Position of the close button.
 			else if(infile.key == "close") {
@@ -69,6 +70,9 @@ MenuLog::MenuLog() {
 		}
 		infile.close();
 	}
+
+	label_log.setText(msg->get("Log"));
+	label_log.setColor(font->getColor("menu_normal"));
 
 	// Initialize the tab control.
 	tabControl = new WidgetTabControl();
@@ -101,7 +105,7 @@ void MenuLog::align() {
 
 	closeButton->setPos(window_area.x, window_area.y);
 
-	label_log.set(window_area.x+title.x, window_area.y+title.y, title.justify, title.valign, msg->get("Log"), font->getColor("menu_normal"), title.font_style);
+	label_log.setPos(window_area.x, window_area.y);
 
 	for (size_t i = 0; i < TYPE_COUNT; ++i) {
 		log[i]->setPos(window_area.x, window_area.y);

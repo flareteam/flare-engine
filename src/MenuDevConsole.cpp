@@ -77,7 +77,10 @@ MenuDevConsole::MenuDevConsole()
 				button_close->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
 			}
 			// @ATTR label_title|label|Position of the "Developer Console" label.
-			else if(infile.key == "label_title") title = eatLabelInfo(infile.val);
+			else if(infile.key == "label_title") {
+				title = eatLabelInfo(infile.val);
+				label.setFromLabelInfo(title);
+			}
 			// @ATTR confirm|point|Position of the "Execute" button.
 			else if(infile.key == "confirm") {
 				Point pos = toPoint(infile.val);
@@ -95,6 +98,9 @@ MenuDevConsole::MenuDevConsole()
 		}
 		infile.close();
 	}
+
+	label.setText(msg->get("Developer Console"));
+	label.setColor(font->getColor("menu_normal"));
 
 	log_history = new WidgetLog(history_area.w, history_area.h);
 	log_history->setBasePos(history_area.x, history_area.y, ALIGN_TOPLEFT);
@@ -126,7 +132,7 @@ void MenuDevConsole::align() {
 	input_box->setPos(window_area.x, window_area.y);
 	log_history->setPos(window_area.x, window_area.y);
 
-	label.set(window_area.x+title.x, window_area.y+title.y, title.justify, title.valign, msg->get("Developer Console"), font->getColor("menu_normal"));
+	label.setPos(window_area.x, window_area.y);
 }
 
 void MenuDevConsole::logic() {

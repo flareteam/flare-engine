@@ -819,7 +819,7 @@ void GameStateConfigBase::placeLabeledWidget(WidgetLabel *lb, Widget *w, int x1,
 
 	if (lb) {
 		lb->setBasePos(x1, y1, ALIGN_TOPLEFT);
-		lb->set(str);
+		lb->setText(str);
 		lb->setJustify(justify);
 	}
 }

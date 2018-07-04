@@ -132,24 +132,36 @@ void MenuEnemy::render() {
 		render_device->render(bar_hp);
 	}
 
-	std::stringstream ss;
-	ss.str("");
-	if (enemy->stats.hp > 0)
-		ss << enemy->stats.hp << "/" << enemy->stats.get(Stats::HP_MAX);
-	else
-		ss << msg->get("Dead");
-
 	if (!text_pos.hidden) {
+		// enemy name display
+		label_text.setText(msg->get("%s level %d", enemy->stats.name.c_str(), enemy->stats.level));
+		label_text.setColor(color_normal);
 
 		if (custom_text_pos) {
-			label_text.set(window_area.x+text_pos.x, window_area.y+text_pos.y, text_pos.justify, text_pos.valign, msg->get("%s level %d", enemy->stats.name.c_str(), enemy->stats.level), color_normal, text_pos.font_style);
+			label_text.setPos(window_area.x + text_pos.x, window_area.y + text_pos.y);
+			label_text.setJustify(text_pos.justify);
+			label_text.setVAlign(text_pos.valign);
+			label_text.setFont(text_pos.font_style);
 		}
 		else {
-			label_text.set(window_area.x+bar_pos.x+bar_pos.w/2, window_area.y+bar_pos.y, FontEngine::JUSTIFY_CENTER, VALIGN_BOTTOM, msg->get("%s level %d", enemy->stats.name.c_str(), enemy->stats.level), color_normal);
+			label_text.setPos(window_area.x + bar_pos.x + bar_pos.w/2, window_area.y + bar_pos.y);
+			label_text.setJustify(FontEngine::JUSTIFY_CENTER);
+			label_text.setVAlign(LabelInfo::VALIGN_BOTTOM);
 		}
 		label_text.render();
 
-		label_stats.set(window_area.x+bar_pos.x+bar_pos.w/2, window_area.y+bar_pos.y+bar_pos.h/2, FontEngine::JUSTIFY_CENTER, VALIGN_CENTER, ss.str(), color_normal);
+		// HP display
+		std::stringstream ss;
+		ss.str("");
+		if (enemy->stats.hp > 0)
+			ss << enemy->stats.hp << "/" << enemy->stats.get(Stats::HP_MAX);
+		else
+			ss << msg->get("Dead");
+		label_stats.setText(ss.str());
+
+		label_stats.setPos(window_area.x + bar_pos.x + bar_pos.w/2, window_area.y + bar_pos.y + bar_pos.h/2);
+		label_stats.setJustify(FontEngine::JUSTIFY_CENTER);
+		label_stats.setVAlign(LabelInfo::VALIGN_CENTER);
 		label_stats.render();
 	}
 }

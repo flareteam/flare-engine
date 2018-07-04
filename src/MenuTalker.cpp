@@ -95,6 +95,7 @@ MenuTalker::MenuTalker(MenuNPCActions *_npc_menu)
 
 	label_name = new WidgetLabel();
 	label_name->setBasePos(text_pos.x + text_offset.x, text_pos.y + text_offset.y, ALIGN_TOPLEFT);
+	label_name->setColor(color_normal);
 
 	textbox = new WidgetScrollBox(text_pos.w, text_pos.h-(text_offset.y*2));
 	textbox->setBasePos(text_pos.x, text_pos.y + text_offset.y, ALIGN_TOPLEFT);
@@ -110,7 +111,7 @@ void MenuTalker::align() {
 
 	label_name->setPos(window_area.x, window_area.y);
 
-	textbox->setPos(window_area.x, window_area.y + label_name->bounds.h);
+	textbox->setPos(window_area.x, window_area.y + label_name->getBounds()->h);
 	textbox->pos.h = text_pos.h - (text_offset.y*2);
 }
 
@@ -202,7 +203,8 @@ void MenuTalker::createBuffer() {
 		who = hero_name;
 	}
 
-	label_name->set(window_area.x+text_pos.x+text_offset.x, window_area.y+text_pos.y+text_offset.y, FontEngine::JUSTIFY_LEFT, VALIGN_TOP, who, color_normal, font_who);
+	label_name->setText(who);
+	label_name->setFont(font_who);
 
 
 	line = substituteVarsInString(npc->dialog[dialog_node][event_cursor].s, pc);

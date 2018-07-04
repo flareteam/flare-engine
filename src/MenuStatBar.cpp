@@ -180,11 +180,20 @@ void MenuStatBar::render() {
 			else
 				ss << stat_cur << "/" << stat_max;
 
-			if (custom_text_pos)
-				label->set(bar_dest.x+text_pos.x, bar_dest.y+text_pos.y, text_pos.justify, text_pos.valign, ss.str(), color_normal, text_pos.font_style);
-			else
-				label->set(bar_dest.x+bar_pos.w/2, bar_dest.y+bar_pos.h/2, FontEngine::JUSTIFY_CENTER, VALIGN_CENTER, ss.str(), color_normal);
-			// label->set(ss.str());
+			label->setText(ss.str());
+			label->setColor(color_normal);
+
+			if (custom_text_pos) {
+				label->setPos(bar_dest.x + text_pos.x, bar_dest.y + text_pos.y);
+				label->setJustify(text_pos.justify);
+				label->setVAlign(text_pos.valign);
+				label->setFont(text_pos.font_style);
+			}
+			else {
+				label->setPos(bar_dest.x + bar_pos.w/2, bar_dest.y + bar_pos.h/2);
+				label->setJustify(FontEngine::JUSTIFY_CENTER);
+				label->setVAlign(LabelInfo::VALIGN_CENTER);
+			}
 			label->render();
 		}
 	}

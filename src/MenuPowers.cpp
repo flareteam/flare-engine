@@ -93,9 +93,15 @@ MenuPowers::MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar)
 				continue;
 
 			// @ATTR label_title|label|Position of the "Powers" text.
-			if (infile.key == "label_title") *title = eatLabelInfo(infile.val);
+			if (infile.key == "label_title") {
+				*title = eatLabelInfo(infile.val);
+				label_powers->setFromLabelInfo(*title);
+			}
 			// @ATTR unspent_points|label|Position of the text that displays the amount of unused power points.
-			else if (infile.key == "unspent_points") *unspent_points = eatLabelInfo(infile.val);
+			else if (infile.key == "unspent_points") {
+				*unspent_points = eatLabelInfo(infile.val);
+				stat_up->setFromLabelInfo(*unspent_points);
+			}
 			// @ATTR close|point|Position of the close button.
 			else if (infile.key == "close") close_pos = toPoint(infile.val);
 			// @ATTR tab_area|rectangle|Position and dimensions of the tree pages.
@@ -105,6 +111,11 @@ MenuPowers::MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar)
 		}
 		infile.close();
 	}
+
+	label_powers->setText(msg->get("Powers"));
+	label_powers->setColor(font->getColor("menu_normal"));
+
+	stat_up->setColor(font->getColor("menu_bonus"));
 
 	loadGraphics();
 
@@ -144,12 +155,11 @@ MenuPowers::~MenuPowers() {
 void MenuPowers::align() {
 	Menu::align();
 
-	label_powers->set(window_area.x + title->x, window_area.y + title->y, title->justify, title->valign, msg->get("Powers"), font->getColor("menu_normal"), title->font_style);
+	label_powers->setPos(window_area.x, window_area.y);
+	stat_up->setPos(window_area.x, window_area.y);
 
 	closeButton->pos.x = window_area.x+close_pos.x;
 	closeButton->pos.y = window_area.y+close_pos.y;
-
-	stat_up->set(window_area.x + unspent_points->x, window_area.y + unspent_points->y, unspent_points->justify, unspent_points->valign, "", font->getColor("menu_bonus"), unspent_points->font_style);
 
 	if (tab_control) {
 		tab_control->setMainArea(window_area.x + tab_area.x, window_area.y + tab_area.y);
@@ -1349,7 +1359,7 @@ void MenuPowers::render() {
 		else if (points_left > 1) {
 			ss << msg->get("%d unspent skill points", points_left);
 		}
-		stat_up->set(ss.str());
+		stat_up->setText(ss.str());
 		stat_up->render();
 	}
 }

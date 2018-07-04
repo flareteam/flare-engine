@@ -82,10 +82,12 @@ MenuStash::MenuStash(StatBlock *_stats)
 			// @ATTR label_title|label|Position of the "Stash" label.
 			else if (infile.key == "label_title") {
 				title =  eatLabelInfo(infile.val);
+				label_title.setFromLabelInfo(title);
 			}
 			// @ATTR currency|label|Position of the label displaying the amount of currency stored in the stash.
 			else if (infile.key == "currency") {
 				currency =  eatLabelInfo(infile.val);
+				label_currency.setFromLabelInfo(currency);
 			}
 			else {
 				infile.error("MenuStash: '%s' is not a valid key.", infile.key.c_str());
@@ -93,6 +95,11 @@ MenuStash::MenuStash(StatBlock *_stats)
 		}
 		infile.close();
 	}
+
+	label_title.setText(msg->get("Shared Stash"));
+	label_title.setColor(color_normal);
+
+	label_currency.setColor(color_normal);
 
 	STASH_SLOTS = slots_cols * slots_rows;
 	slots_area.w = slots_cols * eset->resolutions.icon_size;
@@ -111,6 +118,9 @@ void MenuStash::align() {
 
 	closeButton->setPos(window_area.x, window_area.y);
 	stock.setPos(window_area.x, window_area.y);
+
+	label_title.setPos(window_area.x, window_area.y);
+	label_currency.setPos(window_area.x, window_area.y);
 }
 
 void MenuStash::logic() {
@@ -134,14 +144,12 @@ void MenuStash::render() {
 	closeButton->render();
 
 	// text overlay
-	WidgetLabel label;
 	if (!title.hidden) {
-		label.set(window_area.x+title.x, window_area.y+title.y, title.justify, title.valign, msg->get("Shared Stash"), color_normal, title.font_style);
-		label.render();
+		label_title.render();
 	}
 	if (!currency.hidden) {
-		label.set(window_area.x+currency.x, window_area.y+currency.y, currency.justify, currency.valign, msg->get("%d %s", stock.count(eset->misc.currency_id), eset->loot.currency.c_str()), color_normal, currency.font_style);
-		label.render();
+		label_currency.setText(msg->get("%d %s", stock.count(eset->misc.currency_id), eset->loot.currency.c_str()));
+		label_currency.render();
 	}
 
 

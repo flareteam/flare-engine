@@ -170,13 +170,15 @@ void WidgetButton::render() {
 void WidgetButton::refresh() {
 	if (label != "") {
 
-		int font_x = pos.x + (pos.w/2);
-		int font_y = pos.y + (pos.h/2);
+		wlabel.setPos(pos.x + (pos.w/2), pos.y + (pos.h/2));
+		wlabel.setJustify(FontEngine::JUSTIFY_CENTER);
+		wlabel.setVAlign(LabelInfo::VALIGN_CENTER);
+		wlabel.setText(label);
 
 		if (enabled)
-			wlabel.set(font_x, font_y, FontEngine::JUSTIFY_CENTER, VALIGN_CENTER, label, color_normal);
+			wlabel.setColor(color_normal);
 		else
-			wlabel.set(font_x, font_y, FontEngine::JUSTIFY_CENTER, VALIGN_CENTER, label, color_disabled);
+			wlabel.setColor(color_disabled);
 	}
 }
 

@@ -438,9 +438,6 @@ void WidgetListBox::refresh(bool go_to_selected) {
 		}
 		rows[i].h = pos.h;
 
-		int font_x = rows[i].x + 8;
-		int font_y = rows[i].y + (rows[i].h/2);
-
 		int padding = font->getFontHeight();
 
 		if (i+cursor < items.size()) {
@@ -450,11 +447,16 @@ void WidgetListBox::refresh(bool go_to_selected) {
 				temp = font->trimTextToWidth(items[i+cursor].value, pos.w-right_margin-padding, true, 0);
 		}
 
+		// TODO remove hardcoded +8
+		vlabels[i].setPos(rows[i].x + 8, rows[i].y + (rows[i].h/2));
+		vlabels[i].setVAlign(LabelInfo::VALIGN_CENTER);
+		vlabels[i].setText(temp);
+
 		if(i+cursor < items.size() && items[i+cursor].selected) {
-			vlabels[i].set(font_x, font_y, FontEngine::JUSTIFY_LEFT, VALIGN_CENTER, temp, color_normal);
+			vlabels[i].setColor(color_normal);
 		}
 		else if (i < items.size()) {
-			vlabels[i].set(font_x, font_y, FontEngine::JUSTIFY_LEFT, VALIGN_CENTER, temp, color_disabled);
+			vlabels[i].setColor(color_disabled);
 		}
 	}
 

@@ -119,21 +119,15 @@ void WidgetTabControl::updateHeader() {
 		tabs[i].w = eset->widgets.tab_padding.x + font->calc_width(titles[i]) + eset->widgets.tab_padding.x;
 		tabs_area.w += tabs[i].w;
 
-		active_labels[i].set(
-			tabs[i].x + eset->widgets.tab_padding.x,
-			tabs[i].y + tabs[i].h/2 + eset->widgets.tab_padding.y,
-			FontEngine::JUSTIFY_LEFT,
-			VALIGN_CENTER,
-			titles[i],
-			color_normal);
+		active_labels[i].setPos(tabs[i].x + eset->widgets.tab_padding.x, tabs[i].y + tabs[i].h/2 + eset->widgets.tab_padding.y);
+		active_labels[i].setVAlign(LabelInfo::VALIGN_CENTER);
+		active_labels[i].setText(titles[i]);
+		active_labels[i].setColor(color_normal);
 
-		inactive_labels[i].set(
-			tabs[i].x + eset->widgets.tab_padding.x,
-			tabs[i].y + tabs[i].h/2 + eset->widgets.tab_padding.y,
-			FontEngine::JUSTIFY_LEFT,
-			VALIGN_CENTER,
-			titles[i],
-			color_disabled);
+		inactive_labels[i].setPos(tabs[i].x + eset->widgets.tab_padding.x, tabs[i].y + tabs[i].h/2 + eset->widgets.tab_padding.y);
+		inactive_labels[i].setVAlign(LabelInfo::VALIGN_CENTER);
+		inactive_labels[i].setText(titles[i]);
+		inactive_labels[i].setColor(color_disabled);
 	}
 }
 

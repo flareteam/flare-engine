@@ -85,6 +85,7 @@ MenuVendor::MenuVendor(StatBlock *_stats)
 			// @ATTR label_title|label|The position of the text that displays the NPC's name.
 			else if (infile.key == "label_title") {
 				title =  eatLabelInfo(infile.val);
+				label_vendor.setFromLabelInfo(title);
 			}
 			else {
 				infile.error("MenuVendor: '%s' is not a valid key.", infile.key.c_str());
@@ -92,6 +93,8 @@ MenuVendor::MenuVendor(StatBlock *_stats)
 		}
 		infile.close();
 	}
+
+	label_vendor.setColor(color_normal);
 
 	VENDOR_SLOTS = slots_cols * slots_rows;
 	slots_area.w = slots_cols * eset->resolutions.icon_size;
@@ -119,6 +122,8 @@ MenuVendor::MenuVendor(StatBlock *_stats)
 
 void MenuVendor::align() {
 	Menu::align();
+
+	label_vendor.setPos(window_area.x, window_area.y);
 
 	Rect tabs_area = slots_area;
 	tabs_area.x += window_area.x;
@@ -184,7 +189,6 @@ void MenuVendor::render() {
 
 	// text overlay
 	if (!title.hidden) {
-		label_vendor.set(window_area.x+title.x, window_area.y+title.y, title.justify, title.valign, msg->get("Vendor") + " - " + npc->name, color_normal, title.font_style);
 		label_vendor.render();
 	}
 
@@ -269,6 +273,8 @@ void MenuVendor::setNPC(NPC* _npc) {
 		visible = false;
 		return;
 	}
+
+	label_vendor.setText(msg->get("Vendor") + " - " + npc->name);
 
 	setTab(ItemManager::VENDOR_BUY);
 

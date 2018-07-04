@@ -103,7 +103,11 @@ void CombatText::addString(const std::string& message, const FPoint& location, i
 		c->lifespan = duration;
 		c->displaytype = displaytype;
 
-		c->label->set(static_cast<int>(c->pos.x), static_cast<int>(c->pos.y), FontEngine::JUSTIFY_CENTER, VALIGN_BOTTOM, c->text, msg_color[c->displaytype]);
+		c->label->setPos(static_cast<int>(c->pos.x), static_cast<int>(c->pos.y));
+		c->label->setJustify(FontEngine::JUSTIFY_CENTER);
+		c->label->setVAlign(LabelInfo::VALIGN_BOTTOM);
+		c->label->setText(c->text);
+		c->label->setColor(msg_color[c->displaytype]);
 		combat_text.push_back(*c);
 		delete c;
 	}
@@ -128,8 +132,7 @@ void CombatText::logic(const FPoint& _cam) {
 		scr_pos = map_to_screen(it->pos.x, it->pos.y, cam.x, cam.y);
 		scr_pos.y -= static_cast<int>(it->floating_offset);
 
-		it->label->setX(scr_pos.x);
-		it->label->setY(scr_pos.y);
+		it->label->setPos(scr_pos.x, scr_pos.y);
 	}
 
 	// delete expired messages

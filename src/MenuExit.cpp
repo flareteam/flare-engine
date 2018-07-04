@@ -55,6 +55,7 @@ MenuExit::MenuExit() : Menu() {
 			else if (infile.key == "title") {
 				// @ATTR title|label|Position of the "Paused" text.
 				title = eatLabelInfo(infile.val);
+				title_lb.setFromLabelInfo(title);
 			}
 			else if (infile.key == "exit") {
 				// @ATTR exit|point|Position of the "Save and Exit" button.
@@ -81,6 +82,9 @@ MenuExit::MenuExit() : Menu() {
 		}
 		infile.close();
 	}
+
+	title_lb.setText(msg->get("Paused"));
+	title_lb.setColor(font->getColor("menu_normal"));
 
 	exitClicked = false;
 	reload_music = false;
@@ -114,7 +118,7 @@ MenuExit::MenuExit() : Menu() {
 void MenuExit::align() {
 	Menu::align();
 
-	title_lb.set(window_area.x+title.x, window_area.y+title.y, title.justify, title.valign, msg->get("Paused"), font->getColor("menu_normal"), title.font_style);
+	title_lb.setPos(window_area.x, window_area.y);
 
 	buttonExit->setPos(window_area.x, window_area.y);
 	buttonExit->refresh();
@@ -134,7 +138,7 @@ void MenuExit::align() {
 void MenuExit::logic() {
 	if (visible) {
 		std::string title_str = msg->get("Paused") + " [" + getTimeString(pc->time_played, true) + "]";
-		title_lb.set(title_str);
+		title_lb.setText(title_str);
 
 		tablist.logic();
 
@@ -185,7 +189,7 @@ void MenuExit::placeOptionWidgets(WidgetLabel *lb, Widget *w, int x1, int y1, in
 
 	if (lb) {
 		lb->setBasePos(x1, y1, ALIGN_TOPLEFT);
-		lb->set(str);
+		lb->setText(str);
 		lb->setJustify(FontEngine::JUSTIFY_CENTER);
 		option_labels.push_back(lb);
 	}

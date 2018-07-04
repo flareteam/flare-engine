@@ -383,7 +383,10 @@ void MenuActionBar::render() {
 			// put an asterisk on this icon if in colorblind mode
 			if (settings->colorblind) {
 				WidgetLabel label;
-				label.set(menus[i]->pos.x + 2, menus[i]->pos.y + 2, FontEngine::JUSTIFY_LEFT, VALIGN_TOP, "*", font->getColor("menu_normal"));
+				// TODO remove hard-coded +2 here
+				label.setPos(menus[i]->pos.x + 2, menus[i]->pos.y + 2);
+				label.setText("*");
+				label.setColor(font->getColor("menu_normal"));
 				label.render();
 			}
 		}

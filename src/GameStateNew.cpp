@@ -176,20 +176,24 @@ GameStateNew::GameStateNew()
 	color_normal = font->getColor("menu_normal");
 
 	label_portrait = new WidgetLabel();
-	label_portrait->setBasePos(portrait_label.x, portrait_label.y, ALIGN_TOPLEFT);
-	label_portrait->set(portrait_label.x, portrait_label.y, portrait_label.justify, portrait_label.valign, msg->get("Choose a Portrait"), color_normal, portrait_label.font_style);
+	label_portrait->setFromLabelInfo(portrait_label);
+	label_portrait->setText(msg->get("Choose a Portrait"));
+	label_portrait->setColor(color_normal);
 
 	label_name = new WidgetLabel();
-	label_name->setBasePos(name_label.x, name_label.y, ALIGN_TOPLEFT);
-	label_name->set(name_label.x, name_label.y, name_label.justify, name_label.valign, msg->get("Choose a Name"), color_normal, name_label.font_style);
+	label_name->setFromLabelInfo(name_label);
+	label_name->setText(msg->get("Choose a Name"));
+	label_name->setColor(color_normal);
 
 	label_permadeath = new WidgetLabel();
-	label_permadeath->setBasePos(permadeath_label.x, permadeath_label.y, ALIGN_TOPLEFT);
-	label_permadeath->set(permadeath_label.x, permadeath_label.y, permadeath_label.justify, permadeath_label.valign, msg->get("Permadeath?"), color_normal, permadeath_label.font_style);
+	label_permadeath->setFromLabelInfo(permadeath_label);
+	label_permadeath->setText(msg->get("Permadeath?"));
+	label_permadeath->setColor(color_normal);
 
 	label_classlist = new WidgetLabel();
-	label_classlist->setBasePos(classlist_label.x, classlist_label.y, ALIGN_TOPLEFT);
-	label_classlist->set(classlist_label.x, classlist_label.y, classlist_label.justify, classlist_label.valign, msg->get("Choose a Class"), color_normal, classlist_label.font_style);
+	label_classlist->setFromLabelInfo(classlist_label);
+	label_classlist->setText(msg->get("Choose a Class"));
+	label_classlist->setColor(color_normal);
 
 	// set up class list
 	for (unsigned i = 0; i < eset->hero_classes.list.size(); i++) {

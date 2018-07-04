@@ -182,7 +182,8 @@ void WidgetSlot::render() {
 		if (amount > 1 || max_amount > 1) {
 			std::stringstream ss;
 			ss << amount_str;
-			label_amount.set(pos.x + icons->text_offset.x, pos.y + icons->text_offset.y, FontEngine::JUSTIFY_LEFT, VALIGN_TOP, ss.str(), font->getColor("widget_normal"));
+			label_amount.setPos(pos.x + icons->text_offset.x, pos.y + icons->text_offset.y);
+			label_amount.setText(ss.str());
 			label_amount.local_frame = local_frame;
 			label_amount.local_offset = local_offset;
 			label_amount.render();

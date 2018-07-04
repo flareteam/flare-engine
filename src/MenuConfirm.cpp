@@ -70,14 +70,18 @@ MenuConfirm::MenuConfirm(const std::string& _buttonMsg, const std::string& _boxM
 void MenuConfirm::align() {
 	Menu::align();
 
+	label.setJustify(FontEngine::JUSTIFY_CENTER);
+	label.setText(boxMsg);
+	label.setColor(font->getColor("menu_normal"));
+
 	if (hasConfirmButton) {
 		buttonConfirm->pos.x = window_area.x + window_area.w/2 - buttonConfirm->pos.w/2;
 		buttonConfirm->pos.y = window_area.y + window_area.h/2;
 		buttonConfirm->refresh();
-		label.set(window_area.x + window_area.w/2, window_area.y + window_area.h - (buttonConfirm->pos.h * 2), FontEngine::JUSTIFY_CENTER, VALIGN_TOP, boxMsg, font->getColor("menu_normal"));
+		label.setPos(window_area.x + window_area.w/2, window_area.y + window_area.h - (buttonConfirm->pos.h * 2));
 	}
 	else {
-		label.set(window_area.x + window_area.w/2, window_area.y + (window_area.h / 4), FontEngine::JUSTIFY_CENTER, VALIGN_TOP, boxMsg, font->getColor("menu_normal"));
+		label.setPos(window_area.x + window_area.w/2, window_area.y + (window_area.h / 4));
 	}
 
 	buttonClose->pos.x = window_area.x + window_area.w;

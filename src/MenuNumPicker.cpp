@@ -57,6 +57,9 @@ MenuNumPicker::MenuNumPicker()
 	input_box = new WidgetInput(WidgetInput::DEFAULT_FILE);
 	input_box->only_numbers = true;
 
+	label.setText(msg->get("Enter amount:"));
+	label.setColor(font->getColor("menu_normal"));
+
 	// Load config settings
 	FileParser infile;
 	// @CLASS MenuNumPicker|Description of menus/num_picker.txt
@@ -67,6 +70,7 @@ MenuNumPicker::MenuNumPicker()
 			else if (infile.key == "label_title") {
 				// @ATTR label_title|label|Position of the "Enter amount:" text.
 				title = eatLabelInfo(infile.val);
+				label.setFromLabelInfo(title);
 			}
 			else if (infile.key == "confirm") {
 				// @ATTR confirm|point|Position of the "OK" button.
@@ -120,7 +124,7 @@ void MenuNumPicker::align() {
 
 	input_box->setPos(window_area.x, window_area.y);
 
-	label.set(window_area.x + title.x, window_area.y + title.y, title.justify, title.valign, msg->get("Enter amount:"), font->getColor("menu_normal"));
+	label.setPos(window_area.x, window_area.y);
 
 	updateInput();
 }

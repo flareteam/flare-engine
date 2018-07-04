@@ -197,8 +197,11 @@ bool Scene::logic() {
 
 				vsc.text = new WidgetLabel();
 				if (vsc.text) {
-					vsc.text->set(vsc.pos.x, vsc.pos.y, FontEngine::JUSTIFY_CENTER, VALIGN_TOP, components.front().s, font->getColor("widget_normal"), "font_captions");
-					next_y += vsc.text->bounds.h;
+					vsc.text->setPos(vsc.pos.x, vsc.pos.y);
+					vsc.text->setJustify(FontEngine::JUSTIFY_CENTER);
+					vsc.text->setText(components.front().s);
+					vsc.text->setFont("font_captions");
+					next_y += vsc.text->getBounds()->h;
 				}
 
 				vscroll_components.push_back(vsc);
@@ -246,7 +249,7 @@ bool Scene::logic() {
 		// scroll has reached the end, quit the scene
 		if (!vscroll_components.empty()) {
 			VScrollComponent& vsc = vscroll_components.back();
-			if (vsc.text && (vsc.text->bounds.y + vsc.text->bounds.h < 0)) {
+			if (vsc.text && (vsc.text->getBounds()->y + vsc.text->getBounds()->h < 0)) {
 				return false;
 			}
 			else if ((vsc.pos.y + vsc.separator_h) - vscroll_offset < 0) {
@@ -321,8 +324,7 @@ void Scene::refreshWidgets() {
 		// position elements relative to the vertical offset
 		for (size_t i = 0; i < vscroll_components.size(); ++i) {
 			if (vscroll_components[i].text) {
-				vscroll_components[i].text->setX(settings->view_w/2);
-				vscroll_components[i].text->setY(vscroll_components[i].pos.y - vscroll_offset);
+				vscroll_components[i].text->setPos(settings->view_w / 2, vscroll_components[i].pos.y - vscroll_offset);
 			}
 			else if (vscroll_components[i].image) {
 				int x = settings->view_w/2 - vscroll_components[i].image_size.x/2;
@@ -361,7 +363,7 @@ void Scene::render() {
 			VScrollComponent& vsc = vscroll_components[i];
 
 			if (vsc.text) {
-				if (vsc.text->bounds.y <= settings->view_h && (vsc.text->bounds.y + vsc.text->bounds.h >= 0)) {
+				if (vsc.text->getBounds()->y <= settings->view_h && (vsc.text->getBounds()->y + vsc.text->getBounds()->h >= 0)) {
 					vsc.text->render();
 				}
 			}

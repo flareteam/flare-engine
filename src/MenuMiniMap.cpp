@@ -42,6 +42,7 @@ MenuMiniMap::MenuMiniMap()
 	, color_obst(64,64,64,255)
 	, color_hero(255,255,255,255)
 	, map_surface(NULL)
+	, label(new WidgetLabel())
 {
 	std::string bg_filename;
 
@@ -62,6 +63,7 @@ MenuMiniMap::MenuMiniMap()
 			// @ATTR text_pos|label|Position of the text label with the map name.
 			else if(infile.key == "text_pos") {
 				text_pos = eatLabelInfo(infile.val);
+				label->setFromLabelInfo(text_pos);
 			}
 			// @ATTR background|filename|Optional background image.
 			else if (infile.key == "background") {
@@ -74,9 +76,7 @@ MenuMiniMap::MenuMiniMap()
 		infile.close();
 	}
 
-	// label for map name
-	label = new WidgetLabel();
-	label->setBasePos(text_pos.x, text_pos.y, ALIGN_TOPLEFT);
+	label->setColor(font->getColor("menu_normal"));
 
 	if (!bg_filename.empty())
 		setBackground(bg_filename);
@@ -90,7 +90,7 @@ void MenuMiniMap::align() {
 }
 
 void MenuMiniMap::setMapTitle(const std::string& map_title) {
-	label->set(window_area.x+text_pos.x, window_area.y+text_pos.y, text_pos.justify, text_pos.valign, map_title, font->getColor("menu_normal"), text_pos.font_style);
+	label->setText(map_title);
 }
 
 void MenuMiniMap::createMapSurface() {

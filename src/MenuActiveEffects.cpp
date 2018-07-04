@@ -117,12 +117,11 @@ void MenuActiveEffects::logic() {
 
 				if(!effect_icons[most_recent_id].stacksLabel){
 					effect_icons[most_recent_id].stacksLabel = new WidgetLabel();
-					effect_icons[most_recent_id].stacksLabel->setX(effect_icons[most_recent_id].pos.x);
-					effect_icons[most_recent_id].stacksLabel->setY(effect_icons[most_recent_id].pos.y);
+					effect_icons[most_recent_id].stacksLabel->setPos(effect_icons[most_recent_id].pos.x, effect_icons[most_recent_id].pos.y);
 					effect_icons[most_recent_id].stacksLabel->setMaxWidth(eset->resolutions.icon_size);
 				}
 
-				effect_icons[most_recent_id].stacksLabel->set(msg->get("x%d", effect_icons[most_recent_id].stacks));
+				effect_icons[most_recent_id].stacksLabel->setText(msg->get("x%d", effect_icons[most_recent_id].stacks));
 
 				continue;
 			}

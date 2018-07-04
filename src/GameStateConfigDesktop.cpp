@@ -94,7 +94,7 @@ GameStateConfigDesktop::GameStateConfigDesktop(bool _enable_video_tab)
 	// Allocate KeyBindings
 	for (int i = 0; i < inpt->KEY_COUNT; i++) {
 		keybinds_lb.push_back(new WidgetLabel());
-		keybinds_lb[i]->set(inpt->binding_name[i]);
+		keybinds_lb[i]->setText(inpt->binding_name[i]);
 		keybinds_lb[i]->setJustify(FontEngine::JUSTIFY_RIGHT);
 	}
 	for (int i = 0; i < inpt->KEY_COUNT * 3; i++) {
@@ -382,8 +382,7 @@ bool GameStateConfigDesktop::parseKeyDesktop(FileParser &infile, int &x1, int &y
 
 	if (keybind_num > -1 && static_cast<unsigned>(keybind_num) < keybinds_lb.size() && static_cast<unsigned>(keybind_num) < keybinds_btn.size()) {
 		//keybindings
-		keybinds_lb[keybind_num]->setX(x1);
-		keybinds_lb[keybind_num]->setY(y1);
+		keybinds_lb[keybind_num]->setPos(x1, y1);
 		keybinds_btn[keybind_num]->pos.x = x2;
 		keybinds_btn[keybind_num]->pos.y = y2;
 	}

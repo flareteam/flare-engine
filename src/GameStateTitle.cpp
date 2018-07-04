@@ -123,7 +123,9 @@ GameStateTitle::GameStateTitle()
 
 	// set up labels
 	label_version = new WidgetLabel();
-	label_version->set(0, 0, FontEngine::JUSTIFY_RIGHT, VALIGN_TOP, createVersionStringFull(), font->getColor("menu_normal"));
+	label_version->setJustify(FontEngine::JUSTIFY_RIGHT);
+	label_version->setText(createVersionStringFull());
+	label_version->setColor(font->getColor("menu_normal"));
 
 	// Setup tab order
 	tablist.ignore_no_mouse = true;

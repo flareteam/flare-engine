@@ -44,14 +44,14 @@ public:
 		: id(_id)
 		, label(id != "" ? new WidgetLabel() : NULL) {
 		if (label)
-			label->set(_label);
+			label->setText(_label);
 	}
 
 	Action(const Action &r)
 		: id(r.id)
 		, label(id != "" ? new WidgetLabel() : NULL) {
 		if (label)
-			label->set(r.label->get());
+			label->setText(r.label->getText());
 
 		rect = r.rect;
 	}
@@ -60,7 +60,7 @@ public:
 		id = r.id;
 		label = (id != "") ? new WidgetLabel() : NULL;
 		if (label)
-			label->set(r.label->get());
+			label->setText(r.label->getText());
 
 		rect = r.rect;
 
@@ -129,8 +129,8 @@ void MenuNPCActions::update() {
 	for(size_t i=0; i<npc_actions.size(); i++) {
 		h += ITEM_SPACING;
 		if (npc_actions[i].label) {
-			w = std::max(static_cast<int>(npc_actions[i].label->bounds.w), w);
-			h += npc_actions[i].label->bounds.h;
+			w = std::max(static_cast<int>(npc_actions[i].label->getBounds()->w), w);
+			h += npc_actions[i].label->getBounds()->h;
 		}
 		else
 			h += SEPARATOR_HEIGHT;
@@ -155,7 +155,7 @@ void MenuNPCActions::update() {
 		npc_actions[i].rect.w = w;
 
 		if (npc_actions[i].label) {
-			npc_actions[i].rect.h = npc_actions[i].label->bounds.h + (ITEM_SPACING*2);
+			npc_actions[i].rect.h = npc_actions[i].label->getBounds()->h + (ITEM_SPACING*2);
 
 			if (i == current_action) {
 				if (npc_actions[i].id == "id_cancel")
@@ -164,11 +164,6 @@ void MenuNPCActions::update() {
 					text_color = vendor_hilight_color;
 				else
 					text_color = topic_hilight_color;
-
-				npc_actions[i].label->set(MENU_BORDER + (w/2),
-										  yoffs + (npc_actions[i].rect.h/2) ,
-										  FontEngine::JUSTIFY_CENTER, VALIGN_CENTER,
-										  npc_actions[i].label->get(), text_color);
 			}
 			else {
 				if (npc_actions[i].id == "id_cancel")
@@ -177,12 +172,12 @@ void MenuNPCActions::update() {
 					text_color = vendor_normal_color;
 				else
 					text_color = topic_normal_color;
-
-				npc_actions[i].label->set(MENU_BORDER + (w/2),
-										  yoffs + (npc_actions[i].rect.h/2),
-										  FontEngine::JUSTIFY_CENTER, VALIGN_CENTER,
-										  npc_actions[i].label->get(), text_color);
 			}
+
+			npc_actions[i].label->setPos(MENU_BORDER + (w/2), yoffs + (npc_actions[i].rect.h/2));
+			npc_actions[i].label->setJustify(FontEngine::JUSTIFY_CENTER);
+			npc_actions[i].label->setVAlign(LabelInfo::VALIGN_CENTER);
+			npc_actions[i].label->setColor(text_color);
 
 		}
 		else

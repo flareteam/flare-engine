@@ -57,9 +57,9 @@ LabelInfo eatLabelInfo(std::string val) {
 		else if (justify == "center") info.justify = FontEngine::JUSTIFY_CENTER;
 		else if (justify == "right") info.justify = FontEngine::JUSTIFY_RIGHT;
 
-		if (valign == "top") info.valign = VALIGN_TOP;
-		else if (valign == "center") info.valign = VALIGN_CENTER;
-		else if (valign == "bottom") info.valign = VALIGN_BOTTOM;
+		if (valign == "top") info.valign = LabelInfo::VALIGN_TOP;
+		else if (valign == "center") info.valign = LabelInfo::VALIGN_CENTER;
+		else if (valign == "bottom") info.valign = LabelInfo::VALIGN_BOTTOM;
 
 		if (style != "") info.font_style = style;
 	}
@@ -67,13 +67,17 @@ LabelInfo eatLabelInfo(std::string val) {
 	return info;
 }
 
+const std::string WidgetLabel::DEFAULT_FONT = "font_regular";
+
 WidgetLabel::WidgetLabel()
 	: justify(FontEngine::JUSTIFY_LEFT)
-	, valign(VALIGN_TOP)
+	, valign(LabelInfo::VALIGN_TOP)
 	, max_width(0)
+	, update_flag(UPDATE_NONE)
+	, window_resize_flag(false)
 	, label(NULL)
 	, text("")
-	, font_style("font_regular")
+	, font_style(DEFAULT_FONT)
 	, color(font->getColor("widget_normal"))
 {
 	bounds.x = bounds.y = 0;
@@ -82,130 +86,84 @@ WidgetLabel::WidgetLabel()
 	render_to_alpha = false;
 }
 
-/**
- * Draw the buffered string surface to the screen
- */
-void WidgetLabel::render() {
-	if (label) {
-		label->local_frame = local_frame;
-		label->setOffset(local_offset);
-		render_device->render(label);
+void WidgetLabel::setMaxWidth(int width) {
+	if (width != max_width) {
+		max_width = width;
+		setUpdateFlag(UPDATE_RECACHE);
 	}
 }
 
 void WidgetLabel::setPos(int offset_x, int offset_y) {
+	Rect old_pos = pos;
 	Widget::setPos(offset_x, offset_y);
-	applyOffsets();
-}
 
-void WidgetLabel::setMaxWidth(int width) {
-	if (width != max_width) {
-		max_width = width;
-		recacheTextSprite();
+	if (old_pos.x != pos.x || old_pos.y != pos.y) {
+		setUpdateFlag(UPDATE_POS);
 	}
 }
 
-void WidgetLabel::set(int _x, int _y, int _justify, int _valign, const std::string& _text, const Color& _color) {
-	set(_x, _y, _justify, _valign, _text, _color, "font_regular");
-}
-
-/**
- * A shortcut function to set all attributes simultaneously.
- */
-void WidgetLabel::set(int _x, int _y, int _justify, int _valign, const std::string& _text, const Color& _color, const std::string& _font) {
-
-	bool changed = false;
-	bool changed_pos = false;
-
-	if (justify != _justify) {
-		justify = _justify;
-		changed = true;
-	}
-	if (valign != _valign) {
-		valign = _valign;
-		changed = true;
-	}
-	if (text != _text) {
-		text = _text;
-		changed = true;
-	}
-	if (color.r != _color.r || color.g != _color.g || color.b != _color.b) {
-		color = _color;
-		changed = true;
-	}
-	if (pos.x != _x) {
-		pos.x = _x;
-		changed_pos = true;
-	}
-	if (pos.y != _y) {
-		pos.y = _y;
-		changed_pos = true;
-	}
-	if (font_style != _font) {
-		font_style = _font;
-		changed = true;
-	}
-
-	if (changed) {
-		recacheTextSprite();
-	}
-	else if (changed_pos) {
-		applyOffsets();
-	}
-}
-
-/**
- * Set initial X position of label.
- */
-void WidgetLabel::setX(int _x) {
-	if (pos.x != _x) {
-		pos.x = _x;
-		applyOffsets();
-	}
-}
-
-/**
- * Set initial Y position of label.
- */
-void WidgetLabel::setY(int _y) {
-	if (pos.y != _y) {
-		pos.y = _y;
-		applyOffsets();
-	}
-}
-
-/**
- * Get X position of label.
- */
-int WidgetLabel::getX() {
-	return pos.x;
-}
-
-/**
- * Get Y position of label.
- */
-int WidgetLabel::getY() {
-	return pos.y;
-}
-
-/**
- * Set justify value.
- */
 void WidgetLabel::setJustify(int _justify) {
 	if (justify != _justify) {
 		justify = _justify;
-		recacheTextSprite();
+		setUpdateFlag(UPDATE_RECACHE);
 	}
+}
+
+void WidgetLabel::setText(const std::string& _text) {
+	if (text != _text) {
+		text = _text;
+		setUpdateFlag(UPDATE_RECACHE);
+	}
+}
+
+void WidgetLabel::setVAlign(int _valign) {
+	if (valign != _valign) {
+		valign = _valign;
+		setUpdateFlag(UPDATE_RECACHE);
+	}
+}
+
+void WidgetLabel::setColor(const Color& _color) {
+	if (color.r != _color.r || color.g != _color.g || color.b != _color.b) {
+		color = _color;
+		setUpdateFlag(UPDATE_RECACHE);
+	}
+}
+
+void WidgetLabel::setFont(const std::string& _font) {
+	if (font_style != _font) {
+		font_style = _font;
+		setUpdateFlag(UPDATE_RECACHE);
+	}
+}
+
+void WidgetLabel::setFromLabelInfo(const LabelInfo& label_info) {
+	if (pos_base.x != label_info.x || pos_base.y != label_info.y)
+		setUpdateFlag(UPDATE_POS);
+
+	setBasePos(label_info.x, label_info.y, alignment);
+
+	setJustify(label_info.justify);
+	setVAlign(label_info.valign);
+	setFont(label_info.font_style);
+}
+
+std::string WidgetLabel::getText() {
+	return text;
+}
+
+/**
+ * Gets the label's dimensions, re-caching beforehand if necessary
+ */
+Rect* WidgetLabel::getBounds() {
+	update();
+	return &bounds;
 }
 
 /**
  * Apply horizontal justify and vertical alignment to label position
  */
-void WidgetLabel::applyOffsets(bool recache) {
-	if (inpt->window_resized && recache) {
-		recacheTextSprite(false);
-	}
-
+void WidgetLabel::applyOffsets() {
 	// apply JUSTIFY
 	if (justify == FontEngine::JUSTIFY_LEFT)
 		bounds.x = pos.x;
@@ -215,13 +173,13 @@ void WidgetLabel::applyOffsets(bool recache) {
 		bounds.x = pos.x - bounds.w/2;
 
 	// apply VALIGN
-	if (valign == VALIGN_TOP) {
+	if (valign == LabelInfo::VALIGN_TOP) {
 		bounds.y = pos.y;
 	}
-	else if (valign == VALIGN_BOTTOM) {
-		bounds.y = pos.y - bounds.h;;
+	else if (valign == LabelInfo::VALIGN_BOTTOM) {
+		bounds.y = pos.y - bounds.h;
 	}
-	else if (valign == VALIGN_CENTER) {
+	else if (valign == LabelInfo::VALIGN_CENTER) {
 		bounds.y = pos.y - bounds.h/2;
 	}
 
@@ -232,20 +190,10 @@ void WidgetLabel::applyOffsets(bool recache) {
 }
 
 /**
- * Update the label text only
- */
-void WidgetLabel::set(const std::string& _text) {
-	if (text != _text) {
-		this->text = _text;
-		recacheTextSprite();
-	}
-}
-
-/**
  * We buffer the rendered text instead of calculating it each frame
  * This function refreshes the buffer.
  */
-void WidgetLabel::recacheTextSprite(bool apply_offsets) {
+void WidgetLabel::recacheTextSprite() {
 	Image *image;
 
 	if (label) {
@@ -273,9 +221,51 @@ void WidgetLabel::recacheTextSprite(bool apply_offsets) {
 	font->renderShadowed(temp_text, 0, 0, FontEngine::JUSTIFY_LEFT, image, 0, color);
 	label = image->createSprite();
 	image->unref();
+}
 
-	if (apply_offsets)
-		applyOffsets(false);
+/**
+ * Sets a flag so that update() knows what's changed
+ */
+void WidgetLabel::setUpdateFlag(int _update_flag) {
+	if (_update_flag > update_flag || _update_flag == UPDATE_NONE)
+		update_flag = _update_flag;
+}
+
+/**
+ * Runs recacheTextSprite() and applyOffsets() based on what's changed
+ */
+void WidgetLabel::update() {
+	// we only need to check if the window was resized once per frame
+	// yet, this update function may be called multiple times (ex. getBounds())
+	// so we set a flag to prevent unnecessary re-caching
+	if (inpt->window_resized && !window_resize_flag) {
+		setUpdateFlag(UPDATE_RECACHE);
+		window_resize_flag = true;
+	}
+
+	if (update_flag == UPDATE_RECACHE)
+		recacheTextSprite();
+
+	if (update_flag >= UPDATE_POS)
+		applyOffsets();
+
+	setUpdateFlag(UPDATE_NONE);
+}
+
+/**
+ * Draw the buffered string surface to the screen
+ */
+void WidgetLabel::render() {
+	update();
+
+	if (label) {
+		label->local_frame = local_frame;
+		label->setOffset(local_offset);
+		render_device->render(label);
+	}
+
+	// reset flag
+	window_resize_flag = false;
 }
 
 WidgetLabel::~WidgetLabel() {

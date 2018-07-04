@@ -35,6 +35,8 @@ class MenuStash : public Menu {
 private:
 	StatBlock *stats;
 	WidgetButton *closeButton;
+	WidgetLabel label_title;
+	WidgetLabel label_currency;
 
 	int STASH_SLOTS;
 

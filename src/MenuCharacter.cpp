@@ -50,6 +50,10 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 	, show_resists(true)
 	, name_max_width(0)
 {
+	labelCharacter->setText(msg->get("Character"));
+	labelCharacter->setColor(font->getColor("menu_normal"));
+	labelUnspent->setColor(font->getColor("menu_bonus"));
+
 	// 2 is added here to account for CSTAT_NAME and CSTAT_LEVEL
 	cstat.resize(eset->primary_stats.list.size() + 2);
 
@@ -66,6 +70,11 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 		cstat[i].hover.x = cstat[i].hover.y = 0;
 		cstat[i].hover.w = cstat[i].hover.h = 0;
 		cstat[i].visible = true;
+
+		cstat[i].label->setColor(font->getColor("menu_normal"));
+
+		cstat[i].value->setVAlign(LabelInfo::VALIGN_CENTER);
+		cstat[i].value->setColor(font->getColor("menu_normal"));
 	}
 
 	show_stat.resize(Stats::COUNT + eset->damage_types.count);
@@ -207,6 +216,13 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 		infile.close();
 	}
 
+	// apply LabelInfo values
+	labelCharacter->setFromLabelInfo(title);
+	labelUnspent->setFromLabelInfo(unspent_pos);
+	for (size_t i = 0; i < cstat.size(); ++i) {
+		cstat[i].label->setFromLabelInfo(cstat[i].label_info);
+	}
+
 	// stat list
 	statList = new WidgetListBox(statlist_rows, "images/menus/buttons/listbox_char.png");
 	tablist.add(statList);
@@ -240,7 +256,7 @@ void MenuCharacter::align() {
 	closeButton->setPos(window_area.x, window_area.y);
 
 	// menu title
-	labelCharacter->set(window_area.x+title.x, window_area.y+title.y, title.justify, title.valign, msg->get("Character"), font->getColor("menu_normal"), title.font_style);
+	labelCharacter->setPos(window_area.x, window_area.y);
 
 	// upgrade buttons
 	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
@@ -252,13 +268,8 @@ void MenuCharacter::align() {
 
 	for (size_t i = 0; i < cstat.size(); ++i) {
 		// setup static labels
-		cstat[i].label->set(window_area.x + cstat[i].label_info.x,
-							window_area.y + cstat[i].label_info.y,
-							cstat[i].label_info.justify,
-							cstat[i].label_info.valign,
-							cstat[i].label_text,
-							font->getColor("menu_normal"),
-							cstat[i].label_info.font_style);
+		cstat[i].label->setPos(window_area.x, window_area.y);
+		cstat[i].label->setText(cstat[i].label_text);
 
 		// setup hotspot locations
 		cstat[i].setHover(window_area.x + cstat[i].value_pos.x, window_area.y + cstat[i].value_pos.y, cstat[i].value_pos.w, cstat[i].value_pos.h);
@@ -267,8 +278,7 @@ void MenuCharacter::align() {
 		cstat[i].value->setPos(window_area.x, window_area.y);
 	}
 
-	labelUnspent->setX(window_area.x + unspent_pos.x);
-	labelUnspent->setY(window_area.y + unspent_pos.y);
+	labelUnspent->setPos(window_area.x, window_area.y);
 }
 
 /**
@@ -286,16 +296,20 @@ void MenuCharacter::refreshStats() {
 		trimmed_name = font->trimTextToWidth(stats->name, name_max_width, true, 0);
 	else
 		trimmed_name = stats->name;
-	cstat[CSTAT_NAME].value->set(cstat[CSTAT_NAME].value->pos.x, cstat[CSTAT_NAME].value->pos.y, FontEngine::JUSTIFY_LEFT, VALIGN_CENTER, trimmed_name, font->getColor("menu_normal"));
+
+	cstat[CSTAT_NAME].value->setText(trimmed_name);
 
 	ss.str("");
 	ss << stats->level;
-	cstat[CSTAT_LEVEL].value->set(cstat[CSTAT_LEVEL].value->pos.x, cstat[CSTAT_LEVEL].value->pos.y, FontEngine::JUSTIFY_CENTER, VALIGN_CENTER, ss.str(), font->getColor("menu_normal"));
+	cstat[CSTAT_LEVEL].value->setText(ss.str());
+	cstat[CSTAT_LEVEL].value->setJustify(FontEngine::JUSTIFY_CENTER);
 
 	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 		ss.str("");
 		ss << stats->get_primary(i);
-		cstat[i+2].value->set(cstat[i+2].value->pos.x, cstat[i+2].value->pos.y, FontEngine::JUSTIFY_CENTER, VALIGN_CENTER, ss.str(), bonusColor(stats->primary_additional[i]));
+		cstat[i+2].value->setText(ss.str());
+		cstat[i+2].value->setJustify(FontEngine::JUSTIFY_CENTER);
+		cstat[i+2].value->setColor(bonusColor(stats->primary_additional[i]));
 	}
 
 	ss.str("");
@@ -305,7 +319,7 @@ void MenuCharacter::refreshStats() {
 	else if (skill_points > 1) {
 		ss << msg->get("%d unspent stat points", skill_points);
 	}
-	labelUnspent->set(window_area.x+unspent_pos.x, window_area.y+unspent_pos.y, unspent_pos.justify, unspent_pos.valign, ss.str(), font->getColor("menu_bonus"), unspent_pos.font_style);
+	labelUnspent->setText(ss.str());
 
 	// scrolling stat list
 	unsigned stat_index = 0;
