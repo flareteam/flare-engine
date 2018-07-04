@@ -52,7 +52,7 @@ MenuLog::MenuLog() {
 
 			// @ATTR label_title|label|Position of the "Log" text.
 			if(infile.key == "label_title") {
-				title = eatLabelInfo(infile.val);
+				title = popLabelInfo(infile.val);
 				label_log.setFromLabelInfo(title);
 			}
 			// @ATTR close|point|Position of the close button.

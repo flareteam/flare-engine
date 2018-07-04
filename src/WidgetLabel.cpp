@@ -27,44 +27,16 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FontEngine.h"
 #include "InputState.h"
 #include "RenderDevice.h"
-#include "WidgetLabel.h"
 #include "SharedResources.h"
-#include "UtilsParsing.h"
+#include "WidgetLabel.h"
 
-LabelInfo::LabelInfo() : x(0), y(0), justify(FontEngine::JUSTIFY_LEFT), valign(VALIGN_TOP), hidden(false), font_style("font_regular") {
-}
-
-/**
- * This is used in menus (e.g. MenuInventory) when parsing their config files
- */
-LabelInfo eatLabelInfo(std::string val) {
-	LabelInfo info;
-	std::string justify,valign,style;
-
-	std::string tmp = popFirstString(val);
-	if (tmp == "hidden") {
-		info.hidden = true;
-	}
-	else {
-		info.hidden = false;
-		info.x = toInt(tmp);
-		info.y = popFirstInt(val);
-		justify = popFirstString(val);
-		valign = popFirstString(val);
-		style = popFirstString(val);
-
-		if (justify == "left") info.justify = FontEngine::JUSTIFY_LEFT;
-		else if (justify == "center") info.justify = FontEngine::JUSTIFY_CENTER;
-		else if (justify == "right") info.justify = FontEngine::JUSTIFY_RIGHT;
-
-		if (valign == "top") info.valign = LabelInfo::VALIGN_TOP;
-		else if (valign == "center") info.valign = LabelInfo::VALIGN_CENTER;
-		else if (valign == "bottom") info.valign = LabelInfo::VALIGN_BOTTOM;
-
-		if (style != "") info.font_style = style;
-	}
-
-	return info;
+LabelInfo::LabelInfo()
+	: x(0)
+	, y(0)
+	, justify(FontEngine::JUSTIFY_LEFT)
+	, valign(VALIGN_TOP)
+	, hidden(false)
+	, font_style("font_regular") {
 }
 
 const std::string WidgetLabel::DEFAULT_FONT = "font_regular";

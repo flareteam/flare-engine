@@ -136,19 +136,19 @@ GameStateNew::GameStateNew()
 			}
 			// @ATTR portrait_label|label|Label for the "Choose a Portrait" text.
 			else if (infile.key == "portrait_label") {
-				portrait_label = eatLabelInfo(infile.val);
+				portrait_label = popLabelInfo(infile.val);
 			}
 			// @ATTR name_label|label|Label for the "Choose a Name" text.
 			else if (infile.key == "name_label") {
-				name_label = eatLabelInfo(infile.val);
+				name_label = popLabelInfo(infile.val);
 			}
 			// @ATTR permadeath_label|label|Label for the "Permadeath?" text.
 			else if (infile.key == "permadeath_label") {
-				permadeath_label = eatLabelInfo(infile.val);
+				permadeath_label = popLabelInfo(infile.val);
 			}
 			// @ATTR classlist_label|label|Label for the "Choose a Class" text.
 			else if (infile.key == "classlist_label") {
-				classlist_label = eatLabelInfo(infile.val);
+				classlist_label = popLabelInfo(infile.val);
 			}
 			// @ATTR portrait|rectangle|Position and dimensions of the portrait image.
 			else if (infile.key == "portrait") {

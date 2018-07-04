@@ -81,12 +81,12 @@ MenuStash::MenuStash(StatBlock *_stats)
 			}
 			// @ATTR label_title|label|Position of the "Stash" label.
 			else if (infile.key == "label_title") {
-				title =  eatLabelInfo(infile.val);
+				title =  popLabelInfo(infile.val);
 				label_title.setFromLabelInfo(title);
 			}
 			// @ATTR currency|label|Position of the label displaying the amount of currency stored in the stash.
 			else if (infile.key == "currency") {
-				currency =  eatLabelInfo(infile.val);
+				currency =  popLabelInfo(infile.val);
 				label_currency.setFromLabelInfo(currency);
 			}
 			else {

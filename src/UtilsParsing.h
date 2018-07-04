@@ -25,6 +25,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <string>
 #include <typeinfo>
 
+class LabelInfo;
+
 std::string trim(const std::string& s, const std::string& delimiters = " \f\n\r\t\v");
 std::string trim_left_inplace(std::string s, const std::string& delimiters = " \f\n\r\t\v");
 std::string trim_right_inplace(std::string s, const std::string& delimiters = " \f\n\r\t\v");
@@ -49,5 +51,6 @@ Point toPoint(std::string value);
 Rect toRect(std::string value);
 Color toRGB(std::string value);
 Color toRGBA(std::string value);
+LabelInfo popLabelInfo(std::string val);
 
 #endif

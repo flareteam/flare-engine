@@ -19,12 +19,15 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 #include "CommonIncludes.h"
-#include "UtilsParsing.h"
+#include "FontEngine.h"
 #include "Settings.h"
 #include "SharedResources.h"
+#include "UtilsParsing.h"
+#include "WidgetLabel.h"
+
 #include <cstdlib>
-#include <typeinfo>
 #include <math.h>
+#include <typeinfo>
 
 std::string trim(const std::string& s, const std::string& delimiters) {
 	return trim_left_inplace(trim_right_inplace(s, delimiters), delimiters);
@@ -357,3 +360,34 @@ Color toRGBA(std::string value) {
 	c.a = static_cast<Uint8>(popFirstInt(value));
 	return c;
 }
+
+LabelInfo popLabelInfo(std::string val) {
+	LabelInfo info;
+	std::string justify,valign,style;
+
+	std::string tmp = popFirstString(val);
+	if (tmp == "hidden") {
+		info.hidden = true;
+	}
+	else {
+		info.hidden = false;
+		info.x = toInt(tmp);
+		info.y = popFirstInt(val);
+		justify = popFirstString(val);
+		valign = popFirstString(val);
+		style = popFirstString(val);
+
+		if (justify == "left") info.justify = FontEngine::JUSTIFY_LEFT;
+		else if (justify == "center") info.justify = FontEngine::JUSTIFY_CENTER;
+		else if (justify == "right") info.justify = FontEngine::JUSTIFY_RIGHT;
+
+		if (valign == "top") info.valign = LabelInfo::VALIGN_TOP;
+		else if (valign == "center") info.valign = LabelInfo::VALIGN_CENTER;
+		else if (valign == "bottom") info.valign = LabelInfo::VALIGN_BOTTOM;
+
+		if (style != "") info.font_style = style;
+	}
+
+	return info;
+}
+

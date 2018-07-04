@@ -54,7 +54,7 @@ MenuExit::MenuExit() : Menu() {
 				continue;
 			else if (infile.key == "title") {
 				// @ATTR title|label|Position of the "Paused" text.
-				title = eatLabelInfo(infile.val);
+				title = popLabelInfo(infile.val);
 				title_lb.setFromLabelInfo(title);
 			}
 			else if (infile.key == "exit") {

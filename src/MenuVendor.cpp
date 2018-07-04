@@ -84,7 +84,7 @@ MenuVendor::MenuVendor(StatBlock *_stats)
 			}
 			// @ATTR label_title|label|The position of the text that displays the NPC's name.
 			else if (infile.key == "label_title") {
-				title =  eatLabelInfo(infile.val);
+				title =  popLabelInfo(infile.val);
 				label_vendor.setFromLabelInfo(title);
 			}
 			else {

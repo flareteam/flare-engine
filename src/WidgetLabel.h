@@ -48,8 +48,6 @@ public:
 	LabelInfo();
 };
 
-LabelInfo eatLabelInfo(std::string val);
-
 class WidgetLabel : public Widget {
 private:
 	enum {

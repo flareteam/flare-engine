@@ -153,27 +153,27 @@ GameStateLoad::GameStateLoad() : GameState()
 			}
 			// @ATTR name|label|The label for the hero's name. Position is relative to game slot position.
 			else if (infile.key == "name") {
-				name_pos = eatLabelInfo(infile.val);
+				name_pos = popLabelInfo(infile.val);
 			}
 			// @ATTR level|label|The label for the hero's level. Position is relative to game slot position.
 			else if (infile.key == "level") {
-				level_pos = eatLabelInfo(infile.val);
+				level_pos = popLabelInfo(infile.val);
 			}
 			// @ATTR class|label|The label for the hero's class. Position is relative to game slot position.
 			else if (infile.key == "class") {
-				class_pos = eatLabelInfo(infile.val);
+				class_pos = popLabelInfo(infile.val);
 			}
 			// @ATTR map|label|The label for the hero's current location. Position is relative to game slot position.
 			else if (infile.key == "map") {
-				map_pos = eatLabelInfo(infile.val);
+				map_pos = popLabelInfo(infile.val);
 			}
 			// @ATTR slot_number|label|The label for the save slot index. Position is relative to game slot position.
 			else if (infile.key == "slot_number") {
-				slot_number_pos = eatLabelInfo(infile.val);
+				slot_number_pos = popLabelInfo(infile.val);
 			}
 			// @ATTR loading_label|label|The label for the "Entering game world..."/"Loading saved game..." text.
 			else if (infile.key == "loading_label") {
-				loading_pos = eatLabelInfo(infile.val);
+				loading_pos = popLabelInfo(infile.val);
 				label_loading->setFromLabelInfo(loading_pos);
 			}
 			// @ATTR sprite|point|Position for the avatar preview image in each slot

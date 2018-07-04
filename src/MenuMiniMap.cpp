@@ -62,7 +62,7 @@ MenuMiniMap::MenuMiniMap()
 			}
 			// @ATTR text_pos|label|Position of the text label with the map name.
 			else if(infile.key == "text_pos") {
-				text_pos = eatLabelInfo(infile.val);
+				text_pos = popLabelInfo(infile.val);
 				label->setFromLabelInfo(text_pos);
 			}
 			// @ATTR background|filename|Optional background image.

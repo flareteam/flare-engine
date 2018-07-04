@@ -69,7 +69,7 @@ MenuNumPicker::MenuNumPicker()
 				continue;
 			else if (infile.key == "label_title") {
 				// @ATTR label_title|label|Position of the "Enter amount:" text.
-				title = eatLabelInfo(infile.val);
+				title = popLabelInfo(infile.val);
 				label.setFromLabelInfo(title);
 			}
 			else if (infile.key == "confirm") {

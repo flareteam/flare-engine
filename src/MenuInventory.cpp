@@ -101,12 +101,12 @@ MenuInventory::MenuInventory(StatBlock *_stats)
 			else if (infile.key == "carried_rows") carried_rows = std::max(1, toInt(infile.val));
 			// @ATTR label_title|label|Position of the "Inventory" label.
 			else if (infile.key == "label_title") {
-				title =  eatLabelInfo(infile.val);
+				title =  popLabelInfo(infile.val);
 				label_inventory.setFromLabelInfo(title);
 			}
 			// @ATTR currency|label|Position of the label that displays the total currency being carried.
 			else if (infile.key == "currency") {
-				currency_lbl = eatLabelInfo(infile.val);
+				currency_lbl = popLabelInfo(infile.val);
 				label_currency.setFromLabelInfo(currency_lbl);
 			}
 			// @ATTR help|rectangle|A mouse-over area that displays some help text for inventory shortcuts.

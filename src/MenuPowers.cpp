@@ -94,12 +94,12 @@ MenuPowers::MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar)
 
 			// @ATTR label_title|label|Position of the "Powers" text.
 			if (infile.key == "label_title") {
-				*title = eatLabelInfo(infile.val);
+				*title = popLabelInfo(infile.val);
 				label_powers->setFromLabelInfo(*title);
 			}
 			// @ATTR unspent_points|label|Position of the text that displays the amount of unused power points.
 			else if (infile.key == "unspent_points") {
-				*unspent_points = eatLabelInfo(infile.val);
+				*unspent_points = popLabelInfo(infile.val);
 				stat_up->setFromLabelInfo(*unspent_points);
 			}
 			// @ATTR close|point|Position of the close button.

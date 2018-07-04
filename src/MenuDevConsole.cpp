@@ -78,7 +78,7 @@ MenuDevConsole::MenuDevConsole()
 			}
 			// @ATTR label_title|label|Position of the "Developer Console" label.
 			else if(infile.key == "label_title") {
-				title = eatLabelInfo(infile.val);
+				title = popLabelInfo(infile.val);
 				label.setFromLabelInfo(title);
 			}
 			// @ATTR confirm|point|Position of the "Execute" button.

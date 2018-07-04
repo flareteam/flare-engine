@@ -110,7 +110,7 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 				closeButton->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
 			}
 			// @ATTR label_title|label|Position of the "Character" text.
-			else if(infile.key == "label_title") title = eatLabelInfo(infile.val);
+			else if(infile.key == "label_title") title = popLabelInfo(infile.val);
 			// @ATTR upgrade_primary|predefined_string, point : Primary stat name, Button position|Position of the button used to add a stat point to this primary stat.
 			else if(infile.key == "upgrade_primary") {
 				std::string prim_stat = popFirstString(infile.val);
@@ -133,12 +133,12 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 
 			// @ATTR label_name|label|Position of the "Name" text.
 			else if(infile.key == "label_name") {
-				cstat[CSTAT_NAME].label_info = eatLabelInfo(infile.val);
+				cstat[CSTAT_NAME].label_info = popLabelInfo(infile.val);
 				cstat[CSTAT_NAME].visible = !cstat[CSTAT_NAME].label_info.hidden;
 			}
 			// @ATTR label_level|label|Position of the "Level" text.
 			else if(infile.key == "label_level") {
-				cstat[CSTAT_LEVEL].label_info = eatLabelInfo(infile.val);
+				cstat[CSTAT_LEVEL].label_info = popLabelInfo(infile.val);
 				cstat[CSTAT_LEVEL].visible = !cstat[CSTAT_LEVEL].label_info.hidden;
 			}
 			// @ATTR label_primary|predefined_string, label : Primary stat name, Text positioning|Position of the text label for this primary stat.
@@ -147,7 +147,7 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 				size_t prim_stat_index = eset->primary_stats.getIndexByID(prim_stat);
 
 				if (prim_stat_index != eset->primary_stats.list.size()) {
-					cstat[prim_stat_index+2].label_info = eatLabelInfo(infile.val);
+					cstat[prim_stat_index+2].label_info = popLabelInfo(infile.val);
 					cstat[prim_stat_index+2].visible = !cstat[prim_stat_index+2].label_info.hidden;
 				}
 				else {
@@ -181,7 +181,7 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 			}
 
 			// @ATTR unspent|label|Position of the label showing the number of unspent stat points.
-			else if(infile.key == "unspent") unspent_pos = eatLabelInfo(infile.val);
+			else if(infile.key == "unspent") unspent_pos = popLabelInfo(infile.val);
 
 			// @ATTR show_resists|bool|Hide the elemental "Resistance" stats in the statlist if set to false.
 			else if (infile.key == "show_resists") show_resists = toBool(infile.val);

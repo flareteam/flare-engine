@@ -60,7 +60,7 @@ MenuEnemy::MenuEnemy()
 			// @ATTR text_pos|label|Position of the text displaying the enemy's name and level.
 			else if(infile.key == "text_pos") {
 				custom_text_pos = true;
-				text_pos = eatLabelInfo(infile.val);
+				text_pos = popLabelInfo(infile.val);
 			}
 			else {
 				infile.error("MenuEnemy: '%s' is not a valid key.", infile.key.c_str());

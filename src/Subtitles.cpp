@@ -53,7 +53,7 @@ Subtitles::Subtitles()
 			else if (infile.section == "style") {
 				if (infile.key == "text_pos") {
 					// @ATTR style.text_pos|label|Position and style of the subtitle text.
-					text_pos = eatLabelInfo(infile.val);
+					text_pos = popLabelInfo(infile.val);
 					label.setFromLabelInfo(text_pos);
 				}
 				else if (infile.key == "pos") {

@@ -68,7 +68,7 @@ MenuStatBar::MenuStatBar(const std::string& type)
 			// @ATTR text_pos|label|Position of the text displaying the current value of the relevant stat.
 			else if(infile.key == "text_pos") {
 				custom_text_pos = true;
-				text_pos = eatLabelInfo(infile.val);
+				text_pos = popLabelInfo(infile.val);
 			}
 			// @ATTR orientation|bool|True is vertical orientation; false is horizontal.
 			else if(infile.key == "orientation") {
