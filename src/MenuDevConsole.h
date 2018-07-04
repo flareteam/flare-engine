@@ -48,10 +48,6 @@ protected:
 
 	Rect history_area;
 
-	Color color_echo;
-	Color color_error;
-	Color color_hint;
-
 	bool first_open;
 
 	unsigned long input_scrollback_pos;

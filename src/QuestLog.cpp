@@ -236,13 +236,13 @@ void QuestLog::createQuestList() {
 
 					if (next_quest_id != quests[k][j].x) {
 						if (quest_names[quests[k][j].x] != "")
-							log->add(quest_names[quests[k][j].x], MenuLog::TYPE_QUESTS, !MenuLog::PREVENT_SPAM, WIDGETLOG_FONT_BOLD);
+							log->add(quest_names[quests[k][j].x], MenuLog::TYPE_QUESTS, !MenuLog::PREVENT_SPAM, WidgetLog::FONT_BOLD);
 
 						log->addSeparator(MenuLog::TYPE_QUESTS);
 					}
 					else if (i == 1) {
 						if (quest_names[quests[k][j].x] != "")
-							log->add(quest_names[quests[k][j].x], MenuLog::TYPE_QUESTS, !MenuLog::PREVENT_SPAM, WIDGETLOG_FONT_BOLD);
+							log->add(quest_names[quests[k][j].x], MenuLog::TYPE_QUESTS, !MenuLog::PREVENT_SPAM, WidgetLog::FONT_BOLD);
 					}
 
 					break;

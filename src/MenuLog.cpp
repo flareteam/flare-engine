@@ -81,7 +81,7 @@ MenuLog::MenuLog() {
 	tablist_log.resize(TYPE_COUNT);
 	for (size_t i = 0; i < TYPE_COUNT; ++i) {
 		log[i] = new WidgetLog(tab_area.w,tab_area.h);
-		log[i]->setBasePos(tab_area.x, tab_area.y + tabControl->getTabHeight());
+		log[i]->setBasePos(tab_area.x, tab_area.y + tabControl->getTabHeight(), ALIGN_TOPLEFT);
 
 		tablist_log[i].add(log[i]->getWidget());
 		tablist_log[i].setPrevTabList(&tablist);
@@ -164,7 +164,7 @@ void MenuLog::render() {
  * Add a new message to the log.
  */
 void MenuLog::add(const std::string& s, int log_type, bool prevent_spam, int style) {
-	log[log_type]->add(substituteVarsInString(s, pc), prevent_spam, NULL, style);
+	log[log_type]->add(substituteVarsInString(s, pc), prevent_spam, WidgetLog::DEFAULT_COLOR, style);
 }
 
 /**

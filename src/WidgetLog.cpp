@@ -27,13 +27,15 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetLog.h"
 #include "WidgetScrollBox.h"
 
+const Color WidgetLog::DEFAULT_COLOR = font->getColor(FontEngine::COLOR_MENU_NORMAL);
+
 WidgetLog::WidgetLog (int width, int height)
 	: scroll_box(new WidgetScrollBox(width, height))
 	, padding(4)
-	, max_messages(WIDGETLOG_MAX_MESSAGES)
+	, max_messages(MAX_MESSAGES)
 	, updated(false)
 {
-	setFont(WIDGETLOG_FONT_REGULAR);
+	setFont(FONT_REGULAR);
 }
 
 WidgetLog::~WidgetLog () {
@@ -52,7 +54,7 @@ void WidgetLog::setPos(int offset_x, int offset_y) {
 }
 
 void WidgetLog::setFont(int style) {
-	if (style == WIDGETLOG_FONT_BOLD) {
+	if (style == FONT_BOLD) {
 		font->setFont("font_bold");
 	}
 	else {
@@ -116,7 +118,7 @@ void WidgetLog::refresh() {
 	}
 }
 
-void WidgetLog::add(const std::string &s, bool prevent_spam, Color* color, int style) {
+void WidgetLog::add(const std::string &s, bool prevent_spam, const Color& color, int style) {
 	// First, make sure we're not repeating the last log message, to avoid spam
 	if (messages.empty() || messages.back() != s || !prevent_spam) {
 		// If we have too many messages, remove the oldest ones
@@ -126,12 +128,7 @@ void WidgetLog::add(const std::string &s, bool prevent_spam, Color* color, int s
 
 		// Add the new message.
 		messages.push_back(s);
-		if (color == NULL) {
-			colors.push_back(font->getColor(FontEngine::COLOR_MENU_NORMAL));
-		}
-		else {
-			colors.push_back(*color);
-		}
+		colors.push_back(color);
 		styles.push_back(style);
 		separators.resize(messages.size(), false);
 		updated = true;
@@ -157,10 +154,10 @@ void WidgetLog::clear() {
 }
 
 void WidgetLog::setMaxMessages(unsigned count) {
-	if (count > WIDGETLOG_MAX_MESSAGES)
+	if (count > MAX_MESSAGES)
 		max_messages = count;
 	else
-		max_messages = WIDGETLOG_MAX_MESSAGES;
+		max_messages = MAX_MESSAGES;
 }
 
 void WidgetLog::addSeparator() {

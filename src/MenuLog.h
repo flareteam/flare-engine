@@ -41,7 +41,7 @@ public:
 	static const int TYPE_COUNT = 2;
 
 	static const bool PREVENT_SPAM = true;
-	static const int DEFAULT_STYLE = WIDGETLOG_FONT_REGULAR;
+	static const int DEFAULT_STYLE = WidgetLog::FONT_REGULAR;
 
 	MenuLog();
 	~MenuLog();
