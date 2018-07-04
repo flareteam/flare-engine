@@ -119,8 +119,6 @@ private:
 
 	Rect gameslot_pos;
 
-	Color color_normal;
-
 	int selected_slot;
 	int visible_slots;
 	int scroll_offset;

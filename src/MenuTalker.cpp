@@ -48,7 +48,6 @@ MenuTalker::MenuTalker(MenuNPCActions *_npc_menu)
 	, event_cursor(0)
 	, font_who("font_regular")
 	, font_dialog("font_regular")
-	, color_normal(font->getColor("menu_normal"))
 	, npc(NULL)
 	, advanceButton(new WidgetButton("images/menus/buttons/right.png"))
 	, closeButton(new WidgetButton("images/menus/buttons/button_x.png")) {
@@ -95,7 +94,7 @@ MenuTalker::MenuTalker(MenuNPCActions *_npc_menu)
 
 	label_name = new WidgetLabel();
 	label_name->setBasePos(text_pos.x + text_offset.x, text_pos.y + text_offset.y, ALIGN_TOPLEFT);
-	label_name->setColor(color_normal);
+	label_name->setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
 	textbox = new WidgetScrollBox(text_pos.w, text_pos.h-(text_offset.y*2));
 	textbox->setBasePos(text_pos.x, text_pos.y + text_offset.y, ALIGN_TOPLEFT);
@@ -220,7 +219,7 @@ void MenuTalker::createBuffer() {
 		FontEngine::JUSTIFY_LEFT,
 		textbox->contents->getGraphics(),
 		text_pos.w - text_offset.x*2,
-		color_normal
+		font->getColor(FontEngine::COLOR_MENU_NORMAL)
 	);
 
 	align();

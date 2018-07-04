@@ -88,7 +88,7 @@ Subtitles::Subtitles()
 		}
 	}
 
-	label.setColor(font->getColor("menu_normal"));
+	label.setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
 	assert(filename.size() == text.size());
 }

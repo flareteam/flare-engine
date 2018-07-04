@@ -55,8 +55,6 @@ private:
 	Rect help_pos;
 	int carried_cols;
 	int carried_rows;
-	Color color_normal;
-	Color color_high;
 	std::vector<Point> equipped_pos;
 	Point carried_pos;
 

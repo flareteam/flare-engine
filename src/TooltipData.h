@@ -42,7 +42,6 @@ public:
 
 	std::vector<std::string> lines;
 	std::vector<Color> colors;
-	Color default_color;
 	Sprite *tip_buffer;
 
 	TooltipData();

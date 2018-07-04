@@ -47,7 +47,6 @@ private:
 	int slots_cols;
 	int slots_rows;
 	int activetab;
-	Color color_normal;
 
 public:
 	explicit MenuVendor(StatBlock *stats);

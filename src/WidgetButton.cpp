@@ -37,8 +37,6 @@ WidgetButton::WidgetButton(const std::string& _fileName)
 	, fileName(_fileName)
 	, buttons()
 	, wlabel()
-	, color_normal(font->getColor("widget_normal"))
-	, color_disabled(font->getColor("widget_disabled"))
 	, tip_buf()
 	, tip_new()
 	, tip(new WidgetTooltip())
@@ -176,9 +174,9 @@ void WidgetButton::refresh() {
 		wlabel.setText(label);
 
 		if (enabled)
-			wlabel.setColor(color_normal);
+			wlabel.setColor(font->getColor(FontEngine::COLOR_WIDGET_NORMAL));
 		else
-			wlabel.setColor(color_disabled);
+			wlabel.setColor(font->getColor(FontEngine::COLOR_WIDGET_DISABLED));
 	}
 }
 

@@ -121,13 +121,10 @@ MenuInventory::MenuInventory(StatBlock *_stats)
 	carried_area.w = carried_cols * eset->resolutions.icon_size;
 	carried_area.h = carried_rows * eset->resolutions.icon_size;
 
-	color_normal = font->getColor("menu_normal");
-	color_high = font->getColor("menu_bonus");
-
 	label_inventory.setText(msg->get("Inventory"));
-	label_inventory.setColor(color_normal);
+	label_inventory.setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
-	label_currency.setColor(color_normal);
+	label_currency.setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
 	inventory[EQUIPMENT].initFromList(MAX_EQUIPPED, equipped_area, slot_type);
 	inventory[CARRIED].initGrid(MAX_CARRIED, carried_area, carried_cols);

@@ -53,8 +53,6 @@ protected:
 
 	Point font_pos;
 
-	Color color_normal;
-
 	// on-screen keyboard tooltip
 	TooltipData osk_buf;
 	WidgetTooltip osk_tip;

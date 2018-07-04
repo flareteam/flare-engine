@@ -102,28 +102,6 @@ SDLFontEngine::SDLFontEngine() : FontEngine(), active_font(NULL) {
 		infile.close();
 	}
 
-	// set the font colors
-	// @CLASS SDLFontEngine: Font colors|Description of engine/font_colors.txt
-	Color color;
-	if (infile.open("engine/font_colors.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
-		while (infile.next()) {
-			// @ATTR menu_normal|color|Basic menu text color. Recommended: white.
-			// @ATTR menu_bonus|color|Positive menu text color. Recommended: green.
-			// @ATTR menu_penalty|color|Negative menu text color. Recommended: red.
-			// @ATTR widget_normal|color|Basic widget text color. Recommended: white.
-			// @ATTR widget_disabled|color|Disabled widget text color. Recommended: grey.
-			// @ATTR combat_givedmg|color|Enemy damage text color. Recommended: white.
-			// @ATTR combat_takedmg|color|Player damage text color. Recommended: red.
-			// @ATTR combat_crit|color|Enemy critical damage text color. Recommended: yellow.
-			// @ATTR requirements_no_met|color|Unmet requirements text color. Recommended: red.
-			// @ATTR item_bonus|color|Item bonus text color. Recommended: green.
-			// @ATTR item_penalty|color|Item penalty text color. Recommended: red.
-			// @ATTR item_flavor|color|Item flavor text color. Recommended: grey.
-			color_map[infile.key] = toRGB(infile.val);
-		}
-		infile.close();
-	}
-
 	// Attempt to set the default active font
 	setFont("font_regular");
 	if (!active_font) {

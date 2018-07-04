@@ -58,7 +58,7 @@ MenuNumPicker::MenuNumPicker()
 	input_box->only_numbers = true;
 
 	label.setText(msg->get("Enter amount:"));
-	label.setColor(font->getColor("menu_normal"));
+	label.setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
 	// Load config settings
 	FileParser infile;

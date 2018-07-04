@@ -83,7 +83,7 @@ MenuExit::MenuExit() : Menu() {
 	}
 
 	title_lb.setText(msg->get("Paused"));
-	title_lb.setColor(font->getColor("menu_normal"));
+	title_lb.setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
 	exitClicked = false;
 	reload_music = false;

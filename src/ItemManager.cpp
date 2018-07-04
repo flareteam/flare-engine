@@ -81,11 +81,6 @@ Item::Item()
 }
 
 ItemManager::ItemManager()
-	: color_normal(font->getColor("widget_normal"))
-	, color_bonus(font->getColor("item_bonus"))
-	, color_penalty(font->getColor("item_penalty"))
-	, color_requirements_not_met(font->getColor("requirements_not_met"))
-	, color_flavor(font->getColor("item_flavor"))
 {
 	// These values are a bit arbitrary, but they should be a good starting point.
 	items.reserve(1000);
@@ -457,7 +452,8 @@ std::string ItemManager::getItemType(const std::string& _type) {
 }
 
 Color ItemManager::getItemColor(unsigned id) {
-	if (id < 1 || id > items.size()) return color_normal;
+	if (id < 1 || id > items.size())
+		return font->getColor(FontEngine::COLOR_WIDGET_NORMAL);
 
 	if (items[id].set > 0) {
 		return item_sets[items[id].set].color;
@@ -470,7 +466,7 @@ Color ItemManager::getItemColor(unsigned id) {
 		}
 	}
 
-	return color_normal;
+	return font->getColor(FontEngine::COLOR_WIDGET_NORMAL);
 }
 
 void ItemManager::addUnknownItem(unsigned id) {
@@ -691,7 +687,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 
 	// quest item
 	if (items[stack.item].quest_item) {
-		tip.addColoredText(msg->get("Quest Item"), color_bonus);
+		tip.addColoredText(msg->get("Quest Item"), font->getColor(FontEngine::COLOR_ITEM_BONUS));
 	}
 
 	// only show the name of the currency item
@@ -700,7 +696,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 
 	// flavor text
 	if (items[stack.item].flavor != "") {
-		tip.addColoredText(substituteVarsInString(items[stack.item].flavor, pc), color_flavor);
+		tip.addColoredText(substituteVarsInString(items[stack.item].flavor, pc), font->getColor(FontEngine::COLOR_ITEM_FLAVOR));
 	}
 
 	// level
@@ -715,7 +711,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 
 	// item quality text for colorblind users
 	if (settings->colorblind && items[stack.item].quality != "") {
-		color = color_normal;
+		color = font->getColor(FontEngine::COLOR_WIDGET_NORMAL);
 		for (size_t i=0; i<item_qualities.size(); ++i) {
 			if (item_qualities[i].id == items[stack.item].quality) {
 				tip.addColoredText(msg->get("Quality: %s", msg->get(item_qualities[i].name.c_str())), color);
@@ -756,16 +752,16 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 		BonusData* bdata = &items[stack.item].bonus[bonus_counter];
 
 		if (bdata->is_speed || bdata->is_attack_speed) {
-			if (bdata->value >= 100) color = color_bonus;
-			else color = color_penalty;
+			if (bdata->value >= 100)
+				color = font->getColor(FontEngine::COLOR_ITEM_BONUS);
+			else
+				color = font->getColor(FontEngine::COLOR_ITEM_PENALTY);
 		}
 		else {
-			if (bdata->value > 0) {
-				color = color_bonus;
-			}
-			else {
-				color = color_penalty;
-			}
+			if (bdata->value > 0)
+				color = font->getColor(FontEngine::COLOR_ITEM_BONUS);
+			else
+				color = font->getColor(FontEngine::COLOR_ITEM_PENALTY);
 		}
 
 		getBonusString(ss, bdata);
@@ -775,13 +771,16 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 
 	// power
 	if (items[stack.item].power_desc != "") {
-		tip.addColoredText(items[stack.item].power_desc, color_bonus);
+		tip.addColoredText(items[stack.item].power_desc, font->getColor(FontEngine::COLOR_ITEM_BONUS));
 	}
 
 	// level requirement
 	if (items[stack.item].requires_level > 0) {
-		if (stats->level < items[stack.item].requires_level) color = color_requirements_not_met;
-		else color = color_normal;
+		if (stats->level < items[stack.item].requires_level)
+			color = font->getColor(FontEngine::COLOR_REQUIREMENTS_NOT_MET);
+		else
+			color = font->getColor(FontEngine::COLOR_WIDGET_NORMAL);
+
 		tip.addColoredText(msg->get("Requires Level %d", items[stack.item].requires_level), color);
 	}
 
@@ -789,9 +788,9 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	for (unsigned i=0; i<items[stack.item].req_stat.size(); ++i) {
 		if (items[stack.item].req_val[i] > 0) {
 			if (stats->get_primary(items[stack.item].req_stat[i]) < items[stack.item].req_val[i])
-				color = color_requirements_not_met;
+				color = font->getColor(FontEngine::COLOR_REQUIREMENTS_NOT_MET);
 			else
-				color = color_normal;
+				color = font->getColor(FontEngine::COLOR_WIDGET_NORMAL);
 
 			tip.addColoredText(msg->get("Requires %s %d", eset->primary_stats.list[items[stack.item].req_stat[i]].name.c_str(), items[stack.item].req_val[i]), color);
 		}
@@ -799,8 +798,11 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 
 	// requires class
 	if (items[stack.item].requires_class != "") {
-		if (items[stack.item].requires_class != stats->character_class) color = color_requirements_not_met;
-		else color = color_normal;
+		if (items[stack.item].requires_class != stats->character_class)
+			color = font->getColor(FontEngine::COLOR_REQUIREMENTS_NOT_MET);
+		else
+			color = font->getColor(FontEngine::COLOR_WIDGET_NORMAL);
+
 		tip.addColoredText(msg->get("Requires Class: %s", msg->get(items[stack.item].requires_class).c_str()), color);
 	}
 
@@ -810,8 +812,11 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 		int price_per_unit;
 		if (context == VENDOR_BUY) {
 			price_per_unit = items[stack.item].getPrice();
-			if (stats->currency < price_per_unit) color = color_requirements_not_met;
-			else color = color_normal;
+			if (stats->currency < price_per_unit)
+				color = font->getColor(FontEngine::COLOR_REQUIREMENTS_NOT_MET);
+			else
+				color = font->getColor(FontEngine::COLOR_WIDGET_NORMAL);
+
 			if (items[stack.item].max_quantity <= 1)
 				tip.addColoredText(msg->get("Buy Price: %d %s", price_per_unit, eset->loot.currency.c_str()), color);
 			else
@@ -819,8 +824,11 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 		}
 		else if (context == VENDOR_SELL) {
 			price_per_unit = items[stack.item].getSellPrice(stack.can_buyback);
-			if (stats->currency < price_per_unit) color = color_requirements_not_met;
-			else color = color_normal;
+			if (stats->currency < price_per_unit)
+				color = font->getColor(FontEngine::COLOR_REQUIREMENTS_NOT_MET);
+			else
+				color = font->getColor(FontEngine::COLOR_WIDGET_NORMAL);
+
 			if (items[stack.item].max_quantity <= 1)
 				tip.addColoredText(msg->get("Buy Price: %d %s", price_per_unit, eset->loot.currency.c_str()), color);
 			else
@@ -828,7 +836,9 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 		}
 		else if (context == PLAYER_INV) {
 			price_per_unit = items[stack.item].getSellPrice();
-			if (price_per_unit == 0) price_per_unit = 1;
+			if (price_per_unit == 0)
+				price_per_unit = 1;
+
 			if (items[stack.item].max_quantity <= 1)
 				tip.addText(msg->get("Sell Price: %d %s", price_per_unit, eset->loot.currency.c_str()));
 			else
@@ -861,10 +871,10 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	if (context == PLAYER_INV && !settings->no_mouse) {
 		int power_id = items[stack.item].power;
 		if (power_id > 0 && items[stack.item].type == "consumable") {
-			tip.addColoredText('\n' + msg->get("Press [%s] to use", inpt->getBindingString(Input::MAIN2).c_str()), color_bonus);
+			tip.addColoredText('\n' + msg->get("Press [%s] to use", inpt->getBindingString(Input::MAIN2).c_str()), font->getColor(FontEngine::COLOR_ITEM_BONUS));
 		}
 		else if (!items[stack.item].book.empty()) {
-			tip.addColoredText('\n' + msg->get("Press [%s] to read", inpt->getBindingString(Input::MAIN2).c_str()), color_bonus);
+			tip.addColoredText('\n' + msg->get("Press [%s] to read", inpt->getBindingString(Input::MAIN2).c_str()), font->getColor(FontEngine::COLOR_ITEM_BONUS));
 		}
 	}
 

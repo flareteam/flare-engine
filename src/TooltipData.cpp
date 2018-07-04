@@ -25,8 +25,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "TooltipData.h"
 
 TooltipData::TooltipData()
-	: default_color(font->getColor("widget_normal"))
-	, tip_buffer(NULL)
+	: tip_buffer(NULL)
 {}
 
 TooltipData::~TooltipData() {
@@ -44,7 +43,6 @@ TooltipData& TooltipData::operator= (const TooltipData &tdSource) {
 
 	clear();
 
-	default_color = tdSource.default_color;
 	lines = tdSource.lines;
 	colors = tdSource.colors;
 
@@ -87,7 +85,7 @@ void TooltipData::addColoredText(const std::string &text, const Color& color) {
 }
 
 void TooltipData::addText(const std::string &text) {
-	addColoredText(text, default_color);
+	addColoredText(text, font->getColor(FontEngine::COLOR_WIDGET_NORMAL));
 }
 
 bool TooltipData::isEmpty() {

@@ -72,7 +72,7 @@ void MenuConfirm::align() {
 
 	label.setJustify(FontEngine::JUSTIFY_CENTER);
 	label.setText(boxMsg);
-	label.setColor(font->getColor("menu_normal"));
+	label.setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
 	if (hasConfirmButton) {
 		buttonConfirm->pos.x = window_area.x + window_area.w/2 - buttonConfirm->pos.w/2;

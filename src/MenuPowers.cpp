@@ -109,17 +109,13 @@ MenuPowers::MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar)
 	}
 
 	label_powers->setText(msg->get("Powers"));
-	label_powers->setColor(font->getColor("menu_normal"));
+	label_powers->setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
-	label_unspent->setColor(font->getColor("menu_bonus"));
+	label_unspent->setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
 	loadGraphics();
 
 	menu_powers = this;
-
-	color_bonus = font->getColor("menu_bonus");
-	color_penalty = font->getColor("menu_penalty");
-	color_flavor = font->getColor("item_flavor");
 
 	align();
 }
@@ -729,7 +725,7 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 		tip->addText(powers->powers[power_cells[slot_num].id].name);
 
 	if (powers->powers[power_cells[slot_num].id].passive) tip->addText(msg->get("Passive"));
-	tip->addColoredText(substituteVarsInString(powers->powers[power_cells[slot_num].id].description, pc), color_flavor);
+	tip->addColoredText(substituteVarsInString(powers->powers[power_cells[slot_num].id].description, pc), font->getColor(FontEngine::COLOR_ITEM_FLAVOR));
 
 	// add mana cost
 	if (powers->powers[power_cells[slot_num].id].requires_mp > 0) {
@@ -956,7 +952,7 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 				ss << "(" << msg->get("%d%% chance", pwr.post_effects[i].chance) << ")";
 			}
 
-			tip->addColoredText(ss.str(), color_bonus);
+			tip->addColoredText(ss.str(), font->getColor(FontEngine::COLOR_MENU_BONUS));
 		}
 	}
 
@@ -988,7 +984,7 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 				ss << " (x" << pwr.count << ")";
 
 			if (!ss.str().empty())
-				tip->addColoredText(ss.str(), color_bonus);
+				tip->addColoredText(ss.str(), font->getColor(FontEngine::COLOR_MENU_BONUS));
 		}
 
 		// modifier_accuracy
@@ -1008,7 +1004,7 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 			ss << msg->get("Base Accuracy");
 
 			if (!ss.str().empty())
-				tip->addColoredText(ss.str(), color_bonus);
+				tip->addColoredText(ss.str(), font->getColor(FontEngine::COLOR_MENU_BONUS));
 		}
 
 		// modifier_critical
@@ -1028,28 +1024,28 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 			ss << msg->get("Base Critical Chance");
 
 			if (!ss.str().empty())
-				tip->addColoredText(ss.str(), color_bonus);
+				tip->addColoredText(ss.str(), font->getColor(FontEngine::COLOR_MENU_BONUS));
 		}
 
 		if (pwr.trait_armor_penetration) {
 			ss.str("");
 			ss << msg->get("Ignores Absorbtion");
-			tip->addColoredText(ss.str(), color_bonus);
+			tip->addColoredText(ss.str(), font->getColor(FontEngine::COLOR_MENU_BONUS));
 		}
 		if (pwr.trait_avoidance_ignore) {
 			ss.str("");
 			ss << msg->get("Ignores Avoidance");
-			tip->addColoredText(ss.str(), color_bonus);
+			tip->addColoredText(ss.str(), font->getColor(FontEngine::COLOR_MENU_BONUS));
 		}
 		if (pwr.trait_crits_impaired > 0) {
 			ss.str("");
 			ss << msg->get("%d%% Chance to crit slowed targets", pwr.trait_crits_impaired);
-			tip->addColoredText(ss.str(), color_bonus);
+			tip->addColoredText(ss.str(), font->getColor(FontEngine::COLOR_MENU_BONUS));
 		}
 		if (pwr.trait_elemental > -1) {
 			ss.str("");
 			ss << msg->get("%s Elemental Damage", eset->elements.list[pwr.trait_elemental].name.c_str());
-			tip->addColoredText(ss.str(), color_bonus);
+			tip->addColoredText(ss.str(), font->getColor(FontEngine::COLOR_MENU_BONUS));
 		}
 	}
 
@@ -1066,7 +1062,7 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 		if (power_cells[slot_num].requires_primary[i] > 0) {
 			if (stats->get_primary(i) < power_cells[slot_num].requires_primary[i])
-				tip->addColoredText(msg->get("Requires %s %d", eset->primary_stats.list[i].name.c_str(), power_cells[slot_num].requires_primary[i]), color_penalty);
+				tip->addColoredText(msg->get("Requires %s %d", eset->primary_stats.list[i].name.c_str(), power_cells[slot_num].requires_primary[i]), font->getColor(FontEngine::COLOR_MENU_PENALTY));
 			else
 				tip->addText(msg->get("Requires %s %d", eset->primary_stats.list[i].name.c_str(), power_cells[slot_num].requires_primary[i]));
 		}
@@ -1074,7 +1070,7 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 
 	// Draw required Level Tooltip
 	if ((power_cells[slot_num].requires_level > 0) && stats->level < power_cells[slot_num].requires_level) {
-		tip->addColoredText(msg->get("Requires Level %d", power_cells[slot_num].requires_level), color_penalty);
+		tip->addColoredText(msg->get("Requires Level %d", power_cells[slot_num].requires_level), font->getColor(FontEngine::COLOR_MENU_PENALTY));
 	}
 	else if ((power_cells[slot_num].requires_level > 0) && stats->level >= power_cells[slot_num].requires_level) {
 		tip->addText(msg->get("Requires Level %d", power_cells[slot_num].requires_level));
@@ -1096,7 +1092,7 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 		// Required Power Tooltip
 		int req_cell_index = getCellByPowerIndex(power_cells[slot_num].requires_power[j], power_cell_all);
 		if (!checkUnlocked(req_cell_index)) {
-			tip->addColoredText(msg->get("Requires Power: %s", req_power_name.c_str()), color_penalty);
+			tip->addColoredText(msg->get("Requires Power: %s", req_power_name.c_str()), font->getColor(FontEngine::COLOR_MENU_PENALTY));
 		}
 		else {
 			tip->addText(msg->get("Requires Power: %s", req_power_name.c_str()));
@@ -1108,11 +1104,11 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 	if (power_cells[slot_num].requires_point && !(std::find(stats->powers_list.begin(), stats->powers_list.end(), power_cells[slot_num].id) != stats->powers_list.end())) {
 		int unlock_id = getCellByPowerIndex(power_cells[slot_num].id, power_cell_all);
 		if (show_unlock_prompt && points_left > 0 && checkUnlock(unlock_id)) {
-			tip->addColoredText(msg->get("Click to Unlock (uses 1 Skill Point)"), color_bonus);
+			tip->addColoredText(msg->get("Click to Unlock (uses 1 Skill Point)"), font->getColor(FontEngine::COLOR_MENU_BONUS));
 		}
 		else {
 			if (power_cells[slot_num].requires_point && points_left < 1)
-				tip->addColoredText(msg->get("Requires 1 Skill Point"), color_penalty);
+				tip->addColoredText(msg->get("Requires 1 Skill Point"), font->getColor(FontEngine::COLOR_MENU_PENALTY));
 			else
 				tip->addText(msg->get("Requires 1 Skill Point"));
 		}

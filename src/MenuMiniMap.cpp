@@ -76,7 +76,7 @@ MenuMiniMap::MenuMiniMap()
 		infile.close();
 	}
 
-	label->setColor(font->getColor("menu_normal"));
+	label->setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
 	if (!bg_filename.empty())
 		setBackground(bg_filename);

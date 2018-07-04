@@ -37,7 +37,6 @@ private:
 	Rect bar_pos;
 	LabelInfo text_pos;
 	bool custom_text_pos;
-	Color color_normal;
 	WidgetLabel label_text;
 	WidgetLabel label_stats;
 public:

@@ -38,7 +38,6 @@ private:
 
 	int paragraph_spacing;
 
-	Color color_normal;
 	Sprite *overlay_bg;
 	bool click_to_dismiss;
 

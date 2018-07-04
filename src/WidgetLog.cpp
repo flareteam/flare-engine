@@ -34,8 +34,6 @@ WidgetLog::WidgetLog (int width, int height)
 	, updated(false)
 {
 	setFont(WIDGETLOG_FONT_REGULAR);
-	color_normal = font->getColor("menu_normal");
-	color_disabled = font->getColor("widget_disabled");
 }
 
 WidgetLog::~WidgetLog () {
@@ -107,7 +105,7 @@ void WidgetLog::refresh() {
 
 		if (!separators.empty() && separators[i-1]) {
 			for (int j=padding; j<padding+content_width; ++j) {
-				render_target->drawPixel(j, y2, color_disabled);
+				render_target->drawPixel(j, y2, font->getColor(FontEngine::COLOR_WIDGET_DISABLED));
 			}
 
 			y2 += paragraph_spacing;
@@ -129,7 +127,7 @@ void WidgetLog::add(const std::string &s, bool prevent_spam, Color* color, int s
 		// Add the new message.
 		messages.push_back(s);
 		if (color == NULL) {
-			colors.push_back(color_normal);
+			colors.push_back(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 		}
 		else {
 			colors.push_back(*color);

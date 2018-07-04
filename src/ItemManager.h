@@ -193,15 +193,6 @@ private:
 	void parseBonus(BonusData& bdata, FileParser& infile);
 	void getBonusString(std::stringstream& ss, BonusData* bdata);
 
-	Color color_normal;
-	Color color_low;
-	Color color_high;
-	Color color_epic;
-	Color color_bonus;
-	Color color_penalty;
-	Color color_requirements_not_met;
-	Color color_flavor;
-
 public:
 	enum {
 		VENDOR_BUY = 0,

@@ -209,7 +209,7 @@ void MenuManager::setDragIconItem(ItemStack stack) {
 		if (stack.quantity > 1 || items->items[stack.item].max_quantity > 1) {
 			std::stringstream ss;
 			ss << abbreviateKilo(stack.quantity);
-			font->renderShadowed(ss.str(), icons->text_offset.x, icons->text_offset.y, FontEngine::JUSTIFY_LEFT, drag_icon->getGraphics(), 0, font->getColor("widget_normal"));
+			font->renderShadowed(ss.str(), icons->text_offset.x, icons->text_offset.y, FontEngine::JUSTIFY_LEFT, drag_icon->getGraphics(), 0, font->getColor(FontEngine::COLOR_WIDGET_NORMAL));
 		}
 	}
 }

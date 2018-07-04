@@ -42,8 +42,6 @@ WidgetListBox::WidgetListBox(int height, const std::string& _fileName)
 	, vlabels(std::vector<WidgetLabel>(height,WidgetLabel()))
 	, rows(std::vector<Rect>(height,Rect()))
 	, scrollbar(new WidgetScrollBar())
-	, color_normal(font->getColor("widget_normal"))
-	, color_disabled(font->getColor("widget_disabled"))
 	, pos_scroll()
 	, pressed(false)
 	, multi_select(false)
@@ -453,10 +451,10 @@ void WidgetListBox::refresh(bool go_to_selected) {
 		vlabels[i].setText(temp);
 
 		if(i+cursor < items.size() && items[i+cursor].selected) {
-			vlabels[i].setColor(color_normal);
+			vlabels[i].setColor(font->getColor(FontEngine::COLOR_WIDGET_NORMAL));
 		}
 		else if (i < items.size()) {
-			vlabels[i].setColor(color_disabled);
+			vlabels[i].setColor(font->getColor(FontEngine::COLOR_WIDGET_DISABLED));
 		}
 	}
 

@@ -386,7 +386,7 @@ void MenuActionBar::render() {
 				// TODO remove hard-coded +2 here
 				label.setPos(menus[i]->pos.x + 2, menus[i]->pos.y + 2);
 				label.setText("*");
-				label.setColor(font->getColor("menu_normal"));
+				label.setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 				label.render();
 			}
 		}

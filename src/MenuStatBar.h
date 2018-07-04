@@ -43,7 +43,6 @@ private:
 	bool orientation;
 	bool custom_text_pos;
 	std::string custom_string;
-	Color color_normal;
 	std::string bar_gfx;
 	std::string bar_gfx_background;
 

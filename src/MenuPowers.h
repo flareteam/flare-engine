@@ -121,10 +121,6 @@ private:
 	WidgetLabel *label_unspent;
 	WidgetTabControl *tab_control;
 
-	Color color_bonus;
-	Color color_penalty;
-	Color color_flavor;
-
 	bool tree_loaded;
 
 	size_t prev_powers_list_size;

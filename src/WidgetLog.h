@@ -44,8 +44,6 @@ private:
 	int paragraph_spacing;
 	int padding;
 	unsigned max_messages;
-	Color color_normal;
-	Color color_disabled;
 
 	std::vector<std::string> messages;
 	std::vector<Color> colors;

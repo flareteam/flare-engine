@@ -209,8 +209,6 @@ GameStateLoad::GameStateLoad() : GameState()
 	readGameSlots();
 	refreshSavePaths();
 
-	color_normal = font->getColor("menu_normal");
-
 	refreshWidgets();
 	updateButtons();
 
@@ -703,11 +701,9 @@ void GameStateLoad::render() {
 		}
 
 		label_loading->setPos((settings->view_w - eset->resolutions.frame_w) / 2, (settings->view_h - eset->resolutions.frame_h) / 2);
-		label_loading->setColor(color_normal);
+		label_loading->setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 		label_loading->render();
 	}
-
-	Color color_permadeath_enabled = font->getColor("hardcore_color_name");
 
 	// display text
 	for (int slot=0; slot<visible_slots; slot++) {
@@ -735,12 +731,16 @@ void GameStateLoad::render() {
 			slot_error.setFromLabelInfo(name_pos);
 			slot_error.setPos(slot_pos[slot].x, slot_pos[slot].y);
 			slot_error.setText(msg->get("Invalid save"));
-			slot_error.setColor(font->getColor("widget_disabled"));
+			slot_error.setColor(font->getColor(FontEngine::COLOR_WIDGET_DISABLED));
 			slot_error.render();
 			continue;
 		}
 
-		const Color& name_color = game_slots[off_slot]->stats.permadeath ? color_permadeath_enabled : color_normal;
+		Color name_color;
+		if (game_slots[off_slot]->stats.permadeath)
+			name_color = font->getColor(FontEngine::COLOR_HARDCORE_NAME);
+		else
+			name_color = font->getColor(FontEngine::COLOR_MENU_NORMAL);
 
 		// name
 		game_slots[off_slot]->label_name.setPos(slot_pos[slot].x, slot_pos[slot].y);
@@ -761,7 +761,7 @@ void GameStateLoad::render() {
 
 		game_slots[off_slot]->label_level.setPos(slot_pos[slot].x, slot_pos[slot].y);
 		game_slots[off_slot]->label_level.setText(ss.str());
-		game_slots[off_slot]->label_level.setColor(color_normal);
+		game_slots[off_slot]->label_level.setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
 		if (text_trim_boundary > 0 && game_slots[off_slot]->label_level.getBounds()->x + game_slots[off_slot]->label_level.getBounds()->w >= text_trim_boundary + slot_dest.x)
 			game_slots[off_slot]->label_level.setMaxWidth(text_trim_boundary - (game_slots[off_slot]->label_level.getBounds()->x - slot_dest.x));
@@ -771,7 +771,7 @@ void GameStateLoad::render() {
 		// class
 		game_slots[off_slot]->label_class.setPos(slot_pos[slot].x, slot_pos[slot].y);
 		game_slots[off_slot]->label_class.setText(game_slots[off_slot]->stats.getLongClass());
-		game_slots[off_slot]->label_class.setColor(color_normal);
+		game_slots[off_slot]->label_class.setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
 		if (text_trim_boundary > 0 && game_slots[off_slot]->label_class.getBounds()->x + game_slots[off_slot]->label_class.getBounds()->w >= text_trim_boundary + slot_dest.x)
 			game_slots[off_slot]->label_class.setMaxWidth(text_trim_boundary - (game_slots[off_slot]->label_class.getBounds()->x - slot_dest.x));
@@ -781,7 +781,7 @@ void GameStateLoad::render() {
 		// map
 		game_slots[off_slot]->label_map.setPos(slot_pos[slot].x, slot_pos[slot].y);
 		game_slots[off_slot]->label_map.setText(game_slots[off_slot]->current_map);
-		game_slots[off_slot]->label_map.setColor(color_normal);
+		game_slots[off_slot]->label_map.setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
 		if (text_trim_boundary > 0 && game_slots[off_slot]->label_map.getBounds()->x + game_slots[off_slot]->label_map.getBounds()->w >= text_trim_boundary + slot_dest.x)
 			game_slots[off_slot]->label_map.setMaxWidth(text_trim_boundary - (game_slots[off_slot]->label_map.getBounds()->x - slot_dest.x));
@@ -800,7 +800,7 @@ void GameStateLoad::render() {
 
 		game_slots[off_slot]->label_slot_number.setPos(slot_pos[slot].x, slot_pos[slot].y);
 		game_slots[off_slot]->label_slot_number.setText(ss.str());
-		game_slots[off_slot]->label_slot_number.setColor(color_normal);
+		game_slots[off_slot]->label_slot_number.setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
 		if (text_trim_boundary > 0 && game_slots[off_slot]->label_slot_number.getBounds()->x + game_slots[off_slot]->label_slot_number.getBounds()->w >= text_trim_boundary + slot_dest.x)
 			game_slots[off_slot]->label_slot_number.setMaxWidth(text_trim_boundary - (game_slots[off_slot]->label_slot_number.getBounds()->x - slot_dest.x));

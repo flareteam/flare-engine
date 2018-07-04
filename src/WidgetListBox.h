@@ -60,8 +60,6 @@ private:
 	std::vector<WidgetLabel> vlabels;
 	std::vector<Rect> rows;
 	WidgetScrollBar *scrollbar;
-	Color color_normal;
-	Color color_disabled;
 
 public:
 	WidgetListBox(int height, const std::string& _fileName = "images/menus/buttons/listbox_default.png");

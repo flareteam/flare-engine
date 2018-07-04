@@ -48,7 +48,6 @@ MenuVendor::MenuVendor(StatBlock *_stats)
 	, slots_cols(1)
 	, slots_rows(1)
 	, activetab(ItemManager::VENDOR_BUY)
-	, color_normal(font->getColor("menu_normal"))
 	, npc(NULL)
 	, buyback_stock() {
 	setBackground("images/menus/vendor.png");
@@ -93,7 +92,7 @@ MenuVendor::MenuVendor(StatBlock *_stats)
 		infile.close();
 	}
 
-	label_vendor.setColor(color_normal);
+	label_vendor.setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
 	VENDOR_SLOTS = slots_cols * slots_rows;
 	slots_area.w = slots_cols * eset->resolutions.icon_size;

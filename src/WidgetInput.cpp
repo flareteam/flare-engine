@@ -44,7 +44,6 @@ WidgetInput::WidgetInput(const std::string& filename)
 	loadGraphics(filename);
 
 	render_to_alpha = false;
-	color_normal = font->getColor("widget_normal");
 }
 
 void WidgetInput::setPos(int offset_x, int offset_y) {
@@ -223,10 +222,10 @@ void WidgetInput::render() {
 	font->setFont("font_regular");
 
 	if (!edit_mode) {
-		font->render(trimmed_text, font_pos.x, font_pos.y, FontEngine::JUSTIFY_LEFT, NULL, 0, color_normal);
+		font->render(trimmed_text, font_pos.x, font_pos.y, FontEngine::JUSTIFY_LEFT, NULL, 0, font->getColor(FontEngine::COLOR_WIDGET_NORMAL));
 	}
 	else {
-		font->renderShadowed(trimmed_text_cursor, font_pos.x, font_pos.y, FontEngine::JUSTIFY_LEFT, NULL, 0, color_normal);
+		font->renderShadowed(trimmed_text_cursor, font_pos.x, font_pos.y, FontEngine::JUSTIFY_LEFT, NULL, 0, font->getColor(FontEngine::COLOR_WIDGET_NORMAL));
 	}
 
 	if (in_focus && !edit_mode) {

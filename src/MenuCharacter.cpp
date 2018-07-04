@@ -51,8 +51,8 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 	, name_max_width(0)
 {
 	labelCharacter->setText(msg->get("Character"));
-	labelCharacter->setColor(font->getColor("menu_normal"));
-	labelUnspent->setColor(font->getColor("menu_bonus"));
+	labelCharacter->setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
+	labelUnspent->setColor(font->getColor(FontEngine::COLOR_MENU_BONUS));
 
 	// 2 is added here to account for CSTAT_NAME and CSTAT_LEVEL
 	cstat.resize(eset->primary_stats.list.size() + 2);
@@ -64,10 +64,15 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 		cstat[i].hover.x = cstat[i].hover.y = 0;
 		cstat[i].hover.w = cstat[i].hover.h = 0;
 
-		cstat[i].label->setColor(font->getColor("menu_normal"));
+		cstat[i].label->setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
 		cstat[i].value->setVAlign(LabelInfo::VALIGN_CENTER);
-		cstat[i].value->setColor(font->getColor("menu_normal"));
+		cstat[i].value->setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
+	}
+	cstat[CSTAT_NAME].label->setText(msg->get("Name"));
+	cstat[CSTAT_LEVEL].label->setText(msg->get("Level"));
+	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
+		cstat[i+2].label->setText(eset->primary_stats.list[i].name);
 	}
 	cstat[CSTAT_NAME].label->setText(msg->get("Name"));
 	cstat[CSTAT_LEVEL].label->setText(msg->get("Level"));
@@ -400,9 +405,9 @@ void MenuCharacter::refreshStats() {
  * Color-coding for positive/negative/no bonus
  */
 Color MenuCharacter::bonusColor(int stat) {
-	if (stat > 0) return font->getColor("menu_bonus");
-	if (stat < 0) return font->getColor("menu_penalty");
-	return font->getColor("menu_label");
+	if (stat > 0) return font->getColor(FontEngine::COLOR_MENU_BONUS);
+	if (stat < 0) return font->getColor(FontEngine::COLOR_MENU_PENALTY);
+	return font->getColor(FontEngine::COLOR_MENU_NORMAL);
 }
 
 /**

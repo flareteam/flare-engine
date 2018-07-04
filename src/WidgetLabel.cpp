@@ -51,7 +51,7 @@ WidgetLabel::WidgetLabel()
 	, label(NULL)
 	, text("")
 	, font_style(DEFAULT_FONT)
-	, color(font->getColor("widget_normal"))
+	, color(font->getColor(FontEngine::COLOR_WIDGET_NORMAL))
 {
 	bounds.x = bounds.y = 0;
 	bounds.w = bounds.h = 0;

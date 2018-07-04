@@ -87,23 +87,21 @@ GameStateNew::GameStateNew()
 	tip = new WidgetTooltip();
 
 	// set up labels
-	color_normal = font->getColor("menu_normal");
-
 	label_portrait = new WidgetLabel();
 	label_portrait->setText(msg->get("Choose a Portrait"));
-	label_portrait->setColor(color_normal);
+	label_portrait->setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
 	label_name = new WidgetLabel();
 	label_name->setText(msg->get("Choose a Name"));
-	label_name->setColor(color_normal);
+	label_name->setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
 	label_permadeath = new WidgetLabel();
 	label_permadeath->setText(msg->get("Permadeath?"));
-	label_permadeath->setColor(color_normal);
+	label_permadeath->setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
 	label_classlist = new WidgetLabel();
 	label_classlist->setText(msg->get("Choose a Class"));
-	label_classlist->setColor(color_normal);
+	label_classlist->setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
 	// Read positions from config file
 	FileParser infile;

@@ -99,7 +99,7 @@ MenuDevConsole::MenuDevConsole()
 	}
 
 	label.setText(msg->get("Developer Console"));
-	label.setColor(font->getColor("menu_normal"));
+	label.setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
 	log_history = new WidgetLog(history_area.w, history_area.h);
 	log_history->setBasePos(history_area.x, history_area.y, ALIGN_TOPLEFT);
@@ -107,9 +107,9 @@ MenuDevConsole::MenuDevConsole()
 
 	setBackground("images/menus/dev_console.png");
 
-	color_echo = font->getColor("widget_disabled");
-	color_error = font->getColor("menu_penalty");
-	color_hint = font->getColor("menu_bonus");
+	color_echo = font->getColor(FontEngine::COLOR_WIDGET_DISABLED);
+	color_error = font->getColor(FontEngine::COLOR_MENU_PENALTY);
+	color_hint = font->getColor(FontEngine::COLOR_MENU_BONUS);
 
 	align();
 	reset();

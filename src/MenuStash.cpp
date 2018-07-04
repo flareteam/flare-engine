@@ -43,7 +43,6 @@ MenuStash::MenuStash(StatBlock *_stats)
 	: Menu()
 	, stats(_stats)
 	, closeButton(new WidgetButton("images/menus/buttons/button_x.png"))
-	, color_normal(font->getColor("menu_normal"))
 	, stock()
 	, updated(false)
 {
@@ -95,9 +94,9 @@ MenuStash::MenuStash(StatBlock *_stats)
 	}
 
 	label_title.setText(msg->get("Shared Stash"));
-	label_title.setColor(color_normal);
+	label_title.setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
-	label_currency.setColor(color_normal);
+	label_currency.setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
 	STASH_SLOTS = slots_cols * slots_rows;
 	slots_area.w = slots_cols * eset->resolutions.icon_size;

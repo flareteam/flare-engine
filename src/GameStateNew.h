@@ -87,8 +87,6 @@ private:
 	bool modified_name;
 	bool delete_items;
 
-	Color color_normal;
-
 	std::vector<int> all_options;
 
 public:

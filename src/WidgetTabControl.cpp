@@ -33,9 +33,6 @@ WidgetTabControl::WidgetTabControl()
 
 	loadGraphics();
 
-	color_normal = font->getColor("widget_normal");
-	color_disabled = font->getColor("widget_disabled");
-
 	scroll_type = SCROLL_HORIZONTAL;
 }
 
@@ -122,12 +119,12 @@ void WidgetTabControl::updateHeader() {
 		active_labels[i].setPos(tabs[i].x + eset->widgets.tab_padding.x, tabs[i].y + tabs[i].h/2 + eset->widgets.tab_padding.y);
 		active_labels[i].setVAlign(LabelInfo::VALIGN_CENTER);
 		active_labels[i].setText(titles[i]);
-		active_labels[i].setColor(color_normal);
+		active_labels[i].setColor(font->getColor(FontEngine::COLOR_WIDGET_NORMAL));
 
 		inactive_labels[i].setPos(tabs[i].x + eset->widgets.tab_padding.x, tabs[i].y + tabs[i].h/2 + eset->widgets.tab_padding.y);
 		inactive_labels[i].setVAlign(LabelInfo::VALIGN_CENTER);
 		inactive_labels[i].setText(titles[i]);
-		inactive_labels[i].setColor(color_disabled);
+		inactive_labels[i].setColor(font->getColor(FontEngine::COLOR_WIDGET_DISABLED));
 	}
 }
 

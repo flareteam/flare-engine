@@ -91,8 +91,6 @@ MenuStatBar::MenuStatBar(const std::string& type)
 
 	loadGraphics();
 
-	color_normal = font->getColor("menu_normal");
-
 	align();
 }
 
@@ -181,7 +179,7 @@ void MenuStatBar::render() {
 				ss << stat_cur << "/" << stat_max;
 
 			label->setText(ss.str());
-			label->setColor(color_normal);
+			label->setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
 			if (custom_text_pos) {
 				label->setPos(bar_dest.x + text_pos.x, bar_dest.y + text_pos.y);

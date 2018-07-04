@@ -71,7 +71,7 @@ MenuLog::MenuLog() {
 	}
 
 	label_log.setText(msg->get("Log"));
-	label_log.setColor(font->getColor("menu_normal"));
+	label_log.setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
 	// Initialize the tab control.
 	tabControl = new WidgetTabControl();

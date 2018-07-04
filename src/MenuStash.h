@@ -43,7 +43,6 @@ private:
 	// label and widget positions
 	int slots_cols;
 	int slots_rows;
-	Color color_normal;
 
 public:
 	explicit MenuStash(StatBlock *stats);

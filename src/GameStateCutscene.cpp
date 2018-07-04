@@ -287,7 +287,7 @@ void Scene::refreshWidgets() {
 								 FontEngine::JUSTIFY_CENTER,
 								 caption_box->contents->getGraphics(),
 								 caption_width,
-								 FontColor::WHITE);
+								 font->getColor(FontEngine::COLOR_WHITE));
 		}
 
 		if (art) {

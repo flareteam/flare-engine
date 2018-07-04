@@ -23,22 +23,85 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class FontEngine
  */
 
+#include "FileParser.h"
 #include "FontEngine.h"
 #include "UtilsParsing.h"
 
-FontStyle::FontStyle() : name(""), path(""), ptsize(0), blend(true), line_height(0), font_height(0) {
+FontStyle::FontStyle()
+	: name("")
+	, path("")
+	, ptsize(0)
+	, blend(true)
+	, line_height(0)
+	, font_height(0) {
 }
 
-FontEngine::FontEngine() : cursor_y(0) {
-}
+FontEngine::FontEngine()
+	: cursor_y(0)
+{
+	font_colors.resize(COLOR_COUNT);
 
-Color FontEngine::getColor(const std::string& _color) {
-	std::map<std::string,Color>::iterator it,end;
-	for (it=color_map.begin(), end=color_map.end(); it!=end; ++it) {
-		if (_color.compare(it->first) == 0) return it->second;
+	font_colors[COLOR_WHITE] = Color(255,255,255);
+	font_colors[COLOR_BLACK] = Color(0,0,0);
+
+	// set the font colors
+	// @CLASS FontEngine: Font colors|Description of engine/font_colors.txt
+	FileParser infile;
+	if (infile.open("engine/font_colors.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
+		while (infile.next()) {
+			// @ATTR menu_normal|color|Basic menu text color. Recommended: white.
+			// @ATTR menu_bonus|color|Positive menu text color. Recommended: green.
+			// @ATTR menu_penalty|color|Negative menu text color. Recommended: red.
+			// @ATTR widget_normal|color|Basic widget text color. Recommended: white.
+			// @ATTR widget_disabled|color|Disabled widget text color. Recommended: grey.
+			// @ATTR combat_givedmg|color|Enemy damage text color. Recommended: white.
+			// @ATTR combat_takedmg|color|Player damage text color. Recommended: red.
+			// @ATTR combat_crit|color|Enemy critical damage text color. Recommended: yellow.
+			// @ATTR combat_buff|color|Healing/buff text color. Recommended: green.
+			// @ATTR combat_miss|color|Missed attack text color. Recommended: grey.
+			// @ATTR requirements_not_met|color|Unmet requirements text color. Recommended: red.
+			// @ATTR item_bonus|color|Item bonus text color. Recommended: green.
+			// @ATTR item_penalty|color|Item penalty text color. Recommended: red.
+			// @ATTR item_flavor|color|Item flavor text color. Recommended: grey.
+			// @ATTR hardcore_color_name|color|Permadeath save slot player name color. Recommended: red.
+			size_t color_id = stringToFontColor(infile.key);
+			if (color_id < COLOR_COUNT)
+				font_colors[color_id] = toRGB(infile.val);
+			else
+				infile.error("FontEngine: %s is not a valid key.", infile.key.c_str());
+		}
+		infile.close();
 	}
+
+}
+
+Color FontEngine::getColor(size_t color_id) {
+	if (color_id < font_colors.size())
+		return font_colors[color_id];
+
 	// If all else fails, return white;
-	return FontColor::WHITE;
+	return font_colors[COLOR_WHITE];
+}
+
+size_t FontEngine::stringToFontColor(const std::string& val) {
+	if (val == "menu_normal") return COLOR_MENU_NORMAL;
+	else if (val == "menu_bonus") return COLOR_MENU_BONUS;
+	else if (val == "menu_penalty") return COLOR_MENU_PENALTY;
+	else if (val == "widget_normal") return COLOR_WIDGET_NORMAL;
+	else if (val == "widget_disabled") return COLOR_WIDGET_DISABLED;
+	else if (val == "combat_givedmg") return COLOR_COMBAT_GIVEDMG;
+	else if (val == "combat_takedmg") return COLOR_COMBAT_TAKEDMG;
+	else if (val == "combat_crit") return COLOR_COMBAT_CRIT;
+	else if (val == "combat_buff") return COLOR_COMBAT_BUFF;
+	else if (val == "combat_miss") return COLOR_COMBAT_MISS;
+	else if (val == "requirements_not_met") return COLOR_REQUIREMENTS_NOT_MET;
+	else if (val == "item_bonus") return COLOR_ITEM_BONUS;
+	else if (val == "item_penalty") return COLOR_ITEM_PENALTY;
+	else if (val == "item_flavor") return COLOR_ITEM_FLAVOR;
+	else if (val == "hardcore_color_name") return COLOR_HARDCORE_NAME;
+
+	// failed to find color
+	else return COLOR_COUNT;
 }
 
 /**
@@ -224,7 +287,7 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, Imag
 }
 
 void FontEngine::renderShadowed(const std::string& text, int x, int y, int justify, Image *target, int width, const Color& color) {
-	render(text, x+1, y+1, justify, target, width, FontColor::BLACK);
+	render(text, x+1, y+1, justify, target, width, getColor(COLOR_BLACK));
 	render(text, x, y, justify, target, width, color);
 }
 

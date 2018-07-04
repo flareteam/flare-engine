@@ -71,8 +71,6 @@ MenuEnemy::MenuEnemy()
 
 	loadGraphics();
 
-	color_normal = font->getColor("menu_normal");
-
 	align();
 }
 
@@ -135,7 +133,7 @@ void MenuEnemy::render() {
 	if (!text_pos.hidden) {
 		// enemy name display
 		label_text.setText(msg->get("%s level %d", enemy->stats.name.c_str(), enemy->stats.level));
-		label_text.setColor(color_normal);
+		label_text.setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
 		if (custom_text_pos) {
 			label_text.setPos(window_area.x + text_pos.x, window_area.y + text_pos.y);

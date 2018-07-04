@@ -47,9 +47,6 @@ private:
 
 	WidgetLabel wlabel;
 
-	Color color_normal;
-	Color color_disabled;
-
 	TooltipData tip_buf;
 	TooltipData tip_new;
 	WidgetTooltip *tip;
