@@ -368,7 +368,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 			ss << " " << msg->get("You may increase one attribute through the Character Menu.");
 			newLevelNotification = true;
 		}
-		logMsg(ss.str(), LOG_PREVENT_SPAM);
+		logMsg(ss.str(), MSG_NORMAL);
 		stats.recalc();
 		snd->play(sound_levelup, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
 
@@ -583,13 +583,13 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 						removeSaveDir(save_load->getGameSlot());
 						menu->exit->disableSave();
 
-						logMsg(substituteVarsInString(msg->get("You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."), this), LOG_PREVENT_SPAM);
+						logMsg(substituteVarsInString(msg->get("You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."), this), MSG_NORMAL);
 					}
 					else {
 						// raise the death penalty flag.  This is handled in MenuInventory
 						stats.death_penalty = true;
 
-						logMsg(substituteVarsInString(msg->get("You are defeated. ${INPUT_CONTINUE} to continue."), this), LOG_PREVENT_SPAM);
+						logMsg(substituteVarsInString(msg->get("You are defeated. ${INPUT_CONTINUE} to continue."), this), MSG_NORMAL);
 					}
 
 					// if the player is attacking, we need to block further input
@@ -842,7 +842,7 @@ void Avatar::untransform() {
 	// For timed transformations, move the player to the last valid tile when untransforming
 	mapr->collider.unblock(stats.pos.x, stats.pos.y);
 	if (!mapr->collider.is_valid_position(stats.pos.x, stats.pos.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_HERO)) {
-		logMsg(msg->get("Transformation expired. You have been moved back to a safe place."), LOG_PREVENT_SPAM);
+		logMsg(msg->get("Transformation expired. You have been moved back to a safe place."), MSG_NORMAL);
 		if (transform_map != mapr->getFilename()) {
 			mapr->teleportation = true;
 			mapr->teleport_mapname = transform_map;
@@ -966,8 +966,8 @@ void Avatar::addRenders(std::vector<Renderable> &r) {
 	}
 }
 
-void Avatar::logMsg(const std::string& str, bool prevent_spam) {
-	log_msg.push(std::pair<std::string, bool>(str, prevent_spam));
+void Avatar::logMsg(const std::string& str, int type) {
+	log_msg.push(std::pair<std::string, int>(str, type));
 }
 
 Avatar::~Avatar() {

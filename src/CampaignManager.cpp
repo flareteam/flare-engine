@@ -124,7 +124,7 @@ void CampaignManager::removeCurrency(int quantity) {
 
 	if (max_amount > 0) {
 		menu->inv->removeCurrency(max_amount);
-		pc->logMsg(msg->get("%d %s removed.", max_amount, eset->loot.currency.c_str()), !Avatar::LOG_PREVENT_SPAM);
+		pc->logMsg(msg->get("%d %s removed.", max_amount, eset->loot.currency.c_str()), Avatar::MSG_UNIQUE);
 		items->playSound(eset->misc.currency_id);
 	}
 }
@@ -133,7 +133,7 @@ void CampaignManager::removeItem(int item_id) {
 	if (item_id < 0 || static_cast<unsigned>(item_id) >= items->items.size()) return;
 
 	if (menu->inv->remove(item_id)) {
-		pc->logMsg(msg->get("%s removed.", items->getItemName(item_id).c_str()), !Avatar::LOG_PREVENT_SPAM);
+		pc->logMsg(msg->get("%s removed.", items->getItemName(item_id).c_str()), Avatar::MSG_UNIQUE);
 		items->playSound(item_id);
 	}
 }
@@ -146,9 +146,9 @@ void CampaignManager::rewardItem(ItemStack istack) {
 
 	if (istack.item != eset->misc.currency_id) {
 		if (istack.quantity <= 1)
-			pc->logMsg(msg->get("You receive %s.", items->getItemName(istack.item).c_str()), !Avatar::LOG_PREVENT_SPAM);
+			pc->logMsg(msg->get("You receive %s.", items->getItemName(istack.item).c_str()), Avatar::MSG_UNIQUE);
 		if (istack.quantity > 1)
-			pc->logMsg(msg->get("You receive %s x%d.", items->getItemName(istack.item).c_str(), istack.quantity), !Avatar::LOG_PREVENT_SPAM);
+			pc->logMsg(msg->get("You receive %s x%d.", items->getItemName(istack.item).c_str(), istack.quantity), Avatar::MSG_UNIQUE);
 	}
 }
 
@@ -157,7 +157,7 @@ void CampaignManager::rewardCurrency(int amount) {
 	stack.item = eset->misc.currency_id;
 	stack.quantity = amount;
 
-	pc->logMsg(msg->get("You receive %d %s.", amount, eset->loot.currency.c_str()), !Avatar::LOG_PREVENT_SPAM);
+	pc->logMsg(msg->get("You receive %d %s.", amount, eset->loot.currency.c_str()), Avatar::MSG_UNIQUE);
 	rewardItem(stack);
 }
 
@@ -166,32 +166,32 @@ void CampaignManager::rewardXP(int amount, bool show_message) {
 	pc->stats.addXP(static_cast<int>(bonus_xp));
 	bonus_xp -= static_cast<float>(static_cast<int>(bonus_xp));
 	pc->stats.refresh_stats = true;
-	if (show_message) pc->logMsg(msg->get("You receive %d XP.", amount), !Avatar::LOG_PREVENT_SPAM);
+	if (show_message) pc->logMsg(msg->get("You receive %d XP.", amount), Avatar::MSG_UNIQUE);
 }
 
 void CampaignManager::restoreHPMP(const std::string& s) {
 	if (s == "hp") {
 		pc->stats.hp = pc->stats.get(Stats::HP_MAX);
-		pc->logMsg(msg->get("HP restored."), !Avatar::LOG_PREVENT_SPAM);
+		pc->logMsg(msg->get("HP restored."), Avatar::MSG_UNIQUE);
 	}
 	else if (s == "mp") {
 		pc->stats.mp = pc->stats.get(Stats::MP_MAX);
-		pc->logMsg(msg->get("MP restored."), !Avatar::LOG_PREVENT_SPAM);
+		pc->logMsg(msg->get("MP restored."), Avatar::MSG_UNIQUE);
 	}
 	else if (s == "hpmp") {
 		pc->stats.hp = pc->stats.get(Stats::HP_MAX);
 		pc->stats.mp = pc->stats.get(Stats::MP_MAX);
-		pc->logMsg(msg->get("HP and MP restored."), !Avatar::LOG_PREVENT_SPAM);
+		pc->logMsg(msg->get("HP and MP restored."), Avatar::MSG_UNIQUE);
 	}
 	else if (s == "status") {
 		pc->stats.effects.clearNegativeEffects();
-		pc->logMsg(msg->get("Negative effects removed."), !Avatar::LOG_PREVENT_SPAM);
+		pc->logMsg(msg->get("Negative effects removed."), Avatar::MSG_UNIQUE);
 	}
 	else if (s == "all") {
 		pc->stats.hp = pc->stats.get(Stats::HP_MAX);
 		pc->stats.mp = pc->stats.get(Stats::MP_MAX);
 		pc->stats.effects.clearNegativeEffects();
-		pc->logMsg(msg->get("HP and MP restored, negative effects removed"), !Avatar::LOG_PREVENT_SPAM);
+		pc->logMsg(msg->get("HP and MP restored, negative effects removed"), Avatar::MSG_UNIQUE);
 	}
 }
 

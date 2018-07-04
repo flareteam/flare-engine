@@ -91,7 +91,10 @@ public:
 		std::string type;
 	};
 
-	static const bool LOG_PREVENT_SPAM = true;
+	enum {
+		MSG_NORMAL = 0,
+		MSG_UNIQUE = 1
+	};
 
 	Avatar();
 	~Avatar();
@@ -110,12 +113,12 @@ public:
 
 	void addRenders(std::vector<Renderable> &r);
 
-	void logMsg(const std::string& str, bool prevent_spam);
+	void logMsg(const std::string& str, int type);
 
 	std::vector<std::string> layer_reference_order;
 	std::vector<std::vector<unsigned> > layer_def;
 
-	std::queue<std::pair<std::string, bool> > log_msg;
+	std::queue<std::pair<std::string, int> > log_msg;
 
 	std::string attack_anim;
 	bool setPowers;

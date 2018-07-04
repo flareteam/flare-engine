@@ -40,16 +40,15 @@ public:
 	};
 	static const int TYPE_COUNT = 2;
 
-	static const bool PREVENT_SPAM = true;
-	static const int DEFAULT_STYLE = WidgetLog::FONT_REGULAR;
-
 	MenuLog();
 	~MenuLog();
 	void align();
 
 	void logic();
 	void render();
-	void add(const std::string& s, int log_type, bool prevent_spam, int style);
+	void add(const std::string& s, int log_type, int msg_type);
+	void setNextColor(const Color& color, int log_type);
+	void setNextStyle(int style, int log_type);
 	void remove(int msg_index, int log_type);
 	void clear(int log_type);
 	void clearAll();

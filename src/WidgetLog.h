@@ -45,15 +45,21 @@ private:
 
 	bool updated;
 
+	Color next_color;
+	int next_style;
+
 public:
 	enum {
 		FONT_REGULAR = 0,
 		FONT_BOLD = 1
 	};
 
+	enum {
+		MSG_NORMAL = 0,
+		MSG_UNIQUE = 1
+	};
+
 	static const unsigned MAX_MESSAGES = 50;
-	static const bool PREVENT_SPAM = true;
-	static const Color DEFAULT_COLOR;
 
 	WidgetLog (int width, int height);
 	~WidgetLog ();
@@ -68,7 +74,9 @@ public:
 		return reinterpret_cast<Widget*>(scroll_box);    // for adding to tablist
 	}
 
-	void add(const std::string &s, bool prevent_spam, const Color& color, int style);
+	void add(const std::string &s, int type);
+	void setNextColor(const Color& color);
+	void setNextStyle(int style);
 	void remove(unsigned msg_index);
 	void clear();
 	void setMaxMessages(unsigned count);

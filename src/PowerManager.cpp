@@ -1387,7 +1387,7 @@ bool PowerManager::transform(int power_index, StatBlock *src_stats, const FPoint
 	inpt->lockActionBar();
 
 	if (src_stats->transformed && powers[power_index].spawn_type != "untransform") {
-		pc->logMsg(msg->get("You are already transformed, untransform first."), Avatar::LOG_PREVENT_SPAM);
+		pc->logMsg(msg->get("You are already transformed, untransform first."), Avatar::MSG_NORMAL);
 		return false;
 	}
 
@@ -1399,7 +1399,7 @@ bool PowerManager::transform(int power_index, StatBlock *src_stats, const FPoint
 			src_stats->transform_type = "untransform"; // untransform() is called only if type !=""
 		}
 		else {
-			pc->logMsg(msg->get("Could not untransform at this position."), Avatar::LOG_PREVENT_SPAM);
+			pc->logMsg(msg->get("Could not untransform at this position."), Avatar::MSG_NORMAL);
 			inpt->unlockActionBar();
 			collider->block(src_stats->pos.x, src_stats->pos.y, false);
 			return false;

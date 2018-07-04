@@ -726,7 +726,7 @@ bool EventManager::executeEvent(Event &ev) {
 			}
 			else {
 				ev.keep_after_trigger = false;
-				pc->logMsg(msg->get("Unknown destination"), !Avatar::LOG_PREVENT_SPAM);
+				pc->logMsg(msg->get("Unknown destination"), Avatar::MSG_UNIQUE);
 			}
 		}
 		else if (ec->type == EC_INTRAMAP) {
@@ -795,7 +795,7 @@ bool EventManager::executeEvent(Event &ev) {
 			mapr->loot.push_back(*ec);
 		}
 		else if (ec->type == EC_MSG) {
-			pc->logMsg(ec->s, !Avatar::LOG_PREVENT_SPAM);
+			pc->logMsg(ec->s, Avatar::MSG_UNIQUE);
 		}
 		else if (ec->type == EC_SHAKYCAM) {
 			mapr->shaky_cam_ticks = ec->x;

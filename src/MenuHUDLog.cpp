@@ -174,11 +174,11 @@ void MenuHUDLog::renderOverlay() {
 /**
  * Add a new message to the log
  */
-void MenuHUDLog::add(const std::string& s, bool prevent_spam) {
+void MenuHUDLog::add(const std::string& s, int type) {
 	hide_overlay = false;
 
 	// Make sure we don't spam the same message repeatedly
-	if (log_msg.empty() || log_msg.back() != s || !prevent_spam) {
+	if (log_msg.empty() || log_msg.back() != s || type == MSG_UNIQUE) {
 		// add new message
 		log_msg.push_back(substituteVarsInString(s, pc));
 		msg_age.push_back(calcDuration(log_msg.back()));

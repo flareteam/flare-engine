@@ -138,12 +138,18 @@ void MenuDevConsole::logic() {
 	if (visible) {
 		if (!first_open) {
 			first_open = true;
-			log_history->add(msg->get("Use '%s' to inspect with the cursor.", inpt->getBindingString(Input::MAIN2).c_str()), WidgetLog::PREVENT_SPAM, WidgetLog::DEFAULT_COLOR, WidgetLog::FONT_REGULAR);
-			log_history->add("exec \"msg=Hello World\"", WidgetLog::PREVENT_SPAM, font->getColor(FontEngine::COLOR_MENU_BONUS), WidgetLog::FONT_REGULAR);
-			log_history->add(msg->get("Arguments with spaces should be enclosed with double quotes. Example:"), WidgetLog::PREVENT_SPAM, WidgetLog::DEFAULT_COLOR, WidgetLog::FONT_REGULAR);
-			log_history->add(msg->get("Type 'help' to get a list of commands.") + ' ', WidgetLog::PREVENT_SPAM, WidgetLog::DEFAULT_COLOR, WidgetLog::FONT_REGULAR);
-			if (label.isHidden())
-				log_history->add(msg->get("Developer Console"), WidgetLog::PREVENT_SPAM, WidgetLog::DEFAULT_COLOR, WidgetLog::FONT_BOLD);
+			log_history->add(msg->get("Use '%s' to inspect with the cursor.", inpt->getBindingString(Input::MAIN2).c_str()), WidgetLog::MSG_NORMAL);
+
+			log_history->setNextColor(font->getColor(FontEngine::COLOR_MENU_BONUS));
+			log_history->add("exec \"msg=Hello World\"", WidgetLog::MSG_NORMAL);
+
+			log_history->add(msg->get("Arguments with spaces should be enclosed with double quotes. Example:"), WidgetLog::MSG_NORMAL);
+			log_history->add(msg->get("Type 'help' to get a list of commands.") + ' ', WidgetLog::MSG_NORMAL);
+
+			if (label.isHidden()) {
+				log_history->setNextStyle(WidgetLog::FONT_BOLD);
+				log_history->add(msg->get("Developer Console"), WidgetLog::MSG_NORMAL);
+			}
 		}
 
 		if (!input_box->edit_mode) {
@@ -201,11 +207,11 @@ void MenuDevConsole::logic() {
 
 				ss << "X=" << target.x << ", Y=" << target.y;
 				ss << "  |  X=" << inpt->mouse.x << msg->get("px") << ", Y=" << inpt->mouse.y << msg->get("px");
-				log_history->add(ss.str(), WidgetLog::PREVENT_SPAM, WidgetLog::DEFAULT_COLOR, WidgetLog::FONT_REGULAR);
+				log_history->add(ss.str(), WidgetLog::MSG_NORMAL);
 			}
 			else {
 				ss << "X=" << inpt->mouse.x << msg->get("px") << ", Y=" << inpt->mouse.y << msg->get("px");
-				log_history->add(ss.str(), WidgetLog::PREVENT_SPAM, WidgetLog::DEFAULT_COLOR, WidgetLog::FONT_REGULAR);
+				log_history->add(ss.str(), WidgetLog::MSG_NORMAL);
 			}
 		}
 
@@ -216,7 +222,7 @@ void MenuDevConsole::logic() {
 			if (distance_ticks == settings->max_frames_per_sec) {
 				std::stringstream ss;
 				ss << msg->get("Distance") << ": " << calcDist(target, pc->stats.pos);
-				log_history->add(ss.str(), WidgetLog::PREVENT_SPAM, WidgetLog::DEFAULT_COLOR, WidgetLog::FONT_REGULAR);
+				log_history->add(ss.str(), WidgetLog::MSG_NORMAL);
 			}
 		}
 		else {
@@ -231,7 +237,8 @@ void MenuDevConsole::getPlayerInfo() {
 
 	std::stringstream ss;
 	ss << msg->get("Entity") << ": " << pc->stats.name << "  |  X=" << pc->stats.pos.x << ", Y=" << pc->stats.pos.y;
-	log_history->add(ss.str(), WidgetLog::PREVENT_SPAM, font->getColor(FontEngine::COLOR_MENU_BONUS), WidgetLog::FONT_REGULAR);
+	log_history->setNextColor(font->getColor(FontEngine::COLOR_MENU_BONUS));
+	log_history->add(ss.str(), WidgetLog::MSG_NORMAL);
 
 	// TODO print more player data
 }
@@ -245,7 +252,7 @@ void MenuDevConsole::getTileInfo() {
 			continue;
 		ss.str("");
 		ss << "    " << mapr->layernames[i] << "=" << mapr->layers[i][tile.x][tile.y];
-		log_history->add(ss.str(), WidgetLog::PREVENT_SPAM, WidgetLog::DEFAULT_COLOR, WidgetLog::FONT_REGULAR);
+		log_history->add(ss.str(), WidgetLog::MSG_NORMAL);
 	}
 
 	ss.str("");
@@ -261,11 +268,11 @@ void MenuDevConsole::getTileInfo() {
 		default: ss << msg->get("none");
 	}
 	ss << ")";
-	log_history->add(ss.str(), WidgetLog::PREVENT_SPAM, WidgetLog::DEFAULT_COLOR, WidgetLog::FONT_REGULAR);
+	log_history->add(ss.str(), WidgetLog::MSG_NORMAL);
 
 	ss.str("");
 	ss << msg->get("Tile") << ": X=" << tile.x <<  ", Y=" << tile.y;
-	log_history->add(ss.str(), WidgetLog::PREVENT_SPAM, WidgetLog::DEFAULT_COLOR, WidgetLog::FONT_REGULAR);
+	log_history->add(ss.str(), WidgetLog::MSG_NORMAL);
 }
 
 void MenuDevConsole::getEnemyInfo() {
@@ -277,7 +284,8 @@ void MenuDevConsole::getEnemyInfo() {
 
 		ss.str("");
 		ss << msg->get("Entity") << ": " << e->stats.name << "  |  X=" << e->stats.pos.x << ", Y=" << e->stats.pos.y;
-		log_history->add(ss.str(), WidgetLog::PREVENT_SPAM, font->getColor(FontEngine::COLOR_MENU_BONUS), WidgetLog::FONT_REGULAR);
+		log_history->setNextColor(font->getColor(FontEngine::COLOR_MENU_BONUS));
+		log_history->add(ss.str(), WidgetLog::MSG_NORMAL);
 
 		// TODO print more enemy data
 	}
@@ -323,7 +331,8 @@ void MenuDevConsole::execute() {
 	input_box->setText("");
 
 	log_history->addSeparator();
-	log_history->add(command, !WidgetLog::PREVENT_SPAM, font->getColor(FontEngine::COLOR_WIDGET_DISABLED), WidgetLog::FONT_REGULAR);
+	log_history->setNextColor(font->getColor(FontEngine::COLOR_WIDGET_DISABLED));
+	log_history->add(command, WidgetLog::MSG_UNIQUE);
 
 	std::vector<std::string> args;
 	command += ' ';
@@ -348,27 +357,27 @@ void MenuDevConsole::execute() {
 	}
 
 	if (args[0] == "help") {
-		log_history->add("add_power - " + msg->get("adds a power to the action bar"), !WidgetLog::PREVENT_SPAM, WidgetLog::DEFAULT_COLOR, WidgetLog::FONT_REGULAR);
-		log_history->add("toggle_hud - " + msg->get("turns on/off all of the HUD elements"), !WidgetLog::PREVENT_SPAM, WidgetLog::DEFAULT_COLOR, WidgetLog::FONT_REGULAR);
-		log_history->add("toggle_devhud - " + msg->get("turns on/off the developer hud"), !WidgetLog::PREVENT_SPAM, WidgetLog::DEFAULT_COLOR, WidgetLog::FONT_REGULAR);
-		log_history->add("list_powers - " + msg->get("Prints a list of powers that match a search term. No search term will list all items"), !WidgetLog::PREVENT_SPAM, WidgetLog::DEFAULT_COLOR, WidgetLog::FONT_REGULAR);
-		log_history->add("list_maps - " + msg->get("Prints out all the map filenames located in the \"maps/\" directory."), !WidgetLog::PREVENT_SPAM, WidgetLog::DEFAULT_COLOR, WidgetLog::FONT_REGULAR);
-		log_history->add("list_status - " + msg->get("Prints out the active campaign statuses that match a search term. No search term will list all active statuses"), !WidgetLog::PREVENT_SPAM, WidgetLog::DEFAULT_COLOR, WidgetLog::FONT_REGULAR);
-		log_history->add("list_items - " + msg->get("Prints a list of items that match a search term. No search term will list all items"), !WidgetLog::PREVENT_SPAM, WidgetLog::DEFAULT_COLOR, WidgetLog::FONT_REGULAR);
-		log_history->add("exec - " + msg->get("parses a series of event components and executes them as a single event"), !WidgetLog::PREVENT_SPAM, WidgetLog::DEFAULT_COLOR, WidgetLog::FONT_REGULAR);
-		log_history->add("clear - " + msg->get("clears the command history"), !WidgetLog::PREVENT_SPAM, WidgetLog::DEFAULT_COLOR, WidgetLog::FONT_REGULAR);
-		log_history->add("help - " + msg->get("displays this text"), !WidgetLog::PREVENT_SPAM, WidgetLog::DEFAULT_COLOR, WidgetLog::FONT_REGULAR);
+		log_history->add("add_power - " + msg->get("adds a power to the action bar"), WidgetLog::MSG_UNIQUE);
+		log_history->add("toggle_hud - " + msg->get("turns on/off all of the HUD elements"), WidgetLog::MSG_UNIQUE);
+		log_history->add("toggle_devhud - " + msg->get("turns on/off the developer hud"), WidgetLog::MSG_UNIQUE);
+		log_history->add("list_powers - " + msg->get("Prints a list of powers that match a search term. No search term will list all items"), WidgetLog::MSG_UNIQUE);
+		log_history->add("list_maps - " + msg->get("Prints out all the map filenames located in the \"maps/\" directory."), WidgetLog::MSG_UNIQUE);
+		log_history->add("list_status - " + msg->get("Prints out the active campaign statuses that match a search term. No search term will list all active statuses"), WidgetLog::MSG_UNIQUE);
+		log_history->add("list_items - " + msg->get("Prints a list of items that match a search term. No search term will list all items"), WidgetLog::MSG_UNIQUE);
+		log_history->add("exec - " + msg->get("parses a series of event components and executes them as a single event"), WidgetLog::MSG_UNIQUE);
+		log_history->add("clear - " + msg->get("clears the command history"), WidgetLog::MSG_UNIQUE);
+		log_history->add("help - " + msg->get("displays this text"), WidgetLog::MSG_UNIQUE);
 	}
 	else if (args[0] == "clear") {
 		log_history->clear();
 	}
 	else if (args[0] == "toggle_devhud") {
 		settings->dev_hud = !settings->dev_hud;
-		log_history->add(msg->get("Toggled the developer hud"), !WidgetLog::PREVENT_SPAM, WidgetLog::DEFAULT_COLOR, WidgetLog::FONT_REGULAR);
+		log_history->add(msg->get("Toggled the developer hud"), WidgetLog::MSG_UNIQUE);
 	}
 	else if (args[0] == "toggle_hud") {
 		settings->show_hud = !settings->show_hud;
-		log_history->add(msg->get("Toggled the hud"), !WidgetLog::PREVENT_SPAM, WidgetLog::DEFAULT_COLOR, WidgetLog::FONT_REGULAR);
+		log_history->add(msg->get("Toggled the hud"), WidgetLog::MSG_UNIQUE);
 	}
 	else if (args[0] == "list_status") {
 		std::string search_terms;
@@ -392,7 +401,7 @@ void MenuDevConsole::execute() {
 			log_history->setMaxMessages(static_cast<unsigned>(matching_ids.size()));
 
 			for (size_t i=matching_ids.size(); i>0; i--) {
-				log_history->add(camp->status[matching_ids[i-1]], WidgetLog::PREVENT_SPAM, WidgetLog::DEFAULT_COLOR, WidgetLog::FONT_REGULAR);
+				log_history->add(camp->status[matching_ids[i-1]], WidgetLog::MSG_NORMAL);
 			}
 
 			log_history->setMaxMessages(WidgetLog::MAX_MESSAGES); // reset
@@ -430,7 +439,8 @@ void MenuDevConsole::execute() {
 
 				ss.str("");
 				ss << items->getItemName(static_cast<int>(id)) << " (" << id <<")";
-				log_history->add(ss.str(), !WidgetLog::PREVENT_SPAM, items->getItemColor(static_cast<int>(id)), WidgetLog::FONT_REGULAR);
+				log_history->setNextColor(items->getItemColor(static_cast<int>(id)));
+				log_history->add(ss.str(), WidgetLog::MSG_UNIQUE);
 			}
 
 			log_history->setMaxMessages(WidgetLog::MAX_MESSAGES); // reset
@@ -468,7 +478,7 @@ void MenuDevConsole::execute() {
 			log_history->setMaxMessages(static_cast<unsigned>(matching_ids.size()));
 
 			for (size_t i=matching_ids.size(); i>0; i--) {
-				log_history->add("maps/" + map_filenames[matching_ids[i-1]], !WidgetLog::PREVENT_SPAM, WidgetLog::DEFAULT_COLOR, WidgetLog::FONT_REGULAR);
+				log_history->add("maps/" + map_filenames[matching_ids[i-1]], WidgetLog::MSG_UNIQUE);
 			}
 
 			log_history->setMaxMessages(WidgetLog::MAX_MESSAGES); // reset
@@ -506,7 +516,7 @@ void MenuDevConsole::execute() {
 
 				ss.str("");
 				ss << powers->powers[id].name << " (" << id <<")";
-				log_history->add(ss.str(), !WidgetLog::PREVENT_SPAM, WidgetLog::DEFAULT_COLOR, WidgetLog::FONT_REGULAR);
+				log_history->add(ss.str(), WidgetLog::MSG_UNIQUE);
 			}
 
 			log_history->setMaxMessages(WidgetLog::MAX_MESSAGES); // reset
@@ -514,8 +524,10 @@ void MenuDevConsole::execute() {
 	}
 	else if (args[0] == "add_power") {
 		if (args.size() != 2) {
-			log_history->add(msg->get("ERROR: Incorrect number of arguments"), !WidgetLog::PREVENT_SPAM, font->getColor(FontEngine::COLOR_MENU_PENALTY), WidgetLog::FONT_REGULAR);
-			log_history->add(msg->get("HINT:") + ' ' + args[0] + ' ' + msg->get("<id>"), !WidgetLog::PREVENT_SPAM, font->getColor(FontEngine::COLOR_MENU_BONUS), WidgetLog::FONT_REGULAR);
+			log_history->setNextColor(font->getColor(FontEngine::COLOR_MENU_PENALTY));
+			log_history->add(msg->get("ERROR: Incorrect number of arguments"), WidgetLog::MSG_UNIQUE);
+			log_history->setNextColor(font->getColor(FontEngine::COLOR_MENU_BONUS));
+			log_history->add(msg->get("HINT:") + ' ' + args[0] + ' ' + msg->get("<id>"), WidgetLog::MSG_UNIQUE);
 		}
 		else {
 			menu->act->addPower(toInt(args[1]), MenuActionBar::USE_EMPTY_SLOT);
@@ -530,7 +542,8 @@ void MenuDevConsole::execute() {
 				std::string val = args[i];
 
 				if (!EventManager::loadEventComponentString(key, val, &evnt, NULL)) {
-					log_history->add(msg->get("ERROR: '%s' is not a valid event key", key.c_str()), !WidgetLog::PREVENT_SPAM, font->getColor(FontEngine::COLOR_MENU_PENALTY), WidgetLog::FONT_REGULAR);
+					log_history->setNextColor(font->getColor(FontEngine::COLOR_MENU_PENALTY));
+					log_history->add(msg->get("ERROR: '%s' is not a valid event key", key.c_str()), WidgetLog::MSG_UNIQUE);
 				}
 			}
 
@@ -539,12 +552,16 @@ void MenuDevConsole::execute() {
 			}
 		}
 		else {
-			log_history->add(msg->get("ERROR: Too few arguments"), !WidgetLog::PREVENT_SPAM, font->getColor(FontEngine::COLOR_MENU_PENALTY), WidgetLog::FONT_REGULAR);
-			log_history->add(msg->get("HINT:") + ' ' + args[0] + ' ' + msg->get("<key>=<val> <key>=<val> ..."), !WidgetLog::PREVENT_SPAM, font->getColor(FontEngine::COLOR_MENU_BONUS), WidgetLog::FONT_REGULAR);
+			log_history->setNextColor(font->getColor(FontEngine::COLOR_MENU_PENALTY));
+			log_history->add(msg->get("ERROR: Too few arguments"), WidgetLog::MSG_UNIQUE);
+			log_history->setNextColor(font->getColor(FontEngine::COLOR_MENU_BONUS));
+			log_history->add(msg->get("HINT:") + ' ' + args[0] + ' ' + msg->get("<key>=<val> <key>=<val> ..."), WidgetLog::MSG_UNIQUE);
 		}
 	}
 	else {
-		log_history->add(msg->get("ERROR: Unknown command"), !WidgetLog::PREVENT_SPAM, font->getColor(FontEngine::COLOR_MENU_PENALTY), WidgetLog::FONT_REGULAR);
-		log_history->add(msg->get("HINT: Type help"), !WidgetLog::PREVENT_SPAM, font->getColor(FontEngine::COLOR_MENU_BONUS), WidgetLog::FONT_REGULAR);
+		log_history->setNextColor(font->getColor(FontEngine::COLOR_MENU_PENALTY));
+		log_history->add(msg->get("ERROR: Unknown command"), WidgetLog::MSG_UNIQUE);
+		log_history->setNextColor(font->getColor(FontEngine::COLOR_MENU_BONUS));
+		log_history->add(msg->get("HINT: Type help"), WidgetLog::MSG_UNIQUE);
 	}
 }

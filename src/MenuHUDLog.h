@@ -42,13 +42,16 @@ private:
 	bool click_to_dismiss;
 
 public:
-	static const bool PREVENT_SPAM = true;
+	enum {
+		MSG_NORMAL = 0,
+		MSG_UNIQUE = 1
+	};
 
 	MenuHUDLog();
 	~MenuHUDLog();
 	void logic();
 	void render();
-	void add(const std::string& s, bool prevent_spam);
+	void add(const std::string& s, int type);
 	void remove(int msg_index);
 	void clear();
 	void renderOverlay();

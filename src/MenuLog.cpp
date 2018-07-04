@@ -163,8 +163,16 @@ void MenuLog::render() {
 /**
  * Add a new message to the log.
  */
-void MenuLog::add(const std::string& s, int log_type, bool prevent_spam, int style) {
-	log[log_type]->add(substituteVarsInString(s, pc), prevent_spam, WidgetLog::DEFAULT_COLOR, style);
+void MenuLog::add(const std::string& s, int log_type, int msg_type) {
+	log[log_type]->add(substituteVarsInString(s, pc), msg_type);
+}
+
+void MenuLog::setNextColor(const Color& color, int log_type) {
+	log[log_type]->setNextColor(color);
+}
+
+void MenuLog::setNextStyle(int style, int log_type) {
+	log[log_type]->setNextStyle(style);
 }
 
 /**

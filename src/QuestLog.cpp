@@ -232,17 +232,21 @@ void QuestLog::createQuestList() {
 
 			for (size_t j=0; j<quests[k].size(); j++) {
 				if (quests[k][j].type == EC_QUEST_TEXT) {
-					log->add(quests[k][j].s, MenuLog::TYPE_QUESTS, !MenuLog::PREVENT_SPAM, MenuLog::DEFAULT_STYLE);
+					log->add(quests[k][j].s, MenuLog::TYPE_QUESTS, WidgetLog::MSG_UNIQUE);
 
 					if (next_quest_id != quests[k][j].x) {
-						if (quest_names[quests[k][j].x] != "")
-							log->add(quest_names[quests[k][j].x], MenuLog::TYPE_QUESTS, !MenuLog::PREVENT_SPAM, WidgetLog::FONT_BOLD);
+						if (quest_names[quests[k][j].x] != "") {
+							log->setNextStyle(WidgetLog::FONT_BOLD, MenuLog::TYPE_QUESTS);
+							log->add(quest_names[quests[k][j].x], MenuLog::TYPE_QUESTS, WidgetLog::MSG_UNIQUE);
+						}
 
 						log->addSeparator(MenuLog::TYPE_QUESTS);
 					}
 					else if (i == 1) {
-						if (quest_names[quests[k][j].x] != "")
-							log->add(quest_names[quests[k][j].x], MenuLog::TYPE_QUESTS, !MenuLog::PREVENT_SPAM, WidgetLog::FONT_BOLD);
+						if (quest_names[quests[k][j].x] != "") {
+							log->setNextStyle(WidgetLog::FONT_BOLD, MenuLog::TYPE_QUESTS);
+							log->add(quest_names[quests[k][j].x], MenuLog::TYPE_QUESTS, WidgetLog::MSG_UNIQUE);
+						}
 					}
 
 					break;
