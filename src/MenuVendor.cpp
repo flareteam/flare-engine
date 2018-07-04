@@ -84,8 +84,7 @@ MenuVendor::MenuVendor(StatBlock *_stats)
 			}
 			// @ATTR label_title|label|The position of the text that displays the NPC's name.
 			else if (infile.key == "label_title") {
-				title =  popLabelInfo(infile.val);
-				label_vendor.setFromLabelInfo(title);
+				label_vendor.setFromLabelInfo(popLabelInfo(infile.val));
 			}
 			else {
 				infile.error("MenuVendor: '%s' is not a valid key.", infile.key.c_str());
@@ -188,9 +187,7 @@ void MenuVendor::render() {
 	closeButton->render();
 
 	// text overlay
-	if (!title.hidden) {
-		label_vendor.render();
-	}
+	label_vendor.render();
 
 	// render tabs
 	tabControl->render();

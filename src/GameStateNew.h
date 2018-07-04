@@ -81,10 +81,6 @@ private:
 
 	TabList tablist;
 
-	LabelInfo portrait_label;
-	LabelInfo name_label;
-	LabelInfo permadeath_label;
-	LabelInfo classlist_label;
 	Rect portrait_pos;
 	bool show_classlist;
 	TooltipData tip_buf;

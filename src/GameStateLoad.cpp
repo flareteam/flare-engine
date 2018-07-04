@@ -173,8 +173,7 @@ GameStateLoad::GameStateLoad() : GameState()
 			}
 			// @ATTR loading_label|label|The label for the "Entering game world..."/"Loading saved game..." text.
 			else if (infile.key == "loading_label") {
-				loading_pos = popLabelInfo(infile.val);
-				label_loading->setFromLabelInfo(loading_pos);
+				label_loading->setFromLabelInfo(popLabelInfo(infile.val));
 			}
 			// @ATTR sprite|point|Position for the avatar preview image in each slot
 			else if (infile.key == "sprite") {

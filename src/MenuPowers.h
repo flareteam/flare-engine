@@ -30,7 +30,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Menu.h"
 #include "Utils.h"
 
-class LabelInfo;
 class MenuActionBar;
 class StatBlock;
 class TooltipData;
@@ -111,8 +110,6 @@ private:
 	std::vector<Sprite *> tree_surf;
 	WidgetButton *closeButton;
 
-	LabelInfo* title;
-	LabelInfo* unspent_points;
 	Point close_pos;
 	Rect tab_area;
 
@@ -121,7 +118,7 @@ private:
 	std::string default_background;
 
 	WidgetLabel *label_powers;
-	WidgetLabel *stat_up;
+	WidgetLabel *label_unspent;
 	WidgetTabControl *tab_control;
 
 	Color color_bonus;

@@ -52,8 +52,6 @@ private:
 	int MAX_CARRIED;
 
 	// label and widget positions
-	LabelInfo title;
-	LabelInfo currency_lbl;
 	Rect help_pos;
 	int carried_cols;
 	int carried_rows;

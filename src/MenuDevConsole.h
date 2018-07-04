@@ -46,7 +46,6 @@ protected:
 
 	WidgetLabel label;
 
-	LabelInfo title;
 	Rect history_area;
 
 	Color color_echo;

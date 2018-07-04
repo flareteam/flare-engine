@@ -72,7 +72,6 @@ private:
 	std::string tab_labels[TYPE_COUNT];
 	Rect tab_rect[TYPE_COUNT];
 
-	LabelInfo title;
 	Rect tab_area;
 	Color tab_bg;
 };

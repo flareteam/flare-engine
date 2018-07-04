@@ -113,7 +113,6 @@ private:
 	LabelInfo class_pos;
 	LabelInfo map_pos;
 	LabelInfo slot_number_pos;
-	LabelInfo loading_pos;
 	Point sprites_pos;
 
 	Rect portrait_dest;

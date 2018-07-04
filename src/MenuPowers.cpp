@@ -69,12 +69,10 @@ MenuPowers::MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar)
 	, skip_section(false)
 	, powers_unlock(NULL)
 	, overlay_disabled(NULL)
-	, title(new LabelInfo)
-	, unspent_points(new LabelInfo)
 	, points_left(0)
 	, default_background("")
 	, label_powers(new WidgetLabel)
-	, stat_up(new WidgetLabel)
+	, label_unspent(new WidgetLabel)
 	, tab_control(NULL)
 	, tree_loaded(false)
 	, prev_powers_list_size(0)
@@ -94,13 +92,11 @@ MenuPowers::MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar)
 
 			// @ATTR label_title|label|Position of the "Powers" text.
 			if (infile.key == "label_title") {
-				*title = popLabelInfo(infile.val);
-				label_powers->setFromLabelInfo(*title);
+				label_powers->setFromLabelInfo(popLabelInfo(infile.val));
 			}
 			// @ATTR unspent_points|label|Position of the text that displays the amount of unused power points.
 			else if (infile.key == "unspent_points") {
-				*unspent_points = popLabelInfo(infile.val);
-				stat_up->setFromLabelInfo(*unspent_points);
+				label_unspent->setFromLabelInfo(popLabelInfo(infile.val));
 			}
 			// @ATTR close|point|Position of the close button.
 			else if (infile.key == "close") close_pos = toPoint(infile.val);
@@ -115,7 +111,7 @@ MenuPowers::MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar)
 	label_powers->setText(msg->get("Powers"));
 	label_powers->setColor(font->getColor("menu_normal"));
 
-	stat_up->setColor(font->getColor("menu_bonus"));
+	label_unspent->setColor(font->getColor("menu_bonus"));
 
 	loadGraphics();
 
@@ -146,17 +142,15 @@ MenuPowers::~MenuPowers() {
 	if (tab_control) delete tab_control;
 	menu_powers = NULL;
 
-	delete title;
-	delete unspent_points;
 	delete label_powers;
-	delete stat_up;
+	delete label_unspent;
 }
 
 void MenuPowers::align() {
 	Menu::align();
 
 	label_powers->setPos(window_area.x, window_area.y);
-	stat_up->setPos(window_area.x, window_area.y);
+	label_unspent->setPos(window_area.x, window_area.y);
 
 	closeButton->pos.x = window_area.x+close_pos.x;
 	closeButton->pos.y = window_area.y+close_pos.y;
@@ -1346,10 +1340,10 @@ void MenuPowers::render() {
 	closeButton->render();
 
 	// text overlay
-	if (!title->hidden) label_powers->render();
+	label_powers->render();
 
 	// stats
-	if (!unspent_points->hidden) {
+	if (!label_unspent->isHidden()) {
 		std::stringstream ss;
 
 		ss.str("");
@@ -1359,8 +1353,8 @@ void MenuPowers::render() {
 		else if (points_left > 1) {
 			ss << msg->get("%d unspent skill points", points_left);
 		}
-		stat_up->setText(ss.str());
-		stat_up->render();
+		label_unspent->setText(ss.str());
+		label_unspent->render();
 	}
 }
 

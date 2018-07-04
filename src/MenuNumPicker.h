@@ -41,8 +41,6 @@ protected:
 	WidgetInput *input_box;
 	WidgetLabel label;
 
-	LabelInfo title;
-
 	int value;
 	int value_min;
 	int value_max;

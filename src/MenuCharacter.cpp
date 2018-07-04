@@ -58,10 +58,10 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 	cstat.resize(eset->primary_stats.list.size() + 2);
 
 	// Labels for major stats
-	cstat[CSTAT_NAME].label_text = msg->get("Name");
-	cstat[CSTAT_LEVEL].label_text = msg->get("Level");
+	cstat[CSTAT_NAME].label->setText(msg->get("Name"));
+	cstat[CSTAT_LEVEL].label->setText(msg->get("Level"));
 	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
-		cstat[i+2].label_text = eset->primary_stats.list[i].name;
+		cstat[i+2].label->setText(eset->primary_stats.list[i].name);
 	}
 
 	for (size_t i = 0; i < cstat.size(); ++i) {
@@ -69,7 +69,6 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 		cstat[i].value = new WidgetLabel();
 		cstat[i].hover.x = cstat[i].hover.y = 0;
 		cstat[i].hover.w = cstat[i].hover.h = 0;
-		cstat[i].visible = true;
 
 		cstat[i].label->setColor(font->getColor("menu_normal"));
 
@@ -110,7 +109,7 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 				closeButton->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
 			}
 			// @ATTR label_title|label|Position of the "Character" text.
-			else if(infile.key == "label_title") title = popLabelInfo(infile.val);
+			else if(infile.key == "label_title") labelCharacter->setFromLabelInfo(popLabelInfo(infile.val));
 			// @ATTR upgrade_primary|predefined_string, point : Primary stat name, Button position|Position of the button used to add a stat point to this primary stat.
 			else if(infile.key == "upgrade_primary") {
 				std::string prim_stat = popFirstString(infile.val);
@@ -133,13 +132,11 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 
 			// @ATTR label_name|label|Position of the "Name" text.
 			else if(infile.key == "label_name") {
-				cstat[CSTAT_NAME].label_info = popLabelInfo(infile.val);
-				cstat[CSTAT_NAME].visible = !cstat[CSTAT_NAME].label_info.hidden;
+				cstat[CSTAT_NAME].label->setFromLabelInfo(popLabelInfo(infile.val));
 			}
 			// @ATTR label_level|label|Position of the "Level" text.
 			else if(infile.key == "label_level") {
-				cstat[CSTAT_LEVEL].label_info = popLabelInfo(infile.val);
-				cstat[CSTAT_LEVEL].visible = !cstat[CSTAT_LEVEL].label_info.hidden;
+				cstat[CSTAT_LEVEL].label->setFromLabelInfo(popLabelInfo(infile.val));
 			}
 			// @ATTR label_primary|predefined_string, label : Primary stat name, Text positioning|Position of the text label for this primary stat.
 			else if(infile.key == "label_primary") {
@@ -147,8 +144,7 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 				size_t prim_stat_index = eset->primary_stats.getIndexByID(prim_stat);
 
 				if (prim_stat_index != eset->primary_stats.list.size()) {
-					cstat[prim_stat_index+2].label_info = popLabelInfo(infile.val);
-					cstat[prim_stat_index+2].visible = !cstat[prim_stat_index+2].label_info.hidden;
+					cstat[prim_stat_index+2].label->setFromLabelInfo(popLabelInfo(infile.val));
 				}
 				else {
 					infile.error("MenuCharacter: '%s' is not a valid primary stat.", prim_stat.c_str());
@@ -181,7 +177,7 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 			}
 
 			// @ATTR unspent|label|Position of the label showing the number of unspent stat points.
-			else if(infile.key == "unspent") unspent_pos = popLabelInfo(infile.val);
+			else if(infile.key == "unspent") labelUnspent->setFromLabelInfo(popLabelInfo(infile.val));
 
 			// @ATTR show_resists|bool|Hide the elemental "Resistance" stats in the statlist if set to false.
 			else if (infile.key == "show_resists") show_resists = toBool(infile.val);
@@ -214,13 +210,6 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 			}
 		}
 		infile.close();
-	}
-
-	// apply LabelInfo values
-	labelCharacter->setFromLabelInfo(title);
-	labelUnspent->setFromLabelInfo(unspent_pos);
-	for (size_t i = 0; i < cstat.size(); ++i) {
-		cstat[i].label->setFromLabelInfo(cstat[i].label_info);
 	}
 
 	// stat list
@@ -269,10 +258,9 @@ void MenuCharacter::align() {
 	for (size_t i = 0; i < cstat.size(); ++i) {
 		// setup static labels
 		cstat[i].label->setPos(window_area.x, window_area.y);
-		cstat[i].label->setText(cstat[i].label_text);
 
 		// setup hotspot locations
-		cstat[i].setHover(window_area.x + cstat[i].value_pos.x, window_area.y + cstat[i].value_pos.y, cstat[i].value_pos.w, cstat[i].value_pos.h);
+		cstat[i].setHover(window_area.x, window_area.y);
 
 		// setup value labels
 		cstat[i].value->setPos(window_area.x, window_area.y);
@@ -376,7 +364,7 @@ void MenuCharacter::refreshStats() {
 
 	for (size_t j = 2; j < cstat.size(); ++j) {
 		cstat[j].tip.clear();
-		cstat[j].tip.addText(cstat[j].label_text);
+		cstat[j].tip.addText(cstat[j].label->getText());
 		cstat[j].tip.addText(msg->get("base (%d), bonus (%d)", *(base_stats[j-2]), *(base_stats_add[j-2])));
 		bool have_bonus = false;
 		for (size_t i = 0; i < Stats::COUNT; ++i) {
@@ -534,7 +522,7 @@ void MenuCharacter::render() {
 
 	// labels and values
 	for (size_t i = 0; i < cstat.size(); ++i) {
-		if (cstat[i].visible) {
+		if (!cstat[i].label->isHidden()) {
 			cstat[i].label->render();
 			cstat[i].value->render();
 		}
@@ -555,7 +543,7 @@ void MenuCharacter::render() {
 TooltipData MenuCharacter::checkTooltip() {
 
 	for (size_t i = 0; i < cstat.size(); ++i) {
-		if (isWithinRect(cstat[i].hover, inpt->mouse) && !cstat[i].tip.isEmpty() && cstat[i].visible)
+		if (isWithinRect(cstat[i].hover, inpt->mouse) && !cstat[i].tip.isEmpty() && !cstat[i].label->isHidden())
 			return cstat[i].tip;
 	}
 

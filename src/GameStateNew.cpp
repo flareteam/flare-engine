@@ -86,6 +86,25 @@ GameStateNew::GameStateNew()
 
 	tip = new WidgetTooltip();
 
+	// set up labels
+	color_normal = font->getColor("menu_normal");
+
+	label_portrait = new WidgetLabel();
+	label_portrait->setText(msg->get("Choose a Portrait"));
+	label_portrait->setColor(color_normal);
+
+	label_name = new WidgetLabel();
+	label_name->setText(msg->get("Choose a Name"));
+	label_name->setColor(color_normal);
+
+	label_permadeath = new WidgetLabel();
+	label_permadeath->setText(msg->get("Permadeath?"));
+	label_permadeath->setColor(color_normal);
+
+	label_classlist = new WidgetLabel();
+	label_classlist->setText(msg->get("Choose a Class"));
+	label_classlist->setColor(color_normal);
+
 	// Read positions from config file
 	FileParser infile;
 
@@ -136,19 +155,19 @@ GameStateNew::GameStateNew()
 			}
 			// @ATTR portrait_label|label|Label for the "Choose a Portrait" text.
 			else if (infile.key == "portrait_label") {
-				portrait_label = popLabelInfo(infile.val);
+				label_portrait->setFromLabelInfo(popLabelInfo(infile.val));
 			}
 			// @ATTR name_label|label|Label for the "Choose a Name" text.
 			else if (infile.key == "name_label") {
-				name_label = popLabelInfo(infile.val);
+				label_name->setFromLabelInfo(popLabelInfo(infile.val));
 			}
 			// @ATTR permadeath_label|label|Label for the "Permadeath?" text.
 			else if (infile.key == "permadeath_label") {
-				permadeath_label = popLabelInfo(infile.val);
+				label_permadeath->setFromLabelInfo(popLabelInfo(infile.val));
 			}
 			// @ATTR classlist_label|label|Label for the "Choose a Class" text.
 			else if (infile.key == "classlist_label") {
-				classlist_label = popLabelInfo(infile.val);
+				label_classlist->setFromLabelInfo(popLabelInfo(infile.val));
 			}
 			// @ATTR portrait|rectangle|Position and dimensions of the portrait image.
 			else if (infile.key == "portrait") {
@@ -171,29 +190,6 @@ GameStateNew::GameStateNew()
 		}
 		infile.close();
 	}
-
-	// set up labels
-	color_normal = font->getColor("menu_normal");
-
-	label_portrait = new WidgetLabel();
-	label_portrait->setFromLabelInfo(portrait_label);
-	label_portrait->setText(msg->get("Choose a Portrait"));
-	label_portrait->setColor(color_normal);
-
-	label_name = new WidgetLabel();
-	label_name->setFromLabelInfo(name_label);
-	label_name->setText(msg->get("Choose a Name"));
-	label_name->setColor(color_normal);
-
-	label_permadeath = new WidgetLabel();
-	label_permadeath->setFromLabelInfo(permadeath_label);
-	label_permadeath->setText(msg->get("Permadeath?"));
-	label_permadeath->setColor(color_normal);
-
-	label_classlist = new WidgetLabel();
-	label_classlist->setFromLabelInfo(classlist_label);
-	label_classlist->setText(msg->get("Choose a Class"));
-	label_classlist->setColor(color_normal);
 
 	// set up class list
 	for (unsigned i = 0; i < eset->hero_classes.list.size(); i++) {
@@ -460,13 +456,13 @@ void GameStateNew::render() {
 	}
 
 	// display labels
-	if (!portrait_label.hidden) label_portrait->render();
-	if (!name_label.hidden) label_name->render();
-	if (!permadeath_label.hidden) label_permadeath->render();
+	label_portrait->render();
+	label_name->render();
+	label_permadeath->render();
 
 	// display class list
 	if (show_classlist) {
-		if (!classlist_label.hidden) label_classlist->render();
+		label_classlist->render();
 		class_list->render();
 
 		TooltipData tip_new = class_list->checkTooltip(inpt->mouse);

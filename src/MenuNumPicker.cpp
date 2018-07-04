@@ -69,8 +69,7 @@ MenuNumPicker::MenuNumPicker()
 				continue;
 			else if (infile.key == "label_title") {
 				// @ATTR label_title|label|Position of the "Enter amount:" text.
-				title = popLabelInfo(infile.val);
-				label.setFromLabelInfo(title);
+				label.setFromLabelInfo(popLabelInfo(infile.val));
 			}
 			else if (infile.key == "confirm") {
 				// @ATTR confirm|point|Position of the "OK" button.

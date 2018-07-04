@@ -46,6 +46,7 @@ WidgetLabel::WidgetLabel()
 	, valign(LabelInfo::VALIGN_TOP)
 	, max_width(0)
 	, update_flag(UPDATE_NONE)
+	, hidden(false)
 	, window_resize_flag(false)
 	, label(NULL)
 	, text("")
@@ -63,6 +64,10 @@ void WidgetLabel::setMaxWidth(int width) {
 		max_width = width;
 		setUpdateFlag(UPDATE_RECACHE);
 	}
+}
+
+void WidgetLabel::setHidden(bool _hidden) {
+	hidden = _hidden;
 }
 
 void WidgetLabel::setPos(int offset_x, int offset_y) {
@@ -118,6 +123,8 @@ void WidgetLabel::setFromLabelInfo(const LabelInfo& label_info) {
 	setJustify(label_info.justify);
 	setVAlign(label_info.valign);
 	setFont(label_info.font_style);
+
+	hidden = label_info.hidden;
 }
 
 std::string WidgetLabel::getText() {
@@ -130,6 +137,10 @@ std::string WidgetLabel::getText() {
 Rect* WidgetLabel::getBounds() {
 	update();
 	return &bounds;
+}
+
+bool WidgetLabel::isHidden() {
+	return hidden;
 }
 
 /**
@@ -228,6 +239,9 @@ void WidgetLabel::update() {
  * Draw the buffered string surface to the screen
  */
 void WidgetLabel::render() {
+	if (hidden)
+		return;
+
 	update();
 
 	if (label) {

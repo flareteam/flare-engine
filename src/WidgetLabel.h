@@ -65,6 +65,7 @@ private:
 	int valign;
 	int max_width;
 	int update_flag;
+	bool hidden;
 	bool window_resize_flag;
 	Sprite *label;
 
@@ -81,6 +82,7 @@ public:
 	~WidgetLabel();
 	void render();
 	void setMaxWidth(int width);
+	void setHidden(bool _hidden);
 	void setPos(int offset_x, int offset_y);
 	void setJustify(int _justify);
 	void setVAlign(int _valign);
@@ -91,6 +93,7 @@ public:
 
 	std::string getText();
 	Rect* getBounds();
+	bool isHidden();
 };
 
 #endif

@@ -34,6 +34,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 #include "SharedResources.h"
 #include "UtilsParsing.h"
+#include "WidgetLabel.h"
 
 #include <cmath>
 
@@ -62,8 +63,7 @@ MenuMiniMap::MenuMiniMap()
 			}
 			// @ATTR text_pos|label|Position of the text label with the map name.
 			else if(infile.key == "text_pos") {
-				text_pos = popLabelInfo(infile.val);
-				label->setFromLabelInfo(text_pos);
+				label->setFromLabelInfo(popLabelInfo(infile.val));
 			}
 			// @ATTR background|filename|Optional background image.
 			else if (infile.key == "background") {
@@ -115,7 +115,7 @@ void MenuMiniMap::render(const FPoint& hero_pos) {
 
 	Menu::render();
 
-	if (!text_pos.hidden) label->render();
+	label->render();
 
 	if (map_surface) {
 		if (eset->tileset.orientation == eset->tileset.TILESET_ISOMETRIC)

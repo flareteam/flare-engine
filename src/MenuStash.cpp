@@ -81,13 +81,11 @@ MenuStash::MenuStash(StatBlock *_stats)
 			}
 			// @ATTR label_title|label|Position of the "Stash" label.
 			else if (infile.key == "label_title") {
-				title =  popLabelInfo(infile.val);
-				label_title.setFromLabelInfo(title);
+				label_title.setFromLabelInfo(popLabelInfo(infile.val));
 			}
 			// @ATTR currency|label|Position of the label displaying the amount of currency stored in the stash.
 			else if (infile.key == "currency") {
-				currency =  popLabelInfo(infile.val);
-				label_currency.setFromLabelInfo(currency);
+				label_currency.setFromLabelInfo(popLabelInfo(infile.val));
 			}
 			else {
 				infile.error("MenuStash: '%s' is not a valid key.", infile.key.c_str());
@@ -144,10 +142,8 @@ void MenuStash::render() {
 	closeButton->render();
 
 	// text overlay
-	if (!title.hidden) {
-		label_title.render();
-	}
-	if (!currency.hidden) {
+	label_title.render();
+	if (!label_currency.isHidden()) {
 		label_currency.setText(msg->get("%d %s", stock.count(eset->misc.currency_id), eset->loot.currency.c_str()));
 		label_currency.render();
 	}

@@ -78,8 +78,7 @@ MenuDevConsole::MenuDevConsole()
 			}
 			// @ATTR label_title|label|Position of the "Developer Console" label.
 			else if(infile.key == "label_title") {
-				title = popLabelInfo(infile.val);
-				label.setFromLabelInfo(title);
+				label.setFromLabelInfo(popLabelInfo(infile.val));
 			}
 			// @ATTR confirm|point|Position of the "Execute" button.
 			else if(infile.key == "confirm") {
@@ -147,7 +146,7 @@ void MenuDevConsole::logic() {
 			log_history->add("exec \"msg=Hello World\"", true, &color_hint);
 			log_history->add(msg->get("Arguments with spaces should be enclosed with double quotes. Example:"));
 			log_history->add(msg->get("Type 'help' to get a list of commands.") + ' ');
-			if (title.hidden)
+			if (label.isHidden())
 				log_history->add(msg->get("Developer Console"), true, NULL, WIDGETLOG_FONT_BOLD);
 		}
 
@@ -295,8 +294,7 @@ void MenuDevConsole::render() {
 	// background
 	Menu::render();
 
-	if (!title.hidden)
-		label.render();
+	label.render();
 	button_close->render();
 	button_confirm->render();
 	input_box->render();

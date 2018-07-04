@@ -101,13 +101,11 @@ MenuInventory::MenuInventory(StatBlock *_stats)
 			else if (infile.key == "carried_rows") carried_rows = std::max(1, toInt(infile.val));
 			// @ATTR label_title|label|Position of the "Inventory" label.
 			else if (infile.key == "label_title") {
-				title =  popLabelInfo(infile.val);
-				label_inventory.setFromLabelInfo(title);
+				label_inventory.setFromLabelInfo(popLabelInfo(infile.val));
 			}
 			// @ATTR currency|label|Position of the label that displays the total currency being carried.
 			else if (infile.key == "currency") {
-				currency_lbl = popLabelInfo(infile.val);
-				label_currency.setFromLabelInfo(currency_lbl);
+				label_currency.setFromLabelInfo(popLabelInfo(infile.val));
 			}
 			// @ATTR help|rectangle|A mouse-over area that displays some help text for inventory shortcuts.
 			else if (infile.key == "help") help_pos = toRect(infile.val);
@@ -252,9 +250,9 @@ void MenuInventory::render() {
 	closeButton->render();
 
 	// text overlay
-	if (!title.hidden) label_inventory.render();
+	label_inventory.render();
 
-	if (!currency_lbl.hidden) {
+	if (!label_currency.isHidden()) {
 		label_currency.setText(msg->get("%d %s", currency, eset->loot.currency.c_str()));
 		label_currency.render();
 	}

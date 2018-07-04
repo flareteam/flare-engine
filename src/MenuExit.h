@@ -38,7 +38,6 @@ protected:
 	WidgetButton *buttonExit;
 	WidgetButton *buttonClose;
 	WidgetLabel title_lb;
-	LabelInfo title;
 
 	WidgetSlider *music_volume_sl;
 	WidgetSlider *sound_volume_sl;

@@ -52,8 +52,7 @@ MenuLog::MenuLog() {
 
 			// @ATTR label_title|label|Position of the "Log" text.
 			if(infile.key == "label_title") {
-				title = popLabelInfo(infile.val);
-				label_log.setFromLabelInfo(title);
+				label_log.setFromLabelInfo(popLabelInfo(infile.val));
 			}
 			// @ATTR close|point|Position of the close button.
 			else if(infile.key == "close") {
@@ -151,7 +150,7 @@ void MenuLog::render() {
 	closeButton->render();
 
 	// Text overlay.
-	if (!title.hidden) label_log.render();
+	label_log.render();
 
 	// Tab control.
 	tabControl->render();

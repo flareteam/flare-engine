@@ -26,7 +26,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "Utils.h"
-#include "WidgetLabel.h"
 
 class MapCollision;
 class WidgetLabel;
@@ -41,7 +40,6 @@ private:
 	Point map_size;
 
 	Rect pos;
-	LabelInfo text_pos;
 	WidgetLabel *label;
 
 	void createMapSurface();

@@ -41,8 +41,6 @@ private:
 	int STASH_SLOTS;
 
 	// label and widget positions
-	LabelInfo title;
-	LabelInfo currency;
 	int slots_cols;
 	int slots_rows;
 	Color color_normal;

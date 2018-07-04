@@ -44,7 +44,6 @@ private:
 	unsigned VENDOR_SLOTS;
 
 	// label and widget positions
-	LabelInfo title;
 	int slots_cols;
 	int slots_rows;
 	int activetab;

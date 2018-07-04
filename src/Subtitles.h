@@ -44,7 +44,6 @@ private:
 	WidgetLabel label;
 	Point label_pos;
 	ALIGNMENT label_alignment;
-	LabelInfo text_pos;
 	unsigned long current_id;
 	std::string current_text;
 	bool visible;
