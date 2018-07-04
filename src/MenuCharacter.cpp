@@ -58,12 +58,6 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 	cstat.resize(eset->primary_stats.list.size() + 2);
 
 	// Labels for major stats
-	cstat[CSTAT_NAME].label->setText(msg->get("Name"));
-	cstat[CSTAT_LEVEL].label->setText(msg->get("Level"));
-	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
-		cstat[i+2].label->setText(eset->primary_stats.list[i].name);
-	}
-
 	for (size_t i = 0; i < cstat.size(); ++i) {
 		cstat[i].label = new WidgetLabel();
 		cstat[i].value = new WidgetLabel();
@@ -74,6 +68,11 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 
 		cstat[i].value->setVAlign(LabelInfo::VALIGN_CENTER);
 		cstat[i].value->setColor(font->getColor("menu_normal"));
+	}
+	cstat[CSTAT_NAME].label->setText(msg->get("Name"));
+	cstat[CSTAT_LEVEL].label->setText(msg->get("Level"));
+	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
+		cstat[i+2].label->setText(eset->primary_stats.list[i].name);
 	}
 
 	show_stat.resize(Stats::COUNT + eset->damage_types.count);
