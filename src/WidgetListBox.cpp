@@ -32,6 +32,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetListBox.h"
 #include "WidgetScrollBar.h"
 
+const std::string WidgetListBox::DEFAULT_FILE = "images/menus/buttons/listbox_default.png";
+
 WidgetListBox::WidgetListBox(int height, const std::string& _fileName)
 	: Widget()
 	, fileName(_fileName)
@@ -64,7 +66,7 @@ WidgetListBox::WidgetListBox(int height, const std::string& _fileName)
 }
 
 bool WidgetListBox::checkClick() {
-	return checkClick(inpt->mouse.x,inpt->mouse.y);
+	return checkClickAt(inpt->mouse.x,inpt->mouse.y);
 }
 
 void WidgetListBox::setPos(int offset_x, int offset_y) {
@@ -76,7 +78,7 @@ void WidgetListBox::setPos(int offset_x, int offset_y) {
  * Sets and releases the "pressed" visual state of the ListBox
  * If press and release, activate (return true)
  */
-bool WidgetListBox::checkClick(int x, int y) {
+bool WidgetListBox::checkClickAt(int x, int y) {
 
 	Point mouse(x, y);
 
@@ -393,19 +395,21 @@ void WidgetListBox::render() {
 	}
 }
 
+void WidgetListBox::jumpToSelected() {
+	int index = getSelected();
+	int index_offset = static_cast<int>(rows.size() / 2) - 1;
+	int max_index = static_cast<int>(items.size() - rows.size());
+
+	cursor = std::max(0, max_index - std::max(0, max_index + index_offset - index));
+
+	refresh();
+}
+
 /**
  * Create the text buffer
  * Also, toggle the scrollbar based on the size of the list
  */
-void WidgetListBox::refresh(bool go_to_selected) {
-	if (go_to_selected) {
-		int index = getSelected();
-		int index_offset = static_cast<int>(rows.size() / 2) - 1;
-		int max_index = static_cast<int>(items.size() - rows.size());
-
-		cursor = std::max(0, max_index - std::max(0, max_index + index_offset - index));
-	}
-
+void WidgetListBox::refresh() {
 	std::string temp;
 	int right_margin = 0;
 

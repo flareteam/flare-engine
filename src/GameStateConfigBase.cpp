@@ -84,11 +84,11 @@ GameStateConfigBase::GameStateConfigBase (bool do_init)
 	, music_volume_lb(new WidgetLabel())
 	, sound_volume_sl(new WidgetSlider())
 	, sound_volume_lb(new WidgetLabel())
-	, activemods_lstb(new WidgetListBox(10))
+	, activemods_lstb(new WidgetListBox(10, WidgetListBox::DEFAULT_FILE))
 	, activemods_lb(new WidgetLabel())
-	, inactivemods_lstb(new WidgetListBox(10))
+	, inactivemods_lstb(new WidgetListBox(10, WidgetListBox::DEFAULT_FILE))
 	, inactivemods_lb(new WidgetLabel())
-	, language_lstb(new WidgetListBox(10))
+	, language_lstb(new WidgetListBox(10, WidgetListBox::DEFAULT_FILE))
 	, language_lb(new WidgetLabel())
 	, activemods_shiftup_btn(new WidgetButton("images/menus/buttons/up.png"))
 	, activemods_shiftdown_btn(new WidgetButton("images/menus/buttons/down.png"))
@@ -869,7 +869,7 @@ void GameStateConfigBase::refreshLanguages() {
 		infile.close();
 	}
 
-	language_lstb->refresh(WidgetListBox::GOTO_SELECTED);
+	language_lstb->jumpToSelected();
 }
 
 void GameStateConfigBase::refreshFont() {

@@ -81,7 +81,7 @@ GameStateNew::GameStateNew()
 		button_permadeath->setChecked(true);
 	}
 
-	class_list = new WidgetListBox (12);
+	class_list = new WidgetListBox(12, WidgetListBox::DEFAULT_FILE);
 	class_list->can_deselect = false;
 
 	tip = new WidgetTooltip();

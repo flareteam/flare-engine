@@ -53,7 +53,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 GameStateConfigDesktop::GameStateConfigDesktop(bool _enable_video_tab)
 	: GameStateConfigBase(!GameStateConfigBase::DO_INIT)
-	, renderer_lstb(new WidgetListBox(4))
+	, renderer_lstb(new WidgetListBox(4, WidgetListBox::DEFAULT_FILE))
 	, renderer_lb(new WidgetLabel())
 	, fullscreen_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
 	, fullscreen_lb(new WidgetLabel())
@@ -69,7 +69,7 @@ GameStateConfigDesktop::GameStateConfigDesktop(bool _enable_video_tab)
 	, change_gamma_lb(new WidgetLabel())
 	, gamma_sl(new WidgetSlider())
 	, gamma_lb(new WidgetLabel())
-	, joystick_device_lstb(new WidgetListBox(10))
+	, joystick_device_lstb(new WidgetListBox(10, WidgetListBox::DEFAULT_FILE))
 	, joystick_device_lb(new WidgetLabel())
 	, enable_joystick_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
 	, enable_joystick_lb(new WidgetLabel())
@@ -536,7 +536,7 @@ void GameStateConfigDesktop::updateInput() {
 		inpt->initJoystick();
 		joystick_device_lstb->select(settings->joystick_device);
 	}
-	joystick_device_lstb->refresh(WidgetListBox::GOTO_SELECTED);
+	joystick_device_lstb->jumpToSelected();
 
 	joystick_deadzone_sl->set(0, 32768, settings->joy_deadzone);
 }
@@ -705,7 +705,7 @@ void GameStateConfigDesktop::logicInput() {
 			}
 
 			if (inpt->getNumJoysticks() > 0)
-				joystick_device_lstb->refresh(WidgetListBox::GOTO_SELECTED);
+				joystick_device_lstb->jumpToSelected();
 		}
 		else {
 			disableJoystickOptions();
@@ -948,5 +948,5 @@ void GameStateConfigDesktop::refreshRenderers() {
 		}
 	}
 
-	renderer_lstb->refresh(WidgetListBox::GOTO_SELECTED);
+	renderer_lstb->jumpToSelected();
 }
