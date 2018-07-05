@@ -30,16 +30,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Widget.h"
 #include "WidgetLabel.h"
 
-enum CLICK_TYPE {
-
-	NO_CLICK = 0,
-	CHECKED = 1,
-	ACTIVATED = 2
-};
-
 class WidgetSlot : public Widget {
 private:
-
 	Sprite *slot_selected;
 	Sprite *slot_checked;
 
@@ -48,10 +40,18 @@ private:
 	int amount;			// entries amount in slot
 	int max_amount;		// if > 1 always display amount
 	std::string amount_str; // formatted display of amount
-	int ACTIVATE;
+	int activate_key;
 
 public:
-	WidgetSlot(int _icon_id = -1, int _ACTIVATE = Input::ACCEPT);
+	enum CLICK_TYPE {
+		NO_CLICK = 0,
+		CHECKED = 1,
+		ACTIVATED = 2
+	};
+
+	static const int NO_ICON = -1;
+
+	WidgetSlot(int _icon_id, int _activate_key);
 	~WidgetSlot();
 
 	void activate();
@@ -63,7 +63,7 @@ public:
 	CLICK_TYPE checkClick();
 	CLICK_TYPE checkClick(int x, int y);
 	void setIcon(int _icon_id);
-	void setAmount(int _amount, int _max_amount = 1);
+	void setAmount(int _amount, int _max_amount);
 	void render();
 	void renderSelection();
 

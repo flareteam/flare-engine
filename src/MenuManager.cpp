@@ -905,7 +905,6 @@ void MenuManager::dragAndDropWithKeyboard() {
 
 	if (inv->visible && inv->getCurrentTabList() && drag_src != DRAG_SRC_ACTIONBAR) {
 		int slot_index = inv->getCurrentTabList()->getCurrent();
-		CLICK_TYPE slotClick;
 		Point src_slot;
 		WidgetSlot * inv_slot;
 
@@ -916,10 +915,11 @@ void MenuManager::dragAndDropWithKeyboard() {
 
 		src_slot.x = inv_slot->pos.x;
 		src_slot.y = inv_slot->pos.y;
-		slotClick = inv_slot->checkClick();
+
+		WidgetSlot::CLICK_TYPE slotClick = inv_slot->checkClick();
 
 		// pick up item
-		if (slotClick == CHECKED && drag_stack.empty()) {
+		if (slotClick == WidgetSlot::CHECKED && drag_stack.empty()) {
 			drag_stack = inv->click(src_slot);
 			if (!drag_stack.empty()) {
 				keyboard_dragging = true;
@@ -931,7 +931,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 			}
 		}
 		// rearrange item
-		else if (slotClick == CHECKED && !drag_stack.empty()) {
+		else if (slotClick == WidgetSlot::CHECKED && !drag_stack.empty()) {
 			inv->drop(src_slot, drag_stack);
 			inv_slot->checked = false;
 			drag_src = DRAG_SRC_NONE;
@@ -940,7 +940,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 			sticky_dragging = false;
 		}
 		// sell, stash, or use item
-		else if (slotClick == ACTIVATED && !drag_stack.empty()) {
+		else if (slotClick == WidgetSlot::ACTIVATED && !drag_stack.empty()) {
 			if (vendor->visible && inv->sell(drag_stack)) {
 				vendor->setTab(ItemManager::VENDOR_SELL);
 				vendor->add(drag_stack);
@@ -967,7 +967,6 @@ void MenuManager::dragAndDropWithKeyboard() {
 	// vendor menu
 	if (vendor->visible && vendor->getCurrentTabList() && vendor->getCurrentTabList() != (&vendor->tablist) && drag_src != DRAG_SRC_ACTIONBAR) {
 		int slot_index = vendor->getCurrentTabList()->getCurrent();
-		CLICK_TYPE slotClick;
 		Point src_slot;
 		WidgetSlot * vendor_slot;
 
@@ -978,10 +977,11 @@ void MenuManager::dragAndDropWithKeyboard() {
 
 		src_slot.x = vendor_slot->pos.x;
 		src_slot.y = vendor_slot->pos.y;
-		slotClick = vendor_slot->checkClick();
+
+		WidgetSlot::CLICK_TYPE slotClick = vendor_slot->checkClick();
 
 		// buy item
-		if (slotClick == CHECKED && drag_stack.empty()) {
+		if (slotClick == WidgetSlot::CHECKED && drag_stack.empty()) {
 			drag_stack = vendor->click(src_slot);
 			if (!drag_stack.empty()) {
 				keyboard_dragging = true;
@@ -1020,11 +1020,11 @@ void MenuManager::dragAndDropWithKeyboard() {
 	// stash menu
 	if (stash->visible && stash->getCurrentTabList() && drag_src != DRAG_SRC_ACTIONBAR) {
 		int slot_index = stash->getCurrentTabList()->getCurrent();
-		CLICK_TYPE slotClick = stash->stock.slots[slot_index]->checkClick();
+		WidgetSlot::CLICK_TYPE slotClick = stash->stock.slots[slot_index]->checkClick();
 		Point src_slot(stash->stock.slots[slot_index]->pos.x, stash->stock.slots[slot_index]->pos.y);
 
 		// pick up item
-		if (slotClick == CHECKED && drag_stack.empty()) {
+		if (slotClick == WidgetSlot::CHECKED && drag_stack.empty()) {
 			drag_stack = stash->click(src_slot);
 			if (!drag_stack.empty()) {
 				keyboard_dragging = true;
@@ -1036,7 +1036,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 			}
 		}
 		// rearrange item
-		else if (slotClick == CHECKED && !drag_stack.empty()) {
+		else if (slotClick == WidgetSlot::CHECKED && !drag_stack.empty()) {
 			stash->stock.slots[slot_index]->checked = false;
 			if (!stash->drop(src_slot, drag_stack)) {
 				drop_stack.push(stash->drop_stack.front());
@@ -1048,7 +1048,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 			sticky_dragging = false;
 		}
 		// send to inventory
-		else if (slotClick == ACTIVATED && !drag_stack.empty()) {
+		else if (slotClick == WidgetSlot::ACTIVATED && !drag_stack.empty()) {
 			if (!inv->add(drag_stack, MenuInventory::CARRIED, ItemStorage::NO_SLOT, MenuInventory::ADD_PLAY_SOUND, MenuInventory::ADD_AUTO_EQUIP)) {
 				stash->itemReturn(inv->drop_stack.front());
 				inv->drop_stack.pop();
@@ -1064,9 +1064,9 @@ void MenuManager::dragAndDropWithKeyboard() {
 	// powers menu
 	if (pow->visible && pow->isTabListSelected() && drag_src != DRAG_SRC_ACTIONBAR) {
 		int slot_index = pow->getSelectedCellIndex();
-		CLICK_TYPE slotClick = pow->slots[slot_index]->checkClick();
+		WidgetSlot::CLICK_TYPE slotClick = pow->slots[slot_index]->checkClick();
 
-		if (slotClick == CHECKED) {
+		if (slotClick == WidgetSlot::CHECKED) {
 			Point src_slot(pow->slots[slot_index]->pos.x, pow->slots[slot_index]->pos.y);
 			// check for unlock/dragging
 			drag_power = pow->click(src_slot);
@@ -1079,7 +1079,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 			}
 		}
 		// clear power dragging if power slot was pressed twice
-		else if (slotClick == ACTIVATED) {
+		else if (slotClick == WidgetSlot::ACTIVATED) {
 			if (drag_power > 0) {
 				pow->upgradeByCell(slot_index);
 			}
@@ -1092,11 +1092,11 @@ void MenuManager::dragAndDropWithKeyboard() {
 	// actionbar
 	if (act->getCurrentTabList() && static_cast<unsigned>(act->getCurrentTabList()->getCurrent()) < act->slots.size()) {
 		int slot_index = act->getCurrentTabList()->getCurrent();
-		CLICK_TYPE slotClick = act->slots[slot_index]->checkClick();
+		WidgetSlot::CLICK_TYPE slotClick = act->slots[slot_index]->checkClick();
 		Point dest_slot = act->getSlotPos(slot_index);
 
 		// pick up power
-		if (slotClick == CHECKED && drag_stack.empty() && drag_power == 0) {
+		if (slotClick == WidgetSlot::CHECKED && drag_stack.empty() && drag_power == 0) {
 			drag_power = act->checkDrag(dest_slot);
 			if (drag_power > 0) {
 				keyboard_dragging = true;
@@ -1107,7 +1107,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 			}
 		}
 		// drop power/item from other menu
-		else if (slotClick == CHECKED && drag_src != DRAG_SRC_ACTIONBAR && (!drag_stack.empty() || drag_power > 0)) {
+		else if (slotClick == WidgetSlot::CHECKED && drag_src != DRAG_SRC_ACTIONBAR && (!drag_stack.empty() || drag_power > 0)) {
 			if (drag_src == DRAG_SRC_POWERS) {
 				act->drop(dest_slot, drag_power, 0);
 				pow->slots[slot_index]->checked = false;
@@ -1127,8 +1127,8 @@ void MenuManager::dragAndDropWithKeyboard() {
 			inv->applyEquipment();
 		}
 		// rearrange actionbar
-		else if ((slotClick == CHECKED || slotClick == ACTIVATED) && drag_src == DRAG_SRC_ACTIONBAR && drag_power > 0) {
-			if (slotClick == CHECKED) act->slots[slot_index]->checked = false;
+		else if ((slotClick == WidgetSlot::CHECKED || slotClick == WidgetSlot::ACTIVATED) && drag_src == DRAG_SRC_ACTIONBAR && drag_power > 0) {
+			if (slotClick == WidgetSlot::CHECKED) act->slots[slot_index]->checked = false;
 			act->drop(dest_slot, drag_power, 1);
 			drag_src = DRAG_SRC_NONE;
 			drag_power = 0;

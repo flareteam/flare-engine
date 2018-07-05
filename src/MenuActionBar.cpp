@@ -524,7 +524,7 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 			}
 
 			// mouse/touch click
-			else if (inpt->usingMouse() && slots[i]->checkClick() == ACTIVATED) {
+			else if (inpt->usingMouse() && slots[i]->checkClick() == WidgetSlot::ACTIVATED) {
 				have_aim = false;
 				slot_activated[i] = true;
 				action.power = hotkeys_mod[i];
