@@ -32,6 +32,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <assert.h>
 
+const std::string WidgetSlider::DEFAULT_FILE = "images/menus/buttons/slider_default.png";
+
 WidgetSlider::WidgetSlider (const std::string& fname)
 	: enabled(true)
 	, sl(NULL)
@@ -70,12 +72,11 @@ void WidgetSlider::setPos(int offset_x, int offset_y) {
 }
 
 bool WidgetSlider::checkClick() {
-	if (!enabled) return false;
-	return checkClick(inpt->mouse.x,inpt->mouse.y);
+	return checkClickAt(inpt->mouse.x,inpt->mouse.y);
 }
 
 
-bool WidgetSlider::checkClick (int x, int y) {
+bool WidgetSlider::checkClickAt(int x, int y) {
 	if (!enabled) return false;
 	Point mouse(x, y);
 	//

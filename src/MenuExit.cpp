@@ -42,8 +42,8 @@ MenuExit::MenuExit() : Menu() {
 	buttonClose = new WidgetButton(WidgetButton::DEFAULT_FILE);
 
 	// widgets for game options
-	music_volume_sl = new WidgetSlider();
-	sound_volume_sl = new WidgetSlider();
+	music_volume_sl = new WidgetSlider(WidgetSlider::DEFAULT_FILE);
+	sound_volume_sl = new WidgetSlider(WidgetSlider::DEFAULT_FILE);
 
 	// Load config settings
 	FileParser infile;
