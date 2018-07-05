@@ -37,7 +37,7 @@ WidgetScrollBox::WidgetScrollBox(int width, int height)
 	bg.r = bg.g = bg.b = 0;
 	bg.a = 0;
 	currentChild = -1;
-	scrollbar = new WidgetScrollBar();
+	scrollbar = new WidgetScrollBar(WidgetScrollBar::DEFAULT_FILE);
 	update = true;
 	render_to_alpha = false;
 	resize(width, height);
@@ -142,7 +142,7 @@ void WidgetScrollBox::logic(int x, int y) {
 
 	// check ScrollBar clicks
 	if (contents && contents->getGraphicsHeight() > pos.h && scrollbar) {
-		switch (scrollbar->checkClick(mouse.x,mouse.y)) {
+		switch (scrollbar->checkClickAt(mouse.x,mouse.y)) {
 			case 1:
 				scrollUp();
 				break;

@@ -40,12 +40,14 @@ private:
 	int maximum;
 
 public:
-	explicit WidgetScrollBar(const std::string& _fileName = "images/menus/buttons/scrollbar_default.png");
+	static const std::string DEFAULT_FILE;
+
+	explicit WidgetScrollBar(const std::string& _fileName);
 	~WidgetScrollBar();
 
 	void loadArt();
 	int checkClick();
-	int checkClick(int x, int y);
+	int checkClickAt(int x, int y);
 	void set();
 	int getValue();
 	void render();

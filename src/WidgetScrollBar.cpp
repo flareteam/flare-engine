@@ -27,6 +27,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "WidgetScrollBar.h"
 
+const std::string WidgetScrollBar::DEFAULT_FILE = "images/menus/buttons/scrollbar_default.png";
+
 WidgetScrollBar::WidgetScrollBar(const std::string& _fileName)
 	: Widget()
 	, fileName(_fileName)
@@ -56,15 +58,14 @@ void WidgetScrollBar::loadArt() {
 }
 
 int WidgetScrollBar::checkClick() {
-	int r = checkClick(inpt->mouse.x,inpt->mouse.y);
-	return r;
+	return checkClickAt(inpt->mouse.x,inpt->mouse.y);
 }
 
 /**
  * Sets and releases the "pressed" visual state of the ScrollBar
  * If press and release, activate (return 1 for up, 2 for down)
  */
-int WidgetScrollBar::checkClick(int x, int y) {
+int WidgetScrollBar::checkClickAt(int x, int y) {
 	Point mouse = Point(x,y);
 
 	// main ScrollBar already in use, new click not allowed

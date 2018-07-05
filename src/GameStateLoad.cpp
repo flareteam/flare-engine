@@ -100,7 +100,7 @@ GameStateLoad::GameStateLoad() : GameState()
 	button_delete->label = msg->get("Delete Save");
 	button_delete->enabled = false;
 
-	scrollbar = new WidgetScrollBar();
+	scrollbar = new WidgetScrollBar(WidgetScrollBar::DEFAULT_FILE);
 
 	// Set up tab list
 	tablist = TabList();
@@ -489,7 +489,7 @@ void GameStateLoad::logic() {
 				}
 			}
 			else if (has_scroll_bar) {
-				switch (scrollbar->checkClick(inpt->mouse.x, inpt->mouse.y)) {
+				switch (scrollbar->checkClick()) {
 					case 1:
 						scrollUp();
 						break;

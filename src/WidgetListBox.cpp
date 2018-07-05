@@ -43,7 +43,7 @@ WidgetListBox::WidgetListBox(int height, const std::string& _fileName)
 	, any_selected(false)
 	, vlabels(std::vector<WidgetLabel>(height,WidgetLabel()))
 	, rows(std::vector<Rect>(height,Rect()))
-	, scrollbar(new WidgetScrollBar())
+	, scrollbar(new WidgetScrollBar(WidgetScrollBar::DEFAULT_FILE))
 	, pos_scroll()
 	, pressed(false)
 	, multi_select(false)
@@ -102,7 +102,7 @@ bool WidgetListBox::checkClickAt(int x, int y) {
 
 	// check ScrollBar clicks
 	if (has_scroll_bar) {
-		switch (scrollbar->checkClick(mouse.x,mouse.y)) {
+		switch (scrollbar->checkClickAt(mouse.x,mouse.y)) {
 			case 1:
 				scrollUp();
 				break;
