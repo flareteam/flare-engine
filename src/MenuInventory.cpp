@@ -44,6 +44,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
 #include "WidgetSlot.h"
+#include "WidgetTooltip.h"
 
 MenuInventory::MenuInventory(StatBlock *_stats)
 	: stats(_stats)
@@ -52,6 +53,7 @@ MenuInventory::MenuInventory(StatBlock *_stats)
 	, carried_cols(4)
 	, carried_rows(4)
 	, tap_to_activate_ticks(0)
+	, tip(new WidgetTooltip())
 	, currency(0)
 	, drag_prev_src(-1)
 	, changed_equipment(true)
@@ -283,39 +285,45 @@ int MenuInventory::areaOver(const Point& position) {
  *
  * @param mouse The x,y screen coordinates of the mouse cursor
  */
-TooltipData MenuInventory::checkTooltip(const Point& position) {
-	int area;
-	int slot;
-	TooltipData tip;
+void MenuInventory::renderTooltips(const Point& position) {
+	if (!visible || !isWithinRect(window_area, position))
+		return;
 
-	area = areaOver(position);
+	int area = areaOver(position);
+	int slot = -1;
+	TooltipData tip_data;
+
 	if (area < 0) {
 		if (position.x >= window_area.x + help_pos.x && position.y >= window_area.y+help_pos.y && position.x < window_area.x+help_pos.x+help_pos.w && position.y < window_area.y+help_pos.y+help_pos.h) {
-			tip.addText(msg->get("Pick up item(s):") + " " + inpt->getBindingString(Input::MAIN1));
-			tip.addText(msg->get("Use or equip item:") + " " + inpt->getBindingString(Input::MAIN2) + "\n");
-			tip.addText(msg->get("%s modifiers", inpt->getBindingString(Input::MAIN1).c_str()));
-			tip.addText(msg->get("Select a quantity of item:") + " " + inpt->getBindingString(Input::SHIFT) + " / " + inpt->getBindingString(Input::SHIFT, InputState::BINDING_ALT));
+			tip_data.addText(msg->get("Pick up item(s):") + " " + inpt->getBindingString(Input::MAIN1));
+			tip_data.addText(msg->get("Use or equip item:") + " " + inpt->getBindingString(Input::MAIN2) + "\n");
+			tip_data.addText(msg->get("%s modifiers", inpt->getBindingString(Input::MAIN1).c_str()));
+			tip_data.addText(msg->get("Select a quantity of item:") + " " + inpt->getBindingString(Input::SHIFT) + " / " + inpt->getBindingString(Input::SHIFT, InputState::BINDING_ALT));
 
 			if (inv_ctrl == CTRL_STASH)
-				tip.addText(msg->get("Stash item stack:") + " " + inpt->getBindingString(Input::CTRL) + " / " + inpt->getBindingString(Input::CTRL, InputState::BINDING_ALT));
+				tip_data.addText(msg->get("Stash item stack:") + " " + inpt->getBindingString(Input::CTRL) + " / " + inpt->getBindingString(Input::CTRL, InputState::BINDING_ALT));
 			else if (inv_ctrl == CTRL_VENDOR || (eset->misc.sell_without_vendor && inv_ctrl != CTRL_STASH))
-				tip.addText(msg->get("Sell item stack:") + " " + inpt->getBindingString(Input::CTRL) + " / " + inpt->getBindingString(Input::CTRL, InputState::BINDING_ALT));
+				tip_data.addText(msg->get("Sell item stack:") + " " + inpt->getBindingString(Input::CTRL) + " / " + inpt->getBindingString(Input::CTRL, InputState::BINDING_ALT));
 		}
-		return tip;
+		tip->render(tip_data, position, TooltipData::STYLE_FLOAT);
 	}
-	slot = inventory[area].slotOver(position);
+	else {
+		slot = inventory[area].slotOver(position);
+	}
 
 	if (slot == -1)
-		return tip;
+		return;
+
+	tip_data.clear();
 
 	if (inventory[area][slot].item > 0) {
-		tip = inventory[area].checkTooltip(position, stats, ItemManager::PLAYER_INV);
+		tip_data = inventory[area].checkTooltip(position, stats, ItemManager::PLAYER_INV);
 	}
 	else if (area == EQUIPMENT && inventory[area][slot].empty()) {
-		tip.addText(msg->get(items->getItemType(slot_type[slot])));
+		tip_data.addText(msg->get(items->getItemType(slot_type[slot])));
 	}
 
-	return tip;
+	tip->render(tip_data, position, TooltipData::STYLE_FLOAT);
 }
 
 /**
@@ -1177,4 +1185,5 @@ int MenuInventory::getEquipSlotFromItem(int item, bool only_empty_slots) {
 
 MenuInventory::~MenuInventory() {
 	delete closeButton;
+	delete tip;
 }

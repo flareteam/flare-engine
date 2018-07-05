@@ -29,6 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsDebug.h"
 #include "Widget.h"
 #include "WidgetSlider.h"
+#include "WidgetTooltip.h"
 
 #include <assert.h>
 
@@ -42,7 +43,6 @@ WidgetSlider::WidgetSlider (const std::string& fname)
 	, minimum(0)
 	, maximum(0)
 	, value(0)
-	, tip_buf()
 	, tip(new WidgetTooltip()) {
 
 	Image *graphics;
@@ -200,17 +200,11 @@ void WidgetSlider::render () {
 
 	if (pressed || in_focus) {
 		std::stringstream ss;
-		TooltipData tip_new;
-
 		ss << value;
-		tip_new.addText(ss.str());
-		if (!tip_new.isEmpty()) {
-			if (!tip_new.compare(&tip_buf)) {
-				tip_buf.clear();
-				tip_buf = tip_new;
-			}
-			tip->render(tip_buf, Point(pos_knob.x + pos_knob.w*2, pos_knob.y + (pos_knob.h/2)), TooltipData::STYLE_TOPLABEL);
-		}
+
+		TooltipData tip_data;
+		tip_data.addText(ss.str());
+		tip->render(tip_data, Point(pos_knob.x + pos_knob.w*2, pos_knob.y + (pos_knob.h/2)), TooltipData::STYLE_TOPLABEL);
 	}
 }
 

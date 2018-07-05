@@ -61,16 +61,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
 #include "WidgetSlot.h"
-#include "WidgetTooltip.h"
 
 MenuManager::MenuManager(StatBlock *_stats)
 	: stats(_stats)
-	, tip_buf()
-	, keyb_tip_buf_vendor()
-	, keyb_tip_buf_stash()
-	, keyb_tip_buf_pow()
-	, keyb_tip_buf_inv()
-	, keyb_tip_buf_act()
 	, key_lock(false)
 	, mouse_dragging(false)
 	, keyboard_dragging(false)
@@ -93,7 +86,6 @@ MenuManager::MenuManager(StatBlock *_stats)
 	, hp(NULL)
 	, mp(NULL)
 	, xp(NULL)
-	, tip(NULL)
 	, mini(NULL)
 	, npc(NULL)
 	, num_picker(NULL)
@@ -156,8 +148,6 @@ MenuManager::MenuManager(StatBlock *_stats)
 	touch_controls = new MenuTouchControls();
 
 	subtitles = new Subtitles();
-
-	tip = new WidgetTooltip();
 
 	closeAll(); // make sure all togglable menus start closed
 
@@ -1235,48 +1225,18 @@ void MenuManager::render() {
 		if (!inpt->usingMouse() || settings->touchscreen)
 			handleKeyboardTooltips();
 		else {
-			TooltipData tip_new;
-
 			// Find tooltips depending on mouse position
 			if (!book->visible) {
-				if (chr->visible && isWithinRect(chr->window_area,inpt->mouse)) {
-					tip_new = chr->checkTooltip();
-				}
-				if (vendor->visible && isWithinRect(vendor->window_area,inpt->mouse)) {
-					tip_new = vendor->checkTooltip(inpt->mouse);
-				}
-				if (stash->visible && isWithinRect(stash->window_area,inpt->mouse)) {
-					tip_new = stash->checkTooltip(inpt->mouse);
-				}
-				if (pow->visible && isWithinRect(pow->window_area,inpt->mouse)) {
-					tip_new = pow->checkTooltip(inpt->mouse);
-				}
-				if (inv->visible && !mouse_dragging && isWithinRect(inv->window_area,inpt->mouse)) {
-					tip_new = inv->checkTooltip(inpt->mouse);
-				}
+				chr->renderTooltips(inpt->mouse);
+				vendor->renderTooltips(inpt->mouse);
+				stash->renderTooltips(inpt->mouse);
+				pow->renderTooltips(inpt->mouse);
+				inv->renderTooltips(inpt->mouse);
 			}
-			if (isWithinRect(effects->window_area, inpt->mouse)) {
-				tip_new = effects->checkTooltip(inpt->mouse);
-			}
-			if (isWithinRect(act->window_area,inpt->mouse)) {
-				tip_new = act->checkTooltip(inpt->mouse);
-			}
+			effects->renderTooltips(inpt->mouse);
+			act->renderTooltips(inpt->mouse);
 
-			if (!tip_new.isEmpty()) {
-
-				// when we render a tooltip it buffers the rasterized text for performance.
-				// If this new tooltip is the same as the existing one, reuse.
-
-				if (!tip_new.compare(&tip_buf)) {
-					tip_buf.clear();
-					tip_buf = tip_new;
-				}
-				tip->render(tip_buf, inpt->mouse, TooltipData::STYLE_FLOAT);
-				TOOLTIP_CONTEXT = TOOLTIP_MENU;
-			}
-			else if (TOOLTIP_CONTEXT != TOOLTIP_MAP) {
-				TOOLTIP_CONTEXT = TOOLTIP_NONE;
-			}
+			// TODO handle menu vs map context
 		}
 	}
 
@@ -1308,13 +1268,6 @@ void MenuManager::render() {
 }
 
 void MenuManager::handleKeyboardTooltips() {
-
-	TooltipData keyb_tip_new_vendor;
-	TooltipData keyb_tip_new_stash;
-	TooltipData keyb_tip_new_pow;
-	TooltipData keyb_tip_new_inv;
-	TooltipData keyb_tip_new_act;
-
 	if (vendor->visible && vendor->getCurrentTabList() && vendor->getCurrentTabList() != (&vendor->tablist)) {
 		int slot_index = vendor->getCurrentTabList()->getCurrent();
 
@@ -1327,14 +1280,7 @@ void MenuManager::handleKeyboardTooltips() {
 			keydrag_pos.y = vendor->stock[ItemManager::VENDOR_SELL].slots[slot_index]->pos.y;
 		}
 
-		keyb_tip_new_vendor = vendor->checkTooltip(keydrag_pos);
-		if (!keyb_tip_new_vendor.isEmpty()) {
-			if (!keyb_tip_new_vendor.compare(&keyb_tip_buf_vendor)) {
-				keyb_tip_buf_vendor.clear();
-				keyb_tip_buf_vendor = keyb_tip_new_vendor;
-			}
-			tip->render(keyb_tip_buf_vendor, keydrag_pos, TooltipData::STYLE_FLOAT);
-		}
+		vendor->renderTooltips(keydrag_pos);
 	}
 
 	if (stash->visible && stash->getCurrentTabList()) {
@@ -1343,14 +1289,7 @@ void MenuManager::handleKeyboardTooltips() {
 		keydrag_pos.x = stash->stock.slots[slot_index]->pos.x;
 		keydrag_pos.y = stash->stock.slots[slot_index]->pos.y;
 
-		keyb_tip_new_stash = stash->checkTooltip(keydrag_pos);
-		if (!keyb_tip_new_stash.isEmpty()) {
-			if (!keyb_tip_new_stash.compare(&keyb_tip_buf_stash)) {
-				keyb_tip_buf_stash.clear();
-				keyb_tip_buf_stash = keyb_tip_new_stash;
-			}
-			tip->render(keyb_tip_buf_stash, keydrag_pos, TooltipData::STYLE_FLOAT);
-		}
+		stash->renderTooltips(keydrag_pos);
 	}
 
 	if (pow->visible && pow->isTabListSelected()) {
@@ -1359,14 +1298,7 @@ void MenuManager::handleKeyboardTooltips() {
 		keydrag_pos.x = pow->slots[slot_index]->pos.x;
 		keydrag_pos.y = pow->slots[slot_index]->pos.y;
 
-		keyb_tip_new_pow = pow->checkTooltip(keydrag_pos);
-		if (!keyb_tip_new_pow.isEmpty()) {
-			if (!keyb_tip_new_pow.compare(&keyb_tip_buf_pow)) {
-				keyb_tip_buf_pow.clear();
-				keyb_tip_buf_pow = keyb_tip_new_pow;
-			}
-			tip->render(keyb_tip_buf_pow, keydrag_pos, TooltipData::STYLE_FLOAT);
-		}
+		pow->renderTooltips(keydrag_pos);
 	}
 
 	if (inv->visible && inv->getCurrentTabList()) {
@@ -1381,14 +1313,7 @@ void MenuManager::handleKeyboardTooltips() {
 			keydrag_pos.y = inv->inventory[MenuInventory::CARRIED].slots[slot_index - inv->getEquippedCount()]->pos.y;
 		}
 
-		keyb_tip_new_inv = inv->checkTooltip(keydrag_pos);
-		if (!keyb_tip_new_inv.isEmpty()) {
-			if (!keyb_tip_new_inv.compare(&keyb_tip_buf_inv)) {
-				keyb_tip_buf_inv.clear();
-				keyb_tip_buf_inv = keyb_tip_new_inv;
-			}
-			tip->render(keyb_tip_buf_inv, keydrag_pos, TooltipData::STYLE_FLOAT);
-		}
+		inv->renderTooltips(keydrag_pos);
 	}
 
 	if (act_drag_hover && act->getCurrentTabList()) {
@@ -1396,14 +1321,7 @@ void MenuManager::handleKeyboardTooltips() {
 
 		keydrag_pos = act->getSlotPos(slot_index);
 
-		keyb_tip_new_act = act->checkTooltip(keydrag_pos);
-		if (!keyb_tip_new_act.isEmpty()) {
-			if (!keyb_tip_new_act.compare(&keyb_tip_buf_act)) {
-				keyb_tip_buf_act.clear();
-				keyb_tip_buf_act = keyb_tip_new_act;
-			}
-			tip->render(keyb_tip_buf_act, keydrag_pos, TooltipData::STYLE_FLOAT);
-		}
+		act->renderTooltips(keydrag_pos);
 	}
 }
 
@@ -1465,8 +1383,6 @@ void MenuManager::showExitMenu() {
 
 MenuManager::~MenuManager() {
 
-	tip_buf.clear();
-
 	delete hp;
 	delete mp;
 	delete xp;
@@ -1477,7 +1393,6 @@ MenuManager::~MenuManager() {
 	delete hudlog;
 	delete questlog;
 	delete act;
-	delete tip;
 	delete vendor;
 	delete talker;
 	delete exit;

@@ -33,6 +33,7 @@ class NPC;
 class StatBlock;
 class WidgetButton;
 class WidgetTabControl;
+class WidgetTooltip;
 
 class MenuVendor : public Menu {
 private:
@@ -47,6 +48,8 @@ private:
 	int slots_cols;
 	int slots_rows;
 	int activetab;
+
+	WidgetTooltip* tip;
 
 public:
 	explicit MenuVendor(StatBlock *stats);
@@ -66,7 +69,7 @@ public:
 	ItemStack click(const Point& position);
 	void itemReturn(ItemStack stack);
 	void add(ItemStack stack);
-	TooltipData checkTooltip(const Point& position);
+	void renderTooltips(const Point& position);
 	void saveInventory();
 	void sort(int type);
 	void setNPC(NPC* _npc);

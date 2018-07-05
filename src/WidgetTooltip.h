@@ -47,6 +47,8 @@ public:
 
 private:
 	Image *background;
+	TooltipData data_buf;
+	Sprite* sprite_buf;
 };
 
 #endif

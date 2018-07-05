@@ -53,7 +53,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetListBox.h"
 #include "WidgetSlider.h"
 #include "WidgetTabControl.h"
-#include "WidgetTooltip.h"
 
 GameStateConfigBase::GameStateConfigBase (bool do_init)
 	: GameState()
@@ -95,8 +94,6 @@ GameStateConfigBase::GameStateConfigBase (bool do_init)
 	, activemods_deactivate_btn(new WidgetButton(WidgetButton::DEFAULT_FILE))
 	, inactivemods_activate_btn(new WidgetButton(WidgetButton::DEFAULT_FILE))
 	, defaults_confirm(new MenuConfirm(msg->get("Defaults"), msg->get("Reset ALL settings?")))
-	, tip(new WidgetTooltip())
-	, tip_buf()
 	, active_tab(0)
 	, frame(0,0)
 	, frame_offset(11,8)
@@ -782,16 +779,7 @@ void GameStateConfigBase::render() {
 	// Get tooltips for listboxes
 	// This isn't very elegant right now
 	// In the future, we'll want to get tooltips for all widget types
-	TooltipData tip_new;
-	renderTooltips(tip_new);
-
-	if (!tip_new.isEmpty()) {
-		if (!tip_new.compare(&tip_buf)) {
-			tip_buf.clear();
-			tip_buf = tip_new;
-		}
-		tip->render(tip_buf, inpt->mouse, TooltipData::STYLE_FLOAT);
-	}
+	renderTooltips();
 }
 
 void GameStateConfigBase::renderTabContents() {
@@ -806,10 +794,10 @@ void GameStateConfigBase::renderDialogs() {
 		defaults_confirm->render();
 }
 
-void GameStateConfigBase::renderTooltips(TooltipData& tip_new) {
-	if (active_tab == INTERFACE_TAB && tip_new.isEmpty()) tip_new = language_lstb->checkTooltip(inpt->mouse);
-	if (active_tab == MODS_TAB && tip_new.isEmpty()) tip_new = activemods_lstb->checkTooltip(inpt->mouse);
-	if (active_tab == MODS_TAB && tip_new.isEmpty()) tip_new = inactivemods_lstb->checkTooltip(inpt->mouse);
+void GameStateConfigBase::renderTooltips() {
+	if (active_tab == INTERFACE_TAB) language_lstb->renderTooltip(inpt->mouse);
+	if (active_tab == MODS_TAB) activemods_lstb->renderTooltip(inpt->mouse);
+	if (active_tab == MODS_TAB) inactivemods_lstb->renderTooltip(inpt->mouse);
 }
 
 void GameStateConfigBase::placeLabeledWidget(WidgetLabel *lb, Widget *w, int x1, int y1, int x2, int y2, std::string const& str, int justify) {
@@ -977,12 +965,6 @@ void GameStateConfigBase::cleanup() {
 	if (background) {
 		delete background;
 		background = NULL;
-	}
-
-	tip_buf.clear();
-	if (tip != NULL) {
-		delete tip;
-		tip = NULL;
 	}
 
 	if (tab_control != NULL) {

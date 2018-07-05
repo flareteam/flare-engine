@@ -47,6 +47,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "WidgetLabel.h"
 #include "WidgetSlot.h"
+#include "WidgetTooltip.h"
 
 #include <climits>
 
@@ -54,6 +55,7 @@ MenuActionBar::MenuActionBar()
 	: sprite_emptyslot(NULL)
 	, sprite_disabled(NULL)
 	, sprite_attention(NULL)
+	, tip (new WidgetTooltip())
 	, slots_count(0)
 	, drag_prev_slot(-1)
 	, updated(false)
@@ -71,6 +73,10 @@ MenuActionBar::MenuActionBar()
 	for (unsigned int i=0; i<4; i++) {
 		menus[i] = new WidgetSlot(-1, Input::ACTIONBAR);
 	}
+	menu_titles[MENU_CHARACTER] = msg->get("Character");
+	menu_titles[MENU_INVENTORY] = msg->get("Inventory");
+	menu_titles[MENU_POWERS] = msg->get("Powers");
+	menu_titles[MENU_LOG] = msg->get("Log");
 
 	// Read data from config file
 	FileParser infile;
@@ -396,55 +402,35 @@ void MenuActionBar::render() {
 /**
  * On mouseover, show tooltip for buttons
  */
-TooltipData MenuActionBar::checkTooltip(const Point& mouse) {
-	TooltipData tip;
+void MenuActionBar::renderTooltips(const Point& position) {
+	TooltipData tip_data;
 
-	if (isWithinRect(menus[MENU_CHARACTER]->pos, mouse)) {
-		if (settings->colorblind && requires_attention[MENU_CHARACTER])
-			tip.addText(msg->get("Character") + " (*)");
-		else
-			tip.addText(msg->get("Character"));
+	// menus
+	for (int i = 0; i < 4; ++i) {
+		if (isWithinRect(menus[i]->pos, position)) {
+			if (settings->colorblind && requires_attention[i])
+				tip_data.addText(menu_titles[i] + " (*)");
+			else
+				tip_data.addText(menu_titles[i]);
 
-		tip.addText(menu_labels[MENU_CHARACTER]);
-		return tip;
+			tip_data.addText(menu_labels[i]);
+
+			tip->render(tip_data, position, TooltipData::STYLE_FLOAT);
+			break;
+		}
 	}
-	if (isWithinRect(menus[MENU_INVENTORY]->pos, mouse)) {
-		if (settings->colorblind && requires_attention[MENU_INVENTORY])
-			tip.addText(msg->get("Inventory") + " (*)");
-		else
-			tip.addText(msg->get("Inventory"));
+	tip_data.clear();
 
-		tip.addText(menu_labels[MENU_INVENTORY]);
-		return tip;
-	}
-	if (isWithinRect(menus[MENU_POWERS]->pos, mouse)) {
-		if (settings->colorblind && requires_attention[MENU_POWERS])
-			tip.addText(msg->get("Powers") + " (*)");
-		else
-			tip.addText(msg->get("Powers"));
-
-		tip.addText(menu_labels[MENU_POWERS]);
-		return tip;
-	}
-	if (isWithinRect(menus[MENU_LOG]->pos, mouse)) {
-		if (settings->colorblind && requires_attention[MENU_LOG])
-			tip.addText(msg->get("Log") + " (*)");
-		else
-			tip.addText(msg->get("Log"));
-
-		tip.addText(menu_labels[MENU_LOG]);
-		return tip;
-	}
 	for (unsigned i = 0; i < slots_count; i++) {
-		if (slots[i] && isWithinRect(slots[i]->pos, mouse)) {
+		if (slots[i] && isWithinRect(slots[i]->pos, position)) {
 			if (hotkeys_mod[i] != 0) {
-				tip.addText(powers->powers[hotkeys_mod[i]].name);
+				tip_data.addText(powers->powers[hotkeys_mod[i]].name);
 			}
-			tip.addText(labels[i]);
+			tip_data.addText(labels[i]);
 		}
 	}
 
-	return tip;
+	tip->render(tip_data, position, TooltipData::STYLE_FLOAT);
 }
 
 /**
@@ -848,4 +834,6 @@ MenuActionBar::~MenuActionBar() {
 
 	for (unsigned int i=0; i<4; i++)
 		delete menus[i];
+
+	delete tip;
 }

@@ -26,8 +26,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef WIDGET_CHECKBOX_H
 #define WIDGET_CHECKBOX_H
 
-#include "TooltipData.h"
-
 class Widget;
 class WidgetTooltip;
 
@@ -44,12 +42,13 @@ public:
 	bool checkClickAt(int x, int y);
 	bool isChecked() const;
 	void render();
-	TooltipData checkTooltip(const Point& mouse);
+	void renderTooltip(const Point& mouse);
 	bool enabled;
 	std::string tooltip;
 
 private:
 	Sprite *cb;
+	WidgetTooltip* tip;
 	bool checked;
 	bool pressed;
 	bool activated;

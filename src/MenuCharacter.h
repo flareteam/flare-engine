@@ -31,6 +31,7 @@ class StatBlock;
 class WidgetButton;
 class WidgetLabel;
 class WidgetListBox;
+class WidgetTooltip;
 
 class MenuCharacter : public Menu {
 private:
@@ -86,6 +87,8 @@ private:
 
 	int name_max_width;
 
+	WidgetTooltip* tip;
+
 public:
 	explicit MenuCharacter(StatBlock *stats);
 	~MenuCharacter();
@@ -94,7 +97,7 @@ public:
 	void logic();
 	void render();
 	void refreshStats();
-	TooltipData checkTooltip();
+	void renderTooltips(const Point& position);
 	bool checkUpgrade();
 	int getUnspent() {
 		return skill_points;

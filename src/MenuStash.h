@@ -30,6 +30,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class NPC;
 class StatBlock;
 class WidgetButton;
+class WidgetTooltip;
 
 class MenuStash : public Menu {
 private:
@@ -44,6 +45,8 @@ private:
 	int slots_cols;
 	int slots_rows;
 
+	WidgetTooltip *tip;
+
 public:
 	explicit MenuStash(StatBlock *stats);
 	~MenuStash();
@@ -54,7 +57,7 @@ public:
 	ItemStack click(const Point& position);
 	void itemReturn(ItemStack stack);
 	bool add(ItemStack stack, int slot, bool play_sound);
-	TooltipData checkTooltip(const Point& position);
+	void renderTooltips(const Point& position);
 	bool drop(const Point& position, ItemStack stack);
 
 	void removeFromPrevSlot(int quantity);

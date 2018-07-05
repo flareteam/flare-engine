@@ -37,6 +37,7 @@ class WidgetButton;
 class WidgetLabel;
 class WidgetSlot;
 class WidgetTabControl;
+class WidgetTooltip;
 
 class Power_Menu_Tab {
 public:
@@ -92,7 +93,7 @@ private:
 	void setUnlockedPowers();
 	int getPointsUsed();
 
-	void createTooltip(TooltipData* tip, int slot_num, const std::vector<Power_Menu_Cell>& power_cells, bool show_unlock_prompt);
+	void createTooltip(TooltipData* tip_data, int slot_num, const std::vector<Power_Menu_Cell>& power_cells, bool show_unlock_prompt);
 	void renderPowers(int tab_num);
 
 	StatBlock *stats;
@@ -127,6 +128,8 @@ private:
 
 	int default_power_tab;
 
+	WidgetTooltip *tip;
+
 public:
 	MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar);
 	~MenuPowers();
@@ -137,7 +140,7 @@ public:
 	void logic();
 	void render();
 
-	TooltipData checkTooltip(const Point& mouse);
+	void renderTooltips(const Point& position);
 	int click(const Point& mouse);
 	void upgradeByCell(int pci);
 

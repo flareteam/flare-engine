@@ -34,9 +34,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class ActionData;
 class Power;
 class StatBlock;
-class TooltipData;
 class WidgetLabel;
 class WidgetSlot;
+class WidgetTooltip;
 
 class MenuActionBar : public Menu {
 private:
@@ -56,6 +56,8 @@ private:
 	std::vector<std::string> menu_labels;
 
 	Point last_mouse;
+
+	WidgetTooltip *tip;
 
 public:
 	enum {
@@ -87,7 +89,7 @@ public:
 	void resetSlots();
 	Point getSlotPos(int slot);
 
-	TooltipData checkTooltip(const Point& mouse);
+	void renderTooltips(const Point& position);
 	bool isWithinSlots(const Point& mouse);
 	bool isWithinMenus(const Point& mouse);
 	void addPower(const int id, const int target_id);
@@ -100,6 +102,7 @@ public:
 	std::vector<bool> prevent_changing;
 	std::vector<WidgetSlot *> slots; // hotkey slots
 	WidgetSlot *menus[4]; // menu buttons
+	std::string menu_titles[4];
 	std::vector<int> slot_item_count; // -1 means this power isn't item based.  0 means out of items.  1+ means sufficient items.
 	std::vector<bool> slot_enabled;
 	bool requires_attention[4];

@@ -39,11 +39,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
 #include "WidgetLabel.h"
+#include "WidgetTooltip.h"
 
 MenuActiveEffects::MenuActiveEffects(StatBlock *_stats)
 	: timer(NULL)
 	, stats(_stats)
 	, is_vertical(false)
+	, tip(new WidgetTooltip())
 {
 	// Load config settings
 	FileParser infile;
@@ -199,13 +201,13 @@ void MenuActiveEffects::render() {
 	}
 }
 
-TooltipData MenuActiveEffects::checkTooltip(const Point& mouse) {
-	TooltipData tip;
+void MenuActiveEffects::renderTooltips(const Point& position) {
+	TooltipData tip_data;
 
 	for (size_t i = 0; i < effect_icons.size(); ++i) {
-		if (isWithinRect(effect_icons[i].pos, mouse)) {
+		if (isWithinRect(effect_icons[i].pos, position)) {
 			if (!effect_icons[i].name.empty())
-				tip.addText(msg->get(effect_icons[i].name));
+				tip_data.addText(msg->get(effect_icons[i].name));
 
 			if (effect_icons[i].type == Effect::HEAL)
 				continue;
@@ -213,16 +215,16 @@ TooltipData MenuActiveEffects::checkTooltip(const Point& mouse) {
 			std::stringstream ss;
 			if (effect_icons[i].type == Effect::SHIELD) {
 				ss << "(" << effect_icons[i].current << "/" << effect_icons[i].max << ")";
-				tip.addText(ss.str());
+				tip_data.addText(ss.str());
 			}
 			else if (effect_icons[i].max > 0) {
 				ss << msg->get("Remaining:") << " " << getDurationString(effect_icons[i].current, 1);
-				tip.addText(ss.str());
+				tip_data.addText(ss.str());
 			}
 
 			if(effect_icons[i].type != Effect::SHIELD){
 				if(effect_icons[i].stacks > 1){
-					tip.addText(msg->get("x%d stacks", effect_icons[i].stacks));
+					tip_data.addText(msg->get("x%d stacks", effect_icons[i].stacks));
 				}
 			}
 
@@ -230,10 +232,10 @@ TooltipData MenuActiveEffects::checkTooltip(const Point& mouse) {
 		}
 	}
 
-	return tip;
+	tip->render(tip_data, position, TooltipData::STYLE_FLOAT);
 }
 
 MenuActiveEffects::~MenuActiveEffects() {
-	if (timer)
-		delete timer;
+	delete timer;
+	delete tip;
 }

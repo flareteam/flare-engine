@@ -23,10 +23,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef WIDGET_SLIDER_H
 #define WIDGET_SLIDER_H
 
-#include "TooltipData.h"
-#include "WidgetTooltip.h"
-
 class Widget;
+class WidgetTooltip;
 
 class WidgetSlider : public Widget {
 public:
@@ -56,7 +54,6 @@ private:
 	int maximum;
 	int value;
 
-	TooltipData tip_buf;
 	WidgetTooltip *tip;
 };
 

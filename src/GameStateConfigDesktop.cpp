@@ -43,7 +43,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetScrollBox.h"
 #include "WidgetSlider.h"
 #include "WidgetTabControl.h"
-#include "WidgetTooltip.h"
 
 #include <limits.h>
 #include <iomanip>
@@ -798,16 +797,16 @@ void GameStateConfigDesktop::renderDialogs() {
 	}
 }
 
-void GameStateConfigDesktop::renderTooltips(TooltipData& tip_new) {
-	GameStateConfigBase::renderTooltips(tip_new);
+void GameStateConfigDesktop::renderTooltips() {
+	GameStateConfigBase::renderTooltips();
 
-	if (active_tab == VIDEO_TAB && tip_new.isEmpty()) tip_new = renderer_lstb->checkTooltip(inpt->mouse);
-	if (active_tab == VIDEO_TAB && tip_new.isEmpty()) tip_new = hwsurface_cb->checkTooltip(inpt->mouse);
-	if (active_tab == VIDEO_TAB && tip_new.isEmpty()) tip_new = vsync_cb->checkTooltip(inpt->mouse);
-	if (active_tab == VIDEO_TAB && tip_new.isEmpty()) tip_new = dpi_scaling_cb->checkTooltip(inpt->mouse);
-	if (active_tab == VIDEO_TAB && tip_new.isEmpty()) tip_new = change_gamma_cb->checkTooltip(inpt->mouse);
-	if (active_tab == INPUT_TAB && tip_new.isEmpty()) tip_new = joystick_device_lstb->checkTooltip(inpt->mouse);
-	if (active_tab == INPUT_TAB && tip_new.isEmpty()) tip_new = no_mouse_cb->checkTooltip(inpt->mouse);
+	if (active_tab == VIDEO_TAB) renderer_lstb->renderTooltip(inpt->mouse);
+	if (active_tab == VIDEO_TAB) hwsurface_cb->renderTooltip(inpt->mouse);
+	if (active_tab == VIDEO_TAB) vsync_cb->renderTooltip(inpt->mouse);
+	if (active_tab == VIDEO_TAB) dpi_scaling_cb->renderTooltip(inpt->mouse);
+	if (active_tab == VIDEO_TAB) change_gamma_cb->renderTooltip(inpt->mouse);
+	if (active_tab == INPUT_TAB) joystick_device_lstb->renderTooltip(inpt->mouse);
+	if (active_tab == INPUT_TAB) no_mouse_cb->renderTooltip(inpt->mouse);
 }
 
 void GameStateConfigDesktop::refreshWidgets() {

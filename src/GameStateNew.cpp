@@ -41,14 +41,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
-#include "TooltipData.h"
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
 #include "WidgetCheckBox.h"
 #include "WidgetInput.h"
 #include "WidgetLabel.h"
 #include "WidgetListBox.h"
-#include "WidgetTooltip.h"
 
 GameStateNew::GameStateNew()
 	: GameState()
@@ -83,8 +81,6 @@ GameStateNew::GameStateNew()
 
 	class_list = new WidgetListBox(12, WidgetListBox::DEFAULT_FILE);
 	class_list->can_deselect = false;
-
-	tip = new WidgetTooltip();
 
 	// set up labels
 	label_portrait = new WidgetLabel();
@@ -462,20 +458,7 @@ void GameStateNew::render() {
 	if (show_classlist) {
 		label_classlist->render();
 		class_list->render();
-
-		TooltipData tip_new = class_list->checkTooltip(inpt->mouse);
-		if (!tip_new.isEmpty()) {
-
-			// when we render a tooltip it buffers the rasterized text for performance.
-			// If this new tooltip is the same as the existing one, reuse.
-
-			if (!tip_new.compare(&tip_buf)) {
-				tip_buf.clear();
-				tip_buf = tip_new;
-			}
-			tip->render(tip_buf, inpt->mouse, TooltipData::STYLE_FLOAT);
-		}
-
+		class_list->renderTooltip(inpt->mouse);
 	}
 
 }
@@ -509,5 +492,4 @@ GameStateNew::~GameStateNew() {
 	delete label_permadeath;
 	delete label_classlist;
 	delete class_list;
-	delete tip;
 }

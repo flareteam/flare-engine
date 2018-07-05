@@ -31,6 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetLabel.h"
 #include "WidgetListBox.h"
 #include "WidgetScrollBar.h"
+#include "WidgetTooltip.h"
 
 const std::string WidgetListBox::DEFAULT_FILE = "images/menus/buttons/listbox_default.png";
 
@@ -44,6 +45,7 @@ WidgetListBox::WidgetListBox(int height, const std::string& _fileName)
 	, vlabels(std::vector<WidgetLabel>(height,WidgetLabel()))
 	, rows(std::vector<Rect>(height,Rect()))
 	, scrollbar(new WidgetScrollBar(WidgetScrollBar::DEFAULT_FILE))
+	, tip(new WidgetTooltip())
 	, pos_scroll()
 	, pressed(false)
 	, multi_select(false)
@@ -166,27 +168,22 @@ bool WidgetListBox::checkClickAt(int x, int y) {
 
 }
 
-/**
- * If mousing-over an item with a tooltip, return that tooltip data.
- *
- * @param mouse The x,y screen coordinates of the mouse cursor
- */
-TooltipData WidgetListBox::checkTooltip(const Point& mouse) {
-	TooltipData _tip;
-
+void WidgetListBox::renderTooltip(const Point& mouse) {
 	if (!inpt->usingMouse())
-		return _tip;
+		return;
 
+	TooltipData tip_data;
 	for(unsigned i=0; i<rows.size(); i++) {
 		if (i<items.size()) {
 			if (isWithinRect(rows[i], mouse) && items[i+cursor].tooltip != "") {
-				_tip.addText(items[i+cursor].tooltip);
+				tip_data.addText(items[i+cursor].tooltip);
 				break;
 			}
 		}
 	}
 
-	return _tip;
+	if (!tip_data.isEmpty())
+		tip->render(tip_data, mouse, TooltipData::STYLE_FLOAT);
 }
 
 /**
@@ -558,7 +555,8 @@ void WidgetListBox::sort() {
 }
 
 WidgetListBox::~WidgetListBox() {
-	if (listboxs) delete listboxs;
-	if (scrollbar) delete scrollbar;
+	delete listboxs;
+	delete scrollbar;
+	delete tip;
 }
 

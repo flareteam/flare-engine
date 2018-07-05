@@ -47,6 +47,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetLabel.h"
 #include "WidgetSlot.h"
 #include "WidgetTabControl.h"
+#include "WidgetTooltip.h"
 
 #include <climits>
 
@@ -77,6 +78,7 @@ MenuPowers::MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar)
 	, tree_loaded(false)
 	, prev_powers_list_size(0)
 	, default_power_tab(-1)
+	, tip(new WidgetTooltip())
 	, newPowerNotification(false)
 {
 
@@ -140,6 +142,8 @@ MenuPowers::~MenuPowers() {
 
 	delete label_powers;
 	delete label_unspent;
+
+	delete tip;
 }
 
 void MenuPowers::align() {
@@ -718,28 +722,28 @@ int MenuPowers::getPointsUsed() {
 	return used;
 }
 
-void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector<Power_Menu_Cell>& power_cells, bool show_unlock_prompt) {
+void MenuPowers::createTooltip(TooltipData* tip_data, int slot_num, const std::vector<Power_Menu_Cell>& power_cells, bool show_unlock_prompt) {
 	if (power_cells[slot_num].upgrade_level > 0)
-		tip->addText(powers->powers[power_cells[slot_num].id].name + " (" + msg->get("Level %d", power_cells[slot_num].upgrade_level) + ")");
+		tip_data->addText(powers->powers[power_cells[slot_num].id].name + " (" + msg->get("Level %d", power_cells[slot_num].upgrade_level) + ")");
 	else
-		tip->addText(powers->powers[power_cells[slot_num].id].name);
+		tip_data->addText(powers->powers[power_cells[slot_num].id].name);
 
-	if (powers->powers[power_cells[slot_num].id].passive) tip->addText(msg->get("Passive"));
-	tip->addColoredText(substituteVarsInString(powers->powers[power_cells[slot_num].id].description, pc), font->getColor(FontEngine::COLOR_ITEM_FLAVOR));
+	if (powers->powers[power_cells[slot_num].id].passive) tip_data->addText(msg->get("Passive"));
+	tip_data->addColoredText(substituteVarsInString(powers->powers[power_cells[slot_num].id].description, pc), font->getColor(FontEngine::COLOR_ITEM_FLAVOR));
 
 	// add mana cost
 	if (powers->powers[power_cells[slot_num].id].requires_mp > 0) {
-		tip->addText(msg->get("Costs %d MP", powers->powers[power_cells[slot_num].id].requires_mp));
+		tip_data->addText(msg->get("Costs %d MP", powers->powers[power_cells[slot_num].id].requires_mp));
 	}
 	// add health cost
 	if (powers->powers[power_cells[slot_num].id].requires_hp > 0) {
-		tip->addText(msg->get("Costs %d HP", powers->powers[power_cells[slot_num].id].requires_hp));
+		tip_data->addText(msg->get("Costs %d HP", powers->powers[power_cells[slot_num].id].requires_hp));
 	}
 	// add cooldown time
 	if (powers->powers[power_cells[slot_num].id].cooldown > 0) {
 		std::stringstream ss;
 		ss << msg->get("Cooldown:") << " " << getDurationString(powers->powers[power_cells[slot_num].id].cooldown);
-		tip->addText(ss.str());
+		tip_data->addText(ss.str());
 	}
 
 	const Power &pwr = powers->powers[power_cells[slot_num].id];
@@ -952,7 +956,7 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 				ss << "(" << msg->get("%d%% chance", pwr.post_effects[i].chance) << ")";
 			}
 
-			tip->addColoredText(ss.str(), font->getColor(FontEngine::COLOR_MENU_BONUS));
+			tip_data->addColoredText(ss.str(), font->getColor(FontEngine::COLOR_MENU_BONUS));
 		}
 	}
 
@@ -984,7 +988,7 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 				ss << " (x" << pwr.count << ")";
 
 			if (!ss.str().empty())
-				tip->addColoredText(ss.str(), font->getColor(FontEngine::COLOR_MENU_BONUS));
+				tip_data->addColoredText(ss.str(), font->getColor(FontEngine::COLOR_MENU_BONUS));
 		}
 
 		// modifier_accuracy
@@ -1004,7 +1008,7 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 			ss << msg->get("Base Accuracy");
 
 			if (!ss.str().empty())
-				tip->addColoredText(ss.str(), font->getColor(FontEngine::COLOR_MENU_BONUS));
+				tip_data->addColoredText(ss.str(), font->getColor(FontEngine::COLOR_MENU_BONUS));
 		}
 
 		// modifier_critical
@@ -1024,28 +1028,28 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 			ss << msg->get("Base Critical Chance");
 
 			if (!ss.str().empty())
-				tip->addColoredText(ss.str(), font->getColor(FontEngine::COLOR_MENU_BONUS));
+				tip_data->addColoredText(ss.str(), font->getColor(FontEngine::COLOR_MENU_BONUS));
 		}
 
 		if (pwr.trait_armor_penetration) {
 			ss.str("");
 			ss << msg->get("Ignores Absorbtion");
-			tip->addColoredText(ss.str(), font->getColor(FontEngine::COLOR_MENU_BONUS));
+			tip_data->addColoredText(ss.str(), font->getColor(FontEngine::COLOR_MENU_BONUS));
 		}
 		if (pwr.trait_avoidance_ignore) {
 			ss.str("");
 			ss << msg->get("Ignores Avoidance");
-			tip->addColoredText(ss.str(), font->getColor(FontEngine::COLOR_MENU_BONUS));
+			tip_data->addColoredText(ss.str(), font->getColor(FontEngine::COLOR_MENU_BONUS));
 		}
 		if (pwr.trait_crits_impaired > 0) {
 			ss.str("");
 			ss << msg->get("%d%% Chance to crit slowed targets", pwr.trait_crits_impaired);
-			tip->addColoredText(ss.str(), font->getColor(FontEngine::COLOR_MENU_BONUS));
+			tip_data->addColoredText(ss.str(), font->getColor(FontEngine::COLOR_MENU_BONUS));
 		}
 		if (pwr.trait_elemental > -1) {
 			ss.str("");
 			ss << msg->get("%s Elemental Damage", eset->elements.list[pwr.trait_elemental].name.c_str());
-			tip->addColoredText(ss.str(), font->getColor(FontEngine::COLOR_MENU_BONUS));
+			tip_data->addColoredText(ss.str(), font->getColor(FontEngine::COLOR_MENU_BONUS));
 		}
 	}
 
@@ -1053,7 +1057,7 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 	for (it = powers->powers[power_cells[slot_num].id].requires_flags.begin(); it != powers->powers[power_cells[slot_num].id].requires_flags.end(); ++it) {
 		for (size_t i = 0; i < eset->equip_flags.list.size(); ++i) {
 			if ((*it) == eset->equip_flags.list[i].id) {
-				tip->addText(msg->get("Requires a %s", msg->get(eset->equip_flags.list[i].name).c_str()));
+				tip_data->addText(msg->get("Requires a %s", msg->get(eset->equip_flags.list[i].name).c_str()));
 			}
 		}
 	}
@@ -1062,18 +1066,18 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 		if (power_cells[slot_num].requires_primary[i] > 0) {
 			if (stats->get_primary(i) < power_cells[slot_num].requires_primary[i])
-				tip->addColoredText(msg->get("Requires %s %d", eset->primary_stats.list[i].name.c_str(), power_cells[slot_num].requires_primary[i]), font->getColor(FontEngine::COLOR_MENU_PENALTY));
+				tip_data->addColoredText(msg->get("Requires %s %d", eset->primary_stats.list[i].name.c_str(), power_cells[slot_num].requires_primary[i]), font->getColor(FontEngine::COLOR_MENU_PENALTY));
 			else
-				tip->addText(msg->get("Requires %s %d", eset->primary_stats.list[i].name.c_str(), power_cells[slot_num].requires_primary[i]));
+				tip_data->addText(msg->get("Requires %s %d", eset->primary_stats.list[i].name.c_str(), power_cells[slot_num].requires_primary[i]));
 		}
 	}
 
 	// Draw required Level Tooltip
 	if ((power_cells[slot_num].requires_level > 0) && stats->level < power_cells[slot_num].requires_level) {
-		tip->addColoredText(msg->get("Requires Level %d", power_cells[slot_num].requires_level), font->getColor(FontEngine::COLOR_MENU_PENALTY));
+		tip_data->addColoredText(msg->get("Requires Level %d", power_cells[slot_num].requires_level), font->getColor(FontEngine::COLOR_MENU_PENALTY));
 	}
 	else if ((power_cells[slot_num].requires_level > 0) && stats->level >= power_cells[slot_num].requires_level) {
-		tip->addText(msg->get("Requires Level %d", power_cells[slot_num].requires_level));
+		tip_data->addText(msg->get("Requires Level %d", power_cells[slot_num].requires_level));
 	}
 
 	for (size_t j=0; j < power_cells[slot_num].requires_power.size(); ++j) {
@@ -1092,10 +1096,10 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 		// Required Power Tooltip
 		int req_cell_index = getCellByPowerIndex(power_cells[slot_num].requires_power[j], power_cell_all);
 		if (!checkUnlocked(req_cell_index)) {
-			tip->addColoredText(msg->get("Requires Power: %s", req_power_name.c_str()), font->getColor(FontEngine::COLOR_MENU_PENALTY));
+			tip_data->addColoredText(msg->get("Requires Power: %s", req_power_name.c_str()), font->getColor(FontEngine::COLOR_MENU_PENALTY));
 		}
 		else {
-			tip->addText(msg->get("Requires Power: %s", req_power_name.c_str()));
+			tip_data->addText(msg->get("Requires Power: %s", req_power_name.c_str()));
 		}
 
 	}
@@ -1104,13 +1108,13 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 	if (power_cells[slot_num].requires_point && !(std::find(stats->powers_list.begin(), stats->powers_list.end(), power_cells[slot_num].id) != stats->powers_list.end())) {
 		int unlock_id = getCellByPowerIndex(power_cells[slot_num].id, power_cell_all);
 		if (show_unlock_prompt && points_left > 0 && checkUnlock(unlock_id)) {
-			tip->addColoredText(msg->get("Click to Unlock (uses 1 Skill Point)"), font->getColor(FontEngine::COLOR_MENU_BONUS));
+			tip_data->addColoredText(msg->get("Click to Unlock (uses 1 Skill Point)"), font->getColor(FontEngine::COLOR_MENU_BONUS));
 		}
 		else {
 			if (power_cells[slot_num].requires_point && points_left < 1)
-				tip->addColoredText(msg->get("Requires 1 Skill Point"), font->getColor(FontEngine::COLOR_MENU_PENALTY));
+				tip_data->addColoredText(msg->get("Requires 1 Skill Point"), font->getColor(FontEngine::COLOR_MENU_PENALTY));
 			else
-				tip->addText(msg->get("Requires 1 Skill Point"));
+				tip_data->addText(msg->get("Requires 1 Skill Point"));
 		}
 	}
 }
@@ -1357,9 +1361,11 @@ void MenuPowers::render() {
 /**
  * Show mouseover descriptions of disciplines and powers
  */
-TooltipData MenuPowers::checkTooltip(const Point& mouse) {
+void MenuPowers::renderTooltips(const Point& position) {
+	if (!visible || !isWithinRect(window_area, position))
+		return;
 
-	TooltipData tip;
+	TooltipData tip_data;
 
 	for (size_t i=0; i<power_cell.size(); i++) {
 
@@ -1368,23 +1374,22 @@ TooltipData MenuPowers::checkTooltip(const Point& mouse) {
 		int cell_index = getCellByPowerIndex(power_cell[i].id, power_cell_all);
 		if (!checkCellVisible(cell_index)) continue;
 
-		if (slots[i] && isWithinRect(slots[i]->pos, mouse)) {
+		if (slots[i] && isWithinRect(slots[i]->pos, position)) {
 			bool base_unlocked = checkUnlocked(cell_index) || std::find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[i].id) != stats->powers_list.end();
 
-			createTooltip(&tip, static_cast<int>(i), power_cell, !base_unlocked);
+			createTooltip(&tip_data, static_cast<int>(i), power_cell, !base_unlocked);
 			if (!power_cell[i].upgrades.empty()) {
 				int next_level = getNextLevelCell(static_cast<int>(i));
 				if (next_level != -1) {
-					tip.addText("\n" + msg->get("Next Level:"));
-					createTooltip(&tip, next_level, power_cell_upgrade, base_unlocked);
+					tip_data.addText("\n" + msg->get("Next Level:"));
+					createTooltip(&tip_data, next_level, power_cell_upgrade, base_unlocked);
 				}
 			}
 
-			return tip;
+			tip->render(tip_data, position, TooltipData::STYLE_FLOAT);
+			break;
 		}
 	}
-
-	return tip;
 }
 
 /**

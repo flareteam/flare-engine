@@ -33,6 +33,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class BonusData;
 class StatBlock;
 class WidgetButton;
+class WidgetTooltip;
 
 class MenuInventory : public Menu {
 private:
@@ -60,6 +61,8 @@ private:
 
 	int tap_to_activate_ticks;
 
+	WidgetTooltip *tip;
+
 public:
 	enum {
 		CTRL_NONE = 0,
@@ -81,7 +84,7 @@ public:
 
 	void logic();
 	void render();
-	TooltipData checkTooltip(const Point& position);
+	void renderTooltips(const Point& position);
 	int areaOver(const Point& position);
 
 	ItemStack click(const Point& position);

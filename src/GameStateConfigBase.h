@@ -43,7 +43,6 @@ class WidgetLabel;
 class WidgetListBox;
 class WidgetSlider;
 class WidgetTabControl;
-class WidgetTooltip;
 
 class GameStateConfigBase : public GameState {
 protected:
@@ -83,7 +82,7 @@ public:
 	void render();
 	virtual void renderTabContents();
 	virtual void renderDialogs();
-	virtual void renderTooltips(TooltipData& tip_new);
+	virtual void renderTooltips();
 
 	void placeLabeledWidget(WidgetLabel* lb, Widget* w, int x1, int y1, int x2, int y2, std::string const& str, int justify = 0);
 	virtual void refreshWidgets();
@@ -148,9 +147,6 @@ public:
 	WidgetButton        * inactivemods_activate_btn;
 
 	MenuConfirm         * defaults_confirm;
-
-	WidgetTooltip       * tip;
-	TooltipData         tip_buf;
 
 	int active_tab;
 

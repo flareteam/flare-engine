@@ -39,6 +39,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetButton.h"
 #include "WidgetSlot.h"
 #include "WidgetTabControl.h"
+#include "WidgetTooltip.h"
 
 MenuVendor::MenuVendor(StatBlock *_stats)
 	: Menu()
@@ -48,6 +49,7 @@ MenuVendor::MenuVendor(StatBlock *_stats)
 	, slots_cols(1)
 	, slots_rows(1)
 	, activetab(ItemManager::VENDOR_BUY)
+	, tip (new WidgetTooltip())
 	, npc(NULL)
 	, buyback_stock() {
 	setBackground("images/menus/vendor.png");
@@ -233,9 +235,13 @@ void MenuVendor::add(ItemStack stack) {
 	saveInventory();
 }
 
-TooltipData MenuVendor::checkTooltip(const Point& position) {
+void MenuVendor::renderTooltips(const Point& position) {
+	if (!visible || !isWithinRect(window_area, position))
+		return;
+
 	int vendor_view = (activetab == ItemManager::VENDOR_BUY) ? ItemManager::VENDOR_BUY : ItemManager::VENDOR_SELL;
-	return stock[activetab].checkTooltip(position, stats, vendor_view);
+	TooltipData tip_data = stock[activetab].checkTooltip(position, stats, vendor_view);
+	tip->render(tip_data, position, TooltipData::STYLE_FLOAT);
 }
 
 /**
@@ -339,5 +345,6 @@ void MenuVendor::defocusTabLists() {
 MenuVendor::~MenuVendor() {
 	delete closeButton;
 	delete tabControl;
+	delete tip;
 }
 

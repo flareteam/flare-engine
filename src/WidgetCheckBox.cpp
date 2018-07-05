@@ -31,6 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "TooltipData.h"
 #include "Widget.h"
 #include "WidgetCheckBox.h"
+#include "WidgetTooltip.h"
 
 const std::string WidgetCheckBox::DEFAULT_FILE = "images/menus/buttons/checkbox_default.png";
 
@@ -38,6 +39,7 @@ WidgetCheckBox::WidgetCheckBox (const std::string &fname)
 	: enabled(true)
 	, tooltip("")
 	, cb(NULL)
+	, tip(new WidgetTooltip())
 	, checked(false)
 	, pressed(false)
 	, activated(false)
@@ -62,7 +64,8 @@ void WidgetCheckBox::activate() {
 }
 
 WidgetCheckBox::~WidgetCheckBox () {
-	if (cb) delete cb;
+	delete cb;
+	delete tip;
 }
 
 void WidgetCheckBox::setChecked(const bool status) {
@@ -141,18 +144,13 @@ void WidgetCheckBox::render() {
 	}
 }
 
-/**
- * If mousing-over an item with a tooltip, return that tooltip data.
- *
- * @param mouse The x,y screen coordinates of the mouse cursor
- */
-TooltipData WidgetCheckBox::checkTooltip(const Point& mouse) {
-	TooltipData _tip;
-
+void WidgetCheckBox::renderTooltip(const Point& mouse) {
+	TooltipData tip_data;
 	if (inpt->usingMouse() && isWithinRect(pos, mouse) && tooltip != "") {
-		_tip.addText(tooltip);
+		tip_data.addText(tooltip);
 	}
 
-	return _tip;
+	if (!tip_data.isEmpty())
+		tip->render(tip_data, mouse, TooltipData::STYLE_FLOAT);
 }
 

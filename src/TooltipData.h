@@ -42,27 +42,22 @@ public:
 
 	std::vector<std::string> lines;
 	std::vector<Color> colors;
-	Sprite *tip_buffer;
 
 	TooltipData();
 	~TooltipData();
-
-	TooltipData(const TooltipData &tdSource);
-	TooltipData& operator= (const TooltipData &tdSource);
-
-	void clear();
 
 	// add text with support for new lines
 	void addColoredText(const std::string &text, const Color& color);
 	void addText(const std::string &text);
 
+	void clear();
 	bool isEmpty();
 
 	// compare the first line
 	bool compareFirstLine(const std::string &text);
 
 	// compare all lines
-	bool compare(const TooltipData *tip);
+	bool compare(const TooltipData& tip);
 };
 
 #endif // TOOLTIPDATA_H

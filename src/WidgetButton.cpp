@@ -37,8 +37,6 @@ WidgetButton::WidgetButton(const std::string& _fileName)
 	, fileName(_fileName)
 	, buttons()
 	, wlabel()
-	, tip_buf()
-	, tip_new()
 	, tip(new WidgetTooltip())
 	, activated(false)
 	, label("")
@@ -86,9 +84,6 @@ bool WidgetButton::checkClickAt(int x, int y) {
 
 	// Change the hover state
 	hover = isWithinRect(pos, mouse) && inpt->usingMouse();
-
-	// Check the tooltip
-	tip_new = checkTooltip(mouse);
 
 	// disabled buttons can't be clicked;
 	if (!enabled) return false;
@@ -153,13 +148,10 @@ void WidgetButton::render() {
 	wlabel.render();
 
 	// render the tooltip
-	if (!tip_new.isEmpty()) {
-		if (!tip_new.compare(&tip_buf)) {
-			tip_buf.clear();
-			tip_buf = tip_new;
-		}
-		tip->render(tip_buf, inpt->mouse, TooltipData::STYLE_FLOAT);
-	}
+	// NOTE This probably shouldn't be called here.
+	// Instead, it should be called outside this class so that it may render above other widgets, etc.
+	// A better solution might be to leave the call here, but defer the rendering to a final pass
+	renderTooltip(inpt->mouse);
 }
 
 /**
@@ -180,24 +172,18 @@ void WidgetButton::refresh() {
 	}
 }
 
-/**
- * If mousing-over an item with a tooltip, return that tooltip data.
- *
- * @param mouse The x,y screen coordinates of the mouse cursor
- */
-TooltipData WidgetButton::checkTooltip(const Point& mouse) {
-	TooltipData _tip;
+void WidgetButton::renderTooltip(const Point& mouse) {
+	TooltipData tip_data;
 
 	if (inpt->usingMouse() && isWithinRect(pos, mouse) && tooltip != "") {
-		_tip.addText(tooltip);
+		tip_data.addText(tooltip);
 	}
 
-	return _tip;
+	tip->render(tip_data, mouse, TooltipData::STYLE_FLOAT);
 }
 
 WidgetButton::~WidgetButton() {
 	if (buttons) delete buttons;
-	tip_buf.clear();
 	delete tip;
 }
 

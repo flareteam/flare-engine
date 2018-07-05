@@ -28,7 +28,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "Widget.h"
 #include "WidgetLabel.h"
-#include "TooltipData.h"
 
 class WidgetTooltip;
 
@@ -47,10 +46,8 @@ private:
 
 	WidgetLabel wlabel;
 
-	TooltipData tip_buf;
-	TooltipData tip_new;
 	WidgetTooltip *tip;
-	TooltipData checkTooltip(const Point& mouse);
+	void renderTooltip(const Point& mouse);
 
 	bool activated;
 

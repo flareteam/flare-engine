@@ -27,10 +27,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "Widget.h"
-#include "TooltipData.h"
 
 class WidgetLabel;
 class WidgetScrollBar;
+class WidgetTooltip;
 
 class WidgetListBox : public Widget {
 private:
@@ -59,6 +59,7 @@ private:
 	std::vector<WidgetLabel> vlabels;
 	std::vector<Rect> rows;
 	WidgetScrollBar *scrollbar;
+	WidgetTooltip *tip;
 
 public:
 	WidgetListBox(int height, const std::string& _fileName);
@@ -69,7 +70,7 @@ public:
 
 	bool checkClick();
 	bool checkClickAt(int x, int y);
-	TooltipData checkTooltip(const Point& mouse);
+	void renderTooltip(const Point& mouse);
 	void append(const std::string& value, const std::string& tooltip);
 	void set(unsigned index, const std::string& value, const std::string& tooltip);
 	void remove(int index);

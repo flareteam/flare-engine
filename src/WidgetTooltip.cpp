@@ -35,11 +35,14 @@ int TOOLTIP_CONTEXT = TOOLTIP_NONE;
 
 WidgetTooltip::WidgetTooltip() {
 	background = render_device->loadImage("images/menus/tooltips.png", RenderDevice::ERROR_NONE);
+	sprite_buf = NULL;
 }
 
 WidgetTooltip::~WidgetTooltip() {
 	if (background)
 		background->unref();
+
+	delete sprite_buf;
 }
 
 /**
@@ -96,18 +99,18 @@ Point WidgetTooltip::calcPosition(uint8_t style, const Point& pos, const Point& 
  * Creates the cached text buffer if needed and sets the position & bounds of the tooltip
  */
 void WidgetTooltip::prerender(TooltipData&tip, const Point& pos, uint8_t style) {
-	if (tip.tip_buffer == NULL) {
+	if (sprite_buf == NULL || !tip.compare(data_buf)) {
 		if (!createBuffer(tip)) return;
 	}
 
 	Point size;
-	size.x = tip.tip_buffer->getGraphicsWidth();
-	size.y = tip.tip_buffer->getGraphicsHeight();
+	size.x = sprite_buf->getGraphicsWidth();
+	size.y = sprite_buf->getGraphicsHeight();
 
 	Point tip_pos = calcPosition(style, pos, size);
 
-	tip.tip_buffer->setDestX(tip_pos.x);
-	tip.tip_buffer->setDestY(tip_pos.y);
+	sprite_buf->setDestX(tip_pos.x);
+	sprite_buf->setDestY(tip_pos.y);
 
 	bounds.x = tip_pos.x;
 	bounds.y = tip_pos.y;
@@ -120,8 +123,11 @@ void WidgetTooltip::prerender(TooltipData&tip, const Point& pos, uint8_t style) 
  * Draw the buffered tooltip if it exists, else render the tooltip and buffer it
  */
 void WidgetTooltip::render(TooltipData &tip, const Point& pos, uint8_t style) {
+	if (tip.isEmpty())
+		return;
+
 	prerender(tip, pos, style);
-	render_device->render(tip.tip_buffer);
+	render_device->render(sprite_buf);
 }
 
 /**
@@ -129,7 +135,6 @@ void WidgetTooltip::render(TooltipData &tip, const Point& pos, uint8_t style) {
  * Instead of doing this each frame, do it once and cache the result.
  */
 bool WidgetTooltip::createBuffer(TooltipData &tip) {
-
 	if (tip.lines.empty()) {
 		tip.lines.resize(1);
 		tip.colors.resize(1);
@@ -148,9 +153,9 @@ bool WidgetTooltip::createBuffer(TooltipData &tip) {
 	Point size = font->calc_size(fulltext, eset->tooltips.width);
 
 	// WARNING: dynamic memory allocation. Be careful of memory leaks.
-	if (tip.tip_buffer) {
-		delete tip.tip_buffer;
-		tip.tip_buffer = NULL;
+	if (sprite_buf) {
+		delete sprite_buf;
+		sprite_buf = NULL;
 	}
 
 	Image *graphics;
@@ -217,9 +222,10 @@ bool WidgetTooltip::createBuffer(TooltipData &tip) {
 		cursor_y = font->cursor_y;
 	}
 
-	tip.tip_buffer = graphics->createSprite();
+	sprite_buf = graphics->createSprite();
 	graphics->unref();
 
+	data_buf = tip;
 	return true;
 }
 

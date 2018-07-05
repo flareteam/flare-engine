@@ -27,7 +27,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "ItemManager.h"
-#include "TooltipData.h"
 
 class Menu;
 class MenuInventory;
@@ -51,7 +50,6 @@ class MenuDevConsole;
 class MenuTouchControls;
 class StatBlock;
 class Subtitles;
-class WidgetTooltip;
 
 class MenuManager {
 private:
@@ -65,13 +63,6 @@ private:
 	};
 
 	StatBlock *stats;
-
-	TooltipData tip_buf;
-	TooltipData keyb_tip_buf_vendor;
-	TooltipData keyb_tip_buf_stash;
-	TooltipData keyb_tip_buf_pow;
-	TooltipData keyb_tip_buf_inv;
-	TooltipData keyb_tip_buf_act;
 
 	void handleKeyboardTooltips();
 
@@ -120,7 +111,6 @@ public:
 	MenuStatBar *hp;
 	MenuStatBar *mp;
 	MenuStatBar *xp;
-	WidgetTooltip *tip;
 	MenuMiniMap *mini;
 	MenuNPCActions *npc;
 	MenuNumPicker *num_picker;

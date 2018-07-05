@@ -39,7 +39,6 @@ class WidgetListBox;
 class WidgetScrollBox;
 class WidgetSlider;
 class WidgetTabControl;
-class WidgetTooltip;
 
 class GameStateConfigDesktop : public GameStateConfigBase {
 public:
@@ -72,7 +71,7 @@ private:
 
 	void renderTabContents();
 	void renderDialogs();
-	void renderTooltips(TooltipData& tip_new);
+	void renderTooltips();
 
 	void refreshWidgets();
 
