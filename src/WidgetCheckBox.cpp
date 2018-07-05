@@ -28,10 +28,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "InputState.h"
 #include "RenderDevice.h"
 #include "SharedResources.h"
-#include "TooltipData.h"
+#include "TooltipManager.h"
 #include "Widget.h"
 #include "WidgetCheckBox.h"
-#include "WidgetTooltip.h"
 
 const std::string WidgetCheckBox::DEFAULT_FILE = "images/menus/buttons/checkbox_default.png";
 
@@ -39,7 +38,6 @@ WidgetCheckBox::WidgetCheckBox (const std::string &fname)
 	: enabled(true)
 	, tooltip("")
 	, cb(NULL)
-	, tip(new WidgetTooltip())
 	, checked(false)
 	, pressed(false)
 	, activated(false)
@@ -65,7 +63,6 @@ void WidgetCheckBox::activate() {
 
 WidgetCheckBox::~WidgetCheckBox () {
 	delete cb;
-	delete tip;
 }
 
 void WidgetCheckBox::setChecked(const bool status) {
@@ -83,6 +80,8 @@ bool WidgetCheckBox::checkClickAt(int x, int y) {
 	if (!enabled) return false;
 
 	Point mouse(x,y);
+
+	checkTooltip(mouse);
 
 	// main button already in use, new click not allowed
 	if (inpt->lock[Input::MAIN1]) return false;
@@ -144,13 +143,13 @@ void WidgetCheckBox::render() {
 	}
 }
 
-void WidgetCheckBox::renderTooltip(const Point& mouse) {
+void WidgetCheckBox::checkTooltip(const Point& mouse) {
 	TooltipData tip_data;
 	if (inpt->usingMouse() && isWithinRect(pos, mouse) && tooltip != "") {
 		tip_data.addText(tooltip);
 	}
 
 	if (!tip_data.isEmpty())
-		tip->render(tip_data, mouse, TooltipData::STYLE_FLOAT);
+		tooltipm->push(tip_data, mouse, TooltipData::STYLE_FLOAT);
 }
 

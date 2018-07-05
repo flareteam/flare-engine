@@ -33,7 +33,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class BonusData;
 class StatBlock;
 class WidgetButton;
-class WidgetTooltip;
 
 class MenuInventory : public Menu {
 private:
@@ -60,8 +59,6 @@ private:
 	Point carried_pos;
 
 	int tap_to_activate_ticks;
-
-	WidgetTooltip *tip;
 
 public:
 	enum {

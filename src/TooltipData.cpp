@@ -64,7 +64,7 @@ void TooltipData::clear() {
 	colors.clear();
 }
 
-bool TooltipData::isEmpty() {
+bool TooltipData::isEmpty() const {
 	return lines.empty();
 }
 

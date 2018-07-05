@@ -458,7 +458,6 @@ void GameStateNew::render() {
 	if (show_classlist) {
 		label_classlist->render();
 		class_list->render();
-		class_list->renderTooltip(inpt->mouse);
 	}
 
 }

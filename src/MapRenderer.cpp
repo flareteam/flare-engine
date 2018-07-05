@@ -42,6 +42,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "SoundManager.h"
 #include "StatBlock.h"
+#include "TooltipManager.h"
 #include "UtilsFileSystem.h"
 #include "UtilsMath.h"
 #include "WidgetTooltip.h"
@@ -1041,16 +1042,16 @@ void MapRenderer::checkTooltip() {
 }
 
 void MapRenderer::createTooltip(Event_Component *ec) {
-	if (ec && !ec->s.empty() && TOOLTIP_CONTEXT != TOOLTIP_MENU) {
+	if (ec && !ec->s.empty() && tooltipm->context != TooltipManager::CONTEXT_MENU) {
 		show_tooltip = true;
 		if (!tip_buf.compareFirstLine(ec->s)) {
 			tip_buf.clear();
 			tip_buf.addText(ec->s);
 		}
-		TOOLTIP_CONTEXT = TOOLTIP_MAP;
+		tooltipm->context = TooltipManager::CONTEXT_MAP;
 	}
-	else if (TOOLTIP_CONTEXT != TOOLTIP_MENU) {
-		TOOLTIP_CONTEXT = TOOLTIP_NONE;
+	else if (tooltipm->context != TooltipManager::CONTEXT_MENU) {
+		tooltipm->context = TooltipManager::CONTEXT_NONE;
 	}
 }
 

@@ -31,7 +31,6 @@ class StatBlock;
 class WidgetButton;
 class WidgetLabel;
 class WidgetListBox;
-class WidgetTooltip;
 
 class MenuCharacter : public Menu {
 private:
@@ -86,8 +85,6 @@ private:
 	std::vector< std::vector<int>* > base_bonus;
 
 	int name_max_width;
-
-	WidgetTooltip* tip;
 
 public:
 	explicit MenuCharacter(StatBlock *stats);

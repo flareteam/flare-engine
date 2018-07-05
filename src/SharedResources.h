@@ -45,6 +45,7 @@ class RenderDevice;
 class SaveLoad;
 class Settings;
 class SoundManager;
+class TooltipManager;
 
 extern AnimationManager *anim;
 extern CombatText *comb;
@@ -59,5 +60,6 @@ extern RenderDevice *render_device;
 extern SaveLoad *save_load;
 extern Settings *settings;
 extern SoundManager *snd;
+extern TooltipManager *tooltipm;
 
 #endif

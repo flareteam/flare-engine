@@ -21,6 +21,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef TOOLTIPDATA_H
 #define TOOLTIPDATA_H
 
+#include "CommonIncludes.h"
 #include "Utils.h"
 
 /**
@@ -51,7 +52,7 @@ public:
 	void addText(const std::string &text);
 
 	void clear();
-	bool isEmpty();
+	bool isEmpty() const;
 
 	// compare the first line
 	bool compareFirstLine(const std::string &text);

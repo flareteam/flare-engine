@@ -1235,8 +1235,6 @@ void MenuManager::render() {
 			}
 			effects->renderTooltips(inpt->mouse);
 			act->renderTooltips(inpt->mouse);
-
-			// TODO handle menu vs map context
 		}
 	}
 

@@ -45,6 +45,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "SoundManager.h"
 #include "Stats.h"
+#include "TooltipManager.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
 #include "Version.h"
@@ -649,6 +650,8 @@ void GameStateConfigBase::logicAccept() {
 		loading_tip = NULL;
 	}
 
+	delete tooltipm;
+
 	// we can't replace the render device in-place, so soft-reset the game
 	if (new_render_device != settings->render_device_name) {
 		settings->render_device_name = new_render_device;
@@ -657,6 +660,7 @@ void GameStateConfigBase::logicAccept() {
 	}
 
 	render_device->createContext();
+	tooltipm = new TooltipManager();
 	settings->saveSettings();
 	setRequestedGameState(new GameStateTitle());
 }
@@ -775,11 +779,6 @@ void GameStateConfigBase::render() {
 
 	renderTabContents();
 	renderDialogs();
-
-	// Get tooltips for listboxes
-	// This isn't very elegant right now
-	// In the future, we'll want to get tooltips for all widget types
-	renderTooltips();
 }
 
 void GameStateConfigBase::renderTabContents() {
@@ -792,12 +791,6 @@ void GameStateConfigBase::renderTabContents() {
 void GameStateConfigBase::renderDialogs() {
 	if (defaults_confirm->visible)
 		defaults_confirm->render();
-}
-
-void GameStateConfigBase::renderTooltips() {
-	if (active_tab == INTERFACE_TAB) language_lstb->renderTooltip(inpt->mouse);
-	if (active_tab == MODS_TAB) activemods_lstb->renderTooltip(inpt->mouse);
-	if (active_tab == MODS_TAB) inactivemods_lstb->renderTooltip(inpt->mouse);
 }
 
 void GameStateConfigBase::placeLabeledWidget(WidgetLabel *lb, Widget *w, int x1, int y1, int x2, int y2, std::string const& str, int justify) {

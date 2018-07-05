@@ -182,6 +182,7 @@ Set (FLARE_SOURCES
 	./src/Subtitles.cpp
 	./src/TileSet.cpp
 	./src/TooltipData.cpp
+	./src/TooltipManager.cpp
 	./src/Utils.cpp
 	./src/UtilsDebug.cpp
 	./src/UtilsFileSystem.cpp
@@ -294,6 +295,7 @@ Set (FLARE_HEADERS
 	./src/Subtitles.h
 	./src/TileSet.h
 	./src/TooltipData.h
+	./src/TooltipManager.h
 	./src/Utils.h
 	./src/UtilsDebug.h
 	./src/UtilsFileSystem.h

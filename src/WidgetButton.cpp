@@ -27,8 +27,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "InputState.h"
 #include "RenderDevice.h"
 #include "SharedResources.h"
+#include "TooltipManager.h"
 #include "WidgetButton.h"
-#include "WidgetTooltip.h"
 
 const std::string WidgetButton::DEFAULT_FILE = "images/menus/buttons/button_default.png";
 
@@ -37,7 +37,6 @@ WidgetButton::WidgetButton(const std::string& _fileName)
 	, fileName(_fileName)
 	, buttons()
 	, wlabel()
-	, tip(new WidgetTooltip())
 	, activated(false)
 	, label("")
 	, tooltip("")
@@ -81,6 +80,8 @@ bool WidgetButton::checkClick() {
  */
 bool WidgetButton::checkClickAt(int x, int y) {
 	Point mouse(x,y);
+
+	checkTooltip(mouse);
 
 	// Change the hover state
 	hover = isWithinRect(pos, mouse) && inpt->usingMouse();
@@ -146,12 +147,6 @@ void WidgetButton::render() {
 	wlabel.local_frame = local_frame;
 	wlabel.local_offset = local_offset;
 	wlabel.render();
-
-	// render the tooltip
-	// NOTE This probably shouldn't be called here.
-	// Instead, it should be called outside this class so that it may render above other widgets, etc.
-	// A better solution might be to leave the call here, but defer the rendering to a final pass
-	renderTooltip(inpt->mouse);
 }
 
 /**
@@ -172,18 +167,15 @@ void WidgetButton::refresh() {
 	}
 }
 
-void WidgetButton::renderTooltip(const Point& mouse) {
-	TooltipData tip_data;
-
+void WidgetButton::checkTooltip(const Point& mouse) {
 	if (inpt->usingMouse() && isWithinRect(pos, mouse) && tooltip != "") {
+		TooltipData tip_data;
 		tip_data.addText(tooltip);
+		tooltipm->push(tip_data, mouse, TooltipData::STYLE_FLOAT);
 	}
-
-	tip->render(tip_data, mouse, TooltipData::STYLE_FLOAT);
 }
 
 WidgetButton::~WidgetButton() {
-	if (buttons) delete buttons;
-	delete tip;
+	delete buttons;
 }
 

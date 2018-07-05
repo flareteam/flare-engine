@@ -30,7 +30,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class WidgetLabel;
 class WidgetScrollBar;
-class WidgetTooltip;
 
 class WidgetListBox : public Widget {
 private:
@@ -48,6 +47,8 @@ private:
 		bool selected;
 	};
 
+	void checkTooltip(const Point& mouse);
+
 	std::string fileName; // the path to the ListBoxs background image
 
 	Sprite *listboxs;
@@ -59,7 +60,6 @@ private:
 	std::vector<WidgetLabel> vlabels;
 	std::vector<Rect> rows;
 	WidgetScrollBar *scrollbar;
-	WidgetTooltip *tip;
 
 public:
 	WidgetListBox(int height, const std::string& _fileName);
@@ -70,7 +70,6 @@ public:
 
 	bool checkClick();
 	bool checkClickAt(int x, int y);
-	void renderTooltip(const Point& mouse);
 	void append(const std::string& value, const std::string& tooltip);
 	void set(unsigned index, const std::string& value, const std::string& tooltip);
 	void remove(int index);

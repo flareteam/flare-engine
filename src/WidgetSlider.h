@@ -24,7 +24,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define WIDGET_SLIDER_H
 
 class Widget;
-class WidgetTooltip;
 
 class WidgetSlider : public Widget {
 public:
@@ -53,8 +52,6 @@ private:
 	int minimum;
 	int maximum;
 	int value;
-
-	WidgetTooltip *tip;
 };
 
 #endif

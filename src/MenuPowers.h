@@ -37,7 +37,6 @@ class WidgetButton;
 class WidgetLabel;
 class WidgetSlot;
 class WidgetTabControl;
-class WidgetTooltip;
 
 class Power_Menu_Tab {
 public:
@@ -127,8 +126,6 @@ private:
 	size_t prev_powers_list_size;
 
 	int default_power_tab;
-
-	WidgetTooltip *tip;
 
 public:
 	MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar);

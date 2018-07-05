@@ -35,10 +35,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "SoundManager.h"
 #include "StatBlock.h"
+#include "TooltipManager.h"
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
 #include "WidgetListBox.h"
-#include "WidgetTooltip.h"
 
 MenuCharacter::MenuCharacter(StatBlock *_stats)
 	: stats(_stats)
@@ -50,7 +50,6 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 	, statlist_scrollbar_offset(0)
 	, show_resists(true)
 	, name_max_width(0)
-	, tip(new WidgetTooltip())
 {
 	labelCharacter->setText(msg->get("Character"));
 	labelCharacter->setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
@@ -552,12 +551,10 @@ void MenuCharacter::renderTooltips(const Point& position) {
 
 	for (size_t i = 0; i < cstat.size(); ++i) {
 		if (isWithinRect(cstat[i].hover, position) && !cstat[i].tip.isEmpty() && !cstat[i].label->isHidden()) {
-			tip->render(cstat[i].tip, position, TooltipData::STYLE_FLOAT);
+			tooltipm->push(cstat[i].tip, position, TooltipData::STYLE_FLOAT);
 			break;
 		}
 	}
-
-	statList->renderTooltip(position);
 }
 
 /**
@@ -603,5 +600,4 @@ MenuCharacter::~MenuCharacter() {
 		delete upgradeButton[i];
 	}
 	delete statList;
-	delete tip;
 }

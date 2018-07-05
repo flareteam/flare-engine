@@ -29,8 +29,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Widget.h"
 #include "WidgetLabel.h"
 
-class WidgetTooltip;
-
 class WidgetButton : public Widget {
 private:
 	enum {
@@ -46,8 +44,7 @@ private:
 
 	WidgetLabel wlabel;
 
-	WidgetTooltip *tip;
-	void renderTooltip(const Point& mouse);
+	void checkTooltip(const Point& mouse);
 
 	bool activated;
 

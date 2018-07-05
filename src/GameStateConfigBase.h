@@ -82,7 +82,6 @@ public:
 	void render();
 	virtual void renderTabContents();
 	virtual void renderDialogs();
-	virtual void renderTooltips();
 
 	void placeLabeledWidget(WidgetLabel* lb, Widget* w, int x1, int y1, int x2, int y2, std::string const& str, int justify = 0);
 	virtual void refreshWidgets();

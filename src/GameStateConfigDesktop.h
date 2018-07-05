@@ -71,7 +71,6 @@ private:
 
 	void renderTabContents();
 	void renderDialogs();
-	void renderTooltips();
 
 	void refreshWidgets();
 

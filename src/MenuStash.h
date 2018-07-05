@@ -30,7 +30,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class NPC;
 class StatBlock;
 class WidgetButton;
-class WidgetTooltip;
 
 class MenuStash : public Menu {
 private:
@@ -44,8 +43,6 @@ private:
 	// label and widget positions
 	int slots_cols;
 	int slots_rows;
-
-	WidgetTooltip *tip;
 
 public:
 	explicit MenuStash(StatBlock *stats);

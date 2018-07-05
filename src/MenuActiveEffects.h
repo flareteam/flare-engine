@@ -33,7 +33,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class StatBlock;
 class TooltipData;
 class WidgetLabel;
-class WidgetTooltip;
 
 class EffectIcon {
 public:
@@ -63,8 +62,6 @@ private:
 	StatBlock *stats;
 	bool is_vertical;
 	std::vector<EffectIcon> effect_icons;
-
-	WidgetTooltip *tip;
 
 public:
 	explicit MenuActiveEffects(StatBlock *_stats);

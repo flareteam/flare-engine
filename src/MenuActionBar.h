@@ -36,7 +36,6 @@ class Power;
 class StatBlock;
 class WidgetLabel;
 class WidgetSlot;
-class WidgetTooltip;
 
 class MenuActionBar : public Menu {
 private:
@@ -56,8 +55,6 @@ private:
 	std::vector<std::string> menu_labels;
 
 	Point last_mouse;
-
-	WidgetTooltip *tip;
 
 public:
 	enum {

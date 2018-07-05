@@ -41,10 +41,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "SoundManager.h"
 #include "StatBlock.h"
+#include "TooltipManager.h"
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
 #include "WidgetSlot.h"
-#include "WidgetTooltip.h"
 
 MenuInventory::MenuInventory(StatBlock *_stats)
 	: stats(_stats)
@@ -53,7 +53,6 @@ MenuInventory::MenuInventory(StatBlock *_stats)
 	, carried_cols(4)
 	, carried_rows(4)
 	, tap_to_activate_ticks(0)
-	, tip(new WidgetTooltip())
 	, currency(0)
 	, drag_prev_src(-1)
 	, changed_equipment(true)
@@ -305,7 +304,7 @@ void MenuInventory::renderTooltips(const Point& position) {
 			else if (inv_ctrl == CTRL_VENDOR || (eset->misc.sell_without_vendor && inv_ctrl != CTRL_STASH))
 				tip_data.addText(msg->get("Sell item stack:") + " " + inpt->getBindingString(Input::CTRL) + " / " + inpt->getBindingString(Input::CTRL, InputState::BINDING_ALT));
 		}
-		tip->render(tip_data, position, TooltipData::STYLE_FLOAT);
+		tooltipm->push(tip_data, position, TooltipData::STYLE_FLOAT);
 	}
 	else {
 		slot = inventory[area].slotOver(position);
@@ -323,7 +322,7 @@ void MenuInventory::renderTooltips(const Point& position) {
 		tip_data.addText(msg->get(items->getItemType(slot_type[slot])));
 	}
 
-	tip->render(tip_data, position, TooltipData::STYLE_FLOAT);
+	tooltipm->push(tip_data, position, TooltipData::STYLE_FLOAT);
 }
 
 /**
@@ -1185,5 +1184,4 @@ int MenuInventory::getEquipSlotFromItem(int item, bool only_empty_slots) {
 
 MenuInventory::~MenuInventory() {
 	delete closeButton;
-	delete tip;
 }

@@ -41,6 +41,7 @@ Created and destroyed by main.cpp
 #include "Settings.h"
 #include "SharedResources.h"
 #include "SoundManager.h"
+#include "TooltipManager.h"
 
 AnimationManager *anim = NULL;
 CombatText *comb = NULL;
@@ -55,3 +56,4 @@ RenderDevice *render_device = NULL;
 SaveLoad *save_load = NULL;
 Settings *settings = NULL;
 SoundManager *snd = NULL;
+TooltipManager *tooltipm = NULL;

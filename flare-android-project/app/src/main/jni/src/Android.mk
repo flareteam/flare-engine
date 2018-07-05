@@ -102,6 +102,7 @@ LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c \
 	../../../../../../src/Subtitles.cpp \
 	../../../../../../src/TileSet.cpp \
 	../../../../../../src/TooltipData.cpp \
+	../../../../../../src/TooltipManager.cpp \
 	../../../../../../src/Utils.cpp \
 	../../../../../../src/UtilsDebug.cpp \
 	../../../../../../src/UtilsFileSystem.cpp \

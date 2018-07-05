@@ -27,11 +27,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "InputState.h"
 #include "RenderDevice.h"
 #include "SharedResources.h"
-#include "TooltipData.h"
+#include "TooltipManager.h"
 #include "WidgetLabel.h"
 #include "WidgetListBox.h"
 #include "WidgetScrollBar.h"
-#include "WidgetTooltip.h"
 
 const std::string WidgetListBox::DEFAULT_FILE = "images/menus/buttons/listbox_default.png";
 
@@ -45,7 +44,6 @@ WidgetListBox::WidgetListBox(int height, const std::string& _fileName)
 	, vlabels(std::vector<WidgetLabel>(height,WidgetLabel()))
 	, rows(std::vector<Rect>(height,Rect()))
 	, scrollbar(new WidgetScrollBar(WidgetScrollBar::DEFAULT_FILE))
-	, tip(new WidgetTooltip())
 	, pos_scroll()
 	, pressed(false)
 	, multi_select(false)
@@ -85,6 +83,8 @@ bool WidgetListBox::checkClickAt(int x, int y) {
 	Point mouse(x, y);
 
 	refresh();
+
+	checkTooltip(mouse);
 
 	// check scroll wheel
 	Rect scroll_area;
@@ -168,7 +168,7 @@ bool WidgetListBox::checkClickAt(int x, int y) {
 
 }
 
-void WidgetListBox::renderTooltip(const Point& mouse) {
+void WidgetListBox::checkTooltip(const Point& mouse) {
 	if (!inpt->usingMouse())
 		return;
 
@@ -183,7 +183,7 @@ void WidgetListBox::renderTooltip(const Point& mouse) {
 	}
 
 	if (!tip_data.isEmpty())
-		tip->render(tip_data, mouse, TooltipData::STYLE_FLOAT);
+		tooltipm->push(tip_data, mouse, TooltipData::STYLE_FLOAT);
 }
 
 /**
@@ -557,6 +557,5 @@ void WidgetListBox::sort() {
 WidgetListBox::~WidgetListBox() {
 	delete listboxs;
 	delete scrollbar;
-	delete tip;
 }
 

@@ -43,11 +43,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "StatBlock.h"
-#include "TooltipData.h"
+#include "TooltipManager.h"
 #include "UtilsParsing.h"
 #include "WidgetLabel.h"
 #include "WidgetSlot.h"
-#include "WidgetTooltip.h"
 
 #include <climits>
 
@@ -55,7 +54,6 @@ MenuActionBar::MenuActionBar()
 	: sprite_emptyslot(NULL)
 	, sprite_disabled(NULL)
 	, sprite_attention(NULL)
-	, tip (new WidgetTooltip())
 	, slots_count(0)
 	, drag_prev_slot(-1)
 	, updated(false)
@@ -415,7 +413,7 @@ void MenuActionBar::renderTooltips(const Point& position) {
 
 			tip_data.addText(menu_labels[i]);
 
-			tip->render(tip_data, position, TooltipData::STYLE_FLOAT);
+			tooltipm->push(tip_data, position, TooltipData::STYLE_FLOAT);
 			break;
 		}
 	}
@@ -430,7 +428,7 @@ void MenuActionBar::renderTooltips(const Point& position) {
 		}
 	}
 
-	tip->render(tip_data, position, TooltipData::STYLE_FLOAT);
+	tooltipm->push(tip_data, position, TooltipData::STYLE_FLOAT);
 }
 
 /**
@@ -834,6 +832,4 @@ MenuActionBar::~MenuActionBar() {
 
 	for (unsigned int i=0; i<4; i++)
 		delete menus[i];
-
-	delete tip;
 }

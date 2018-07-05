@@ -797,18 +797,6 @@ void GameStateConfigDesktop::renderDialogs() {
 	}
 }
 
-void GameStateConfigDesktop::renderTooltips() {
-	GameStateConfigBase::renderTooltips();
-
-	if (active_tab == VIDEO_TAB) renderer_lstb->renderTooltip(inpt->mouse);
-	if (active_tab == VIDEO_TAB) hwsurface_cb->renderTooltip(inpt->mouse);
-	if (active_tab == VIDEO_TAB) vsync_cb->renderTooltip(inpt->mouse);
-	if (active_tab == VIDEO_TAB) dpi_scaling_cb->renderTooltip(inpt->mouse);
-	if (active_tab == VIDEO_TAB) change_gamma_cb->renderTooltip(inpt->mouse);
-	if (active_tab == INPUT_TAB) joystick_device_lstb->renderTooltip(inpt->mouse);
-	if (active_tab == INPUT_TAB) no_mouse_cb->renderTooltip(inpt->mouse);
-}
-
 void GameStateConfigDesktop::refreshWidgets() {
 	GameStateConfigBase::refreshWidgets();
 

@@ -43,6 +43,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 #include "SharedResources.h"
 #include "SoundManager.h"
+#include "TooltipManager.h"
 #include "Utils.h"
 #include "UtilsParsing.h"
 #include "WidgetLabel.h"
@@ -164,6 +165,9 @@ void GameSwitcher::logic() {
 	// reset the mouse cursor
 	curs->logic();
 
+	// reset the global tooltip
+	tooltipm->clear();
+
 	// Check if a the game state is to be changed and change it if necessary, deleting the old state
 	GameState* newState = currentState->getRequestedGameState();
 	if (newState != NULL) {
@@ -281,6 +285,7 @@ void GameSwitcher::render() {
 	}
 
 	currentState->render();
+	tooltipm->render();
 	curs->render();
 }
 

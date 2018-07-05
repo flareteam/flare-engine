@@ -35,17 +35,15 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 #include "SharedResources.h"
 #include "StatBlock.h"
-#include "TooltipData.h"
+#include "TooltipManager.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
 #include "WidgetLabel.h"
-#include "WidgetTooltip.h"
 
 MenuActiveEffects::MenuActiveEffects(StatBlock *_stats)
 	: timer(NULL)
 	, stats(_stats)
 	, is_vertical(false)
-	, tip(new WidgetTooltip())
 {
 	// Load config settings
 	FileParser infile;
@@ -232,10 +230,9 @@ void MenuActiveEffects::renderTooltips(const Point& position) {
 		}
 	}
 
-	tip->render(tip_data, position, TooltipData::STYLE_FLOAT);
+	tooltipm->push(tip_data, position, TooltipData::STYLE_FLOAT);
 }
 
 MenuActiveEffects::~MenuActiveEffects() {
 	delete timer;
-	delete tip;
 }

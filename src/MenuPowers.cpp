@@ -41,13 +41,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "SoundManager.h"
 #include "StatBlock.h"
-#include "TooltipData.h"
+#include "TooltipManager.h"
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
 #include "WidgetLabel.h"
 #include "WidgetSlot.h"
 #include "WidgetTabControl.h"
-#include "WidgetTooltip.h"
 
 #include <climits>
 
@@ -78,7 +77,6 @@ MenuPowers::MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar)
 	, tree_loaded(false)
 	, prev_powers_list_size(0)
 	, default_power_tab(-1)
-	, tip(new WidgetTooltip())
 	, newPowerNotification(false)
 {
 
@@ -142,8 +140,6 @@ MenuPowers::~MenuPowers() {
 
 	delete label_powers;
 	delete label_unspent;
-
-	delete tip;
 }
 
 void MenuPowers::align() {
@@ -1386,7 +1382,7 @@ void MenuPowers::renderTooltips(const Point& position) {
 				}
 			}
 
-			tip->render(tip_data, position, TooltipData::STYLE_FLOAT);
+			tooltipm->push(tip_data, position, TooltipData::STYLE_FLOAT);
 			break;
 		}
 	}

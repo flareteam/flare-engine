@@ -40,6 +40,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "SoundManager.h"
 #include "Stats.h"
+#include "TooltipManager.h"
 #include "Utils.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
@@ -149,6 +150,8 @@ static void init(const CmdLineArgs& cmd_line_args) {
 	snd = getSoundManager();
 
 	inpt->initJoystick();
+
+	tooltipm = new TooltipManager();
 
 	gswitch = new GameSwitcher();
 }

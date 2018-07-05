@@ -26,10 +26,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "InputState.h"
 #include "RenderDevice.h"
 #include "SharedResources.h"
+#include "TooltipManager.h"
 #include "UtilsDebug.h"
 #include "Widget.h"
 #include "WidgetSlider.h"
-#include "WidgetTooltip.h"
 
 #include <assert.h>
 
@@ -42,8 +42,7 @@ WidgetSlider::WidgetSlider (const std::string& fname)
 	, changed_without_mouse(false)
 	, minimum(0)
 	, maximum(0)
-	, value(0)
-	, tip(new WidgetTooltip()) {
+	, value(0) {
 
 	Image *graphics;
 	graphics = render_device->loadImage(fname, RenderDevice::ERROR_EXIT);
@@ -63,7 +62,6 @@ WidgetSlider::WidgetSlider (const std::string& fname)
 
 WidgetSlider::~WidgetSlider () {
 	if (sl) delete sl;
-	delete tip;
 }
 
 void WidgetSlider::setPos(int offset_x, int offset_y) {
@@ -204,7 +202,7 @@ void WidgetSlider::render () {
 
 		TooltipData tip_data;
 		tip_data.addText(ss.str());
-		tip->render(tip_data, Point(pos_knob.x + pos_knob.w*2, pos_knob.y + (pos_knob.h/2)), TooltipData::STYLE_TOPLABEL);
+		tooltipm->push(tip_data, Point(pos_knob.x + pos_knob.w*2, pos_knob.y + (pos_knob.h/2)), TooltipData::STYLE_TOPLABEL);
 	}
 }
 

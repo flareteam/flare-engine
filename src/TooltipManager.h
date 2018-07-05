@@ -1,8 +1,5 @@
 /*
-Copyright © 2011-2012 Clint Bellanger
-Copyright © 2012 Stefan Beller
-Copyright © 2013 Kurt Rinnert
-Copyright © 2012-2016 Justin Jacobs
+Copyright © 2018 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -19,31 +16,40 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 /**
- * class WidgetTooltip
+ * class TooltipManager
  */
 
-#ifndef WIDGET_TOOLTIP_H
-#define WIDGET_TOOLTIP_H
+#ifndef TOOLTIP_MANAGER_H
+#define TOOLTIP_MANAGER_H
 
-#include "CommonIncludes.h"
 #include "TooltipData.h"
 #include "Utils.h"
 
-class WidgetTooltip {
-public:
-	WidgetTooltip();
-	~WidgetTooltip();
-	Point calcPosition(uint8_t style, const Point& pos, const Point& size);
-	void prerender(TooltipData&tip, const Point& pos, uint8_t style);
-	void render(TooltipData &tip, const Point& pos, uint8_t style);
-	bool createBuffer(TooltipData &tip);
+class WidgetTooltip;
 
-	Rect bounds;
-
+class TooltipManager {
 private:
-	Image *background;
-	TooltipData data_buf;
-	Sprite* sprite_buf;
+	WidgetTooltip *tip;
+	TooltipData tip_data;
+	Point pos;
+	uint8_t style;
+
+public:
+	enum {
+		CONTEXT_NONE = 0,
+		CONTEXT_MENU = 1,
+		CONTEXT_MAP = 2
+	};
+
+	TooltipManager();
+	~TooltipManager();
+
+	void clear();
+	bool isEmpty();
+	void push(const TooltipData& _tip_data, const Point& _pos, uint8_t _style);
+	void render();
+
+	uint8_t context;
 };
 
 #endif

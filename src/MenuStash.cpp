@@ -35,16 +35,15 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "SoundManager.h"
+#include "TooltipManager.h"
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
 #include "WidgetSlot.h"
-#include "WidgetTooltip.h"
 
 MenuStash::MenuStash(StatBlock *_stats)
 	: Menu()
 	, stats(_stats)
 	, closeButton(new WidgetButton("images/menus/buttons/button_x.png"))
-	, tip(new WidgetTooltip())
 	, stock()
 	, updated(false)
 {
@@ -253,7 +252,7 @@ void MenuStash::renderTooltips(const Point& position) {
 		return;
 
 	TooltipData tip_data = stock.checkTooltip(position, stats, ItemManager::PLAYER_INV);
-	tip->render(tip_data, position, TooltipData::STYLE_FLOAT);
+	tooltipm->push(tip_data, position, TooltipData::STYLE_FLOAT);
 }
 
 void MenuStash::removeFromPrevSlot(int quantity) {
@@ -265,6 +264,5 @@ void MenuStash::removeFromPrevSlot(int quantity) {
 
 MenuStash::~MenuStash() {
 	delete closeButton;
-	delete tip;
 }
 

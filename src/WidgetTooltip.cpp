@@ -31,8 +31,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Utils.h"
 #include "WidgetTooltip.h"
 
-int TOOLTIP_CONTEXT = TOOLTIP_NONE;
-
 WidgetTooltip::WidgetTooltip() {
 	background = render_device->loadImage("images/menus/tooltips.png", RenderDevice::ERROR_NONE);
 	sprite_buf = NULL;
