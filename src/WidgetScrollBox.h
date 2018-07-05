@@ -34,7 +34,7 @@ class WidgetScrollBox : public Widget {
 public:
 	WidgetScrollBox (int width, int height);
 	~WidgetScrollBox ();
-	void setPos(int offset_x = 0, int offset_y = 0);
+	void setPos(int offset_x, int offset_y);
 
 	void addChildWidget(Widget* child);
 	Point input_assist(const Point& mouse);
