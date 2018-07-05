@@ -42,6 +42,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <cassert>
 #include <cstring>
 
+// this value is used to determine the greatest possible position within a tile before transitioning to the next tile
+// so if an entity has a position of (1-MIN_TILE_GAP, 0) and moves to the east, they will move to (1,0)
+const float MapCollision::MIN_TILE_GAP = 0.001f;
+
 MapCollision::MapCollision()
 	: map_size(Point())
 {

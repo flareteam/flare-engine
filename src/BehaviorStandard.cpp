@@ -398,7 +398,7 @@ void BehaviorStandard::checkMove() {
 				if(recalculate_path) {
 					chance_calc_path = -100;
 					path.clear();
-					path_found = mapr->collider.compute_path(e->stats.pos, pursue_pos, path, e->stats.movement_type);
+					path_found = mapr->collider.compute_path(e->stats.pos, pursue_pos, path, e->stats.movement_type, MapCollision::DEFAULT_PATH_LIMIT);
 				}
 
 				if(!path.empty()) {

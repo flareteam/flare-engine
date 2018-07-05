@@ -33,13 +33,13 @@ typedef std::vector< std::vector<unsigned short> > Map_Layer;
 
 class MapCollision {
 private:
-	// this value is used to determine the greatest possible position within a tile before transitioning to the next tile
-	// so if an entity has a position of (1-MIN_TILE_GAP, 0) and moves to the east, they will move to (1,0)
-	const float MIN_TILE_GAP = 0.001f;
+	static const float MIN_TILE_GAP;
 
 	// collision check types
-	const int CHECK_MOVEMENT = 1;
-	const int CHECK_SIGHT = 2;
+	enum {
+		CHECK_MOVEMENT = 1,
+		CHECK_SIGHT = 2
+	};
 
 	bool line_check(const float& x1, const float& y1, const float& x2, const float& y2, int check_type, int movement_type);
 
@@ -56,6 +56,7 @@ public:
 	// const flags
 	static const bool IGNORE_BLOCKED = true;
 	static const bool IS_ALLY = true;
+	static const int DEFAULT_PATH_LIMIT = 0;
 
 	// entity collision type
 	enum {
@@ -104,7 +105,7 @@ public:
 
 	bool is_facing(const float& x1, const float& y1, char direction, const float& x2, const float& y2);
 
-	bool compute_path(const FPoint& start, const FPoint& end, std::vector<FPoint> &path, int movement_type, unsigned int limit = 0);
+	bool compute_path(const FPoint& start, const FPoint& end, std::vector<FPoint> &path, int movement_type, unsigned int limit);
 
 	void block(const float& map_x, const float& map_y, bool is_ally);
 	void unblock(const float& map_x, const float& map_y);
