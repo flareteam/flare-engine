@@ -212,7 +212,7 @@ void MenuActionBar::align() {
 		}
 	}
 
-	for (unsigned int i = SLOT_MAIN1; i < static_cast<unsigned int>(SLOT_MAIN1); i++) {
+	for (unsigned int i = SLOT_MAIN1; i < static_cast<unsigned int>(SLOT_MAX); i++) {
 		if (i < slots.size() && slots[i]) {
 			labels[i] = msg->get("Hotkey: %s", inpt->getBindingString(i - SLOT_MAIN1 + Input::MAIN1).c_str());
 		}
