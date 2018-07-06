@@ -47,9 +47,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <limits.h>
 #include <iomanip>
 
-#define GAMMA_MIN 5
-#define GAMMA_MAX 15
-
 GameStateConfigDesktop::GameStateConfigDesktop(bool _enable_video_tab)
 	: GameStateConfigBase(!GameStateConfigBase::DO_INIT)
 	, renderer_lstb(new WidgetListBox(4, WidgetListBox::DEFAULT_FILE))

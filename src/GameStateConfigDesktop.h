@@ -48,6 +48,9 @@ public:
 	~GameStateConfigDesktop();
 
 private:
+	static const int GAMMA_MIN = 5;
+	static const int GAMMA_MAX = 15;
+
 	short VIDEO_TAB;
 	short INPUT_TAB;
 	short KEYBINDS_TAB;
