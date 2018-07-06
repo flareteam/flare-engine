@@ -460,7 +460,7 @@ void MenuActionBar::drop(const Point& mouse, int power_index, bool rearranging) 
  * Return the power to the last clicked on slot
  */
 void MenuActionBar::actionReturn(int power_index) {
-	drop(last_mouse, power_index, 0);
+	drop(last_mouse, power_index, !REORDER);
 }
 
 /**

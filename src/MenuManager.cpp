@@ -758,14 +758,14 @@ void MenuManager::logic() {
 			// putting a power on the Action Bar
 			if (drag_src == DRAG_SRC_POWERS) {
 				if (act->isWithinSlots(inpt->mouse)) {
-					act->drop(inpt->mouse, drag_power, 0);
+					act->drop(inpt->mouse, drag_power, !MenuActionBar::REORDER);
 				}
 			}
 
 			// rearranging the action bar
 			else if (drag_src == DRAG_SRC_ACTIONBAR) {
 				if (act->isWithinSlots(inpt->mouse)) {
-					act->drop(inpt->mouse, drag_power, 1);
+					act->drop(inpt->mouse, drag_power, MenuActionBar::REORDER);
 					// for locked slots forbid power dropping
 				}
 				else if (act->locked[act->drag_prev_slot]) {
@@ -787,7 +787,7 @@ void MenuManager::logic() {
 
 					// put an item with a power on the action bar
 					if (items->items[drag_stack.item].power != 0) {
-						act->drop(inpt->mouse, items->items[drag_stack.item].power, false);
+						act->drop(inpt->mouse, items->items[drag_stack.item].power, !MenuActionBar::REORDER);
 					}
 				}
 				else if (vendor->visible && isWithinRect(vendor->window_area, inpt->mouse)) {
@@ -1099,7 +1099,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 		// drop power/item from other menu
 		else if (slotClick == WidgetSlot::CHECKED && drag_src != DRAG_SRC_ACTIONBAR && (!drag_stack.empty() || drag_power > 0)) {
 			if (drag_src == DRAG_SRC_POWERS) {
-				act->drop(dest_slot, drag_power, 0);
+				act->drop(dest_slot, drag_power, !MenuActionBar::REORDER);
 				pow->slots[slot_index]->checked = false;
 			}
 			else if (drag_src == DRAG_SRC_INVENTORY) {
@@ -1109,7 +1109,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 					inv->inventory[MenuInventory::CARRIED].slots[slot_index - inv->getEquippedCount()]->checked = false;
 
 				if (items->items[drag_stack.item].power != 0) {
-					act->drop(dest_slot, items->items[drag_stack.item].power, false);
+					act->drop(dest_slot, items->items[drag_stack.item].power, !MenuActionBar::REORDER);
 				}
 			}
 			act->slots[slot_index]->checked = false;
@@ -1119,7 +1119,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 		// rearrange actionbar
 		else if ((slotClick == WidgetSlot::CHECKED || slotClick == WidgetSlot::ACTIVATED) && drag_src == DRAG_SRC_ACTIONBAR && drag_power > 0) {
 			if (slotClick == WidgetSlot::CHECKED) act->slots[slot_index]->checked = false;
-			act->drop(dest_slot, drag_power, 1);
+			act->drop(dest_slot, drag_power, MenuActionBar::REORDER);
 			drag_src = DRAG_SRC_NONE;
 			drag_power = 0;
 			keyboard_dragging = false;

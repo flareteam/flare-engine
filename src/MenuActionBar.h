@@ -69,6 +69,8 @@ public:
 
 	static const int USE_EMPTY_SLOT = 0;
 
+	static const bool REORDER = true;
+
 	MenuActionBar();
 	~MenuActionBar();
 	void align();
