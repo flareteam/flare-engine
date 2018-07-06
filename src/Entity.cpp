@@ -368,7 +368,7 @@ bool Entity::takeHit(Hazard &h) {
 	// prepare the combat text
 	CombatText *combat_text = comb;
 
-	if (h.power->type == Power::TYPE_MISSILE && percentChance(stats.get(Stats::REFLECT))) {
+	if (h.power->type == Power::TYPE_MISSILE && Math::percentChance(stats.get(Stats::REFLECT))) {
 		// reflect the missile 180 degrees
 		h.setAngle(h.angle+static_cast<float>(M_PI));
 
@@ -404,23 +404,23 @@ bool Entity::takeHit(Hazard &h) {
 	}
 
 	int true_avoidance = 100 - (accuracy - avoidance);
-	bool is_overhit = (true_avoidance < 0 && !h.src_stats->perfect_accuracy) ? percentChance(abs(true_avoidance)) : false;
+	bool is_overhit = (true_avoidance < 0 && !h.src_stats->perfect_accuracy) ? Math::percentChance(abs(true_avoidance)) : false;
 	true_avoidance = std::min(std::max(true_avoidance, eset->combat.min_avoidance), eset->combat.max_avoidance);
 
 	bool missed = false;
-	if (!h.src_stats->perfect_accuracy && percentChance(true_avoidance)) {
+	if (!h.src_stats->perfect_accuracy && Math::percentChance(true_avoidance)) {
 		missed = true;
 	}
 
 	// calculate base damage
-	int dmg = randBetween(h.dmg_min, h.dmg_max);
+	int dmg = Math::randBetween(h.dmg_min, h.dmg_max);
 
 	if(powers->powers[h.power_index].mod_damage_mode == Power::STAT_MODIFIER_MODE_MULTIPLY)
 		dmg = dmg * powers->powers[h.power_index].mod_damage_value_min / 100;
 	else if(powers->powers[h.power_index].mod_damage_mode == Power::STAT_MODIFIER_MODE_ADD)
 		dmg += powers->powers[h.power_index].mod_damage_value_min;
 	else if(powers->powers[h.power_index].mod_damage_mode == Power::STAT_MODIFIER_MODE_ABSOLUTE)
-		dmg = randBetween(powers->powers[h.power_index].mod_damage_value_min, powers->powers[h.power_index].mod_damage_value_max);
+		dmg = Math::randBetween(powers->powers[h.power_index].mod_damage_value_min, powers->powers[h.power_index].mod_damage_value_max);
 
 	// apply elemental resistance
 	if (h.power->trait_elemental >= 0 && static_cast<size_t>(h.power->trait_elemental) < stats.vulnerable.size()) {
@@ -435,7 +435,7 @@ bool Entity::takeHit(Hazard &h) {
 
 	if (!h.power->trait_armor_penetration) { // armor penetration ignores all absorption
 		// subtract absorption from armor
-		int absorption = randBetween(stats.get(Stats::ABS_MIN), stats.get(Stats::ABS_MAX));
+		int absorption = Math::randBetween(stats.get(Stats::ABS_MIN), stats.get(Stats::ABS_MAX));
 
 		if (absorption > 0 && dmg > 0) {
 			int abs = absorption;
@@ -490,21 +490,21 @@ bool Entity::takeHit(Hazard &h) {
 	if (stats.effects.stun || stats.effects.speed < 100)
 		true_crit_chance += h.power->trait_crits_impaired;
 
-	bool crit = percentChance(true_crit_chance);
+	bool crit = Math::percentChance(true_crit_chance);
 	if (crit) {
 		// default is dmg * 2
-		dmg = (dmg * randBetween(eset->combat.min_crit_damage, eset->combat.max_crit_damage)) / 100;
+		dmg = (dmg * Math::randBetween(eset->combat.min_crit_damage, eset->combat.max_crit_damage)) / 100;
 		if(!stats.hero)
 			mapr->shaky_cam_ticks = settings->max_frames_per_sec/2;
 	}
 	else if (is_overhit) {
-		dmg = (dmg * randBetween(eset->combat.min_overhit_damage, eset->combat.max_overhit_damage)) / 100;
+		dmg = (dmg * Math::randBetween(eset->combat.min_overhit_damage, eset->combat.max_overhit_damage)) / 100;
 		// Should we use shakycam for overhits?
 	}
 
 	// misses cause reduced damage
 	if (missed) {
-		dmg = (dmg * randBetween(eset->combat.min_miss_damage, eset->combat.max_miss_damage)) / 100;
+		dmg = (dmg * Math::randBetween(eset->combat.min_miss_damage, eset->combat.max_miss_damage)) / 100;
 	}
 
 	if (!powers->powers[h.power_index].ignore_zero_damage) {
@@ -574,14 +574,14 @@ bool Entity::takeHit(Hazard &h) {
 		stats.effects.removeEffectID(powers->powers[h.power_index].remove_effects);
 
 		// post power
-		if (h.power->post_power > 0 && percentChance(h.power->post_power_chance)) {
+		if (h.power->post_power > 0 && Math::percentChance(h.power->post_power_chance)) {
 			powers->activate(h.power->post_power, h.src_stats, stats.pos);
 		}
 	}
 
 	// interrupted to new state
 	if (dmg > 0) {
-		bool chance_poise = percentChance(stats.get(Stats::POISE));
+		bool chance_poise = Math::percentChance(stats.get(Stats::POISE));
 
 		if(stats.hp <= 0) {
 			stats.effects.triggered_death = true;

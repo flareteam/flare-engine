@@ -244,7 +244,7 @@ void NPC::load(const std::string& npc_id) {
 	loadGraphics();
 
 	// fill inventory with items from random stock table
-	unsigned rand_count = randBetween(random_table_count.x, random_table_count.y);
+	unsigned rand_count = Math::randBetween(random_table_count.x, random_table_count.y);
 
 	std::vector<ItemStack> rand_itemstacks;
 	for (unsigned i=0; i<rand_count; ++i) {

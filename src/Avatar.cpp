@@ -679,7 +679,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 					stats.prevent_interrupt = power.prevent_interrupt;
 
-					if (power.pre_power > 0 && percentChance(power.pre_power_chance)) {
+					if (power.pre_power > 0 && Math::percentChance(power.pre_power_chance)) {
 						powers->activate(power.pre_power, &stats, target);
 					}
 

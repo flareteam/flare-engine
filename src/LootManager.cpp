@@ -206,10 +206,10 @@ void LootManager::checkEnemiesForLoot() {
 		if (!e->stats.loot_table.empty()) {
 			unsigned drops;
 			if (e->stats.loot_count.y != 0) {
-				drops = randBetween(e->stats.loot_count.x, e->stats.loot_count.y);
+				drops = Math::randBetween(e->stats.loot_count.x, e->stats.loot_count.y);
 			}
 			else {
-				drops = randBetween(1, eset->loot.drop_max);
+				drops = Math::randBetween(1, eset->loot.drop_max);
 			}
 
 			for (unsigned j=0; j<drops; ++j) {
@@ -229,10 +229,10 @@ void LootManager::checkMapForLoot() {
 	if (!mapr->loot.empty()) {
 		unsigned drops;
 		if (mapr->loot_count.y != 0) {
-			drops = randBetween(mapr->loot_count.x, mapr->loot_count.y);
+			drops = Math::randBetween(mapr->loot_count.x, mapr->loot_count.y);
 		}
 		else {
-			drops = randBetween(1, eset->loot.drop_max);
+			drops = Math::randBetween(1, eset->loot.drop_max);
 		}
 
 		for (unsigned i=0; i<drops; ++i) {
@@ -292,7 +292,7 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 				}
 			}
 
-			new_loot.quantity = randBetween(ec->a,ec->b);
+			new_loot.quantity = Math::randBetween(ec->a,ec->b);
 
 			// an item id of 0 means we should drop currency instead
 			if (ec->c == 0 || ec->c == eset->misc.currency_id) {
@@ -370,7 +370,7 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 			}
 		}
 
-		new_loot.quantity = randBetween(ec->a,ec->b);
+		new_loot.quantity = Math::randBetween(ec->a,ec->b);
 
 		// an item id of 0 means we should drop currency instead
 		if (ec->c == 0 || ec->c == eset->misc.currency_id) {

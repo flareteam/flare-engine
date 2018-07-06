@@ -1079,7 +1079,7 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, const FPoint& tar
 		src_stats->effects.removeEffectID(powers[power_index].remove_effects);
 
 		if (!powers[power_index].passive) {
-			if (percentChance(powers[power_index].post_power_chance)) {
+			if (Math::percentChance(powers[power_index].post_power_chance)) {
 				activate(powers[power_index].post_power, src_stats, src_stats->pos);
 			}
 		}
@@ -1100,7 +1100,7 @@ bool PowerManager::effect(StatBlock *target_stats, StatBlock *caster_stats, int 
 	for (unsigned i=0; i<powers[power_index].post_effects.size(); i++) {
 		const PostEffect& pe = pwr.post_effects[i];
 
-		if (!percentChance(pe.chance))
+		if (!Math::percentChance(pe.chance))
 			continue;
 
 		EffectDef effect_data;
@@ -1127,7 +1127,7 @@ bool PowerManager::effect(StatBlock *target_stats, StatBlock *caster_stats, int 
 				else if(pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_ADD)
 					magnitude = caster_stats->getDamageMax(pwr.base_damage) + pwr.mod_damage_value_min;
 				else if(pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_ABSOLUTE)
-					magnitude = randBetween(pwr.mod_damage_value_min, pwr.mod_damage_value_max);
+					magnitude = Math::randBetween(pwr.mod_damage_value_min, pwr.mod_damage_value_max);
 				else
 					magnitude = caster_stats->getDamageMax(pwr.base_damage);
 
@@ -1138,14 +1138,14 @@ bool PowerManager::effect(StatBlock *target_stats, StatBlock *caster_stats, int 
 					continue;
 
 				// heal for ment weapon damage * damage multiplier
-				magnitude = randBetween(caster_stats->getDamageMin(pwr.base_damage), caster_stats->getDamageMax(pwr.base_damage));
+				magnitude = Math::randBetween(caster_stats->getDamageMin(pwr.base_damage), caster_stats->getDamageMax(pwr.base_damage));
 
 				if(pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_MULTIPLY)
 					magnitude = magnitude * pwr.mod_damage_value_min / 100;
 				else if(pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_ADD)
 					magnitude += pwr.mod_damage_value_min;
 				else if(pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_ABSOLUTE)
-					magnitude = randBetween(pwr.mod_damage_value_min, pwr.mod_damage_value_max);
+					magnitude = Math::randBetween(pwr.mod_damage_value_min, pwr.mod_damage_value_max);
 
 				comb->addString(msg->get("+%d HP",magnitude), dest_stats->pos, CombatText::MSG_BUFF);
 				dest_stats->hp += magnitude;
@@ -1647,7 +1647,7 @@ void PowerManager::activatePassivePostPowers(StatBlock *src_stats) {
 			continue;
 
 		if (src_stats->getPowerCooldown(post_power) == 0 && src_stats->canUsePower(post_power, !StatBlock::CAN_USE_PASSIVE)) {
-			if (percentChance(powers[src_stats->powers_passive[i]].post_power_chance)) {
+			if (Math::percentChance(powers[src_stats->powers_passive[i]].post_power_chance)) {
 				activate(post_power, src_stats, src_stats->pos);
 				src_stats->setPowerCooldown(post_power, powers[post_power].cooldown);
 			}

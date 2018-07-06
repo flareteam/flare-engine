@@ -72,7 +72,7 @@ void HazardManager::logic() {
 				EventManager::executeScript(h[i-1]->power->script, h[i-1]->pos.x, h[i-1]->pos.y);
 			}
 
-			if (h[i-1]->power->wall_power > 0 && percentChance(h[i-1]->power->wall_power_chance)) {
+			if (h[i-1]->power->wall_power > 0 && Math::percentChance(h[i-1]->power->wall_power_chance)) {
 				powers->activate(h[i-1]->power->wall_power, h[i-1]->src_stats, h[i-1]->pos);
 
 				if (powers->powers[h[i-1]->power->wall_power].directional) {

@@ -215,7 +215,7 @@ void BehaviorStandard::findTarget() {
 			e->stats.cur_state == StatBlock::ENEMY_STANCE &&
 			!move_to_safe_dist && hero_dist < e->stats.flee_range &&
 			hero_dist >= e->stats.melee_range &&
-			percentChance(e->stats.chance_flee) &&
+			Math::percentChance(e->stats.chance_flee) &&
 			flee_cooldown == 0
 		)
 	{
@@ -253,7 +253,7 @@ void BehaviorStandard::findTarget() {
 			fleeing = false;
 		}
 		else {
-			int index = randBetween(0, static_cast<int>(flee_dirs.size())-1);
+			int index = Math::randBetween(0, static_cast<int>(flee_dirs.size())-1);
 			pursue_pos = calcVector(e->stats.pos, flee_dirs[index], 1);
 
 			if (flee_ticks == 0) {
@@ -382,12 +382,12 @@ void BehaviorStandard::checkMove() {
 				//add a 5% chance to recalculate on every frame. This prevents reclaulating lots of entities in the same frame
 				chance_calc_path += 5;
 
-				if(percentChance(chance_calc_path))
+				if(Math::percentChance(chance_calc_path))
 					recalculate_path = true;
 
 				//dont recalculate if we were blocked and no path was found last time
 				//this makes sure that pathfinding calculation is not spammed when the target is unreachable and the entity is as close as its going to get
-				if(!path_found && collided && !percentChance(chance_calc_path))
+				if(!path_found && collided && !Math::percentChance(chance_calc_path))
 					recalculate_path = false;
 				else//reset the collision flag only if we dont want the cooldown in place
 					collided = false;
@@ -473,7 +473,7 @@ void BehaviorStandard::checkMoveStateStance() {
 	// try to move to the target if we're either:
 	// 1. too far away and chance_pursue roll succeeds
 	// 2. within range, but lack line-of-sight (required to attack)
-	bool should_move_to_target = (target_dist > e->stats.melee_range && percentChance(e->stats.chance_pursue)) || (target_dist <= e->stats.melee_range && !los);
+	bool should_move_to_target = (target_dist > e->stats.melee_range && Math::percentChance(e->stats.chance_pursue)) || (target_dist <= e->stats.melee_range && !los);
 
 	if (should_move_to_target || fleeing) {
 
@@ -511,7 +511,7 @@ void BehaviorStandard::checkMoveStateMove() {
 		}
 	}
 	// in order to prevent infinite fleeing, we re-roll our chance to flee after a certain duration
-	bool stop_fleeing = can_attack && fleeing && flee_ticks == 0 && !percentChance(e->stats.chance_flee);
+	bool stop_fleeing = can_attack && fleeing && flee_ticks == 0 && !Math::percentChance(e->stats.chance_flee);
 
 	if (!stop_fleeing && flee_ticks == 0) {
 		// if the roll to continue fleeing succeeds, but the flee duration has expired, we don't want to reset the duration to the full amount
@@ -591,7 +591,7 @@ void BehaviorStandard::updateState() {
 
 			// sound effect based on power type
 			if (e->activeAnimation->isFirstFrame()) {
-				if (powers->powers[power_id].pre_power > 0 && percentChance(powers->powers[power_id].pre_power_chance)) {
+				if (powers->powers[power_id].pre_power > 0 && Math::percentChance(powers->powers[power_id].pre_power_chance)) {
 					powers->activate(powers->powers[power_id].pre_power, &e->stats, pursue_pos);
 				}
 

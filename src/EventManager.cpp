@@ -684,7 +684,7 @@ bool EventManager::executeEvent(Event &ev) {
 	// if chance_exec roll fails, don't execute the event
 	// we respect the value of "repeat", even if the event doesn't execute
 	Event_Component *ec_chance_exec = ev.getComponent(EC_CHANCE_EXEC);
-	if (ec_chance_exec && !percentChance(ec_chance_exec->x)) {
+	if (ec_chance_exec && !Math::percentChance(ec_chance_exec->x)) {
 		return !ev.keep_after_trigger;
 	}
 
@@ -831,7 +831,7 @@ bool EventManager::executeEvent(Event &ev) {
 			random_table.push_back(Event_Component());
 			loot->parseLoot(ec->s, &random_table.back(), &random_table);
 
-			unsigned rand_count = randBetween(random_table_count.x, random_table_count.y);
+			unsigned rand_count = Math::randBetween(random_table_count.x, random_table_count.y);
 			std::vector<ItemStack> rand_itemstacks;
 			for (unsigned j = 0; j < rand_count; ++j) {
 				loot->checkLoot(random_table, NULL, &rand_itemstacks);

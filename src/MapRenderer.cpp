@@ -119,7 +119,7 @@ void MapRenderer::pushEnemyGroup(Map_Group &g) {
 	// actual places, so have an upper bound of tries.
 
 	// random number of enemies
-	int enemies_to_spawn = randBetween(g.numbermin, g.numbermax);
+	int enemies_to_spawn = Math::randBetween(g.numbermin, g.numbermax);
 
 	// pick an upper bound, which is definitely larger than threetimes the enemy number to spawn.
 	int allowed_misses = 5 * g.numbermax;

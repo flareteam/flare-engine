@@ -138,7 +138,7 @@ void BehaviorAlly::findTarget() {
 			e->stats.cur_state == StatBlock::ENEMY_STANCE &&
 			!move_to_safe_dist && hero_dist < e->stats.flee_range &&
 			hero_dist >= e->stats.melee_range &&
-			percentChance(e->stats.chance_flee) &&
+			Math::percentChance(e->stats.chance_flee) &&
 			flee_cooldown == 0
 		)
 	{
@@ -176,7 +176,7 @@ void BehaviorAlly::findTarget() {
 			fleeing = false;
 		}
 		else {
-			int index = randBetween(0, static_cast<int>(flee_dirs.size())-1);
+			int index = Math::randBetween(0, static_cast<int>(flee_dirs.size())-1);
 			pursue_pos = calcVector(e->stats.pos, flee_dirs[index], 1);
 
 			if (flee_ticks == 0) {
@@ -194,7 +194,7 @@ void BehaviorAlly::checkMoveStateStance() {
 	// try to move to the target if we're either:
 	// 1. too far away and chance_pursue roll succeeds
 	// 2. within range, but lack line-of-sight (required to attack)
-	bool should_move_to_target = (target_dist > e->stats.melee_range && percentChance(e->stats.chance_pursue)) || (target_dist <= e->stats.melee_range && !los) || (hero_dist > ALLY_FOLLOW_DISTANCE_WALK);
+	bool should_move_to_target = (target_dist > e->stats.melee_range && Math::percentChance(e->stats.chance_pursue)) || (target_dist <= e->stats.melee_range && !los) || (hero_dist > ALLY_FOLLOW_DISTANCE_WALK);
 
 	if (should_move_to_target || fleeing) {
 		if(e->stats.in_combat && target_dist > e->stats.melee_range) {
@@ -237,7 +237,7 @@ void BehaviorAlly::checkMoveStateMove() {
 		}
 	}
 	// in order to prevent infinite fleeing, we re-roll our chance to flee after a certain duration
-	bool stop_fleeing = can_attack && fleeing && flee_ticks == 0 && !percentChance(e->stats.chance_flee);
+	bool stop_fleeing = can_attack && fleeing && flee_ticks == 0 && !Math::percentChance(e->stats.chance_flee);
 
 	if (!stop_fleeing && flee_ticks == 0) {
 		// if the roll to continue fleeing succeeds, but the flee duration has expired, we don't want to reset the duration to the full amount
