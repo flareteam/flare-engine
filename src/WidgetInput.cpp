@@ -72,10 +72,10 @@ void WidgetInput::trimText() {
 	text_with_cursor.insert(cursor_pos, "|");
 
 	int padding = font->getFontHeight();
-	trimmed_text = font->trimTextToWidth(text, pos.w-padding, false, text.length());
+	trimmed_text = font->trimTextToWidth(text, pos.w-padding, !FontEngine::USE_ELLIPSIS, text.length());
 
 	size_t trim_pos = (cursor_pos > 0 ? cursor_pos - 1 : cursor_pos);
-	trimmed_text_cursor = font->trimTextToWidth(text_with_cursor, pos.w-padding, false, trim_pos);
+	trimmed_text_cursor = font->trimTextToWidth(text_with_cursor, pos.w-padding, !FontEngine::USE_ELLIPSIS, trim_pos);
 }
 
 void WidgetInput::activate() {

@@ -286,7 +286,7 @@ void MenuCharacter::refreshStats() {
 	// update stat text
 	std::string trimmed_name;
 	if (name_max_width > 0)
-		trimmed_name = font->trimTextToWidth(stats->name, name_max_width, true, 0);
+		trimmed_name = font->trimTextToWidth(stats->name, name_max_width, FontEngine::USE_ELLIPSIS, 0);
 	else
 		trimmed_name = stats->name;
 

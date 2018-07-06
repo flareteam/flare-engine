@@ -194,7 +194,7 @@ void WidgetLabel::recacheTextSprite() {
 	bounds.h = font->getFontHeight();
 
 	if (max_width > 0 && bounds.w > max_width) {
-		temp_text = font->trimTextToWidth(text, max_width, true, 0);
+		temp_text = font->trimTextToWidth(text, max_width, FontEngine::USE_ELLIPSIS, 0);
 		bounds.w = font->calc_width(temp_text);
 	}
 

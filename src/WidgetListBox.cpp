@@ -443,7 +443,7 @@ void WidgetListBox::refresh() {
 			if (disable_text_trim)
 				temp = items[i+cursor].value;
 			else
-				temp = font->trimTextToWidth(items[i+cursor].value, pos.w-right_margin-padding, true, 0);
+				temp = font->trimTextToWidth(items[i+cursor].value, pos.w-right_margin-padding, FontEngine::USE_ELLIPSIS, 0);
 		}
 
 		// TODO remove hardcoded +8

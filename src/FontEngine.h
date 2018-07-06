@@ -72,6 +72,7 @@ public:
 	};
 	static const size_t COLOR_COUNT = 17;
 
+	static const bool USE_ELLIPSIS = true;
 	FontEngine();
 	virtual ~FontEngine() {};
 
