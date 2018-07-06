@@ -857,7 +857,7 @@ bool MenuInventory::sell(ItemStack stack) {
 		return false;
 	}
 
-	int value_each = items->items[stack.item].getSellPrice();
+	int value_each = items->items[stack.item].getSellPrice(ItemManager::DEFAULT_SELL_PRICE);
 	int value = value_each * stack.quantity;
 	addCurrency(value);
 	items->playSound(eset->misc.currency_id);

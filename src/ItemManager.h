@@ -129,7 +129,7 @@ public:
 	bool quest_item;
 
 	int getPrice();
-	int getSellPrice(bool is_new_buyback = true);
+	int getSellPrice(bool is_new_buyback);
 
 	Item();
 	~Item() {
@@ -199,6 +199,8 @@ public:
 		VENDOR_SELL = 1,
 		PLAYER_INV = 2
 	};
+
+	static const bool DEFAULT_SELL_PRICE = true;
 
 	ItemManager();
 	~ItemManager();

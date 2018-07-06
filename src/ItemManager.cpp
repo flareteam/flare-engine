@@ -835,7 +835,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 				tip.addColoredText(msg->get("Buy Price: %d %s each", price_per_unit, eset->loot.currency.c_str()), color);
 		}
 		else if (context == PLAYER_INV) {
-			price_per_unit = items[stack.item].getSellPrice();
+			price_per_unit = items[stack.item].getSellPrice(DEFAULT_SELL_PRICE);
 			if (price_per_unit == 0)
 				price_per_unit = 1;
 
@@ -958,12 +958,14 @@ int Item::getPrice() {
 int Item::getSellPrice(bool is_new_buyback) {
 	int new_price = 0;
 	if (is_new_buyback || eset->loot.vendor_ratio_buyback == 0) {
+		// default sell price
 		if (price_sell != 0)
 			new_price = price_sell;
 		else
 			new_price = static_cast<int>(static_cast<float>(getPrice()) * eset->loot.vendor_ratio);
 	}
 	else {
+		// sell price adjusted because the player can no longer buyback the item at the original sell price
 		new_price = static_cast<int>(static_cast<float>(getPrice()) * eset->loot.vendor_ratio_buyback);
 	}
 	if (new_price == 0) new_price = 1;
