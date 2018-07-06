@@ -243,6 +243,18 @@ public:
 		Point tab_padding;
 	};
 
+	class XPTable {
+	public:
+		void load();
+
+		unsigned long getLevelXP(int level);
+		int getMaxLevel();
+		int getLevelFromXP(unsigned long level_xp);
+
+	private:
+		std::vector<unsigned long> xp_table;
+	};
+
 	Misc misc;
 	Resolutions resolutions;
 	Gameplay gameplay;
@@ -257,6 +269,7 @@ public:
 	Loot loot;
 	Tileset tileset;
 	Widgets widgets;
+	XPTable xp;
 };
 
 #endif // ENGINESETTINGS_H

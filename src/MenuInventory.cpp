@@ -180,14 +180,14 @@ void MenuInventory::logic() {
 			death_message += msg->get("Lost %d%% of total XP.", eset->death_penalty.xp) + ' ';
 		}
 		else if (eset->death_penalty.xp_current > 0) {
-			if (stats->xp - stats->xp_table[stats->level-1] > 0)
-				stats->xp -= ((stats->xp - stats->xp_table[stats->level-1]) * eset->death_penalty.xp_current) / 100;
+			if (stats->xp - eset->xp.getLevelXP(stats->level) > 0)
+				stats->xp -= ((stats->xp - eset->xp.getLevelXP(stats->level)) * eset->death_penalty.xp_current) / 100;
 			death_message += msg->get("Lost %d%% of current level XP.", eset->death_penalty.xp_current) + ' ';
 		}
 
 		// prevent down-leveling from removing too much xp
-		if (stats->xp < stats->xp_table[stats->level-1])
-			stats->xp = stats->xp_table[stats->level-1];
+		if (stats->xp < eset->xp.getLevelXP(stats->level))
+			stats->xp = eset->xp.getLevelXP(stats->level);
 
 		// remove a random carried item
 		if (eset->death_penalty.item) {

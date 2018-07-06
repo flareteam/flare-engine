@@ -363,8 +363,8 @@ void MenuCharacter::refreshStats() {
 
 	cstat[CSTAT_LEVEL].tip.clear();
 	cstat[CSTAT_LEVEL].tip.addText(msg->get("XP: %d", stats->xp));
-	if (static_cast<unsigned>(stats->level) < stats->xp_table.size()) {
-		cstat[CSTAT_LEVEL].tip.addText(msg->get("Next: %d", stats->xp_table[stats->level]));
+	if (stats->level < eset->xp.getMaxLevel()) {
+		cstat[CSTAT_LEVEL].tip.addText(msg->get("Next: %d", eset->xp.getLevelXP(stats->level + 1)));
 	}
 
 	for (size_t j = 2; j < cstat.size(); ++j) {

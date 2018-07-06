@@ -44,6 +44,7 @@ void EngineSettings::load() {
 	loot.load(); // depends on misc
 	tileset.load();
 	widgets.load();
+	xp.load();
 }
 
 void EngineSettings::Misc::load() {
@@ -832,4 +833,55 @@ void EngineSettings::Widgets::load() {
 			}
 		}
 	}
+}
+
+void EngineSettings::XPTable::load() {
+	xp_table.clear();
+
+	FileParser infile;
+	// @CLASS EngineSettings: XP table|Description of engine/xp_table.txt
+	if (infile.open("engine/xp_table.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
+		while(infile.next()) {
+			if (infile.key == "level") {
+				// @ATTR level|int, int : Level, XP|The amount of XP required for this level.
+				unsigned lvl_id = popFirstInt(infile.val);
+				unsigned long lvl_xp = toUnsignedLong(popFirstString(infile.val));
+
+				if (lvl_id > xp_table.size())
+					xp_table.resize(lvl_id);
+
+				xp_table[lvl_id - 1] = lvl_xp;
+			}
+		}
+		infile.close();
+	}
+
+	if (xp_table.empty()) {
+		logError("EngineSettings: No XP table defined.");
+		xp_table.push_back(0);
+	}
+}
+
+unsigned long EngineSettings::XPTable::getLevelXP(int level) {
+	if (level <= 1)
+		return 0;
+	else if (level > static_cast<int>(xp_table.size()))
+		return xp_table.back();
+	else
+		return xp_table[level - 1];
+}
+
+int EngineSettings::XPTable::getMaxLevel() {
+	return static_cast<int>(xp_table.size());
+}
+
+int EngineSettings::XPTable::getLevelFromXP(unsigned long level_xp) {
+	int level = 0;
+
+	for (size_t i = 0; i < xp_table.size(); ++i) {
+		if (level_xp >= xp_table[i])
+			level = static_cast<int>(i + 1);
+	}
+
+	return level;
 }

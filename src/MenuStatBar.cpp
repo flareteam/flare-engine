@@ -42,9 +42,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 MenuStatBar::MenuStatBar(const std::string& type)
 	: bar(NULL)
+	, stat_min(0)
 	, stat_cur(0)
 	, stat_max(0)
-	, orientation(0) // horizontal
+	, orientation(HORIZONTAL)
 	, custom_text_pos(false) // label will be placed in the middle of the bar
 	, custom_string("")
 	, bar_gfx("")
@@ -110,14 +111,14 @@ void MenuStatBar::loadGraphics() {
 	}
 }
 
-void MenuStatBar::update(unsigned long _stat_cur, unsigned long _stat_max) {
-	updateCustomString(_stat_cur, _stat_max, "");
-}
-
-void MenuStatBar::updateCustomString(unsigned long _stat_cur, unsigned long _stat_max, const std::string& _custom_string) {
-	if (!_custom_string.empty()) custom_string = _custom_string;
+void MenuStatBar::update(unsigned long _stat_min, unsigned long _stat_cur, unsigned long _stat_max) {
+	stat_min = _stat_min;
 	stat_cur = _stat_cur;
 	stat_max = _stat_max;
+}
+
+void MenuStatBar::setCustomString(const std::string& _custom_string) {
+	custom_string = _custom_string;
 }
 
 void MenuStatBar::render() {
@@ -141,10 +142,12 @@ void MenuStatBar::render() {
 	Menu::render();
 
 	unsigned long stat_cur_clamped = std::min(stat_cur, stat_max);
+	unsigned long normalized_cur = stat_cur_clamped - std::min(stat_cur_clamped, stat_min);
+	unsigned long normalized_max = stat_max - std::min(stat_max, stat_min);
 
 	// draw bar progress based on orientation
-	if (orientation == 0) {
-		unsigned long bar_length = (stat_max == 0) ? 0 : (stat_cur_clamped * static_cast<unsigned long>(bar_pos.w)) / stat_max;
+	if (orientation == HORIZONTAL) {
+		unsigned long bar_length = (normalized_max == 0) ? 0 : (normalized_cur * static_cast<unsigned long>(bar_pos.w)) / normalized_max;
 		src.x = 0;
 		src.y = 0;
 		src.w = static_cast<int>(bar_length);
@@ -152,8 +155,8 @@ void MenuStatBar::render() {
 		dest.x = bar_dest.x;
 		dest.y = bar_dest.y;
 	}
-	else if (orientation == 1) {
-		unsigned long bar_length = (stat_max == 0) ? 0 : (stat_cur_clamped * static_cast<unsigned long>(bar_pos.h)) / stat_max;
+	else if (orientation == VERTICAL) {
+		unsigned long bar_length = (normalized_max == 0) ? 0 : (normalized_cur * static_cast<unsigned long>(bar_pos.h)) / normalized_max;
 		src.x = 0;
 		src.y = bar_pos.h-static_cast<int>(bar_length);
 		src.w = bar_pos.w;

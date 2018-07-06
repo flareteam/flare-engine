@@ -608,16 +608,12 @@ void StatBlock::recalc() {
 
 		refresh_stats = true;
 
-		level = 0;
-		for (unsigned i=0; i<xp_table.size(); i++) {
-			if (xp >= xp_table[i]) {
-				level=i+1;
-				check_title = true;
-			}
-		}
+		unsigned long xp_max = eset->xp.getLevelXP(eset->xp.getMaxLevel());
+		xp = std::min(xp, xp_max);
 
-		if (xp >= xp_table.back())
-			xp = xp_table.back();
+		level = eset->xp.getLevelFromXP(xp);
+		if (level != 0)
+			check_title = true;
 	}
 
 	if (level < 1)
@@ -980,30 +976,7 @@ void StatBlock::loadHeroStats() {
 	if (max_points_per_stat == 0) max_points_per_stat = max_spendable_stat_points / 4 + 1;
 	statsLoaded = true;
 
-	// load the XP table
-	// @CLASS StatBlock: XP table|Description of engine/xp_table.txt
-	if (infile.open("engine/xp_table.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
-		while(infile.next()) {
-			if (infile.key == "level") {
-				// @ATTR level|int, int : Level, XP|The amount of XP required for this level.
-				unsigned lvl_id = popFirstInt(infile.val);
-				unsigned long lvl_xp = toUnsignedLong(popFirstString(infile.val));
-
-				if (lvl_id > xp_table.size())
-					xp_table.resize(lvl_id);
-
-				xp_table[lvl_id - 1] = lvl_xp;
-			}
-		}
-		infile.close();
-	}
-
-	if (xp_table.empty()) {
-		logError("StatBlock: No XP table defined.");
-		xp_table.push_back(0);
-	}
-
-	max_spendable_stat_points = static_cast<int>(xp_table.size()) * stat_points_per_level;
+	max_spendable_stat_points = eset->xp.getMaxLevel() * stat_points_per_level;
 }
 
 void StatBlock::loadHeroSFX() {
@@ -1123,8 +1096,8 @@ std::string StatBlock::getLongClass() {
 void StatBlock::addXP(int amount) {
 	xp += amount;
 
-	if (xp >= xp_table.back())
-		xp = xp_table.back();
+	unsigned long xp_max = eset->xp.getLevelXP(eset->xp.getMaxLevel());
+	xp = std::min(xp, xp_max);
 }
 
 StatBlock::AIPower* StatBlock::getAIPower(StatBlock::AI_POWER ai_type) {

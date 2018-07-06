@@ -150,7 +150,6 @@ public:
 
 	int level;
 	unsigned long xp;
-	std::vector<unsigned long> xp_table;
 	bool level_up;
 	bool check_title;
 	int stat_points_per_level;

@@ -294,13 +294,16 @@ void MenuManager::logic() {
 
 	subtitles->logic(snd->getLastPlayedSID());
 
-	hp->update(stats->hp, stats->get(Stats::HP_MAX));
-	mp->update(stats->mp, stats->get(Stats::MP_MAX));
+	hp->update(0, stats->hp, stats->get(Stats::HP_MAX));
+	mp->update(0, stats->mp, stats->get(Stats::MP_MAX));
 
-	if (stats->level == static_cast<int>(stats->xp_table.size()))
-		xp->updateCustomString((stats->xp - stats->xp_table[stats->level-1]), (stats->xp - stats->xp_table[stats->level-1]), msg->get("XP: %d", stats->xp));
-	else
-		xp->updateCustomString((stats->xp - stats->xp_table[stats->level-1]), (stats->xp_table[stats->level] - stats->xp_table[stats->level-1]), msg->get("XP: %d/%d", stats->xp, stats->xp_table[stats->level]));
+	if (stats->level == eset->xp.getMaxLevel()) {
+		xp->setCustomString(msg->get("XP: %d", stats->xp));
+	}
+	else {
+		xp->setCustomString(msg->get("XP: %d/%d", stats->xp, eset->xp.getLevelXP(stats->level + 1)));
+	}
+	xp->update(eset->xp.getLevelXP(stats->level), stats->xp, eset->xp.getLevelXP(stats->level + 1));
 
 	// when selecting item quantities, don't process other menus
 	if (num_picker->visible) {
