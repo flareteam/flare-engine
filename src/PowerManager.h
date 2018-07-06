@@ -323,6 +323,8 @@ private:
 	std::vector<Animation*> effect_animations;
 
 public:
+	static const bool ALLOW_ZERO_ID = true;
+
 	explicit PowerManager();
 	~PowerManager();
 
@@ -333,7 +335,7 @@ public:
 	bool effect(StatBlock *target_stats, StatBlock *caster_stats, int power_index, int source_type);
 	void activatePassives(StatBlock *src_stats);
 	void activateSinglePassive(StatBlock *src_stats, int id);
-	int verifyID(int power_id, FileParser* infile = NULL, bool allow_zero = true);
+	int verifyID(int power_id, FileParser* infile, bool allow_zero);
 	bool checkNearestTargeting(const Power &pow, const StatBlock *src_stats, bool check_corpses);
 	bool checkRequiredItems(const Power &pow, const StatBlock *src_stats);
 

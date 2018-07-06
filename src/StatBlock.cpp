@@ -477,7 +477,7 @@ void StatBlock::load(const std::string& filename) {
 
 			std::string ai_type = popFirstString(infile.val);
 
-			ai_power.id = powers->verifyID(popFirstInt(infile.val), &infile, false);
+			ai_power.id = powers->verifyID(popFirstInt(infile.val), &infile, !PowerManager::ALLOW_ZERO_ID);
 			if (ai_power.id == 0)
 				continue; // verifyID() will print our error message
 

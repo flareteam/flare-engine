@@ -869,8 +869,8 @@ void PowerManager::loadPowers() {
 
 	// verify wall/post power ids
 	for (size_t i=0; i<powers.size(); ++i) {
-		powers[i].wall_power = verifyID(powers[i].wall_power);
-		powers[i].post_power = verifyID(powers[i].post_power);
+		powers[i].wall_power = verifyID(powers[i].wall_power, NULL, ALLOW_ZERO_ID);
+		powers[i].post_power = verifyID(powers[i].post_power, NULL, ALLOW_ZERO_ID);
 	}
 }
 
