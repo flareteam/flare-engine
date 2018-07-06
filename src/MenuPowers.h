@@ -72,6 +72,8 @@ public:
 
 class MenuPowers : public Menu {
 private:
+	static const bool UPGRADE_POWER_ALL_TABS = true;
+
 	void loadGraphics();
 	void loadTab(FileParser &infile);
 	void loadPower(FileParser &infile);
@@ -87,7 +89,7 @@ private:
 	int getNextLevelCell(int pci);
 
 	void replaceCellWithUpgrade(int pci, int uci);
-	void upgradePower(int pci, bool ignore_tab = false);
+	void upgradePower(int pci, bool ignore_tab);
 
 	void setUnlockedPowers();
 	int getPointsUsed();

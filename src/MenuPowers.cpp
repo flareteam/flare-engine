@@ -1221,7 +1221,7 @@ void MenuPowers::logic() {
 				upgradeButtons[i]->enabled = true;
 			}
 			if ((!tab_control || power_cell[i].tab == tab_control->getActiveTab()) && upgradeButtons[i]->checkClick()) {
-				upgradePower(static_cast<int>(i));
+				upgradePower(static_cast<int>(i), !UPGRADE_POWER_ALL_TABS);
 			}
 
 			// automatically apply upgrades when requires_point = false
@@ -1235,7 +1235,7 @@ void MenuPowers::logic() {
 					}
 
 					if (!power_cell_upgrade[next_index].requires_point && checkUpgrade(static_cast<int>(i))) {
-						upgradePower(static_cast<int>(i), true);
+						upgradePower(static_cast<int>(i), UPGRADE_POWER_ALL_TABS);
 					}
 					else {
 						break;
@@ -1442,7 +1442,7 @@ int MenuPowers::click(const Point& mouse) {
 
 void MenuPowers::upgradeByCell(int pci) {
 	if (checkUpgrade(pci))
-		upgradePower(pci);
+		upgradePower(pci, !UPGRADE_POWER_ALL_TABS);
 }
 
 /**
