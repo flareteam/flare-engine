@@ -168,10 +168,10 @@ void GameStateConfigDesktop::readConfig() {
 			if (parseKeyButtons(infile))
 				continue;
 
-			int x1 = popFirstInt(infile.val);
-			int y1 = popFirstInt(infile.val);
-			int x2 = popFirstInt(infile.val);
-			int y2 = popFirstInt(infile.val);
+			int x1 = Parse::popFirstInt(infile.val);
+			int y1 = Parse::popFirstInt(infile.val);
+			int x2 = Parse::popFirstInt(infile.val);
+			int y2 = Parse::popFirstInt(infile.val);
 
 			if (parseKeyDesktop(infile, x1, y1, x2, y2))
 				continue;

@@ -466,16 +466,16 @@ bool GameStateCutscene::load(const std::string& filename) {
 		if (infile.section.empty()) {
 			if (infile.key == "caption_margins") {
 				// @ATTR caption_margins|float, float : X margin, Y margin|Percentage-based margins for the caption text based on screen size
-				cutscene_settings.caption_margins.x = toFloat(popFirstString(infile.val))/100.0f;
-				cutscene_settings.caption_margins.y = toFloat(popFirstString(infile.val))/100.0f;
+				cutscene_settings.caption_margins.x = Parse::toFloat(Parse::popFirstString(infile.val))/100.0f;
+				cutscene_settings.caption_margins.y = Parse::toFloat(Parse::popFirstString(infile.val))/100.0f;
 			}
 			else if (infile.key == "caption_background") {
 				// @ATTR caption_background|color, int : Color, Alpha|Color (RGBA) of the caption area background.
-				cutscene_settings.caption_background = toRGBA(infile.val);
+				cutscene_settings.caption_background = Parse::toRGBA(infile.val);
 			}
 			else if (infile.key == "vscroll_speed") {
 				// @ATTR vscroll_speed|float|The speed at which elements will scroll in 'vscroll' scenes.
-				cutscene_settings.vscroll_speed = toFloat(infile.val);
+				cutscene_settings.vscroll_speed = Parse::toFloat(infile.val);
 			}
 			else if (infile.key == "menu_backgrounds") {
 				// @ATTR menu_backgrounds|bool|This cutscene will use a random fullscreen background image, like the title screen does
@@ -501,8 +501,8 @@ bool GameStateCutscene::load(const std::string& filename) {
 			else if (infile.key == "image") {
 				// @ATTR scene.image|filename, int : Filename, Scaling type|Filename of an image that will be shown. The scaling type is a value between 0-2, corresponding to: none, fit height, fit screen.
 				sc.type = infile.key;
-				sc.s = popFirstString(infile.val);
-				sc.x = popFirstInt(infile.val);
+				sc.s = Parse::popFirstString(infile.val);
+				sc.x = Parse::popFirstInt(infile.val);
 				if (sc.x < Scene::CUTSCENE_SCALE_NONE || sc.x > Scene::CUTSCENE_SCALE_SCREEN) {
 					infile.error("GameStateCutscene: '%d' is not a valid scaling type.", sc.x);
 					sc.x = Scene::CUTSCENE_SCALE_NONE;
@@ -511,7 +511,7 @@ bool GameStateCutscene::load(const std::string& filename) {
 			else if (infile.key == "pause") {
 				// @ATTR scene.pause|duration|Pause before next component in 'ms' or 's'.
 				sc.type = infile.key;
-				sc.x = parse_duration(infile.val);
+				sc.x = Parse::toDuration(infile.val);
 			}
 			else if (infile.key == "soundfx") {
 				// @ATTR scene.soundfx|filename|Filename of a sound that will be played
@@ -542,7 +542,7 @@ bool GameStateCutscene::load(const std::string& filename) {
 			else if (infile.key == "separator") {
 				// @ATTR vscroll.separator|int|Places an invisible gap of a specified height between elements.
 				sc.type = infile.key;
-				sc.x = toInt(infile.val);
+				sc.x = Parse::toInt(infile.val);
 			}
 			else {
 				infile.error("GameStateCutscene: '%s' is not a valid key.", infile.key.c_str());

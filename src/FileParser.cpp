@@ -66,12 +66,12 @@ bool FileParser::open(const std::string& _filename, bool _is_mod_file, int _erro
 
 		if (ret) {
 			// This will be the first file to be parsed. Seek to the start of the file and leave it open.
-			if (infile.good() && trim(getLine(infile)) != "APPEND") {
+			if (infile.good() && Parse::trim(Parse::getLine(infile)) != "APPEND") {
 				std::string test_line;
 
 				// get the first non-comment, non blank line
 				while (infile.good()) {
-					test_line = trim(getLine(infile));
+					test_line = Parse::trim(Parse::getLine(infile));
 					if (test_line.length() == 0) continue;
 					else if (test_line.at(0) == '#') continue;
 					else break;
@@ -142,7 +142,7 @@ bool FileParser::next() {
 				}
 			}
 
-			line = trim(getLine(infile));
+			line = Parse::trim(Parse::getLine(infile));
 			line_number++;
 
 			// skip ahead if this line is empty
@@ -156,7 +156,7 @@ bool FileParser::next() {
 			// set new section if this line is a section declaration
 			if (starts_with == "[") {
 				new_section = true;
-				section = parse_section_title(line);
+				section = Parse::getSectionTitle(line);
 
 				// keep searching for a key-pair
 				continue;
@@ -188,7 +188,7 @@ bool FileParser::next() {
 			}
 
 			// this is a keypair. Perform basic parsing and return
-			parse_key_pair(line, key, val);
+			Parse::getKeyPair(line, key, val);
 			return true;
 		}
 
@@ -222,7 +222,7 @@ std::string FileParser::getRawLine() {
 	line = "";
 
 	if (infile.good()) {
-		line = getLine(infile);
+		line = Parse::getLine(infile);
 	}
 	return line;
 }

@@ -141,14 +141,14 @@ void Platform::setPaths() {
 	if (getenv("XDG_DATA_DIRS") != NULL) {
 		std::string pathlist = (std::string)getenv("XDG_DATA_DIRS");
 		std::string pathtest;
-		pathtest = popFirstString(pathlist,':');
+		pathtest = Parse::popFirstString(pathlist,':');
 		while (pathtest != "") {
 			if (!path_data) {
 				settings->path_data = pathtest + "/flare/";
 				if (pathExists(settings->path_data)) path_data = true;
 			}
 			if (path_data) break;
-			pathtest = popFirstString(pathlist,':');
+			pathtest = Parse::popFirstString(pathlist,':');
 		}
 	}
 

@@ -173,7 +173,7 @@ void ModManager::loadModList() {
 		}
 
 		while (infile.good()) {
-			line = getLine(infile);
+			line = Parse::getLine(infile);
 
 			// skip ahead if this line is empty
 			if (line.length() == 0) continue;
@@ -326,7 +326,7 @@ Mod ModManager::loadMod(const std::string& name) {
 		infile.open(path.c_str(), std::ios::in);
 
 		while (infile.good()) {
-			line = getLine(infile);
+			line = Parse::getLine(infile);
 			key = "";
 			val = "";
 
@@ -337,7 +337,7 @@ Mod ModManager::loadMod(const std::string& name) {
 			starts_with = line.at(0);
 			if (starts_with == "#") continue;
 
-			parse_key_pair(line, key, val);
+			Parse::getKeyPair(line, key, val);
 
 			if (key == "description") {
 				// @ATTR description|string|Some text describing the mod.
@@ -351,13 +351,13 @@ Mod ModManager::loadMod(const std::string& name) {
 				// @ATTR requires|list(string)|A comma-separated list of the mods that are required in order to use this mod. The dependency version requirements can also be specified and separated by colons (e.g. fantasycore:0.1:2.0).
 				std::string dep;
 				val = val + ',';
-				while ((dep = popFirstString(val)) != "") {
+				while ((dep = Parse::popFirstString(val)) != "") {
 					std::string dep_full = dep + "::";
 
-					mod.depends.push_back(popFirstString(dep_full, ':'));
+					mod.depends.push_back(Parse::popFirstString(dep_full, ':'));
 
-					Version dep_min = stringToVersion(popFirstString(dep_full, ':'));
-					Version dep_max = stringToVersion(popFirstString(dep_full, ':'));
+					Version dep_min = stringToVersion(Parse::popFirstString(dep_full, ':'));
+					Version dep_max = stringToVersion(Parse::popFirstString(dep_full, ':'));
 
 					if (dep_min != VERSION_MIN && dep_max != VERSION_MIN && dep_min > dep_max)
 						dep_max = dep_min;

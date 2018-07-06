@@ -194,24 +194,24 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 
 	if (infile->key == "speed") {
 		// @ATTR speed|float|Movement speed
-		float fvalue = toFloat(infile->val, 0);
+		float fvalue = Parse::toFloat(infile->val, 0);
 		speed = speed_default = fvalue / settings->max_frames_per_sec;
 		return true;
 	}
 	else if (infile->key == "cooldown") {
 		// @ATTR cooldown|int|Cooldown between attacks in 'ms' or 's'.
-		cooldown = parse_duration(infile->val);
+		cooldown = Parse::toDuration(infile->val);
 		return true;
 	}
 	else if (infile->key == "cooldown_hit") {
 		// @ATTR cooldown_hit|duration|Duration of cooldown after being hit in 'ms' or 's'.
-		cooldown_hit = parse_duration(infile->val);
+		cooldown_hit = Parse::toDuration(infile->val);
 		return true;
 	}
 	else if (infile->key == "stat") {
 		// @ATTR stat|string, int : Stat name, Value|The starting value for this stat.
-		std::string stat = popFirstString(infile->val);
-		int value = popFirstInt(infile->val);
+		std::string stat = Parse::popFirstString(infile->val);
+		int value = Parse::popFirstInt(infile->val);
 
 		for (size_t i=0; i<Stats::COUNT; ++i) {
 			if (Stats::KEY[i] == stat) {
@@ -233,8 +233,8 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 	}
 	else if (infile->key == "stat_per_level") {
 		// @ATTR stat_per_level|predefined_string, int : Stat name, Value|The value for this stat added per level.
-		std::string stat = popFirstString(infile->val);
-		int value = popFirstInt(infile->val);
+		std::string stat = Parse::popFirstString(infile->val);
+		int value = Parse::popFirstInt(infile->val);
 
 		for (unsigned i=0; i<Stats::COUNT; i++) {
 			if (Stats::KEY[i] == stat) {
@@ -256,15 +256,15 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 	}
 	else if (infile->key == "stat_per_primary") {
 		// @ATTR stat_per_primary|predefined_string, predefined_string, int : Primary Stat, Stat name, Value|The value for this stat added for every point allocated to this primary stat.
-		std::string prim_stat = popFirstString(infile->val);
+		std::string prim_stat = Parse::popFirstString(infile->val);
 		size_t prim_stat_index = eset->primary_stats.getIndexByID(prim_stat);
 		if (prim_stat_index == eset->primary_stats.list.size()) {
 			infile->error("StatBlock: '%s' is not a valid primary stat.", prim_stat.c_str());
 			return true;
 		}
 
-		std::string stat = popFirstString(infile->val);
-		int value = popFirstInt(infile->val);
+		std::string stat = Parse::popFirstString(infile->val);
+		int value = Parse::popFirstInt(infile->val);
 
 		for (unsigned i=0; i<Stats::COUNT; i++) {
 			if (Stats::KEY[i] == stat) {
@@ -286,8 +286,8 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 	}
 	else if (infile->key == "vulnerable") {
 		// @ATTR vulnerable|predefined_string, int : Element, Value|Percentage weakness to this element.
-		std::string element = popFirstString(infile->val);
-		int value = popFirstInt(infile->val);
+		std::string element = Parse::popFirstString(infile->val);
+		int value = Parse::popFirstInt(infile->val);
 
 		for (unsigned int i=0; i<eset->elements.list.size(); i++) {
 			if (element == eset->elements.list[i].id) {
@@ -298,10 +298,10 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 	}
 	else if (infile->key == "power_filter") {
 		// @ATTR power_filter|list(power_id)|Only these powers are allowed to hit this entity.
-		std::string power_id = popFirstString(infile->val);
+		std::string power_id = Parse::popFirstString(infile->val);
 		while (!power_id.empty()) {
-			power_filter.push_back(toInt(power_id));
-			power_id = popFirstString(infile->val);
+			power_filter.push_back(Parse::toInt(power_id));
+			power_id = Parse::popFirstString(infile->val);
 		}
 		return true;
 	}
@@ -325,8 +325,8 @@ bool StatBlock::loadSfxStat(FileParser *infile) {
 
 	if (infile->key == "sfx_attack") {
 		// @ATTR sfx_attack|repeatable(predefined_string, filename) : Animation name, Sound file|Filename of sound effect for the specified attack animation.
-		std::string anim_name = popFirstString(infile->val);
-		std::string filename = popFirstString(infile->val);
+		std::string anim_name = Parse::popFirstString(infile->val);
+		std::string filename = Parse::popFirstString(infile->val);
 
 		size_t found_index = sfx_attack.size();
 		for (size_t i = 0; i < sfx_attack.size(); ++i) {
@@ -400,14 +400,14 @@ void StatBlock::load(const std::string& filename) {
 			clear_loot = true;
 		}
 
-		int num = toInt(infile.val);
-		float fnum = toFloat(infile.val);
+		int num = Parse::toInt(infile.val);
+		float fnum = Parse::toFloat(infile.val);
 		bool valid = loadCoreStat(&infile) || loadSfxStat(&infile);
 
 		// @ATTR name|string|Name
 		if (infile.key == "name") name = msg->get(infile.val);
 		// @ATTR humanoid|bool|This creature gives human traits when transformed into, such as the ability to talk with NPCs.
-		else if (infile.key == "humanoid") humanoid = toBool(infile.val);
+		else if (infile.key == "humanoid") humanoid = Parse::toBool(infile.val);
 
 		// @ATTR level|int|Level
 		else if (infile.key == "level") level = num;
@@ -433,8 +433,8 @@ void StatBlock::load(const std::string& filename) {
 		}
 		else if (infile.key == "loot_count") {
 			// @ATTR loot_count|int, int : Min, Max|Sets the minimum (and optionally, the maximum) amount of loot this creature can drop. Overrides the global drop_max setting.
-			loot_count.x = popFirstInt(infile.val);
-			loot_count.y = popFirstInt(infile.val);
+			loot_count.x = Parse::popFirstInt(infile.val);
+			loot_count.y = Parse::popFirstInt(infile.val);
 			if (loot_count.x != 0 || loot_count.y != 0) {
 				loot_count.x = std::max(loot_count.x, 1);
 				loot_count.y = std::max(loot_count.y, loot_count.x);
@@ -448,24 +448,24 @@ void StatBlock::load(const std::string& filename) {
 		else if (infile.key == "first_defeat_loot") first_defeat_loot = num;
 		// @ATTR quest_loot|string, string, item_id : Required status, Required not status, Item|Drops this item when campaign status is met.
 		else if (infile.key == "quest_loot") {
-			quest_loot_requires_status = popFirstString(infile.val);
-			quest_loot_requires_not_status = popFirstString(infile.val);
-			quest_loot_id = popFirstInt(infile.val);
+			quest_loot_requires_status = Parse::popFirstString(infile.val);
+			quest_loot_requires_not_status = Parse::popFirstString(infile.val);
+			quest_loot_id = Parse::popFirstInt(infile.val);
 		}
 
 		// behavior stats
 		// @ATTR flying|bool|Creature can move over gaps/water.
-		else if (infile.key == "flying") flying = toBool(infile.val);
+		else if (infile.key == "flying") flying = Parse::toBool(infile.val);
 		// @ATTR intangible|bool|Creature can move through walls.
-		else if (infile.key == "intangible") intangible = toBool(infile.val);
+		else if (infile.key == "intangible") intangible = Parse::toBool(infile.val);
 		// @ATTR facing|bool|Creature can turn to face their target.
-		else if (infile.key == "facing") facing = toBool(infile.val);
+		else if (infile.key == "facing") facing = Parse::toBool(infile.val);
 
 		// @ATTR waypoint_pause|duration|Duration to wait at each waypoint in 'ms' or 's'.
-		else if (infile.key == "waypoint_pause") waypoint_pause = parse_duration(infile.val);
+		else if (infile.key == "waypoint_pause") waypoint_pause = Parse::toDuration(infile.val);
 
 		// @ATTR turn_delay|duration|Duration it takes for this creature to turn and face their target in 'ms' or 's'.
-		else if (infile.key == "turn_delay") turn_delay = parse_duration(infile.val);
+		else if (infile.key == "turn_delay") turn_delay = Parse::toDuration(infile.val);
 		// @ATTR chance_pursue|int|Percentage change that the creature will chase their target.
 		else if (infile.key == "chance_pursue") chance_pursue = num;
 		// @ATTR chance_flee|int|Percentage chance that the creature will run away from their target.
@@ -475,13 +475,13 @@ void StatBlock::load(const std::string& filename) {
 			// @ATTR power|["melee", "ranged", "beacon", "on_hit", "on_death", "on_half_dead", "on_join_combat", "on_debuff"], power_id, int : State, Power, Chance|A power that has a chance of being triggered in a certain state.
 			AIPower ai_power;
 
-			std::string ai_type = popFirstString(infile.val);
+			std::string ai_type = Parse::popFirstString(infile.val);
 
-			ai_power.id = powers->verifyID(popFirstInt(infile.val), &infile, !PowerManager::ALLOW_ZERO_ID);
+			ai_power.id = powers->verifyID(Parse::popFirstInt(infile.val), &infile, !PowerManager::ALLOW_ZERO_ID);
 			if (ai_power.id == 0)
 				continue; // verifyID() will print our error message
 
-			ai_power.chance = popFirstInt(infile.val);
+			ai_power.chance = Parse::popFirstInt(infile.val);
 
 			if (ai_type == "melee") ai_power.type = AI_POWER_MELEE;
 			else if (ai_type == "ranged") ai_power.type = AI_POWER_RANGED;
@@ -505,10 +505,10 @@ void StatBlock::load(const std::string& filename) {
 		else if (infile.key == "passive_powers") {
 			// @ATTR passive_powers|list(power_id)|A list of passive powers this creature has.
 			powers_passive.clear();
-			std::string p = popFirstString(infile.val);
+			std::string p = Parse::popFirstString(infile.val);
 			while (p != "") {
-				powers_passive.push_back(toInt(p));
-				p = popFirstString(infile.val);
+				powers_passive.push_back(Parse::toInt(p));
+				p = Parse::popFirstString(infile.val);
 
 				// if a passive power has a post power, add it to the AI power list so we can track its cooldown
 				int post_power = powers->powers[powers_passive.back()].post_power;
@@ -526,11 +526,11 @@ void StatBlock::load(const std::string& filename) {
 		else if (infile.key == "melee_range") melee_range = fnum;
 		// @ATTR threat_range|float, float: Engage distance, Stop distance|The first value is the radius of the area this creature will be able to start chasing the hero. The second, optional, value is the radius at which this creature will stop pursuing their target and defaults to double the first value.
 		else if (infile.key == "threat_range") {
-			threat_range = toFloat(popFirstString(infile.val));
+			threat_range = Parse::toFloat(Parse::popFirstString(infile.val));
 
-			std::string tr_far = popFirstString(infile.val);
+			std::string tr_far = Parse::popFirstString(infile.val);
 			if (!tr_far.empty())
-				threat_range_far = toFloat(tr_far);
+				threat_range_far = Parse::toFloat(tr_far);
 			else
 				threat_range_far = threat_range * 2;
 		}
@@ -551,21 +551,21 @@ void StatBlock::load(const std::string& filename) {
 		else if (infile.key == "animations") animations = infile.val;
 
 		// @ATTR suppress_hp|bool|Hides the enemy HP bar for this creature.
-		else if (infile.key == "suppress_hp") suppress_hp = toBool(infile.val);
+		else if (infile.key == "suppress_hp") suppress_hp = Parse::toBool(infile.val);
 
 		else if (infile.key == "categories") {
 			// @ATTR categories|list(string)|Categories that this enemy belongs to.
 			categories.clear();
 			std::string cat;
-			while ((cat = popFirstString(infile.val)) != "") {
+			while ((cat = Parse::popFirstString(infile.val)) != "") {
 				categories.push_back(cat);
 			}
 		}
 
 		// @ATTR flee_duration|duration|The minimum amount of time that this creature will flee. They may flee longer than the specified time.
-		else if (infile.key == "flee_duration") flee_duration = parse_duration(infile.val);
+		else if (infile.key == "flee_duration") flee_duration = Parse::toDuration(infile.val);
 		// @ATTR flee_cooldown|duration|The amount of time this creature must wait before they can start fleeing again.
-		else if (infile.key == "flee_cooldown") flee_cooldown = parse_duration(infile.val);
+		else if (infile.key == "flee_cooldown") flee_cooldown = Parse::toDuration(infile.val);
 
 		// this is only used for EnemyGroupManager
 		// we check for them here so that we don't get an error saying they are invalid
@@ -939,14 +939,14 @@ bool StatBlock::canUsePower(int powerid, bool allow_passive) const {
 
 void StatBlock::loadHeroStats() {
 	// set the default global cooldown
-	cooldown = parse_duration("66ms");
+	cooldown = Parse::toDuration("66ms");
 
 	// Redefine numbers from config file if present
 	FileParser infile;
 	// @CLASS StatBlock: Hero stats|Description of engine/stats.txt
 	if (infile.open("engine/stats.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
-			int value = toInt(infile.val);
+			int value = Parse::toInt(infile.val);
 
 			bool valid = loadCoreStat(&infile);
 

@@ -74,16 +74,16 @@ void EngineSettings::Misc::load() {
 		while (infile.next()) {
 			// @ATTR save_hpmp|bool|When saving the game, keep the hero's current HP and MP.
 			if (infile.key == "save_hpmp")
-				save_hpmp = toBool(infile.val);
+				save_hpmp = Parse::toBool(infile.val);
 			// @ATTR corpse_timeout|duration|Duration that a corpse can exist on the map in 'ms' or 's'.
 			else if (infile.key == "corpse_timeout")
-				corpse_timeout = parse_duration(infile.val);
+				corpse_timeout = Parse::toDirection(infile.val);
 			// @ATTR sell_without_vendor|bool|Allows selling items when not at a vendor via CTRL-Click.
 			else if (infile.key == "sell_without_vendor")
-				sell_without_vendor = toBool(infile.val);
+				sell_without_vendor = Parse::toBool(infile.val);
 			// @ATTR aim_assist|int|The pixel offset for powers that use aim_assist.
 			else if (infile.key == "aim_assist")
-				aim_assist = toInt(infile.val);
+				aim_assist = Parse::toInt(infile.val);
 			// @ATTR window_title|string|Sets the text in the window's titlebar.
 			else if (infile.key == "window_title")
 				window_title = infile.val;
@@ -92,19 +92,19 @@ void EngineSettings::Misc::load() {
 				save_prefix = infile.val;
 			// @ATTR sound_falloff|int|The maximum radius in tiles that any single sound is audible.
 			else if (infile.key == "sound_falloff")
-				sound_falloff = toInt(infile.val);
+				sound_falloff = Parse::toInt(infile.val);
 			// @ATTR party_exp_percentage|int|The percentage of XP given to allies.
 			else if (infile.key == "party_exp_percentage")
-				party_exp_percentage = toInt(infile.val);
+				party_exp_percentage = Parse::toInt(infile.val);
 			// @ATTR enable_ally_collision|bool|Allows allies to block the player's path.
 			else if (infile.key == "enable_ally_collision")
-				enable_ally_collision = toBool(infile.val);
+				enable_ally_collision = Parse::toBool(infile.val);
 			// @ATTR enable_ally_collision_ai|bool|Allows allies to block the path of other AI creatures.
 			else if (infile.key == "enable_ally_collision_ai")
-				enable_ally_collision_ai = toBool(infile.val);
+				enable_ally_collision_ai = Parse::toBool(infile.val);
 			else if (infile.key == "currency_id") {
 				// @ATTR currency_id|item_id|An item id that will be used as currency.
-				currency_id = toInt(infile.val);
+				currency_id = Parse::toInt(infile.val);
 				if (currency_id < 1) {
 					currency_id = 1;
 					logError("EngineSettings: Currency ID below the minimum allowed value. Resetting it to %d", currency_id);
@@ -112,28 +112,28 @@ void EngineSettings::Misc::load() {
 			}
 			// @ATTR interact_range|float|Distance where the player can interact with objects and NPCs.
 			else if (infile.key == "interact_range")
-				interact_range = toFloat(infile.val);
+				interact_range = Parse::toFloat(infile.val);
 			// @ATTR menus_pause|bool|Opening any menu will pause the game.
 			else if (infile.key == "menus_pause")
-				menus_pause = toBool(infile.val);
+				menus_pause = Parse::toBool(infile.val);
 			// @ATTR save_onload|bool|Save the game upon changing maps.
 			else if (infile.key == "save_onload")
-				save_onload = toBool(infile.val);
+				save_onload = Parse::toBool(infile.val);
 			// @ATTR save_onexit|bool|Save the game upon quitting to the title screen or desktop.
 			else if (infile.key == "save_onexit")
-				save_onexit = toBool(infile.val);
+				save_onexit = Parse::toBool(infile.val);
 			// @ATTR camera_speed|float|Modifies how fast the camera moves to recenter on the player. Larger values mean a slower camera. Default value is 10.
 			else if (infile.key == "camera_speed") {
-				camera_speed = toFloat(infile.val);
+				camera_speed = Parse::toFloat(infile.val);
 				if (camera_speed <= 0)
 					camera_speed = 1;
 			}
 			// @ATTR save_buyback|bool|Saves the vendor buyback stock whenever the game is saved.
 			else if (infile.key == "save_buyback")
-				save_buyback = toBool(infile.val);
+				save_buyback = Parse::toBool(infile.val);
 			// @ATTR keep_buyback_on_map_change|bool|If true, NPC buyback stocks will persist when the map changes. If false, save_buyback is disabled.
 			else if (infile.key == "keep_buyback_on_map_change")
-				keep_buyback_on_map_change = toBool(infile.val);
+				keep_buyback_on_map_change = Parse::toBool(infile.val);
 
 			else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
 		}
@@ -168,28 +168,28 @@ void EngineSettings::Resolutions::load() {
 		while (infile.next()) {
 			// @ATTR menu_frame_width|int|Width of frame for New Game, Configuration, etc. menus.
 			if (infile.key == "menu_frame_width")
-				frame_w = static_cast<unsigned short>(toInt(infile.val));
+				frame_w = static_cast<unsigned short>(Parse::toInt(infile.val));
 			// @ATTR menu_frame_height|int|Height of frame for New Game, Configuration, etc. menus.
 			else if (infile.key == "menu_frame_height")
-				frame_h = static_cast<unsigned short>(toInt(infile.val));
+				frame_h = static_cast<unsigned short>(Parse::toInt(infile.val));
 			// @ATTR icon_size|int|Size of icons.
 			else if (infile.key == "icon_size")
-				icon_size = static_cast<unsigned short>(toInt(infile.val));
+				icon_size = static_cast<unsigned short>(Parse::toInt(infile.val));
 			// @ATTR required_width|int|Minimum window/screen resolution width.
 			else if (infile.key == "required_width") {
-				min_screen_w = static_cast<unsigned short>(toInt(infile.val));
+				min_screen_w = static_cast<unsigned short>(Parse::toInt(infile.val));
 			}
 			// @ATTR required_height|int|Minimum window/screen resolution height.
 			else if (infile.key == "required_height") {
-				min_screen_h = static_cast<unsigned short>(toInt(infile.val));
+				min_screen_h = static_cast<unsigned short>(Parse::toInt(infile.val));
 			}
 			// @ATTR virtual_height|list(int)|A list of heights (in pixels) that the game can use for its actual rendering area. The virtual height chosen is based on the current window height. The width will be resized to match the window's aspect ratio, and everything will be scaled up to fill the window.
 			else if (infile.key == "virtual_height") {
 				virtual_heights.clear();
-				std::string v_height = popFirstString(infile.val);
+				std::string v_height = Parse::popFirstString(infile.val);
 				while (!v_height.empty()) {
-					virtual_heights.push_back(static_cast<unsigned short>(toInt(v_height)));
-					v_height = popFirstString(infile.val);
+					virtual_heights.push_back(static_cast<unsigned short>(Parse::toInt(v_height)));
+					v_height = Parse::popFirstString(infile.val);
 				}
 
 				std::sort(virtual_heights.begin(), virtual_heights.end());
@@ -202,11 +202,11 @@ void EngineSettings::Resolutions::load() {
 			}
 			// @ATTR virtual_dpi|float|A target diagonal screen DPI used to determine how much to scale the internal render resolution.
 			else if (infile.key == "virtual_dpi") {
-				virtual_dpi = toFloat(infile.val);
+				virtual_dpi = Parse::toFloat(infile.val);
 			}
 			// @ATTR ignore_texture_filter|bool|If true, this ignores the "Texture Filtering" video setting and uses only nearest-neighbor scaling. This is good for games that use pixel art assets.
 			else if (infile.key == "ignore_texture_filter") {
-				ignore_texture_filter = toBool(infile.val);
+				ignore_texture_filter = Parse::toBool(infile.val);
 			}
 			else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
 		}
@@ -242,7 +242,7 @@ void EngineSettings::Gameplay::load() {
 		while (infile.next()) {
 			if (infile.key == "enable_playgame") {
 				// @ATTR enable_playgame|bool|Enables the "Play Game" button on the main menu.
-				enable_playgame = toBool(infile.val);
+				enable_playgame = Parse::toBool(infile.val);
 			}
 			else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
 		}
@@ -273,44 +273,44 @@ void EngineSettings::Combat::load() {
 		while (infile.next()) {
 			if (infile.key == "absorb_percent") {
 				// @ATTR absorb_percent|int, int : Minimum, Maximum|Limits the percentage of damage that can be absorbed.
-				min_absorb = popFirstInt(infile.val);
-				max_absorb = popFirstInt(infile.val);
+				min_absorb = Parse::popFirstInt(infile.val);
+				max_absorb = Parse::popFirstInt(infile.val);
 				max_absorb = std::max(max_absorb, min_absorb);
 			}
 			else if (infile.key == "resist_percent") {
 				// @ATTR resist_percent|int, int : Minimum, Maximum|Limits the percentage of damage that can be resisted.
-				min_resist = popFirstInt(infile.val);
-				max_resist = popFirstInt(infile.val);
+				min_resist = Parse::popFirstInt(infile.val);
+				max_resist = Parse::popFirstInt(infile.val);
 				max_resist = std::max(max_resist, min_resist);
 			}
 			else if (infile.key == "block_percent") {
 				// @ATTR block_percent|int, int : Minimum, Maximum|Limits the percentage of damage that can be blocked.
-				min_block = popFirstInt(infile.val);
-				max_block = popFirstInt(infile.val);
+				min_block = Parse::popFirstInt(infile.val);
+				max_block = Parse::popFirstInt(infile.val);
 				max_block = std::max(max_block, min_block);
 			}
 			else if (infile.key == "avoidance_percent") {
 				// @ATTR avoidance_percent|int, int : Minimum, Maximum|Limits the percentage chance that damage will be avoided.
-				min_avoidance = popFirstInt(infile.val);
-				max_avoidance = popFirstInt(infile.val);
+				min_avoidance = Parse::popFirstInt(infile.val);
+				max_avoidance = Parse::popFirstInt(infile.val);
 				max_avoidance = std::max(max_avoidance, min_avoidance);
 			}
 			// @ATTR miss_damage_percent|int, int : Minimum, Maximum|The percentage of damage dealt when a miss occurs.
 			else if (infile.key == "miss_damage_percent") {
-				min_miss_damage = popFirstInt(infile.val);
-				max_miss_damage = popFirstInt(infile.val);
+				min_miss_damage = Parse::popFirstInt(infile.val);
+				max_miss_damage = Parse::popFirstInt(infile.val);
 				max_miss_damage = std::max(max_miss_damage, min_miss_damage);
 			}
 			// @ATTR crit_damage_percent|int, int : Minimum, Maximum|The percentage of damage dealt when a critical hit occurs.
 			else if (infile.key == "crit_damage_percent") {
-				min_crit_damage = popFirstInt(infile.val);
-				max_crit_damage = popFirstInt(infile.val);
+				min_crit_damage = Parse::popFirstInt(infile.val);
+				max_crit_damage = Parse::popFirstInt(infile.val);
 				max_crit_damage = std::max(max_crit_damage, min_crit_damage);
 			}
 			// @ATTR overhit_damage_percent|int, int : Minimum, Maximum|The percentage of damage dealt when an overhit occurs.
 			else if (infile.key == "overhit_damage_percent") {
-				min_overhit_damage = popFirstInt(infile.val);
-				max_overhit_damage = popFirstInt(infile.val);
+				min_overhit_damage = Parse::popFirstInt(infile.val);
+				max_overhit_damage = Parse::popFirstInt(infile.val);
 				max_overhit_damage = std::max(max_overhit_damage, min_overhit_damage);
 			}
 
@@ -480,18 +480,18 @@ void EngineSettings::HeroClasses::load() {
 				// @ATTR description|string|A description of this class.
 				else if (infile.key == "description") list.back().description = infile.val;
 				// @ATTR currency|int|The amount of currency this class will start with.
-				else if (infile.key == "currency") list.back().currency = toInt(infile.val);
+				else if (infile.key == "currency") list.back().currency = Parse::toInt(infile.val);
 				// @ATTR equipment|list(item_id)|A list of items that are equipped when starting with this class.
 				else if (infile.key == "equipment") list.back().equipment = infile.val;
 				// @ATTR carried|list(item_id)|A list of items that are placed in the normal inventorty when starting with this class.
 				else if (infile.key == "carried") list.back().carried = infile.val;
 				// @ATTR primary|predefined_string, int : Primary stat name, Default value|Class starts with this value for the specified stat.
 				else if (infile.key == "primary") {
-					std::string prim_stat = popFirstString(infile.val);
+					std::string prim_stat = Parse::popFirstString(infile.val);
 					size_t prim_stat_index = eset->primary_stats.getIndexByID(prim_stat);
 
 					if (prim_stat_index != eset->primary_stats.list.size()) {
-						list.back().primary[prim_stat_index] = toInt(infile.val);
+						list.back().primary[prim_stat_index] = Parse::toInt(infile.val);
 					}
 					else {
 						infile.error("EngineSettings: '%s' is not a valid primary stat.", prim_stat.c_str());
@@ -501,20 +501,20 @@ void EngineSettings::HeroClasses::load() {
 				else if (infile.key == "actionbar") {
 					// @ATTR actionbar|list(power_id)|A list of powers to place in the action bar for the class.
 					for (int i=0; i<12; i++) {
-						list.back().hotkeys[i] = popFirstInt(infile.val);
+						list.back().hotkeys[i] = Parse::popFirstInt(infile.val);
 					}
 				}
 				else if (infile.key == "powers") {
 					// @ATTR powers|list(power_id)|A list of powers that are unlocked when starting this class.
 					std::string power;
-					while ( (power = popFirstString(infile.val)) != "") {
-						list.back().powers.push_back(toInt(power));
+					while ( (power = Parse::popFirstString(infile.val)) != "") {
+						list.back().powers.push_back(Parse::toInt(power));
 					}
 				}
 				else if (infile.key == "campaign") {
 					// @ATTR campaign|list(string)|A list of campaign statuses that are set when starting this class.
 					std::string status;
-					while ( (status = popFirstString(infile.val)) != "") {
+					while ( (status = Parse::popFirstString(infile.val)) != "") {
 						list.back().statuses.push_back(status);
 					}
 				}
@@ -525,15 +525,15 @@ void EngineSettings::HeroClasses::load() {
 				else if (infile.key == "hero_options") {
 					// @ATTR hero_options|list(int)|A list of indicies of the hero options this class can use.
 					std::string hero_option;
-					while ( (hero_option = popFirstString(infile.val)) != "") {
-						list.back().options.push_back(toInt(hero_option));
+					while ( (hero_option = Parse::popFirstString(infile.val)) != "") {
+						list.back().options.push_back(Parse::toInt(hero_option));
 					}
 
 					std::sort(list.back().options.begin(), list.back().options.end());
 				}
 				else if (infile.key == "default_power_tab") {
 					// @ATTR default_power_tab|int|Index of the tab to switch to when opening the Powers menu
-					list.back().default_power_tab = toInt(infile.val);
+					list.back().default_power_tab = Parse::toInt(infile.val);
 				}
 
 				else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
@@ -628,17 +628,17 @@ void EngineSettings::DeathPenalty::load() {
 	if (infile.open("engine/death_penalty.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			// @ATTR enable|bool|Enable the death penalty.
-			if (infile.key == "enable") enabled = toBool(infile.val);
+			if (infile.key == "enable") enabled = Parse::toBool(infile.val);
 			// @ATTR permadeath|bool|Force permadeath for all new saves.
-			else if (infile.key == "permadeath") permadeath = toBool(infile.val);
+			else if (infile.key == "permadeath") permadeath = Parse::toBool(infile.val);
 			// @ATTR currency|int|Remove this percentage of currency.
-			else if (infile.key == "currency") currency = toInt(infile.val);
+			else if (infile.key == "currency") currency = Parse::toInt(infile.val);
 			// @ATTR xp_total|int|Remove this percentage of total XP.
-			else if (infile.key == "xp_total") xp = toInt(infile.val);
+			else if (infile.key == "xp_total") xp = Parse::toInt(infile.val);
 			// @ATTR xp_current_level|int|Remove this percentage of the XP gained since the last level.
-			else if (infile.key == "xp_current_level") xp_current = toInt(infile.val);
+			else if (infile.key == "xp_current_level") xp_current = Parse::toInt(infile.val);
 			// @ATTR random_item|bool|Removes a random item from the player's inventory.
-			else if (infile.key == "random_item") item = toBool(infile.val);
+			else if (infile.key == "random_item") item = Parse::toBool(infile.val);
 
 			else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
 		}
@@ -661,19 +661,19 @@ void EngineSettings::Tooltips::load() {
 		while (infile.next()) {
 			// @ATTR tooltip_offset|int|Offset in pixels from the origin point (usually mouse cursor).
 			if (infile.key == "tooltip_offset")
-				offset = toInt(infile.val);
+				offset = Parse::toInt(infile.val);
 			// @ATTR tooltip_width|int|Maximum width of tooltip in pixels.
 			else if (infile.key == "tooltip_width")
-				width = toInt(infile.val);
+				width = Parse::toInt(infile.val);
 			// @ATTR tooltip_margin|int|Padding between the text and the tooltip borders.
 			else if (infile.key == "tooltip_margin")
-				margin = toInt(infile.val);
+				margin = Parse::toInt(infile.val);
 			// @ATTR npc_tooltip_margin|int|Vertical offset for NPC labels.
 			else if (infile.key == "npc_tooltip_margin")
-				margin_npc = toInt(infile.val);
+				margin_npc = Parse::toInt(infile.val);
 			// @ATTR tooltip_background_border|int|The pixel size of the border in "images/menus/tooltips.png".
 			else if (infile.key == "tooltip_background_border")
-				background_border = toInt(infile.val);
+				background_border = Parse::toInt(infile.val);
 
 			else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
 		}
@@ -699,15 +699,15 @@ void EngineSettings::Loot::load() {
 		while (infile.next()) {
 			if (infile.key == "tooltip_margin") {
 				// @ATTR tooltip_margin|int|Vertical offset of the loot tooltip from the loot itself.
-				tooltip_margin = toInt(infile.val);
+				tooltip_margin = Parse::toInt(infile.val);
 			}
 			else if (infile.key == "autopickup_currency") {
 				// @ATTR autopickup_currency|bool|Enable autopickup for currency
-				autopickup_currency = toBool(infile.val);
+				autopickup_currency = Parse::toBool(infile.val);
 			}
 			else if (infile.key == "autopickup_range") {
 				// @ATTR autopickup_range|float|Minimum distance the player must be from loot to trigger autopickup.
-				autopickup_range = toFloat(infile.val);
+				autopickup_range = Parse::toFloat(infile.val);
 			}
 			else if (infile.key == "currency_name") {
 				// @ATTR currency_name|string|Define the name of currency in game
@@ -715,11 +715,11 @@ void EngineSettings::Loot::load() {
 			}
 			else if (infile.key == "vendor_ratio") {
 				// @ATTR vendor_ratio|int|Percentage of item buying price to use as selling price. Also used as the buyback price until the player leaves the map.
-				vendor_ratio = static_cast<float>(toInt(infile.val)) / 100.0f;
+				vendor_ratio = static_cast<float>(Parse::toInt(infile.val)) / 100.0f;
 			}
 			else if (infile.key == "vendor_ratio_buyback") {
 				// @ATTR vendor_ratio_buyback|int|Percentage of item buying price to use as the buying price for previously sold items.
-				vendor_ratio_buyback = static_cast<float>(toInt(infile.val)) / 100.0f;
+				vendor_ratio_buyback = static_cast<float>(Parse::toInt(infile.val)) / 100.0f;
 			}
 			else if (infile.key == "sfx_loot") {
 				// @ATTR sfx_loot|filename|Filename of a sound effect to play for dropping loot.
@@ -727,11 +727,11 @@ void EngineSettings::Loot::load() {
 			}
 			else if (infile.key == "drop_max") {
 				// @ATTR drop_max|int|The maximum number of random item stacks that can drop at once
-				drop_max = std::max(toInt(infile.val), 1);
+				drop_max = std::max(Parse::toInt(infile.val), 1);
 			}
 			else if (infile.key == "drop_radius") {
 				// @ATTR drop_radius|int|The distance (in tiles) away from the origin that loot can drop
-				drop_radius = std::max(toInt(infile.val), 1);
+				drop_radius = std::max(Parse::toInt(infile.val), 1);
 			}
 			else {
 				infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
@@ -757,8 +757,8 @@ void EngineSettings::Tileset::load() {
 		while (infile.next()) {
 			if (infile.key == "tile_size") {
 				// @ATTR tile_size|int, int : Width, Height|The width and height of a tile.
-				tile_w = static_cast<unsigned short>(popFirstInt(infile.val));
-				tile_h = static_cast<unsigned short>(popFirstInt(infile.val));
+				tile_w = static_cast<unsigned short>(Parse::popFirstInt(infile.val));
+				tile_h = static_cast<unsigned short>(Parse::popFirstInt(infile.val));
 				tile_w_half = tile_w /2;
 				tile_h_half = tile_h /2;
 			}
@@ -822,13 +822,13 @@ void EngineSettings::Widgets::load() {
 			if (infile.section == "misc") {
 				if (infile.key == "selection_rect_color") {
 					// @ATTR misc.selection_rect_color|color, int : Color, Alpha|Color of the selection rectangle when navigating widgets without a mouse.
-					selection_rect_color = toRGBA(infile.val);
+					selection_rect_color = Parse::toRGBA(infile.val);
 				}
 			}
 			else if (infile.section == "tab") {
 				if (infile.key == "padding") {
 					// @ATTR tab.padding|int, int : Left/right padding, Top padding|The pixel padding around tabs. Controls how the left and right edges are drawn.
-					tab_padding = toPoint(infile.val);
+					tab_padding = Parse::toPoint(infile.val);
 				}
 			}
 		}
@@ -844,8 +844,8 @@ void EngineSettings::XPTable::load() {
 		while(infile.next()) {
 			if (infile.key == "level") {
 				// @ATTR level|int, int : Level, XP|The amount of XP required for this level.
-				unsigned lvl_id = popFirstInt(infile.val);
-				unsigned long lvl_xp = toUnsignedLong(popFirstString(infile.val));
+				unsigned lvl_id = Parse::popFirstInt(infile.val);
+				unsigned long lvl_xp = Parse::toUnsignedLong(Parse::popFirstString(infile.val));
 
 				if (lvl_id > xp_table.size())
 					xp_table.resize(lvl_id);

@@ -66,7 +66,7 @@ FontEngine::FontEngine()
 			// @ATTR hardcore_color_name|color|Permadeath save slot player name color. Recommended: red.
 			size_t color_id = stringToFontColor(infile.key);
 			if (color_id < COLOR_COUNT)
-				font_colors[color_id] = toRGB(infile.val);
+				font_colors[color_id] = Parse::toRGB(infile.val);
 			else
 				infile.error("FontEngine: %s is not a valid key.", infile.key.c_str());
 		}
@@ -183,7 +183,7 @@ Point FontEngine::calc_size(const std::string& text_with_newlines, int width) {
 		next_word = getNextToken(fulltext, cursor, space); // get next word
 	}
 
-	builder.str(trim(builder.str())); //removes whitespace that shouldn't be included in the size
+	builder.str(Parse::trim(builder.str())); //removes whitespace that shouldn't be included in the size
 	if (!builder.str().empty())
 		height += getLineHeight();
 	if (calc_width(builder.str()) > max_width) max_width = calc_width(builder.str());
@@ -318,3 +318,16 @@ std::string FontEngine::popTokenByWidth(std::string& text, int width) {
 		return text;
 	}
 }
+
+// similar to Parse::popFirstString but does not alter the input string
+std::string FontEngine::getNextToken(const std::string& s, size_t &cursor, char separator) {
+	size_t seppos = s.find_first_of(separator, cursor);
+	if (seppos == std::string::npos) { // not found
+		cursor = std::string::npos;
+		return "";
+	}
+	std::string outs = s.substr(cursor, seppos-cursor);
+	cursor = seppos+1;
+	return outs;
+}
+

@@ -75,13 +75,13 @@ void MenuBook::loadBook() {
 
 			// @ATTR close|point|Position of the close button.
 			if(infile.key == "close") {
-				int x = popFirstInt(infile.val);
-				int y = popFirstInt(infile.val);
+				int x = Parse::popFirstInt(infile.val);
+				int y = Parse::popFirstInt(infile.val);
 				closeButton->setBasePos(x, y, ALIGN_TOPLEFT);
 			}
 			// @ATTR background|filename|Filename for the background image.
 			else if (infile.key == "background") {
-				setBackground(popFirstString(infile.val));
+				setBackground(Parse::popFirstString(infile.val));
 			}
 			else if (infile.section == "") {
 				infile.error("MenuBook: '%s' is not a valid key.", infile.key.c_str());
@@ -181,12 +181,12 @@ void MenuBook::loadBook() {
 void MenuBook::loadImage(FileParser &infile, BookImage& bimage) {
 	// @ATTR image.image_pos|point|Position of the image.
 	if (infile.key == "image_pos") {
-		bimage.dest = toPoint(infile.val);
+		bimage.dest = Parse::toPoint(infile.val);
 	}
 	// @ATTR image.image|filename|Filename of the image.
 	else if (infile.key == "image") {
 		Image *graphics;
-		graphics = render_device->loadImage(popFirstString(infile.val), RenderDevice::ERROR_NORMAL);
+		graphics = render_device->loadImage(Parse::popFirstString(infile.val), RenderDevice::ERROR_NORMAL);
 		if (graphics) {
 		  bimage.image = graphics->createSprite();
 		  graphics->unref();
@@ -194,18 +194,18 @@ void MenuBook::loadImage(FileParser &infile, BookImage& bimage) {
 	}
 	// @ATTR image.requires_status|list(string)|Image requires these campaign statuses in order to be visible.
 	else if (infile.key == "requires_status") {
-		std::string temp = popFirstString(infile.val);
+		std::string temp = Parse::popFirstString(infile.val);
 		while (!temp.empty()) {
 			bimage.requires_status.push_back(temp);
-			temp = popFirstString(infile.val);
+			temp = Parse::popFirstString(infile.val);
 		}
 	}
 	// @ATTR image.requires_not_status|list(string)|Image must not have any of these campaign statuses in order to be visible.
 	else if (infile.key == "requires_not_status") {
-		std::string temp = popFirstString(infile.val);
+		std::string temp = Parse::popFirstString(infile.val);
 		while (!temp.empty()) {
 			bimage.requires_not_status.push_back(temp);
-			temp = popFirstString(infile.val);
+			temp = Parse::popFirstString(infile.val);
 		}
 	}
 	else {
@@ -216,10 +216,10 @@ void MenuBook::loadImage(FileParser &infile, BookImage& bimage) {
 void MenuBook::loadText(FileParser &infile, BookText& btext) {
 	// @ATTR text.text_pos|int, int, int, ["left", "center", "right"] : X, Y, Width, Text justify|Position of the text.
 	if (infile.key == "text_pos") {
-		btext.size.x = popFirstInt(infile.val);
-		btext.size.y = popFirstInt(infile.val);
-		btext.size.w = popFirstInt(infile.val);
-		std::string _justify = popFirstString(infile.val);
+		btext.size.x = Parse::popFirstInt(infile.val);
+		btext.size.y = Parse::popFirstInt(infile.val);
+		btext.size.w = Parse::popFirstInt(infile.val);
+		std::string _justify = Parse::popFirstString(infile.val);
 
 		if (_justify == "left") btext.justify = FontEngine::JUSTIFY_LEFT;
 		else if (_justify == "center") btext.justify = FontEngine::JUSTIFY_CENTER;
@@ -227,10 +227,10 @@ void MenuBook::loadText(FileParser &infile, BookText& btext) {
 	}
 	// @ATTR text.text_font|color, string : Font color, Font style|Font color and style.
 	else if (infile.key == "text_font") {
-		btext.color.r = static_cast<Uint8>(popFirstInt(infile.val));
-		btext.color.g = static_cast<Uint8>(popFirstInt(infile.val));
-		btext.color.b = static_cast<Uint8>(popFirstInt(infile.val));
-		btext.font= popFirstString(infile.val);
+		btext.color.r = static_cast<Uint8>(Parse::popFirstInt(infile.val));
+		btext.color.g = static_cast<Uint8>(Parse::popFirstInt(infile.val));
+		btext.color.b = static_cast<Uint8>(Parse::popFirstInt(infile.val));
+		btext.font= Parse::popFirstString(infile.val);
 	}
 	// @ATTR text.text|string|The text to be displayed.
 	else if (infile.key == "text") {
@@ -245,16 +245,16 @@ void MenuBook::loadText(FileParser &infile, BookText& btext) {
 void MenuBook::loadButton(FileParser &infile, BookButton& bbutton) {
 	// @ATTR button.button_pos|point|Position of the button.
 	if (infile.key == "button_pos") {
-		bbutton.dest.x = popFirstInt(infile.val);
-		bbutton.dest.y = popFirstInt(infile.val);
+		bbutton.dest.x = Parse::popFirstInt(infile.val);
+		bbutton.dest.y = Parse::popFirstInt(infile.val);
 	}
 	// @ATTR button.button_image|filename|Image file to use for this button. Default is the normal menu button.
 	else if (infile.key == "button_image") {
-		bbutton.image = popFirstString(infile.val);
+		bbutton.image = Parse::popFirstString(infile.val);
 	}
 	// @ATTR button.text|string|Optional text label for the button.
 	else if (infile.key == "text") {
-		bbutton.label = popFirstString(infile.val);
+		bbutton.label = Parse::popFirstString(infile.val);
 	}
 	else {
 		loadBookEvent(infile, bbutton.event);

@@ -107,76 +107,76 @@ GameStateNew::GameStateNew()
 		while (infile.next()) {
 			// @ATTR button_prev|int, int, alignment : X, Y, Alignment|Position of button to choose the previous preset hero.
 			if (infile.key == "button_prev") {
-				int x = popFirstInt(infile.val);
-				int y = popFirstInt(infile.val);
-				ALIGNMENT a = parse_alignment(popFirstString(infile.val));
+				int x = Parse::popFirstInt(infile.val);
+				int y = Parse::popFirstInt(infile.val);
+				ALIGNMENT a = Parse::toAlignment(Parse::popFirstString(infile.val));
 				button_prev->setBasePos(x, y, a);
 			}
 			// @ATTR button_next|int, int, alignment : X, Y, Alignment|Position of button to choose the next preset hero.
 			else if (infile.key == "button_next") {
-				int x = popFirstInt(infile.val);
-				int y = popFirstInt(infile.val);
-				ALIGNMENT a = parse_alignment(popFirstString(infile.val));
+				int x = Parse::popFirstInt(infile.val);
+				int y = Parse::popFirstInt(infile.val);
+				ALIGNMENT a = Parse::toAlignment(Parse::popFirstString(infile.val));
 				button_next->setBasePos(x, y, a);
 			}
 			// @ATTR button_exit|int, int, alignment : X, Y, Alignment|Position of "Cancel" button.
 			else if (infile.key == "button_exit") {
-				int x = popFirstInt(infile.val);
-				int y = popFirstInt(infile.val);
-				ALIGNMENT a = parse_alignment(popFirstString(infile.val));
+				int x = Parse::popFirstInt(infile.val);
+				int y = Parse::popFirstInt(infile.val);
+				ALIGNMENT a = Parse::toAlignment(Parse::popFirstString(infile.val));
 				button_exit->setBasePos(x, y, a);
 			}
 			// @ATTR button_create|int, int, alignment : X, Y, Alignment|Position of "Create" button.
 			else if (infile.key == "button_create") {
-				int x = popFirstInt(infile.val);
-				int y = popFirstInt(infile.val);
-				ALIGNMENT a = parse_alignment(popFirstString(infile.val));
+				int x = Parse::popFirstInt(infile.val);
+				int y = Parse::popFirstInt(infile.val);
+				ALIGNMENT a = Parse::toAlignment(Parse::popFirstString(infile.val));
 				button_create->setBasePos(x, y, a);
 			}
 			// @ATTR button_permadeath|int, int, alignment : X, Y, Alignment|Position of checkbox for toggling permadeath.
 			else if (infile.key == "button_permadeath") {
-				int x = popFirstInt(infile.val);
-				int y = popFirstInt(infile.val);
-				ALIGNMENT a = parse_alignment(popFirstString(infile.val));
+				int x = Parse::popFirstInt(infile.val);
+				int y = Parse::popFirstInt(infile.val);
+				ALIGNMENT a = Parse::toAlignment(Parse::popFirstString(infile.val));
 				button_permadeath->setBasePos(x, y, a);
 			}
 			// @ATTR name_input|int, int, alignment : X, Y, Alignment|Position of the hero name textbox.
 			else if (infile.key == "name_input") {
-				int x = popFirstInt(infile.val);
-				int y = popFirstInt(infile.val);
-				ALIGNMENT a = parse_alignment(popFirstString(infile.val));
+				int x = Parse::popFirstInt(infile.val);
+				int y = Parse::popFirstInt(infile.val);
+				ALIGNMENT a = Parse::toAlignment(Parse::popFirstString(infile.val));
 				input_name->setBasePos(x, y, a);
 			}
 			// @ATTR portrait_label|label|Label for the "Choose a Portrait" text.
 			else if (infile.key == "portrait_label") {
-				label_portrait->setFromLabelInfo(popLabelInfo(infile.val));
+				label_portrait->setFromLabelInfo(Parse::popLabelInfo(infile.val));
 			}
 			// @ATTR name_label|label|Label for the "Choose a Name" text.
 			else if (infile.key == "name_label") {
-				label_name->setFromLabelInfo(popLabelInfo(infile.val));
+				label_name->setFromLabelInfo(Parse::popLabelInfo(infile.val));
 			}
 			// @ATTR permadeath_label|label|Label for the "Permadeath?" text.
 			else if (infile.key == "permadeath_label") {
-				label_permadeath->setFromLabelInfo(popLabelInfo(infile.val));
+				label_permadeath->setFromLabelInfo(Parse::popLabelInfo(infile.val));
 			}
 			// @ATTR classlist_label|label|Label for the "Choose a Class" text.
 			else if (infile.key == "classlist_label") {
-				label_classlist->setFromLabelInfo(popLabelInfo(infile.val));
+				label_classlist->setFromLabelInfo(Parse::popLabelInfo(infile.val));
 			}
 			// @ATTR portrait|rectangle|Position and dimensions of the portrait image.
 			else if (infile.key == "portrait") {
-				portrait_pos = toRect(infile.val);
+				portrait_pos = Parse::toRect(infile.val);
 			}
 			// @ATTR class_list|int, int, alignment : X, Y, Alignment|Position of the class list.
 			else if (infile.key == "class_list") {
-				int x = popFirstInt(infile.val);
-				int y = popFirstInt(infile.val);
-				ALIGNMENT a = parse_alignment(popFirstString(infile.val));
+				int x = Parse::popFirstInt(infile.val);
+				int y = Parse::popFirstInt(infile.val);
+				ALIGNMENT a = Parse::toAlignment(Parse::popFirstString(infile.val));
 				class_list->setBasePos(x, y, a);
 			}
 			// @ATTR show_classlist|bool|Allows hiding the class list.
 			else if (infile.key == "show_classlist") {
-				show_classlist = toBool(infile.val);
+				show_classlist = Parse::toBool(infile.val);
 			}
 			else {
 				infile.error("GameStateNew: '%s' is not a valid key.", infile.key.c_str());
@@ -255,16 +255,16 @@ void GameStateNew::loadOptions(const std::string& filename) {
 	while (fin.next()) {
 		// @ATTR option|int, string, string, filename, string : Index, Base, Head, Portrait, Name|A default body, head, portrait, and name for a hero.
 		if (fin.key == "option") {
-			cur_index = std::max(0, popFirstInt(fin.val));
+			cur_index = std::max(0, Parse::popFirstInt(fin.val));
 
 			if (static_cast<size_t>(cur_index + 1) > hero_options.size()) {
 				hero_options.resize(cur_index + 1);
 			}
 
-			hero_options[cur_index].base = popFirstString(fin.val);
-			hero_options[cur_index].head = popFirstString(fin.val);
-			hero_options[cur_index].portrait = popFirstString(fin.val);
-			hero_options[cur_index].name = msg->get(popFirstString(fin.val));
+			hero_options[cur_index].base = Parse::popFirstString(fin.val);
+			hero_options[cur_index].head = Parse::popFirstString(fin.val);
+			hero_options[cur_index].portrait = Parse::popFirstString(fin.val);
+			hero_options[cur_index].name = msg->get(Parse::popFirstString(fin.val));
 
 			all_options.push_back(cur_index);
 		}

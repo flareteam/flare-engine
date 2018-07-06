@@ -97,6 +97,7 @@ protected:
 	Rect position(const std::string& text, int x, int y, int justify);
 	virtual void renderInternal(const std::string& text, int x, int y, int justify, Image *target, const Color& color) = 0;
 	std::string popTokenByWidth(std::string& text, int width);
+	std::string getNextToken(const std::string& s, size_t& cursor, char separator);
 
 	std::vector<Color> font_colors;
 };

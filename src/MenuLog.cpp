@@ -52,16 +52,16 @@ MenuLog::MenuLog() {
 
 			// @ATTR label_title|label|Position of the "Log" text.
 			if(infile.key == "label_title") {
-				label_log.setFromLabelInfo(popLabelInfo(infile.val));
+				label_log.setFromLabelInfo(Parse::popLabelInfo(infile.val));
 			}
 			// @ATTR close|point|Position of the close button.
 			else if(infile.key == "close") {
-				Point pos = toPoint(infile.val);
+				Point pos = Parse::toPoint(infile.val);
 				closeButton->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
 			}
 			// @ATTR tab_area|rectangle|The position of the row of tabs, followed by the dimensions of the log text area.
 			else if(infile.key == "tab_area") {
-				tab_area = toRect(infile.val);
+				tab_area = Parse::toRect(infile.val);
 			}
 			else {
 				infile.error("MenuLog: '%s' is not a valid key.", infile.key.c_str());

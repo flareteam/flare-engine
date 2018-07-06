@@ -381,7 +381,7 @@ int main(int argc, char *argv[]) {
 		else if (arg == "mods") {
 			std::string mod_list_str = parseArgValue(arg_full);
 			while (!mod_list_str.empty()) {
-				cmd_line_args.mod_list.push_back(popFirstString(mod_list_str));
+				cmd_line_args.mod_list.push_back(Parse::popFirstString(mod_list_str));
 			}
 		}
 		else if (arg == "load-slot") {

@@ -189,10 +189,10 @@ void GameStateConfigBase::readConfig() {
 			if (parseKeyButtons(infile))
 				continue;
 
-			int x1 = popFirstInt(infile.val);
-			int y1 = popFirstInt(infile.val);
-			int x2 = popFirstInt(infile.val);
-			int y2 = popFirstInt(infile.val);
+			int x1 = Parse::popFirstInt(infile.val);
+			int y1 = Parse::popFirstInt(infile.val);
+			int x2 = Parse::popFirstInt(infile.val);
+			int y2 = Parse::popFirstInt(infile.val);
 
 			if (parseKey(infile, x1, y1, x2, y2))
 				continue;
@@ -211,23 +211,23 @@ bool GameStateConfigBase::parseKeyButtons(FileParser &infile) {
 
 	if (infile.key == "button_ok") {
 		// @ATTR button_ok|int, int, alignment : X, Y, Alignment|Position of the "OK" button.
-		int x = popFirstInt(infile.val);
-		int y = popFirstInt(infile.val);
-		ALIGNMENT a = parse_alignment(popFirstString(infile.val));
+		int x = Parse::popFirstInt(infile.val);
+		int y = Parse::popFirstInt(infile.val);
+		ALIGNMENT a = Parse::toAlignment(Parse::popFirstString(infile.val));
 		ok_button->setBasePos(x, y, a);
 	}
 	else if (infile.key == "button_defaults") {
 		// @ATTR button_defaults|int, int, alignment : X, Y, Alignment|Position of the "Defaults" button.
-		int x = popFirstInt(infile.val);
-		int y = popFirstInt(infile.val);
-		ALIGNMENT a = parse_alignment(popFirstString(infile.val));
+		int x = Parse::popFirstInt(infile.val);
+		int y = Parse::popFirstInt(infile.val);
+		ALIGNMENT a = Parse::toAlignment(Parse::popFirstString(infile.val));
 		defaults_button->setBasePos(x, y, a);
 	}
 	else if (infile.key == "button_cancel") {
 		// @ATTR button_cancel|int, int, alignment : X, Y, Alignment|Position of the "Cancel" button.
-		int x = popFirstInt(infile.val);
-		int y = popFirstInt(infile.val);
-		ALIGNMENT a = parse_alignment(popFirstString(infile.val));
+		int x = Parse::popFirstInt(infile.val);
+		int y = Parse::popFirstInt(infile.val);
+		ALIGNMENT a = Parse::toAlignment(Parse::popFirstString(infile.val));
 		cancel_button->setBasePos(x, y, a);
 	}
 	else {

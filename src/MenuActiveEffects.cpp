@@ -55,7 +55,7 @@ MenuActiveEffects::MenuActiveEffects(StatBlock *_stats)
 
 			// @ATTR vertical|bool|True is vertical orientation; False is horizontal orientation.
 			if(infile.key == "vertical") {
-				is_vertical = toBool(infile.val);
+				is_vertical = Parse::toBool(infile.val);
 			}
 			else {
 				infile.error("MenuActiveEffects: '%s' is not a valid key.", infile.key.c_str());

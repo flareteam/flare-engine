@@ -92,16 +92,16 @@ MenuPowers::MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar)
 
 			// @ATTR label_title|label|Position of the "Powers" text.
 			if (infile.key == "label_title") {
-				label_powers->setFromLabelInfo(popLabelInfo(infile.val));
+				label_powers->setFromLabelInfo(Parse::popLabelInfo(infile.val));
 			}
 			// @ATTR unspent_points|label|Position of the text that displays the amount of unused power points.
 			else if (infile.key == "unspent_points") {
-				label_unspent->setFromLabelInfo(popLabelInfo(infile.val));
+				label_unspent->setFromLabelInfo(Parse::popLabelInfo(infile.val));
 			}
 			// @ATTR close|point|Position of the close button.
-			else if (infile.key == "close") close_pos = toPoint(infile.val);
+			else if (infile.key == "close") close_pos = Parse::toPoint(infile.val);
 			// @ATTR tab_area|rectangle|Position and dimensions of the tree pages.
-			else if (infile.key == "tab_area") tab_area = toRect(infile.val);
+			else if (infile.key == "tab_area") tab_area = Parse::toRect(infile.val);
 
 			else infile.error("MenuPowers: '%s' is not a valid key.", infile.key.c_str());
 		}
@@ -352,7 +352,7 @@ void MenuPowers::loadTab(FileParser &infile) {
 void MenuPowers::loadPower(FileParser &infile) {
 	// @ATTR power.id|int|A power id from powers/powers.txt for this slot.
 	if (infile.key == "id") {
-		int id = popFirstInt(infile.val);
+		int id = Parse::popFirstInt(infile.val);
 		if (id > 0) {
 			skip_section = false;
 			power_cell.back().id = id;
@@ -375,28 +375,28 @@ void MenuPowers::loadPower(FileParser &infile) {
 		return;
 
 	// @ATTR power.tab|int|Tab index to place this power on, starting from 0.
-	if (infile.key == "tab") power_cell.back().tab = toInt(infile.val);
+	if (infile.key == "tab") power_cell.back().tab = Parse::toInt(infile.val);
 	// @ATTR power.position|point|Position of this power icon; relative to MenuPowers "pos".
-	else if (infile.key == "position") power_cell.back().pos = toPoint(infile.val);
+	else if (infile.key == "position") power_cell.back().pos = Parse::toPoint(infile.val);
 
 	// @ATTR power.requires_primary|predefined_string, int : Primary stat name, Required value|Power requires this primary stat to be at least the specificed value.
 	else if (infile.key == "requires_primary") {
-		std::string prim_stat = popFirstString(infile.val);
+		std::string prim_stat = Parse::popFirstString(infile.val);
 		size_t prim_stat_index = eset->primary_stats.getIndexByID(prim_stat);
 
 		if (prim_stat_index != eset->primary_stats.list.size()) {
-			power_cell.back().requires_primary[prim_stat_index] = toInt(infile.val);
+			power_cell.back().requires_primary[prim_stat_index] = Parse::toInt(infile.val);
 		}
 		else {
 			infile.error("MenuPowers: '%s' is not a valid primary stat.", prim_stat.c_str());
 		}
 	}
 	// @ATTR power.requires_point|bool|Power requires a power point to unlock.
-	else if (infile.key == "requires_point") power_cell.back().requires_point = toBool(infile.val);
+	else if (infile.key == "requires_point") power_cell.back().requires_point = Parse::toBool(infile.val);
 	// @ATTR power.requires_level|int|Power requires at least this level for the hero.
-	else if (infile.key == "requires_level") power_cell.back().requires_level = toInt(infile.val);
+	else if (infile.key == "requires_level") power_cell.back().requires_level = Parse::toInt(infile.val);
 	// @ATTR power.requires_power|power_id|Power requires another power id.
-	else if (infile.key == "requires_power") power_cell.back().requires_power.push_back(toInt(infile.val));
+	else if (infile.key == "requires_power") power_cell.back().requires_power.push_back(Parse::toInt(infile.val));
 
 	// @ATTR power.visible_requires_status|repeatable(string)|Hide the power if we don't have this campaign status.
 	else if (infile.key == "visible_requires_status") power_cell.back().visible_requires_status.push_back(infile.val);
@@ -409,10 +409,10 @@ void MenuPowers::loadPower(FileParser &infile) {
 			upgradeButtons.back() = new WidgetButton("images/menus/buttons/button_plus.png");
 		}
 
-		std::string repeat_val = popFirstString(infile.val);
+		std::string repeat_val = Parse::popFirstString(infile.val);
 		while (repeat_val != "") {
-			power_cell.back().upgrades.push_back(toInt(repeat_val));
-			repeat_val = popFirstString(infile.val);
+			power_cell.back().upgrades.push_back(Parse::toInt(repeat_val));
+			repeat_val = Parse::popFirstString(infile.val);
 		}
 
 		if (!power_cell.back().upgrades.empty())
@@ -425,7 +425,7 @@ void MenuPowers::loadPower(FileParser &infile) {
 void MenuPowers::loadUpgrade(FileParser &infile) {
 	// @ATTR upgrade.id|int|A power id from powers/powers.txt for this upgrade.
 	if (infile.key == "id") {
-		int id = popFirstInt(infile.val);
+		int id = Parse::popFirstInt(infile.val);
 		if (id > 0) {
 			skip_section = false;
 			power_cell_upgrade.back().id = (id);
@@ -443,22 +443,22 @@ void MenuPowers::loadUpgrade(FileParser &infile) {
 
 	// @ATTR upgrade.requires_primary|predefined_string, int : Primary stat name, Required value|Upgrade requires this primary stat to be at least the specificed value.
 	if (infile.key == "requires_primary") {
-		std::string prim_stat = popFirstString(infile.val);
+		std::string prim_stat = Parse::popFirstString(infile.val);
 		size_t prim_stat_index = eset->primary_stats.getIndexByID(prim_stat);
 
 		if (prim_stat_index != eset->primary_stats.list.size()) {
-			power_cell_upgrade.back().requires_primary[prim_stat_index] = toInt(infile.val);
+			power_cell_upgrade.back().requires_primary[prim_stat_index] = Parse::toInt(infile.val);
 		}
 		else {
 			infile.error("MenuPowers: '%s' is not a valid primary stat.", prim_stat.c_str());
 		}
 	}
 	// @ATTR upgrade.requires_point|bool|Upgrade requires a power point to unlock.
-	else if (infile.key == "requires_point") power_cell_upgrade.back().requires_point = toBool(infile.val);
+	else if (infile.key == "requires_point") power_cell_upgrade.back().requires_point = Parse::toBool(infile.val);
 	// @ATTR upgrade.requires_level|int|Upgrade requires at least this level for the hero.
-	else if (infile.key == "requires_level") power_cell_upgrade.back().requires_level = toInt(infile.val);
+	else if (infile.key == "requires_level") power_cell_upgrade.back().requires_level = Parse::toInt(infile.val);
 	// @ATTR upgrade.requires_power|int|Upgrade requires another power id.
-	else if (infile.key == "requires_power") power_cell_upgrade.back().requires_power.push_back(toInt(infile.val));
+	else if (infile.key == "requires_power") power_cell_upgrade.back().requires_power.push_back(Parse::toInt(infile.val));
 
 	// @ATTR upgrade.visible_requires_status|repeatable(string)|Hide the upgrade if we don't have this campaign status.
 	else if (infile.key == "visible_requires_status") power_cell_upgrade.back().visible_requires_status.push_back(infile.val);

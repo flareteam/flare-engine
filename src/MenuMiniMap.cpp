@@ -59,11 +59,11 @@ MenuMiniMap::MenuMiniMap()
 
 			// @ATTR map_pos|rectangle|Position and dimensions of the map.
 			if(infile.key == "map_pos") {
-				pos = toRect(infile.val);
+				pos = Parse::toRect(infile.val);
 			}
 			// @ATTR text_pos|label|Position of the text label with the map name.
 			else if(infile.key == "text_pos") {
-				label->setFromLabelInfo(popLabelInfo(infile.val));
+				label->setFromLabelInfo(Parse::popLabelInfo(infile.val));
 			}
 			// @ATTR background|filename|Optional background image.
 			else if (infile.key == "background") {

@@ -46,8 +46,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetScrollBar.h"
 
 bool compareSaveDirs(const std::string& dir1, const std::string& dir2) {
-	int first = toInt(dir1);
-	int second = toInt(dir2);
+	int first = Parse::toInt(dir1);
+	int second = Parse::toInt(dir2);
 
 	return first < second;
 }
@@ -117,78 +117,78 @@ GameStateLoad::GameStateLoad() : GameState()
 		while (infile.next()) {
 			// @ATTR button_new|int, int, alignment : X, Y, Alignment|Position of the "New Game" button.
 			if (infile.key == "button_new") {
-				int x = popFirstInt(infile.val);
-				int y = popFirstInt(infile.val);
-				ALIGNMENT a = parse_alignment(popFirstString(infile.val));
+				int x = Parse::popFirstInt(infile.val);
+				int y = Parse::popFirstInt(infile.val);
+				ALIGNMENT a = Parse::toAlignment(Parse::popFirstString(infile.val));
 				button_new->setBasePos(x, y, a);
 			}
 			// @ATTR button_load|int, int, alignment : X, Y, Alignment|Position of the "Load Game" button.
 			else if (infile.key == "button_load") {
-				int x = popFirstInt(infile.val);
-				int y = popFirstInt(infile.val);
-				ALIGNMENT a = parse_alignment(popFirstString(infile.val));
+				int x = Parse::popFirstInt(infile.val);
+				int y = Parse::popFirstInt(infile.val);
+				ALIGNMENT a = Parse::toAlignment(Parse::popFirstString(infile.val));
 				button_load->setBasePos(x, y, a);
 			}
 			// @ATTR button_delete|int, int, alignment : X, Y, Alignment|Position of the "Delete Save" button.
 			else if (infile.key == "button_delete") {
-				int x = popFirstInt(infile.val);
-				int y = popFirstInt(infile.val);
-				ALIGNMENT a = parse_alignment(popFirstString(infile.val));
+				int x = Parse::popFirstInt(infile.val);
+				int y = Parse::popFirstInt(infile.val);
+				ALIGNMENT a = Parse::toAlignment(Parse::popFirstString(infile.val));
 				button_delete->setBasePos(x, y, a);
 			}
 			// @ATTR button_exit|int, int, alignment : X, Y, Alignment|Position of the "Exit to Title" button.
 			else if (infile.key == "button_exit") {
-				int x = popFirstInt(infile.val);
-				int y = popFirstInt(infile.val);
-				ALIGNMENT a = parse_alignment(popFirstString(infile.val));
+				int x = Parse::popFirstInt(infile.val);
+				int y = Parse::popFirstInt(infile.val);
+				ALIGNMENT a = Parse::toAlignment(Parse::popFirstString(infile.val));
 				button_exit->setBasePos(x, y, a);
 			}
 			// @ATTR portrait|rectangle|Position and dimensions of the portrait image.
 			else if (infile.key == "portrait") {
-				portrait_dest = toRect(infile.val);
+				portrait_dest = Parse::toRect(infile.val);
 			}
 			// @ATTR gameslot|rectangle|Position and dimensions of the first game slot.
 			else if (infile.key == "gameslot") {
-				gameslot_pos = toRect(infile.val);
+				gameslot_pos = Parse::toRect(infile.val);
 			}
 			// @ATTR name|label|The label for the hero's name. Position is relative to game slot position.
 			else if (infile.key == "name") {
-				name_pos = popLabelInfo(infile.val);
+				name_pos = Parse::popLabelInfo(infile.val);
 			}
 			// @ATTR level|label|The label for the hero's level. Position is relative to game slot position.
 			else if (infile.key == "level") {
-				level_pos = popLabelInfo(infile.val);
+				level_pos = Parse::popLabelInfo(infile.val);
 			}
 			// @ATTR class|label|The label for the hero's class. Position is relative to game slot position.
 			else if (infile.key == "class") {
-				class_pos = popLabelInfo(infile.val);
+				class_pos = Parse::popLabelInfo(infile.val);
 			}
 			// @ATTR map|label|The label for the hero's current location. Position is relative to game slot position.
 			else if (infile.key == "map") {
-				map_pos = popLabelInfo(infile.val);
+				map_pos = Parse::popLabelInfo(infile.val);
 			}
 			// @ATTR slot_number|label|The label for the save slot index. Position is relative to game slot position.
 			else if (infile.key == "slot_number") {
-				slot_number_pos = popLabelInfo(infile.val);
+				slot_number_pos = Parse::popLabelInfo(infile.val);
 			}
 			// @ATTR loading_label|label|The label for the "Entering game world..."/"Loading saved game..." text.
 			else if (infile.key == "loading_label") {
-				label_loading->setFromLabelInfo(popLabelInfo(infile.val));
+				label_loading->setFromLabelInfo(Parse::popLabelInfo(infile.val));
 			}
 			// @ATTR sprite|point|Position for the avatar preview image in each slot
 			else if (infile.key == "sprite") {
-				sprites_pos = toPoint(infile.val);
+				sprites_pos = Parse::toPoint(infile.val);
 			}
 			// @ATTR visible_slots|int|The maximum numbers of visible save slots.
 			else if (infile.key == "visible_slots") {
-				game_slot_max = toInt(infile.val);
+				game_slot_max = Parse::toInt(infile.val);
 
 				// can't have less than 1 game slot visible
 				game_slot_max = std::max(game_slot_max, 1);
 			}
 			// @ATTR text_trim_boundary|int|The position of the right-side boundary where text will be shortened with an ellipsis. Position is relative to game slot position.
 			else if (infile.key == "text_trim_boundary") {
-				text_trim_boundary = toInt(infile.val);
+				text_trim_boundary = Parse::toInt(infile.val);
 			}
 			else {
 				infile.error("GameStateLoad: '%s' is not a valid key.", infile.key.c_str());
@@ -214,7 +214,7 @@ GameStateLoad::GameStateLoad() : GameState()
 
 	// if we specified a slot to load at launch, load it now
 	if (!settings->load_slot.empty()) {
-		size_t load_slot_id = toInt(settings->load_slot) - 1;
+		size_t load_slot_id = Parse::toInt(settings->load_slot) - 1;
 		settings->load_slot.clear();
 
 		if (load_slot_id < game_slots.size()) {
@@ -287,7 +287,7 @@ void GameStateLoad::readGameSlots() {
 
 	// save dirs can only be >= 1
 	for (size_t i=save_dirs.size(); i>0; --i) {
-		if (toInt(save_dirs[i-1]) < 1)
+		if (Parse::toInt(save_dirs[i-1]) < 1)
 			save_dirs.erase(save_dirs.begin() + (i-1));
 	}
 
@@ -303,7 +303,7 @@ void GameStateLoad::readGameSlots() {
 		if (!infile.open(filename.str(), !FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) continue;
 
 		game_slots[i] = new GameSlot();
-		game_slots[i]->id = toInt(save_dirs[i]);
+		game_slots[i]->id = Parse::toInt(save_dirs[i]);
 		game_slots[i]->stats.hero = true;
 		game_slots[i]->label_name.setFromLabelInfo(name_pos);
 		game_slots[i]->label_level.setFromLabelInfo(level_pos);
@@ -317,36 +317,36 @@ void GameStateLoad::readGameSlots() {
 			if (infile.key == "name")
 				game_slots[i]->stats.name = infile.val;
 			else if (infile.key == "class") {
-				game_slots[i]->stats.character_class = popFirstString(infile.val);
-				game_slots[i]->stats.character_subclass = popFirstString(infile.val);
+				game_slots[i]->stats.character_class = Parse::popFirstString(infile.val);
+				game_slots[i]->stats.character_subclass = Parse::popFirstString(infile.val);
 			}
 			else if (infile.key == "xp")
-				game_slots[i]->stats.xp = toInt(infile.val);
+				game_slots[i]->stats.xp = Parse::toInt(infile.val);
 			else if (infile.key == "build") {
 				for (size_t j = 0; j < eset->primary_stats.list.size(); ++j) {
-					game_slots[i]->stats.primary[j] = popFirstInt(infile.val);
+					game_slots[i]->stats.primary[j] = Parse::popFirstInt(infile.val);
 				}
 			}
 			else if (infile.key == "equipped") {
-				std::string repeat_val = popFirstString(infile.val);
+				std::string repeat_val = Parse::popFirstString(infile.val);
 				while (repeat_val != "") {
-					game_slots[i]->equipped.push_back(toInt(repeat_val));
-					repeat_val = popFirstString(infile.val);
+					game_slots[i]->equipped.push_back(Parse::toInt(repeat_val));
+					repeat_val = Parse::popFirstString(infile.val);
 				}
 			}
 			else if (infile.key == "option") {
-				game_slots[i]->stats.gfx_base = popFirstString(infile.val);
-				game_slots[i]->stats.gfx_head = popFirstString(infile.val);
-				game_slots[i]->stats.gfx_portrait = popFirstString(infile.val);
+				game_slots[i]->stats.gfx_base = Parse::popFirstString(infile.val);
+				game_slots[i]->stats.gfx_head = Parse::popFirstString(infile.val);
+				game_slots[i]->stats.gfx_portrait = Parse::popFirstString(infile.val);
 			}
 			else if (infile.key == "spawn") {
-				game_slots[i]->current_map = getMapName(popFirstString(infile.val));
+				game_slots[i]->current_map = getMapName(Parse::popFirstString(infile.val));
 			}
 			else if (infile.key == "permadeath") {
-				game_slots[i]->stats.permadeath = toBool(infile.val);
+				game_slots[i]->stats.permadeath = Parse::toBool(infile.val);
 			}
 			else if (infile.key == "time_played") {
-				game_slots[i]->time_played = toUnsignedLong(infile.val);
+				game_slots[i]->time_played = Parse::toUnsignedLong(infile.val);
 			}
 		}
 		infile.close();

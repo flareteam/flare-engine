@@ -65,7 +65,7 @@ bool GetText::next() {
 	fuzzy = false;
 
 	while (infile.good()) {
-		line = getLine(infile);
+		line = Parse::getLine(infile);
 
 		// check if comment and if fuzzy
 		if (line.compare(0, 2, "#,") == 0 && line.find("fuzzy") != std::string::npos)
@@ -83,12 +83,12 @@ bool GetText::next() {
 			else {
 				// It is a multi-line value, unless it is the first msgid, in which case it will be empty
 				// and it will be ignored when finding the matching msgstr, so no big deal.
-				line = getLine(infile);
+				line = Parse::getLine(infile);
 				while(!line.empty() && line[0] == '\"') {
 					// We remove the double quotes.
 					key += line.substr(1, line.length()-2);
 					key = sanitize(key);
-					line = getLine(infile);
+					line = Parse::getLine(infile);
 				}
 			}
 		}
@@ -106,12 +106,12 @@ bool GetText::next() {
 					return true;
 				}
 				else { // Might be a multi-line value.
-					line = getLine(infile);
+					line = Parse::getLine(infile);
 					while(!line.empty() && line[0] == '\"') {
 						// We remove the double quotes.
 						val += line.substr(1, line.length()-2);
 						val = sanitize(val);
-						line = getLine(infile);
+						line = Parse::getLine(infile);
 					}
 					if(val != "") { // It was a multi-line value indeed.
 						return true;

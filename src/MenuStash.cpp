@@ -63,29 +63,29 @@ MenuStash::MenuStash(StatBlock *_stats)
 
 			// @ATTR close|point|Position of the close button.
 			if (infile.key == "close") {
-				Point pos = toPoint(infile.val);
+				Point pos = Parse::toPoint(infile.val);
 				closeButton->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
 			}
 			// @ATTR slots_area|point|Position of the top-left slot.
 			else if (infile.key == "slots_area") {
-				slots_area.x = popFirstInt(infile.val);
-				slots_area.y = popFirstInt(infile.val);
+				slots_area.x = Parse::popFirstInt(infile.val);
+				slots_area.y = Parse::popFirstInt(infile.val);
 			}
 			// @ATTR stash_cols|int|The number of columns for the grid of slots.
 			else if (infile.key == "stash_cols") {
-				slots_cols = std::max(1, toInt(infile.val));
+				slots_cols = std::max(1, Parse::toInt(infile.val));
 			}
 			// @ATTR stash_rows|int|The number of rows for the grid of slots.
 			else if (infile.key == "stash_rows") {
-				slots_rows = std::max(1, toInt(infile.val));
+				slots_rows = std::max(1, Parse::toInt(infile.val));
 			}
 			// @ATTR label_title|label|Position of the "Stash" label.
 			else if (infile.key == "label_title") {
-				label_title.setFromLabelInfo(popLabelInfo(infile.val));
+				label_title.setFromLabelInfo(Parse::popLabelInfo(infile.val));
 			}
 			// @ATTR currency|label|Position of the label displaying the amount of currency stored in the stash.
 			else if (infile.key == "currency") {
-				label_currency.setFromLabelInfo(popLabelInfo(infile.val));
+				label_currency.setFromLabelInfo(Parse::popLabelInfo(infile.val));
 			}
 			else {
 				infile.error("MenuStash: '%s' is not a valid key.", infile.key.c_str());

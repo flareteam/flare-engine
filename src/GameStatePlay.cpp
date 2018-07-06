@@ -475,32 +475,32 @@ void GameStatePlay::loadTitles() {
 			}
 			else if (infile.key == "level") {
 				// @ATTR title.level|int|Requires level.
-				titles.back().level = toInt(infile.val);
+				titles.back().level = Parse::toInt(infile.val);
 			}
 			else if (infile.key == "power") {
 				// @ATTR title.power|power_id|Requires power.
-				titles.back().power = toInt(infile.val);
+				titles.back().power = Parse::toInt(infile.val);
 			}
 			else if (infile.key == "requires_status") {
 				// @ATTR title.requires_status|list(string)|Requires status.
-				std::string repeat_val = popFirstString(infile.val);
+				std::string repeat_val = Parse::popFirstString(infile.val);
 				while (repeat_val != "") {
 					titles.back().requires_status.push_back(repeat_val);
-					repeat_val = popFirstString(infile.val);
+					repeat_val = Parse::popFirstString(infile.val);
 				}
 			}
 			else if (infile.key == "requires_not_status") {
 				// @ATTR title.requires_not_status|list(string)|Requires not status.
-				std::string repeat_val = popFirstString(infile.val);
+				std::string repeat_val = Parse::popFirstString(infile.val);
 				while (repeat_val != "") {
 					titles.back().requires_not_status.push_back(repeat_val);
-					repeat_val = popFirstString(infile.val);
+					repeat_val = Parse::popFirstString(infile.val);
 				}
 			}
 			else if (infile.key == "primary_stat") {
 				// @ATTR title.primary_stat|predefined_string, predefined_string : Primary stat, Lesser primary stat|Required primary stat(s). The lesser stat is optional.
-				titles.back().primary_stat_1 = popFirstString(infile.val);
-				titles.back().primary_stat_2 = popFirstString(infile.val);
+				titles.back().primary_stat_1 = Parse::popFirstString(infile.val);
+				titles.back().primary_stat_2 = Parse::popFirstString(infile.val);
 			}
 			else infile.error("GameStatePlay: '%s' is not a valid key.", infile.key.c_str());
 		}

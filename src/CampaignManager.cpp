@@ -50,7 +50,7 @@ void CampaignManager::setAll(const std::string& s) {
 	std::string str = s + ',';
 	std::string token;
 	while (str != "") {
-		token = popFirstString(str);
+		token = Parse::popFirstString(str);
 		if (token != "") this->setStatus(token);
 	}
 }

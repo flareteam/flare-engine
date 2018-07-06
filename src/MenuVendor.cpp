@@ -67,25 +67,25 @@ MenuVendor::MenuVendor(StatBlock *_stats)
 
 			// @ATTR close|point|Position of the close button.
 			if(infile.key == "close") {
-				Point pos = toPoint(infile.val);
+				Point pos = Parse::toPoint(infile.val);
 				closeButton->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
 			}
 			// @ATTR slots_area|point|Position of the top-left slot.
 			else if(infile.key == "slots_area") {
-				slots_area.x = popFirstInt(infile.val);
-				slots_area.y = popFirstInt(infile.val);
+				slots_area.x = Parse::popFirstInt(infile.val);
+				slots_area.y = Parse::popFirstInt(infile.val);
 			}
 			// @ATTR vendor_cols|int|The number of columns in the grid of slots.
 			else if (infile.key == "vendor_cols") {
-				slots_cols = std::max(1, toInt(infile.val));
+				slots_cols = std::max(1, Parse::toInt(infile.val));
 			}
 			// @ATTR vendor_rows|int|The number of rows in the grid of slots.
 			else if (infile.key == "vendor_rows") {
-				slots_rows = std::max(1, toInt(infile.val));
+				slots_rows = std::max(1, Parse::toInt(infile.val));
 			}
 			// @ATTR label_title|label|The position of the text that displays the NPC's name.
 			else if (infile.key == "label_title") {
-				label_vendor.setFromLabelInfo(popLabelInfo(infile.val));
+				label_vendor.setFromLabelInfo(Parse::popLabelInfo(infile.val));
 			}
 			else {
 				infile.error("MenuVendor: '%s' is not a valid key.", infile.key.c_str());

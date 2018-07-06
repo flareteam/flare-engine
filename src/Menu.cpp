@@ -110,12 +110,12 @@ bool Menu::parseMenuKey(const std::string &key, const std::string &val) {
 	if (key == "pos") {
 		// @ATTR pos|rectangle|Menu position and dimensions
 		value = value + ',';
-		window_area = toRect(value);
+		window_area = Parse::toRect(value);
 		setWindowPos(window_area.x, window_area.y);
 	}
 	else if (key == "align") {
 		// @ATTR align|alignment|Position relative to screen edges
-		alignment = parse_alignment(value);
+		alignment = Parse::toAlignment(value);
 	}
 	else if (key == "soundfx_open") {
 		// @ATTR soundfx_open|filename|Filename of a sound to play when opening this menu.

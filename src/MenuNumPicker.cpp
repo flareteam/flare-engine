@@ -69,31 +69,31 @@ MenuNumPicker::MenuNumPicker()
 				continue;
 			else if (infile.key == "label_title") {
 				// @ATTR label_title|label|Position of the "Enter amount:" text.
-				label.setFromLabelInfo(popLabelInfo(infile.val));
+				label.setFromLabelInfo(Parse::popLabelInfo(infile.val));
 			}
 			else if (infile.key == "confirm") {
 				// @ATTR confirm|point|Position of the "OK" button.
-				Point pos = toPoint(infile.val);
+				Point pos = Parse::toPoint(infile.val);
 				button_ok->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
 			}
 			else if (infile.key == "increase") {
 				// @ATTR increase|point|Position of the button used to increase the value.
-				Point pos = toPoint(infile.val);
+				Point pos = Parse::toPoint(infile.val);
 				button_up->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
 			}
 			else if (infile.key == "decrease") {
 				// @ATTR decrease|point|Position of the button used to decrease the value.
-				Point pos = toPoint(infile.val);
+				Point pos = Parse::toPoint(infile.val);
 				button_down->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
 			}
 			else if (infile.key == "close") {
 				// @ATTR close|point|Position of the button used to close the number picker window.
-				Point pos = toPoint(infile.val);
+				Point pos = Parse::toPoint(infile.val);
 				button_close->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
 			}
 			else if (infile.key == "input") {
 				// @ATTR input|point|Position of the text input box.
-				Point pos = toPoint(infile.val);
+				Point pos = Parse::toPoint(infile.val);
 				input_box->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
 			}
 			else
@@ -180,7 +180,7 @@ void MenuNumPicker::logic() {
 		}
 
 		if (confirm_clicked) {
-			setValue(toInt(input_box->getText()));
+			setValue(Parse::toInt(input_box->getText()));
 			updateInput();
 		}
 
@@ -216,7 +216,7 @@ void MenuNumPicker::setValue(int val) {
 }
 
 void MenuNumPicker::increaseValue(int val) {
-	setValue(toInt(input_box->getText()));
+	setValue(Parse::toInt(input_box->getText()));
 
 	value += val;
 
@@ -227,7 +227,7 @@ void MenuNumPicker::increaseValue(int val) {
 }
 
 void MenuNumPicker::decreaseValue(int val) {
-	setValue(toInt(input_box->getText()));
+	setValue(Parse::toInt(input_box->getText()));
 
 	value -= val;
 

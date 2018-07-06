@@ -238,13 +238,13 @@ void GameSwitcher::loadFPS() {
 		while(infile.next()) {
 			// @ATTR position|int, int, alignment : X, Y, Alignment|Position of the fps counter.
 			if(infile.key == "position") {
-				fps_position.x = popFirstInt(infile.val);
-				fps_position.y = popFirstInt(infile.val);
-				fps_corner = parse_alignment(popFirstString(infile.val));
+				fps_position.x = Parse::popFirstInt(infile.val);
+				fps_position.y = Parse::popFirstInt(infile.val);
+				fps_corner = Parse::toAlignment(Parse::popFirstString(infile.val));
 			}
 			// @ATTR color|color|Color of the fps counter text.
 			else if(infile.key == "color") {
-				fps_color = toRGB(infile.val);
+				fps_color = Parse::toRGB(infile.val);
 			}
 			else {
 				infile.error("GameSwitcher: '%s' is not a valid key.", infile.key.c_str());

@@ -107,7 +107,7 @@ size_t Settings::getConfigEntry(const char *name) {
 void Settings::loadSettings() {
 	// init defaults
 	for (size_t i = 0; i < config.size(); i++) {
-		tryParseValue(*config[i].type, config[i].default_val, config[i].storage);
+		Parse::tryParseValue(*config[i].type, std::string(config[i].default_val), config[i].storage);
 	}
 
 	// try read from file
@@ -124,7 +124,7 @@ void Settings::loadSettings() {
 	while (infile.next()) {
 		size_t entry = getConfigEntry(infile.key.c_str());
 		if (entry != config.size()) {
-			tryParseValue(*config[entry].type, infile.val, config[entry].storage);
+			Parse::tryParseValue(*config[entry].type, infile.val, config[entry].storage);
 		}
 	}
 	infile.close();
@@ -153,7 +153,7 @@ void Settings::saveSettings() {
 			if (config[i].comment != NULL) {
 				outfile<<"# "<<config[i].comment<<"\n";
 			}
-			outfile<<config[i].name<<"="<<toString(*config[i].type, config[i].storage)<<"\n";
+			outfile << config[i].name << "=" << Parse::toString(*config[i].type, config[i].storage) << "\n";
 		}
 
 		if (outfile.bad()) logError("Settings: Unable to write settings file. No write access or disk is full!");
@@ -170,7 +170,7 @@ void Settings::saveSettings() {
 void Settings::loadDefaults() {
 	// HACK init defaults except video
 	for (size_t i = 3; i < config.size(); i++) {
-		tryParseValue(*config[i].type, config[i].default_val, config[i].storage);
+		Parse::tryParseValue(*config[i].type, std::string(config[i].default_val), config[i].storage);
 	}
 
 	loadMobileDefaults();

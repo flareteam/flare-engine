@@ -59,7 +59,7 @@ ItemStack & ItemStorage::operator [] (int slot) {
 void ItemStorage::setItems(const std::string& s) {
 	std::string item_list = s + ',';
 	for (int i=0; i<slot_number; i++) {
-		storage[i].item = popFirstInt(item_list);
+		storage[i].item = Parse::popFirstInt(item_list);
 		// check if such item exists to avoid crash if savegame was modified manually
 		if (storage[i].item < 0) {
 			logError("ItemStorage: Item on position %d has negative id, skipping", i);
@@ -78,7 +78,7 @@ void ItemStorage::setItems(const std::string& s) {
 void ItemStorage::setQuantities(const std::string& s) {
 	std::string quantity_list = s + ',';
 	for (int i=0; i<slot_number; i++) {
-		storage[i].quantity = popFirstInt(quantity_list);
+		storage[i].quantity = Parse::popFirstInt(quantity_list);
 		if (storage[i].quantity < 0) {
 			logError("ItemStorage: Items quantity on position %d is negative, setting to zero", i);
 			storage[i].quantity = 0;

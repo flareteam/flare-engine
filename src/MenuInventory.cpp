@@ -75,7 +75,7 @@ MenuInventory::MenuInventory(StatBlock *_stats)
 
 			// @ATTR close|point|Position of the close button.
 			if(infile.key == "close") {
-				Point pos = toPoint(infile.val);
+				Point pos = Parse::toPoint(infile.val);
 				closeButton->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
 			}
 			// @ATTR equipment_slot|repeatable(int, int, string) : X, Y, Slot Type|Position and item type of an equipment slot.
@@ -83,33 +83,33 @@ MenuInventory::MenuInventory(StatBlock *_stats)
 				Rect area;
 				Point pos;
 
-				pos.x = area.x = popFirstInt(infile.val);
-				pos.y = area.y = popFirstInt(infile.val);
+				pos.x = area.x = Parse::popFirstInt(infile.val);
+				pos.y = area.y = Parse::popFirstInt(infile.val);
 				area.w = area.h = eset->resolutions.icon_size;
 				equipped_area.push_back(area);
 				equipped_pos.push_back(pos);
-				slot_type.push_back(popFirstString(infile.val));
+				slot_type.push_back(Parse::popFirstString(infile.val));
 			}
 			// @ATTR carried_area|point|Position of the first normal inventory slot.
 			else if(infile.key == "carried_area") {
 				Point pos;
-				carried_pos.x = carried_area.x = popFirstInt(infile.val);
-				carried_pos.y = carried_area.y = popFirstInt(infile.val);
+				carried_pos.x = carried_area.x = Parse::popFirstInt(infile.val);
+				carried_pos.y = carried_area.y = Parse::popFirstInt(infile.val);
 			}
 			// @ATTR carried_cols|int|The number of columns for the normal inventory.
-			else if (infile.key == "carried_cols") carried_cols = std::max(1, toInt(infile.val));
+			else if (infile.key == "carried_cols") carried_cols = std::max(1, Parse::toInt(infile.val));
 			// @ATTR carried_rows|int|The number of rows for the normal inventory.
-			else if (infile.key == "carried_rows") carried_rows = std::max(1, toInt(infile.val));
+			else if (infile.key == "carried_rows") carried_rows = std::max(1, Parse::toInt(infile.val));
 			// @ATTR label_title|label|Position of the "Inventory" label.
 			else if (infile.key == "label_title") {
-				label_inventory.setFromLabelInfo(popLabelInfo(infile.val));
+				label_inventory.setFromLabelInfo(Parse::popLabelInfo(infile.val));
 			}
 			// @ATTR currency|label|Position of the label that displays the total currency being carried.
 			else if (infile.key == "currency") {
-				label_currency.setFromLabelInfo(popLabelInfo(infile.val));
+				label_currency.setFromLabelInfo(Parse::popLabelInfo(infile.val));
 			}
 			// @ATTR help|rectangle|A mouse-over area that displays some help text for inventory shortcuts.
-			else if (infile.key == "help") help_pos = toRect(infile.val);
+			else if (infile.key == "help") help_pos = Parse::toRect(infile.val);
 
 			else infile.error("MenuInventory: '%s' is not a valid key.", infile.key.c_str());
 		}

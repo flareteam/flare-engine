@@ -126,10 +126,10 @@ void EventManager::loadEvent(FileParser &infile, Event* evnt) {
 	}
 	else if (infile.key == "location") {
 		// @ATTR event.location|rectangle|Defines the location area for the event.
-		evnt->location.x = popFirstInt(infile.val);
-		evnt->location.y = popFirstInt(infile.val);
-		evnt->location.w = popFirstInt(infile.val);
-		evnt->location.h = popFirstInt(infile.val);
+		evnt->location.x = Parse::popFirstInt(infile.val);
+		evnt->location.y = Parse::popFirstInt(infile.val);
+		evnt->location.w = Parse::popFirstInt(infile.val);
+		evnt->location.h = Parse::popFirstInt(infile.val);
 
 		if (evnt->center.x == -1 && evnt->center.y == -1) {
 			evnt->center.x = static_cast<float>(evnt->location.x) + static_cast<float>(evnt->location.w)/2;
@@ -145,10 +145,10 @@ void EventManager::loadEvent(FileParser &infile, Event* evnt) {
 			evnt->hotspot.h = evnt->location.h;
 		}
 		else {
-			evnt->hotspot.x = popFirstInt(infile.val);
-			evnt->hotspot.y = popFirstInt(infile.val);
-			evnt->hotspot.w = popFirstInt(infile.val);
-			evnt->hotspot.h = popFirstInt(infile.val);
+			evnt->hotspot.x = Parse::popFirstInt(infile.val);
+			evnt->hotspot.y = Parse::popFirstInt(infile.val);
+			evnt->hotspot.w = Parse::popFirstInt(infile.val);
+			evnt->hotspot.h = Parse::popFirstInt(infile.val);
 		}
 
 		evnt->center.x = static_cast<float>(evnt->hotspot.x) + static_cast<float>(evnt->hotspot.w)/2;
@@ -156,18 +156,18 @@ void EventManager::loadEvent(FileParser &infile, Event* evnt) {
 	}
 	else if (infile.key == "cooldown") {
 		// @ATTR event.cooldown|duration|Duration for event cooldown in 'ms' or 's'.
-		evnt->cooldown = parse_duration(infile.val);
+		evnt->cooldown = Parse::toDuration(infile.val);
 	}
 	else if (infile.key == "delay") {
 		// @ATTR event.delay|duration|Event will execute after a specified duration.
-		evnt->delay = parse_duration(infile.val);
+		evnt->delay = Parse::toDuration(infile.val);
 	}
 	else if (infile.key == "reachable_from") {
 		// @ATTR event.reachable_from|rectangle|If the hero is inside this rectangle, they can activate the event.
-		evnt->reachable_from.x = popFirstInt(infile.val);
-		evnt->reachable_from.y = popFirstInt(infile.val);
-		evnt->reachable_from.w = popFirstInt(infile.val);
-		evnt->reachable_from.h = popFirstInt(infile.val);
+		evnt->reachable_from.x = Parse::popFirstInt(infile.val);
+		evnt->reachable_from.y = Parse::popFirstInt(infile.val);
+		evnt->reachable_from.w = Parse::popFirstInt(infile.val);
+		evnt->reachable_from.h = Parse::popFirstInt(infile.val);
 	}
 	else {
 		loadEventComponent(infile, evnt, NULL);
@@ -206,75 +206,75 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 
 		// x,y are src, if s=="hero" we target the hero,
 		// else we'll use values in a,b as coordinates
-		e->x = popFirstInt(val);
-		e->y = popFirstInt(val);
+		e->x = Parse::popFirstInt(val);
+		e->y = Parse::popFirstInt(val);
 
-		std::string dest = popFirstString(val);
+		std::string dest = Parse::popFirstString(val);
 		if (dest == "hero") {
 			e->s = "hero";
 		}
 		else {
-			e->a = toInt(dest);
-			e->b = popFirstInt(val);
+			e->a = Parse::toInt(dest);
+			e->b = Parse::popFirstInt(val);
 		}
 	}
 	else if (key == "power_damage") {
 		// @ATTR event.power_damage|int, int : Min, Max|Range of power damage
 		e->type = EC_POWER_DAMAGE;
 
-		e->a = popFirstInt(val);
-		e->b = popFirstInt(val);
+		e->a = Parse::popFirstInt(val);
+		e->b = Parse::popFirstInt(val);
 	}
 	else if (key == "intermap") {
 		// @ATTR event.intermap|filename, int, int : Map file, X, Y|Jump to specific map at location specified.
 		e->type = EC_INTERMAP;
 
-		e->s = popFirstString(val);
+		e->s = Parse::popFirstString(val);
 		e->x = -1;
 		e->y = -1;
 
-		std::string test_x = popFirstString(val);
+		std::string test_x = Parse::popFirstString(val);
 		if (!test_x.empty()) {
-			e->x = toInt(test_x);
-			e->y = popFirstInt(val);
+			e->x = Parse::toInt(test_x);
+			e->y = Parse::popFirstInt(val);
 		}
 	}
 	else if (key == "intermap_random") {
 		// @ATTR event.intermap_random|filename|Pick a random map from a map list file and teleport to it.
 		e->type = EC_INTERMAP;
 
-		e->s = popFirstString(val);
+		e->s = Parse::popFirstString(val);
 		e->z = 1; // flag that tells an intermap event that it contains a map list
 	}
 	else if (key == "intramap") {
 		// @ATTR event.intramap|int, int : X, Y|Jump to specific position within current map.
 		e->type = EC_INTRAMAP;
 
-		e->x = popFirstInt(val);
-		e->y = popFirstInt(val);
+		e->x = Parse::popFirstInt(val);
+		e->y = Parse::popFirstInt(val);
 	}
 	else if (key == "mapmod") {
 		// @ATTR event.mapmod|list(predefined_string, int, int, int) : Layer, X, Y, Tile ID|Modify map tiles
 		e->type = EC_MAPMOD;
 
-		e->s = popFirstString(val);
-		e->x = popFirstInt(val);
-		e->y = popFirstInt(val);
-		e->z = popFirstInt(val);
+		e->s = Parse::popFirstString(val);
+		e->x = Parse::popFirstInt(val);
+		e->y = Parse::popFirstInt(val);
+		e->z = Parse::popFirstInt(val);
 
 		// add repeating mapmods
 		if (evnt) {
-			std::string repeat_val = popFirstString(val);
+			std::string repeat_val = Parse::popFirstString(val);
 			while (repeat_val != "") {
 				evnt->components.push_back(Event_Component());
 				e = &evnt->components.back();
 				e->type = EC_MAPMOD;
 				e->s = repeat_val;
-				e->x = popFirstInt(val);
-				e->y = popFirstInt(val);
-				e->z = popFirstInt(val);
+				e->x = Parse::popFirstInt(val);
+				e->y = Parse::popFirstInt(val);
+				e->z = Parse::popFirstInt(val);
 
-				repeat_val = popFirstString(val);
+				repeat_val = Parse::popFirstString(val);
 			}
 		}
 	}
@@ -282,18 +282,18 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		// @ATTR event.soundfx|filename, int, int, bool : Sound file, X, Y, loop|Filename of a sound to play. Optionally, it can be played at a specific location and/or looped.
 		e->type = EC_SOUNDFX;
 
-		e->s = popFirstString(val);
+		e->s = Parse::popFirstString(val);
 		e->x = e->y = -1;
 		e->z = static_cast<int>(false);
 
-		std::string s = popFirstString(val);
-		if (s != "") e->x = toInt(s);
+		std::string s = Parse::popFirstString(val);
+		if (s != "") e->x = Parse::toInt(s);
 
-		s = popFirstString(val);
-		if (s != "") e->y = toInt(s);
+		s = Parse::popFirstString(val);
+		if (s != "") e->y = Parse::toInt(s);
 
-		s = popFirstString(val);
-		if (s != "") e->z = static_cast<int>(toBool(s));
+		s = Parse::popFirstString(val);
+		if (s != "") e->z = static_cast<int>(Parse::toBool(s));
 	}
 	else if (key == "loot") {
 		// @ATTR event.loot|list(loot)|Add loot to the event.
@@ -305,8 +305,8 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		// @ATTR event.loot_count|int, int : Min, Max|Sets the minimum (and optionally, the maximum) amount of loot this event can drop. Overrides the global drop_max setting.
 		e->type = EC_LOOT_COUNT;
 
-		e->x = popFirstInt(val);
-		e->y = popFirstInt(val);
+		e->x = Parse::popFirstInt(val);
+		e->y = Parse::popFirstInt(val);
 		if (e->x != 0 || e->y != 0) {
 			e->x = std::max(e->x, 1);
 			e->y = std::max(e->y, e->x);
@@ -322,24 +322,24 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		// @ATTR event.shakycam|duration|Makes the camera shake for this duration in 'ms' or 's'.
 		e->type = EC_SHAKYCAM;
 
-		e->x = parse_duration(val);
+		e->x = Parse::toDuration(val);
 	}
 	else if (key == "requires_status") {
 		// @ATTR event.requires_status|list(string)|Event requires list of statuses
 		e->type = EC_REQUIRES_STATUS;
 
-		e->s = popFirstString(val);
+		e->s = Parse::popFirstString(val);
 
 		// add repeating requires_status
 		if (evnt) {
-			std::string repeat_val = popFirstString(val);
+			std::string repeat_val = Parse::popFirstString(val);
 			while (repeat_val != "") {
 				evnt->components.push_back(Event_Component());
 				e = &evnt->components.back();
 				e->type = EC_REQUIRES_STATUS;
 				e->s = repeat_val;
 
-				repeat_val = popFirstString(val);
+				repeat_val = Parse::popFirstString(val);
 			}
 		}
 	}
@@ -347,18 +347,18 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		// @ATTR event.requires_not_status|list(string)|Event requires not list of statuses
 		e->type = EC_REQUIRES_NOT_STATUS;
 
-		e->s = popFirstString(val);
+		e->s = Parse::popFirstString(val);
 
 		// add repeating requires_not
 		if (evnt) {
-			std::string repeat_val = popFirstString(val);
+			std::string repeat_val = Parse::popFirstString(val);
 			while (repeat_val != "") {
 				evnt->components.push_back(Event_Component());
 				e = &evnt->components.back();
 				e->type = EC_REQUIRES_NOT_STATUS;
 				e->s = repeat_val;
 
-				repeat_val = popFirstString(val);
+				repeat_val = Parse::popFirstString(val);
 			}
 		}
 	}
@@ -366,42 +366,42 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		// @ATTR event.requires_level|int|Event requires hero level
 		e->type = EC_REQUIRES_LEVEL;
 
-		e->x = popFirstInt(val);
+		e->x = Parse::popFirstInt(val);
 	}
 	else if (key == "requires_not_level") {
 		// @ATTR event.requires_not_level|int|Event requires not hero level
 		e->type = EC_REQUIRES_NOT_LEVEL;
 
-		e->x = popFirstInt(val);
+		e->x = Parse::popFirstInt(val);
 	}
 	else if (key == "requires_currency") {
 		// @ATTR event.requires_currency|int|Event requires atleast this much currency
 		e->type = EC_REQUIRES_CURRENCY;
 
-		e->x = popFirstInt(val);
+		e->x = Parse::popFirstInt(val);
 	}
 	else if (key == "requires_not_currency") {
 		// @ATTR event.requires_not_currency|int|Event requires no more than this much currency
 		e->type = EC_REQUIRES_NOT_CURRENCY;
 
-		e->x = popFirstInt(val);
+		e->x = Parse::popFirstInt(val);
 	}
 	else if (key == "requires_item") {
 		// @ATTR event.requires_item|list(item_id)|Event requires specific item (not equipped)
 		e->type = EC_REQUIRES_ITEM;
 
-		e->x = popFirstInt(val);
+		e->x = Parse::popFirstInt(val);
 
 		// add repeating requires_item
 		if (evnt) {
-			std::string repeat_val = popFirstString(val);
+			std::string repeat_val = Parse::popFirstString(val);
 			while (repeat_val != "") {
 				evnt->components.push_back(Event_Component());
 				e = &evnt->components.back();
 				e->type = EC_REQUIRES_ITEM;
-				e->x = toInt(repeat_val);
+				e->x = Parse::toInt(repeat_val);
 
-				repeat_val = popFirstString(val);
+				repeat_val = Parse::popFirstString(val);
 			}
 		}
 	}
@@ -409,18 +409,18 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		// @ATTR event.requires_not_item|list(item_id)|Event requires not having a specific item (not equipped)
 		e->type = EC_REQUIRES_NOT_ITEM;
 
-		e->x = popFirstInt(val);
+		e->x = Parse::popFirstInt(val);
 
 		// add repeating requires_not_item
 		if (evnt) {
-			std::string repeat_val = popFirstString(val);
+			std::string repeat_val = Parse::popFirstString(val);
 			while (repeat_val != "") {
 				evnt->components.push_back(Event_Component());
 				e = &evnt->components.back();
 				e->type = EC_REQUIRES_NOT_ITEM;
-				e->x = toInt(repeat_val);
+				e->x = Parse::toInt(repeat_val);
 
-				repeat_val = popFirstString(val);
+				repeat_val = Parse::popFirstString(val);
 			}
 		}
 	}
@@ -428,30 +428,30 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		// @ATTR event.requires_class|predefined_string|Event requires this base class
 		e->type = EC_REQUIRES_CLASS;
 
-		e->s = popFirstString(val);
+		e->s = Parse::popFirstString(val);
 	}
 	else if (key == "requires_not_class") {
 		// @ATTR event.requires_not_class|predefined_string|Event requires not this base class
 		e->type = EC_REQUIRES_NOT_CLASS;
 
-		e->s = popFirstString(val);
+		e->s = Parse::popFirstString(val);
 	}
 	else if (key == "set_status") {
 		// @ATTR event.set_status|list(string)|Sets specified statuses
 		e->type = EC_SET_STATUS;
 
-		e->s = popFirstString(val);
+		e->s = Parse::popFirstString(val);
 
 		// add repeating set_status
 		if (evnt) {
-			std::string repeat_val = popFirstString(val);
+			std::string repeat_val = Parse::popFirstString(val);
 			while (repeat_val != "") {
 				evnt->components.push_back(Event_Component());
 				e = &evnt->components.back();
 				e->type = EC_SET_STATUS;
 				e->s = repeat_val;
 
-				repeat_val = popFirstString(val);
+				repeat_val = Parse::popFirstString(val);
 			}
 		}
 	}
@@ -459,18 +459,18 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		// @ATTR event.unset_status|list(string)|Unsets specified statuses
 		e->type = EC_UNSET_STATUS;
 
-		e->s = popFirstString(val);
+		e->s = Parse::popFirstString(val);
 
 		// add repeating unset_status
 		if (evnt) {
-			std::string repeat_val = popFirstString(val);
+			std::string repeat_val = Parse::popFirstString(val);
 			while (repeat_val != "") {
 				evnt->components.push_back(Event_Component());
 				e = &evnt->components.back();
 				e->type = EC_UNSET_STATUS;
 				e->s = repeat_val;
 
-				repeat_val = popFirstString(val);
+				repeat_val = Parse::popFirstString(val);
 			}
 		}
 	}
@@ -478,24 +478,24 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		// @ATTR event.remove_currency|int|Removes specified amount of currency from hero inventory
 		e->type = EC_REMOVE_CURRENCY;
 
-		e->x = std::max(toInt(val), 0);
+		e->x = std::max(Parse::toInt(val), 0);
 	}
 	else if (key == "remove_item") {
 		// @ATTR event.remove_item|list(item_id)|Removes specified item from hero inventory
 		e->type = EC_REMOVE_ITEM;
 
-		e->x = popFirstInt(val);
+		e->x = Parse::popFirstInt(val);
 
 		// add repeating remove_item
 		if (evnt) {
-			std::string repeat_val = popFirstString(val);
+			std::string repeat_val = Parse::popFirstString(val);
 			while (repeat_val != "") {
 				evnt->components.push_back(Event_Component());
 				e = &evnt->components.back();
 				e->type = EC_REMOVE_ITEM;
-				e->x = toInt(repeat_val);
+				e->x = Parse::toInt(repeat_val);
 
-				repeat_val = popFirstString(val);
+				repeat_val = Parse::popFirstString(val);
 			}
 		}
 	}
@@ -503,20 +503,20 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		// @ATTR event.reward_xp|int|Reward hero with specified amount of experience points.
 		e->type = EC_REWARD_XP;
 
-		e->x = std::max(toInt(val), 0);
+		e->x = std::max(Parse::toInt(val), 0);
 	}
 	else if (key == "reward_currency") {
 		// @ATTR event.reward_currency|int|Reward hero with specified amount of currency.
 		e->type = EC_REWARD_CURRENCY;
 
-		e->x = std::max(toInt(val), 0);
+		e->x = std::max(Parse::toInt(val), 0);
 	}
 	else if (key == "reward_item") {
 		// @ATTR event.reward_item|item_id, int : Item, Quantity|Reward hero with y number of item x.
 		e->type = EC_REWARD_ITEM;
 
-		e->x = popFirstInt(val);
-		e->y = std::max(popFirstInt(val), 1);
+		e->x = Parse::popFirstInt(val);
+		e->y = std::max(Parse::popFirstInt(val), 1);
 	}
 	else if (key == "reward_loot") {
 		// @ATTR event.reward_loot|list(loot)|Reward hero with random loot.
@@ -528,8 +528,8 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		// @ATTR event.reward_loot_count|int, int : Min, Max|Sets the minimum (and optionally, the maximum) amount of loot that reward_loot can give the hero. Defaults to 1.
 		e->type = EC_REWARD_LOOT_COUNT;
 
-		e->x = std::max(popFirstInt(val), 1);
-		e->y = std::max(popFirstInt(val), e->x);
+		e->x = std::max(Parse::popFirstInt(val), 1);
+		e->y = std::max(Parse::popFirstInt(val), e->x);
 	}
 	else if (key == "restore") {
 		// @ATTR event.restore|["hp", "mp", "hpmp", "status", "all"]|Restore the hero's HP, MP, and/or status.
@@ -541,29 +541,29 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		// @ATTR event.power|power_id|Specify power coupled with event.
 		e->type = EC_POWER;
 
-		e->x = toInt(val);
+		e->x = Parse::toInt(val);
 	}
 	else if (key == "spawn") {
 		// @ATTR event.spawn|list(predefined_string, int, int) : Enemy category, X, Y|Spawn an enemy from this category at location
 		e->type = EC_SPAWN;
 
-		e->s = popFirstString(val);
-		e->x = popFirstInt(val);
-		e->y = popFirstInt(val);
+		e->s = Parse::popFirstString(val);
+		e->x = Parse::popFirstInt(val);
+		e->y = Parse::popFirstInt(val);
 
 		// add repeating spawn
 		if (evnt) {
-			std::string repeat_val = popFirstString(val);
+			std::string repeat_val = Parse::popFirstString(val);
 			while (repeat_val != "") {
 				evnt->components.push_back(Event_Component());
 				e = &evnt->components.back();
 				e->type = EC_SPAWN;
 
 				e->s = repeat_val;
-				e->x = popFirstInt(val);
-				e->y = popFirstInt(val);
+				e->x = Parse::popFirstInt(val);
+				e->y = Parse::popFirstInt(val);
 
-				repeat_val = popFirstString(val);
+				repeat_val = Parse::popFirstString(val);
 			}
 		}
 	}
@@ -571,7 +571,7 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		// @ATTR event.stash|bool|If true, the Stash menu if opened.
 		e->type = EC_STASH;
 
-		e->x = static_cast<int>(toBool(val));
+		e->x = static_cast<int>(Parse::toBool(val));
 	}
 	else if (key == "npc") {
 		// @ATTR event.npc|filename|Filename of an NPC to start dialog with.
@@ -595,13 +595,13 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		// @ATTR event.repeat|bool|If true, the event to be triggered again.
 		e->type = EC_REPEAT;
 
-		e->x = static_cast<int>(toBool(val));
+		e->x = static_cast<int>(Parse::toBool(val));
 	}
 	else if (key == "save_game") {
 		// @ATTR event.save_game|bool|If true, the game is saved when the event is triggered. The respawn position is set to where the player is standing.
 		e->type = EC_SAVE_GAME;
 
-		e->x = static_cast<int>(toBool(val));
+		e->x = static_cast<int>(Parse::toBool(val));
 	}
 	else if (key == "book") {
 		// @ATTR event.book|filename|Opens a book by filename.
@@ -619,14 +619,14 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		// @ATTR event.chance_exec|int|Percentage chance that this event will execute when triggered.
 		e->type = EC_CHANCE_EXEC;
 
-		e->x = popFirstInt(val);
+		e->x = Parse::popFirstInt(val);
 	}
 	else if (key == "respec") {
 		// @ATTR event.respec|["xp", "stats", "powers"], bool : Respec mode, Ignore class defaults|Resets various aspects of the character's progression. Resetting "xp" also resets "stats". Resetting "stats" also resets "powers".
 		e->type = EC_RESPEC;
 
-		std::string mode = popFirstString(val);
-		std::string use_engine_defaults = popFirstString(val);
+		std::string mode = Parse::popFirstString(val);
+		std::string use_engine_defaults = Parse::popFirstString(val);
 
 		if (mode == "xp") {
 			e->x = 3;
@@ -639,7 +639,7 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		}
 
 		if (!use_engine_defaults.empty())
-			e->y = static_cast<int>(toBool(use_engine_defaults));
+			e->y = static_cast<int>(Parse::toBool(use_engine_defaults));
 	}
 	else {
 		return false;
@@ -1043,15 +1043,15 @@ Event_Component EventManager::getRandomMapFromFile(const std::string& fname) {
 			// @ATTR map|filename, int, int : Map file, X, Y|Adds a map and optional spawn position to the random list of maps to teleport to.
 			if (infile.key == "map") {
 				Event_Component ec;
-				ec.s = popFirstString(infile.val);
+				ec.s = Parse::popFirstString(infile.val);
 				if (ec_list.empty() || ec.s != mapr->getFilename()) {
 					ec.x = -1;
 					ec.y = -1;
 
-					std::string test_x = popFirstString(infile.val);
+					std::string test_x = Parse::popFirstString(infile.val);
 					if (!test_x.empty()) {
-						ec.x = toInt(test_x);
-						ec.y = popFirstInt(infile.val);
+						ec.x = Parse::toInt(test_x);
+						ec.y = Parse::popFirstInt(infile.val);
 					}
 
 					ec_list.push_back(ec);

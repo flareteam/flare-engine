@@ -110,18 +110,18 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 
 			// @ATTR close|point|Position of the close button.
 			if(infile.key == "close") {
-				Point pos = toPoint(infile.val);
+				Point pos = Parse::toPoint(infile.val);
 				closeButton->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
 			}
 			// @ATTR label_title|label|Position of the "Character" text.
-			else if(infile.key == "label_title") labelCharacter->setFromLabelInfo(popLabelInfo(infile.val));
+			else if(infile.key == "label_title") labelCharacter->setFromLabelInfo(Parse::popLabelInfo(infile.val));
 			// @ATTR upgrade_primary|predefined_string, point : Primary stat name, Button position|Position of the button used to add a stat point to this primary stat.
 			else if(infile.key == "upgrade_primary") {
-				std::string prim_stat = popFirstString(infile.val);
+				std::string prim_stat = Parse::popFirstString(infile.val);
 				size_t prim_stat_index = eset->primary_stats.getIndexByID(prim_stat);
 
 				if (prim_stat_index != eset->primary_stats.list.size()) {
-					Point pos = toPoint(infile.val);
+					Point pos = Parse::toPoint(infile.val);
 					upgradeButton[prim_stat_index]->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
 				}
 				else {
@@ -129,27 +129,27 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 				}
 			}
 			// @ATTR statlist|point|Position of the scrollbox containing non-primary stats.
-			else if(infile.key == "statlist") statlist_pos = toPoint(infile.val);
+			else if(infile.key == "statlist") statlist_pos = Parse::toPoint(infile.val);
 			// @ATTR statlist_rows|int|The height of the statlist in rows.
-			else if (infile.key == "statlist_rows") statlist_rows = toInt(infile.val);
+			else if (infile.key == "statlist_rows") statlist_rows = Parse::toInt(infile.val);
 			// @ATTR statlist_scrollbar_offset|int|Right margin in pixels for the statlist's scrollbar.
-			else if (infile.key == "statlist_scrollbar_offset") statlist_scrollbar_offset = toInt(infile.val);
+			else if (infile.key == "statlist_scrollbar_offset") statlist_scrollbar_offset = Parse::toInt(infile.val);
 
 			// @ATTR label_name|label|Position of the "Name" text.
 			else if(infile.key == "label_name") {
-				cstat[CSTAT_NAME].label->setFromLabelInfo(popLabelInfo(infile.val));
+				cstat[CSTAT_NAME].label->setFromLabelInfo(Parse::popLabelInfo(infile.val));
 			}
 			// @ATTR label_level|label|Position of the "Level" text.
 			else if(infile.key == "label_level") {
-				cstat[CSTAT_LEVEL].label->setFromLabelInfo(popLabelInfo(infile.val));
+				cstat[CSTAT_LEVEL].label->setFromLabelInfo(Parse::popLabelInfo(infile.val));
 			}
 			// @ATTR label_primary|predefined_string, label : Primary stat name, Text positioning|Position of the text label for this primary stat.
 			else if(infile.key == "label_primary") {
-				std::string prim_stat = popFirstString(infile.val);
+				std::string prim_stat = Parse::popFirstString(infile.val);
 				size_t prim_stat_index = eset->primary_stats.getIndexByID(prim_stat);
 
 				if (prim_stat_index != eset->primary_stats.list.size()) {
-					cstat[prim_stat_index+2].label->setFromLabelInfo(popLabelInfo(infile.val));
+					cstat[prim_stat_index+2].label->setFromLabelInfo(Parse::popLabelInfo(infile.val));
 				}
 				else {
 					infile.error("MenuCharacter: '%s' is not a valid primary stat.", prim_stat.c_str());
@@ -158,21 +158,21 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 
 			// @ATTR name|rectangle|Position of the player's name and dimensions of the tooltip hotspot.
 			else if(infile.key == "name") {
-				cstat[CSTAT_NAME].value_pos = toRect(infile.val);
+				cstat[CSTAT_NAME].value_pos = Parse::toRect(infile.val);
 				cstat[CSTAT_NAME].value->setBasePos(cstat[CSTAT_NAME].value_pos.x, cstat[CSTAT_NAME].value_pos.y + (cstat[CSTAT_NAME].value_pos.h/2), ALIGN_TOPLEFT);
 			}
 			// @ATTR level|rectangle|Position of the player's level and dimensions of the tooltip hotspot.
 			else if(infile.key == "level") {
-				cstat[CSTAT_LEVEL].value_pos = toRect(infile.val);
+				cstat[CSTAT_LEVEL].value_pos = Parse::toRect(infile.val);
 				cstat[CSTAT_LEVEL].value->setBasePos(cstat[CSTAT_LEVEL].value_pos.x + (cstat[CSTAT_LEVEL].value_pos.w/2), cstat[CSTAT_LEVEL].value_pos.y + (cstat[CSTAT_LEVEL].value_pos.h/2), ALIGN_TOPLEFT);
 			}
 			// @ATTR primary|predefined_string, rectangle : Primary stat name, Hotspot position|Position of this primary stat value display and dimensions of its tooltip hotspot.
 			else if(infile.key == "primary") {
-				std::string prim_stat = popFirstString(infile.val);
+				std::string prim_stat = Parse::popFirstString(infile.val);
 				size_t prim_stat_index = eset->primary_stats.getIndexByID(prim_stat);
 
 				if (prim_stat_index != eset->primary_stats.list.size()) {
-					Rect r = toRect(infile.val);
+					Rect r = Parse::toRect(infile.val);
 					cstat[prim_stat_index+2].value_pos = r;
 					cstat[prim_stat_index+2].value->setBasePos(r.x + (r.w/2), r.y + (r.h/2), ALIGN_TOPLEFT);
 				}
@@ -182,33 +182,33 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 			}
 
 			// @ATTR unspent|label|Position of the label showing the number of unspent stat points.
-			else if(infile.key == "unspent") labelUnspent->setFromLabelInfo(popLabelInfo(infile.val));
+			else if(infile.key == "unspent") labelUnspent->setFromLabelInfo(Parse::popLabelInfo(infile.val));
 
 			// @ATTR show_resists|bool|Hide the elemental "Resistance" stats in the statlist if set to false.
-			else if (infile.key == "show_resists") show_resists = toBool(infile.val);
+			else if (infile.key == "show_resists") show_resists = Parse::toBool(infile.val);
 
 			// @ATTR show_stat|predefined_string, bool : Stat name / Damage type, Visible|Hide the matching stat or damage type min/max in the statlist if set to false.
 			else if (infile.key == "show_stat") {
-				std::string stat_name = popFirstString(infile.val);
+				std::string stat_name = Parse::popFirstString(infile.val);
 
 				for (unsigned i=0; i<Stats::COUNT; ++i) {
 					if (stat_name == Stats::KEY[i]) {
-						show_stat[i] = toBool(popFirstString(infile.val));
+						show_stat[i] = Parse::toBool(Parse::popFirstString(infile.val));
 						break;
 					}
 				}
 				for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
 					if (stat_name == eset->damage_types.list[i].min) {
-						show_stat[Stats::COUNT + (i*2)] = toBool(popFirstString(infile.val));
+						show_stat[Stats::COUNT + (i*2)] = Parse::toBool(Parse::popFirstString(infile.val));
 					}
 					else if (stat_name == eset->damage_types.list[i].max) {
-						show_stat[Stats::COUNT + (i*2) + 1] = toBool(popFirstString(infile.val));
+						show_stat[Stats::COUNT + (i*2) + 1] = Parse::toBool(Parse::popFirstString(infile.val));
 					}
 				}
 			}
 
 			// @ATTR name_max_width|int|The maxiumum width, in pixels, that the character name can occupy until it is abbreviated.
-			else if (infile.key == "name_max_width") name_max_width = toInt(infile.val);
+			else if (infile.key == "name_max_width") name_max_width = Parse::toInt(infile.val);
 
 			else {
 				infile.error("MenuCharacter: '%s' is not a valid key.", infile.key.c_str());

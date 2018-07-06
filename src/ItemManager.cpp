@@ -148,7 +148,7 @@ void ItemManager::loadItems(const std::string& filename) {
 		if (infile.key == "id") {
 			// @ATTR id|item_id|An uniq id of the item used as reference from other classes.
 			id_line = true;
-			id = toInt(infile.val);
+			id = Parse::toInt(infile.val);
 			addUnknownItem(id);
 
 			clear_req_stat = true;
@@ -176,10 +176,10 @@ void ItemManager::loadItems(const std::string& filename) {
 			items[id].flavor = msg->get(infile.val);
 		else if (infile.key == "level")
 			// @ATTR level|int|The item's level. Has no gameplay impact. (Deprecated?)
-			items[id].level = toInt(infile.val);
+			items[id].level = Parse::toInt(infile.val);
 		else if (infile.key == "icon") {
 			// @ATTR icon|icon_id|An id for the icon to display for this item.
-			items[id].icon = toInt(infile.val);
+			items[id].icon = Parse::toInt(infile.val);
 		}
 		else if (infile.key == "book") {
 			// @ATTR book|filename|A book file to open when this item is activated.
@@ -196,16 +196,16 @@ void ItemManager::loadItems(const std::string& filename) {
 		else if (infile.key == "equip_flags") {
 			// @ATTR equip_flags|list(predefined_string)|A comma separated list of flags to set when this item is equipped. See engine/equip_flags.txt.
 			items[id].equip_flags.clear();
-			std::string flag = popFirstString(infile.val);
+			std::string flag = Parse::popFirstString(infile.val);
 
 			while (flag != "") {
 				items[id].equip_flags.push_back(flag);
-				flag = popFirstString(infile.val);
+				flag = Parse::popFirstString(infile.val);
 			}
 		}
 		else if (infile.key == "dmg") {
 			// @ATTR dmg|predefined_string, int, int : Damage type, Min, Max|Defines the item's base damage type and range. Max may be ommitted and will default to Min.
-			std::string dmg_type_str = popFirstString(infile.val);
+			std::string dmg_type_str = Parse::popFirstString(infile.val);
 
 			size_t dmg_type = eset->damage_types.list.size();
 			for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
@@ -219,24 +219,24 @@ void ItemManager::loadItems(const std::string& filename) {
 				infile.error("ItemManager: '%s' is not a known damage type id.", dmg_type_str.c_str());
 			}
 			else {
-				items[id].dmg_min[dmg_type] = popFirstInt(infile.val);
+				items[id].dmg_min[dmg_type] = Parse::popFirstInt(infile.val);
 				if (infile.val.length() > 0)
-					items[id].dmg_max[dmg_type] = popFirstInt(infile.val);
+					items[id].dmg_max[dmg_type] = Parse::popFirstInt(infile.val);
 				else
 					items[id].dmg_max[dmg_type] = items[id].dmg_min[dmg_type];
 			}
 		}
 		else if (infile.key == "abs") {
 			// @ATTR abs|int, int : Min, Max|Defines the item absorb value, if only min is specified the absorb value is fixed.
-			items[id].abs_min = popFirstInt(infile.val);
+			items[id].abs_min = Parse::popFirstInt(infile.val);
 			if (infile.val.length() > 0)
-				items[id].abs_max = popFirstInt(infile.val);
+				items[id].abs_max = Parse::popFirstInt(infile.val);
 			else
 				items[id].abs_max = items[id].abs_min;
 		}
 		else if (infile.key == "requires_level") {
 			// @ATTR requires_level|int|The hero's level must match or exceed this value in order to equip this item.
-			items[id].requires_level = toInt(infile.val);
+			items[id].requires_level = Parse::toInt(infile.val);
 		}
 		else if (infile.key == "requires_stat") {
 			// @ATTR requires_stat|repeatable(predefined_string, int) : Primary stat name, Value|Make item require specific stat level ex. requires_stat=physical,6 will require hero to have level 6 in physical stats
@@ -245,13 +245,13 @@ void ItemManager::loadItems(const std::string& filename) {
 				items[id].req_val.clear();
 				clear_req_stat = false;
 			}
-			std::string s = popFirstString(infile.val);
+			std::string s = Parse::popFirstString(infile.val);
 			size_t req_stat_index = eset->primary_stats.getIndexByID(s);
 			if (req_stat_index != eset->primary_stats.list.size())
 				items[id].req_stat.push_back(req_stat_index);
 			else
 				infile.error("ItemManager: '%s' is not a valid primary stat.", s.c_str());
-			items[id].req_val.push_back(popFirstInt(infile.val));
+			items[id].req_val.push_back(Parse::popFirstInt(infile.val));
 		}
 		else if (infile.key == "requires_class") {
 			// @ATTR requires_class|predefined_string|The hero's base class (engine/classes.txt) must match for this item to be equipped.
@@ -282,15 +282,15 @@ void ItemManager::loadItems(const std::string& filename) {
 				clear_loot_anim = false;
 			}
 			LootAnimation la;
-			la.name = popFirstString(infile.val);
-			la.low = popFirstInt(infile.val);
-			la.high = popFirstInt(infile.val);
+			la.name = Parse::popFirstString(infile.val);
+			la.low = Parse::popFirstInt(infile.val);
+			la.high = Parse::popFirstInt(infile.val);
 			items[id].loot_animation.push_back(la);
 		}
 		else if (infile.key == "power") {
 			// @ATTR power|power_id|Adds a specific power to the item which makes it usable as a power and can be placed in action bar.
-			if (toInt(infile.val) > 0)
-				items[id].power = toInt(infile.val);
+			if (Parse::toInt(infile.val) > 0)
+				items[id].power = Parse::toInt(infile.val);
 			else
 				infile.error("ItemManager: Power index out of bounds 1-%d, skipping power.", INT_MAX);
 		}
@@ -300,7 +300,7 @@ void ItemManager::loadItems(const std::string& filename) {
 				items[id].replace_power.clear();
 				clear_replace_power = false;
 			}
-			Point power_ids = toPoint(infile.val);
+			Point power_ids = Parse::toPoint(infile.val);
 			items[id].replace_power.push_back(power_ids);
 		}
 		else if (infile.key == "power_desc")
@@ -308,16 +308,16 @@ void ItemManager::loadItems(const std::string& filename) {
 			items[id].power_desc = msg->get(infile.val);
 		else if (infile.key == "price")
 			// @ATTR price|int|The amount of currency the item costs, if set to 0 the item cannot be sold.
-			items[id].price = toInt(infile.val);
+			items[id].price = Parse::toInt(infile.val);
 		else if (infile.key == "price_per_level")
 			// @ATTR price_per_level|int|Additional price for each player level above 1
-			items[id].price_per_level = toInt(infile.val);
+			items[id].price_per_level = Parse::toInt(infile.val);
 		else if (infile.key == "price_sell")
 			// @ATTR price_sell|int|The amount of currency the item is sold for, if set to 0 the sell prices is prices*vendor_ratio.
-			items[id].price_sell = toInt(infile.val);
+			items[id].price_sell = Parse::toInt(infile.val);
 		else if (infile.key == "max_quantity")
 			// @ATTR max_quantity|int|Max item count per stack.
-			items[id].max_quantity = toInt(infile.val);
+			items[id].max_quantity = Parse::toInt(infile.val);
 		else if (infile.key == "pickup_status")
 			// @ATTR pickup_status|string|Set a campaign status when item is picked up, this is used for quest items.
 			items[id].pickup_status = infile.val;
@@ -327,16 +327,16 @@ void ItemManager::loadItems(const std::string& filename) {
 		else if (infile.key == "disable_slots") {
 			// @ATTR disable_slots|list(predefined_string)|A comma separated list of equip slot types to disable when this item is equipped.
 			items[id].disable_slots.clear();
-			std::string slot_type = popFirstString(infile.val);
+			std::string slot_type = Parse::popFirstString(infile.val);
 
 			while (slot_type != "") {
 				items[id].disable_slots.push_back(slot_type);
-				slot_type = popFirstString(infile.val);
+				slot_type = Parse::popFirstString(infile.val);
 			}
 		}
 		else if (infile.key == "quest_item") {
 			// @ATTR quest_item|bool|If true, this item is a quest item and can not be dropped, stashed, or sold.
-			items[id].quest_item = toBool(infile.val);
+			items[id].quest_item = Parse::toBool(infile.val);
 		}
 		else {
 			infile.error("ItemManager: '%s' is not a valid key.", infile.key.c_str());
@@ -420,7 +420,7 @@ void ItemManager::loadQualities(const std::string& filename) {
 				item_qualities.back().name = infile.val;
 			// @ATTR quality.color|color|Item quality color.
 			else if (infile.key == "color")
-				item_qualities.back().color = toRGB(infile.val);
+				item_qualities.back().color = Parse::toRGB(infile.val);
 			else
 				infile.error("ItemManager: '%s' is not a valid key.", infile.key.c_str());
 		}
@@ -497,7 +497,7 @@ void ItemManager::loadSets(const std::string& filename) {
 		if (infile.key == "id") {
 			// @ATTR id|int|A uniq id for the item set.
 			id_line = true;
-			id = toInt(infile.val);
+			id = Parse::toInt(infile.val);
 
 			if (id > 0) {
 				size_t new_size = id+1;
@@ -524,9 +524,9 @@ void ItemManager::loadSets(const std::string& filename) {
 		else if (infile.key == "items") {
 			// @ATTR items|list(item_id)|List of item id's that is part of the set.
 			item_sets[id].items.clear();
-			std::string item_id = popFirstString(infile.val);
+			std::string item_id = Parse::popFirstString(infile.val);
 			while (item_id != "") {
-				int temp_id = toInt(item_id);
+				int temp_id = Parse::toInt(item_id);
 				if (temp_id > 0 && temp_id < static_cast<int>(items.size())) {
 					items[temp_id].set = id;
 					item_sets[id].items.push_back(temp_id);
@@ -535,12 +535,12 @@ void ItemManager::loadSets(const std::string& filename) {
 					const int maxsize = static_cast<int>(items.size()-1);
 					infile.error("ItemManager: Item index out of bounds 1-%d, skipping item.", maxsize);
 				}
-				item_id = popFirstString(infile.val);
+				item_id = Parse::popFirstString(infile.val);
 			}
 		}
 		else if (infile.key == "color") {
 			// @ATTR color|color|A specific of color for the set.
-			item_sets[id].color = toRGB(infile.val);
+			item_sets[id].color = Parse::toRGB(infile.val);
 		}
 		else if (infile.key == "bonus") {
 			// @ATTR bonus|repeatable(int, string, int) : Required set item count, Stat name, Value|Bonus to append to items in the set.
@@ -549,7 +549,7 @@ void ItemManager::loadSets(const std::string& filename) {
 				clear_bonus = false;
 			}
 			Set_bonus bonus;
-			bonus.requirement = popFirstInt(infile.val);
+			bonus.requirement = Parse::popFirstInt(infile.val);
 			parseBonus(bonus, infile);
 			item_sets[id].bonus.push_back(bonus);
 		}
@@ -561,8 +561,8 @@ void ItemManager::loadSets(const std::string& filename) {
 }
 
 void ItemManager::parseBonus(BonusData& bdata, FileParser& infile) {
-	std::string bonus_str = popFirstString(infile.val);
-	bdata.value = popFirstInt(infile.val);
+	std::string bonus_str = Parse::popFirstString(infile.val);
+	bdata.value = Parse::popFirstInt(infile.val);
 
 	if (bonus_str == "speed") {
 		bdata.is_speed = true;

@@ -542,12 +542,12 @@ void LootManager::parseLoot(std::string &val, Event_Component *e, std::vector<Ev
 
 	std::string chance;
 	bool first_is_filename = false;
-	e->s = popFirstString(val);
+	e->s = Parse::popFirstString(val);
 
 	if (e->s == "currency")
 		e->c = eset->misc.currency_id;
-	else if (toInt(e->s, -1) != -1)
-		e->c = toInt(e->s);
+	else if (Parse::toInt(e->s, -1) != -1)
+		e->c = Parse::toInt(e->s);
 	else if (ec_list) {
 		// load entire loot table
 		std::string filename = e->s;
@@ -565,18 +565,18 @@ void LootManager::parseLoot(std::string &val, Event_Component *e, std::vector<Ev
 		e->type = EC_LOOT;
 
 		// drop chance
-		chance = popFirstString(val);
+		chance = Parse::popFirstString(val);
 		if (chance == "fixed") e->z = 0;
-		else e->z = toInt(chance);
+		else e->z = Parse::toInt(chance);
 
 		// quantity min/max
-		e->a = std::max(popFirstInt(val), 1);
-		e->b = std::max(popFirstInt(val), e->a);
+		e->a = std::max(Parse::popFirstInt(val), 1);
+		e->b = std::max(Parse::popFirstInt(val), e->a);
 	}
 
 	// add repeating loot
 	if (ec_list) {
-		std::string repeat_val = popFirstString(val);
+		std::string repeat_val = Parse::popFirstString(val);
 		while (repeat_val != "") {
 			ec_list->push_back(Event_Component());
 			Event_Component *ec = &ec_list->back();
@@ -585,26 +585,26 @@ void LootManager::parseLoot(std::string &val, Event_Component *e, std::vector<Ev
 			ec->s = repeat_val;
 			if (ec->s == "currency")
 				ec->c = eset->misc.currency_id;
-			else if (toInt(ec->s, -1) != -1)
-				ec->c = toInt(ec->s);
+			else if (Parse::toInt(ec->s, -1) != -1)
+				ec->c = Parse::toInt(ec->s);
 			else {
 				// remove the last event component, since getLootTable() will create a new one
 				ec_list->pop_back();
 
 				getLootTable(repeat_val, ec_list);
 
-				repeat_val = popFirstString(val);
+				repeat_val = Parse::popFirstString(val);
 				continue;
 			}
 
-			chance = popFirstString(val);
+			chance = Parse::popFirstString(val);
 			if (chance == "fixed") ec->z = 0;
-			else ec->z = toInt(chance);
+			else ec->z = Parse::toInt(chance);
 
-			ec->a = std::max(popFirstInt(val), 1);
-			ec->b = std::max(popFirstInt(val), ec->a);
+			ec->a = std::max(Parse::popFirstInt(val), 1);
+			ec->b = std::max(Parse::popFirstInt(val), ec->a);
 
-			repeat_val = popFirstString(val);
+			repeat_val = Parse::popFirstString(val);
 		}
 	}
 }
@@ -645,8 +645,8 @@ void LootManager::loadLootTables() {
 
 					if (ec->s == "currency")
 						ec->c = eset->misc.currency_id;
-					else if (toInt(ec->s, -1) != -1)
-						ec->c = toInt(ec->s);
+					else if (Parse::toInt(ec->s, -1) != -1)
+						ec->c = Parse::toInt(ec->s);
 					else {
 						skip_to_next = true;
 						infile.error("LootManager: Invalid item id for loot.");
@@ -656,11 +656,11 @@ void LootManager::loadLootTables() {
 					if (infile.val == "fixed")
 						ec->z = 0;
 					else
-						ec->z = toInt(infile.val);
+						ec->z = Parse::toInt(infile.val);
 				}
 				else if (infile.key == "quantity") {
-					ec->a = std::max(popFirstInt(infile.val), 1);
-					ec->b = std::max(popFirstInt(infile.val), ec->a);
+					ec->a = std::max(Parse::popFirstInt(infile.val), 1);
+					ec->b = std::max(Parse::popFirstInt(infile.val), ec->a);
 				}
 			}
 		}

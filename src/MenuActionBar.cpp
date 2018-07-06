@@ -87,60 +87,60 @@ MenuActionBar::MenuActionBar()
 
 			// @ATTR slot|repeatable(int, int, int, bool) : Index, X, Y, Locked|Index (max 10) and position for power slot. If a slot is locked, its Power can't be changed by the player.
 			if (infile.key == "slot") {
-				unsigned index = popFirstInt(infile.val);
+				unsigned index = Parse::popFirstInt(infile.val);
 				if (index == 0 || index > 10) {
 					infile.error("MenuActionBar: Slot index must be in range 1-10.");
 				}
 				else {
-					int x = popFirstInt(infile.val);
-					int y = popFirstInt(infile.val);
-					std::string val = popFirstString(infile.val);
-					bool is_locked = (val.empty() ? false : toBool(val));
+					int x = Parse::popFirstInt(infile.val);
+					int y = Parse::popFirstInt(infile.val);
+					std::string val = Parse::popFirstString(infile.val);
+					bool is_locked = (val.empty() ? false : Parse::toBool(val));
 					addSlot(index-1, x, y, is_locked);
 				}
 			}
 			// @ATTR slot_M1|point, bool : Position, Locked|Position for the primary action slot. If the slot is locked, its Power can't be changed by the player.
 			else if (infile.key == "slot_M1") {
-				int x = popFirstInt(infile.val);
-				int y = popFirstInt(infile.val);
-				std::string val = popFirstString(infile.val);
-				bool is_locked = (val.empty() ? false : toBool(val));
+				int x = Parse::popFirstInt(infile.val);
+				int y = Parse::popFirstInt(infile.val);
+				std::string val = Parse::popFirstString(infile.val);
+				bool is_locked = (val.empty() ? false : Parse::toBool(val));
 				addSlot(10, x, y, is_locked);
 			}
 			// @ATTR slot_M2|point, bool : Position Locked|Position for the secondary action slot. If the slot is locked, its Power can't be changed by the player.
 			else if (infile.key == "slot_M2") {
-				int x = popFirstInt(infile.val);
-				int y = popFirstInt(infile.val);
-				std::string val = popFirstString(infile.val);
-				bool is_locked = (val.empty() ? false : toBool(val));
+				int x = Parse::popFirstInt(infile.val);
+				int y = Parse::popFirstInt(infile.val);
+				std::string val = Parse::popFirstString(infile.val);
+				bool is_locked = (val.empty() ? false : Parse::toBool(val));
 				addSlot(11, x, y, is_locked);
 			}
 
 			// @ATTR char_menu|point|Position for the Character menu button.
 			else if (infile.key == "char_menu") {
-				int x = popFirstInt(infile.val);
-				int y = popFirstInt(infile.val);
+				int x = Parse::popFirstInt(infile.val);
+				int y = Parse::popFirstInt(infile.val);
 				menus[MENU_CHARACTER]->setBasePos(x, y, ALIGN_TOPLEFT);
 				menus[MENU_CHARACTER]->pos.w = menus[MENU_CHARACTER]->pos.h = eset->resolutions.icon_size;
 			}
 			// @ATTR inv_menu|point|Position for the Inventory menu button.
 			else if (infile.key == "inv_menu") {
-				int x = popFirstInt(infile.val);
-				int y = popFirstInt(infile.val);
+				int x = Parse::popFirstInt(infile.val);
+				int y = Parse::popFirstInt(infile.val);
 				menus[MENU_INVENTORY]->setBasePos(x, y, ALIGN_TOPLEFT);
 				menus[MENU_INVENTORY]->pos.w = menus[MENU_INVENTORY]->pos.h = eset->resolutions.icon_size;
 			}
 			// @ATTR powers_menu|point|Position for the Powers menu button.
 			else if (infile.key == "powers_menu") {
-				int x = popFirstInt(infile.val);
-				int y = popFirstInt(infile.val);
+				int x = Parse::popFirstInt(infile.val);
+				int y = Parse::popFirstInt(infile.val);
 				menus[MENU_POWERS]->setBasePos(x, y, ALIGN_TOPLEFT);
 				menus[MENU_POWERS]->pos.w = menus[MENU_POWERS]->pos.h = eset->resolutions.icon_size;
 			}
 			// @ATTR log_menu|point|Position for the Log menu button.
 			else if (infile.key == "log_menu") {
-				int x = popFirstInt(infile.val);
-				int y = popFirstInt(infile.val);
+				int x = Parse::popFirstInt(infile.val);
+				int y = Parse::popFirstInt(infile.val);
 				menus[MENU_LOG]->setBasePos(x, y, ALIGN_TOPLEFT);
 				menus[MENU_LOG]->pos.w = menus[MENU_LOG]->pos.h = eset->resolutions.icon_size;
 			}

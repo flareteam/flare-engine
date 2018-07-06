@@ -39,39 +39,39 @@ CursorManager::CursorManager()
 		while (infile.next()) {
 			if (infile.key == "normal") {
 				// @ATTR normal|filename|Filename of an image for the normal cursor.
-				graphics = render_device->loadImage(popFirstString(infile.val), RenderDevice::ERROR_NORMAL);
+				graphics = render_device->loadImage(Parse::popFirstString(infile.val), RenderDevice::ERROR_NORMAL);
 				if (graphics) {
 					cursor_normal = graphics->createSprite();
 					graphics->unref();
 				}
-				offset_normal = toPoint(infile.val);
+				offset_normal = Parse::toPoint(infile.val);
 			}
 			else if (infile.key == "interact") {
 				// @ATTR interact|filename|Filename of an image for the object interaction cursor.
-				graphics = render_device->loadImage(popFirstString(infile.val), RenderDevice::ERROR_NORMAL);
+				graphics = render_device->loadImage(Parse::popFirstString(infile.val), RenderDevice::ERROR_NORMAL);
 				if (graphics) {
 					cursor_interact = graphics->createSprite();
 					graphics->unref();
 				}
-				offset_interact = toPoint(infile.val);
+				offset_interact = Parse::toPoint(infile.val);
 			}
 			else if (infile.key == "talk") {
 				// @ATTR talk|filename|Filename of an image for the NPC interaction cursor.
-				graphics = render_device->loadImage(popFirstString(infile.val), RenderDevice::ERROR_NORMAL);
+				graphics = render_device->loadImage(Parse::popFirstString(infile.val), RenderDevice::ERROR_NORMAL);
 				if (graphics) {
 					cursor_talk = graphics->createSprite();
 					graphics->unref();
 				}
-				offset_talk = toPoint(infile.val);
+				offset_talk = Parse::toPoint(infile.val);
 			}
 			else if (infile.key == "attack") {
 				// @ATTR attack|filename|Filename of an image for the cursor when attacking enemies.
-				graphics = render_device->loadImage(popFirstString(infile.val), RenderDevice::ERROR_NORMAL);
+				graphics = render_device->loadImage(Parse::popFirstString(infile.val), RenderDevice::ERROR_NORMAL);
 				if (graphics) {
 					cursor_attack = graphics->createSprite();
 					graphics->unref();
 				}
-				offset_attack = toPoint(infile.val);
+				offset_attack = Parse::toPoint(infile.val);
 			}
 			else {
 				infile.error("CursorManager: '%s' is not a valid key.", infile.key.c_str());

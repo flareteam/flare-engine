@@ -50,7 +50,7 @@ EnemyGroupManager::EnemyGroupManager() {
 
 			if (infile.key == "level") {
 				// @ATTR level|int|Level of the enemy
-				new_enemy.level = toInt(infile.val);
+				new_enemy.level = Parse::toInt(infile.val);
 			}
 			else if (infile.key == "rarity") {
 				// @ATTR rarity|["common", "uncommon", "rare"]|Enemy rarity
@@ -64,7 +64,7 @@ EnemyGroupManager::EnemyGroupManager() {
 		infile.close();
 
 		std::string cat;
-		while ( (cat = popFirstString(category_str)) != "") {
+		while ( (cat = Parse::popFirstString(category_str)) != "") {
 			_categories[cat].push_back(new_enemy);
 		}
 	}

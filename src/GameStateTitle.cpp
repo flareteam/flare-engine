@@ -60,42 +60,42 @@ GameStateTitle::GameStateTitle()
 		while (infile.next()) {
 			// @ATTR logo|filename, int, int, alignment : Image file, X, Y, Alignment|Filename and position of the main logo image.
 			if (infile.key == "logo") {
-				Image *graphics = render_device->loadImage(popFirstString(infile.val), RenderDevice::ERROR_NONE);
+				Image *graphics = render_device->loadImage(Parse::popFirstString(infile.val), RenderDevice::ERROR_NONE);
 				if (graphics) {
  				    logo = graphics->createSprite();
 					graphics->unref();
 
-					pos_logo.x = popFirstInt(infile.val);
-					pos_logo.y = popFirstInt(infile.val);
-					align_logo = parse_alignment(popFirstString(infile.val));
+					pos_logo.x = Parse::popFirstInt(infile.val);
+					pos_logo.y = Parse::popFirstInt(infile.val);
+					align_logo = Parse::toAlignment(Parse::popFirstString(infile.val));
 				}
 			}
 			// @ATTR play_pos|int, int, alignment : X, Y, Alignment|Position of the "Play Game" button.
 			else if (infile.key == "play_pos") {
-				int x = popFirstInt(infile.val);
-				int y = popFirstInt(infile.val);
-				ALIGNMENT a = parse_alignment(popFirstString(infile.val));
+				int x = Parse::popFirstInt(infile.val);
+				int y = Parse::popFirstInt(infile.val);
+				ALIGNMENT a = Parse::toAlignment(Parse::popFirstString(infile.val));
 				button_play->setBasePos(x, y, a);
 			}
 			// @ATTR config_pos|int, int, alignment : X, Y, Alignment|Position of the "Configuration" button.
 			else if (infile.key == "config_pos") {
-				int x = popFirstInt(infile.val);
-				int y = popFirstInt(infile.val);
-				ALIGNMENT a = parse_alignment(popFirstString(infile.val));
+				int x = Parse::popFirstInt(infile.val);
+				int y = Parse::popFirstInt(infile.val);
+				ALIGNMENT a = Parse::toAlignment(Parse::popFirstString(infile.val));
 				button_cfg->setBasePos(x, y, a);
 			}
 			// @ATTR credits_pos|int, int, alignment : X, Y, Alignment|Position of the "Credits" button.
 			else if (infile.key == "credits_pos") {
-				int x = popFirstInt(infile.val);
-				int y = popFirstInt(infile.val);
-				ALIGNMENT a = parse_alignment(popFirstString(infile.val));
+				int x = Parse::popFirstInt(infile.val);
+				int y = Parse::popFirstInt(infile.val);
+				ALIGNMENT a = Parse::toAlignment(Parse::popFirstString(infile.val));
 				button_credits->setBasePos(x, y, a);
 			}
 			// @ATTR exit_pos|int, int, alignment : X, Y, Alignment|Position of the "Exit Game" button.
 			else if (infile.key == "exit_pos") {
-				int x = popFirstInt(infile.val);
-				int y = popFirstInt(infile.val);
-				ALIGNMENT a = parse_alignment(popFirstString(infile.val));
+				int x = Parse::popFirstInt(infile.val);
+				int y = Parse::popFirstInt(infile.val);
+				ALIGNMENT a = Parse::toAlignment(Parse::popFirstString(infile.val));
 				button_exit->setBasePos(x, y, a);
 			}
 			else {

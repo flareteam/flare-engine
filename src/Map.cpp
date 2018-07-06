@@ -152,11 +152,11 @@ void Map::loadHeader(FileParser &infile) {
 	}
 	else if (infile.key == "width") {
 		// @ATTR width|int|Width of map
-		this->w = static_cast<unsigned short>(std::max(toInt(infile.val), 1));
+		this->w = static_cast<unsigned short>(std::max(Parse::toInt(infile.val), 1));
 	}
 	else if (infile.key == "height") {
 		// @ATTR height|int|Height of map
-		this->h = static_cast<unsigned short>(std::max(toInt(infile.val), 1));
+		this->h = static_cast<unsigned short>(std::max(Parse::toInt(infile.val), 1));
 	}
 	else if (infile.key == "tileset") {
 		// @ATTR tileset|filename|Filename of a tileset definition to use for map
@@ -168,8 +168,8 @@ void Map::loadHeader(FileParser &infile) {
 	}
 	else if (infile.key == "hero_pos") {
 		// @ATTR hero_pos|point|The player will spawn in this location if no point was previously given.
-		hero_pos.x = static_cast<float>(popFirstInt(infile.val)) + 0.5f;
-		hero_pos.y = static_cast<float>(popFirstInt(infile.val)) + 0.5f;
+		hero_pos.x = static_cast<float>(Parse::popFirstInt(infile.val)) + 0.5f;
+		hero_pos.y = static_cast<float>(Parse::popFirstInt(infile.val)) + 0.5f;
 		hero_pos_enabled = true;
 	}
 	else if (infile.key == "parallax_layers") {
@@ -178,7 +178,7 @@ void Map::loadHeader(FileParser &infile) {
 	}
 	else if (infile.key == "background_color") {
 		// @ATTR background_color|color, int : Color, alpha|Background color for the map.
-		background_color = toRGBA(infile.val);
+		background_color = Parse::toRGBA(infile.val);
 	}
 	else if (infile.key == "tilewidth") {
 		// @ATTR tilewidth|int|Inherited from Tiled map file. Unused by engine.
@@ -238,7 +238,7 @@ void Map::loadLayer(FileParser &infile) {
 			}
 
 			for (int i=0; i<w; i++)
-				layers.back()[i][j] = static_cast<unsigned short>(popFirstInt(val));
+				layers.back()[i][j] = static_cast<unsigned short>(Parse::popFirstInt(val));
 		}
 	}
 	else {
@@ -257,43 +257,43 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 	}
 	else if (infile.key == "level") {
 		// @ATTR enemygroup.level|int, int : Min, Max|Defines the level range of enemies in group. If only one number is given, it's the exact level.
-		group->levelmin = std::max(0, popFirstInt(infile.val));
-		group->levelmax = std::max(std::max(0, toInt(popFirstString(infile.val))), group->levelmin);
+		group->levelmin = std::max(0, Parse::popFirstInt(infile.val));
+		group->levelmax = std::max(std::max(0, Parse::toInt(Parse::popFirstString(infile.val))), group->levelmin);
 	}
 	else if (infile.key == "location") {
 		// @ATTR enemygroup.location|rectangle|Location area for enemygroup
-		group->pos.x = popFirstInt(infile.val);
-		group->pos.y = popFirstInt(infile.val);
-		group->area.x = popFirstInt(infile.val);
-		group->area.y = popFirstInt(infile.val);
+		group->pos.x = Parse::popFirstInt(infile.val);
+		group->pos.y = Parse::popFirstInt(infile.val);
+		group->area.x = Parse::popFirstInt(infile.val);
+		group->area.y = Parse::popFirstInt(infile.val);
 	}
 	else if (infile.key == "number") {
 		// @ATTR enemygroup.number|int, int : Min, Max|Defines the range of enemies in group. If only one number is given, it's the exact amount.
-		group->numbermin = std::max(0, popFirstInt(infile.val));
-		group->numbermax = std::max(std::max(0, toInt(popFirstString(infile.val))), group->numbermin);
+		group->numbermin = std::max(0, Parse::popFirstInt(infile.val));
+		group->numbermax = std::max(std::max(0, Parse::toInt(Parse::popFirstString(infile.val))), group->numbermin);
 	}
 	else if (infile.key == "chance") {
 		// @ATTR enemygroup.chance|int|Percentage of chance
-		float n = static_cast<float>(std::max(0, popFirstInt(infile.val))) / 100.0f;
+		float n = static_cast<float>(std::max(0, Parse::popFirstInt(infile.val))) / 100.0f;
 		group->chance = std::min(1.0f, std::max(0.0f, n));
 	}
 	else if (infile.key == "direction") {
 		// @ATTR enemygroup.direction|direction|Direction that enemies will initially face.
-		group->direction = parse_direction(infile.val);
+		group->direction = Parse::toDirection(infile.val);
 	}
 	else if (infile.key == "waypoints") {
 		// @ATTR enemygroup.waypoints|list(point)|Enemy waypoints; single enemy only; negates wander_radius
 		std::string none = "";
-		std::string a = popFirstString(infile.val);
-		std::string b = popFirstString(infile.val);
+		std::string a = Parse::popFirstString(infile.val);
+		std::string b = Parse::popFirstString(infile.val);
 
 		while (a != none) {
 			FPoint p;
-			p.x = static_cast<float>(toInt(a)) + 0.5f;
-			p.y = static_cast<float>(toInt(b)) + 0.5f;
+			p.x = static_cast<float>(Parse::toInt(a)) + 0.5f;
+			p.y = static_cast<float>(Parse::toInt(b)) + 0.5f;
 			group->waypoints.push(p);
-			a = popFirstString(infile.val);
-			b = popFirstString(infile.val);
+			a = Parse::popFirstString(infile.val);
+			b = Parse::popFirstString(infile.val);
 		}
 
 		// disable wander radius, since we can't have waypoints and wandering at the same time
@@ -301,7 +301,7 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 	}
 	else if (infile.key == "wander_radius") {
 		// @ATTR enemygroup.wander_radius|int|The radius (in tiles) that an enemy will wander around randomly; negates waypoints
-		group->wander_radius = std::max(0, popFirstInt(infile.val));
+		group->wander_radius = std::max(0, Parse::popFirstInt(infile.val));
 
 		// clear waypoints, since wandering will use the waypoint queue
 		while (!group->waypoints.empty()) {
@@ -311,28 +311,28 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 	else if (infile.key == "requires_status") {
 		// @ATTR enemygroup.requires_status|list(string)|Status required for loading enemies
 		std::string s;
-		while ((s = popFirstString(infile.val)) != "") {
+		while ((s = Parse::popFirstString(infile.val)) != "") {
 			group->requires_status.push_back(s);
 		}
 	}
 	else if (infile.key == "requires_not_status") {
 		// @ATTR enemygroup.requires_not_status|list(string)|Status required to be missing for loading enemies
 		std::string s;
-		while ((s = popFirstString(infile.val)) != "") {
+		while ((s = Parse::popFirstString(infile.val)) != "") {
 			group->requires_not_status.push_back(s);
 		}
 	}
 	else if (infile.key == "invincible_requires_status") {
 		// @ATTR enemygroup.invincible_requires_status|list(string)|Enemies in this group are invincible to hero attacks when these statuses are set.
 		std::string s;
-		while ((s = popFirstString(infile.val)) != "") {
+		while ((s = Parse::popFirstString(infile.val)) != "") {
 			group->invincible_requires_status.push_back(s);
 		}
 	}
 	else if (infile.key == "invincible_requires_not_status") {
 		// @ATTR enemygroup.invincible_requires_not_status|list(string)|Enemies in this group are invincible to hero attacks when these statuses are not set.
 		std::string s;
-		while ((s = popFirstString(infile.val)) != "") {
+		while ((s = Parse::popFirstString(infile.val)) != "") {
 			group->invincible_requires_not_status.push_back(s);
 		}
 	}
@@ -353,18 +353,18 @@ void Map::loadNPC(FileParser &infile) {
 	}
 	else if (infile.key == "requires_status") {
 		// @ATTR npc.requires_status|list(string)|Status required for NPC load. There can be multiple states, separated by comma
-		while ( (s = popFirstString(infile.val)) != "")
+		while ( (s = Parse::popFirstString(infile.val)) != "")
 			npcs.back().requires_status.push_back(s);
 	}
 	else if (infile.key == "requires_not_status") {
 		// @ATTR npc.requires_not_status|list(string)|Status required to be missing for NPC load. There can be multiple states, separated by comma
-		while ( (s = popFirstString(infile.val)) != "")
+		while ( (s = Parse::popFirstString(infile.val)) != "")
 			npcs.back().requires_not_status.push_back(s);
 	}
 	else if (infile.key == "location") {
 		// @ATTR npc.location|point|Location of NPC
-		npcs.back().pos.x = static_cast<float>(popFirstInt(infile.val)) + 0.5f;
-		npcs.back().pos.y = static_cast<float>(popFirstInt(infile.val)) + 0.5f;
+		npcs.back().pos.x = static_cast<float>(Parse::popFirstInt(infile.val)) + 0.5f;
+		npcs.back().pos.y = static_cast<float>(Parse::popFirstInt(infile.val)) + 0.5f;
 	}
 	else {
 		infile.error("Map: '%s' is not a valid key.", infile.key.c_str());

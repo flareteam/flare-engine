@@ -576,12 +576,12 @@ void lockFileRead() {
 	infile.open(lock_file_path.c_str(), std::ios::in);
 
 	while (infile.good()) {
-		std::string line = getLine(infile);
+		std::string line = Parse::getLine(infile);
 
 		if (line.length() == 0 || line.at(0) == '#')
 			continue;
 
-		LOCK_INDEX = toInt(line);
+		LOCK_INDEX = Parse::toInt(line);
 	}
 
 	infile.close();

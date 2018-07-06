@@ -64,16 +64,16 @@ MenuStatBar::MenuStatBar(const std::string& type)
 
 			// @ATTR bar_pos|rectangle|Position and dimensions of the bar graphics.
 			if(infile.key == "bar_pos") {
-				bar_pos = toRect(infile.val);
+				bar_pos = Parse::toRect(infile.val);
 			}
 			// @ATTR text_pos|label|Position of the text displaying the current value of the relevant stat.
 			else if(infile.key == "text_pos") {
 				custom_text_pos = true;
-				text_pos = popLabelInfo(infile.val);
+				text_pos = Parse::popLabelInfo(infile.val);
 			}
 			// @ATTR orientation|bool|True is vertical orientation; false is horizontal.
 			else if(infile.key == "orientation") {
-				orientation = toBool(infile.val);
+				orientation = Parse::toBool(infile.val);
 			}
 			// @ATTR bar_gfx|filename|Filename of the image to use for the "fill" of the bar.
 			else if (infile.key == "bar_gfx") {

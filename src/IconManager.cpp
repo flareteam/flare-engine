@@ -41,8 +41,8 @@ IconManager::IconManager()
 		while (infile.next()) {
 			if (infile.key == "icon_set") {
 				// @ATTR icon_set|repeatable(icon_id, filename) : First ID, Image file|Defines an icon graphics file to load, as well as the index of the first icon.
-				int first_id = popFirstInt(infile.val);
-				std::string filename = popFirstString(infile.val);
+				int first_id = Parse::popFirstInt(infile.val);
+				std::string filename = Parse::popFirstString(infile.val);
 
 				icon_sets.resize(icon_sets.size()+1);
 				if (!loadIconSet(icon_sets.back(), filename, first_id)) {
@@ -51,7 +51,7 @@ IconManager::IconManager()
 			}
 			else if (infile.key == "text_offset") {
 				// @ATTR text_offset|point|A pixel offset from the top-left to place item quantity text on icons.
-				text_offset = toPoint(infile.val);
+				text_offset = Parse::toPoint(infile.val);
 			}
 		}
 		infile.close();

@@ -64,24 +64,24 @@ MenuTalker::MenuTalker(MenuNPCActions *_npc_menu)
 
 			// @ATTR close|point|Position of the close button.
 			if(infile.key == "close") {
-				Point pos = toPoint(infile.val);
+				Point pos = Parse::toPoint(infile.val);
 				closeButton->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
 			}
 			// @ATTR advance|point|Position of the button to advance dialog.
 			else if(infile.key == "advance") {
-				Point pos = toPoint(infile.val);
+				Point pos = Parse::toPoint(infile.val);
 				advanceButton->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
 			}
 			// @ATTR dialogbox|rectangle|Position and dimensions of the text box graphics.
-			else if (infile.key == "dialogbox") dialog_pos = toRect(infile.val);
+			else if (infile.key == "dialogbox") dialog_pos = Parse::toRect(infile.val);
 			// @ATTR dialogtext|rectangle|Rectangle where the dialog text is placed.
-			else if (infile.key == "dialogtext") text_pos = toRect(infile.val);
+			else if (infile.key == "dialogtext") text_pos = Parse::toRect(infile.val);
 			// @ATTR text_offset|point|Margins for the left/right and top/bottom of the dialog text.
-			else if (infile.key == "text_offset") text_offset = toPoint(infile.val);
+			else if (infile.key == "text_offset") text_offset = Parse::toPoint(infile.val);
 			// @ATTR portrait_he|rectangle|Position and dimensions of the NPC portrait graphics.
-			else if (infile.key == "portrait_he") portrait_he = toRect(infile.val);
+			else if (infile.key == "portrait_he") portrait_he = Parse::toRect(infile.val);
 			// @ATTR portrait_you|rectangle|Position and dimensions of the player's portrait graphics.
-			else if (infile.key == "portrait_you") portrait_you = toRect(infile.val);
+			else if (infile.key == "portrait_you") portrait_you = Parse::toRect(infile.val);
 			// @ATTR font_who|predefined_string|Font style to use for the name of the currently talking person.
 			else if (infile.key == "font_who") font_who = infile.val;
 			// @ATTR font_dialog|predefined_string|Font style to use for the dialog text.

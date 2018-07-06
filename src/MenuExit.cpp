@@ -54,26 +54,26 @@ MenuExit::MenuExit() : Menu() {
 				continue;
 			else if (infile.key == "title") {
 				// @ATTR title|label|Position of the "Paused" text.
-				title_lb.setFromLabelInfo(popLabelInfo(infile.val));
+				title_lb.setFromLabelInfo(Parse::popLabelInfo(infile.val));
 			}
 			else if (infile.key == "exit") {
 				// @ATTR exit|point|Position of the "Save and Exit" button.
-				Point p = toPoint(infile.val);
+				Point p = Parse::toPoint(infile.val);
 				buttonExit->setBasePos(p.x, p.y, ALIGN_TOPLEFT);
 			}
 			else if (infile.key == "continue") {
 				// @ATTR continue|point|Position of the "Continue" button.
-				Point p = toPoint(infile.val);
+				Point p = Parse::toPoint(infile.val);
 				buttonClose->setBasePos(p.x, p.y, ALIGN_TOPLEFT);
 			}
 			else if (infile.key == "music_volume") {
 				// @ATTR music_volume|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Music Volume" slider relative to the frame.
-				Rect r = toRect(infile.val);
+				Rect r = Parse::toRect(infile.val);
 				placeOptionWidgets(&music_volume_lb, music_volume_sl, r.x, r.y, r.w, r.h, msg->get("Music Volume"));
 			}
 			else if (infile.key == "sound_volume") {
 				// @ATTR sound_volume|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Sound Volume" slider relative to the frame.
-				Rect r = toRect(infile.val);
+				Rect r = Parse::toRect(infile.val);
 				placeOptionWidgets(&sound_volume_lb, sound_volume_sl, r.x, r.y, r.w, r.h, msg->get("Sound Volume"));
 			}
 			else

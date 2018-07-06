@@ -80,12 +80,12 @@ SDLFontEngine::SDLFontEngine() : FontEngine(), active_font(NULL) {
 			else if (infile.key == "style") {
 				// @ATTR font.style|repeatable(["default", predefined_string], filename, int, bool) : Language, Font file, Point size, Blending|Filename, point size, and blend mode of the font to use for this language. Language can be "default" or a 2-letter region code.
 
-				std::string lang = popFirstString(infile.val);
+				std::string lang = Parse::popFirstString(infile.val);
 
 				if ((lang == "default" && style->path == "") || lang == settings->language) {
-					style->path = popFirstString(infile.val);
-					style->ptsize = popFirstInt(infile.val);
-					style->blend = toBool(popFirstString(infile.val));
+					style->path = Parse::popFirstString(infile.val);
+					style->ptsize = Parse::popFirstInt(infile.val);
+					style->blend = Parse::toBool(Parse::popFirstString(infile.val));
 
 					style->ttfont = TTF_OpenFont(mods->locate("fonts/" + style->path).c_str(), style->ptsize);
 					if(style->ttfont == NULL) {

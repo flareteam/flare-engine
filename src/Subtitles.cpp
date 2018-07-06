@@ -53,19 +53,19 @@ Subtitles::Subtitles()
 			else if (infile.section == "style") {
 				if (infile.key == "text_pos") {
 					// @ATTR style.text_pos|label|Position and style of the subtitle text.
-					label.setFromLabelInfo(popLabelInfo(infile.val));
+					label.setFromLabelInfo(Parse::popLabelInfo(infile.val));
 				}
 				else if (infile.key == "pos") {
 					// @ATTR style.pos|point|Position of the subtitle text relative to alignment.
-					label_pos = toPoint(infile.val);
+					label_pos = Parse::toPoint(infile.val);
 				}
 				else if (infile.key == "align") {
 					// @ATTR style.align|alignment|Alignment of the subtitle text.
-					label_alignment = parse_alignment(infile.val);
+					label_alignment = Parse::toAlignment(infile.val);
 				}
 				else if (infile.key == "background_color") {
 					// @ATTR style.background_color|color, int : Color, Alpha|Color and alpha of the subtitle background rectangle.
-					background_color = toRGBA(infile.val);
+					background_color = Parse::toRGBA(infile.val);
 				}
 			}
 

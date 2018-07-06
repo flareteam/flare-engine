@@ -65,15 +65,15 @@ CombatText::CombatText() {
 		while(infile.next()) {
 			if(infile.key == "duration") {
 				// @ATTR duration|duration|Duration of the combat text in 'ms' or 's'.
-				duration = parse_duration(infile.val);
+				duration = Parse::toDuration(infile.val);
 			}
 			else if(infile.key == "speed") {
 				// @ATTR speed|int|Motion speed of the combat text.
-				speed = static_cast<float>(toInt(infile.val) * 60) / settings->max_frames_per_sec;
+				speed = static_cast<float>(Parse::toInt(infile.val) * 60) / settings->max_frames_per_sec;
 			}
 			else if (infile.key == "offset") {
 				// @ATTR offset|int|The vertical offset for the combat text's starting position.
-				offset = toInt(infile.val);
+				offset = Parse::toInt(infile.val);
 			}
 			else {
 				infile.error("CombatText: '%s' is not a valid key.",infile.key.c_str());

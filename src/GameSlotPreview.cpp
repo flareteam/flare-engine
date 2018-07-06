@@ -61,14 +61,14 @@ void GameSlotPreview::loadLayerDefinitions() {
 	if (infile.open("engine/hero_layers.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while(infile.next()) {
 			if (infile.key == "layer") {
-				unsigned dir = parse_direction(popFirstString(infile.val));
+				unsigned dir = Parse::toDirection(Parse::popFirstString(infile.val));
 				if (dir>7) {
 					infile.error("GameSlotPreview: Hero layer direction must be in range [0,7]");
 					logErrorDialog("GameSlotPreview: Hero layer direction must be in range [0,7]");
 					mods->resetModConfig();
 					Exit(1);
 				}
-				std::string layer = popFirstString(infile.val);
+				std::string layer = Parse::popFirstString(infile.val);
 				while (layer != "") {
 					// check if already in layer_reference:
 					unsigned ref_pos;
@@ -79,7 +79,7 @@ void GameSlotPreview::loadLayerDefinitions() {
 						layer_reference_order.push_back(layer);
 					layer_def[dir].push_back(ref_pos);
 
-					layer = popFirstString(infile.val);
+					layer = Parse::popFirstString(infile.val);
 				}
 			}
 			else {

@@ -100,7 +100,7 @@ void TileSet::load(const std::string& filename) {
 			else if (infile.key == "tile") {
 				// @ATTR tileset.tile|int, int, int, int, int, int, int : Index, X, Y, Width, Height, X offset, Y offset|A single tile definition.
 
-				size_t index = popFirstInt(infile.val);
+				size_t index = Parse::popFirstInt(infile.val);
 
 				if (index >= tiles.size()) {
 					tiles.resize(index + 1);
@@ -110,14 +110,14 @@ void TileSet::load(const std::string& filename) {
 				}
 
 				Rect clip;
-				clip.x = popFirstInt(infile.val);
-				clip.y = popFirstInt(infile.val);
-				clip.w = popFirstInt(infile.val);
-				clip.h = popFirstInt(infile.val);
+				clip.x = Parse::popFirstInt(infile.val);
+				clip.y = Parse::popFirstInt(infile.val);
+				clip.w = Parse::popFirstInt(infile.val);
+				clip.h = Parse::popFirstInt(infile.val);
 
 				Point offset;
-				offset.x = popFirstInt(infile.val);
-				offset.y = popFirstInt(infile.val);
+				offset.x = Parse::popFirstInt(infile.val);
+				offset.y = Parse::popFirstInt(infile.val);
 
 				tile_images[index] = image_filenames.size() - 1;
 				tile_clips[index] = clip;
@@ -127,22 +127,22 @@ void TileSet::load(const std::string& filename) {
 				// @ATTR tileset.animation|list(int, int, int, duration) : Tile index, X, Y, duration|An animation for a tile. Durations are in 'ms' or 's'.
 
 				unsigned short frame = 0;
-				size_t index = popFirstInt(infile.val);
+				size_t index = Parse::popFirstInt(infile.val);
 
 				if (index >= anim.size())
 					anim.resize(index + 1);
 
-				std::string repeat_val = popFirstString(infile.val);
+				std::string repeat_val = Parse::popFirstString(infile.val);
 				while (repeat_val != "") {
 					anim[index].frames++;
 					anim[index].pos.resize(frame + 1);
 					anim[index].frame_duration.resize(frame + 1);
-					anim[index].pos[frame].x = toInt(repeat_val);
-					anim[index].pos[frame].y = popFirstInt(infile.val);
-					anim[index].frame_duration[frame] = static_cast<unsigned short>(parse_duration(popFirstString(infile.val)));
+					anim[index].pos[frame].x = Parse::toInt(repeat_val);
+					anim[index].pos[frame].y = Parse::popFirstInt(infile.val);
+					anim[index].frame_duration[frame] = static_cast<unsigned short>(Parse::toDuration(Parse::popFirstString(infile.val)));
 
 					frame++;
-					repeat_val = popFirstString(infile.val);
+					repeat_val = Parse::popFirstString(infile.val);
 				}
 			}
 			else {

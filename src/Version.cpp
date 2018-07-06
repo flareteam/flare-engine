@@ -111,15 +111,15 @@ Version stringToVersion(const std::string& s) {
 	std::string val = s + '.';
 	Version v;
 
-	v.x = static_cast<unsigned short>(popFirstInt(val, '.'));
+	v.x = static_cast<unsigned short>(Parse::popFirstInt(val, '.'));
 
-	std::string y = popFirstString(val, '.');
-	v.y = static_cast<unsigned short>(toInt(y));
+	std::string y = Parse::popFirstString(val, '.');
+	v.y = static_cast<unsigned short>(Parse::toInt(y));
 	if (y.length() == 1)
 		v.y = static_cast<unsigned short>(v.y * 10);
 
-	std::string z = popFirstString(val, '.');
-	v.z = static_cast<unsigned short>(toInt(z));
+	std::string z = Parse::popFirstString(val, '.');
+	v.z = static_cast<unsigned short>(Parse::toInt(z));
 	if (z.length() == 1)
 		v.z = static_cast<unsigned short>(v.z * 10);
 

@@ -261,27 +261,27 @@ void SaveLoad::loadGame() {
 		while (infile.next()) {
 			if (infile.key == "name") pc->stats.name = infile.val;
 			else if (infile.key == "permadeath") {
-				pc->stats.permadeath = toBool(infile.val);
+				pc->stats.permadeath = Parse::toBool(infile.val);
 			}
 			else if (infile.key == "option") {
-				pc->stats.gfx_base = popFirstString(infile.val);
-				pc->stats.gfx_head = popFirstString(infile.val);
-				pc->stats.gfx_portrait = popFirstString(infile.val);
+				pc->stats.gfx_base = Parse::popFirstString(infile.val);
+				pc->stats.gfx_head = Parse::popFirstString(infile.val);
+				pc->stats.gfx_portrait = Parse::popFirstString(infile.val);
 			}
 			else if (infile.key == "class") {
-				pc->stats.character_class = popFirstString(infile.val);
-				pc->stats.character_subclass = popFirstString(infile.val);
+				pc->stats.character_class = Parse::popFirstString(infile.val);
+				pc->stats.character_subclass = Parse::popFirstString(infile.val);
 			}
 			else if (infile.key == "xp") {
-				pc->stats.xp = toUnsignedLong(infile.val);
+				pc->stats.xp = Parse::toUnsignedLong(infile.val);
 			}
 			else if (infile.key == "hpmp") {
-				saved_hp = popFirstInt(infile.val);
-				saved_mp = popFirstInt(infile.val);
+				saved_hp = Parse::popFirstInt(infile.val);
+				saved_mp = Parse::popFirstInt(infile.val);
 			}
 			else if (infile.key == "build") {
 				for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
-					pc->stats.primary[i] = popFirstInt(infile.val);
+					pc->stats.primary[i] = Parse::popFirstInt(infile.val);
 					if (pc->stats.primary[i] < 0 || pc->stats.primary[i] > pc->stats.max_points_per_stat) {
 						logInfo("SaveLoad: Primary stat value for '%s' is out of bounds, setting to zero.", eset->primary_stats.list[i].id.c_str());
 						pc->stats.primary[i] = 0;
@@ -289,7 +289,7 @@ void SaveLoad::loadGame() {
 				}
 			}
 			else if (infile.key == "currency") {
-				currency = toInt(infile.val);
+				currency = Parse::toInt(infile.val);
 			}
 			else if (infile.key == "equipped") {
 				menu->inv->inventory[MenuInventory::EQUIPMENT].setItems(infile.val);
@@ -304,10 +304,10 @@ void SaveLoad::loadGame() {
 				menu->inv->inventory[MenuInventory::CARRIED].setQuantities(infile.val);
 			}
 			else if (infile.key == "spawn") {
-				mapr->teleport_mapname = popFirstString(infile.val);
+				mapr->teleport_mapname = Parse::popFirstString(infile.val);
 				if (mapr->teleport_mapname != "" && fileExists(mods->locate(mapr->teleport_mapname))) {
-					mapr->teleport_destination.x = static_cast<float>(popFirstInt(infile.val)) + 0.5f;
-					mapr->teleport_destination.y = static_cast<float>(popFirstInt(infile.val)) + 0.5f;
+					mapr->teleport_destination.x = static_cast<float>(Parse::popFirstInt(infile.val)) + 0.5f;
+					mapr->teleport_destination.y = static_cast<float>(Parse::popFirstInt(infile.val)) + 0.5f;
 					mapr->teleportation = true;
 					// prevent spawn.txt from putting us on the starting map
 					mapr->clearEvents();
@@ -322,7 +322,7 @@ void SaveLoad::loadGame() {
 			}
 			else if (infile.key == "actionbar") {
 				for (int i = 0; i < MenuActionBar::SLOT_MAX; i++) {
-					hotkeys[i] = popFirstInt(infile.val);
+					hotkeys[i] = Parse::popFirstInt(infile.val);
 					if (hotkeys[i] < 0) {
 						logError("SaveLoad: Hotkey power on position %d has negative id, skipping", i);
 						hotkeys[i] = 0;
@@ -339,37 +339,37 @@ void SaveLoad::loadGame() {
 				menu->act->set(hotkeys);
 			}
 			else if (infile.key == "transformed") {
-				pc->stats.transform_type = popFirstString(infile.val);
+				pc->stats.transform_type = Parse::popFirstString(infile.val);
 				if (pc->stats.transform_type != "") {
 					pc->stats.transform_duration = -1;
-					pc->stats.manual_untransform = toBool(popFirstString(infile.val));
+					pc->stats.manual_untransform = Parse::toBool(Parse::popFirstString(infile.val));
 				}
 			}
 			else if (infile.key == "powers") {
 				std::string power;
-				while ( (power = popFirstString(infile.val)) != "") {
-					if (toInt(power) > 0)
-						pc->stats.powers_list.push_back(toInt(power));
+				while ( (power = Parse::popFirstString(infile.val)) != "") {
+					if (Parse::toInt(power) > 0)
+						pc->stats.powers_list.push_back(Parse::toInt(power));
 				}
 			}
 			else if (infile.key == "campaign") camp->setAll(infile.val);
-			else if (infile.key == "time_played") pc->time_played = toUnsignedLong(infile.val);
+			else if (infile.key == "time_played") pc->time_played = Parse::toUnsignedLong(infile.val);
 			else if (infile.key == "engine_version") save_version = stringToVersion(infile.val);
 			else if (eset->misc.save_buyback && infile.key == "buyback_item") {
-				std::string npc_filename = popFirstString(infile.val, ';');
+				std::string npc_filename = Parse::popFirstString(infile.val, ';');
 				if (!npc_filename.empty()) {
 					menu->vendor->buyback_stock[npc_filename].init(NPC::VENDOR_MAX_STOCK);
 					menu->vendor->buyback_stock[npc_filename].setItems(infile.val);
 				}
 			}
 			else if (eset->misc.save_buyback && infile.key == "buyback_quantity") {
-				std::string npc_filename = popFirstString(infile.val, ';');
+				std::string npc_filename = Parse::popFirstString(infile.val, ';');
 				if (!npc_filename.empty()) {
 					menu->vendor->buyback_stock[npc_filename].init(NPC::VENDOR_MAX_STOCK);
 					menu->vendor->buyback_stock[npc_filename].setQuantities(infile.val);
 				}
 			}
-			else if (infile.key == "questlog_dismissed") pc->questlog_dismissed = toBool(infile.val);
+			else if (infile.key == "questlog_dismissed") pc->questlog_dismissed = Parse::toBool(infile.val);
 		}
 
 		infile.close();
@@ -452,7 +452,7 @@ void SaveLoad::loadClass(int index) {
 	ItemStack stack;
 	stack.quantity = 1;
 	while (carried != "") {
-		stack.item = popFirstInt(carried);
+		stack.item = Parse::popFirstInt(carried);
 		menu->inv->add(stack, MenuInventory::CARRIED, ItemStorage::NO_SLOT, !MenuInventory::ADD_PLAY_SOUND, !MenuInventory::ADD_AUTO_EQUIP);
 	}
 

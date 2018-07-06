@@ -152,13 +152,13 @@ void NPC::load(const std::string& npc_id) {
 				}
 				else if (infile.key == "direction") {
 					// @ATTR direction|direction|The direction to use for this NPC's stance animation.
-					direction = parse_direction(infile.val);
+					direction = Parse::toDirection(infile.val);
 				}
 
 				// handle talkers
 				else if (infile.key == "talker") {
 					// @ATTR talker|bool|Allows this NPC to be talked to.
-					talker = toBool(infile.val);
+					talker = Parse::toBool(infile.val);
 				}
 				else if (infile.key == "portrait") {
 					// @ATTR portrait|filename|Filename of the default portrait image.
@@ -168,27 +168,27 @@ void NPC::load(const std::string& npc_id) {
 				// handle vendors
 				else if (infile.key == "vendor") {
 					// @ATTR vendor|bool|Allows this NPC to buy/sell items.
-					vendor = toBool(infile.val);
+					vendor = Parse::toBool(infile.val);
 				}
 				else if (infile.key == "vendor_requires_status") {
 					// @ATTR vendor_requires_status|list(string)|The player must have these statuses in order to use this NPC as a vendor.
 					while (infile.val != "") {
-						vendor_requires_status.push_back(popFirstString(infile.val));
+						vendor_requires_status.push_back(Parse::popFirstString(infile.val));
 					}
 				}
 				else if (infile.key == "vendor_requires_not_status") {
 					// @ATTR vendor_requires_not_status|list(string)|The player must not have these statuses in order to use this NPC as a vendor.
 					while (infile.val != "") {
-						vendor_requires_not_status.push_back(popFirstString(infile.val));
+						vendor_requires_not_status.push_back(Parse::popFirstString(infile.val));
 					}
 				}
 				else if (infile.key == "constant_stock") {
 					// @ATTR constant_stock|repeatable(list(item_id))|A list of items this vendor has for sale. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.
 					while (infile.val != "") {
-						std::string temp = popFirstString(infile.val);
+						std::string temp = Parse::popFirstString(infile.val);
 						temp += ':';
-						stack.item = popFirstInt(temp, ':');
-						stack.quantity = popFirstInt(temp, ':');
+						stack.item = Parse::popFirstInt(temp, ':');
+						stack.quantity = Parse::popFirstInt(temp, ':');
 						if (stack.quantity == 0)
 							stack.quantity = 1;
 						stock.add(stack, ItemStorage::NO_SLOT);
@@ -196,12 +196,12 @@ void NPC::load(const std::string& npc_id) {
 				}
 				else if (infile.key == "status_stock") {
 					// @ATTR status_stock|repeatable(string, list(item_id)) : Required status, Item(s)|A list of items this vendor will have for sale if the required status is met. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.
-					if (camp->checkStatus(popFirstString(infile.val))) {
+					if (camp->checkStatus(Parse::popFirstString(infile.val))) {
 						while (infile.val != "") {
-							std::string temp = popFirstString(infile.val);
+							std::string temp = Parse::popFirstString(infile.val);
 							temp += ':';
-							stack.item = popFirstInt(temp, ':');
-							stack.quantity = popFirstInt(temp, ':');
+							stack.item = Parse::popFirstInt(temp, ':');
+							stack.quantity = Parse::popFirstInt(temp, ':');
 							if (stack.quantity == 0)
 								stack.quantity = 1;
 							stock.add(stack, ItemStorage::NO_SLOT);
@@ -220,8 +220,8 @@ void NPC::load(const std::string& npc_id) {
 				}
 				else if (infile.key == "random_stock_count") {
 					// @ATTR random_stock_count|int, int : Min, Max|Sets the minimum (and optionally, the maximum) amount of random items this npc can have.
-					random_table_count.x = popFirstInt(infile.val);
-					random_table_count.y = popFirstInt(infile.val);
+					random_table_count.x = Parse::popFirstInt(infile.val);
+					random_table_count.y = Parse::popFirstInt(infile.val);
 					if (random_table_count.x != 0 || random_table_count.y != 0) {
 						random_table_count.x = std::max(random_table_count.x, 1);
 						random_table_count.y = std::max(random_table_count.y, random_table_count.x);
@@ -404,7 +404,7 @@ bool NPC::checkMovement(unsigned int dialog_node) {
 	if (dialog_node < dialog.size()) {
 		for (unsigned int i=0; i<dialog[dialog_node].size(); i++) {
 			if (dialog[dialog_node][i].type == EC_NPC_ALLOW_MOVEMENT)
-				return toBool(dialog[dialog_node][i].s);
+				return Parse::toBool(dialog[dialog_node][i].s);
 		}
 	}
 	return true;

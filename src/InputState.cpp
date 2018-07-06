@@ -124,23 +124,23 @@ void InputState::loadKeyBindings() {
 
 		if (infile.section.empty()) {
 			// this is a traditional keybindings file that has been written by the engine via saveKeyBindings()
-			key1 = toInt(popFirstString(infile.val), -1);
-			key2 = toInt(popFirstString(infile.val), -1);
-			key3 = toInt(popFirstString(infile.val), -1);
+			key1 = Parse::toInt(Parse::popFirstString(infile.val), -1);
+			key2 = Parse::toInt(Parse::popFirstString(infile.val), -1);
+			key3 = Parse::toInt(Parse::popFirstString(infile.val), -1);
 		}
 		else if (infile.section == "default") {
 			// this is a set of default keybindings located in a mod
-			std::string str1 = popFirstString(infile.val);
-			std::string str2 = popFirstString(infile.val);
-			std::string str3 = popFirstString(infile.val);
+			std::string str1 = Parse::popFirstString(infile.val);
+			std::string str2 = Parse::popFirstString(infile.val);
+			std::string str3 = Parse::popFirstString(infile.val);
 
 			if (str1.length() > 6 && str1.substr(0, 6) == "mouse_")
-				key1 = (toInt(str1.substr(6))+ 1 + MOUSE_BIND_OFFSET) * (-1);
+				key1 = (Parse::toInt(str1.substr(6))+ 1 + MOUSE_BIND_OFFSET) * (-1);
 			else if (str1 != "-1")
 				key1 = getKeyFromName(str1);
 
 			if (str2.length() > 6 && str2.substr(0, 6) == "mouse_")
-				key2 = (toInt(str1.substr(6))+ 1 + MOUSE_BIND_OFFSET) * (-1);
+				key2 = (Parse::toInt(str1.substr(6))+ 1 + MOUSE_BIND_OFFSET) * (-1);
 			else if (str2 != "-1")
 				key2 = getKeyFromName(str2);
 
@@ -148,14 +148,14 @@ void InputState::loadKeyBindings() {
 				size_t pos_minus = str3.find('-');
 				size_t pos_plus = str3.find('+');
 				if (pos_minus != std::string::npos) {
-					key3 = ((toInt(str3.substr(5, pos_minus)) * 2) + JOY_AXIS_OFFSET) * (-1);
+					key3 = ((Parse::toInt(str3.substr(5, pos_minus)) * 2) + JOY_AXIS_OFFSET) * (-1);
 				}
 				else if (pos_plus != std::string::npos) {
-					key3 = ((toInt(str3.substr(5, pos_plus)) * 2) + 1 + JOY_AXIS_OFFSET) * (-1);
+					key3 = ((Parse::toInt(str3.substr(5, pos_plus)) * 2) + 1 + JOY_AXIS_OFFSET) * (-1);
 				}
 			}
 			else if (str3.length() > 4 && str3.substr(0, 4) == "joy_")
-				key3 = toInt(str3.substr(4));
+				key3 = Parse::toInt(str3.substr(4));
 		}
 		else
 			continue;
