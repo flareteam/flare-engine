@@ -38,13 +38,10 @@ private:
 	WidgetLabel label_title;
 	WidgetLabel label_currency;
 
-	int STASH_SLOTS;
-
-	// label and widget positions
-	int slots_cols;
-	int slots_rows;
-
 public:
+	static const int NO_SLOT = -1;
+	static const bool ADD_PLAY_SOUND = true;
+
 	explicit MenuStash(StatBlock *stats);
 	~MenuStash();
 	void align();

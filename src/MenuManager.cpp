@@ -676,7 +676,7 @@ void MenuManager::logic() {
 					inpt->lock[Input::MAIN1] = true;
 					stack = inv->click(inpt->mouse);
 					if (stash->visible) {
-						if (!stash->add(stack, -1, true)) {
+						if (!stash->add(stack, MenuStash::NO_SLOT, MenuStash::ADD_PLAY_SOUND)) {
 							inv->itemReturn(stash->drop_stack.front());
 							stash->drop_stack.pop();
 						}
@@ -936,7 +936,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 				vendor->add(drag_stack);
 			}
 			else if (stash->visible) {
-				if (!stash->add(drag_stack, -1, true)) {
+				if (!stash->add(drag_stack, MenuStash::NO_SLOT, MenuStash::ADD_PLAY_SOUND)) {
 					inv->itemReturn(stash->drop_stack.front());
 					stash->drop_stack.pop();
 				}

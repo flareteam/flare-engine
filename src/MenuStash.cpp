@@ -50,8 +50,8 @@ MenuStash::MenuStash(StatBlock *_stats)
 
 	setBackground("images/menus/stash.png");
 
-	slots_cols = 8; // default if menus/stash.txt::stash_cols not set
-	slots_rows = 8; // default if menus/stash.txt::slots_rows not set
+	int slots_cols = 8; // default if menus/stash.txt::stash_cols not set
+	int slots_rows = 8; // default if menus/stash.txt::slots_rows not set
 
 	// Load config settings
 	FileParser infile;
@@ -99,12 +99,12 @@ MenuStash::MenuStash(StatBlock *_stats)
 
 	label_currency.setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
-	STASH_SLOTS = slots_cols * slots_rows;
+	int stash_slots = slots_cols * slots_rows;
 	slots_area.w = slots_cols * eset->resolutions.icon_size;
 	slots_area.h = slots_rows * eset->resolutions.icon_size;
 
-	stock.initGrid(STASH_SLOTS, slots_area, slots_cols);
-	for (int i = 0; i < STASH_SLOTS; i++) {
+	stock.initGrid(stash_slots, slots_area, slots_cols);
+	for (int i = 0; i < stash_slots; i++) {
 		tablist.add(stock.slots[i]);
 	}
 
@@ -171,12 +171,12 @@ bool MenuStash::drop(const Point& position, ItemStack stack) {
 	drag_prev_slot = stock.drag_prev_slot;
 
 	if (slot == -1) {
-		success = add(stack, slot, false);
+		success = add(stack, slot, !ADD_PLAY_SOUND);
 	}
 	else if (drag_prev_slot != -1) {
 		if (stock[slot].item == stack.item || stock[slot].empty()) {
 			// Drop the stack, merging if needed
-			success = add(stack, slot, false);
+			success = add(stack, slot, !ADD_PLAY_SOUND);
 		}
 		else if (drag_prev_slot != -1 && stock[drag_prev_slot].empty()) {
 			// Check if the previous slot is free (could still be used if SHIFT was used).
@@ -191,7 +191,7 @@ bool MenuStash::drop(const Point& position, ItemStack stack) {
 		}
 	}
 	else {
-		success = add(stack, slot, false);
+		success = add(stack, slot, !ADD_PLAY_SOUND);
 	}
 
 	return success;
