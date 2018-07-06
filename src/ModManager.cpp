@@ -109,8 +109,8 @@ ModManager::ModManager(const std::vector<std::string> *_cmd_line_mods)
 	setPaths();
 
 	std::vector<std::string> mod_dirs_other;
-	getDirList(settings->path_data + "mods", mod_dirs_other);
-	getDirList(settings->path_user + "mods", mod_dirs_other);
+	Filesystem::getDirList(settings->path_data + "mods", mod_dirs_other);
+	Filesystem::getDirList(settings->path_user + "mods", mod_dirs_other);
 
 	for (unsigned i=0; i<mod_dirs_other.size(); ++i) {
 		if (find(mod_dirs.begin(), mod_dirs.end(), mod_dirs_other[i]) == mod_dirs.end())
@@ -239,7 +239,7 @@ std::string ModManager::locate(const std::string& filename) {
 	for (size_t i = mod_list.size(); i > 0; i--) {
 		for (size_t j = 0; j < mod_paths.size(); j++) {
 			test_path = mod_paths[j] + "mods/" + mod_list[i-1].name + "/" + filename;
-			if (fileExists(test_path)) {
+			if (Filesystem::fileExists(test_path)) {
 				loc_cache[filename] = test_path;
 				return test_path;
 			}
@@ -248,16 +248,16 @@ std::string ModManager::locate(const std::string& filename) {
 
 	// all else failing, simply return the filename if it exists
 	test_path = settings->path_data + filename;
-	if (!fileExists(test_path))
+	if (!Filesystem::fileExists(test_path))
 		test_path = "";
 
 	return test_path;
 }
 
 void amendPathToVector(const std::string &path, std::vector<std::string> &vec) {
-	if (pathExists(path)) {
-		if (isDirectory(path)) {
-			getFileList(path, "txt", vec);
+	if (Filesystem::pathExists(path)) {
+		if (Filesystem::isDirectory(path)) {
+			Filesystem::getFileList(path, "txt", vec);
 		}
 		else {
 			vec.push_back(path);
@@ -535,7 +535,7 @@ void ModManager::saveMods() {
 void ModManager::resetModConfig() {
 	std::string config_path = settings->path_conf + "mods.txt";
 	logError("ModManager: Game data is either missing or misconfigured. Deleting '%s' in attempt to recover.", config_path.c_str());
-	removeFile(config_path);
+	Filesystem::removeFile(config_path);
 }
 
 ModManager::~ModManager() {

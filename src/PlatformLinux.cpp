@@ -60,7 +60,7 @@ void Platform::setPaths() {
 	// $HOME/.config/flare/
 	else if (getenv("HOME") != NULL) {
 		settings->path_conf = (std::string)getenv("HOME") + "/.config/";
-		createDir(settings->path_conf);
+		Filesystem::createDir(settings->path_conf);
 		settings->path_conf += "flare/";
 	}
 	// ./config/
@@ -68,7 +68,7 @@ void Platform::setPaths() {
 		settings->path_conf = "./config/";
 	}
 
-	createDir(settings->path_conf);
+	Filesystem::createDir(settings->path_conf);
 
 	// set user path (save games)
 	// $XDG_DATA_HOME/flare/
@@ -78,9 +78,9 @@ void Platform::setPaths() {
 	// $HOME/.local/share/flare/
 	else if (getenv("HOME") != NULL) {
 		settings->path_user = (std::string)getenv("HOME") + "/.local/";
-		createDir(settings->path_user);
+		Filesystem::createDir(settings->path_user);
 		settings->path_user += "share/";
-		createDir(settings->path_user);
+		Filesystem::createDir(settings->path_user);
 		settings->path_user += "flare/";
 	}
 	// ./saves/
@@ -88,9 +88,9 @@ void Platform::setPaths() {
 		settings->path_user = "./userdata/";
 	}
 
-	createDir(settings->path_user);
-	createDir(settings->path_user + "mods/");
-	createDir(settings->path_user + "saves/");
+	Filesystem::createDir(settings->path_user);
+	Filesystem::createDir(settings->path_user + "mods/");
+	Filesystem::createDir(settings->path_user + "saves/");
 
 	// data folder
 	// while settings->path_conf and settings->path_user are created if not found,
@@ -105,7 +105,7 @@ void Platform::setPaths() {
 	bool path_data = false;
 
 	// if the user specified a data path, try to use it
-	if (pathExists(settings->custom_path_data)) {
+	if (Filesystem::pathExists(settings->custom_path_data)) {
 		if (!path_data) settings->path_data = settings->custom_path_data;
 		path_data = true;
 	}
@@ -115,7 +115,7 @@ void Platform::setPaths() {
 	}
 
 	// Check for the local data before trying installed ones.
-	if (pathExists("./mods")) {
+	if (Filesystem::pathExists("./mods")) {
 		if (!path_data) settings->path_data = "./";
 		path_data = true;
 	}
@@ -129,7 +129,7 @@ void Platform::setPaths() {
 		while (pathtest != "") {
 			if (!path_data) {
 				settings->path_data = pathtest + "/flare/";
-				if (pathExists(settings->path_data)) path_data = true;
+				if (Filesystem::pathExists(settings->path_data)) path_data = true;
 			}
 			if (path_data) break;
 			pathtest = Parse::popFirstString(pathlist,':');
@@ -138,22 +138,22 @@ void Platform::setPaths() {
 
 #if defined DATA_INSTALL_DIR
 	if (!path_data) settings->path_data = DATA_INSTALL_DIR "/";
-	if (!path_data && pathExists(settings->path_data)) path_data = true;
+	if (!path_data && Filesystem::pathExists(settings->path_data)) path_data = true;
 #endif
 
 	// check /usr/local/share/flare/ and /usr/share/flare/ next
 	if (!path_data) settings->path_data = "/usr/local/share/flare/";
-	if (!path_data && pathExists(settings->path_data)) path_data = true;
+	if (!path_data && Filesystem::pathExists(settings->path_data)) path_data = true;
 
 	if (!path_data) settings->path_data = "/usr/share/flare/";
-	if (!path_data && pathExists(settings->path_data)) path_data = true;
+	if (!path_data && Filesystem::pathExists(settings->path_data)) path_data = true;
 
 	// check "games" variants of these
 	if (!path_data) settings->path_data = "/usr/local/share/games/flare/";
-	if (!path_data && pathExists(settings->path_data)) path_data = true;
+	if (!path_data && Filesystem::pathExists(settings->path_data)) path_data = true;
 
 	if (!path_data) settings->path_data = "/usr/share/games/flare/";
-	if (!path_data && pathExists(settings->path_data)) path_data = true;
+	if (!path_data && Filesystem::pathExists(settings->path_data)) path_data = true;
 
 	// finally assume the local folder
 	if (!path_data)	settings->path_data = "./";
@@ -161,7 +161,7 @@ void Platform::setPaths() {
 
 bool Platform::dirCreate(const std::string& path) {
 	if (mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IRWXO) == -1) {
-		std::string error_msg = "createDir (" + path + ")";
+		std::string error_msg = "Platform::dirCreate (" + path + ")";
 		perror(error_msg.c_str());
 		return false;
 	}
@@ -170,7 +170,7 @@ bool Platform::dirCreate(const std::string& path) {
 
 bool Platform::dirRemove(const std::string& path) {
 	if (rmdir(path.c_str()) == -1) {
-		std::string error_msg = "removeDir (" + path + ")";
+		std::string error_msg = "Platform::dirRemove (" + path + ")";
 		perror(error_msg.c_str());
 		return false;
 	}

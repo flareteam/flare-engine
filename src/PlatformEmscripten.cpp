@@ -51,12 +51,12 @@ Platform::~Platform() {
 
 void Platform::setPaths() {
 	settings->path_conf = "/flare_data/config/";
-	createDir(settings->path_conf);
+	Filesystem::createDir(settings->path_conf);
 
 	settings->path_user = "/flare_data/userdata/";
-	createDir(settings->path_user);
-	createDir(settings->path_user + "mods/");
-	createDir(settings->path_user + "saves/");
+	Filesystem::createDir(settings->path_user);
+	Filesystem::createDir(settings->path_user + "mods/");
+	Filesystem::createDir(settings->path_user + "saves/");
 
 	// data folder
 
@@ -64,7 +64,7 @@ void Platform::setPaths() {
 	bool path_data = false;
 
 	// Check for the local data before trying installed ones.
-	if (pathExists("./mods")) {
+	if (Filesystem::pathExists("./mods")) {
 		if (!path_data) settings->path_data = "./";
 		path_data = true;
 	}
@@ -78,7 +78,7 @@ void Platform::setExitEventFilter() {
 
 bool Platform::dirCreate(const std::string& path) {
 	if (mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IRWXO) == -1) {
-		std::string error_msg = "createDir (" + path + ")";
+		std::string error_msg = "Platform::dirCreate (" + path + ")";
 		perror(error_msg.c_str());
 		return false;
 	}
@@ -87,7 +87,7 @@ bool Platform::dirCreate(const std::string& path) {
 
 bool Platform::dirRemove(const std::string& path) {
 	if (rmdir(path.c_str()) == -1) {
-		std::string error_msg = "removeDir (" + path + ")";
+		std::string error_msg = "Platform::dirRemove (" + path + ")";
 		perror(error_msg.c_str());
 		return false;
 	}

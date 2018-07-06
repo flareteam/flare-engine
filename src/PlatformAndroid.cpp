@@ -122,7 +122,7 @@ void Platform::setPaths() {
 	}
 
 	for (int i = 0; i < internalSDList.size(); i++) {
-		if (pathExists(internalSDList[i])) {
+		if (Filesystem::pathExists(internalSDList[i])) {
 			settings->path_user = internalSDList[i] + "/Flare";
 			settings->path_conf = settings->path_user + "/config";
 
@@ -137,9 +137,9 @@ void Platform::setPaths() {
 		logError("Settings: Android external storage unavailable: %s", SDL_GetError());
 	}
 
-	if (settings->path_user.empty() || !pathExists(settings->path_user)) {
+	if (settings->path_user.empty() || !Filesystem::pathExists(settings->path_user)) {
 		for (int i = 0; i < externalSDList.size(); i++) {
-			if (pathExists(externalSDList[i])) {
+			if (Filesystem::pathExists(externalSDList[i])) {
 				settings->path_user = externalSDList[i] + "/Flare";
 				settings->path_conf = settings->path_user + "/config";
 
@@ -148,10 +148,10 @@ void Platform::setPaths() {
 		}
 	}
 
-	createDir(settings->path_user);
-	createDir(settings->path_conf);
-	createDir(settings->path_user + "/mods");
-	createDir(settings->path_user + "/saves");
+	Filesystem::createDir(settings->path_user);
+	Filesystem::createDir(settings->path_conf);
+	Filesystem::createDir(settings->path_user + "/mods");
+	Filesystem::createDir(settings->path_user + "/saves");
 
 	settings->path_conf += "/";
 	settings->path_user += "/";
@@ -164,7 +164,7 @@ void Platform::setExitEventFilter() {
 
 bool Platform::dirCreate(const std::string& path) {
 	if (mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IRWXO) == -1) {
-		std::string error_msg = "createDir (" + path + ")";
+		std::string error_msg = "Platform::dirCreate (" + path + ")";
 		perror(error_msg.c_str());
 		return false;
 	}
@@ -173,7 +173,7 @@ bool Platform::dirCreate(const std::string& path) {
 
 bool Platform::dirRemove(const std::string& path) {
 	if (rmdir(path.c_str()) == -1) {
-		std::string error_msg = "removeDir (" + path + ")";
+		std::string error_msg = "Platform::dirRemove (" + path + ")";
 		perror(error_msg.c_str());
 		return false;
 	}

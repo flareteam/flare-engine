@@ -35,7 +35,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 /**
  * Check to see if a directory/folder exists
  */
-bool pathExists(const std::string &path) {
+bool Filesystem::pathExists(const std::string &path) {
 	struct stat st;
 	return (stat(path.c_str(), &st) == 0);
 }
@@ -44,32 +44,18 @@ bool pathExists(const std::string &path) {
  * Create this folder if it doesn't already exist
  */
 
-void createDir(const std::string &path) {
+void Filesystem::createDir(const std::string &path) {
 	if (isDirectory(path, false))
 		return;
 
 	PLATFORM.dirCreate(path);
 }
 
-bool isDirectory(const std::string &path, bool show_error) {
-	struct stat st;
-	if (stat(path.c_str(), &st) == -1) {
-		if (show_error) {
-			std::string error_msg = "isDirectory (" + path + ")";
-			perror(error_msg.c_str());
-		}
-		return false;
-	}
-	else {
-		return (st.st_mode & S_IFDIR) != 0;
-	}
-}
-
 /**
  * Check to see if a file exists
  * The filename parameter should include the entire path to this file
  */
-bool fileExists(const std::string &filename) {
+bool Filesystem::fileExists(const std::string &filename) {
 	if (isDirectory(filename, false)) return false;
 
 	std::ifstream infile(filename.c_str());
@@ -82,7 +68,7 @@ bool fileExists(const std::string &filename) {
 /**
  * Returns a vector containing all filenames in a given folder with the given extension
  */
-int getFileList(const std::string &dir, const std::string &ext, std::vector<std::string> &files) {
+int Filesystem::getFileList(const std::string &dir, const std::string &ext, std::vector<std::string> &files) {
 
 	DIR *dp;
 	struct dirent *dirp;
@@ -104,7 +90,7 @@ int getFileList(const std::string &dir, const std::string &ext, std::vector<std:
 /**
  * Returns a vector containing all directory names in a given directory
  */
-int getDirList(const std::string &dir, std::vector<std::string> &dirs) {
+int Filesystem::getDirList(const std::string &dir, std::vector<std::string> &dirs) {
 
 	DIR *dp;
 	struct dirent *dirp;
@@ -130,23 +116,37 @@ int getDirList(const std::string &dir, std::vector<std::string> &dirs) {
 	return 0;
 }
 
-bool removeFile(const std::string &file) {
+bool Filesystem::isDirectory(const std::string &path, bool show_error) {
+	struct stat st;
+	if (stat(path.c_str(), &st) == -1) {
+		if (show_error) {
+			std::string error_msg = "Filesystem::isDirectory (" + path + ")";
+			perror(error_msg.c_str());
+		}
+		return false;
+	}
+	else {
+		return (st.st_mode & S_IFDIR) != 0;
+	}
+}
+
+bool Filesystem::removeFile(const std::string &file) {
 	if (remove(file.c_str()) != 0) {
-		std::string error_msg = "removeFile (" + file + ")";
+		std::string error_msg = "Filesystem::removeFile (" + file + ")";
 		perror(error_msg.c_str());
 		return false;
 	}
 	return true;
 }
 
-bool removeDir(const std::string &dir) {
+bool Filesystem::removeDir(const std::string &dir) {
 	if (!isDirectory(dir))
 		return false;
 
 	return PLATFORM.dirRemove(dir);
 }
 
-bool removeDirRecursive(const std::string &dir) {
+bool Filesystem::removeDirRecursive(const std::string &dir) {
 	std::vector<std::string> dir_list;
 	std::vector<std::string> file_list;
 
@@ -170,7 +170,7 @@ bool removeDirRecursive(const std::string &dir) {
 /**
  * Convert from stringstream to filesystem path string in an os-independent fashion
  */
-std::string path(const std::stringstream* ss) {
+std::string Filesystem::path(const std::stringstream* ss) {
 	std::string path = ss->str();
 
 	bool is_windows_path = false;
@@ -195,9 +195,9 @@ std::string path(const std::stringstream* ss) {
 	return path;
 }
 
-bool renameFile(const std::string &oldfile, const std::string &newfile) {
+bool Filesystem::renameFile(const std::string &oldfile, const std::string &newfile) {
 	if (rename(oldfile.c_str(), newfile.c_str()) != 0) {
-		std::string error_msg = "renameFile (" + oldfile + " -> " + newfile + ")";
+		std::string error_msg = "Filesystem::renameFile (" + oldfile + " -> " + newfile + ")";
 		perror(error_msg.c_str());
 		return false;
 	}

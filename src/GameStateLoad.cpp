@@ -282,7 +282,7 @@ void GameStateLoad::readGameSlots() {
 	std::stringstream filename;
 	std::vector<std::string> save_dirs;
 
-	getDirList(settings->path_user + "saves/" + eset->misc.save_prefix, save_dirs);
+	Filesystem::getDirList(settings->path_user + "saves/" + eset->misc.save_prefix, save_dirs);
 	std::sort(save_dirs.begin(), save_dirs.end(), compareSaveDirs);
 
 	// save dirs can only be >= 1
@@ -383,7 +383,7 @@ void GameStateLoad::loadPreview(GameSlot* slot) {
 
 	// fall back to default if it exists
 	for (unsigned int i=0; i<preview_layer.size(); i++) {
-		bool exists = fileExists(mods->locate("animations/avatar/" + slot->stats.gfx_base + "/default_" + preview_layer[i] + ".txt"));
+		bool exists = Filesystem::fileExists(mods->locate("animations/avatar/" + slot->stats.gfx_base + "/default_" + preview_layer[i] + ".txt"));
 		if (exists) {
 			img_gfx.push_back("default_" + preview_layer[i]);
 		}
@@ -568,7 +568,7 @@ void GameStateLoad::updateButtons() {
 	loadPortrait(selected_slot);
 
 	// check status of New Game button
-	if (!fileExists(mods->locate("maps/spawn.txt"))) {
+	if (!Filesystem::fileExists(mods->locate("maps/spawn.txt"))) {
 		button_new->enabled = false;
 		tablist.remove(button_new);
 		button_new->tooltip = msg->get("Enable a story mod to continue");
@@ -589,7 +589,7 @@ void GameStateLoad::updateButtons() {
 
 		button_load->label = msg->get("Load Game");
 		if (game_slots[selected_slot]->current_map == "") {
-			if (!fileExists(mods->locate("maps/spawn.txt"))) {
+			if (!Filesystem::fileExists(mods->locate("maps/spawn.txt"))) {
 				button_load->enabled = false;
 				tablist.remove(button_load);
 				button_load->tooltip = msg->get("Enable a story mod to continue");
@@ -849,7 +849,7 @@ void GameStateLoad::refreshSavePaths() {
 			std::stringstream oldpath, newpath;
 			oldpath << settings->path_user << "saves/" << eset->misc.save_prefix << "/" << game_slots[i]->id;
 			newpath << settings->path_user << "saves/" << eset->misc.save_prefix << "/" << i+1;
-			if (renameFile(oldpath.str(), newpath.str())) {
+			if (Filesystem::renameFile(oldpath.str(), newpath.str())) {
 				game_slots[i]->id = static_cast<unsigned>(i+1);
 			}
 		}

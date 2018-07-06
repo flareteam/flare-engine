@@ -46,26 +46,26 @@ void Platform::setPaths() {
 	// handle Windows-specific path options
 	if (getenv("APPDATA") != NULL) {
 		settings->path_conf = settings->path_user = (std::string)getenv("APPDATA") + "\\flare";
-		createDir(settings->path_conf);
-		createDir(settings->path_user);
+		Filesystem::createDir(settings->path_conf);
+		Filesystem::createDir(settings->path_user);
 
 		settings->path_conf += "\\config";
 		settings->path_user += "\\userdata";
-		createDir(settings->path_conf);
-		createDir(settings->path_user);
+		Filesystem::createDir(settings->path_conf);
+		Filesystem::createDir(settings->path_user);
 	}
 	else {
 		settings->path_conf = "config";
 		settings->path_user = "userdata";
-		createDir(settings->path_conf);
-		createDir(settings->path_user);
+		Filesystem::createDir(settings->path_conf);
+		Filesystem::createDir(settings->path_user);
 	}
 
-	createDir(settings->path_user + "\\mods");
-	createDir(settings->path_user + "\\saves");
+	Filesystem::createDir(settings->path_user + "\\mods");
+	Filesystem::createDir(settings->path_user + "\\saves");
 
 	settings->path_data = "";
-	if (pathExists(settings->custom_path_data)) settings->path_data = settings->custom_path_data;
+	if (Filesystem::pathExists(settings->custom_path_data)) settings->path_data = settings->custom_path_data;
 	else if (!settings->custom_path_data.empty()) {
 		logError("Settings: Could not find specified game data directory.");
 		settings->custom_path_data = "";
@@ -77,7 +77,7 @@ void Platform::setPaths() {
 
 bool Platform::dirCreate(const std::string& path) {
 	if (_mkdir(path.c_str()) != 0) {
-		std::string error_msg = "createDir (" + path + ")";
+		std::string error_msg = "Platform::dirCreate (" + path + ")";
 		perror(error_msg.c_str());
 		return false;
 	}
@@ -86,7 +86,7 @@ bool Platform::dirCreate(const std::string& path) {
 
 bool Platform::dirRemove(const std::string& path) {
 	if (_rmdir(path.c_str()) != 0) {
-		std::string error_msg = "removeDir (" + path + ")";
+		std::string error_msg = "Platform::dirRemove (" + path + ")";
 		perror(error_msg.c_str());
 		return false;
 	}

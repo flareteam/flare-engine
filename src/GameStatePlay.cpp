@@ -583,7 +583,7 @@ void GameStatePlay::checkEquipmentChange() {
 			}
 			// fall back to default if it exists
 			if (gfx.gfx == "") {
-				bool exists = fileExists(mods->locate("animations/avatar/" + pc->stats.gfx_base + "/default_" + gfx.type + ".txt"));
+				bool exists = Filesystem::fileExists(mods->locate("animations/avatar/" + pc->stats.gfx_base + "/default_" + gfx.type + ".txt"));
 				if (exists) gfx.gfx = "default_" + gfx.type;
 			}
 			img_gfx.push_back(gfx);

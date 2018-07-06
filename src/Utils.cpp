@@ -331,8 +331,8 @@ void createLogFile() {
 	LOG_PATH = settings->path_conf + "/flare_log.txt";
 
 	// always create a new log file on each launch
-	if (fileExists(LOG_PATH)) {
-		removeFile(LOG_PATH);
+	if (Filesystem::fileExists(LOG_PATH)) {
+		Filesystem::removeFile(LOG_PATH);
 	}
 
 	FILE *log_file = fopen(LOG_PATH.c_str(), "w+");
@@ -375,10 +375,10 @@ void createSaveDir(int slot) {
 	std::stringstream ss;
 	ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/";
 
-	createDir(path(&ss));
+	Filesystem::createDir(Filesystem::path(&ss));
 
 	ss << slot;
-	createDir(path(&ss));
+	Filesystem::createDir(Filesystem::path(&ss));
 }
 
 void removeSaveDir(int slot) {
@@ -388,8 +388,8 @@ void removeSaveDir(int slot) {
 	std::stringstream ss;
 	ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/" << slot;
 
-	if (isDirectory(path(&ss))) {
-		removeDirRecursive(path(&ss));
+	if (Filesystem::isDirectory(Filesystem::path(&ss))) {
+		Filesystem::removeDirRecursive(Filesystem::path(&ss));
 	}
 }
 

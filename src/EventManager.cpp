@@ -710,7 +710,7 @@ bool EventManager::executeEvent(Event &ev) {
 				ec->y = random_ec.y;
 			}
 
-			if (fileExists(mods->locate(ec->s))) {
+			if (Filesystem::fileExists(mods->locate(ec->s))) {
 				mapr->teleportation = true;
 				mapr->teleport_mapname = ec->s;
 
