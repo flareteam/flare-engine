@@ -34,47 +34,35 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "WidgetLabel.h"
 
-#define SEPARATOR_HEIGHT 2
-#define ITEM_SPACING 2
-#define MENU_BORDER 8
+MenuNPCActions::Action::Action(const std::string& _id, const std::string& _label)
+	: id(_id)
+	, label(!id.empty() ? new WidgetLabel() : NULL)
+{
+	if (label)
+		label->setText(_label);
+}
 
-class Action {
-public:
-	Action(const std::string& _id = "", std::string _label = "")
-		: id(_id)
-		, label(id != "" ? new WidgetLabel() : NULL) {
-		if (label)
-			label->setText(_label);
-	}
+MenuNPCActions::Action::Action(const Action &r) {
+	*this = r;
+}
 
-	Action(const Action &r)
-		: id(r.id)
-		, label(id != "" ? new WidgetLabel() : NULL) {
-		if (label)
-			label->setText(r.label->getText());
-
-		rect = r.rect;
-	}
-
-	Action& operator=(const Action &r) {
-		id = r.id;
-		label = (id != "") ? new WidgetLabel() : NULL;
-		if (label)
-			label->setText(r.label->getText());
-
-		rect = r.rect;
-
+MenuNPCActions::Action& MenuNPCActions::Action::operator=(const MenuNPCActions::Action &r) {
+	if (this == &r)
 		return *this;
-	}
 
-	virtual ~Action() {
-		delete label;
-	}
+	id = r.id;
+	label = !id.empty() ? new WidgetLabel() : NULL;
+	if (label)
+		label->setText(r.label->getText());
 
-	std::string id;
-	WidgetLabel *label;
-	Rect rect;
-};
+	rect = r.rect;
+
+	return *this;
+}
+
+MenuNPCActions::Action::~Action() {
+	delete label;
+}
 
 MenuNPCActions::MenuNPCActions()
 	: Menu()

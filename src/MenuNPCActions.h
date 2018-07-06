@@ -24,12 +24,29 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define MENU_NPC_ACTIONS_H
 
 #include "CommonIncludes.h"
+#include "Utils.h"
 
-class Action;
 class NPC;
+class WidgetLabel;
 
 class MenuNPCActions : public Menu {
 private:
+	class Action {
+	public:
+		Action(const std::string& _id = "", const std::string& _label = "");
+		~Action();
+		Action(const Action &r);
+		Action& operator=(const Action &r);
+
+		std::string id;
+		WidgetLabel *label;
+		Rect rect;
+	};
+
+	static const int SEPARATOR_HEIGHT = 2;
+	static const int ITEM_SPACING = 2;
+	static const int MENU_BORDER = 8;
+
 	typedef std::vector<Action> ActionsContainer;
 	typedef ActionsContainer::iterator ActionsIterator;
 
