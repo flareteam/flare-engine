@@ -16,6 +16,7 @@ fi=Suomi
 fr=Français
 gd=Gàidhlig
 gl=Galego
+# he=עברית
 it=Italiano
 ja=Japanese
 nb=Norsk Bokmål
