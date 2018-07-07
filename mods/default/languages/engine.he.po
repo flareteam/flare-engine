@@ -10,86 +10,83 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-06-18 12:53-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
-"Language-Team: Belarusian (https://www.transifex.com/flareorg/teams/84925/be/)\n"
+"Language-Team: Hebrew (https://www.transifex.com/flareorg/teams/84925/he/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: be\n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
+"Language: he\n"
+"Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;\n"
 
 #: ../../../src/Avatar.cpp:363
 #, c-format
 msgid "Congratulations, you have reached level %d!"
-msgstr "Віншуем, вы дасягнулі %d ўзроўня!"
+msgstr ""
 
 #: ../../../src/Avatar.cpp:365
 msgid "You may increase one attribute through the Character Menu."
-msgstr "Вы можаце палепшыць адзін атрыбут у меню персанажа."
+msgstr ""
 
 #: ../../../src/Avatar.cpp:583
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
 msgstr ""
-"Вы зазналі паразу. Гульня завершана. Націсніце ${INPUT_CONTINUE}, каб выйсці"
-" ў меню."
 
 #: ../../../src/Avatar.cpp:589
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
-msgstr "Вы зазналі паразу. Націсніце ${INPUT_CONTINUE}, каб працягнуць."
+msgstr ""
 
 #: ../../../src/Avatar.cpp:842
 msgid "Transformation expired. You have been moved back to a safe place."
-msgstr "Трансфармацыя завершана. Вы вярнуліся ў бяспечнае месца."
+msgstr ""
 
 #: ../../../src/CampaignManager.cpp:126
 #, c-format
 msgid "%d %s removed."
-msgstr "%d %s прыбрана."
+msgstr ""
 
 #: ../../../src/CampaignManager.cpp:135
 #, c-format
 msgid "%s removed."
-msgstr "%s прыбрана."
+msgstr ""
 
 #: ../../../src/CampaignManager.cpp:148
 #, c-format
 msgid "You receive %s."
-msgstr "Вы атрымліваеце %s."
+msgstr ""
 
 #: ../../../src/CampaignManager.cpp:150
 #, c-format
 msgid "You receive %s x%d."
-msgstr "Вы атрымліваеце %s x%d."
+msgstr ""
 
 #: ../../../src/CampaignManager.cpp:159
 #, c-format
 msgid "You receive %d %s."
-msgstr "Вы атрымліваеце %d %s."
+msgstr ""
 
 #: ../../../src/CampaignManager.cpp:168
 #, c-format
 msgid "You receive %d XP."
-msgstr "Вы атрымліваеце %d жыцця."
+msgstr ""
 
 #: ../../../src/CampaignManager.cpp:174
 msgid "HP restored."
-msgstr "Жыццё адноўлена."
+msgstr ""
 
 #: ../../../src/CampaignManager.cpp:178
 msgid "MP restored."
-msgstr "Мана адноўлена."
+msgstr ""
 
 #: ../../../src/CampaignManager.cpp:183
 msgid "HP and MP restored."
-msgstr "Жыццё і мана адноўлены."
+msgstr ""
 
 #: ../../../src/CampaignManager.cpp:187
 msgid "Negative effects removed."
-msgstr "Негатыўныя эфекты прыбраны."
+msgstr ""
 
 #: ../../../src/CampaignManager.cpp:193
 msgid "HP and MP restored, negative effects removed"
-msgstr "Жыццё і мана адноўлены, негатыўныя эфекты зніклі"
+msgstr ""
 
 #: ../../../src/DeviceList.cpp:56
 msgid ""
@@ -97,8 +94,6 @@ msgid ""
 "\n"
 "Often slower, but less likely to have issues."
 msgstr ""
-"Праграмны адмалёўшчык SDL. Найчасцей больш павольны за апаратны, але з ім "
-"узнікае менш праблем."
 
 #: ../../../src/DeviceList.cpp:59
 msgid ""
@@ -106,179 +101,173 @@ msgid ""
 "\n"
 "The default renderer that is often faster than the SDL software renderer."
 msgstr ""
-"Апаратны адмалёўшчык SDL. Прадвызначаны адмалёўшчык, які найчасцей працуе "
-"хутчэй за праграмны адмалёўшчык SDL."
 
 #: ../../../src/Entity.cpp:513
 msgid "miss"
-msgstr "промах"
+msgstr ""
 
 #: ../../../src/Entity.cpp:550 ../../../src/PowerManager.cpp:1082
 #: ../../../src/StatBlock.cpp:809 ../../../src/StatBlock.cpp:815
 #, c-format
 msgid "+%d HP"
-msgstr "+%d жыцця"
+msgstr ""
 
 #: ../../../src/Entity.cpp:557 ../../../src/StatBlock.cpp:820
 #: ../../../src/StatBlock.cpp:826
 #, c-format
 msgid "+%d MP"
-msgstr "+%d маны"
+msgstr ""
 
 #: ../../../src/EventManager.cpp:728
 msgid "Unknown destination"
-msgstr "Невядомы накірунак"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:96
 #: ../../../src/GameStateConfigBase.cpp:119
 msgid "Defaults"
-msgstr "Прадвызначана"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:96
 msgid "Reset ALL settings?"
-msgstr "Скінуць УСЕ налады?"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:118 ../../../src/MenuNumPicker.cpp:50
 msgid "OK"
-msgstr "Добра"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:120 ../../../src/GameStateNew.cpp:64
 #: ../../../src/InputState.cpp:372 ../../../src/MenuNPCActions.cpp:88
 msgid "Cancel"
-msgstr "Скасаваць"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:169
 #: ../../../src/GameStateConfigDesktop.cpp:132
 msgid "Audio"
-msgstr "Аўдыё"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:170
 #: ../../../src/GameStateConfigDesktop.cpp:133
 msgid "Interface"
-msgstr "Інтэрфейс"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:171
 #: ../../../src/GameStateConfigDesktop.cpp:136
 msgid "Mods"
-msgstr "Моды"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:259 ../../../src/MenuExit.cpp:71
 msgid "Music Volume"
-msgstr "Гучнасць музыкі"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:263 ../../../src/MenuExit.cpp:76
 msgid "Sound Volume"
-msgstr "Гучнасць наваколля"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:267
 msgid "Language"
-msgstr "Мова"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:276
 msgid "Show combat text"
-msgstr "Паказваць тэкст бою"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:280
 msgid "Show FPS"
-msgstr "Паказваць FPS"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:284
 msgid "Colorblind Mode"
-msgstr "Рэжым дальтанізму"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:288
 msgid "Hardware mouse cursor"
-msgstr "Апаратны курсор мышы"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:292
 msgid "Developer Mode"
-msgstr "Рэжым распрацоўшчыка"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:296
 msgid "Always show loot labels"
-msgstr "Заўсёды паказваць адмеціны здабытага"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:300
 msgid "Always show stat bar labels"
-msgstr "Заўсёды паказваць адмеціны ў радку стану"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:304
 msgid "Automatically equip items"
-msgstr "Аўтаматычна апранаць прадметы"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:308
 msgid "Subtitles"
-msgstr "Субтытры"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:312
 msgid "Active Mods"
-msgstr "Актыўныя моды"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:321
 msgid "Available Mods"
-msgstr "Наяўныя моды"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:340
 msgid "<< Disable"
-msgstr "<< Выключыць"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:346
 msgid "Enable >>"
-msgstr "Уключыць >>"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:941
 msgid "Version:"
-msgstr "Версія:"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:946
 msgid "Game:"
-msgstr "Гульня:"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:951
 msgid "Engine version:"
-msgstr "Версія рухавіка:"
+msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:959
 msgid "Requires mods:"
-msgstr "Патрабуюцца моды:"
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:85
 #: ../../../src/GameStateConfigDesktop.cpp:745
 msgid "Clear"
-msgstr "Ачысціць"
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:85
 #: ../../../src/GameStateConfigDesktop.cpp:743
 msgid "Assign:"
-msgstr "Прызначыць:"
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:130
 msgid "Video"
-msgstr "Відэа"
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:134
 msgid "Input"
-msgstr "Увод"
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:135
 msgid "Keybindings"
-msgstr "Клавішы"
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:191
 msgid ""
 "Will try to store surfaces in video memory versus system memory. The effect "
 "this has on performance depends on the renderer."
 msgstr ""
-"Паспрабуйце апрацоўваць паверхні ў відэапамяці, а не ў сістэмнай памяці. "
-"Эфект залежыць ад адмалёўшчыка."
 
 #: ../../../src/GameStateConfigDesktop.cpp:192
 msgid ""
 "Prevents screen tearing. Disable if you experience \"stuttering\" in "
 "windowed mode or input lag."
 msgstr ""
-"Прадухіляе разрывы экрану. Выключыце, калі ўзнікаюць праблемы з ўводам альбо"
-" ў аконным рэжыме."
 
 #: ../../../src/GameStateConfigDesktop.cpp:193
 msgid ""
@@ -286,1229 +275,1222 @@ msgid ""
 "to scale the rendering resolution. Otherwise, only the window dimensions are"
 " used."
 msgstr ""
-"Калі ўключана, дадаткова да маштабавання па памерах акна для адмалёўкі па "
-"раздзяляльнай здольнасці выкарыстоўваецца экран DPI. "
 
 #: ../../../src/GameStateConfigDesktop.cpp:194
 msgid "Experimental"
-msgstr "Эксперыментальна"
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:195
 msgid "For handheld devices"
-msgstr "Для мабільных прылад"
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:213
 msgid "Renderer"
-msgstr "Адмалёўшчык"
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:229
 msgid "Full Screen Mode"
-msgstr "Поўнаэкранны рэжым"
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:233
 msgid "Move hero using mouse"
-msgstr "Перамяшчаць героя мышшу"
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:237
 msgid "Hardware surfaces"
-msgstr "Апаратныя паверхні"
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:241
 msgid "V-Sync"
-msgstr "Вертыкальная сінхранізацыя"
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:245
 msgid "Texture Filtering"
-msgstr "Фільтрацыя тэкстур"
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:249
 msgid "DPI scaling"
-msgstr "Маштабаванне DPI"
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:253
 msgid "Allow changing gamma"
-msgstr "Дазволіць змяняць гаму"
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:257
 msgid "Gamma"
-msgstr "Гама"
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:261
 msgid "Use joystick"
-msgstr "Вкарыстоўваць джойсцік"
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:265
 msgid "Joystick"
-msgstr "Джойсцік"
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:281
 msgid "Mouse aim"
-msgstr "Нацэльвацца мышшу"
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:285
 msgid "Do not use mouse"
-msgstr "Не выкарыстоўваць мыш"
+msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:289
 msgid "Joystick Deadzone"
-msgstr "Мёртвая зона джойсціка"
+msgstr ""
 
 #: ../../../src/GameState.cpp:37 ../../../src/GameState.cpp:51
 #: ../../../src/GameState.cpp:67
 msgid "Loading..."
-msgstr "Загрузка..."
+msgstr ""
 
 #: ../../../src/GameStateLoad.cpp:85 ../../../src/GameStateLoad.cpp:98
 msgid "Delete Save"
-msgstr "Выдаліць гульню"
+msgstr ""
 
 #: ../../../src/GameStateLoad.cpp:85
 msgid "Delete this save?"
-msgstr "Выдаліць захаваную гульню?"
+msgstr ""
 
 #: ../../../src/GameStateLoad.cpp:87
 msgid "Exit to Title"
-msgstr "Выйсці ў меню"
+msgstr ""
 
 #: ../../../src/GameStateLoad.cpp:90
 msgid "New Game"
-msgstr "Новая гульня"
+msgstr ""
 
 #: ../../../src/GameStateLoad.cpp:94 ../../../src/GameStateLoad.cpp:594
 msgid "Choose a Slot"
-msgstr "Абярыце слот"
+msgstr ""
 
 #: ../../../src/GameStateLoad.cpp:567 ../../../src/GameStateLoad.cpp:588
 msgid "Enable a story mod to continue"
-msgstr "Уключыце сюжэтны мод, каб працягнуць"
+msgstr ""
 
 #: ../../../src/GameStateLoad.cpp:583
 msgid "Load Game"
-msgstr "Загрузіць гульню"
+msgstr ""
 
 #: ../../../src/GameStateLoad.cpp:696
 msgid "Entering game world..."
-msgstr "Уваход у гульнявы свет..."
+msgstr ""
 
 #: ../../../src/GameStateLoad.cpp:699
 msgid "Loading saved game..."
-msgstr "Загрузка захаванай гульні..."
+msgstr ""
 
 #: ../../../src/GameStateLoad.cpp:733
 msgid "Invalid save"
-msgstr "Хібная гульня"
+msgstr ""
 
 #: ../../../src/GameStateLoad.cpp:752 ../../../src/ItemManager.cpp:678
 #: ../../../src/MenuPowers.cpp:707 ../../../src/MenuPowers.cpp:1071
 #, c-format
 msgid "Level %d"
-msgstr "Узровень %d"
+msgstr ""
 
 #: ../../../src/GameStateNew.cpp:67
 msgid "Create"
-msgstr "Стварыць"
+msgstr ""
 
 #: ../../../src/GameStateNew.cpp:179
 msgid "Choose a Portrait"
-msgstr "Абярыце партрэт"
+msgstr ""
 
 #: ../../../src/GameStateNew.cpp:183
 msgid "Choose a Name"
-msgstr "Абярыце імя"
+msgstr ""
 
 #: ../../../src/GameStateNew.cpp:187
 msgid "Permadeath?"
-msgstr "Памерці можна толькі раз?"
+msgstr ""
 
 #: ../../../src/GameStateNew.cpp:191
 msgid "Choose a Class"
-msgstr "Абярыце клас"
+msgstr ""
 
 #: ../../../src/GameStateTitle.cpp:107
 msgid "Play Game"
-msgstr "Гуляць"
+msgstr ""
 
 #: ../../../src/GameStateTitle.cpp:110
 msgid "Enable a core mod to continue"
-msgstr "Уключыце асноўны мод, каб працягнуць"
+msgstr ""
 
 #: ../../../src/GameStateTitle.cpp:114
 msgid "Configuration"
-msgstr "Канфігурацыя"
+msgstr ""
 
 #: ../../../src/GameStateTitle.cpp:117
 msgid "Credits"
-msgstr "Стваральнікі"
+msgstr ""
 
 #: ../../../src/GameStateTitle.cpp:120
 msgid "Exit Game"
-msgstr "Выйсці"
+msgstr ""
 
 #: ../../../src/InputState.cpp:373
 msgid "Accept"
-msgstr "Пагадзіцца"
+msgstr ""
 
 #: ../../../src/InputState.cpp:374 ../../../src/SDLInputState.cpp:606
 msgid "Up"
-msgstr "Уверх"
+msgstr ""
 
 #: ../../../src/InputState.cpp:375 ../../../src/SDLInputState.cpp:584
 msgid "Down"
-msgstr "Уніз"
+msgstr ""
 
 #: ../../../src/InputState.cpp:376 ../../../src/SDLInputState.cpp:591
 msgid "Left"
-msgstr "Налева"
+msgstr ""
 
 #: ../../../src/InputState.cpp:377 ../../../src/SDLInputState.cpp:601
 msgid "Right"
-msgstr "Направа"
+msgstr ""
 
 #: ../../../src/InputState.cpp:378
 msgid "Bar1"
-msgstr "Панэль1"
+msgstr ""
 
 #: ../../../src/InputState.cpp:379
 msgid "Bar2"
-msgstr "Панэль2"
+msgstr ""
 
 #: ../../../src/InputState.cpp:380
 msgid "Bar3"
-msgstr "Панэль3"
+msgstr ""
 
 #: ../../../src/InputState.cpp:381
 msgid "Bar4"
-msgstr "Панэль4"
+msgstr ""
 
 #: ../../../src/InputState.cpp:382
 msgid "Bar5"
-msgstr "Панэль5"
+msgstr ""
 
 #: ../../../src/InputState.cpp:383
 msgid "Bar6"
-msgstr "Панэль6"
+msgstr ""
 
 #: ../../../src/InputState.cpp:384
 msgid "Bar7"
-msgstr "Панэль7"
+msgstr ""
 
 #: ../../../src/InputState.cpp:385
 msgid "Bar8"
-msgstr "Панэль8"
+msgstr ""
 
 #: ../../../src/InputState.cpp:386
 msgid "Bar9"
-msgstr "Панэль9"
+msgstr ""
 
 #: ../../../src/InputState.cpp:387
 msgid "Bar0"
-msgstr "Панэль0"
+msgstr ""
 
 #: ../../../src/InputState.cpp:388 ../../../src/MenuActionBar.cpp:398
 #: ../../../src/MenuActionBar.cpp:400 ../../../src/MenuCharacter.cpp:242
 msgid "Character"
-msgstr "Персанаж"
+msgstr ""
 
 #: ../../../src/InputState.cpp:389 ../../../src/MenuActionBar.cpp:407
 #: ../../../src/MenuActionBar.cpp:409 ../../../src/MenuInventory.cpp:151
 #: ../../../src/MenuVendor.cpp:55
 msgid "Inventory"
-msgstr "Інвентар"
+msgstr ""
 
 #: ../../../src/InputState.cpp:390 ../../../src/MenuActionBar.cpp:416
 #: ../../../src/MenuActionBar.cpp:418 ../../../src/MenuPowers.cpp:132
 msgid "Powers"
-msgstr "Таленты"
+msgstr ""
 
 #: ../../../src/InputState.cpp:391 ../../../src/MenuActionBar.cpp:425
 #: ../../../src/MenuActionBar.cpp:427 ../../../src/MenuLog.cpp:104
 msgid "Log"
-msgstr "Нататнік"
+msgstr ""
 
 #: ../../../src/InputState.cpp:392
 msgid "Main1"
-msgstr "Галоўнае1"
+msgstr ""
 
 #: ../../../src/InputState.cpp:393
 msgid "Main2"
-msgstr "Галоўнае2"
+msgstr ""
 
 #: ../../../src/InputState.cpp:394
 msgid "Ctrl"
-msgstr "Ctrl"
+msgstr ""
 
 #: ../../../src/InputState.cpp:395
 msgid "Shift"
-msgstr "Shift"
+msgstr ""
 
 #: ../../../src/InputState.cpp:396
 msgid "Alt"
-msgstr "Alt"
+msgstr ""
 
 #: ../../../src/InputState.cpp:397 ../../../src/SDLInputState.cpp:583
 msgid "Delete"
-msgstr "Delete"
+msgstr ""
 
 #: ../../../src/InputState.cpp:398
 msgid "ActionBar Accept"
-msgstr "Панэль дзеянняў: пагадзіцца"
+msgstr ""
 
 #: ../../../src/InputState.cpp:399
 msgid "ActionBar Left"
-msgstr "Панэль дзеянняў: улева"
+msgstr ""
 
 #: ../../../src/InputState.cpp:400
 msgid "ActionBar Right"
-msgstr "Панэль дзеянняў: управа"
+msgstr ""
 
 #: ../../../src/InputState.cpp:401
 msgid "ActionBar Use"
-msgstr "Панэль дзеянняў: выкарыстаць"
+msgstr ""
 
 #: ../../../src/InputState.cpp:402
 msgid "Developer Menu"
-msgstr "Меню распрацоўшчыка"
+msgstr ""
 
 #: ../../../src/InputState.cpp:404
 msgid "Left Mouse"
-msgstr "Левая кнопка мышы"
+msgstr ""
 
 #: ../../../src/InputState.cpp:405
 msgid "Middle Mouse"
-msgstr "Сярэдняя кнопка мышы"
+msgstr ""
 
 #: ../../../src/InputState.cpp:406
 msgid "Right Mouse"
-msgstr "Правая кнопка мышы"
+msgstr ""
 
 #: ../../../src/InputState.cpp:407
 msgid "Wheel Up"
-msgstr "Пракрутка ўверх"
+msgstr ""
 
 #: ../../../src/InputState.cpp:408
 msgid "Wheel Down"
-msgstr "Пракрутка ўніз"
+msgstr ""
 
 #: ../../../src/InputState.cpp:409
 msgid "Mouse X1"
-msgstr "Мыш х2"
+msgstr ""
 
 #: ../../../src/InputState.cpp:410
 msgid "Mouse X2"
-msgstr "Мыш х1"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:412 ../../../src/ItemManager.cpp:415
 msgid "Unknown Item"
-msgstr "Невядомы прадмет"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:587 ../../../src/MenuPowers.cpp:813
 #, c-format
 msgid "%d%% Speed"
-msgstr "Хуткасць %d%%"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:591 ../../../src/MenuPowers.cpp:816
 #, c-format
 msgid "%d%% Attack Speed"
-msgstr "Хуткасць атакі %d%%"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:613 ../../../src/MenuCharacter.cpp:346
 #: ../../../src/MenuPowers.cpp:758
 #, c-format
 msgid "%s Resistance"
-msgstr "Супраціўленне %s"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:664
 msgid "Quest Item"
-msgstr "Прадмет задання"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:691
 #, c-format
 msgid "Quality: %s"
-msgstr "Якасць: %s"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:716
 #, c-format
 msgid "Absorb: %d-%d"
-msgstr "Паглынае: %d-%d"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:718
 #, c-format
 msgid "Absorb: %d"
-msgstr "Паглынае: %d"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:755 ../../../src/MenuPowers.cpp:1057
 #: ../../../src/MenuPowers.cpp:1060
 #, c-format
 msgid "Requires Level %d"
-msgstr "Патрабуецца %d узровень"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:766 ../../../src/MenuPowers.cpp:1049
 #: ../../../src/MenuPowers.cpp:1051
 #, c-format
 msgid "Requires %s %d"
-msgstr "Патрабуецца %s %d"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:774
 #, c-format
 msgid "Requires Class: %s"
-msgstr "Патрабуецца клас: %s"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:786 ../../../src/ItemManager.cpp:795
 #, c-format
 msgid "Buy Price: %d %s"
-msgstr "Кошт пакупкі: %d %s"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:788 ../../../src/ItemManager.cpp:797
 #, c-format
 msgid "Buy Price: %d %s each"
-msgstr "Кошт пакупкі: %d %s за кожны"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:803
 #, c-format
 msgid "Sell Price: %d %s"
-msgstr "Кошт продажу: %d %s"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:805
 #, c-format
 msgid "Sell Price: %d %s each"
-msgstr "Кошт продажу: %d %s за кожны"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:814
 msgid "Set:"
-msgstr "Набор:"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:821
 #, c-format
 msgid "%d items:"
-msgstr "%d прадметаў:"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:834
 #, c-format
 msgid "Press [%s] to use"
-msgstr "Націсніце [%s], каб выкарыстаць"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:837
 #, c-format
 msgid "Press [%s] to read"
-msgstr "Націсніце [%s], каб прачытаць"
+msgstr ""
 
 #: ../../../src/MenuActionBar.cpp:202 ../../../src/MenuActionBar.cpp:208
 #: ../../../src/MenuActionBar.cpp:213
 #, c-format
 msgid "Hotkey: %s"
-msgstr "Гарачая клавіша: %s"
+msgstr ""
 
 #: ../../../src/MenuActiveEffects.cpp:124
 #, c-format
 msgid "x%d"
-msgstr "x%d"
+msgstr ""
 
 #: ../../../src/MenuActiveEffects.cpp:219
 msgid "Remaining:"
-msgstr "Засталося:"
+msgstr ""
 
 #: ../../../src/MenuActiveEffects.cpp:225
 #, c-format
 msgid "x%d stacks"
-msgstr "x%d кампанентаў"
+msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:56
 msgid "Name"
-msgstr "Імя"
+msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:57
 msgid "Level"
-msgstr "Узровень"
+msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:302
 #, c-format
 msgid "%d unspent stat point"
-msgstr "%d невыкарыстаны пункт уменняў"
+msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:305
 #, c-format
 msgid "%d unspent stat points"
-msgstr "%d невыкарыстаных пунктаў уменняў"
+msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:357 ../../../src/MenuManager.cpp:309
 #, c-format
 msgid "XP: %d"
-msgstr "Жыццё: %d"
+msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:359
 #, c-format
 msgid "Next: %d"
-msgstr "Наступны: %d"
+msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:365
 #, c-format
 msgid "base (%d), bonus (%d)"
-msgstr "базавае (%d), бонус (%d)"
+msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:373 ../../../src/MenuCharacter.cpp:387
 msgid "Related stats:"
-msgstr "Звязаныя ўменні:"
+msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:413 ../../../src/MenuCharacter.cpp:437
 #, c-format
 msgid "Each level grants %d."
-msgstr "З кожным узроўнем даецца %d."
+msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:417 ../../../src/MenuCharacter.cpp:441
 #, c-format
 msgid "Each point of %s grants %d."
-msgstr "З кожным пунктам %s даецца %d"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:63
 msgid "Execute"
-msgstr "Запусціць"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:129 ../../../src/MenuDevConsole.cpp:145
 msgid "Developer Console"
-msgstr "Кансоль распрацоўшчыка"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:140
 #, c-format
 msgid "Use '%s' to inspect with the cursor."
-msgstr "Выкарыстоўвайце \"%s\" для агляду з дапамогай курсора."
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:142
 msgid "Arguments with spaces should be enclosed with double quotes. Example:"
-msgstr "Аргументы з прагаламі мусяць быць у падвойных двукоссях. Прыклад:"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:143
 msgid "Type 'help' to get a list of commands."
-msgstr "Увядзіце \"help\", каб атрымаць спіс загадаў."
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:202 ../../../src/MenuDevConsole.cpp:206
 msgid "px"
-msgstr "пікс"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:217
 msgid "Distance"
-msgstr "Дыстанцыя"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:232 ../../../src/MenuDevConsole.cpp:278
 msgid "Entity"
-msgstr "Аб'ект"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:253 ../../../src/MenuDevConsole.cpp:260
 msgid "none"
-msgstr "няма"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:254 ../../../src/MenuDevConsole.cpp:256
 msgid "wall"
-msgstr "перашкода"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:255 ../../../src/MenuDevConsole.cpp:257
 msgid "short wall / pit"
-msgstr "малая перашкода/яма"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:258
 msgid "entity"
-msgstr "аб'ект"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:259
 msgid "entity, ally"
-msgstr "аб'ект/памочнік"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:266
 msgid "Tile"
-msgstr "Плітка"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:351
 msgid "adds a power to the action bar"
-msgstr "дадае таленты на панэль дзеянняў"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:352
 msgid "turns on/off all of the HUD elements"
-msgstr "пераключае адлюстраванне элементаў інтэрфейсу"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:353
 msgid "turns on/off the developer hud"
-msgstr "пераключае інтэрфейс распрацоўшчыка"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:354
 msgid ""
 "Prints a list of powers that match a search term. No search term will list "
 "all items"
 msgstr ""
-"Выводзіць спіс знойдзеных талентаў. Калі нічога не ўвесці - выведзе ўсе."
 
 #: ../../../src/MenuDevConsole.cpp:355
 msgid "Prints out all the map filenames located in the \"maps/\" directory."
-msgstr "Выводзіць спіс усіх назваў файлаў мапаў з каталога \"maps\"."
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:356
 msgid ""
 "Prints out the active campaign statuses that match a search term. No search "
 "term will list all active statuses"
 msgstr ""
-"Выводзіць спіс знойдзеных статусаў актыўных кампаній. Калі нічога не ўвесці "
-"- выведзе спіс усіх статусаў"
 
 #: ../../../src/MenuDevConsole.cpp:357
 msgid ""
 "Prints a list of items that match a search term. No search term will list "
 "all items"
 msgstr ""
-"Выводзіць спіс знойдзеных прадметаў. Калі нічога не ўвесці - выведзе спіс "
-"усіх прадметаў"
 
 #: ../../../src/MenuDevConsole.cpp:358
 msgid ""
 "parses a series of event components and executes them as a single event"
-msgstr "разбірае набор кампанентаў падзеі і выконвае іх як адну падзею"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:359
 msgid "clears the command history"
-msgstr "ачышчае гісторыю загадаў"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:360
 msgid "displays this text"
-msgstr "выводзіць гэты тэкст"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:367
 msgid "Toggled the developer hud"
-msgstr "Інтэрфейс распрацоўшчыка пераключаны"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:371
 msgid "Toggled the hud"
-msgstr "Інтэрфейс пераключаны"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:518
 msgid "ERROR: Incorrect number of arguments"
-msgstr "ПАМЫЛКА: хібная колькасць аргументаў"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:519 ../../../src/MenuDevConsole.cpp:544
 msgid "HINT:"
-msgstr "ПАДКАЗКА:"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:519
 msgid "<id>"
-msgstr "<id>"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:534
 #, c-format
 msgid "ERROR: '%s' is not a valid event key"
-msgstr "ПАМЫЛКА: \"%s\" - хібны ключ падзеі"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:543
 msgid "ERROR: Too few arguments"
-msgstr "ПАМЫЛКА: не стае аргументаў"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:544
 msgid "<key>=<val> <key>=<val> ..."
-msgstr "<key>=<val> <key>=<val> …"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:548
 msgid "ERROR: Unknown command"
-msgstr "ПАМЫЛКА: невядомы загад"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:549
 msgid "HINT: Type help"
-msgstr "ПАДКАЗКА: ўвядзіце help"
+msgstr ""
 
 #: ../../../src/MenuEnemy.cpp:140
 msgid "Dead"
-msgstr "Забіты"
+msgstr ""
 
 #: ../../../src/MenuEnemy.cpp:145 ../../../src/MenuEnemy.cpp:148
 #, c-format
 msgid "%s level %d"
-msgstr "%s узровень %d"
+msgstr ""
 
 #: ../../../src/MenuExit.cpp:87
 msgid "Save & Exit"
-msgstr "Захаваць і выйсці"
+msgstr ""
 
 #: ../../../src/MenuExit.cpp:88
 msgid "Exit"
-msgstr "Выйсці"
+msgstr ""
 
 #: ../../../src/MenuExit.cpp:92
 msgid "Continue"
-msgstr "Працягнуць"
+msgstr ""
 
 #: ../../../src/MenuExit.cpp:116 ../../../src/MenuExit.cpp:135
 msgid "Paused"
-msgstr "Прыпыніць"
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:164
 #, c-format
 msgid "Lost %d%% of %s."
-msgstr "Страчана %d%% %s."
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:171
 #, c-format
 msgid "Lost %d%% of total XP."
-msgstr "Страчана %d%% агульнага досведу."
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:176
 #, c-format
 msgid "Lost %d%% of current level XP."
-msgstr "Страчана %d%% бягучага ўзроўня досведу."
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:202
 #, c-format
 msgid "Lost %s."
-msgstr "Страчана %s."
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:245 ../../../src/MenuStash.cpp:142
 #, c-format
 msgid "%d %s"
-msgstr "%d %s"
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:286
 msgid "Pick up item(s):"
-msgstr "Паднята прадметаў:"
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:287
 msgid "Use or equip item:"
-msgstr "Выкарыстаць альбо апрануць прадмет:"
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:288
 #, c-format
 msgid "%s modifiers"
-msgstr "%s мадыфікатараў"
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:289
 msgid "Select a quantity of item:"
-msgstr "Абраць колькасць прадметаў:"
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:292
 msgid "Stash item stack:"
-msgstr "Перамясціць набор прадметаў у схованку:"
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:294
 msgid "Sell item stack:"
-msgstr "Прадаць набор прадметаў:"
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:557
 msgid "You don't have enough of the required item."
-msgstr "Не стае патрэбных прадметаў."
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:564
 msgid "You can't use this item right now."
-msgstr "Зараз вы не можаце выкарыстаць гэты прадмет."
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:576
 msgid "This item can only be used from the action bar."
-msgstr "Гэты прадмет можна выкарыстаць толькі з панэлі дзеянняў."
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:694
 msgid "Inventory is full."
-msgstr "Інвентар поўны."
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:814
 #, c-format
 msgid "Not enough %s."
-msgstr "Не стае %s."
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:834 ../../../src/MenuInventory.cpp:841
 msgid "This item can not be sold."
-msgstr "Гэты прадмет немагчыма прадаць."
+msgstr ""
 
 #: ../../../src/MenuLog.cpp:89
 msgid "Notes"
-msgstr "Нататкі"
+msgstr ""
 
 #: ../../../src/MenuLog.cpp:90
 msgid "Quests"
-msgstr "Заданні"
+msgstr ""
 
 #: ../../../src/MenuManager.cpp:311
 #, c-format
 msgid "XP: %d/%d"
-msgstr "Жыццё: %d/%d"
+msgstr ""
 
 #: ../../../src/MenuManager.cpp:825
 msgid "This item can not be dropped."
-msgstr "Гэты прадмет немагчыма выкінуць."
+msgstr ""
 
 #: ../../../src/MenuNPCActions.cpp:87
 msgid "Trade"
-msgstr "Гандляваць"
+msgstr ""
 
 #: ../../../src/MenuNumPicker.cpp:123
 msgid "Enter amount:"
-msgstr "Увядзіце колькасць:"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:711
 msgid "Passive"
-msgstr "Пасіўныя"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:716
 #, c-format
 msgid "Costs %d MP"
-msgstr "Каштуе %d маны"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:720
 #, c-format
 msgid "Costs %d HP"
-msgstr "Каштуе %d жыцця"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:725
 msgid "Cooldown:"
-msgstr "Аднаўленне:"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:792 ../../../src/MenuPowers.cpp:795
 msgid "Damage per second"
-msgstr "Урон за секунду"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:798 ../../../src/MenuPowers.cpp:801
 msgid "HP per second"
-msgstr "Жыцця за секунду"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:804 ../../../src/MenuPowers.cpp:807
 msgid "MP per second"
-msgstr "Маны за секунду"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:811
 msgid "Immobilize"
-msgstr "Зафіксаваць"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:819
 msgid "Immunity"
-msgstr "Устойлівасць"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:822
 msgid "Immunity to damage over time"
-msgstr "Устойлівасць да перыядычнага ўрону"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:825
 msgid "Immunity to slow"
-msgstr "Устойлівасць да запавольвання"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:828
 msgid "Immunity to stun"
-msgstr "Устойлівасць да аглушэння"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:831
 msgid "Immunity to HP steal"
-msgstr "Устойлівасць да выцягвання жыцця"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:834
 msgid "Immunity to MP steal"
-msgstr "Устойлівасць да выцягвання маны"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:837
 msgid "Immunity to knockback"
-msgstr "Устойлівасць да скульвання"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:840
 msgid "Immunity to damage reflection"
-msgstr "Устойлівасць да адбіцця ўрону"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:843
 msgid "Stun"
-msgstr "Аглушэнне"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:846
 msgid "Automatic revive on death"
-msgstr "Аўтаматычна адраджацца пасля смерці"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:849
 msgid "Convert"
-msgstr "Пераўтварыць"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:852
 msgid "Fear"
-msgstr "Страх"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:855
 msgid "Lifespan"
-msgstr "Працягласць жыцця"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:879
 msgid "Magical Shield"
-msgstr "Магічны шчыт"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:908
 msgid "Healing"
-msgstr "Лекаванне"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:911
 msgid "Knockback"
-msgstr "Скульванне"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:936
 #, c-format
 msgid "%d%% chance"
-msgstr "%d%% шанец"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:988
 msgid "Base Accuracy"
-msgstr "Базавая трапнасць"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1008
 msgid "Base Critical Chance"
-msgstr "Базавы шанец крытычнага ўрону"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1016
 msgid "Ignores Absorbtion"
-msgstr "Не зважае на паглынанне"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1021
 msgid "Ignores Avoidance"
-msgstr "Не зважае на ўхіленне"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1026
 #, c-format
 msgid "%d%% Chance to crit slowed targets"
-msgstr "%d%% шанец нанесці крытычны ўрон запаволеным супраціўнікам"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1031
 #, c-format
 msgid "%s Elemental Damage"
-msgstr "%s стыхійнага ўрону"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1040
 #, c-format
 msgid "Requires a %s"
-msgstr "Патрабуецца %s"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1079 ../../../src/MenuPowers.cpp:1082
 #, c-format
 msgid "Requires Power: %s"
-msgstr "Патрабуецца талент: %s"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1091
 msgid "Click to Unlock (uses 1 Skill Point)"
-msgstr "Пстрыкніце, каб разблакаваць (за 1 пункт уменняў)"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1095 ../../../src/MenuPowers.cpp:1097
 msgid "Requires 1 Skill Point"
-msgstr "Патрабуецца 1 пункт уменняў"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1331
 #, c-format
 msgid "%d unspent skill point"
-msgstr "%d невыкарыстаны пункт уменняў"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1334
 #, c-format
 msgid "%d unspent skill points"
-msgstr "%d невыкарыстаных пунктаў уменняў"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1362
 msgid "Next Level:"
-msgstr "Наступны ўзровень:"
+msgstr ""
 
 #: ../../../src/MenuStash.cpp:138
 msgid "Shared Stash"
-msgstr "Агульныя запасы"
+msgstr ""
 
 #: ../../../src/MenuStash.cpp:205
 msgid "Can not store quest items in the stash."
-msgstr "Прадметы заданняў нельга захоўваць у схованцы."
+msgstr ""
 
 #: ../../../src/MenuStash.cpp:215
 msgid "Stash is full."
-msgstr "Схованка поўная."
+msgstr ""
 
 #: ../../../src/MenuVendor.cpp:56
 msgid "Buyback"
-msgstr "Выкуп"
+msgstr ""
 
 #: ../../../src/MenuVendor.cpp:186
 msgid "Vendor"
-msgstr "Гандляр"
+msgstr ""
 
 #: ../../../src/PowerManager.cpp:1066
 #, c-format
 msgid "+%d Shield"
-msgstr "+%d Шчыт"
+msgstr ""
 
 #: ../../../src/PowerManager.cpp:1325
 msgid "You are already transformed, untransform first."
-msgstr "Вы ўжо трансфарміраваны, спачатку растрансфарміруўцеся."
+msgstr ""
 
 #: ../../../src/PowerManager.cpp:1337
 msgid "Could not untransform at this position."
-msgstr "Тут немагчыма растрансфарміравацца"
+msgstr ""
 
 #: ../../../src/SaveLoad.cpp:236 ../../../src/SaveLoad.cpp:237
 msgid "Game saved."
-msgstr "Гульня захавана."
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:581
 msgid "Backspace"
-msgstr "Backspace"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:582
 msgid "CapsLock"
-msgstr "CapsLock"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:585
 msgid "End"
-msgstr "End"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:586
 msgid "Escape"
-msgstr "Escape"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:587
 msgid "Home"
-msgstr "Home"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:588
 msgid "Insert"
-msgstr "Insert"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:589
 msgid "Left Alt"
-msgstr "Левы Alt"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:590
 msgid "Left Ctrl"
-msgstr "Левы Ctrl"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:592
 msgid "Left Shift"
-msgstr "Левы Shift"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:593
 msgid "NumLock"
-msgstr "NumLock"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:594
 msgid "PageDown"
-msgstr "PageDown"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:595
 msgid "PageUp"
-msgstr "PageUp"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:596
 msgid "Pause"
-msgstr "Pause"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:597
 msgid "PrintScreen"
-msgstr "PrintScreen"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:598
 msgid "Right Alt"
-msgstr "Правы Alt"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:599
 msgid "Right Ctrl"
-msgstr "Правы Ctrl"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:600
 msgid "Return"
-msgstr "Enter"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:602
 msgid "Right Shift"
-msgstr "Правы Shift"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:603
 msgid "ScrollLock"
-msgstr "ScrollLock"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:604
 msgid "Space"
-msgstr "Прагал"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:605
 msgid "Tab"
-msgstr "Tab"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:619
 #, c-format
 msgid "Mouse %d"
-msgstr "Мыш %d"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:627
 #, c-format
 msgid "Axis %d -"
-msgstr "Вось %d -"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:629
 #, c-format
 msgid "Axis %d +"
-msgstr "Вось %d +"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:632
 #, c-format
 msgid "Button %d"
-msgstr "Кнопка %d"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:636
 msgid "(none)"
-msgstr "(няма)"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:677 ../../../src/SDLInputState.cpp:701
 #: ../../../src/SDLInputState.cpp:719
 msgid "Tap"
-msgstr "Дакраніцеся"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:677 ../../../src/SDLInputState.cpp:680
 #, c-format
 msgid "%s on ground"
-msgstr "%s па глебе"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:701 ../../../src/SDLInputState.cpp:704
 #, c-format
 msgid "%s on enemy"
-msgstr "%s па ворагу"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:763 ../../../src/SDLInputState.cpp:767
 #: ../../../src/SDLInputState.cpp:771
 #, c-format
 msgid "'%s' is no longer bound to:"
-msgstr "\"%s\" больш не звязана з:"
+msgstr ""
 
 #: ../../../src/Settings.cpp:800
 msgid "Adventurer"
-msgstr "Падарожнік"
+msgstr ""
 
 #: ../../../src/Stats.cpp:37
 msgid "Max HP"
-msgstr "Максімальнае жыццё"
+msgstr ""
 
 #: ../../../src/Stats.cpp:42
 msgid "HP Regen"
-msgstr "Аднаўленне жыцця"
+msgstr ""
 
 #: ../../../src/Stats.cpp:43
 msgid "Ticks of HP regen per minute."
-msgstr "Аднаўленне адзінак жыцця за хвіліну."
+msgstr ""
 
 #: ../../../src/Stats.cpp:47
 msgid "Max MP"
-msgstr "Максімальная мана"
+msgstr ""
 
 #: ../../../src/Stats.cpp:52
 msgid "MP Regen"
-msgstr "Аднаўленне маны"
+msgstr ""
 
 #: ../../../src/Stats.cpp:53
 msgid "Ticks of MP regen per minute."
-msgstr "Аднаўленне адзінак маны за хвіліну."
+msgstr ""
 
 #: ../../../src/Stats.cpp:57
 msgid "Accuracy"
-msgstr "Трапнасць"
+msgstr ""
 
 #: ../../../src/Stats.cpp:62
 msgid "Avoidance"
-msgstr "Ухіленне"
+msgstr ""
 
 #: ../../../src/Stats.cpp:67
 msgid "Absorb Min"
-msgstr "Найменшае паглынанне"
+msgstr ""
 
 #: ../../../src/Stats.cpp:72
 msgid "Absorb Max"
-msgstr "Найбольшае паглынанне"
+msgstr ""
 
 #: ../../../src/Stats.cpp:77
 msgid "Critical Hit Chance"
-msgstr "Шанец крытычнага ўрону"
+msgstr ""
 
 #: ../../../src/Stats.cpp:82
 msgid "Bonus XP"
-msgstr "Бонус досведу"
+msgstr ""
 
 #: ../../../src/Stats.cpp:83
 msgid "Increases the XP gained per kill."
-msgstr "Павялічвае колькасць досведу за забойства."
+msgstr ""
 
 #: ../../../src/Stats.cpp:87
 #, c-format
 msgid "Bonus %s"
-msgstr "Бонус %s"
+msgstr ""
 
 #: ../../../src/Stats.cpp:88
 #, c-format
 msgid "Increases the %s found per drop."
-msgstr "Павялічвае колькасць выпадзення %s."
+msgstr ""
 
 #: ../../../src/Stats.cpp:92
 msgid "Item Find Chance"
-msgstr "Шанец знаходжання прадметаў"
+msgstr ""
 
 #: ../../../src/Stats.cpp:93
 msgid "Increases the chance that an enemy will drop an item."
-msgstr "Павялічвае верагоднасць выпадзення прадметаў пасля смерці ворагаў."
+msgstr ""
 
 #: ../../../src/Stats.cpp:97
 msgid "Stealth"
-msgstr "Асцярога"
+msgstr ""
 
 #: ../../../src/Stats.cpp:98
 msgid "Increases your ability to move undetected."
-msgstr "Паляпшае вашую здольнасць рухацца незаўважаным."
+msgstr ""
 
 #: ../../../src/Stats.cpp:102
 msgid "Poise"
-msgstr "Ураўнаважанасць"
+msgstr ""
 
 #: ../../../src/Stats.cpp:103
 msgid "Reduces your chance of stumbling when hit."
-msgstr "Памяншае верагоднасць аглушэння пры атрыманні ўрону."
+msgstr ""
 
 #: ../../../src/Stats.cpp:107
 msgid "Missile Reflect Chance"
-msgstr "Шанец адбіцця"
+msgstr ""
 
 #: ../../../src/Stats.cpp:108
 msgid "Increases your chance of reflecting missiles back at enemies."
-msgstr "Павялічвае шанец адбіцця стрэлаў назад у ворагаў."
+msgstr ""
 
 #: ../../../src/Stats.cpp:112
 msgid "Damage Reflection"
-msgstr "Адбіццё ўрону"
+msgstr ""
 
 #: ../../../src/Stats.cpp:113
 msgid "Deals a percentage of damage taken back to the attacker."
-msgstr "Частка атрыманага ўрону вяртаецца нападніку."
+msgstr ""
 
 #: ../../../src/Stats.cpp:117
 msgid "HP Steal"
-msgstr "Выцягванне жыцця"
+msgstr ""
 
 #: ../../../src/Stats.cpp:118
 msgid "Percentage of HP stolen per hit."
-msgstr "Адсотак жыцця, выцягнутага за кожны ўдар."
+msgstr ""
 
 #: ../../../src/Stats.cpp:122
 msgid "MP Steal"
-msgstr "Выцягванне маны"
+msgstr ""
 
 #: ../../../src/Stats.cpp:123
 msgid "Percentage of MP stolen per hit."
-msgstr "Адсотак маны, выцягнутай за кожны ўдар."
+msgstr ""
 
 #: ../../../src/Stats.cpp:127
 msgid "Base HP"
-msgstr "Базавае жыццё"
+msgstr ""
 
 #: ../../../src/Stats.cpp:132
 msgid "Base MP"
-msgstr "Базавая мана"
+msgstr ""
 
 #: ../../../src/Utils.cpp:205
 msgid "k"
-msgstr "k"
+msgstr ""
 
 #: ../../../src/Utils.cpp:450
 #, c-format
 msgid "%s second"
-msgstr "%s секунда"
+msgstr ""
 
 #: ../../../src/Utils.cpp:453
 #, c-format
 msgid "%s seconds"
-msgstr "%s секунд"
+msgstr ""
 
 #: ../../../src/Version.cpp:140
 msgid "or newer"
-msgstr "альбо навейшая"
+msgstr ""
 
 #: ../../../src/Version.cpp:143
 msgid "or older"
-msgstr "альбо пазнейшая"
+msgstr ""
