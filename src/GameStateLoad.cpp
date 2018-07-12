@@ -119,28 +119,28 @@ GameStateLoad::GameStateLoad() : GameState()
 			if (infile.key == "button_new") {
 				int x = Parse::popFirstInt(infile.val);
 				int y = Parse::popFirstInt(infile.val);
-				ALIGNMENT a = Parse::toAlignment(Parse::popFirstString(infile.val));
+				int a = Parse::toAlignment(Parse::popFirstString(infile.val));
 				button_new->setBasePos(x, y, a);
 			}
 			// @ATTR button_load|int, int, alignment : X, Y, Alignment|Position of the "Load Game" button.
 			else if (infile.key == "button_load") {
 				int x = Parse::popFirstInt(infile.val);
 				int y = Parse::popFirstInt(infile.val);
-				ALIGNMENT a = Parse::toAlignment(Parse::popFirstString(infile.val));
+				int a = Parse::toAlignment(Parse::popFirstString(infile.val));
 				button_load->setBasePos(x, y, a);
 			}
 			// @ATTR button_delete|int, int, alignment : X, Y, Alignment|Position of the "Delete Save" button.
 			else if (infile.key == "button_delete") {
 				int x = Parse::popFirstInt(infile.val);
 				int y = Parse::popFirstInt(infile.val);
-				ALIGNMENT a = Parse::toAlignment(Parse::popFirstString(infile.val));
+				int a = Parse::toAlignment(Parse::popFirstString(infile.val));
 				button_delete->setBasePos(x, y, a);
 			}
 			// @ATTR button_exit|int, int, alignment : X, Y, Alignment|Position of the "Exit to Title" button.
 			else if (infile.key == "button_exit") {
 				int x = Parse::popFirstInt(infile.val);
 				int y = Parse::popFirstInt(infile.val);
-				ALIGNMENT a = Parse::toAlignment(Parse::popFirstString(infile.val));
+				int a = Parse::toAlignment(Parse::popFirstString(infile.val));
 				button_exit->setBasePos(x, y, a);
 			}
 			// @ATTR portrait|rectangle|Position and dimensions of the portrait image.

@@ -63,7 +63,7 @@ public:
 
 	WidgetLog (int width, int height);
 	~WidgetLog ();
-	void setBasePos(int x, int y, ALIGNMENT a);
+	void setBasePos(int x, int y, int a);
 	void setPos(int offset_x, int offset_y);
 
 	void logic();

@@ -277,8 +277,8 @@ int Parse::toDirection(const std::string& s) {
 	return dir;
 }
 
-ALIGNMENT Parse::toAlignment(const std::string &s) {
-	ALIGNMENT align = ALIGN_TOPLEFT;
+int Parse::toAlignment(const std::string &s) {
+	int align = ALIGN_TOPLEFT;
 
 	if (s == "topleft")
 		align = ALIGN_TOPLEFT;

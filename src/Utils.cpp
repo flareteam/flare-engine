@@ -208,7 +208,7 @@ std::string abbreviateKilo(int amount) {
 	return ss.str();
 }
 
-void alignToScreenEdge(ALIGNMENT alignment, Rect *r) {
+void alignToScreenEdge(int alignment, Rect *r) {
 	if (!r) return;
 
 	if (alignment == ALIGN_TOPLEFT) {
@@ -393,7 +393,7 @@ void removeSaveDir(int slot) {
 	}
 }
 
-Rect resizeToScreen(int w, int h, bool crop, ALIGNMENT align) {
+Rect resizeToScreen(int w, int h, bool crop, int align) {
 	Rect r;
 
 	// fit to height

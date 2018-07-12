@@ -49,7 +49,7 @@ private:
 	WidgetLabel *label_fps;
 	Rect fps_position;
 	Color fps_color;
-	ALIGNMENT fps_corner;
+	int fps_corner;
 
 	Sprite *background;
 	Image *background_image;

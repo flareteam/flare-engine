@@ -43,7 +43,7 @@ WidgetLog::~WidgetLog () {
 	clear();
 }
 
-void WidgetLog::setBasePos(int x, int y, ALIGNMENT a) {
+void WidgetLog::setBasePos(int x, int y, int a) {
 	Widget::setBasePos(x, y, a);
 	scroll_box->setBasePos(x, y, a);
 }

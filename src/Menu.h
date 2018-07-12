@@ -44,7 +44,7 @@ public:
 
 	bool visible;
 	Rect window_area;
-	ALIGNMENT alignment;
+	int alignment;
 
 	virtual bool parseMenuKey(const std::string &key, const std::string &val);
 

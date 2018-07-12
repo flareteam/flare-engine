@@ -88,7 +88,8 @@ public:
 	}
 };
 
-typedef enum {
+// Alignment: For aligning objects relative to the screen
+enum {
 	ALIGN_TOPLEFT = 0,
 	ALIGN_TOP = 1,
 	ALIGN_TOPRIGHT = 2,
@@ -98,7 +99,7 @@ typedef enum {
 	ALIGN_BOTTOMLEFT = 6,
 	ALIGN_BOTTOM = 7,
 	ALIGN_BOTTOMRIGHT = 8
-}ALIGNMENT;
+};
 
 Point FPointToPoint(const FPoint& fp);
 FPoint screen_to_map(int x, int y, float camx, float camy);
@@ -113,7 +114,7 @@ bool isWithinRadius(const FPoint& center, float radius, const FPoint& target);
 bool isWithinRect(const Rect& r, const Point& target);
 
 std::string abbreviateKilo(int amount);
-void alignToScreenEdge(ALIGNMENT alignment, Rect *r);
+void alignToScreenEdge(int alignment, Rect *r);
 void alignFPoint(FPoint *pos);
 
 void logInfo(const char* format, ...);
@@ -125,7 +126,7 @@ void Exit(int code);
 void createSaveDir(int slot);
 void removeSaveDir(int slot);
 
-Rect resizeToScreen(int w, int h, bool crop, ALIGNMENT align);
+Rect resizeToScreen(int w, int h, bool crop, int align);
 
 size_t stringFindCaseInsensitive(const std::string &_a, const std::string &_b);
 

@@ -40,7 +40,7 @@ private:
 	TabList tablist;
 
 	Point pos_logo;
-	ALIGNMENT align_logo;
+	int align_logo;
 
 public:
 	GameStateTitle();

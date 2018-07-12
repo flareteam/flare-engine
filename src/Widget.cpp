@@ -51,7 +51,7 @@ bool Widget::getPrev() {
 	return false;
 }
 
-void Widget::setBasePos(int x, int y, ALIGNMENT a) {
+void Widget::setBasePos(int x, int y, int a) {
 	pos_base.x = x;
 	pos_base.y = y;
 	alignment = a;

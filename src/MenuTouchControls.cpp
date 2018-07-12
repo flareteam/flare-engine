@@ -43,7 +43,7 @@ MenuTouchControls::MenuTouchControls()
 	align();
 }
 
-void MenuTouchControls::alignInput(Point& center, const Point& center_base, const int radius, const ALIGNMENT _align) {
+void MenuTouchControls::alignInput(Point& center, const Point& center_base, const int radius, const int _align) {
 	Rect input_rect;
 	input_rect.x = center_base.x - radius;
 	input_rect.y = center_base.y - radius;

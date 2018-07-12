@@ -74,28 +74,28 @@ GameStateTitle::GameStateTitle()
 			else if (infile.key == "play_pos") {
 				int x = Parse::popFirstInt(infile.val);
 				int y = Parse::popFirstInt(infile.val);
-				ALIGNMENT a = Parse::toAlignment(Parse::popFirstString(infile.val));
+				int a = Parse::toAlignment(Parse::popFirstString(infile.val));
 				button_play->setBasePos(x, y, a);
 			}
 			// @ATTR config_pos|int, int, alignment : X, Y, Alignment|Position of the "Configuration" button.
 			else if (infile.key == "config_pos") {
 				int x = Parse::popFirstInt(infile.val);
 				int y = Parse::popFirstInt(infile.val);
-				ALIGNMENT a = Parse::toAlignment(Parse::popFirstString(infile.val));
+				int a = Parse::toAlignment(Parse::popFirstString(infile.val));
 				button_cfg->setBasePos(x, y, a);
 			}
 			// @ATTR credits_pos|int, int, alignment : X, Y, Alignment|Position of the "Credits" button.
 			else if (infile.key == "credits_pos") {
 				int x = Parse::popFirstInt(infile.val);
 				int y = Parse::popFirstInt(infile.val);
-				ALIGNMENT a = Parse::toAlignment(Parse::popFirstString(infile.val));
+				int a = Parse::toAlignment(Parse::popFirstString(infile.val));
 				button_credits->setBasePos(x, y, a);
 			}
 			// @ATTR exit_pos|int, int, alignment : X, Y, Alignment|Position of the "Exit Game" button.
 			else if (infile.key == "exit_pos") {
 				int x = Parse::popFirstInt(infile.val);
 				int y = Parse::popFirstInt(infile.val);
-				ALIGNMENT a = Parse::toAlignment(Parse::popFirstString(infile.val));
+				int a = Parse::toAlignment(Parse::popFirstString(infile.val));
 				button_exit->setBasePos(x, y, a);
 			}
 			else {
