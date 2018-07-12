@@ -1100,7 +1100,7 @@ void StatBlock::addXP(int amount) {
 	xp = std::min(xp, xp_max);
 }
 
-StatBlock::AIPower* StatBlock::getAIPower(StatBlock::AI_POWER ai_type) {
+StatBlock::AIPower* StatBlock::getAIPower(int ai_type) {
 	std::vector<size_t> possible_ids;
 	int chance = rand() % 100;
 

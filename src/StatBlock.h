@@ -43,7 +43,7 @@ private:
 	bool statsLoaded;
 
 public:
-	typedef enum {
+	enum {
 		AI_POWER_MELEE = 0,
 		AI_POWER_RANGED = 1,
 		AI_POWER_BEACON = 2,
@@ -53,7 +53,7 @@ public:
 		AI_POWER_JOIN_COMBAT = 6,
 		AI_POWER_DEBUFF = 7,
 		AI_POWER_PASSIVE_POST = 8
-	} AI_POWER;
+	};
 
 	enum AvatarState {
 		AVATAR_STANCE = 0,
@@ -83,7 +83,7 @@ public:
 
 	class AIPower {
 	public:
-		AI_POWER type;
+		int type;
 		int id;
 		int chance;
 		int ticks;
@@ -115,7 +115,7 @@ public:
 	std::string getShortClass();
 	std::string getLongClass();
 	void addXP(int amount);
-	AIPower* getAIPower(AI_POWER ai_type);
+	AIPower* getAIPower(int ai_type);
 	int getPowerCooldown(int power_id);
 	void setPowerCooldown(int power_id, int power_cooldown);
 
