@@ -26,6 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Avatar.h"
 #include "CommonIncludes.h"
+#include "EffectManager.h"
 #include "EngineSettings.h"
 #include "FileParser.h"
 #include "FontEngine.h"

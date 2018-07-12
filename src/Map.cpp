@@ -19,6 +19,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 
+#include "EffectManager.h"
 #include "EngineSettings.h"
 #include "EventManager.h"
 #include "FileParser.h"

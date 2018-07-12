@@ -91,6 +91,24 @@ public:
 	std::string attack_speed_anim;
 };
 
+class EffectDef {
+public:
+	EffectDef();
+
+	std::string id;
+	std::string type;
+	std::string name;
+	int icon;
+	std::string animation;
+	bool can_stack;
+	int max_stacks;
+	bool group_stack;
+	bool render_above;
+	Color color_mod;
+	uint8_t alpha_mod;
+	std::string attack_speed_anim;
+};
+
 class EffectManager {
 private:
 	void removeEffect(size_t id);

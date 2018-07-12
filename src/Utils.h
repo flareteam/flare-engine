@@ -182,37 +182,6 @@ public:
 	}
 };
 
-class EffectDef {
-public:
-	std::string id;
-	std::string type;
-	std::string name;
-	int icon;
-	std::string animation;
-	bool can_stack;
-	int max_stacks;
-	bool group_stack;
-	bool render_above;
-	Color color_mod;
-	uint8_t alpha_mod;
-	std::string attack_speed_anim;
-
-	EffectDef()
-		: id("")
-		, type("")
-		, name("")
-		, icon(-1)
-		, animation("")
-		, can_stack(true)
-		, max_stacks(-1)
-		, group_stack(false)
-		, render_above(false)
-		, color_mod(255, 255, 255)
-		, alpha_mod(255)
-		, attack_speed_anim("") {
-	}
-};
-
 Point FPointToPoint(const FPoint& fp);
 FPoint screen_to_map(int x, int y, float camx, float camy);
 Point map_to_screen(float x, float y, float camx, float camy);

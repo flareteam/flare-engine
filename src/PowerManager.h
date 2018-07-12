@@ -34,6 +34,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class Animation;
 class AnimationSet;
+class EffectDef;
 class Hazard;
 
 class PostEffect {

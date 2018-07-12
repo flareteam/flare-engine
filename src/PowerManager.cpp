@@ -29,6 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "AnimationSet.h"
 #include "Avatar.h"
 #include "CombatText.h"
+#include "EffectManager.h"
 #include "EnemyManager.h"
 #include "EngineSettings.h"
 #include "EventManager.h"

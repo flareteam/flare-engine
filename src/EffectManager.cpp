@@ -31,6 +31,21 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "Stats.h"
 
+EffectDef::EffectDef()
+	: id("")
+	, type("")
+	, name("")
+	, icon(-1)
+	, animation("")
+	, can_stack(true)
+	, max_stacks(-1)
+	, group_stack(false)
+	, render_above(false)
+	, color_mod(255, 255, 255)
+	, alpha_mod(255)
+	, attack_speed_anim("") {
+}
+
 Effect::Effect()
 	: id("")
 	, name("")
