@@ -48,7 +48,7 @@ private:
 	void checkEnemiesForLoot();
 	void checkMapForLoot();
 	void loadLootTables();
-	void getLootTable(const std::string &filename, std::vector<Event_Component> *ec_list);
+	void getLootTable(const std::string &filename, std::vector<EventComponent> *ec_list);
 
 	SoundID sfx_loot;
 
@@ -59,7 +59,7 @@ private:
 	std::vector<class Enemy*> enemiesDroppingLoot;
 
 	// loot tables defined in files under "loot/"
-	std::map<std::string, std::vector<Event_Component> > loot_tables;
+	std::map<std::string, std::vector<EventComponent> > loot_tables;
 
 	// to prevent dropping multiple loot stacks on the same tile,
 	// we block tiles that have loot dropped on them
@@ -81,14 +81,14 @@ public:
 	// called by enemy, who definitly wants to drop loot.
 	void addEnemyLoot(Enemy *e);
 	void addLoot(ItemStack stack, const FPoint& pos, bool dropped_by_hero);
-	void checkLoot(std::vector<Event_Component> &loot_table, FPoint *pos, std::vector<ItemStack> *itemstack_vec);
+	void checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos, std::vector<ItemStack> *itemstack_vec);
 	ItemStack checkPickup(const Point& mouse, const FPoint& cam, const FPoint& hero_pos);
 	ItemStack checkAutoPickup(const FPoint& hero_pos);
 	ItemStack checkNearestPickup(const FPoint& hero_pos);
 
 	void addRenders(std::vector<Renderable> &ren, std::vector<Renderable> &ren_dead);
 
-	void parseLoot(std::string &val, Event_Component *e, std::vector<Event_Component> *ec_list);
+	void parseLoot(std::string &val, EventComponent *e, std::vector<EventComponent> *ec_list);
 
 	StatBlock *hero;
 };

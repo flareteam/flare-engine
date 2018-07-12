@@ -779,9 +779,9 @@ void MapRenderer::executeOnLoadEvents() {
 	// if set from the command-line, execute a given script if this is our first map load
 	if (!settings->load_script.empty() && filename != "maps/spawn.txt") {
 		Event evnt;
-		Event_Component ec;
+		EventComponent ec;
 
-		ec.type = EC_SCRIPT;
+		ec.type = EventComponent::SCRIPT;
 		ec.s = settings->load_script;
 		settings->load_script.clear();
 
@@ -857,14 +857,14 @@ void MapRenderer::checkEvents(const FPoint& loc) {
 
 		if ((*it).activate_type == Event::ACTIVATE_ON_LEAVE) {
 			if (inside) {
-				if (!(*it).getComponent(EC_WAS_INSIDE_EVENT_AREA)) {
-					(*it).components.push_back(Event_Component());
-					(*it).components.back().type = EC_WAS_INSIDE_EVENT_AREA;
+				if (!(*it).getComponent(EventComponent::WAS_INSIDE_EVENT_AREA)) {
+					(*it).components.push_back(EventComponent());
+					(*it).components.back().type = EventComponent::WAS_INSIDE_EVENT_AREA;
 				}
 			}
 			else {
-				if ((*it).getComponent(EC_WAS_INSIDE_EVENT_AREA)) {
-					(*it).deleteAllComponents(EC_WAS_INSIDE_EVENT_AREA);
+				if ((*it).getComponent(EventComponent::WAS_INSIDE_EVENT_AREA)) {
+					(*it).deleteAllComponents(EventComponent::WAS_INSIDE_EVENT_AREA);
 					if (EventManager::executeEvent(*it))
 						it = events.erase(it);
 				}
@@ -904,7 +904,7 @@ void MapRenderer::checkHotspots() {
 				bool matched = false;
 				bool is_npc = false;
 
-				Event_Component* npc = (*it).getComponent(EC_NPC_HOTSPOT);
+				EventComponent* npc = (*it).getComponent(EventComponent::NPC_HOTSPOT);
 				if (npc) {
 					is_npc = true;
 
@@ -957,7 +957,7 @@ void MapRenderer::checkHotspots() {
 					if ((*it).cooldown_ticks != 0) continue;
 
 					// new tooltip?
-					createTooltip((*it).getComponent(EC_TOOLTIP));
+					createTooltip((*it).getComponent(EventComponent::TOOLTIP));
 
 					if ((((*it).reachable_from.w == 0 && (*it).reachable_from.h == 0) || isWithinRect((*it).reachable_from, FPointToPoint(cam)))
 							&& calcDist(cam, (*it).center) < eset->misc.interact_range) {
@@ -1017,9 +1017,9 @@ void MapRenderer::checkNearestEvent() {
 	if (nearest != events.end()) {
 		if (!inpt->usingMouse() || settings->touchscreen) {
 			// new tooltip?
-			createTooltip((*nearest).getComponent(EC_TOOLTIP));
+			createTooltip((*nearest).getComponent(EventComponent::TOOLTIP));
 			tip_pos = map_to_screen((*nearest).center.x, (*nearest).center.y, shakycam.x, shakycam.y);
-			if ((*nearest).getComponent(EC_NPC_HOTSPOT)) {
+			if ((*nearest).getComponent(EventComponent::NPC_HOTSPOT)) {
 				tip_pos.y -= eset->tooltips.margin_npc;
 			}
 			else {
@@ -1041,7 +1041,7 @@ void MapRenderer::checkTooltip() {
 		tip->render(tip_buf, tip_pos, TooltipData::STYLE_TOPLABEL);
 }
 
-void MapRenderer::createTooltip(Event_Component *ec) {
+void MapRenderer::createTooltip(EventComponent *ec) {
 	if (ec && !ec->s.empty() && tooltipm->context != TooltipManager::CONTEXT_MENU) {
 		show_tooltip = true;
 		if (!tip_buf.compareFirstLine(ec->s)) {

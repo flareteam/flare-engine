@@ -28,6 +28,88 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class FileParser;
 
+class EventComponent {
+public:
+	enum {
+		NONE = 0,
+		TOOLTIP = 1,
+		POWER_PATH = 2,
+		POWER_DAMAGE = 3,
+		INTERMAP = 4,
+		INTRAMAP = 5,
+		MAPMOD = 6,
+		SOUNDFX = 7,
+		LOOT = 8,
+		LOOT_COUNT = 9,
+		MSG = 10,
+		SHAKYCAM = 11,
+		REQUIRES_STATUS = 12,
+		REQUIRES_NOT_STATUS = 13,
+		REQUIRES_LEVEL = 14,
+		REQUIRES_NOT_LEVEL = 15,
+		REQUIRES_CURRENCY = 16,
+		REQUIRES_NOT_CURRENCY = 17,
+		REQUIRES_ITEM = 18,
+		REQUIRES_NOT_ITEM = 19,
+		REQUIRES_CLASS = 20,
+		REQUIRES_NOT_CLASS = 21,
+		SET_STATUS = 22,
+		UNSET_STATUS = 23,
+		REMOVE_CURRENCY = 24,
+		REMOVE_ITEM = 25,
+		REWARD_XP = 26,
+		REWARD_CURRENCY = 27,
+		REWARD_ITEM = 28,
+		REWARD_LOOT = 29,
+		REWARD_LOOT_COUNT = 30,
+		RESTORE = 31,
+		POWER = 32,
+		SPAWN = 33,
+		STASH = 34,
+		NPC = 35,
+		MUSIC = 36,
+		CUTSCENE = 37,
+		REPEAT = 38,
+		SAVE_GAME = 39,
+		BOOK = 40,
+		SCRIPT = 41,
+		CHANCE_EXEC = 42,
+		RESPEC = 43,
+		NPC_ID = 44,
+		NPC_HOTSPOT = 45,
+		NPC_DIALOG_THEM = 46,
+		NPC_DIALOG_YOU = 47,
+		NPC_VOICE = 48,
+		NPC_DIALOG_TOPIC = 49,
+		NPC_DIALOG_GROUP = 50,
+		NPC_ALLOW_MOVEMENT = 51,
+		NPC_PORTRAIT_THEM = 52,
+		NPC_PORTRAIT_YOU = 53,
+		QUEST_TEXT = 54,
+		WAS_INSIDE_EVENT_AREA = 55
+	};
+
+	int type;
+	std::string s;
+	int x;
+	int y;
+	int z;
+	int a;
+	int b;
+	int c;
+
+	EventComponent()
+		: type(NONE)
+		, s("")
+		, x(0)
+		, y(0)
+		, z(0)
+		, a(0)
+		, b(0)
+		, c(0) {
+	}
+};
+
 class Event {
 public:
 	enum {
@@ -41,7 +123,7 @@ public:
 
 	std::string type;
 	int activate_type;
-	std::vector<Event_Component> components;
+	std::vector<EventComponent> components;
 	Rect location;
 	Rect hotspot;
 	int cooldown; // events that run multiple times pause this long in frames
@@ -55,8 +137,8 @@ public:
 	Event();
 	~Event();
 
-	Event_Component* getComponent(const EVENT_COMPONENT_TYPE &_type);
-	void deleteAllComponents(const EVENT_COMPONENT_TYPE &_type);
+	EventComponent* getComponent(const int _type);
+	void deleteAllComponents(const int _type);
 };
 
 class EventManager {
@@ -64,15 +146,15 @@ public:
 	EventManager();
 	~EventManager();
 	static void loadEvent(FileParser &infile, Event* evnt);
-	static void loadEventComponent(FileParser &infile, Event* evnt, Event_Component* ec);
-	static bool loadEventComponentString(std::string &key, std::string &val, Event* evnt, Event_Component* ec);
+	static void loadEventComponent(FileParser &infile, Event* evnt, EventComponent* ec);
+	static bool loadEventComponentString(std::string &key, std::string &val, Event* evnt, EventComponent* ec);
 
 	static bool executeEvent(Event &e);
 	static bool isActive(const Event &e);
 	static void executeScript(const std::string& filename, float x, float y);
 
 private:
-	static Event_Component getRandomMapFromFile(const std::string& fname);
+	static EventComponent getRandomMapFromFile(const std::string& fname);
 
 };
 

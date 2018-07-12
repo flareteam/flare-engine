@@ -92,7 +92,7 @@ void NPCManager::handleNewMap() {
 
 		// create a map event for this npc
 		Event ev;
-		Event_Component ec;
+		EventComponent ec;
 
 		// the event hotspot is a 1x1 tile at the npc's feet
 		ev.activate_type = Event::ACTIVATE_ON_TRIGGER;
@@ -105,11 +105,11 @@ void NPCManager::handleNewMap() {
 		ev.center.x = static_cast<float>(ev.hotspot.x) + static_cast<float>(ev.hotspot.w)/2;
 		ev.center.y = static_cast<float>(ev.hotspot.y) + static_cast<float>(ev.hotspot.h)/2;
 
-		ec.type = EC_NPC_ID;
+		ec.type = EventComponent::NPC_ID;
 		ec.x = static_cast<int>(npcs.size())-1;
 		ev.components.push_back(ec);
 
-		ec.type = EC_TOOLTIP;
+		ec.type = EventComponent::TOOLTIP;
 		ec.s = npc->name;
 		ev.components.push_back(ec);
 
@@ -117,7 +117,7 @@ void NPCManager::handleNewMap() {
 		// This might cause some undesired behavior for npcs that have packed animations and a lot of variation
 		// However, it is sufficient for all of our current game data (fantasycore, no-name mod, polymorphable)
 		Renderable ren = npc->activeAnimation->getCurrentFrame(npc->direction);
-		ec.type = EC_NPC_HOTSPOT;
+		ec.type = EventComponent::NPC_HOTSPOT;
 		ec.x = static_cast<int>(npc->pos.x);
 		ec.y = static_cast<int>(npc->pos.y);
 		ec.z = ren.offset.x;

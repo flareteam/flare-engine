@@ -428,7 +428,7 @@ void StatBlock::load(const std::string& filename) {
 				clear_loot = false;
 			}
 
-			loot_table.push_back(Event_Component());
+			loot_table.push_back(EventComponent());
 			loot->parseLoot(infile.val, &loot_table.back(), &loot_table);
 		}
 		else if (infile.key == "loot_count") {

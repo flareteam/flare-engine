@@ -227,7 +227,7 @@ void EnemyManager::handleNewMap () {
 	// load enemies that can be spawn by map events
 	for (size_t i = 0; i < mapr->events.size(); i++) {
 		for (size_t j = 0; j < mapr->events[i].components.size(); j++) {
-			if (mapr->events[i].components[j].type == EC_SPAWN) {
+			if (mapr->events[i].components[j].type == EventComponent::SPAWN) {
 				std::vector<Enemy_Level> spawn_enemies = enemyg->getEnemiesInCategory(mapr->events[i].components[j].s);
 				for (size_t k = 0; k < spawn_enemies.size(); k++) {
 					loadEnemyPrototype(spawn_enemies[k].type);

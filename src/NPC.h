@@ -29,6 +29,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "ItemStorage.h"
 #include "Utils.h"
 
+class EventComponent;
+
 class NPC : public Entity {
 private:
 	enum {
@@ -38,12 +40,12 @@ private:
 
 	void loadGraphics();
 	int loadSound(const std::string& fname, int vox_type);
-	bool isDialogType(const EVENT_COMPONENT_TYPE &event_type);
+	bool isDialogType(const int &event_type);
 	bool playSoundQuest(int id);
 
 	std::string gfx; // filename of sprite.
 
-	std::vector<Event_Component> random_table;
+	std::vector<EventComponent> random_table;
 	Point random_table_count;
 
 	std::vector<std::string> vendor_requires_status;
@@ -92,7 +94,7 @@ public:
 	// story and dialog options
 	// outer vector is addressing the dialog and the inner vector is
 	// addressing the events during one dialog
-	std::vector<std::vector<Event_Component> > dialog;
+	std::vector<std::vector<EventComponent> > dialog;
 };
 
 #endif

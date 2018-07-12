@@ -36,7 +36,7 @@ private:
 
 	// inner vector is a chain of events per quest, outer vector is a
 	// list of quests.
-	std::vector<std::vector<Event_Component> >quests;
+	std::vector<std::vector<EventComponent> >quests;
 
 	std::vector<size_t> active_quest_ids;
 	std::vector<std::string> quest_names;

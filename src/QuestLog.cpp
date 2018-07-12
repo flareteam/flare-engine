@@ -77,7 +77,7 @@ void QuestLog::load(const std::string& filename) {
 	while (infile.next()) {
 		if (infile.new_section) {
 			if (infile.section == "quest") {
-				quests.push_back(std::vector<Event_Component>());
+				quests.push_back(std::vector<EventComponent>());
 			}
 		}
 
@@ -136,8 +136,8 @@ void QuestLog::load(const std::string& filename) {
 		}
 		else if (infile.key == "quest_text") {
 			// @ATTR quest.quest_text|string|Text that gets displayed in the Quest log when this quest is active.
-			Event_Component ec;
-			ec.type = EC_QUEST_TEXT;
+			EventComponent ec;
+			ec.type = EventComponent::QUEST_TEXT;
 			ec.s = msg->get(infile.val);
 
 			// quest group id
@@ -150,7 +150,7 @@ void QuestLog::load(const std::string& filename) {
 		}
 
 		for (size_t i=0; i<ev.components.size(); ++i) {
-			if (ev.components[i].type != EC_NONE)
+			if (ev.components[i].type != EventComponent::NONE)
 				quests.back().push_back(ev.components[i]);
 		}
 	}
@@ -172,7 +172,7 @@ void QuestLog::createQuestList() {
 		bool requirements_met = false;
 
 		for (size_t j=0; j<quests[i].size(); j++) {
-			if (quests[i][j].type == EC_QUEST_TEXT) {
+			if (quests[i][j].type == EventComponent::QUEST_TEXT) {
 				continue;
 			}
 			else {
@@ -224,14 +224,14 @@ void QuestLog::createQuestList() {
 			// get the group id of the next active quest
 			int next_quest_id = 0;
 			for (size_t j=0; j<quests[k_next].size(); j++) {
-				if (quests[k_next][j].type == EC_QUEST_TEXT) {
+				if (quests[k_next][j].type == EventComponent::QUEST_TEXT) {
 					next_quest_id = quests[k_next][j].x;
 					break;
 				}
 			}
 
 			for (size_t j=0; j<quests[k].size(); j++) {
-				if (quests[k][j].type == EC_QUEST_TEXT) {
+				if (quests[k][j].type == EventComponent::QUEST_TEXT) {
 					log->add(quests[k][j].s, MenuLog::TYPE_QUESTS, WidgetLog::MSG_UNIQUE);
 
 					if (next_quest_id != quests[k][j].x) {

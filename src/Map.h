@@ -26,6 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Utils.h"
 
 class Event;
+class EventComponent;
 class FileParser;
 class StatBlock;
 
@@ -166,7 +167,7 @@ public:
 
 	// intemap_random queue
 	std::string intermap_random_filename;
-	std::queue<Event_Component> intermap_random_queue;
+	std::queue<EventComponent> intermap_random_queue;
 
 	// vars
 	std::string title;

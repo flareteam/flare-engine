@@ -71,51 +71,51 @@ void NPC::load(const std::string& npc_id) {
 		while (infile.next()) {
 			if (infile.section == "dialog") {
 				if (infile.new_section) {
-					dialog.push_back(std::vector<Event_Component>());
+					dialog.push_back(std::vector<EventComponent>());
 				}
-				Event_Component e;
-				e.type = EC_NONE;
+				EventComponent e;
+				e.type = EventComponent::NONE;
 				if (infile.key == "him" || infile.key == "her") {
 					// @ATTR dialog.him|repeatable(string)|A line of dialog from the NPC.
 					// @ATTR dialog.her|repeatable(string)|A line of dialog from the NPC.
-					e.type = EC_NPC_DIALOG_THEM;
+					e.type = EventComponent::NPC_DIALOG_THEM;
 					e.s = msg->get(infile.val);
 				}
 				else if (infile.key == "you") {
 					// @ATTR dialog.you|repeatable(string)|A line of dialog from the player.
-					e.type = EC_NPC_DIALOG_YOU;
+					e.type = EventComponent::NPC_DIALOG_YOU;
 					e.s = msg->get(infile.val);
 				}
 				else if (infile.key == "voice") {
 					// @ATTR dialog.voice|repeatable(string)|Filename of a voice sound file to play.
-					e.type = EC_NPC_VOICE;
+					e.type = EventComponent::NPC_VOICE;
 					e.x = loadSound(infile.val, VOX_QUEST);
 				}
 				else if (infile.key == "topic") {
 					// @ATTR dialog.topic|string|The name of this dialog topic. Displayed when picking a dialog tree.
-					e.type = EC_NPC_DIALOG_TOPIC;
+					e.type = EventComponent::NPC_DIALOG_TOPIC;
 					e.s = msg->get(infile.val);
 				}
 				else if (infile.key == "group") {
 					// @ATTR dialog.group|string|Dialog group.
-					e.type = EC_NPC_DIALOG_GROUP;
+					e.type = EventComponent::NPC_DIALOG_GROUP;
 					e.s = infile.val;
 				}
 				else if (infile.key == "allow_movement") {
 					// @ATTR dialog.allow_movement|bool|Restrict the player's mvoement during dialog.
-					e.type = EC_NPC_ALLOW_MOVEMENT;
+					e.type = EventComponent::NPC_ALLOW_MOVEMENT;
 					e.s = infile.val;
 				}
 				else if (infile.key == "portrait_him" || infile.key == "portrait_her") {
 					// @ATTR dialog.portrait_him|repeatable(filename)|Filename of a portrait to display for the NPC during this dialog.
 					// @ATTR dialog.portrait_her|repeatable(filename)|Filename of a portrait to display for the NPC during this dialog.
-					e.type = EC_NPC_PORTRAIT_THEM;
+					e.type = EventComponent::NPC_PORTRAIT_THEM;
 					e.s = infile.val;
 					portrait_filenames.push_back(e.s);
 				}
 				else if (infile.key == "portrait_you") {
 					// @ATTR dialog.portrait_you|repeatable(filename)|Filename of a portrait to display for the player during this dialog.
-					e.type = EC_NPC_PORTRAIT_YOU;
+					e.type = EventComponent::NPC_PORTRAIT_YOU;
 					e.s = infile.val;
 					portrait_filenames.push_back(e.s);
 				}
@@ -124,13 +124,13 @@ void NPC::load(const std::string& npc_id) {
 					EventManager::loadEventComponent(infile, &ev, NULL);
 
 					for (size_t i=0; i<ev.components.size(); ++i) {
-						if (ev.components[i].type != EC_NONE) {
+						if (ev.components[i].type != EventComponent::NONE) {
 							dialog.back().push_back(ev.components[i]);
 						}
 					}
 				}
 
-				if (e.type != EC_NONE) {
+				if (e.type != EventComponent::NONE) {
 					dialog.back().push_back(e);
 				}
 			}
@@ -215,7 +215,7 @@ void NPC::load(const std::string& npc_id) {
 						clear_random_table = false;
 					}
 
-					random_table.push_back(Event_Component());
+					random_table.push_back(EventComponent());
 					loot->parseLoot(infile.val, &random_table.back(), &random_table);
 				}
 				else if (infile.key == "random_stock_count") {
@@ -341,7 +341,7 @@ void NPC::getDialogNodes(std::vector<int> &result) {
 		bool is_available = true;
 		bool is_grouped = false;
 		for (size_t j=0; j<dialog[i-1].size(); j++) {
-			if (dialog[i-1][j].type == EC_NPC_DIALOG_GROUP) {
+			if (dialog[i-1][j].type == EventComponent::NPC_DIALOG_GROUP) {
 				is_grouped = true;
 				group = dialog[i-1][j].s;
 			}
@@ -390,7 +390,7 @@ std::string NPC::getDialogTopic(unsigned int dialog_node) {
 		return "";
 
 	for (unsigned int j=0; j<dialog[dialog_node].size(); j++) {
-		if (dialog[dialog_node][j].type == EC_NPC_DIALOG_TOPIC)
+		if (dialog[dialog_node][j].type == EventComponent::NPC_DIALOG_TOPIC)
 			return dialog[dialog_node][j].s;
 	}
 
@@ -403,7 +403,7 @@ std::string NPC::getDialogTopic(unsigned int dialog_node) {
 bool NPC::checkMovement(unsigned int dialog_node) {
 	if (dialog_node < dialog.size()) {
 		for (unsigned int i=0; i<dialog[dialog_node].size(); i++) {
-			if (dialog[dialog_node][i].type == EC_NPC_ALLOW_MOVEMENT)
+			if (dialog[dialog_node][i].type == EventComponent::NPC_ALLOW_MOVEMENT)
 				return Parse::toBool(dialog[dialog_node][i].s);
 		}
 	}
@@ -442,46 +442,46 @@ bool NPC::processDialog(unsigned int dialog_node, unsigned int &event_cursor) {
 	while (event_cursor < dialog[dialog_node].size()) {
 
 		// we've already determined requirements are met, so skip these
-		if (dialog[dialog_node][event_cursor].type == EC_REQUIRES_STATUS) {
+		if (dialog[dialog_node][event_cursor].type == EventComponent::REQUIRES_STATUS) {
 			// continue to next event component
 		}
-		else if (dialog[dialog_node][event_cursor].type == EC_REQUIRES_NOT_STATUS) {
+		else if (dialog[dialog_node][event_cursor].type == EventComponent::REQUIRES_NOT_STATUS) {
 			// continue to next event component
 		}
-		else if (dialog[dialog_node][event_cursor].type == EC_REQUIRES_LEVEL) {
+		else if (dialog[dialog_node][event_cursor].type == EventComponent::REQUIRES_LEVEL) {
 			// continue to next event component
 		}
-		else if (dialog[dialog_node][event_cursor].type == EC_REQUIRES_NOT_LEVEL) {
+		else if (dialog[dialog_node][event_cursor].type == EventComponent::REQUIRES_NOT_LEVEL) {
 			// continue to next event component
 		}
-		else if (dialog[dialog_node][event_cursor].type == EC_REQUIRES_CURRENCY) {
+		else if (dialog[dialog_node][event_cursor].type == EventComponent::REQUIRES_CURRENCY) {
 			// continue to next event component
 		}
-		else if (dialog[dialog_node][event_cursor].type == EC_REQUIRES_NOT_CURRENCY) {
+		else if (dialog[dialog_node][event_cursor].type == EventComponent::REQUIRES_NOT_CURRENCY) {
 			// continue to next event component
 		}
-		else if (dialog[dialog_node][event_cursor].type == EC_REQUIRES_ITEM) {
+		else if (dialog[dialog_node][event_cursor].type == EventComponent::REQUIRES_ITEM) {
 			// continue to next event component
 		}
-		else if (dialog[dialog_node][event_cursor].type == EC_REQUIRES_NOT_ITEM) {
+		else if (dialog[dialog_node][event_cursor].type == EventComponent::REQUIRES_NOT_ITEM) {
 			// continue to next event component
 		}
-		else if (dialog[dialog_node][event_cursor].type == EC_REQUIRES_CLASS) {
+		else if (dialog[dialog_node][event_cursor].type == EventComponent::REQUIRES_CLASS) {
 			// continue to next event component
 		}
-		else if (dialog[dialog_node][event_cursor].type == EC_REQUIRES_NOT_CLASS) {
+		else if (dialog[dialog_node][event_cursor].type == EventComponent::REQUIRES_NOT_CLASS) {
 			// continue to next event component
 		}
-		else if (dialog[dialog_node][event_cursor].type == EC_NPC_DIALOG_THEM) {
+		else if (dialog[dialog_node][event_cursor].type == EventComponent::NPC_DIALOG_THEM) {
 			return true;
 		}
-		else if (dialog[dialog_node][event_cursor].type == EC_NPC_DIALOG_YOU) {
+		else if (dialog[dialog_node][event_cursor].type == EventComponent::NPC_DIALOG_YOU) {
 			return true;
 		}
-		else if (dialog[dialog_node][event_cursor].type == EC_NPC_VOICE) {
+		else if (dialog[dialog_node][event_cursor].type == EventComponent::NPC_VOICE) {
 			playSoundQuest(dialog[dialog_node][event_cursor].x);
 		}
-		else if (dialog[dialog_node][event_cursor].type == EC_NPC_PORTRAIT_THEM) {
+		else if (dialog[dialog_node][event_cursor].type == EventComponent::NPC_PORTRAIT_THEM) {
 			npc_portrait = portraits[0];
 			for (size_t i = 0; i < portrait_filenames.size(); ++i) {
 				if (dialog[dialog_node][event_cursor].s == portrait_filenames[i]) {
@@ -490,7 +490,7 @@ bool NPC::processDialog(unsigned int dialog_node, unsigned int &event_cursor) {
 				}
 			}
 		}
-		else if (dialog[dialog_node][event_cursor].type == EC_NPC_PORTRAIT_YOU) {
+		else if (dialog[dialog_node][event_cursor].type == EventComponent::NPC_PORTRAIT_YOU) {
 			hero_portrait = NULL;
 			for (size_t i = 0; i < portrait_filenames.size(); ++i) {
 				if (dialog[dialog_node][event_cursor].s == portrait_filenames[i]) {
@@ -499,7 +499,7 @@ bool NPC::processDialog(unsigned int dialog_node, unsigned int &event_cursor) {
 				}
 			}
 		}
-		else if (dialog[dialog_node][event_cursor].type == EC_NONE) {
+		else if (dialog[dialog_node][event_cursor].type == EventComponent::NONE) {
 			// conversation ends
 			return false;
 		}
@@ -535,8 +535,8 @@ Renderable NPC::getRender() {
 	return r;
 }
 
-bool NPC::isDialogType(const EVENT_COMPONENT_TYPE &event_type) {
-	return event_type == EC_NPC_DIALOG_THEM || event_type == EC_NPC_DIALOG_YOU;
+bool NPC::isDialogType(const int &event_type) {
+	return event_type == EventComponent::NPC_DIALOG_THEM || event_type == EventComponent::NPC_DIALOG_YOU;
 }
 
 NPC::~NPC() {

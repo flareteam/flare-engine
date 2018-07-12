@@ -121,7 +121,7 @@ int Map::load(const std::string& fname) {
 
 	// create StatBlocks for events that need powers
 	for (unsigned i=0; i<events.size(); ++i) {
-		Event_Component *ec_power = events[i].getComponent(EC_POWER);
+		EventComponent *ec_power = events[i].getComponent(EventComponent::POWER);
 		if (ec_power) {
 			// store the index of this StatBlock so that we can find it when the event is activated
 			ec_power->y = addEventStatBlock(events[i]);
@@ -378,7 +378,7 @@ int Map::addEventStatBlock(Event &evnt) {
 
 	statb->perfect_accuracy = true; // never miss AND never overhit
 
-	Event_Component *ec_path = evnt.getComponent(EC_POWER_PATH);
+	EventComponent *ec_path = evnt.getComponent(EventComponent::POWER_PATH);
 	if (ec_path) {
 		// source is power path start
 		statb->pos.x = static_cast<float>(ec_path->x) + 0.5f;
@@ -390,7 +390,7 @@ int Map::addEventStatBlock(Event &evnt) {
 		statb->pos.y = static_cast<float>(evnt.location.y) + 0.5f;
 	}
 
-	Event_Component *ec_damage = evnt.getComponent(EC_POWER_DAMAGE);
+	EventComponent *ec_damage = evnt.getComponent(EventComponent::POWER_DAMAGE);
 	if (ec_damage) {
 		for (size_t i = 0; i < eset->damage_types.count; ++i) {
 			if (i % 2 == 0) {

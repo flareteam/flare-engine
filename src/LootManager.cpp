@@ -194,8 +194,8 @@ void LootManager::checkEnemiesForLoot() {
 
 		if (e->stats.quest_loot_id != 0) {
 			// quest loot
-			Event_Component ec;
-			ec.type = EC_LOOT;
+			EventComponent ec;
+			ec.type = EventComponent::LOOT;
 			ec.c = e->stats.quest_loot_id;
 			ec.a = ec.b = 1;
 			ec.z = 0;
@@ -249,16 +249,16 @@ void LootManager::addEnemyLoot(Enemy *e) {
 	enemiesDroppingLoot.push_back(e);
 }
 
-void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *pos, std::vector<ItemStack> *itemstack_vec) {
+void LootManager::checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos, std::vector<ItemStack> *itemstack_vec) {
 	if (hero == NULL) {
 		logError("LootManager: checkLoot() failed, no hero.");
 		return;
 	}
 
 	FPoint p;
-	Event_Component *ec;
+	EventComponent *ec;
 	ItemStack new_loot;
-	std::vector<Event_Component*> possible_ids;
+	std::vector<EventComponent*> possible_ids;
 
 	int chance = rand() % 100;
 
@@ -537,7 +537,7 @@ void LootManager::addRenders(std::vector<Renderable> &ren, std::vector<Renderabl
 	}
 }
 
-void LootManager::parseLoot(std::string &val, Event_Component *e, std::vector<Event_Component> *ec_list) {
+void LootManager::parseLoot(std::string &val, EventComponent *e, std::vector<EventComponent> *ec_list) {
 	if (e == NULL) return;
 
 	std::string chance;
@@ -562,7 +562,7 @@ void LootManager::parseLoot(std::string &val, Event_Component *e, std::vector<Ev
 
 	if (!first_is_filename) {
 		// make sure the type is "loot"
-		e->type = EC_LOOT;
+		e->type = EventComponent::LOOT;
 
 		// drop chance
 		chance = Parse::popFirstString(val);
@@ -578,9 +578,9 @@ void LootManager::parseLoot(std::string &val, Event_Component *e, std::vector<Ev
 	if (ec_list) {
 		std::string repeat_val = Parse::popFirstString(val);
 		while (repeat_val != "") {
-			ec_list->push_back(Event_Component());
-			Event_Component *ec = &ec_list->back();
-			ec->type = EC_LOOT;
+			ec_list->push_back(EventComponent());
+			EventComponent *ec = &ec_list->back();
+			ec->type = EventComponent::LOOT;
 
 			ec->s = repeat_val;
 			if (ec->s == "currency")
@@ -617,23 +617,23 @@ void LootManager::loadLootTables() {
 		if (!infile.open(filenames[i], FileParser::MOD_FILE, FileParser::ERROR_NORMAL))
 			continue;
 
-		std::vector<Event_Component> *ec_list = &loot_tables[filenames[i]];
-		Event_Component *ec = NULL;
+		std::vector<EventComponent> *ec_list = &loot_tables[filenames[i]];
+		EventComponent *ec = NULL;
 		bool skip_to_next = false;
 
 		while (infile.next()) {
 			if (infile.section == "") {
 				if (infile.key == "loot") {
-					ec_list->push_back(Event_Component());
+					ec_list->push_back(EventComponent());
 					ec = &ec_list->back();
 					parseLoot(infile.val, ec, ec_list);
 				}
 			}
 			else if (infile.section == "loot") {
 				if (infile.new_section) {
-					ec_list->push_back(Event_Component());
+					ec_list->push_back(EventComponent());
 					ec = &ec_list->back();
-					ec->type = EC_LOOT;
+					ec->type = EventComponent::LOOT;
 					skip_to_next = false;
 				}
 
@@ -669,14 +669,14 @@ void LootManager::loadLootTables() {
 	}
 }
 
-void LootManager::getLootTable(const std::string &filename, std::vector<Event_Component> *ec_list) {
+void LootManager::getLootTable(const std::string &filename, std::vector<EventComponent> *ec_list) {
 	if (!ec_list)
 		return;
 
-	std::map<std::string, std::vector<Event_Component> >::iterator it;
+	std::map<std::string, std::vector<EventComponent> >::iterator it;
 	for (it = loot_tables.begin(); it != loot_tables.end(); ++it) {
 		if (it->first == filename) {
-			std::vector<Event_Component> *loot_defs = &it->second;
+			std::vector<EventComponent> *loot_defs = &it->second;
 			for (unsigned i=0; i<loot_defs->size(); ++i) {
 				ec_list->push_back((*loot_defs)[i]);
 			}

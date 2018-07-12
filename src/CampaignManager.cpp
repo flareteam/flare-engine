@@ -28,6 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CampaignManager.h"
 #include "CommonIncludes.h"
 #include "EngineSettings.h"
+#include "EventManager.h"
 #include "Menu.h"
 #include "MenuManager.h"
 #include "MenuInventory.h"
@@ -195,44 +196,44 @@ void CampaignManager::restoreHPMP(const std::string& s) {
 	}
 }
 
-bool CampaignManager::checkAllRequirements(const Event_Component& ec) {
-	if (ec.type == EC_REQUIRES_STATUS) {
+bool CampaignManager::checkAllRequirements(const EventComponent& ec) {
+	if (ec.type == EventComponent::REQUIRES_STATUS) {
 		if (checkStatus(ec.s))
 			return true;
 	}
-	else if (ec.type == EC_REQUIRES_NOT_STATUS) {
+	else if (ec.type == EventComponent::REQUIRES_NOT_STATUS) {
 		if (!checkStatus(ec.s))
 			return true;
 	}
-	else if (ec.type == EC_REQUIRES_CURRENCY) {
+	else if (ec.type == EventComponent::REQUIRES_CURRENCY) {
 		if (checkCurrency(ec.x))
 			return true;
 	}
-	else if (ec.type == EC_REQUIRES_NOT_CURRENCY) {
+	else if (ec.type == EventComponent::REQUIRES_NOT_CURRENCY) {
 		if (!checkCurrency(ec.x))
 			return true;
 	}
-	else if (ec.type == EC_REQUIRES_ITEM) {
+	else if (ec.type == EventComponent::REQUIRES_ITEM) {
 		if (checkItem(ec.x))
 			return true;
 	}
-	else if (ec.type == EC_REQUIRES_NOT_ITEM) {
+	else if (ec.type == EventComponent::REQUIRES_NOT_ITEM) {
 		if (!checkItem(ec.x))
 			return true;
 	}
-	else if (ec.type == EC_REQUIRES_LEVEL) {
+	else if (ec.type == EventComponent::REQUIRES_LEVEL) {
 		if (pc->stats.level >= ec.x)
 			return true;
 	}
-	else if (ec.type == EC_REQUIRES_NOT_LEVEL) {
+	else if (ec.type == EventComponent::REQUIRES_NOT_LEVEL) {
 		if (pc->stats.level < ec.x)
 			return true;
 	}
-	else if (ec.type == EC_REQUIRES_CLASS) {
+	else if (ec.type == EventComponent::REQUIRES_CLASS) {
 		if (pc->stats.character_class == ec.s)
 			return true;
 	}
-	else if (ec.type == EC_REQUIRES_NOT_CLASS) {
+	else if (ec.type == EventComponent::REQUIRES_NOT_CLASS) {
 		if (pc->stats.character_class != ec.s)
 			return true;
 	}

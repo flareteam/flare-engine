@@ -70,7 +70,7 @@ private:
 
 	void clearLayers();
 
-	void createTooltip(Event_Component *ec);
+	void createTooltip(EventComponent *ec);
 
 	void getTileBounds(const int_fast16_t x, const int_fast16_t y, const Map_Layer& layerdata, Rect& bounds, Point& center);
 
@@ -120,7 +120,7 @@ public:
 	MapCollision collider;
 
 	// event-created loot or items
-	std::vector<Event_Component> loot;
+	std::vector<EventComponent> loot;
 	Point loot_count;
 
 	// teleport handling

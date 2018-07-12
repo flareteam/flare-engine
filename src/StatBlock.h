@@ -28,6 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "EffectManager.h"
+#include "EventManager.h"
 #include "Stats.h"
 #include "Utils.h"
 
@@ -275,7 +276,7 @@ public:
 	int flee_cooldown;
 	bool perfect_accuracy; // prevents misses & overhits; used for Event powers
 
-	std::vector<Event_Component> loot_table;
+	std::vector<EventComponent> loot_table;
 	Point loot_count;
 
 	// for the teleport spell
