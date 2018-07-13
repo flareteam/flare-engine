@@ -739,7 +739,7 @@ void MenuPowers::createTooltip(TooltipData* tip_data, int slot_num, const std::v
 	// add cooldown time
 	if (powers->powers[power_cells[slot_num].id].cooldown > 0) {
 		std::stringstream ss;
-		ss << msg->get("Cooldown:") << " " << Utils::getDurationString(powers->powers[power_cells[slot_num].id].cooldown);
+		ss << msg->get("Cooldown:") << " " << Utils::getDurationString(powers->powers[power_cells[slot_num].id].cooldown, 2);
 		tip_data->addText(ss.str());
 	}
 
@@ -940,10 +940,10 @@ void MenuPowers::createTooltip(TooltipData* tip_data, int slot_num, const std::v
 		if (!ss.str().empty()) {
 			if (pwr.post_effects[i].duration > 0) {
 				if (effect_ptr && effect_ptr->type == "death_sentence") {
-					ss << ": " << Utils::getDurationString(pwr.post_effects[i].duration);
+					ss << ": " << Utils::getDurationString(pwr.post_effects[i].duration, 2);
 				}
 				else {
-					ss << " (" << Utils::getDurationString(pwr.post_effects[i].duration) << ")";
+					ss << " (" << Utils::getDurationString(pwr.post_effects[i].duration, 2) << ")";
 				}
 
 				if (pwr.post_effects[i].chance != 100)

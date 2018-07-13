@@ -120,9 +120,9 @@ namespace Utils {
 	size_t stringFindCaseInsensitive(const std::string &_a, const std::string &_b);
 
 	std::string floatToString(const float value, size_t precision);
-	std::string getDurationString(const int duration, size_t precision = 2);
+	std::string getDurationString(const int duration, size_t precision);
 
-	std::string substituteVarsInString(const std::string &_s, Avatar* avatar = NULL);
+	std::string substituteVarsInString(const std::string &_s, Avatar* avatar);
 
 	FPoint clampDistance(float range, const FPoint& src, const FPoint& target);
 
@@ -130,7 +130,7 @@ namespace Utils {
 
 	int rotateDirection(int direction, int val);
 
-	std::string getTimeString(const unsigned long time, bool show_seconds = false);
+	std::string getTimeString(const unsigned long time);
 
 	void lockFileRead();
 	void lockFileWrite(int increment);

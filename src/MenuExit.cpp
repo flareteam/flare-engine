@@ -136,7 +136,7 @@ void MenuExit::align() {
 
 void MenuExit::logic() {
 	if (visible) {
-		std::string title_str = msg->get("Paused") + " [" + Utils::getTimeString(pc->time_played, true) + "]";
+		std::string title_str = msg->get("Paused") + " [" + Utils::getTimeString(pc->time_played) + "]";
 		title_lb.setText(title_str);
 
 		tablist.logic();
