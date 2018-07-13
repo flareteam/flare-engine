@@ -180,7 +180,7 @@ void EnemyManager::handleNewMap () {
 		mapr->collider.block(me.pos.x, me.pos.y, !MapCollision::IS_ALLY);
 	}
 
-	FPoint spawn_pos = mapr->collider.get_random_neighbor(Point(pc->stats.pos), 1, !MapCollision::IGNORE_BLOCKED);
+	FPoint spawn_pos = mapr->collider.getRandomNeighbor(Point(pc->stats.pos), 1, !MapCollision::IGNORE_BLOCKED);
 	while (!allies.empty()) {
 
 		Enemy *e = allies.front();
@@ -329,7 +329,7 @@ void EnemyManager::handleSpawn() {
 			e->stats.recalc();
 		}
 
-		if (mapr->collider.is_valid_position(espawn.pos.x, espawn.pos.y, e->stats.movement_type, MapCollision::COLLIDE_NORMAL) || !e->stats.hero_ally) {
+		if (mapr->collider.isValidPosition(espawn.pos.x, espawn.pos.y, e->stats.movement_type, MapCollision::COLLIDE_NORMAL) || !e->stats.hero_ally) {
 			e->stats.pos.x = espawn.pos.x;
 			e->stats.pos.y = espawn.pos.y;
 		}
@@ -492,7 +492,7 @@ void EnemyManager::spawn(const std::string& enemy_type, const Point& target) {
 	// quick spawns start facing a random direction
 	espawn.direction = rand() % 8;
 
-	if (!mapr->collider.is_empty(espawn.pos.x, espawn.pos.y)) {
+	if (!mapr->collider.isEmpty(espawn.pos.x, espawn.pos.y)) {
 		return;
 	}
 	else {

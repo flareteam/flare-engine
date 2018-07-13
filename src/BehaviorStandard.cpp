@@ -203,7 +203,7 @@ void BehaviorStandard::findTarget() {
 
 	// check line-of-sight
 	if (target_dist < e->stats.threat_range && pc->stats.alive)
-		los = mapr->collider.line_of_sight(e->stats.pos.x, e->stats.pos.y, pc->stats.pos.x, pc->stats.pos.y);
+		los = mapr->collider.lineOfSight(e->stats.pos.x, e->stats.pos.y, pc->stats.pos.x, pc->stats.pos.y);
 	else
 		los = false;
 
@@ -234,7 +234,7 @@ void BehaviorStandard::findTarget() {
 			int test_dir = Utils::rotateDirection(middle_dir, i);
 
 			FPoint test_pos = Utils::calcVector(e->stats.pos, test_dir, 1);
-			if (mapr->collider.is_valid_position(test_pos.x, test_pos.y, e->stats.movement_type, MapCollision::COLLIDE_NORMAL)) {
+			if (mapr->collider.isValidPosition(test_pos.x, test_pos.y, e->stats.movement_type, MapCollision::COLLIDE_NORMAL)) {
 				if (test_dir == e->stats.direction) {
 					// if we're already moving in a good direction, favor it over other directions
 					flee_dirs.clear();
@@ -361,7 +361,7 @@ void BehaviorStandard::checkMove() {
 		if (++e->stats.turn_ticks > real_turn_delay) {
 
 			// if blocked, face in pathfinder direction instead
-			if (!mapr->collider.line_of_movement(e->stats.pos.x, e->stats.pos.y, pursue_pos.x, pursue_pos.y, e->stats.movement_type)) {
+			if (!mapr->collider.lineOfMovement(e->stats.pos.x, e->stats.pos.y, pursue_pos.x, pursue_pos.y, e->stats.movement_type)) {
 
 				// if a path is returned, target first waypoint
 
@@ -398,7 +398,7 @@ void BehaviorStandard::checkMove() {
 				if(recalculate_path) {
 					chance_calc_path = -100;
 					path.clear();
-					path_found = mapr->collider.compute_path(e->stats.pos, pursue_pos, path, e->stats.movement_type, MapCollision::DEFAULT_PATH_LIMIT);
+					path_found = mapr->collider.computePath(e->stats.pos, pursue_pos, path, e->stats.movement_type, MapCollision::DEFAULT_PATH_LIMIT);
 				}
 
 				if(!path.empty()) {
@@ -690,7 +690,7 @@ void BehaviorStandard::updateState() {
 				mapr->collider.unblock(e->stats.pos.x, e->stats.pos.y);
 
 				// remove corpses that land on blocked tiles, such as water or pits
-				if (!mapr->collider.is_valid_position(e->stats.pos.x, e->stats.pos.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_NORMAL)) {
+				if (!mapr->collider.isValidPosition(e->stats.pos.x, e->stats.pos.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_NORMAL)) {
 					e->stats.corpse_ticks = 0;
 				}
 
@@ -743,8 +743,8 @@ FPoint BehaviorStandard::getWanderPoint() {
 	waypoint.x = static_cast<float>(e->stats.wander_area.x) + static_cast<float>(rand() % (e->stats.wander_area.w)) + 0.5f;
 	waypoint.y = static_cast<float>(e->stats.wander_area.y) + static_cast<float>(rand() % (e->stats.wander_area.h)) + 0.5f;
 
-	if (mapr->collider.is_valid_position(waypoint.x, waypoint.y, e->stats.movement_type, mapr->collider.getCollideType(e->stats.hero)) &&
-	    mapr->collider.line_of_movement(e->stats.pos.x, e->stats.pos.y, waypoint.x, waypoint.y, e->stats.movement_type))
+	if (mapr->collider.isValidPosition(waypoint.x, waypoint.y, e->stats.movement_type, mapr->collider.getCollideType(e->stats.hero)) &&
+	    mapr->collider.lineOfMovement(e->stats.pos.x, e->stats.pos.y, waypoint.x, waypoint.y, e->stats.movement_type))
 	{
 		return waypoint;
 	}

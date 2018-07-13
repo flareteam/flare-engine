@@ -198,22 +198,22 @@ void Entity::move_from_offending_tile() {
 	bool original_pos_is_bad = false;
 	int collide_type = mapr->collider.getCollideType(stats.hero);
 
-	while (!mapr->collider.is_valid_position(stats.pos.x, stats.pos.y, stats.movement_type, collide_type)) {
+	while (!mapr->collider.isValidPosition(stats.pos.x, stats.pos.y, stats.movement_type, collide_type)) {
 		original_pos_is_bad = true;
 
 		float pushx = 0;
 		float pushy = 0;
 
-		if (mapr->collider.is_valid_position(stats.pos.x + 1, stats.pos.y, stats.movement_type, collide_type))
+		if (mapr->collider.isValidPosition(stats.pos.x + 1, stats.pos.y, stats.movement_type, collide_type))
 			pushx += 0.1f * (2 - (static_cast<float>(static_cast<int>(stats.pos.x + 1)) + 0.5f - stats.pos.x));
 
-		if (mapr->collider.is_valid_position(stats.pos.x - 1, stats.pos.y, stats.movement_type, collide_type))
+		if (mapr->collider.isValidPosition(stats.pos.x - 1, stats.pos.y, stats.movement_type, collide_type))
 			pushx -= 0.1f * (2 - (stats.pos.x - (static_cast<float>(static_cast<int>(stats.pos.x - 1)) + 0.5f)));
 
-		if (mapr->collider.is_valid_position(stats.pos.x, stats.pos.y + 1, stats.movement_type, collide_type))
+		if (mapr->collider.isValidPosition(stats.pos.x, stats.pos.y + 1, stats.movement_type, collide_type))
 			pushy += 0.1f * (2 - (static_cast<float>(static_cast<int>(stats.pos.y + 1)) + 0.5f - stats.pos.y));
 
-		if (mapr->collider.is_valid_position(stats.pos.x, stats.pos.y- 1, stats.movement_type, collide_type))
+		if (mapr->collider.isValidPosition(stats.pos.x, stats.pos.y- 1, stats.movement_type, collide_type))
 			pushy -= 0.1f * (2 - (stats.pos.y - (static_cast<float>(static_cast<int>(stats.pos.y - 1)) + 0.5f)));
 
 		stats.pos.x += pushx;
@@ -232,7 +232,7 @@ void Entity::move_from_offending_tile() {
 			while (radius <= std::max(mapr->w, mapr->h)) {
 				for (int i = src_pos.x - radius; i <= src_pos.x + radius; ++i) {
 					for (int j = src_pos.y - radius; j <= src_pos.y + radius; ++j) {
-						if (mapr->collider.is_valid_position(static_cast<float>(i), static_cast<float>(j), stats.movement_type, collide_type)) {
+						if (mapr->collider.isValidPosition(static_cast<float>(i), static_cast<float>(j), stats.movement_type, collide_type)) {
 							float test_dist = Utils::calcDist(stats.pos, shortest_pos);
 							if (shortest_dist == 0 || test_dist < shortest_dist) {
 								shortest_dist = test_dist;
@@ -330,7 +330,7 @@ bool Entity::takeHit(Hazard &h) {
 		return false;
 
 	// prevent hazard aoe from hitting targets behind walls
-	if (h.power->walls_block_aoe && !mapr->collider.line_of_movement(stats.pos.x, stats.pos.y, h.pos.x, h.pos.y, MapCollision::MOVE_NORMAL))
+	if (h.power->walls_block_aoe && !mapr->collider.lineOfMovement(stats.pos.x, stats.pos.y, h.pos.x, h.pos.y, MapCollision::MOVE_NORMAL))
 		return false;
 
 	// some enemies can be invicible based on campaign status

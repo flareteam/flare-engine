@@ -298,7 +298,7 @@ void GameStatePlay::checkTeleport() {
 		// if we're not changing map, move allies to a the player's new position
 		// when changing maps, enemym->handleNewMap() does something similar to this
 		if (mapr->teleport_mapname.empty()) {
-			FPoint spawn_pos = mapr->collider.get_random_neighbor(Point(pc->stats.pos), 1, !MapCollision::IGNORE_BLOCKED);
+			FPoint spawn_pos = mapr->collider.getRandomNeighbor(Point(pc->stats.pos), 1, !MapCollision::IGNORE_BLOCKED);
 			for (unsigned int i=0; i < enemym->enemies.size(); i++) {
 				if(enemym->enemies[i]->stats.hero_ally && enemym->enemies[i]->stats.alive) {
 					mapr->collider.unblock(enemym->enemies[i]->stats.pos.x, enemym->enemies[i]->stats.pos.y);
@@ -327,7 +327,7 @@ void GameStatePlay::checkTeleport() {
 			}
 
 			// store this as the new respawn point (provided the tile is open)
-			if (mapr->collider.is_valid_position(pc->stats.pos.x, pc->stats.pos.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_HERO)) {
+			if (mapr->collider.isValidPosition(pc->stats.pos.x, pc->stats.pos.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_HERO)) {
 				mapr->respawn_map = teleport_mapname;
 				mapr->respawn_point = pc->stats.pos;
 			}
@@ -367,7 +367,7 @@ void GameStatePlay::checkTeleport() {
 				on_load_teleport = true;
 		}
 
-		if (mapr->collider.is_outside_map(pc->stats.pos.x, pc->stats.pos.y)) {
+		if (mapr->collider.isOutsideMap(pc->stats.pos.x, pc->stats.pos.y)) {
 			Utils::logError("GameStatePlay: Teleport position is outside of map bounds.");
 			pc->stats.pos.x = 0.5f;
 			pc->stats.pos.y = 0.5f;

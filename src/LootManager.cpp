@@ -277,10 +277,10 @@ void LootManager::checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos
 			p.x = static_cast<float>(src.x) + 0.5f;
 			p.y = static_cast<float>(src.y) + 0.5f;
 
-			if (!mapr->collider.is_valid_position(p.x, p.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_NORMAL)) {
-				p = mapr->collider.get_random_neighbor(src, eset->loot.drop_radius, !MapCollision::IGNORE_BLOCKED);
+			if (!mapr->collider.isValidPosition(p.x, p.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_NORMAL)) {
+				p = mapr->collider.getRandomNeighbor(src, eset->loot.drop_radius, !MapCollision::IGNORE_BLOCKED);
 
-				if (!mapr->collider.is_valid_position(p.x, p.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_NORMAL)) {
+				if (!mapr->collider.isValidPosition(p.x, p.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_NORMAL)) {
 					p = hero->pos;
 				}
 				else {
@@ -355,10 +355,10 @@ void LootManager::checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos
 		p.x = static_cast<float>(src.x) + 0.5f;
 		p.y = static_cast<float>(src.y) + 0.5f;
 
-		if (!mapr->collider.is_valid_position(p.x, p.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_NORMAL)) {
-			p = mapr->collider.get_random_neighbor(src, eset->loot.drop_radius, !MapCollision::IGNORE_BLOCKED);
+		if (!mapr->collider.isValidPosition(p.x, p.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_NORMAL)) {
+			p = mapr->collider.getRandomNeighbor(src, eset->loot.drop_radius, !MapCollision::IGNORE_BLOCKED);
 
-			if (!mapr->collider.is_valid_position(p.x, p.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_NORMAL)) {
+			if (!mapr->collider.isValidPosition(p.x, p.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_NORMAL)) {
 				p = hero->pos;
 			}
 			else {

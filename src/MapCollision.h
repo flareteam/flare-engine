@@ -41,18 +41,20 @@ private:
 		CHECK_SIGHT = 2
 	};
 
-	bool line_check(const float& x1, const float& y1, const float& x2, const float& y2, int check_type, int movement_type);
+	bool isTileOutsideMap(const int& tile_x, const int& tile_y) const;
 
-	bool small_step_forced_slide_along_grid(
+	bool lineCheck(const float& x1, const float& y1, const float& x2, const float& y2, int check_type, int movement_type);
+
+	bool smallStepForcedSlideAlongGrid(
 		float &x, float &y, float step_x, float step_y, int movement_type, int collide_type);
-	bool small_step_forced_slide(
+	bool smallStepForcedSlide(
 		float &x, float &y, float step_x, float step_y, int movement_type, int collide_type);
-	bool small_step(
+	bool smallStep(
 		float &x, float &y, float step_x, float step_y, int movement_type, int collide_type);
 
-	bool is_valid_tile(const int& x, const int& y, int movement_type, int collide_type) const;
+	bool isValidTile(const int& x, const int& y, int movement_type, int collide_type) const;
 
-	FPoint collision_to_map(const Point& p);
+	FPoint collisionToMap(const Point& p);
 
 public:
 	// const flags
@@ -92,27 +94,26 @@ public:
 	MapCollision();
 	~MapCollision();
 
-	void setmap(const Map_Layer& _colmap, unsigned short w, unsigned short h);
+	void setMap(const Map_Layer& _colmap, unsigned short w, unsigned short h);
 	bool move(float &x, float &y, float step_x, float step_y, int movement_type, int collide_type);
 
-	bool is_outside_map(const int& tile_x, const int& tile_y) const;
-	bool is_outside_map(const float& tile_x, const float& tile_y) const;
-	bool is_empty(const float& x, const float& y) const;
-	bool is_wall(const float& x, const float& y) const;
+	bool isOutsideMap(const float& tile_x, const float& tile_y) const;
+	bool isEmpty(const float& x, const float& y) const;
+	bool isWall(const float& x, const float& y) const;
 
-	bool is_valid_position(const float& x, const float& y, int movement_type, int collide_type) const;
+	bool isValidPosition(const float& x, const float& y, int movement_type, int collide_type) const;
 
-	bool line_of_sight(const float& x1, const float& y1, const float& x2, const float& y2);
-	bool line_of_movement(const float& x1, const float& y1, const float& x2, const float& y2, int movement_type);
+	bool lineOfSight(const float& x1, const float& y1, const float& x2, const float& y2);
+	bool lineOfMovement(const float& x1, const float& y1, const float& x2, const float& y2, int movement_type);
 
-	bool is_facing(const float& x1, const float& y1, char direction, const float& x2, const float& y2);
+	bool isFacing(const float& x1, const float& y1, char direction, const float& x2, const float& y2);
 
-	bool compute_path(const FPoint& start, const FPoint& end, std::vector<FPoint> &path, int movement_type, unsigned int limit);
+	bool computePath(const FPoint& start, const FPoint& end, std::vector<FPoint> &path, int movement_type, unsigned int limit);
 
 	void block(const float& map_x, const float& map_y, bool is_ally);
 	void unblock(const float& map_x, const float& map_y);
 
-	FPoint get_random_neighbor(const Point& target, int range, bool ignore_blocked);
+	FPoint getRandomNeighbor(const Point& target, int range, bool ignore_blocked);
 
 	int getCollideType(bool hero) {
 		return hero ? COLLIDE_HERO : COLLIDE_NORMAL;

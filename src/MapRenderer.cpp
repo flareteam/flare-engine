@@ -81,7 +81,7 @@ void MapRenderer::clearQueues() {
 }
 
 bool MapRenderer::enemyGroupPlaceEnemy(float x, float y, Map_Group &g) {
-	if (collider.is_empty(x, y)) {
+	if (collider.isEmpty(x, y)) {
 		Enemy_Level enemy_lev = enemyg->getRandomEnemy(g.category, g.levelmin, g.levelmax);
 		if (!enemy_lev.type.empty()) {
 			Map_Enemy group_member = Map_Enemy(enemy_lev.type, FPoint(x, y));
@@ -197,7 +197,7 @@ int MapRenderer::load(const std::string& fname) {
 				break;
 			}
 			short height = static_cast<short>(layers[i][0].size());
-			collider.setmap(layers[i], width, height);
+			collider.setMap(layers[i], width, height);
 			removeLayer(i);
 		}
 	}
@@ -1121,7 +1121,7 @@ void MapRenderer::drawDevCursor() {
 	Color dev_cursor_color = Color(255,255,0,255);
 	FPoint target = Utils::screenToMap(inpt->mouse.x,  inpt->mouse.y, shakycam.x, shakycam.y);
 
-	if (!collider.is_outside_map(floorf(target.x), floorf(target.y))) {
+	if (!collider.isOutsideMap(floorf(target.x), floorf(target.y))) {
 		if (eset->tileset.orientation == eset->tileset.TILESET_ORTHOGONAL) {
 			Point p_topleft = Utils::mapToScreen(floorf(target.x), floorf(target.y), shakycam.x, shakycam.y);
 			Point p_bottomright(p_topleft.x + eset->tileset.tile_w, p_topleft.y + eset->tileset.tile_h);

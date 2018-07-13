@@ -107,7 +107,7 @@ void BehaviorAlly::findTarget() {
 
 	// check line-of-sight
 	if (target_dist < e->stats.threat_range && pc->stats.alive)
-		los = mapr->collider.line_of_sight(e->stats.pos.x, e->stats.pos.y, pursue_pos.x, pursue_pos.y);
+		los = mapr->collider.lineOfSight(e->stats.pos.x, e->stats.pos.y, pursue_pos.x, pursue_pos.y);
 	else
 		los = false;
 
@@ -116,7 +116,7 @@ void BehaviorAlly::findTarget() {
 	//if hero is facing the summon
 	if(eset->misc.enable_ally_collision_ai) {
 		if(!enemym->player_blocked && hero_dist < ALLY_FLEE_DISTANCE
-				&& mapr->collider.is_facing(pc->stats.pos.x,pc->stats.pos.y,pc->stats.direction,e->stats.pos.x,e->stats.pos.y)) {
+				&& mapr->collider.isFacing(pc->stats.pos.x,pc->stats.pos.y,pc->stats.direction,e->stats.pos.x,e->stats.pos.y)) {
 			enemym->player_blocked = true;
 			enemym->player_blocked_ticks = BLOCK_TICKS;
 		}
@@ -124,7 +124,7 @@ void BehaviorAlly::findTarget() {
 		bool player_closer_than_target = Utils::calcDist(e->stats.pos, pursue_pos) > Utils::calcDist(e->stats.pos, pc->stats.pos);
 
 		if(enemym->player_blocked && (!e->stats.in_combat || player_closer_than_target)
-				&& mapr->collider.is_facing(pc->stats.pos.x,pc->stats.pos.y,pc->stats.direction,e->stats.pos.x,e->stats.pos.y)) {
+				&& mapr->collider.isFacing(pc->stats.pos.x,pc->stats.pos.y,pc->stats.direction,e->stats.pos.x,e->stats.pos.y)) {
 			fleeing = true;
 			pursue_pos = pc->stats.pos;
 		}
@@ -157,7 +157,7 @@ void BehaviorAlly::findTarget() {
 			int test_dir = Utils::rotateDirection(middle_dir, i);
 
 			FPoint test_pos = Utils::calcVector(e->stats.pos, test_dir, 1);
-			if (mapr->collider.is_valid_position(test_pos.x, test_pos.y, e->stats.movement_type, MapCollision::COLLIDE_NORMAL)) {
+			if (mapr->collider.isValidPosition(test_pos.x, test_pos.y, e->stats.movement_type, MapCollision::COLLIDE_NORMAL)) {
 				if (test_dir == e->stats.direction) {
 					// if we're already moving in a good direction, favor it over other directions
 					flee_dirs.clear();

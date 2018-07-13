@@ -183,7 +183,7 @@ void Hazard::logic() {
 	if (check_collide) {
 		// very simplified collider, could skim around corners
 		// or even pass through thin walls if speed > tilesize
-		if (!collider->is_valid_position(pos.x, pos.y, power->movement_type, MapCollision::COLLIDE_NO_ENTITY)) {
+		if (!collider->isValidPosition(pos.x, pos.y, power->movement_type, MapCollision::COLLIDE_NO_ENTITY)) {
 
 			hit_wall = true;
 
@@ -192,7 +192,7 @@ void Hazard::logic() {
 			}
 			else {
 				lifespan = 0;
-				if (collider->is_outside_map(int(pos.x), int(pos.y)))
+				if (collider->isOutsideMap(pos.x, pos.y))
 					remove_now = true;
 		    }
 		}
@@ -200,11 +200,11 @@ void Hazard::logic() {
 }
 
 void Hazard::reflect() {
-  if (!collider->is_wall(pos.x - speed.x, pos.y)) {
+  if (!collider->isWall(pos.x - speed.x, pos.y)) {
     speed.x *= -1;
 	pos.x += speed.x;
   }
-  else if (!collider->is_wall(pos.x, pos.y - speed.y)) {
+  else if (!collider->isWall(pos.x, pos.y - speed.y)) {
     speed.y *= -1;
 	pos.y += speed.y;
   }

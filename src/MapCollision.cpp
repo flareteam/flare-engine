@@ -53,7 +53,7 @@ MapCollision::MapCollision()
 	colmap[0].resize(1);
 }
 
-void MapCollision::setmap(const Map_Layer& _colmap, unsigned short w, unsigned short h) {
+void MapCollision::setMap(const Map_Layer& _colmap, unsigned short w, unsigned short h) {
 	colmap.resize(w);
 	for (unsigned i=0; i<w; ++i) {
 		colmap[i].resize(h);
@@ -72,11 +72,11 @@ int sgn(float f) {
 	else			return 0;
 }
 
-bool MapCollision::small_step(float &x, float &y, float step_x, float step_y, int movement_type, int collide_type) {
-	if (is_valid_position(x + step_x, y + step_y, movement_type, collide_type)) {
+bool MapCollision::smallStep(float &x, float &y, float step_x, float step_y, int movement_type, int collide_type) {
+	if (isValidPosition(x + step_x, y + step_y, movement_type, collide_type)) {
 		x += step_x;
 		y += step_y;
-		assert(is_valid_position(x,y,movement_type, collide_type));
+		assert(isValidPosition(x,y,movement_type, collide_type));
 		return true;
 	}
 	else {
@@ -84,16 +84,16 @@ bool MapCollision::small_step(float &x, float &y, float step_x, float step_y, in
 	}
 }
 
-bool MapCollision::small_step_forced_slide_along_grid(float &x, float &y, float step_x, float step_y, int movement_type, int collide_type) {
-	if (is_valid_position(x + step_x, y, movement_type, collide_type)) { // slide along wall
+bool MapCollision::smallStepForcedSlideAlongGrid(float &x, float &y, float step_x, float step_y, int movement_type, int collide_type) {
+	if (isValidPosition(x + step_x, y, movement_type, collide_type)) { // slide along wall
 		if (step_x == 0) return true;
 		x += step_x;
-		assert(is_valid_position(x,y,movement_type, collide_type));
+		assert(isValidPosition(x,y,movement_type, collide_type));
 	}
-	else if (is_valid_position(x, y + step_y, movement_type, collide_type)) {
+	else if (isValidPosition(x, y + step_y, movement_type, collide_type)) {
 		if (step_y == 0) return true;
 		y += step_y;
-		assert(is_valid_position(x,y,movement_type, collide_type));
+		assert(isValidPosition(x,y,movement_type, collide_type));
 	}
 	else {
 		return false;
@@ -101,7 +101,7 @@ bool MapCollision::small_step_forced_slide_along_grid(float &x, float &y, float 
 	return true;
 }
 
-bool MapCollision::small_step_forced_slide(float &x, float &y, float step_x, float step_y, int movement_type, int collide_type) {
+bool MapCollision::smallStepForcedSlide(float &x, float &y, float step_x, float step_y, int movement_type, int collide_type) {
 	// is there a singular obstacle or corner we can step around?
 	// only works if we are moving straight
 	const float epsilon = 0.01f;
@@ -109,32 +109,32 @@ bool MapCollision::small_step_forced_slide(float &x, float &y, float step_x, flo
 		assert(step_y == 0);
 		float dy = y - floorf(y);
 
-		if (is_valid_tile(int(x), int(y) + 1, movement_type, collide_type)
-				&& is_valid_tile(int(x) + sgn(step_x), int(y) + 1, movement_type, collide_type)
+		if (isValidTile(int(x), int(y) + 1, movement_type, collide_type)
+				&& isValidTile(int(x) + sgn(step_x), int(y) + 1, movement_type, collide_type)
 				&& dy > 0.5) {
 			y += std::min(1 - dy + epsilon, float(fabs(step_x)));
 		}
-		else if (is_valid_tile(int(x), int(y) - 1, movement_type, collide_type)
-				 && is_valid_tile(int(x) + sgn(step_x), int(y) - 1, movement_type, collide_type)
+		else if (isValidTile(int(x), int(y) - 1, movement_type, collide_type)
+				 && isValidTile(int(x) + sgn(step_x), int(y) - 1, movement_type, collide_type)
 				 && dy < 0.5) {
 			y -= std::min(dy + epsilon, float(fabs(step_x)));
 		}
 		else {
 			return false;
 		}
-		assert(is_valid_position(x,y,movement_type, collide_type));
+		assert(isValidPosition(x,y,movement_type, collide_type));
 	}
 	else if (step_y != 0) {
 		assert(step_x == 0);
 		float dx = x - floorf(x);
 
-		if (is_valid_tile(int(x) + 1, int(y), movement_type, collide_type)
-				&& is_valid_tile(int(x) + 1, int(y) + sgn(step_y), movement_type, collide_type)
+		if (isValidTile(int(x) + 1, int(y), movement_type, collide_type)
+				&& isValidTile(int(x) + 1, int(y) + sgn(step_y), movement_type, collide_type)
 				&& dx > 0.5) {
 			x += std::min(1 - dx + epsilon, float(fabs(step_y)));
 		}
-		else if (is_valid_tile(int(x) - 1, int(y), movement_type, collide_type)
-				 && is_valid_tile(int(x) - 1, int(y) + sgn(step_y), movement_type, collide_type)
+		else if (isValidTile(int(x) - 1, int(y), movement_type, collide_type)
+				 && isValidTile(int(x) - 1, int(y) + sgn(step_y), movement_type, collide_type)
 				 && dx < 0.5) {
 			x -= std::min(dx + epsilon, float(fabs(step_y)));
 		}
@@ -186,13 +186,13 @@ bool MapCollision::move(float &x, float &y, float _step_x, float _step_y, int mo
 		_step_x -= step_x;
 		_step_y -= step_y;
 
-		if (!small_step(x, y, step_x, step_y, movement_type, collide_type)) {
+		if (!smallStep(x, y, step_x, step_y, movement_type, collide_type)) {
 			if (force_slide) {
-				if (!small_step_forced_slide_along_grid(x, y, step_x, step_y, movement_type, collide_type))
+				if (!smallStepForcedSlideAlongGrid(x, y, step_x, step_y, movement_type, collide_type))
 					return false;
 			}
 			else {
-				if (!small_step_forced_slide(x, y, step_x, step_y, movement_type, collide_type))
+				if (!smallStepForcedSlide(x, y, step_x, step_y, movement_type, collide_type))
 					return false;
 			}
 		}
@@ -203,23 +203,23 @@ bool MapCollision::move(float &x, float &y, float _step_x, float _step_y, int mo
 /**
  * Determines whether the grid position is outside the map boundary
  */
-bool MapCollision::is_outside_map(const int& tile_x, const int& tile_y) const {
+bool MapCollision::isTileOutsideMap(const int& tile_x, const int& tile_y) const {
 	return (tile_x < 0 || tile_y < 0 || tile_x >= map_size.x || tile_y >= map_size.y);
 }
 
-bool MapCollision::is_outside_map(const float& tile_x, const float& tile_y) const {
-	return is_outside_map(static_cast<int>(tile_x), static_cast<int>(tile_y));
+bool MapCollision::isOutsideMap(const float& tile_x, const float& tile_y) const {
+	return isTileOutsideMap(static_cast<int>(tile_x), static_cast<int>(tile_y));
 }
 
 /**
  * A map space is empty if it contains no blocking type
  * A position outside the map boundary is not empty
  */
-bool MapCollision::is_empty(const float& x, const float& y) const {
+bool MapCollision::isEmpty(const float& x, const float& y) const {
 	// map bounds check
-	const int tile_x = int(x);
-	const int tile_y = int(y);
-	if (is_outside_map(tile_x, tile_y)) return false;
+	const int tile_x = static_cast<int>(x);
+	const int tile_y = static_cast<int>(y);
+	if (isTileOutsideMap(tile_x, tile_y)) return false;
 
 	// collision type check
 	return (colmap[tile_x][tile_y] == BLOCKS_NONE || colmap[tile_x][tile_y] == MAP_ONLY || colmap[tile_x][tile_y] == MAP_ONLY_ALT);
@@ -229,11 +229,11 @@ bool MapCollision::is_empty(const float& x, const float& y) const {
  * A map space is a wall if it contains a wall blocking type (normal or hidden)
  * A position outside the map boundary is a wall
  */
-bool MapCollision::is_wall(const float& x, const float& y) const {
+bool MapCollision::isWall(const float& x, const float& y) const {
 	// bounds check
-	const int tile_x = int(x);
-	const int tile_y = int(y);
-	if (is_outside_map(tile_x, tile_y)) return true;
+	const int tile_x = static_cast<int>(x);
+	const int tile_y = static_cast<int>(y);
+	if (isTileOutsideMap(tile_x, tile_y)) return true;
 
 	// collision type check
 	return (colmap[tile_x][tile_y] == BLOCKS_ALL || colmap[tile_x][tile_y] == BLOCKS_ALL_HIDDEN);
@@ -242,9 +242,9 @@ bool MapCollision::is_wall(const float& x, const float& y) const {
 /**
  * Is this a valid tile for an entity with this movement type?
  */
-bool MapCollision::is_valid_tile(const int& tile_x, const int& tile_y, int movement_type, int collide_type) const {
+bool MapCollision::isValidTile(const int& tile_x, const int& tile_y, int movement_type, int collide_type) const {
 	// outside the map isn't valid
-	if (is_outside_map(tile_x,tile_y)) return false;
+	if (isTileOutsideMap(tile_x,tile_y)) return false;
 
 	if (collide_type == COLLIDE_NORMAL) {
 		if (colmap[tile_x][tile_y] == BLOCKS_ENEMIES)
@@ -276,17 +276,17 @@ bool MapCollision::is_valid_tile(const int& tile_x, const int& tile_y, int movem
 /**
  * Is this a valid position for an entity with this movement type?
  */
-bool MapCollision::is_valid_position(const float& x, const float& y, int movement_type, int collide_type) const {
+bool MapCollision::isValidPosition(const float& x, const float& y, int movement_type, int collide_type) const {
 	if (x < 0 || y < 0) return false;
 
-	return is_valid_tile(int(x), int(y), movement_type, collide_type);
+	return isValidTile(int(x), int(y), movement_type, collide_type);
 }
 
 /**
  * Does not have the "slide" submovement that move() features
  * Line can be arbitrary angles.
  */
-bool MapCollision::line_check(const float& x1, const float& y1, const float& x2, const float& y2, int check_type, int movement_type) {
+bool MapCollision::lineCheck(const float& x1, const float& y1, const float& x2, const float& y2, int check_type, int movement_type) {
 	float x = x1;
 	float y = y1;
 	float dx = static_cast<float>(fabs(x2 - x1));
@@ -313,7 +313,7 @@ bool MapCollision::line_check(const float& x1, const float& y1, const float& x2,
 		for (int i=0; i<steps; i++) {
 			x += step_x;
 			y += step_y;
-			if (is_wall(x, y))
+			if (isWall(x, y))
 				return false;
 		}
 	}
@@ -321,7 +321,7 @@ bool MapCollision::line_check(const float& x1, const float& y1, const float& x2,
 		for (int i=0; i<steps; i++) {
 			x += step_x;
 			y += step_y;
-			if (!is_valid_position(x, y, movement_type, COLLIDE_NORMAL))
+			if (!isValidPosition(x, y, movement_type, COLLIDE_NORMAL))
 				return false;
 		}
 	}
@@ -329,12 +329,12 @@ bool MapCollision::line_check(const float& x1, const float& y1, const float& x2,
 	return true;
 }
 
-bool MapCollision::line_of_sight(const float& x1, const float& y1, const float& x2, const float& y2) {
-	return line_check(x1, y1, x2, y2, CHECK_SIGHT, MOVE_NORMAL);
+bool MapCollision::lineOfSight(const float& x1, const float& y1, const float& x2, const float& y2) {
+	return lineCheck(x1, y1, x2, y2, CHECK_SIGHT, MOVE_NORMAL);
 }
 
-bool MapCollision::line_of_movement(const float& x1, const float& y1, const float& x2, const float& y2, int movement_type) {
-	if (is_outside_map(x2, y2)) return false;
+bool MapCollision::lineOfMovement(const float& x1, const float& y1, const float& x2, const float& y2, int movement_type) {
+	if (isOutsideMap(x2, y2)) return false;
 
 	// intangible entities can always move
 	if (movement_type == MOVE_INTANGIBLE) return true;
@@ -349,7 +349,7 @@ bool MapCollision::line_of_movement(const float& x1, const float& y1, const floa
 		unblock(x2,y2);
 	}
 
-	bool has_movement = line_check(x1, y1, x2, y2, CHECK_MOVEMENT, movement_type);
+	bool has_movement = lineCheck(x1, y1, x2, y2, CHECK_MOVEMENT, movement_type);
 
 	if (target_blocks) block(x2,y2, target_blocks_type == BLOCKS_ENEMIES);
 	return has_movement;
@@ -360,7 +360,7 @@ bool MapCollision::line_of_movement(const float& x1, const float& y1, const floa
  * Checks whether the entity in pos 1 is facing the point at pos 2
  * based on a 180 degree field of vision
  */
-bool MapCollision::is_facing(const float& x1, const float& y1, char direction, const float& x2, const float& y2) {
+bool MapCollision::isFacing(const float& x1, const float& y1, char direction, const float& x2, const float& y2) {
 
 	// 180 degree fov
 	switch (direction) {
@@ -390,9 +390,9 @@ bool MapCollision::is_facing(const float& x1, const float& y1, char direction, c
 * limit is the maximum number of explored node
 * @return true if a path is found
 */
-bool MapCollision::compute_path(const FPoint& start_pos, const FPoint& end_pos, std::vector<FPoint> &path, int movement_type, unsigned int limit) {
+bool MapCollision::computePath(const FPoint& start_pos, const FPoint& end_pos, std::vector<FPoint> &path, int movement_type, unsigned int limit) {
 
-	if (is_outside_map(end_pos.x, end_pos.y)) return false;
+	if (isOutsideMap(end_pos.x, end_pos.y)) return false;
 
 	// default limit set to 10% of the total map size
 	if (limit == 0)
@@ -449,7 +449,7 @@ bool MapCollision::compute_path(const FPoint& start_pos, const FPoint& end_pos, 
 			}
 
 			// if neighbour is not free of any collision, skip it
-			if (!is_valid_tile(neighbour.x,neighbour.y,movement_type, MapCollision::COLLIDE_NORMAL))
+			if (!isValidTile(neighbour.x,neighbour.y,movement_type, MapCollision::COLLIDE_NORMAL))
 				continue;
 			// if nabour is already in close, skip it
 			if(close.exists(neighbour))
@@ -483,15 +483,15 @@ bool MapCollision::compute_path(const FPoint& start_pos, const FPoint& end_pos, 
 		current.y = node->getY();
 
 		while (!(current.x == start.x && current.y == start.y)) {
-			path.push_back(collision_to_map(current));
+			path.push_back(collisionToMap(current));
 			current = close.get(current.x, current.y)->getParent();
 		}
 	}
 	else {
 		// store path from end to start
-		path.push_back(collision_to_map(end));
+		path.push_back(collisionToMap(end));
 		while (!(current.x == start.x && current.y == start.y)) {
-			path.push_back(collision_to_map(current));
+			path.push_back(collisionToMap(current));
 			current = close.get(current.x, current.y)->getParent();
 		}
 	}
@@ -528,7 +528,7 @@ void MapCollision::unblock(const float& map_x, const float& map_y) {
  * Given a target, trys to return one of the 8+ adjacent tiles
  * Returns the retargeted position on success, returns the original position on failure
  */
-FPoint MapCollision::get_random_neighbor(const Point& target, int range, bool ignore_blocked) {
+FPoint MapCollision::getRandomNeighbor(const Point& target, int range, bool ignore_blocked) {
 	FPoint new_target(target);
 	std::vector<FPoint> valid_tiles;
 
@@ -537,7 +537,7 @@ FPoint MapCollision::get_random_neighbor(const Point& target, int range, bool ig
 			if (i == 0 && j == 0) continue; // skip the middle tile
 			new_target.x = static_cast<float>(target.x + i) + 0.5f;
 			new_target.y = static_cast<float>(target.y + j) + 0.5f;
-			if (is_valid_position(new_target.x, new_target.y, MOVE_NORMAL, COLLIDE_NORMAL) || ignore_blocked)
+			if (isValidPosition(new_target.x, new_target.y, MOVE_NORMAL, COLLIDE_NORMAL) || ignore_blocked)
 				valid_tiles.push_back(new_target);
 		}
 	}
@@ -548,7 +548,7 @@ FPoint MapCollision::get_random_neighbor(const Point& target, int range, bool ig
 		return FPoint(target);
 }
 
-FPoint MapCollision::collision_to_map(const Point& p) {
+FPoint MapCollision::collisionToMap(const Point& p) {
 	FPoint ret;
 	ret.x = static_cast<float>(p.x) + 0.5f;
 	ret.y = static_cast<float>(p.y) + 0.5f;
