@@ -129,7 +129,7 @@ ModManager::ModManager(const std::vector<std::string> *_cmd_line_mods)
 		if (i < mod_list.size()-1)
 			ss << ", ";
 	}
-	logInfo(ss.str().c_str());
+	Utils::logInfo(ss.str().c_str());
 }
 
 /**
@@ -168,8 +168,8 @@ void ModManager::loadModList() {
 			infile.open(place2.c_str(), std::ios::in);
 		}
 		if (!infile.is_open()) {
-			logError("ModManager: Error during loadModList() -- couldn't open mods.txt, to be located at:");
-			logError("%s\n%s\n", place1.c_str(), place2.c_str());
+			Utils::logError("ModManager: Error during loadModList() -- couldn't open mods.txt, to be located at:");
+			Utils::logError("%s\n%s\n", place1.c_str(), place2.c_str());
 		}
 
 		while (infile.good()) {
@@ -189,7 +189,7 @@ void ModManager::loadModList() {
 					found_any_mod = true;
 				}
 				else {
-					logError("ModManager: Mod \"%s\" not found, skipping", line.c_str());
+					Utils::logError("ModManager: Mod \"%s\" not found, skipping", line.c_str());
 				}
 			}
 		}
@@ -207,7 +207,7 @@ void ModManager::loadModList() {
 					found_any_mod = true;
 				}
 				else {
-					logError("ModManager: Mod \"%s\" not found, skipping", line.c_str());
+					Utils::logError("ModManager: Mod \"%s\" not found, skipping", line.c_str());
 				}
 			}
 		}
@@ -216,7 +216,7 @@ void ModManager::loadModList() {
 	}
 
 	if (!found_any_mod && mod_list.size() == 1) {
-		logError("ModManager: Couldn't locate any Flare mod. Check if the game data are installed \
+		Utils::logError("ModManager: Couldn't locate any Flare mod. Check if the game data are installed \
                   correctly. Expected to find the data in the $XDG_DATA_DIRS path, in \
 				  /usr/local/share/flare/mods, or in the same folder as the executable. \
 				  Try placing the mods folder in one of these locations.");
@@ -387,7 +387,7 @@ Mod ModManager::loadMod(const std::string& name) {
 				*mod.engine_max_version = stringToVersion(val);
 			}
 			else {
-				logError("ModManager: Mod '%s' contains invalid key: '%s'", name.c_str(), key.c_str());
+				Utils::logError("ModManager: Mod '%s' contains invalid key: '%s'", name.c_str(), key.c_str());
 			}
 		}
 		if (infile.good()) {
@@ -418,13 +418,13 @@ void ModManager::applyDepends() {
 	for (unsigned i=0; i<mod_list.size(); i++) {
 		// skip the mod if the game doesn't match
 		if (game != FALLBACK_GAME && mod_list[i].game != FALLBACK_GAME && mod_list[i].game != game && mod_list[i].name != FALLBACK_MOD) {
-			logError("ModManager: Tried to enable \"%s\", but failed. Game does not match \"%s\".", mod_list[i].name.c_str(), game.c_str());
+			Utils::logError("ModManager: Tried to enable \"%s\", but failed. Game does not match \"%s\".", mod_list[i].name.c_str(), game.c_str());
 			continue;
 		}
 
 		// skip the mod if it's incompatible with this engine version
 		if (*mod_list[i].engine_min_version > ENGINE_VERSION || ENGINE_VERSION > *mod_list[i].engine_max_version) {
-			logError("ModManager: Tried to enable \"%s\", but failed. Not compatible with engine version %s.", mod_list[i].name.c_str(), versionToString(ENGINE_VERSION).c_str());
+			Utils::logError("ModManager: Tried to enable \"%s\", but failed. Not compatible with engine version %s.", mod_list[i].name.c_str(), versionToString(ENGINE_VERSION).c_str());
 			continue;
 		}
 
@@ -448,17 +448,17 @@ void ModManager::applyDepends() {
 					if (find(mod_dirs.begin(), mod_dirs.end(), mod_list[i].depends[j]) != mod_dirs.end()) {
 						Mod new_depend = loadMod(mod_list[i].depends[j]);
 						if (game != FALLBACK_GAME && new_depend.game != FALLBACK_GAME && new_depend.game != game) {
-							logError("ModManager: Tried to enable dependency \"%s\" for \"%s\", but failed. Game does not match \"%s\".", new_depend.name.c_str(), mod_list[i].name.c_str(), game.c_str());
+							Utils::logError("ModManager: Tried to enable dependency \"%s\" for \"%s\", but failed. Game does not match \"%s\".", new_depend.name.c_str(), mod_list[i].name.c_str(), game.c_str());
 							depends_met = false;
 							break;
 						}
 						else if (*new_depend.engine_min_version > ENGINE_VERSION || ENGINE_VERSION > *new_depend.engine_max_version) {
-							logError("ModManager: Tried to enable dependency \"%s\" for \"%s\", but failed. Not compatible with engine version %s.", new_depend.name.c_str(), mod_list[i].name.c_str(), versionToString(ENGINE_VERSION).c_str());
+							Utils::logError("ModManager: Tried to enable dependency \"%s\" for \"%s\", but failed. Not compatible with engine version %s.", new_depend.name.c_str(), mod_list[i].name.c_str(), versionToString(ENGINE_VERSION).c_str());
 							depends_met = false;
 							break;
 						}
 						else if (*new_depend.version < *mod_list[i].depends_min[j] || *new_depend.version > *mod_list[i].depends_max[j]) {
-							logError("ModManager: Tried to enable dependency \"%s\" for \"%s\", but failed. Version \"%s\" is required, but only version \"%s\" is available.",
+							Utils::logError("ModManager: Tried to enable dependency \"%s\" for \"%s\", but failed. Version \"%s\" is required, but only version \"%s\" is available.",
 									new_depend.name.c_str(),
 									mod_list[i].name.c_str(),
 									createVersionReqString(*mod_list[i].depends_min[j], *mod_list[i].depends_max[j]).c_str(),
@@ -468,14 +468,14 @@ void ModManager::applyDepends() {
 							break;
 						}
 						else if (std::find(new_mods.begin(), new_mods.end(), new_depend) == new_mods.end()) {
-							logError("ModManager: Mod \"%s\" requires the \"%s\" mod. Enabling \"%s\" now.", mod_list[i].name.c_str(), mod_list[i].depends[j].c_str(), mod_list[i].depends[j].c_str());
+							Utils::logError("ModManager: Mod \"%s\" requires the \"%s\" mod. Enabling \"%s\" now.", mod_list[i].name.c_str(), mod_list[i].depends[j].c_str(), mod_list[i].depends[j].c_str());
 							new_mods.push_back(new_depend);
 							finished = false;
 							break;
 						}
 					}
 					else {
-						logError("ModManager: Could not find mod \"%s\", which is required by mod \"%s\". Disabling \"%s\" now.", mod_list[i].depends[j].c_str(), mod_list[i].name.c_str(), mod_list[i].name.c_str());
+						Utils::logError("ModManager: Could not find mod \"%s\", which is required by mod \"%s\". Disabling \"%s\" now.", mod_list[i].depends[j].c_str(), mod_list[i].name.c_str(), mod_list[i].name.c_str());
 						depends_met = false;
 						break;
 					}
@@ -523,7 +523,7 @@ void ModManager::saveMods() {
 		}
 	}
 	if (outfile.bad())
-		logError("GameStateConfigBase: Unable to save mod list into file. No write access or disk is full!");
+		Utils::logError("GameStateConfigBase: Unable to save mod list into file. No write access or disk is full!");
 
 	outfile.close();
 	outfile.clear();
@@ -534,7 +534,7 @@ void ModManager::saveMods() {
 
 void ModManager::resetModConfig() {
 	std::string config_path = settings->path_conf + "mods.txt";
-	logError("ModManager: Game data is either missing or misconfigured. Deleting '%s' in attempt to recover.", config_path.c_str());
+	Utils::logError("ModManager: Game data is either missing or misconfigured. Deleting '%s' in attempt to recover.", config_path.c_str());
 	Filesystem::removeFile(config_path);
 }
 

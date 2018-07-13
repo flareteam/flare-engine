@@ -224,7 +224,7 @@ void Entity::move_from_offending_tile() {
 		// just blink away. This will seriously irritate the player, but there
 		// is probably no other easy way to repair the game
 		if (pushx == 0 && pushy == 0) {
-			Point src_pos = FPointToPoint(stats.pos);
+			Point src_pos(stats.pos);
 			FPoint shortest_pos;
 			float shortest_dist = 0;
 			int radius = 1;
@@ -233,7 +233,7 @@ void Entity::move_from_offending_tile() {
 				for (int i = src_pos.x - radius; i <= src_pos.x + radius; ++i) {
 					for (int j = src_pos.y - radius; j <= src_pos.y + radius; ++j) {
 						if (mapr->collider.is_valid_position(static_cast<float>(i), static_cast<float>(j), stats.movement_type, collide_type)) {
-							float test_dist = calcDist(stats.pos, shortest_pos);
+							float test_dist = Utils::calcDist(stats.pos, shortest_pos);
 							if (shortest_dist == 0 || test_dist < shortest_dist) {
 								shortest_dist = test_dist;
 								shortest_pos.x = static_cast<float>(i) + 0.5f;
@@ -252,7 +252,7 @@ void Entity::move_from_offending_tile() {
 	}
 
 	if (original_pos_is_bad) {
-		logInfo("Entity: '%s' was stuck and has been moved: (%g, %g) -> (%g, %g)",
+		Utils::logInfo("Entity: '%s' was stuck and has been moved: (%g, %g) -> (%g, %g)",
 				stats.name.c_str(),
 				original_pos.x,
 				original_pos.y,
@@ -666,7 +666,7 @@ bool Entity::setAnimation(const std::string& animationName) {
 	activeAnimation = animationSet->getAnimation(animationName);
 
 	if (activeAnimation == NULL)
-		logError("Entity::setAnimation(%s): not found", animationName.c_str());
+		Utils::logError("Entity::setAnimation(%s): not found", animationName.c_str());
 
 	return activeAnimation == NULL;
 }

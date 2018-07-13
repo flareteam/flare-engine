@@ -108,7 +108,7 @@ WidgetSlot::CLICK_TYPE WidgetSlot::checkClick(int x, int y) {
 	// disabled slots can't be clicked;
 	if (!enabled) return NO_CLICK;
 
-	if (continuous && pressed && checked && (inpt->lock[Input::MAIN2] || inpt->lock[activate_key] || (inpt->touch_locked && isWithinRect(pos, mouse))))
+	if (continuous && pressed && checked && (inpt->lock[Input::MAIN2] || inpt->lock[activate_key] || (inpt->touch_locked && Utils::isWithinRect(pos, mouse))))
 		return ACTIVATED;
 
 	// main button already in use, new click not allowed
@@ -131,7 +131,7 @@ WidgetSlot::CLICK_TYPE WidgetSlot::checkClick(int x, int y) {
 	// detect new click
 	// use MAIN1 only for selecting
 	if (inpt->pressing[Input::MAIN1]) {
-		if (isWithinRect(pos, mouse)) {
+		if (Utils::isWithinRect(pos, mouse)) {
 
 			inpt->lock[Input::MAIN1] = true;
 			pressed = true;
@@ -140,7 +140,7 @@ WidgetSlot::CLICK_TYPE WidgetSlot::checkClick(int x, int y) {
 	}
 	// use MAIN2 only for activating
 	if (inpt->pressing[Input::MAIN2]) {
-		if (isWithinRect(pos, mouse)) {
+		if (Utils::isWithinRect(pos, mouse)) {
 
 			inpt->lock[Input::MAIN2] = true;
 			pressed = true;
@@ -150,7 +150,7 @@ WidgetSlot::CLICK_TYPE WidgetSlot::checkClick(int x, int y) {
 
 	// handle touch presses for action bar
 	if (continuous && inpt->touch_locked) {
-		if (isWithinRect(pos, mouse)) {
+		if (Utils::isWithinRect(pos, mouse)) {
 			pressed = true;
 			checked = true;
 			return ACTIVATED;
@@ -169,7 +169,7 @@ void WidgetSlot::setAmount(int _amount, int _max_amount) {
 	amount = _amount;
 	max_amount = _max_amount;
 
-	amount_str = abbreviateKilo(amount);
+	amount_str = Utils::abbreviateKilo(amount);
 }
 
 void WidgetSlot::render() {

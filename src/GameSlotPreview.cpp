@@ -64,9 +64,9 @@ void GameSlotPreview::loadLayerDefinitions() {
 				unsigned dir = Parse::toDirection(Parse::popFirstString(infile.val));
 				if (dir>7) {
 					infile.error("GameSlotPreview: Hero layer direction must be in range [0,7]");
-					logErrorDialog("GameSlotPreview: Hero layer direction must be in range [0,7]");
+					Utils::logErrorDialog("GameSlotPreview: Hero layer direction must be in range [0,7]");
 					mods->resetModConfig();
-					Exit(1);
+					Utils::Exit(1);
 				}
 				std::string layer = Parse::popFirstString(infile.val);
 				while (layer != "") {
@@ -118,7 +118,7 @@ void GameSlotPreview::loadGraphics(std::vector<std::string> _img_gfx) {
 			anims.push_back(animsets.back()->getAnimation(activeAnimation->getName()));
 			setAnimation("stance");
 			if(!anims.back()->syncTo(activeAnimation)) {
-				logError("GameSlotPreview: Error syncing animation in '%s' to 'animations/hero.txt'.", animsets.back()->getName().c_str());
+				Utils::logError("GameSlotPreview: Error syncing animation in '%s' to 'animations/hero.txt'.", animsets.back()->getName().c_str());
 			}
 		}
 		else {

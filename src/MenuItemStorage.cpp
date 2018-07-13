@@ -61,7 +61,7 @@ void MenuItemStorage::initGrid(int _slot_number, const Rect& _area, int _nb_cols
 		slots[i]->pos.x = grid_area.x + (i % nb_cols * eset->resolutions.icon_size);
 		slots[i]->pos.y = grid_area.y + (i / nb_cols * eset->resolutions.icon_size);
 		slots[i]->pos.h = slots[i]->pos.w = eset->resolutions.icon_size;
-		slots[i]->setBasePos(slots[i]->pos.x, slots[i]->pos.y, ALIGN_TOPLEFT);
+		slots[i]->setBasePos(slots[i]->pos.x, slots[i]->pos.y, Utils::ALIGN_TOPLEFT);
 	}
 	loadGraphics();
 }
@@ -71,7 +71,7 @@ void MenuItemStorage::initFromList(int _slot_number, const std::vector<Rect>& _a
 	for (int i = 0; i < _slot_number; i++) {
 		WidgetSlot *slot = new WidgetSlot(WidgetSlot::NO_ICON, Input::ACCEPT);
 		slot->pos = _area[i];
-		slot->setBasePos(slot->pos.x, slot->pos.y, ALIGN_TOPLEFT);
+		slot->setBasePos(slot->pos.x, slot->pos.y, Utils::ALIGN_TOPLEFT);
 		slots.push_back(slot);
 	}
 	nb_cols = 0;
@@ -140,12 +140,12 @@ void MenuItemStorage::render() {
 }
 
 int MenuItemStorage::slotOver(const Point& position) {
-	if (isWithinRect(grid_area, position) && nb_cols > 0) {
+	if (Utils::isWithinRect(grid_area, position) && nb_cols > 0) {
 		return (position.x - grid_area.x) / slots[0]->pos.w + (position.y - grid_area.y) / slots[0]->pos.w * nb_cols;
 	}
 	else if (nb_cols == 0) {
 		for (unsigned int i=0; i<slots.size(); i++) {
-			if (isWithinRect(slots[i]->pos, position)) return i;
+			if (Utils::isWithinRect(slots[i]->pos, position)) return i;
 		}
 	}
 	return -1;

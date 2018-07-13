@@ -84,7 +84,7 @@ bool WidgetButton::checkClickAt(int x, int y) {
 	checkTooltip(mouse);
 
 	// Change the hover state
-	hover = isWithinRect(pos, mouse) && inpt->usingMouse();
+	hover = Utils::isWithinRect(pos, mouse) && inpt->usingMouse();
 
 	// disabled buttons can't be clicked;
 	if (!enabled) return false;
@@ -94,7 +94,7 @@ bool WidgetButton::checkClickAt(int x, int y) {
 	if (inpt->lock[Input::ACCEPT]) return false;
 
 	// main click released, so the button state goes back to unpressed
-	if (pressed && !inpt->lock[Input::MAIN1] && !inpt->lock[Input::ACCEPT] && (isWithinRect(pos, mouse) || activated)) {
+	if (pressed && !inpt->lock[Input::MAIN1] && !inpt->lock[Input::ACCEPT] && (Utils::isWithinRect(pos, mouse) || activated)) {
 		activated = false;
 		pressed = false;
 		return true;
@@ -104,7 +104,7 @@ bool WidgetButton::checkClickAt(int x, int y) {
 
 	// detect new click
 	if (inpt->pressing[Input::MAIN1]) {
-		if (isWithinRect(pos, mouse)) {
+		if (Utils::isWithinRect(pos, mouse)) {
 
 			inpt->lock[Input::MAIN1] = true;
 			pressed = true;
@@ -168,7 +168,7 @@ void WidgetButton::refresh() {
 }
 
 void WidgetButton::checkTooltip(const Point& mouse) {
-	if (inpt->usingMouse() && isWithinRect(pos, mouse) && tooltip != "") {
+	if (inpt->usingMouse() && Utils::isWithinRect(pos, mouse) && tooltip != "") {
 		TooltipData tip_data;
 		tip_data.addText(tooltip);
 		tooltipm->push(tip_data, mouse, TooltipData::STYLE_FLOAT);

@@ -216,7 +216,7 @@ int RenderDevice::createContext() {
 	if (status == -1) {
 		// all attempts have failed, abort!
 		createContextError();
-		Exit(1);
+		Utils::Exit(1);
 	}
 
 	return status;
@@ -225,10 +225,10 @@ int RenderDevice::createContext() {
 void RenderDevice::destroyContext() {
 	if (!cache.empty()) {
 		IMAGE_CACHE_CONTAINER_ITER it;
-		logError("RenderDevice: Image cache still holding these images:");
+		Utils::logError("RenderDevice: Image cache still holding these images:");
 		it = cache.begin();
 		while (it != cache.end()) {
-			logError("%s %d", it->first.c_str(), it->second->getRefCount());
+			Utils::logError("%s %d", it->first.c_str(), it->second->getRefCount());
 			++it;
 		}
 	}
@@ -371,17 +371,17 @@ void RenderDevice::windowResizeInternal() {
 	settings->view_w_half = settings->view_w/2;
 
 	if (settings->view_w != old_view_w || settings->view_h != old_view_h) {
-		logInfo("RenderDevice: Internal render size is %dx%d", settings->view_w, settings->view_h);
+		Utils::logInfo("RenderDevice: Internal render size is %dx%d", settings->view_w, settings->view_h);
 	}
 	if (settings->screen_w != old_screen_w || settings->screen_h != old_screen_h) {
-		logInfo("RenderDevice: Window size changed to %dx%d", settings->screen_w, settings->screen_h);
+		Utils::logInfo("RenderDevice: Window size changed to %dx%d", settings->screen_w, settings->screen_h);
 	}
 }
 
 void RenderDevice::setBackgroundColor(Color color) {
 	// print out the color to avoid unused variable compiler warning
-	logInfo("RenderDevice: Trying to set background color to (%d,%d,%d,%d).", color.r, color.g, color.b, color.a);
-	logError("RenderDevice: Renderer does not support setting background color!");
+	Utils::logInfo("RenderDevice: Trying to set background color to (%d,%d,%d,%d).", color.r, color.g, color.b, color.a);
+	Utils::logError("RenderDevice: Renderer does not support setting background color!");
 }
 
 void RenderDevice::drawEllipse(int x0, int y0, int x1, int y1, const Color& color, float step) {

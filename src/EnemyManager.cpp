@@ -77,7 +77,7 @@ size_t EnemyManager::loadEnemyPrototype(const std::string& type_id) {
 	e.type = type_id;
 
 	if (e.stats.animations == "")
-		logError("EnemyManager: No animation file specified for entity: %s", type_id.c_str());
+		Utils::logError("EnemyManager: No animation file specified for entity: %s", type_id.c_str());
 
 	loadAnimations(&e);
 	e.loadSounds();
@@ -145,7 +145,7 @@ void EnemyManager::handleNewMap () {
 		mapr->enemies.pop();
 
 		if (me.type.empty()) {
-			logError("EnemyManager: Enemy(%f, %f) doesn't have type attribute set, skipping", me.pos.x, me.pos.y);
+			Utils::logError("EnemyManager: Enemy(%f, %f) doesn't have type attribute set, skipping", me.pos.x, me.pos.y);
 			continue;
 		}
 
@@ -180,7 +180,7 @@ void EnemyManager::handleNewMap () {
 		mapr->collider.block(me.pos.x, me.pos.y, !MapCollision::IS_ALLY);
 	}
 
-	FPoint spawn_pos = mapr->collider.get_random_neighbor(FPointToPoint(pc->stats.pos), 1, !MapCollision::IGNORE_BLOCKED);
+	FPoint spawn_pos = mapr->collider.get_random_neighbor(Point(pc->stats.pos), 1, !MapCollision::IGNORE_BLOCKED);
 	while (!allies.empty()) {
 
 		Enemy *e = allies.front();
@@ -279,7 +279,7 @@ void EnemyManager::handleSpawn() {
 			e->stats.load(el.type);
 		}
 		else {
-			logError("EnemyManager: Could not spawn creature type '%s'", espawn.type.c_str());
+			Utils::logError("EnemyManager: Could not spawn creature type '%s'", espawn.type.c_str());
 			delete e;
 			return;
 		}
@@ -291,10 +291,10 @@ void EnemyManager::handleSpawn() {
 			if (e->animationSet)
 				e->activeAnimation = e->animationSet->getAnimation("");
 			else
-				logError("EnemyManager: Animations file could not be loaded for %s", espawn.type.c_str());
+				Utils::logError("EnemyManager: Animations file could not be loaded for %s", espawn.type.c_str());
 		}
 		else {
-			logError("EnemyManager: No animation file specified for entity: %s", espawn.type.c_str());
+			Utils::logError("EnemyManager: No animation file specified for entity: %s", espawn.type.c_str());
 		}
 		e->loadSounds();
 
@@ -409,7 +409,7 @@ Enemy* EnemyManager::enemyFocus(const Point& mouse, const FPoint& cam, bool aliv
 		if(alive_only && (enemies[i]->stats.cur_state == StatBlock::ENEMY_DEAD || enemies[i]->stats.cur_state == StatBlock::ENEMY_CRITDEAD)) {
 			continue;
 		}
-		p = map_to_screen(enemies[i]->stats.pos.x, enemies[i]->stats.pos.y, cam.x, cam.y);
+		p = Utils::mapToScreen(enemies[i]->stats.pos.x, enemies[i]->stats.pos.y, cam.x, cam.y);
 
 		Renderable ren = enemies[i]->getRender();
 		r.w = ren.src.w;
@@ -417,7 +417,7 @@ Enemy* EnemyManager::enemyFocus(const Point& mouse, const FPoint& cam, bool aliv
 		r.x = p.x - ren.offset.x;
 		r.y = p.y - ren.offset.y;
 
-		if (isWithinRect(r, mouse)) {
+		if (Utils::isWithinRect(r, mouse)) {
 			Enemy *enemy = enemies[i];
 			return enemy;
 		}
@@ -437,7 +437,7 @@ Enemy* EnemyManager::getNearestEnemy(const FPoint& pos, bool get_corpse, float *
 			continue;
 		}
 
-		float distance = calcDist(pos, enemies[i]->stats.pos);
+		float distance = Utils::calcDist(pos, enemies[i]->stats.pos);
 		if (distance < best_distance) {
 			best_distance = distance;
 			nearest = enemies[i];

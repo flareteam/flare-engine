@@ -187,9 +187,9 @@ void Avatar::loadLayerDefinitions() {
 				unsigned dir = Parse::toDirection(Parse::popFirstString(infile.val));
 				if (dir>7) {
 					infile.error("Avatar: Hero layer direction must be in range [0,7]");
-					logErrorDialog("Avatar: Hero layer direction must be in range [0,7]");
+					Utils::logErrorDialog("Avatar: Hero layer direction must be in range [0,7]");
 					mods->resetModConfig();
-					Exit(1);
+					Utils::Exit(1);
 				}
 				std::string layer = Parse::popFirstString(infile.val);
 				while (layer != "") {
@@ -237,7 +237,7 @@ void Avatar::loadGraphics(std::vector<Layer_gfx> _img_gfx) {
 			anims.push_back(animsets.back()->getAnimation(activeAnimation->getName()));
 			setAnimation("stance");
 			if(!anims.back()->syncTo(activeAnimation)) {
-				logError("Avatar: Error syncing animation in '%s' to 'animations/hero.txt'.", animsets.back()->getName().c_str());
+				Utils::logError("Avatar: Error syncing animation in '%s' to 'animations/hero.txt'.", animsets.back()->getName().c_str());
 			}
 		}
 		else {
@@ -281,7 +281,7 @@ void Avatar::loadStepFX(const std::string& stepname) {
 	}
 
 	// Could not find step sound fx
-	logError("Avatar: Could not find footstep sounds for '%s'.", filename.c_str());
+	Utils::logError("Avatar: Could not find footstep sounds for '%s'.", filename.c_str());
 }
 
 
@@ -306,8 +306,8 @@ bool Avatar::pressing_move() {
 void Avatar::set_direction() {
 	// handle direction changes
 	if (settings->mouse_move) {
-		FPoint target = screen_to_map(inpt->mouse.x, inpt->mouse.y, stats.pos.x, stats.pos.y);
-		stats.direction = calcDirection(stats.pos.x, stats.pos.y, target.x, target.y);
+		FPoint target = Utils::screenToMap(inpt->mouse.x, inpt->mouse.y, stats.pos.x, stats.pos.y);
+		stats.direction = Utils::calcDirection(stats.pos.x, stats.pos.y, target.x, target.y);
 	}
 	else {
 		if (inpt->pressing[Input::UP] && !inpt->lock[Input::UP] && inpt->pressing[Input::LEFT] && !inpt->lock[Input::LEFT]) stats.direction = 1;
@@ -580,16 +580,16 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 					if (stats.permadeath) {
 						// ignore death penalty on permadeath and instead delete the player's saved game
 						stats.death_penalty = false;
-						removeSaveDir(save_load->getGameSlot());
+						Utils::removeSaveDir(save_load->getGameSlot());
 						menu->exit->disableSave();
 
-						logMsg(substituteVarsInString(msg->get("You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."), this), MSG_NORMAL);
+						logMsg(Utils::substituteVarsInString(msg->get("You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."), this), MSG_NORMAL);
 					}
 					else {
 						// raise the death penalty flag.  This is handled in MenuInventory
 						stats.death_penalty = true;
 
-						logMsg(substituteVarsInString(msg->get("You are defeated. ${INPUT_CONTINUE} to continue."), this), MSG_NORMAL);
+						logMsg(Utils::substituteVarsInString(msg->get("You are defeated. ${INPUT_CONTINUE} to continue."), this), MSG_NORMAL);
 					}
 
 					// if the player is attacking, we need to block further input
@@ -662,7 +662,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 					// is this a power that requires changing direction?
 					if (power.face) {
-						stats.direction = calcDirection(stats.pos.x, stats.pos.y, target.x, target.y);
+						stats.direction = Utils::calcDirection(stats.pos.x, stats.pos.y, target.x, target.y);
 					}
 
 					if (power.new_state != Power::STATE_INSTANT) {
@@ -721,8 +721,8 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 	// calc new cam position from player position
 	// cam is focused at player position
-	float cam_dx = (calcDist(FPoint(mapr->cam.x, stats.pos.y), stats.pos)) / eset->misc.camera_speed;
-	float cam_dy = (calcDist(FPoint(stats.pos.x, mapr->cam.y), stats.pos)) / eset->misc.camera_speed;
+	float cam_dx = (Utils::calcDist(FPoint(mapr->cam.x, stats.pos.y), stats.pos)) / eset->misc.camera_speed;
+	float cam_dy = (Utils::calcDist(FPoint(stats.pos.x, mapr->cam.y), stats.pos)) / eset->misc.camera_speed;
 
 	if (mapr->cam.x < stats.pos.x) {
 		mapr->cam.x += cam_dx;
@@ -781,7 +781,7 @@ void Avatar::transform() {
 		charmed_stats->load(el.type);
 	}
 	else {
-		logError("Avatar: Could not transform into creature type '%s'", stats.transform_type.c_str());
+		Utils::logError("Avatar: Could not transform into creature type '%s'", stats.transform_type.c_str());
 		stats.transform_type = "";
 		return;
 	}

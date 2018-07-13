@@ -68,7 +68,7 @@ MenuVendor::MenuVendor(StatBlock *_stats)
 			// @ATTR close|point|Position of the close button.
 			if(infile.key == "close") {
 				Point pos = Parse::toPoint(infile.val);
-				closeButton->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
+				closeButton->setBasePos(pos.x, pos.y, Utils::ALIGN_TOPLEFT);
 			}
 			// @ATTR slots_area|point|Position of the top-left slot.
 			else if(infile.key == "slots_area") {
@@ -236,7 +236,7 @@ void MenuVendor::add(ItemStack stack) {
 }
 
 void MenuVendor::renderTooltips(const Point& position) {
-	if (!visible || !isWithinRect(window_area, position))
+	if (!visible || !Utils::isWithinRect(window_area, position))
 		return;
 
 	int vendor_view = (activetab == ItemManager::VENDOR_BUY) ? ItemManager::VENDOR_BUY : ItemManager::VENDOR_SELL;

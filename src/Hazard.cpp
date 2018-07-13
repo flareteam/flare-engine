@@ -216,7 +216,7 @@ void Hazard::reflect() {
   }
 
   if (power->directional)
-	animationKind = calcDirection(pos.x, pos.y, pos.x + speed.x, pos.y + speed.y);
+	animationKind = Utils::calcDirection(pos.x, pos.y, pos.x + speed.x, pos.y + speed.y);
 }
 
 void Hazard::loadAnimation(const std::string &s) {
@@ -286,5 +286,5 @@ void Hazard::setAngle(const float& _angle) {
 	speed.y = power->speed * sinf(angle);
 
 	if (power->directional)
-		animationKind = calcDirection(pos.x, pos.y, pos.x + speed.x, pos.y + speed.y);
+		animationKind = Utils::calcDirection(pos.x, pos.y, pos.x + speed.x, pos.y + speed.y);
 }

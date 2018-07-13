@@ -120,28 +120,28 @@ MenuActionBar::MenuActionBar()
 			else if (infile.key == "char_menu") {
 				int x = Parse::popFirstInt(infile.val);
 				int y = Parse::popFirstInt(infile.val);
-				menus[MENU_CHARACTER]->setBasePos(x, y, ALIGN_TOPLEFT);
+				menus[MENU_CHARACTER]->setBasePos(x, y, Utils::ALIGN_TOPLEFT);
 				menus[MENU_CHARACTER]->pos.w = menus[MENU_CHARACTER]->pos.h = eset->resolutions.icon_size;
 			}
 			// @ATTR inv_menu|point|Position for the Inventory menu button.
 			else if (infile.key == "inv_menu") {
 				int x = Parse::popFirstInt(infile.val);
 				int y = Parse::popFirstInt(infile.val);
-				menus[MENU_INVENTORY]->setBasePos(x, y, ALIGN_TOPLEFT);
+				menus[MENU_INVENTORY]->setBasePos(x, y, Utils::ALIGN_TOPLEFT);
 				menus[MENU_INVENTORY]->pos.w = menus[MENU_INVENTORY]->pos.h = eset->resolutions.icon_size;
 			}
 			// @ATTR powers_menu|point|Position for the Powers menu button.
 			else if (infile.key == "powers_menu") {
 				int x = Parse::popFirstInt(infile.val);
 				int y = Parse::popFirstInt(infile.val);
-				menus[MENU_POWERS]->setBasePos(x, y, ALIGN_TOPLEFT);
+				menus[MENU_POWERS]->setBasePos(x, y, Utils::ALIGN_TOPLEFT);
 				menus[MENU_POWERS]->pos.w = menus[MENU_POWERS]->pos.h = eset->resolutions.icon_size;
 			}
 			// @ATTR log_menu|point|Position for the Log menu button.
 			else if (infile.key == "log_menu") {
 				int x = Parse::popFirstInt(infile.val);
 				int y = Parse::popFirstInt(infile.val);
-				menus[MENU_LOG]->setBasePos(x, y, ALIGN_TOPLEFT);
+				menus[MENU_LOG]->setBasePos(x, y, Utils::ALIGN_TOPLEFT);
 				menus[MENU_LOG]->pos.w = menus[MENU_LOG]->pos.h = eset->resolutions.icon_size;
 			}
 
@@ -181,7 +181,7 @@ void MenuActionBar::addSlot(unsigned index, int x, int y, bool is_locked) {
 	}
 
 	slots[index] = new WidgetSlot(-1, Input::ACTIONBAR);
-	slots[index]->setBasePos(x, y, ALIGN_TOPLEFT);
+	slots[index]->setBasePos(x, y, Utils::ALIGN_TOPLEFT);
 	slots[index]->pos.w = slots[index]->pos.h = eset->resolutions.icon_size;
 	slots[index]->continuous = true;
 
@@ -405,7 +405,7 @@ void MenuActionBar::renderTooltips(const Point& position) {
 
 	// menus
 	for (int i = 0; i < 4; ++i) {
-		if (isWithinRect(menus[i]->pos, position)) {
+		if (Utils::isWithinRect(menus[i]->pos, position)) {
 			if (settings->colorblind && requires_attention[i])
 				tip_data.addText(menu_titles[i] + " (*)");
 			else
@@ -420,7 +420,7 @@ void MenuActionBar::renderTooltips(const Point& position) {
 	tip_data.clear();
 
 	for (unsigned i = 0; i < slots_count; i++) {
-		if (slots[i] && isWithinRect(slots[i]->pos, position)) {
+		if (slots[i] && Utils::isWithinRect(slots[i]->pos, position)) {
 			if (hotkeys_mod[i] != 0) {
 				tip_data.addText(powers->powers[hotkeys_mod[i]].name);
 			}
@@ -436,7 +436,7 @@ void MenuActionBar::renderTooltips(const Point& position) {
  */
 void MenuActionBar::drop(const Point& mouse, int power_index, bool rearranging) {
 	for (unsigned i = 0; i < slots_count; i++) {
-		if (slots[i] && !powers->powers[power_index].no_actionbar && isWithinRect(slots[i]->pos, mouse)) {
+		if (slots[i] && !powers->powers[power_index].no_actionbar && Utils::isWithinRect(slots[i]->pos, mouse)) {
 			if (rearranging) {
 				if (prevent_changing[i]) {
 					actionReturn(power_index);
@@ -468,7 +468,7 @@ void MenuActionBar::actionReturn(int power_index) {
  */
 void MenuActionBar::remove(const Point& mouse) {
 	for (unsigned i=0; i<slots_count; i++) {
-		if (slots[i] && isWithinRect(slots[i]->pos, mouse)) {
+		if (slots[i] && Utils::isWithinRect(slots[i]->pos, mouse)) {
 			if (locked[i]) return;
 			hotkeys[i] = 0;
 			updated = true;
@@ -541,12 +541,12 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 				action.power = hotkeys_mod[i];
 				twostep_slot = -1;
 			}
-			else if (i==10 && inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1] && !isWithinRect(window_area, inpt->mouse) && enable_main1) {
+			else if (i==10 && inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1] && !Utils::isWithinRect(window_area, inpt->mouse) && enable_main1) {
 				have_aim = inpt->usingMouse();
 				action.power = hotkeys_mod[10];
 				twostep_slot = -1;
 			}
-			else if (i==11 && inpt->pressing[Input::MAIN2] && !inpt->lock[Input::MAIN2] && !isWithinRect(window_area, inpt->mouse)) {
+			else if (i==11 && inpt->pressing[Input::MAIN2] && !inpt->lock[Input::MAIN2] && !Utils::isWithinRect(window_area, inpt->mouse)) {
 				have_aim = inpt->usingMouse();
 				action.power = hotkeys_mod[11];
 				twostep_slot = -1;
@@ -607,7 +607,7 @@ int MenuActionBar::checkDrag(const Point& mouse) {
 	int power_index;
 
 	for (unsigned i=0; i<slots_count; i++) {
-		if (slots[i] && isWithinRect(slots[i]->pos, mouse)) {
+		if (slots[i] && Utils::isWithinRect(slots[i]->pos, mouse)) {
 			if (prevent_changing[i])
 				return 0;
 
@@ -694,9 +694,9 @@ FPoint MenuActionBar::setTarget(bool have_aim, const Power& pow) {
 	if (have_aim && settings->mouse_aim) {
 		FPoint map_pos;
 		if (pow.aim_assist)
-			map_pos = screen_to_map(inpt->mouse.x,  inpt->mouse.y + eset->misc.aim_assist, pc->stats.pos.x, pc->stats.pos.y);
+			map_pos = Utils::screenToMap(inpt->mouse.x,  inpt->mouse.y + eset->misc.aim_assist, pc->stats.pos.x, pc->stats.pos.y);
 		else
-			map_pos = screen_to_map(inpt->mouse.x,  inpt->mouse.y, pc->stats.pos.x, pc->stats.pos.y);
+			map_pos = Utils::screenToMap(inpt->mouse.x,  inpt->mouse.y, pc->stats.pos.x, pc->stats.pos.y);
 
 		if (pow.target_nearest > 0) {
 			if (!pow.requires_corpse && powers->checkNearestTargeting(pow, &pc->stats, false)) {
@@ -710,7 +710,7 @@ FPoint MenuActionBar::setTarget(bool have_aim, const Power& pow) {
 		return map_pos;
 	}
 	else {
-		return calcVector(pc->stats.pos, pc->stats.direction, pc->stats.melee_range);
+		return Utils::calcVector(pc->stats.pos, pc->stats.direction, pc->stats.melee_range);
 	}
 }
 
@@ -738,7 +738,7 @@ void MenuActionBar::setItemCount(unsigned index, int count, bool is_equipped) {
 
 bool MenuActionBar::isWithinSlots(const Point& mouse) {
 	for (unsigned i=0; i<slots_count; i++) {
-		if (slots[i] && isWithinRect(slots[i]->pos, mouse))
+		if (slots[i] && Utils::isWithinRect(slots[i]->pos, mouse))
 			return true;
 	}
 	return false;
@@ -746,7 +746,7 @@ bool MenuActionBar::isWithinSlots(const Point& mouse) {
 
 bool MenuActionBar::isWithinMenus(const Point& mouse) {
 	for (unsigned i=0; i<4; i++) {
-		if (isWithinRect(menus[i]->pos, mouse))
+		if (Utils::isWithinRect(menus[i]->pos, mouse))
 			return true;
 	}
 	return false;

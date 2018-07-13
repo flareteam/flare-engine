@@ -53,7 +53,7 @@ bool FileParser::open(const std::string& _filename, bool _is_mod_file, int _erro
 
 	if (filenames.empty()) {
 		if (error_mode != ERROR_NONE)
-			logError("FileParser: Could not open text file: %s: No such file or directory!", _filename.c_str());
+			Utils::logError("FileParser: Could not open text file: %s: No such file or directory!", _filename.c_str());
 		return false;
 	}
 
@@ -93,7 +93,7 @@ bool FileParser::open(const std::string& _filename, bool _is_mod_file, int _erro
 		}
 		else {
 			if (error_mode != ERROR_NONE)
-				logError("FileParser: Could not open text file: %s", filenames[i-1].c_str());
+				Utils::logError("FileParser: Could not open text file: %s", filenames[i-1].c_str());
 			infile.clear();
 		}
 	}
@@ -203,7 +203,7 @@ bool FileParser::next() {
 		infile.open(current_filename.c_str(), std::ios::in);
 		if (!infile.is_open()) {
 			if (error_mode != ERROR_NONE)
-				logError("FileParser: Could not open text file: %s", current_filename.c_str());
+				Utils::logError("FileParser: Could not open text file: %s", current_filename.c_str());
 			infile.clear();
 			return false;
 		}
@@ -245,7 +245,7 @@ void FileParser::errorBuf(const char* buffer) {
 	else {
 		std::stringstream ss;
 		ss << "[" << filenames[current_index] << ":" << line_number << "] " << buffer;
-		logError(ss.str().c_str());
+		Utils::logError(ss.str().c_str());
 	}
 }
 

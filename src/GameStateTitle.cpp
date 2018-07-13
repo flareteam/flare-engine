@@ -43,7 +43,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 GameStateTitle::GameStateTitle()
 	: GameState()
 	, logo(NULL)
-	, align_logo(ALIGN_CENTER)
+	, align_logo(Utils::ALIGN_CENTER)
 	, exit_game(false)
 	, load_game(false)
 {
@@ -197,7 +197,7 @@ void GameStateTitle::refreshWidgets() {
 		r.y = pos_logo.y;
 		r.w = logo->getGraphicsWidth();
 		r.h = logo->getGraphicsHeight();
-		alignToScreenEdge(align_logo, &r);
+		Utils::alignToScreenEdge(align_logo, &r);
 		logo->setDestX(r.x);
 		logo->setDestY(r.y);
 	}

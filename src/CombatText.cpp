@@ -129,7 +129,7 @@ void CombatText::logic(const FPoint& _cam) {
 		it->floating_offset += speed;
 
 		Point scr_pos;
-		scr_pos = map_to_screen(it->pos.x, it->pos.y, cam.x, cam.y);
+		scr_pos = Utils::mapToScreen(it->pos.x, it->pos.y, cam.x, cam.y);
 		scr_pos.y -= static_cast<int>(it->floating_offset);
 
 		it->label->setPos(scr_pos.x, scr_pos.y);

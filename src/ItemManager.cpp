@@ -121,7 +121,7 @@ void ItemManager::loadAll() {
 		std::vector<ItemSet>(item_sets).swap(item_sets);
 
 	if (items.empty())
-		logInfo("ItemManager: No items were found.");
+		Utils::logInfo("ItemManager: No items were found.");
 }
 
 /**
@@ -696,7 +696,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 
 	// flavor text
 	if (items[stack.item].flavor != "") {
-		tip.addColoredText(substituteVarsInString(items[stack.item].flavor, pc), font->getColor(FontEngine::COLOR_ITEM_FLAVOR));
+		tip.addColoredText(Utils::substituteVarsInString(items[stack.item].flavor, pc), font->getColor(FontEngine::COLOR_ITEM_FLAVOR));
 	}
 
 	// level
@@ -935,11 +935,11 @@ bool ItemStack::empty() {
 		return false;
 	}
 	else if (item == 0 && quantity != 0) {
-		logError("ItemStack: Item id is zero, but quantity is %d.", quantity);
+		Utils::logError("ItemStack: Item id is zero, but quantity is %d.", quantity);
 		clear();
 	}
 	else if (item != 0 && quantity == 0) {
-		logError("ItemStack: Item id is %d, but quantity is zero.", item);
+		Utils::logError("ItemStack: Item id is %d, but quantity is zero.", item);
 		clear();
 	}
 	return true;

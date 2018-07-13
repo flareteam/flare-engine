@@ -77,7 +77,7 @@ MenuInventory::MenuInventory(StatBlock *_stats)
 			// @ATTR close|point|Position of the close button.
 			if(infile.key == "close") {
 				Point pos = Parse::toPoint(infile.val);
-				closeButton->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
+				closeButton->setBasePos(pos.x, pos.y, Utils::ALIGN_TOPLEFT);
 			}
 			// @ATTR equipment_slot|repeatable(int, int, string) : X, Y, Slot Type|Position and item type of an equipment slot.
 			else if(infile.key == "equipment_slot") {
@@ -261,19 +261,19 @@ void MenuInventory::render() {
 }
 
 int MenuInventory::areaOver(const Point& position) {
-	if (isWithinRect(carried_area, position)) {
+	if (Utils::isWithinRect(carried_area, position)) {
 		return CARRIED;
 	}
 	else {
 		for (unsigned int i=0; i<equipped_area.size(); i++) {
-			if (isWithinRect(equipped_area[i], position)) {
+			if (Utils::isWithinRect(equipped_area[i], position)) {
 				return EQUIPMENT;
 			}
 		}
 	}
 
 	// point is inside the inventory menu, but not over a slot
-	if (isWithinRect(window_area, position)) {
+	if (Utils::isWithinRect(window_area, position)) {
 		return NO_AREA;
 	}
 
@@ -286,7 +286,7 @@ int MenuInventory::areaOver(const Point& position) {
  * @param mouse The x,y screen coordinates of the mouse cursor
  */
 void MenuInventory::renderTooltips(const Point& position) {
-	if (!visible || !isWithinRect(window_area, position))
+	if (!visible || !Utils::isWithinRect(window_area, position))
 		return;
 
 	int area = areaOver(position);
@@ -631,7 +631,7 @@ void MenuInventory::activate(const Point& position) {
 			applyEquipment();
 		}
 		else if (equip_slot == -1) {
-			logError("MenuInventory: Can't find equip slot, corresponding to type %s", items->items[inventory[CARRIED][slot].item].type.c_str());
+			Utils::logError("MenuInventory: Can't find equip slot, corresponding to type %s", items->items[inventory[CARRIED][slot].item].type.c_str());
 		}
 	}
 

@@ -107,7 +107,7 @@ void EngineSettings::Misc::load() {
 				currency_id = Parse::toInt(infile.val);
 				if (currency_id < 1) {
 					currency_id = 1;
-					logError("EngineSettings: Currency ID below the minimum allowed value. Resetting it to %d", currency_id);
+					Utils::logError("EngineSettings: Currency ID below the minimum allowed value. Resetting it to %d", currency_id);
 				}
 			}
 			// @ATTR interact_range|float|Distance where the player can interact with objects and NPCs.
@@ -141,12 +141,12 @@ void EngineSettings::Misc::load() {
 	}
 
 	if (save_prefix == "") {
-		logError("EngineSettings: save_prefix not found in engine/misc.txt, setting to 'default'. This may cause save file conflicts between games that have no save_prefix.");
+		Utils::logError("EngineSettings: save_prefix not found in engine/misc.txt, setting to 'default'. This may cause save file conflicts between games that have no save_prefix.");
 		save_prefix = "default";
 	}
 
 	if (save_buyback && !keep_buyback_on_map_change) {
-		logError("EngineSettings: Warning, save_buyback=true is ignored when keep_buyback_on_map_change=false.");
+		Utils::logError("EngineSettings: Warning, save_buyback=true is ignored when keep_buyback_on_map_change=false.");
 		save_buyback = false;
 	}
 }
@@ -219,7 +219,7 @@ void EngineSettings::Resolutions::load() {
 
 	// set the default virtual height if it's not defined
 	if (settings->view_h == 0) {
-		logError("EngineSettings: virtual_height is undefined. Setting it to %d.", min_screen_h);
+		Utils::logError("EngineSettings: virtual_height is undefined. Setting it to %d.", min_screen_h);
 		virtual_heights.push_back(min_screen_h);
 		settings->view_h = min_screen_h;
 		settings->view_h_half = settings->view_h / 2;
@@ -227,7 +227,7 @@ void EngineSettings::Resolutions::load() {
 
 	// icon size can not be zero, so we set a default of 32x32, which is fantasycore's icon size
 	if (icon_size == 0) {
-		logError("EngineSettings: icon_size is undefined. Setting it to 32.");
+		Utils::logError("EngineSettings: icon_size is undefined. Setting it to 32.");
 		icon_size = 32;
 	}
 }
@@ -776,7 +776,7 @@ void EngineSettings::Tileset::load() {
 		infile.close();
 	}
 	else {
-		logError("Unable to open engine/tileset_config.txt! Defaulting to 64x32 isometric tiles.");
+		Utils::logError("Unable to open engine/tileset_config.txt! Defaulting to 64x32 isometric tiles.");
 	}
 
 	// Init automatically calculated parameters
@@ -786,7 +786,7 @@ void EngineSettings::Tileset::load() {
 			units_per_pixel_y = 2.0f / tile_h;
 		}
 		else {
-			logError("EngineSettings: Tile dimensions must be greater than 0. Resetting to the default size of 64x32.");
+			Utils::logError("EngineSettings: Tile dimensions must be greater than 0. Resetting to the default size of 64x32.");
 			tile_w = 64;
 			tile_h = 32;
 		}
@@ -797,16 +797,16 @@ void EngineSettings::Tileset::load() {
 			units_per_pixel_y = 1.0f / tile_h;
 		}
 		else {
-			logError("EngineSettings: Tile dimensions must be greater than 0. Resetting to the default size of 64x32.");
+			Utils::logError("EngineSettings: Tile dimensions must be greater than 0. Resetting to the default size of 64x32.");
 			tile_w = 64;
 			tile_h = 32;
 		}
 	}
 	if (units_per_pixel_x == 0 || units_per_pixel_y == 0) {
-		logError("EngineSettings: One of UNITS_PER_PIXEL values is zero! %dx%d", static_cast<int>(units_per_pixel_x), static_cast<int>(units_per_pixel_y));
-		logErrorDialog("EngineSettings: One of UNITS_PER_PIXEL values is zero! %dx%d", static_cast<int>(units_per_pixel_x), static_cast<int>(units_per_pixel_y));
+		Utils::logError("EngineSettings: One of UNITS_PER_PIXEL values is zero! %dx%d", static_cast<int>(units_per_pixel_x), static_cast<int>(units_per_pixel_y));
+		Utils::logErrorDialog("EngineSettings: One of UNITS_PER_PIXEL values is zero! %dx%d", static_cast<int>(units_per_pixel_x), static_cast<int>(units_per_pixel_y));
 		mods->resetModConfig();
-		Exit(1);
+		Utils::Exit(1);
 	}
 };
 
@@ -857,7 +857,7 @@ void EngineSettings::XPTable::load() {
 	}
 
 	if (xp_table.empty()) {
-		logError("EngineSettings: No XP table defined.");
+		Utils::logError("EngineSettings: No XP table defined.");
 		xp_table.push_back(0);
 	}
 }

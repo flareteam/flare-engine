@@ -115,9 +115,9 @@ void AnimationSet::load() {
 				// @ATTR image|filename|Filename of sprite-sheet image.
 				if (sprite != NULL) {
 					parser.error("AnimationSet: Multiple images specified. Dragons be here!");
-					logErrorDialog("AnimationSet: Multiple images specified. Dragons be here!");
+					Utils::logErrorDialog("AnimationSet: Multiple images specified. Dragons be here!");
 					mods->resetModConfig();
-					Exit(128);
+					Utils::Exit(128);
 				}
 
 				sprite = render_device->loadImage(parser.val, RenderDevice::ERROR_NORMAL);

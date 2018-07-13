@@ -397,7 +397,7 @@ void GameStateLoad::loadPreview(GameSlot* slot) {
 
 	for (unsigned int i=0; i<slot->equipped.size(); i++) {
 		if (static_cast<unsigned>(slot->equipped[i]) > items->items.size()-1) {
-			logError("GameStateLoad: Item in save slot %d with id=%d is out of bounds 1-%d. Your savegame is broken or you might be using an incompatible savegame/mod", slot->id, slot->equipped[i], static_cast<int>(items->items.size())-1);
+			Utils::logError("GameStateLoad: Item in save slot %d with id=%d is out of bounds 1-%d. Your savegame is broken or you might be using an incompatible savegame/mod", slot->id, slot->equipped[i], static_cast<int>(items->items.size())-1);
 			continue;
 		}
 
@@ -470,10 +470,10 @@ void GameStateLoad::logic() {
 			Rect scroll_area = slot_pos[0];
 			scroll_area.h = slot_pos[0].h * game_slot_max;
 
-			if (isWithinRect(scroll_area, inpt->mouse)) {
+			if (Utils::isWithinRect(scroll_area, inpt->mouse)) {
 				if (inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1]) {
 					for (int i=0; i<visible_slots; ++i) {
-						if (isWithinRect(slot_pos[i], inpt->mouse)) {
+						if (Utils::isWithinRect(slot_pos[i], inpt->mouse)) {
 							inpt->lock[Input::MAIN1] = true;
 							setSelectedSlot(i + scroll_offset);
 							updateButtons();
@@ -525,7 +525,7 @@ void GameStateLoad::logic() {
 	else if (confirm->visible) {
 		confirm->logic();
 		if (confirm->confirmClicked) {
-			removeSaveDir(game_slots[selected_slot]->id);
+			Utils::removeSaveDir(game_slots[selected_slot]->id);
 
 			delete game_slots[selected_slot];
 			game_slots[selected_slot] = NULL;
@@ -724,7 +724,7 @@ void GameStateLoad::render() {
 			background->setDest(dest);
 			render_device->render(background);
 		}
-		Point slot_dest = FPointToPoint(background->getDest());
+		Point slot_dest(background->getDest());
 
 		if (!game_slots[off_slot]) {
 			WidgetLabel slot_error;
@@ -755,7 +755,7 @@ void GameStateLoad::render() {
 		// level
 		ss.str("");
 		ss << msg->get("Level %d", game_slots[off_slot]->stats.level);
-		ss << " / " << getTimeString(game_slots[off_slot]->time_played, true);
+		ss << " / " << Utils::getTimeString(game_slots[off_slot]->time_played, true);
 		if (game_slots[off_slot]->stats.permadeath)
 			ss << " / +";
 

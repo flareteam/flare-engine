@@ -58,7 +58,7 @@ Animation::Animation(const std::string &_name, const std::string &_type, Image *
 	, frame_count(0)
 	, speed(1.0f) {
 	if (type == ANIMTYPE_NONE)
-		logError("Animation: Type %s is unknown", _type.c_str());
+		Utils::logError("Animation: Type %s is unknown", _type.c_str());
 }
 
 void Animation::setupUncompressed(const Point& _render_size, const Point& _render_offset, unsigned short _position, unsigned short _frames, unsigned short _duration, unsigned short _maxkinds) {
@@ -151,12 +151,12 @@ void Animation::setup(unsigned short _frames, unsigned short _duration, unsigned
 void Animation::addFrame(unsigned short index, unsigned short kind, const Rect& rect, const Point& _render_offset) {
 
 	if (index >= gfx.size()/max_kinds) {
-		logError("Animation: Animation(%s) adding rect(%d, %d, %d, %d) to frame index(%u) out of bounds. must be in [0, %d]",
+		Utils::logError("Animation: Animation(%s) adding rect(%d, %d, %d, %d) to frame index(%u) out of bounds. must be in [0, %d]",
 				name.c_str(), rect.x, rect.y, rect.w, rect.h, index, static_cast<int>(gfx.size())/max_kinds);
 		return;
 	}
 	if (kind > max_kinds-1) {
-		logError("Animation: Animation(%s) adding rect(%d, %d, %d, %d) to frame(%u) kind(%u) out of bounds. must be in [0, %d]",
+		Utils::logError("Animation: Animation(%s) adding rect(%d, %d, %d, %d) to frame(%u) kind(%u) out of bounds. must be in [0, %d]",
 				name.c_str(), rect.x, rect.y, rect.w, rect.h, index, kind, max_kinds-1);
 		return;
 	}
@@ -268,13 +268,13 @@ bool Animation::syncTo(const Animation *other) {
 
 	if (cur_frame_index >= frames.size()) {
 		if (frames.empty()) {
-			logError("Animation: '%s' animation has no frames, but current frame index is greater than 0.", name.c_str());
+			Utils::logError("Animation: '%s' animation has no frames, but current frame index is greater than 0.", name.c_str());
 			cur_frame_index = 0;
 			cur_frame_index_f = 0;
 			return false;
 		}
 		else {
-			logError("Animation: Current frame index (%d) was larger than the last frame index (%d) when syncing '%s' animation.", cur_frame_index, frames.size()-1, name.c_str());
+			Utils::logError("Animation: Current frame index (%d) was larger than the last frame index (%d) when syncing '%s' animation.", cur_frame_index, frames.size()-1, name.c_str());
 			cur_frame_index = static_cast<unsigned short>(frames.size()-1);
 			cur_frame_index_f = cur_frame_index;
 			return false;

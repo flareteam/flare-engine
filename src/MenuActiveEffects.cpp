@@ -203,7 +203,7 @@ void MenuActiveEffects::renderTooltips(const Point& position) {
 	TooltipData tip_data;
 
 	for (size_t i = 0; i < effect_icons.size(); ++i) {
-		if (isWithinRect(effect_icons[i].pos, position)) {
+		if (Utils::isWithinRect(effect_icons[i].pos, position)) {
 			if (!effect_icons[i].name.empty())
 				tip_data.addText(msg->get(effect_icons[i].name));
 
@@ -216,7 +216,7 @@ void MenuActiveEffects::renderTooltips(const Point& position) {
 				tip_data.addText(ss.str());
 			}
 			else if (effect_icons[i].max > 0) {
-				ss << msg->get("Remaining:") << " " << getDurationString(effect_icons[i].current, 1);
+				ss << msg->get("Remaining:") << " " << Utils::getDurationString(effect_icons[i].current, 1);
 				tip_data.addText(ss.str());
 			}
 

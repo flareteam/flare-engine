@@ -160,7 +160,7 @@ bool WidgetTooltip::createBuffer(TooltipData &tip) {
 	graphics = render_device->createImage(size.x + (eset->tooltips.margin*2), size.y + (eset->tooltips.margin*2));
 
 	if (!graphics) {
-		logError("WidgetTooltip: Could not create tooltip buffer.");
+		Utils::logError("WidgetTooltip: Could not create tooltip buffer.");
 		return false;
 	}
 

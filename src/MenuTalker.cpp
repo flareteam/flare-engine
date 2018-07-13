@@ -65,12 +65,12 @@ MenuTalker::MenuTalker(MenuNPCActions *_npc_menu)
 			// @ATTR close|point|Position of the close button.
 			if(infile.key == "close") {
 				Point pos = Parse::toPoint(infile.val);
-				closeButton->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
+				closeButton->setBasePos(pos.x, pos.y, Utils::ALIGN_TOPLEFT);
 			}
 			// @ATTR advance|point|Position of the button to advance dialog.
 			else if(infile.key == "advance") {
 				Point pos = Parse::toPoint(infile.val);
-				advanceButton->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
+				advanceButton->setBasePos(pos.x, pos.y, Utils::ALIGN_TOPLEFT);
 			}
 			// @ATTR dialogbox|rectangle|Position and dimensions of the text box graphics.
 			else if (infile.key == "dialogbox") dialog_pos = Parse::toRect(infile.val);
@@ -93,11 +93,11 @@ MenuTalker::MenuTalker(MenuNPCActions *_npc_menu)
 	}
 
 	label_name = new WidgetLabel();
-	label_name->setBasePos(text_pos.x + text_offset.x, text_pos.y + text_offset.y, ALIGN_TOPLEFT);
+	label_name->setBasePos(text_pos.x + text_offset.x, text_pos.y + text_offset.y, Utils::ALIGN_TOPLEFT);
 	label_name->setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
 	textbox = new WidgetScrollBox(text_pos.w, text_pos.h-(text_offset.y*2));
-	textbox->setBasePos(text_pos.x, text_pos.y + text_offset.y, ALIGN_TOPLEFT);
+	textbox->setBasePos(text_pos.x, text_pos.y + text_offset.y, Utils::ALIGN_TOPLEFT);
 
 	align();
 }
@@ -206,7 +206,7 @@ void MenuTalker::createBuffer() {
 	label_name->setFont(font_who);
 
 
-	line = substituteVarsInString(npc->dialog[dialog_node][event_cursor].s, pc);
+	line = Utils::substituteVarsInString(npc->dialog[dialog_node][event_cursor].s, pc);
 
 	// render dialog text to the scrollbox buffer
 	Point line_size = font->calc_size(line,textbox->pos.w-(text_offset.x*2));

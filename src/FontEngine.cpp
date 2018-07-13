@@ -215,7 +215,7 @@ Rect FontEngine::position(const std::string& text, int x, int y, int justify) {
 		dest_rect.y = y;
 	}
 	else {
-		logError("FontEngine::position() given unhandled 'justify=%d', assuming left",justify);
+		Utils::logError("FontEngine::position() given unhandled 'justify=%d', assuming left",justify);
 		dest_rect.x = x;
 		dest_rect.y = y;
 	}

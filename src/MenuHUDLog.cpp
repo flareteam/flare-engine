@@ -88,7 +88,7 @@ void MenuHUDLog::logic() {
 			overlay_area.w = overlay_bg->getGraphicsWidth();
 			overlay_area.h = overlay_bg->getGraphicsHeight();
 
-			if (isWithinRect(overlay_area, inpt->mouse)) {
+			if (Utils::isWithinRect(overlay_area, inpt->mouse)) {
 				inpt->lock[Input::MAIN1] = true;
 				hide_overlay = true;
 			}
@@ -180,7 +180,7 @@ void MenuHUDLog::add(const std::string& s, int type) {
 	// Make sure we don't spam the same message repeatedly
 	if (log_msg.empty() || log_msg.back() != s || type == MSG_UNIQUE) {
 		// add new message
-		log_msg.push_back(substituteVarsInString(s, pc));
+		log_msg.push_back(Utils::substituteVarsInString(s, pc));
 		msg_age.push_back(calcDuration(log_msg.back()));
 
 		// render the log entry and store it in a buffer

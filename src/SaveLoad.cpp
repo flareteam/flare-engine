@@ -75,7 +75,7 @@ void SaveLoad::saveGame() {
 	if (game_slot <= 0) return;
 
 	// if needed, create the save file structure
-	createSaveDir(game_slot);
+	Utils::createSaveDir(game_slot);
 
 	// remove items with zero quantity from inventory
 	menu->inv->inventory[MenuInventory::EQUIPMENT].clean();
@@ -200,7 +200,7 @@ void SaveLoad::saveGame() {
 
 		outfile << std::endl;
 
-		if (outfile.bad()) logError("SaveLoad: Unable to save the game. No write access or disk is full!");
+		if (outfile.bad()) Utils::logError("SaveLoad: Unable to save the game. No write access or disk is full!");
 		outfile.close();
 		outfile.clear();
 
@@ -226,7 +226,7 @@ void SaveLoad::saveGame() {
 
 		outfile << std::endl;
 
-		if (outfile.bad()) logError("SaveLoad: Unable to save stash. No write access or disk is full!");
+		if (outfile.bad()) Utils::logError("SaveLoad: Unable to save stash. No write access or disk is full!");
 		outfile.close();
 		outfile.clear();
 
@@ -283,7 +283,7 @@ void SaveLoad::loadGame() {
 				for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 					pc->stats.primary[i] = Parse::popFirstInt(infile.val);
 					if (pc->stats.primary[i] < 0 || pc->stats.primary[i] > pc->stats.max_points_per_stat) {
-						logInfo("SaveLoad: Primary stat value for '%s' is out of bounds, setting to zero.", eset->primary_stats.list[i].id.c_str());
+						Utils::logInfo("SaveLoad: Primary stat value for '%s' is out of bounds, setting to zero.", eset->primary_stats.list[i].id.c_str());
 						pc->stats.primary[i] = 0;
 					}
 				}
@@ -313,7 +313,7 @@ void SaveLoad::loadGame() {
 					mapr->clearEvents();
 				}
 				else {
-					logError("SaveLoad: Unable to find %s, loading maps/spawn.txt", mapr->teleport_mapname.c_str());
+					Utils::logError("SaveLoad: Unable to find %s, loading maps/spawn.txt", mapr->teleport_mapname.c_str());
 					mapr->teleport_mapname = "maps/spawn.txt";
 					mapr->teleport_destination.x = 0.5f;
 					mapr->teleport_destination.y = 0.5f;
@@ -324,15 +324,15 @@ void SaveLoad::loadGame() {
 				for (int i = 0; i < MenuActionBar::SLOT_MAX; i++) {
 					hotkeys[i] = Parse::popFirstInt(infile.val);
 					if (hotkeys[i] < 0) {
-						logError("SaveLoad: Hotkey power on position %d has negative id, skipping", i);
+						Utils::logError("SaveLoad: Hotkey power on position %d has negative id, skipping", i);
 						hotkeys[i] = 0;
 					}
 					else if (static_cast<unsigned>(hotkeys[i]) > powers->powers.size()-1) {
-						logError("SaveLoad: Hotkey power id (%d) out of bounds 1-%d, skipping", hotkeys[i], static_cast<int>(powers->powers.size()));
+						Utils::logError("SaveLoad: Hotkey power id (%d) out of bounds 1-%d, skipping", hotkeys[i], static_cast<int>(powers->powers.size()));
 						hotkeys[i] = 0;
 					}
 					else if (hotkeys[i] != 0 && static_cast<unsigned>(hotkeys[i]) < powers->powers.size() && powers->powers[hotkeys[i]].name == "") {
-						logError("SaveLoad: Hotkey power with id=%d, found on position %d does not exist, skipping", hotkeys[i], i);
+						Utils::logError("SaveLoad: Hotkey power with id=%d, found on position %d does not exist, skipping", hotkeys[i], i);
 						hotkeys[i] = 0;
 					}
 				}
@@ -374,7 +374,7 @@ void SaveLoad::loadGame() {
 
 		infile.close();
 	}
-	else logError("SaveLoad: Unable to open %s!", ss.str().c_str());
+	else Utils::logError("SaveLoad: Unable to open %s!", ss.str().c_str());
 
 	// set starting values for primary stats based on class
 	EngineSettings::HeroClasses::HeroClass* pc_class;
@@ -395,13 +395,13 @@ void SaveLoad::loadGame() {
 	// powers->activatePassives(pc->stats);
 	if (eset->misc.save_hpmp && saved_hp != 0) {
 		if (saved_hp < 0 || saved_hp > pc->stats.get(Stats::HP_MAX)) {
-			logError("SaveLoad: HP value is out of bounds, setting to maximum");
+			Utils::logError("SaveLoad: HP value is out of bounds, setting to maximum");
 			pc->stats.hp = pc->stats.get(Stats::HP_MAX);
 		}
 		else pc->stats.hp = saved_hp;
 
 		if (saved_mp < 0 || saved_mp > pc->stats.get(Stats::MP_MAX)) {
-			logError("SaveLoad: MP value is out of bounds, setting to maximum");
+			Utils::logError("SaveLoad: MP value is out of bounds, setting to maximum");
 			pc->stats.mp = pc->stats.get(Stats::MP_MAX);
 		}
 		else pc->stats.mp = saved_mp;
@@ -412,7 +412,7 @@ void SaveLoad::loadGame() {
 	}
 
 	if (save_version != ENGINE_VERSION)
-		logInfo("SaveLoad: Warning! Engine version of save file (%s) does not match current engine version (%s). Be on the lookout for bugs.", versionToString(save_version).c_str(), versionToString(ENGINE_VERSION).c_str());
+		Utils::logInfo("SaveLoad: Warning! Engine version of save file (%s) does not match current engine version (%s). Be on the lookout for bugs.", versionToString(save_version).c_str(), versionToString(ENGINE_VERSION).c_str());
 
 	// reset character menu
 	menu->chr->refreshStats();
@@ -427,7 +427,7 @@ void SaveLoad::loadClass(int index) {
 	if (game_slot <= 0) return;
 
 	if (index < 0 || static_cast<unsigned>(index) >= eset->hero_classes.list.size()) {
-		logError("SaveLoad: Class index out of bounds.");
+		Utils::logError("SaveLoad: Class index out of bounds.");
 		return;
 	}
 
@@ -488,7 +488,7 @@ void SaveLoad::loadStash() {
 		}
 		infile.close();
 	}
-	else logInfo("SaveLoad: Could not open stash file '%s'. This may be because it hasn't been created yet.", ss.str().c_str());
+	else Utils::logInfo("SaveLoad: Could not open stash file '%s'. This may be because it hasn't been created yet.", ss.str().c_str());
 
 	menu->stash->stock.clean();
 }

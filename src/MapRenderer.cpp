@@ -149,7 +149,7 @@ void MapRenderer::pushEnemyGroup(Map_Group &g) {
 
 	}
 	if (enemies_to_spawn > 0) {
-		logError("MapRenderer: Could not spawn all enemies in group at %s (x=%d,y=%d,w=%d,h=%d), %d missing (min=%d max=%d)",
+		Utils::logError("MapRenderer: Could not spawn all enemies in group at %s (x=%d,y=%d,w=%d,h=%d), %d missing (min=%d max=%d)",
 				filename.c_str(), g.pos.x, g.pos.y, g.area.x, g.area.y, enemies_to_spawn, g.numbermin, g.numbermax);
 	}
 }
@@ -193,7 +193,7 @@ int MapRenderer::load(const std::string& fname) {
 		if (layernames[i] == "collision") {
 			short width = static_cast<short>(layers[i].size());
 			if (width == 0) {
-				logError("MapRenderer: Map width is 0. Can't set collision layer.");
+				Utils::logError("MapRenderer: Map width is 0. Can't set collision layer.");
 				break;
 			}
 			short height = static_cast<short>(layers[i][0].size());
@@ -228,9 +228,9 @@ int MapRenderer::load(const std::string& fname) {
 	}
 
 	if (!corrupted.empty()) {
-		logError("MapRenderer: Tileset or Map corrupted. A tile has a larger id than the tileset allows or is undefined.");
+		Utils::logError("MapRenderer: Tileset or Map corrupted. A tile has a larger id than the tileset allows or is undefined.");
 		while (!corrupted.empty()) {
-			logError("MapRenderer: Removing offending tile id %d.", corrupted.back());
+			Utils::logError("MapRenderer: Removing offending tile id %d.", corrupted.back());
 			corrupted.pop_back();
 		}
 	}
@@ -353,7 +353,7 @@ void MapRenderer::render(std::vector<Renderable> &r, std::vector<Renderable> &r_
 void MapRenderer::drawRenderable(std::vector<Renderable>::iterator r_cursor) {
 	if (r_cursor->image != NULL) {
 		Rect dest;
-		Point p = map_to_screen(r_cursor->map_pos.x, r_cursor->map_pos.y, shakycam.x, shakycam.y);
+		Point p = Utils::mapToScreen(r_cursor->map_pos.x, r_cursor->map_pos.y, shakycam.x, shakycam.y);
 		dest.x = p.x - r_cursor->offset.x;
 		dest.y = p.y - r_cursor->offset.y;
 		render_device->render(*r_cursor, dest);
@@ -364,7 +364,7 @@ void MapRenderer::renderIsoLayer(const Map_Layer& layerdata) {
 	int_fast16_t i; // first index of the map array
 	int_fast16_t j; // second index of the map array
 	Point dest;
-	const Point upperleft = FPointToPoint(screen_to_map(0, 0, shakycam.x, shakycam.y));
+	const Point upperleft(Utils::screenToMap(0, 0, shakycam.x, shakycam.y));
 	const int_fast16_t max_tiles_width =   static_cast<int_fast16_t>((settings->view_w / eset->tileset.tile_w) + 2*tset.max_size_x);
 	const int_fast16_t max_tiles_height = static_cast<int_fast16_t>((2 * settings->view_h / eset->tileset.tile_h) + 2*(tset.max_size_y+1));
 
@@ -393,7 +393,7 @@ void MapRenderer::renderIsoLayer(const Map_Layer& layerdata) {
 		// lower left (south west) corner is caught by having 0 in there, so j>0
 		const int_fast16_t j_end = std::max(static_cast<int_fast16_t>(j+i-w+1),	std::max(static_cast<int_fast16_t>(j - max_tiles_width), static_cast<int_fast16_t>(0)));
 
-		Point p = map_to_screen(float(i), float(j), shakycam.x, shakycam.y);
+		Point p = Utils::mapToScreen(float(i), float(j), shakycam.x, shakycam.y);
 		p = centerTile(p);
 
 		// draw one horizontal line
@@ -432,7 +432,7 @@ void MapRenderer::renderIsoBackObjects(std::vector<Renderable> &r) {
 void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 	Point dest;
 
-	const Point upperleft = FPointToPoint(screen_to_map(0, 0, shakycam.x, shakycam.y));
+	const Point upperleft(Utils::screenToMap(0, 0, shakycam.x, shakycam.y));
 	const int_fast16_t max_tiles_width = static_cast<int_fast16_t>((settings->view_w / eset->tileset.tile_w) + 2 * tset.max_size_x);
 	const int_fast16_t max_tiles_height = static_cast<int_fast16_t>(((settings->view_h / eset->tileset.tile_h) + 2 * tset.max_size_y)*2);
 
@@ -473,7 +473,7 @@ void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 		const int_fast16_t j_end = std::max(static_cast<int_fast16_t>(j+i-w+1), std::max(static_cast<int_fast16_t>(j - max_tiles_width), static_cast<int_fast16_t>(0)));
 
 		// draw one horizontal line
-		Point p = map_to_screen(float(i), float(j), shakycam.x, shakycam.y);
+		Point p = Utils::mapToScreen(float(i), float(j), shakycam.x, shakycam.y);
 		p = centerTile(p);
 		const Map_Layer &current_layer = layers[index_objectlayer];
 		bool is_last_NE_tile = false;
@@ -542,7 +542,7 @@ do_last_NE_tile:
 					draw_NE_tile = !is_last_NE_tile;
 
 					// r_cursor left/right side
-					Point r_cursor_left = map_to_screen(r_cursor->map_pos.x, r_cursor->map_pos.y, shakycam.x, shakycam.y);
+					Point r_cursor_left = Utils::mapToScreen(r_cursor->map_pos.x, r_cursor->map_pos.y, shakycam.x, shakycam.y);
 					r_cursor_left.y -= r_cursor->offset.y;
 					Point r_cursor_right = r_cursor_left;
 					r_cursor_left.x -= r_cursor->offset.x;
@@ -552,12 +552,12 @@ do_last_NE_tile:
 					bool is_behind_NE = false;
 
 					// check left of r_cursor
-					if (isWithinRect(tile_S_bounds, r_cursor_right) && isWithinRect(tile_SW_bounds, r_cursor_left)) {
+					if (Utils::isWithinRect(tile_S_bounds, r_cursor_right) && Utils::isWithinRect(tile_SW_bounds, r_cursor_left)) {
 						is_behind_SW = true;
 					}
 
 					// check right of r_cursor
-					if (draw_NE_tile && isWithinRect(tile_E_bounds, r_cursor_left) && isWithinRect(tile_NE_bounds, r_cursor_right)) {
+					if (draw_NE_tile && Utils::isWithinRect(tile_E_bounds, r_cursor_left) && Utils::isWithinRect(tile_NE_bounds, r_cursor_right)) {
 						is_behind_NE = true;
 					}
 
@@ -669,7 +669,7 @@ void MapRenderer::renderIso(std::vector<Renderable> &r, std::vector<Renderable> 
 void MapRenderer::renderOrthoLayer(const Map_Layer& layerdata) {
 
 	Point dest;
-	const Point upperleft = FPointToPoint(screen_to_map(0, 0, shakycam.x, shakycam.y));
+	const Point upperleft(Utils::screenToMap(0, 0, shakycam.x, shakycam.y));
 
 	short int startj = static_cast<short int>(std::max(0, upperleft.y));
 	short int starti = static_cast<short int>(std::max(0, upperleft.x));
@@ -680,7 +680,7 @@ void MapRenderer::renderOrthoLayer(const Map_Layer& layerdata) {
 	short int j;
 
 	for (j = startj; j < max_tiles_height; j++) {
-		Point p = map_to_screen(starti, j, shakycam.x, shakycam.y);
+		Point p = Utils::mapToScreen(starti, j, shakycam.x, shakycam.y);
 		p = centerTile(p);
 		for (i = starti; i < max_tiles_width; i++) {
 
@@ -711,7 +711,7 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 	std::vector<Renderable>::iterator r_cursor = r.begin();
 	std::vector<Renderable>::iterator r_end = r.end();
 
-	const Point upperleft = FPointToPoint(screen_to_map(0, 0, shakycam.x, shakycam.y));
+	const Point upperleft(Utils::screenToMap(0, 0, shakycam.x, shakycam.y));
 
 	short int startj = static_cast<short int>(std::max(0, upperleft.y));
 	short int starti = static_cast<short int>(std::max(0, upperleft.x));
@@ -725,7 +725,7 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 		return;
 
 	for (j = startj; j < max_tiles_height; j++) {
-		Point p = map_to_screen(starti, j, shakycam.x, shakycam.y);
+		Point p = Utils::mapToScreen(starti, j, shakycam.x, shakycam.y);
 		p = centerTile(p);
 		for (i = starti; i<max_tiles_width; i++) {
 
@@ -908,7 +908,7 @@ void MapRenderer::checkHotspots() {
 				if (npc) {
 					is_npc = true;
 
-					Point p = map_to_screen(float(npc->x), float(npc->y), shakycam.x, shakycam.y);
+					Point p = Utils::mapToScreen(float(npc->x), float(npc->y), shakycam.x, shakycam.y);
 					p = centerTile(p);
 
 					Rect dest;
@@ -917,7 +917,7 @@ void MapRenderer::checkHotspots() {
 					dest.w = npc->b;
 					dest.h = npc->c;
 
-					if (isWithinRect(dest, inpt->mouse)) {
+					if (Utils::isWithinRect(dest, inpt->mouse)) {
 						matched = true;
 						tip_pos.x = dest.x + dest.w/2;
 						tip_pos.y = p.y - eset->tooltips.margin_npc;
@@ -925,7 +925,7 @@ void MapRenderer::checkHotspots() {
 				}
 				else {
 					for (unsigned index = 0; index <= index_objectlayer; ++index) {
-						Point p = map_to_screen(float(x), float(y), shakycam.x, shakycam.y);
+						Point p = Utils::mapToScreen(float(x), float(y), shakycam.x, shakycam.y);
 						p = centerTile(p);
 
 						if (const short current_tile = layers[index][x][y]) {
@@ -937,9 +937,9 @@ void MapRenderer::checkHotspots() {
 							dest.w = tile.tile->getClip().w;
 							dest.h = tile.tile->getClip().h;
 
-							if (isWithinRect(dest, inpt->mouse)) {
+							if (Utils::isWithinRect(dest, inpt->mouse)) {
 								matched = true;
-								tip_pos = map_to_screen(it->center.x, it->center.y, shakycam.x, shakycam.y);
+								tip_pos = Utils::mapToScreen(it->center.x, it->center.y, shakycam.x, shakycam.y);
 								tip_pos.y -= eset->tileset.tile_h;
 							}
 						}
@@ -959,8 +959,8 @@ void MapRenderer::checkHotspots() {
 					// new tooltip?
 					createTooltip((*it).getComponent(EventComponent::TOOLTIP));
 
-					if ((((*it).reachable_from.w == 0 && (*it).reachable_from.h == 0) || isWithinRect((*it).reachable_from, FPointToPoint(cam)))
-							&& calcDist(cam, (*it).center) < eset->misc.interact_range) {
+					if ((((*it).reachable_from.w == 0 && (*it).reachable_from.h == 0) || Utils::isWithinRect((*it).reachable_from, Point(cam)))
+							&& Utils::calcDist(cam, (*it).center) < eset->misc.interact_range) {
 
 						// only check events if the player is clicking
 						// and allowed to click
@@ -1005,8 +1005,8 @@ void MapRenderer::checkNearestEvent() {
 		// skip events on cooldown
 		if ((*it).cooldown_ticks != 0) continue;
 
-		float distance = calcDist(cam, (*it).center);
-		if ((((*it).reachable_from.w == 0 && (*it).reachable_from.h == 0) || isWithinRect((*it).reachable_from, FPointToPoint(cam)))
+		float distance = Utils::calcDist(cam, (*it).center);
+		if ((((*it).reachable_from.w == 0 && (*it).reachable_from.h == 0) || Utils::isWithinRect((*it).reachable_from, Point(cam)))
 				&& distance < eset->misc.interact_range && distance < best_distance) {
 			best_distance = distance;
 			nearest = it;
@@ -1018,7 +1018,7 @@ void MapRenderer::checkNearestEvent() {
 		if (!inpt->usingMouse() || settings->touchscreen) {
 			// new tooltip?
 			createTooltip((*nearest).getComponent(EventComponent::TOOLTIP));
-			tip_pos = map_to_screen((*nearest).center.x, (*nearest).center.y, shakycam.x, shakycam.y);
+			tip_pos = Utils::mapToScreen((*nearest).center.x, (*nearest).center.y, shakycam.x, shakycam.y);
 			if ((*nearest).getComponent(EventComponent::NPC_HOTSPOT)) {
 				tip_pos.y -= eset->tooltips.margin_npc;
 			}
@@ -1060,7 +1060,7 @@ void MapRenderer::createTooltip(EventComponent *ec) {
  */
 void MapRenderer::activatePower(int power_index, unsigned statblock_index, FPoint &target) {
 	if (power_index < 0 || static_cast<unsigned>(power_index) >= powers->powers.size()) {
-		logError("MapRenderer: Power index is out of bounds.");
+		Utils::logError("MapRenderer: Power index is out of bounds.");
 		return;
 	}
 
@@ -1072,7 +1072,7 @@ void MapRenderer::activatePower(int power_index, unsigned statblock_index, FPoin
 		}
 	}
 	else {
-		logError("MapRenderer: StatBlock index is out of bounds.");
+		Utils::logError("MapRenderer: StatBlock index is out of bounds.");
 	}
 }
 
@@ -1104,7 +1104,7 @@ void MapRenderer::getTileBounds(const int_fast16_t x, const int_fast16_t y, cons
 			const TileSet::Tile_Def &tile = tset.tiles[tile_index];
 			if (!tile.tile)
 				return;
-			center = centerTile(map_to_screen(float(x), float(y), shakycam.x, shakycam.y));
+			center = centerTile(Utils::mapToScreen(float(x), float(y), shakycam.x, shakycam.y));
 			bounds.x = center.x - tile.offset.x;
 			bounds.y = center.y - tile.offset.y;
 			bounds.w = tile.tile->getClip().w;
@@ -1119,17 +1119,17 @@ void MapRenderer::drawDevCursor() {
 		return;
 
 	Color dev_cursor_color = Color(255,255,0,255);
-	FPoint target = screen_to_map(inpt->mouse.x,  inpt->mouse.y, shakycam.x, shakycam.y);
+	FPoint target = Utils::screenToMap(inpt->mouse.x,  inpt->mouse.y, shakycam.x, shakycam.y);
 
 	if (!collider.is_outside_map(floorf(target.x), floorf(target.y))) {
 		if (eset->tileset.orientation == eset->tileset.TILESET_ORTHOGONAL) {
-			Point p_topleft = map_to_screen(floorf(target.x), floorf(target.y), shakycam.x, shakycam.y);
+			Point p_topleft = Utils::mapToScreen(floorf(target.x), floorf(target.y), shakycam.x, shakycam.y);
 			Point p_bottomright(p_topleft.x + eset->tileset.tile_w, p_topleft.y + eset->tileset.tile_h);
 
 			render_device->drawRectangle(p_topleft, p_bottomright, dev_cursor_color);
 		}
 		else {
-			Point p_left = map_to_screen(floorf(target.x), floorf(target.y+1), shakycam.x, shakycam.y);
+			Point p_left = Utils::mapToScreen(floorf(target.x), floorf(target.y+1), shakycam.x, shakycam.y);
 			Point p_top(p_left.x + eset->tileset.tile_w_half, p_left.y - eset->tileset.tile_h_half);
 			Point p_right(p_left.x + eset->tileset.tile_w, p_left.y);
 			Point p_bottom(p_left.x + eset->tileset.tile_w_half, p_left.y + eset->tileset.tile_h_half);
@@ -1142,8 +1142,8 @@ void MapRenderer::drawDevCursor() {
 
 		// draw distance line
 		if (menu->devconsole->distance_ticks >= settings->max_frames_per_sec) {
-			Point p0 = map_to_screen(menu->devconsole->target.x, menu->devconsole->target.y, shakycam.x, shakycam.y);
-			Point p1 = map_to_screen(pc->stats.pos.x, pc->stats.pos.y, shakycam.x, shakycam.y);
+			Point p0 = Utils::mapToScreen(menu->devconsole->target.x, menu->devconsole->target.y, shakycam.x, shakycam.y);
+			Point p1 = Utils::mapToScreen(pc->stats.pos.x, pc->stats.pos.y, shakycam.x, shakycam.y);
 			render_device->drawLine(p0.x, p0.y, p1.x, p1.y, dev_cursor_color);
 		}
 	}
@@ -1162,14 +1162,14 @@ void MapRenderer::drawDevHUD() {
 
 	// player
 	{
-		Point p0 = map_to_screen(pc->stats.pos.x, pc->stats.pos.y, shakycam.x, shakycam.y);
+		Point p0 = Utils::mapToScreen(pc->stats.pos.x, pc->stats.pos.y, shakycam.x, shakycam.y);
 		render_device->drawLine(p0.x - cross_size, p0.y, p0.x + cross_size, p0.y, color_entity);
 		render_device->drawLine(p0.x, p0.y - cross_size, p0.x, p0.y + cross_size, color_entity);
 	}
 
 	// enemies
 	for (size_t i = 0; i < enemym->enemies.size(); ++i) {
-		Point p0 = map_to_screen(enemym->enemies[i]->stats.pos.x, enemym->enemies[i]->stats.pos.y, shakycam.x, shakycam.y);
+		Point p0 = Utils::mapToScreen(enemym->enemies[i]->stats.pos.x, enemym->enemies[i]->stats.pos.y, shakycam.x, shakycam.y);
 		render_device->drawLine(p0.x - cross_size, p0.y, p0.x + cross_size, p0.y, color_entity);
 		render_device->drawLine(p0.x, p0.y - cross_size, p0.x, p0.y + cross_size, color_entity);
 	}
@@ -1180,8 +1180,8 @@ void MapRenderer::drawDevHUD() {
 			continue;
 
 		float radius_c = sqrtf(powf(hazards->h[i]->power->radius, 2) + powf(hazards->h[i]->power->radius, 2));
-		Point p0 = map_to_screen(hazards->h[i]->pos.x, hazards->h[i]->pos.y, shakycam.x, shakycam.y);
-		Point p1 = map_to_screen(hazards->h[i]->pos.x + radius_c, hazards->h[i]->pos.y, shakycam.x, shakycam.y);
+		Point p0 = Utils::mapToScreen(hazards->h[i]->pos.x, hazards->h[i]->pos.y, shakycam.x, shakycam.y);
+		Point p1 = Utils::mapToScreen(hazards->h[i]->pos.x + radius_c, hazards->h[i]->pos.y, shakycam.x, shakycam.y);
 		int radius = p1.x - p0.x;
 		render_device->drawLine(p0.x - cross_size, p0.y, p0.x + cross_size, p0.y, color_hazard);
 		render_device->drawLine(p0.x, p0.y - cross_size, p0.x, p0.y + cross_size, color_hazard);

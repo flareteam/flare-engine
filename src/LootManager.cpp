@@ -129,7 +129,7 @@ void LootManager::renderTooltips(const FPoint& cam) {
 		it->tip_visible = false;
 
 		if (it->on_ground) {
-			Point p = map_to_screen(it->pos.x, it->pos.y, cam.x, cam.y);
+			Point p = Utils::mapToScreen(it->pos.x, it->pos.y, cam.x, cam.y);
 			dest.x = p.x;
 			dest.y = p.y + eset->tileset.tile_h_half;
 
@@ -143,7 +143,7 @@ void LootManager::renderTooltips(const FPoint& cam) {
 			hover.w = eset->tileset.tile_w;
 			hover.h = eset->tileset.tile_h;
 
-			if ((settings->loot_tooltips && !inpt->pressing[Input::ALT]) || (!settings->loot_tooltips && inpt->pressing[Input::ALT]) || isWithinRect(hover, inpt->mouse)) {
+			if ((settings->loot_tooltips && !inpt->pressing[Input::ALT]) || (!settings->loot_tooltips && inpt->pressing[Input::ALT]) || Utils::isWithinRect(hover, inpt->mouse)) {
 				it->tip_visible = true;
 
 				// create tooltip data if needed
@@ -157,7 +157,7 @@ void LootManager::renderTooltips(const FPoint& cam) {
 				tip->prerender(it->tip, dest, TooltipData::STYLE_TOPLABEL);
 				std::vector<Loot>::iterator test_it;
 				for (test_it = loot.begin(); test_it != it; ) {
-					if (rectsOverlap(test_it->tip_bounds, tip->bounds)) {
+					if (Utils::rectsOverlap(test_it->tip_bounds, tip->bounds)) {
 						if (tooltip_below)
 							dest.y = test_it->tip_bounds.y + test_it->tip_bounds.h + eset->tooltips.offset;
 						else
@@ -251,7 +251,7 @@ void LootManager::addEnemyLoot(Enemy *e) {
 
 void LootManager::checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos, std::vector<ItemStack> *itemstack_vec) {
 	if (hero == NULL) {
-		logError("LootManager: checkLoot() failed, no hero.");
+		Utils::logError("LootManager: checkLoot() failed, no hero.");
 		return;
 	}
 
@@ -268,7 +268,7 @@ void LootManager::checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos
 		if (ec->z == 0) {
 			Point src;
 			if (pos) {
-				src = FPointToPoint(*pos);
+				src = Point(*pos);
 			}
 			else {
 				src.x = ec->x;
@@ -288,7 +288,7 @@ void LootManager::checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos
 						p = hero->pos;
 
 					mapr->collider.block(p.x, p.y, !MapCollision::IS_ALLY);
-					tiles_to_unblock.push_back(FPointToPoint(p));
+					tiles_to_unblock.push_back(Point(p));
 				}
 			}
 
@@ -346,7 +346,7 @@ void LootManager::checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos
 
 		Point src;
 		if (pos) {
-			src = FPointToPoint(*pos);
+			src = Point(*pos);
 		}
 		else {
 			src.x = ec->x;
@@ -366,7 +366,7 @@ void LootManager::checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos
 					p = hero->pos;
 
 				mapr->collider.block(p.x, p.y, !MapCollision::IS_ALLY);
-				tiles_to_unblock.push_back(FPointToPoint(p));
+				tiles_to_unblock.push_back(Point(p));
 			}
 		}
 
@@ -390,7 +390,7 @@ void LootManager::checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos
 
 void LootManager::addLoot(ItemStack stack, const FPoint& pos, bool dropped_by_hero) {
 	if (static_cast<size_t>(stack.item) >= items->items.size()) {
-		logError("LootManager: Loot item with id %d is not valid.", stack.item);
+		Utils::logError("LootManager: Loot item with id %d is not valid.", stack.item);
 		return;
 	}
 
@@ -398,7 +398,7 @@ void LootManager::addLoot(ItemStack stack, const FPoint& pos, bool dropped_by_he
 	ld.stack = stack;
 	ld.pos.x = pos.x;
 	ld.pos.y = pos.y;
-	alignFPoint(&ld.pos);
+	ld.pos.align(); // prevent "rounding jitter"
 	ld.dropped_by_hero = dropped_by_hero;
 
 	if (!items->items[stack.item].loot_animation.empty()) {
@@ -442,7 +442,7 @@ ItemStack LootManager::checkPickup(const Point& mouse, const FPoint& cam, const 
 
 			// loot close enough to pickup?
 			if (fabs(hero_pos.x - it->pos.x) < eset->misc.interact_range && fabs(hero_pos.y - it->pos.y) < eset->misc.interact_range && !it->isFlying()) {
-				Point p = map_to_screen(it->pos.x, it->pos.y, cam.x, cam.y);
+				Point p = Utils::mapToScreen(it->pos.x, it->pos.y, cam.x, cam.y);
 
 				r.x = p.x - eset->tileset.tile_w_half;
 				r.y = p.y - eset->tileset.tile_h_half;
@@ -450,7 +450,7 @@ ItemStack LootManager::checkPickup(const Point& mouse, const FPoint& cam, const 
 				r.h = eset->tileset.tile_h;
 
 				// clicked in pickup hotspot?
-				if ((it->tip_visible && isWithinRect(it->tip_bounds, mouse)) || isWithinRect(r, mouse)) {
+				if ((it->tip_visible && Utils::isWithinRect(it->tip_bounds, mouse)) || Utils::isWithinRect(r, mouse)) {
 					curs->setCursor(CursorManager::CURSOR_INTERACT);
 					if (inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1]) {
 						inpt->lock[Input::MAIN1] = true;
@@ -508,7 +508,7 @@ ItemStack LootManager::checkNearestPickup(const FPoint& hero_pos) {
 	for (it = loot.end(); it != loot.begin(); ) {
 		--it;
 
-		float distance = calcDist(hero_pos, it->pos);
+		float distance = Utils::calcDist(hero_pos, it->pos);
 		if (distance < eset->misc.interact_range && distance < best_distance) {
 			best_distance = distance;
 			nearest = it;

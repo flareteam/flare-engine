@@ -35,13 +35,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 
 MessageEngine::MessageEngine() {
-	logInfo("MessageEngine: Using language '%s'", settings->language.c_str());
+	Utils::logInfo("MessageEngine: Using language '%s'", settings->language.c_str());
 
 	GetText infile;
 
 	std::vector<std::string> engineFiles = mods->list("languages/engine." + settings->language + ".po", ModManager::LIST_FULL_PATHS);
 	if (engineFiles.empty() && settings->language != "en")
-		logError("MessageEngine: Unable to open basic translation files located in languages/engine.%s.po", settings->language.c_str());
+		Utils::logError("MessageEngine: Unable to open basic translation files located in languages/engine.%s.po", settings->language.c_str());
 
 	for (unsigned i = 0; i < engineFiles.size(); ++i) {
 		if (infile.open(engineFiles[i])) {
@@ -55,7 +55,7 @@ MessageEngine::MessageEngine() {
 
 	std::vector<std::string> dataFiles = mods->list("languages/data." + settings->language + ".po", ModManager::LIST_FULL_PATHS);
 	if (dataFiles.empty() && settings->language != "en")
-		logError("MessageEngine: Unable to open basic translation files located in languages/data.%s.po", settings->language.c_str());
+		Utils::logError("MessageEngine: Unable to open basic translation files located in languages/data.%s.po", settings->language.c_str());
 
 	for (unsigned i = 0; i < dataFiles.size(); ++i) {
 		if (infile.open(dataFiles[i])) {

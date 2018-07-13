@@ -312,7 +312,7 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 	for (size_t i=0; i<slots.size(); i++) {
 		if (static_cast<size_t>(power_cell[i].id) < powers->powers.size()) {
 			slots[i] = new WidgetSlot(powers->powers[power_cell[i].id].icon, Input::ACCEPT);
-			slots[i]->setBasePos(power_cell[i].pos.x, power_cell[i].pos.y, ALIGN_TOPLEFT);
+			slots[i]->setBasePos(power_cell[i].pos.x, power_cell[i].pos.y, Utils::ALIGN_TOPLEFT);
 
 			if (!tablist_pow.empty()) {
 				tablist_pow[power_cell[i].tab].add(slots[i]);
@@ -324,7 +324,7 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 			}
 
 			if (upgradeButtons[i] != NULL) {
-				upgradeButtons[i]->setBasePos(power_cell[i].pos.x + eset->resolutions.icon_size, power_cell[i].pos.y, ALIGN_TOPLEFT);
+				upgradeButtons[i]->setBasePos(power_cell[i].pos.x + eset->resolutions.icon_size, power_cell[i].pos.y, Utils::ALIGN_TOPLEFT);
 			}
 		}
 	}
@@ -369,7 +369,7 @@ void MenuPowers::loadPower(FileParser &infile) {
 		power_cell.pop_back();
 		slots.pop_back();
 		upgradeButtons.pop_back();
-		logError("MenuPowers: There is a power without a valid id as the first attribute. IDs must be the first attribute in the power menu definition.");
+		Utils::logError("MenuPowers: There is a power without a valid id as the first attribute. IDs must be the first attribute in the power menu definition.");
 	}
 
 	if (skip_section)
@@ -726,7 +726,7 @@ void MenuPowers::createTooltip(TooltipData* tip_data, int slot_num, const std::v
 		tip_data->addText(powers->powers[power_cells[slot_num].id].name);
 
 	if (powers->powers[power_cells[slot_num].id].passive) tip_data->addText(msg->get("Passive"));
-	tip_data->addColoredText(substituteVarsInString(powers->powers[power_cells[slot_num].id].description, pc), font->getColor(FontEngine::COLOR_ITEM_FLAVOR));
+	tip_data->addColoredText(Utils::substituteVarsInString(powers->powers[power_cells[slot_num].id].description, pc), font->getColor(FontEngine::COLOR_ITEM_FLAVOR));
 
 	// add mana cost
 	if (powers->powers[power_cells[slot_num].id].requires_mp > 0) {
@@ -739,7 +739,7 @@ void MenuPowers::createTooltip(TooltipData* tip_data, int slot_num, const std::v
 	// add cooldown time
 	if (powers->powers[power_cells[slot_num].id].cooldown > 0) {
 		std::stringstream ss;
-		ss << msg->get("Cooldown:") << " " << getDurationString(powers->powers[power_cells[slot_num].id].cooldown);
+		ss << msg->get("Cooldown:") << " " << Utils::getDurationString(powers->powers[power_cells[slot_num].id].cooldown);
 		tip_data->addText(ss.str());
 	}
 
@@ -940,10 +940,10 @@ void MenuPowers::createTooltip(TooltipData* tip_data, int slot_num, const std::v
 		if (!ss.str().empty()) {
 			if (pwr.post_effects[i].duration > 0) {
 				if (effect_ptr && effect_ptr->type == "death_sentence") {
-					ss << ": " << getDurationString(pwr.post_effects[i].duration);
+					ss << ": " << Utils::getDurationString(pwr.post_effects[i].duration);
 				}
 				else {
-					ss << " (" << getDurationString(pwr.post_effects[i].duration) << ")";
+					ss << " (" << Utils::getDurationString(pwr.post_effects[i].duration) << ")";
 				}
 
 				if (pwr.post_effects[i].chance != 100)
@@ -1359,7 +1359,7 @@ void MenuPowers::render() {
  * Show mouseover descriptions of disciplines and powers
  */
 void MenuPowers::renderTooltips(const Point& position) {
-	if (!visible || !isWithinRect(window_area, position))
+	if (!visible || !Utils::isWithinRect(window_area, position))
 		return;
 
 	TooltipData tip_data;
@@ -1371,7 +1371,7 @@ void MenuPowers::renderTooltips(const Point& position) {
 		int cell_index = getCellByPowerIndex(power_cell[i].id, power_cell_all);
 		if (!checkCellVisible(cell_index)) continue;
 
-		if (slots[i] && isWithinRect(slots[i]->pos, position)) {
+		if (slots[i] && Utils::isWithinRect(slots[i]->pos, position)) {
 			bool base_unlocked = checkUnlocked(cell_index) || std::find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[i].id) != stats->powers_list.end();
 
 			createTooltip(&tip_data, static_cast<int>(i), power_cell, !base_unlocked);
@@ -1396,7 +1396,7 @@ int MenuPowers::click(const Point& mouse) {
 	int active_tab = (tab_control) ? tab_control->getActiveTab() : 0;
 
 	for (size_t i=0; i<power_cell.size(); i++) {
-		if (slots[i] && isWithinRect(slots[i]->pos, mouse) && (power_cell[i].tab == active_tab)) {
+		if (slots[i] && Utils::isWithinRect(slots[i]->pos, mouse) && (power_cell[i].tab == active_tab)) {
 			if (settings->touchscreen) {
 				if (!slots[i]->in_focus) {
 					slots[i]->in_focus = true;

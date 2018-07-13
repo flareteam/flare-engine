@@ -181,7 +181,7 @@ void GameStatePlay::checkEnemyFocus() {
 		else {
 			enemy = enemym->enemyFocus(inpt->mouse, mapr->cam, EnemyManager::IS_ALIVE);
 			if (enemy) curs->setCursor(CursorManager::CURSOR_ATTACK);
-			src_pos = screen_to_map(inpt->mouse.x, inpt->mouse.y, mapr->cam.x, mapr->cam.y);
+			src_pos = Utils::screenToMap(inpt->mouse.x, inpt->mouse.y, mapr->cam.x, mapr->cam.y);
 
 		}
 	}
@@ -298,7 +298,7 @@ void GameStatePlay::checkTeleport() {
 		// if we're not changing map, move allies to a the player's new position
 		// when changing maps, enemym->handleNewMap() does something similar to this
 		if (mapr->teleport_mapname.empty()) {
-			FPoint spawn_pos = mapr->collider.get_random_neighbor(FPointToPoint(pc->stats.pos), 1, !MapCollision::IGNORE_BLOCKED);
+			FPoint spawn_pos = mapr->collider.get_random_neighbor(Point(pc->stats.pos), 1, !MapCollision::IGNORE_BLOCKED);
 			for (unsigned int i=0; i < enemym->enemies.size(); i++) {
 				if(enemym->enemies[i]->stats.hero_ally && enemym->enemies[i]->stats.alive) {
 					mapr->collider.unblock(enemym->enemies[i]->stats.pos.x, enemym->enemies[i]->stats.pos.y);
@@ -332,7 +332,7 @@ void GameStatePlay::checkTeleport() {
 				mapr->respawn_point = pc->stats.pos;
 			}
 			else {
-				logError("GameStatePlay: Spawn position (%d, %d) is blocked.", static_cast<int>(pc->stats.pos.x), static_cast<int>(pc->stats.pos.y));
+				Utils::logError("GameStatePlay: Spawn position (%d, %d) is blocked.", static_cast<int>(pc->stats.pos.x), static_cast<int>(pc->stats.pos.y));
 			}
 
 			enemym->handleNewMap();
@@ -368,7 +368,7 @@ void GameStatePlay::checkTeleport() {
 		}
 
 		if (mapr->collider.is_outside_map(pc->stats.pos.x, pc->stats.pos.y)) {
-			logError("GameStatePlay: Teleport position is outside of map bounds.");
+			Utils::logError("GameStatePlay: Teleport position is outside of map bounds.");
 			pc->stats.pos.x = 0.5f;
 			pc->stats.pos.y = 0.5f;
 		}
@@ -707,7 +707,7 @@ void GameStatePlay::checkNPCInteraction() {
 	if (npc_id != -1) {
 		bool interact_with_npc = false;
 		if (npc_from_map) {
-			float interact_distance = calcDist(pc->stats.pos, npcs->npcs[npc_id]->pos);
+			float interact_distance = Utils::calcDist(pc->stats.pos, npcs->npcs[npc_id]->pos);
 
 			if (interact_distance < eset->misc.interact_range) {
 				interact_with_npc = true;
@@ -777,7 +777,7 @@ void GameStatePlay::checkStash() {
 		}
 
 		// If the player walks away from the stash, close its menu
-		float interact_distance = calcDist(pc->stats.pos, mapr->stash_pos);
+		float interact_distance = Utils::calcDist(pc->stats.pos, mapr->stash_pos);
 		if (interact_distance > eset->misc.interact_range || !pc->stats.alive) {
 			menu->resetDrag();
 			menu->stash->visible = false;
@@ -968,7 +968,7 @@ void GameStatePlay::logic() {
 			menu->act->locked[count] = true;
 		}
 		else if (pc->stats.manual_untransform && pc->untransform_power == 0)
-			logError("GameStatePlay: Untransform power not found, you can't untransform manually");
+			Utils::logError("GameStatePlay: Untransform power not found, you can't untransform manually");
 
 		menu->act->updated = true;
 

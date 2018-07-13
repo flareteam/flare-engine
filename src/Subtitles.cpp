@@ -162,7 +162,7 @@ void Subtitles::updateLabelAndBackground() {
 	Rect r;
 	r.x = label_pos.x;
 	r.y = label_pos.y;
-	alignToScreenEdge(label_alignment, &r);
+	Utils::alignToScreenEdge(label_alignment, &r);
 	label.setPos(r.x, r.y);
 	label.setText(current_text);
 

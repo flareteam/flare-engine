@@ -522,7 +522,7 @@ void PowerManager::loadPowers() {
 			// @ATTR power.attack_speed|int|Changes attack animation speed for this Power. A value of 100 is 100% speed (aka normal speed).
 			powers[input_id].attack_speed = static_cast<float>(Parse::toInt(infile.val));
 			if (powers[input_id].attack_speed < 100) {
-				logInfo("PowerManager: Attack speeds less than 100 are unsupported.");
+				Utils::logInfo("PowerManager: Attack speeds less than 100 are unsupported.");
 				powers[input_id].attack_speed = 100;
 			}
 		}
@@ -942,7 +942,7 @@ bool PowerManager::hasValidTarget(int power_index, StatBlock *src_stats, const F
 
 	if (!collider) return false;
 
-	FPoint limit_target = clampDistance(powers[power_index].target_range,src_stats->pos,target);
+	FPoint limit_target = Utils::clampDistance(powers[power_index].target_range,src_stats->pos,target);
 
 	if (!collider->is_empty(limit_target.x, limit_target.y) || collider->is_wall(limit_target.x,limit_target.y)) {
 		if (powers[power_index].buff_teleport) {
@@ -1000,7 +1000,7 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, const FPoin
 	}
 
 	if (powers[power_index].directional) {
-		haz->animationKind = calcDirection(src_stats->pos.x, src_stats->pos.y, target.x, target.y);
+		haz->animationKind = Utils::calcDirection(src_stats->pos.x, src_stats->pos.y, target.x, target.y);
 	}
 	else if (powers[power_index].visual_random) {
 		haz->animationKind = rand() % powers[power_index].visual_random;
@@ -1019,14 +1019,14 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, const FPoin
 		haz->pos = src_stats->pos;
 	}
 	else if (powers[power_index].starting_pos == Power::STARTING_POS_TARGET) {
-		haz->pos = clampDistance(powers[power_index].target_range,src_stats->pos,target);
+		haz->pos = Utils::clampDistance(powers[power_index].target_range,src_stats->pos,target);
 	}
 	else if (powers[power_index].starting_pos == Power::STARTING_POS_MELEE) {
-		haz->pos = calcVector(src_stats->pos, src_stats->direction, src_stats->melee_range);
+		haz->pos = Utils::calcVector(src_stats->pos, src_stats->direction, src_stats->melee_range);
 	}
 
 	if (powers[power_index].target_neighbor > 0) {
-		haz->pos = collider->get_random_neighbor(FPointToPoint(src_stats->pos), powers[power_index].target_neighbor, MapCollision::IGNORE_BLOCKED);
+		haz->pos = collider->get_random_neighbor(Point(src_stats->pos), powers[power_index].target_neighbor, MapCollision::IGNORE_BLOCKED);
 	}
 
 	if (powers[power_index].relative_pos) {
@@ -1044,9 +1044,9 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, const FPoint& tar
 
 	// teleport to the target location
 	if (powers[power_index].buff_teleport) {
-		FPoint limit_target = clampDistance(powers[power_index].target_range,src_stats->pos,target);
+		FPoint limit_target = Utils::clampDistance(powers[power_index].target_range,src_stats->pos,target);
 		if (powers[power_index].target_neighbor > 0) {
-			FPoint new_target = collider->get_random_neighbor(FPointToPoint(limit_target), powers[power_index].target_neighbor, !MapCollision::IGNORE_BLOCKED);
+			FPoint new_target = collider->get_random_neighbor(Point(limit_target), powers[power_index].target_neighbor, !MapCollision::IGNORE_BLOCKED);
 			if (floorf(new_target.x) == floorf(limit_target.x) && floorf(new_target.y) == floorf(limit_target.y)) {
 				src_stats->teleportation = false;
 			}
@@ -1226,7 +1226,7 @@ bool PowerManager::missile(int power_index, StatBlock *src_stats, const FPoint& 
 	}
 
 	// calculate polar coordinates angle
-	float theta = calcTheta(src.x, src.y, target.x, target.y);
+	float theta = Utils::calcTheta(src.x, src.y, target.x, target.y);
 
 	int delay_iterator = 0;
 
@@ -1281,7 +1281,7 @@ bool PowerManager::repeater(int power_index, StatBlock *src_stats, const FPoint&
 	int delay_iterator = 0;
 
 	// calculate polar coordinates angle
-	float theta = calcTheta(src_stats->pos.x, src_stats->pos.y, target.x, target.y);
+	float theta = Utils::calcTheta(src_stats->pos.x, src_stats->pos.y, target.x, target.y);
 
 	speed.x = powers[power_index].speed * cosf(theta);
 	speed.y = powers[power_index].speed * sinf(theta);
@@ -1340,7 +1340,7 @@ bool PowerManager::spawn(int power_index, StatBlock *src_stats, const FPoint& ta
 		espawn.pos = target;
 	}
 	else if (powers[power_index].starting_pos == Power::STARTING_POS_MELEE) {
-		espawn.pos = calcVector(src_stats->pos, src_stats->direction, src_stats->melee_range);
+		espawn.pos = Utils::calcVector(src_stats->pos, src_stats->direction, src_stats->melee_range);
 	}
 
 	// force target_neighbor if our initial target is blocked
@@ -1350,10 +1350,10 @@ bool PowerManager::spawn(int power_index, StatBlock *src_stats, const FPoint& ta
 	}
 
 	if (target_neighbor > 0) {
-		espawn.pos = collider->get_random_neighbor(FPointToPoint(src_stats->pos), target_neighbor, !MapCollision::IGNORE_BLOCKED);
+		espawn.pos = collider->get_random_neighbor(Point(src_stats->pos), target_neighbor, !MapCollision::IGNORE_BLOCKED);
 	}
 
-	espawn.direction = calcDirection(src_stats->pos.x, src_stats->pos.y, target.x, target.y);
+	espawn.direction = Utils::calcDirection(src_stats->pos.x, src_stats->pos.y, target.x, target.y);
 	espawn.summon_power_index = power_index;
 	espawn.hero_ally = src_stats->hero || src_stats->hero_ally;
 	espawn.enemy_ally = !src_stats->hero;
@@ -1497,9 +1497,9 @@ bool PowerManager::activate(int power_index, StatBlock *src_stats, const FPoint&
 	// check if we need to snap the target to one of the 8 directions
 	FPoint new_target = target;
 	if (powers[power_index].lock_target_to_direction) {
-		float dist = calcDist(src_stats->pos, new_target);
-		int dir = calcDirection(src_stats->pos.x, src_stats->pos.y, new_target.x, new_target.y);
-		new_target = calcVector(src_stats->pos, dir, dist);
+		float dist = Utils::calcDist(src_stats->pos, new_target);
+		int dir = Utils::calcDirection(src_stats->pos.x, src_stats->pos.y, new_target.x, new_target.y);
+		new_target = Utils::calcVector(src_stats->pos, dir, dist);
 	}
 
 	// logic for different types of powers are very different.  We allow these
@@ -1671,7 +1671,7 @@ int PowerManager::verifyID(int power_id, FileParser* infile, bool allow_zero) {
 		if (infile != NULL)
 			infile->error("PowerManager: %d is not a valid power id.", power_id);
 		else
-			logError("PowerManager: %d is not a valid power id.", power_id);
+			Utils::logError("PowerManager: %d is not a valid power id.", power_id);
 
 		return 0;
 	}

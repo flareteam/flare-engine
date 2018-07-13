@@ -52,6 +52,8 @@ private:
 
 	bool is_valid_tile(const int& x, const int& y, int movement_type, int collide_type) const;
 
+	FPoint collision_to_map(const Point& p);
+
 public:
 	// const flags
 	static const bool IGNORE_BLOCKED = true;

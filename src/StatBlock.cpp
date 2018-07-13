@@ -835,7 +835,7 @@ void StatBlock::logic() {
 		removeSummons();
 
 	if (effects.knockback_speed != 0) {
-		float theta = calcTheta(knockback_srcpos.x, knockback_srcpos.y, knockback_destpos.x, knockback_destpos.y);
+		float theta = Utils::calcTheta(knockback_srcpos.x, knockback_srcpos.y, knockback_destpos.x, knockback_destpos.y);
 		knockback_speed.x = effects.knockback_speed * cosf(theta);
 		knockback_speed.y = effects.knockback_speed * sinf(theta);
 

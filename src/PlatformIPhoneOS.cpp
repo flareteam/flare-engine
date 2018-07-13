@@ -41,9 +41,9 @@ int PlatformIPhoneOS::isExitEvent(void* userdata, SDL_Event* event) {
 	if (userdata) {}; // avoid unused var compile warning
 
 	if (event->type == SDL_APP_TERMINATING) {
-		logInfo("Terminating app, saving...");
+		Utils::logInfo("Terminating app, saving...");
 		save_load->saveGame();
-		logInfo("Saved, ready to exit.");
+		Utils::logInfo("Saved, ready to exit.");
 		return 0;
 	}
 	return 1;
@@ -126,7 +126,7 @@ void Platform::setPaths() {
 		path_data = true;
 	}
 	else if (!settings->custom_path_data.empty()) {
-		logError("Settings: Could not find specified game data directory.");
+		Utils::logError("Settings: Could not find specified game data directory.");
 		settings->custom_path_data = "";
 	}
 

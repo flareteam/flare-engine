@@ -105,7 +105,7 @@ bool Parse::tryParseValue(const std::type_info & type, const std::string & value
 		*((std::string *)output) = value;
 	}
 	else {
-		logError("UtilsParsing: %s: a required type is not defined!", __FUNCTION__);
+		Utils::logError("UtilsParsing: %s: a required type is not defined!", __FUNCTION__);
 		return false;
 	}
 
@@ -144,7 +144,7 @@ std::string Parse::toString(const std::type_info & type, void * value) {
 		return (std::string &)*((std::string *)value);
 	}
 	else {
-		logError("UtilsParsing: %s: a required type is not defined!", __FUNCTION__);
+		Utils::logError("UtilsParsing: %s: a required type is not defined!", __FUNCTION__);
 		return "";
 	}
 
@@ -183,7 +183,7 @@ bool Parse::toBool(std::string value) {
 	if (value == "no") return false;
 	if (value == "0") return false;
 
-	logError("UtilsParsing: %s %s doesn't know how to handle %s", __FILE__, __FUNCTION__, value.c_str());
+	Utils::logError("UtilsParsing: %s %s doesn't know how to handle %s", __FILE__, __FUNCTION__, value.c_str());
 	return false;
 }
 
@@ -237,7 +237,7 @@ int Parse::toDuration(const std::string& s) {
 		val *= settings->max_frames_per_sec;
 	else {
 		if (suffix != "ms")
-			logError("UtilsParsing: Duration of '%d' does not have a suffix. Assuming 'ms'.", val);
+			Utils::logError("UtilsParsing: Duration of '%d' does not have a suffix. Assuming 'ms'.", val);
 		val = static_cast<int>(floorf((static_cast<float>(val * settings->max_frames_per_sec) / 1000.f) + 0.5f));
 	}
 
@@ -269,7 +269,7 @@ int Parse::toDirection(const std::string& s) {
 	else {
 		dir = Parse::toInt(s);
 		if (dir < 0 || dir > 7) {
-			logError("UtilsParsing: Direction '%d' is not within range 0-7.");
+			Utils::logError("UtilsParsing: Direction '%d' is not within range 0-7.");
 			dir = 0;
 		}
 	}
@@ -278,26 +278,26 @@ int Parse::toDirection(const std::string& s) {
 }
 
 int Parse::toAlignment(const std::string &s) {
-	int align = ALIGN_TOPLEFT;
+	int align = Utils::ALIGN_TOPLEFT;
 
 	if (s == "topleft")
-		align = ALIGN_TOPLEFT;
+		align = Utils::ALIGN_TOPLEFT;
 	else if (s == "top")
-		align = ALIGN_TOP;
+		align = Utils::ALIGN_TOP;
 	else if (s == "topright")
-		align = ALIGN_TOPRIGHT;
+		align = Utils::ALIGN_TOPRIGHT;
 	else if (s == "left")
-		align = ALIGN_LEFT;
+		align = Utils::ALIGN_LEFT;
 	else if (s == "center")
-		align = ALIGN_CENTER;
+		align = Utils::ALIGN_CENTER;
 	else if (s == "right")
-		align = ALIGN_RIGHT;
+		align = Utils::ALIGN_RIGHT;
 	else if (s == "bottomleft")
-		align = ALIGN_BOTTOMLEFT;
+		align = Utils::ALIGN_BOTTOMLEFT;
 	else if (s == "bottom")
-		align = ALIGN_BOTTOM;
+		align = Utils::ALIGN_BOTTOM;
 	else if (s == "bottomright")
-		align = ALIGN_BOTTOMRIGHT;
+		align = Utils::ALIGN_BOTTOMRIGHT;
 
 	return align;
 }

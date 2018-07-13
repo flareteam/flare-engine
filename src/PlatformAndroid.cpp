@@ -64,9 +64,9 @@ int PlatformAndroid::isExitEvent(void* userdata, SDL_Event* event) {
 	if (userdata) {}; // avoid unused var compile warning
 
 	if (event->type == SDL_APP_TERMINATING) {
-		logInfo("Terminating app, saving...");
+		Utils::logInfo("Terminating app, saving...");
 		save_load->saveGame();
-		logInfo("Saved, ready to exit.");
+		Utils::logInfo("Saved, ready to exit.");
 		return 0;
 	}
 	return 1;
@@ -134,7 +134,7 @@ void Platform::setPaths() {
 	}
 
 	if (settings->path_data.empty()) {
-		logError("Settings: Android external storage unavailable: %s", SDL_GetError());
+		Utils::logError("Settings: Android external storage unavailable: %s", SDL_GetError());
 	}
 
 	if (settings->path_user.empty() || !Filesystem::pathExists(settings->path_user)) {

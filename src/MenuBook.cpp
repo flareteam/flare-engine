@@ -77,7 +77,7 @@ void MenuBook::loadBook() {
 			if(infile.key == "close") {
 				int x = Parse::popFirstInt(infile.val);
 				int y = Parse::popFirstInt(infile.val);
-				closeButton->setBasePos(x, y, ALIGN_TOPLEFT);
+				closeButton->setBasePos(x, y, Utils::ALIGN_TOPLEFT);
 			}
 			// @ATTR background|filename|Filename for the background image.
 			else if (infile.key == "background") {
@@ -162,7 +162,7 @@ void MenuBook::loadBook() {
 		else
 			buttons[i].button = new WidgetButton(buttons[i].image);
 
-		buttons[i].button->setBasePos(buttons[i].dest.x, buttons[i].dest.y, ALIGN_TOPLEFT);
+		buttons[i].button->setBasePos(buttons[i].dest.x, buttons[i].dest.y, Utils::ALIGN_TOPLEFT);
 		buttons[i].button->label = msg->get(buttons[i].label);
 		buttons[i].button->refresh();
 

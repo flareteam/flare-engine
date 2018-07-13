@@ -272,7 +272,7 @@ void Scene::refreshWidgets() {
 
 			if (!caption_box) {
 				caption_box = new WidgetScrollBox(caption_size_padded.x, caption_size_padded.y);
-				caption_box->setBasePos(0, 0, ALIGN_BOTTOM);
+				caption_box->setBasePos(0, 0, Utils::ALIGN_BOTTOM);
 				caption_box->bg = cutscene_settings.caption_background;
 				caption_box->resize(caption_size_padded.x, caption_size_padded.y);
 			}
@@ -294,9 +294,9 @@ void Scene::refreshWidgets() {
 			Rect art_dest;
 			if (art_scale_type != CUTSCENE_SCALE_NONE) {
 				if (art_scale_type == CUTSCENE_SCALE_SCREEN)
-					art_dest = resizeToScreen(art_size.x, art_size.y, false, ALIGN_CENTER);
+					art_dest = Utils::resizeToScreen(art_size.x, art_size.y, false, Utils::ALIGN_CENTER);
 				else if (art_scale_type == CUTSCENE_SCALE_HEIGHT)
-					art_dest = resizeToScreen(art_size.x, art_size.y, true, ALIGN_CENTER);
+					art_dest = Utils::resizeToScreen(art_size.x, art_size.y, true, Utils::ALIGN_CENTER);
 
 				art->getGraphics()->ref(); // resize unref's our image (which we want to keep), so counter that here
 				Image *resized = art->getGraphics()->resize(art_dest.w, art_dest.h);
@@ -315,7 +315,7 @@ void Scene::refreshWidgets() {
 				art_dest.w = art_size.x;
 				art_dest.h = art_size.y;
 
-				alignToScreenEdge(ALIGN_CENTER, &art_dest);
+				Utils::alignToScreenEdge(Utils::ALIGN_CENTER, &art_dest);
 				art->setDest(art_dest);
 			}
 		}
@@ -334,9 +334,9 @@ void Scene::refreshWidgets() {
 		}
 	}
 
-	button_next->setBasePos(0, 0, ALIGN_TOPRIGHT);
+	button_next->setBasePos(0, 0, Utils::ALIGN_TOPRIGHT);
 	button_next->setPos(-(button_next->pos.w/2), button_next->pos.h/2);
-	button_close->setBasePos(0, 0, ALIGN_TOPRIGHT);
+	button_close->setBasePos(0, 0, Utils::ALIGN_TOPRIGHT);
 	button_close->setPos(-(button_close->pos.w/2), button_close->pos.h/2);
 }
 
@@ -368,7 +368,7 @@ void Scene::render() {
 				}
 			}
 			else if (vsc.image) {
-				Point dest = FPointToPoint(vsc.image->getDest());
+				Point dest(vsc.image->getDest());
 				if (dest.y <= settings->view_h && (dest.y + vsc.image_size.y >= 0)) {
 					render_device->render(vsc.image);
 				}
@@ -445,7 +445,7 @@ bool GameStateCutscene::load(const std::string& filename) {
 	if (!infile.open(filename, FileParser::MOD_FILE, FileParser::ERROR_NORMAL))
 		return false;
 
-	logInfo("GameStateCutscene: Loading cutscene '%s'", filename.c_str());
+	Utils::logInfo("GameStateCutscene: Loading cutscene '%s'", filename.c_str());
 
 	// parse the cutscene file
 	while (infile.next()) {
@@ -561,7 +561,7 @@ bool GameStateCutscene::load(const std::string& filename) {
 	infile.close();
 
 	if (scenes.empty()) {
-		logError("GameStateCutscene: No scenes defined in cutscene file %s", filename.c_str());
+		Utils::logError("GameStateCutscene: No scenes defined in cutscene file %s", filename.c_str());
 		return false;
 	}
 	else {

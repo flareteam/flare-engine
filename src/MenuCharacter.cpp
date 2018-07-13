@@ -111,7 +111,7 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 			// @ATTR close|point|Position of the close button.
 			if(infile.key == "close") {
 				Point pos = Parse::toPoint(infile.val);
-				closeButton->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
+				closeButton->setBasePos(pos.x, pos.y, Utils::ALIGN_TOPLEFT);
 			}
 			// @ATTR label_title|label|Position of the "Character" text.
 			else if(infile.key == "label_title") labelCharacter->setFromLabelInfo(Parse::popLabelInfo(infile.val));
@@ -122,7 +122,7 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 
 				if (prim_stat_index != eset->primary_stats.list.size()) {
 					Point pos = Parse::toPoint(infile.val);
-					upgradeButton[prim_stat_index]->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
+					upgradeButton[prim_stat_index]->setBasePos(pos.x, pos.y, Utils::ALIGN_TOPLEFT);
 				}
 				else {
 					infile.error("MenuCharacter: '%s' is not a valid primary stat.", prim_stat.c_str());
@@ -159,12 +159,12 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 			// @ATTR name|rectangle|Position of the player's name and dimensions of the tooltip hotspot.
 			else if(infile.key == "name") {
 				cstat[CSTAT_NAME].value_pos = Parse::toRect(infile.val);
-				cstat[CSTAT_NAME].value->setBasePos(cstat[CSTAT_NAME].value_pos.x, cstat[CSTAT_NAME].value_pos.y + (cstat[CSTAT_NAME].value_pos.h/2), ALIGN_TOPLEFT);
+				cstat[CSTAT_NAME].value->setBasePos(cstat[CSTAT_NAME].value_pos.x, cstat[CSTAT_NAME].value_pos.y + (cstat[CSTAT_NAME].value_pos.h/2), Utils::ALIGN_TOPLEFT);
 			}
 			// @ATTR level|rectangle|Position of the player's level and dimensions of the tooltip hotspot.
 			else if(infile.key == "level") {
 				cstat[CSTAT_LEVEL].value_pos = Parse::toRect(infile.val);
-				cstat[CSTAT_LEVEL].value->setBasePos(cstat[CSTAT_LEVEL].value_pos.x + (cstat[CSTAT_LEVEL].value_pos.w/2), cstat[CSTAT_LEVEL].value_pos.y + (cstat[CSTAT_LEVEL].value_pos.h/2), ALIGN_TOPLEFT);
+				cstat[CSTAT_LEVEL].value->setBasePos(cstat[CSTAT_LEVEL].value_pos.x + (cstat[CSTAT_LEVEL].value_pos.w/2), cstat[CSTAT_LEVEL].value_pos.y + (cstat[CSTAT_LEVEL].value_pos.h/2), Utils::ALIGN_TOPLEFT);
 			}
 			// @ATTR primary|predefined_string, rectangle : Primary stat name, Hotspot position|Position of this primary stat value display and dimensions of its tooltip hotspot.
 			else if(infile.key == "primary") {
@@ -174,7 +174,7 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 				if (prim_stat_index != eset->primary_stats.list.size()) {
 					Rect r = Parse::toRect(infile.val);
 					cstat[prim_stat_index+2].value_pos = r;
-					cstat[prim_stat_index+2].value->setBasePos(r.x + (r.w/2), r.y + (r.h/2), ALIGN_TOPLEFT);
+					cstat[prim_stat_index+2].value->setBasePos(r.x + (r.w/2), r.y + (r.h/2), Utils::ALIGN_TOPLEFT);
 				}
 				else {
 					infile.error("MenuCharacter: '%s' is not a valid primary stat.", prim_stat.c_str());
@@ -222,7 +222,7 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 	tablist.add(statList);
 	statList->can_select = false;
 	statList->scrollbar_offset = statlist_scrollbar_offset;
-	statList->setBasePos(statlist_pos.x, statlist_pos.y, ALIGN_TOPLEFT);
+	statList->setBasePos(statlist_pos.x, statlist_pos.y, Utils::ALIGN_TOPLEFT);
 
 	// HACK: During gameplay, the stat list can refresh rapidly when the charcter menu is open and the player has certain effects
 	// frequently refreshing trimmed text is slow for Cyrillic characters, so disable it here
@@ -546,11 +546,11 @@ void MenuCharacter::render() {
  * Display various mouseovers tooltips depending on cursor location
  */
 void MenuCharacter::renderTooltips(const Point& position) {
-	if (!visible || !isWithinRect(window_area, position))
+	if (!visible || !Utils::isWithinRect(window_area, position))
 		return;
 
 	for (size_t i = 0; i < cstat.size(); ++i) {
-		if (isWithinRect(cstat[i].hover, position) && !cstat[i].tip.isEmpty() && !cstat[i].label->isHidden()) {
+		if (Utils::isWithinRect(cstat[i].hover, position) && !cstat[i].tip.isEmpty() && !cstat[i].label->isHidden()) {
 			tooltipm->push(cstat[i].tip, position, TooltipData::STYLE_FLOAT);
 			break;
 		}

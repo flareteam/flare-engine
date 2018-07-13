@@ -74,27 +74,27 @@ MenuNumPicker::MenuNumPicker()
 			else if (infile.key == "confirm") {
 				// @ATTR confirm|point|Position of the "OK" button.
 				Point pos = Parse::toPoint(infile.val);
-				button_ok->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
+				button_ok->setBasePos(pos.x, pos.y, Utils::ALIGN_TOPLEFT);
 			}
 			else if (infile.key == "increase") {
 				// @ATTR increase|point|Position of the button used to increase the value.
 				Point pos = Parse::toPoint(infile.val);
-				button_up->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
+				button_up->setBasePos(pos.x, pos.y, Utils::ALIGN_TOPLEFT);
 			}
 			else if (infile.key == "decrease") {
 				// @ATTR decrease|point|Position of the button used to decrease the value.
 				Point pos = Parse::toPoint(infile.val);
-				button_down->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
+				button_down->setBasePos(pos.x, pos.y, Utils::ALIGN_TOPLEFT);
 			}
 			else if (infile.key == "close") {
 				// @ATTR close|point|Position of the button used to close the number picker window.
 				Point pos = Parse::toPoint(infile.val);
-				button_close->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
+				button_close->setBasePos(pos.x, pos.y, Utils::ALIGN_TOPLEFT);
 			}
 			else if (infile.key == "input") {
 				// @ATTR input|point|Position of the text input box.
 				Point pos = Parse::toPoint(infile.val);
-				input_box->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
+				input_box->setBasePos(pos.x, pos.y, Utils::ALIGN_TOPLEFT);
 			}
 			else
 				infile.error("MenuNumPicker: '%s' is not a valid key.", infile.key.c_str());

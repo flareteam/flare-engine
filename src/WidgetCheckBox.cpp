@@ -87,7 +87,7 @@ bool WidgetCheckBox::checkClickAt(int x, int y) {
 	if (inpt->lock[Input::MAIN1]) return false;
 	if (inpt->lock[Input::ACCEPT]) return false;
 
-	if (pressed && !inpt->lock[Input::MAIN1] && !inpt->lock[Input::ACCEPT] && (isWithinRect(pos, mouse) || activated)) { // this is a button release
+	if (pressed && !inpt->lock[Input::MAIN1] && !inpt->lock[Input::ACCEPT] && (Utils::isWithinRect(pos, mouse) || activated)) { // this is a button release
 		activated = false;
 		pressed = false;
 		setChecked(!checked);
@@ -97,7 +97,7 @@ bool WidgetCheckBox::checkClickAt(int x, int y) {
 	pressed = false;
 
 	if (inpt->pressing[Input::MAIN1]) {
-		if (isWithinRect(pos, mouse)) {
+		if (Utils::isWithinRect(pos, mouse)) {
 			pressed = true;
 			inpt->lock[Input::MAIN1] = true;
 		}
@@ -145,7 +145,7 @@ void WidgetCheckBox::render() {
 
 void WidgetCheckBox::checkTooltip(const Point& mouse) {
 	TooltipData tip_data;
-	if (inpt->usingMouse() && isWithinRect(pos, mouse) && tooltip != "") {
+	if (inpt->usingMouse() && Utils::isWithinRect(pos, mouse) && tooltip != "") {
 		tip_data.addText(tooltip);
 	}
 

@@ -57,7 +57,7 @@ MenuLog::MenuLog() {
 			// @ATTR close|point|Position of the close button.
 			else if(infile.key == "close") {
 				Point pos = Parse::toPoint(infile.val);
-				closeButton->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
+				closeButton->setBasePos(pos.x, pos.y, Utils::ALIGN_TOPLEFT);
 			}
 			// @ATTR tab_area|rectangle|The position of the row of tabs, followed by the dimensions of the log text area.
 			else if(infile.key == "tab_area") {
@@ -81,7 +81,7 @@ MenuLog::MenuLog() {
 	tablist_log.resize(TYPE_COUNT);
 	for (size_t i = 0; i < TYPE_COUNT; ++i) {
 		log[i] = new WidgetLog(tab_area.w,tab_area.h);
-		log[i]->setBasePos(tab_area.x, tab_area.y + tabControl->getTabHeight(), ALIGN_TOPLEFT);
+		log[i]->setBasePos(tab_area.x, tab_area.y + tabControl->getTabHeight(), Utils::ALIGN_TOPLEFT);
 
 		tablist_log[i].add(log[i]->getWidget());
 		tablist_log[i].setPrevTabList(&tablist);
@@ -164,7 +164,7 @@ void MenuLog::render() {
  * Add a new message to the log.
  */
 void MenuLog::add(const std::string& s, int log_type, int msg_type) {
-	log[log_type]->add(substituteVarsInString(s, pc), msg_type);
+	log[log_type]->add(Utils::substituteVarsInString(s, pc), msg_type);
 }
 
 void MenuLog::setNextColor(const Color& color, int log_type) {

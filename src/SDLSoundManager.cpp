@@ -50,12 +50,12 @@ SDLSoundManager::SDLSoundManager()
 	, last_played_sid(-1)
 {
 	if (settings->audio && Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 1024)) {
-		logError("SDLSoundManager: Error during Mix_OpenAudio: %s", SDL_GetError());
+		Utils::logError("SDLSoundManager: Error during Mix_OpenAudio: %s", SDL_GetError());
 		settings->audio = false;
 	}
 
 	if (settings->audio) {
-		logInfo("SoundManager: Using SDLSoundManager (SDL2, %s)", SDL_GetCurrentAudioDriver());
+		Utils::logInfo("SoundManager: Using SDLSoundManager (SDL2, %s)", SDL_GetCurrentAudioDriver());
 	}
 
 	Mix_AllocateChannels(128);
@@ -98,7 +98,7 @@ void SDLSoundManager::logic(const FPoint& center) {
 		}
 
 		/* control mixing playback depending on distance */
-		float v = calcDist(center, it->second.location) / static_cast<float>(eset->misc.sound_falloff);
+		float v = Utils::calcDist(center, it->second.location) / static_cast<float>(eset->misc.sound_falloff);
 		if (it->second.loop) {
 			if (v < 1.0 && it->second.paused) {
 				Mix_Resume(it->first);
@@ -179,7 +179,7 @@ SoundID SDLSoundManager::load(const std::string& filename, const std::string& er
 	lsnd.chunk = Mix_LoadWAV(realfilename.c_str());
 	lsnd.refCnt = 1;
 	if (!lsnd.chunk) {
-		logError("SoundManager: %s: Loading sound %s (%s) failed: %s", errormessage.c_str(),
+		Utils::logError("SoundManager: %s: Loading sound %s (%s) failed: %s", errormessage.c_str(),
 				realfilename.c_str(), filename.c_str(), Mix_GetError());
 		return 0;
 	}
@@ -250,12 +250,12 @@ void SDLSoundManager::play(SoundID sid, const std::string& channel, const FPoint
 	int c = Mix_PlayChannel(-1, it->second->chunk, (loop ? -1 : 0));
 
 	if (c == -1)
-		logError("SoundManager: Failed to play sound, no more channels available.");
+		Utils::logError("SoundManager: Failed to play sound, no more channels available.");
 
 	// precalculate mixing volume if sound has a location
 	Uint8 d = 0;
 	if (p.location.x != 0 || p.location.y != 0) {
-		float v = 255.0f * (calcDist(lastPos, p.location) / static_cast<float>(eset->misc.sound_falloff));
+		float v = 255.0f * (Utils::calcDist(lastPos, p.location) / static_cast<float>(eset->misc.sound_falloff));
 		v = std::min<float>(std::max<float>(v, 0.0f), 255.0f);
 		d = Uint8(v);
 	}
@@ -317,7 +317,7 @@ void SDLSoundManager::loadMusic(const std::string& filename) {
 		playMusic();
 	}
 	else {
-		logError("SoundManager: Couldn't load music file '%s': %s", filename.c_str(), Mix_GetError());
+		Utils::logError("SoundManager: Couldn't load music file '%s': %s", filename.c_str(), Mix_GetError());
 	}
 }
 

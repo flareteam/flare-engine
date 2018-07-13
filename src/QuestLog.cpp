@@ -146,7 +146,7 @@ void QuestLog::load(const std::string& filename) {
 			ev.components.push_back(ec);
 		}
 		else {
-			logError("QuestLog: %s is not a valid key.", infile.key.c_str());
+			Utils::logError("QuestLog: %s is not a valid key.", infile.key.c_str());
 		}
 
 		for (size_t i=0; i<ev.components.size(); ++i) {

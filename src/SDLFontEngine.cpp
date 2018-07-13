@@ -37,10 +37,10 @@ SDLFontStyle::SDLFontStyle() : FontStyle(), ttfont(NULL) {
 SDLFontEngine::SDLFontEngine() : FontEngine(), active_font(NULL) {
 	// Initiate SDL_ttf
 	if(!TTF_WasInit() && TTF_Init()==-1) {
-		logError("SDLFontEngine: TTF_Init: %s", TTF_GetError());
-		logErrorDialog("SDLFontEngine: TTF_Init: %s", TTF_GetError());
+		Utils::logError("SDLFontEngine: TTF_Init: %s", TTF_GetError());
+		Utils::logErrorDialog("SDLFontEngine: TTF_Init: %s", TTF_GetError());
 		mods->resetModConfig();
-		Exit(2);
+		Utils::Exit(2);
 	}
 
 	// load the fonts
@@ -89,7 +89,7 @@ SDLFontEngine::SDLFontEngine() : FontEngine(), active_font(NULL) {
 
 					style->ttfont = TTF_OpenFont(mods->locate("fonts/" + style->path).c_str(), style->ptsize);
 					if(style->ttfont == NULL) {
-						logError("FontEngine: TTF_OpenFont: %s", TTF_GetError());
+						Utils::logError("FontEngine: TTF_OpenFont: %s", TTF_GetError());
 					}
 					else {
 						int lineskip = TTF_FontLineSkip(style->ttfont);
@@ -105,10 +105,10 @@ SDLFontEngine::SDLFontEngine() : FontEngine(), active_font(NULL) {
 	// Attempt to set the default active font
 	setFont("font_regular");
 	if (!active_font) {
-		logError("FontEngine: Unable to determine default font!");
-		logErrorDialog("FontEngine: Unable to determine default font!");
+		Utils::logError("FontEngine: Unable to determine default font!");
+		Utils::logErrorDialog("FontEngine: Unable to determine default font!");
 		mods->resetModConfig();
-		Exit(1);
+		Utils::Exit(1);
 	}
 }
 

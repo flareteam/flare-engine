@@ -157,7 +157,7 @@ SDLSoftwareRenderDevice::SDLSoftwareRenderDevice()
 	, titlebar_icon(NULL)
 	, title(NULL)
 	, background_color(0) {
-	logInfo("RenderDevice: Using SDLSoftwareRenderDevice (software, SDL 2, %s)", SDL_GetCurrentVideoDriver());
+	Utils::logInfo("RenderDevice: Using SDLSoftwareRenderDevice (software, SDL 2, %s)", SDL_GetCurrentVideoDriver());
 
 	fullscreen = settings->fullscreen;
 	hwsurface = settings->hwsurface;
@@ -170,7 +170,7 @@ SDLSoftwareRenderDevice::SDLSoftwareRenderDevice()
 	SDL_DisplayMode desktop;
 	if (SDL_GetDesktopDisplayMode(0, &desktop) == 0) {
 		// we only support display #0
-		logInfo("RenderDevice: %d display(s), using display 0 (%dx%d @ %dhz)", SDL_GetNumVideoDisplays(), desktop.w, desktop.h, desktop.refresh_rate);
+		Utils::logInfo("RenderDevice: %d display(s), using display 0 (%dx%d @ %dhz)", SDL_GetNumVideoDisplays(), desktop.w, desktop.h, desktop.refresh_rate);
 	}
 }
 
@@ -233,7 +233,7 @@ int SDLSoftwareRenderDevice::createContextInternal() {
 			if (!is_initialized) {
 				// save the system gamma levels if we just created the window
 				SDL_GetWindowGammaRamp(window, gamma_r, gamma_g, gamma_b);
-				logInfo("RenderDevice: Window size is %dx%d", settings->screen_w, settings->screen_h);
+				Utils::logInfo("RenderDevice: Window size is %dx%d", settings->screen_w, settings->screen_h);
 			}
 
 			fullscreen = settings->fullscreen;
@@ -242,13 +242,13 @@ int SDLSoftwareRenderDevice::createContextInternal() {
 			texture_filter = settings->texture_filter;
 			is_initialized = true;
 
-			logInfo("RenderDevice: Fullscreen=%d, Hardware surfaces=%d, Vsync=%d, Texture Filter=%d", fullscreen, hwsurface, vsync, texture_filter);
+			Utils::logInfo("RenderDevice: Fullscreen=%d, Hardware surfaces=%d, Vsync=%d, Texture Filter=%d", fullscreen, hwsurface, vsync, texture_filter);
 
 #if SDL_VERSION_ATLEAST(2, 0, 4)
 			SDL_GetDisplayDPI(0, &ddpi, 0, 0);
-			logInfo("RenderDevice: Display DPI is %f", ddpi);
+			Utils::logInfo("RenderDevice: Display DPI is %f", ddpi);
 #else
-			logError("RenderDevice: The SDL version used to compile Flare does not support SDL_GetDisplayDPI(). The virtual_dpi setting will be ignored.");
+			Utils::logError("RenderDevice: The SDL version used to compile Flare does not support SDL_GetDisplayDPI(). The virtual_dpi setting will be ignored.");
 #endif
 		}
 	}
@@ -286,8 +286,8 @@ int SDLSoftwareRenderDevice::createContextInternal() {
 }
 
 void SDLSoftwareRenderDevice::createContextError() {
-	logError("SDLSoftwareRenderDevice: createContext() failed: %s", SDL_GetError());
-	logErrorDialog("SDLSoftwareRenderDevice: createContext() failed: %s", SDL_GetError());
+	Utils::logError("SDLSoftwareRenderDevice: createContext() failed: %s", SDL_GetError());
+	Utils::logErrorDialog("SDLSoftwareRenderDevice: createContext() failed: %s", SDL_GetError());
 }
 
 int SDLSoftwareRenderDevice::render(Renderable& r, Rect& dest) {
@@ -511,7 +511,7 @@ Image *SDLSoftwareRenderDevice::createImage(int width, int height) {
 	image->surface = SDL_CreateRGBSurface(0, width, height, BITS_PER_PIXEL, rmask, gmask, bmask, amask);
 
 	if(image->surface == NULL) {
-		logError("SDLSoftwareRenderDevice: CreateRGBSurface failed: %s", SDL_GetError());
+		Utils::logError("SDLSoftwareRenderDevice: CreateRGBSurface failed: %s", SDL_GetError());
 		delete image;
 		return NULL;
 	}
@@ -559,12 +559,12 @@ Image *SDLSoftwareRenderDevice::loadImage(const std::string& filename, int error
 	SDL_Surface *cleanup = IMG_Load(mods->locate(filename).c_str());
 	if(!cleanup) {
 		if (error_type != ERROR_NONE)
-			logError("SDLSoftwareRenderDevice: Couldn't load image: '%s'. %s", filename.c_str(), IMG_GetError());
+			Utils::logError("SDLSoftwareRenderDevice: Couldn't load image: '%s'. %s", filename.c_str(), IMG_GetError());
 
 		if (error_type == ERROR_EXIT) {
-			logErrorDialog("SDLSoftwareRenderDevice: Couldn't load image: '%s'.\n%s", filename.c_str(), IMG_GetError());
+			Utils::logErrorDialog("SDLSoftwareRenderDevice: Couldn't load image: '%s'.\n%s", filename.c_str(), IMG_GetError());
 			mods->resetModConfig();
-			Exit(1);
+			Utils::Exit(1);
 		}
 
 		return NULL;

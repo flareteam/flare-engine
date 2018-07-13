@@ -35,10 +35,10 @@ AnimationSet *AnimationManager::getAnimationSet(const std::string& filename) {
 		return sets[index];
 	}
 	else {
-		logError("AnimationManager::getAnimationSet(): %s not found", filename.c_str());
-		logErrorDialog("AnimationManager::getAnimationSet(): %s not found", filename.c_str());
+		Utils::logError("AnimationManager::getAnimationSet(): %s not found", filename.c_str());
+		Utils::logErrorDialog("AnimationManager::getAnimationSet(): %s not found", filename.c_str());
 		mods->resetModConfig();
-		Exit(1);
+		Utils::Exit(1);
 		return NULL;
 	}
 }
@@ -51,9 +51,9 @@ AnimationManager::~AnimationManager() {
 // NDEBUG is used by posix to disable assertions, so use the same MACRO.
 #ifndef NDEBUG
 	if (!names.empty()) {
-		logError("AnimationManager: Still holding these animations:");
+		Utils::logError("AnimationManager: Still holding these animations:");
 		for (size_t i = 0; i < names.size(); i++) {
-			logError("%s %d", names[i].c_str(), counts[i]);
+			Utils::logError("%s %d", names[i].c_str(), counts[i]);
 		}
 	}
 	assert(names.size() == 0);
@@ -81,9 +81,9 @@ void AnimationManager::decreaseCount(const std::string &name) {
 		counts[index]--;
 	}
 	else {
-		logError("AnimationManager::decreaseCount(): %s not found", name.c_str());
-		logErrorDialog("AnimationManager::decreaseCount(): %s not found", name.c_str());
-		Exit(1);
+		Utils::logError("AnimationManager::decreaseCount(): %s not found", name.c_str());
+		Utils::logErrorDialog("AnimationManager::decreaseCount(): %s not found", name.c_str());
+		Utils::Exit(1);
 	}
 }
 

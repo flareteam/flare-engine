@@ -198,7 +198,7 @@ void MenuManager::setDragIconItem(ItemStack stack) {
 
 		if (stack.quantity > 1 || items->items[stack.item].max_quantity > 1) {
 			std::stringstream ss;
-			ss << abbreviateKilo(stack.quantity);
+			ss << Utils::abbreviateKilo(stack.quantity);
 			font->renderShadowed(ss.str(), icons->text_offset.x, icons->text_offset.y, FontEngine::JUSTIFY_LEFT, drag_icon->getGraphics(), 0, font->getColor(FontEngine::COLOR_WIDGET_NORMAL));
 		}
 	}
@@ -351,15 +351,15 @@ void MenuManager::logic() {
 
 	// Stop attacking if the cursor is inside an interactable menu
 	if (stats->attacking) {
-		if (isWithinRect(act->window_area, inpt->mouse) ||
-			(book->visible && isWithinRect(book->window_area, inpt->mouse)) ||
-			(chr->visible && isWithinRect(chr->window_area, inpt->mouse)) ||
-			(inv->visible && isWithinRect(inv->window_area, inpt->mouse)) ||
-			(vendor->visible && isWithinRect(vendor->window_area, inpt->mouse)) ||
-			(pow->visible && isWithinRect(pow->window_area, inpt->mouse)) ||
-			(questlog->visible && isWithinRect(questlog->window_area, inpt->mouse)) ||
-			(talker->visible && isWithinRect(talker->window_area, inpt->mouse)) ||
-			(stash->visible && isWithinRect(stash->window_area, inpt->mouse)))
+		if (Utils::isWithinRect(act->window_area, inpt->mouse) ||
+			(book->visible && Utils::isWithinRect(book->window_area, inpt->mouse)) ||
+			(chr->visible && Utils::isWithinRect(chr->window_area, inpt->mouse)) ||
+			(inv->visible && Utils::isWithinRect(inv->window_area, inpt->mouse)) ||
+			(vendor->visible && Utils::isWithinRect(vendor->window_area, inpt->mouse)) ||
+			(pow->visible && Utils::isWithinRect(pow->window_area, inpt->mouse)) ||
+			(questlog->visible && Utils::isWithinRect(questlog->window_area, inpt->mouse)) ||
+			(talker->visible && Utils::isWithinRect(talker->window_area, inpt->mouse)) ||
+			(stash->visible && Utils::isWithinRect(stash->window_area, inpt->mouse)))
 		{
 			inpt->pressing[Input::MAIN1] = false;
 			inpt->pressing[Input::MAIN2] = false;
@@ -568,19 +568,19 @@ void MenuManager::logic() {
 		// handle right-click
 		if (!mouse_dragging && inpt->pressing[Input::MAIN2] && !inpt->lock[Input::MAIN2]) {
 			// exit menu
-			if (exit->visible && isWithinRect(exit->window_area, inpt->mouse)) {
+			if (exit->visible && Utils::isWithinRect(exit->window_area, inpt->mouse)) {
 				inpt->lock[Input::MAIN2] = true;
 			}
 
 			// book menu
-			if (book->visible && isWithinRect(book->window_area, inpt->mouse)) {
+			if (book->visible && Utils::isWithinRect(book->window_area, inpt->mouse)) {
 				inpt->lock[Input::MAIN2] = true;
 			}
 
 			// activate inventory item
-			else if (inv->visible && isWithinRect(inv->window_area, inpt->mouse)) {
+			else if (inv->visible && Utils::isWithinRect(inv->window_area, inpt->mouse)) {
 				inpt->lock[Input::MAIN2] = true;
-				if (isWithinRect(inv->carried_area, inpt->mouse)) {
+				if (Utils::isWithinRect(inv->carried_area, inpt->mouse)) {
 					inv->activate(inpt->mouse);
 				}
 			}
@@ -588,7 +588,7 @@ void MenuManager::logic() {
 
 		// handle left-click for book menu first
 		if (!mouse_dragging && inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1]) {
-			if (book->visible && isWithinRect(book->window_area, inpt->mouse)) {
+			if (book->visible && Utils::isWithinRect(book->window_area, inpt->mouse)) {
 				inpt->lock[Input::MAIN1] = true;
 			}
 		}
@@ -598,22 +598,22 @@ void MenuManager::logic() {
 			resetDrag();
 
 			for (size_t i=0; i<menus.size(); ++i) {
-				if (!menus[i]->visible || !isWithinRect(menus[i]->window_area, inpt->mouse)) {
+				if (!menus[i]->visible || !Utils::isWithinRect(menus[i]->window_area, inpt->mouse)) {
 					menus[i]->defocusTabLists();
 				}
 			}
 
 			// exit menu
-			if (exit->visible && isWithinRect(exit->window_area, inpt->mouse)) {
+			if (exit->visible && Utils::isWithinRect(exit->window_area, inpt->mouse)) {
 				inpt->lock[Input::MAIN1] = true;
 			}
 
 
-			if (chr->visible && isWithinRect(chr->window_area, inpt->mouse)) {
+			if (chr->visible && Utils::isWithinRect(chr->window_area, inpt->mouse)) {
 				inpt->lock[Input::MAIN1] = true;
 			}
 
-			if (vendor->visible && isWithinRect(vendor->window_area,inpt->mouse)) {
+			if (vendor->visible && Utils::isWithinRect(vendor->window_area,inpt->mouse)) {
 				inpt->lock[Input::MAIN1] = true;
 				if (inpt->pressing[Input::CTRL]) {
 					// buy item from a vendor
@@ -644,7 +644,7 @@ void MenuManager::logic() {
 				}
 			}
 
-			if (stash->visible && isWithinRect(stash->window_area,inpt->mouse)) {
+			if (stash->visible && Utils::isWithinRect(stash->window_area,inpt->mouse)) {
 				inpt->lock[Input::MAIN1] = true;
 				if (inpt->pressing[Input::CTRL]) {
 					// take an item from the stash
@@ -669,12 +669,12 @@ void MenuManager::logic() {
 				}
 			}
 
-			if (questlog->visible && isWithinRect(questlog->window_area,inpt->mouse)) {
+			if (questlog->visible && Utils::isWithinRect(questlog->window_area,inpt->mouse)) {
 				inpt->lock[Input::MAIN1] = true;
 			}
 
 			// pick up an inventory item
-			if (inv->visible && isWithinRect(inv->window_area,inpt->mouse)) {
+			if (inv->visible && Utils::isWithinRect(inv->window_area,inpt->mouse)) {
 				if (inpt->pressing[Input::CTRL]) {
 					inpt->lock[Input::MAIN1] = true;
 					stack = inv->click(inpt->mouse);
@@ -711,7 +711,7 @@ void MenuManager::logic() {
 				}
 			}
 			// pick up a power
-			if (pow->visible && isWithinRect(pow->window_area,inpt->mouse)) {
+			if (pow->visible && Utils::isWithinRect(pow->window_area,inpt->mouse)) {
 				inpt->lock[Input::MAIN1] = true;
 
 				// check for unlock/dragging
@@ -780,7 +780,7 @@ void MenuManager::logic() {
 			// rearranging inventory or dropping items
 			else if (drag_src == DRAG_SRC_INVENTORY) {
 
-				if (inv->visible && isWithinRect(inv->window_area, inpt->mouse)) {
+				if (inv->visible && Utils::isWithinRect(inv->window_area, inpt->mouse)) {
 					inv->drop(inpt->mouse, drag_stack);
 				}
 				else if (act->isWithinSlots(inpt->mouse)) {
@@ -793,7 +793,7 @@ void MenuManager::logic() {
 						act->drop(inpt->mouse, items->items[drag_stack.item].power, !MenuActionBar::REORDER);
 					}
 				}
-				else if (vendor->visible && isWithinRect(vendor->window_area, inpt->mouse)) {
+				else if (vendor->visible && Utils::isWithinRect(vendor->window_area, inpt->mouse)) {
 					if (inv->sell( drag_stack)) {
 						vendor->setTab(ItemManager::VENDOR_SELL);
 						vendor->add( drag_stack);
@@ -802,7 +802,7 @@ void MenuManager::logic() {
 						inv->itemReturn(drag_stack);
 					}
 				}
-				else if (stash->visible && isWithinRect(stash->window_area, inpt->mouse)) {
+				else if (stash->visible && Utils::isWithinRect(stash->window_area, inpt->mouse)) {
 					stash->stock.drag_prev_slot = -1;
 					if (!stash->drop(inpt->mouse, drag_stack)) {
 						inv->itemReturn(stash->drop_stack.front());
@@ -829,7 +829,7 @@ void MenuManager::logic() {
 			else if (drag_src == DRAG_SRC_VENDOR) {
 
 				// dropping an item from vendor (we only allow to drop into the carried area)
-				if (inv->visible && isWithinRect(inv->window_area, inpt->mouse)) {
+				if (inv->visible && Utils::isWithinRect(inv->window_area, inpt->mouse)) {
 					if (!inv->buy(drag_stack, vendor->getTab(), MenuInventory::IS_DRAGGING)) {
 						vendor->itemReturn(inv->drop_stack.front());
 						inv->drop_stack.pop();
@@ -843,14 +843,14 @@ void MenuManager::logic() {
 			else if (drag_src == DRAG_SRC_STASH) {
 
 				// dropping an item from stash (we only allow to drop into the carried area)
-				if (inv->visible && isWithinRect(inv->window_area, inpt->mouse)) {
+				if (inv->visible && Utils::isWithinRect(inv->window_area, inpt->mouse)) {
 					if (!inv->drop(inpt->mouse, drag_stack)) {
 						stash->itemReturn(inv->drop_stack.front());
 						inv->drop_stack.pop();
 					}
 					stash->updated = true;
 				}
-				else if (stash->visible && isWithinRect(stash->window_area, inpt->mouse)) {
+				else if (stash->visible && Utils::isWithinRect(stash->window_area, inpt->mouse)) {
 					if (!stash->drop(inpt->mouse,drag_stack)) {
 						drop_stack.push(stash->drop_stack.front());
 						stash->drop_stack.pop();
@@ -1186,25 +1186,25 @@ void MenuManager::render() {
 	}
 
 	bool hudlog_overlapped = false;
-	if (chr->visible && rectsOverlap(hudlog->window_area, chr->window_area)) {
+	if (chr->visible && Utils::rectsOverlap(hudlog->window_area, chr->window_area)) {
 		hudlog_overlapped = true;
 	}
-	if (questlog->visible && rectsOverlap(hudlog->window_area, questlog->window_area)) {
+	if (questlog->visible && Utils::rectsOverlap(hudlog->window_area, questlog->window_area)) {
 		hudlog_overlapped = true;
 	}
-	if (inv->visible && rectsOverlap(hudlog->window_area, inv->window_area)) {
+	if (inv->visible && Utils::rectsOverlap(hudlog->window_area, inv->window_area)) {
 		hudlog_overlapped = true;
 	}
-	if (pow->visible && rectsOverlap(hudlog->window_area, pow->window_area)) {
+	if (pow->visible && Utils::rectsOverlap(hudlog->window_area, pow->window_area)) {
 		hudlog_overlapped = true;
 	}
-	if (vendor->visible && rectsOverlap(hudlog->window_area, vendor->window_area)) {
+	if (vendor->visible && Utils::rectsOverlap(hudlog->window_area, vendor->window_area)) {
 		hudlog_overlapped = true;
 	}
-	if (stash->visible && rectsOverlap(hudlog->window_area, stash->window_area)) {
+	if (stash->visible && Utils::rectsOverlap(hudlog->window_area, stash->window_area)) {
 		hudlog_overlapped = true;
 	}
-	if (talker->visible && rectsOverlap(hudlog->window_area, talker->window_area)) {
+	if (talker->visible && Utils::rectsOverlap(hudlog->window_area, talker->window_area)) {
 		hudlog_overlapped = true;
 	}
 

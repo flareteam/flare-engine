@@ -49,7 +49,7 @@ void BehaviorAlly::findTarget() {
 
 	// check distance and line of sight between minion and hero
 	if (pc->stats.alive)
-		hero_dist = calcDist(e->stats.pos, pc->stats.pos);
+		hero_dist = Utils::calcDist(e->stats.pos, pc->stats.pos);
 	else
 		hero_dist = 0;
 
@@ -70,7 +70,7 @@ void BehaviorAlly::findTarget() {
 
 			//now work out the distance to the enemy and compare it to the distance to the current targer (we want to target the closest enemy)
 			if(enemies_in_combat) {
-				float enemy_dist = calcDist(e->stats.pos, enemy->stats.pos);
+				float enemy_dist = Utils::calcDist(e->stats.pos, enemy->stats.pos);
 				if (enemy_dist < target_dist) {
 					pursue_pos.x = enemy->stats.pos.x;
 					pursue_pos.y = enemy->stats.pos.y;
@@ -81,7 +81,7 @@ void BehaviorAlly::findTarget() {
 				//minion is not already chasig another enemy so chase this one
 				pursue_pos.x = enemy->stats.pos.x;
 				pursue_pos.y = enemy->stats.pos.y;
-				target_dist = calcDist(e->stats.pos, enemy->stats.pos);
+				target_dist = Utils::calcDist(e->stats.pos, enemy->stats.pos);
 			}
 
 			e->stats.in_combat = true;
@@ -121,7 +121,7 @@ void BehaviorAlly::findTarget() {
 			enemym->player_blocked_ticks = BLOCK_TICKS;
 		}
 
-		bool player_closer_than_target = calcDist(e->stats.pos, pursue_pos) > calcDist(e->stats.pos, pc->stats.pos);
+		bool player_closer_than_target = Utils::calcDist(e->stats.pos, pursue_pos) > Utils::calcDist(e->stats.pos, pc->stats.pos);
 
 		if(enemym->player_blocked && (!e->stats.in_combat || player_closer_than_target)
 				&& mapr->collider.is_facing(pc->stats.pos.x,pc->stats.pos.y,pc->stats.direction,e->stats.pos.x,e->stats.pos.y)) {
@@ -152,11 +152,11 @@ void BehaviorAlly::findTarget() {
 
 		std::vector<int> flee_dirs;
 
-		int middle_dir = calcDirection(target_pos.x, target_pos.y, e->stats.pos.x, e->stats.pos.y);
+		int middle_dir = Utils::calcDirection(target_pos.x, target_pos.y, e->stats.pos.x, e->stats.pos.y);
 		for (int i = -2; i <= 2; ++i) {
-			int test_dir = rotateDirection(middle_dir, i);
+			int test_dir = Utils::rotateDirection(middle_dir, i);
 
-			FPoint test_pos = calcVector(e->stats.pos, test_dir, 1);
+			FPoint test_pos = Utils::calcVector(e->stats.pos, test_dir, 1);
 			if (mapr->collider.is_valid_position(test_pos.x, test_pos.y, e->stats.movement_type, MapCollision::COLLIDE_NORMAL)) {
 				if (test_dir == e->stats.direction) {
 					// if we're already moving in a good direction, favor it over other directions
@@ -177,7 +177,7 @@ void BehaviorAlly::findTarget() {
 		}
 		else {
 			int index = Math::randBetween(0, static_cast<int>(flee_dirs.size())-1);
-			pursue_pos = calcVector(e->stats.pos, flee_dirs[index], 1);
+			pursue_pos = Utils::calcVector(e->stats.pos, flee_dirs[index], 1);
 
 			if (flee_ticks == 0) {
 				flee_ticks = e->stats.flee_duration;

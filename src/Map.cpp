@@ -89,7 +89,7 @@ int Map::load(const std::string& fname) {
 	if (!infile.open(fname, FileParser::MOD_FILE, FileParser::ERROR_NORMAL))
 		return 0;
 
-	logInfo("Map: Loading map '%s'", fname.c_str());
+	Utils::logInfo("Map: Loading map '%s'", fname.c_str());
 
 	this->filename = fname;
 
@@ -140,7 +140,7 @@ int Map::load(const std::string& fname) {
 	}
 
 	if (!hero_pos_enabled) {
-		logError("Map: Hero spawn position (hero_pos) not defined in map header. Defaulting to (0,0).");
+		Utils::logError("Map: Hero spawn position (hero_pos) not defined in map header. Defaulting to (0,0).");
 	}
 
 	return 0;
@@ -211,9 +211,9 @@ void Map::loadLayer(FileParser &infile) {
 		// @ATTR layer.format|string|Format for map layer, must be 'dec'
 		if (infile.val != "dec") {
 			infile.error("Map: The format of a layer must be 'dec'!");
-			logErrorDialog("Map: The format of a layer must be 'dec'!");
+			Utils::logErrorDialog("Map: The format of a layer must be 'dec'!");
 			mods->resetModConfig();
-			Exit(1);
+			Utils::Exit(1);
 		}
 	}
 	else if (infile.key == "data") {
@@ -235,7 +235,7 @@ void Map::loadLayer(FileParser &infile) {
 			if (comma_count != w) {
 				infile.error("Map: A row of layer data has a width not equal to %d.", w);
 				mods->resetModConfig();
-				Exit(1);
+				Utils::Exit(1);
 			}
 
 			for (int i=0; i<w; i++)

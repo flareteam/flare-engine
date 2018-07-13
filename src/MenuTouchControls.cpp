@@ -27,16 +27,16 @@ MenuTouchControls::MenuTouchControls()
 	, move_radius(settings->view_h / 4)
 	, move_center(0,0)
 	, move_center_base(move_radius, -(move_radius / 2))
-	, move_align(ALIGN_BOTTOMLEFT)
+	, move_align(Utils::ALIGN_BOTTOMLEFT)
 	, move_deadzone(settings->view_h / 20)
 	, main1_radius(settings->view_h / 6)
 	, main1_center(0,0)
 	, main1_center_base(-main1_radius - (settings->view_h / 4), -(settings->view_h / 8))
-	, main1_align(ALIGN_BOTTOMRIGHT)
+	, main1_align(Utils::ALIGN_BOTTOMRIGHT)
 	, main2_radius(settings->view_h / 6)
 	, main2_center(0,0)
 	, main2_center_base(0, -(settings->view_h / 6))
-	, main2_align(ALIGN_BOTTOMRIGHT)
+	, main2_align(Utils::ALIGN_BOTTOMRIGHT)
 	, radius_padding(settings->view_h / 20)
 {
 	visible = true;
@@ -49,7 +49,7 @@ void MenuTouchControls::alignInput(Point& center, const Point& center_base, cons
 	input_rect.y = center_base.y - radius;
 	input_rect.w = input_rect.h = radius;
 
-	alignToScreenEdge(_align, &input_rect);
+	Utils::alignToScreenEdge(_align, &input_rect);
 	center.x = input_rect.x + radius;
 	center.y = input_rect.y + radius;
 }
@@ -72,7 +72,7 @@ void MenuTouchControls::logic() {
 
 	FPoint mouse(static_cast<float>(inpt->mouse.x), static_cast<float>(inpt->mouse.y));
 
-	if (inpt->pressing[Input::MAIN1] && isWithinRadius(mv_center, static_cast<float>(move_radius), mouse)) {
+	if (inpt->pressing[Input::MAIN1] && Utils::isWithinRadius(mv_center, static_cast<float>(move_radius), mouse)) {
 		if (inpt->mouse.x < move_center.x - move_deadzone)
 			inpt->pressing[Input::LEFT] = true;
 		if (inpt->mouse.x > move_center.x + move_deadzone)
@@ -85,7 +85,7 @@ void MenuTouchControls::logic() {
 
 	// checking for MAIN1 is redundant, as the touch event itself triggers that
 
-	if (inpt->pressing[Input::MAIN1] && isWithinRadius(m2_center, static_cast<float>(main2_radius), mouse)) {
+	if (inpt->pressing[Input::MAIN1] && Utils::isWithinRadius(m2_center, static_cast<float>(main2_radius), mouse)) {
 		inpt->pressing[Input::MAIN2] = true;
 	}
 }
@@ -97,7 +97,7 @@ bool MenuTouchControls::checkAllowMain1() {
 	FPoint m1_center(static_cast<float>(main1_center.x), static_cast<float>(main1_center.y));
 	FPoint mouse(static_cast<float>(inpt->mouse.x), static_cast<float>(inpt->mouse.y));
 
-	return isWithinRadius(m1_center, static_cast<float>(main1_radius), mouse);
+	return Utils::isWithinRadius(m1_center, static_cast<float>(main1_radius), mouse);
 }
 
 void MenuTouchControls::renderInput(const Point& center, const int radius, const Color& color) {

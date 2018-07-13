@@ -95,7 +95,7 @@ bool WidgetInput::checkClick(const Point& mouse) {
 	if (pressed && !inpt->lock[Input::MAIN1]) {
 		pressed = false;
 
-		if (isWithinRect(pos, mouse)) {
+		if (Utils::isWithinRect(pos, mouse)) {
 			// activate upon release
 			return true;
 		}
@@ -105,7 +105,7 @@ bool WidgetInput::checkClick(const Point& mouse) {
 
 	// detect new click
 	if (inpt->pressing[Input::MAIN1]) {
-		if (isWithinRect(pos, mouse)) {
+		if (Utils::isWithinRect(pos, mouse)) {
 
 			inpt->lock[Input::MAIN1] = true;
 			pressed = true;
@@ -129,7 +129,7 @@ bool WidgetInput::logicAt(int x, int y) {
 
 	// if clicking elsewhere unfocus the text box
 	if (inpt->pressing[Input::MAIN1]) {
-		if (!isWithinRect(pos, mouse)) {
+		if (!Utils::isWithinRect(pos, mouse)) {
 			edit_mode = false;
 		}
 	}

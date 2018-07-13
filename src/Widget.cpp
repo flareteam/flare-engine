@@ -27,7 +27,7 @@ Widget::Widget()
 	, in_focus(false)
 	, focusable(false)
 	, scroll_type(SCROLL_TWO_DIRECTIONS)
-	, alignment(ALIGN_TOPLEFT) {
+	, alignment(Utils::ALIGN_TOPLEFT) {
 }
 
 Widget::~Widget() {
@@ -60,7 +60,7 @@ void Widget::setBasePos(int x, int y, int a) {
 void Widget::setPos(int offset_x, int offset_y) {
 	pos.x = pos_base.x + offset_x;
 	pos.y = pos_base.y + offset_y;
-	alignToScreenEdge(alignment, &pos);
+	Utils::alignToScreenEdge(alignment, &pos);
 }
 
 TabList::TabList()
@@ -271,7 +271,7 @@ int TabList::getNextRelativeIndex(uint8_t dir) {
 		else if (dir == WIDGET_SELECT_DOWN && p1.y >= p2.y)
 			continue;
 
-		float dist = calcDist(p1, p2);
+		float dist = Utils::calcDist(p1, p2);
 
 		if (min_distance == -1 || dist < min_distance) {
 			min_distance = dist;
@@ -379,7 +379,7 @@ void TabList::logic() {
 	}
 
 	// If mouse is clicked, defocus current tabindex item
-	if (inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1] && current_is_valid() && !isWithinRect(widgets[getCurrent()]->pos, inpt->mouse)) {
+	if (inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1] && current_is_valid() && !Utils::isWithinRect(widgets[getCurrent()]->pos, inpt->mouse)) {
 		defocus();
 	}
 

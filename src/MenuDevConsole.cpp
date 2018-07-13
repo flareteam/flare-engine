@@ -74,7 +74,7 @@ MenuDevConsole::MenuDevConsole()
 			// @ATTR close|point|Position of the close button.
 			if(infile.key == "close") {
 				Point pos = Parse::toPoint(infile.val);
-				button_close->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
+				button_close->setBasePos(pos.x, pos.y, Utils::ALIGN_TOPLEFT);
 			}
 			// @ATTR label_title|label|Position of the "Developer Console" label.
 			else if(infile.key == "label_title") {
@@ -83,12 +83,12 @@ MenuDevConsole::MenuDevConsole()
 			// @ATTR confirm|point|Position of the "Execute" button.
 			else if(infile.key == "confirm") {
 				Point pos = Parse::toPoint(infile.val);
-				button_confirm->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
+				button_confirm->setBasePos(pos.x, pos.y, Utils::ALIGN_TOPLEFT);
 			}
 			// @ATTR input|point|Position of the command entry widget.
 			else if(infile.key == "input") {
 				Point pos = Parse::toPoint(infile.val);
-				input_box->setBasePos(pos.x, pos.y, ALIGN_TOPLEFT);
+				input_box->setBasePos(pos.x, pos.y, Utils::ALIGN_TOPLEFT);
 			}
 			// @ATTR history|rectangle|Position and dimensions of the command history.
 			else if(infile.key == "history") history_area = Parse::toRect(infile.val);
@@ -102,7 +102,7 @@ MenuDevConsole::MenuDevConsole()
 	label.setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
 	log_history = new WidgetLog(history_area.w, history_area.h);
-	log_history->setBasePos(history_area.x, history_area.y, ALIGN_TOPLEFT);
+	log_history->setBasePos(history_area.x, history_area.y, Utils::ALIGN_TOPLEFT);
 	tablist.add(log_history->getWidget());
 
 	setBackground("images/menus/dev_console.png");
@@ -194,7 +194,7 @@ void MenuDevConsole::logic() {
 
 		if (inpt->pressing[Input::MAIN2] && !inpt->lock[Input::MAIN2]) {
 			inpt->lock[Input::MAIN2] = true;
-			target = screen_to_map(inpt->mouse.x,  inpt->mouse.y, pc->stats.pos.x, pc->stats.pos.y);
+			target = Utils::screenToMap(inpt->mouse.x,  inpt->mouse.y, pc->stats.pos.x, pc->stats.pos.y);
 
 			log_history->addSeparator();
 
@@ -221,7 +221,7 @@ void MenuDevConsole::logic() {
 			// print target distance from the player
 			if (distance_ticks == settings->max_frames_per_sec) {
 				std::stringstream ss;
-				ss << msg->get("Distance") << ": " << calcDist(target, pc->stats.pos);
+				ss << msg->get("Distance") << ": " << Utils::calcDist(target, pc->stats.pos);
 				log_history->add(ss.str(), WidgetLog::MSG_NORMAL);
 			}
 		}
@@ -244,7 +244,7 @@ void MenuDevConsole::getPlayerInfo() {
 }
 
 void MenuDevConsole::getTileInfo() {
-	Point tile = FPointToPoint(target);
+	Point tile(target);
 
 	std::stringstream ss;
 	for (size_t i = 0; i < mapr->layers.size(); ++i) {
@@ -391,7 +391,7 @@ void MenuDevConsole::execute() {
 		std::vector<size_t> matching_ids;
 
 		for (size_t i=0; i<camp->status.size(); ++i) {
-			if (!search_terms.empty() && stringFindCaseInsensitive(camp->status[i], search_terms) == std::string::npos)
+			if (!search_terms.empty() && Utils::stringFindCaseInsensitive(camp->status[i], search_terms) == std::string::npos)
 				continue;
 
 			matching_ids.push_back(i);
@@ -425,7 +425,7 @@ void MenuDevConsole::execute() {
 				continue;
 
 			std::string item_name = items->getItemName(static_cast<int>(i));
-			if (!search_terms.empty() && stringFindCaseInsensitive(item_name, search_terms) == std::string::npos)
+			if (!search_terms.empty() && Utils::stringFindCaseInsensitive(item_name, search_terms) == std::string::npos)
 				continue;
 
 			matching_ids.push_back(i);
@@ -468,7 +468,7 @@ void MenuDevConsole::execute() {
 		std::vector<size_t> matching_ids;
 
 		for (size_t i=0; i<map_filenames.size(); ++i) {
-			if (!search_terms.empty() && stringFindCaseInsensitive(map_filenames[i], search_terms) == std::string::npos)
+			if (!search_terms.empty() && Utils::stringFindCaseInsensitive(map_filenames[i], search_terms) == std::string::npos)
 				continue;
 
 			matching_ids.push_back(i);
@@ -502,7 +502,7 @@ void MenuDevConsole::execute() {
 				continue;
 
 			std::string item_name = powers->powers[i].name;
-			if (!search_terms.empty() && stringFindCaseInsensitive(item_name, search_terms) == std::string::npos)
+			if (!search_terms.empty() && Utils::stringFindCaseInsensitive(item_name, search_terms) == std::string::npos)
 				continue;
 
 			matching_ids.push_back(i);

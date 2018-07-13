@@ -86,16 +86,16 @@ static void init(const CmdLineArgs& cmd_line_args) {
 	 */
 	PLATFORM.setPaths();
 
-	lockFileCheck();
+	Utils::lockFileCheck();
 
-	createLogFile();
-	logInfo(createVersionStringFull().c_str());
+	Utils::createLogFile();
+	Utils::logInfo(createVersionStringFull().c_str());
 
 	// SDL Inits
 	if ( SDL_Init (SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK) < 0 ) {
-		logError("main: Could not initialize SDL: %s", SDL_GetError());
-		logErrorDialog("main: Could not initialize SDL: %s", SDL_GetError());
-		Exit(1);
+		Utils::logError("main: Could not initialize SDL: %s", SDL_GetError());
+		Utils::logErrorDialog("main: Could not initialize SDL: %s", SDL_GetError());
+		Utils::Exit(1);
 	}
 
 	// Shared Resources set-up
@@ -103,14 +103,14 @@ static void init(const CmdLineArgs& cmd_line_args) {
 	mods = new ModManager(&(cmd_line_args.mod_list));
 
 	if (!mods->haveFallbackMod()) {
-		logError("main: Could not find the default mod in the following locations:");
-		if (Filesystem::pathExists(settings->path_user + "mods")) logError("%smods/", settings->path_user.c_str());
-		if (Filesystem::pathExists(settings->path_data + "mods")) logError("%smods/", settings->path_data.c_str());
-		logError("A copy of the default mod is in the \"mods\" directory of the flare-engine repo.");
-		logError("The repo is located at: https://github.com/clintbellanger/flare-engine");
-		logError("Try again after copying the default mod to one of the above directories. Exiting.");
-		logErrorDialog("main: Could not find the 'default' mod in the following locations:\n\n%smods/\n%smods/", settings->path_user.c_str(), settings->path_data.c_str());
-		Exit(1);
+		Utils::logError("main: Could not find the default mod in the following locations:");
+		if (Filesystem::pathExists(settings->path_user + "mods")) Utils::logError("%smods/", settings->path_user.c_str());
+		if (Filesystem::pathExists(settings->path_data + "mods")) Utils::logError("%smods/", settings->path_data.c_str());
+		Utils::logError("A copy of the default mod is in the \"mods\" directory of the flare-engine repo.");
+		Utils::logError("The repo is located at: https://github.com/clintbellanger/flare-engine");
+		Utils::logError("Try again after copying the default mod to one of the above directories. Exiting.");
+		Utils::logErrorDialog("main: Could not find the 'default' mod in the following locations:\n\n%smods/\n%smods/", settings->path_user.c_str(), settings->path_data.c_str());
+		Utils::Exit(1);
 	}
 
 	settings->loadSettings();
@@ -142,9 +142,9 @@ static void init(const CmdLineArgs& cmd_line_args) {
 	int status = render_device->createContext();
 
 	if (status == -1) {
-		logError("main: Could not create rendering context: %s", SDL_GetError());
-		logErrorDialog("main: Could not create rendering context: %s", SDL_GetError());
-		Exit(1);
+		Utils::logError("main: Could not create rendering context: %s", SDL_GetError());
+		Utils::logErrorDialog("main: Could not create rendering context: %s", SDL_GetError());
+		Utils::Exit(1);
 	}
 
 	snd = getSoundManager();
@@ -260,7 +260,7 @@ static void mainLoop () {
 }
 
 static void cleanup() {
-	lockFileWrite(-1);
+	Utils::lockFileWrite(-1);
 
 	delete gswitch;
 
@@ -361,10 +361,10 @@ int main(int argc, char *argv[]) {
 				settings->custom_path_data += "/";
 
 			if (Filesystem::pathExists(settings->custom_path_data)) {
-				logInfo("Custom data path: \"%s\"", settings->custom_path_data.c_str());
+				Utils::logInfo("Custom data path: \"%s\"", settings->custom_path_data.c_str());
 			}
 			else {
-				logError("Invalid custom data path: \"%s\"", settings->custom_path_data.c_str());
+				Utils::logError("Invalid custom data path: \"%s\"", settings->custom_path_data.c_str());
 				settings->custom_path_data.clear();
 			}
 		}
@@ -406,7 +406,7 @@ int main(int argc, char *argv[]) {
 			done = true;
 		}
 		else {
-			logError("'%s' is not a valid command line option. Try '--help' for a list of valid options.", argv[i]);
+			Utils::logError("'%s' is not a valid command line option. Try '--help' for a list of valid options.", argv[i]);
 		}
 	}
 
@@ -432,7 +432,7 @@ soft_reset:
 	}
 
 	if (settings->soft_reset) {
-		logInfo("main: Restarting Flare...");
+		Utils::logInfo("main: Restarting Flare...");
 		settings->soft_reset = false;
 		done = false;
 		cmd_line_args = CmdLineArgs();

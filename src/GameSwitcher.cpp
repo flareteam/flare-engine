@@ -133,7 +133,7 @@ void GameSwitcher::loadBackgroundImage() {
 void GameSwitcher::refreshBackground() {
 	if (background_image) {
 		background_image->ref();
-		Rect dest = resizeToScreen(background_image->getWidth(), background_image->getHeight(), true, ALIGN_CENTER);
+		Rect dest = Utils::resizeToScreen(background_image->getWidth(), background_image->getHeight(), true, Utils::ALIGN_CENTER);
 
 		Image *resized = background_image->resize(dest.w, dest.h);
 		if (resized) {
@@ -218,9 +218,9 @@ void GameSwitcher::showFPS(float fps) {
 
 			float avg_fps = (fps + last_fps) / 2.f;
 			last_fps = fps;
-			std::string sfps = floatToString(avg_fps, 2) + std::string (" fps");
+			std::string sfps = Utils::floatToString(avg_fps, 2) + std::string (" fps");
 			Rect pos = fps_position;
-			alignToScreenEdge(fps_corner, &pos);
+			Utils::alignToScreenEdge(fps_corner, &pos);
 			label_fps->setPos(pos.x, pos.y);
 			label_fps->setText(sfps);
 			label_fps->setColor(fps_color);

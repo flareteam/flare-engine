@@ -65,17 +65,17 @@ SDLInputState::SDLInputState(void)
 
 	// print some information to the console about connected joysticks
 	if(SDL_NumJoysticks() > 0) {
-		logInfo("InputState: %d joystick(s) found.", SDL_NumJoysticks());
+		Utils::logInfo("InputState: %d joystick(s) found.", SDL_NumJoysticks());
 		joy_num = SDL_NumJoysticks();
 	}
 	else {
-		logInfo("InputState: No joysticks were found.");
+		Utils::logInfo("InputState: No joysticks were found.");
 		settings->enable_joystick = false;
 		return;
 	}
 
 	for(int i = 0; i < SDL_NumJoysticks(); i++) {
-		logInfo("InputState: Joystick %d, %s", i, getJoystickName(i).c_str());
+		Utils::logInfo("InputState: Joystick %d, %s", i, getJoystickName(i).c_str());
 	}
 }
 
@@ -89,7 +89,7 @@ void SDLInputState::initJoystick() {
 	joy_num = SDL_NumJoysticks();
 	if (settings->enable_joystick && joy_num > 0) {
 		joy = SDL_JoystickOpen(settings->joystick_device);
-		logInfo("InputState: Using joystick %d.", settings->joystick_device);
+		Utils::logInfo("InputState: Using joystick %d.", settings->joystick_device);
 	}
 
 	if (joy) {
@@ -226,9 +226,9 @@ void SDLInputState::handle() {
 				else if (event.window.event == SDL_WINDOWEVENT_MINIMIZED) {
 					if (PLATFORM.is_mobile_device) {
 						// on mobile, we the user could kill the app, so save the game beforehand
-						logInfo("InputState: Minimizing app, saving...");
+						Utils::logInfo("InputState: Minimizing app, saving...");
 						save_load->saveGame();
-						logInfo("InputState: Game saved");
+						Utils::logInfo("InputState: Game saved");
 					}
 					window_minimized = true;
 					snd->pauseAll();
@@ -505,13 +505,13 @@ void SDLInputState::handle() {
 					joystick_init = true;
 				}
 				else {
-					logInfo("InputState: Joystick added.");
+					Utils::logInfo("InputState: Joystick added.");
 					joysticks_changed = true;
 					initJoystick();
 				}
 				break;
 			case SDL_JOYDEVICEREMOVED:
-				logInfo("InputState: Joystick removed.");
+				Utils::logInfo("InputState: Joystick removed.");
 				joysticks_changed = true;
 				settings->enable_joystick = false;
 				initJoystick();

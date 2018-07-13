@@ -37,21 +37,124 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <iomanip>
 #include <iostream>
 
-int LOCK_INDEX = 0;
+int Utils::LOCK_INDEX = 0;
 
-bool LOG_FILE_INIT = false;
-bool LOG_FILE_CREATED = false;
-std::string LOG_PATH;
-std::queue<std::pair<SDL_LogPriority, std::string> > LOG_MSG;
+bool Utils::LOG_FILE_INIT = false;
+bool Utils::LOG_FILE_CREATED = false;
+std::string Utils::LOG_PATH;
+std::queue<std::pair<SDL_LogPriority, std::string> > Utils::LOG_MSG;
 
-Point FPointToPoint(const FPoint& fp) {
-	Point result;
-	result.x = int(fp.x);
-	result.y = int(fp.y);
-	return result;
+/**
+ * Point: A simple x/y coordinate structure
+ */
+Point::Point()
+	: x(0)
+	, y(0)
+{}
+
+Point::Point(int _x, int _y)
+	: x(_x)
+	, y(_y)
+{}
+
+Point::Point(const FPoint& _fp)
+	: x(static_cast<int>(_fp.x))
+	, y(static_cast<int>(_fp.y))
+{}
+
+/**
+ * FPoint: A floating point version of Point
+ */
+FPoint::FPoint()
+	: x(0)
+	, y(0)
+{}
+
+FPoint::FPoint(float _x, float _y)
+	: x(_x)
+	, y(_y)
+{}
+
+FPoint::FPoint(Point _p)
+	: x(static_cast<float>(_p.x))
+	, y(static_cast<float>(_p.y))
+{}
+
+void FPoint::align() {
+	// this rounds the float values to the nearest multiple of 1/(2^4)
+	// 1/(2^4) was chosen because it's a "nice" floating point number, removing 99% of rounding errors
+	x = floorf(x / 0.0625f) * 0.0625f;
+	y = floorf(y / 0.0625f) * 0.0625f;
 }
 
-FPoint screen_to_map(int x, int y, float camx, float camy) {
+/**
+ * Rect: A rectangle defined by the top-left x/y and the width/height
+ */
+Rect::Rect()
+	: x(0)
+	, y(0)
+	, w(0)
+	, h(0)
+{}
+
+Rect::Rect(int _x, int _y, int _w, int _h)
+	: x(_x)
+	, y(_y)
+	, w(_w)
+	, h(_h)
+{}
+
+Rect::Rect(const SDL_Rect& _r)
+	: x(_r.x)
+	, y(_r.y)
+	, w(_r.w)
+	, h(_r.h)
+{}
+
+Rect::operator SDL_Rect() const {
+	SDL_Rect r;
+	r.x = x;
+	r.y = y;
+	r.w = w;
+	r.h = h;
+	return r;
+}
+
+/**
+ * Color: RGBA color; defaults to 100% opaque black
+ */
+Color::Color()
+	: r(0)
+	, g(0)
+	, b(0)
+	, a(255)
+{}
+
+Color::Color(Uint8 _r, Uint8 _g, Uint8 _b, Uint8 _a)
+	: r(_r)
+	, g(_g)
+	, b(_b)
+	, a(_a)
+{}
+
+Color::operator SDL_Color() const {
+	SDL_Color c;
+	c.r = r;
+	c.g = g;
+	c.b = b;
+	c.a = a;
+	return c;
+}
+
+bool Color::operator ==(const Color &other) {
+	return r == other.r && g == other.g && b == other.b && a == other.a;
+}
+
+bool Color::operator !=(const Color &other) {
+	return !((*this) == other);
+}
+
+FPoint Utils::screenToMap(int x, int y, float camx, float camy) {
 	FPoint r;
 	if (eset->tileset.orientation == eset->tileset.TILESET_ISOMETRIC) {
 		float scrx = float(x - settings->view_w_half) * 0.5f;
@@ -71,7 +174,7 @@ FPoint screen_to_map(int x, int y, float camx, float camy) {
  * Returns a point (in map units) of a given (x,y) tupel on the screen
  * when the camera is at a given position.
  */
-Point map_to_screen(float x, float y, float camx, float camy) {
+Point Utils::mapToScreen(float x, float y, float camx, float camy) {
 	Point r;
 
 	// adjust to the center of the viewport
@@ -90,24 +193,10 @@ Point map_to_screen(float x, float y, float camx, float camy) {
 	return r;
 }
 
-FPoint collision_to_map(const Point& p) {
-	FPoint ret;
-	ret.x = static_cast<float>(p.x) + 0.5f;
-	ret.y = static_cast<float>(p.y) + 0.5f;
-	return ret;
-}
-
-Point map_to_collision(const FPoint& p) {
-	Point ret;
-	ret.x = int(p.x);
-	ret.y = int(p.y);
-	return ret;
-}
-
 /**
  * Apply parameter distance to position and direction
  */
-FPoint calcVector(const FPoint& pos, int direction, float dist) {
+FPoint Utils::calcVector(const FPoint& pos, int direction, float dist) {
 	FPoint p;
 	p.x = pos.x;
 	p.y = pos.y;
@@ -148,25 +237,25 @@ FPoint calcVector(const FPoint& pos, int direction, float dist) {
 	return p;
 }
 
-float calcDist(const FPoint& p1, const FPoint& p2) {
+float Utils::calcDist(const FPoint& p1, const FPoint& p2) {
 	return static_cast<float>(sqrt((p2.x - p1.x) * (p2.x - p1.x) + (p2.y - p1.y) * (p2.y - p1.y)));
 }
 
 /**
  * is target within the area defined by center and radius?
  */
-bool isWithinRadius(const FPoint& center, float radius, const FPoint& target) {
+bool Utils::isWithinRadius(const FPoint& center, float radius, const FPoint& target) {
 	return (calcDist(center, target) < radius);
 }
 
 /**
  * is target within the area defined by rectangle r?
  */
-bool isWithinRect(const Rect& r, const Point& target) {
+bool Utils::isWithinRect(const Rect& r, const Point& target) {
 	return target.x >= r.x && target.y >= r.y && target.x < r.x+r.w && target.y < r.y+r.h;
 }
 
-unsigned char calcDirection(float x0, float y0, float x1, float y1) {
+unsigned char Utils::calcDirection(float x0, float y0, float x1, float y1) {
 	float theta = calcTheta(x0, y0, x1, y1);
 	float val = theta / (static_cast<float>(M_PI)/4);
 	int dir = static_cast<int>(((val < 0) ? ceilf(val-0.5f) : floorf(val+0.5f)) + 4);
@@ -178,7 +267,7 @@ unsigned char calcDirection(float x0, float y0, float x1, float y1) {
 }
 
 // convert cartesian to polar theta where (x1,x2) is the origin
-float calcTheta(float x1, float y1, float x2, float y2) {
+float Utils::calcTheta(float x1, float y1, float x2, float y2) {
 	// calculate base angle
 	float dx = x2 - x1;
 	float dy = y2 - y1;
@@ -198,7 +287,7 @@ float calcTheta(float x1, float y1, float x2, float y2) {
 	return theta;
 }
 
-std::string abbreviateKilo(int amount) {
+std::string Utils::abbreviateKilo(int amount) {
 	std::stringstream ss;
 	if (amount < 1000)
 		ss << amount;
@@ -208,7 +297,7 @@ std::string abbreviateKilo(int amount) {
 	return ss.str();
 }
 
-void alignToScreenEdge(int alignment, Rect *r) {
+void Utils::alignToScreenEdge(int alignment, Rect *r) {
 	if (!r) return;
 
 	if (alignment == ALIGN_TOPLEFT) {
@@ -248,21 +337,9 @@ void alignToScreenEdge(int alignment, Rect *r) {
 }
 
 /**
- * Given a floating Point pos, the decimal is rounded to the nearest multiple of 1/(2^4)
- * 1/(2^4) was chosen because it's a "nice" floating point number, removing 99% of rounding errors
- */
-void alignFPoint(FPoint *pos) {
-	if (!pos) return;
-
-	pos->x = floorf(pos->x / 0.0625f) * 0.0625f;
-	pos->y = floorf(pos->y / 0.0625f) * 0.0625f;
-}
-
-
-/**
  * These functions provide a unified way to log messages, printf-style
  */
-void logInfo(const char* format, ...) {
+void Utils::logInfo(const char* format, ...) {
 	va_list args;
 
 	va_start(args, format);
@@ -289,7 +366,7 @@ void logInfo(const char* format, ...) {
 
 }
 
-void logError(const char* format, ...) {
+void Utils::logError(const char* format, ...) {
 	va_list args;
 
 	va_start(args, format);
@@ -315,7 +392,7 @@ void logError(const char* format, ...) {
 	}
 }
 
-void logErrorDialog(const char* dialog_text, ...) {
+void Utils::logErrorDialog(const char* dialog_text, ...) {
 	char pre_buf[BUFSIZ];
 	char buf[BUFSIZ];
 	snprintf(pre_buf, BUFSIZ, "%s%s", "FLARE Error\n", dialog_text);
@@ -327,7 +404,7 @@ void logErrorDialog(const char* dialog_text, ...) {
 	va_end(args);
 }
 
-void createLogFile() {
+void Utils::createLogFile() {
 	LOG_PATH = settings->path_conf + "/flare_log.txt";
 
 	// always create a new log file on each launch
@@ -363,12 +440,13 @@ void createLogFile() {
 	LOG_FILE_INIT = true;
 }
 
-void Exit(int code) {
+void Utils::Exit(int code) {
 	SDL_Quit();
 	lockFileWrite(-1);
 	exit(code);
 }
-void createSaveDir(int slot) {
+
+void Utils::createSaveDir(int slot) {
 	// game slots are currently 1-4
 	if (slot == 0) return;
 
@@ -381,7 +459,7 @@ void createSaveDir(int slot) {
 	Filesystem::createDir(Filesystem::path(&ss));
 }
 
-void removeSaveDir(int slot) {
+void Utils::removeSaveDir(int slot) {
 	// game slots are currently 1-4
 	if (slot == 0) return;
 
@@ -393,7 +471,7 @@ void removeSaveDir(int slot) {
 	}
 }
 
-Rect resizeToScreen(int w, int h, bool crop, int align) {
+Rect Utils::resizeToScreen(int w, int h, bool crop, int align) {
 	Rect r;
 
 	// fit to height
@@ -415,7 +493,7 @@ Rect resizeToScreen(int w, int h, bool crop, int align) {
 	return r;
 }
 
-size_t stringFindCaseInsensitive(const std::string &_a, const std::string &_b) {
+size_t Utils::stringFindCaseInsensitive(const std::string &_a, const std::string &_b) {
 	std::string a;
 	std::string b;
 
@@ -430,7 +508,7 @@ size_t stringFindCaseInsensitive(const std::string &_a, const std::string &_b) {
 	return a.find(b);
 }
 
-std::string floatToString(const float value, size_t precision) {
+std::string Utils::floatToString(const float value, size_t precision) {
 	std::stringstream ss;
 	ss << value;
 	std::string temp = ss.str();
@@ -443,7 +521,7 @@ std::string floatToString(const float value, size_t precision) {
 	return temp;
 }
 
-std::string getDurationString(const int duration, size_t precision) {
+std::string Utils::getDurationString(const int duration, size_t precision) {
 	float real_duration = static_cast<float>(duration) / settings->max_frames_per_sec;
 	std::string temp = floatToString(real_duration, precision);
 
@@ -455,7 +533,7 @@ std::string getDurationString(const int duration, size_t precision) {
 	}
 }
 
-std::string substituteVarsInString(const std::string &_s, Avatar* avatar) {
+std::string Utils::substituteVarsInString(const std::string &_s, Avatar* avatar) {
 	std::string s = _s;
 
 	size_t begin = s.find("${");
@@ -498,7 +576,7 @@ std::string substituteVarsInString(const std::string &_s, Avatar* avatar) {
 /**
  * Keep two points within a certain range
  */
-FPoint clampDistance(float range, const FPoint& src, const FPoint& target) {
+FPoint Utils::clampDistance(float range, const FPoint& src, const FPoint& target) {
 	FPoint limit_target = target;
 
 	if (range > 0) {
@@ -518,7 +596,7 @@ FPoint clampDistance(float range, const FPoint& src, const FPoint& target) {
 /**
  * Compares two rectangles and returns true if they overlap
  */
-bool rectsOverlap(const Rect &a, const Rect &b) {
+bool Utils::rectsOverlap(const Rect &a, const Rect &b) {
 	Point a_1(a.x, a.y);
 	Point a_2(a.x + a.w, a.y);
 	Point a_3(a.x, a.y + a.h);
@@ -535,7 +613,7 @@ bool rectsOverlap(const Rect &a, const Rect &b) {
 	return a_in_b || b_in_a;
 }
 
-int rotateDirection(int direction, int val) {
+int Utils::rotateDirection(int direction, int val) {
 	direction += val;
 	if (direction > 7)
 		direction -= 7;
@@ -545,7 +623,7 @@ int rotateDirection(int direction, int val) {
 	return direction;
 }
 
-std::string getTimeString(const unsigned long time, bool show_seconds) {
+std::string Utils::getTimeString(const unsigned long time, bool show_seconds) {
 	std::stringstream ss;
 	unsigned long hours = (time / 60) / 60;
 	if (hours < 100)
@@ -566,7 +644,7 @@ std::string getTimeString(const unsigned long time, bool show_seconds) {
 	return ss.str();
 }
 
-void lockFileRead() {
+void Utils::lockFileRead() {
 	if (!PLATFORM.has_lock_file)
 		return;
 
@@ -591,7 +669,7 @@ void lockFileRead() {
 		LOCK_INDEX = 0;
 }
 
-void lockFileWrite(int increment) {
+void Utils::lockFileWrite(int increment) {
 	if (!PLATFORM.has_lock_file)
 		return;
 
@@ -616,7 +694,7 @@ void lockFileWrite(int increment) {
 	}
 }
 
-void lockFileCheck() {
+void Utils::lockFileCheck() {
 	if (!PLATFORM.has_lock_file)
 		return;
 

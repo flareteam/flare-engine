@@ -326,7 +326,7 @@ void EffectManager::addEffectInternal(EffectDef &effect, int duration, int magni
 		return;
 
 	if (effect_type == Effect::ATTACK_SPEED && magnitude < 100) {
-		logInfo("EffectManager: Attack speeds less than 100 are unsupported.");
+		Utils::logInfo("EffectManager: Attack speeds less than 100 are unsupported.");
 		return;
 	}
 
@@ -570,7 +570,7 @@ int EffectManager::getType(const std::string& type) {
 		}
 	}
 
-	logError("EffectManager: '%s' is not a valid effect type.", type.c_str());
+	Utils::logError("EffectManager: '%s' is not a valid effect type.", type.c_str());
 	return Effect::NONE;
 }
 

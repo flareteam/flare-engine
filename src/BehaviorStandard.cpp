@@ -63,7 +63,7 @@ void BehaviorStandard::logic() {
 	}
 
 	if (!e->stats.hero_ally) {
-		if (calcDist(e->stats.pos, pc->stats.pos) <= settings->encounter_dist)
+		if (Utils::calcDist(e->stats.pos, pc->stats.pos) <= settings->encounter_dist)
 			e->stats.encountered = true;
 
 		if (!e->stats.encountered)
@@ -123,7 +123,7 @@ void BehaviorStandard::findTarget() {
 
 	// check distance and line of sight between enemy and hero
 	if (pc->stats.alive)
-		hero_dist = calcDist(e->stats.pos, pc->stats.pos);
+		hero_dist = Utils::calcDist(e->stats.pos, pc->stats.pos);
 	else
 		hero_dist = 0;
 
@@ -177,7 +177,7 @@ void BehaviorStandard::findTarget() {
 		for (unsigned int i=0; i < enemym->enemies.size(); i++) {
 			if(!enemym->enemies[i]->stats.corpse && enemym->enemies[i]->stats.hero_ally) {
 				//now work out the distance to the minion and compare it to the distance to the current targer (we want to target the closest ally)
-				float ally_dist = calcDist(e->stats.pos, enemym->enemies[i]->stats.pos);
+				float ally_dist = Utils::calcDist(e->stats.pos, enemym->enemies[i]->stats.pos);
 				if (ally_dist < target_dist) {
 					pursue_pos.x = enemym->enemies[i]->stats.pos.x;
 					pursue_pos.y = enemym->enemies[i]->stats.pos.y;
@@ -229,11 +229,11 @@ void BehaviorStandard::findTarget() {
 
 		std::vector<int> flee_dirs;
 
-		int middle_dir = calcDirection(target_pos.x, target_pos.y, e->stats.pos.x, e->stats.pos.y);
+		int middle_dir = Utils::calcDirection(target_pos.x, target_pos.y, e->stats.pos.x, e->stats.pos.y);
 		for (int i = -2; i <= 2; ++i) {
-			int test_dir = rotateDirection(middle_dir, i);
+			int test_dir = Utils::rotateDirection(middle_dir, i);
 
-			FPoint test_pos = calcVector(e->stats.pos, test_dir, 1);
+			FPoint test_pos = Utils::calcVector(e->stats.pos, test_dir, 1);
 			if (mapr->collider.is_valid_position(test_pos.x, test_pos.y, e->stats.movement_type, MapCollision::COLLIDE_NORMAL)) {
 				if (test_dir == e->stats.direction) {
 					// if we're already moving in a good direction, favor it over other directions
@@ -254,7 +254,7 @@ void BehaviorStandard::findTarget() {
 		}
 		else {
 			int index = Math::randBetween(0, static_cast<int>(flee_dirs.size())-1);
-			pursue_pos = calcVector(e->stats.pos, flee_dirs[index], 1);
+			pursue_pos = Utils::calcVector(e->stats.pos, flee_dirs[index], 1);
 
 			if (flee_ticks == 0) {
 				flee_ticks = e->stats.flee_duration;
@@ -372,7 +372,7 @@ void BehaviorStandard::checkMove() {
 					recalculate_path = true;
 
 				//if the target moved more than 1 tile away, recalculate
-				if(calcDist(FPoint(map_to_collision(prev_target)), FPoint(map_to_collision(pursue_pos))) > 1.f)
+				if(Utils::calcDist(FPoint(Point(prev_target)), FPoint(Point(pursue_pos))) > 1.f)
 					recalculate_path = true;
 
 				//if a collision ocurred then recalculate
@@ -405,7 +405,7 @@ void BehaviorStandard::checkMove() {
 					pursue_pos = path.back();
 
 					//if distance to node is lower than a tile size, the node is going to be passed and can be removed
-					if(calcDist(e->stats.pos, pursue_pos) <= 1.f)
+					if(Utils::calcDist(e->stats.pos, pursue_pos) <= 1.f)
 						path.pop_back();
 				}
 			}
@@ -414,7 +414,7 @@ void BehaviorStandard::checkMove() {
 			}
 
 			if (e->stats.charge_speed == 0.0f) {
-				e->stats.direction = calcDirection(e->stats.pos.x, e->stats.pos.y, pursue_pos.x, pursue_pos.y);
+				e->stats.direction = Utils::calcDirection(e->stats.pos.x, e->stats.pos.y, pursue_pos.x, pursue_pos.y);
 			}
 			e->stats.turn_ticks = 0;
 		}
@@ -440,11 +440,11 @@ void BehaviorStandard::checkMove() {
 	if (!e->stats.waypoints.empty()) {
 		// if the patroller is close to the waypoint
 		FPoint waypoint = e->stats.waypoints.front();
-		float waypoint_dist = calcDist(waypoint, e->stats.pos);
+		float waypoint_dist = Utils::calcDist(waypoint, e->stats.pos);
 
 		FPoint saved_pos = e->stats.pos;
 		e->move();
-		float new_dist = calcDist(waypoint, e->stats.pos);
+		float new_dist = Utils::calcDist(waypoint, e->stats.pos);
 		e->stats.pos = saved_pos;
 
 		if (waypoint_dist <= real_speed || (waypoint_dist <= 0.5f && new_dist > waypoint_dist)) {
@@ -695,7 +695,7 @@ void BehaviorStandard::updateState() {
 				}
 
 				// prevent "jumping" when rendering
-				alignFPoint(&e->stats.pos);
+				e->stats.pos.align();
 			}
 
 			break;
@@ -722,7 +722,7 @@ void BehaviorStandard::updateState() {
 				mapr->collider.unblock(e->stats.pos.x, e->stats.pos.y);
 
 				// prevent "jumping" when rendering
-				alignFPoint(&e->stats.pos);
+				e->stats.pos.align();
 			}
 
 			break;

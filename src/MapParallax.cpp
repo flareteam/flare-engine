@@ -116,7 +116,7 @@ void MapParallax::render(const FPoint& cam, const std::string& map_layer) {
 		dp.x = map_center.x - cam.x;
 		dp.y = map_center.y - cam.y;
 
-		Point center_tile = map_to_screen(map_center.x + (dp.x * layers[i].speed) + layers[i].fixed_offset.x, map_center.y + (dp.y * layers[i].speed) + layers[i].fixed_offset.y, cam.x, cam.y);
+		Point center_tile = Utils::mapToScreen(map_center.x + (dp.x * layers[i].speed) + layers[i].fixed_offset.x, map_center.y + (dp.y * layers[i].speed) + layers[i].fixed_offset.y, cam.x, cam.y);
 		center_tile.x -= width/2;
 		center_tile.y -= height/2;
 

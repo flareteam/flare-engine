@@ -34,7 +34,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 Menu::Menu()
 	: visible(false)
-	, alignment(ALIGN_TOPLEFT)
+	, alignment(Utils::ALIGN_TOPLEFT)
 	, sfx_open(0)
 	, sfx_close(0)
 	, background(NULL) {
@@ -82,7 +82,7 @@ void Menu::align() {
 	window_area.x = window_area_base.x;
 	window_area.y = window_area_base.y;
 
-	alignToScreenEdge(alignment, &window_area);
+	Utils::alignToScreenEdge(alignment, &window_area);
 
 	if (background) {
 		background->setClip(

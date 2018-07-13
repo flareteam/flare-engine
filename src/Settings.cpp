@@ -100,7 +100,7 @@ size_t Settings::getConfigEntry(const char *name) {
 			return i;
 	}
 
-	logError("Settings: '%s' is not a valid configuration key.", name);
+	Utils::logError("Settings: '%s' is not a valid configuration key.", name);
 	return config.size();
 }
 
@@ -156,7 +156,7 @@ void Settings::saveSettings() {
 			outfile << config[i].name << "=" << Parse::toString(*config[i].type, config[i].storage) << "\n";
 		}
 
-		if (outfile.bad()) logError("Settings: Unable to write settings file. No write access or disk is full!");
+		if (outfile.bad()) Utils::logError("Settings: Unable to write settings file. No write access or disk is full!");
 		outfile.close();
 		outfile.clear();
 

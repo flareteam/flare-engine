@@ -403,8 +403,8 @@ bool MapCollision::compute_path(const FPoint& start_pos, const FPoint& end_pos, 
 		path.clear();
 
 	// convert start & end to MapCollision precision
-	Point start = map_to_collision(start_pos);
-	Point end = map_to_collision(end_pos);
+	Point start(start_pos);
+	Point end(end_pos);
 
 	// if the target square has an entity, temporarily clear it to compute the path
 	bool target_blocks = false;
@@ -417,7 +417,7 @@ bool MapCollision::compute_path(const FPoint& start_pos, const FPoint& end_pos, 
 	Point current = start;
 	AStarNode* node = new AStarNode(start);
 	node->setActualCost(0);
-	node->setEstimatedCost(static_cast<float>(calcDist(FPoint(start),FPoint(end))));
+	node->setEstimatedCost(static_cast<float>(Utils::calcDist(FPoint(start),FPoint(end))));
 	node->setParent(current);
 
 	AStarContainer open(map_size.x, map_size.y, limit);
@@ -458,18 +458,18 @@ bool MapCollision::compute_path(const FPoint& start_pos, const FPoint& end_pos, 
 			// if neighbour isn't inside open, add it as a new Node
 			if(!open.exists(neighbour)) {
 				AStarNode* newNode = new AStarNode(neighbour);
-				newNode->setActualCost(node->getActualCost() + static_cast<float>(calcDist(FPoint(current),FPoint(neighbour))));
+				newNode->setActualCost(node->getActualCost() + static_cast<float>(Utils::calcDist(FPoint(current),FPoint(neighbour))));
 				newNode->setParent(current);
-				newNode->setEstimatedCost(static_cast<float>(calcDist(FPoint(neighbour),FPoint(end))));
+				newNode->setEstimatedCost(static_cast<float>(Utils::calcDist(FPoint(neighbour),FPoint(end))));
 				open.add(newNode);
 			}
 			// else, update it's cost if better
 			else {
 				AStarNode* i = open.get(neighbour.x, neighbour.y);
-				if (node->getActualCost() + static_cast<float>(calcDist(FPoint(current),FPoint(neighbour))) < i->getActualCost()) {
+				if (node->getActualCost() + static_cast<float>(Utils::calcDist(FPoint(current),FPoint(neighbour))) < i->getActualCost()) {
 					Point pos(i->getX(), i->getY());
 					Point parent_pos(node->getX(), node->getY());
-					open.updateParent(pos, parent_pos, node->getActualCost() + static_cast<float>(calcDist(FPoint(current),FPoint(neighbour))));
+					open.updateParent(pos, parent_pos, node->getActualCost() + static_cast<float>(Utils::calcDist(FPoint(current),FPoint(neighbour))));
 				}
 			}
 		}
@@ -546,6 +546,13 @@ FPoint MapCollision::get_random_neighbor(const Point& target, int range, bool ig
 		return valid_tiles[rand() % valid_tiles.size()];
 	else
 		return FPoint(target);
+}
+
+FPoint MapCollision::collision_to_map(const Point& p) {
+	FPoint ret;
+	ret.x = static_cast<float>(p.x) + 0.5f;
+	ret.y = static_cast<float>(p.y) + 0.5f;
+	return ret;
 }
 
 MapCollision::~MapCollision() {
