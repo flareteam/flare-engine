@@ -49,7 +49,7 @@ SDLInputState::SDLInputState(void)
 	, joystick_init(false)
 	, text_input(false)
 {
-	PLATFORM.setExitEventFilter();
+	platform.setExitEventFilter();
 
 	defaultQwertyKeyBindings();
 	defaultJoystickBindings();
@@ -100,7 +100,7 @@ void SDLInputState::initJoystick() {
 }
 
 void SDLInputState::defaultQwertyKeyBindings () {
-	if (PLATFORM.is_mobile_device) {
+	if (platform.is_mobile_device) {
 		binding[Input::CANCEL] = SDLK_AC_BACK;
 		binding_alt[Input::ACCEPT] = SDLK_MENU;
 	}
@@ -178,14 +178,14 @@ void SDLInputState::handle() {
 		switch (event.type) {
 			case SDL_MOUSEMOTION:
 				last_is_joystick = false;
-				if (!PLATFORM.is_mobile_device) {
+				if (!platform.is_mobile_device) {
 					mouse = scaleMouse(event.motion.x, event.motion.y);
 					curs->show_cursor = true;
 				}
 				break;
 			case SDL_MOUSEWHEEL:
 				last_is_joystick = false;
-				if (!PLATFORM.is_mobile_device) {
+				if (!platform.is_mobile_device) {
 					if (event.wheel.y > 0) {
 						scroll_up = true;
 					} else if (event.wheel.y < 0) {
@@ -195,7 +195,7 @@ void SDLInputState::handle() {
 				break;
 			case SDL_MOUSEBUTTONDOWN:
 				last_is_joystick = false;
-				if (!PLATFORM.is_mobile_device) {
+				if (!platform.is_mobile_device) {
 					mouse = scaleMouse(event.button.x, event.button.y);
 					bind_button = (event.button.button + MOUSE_BIND_OFFSET) * (-1);
 					for (int key=0; key<KEY_COUNT; key++) {
@@ -208,7 +208,7 @@ void SDLInputState::handle() {
 				break;
 			case SDL_MOUSEBUTTONUP:
 				last_is_joystick = false;
-				if (!PLATFORM.is_mobile_device) {
+				if (!platform.is_mobile_device) {
 					mouse = scaleMouse(event.button.x, event.button.y);
 					bind_button = (event.button.button + MOUSE_BIND_OFFSET) * (-1);
 					for (int key=0; key<KEY_COUNT; key++) {
@@ -224,7 +224,7 @@ void SDLInputState::handle() {
 					resize_ticks = settings->max_frames_per_sec / 4;
 				}
 				else if (event.window.event == SDL_WINDOWEVENT_MINIMIZED) {
-					if (PLATFORM.is_mobile_device) {
+					if (platform.is_mobile_device) {
 						// on mobile, we the user could kill the app, so save the game beforehand
 						Utils::logInfo("InputState: Minimizing app, saving...");
 						save_load->saveGame();
@@ -245,7 +245,7 @@ void SDLInputState::handle() {
 			// NOTE Should these be limited to mobile only?
 			case SDL_FINGERMOTION:
 				last_is_joystick = false;
-				if (PLATFORM.is_mobile_device) {
+				if (platform.is_mobile_device) {
 					mouse.x = static_cast<int>((event.tfinger.x + event.tfinger.dx) * settings->view_w);
 					mouse.y = static_cast<int>((event.tfinger.y + event.tfinger.dy) * settings->view_h);
 
@@ -265,7 +265,7 @@ void SDLInputState::handle() {
 				break;
 			case SDL_FINGERDOWN:
 				last_is_joystick = false;
-				if (PLATFORM.is_mobile_device) {
+				if (platform.is_mobile_device) {
 					touch_locked = true;
 					mouse.x = static_cast<int>(event.tfinger.x * settings->view_w);
 					mouse.y = static_cast<int>(event.tfinger.y * settings->view_h);
@@ -281,7 +281,7 @@ void SDLInputState::handle() {
 				break;
 			case SDL_FINGERUP:
 				last_is_joystick = false;
-				if (PLATFORM.is_mobile_device) {
+				if (platform.is_mobile_device) {
 					for (size_t i = 0; i < touch_fingers.size(); ++i) {
 						if (touch_fingers[i].id == event.tfinger.fingerId) {
 							touch_fingers.erase(touch_fingers.begin() + i);

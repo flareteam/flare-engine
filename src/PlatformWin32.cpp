@@ -28,7 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <direct.h>
 
-Platform PLATFORM;
+Platform platform;
 
 Platform::Platform()
 	: has_exit_button(true)

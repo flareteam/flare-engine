@@ -31,7 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <unistd.h>
 #include <sys/stat.h>
 
-Platform PLATFORM;
+Platform platform;
 
 namespace PlatformIPhoneOS {
 	int isExitEvent(void* userdata, SDL_Event* event);

@@ -34,7 +34,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <jni.h>
 
-Platform PLATFORM;
+Platform platform;
 
 namespace PlatformAndroid {
 	std::string getPackageName();

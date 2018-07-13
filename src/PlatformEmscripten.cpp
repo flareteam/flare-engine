@@ -35,7 +35,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <emscripten.h>
 
-Platform PLATFORM;
+Platform platform;
 
 Platform::Platform()
 	: has_exit_button(false)

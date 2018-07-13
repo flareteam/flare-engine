@@ -84,7 +84,7 @@ static void init(const CmdLineArgs& cmd_line_args) {
 	 * PATH_USER is for user-specific data (e.g. save games)
 	 * PATH_DATA is for common game data (e.g. images, music)
 	 */
-	PLATFORM.setPaths();
+	platform.setPaths();
 
 	Utils::lockFileCheck();
 
@@ -129,11 +129,11 @@ static void init(const CmdLineArgs& cmd_line_args) {
 	Stats::init();
 
 	// platform-specific default screen size
-	PLATFORM.setScreenSize();
+	platform.setScreenSize();
 
 	// Create render Device and Rendering Context.
-	if (PLATFORM.default_renderer != "")
-		render_device = getRenderDevice(PLATFORM.default_renderer);
+	if (platform.default_renderer != "")
+		render_device = getRenderDevice(platform.default_renderer);
 	else if (cmd_line_args.render_device_name != "")
 		render_device = getRenderDevice(cmd_line_args.render_device_name);
 	else

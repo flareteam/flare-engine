@@ -160,7 +160,7 @@ void Settings::saveSettings() {
 		outfile.close();
 		outfile.clear();
 
-		PLATFORM.FSCommit();
+		platform.FSCommit();
 	}
 }
 
@@ -180,7 +180,7 @@ void Settings::loadDefaults() {
  * Set required settings for Mobile devices
  */
 void Settings::loadMobileDefaults() {
-	if (PLATFORM.is_mobile_device) {
+	if (platform.is_mobile_device) {
 		mouse_move = false;
 		mouse_aim = false;
 		no_mouse = false;

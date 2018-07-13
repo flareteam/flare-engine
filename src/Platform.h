@@ -50,6 +50,6 @@ public:
 	std::string default_renderer;
 };
 
-extern Platform PLATFORM;
+extern Platform platform;
 
 #endif
