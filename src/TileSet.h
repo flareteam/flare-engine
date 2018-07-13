@@ -29,6 +29,21 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "Utils.h"
 
+/**
+ * Describes a tile by its location \a src in the tileset sprite and
+ * by the \a offset to be applied when rendering it on screen.
+ * The offset is measured from upper left corner to the logical midpoint
+ * of the tile at groundlevel.
+ */
+class Tile_Def {
+public:
+	Point offset;
+	Sprite *tile;// inside graphics not used
+	Tile_Def()
+		: tile(NULL) {
+	}
+};
+
 class TileSet {
 private:
 	class Tile_Anim {
@@ -56,21 +71,6 @@ private:
 	std::vector<Tile_Anim> anim;
 
 public:
-	/**
-	 * Describes a tile by its location \a src in the tileset sprite and
-	 * by the \a offset to be applied when rendering it on screen.
-	 * The offset is measured from upper left corner to the logical midpoint
-	 * of the tile at groundlevel.
-	 */
-	class Tile_Def {
-	public:
-		Point offset;
-		Sprite *tile;// inside graphics not used
-		Tile_Def()
-			: tile(NULL) {
-		}
-	};
-
 	// functions
 	TileSet();
 	~TileSet();
