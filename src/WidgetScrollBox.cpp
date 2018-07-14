@@ -25,7 +25,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EngineSettings.h"
 #include "InputState.h"
 #include "RenderDevice.h"
-#include "Settings.h"
 #include "WidgetScrollBox.h"
 
 WidgetScrollBox::WidgetScrollBox(int width, int height)

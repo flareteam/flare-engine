@@ -36,12 +36,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MapRenderer.h"
 #include "MessageEngine.h"
 #include "PowerManager.h"
+#include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "SoundManager.h"
 #include "UtilsMath.h"
-
-#include "Settings.h"
 
 #include <math.h>
 

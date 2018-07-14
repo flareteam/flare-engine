@@ -33,7 +33,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuManager.h"
 #include "MenuInventory.h"
 #include "MessageEngine.h"
-#include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "StatBlock.h"

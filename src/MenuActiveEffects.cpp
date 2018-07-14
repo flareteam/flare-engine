@@ -32,7 +32,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "ModManager.h"
 #include "MessageEngine.h"
 #include "RenderDevice.h"
-#include "Settings.h"
 #include "SharedResources.h"
 #include "StatBlock.h"
 #include "TooltipManager.h"

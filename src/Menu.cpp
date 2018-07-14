@@ -26,7 +26,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Menu.h"
 #include "RenderDevice.h"
-#include "Settings.h"
 #include "SharedResources.h"
 #include "SoundManager.h"
 #include "Utils.h"

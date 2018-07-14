@@ -28,7 +28,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FontEngine.h"
 #include "IconManager.h"
 #include "RenderDevice.h"
-#include "Settings.h"
 #include "SharedResources.h"
 #include "WidgetSlot.h"
 

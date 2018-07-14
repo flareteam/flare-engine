@@ -36,10 +36,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuActionBar.h"
 #include "PowerManager.h"
 #include "RenderDevice.h"
+#include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
-
-#include "Settings.h"
 
 #include <limits>
 

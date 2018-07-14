@@ -17,7 +17,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "EngineSettings.h"
 #include "MessageEngine.h"
-#include "Settings.h"
 #include "SharedResources.h"
 #include "Stats.h"
 

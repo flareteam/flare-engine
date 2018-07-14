@@ -23,7 +23,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FontEngine.h"
 #include "InputState.h"
 #include "MenuConfirm.h"
-#include "Settings.h"
 #include "SharedResources.h"
 #include "WidgetButton.h"
 

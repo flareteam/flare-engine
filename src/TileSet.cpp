@@ -29,7 +29,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FileParser.h"
 #include "ModManager.h"
 #include "RenderDevice.h"
-#include "Settings.h"
 #include "SharedResources.h"
 #include "TileSet.h"
 #include "UtilsParsing.h"

@@ -22,7 +22,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EnemyManager.h"
 #include "EngineSettings.h"
 #include "MapRenderer.h"
-#include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "UtilsMath.h"

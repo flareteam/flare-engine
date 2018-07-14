@@ -31,7 +31,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuTalker.h"
 #include "NPC.h"
 #include "RenderDevice.h"
-#include "Settings.h"
 #include "SharedResources.h"
 #include "SharedGameResources.h"
 #include "StatBlock.h"

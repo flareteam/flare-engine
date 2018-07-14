@@ -32,7 +32,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "RenderDevice.h"
 #include "SharedResources.h"
 #include "StatBlock.h"
-#include "Settings.h"
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
 
