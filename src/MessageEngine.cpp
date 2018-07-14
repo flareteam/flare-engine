@@ -74,7 +74,7 @@ MessageEngine::MessageEngine() {
  * - %s is for C strings (no std::string!)
  * - %% is a literal percent sign
  */
-std::string MessageEngine::get(const std::string& key, ...) {
+std::string MessageEngine::get(const std::string key, ...) {
 	std::string message = messages[key];
 	if (message == "") message = key;
 

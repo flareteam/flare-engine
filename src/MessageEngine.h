@@ -38,7 +38,7 @@ private:
 	std::map<std::string,std::string> messages;
 public:
 	MessageEngine();
-	std::string get(const std::string& key, ...);
+	std::string get(const std::string key, ...);
 };
 
 #endif

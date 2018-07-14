@@ -22,11 +22,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define MAP_H
 
 #include "CommonIncludes.h"
+#include "EventManager.h"
 #include "MapCollision.h"
 #include "Utils.h"
 
 class Event;
-class EventComponent;
 class FileParser;
 class StatBlock;
 

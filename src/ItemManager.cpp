@@ -714,7 +714,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 		color = font->getColor(FontEngine::COLOR_WIDGET_NORMAL);
 		for (size_t i=0; i<item_qualities.size(); ++i) {
 			if (item_qualities[i].id == items[stack.item].quality) {
-				tip.addColoredText(msg->get("Quality: %s", msg->get(item_qualities[i].name.c_str())), color);
+				tip.addColoredText(msg->get("Quality: %s", msg->get(item_qualities[i].name).c_str()), color);
 				break;
 			}
 		}
