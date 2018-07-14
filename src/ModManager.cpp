@@ -32,8 +32,8 @@ Mod::Mod()
 	, description("")
 	, game("")
 	, version(new Version())
-	, engine_min_version(new Version(VERSION_MIN))
-	, engine_max_version(new Version(VERSION_MAX)) {
+	, engine_min_version(new Version(VersionInfo::MIN))
+	, engine_max_version(new Version(VersionInfo::MAX)) {
 }
 
 Mod::~Mod() {
@@ -124,8 +124,8 @@ ModManager::ModManager(const std::vector<std::string> *_cmd_line_mods)
 	ss << "Active mods: ";
 	for (size_t i = 0; i < mod_list.size(); ++i) {
 		ss << mod_list[i].name;
-		if (*mod_list[i].version != VERSION_MIN)
-			ss << " (" << versionToString(*mod_list[i].version) << ")";
+		if (*mod_list[i].version != VersionInfo::MIN)
+			ss << " (" << mod_list[i].version->getString() << ")";
 		if (i < mod_list.size()-1)
 			ss << ", ";
 	}
@@ -345,7 +345,7 @@ Mod ModManager::loadMod(const std::string& name) {
 			}
 			else if (key == "version") {
 				// @ATTR version|version|The version number of this mod.
-				*mod.version = stringToVersion(val);
+				mod.version->setFromString(val);
 			}
 			else if (key == "requires") {
 				// @ATTR requires|list(string)|A comma-separated list of the mods that are required in order to use this mod. The dependency version requirements can also be specified and separated by colons (e.g. fantasycore:0.1:2.0).
@@ -356,17 +356,18 @@ Mod ModManager::loadMod(const std::string& name) {
 
 					mod.depends.push_back(Parse::popFirstString(dep_full, ':'));
 
-					Version dep_min = stringToVersion(Parse::popFirstString(dep_full, ':'));
-					Version dep_max = stringToVersion(Parse::popFirstString(dep_full, ':'));
+					Version dep_min, dep_max;
+					dep_min.setFromString(Parse::popFirstString(dep_full, ':'));
+					dep_max.setFromString(Parse::popFirstString(dep_full, ':'));
 
-					if (dep_min != VERSION_MIN && dep_max != VERSION_MIN && dep_min > dep_max)
+					if (dep_min != VersionInfo::MIN && dep_max != VersionInfo::MIN && dep_min > dep_max)
 						dep_max = dep_min;
 
 					// empty min version also happens to be the default for min
 					mod.depends_min.push_back(new Version(dep_min));
 
-					if (dep_max == VERSION_MIN)
-						mod.depends_max.push_back(new Version(VERSION_MAX));
+					if (dep_max == VersionInfo::MIN)
+						mod.depends_max.push_back(new Version(VersionInfo::MAX));
 					else
 						mod.depends_max.push_back(new Version(dep_max));
 
@@ -380,11 +381,11 @@ Mod ModManager::loadMod(const std::string& name) {
 			}
 			else if (key == "engine_version_min") {
 				// @ATTR engine_version_min|version|The minimum engine version required to use this mod.
-				*mod.engine_min_version = stringToVersion(val);
+				mod.engine_min_version->setFromString(val);
 			}
 			else if (key == "engine_version_max") {
 				// @ATTR engine_version_max|version|The maximum engine version required to use this mod.
-				*mod.engine_max_version = stringToVersion(val);
+				mod.engine_max_version->setFromString(val);
 			}
 			else {
 				Utils::logError("ModManager: Mod '%s' contains invalid key: '%s'", name.c_str(), key.c_str());
@@ -402,7 +403,7 @@ Mod ModManager::loadMod(const std::string& name) {
 	}
 
 	// ensure that engine min version <= engine max version
-	if (*mod.engine_min_version != VERSION_MIN && *mod.engine_min_version > *mod.engine_max_version)
+	if (*mod.engine_min_version != VersionInfo::MIN && *mod.engine_min_version > *mod.engine_max_version)
 		*mod.engine_max_version = *mod.engine_min_version;
 
 	return mod;
@@ -423,8 +424,8 @@ void ModManager::applyDepends() {
 		}
 
 		// skip the mod if it's incompatible with this engine version
-		if (*mod_list[i].engine_min_version > ENGINE_VERSION || ENGINE_VERSION > *mod_list[i].engine_max_version) {
-			Utils::logError("ModManager: Tried to enable \"%s\", but failed. Not compatible with engine version %s.", mod_list[i].name.c_str(), versionToString(ENGINE_VERSION).c_str());
+		if (*mod_list[i].engine_min_version > VersionInfo::ENGINE || VersionInfo::ENGINE > *mod_list[i].engine_max_version) {
+			Utils::logError("ModManager: Tried to enable \"%s\", but failed. Not compatible with engine version %s.", mod_list[i].name.c_str(), VersionInfo::ENGINE.getString().c_str());
 			continue;
 		}
 
@@ -452,8 +453,8 @@ void ModManager::applyDepends() {
 							depends_met = false;
 							break;
 						}
-						else if (*new_depend.engine_min_version > ENGINE_VERSION || ENGINE_VERSION > *new_depend.engine_max_version) {
-							Utils::logError("ModManager: Tried to enable dependency \"%s\" for \"%s\", but failed. Not compatible with engine version %s.", new_depend.name.c_str(), mod_list[i].name.c_str(), versionToString(ENGINE_VERSION).c_str());
+						else if (*new_depend.engine_min_version > VersionInfo::ENGINE || VersionInfo::ENGINE > *new_depend.engine_max_version) {
+							Utils::logError("ModManager: Tried to enable dependency \"%s\" for \"%s\", but failed. Not compatible with engine version %s.", new_depend.name.c_str(), mod_list[i].name.c_str(), VersionInfo::ENGINE.getString().c_str());
 							depends_met = false;
 							break;
 						}
@@ -461,8 +462,8 @@ void ModManager::applyDepends() {
 							Utils::logError("ModManager: Tried to enable dependency \"%s\" for \"%s\", but failed. Version \"%s\" is required, but only version \"%s\" is available.",
 									new_depend.name.c_str(),
 									mod_list[i].name.c_str(),
-									createVersionReqString(*mod_list[i].depends_min[j], *mod_list[i].depends_max[j]).c_str(),
-									versionToString(*new_depend.version).c_str()
+									VersionInfo::createVersionReqString(*mod_list[i].depends_min[j], *mod_list[i].depends_max[j]).c_str(),
+									new_depend.version->getString().c_str()
 							);
 							depends_met = false;
 							break;

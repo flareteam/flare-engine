@@ -905,8 +905,8 @@ bool GameStateConfigBase::setMods() {
 std::string GameStateConfigBase::createModTooltip(Mod *mod) {
 	std::string ret = "";
 	if (mod) {
-		std::string mod_ver = (*mod->version == VERSION_MIN) ? "" : versionToString(*mod->version);
-		std::string engine_ver = createVersionReqString(*mod->engine_min_version, *mod->engine_max_version);
+		std::string mod_ver = (*mod->version == VersionInfo::MIN) ? "" : mod->version->getString();
+		std::string engine_ver = VersionInfo::createVersionReqString(*mod->engine_min_version, *mod->engine_max_version);
 
 		ret = mod->name + '\n';
 
@@ -940,7 +940,7 @@ std::string GameStateConfigBase::createModTooltip(Mod *mod) {
 			ret += msg->get("Requires mods:") + '\n';
 			for (unsigned i=0; i<mod->depends.size(); ++i) {
 				ret += "-  " + mod->depends[i];
-				std::string depend_ver = createVersionReqString(*mod->depends_min[i], *mod->depends_max[i]);
+				std::string depend_ver = VersionInfo::createVersionReqString(*mod->depends_min[i], *mod->depends_max[i]);
 				if (depend_ver != "")
 					ret += " (" + depend_ver + ")";
 				if (i < mod->depends.size()-1)

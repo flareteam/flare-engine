@@ -30,9 +30,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <SDL.h>
 
-Version ENGINE_VERSION(1, 6, 10);
-Version VERSION_MIN(0, 0, 0);
-Version VERSION_MAX(USHRT_MAX, USHRT_MAX, USHRT_MAX);
+Version VersionInfo::ENGINE(1, 6, 10);
+Version VersionInfo::MIN(0, 0, 0);
+Version VersionInfo::MAX(USHRT_MAX, USHRT_MAX, USHRT_MAX);
 
 Version::Version(unsigned short _x, unsigned short _y, unsigned short _z)
 	: x(_x)
@@ -74,61 +74,58 @@ bool Version::operator<=(const Version& v) {
 	return (*this == v || *this < v);
 }
 
-std::string versionToString(const Version& v) {
+std::string Version::getString() {
 	std::stringstream ss;
 
 	// major
-	ss << v.x << '.';
+	ss << x << '.';
 
 	// minor
-	if (v.y >= 100 || v.y == 0) {
-		ss << v.y;
+	if (y >= 100 || y == 0) {
+		ss << y;
 	}
 	else {
 		ss << std::setfill('0') << std::setw(2);
-		ss << v.y;
+		ss << y;
 	}
 
 	// don't bother printing if there's no patch version
-	if (v.z == 0)
+	if (z == 0)
 		return ss.str();
 
 	ss << '.';
 
 	// patch
-	if (v.z >= 100 || v.z == 0) {
-		ss << v.z;
+	if (z >= 100 || z == 0) {
+		ss << z;
 	}
 	else {
 		ss << std::setfill('0') << std::setw(2);
-		ss << v.z;
+		ss << z;
 	}
 
 	return ss.str();
 }
 
-Version stringToVersion(const std::string& s) {
+void Version::setFromString(const std::string& s) {
 	std::string val = s + '.';
-	Version v;
 
-	v.x = static_cast<unsigned short>(Parse::popFirstInt(val, '.'));
+	x = static_cast<unsigned short>(Parse::popFirstInt(val, '.'));
 
-	std::string y = Parse::popFirstString(val, '.');
-	v.y = static_cast<unsigned short>(Parse::toInt(y));
-	if (y.length() == 1)
-		v.y = static_cast<unsigned short>(v.y * 10);
+	std::string str_y = Parse::popFirstString(val, '.');
+	y = static_cast<unsigned short>(Parse::toInt(str_y));
+	if (str_y.length() == 1)
+		y = static_cast<unsigned short>(y * 10);
 
-	std::string z = Parse::popFirstString(val, '.');
-	v.z = static_cast<unsigned short>(Parse::toInt(z));
-	if (z.length() == 1)
-		v.z = static_cast<unsigned short>(v.z * 10);
-
-	return v;
+	std::string str_z = Parse::popFirstString(val, '.');
+	z = static_cast<unsigned short>(Parse::toInt(str_z));
+	if (str_z.length() == 1)
+		z = static_cast<unsigned short>(z * 10);
 }
 
-std::string createVersionReqString(Version& v1, Version& v2) {
-	std::string min_version = (v1 == VERSION_MIN) ? "" : versionToString(v1);
-	std::string max_version = (v2 == VERSION_MAX) ? "" : versionToString(v2);
+std::string VersionInfo::createVersionReqString(Version& v1, Version& v2) {
+	std::string min_version = (v1 == MIN) ? "" : v1.getString();
+	std::string max_version = (v2 == MAX) ? "" : v2.getString();
 	std::string ret;
 
 	if (min_version != "" || max_version != "") {
@@ -149,10 +146,10 @@ std::string createVersionReqString(Version& v1, Version& v2) {
 	return ret;
 }
 
-std::string createVersionStringFull() {
+std::string VersionInfo::createVersionStringFull() {
 	// example output: Flare 1.0 (Linux)
 	std::stringstream ss;
-	ss << VERSION_NAME << ' ' << versionToString(ENGINE_VERSION);
+	ss << NAME << ' ' << ENGINE.getString();
 	ss << " (" << SDL_GetPlatform() << ")";
 	return ss.str();
 }

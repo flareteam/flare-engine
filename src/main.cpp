@@ -89,7 +89,7 @@ static void init(const CmdLineArgs& cmd_line_args) {
 	Utils::lockFileCheck();
 
 	Utils::createLogFile();
-	Utils::logInfo(createVersionStringFull().c_str());
+	Utils::logInfo(VersionInfo::createVersionStringFull().c_str());
 
 	// SDL Inits
 	if ( SDL_Init (SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK) < 0 ) {
@@ -369,7 +369,7 @@ int main(int argc, char *argv[]) {
 			}
 		}
 		else if (arg == "version") {
-			printf("%s\n", createVersionStringFull().c_str());
+			printf("%s\n", VersionInfo::createVersionStringFull().c_str());
 			done = true;
 		}
 		else if (arg == "renderer") {

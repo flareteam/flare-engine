@@ -39,17 +39,20 @@ public:
 	bool operator>=(const Version&v);
 	bool operator<(const Version&v);
 	bool operator<=(const Version&v);
+
+	std::string getString();
+	void setFromString(const std::string& s);
 };
 
-const std::string VERSION_NAME = "Flare";
-extern Version ENGINE_VERSION;
-extern Version VERSION_MIN;
-extern Version VERSION_MAX;
+namespace VersionInfo {
+	const std::string NAME = "Flare";
+	extern Version ENGINE;
+	extern Version MIN;
+	extern Version MAX;
 
-std::string versionToString(const Version& v);
-Version stringToVersion(const std::string& s);
-std::string createVersionReqString(Version& v1, Version& v2);
-std::string createVersionStringFull();
+	std::string createVersionReqString(Version& v1, Version& v2);
+	std::string createVersionStringFull();
+}
 
 #endif
 

@@ -124,7 +124,7 @@ GameStateTitle::GameStateTitle()
 	// set up labels
 	label_version = new WidgetLabel();
 	label_version->setJustify(FontEngine::JUSTIFY_RIGHT);
-	label_version->setText(createVersionStringFull());
+	label_version->setText(VersionInfo::createVersionStringFull());
 	label_version->setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
 	// Setup tab order

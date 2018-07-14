@@ -181,7 +181,7 @@ void SaveLoad::saveGame() {
 		outfile << "time_played=" << pc->time_played << "\n";
 
 		// save the engine version for troubleshooting purposes
-		outfile << "engine_version=" << versionToString(ENGINE_VERSION) << "\n";
+		outfile << "engine_version=" << VersionInfo::ENGINE.getString() << "\n";
 
 		// save the vendor buyback
 		if (eset->misc.save_buyback) {
@@ -249,7 +249,7 @@ void SaveLoad::loadGame() {
 	int saved_hp = 0;
 	int saved_mp = 0;
 	int currency = 0;
-	Version save_version(VERSION_MIN);
+	Version save_version(VersionInfo::MIN);
 
 	FileParser infile;
 	std::vector<int> hotkeys(MenuActionBar::SLOT_MAX, -1);
@@ -354,7 +354,7 @@ void SaveLoad::loadGame() {
 			}
 			else if (infile.key == "campaign") camp->setAll(infile.val);
 			else if (infile.key == "time_played") pc->time_played = Parse::toUnsignedLong(infile.val);
-			else if (infile.key == "engine_version") save_version = stringToVersion(infile.val);
+			else if (infile.key == "engine_version") save_version.setFromString(infile.val);
 			else if (eset->misc.save_buyback && infile.key == "buyback_item") {
 				std::string npc_filename = Parse::popFirstString(infile.val, ';');
 				if (!npc_filename.empty()) {
@@ -411,8 +411,8 @@ void SaveLoad::loadGame() {
 		pc->stats.mp = pc->stats.get(Stats::MP_MAX);
 	}
 
-	if (save_version != ENGINE_VERSION)
-		Utils::logInfo("SaveLoad: Warning! Engine version of save file (%s) does not match current engine version (%s). Be on the lookout for bugs.", versionToString(save_version).c_str(), versionToString(ENGINE_VERSION).c_str());
+	if (save_version != VersionInfo::ENGINE)
+		Utils::logInfo("SaveLoad: Warning! Engine version of save file (%s) does not match current engine version (%s). Be on the lookout for bugs.", save_version.getString().c_str(), VersionInfo::ENGINE.getString().c_str());
 
 	// reset character menu
 	menu->chr->refreshStats();
