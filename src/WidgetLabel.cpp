@@ -123,8 +123,7 @@ void WidgetLabel::setFromLabelInfo(const LabelInfo& label_info) {
 	setJustify(label_info.justify);
 	setVAlign(label_info.valign);
 	setFont(label_info.font_style);
-
-	hidden = label_info.hidden;
+	setHidden(label_info.hidden);
 }
 
 std::string WidgetLabel::getText() {

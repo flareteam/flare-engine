@@ -76,11 +76,6 @@ void WidgetLog::render() {
 	scroll_box->render();
 }
 
-void WidgetLog::setPosition(int x, int y) {
-	scroll_box->pos.x = x;
-	scroll_box->pos.y = y;
-}
-
 void WidgetLog::refresh() {
 	int y,y2;
 	y = y2 = padding;
@@ -123,7 +118,7 @@ void WidgetLog::add(const std::string &s, int type) {
 	if (messages.empty() || messages.back() != s || type == MSG_UNIQUE) {
 		// If we have too many messages, remove the oldest ones
 		while (messages.size() >= max_messages) {
-			remove(0);
+			this->remove(0);
 		}
 
 		// Add the new message.

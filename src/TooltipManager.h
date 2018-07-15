@@ -43,6 +43,7 @@ public:
 
 	TooltipManager();
 	~TooltipManager();
+	TooltipManager(const TooltipManager& copy); // copy constructor not implemented
 
 	void clear();
 	bool isEmpty();

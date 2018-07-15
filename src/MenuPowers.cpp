@@ -789,16 +789,15 @@ void MenuPowers::createTooltip(TooltipData* tip_data, int slot_num, const std::v
 				}
 			}
 
+			// NOTE don't need to set found_key after this, since this is the last set of keys to check
 			if (!found_key) {
 				for (size_t j=0; j<eset->damage_types.list.size(); ++j) {
 					if (pwr.post_effects[i].id == eset->damage_types.list[j].min) {
 						ss << " " << eset->damage_types.list[j].name_min;
-						found_key = true;
 						break;
 					}
 					else if (pwr.post_effects[i].id == eset->damage_types.list[j].max) {
 						ss << " " << eset->damage_types.list[j].name_max;
-						found_key = true;
 						break;
 					}
 				}

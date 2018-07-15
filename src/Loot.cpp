@@ -33,9 +33,10 @@ Loot::Loot()
 	tip.clear();
 }
 
-Loot::Loot(const Loot &other) {
-	gfx = "";
-	animation = NULL;
+Loot::Loot(const Loot &other)
+	: gfx("")
+	, animation(NULL)
+{
 	*this = other;
 }
 

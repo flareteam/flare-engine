@@ -69,7 +69,6 @@ public:
 	void logic();
 	void render();
 
-	void setPosition(int x, int y);
 	Widget* getWidget() {
 		return reinterpret_cast<Widget*>(scroll_box);    // for adding to tablist
 	}

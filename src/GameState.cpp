@@ -49,6 +49,7 @@ GameState& GameState::operator=(const GameState& other) {
 	has_background = other.has_background;
 	reload_music = other.reload_music;
 	reload_backgrounds = other.reload_backgrounds;
+	force_refresh_background = other.force_refresh_background;
 	save_settings_on_exit = other.save_settings_on_exit;
 	load_counter = other.load_counter;
 	requestedGameState = other.requestedGameState;
