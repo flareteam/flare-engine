@@ -60,15 +60,15 @@ msgstr "Найбольшы адлеглы ўрон"
 
 #: ../engine/damage_types.txt:19
 msgid "Mental Damage"
-msgstr "Ментальны ўрон"
+msgstr "Магічны ўрон"
 
 #: ../engine/damage_types.txt:20
 msgid "Mental Damage Min"
-msgstr "Найменшы ментальны ўрон"
+msgstr "Найменшы магічны ўрон"
 
 #: ../engine/damage_types.txt:21
 msgid "Mental Damage Max"
-msgstr "Найбольшы ментальны ўрон"
+msgstr "Найбольшы магічны ўрон"
 
 #: ../cutscenes/credits.txt:7
 msgid "Flare Engine Credits"

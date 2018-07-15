@@ -69,7 +69,7 @@ msgstr "Вы атрымліваеце %d %s."
 #: ../../../src/CampaignManager.cpp:168
 #, c-format
 msgid "You receive %d XP."
-msgstr "Вы атрымліваеце %d жыцця."
+msgstr "Вы атрымліваеце %d досведу."
 
 #: ../../../src/CampaignManager.cpp:174
 msgid "HP restored."
@@ -287,7 +287,7 @@ msgid ""
 " used."
 msgstr ""
 "Калі ўключана, дадаткова да маштабавання па памерах акна для адмалёўкі па "
-"раздзяляльнай здольнасці выкарыстоўваецца экран DPI. "
+"раздзяляльнай здольнасці выкарыстоўваецца экран DPI."
 
 #: ../../../src/GameStateConfigDesktop.cpp:194
 msgid "Experimental"
@@ -733,7 +733,7 @@ msgstr "%d невыкарыстаных пунктаў уменняў"
 #: ../../../src/MenuCharacter.cpp:357 ../../../src/MenuManager.cpp:309
 #, c-format
 msgid "XP: %d"
-msgstr "Жыццё: %d"
+msgstr "Досвед: %d"
 
 #: ../../../src/MenuCharacter.cpp:359
 #, c-format
@@ -1020,7 +1020,7 @@ msgstr "Заданні"
 #: ../../../src/MenuManager.cpp:311
 #, c-format
 msgid "XP: %d/%d"
-msgstr "Жыццё: %d/%d"
+msgstr "Досвед: %d/%d"
 
 #: ../../../src/MenuManager.cpp:825
 msgid "This item can not be dropped."
@@ -1363,7 +1363,7 @@ msgstr "\"%s\" больш не звязана з:"
 
 #: ../../../src/Settings.cpp:800
 msgid "Adventurer"
-msgstr "Падарожнік"
+msgstr "Вандроўнік"
 
 #: ../../../src/Stats.cpp:37
 msgid "Max HP"
