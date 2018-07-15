@@ -1028,7 +1028,7 @@ void MapRenderer::checkNearestEvent() {
 		}
 
 		if (inpt->pressing[Input::ACCEPT] && !inpt->lock[Input::ACCEPT]) {
-			if (inpt->pressing[Input::ACCEPT]) inpt->lock[Input::ACCEPT] = true;
+			inpt->lock[Input::ACCEPT] = true;
 
 			if(EventManager::executeEvent(*nearest))
 				events.erase(nearest);

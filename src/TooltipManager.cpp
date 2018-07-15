@@ -24,6 +24,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 TooltipManager::TooltipManager()
 	: tip(new WidgetTooltip())
+	, style(TooltipData::STYLE_FLOAT)
 	, context(CONTEXT_NONE)
 {}
 

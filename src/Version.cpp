@@ -96,7 +96,7 @@ std::string Version::getString() {
 	ss << '.';
 
 	// patch
-	if (z >= 100 || z == 0) {
+	if (z >= 100) {
 		ss << z;
 	}
 	else {
