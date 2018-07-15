@@ -117,7 +117,7 @@ void MenuNPCActions::update() {
 	for(size_t i=0; i<npc_actions.size(); i++) {
 		h += ITEM_SPACING;
 		if (npc_actions[i].label) {
-			w = std::max(static_cast<int>(npc_actions[i].label->getBounds()->w), w);
+			w = std::max(npc_actions[i].label->getBounds()->w, w);
 			h += npc_actions[i].label->getBounds()->h;
 		}
 		else

@@ -416,7 +416,7 @@ bool MapCollision::computePath(const FPoint& start_pos, const FPoint& end_pos, s
 	Point current = start;
 	AStarNode* node = new AStarNode(start);
 	node->setActualCost(0);
-	node->setEstimatedCost(static_cast<float>(Utils::calcDist(FPoint(start),FPoint(end))));
+	node->setEstimatedCost(Utils::calcDist(FPoint(start),FPoint(end)));
 	node->setParent(current);
 
 	AStarContainer open(map_size.x, map_size.y, limit);
@@ -457,18 +457,18 @@ bool MapCollision::computePath(const FPoint& start_pos, const FPoint& end_pos, s
 			// if neighbour isn't inside open, add it as a new Node
 			if(!open.exists(neighbour)) {
 				AStarNode* newNode = new AStarNode(neighbour);
-				newNode->setActualCost(node->getActualCost() + static_cast<float>(Utils::calcDist(FPoint(current),FPoint(neighbour))));
+				newNode->setActualCost(node->getActualCost() + Utils::calcDist(FPoint(current),FPoint(neighbour)));
 				newNode->setParent(current);
-				newNode->setEstimatedCost(static_cast<float>(Utils::calcDist(FPoint(neighbour),FPoint(end))));
+				newNode->setEstimatedCost(Utils::calcDist(FPoint(neighbour),FPoint(end)));
 				open.add(newNode);
 			}
 			// else, update it's cost if better
 			else {
 				AStarNode* i = open.get(neighbour.x, neighbour.y);
-				if (node->getActualCost() + static_cast<float>(Utils::calcDist(FPoint(current),FPoint(neighbour))) < i->getActualCost()) {
+				if (node->getActualCost() + Utils::calcDist(FPoint(current),FPoint(neighbour)) < i->getActualCost()) {
 					Point pos(i->getX(), i->getY());
 					Point parent_pos(node->getX(), node->getY());
-					open.updateParent(pos, parent_pos, node->getActualCost() + static_cast<float>(Utils::calcDist(FPoint(current),FPoint(neighbour))));
+					open.updateParent(pos, parent_pos, node->getActualCost() + Utils::calcDist(FPoint(current),FPoint(neighbour)));
 				}
 			}
 		}

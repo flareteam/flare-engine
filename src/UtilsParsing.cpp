@@ -78,31 +78,31 @@ bool Parse::tryParseValue(const std::type_info & type, const std::string & value
 	std::stringstream stream(value);
 
 	if (type == typeid(bool)) {
-		stream>>(bool&)*((bool*)output);
+		stream >> *(static_cast<bool*>(output));
 	}
 	else if (type == typeid(int)) {
-		stream>>(int&)*((int*)output);
+		stream >> *(static_cast<int*>(output));
 	}
 	else if (type == typeid(unsigned int)) {
-		stream>>(unsigned int&)*((unsigned int*)output);
+		stream >> *(static_cast<unsigned int*>(output));
 	}
 	else if (type == typeid(short)) {
-		stream>>(short&)*((short*)output);
+		stream >> *(static_cast<short*>(output));
 	}
 	else if (type == typeid(unsigned short)) {
-		stream>>(unsigned short&)*((unsigned short*)output);
+		stream >> *(static_cast<unsigned short*>(output));
 	}
 	else if (type == typeid(char)) {
-		stream>>(char&)*((char*)output);
+		stream >> *(static_cast<char*>(output));
 	}
 	else if (type == typeid(unsigned char)) {
-		stream>>(unsigned char&)*((unsigned char*)output);
+		stream >> *(static_cast<unsigned char*>(output));
 	}
 	else if (type == typeid(float)) {
-		stream>>(float&)*((float*)output);
+		stream >> *(static_cast<float*>(output));
 	}
 	else if (type == typeid(std::string)) {
-		*((std::string *)output) = value;
+		*(static_cast<std::string*>(output)) = value;
 	}
 	else {
 		Utils::logError("UtilsParsing: %s: a required type is not defined!", __FUNCTION__);
@@ -117,31 +117,31 @@ std::string Parse::toString(const std::type_info & type, void * value) {
 	std::stringstream stream;
 
 	if (type == typeid(bool)) {
-		stream<<*((bool*)value);
+		stream << *(static_cast<bool*>(value));
 	}
 	else if (type == typeid(int)) {
-		stream<<*((int*)value);
+		stream << *(static_cast<int*>(value));
 	}
 	else if (type == typeid(unsigned int)) {
-		stream<<*((unsigned int*)value);
+		stream << *(static_cast<unsigned int*>(value));
 	}
 	else if (type == typeid(short)) {
-		stream<<*((short*)value);
+		stream << *(static_cast<short*>(value));
 	}
 	else if (type == typeid(unsigned short)) {
-		stream<<*((unsigned short*)value);
+		stream << *(static_cast<unsigned short*>(value));
 	}
 	else if (type == typeid(char)) {
-		stream<<*((char*)value);
+		stream << *(static_cast<char*>(value));
 	}
 	else if (type == typeid(unsigned char)) {
-		stream<<*((unsigned char*)value);
+		stream << *(static_cast<unsigned char*>(value));
 	}
 	else if (type == typeid(float)) {
-		stream<<*((float*)value);
+		stream << *(static_cast<float*>(value));
 	}
 	else if (type == typeid(std::string)) {
-		return (std::string &)*((std::string *)value);
+		return *(static_cast<std::string*>(value));
 	}
 	else {
 		Utils::logError("UtilsParsing: %s: a required type is not defined!", __FUNCTION__);

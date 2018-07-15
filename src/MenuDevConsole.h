@@ -50,7 +50,7 @@ protected:
 
 	bool first_open;
 
-	unsigned long input_scrollback_pos;
+	size_t input_scrollback_pos;
 	std::vector<std::string> input_scrollback;
 
 public:

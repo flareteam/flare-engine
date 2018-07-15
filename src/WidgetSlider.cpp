@@ -119,7 +119,7 @@ bool WidgetSlider::checkClickAt(int x, int y) {
 		}
 
 		// set the value of the slider
-		int tmp = std::max(0, std::min(mouse.x - pos.x, static_cast<int>(pos.w)));
+		int tmp = std::max(0, std::min(mouse.x - pos.x, pos.w));
 
 		pos_knob.x = pos.x + tmp - (pos_knob.w/2);
 		assert(pos.w);

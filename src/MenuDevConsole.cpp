@@ -186,7 +186,7 @@ void MenuDevConsole::logic() {
 					input_box->setText(input_scrollback[input_scrollback_pos]);
 				}
 				else {
-					input_scrollback_pos = static_cast<unsigned long>(input_scrollback.size());
+					input_scrollback_pos = input_scrollback.size();
 					input_box->setText("");
 				}
 			}
@@ -327,7 +327,7 @@ void MenuDevConsole::execute() {
 	if (command == "") return;
 
 	input_scrollback.push_back(command);
-	input_scrollback_pos = static_cast<unsigned long>(input_scrollback.size());
+	input_scrollback_pos = input_scrollback.size();
 	input_box->setText("");
 
 	log_history->addSeparator();

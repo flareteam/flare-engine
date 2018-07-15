@@ -165,7 +165,7 @@ int Sprite::getGraphicsHeight() {
 }
 
 Image * Sprite::getGraphics() {
-	return static_cast<Image *>(image);
+	return image;
 }
 
 

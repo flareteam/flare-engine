@@ -55,11 +55,11 @@ void Platform::setPaths() {
 	// set config path (settings, keybindings)
 	// $XDG_CONFIG_HOME/flare/
 	if (getenv("XDG_CONFIG_HOME") != NULL) {
-		settings->path_conf = (std::string)getenv("XDG_CONFIG_HOME") + "/flare/";
+		settings->path_conf = std::string(getenv("XDG_CONFIG_HOME")) + "/flare/";
 	}
 	// $HOME/.config/flare/
 	else if (getenv("HOME") != NULL) {
-		settings->path_conf = (std::string)getenv("HOME") + "/.config/";
+		settings->path_conf = std::string(getenv("HOME")) + "/.config/";
 		Filesystem::createDir(settings->path_conf);
 		settings->path_conf += "flare/";
 	}
@@ -73,11 +73,11 @@ void Platform::setPaths() {
 	// set user path (save games)
 	// $XDG_DATA_HOME/flare/
 	if (getenv("XDG_DATA_HOME") != NULL) {
-		settings->path_user = (std::string)getenv("XDG_DATA_HOME") + "/flare/";
+		settings->path_user = std::string(getenv("XDG_DATA_HOME")) + "/flare/";
 	}
 	// $HOME/.local/share/flare/
 	else if (getenv("HOME") != NULL) {
-		settings->path_user = (std::string)getenv("HOME") + "/.local/";
+		settings->path_user = std::string(getenv("HOME")) + "/.local/";
 		Filesystem::createDir(settings->path_user);
 		settings->path_user += "share/";
 		Filesystem::createDir(settings->path_user);
@@ -123,7 +123,7 @@ void Platform::setPaths() {
 	// check $XDG_DATA_DIRS options
 	// a list of directories in preferred order separated by :
 	if (getenv("XDG_DATA_DIRS") != NULL) {
-		std::string pathlist = (std::string)getenv("XDG_DATA_DIRS");
+		std::string pathlist = std::string(getenv("XDG_DATA_DIRS"));
 		std::string pathtest;
 		pathtest = Parse::popFirstString(pathlist,':');
 		while (pathtest != "") {

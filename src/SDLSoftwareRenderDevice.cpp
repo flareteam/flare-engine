@@ -76,7 +76,7 @@ void SDLSoftwareImage::drawPixel(int x, int y, const Color& color) {
 
 	int bpp = surface->format->BytesPerPixel;
 	/* Here p is the address to the pixel we want to set */
-	Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
+	Uint8 *p = static_cast<Uint8*>(surface->pixels) + y * surface->pitch + x * bpp;
 
 	if (SDL_MUSTLOCK(surface)) {
 		SDL_LockSurface(surface);
@@ -87,7 +87,7 @@ void SDLSoftwareImage::drawPixel(int x, int y, const Color& color) {
 			break;
 
 		case 2:
-			*(Uint16 *)p = static_cast<Uint16>(pixel);
+			*(reinterpret_cast<Uint16*>(p)) = static_cast<Uint16>(pixel);
 			break;
 
 		case 3:
@@ -103,7 +103,7 @@ void SDLSoftwareImage::drawPixel(int x, int y, const Color& color) {
 			break;
 
 		case 4:
-			*(Uint32 *)p = pixel;
+			*(reinterpret_cast<Uint32*>(p)) = pixel;
 			break;
 	}
 	if (SDL_MUSTLOCK(surface)) {
@@ -356,7 +356,7 @@ void SDLSoftwareRenderDevice::drawPixel(int x, int y, const Color& color) {
 
 	int bpp = screen->format->BytesPerPixel;
 	/* Here p is the address to the pixel we want to set */
-	Uint8 *p = (Uint8 *)screen->pixels + y * screen->pitch + x * bpp;
+	Uint8 *p = static_cast<Uint8*>(screen->pixels) + y * screen->pitch + x * bpp;
 
 	if (SDL_MUSTLOCK(screen)) {
 		SDL_LockSurface(screen);
@@ -367,7 +367,7 @@ void SDLSoftwareRenderDevice::drawPixel(int x, int y, const Color& color) {
 			break;
 
 		case 2:
-			*(Uint16 *)p = static_cast<Uint16>(pixel);
+			*(reinterpret_cast<Uint16*>(p)) = static_cast<Uint16>(pixel);
 			break;
 
 		case 3:
@@ -383,7 +383,7 @@ void SDLSoftwareRenderDevice::drawPixel(int x, int y, const Color& color) {
 			break;
 
 		case 4:
-			*(Uint32 *)p = pixel;
+			*(reinterpret_cast<Uint32*>(p)) = pixel;
 			break;
 	}
 	if (SDL_MUSTLOCK(screen)) {

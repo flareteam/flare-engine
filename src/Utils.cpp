@@ -238,7 +238,7 @@ FPoint Utils::calcVector(const FPoint& pos, int direction, float dist) {
 }
 
 float Utils::calcDist(const FPoint& p1, const FPoint& p2) {
-	return static_cast<float>(sqrt((p2.x - p1.x) * (p2.x - p1.x) + (p2.y - p1.y) * (p2.y - p1.y)));
+	return sqrtf((p2.x - p1.x) * (p2.x - p1.x) + (p2.y - p1.y) * (p2.y - p1.y));
 }
 
 /**

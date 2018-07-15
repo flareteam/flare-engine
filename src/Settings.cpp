@@ -120,7 +120,7 @@ size_t Settings::getConfigEntry(const std::string& name) {
 void Settings::loadSettings() {
 	// init defaults
 	for (size_t i = 0; i < config.size(); i++) {
-		Parse::tryParseValue(*config[i].type, std::string(config[i].default_val), config[i].storage);
+		Parse::tryParseValue(*config[i].type, config[i].default_val, config[i].storage);
 	}
 
 	// try read from file
@@ -183,7 +183,7 @@ void Settings::saveSettings() {
 void Settings::loadDefaults() {
 	// HACK init defaults except video
 	for (size_t i = 3; i < config.size(); i++) {
-		Parse::tryParseValue(*config[i].type, std::string(config[i].default_val), config[i].storage);
+		Parse::tryParseValue(*config[i].type, config[i].default_val, config[i].storage);
 	}
 
 	loadMobileDefaults();

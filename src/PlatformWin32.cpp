@@ -45,7 +45,7 @@ Platform::~Platform() {
 void Platform::setPaths() {
 	// handle Windows-specific path options
 	if (getenv("APPDATA") != NULL) {
-		settings->path_conf = settings->path_user = (std::string)getenv("APPDATA") + "\\flare";
+		settings->path_conf = settings->path_user = std::string(getenv("APPDATA")) + "\\flare";
 		Filesystem::createDir(settings->path_conf);
 		Filesystem::createDir(settings->path_user);
 

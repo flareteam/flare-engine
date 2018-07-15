@@ -577,7 +577,7 @@ std::string SDLInputState::getJoystickName(int index) {
 
 std::string SDLInputState::getKeyName(int key) {
 	// first, we try to provide a translation of the key
-	switch ((SDL_Keycode)key) {
+	switch (static_cast<SDL_Keycode>(key)) {
 		case SDLK_BACKSPACE:    return msg->get("Backspace");
 		case SDLK_CAPSLOCK:     return msg->get("CapsLock");
 		case SDLK_DELETE:       return msg->get("Delete");
@@ -607,7 +607,7 @@ std::string SDLInputState::getKeyName(int key) {
 	}
 
 	// no translation for this key, so just get the name straight from SDL
-	return std::string(SDL_GetKeyName((SDL_Keycode)key));
+	return std::string(SDL_GetKeyName(static_cast<SDL_Keycode>(key)));
 }
 
 std::string SDLInputState::getMouseButtonName(int button) {
