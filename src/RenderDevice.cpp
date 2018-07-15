@@ -172,6 +172,9 @@ Image * Sprite::getGraphics() {
 /*
  * RenderDevice
  */
+
+const unsigned char RenderDevice::BITS_PER_PIXEL = 32;
+
 RenderDevice::RenderDevice()
 	: fullscreen(false)
 	, hwsurface(false)

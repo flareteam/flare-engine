@@ -1240,7 +1240,7 @@ bool PowerManager::missile(int power_index, StatBlock *src_stats, const FPoint& 
 		float variance = 0;
 		if (powers[power_index].angle_variance != 0) {
 			//random between 0 and angle_variance away
-			variance = static_cast<float>(pow(-1.0f, (rand() % 2) - 1) * (rand() % powers[power_index].angle_variance) * M_PI / 180.0f);
+			variance = static_cast<float>(pow(-1.0f, (rand() % 2) - 1) * static_cast<float>(rand() % powers[power_index].angle_variance) * M_PI / 180.0f);
 		}
 		float alpha = theta + offset_angle + variance;
 

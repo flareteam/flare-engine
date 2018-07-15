@@ -100,6 +100,9 @@ bool Mod::operator!= (const Mod &mod) const {
 	return !(*this == mod);
 }
 
+const std::string ModManager::FALLBACK_MOD = "default";
+const std::string ModManager::FALLBACK_GAME = "default";
+
 ModManager::ModManager(const std::vector<std::string> *_cmd_line_mods)
 	: cmd_line_mods(_cmd_line_mods)
 {

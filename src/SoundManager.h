@@ -32,8 +32,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 **/
 class SoundManager {
 public:
-	const std::string DEFAULT_CHANNEL = "__global__";
-	const FPoint NO_POS = FPoint(0,0);
+	static const std::string DEFAULT_CHANNEL;
+	static const FPoint NO_POS;
 	static const bool LOOP = true;
 
 	virtual ~SoundManager() {};

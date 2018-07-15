@@ -63,8 +63,8 @@ private:
 public:
 	static const bool LIST_FULL_PATHS = true;
 
-	const std::string FALLBACK_MOD = "default";
-	const std::string FALLBACK_GAME = "default";
+	static const std::string FALLBACK_MOD;
+	static const std::string FALLBACK_GAME;
 
 	explicit ModManager(const std::vector<std::string> *_cmd_line_mods);
 	~ModManager();

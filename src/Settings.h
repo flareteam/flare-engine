@@ -116,15 +116,16 @@ public:
 private:
 	class ConfigEntry {
 	public:
-		const char *name;
+		std::string name;
 		const std::type_info *type;
-		const char *default_val;
+		std::string default_val;
 		void *storage;
-		const char *comment;
+		std::string comment;
 	};
 	std::vector<ConfigEntry> config;
 
-	size_t getConfigEntry(const char *name);
+	void setConfigDefault(size_t index, const std::string& name, const std::type_info *type, const std::string& default_val, void *storage, const std::string& comment);
+	size_t getConfigEntry(const std::string& name);
 	void loadMobileDefaults();
 };
 #endif

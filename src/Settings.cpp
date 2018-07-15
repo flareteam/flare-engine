@@ -61,46 +61,59 @@ Settings::Settings()
 	, soft_reset(false)
 {
 	config.resize(31);
-	config[0]  = { "fullscreen",        &typeid(fullscreen),         "0",            &fullscreen,         "fullscreen mode. 1 enable, 0 disable."};
-	config[1]  = { "resolution_w",      &typeid(screen_w),           "640",          &screen_w,           "display resolution. 640x480 minimum."};
-	config[2]  = { "resolution_h",      &typeid(screen_h),           "480",          &screen_h,           NULL};
-	config[3]  = { "music_volume",      &typeid(music_volume),       "96",           &music_volume,       "music and sound volume (0 = silent, 128 = max)"};
-	config[4]  = { "sound_volume",      &typeid(sound_volume),       "128",          &sound_volume,       NULL};
-	config[5]  = { "combat_text",       &typeid(combat_text),        "1",            &combat_text,        "display floating damage text. 1 enable, 0 disable."};
-	config[6]  = { "mouse_move",        &typeid(mouse_move),         "0",            &mouse_move,         "use mouse to move (experimental). 1 enable, 0 disable."};
-	config[7]  = { "hwsurface",         &typeid(hwsurface),          "1",            &hwsurface,          "hardware surfaces, v-sync. Try disabling for performance. 1 enable, 0 disable."};
-	config[8]  = { "vsync",             &typeid(vsync),              "1",            &vsync,              NULL};
-	config[9]  = { "texture_filter",    &typeid(texture_filter),     "1",            &texture_filter,     "texture filter quality. 0 nearest neighbor (worst), 1 linear (best)"};
-	config[10] = { "dpi_scaling",       &typeid(dpi_scaling),        "0",            &dpi_scaling,        "toggle DPI-based render scaling. 1 enable, 0 disable"};
-	config[11] = { "max_fps",           &typeid(max_frames_per_sec), "60",           &max_frames_per_sec, "maximum frames per second. default is 60"};
-	config[12] = { "renderer",          &typeid(render_device_name), "sdl_hardware", &render_device_name, "default render device. 'sdl' is the default setting"};
-	config[13] = { "enable_joystick",   &typeid(enable_joystick),    "0",            &enable_joystick,    "joystick settings."};
-	config[14] = { "joystick_device",   &typeid(joystick_device),    "0",            &joystick_device,    NULL};
-	config[15] = { "joystick_deadzone", &typeid(joy_deadzone),       "100",          &joy_deadzone,       NULL};
-	config[16] = { "language",          &typeid(language),           "en",           &language,           "2-letter language code."};
-	config[17] = { "change_gamma",      &typeid(change_gamma),       "0",            &change_gamma,       "allow changing gamma (experimental). 1 enable, 0 disable."};
-	config[18] = { "gamma",             &typeid(gamma),              "1.0",          &gamma,              "screen gamma (0.5 = darkest, 2.0 = lightest)"};
-	config[19] = { "mouse_aim",         &typeid(mouse_aim),          "1",            &mouse_aim,          "use mouse to aim. 1 enable, 0 disable."};
-	config[20] = { "no_mouse",          &typeid(no_mouse),           "0",            &no_mouse,           "make using mouse secondary, give full control to keyboard. 1 enable, 0 disable."};
-	config[21] = { "show_fps",          &typeid(show_fps),           "0",            &show_fps,           "show frames per second. 1 enable, 0 disable."};
-	config[22] = { "colorblind",        &typeid(colorblind),         "0",            &colorblind,         "enable colorblind tooltips. 1 enable, 0 disable"};
-	config[23] = { "hardware_cursor",   &typeid(hardware_cursor),    "0",            &hardware_cursor,    "use the system mouse cursor. 1 enable, 0 disable"};
-	config[24] = { "dev_mode",          &typeid(dev_mode),           "0",            &dev_mode,           "allow opening the developer console. 1 enable, 0 disable"};
-	config[25] = { "dev_hud",           &typeid(dev_hud),            "1",            &dev_hud,            "shows some additional information on-screen when developer mode is enabled. 1 enable, 0 disable"};
-	config[26] = { "loot_tooltips",     &typeid(loot_tooltips),      "1",            &loot_tooltips,      "always show loot tooltips. 1 enable, 0 disable"};
-	config[27] = { "statbar_labels",    &typeid(statbar_labels),     "0",            &statbar_labels,     "always show labels on HP/MP/XP bars. 1 enable, 0 disable"};
-	config[28] = { "auto_equip",        &typeid(auto_equip),         "1",            &auto_equip,         "automatically equip items. 1 enable, 0 disable"};
-	config[29] = { "subtitles",         &typeid(subtitles),          "0",            &subtitles,          "displays subtitles. 1 enable, 0 disable"};
-	config[30] = { "prev_save_slot",    &typeid(prev_save_slot),     "-1",           &prev_save_slot,     "index of the last used save slot"};
+	setConfigDefault(0,  "fullscreen",        &typeid(fullscreen),         "0",            &fullscreen,         "fullscreen mode. 1 enable, 0 disable.");
+	setConfigDefault(1,  "resolution_w",      &typeid(screen_w),           "640",          &screen_w,           "display resolution. 640x480 minimum.");
+	setConfigDefault(2,  "resolution_h",      &typeid(screen_h),           "480",          &screen_h,           "");
+	setConfigDefault(3,  "music_volume",      &typeid(music_volume),       "96",           &music_volume,       "music and sound volume (0 = silent, 128 = max)");
+	setConfigDefault(4,  "sound_volume",      &typeid(sound_volume),       "128",          &sound_volume,       "");
+	setConfigDefault(5,  "combat_text",       &typeid(combat_text),        "1",            &combat_text,        "display floating damage text. 1 enable, 0 disable.");
+	setConfigDefault(6,  "mouse_move",        &typeid(mouse_move),         "0",            &mouse_move,         "use mouse to move (experimental). 1 enable, 0 disable.");
+	setConfigDefault(7,  "hwsurface",         &typeid(hwsurface),          "1",            &hwsurface,          "hardware surfaces, v-sync. Try disabling for performance. 1 enable, 0 disable.");
+	setConfigDefault(8,  "vsync",             &typeid(vsync),              "1",            &vsync,              "");
+	setConfigDefault(9,  "texture_filter",    &typeid(texture_filter),     "1",            &texture_filter,     "texture filter quality. 0 nearest neighbor (worst), 1 linear (best)");
+	setConfigDefault(10, "dpi_scaling",       &typeid(dpi_scaling),        "0",            &dpi_scaling,        "toggle DPI-based render scaling. 1 enable, 0 disable");
+	setConfigDefault(11, "max_fps",           &typeid(max_frames_per_sec), "60",           &max_frames_per_sec, "maximum frames per second. default is 60");
+	setConfigDefault(12, "renderer",          &typeid(render_device_name), "sdl_hardware", &render_device_name, "default render device. 'sdl' is the default setting");
+	setConfigDefault(13, "enable_joystick",   &typeid(enable_joystick),    "0",            &enable_joystick,    "joystick settings.");
+	setConfigDefault(14, "joystick_device",   &typeid(joystick_device),    "0",            &joystick_device,    "");
+	setConfigDefault(15, "joystick_deadzone", &typeid(joy_deadzone),       "100",          &joy_deadzone,       "");
+	setConfigDefault(16, "language",          &typeid(language),           "en",           &language,           "2-letter language code.");
+	setConfigDefault(17, "change_gamma",      &typeid(change_gamma),       "0",            &change_gamma,       "allow changing gamma (experimental). 1 enable, 0 disable.");
+	setConfigDefault(18, "gamma",             &typeid(gamma),              "1.0",          &gamma,              "screen gamma (0.5 = darkest, 2.0 = lightest)");
+	setConfigDefault(19, "mouse_aim",         &typeid(mouse_aim),          "1",            &mouse_aim,          "use mouse to aim. 1 enable, 0 disable.");
+	setConfigDefault(20, "no_mouse",          &typeid(no_mouse),           "0",            &no_mouse,           "make using mouse secondary, give full control to keyboard. 1 enable, 0 disable.");
+	setConfigDefault(21, "show_fps",          &typeid(show_fps),           "0",            &show_fps,           "show frames per second. 1 enable, 0 disable.");
+	setConfigDefault(22, "colorblind",        &typeid(colorblind),         "0",            &colorblind,         "enable colorblind tooltips. 1 enable, 0 disable");
+	setConfigDefault(23, "hardware_cursor",   &typeid(hardware_cursor),    "0",            &hardware_cursor,    "use the system mouse cursor. 1 enable, 0 disable");
+	setConfigDefault(24, "dev_mode",          &typeid(dev_mode),           "0",            &dev_mode,           "allow opening the developer console. 1 enable, 0 disable");
+	setConfigDefault(25, "dev_hud",           &typeid(dev_hud),            "1",            &dev_hud,            "shows some additional information on-screen when developer mode is enabled. 1 enable, 0 disable");
+	setConfigDefault(26, "loot_tooltips",     &typeid(loot_tooltips),      "1",            &loot_tooltips,      "always show loot tooltips. 1 enable, 0 disable");
+	setConfigDefault(27, "statbar_labels",    &typeid(statbar_labels),     "0",            &statbar_labels,     "always show labels on HP/MP/XP bars. 1 enable, 0 disable");
+	setConfigDefault(28, "auto_equip",        &typeid(auto_equip),         "1",            &auto_equip,         "automatically equip items. 1 enable, 0 disable");
+	setConfigDefault(29, "subtitles",         &typeid(subtitles),          "0",            &subtitles,          "displays subtitles. 1 enable, 0 disable");
+	setConfigDefault(30, "prev_save_slot",    &typeid(prev_save_slot),     "-1",           &prev_save_slot,     "index of the last used save slot");
 }
 
-size_t Settings::getConfigEntry(const char *name) {
+void Settings::setConfigDefault(size_t index, const std::string& name, const std::type_info *type, const std::string& default_val, void *storage, const std::string& comment) {
+	if (index >= config.size()) {
+		Utils::logError("Settings: Can't set default config value; %u is not a valid index.", index);
+		return;
+	}
+
+	config[index].name = name;
+	config[index].type = type;
+	config[index].default_val = default_val;
+	config[index].storage = storage;
+	config[index].comment = comment;
+}
+
+size_t Settings::getConfigEntry(const std::string& name) {
 	for (size_t i = 0; i < config.size(); i++) {
-		if (std::strcmp(config[i].name, name) == 0)
+		if (config[i].name == name)
 			return i;
 	}
 
-	Utils::logError("Settings: '%s' is not a valid configuration key.", name);
+	Utils::logError("Settings: '%s' is not a valid configuration key.", name.c_str());
 	return config.size();
 }
 
@@ -122,7 +135,7 @@ void Settings::loadSettings() {
 	}
 
 	while (infile.next()) {
-		size_t entry = getConfigEntry(infile.key.c_str());
+		size_t entry = getConfigEntry(infile.key);
 		if (entry != config.size()) {
 			Parse::tryParseValue(*config[entry].type, infile.val, config[entry].storage);
 		}
@@ -147,10 +160,10 @@ void Settings::saveSettings() {
 		for (size_t i = 0; i < config.size(); i++) {
 
 			// write additional newline before the next section
-			if (i != 0 && config[i].comment != NULL)
+			if (i != 0 && !config[i].comment.empty())
 				outfile<<"\n";
 
-			if (config[i].comment != NULL) {
+			if (!config[i].comment.empty()) {
 				outfile<<"# "<<config[i].comment<<"\n";
 			}
 			outfile << config[i].name << "=" << Parse::toString(*config[i].type, config[i].storage) << "\n";
