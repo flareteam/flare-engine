@@ -171,6 +171,264 @@ body {
 
 <hr />
 
+<h4>EngineSettings: Misc</h4>
+
+<p>Description of engine/misc.txt</p>
+
+<p><strong>save_hpmp</strong> | <code>bool</code> | When saving the game, keep the hero&rsquo;s current HP and MP.</p>
+
+<p><strong>corpse_timeout</strong> | <code>duration</code> | Duration that a corpse can exist on the map in &lsquo;ms&rsquo; or &rsquo;s'.</p>
+
+<p><strong>sell_without_vendor</strong> | <code>bool</code> | Allows selling items when not at a vendor via CTRL-Click.</p>
+
+<p><strong>aim_assist</strong> | <code>int</code> | The pixel offset for powers that use aim_assist.</p>
+
+<p><strong>window_title</strong> | <code>string</code> | Sets the text in the window&rsquo;s titlebar.</p>
+
+<p><strong>save_prefix</strong> | <code>string</code> | A string that&rsquo;s prepended to save filenames to prevent conflicts between mods.</p>
+
+<p><strong>sound_falloff</strong> | <code>int</code> | The maximum radius in tiles that any single sound is audible.</p>
+
+<p><strong>party_exp_percentage</strong> | <code>int</code> | The percentage of XP given to allies.</p>
+
+<p><strong>enable_ally_collision</strong> | <code>bool</code> | Allows allies to block the player&rsquo;s path.</p>
+
+<p><strong>enable_ally_collision_ai</strong> | <code>bool</code> | Allows allies to block the path of other AI creatures.</p>
+
+<p><strong>currency_id</strong> | <code>item_id</code> | An item id that will be used as currency.</p>
+
+<p><strong>interact_range</strong> | <code>float</code> | Distance where the player can interact with objects and NPCs.</p>
+
+<p><strong>menus_pause</strong> | <code>bool</code> | Opening any menu will pause the game.</p>
+
+<p><strong>save_onload</strong> | <code>bool</code> | Save the game upon changing maps.</p>
+
+<p><strong>save_onexit</strong> | <code>bool</code> | Save the game upon quitting to the title screen or desktop.</p>
+
+<p><strong>camera_speed</strong> | <code>float</code> | Modifies how fast the camera moves to recenter on the player. Larger values mean a slower camera. Default value is 10.</p>
+
+<p><strong>save_buyback</strong> | <code>bool</code> | Saves the vendor buyback stock whenever the game is saved.</p>
+
+<p><strong>keep_buyback_on_map_change</strong> | <code>bool</code> | If true, NPC buyback stocks will persist when the map changes. If false, save_buyback is disabled.</p>
+
+<hr />
+
+<h4>EngineSettings: Resolution</h4>
+
+<p>Description of engine/resolutions.txt</p>
+
+<p><strong>menu_frame_width</strong> | <code>int</code> | Width of frame for New Game, Configuration, etc. menus.</p>
+
+<p><strong>menu_frame_height</strong> | <code>int</code> | Height of frame for New Game, Configuration, etc. menus.</p>
+
+<p><strong>icon_size</strong> | <code>int</code> | Size of icons.</p>
+
+<p><strong>required_width</strong> | <code>int</code> | Minimum window/screen resolution width.</p>
+
+<p><strong>required_height</strong> | <code>int</code> | Minimum window/screen resolution height.</p>
+
+<p><strong>virtual_height</strong> | <code>list(int)</code> | A list of heights (in pixels) that the game can use for its actual rendering area. The virtual height chosen is based on the current window height. The width will be resized to match the window&rsquo;s aspect ratio, and everything will be scaled up to fill the window.</p>
+
+<p><strong>virtual_dpi</strong> | <code>float</code> | A target diagonal screen DPI used to determine how much to scale the internal render resolution.</p>
+
+<p><strong>ignore_texture_filter</strong> | <code>bool</code> | If true, this ignores the &ldquo;Texture Filtering&rdquo; video setting and uses only nearest-neighbor scaling. This is good for games that use pixel art assets.</p>
+
+<hr />
+
+<h4>EngineSettings: Gameplay</h4>
+
+<p>Description of engine/gameplay.txt</p>
+
+<p><strong>enable_playgame</strong> | <code>bool</code> | Enables the &ldquo;Play Game&rdquo; button on the main menu.</p>
+
+<hr />
+
+<h4>EngineSettings: Combat</h4>
+
+<p>Description of engine/combat.txt</p>
+
+<p><strong>absorb_percent</strong> | <code>int, int : Minimum, Maximum</code> | Limits the percentage of damage that can be absorbed.</p>
+
+<p><strong>resist_percent</strong> | <code>int, int : Minimum, Maximum</code> | Limits the percentage of damage that can be resisted.</p>
+
+<p><strong>block_percent</strong> | <code>int, int : Minimum, Maximum</code> | Limits the percentage of damage that can be blocked.</p>
+
+<p><strong>avoidance_percent</strong> | <code>int, int : Minimum, Maximum</code> | Limits the percentage chance that damage will be avoided.</p>
+
+<p><strong>miss_damage_percent</strong> | <code>int, int : Minimum, Maximum</code> | The percentage of damage dealt when a miss occurs.</p>
+
+<p><strong>crit_damage_percent</strong> | <code>int, int : Minimum, Maximum</code> | The percentage of damage dealt when a critical hit occurs.</p>
+
+<p><strong>overhit_damage_percent</strong> | <code>int, int : Minimum, Maximum</code> | The percentage of damage dealt when an overhit occurs.</p>
+
+<hr />
+
+<h4>EngineSettings: Elements</h4>
+
+<p>Description of engine/elements.txt</p>
+
+<p><strong>element.id</strong> | <code>string</code> | An identifier for this element.</p>
+
+<p><strong>element.name</strong> | <code>string</code> | The displayed name of this element.</p>
+
+<hr />
+
+<h4>EngineSettings: Equip flags</h4>
+
+<p>Description of engine/equip_flags.txt</p>
+
+<p><strong>flag.id</strong> | <code>string</code> | An identifier for this equip flag.</p>
+
+<p><strong>flag.name</strong> | <code>string</code> | The displayed name of this equip flag.</p>
+
+<hr />
+
+<h4>EngineSettings: Primary Stats</h4>
+
+<p>Description of engine/primary_stats.txt</p>
+
+<p><strong>stat.id</strong> | <code>string</code> | An identifier for this primary stat.</p>
+
+<p><strong>stat.name</strong> | <code>string</code> | The displayed name of this primary stat.</p>
+
+<hr />
+
+<h4>EngineSettings: Classes</h4>
+
+<p>Description of engine/classes.txt</p>
+
+<p><strong>name</strong> | <code>string</code> | The displayed name of this class.</p>
+
+<p><strong>description</strong> | <code>string</code> | A description of this class.</p>
+
+<p><strong>currency</strong> | <code>int</code> | The amount of currency this class will start with.</p>
+
+<p><strong>equipment</strong> | <code>list(item_id)</code> | A list of items that are equipped when starting with this class.</p>
+
+<p><strong>carried</strong> | <code>list(item_id)</code> | A list of items that are placed in the normal inventorty when starting with this class.</p>
+
+<p><strong>primary</strong> | <code>predefined_string, int : Primary stat name, Default value</code> | Class starts with this value for the specified stat.</p>
+
+<p><strong>actionbar</strong> | <code>list(power_id)</code> | A list of powers to place in the action bar for the class.</p>
+
+<p><strong>powers</strong> | <code>list(power_id)</code> | A list of powers that are unlocked when starting this class.</p>
+
+<p><strong>campaign</strong> | <code>list(string)</code> | A list of campaign statuses that are set when starting this class.</p>
+
+<p><strong>power_tree</strong> | <code>string</code> | Power tree that will be loaded by MenuPowers</p>
+
+<p><strong>hero_options</strong> | <code>list(int)</code> | A list of indicies of the hero options this class can use.</p>
+
+<p><strong>default_power_tab</strong> | <code>int</code> | Index of the tab to switch to when opening the Powers menu</p>
+
+<hr />
+
+<h4>EngineSettings: Damage Types</h4>
+
+<p>Description of engine/damage_types.txt</p>
+
+<p><strong>damage_type.id</strong> | <code>string</code> | The identifier used for Item damage_type and Power base_damage.</p>
+
+<p><strong>damage_type.name</strong> | <code>string</code> | The displayed name for the value of this damage type.</p>
+
+<p><strong>damage_type.name_min</strong> | <code>string</code> | The displayed name for the minimum value of this damage type.</p>
+
+<p><strong>damage_type.name_max</strong> | <code>string</code> | The displayed name for the maximum value of this damage type.</p>
+
+<p><strong>damage_type.description</strong> | <code>string</code> | The description that will be displayed in the Character menu tooltips.</p>
+
+<p><strong>damage_type.min</strong> | <code>string</code> | The identifier used as a Stat type and an Effect type, for the minimum damage of this type.</p>
+
+<p><strong>damage_type.max</strong> | <code>string</code> | The identifier used as a Stat type and an Effect type, for the maximum damage of this type.</p>
+
+<hr />
+
+<h4>EngineSettings: Death penalty</h4>
+
+<p>Description of engine/death_penalty.txt</p>
+
+<p><strong>enable</strong> | <code>bool</code> | Enable the death penalty.</p>
+
+<p><strong>permadeath</strong> | <code>bool</code> | Force permadeath for all new saves.</p>
+
+<p><strong>currency</strong> | <code>int</code> | Remove this percentage of currency.</p>
+
+<p><strong>xp_total</strong> | <code>int</code> | Remove this percentage of total XP.</p>
+
+<p><strong>xp_current_level</strong> | <code>int</code> | Remove this percentage of the XP gained since the last level.</p>
+
+<p><strong>random_item</strong> | <code>bool</code> | Removes a random item from the player&rsquo;s inventory.</p>
+
+<hr />
+
+<h4>EngineSettings: Tooltips</h4>
+
+<p>Description of engine/tooltips.txt</p>
+
+<p><strong>tooltip_offset</strong> | <code>int</code> | Offset in pixels from the origin point (usually mouse cursor).</p>
+
+<p><strong>tooltip_width</strong> | <code>int</code> | Maximum width of tooltip in pixels.</p>
+
+<p><strong>tooltip_margin</strong> | <code>int</code> | Padding between the text and the tooltip borders.</p>
+
+<p><strong>npc_tooltip_margin</strong> | <code>int</code> | Vertical offset for NPC labels.</p>
+
+<p><strong>tooltip_background_border</strong> | <code>int</code> | The pixel size of the border in &ldquo;images/menus/tooltips.png&rdquo;.</p>
+
+<hr />
+
+<h4>EngineSettings: Loot</h4>
+
+<p>Description of engine/loot.txt</p>
+
+<p><strong>tooltip_margin</strong> | <code>int</code> | Vertical offset of the loot tooltip from the loot itself.</p>
+
+<p><strong>autopickup_currency</strong> | <code>bool</code> | Enable autopickup for currency</p>
+
+<p><strong>autopickup_range</strong> | <code>float</code> | Minimum distance the player must be from loot to trigger autopickup.</p>
+
+<p><strong>currency_name</strong> | <code>string</code> | Define the name of currency in game</p>
+
+<p><strong>vendor_ratio</strong> | <code>int</code> | Percentage of item buying price to use as selling price. Also used as the buyback price until the player leaves the map.</p>
+
+<p><strong>vendor_ratio_buyback</strong> | <code>int</code> | Percentage of item buying price to use as the buying price for previously sold items.</p>
+
+<p><strong>sfx_loot</strong> | <code>filename</code> | Filename of a sound effect to play for dropping loot.</p>
+
+<p><strong>drop_max</strong> | <code>int</code> | The maximum number of random item stacks that can drop at once</p>
+
+<p><strong>drop_radius</strong> | <code>int</code> | The distance (in tiles) away from the origin that loot can drop</p>
+
+<hr />
+
+<h4>EngineSettings: Tileset config</h4>
+
+<p>Description of engine/tileset_config.txt</p>
+
+<p><strong>tile_size</strong> | <code>int, int : Width, Height</code> | The width and height of a tile.</p>
+
+<p><strong>orientation</strong> | <code>["isometric", "orthogonal"]</code> | The perspective of tiles; isometric or orthogonal.</p>
+
+<hr />
+
+<h4>EngineSettings: Widgets</h4>
+
+<p>Description of engine/widget_settings.txt</p>
+
+<p><strong>misc.selection_rect_color</strong> | <code>color, int : Color, Alpha</code> | Color of the selection rectangle when navigating widgets without a mouse.</p>
+
+<p><strong>tab.padding</strong> | <code>int, int : Left/right padding, Top padding</code> | The pixel padding around tabs. Controls how the left and right edges are drawn.</p>
+
+<hr />
+
+<h4>EngineSettings: XP table</h4>
+
+<p>Description of engine/xp_table.txt</p>
+
+<p><strong>level</strong> | <code>int, int : Level, XP</code> | The amount of XP required for this level.</p>
+
+<hr />
+
 <h4>EventManager</h4>
 
 <p>Description of events in maps/ and npcs/</p>
@@ -284,6 +542,42 @@ body {
 <p>Description of maps/random/lists/</p>
 
 <p><strong>map</strong> | <code>filename, int, int : Map file, X, Y</code> | Adds a map and optional spawn position to the random list of maps to teleport to.</p>
+
+<hr />
+
+<h4>FontEngine: Font colors</h4>
+
+<p>Description of engine/font_colors.txt</p>
+
+<p><strong>menu_normal</strong> | <code>color</code> | Basic menu text color. Recommended  white.</p>
+
+<p><strong>menu_bonus</strong> | <code>color</code> | Positive menu text color. Recommended  green.</p>
+
+<p><strong>menu_penalty</strong> | <code>color</code> | Negative menu text color. Recommended  red.</p>
+
+<p><strong>widget_normal</strong> | <code>color</code> | Basic widget text color. Recommended  white.</p>
+
+<p><strong>widget_disabled</strong> | <code>color</code> | Disabled widget text color. Recommended  grey.</p>
+
+<p><strong>combat_givedmg</strong> | <code>color</code> | Enemy damage text color. Recommended  white.</p>
+
+<p><strong>combat_takedmg</strong> | <code>color</code> | Player damage text color. Recommended  red.</p>
+
+<p><strong>combat_crit</strong> | <code>color</code> | Enemy critical damage text color. Recommended  yellow.</p>
+
+<p><strong>combat_buff</strong> | <code>color</code> | Healing/buff text color. Recommended  green.</p>
+
+<p><strong>combat_miss</strong> | <code>color</code> | Missed attack text color. Recommended  grey.</p>
+
+<p><strong>requirements_not_met</strong> | <code>color</code> | Unmet requirements text color. Recommended  red.</p>
+
+<p><strong>item_bonus</strong> | <code>color</code> | Item bonus text color. Recommended  green.</p>
+
+<p><strong>item_penalty</strong> | <code>color</code> | Item penalty text color. Recommended  red.</p>
+
+<p><strong>item_flavor</strong> | <code>color</code> | Item flavor text color. Recommended  grey.</p>
+
+<p><strong>hardcore_color_name</strong> | <code>color</code> | Permadeath save slot player name color. Recommended  red.</p>
 
 <hr />
 
@@ -800,28 +1094,6 @@ body {
 <p><strong>color</strong> | <code>color</code> | A specific of color for the set.</p>
 
 <p><strong>bonus</strong> | <code>repeatable(int, string, int) : Required set item count, Stat name, Value</code> | Bonus to append to items in the set.</p>
-
-<hr />
-
-<h4>Loot</h4>
-
-<p>Description of engine/loot.txt</p>
-
-<p><strong>tooltip_margin</strong> | <code>int</code> | Vertical offset of the loot tooltip from the loot itself.</p>
-
-<p><strong>autopickup_currency</strong> | <code>bool</code> | Enable autopickup for currency</p>
-
-<p><strong>autopickup_range</strong> | <code>float</code> | Minimum distance the player must be from loot to trigger autopickup.</p>
-
-<p><strong>vendor_ratio</strong> | <code>int</code> | Percentage of item buying price to use as selling price. Also used as the buyback price until the player leaves the map.</p>
-
-<p><strong>vendor_ratio_buyback</strong> | <code>int</code> | Percentage of item buying price to use as the buying price for previously sold items.</p>
-
-<p><strong>sfx_loot</strong> | <code>filename</code> | Filename of a sound effect to play for dropping loot.</p>
-
-<p><strong>drop_max</strong> | <code>int</code> | The maximum number of random item stacks that can drop at once</p>
-
-<p><strong>drop_radius</strong> | <code>int</code> | The distance (in tiles) away from the origin that loot can drop</p>
 
 <hr />
 
@@ -1617,260 +1889,6 @@ body {
 
 <hr />
 
-<h4>SDLFontEngine: Font colors</h4>
-
-<p>Description of engine/font_colors.txt</p>
-
-<p><strong>menu_normal</strong> | <code>color</code> | Basic menu text color. Recommended  white.</p>
-
-<p><strong>menu_bonus</strong> | <code>color</code> | Positive menu text color. Recommended  green.</p>
-
-<p><strong>menu_penalty</strong> | <code>color</code> | Negative menu text color. Recommended  red.</p>
-
-<p><strong>widget_normal</strong> | <code>color</code> | Basic widget text color. Recommended  white.</p>
-
-<p><strong>widget_disabled</strong> | <code>color</code> | Disabled widget text color. Recommended  grey.</p>
-
-<p><strong>combat_givedmg</strong> | <code>color</code> | Enemy damage text color. Recommended  white.</p>
-
-<p><strong>combat_takedmg</strong> | <code>color</code> | Player damage text color. Recommended  red.</p>
-
-<p><strong>combat_crit</strong> | <code>color</code> | Enemy critical damage text color. Recommended  yellow.</p>
-
-<p><strong>requirements_no_met</strong> | <code>color</code> | Unmet requirements text color. Recommended  red.</p>
-
-<p><strong>item_bonus</strong> | <code>color</code> | Item bonus text color. Recommended  green.</p>
-
-<p><strong>item_penalty</strong> | <code>color</code> | Item penalty text color. Recommended  red.</p>
-
-<p><strong>item_flavor</strong> | <code>color</code> | Item flavor text color. Recommended  grey.</p>
-
-<hr />
-
-<h4>Settings: Tileset config</h4>
-
-<p>Description of engine/tileset_config.txt</p>
-
-<p><strong>tile_size</strong> | <code>int, int : Width, Height</code> | The width and height of a tile.</p>
-
-<p><strong>orientation</strong> | <code>["isometric", "orthogonal"]</code> | The perspective of tiles; isometric or orthogonal.</p>
-
-<hr />
-
-<h4>Settings: Misc</h4>
-
-<p>Description of engine/misc.txt</p>
-
-<p><strong>save_hpmp</strong> | <code>bool</code> | When saving the game, keep the hero&rsquo;s current HP and MP.</p>
-
-<p><strong>corpse_timeout</strong> | <code>duration</code> | Duration that a corpse can exist on the map in &lsquo;ms&rsquo; or &rsquo;s'.</p>
-
-<p><strong>sell_without_vendor</strong> | <code>bool</code> | Allows selling items when not at a vendor via CTRL-Click.</p>
-
-<p><strong>aim_assist</strong> | <code>int</code> | The pixel offset for powers that use aim_assist.</p>
-
-<p><strong>window_title</strong> | <code>string</code> | Sets the text in the window&rsquo;s titlebar.</p>
-
-<p><strong>save_prefix</strong> | <code>string</code> | A string that&rsquo;s prepended to save filenames to prevent conflicts between mods.</p>
-
-<p><strong>sound_falloff</strong> | <code>int</code> | The maximum radius in tiles that any single sound is audible.</p>
-
-<p><strong>party_exp_percentage</strong> | <code>int</code> | The percentage of XP given to allies.</p>
-
-<p><strong>enable_ally_collision</strong> | <code>bool</code> | Allows allies to block the player&rsquo;s path.</p>
-
-<p><strong>enable_ally_collision_ai</strong> | <code>bool</code> | Allows allies to block the path of other AI creatures.</p>
-
-<p><strong>currency_id</strong> | <code>item_id</code> | An item id that will be used as currency.</p>
-
-<p><strong>interact_range</strong> | <code>float</code> | Distance where the player can interact with objects and NPCs.</p>
-
-<p><strong>menus_pause</strong> | <code>bool</code> | Opening any menu will pause the game.</p>
-
-<p><strong>save_onload</strong> | <code>bool</code> | Save the game upon changing maps.</p>
-
-<p><strong>save_onexit</strong> | <code>bool</code> | Save the game upon quitting to the title screen or desktop.</p>
-
-<p><strong>camera_speed</strong> | <code>float</code> | Modifies how fast the camera moves to recenter on the player. Larger values mean a slower camera. Default value is 10.</p>
-
-<p><strong>save_buyback</strong> | <code>bool</code> | Saves the vendor buyback stock whenever the game is saved.</p>
-
-<p><strong>keep_buyback_on_map_change</strong> | <code>bool</code> | If true, NPC buyback stocks will persist when the map changes. If false, save_buyback is disabled.</p>
-
-<hr />
-
-<h4>Settings: Resolution</h4>
-
-<p>Description of engine/resolutions.txt</p>
-
-<p><strong>menu_frame_width</strong> | <code>int</code> | Width of frame for New Game, Configuration, etc. menus.</p>
-
-<p><strong>menu_frame_height</strong> | <code>int</code> | Height of frame for New Game, Configuration, etc. menus.</p>
-
-<p><strong>icon_size</strong> | <code>int</code> | Size of icons.</p>
-
-<p><strong>required_width</strong> | <code>int</code> | Minimum window/screen resolution width.</p>
-
-<p><strong>required_height</strong> | <code>int</code> | Minimum window/screen resolution height.</p>
-
-<p><strong>virtual_height</strong> | <code>list(int)</code> | A list of heights (in pixels) that the game can use for its actual rendering area. The virtual height chosen is based on the current window height. The width will be resized to match the window&rsquo;s aspect ratio, and everything will be scaled up to fill the window.</p>
-
-<p><strong>virtual_dpi</strong> | <code>float</code> | A target diagonal screen DPI used to determine how much to scale the internal render resolution.</p>
-
-<p><strong>ignore_texture_filter</strong> | <code>bool</code> | If true, this ignores the &ldquo;Texture Filtering&rdquo; video setting and uses only nearest-neighbor scaling. This is good for games that use pixel art assets.</p>
-
-<hr />
-
-<h4>Settings: Gameplay</h4>
-
-<p>Description of engine/gameplay.txt</p>
-
-<p><strong>enable_playgame</strong> | <code>bool</code> | Enables the &ldquo;Play Game&rdquo; button on the main menu.</p>
-
-<hr />
-
-<h4>Settings: Combat</h4>
-
-<p>Description of engine/combat.txt</p>
-
-<p><strong>absorb_percent</strong> | <code>int, int : Minimum, Maximum</code> | Limits the percentage of damage that can be absorbed.</p>
-
-<p><strong>resist_percent</strong> | <code>int, int : Minimum, Maximum</code> | Limits the percentage of damage that can be resisted.</p>
-
-<p><strong>block_percent</strong> | <code>int, int : Minimum, Maximum</code> | Limits the percentage of damage that can be blocked.</p>
-
-<p><strong>avoidance_percent</strong> | <code>int, int : Minimum, Maximum</code> | Limits the percentage chance that damage will be avoided.</p>
-
-<p><strong>miss_damage_percent</strong> | <code>int, int : Minimum, Maximum</code> | The percentage of damage dealt when a miss occurs.</p>
-
-<p><strong>crit_damage_percent</strong> | <code>int, int : Minimum, Maximum</code> | The percentage of damage dealt when a critical hit occurs.</p>
-
-<p><strong>overhit_damage_percent</strong> | <code>int, int : Minimum, Maximum</code> | The percentage of damage dealt when an overhit occurs.</p>
-
-<hr />
-
-<h4>Settings: Elements</h4>
-
-<p>Description of engine/elements.txt</p>
-
-<p><strong>element.id</strong> | <code>string</code> | An identifier for this element.</p>
-
-<p><strong>element.name</strong> | <code>string</code> | The displayed name of this element.</p>
-
-<hr />
-
-<h4>Settings: Equip flags</h4>
-
-<p>Description of engine/equip_flags.txt</p>
-
-<p><strong>flag.id</strong> | <code>string</code> | An identifier for this equip flag.</p>
-
-<p><strong>flag.name</strong> | <code>string</code> | The displayed name of this equip flag.</p>
-
-<hr />
-
-<h4>Settings: Primary Stats</h4>
-
-<p>Description of engine/primary_stats.txt</p>
-
-<p><strong>stat.id</strong> | <code>string</code> | An identifier for this primary stat.</p>
-
-<p><strong>stat.name</strong> | <code>string</code> | The displayed name of this primary stat.</p>
-
-<hr />
-
-<h4>Settings: Classes</h4>
-
-<p>Description of engine/classes.txt</p>
-
-<p><strong>name</strong> | <code>string</code> | The displayed name of this class.</p>
-
-<p><strong>description</strong> | <code>string</code> | A description of this class.</p>
-
-<p><strong>currency</strong> | <code>int</code> | The amount of currency this class will start with.</p>
-
-<p><strong>equipment</strong> | <code>list(item_id)</code> | A list of items that are equipped when starting with this class.</p>
-
-<p><strong>carried</strong> | <code>list(item_id)</code> | A list of items that are placed in the normal inventorty when starting with this class.</p>
-
-<p><strong>primary</strong> | <code>predefined_string, int : Primary stat name, Default value</code> | Class starts with this value for the specified stat.</p>
-
-<p><strong>actionbar</strong> | <code>list(power_id)</code> | A list of powers to place in the action bar for the class.</p>
-
-<p><strong>powers</strong> | <code>list(power_id)</code> | A list of powers that are unlocked when starting this class.</p>
-
-<p><strong>campaign</strong> | <code>list(string)</code> | A list of campaign statuses that are set when starting this class.</p>
-
-<p><strong>power_tree</strong> | <code>string</code> | Power tree that will be loaded by MenuPowers</p>
-
-<p><strong>hero_options</strong> | <code>list(int)</code> | A list of indicies of the hero options this class can use.</p>
-
-<p><strong>default_power_tab</strong> | <code>int</code> | Index of the tab to switch to when opening the Powers menu</p>
-
-<hr />
-
-<h4>Settings: Damage Types</h4>
-
-<p>Description of engine/damage_types.txt</p>
-
-<p><strong>damage_type.id</strong> | <code>string</code> | The identifier used for Item damage_type and Power base_damage.</p>
-
-<p><strong>damage_type.name</strong> | <code>string</code> | The displayed name for the value of this damage type.</p>
-
-<p><strong>damage_type.name_min</strong> | <code>string</code> | The displayed name for the minimum value of this damage type.</p>
-
-<p><strong>damage_type.name_max</strong> | <code>string</code> | The displayed name for the maximum value of this damage type.</p>
-
-<p><strong>damage_type.description</strong> | <code>string</code> | The description that will be displayed in the Character menu tooltips.</p>
-
-<p><strong>damage_type.min</strong> | <code>string</code> | The identifier used as a Stat type and an Effect type, for the minimum damage of this type.</p>
-
-<p><strong>damage_type.max</strong> | <code>string</code> | The identifier used as a Stat type and an Effect type, for the maximum damage of this type.</p>
-
-<hr />
-
-<h4>Settings: Death penalty</h4>
-
-<p>Description of engine/death_penalty.txt</p>
-
-<p><strong>enable</strong> | <code>bool</code> | Enable the death penalty.</p>
-
-<p><strong>permadeath</strong> | <code>bool</code> | Force permadeath for all new saves.</p>
-
-<p><strong>currency</strong> | <code>int</code> | Remove this percentage of currency.</p>
-
-<p><strong>xp_total</strong> | <code>int</code> | Remove this percentage of total XP.</p>
-
-<p><strong>xp_current_level</strong> | <code>int</code> | Remove this percentage of the XP gained since the last level.</p>
-
-<p><strong>random_item</strong> | <code>bool</code> | Removes a random item from the player&rsquo;s inventory.</p>
-
-<hr />
-
-<h4>Settings: Tooltips</h4>
-
-<p>Description of engine/tooltips.txt</p>
-
-<p><strong>tooltip_offset</strong> | <code>int</code> | Offset in pixels from the origin point (usually mouse cursor).</p>
-
-<p><strong>tooltip_width</strong> | <code>int</code> | Maximum width of tooltip in pixels.</p>
-
-<p><strong>tooltip_margin</strong> | <code>int</code> | Padding between the text and the tooltip borders.</p>
-
-<p><strong>npc_tooltip_margin</strong> | <code>int</code> | Vertical offset for NPC labels.</p>
-
-<p><strong>tooltip_background_border</strong> | <code>int</code> | The pixel size of the border in &ldquo;images/menus/tooltips.png&rdquo;.</p>
-
-<hr />
-
-<h4>Settings: Loot</h4>
-
-<p>Description of engine/loot.txt</p>
-
-<p><strong>currency_name</strong> | <code>string</code> | Define the name of currency in game</p>
-
-<hr />
-
 <h4>StatBlock: Core stats</h4>
 
 <p>Description of engine/stats.txt and enemies in enemies/</p>
@@ -1987,14 +2005,6 @@ body {
 
 <hr />
 
-<h4>StatBlock: XP table</h4>
-
-<p>Description of engine/xp_table.txt</p>
-
-<p><strong>level</strong> | <code>int, int : Level, XP</code> | The amount of XP required for this level.</p>
-
-<hr />
-
 <h4>Subtitles</h4>
 
 <p>Description of soundfx/subtitles.txt</p>
@@ -2022,16 +2032,6 @@ body {
 <p><strong>tileset.tile</strong> | <code>int, int, int, int, int, int, int : Index, X, Y, Width, Height, X offset, Y offset</code> | A single tile definition.</p>
 
 <p><strong>tileset.animation</strong> | <code>list(int, int, int, duration) : Tile index, X, Y, duration</code> | An animation for a tile. Durations are in &lsquo;ms&rsquo; or &rsquo;s'.</p>
-
-<hr />
-
-<h4>WidgetSettings</h4>
-
-<p>Description of engine/widget_settings.txt</p>
-
-<p><strong>misc.selection_rect_color</strong> | <code>color, int : Color, Alpha</code> | Color of the selection rectangle when navigating widgets without a mouse.</p>
-
-<p><strong>tab.padding</strong> | <code>int, int : Left/right padding, Top padding</code> | The pixel padding around tabs. Controls how the left and right edges are drawn.</p>
 
 <hr />
 

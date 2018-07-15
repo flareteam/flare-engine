@@ -11,6 +11,7 @@ Engine fixes:
 * Fixed rendering bug in WidgetTabControl.
 * Fixed crashes when using an empty WidgetListBox.
 * Fixed GetText bug where strings weren't being sanitized.
+* Lots of code cleanup.
 
 New translations:
 
