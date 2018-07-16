@@ -151,10 +151,15 @@ void MenuEnemy::render() {
 		// HP display
 		std::stringstream ss;
 		ss.str("");
-		if (enemy->stats.hp > 0)
+		if (enemy->stats.hp > 0) {
 			ss << enemy->stats.hp << "/" << enemy->stats.get(Stats::HP_MAX);
-		else
-			ss << msg->get("Dead");
+		}
+		else {
+			if (enemy->stats.lifeform)
+				ss << msg->get("Dead");
+			else
+				ss << msg->get("Destroyed");
+		}
 		label_stats.setText(ss.str());
 
 		label_stats.setPos(window_area.x + bar_pos.x + bar_pos.w/2, window_area.y + bar_pos.y + bar_pos.h/2);

@@ -126,6 +126,7 @@ public:
 	bool hero_ally;
 	bool enemy_ally;
 	bool humanoid; // true for human, sceleton...; false for wyvern, snake...
+	bool lifeform;
 	bool permadeath;
 	bool transformed;
 	bool refresh_stats;

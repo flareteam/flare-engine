@@ -7,6 +7,7 @@ Engine features:
 * Navigating cutscenes has been improved. Players can move back and forth through scenes with left/right arrows.
 * Vertical scrolling cutscenes can be manually scrolled with the Up and Down keys.
 * Scenes in cutscenes can now pause indefinitely by using "pause=-1".
+* Added a "lifeform" flag to enemy stats. Setting it to false will display "Destroyed" instead of "Dead" when their HP reaches 0.
 
 Engine fixes:
 

@@ -56,6 +56,7 @@ StatBlock::StatBlock()
 	, hero_ally(false)
 	, enemy_ally(false)
 	, humanoid(false)
+	, lifeform(true)
 	, permadeath(false)
 	, transformed(false)
 	, refresh_stats(false)
@@ -408,6 +409,8 @@ void StatBlock::load(const std::string& filename) {
 		if (infile.key == "name") name = msg->get(infile.val);
 		// @ATTR humanoid|bool|This creature gives human traits when transformed into, such as the ability to talk with NPCs.
 		else if (infile.key == "humanoid") humanoid = Parse::toBool(infile.val);
+		// @ATTR lifeform|bool|Determines whether or not this entity is referred to as a living thing, such as displaying "Dead" vs "Destroyed" when their HP is 0.
+		else if (infile.key == "lifeform") lifeform = Parse::toBool(infile.val);
 
 		// @ATTR level|int|Level
 		else if (infile.key == "level") level = num;
