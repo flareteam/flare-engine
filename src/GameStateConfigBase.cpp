@@ -882,7 +882,7 @@ void GameStateConfigBase::disableMods() {
 }
 
 bool GameStateConfigBase::setMods() {
-	// Save new mods list. Return true if modlist was changed. Else return false
+	// Save new mods list and return true if modlist was changed. Else return false
 
 	std::vector<Mod> temp_list = mods->mod_list;
 	mods->mod_list.clear();
@@ -894,12 +894,14 @@ bool GameStateConfigBase::setMods() {
 	}
 
 	mods->applyDepends();
-	mods->saveMods();
 
-	if (mods->mod_list != temp_list)
+	if (mods->mod_list != temp_list) {
+		mods->saveMods();
 		return true;
-	else
+	}
+	else {
 		return false;
+	}
 }
 
 std::string GameStateConfigBase::createModTooltip(Mod *mod) {

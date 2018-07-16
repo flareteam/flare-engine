@@ -214,8 +214,6 @@ void ModManager::loadModList() {
 				}
 			}
 		}
-
-		saveMods();
 	}
 
 	if (!found_any_mod && mod_list.size() == 1) {
