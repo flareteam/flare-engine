@@ -695,7 +695,7 @@ bool GameStateCutscene::load(const std::string& filename) {
 	infile.close();
 
 	if (scenes.empty()) {
-		Utils::logError("GameStateCutscene: No scenes defined in cutscene file %s", filename.c_str());
+		Utils::logInfo("GameStateCutscene: No scenes defined in cutscene file %s", filename.c_str());
 		return false;
 	}
 	else {
