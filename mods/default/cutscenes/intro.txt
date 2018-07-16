@@ -2,8 +2,7 @@
 # Use it for displaying developer logos, age ratings, etc.
 # This is an example, so everything has been commented out
 
-[scene]
-pause=0
+#[scene]
 #image=images/menus/logo.png,0
 #caption=Flare, the...
 #soundfx=soundfx/level_up.ogg
