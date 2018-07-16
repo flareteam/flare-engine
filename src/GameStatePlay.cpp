@@ -49,6 +49,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuActionBar.h"
 #include "MenuBook.h"
 #include "MenuCharacter.h"
+#include "MenuDevConsole.h"
 #include "MenuEnemy.h"
 #include "MenuExit.h"
 #include "MenuHUDLog.h"
@@ -822,6 +823,10 @@ void GameStatePlay::checkCutscene() {
 
 	if (eset->misc.save_onload)
 		save_load->saveGame();
+
+	if (menu->devconsole) {
+		menu->devconsole->closeWindow();
+	}
 
 	setRequestedGameState(cutscene);
 }
