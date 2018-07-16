@@ -278,8 +278,6 @@ static void cleanup() {
 		render_device->destroyContext();
 	delete render_device;
 
-	delete settings;
-
 	SDL_Quit();
 }
 
@@ -438,6 +436,8 @@ soft_reset:
 		cmd_line_args = CmdLineArgs();
 		goto soft_reset;
 	}
+
+	delete settings;
 
 	return 0;
 }
