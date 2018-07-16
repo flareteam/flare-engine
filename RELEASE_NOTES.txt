@@ -4,6 +4,9 @@ Engine features:
 
 * Added descriptions for some of the player stats to help clarify their purpose.
 * The game now remembers if the player dismissed the quest log notification.
+* Navigating cutscenes has been improved. Players can move back and forth through scenes with left/right arrows.
+* Vertical scrolling cutscenes can be manually scrolled with the Up and Down keys.
+* Scenes in cutscenes can now pause indefinitely by using "pause=-1".
 
 Engine fixes:
 
