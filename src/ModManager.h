@@ -39,8 +39,11 @@ public:
 	bool operator== (const Mod &mod) const;
 	bool operator!= (const Mod &mod) const;
 
+	std::string getLocaleDescription(const std::string& lang);
+
 	std::string name;
 	std::string description;
+	std::map<std::string, std::string> description_locale;
 	std::string game;
 	Version* version;
 	Version* engine_min_version;

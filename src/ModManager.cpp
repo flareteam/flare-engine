@@ -30,6 +30,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 Mod::Mod()
 	: name("")
 	, description("")
+	, description_locale()
 	, game("")
 	, version(new Version())
 	, engine_min_version(new Version(VersionInfo::MIN))
@@ -64,6 +65,7 @@ Mod& Mod::operator=(const Mod &mod) {
 
 	name = mod.name;
 	description = mod.description;
+	description_locale = mod.description_locale;
 	game = mod.game;
 	*version = *mod.version;
 	*engine_min_version = *mod.engine_min_version;
@@ -98,6 +100,15 @@ bool Mod::operator== (const Mod &mod) const {
 
 bool Mod::operator!= (const Mod &mod) const {
 	return !(*this == mod);
+}
+
+std::string Mod::getLocaleDescription(const std::string& lang) {
+	std::map<std::string, std::string>::iterator it = description_locale.find(lang);
+
+	if (it != description_locale.end())
+		return it->second;
+	else
+		return description;
 }
 
 const std::string ModManager::FALLBACK_MOD = "default";
@@ -343,6 +354,12 @@ Mod ModManager::loadMod(const std::string& name) {
 			if (key == "description") {
 				// @ATTR description|string|Some text describing the mod.
 				mod.description = val;
+			}
+			else if (key == "description_locale") {
+				// @ATTR description_locale|string, string : Language, Translated description|A translated description for a language (specified by 2-letter code).
+				std::string locale_str = Parse::popFirstString(val);
+				if (!locale_str.empty())
+					mod.description_locale[locale_str] = Parse::popFirstString(val);
 			}
 			else if (key == "version") {
 				// @ATTR version|version|The version number of this mod.

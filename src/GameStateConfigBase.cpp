@@ -912,23 +912,24 @@ std::string GameStateConfigBase::createModTooltip(Mod *mod) {
 
 		ret = mod->name + '\n';
 
-		if (mod->description != "") {
+		std::string mod_description = mod->getLocaleDescription(settings->language);
+		if (!mod_description.empty()) {
 			ret += '\n';
-			ret += mod->description + '\n';
+			ret += mod_description + '\n';
 		}
 
 		bool middle_section = false;
-		if (mod_ver != "") {
+		if (!mod_ver.empty()) {
 			middle_section = true;
 			ret += '\n';
 			ret += msg->get("Version:") + ' ' + mod_ver;
 		}
-		if (mod->game != "" && mod->game != mods->FALLBACK_GAME) {
+		if (!mod->game.empty() && mod->game != mods->FALLBACK_GAME) {
 			middle_section = true;
 			ret += '\n';
 			ret += msg->get("Game:") + ' ' + mod->game;
 		}
-		if (engine_ver != "") {
+		if (!engine_ver.empty()) {
 			middle_section = true;
 			ret += '\n';
 			ret += msg->get("Engine version:") + ' ' + engine_ver;
@@ -940,7 +941,7 @@ std::string GameStateConfigBase::createModTooltip(Mod *mod) {
 		if (!mod->depends.empty()) {
 			ret += '\n';
 			ret += msg->get("Requires mods:") + '\n';
-			for (unsigned i=0; i<mod->depends.size(); ++i) {
+			for (size_t i=0; i<mod->depends.size(); ++i) {
 				ret += "-  " + mod->depends[i];
 				std::string depend_ver = VersionInfo::createVersionReqString(*mod->depends_min[i], *mod->depends_max[i]);
 				if (depend_ver != "")

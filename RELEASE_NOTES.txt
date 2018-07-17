@@ -8,6 +8,7 @@ Engine features:
 * Vertical scrolling cutscenes can be manually scrolled with the Up and Down keys.
 * Scenes in cutscenes can now pause indefinitely by using "pause=-1".
 * Added a "lifeform" flag to enemy stats. Setting it to false will display "Destroyed" instead of "Dead" when their HP reaches 0.
+* Mod descriptions can now be translated with "description_locale".
 
 Engine fixes:
 
