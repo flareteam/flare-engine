@@ -147,6 +147,9 @@ static void init(const CmdLineArgs& cmd_line_args) {
 		Utils::Exit(1);
 	}
 
+	// reset the reload_graphics flag
+	render_device->reloadGraphics();
+
 	snd = getSoundManager();
 
 	inpt->initJoystick();
