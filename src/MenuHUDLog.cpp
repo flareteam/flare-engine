@@ -33,10 +33,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedGameResources.h"
 #include "Settings.h"
 #include "Utils.h"
+#include "UtilsParsing.h"
 
 MenuHUDLog::MenuHUDLog()
 	: overlay_bg(NULL)
+	, enable_overlay(true)
 	, click_to_dismiss(false)
+	, start_at_bottom(true)
+	, overlay_at_bottom(true)
 	, hide_overlay(false)
 {
 
@@ -46,6 +50,15 @@ MenuHUDLog::MenuHUDLog()
 		while(infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
+			else if (infile.key == "enable_overlay")
+				// @ATTR enable_overlay|bool|If true, shows an overlay of the last message on top of other menus.
+				enable_overlay = Parse::toBool(infile.val);
+			else if (infile.key == "start_at_bottom")
+				// @ATTR start_at_bottom|bool|If true, messages start at the bottom and get pushed up. If false, messages start at the top and get pushed down.
+				start_at_bottom = Parse::toBool(infile.val);
+			else if (infile.key == "overlay_at_bottom")
+				// @ATTR overlay_at_bottom|bool|If true, the overlay message will be at the bottom of the HUD log area. If false, it will be at the top.
+				overlay_at_bottom = Parse::toBool(infile.val);
 			else
 				infile.error("MenuHUDLog: '%s' is not a valid key.", infile.key.c_str());
 		}
@@ -110,17 +123,36 @@ void MenuHUDLog::render() {
 
 	Rect dest;
 	dest.x = window_area.x + paragraph_spacing;
-	dest.y = window_area.y+window_area.h;
 
-	// go through new messages
-	for (size_t i = msg_age.size(); i > 0; i--) {
-		if (msg_age[i-1] > 0 && dest.y > 64 && msg_buffer[i-1]) {
-			dest.y -= msg_buffer[i-1]->getGraphicsHeight() + paragraph_spacing;
-			msg_buffer[i-1]->setDest(dest);
-			render_device->render(msg_buffer[i-1]);
+	if (start_at_bottom) {
+		dest.y = window_area.y+window_area.h;
+
+		// go through new messages
+		for (size_t i = msg_age.size(); i > 0; i--) {
+			if (msg_age[i-1] > 0 && dest.y > window_area.y && msg_buffer[i-1]) {
+				dest.y -= msg_buffer[i-1]->getGraphicsHeight() + paragraph_spacing;
+				msg_buffer[i-1]->setDest(dest);
+				render_device->render(msg_buffer[i-1]);
+			}
+			else return; // no more new messages
 		}
-		else return; // no more new messages
 	}
+	else {
+		dest.y = window_area.y + paragraph_spacing;
+
+		// go through new messages
+		for (size_t i = msg_age.size(); i > 0; i--) {
+			int msg_height = msg_buffer[i-1]->getGraphicsHeight() + paragraph_spacing;
+			if (msg_age[i-1] > 0 && dest.y + msg_height < window_area.y + window_area.h && msg_buffer[i-1]) {
+				// dest.y -= msg_buffer[i-1]->getGraphicsHeight() + paragraph_spacing;
+				msg_buffer[i-1]->setDest(dest);
+				render_device->render(msg_buffer[i-1]);
+				dest.y += msg_height;
+			}
+			else return; // no more new messages
+		}
+	}
+
 }
 
 
@@ -129,7 +161,7 @@ void MenuHUDLog::render() {
  * It is meant to be displayed on top of other menus in place of the normal render output
  */
 void MenuHUDLog::renderOverlay() {
-	if (msg_buffer.empty() || hide_overlay) {
+	if (msg_buffer.empty() || hide_overlay || !enable_overlay) {
 		return;
 	}
 
@@ -157,14 +189,20 @@ void MenuHUDLog::renderOverlay() {
 		}
 	}
 
+	int start_y;
+	if (overlay_at_bottom)
+		start_y = window_area.y + window_area.h - msg_height;
+	else
+		start_y = window_area.y;
+
 	if (overlay_bg) {
-		overlay_bg->setDest(window_area.x, window_area.y + window_area.h - msg_height);
+		overlay_bg->setDest(window_area.x, start_y);
 		render_device->render(overlay_bg);
 	}
 
 	Rect dest;
 	dest.x = window_area.x + paragraph_spacing;
-	dest.y = window_area.y + window_area.h - msg_height + paragraph_spacing;
+	dest.y = start_y + paragraph_spacing;
 
 	msg_buffer.back()->setDest(dest);
 	render_device->render(msg_buffer.back());

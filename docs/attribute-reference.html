@@ -1329,6 +1329,12 @@ body {
 
 <p><strong>sound_volume</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Sound Volume&rdquo; slider relative to the frame.</p>
 
+<p><strong>enable_overlay</strong> | <code>bool</code> | If true, shows an overlay of the last message on top of other menus.</p>
+
+<p><strong>start_at_bottom</strong> | <code>bool</code> | If true, messages start at the bottom and get pushed up. If false, messages start at the top and get pushed down.</p>
+
+<p><strong>overlay_at_bottom</strong> | <code>bool</code> | If true, the overlay message will be at the bottom of the HUD log area. If false, it will be at the top.</p>
+
 <hr />
 
 <h4>MenuInventory</h4>
@@ -1554,6 +1560,8 @@ body {
 <p>Description of mod settings.txt</p>
 
 <p><strong>description</strong> | <code>string</code> | Some text describing the mod.</p>
+
+<p><strong>description_locale</strong> | <code>string, string : Language, Translated description</code> | A translated description for a language (specified by 2-letter code).</p>
 
 <p><strong>version</strong> | <code>version</code> | The version number of this mod.</p>
 
@@ -1936,6 +1944,8 @@ body {
 <p><strong>name</strong> | <code>string</code> | Name</p>
 
 <p><strong>humanoid</strong> | <code>bool</code> | This creature gives human traits when transformed into, such as the ability to talk with NPCs.</p>
+
+<p><strong>lifeform</strong> | <code>bool</code> | Determines whether or not this entity is referred to as a living thing, such as displaying &ldquo;Dead&rdquo; vs &ldquo;Destroyed&rdquo; when their HP is 0.</p>
 
 <p><strong>level</strong> | <code>int</code> | Level</p>
 

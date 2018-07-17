@@ -39,7 +39,10 @@ private:
 	int paragraph_spacing;
 
 	Sprite *overlay_bg;
+	bool enable_overlay;
 	bool click_to_dismiss;
+	bool start_at_bottom;
+	bool overlay_at_bottom;
 
 public:
 	enum {
