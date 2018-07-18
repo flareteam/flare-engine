@@ -19,6 +19,7 @@ Engine fixes:
 * Fixed GetText bug where strings weren't being sanitized.
 * Fix locked left/right keys when loading a cutscene from the dev console.
 * Using the --mods command line flag doesn't overwrite the user's mod configuration.
+* Fix infinte loop bug when trying to render multi-line text in a small area.
 * Lots of code cleanup.
 
 New translations:

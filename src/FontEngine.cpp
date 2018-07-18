@@ -169,6 +169,9 @@ Point FontEngine::calc_size(const std::string& text_with_newlines, int width) {
 
 					next_word = long_token;
 					long_token = popTokenByWidth(next_word, width);
+
+					if (long_token == next_word)
+						break;
 				}
 			}
 
@@ -180,7 +183,10 @@ Point FontEngine::calc_size(const std::string& text_with_newlines, int width) {
 			builder_prev.str(builder.str());
 		}
 
-		next_word = getNextToken(fulltext, cursor, space); // get next word
+		std::string old_word = next_word;
+		next_word = getNextToken(fulltext, cursor, space); // next word
+		if (old_word == next_word)
+			break;
 	}
 
 	builder.str(Parse::trim(builder.str())); //removes whitespace that shouldn't be included in the size
@@ -267,6 +273,9 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, Imag
 
 					next_word = long_token;
 					long_token = popTokenByWidth(next_word, width);
+
+					if (long_token == next_word)
+						break;
 				}
 			}
 
@@ -278,7 +287,10 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, Imag
 			builder_prev.str(builder.str());
 		}
 
+		std::string old_word = next_word;
 		next_word = getNextToken(fulltext, cursor, space); // next word
+		if (old_word == next_word)
+			break;
 	}
 
 	renderInternal(builder.str(), x, cursor_y, justify, target, color);
