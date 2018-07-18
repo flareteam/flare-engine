@@ -64,10 +64,13 @@ private:
 	public:
 		Sprite* sprite;
 		std::string text;
+		std::string text_raw;
 		std::string font;
 		Color color;
 		Rect size;
 		int justify;
+		std::vector<std::string> requires_status;
+		std::vector<std::string> requires_not_status;
 
 		BookText()
 			: sprite(NULL)
@@ -102,6 +105,7 @@ private:
 	void loadButton(FileParser &infile, BookButton& bbutton);
 	void loadBookEvent(FileParser &infile, Event& ev);
 	void clearBook();
+	void refreshText();
 };
 
 #endif //MENU_BOOK_H

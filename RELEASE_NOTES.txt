@@ -10,6 +10,8 @@ Engine features:
 * Added a "lifeform" flag to enemy stats. Setting it to false will display "Destroyed" instead of "Dead" when their HP reaches 0.
 * Mod descriptions can now be translated with "description_locale".
 * Added "enable_overlay", "start_at_bottom", and "overlay_at_bottom" to HUD log configuration.
+* Added "requires_status" and "requires_not_status" to book text.
+* Added ability for book text to use special variables like "${AVATAR_NAME}".
 
 Engine fixes:
 

@@ -121,6 +121,8 @@ void MenuBook::loadBook() {
 		infile.close();
 	}
 
+	refreshText();
+
 	for (size_t i = images.size(); i > 0;) {
 		i--;
 
@@ -128,30 +130,6 @@ void MenuBook::loadBook() {
 			images[i].image->setDest(images[i].dest);
 		else
 			images.erase(images.begin() + i);
-	}
-
-	// render text to surface
-	for (size_t i = text.size(); i > 0;) {
-		i--;
-
-		font->setFont(text[i].font);
-		Point pSize = font->calc_size(text[i].text, text[i].size.w);
-		Image *graphics = render_device->createImage(text[i].size.w, pSize.y);
-
-		if (graphics) {
-			int x_offset = 0;
-			if (text[i].justify == FontEngine::JUSTIFY_CENTER)
-				x_offset = text[i].size.w / 2;
-			else if (text[i].justify == FontEngine::JUSTIFY_RIGHT)
-				x_offset = text[i].size.w;
-
-			font->render(text[i].text, x_offset, 0, text[i].justify, graphics, text[i].size.w, text[i].color);
-			text[i].sprite = graphics->createSprite();
-			graphics->unref();
-		}
-
-		if (!graphics || !text[i].sprite)
-			text.erase(text.begin() + i);
 	}
 
 	for (size_t i = buttons.size(); i > 0;) {
@@ -235,7 +213,23 @@ void MenuBook::loadText(FileParser &infile, BookText& btext) {
 	// @ATTR text.text|string|The text to be displayed.
 	else if (infile.key == "text") {
 		// we use substr here to remove the trailing comma that was added in loadBook()
-		btext.text = msg->get(infile.val.substr(0, infile.val.length() - 1));
+		btext.text_raw = infile.val.substr(0, infile.val.length() - 1);
+	}
+	// @ATTR text.requires_status|list(string)|Text requires these campaign statuses in order to be visible.
+	else if (infile.key == "requires_status") {
+		std::string temp = Parse::popFirstString(infile.val);
+		while (!temp.empty()) {
+			btext.requires_status.push_back(temp);
+			temp = Parse::popFirstString(infile.val);
+		}
+	}
+	// @ATTR text.requires_not_status|list(string)|Text must not have any of these campaign statuses in order to be visible.
+	else if (infile.key == "requires_not_status") {
+		std::string temp = Parse::popFirstString(infile.val);
+		while (!temp.empty()) {
+			btext.requires_not_status.push_back(temp);
+			temp = Parse::popFirstString(infile.val);
+		}
 	}
 	else {
 		infile.error("MenuBook: '%s' is not a valid key.", infile.key.c_str());
@@ -326,6 +320,39 @@ void MenuBook::closeWindow() {
 	book_loaded = false;
 }
 
+void MenuBook::refreshText() {
+	for (size_t i = text.size(); i > 0;) {
+		i--;
+
+		std::string text_new = Utils::substituteVarsInString(msg->get(text[i].text_raw), pc);
+		if (text[i].text == text_new)
+			continue;
+
+		text[i].text = text_new;
+
+		// render text to surface
+		font->setFont(text[i].font);
+		Point pSize = font->calc_size(text[i].text, text[i].size.w);
+		Image *graphics = render_device->createImage(text[i].size.w, pSize.y);
+
+		if (graphics) {
+			int x_offset = 0;
+			if (text[i].justify == FontEngine::JUSTIFY_CENTER)
+				x_offset = text[i].size.w / 2;
+			else if (text[i].justify == FontEngine::JUSTIFY_RIGHT)
+				x_offset = text[i].size.w;
+
+			font->render(text[i].text, x_offset, 0, text[i].justify, graphics, text[i].size.w, text[i].color);
+			text[i].sprite = graphics->createSprite();
+			graphics->unref();
+		}
+
+		if (!graphics || !text[i].sprite)
+			text.erase(text.begin() + i);
+	}
+
+}
+
 void MenuBook::logic() {
 	if (book_name.empty()) return;
 	else {
@@ -344,6 +371,8 @@ void MenuBook::logic() {
 		closeWindow();
 		snd->play(sfx_close, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
 	}
+
+	refreshText();
 
 	for (size_t i = 0; i < buttons.size(); ++i) {
 		if (buttons[i].event.components.empty() || !EventManager::isActive(buttons[i].event)) {
@@ -370,6 +399,21 @@ void MenuBook::render() {
 
 	closeButton->render();
 	for (unsigned i=0; i<text.size(); i++) {
+		bool skip = false;
+
+		for (size_t j = 0; j < text[i].requires_status.size(); ++j) {
+			if (!camp->checkStatus(text[i].requires_status[j]))
+				skip = true;
+		}
+
+		for (size_t j = 0; j < text[i].requires_not_status.size(); ++j) {
+			if (camp->checkStatus(text[i].requires_not_status[j]))
+				skip = true;
+		}
+
+		if (skip)
+			continue;
+
 		render_device->render(text[i].sprite);
 	}
 	for (size_t i = 0; i < images.size(); ++i) {
