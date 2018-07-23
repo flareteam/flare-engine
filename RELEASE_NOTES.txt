@@ -12,6 +12,7 @@ Engine features:
 * Added "enable_overlay", "start_at_bottom", and "overlay_at_bottom" to HUD log configuration.
 * Added "requires_status" and "requires_not_status" to book text.
 * Added ability for book text to use special variables like "${AVATAR_NAME}".
+* Added random selection of portrait and class to New Game menu.
 
 Engine fixes:
 

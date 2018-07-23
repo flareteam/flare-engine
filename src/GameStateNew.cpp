@@ -56,6 +56,8 @@ GameStateNew::GameStateNew()
 	, show_classlist(true)
 	, modified_name(false)
 	, delete_items(true)
+	, random_option(false)
+	, random_class(false)
 	, game_slot(0)
 {
 	// set up buttons
@@ -178,6 +180,14 @@ GameStateNew::GameStateNew()
 			else if (infile.key == "show_classlist") {
 				show_classlist = Parse::toBool(infile.val);
 			}
+			// @ATTR random_option|bool|Initially picks a random character option (aka portrait/name).
+			else if (infile.key == "random_option") {
+				random_option = Parse::toBool(infile.val);
+			}
+			// @ATTR random_class|bool|Initially picks a random character class.
+			else if (infile.key == "random_class") {
+				random_class = Parse::toBool(infile.val);
+			}
 			else {
 				infile.error("GameStateNew: '%s' is not a valid key.", infile.key.c_str());
 			}
@@ -190,15 +200,21 @@ GameStateNew::GameStateNew()
 		class_list->append(msg->get(eset->hero_classes.list[i].name), getClassTooltip(i));
 	}
 
-	if (!eset->hero_classes.list.empty())
-		class_list->select(0);
+	if (!eset->hero_classes.list.empty()) {
+		int class_index = 0;
+		if (random_class)
+			class_index = static_cast<int>(rand() % eset->hero_classes.list.size());
+
+		class_list->select(class_index);
+	}
 
 	loadGraphics();
 	loadOptions("hero_options.txt");
 
-	loadPortrait(hero_options[0].portrait);
-	setName(hero_options[0].name);
-	setHeroOption(0);
+	if (random_option)
+		setHeroOption(OPTION_RANDOM);
+	else
+		setHeroOption(OPTION_CURRENT);
 
 	// Set up tab list
 	tablist.ignore_no_mouse = true;
@@ -301,12 +317,19 @@ void GameStateNew::setHeroOption(int dir) {
 		}
 	}
 
-	if (dir == 0) {
+	if (dir == OPTION_CURRENT) {
 		// don't change current_option unless required
-		if (std::find(available_options->begin(), available_options->end(), current_option) == available_options->end())
-			current_option = available_options->front();
+		if (std::find(available_options->begin(), available_options->end(), current_option) == available_options->end()) {
+			if (random_option && available_options != &all_options) {
+				size_t rand_index = rand() % available_options->size();
+				current_option = available_options->at(rand_index);
+			}
+			else {
+				current_option = available_options->front();
+			}
+		}
 	}
-	else if (dir == 1) {
+	else if (dir == OPTION_NEXT) {
 		// increment current_option
 		std::vector<int>::iterator it = std::find(available_options->begin(), available_options->end(), current_option);
 		if (it == available_options->end()) {
@@ -320,7 +343,7 @@ void GameStateNew::setHeroOption(int dir) {
 				current_option = available_options->front();
 		}
 	}
-	else if (dir == -1) {
+	else if (dir == OPTION_PREV) {
 		// decrement current_option
 		std::vector<int>::iterator it = std::find(available_options->begin(), available_options->end(), current_option);
 		if (it == available_options->begin()) {
@@ -330,6 +353,10 @@ void GameStateNew::setHeroOption(int dir) {
 			--it;
 			current_option = (*it);
 		}
+	}
+	else if (dir == OPTION_RANDOM && !available_options->empty()) {
+		size_t rand_index = rand() % available_options->size();
+		current_option = available_options->at(rand_index);
 	}
 
 	loadPortrait(hero_options[current_option].portrait);
@@ -348,7 +375,7 @@ void GameStateNew::logic() {
 
 	button_permadeath->checkClick();
 	if (show_classlist && class_list->checkClick()) {
-		setHeroOption(0);
+		setHeroOption(OPTION_CURRENT);
 	}
 
 	// require character name
@@ -393,10 +420,10 @@ void GameStateNew::logic() {
 
 	// scroll through portrait options
 	if (button_next->checkClick()) {
-		setHeroOption(1);
+		setHeroOption(OPTION_NEXT);
 	}
 	else if (button_prev->checkClick()) {
-		setHeroOption(-1);
+		setHeroOption(OPTION_PREV);
 	}
 
 	if (input_name->getText() != hero_options[current_option].name)
