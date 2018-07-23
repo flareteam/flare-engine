@@ -27,6 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "EventManager.h"
 #include "FileParser.h"
+#include "FontEngine.h"
 #include "Menu.h"
 #include "MenuLog.h"
 #include "MessageEngine.h"
@@ -70,26 +71,29 @@ void QuestLog::load(const std::string& filename) {
 	if (!infile.open(filename, FileParser::MOD_FILE, FileParser::ERROR_NORMAL))
 		return;
 
-	quest_names.resize(quest_names.size()+1);
-	quest_names.back() = "";
+	quests.resize(quests.size()+1);
 
 	while (infile.next()) {
 		if (infile.new_section) {
 			if (infile.section == "quest") {
-				quests.push_back(std::vector<EventComponent>());
+				quest_sections.push_back(std::vector<EventComponent>());
 			}
 		}
 
 		if (infile.section == "") {
 			if (infile.key == "name") {
 				// @ATTR name|string|A displayed name for this quest.
-				quest_names.back() = msg->get(infile.val);
+				quests.back().name = msg->get(infile.val);
+			}
+			else if (infile.key == "complete_status") {
+				// @ATTR complete_status|string|If this status is set, the quest will be displayed as completed.
+				quests.back().complete_status = infile.val;
 			}
 
 			continue;
 		}
 
-		if (quests.empty())
+		if (quest_sections.empty())
 			continue;
 
 		Event ev;
@@ -140,7 +144,7 @@ void QuestLog::load(const std::string& filename) {
 			ec.s = msg->get(infile.val);
 
 			// quest group id
-			ec.x = static_cast<int>(quest_names.size()-1);
+			ec.x = static_cast<int>(quests.size()-1);
 
 			ev.components.push_back(ec);
 		}
@@ -150,7 +154,7 @@ void QuestLog::load(const std::string& filename) {
 
 		for (size_t i=0; i<ev.components.size(); ++i) {
 			if (ev.components[i].type != EventComponent::NONE)
-				quests.back().push_back(ev.components[i]);
+				quest_sections.back().push_back(ev.components[i]);
 		}
 	}
 	infile.close();
@@ -165,20 +169,21 @@ void QuestLog::logic() {
  */
 void QuestLog::createQuestList() {
 	std::vector<size_t> temp_quest_ids;
+	std::vector<size_t> temp_complete_quest_ids;
 
 	// check quest requirements
-	for (size_t i=0; i<quests.size(); i++) {
+	for (size_t i=0; i<quest_sections.size(); i++) {
 		bool requirements_met = false;
 
-		for (size_t j=0; j<quests[i].size(); j++) {
-			if (quests[i][j].type == EventComponent::QUEST_TEXT) {
+		for (size_t j=0; j<quest_sections[i].size(); j++) {
+			if (quest_sections[i][j].type == EventComponent::QUEST_TEXT) {
 				continue;
 			}
 			else {
 				// check requirements
 				// break (skip to next dialog node) if any requirement fails
 				// if we reach an event that is not a requirement, succeed
-				if (!camp->checkAllRequirements(quests[i][j])) {
+				if (!camp->checkAllRequirements(quest_sections[i][j])) {
 					requirements_met = false;
 					break;
 				}
@@ -193,26 +198,46 @@ void QuestLog::createQuestList() {
 		}
 	}
 
-	// check if we actually need to update the quest log
-	bool refresh_quest_list = false;
-	if (temp_quest_ids.size() != active_quest_ids.size()) {
-		refresh_quest_list = true;
-	}
-	else {
-		for (size_t i=0; i<temp_quest_ids.size(); ++i) {
-			if (temp_quest_ids[i] != active_quest_ids[i]) {
-				refresh_quest_list = true;
-				break;
+	// check quest completion status
+	for (size_t i=0; i<quests.size(); ++i) {
+		if (!quests[i].name.empty() && !quests[i].complete_status.empty()) {
+			if (camp->checkStatus(quests[i].complete_status)) {
+				temp_complete_quest_ids.push_back(i);
 			}
 		}
 	}
 
+	// check if we actually need to update the quest log
+	bool refresh_quest_list = false;
+	if (temp_quest_ids != active_quest_ids || temp_complete_quest_ids != complete_quest_ids)
+		refresh_quest_list = true;
+
 	// update the quest log
 	if (refresh_quest_list) {
 		active_quest_ids = temp_quest_ids;
+		complete_quest_ids = temp_complete_quest_ids;
 		newQuestNotification = true;
 
 		log->clear(MenuLog::TYPE_QUESTS);
+
+		bool complete_header = false;
+		for (size_t i = complete_quest_ids.size(); i > 0; i--) {
+			if (!complete_header) {
+				complete_header = true;
+			}
+			log->setNextColor(font->getColor(FontEngine::COLOR_WIDGET_DISABLED), MenuLog::TYPE_QUESTS);
+			log->add(quests[complete_quest_ids[i-1]].name, MenuLog::TYPE_QUESTS, WidgetLog::MSG_UNIQUE);
+		}
+
+		if (complete_header) {
+			std::stringstream ss;
+			ss << msg->get("Completed Quests") << " (" << complete_quest_ids.size() << ")";
+			log->setNextStyle(WidgetLog::FONT_BOLD, MenuLog::TYPE_QUESTS);
+			log->setNextColor(font->getColor(FontEngine::COLOR_WIDGET_DISABLED), MenuLog::TYPE_QUESTS);
+			log->add(ss.str(), MenuLog::TYPE_QUESTS, WidgetLog::MSG_UNIQUE);
+			if (!active_quest_ids.empty())
+				log->addSeparator(MenuLog::TYPE_QUESTS);
+		}
 
 		for (size_t i=active_quest_ids.size(); i>0; i--) {
 			size_t k = active_quest_ids[i-1];
@@ -222,29 +247,30 @@ void QuestLog::createQuestList() {
 
 			// get the group id of the next active quest
 			int next_quest_id = 0;
-			for (size_t j=0; j<quests[k_next].size(); j++) {
-				if (quests[k_next][j].type == EventComponent::QUEST_TEXT) {
-					next_quest_id = quests[k_next][j].x;
+			for (size_t j=0; j<quest_sections[k_next].size(); j++) {
+				if (quest_sections[k_next][j].type == EventComponent::QUEST_TEXT) {
+					next_quest_id = quest_sections[k_next][j].x;
 					break;
 				}
 			}
 
-			for (size_t j=0; j<quests[k].size(); j++) {
-				if (quests[k][j].type == EventComponent::QUEST_TEXT) {
-					log->add(quests[k][j].s, MenuLog::TYPE_QUESTS, WidgetLog::MSG_UNIQUE);
+			for (size_t j=0; j<quest_sections[k].size(); j++) {
+				if (quest_sections[k][j].type == EventComponent::QUEST_TEXT) {
+					log->add(quest_sections[k][j].s, MenuLog::TYPE_QUESTS, WidgetLog::MSG_UNIQUE);
 
-					if (next_quest_id != quests[k][j].x) {
-						if (quest_names[quests[k][j].x] != "") {
+					int quest_id = quest_sections[k][j].x;
+					if (next_quest_id != quest_id) {
+						if (!quests[quest_id].name.empty()) {
 							log->setNextStyle(WidgetLog::FONT_BOLD, MenuLog::TYPE_QUESTS);
-							log->add(quest_names[quests[k][j].x], MenuLog::TYPE_QUESTS, WidgetLog::MSG_UNIQUE);
+							log->add(quests[quest_id].name, MenuLog::TYPE_QUESTS, WidgetLog::MSG_UNIQUE);
 						}
 
 						log->addSeparator(MenuLog::TYPE_QUESTS);
 					}
 					else if (i == 1) {
-						if (quest_names[quests[k][j].x] != "") {
+						if (!quests[quest_id].name.empty()) {
 							log->setNextStyle(WidgetLog::FONT_BOLD, MenuLog::TYPE_QUESTS);
-							log->add(quest_names[quests[k][j].x], MenuLog::TYPE_QUESTS, WidgetLog::MSG_UNIQUE);
+							log->add(quests[quest_id].name, MenuLog::TYPE_QUESTS, WidgetLog::MSG_UNIQUE);
 						}
 					}
 

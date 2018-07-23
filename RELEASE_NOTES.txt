@@ -14,6 +14,7 @@ Engine features:
 * Added ability for book text to use special variables like "${AVATAR_NAME}".
 * Added random selection of portrait and class to New Game menu.
 * Allow setting the class list height in the New Game menu.
+* Display a list of completed quests in the Quests log.
 
 Engine fixes:
 

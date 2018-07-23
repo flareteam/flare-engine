@@ -32,14 +32,21 @@ class MenuLog;
 
 class QuestLog {
 private:
+	class Quest {
+	public:
+		std::string name;
+		std::string complete_status;
+	};
+
 	MenuLog *log;
 
 	// inner vector is a chain of events per quest, outer vector is a
 	// list of quests.
-	std::vector<std::vector<EventComponent> >quests;
+	std::vector<std::vector<EventComponent> >quest_sections;
 
 	std::vector<size_t> active_quest_ids;
-	std::vector<std::string> quest_names;
+	std::vector<size_t> complete_quest_ids;
+	std::vector<Quest> quests;
 
 public:
 	explicit QuestLog(MenuLog *_log);
