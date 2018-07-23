@@ -45,6 +45,7 @@ Translation updates:
 Game changes:
 
 * The player's name can now been seen if they write it in the Book of the Dead.
+* Fixed not being able to do the Merchant's Journal quest if Abasi was in his final location.
 
 
 
