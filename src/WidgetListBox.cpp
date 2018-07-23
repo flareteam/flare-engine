@@ -517,6 +517,10 @@ void WidgetListBox::select(int index) {
 	if (items.empty())
 		return;
 
+	int sel = getSelected();
+	if (!multi_select && sel != -1) {
+		items[sel].selected = false;
+	}
 	items[index].selected = true;
 }
 

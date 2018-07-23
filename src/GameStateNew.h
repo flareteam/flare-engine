@@ -74,6 +74,7 @@ private:
 	WidgetButton *button_create;
 	WidgetButton *button_next;
 	WidgetButton *button_prev;
+	WidgetButton *button_randomize;
 	WidgetLabel *label_portrait;
 	WidgetLabel *label_name;
 	WidgetInput *input_name;

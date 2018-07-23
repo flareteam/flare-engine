@@ -72,6 +72,9 @@ GameStateNew::GameStateNew()
 	button_prev = new WidgetButton("images/menus/buttons/left.png");
 	button_next = new WidgetButton("images/menus/buttons/right.png");
 
+	button_randomize = new WidgetButton(WidgetButton::DEFAULT_FILE);
+	button_randomize->label = msg->get("Randomize");
+
 	input_name = new WidgetInput(WidgetInput::DEFAULT_FILE);
 	input_name->max_length = 20;
 
@@ -142,6 +145,13 @@ GameStateNew::GameStateNew()
 				int a = Parse::toAlignment(Parse::popFirstString(infile.val));
 				button_permadeath->setBasePos(x, y, a);
 			}
+			// @ATTR bytton_randomize|int, int, alignment : X, Y, Alignment|Position of the "Randomize" button.
+			else if (infile.key == "button_randomize") {
+				int x = Parse::popFirstInt(infile.val);
+				int y = Parse::popFirstInt(infile.val);
+				int a = Parse::toAlignment(Parse::popFirstString(infile.val));
+				button_randomize->setBasePos(x, y, a);
+			}
 			// @ATTR name_input|int, int, alignment : X, Y, Alignment|Position of the hero name textbox.
 			else if (infile.key == "name_input") {
 				int x = Parse::popFirstInt(infile.val);
@@ -164,6 +174,10 @@ GameStateNew::GameStateNew()
 			// @ATTR classlist_label|label|Label for the "Choose a Class" text.
 			else if (infile.key == "classlist_label") {
 				label_classlist->setFromLabelInfo(Parse::popLabelInfo(infile.val));
+			}
+			// @ATTR classlist_height|int|Number of visible rows for the class list widget.
+			else if (infile.key == "classlist_height") {
+				class_list->setHeight(Parse::popFirstInt(infile.val));
 			}
 			// @ATTR portrait|rectangle|Position and dimensions of the portrait image.
 			else if (infile.key == "portrait") {
@@ -222,6 +236,7 @@ GameStateNew::GameStateNew()
 	tablist.add(button_create);
 	tablist.add(input_name);
 	tablist.add(button_permadeath);
+	tablist.add(button_randomize);
 	tablist.add(button_prev);
 	tablist.add(button_next);
 	tablist.add(class_list);
@@ -426,6 +441,14 @@ void GameStateNew::logic() {
 		setHeroOption(OPTION_PREV);
 	}
 
+	if (button_randomize->checkClick()) {
+		if (!eset->hero_classes.list.empty()) {
+			int class_index = static_cast<int>(rand() % eset->hero_classes.list.size());
+			class_list->select(class_index);
+		}
+		setHeroOption(OPTION_RANDOM);
+	}
+
 	if (input_name->getText() != hero_options[current_option].name)
 		modified_name = true;
 }
@@ -437,6 +460,7 @@ void GameStateNew::refreshWidgets() {
 	button_prev->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);
 	button_next->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);
 	button_permadeath->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);
+	button_randomize->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);
 	class_list->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);
 
 	label_portrait->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);
@@ -456,6 +480,7 @@ void GameStateNew::render() {
 	button_next->render();
 	input_name->render();
 	button_permadeath->render();
+	button_randomize->render();
 
 	// display portrait option
 	Rect src;
@@ -511,6 +536,7 @@ GameStateNew::~GameStateNew() {
 	delete button_create;
 	delete button_next;
 	delete button_prev;
+	delete button_randomize;
 	delete label_portrait;
 	delete label_name;
 	delete input_name;
