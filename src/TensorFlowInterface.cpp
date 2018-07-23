@@ -32,13 +32,6 @@ TensorFlowInterface::TensorFlowInterface()
 	graph = TF_NewGraph();
 	session = TF_LoadSessionFromSavedModel(opts, NULL, saved_model_path, tags, 1, graph, NULL, status);
 	TF_DeleteSessionOptions(opts);
-
-	// allocate memory to tensors to avoid mem errors
-	int64_t dims_in[NUM_DIMS] = {1, TENSOR_IN_LENGTH};
-	int64_t dims_out[NUM_DIMS] = {1, TENSOR_OUT_LENGTH};
-	tensor_in = TF_AllocateTensor(TF_FLOAT, dims_in, NUM_DIMS, sizeof(float) * TENSOR_IN_LENGTH);
-	tensor_out = TF_AllocateTensor(TF_FLOAT, dims_out, NUM_DIMS, sizeof(float) * TENSOR_OUT_LENGTH);
-
 }
 
 TensorFlowInterface::~TensorFlowInterface() {
@@ -55,10 +48,6 @@ void TensorFlowInterface::tensor_free_none(void * data, size_t len, void* arg) {
 }
 
 float * TensorFlowInterface::predict(std::array<float, TENSOR_IN_LENGTH> game_data) {
-
-	for(int i=0;i<game_data.size();i++) {
-		printf("game_data[%d]=%f, ", i, game_data[i]);
-	}
 
 	// int64_t input_num_values = current_game_data.size();
 	// const int num_dims = 2;
@@ -78,6 +67,12 @@ float * TensorFlowInterface::predict(std::array<float, TENSOR_IN_LENGTH> game_da
 	// //TF_Tensor * tensor_out = TF_NewTensor(TF_FLOAT, out_dims, num_dims, &out_data, sizeof(float) * 2, tensor_free_none, NULL);
 	// TF_Tensor * tensor_out = TF_AllocateTensor(TF_FLOAT, out_dims, num_dims, sizeof(float) * output_num_values);
 	// printf("Output tensor allocated.\n");
+
+	// allocate memory to tensors to avoid mem errors
+	int64_t dims_in[NUM_DIMS] = {1, TENSOR_IN_LENGTH};
+	int64_t dims_out[NUM_DIMS] = {1, TENSOR_OUT_LENGTH};
+	tensor_in = TF_AllocateTensor(TF_FLOAT, dims_in, NUM_DIMS, sizeof(float) * TENSOR_IN_LENGTH);
+	tensor_out = TF_AllocateTensor(TF_FLOAT, dims_out, NUM_DIMS, sizeof(float) * TENSOR_OUT_LENGTH);
 
 	float* tensor_in_ptr = (float *)TF_TensorData(tensor_in);
 
