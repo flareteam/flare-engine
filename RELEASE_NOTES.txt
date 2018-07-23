@@ -13,6 +13,7 @@ Engine features:
 * Added "requires_status" and "requires_not_status" to book text.
 * Added ability for book text to use special variables like "${AVATAR_NAME}".
 * Added random selection of portrait and class to New Game menu.
+* Allow setting the class list height in the New Game menu.
 
 Engine fixes:
 
@@ -39,6 +40,10 @@ Translation updates:
 * Scottish Gaelic (gd) update (GunChleoc)
 * Russian (ru) update (Sam Vo)
 * Chinese (zh) update (dumaosen)
+
+Game changes:
+
+* The player's name can now been seen if they write it in the Book of the Dead.
 
 
 
