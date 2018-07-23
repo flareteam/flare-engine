@@ -76,29 +76,29 @@ float * TensorFlowInterface::predict(std::array<float, TENSOR_IN_LENGTH> game_da
 
 	float* tensor_in_ptr = (float *)TF_TensorData(tensor_in);
 
-	logInfo("TensorFlowInterface: Prediction, input vector is length %d, with size of %d, sizeof float %d",
-					game_data.size(), sizeof(game_data[0]), sizeof(float));
+	//logInfo("TensorFlowInterface: Prediction, input vector is length %d, with size of %d, sizeof float %d",
+	//				game_data.size(), sizeof(game_data[0]), sizeof(float));
 
 	//std::memcpy(tensor_in_ptr, &game_data[0], sizeof(float)*TENSOR_IN_LENGTH);
 	std::copy(game_data.begin(), game_data.end(), tensor_in_ptr);
-  printf("Input tensor filled.\n");
+  //printf("Input tensor filled.\n");
 
 	// Operations
 	TF_Operation * op_in = TF_GraphOperationByName(graph, "InputData/X");
 	TF_Operation * op_out = TF_GraphOperationByName(graph, "FullyConnected_4/Softmax");
-	printf("Operations set.\n");
+	//printf("Operations set.\n");
 
 	// Session Inputs
 	TF_Output input_operations[] = { op_in, 0 };
 	TF_Tensor ** input_tensors = {&tensor_in};
-	printf("Session inputs.\n");
+	//printf("Session inputs.\n");
 
 	// Session Outputs
 	TF_Output output_operations[] = { op_out, 0 };
 	TF_Tensor ** output_tensors = {&tensor_out};
-	printf("Session outputs.\n");
+	//printf("Session outputs.\n");
 
-	printf("Starting session run.\n");
+	//printf("Starting session run.\n");
 
 	TF_SessionRun(session, NULL,
 			// Inputs
@@ -109,10 +109,10 @@ float * TensorFlowInterface::predict(std::array<float, TENSOR_IN_LENGTH> game_da
 			NULL, 0, NULL,
 			status);
 
-	printf("Session Run Status: %d - %s\n", TF_GetCode(status), TF_Message(status) );
-	printf("Output Tensor Type: %d\n", TF_TensorType(tensor_out));
+	//printf("Session Run Status: %d - %s\n", TF_GetCode(status), TF_Message(status) );
+	//printf("Output Tensor Type: %d\n", TF_TensorType(tensor_out));
 	float* outval = (float *)TF_TensorData(tensor_out);
-	printf("Output Tensor Value: %.2f\n", (*outval));
+	//printf("Output Tensor Value: %.2f\n", (*outval));
 
 	// de-allocate
 	TF_DeleteTensor(tensor_in);

@@ -64,48 +64,24 @@ void BehaviorTF::logic() {
 		For first pass, compute probabilities of each move direction, and render on top of entity.
 	*/
 
-	logInfo("BehaviorTF: Logic step started.");
+	CombatText *combat_text = comb;
 
-
-	for ( int actionInt = 0; actionInt <= 0; actionInt++ )
+	for ( int actionInt = 0; actionInt <= 4; actionInt++ )
 	{
 		 ACTION action = static_cast<ACTION>(actionInt);
-		 logInfo("BehaviorTF: Logic step, prediction for action, %d", action);
-	   std::array<float, TENSOR_IN_LENGTH> game_data = getGameStateData(action);
-		 logInfo("BehaviorTF: Logic step, got game_data, 1st entry %f, size %d, sizeof %d",
-		 				 game_data[0], game_data.size(), sizeof(game_data[0]));
+		 std::array<float, TENSOR_IN_LENGTH> game_data = getGameStateData(action);
 		 float * pred = tf_model->predict(game_data);
-		 logInfo("BehaviorTF: Logic step, prediction is %f", (*pred));
 		 int predInt = int( (*pred) * 10000 );
-		 logInfo("BehaviorTF: Logic step, prediction cast to int, %d", predInt);
-		 // std::this_thread::sleep_for(std::chrono::milliseconds(10));
+
+		 // render pred above entity
+		 // use turn_ticks to render only after every enemy turn
+		 if( e->stats.turn_ticks == 0) {
+		   FPoint pos = e->stats.pos;
+			 pos.x += POS_OFFETS_X[actionInt];
+			 pos.y += POS_OFFETS_Y[actionInt];
+			 combat_text->addInt(predInt, pos, COMBAT_MESSAGE_MISS);
+		 }
 	}
-	/*
-	std::array<float, 5> preds;
-
-	preds[0] = tf_model->predict(getGameStateData(ACTION::NONE));
-	preds[1] = tf_model->predict(getGameStateData(ACTION::MOVE_NORTH));
-	preds[2] = tf_model->predict(getGameStateData(ACTION::MOVE_EAST));
-	preds[3] = tf_model->predict(getGameStateData(ACTION::MOVE_SOUTH));
-	preds[4] = tf_model->predict(getGameStateData(ACTION::MOVE_WEST));
-
-	logInfo(
-		"BehaviorTF: Predict tf_model with outputs %d, %d, %d, %d, %d .",
-		preds[0], preds[1], preds[2], preds[3], preds[4]
-	);
-
-	// TODO(Leo): render preds on screen
-	CombatText *combat_text = comb;
-	 for (int i = 0; i < 5; i++) {
-		 FPoint pos = e->stats.pos;
-		 pos.x += POS_OFFETS_X[i];
-		 pos.y += POS_OFFETS_Y[i];
-		 int pred = int( preds[i] * 10000 );
-		 combat_text->addInt(pred, pos, COMBAT_MESSAGE_MISS);
-		 // tip_buf.addText(preds[i]);
-		 // loading_tip->render(tip_buf, Point(VIEW_W, VIEW_H), STYLE_FLOAT);
-	 }
-	 */
 }
 
 // TODO(Leo): can move to UTILS_MATH_H
@@ -197,21 +173,21 @@ std::array<float, TENSOR_IN_LENGTH> BehaviorTF::getGameStateData(ACTION action) 
 	data[4] = pc->stats.hp;
 	data[5] = pc->stats.mp;
 
-	printf("BehaviorTF: e hp %.2f\n", data[0]);
+	// printf("BehaviorTF: e hp %.2f\n", data[0]);
 
 	// distance (dx, dy) from entity to pc
 	std::array<float, 2> dist = distEntities(e_x, e_y, pc->stats.pos.x, pc->stats.pos.y);
 	std::copy(dist.begin(), dist.end(), &data[6]);
 	// data.insert(data.end(), dist.begin(), dist.end());
 
-	printf("BehaviorTF: (dx,dy) = %.2f , %.2f\n", data[6], data[7]);
+	// printf("BehaviorTF: (dx,dy) = %.2f , %.2f\n", data[6], data[7]);
 
 	// 10 x 10 grid flattened of other entity hp
 	std::array<float, RELATIVE_OVERLAY_LENGTH> allies_hp_overlay = featureToRelativeOverlay(FEATURE::HP, e_x, e_y);
 	std::copy(allies_hp_overlay.begin(), allies_hp_overlay.end(), &data[8]);
 	// data.insert(data.end(), allies_hp_overlay.begin(), allies_hp_overlay.end());
 
-	printf("BehaviorTF: allies_hp_overlay[0] = %.2f = %.2f\n", allies_hp_overlay[0], data[8]);
+	// printf("BehaviorTF: allies_hp_overlay[0] = %.2f = %.2f\n", allies_hp_overlay[0], data[8]);
 
 	// printf("BehaviorTF: data len = %lu\n", data.size());
 	return data;
