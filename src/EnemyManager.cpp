@@ -259,6 +259,8 @@ void EnemyManager::handleSpawn() {
 		else
 			e->eb = new BehaviorStandard(e);
 
+		// TODO(LEO): add BehaviorTF here too? 
+
 		e->stats.hero_ally = espawn.hero_ally;
 		e->stats.enemy_ally = espawn.enemy_ally;
 		e->stats.summoned = true;

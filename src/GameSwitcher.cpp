@@ -305,23 +305,27 @@ void GameSwitcher::saveUserSettings() {
 void GameSwitcher::logGameState(char * fname) {
 	if (currentState) {
 
-		std::map<std::string, std::string> log_game_state = currentState->logGameState();
+		std::map<std::string, std::string> game_state_log = currentState->logGameState();
 
-		if (!log_game_state.empty()) {
+		if (!game_state_log.empty()) {
 
-			json state_json(currentState->logGameState());
+			json game_state_json(game_state_log);
+			std::string game_state_str = game_state_json.dump();
 
-			std::ofstream outfile;
-			outfile.open(fname, std::ios::out | std::ios::app);
+			if (game_state_str != prev_game_state_str) {
+				std::ofstream outfile;
+				outfile.open(fname, std::ios::out | std::ios::app);
 
-			if (outfile.is_open()) {
+				if (outfile.is_open()) {
 
-				outfile << state_json.dump();
-				outfile << "\n";
+					outfile << game_state_str;
+					outfile << "\n";
 
-				if (outfile.bad()) logError("GameSwitcher: Unable to write state log file. No write access or disk is full!");
-				outfile.close();
-				outfile.clear();
+					if (outfile.bad()) logError("GameSwitcher: Unable to write state log file. No write access or disk is full!");
+					outfile.close();
+					outfile.clear();
+				}
+				prev_game_state_str = game_state_str;
 			}
 		}
 	}

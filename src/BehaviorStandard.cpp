@@ -70,8 +70,8 @@ void BehaviorStandard::logic() {
 	}
 
 	doUpkeep();
-	doRandomBehavior();
 	findTarget();
+	doRandomBehavior();
 	checkPower();
 	checkMove();
 	updateState();
@@ -110,7 +110,10 @@ void BehaviorStandard::doUpkeep() {
 }
 
 /**
- * Locate the player and set various targeting info
+ * Locate the player and set various targeting info:
+ * - enter / exit combat
+ * - pursue direction & LoS
+ * - fleeing
  */
 void BehaviorStandard::findTarget() {
 	// dying enemies can't target anything
@@ -761,7 +764,7 @@ FPoint BehaviorStandard::getWanderPoint() {
 void BehaviorStandard::doRandomBehavior() {
 	// randomly change behavior
 	if(percentChance(CHANCE_RANDOM_BEHAVIOR)) {
-		int behaviorChoice = randBetween(1,4);
+		int behaviorChoice = randBetween(1,20);
 
 		//logInfo("BehaviorStandard: Chose Random Behavior with choice '%d'.", behaviorChoice);
 
@@ -796,6 +799,10 @@ void BehaviorStandard::doRandomBehavior() {
 			// chill out
 			case 5:
 				e->stats.cur_state = ENEMY_STANCE;
+				break;
+			// toggle in_combat
+			case 6:
+				e->stats.in_combat = !e->stats.in_combat;
 				break;
 		}
 	}

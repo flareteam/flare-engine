@@ -30,6 +30,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Utils.h"
 
 class EnemyBehavior;
+class BehaviorTF;
 
 class Enemy : public Entity {
 
@@ -47,6 +48,7 @@ public:
 	Renderable getRender();
 
 	EnemyBehavior *eb;
+	BehaviorTF *eb_tf;
 
 	// other flags
 	bool reward_xp;
@@ -57,4 +59,3 @@ public:
 
 
 #endif
-

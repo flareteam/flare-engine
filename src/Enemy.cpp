@@ -33,6 +33,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "UtilsMath.h"
 
+// TODO(LEO): tf
+#include "BehaviorTF.h"
+
 #include <math.h>
 #include <cassert>
 
@@ -47,6 +50,7 @@ Enemy::Enemy() : Entity() {
 	instant_power = false;
 	kill_source_type = Power::SOURCE_TYPE_NEUTRAL;
 	eb = NULL;
+	eb_tf = NULL;
 }
 
 Enemy::Enemy(const Enemy& e)
@@ -56,6 +60,7 @@ Enemy::Enemy(const Enemy& e)
 	, instant_power(e.instant_power)
 	, kill_source_type(e.kill_source_type) {
 	eb = new BehaviorStandard(this); // Putting a 'this' into the init list will make MSVS complain, hence it's in the body of the ctor
+	eb_tf = new BehaviorTF(this);
 }
 
 Enemy& Enemy::operator=(const Enemy& e) {
@@ -68,6 +73,7 @@ Enemy& Enemy::operator=(const Enemy& e) {
 	instant_power = e.instant_power;
 	kill_source_type = e.kill_source_type;
 	eb = new BehaviorStandard(this);
+	eb_tf = new BehaviorTF(this);
 
 	return *this;
 }
@@ -116,6 +122,9 @@ unsigned char Enemy::faceNextBest(float mapx, float mapy) {
 void Enemy::logic() {
 
 	eb->logic();
+
+	//TODO(LEO): tf
+	eb_tf->logic();
 
 	//need to check whether the enemy was converted here
 	//cant do it in behaviour because the behaviour object would be replaced by this
@@ -189,4 +198,3 @@ Renderable Enemy::getRender() {
 Enemy::~Enemy() {
 	delete eb;
 }
-
