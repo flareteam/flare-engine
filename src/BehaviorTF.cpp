@@ -37,8 +37,8 @@ Behavior logic using a TensorFlow Model through TensorFlowInterface
 //TODO(LP): remove test tf
 #include "SharedResources.h"
 #include "CombatText.h"
-std::array<float, 5> POS_OFFETS_X {{0.0f, 0.0f, 0.1f, 0.0f, -0.1f}};
-std::array<float, 5> POS_OFFETS_Y {{0.0f, 0.1f, 0.0f, -0.1f, 0.0f}};
+std::array<float, 5> POS_OFFETS_X {{0.0f, 0.0f, 1.0f, 0.0f, -1.0f}};
+std::array<float, 5> POS_OFFETS_Y {{0.0f, 1.0f, 0.0f, -1.0f, 0.0f}};
 
 BehaviorTF::BehaviorTF(Enemy *_e): BehaviorStandard(_e) {
 	// tip_buf = new TooltipData();
@@ -64,24 +64,35 @@ void BehaviorTF::logic() {
 		For first pass, compute probabilities of each move direction, and render on top of entity.
 	*/
 
-	CombatText *combat_text = comb;
+	// use turn_ticks to render only after every enemy turn
+	if( e->stats.turn_ticks == 0) {
+		std::array<int, 5> pred_ints;
+		int max_pred_int = 0;
 
-	for ( int actionInt = 0; actionInt <= 4; actionInt++ )
-	{
-		 ACTION action = static_cast<ACTION>(actionInt);
-		 std::array<float, TENSOR_IN_LENGTH> game_data = getGameStateData(action);
-		 float * pred = tf_model->predict(game_data);
-		 int predInt = int( (*pred) * 10000 );
+		for ( int action_int = 0; action_int <= 4; action_int++ )
+		{
+			 ACTION action = static_cast<ACTION>(action_int);
+			 std::array<float, TENSOR_IN_LENGTH> game_data = getGameStateData(action);
+			 float * pred = tf_model->predict(game_data);
+			 int pred_int = int( (*pred) * 10000 );
+			 pred_ints[action_int] = pred_int;
+			 max_pred_int = std::max(max_pred_int, pred_int);
+		}
 
-		 // render pred above entity
-		 // use turn_ticks to render only after every enemy turn
-		 if( e->stats.turn_ticks == 0) {
-		   FPoint pos = e->stats.pos;
-			 pos.x += POS_OFFETS_X[actionInt];
-			 pos.y += POS_OFFETS_Y[actionInt];
-			 combat_text->addInt(predInt, pos, COMBAT_MESSAGE_MISS);
-		 }
-	}
+		// render pred above entity
+		CombatText *combat_text = comb;
+
+		for ( unsigned long i=0; i<=pred_ints.size(); i++) {
+		  int displaytype = COMBAT_MESSAGE_MISS;
+		  if ( pred_ints[i] == max_pred_int ) {
+			  displaytype = COMBAT_MESSAGE_TAKEDMG;
+		  }
+		  FPoint pos = e->stats.pos;
+		  pos.x += POS_OFFETS_X[i];
+		  pos.y += POS_OFFETS_Y[i];
+		  combat_text->addInt(pred_ints[i], pos, displaytype);
+	  }
+  }
 }
 
 // TODO(Leo): can move to UTILS_MATH_H
