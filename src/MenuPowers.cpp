@@ -621,7 +621,7 @@ void MenuPowers::replaceCellWithUpgrade(int pci, int uci) {
 	power_cell[pci].upgrade_level = power_cell_upgrade[uci].upgrade_level;
 
 	if (slots[pci])
-		slots[pci]->setIcon(powers->powers[power_cell_upgrade[uci].id].icon);
+		slots[pci]->setIcon(powers->powers[power_cell_upgrade[uci].id].icon, WidgetSlot::NO_OVERLAY);
 }
 
 /**

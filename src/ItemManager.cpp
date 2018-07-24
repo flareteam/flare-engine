@@ -421,6 +421,9 @@ void ItemManager::loadQualities(const std::string& filename) {
 			// @ATTR quality.color|color|Item quality color.
 			else if (infile.key == "color")
 				item_qualities.back().color = Parse::toRGB(infile.val);
+			// @ATTR quality.overlay_icon|icon_id|The icon to be used as an overlay.
+			else if (infile.key == "overlay_icon")
+				item_qualities.back().overlay_icon = Parse::toInt(infile.val);
 			else
 				infile.error("ItemManager: '%s' is not a valid key.", infile.key.c_str());
 		}
@@ -467,6 +470,20 @@ Color ItemManager::getItemColor(unsigned id) {
 	}
 
 	return font->getColor(FontEngine::COLOR_WIDGET_NORMAL);
+}
+
+int ItemManager::getItemIconOverlay(size_t id) {
+	if (id < 1 || id > items.size())
+		return -1;
+
+	for (size_t i=0; i < item_qualities.size(); ++i) {
+		if (item_qualities[i].id == items[id].quality) {
+			return item_qualities[i].overlay_icon;
+		}
+	}
+
+	// no overlay icon
+	return -1;
 }
 
 void ItemManager::addUnknownItem(unsigned id) {

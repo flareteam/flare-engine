@@ -15,6 +15,7 @@ Engine features:
 * Added random selection of portrait and class to New Game menu.
 * Allow setting the class list height in the New Game menu.
 * Display a list of completed quests in the Quests log.
+* Item icons can now have an overlay image based on their quality.
 
 Engine fixes:
 

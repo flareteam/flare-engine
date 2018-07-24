@@ -116,11 +116,11 @@ void MenuItemStorage::render() {
 
 	for (int i=0; i<slot_number; i++) {
 		if (storage[i].item > 0) {
-			slots[i]->setIcon(items->items[storage[i].item].icon);
+			slots[i]->setIcon(items->items[storage[i].item].icon, items->getItemIconOverlay(storage[i].item));
 			slots[i]->setAmount(storage[i].quantity, items->items[storage[i].item].max_quantity);
 		}
 		else {
-			slots[i]->setIcon(-1);
+			slots[i]->setIcon(WidgetSlot::NO_ICON, WidgetSlot::NO_OVERLAY);
 		}
 		slots[i]->render();
 		if (!slots[i]->enabled) {

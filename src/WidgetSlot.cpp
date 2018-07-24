@@ -36,6 +36,7 @@ WidgetSlot::WidgetSlot(int _icon_id, int _ACTIVATE)
 	, slot_selected(NULL)
 	, slot_checked(NULL)
 	, icon_id(_icon_id)
+	, overlay_id(NO_ICON)
 	, amount(1)
 	, max_amount(1)
 	, amount_str("")
@@ -160,8 +161,9 @@ WidgetSlot::CLICK_TYPE WidgetSlot::checkClick(int x, int y) {
 
 }
 
-void WidgetSlot::setIcon(int _icon_id) {
+void WidgetSlot::setIcon(int _icon_id, int _overlay_id) {
 	icon_id = _icon_id;
+	overlay_id = _overlay_id;
 }
 
 void WidgetSlot::setAmount(int _amount, int _max_amount) {
@@ -177,6 +179,11 @@ void WidgetSlot::render() {
 	if (icon_id != -1 && icons) {
 		icons->setIcon(icon_id, Point(pos.x, pos.y));
 		icons->render();
+
+		if (overlay_id != -1) {
+			icons->setIcon(overlay_id, Point(pos.x, pos.y));
+			icons->render();
+		}
 
 		if (amount > 1 || max_amount > 1) {
 			std::stringstream ss;

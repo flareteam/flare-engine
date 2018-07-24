@@ -314,7 +314,7 @@ void MenuActionBar::logic() {
 							  && pc->stats.canUsePower(hotkeys_mod[i], !StatBlock::CAN_USE_PASSIVE)
 							  && (twostep_slot == -1 || static_cast<unsigned>(twostep_slot) == i);
 
-			slots[i]->setIcon(power.icon);
+			slots[i]->setIcon(power.icon, WidgetSlot::NO_OVERLAY);
 		}
 		else {
 			slot_enabled[i] = true;

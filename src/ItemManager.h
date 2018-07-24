@@ -81,10 +81,12 @@ public:
 	std::string id;
 	std::string name;
 	Color color;
+	int overlay_icon;
 	ItemQuality()
 		: id("")
 		, name("")
-		, color(255,255,255) {
+		, color(255,255,255)
+		, overlay_icon(-1) {
 	}
 };
 
@@ -210,6 +212,7 @@ public:
 	std::string getItemName(unsigned id);
 	std::string getItemType(const std::string& _type);
 	Color getItemColor(unsigned id);
+	int getItemIconOverlay(size_t id);
 	void addUnknownItem(unsigned id);
 	bool requirementsMet(const StatBlock *stats, int item);
 

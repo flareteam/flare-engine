@@ -82,7 +82,7 @@ private:
 	Point keydrag_pos;
 
 	void renderIcon(int x, int y);
-	void setDragIcon(int icon_id);
+	void setDragIcon(int icon_id, int overlay_id);
 	void setDragIconItem(ItemStack stack);
 
 	void handleKeyboardNavigation();
