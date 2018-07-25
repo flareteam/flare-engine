@@ -35,6 +35,7 @@ WidgetSlot::WidgetSlot(int _icon_id, int _ACTIVATE)
 	: Widget()
 	, slot_selected(NULL)
 	, slot_checked(NULL)
+	, label_bg(NULL)
 	, icon_id(_icon_id)
 	, overlay_id(NO_ICON)
 	, amount(1)
@@ -54,6 +55,7 @@ WidgetSlot::WidgetSlot(int _icon_id, int _ACTIVATE)
 	src.x = src.y = 0;
 	src.w = src.h = eset->resolutions.icon_size;
 
+	label_amount.setFromLabelInfo(eset->widgets.slot_quantity_label);
 
 	Image *graphics;
 	graphics = render_device->loadImage("images/menus/slot_selected.png", RenderDevice::ERROR_NORMAL);
@@ -68,6 +70,17 @@ WidgetSlot::WidgetSlot(int _icon_id, int _ACTIVATE)
 		slot_checked = graphics->createSprite();
 		slot_checked->setClip(src);
 		graphics->unref();
+	}
+}
+
+void WidgetSlot::setPos(int offset_x, int offset_y) {
+	Widget::setPos(offset_x, offset_y);
+
+	label_amount.setPos(pos.x + icons->text_offset.x, pos.y + icons->text_offset.y);
+
+	if (label_bg) {
+		Rect *r = label_amount.getBounds();
+		label_bg->setDest(r->x, r->y);
 	}
 }
 
@@ -103,10 +116,10 @@ WidgetSlot::CLICK_TYPE WidgetSlot::checkClick() {
 }
 
 WidgetSlot::CLICK_TYPE WidgetSlot::checkClick(int x, int y) {
-	Point mouse(x,y);
-
 	// disabled slots can't be clicked;
 	if (!enabled) return NO_CLICK;
+
+	Point mouse(x,y);
 
 	if (continuous && pressed && checked && (inpt->lock[Input::MAIN2] || inpt->lock[activate_key] || (inpt->touch_locked && Utils::isWithinRect(pos, mouse))))
 		return ACTIVATED;
@@ -161,6 +174,10 @@ WidgetSlot::CLICK_TYPE WidgetSlot::checkClick(int x, int y) {
 
 }
 
+int WidgetSlot::getIcon() {
+	return icon_id;
+}
+
 void WidgetSlot::setIcon(int _icon_id, int _overlay_id) {
 	icon_id = _icon_id;
 	overlay_id = _overlay_id;
@@ -171,6 +188,34 @@ void WidgetSlot::setAmount(int _amount, int _max_amount) {
 	max_amount = _max_amount;
 
 	amount_str = Utils::abbreviateKilo(amount);
+
+	if (amount > 1 || max_amount > 1) {
+		label_amount.setPos(pos.x + icons->text_offset.x, pos.y + icons->text_offset.y);
+		label_amount.setText(amount_str);
+		label_amount.local_frame = local_frame;
+		label_amount.local_offset = local_offset;
+
+		Rect* r = label_amount.getBounds();
+		if (!label_bg || label_bg->getGraphicsWidth() != r->w || label_bg->getGraphicsHeight() != r->h) {
+			if (label_bg) {
+				delete label_bg;
+				label_bg = NULL;
+			}
+
+			if (eset->widgets.slot_quantity_bg_color.a != 0) {
+				Image *temp = render_device->createImage(r->w, r->h);
+				if (temp) {
+					temp->fillWithColor(eset->widgets.slot_quantity_bg_color);
+					label_bg = temp->createSprite();
+					temp->unref();
+				}
+			}
+
+			if (label_bg) {
+				label_bg->setDest(r->x, r->y);
+			}
+		}
+	}
 }
 
 void WidgetSlot::render() {
@@ -186,12 +231,7 @@ void WidgetSlot::render() {
 		}
 
 		if (amount > 1 || max_amount > 1) {
-			std::stringstream ss;
-			ss << amount_str;
-			label_amount.setPos(pos.x + icons->text_offset.x, pos.y + icons->text_offset.y);
-			label_amount.setText(ss.str());
-			label_amount.local_frame = local_frame;
-			label_amount.local_offset = local_offset;
+			render_device->render(label_bg);
 			label_amount.render();
 		}
 	}
@@ -219,6 +259,7 @@ void WidgetSlot::renderSelection() {
 }
 
 WidgetSlot::~WidgetSlot() {
-	if (slot_selected) delete slot_selected;
-	if (slot_checked) delete slot_checked;
+	delete slot_selected;
+	delete slot_checked;
+	delete label_bg;
 }

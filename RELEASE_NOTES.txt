@@ -16,6 +16,7 @@ Engine features:
 * Allow setting the class list height in the New Game menu.
 * Display a list of completed quests in the Quests log.
 * Item icons can now have an overlay image based on their quality.
+* Added widget settings for modifying the appearance of the quantity text on item icons.
 
 Engine fixes:
 

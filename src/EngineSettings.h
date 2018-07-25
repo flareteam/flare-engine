@@ -24,6 +24,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "Utils.h"
+#include "WidgetLabel.h"
 
 class EngineSettings {
 public:
@@ -241,6 +242,8 @@ public:
 
 		Color selection_rect_color;
 		Point tab_padding;
+		LabelInfo slot_quantity_label;
+		Color slot_quantity_bg_color;
 	};
 
 	class XPTable {

@@ -34,6 +34,7 @@ class WidgetSlot : public Widget {
 private:
 	Sprite *slot_selected;
 	Sprite *slot_checked;
+	Sprite *label_bg;
 
 	WidgetLabel label_amount;
 	int icon_id;		// current slot id
@@ -56,6 +57,8 @@ public:
 	WidgetSlot(int _icon_id, int _activate_key);
 	~WidgetSlot();
 
+	void setPos(int offset_x, int offset_y);
+
 	void activate();
 	void deactivate();
 	void defocus();
@@ -64,6 +67,7 @@ public:
 
 	CLICK_TYPE checkClick();
 	CLICK_TYPE checkClick(int x, int y);
+	int getIcon();
 	void setIcon(int _icon_id, int _overlay_id);
 	void setAmount(int _amount, int _max_amount);
 	void render();

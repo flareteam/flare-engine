@@ -71,7 +71,7 @@ MenuManager::MenuManager(StatBlock *_stats)
 	, drag_stack()
 	, drag_power(0)
 	, drag_src(DRAG_SRC_NONE)
-	, drag_icon(NULL)
+	, drag_icon(new WidgetSlot(WidgetSlot::NO_ICON, Input::ACCEPT))
 	, done(false)
 	, act_drag_hover(false)
 	, keydrag_pos(Point())
@@ -152,6 +152,8 @@ MenuManager::MenuManager(StatBlock *_stats)
 	closeAll(); // make sure all togglable menus start closed
 
 	settings->show_hud = true;
+
+	drag_icon->enabled = false;
 }
 
 void MenuManager::alignAll() {
@@ -167,45 +169,25 @@ void MenuManager::alignAll() {
 }
 
 void MenuManager::renderIcon(int x, int y) {
-	if (drag_icon) {
-		drag_icon->setDest(x,y);
-		render_device->render(drag_icon);
+	if (drag_icon->getIcon() != WidgetSlot::NO_ICON) {
+		drag_icon->setPos(x,y);
+		drag_icon->render();
 	}
 }
 
 void MenuManager::setDragIcon(int icon_id, int overlay_id) {
-	if (!icons) return;
-
-	if (!drag_icon) {
-		Image *graphics = render_device->createImage(eset->resolutions.icon_size, eset->resolutions.icon_size);
-
-		if (!graphics) return;
-		drag_icon = graphics->createSprite();
-		graphics->unref();
-
-		icons->setIcon(icon_id, Point());
-		icons->renderToImage(drag_icon->getGraphics());
-
-		if (overlay_id != -1) {
-			icons->setIcon(overlay_id, Point());
-			icons->renderToImage(drag_icon->getGraphics());
-		}
-	}
+	drag_icon->setIcon(icon_id, overlay_id);
+	drag_icon->setAmount(0, 0);
 }
 
 void MenuManager::setDragIconItem(ItemStack stack) {
-	if (!drag_icon) {
-		if (stack.empty()) return;
-
-		setDragIcon(items->items[stack.item].icon, items->getItemIconOverlay(stack.item));
-
-		if (!drag_icon) return;
-
-		if (stack.quantity > 1 || items->items[stack.item].max_quantity > 1) {
-			std::stringstream ss;
-			ss << Utils::abbreviateKilo(stack.quantity);
-			font->renderShadowed(ss.str(), icons->text_offset.x, icons->text_offset.y, FontEngine::JUSTIFY_LEFT, drag_icon->getGraphics(), 0, font->getColor(FontEngine::COLOR_WIDGET_NORMAL));
-		}
+	if (stack.empty()) {
+		drag_icon->setIcon(WidgetSlot::NO_ICON, WidgetSlot::NO_OVERLAY);
+		drag_icon->setAmount(0, 0);
+	}
+	else {
+		drag_icon->setIcon(items->items[stack.item].icon, items->getItemIconOverlay(stack.item));
+		drag_icon->setAmount(stack.quantity, items->items[stack.item].max_quantity);
 	}
 }
 
@@ -892,9 +874,8 @@ void MenuManager::logic() {
 		// the equipment flags get reset in GameStatePlay
 	}
 
-	if (drag_icon && !(mouse_dragging || keyboard_dragging)) {
-		delete drag_icon;
-		drag_icon = NULL;
+	if (!(mouse_dragging || keyboard_dragging)) {
+		setDragIcon(WidgetSlot::NO_ICON, WidgetSlot::NO_OVERLAY);
 	}
 }
 
@@ -1159,10 +1140,7 @@ void MenuManager::resetDrag() {
 		inpt->lock[Input::ACCEPT] = false;
 	}
 
-	if (drag_icon) {
-		delete drag_icon;
-		drag_icon = NULL;
-	}
+	setDragIcon(WidgetSlot::NO_ICON, WidgetSlot::NO_OVERLAY);
 
 	vendor->stock[ItemManager::VENDOR_BUY].drag_prev_slot = -1;
 	vendor->stock[ItemManager::VENDOR_SELL].drag_prev_slot = -1;
@@ -1417,5 +1395,5 @@ MenuManager::~MenuManager() {
 
 	delete subtitles;
 
-	if (drag_icon) delete drag_icon;
+	delete drag_icon;
 }

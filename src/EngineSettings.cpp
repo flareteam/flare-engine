@@ -814,6 +814,8 @@ void EngineSettings::Widgets::load() {
 	// reset to defaults
 	selection_rect_color = Color(255, 248, 220, 255);
 	tab_padding = Point(8, 0);
+	slot_quantity_label = LabelInfo();
+	slot_quantity_bg_color = Color(0, 0, 0, 0);
 
 	FileParser infile;
 	// @CLASS EngineSettings: Widgets|Description of engine/widget_settings.txt
@@ -829,6 +831,16 @@ void EngineSettings::Widgets::load() {
 				if (infile.key == "padding") {
 					// @ATTR tab.padding|int, int : Left/right padding, Top padding|The pixel padding around tabs. Controls how the left and right edges are drawn.
 					tab_padding = Parse::toPoint(infile.val);
+				}
+			}
+			else if (infile.section == "slot") {
+				if (infile.key == "quantity_label") {
+					// @ATTR slot.quantity_label|label|Setting for the slot quantity text.
+					slot_quantity_label = Parse::popLabelInfo(infile.val);
+				}
+				else if (infile.key == "quantity_bg_color") {
+					// @ATTR slot.quantity_bg_color|color, int : Color, Alpha|If a slot has a quantity, a rectangle filled with this color will be placed beneath the text.
+					slot_quantity_bg_color = Parse::toRGBA(infile.val);
 				}
 			}
 		}
