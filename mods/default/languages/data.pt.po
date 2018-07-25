@@ -196,7 +196,7 @@ msgstr "Tradutores"
 
 #: ../cutscenes/credits.txt:51
 msgid "Ademaro"
-msgstr ""
+msgstr "Ademaro"
 
 #: ../cutscenes/credits.txt:52
 msgid "Adrian Chaves Fernandez"
@@ -232,11 +232,11 @@ msgstr "Diego J. Romero López"
 
 #: ../cutscenes/credits.txt:62
 msgid "dumaosen"
-msgstr ""
+msgstr "dumaosen"
 
 #: ../cutscenes/credits.txt:63
 msgid "Eric R"
-msgstr ""
+msgstr "Eric R"
 
 #: ../cutscenes/credits.txt:64
 msgid "Evgen Pavlov"
@@ -260,7 +260,7 @@ msgstr "Hans Joachim Desserud"
 
 #: ../cutscenes/credits.txt:69
 msgid "hark34"
-msgstr ""
+msgstr "hark34"
 
 #: ../cutscenes/credits.txt:71
 msgid "Janet Hunt"
@@ -304,7 +304,7 @@ msgstr "Nea Retrogamer"
 
 #: ../cutscenes/credits.txt:81
 msgid "Nguyễn Gia Phong"
-msgstr ""
+msgstr "Nguyễn Gia Phong"
 
 #: ../cutscenes/credits.txt:82
 msgid "Nikita Vanku"
@@ -352,7 +352,7 @@ msgstr "Timo Sievänen"
 
 #: ../cutscenes/credits.txt:94
 msgid "Vicente Monteiro"
-msgstr ""
+msgstr "Vicente Monteiro"
 
 #: ../cutscenes/credits.txt:95
 msgid "Wuzzy2"

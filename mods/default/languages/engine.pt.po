@@ -39,7 +39,7 @@ msgstr "Perdeste. Pressiona a tecla ${INPUT_CONTINUE} para continuar."
 
 #: ../../../src/Avatar.cpp:842
 msgid "Transformation expired. You have been moved back to a safe place."
-msgstr ""
+msgstr "A transformação expirou. Foste transferido para um local seguro."
 
 #: ../../../src/CampaignManager.cpp:126
 #, c-format
@@ -202,7 +202,7 @@ msgstr "Mostrar sempre etiquetas dos saques"
 
 #: ../../../src/GameStateConfigBase.cpp:300
 msgid "Always show stat bar labels"
-msgstr ""
+msgstr "Mostrar sempre etiquetas na barra de estatísticas"
 
 #: ../../../src/GameStateConfigBase.cpp:304
 msgid "Automatically equip items"
@@ -252,7 +252,7 @@ msgstr "Limpar"
 #: ../../../src/GameStateConfigDesktop.cpp:85
 #: ../../../src/GameStateConfigDesktop.cpp:743
 msgid "Assign:"
-msgstr ""
+msgstr "Atribuir:"
 
 #: ../../../src/GameStateConfigDesktop.cpp:130
 msgid "Video"
@@ -319,7 +319,7 @@ msgstr "Filtro de Textura"
 
 #: ../../../src/GameStateConfigDesktop.cpp:249
 msgid "DPI scaling"
-msgstr ""
+msgstr "Escalonamento por DPI"
 
 #: ../../../src/GameStateConfigDesktop.cpp:253
 msgid "Allow changing gamma"
@@ -547,19 +547,19 @@ msgstr "Remover"
 
 #: ../../../src/InputState.cpp:398
 msgid "ActionBar Accept"
-msgstr ""
+msgstr "Barra de Ação Aceitar"
 
 #: ../../../src/InputState.cpp:399
 msgid "ActionBar Left"
-msgstr ""
+msgstr "Barra de Ação Esquerda"
 
 #: ../../../src/InputState.cpp:400
 msgid "ActionBar Right"
-msgstr ""
+msgstr "Barra de Ação Direita"
 
 #: ../../../src/InputState.cpp:401
 msgid "ActionBar Use"
-msgstr ""
+msgstr "Barra de Ação Usar"
 
 #: ../../../src/InputState.cpp:402
 msgid "Developer Menu"
@@ -567,15 +567,15 @@ msgstr "Menu Programador"
 
 #: ../../../src/InputState.cpp:404
 msgid "Left Mouse"
-msgstr ""
+msgstr "Rato - Botão Esquerdo"
 
 #: ../../../src/InputState.cpp:405
 msgid "Middle Mouse"
-msgstr ""
+msgstr "Rato - Botão Central"
 
 #: ../../../src/InputState.cpp:406
 msgid "Right Mouse"
-msgstr ""
+msgstr "Rato - Botão Direito"
 
 #: ../../../src/InputState.cpp:407
 msgid "Wheel Up"
@@ -587,11 +587,11 @@ msgstr "Roda p/Baixo"
 
 #: ../../../src/InputState.cpp:409
 msgid "Mouse X1"
-msgstr ""
+msgstr "Rato X1"
 
 #: ../../../src/InputState.cpp:410
 msgid "Mouse X2"
-msgstr ""
+msgstr "Rato X2"
 
 #: ../../../src/ItemManager.cpp:412 ../../../src/ItemManager.cpp:415
 msgid "Unknown Item"
@@ -615,7 +615,7 @@ msgstr "%s Resistência"
 
 #: ../../../src/ItemManager.cpp:664
 msgid "Quest Item"
-msgstr ""
+msgstr "Item de Missão"
 
 #: ../../../src/ItemManager.cpp:691
 #, c-format
@@ -671,7 +671,7 @@ msgstr "Preço de Venda: %d %s cada"
 
 #: ../../../src/ItemManager.cpp:814
 msgid "Set:"
-msgstr ""
+msgstr "Conjunto:"
 
 #: ../../../src/ItemManager.cpp:821
 #, c-format
@@ -782,19 +782,19 @@ msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:217
 msgid "Distance"
-msgstr ""
+msgstr "Distância"
 
 #: ../../../src/MenuDevConsole.cpp:232 ../../../src/MenuDevConsole.cpp:278
 msgid "Entity"
-msgstr ""
+msgstr "Entidade"
 
 #: ../../../src/MenuDevConsole.cpp:253 ../../../src/MenuDevConsole.cpp:260
 msgid "none"
-msgstr ""
+msgstr "nenhum"
 
 #: ../../../src/MenuDevConsole.cpp:254 ../../../src/MenuDevConsole.cpp:256
 msgid "wall"
-msgstr ""
+msgstr "muro"
 
 #: ../../../src/MenuDevConsole.cpp:255 ../../../src/MenuDevConsole.cpp:257
 msgid "short wall / pit"
@@ -839,6 +839,8 @@ msgid ""
 "Prints out the active campaign statuses that match a search term. No search "
 "term will list all active statuses"
 msgstr ""
+"Mostra o estado da campanha ativa que corresponde ao termo de pesquisa. "
+"Nenhum termo de pesquisa irá mostrar todos os estados ativos"
 
 #: ../../../src/MenuDevConsole.cpp:357
 msgid ""
@@ -877,7 +879,7 @@ msgstr "DICA:"
 
 #: ../../../src/MenuDevConsole.cpp:519
 msgid "<id>"
-msgstr ""
+msgstr "<id>"
 
 #: ../../../src/MenuDevConsole.cpp:534
 #, c-format
@@ -890,7 +892,7 @@ msgstr "ERRO: argumentos a menos"
 
 #: ../../../src/MenuDevConsole.cpp:544
 msgid "<key>=<val> <key>=<val> ..."
-msgstr ""
+msgstr "<key>=<val> <key>=<val> ..."
 
 #: ../../../src/MenuDevConsole.cpp:548
 msgid "ERROR: Unknown command"
@@ -969,7 +971,7 @@ msgstr "Escolher quantidade de um item:"
 
 #: ../../../src/MenuInventory.cpp:292
 msgid "Stash item stack:"
-msgstr ""
+msgstr "Pilha de item no baú:"
 
 #: ../../../src/MenuInventory.cpp:294
 msgid "Sell item stack:"
@@ -1006,7 +1008,7 @@ msgstr "Notas"
 
 #: ../../../src/MenuLog.cpp:90
 msgid "Quests"
-msgstr "Aventuras"
+msgstr "Missões"
 
 #: ../../../src/MenuManager.cpp:311
 #, c-format
@@ -1027,7 +1029,7 @@ msgstr "Introduz a quantidade:"
 
 #: ../../../src/MenuPowers.cpp:711
 msgid "Passive"
-msgstr ""
+msgstr "Passivo"
 
 #: ../../../src/MenuPowers.cpp:716
 #, c-format
@@ -1101,7 +1103,7 @@ msgstr ""
 
 #: ../../../src/MenuPowers.cpp:849
 msgid "Convert"
-msgstr ""
+msgstr "Converter"
 
 #: ../../../src/MenuPowers.cpp:852
 msgid "Fear"
@@ -1184,7 +1186,7 @@ msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1362
 msgid "Next Level:"
-msgstr "P´roximo Nível:"
+msgstr "Próximo Nível:"
 
 #: ../../../src/MenuStash.cpp:138
 msgid "Shared Stash"
@@ -1192,11 +1194,11 @@ msgstr "Baú Compartilhado"
 
 #: ../../../src/MenuStash.cpp:205
 msgid "Can not store quest items in the stash."
-msgstr ""
+msgstr "Não é possível armazenar itens no baú."
 
 #: ../../../src/MenuStash.cpp:215
 msgid "Stash is full."
-msgstr ""
+msgstr "O baú está cheio."
 
 #: ../../../src/MenuVendor.cpp:56
 msgid "Buyback"
@@ -1310,12 +1312,12 @@ msgstr "Tab"
 #: ../../../src/SDLInputState.cpp:619
 #, c-format
 msgid "Mouse %d"
-msgstr ""
+msgstr "Rato %d"
 
 #: ../../../src/SDLInputState.cpp:627
 #, c-format
 msgid "Axis %d -"
-msgstr ""
+msgstr "Eixo %d -"
 
 #: ../../../src/SDLInputState.cpp:629
 #, c-format
@@ -1382,7 +1384,7 @@ msgstr ""
 
 #: ../../../src/Stats.cpp:57
 msgid "Accuracy"
-msgstr ""
+msgstr "Precisão"
 
 #: ../../../src/Stats.cpp:62
 msgid "Avoidance"
