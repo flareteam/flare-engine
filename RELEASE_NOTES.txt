@@ -27,6 +27,7 @@ Engine fixes:
 * Fix locked left/right keys when loading a cutscene from the dev console.
 * Using the --mods command line flag doesn't overwrite the user's mod configuration.
 * Fix infinte loop bug when trying to render multi-line text in a small area.
+* Fix interaction with loot hitboxes interfering with loot tooltips.
 * Lots of code cleanup.
 
 New translations:

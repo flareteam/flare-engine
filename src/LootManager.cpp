@@ -428,7 +428,6 @@ void LootManager::addLoot(ItemStack stack, const FPoint& pos, bool dropped_by_he
  * screen coordinates to map locations.
  */
 ItemStack LootManager::checkPickup(const Point& mouse, const FPoint& cam, const FPoint& hero_pos) {
-	Rect r;
 	ItemStack loot_stack;
 
 	// check left mouse click
@@ -436,7 +435,8 @@ ItemStack LootManager::checkPickup(const Point& mouse, const FPoint& cam, const 
 		// I'm starting at the end of the loot list so that more recently-dropped
 		// loot is picked up first.  If a player drops several loot in the same
 		// location, picking it back up will work like a stack.
-		std::vector<Loot>::iterator it;
+		std::vector<Loot>::iterator it, it_tip, it_hotspot;
+		it_tip = it_hotspot = loot.end();
 		for (it = loot.end(); it != loot.begin(); ) {
 			--it;
 
@@ -444,24 +444,44 @@ ItemStack LootManager::checkPickup(const Point& mouse, const FPoint& cam, const 
 			if (fabs(hero_pos.x - it->pos.x) < eset->misc.interact_range && fabs(hero_pos.y - it->pos.y) < eset->misc.interact_range && !it->isFlying()) {
 				Point p = Utils::mapToScreen(it->pos.x, it->pos.y, cam.x, cam.y);
 
+				Rect r;
 				r.x = p.x - eset->tileset.tile_w_half;
 				r.y = p.y - eset->tileset.tile_h_half;
 				r.w = eset->tileset.tile_w;
 				r.h = eset->tileset.tile_h;
 
-				// clicked in pickup hotspot?
-				if ((it->tip_visible && Utils::isWithinRect(it->tip_bounds, mouse)) || Utils::isWithinRect(r, mouse)) {
+				if (it_tip == loot.end() && it->tip_visible && Utils::isWithinRect(it->tip_bounds, mouse)) {
+					// clicked on a tooltip
 					curs->setCursor(CursorManager::CURSOR_INTERACT);
-					if (inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1]) {
-						inpt->lock[Input::MAIN1] = true;
-						if (!it->stack.empty()) {
-							loot_stack = it->stack;
-							it = loot.erase(it);
-							return loot_stack;
-						}
+					if (inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1] && !it->stack.empty()) {
+						it_tip = it;
 					}
 				}
+				else if (it_hotspot == loot.end() && Utils::isWithinRect(r, mouse)) {
+					// clicked on a hotspot
+					curs->setCursor(CursorManager::CURSOR_INTERACT);
+					if (inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1] && !it->stack.empty()) {
+						it_hotspot = it;
+					}
+				}
+
+				// tooltips take priority over hotspots, so we can jump out here if we clicked on a tooltip
+				if (it_tip != loot.end())
+					break;
 			}
+		}
+
+		if (it_tip != loot.end()) {
+			inpt->lock[Input::MAIN1] = true;
+			loot_stack = it_tip->stack;
+			loot.erase(it_tip);
+			return loot_stack;
+		}
+		else if (it_hotspot != loot.end()) {
+			inpt->lock[Input::MAIN1] = true;
+			loot_stack = it_hotspot->stack;
+			loot.erase(it_hotspot);
+			return loot_stack;
 		}
 	}
 
