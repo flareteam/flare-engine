@@ -28,6 +28,7 @@ Engine fixes:
 * Using the --mods command line flag doesn't overwrite the user's mod configuration.
 * Fix infinte loop bug when trying to render multi-line text in a small area.
 * Fix interaction with loot hitboxes interfering with loot tooltips.
+* Improved handling of mouse movement for melee characters. The player will no longer execute their primary melee attack if they are out of melee range of their target. Also, the player will begin to attack if they enter melee range while moving.
 * Lots of code cleanup.
 
 New translations:

@@ -87,6 +87,7 @@ public:
 	void clear();
 	void resetSlots();
 	Point getSlotPos(int slot);
+	int getSlotPower(int slot);
 
 	void renderTooltips(const Point& position);
 	bool isWithinSlots(const Point& mouse);

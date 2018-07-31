@@ -38,6 +38,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Hazard.h"
 #include "InputState.h"
 #include "MapRenderer.h"
+#include "MenuActionBar.h"
 #include "MenuExit.h"
 #include "MenuManager.h"
 #include "MessageEngine.h"
@@ -410,6 +411,9 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 		bool allowed_to_move;
 		bool allowed_to_use_power = true;
 
+		bool have_enemy = (enemy_pos.x != -1 && enemy_pos.y != -1);
+		int main1_id = menu->act->getSlotPower(MenuActionBar::SLOT_MAIN1);
+
 		switch(stats.cur_state) {
 			case StatBlock::AVATAR_STANCE:
 
@@ -469,6 +473,17 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 				// handle direction changes
 				set_direction();
 
+				// mouse movement only: if we're close enough to our target while moving, begin attacking
+				if (settings->mouse_move && inpt->pressing[Input::MAIN1] && have_enemy && main1_id != 0) {
+					Power& p = powers->powers[main1_id];
+					if (p.type == Power::TYPE_FIXED && p.starting_pos == Power::STARTING_POS_MELEE && Utils::calcDist(stats.pos, enemy_pos) <= stats.melee_range) {
+						inpt->lock[Input::MAIN1] = false;
+						stats.cur_state = StatBlock::AVATAR_STANCE;
+						drag_walking = false;
+						break;
+					}
+				}
+
 				// handle transition to STANCE
 				if (!pressing_move()) {
 					stats.cur_state = StatBlock::AVATAR_STANCE;
@@ -485,6 +500,16 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 				break;
 
 			case StatBlock::AVATAR_ATTACK:
+				// mouse movement only: if we're too far away to attack (i.e. melee power), switch to movement state
+				if (settings->mouse_move && inpt->pressing[Input::MAIN1] && have_enemy && main1_id != 0) {
+					Power& p = powers->powers[main1_id];
+					if (p.type == Power::TYPE_FIXED && p.starting_pos == Power::STARTING_POS_MELEE && Utils::calcDist(stats.pos, enemy_pos) > stats.melee_range) {
+						inpt->lock[Input::MAIN1] = true;
+						stats.cur_state = StatBlock::AVATAR_RUN;
+						allowed_to_use_power = false;
+						break;
+					}
+				}
 
 				setAnimation(attack_anim);
 

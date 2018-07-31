@@ -814,6 +814,13 @@ Point MenuActionBar::getSlotPos(int slot) {
 	return Point();
 }
 
+int MenuActionBar::getSlotPower(int slot) {
+	if (static_cast<unsigned>(slot) < hotkeys.size()) {
+		return hotkeys[slot];
+	}
+	return 0;
+}
+
 MenuActionBar::~MenuActionBar() {
 
 	menu_act = NULL;
