@@ -22,6 +22,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "Utils.h"
 
+class Version;
+
 namespace Input {
 	// Input action enum
 	enum {
@@ -93,7 +95,7 @@ public:
 	std::string mouse_button[MOUSE_BUTTON_NAME_COUNT];
 
 	InputState(void);
-	virtual ~InputState() {};
+	virtual ~InputState();
 
 	virtual void initJoystick() = 0;
 	void defaultJoystickBindings();
@@ -166,6 +168,9 @@ protected:
 		Point pos;
 	};
 	std::vector<FingerData> touch_fingers;
+
+	Version* file_version;
+	Version* file_version_min;
 };
 
 #endif

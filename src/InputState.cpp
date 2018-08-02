@@ -32,6 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 #include "SharedResources.h"
 #include "UtilsParsing.h"
+#include "Version.h"
 
 #include <math.h>
 
@@ -65,7 +66,14 @@ InputState::InputState(void)
 	, un_press()
 	, current_touch()
 	, dump_event(false)
+	, file_version(new Version())
+	, file_version_min(new Version(1, 6, 28))
 {
+}
+
+InputState::~InputState() {
+	delete file_version;
+	delete file_version_min;
 }
 
 void InputState::defaultJoystickBindings () {
@@ -97,6 +105,7 @@ void InputState::loadKeyBindings() {
 
 	FileParser infile;
 	bool opened_file = false;
+	*file_version = VersionInfo::MIN;
 
 	// first check for mod keybinds
 	if (mods->locate("engine/default_keybindings.txt") != "") {
@@ -118,11 +127,25 @@ void InputState::loadKeyBindings() {
 	}
 
 	while (infile.next()) {
+		if (infile.section.empty()) {
+			if (infile.key == "file_version")
+				file_version->setFromString(infile.val);
+
+			if (*file_version < *file_version_min) {
+				Utils::logError("InputState: Keybindings configuration file is out of date (%s < %s). Resetting to engine defaults.", file_version->getString().c_str(), file_version_min->getString().c_str());
+				Utils::logErrorDialog("InputState: Keybindings configuration file is out of date. Resetting to engine defaults.", file_version->getString().c_str(), file_version_min->getString().c_str());
+				saveKeyBindings();
+				break;
+			}
+
+			continue;
+		}
+
 		int key1 = -1;
 		int key2 = -1;
 		int key3 = -1;
 
-		if (infile.section.empty()) {
+		if (infile.section == "user") {
 			// this is a traditional keybindings file that has been written by the engine via saveKeyBindings()
 			key1 = Parse::toInt(Parse::popFirstString(infile.val), -1);
 			key2 = Parse::toInt(Parse::popFirstString(infile.val), -1);
@@ -259,6 +282,10 @@ void InputState::saveKeyBindings() {
 		outfile << "# For BIND and BIND_ALT, any value less than -1 is a mouse button\n";
 		outfile << "# As an example, mouse button 1 would be -3 here. Button 2 would be -4, etc.\n\n";
 
+		*file_version = *file_version_min;
+		outfile << "file_version=" << file_version->getString() << "\n\n";
+
+		outfile << "[user]\n";
 		outfile << "cancel=" << binding[Input::CANCEL] << "," << binding_alt[Input::CANCEL] << "," << binding_joy[Input::CANCEL] << "\n";
 		outfile << "accept=" << binding[Input::ACCEPT] << "," << binding_alt[Input::ACCEPT] << "," << binding_joy[Input::ACCEPT] << "\n";
 		outfile << "up=" << binding[Input::UP] << "," << binding_alt[Input::UP] << "," << binding_joy[Input::UP] << "\n";
