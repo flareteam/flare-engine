@@ -166,8 +166,8 @@ void MenuStatBar::render() {
 	}
 
 	if (bar) {
-		bar->setClip(src);
-		bar->setDest(dest);
+		bar->setClipFromRect(src);
+		bar->setDestFromRect(dest);
 		render_device->render(bar);
 	}
 

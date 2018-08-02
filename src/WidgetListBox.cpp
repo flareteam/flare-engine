@@ -349,8 +349,8 @@ void WidgetListBox::render() {
 			src.y = pos.h;
 
 		if (listboxs) {
-			listboxs->setClip(src);
-			listboxs->setDest(rows[i]);
+			listboxs->setClipFromRect(src);
+			listboxs->setDestFromRect(rows[i]);
 			render_device->render(listboxs);
 		}
 

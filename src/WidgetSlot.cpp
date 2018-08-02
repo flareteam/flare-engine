@@ -61,14 +61,14 @@ WidgetSlot::WidgetSlot(int _icon_id, int _ACTIVATE)
 	graphics = render_device->loadImage("images/menus/slot_selected.png", RenderDevice::ERROR_NORMAL);
 	if (graphics) {
 		slot_selected = graphics->createSprite();
-		slot_selected->setClip(src);
+		slot_selected->setClipFromRect(src);
 		graphics->unref();
 	}
 
 	graphics = render_device->loadImage("images/menus/slot_checked.png", RenderDevice::ERROR_NORMAL);
 	if (graphics) {
 		slot_checked = graphics->createSprite();
-		slot_checked->setClip(src);
+		slot_checked->setClipFromRect(src);
 		graphics->unref();
 	}
 }
@@ -246,13 +246,13 @@ void WidgetSlot::renderSelection() {
 		if (slot_checked && checked) {
 			slot_checked->local_frame = local_frame;
 			slot_checked->setOffset(local_offset);
-			slot_checked->setDest(pos);
+			slot_checked->setDestFromRect(pos);
 			render_device->render(slot_checked);
 		}
 		else if (slot_selected) {
 			slot_selected->local_frame = local_frame;
 			slot_selected->setOffset(local_offset);
-			slot_selected->setDest(pos);
+			slot_selected->setDestFromRect(pos);
 			render_device->render(slot_selected);
 		}
 	}

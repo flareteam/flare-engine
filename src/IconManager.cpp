@@ -122,11 +122,11 @@ void IconManager::setIcon(int icon_id, Point dest_pos) {
 	current_src.x = (offset_id % current_set->columns) * eset->resolutions.icon_size;
 	current_src.y = (offset_id / current_set->columns) * eset->resolutions.icon_size;
 	current_src.w = current_src.h = eset->resolutions.icon_size;
-	current_set->gfx->setClip(current_src);
+	current_set->gfx->setClipFromRect(current_src);
 
 	current_dest.x = dest_pos.x;
 	current_dest.y = dest_pos.y;
-	current_set->gfx->setDest(current_dest);
+	current_set->gfx->setDestFromRect(current_dest);
 
 }
 

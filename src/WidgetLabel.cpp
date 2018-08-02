@@ -166,8 +166,7 @@ void WidgetLabel::applyOffsets() {
 	}
 
 	if (label) {
-		label->setDestX(bounds.x);
-		label->setDestY(bounds.y);
+		label->setDestFromRect(bounds);
 	}
 }
 

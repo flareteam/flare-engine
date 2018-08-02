@@ -409,7 +409,7 @@ void MapRenderer::renderIsoLayer(const Map_Layer& layerdata) {
 				dest.y = p.y - tile.offset.y;
 				// no need to set w and h in dest, as it is ignored
 				// by SDL_BlitSurface
-				tile.tile->setDest(dest);
+				tile.tile->setDestFromPoint(dest);
 				render_device->render(tile.tile);
 			}
 		}
@@ -505,7 +505,7 @@ void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 					const Tile_Def &tile = tset.tiles[current_tile];
 					dest.x = p.x - tile.offset.x;
 					dest.y = p.y - tile.offset.y;
-					tile.tile->setDest(dest);
+					tile.tile->setDestFromPoint(dest);
 					render_device->render(tile.tile);
 					drawn_tiles[i][j] = 1;
 				}
@@ -586,7 +586,7 @@ do_last_NE_tile:
 					const Tile_Def &tile = tset.tiles[current_tile];
 					dest.x = tile_SW_center.x - tile.offset.x;
 					dest.y = tile_SW_center.y - tile.offset.y;
-					tile.tile->setDest(dest);
+					tile.tile->setDestFromPoint(dest);
 					render_device->render(tile.tile);
 					drawn_tiles[i-2][j+2] = 1;
 				}
@@ -603,7 +603,7 @@ do_last_NE_tile:
 					const Tile_Def &tile = tset.tiles[current_tile];
 					dest.x = tile_NE_center.x - tile.offset.x;
 					dest.y = tile_NE_center.y - tile.offset.y;
-					tile.tile->setDest(dest);
+					tile.tile->setDestFromPoint(dest);
 					render_device->render(tile.tile);
 					drawn_tiles[i][j] = 1;
 				}
@@ -688,7 +688,7 @@ void MapRenderer::renderOrthoLayer(const Map_Layer& layerdata) {
 				const Tile_Def &tile = tset.tiles[current_tile];
 				dest.x = p.x - tile.offset.x;
 				dest.y = p.y - tile.offset.y;
-				tile.tile->setDest(dest);
+				tile.tile->setDestFromPoint(dest);
 				render_device->render(tile.tile);
 			}
 			p.x += eset->tileset.tile_w;
@@ -733,7 +733,7 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 				const Tile_Def &tile = tset.tiles[current_tile];
 				dest.x = p.x - tile.offset.x;
 				dest.y = p.y - tile.offset.y;
-				tile.tile->setDest(dest);
+				tile.tile->setDestFromPoint(dest);
 				render_device->render(tile.tile);
 			}
 			p.x += eset->tileset.tile_w;

@@ -247,7 +247,7 @@ void SDLFontEngine::renderInternal(const std::string& text, int x, int y, int ju
 		else {
 			Sprite* temp_sprite = graphics->createSprite();
 			if (temp_sprite) {
-				temp_sprite->setDest(dest_rect);
+				temp_sprite->setDestFromRect(dest_rect);
 				render_device->render(temp_sprite);
 				delete temp_sprite;
 			}

@@ -224,8 +224,8 @@ void WidgetScrollBox::render() {
 	if (contents) {
 		contents->local_frame = local_frame;
 		contents->setOffset(local_offset);
-		contents->setClip(src);
-		contents->setDest(dest);
+		contents->setClipFromRect(src);
+		contents->setDestFromRect(dest);
 		render_device->render(contents);
 	}
 

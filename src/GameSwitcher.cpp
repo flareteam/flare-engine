@@ -145,7 +145,7 @@ void GameSwitcher::refreshBackground() {
 		}
 
 		if (background)
-			background->setDest(dest);
+			background->setDestFromRect(dest);
 	}
 }
 

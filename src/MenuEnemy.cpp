@@ -125,8 +125,8 @@ void MenuEnemy::render() {
 	if (bar_hp) {
 		src.w = hp_bar_length;
 		src.h = bar_pos.h;
-		bar_hp->setClip(src);
-		bar_hp->setDest(dest);
+		bar_hp->setClipFromRect(src);
+		bar_hp->setDestFromRect(dest);
 		render_device->render(bar_hp);
 	}
 

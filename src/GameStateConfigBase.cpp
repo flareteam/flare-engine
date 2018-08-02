@@ -766,7 +766,7 @@ void GameStateConfigBase::render() {
 	pos.y = (settings->view_h - eset->resolutions.frame_h)/2 + tabheight - tabheight/16;
 
 	if (background) {
-		background->setDest(pos);
+		background->setDestFromRect(pos);
 		render_device->render(background);
 	}
 

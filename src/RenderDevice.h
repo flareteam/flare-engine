@@ -56,21 +56,14 @@ public:
 
 	Image * getGraphics();
 	void setOffset(const Point& _offset);
-	void setOffset(const int x, const int y);
-	Point getOffset();
-	void setClip(const Rect& clip);
+	const Point& getOffset();
+	void setClipFromRect(const Rect& clip);
 	void setClip(const int x, const int y, const int w, const int h);
-	void setClipX(const int x);
-	void setClipY(const int y);
-	void setClipW(const int w);
-	void setClipH(const int h);
-	Rect getClip();
-	void setDest(const Rect& _dest);
-	void setDest(const Point& _dest);
+	const Rect& getClip();
+	void setDestFromRect(const Rect& _dest);
+	void setDestFromPoint(const Point& _dest);
 	void setDest(int x, int y);
-	void setDestX(int x);
-	void setDestY(int y);
-	FPoint getDest();
+	const Point& getDest();
 	int getGraphicsWidth();
 	int getGraphicsHeight();
 private:
@@ -82,7 +75,7 @@ protected:
 	Image *image;
 	Rect src; // location on the sprite in pixel coordinates.
 	Point offset;      // offset from map_pos to topleft corner of sprite
-	FPoint dest;
+	Point dest;
 };
 
 /** An image representation

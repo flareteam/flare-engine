@@ -133,13 +133,13 @@ void WidgetButton::render() {
 	if (buttons) {
 		buttons->local_frame = local_frame;
 		buttons->setOffset(local_offset);
-		buttons->setClip(
-			buttons->getClip().x,
-			y,
-			buttons->getClip().w,
-			buttons->getClip().h
-		);
-		buttons->setDest(pos);
+
+		Rect clip = buttons->getClip();
+		clip.y = y;
+
+		buttons->setClipFromRect(clip);
+		buttons->setDestFromRect(pos);
+
 		render_device->render(buttons);
 	}
 

@@ -270,8 +270,7 @@ void GameStateLoad::loadPortrait(int slot) {
 	graphics = render_device->loadImage(game_slots[slot]->stats.gfx_portrait, RenderDevice::ERROR_NORMAL);
 	if (graphics) {
 		portrait = graphics->createSprite();
-		portrait->setClipW(portrait_dest.w);
-		portrait->setClipH(portrait_dest.h);
+		portrait->setClip(0, 0, portrait_dest.w, portrait_dest.h);
 		graphics->unref();
 	}
 
@@ -620,8 +619,7 @@ void GameStateLoad::refreshWidgets() {
 	button_delete->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);
 
 	if (portrait) {
-		portrait->setDestX(portrait_dest.x + ((settings->view_w - eset->resolutions.frame_w)/2));
-		portrait->setDestY(portrait_dest.y + ((settings->view_h - eset->resolutions.frame_h)/2));
+		portrait->setDest(portrait_dest.x + ((settings->view_w - eset->resolutions.frame_w)/2), portrait_dest.y + ((settings->view_h - eset->resolutions.frame_h)/2));
 	}
 
 	slot_pos.resize(visible_slots);
@@ -684,9 +682,9 @@ void GameStateLoad::render() {
 	// portrait
 	if (selected_slot >= 0 && portrait != NULL && portrait_border != NULL) {
 		render_device->render(portrait);
-		dest.x = int(portrait->getDest().x);
-		dest.y = int(portrait->getDest().y);
-		portrait_border->setDest(dest);
+		dest.x = portrait->getDest().x;
+		dest.y = portrait->getDest().y;
+		portrait_border->setDestFromRect(dest);
 		render_device->render(portrait_border);
 	}
 
@@ -720,11 +718,11 @@ void GameStateLoad::render() {
 			dest.x = slot_pos[slot].x;
 			dest.y = slot_pos[slot].y;
 
-			background->setClip(src);
-			background->setDest(dest);
+			background->setClipFromRect(src);
+			background->setDestFromRect(dest);
 			render_device->render(background);
 		}
-		Point slot_dest(background->getDest());
+		Point slot_dest = background->getDest();
 
 		if (!game_slots[off_slot]) {
 			WidgetLabel slot_error;
@@ -810,7 +808,7 @@ void GameStateLoad::render() {
 
 	// display selection
 	if (selected_slot >= scroll_offset && selected_slot < visible_slots+scroll_offset && selection != NULL) {
-		selection->setDest(slot_pos[selected_slot-scroll_offset]);
+		selection->setDestFromRect(slot_pos[selected_slot-scroll_offset]);
 		render_device->render(selection);
 	}
 

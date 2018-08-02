@@ -107,8 +107,7 @@ void WidgetTooltip::prerender(TooltipData&tip, const Point& pos, uint8_t style) 
 
 	Point tip_pos = calcPosition(style, pos, size);
 
-	sprite_buf->setDestX(tip_pos.x);
-	sprite_buf->setDestY(tip_pos.y);
+	sprite_buf->setDestFromPoint(tip_pos);
 
 	bounds.x = tip_pos.x;
 	bounds.y = tip_pos.y;

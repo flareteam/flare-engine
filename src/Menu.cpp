@@ -54,18 +54,18 @@ void Menu::setBackground(const std::string& background_image) {
 	graphics = render_device->loadImage(background_image, RenderDevice::ERROR_NORMAL);
 	if (graphics) {
 		background = graphics->createSprite();
-		background->setClip(0,0,window_area.w,window_area.h);
-		background->setDest(window_area);
+		background->setClip(0, 0, window_area.w, window_area.h);
+		background->setDestFromRect(window_area);
 		graphics->unref();
 	}
 }
 
 void Menu::setBackgroundDest(Rect &dest) {
-	if (background) background->setDest(dest);
+	if (background) background->setDestFromRect(dest);
 }
 
 void Menu::setBackgroundClip(Rect &clip) {
-	if (background) background->setClip(clip);
+	if (background) background->setClipFromRect(clip);
 }
 
 void Menu::render() {
@@ -84,13 +84,8 @@ void Menu::align() {
 	Utils::alignToScreenEdge(alignment, &window_area);
 
 	if (background) {
-		background->setClip(
-			0,
-			0,
-			window_area.w,
-			window_area.h
-		);
-		background->setDest(window_area);
+		background->setClip(0, 0, window_area.w, window_area.h);
+		background->setDestFromRect(window_area);
 	}
 }
 

@@ -85,20 +85,14 @@ Sprite::~Sprite() {
 }
 
 void Sprite::setOffset(const Point& _offset) {
-	this->offset = _offset;
+	offset = _offset;
 }
 
-void Sprite::setOffset(const int x, const int y) {
-	this->offset.x = x;
-	this->offset.y = y;
-}
-
-Point Sprite::getOffset() {
-
+const Point& Sprite::getOffset() {
 	return offset;
 }
 
-void Sprite::setClip(const Rect& clip) {
+void Sprite::setClipFromRect(const Rect& clip) {
 	src = clip;
 }
 
@@ -109,50 +103,25 @@ void Sprite::setClip(const int x, const int y, const int w, const int h) {
 	src.h = h;
 }
 
-void Sprite::setClipX(const int x) {
-	src.x = x;
-}
-
-void Sprite::setClipY(const int y) {
-	src.y = y;
-}
-
-void Sprite::setClipW(const int w) {
-	src.w = w;
-}
-
-void Sprite::setClipH(const int h) {
-	src.h = h;
-}
-
-
-Rect Sprite::getClip() {
+const Rect& Sprite::getClip() {
 	return src;
 }
-void Sprite::setDest(const Rect& _dest) {
-	dest.x = static_cast<float>(_dest.x);
-	dest.y = static_cast<float>(_dest.y);
+void Sprite::setDestFromRect(const Rect& _dest) {
+	dest.x = _dest.x;
+	dest.y = _dest.y;
 }
 
-void Sprite::setDest(const Point& _dest) {
-	dest.x = static_cast<float>(_dest.x);
-	dest.y = static_cast<float>(_dest.y);
+void Sprite::setDestFromPoint(const Point& _dest) {
+	dest.x = _dest.x;
+	dest.y = _dest.y;
 }
 
 void Sprite::setDest(int x, int y) {
-	dest.x = static_cast<float>(x);
-	dest.y = static_cast<float>(y);
+	dest.x = x;
+	dest.y = y;
 }
 
-void Sprite::setDestX(int x) {
-	dest.x = static_cast<float>(x);
-}
-
-void Sprite::setDestY(int y) {
-	dest.y = static_cast<float>(y);
-}
-
-FPoint Sprite::getDest() {
+const Point& Sprite::getDest() {
 	return dest;
 }
 
@@ -278,10 +247,10 @@ void RenderDevice::cacheRemoveAll() {
 bool RenderDevice::localToGlobal(Sprite *r) {
 	m_clip = r->getClip();
 
-	int left = static_cast<int>(r->getDest().x) - r->getOffset().x;
-	int right = left + r->getClip().w;
-	int up = static_cast<int>(r->getDest().y) - r->getOffset().y;
-	int down = up + r->getClip().h;
+	int left = r->getDest().x - r->getOffset().x;
+	int right = left + m_clip.w;
+	int up = r->getDest().y - r->getOffset().y;
+	int down = up + m_clip.h;
 
 	// Check whether we need to render.
 	// If so, compute the correct clipping.
@@ -293,7 +262,7 @@ bool RenderDevice::localToGlobal(Sprite *r) {
 			return false;
 		}
 		if (left < 0) {
-			m_clip.x = r->getClip().x - left;
+			m_clip.x = m_clip.x - left;
 			left = 0;
 		};
 		right = (right < r->local_frame.w ? right : r->local_frame.w);
@@ -307,7 +276,7 @@ bool RenderDevice::localToGlobal(Sprite *r) {
 			return false;
 		}
 		if (up < 0) {
-			m_clip.y = r->getClip().y - up;
+			m_clip.y = m_clip.y - up;
 			up = 0;
 		};
 		down = (down < r->local_frame.h ? down : r->local_frame.h);

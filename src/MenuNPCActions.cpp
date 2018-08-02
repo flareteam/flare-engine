@@ -381,7 +381,7 @@ void MenuNPCActions::render() {
 	if (!visible) return;
 	if (!action_menu) return;
 
-	action_menu->setDest(window_area);
+	action_menu->setDestFromRect(window_area);
 	render_device->render(action_menu);
 	for(size_t i=0; i<npc_actions.size(); i++) {
 		if (npc_actions[i].label) {

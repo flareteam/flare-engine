@@ -254,8 +254,8 @@ void MenuTalker::render() {
 				dest.x = offset_x + portrait_he.x;
 				dest.y = offset_y + portrait_he.y;
 
-				npc->npc_portrait->setClip(src);
-				npc->npc_portrait->setDest(dest);
+				npc->npc_portrait->setClipFromRect(src);
+				npc->npc_portrait->setDestFromRect(dest);
 				render_device->render(npc->npc_portrait);
 			}
 		}
@@ -265,8 +265,8 @@ void MenuTalker::render() {
 				src.h = dest.h = portrait_you.h;
 				dest.x = offset_x + portrait_you.x;
 				dest.y = offset_y + portrait_you.y;
-				npc->hero_portrait->setClip(src);
-				npc->hero_portrait->setDest(dest);
+				npc->hero_portrait->setClipFromRect(src);
+				npc->hero_portrait->setDestFromRect(dest);
 				render_device->render(npc->hero_portrait);
 			}
 			else if (portrait) {
@@ -274,8 +274,8 @@ void MenuTalker::render() {
 				src.h = dest.h = portrait_you.h;
 				dest.x = offset_x + portrait_you.x;
 				dest.y = offset_y + portrait_you.y;
-				portrait->setClip(src);
-				portrait->setDest(dest);
+				portrait->setClipFromRect(src);
+				portrait->setDestFromRect(dest);
 				render_device->render(portrait);
 			}
 		}

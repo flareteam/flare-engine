@@ -154,16 +154,16 @@ void WidgetScrollBar::render() {
 	if (scrollbars) {
 		scrollbars->local_frame = local_frame;
 		scrollbars->setOffset(local_offset);
-		scrollbars->setClip(src_up);
-		scrollbars->setDest(pos_up);
+		scrollbars->setClipFromRect(src_up);
+		scrollbars->setDestFromRect(pos_up);
 		render_device->render(scrollbars);
 
-		scrollbars->setClip(src_down);
-		scrollbars->setDest(pos_down);
+		scrollbars->setClipFromRect(src_down);
+		scrollbars->setDestFromRect(pos_down);
 		render_device->render(scrollbars);
 
-		scrollbars->setClip(src_knob);
-		scrollbars->setDest(pos_knob);
+		scrollbars->setClipFromRect(src_knob);
+		scrollbars->setDestFromRect(pos_knob);
 		render_device->render(scrollbars);
 	}
 }

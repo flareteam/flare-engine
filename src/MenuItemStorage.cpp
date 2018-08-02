@@ -125,14 +125,14 @@ void MenuItemStorage::render() {
 		slots[i]->render();
 		if (!slots[i]->enabled) {
 			if (overlay_disabled) {
-				overlay_disabled->setClip(disabled_src);
-				overlay_disabled->setDest(slots[i]->pos);
+				overlay_disabled->setClipFromRect(disabled_src);
+				overlay_disabled->setDestFromRect(slots[i]->pos);
 				render_device->render(overlay_disabled);
 			}
 		}
 		if (highlight[i] && !slots[i]->in_focus) {
 			if (highlight_image) {
-				highlight_image->setDest(slots[i]->pos);
+				highlight_image->setDestFromRect(slots[i]->pos);
 				render_device->render(highlight_image);
 			}
 		}

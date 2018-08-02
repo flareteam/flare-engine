@@ -162,7 +162,7 @@ void TileSet::load(const std::string& filename) {
 			continue;
 
 		tiles[i].tile = sprites[tile_images[i]]->getGraphics()->createSprite();
-		tiles[i].tile->setClip(tile_clips[i]);
+		tiles[i].tile->setClipFromRect(tile_clips[i]);
 		tiles[i].offset = tile_offsets[i];
 
 		max_size_x = std::max(max_size_x, (tiles[i].tile->getClip().w / eset->tileset.tile_w) + 1);
@@ -178,8 +178,10 @@ void TileSet::logic() {
 		if (!an.frames)
 			continue;
 		if (tiles[i].tile && an.duration >= an.frame_duration[an.current_frame]) {
-			tiles[i].tile->setClipX(an.pos[an.current_frame].x);
-			tiles[i].tile->setClipY(an.pos[an.current_frame].y);
+			Rect clip = tiles[i].tile->getClip();
+			clip.x = an.pos[an.current_frame].x;
+			clip.y = an.pos[an.current_frame].y;
+			tiles[i].tile->setClipFromRect(clip);
 			an.duration = 0;
 			an.current_frame = static_cast<unsigned short>((an.current_frame + 1) % an.frames);
 		}

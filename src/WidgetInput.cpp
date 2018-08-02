@@ -214,8 +214,8 @@ void WidgetInput::render() {
 	if (background) {
 		background->local_frame = local_frame;
 		background->setOffset(local_offset);
-		background->setClip(src);
-		background->setDest(pos);
+		background->setClipFromRect(src);
+		background->setDestFromRect(pos);
 		render_device->render(background);
 	}
 

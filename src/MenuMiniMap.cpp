@@ -159,8 +159,8 @@ void MenuMiniMap::renderOrtho(const FPoint& hero_pos) {
 	map_area.h = pos.h;
 
 	if (map_surface) {
-		map_surface->setClip(clip);
-		map_surface->setDest(map_area);
+		map_surface->setClipFromRect(clip);
+		map_surface->setDestFromRect(map_area);
 		render_device->render(map_surface);
 	}
 
@@ -192,8 +192,8 @@ void MenuMiniMap::renderIso(const FPoint& hero_pos) {
 	map_area.h = pos.h;
 
 	if (map_surface) {
-		map_surface->setClip(clip);
-		map_surface->setDest(map_area);
+		map_surface->setClipFromRect(clip);
+		map_surface->setDestFromRect(map_area);
 		render_device->render(map_surface);
 	}
 

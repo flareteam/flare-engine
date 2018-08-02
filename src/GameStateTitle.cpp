@@ -198,8 +198,7 @@ void GameStateTitle::refreshWidgets() {
 		r.w = logo->getGraphicsWidth();
 		r.h = logo->getGraphicsHeight();
 		Utils::alignToScreenEdge(align_logo, &r);
-		logo->setDestX(r.x);
-		logo->setDestY(r.y);
+		logo->setDestFromRect(r);
 	}
 
 	button_play->setPos(0, 0);

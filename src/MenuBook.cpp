@@ -127,7 +127,7 @@ void MenuBook::loadBook() {
 		i--;
 
 		if (images[i].image)
-			images[i].image->setDest(images[i].dest);
+			images[i].image->setDestFromPoint(images[i].dest);
 		else
 			images.erase(images.begin() + i);
 	}
@@ -270,12 +270,10 @@ void MenuBook::align() {
 	closeButton->setPos(window_area.x, window_area.y);
 
 	for (unsigned i=0; i<text.size(); i++) {
-		text[i].sprite->setDestX(text[i].size.x + window_area.x);
-		text[i].sprite->setDestY(text[i].size.y + window_area.y);
+		text[i].sprite->setDest(text[i].size.x + window_area.x, text[i].size.y + window_area.y);
 	}
 	for (size_t i = 0; i < images.size(); ++i) {
-		images[i].image->setDestX(images[i].dest.x + window_area.x);
-		images[i].image->setDestY(images[i].dest.y + window_area.y);
+		images[i].image->setDest(images[i].dest.x + window_area.x, images[i].dest.y + window_area.y);
 	}
 	for (size_t i = 0; i < buttons.size(); ++i) {
 		buttons[i].button->setPos(window_area.x, window_area.y);

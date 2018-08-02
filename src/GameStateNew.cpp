@@ -267,7 +267,7 @@ void GameStateNew::loadPortrait(const std::string& portrait_filename) {
 	graphics = render_device->loadImage(portrait_filename, RenderDevice::ERROR_NORMAL);
 	if (graphics) {
 		portrait_image = graphics->createSprite();
-		portrait_image->setDest(portrait_pos);
+		portrait_image->setDestFromRect(portrait_pos);
 		graphics->unref();
 	}
 }
@@ -493,11 +493,11 @@ void GameStateNew::render() {
 	dest.y = portrait_pos.y + (settings->view_h - eset->resolutions.frame_h)/2;
 
 	if (portrait_image) {
-		portrait_image->setClip(src);
-		portrait_image->setDest(dest);
+		portrait_image->setClipFromRect(src);
+		portrait_image->setDestFromRect(dest);
 		render_device->render(portrait_image);
-		portrait_border->setClip(src);
-		portrait_border->setDest(dest);
+		portrait_border->setClipFromRect(src);
+		portrait_border->setDestFromRect(dest);
 		render_device->render(portrait_border);
 	}
 

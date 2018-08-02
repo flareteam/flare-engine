@@ -164,11 +164,11 @@ void WidgetSlider::render () {
 	if (sl) {
 		sl->local_frame = local_frame;
 		sl->setOffset(local_offset);
-		sl->setClip(base);
-		sl->setDest(pos);
+		sl->setClipFromRect(base);
+		sl->setDestFromRect(pos);
 		render_device->render(sl);
-		sl->setClip(knob);
-		sl->setDest(pos_knob);
+		sl->setClipFromRect(knob);
+		sl->setDestFromRect(pos_knob);
 		render_device->render(sl);
 	}
 

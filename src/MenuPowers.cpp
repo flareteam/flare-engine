@@ -1154,16 +1154,16 @@ void MenuPowers::renderPowers(int tab_num) {
 					continue;
 
 				if (power_cell[j].id == power_cell[i].id && powers_unlock && slots[j]) {
-					powers_unlock->setClip(src_unlock);
-					powers_unlock->setDest(slots[j]->pos);
+					powers_unlock->setClipFromRect(src_unlock);
+					powers_unlock->setDestFromRect(slots[j]->pos);
 					render_device->render(powers_unlock);
 				}
 			}
 		}
 		else {
 			if (overlay_disabled && slots[i]) {
-				overlay_disabled->setClip(disabled_src);
-				overlay_disabled->setDest(slots[i]->pos);
+				overlay_disabled->setClipFromRect(disabled_src);
+				overlay_disabled->setDestFromRect(slots[i]->pos);
 				render_device->render(overlay_disabled);
 			}
 		}
@@ -1309,8 +1309,8 @@ void MenuPowers::render() {
 				// power tree
 				Sprite *r = tree_surf[i];
 				if (r) {
-					r->setClip(src);
-					r->setDest(dest);
+					r->setClipFromRect(src);
+					r->setDestFromRect(dest);
 					render_device->render(r);
 				}
 
@@ -1322,8 +1322,8 @@ void MenuPowers::render() {
 	else if (!tree_surf.empty()) {
 		Sprite *r = tree_surf[0];
 		if (r) {
-			r->setClip(src);
-			r->setDest(dest);
+			r->setClipFromRect(src);
+			r->setDestFromRect(dest);
 			render_device->render(r);
 		}
 		renderPowers(0);

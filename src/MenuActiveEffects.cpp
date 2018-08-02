@@ -187,8 +187,8 @@ void MenuActiveEffects::render() {
 		icons->render();
 
 		if (timer) {
-			timer->setClip(effect_icons[i].overlay);
-			timer->setDest(effect_icons[i].pos);
+			timer->setClipFromRect(effect_icons[i].overlay);
+			timer->setDestFromRect(effect_icons[i].pos);
 			render_device->render(timer);
 		}
 

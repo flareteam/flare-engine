@@ -415,14 +415,14 @@ void Scene::refreshWidgets() {
 				}
 
 				if (art_scaled)
-					art_scaled->setDest(art_dest);
+					art_scaled->setDestFromRect(art_dest);
 			}
 			else {
 				art_dest.w = art_size.x;
 				art_dest.h = art_size.y;
 
 				Utils::alignToScreenEdge(Utils::ALIGN_CENTER, &art_dest);
-				art->setDest(art_dest);
+				art->setDestFromRect(art_dest);
 			}
 		}
 	}

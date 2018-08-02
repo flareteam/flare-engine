@@ -96,8 +96,8 @@ void MenuHUDLog::logic() {
 	if (overlay_bg && click_to_dismiss) {
 		if (inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1]) {
 			Rect overlay_area;
-			overlay_area.x = static_cast<int>(overlay_bg->getDest().x);
-			overlay_area.y = static_cast<int>(overlay_bg->getDest().y);
+			overlay_area.x = overlay_bg->getDest().x;
+			overlay_area.y = overlay_bg->getDest().y;
 			overlay_area.w = overlay_bg->getGraphicsWidth();
 			overlay_area.h = overlay_bg->getGraphicsHeight();
 
@@ -131,7 +131,7 @@ void MenuHUDLog::render() {
 		for (size_t i = msg_age.size(); i > 0; i--) {
 			if (msg_age[i-1] > 0 && dest.y > window_area.y && msg_buffer[i-1]) {
 				dest.y -= msg_buffer[i-1]->getGraphicsHeight() + paragraph_spacing;
-				msg_buffer[i-1]->setDest(dest);
+				msg_buffer[i-1]->setDestFromRect(dest);
 				render_device->render(msg_buffer[i-1]);
 			}
 			else return; // no more new messages
@@ -145,7 +145,7 @@ void MenuHUDLog::render() {
 			int msg_height = msg_buffer[i-1]->getGraphicsHeight() + paragraph_spacing;
 			if (msg_age[i-1] > 0 && dest.y + msg_height < window_area.y + window_area.h && msg_buffer[i-1]) {
 				// dest.y -= msg_buffer[i-1]->getGraphicsHeight() + paragraph_spacing;
-				msg_buffer[i-1]->setDest(dest);
+				msg_buffer[i-1]->setDestFromRect(dest);
 				render_device->render(msg_buffer[i-1]);
 				dest.y += msg_height;
 			}
@@ -204,7 +204,7 @@ void MenuHUDLog::renderOverlay() {
 	dest.x = window_area.x + paragraph_spacing;
 	dest.y = start_y + paragraph_spacing;
 
-	msg_buffer.back()->setDest(dest);
+	msg_buffer.back()->setDestFromRect(dest);
 	render_device->render(msg_buffer.back());
 }
 

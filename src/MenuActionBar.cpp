@@ -246,17 +246,20 @@ void MenuActionBar::loadGraphics() {
 
 	setBackground("images/menus/actionbar_trim.png");
 
+	Rect icon_clip;
+	icon_clip.w = icon_clip.h = eset->resolutions.icon_size;
+
 	graphics = render_device->loadImage("images/menus/slot_empty.png", RenderDevice::ERROR_NORMAL);
 	if (graphics) {
 		sprite_emptyslot = graphics->createSprite();
-		sprite_emptyslot->setClip(0,0,eset->resolutions.icon_size,eset->resolutions.icon_size);
+		sprite_emptyslot->setClipFromRect(icon_clip);
 		graphics->unref();
 	}
 
 	graphics = render_device->loadImage("images/menus/disabled.png", RenderDevice::ERROR_NORMAL);
 	if (graphics) {
 		sprite_disabled = graphics->createSprite();
-		sprite_disabled->setClip(0,0,eset->resolutions.icon_size,eset->resolutions.icon_size);
+		sprite_disabled->setClipFromRect(icon_clip);
 		graphics->unref();
 	}
 
@@ -346,7 +349,7 @@ void MenuActionBar::render() {
 		}
 		else {
 			if (sprite_emptyslot) {
-				sprite_emptyslot->setDest(slots[i]->pos);
+				sprite_emptyslot->setDestFromRect(slots[i]->pos);
 				render_device->render(sprite_emptyslot);
 			}
 		}
@@ -363,8 +366,8 @@ void MenuActionBar::render() {
 			}
 
 			if (sprite_disabled && clip.h > 0) {
-				sprite_disabled->setClip(clip);
-				sprite_disabled->setDest(slots[i]->pos);
+				sprite_disabled->setClipFromRect(clip);
+				sprite_disabled->setDestFromRect(slots[i]->pos);
 				render_device->render(sprite_disabled);
 			}
 		}
@@ -380,7 +383,7 @@ void MenuActionBar::render() {
 			Rect dest;
 
 			if (sprite_attention) {
-				sprite_attention->setDest(menus[i]->pos);
+				sprite_attention->setDestFromRect(menus[i]->pos);
 				render_device->render(sprite_attention);
 			}
 

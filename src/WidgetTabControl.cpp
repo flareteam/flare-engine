@@ -237,13 +237,13 @@ void WidgetTabControl::renderTab(unsigned number) {
 			src.w = tabs[i].w - (render_cursor - src.w);
 
 		if (i == active_tab) {
-			active_tab_surface->setClip(src);
-			active_tab_surface->setDest(dest);
+			active_tab_surface->setClipFromRect(src);
+			active_tab_surface->setDestFromRect(dest);
 			render_device->render(active_tab_surface);
 		}
 		else {
-			inactive_tab_surface->setClip(src);
-			inactive_tab_surface->setDest(dest);
+			inactive_tab_surface->setClipFromRect(src);
+			inactive_tab_surface->setDestFromRect(dest);
 			render_device->render(inactive_tab_surface);
 		}
 	}
@@ -254,13 +254,13 @@ void WidgetTabControl::renderTab(unsigned number) {
 	dest.x = tabs[i].x + tabs[i].w - eset->widgets.tab_padding.x;
 
 	if (i == active_tab) {
-		active_tab_surface->setClip(src);
-		active_tab_surface->setDest(dest);
+		active_tab_surface->setClipFromRect(src);
+		active_tab_surface->setDestFromRect(dest);
 		render_device->render(active_tab_surface);
 	}
 	else {
-		inactive_tab_surface->setClip(src);
-		inactive_tab_surface->setDest(dest);
+		inactive_tab_surface->setClipFromRect(src);
+		inactive_tab_surface->setDestFromRect(dest);
 		render_device->render(inactive_tab_surface);
 	}
 

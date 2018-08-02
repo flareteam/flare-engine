@@ -68,7 +68,7 @@ WidgetCheckBox::~WidgetCheckBox () {
 void WidgetCheckBox::setChecked(const bool status) {
 	checked = status;
 	if (cb)	{
-		cb->setClip(0,(checked ? pos.h : 0), pos.w, pos.h);
+		cb->setClip(0, (checked ? pos.h : 0), pos.w, pos.h);
 	}
 }
 
@@ -114,7 +114,7 @@ void WidgetCheckBox::render() {
 	if (cb) {
 		cb->local_frame = local_frame;
 		cb->setOffset(local_offset);
-		cb->setDest(pos);
+		cb->setDestFromRect(pos);
 		render_device->render(cb);
 	}
 
