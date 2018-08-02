@@ -36,6 +36,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <ctype.h>
 #include <iomanip>
 #include <iostream>
+#include <locale>
 
 int Utils::LOCK_INDEX = 0;
 
@@ -640,6 +641,12 @@ std::string Utils::getTimeString(const unsigned long time) {
 	ss << std::setfill('0') << std::setw(2) << seconds;
 
 	return ss.str();
+}
+
+unsigned long Utils::hashString(const std::string& str) {
+	std::locale loc;
+	const std::collate<char>& coll = std::use_facet<std::collate<char> >(loc);
+	return coll.hash(str.data(), str.data() + str.length());
 }
 
 void Utils::lockFileRead() {

@@ -32,7 +32,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Utils.h"
 #include "UtilsParsing.h"
 
-#include <locale>
 #include <cassert>
 
 Subtitles::Subtitles()
@@ -74,12 +73,7 @@ Subtitles::Subtitles()
 
 			if (infile.key == "id") {
 				// @ATTR subtitle.id|filename|Filename of the sound file that will trigger this subtitle.
-				std::locale loc;
-				const std::collate<char>& coll = std::use_facet<std::collate<char> >(loc);
-				const std::string realfilename = mods->locate(infile.val);
-
-				unsigned long sid = coll.hash(realfilename.data(), realfilename.data()+realfilename.length());
-				filename.back() = sid;
+				filename.back() = Utils::hashString(mods->locate(infile.val));
 			}
 			else if (infile.key == "text") {
 				// @ATTR subtitle.text|string|The subtitle text that will be displayed.

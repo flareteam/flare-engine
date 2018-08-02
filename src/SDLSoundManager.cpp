@@ -31,7 +31,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SDLSoundManager.h"
 #include "UtilsMath.h"
 
-#include <locale>
 #include <math.h>
 
 class Sound {
@@ -159,16 +158,12 @@ SoundID SDLSoundManager::load(const std::string& filename, const std::string& er
 	Sound lsnd;
 	SoundID sid = 0;
 	SoundMapIterator it;
-	std::locale loc;
 
 	if (!settings->audio)
 		return 0;
 
-	const std::collate<char>& coll = std::use_facet<std::collate<char> >(loc);
 	const std::string realfilename = mods->locate(filename);
-
-	/* create sid hash and check if already loaded */
-	sid = coll.hash(realfilename.data(), realfilename.data()+realfilename.length());
+	sid = Utils::hashString(realfilename);
 	it = sounds.find(sid);
 	if (it != sounds.end()) {
 		it->second->refCnt++;

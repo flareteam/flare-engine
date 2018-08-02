@@ -132,6 +132,8 @@ namespace Utils {
 
 	std::string getTimeString(const unsigned long time);
 
+	unsigned long hashString(const std::string& str);
+
 	void lockFileRead();
 	void lockFileWrite(int increment);
 	void lockFileCheck();
