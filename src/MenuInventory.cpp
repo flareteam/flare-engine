@@ -297,7 +297,7 @@ void MenuInventory::renderTooltips(const Point& position) {
 		if (position.x >= window_area.x + help_pos.x && position.y >= window_area.y+help_pos.y && position.x < window_area.x+help_pos.x+help_pos.w && position.y < window_area.y+help_pos.y+help_pos.h) {
 			tip_data.addText(msg->get("Pick up item(s):") + " " + inpt->getBindingString(Input::MAIN1));
 			tip_data.addText(msg->get("Use or equip item:") + " " + inpt->getBindingString(Input::MAIN2) + "\n");
-			tip_data.addText(msg->get("%s modifiers", inpt->getBindingString(Input::MAIN1).c_str()));
+			tip_data.addText(msg->get("%s modifiers", inpt->getBindingString(Input::MAIN1)));
 			tip_data.addText(msg->get("Select a quantity of item:") + " " + inpt->getBindingString(Input::SHIFT) + " / " + inpt->getBindingString(Input::SHIFT, InputState::BINDING_ALT));
 
 			if (inv_ctrl == CTRL_STASH)

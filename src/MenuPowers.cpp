@@ -772,7 +772,7 @@ void MenuPowers::createTooltip(TooltipData* tip_data, int slot_num, const std::v
 			if (!found_key) {
 				for (size_t j=0; j<eset->elements.list.size(); ++j) {
 					if (pwr.post_effects[i].id == eset->elements.list[j].id + "_resist") {
-						ss << "% " << msg->get("%s Resistance", eset->elements.list[j].name.c_str());
+						ss << "% " << msg->get("%s Resistance", eset->elements.list[j].name);
 						found_key = true;
 						break;
 					}
@@ -1044,7 +1044,7 @@ void MenuPowers::createTooltip(TooltipData* tip_data, int slot_num, const std::v
 		}
 		if (pwr.trait_elemental > -1) {
 			ss.str("");
-			ss << msg->get("%s Elemental Damage", eset->elements.list[pwr.trait_elemental].name.c_str());
+			ss << msg->get("%s Elemental Damage", eset->elements.list[pwr.trait_elemental].name);
 			tip_data->addColoredText(ss.str(), font->getColor(FontEngine::COLOR_MENU_BONUS));
 		}
 	}

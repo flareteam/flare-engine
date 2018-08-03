@@ -350,8 +350,8 @@ void MenuCharacter::refreshStats() {
 	if (show_resists) {
 		for (unsigned int j=0; j<stats->vulnerable.size(); ++j) {
 			ss.str("");
-			ss << msg->get("%s Resistance", eset->elements.list[j].name.c_str()) << ": " << (100 - stats->vulnerable[j]) << "%";
-			statList->set(j+stat_index, ss.str(), msg->get("Reduces the damage taken from \"%s\" elemental attacks.", eset->elements.list[j].name.c_str()));
+			ss << msg->get("%s Resistance", eset->elements.list[j].name) << ": " << (100 - stats->vulnerable[j]) << "%";
+			statList->set(j+stat_index, ss.str(), msg->get("Reduces the damage taken from \"%s\" elemental attacks.", eset->elements.list[j].name));
 		}
 	}
 
@@ -421,7 +421,7 @@ std::string MenuCharacter::statTooltip(int stat) {
 
 	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 		if (stats->per_primary[i][stat] > 0)
-			tooltip_text += msg->get("Each point of %s grants %d.", stats->per_primary[i][stat], eset->primary_stats.list[i].name.c_str()) + ' ';
+			tooltip_text += msg->get("Each point of %s grants %d.", eset->primary_stats.list[i].name, stats->per_primary[i][stat]) + ' ';
 	}
 
 	std::string full_tooltip = "";

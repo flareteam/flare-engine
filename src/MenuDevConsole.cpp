@@ -138,7 +138,7 @@ void MenuDevConsole::logic() {
 	if (visible) {
 		if (!first_open) {
 			first_open = true;
-			log_history->add(msg->get("Use '%s' to inspect with the cursor.", inpt->getBindingString(Input::MAIN2).c_str()), WidgetLog::MSG_NORMAL);
+			log_history->add(msg->get("Use '%s' to inspect with the cursor.", inpt->getBindingString(Input::MAIN2)), WidgetLog::MSG_NORMAL);
 
 			log_history->setNextColor(font->getColor(FontEngine::COLOR_MENU_BONUS));
 			log_history->add("exec \"msg=Hello World\"", WidgetLog::MSG_NORMAL);
@@ -544,7 +544,7 @@ void MenuDevConsole::execute() {
 
 				if (!EventManager::loadEventComponentString(key, val, &evnt, NULL)) {
 					log_history->setNextColor(font->getColor(FontEngine::COLOR_MENU_PENALTY));
-					log_history->add(msg->get("ERROR: '%s' is not a valid event key", key.c_str()), WidgetLog::MSG_UNIQUE);
+					log_history->add(msg->get("ERROR: '%s' is not a valid event key", key), WidgetLog::MSG_UNIQUE);
 				}
 			}
 

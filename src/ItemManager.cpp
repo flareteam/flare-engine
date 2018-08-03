@@ -653,7 +653,7 @@ void ItemManager::getBonusString(std::stringstream& ss, BonusData* bdata) {
 		ss << " " << eset->damage_types.list[bdata->damage_index_max].name_max;
 	}
 	else if (bdata->resist_index != -1) {
-		ss << "% " << msg->get("%s Resistance", eset->elements.list[bdata->resist_index].name.c_str());
+		ss << "% " << msg->get("%s Resistance", eset->elements.list[bdata->resist_index].name);
 	}
 	else if (bdata->base_index > -1 && static_cast<size_t>(bdata->base_index) < eset->primary_stats.list.size()) {
 		ss << " " << eset->primary_stats.list[bdata->base_index].name;
@@ -809,7 +809,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 			else
 				color = font->getColor(FontEngine::COLOR_WIDGET_NORMAL);
 
-			tip.addColoredText(msg->get("Requires %s %d", items[stack.item].req_val[i], eset->primary_stats.list[items[stack.item].req_stat[i]].name.c_str()), color);
+			tip.addColoredText(msg->get("Requires %s %d", eset->primary_stats.list[items[stack.item].req_stat[i]].name, items[stack.item].req_val[i]), color);
 		}
 	}
 
@@ -888,10 +888,10 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	if (context == PLAYER_INV && !settings->no_mouse) {
 		int power_id = items[stack.item].power;
 		if (power_id > 0 && items[stack.item].type == "consumable") {
-			tip.addColoredText('\n' + msg->get("Press [%s] to use", inpt->getBindingString(Input::MAIN2).c_str()), font->getColor(FontEngine::COLOR_ITEM_BONUS));
+			tip.addColoredText('\n' + msg->get("Press [%s] to use", inpt->getBindingString(Input::MAIN2)), font->getColor(FontEngine::COLOR_ITEM_BONUS));
 		}
 		else if (!items[stack.item].book.empty()) {
-			tip.addColoredText('\n' + msg->get("Press [%s] to read", inpt->getBindingString(Input::MAIN2).c_str()), font->getColor(FontEngine::COLOR_ITEM_BONUS));
+			tip.addColoredText('\n' + msg->get("Press [%s] to read", inpt->getBindingString(Input::MAIN2)), font->getColor(FontEngine::COLOR_ITEM_BONUS));
 		}
 	}
 

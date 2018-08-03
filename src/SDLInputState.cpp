@@ -760,15 +760,15 @@ void SDLInputState::setKeybind(int key, int binding_button, int bindings_list, s
 				continue;
 
 			if ((bindings_list == InputState::BINDING_DEFAULT && binding[i] == key && i != binding_button) || (bindings_list == InputState::BINDING_ALT && binding[i] == key)) {
-				keybind_msg = msg->get("'%s' is no longer bound to:", getBindingString(i, InputState::BINDING_DEFAULT).c_str()) + " '" + binding_name[i] + "'";
+				keybind_msg = msg->get("'%s' is no longer bound to:", getBindingString(i, InputState::BINDING_DEFAULT)) + " '" + binding_name[i] + "'";
 				binding[i] = -1;
 			}
 			if ((bindings_list == InputState::BINDING_DEFAULT && binding_alt[i] == key) || (bindings_list == InputState::BINDING_ALT && binding_alt[i] == key && i != binding_button)) {
-				keybind_msg = msg->get("'%s' is no longer bound to:", getBindingString(i, InputState::BINDING_ALT).c_str()) + " '" + binding_name[i] + "'";
+				keybind_msg = msg->get("'%s' is no longer bound to:", getBindingString(i, InputState::BINDING_ALT)) + " '" + binding_name[i] + "'";
 				binding_alt[i] = -1;
 			}
 			if (bindings_list == InputState::BINDING_JOYSTICK && binding_joy[i] == key && i != binding_button) {
-				keybind_msg = msg->get("'%s' is no longer bound to:", getBindingString(i, InputState::BINDING_JOYSTICK).c_str()) + " '" + binding_name[i] + "'";
+				keybind_msg = msg->get("'%s' is no longer bound to:", getBindingString(i, InputState::BINDING_JOYSTICK)) + " '" + binding_name[i] + "'";
 				binding_joy[i] = -1;
 			}
 		}
