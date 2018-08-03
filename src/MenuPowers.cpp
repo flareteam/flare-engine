@@ -112,7 +112,7 @@ MenuPowers::MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar)
 	label_powers->setText(msg->get("Powers"));
 	label_powers->setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
-	label_unspent->setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
+	label_unspent->setColor(font->getColor(FontEngine::COLOR_MENU_BONUS));
 
 	loadGraphics();
 
