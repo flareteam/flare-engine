@@ -547,19 +547,19 @@ msgstr "Remover"
 
 #: ../../../src/InputState.cpp:398
 msgid "ActionBar Accept"
-msgstr "Barra de Ação Aceitar"
+msgstr "BarraAção Aceitar"
 
 #: ../../../src/InputState.cpp:399
 msgid "ActionBar Left"
-msgstr "Barra de Ação Esquerda"
+msgstr "BarraAção Esq."
 
 #: ../../../src/InputState.cpp:400
 msgid "ActionBar Right"
-msgstr "Barra de Ação Direita"
+msgstr "BarraAção Direita"
 
 #: ../../../src/InputState.cpp:401
 msgid "ActionBar Use"
-msgstr "Barra de Ação Usar"
+msgstr "BarraAção Usar"
 
 #: ../../../src/InputState.cpp:402
 msgid "Developer Menu"
@@ -748,16 +748,16 @@ msgstr "Estatísticas relacionadas:"
 #: ../../../src/MenuCharacter.cpp:413 ../../../src/MenuCharacter.cpp:437
 #, c-format
 msgid "Each level grants %d."
-msgstr ""
+msgstr "Cada nível garante %d."
 
 #: ../../../src/MenuCharacter.cpp:417 ../../../src/MenuCharacter.cpp:441
 #, c-format
 msgid "Each point of %s grants %d."
-msgstr ""
+msgstr "Cada ponto de %s dá %d."
 
 #: ../../../src/MenuDevConsole.cpp:63
 msgid "Execute"
-msgstr ""
+msgstr "Executar"
 
 #: ../../../src/MenuDevConsole.cpp:129 ../../../src/MenuDevConsole.cpp:145
 msgid "Developer Console"
@@ -766,11 +766,11 @@ msgstr "Consola de Programador"
 #: ../../../src/MenuDevConsole.cpp:140
 #, c-format
 msgid "Use '%s' to inspect with the cursor."
-msgstr ""
+msgstr "Usar '%s' para inspecionar com o cursor."
 
 #: ../../../src/MenuDevConsole.cpp:142
 msgid "Arguments with spaces should be enclosed with double quotes. Example:"
-msgstr ""
+msgstr "Os argumentos com espaços devem estar entre aspas duplas. Exemplo:"
 
 #: ../../../src/MenuDevConsole.cpp:143
 msgid "Type 'help' to get a list of commands."
@@ -778,7 +778,7 @@ msgstr "Escreve 'help' para obter uma lista de comandos."
 
 #: ../../../src/MenuDevConsole.cpp:202 ../../../src/MenuDevConsole.cpp:206
 msgid "px"
-msgstr ""
+msgstr "px"
 
 #: ../../../src/MenuDevConsole.cpp:217
 msgid "Distance"
@@ -802,7 +802,7 @@ msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:258
 msgid "entity"
-msgstr ""
+msgstr "entidade"
 
 #: ../../../src/MenuDevConsole.cpp:259
 msgid "entity, ally"
@@ -884,7 +884,7 @@ msgstr "<id>"
 #: ../../../src/MenuDevConsole.cpp:534
 #, c-format
 msgid "ERROR: '%s' is not a valid event key"
-msgstr ""
+msgstr "ERRO: '%s' não é uma chave de evento válida"
 
 #: ../../../src/MenuDevConsole.cpp:543
 msgid "ERROR: Too few arguments"
@@ -900,7 +900,7 @@ msgstr "ERRO: comendo desconhecido"
 
 #: ../../../src/MenuDevConsole.cpp:549
 msgid "HINT: Type help"
-msgstr ""
+msgstr "DICA: escreva help"
 
 #: ../../../src/MenuEnemy.cpp:140
 msgid "Dead"
@@ -1017,7 +1017,7 @@ msgstr ""
 
 #: ../../../src/MenuManager.cpp:825
 msgid "This item can not be dropped."
-msgstr ""
+msgstr "Este item não pode ser deitado fora."
 
 #: ../../../src/MenuNPCActions.cpp:87
 msgid "Trade"
@@ -1426,7 +1426,7 @@ msgstr ""
 
 #: ../../../src/Stats.cpp:93
 msgid "Increases the chance that an enemy will drop an item."
-msgstr ""
+msgstr "Aumenta a possibilidade do inimigo deixar cair um item."
 
 #: ../../../src/Stats.cpp:97
 msgid "Stealth"

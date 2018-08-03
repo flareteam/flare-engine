@@ -271,12 +271,16 @@ msgid ""
 "Will try to store surfaces in video memory versus system memory. The effect "
 "this has on performance depends on the renderer."
 msgstr ""
+"Cerca di caricare le superfici nella memoria video anziché in quella di "
+"sistema. L'effetto sulla performance dipende dalla scheda video."
 
 #: ../../../src/GameStateConfigDesktop.cpp:192
 msgid ""
 "Prevents screen tearing. Disable if you experience \"stuttering\" in "
 "windowed mode or input lag."
 msgstr ""
+"Previene il tearing dello schermo. Disabilita se sperimenti lo "
+"\"stuttering\" nel modo 'windowed' o un ritardo nell'input."
 
 #: ../../../src/GameStateConfigDesktop.cpp:193
 msgid ""
@@ -284,6 +288,9 @@ msgid ""
 "to scale the rendering resolution. Otherwise, only the window dimensions are"
 " used."
 msgstr ""
+"Se abilitato, utilizza il DPI dello schermo in aggiunta alle dimensioni "
+"della finestra per modificare la risoluzione. Altrimenti, sono utilizzate "
+"solo le dimensioni della finestra."
 
 #: ../../../src/GameStateConfigDesktop.cpp:194
 msgid "Experimental"
@@ -319,7 +326,7 @@ msgstr "Filtro texture"
 
 #: ../../../src/GameStateConfigDesktop.cpp:249
 msgid "DPI scaling"
-msgstr ""
+msgstr "dimensione DPI"
 
 #: ../../../src/GameStateConfigDesktop.cpp:253
 msgid "Allow changing gamma"
@@ -719,12 +726,12 @@ msgstr "Livello"
 #: ../../../src/MenuCharacter.cpp:302
 #, c-format
 msgid "%d unspent stat point"
-msgstr ""
+msgstr "%d punto statistiche non utilizzato"
 
 #: ../../../src/MenuCharacter.cpp:305
 #, c-format
 msgid "%d unspent stat points"
-msgstr ""
+msgstr "%d punti statistiche non utilizzati"
 
 #: ../../../src/MenuCharacter.cpp:357 ../../../src/MenuManager.cpp:309
 #, c-format
@@ -766,7 +773,7 @@ msgstr "Console Sviluppatore"
 #: ../../../src/MenuDevConsole.cpp:140
 #, c-format
 msgid "Use '%s' to inspect with the cursor."
-msgstr ""
+msgstr "Usa '%s' per esaminare col cursore."
 
 #: ../../../src/MenuDevConsole.cpp:142
 msgid "Arguments with spaces should be enclosed with double quotes. Example:"
@@ -780,39 +787,39 @@ msgstr "Digita 'help' per ottenere un elenco di comandi."
 
 #: ../../../src/MenuDevConsole.cpp:202 ../../../src/MenuDevConsole.cpp:206
 msgid "px"
-msgstr ""
+msgstr "px"
 
 #: ../../../src/MenuDevConsole.cpp:217
 msgid "Distance"
-msgstr ""
+msgstr "Distanza"
 
 #: ../../../src/MenuDevConsole.cpp:232 ../../../src/MenuDevConsole.cpp:278
 msgid "Entity"
-msgstr ""
+msgstr "Entità"
 
 #: ../../../src/MenuDevConsole.cpp:253 ../../../src/MenuDevConsole.cpp:260
 msgid "none"
-msgstr ""
+msgstr "nessuno"
 
 #: ../../../src/MenuDevConsole.cpp:254 ../../../src/MenuDevConsole.cpp:256
 msgid "wall"
-msgstr ""
+msgstr "muro"
 
 #: ../../../src/MenuDevConsole.cpp:255 ../../../src/MenuDevConsole.cpp:257
 msgid "short wall / pit"
-msgstr ""
+msgstr "muretto / pozzo"
 
 #: ../../../src/MenuDevConsole.cpp:258
 msgid "entity"
-msgstr ""
+msgstr "entità"
 
 #: ../../../src/MenuDevConsole.cpp:259
 msgid "entity, ally"
-msgstr ""
+msgstr "entità, alleato"
 
 #: ../../../src/MenuDevConsole.cpp:266
 msgid "Tile"
-msgstr ""
+msgstr "Mattonella"
 
 #: ../../../src/MenuDevConsole.cpp:351
 msgid "adds a power to the action bar"
@@ -1187,12 +1194,12 @@ msgstr "Richiede 1 Punto Abilità"
 #: ../../../src/MenuPowers.cpp:1331
 #, c-format
 msgid "%d unspent skill point"
-msgstr ""
+msgstr "%d punto abilità non utilizzato"
 
 #: ../../../src/MenuPowers.cpp:1334
 #, c-format
 msgid "%d unspent skill points"
-msgstr ""
+msgstr "%d punti abilità non utilizzati"
 
 #: ../../../src/MenuPowers.cpp:1362
 msgid "Next Level:"
