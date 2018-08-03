@@ -94,8 +94,6 @@ private:
 
 	std::vector<Title> titles;
 
-	int nearest_npc;
-
 	std::vector<ActionData> action_queue;
 
 	int menu_enemy_timeout;

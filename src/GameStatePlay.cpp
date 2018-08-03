@@ -84,7 +84,6 @@ GameStatePlay::GameStatePlay()
 	, enemy(NULL)
 	, npc_id(-1)
 	, npc_from_map(true)
-	, nearest_npc(-1)
 	, menu_enemy_timeout(settings->max_frames_per_sec * 10)
 	, second_ticks(0)
 	, is_first_map_load(true)
@@ -338,16 +337,25 @@ void GameStatePlay::checkTeleport() {
 				Utils::logError("GameStatePlay: Spawn position (%d, %d) is blocked.", static_cast<int>(pc->stats.pos.x), static_cast<int>(pc->stats.pos.y));
 			}
 
-			enemym->handleNewMap();
 			hazards->handleNewMap();
 			loot->handleNewMap();
 			powers->handleNewMap(&mapr->collider);
 			menu->enemy->handleNewMap();
+			menu->stash->visible = false;
+
+			// switch off teleport flag so we can check if an on_load event has teleportation
+			mapr->teleportation = false;
+
+			mapr->executeOnLoadEvents();
+			if (mapr->teleportation)
+				on_load_teleport = true;
+
+			// enemies and npcs should be initialized AFTER on_load events execute
+			enemym->handleNewMap();
 			npcs->handleNewMap();
 			resetNPC();
-			menu->stash->visible = false;
+
 			menu->mini->prerender(&mapr->collider, mapr->w, mapr->h);
-			npc_id = nearest_npc = -1;
 
 			// return to title (permadeath) OR auto-save
 			if (pc->stats.permadeath && pc->stats.cur_state == StatBlock::AVATAR_DEAD) {
@@ -361,13 +369,6 @@ void GameStatePlay::checkTeleport() {
 				else
 					is_first_map_load = false;
 			}
-
-			// switch off teleport flag so we can check if an on_load event has teleportation
-			mapr->teleportation = false;
-
-			mapr->executeOnLoadEvents();
-			if (mapr->teleportation)
-				on_load_teleport = true;
 		}
 
 		if (mapr->collider.isOutsideMap(pc->stats.pos.x, pc->stats.pos.y)) {
