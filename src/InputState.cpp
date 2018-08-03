@@ -133,7 +133,9 @@ void InputState::loadKeyBindings() {
 
 			if (*file_version < *file_version_min) {
 				Utils::logError("InputState: Keybindings configuration file is out of date (%s < %s). Resetting to engine defaults.", file_version->getString().c_str(), file_version_min->getString().c_str());
-				Utils::logErrorDialog("InputState: Keybindings configuration file is out of date. Resetting to engine defaults.", file_version->getString().c_str(), file_version_min->getString().c_str());
+				if (platform.config_menu_type != Platform::CONFIG_MENU_TYPE_BASE) {
+					Utils::logErrorDialog("InputState: Keybindings configuration file is out of date. Resetting to engine defaults.", file_version->getString().c_str(), file_version_min->getString().c_str());
+				}
 				saveKeyBindings();
 				break;
 			}
