@@ -78,7 +78,7 @@ MenuLog::MenuLog() {
 
 	// Store the amount of displayed log messages on each log, and the maximum.
 	tablist_log.resize(TYPE_COUNT);
-	for (size_t i = 0; i < TYPE_COUNT; ++i) {
+	for (int i = 0; i < TYPE_COUNT; ++i) {
 		log[i] = new WidgetLog(tab_area.w,tab_area.h);
 		log[i]->setBasePos(tab_area.x, tab_area.y + tabControl->getTabHeight(), Utils::ALIGN_TOPLEFT);
 
@@ -105,7 +105,7 @@ void MenuLog::align() {
 
 	label_log.setPos(window_area.x, window_area.y);
 
-	for (size_t i = 0; i < TYPE_COUNT; ++i) {
+	for (int i = 0; i < TYPE_COUNT; ++i) {
 		log[i]->setPos(window_area.x, window_area.y);
 	}
 }
@@ -118,7 +118,7 @@ void MenuLog::logic() {
 
 	tablist.logic();
 	// make shure keyboard navigation leads us to correct tab
-	for (size_t i = 0; i < TYPE_COUNT; ++i) {
+	for (int i = 0; i < TYPE_COUNT; ++i) {
 		if (tabControl->getActiveTab() == static_cast<int>(i)) {
 			tablist.setNextTabList(&tablist_log[i]);
 		}
@@ -188,7 +188,7 @@ void MenuLog::clear(int log_type) {
 }
 
 void MenuLog::clearAll() {
-	for (size_t i = 0; i < TYPE_COUNT; ++i) {
+	for (int i = 0; i < TYPE_COUNT; ++i) {
 		log[i]->clear();
 	}
 }
@@ -198,7 +198,7 @@ void MenuLog::addSeparator(int log_type) {
 }
 
 void MenuLog::setNextTabList(TabList *tl) {
-	for (size_t i = 0; i < TYPE_COUNT; ++i) {
+	for (int i = 0; i < TYPE_COUNT; ++i) {
 		tablist_log[i].setNextTabList(tl);
 	}
 }
@@ -208,7 +208,7 @@ TabList* MenuLog::getCurrentTabList() {
 		return (&tablist);
 	}
 	else {
-		for (size_t i = 0; i < TYPE_COUNT; ++i) {
+		for (int i = 0; i < TYPE_COUNT; ++i) {
 			if (tablist_log[i].getCurrent() != -1)
 				return (&tablist_log[i]);
 		}
@@ -219,13 +219,13 @@ TabList* MenuLog::getCurrentTabList() {
 
 void MenuLog::defocusTabLists() {
 	tablist.defocus();
-	for (size_t i = 0; i < TYPE_COUNT; ++i) {
+	for (int i = 0; i < TYPE_COUNT; ++i) {
 		tablist_log[i].defocus();
 	}
 }
 
 MenuLog::~MenuLog() {
-	for (size_t i = 0; i < TYPE_COUNT; ++i) {
+	for (int i = 0; i < TYPE_COUNT; ++i) {
 		delete log[i];
 	}
 

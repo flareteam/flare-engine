@@ -273,7 +273,7 @@ void SDLInputState::handle() {
 					un_press[Input::MAIN1] = false;
 
 					FingerData fd;
-					fd.id = event.tfinger.fingerId;
+					fd.id = static_cast<long int>(event.tfinger.fingerId);
 					fd.pos.x = mouse.x;
 					fd.pos.y = mouse.y;
 					touch_fingers.push_back(fd);

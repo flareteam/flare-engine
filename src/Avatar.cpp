@@ -842,7 +842,7 @@ void Avatar::transform() {
 	stats.cur_state = StatBlock::AVATAR_STANCE;
 
 	// base stats
-	for (unsigned int i=0; i<Stats::COUNT; ++i) {
+	for (int i=0; i<Stats::COUNT; ++i) {
 		stats.starting[i] = std::max(stats.starting[i], charmed_stats->starting[i]);
 	}
 
@@ -909,7 +909,7 @@ void Avatar::untransform() {
 	// In order to switch to the stance animation, we can't already be in a stance animation
 	setAnimation("run");
 
-	for (unsigned int i=0; i<Stats::COUNT; ++i) {
+	for (int i=0; i<Stats::COUNT; ++i) {
 		stats.starting[i] = hero_stats->starting[i];
 	}
 

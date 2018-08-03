@@ -590,7 +590,7 @@ void ItemManager::parseBonus(BonusData& bdata, FileParser& infile) {
 		return;
 	}
 
-	for (unsigned i=0; i<Stats::COUNT; ++i) {
+	for (int i=0; i<Stats::COUNT; ++i) {
 		if (bonus_str == Stats::KEY[i]) {
 			bdata.stat_index = static_cast<Stats::STAT>(i);
 			return;

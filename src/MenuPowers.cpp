@@ -757,7 +757,7 @@ void MenuPowers::createTooltip(TooltipData* tip_data, int slot_num, const std::v
 			ss << pwr.post_effects[i].magnitude;
 			bool found_key = false;
 
-			for (size_t j=0; j<Stats::COUNT; ++j) {
+			for (int j=0; j<Stats::COUNT; ++j) {
 				if (pwr.post_effects[i].id == Stats::KEY[j]) {
 					if (Stats::PERCENT[j])
 						ss << "%";

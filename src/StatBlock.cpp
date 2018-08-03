@@ -215,7 +215,7 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 		std::string stat = Parse::popFirstString(infile->val);
 		int value = Parse::popFirstInt(infile->val);
 
-		for (size_t i=0; i<Stats::COUNT; ++i) {
+		for (int i=0; i<Stats::COUNT; ++i) {
 			if (Stats::KEY[i] == stat) {
 				starting[i] = value;
 				return true;
@@ -238,7 +238,7 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 		std::string stat = Parse::popFirstString(infile->val);
 		int value = Parse::popFirstInt(infile->val);
 
-		for (unsigned i=0; i<Stats::COUNT; i++) {
+		for (int i=0; i<Stats::COUNT; i++) {
 			if (Stats::KEY[i] == stat) {
 				per_level[i] = value;
 				return true;
@@ -268,7 +268,7 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 		std::string stat = Parse::popFirstString(infile->val);
 		int value = Parse::popFirstInt(infile->val);
 
-		for (unsigned i=0; i<Stats::COUNT; i++) {
+		for (int i=0; i<Stats::COUNT; i++) {
 			if (Stats::KEY[i] == stat) {
 				per_primary[prim_stat_index][i] = value;
 				return true;

@@ -520,14 +520,14 @@ do_last_NE_tile:
 			// calculate south/south-west tile bounds
 			Rect tile_SW_bounds, tile_S_bounds;
 			Point tile_SW_center, tile_S_center;
-			getTileBounds(i-2, j+2, current_layer, tile_SW_bounds, tile_SW_center);
-			getTileBounds(i-1, j+2, current_layer, tile_S_bounds, tile_S_center);
+			getTileBounds(static_cast<int_fast16_t>(i-2), static_cast<int_fast16_t>(j+2), current_layer, tile_SW_bounds, tile_SW_center);
+			getTileBounds(static_cast<int_fast16_t>(i-1), static_cast<int_fast16_t>(j+2), current_layer, tile_S_bounds, tile_S_center);
 
 			// calculate east/north-east tile bounds
 			Rect tile_NE_bounds, tile_E_bounds;
 			Point tile_NE_center, tile_E_center;
 			getTileBounds(i, j, current_layer, tile_NE_bounds, tile_NE_center);
-			getTileBounds(i, j+1, current_layer, tile_E_bounds, tile_E_center);
+			getTileBounds(i, static_cast<int_fast16_t>(j+1), current_layer, tile_E_bounds, tile_E_center);
 
 			bool draw_SW_tile = false;
 			bool draw_NE_tile = false;

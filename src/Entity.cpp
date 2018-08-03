@@ -44,7 +44,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <math.h>
 
-#ifdef _MSC_VER
+#ifndef M_SQRT2
 #define M_SQRT2 sqrt(2.0)
 #endif
 

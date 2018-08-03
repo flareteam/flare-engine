@@ -150,7 +150,7 @@ bool WidgetInput::logicAt(int x, int y) {
 			}
 
 			// HACK: this prevents normal keys from triggering common menu shortcuts
-			for (size_t i = 0; i < inpt->KEY_COUNT; ++i) {
+			for (int i = 0; i < inpt->KEY_COUNT; ++i) {
 				if (inpt->pressing[i]) {
 					inpt->lock[i] = true;
 					inpt->repeat_ticks[i] = 1;

@@ -540,7 +540,7 @@ void SDLSoftwareRenderDevice::updateTitleBar() {
 
 	if (!window) return;
 
-	title = strdup(msg->get(eset->misc.window_title).c_str());
+	title = Utils::strdup(msg->get(eset->misc.window_title));
 	titlebar_icon = IMG_Load(mods->locate("images/logo/icon.png").c_str());
 
 	if (title) SDL_SetWindowTitle(window, title);

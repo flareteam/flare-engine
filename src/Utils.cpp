@@ -37,6 +37,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <iomanip>
 #include <iostream>
 #include <locale>
+#include <string.h>
 
 int Utils::LOCK_INDEX = 0;
 
@@ -647,6 +648,15 @@ unsigned long Utils::hashString(const std::string& str) {
 	std::locale loc;
 	const std::collate<char>& coll = std::use_facet<std::collate<char> >(loc);
 	return coll.hash(str.data(), str.data() + str.length());
+}
+
+char* Utils::strdup(const std::string& str) {
+	size_t length = str.length() + 1;
+	char *x = static_cast<char*>(malloc(length));
+	if (!x)
+		return NULL;
+	memcpy(x, str.c_str(), length);
+	return x;
 }
 
 void Utils::lockFileRead() {

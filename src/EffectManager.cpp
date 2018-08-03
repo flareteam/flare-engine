@@ -542,7 +542,7 @@ int EffectManager::getType(const std::string& type) {
 	else if (type == "heal") return Effect::HEAL;
 	else if (type == "knockback") return Effect::KNOCKBACK;
 	else {
-		for (unsigned i=0; i<Stats::COUNT; i++) {
+		for (int i=0; i<Stats::COUNT; i++) {
 			if (type == Stats::KEY[i]) {
 				return Effect::TYPE_COUNT + i;
 			}

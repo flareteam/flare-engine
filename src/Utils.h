@@ -135,6 +135,8 @@ namespace Utils {
 
 	unsigned long hashString(const std::string& str);
 
+	char* strdup(const std::string& str);
+
 	void lockFileRead();
 	void lockFileWrite(int increment);
 	void lockFileCheck();
