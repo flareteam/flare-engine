@@ -85,8 +85,8 @@ namespace Stats {
 		PERCENT[XP_GAIN] = true;
 		// @TYPE currency_find|Percentage boost to the amount of gold dropped per loot event.
 		KEY[CURRENCY_FIND] = "currency_find";
-		NAME[CURRENCY_FIND] = msg->get("Bonus %s", eset->loot.currency.c_str());
-		DESC[CURRENCY_FIND] = msg->get("Increases the %s found per drop.", eset->loot.currency.c_str());
+		NAME[CURRENCY_FIND] = msg->get("Bonus %s", eset->loot.currency);
+		DESC[CURRENCY_FIND] = msg->get("Increases the %s found per drop.", eset->loot.currency);
 		PERCENT[CURRENCY_FIND] = true;
 		// @TYPE item_find|Increases the chance of finding items in loot.
 		KEY[ITEM_FIND] = "item_find";

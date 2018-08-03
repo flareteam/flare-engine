@@ -1053,7 +1053,7 @@ void MenuPowers::createTooltip(TooltipData* tip_data, int slot_num, const std::v
 	for (it = powers->powers[power_cells[slot_num].id].requires_flags.begin(); it != powers->powers[power_cells[slot_num].id].requires_flags.end(); ++it) {
 		for (size_t i = 0; i < eset->equip_flags.list.size(); ++i) {
 			if ((*it) == eset->equip_flags.list[i].id) {
-				tip_data->addText(msg->get("Requires a %s", msg->get(eset->equip_flags.list[i].name).c_str()));
+				tip_data->addText(msg->get("Requires a %s", msg->get(eset->equip_flags.list[i].name)));
 			}
 		}
 	}
@@ -1062,9 +1062,9 @@ void MenuPowers::createTooltip(TooltipData* tip_data, int slot_num, const std::v
 	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 		if (power_cells[slot_num].requires_primary[i] > 0) {
 			if (stats->get_primary(i) < power_cells[slot_num].requires_primary[i])
-				tip_data->addColoredText(msg->get("Requires %s %d", eset->primary_stats.list[i].name.c_str(), power_cells[slot_num].requires_primary[i]), font->getColor(FontEngine::COLOR_MENU_PENALTY));
+				tip_data->addColoredText(msg->get("Requires %s %d", eset->primary_stats.list[i].name, power_cells[slot_num].requires_primary[i]), font->getColor(FontEngine::COLOR_MENU_PENALTY));
 			else
-				tip_data->addText(msg->get("Requires %s %d", eset->primary_stats.list[i].name.c_str(), power_cells[slot_num].requires_primary[i]));
+				tip_data->addText(msg->get("Requires %s %d", eset->primary_stats.list[i].name, power_cells[slot_num].requires_primary[i]));
 		}
 	}
 
@@ -1092,10 +1092,10 @@ void MenuPowers::createTooltip(TooltipData* tip_data, int slot_num, const std::v
 		// Required Power Tooltip
 		int req_cell_index = getCellByPowerIndex(power_cells[slot_num].requires_power[j], power_cell_all);
 		if (!checkUnlocked(req_cell_index)) {
-			tip_data->addColoredText(msg->get("Requires Power: %s", req_power_name.c_str()), font->getColor(FontEngine::COLOR_MENU_PENALTY));
+			tip_data->addColoredText(msg->get("Requires Power: %s", req_power_name), font->getColor(FontEngine::COLOR_MENU_PENALTY));
 		}
 		else {
-			tip_data->addText(msg->get("Requires Power: %s", req_power_name.c_str()));
+			tip_data->addText(msg->get("Requires Power: %s", req_power_name));
 		}
 
 	}

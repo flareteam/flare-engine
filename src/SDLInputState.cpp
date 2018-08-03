@@ -674,10 +674,10 @@ std::string SDLInputState::getMovementString() {
 		ss << getBindingString(Input::DOWN, InputState::BINDING_JOYSTICK);
 	}
 	else if (settings->touchscreen) {
-		ss << msg->get("%s on ground", msg->get("Tap").c_str());
+		ss << msg->get("%s on ground", msg->get("Tap"));
 	}
 	else if (settings->mouse_move) {
-		ss << msg->get("%s on ground", getBindingString(Input::MAIN1).c_str());
+		ss << msg->get("%s on ground", getBindingString(Input::MAIN1));
 	}
 	else {
 		ss << getBindingString(Input::LEFT) <<  "/";
@@ -698,10 +698,10 @@ std::string SDLInputState::getAttackString() {
 		ss << getBindingString(Input::ACTIONBAR_USE, InputState::BINDING_JOYSTICK);
 	}
 	else if (settings->touchscreen) {
-		ss << msg->get("%s on enemy", msg->get("Tap").c_str());
+		ss << msg->get("%s on enemy", msg->get("Tap"));
 	}
 	else if (settings->mouse_move) {
-		ss << msg->get("%s on enemy", getBindingString(Input::MAIN1).c_str());
+		ss << msg->get("%s on enemy", getBindingString(Input::MAIN1));
 	}
 	else {
 		ss << getBindingString(Input::MAIN1);

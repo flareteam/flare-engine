@@ -144,7 +144,7 @@ void MenuStash::render() {
 	// text overlay
 	label_title.render();
 	if (!label_currency.isHidden()) {
-		label_currency.setText(msg->get("%d %s", stock.count(eset->misc.currency_id), eset->loot.currency.c_str()));
+		label_currency.setText(msg->get("%d %s", stock.count(eset->misc.currency_id), eset->loot.currency));
 		label_currency.render();
 	}
 
