@@ -291,10 +291,10 @@ public:
 	bool death_penalty;
 
 	// Campaign event interaction
-	std::string defeat_status;
-	std::string convert_status;
-	std::string quest_loot_requires_status;
-	std::string quest_loot_requires_not_status;
+	StatusID defeat_status;
+	StatusID convert_status;
+	StatusID quest_loot_requires_status;
+	StatusID quest_loot_requires_not_status;
 	int quest_loot_id;
 	int first_defeat_loot;
 
@@ -336,8 +336,8 @@ public:
 
 	int bleed_source_type;
 
-	std::vector<std::string> invincible_requires_status;
-	std::vector<std::string> invincible_requires_not_status;
+	std::vector<StatusID> invincible_requires_status;
+	std::vector<StatusID> invincible_requires_not_status;
 };
 
 #endif

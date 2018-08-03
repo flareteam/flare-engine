@@ -44,10 +44,10 @@ public:
 	int direction;
 	std::queue<FPoint> waypoints;
 	int wander_radius;
-	std::vector<std::string> requires_status;
-	std::vector<std::string> requires_not_status;
-	std::vector<std::string> invincible_requires_status;
-	std::vector<std::string> invincible_requires_not_status;
+	std::vector<StatusID> requires_status;
+	std::vector<StatusID> requires_not_status;
+	std::vector<StatusID> invincible_requires_status;
+	std::vector<StatusID> invincible_requires_not_status;
 
 	Map_Group()
 		: type("")
@@ -74,8 +74,8 @@ public:
 	std::string type;
 	std::string id;
 	FPoint pos;
-	std::vector<std::string> requires_status;
-	std::vector<std::string> requires_not_status;
+	std::vector<StatusID> requires_status;
+	std::vector<StatusID> requires_not_status;
 
 	Map_NPC()
 		: type("")
@@ -97,10 +97,10 @@ public:
 	bool enemy_ally;
 	int summon_power_index;
 	StatBlock* summoner;
-	std::vector<std::string> requires_status;
-	std::vector<std::string> requires_not_status;
-	std::vector<std::string> invincible_requires_status;
-	std::vector<std::string> invincible_requires_not_status;
+	std::vector<StatusID> requires_status;
+	std::vector<StatusID> requires_not_status;
+	std::vector<StatusID> invincible_requires_status;
+	std::vector<StatusID> invincible_requires_not_status;
 
 	Map_Enemy(const std::string& _type="", FPoint _pos=FPoint())
 		: type(_type)

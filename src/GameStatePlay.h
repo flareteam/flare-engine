@@ -45,8 +45,8 @@ public:
 	std::string title;
 	int level;
 	int power;
-	std::vector<std::string> requires_status;
-	std::vector<std::string> requires_not_status;
+	std::vector<StatusID> requires_status;
+	std::vector<StatusID> requires_not_status;
 	std::string primary_stat_1;
 	std::string primary_stat_2;
 

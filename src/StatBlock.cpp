@@ -26,6 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "Avatar.h"
+#include "CampaignManager.h"
 #include "CombatText.h"
 #include "Enemy.h"
 #include "EnemyManager.h"
@@ -151,10 +152,10 @@ StatBlock::StatBlock()
 	, teleport_destination()
 	, currency(0)
 	, death_penalty(false)
-	, defeat_status("")			// enemy only
-	, convert_status("")		// enemy only
-	, quest_loot_requires_status("")	// enemy only
-	, quest_loot_requires_not_status("")		// enemy only
+	, defeat_status(0)			// enemy only
+	, convert_status(0)		// enemy only
+	, quest_loot_requires_status(0)	// enemy only
+	, quest_loot_requires_not_status(0)		// enemy only
 	, quest_loot_id(0)			// enemy only
 	, first_defeat_loot(0)		// enemy only
 	, gfx_base("male")
@@ -444,15 +445,15 @@ void StatBlock::load(const std::string& filename) {
 			}
 		}
 		// @ATTR defeat_status|string|Campaign status to set upon death.
-		else if (infile.key == "defeat_status") defeat_status = infile.val;
+		else if (infile.key == "defeat_status") defeat_status = camp->registerStatus(infile.val);
 		// @ATTR convert_status|string|Campaign status to set upon being converted to a player ally.
-		else if (infile.key == "convert_status") convert_status = infile.val;
+		else if (infile.key == "convert_status") convert_status = camp->registerStatus(infile.val);
 		// @ATTR first_defeat_loot|item_id|Drops this item upon first death.
 		else if (infile.key == "first_defeat_loot") first_defeat_loot = num;
 		// @ATTR quest_loot|string, string, item_id : Required status, Required not status, Item|Drops this item when campaign status is met.
 		else if (infile.key == "quest_loot") {
-			quest_loot_requires_status = Parse::popFirstString(infile.val);
-			quest_loot_requires_not_status = Parse::popFirstString(infile.val);
+			quest_loot_requires_status = camp->registerStatus(Parse::popFirstString(infile.val));
+			quest_loot_requires_not_status = camp->registerStatus(Parse::popFirstString(infile.val));
 			quest_loot_id = Parse::popFirstInt(infile.val);
 		}
 

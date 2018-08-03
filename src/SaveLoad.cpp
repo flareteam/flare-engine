@@ -443,7 +443,8 @@ void SaveLoad::loadClass(int index) {
 		pc->stats.powers_list.push_back(eset->hero_classes.list[index].powers[i]);
 	}
 	for (unsigned i=0; i<eset->hero_classes.list[index].statuses.size(); i++) {
-		camp->setStatus(eset->hero_classes.list[index].statuses[i]);
+		StatusID class_status = camp->registerStatus(eset->hero_classes.list[index].statuses[i]);
+		camp->setStatus(class_status);
 	}
 	menu->act->set(eset->hero_classes.list[index].hotkeys);
 

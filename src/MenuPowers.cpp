@@ -400,9 +400,9 @@ void MenuPowers::loadPower(FileParser &infile) {
 	else if (infile.key == "requires_power") power_cell.back().requires_power.push_back(Parse::toInt(infile.val));
 
 	// @ATTR power.visible_requires_status|repeatable(string)|Hide the power if we don't have this campaign status.
-	else if (infile.key == "visible_requires_status") power_cell.back().visible_requires_status.push_back(infile.val);
+	else if (infile.key == "visible_requires_status") power_cell.back().visible_requires_status.push_back(camp->registerStatus(infile.val));
 	// @ATTR power.visible_requires_not_status|repeatable(string)|Hide the power if we have this campaign status.
-	else if (infile.key == "visible_requires_not_status") power_cell.back().visible_requires_not.push_back(infile.val);
+	else if (infile.key == "visible_requires_not_status") power_cell.back().visible_requires_not.push_back(camp->registerStatus(infile.val));
 
 	// @ATTR power.upgrades|list(power_id)|A list of upgrade power ids that this power slot can upgrade to. Each of these powers should have a matching upgrade section.
 	else if (infile.key == "upgrades") {
@@ -462,9 +462,9 @@ void MenuPowers::loadUpgrade(FileParser &infile) {
 	else if (infile.key == "requires_power") power_cell_upgrade.back().requires_power.push_back(Parse::toInt(infile.val));
 
 	// @ATTR upgrade.visible_requires_status|repeatable(string)|Hide the upgrade if we don't have this campaign status.
-	else if (infile.key == "visible_requires_status") power_cell_upgrade.back().visible_requires_status.push_back(infile.val);
+	else if (infile.key == "visible_requires_status") power_cell_upgrade.back().visible_requires_status.push_back(camp->registerStatus(infile.val));
 	// @ATTR upgrade.visible_requires_not_status|repeatable(string)|Hide the upgrade if we have this campaign status.
-	else if (infile.key == "visible_requires_not_status") power_cell_upgrade.back().visible_requires_not.push_back(infile.val);
+	else if (infile.key == "visible_requires_not_status") power_cell_upgrade.back().visible_requires_not.push_back(camp->registerStatus(infile.val));
 
 	else infile.error("MenuPowers: '%s' is not a valid key.", infile.key.c_str());
 }

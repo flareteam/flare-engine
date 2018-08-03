@@ -174,7 +174,7 @@ void MenuBook::loadImage(FileParser &infile, BookImage& bimage) {
 	else if (infile.key == "requires_status") {
 		std::string temp = Parse::popFirstString(infile.val);
 		while (!temp.empty()) {
-			bimage.requires_status.push_back(temp);
+			bimage.requires_status.push_back(camp->registerStatus(temp));
 			temp = Parse::popFirstString(infile.val);
 		}
 	}
@@ -182,7 +182,7 @@ void MenuBook::loadImage(FileParser &infile, BookImage& bimage) {
 	else if (infile.key == "requires_not_status") {
 		std::string temp = Parse::popFirstString(infile.val);
 		while (!temp.empty()) {
-			bimage.requires_not_status.push_back(temp);
+			bimage.requires_not_status.push_back(camp->registerStatus(temp));
 			temp = Parse::popFirstString(infile.val);
 		}
 	}
@@ -219,7 +219,7 @@ void MenuBook::loadText(FileParser &infile, BookText& btext) {
 	else if (infile.key == "requires_status") {
 		std::string temp = Parse::popFirstString(infile.val);
 		while (!temp.empty()) {
-			btext.requires_status.push_back(temp);
+			btext.requires_status.push_back(camp->registerStatus(temp));
 			temp = Parse::popFirstString(infile.val);
 		}
 	}
@@ -227,7 +227,7 @@ void MenuBook::loadText(FileParser &infile, BookText& btext) {
 	else if (infile.key == "requires_not_status") {
 		std::string temp = Parse::popFirstString(infile.val);
 		while (!temp.empty()) {
-			btext.requires_not_status.push_back(temp);
+			btext.requires_not_status.push_back(camp->registerStatus(temp));
 			temp = Parse::popFirstString(infile.val);
 		}
 	}

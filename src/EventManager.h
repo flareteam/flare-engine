@@ -91,6 +91,7 @@ public:
 
 	int type;
 	std::string s;
+	StatusID status;
 	int x;
 	int y;
 	int z;
@@ -101,6 +102,7 @@ public:
 	EventComponent()
 		: type(NONE)
 		, s("")
+		, status(0)
 		, x(0)
 		, y(0)
 		, z(0)

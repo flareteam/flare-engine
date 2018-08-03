@@ -387,11 +387,12 @@ void MenuDevConsole::execute() {
 			if (i+1 != args.size())
 				search_terms += ' ';
 		}
-
 		std::vector<size_t> matching_ids;
+		std::vector<std::string> status_strings;
+		camp->getSetStatusStrings(status_strings);
 
-		for (size_t i=0; i<camp->status.size(); ++i) {
-			if (!search_terms.empty() && Utils::stringFindCaseInsensitive(camp->status[i], search_terms) == std::string::npos)
+		for (size_t i=0; i<status_strings.size(); ++i) {
+			if (!search_terms.empty() && Utils::stringFindCaseInsensitive(status_strings[i], search_terms) == std::string::npos)
 				continue;
 
 			matching_ids.push_back(i);
@@ -401,7 +402,7 @@ void MenuDevConsole::execute() {
 			log_history->setMaxMessages(static_cast<unsigned>(matching_ids.size()));
 
 			for (size_t i=matching_ids.size(); i>0; i--) {
-				log_history->add(camp->status[matching_ids[i-1]], WidgetLog::MSG_NORMAL);
+				log_history->add(status_strings[matching_ids[i-1]], WidgetLog::MSG_NORMAL);
 			}
 
 			log_history->setMaxMessages(WidgetLog::MAX_MESSAGES); // reset

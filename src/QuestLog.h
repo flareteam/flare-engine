@@ -35,7 +35,7 @@ private:
 	class Quest {
 	public:
 		std::string name;
-		std::string complete_status;
+		StatusID complete_status;
 	};
 
 	MenuLog *log;

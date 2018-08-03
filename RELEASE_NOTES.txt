@@ -30,6 +30,7 @@ Engine fixes:
 * Fix interaction with loot hitboxes interfering with loot tooltips.
 * Improved handling of mouse movement for melee characters. The player will no longer execute their primary melee attack if they are out of melee range of their target. Also, the player will begin to attack if they enter melee range while moving.
 * The user keybindings are now reset if the keybindings file is not forwards compatible. Anyone using remapped keys will need to set them again with this update.
+* Improved performance when dealing with campaign statuses.
 * Lots of code cleanup.
 
 New translations:

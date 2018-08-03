@@ -39,8 +39,25 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 
 CampaignManager::CampaignManager()
-	: status()
-	, bonus_xp(0.0) {
+	: bonus_xp(0.0) {
+}
+
+StatusID CampaignManager::registerStatus(const std::string& s) {
+	if (s.empty())
+		return 0;
+
+	StatusID new_id = Utils::hashString(s);
+
+	// check if this status was already registered
+	StatusMap::iterator it;
+	it = status.find(new_id);
+	if (it != status.end())
+		return it->first;
+
+	// register a new status
+	status[new_id].first = false;
+	status[new_id].second = s;
+	return new_id;
 }
 
 /**
@@ -49,9 +66,10 @@ CampaignManager::CampaignManager()
 void CampaignManager::setAll(const std::string& s) {
 	std::string str = s + ',';
 	std::string token;
-	while (str != "") {
+	while (!str.empty()) {
 		token = Parse::popFirstString(str);
-		if (token != "") this->setStatus(token);
+		if (!token.empty())
+			setStatus(registerStatus(token));
 	}
 }
 
@@ -61,50 +79,58 @@ void CampaignManager::setAll(const std::string& s) {
 std::string CampaignManager::getAll() {
 	std::stringstream ss;
 	ss.str("");
-	for (unsigned int i=0; i < status.size(); i++) {
-		ss << status[i];
-		if (i < status.size()-1) ss << ',';
+
+	StatusMap::iterator it;
+	for (it = status.begin(); it != status.end(); ++it) {
+		if (it->second.first)
+			ss << it->second.second;
+
+		StatusMap::iterator temp = it;
+		temp++;
+		if (temp != status.end() && temp->second.first) {
+			ss << ',';
+		}
 	}
 	return ss.str();
 }
 
-bool CampaignManager::checkStatus(const std::string& s) {
+bool CampaignManager::checkStatus(const StatusID s) {
+	StatusMap::iterator it;
+	it = status.find(s);
+	if (it != status.end() && it->second.first)
+		return true;
 
-	// avoid searching empty statuses
-	if (s == "") return false;
-
-	for (unsigned int i=0; i < status.size(); i++) {
-		if (status[i] == s) return true;
-	}
 	return false;
 }
 
-void CampaignManager::setStatus(const std::string& s) {
-
-	// avoid adding empty statuses
-	if (s == "") return;
-
-	// if it's already set, don't add it again
+void CampaignManager::setStatus(const StatusID s) {
+	// if it's already set, don't set it again
 	if (checkStatus(s)) return;
 
-	status.push_back(s);
+	status[s].first = true;
 	pc->stats.check_title = true;
 }
 
-void CampaignManager::unsetStatus(const std::string& s) {
+void CampaignManager::unsetStatus(const StatusID s) {
+	// if it's already unset, don't unset it again
+	if (!checkStatus(s)) return;
 
-	// avoid searching empty statuses
-	if (s == "") return;
+	status[s].first = false;
+	pc->stats.check_title = true;
+}
 
-	std::vector<std::string>::iterator it;
-	// see http://stackoverflow.com/a/223405
-	for (it = status.end(); it != status.begin();) {
-		--it;
-		if ((*it) == s) {
-			it = status.erase(it);
-			pc->stats.check_title = true;
-			return;
-		}
+void CampaignManager::resetAllStatuses() {
+	StatusMap::iterator it;
+	for (it = status.begin(); it != status.end(); ++it) {
+		it->second.first = false;
+	}
+}
+
+void CampaignManager::getSetStatusStrings(std::vector<std::string>& status_strings) {
+	StatusMap::iterator it;
+	for (it = status.begin(); it != status.end(); ++it) {
+		if (it->second.first)
+			status_strings.push_back(it->second.second);
 	}
 }
 
@@ -197,11 +223,11 @@ void CampaignManager::restoreHPMP(const std::string& s) {
 
 bool CampaignManager::checkAllRequirements(const EventComponent& ec) {
 	if (ec.type == EventComponent::REQUIRES_STATUS) {
-		if (checkStatus(ec.s))
+		if (checkStatus(ec.status))
 			return true;
 	}
 	else if (ec.type == EventComponent::REQUIRES_NOT_STATUS) {
-		if (!checkStatus(ec.s))
+		if (!checkStatus(ec.status))
 			return true;
 	}
 	else if (ec.type == EventComponent::REQUIRES_CURRENCY) {

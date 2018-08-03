@@ -96,9 +96,10 @@ GameStatePlay::GameStatePlay()
 	if (items == NULL)
 		items = new ItemManager();
 
+	camp = new CampaignManager();
+
 	loot = new LootManager();
 	powers = new PowerManager();
-	camp = new CampaignManager();
 	mapr = new MapRenderer();
 	pc = new Avatar();
 	enemym = new EnemyManager();
@@ -127,7 +128,7 @@ void GameStatePlay::refreshWidgets() {
 void GameStatePlay::resetGame() {
 	mapr->load("maps/spawn.txt");
 	setLoadingFrame();
-	camp->status.clear();
+	camp->resetAllStatuses();
 	pc->init();
 	pc->stats.currency = 0;
 	menu->act->clear();
@@ -271,7 +272,8 @@ void GameStatePlay::checkLoot() {
 
 	if (!pickup.empty()) {
 		menu->inv->add(pickup, MenuInventory::CARRIED, ItemStorage::NO_SLOT, MenuInventory::ADD_PLAY_SOUND, MenuInventory::ADD_AUTO_EQUIP);
-		camp->setStatus(items->items[pickup.item].pickup_status);
+		StatusID pickup_status = camp->registerStatus(items->items[pickup.item].pickup_status);
+		camp->setStatus(pickup_status);
 		pickup.clear();
 	}
 
@@ -486,7 +488,7 @@ void GameStatePlay::loadTitles() {
 				// @ATTR title.requires_status|list(string)|Requires status.
 				std::string repeat_val = Parse::popFirstString(infile.val);
 				while (repeat_val != "") {
-					titles.back().requires_status.push_back(repeat_val);
+					titles.back().requires_status.push_back(camp->registerStatus(repeat_val));
 					repeat_val = Parse::popFirstString(infile.val);
 				}
 			}
@@ -494,7 +496,7 @@ void GameStatePlay::loadTitles() {
 				// @ATTR title.requires_not_status|list(string)|Requires not status.
 				std::string repeat_val = Parse::popFirstString(infile.val);
 				while (repeat_val != "") {
-					titles.back().requires_not_status.push_back(repeat_val);
+					titles.back().requires_not_status.push_back(camp->registerStatus(repeat_val));
 					repeat_val = Parse::popFirstString(infile.val);
 				}
 			}

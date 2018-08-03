@@ -48,8 +48,8 @@ private:
 	std::vector<EventComponent> random_table;
 	Point random_table_count;
 
-	std::vector<std::string> vendor_requires_status;
-	std::vector<std::string> vendor_requires_not_status;
+	std::vector<StatusID> vendor_requires_status;
+	std::vector<StatusID> vendor_requires_not_status;
 
 	std::vector<std::string> portrait_filenames;
 

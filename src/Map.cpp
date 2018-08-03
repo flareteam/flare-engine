@@ -19,6 +19,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 
+#include "CampaignManager.h"
 #include "EffectManager.h"
 #include "EngineSettings.h"
 #include "EventManager.h"
@@ -28,6 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "ModManager.h"
 #include "PowerManager.h"
 #include "SharedResources.h"
+#include "SharedGameResources.h"
 #include "StatBlock.h"
 #include "UtilsParsing.h"
 
@@ -312,28 +314,28 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 		// @ATTR enemygroup.requires_status|list(string)|Status required for loading enemies
 		std::string s;
 		while ((s = Parse::popFirstString(infile.val)) != "") {
-			group->requires_status.push_back(s);
+			group->requires_status.push_back(camp->registerStatus(s));
 		}
 	}
 	else if (infile.key == "requires_not_status") {
 		// @ATTR enemygroup.requires_not_status|list(string)|Status required to be missing for loading enemies
 		std::string s;
 		while ((s = Parse::popFirstString(infile.val)) != "") {
-			group->requires_not_status.push_back(s);
+			group->requires_not_status.push_back(camp->registerStatus(s));
 		}
 	}
 	else if (infile.key == "invincible_requires_status") {
 		// @ATTR enemygroup.invincible_requires_status|list(string)|Enemies in this group are invincible to hero attacks when these statuses are set.
 		std::string s;
 		while ((s = Parse::popFirstString(infile.val)) != "") {
-			group->invincible_requires_status.push_back(s);
+			group->invincible_requires_status.push_back(camp->registerStatus(s));
 		}
 	}
 	else if (infile.key == "invincible_requires_not_status") {
 		// @ATTR enemygroup.invincible_requires_not_status|list(string)|Enemies in this group are invincible to hero attacks when these statuses are not set.
 		std::string s;
 		while ((s = Parse::popFirstString(infile.val)) != "") {
-			group->invincible_requires_not_status.push_back(s);
+			group->invincible_requires_not_status.push_back(camp->registerStatus(s));
 		}
 	}
 	else {
@@ -354,12 +356,12 @@ void Map::loadNPC(FileParser &infile) {
 	else if (infile.key == "requires_status") {
 		// @ATTR npc.requires_status|list(string)|Status required for NPC load. There can be multiple states, separated by comma
 		while ( (s = Parse::popFirstString(infile.val)) != "")
-			npcs.back().requires_status.push_back(s);
+			npcs.back().requires_status.push_back(camp->registerStatus(s));
 	}
 	else if (infile.key == "requires_not_status") {
 		// @ATTR npc.requires_not_status|list(string)|Status required to be missing for NPC load. There can be multiple states, separated by comma
 		while ( (s = Parse::popFirstString(infile.val)) != "")
-			npcs.back().requires_not_status.push_back(s);
+			npcs.back().requires_not_status.push_back(camp->registerStatus(s));
 	}
 	else if (infile.key == "location") {
 		// @ATTR npc.location|point|Location of NPC

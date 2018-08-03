@@ -66,8 +66,8 @@ public:
 
 	bool requires_point;
 	bool passive_on;
-	std::vector<std::string> visible_requires_status;
-	std::vector<std::string> visible_requires_not;
+	std::vector<StatusID> visible_requires_status;
+	std::vector<StatusID> visible_requires_not;
 };
 
 class MenuPowers : public Menu {

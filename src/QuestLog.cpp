@@ -87,7 +87,7 @@ void QuestLog::load(const std::string& filename) {
 			}
 			else if (infile.key == "complete_status") {
 				// @ATTR complete_status|string|If this status is set, the quest will be displayed as completed.
-				quests.back().complete_status = infile.val;
+				quests.back().complete_status = camp->registerStatus(infile.val);
 			}
 
 			continue;
@@ -200,7 +200,7 @@ void QuestLog::createQuestList() {
 
 	// check quest completion status
 	for (size_t i=0; i<quests.size(); ++i) {
-		if (!quests[i].name.empty() && !quests[i].complete_status.empty()) {
+		if (!quests[i].name.empty() && quests[i].complete_status != 0) {
 			if (camp->checkStatus(quests[i].complete_status)) {
 				temp_complete_quest_ids.push_back(i);
 			}

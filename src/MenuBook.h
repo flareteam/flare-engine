@@ -52,8 +52,8 @@ private:
 	public:
 		Sprite* image;
 		Point dest;
-		std::vector<std::string> requires_status;
-		std::vector<std::string> requires_not_status;
+		std::vector<StatusID> requires_status;
+		std::vector<StatusID> requires_not_status;
 
 		BookImage()
 			: image(NULL)
@@ -69,8 +69,8 @@ private:
 		Color color;
 		Rect size;
 		int justify;
-		std::vector<std::string> requires_status;
-		std::vector<std::string> requires_not_status;
+		std::vector<StatusID> requires_status;
+		std::vector<StatusID> requires_not_status;
 
 		BookText()
 			: sprite(NULL)

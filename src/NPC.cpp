@@ -173,13 +173,13 @@ void NPC::load(const std::string& npc_id) {
 				else if (infile.key == "vendor_requires_status") {
 					// @ATTR vendor_requires_status|list(string)|The player must have these statuses in order to use this NPC as a vendor.
 					while (infile.val != "") {
-						vendor_requires_status.push_back(Parse::popFirstString(infile.val));
+						vendor_requires_status.push_back(camp->registerStatus(Parse::popFirstString(infile.val)));
 					}
 				}
 				else if (infile.key == "vendor_requires_not_status") {
 					// @ATTR vendor_requires_not_status|list(string)|The player must not have these statuses in order to use this NPC as a vendor.
 					while (infile.val != "") {
-						vendor_requires_not_status.push_back(Parse::popFirstString(infile.val));
+						vendor_requires_not_status.push_back(camp->registerStatus(Parse::popFirstString(infile.val)));
 					}
 				}
 				else if (infile.key == "constant_stock") {
@@ -196,7 +196,7 @@ void NPC::load(const std::string& npc_id) {
 				}
 				else if (infile.key == "status_stock") {
 					// @ATTR status_stock|repeatable(string, list(item_id)) : Required status, Item(s)|A list of items this vendor will have for sale if the required status is met. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.
-					if (camp->checkStatus(Parse::popFirstString(infile.val))) {
+					if (camp->checkStatus(camp->registerStatus(Parse::popFirstString(infile.val)))) {
 						while (infile.val != "") {
 							std::string temp = Parse::popFirstString(infile.val);
 							temp += ':';
