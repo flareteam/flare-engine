@@ -63,6 +63,7 @@ public:
 	int crit_chance;
 	int accuracy;
 	int source_type;
+	float base_speed;
 	int lifespan; // ticks down to zero
 	int animationKind;	// either a direction or option/random
 	int delay_frames;

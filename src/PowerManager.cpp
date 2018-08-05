@@ -1016,6 +1016,7 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, const FPoin
 	}
 
 	// combat traits
+	haz->base_speed = powers[power_index].speed;
 	haz->lifespan = powers[power_index].lifespan;
 	haz->active = !powers[power_index].no_attack;
 
@@ -1257,7 +1258,7 @@ bool PowerManager::missile(int power_index, StatBlock *src_stats, const FPoint& 
 		}
 
 		// set speed and angle
-		haz->power->speed += speed_var;
+		haz->base_speed += speed_var;
 		haz->setAngle(alpha);
 
 		// add optional delay

@@ -48,6 +48,7 @@ Hazard::Hazard(MapCollision *_collider)
 	, crit_chance(0)
 	, accuracy(0)
 	, source_type(0)
+	, base_speed(0)
 	, lifespan(1)
 	, animationKind(0)
 	, delay_frames(0)
@@ -281,8 +282,8 @@ void Hazard::setAngle(const float& _angle) {
 	while (angle >= static_cast<float>(M_PI)*2) angle -= static_cast<float>(M_PI)*2;
 	while (angle < 0.0) angle += static_cast<float>(M_PI)*2;
 
-	speed.x = power->speed * cosf(angle);
-	speed.y = power->speed * sinf(angle);
+	speed.x = base_speed * cosf(angle);
+	speed.y = base_speed * sinf(angle);
 
 	if (power->directional)
 		animationKind = Utils::calcDirection(pos.x, pos.y, pos.x + speed.x, pos.y + speed.y);
