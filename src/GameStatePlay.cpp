@@ -853,16 +853,10 @@ void GameStatePlay::updateActionBar(unsigned index) {
 	for (unsigned i = index; i < menu->act->slots_count; i++) {
 		if (menu->act->hotkeys[i] == 0) continue;
 
-		for (int j=0; j<menu->inv->inventory[MenuInventory::EQUIPMENT].getSlotNumber(); j++) {
-			int id = menu->inv->inventory[MenuInventory::EQUIPMENT][j].item;
-
-			for (unsigned k=0; k<items->items[id].replace_power.size(); k++) {
-				if (items->items[id].replace_power[k].x == menu->act->hotkeys_mod[i] &&
-				    items->items[id].replace_power[k].y != menu->act->hotkeys_mod[i]) {
-						menu->act->hotkeys_mod[i] = items->items[id].replace_power[k].y;
-						return updateActionBar(i);
-				}
-			}
+		int id = menu->inv->getPowerMod(menu->act->hotkeys_mod[i]);
+		if (id > 0) {
+			menu->act->hotkeys_mod[i] = id;
+			return updateActionBar(i);
 		}
 	}
 }

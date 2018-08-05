@@ -112,6 +112,8 @@ public:
 
 	int getMaxPurchasable(ItemStack item, int vendor_tab);
 
+	int getPowerMod(int meta_power);
+
 	Rect carried_area;
 	std::vector<Rect> equipped_area;
 	std::vector<std::string> slot_type;

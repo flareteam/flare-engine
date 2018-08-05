@@ -570,6 +570,14 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 					action.power = power->fallback_power;
 					power = &powers->powers[action.power];
 
+					if (power->meta_power) {
+						int id = menu->inv->getPowerMod(action.power);
+						if (id > 0) {
+							action.power = id;
+							power = &powers->powers[action.power];
+						}
+					}
+
 					for (size_t j = 0; j < action_queue.size(); ++j) {
 						if (action_queue[j].hotkey == i)
 							action_queue.erase(action_queue.begin()+j);

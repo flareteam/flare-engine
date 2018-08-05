@@ -1183,6 +1183,20 @@ int MenuInventory::getEquipSlotFromItem(int item, bool only_empty_slots) {
 	return equip_slot;
 }
 
+int MenuInventory::getPowerMod(int meta_power) {
+	for (int i = 0; i < inventory[EQUIPMENT].getSlotNumber(); ++i) {
+		int id = inventory[EQUIPMENT][i].item;
+
+		for (size_t j=0; j<items->items[id].replace_power.size(); j++) {
+			if (items->items[id].replace_power[j].x == meta_power && items->items[id].replace_power[j].y != meta_power) {
+				return items->items[id].replace_power[j].y;
+			}
+		}
+	}
+
+	return 0;
+}
+
 MenuInventory::~MenuInventory() {
 	delete closeButton;
 }
