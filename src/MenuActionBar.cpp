@@ -501,80 +501,111 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 
 		if (!slots[i]) continue;
 
-		if (slot_enabled[i]) {
-			// part two of two step activation
-			if (static_cast<unsigned>(twostep_slot) == i && inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1]) {
-				have_aim = true;
-				action.power = hotkeys_mod[i];
-				twostep_slot = -1;
-				inpt->lock[Input::MAIN1] = true;
-			}
+		// part two of two step activation
+		if (static_cast<unsigned>(twostep_slot) == i && inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1]) {
+			have_aim = true;
+			action.power = hotkeys_mod[i];
+			twostep_slot = -1;
+			inpt->lock[Input::MAIN1] = true;
+		}
 
-			// mouse/touch click
-			else if (inpt->usingMouse() && slots[i]->checkClick() == WidgetSlot::ACTIVATED) {
-				have_aim = false;
-				slot_activated[i] = true;
-				action.power = hotkeys_mod[i];
+		// mouse/touch click
+		else if (inpt->usingMouse() && slots[i]->checkClick() == WidgetSlot::ACTIVATED) {
+			have_aim = false;
+			slot_activated[i] = true;
+			action.power = hotkeys_mod[i];
 
-				// if a power requires a fixed target (like teleportation), break up activation into two parts
-				// the first step is to mark the slot that was clicked on
-				if (action.power > 0) {
-					const Power &power = powers->powers[action.power];
-					if (power.starting_pos == Power::STARTING_POS_TARGET || power.buff_teleport) {
+			// if a power requires a fixed target (like teleportation), break up activation into two parts
+			// the first step is to mark the slot that was clicked on
+			// NOTE only works for enabled slots
+			if (action.power > 0) {
+				const Power &power = powers->powers[action.power];
+				if (power.starting_pos == Power::STARTING_POS_TARGET || power.buff_teleport) {
+					if (slot_enabled[i]) {
 						twostep_slot = i;
 						action.power = 0;
 					}
 					else {
 						twostep_slot = -1;
+						action.power = 0;
 					}
 				}
+				else {
+					twostep_slot = -1;
+				}
 			}
+		}
 
-			// joystick/keyboard action button
-			else if (inpt->pressing[Input::ACTIONBAR_USE] && static_cast<unsigned>(tablist.getCurrent()) == i) {
-				have_aim = false;
-				slot_activated[i] = true;
-				action.power = hotkeys_mod[i];
-				twostep_slot = -1;
-			}
+		// joystick/keyboard action button
+		else if (inpt->pressing[Input::ACTIONBAR_USE] && static_cast<unsigned>(tablist.getCurrent()) == i) {
+			have_aim = false;
+			slot_activated[i] = true;
+			action.power = hotkeys_mod[i];
+			twostep_slot = -1;
+		}
 
-			// pressing hotkey
-			else if (i<10 && inpt->pressing[i + Input::BAR_1]) {
-				have_aim = inpt->usingMouse();
-				action.power = hotkeys_mod[i];
-				twostep_slot = -1;
-			}
-			else if (i==10 && inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1] && !Utils::isWithinRect(window_area, inpt->mouse) && enable_main1) {
-				have_aim = inpt->usingMouse();
-				action.power = hotkeys_mod[10];
-				twostep_slot = -1;
-			}
-			else if (i==11 && inpt->pressing[Input::MAIN2] && !inpt->lock[Input::MAIN2] && !Utils::isWithinRect(window_area, inpt->mouse)) {
-				have_aim = inpt->usingMouse();
-				action.power = hotkeys_mod[11];
-				twostep_slot = -1;
-			}
+		// pressing hotkey
+		else if (i<10 && inpt->pressing[i + Input::BAR_1]) {
+			have_aim = inpt->usingMouse();
+			action.power = hotkeys_mod[i];
+			twostep_slot = -1;
+		}
+		else if (i==10 && inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1] && !Utils::isWithinRect(window_area, inpt->mouse) && enable_main1) {
+			have_aim = inpt->usingMouse();
+			action.power = hotkeys_mod[10];
+			twostep_slot = -1;
+		}
+		else if (i==11 && inpt->pressing[Input::MAIN2] && !inpt->lock[Input::MAIN2] && !Utils::isWithinRect(window_area, inpt->mouse)) {
+			have_aim = inpt->usingMouse();
+			action.power = hotkeys_mod[11];
+			twostep_slot = -1;
 		}
 
 		// a power slot was activated
 		if (action.power > 0 && static_cast<unsigned>(action.power) < powers->powers.size()) {
-			const Power &power = powers->powers[action.power];
-			bool can_use_power = true;
+			Power *power = &powers->powers[action.power];
+
+			if (pc->stats.mp < power->requires_mp || (!power->sacrifice && pc->stats.hp < power->requires_hp)) {
+				if (power->fallback_power > 0) {
+					action.power = power->fallback_power;
+					power = &powers->powers[action.power];
+
+					for (size_t j = 0; j < action_queue.size(); ++j) {
+						if (action_queue[j].hotkey == i)
+							action_queue.erase(action_queue.begin()+j);
+					}
+				}
+				else {
+					continue;
+				}
+			}
+			else if (slot_enabled[i]) {
+				for (size_t j = 0; j < action_queue.size(); ++j) {
+					if (action_queue[j].hotkey == i && action_queue[j].power != action.power)
+						action_queue.erase(action_queue.begin()+j);
+				}
+			}
+			else {
+				continue;
+			}
+
 			action.instant_item = false;
-			if (power.new_state == Power::STATE_INSTANT) {
-				for (size_t j = 0; j < power.required_items.size(); ++j) {
-					if (power.required_items[j].id > 0 && !power.required_items[j].equipped) {
+			if (power->new_state == Power::STATE_INSTANT) {
+				for (size_t j = 0; j < power->required_items.size(); ++j) {
+					if (power->required_items[j].id > 0 && !power->required_items[j].equipped) {
 						action.instant_item = true;
 						break;
 					}
 				}
 			}
 
+			bool can_use_power = true;
+
 			// check if we can add this power to the action queue
-			for (unsigned j=0; j<action_queue.size(); j++) {
+			for (size_t j=0; j<action_queue.size(); j++) {
 				if (action_queue[j].hotkey == i) {
 					// this power is already in the action queue, update its target
-					action_queue[j].target = setTarget(have_aim, power);
+					action_queue[j].target = setTarget(have_aim, *power);
 					can_use_power = false;
 					break;
 				}
@@ -587,7 +618,7 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 				continue;
 
 			// set the target depending on how the power was triggered
-			action.target = setTarget(have_aim, power);
+			action.target = setTarget(have_aim, *power);
 
 			// add it to the queue
 			action_queue.push_back(action);
@@ -595,7 +626,7 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 		else {
 			// if we're not triggering an action that is currently in the queue,
 			// remove it from the queue
-			for (unsigned j=0; j<action_queue.size(); j++) {
+			for (size_t j=0; j<action_queue.size(); j++) {
 				if (action_queue[j].hotkey == i)
 					action_queue.erase(action_queue.begin()+j);
 			}
