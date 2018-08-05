@@ -1735,6 +1735,8 @@ body {
 
 <p><strong>power.requires_hpmp_state</strong> | <code>["hp", "mp"], ["percent", "not_percent", "ignore"], int : Stat, Current state, Percentage value</code> | Power can only be used when HP/MP matches the specified state</p>
 
+<p><strong>power.fallback_power</strong> | <code>power_id</code> | If the hero tries to cast this power, but does not satisfy the requires_mp or requires_hp properties, this power will automatically be used instead.</p>
+
 <p><strong>power.animation</strong> | <code>filename</code> | The filename of the power animation.</p>
 
 <p><strong>power.soundfx</strong> | <code>filename</code> | Filename of a sound effect to play when the power is used.</p>
