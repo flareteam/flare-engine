@@ -83,6 +83,7 @@ Hazard& Hazard::operator=(const Hazard& other) {
 	crit_chance = other.crit_chance;
 	accuracy = other.accuracy;
 	source_type = other.source_type;
+	base_speed = other.base_speed;
 	lifespan = other.lifespan;
 	animationKind = other.animationKind;
 	delay_frames = other.delay_frames;
