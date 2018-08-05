@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-18 12:53+\n"
+"POT-Creation-Date: 2018-08-04 22:10+\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Vicente Monteiro, 2018\n"
 "Language-Team: Portuguese (Brazil) (https://www.transifex.com/flareorg/teams/84925/pt_BR/)\n"
@@ -39,34 +39,46 @@ msgid "Melee Damage"
 msgstr "Dano corpo a corpo"
 
 #: ../engine/damage_types.txt:4
+msgid "Increases the damage done with swords and other melee weapons."
+msgstr ""
+
+#: ../engine/damage_types.txt:5
 msgid "Melee Damage Min"
 msgstr "Dano mín. corpo a corpo "
 
-#: ../engine/damage_types.txt:5
+#: ../engine/damage_types.txt:6
 msgid "Melee Damage Max"
 msgstr "Dano máx. corpo a corpo "
 
-#: ../engine/damage_types.txt:11
+#: ../engine/damage_types.txt:12
 msgid "Ranged Damage"
 msgstr "Dano à distância"
 
-#: ../engine/damage_types.txt:12
+#: ../engine/damage_types.txt:13
+msgid "Increases the damage done with bows and other ranged weapons."
+msgstr ""
+
+#: ../engine/damage_types.txt:14
 msgid "Ranged Damage Min"
 msgstr "Dano mín. à distância"
 
-#: ../engine/damage_types.txt:13
+#: ../engine/damage_types.txt:15
 msgid "Ranged Damage Max"
 msgstr "Dano máx. à distância"
 
-#: ../engine/damage_types.txt:19
+#: ../engine/damage_types.txt:21
 msgid "Mental Damage"
 msgstr "Dano Mental"
 
-#: ../engine/damage_types.txt:20
+#: ../engine/damage_types.txt:22
+msgid "Increases the damage done with staves and other mental weapons."
+msgstr ""
+
+#: ../engine/damage_types.txt:23
 msgid "Mental Damage Min"
 msgstr "Dano mín. mental "
 
-#: ../engine/damage_types.txt:21
+#: ../engine/damage_types.txt:24
 msgid "Mental Damage Max"
 msgstr "Dano máx. mental"
 
@@ -362,50 +374,54 @@ msgstr "Wuzzy2"
 msgid "Yannis Anthymidis"
 msgstr "Yannis Anthymidis"
 
-#: ../cutscenes/credits.txt:99
+#: ../cutscenes/credits.txt:97
+msgid "Zmicer Turok"
+msgstr ""
+
+#: ../cutscenes/credits.txt:100
 msgid "Distributors"
 msgstr "Distribuidores"
 
-#: ../cutscenes/credits.txt:101
+#: ../cutscenes/credits.txt:102
 msgid "Ablu"
 msgstr "Ablu"
 
-#: ../cutscenes/credits.txt:102
+#: ../cutscenes/credits.txt:103
 msgid "Feillyne"
 msgstr "Feillyne"
 
-#: ../cutscenes/credits.txt:103
+#: ../cutscenes/credits.txt:104
 msgid "Jan-Hendrik Peters"
 msgstr "Jan-Hendrik Peters"
 
-#: ../cutscenes/credits.txt:105
+#: ../cutscenes/credits.txt:106
 msgid "miffe"
 msgstr "miffe"
 
-#: ../cutscenes/credits.txt:108
+#: ../cutscenes/credits.txt:109
 msgid "Special Thanks"
 msgstr "Agradecimento Especial"
 
-#: ../cutscenes/credits.txt:112
+#: ../cutscenes/credits.txt:113
 msgid "For giving constant feedback and testing:"
 msgstr "Por constantes sugestões e testes:"
 
-#: ../cutscenes/credits.txt:113
+#: ../cutscenes/credits.txt:114
 msgid "Bart Kelsey"
 msgstr "Bart Kelsey"
 
-#: ../cutscenes/credits.txt:114
+#: ../cutscenes/credits.txt:115
 msgid "The community at OpenGameArt"
 msgstr "A comunidade do OpenGameArt:"
 
-#: ../cutscenes/credits.txt:118
+#: ../cutscenes/credits.txt:119
 msgid "For Tiled and the Flare map exporter:"
 msgstr "Pelo Tiled editor e exportador de mapas do Flare:"
 
-#: ../cutscenes/credits.txt:119
+#: ../cutscenes/credits.txt:120
 msgid "Thorbjørn Lindeijer"
 msgstr "Thorbjørn Lindeijer"
 
-#: ../cutscenes/credits.txt:121
+#: ../cutscenes/credits.txt:122
 msgid "Ranie Jade Ramiso"
 msgstr "Ranie Jade Ramiso"
