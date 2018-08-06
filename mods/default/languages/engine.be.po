@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-04 22:10-0400\n"
+"POT-Creation-Date: 2018-08-05 20:36-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
 "Language-Team: Belarusian (https://www.transifex.com/flareorg/teams/84925/be/)\n"
@@ -109,7 +109,7 @@ msgstr ""
 "Апаратны адмалёўшчык SDL. Прадвызначаны адмалёўшчык, які найчасцей працуе "
 "хутчэй за праграмны адмалёўшчык SDL."
 
-#: ../../../src/EngineSettings.cpp:553
+#: ../../../src/EngineSettings.cpp:557
 msgid "Adventurer"
 msgstr "Вандроўнік"
 
@@ -117,7 +117,7 @@ msgstr "Вандроўнік"
 msgid "miss"
 msgstr "промах"
 
-#: ../../../src/Entity.cpp:548 ../../../src/PowerManager.cpp:1156
+#: ../../../src/Entity.cpp:548 ../../../src/PowerManager.cpp:1152
 #: ../../../src/StatBlock.cpp:810 ../../../src/StatBlock.cpp:816
 #, c-format
 msgid "+%d HP"
@@ -413,7 +413,7 @@ msgstr "Стварыць"
 
 #: ../../../src/GameStateNew.cpp:76
 msgid "Randomize"
-msgstr ""
+msgstr "Перамяшайце"
 
 #: ../../../src/GameStateNew.cpp:92
 msgid "Choose a Portrait"
@@ -511,22 +511,22 @@ msgstr "Панэль9"
 msgid "Bar0"
 msgstr "Панэль0"
 
-#: ../../../src/InputState.cpp:418 ../../../src/MenuActionBar.cpp:74
+#: ../../../src/InputState.cpp:418 ../../../src/MenuActionBar.cpp:76
 #: ../../../src/MenuCharacter.cpp:53
 msgid "Character"
 msgstr "Персанаж"
 
-#: ../../../src/InputState.cpp:419 ../../../src/MenuActionBar.cpp:75
+#: ../../../src/InputState.cpp:419 ../../../src/MenuActionBar.cpp:77
 #: ../../../src/MenuInventory.cpp:126 ../../../src/MenuVendor.cpp:57
 msgid "Inventory"
 msgstr "Інвентар"
 
-#: ../../../src/InputState.cpp:420 ../../../src/MenuActionBar.cpp:76
+#: ../../../src/InputState.cpp:420 ../../../src/MenuActionBar.cpp:78
 #: ../../../src/MenuPowers.cpp:112
 msgid "Powers"
 msgstr "Таленты"
 
-#: ../../../src/InputState.cpp:421 ../../../src/MenuActionBar.cpp:77
+#: ../../../src/InputState.cpp:421 ../../../src/MenuActionBar.cpp:79
 #: ../../../src/MenuLog.cpp:72
 msgid "Log"
 msgstr "Нататнік"
@@ -698,11 +698,15 @@ msgstr "Націсніце [%s], каб выкарыстаць"
 msgid "Press [%s] to read"
 msgstr "Націсніце [%s], каб прачытаць"
 
-#: ../../../src/MenuActionBar.cpp:209 ../../../src/MenuActionBar.cpp:215
-#: ../../../src/MenuActionBar.cpp:220
+#: ../../../src/MenuActionBar.cpp:215 ../../../src/MenuActionBar.cpp:221
+#: ../../../src/MenuActionBar.cpp:226
 #, c-format
 msgid "Hotkey: %s"
 msgstr "Гарачая клавіша: %s"
+
+#: ../../../src/MenuActionBar.cpp:580
+msgid "Not enough MP."
+msgstr ""
 
 #: ../../../src/MenuActiveEffects.cpp:123
 #, c-format
@@ -739,7 +743,7 @@ msgstr "%d невыкарыстаных пунктаў уменняў"
 #: ../../../src/MenuCharacter.cpp:354
 #, c-format
 msgid "Reduces the damage taken from \"%s\" elemental attacks."
-msgstr ""
+msgstr "Памяншае ўрон ад \"%s\" стыхійных атак."
 
 #: ../../../src/MenuCharacter.cpp:364 ../../../src/MenuManager.cpp:288
 #, c-format
@@ -931,7 +935,7 @@ msgstr "Забіты"
 
 #: ../../../src/MenuEnemy.cpp:161
 msgid "Destroyed"
-msgstr ""
+msgstr "Знішчана"
 
 #: ../../../src/MenuExit.cpp:85 ../../../src/MenuExit.cpp:139
 msgid "Paused"
@@ -1230,22 +1234,22 @@ msgstr "Выкуп"
 msgid "Vendor"
 msgstr "Гандляр"
 
-#: ../../../src/PowerManager.cpp:1140
+#: ../../../src/PowerManager.cpp:1136
 #, c-format
 msgid "+%d Shield"
 msgstr "+%d Шчыт"
 
-#: ../../../src/PowerManager.cpp:1396
+#: ../../../src/PowerManager.cpp:1392
 msgid "You are already transformed, untransform first."
 msgstr "Вы ўжо трансфарміраваны, спачатку растрансфарміруўцеся."
 
-#: ../../../src/PowerManager.cpp:1408
+#: ../../../src/PowerManager.cpp:1404
 msgid "Could not untransform at this position."
 msgstr "Тут немагчыма растрансфарміравацца"
 
 #: ../../../src/QuestLog.cpp:234
 msgid "Completed Quests"
-msgstr ""
+msgstr "Завершаныя заданні"
 
 #: ../../../src/SaveLoad.cpp:239 ../../../src/SaveLoad.cpp:240
 msgid "Game saved."
@@ -1386,7 +1390,7 @@ msgstr "Максімальнае жыццё"
 
 #: ../../../src/Stats.cpp:39
 msgid "Total amount of HP."
-msgstr ""
+msgstr "Агульная колькасць жыцця."
 
 #: ../../../src/Stats.cpp:43
 msgid "HP Regen"
@@ -1402,7 +1406,7 @@ msgstr "Максімальная мана"
 
 #: ../../../src/Stats.cpp:49
 msgid "Total amount of MP."
-msgstr ""
+msgstr "Агульная колькасць маны."
 
 #: ../../../src/Stats.cpp:53
 msgid "MP Regen"
@@ -1421,6 +1425,8 @@ msgid ""
 "Accuracy rating. The enemy's Avoidance rating is subtracted from this value "
 "to calculate your likeliness to land a direct hit."
 msgstr ""
+"Рэйтынг трапнасці. Для вылічэння верагоднасці прамога удару ад гэтага "
+"значэння неабходна адняць рэйтынг ухілення супраціўніка."
 
 #: ../../../src/Stats.cpp:63
 msgid "Avoidance"
@@ -1431,6 +1437,8 @@ msgid ""
 "Avoidance rating. This value is subtracted from the enemy's Accuracy rating "
 "to calculate their likeliness to land a direct hit."
 msgstr ""
+"Рэйтынг ухілення. Для вылічэння верагоднасці атрымання прамога ўдару ад "
+"рэйтынга трапнасці супраціўніка аднімаецца гэтае значэнне."
 
 #: ../../../src/Stats.cpp:68
 msgid "Absorb Min"
@@ -1438,7 +1446,7 @@ msgstr "Найменшае паглынанне"
 
 #: ../../../src/Stats.cpp:69 ../../../src/Stats.cpp:74
 msgid "Reduces the amount of damage taken."
-msgstr ""
+msgstr "Памяншэнне колькасці ўрону."
 
 #: ../../../src/Stats.cpp:73
 msgid "Absorb Max"
@@ -1450,7 +1458,7 @@ msgstr "Шанец крытычнага ўрону"
 
 #: ../../../src/Stats.cpp:79
 msgid "Chance for an attack to do extra damage."
-msgstr ""
+msgstr "Шанец нанясення дадатковага ўрону."
 
 #: ../../../src/Stats.cpp:83
 msgid "Bonus XP"

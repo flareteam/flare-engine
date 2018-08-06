@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-04 22:10-0400\n"
+"POT-Creation-Date: 2018-08-05 20:36-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: 茂森 杜 <dumaosen_main01@outlook.com>, 2018\n"
 "Language-Team: Chinese (https://www.transifex.com/flareorg/teams/84925/zh/)\n"
@@ -107,7 +107,7 @@ msgstr ""
 "SDL硬件渲染器\n"
 "默认渲染器，通常比SDL软件渲染器更快。"
 
-#: ../../../src/EngineSettings.cpp:553
+#: ../../../src/EngineSettings.cpp:557
 msgid "Adventurer"
 msgstr "玩家"
 
@@ -115,7 +115,7 @@ msgstr "玩家"
 msgid "miss"
 msgstr "未击中"
 
-#: ../../../src/Entity.cpp:548 ../../../src/PowerManager.cpp:1156
+#: ../../../src/Entity.cpp:548 ../../../src/PowerManager.cpp:1152
 #: ../../../src/StatBlock.cpp:810 ../../../src/StatBlock.cpp:816
 #, c-format
 msgid "+%d HP"
@@ -503,22 +503,22 @@ msgstr "槽9"
 msgid "Bar0"
 msgstr "槽0"
 
-#: ../../../src/InputState.cpp:418 ../../../src/MenuActionBar.cpp:74
+#: ../../../src/InputState.cpp:418 ../../../src/MenuActionBar.cpp:76
 #: ../../../src/MenuCharacter.cpp:53
 msgid "Character"
 msgstr "角色"
 
-#: ../../../src/InputState.cpp:419 ../../../src/MenuActionBar.cpp:75
+#: ../../../src/InputState.cpp:419 ../../../src/MenuActionBar.cpp:77
 #: ../../../src/MenuInventory.cpp:126 ../../../src/MenuVendor.cpp:57
 msgid "Inventory"
 msgstr "物品"
 
-#: ../../../src/InputState.cpp:420 ../../../src/MenuActionBar.cpp:76
+#: ../../../src/InputState.cpp:420 ../../../src/MenuActionBar.cpp:78
 #: ../../../src/MenuPowers.cpp:112
 msgid "Powers"
 msgstr "技能"
 
-#: ../../../src/InputState.cpp:421 ../../../src/MenuActionBar.cpp:77
+#: ../../../src/InputState.cpp:421 ../../../src/MenuActionBar.cpp:79
 #: ../../../src/MenuLog.cpp:72
 msgid "Log"
 msgstr "说明"
@@ -690,10 +690,14 @@ msgstr ""
 msgid "Press [%s] to read"
 msgstr ""
 
-#: ../../../src/MenuActionBar.cpp:209 ../../../src/MenuActionBar.cpp:215
-#: ../../../src/MenuActionBar.cpp:220
+#: ../../../src/MenuActionBar.cpp:215 ../../../src/MenuActionBar.cpp:221
+#: ../../../src/MenuActionBar.cpp:226
 #, c-format
 msgid "Hotkey: %s"
+msgstr ""
+
+#: ../../../src/MenuActionBar.cpp:580
+msgid "Not enough MP."
 msgstr ""
 
 #: ../../../src/MenuActiveEffects.cpp:123
@@ -1217,16 +1221,16 @@ msgstr "购回"
 msgid "Vendor"
 msgstr "商人"
 
-#: ../../../src/PowerManager.cpp:1140
+#: ../../../src/PowerManager.cpp:1136
 #, c-format
 msgid "+%d Shield"
 msgstr "+%d Shield"
 
-#: ../../../src/PowerManager.cpp:1396
+#: ../../../src/PowerManager.cpp:1392
 msgid "You are already transformed, untransform first."
 msgstr "You are already transformed, untransform first."
 
-#: ../../../src/PowerManager.cpp:1408
+#: ../../../src/PowerManager.cpp:1404
 msgid "Could not untransform at this position."
 msgstr ""
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-04 22:10-0400\n"
+"POT-Creation-Date: 2018-08-05 20:36-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: GunChleoc, 2018\n"
 "Language-Team: Gaelic, Scottish (https://www.transifex.com/flareorg/teams/84925/gd/)\n"
@@ -114,7 +114,7 @@ msgstr ""
 "\n"
 "An t-inneal-reandaraidh tùsail a bhios nas luaithe mar as trice na an t-inneal-reandaraidh bathair-bhog SDL."
 
-#: ../../../src/EngineSettings.cpp:553
+#: ../../../src/EngineSettings.cpp:557
 msgid "Adventurer"
 msgstr "Baoghlair"
 
@@ -122,7 +122,7 @@ msgstr "Baoghlair"
 msgid "miss"
 msgstr "mì-amais"
 
-#: ../../../src/Entity.cpp:548 ../../../src/PowerManager.cpp:1156
+#: ../../../src/Entity.cpp:548 ../../../src/PowerManager.cpp:1152
 #: ../../../src/StatBlock.cpp:810 ../../../src/StatBlock.cpp:816
 #, c-format
 msgid "+%d HP"
@@ -518,22 +518,22 @@ msgstr "Bàr 9"
 msgid "Bar0"
 msgstr "Bàr 0"
 
-#: ../../../src/InputState.cpp:418 ../../../src/MenuActionBar.cpp:74
+#: ../../../src/InputState.cpp:418 ../../../src/MenuActionBar.cpp:76
 #: ../../../src/MenuCharacter.cpp:53
 msgid "Character"
 msgstr "Pearsa"
 
-#: ../../../src/InputState.cpp:419 ../../../src/MenuActionBar.cpp:75
+#: ../../../src/InputState.cpp:419 ../../../src/MenuActionBar.cpp:77
 #: ../../../src/MenuInventory.cpp:126 ../../../src/MenuVendor.cpp:57
 msgid "Inventory"
 msgstr "Tasgadh"
 
-#: ../../../src/InputState.cpp:420 ../../../src/MenuActionBar.cpp:76
+#: ../../../src/InputState.cpp:420 ../../../src/MenuActionBar.cpp:78
 #: ../../../src/MenuPowers.cpp:112
 msgid "Powers"
 msgstr "Cumhachdan"
 
-#: ../../../src/InputState.cpp:421 ../../../src/MenuActionBar.cpp:77
+#: ../../../src/InputState.cpp:421 ../../../src/MenuActionBar.cpp:79
 #: ../../../src/MenuLog.cpp:72
 msgid "Log"
 msgstr "Leabhar-latha"
@@ -705,11 +705,15 @@ msgstr "Brùth air [%s] gus a chleachdadh"
 msgid "Press [%s] to read"
 msgstr "Brùth air [%s] gus a leughadh"
 
-#: ../../../src/MenuActionBar.cpp:209 ../../../src/MenuActionBar.cpp:215
-#: ../../../src/MenuActionBar.cpp:220
+#: ../../../src/MenuActionBar.cpp:215 ../../../src/MenuActionBar.cpp:221
+#: ../../../src/MenuActionBar.cpp:226
 #, c-format
 msgid "Hotkey: %s"
 msgstr "Grad-iuchair: %s"
+
+#: ../../../src/MenuActionBar.cpp:580
+msgid "Not enough MP."
+msgstr ""
 
 #: ../../../src/MenuActiveEffects.cpp:123
 #, c-format
@@ -1243,18 +1247,18 @@ msgstr "Na reic thu roimhe"
 msgid "Vendor"
 msgstr "Reiceadair"
 
-#: ../../../src/PowerManager.cpp:1140
+#: ../../../src/PowerManager.cpp:1136
 #, c-format
 msgid "+%d Shield"
 msgstr "Sgiath +%d"
 
-#: ../../../src/PowerManager.cpp:1396
+#: ../../../src/PowerManager.cpp:1392
 msgid "You are already transformed, untransform first."
 msgstr ""
 "Tha thu air cruth-atharrachadh mar-thà, feumaidh tu an cruth tùsail agad a "
 "ghabhail an toiseach."
 
-#: ../../../src/PowerManager.cpp:1408
+#: ../../../src/PowerManager.cpp:1404
 msgid "Could not untransform at this position."
 msgstr "Cha b’ urrainn dhut neo-chruth-atharrachadh air an ionad seo."
 

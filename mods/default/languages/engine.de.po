@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-04 22:10-0400\n"
+"POT-Creation-Date: 2018-08-05 20:36-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
 "Language-Team: German (https://www.transifex.com/flareorg/teams/84925/de/)\n"
@@ -111,7 +111,7 @@ msgstr ""
 "\n"
 "Der Standard-Renderer, der oft schneller als der SDL-Software-Renderer ist."
 
-#: ../../../src/EngineSettings.cpp:553
+#: ../../../src/EngineSettings.cpp:557
 msgid "Adventurer"
 msgstr "Abenteurer"
 
@@ -119,7 +119,7 @@ msgstr "Abenteurer"
 msgid "miss"
 msgstr "verfehlt"
 
-#: ../../../src/Entity.cpp:548 ../../../src/PowerManager.cpp:1156
+#: ../../../src/Entity.cpp:548 ../../../src/PowerManager.cpp:1152
 #: ../../../src/StatBlock.cpp:810 ../../../src/StatBlock.cpp:816
 #, c-format
 msgid "+%d HP"
@@ -514,22 +514,22 @@ msgstr "Aktionsleiste 9"
 msgid "Bar0"
 msgstr "Aktionsleiste 0"
 
-#: ../../../src/InputState.cpp:418 ../../../src/MenuActionBar.cpp:74
+#: ../../../src/InputState.cpp:418 ../../../src/MenuActionBar.cpp:76
 #: ../../../src/MenuCharacter.cpp:53
 msgid "Character"
 msgstr "Charakter"
 
-#: ../../../src/InputState.cpp:419 ../../../src/MenuActionBar.cpp:75
+#: ../../../src/InputState.cpp:419 ../../../src/MenuActionBar.cpp:77
 #: ../../../src/MenuInventory.cpp:126 ../../../src/MenuVendor.cpp:57
 msgid "Inventory"
 msgstr "Inventar"
 
-#: ../../../src/InputState.cpp:420 ../../../src/MenuActionBar.cpp:76
+#: ../../../src/InputState.cpp:420 ../../../src/MenuActionBar.cpp:78
 #: ../../../src/MenuPowers.cpp:112
 msgid "Powers"
 msgstr "Fähigkeiten"
 
-#: ../../../src/InputState.cpp:421 ../../../src/MenuActionBar.cpp:77
+#: ../../../src/InputState.cpp:421 ../../../src/MenuActionBar.cpp:79
 #: ../../../src/MenuLog.cpp:72
 msgid "Log"
 msgstr "Journal"
@@ -701,11 +701,15 @@ msgstr "Drücke [%s] zum Verwenden"
 msgid "Press [%s] to read"
 msgstr "Drücke [%s] zum Lesen"
 
-#: ../../../src/MenuActionBar.cpp:209 ../../../src/MenuActionBar.cpp:215
-#: ../../../src/MenuActionBar.cpp:220
+#: ../../../src/MenuActionBar.cpp:215 ../../../src/MenuActionBar.cpp:221
+#: ../../../src/MenuActionBar.cpp:226
 #, c-format
 msgid "Hotkey: %s"
 msgstr "Schnelltaste: %s"
+
+#: ../../../src/MenuActionBar.cpp:580
+msgid "Not enough MP."
+msgstr ""
 
 #: ../../../src/MenuActiveEffects.cpp:123
 #, c-format
@@ -1238,16 +1242,16 @@ msgstr "Rückkauf"
 msgid "Vendor"
 msgstr "Verkäufer"
 
-#: ../../../src/PowerManager.cpp:1140
+#: ../../../src/PowerManager.cpp:1136
 #, c-format
 msgid "+%d Shield"
 msgstr "+%d Schild"
 
-#: ../../../src/PowerManager.cpp:1396
+#: ../../../src/PowerManager.cpp:1392
 msgid "You are already transformed, untransform first."
 msgstr "Du bist bereits verwandelt, beende die Verwandlung zunächst."
 
-#: ../../../src/PowerManager.cpp:1408
+#: ../../../src/PowerManager.cpp:1404
 msgid "Could not untransform at this position."
 msgstr "An diesem Ort ist eine Zurückverwandlung nicht möglich."
 
