@@ -87,7 +87,6 @@ Power::Power()
 	, requires_max_mp(-1)
 	, requires_not_max_hp(-1)
 	, requires_not_max_mp(-1)
-	, fallback_power(0)
 	, animation_name("")
 	, sfx_index(-1)
 	, sfx_hit(0)
@@ -467,10 +466,6 @@ void PowerManager::loadPowers() {
 			else {
 				infile.error("PowerManager: Please specify 'hp' or 'mp'.");
 			}
-		}
-		else if (infile.key == "fallback_power") {
-			// @ATTR power.fallback_power|power_id|If the hero tries to cast this power, but does not satisfy the requires_mp or requires_hp properties, this power will automatically be used instead.
-			powers[input_id].fallback_power = Parse::toInt(infile.val);
 		}
 		// animation info
 		else if (infile.key == "animation") {

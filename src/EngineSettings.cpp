@@ -67,6 +67,7 @@ void EngineSettings::Misc::load() {
 	camera_speed = 10.f;
 	save_buyback = true;
 	keep_buyback_on_map_change = true;
+	sfx_unable_to_cast = "";
 
 	FileParser infile;
 	// @CLASS EngineSettings: Misc|Description of engine/misc.txt
@@ -134,6 +135,9 @@ void EngineSettings::Misc::load() {
 			// @ATTR keep_buyback_on_map_change|bool|If true, NPC buyback stocks will persist when the map changes. If false, save_buyback is disabled.
 			else if (infile.key == "keep_buyback_on_map_change")
 				keep_buyback_on_map_change = Parse::toBool(infile.val);
+			// @ATTR sfx_unable_to_cast|filename|Sound to play when the player lacks the MP to cast a power.
+			else if (infile.key == "sfx_unable_to_cast")
+				sfx_unable_to_cast = infile.val;
 
 			else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
 		}

@@ -17,7 +17,7 @@ Engine features:
 * Display a list of completed quests in the Quests log.
 * Item icons can now have an overlay image based on their quality.
 * Added widget settings for modifying the appearance of the quantity text on item icons.
-* Powers can now have a fallback power which will be cast instead if the player lacks the appropriate amount of HP/MP.
+* Added support for playing a sound effect and showing a message when player lacks required MP for power usage.
 
 Engine fixes:
 

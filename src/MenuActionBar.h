@@ -56,6 +56,10 @@ private:
 
 	Point last_mouse;
 
+	std::vector<int> slot_fail_cooldown;
+
+	SoundID sfx_unable_to_cast;
+
 public:
 	enum {
 		MENU_CHARACTER = 0,

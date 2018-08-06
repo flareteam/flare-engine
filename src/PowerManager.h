@@ -173,7 +173,6 @@ public:
 	int requires_max_mp;
 	int requires_not_max_hp;
 	int requires_not_max_mp;
-	int fallback_power;
 
 	// animation info
 	std::string animation_name;

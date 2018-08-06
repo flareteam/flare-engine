@@ -42,6 +42,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
+#include "SoundManager.h"
 #include "StatBlock.h"
 #include "TooltipManager.h"
 #include "UtilsParsing.h"
@@ -54,6 +55,7 @@ MenuActionBar::MenuActionBar()
 	: sprite_emptyslot(NULL)
 	, sprite_disabled(NULL)
 	, sprite_attention(NULL)
+	, sfx_unable_to_cast(0)
 	, slots_count(0)
 	, drag_prev_slot(-1)
 	, updated(false)
@@ -164,10 +166,14 @@ MenuActionBar::MenuActionBar()
 	slot_enabled.resize(slots_count);
 	slot_activated.resize(slots_count);
 	slot_cooldown_size.resize(slots_count);
+	slot_fail_cooldown.resize(slots_count);
 
 	clear();
 
 	loadGraphics();
+
+	if (!eset->misc.sfx_unable_to_cast.empty())
+		sfx_unable_to_cast = snd->load(eset->misc.sfx_unable_to_cast, "MenuActionBar unable to cast");
 
 	align();
 
@@ -232,6 +238,7 @@ void MenuActionBar::clear() {
 		locked[i] = false;
 		slot_activated[i] = false;
 		slot_cooldown_size[i] = 0;
+		slot_fail_cooldown[i] = 0;
 	}
 
 	// clear menu notifications
@@ -332,6 +339,9 @@ void MenuActionBar::logic() {
 		else {
 			slot_cooldown_size[i] = (slot_enabled[i] ? 0 : eset->resolutions.icon_size);;
 		}
+
+		if (slot_fail_cooldown[i] > 0)
+			slot_fail_cooldown[i]--;
 	}
 
 }
@@ -563,44 +573,24 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 
 		// a power slot was activated
 		if (action.power > 0 && static_cast<unsigned>(action.power) < powers->powers.size()) {
-			Power *power = &powers->powers[action.power];
+			const Power& power = powers->powers[action.power];
 
-			if (pc->stats.mp < power->requires_mp || (!power->sacrifice && pc->stats.hp < power->requires_hp)) {
-				if (power->fallback_power > 0) {
-					action.power = power->fallback_power;
-					power = &powers->powers[action.power];
-
-					if (power->meta_power) {
-						int id = menu->inv->getPowerMod(action.power);
-						if (id > 0) {
-							action.power = id;
-							power = &powers->powers[action.power];
-						}
-					}
-
-					for (size_t j = 0; j < action_queue.size(); ++j) {
-						if (action_queue[j].hotkey == i)
-							action_queue.erase(action_queue.begin()+j);
-					}
-				}
-				else {
-					continue;
-				}
+			if (pc->stats.mp < power.requires_mp && slot_fail_cooldown[i] == 0) {
+				slot_fail_cooldown[i] = settings->max_frames_per_sec;
+				pc->logMsg(msg->get("Not enough MP."), Avatar::MSG_NORMAL);
+				snd->play(sfx_unable_to_cast, "ACT_NO_MP", snd->NO_POS, !snd->LOOP);
+				continue;
 			}
-			else if (slot_enabled[i]) {
-				for (size_t j = 0; j < action_queue.size(); ++j) {
-					if (action_queue[j].hotkey == i && action_queue[j].power != action.power)
-						action_queue.erase(action_queue.begin()+j);
-				}
-			}
-			else {
+			else if (!slot_enabled[i]) {
 				continue;
 			}
 
+			slot_fail_cooldown[i] = pc->power_cast_duration[action.power];
+
 			action.instant_item = false;
-			if (power->new_state == Power::STATE_INSTANT) {
-				for (size_t j = 0; j < power->required_items.size(); ++j) {
-					if (power->required_items[j].id > 0 && !power->required_items[j].equipped) {
+			if (power.new_state == Power::STATE_INSTANT) {
+				for (size_t j = 0; j < power.required_items.size(); ++j) {
+					if (power.required_items[j].id > 0 && !power.required_items[j].equipped) {
 						action.instant_item = true;
 						break;
 					}
@@ -613,7 +603,7 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 			for (size_t j=0; j<action_queue.size(); j++) {
 				if (action_queue[j].hotkey == i) {
 					// this power is already in the action queue, update its target
-					action_queue[j].target = setTarget(have_aim, *power);
+					action_queue[j].target = setTarget(have_aim, power);
 					can_use_power = false;
 					break;
 				}
@@ -626,7 +616,7 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 				continue;
 
 			// set the target depending on how the power was triggered
-			action.target = setTarget(have_aim, *power);
+			action.target = setTarget(have_aim, power);
 
 			// add it to the queue
 			action_queue.push_back(action);
@@ -881,4 +871,6 @@ MenuActionBar::~MenuActionBar() {
 
 	for (unsigned int i=0; i<4; i++)
 		delete menus[i];
+
+	snd->unload(sfx_unable_to_cast);
 }

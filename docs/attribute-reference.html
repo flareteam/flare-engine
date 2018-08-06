@@ -211,6 +211,8 @@ body {
 
 <p><strong>keep_buyback_on_map_change</strong> | <code>bool</code> | If true, NPC buyback stocks will persist when the map changes. If false, save_buyback is disabled.</p>
 
+<p><strong>sfx_unable_to_cast</strong> | <code>filename</code> | Sound to play when the player lacks the MP to cast a power.</p>
+
 <hr />
 
 <h4>EngineSettings: Resolution</h4>
@@ -1734,8 +1736,6 @@ body {
 <p><strong>power.cooldown</strong> | <code>duration</code> | Specify the duration for cooldown of the power in &lsquo;ms&rsquo; or &rsquo;s'.</p>
 
 <p><strong>power.requires_hpmp_state</strong> | <code>["hp", "mp"], ["percent", "not_percent", "ignore"], int : Stat, Current state, Percentage value</code> | Power can only be used when HP/MP matches the specified state</p>
-
-<p><strong>power.fallback_power</strong> | <code>power_id</code> | If the hero tries to cast this power, but does not satisfy the requires_mp or requires_hp properties, this power will automatically be used instead.</p>
 
 <p><strong>power.animation</strong> | <code>filename</code> | The filename of the power animation.</p>
 
