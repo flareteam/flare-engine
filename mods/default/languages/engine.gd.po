@@ -420,7 +420,7 @@ msgstr "Cruthaich"
 
 #: ../../../src/GameStateNew.cpp:76
 msgid "Randomize"
-msgstr ""
+msgstr "Cuir air thuaiream"
 
 #: ../../../src/GameStateNew.cpp:92
 msgid "Choose a Portrait"
@@ -713,7 +713,7 @@ msgstr "Grad-iuchair: %s"
 
 #: ../../../src/MenuActionBar.cpp:580
 msgid "Not enough MP."
-msgstr ""
+msgstr "Chan fhoghainn na PG."
 
 #: ../../../src/MenuActiveEffects.cpp:123
 #, c-format
@@ -751,6 +751,7 @@ msgstr "%d puing(ean)-pearsa nach deach a chleachdadh"
 #, c-format
 msgid "Reduces the damage taken from \"%s\" elemental attacks."
 msgstr ""
+"Ìslichidh seo an dochann a dh’fhulaingeas tu o ionnsaighean dùileach “%s”"
 
 #: ../../../src/MenuCharacter.cpp:364 ../../../src/MenuManager.cpp:288
 #, c-format
@@ -948,7 +949,7 @@ msgstr "Marbh"
 
 #: ../../../src/MenuEnemy.cpp:161
 msgid "Destroyed"
-msgstr ""
+msgstr "Air a mhilleadh"
 
 #: ../../../src/MenuExit.cpp:85 ../../../src/MenuExit.cpp:139
 msgid "Paused"
@@ -1264,7 +1265,7 @@ msgstr "Cha b’ urrainn dhut neo-chruth-atharrachadh air an ionad seo."
 
 #: ../../../src/QuestLog.cpp:234
 msgid "Completed Quests"
-msgstr ""
+msgstr "Cinn-thurais air a choileanadh"
 
 #: ../../../src/SaveLoad.cpp:239 ../../../src/SaveLoad.cpp:240
 msgid "Game saved."
@@ -1405,7 +1406,7 @@ msgstr "Puingean-beatha as motha"
 
 #: ../../../src/Stats.cpp:39
 msgid "Total amount of HP."
-msgstr ""
+msgstr "Na PB iomlan."
 
 #: ../../../src/Stats.cpp:43
 msgid "HP Regen"
@@ -1421,7 +1422,7 @@ msgstr "Puingean-gluasaid as motha"
 
 #: ../../../src/Stats.cpp:49
 msgid "Total amount of MP."
-msgstr ""
+msgstr "Na PG iomlan."
 
 #: ../../../src/Stats.cpp:53
 msgid "MP Regen"
@@ -1440,6 +1441,9 @@ msgid ""
 "Accuracy rating. The enemy's Avoidance rating is subtracted from this value "
 "to calculate your likeliness to land a direct hit."
 msgstr ""
+"Rangachadh na pongalachd. Thèid teàrnadh an nàmhad a thoirt air falbh on "
+"luach seo airson àireamhachadh dè cho coltach ’s a bhios e gum buail thu "
+"air."
 
 #: ../../../src/Stats.cpp:63
 msgid "Avoidance"
@@ -1450,6 +1454,9 @@ msgid ""
 "Avoidance rating. This value is subtracted from the enemy's Accuracy rating "
 "to calculate their likeliness to land a direct hit."
 msgstr ""
+"Rangachadh an tèarnaidh. Thèid an luach seo a thoirt air falbh o rangachd "
+"pongalachd nan nàimhdean airson àireamhachadh dè cho coltach ’s a bhios e "
+"gum buail iad ort."
 
 #: ../../../src/Stats.cpp:68
 msgid "Absorb Min"
@@ -1457,7 +1464,7 @@ msgstr "Ceapadh as lugha"
 
 #: ../../../src/Stats.cpp:69 ../../../src/Stats.cpp:74
 msgid "Reduces the amount of damage taken."
-msgstr ""
+msgstr "Ìslichidh seo am meud a dhochann a dh’fhulaingeas tu."
 
 #: ../../../src/Stats.cpp:73
 msgid "Absorb Max"
@@ -1469,7 +1476,7 @@ msgstr "Teans air bualadh èiginneach"
 
 #: ../../../src/Stats.cpp:79
 msgid "Chance for an attack to do extra damage."
-msgstr ""
+msgstr "An teans gun dèan ionnsaigh dochann a bharrachd."
 
 #: ../../../src/Stats.cpp:83
 msgid "Bonus XP"

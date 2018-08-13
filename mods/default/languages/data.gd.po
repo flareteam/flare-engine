@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-04 22:10+\n"
+"POT-Creation-Date: 2018-08-05 20:36+\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: GunChleoc, 2018\n"
 "Language-Team: Gaelic, Scottish (https://www.transifex.com/flareorg/teams/84925/gd/)\n"
@@ -41,7 +41,7 @@ msgstr "Dochann dlùth"
 
 #: ../engine/damage_types.txt:4
 msgid "Increases the damage done with swords and other melee weapons."
-msgstr ""
+msgstr "Meudaichidh seo an dochann a nì claidheamhan is airm dhlùtha eile."
 
 #: ../engine/damage_types.txt:5
 msgid "Melee Damage Min"
@@ -57,7 +57,7 @@ msgstr "Dochann astair"
 
 #: ../engine/damage_types.txt:13
 msgid "Increases the damage done with bows and other ranged weapons."
-msgstr ""
+msgstr "Meudaichidh seo an dochann a nì boghachan is airm astair eile."
 
 #: ../engine/damage_types.txt:14
 msgid "Ranged Damage Min"
@@ -73,7 +73,7 @@ msgstr "Dochann inntinne"
 
 #: ../engine/damage_types.txt:22
 msgid "Increases the damage done with staves and other mental weapons."
-msgstr ""
+msgstr "Meudaichidh seo an dochann a nì bataichean is airm inntinne eile."
 
 #: ../engine/damage_types.txt:23
 msgid "Mental Damage Min"
@@ -377,7 +377,7 @@ msgstr "Yannis Anthymidis"
 
 #: ../cutscenes/credits.txt:97
 msgid "Zmicer Turok"
-msgstr ""
+msgstr "Zmicer Turok"
 
 #: ../cutscenes/credits.txt:100
 msgid "Distributors"
