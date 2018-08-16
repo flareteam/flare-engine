@@ -33,6 +33,7 @@ Engine fixes:
 * The user keybindings are now reset if the keybindings file is not forwards compatible. Anyone using remapped keys will need to set them again with this update.
 * Improved performance when dealing with campaign statuses.
 * Fix NPCs/enemies not begin affected by statuses set in on_load events until the player re-entered the map.
+* Various fixes to MenuPowers, including better handling of when powers no longer meet their requirements.
 * Lots of code cleanup.
 
 New translations:

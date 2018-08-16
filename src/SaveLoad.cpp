@@ -523,7 +523,7 @@ void SaveLoad::applyPlayerData() {
 	pc->loadSounds();
 
 	// apply power upgrades
-	menu->pow->applyPowerUpgrades();
+	menu->pow->setUnlockedPowers();
 }
 
 void SaveLoad::loadPowerTree() {

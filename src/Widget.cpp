@@ -26,6 +26,7 @@ Widget::Widget()
 	: render_to_alpha(false)
 	, in_focus(false)
 	, focusable(false)
+	, enable_tablist_nav(true)
 	, scroll_type(SCROLL_TWO_DIRECTIONS)
 	, alignment(Utils::ALIGN_TOPLEFT) {
 }
@@ -178,6 +179,8 @@ Widget* TabList::getNext(bool inner, uint8_t dir) {
 
 		if (current >= static_cast<int>(widgets.size()))
 			current = 0;
+
+		// TODO handle enable_tablist_nav here?
 	}
 	else {
 		int next = getNextRelativeIndex(dir);
@@ -222,6 +225,8 @@ Widget* TabList::getPrev(bool inner, uint8_t dir) {
 
 		if (current <= -1)
 			current = static_cast<unsigned>(widgets.size()-1);
+
+		// TODO handle enable_tablist_nav here?
 	}
 	else {
 		int next = getNextRelativeIndex(dir);
@@ -257,6 +262,9 @@ int TabList::getNextRelativeIndex(uint8_t dir) {
 
 	for (size_t i=0; i<widgets.size(); ++i) {
 		if (current == static_cast<int>(i))
+			continue;
+
+		if (!widgets.at(i)->enable_tablist_nav)
 			continue;
 
 		FPoint p1(static_cast<float>(widgets.at(current)->pos.x), static_cast<float>(widgets.at(current)->pos.y));

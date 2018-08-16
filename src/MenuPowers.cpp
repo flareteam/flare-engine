@@ -33,6 +33,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FontEngine.h"
 #include "Menu.h"
 #include "MenuActionBar.h"
+#include "MenuManager.h"
 #include "MenuPowers.h"
 #include "MessageEngine.h"
 #include "PowerManager.h"
@@ -51,23 +52,47 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <climits>
 
-Power_Menu_Cell::Power_Menu_Cell()
+MenuPowersCell::MenuPowersCell()
 	: id(-1)
-	, tab(0)
-	, pos(Point())
-	, requires_primary(eset->primary_stats.list.size(), 0)
 	, requires_level(0)
-	, upgrade_level(0)
-	, upgrades()
-	, requires_power()
 	, requires_point(false)
-	, passive_on(false) {
+	, requires_primary(eset->primary_stats.list.size(), 0)
+	, requires_power()
+	, visible_requires_status()
+	, visible_requires_not()
+	, upgrade_level(0)
+	, passive_on(false)
+	, is_unlocked(false)
+	, group(0)
+	, next(NULL) {
 }
 
-MenuPowers::MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar)
-	: stats(_stats)
-	, action_bar(_action_bar)
-	, skip_section(false)
+bool MenuPowersCell::isVisible() {
+	for (size_t i = 0; i < visible_requires_status.size(); ++i)
+		if (!camp->checkStatus(visible_requires_status[i]))
+			return false;
+
+	for (size_t i = 0; i < visible_requires_not.size(); ++i)
+		if (camp->checkStatus(visible_requires_not[i]))
+			return false;
+
+	return true;
+}
+
+MenuPowersCellGroup::MenuPowersCellGroup()
+	: tab(0)
+	, pos()
+	, current_cell(0)
+	, cells()
+	, upgrade_button(NULL) {
+}
+
+MenuPowersCell* MenuPowersCellGroup::getCurrent() {
+	return &cells[current_cell];
+}
+
+MenuPowers::MenuPowers()
+	: skip_section(false)
 	, powers_unlock(NULL)
 	, overlay_disabled(NULL)
 	, points_left(0)
@@ -130,10 +155,12 @@ MenuPowers::~MenuPowers() {
 	}
 	for (size_t i=0; i<slots.size(); i++) {
 		delete slots.at(i);
-		delete upgradeButtons.at(i);
 	}
 	slots.clear();
-	upgradeButtons.clear();
+
+	for (size_t i=0; i<power_cell.size(); i++) {
+		delete power_cell[i].upgrade_button;
+	}
 
 	delete closeButton;
 	if (tab_control) delete tab_control;
@@ -161,8 +188,8 @@ void MenuPowers::align() {
 
 		slots[i]->setPos(window_area.x, window_area.y);
 
-		if (upgradeButtons[i] != NULL) {
-			upgradeButtons[i]->setPos(window_area.x, window_area.y);
+		if (power_cell[i].upgrade_button != NULL) {
+			power_cell[i].upgrade_button->setPos(window_area.x, window_area.y);
 		}
 	}
 
@@ -197,6 +224,7 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 	if (tree_loaded) return;
 
 	// First, parse the power tree file
+	std::vector<MenuPowersCell> power_cell_upgrade;
 
 	FileParser infile;
 	// @CLASS MenuPowers: Power tree layout|Description of powers/trees/
@@ -206,13 +234,14 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 				// for sections that are stored in collections, add a new object here
 				if (infile.section == "power") {
 					slots.push_back(NULL);
-					upgradeButtons.push_back(NULL);
-					power_cell.push_back(Power_Menu_Cell());
+					power_cell.push_back(MenuPowersCellGroup());
+					power_cell.back().cells.push_back(MenuPowersCell());
+					power_cell.back().cells.back().group = power_cell.size() - 1;
 				}
 				else if (infile.section == "upgrade")
-					power_cell_upgrade.push_back(Power_Menu_Cell());
+					power_cell_upgrade.push_back(MenuPowersCell());
 				else if (infile.section == "tab")
-					tabs.push_back(Power_Menu_Tab());
+					tabs.push_back(MenuPowersTab());
 			}
 
 			if (infile.section == "") {
@@ -224,38 +253,22 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 			else if (infile.section == "power")
 				loadPower(infile);
 			else if (infile.section == "upgrade")
-				loadUpgrade(infile);
+				loadUpgrade(infile, power_cell_upgrade);
 		}
 		infile.close();
 	}
 
-	// save a copy of the base level powers, as they get overwritten during upgrades
-	power_cell_base = power_cell;
-
-	// store the appropriate level for all upgrades
-	for (size_t i=0; i<power_cell_upgrade.size(); ++i) {
-		for (size_t j=0; j<power_cell_base.size(); j++) {
-			std::vector<int>::iterator it = std::find(power_cell_base[j].upgrades.begin(), power_cell_base[j].upgrades.end(), power_cell_upgrade[i].id);
-			if (it != power_cell_base[j].upgrades.end()) {
-				power_cell_upgrade[i].upgrade_level = static_cast<int>(std::distance(power_cell_base[j].upgrades.begin(), it) + 2);
-				break;
+	// fill cell groups with upgrades
+	for (size_t i = 0; i < power_cell.size(); ++i) {
+		for (size_t j = 1; j < power_cell[i].cells.size(); ++j) {
+			for (size_t k = 1; k < power_cell_upgrade.size(); ++k) {
+				if (power_cell_upgrade[k].id == power_cell[i].cells[j].id) {
+					power_cell[i].cells[j] = power_cell_upgrade[k];
+					power_cell[i].cells[j].upgrade_level = static_cast<int>(j) + 1;
+					power_cell[i].cells[j].group = i;
+					power_cell[i].cells[j-1].next = &power_cell[i].cells[j];
+				}
 			}
-		}
-	}
-
-	// combine base and upgrade powers into a single list
-	for (size_t i=0; i<power_cell_base.size(); ++i) {
-		power_cell_all.push_back(power_cell_base[i]);
-	}
-	for (size_t i=0; i<power_cell_upgrade.size(); ++i) {
-		power_cell_all.push_back(power_cell_upgrade[i]);
-	}
-
-	// save cell indexes for required powers
-	for (size_t i=0; i<power_cell_all.size(); ++i) {
-		for (size_t j=0; j<power_cell_all[i].requires_power.size(); ++j) {
-			int cell_index = getCellByPowerIndex(power_cell_all[i].requires_power[j], power_cell_all);
-			power_cell_all[i].requires_power_cell.push_back(cell_index);
 		}
 	}
 
@@ -310,8 +323,8 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 
 	// create power slots
 	for (size_t i=0; i<slots.size(); i++) {
-		if (static_cast<size_t>(power_cell[i].id) < powers->powers.size()) {
-			slots[i] = new WidgetSlot(powers->powers[power_cell[i].id].icon, Input::ACCEPT);
+		if (!power_cell[i].cells.empty() && static_cast<size_t>(power_cell[i].cells[0].id) < powers->powers.size()) {
+			slots[i] = new WidgetSlot(powers->powers[power_cell[i].cells[0].id].icon, Input::ACCEPT);
 			slots[i]->setBasePos(power_cell[i].pos.x, power_cell[i].pos.y, Utils::ALIGN_TOPLEFT);
 
 			if (!tablist_pow.empty()) {
@@ -323,13 +336,13 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 				tablist.add(slots[i]);
 			}
 
-			if (upgradeButtons[i] != NULL) {
-				upgradeButtons[i]->setBasePos(power_cell[i].pos.x + eset->resolutions.icon_size, power_cell[i].pos.y, Utils::ALIGN_TOPLEFT);
+			if (power_cell[i].upgrade_button != NULL) {
+				power_cell[i].upgrade_button->setBasePos(power_cell[i].pos.x + eset->resolutions.icon_size, power_cell[i].pos.y, Utils::ALIGN_TOPLEFT);
 			}
 		}
 	}
 
-	applyPowerUpgrades();
+	setUnlockedPowers();
 
 	// set the default tab from character class setting
 	EngineSettings::HeroClasses::HeroClass* pc_class;
@@ -356,7 +369,7 @@ void MenuPowers::loadPower(FileParser &infile) {
 		int id = Parse::popFirstInt(infile.val);
 		if (id > 0) {
 			skip_section = false;
-			power_cell.back().id = id;
+			power_cell.back().cells.back().id = id;
 		}
 		else {
 			infile.error("MenuPowers: Power index out of bounds 1-%d, skipping power.", INT_MAX);
@@ -364,11 +377,10 @@ void MenuPowers::loadPower(FileParser &infile) {
 		return;
 	}
 
-	if (power_cell.back().id <= 0) {
+	if (power_cell.back().cells.back().id <= 0) {
 		skip_section = true;
 		power_cell.pop_back();
 		slots.pop_back();
-		upgradeButtons.pop_back();
 		Utils::logError("MenuPowers: There is a power without a valid id as the first attribute. IDs must be the first attribute in the power menu definition.");
 	}
 
@@ -386,44 +398,44 @@ void MenuPowers::loadPower(FileParser &infile) {
 		size_t prim_stat_index = eset->primary_stats.getIndexByID(prim_stat);
 
 		if (prim_stat_index != eset->primary_stats.list.size()) {
-			power_cell.back().requires_primary[prim_stat_index] = Parse::toInt(infile.val);
+			power_cell.back().cells.back().requires_primary[prim_stat_index] = Parse::toInt(infile.val);
 		}
 		else {
 			infile.error("MenuPowers: '%s' is not a valid primary stat.", prim_stat.c_str());
 		}
 	}
 	// @ATTR power.requires_point|bool|Power requires a power point to unlock.
-	else if (infile.key == "requires_point") power_cell.back().requires_point = Parse::toBool(infile.val);
+	else if (infile.key == "requires_point") power_cell.back().cells.back().requires_point = Parse::toBool(infile.val);
 	// @ATTR power.requires_level|int|Power requires at least this level for the hero.
-	else if (infile.key == "requires_level") power_cell.back().requires_level = Parse::toInt(infile.val);
+	else if (infile.key == "requires_level") power_cell.back().cells.back().requires_level = Parse::toInt(infile.val);
 	// @ATTR power.requires_power|power_id|Power requires another power id.
-	else if (infile.key == "requires_power") power_cell.back().requires_power.push_back(Parse::toInt(infile.val));
+	else if (infile.key == "requires_power") power_cell.back().cells.back().requires_power.push_back(Parse::toInt(infile.val));
 
 	// @ATTR power.visible_requires_status|repeatable(string)|Hide the power if we don't have this campaign status.
-	else if (infile.key == "visible_requires_status") power_cell.back().visible_requires_status.push_back(camp->registerStatus(infile.val));
+	else if (infile.key == "visible_requires_status") power_cell.back().cells.back().visible_requires_status.push_back(camp->registerStatus(infile.val));
 	// @ATTR power.visible_requires_not_status|repeatable(string)|Hide the power if we have this campaign status.
-	else if (infile.key == "visible_requires_not_status") power_cell.back().visible_requires_not.push_back(camp->registerStatus(infile.val));
+	else if (infile.key == "visible_requires_not_status") power_cell.back().cells.back().visible_requires_not.push_back(camp->registerStatus(infile.val));
 
 	// @ATTR power.upgrades|list(power_id)|A list of upgrade power ids that this power slot can upgrade to. Each of these powers should have a matching upgrade section.
 	else if (infile.key == "upgrades") {
-		if (power_cell.back().upgrades.empty()) {
-			upgradeButtons.back() = new WidgetButton("images/menus/buttons/button_plus.png");
-		}
-
 		std::string repeat_val = Parse::popFirstString(infile.val);
 		while (repeat_val != "") {
-			power_cell.back().upgrades.push_back(Parse::toInt(repeat_val));
+			power_cell.back().cells.push_back(MenuPowersCell());
+			power_cell.back().cells.back().id = Parse::toInt(repeat_val);
 			repeat_val = Parse::popFirstString(infile.val);
 		}
 
-		if (!power_cell.back().upgrades.empty())
-			power_cell.back().upgrade_level = 1;
+		if (power_cell.back().cells.size() > 1) {
+			power_cell.back().cells[0].upgrade_level = 1;
+			if (!power_cell.back().upgrade_button)
+				power_cell.back().upgrade_button = new WidgetButton("images/menus/buttons/button_plus.png");
+		}
 	}
 
 	else infile.error("MenuPowers: '%s' is not a valid key.", infile.key.c_str());
 }
 
-void MenuPowers::loadUpgrade(FileParser &infile) {
+void MenuPowers::loadUpgrade(FileParser &infile, std::vector<MenuPowersCell>& power_cell_upgrade) {
 	// @ATTR upgrade.id|int|A power id from powers/powers.txt for this upgrade.
 	if (infile.key == "id") {
 		int id = Parse::popFirstInt(infile.val);
@@ -469,281 +481,264 @@ void MenuPowers::loadUpgrade(FileParser &infile) {
 	else infile.error("MenuPowers: '%s' is not a valid key.", infile.key.c_str());
 }
 
-bool MenuPowers::checkRequirements(int pci) {
-	if (pci == -1)
+bool MenuPowers::checkRequirements(MenuPowersCell* pcell) {
+	if (!pcell)
 		return false;
 
-	for (size_t i = 0; i < power_cell_all[pci].requires_power_cell.size(); ++i)
-		if (!checkUnlocked(power_cell_all[pci].requires_power_cell[i]))
+	for (size_t i = 0; i < pcell->requires_power.size(); ++i) {
+		if (!checkUnlocked(getCellByPowerIndex(pcell->requires_power[i])))
 			return false;
+	}
 
-	if (stats->level < power_cell_all[pci].requires_level)
+	if (pc->stats.level < pcell->requires_level)
 		return false;
 
 	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
-		if (stats->get_primary(i) < power_cell_all[pci].requires_primary[i])
+		if (pc->stats.get_primary(i) < pcell->requires_primary[i])
 			return false;
 	}
 
-	const Power& power = powers->powers[power_cell_all[pci].id];
-	if (power.passive) {
-		if (!stats->canUsePower(power_cell_all[pci].id, StatBlock::CAN_USE_PASSIVE))
+	if (powers->powers[pcell->id].passive) {
+		if (!pc->stats.canUsePower(pcell->id, StatBlock::CAN_USE_PASSIVE))
 			return false;
 	}
 
 	return true;
 }
 
-bool MenuPowers::checkUnlocked(int pci) {
-	// If we didn't find power in power_menu, than it has no requirements
-	if (pci == -1) return true;
+bool MenuPowers::checkUnlocked(MenuPowersCell* pcell) {
+	// If this power is not in the menu, than it has no requirements
+	if (!pcell)
+		return true;
 
-	if (!checkCellVisible(pci))
+	if (!pcell->isVisible())
 		return false;
 
 	// If power_id is saved into vector, it's unlocked anyway
-	// check power_cell_unlocked and stats->powers_list
-	for (size_t i=0; i<power_cell_unlocked.size(); ++i) {
-		if (power_cell_unlocked[i].id == power_cell_all[pci].id)
-			return true;
-	}
-	if (std::find(stats->powers_list.begin(), stats->powers_list.end(), power_cell_all[pci].id) != stats->powers_list.end())
+	// check if the unlocked flag is set and check the player's power list
+	if (pcell->is_unlocked)
+		return true;
+	if (std::find(pc->stats.powers_list.begin(), pc->stats.powers_list.end(), pcell->id) != pc->stats.powers_list.end())
 		return true;
 
-	// Check the rest requirements
+	// Check the rest of the requirements
 	// only check base level; upgrades are checked in logic()
-	if (!power_cell_all[pci].requires_point && power_cell_all[pci].upgrade_level <= 1 && checkRequirements(pci))
+	if (!pcell->requires_point && pcell->upgrade_level <= 1 && checkRequirements(pcell))
 		return true;
 
 	return false;
-}
-
-bool MenuPowers::checkCellVisible(int pci) {
-	// If we didn't find power in power_menu, than it has no requirements
-	if (pci == -1) return true;
-
-	for (size_t i=0; i<power_cell_all[pci].visible_requires_status.size(); ++i)
-		if (!camp->checkStatus(power_cell_all[pci].visible_requires_status[i]))
-			return false;
-
-	for (size_t i=0; i<power_cell_all[pci].visible_requires_not.size(); ++i)
-		if (camp->checkStatus(power_cell_all[pci].visible_requires_not[i]))
-			return false;
-
-	return true;
 }
 
 /**
  * Check if we can unlock power.
  */
-bool MenuPowers::checkUnlock(int pci) {
-	// If we didn't find power in power_menu, than it has no requirements
-	if (pci == -1) return true;
+bool MenuPowers::checkUnlock(MenuPowersCell* pcell) {
+	// If this power is not in the menu, than it has no requirements
+	if (!pcell)
+		return true;
 
-	if (!checkCellVisible(pci)) return false;
+	if (!pcell->isVisible())
+		return false;
 
 	// If we already have a power, don't try to unlock it
-	if (checkUnlocked(pci)) return false;
+	if (checkUnlocked(pcell))
+		return false;
 
 	// Check base requirements
-	if (checkRequirements(pci)) return true;
+	if (checkRequirements(pcell))
+		return true;
+
 	return false;
 }
 
-bool MenuPowers::checkUpgrade(int pci) {
-	int id = getCellByPowerIndex(power_cell[pci].id, power_cell_all);
-	if (!checkUnlocked(id))
+bool MenuPowers::checkUpgrade(MenuPowersCell* pcell) {
+	if (!checkUnlocked(pcell))
 		return false;
 
-	int next_index = getNextLevelCell(pci);
-	if (next_index == -1)
-		return false;
-	if (power_cell_upgrade[next_index].requires_point && points_left < 1)
+	if (!pcell->next || (pcell->next->requires_point && points_left < 1))
 		return false;
 
-	int id_upgrade = getCellByPowerIndex(power_cell_upgrade[next_index].id, power_cell_all);
-	if (!checkUnlock(id_upgrade))
+	if (!checkUnlock(pcell->next))
 		return false;
 
 	return true;
 }
 
-int MenuPowers::getCellByPowerIndex(int power_index, const std::vector<Power_Menu_Cell>& cell) {
+void MenuPowers::lockCell(MenuPowersCell* pcell) {
+	pcell->is_unlocked = false;
+
+	// remove passive effects
+	if (powers->powers[pcell->id].passive && pcell->passive_on) {
+		std::vector<int>::iterator passive_it = std::find(pc->stats.powers_passive.begin(), pc->stats.powers_passive.end(), pcell->id);
+		if (passive_it != pc->stats.powers_passive.end())
+			pc->stats.powers_passive.erase(passive_it);
+
+		pc->stats.effects.removeEffectPassive(pcell->id);
+		pcell->passive_on = false;
+		pc->stats.refresh_stats = true;
+	}
+
+	// remove from player's power list
+	std::vector<int>::iterator it = std::find(pc->stats.powers_list.begin(), pc->stats.powers_list.end(), pcell->id);
+	if (it != pc->stats.powers_list.end())
+		pc->stats.powers_list.erase(it);
+
+	// remove from action bar
+	menu->act->addPower(0, pcell->id);
+
+	// lock higher levels as well
+	MenuPowersCell* next_cell = pcell->next;
+	while (next_cell) {
+		lockCell(next_cell);
+		next_cell = next_cell->next;
+	}
+}
+
+MenuPowersCell* MenuPowers::getCellByPowerIndex(int power_index) {
 	// Powers can not have an id of 0
-	if (power_index == 0) return -1;
+	if (power_index <= 0)
+		return NULL;
 
 	// Find cell with our power
-	for (size_t i=0; i<cell.size(); i++)
-		if (cell[i].id == power_index)
-			return static_cast<int>(i);
-
-	return -1;
-}
-
-/**
- * Find cell in upgrades with next upgrade for current power_cell
- */
-int MenuPowers::getNextLevelCell(int pci) {
-	if (power_cell[pci].upgrades.empty()) {
-		return -1;
+	for (size_t i = 0; i < power_cell.size(); ++i) {
+		for (size_t j = 0; j < power_cell[i].cells.size(); ++j) {
+			if (power_cell[i].cells[j].id == power_index)
+				return &power_cell[i].cells[j];
+		}
 	}
 
-	std::vector<int>::iterator level_it;
-	level_it = std::find(power_cell[pci].upgrades.begin(),
-					power_cell[pci].upgrades.end(),
-					power_cell[pci].id);
-
-	if (level_it == power_cell[pci].upgrades.end()) {
-		// current power is base power, take first upgrade
-		int index = power_cell[pci].upgrades[0];
-		return getCellByPowerIndex(index, power_cell_upgrade);
-	}
-	// current power is an upgrade, take next upgrade if avaliable
-	size_t index = std::distance(power_cell[pci].upgrades.begin(), level_it);
-	if (power_cell[pci].upgrades.size() > index + 1) {
-		return getCellByPowerIndex(*(++level_it), power_cell_upgrade);
-	}
-	else {
-		return -1;
-	}
-}
-
-void MenuPowers::replaceCellWithUpgrade(int pci, int uci) {
-	power_cell[pci].id = power_cell_upgrade[uci].id;
-	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
-		power_cell[pci].requires_primary[i] = power_cell_upgrade[uci].requires_primary[i];
-	}
-	power_cell[pci].requires_level = power_cell_upgrade[uci].requires_level;
-	power_cell[pci].requires_power = power_cell_upgrade[uci].requires_power;
-	power_cell[pci].requires_power_cell = power_cell_upgrade[uci].requires_power_cell;
-	power_cell[pci].requires_point = power_cell_upgrade[uci].requires_point;
-	power_cell[pci].passive_on = power_cell_upgrade[uci].passive_on;
-	power_cell[pci].upgrade_level = power_cell_upgrade[uci].upgrade_level;
-
-	if (slots[pci])
-		slots[pci]->setIcon(powers->powers[power_cell_upgrade[uci].id].icon, WidgetSlot::NO_OVERLAY);
+	return NULL;
 }
 
 /**
  * Upgrade power cell "pci" to the next level
  */
-void MenuPowers::upgradePower(int pci, bool ignore_tab) {
-	int i = getNextLevelCell(pci);
-	if (i == -1)
+void MenuPowers::upgradePower(MenuPowersCell* pcell, bool ignore_tab) {
+	if (!pcell || !pcell->next)
 		return;
 
-	// if power was present in ActionBar, update it there
-	action_bar->addPower(power_cell_upgrade[i].id, power_cell[pci].id);
-
-	// if we have tab_control
-	if (tab_control) {
-		int active_tab = tab_control->getActiveTab();
-		if (power_cell[pci].tab == active_tab || ignore_tab) {
-			replaceCellWithUpgrade(pci, i);
-			stats->powers_list.push_back(power_cell_upgrade[i].id);
-			stats->check_title = true;
-		}
-	}
-	// if have don't have tabs
-	else {
-		replaceCellWithUpgrade(pci, i);
-		stats->powers_list.push_back(power_cell_upgrade[i].id);
-		stats->check_title = true;
+	if (!tab_control || ignore_tab || (tab_control && tab_control->getActiveTab() == power_cell[pcell->group].tab)) {
+		pcell->next->is_unlocked = true;
+		pc->stats.powers_list.push_back(pcell->next->id);
+		pc->stats.check_title = true;
 	}
 	setUnlockedPowers();
 }
 
 void MenuPowers::setUnlockedPowers() {
-	std::vector<int> power_ids;
-	bool unlocked_cleared = false;
-
-	// only clear/repopulate power_cell_unlocked if the size of the hero's powers_list has changed
-	if (prev_powers_list_size != stats->powers_list.size() || power_cell_unlocked.empty()) {
-		prev_powers_list_size = stats->powers_list.size();
-		power_cell_unlocked.clear();
-		unlocked_cleared = true;
-	}
+	bool did_cell_lock = false;
 
 	for (size_t i=0; i<power_cell.size(); ++i) {
-		if (std::find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[i].id) != stats->powers_list.end()) {
-			if (!unlocked_cleared)
-				continue;
-
-			// base power
-			if (std::find(power_ids.begin(), power_ids.end(), power_cell[i].id) == power_ids.end()) {
-				power_ids.push_back(power_cell_base[i].id);
-				power_cell_unlocked.push_back(power_cell_base[i]);
+		for (size_t j = 0; j < power_cell[i].cells.size(); ++j) {
+			if (std::find(pc->stats.powers_list.begin(), pc->stats.powers_list.end(), power_cell[i].cells[j].id) != pc->stats.powers_list.end()) {
+				power_cell[i].cells[j].is_unlocked = true;
 			}
-			if (power_cell[i].id == power_cell_base[i].id)
-				continue;
+			else {
+				if (checkUnlocked(&power_cell[i].cells[j])) {
+					// power is unlocked, but not in the player's powers_list
+					pc->stats.powers_list.push_back(power_cell[i].cells[j].id);
+					power_cell[i].cells[j].is_unlocked = true;
+				}
+			}
 
-			//upgrades
-			for (size_t j=0; j<power_cell[i].upgrades.size(); ++j) {
-				if (std::find(power_ids.begin(), power_ids.end(), power_cell[i].upgrades[j]) == power_ids.end()) {
-					int id = getCellByPowerIndex(power_cell[i].upgrades[j], power_cell_upgrade);
-					if (id != -1) {
-						power_ids.push_back(power_cell[i].upgrades[j]);
-						power_cell_unlocked.push_back(power_cell_upgrade[id]);
+			if (power_cell[i].cells[j].is_unlocked) {
+				if (!power_cell[i].cells[j].isVisible() || !checkRequirements(&power_cell[i].cells[j])) {
+					lockCell(&power_cell[i].cells[j]);
+					did_cell_lock = true;
+				}
+				else {
+					// if power was present in ActionBar, update it there
+					if (power_cell[i].current_cell != j)
+						menu->act->addPower(power_cell[i].cells[j].id, power_cell[i].getCurrent()->id);
 
-						if (power_cell[i].id == power_cell[i].upgrades[j])
-							break;
-					}
-					else {
-						break;
-					}
+					power_cell[i].current_cell = j;
+					if (slots[i])
+						slots[i]->setIcon(powers->powers[power_cell[i].cells[j].id].icon, WidgetSlot::NO_OVERLAY);
 				}
 			}
 		}
-		else {
-			// power is unlocked, but not in the player's powers_list
-			int pci = getCellByPowerIndex(power_cell[i].id, power_cell_all);
-			if (checkUnlocked(pci)) {
-				stats->powers_list.push_back(power_cell[i].id);
-			}
-		}
 	}
 
-	// the hero's powers_list may have grown, so we need to re-check unlocked powers
-	if (prev_powers_list_size != stats->powers_list.size()) {
+	// if we locked a cell, we need to re-run this function to make sure the proper current_cell is set
+	if (did_cell_lock) {
 		setUnlockedPowers();
+		return;
+	}
+
+	// handle passive powers
+	for (size_t i = 0; i < power_cell.size(); ++i) {
+		MenuPowersCell* current_pcell = power_cell[i].getCurrent();
+		if (!current_pcell->is_unlocked)
+			continue;
+
+		for (size_t j = 0; j < power_cell[i].cells.size(); ++j) {
+			MenuPowersCell* pcell = &power_cell[i].cells[j];
+
+			if (pcell != current_pcell || ((!checkRequirements(pcell) || !pcell->is_unlocked) && pcell->passive_on)) {
+				// passive power is activated, but does not meet requirements, so remove it
+				std::vector<int>::iterator passive_it = std::find(pc->stats.powers_passive.begin(), pc->stats.powers_passive.end(), pcell->id);
+				if (passive_it != pc->stats.powers_passive.end())
+					pc->stats.powers_passive.erase(passive_it);
+
+				pc->stats.effects.removeEffectPassive(pcell->id);
+				pcell->passive_on = false;
+				pc->stats.refresh_stats = true;
+			}
+			else if (pcell == current_pcell && pcell->is_unlocked && checkRequirements(pcell) && !pcell->passive_on) {
+				// passive power has not been activated, so activate it here
+				std::vector<int>::iterator passive_it = std::find(pc->stats.powers_passive.begin(), pc->stats.powers_passive.end(), pcell->id);
+				if (passive_it == pc->stats.powers_passive.end())
+					pc->stats.powers_passive.push_back(pcell->id);
+
+				pcell->passive_on = true;
+				// for passives without special triggers, we need to trigger them here
+				if (pc->stats.effects.triggered_others)
+					powers->activateSinglePassive(&pc->stats, pcell->id);
+			}
+		}
 	}
 }
 
 int MenuPowers::getPointsUsed() {
 	int used = 0;
-	for (size_t i=0; i<power_cell_unlocked.size(); ++i) {
-		if (power_cell_unlocked[i].requires_point)
+
+	for (size_t i = 0; i < pc->stats.powers_list.size(); ++i) {
+		MenuPowersCell* pcell = getCellByPowerIndex(pc->stats.powers_list[i]);
+		if (pcell && pcell->requires_point)
 			used++;
 	}
 
 	return used;
 }
 
-void MenuPowers::createTooltip(TooltipData* tip_data, int slot_num, const std::vector<Power_Menu_Cell>& power_cells, bool show_unlock_prompt) {
-	if (power_cells[slot_num].upgrade_level > 0)
-		tip_data->addText(powers->powers[power_cells[slot_num].id].name + " (" + msg->get("Level %d", power_cells[slot_num].upgrade_level) + ")");
-	else
-		tip_data->addText(powers->powers[power_cells[slot_num].id].name);
+void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, bool show_unlock_prompt) {
+	if (!pcell)
+		return;
 
-	if (powers->powers[power_cells[slot_num].id].passive) tip_data->addText(msg->get("Passive"));
-	tip_data->addColoredText(Utils::substituteVarsInString(powers->powers[power_cells[slot_num].id].description, pc), font->getColor(FontEngine::COLOR_ITEM_FLAVOR));
+	if (pcell->upgrade_level > 0)
+		tip_data->addText(powers->powers[pcell->id].name + " (" + msg->get("Level %d", pcell->upgrade_level) + ")");
+	else
+		tip_data->addText(powers->powers[pcell->id].name);
+
+	if (powers->powers[pcell->id].passive) tip_data->addText(msg->get("Passive"));
+	tip_data->addColoredText(Utils::substituteVarsInString(powers->powers[pcell->id].description, pc), font->getColor(FontEngine::COLOR_ITEM_FLAVOR));
 
 	// add mana cost
-	if (powers->powers[power_cells[slot_num].id].requires_mp > 0) {
-		tip_data->addText(msg->get("Costs %d MP", powers->powers[power_cells[slot_num].id].requires_mp));
+	if (powers->powers[pcell->id].requires_mp > 0) {
+		tip_data->addText(msg->get("Costs %d MP", powers->powers[pcell->id].requires_mp));
 	}
 	// add health cost
-	if (powers->powers[power_cells[slot_num].id].requires_hp > 0) {
-		tip_data->addText(msg->get("Costs %d HP", powers->powers[power_cells[slot_num].id].requires_hp));
+	if (powers->powers[pcell->id].requires_hp > 0) {
+		tip_data->addText(msg->get("Costs %d HP", powers->powers[pcell->id].requires_hp));
 	}
 	// add cooldown time
-	if (powers->powers[power_cells[slot_num].id].cooldown > 0) {
+	if (powers->powers[pcell->id].cooldown > 0) {
 		std::stringstream ss;
-		ss << msg->get("Cooldown:") << " " << Utils::getDurationString(powers->powers[power_cells[slot_num].id].cooldown, 2);
+		ss << msg->get("Cooldown:") << " " << Utils::getDurationString(powers->powers[pcell->id].cooldown, 2);
 		tip_data->addText(ss.str());
 	}
 
-	const Power &pwr = powers->powers[power_cells[slot_num].id];
+	const Power &pwr = powers->powers[pcell->id];
 	for (size_t i=0; i<pwr.post_effects.size(); ++i) {
 		std::stringstream ss;
 		EffectDef* effect_ptr = powers->getEffectDef(pwr.post_effects[i].id);
@@ -875,11 +870,11 @@ void MenuPowers::createTooltip(TooltipData* tip_data, int slot_num, const std::v
 					continue;
 
 				if (pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_MULTIPLY) {
-					int magnitude = stats->getDamageMax(pwr.base_damage) * pwr.mod_damage_value_min / 100;
+					int magnitude = pc->stats.getDamageMax(pwr.base_damage) * pwr.mod_damage_value_min / 100;
 					ss << magnitude;
 				}
 				else if (pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_ADD) {
-					int magnitude = stats->getDamageMax(pwr.base_damage) + pwr.mod_damage_value_min;
+					int magnitude = pc->stats.getDamageMax(pwr.base_damage) + pwr.mod_damage_value_min;
 					ss << magnitude;
 				}
 				else if (pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_ABSOLUTE) {
@@ -889,7 +884,7 @@ void MenuPowers::createTooltip(TooltipData* tip_data, int slot_num, const std::v
 						ss << pwr.mod_damage_value_min << "-" << pwr.mod_damage_value_max;
 				}
 				else {
-					ss << stats->getDamageMax(pwr.base_damage);
+					ss << pc->stats.getDamageMax(pwr.base_damage);
 				}
 
 				ss << " " << msg->get("Magical Shield");
@@ -898,8 +893,8 @@ void MenuPowers::createTooltip(TooltipData* tip_data, int slot_num, const std::v
 				if (pwr.base_damage == eset->damage_types.list.size())
 					continue;
 
-				int mag_min = stats->getDamageMin(pwr.base_damage);
-				int mag_max = stats->getDamageMax(pwr.base_damage);
+				int mag_min = pc->stats.getDamageMin(pwr.base_damage);
+				int mag_max = pc->stats.getDamageMax(pwr.base_damage);
 
 				if (pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_MULTIPLY) {
 					mag_min = mag_min * pwr.mod_damage_value_min / 100;
@@ -1050,7 +1045,7 @@ void MenuPowers::createTooltip(TooltipData* tip_data, int slot_num, const std::v
 	}
 
 	std::set<std::string>::iterator it;
-	for (it = powers->powers[power_cells[slot_num].id].requires_flags.begin(); it != powers->powers[power_cells[slot_num].id].requires_flags.end(); ++it) {
+	for (it = powers->powers[pcell->id].requires_flags.begin(); it != powers->powers[pcell->id].requires_flags.end(); ++it) {
 		for (size_t i = 0; i < eset->equip_flags.list.size(); ++i) {
 			if ((*it) == eset->equip_flags.list[i].id) {
 				tip_data->addText(msg->get("Requires a %s", msg->get(eset->equip_flags.list[i].name)));
@@ -1060,38 +1055,36 @@ void MenuPowers::createTooltip(TooltipData* tip_data, int slot_num, const std::v
 
 	// add requirement
 	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
-		if (power_cells[slot_num].requires_primary[i] > 0) {
-			if (stats->get_primary(i) < power_cells[slot_num].requires_primary[i])
-				tip_data->addColoredText(msg->get("Requires %s %d", eset->primary_stats.list[i].name, power_cells[slot_num].requires_primary[i]), font->getColor(FontEngine::COLOR_MENU_PENALTY));
+		if (pcell->requires_primary[i] > 0) {
+			if (pc->stats.get_primary(i) < pcell->requires_primary[i])
+				tip_data->addColoredText(msg->get("Requires %s %d", eset->primary_stats.list[i].name, pcell->requires_primary[i]), font->getColor(FontEngine::COLOR_MENU_PENALTY));
 			else
-				tip_data->addText(msg->get("Requires %s %d", eset->primary_stats.list[i].name, power_cells[slot_num].requires_primary[i]));
+				tip_data->addText(msg->get("Requires %s %d", eset->primary_stats.list[i].name, pcell->requires_primary[i]));
 		}
 	}
 
 	// Draw required Level Tooltip
-	if ((power_cells[slot_num].requires_level > 0) && stats->level < power_cells[slot_num].requires_level) {
-		tip_data->addColoredText(msg->get("Requires Level %d", power_cells[slot_num].requires_level), font->getColor(FontEngine::COLOR_MENU_PENALTY));
+	if ((pcell->requires_level > 0) && pc->stats.level < pcell->requires_level) {
+		tip_data->addColoredText(msg->get("Requires Level %d", pcell->requires_level), font->getColor(FontEngine::COLOR_MENU_PENALTY));
 	}
-	else if ((power_cells[slot_num].requires_level > 0) && stats->level >= power_cells[slot_num].requires_level) {
-		tip_data->addText(msg->get("Requires Level %d", power_cells[slot_num].requires_level));
+	else if ((pcell->requires_level > 0) && pc->stats.level >= pcell->requires_level) {
+		tip_data->addText(msg->get("Requires Level %d", pcell->requires_level));
 	}
 
-	for (size_t j=0; j < power_cells[slot_num].requires_power.size(); ++j) {
-		if (power_cells[slot_num].requires_power[j] == 0) continue;
-
-		int req_index = getCellByPowerIndex(power_cells[slot_num].requires_power[j], power_cell_all);
-		if (req_index == -1) continue;
+	for (size_t j=0; j < pcell->requires_power.size(); ++j) {
+		MenuPowersCell* req_cell = getCellByPowerIndex(pcell->requires_power[j]);
+		if (!req_cell)
+			continue;
 
 		std::string req_power_name;
-		if (power_cell_all[req_index].upgrade_level > 0)
-			req_power_name = powers->powers[power_cell_all[req_index].id].name + " (" + msg->get("Level %d", power_cell_all[req_index].upgrade_level) + ")";
+		if (req_cell->upgrade_level > 0)
+			req_power_name = powers->powers[req_cell->id].name + " (" + msg->get("Level %d", req_cell->upgrade_level) + ")";
 		else
-			req_power_name = powers->powers[power_cell_all[req_index].id].name;
+			req_power_name = powers->powers[req_cell->id].name;
 
 
 		// Required Power Tooltip
-		int req_cell_index = getCellByPowerIndex(power_cells[slot_num].requires_power[j], power_cell_all);
-		if (!checkUnlocked(req_cell_index)) {
+		if (!checkUnlocked(req_cell)) {
 			tip_data->addColoredText(msg->get("Requires Power: %s", req_power_name), font->getColor(FontEngine::COLOR_MENU_PENALTY));
 		}
 		else {
@@ -1101,13 +1094,13 @@ void MenuPowers::createTooltip(TooltipData* tip_data, int slot_num, const std::v
 	}
 
 	// Draw unlock power Tooltip
-	if (power_cells[slot_num].requires_point && !(std::find(stats->powers_list.begin(), stats->powers_list.end(), power_cells[slot_num].id) != stats->powers_list.end())) {
-		int unlock_id = getCellByPowerIndex(power_cells[slot_num].id, power_cell_all);
-		if (show_unlock_prompt && points_left > 0 && checkUnlock(unlock_id)) {
+	if (pcell->requires_point && !(std::find(pc->stats.powers_list.begin(), pc->stats.powers_list.end(), pcell->id) != pc->stats.powers_list.end())) {
+		MenuPowersCell* unlock_cell = getCellByPowerIndex(pcell->id);
+		if (show_unlock_prompt && points_left > 0 && checkUnlock(unlock_cell)) {
 			tip_data->addColoredText(msg->get("Click to Unlock (uses 1 Skill Point)"), font->getColor(FontEngine::COLOR_MENU_BONUS));
 		}
 		else {
-			if (power_cells[slot_num].requires_point && points_left < 1)
+			if (pcell->requires_point && points_left < 1)
 				tip_data->addColoredText(msg->get("Requires 1 Skill Point"), font->getColor(FontEngine::COLOR_MENU_PENALTY));
 			else
 				tip_data->addText(msg->get("Requires 1 Skill Point"));
@@ -1122,21 +1115,22 @@ void MenuPowers::renderPowers(int tab_num) {
 	disabled_src.w = disabled_src.h = eset->resolutions.icon_size;
 
 	for (size_t i=0; i<power_cell.size(); i++) {
-		bool power_in_vector = false;
-
 		// Continue if slot is not filled with data
 		if (power_cell[i].tab != tab_num) continue;
 
-		int cell_index = getCellByPowerIndex(power_cell[i].id, power_cell_all);
-		if (!checkCellVisible(cell_index)) continue;
-
-		if (std::find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[i].id) != stats->powers_list.end()) power_in_vector = true;
+		MenuPowersCell* slot_cell = power_cell[i].getCurrent();
+		if (!slot_cell || !slot_cell->isVisible())
+			continue;
 
 		if (slots[i])
 			slots[i]->render();
 
+		// upgrade buttons
+		if (power_cell[i].upgrade_button)
+			power_cell[i].upgrade_button->render();
+
 		// highlighting
-		if (power_in_vector || checkUnlocked(cell_index)) {
+		if (checkUnlocked(slot_cell)) {
 			Rect src_unlock;
 
 			src_unlock.x = 0;
@@ -1149,15 +1143,13 @@ void MenuPowers::renderPowers(int tab_num) {
 				selected_slot = getSelectedCellIndex();
 			}
 
-			for (size_t j=0; j<power_cell.size(); j++) {
-				if (selected_slot == static_cast<int>(j))
-					continue;
+			if (selected_slot == static_cast<int>(i))
+				continue;
 
-				if (power_cell[j].id == power_cell[i].id && powers_unlock && slots[j]) {
-					powers_unlock->setClipFromRect(src_unlock);
-					powers_unlock->setDestFromRect(slots[j]->pos);
-					render_device->render(powers_unlock);
-				}
+			if (powers_unlock && slots[i]) {
+				powers_unlock->setClipFromRect(src_unlock);
+				powers_unlock->setDestFromRect(slots[i]->pos);
+				render_device->render(powers_unlock);
 			}
 		}
 		else {
@@ -1170,10 +1162,6 @@ void MenuPowers::renderPowers(int tab_num) {
 
 		if (slots[i])
 			slots[i]->renderSelection();
-
-		// upgrade buttons
-		if (upgradeButtons[i])
-			upgradeButtons[i]->render();
 	}
 }
 
@@ -1184,70 +1172,25 @@ void MenuPowers::logic() {
 
 	setUnlockedPowers();
 
-	for (size_t i=0; i<power_cell_unlocked.size(); i++) {
-		if (static_cast<size_t>(power_cell_unlocked[i].id) < powers->powers.size() && powers->powers[power_cell_unlocked[i].id].passive) {
-			std::vector<int>::iterator passive_it = std::find(stats->powers_passive.begin(), stats->powers_passive.end(), power_cell_unlocked[i].id);
-
-			int cell_index = getCellByPowerIndex(power_cell_unlocked[i].id, power_cell_all);
-			bool is_current_upgrade_max = (getCellByPowerIndex(power_cell_unlocked[i].id, power_cell) != -1);
-
-			if (passive_it != stats->powers_passive.end()) {
-				if (!is_current_upgrade_max || (!checkRequirements(cell_index) && power_cell_unlocked[i].passive_on)) {
-					// passive power is activated, but does not meet requirements, so remove it
-					stats->powers_passive.erase(passive_it);
-					stats->effects.removeEffectPassive(power_cell_unlocked[i].id);
-					power_cell[i].passive_on = false;
-					power_cell_unlocked[i].passive_on = false;
-					stats->refresh_stats = true;
-				}
-			}
-			else if (is_current_upgrade_max && checkRequirements(cell_index) && !power_cell_unlocked[i].passive_on) {
-				// passive power has not been activated, so activate it here
-				stats->powers_passive.push_back(power_cell_unlocked[i].id);
-				power_cell_unlocked[i].passive_on = true;
-				// for passives without special triggers, we need to trigger them here
-				if (stats->effects.triggered_others)
-					powers->activateSinglePassive(stats, power_cell_unlocked[i].id);
-			}
-		}
-	}
-
 	for (size_t i=0; i<power_cell.size(); i++) {
+		// make sure invisible cells are skipped in the tablist
+		if (slots[i])
+			slots[i]->enable_tablist_nav = power_cell[i].getCurrent()->isVisible();
+
 		//upgrade buttons logic
-		if (upgradeButtons[i] != NULL) {
-			upgradeButtons[i]->enabled = false;
+		if (power_cell[i].upgrade_button != NULL) {
+			power_cell[i].upgrade_button->enabled = false;
 			// enable button only if current level is unlocked and next level can be unlocked
-			if (checkUpgrade(static_cast<int>(i))) {
-				upgradeButtons[i]->enabled = true;
+			if (checkUpgrade(power_cell[i].getCurrent())) {
+				power_cell[i].upgrade_button->enabled = true;
 			}
-			if ((!tab_control || power_cell[i].tab == tab_control->getActiveTab()) && upgradeButtons[i]->checkClick()) {
-				upgradePower(static_cast<int>(i), !UPGRADE_POWER_ALL_TABS);
-			}
-
-			// automatically apply upgrades when requires_point = false
-			if (upgradeButtons[i]->enabled) {
-				int next_index;
-				int prev_index = -1;
-				while ((next_index = getNextLevelCell(static_cast<int>(i))) != -1) {
-					if (prev_index == next_index) {
-						// this should never happen, but if it ever does, it would be an infinite loop
-						break;
-					}
-
-					if (!power_cell_upgrade[next_index].requires_point && checkUpgrade(static_cast<int>(i))) {
-						upgradePower(static_cast<int>(i), UPGRADE_POWER_ALL_TABS);
-					}
-					else {
-						break;
-					}
-
-					prev_index = next_index;
-				}
+			if ((!tab_control || power_cell[i].tab == tab_control->getActiveTab()) && power_cell[i].upgrade_button->checkClick()) {
+				upgradePower(power_cell[i].getCurrent(), !UPGRADE_POWER_ALL_TABS);
 			}
 		}
 	}
 
-	points_left = (stats->level * stats->power_points_per_level) - getPointsUsed();
+	points_left = (pc->stats.level * pc->stats.power_points_per_level) - getPointsUsed();
 	if (points_left > 0) {
 		newPowerNotification = true;
 	}
@@ -1365,21 +1308,20 @@ void MenuPowers::renderTooltips(const Point& position) {
 
 	for (size_t i=0; i<power_cell.size(); i++) {
 
-		if (tab_control && (tab_control->getActiveTab() != power_cell[i].tab)) continue;
+		if (tab_control && (tab_control->getActiveTab() != power_cell[i].tab))
+			continue;
 
-		int cell_index = getCellByPowerIndex(power_cell[i].id, power_cell_all);
-		if (!checkCellVisible(cell_index)) continue;
+		MenuPowersCell* tip_cell = power_cell[i].getCurrent();
+		if (!tip_cell->isVisible())
+			continue;
 
 		if (slots[i] && Utils::isWithinRect(slots[i]->pos, position)) {
-			bool base_unlocked = checkUnlocked(cell_index) || std::find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[i].id) != stats->powers_list.end();
+			bool base_unlocked = checkUnlocked(tip_cell);
 
-			createTooltip(&tip_data, static_cast<int>(i), power_cell, !base_unlocked);
-			if (!power_cell[i].upgrades.empty()) {
-				int next_level = getNextLevelCell(static_cast<int>(i));
-				if (next_level != -1) {
-					tip_data.addText("\n" + msg->get("Next Level:"));
-					createTooltip(&tip_data, next_level, power_cell_upgrade, base_unlocked);
-				}
+			createTooltip(&tip_data, tip_cell, !base_unlocked);
+			if (tip_cell->next) {
+				tip_data.addText("\n" + msg->get("Next Level:"));
+				createTooltip(&tip_data, tip_cell->next, base_unlocked);
 			}
 
 			tooltipm->push(tip_data, position, TooltipData::STYLE_FLOAT);
@@ -1409,16 +1351,19 @@ int MenuPowers::click(const Point& mouse) {
 				}
 			}
 
-			int cell_index = getCellByPowerIndex(power_cell[i].id, power_cell_all);
-			if (checkUnlock(cell_index) && points_left > 0 && power_cell[i].requires_point) {
+			MenuPowersCell* pcell = power_cell[i].getCurrent();
+			if (!pcell)
+				return 0;
+
+			if (checkUnlock(pcell) && points_left > 0 && pcell->requires_point) {
 				// unlock power
-				stats->powers_list.push_back(power_cell[i].id);
-				stats->check_title = true;
+				pc->stats.powers_list.push_back(pcell->id);
+				pc->stats.check_title = true;
 				setUnlockedPowers();
-				action_bar->addPower(power_cell[i].id, 0);
+				menu->act->addPower(pcell->id, 0);
 				return 0;
 			}
-			else if (checkUnlocked(cell_index) && !powers->powers[power_cell[i].id].passive) {
+			else if (checkUnlocked(pcell) && !powers->powers[pcell->id].passive) {
 				// pick up and drag power
 				slots[i]->defocus();
 				if (!tabs.empty()) {
@@ -1427,7 +1372,7 @@ int MenuPowers::click(const Point& mouse) {
 				else {
 					tablist.setCurrent(NULL);
 				}
-				return power_cell[i].id;
+				return pcell->id;
 			}
 			else
 				return 0;
@@ -1440,38 +1385,22 @@ int MenuPowers::click(const Point& mouse) {
 	return 0;
 }
 
-void MenuPowers::upgradeByCell(int pci) {
-	if (checkUpgrade(pci))
-		upgradePower(pci, !UPGRADE_POWER_ALL_TABS);
-}
-
-/**
- * Apply power upgrades on savegame loading
- */
-void MenuPowers::applyPowerUpgrades() {
-	for (size_t i=0; i<power_cell.size(); i++) {
-		if (!power_cell[i].upgrades.empty()) {
-			std::vector<int>::iterator it;
-			for (it = power_cell[i].upgrades.end(); it != power_cell[i].upgrades.begin(); ) {
-				--it;
-				std::vector<int>::iterator upgrade_it;
-				upgrade_it = std::find(stats->powers_list.begin(), stats->powers_list.end(), *it);
-				if (upgrade_it != stats->powers_list.end()) {
-					int upgrade_index = getCellByPowerIndex((*upgrade_it), power_cell_upgrade);
-					if (upgrade_index != -1)
-						replaceCellWithUpgrade(static_cast<int>(i), upgrade_index);
-					break;
-				}
-			}
-		}
-	}
-	setUnlockedPowers();
+void MenuPowers::upgradeBySlotIndex(int slot_index) {
+	MenuPowersCell* pcell = power_cell[slot_index].getCurrent();
+	if (checkUpgrade(pcell))
+		upgradePower(pcell, !UPGRADE_POWER_ALL_TABS);
 }
 
 void MenuPowers::resetToBasePowers() {
-	for (size_t i=0; i<power_cell.size(); ++i) {
-		power_cell[i] = power_cell_base[i];
+	for (size_t i = 0; i < power_cell.size(); ++i) {
+		power_cell[i].current_cell = 0;
+		for (size_t j = 0; j < power_cell[i].cells.size(); ++j) {
+			power_cell[i].cells[j].is_unlocked = false;
+			power_cell[i].cells[j].passive_on = false;
+		}
 	}
+
+	setUnlockedPowers();
 }
 
 /**
@@ -1479,13 +1408,14 @@ void MenuPowers::resetToBasePowers() {
  */
 bool MenuPowers::meetsUsageStats(int power_index) {
 	// Find cell with our power
-	int id = getCellByPowerIndex(power_index, power_cell);
+	MenuPowersCell* pcell = getCellByPowerIndex(power_index);
 
 	// If we didn't find power in power_menu, than it has no stats requirements
-	if (id == -1) return true;
+	if (!pcell)
+		return true;
 
 	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
-		if (stats->get_primary(i) < power_cell[id].requires_primary[i])
+		if (pc->stats.get_primary(i) < pcell->requires_primary[i])
 			return false;
 	}
 

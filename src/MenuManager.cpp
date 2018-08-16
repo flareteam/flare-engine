@@ -115,7 +115,7 @@ MenuManager::MenuManager(StatBlock *_stats)
 	mini = new MenuMiniMap();
 	chr = new MenuCharacter(stats);
 	inv = new MenuInventory(stats);
-	pow = new MenuPowers(stats, act);
+	pow = new MenuPowers();
 	questlog = new MenuLog();
 	stash = new MenuStash(stats);
 	book = new MenuBook();
@@ -1060,7 +1060,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 		// clear power dragging if power slot was pressed twice
 		else if (slotClick == WidgetSlot::ACTIVATED) {
 			if (drag_power > 0) {
-				pow->upgradeByCell(slot_index);
+				pow->upgradeBySlotIndex(slot_index);
 			}
 			drag_src = DRAG_SRC_NONE;
 			drag_power = 0;

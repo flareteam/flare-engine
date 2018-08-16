@@ -951,7 +951,7 @@ bool EventManager::executeEvent(Event &ev) {
 						pc->stats.powers_list.push_back(pc_class->powers[j]);
 					}
 				}
-				menu_powers->applyPowerUpgrades();
+				menu_powers->setUnlockedPowers();
 
 				menu_act->clear();
 				if (pc_class && !use_engine_defaults) {

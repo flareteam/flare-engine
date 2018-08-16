@@ -38,36 +38,50 @@ class WidgetLabel;
 class WidgetSlot;
 class WidgetTabControl;
 
-class Power_Menu_Tab {
+class MenuPowersTab {
 public:
 	std::string title;
 	std::string background;
 
-	Power_Menu_Tab()
+	MenuPowersTab()
 		: title("")
 		, background("") {
 	}
 };
 
-class Power_Menu_Cell {
+class MenuPowersCell {
 public:
-	Power_Menu_Cell();
+	MenuPowersCell();
+	bool isVisible();
 
 	int id;
-	int tab;
-	Point pos;
-	std::vector<int> requires_primary;
 	int requires_level;
-	int upgrade_level;
-	std::vector<int> upgrades;
-
-	std::vector<int> requires_power;
-	std::vector<int> requires_power_cell;
-
 	bool requires_point;
-	bool passive_on;
+	std::vector<int> requires_primary;
+	std::vector<int> requires_power;
 	std::vector<StatusID> visible_requires_status;
 	std::vector<StatusID> visible_requires_not;
+
+	int upgrade_level;
+	bool passive_on;
+	bool is_unlocked;
+
+	size_t group;
+	MenuPowersCell* next; // TODO should we also have "parent"?
+};
+
+class MenuPowersCellGroup {
+public:
+	MenuPowersCellGroup();
+	MenuPowersCell* getCurrent();
+
+	int tab;
+	Point pos;
+
+	size_t current_cell;
+	std::vector<MenuPowersCell> cells;
+
+	WidgetButton* upgrade_button;
 };
 
 class MenuPowers : public Menu {
@@ -77,34 +91,24 @@ private:
 	void loadGraphics();
 	void loadTab(FileParser &infile);
 	void loadPower(FileParser &infile);
-	void loadUpgrade(FileParser &infile);
+	void loadUpgrade(FileParser &infile, std::vector<MenuPowersCell>& power_cell_upgrade);
 
-	bool checkRequirements(int pci);
-	bool checkUnlocked(int pci);
-	bool checkCellVisible(int pci);
-	bool checkUnlock(int pci);
-	bool checkUpgrade(int pci);
+	bool checkRequirements(MenuPowersCell* pcell);
+	bool checkUnlocked(MenuPowersCell* pcell);
+	bool checkUnlock(MenuPowersCell* pcell);
+	bool checkUpgrade(MenuPowersCell* pcell);
+	void lockCell(MenuPowersCell* pcell);
 
-	int getCellByPowerIndex(int power_index, const std::vector<Power_Menu_Cell>& cell);
-	int getNextLevelCell(int pci);
+	MenuPowersCell* getCellByPowerIndex(int power_index);
 
-	void replaceCellWithUpgrade(int pci, int uci);
-	void upgradePower(int pci, bool ignore_tab);
+	void upgradePower(MenuPowersCell* pcell, bool ignore_tab);
 
-	void setUnlockedPowers();
 	int getPointsUsed();
 
-	void createTooltip(TooltipData* tip_data, int slot_num, const std::vector<Power_Menu_Cell>& power_cells, bool show_unlock_prompt);
+	void createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, bool show_unlock_prompt);
 	void renderPowers(int tab_num);
 
-	StatBlock *stats;
-	MenuActionBar *action_bar;
-	std::vector<Power_Menu_Cell> power_cell;           // the current visible power cells
-	std::vector<Power_Menu_Cell> power_cell_base;      // only base powers
-	std::vector<Power_Menu_Cell> power_cell_upgrade;   // only upgrades
-	std::vector<Power_Menu_Cell> power_cell_all;       // power_cell_base + power_cell_upgrade
-	std::vector<Power_Menu_Cell> power_cell_unlocked;  // only base powers and upgrades that have been unlocked
-	std::vector<WidgetButton*> upgradeButtons;
+	std::vector<MenuPowersCellGroup> power_cell;
 	bool skip_section;
 
 	Sprite *powers_unlock;
@@ -116,7 +120,7 @@ private:
 	Rect tab_area;
 
 	int points_left;
-	std::vector<Power_Menu_Tab> tabs;
+	std::vector<MenuPowersTab> tabs;
 	std::string default_background;
 
 	WidgetLabel *label_powers;
@@ -130,7 +134,7 @@ private:
 	int default_power_tab;
 
 public:
-	MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar);
+	MenuPowers();
 	~MenuPowers();
 	void align();
 
@@ -141,9 +145,9 @@ public:
 
 	void renderTooltips(const Point& position);
 	int click(const Point& mouse);
-	void upgradeByCell(int pci);
+	void upgradeBySlotIndex(int slot_index);
 
-	void applyPowerUpgrades();
+	void setUnlockedPowers();
 	void resetToBasePowers();
 
 	bool meetsUsageStats(int power_index);
