@@ -40,9 +40,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetButton.h"
 #include "WidgetSlot.h"
 
-MenuStash::MenuStash(StatBlock *_stats)
+MenuStash::MenuStash()
 	: Menu()
-	, stats(_stats)
 	, closeButton(new WidgetButton("images/menus/buttons/button_x.png"))
 	, stock()
 	, updated(false)
@@ -251,7 +250,7 @@ void MenuStash::renderTooltips(const Point& position) {
 	if (!visible || !Utils::isWithinRect(window_area, position))
 		return;
 
-	TooltipData tip_data = stock.checkTooltip(position, stats, ItemManager::PLAYER_INV);
+	TooltipData tip_data = stock.checkTooltip(position, &pc->stats, ItemManager::PLAYER_INV);
 	tooltipm->push(tip_data, position, TooltipData::STYLE_FLOAT);
 }
 

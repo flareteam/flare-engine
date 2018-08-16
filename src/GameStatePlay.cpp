@@ -104,12 +104,9 @@ GameStatePlay::GameStatePlay()
 	enemym = new EnemyManager();
 	enemyg = new EnemyGroupManager();
 	hazards = new HazardManager();
-	menu = new MenuManager(&pc->stats);
-	npcs = new NPCManager(&pc->stats);
+	menu = new MenuManager();
+	npcs = new NPCManager();
 	quests = new QuestLog(menu->questlog);
-
-	// LootManager needs hero StatBlock
-	loot->hero = &pc->stats;
 
 	// load the config file for character titles
 	loadTitles();

@@ -36,11 +36,10 @@ class WidgetTooltip;
 class NPCManager {
 private:
 	WidgetTooltip *tip;
-	StatBlock *stats;
 	TooltipData tip_buf;
 
 public:
-	explicit NPCManager(StatBlock *stats);
+	explicit NPCManager();
 	NPCManager(const NPCManager &copy); // not implemented
 	~NPCManager();
 

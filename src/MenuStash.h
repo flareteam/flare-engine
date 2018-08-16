@@ -33,7 +33,6 @@ class WidgetButton;
 
 class MenuStash : public Menu {
 private:
-	StatBlock *stats;
 	WidgetButton *closeButton;
 	WidgetLabel label_title;
 	WidgetLabel label_currency;
@@ -42,7 +41,7 @@ public:
 	static const int NO_SLOT = -1;
 	static const bool ADD_PLAY_SOUND = true;
 
-	explicit MenuStash(StatBlock *stats);
+	explicit MenuStash();
 	~MenuStash();
 	void align();
 

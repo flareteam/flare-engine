@@ -62,9 +62,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "WidgetSlot.h"
 
-MenuManager::MenuManager(StatBlock *_stats)
-	: stats(_stats)
-	, key_lock(false)
+MenuManager::MenuManager()
+	: key_lock(false)
 	, mouse_dragging(false)
 	, keyboard_dragging(false)
 	, sticky_dragging(false)
@@ -104,20 +103,20 @@ MenuManager::MenuManager(StatBlock *_stats)
 	hp = new MenuStatBar("hp");
 	mp = new MenuStatBar("mp");
 	xp = new MenuStatBar("xp");
-	effects = new MenuActiveEffects(stats);
+	effects = new MenuActiveEffects();
 	hudlog = new MenuHUDLog();
 	act = new MenuActionBar();
 	enemy = new MenuEnemy();
-	vendor = new MenuVendor(stats);
+	vendor = new MenuVendor();
 	npc = new MenuNPCActions();
 	talker = new MenuTalker(npc);
 	exit = new MenuExit();
 	mini = new MenuMiniMap();
-	chr = new MenuCharacter(stats);
-	inv = new MenuInventory(stats);
+	chr = new MenuCharacter();
+	inv = new MenuInventory();
 	pow = new MenuPowers();
 	questlog = new MenuLog();
-	stash = new MenuStash(stats);
+	stash = new MenuStash();
 	book = new MenuBook();
 	num_picker = new MenuNumPicker();
 
@@ -281,16 +280,16 @@ void MenuManager::logic() {
 
 	subtitles->logic(snd->getLastPlayedSID());
 
-	hp->update(0, stats->hp, stats->get(Stats::HP_MAX));
-	mp->update(0, stats->mp, stats->get(Stats::MP_MAX));
+	hp->update(0, pc->stats.hp, pc->stats.get(Stats::HP_MAX));
+	mp->update(0, pc->stats.mp, pc->stats.get(Stats::MP_MAX));
 
-	if (stats->level == eset->xp.getMaxLevel()) {
-		xp->setCustomString(msg->get("XP: %d", stats->xp));
+	if (pc->stats.level == eset->xp.getMaxLevel()) {
+		xp->setCustomString(msg->get("XP: %d", pc->stats.xp));
 	}
 	else {
-		xp->setCustomString(msg->get("XP: %d/%d", stats->xp, eset->xp.getLevelXP(stats->level + 1)));
+		xp->setCustomString(msg->get("XP: %d/%d", pc->stats.xp, eset->xp.getLevelXP(pc->stats.level + 1)));
 	}
-	xp->update(eset->xp.getLevelXP(stats->level), stats->xp, eset->xp.getLevelXP(stats->level + 1));
+	xp->update(eset->xp.getLevelXP(pc->stats.level), pc->stats.xp, eset->xp.getLevelXP(pc->stats.level + 1));
 
 	// when selecting item quantities, don't process other menus
 	if (num_picker->visible) {
@@ -337,7 +336,7 @@ void MenuManager::logic() {
 		handleKeyboardNavigation();
 
 	// Stop attacking if the cursor is inside an interactable menu
-	if (stats->attacking) {
+	if (pc->stats.attacking) {
 		if (Utils::isWithinRect(act->window_area, inpt->mouse) ||
 			(book->visible && Utils::isWithinRect(book->window_area, inpt->mouse)) ||
 			(chr->visible && Utils::isWithinRect(chr->window_area, inpt->mouse)) ||
@@ -372,12 +371,12 @@ void MenuManager::logic() {
 
 	touch_controls->logic();
 
-	if (chr->checkUpgrade() || stats->level_up) {
+	if (chr->checkUpgrade() || pc->stats.level_up) {
 		// apply equipment and max hp/mp
 		inv->applyEquipment();
-		stats->hp = stats->get(Stats::HP_MAX);
-		stats->mp = stats->get(Stats::MP_MAX);
-		stats->level_up = false;
+		pc->stats.hp = pc->stats.get(Stats::HP_MAX);
+		pc->stats.mp = pc->stats.get(Stats::MP_MAX);
+		pc->stats.level_up = false;
 	}
 
 	// only allow the vendor window to be open if the inventory is open
@@ -409,7 +408,7 @@ void MenuManager::logic() {
 	}
 
 	// cancel dragging and defocus menu tablists
-	if (!key_lock && inpt->pressing[Input::CANCEL] && !inpt->lock[Input::CANCEL] && !stats->corpse) {
+	if (!key_lock && inpt->pressing[Input::CANCEL] && !inpt->lock[Input::CANCEL] && !pc->stats.corpse) {
 		if (keyboard_dragging || mouse_dragging) {
 			inpt->lock[Input::CANCEL] = true;
 			resetDrag();
@@ -482,7 +481,7 @@ void MenuManager::logic() {
 		}
 
 		// powers menu toggle
-		if (((inpt->pressing[Input::POWERS] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_powers) && !stats->transformed) {
+		if (((inpt->pressing[Input::POWERS] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_powers) && !pc->stats.transformed) {
 			key_lock = true;
 			if (pow->visible) {
 				snd->play(pow->sfx_close, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
@@ -550,7 +549,7 @@ void MenuManager::logic() {
 
 	touch_controls->visible = !menus_open && !exit->visible;
 
-	if (stats->alive) {
+	if (pc->stats.alive) {
 
 		// handle right-click
 		if (!mouse_dragging && inpt->pressing[Input::MAIN2] && !inpt->lock[Input::MAIN2]) {

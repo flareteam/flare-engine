@@ -27,6 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Animation.h"
 #include "AnimationManager.h"
 #include "AnimationSet.h"
+#include "Avatar.h"
 #include "CommonIncludes.h"
 #include "CursorManager.h"
 #include "Enemy.h"
@@ -54,7 +55,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 LootManager::LootManager()
 	: tip(new WidgetTooltip())
 	, sfx_loot(snd->load(eset->loot.sfx_loot, "LootManager dropping loot"))
-	, hero(NULL)
 {
 	loadGraphics();
 	loadLootTables();
@@ -250,11 +250,6 @@ void LootManager::addEnemyLoot(Enemy *e) {
 }
 
 void LootManager::checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos, std::vector<ItemStack> *itemstack_vec) {
-	if (hero == NULL) {
-		Utils::logError("LootManager: checkLoot() failed, no hero.");
-		return;
-	}
-
 	FPoint p;
 	EventComponent *ec;
 	ItemStack new_loot;
@@ -281,11 +276,11 @@ void LootManager::checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos
 				p = mapr->collider.getRandomNeighbor(src, eset->loot.drop_radius, !MapCollision::IGNORE_BLOCKED);
 
 				if (!mapr->collider.isValidPosition(p.x, p.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_NORMAL)) {
-					p = hero->pos;
+					p = pc->stats.pos;
 				}
 				else {
 					if (src.x == static_cast<int>(p.x) && src.y == static_cast<int>(p.y))
-						p = hero->pos;
+						p = pc->stats.pos;
 
 					mapr->collider.block(p.x, p.y, !MapCollision::IS_ALLY);
 					tiles_to_unblock.push_back(Point(p));
@@ -297,7 +292,7 @@ void LootManager::checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos
 			// an item id of 0 means we should drop currency instead
 			if (ec->c == 0 || ec->c == eset->misc.currency_id) {
 				new_loot.item = eset->misc.currency_id;
-				new_loot.quantity = new_loot.quantity * (100 + hero->get(Stats::CURRENCY_FIND)) / 100;
+				new_loot.quantity = new_loot.quantity * (100 + pc->stats.get(Stats::CURRENCY_FIND)) / 100;
 			}
 			else {
 				new_loot.item = ec->c;
@@ -313,14 +308,14 @@ void LootManager::checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos
 	}
 
 	// now pick up to 1 random item to drop
-	int threshold = hero->get(Stats::ITEM_FIND) + 100;
+	int threshold = pc->stats.get(Stats::ITEM_FIND) + 100;
 	for (unsigned i = 0; i < loot_table.size(); i++) {
 		ec = &loot_table[i];
 
 		int real_chance = ec->z;
 
 		if (ec->c != 0 && ec->c != eset->misc.currency_id) {
-			real_chance = static_cast<int>(static_cast<float>(ec->z) * static_cast<float>(hero->get(Stats::ITEM_FIND) + 100) / 100.f);
+			real_chance = static_cast<int>(static_cast<float>(ec->z) * static_cast<float>(pc->stats.get(Stats::ITEM_FIND) + 100) / 100.f);
 		}
 
 		if (real_chance >= chance) {
@@ -359,11 +354,11 @@ void LootManager::checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos
 			p = mapr->collider.getRandomNeighbor(src, eset->loot.drop_radius, !MapCollision::IGNORE_BLOCKED);
 
 			if (!mapr->collider.isValidPosition(p.x, p.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_NORMAL)) {
-				p = hero->pos;
+				p = pc->stats.pos;
 			}
 			else {
 				if (src.x == static_cast<int>(p.x) && src.y == static_cast<int>(p.y))
-					p = hero->pos;
+					p = pc->stats.pos;
 
 				mapr->collider.block(p.x, p.y, !MapCollision::IS_ALLY);
 				tiles_to_unblock.push_back(Point(p));
@@ -375,7 +370,7 @@ void LootManager::checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos
 		// an item id of 0 means we should drop currency instead
 		if (ec->c == 0 || ec->c == eset->misc.currency_id) {
 			new_loot.item = eset->misc.currency_id;
-			new_loot.quantity = new_loot.quantity * (100 + hero->get(Stats::CURRENCY_FIND)) / 100;
+			new_loot.quantity = new_loot.quantity * (100 + pc->stats.get(Stats::CURRENCY_FIND)) / 100;
 		}
 		else {
 			new_loot.item = ec->c;

@@ -37,7 +37,6 @@ class WidgetTooltip;
 
 class MenuVendor : public Menu {
 private:
-	StatBlock *stats;
 	WidgetButton *closeButton;
 	WidgetTabControl *tabControl;
 	WidgetLabel label_vendor;
@@ -52,7 +51,7 @@ private:
 	WidgetTooltip* tip;
 
 public:
-	explicit MenuVendor(StatBlock *stats);
+	explicit MenuVendor();
 	~MenuVendor();
 	void align();
 

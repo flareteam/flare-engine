@@ -59,12 +59,11 @@ public:
 class MenuActiveEffects : public Menu {
 private:
 	Sprite *timer;
-	StatBlock *stats;
 	bool is_vertical;
 	std::vector<EffectIcon> effect_icons;
 
 public:
-	explicit MenuActiveEffects(StatBlock *_stats);
+	explicit MenuActiveEffects();
 	~MenuActiveEffects();
 	void loadGraphics();
 	void logic();

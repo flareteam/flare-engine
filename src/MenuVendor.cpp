@@ -22,6 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuVendor
  */
 
+#include "Avatar.h"
 #include "EngineSettings.h"
 #include "FileParser.h"
 #include "FontEngine.h"
@@ -41,9 +42,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetTabControl.h"
 #include "WidgetTooltip.h"
 
-MenuVendor::MenuVendor(StatBlock *_stats)
+MenuVendor::MenuVendor()
 	: Menu()
-	, stats(_stats)
 	, closeButton(new WidgetButton("images/menus/buttons/button_x.png"))
 	, tabControl(new WidgetTabControl())
 	, slots_cols(1)
@@ -240,7 +240,7 @@ void MenuVendor::renderTooltips(const Point& position) {
 		return;
 
 	int vendor_view = (activetab == ItemManager::VENDOR_BUY) ? ItemManager::VENDOR_BUY : ItemManager::VENDOR_SELL;
-	TooltipData tip_data = stock[activetab].checkTooltip(position, stats, vendor_view);
+	TooltipData tip_data = stock[activetab].checkTooltip(position, &pc->stats, vendor_view);
 	tip->render(tip_data, position, TooltipData::STYLE_FLOAT);
 }
 

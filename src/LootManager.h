@@ -89,8 +89,6 @@ public:
 	void addRenders(std::vector<Renderable> &ren, std::vector<Renderable> &ren_dead);
 
 	void parseLoot(std::string &val, EventComponent *e, std::vector<EventComponent> *ec_list);
-
-	StatBlock *hero;
 };
 
 #endif

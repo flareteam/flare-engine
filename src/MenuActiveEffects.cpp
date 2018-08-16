@@ -23,6 +23,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Handles the display of active effects (buffs/debuffs)
  */
 
+#include "Avatar.h"
 #include "CommonIncludes.h"
 #include "EngineSettings.h"
 #include "FileParser.h"
@@ -32,6 +33,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "ModManager.h"
 #include "MessageEngine.h"
 #include "RenderDevice.h"
+#include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "StatBlock.h"
 #include "TooltipManager.h"
@@ -39,9 +41,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "WidgetLabel.h"
 
-MenuActiveEffects::MenuActiveEffects(StatBlock *_stats)
+MenuActiveEffects::MenuActiveEffects()
 	: timer(NULL)
-	, stats(_stats)
 	, is_vertical(false)
 {
 	// Load config settings
@@ -85,11 +86,11 @@ void MenuActiveEffects::logic() {
 
 	effect_icons.clear();
 
-	for (size_t i = 0; i < stats->effects.effect_list.size(); ++i) {
-		if (stats->effects.effect_list[i].icon == -1)
+	for (size_t i = 0; i < pc->stats.effects.effect_list.size(); ++i) {
+		if (pc->stats.effects.effect_list[i].icon == -1)
 			continue;
 
-		const Effect &ed = stats->effects.effect_list[i];
+		const Effect &ed = pc->stats.effects.effect_list[i];
 
 		size_t most_recent_id = effect_icons.size()-1;
 		if(ed.group_stack){

@@ -34,14 +34,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "RenderDevice.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
-#include "StatBlock.h"
 #include "WidgetTooltip.h"
 
 #include <limits>
 
-NPCManager::NPCManager(StatBlock *_stats)
+NPCManager::NPCManager()
 	: tip(new WidgetTooltip())
-	, stats(_stats)
 	, tip_buf() {
 }
 

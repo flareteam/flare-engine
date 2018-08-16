@@ -38,8 +38,6 @@ class MenuInventory : public Menu {
 private:
 	static const bool ONLY_EMPTY_SLOTS = true;
 
-	StatBlock *stats;
-
 	void loadGraphics();
 	void updateEquipment(int slot);
 	int getEquipSlotFromItem(int item, bool only_empty_slots);
@@ -75,7 +73,7 @@ public:
 	static const bool ADD_AUTO_EQUIP = true;
 	static const bool IS_DRAGGING = true;
 
-	explicit MenuInventory(StatBlock *stats);
+	explicit MenuInventory();
 	~MenuInventory();
 	void align();
 

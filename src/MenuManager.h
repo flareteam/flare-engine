@@ -63,8 +63,6 @@ private:
 		DRAG_SRC_STASH = 5
 	};
 
-	StatBlock *stats;
-
 	void handleKeyboardTooltips();
 
 	bool key_lock;
@@ -90,7 +88,7 @@ private:
 	void dragAndDropWithKeyboard();
 
 public:
-	explicit MenuManager(StatBlock *stats);
+	explicit MenuManager();
 	MenuManager(const MenuManager &copy); // not implemented
 	~MenuManager();
 	void alignAll();

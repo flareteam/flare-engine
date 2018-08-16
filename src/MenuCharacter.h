@@ -55,8 +55,6 @@ private:
 		CSTAT_LEVEL = 1
 	};
 
-	StatBlock *stats;
-
 	WidgetButton *closeButton;
 	WidgetLabel *labelCharacter;
 	WidgetLabel *labelUnspent;
@@ -87,7 +85,7 @@ private:
 	int name_max_width;
 
 public:
-	explicit MenuCharacter(StatBlock *stats);
+	explicit MenuCharacter();
 	~MenuCharacter();
 	void align();
 
