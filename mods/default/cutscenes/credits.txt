@@ -60,6 +60,7 @@ text=Christoph J. Thompson
 text=Denis Lysenko
 text=Diego J. Romero López
 text=dumaosen
+text=Emil
 text=Eric R
 text=Evgen Pavlov
 text=Gianfranco Del Borrello

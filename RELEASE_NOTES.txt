@@ -38,6 +38,7 @@ Engine fixes:
 
 New translations:
 
+* Bulgarian (bg) by Emil
 * Brazilian Portuguese (pt_BR) by Gabriel Iasi, Vicente Monteiro
 * Vietnamese (vi) by Nguyễn Gia Phong
 

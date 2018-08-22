@@ -1257,7 +1257,7 @@ msgstr "No se puede quitar la transformación en esta posición."
 
 #: ../../../src/QuestLog.cpp:234
 msgid "Completed Quests"
-msgstr ""
+msgstr "Gestas completadas"
 
 #: ../../../src/SaveLoad.cpp:239 ../../../src/SaveLoad.cpp:240
 msgid "Game saved."
@@ -1398,7 +1398,7 @@ msgstr "PV máx."
 
 #: ../../../src/Stats.cpp:39
 msgid "Total amount of HP."
-msgstr ""
+msgstr "Cantidad total de PV."
 
 #: ../../../src/Stats.cpp:43
 msgid "HP Regen"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-04 22:10+\n"
+"POT-Creation-Date: 2018-08-05 20:36+\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Eric R, 2018\n"
 "Language-Team: Spanish (https://www.transifex.com/flareorg/teams/84925/es/)\n"
@@ -41,7 +41,7 @@ msgstr "Daño cuerpo a cuerpo"
 
 #: ../engine/damage_types.txt:4
 msgid "Increases the damage done with swords and other melee weapons."
-msgstr ""
+msgstr "Incrementa el daño causado por espadas y otras armas cuerpo a cuerpo."
 
 #: ../engine/damage_types.txt:5
 msgid "Melee Damage Min"
@@ -57,7 +57,7 @@ msgstr "Daño a distancia"
 
 #: ../engine/damage_types.txt:13
 msgid "Increases the damage done with bows and other ranged weapons."
-msgstr ""
+msgstr "Incrementa el daño causado por arcos y otras armas a distancia."
 
 #: ../engine/damage_types.txt:14
 msgid "Ranged Damage Min"
@@ -73,7 +73,7 @@ msgstr "Daño mental"
 
 #: ../engine/damage_types.txt:22
 msgid "Increases the damage done with staves and other mental weapons."
-msgstr ""
+msgstr "Incrementa el daño causado por por bastones y otras armas mentales."
 
 #: ../engine/damage_types.txt:23
 msgid "Mental Damage Min"
@@ -377,7 +377,7 @@ msgstr "Yannis Anthymidis"
 
 #: ../cutscenes/credits.txt:97
 msgid "Zmicer Turok"
-msgstr ""
+msgstr "Zmicer Turok"
 
 #: ../cutscenes/credits.txt:100
 msgid "Distributors"
