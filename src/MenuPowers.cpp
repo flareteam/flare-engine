@@ -261,7 +261,7 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 	// fill cell groups with upgrades
 	for (size_t i = 0; i < power_cell.size(); ++i) {
 		for (size_t j = 1; j < power_cell[i].cells.size(); ++j) {
-			for (size_t k = 1; k < power_cell_upgrade.size(); ++k) {
+			for (size_t k = 0; k < power_cell_upgrade.size(); ++k) {
 				if (power_cell_upgrade[k].id == power_cell[i].cells[j].id) {
 					power_cell[i].cells[j] = power_cell_upgrade[k];
 					power_cell[i].cells[j].upgrade_level = static_cast<int>(j) + 1;
