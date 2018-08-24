@@ -90,7 +90,7 @@ msgstr "Негативните въздействия са премахнати.
 #: ../../../src/CampaignManager.cpp:220
 msgid "HP and MP restored, negative effects removed"
 msgstr ""
-"Здравето и маната са възстановени, негативните въздействия са премахнати"
+"Здравето и маната са възстановени, негативните въздействия са премахнати."
 
 #: ../../../src/DeviceList.cpp:56
 msgid ""
@@ -247,7 +247,7 @@ msgstr "Engine версия:"
 
 #: ../../../src/GameStateConfigBase.cpp:943
 msgid "Requires mods:"
-msgstr "Изисква модификации"
+msgstr "Изисква модификации:"
 
 #: ../../../src/GameStateConfigDesktop.cpp:81
 #: ../../../src/GameStateConfigDesktop.cpp:740
@@ -344,7 +344,7 @@ msgstr "Гама"
 
 #: ../../../src/GameStateConfigDesktop.cpp:257
 msgid "Use joystick"
-msgstr "Използвай джойстик"
+msgstr "Използване на джойстик"
 
 #: ../../../src/GameStateConfigDesktop.cpp:261
 msgid "Joystick"
@@ -400,7 +400,7 @@ msgstr "Влизане в игралния свят…"
 
 #: ../../../src/GameStateLoad.cpp:698
 msgid "Loading saved game..."
-msgstr "Зареждане на запазена игра…"
+msgstr "Зареждане на запазената игра…"
 
 #: ../../../src/GameStateLoad.cpp:731
 msgid "Invalid save"
@@ -758,7 +758,7 @@ msgstr "Опит: %d"
 #: ../../../src/MenuCharacter.cpp:366
 #, c-format
 msgid "Next: %d"
-msgstr "Следващо %d"
+msgstr "Следващо: %d"
 
 #: ../../../src/MenuCharacter.cpp:372
 #, c-format
@@ -1022,7 +1022,7 @@ msgstr "Не можете да използвате този предмет то
 
 #: ../../../src/MenuInventory.cpp:592
 msgid "This item can only be used from the action bar."
-msgstr "Този предмет може да се използва само от лентата за действия."
+msgstr "Този предмет може да бъде използван само от лентата за действия."
 
 #: ../../../src/MenuInventory.cpp:710
 msgid "Inventory is full."
@@ -1035,7 +1035,7 @@ msgstr "Нямате достатъчно %s."
 
 #: ../../../src/MenuInventory.cpp:850 ../../../src/MenuInventory.cpp:857
 msgid "This item can not be sold."
-msgstr "Този предмет не може да се продаде."
+msgstr "Този предмет не може да бъде продаден."
 
 #: ../../../src/MenuLog.cpp:91
 msgid "Notes"
@@ -1446,7 +1446,7 @@ msgid ""
 "Avoidance rating. This value is subtracted from the enemy's Accuracy rating "
 "to calculate their likeliness to land a direct hit."
 msgstr ""
-"Процент на избягване. Тази стойност се изважда от вражеският процент на "
+"Процент на избягване. Тази стойност се изважда от вражеския процент на "
 "точност, за да се изчисли тяхната вероятност да направят директен удар."
 
 #: ../../../src/Stats.cpp:68

@@ -416,7 +416,7 @@ msgstr "Общността в OpenGameArt"
 
 #: ../cutscenes/credits.txt:119
 msgid "For Tiled and the Flare map exporter:"
-msgstr "За Tiled и експортъра на карти за Flare:"
+msgstr "За Tiled и експортърът на карти за Flare:"
 
 #: ../cutscenes/credits.txt:120
 msgid "Thorbjørn Lindeijer"

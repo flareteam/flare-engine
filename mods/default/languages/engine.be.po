@@ -706,7 +706,7 @@ msgstr "Гарачая клавіша: %s"
 
 #: ../../../src/MenuActionBar.cpp:580
 msgid "Not enough MP."
-msgstr ""
+msgstr "Не стае маны."
 
 #: ../../../src/MenuActiveEffects.cpp:123
 #, c-format

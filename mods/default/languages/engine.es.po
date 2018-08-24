@@ -416,7 +416,7 @@ msgstr "Crear"
 
 #: ../../../src/GameStateNew.cpp:76
 msgid "Randomize"
-msgstr ""
+msgstr "Aleatorizar"
 
 #: ../../../src/GameStateNew.cpp:92
 msgid "Choose a Portrait"
@@ -709,7 +709,7 @@ msgstr "Atajo: %s"
 
 #: ../../../src/MenuActionBar.cpp:580
 msgid "Not enough MP."
-msgstr ""
+msgstr "PM insuficientes."
 
 #: ../../../src/MenuActiveEffects.cpp:123
 #, c-format
@@ -746,7 +746,7 @@ msgstr "%d puntos de atributos restantes"
 #: ../../../src/MenuCharacter.cpp:354
 #, c-format
 msgid "Reduces the damage taken from \"%s\" elemental attacks."
-msgstr ""
+msgstr "Reduce el daño recibido de ataques elementales de \"%s\"."
 
 #: ../../../src/MenuCharacter.cpp:364 ../../../src/MenuManager.cpp:288
 #, c-format
@@ -943,7 +943,7 @@ msgstr "Muerto"
 
 #: ../../../src/MenuEnemy.cpp:161
 msgid "Destroyed"
-msgstr ""
+msgstr "Destruido"
 
 #: ../../../src/MenuExit.cpp:85 ../../../src/MenuExit.cpp:139
 msgid "Paused"
@@ -1414,7 +1414,7 @@ msgstr "PM máx."
 
 #: ../../../src/Stats.cpp:49
 msgid "Total amount of MP."
-msgstr ""
+msgstr "Cantidad total de PM."
 
 #: ../../../src/Stats.cpp:53
 msgid "MP Regen"
@@ -1433,6 +1433,9 @@ msgid ""
 "Accuracy rating. The enemy's Avoidance rating is subtracted from this value "
 "to calculate your likeliness to land a direct hit."
 msgstr ""
+"Puntuación de certeza en ataque. La puntuación de esquivar del enemigo se "
+"resta a este valor para calcular tus posibilidades de acertarle con un golpe"
+" directo."
 
 #: ../../../src/Stats.cpp:63
 msgid "Avoidance"
@@ -1443,6 +1446,8 @@ msgid ""
 "Avoidance rating. This value is subtracted from the enemy's Accuracy rating "
 "to calculate their likeliness to land a direct hit."
 msgstr ""
+"Puntuación de esquivar. La puntuación de esquivar del enemigo se resta a "
+"este valor para calcular tu posibilidad de acertarle con un golpe directo."
 
 #: ../../../src/Stats.cpp:68
 msgid "Absorb Min"
@@ -1450,7 +1455,7 @@ msgstr "Mín. absorción"
 
 #: ../../../src/Stats.cpp:69 ../../../src/Stats.cpp:74
 msgid "Reduces the amount of damage taken."
-msgstr ""
+msgstr "Reduce la cantidad de daño recibido."
 
 #: ../../../src/Stats.cpp:73
 msgid "Absorb Max"
@@ -1462,7 +1467,7 @@ msgstr "Prob. de golpe crítico"
 
 #: ../../../src/Stats.cpp:79
 msgid "Chance for an attack to do extra damage."
-msgstr ""
+msgstr "Probabilidad de que un ataque cause daño adicional."
 
 #: ../../../src/Stats.cpp:83
 msgid "Bonus XP"
