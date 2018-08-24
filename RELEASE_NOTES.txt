@@ -60,6 +60,7 @@ Game changes:
 * Added color-coded overlays for item icons and improved quantity readability.
 * Added new sound effects for cursed graves.
 * Added new sound effect for when the player does not have enough MP to use a power.
+* Tweaked the bonuses for some unique items to include bonuses to Power levels.
 
 
 
