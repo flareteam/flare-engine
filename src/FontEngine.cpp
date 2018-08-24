@@ -143,6 +143,8 @@ Point FontEngine::calc_size(const std::string& text_with_newlines, int width) {
 	next_word = getNextToken(fulltext, cursor, space);
 
 	while(cursor != std::string::npos) {
+		size_t old_cursor = cursor;
+
 		builder << next_word;
 
 		if (calc_width(builder.str()) > width) {
@@ -183,9 +185,10 @@ Point FontEngine::calc_size(const std::string& text_with_newlines, int width) {
 			builder_prev.str(builder.str());
 		}
 
-		std::string old_word = next_word;
 		next_word = getNextToken(fulltext, cursor, space); // next word
-		if (old_word == next_word)
+
+		// next token is the same location as the previous token; abort
+		if (cursor == old_cursor)
 			break;
 	}
 
@@ -253,6 +256,7 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, Imag
 	next_word = getNextToken(fulltext, cursor, space);
 
 	while(cursor != std::string::npos) {
+		size_t old_cursor = cursor;
 
 		builder << next_word;
 
@@ -287,9 +291,10 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, Imag
 			builder_prev.str(builder.str());
 		}
 
-		std::string old_word = next_word;
 		next_word = getNextToken(fulltext, cursor, space); // next word
-		if (old_word == next_word)
+
+		// next token is the same location as the previous token; abort
+		if (cursor == old_cursor)
 			break;
 	}
 
