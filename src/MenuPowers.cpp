@@ -91,6 +91,37 @@ MenuPowersCell* MenuPowersCellGroup::getCurrent() {
 	return &cells[current_cell];
 }
 
+MenuPowersCell* MenuPowersCellGroup::getBonusCurrent(MenuPowersCell* pcell) {
+	if (bonus_levels.empty())
+		return pcell;
+
+	size_t current = current_cell;
+
+	for (size_t i = 0; i < cells.size(); ++i) {
+		if (pcell == &cells[i]) {
+			current = i;
+			break;
+		}
+	}
+
+	int current_bonus_levels = getBonusLevels();
+	size_t bonus_cell = current + static_cast<size_t>(current_bonus_levels);
+
+	if (bonus_cell >= cells.size())
+		return &cells[cells.size() - 1];
+
+	return &cells[bonus_cell];
+}
+
+int MenuPowersCellGroup::getBonusLevels() {
+	int blevel = 0;
+	for (size_t i = 0; i < bonus_levels.size(); ++i) {
+		if (current_cell >= bonus_levels[i].first)
+			blevel += bonus_levels[i].second;
+	}
+	return blevel;
+}
+
 MenuPowers::MenuPowers()
 	: skip_section(false)
 	, powers_unlock(NULL)
@@ -594,6 +625,16 @@ void MenuPowers::lockCell(MenuPowersCell* pcell) {
 	}
 }
 
+bool MenuPowers::isBonusCell(MenuPowersCell* pcell) {
+	if (!pcell)
+		return false;
+
+	if (power_cell[pcell->group].getBonusLevels() <= 0)
+		return false;
+
+	return pcell == power_cell[pcell->group].getBonusCurrent(power_cell[pcell->group].getCurrent());
+}
+
 MenuPowersCell* MenuPowers::getCellByPowerIndex(int power_index) {
 	// Powers can not have an id of 0
 	if (power_index <= 0)
@@ -628,7 +669,10 @@ void MenuPowers::upgradePower(MenuPowersCell* pcell, bool ignore_tab) {
 void MenuPowers::setUnlockedPowers() {
 	bool did_cell_lock = false;
 
-	for (size_t i=0; i<power_cell.size(); ++i) {
+	// restore bonus-modified action bar powers before performing upgrades
+	clearActionBarBonusLevels();
+
+	for (size_t i = 0; i<power_cell.size(); ++i) {
 		for (size_t j = 0; j < power_cell[i].cells.size(); ++j) {
 			if (std::find(pc->stats.powers_list.begin(), pc->stats.powers_list.end(), power_cell[i].cells[j].id) != pc->stats.powers_list.end()) {
 				power_cell[i].cells[j].is_unlocked = true;
@@ -665,16 +709,18 @@ void MenuPowers::setUnlockedPowers() {
 		return;
 	}
 
-	// handle passive powers
 	for (size_t i = 0; i < power_cell.size(); ++i) {
+		// handle passive powers
 		MenuPowersCell* current_pcell = power_cell[i].getCurrent();
 		if (!current_pcell->is_unlocked)
 			continue;
 
+		MenuPowersCell* bonus_pcell = power_cell[i].getBonusCurrent(current_pcell);
+
 		for (size_t j = 0; j < power_cell[i].cells.size(); ++j) {
 			MenuPowersCell* pcell = &power_cell[i].cells[j];
 
-			if (pcell != current_pcell || ((!checkRequirements(pcell) || !pcell->is_unlocked) && pcell->passive_on)) {
+			if (pcell != bonus_pcell || ((!checkRequirements(pcell) || (!pcell->is_unlocked && !isBonusCell(pcell))) && pcell->passive_on)) {
 				// passive power is activated, but does not meet requirements, so remove it
 				std::vector<int>::iterator passive_it = std::find(pc->stats.powers_passive.begin(), pc->stats.powers_passive.end(), pcell->id);
 				if (passive_it != pc->stats.powers_passive.end())
@@ -684,7 +730,7 @@ void MenuPowers::setUnlockedPowers() {
 				pcell->passive_on = false;
 				pc->stats.refresh_stats = true;
 			}
-			else if (pcell == current_pcell && pcell->is_unlocked && checkRequirements(pcell) && !pcell->passive_on) {
+			else if (pcell == bonus_pcell && checkRequirements(current_pcell) && !pcell->passive_on) {
 				// passive power has not been activated, so activate it here
 				std::vector<int>::iterator passive_it = std::find(pc->stats.powers_passive.begin(), pc->stats.powers_passive.end(), pcell->id);
 				if (passive_it == pc->stats.powers_passive.end())
@@ -695,6 +741,11 @@ void MenuPowers::setUnlockedPowers() {
 				if (pc->stats.effects.triggered_others)
 					powers->activateSinglePassive(&pc->stats, pcell->id);
 			}
+		}
+
+		// update the action bar for powers upgraded via item bonuses
+		if (current_pcell != bonus_pcell) {
+			menu->act->addPower(bonus_pcell->id, current_pcell->id);
 		}
 	}
 }
@@ -715,30 +766,41 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, boo
 	if (!pcell)
 		return;
 
-	if (pcell->upgrade_level > 0)
-		tip_data->addText(powers->powers[pcell->id].name + " (" + msg->get("Level %d", pcell->upgrade_level) + ")");
-	else
-		tip_data->addText(powers->powers[pcell->id].name);
+	MenuPowersCell* pcell_bonus = power_cell[pcell->group].getBonusCurrent(pcell);
 
-	if (powers->powers[pcell->id].passive) tip_data->addText(msg->get("Passive"));
-	tip_data->addColoredText(Utils::substituteVarsInString(powers->powers[pcell->id].description, pc), font->getColor(FontEngine::COLOR_ITEM_FLAVOR));
+	const Power &pwr = powers->powers[pcell_bonus->id];
 
-	// add mana cost
-	if (powers->powers[pcell->id].requires_mp > 0) {
-		tip_data->addText(msg->get("Costs %d MP", powers->powers[pcell->id].requires_mp));
-	}
-	// add health cost
-	if (powers->powers[pcell->id].requires_hp > 0) {
-		tip_data->addText(msg->get("Costs %d HP", powers->powers[pcell->id].requires_hp));
-	}
-	// add cooldown time
-	if (powers->powers[pcell->id].cooldown > 0) {
+	{
 		std::stringstream ss;
-		ss << msg->get("Cooldown:") << " " << Utils::getDurationString(powers->powers[pcell->id].cooldown, 2);
+		ss << pwr.name;
+		if (pcell->upgrade_level > 0) {
+			ss << " (" << msg->get("Level %d", pcell->upgrade_level);
+			int bonus_levels = power_cell[pcell->group].getBonusLevels();
+			if (bonus_levels > 0)
+				ss << ", +" << bonus_levels;
+			ss << ")";
+		}
 		tip_data->addText(ss.str());
 	}
 
-	const Power &pwr = powers->powers[pcell->id];
+	if (pwr.passive) tip_data->addText(msg->get("Passive"));
+	tip_data->addColoredText(Utils::substituteVarsInString(pwr.description, pc), font->getColor(FontEngine::COLOR_ITEM_FLAVOR));
+
+	// add mana cost
+	if (pwr.requires_mp > 0) {
+		tip_data->addText(msg->get("Costs %d MP", pwr.requires_mp));
+	}
+	// add health cost
+	if (pwr.requires_hp > 0) {
+		tip_data->addText(msg->get("Costs %d HP", pwr.requires_hp));
+	}
+	// add cooldown time
+	if (pwr.cooldown > 0) {
+		std::stringstream ss;
+		ss << msg->get("Cooldown:") << " " << Utils::getDurationString(pwr.cooldown, 2);
+		tip_data->addText(ss.str());
+	}
+
 	for (size_t i=0; i<pwr.post_effects.size(); ++i) {
 		std::stringstream ss;
 		EffectDef* effect_ptr = powers->getEffectDef(pwr.post_effects[i].id);
@@ -1045,7 +1107,7 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, boo
 	}
 
 	std::set<std::string>::iterator it;
-	for (it = powers->powers[pcell->id].requires_flags.begin(); it != powers->powers[pcell->id].requires_flags.end(); ++it) {
+	for (it = pwr.requires_flags.begin(); it != pwr.requires_flags.end(); ++it) {
 		for (size_t i = 0; i < eset->equip_flags.list.size(); ++i) {
 			if ((*it) == eset->equip_flags.list[i].id) {
 				tip_data->addText(msg->get("Requires a %s", msg->get(eset->equip_flags.list[i].name)));
@@ -1372,7 +1434,7 @@ int MenuPowers::click(const Point& mouse) {
 				else {
 					tablist.setCurrent(NULL);
 				}
-				return pcell->id;
+				return power_cell[i].getBonusCurrent(pcell)->id;
 			}
 			else
 				return 0;
@@ -1414,12 +1476,70 @@ bool MenuPowers::meetsUsageStats(int power_index) {
 	if (!pcell)
 		return true;
 
+	// ignore bonuses to power level
+	MenuPowersCell* base_pcell = power_cell[pcell->group].getCurrent();
+
+	if (pc->stats.level < base_pcell->requires_level)
+		return false;
+
 	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
-		if (pc->stats.get_primary(i) < pcell->requires_primary[i])
+		if (pc->stats.get_primary(i) < base_pcell->requires_primary[i])
 			return false;
 	}
 
 	return true;
+}
+
+void MenuPowers::clearActionBarBonusLevels() {
+	for (size_t i = 0; i < power_cell.size(); ++i) {
+		if (power_cell[i].getBonusLevels() > 0) {
+			MenuPowersCell* pcell = power_cell[i].getCurrent();
+			menu->act->addPower(pcell->id, power_cell[i].getBonusCurrent(pcell)->id);
+		}
+	}
+}
+
+void MenuPowers::clearBonusLevels() {
+	clearActionBarBonusLevels();
+
+	for (size_t i = 0; i < power_cell.size(); ++i) {
+		power_cell[i].bonus_levels.clear();
+	}
+}
+
+void MenuPowers::addBonusLevels(int power_index, int bonus_levels) {
+	MenuPowersCell* pcell = getCellByPowerIndex(power_index);
+
+	if (!pcell)
+		return;
+
+	MenuPowersCellGroup* pgroup = &power_cell[pcell->group];
+
+	size_t min_level = pgroup->cells.size() - 1;
+	for (size_t i = 0; i < pgroup->cells.size(); ++i) {
+		if (pcell == &pgroup->cells[i]) {
+			min_level = i;
+			break;
+		}
+	}
+
+	std::pair<size_t, int> bonus(min_level, bonus_levels);
+	pgroup->bonus_levels.push_back(bonus);
+}
+
+std::string MenuPowers::getItemBonusPowerReqString(int power_index) {
+	MenuPowersCell* pcell = getCellByPowerIndex(power_index);
+
+	if (!pcell)
+		return "";
+
+	std::stringstream ss;
+	ss << powers->powers[power_index].name;
+	if (pcell->upgrade_level > 0) {
+		ss << " (" << msg->get("Level %d", pcell->upgrade_level) << ")";
+	}
+
+	return ss.str();
 }
 
 bool MenuPowers::isTabListSelected() {

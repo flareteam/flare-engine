@@ -74,6 +74,8 @@ class MenuPowersCellGroup {
 public:
 	MenuPowersCellGroup();
 	MenuPowersCell* getCurrent();
+	MenuPowersCell* getBonusCurrent(MenuPowersCell* pcell);
+	int getBonusLevels();
 
 	int tab;
 	Point pos;
@@ -82,6 +84,8 @@ public:
 	std::vector<MenuPowersCell> cells;
 
 	WidgetButton* upgrade_button;
+
+	std::vector< std::pair<size_t, int> > bonus_levels;
 };
 
 class MenuPowers : public Menu {
@@ -98,6 +102,7 @@ private:
 	bool checkUnlock(MenuPowersCell* pcell);
 	bool checkUpgrade(MenuPowersCell* pcell);
 	void lockCell(MenuPowersCell* pcell);
+	bool isBonusCell(MenuPowersCell* pcell);
 
 	MenuPowersCell* getCellByPowerIndex(int power_index);
 
@@ -151,6 +156,11 @@ public:
 	void resetToBasePowers();
 
 	bool meetsUsageStats(int power_index);
+
+	void clearActionBarBonusLevels();
+	void clearBonusLevels();
+	void addBonusLevels(int power_index, int bonus_levels);
+	std::string getItemBonusPowerReqString(int power_index);
 
 	std::vector<WidgetSlot*> slots; // power slot Widgets
 

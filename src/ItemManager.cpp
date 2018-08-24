@@ -31,7 +31,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FontEngine.h"
 #include "InputState.h"
 #include "ItemManager.h"
+#include "MenuManager.h"
+#include "MenuPowers.h"
 #include "MessageEngine.h"
+#include "PowerManager.h"
 #include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
@@ -265,6 +268,13 @@ void ItemManager::loadItems(const std::string& filename) {
 			}
 			BonusData bdata;
 			parseBonus(bdata, infile);
+			items[id].bonus.push_back(bdata);
+		}
+		else if (infile.key == "bonus_power_level") {
+			// @ATTR bonus_power_level|repeatable(power_id, int) : Base power, Bonus levels|Grants bonus levels to a given base power.
+			BonusData bdata;
+			bdata.power_id = Parse::popFirstInt(infile.val);
+			bdata.value = Parse::popFirstInt(infile.val);
 			items[id].bonus.push_back(bdata);
 		}
 		else if (infile.key == "soundfx") {
@@ -565,9 +575,17 @@ void ItemManager::loadSets(const std::string& filename) {
 				item_sets[id].bonus.clear();
 				clear_bonus = false;
 			}
-			Set_bonus bonus;
+			SetBonusData bonus;
 			bonus.requirement = Parse::popFirstInt(infile.val);
 			parseBonus(bonus, infile);
+			item_sets[id].bonus.push_back(bonus);
+		}
+		else if (infile.key == "bonus_power_level") {
+			// @ATTR bonus_power_level|repeatable(int, power_id, int) : Required set item count, Base power, Bonus levels|Grants bonus levels to a given base power.
+			SetBonusData bonus;
+			bonus.requirement = Parse::popFirstInt(infile.val);
+			bonus.power_id = Parse::popFirstInt(infile.val);
+			bonus.value = Parse::popFirstInt(infile.val);
 			item_sets[id].bonus.push_back(bonus);
 		}
 		else {
@@ -657,6 +675,14 @@ void ItemManager::getBonusString(std::stringstream& ss, BonusData* bdata) {
 	}
 	else if (bdata->base_index > -1 && static_cast<size_t>(bdata->base_index) < eset->primary_stats.list.size()) {
 		ss << " " << eset->primary_stats.list[bdata->base_index].name;
+	}
+	else if (powers && bdata->power_id > 0) {
+		ss << " " << powers->powers[bdata->power_id].name;
+		if (menu && menu->pow) {
+			std::string req_str = menu->pow->getItemBonusPowerReqString(bdata->power_id);
+			if (!req_str.empty())
+				ss << " (" << msg->get("Requires %s", req_str) << ")";
+		}
 	}
 }
 
@@ -873,7 +899,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 		while (bonus_counter < set.bonus.size()) {
 			ss.str("");
 
-			Set_bonus* bdata = &set.bonus[bonus_counter];
+			SetBonusData* bdata = &set.bonus[bonus_counter];
 
 			ss << msg->get("%d items:", bdata->requirement) << ' ';
 

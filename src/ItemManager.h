@@ -55,6 +55,7 @@ public:
 	bool is_speed;
 	bool is_attack_speed;
 	int value;
+	int power_id; // for bonus_power_level
 	BonusData()
 		: stat_index(-1)
 		, damage_index_min(-1)
@@ -63,14 +64,15 @@ public:
 		, base_index(-1)
 		, is_speed(false)
 		, is_attack_speed(false)
-		, value(0) {
+		, value(0)
+		, power_id(0) {
 	}
 };
 
-class Set_bonus : public BonusData {
+class SetBonusData : public BonusData {
 public:
 	int requirement;
-	Set_bonus()
+	SetBonusData()
 		: BonusData()
 		, requirement(0) {
 	}
@@ -142,7 +144,7 @@ class ItemSet {
 public:
 	std::string name;            // item set name displayed on long and short tool tips
 	std::vector<int> items;      // items, included into set
-	std::vector<Set_bonus> bonus;// vector with stats to increase/decrease
+	std::vector<SetBonusData> bonus;// vector with stats to increase/decrease
 	Color color;
 
 	ItemSet()

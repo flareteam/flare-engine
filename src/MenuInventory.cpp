@@ -35,6 +35,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Menu.h"
 #include "MenuActionBar.h"
 #include "MenuInventory.h"
+#include "MenuManager.h"
+#include "MenuPowers.h"
 #include "MessageEngine.h"
 #include "PowerManager.h"
 #include "Settings.h"
@@ -962,6 +964,9 @@ void MenuInventory::applyEquipment() {
 	// remove all effects and bonuses added by items
 	pc->stats.effects.clearItemEffects();
 
+	// reset power level bonuses
+	menu->pow->clearBonusLevels();
+
 	applyItemStats();
 	applyItemSetBonuses();
 
@@ -1034,7 +1039,6 @@ void MenuInventory::applyItemStats() {
 			if (pc->stats.effects.triggered_others)
 				powers->activateSinglePassive(&pc->stats, item.power);
 		}
-
 	}
 }
 
@@ -1056,13 +1060,12 @@ void MenuInventory::applyItemSetBonuses() {
 		}
 	}
 	// apply item set bonuses
-	ItemSet temp_set;
-	for (unsigned k=0; k<set.size(); k++) {
-		temp_set = items->item_sets[set[k]];
-		unsigned bonus_counter = 0;
-		for (bonus_counter=0; bonus_counter<temp_set.bonus.size(); bonus_counter++) {
-			if (temp_set.bonus[bonus_counter].requirement > quantity[k]) continue;
-			applyBonus(&temp_set.bonus[bonus_counter]);
+	for (size_t i = 0; i < set.size(); ++i) {
+		ItemSet& temp_set = items->item_sets[set[i]];
+		for (size_t j = 0; j < temp_set.bonus.size(); ++j) {
+			if (temp_set.bonus[j].requirement > quantity[i])
+				continue;
+			applyBonus(&temp_set.bonus[j]);
 		}
 	}
 }
@@ -1090,6 +1093,10 @@ void MenuInventory::applyBonus(const BonusData* bdata) {
 	}
 	else if (bdata->base_index > -1 && static_cast<size_t>(bdata->base_index) < eset->primary_stats.list.size()) {
 		ed.id = ed.type = eset->primary_stats.list[bdata->base_index].id;
+	}
+	else if (bdata->power_id > 0) {
+		menu->pow->addBonusLevels(bdata->power_id, bdata->value);
+		return; // don't add item effect
 	}
 
 	pc->stats.effects.addItemEffect(ed, 0, bdata->value);

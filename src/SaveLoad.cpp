@@ -132,6 +132,9 @@ void SaveLoad::saveGame() {
 		outfile << "spawn=" << mapr->respawn_map << "," << static_cast<int>(mapr->respawn_point.x) << "," << static_cast<int>(mapr->respawn_point.y) << "\n";
 
 		// action bar
+		// NOTE we need to reset any bonus-modified powers in the action bar before writing
+		// we use menu->pow->setUnlockedPowers() after to restore the action bar state
+		menu->pow->clearActionBarBonusLevels();
 		outfile << "actionbar=";
 		for (unsigned i = 0; i < static_cast<unsigned>(MenuActionBar::SLOT_MAX); i++) {
 			if (i < menu->act->slots_count)
@@ -146,6 +149,7 @@ void SaveLoad::saveGame() {
 			if (i < MenuActionBar::SLOT_MAX - 1) outfile << ",";
 		}
 		outfile << "\n";
+		menu->pow->setUnlockedPowers();
 
 		//shapeshifter value
 		if (pc->stats.transform_type == "untransform" || pc->stats.transform_duration != -1) outfile << "transformed=" << "\n";

@@ -1043,6 +1043,8 @@ body {
 
 <p><strong>bonus</strong> | <code>repeatable(predefined_string, int) : Stat name, Value</code> | Adds a bonus to the item by stat name, example  bonus=hp, 50</p>
 
+<p><strong>bonus_power_level</strong> | <code>repeatable(power_id, int) : Base power, Bonus levels</code> | Grants bonus levels to a given base power.</p>
+
 <p><strong>soundfx</strong> | <code>filename</code> | Sound effect filename to play for the specific item.</p>
 
 <p><strong>gfx</strong> | <code>filename</code> | Filename of an animation set to display when the item is equipped.</p>
@@ -1110,6 +1112,8 @@ body {
 <p><strong>color</strong> | <code>color</code> | A specific of color for the set.</p>
 
 <p><strong>bonus</strong> | <code>repeatable(int, string, int) : Required set item count, Stat name, Value</code> | Bonus to append to items in the set.</p>
+
+<p><strong>bonus_power_level</strong> | <code>repeatable(int, power_id, int) : Required set item count, Base power, Bonus levels</code> | Grants bonus levels to a given base power.</p>
 
 <hr />
 
