@@ -634,7 +634,7 @@ msgstr "Comas-seasaimh an aghaidh %s"
 #: ../../../src/ItemManager.cpp:684
 #, c-format
 msgid "Requires %s"
-msgstr ""
+msgstr "Feumach air %s"
 
 #: ../../../src/ItemManager.cpp:733
 msgid "Quest Item"

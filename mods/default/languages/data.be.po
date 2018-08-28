@@ -248,7 +248,7 @@ msgstr "dumaosen"
 
 #: ../cutscenes/credits.txt:63
 msgid "Emil"
-msgstr ""
+msgstr "Эміль"
 
 #: ../cutscenes/credits.txt:64
 msgid "Eric R"

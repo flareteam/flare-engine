@@ -627,7 +627,7 @@ msgstr "Супраціўленне %s"
 #: ../../../src/ItemManager.cpp:684
 #, c-format
 msgid "Requires %s"
-msgstr ""
+msgstr "Патрабуецца %s"
 
 #: ../../../src/ItemManager.cpp:733
 msgid "Quest Item"
