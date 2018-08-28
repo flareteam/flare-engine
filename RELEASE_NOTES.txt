@@ -62,6 +62,7 @@ Game changes:
 * Added new sound effects for cursed graves.
 * Added new sound effect for when the player does not have enough MP to use a power.
 * Tweaked the bonuses for some unique items to include bonuses to Power levels.
+* Some small additions have been made to the Hyperspace map. Most notably is a book which can be used to re-watch cutscenes.
 
 
 
