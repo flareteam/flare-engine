@@ -35,6 +35,7 @@ Engine fixes:
 * Improved performance when dealing with campaign statuses.
 * Fix NPCs/enemies not begin affected by statuses set in on_load events until the player re-entered the map.
 * Various fixes to MenuPowers, including better handling of when powers no longer meet their requirements.
+* Fixed crashes that occurred when NPC did not have animations.
 * Lots of code cleanup.
 
 New translations:

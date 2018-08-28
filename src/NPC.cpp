@@ -304,7 +304,8 @@ int NPC::loadSound(const std::string& fname, int vox_type) {
 }
 
 void NPC::logic() {
-	activeAnimation->advanceFrame();
+	if (activeAnimation)
+		activeAnimation->advanceFrame();
 }
 
 bool NPC::playSoundIntro() {
@@ -528,7 +529,10 @@ void NPC::processEvent(unsigned int dialog_node, unsigned int cursor) {
 }
 
 Renderable NPC::getRender() {
-	Renderable r = activeAnimation->getCurrentFrame(direction);
+	Renderable r;
+	if (activeAnimation) {
+		r = activeAnimation->getCurrentFrame(direction);
+	}
 	r.map_pos.x = pos.x;
 	r.map_pos.y = pos.y;
 
