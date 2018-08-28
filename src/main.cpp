@@ -76,8 +76,6 @@ bool init_finished = false;
  * Game initialization.
  */
 static void init(const CmdLineArgs& cmd_line_args) {
-	settings = new Settings();
-
 	/**
 	 * Set system paths
 	 * PATH_CONF is for user-configurable settings files (e.g. keybindings)
@@ -336,6 +334,8 @@ void EmscriptenMainLoop() {
 #endif
 
 int main(int argc, char *argv[]) {
+	settings = new Settings();
+
 	bool debug_event = false;
 	bool done = false;
 	CmdLineArgs cmd_line_args;
