@@ -2,14 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
-#, fuzzy
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-23 23:10-0400\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2018-08-29 11:35+0700\n"
 "Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
 "Language-Team: Vietnamese (https://www.transifex.com/flareorg/teams/84925/vi/)\n"
 "MIME-Version: 1.0\n"
@@ -17,6 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: vi\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: ../../../src/Avatar.cpp:367
 #, c-format
@@ -89,7 +89,7 @@ msgstr "Các lời nguyền đã bị vô hiệu."
 
 #: ../../../src/CampaignManager.cpp:220
 msgid "HP and MP restored, negative effects removed"
-msgstr "Thể chất và ma pháp đã hồi phục, các lời nguyền đã bị vô hiệu."
+msgstr "Thể chất và ma pháp đã hồi phục, các lời nguyền đã bị vô hiệu"
 
 #: ../../../src/DeviceList.cpp:56
 msgid ""
@@ -273,18 +273,22 @@ msgid ""
 "Will try to store surfaces in video memory versus system memory. The effect "
 "this has on performance depends on the renderer."
 msgstr ""
+"Lưu dữ liệu bề mặt vào bộ nhớ đồ hoạ thay cho RAM. Hiệu quả của tuỳ chọn "
+"này phụ thuộc vào thiết bị kết xuất."
 
 #: ../../../src/GameStateConfigDesktop.cpp:188
 msgid ""
 "Prevents screen tearing. Disable if you experience \"stuttering\" in "
 "windowed mode or input lag."
 msgstr ""
+"Giúp tránh rách hình. Tắt nếu bạn thấy lag khi điều khiển hoặc chế độ cửa "
+"sổ bị \"lắp\"."
 
 #: ../../../src/GameStateConfigDesktop.cpp:189
 msgid ""
 "When enabled, this uses the screen DPI in addition to the window dimensions "
-"to scale the rendering resolution. Otherwise, only the window dimensions are"
-" used."
+"to scale the rendering resolution. Otherwise, only the window dimensions "
+"are used."
 msgstr ""
 "Khi bật, sử dụng thêm DPI màn hình cùng kích thước cửa sổ để phóng đồ hoạ. "
 "Nếu không, chỉ sử dụng kích thước cửa sổ."
@@ -410,7 +414,7 @@ msgstr "Tạo"
 
 #: ../../../src/GameStateNew.cpp:76
 msgid "Randomize"
-msgstr ""
+msgstr "Ngẫu nhiên"
 
 #: ../../../src/GameStateNew.cpp:92
 msgid "Choose a Portrait"
@@ -623,7 +627,7 @@ msgstr "Khả năng kháng %s"
 #: ../../../src/ItemManager.cpp:684
 #, c-format
 msgid "Requires %s"
-msgstr ""
+msgstr "Yêu cầu %s"
 
 #: ../../../src/ItemManager.cpp:733
 msgid "Quest Item"
@@ -708,7 +712,7 @@ msgstr "Phím: %s"
 
 #: ../../../src/MenuActionBar.cpp:580
 msgid "Not enough MP."
-msgstr ""
+msgstr "Không đủ ma pháp."
 
 #: ../../../src/MenuActiveEffects.cpp:124
 #, c-format
@@ -735,17 +739,17 @@ msgstr "Cấp độ"
 #: ../../../src/MenuCharacter.cpp:310
 #, c-format
 msgid "%d unspent stat point"
-msgstr ""
+msgstr "%d điểm thuộc tính chưa dùng"
 
 #: ../../../src/MenuCharacter.cpp:313
 #, c-format
 msgid "%d unspent stat points"
-msgstr ""
+msgstr "%d điểm thuộc tính chưa dùng"
 
 #: ../../../src/MenuCharacter.cpp:355
 #, c-format
 msgid "Reduces the damage taken from \"%s\" elemental attacks."
-msgstr ""
+msgstr "Giảm sát thương từ nguyên tố %s."
 
 #: ../../../src/MenuCharacter.cpp:365 ../../../src/MenuManager.cpp:287
 #, c-format
@@ -870,8 +874,8 @@ msgid ""
 "Prints a list of items that match a search term. No search term will list "
 "all items"
 msgstr ""
-"In các đồ vật khớp với từ khoá tìm kiếm. Nếu không cung cấp từ khoá, liệt kê"
-" tất cả."
+"In các đồ vật khớp với từ khoá tìm kiếm. Nếu không cung cấp từ khoá, liệt "
+"kê tất cả."
 
 #: ../../../src/MenuDevConsole.cpp:367
 msgid ""
@@ -940,7 +944,7 @@ msgstr "Đã chết"
 
 #: ../../../src/MenuEnemy.cpp:161
 msgid "Destroyed"
-msgstr ""
+msgstr "Đã bị phá huỷ"
 
 #: ../../../src/MenuExit.cpp:85 ../../../src/MenuExit.cpp:139
 msgid "Paused"
@@ -966,12 +970,12 @@ msgstr "Mất %d%% %s."
 #: ../../../src/MenuInventory.cpp:182
 #, c-format
 msgid "Lost %d%% of total XP."
-msgstr "Mất %d%% tổng điểm kinh nghiệm"
+msgstr "Mất %d%% tổng điểm kinh nghiệm."
 
 #: ../../../src/MenuInventory.cpp:187
 #, c-format
 msgid "Lost %d%% of current level XP."
-msgstr "Mất %d%% điểm kinh nghiệm cấp độ hiện tại"
+msgstr "Mất %d%% điểm kinh nghiệm cấp độ hiện tại."
 
 #: ../../../src/MenuInventory.cpp:213
 #, c-format
@@ -1208,12 +1212,12 @@ msgstr "Yêu cầu 1 điểm kĩ năng"
 #: ../../../src/MenuPowers.cpp:1352
 #, c-format
 msgid "%d unspent skill point"
-msgstr ""
+msgstr "%d điểm kĩ năng chưa dùng"
 
 #: ../../../src/MenuPowers.cpp:1355
 #, c-format
 msgid "%d unspent skill points"
-msgstr ""
+msgstr "%d điểm kĩ năng chưa dùng"
 
 #: ../../../src/MenuPowers.cpp:1385
 msgid "Next Level:"
@@ -1254,7 +1258,7 @@ msgstr "Không thể biến về trạng thái ban đầu ở vị trí này."
 
 #: ../../../src/QuestLog.cpp:234
 msgid "Completed Quests"
-msgstr ""
+msgstr "Nhiệm vụ đã hoàn thành"
 
 #: ../../../src/SaveLoad.cpp:243 ../../../src/SaveLoad.cpp:244
 msgid "Game saved."
@@ -1395,7 +1399,7 @@ msgstr "Điểm thể chất tối đa"
 
 #: ../../../src/Stats.cpp:39
 msgid "Total amount of HP."
-msgstr ""
+msgstr "Tổng điểm thể chất."
 
 #: ../../../src/Stats.cpp:43
 msgid "HP Regen"
@@ -1403,7 +1407,7 @@ msgstr "Hồi thể chất"
 
 #: ../../../src/Stats.cpp:44
 msgid "Ticks of HP regen per minute."
-msgstr "Số điểm thể chất hồi một phút"
+msgstr "Số điểm thể chất hồi một phút."
 
 #: ../../../src/Stats.cpp:48
 msgid "Max MP"
@@ -1411,7 +1415,7 @@ msgstr "Điểm ma pháp tối đa"
 
 #: ../../../src/Stats.cpp:49
 msgid "Total amount of MP."
-msgstr ""
+msgstr "Tổng điểm ma pháp."
 
 #: ../../../src/Stats.cpp:53
 msgid "MP Regen"
@@ -1419,7 +1423,7 @@ msgstr "Hồi ma pháp"
 
 #: ../../../src/Stats.cpp:54
 msgid "Ticks of MP regen per minute."
-msgstr "Số điểm ma pháp hồi một phút"
+msgstr "Số điểm ma pháp hồi một phút."
 
 #: ../../../src/Stats.cpp:58
 msgid "Accuracy"
@@ -1430,6 +1434,7 @@ msgid ""
 "Accuracy rating. The enemy's Avoidance rating is subtracted from this value "
 "to calculate your likeliness to land a direct hit."
 msgstr ""
+"Khả năng đánh trúng bằng độ chính xác trừ đi khả năng tránh của kẻ thù."
 
 #: ../../../src/Stats.cpp:63
 msgid "Avoidance"
@@ -1440,6 +1445,7 @@ msgid ""
 "Avoidance rating. This value is subtracted from the enemy's Accuracy rating "
 "to calculate their likeliness to land a direct hit."
 msgstr ""
+"Khả năng bị đánh trúng bằng độ chính xác của kẻ thù trừ đi khả năng tránh."
 
 #: ../../../src/Stats.cpp:68
 msgid "Absorb Min"
@@ -1447,7 +1453,7 @@ msgstr "Hấp thụ tối đa"
 
 #: ../../../src/Stats.cpp:69 ../../../src/Stats.cpp:74
 msgid "Reduces the amount of damage taken."
-msgstr ""
+msgstr "Giảm sát thương phải chịu."
 
 #: ../../../src/Stats.cpp:73
 msgid "Absorb Max"
@@ -1459,7 +1465,7 @@ msgstr "Xác suất siêu sát thương"
 
 #: ../../../src/Stats.cpp:79
 msgid "Chance for an attack to do extra damage."
-msgstr ""
+msgstr "Xác suất thêm sát thương cho đòn tấn công."
 
 #: ../../../src/Stats.cpp:83
 msgid "Bonus XP"
