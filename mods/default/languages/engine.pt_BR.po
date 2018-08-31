@@ -417,7 +417,7 @@ msgstr "Criar"
 
 #: ../../../src/GameStateNew.cpp:76
 msgid "Randomize"
-msgstr ""
+msgstr "Aleatória"
 
 #: ../../../src/GameStateNew.cpp:92
 msgid "Choose a Portrait"
@@ -630,7 +630,7 @@ msgstr "%s Resistência"
 #: ../../../src/ItemManager.cpp:684
 #, c-format
 msgid "Requires %s"
-msgstr ""
+msgstr "Necessário %s"
 
 #: ../../../src/ItemManager.cpp:733
 msgid "Quest Item"
@@ -715,7 +715,7 @@ msgstr "Atalho: %s"
 
 #: ../../../src/MenuActionBar.cpp:580
 msgid "Not enough MP."
-msgstr ""
+msgstr "MP insuficiente."
 
 #: ../../../src/MenuActiveEffects.cpp:124
 #, c-format
@@ -742,17 +742,17 @@ msgstr "Nível"
 #: ../../../src/MenuCharacter.cpp:310
 #, c-format
 msgid "%d unspent stat point"
-msgstr ""
+msgstr "%d pontos não utilizados"
 
 #: ../../../src/MenuCharacter.cpp:313
 #, c-format
 msgid "%d unspent stat points"
-msgstr ""
+msgstr "%d pontos não utilizados"
 
 #: ../../../src/MenuCharacter.cpp:355
 #, c-format
 msgid "Reduces the damage taken from \"%s\" elemental attacks."
-msgstr ""
+msgstr "Reduz o dano recebido de  \"%s\" ataques elementais."
 
 #: ../../../src/MenuCharacter.cpp:365 ../../../src/MenuManager.cpp:287
 #, c-format
@@ -947,7 +947,7 @@ msgstr "Morto"
 
 #: ../../../src/MenuEnemy.cpp:161
 msgid "Destroyed"
-msgstr ""
+msgstr "Destruído"
 
 #: ../../../src/MenuExit.cpp:85 ../../../src/MenuExit.cpp:139
 msgid "Paused"
@@ -1215,12 +1215,12 @@ msgstr "Requer 1 Ponto de Habilidade"
 #: ../../../src/MenuPowers.cpp:1352
 #, c-format
 msgid "%d unspent skill point"
-msgstr ""
+msgstr "%d pontos de habilidade não utilizados"
 
 #: ../../../src/MenuPowers.cpp:1355
 #, c-format
 msgid "%d unspent skill points"
-msgstr ""
+msgstr "%d pontos de habilidade não utilizados"
 
 #: ../../../src/MenuPowers.cpp:1385
 msgid "Next Level:"
@@ -1261,7 +1261,7 @@ msgstr "Não foi possível desfazer a transformação nesta posição."
 
 #: ../../../src/QuestLog.cpp:234
 msgid "Completed Quests"
-msgstr ""
+msgstr "Missões Concluídas"
 
 #: ../../../src/SaveLoad.cpp:243 ../../../src/SaveLoad.cpp:244
 msgid "Game saved."
@@ -1402,7 +1402,7 @@ msgstr "HP Máximo"
 
 #: ../../../src/Stats.cpp:39
 msgid "Total amount of HP."
-msgstr ""
+msgstr "Quantidade total de HP."
 
 #: ../../../src/Stats.cpp:43
 msgid "HP Regen"
@@ -1418,7 +1418,7 @@ msgstr "MP Máximo"
 
 #: ../../../src/Stats.cpp:49
 msgid "Total amount of MP."
-msgstr ""
+msgstr "Quantidade total de MP."
 
 #: ../../../src/Stats.cpp:53
 msgid "MP Regen"
@@ -1437,6 +1437,8 @@ msgid ""
 "Accuracy rating. The enemy's Avoidance rating is subtracted from this value "
 "to calculate your likeliness to land a direct hit."
 msgstr ""
+"Classificação de precisão. A avaliação de esquiva do inimigo é subtraída "
+"deste valor para calcular sua probabilidade de acertar um golpe direto."
 
 #: ../../../src/Stats.cpp:63
 msgid "Avoidance"
@@ -1447,6 +1449,8 @@ msgid ""
 "Avoidance rating. This value is subtracted from the enemy's Accuracy rating "
 "to calculate their likeliness to land a direct hit."
 msgstr ""
+"Avaliação de esquiva. Esse valor é subtraído da classificação de precisão do"
+" inimigo para calcular sua probabilidade de acertar um golpe direto."
 
 #: ../../../src/Stats.cpp:68
 msgid "Absorb Min"
@@ -1454,7 +1458,7 @@ msgstr "Absorção Min."
 
 #: ../../../src/Stats.cpp:69 ../../../src/Stats.cpp:74
 msgid "Reduces the amount of damage taken."
-msgstr ""
+msgstr "Reduz a quantidade de dano recebido."
 
 #: ../../../src/Stats.cpp:73
 msgid "Absorb Max"
@@ -1466,7 +1470,7 @@ msgstr "Chance de Acerto Crítico"
 
 #: ../../../src/Stats.cpp:79
 msgid "Chance for an attack to do extra damage."
-msgstr ""
+msgstr "Oportunidade de um ataque causar dano extra."
 
 #: ../../../src/Stats.cpp:83
 msgid "Bonus XP"

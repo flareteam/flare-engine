@@ -2,13 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-23 23:10-0400\n"
-"PO-Revision-Date: 2018-08-29 11:35+0700\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
 "Language-Team: Vietnamese (https://www.transifex.com/flareorg/teams/84925/vi/)\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +17,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: vi\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.1.1\n"
 
 #: ../../../src/Avatar.cpp:367
 #, c-format
@@ -273,22 +273,22 @@ msgid ""
 "Will try to store surfaces in video memory versus system memory. The effect "
 "this has on performance depends on the renderer."
 msgstr ""
-"Lưu dữ liệu bề mặt vào bộ nhớ đồ hoạ thay cho RAM. Hiệu quả của tuỳ chọn "
-"này phụ thuộc vào thiết bị kết xuất."
+"Lưu dữ liệu bề mặt vào bộ nhớ đồ hoạ thay cho RAM. Hiệu quả của tuỳ chọn này"
+" phụ thuộc vào thiết bị kết xuất."
 
 #: ../../../src/GameStateConfigDesktop.cpp:188
 msgid ""
 "Prevents screen tearing. Disable if you experience \"stuttering\" in "
 "windowed mode or input lag."
 msgstr ""
-"Giúp tránh rách hình. Tắt nếu bạn thấy lag khi điều khiển hoặc chế độ cửa "
-"sổ bị \"lắp\"."
+"Giúp tránh rách hình. Tắt nếu bạn thấy lag khi điều khiển hoặc chế độ cửa sổ"
+" bị \"lắp\"."
 
 #: ../../../src/GameStateConfigDesktop.cpp:189
 msgid ""
 "When enabled, this uses the screen DPI in addition to the window dimensions "
-"to scale the rendering resolution. Otherwise, only the window dimensions "
-"are used."
+"to scale the rendering resolution. Otherwise, only the window dimensions are"
+" used."
 msgstr ""
 "Khi bật, sử dụng thêm DPI màn hình cùng kích thước cửa sổ để phóng đồ hoạ. "
 "Nếu không, chỉ sử dụng kích thước cửa sổ."
@@ -874,8 +874,8 @@ msgid ""
 "Prints a list of items that match a search term. No search term will list "
 "all items"
 msgstr ""
-"In các đồ vật khớp với từ khoá tìm kiếm. Nếu không cung cấp từ khoá, liệt "
-"kê tất cả."
+"In các đồ vật khớp với từ khoá tìm kiếm. Nếu không cung cấp từ khoá, liệt kê"
+" tất cả."
 
 #: ../../../src/MenuDevConsole.cpp:367
 msgid ""

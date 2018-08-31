@@ -40,7 +40,7 @@ msgstr "Dano corpo a corpo"
 
 #: ../engine/damage_types.txt:4
 msgid "Increases the damage done with swords and other melee weapons."
-msgstr ""
+msgstr "Aumenta o dano causado com espadas e outras armas brancas."
 
 #: ../engine/damage_types.txt:5
 msgid "Melee Damage Min"
@@ -56,7 +56,7 @@ msgstr "Dano à distância"
 
 #: ../engine/damage_types.txt:13
 msgid "Increases the damage done with bows and other ranged weapons."
-msgstr ""
+msgstr "Aumenta o dano causado com arcos e outras armas de arremesso."
 
 #: ../engine/damage_types.txt:14
 msgid "Ranged Damage Min"
@@ -72,7 +72,7 @@ msgstr "Dano Mental"
 
 #: ../engine/damage_types.txt:22
 msgid "Increases the damage done with staves and other mental weapons."
-msgstr ""
+msgstr "Aumenta o dano causado com bastões e outras armas mentais."
 
 #: ../engine/damage_types.txt:23
 msgid "Mental Damage Min"
@@ -248,7 +248,7 @@ msgstr "dumaosen"
 
 #: ../cutscenes/credits.txt:63
 msgid "Emil"
-msgstr ""
+msgstr "Emil"
 
 #: ../cutscenes/credits.txt:64
 msgid "Eric R"
@@ -380,7 +380,7 @@ msgstr "Yannis Anthymidis"
 
 #: ../cutscenes/credits.txt:98
 msgid "Zmicer Turok"
-msgstr ""
+msgstr "Zmicer Turok"
 
 #: ../cutscenes/credits.txt:101
 msgid "Distributors"
