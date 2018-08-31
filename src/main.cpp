@@ -313,7 +313,7 @@ std::string parseArgValue(const std::string &arg) {
 #ifdef __EMSCRIPTEN__
 void EmscriptenMainLoop() {
 	if (!init_finished) {
-		if (PlatformFSCheckReady()) {
+		if (platform.FSCheckReady()) {
 			// browsers don't have command line args, so pass default struct to init
 			init(CmdLineArgs());
 			init_finished = true;
@@ -415,7 +415,7 @@ soft_reset:
 	if (!done) {
 		srand(static_cast<unsigned int>(time(NULL)));
 #ifdef __EMSCRIPTEN__
-		PlatformFSInit();
+		platform.FSInit();
 		emscripten_set_main_loop(EmscriptenMainLoop, 0, 1);
 #else
 		init(cmd_line_args);
