@@ -46,7 +46,7 @@ New translations:
 
 Translation updates:
 
-* Belarussian (be) update (Mikalai Valer'evich Sakalouski, Zmicer Turok)
+* Belarusian (be) update (Mikalai Valer'evich Sakalouski, Zmicer Turok)
 * Czech (cs) update (hark34)
 * German (de) update (Wuzzy2)
 * Spanish (es) update (Diego J. Romero López)
@@ -684,7 +684,7 @@ Contributions:
 
 Translations changes:
 
-* (by) Belarussian by mikhailSaTuRn
+* (by) Belarusian by mikhailSaTuRn
 * (de) German by Thomas 'CruzR' Glamsch
 * (es) Spanish by Juan Pablo 'morris989' Tamayo
 * (fi) Finnish by Timo SievA¤nen
