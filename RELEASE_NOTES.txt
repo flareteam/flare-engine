@@ -1,4 +1,12 @@
-Flare v1.07 (WIP, link soon)
+Flare v1.08 (WIP)
+
+Engine fixes:
+
+* Fixed sdl_hardware renderer not clearing top/bottom for tall windows.
+
+
+
+Flare v1.07 (http://flarerpg.org/index.php/2018/08/31/flare-1-07/)
 
 Engine features:
 

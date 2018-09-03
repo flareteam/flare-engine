@@ -367,8 +367,10 @@ void SDLHardwareRenderDevice::drawRectangle(const Point& p0, const Point& p1, co
 }
 
 void SDLHardwareRenderDevice::blankScreen() {
-	SDL_SetRenderTarget(renderer, texture);
 	SDL_SetRenderDrawColor(renderer, background_color.r, background_color.g, background_color.b, background_color.a);
+	SDL_SetRenderTarget(renderer, NULL);
+	SDL_RenderClear(renderer);
+	SDL_SetRenderTarget(renderer, texture);
 	SDL_RenderClear(renderer);
 	return;
 }
