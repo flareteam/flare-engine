@@ -3,6 +3,7 @@ Flare v1.08 (WIP)
 Engine fixes:
 
 * Fixed sdl_hardware renderer not clearing top/bottom for tall windows.
+* Re-create render context when "ignore_texture_filter" setting changes.
 
 
 
