@@ -63,6 +63,7 @@ text=dumaosen
 text=Emil
 text=Eric R
 text=Evgen Pavlov
+text=Fabio Loli
 text=Gianfranco Del Borrello
 text=Giovanni Dalla Torre
 text=GunChleoc

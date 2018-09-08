@@ -5,6 +5,13 @@ Engine fixes:
 * Fixed sdl_hardware renderer not clearing top/bottom for tall windows.
 * Re-create render context when "ignore_texture_filter" setting changes.
 
+Translation updates:
+
+* German (de) update (Wuzzy2)
+* French (fr) update (Simon Georges)
+* Scottish Gaelic (gd) update (GunChleoc)
+* Italian (it) update (Fabio Loli)
+
 
 
 Flare v1.07 (http://flarerpg.org/index.php/2018/08/31/flare-1-07/)
