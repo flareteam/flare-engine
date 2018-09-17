@@ -6,6 +6,7 @@ Engine fixes:
 * Re-create render context when "ignore_texture_filter" setting changes.
 * Fixed bug where points spent on passive powers would be de-allocated after dying.
 * Prevent upgrading powers with the '+' button while the player is dead.
+* Fix off-by-one error when calculating loot drop rates.
 
 Translation updates:
 

@@ -255,7 +255,7 @@ void LootManager::checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos
 	ItemStack new_loot;
 	std::vector<EventComponent*> possible_ids;
 
-	int chance = rand() % 100;
+	int chance = Math::randBetween(1,100);
 
 	// first drop any 'fixed' (0% chance) items
 	for (size_t i = loot_table.size(); i > 0; i--) {
