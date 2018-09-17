@@ -529,7 +529,9 @@ bool MenuPowers::checkRequirements(MenuPowersCell* pcell) {
 			return false;
 	}
 
-	if (powers->powers[pcell->id].passive) {
+	// NOTE if the player is dies, canUsePower() fails and causes passive powers to be locked
+	// so we can guard against this be checking player HP > 0
+	if (powers->powers[pcell->id].passive && pc->stats.hp > 0) {
 		if (!pc->stats.canUsePower(pcell->id, StatBlock::CAN_USE_PASSIVE))
 			return false;
 	}
@@ -1242,12 +1244,14 @@ void MenuPowers::logic() {
 		//upgrade buttons logic
 		if (power_cell[i].upgrade_button != NULL) {
 			power_cell[i].upgrade_button->enabled = false;
-			// enable button only if current level is unlocked and next level can be unlocked
-			if (checkUpgrade(power_cell[i].getCurrent())) {
-				power_cell[i].upgrade_button->enabled = true;
-			}
-			if ((!tab_control || power_cell[i].tab == tab_control->getActiveTab()) && power_cell[i].upgrade_button->checkClick()) {
-				upgradePower(power_cell[i].getCurrent(), !UPGRADE_POWER_ALL_TABS);
+			if (pc->stats.hp > 0) {
+				// enable button only if current level is unlocked and next level can be unlocked
+				if (checkUpgrade(power_cell[i].getCurrent())) {
+					power_cell[i].upgrade_button->enabled = true;
+				}
+				if ((!tab_control || power_cell[i].tab == tab_control->getActiveTab()) && power_cell[i].upgrade_button->checkClick()) {
+					upgradePower(power_cell[i].getCurrent(), !UPGRADE_POWER_ALL_TABS);
+				}
 			}
 		}
 	}

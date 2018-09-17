@@ -4,6 +4,8 @@ Engine fixes:
 
 * Fixed sdl_hardware renderer not clearing top/bottom for tall windows.
 * Re-create render context when "ignore_texture_filter" setting changes.
+* Fixed bug where points spent on passive powers would be de-allocated after dying.
+* Prevent upgrading powers with the '+' button while the player is dead.
 
 Translation updates:
 
