@@ -67,4 +67,4 @@ Translations
 Full Credits
 
 See the full credits listing including per-file attribution online:
-https://github.com/clintbellanger/flare-engine/wiki/Credits
+https://github.com/flareteam/flare-engine/wiki/Credits

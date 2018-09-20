@@ -186,7 +186,7 @@ void Entity::move_from_offending_tile() {
 
 	// If we got stuck on a tile, which we're not allowed to be on, move away
 	// This is just a workaround as we cannot reproduce being stuck easily nor find the
-	// errornous code, check https://github.com/clintbellanger/flare-engine/issues/1058
+	// errornous code, check https://github.com/flareteam/flare-engine/issues/1058
 
 	// As this method should do nothing while regular gameplay, but only in case of bugs
 	// we don't need to care about nice graphical effects, so we may just jump out of the

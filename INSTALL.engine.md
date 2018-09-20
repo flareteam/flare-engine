@@ -8,13 +8,13 @@ A good place to start would be the official [flare-game] mods.
 Mods may then be copied to the `mods/` folder manually,
 if you do not wish to [install Flare system-wide](#install_system_wide).
 
-[flare-game]: https://github.com/clintbellanger/flare-game
+[flare-game]: https://github.com/flareteam/flare-game
 
 ### Clone, Build and Play
 
 ```sh
-git clone https://github.com/clintbellanger/flare-engine.git # clone the latest source code
-git clone https://github.com/clintbellanger/flare-game.git # and game data
+git clone https://github.com/flareteam/flare-engine.git # clone the latest source code
+git clone https://github.com/flareteam/flare-game.git # and game data
 # remember your dependancies(see below)
 cd flare-engine
 cmake .

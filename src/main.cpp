@@ -105,7 +105,7 @@ static void init(const CmdLineArgs& cmd_line_args) {
 		if (Filesystem::pathExists(settings->path_user + "mods")) Utils::logError("%smods/", settings->path_user.c_str());
 		if (Filesystem::pathExists(settings->path_data + "mods")) Utils::logError("%smods/", settings->path_data.c_str());
 		Utils::logError("A copy of the default mod is in the \"mods\" directory of the flare-engine repo.");
-		Utils::logError("The repo is located at: https://github.com/clintbellanger/flare-engine");
+		Utils::logError("The repo is located at: https://github.com/flareteam/flare-engine");
 		Utils::logError("Try again after copying the default mod to one of the above directories. Exiting.");
 		Utils::logErrorDialog("main: Could not find the 'default' mod in the following locations:\n\n%smods/\n%smods/", settings->path_user.c_str(), settings->path_data.c_str());
 		Utils::Exit(1);

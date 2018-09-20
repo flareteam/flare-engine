@@ -19,7 +19,7 @@ Originally the first game to be developed using this engine was part of this
 repository. As the engine became mature, the game content was moved to an
 extra repository and is now called [flare-game]. (happened around sept. 2012)
 
-[flare-game]: https://github.com/clintbellanger/flare-game
+[flare-game]: https://github.com/flareteam/flare-game
 
 ## Copyright and License
 
@@ -41,7 +41,7 @@ The GNU Unifont font is released under GPL v2, with the exception that embedding
 The following links are specific to the engine
 
 * [Homepage](http://flarerpg.org)
-* [Source](https://github.com/clintbellanger/flare-engine)
+* [Source](https://github.com/flareteam/flare-engine)
 * [Forums](http://opengameart.org/forums/flare)
 * Email     clintbellanger@gmail.com
 
@@ -51,7 +51,7 @@ The following links are specific to the engine
 * [polymorphable] A game made for "The Liberated Pixel cup", which was a competition about game art and making a game thereof. The pixel art is 32x32 orthogonal perspective featuring a medival setting. The development has finished.
 * [concordia]     Another game using the art created during "The liberated pixel cup". While this started without stress regarding the timeline for the pixel cup, this story is more thought through and the content is more organized.
 
-[flare-game]: https://github.com/clintbellanger/flare-game
+[flare-game]: https://github.com/flareteam/flare-game
 [polymorphable]: https://github.com/makrohn/polymorphable
 [concordia]: https://github.com/makrohn/concordia
 
