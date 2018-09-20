@@ -1,4 +1,13 @@
-Flare v1.08 (WIP)
+Flare v1.09 (WIP)
+
+Translation updates:
+
+* Brazilian Portuguese (pt_BR) update (Rui)
+* Portuguese (pt) update (Rui)
+
+
+
+Flare v1.08 (http://flarerpg.org/index.php/2018/09/17/flare-1-08/)
 
 Engine fixes:
 

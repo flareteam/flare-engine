@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-23 23:10-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Vicente Monteiro, 2018\n"
+"Last-Translator: Rui <xymarior@yandex.com>, 2018\n"
 "Language-Team: Portuguese (Brazil) (https://www.transifex.com/flareorg/teams/84925/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -226,11 +226,11 @@ msgstr "Mods Disponíveis"
 
 #: ../../../src/GameStateConfigBase.cpp:339
 msgid "<< Disable"
-msgstr "<< Desativar"
+msgstr "<< Desabilitar"
 
 #: ../../../src/GameStateConfigBase.cpp:345
 msgid "Enable >>"
-msgstr "Ativar >>"
+msgstr "Habilitar >>"
 
 #: ../../../src/GameStateConfigBase.cpp:925
 msgid "Version:"
@@ -625,7 +625,7 @@ msgstr "%d%% Velocidade de Ataque"
 #: ../../../src/MenuPowers.cpp:832
 #, c-format
 msgid "%s Resistance"
-msgstr "%s Resistência"
+msgstr "Resistência %s"
 
 #: ../../../src/ItemManager.cpp:684
 #, c-format
@@ -742,7 +742,7 @@ msgstr "Nível"
 #: ../../../src/MenuCharacter.cpp:310
 #, c-format
 msgid "%d unspent stat point"
-msgstr "%d pontos não utilizados"
+msgstr "%d ponto não utilizados"
 
 #: ../../../src/MenuCharacter.cpp:313
 #, c-format
@@ -955,7 +955,7 @@ msgstr "Interrompido"
 
 #: ../../../src/MenuExit.cpp:91
 msgid "Save & Exit"
-msgstr "Salvar & Sair"
+msgstr "Salvar e Sair"
 
 #: ../../../src/MenuExit.cpp:92
 msgid "Exit"
@@ -1145,7 +1145,7 @@ msgstr "Converter"
 
 #: ../../../src/MenuPowers.cpp:925
 msgid "Fear"
-msgstr "Raiva"
+msgstr "Medo"
 
 #: ../../../src/MenuPowers.cpp:928
 msgid "Lifespan"
@@ -1153,7 +1153,7 @@ msgstr "Vida útil"
 
 #: ../../../src/MenuPowers.cpp:952
 msgid "Magical Shield"
-msgstr "Escudo Magico"
+msgstr "Escudo Mágico"
 
 #: ../../../src/MenuPowers.cpp:981
 msgid "Healing"
@@ -1215,7 +1215,7 @@ msgstr "Requer 1 Ponto de Habilidade"
 #: ../../../src/MenuPowers.cpp:1352
 #, c-format
 msgid "%d unspent skill point"
-msgstr "%d pontos de habilidade não utilizados"
+msgstr "%d ponto de habilidade não utilizado"
 
 #: ../../../src/MenuPowers.cpp:1355
 #, c-format
@@ -1454,7 +1454,7 @@ msgstr ""
 
 #: ../../../src/Stats.cpp:68
 msgid "Absorb Min"
-msgstr "Absorção Min."
+msgstr "Absorção Mín."
 
 #: ../../../src/Stats.cpp:69 ../../../src/Stats.cpp:74
 msgid "Reduces the amount of damage taken."
@@ -1504,7 +1504,7 @@ msgstr "Furtivo"
 
 #: ../../../src/Stats.cpp:99
 msgid "Increases your ability to move undetected."
-msgstr "Aumenta sua capacidade de mover-se sem ser detectado."
+msgstr "Aumenta sua capacidade de mover-se sem ser detetado."
 
 #: ../../../src/Stats.cpp:103
 msgid "Poise"
@@ -1528,7 +1528,7 @@ msgstr "Reflexão de dano"
 
 #: ../../../src/Stats.cpp:114
 msgid "Deals a percentage of damage taken back to the attacker."
-msgstr "Percentual de dano recuperado pelo atacante."
+msgstr "Percentual de dano refletido para o atacante."
 
 #: ../../../src/Stats.cpp:118
 msgid "HP Steal"
