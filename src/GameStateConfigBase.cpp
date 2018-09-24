@@ -168,7 +168,6 @@ void GameStateConfigBase::init() {
 	tab_control->setTabTitle(AUDIO_TAB, msg->get("Audio"));
 	tab_control->setTabTitle(INTERFACE_TAB, msg->get("Interface"));
 	tab_control->setTabTitle(MODS_TAB, msg->get("Mods"));
-	tab_control->updateHeader();
 
 	readConfig();
 

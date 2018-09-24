@@ -54,8 +54,6 @@ public:
 
 	int getTabHeight();
 
-	void updateHeader();
-
 	void logic();
 	void logic(int x, int y);
 	void render();

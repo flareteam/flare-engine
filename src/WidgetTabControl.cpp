@@ -83,7 +83,8 @@ void WidgetTabControl::setActiveTab(unsigned tab) {
 }
 
 /**
- * Define the position and size of the tab control.
+ * Define the position and size of the tab control area and the child tabs (including text).
+ * Typically called when running window/menu align() rountines.
  *
  * @param x       X coordinate of the top-left corner of the widget.
  * @param y       Y coordinate of the top-left corner of the widget.
@@ -92,29 +93,16 @@ void WidgetTabControl::setMainArea(int x, int y) {
 	// Set tabs area.
 	tabs_area.x = x;
 	tabs_area.y = y;
-	tabs_area.w = 0; // calculated in updateHeader();
+	tabs_area.w = 0;
 	tabs_area.h = getTabHeight();
 
-	updateHeader();
-}
-
-/**
- * Updates the areas or the tabs.
- *
- * Use it right after you set the area and tab titles of the tab control.
- */
-void WidgetTabControl::updateHeader() {
-	tabs_area.w = 0;
-
+	// update individual tabs
 	for (unsigned i=0; i<tabs.size(); i++) {
 		tabs[i].y = tabs_area.y;
 		tabs[i].h = tabs_area.h;
 
 		if (i==0) tabs[i].x = tabs_area.x;
 		else tabs[i].x = tabs[i-1].x + tabs[i-1].w;
-
-		tabs[i].w = eset->widgets.tab_padding.x + font->calc_width(titles[i]) + eset->widgets.tab_padding.x;
-		tabs_area.w += tabs[i].w;
 
 		active_labels[i].setPos(tabs[i].x + eset->widgets.tab_padding.x, tabs[i].y + tabs[i].h/2 + eset->widgets.tab_padding.y);
 		active_labels[i].setVAlign(LabelInfo::VALIGN_CENTER);
@@ -125,6 +113,9 @@ void WidgetTabControl::updateHeader() {
 		inactive_labels[i].setVAlign(LabelInfo::VALIGN_CENTER);
 		inactive_labels[i].setText(titles[i]);
 		inactive_labels[i].setColor(font->getColor(FontEngine::COLOR_WIDGET_DISABLED));
+
+		tabs[i].w = active_labels[i].getBounds()->w + (eset->widgets.tab_padding.x * 2);
+		tabs_area.w += tabs[i].w;
 	}
 }
 

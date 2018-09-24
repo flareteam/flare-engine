@@ -1,5 +1,8 @@
 Flare v1.09 (WIP)
 
+Engine fixes:
+* Fixed shrinking tab widgets when widow was resized.
+
 Translation updates:
 
 * Brazilian Portuguese (pt_BR) update (Rui)

@@ -130,7 +130,6 @@ void GameStateConfigDesktop::init() {
 	tab_control->setTabTitle(INPUT_TAB, msg->get("Input"));
 	tab_control->setTabTitle(KEYBINDS_TAB, msg->get("Keybindings"));
 	tab_control->setTabTitle(MODS_TAB, msg->get("Mods"));
-	tab_control->updateHeader();
 
 	readConfig();
 

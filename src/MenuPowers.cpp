@@ -338,13 +338,12 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 		tab_control = new WidgetTabControl();
 
 		if (tab_control) {
-			// Initialize the tab control.
-			tab_control->setMainArea(window_area.x+tab_area.x, window_area.y+tab_area.y);
-
 			// Define the header.
 			for (size_t i=0; i<tabs.size(); i++)
 				tab_control->setTabTitle(static_cast<unsigned>(i), msg->get(tabs[i].title));
-			tab_control->updateHeader();
+
+			// Initialize the tab control.
+			tab_control->setMainArea(window_area.x + tab_area.x, window_area.y + tab_area.y);
 
 			tablist.add(tab_control);
 		}
