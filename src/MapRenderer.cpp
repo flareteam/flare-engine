@@ -64,7 +64,7 @@ MapRenderer::MapRenderer()
 	, respawn_point()
 	, cutscene(false)
 	, cutscene_file("")
-	, shaky_cam_ticks(0)
+	, shaky_cam_timer()
 	, stash(false)
 	, stash_pos()
 	, enemies_cleared(false)
@@ -266,9 +266,9 @@ void MapRenderer::logic(bool paused) {
 		return;
 
 	// handle camera shaking timer
-	if (shaky_cam_ticks > 0) shaky_cam_ticks--;
+	shaky_cam_timer.tick();
 
-	if (shaky_cam_ticks == 0) {
+	if (shaky_cam_timer.isEnd()) {
 		shakycam.x = cam.x;
 		shakycam.y = cam.y;
 	}
@@ -286,18 +286,20 @@ void MapRenderer::logic(bool paused) {
 	// handle event cooldowns
 	std::vector<Event>::iterator it;
 	for (it = events.begin(); it < events.end(); ++it) {
-		if ((*it).cooldown_ticks > 0) (*it).cooldown_ticks--;
+		if (!it->delay.isEnd())
+			it->delay.tick();
+		else
+			it->cooldown.tick();
 	}
 
 	// handle delayed events
 	for (it = delayed_events.end(); it != delayed_events.begin(); ) {
 		--it;
 
-		if (it->delay_ticks > 0) {
-			it->delay_ticks--;
-		}
-		else {
-			EventManager::executeEvent(*it);
+		it->delay.tick();
+
+		if (it->delay.isEnd()) {
+			EventManager::executeDelayedEvent(*it);
 			it = delayed_events.erase(it);
 		}
 	}
@@ -951,16 +953,16 @@ void MapRenderer::checkHotspots() {
 					if (!EventManager::isActive(*it)) continue;
 
 					// skip events without hotspots
-					if ((*it).hotspot.h == 0) continue;
+					if (it->hotspot.h == 0) continue;
 
 					// skip events on cooldown
-					if ((*it).cooldown_ticks != 0) continue;
+					if (!it->cooldown.isEnd() || !it->delay.isEnd()) continue;
 
 					// new tooltip?
-					createTooltip((*it).getComponent(EventComponent::TOOLTIP));
+					createTooltip(it->getComponent(EventComponent::TOOLTIP));
 
-					if ((((*it).reachable_from.w == 0 && (*it).reachable_from.h == 0) || Utils::isWithinRect((*it).reachable_from, Point(cam)))
-							&& Utils::calcDist(cam, (*it).center) < eset->misc.interact_range) {
+					if (((it->reachable_from.w == 0 && it->reachable_from.h == 0) || Utils::isWithinRect(it->reachable_from, Point(cam)))
+							&& Utils::calcDist(cam, it->center) < eset->misc.interact_range) {
 
 						// only check events if the player is clicking
 						// and allowed to click
@@ -1000,13 +1002,13 @@ void MapRenderer::checkNearestEvent() {
 		if (!EventManager::isActive(*it)) continue;
 
 		// skip events without hotspots
-		if ((*it).hotspot.h == 0) continue;
+		if (it->hotspot.h == 0) continue;
 
 		// skip events on cooldown
-		if ((*it).cooldown_ticks != 0) continue;
+		if (!it->cooldown.isEnd() || !it->delay.isEnd()) continue;
 
-		float distance = Utils::calcDist(cam, (*it).center);
-		if ((((*it).reachable_from.w == 0 && (*it).reachable_from.h == 0) || Utils::isWithinRect((*it).reachable_from, Point(cam)))
+		float distance = Utils::calcDist(cam, it->center);
+		if (((it->reachable_from.w == 0 && it->reachable_from.h == 0) || Utils::isWithinRect(it->reachable_from, Point(cam)))
 				&& distance < eset->misc.interact_range && distance < best_distance) {
 			best_distance = distance;
 			nearest = it;
@@ -1017,9 +1019,9 @@ void MapRenderer::checkNearestEvent() {
 	if (nearest != events.end()) {
 		if (!inpt->usingMouse() || settings->touchscreen) {
 			// new tooltip?
-			createTooltip((*nearest).getComponent(EventComponent::TOOLTIP));
-			tip_pos = Utils::mapToScreen((*nearest).center.x, (*nearest).center.y, shakycam.x, shakycam.y);
-			if ((*nearest).getComponent(EventComponent::NPC_HOTSPOT)) {
+			createTooltip(nearest->getComponent(EventComponent::TOOLTIP));
+			tip_pos = Utils::mapToScreen(nearest->center.x, nearest->center.y, shakycam.x, shakycam.y);
+			if (nearest->getComponent(EventComponent::NPC_HOTSPOT)) {
 				tip_pos.y -= eset->tooltips.margin_npc;
 			}
 			else {
@@ -1066,8 +1068,8 @@ void MapRenderer::activatePower(int power_index, unsigned statblock_index, FPoin
 
 	if (statblock_index < statblocks.size()) {
 		// check power cooldown before activating
-		if (statblocks[statblock_index].powers_ai[0].ticks == 0) {
-			statblocks[statblock_index].powers_ai[0].ticks = powers->powers[power_index].cooldown;
+		if (statblocks[statblock_index].powers_ai[0].cooldown.isEnd()) {
+			statblocks[statblock_index].powers_ai[0].cooldown.setDuration(powers->powers[power_index].cooldown);
 			powers->activate(power_index, &statblocks[statblock_index], target);
 		}
 	}
@@ -1141,7 +1143,7 @@ void MapRenderer::drawDevCursor() {
 		}
 
 		// draw distance line
-		if (menu->devconsole->distance_ticks >= settings->max_frames_per_sec) {
+		if (menu->devconsole->distance_timer.isEnd()) {
 			Point p0 = Utils::mapToScreen(menu->devconsole->target.x, menu->devconsole->target.y, shakycam.x, shakycam.y);
 			Point p1 = Utils::mapToScreen(pc->stats.pos.x, pc->stats.pos.y, shakycam.x, shakycam.y);
 			render_device->drawLine(p0.x, p0.y, p1.x, p1.y, dev_cursor_color);

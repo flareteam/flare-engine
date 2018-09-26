@@ -41,7 +41,6 @@ MenuNumPicker::MenuNumPicker()
 	, spin_ticks(0)
 	, spin_increment(1)
 	, spin_delay(settings->max_frames_per_sec/6)
-	, spin_rate(1)
 	, confirm_clicked(false)
 	, cancel_clicked(false)
 {

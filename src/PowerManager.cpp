@@ -1555,7 +1555,7 @@ void PowerManager::payPowerCost(int power_index, StatBlock *src_stats) {
 
 		// consume corpses
 		if (powers[power_index].requires_corpse && powers[power_index].remove_corpse && src_stats->target_corpse) {
-			src_stats->target_corpse->corpse_ticks = 0;
+			src_stats->target_corpse->corpse_timer.reset(Timer::END);
 			src_stats->target_corpse = NULL;
 		}
 	}

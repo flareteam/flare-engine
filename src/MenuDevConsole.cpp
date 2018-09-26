@@ -50,8 +50,8 @@ MenuDevConsole::MenuDevConsole()
 	: Menu()
 	, first_open(false)
 	, input_scrollback_pos(0)
-	, distance_ticks(0)
 {
+	distance_timer.setDuration(settings->max_frames_per_sec);
 
 	button_close = new WidgetButton("images/menus/buttons/button_x.png");
 	tablist.add(button_close);
@@ -216,17 +216,17 @@ void MenuDevConsole::logic() {
 		}
 
 		if (inpt->pressing[Input::MAIN2]) {
-			distance_ticks++;
+			distance_timer.tick();
 
 			// print target distance from the player
-			if (distance_ticks == settings->max_frames_per_sec) {
+			if (distance_timer.isEnd()) {
 				std::stringstream ss;
 				ss << msg->get("Distance") << ": " << Utils::calcDist(target, pc->stats.pos);
 				log_history->add(ss.str(), WidgetLog::MSG_NORMAL);
 			}
 		}
 		else {
-			distance_ticks = 0;
+			distance_timer.reset(Timer::BEGIN);
 		}
 	}
 }

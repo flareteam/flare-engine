@@ -20,6 +20,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define SDL_INPUT_STATE_H
 
 #include "InputState.h"
+#include "Utils.h"
 
 /**
  * class SDLInputState
@@ -56,7 +57,7 @@ private:
 	SDL_Joystick* joy;
 	int joy_num;
 	int joy_axis_num;
-	int resize_ticks;
+	Timer resize_cooldown;
 	bool joystick_init;
 	bool text_input;
 

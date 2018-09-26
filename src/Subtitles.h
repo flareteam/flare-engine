@@ -25,6 +25,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define SUBTITLES_H
 
 #include "CommonIncludes.h"
+#include "Utils.h"
 #include "WidgetLabel.h"
 
 class Subtitles {
@@ -50,7 +51,7 @@ private:
 	Sprite *background;
 	Rect background_rect;
 	Color background_color;
-	int visible_ticks;
+	Timer visible_timer;
 };
 
 #endif

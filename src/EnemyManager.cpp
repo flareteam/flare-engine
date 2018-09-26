@@ -46,7 +46,7 @@ EnemyManager::EnemyManager()
 	: enemies()
 	, hero_stealth(0)
 	, player_blocked(false)
-	, player_blocked_ticks(0) {
+	, player_blocked_timer(settings->max_frames_per_sec / 6) {
 	handleNewMap();
 }
 
@@ -82,14 +82,14 @@ size_t EnemyManager::loadEnemyPrototype(const std::string& type_id) {
 	e.loadSounds();
 
 	// set cooldown_hit to duration of hit animation if undefined
-	if (e.stats.cooldown_hit == -1) {
+	if (!e.stats.cooldown_hit_enabled) {
 		Animation *hit_anim = e.animationSet->getAnimation("hit");
 		if (hit_anim) {
-			e.stats.cooldown_hit = hit_anim->getDuration();
+			e.stats.cooldown_hit.setDuration(hit_anim->getDuration());
 			delete hit_anim;
 		}
 		else {
-			e.stats.cooldown_hit = 0;
+			e.stats.cooldown_hit.setDuration(0);
 		}
 	}
 
@@ -385,9 +385,9 @@ bool EnemyManager::checkPartyMembers() {
  */
 void EnemyManager::logic() {
 
-	if(player_blocked) {
-		player_blocked_ticks--;
-		if(player_blocked_ticks <= 0)
+	if (player_blocked) {
+		player_blocked_timer.tick();
+		if (player_blocked_timer.isEnd())
 			player_blocked = false;
 	}
 
@@ -510,16 +510,16 @@ void EnemyManager::addRenders(std::vector<Renderable> &r, std::vector<Renderable
 	std::vector<Enemy*>::iterator it;
 	for (it = enemies.begin(); it != enemies.end(); ++it) {
 		bool dead = (*it)->stats.corpse;
-		if (!dead || (*it)->stats.corpse_ticks > 0) {
+		if (!dead || !(*it)->stats.corpse_timer.isEnd()) {
 			Renderable re = (*it)->getRender();
 			re.prio = 1;
 			(*it)->stats.effects.getCurrentColor(re.color_mod);
 			(*it)->stats.effects.getCurrentAlpha(re.alpha_mod);
 
 			// fade out corpses
-			int fade_time = (eset->misc.corpse_timeout > settings->max_frames_per_sec) ? settings->max_frames_per_sec : eset->misc.corpse_timeout;
-			if (dead && fade_time != 0 && (*it)->stats.corpse_ticks <= fade_time) {
-				re.alpha_mod = static_cast<uint8_t>(static_cast<float>((*it)->stats.corpse_ticks) * (re.alpha_mod / static_cast<float>(fade_time)));
+			unsigned fade_time = (eset->misc.corpse_timeout > settings->max_frames_per_sec) ? settings->max_frames_per_sec : eset->misc.corpse_timeout;
+			if (dead && fade_time != 0 && (*it)->stats.corpse_timer.getCurrent() <= fade_time) {
+				re.alpha_mod = static_cast<uint8_t>(static_cast<float>((*it)->stats.corpse_timer.getCurrent()) * (re.alpha_mod / static_cast<float>(fade_time)));
 			}
 
 			// draw corpses below objects so that floor loot is more visible

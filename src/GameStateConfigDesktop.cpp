@@ -79,12 +79,12 @@ GameStateConfigDesktop::GameStateConfigDesktop(bool _enable_video_tab)
 	, joystick_deadzone_lb(new WidgetLabel())
 	, input_scrollbox(NULL)
 	, input_confirm(new MenuConfirm(msg->get("Clear"),msg->get("Assign:")))
-	, input_confirm_ticks(0)
+	, input_confirm_timer(settings->max_frames_per_sec * 10) // 10 seconds
 	, input_key(0)
 	, key_count(0)
 	, scrollpane_contents(0)
 	, enable_video_tab(_enable_video_tab)
-	, keybind_tip_ticks(0)
+	, keybind_tip_timer(settings->max_frames_per_sec * 5) // 5 seconds
 	, keybind_tip(new WidgetTooltip())
 {
 	// Allocate KeyBindings
@@ -566,8 +566,9 @@ void GameStateConfigDesktop::logic() {
 		// assign a keybind
 		input_confirm->logic();
 		scanKey(input_key);
-		input_confirm_ticks--;
-		if (input_confirm_ticks == 0) input_confirm->visible = false;
+		input_confirm_timer.tick();
+		if (input_confirm_timer.isEnd())
+			input_confirm->visible = false;
 		return;
 	}
 	else {
@@ -737,7 +738,7 @@ void GameStateConfigDesktop::logicKeybinds() {
 			confirm_msg = msg->get("Assign:") + ' ' + inpt->binding_name[i%key_count];
 			delete input_confirm;
 			input_confirm = new MenuConfirm(msg->get("Clear"),confirm_msg);
-			input_confirm_ticks = settings->max_frames_per_sec * 10; // 10 seconds
+			input_confirm_timer.reset(Timer::BEGIN);
 			input_confirm->visible = true;
 			input_key = i;
 			inpt->last_button = -1;
@@ -775,21 +776,21 @@ void GameStateConfigDesktop::renderDialogs() {
 		TooltipData keybind_tip_data;
 		keybind_tip_data.addText(keybind_msg);
 
-		if (keybind_tip_ticks == 0)
-			keybind_tip_ticks = settings->max_frames_per_sec * 5;
+		if (keybind_tip_timer.isEnd())
+			keybind_tip_timer.reset(Timer::BEGIN);
 
-		if (keybind_tip_ticks > 0) {
+		keybind_tip_timer.tick();
+
+		if (!keybind_tip_timer.isEnd()) {
 			keybind_tip->render(keybind_tip_data, Point(settings->view_w, 0), TooltipData::STYLE_FLOAT);
-			keybind_tip_ticks--;
 		}
-
-		if (keybind_tip_ticks == 0) {
+		else {
 			keybind_msg.clear();
 		}
 	}
 	else {
 		keybind_msg.clear();
-		keybind_tip_ticks = 0;
+		keybind_tip_timer.reset(Timer::END);
 	}
 }
 
@@ -806,7 +807,8 @@ void GameStateConfigDesktop::confirmKey(int button) {
 	inpt->lock[button] = false;
 
 	input_confirm->visible = false;
-	input_confirm_ticks = 0;
+	input_confirm_timer.reset(Timer::END);
+	keybind_tip_timer.reset(Timer::END);
 
 	updateKeybinds();
 }

@@ -281,7 +281,7 @@ void MenuActionBar::logic() {
 	tablist.logic();
 
 	// hero has no powers
-	if (pc->power_cast_ticks.empty())
+	if (pc->power_cast_timers.empty())
 		return;
 
 	for (unsigned i = 0; i < slots_count; i++) {
@@ -319,8 +319,8 @@ void MenuActionBar::logic() {
 			}
 
 			//see if the slot should be greyed out
-			slot_enabled[i] = (pc->hero_cooldown[hotkeys_mod[i]] == 0)
-							  && (pc->power_cast_ticks[hotkeys_mod[i]] == 0)
+			slot_enabled[i] = pc->power_cooldown_timers[hotkeys_mod[i]].isEnd()
+							  && pc->power_cast_timers[hotkeys_mod[i]].isEnd()
 							  && pc->stats.canUsePower(hotkeys_mod[i], !StatBlock::CAN_USE_PASSIVE)
 							  && (twostep_slot == -1 || static_cast<unsigned>(twostep_slot) == i);
 
@@ -330,11 +330,11 @@ void MenuActionBar::logic() {
 			slot_enabled[i] = true;
 		}
 
-		if (pc->power_cast_ticks[hotkeys_mod[i]] > 0 && pc->power_cast_duration[hotkeys_mod[i]] > 0) {
-			slot_cooldown_size[i] = (eset->resolutions.icon_size * pc->power_cast_ticks[hotkeys_mod[i]]) / pc->power_cast_duration[hotkeys_mod[i]];
+		if (!pc->power_cast_timers[hotkeys_mod[i]].isEnd() && pc->power_cast_timers[hotkeys_mod[i]].getDuration() > 0) {
+			slot_cooldown_size[i] = (eset->resolutions.icon_size * pc->power_cast_timers[hotkeys_mod[i]].getCurrent()) / pc->power_cast_timers[hotkeys_mod[i]].getDuration();
 		}
-		else if (pc->hero_cooldown[hotkeys_mod[i]] > 0 && powers->powers[hotkeys_mod[i]].cooldown > 0) {
-			slot_cooldown_size[i] = (eset->resolutions.icon_size * pc->hero_cooldown[hotkeys_mod[i]]) / powers->powers[hotkeys_mod[i]].cooldown;
+		else if (!pc->power_cooldown_timers[hotkeys_mod[i]].isEnd() && pc->power_cooldown_timers[hotkeys_mod[i]].getDuration() > 0) {
+			slot_cooldown_size[i] = (eset->resolutions.icon_size * pc->power_cooldown_timers[hotkeys_mod[i]].getCurrent()) / pc->power_cooldown_timers[hotkeys_mod[i]].getDuration();
 		}
 		else {
 			slot_cooldown_size[i] = (slot_enabled[i] ? 0 : eset->resolutions.icon_size);;
@@ -585,7 +585,7 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 				continue;
 			}
 
-			slot_fail_cooldown[i] = pc->power_cast_duration[action.power];
+			slot_fail_cooldown[i] = pc->power_cast_timers[action.power].getDuration();
 
 			action.instant_item = false;
 			if (power.new_state == Power::STATE_INSTANT) {

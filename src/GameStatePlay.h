@@ -96,9 +96,7 @@ private:
 
 	std::vector<ActionData> action_queue;
 
-	int menu_enemy_timeout;
-
-	int second_ticks;
+	Timer second_timer;
 
 	bool is_first_map_load;
 

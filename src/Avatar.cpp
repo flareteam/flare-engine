@@ -77,14 +77,14 @@ Avatar::Avatar()
 	activeAnimation = animationSet->getAnimation("");
 
 	// set cooldown_hit to duration of hit animation if undefined
-	if (stats.cooldown_hit == -1) {
+	if (!stats.cooldown_hit_enabled) {
 		Animation *hit_anim = animationSet->getAnimation("hit");
 		if (hit_anim) {
-			stats.cooldown_hit = hit_anim->getDuration();
+			stats.cooldown_hit.setDuration(hit_anim->getDuration());
 			delete hit_anim;
 		}
 		else {
-			stats.cooldown_hit = 0;
+			stats.cooldown_hit.setDuration(0);
 		}
 	}
 
@@ -146,7 +146,7 @@ void Avatar::init() {
 	}
 	respawn = false;
 
-	stats.cooldown_ticks = 0;
+	stats.cooldown.reset(Timer::END);
 
 	haz = NULL;
 
@@ -166,9 +166,10 @@ void Avatar::init() {
 		}
 	}
 
-	hero_cooldown = std::vector<int>(powers->powers.size(), 0);
-	power_cast_ticks = std::vector<int>(powers->powers.size(), 0);
-	power_cast_duration = std::vector<int>(powers->powers.size(), 0);
+	power_cooldown_timers.clear();
+	power_cooldown_timers.resize(powers->powers.size());
+	power_cast_timers.clear();
+	power_cast_timers.resize(powers->powers.size());
 
 }
 
@@ -523,8 +524,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 					float attack_speed = (stats.effects.getAttackSpeed(attack_anim) * powers->powers[current_power].attack_speed) / 100.0f;
 					activeAnimation->setSpeed(attack_speed);
 					playAttackSound(attack_anim);
-					power_cast_duration[current_power] = activeAnimation->getDuration();
-					power_cast_ticks[current_power] = power_cast_duration[current_power];
+					power_cast_timers[current_power].setDuration(activeAnimation->getDuration());
 				}
 
 				// do power
@@ -534,15 +534,15 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 					mapr->collider.block(stats.pos.x, stats.pos.y, !MapCollision::IS_ALLY);
 
 					powers->activate(current_power, &stats, act_target);
-					hero_cooldown[current_power] = powers->powers[current_power].cooldown;
+					power_cooldown_timers[current_power].setDuration(powers->powers[current_power].cooldown);
 
-					if (stats.state_ticks > 0)
+					if (!stats.state_timer.isEnd())
 						stats.hold_state = true;
 				}
 
-				if ((activeAnimation->isLastFrame() && stats.state_ticks == 0) || activeAnimation->getName() != attack_anim) {
+				if ((activeAnimation->isLastFrame() && stats.state_timer.isEnd()) || activeAnimation->getName() != attack_anim) {
 					stats.cur_state = StatBlock::AVATAR_STANCE;
-					stats.cooldown_ticks = stats.cooldown;
+					stats.cooldown.reset(Timer::BEGIN);
 					allowed_to_use_power = false;
 					stats.prevent_interrupt = false;
 				}
@@ -565,7 +565,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 					stats.effects.triggered_hit = true;
 
 					if (stats.block_power != 0) {
-						hero_cooldown[stats.block_power] = powers->powers[stats.block_power].cooldown;
+						power_cooldown_timers[stats.block_power].setDuration(powers->powers[stats.block_power].cooldown);
 						stats.block_power = 0;
 					}
 				}
@@ -592,9 +592,9 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 					stats.effects.clearEffects();
 
 					// reset power cooldowns
-					for (size_t i = 0; i < hero_cooldown.size(); i++) {
-						hero_cooldown[i] = 0;
-						power_cast_ticks[i] = 0;
+					for (size_t i = 0; i < power_cooldown_timers.size(); i++) {
+						power_cooldown_timers[i].reset(Timer::END);
+						power_cast_timers[i].reset(Timer::END);
 					}
 
 					// close menus in GameStatePlay
@@ -663,7 +663,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 				if (power.type == Power::TYPE_BLOCK)
 					blocking = true;
 
-				if (action.power != 0 && (stats.cooldown_ticks == 0 || action.instant_item)) {
+				if (action.power != 0 && (stats.cooldown.isEnd() || action.instant_item)) {
 					FPoint target = action.target;
 
 					// check requirements
@@ -675,7 +675,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 						continue;
 					if (power.requires_empty_target && !mapr->collider.isEmpty(target.x, target.y))
 						continue;
-					if (hero_cooldown[action.power] > 0)
+					if (!power_cooldown_timers[action.power].isEnd())
 						continue;
 					if (!powers->hasValidTarget(action.power, &stats, target))
 						continue;
@@ -697,7 +697,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 					}
 
 					if (power.state_duration > 0)
-						stats.state_ticks = power.state_duration;
+						stats.state_timer.setDuration(power.state_duration);
 
 					if (power.charge_speed != 0.0f)
 						stats.charge_speed = power.charge_speed;
@@ -715,7 +715,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 						case Power::STATE_INSTANT:	// handle instant powers
 							powers->activate(action.power, &stats, target);
-							hero_cooldown[action.power] = power.cooldown;
+							power_cooldown_timers[action.power].setDuration(power.cooldown);
 							break;
 
 						default:
@@ -774,18 +774,15 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 	mapr->checkEvents(stats.pos);
 
 	// decrement all cooldowns
-	for (unsigned i = 0; i < hero_cooldown.size(); i++) {
-		hero_cooldown[i]--;
-		if (hero_cooldown[i] < 0) hero_cooldown[i] = 0;
-
-		power_cast_ticks[i]--;
-		if (power_cast_ticks[i] < 0) power_cast_ticks[i] = 0;
+	for (unsigned i = 0; i < power_cooldown_timers.size(); i++) {
+		power_cooldown_timers[i].tick();
+		power_cast_timers[i].tick();
 	}
 
 	// make the current square solid
 	mapr->collider.block(stats.pos.x, stats.pos.y, !MapCollision::IS_ALLY);
 
-	if (stats.state_ticks == 0 && stats.hold_state)
+	if (stats.state_timer.isEnd() && stats.hold_state)
 		stats.hold_state = false;
 
 	if (stats.cur_state != StatBlock::AVATAR_ATTACK && stats.charge_speed != 0.0f)

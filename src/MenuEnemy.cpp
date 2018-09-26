@@ -32,6 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuEnemy.h"
 #include "MessageEngine.h"
 #include "RenderDevice.h"
+#include "Settings.h"
 #include "SharedResources.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
@@ -41,7 +42,9 @@ MenuEnemy::MenuEnemy()
 	: bar_hp(NULL)
 	, custom_text_pos(false)
 	, enemy(NULL)
-	, timeout(0) {
+{
+	// disappear after 10 seconds
+	timeout.setDuration(settings->max_frames_per_sec * 10);
 
 	// Load config settings
 	FileParser infile;
@@ -91,15 +94,15 @@ void MenuEnemy::handleNewMap() {
 }
 
 void MenuEnemy::logic() {
-
 	// after a fixed amount of time, hide the enemy display
-	if (timeout > 0) timeout--;
-	if (timeout == 0) enemy = NULL;
+	timeout.tick();
+	if (timeout.isEnd())
+		enemy = NULL;
 }
 
 void MenuEnemy::render() {
 	if (enemy == NULL) return;
-	if (enemy->stats.corpse && enemy->stats.corpse_ticks == 0) return;
+	if (enemy->stats.corpse && enemy->stats.corpse_timer.isEnd()) return;
 
 	Rect src, dest;
 	src.w = bar_pos.w;

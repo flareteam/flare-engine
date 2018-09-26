@@ -153,13 +153,13 @@ bool WidgetInput::logicAt(int x, int y) {
 			for (int i = 0; i < inpt->KEY_COUNT; ++i) {
 				if (inpt->pressing[i]) {
 					inpt->lock[i] = true;
-					inpt->repeat_ticks[i] = 1;
+					inpt->repeat_cooldown[i].setCurrent(inpt->repeat_cooldown[i].getDuration() - 1);
 				}
 			}
 		}
 
 		// handle backspaces
-		if (inpt->pressing[Input::DEL] && inpt->repeat_ticks[Input::DEL] == 0) {
+		if (inpt->pressing[Input::DEL] && inpt->repeat_cooldown[Input::DEL].isBegin()) {
 			if (!text.empty() && cursor_pos > 0) {
 				// remove utf-8 character
 				// size_t old_cursor_pos = cursor_pos;
@@ -174,11 +174,11 @@ bool WidgetInput::logicAt(int x, int y) {
 		}
 
 		// cursor movement
-		if (!text.empty() && cursor_pos > 0 && inpt->pressing[Input::LEFT] && inpt->repeat_ticks[Input::LEFT] == 0) {
+		if (!text.empty() && cursor_pos > 0 && inpt->pressing[Input::LEFT] && inpt->repeat_cooldown[Input::LEFT].isBegin()) {
 			cursor_pos--;
 			trimText();
 		}
-		else if (!text.empty() && cursor_pos < text.length() && inpt->pressing[Input::RIGHT] && inpt->repeat_ticks[Input::RIGHT] == 0) {
+		else if (!text.empty() && cursor_pos < text.length() && inpt->pressing[Input::RIGHT] && inpt->repeat_cooldown[Input::RIGHT].isBegin()) {
 			inpt->lock[Input::RIGHT] = true;
 			cursor_pos++;
 			trimText();

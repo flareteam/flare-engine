@@ -45,8 +45,7 @@ BehaviorStandard::BehaviorStandard(Enemy *_e)
 	, los(false)
 	, fleeing(false)
 	, move_to_safe_dist(false)
-	, flee_ticks(0)
-	, flee_cooldown(0)
+	, turn_timer()
 {
 }
 
@@ -57,8 +56,7 @@ void BehaviorStandard::logic() {
 
 	// skip all logic if the enemy is dead and no longer animating
 	if (e->stats.corpse) {
-		if (e->stats.corpse_ticks > 0)
-			e->stats.corpse_ticks--;
+		e->stats.corpse_timer.tick();
 		return;
 	}
 
@@ -191,7 +189,7 @@ void BehaviorStandard::findTarget() {
 	if (e->stats.wander && e->stats.waypoints.empty()) {
 		FPoint waypoint = getWanderPoint();
 		e->stats.waypoints.push(waypoint);
-		e->stats.waypoint_pause_ticks = e->stats.waypoint_pause;
+		e->stats.waypoint_timer.reset(Timer::BEGIN);
 	}
 
 	// if we're not in combat, pursue the next waypoint
@@ -216,7 +214,7 @@ void BehaviorStandard::findTarget() {
 			!move_to_safe_dist && hero_dist < e->stats.flee_range &&
 			hero_dist >= e->stats.melee_range &&
 			Math::percentChance(e->stats.chance_flee) &&
-			flee_cooldown == 0
+			e->stats.flee_cooldown_timer.isEnd()
 		)
 	{
 		move_to_safe_dist = true;
@@ -256,8 +254,8 @@ void BehaviorStandard::findTarget() {
 			int index = Math::randBetween(0, static_cast<int>(flee_dirs.size())-1);
 			pursue_pos = Utils::calcVector(e->stats.pos, flee_dirs[index], 1);
 
-			if (flee_ticks == 0) {
-				flee_ticks = e->stats.flee_duration;
+			if (e->stats.flee_timer.isEnd()) {
+				e->stats.flee_timer.reset(Timer::BEGIN);
 			}
 		}
 	}
@@ -276,7 +274,7 @@ void BehaviorStandard::checkPower() {
 	if (!e->stats.in_combat) return;
 
 	// if the enemy is on global cooldown it cannot act
-	if (e->stats.cooldown_ticks > 0) return;
+	if (!e->stats.cooldown.isEnd()) return;
 
 	// Note there are two stages to activating a power.
 	// First is the enemy choosing to use a power based on behavioral chance
@@ -329,7 +327,7 @@ void BehaviorStandard::checkMove() {
 	if (e->stats.effects.stun) return;
 
 	// handle not being in combat and (not patrolling waypoints or waiting at waypoint)
-	if (!e->stats.hero_ally && !e->stats.in_combat && (e->stats.waypoints.empty() || e->stats.waypoint_pause_ticks > 0)) {
+	if (!e->stats.hero_ally && !e->stats.in_combat && (e->stats.waypoints.empty() || !e->stats.waypoint_timer.isEnd())) {
 
 		if (e->stats.cur_state == StatBlock::ENEMY_MOVE) {
 			e->stats.cur_state = StatBlock::ENEMY_STANCE;
@@ -341,7 +339,8 @@ void BehaviorStandard::checkMove() {
 
 	float real_speed = e->stats.speed * speedMultiplyer[e->stats.direction] * e->stats.effects.speed / 100;
 
-	int real_turn_delay = e->stats.turn_delay;
+	unsigned turn_ticks = turn_timer.getCurrent();
+	turn_timer.setDuration(e->stats.turn_delay);
 
 	// If an enemy's turn_delay is too long compared to their speed, they will be unable to follow a path properly.
 	// So here, we get how many frames it takes to traverse a single tile and then compare it to the turn delay time.
@@ -349,16 +348,18 @@ void BehaviorStandard::checkMove() {
 	// There may be other solutions to this problem, such as having the enemy pause when they reach a path point,
 	// but I was unable to get anything else working as cleanly/bug-free as this.
 	int max_turn_ticks = static_cast<int>(1.f / real_speed);
-	if (real_turn_delay > max_turn_ticks) {
-		real_turn_delay = max_turn_ticks;
+	if (e->stats.turn_delay > max_turn_ticks) {
+		turn_timer.setDuration(max_turn_ticks);
 	}
+	turn_timer.setCurrent(turn_ticks);
 
 	// clear current space to allow correct movement
 	mapr->collider.unblock(e->stats.pos.x, e->stats.pos.y);
 
 	// update direction
 	if (e->stats.facing) {
-		if (++e->stats.turn_ticks > real_turn_delay) {
+		turn_timer.tick();
+		if (turn_timer.isEnd()) {
 
 			// if blocked, face in pathfinder direction instead
 			if (!mapr->collider.lineOfMovement(e->stats.pos.x, e->stats.pos.y, pursue_pos.x, pursue_pos.y, e->stats.movement_type)) {
@@ -416,15 +417,12 @@ void BehaviorStandard::checkMove() {
 			if (e->stats.charge_speed == 0.0f) {
 				e->stats.direction = Utils::calcDirection(e->stats.pos.x, e->stats.pos.y, pursue_pos.x, pursue_pos.y);
 			}
-			e->stats.turn_ticks = 0;
+			turn_timer.reset(Timer::BEGIN);
 		}
 	}
 
-	if (flee_ticks > 0)
-		flee_ticks--;
-
-	if (flee_cooldown > 0)
-		flee_cooldown--;
+	e->stats.flee_timer.tick();
+	e->stats.flee_cooldown_timer.tick();
 
 	// try to start moving
 	if (e->stats.cur_state == StatBlock::ENEMY_STANCE) {
@@ -449,14 +447,14 @@ void BehaviorStandard::checkMove() {
 
 		if (waypoint_dist <= real_speed || (waypoint_dist <= 0.5f && new_dist > waypoint_dist)) {
 			e->stats.pos = waypoint;
-			e->stats.turn_ticks = e->stats.turn_delay;
+			turn_timer.reset(Timer::END);
 			e->stats.waypoints.pop();
 			// pick a new random point if we're wandering
 			if (e->stats.wander) {
 				waypoint = getWanderPoint();
 			}
 			e->stats.waypoints.push(waypoint);
-			e->stats.waypoint_pause_ticks = e->stats.waypoint_pause;
+			e->stats.waypoint_timer.reset(Timer::BEGIN);
 		}
 	}
 
@@ -498,32 +496,32 @@ void BehaviorStandard::checkMoveStateStance() {
 void BehaviorStandard::checkMoveStateMove() {
 	bool can_attack = true;
 
-	if (e->stats.cooldown_ticks > 0) {
+	if (!e->stats.cooldown.isEnd()) {
 		can_attack = false;
 	}
 	else {
 		can_attack = false;
 		for (size_t i = 0; i < e->stats.powers_ai.size(); ++i) {
-			if (e->stats.powers_ai[i].ticks == 0) {
+			if (e->stats.powers_ai[i].cooldown.isEnd()) {
 				can_attack = true;
 				break;
 			}
 		}
 	}
 	// in order to prevent infinite fleeing, we re-roll our chance to flee after a certain duration
-	bool stop_fleeing = can_attack && fleeing && flee_ticks == 0 && !Math::percentChance(e->stats.chance_flee);
+	bool stop_fleeing = can_attack && fleeing && e->stats.flee_timer.isEnd() && !Math::percentChance(e->stats.chance_flee);
 
-	if (!stop_fleeing && flee_ticks == 0) {
+	if (!stop_fleeing && e->stats.flee_timer.isEnd()) {
 		// if the roll to continue fleeing succeeds, but the flee duration has expired, we don't want to reset the duration to the full amount
 		// instead, we scehdule the next re-roll to happen on the next frame
 		// this will continue until a roll fails, returning to the stance state
-		flee_ticks = 1;
+		e->stats.flee_timer.setCurrent(1);
 	}
 
 	// close enough to the hero or is at a safe distance
 	if (pc->stats.alive && ((target_dist < e->stats.melee_range && !fleeing) || (move_to_safe_dist && target_dist >= e->stats.flee_range) || stop_fleeing)) {
 		if (stop_fleeing) {
-			flee_cooldown = e->stats.flee_cooldown;
+			e->stats.flee_cooldown_timer.reset(Timer::BEGIN);
 		}
 		e->stats.cur_state = StatBlock::ENEMY_STANCE;
 		move_to_safe_dist = false;
@@ -600,7 +598,7 @@ void BehaviorStandard::updateState() {
 				e->playAttackSound(powers->powers[power_id].attack_anim);
 
 				if (powers->powers[power_id].state_duration > 0)
-					e->stats.state_ticks = powers->powers[power_id].state_duration;
+					e->stats.state_timer.setDuration(powers->powers[power_id].state_duration);
 
 				if (powers->powers[power_id].charge_speed != 0.0f)
 					e->stats.charge_speed = powers->powers[power_id].charge_speed;
@@ -615,7 +613,7 @@ void BehaviorStandard::updateState() {
 				// set cooldown for all ai powers with the same power id
 				for (size_t i = 0; i < e->stats.powers_ai.size(); ++i) {
 					if (e->stats.activated_power->id == e->stats.powers_ai[i].id) {
-						e->stats.powers_ai[i].ticks = powers->powers[power_id].cooldown;
+						e->stats.powers_ai[i].cooldown.setDuration(powers->powers[power_id].cooldown);
 					}
 				}
 
@@ -623,17 +621,17 @@ void BehaviorStandard::updateState() {
 					e->stats.half_dead_power = false;
 				}
 
-				if (e->stats.state_ticks > 0)
+				if (!e->stats.state_timer.isEnd())
 					e->stats.hold_state = true;
 			}
 
 			// animation is finished
-			if ((e->activeAnimation->isLastFrame() && e->stats.state_ticks == 0) ||
+			if ((e->activeAnimation->isLastFrame() && e->stats.state_timer.isEnd()) ||
 			    (power_state == Power::STATE_ATTACK && e->activeAnimation->getName() != powers->powers[power_id].attack_anim) ||
 			    e->instant_power)
 			{
 				if (!e->instant_power)
-					e->stats.cooldown_ticks = e->stats.cooldown;
+					e->stats.cooldown.reset(Timer::BEGIN);
 				else
 					e->instant_power = false;
 
@@ -673,7 +671,7 @@ void BehaviorStandard::updateState() {
 			e->setAnimation("die");
 			if (e->activeAnimation->isFirstFrame()) {
 				e->playSound(Entity::SOUND_DIE);
-				e->stats.corpse_ticks = eset->misc.corpse_timeout;
+				e->stats.corpse_timer.setDuration(eset->misc.corpse_timeout);
 			}
 			if (e->activeAnimation->isSecondLastFrame()) {
 				StatBlock::AIPower* ai_power = e->stats.getAIPower(StatBlock::AI_POWER_DEATH);
@@ -691,7 +689,7 @@ void BehaviorStandard::updateState() {
 
 				// remove corpses that land on blocked tiles, such as water or pits
 				if (!mapr->collider.isValidPosition(e->stats.pos.x, e->stats.pos.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_NORMAL)) {
-					e->stats.corpse_ticks = 0;
+					e->stats.corpse_timer.reset(Timer::END);
 				}
 
 				// prevent "jumping" when rendering
@@ -705,7 +703,7 @@ void BehaviorStandard::updateState() {
 			e->setAnimation("critdie");
 			if (e->activeAnimation->isFirstFrame()) {
 				e->playSound(Entity::SOUND_CRITDIE);
-				e->stats.corpse_ticks = eset->misc.corpse_timeout;
+				e->stats.corpse_timer.setDuration(eset->misc.corpse_timeout);
 			}
 			if (e->activeAnimation->isSecondLastFrame()) {
 				StatBlock::AIPower* ai_power = e->stats.getAIPower(StatBlock::AI_POWER_DEATH);
@@ -731,7 +729,7 @@ void BehaviorStandard::updateState() {
 			break;
 	}
 
-	if (e->stats.state_ticks == 0 && e->stats.hold_state)
+	if (e->stats.state_timer.isEnd() && e->stats.hold_state)
 		e->stats.hold_state = false;
 
 	if (e->stats.cur_state != StatBlock::ENEMY_POWER && e->stats.charge_speed != 0.0f)

@@ -24,6 +24,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "Menu.h"
+#include "Utils.h"
 #include "WidgetLabel.h"
 
 class WidgetButton;
@@ -65,7 +66,7 @@ public:
 	bool inputFocus();
 
 	FPoint target;
-	unsigned distance_ticks;
+	Timer distance_timer;
 };
 
 #endif

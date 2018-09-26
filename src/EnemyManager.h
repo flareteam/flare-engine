@@ -67,7 +67,7 @@ public:
 	int hero_stealth;
 
 	bool player_blocked;
-	int player_blocked_ticks;
+	Timer player_blocked_timer;
 
 	static const bool GET_CORPSE = true;
 	static const bool IS_ALIVE = true;

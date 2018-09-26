@@ -117,7 +117,7 @@ void BehaviorAlly::findTarget() {
 		if(!enemym->player_blocked && hero_dist < ALLY_FLEE_DISTANCE
 				&& mapr->collider.isFacing(pc->stats.pos.x,pc->stats.pos.y,pc->stats.direction,e->stats.pos.x,e->stats.pos.y)) {
 			enemym->player_blocked = true;
-			enemym->player_blocked_ticks = BLOCK_TICKS;
+			enemym->player_blocked_timer.reset(Timer::BEGIN);
 		}
 
 		bool player_closer_than_target = Utils::calcDist(e->stats.pos, pursue_pos) > Utils::calcDist(e->stats.pos, pc->stats.pos);
@@ -138,7 +138,7 @@ void BehaviorAlly::findTarget() {
 			!move_to_safe_dist && hero_dist < e->stats.flee_range &&
 			hero_dist >= e->stats.melee_range &&
 			Math::percentChance(e->stats.chance_flee) &&
-			flee_cooldown == 0
+			e->stats.flee_cooldown_timer.isEnd()
 		)
 	{
 		move_to_safe_dist = true;
@@ -178,8 +178,8 @@ void BehaviorAlly::findTarget() {
 			int index = Math::randBetween(0, static_cast<int>(flee_dirs.size())-1);
 			pursue_pos = Utils::calcVector(e->stats.pos, flee_dirs[index], 1);
 
-			if (flee_ticks == 0) {
-				flee_ticks = e->stats.flee_duration;
+			if (e->stats.flee_timer.isEnd()) {
+				e->stats.flee_timer.reset(Timer::BEGIN);
 			}
 		}
 	}
@@ -223,26 +223,26 @@ void BehaviorAlly::checkMoveStateStance() {
 void BehaviorAlly::checkMoveStateMove() {
 	bool can_attack = true;
 
-	if (e->stats.cooldown_ticks > 0) {
+	if (!e->stats.cooldown.isEnd()) {
 		can_attack = false;
 	}
 	else {
 		can_attack = false;
 		for (size_t i = 0; i < e->stats.powers_ai.size(); ++i) {
-			if (e->stats.powers_ai[i].ticks == 0) {
+			if (e->stats.powers_ai[i].cooldown.isEnd()) {
 				can_attack = true;
 				break;
 			}
 		}
 	}
 	// in order to prevent infinite fleeing, we re-roll our chance to flee after a certain duration
-	bool stop_fleeing = can_attack && fleeing && flee_ticks == 0 && !Math::percentChance(e->stats.chance_flee);
+	bool stop_fleeing = can_attack && fleeing && e->stats.flee_timer.isEnd() && !Math::percentChance(e->stats.chance_flee);
 
-	if (!stop_fleeing && flee_ticks == 0) {
+	if (!stop_fleeing && e->stats.flee_timer.isEnd()) {
 		// if the roll to continue fleeing succeeds, but the flee duration has expired, we don't want to reset the duration to the full amount
 		// instead, we scehdule the next re-roll to happen on the next frame
 		// this will continue until a roll fails, returning to the stance state
-		flee_ticks = 1;
+		e->stats.flee_timer.setCurrent(1);
 	}
 
 	//if close enough to hero, stop miving
@@ -252,7 +252,7 @@ void BehaviorAlly::checkMoveStateMove() {
 			|| stop_fleeing)
 	{
 		if (stop_fleeing) {
-			flee_cooldown = e->stats.flee_cooldown;
+			e->stats.flee_cooldown_timer.reset(Timer::BEGIN);
 		}
 		e->stats.cur_state = StatBlock::ENEMY_STANCE;
 		move_to_safe_dist = false;

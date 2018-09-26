@@ -47,10 +47,8 @@ Event::Event()
 	, components(std::vector<EventComponent>())
 	, location(Rect())
 	, hotspot(Rect())
-	, cooldown(0)
-	, cooldown_ticks(0)
-	, delay(0)
-	, delay_ticks(0)
+	, cooldown()
+	, delay()
 	, keep_after_trigger(true)
 	, center(FPoint(-1, -1))
 	, reachable_from(Rect()) {
@@ -156,11 +154,13 @@ void EventManager::loadEvent(FileParser &infile, Event* evnt) {
 	}
 	else if (infile.key == "cooldown") {
 		// @ATTR event.cooldown|duration|Duration for event cooldown in 'ms' or 's'.
-		evnt->cooldown = Parse::toDuration(infile.val);
+		evnt->cooldown.setDuration(Parse::toDuration(infile.val));
+		evnt->cooldown.reset(Timer::END);
 	}
 	else if (infile.key == "delay") {
 		// @ATTR event.delay|duration|Event will execute after a specified duration.
-		evnt->delay = Parse::toDuration(infile.val);
+		evnt->delay.setDuration(Parse::toDuration(infile.val));
+		evnt->delay.reset(Timer::END);
 	}
 	else if (infile.key == "reachable_from") {
 		// @ATTR event.reachable_from|rectangle|If the hero is inside this rectangle, they can activate the event.
@@ -648,16 +648,25 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 	return true;
 }
 
+bool EventManager::executeEvent(Event &e) {
+	return executeEventInternal(e, !SKIP_DELAY);
+}
+
+bool EventManager::executeDelayedEvent(Event &e) {
+	return executeEventInternal(e, SKIP_DELAY);
+}
+
 /**
  * A particular event has been triggered.
  * Process all of this events components.
  *
  * @param The triggered event
+ * @param Delay ignore flag
  * @return Returns true if the event shall not be run again.
  */
-bool EventManager::executeEvent(Event &ev) {
+bool EventManager::executeEventInternal(Event &ev, bool skip_delay) {
 	// skip executing events that are on cooldown
-	if (ev.cooldown_ticks > 0) return false;
+	if (!ev.delay.isEnd() || !ev.cooldown.isEnd()) return false;
 
 	// need to know this for early returns
 	EventComponent *ec_repeat = ev.getComponent(EventComponent::REPEAT);
@@ -665,21 +674,21 @@ bool EventManager::executeEvent(Event &ev) {
 		ev.keep_after_trigger = ec_repeat->x == 0 ? false : true;
 	}
 
-	// delay event execution
-	if (ev.delay > 0) {
-		ev.delay_ticks = ev.delay;
-
+	// Delay event execution
+	// When an event is delayed, we create a copy and push it to mapr->delayed_events.
+	// The original starts both the cooldown and delay timers.
+	// The delay will finish, followed by the cooldown, which gives the correct timing for repeating events.
+	// The copy only starts the delay timer. The cooldown is not needed because the copy never repeats.
+	if (ev.delay.getDuration() > 0 && !skip_delay) {
+		ev.delay.reset(Timer::BEGIN);
 		mapr->delayed_events.push_back(ev);
-		mapr->delayed_events.back().delay_ticks = ev.delay;
-		mapr->delayed_events.back().delay = 0;
-
-		ev.cooldown_ticks = ev.cooldown + ev.delay;
+		ev.cooldown.reset(Timer::BEGIN);
 
 		return !ev.keep_after_trigger;
 	}
 
 	// set cooldown
-	ev.cooldown_ticks = ev.cooldown;
+	ev.cooldown.reset(Timer::BEGIN);
 
 	// if chance_exec roll fails, don't execute the event
 	// we respect the value of "repeat", even if the event doesn't execute
@@ -798,7 +807,7 @@ bool EventManager::executeEvent(Event &ev) {
 			pc->logMsg(ec->s, Avatar::MSG_UNIQUE);
 		}
 		else if (ec->type == EventComponent::SHAKYCAM) {
-			mapr->shaky_cam_ticks = ec->x;
+			mapr->shaky_cam_timer.setDuration(ec->x);
 		}
 		else if (ec->type == EventComponent::REMOVE_CURRENCY) {
 			camp->removeCurrency(ec->x);

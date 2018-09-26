@@ -27,6 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "GameState.h"
 #include "GameStateConfigBase.h"
+#include "Utils.h"
 
 class FileParser;
 class MenuConfirm;
@@ -129,7 +130,7 @@ private:
 	WidgetScrollBox     * input_scrollbox;
 	MenuConfirm         * input_confirm;
 
-	int input_confirm_ticks;
+	Timer input_confirm_timer;
 	int input_key;
 	unsigned key_count;
 
@@ -141,7 +142,7 @@ private:
 	bool enable_video_tab;
 
 	std::string keybind_msg;
-	int keybind_tip_ticks;
+	Timer keybind_tip_timer;
 	WidgetTooltip* keybind_tip;
 };
 

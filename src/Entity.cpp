@@ -494,7 +494,7 @@ bool Entity::takeHit(Hazard &h) {
 		// default is dmg * 2
 		dmg = (dmg * Math::randBetween(eset->combat.min_crit_damage, eset->combat.max_crit_damage)) / 100;
 		if(!stats.hero)
-			mapr->shaky_cam_ticks = settings->max_frames_per_sec/2;
+			mapr->shaky_cam_timer.setDuration(settings->max_frames_per_sec/2);
 	}
 	else if (is_overhit) {
 		dmg = (dmg * Math::randBetween(eset->combat.min_overhit_damage, eset->combat.max_overhit_damage)) / 100;
@@ -599,7 +599,7 @@ bool Entity::takeHit(Hazard &h) {
 		}
 
 		// play hit sound effect, but only if the hit cooldown is done
-		if (stats.cooldown_hit_ticks == 0)
+		if (stats.cooldown_hit.isEnd())
 			playSound(Entity::SOUND_HIT);
 
 		// if this hit caused a debuff, activate an on_debuff power
@@ -608,7 +608,7 @@ bool Entity::takeHit(Hazard &h) {
 			if (ai_power != NULL) {
 				stats.cur_state = StatBlock::ENEMY_POWER;
 				stats.activated_power = ai_power;
-				stats.cooldown_ticks = 0; // ignore global cooldown
+				stats.cooldown.reset(Timer::END); // ignore global cooldown
 				return true;
 			}
 		}
@@ -618,14 +618,14 @@ bool Entity::takeHit(Hazard &h) {
 		if (ai_power != NULL) {
 			stats.cur_state = StatBlock::ENEMY_POWER;
 			stats.activated_power = ai_power;
-			stats.cooldown_ticks = 0; // ignore global cooldown
+			stats.cooldown.reset(Timer::END); // ignore global cooldown
 			return true;
 		}
 
 		// don't go through a hit animation if stunned or successfully poised
 		// however, critical hits ignore poise
-		if(stats.cooldown_hit_ticks == 0) {
-			stats.cooldown_hit_ticks = stats.cooldown_hit;
+		if(stats.cooldown_hit.isEnd()) {
+			stats.cooldown_hit.reset(Timer::BEGIN);
 
 			if (!stats.effects.stun && (!chance_poise || crit) && !stats.prevent_interrupt) {
 				if(stats.hero) {
@@ -633,7 +633,7 @@ bool Entity::takeHit(Hazard &h) {
 				}
 				else {
 					if (stats.cur_state == StatBlock::ENEMY_POWER) {
-						stats.cooldown_ticks = stats.cooldown;
+						stats.cooldown.reset(Timer::BEGIN);
 						stats.activated_power = NULL;
 					}
 					stats.cur_state = StatBlock::ENEMY_HIT;

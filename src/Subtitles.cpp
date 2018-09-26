@@ -39,7 +39,7 @@ Subtitles::Subtitles()
 	, visible(false)
 	, background(NULL)
 	, background_color(0,0,0,200)
-	, visible_ticks(0)
+	, visible_timer()
 {
 	FileParser infile;
 	// @CLASS Subtitles|Description of soundfx/subtitles.txt
@@ -94,7 +94,7 @@ Subtitles::~Subtitles()
 }
 
 void Subtitles::setTextByID(unsigned long id) {
-	if (id == static_cast<unsigned long>(-1) && visible_ticks == 0) {
+	if (id == static_cast<unsigned long>(-1) && visible_timer.isEnd()) {
 		current_id = -1;
 		current_text = "";
 
@@ -113,7 +113,7 @@ void Subtitles::setTextByID(unsigned long id) {
 			updateLabelAndBackground();
 
 			// 1 second per 10 letters
-			visible_ticks = static_cast<int>(current_text.length()) * (settings->max_frames_per_sec / 10);
+			visible_timer.setDuration(static_cast<int>(current_text.length()) * (settings->max_frames_per_sec / 10));
 
 			return;
 		}
@@ -126,8 +126,7 @@ void Subtitles::logic(unsigned long id) {
 
 	setTextByID(id);
 
-	if (visible_ticks > 0)
-		visible_ticks--;
+	visible_timer.tick();
 
 	if (current_text.empty()) {
 		visible = false;

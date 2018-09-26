@@ -86,13 +86,13 @@ public:
 		int type;
 		int id;
 		int chance;
-		int ticks;
+		Timer cooldown;
 
 		AIPower()
 			: type(AI_POWER_MELEE)
 			, id(0)
 			, chance(0)
-			, ticks(0)
+			, cooldown()
 		{}
 	};
 
@@ -121,7 +121,7 @@ public:
 
 	bool alive;
 	bool corpse; // creature is dead and done animating
-	int corpse_ticks;
+	Timer corpse_timer;
 	bool hero; // else, enemy or other
 	bool hero_ally;
 	bool enemy_ally;
@@ -229,19 +229,18 @@ public:
 	FPoint knockback_destpos;
 	unsigned char direction;
 
-	int cooldown_hit;
-	int cooldown_hit_ticks;
+	Timer cooldown_hit;
+	bool cooldown_hit_enabled;
 
 	// state
 	int cur_state;
-	int state_ticks;
+	Timer state_timer;
 	bool hold_state;
 	bool prevent_interrupt;
 
 	// waypoint patrolling
 	std::queue<FPoint> waypoints;
-	int waypoint_pause;
-	int waypoint_pause_ticks;
+	Timer waypoint_timer;
 
 	// wandering area
 	bool wander;
@@ -265,16 +264,14 @@ public:
 	int combat_style; // determines how the creature enters combat
 	int hero_stealth;
 	int turn_delay;
-	int turn_ticks;
 	bool in_combat;
 	bool join_combat;
-	int cooldown_ticks;
-	int cooldown; // min. # of frames between abilities
+	Timer cooldown; // global cooldown
 	AIPower* activated_power;
 	bool half_dead_power;
 	bool suppress_hp; // hide an enemy HP bar
-	int flee_duration;
-	int flee_cooldown;
+	Timer flee_timer;
+	Timer flee_cooldown_timer;
 	bool perfect_accuracy; // prevents misses & overhits; used for Event powers
 
 	std::vector<EventComponent> loot_table;

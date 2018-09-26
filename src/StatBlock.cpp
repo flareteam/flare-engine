@@ -52,7 +52,7 @@ StatBlock::StatBlock()
 	: statsLoaded(false)
 	, alive(true)
 	, corpse(false)
-	, corpse_ticks(0)
+	, corpse_timer()
 	, hero(false)
 	, hero_ally(false)
 	, enemy_ally(false)
@@ -113,15 +113,14 @@ StatBlock::StatBlock()
 	, knockback_srcpos()
 	, knockback_destpos()
 	, direction(0)
-	, cooldown_hit(-1)
-	, cooldown_hit_ticks(0)
+	, cooldown_hit()
+	, cooldown_hit_enabled(false)
 	, cur_state(0)
-	, state_ticks(0)
+	, state_timer()
 	, hold_state(false)
 	, prevent_interrupt(false)
 	, waypoints()		// enemy only
-	, waypoint_pause(settings->max_frames_per_sec)	// enemy only
-	, waypoint_pause_ticks(0)		// enemy only
+	, waypoint_timer(settings->max_frames_per_sec)	// enemy only
 	, wander(false)					// enemy only
 	, wander_area()		// enemy only
 	, chance_pursue(0)
@@ -137,16 +136,14 @@ StatBlock::StatBlock()
 	, combat_style(COMBAT_DEFAULT)//enemy
 	, hero_stealth(0)
 	, turn_delay(0)
-	, turn_ticks(0)
 	, in_combat(false)  //enemy only
 	, join_combat(false)
-	, cooldown_ticks(0)
-	, cooldown(0)
+	, cooldown()
 	, activated_power(NULL) // enemy only
 	, half_dead_power(false) // enemy only
 	, suppress_hp(false)
-	, flee_duration(settings->max_frames_per_sec) // enemy only
-	, flee_cooldown(settings->max_frames_per_sec) // enemy only
+	, flee_timer(settings->max_frames_per_sec) // enemy only
+	, flee_cooldown_timer(settings->max_frames_per_sec) // enemy only
 	, perfect_accuracy(false)
 	, teleportation(false)
 	, teleport_destination()
@@ -202,12 +199,13 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 	}
 	else if (infile->key == "cooldown") {
 		// @ATTR cooldown|int|Cooldown between attacks in 'ms' or 's'.
-		cooldown = Parse::toDuration(infile->val);
+		cooldown.setDuration(Parse::toDuration(infile->val));
 		return true;
 	}
 	else if (infile->key == "cooldown_hit") {
 		// @ATTR cooldown_hit|duration|Duration of cooldown after being hit in 'ms' or 's'.
-		cooldown_hit = Parse::toDuration(infile->val);
+		cooldown_hit.setDuration(Parse::toDuration(infile->val));
+		cooldown_hit_enabled = true;
 		return true;
 	}
 	else if (infile->key == "stat") {
@@ -466,7 +464,7 @@ void StatBlock::load(const std::string& filename) {
 		else if (infile.key == "facing") facing = Parse::toBool(infile.val);
 
 		// @ATTR waypoint_pause|duration|Duration to wait at each waypoint in 'ms' or 's'.
-		else if (infile.key == "waypoint_pause") waypoint_pause = Parse::toDuration(infile.val);
+		else if (infile.key == "waypoint_pause") waypoint_timer.setDuration(Parse::toDuration(infile.val));
 
 		// @ATTR turn_delay|duration|Duration it takes for this creature to turn and face their target in 'ms' or 's'.
 		else if (infile.key == "turn_delay") turn_delay = Parse::toDuration(infile.val);
@@ -567,9 +565,9 @@ void StatBlock::load(const std::string& filename) {
 		}
 
 		// @ATTR flee_duration|duration|The minimum amount of time that this creature will flee. They may flee longer than the specified time.
-		else if (infile.key == "flee_duration") flee_duration = Parse::toDuration(infile.val);
+		else if (infile.key == "flee_duration") flee_timer.setDuration(Parse::toDuration(infile.val));
 		// @ATTR flee_cooldown|duration|The amount of time this creature must wait before they can start fleeing again.
-		else if (infile.key == "flee_cooldown") flee_cooldown = Parse::toDuration(infile.val);
+		else if (infile.key == "flee_cooldown") flee_cooldown_timer.setDuration(Parse::toDuration(infile.val));
 
 		// this is only used for EnemyGroupManager
 		// we check for them here so that we don't get an error saying they are invalid
@@ -751,10 +749,10 @@ void StatBlock::logic() {
 	}
 
 	// handle cooldowns
-	if (cooldown_ticks > 0) cooldown_ticks--; // global cooldown
+	cooldown.tick(); // global cooldown
 
 	for (size_t i=0; i<powers_ai.size(); ++i) { // NPC/enemy powerslot cooldown
-		if (powers_ai[i].ticks > 0) powers_ai[i].ticks--;
+		powers_ai[i].cooldown.tick();
 	}
 
 	// HP regen
@@ -793,17 +791,15 @@ void StatBlock::logic() {
 	if(effects.death_sentence)
 		hp = 0;
 
-	if(cooldown_hit_ticks > 0)
-		cooldown_hit_ticks--;
+	cooldown_hit.tick();
 
 	if (effects.stun) {
 		// stun stops charge attacks
-		state_ticks = 0;
+		state_timer.reset(Timer::END);
 		charge_speed = 0;
 	}
-	else if (state_ticks > 0) {
-		state_ticks--;
-	}
+
+	state_timer.tick();
 
 	// apply healing over time
 	if (effects.hpot > 0) {
@@ -867,8 +863,7 @@ void StatBlock::logic() {
 		}
 	}
 
-	if (waypoint_pause_ticks > 0)
-		waypoint_pause_ticks--;
+	waypoint_timer.tick();
 
 	// check for revive
 	if (hp <= 0 && effects.revive) {
@@ -928,7 +923,7 @@ bool StatBlock::canUsePower(int powerid, bool allow_passive) const {
 			&& (power.requires_not_max_hp == -1 || (power.requires_not_max_hp >= 0 && hp < (current[Stats::HP_MAX] * power.requires_not_max_hp) / 100))
 			&& (power.requires_max_mp  == -1 || (power.requires_max_mp >= 0 && mp >= (current[Stats::MP_MAX] * power.requires_max_mp) / 100))
 			&& (power.requires_not_max_mp == -1 || (power.requires_not_max_mp >= 0 && mp < (current[Stats::MP_MAX]) * power.requires_not_max_mp / 100))
-			&& (!power.requires_corpse || (target_corpse && target_corpse->corpse_ticks > 0) || (target_nearest_corpse && powers->checkNearestTargeting(power, this, true) && target_nearest_corpse->corpse_ticks > 0))
+			&& (!power.requires_corpse || (target_corpse && !target_corpse->corpse_timer.isEnd()) || (target_nearest_corpse && powers->checkNearestTargeting(power, this, true) && !target_nearest_corpse->corpse_timer.isEnd()))
 			&& (checkRequiredSpawns(power.requires_spawns))
 			&& (menu_powers && menu_powers->meetsUsageStats(powerid))
 			&& (power.type == Power::TYPE_SPAWN ? !summonLimitReached(powerid) : true)
@@ -943,7 +938,7 @@ bool StatBlock::canUsePower(int powerid, bool allow_passive) const {
 
 void StatBlock::loadHeroStats() {
 	// set the default global cooldown
-	cooldown = Parse::toDuration("66ms");
+	cooldown.setDuration(Parse::toDuration("66ms"));
 
 	// Redefine numbers from config file if present
 	FileParser infile;
@@ -1004,7 +999,7 @@ void StatBlock::removeSummons() {
 		(*it)->effects.clearEffects();
 		if (!(*it)->hero && !(*it)->corpse) {
 			(*it)->cur_state = ENEMY_DEAD;
-			(*it)->corpse_ticks = eset->misc.corpse_timeout;
+			(*it)->corpse_timer.reset(Timer::BEGIN);
 		}
 		(*it)->removeSummons();
 		(*it)->summoner = NULL;
@@ -1115,7 +1110,7 @@ StatBlock::AIPower* StatBlock::getAIPower(int ai_type) {
 		if (chance > powers_ai[i].chance)
 			continue;
 
-		if (powers_ai[i].ticks > 0)
+		if (!powers_ai[i].cooldown.isEnd())
 			continue;
 
 		if (powers->powers[powers_ai[i].id].type == Power::TYPE_SPAWN) {
@@ -1156,12 +1151,12 @@ bool StatBlock::checkRequiredSpawns(int req_amount) const {
 
 int StatBlock::getPowerCooldown(int power_id) {
 	if (hero) {
-		return pc->hero_cooldown[power_id];
+		return pc->power_cooldown_timers[power_id].getDuration();
 	}
 	else {
 		for (size_t i = 0; i < powers_ai.size(); ++i) {
 			if (power_id == powers_ai[i].id)
-				return powers_ai[i].ticks;
+				return powers_ai[i].cooldown.getDuration();
 		}
 	}
 
@@ -1170,12 +1165,12 @@ int StatBlock::getPowerCooldown(int power_id) {
 
 void StatBlock::setPowerCooldown(int power_id, int power_cooldown) {
 	if (hero) {
-		pc->hero_cooldown[power_id] = power_cooldown;
+		pc->power_cooldown_timers[power_id].setDuration(power_cooldown);
 	}
 	else {
 		for (size_t i = 0; i < powers_ai.size(); ++i) {
 			if (power_id == powers_ai[i].id) {
-				powers_ai[i].ticks = power_cooldown;
+				powers_ai[i].cooldown.setDuration(power_cooldown);
 				break;
 			}
 		}

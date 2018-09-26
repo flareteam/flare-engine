@@ -75,6 +75,27 @@ public:
 	bool operator !=(const Color &other);
 };
 
+class Timer {
+private:
+	unsigned current;
+	unsigned duration;
+public:
+	enum {
+		END = 0,
+		BEGIN = 1
+	};
+
+	Timer(unsigned _duration = 0);
+	unsigned getCurrent();
+	unsigned getDuration();
+	void setCurrent(unsigned val);
+	void setDuration(unsigned val);
+	bool tick();
+	bool isEnd();
+	bool isBegin();
+	void reset(int type);
+};
+
 namespace Utils {
 	// Alignment: For aligning objects relative to the screen
 	enum {

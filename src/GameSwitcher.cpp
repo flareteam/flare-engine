@@ -52,9 +52,11 @@ GameSwitcher::GameSwitcher()
 	: background(NULL)
 	, background_image(NULL)
 	, background_filename("")
-	, fps_ticks(0)
+	, fps_update()
 	, last_fps(0)
 {
+	// update the fps counter 4 times per second
+	fps_update.setDuration(settings->max_frames_per_sec / 4);
 
 	// The initial state is the intro cutscene and then title screen
 	GameStateTitle *title=new GameStateTitle();
@@ -213,8 +215,8 @@ void GameSwitcher::logic() {
 void GameSwitcher::showFPS(float fps) {
 	if (settings->show_fps && settings->show_hud) {
 		if (!label_fps) label_fps = new WidgetLabel();
-		if (fps_ticks == 0) {
-			fps_ticks = settings->max_frames_per_sec / 4;
+		if (fps_update.isEnd()) {
+			fps_update.reset(Timer::BEGIN);
 
 			float avg_fps = (fps + last_fps) / 2.f;
 			last_fps = fps;
@@ -226,7 +228,7 @@ void GameSwitcher::showFPS(float fps) {
 			label_fps->setColor(fps_color);
 		}
 		label_fps->render();
-		fps_ticks--;
+		fps_update.tick();
 	}
 }
 

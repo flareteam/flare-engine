@@ -138,9 +138,8 @@ public:
 	bool respawn;
 	bool close_menus;
 	bool allow_movement;
-	std::vector<int> hero_cooldown;
-	std::vector<int> power_cast_ticks;
-	std::vector<int> power_cast_duration;
+	std::vector<Timer> power_cooldown_timers;
+	std::vector<Timer> power_cast_timers;
 	FPoint enemy_pos; // positon of the highlighted enemy
 	unsigned long time_played;
 	bool questlog_dismissed;

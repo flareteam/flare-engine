@@ -128,10 +128,8 @@ public:
 	std::vector<EventComponent> components;
 	Rect location;
 	Rect hotspot;
-	int cooldown; // events that run multiple times pause this long in frames
-	int cooldown_ticks;
-	int delay;
-	int delay_ticks;
+	Timer cooldown; // events that run multiple times pause this long in frames
+	Timer delay;
 	bool keep_after_trigger; // if this event has been triggered once, should this event be kept? If so, this event can be triggered multiple times.
 	FPoint center;
 	Rect reachable_from;
@@ -152,10 +150,13 @@ public:
 	static bool loadEventComponentString(std::string &key, std::string &val, Event* evnt, EventComponent* ec);
 
 	static bool executeEvent(Event &e);
+	static bool executeDelayedEvent(Event &e);
 	static bool isActive(const Event &e);
 	static void executeScript(const std::string& filename, float x, float y);
 
 private:
+	static const bool SKIP_DELAY = true;
+	static bool executeEventInternal(Event &e, bool skip_delay);
 	static EventComponent getRandomMapFromFile(const std::string& fname);
 
 };

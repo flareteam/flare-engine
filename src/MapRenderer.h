@@ -135,7 +135,7 @@ public:
 	std::string cutscene_file;
 
 	// shaky cam
-	int shaky_cam_ticks;
+	Timer shaky_cam_timer;
 
 	// stash handling
 	bool stash;

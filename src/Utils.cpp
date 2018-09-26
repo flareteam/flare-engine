@@ -156,6 +156,55 @@ bool Color::operator !=(const Color &other) {
 	return !((*this) == other);
 }
 
+Timer::Timer(unsigned _duration)
+	: current(0)
+	, duration(_duration)
+{
+}
+
+unsigned Timer::getCurrent() {
+	return current;
+}
+
+unsigned Timer::getDuration() {
+	return duration;
+}
+
+void Timer::setCurrent(unsigned val) {
+	current = val;
+	if (current > duration)
+		current = duration;
+}
+
+void Timer::setDuration(unsigned val) {
+	current = duration = val;
+}
+
+bool Timer::tick() {
+	if (current > 0)
+		current--;
+
+	if (current == 0)
+		return true;
+
+	return false;
+}
+
+bool Timer::isEnd() {
+	return current == 0;
+}
+
+bool Timer::isBegin() {
+	return current == duration;
+}
+
+void Timer::reset(int type) {
+	if (type == Timer::END)
+		current = 0;
+	else if (type == Timer::BEGIN)
+		current = duration;
+}
+
 FPoint Utils::screenToMap(int x, int y, float camx, float camy) {
 	FPoint r;
 	if (eset->tileset.orientation == eset->tileset.TILESET_ISOMETRIC) {

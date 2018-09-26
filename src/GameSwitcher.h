@@ -56,7 +56,7 @@ private:
 	std::string background_filename;
 	std::vector<std::string> background_list;
 
-	int fps_ticks;
+	Timer fps_update;
 	float last_fps;
 
 public:

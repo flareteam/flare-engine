@@ -98,7 +98,7 @@ private:
 	WidgetButton *button_close;
 	WidgetButton *button_advance;
 	int vscroll_offset;
-	int vscroll_ticks;
+	int vscroll_y;
 	size_t sub_index;
 	size_t prev_sub_index;
 

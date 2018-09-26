@@ -131,8 +131,7 @@ public:
 
 	// handle repeating keys, such as when holding Backspace to delete text in WidgetInput
 	bool slow_repeat[KEY_COUNT];
-	int repeat_ticks[KEY_COUNT];
-	int max_repeat_ticks[KEY_COUNT];
+	Timer repeat_cooldown[KEY_COUNT];
 
 	bool done;
 	Point mouse;

@@ -50,7 +50,7 @@ Scene::Scene(const CutsceneSettings& _settings, short _cutscene_type)
 	, button_close(new WidgetButton("images/menus/buttons/button_x.png"))
 	, button_advance(NULL)
 	, vscroll_offset(0)
-	, vscroll_ticks(0)
+	, vscroll_y(0)
 	, sub_index(0)
 	, prev_sub_index(0)
 	, cutscene_type(_cutscene_type)
@@ -81,7 +81,7 @@ Scene& Scene::operator=(const Scene& other) {
 	button_close = new WidgetButton("images/menus/buttons/button_x.png");
 	button_advance = NULL;
 	vscroll_offset = other.vscroll_offset;
-	vscroll_ticks = other.vscroll_ticks;
+	vscroll_y = other.vscroll_y;
 	sub_index = other.sub_index;
 	prev_sub_index = other.prev_sub_index;
 	cutscene_type = other.cutscene_type;
@@ -132,7 +132,7 @@ void Scene::reset() {
 	delete caption_box;
 	caption_box = NULL;
 	vscroll_offset = 0;
-	vscroll_ticks = 0;
+	vscroll_y = 0;
 	for (size_t i = 0; i < vscroll_components.size(); ++i) {
 		if (vscroll_components[i].image)
 			delete vscroll_components[i].image;
@@ -191,12 +191,12 @@ int Scene::logic() {
 			return DONE;
 		}
 		else if (cutscene_type == CUTSCENE_VSCROLL && inpt->pressing[Input::UP]) {
-			vscroll_ticks -= VSCROLL_SPEED;
-			if (vscroll_ticks < 0)
-				vscroll_ticks = 0;
+			vscroll_y -= VSCROLL_SPEED;
+			if (vscroll_y < 0)
+				vscroll_y = 0;
 		}
 		else if (cutscene_type == CUTSCENE_VSCROLL && inpt->pressing[Input::DOWN]) {
-			vscroll_ticks += VSCROLL_SPEED;
+			vscroll_y += VSCROLL_SPEED;
 		}
 	}
 
@@ -342,13 +342,13 @@ int Scene::logic() {
 			}
 		}
 
-		vscroll_offset = static_cast<int>(static_cast<float>(vscroll_ticks) * (cutscene_settings.vscroll_speed * settings->max_frames_per_sec) / settings->view_h);
+		vscroll_offset = static_cast<int>(static_cast<float>(vscroll_y) * (cutscene_settings.vscroll_speed * settings->max_frames_per_sec) / settings->view_h);
 		if (skip == SKIP_NEXT)
 			return NEXT;
 		else if (skip == SKIP_SUBSCENE)
-			vscroll_ticks += VSCROLL_SPEED;
+			vscroll_y += VSCROLL_SPEED;
 		else
-			vscroll_ticks++;
+			vscroll_y++;
 
 		refreshWidgets();
 

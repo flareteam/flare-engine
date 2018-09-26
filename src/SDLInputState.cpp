@@ -45,7 +45,7 @@ SDLInputState::SDLInputState(void)
 	, joy(NULL)
 	, joy_num(0)
 	, joy_axis_num(0)
-	, resize_ticks(-1)
+	, resize_cooldown()
 	, joystick_init(false)
 	, text_input(false)
 {
@@ -221,7 +221,7 @@ void SDLInputState::handle() {
 				break;
 			case SDL_WINDOWEVENT:
 				if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
-					resize_ticks = settings->max_frames_per_sec / 4;
+					resize_cooldown.setDuration(settings->max_frames_per_sec / 4);
 				}
 				else if (event.window.event == SDL_WINDOWEVENT_MINIMIZED) {
 					if (platform.is_mobile_device) {
@@ -524,13 +524,14 @@ void SDLInputState::handle() {
 		}
 	}
 
-	if (resize_ticks > 0) {
-		resize_ticks--;
-	}
-	if (resize_ticks == 0) {
-		resize_ticks = -1;
-		window_resized = true;
-		render_device->windowResize();
+	if (resize_cooldown.getDuration() > 0) {
+		resize_cooldown.tick();
+
+		if (resize_cooldown.isEnd()) {
+			resize_cooldown.setDuration(0);
+			window_resized = true;
+			render_device->windowResize();
+		}
 	}
 
 	// this flag is used to guard against removing and then adding an already connected controller on startup
@@ -543,19 +544,19 @@ void SDLInputState::handle() {
 		if (slow_repeat[i]) {
 			if (!pressing[i]) {
 				// key not pressed, reset delay
-				max_repeat_ticks[i] = settings->max_frames_per_sec;
+				repeat_cooldown[i].setDuration(settings->max_frames_per_sec);
 			}
 			else if (pressing[i] && !lock[i]) {
 				// lock key and set delay
 				lock[i] = true;
-				repeat_ticks[i] = 0;
-				max_repeat_ticks[i] = std::max(settings->max_frames_per_sec / 10, max_repeat_ticks[i] - (settings->max_frames_per_sec / 2));
+				int prev_duration = static_cast<int>(repeat_cooldown[i].getDuration());
+				repeat_cooldown[i].setDuration(std::max(settings->max_frames_per_sec / 10, prev_duration - (settings->max_frames_per_sec / 2)));
 			}
 			else if (pressing[i] && lock[i]) {
 				// delay unlocking key
-				repeat_ticks[i]++;
+				repeat_cooldown[i].tick();
 
-				if (repeat_ticks[i] >= max_repeat_ticks[i]) {
+				if (repeat_cooldown[i].isEnd()) {
 					lock[i] = false;
 				}
 			}

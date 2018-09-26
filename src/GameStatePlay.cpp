@@ -84,10 +84,10 @@ GameStatePlay::GameStatePlay()
 	, enemy(NULL)
 	, npc_id(-1)
 	, npc_from_map(true)
-	, menu_enemy_timeout(settings->max_frames_per_sec * 10)
-	, second_ticks(0)
 	, is_first_map_load(true)
 {
+	second_timer.setDuration(settings->max_frames_per_sec);
+
 	hasMusic = true;
 	has_background = false;
 	// GameEngine scope variables
@@ -162,8 +162,10 @@ void GameStatePlay::checkEnemyFocus() {
 	if (!inpt->usingMouse()) {
 		if (hazards->last_enemy) {
 			if (enemy == hazards->last_enemy) {
-				if (menu->enemy->timeout > 0 && hazards->last_enemy->stats.hp > 0) return;
-				else hazards->last_enemy = NULL;
+				if (!menu->enemy->timeout.isEnd() && hazards->last_enemy->stats.hp > 0)
+					return;
+				else
+					hazards->last_enemy = NULL;
 			}
 			enemy = hazards->last_enemy;
 		}
@@ -178,7 +180,8 @@ void GameStatePlay::checkEnemyFocus() {
 		}
 		else {
 			enemy = enemym->enemyFocus(inpt->mouse, mapr->cam, EnemyManager::IS_ALIVE);
-			if (enemy) curs->setCursor(CursorManager::CURSOR_ATTACK);
+			if (enemy)
+				curs->setCursor(CursorManager::CURSOR_ATTACK);
 			src_pos = Utils::screenToMap(inpt->mouse.x, inpt->mouse.y, mapr->cam.x, mapr->cam.y);
 
 		}
@@ -188,7 +191,7 @@ void GameStatePlay::checkEnemyFocus() {
 		// set the actual menu with the enemy selected above
 		if (!enemy->stats.suppress_hp) {
 			menu->enemy->enemy = enemy;
-			menu->enemy->timeout = menu_enemy_timeout;
+			menu->enemy->timeout.reset(Timer::BEGIN);
 		}
 	}
 	else if (inpt->usingMouse()) {
@@ -197,7 +200,7 @@ void GameStatePlay::checkEnemyFocus() {
 		if (temp_enemy) {
 			pc->stats.target_corpse = &(temp_enemy->stats);
 			menu->enemy->enemy = temp_enemy;
-			menu->enemy->timeout = menu_enemy_timeout;
+			menu->enemy->timeout.reset(Timer::BEGIN);
 		}
 	}
 
@@ -872,11 +875,11 @@ void GameStatePlay::logic() {
 	menu->logic();
 
 	if (!isPaused()) {
-		if (second_ticks < settings->max_frames_per_sec)
-			second_ticks++;
-		else if (second_ticks == settings->max_frames_per_sec) {
+		if (!second_timer.isEnd())
+			second_timer.tick();
+		else {
 			pc->time_played++;
-			second_ticks = 0;
+			second_timer.reset(Timer::BEGIN);
 		}
 
 		// these actions only occur when the game isn't paused

@@ -27,6 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define MENU_ENEMY_H
 
 #include "CommonIncludes.h"
+#include "Utils.h"
 #include "WidgetLabel.h"
 
 class Enemy;
@@ -47,7 +48,7 @@ public:
 	void handleNewMap();
 	void logic();
 	void render();
-	int timeout;
+	Timer timeout;
 };
 
 #endif

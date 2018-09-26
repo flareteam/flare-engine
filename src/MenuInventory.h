@@ -28,6 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "MenuItemStorage.h"
+#include "Utils.h"
 #include "WidgetLabel.h"
 
 class BonusData;
@@ -56,7 +57,7 @@ private:
 	std::vector<Point> equipped_pos;
 	Point carried_pos;
 
-	int tap_to_activate_ticks;
+	Timer tap_to_activate_timer;
 
 public:
 	enum {

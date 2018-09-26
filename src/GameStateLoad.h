@@ -33,6 +33,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "GameSlotPreview.h"
 #include "GameState.h"
 #include "StatBlock.h"
+#include "Utils.h"
 #include "WidgetLabel.h"
 
 class ItemManager;
@@ -51,8 +52,7 @@ public:
 
 	std::vector<int> equipped;
 	GameSlotPreview preview;
-	int preview_turn_duration;
-	int preview_turn_ticks;
+	Timer preview_turn_timer;
 
 	WidgetLabel label_name;
 	WidgetLabel label_level;

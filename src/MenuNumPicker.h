@@ -48,7 +48,6 @@ protected:
 	int spin_ticks;
 	int spin_increment;
 	int spin_delay;
-	int spin_rate;
 
 public:
 	MenuNumPicker();

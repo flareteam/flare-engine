@@ -54,7 +54,7 @@ MenuInventory::MenuInventory()
 	, MAX_CARRIED(64)
 	, carried_cols(4)
 	, carried_rows(4)
-	, tap_to_activate_ticks(0)
+	, tap_to_activate_timer(settings->max_frames_per_sec / 3)
 	, currency(0)
 	, drag_prev_src(-1)
 	, changed_equipment(true)
@@ -235,9 +235,7 @@ void MenuInventory::logic() {
 		}
 	}
 
-	if (tap_to_activate_ticks > 0) {
-		--tap_to_activate_ticks;
-	}
+	tap_to_activate_timer.tick();
 }
 
 void MenuInventory::render() {
@@ -339,7 +337,7 @@ ItemStack MenuInventory::click(const Point& position) {
 
 		if (settings->touchscreen) {
 			tablist.setCurrent(inventory[drag_prev_src].current_slot);
-			tap_to_activate_ticks = settings->max_frames_per_sec / 3;
+			tap_to_activate_timer.reset(Timer::BEGIN);
 		}
 
 		if (item.empty()) {
@@ -479,7 +477,7 @@ bool MenuInventory::drop(const Point& position, ItemStack stack) {
 				// NOTE: the quantity must be 1, since the number picker appears when tapping on a stack of more than 1 item
 				// NOTE: we only support activating books since equipment activation doesn't work for some reason
 				// NOTE: Consumables are usually in stacks > 1, so we ignore those as well for consistency
-				if (settings->touchscreen && tap_to_activate_ticks > 0 && !items->items[stack.item].book.empty() && stack.quantity == 1) {
+				if (settings->touchscreen && !tap_to_activate_timer.isEnd() && !items->items[stack.item].book.empty() && stack.quantity == 1) {
 					activate(position);
 				}
 			}
@@ -577,12 +575,12 @@ void MenuInventory::activate(const Point& position) {
 		}
 
 		// check power & item requirements
-		if (!pc->stats.canUsePower(power_id, !StatBlock::CAN_USE_PASSIVE) || pc->hero_cooldown[power_id] > 0) {
+		if (!pc->stats.canUsePower(power_id, !StatBlock::CAN_USE_PASSIVE) || !pc->power_cooldown_timers[power_id].isEnd()) {
 			pc->logMsg(msg->get("You can't use this item right now."), Avatar::MSG_NORMAL);
 			return;
 		}
 
-		pc->hero_cooldown[power_id] = powers->powers[power_id].cooldown;
+		pc->power_cooldown_timers[power_id].setDuration(powers->powers[power_id].cooldown);
 
 		// if this item requires targeting it can't be used this way
 		if (!powers->powers[power_id].requires_targeting) {
