@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-23 23:10-0400\n"
+"POT-Creation-Date: 2018-09-28 13:25-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Eric R, 2018\n"
 "Language-Team: Spanish (https://www.transifex.com/flareorg/teams/84925/es/)\n"
@@ -168,93 +168,93 @@ msgstr "Interfaz"
 msgid "Mods"
 msgstr "Mods"
 
-#: ../../../src/GameStateConfigBase.cpp:258 ../../../src/MenuExit.cpp:72
+#: ../../../src/GameStateConfigBase.cpp:257 ../../../src/MenuExit.cpp:72
 msgid "Music Volume"
 msgstr "Volumen de música"
 
-#: ../../../src/GameStateConfigBase.cpp:262 ../../../src/MenuExit.cpp:77
+#: ../../../src/GameStateConfigBase.cpp:261 ../../../src/MenuExit.cpp:77
 msgid "Sound Volume"
 msgstr "Volumen de sonido"
 
-#: ../../../src/GameStateConfigBase.cpp:266
+#: ../../../src/GameStateConfigBase.cpp:265
 msgid "Language"
 msgstr "Idioma"
 
-#: ../../../src/GameStateConfigBase.cpp:275
+#: ../../../src/GameStateConfigBase.cpp:274
 msgid "Show combat text"
 msgstr "Mostrar texto de combate"
 
-#: ../../../src/GameStateConfigBase.cpp:279
+#: ../../../src/GameStateConfigBase.cpp:278
 msgid "Show FPS"
 msgstr "Mostrar FPS"
 
-#: ../../../src/GameStateConfigBase.cpp:283
+#: ../../../src/GameStateConfigBase.cpp:282
 msgid "Colorblind Mode"
 msgstr "Modo para daltónicos"
 
-#: ../../../src/GameStateConfigBase.cpp:287
+#: ../../../src/GameStateConfigBase.cpp:286
 msgid "Hardware mouse cursor"
 msgstr "Cursor del ratón por hardware"
 
-#: ../../../src/GameStateConfigBase.cpp:291
+#: ../../../src/GameStateConfigBase.cpp:290
 msgid "Developer Mode"
 msgstr "Modo desarrollador"
 
-#: ../../../src/GameStateConfigBase.cpp:295
+#: ../../../src/GameStateConfigBase.cpp:294
 msgid "Always show loot labels"
 msgstr "Mostrar siempre las etiquetas del botín"
 
-#: ../../../src/GameStateConfigBase.cpp:299
+#: ../../../src/GameStateConfigBase.cpp:298
 msgid "Always show stat bar labels"
 msgstr "Mostrar etiquetas en las barra de atributos"
 
-#: ../../../src/GameStateConfigBase.cpp:303
+#: ../../../src/GameStateConfigBase.cpp:302
 msgid "Automatically equip items"
 msgstr "Automáticamente equipar con objetos"
 
-#: ../../../src/GameStateConfigBase.cpp:307
+#: ../../../src/GameStateConfigBase.cpp:306
 msgid "Subtitles"
 msgstr "Subtítulos"
 
-#: ../../../src/GameStateConfigBase.cpp:311
+#: ../../../src/GameStateConfigBase.cpp:310
 msgid "Active Mods"
 msgstr "Mods Activos"
 
-#: ../../../src/GameStateConfigBase.cpp:320
+#: ../../../src/GameStateConfigBase.cpp:319
 msgid "Available Mods"
 msgstr "Mods Disponibles"
 
-#: ../../../src/GameStateConfigBase.cpp:339
+#: ../../../src/GameStateConfigBase.cpp:338
 msgid "<< Disable"
 msgstr "<< Inhabilitar"
 
-#: ../../../src/GameStateConfigBase.cpp:345
+#: ../../../src/GameStateConfigBase.cpp:344
 msgid "Enable >>"
 msgstr "Habilitar >>"
 
-#: ../../../src/GameStateConfigBase.cpp:925
+#: ../../../src/GameStateConfigBase.cpp:924
 msgid "Version:"
 msgstr "Versión:"
 
-#: ../../../src/GameStateConfigBase.cpp:930
+#: ../../../src/GameStateConfigBase.cpp:929
 msgid "Game:"
 msgstr "Juego:"
 
-#: ../../../src/GameStateConfigBase.cpp:935
+#: ../../../src/GameStateConfigBase.cpp:934
 msgid "Engine version:"
 msgstr "Versión del motor de juego:"
 
-#: ../../../src/GameStateConfigBase.cpp:943
+#: ../../../src/GameStateConfigBase.cpp:942
 msgid "Requires mods:"
 msgstr "Mods requeridos:"
 
 #: ../../../src/GameStateConfigDesktop.cpp:81
-#: ../../../src/GameStateConfigDesktop.cpp:740
+#: ../../../src/GameStateConfigDesktop.cpp:739
 msgid "Clear"
 msgstr "Limpiar"
 
 #: ../../../src/GameStateConfigDesktop.cpp:81
-#: ../../../src/GameStateConfigDesktop.cpp:738
+#: ../../../src/GameStateConfigDesktop.cpp:737
 msgid "Assign:"
 msgstr "Asignar:"
 
@@ -270,7 +270,7 @@ msgstr "Entrada"
 msgid "Keybindings"
 msgstr "Teclas"
 
-#: ../../../src/GameStateConfigDesktop.cpp:187
+#: ../../../src/GameStateConfigDesktop.cpp:186
 msgid ""
 "Will try to store surfaces in video memory versus system memory. The effect "
 "this has on performance depends on the renderer."
@@ -278,7 +278,7 @@ msgstr ""
 "Intentará almacenar las superficies en la memoria de vídeo en vez de en la "
 "memoria del sistema. Esto afectará de forma distinta según el renderizador."
 
-#: ../../../src/GameStateConfigDesktop.cpp:188
+#: ../../../src/GameStateConfigDesktop.cpp:187
 msgid ""
 "Prevents screen tearing. Disable if you experience \"stuttering\" in "
 "windowed mode or input lag."
@@ -286,7 +286,7 @@ msgstr ""
 "Evita que la pantalla se muestre rota. Se puede desactivar si se detectan "
 "\"parpadeos\" de imagen en el modo ventana o retraso en las entradas"
 
-#: ../../../src/GameStateConfigDesktop.cpp:189
+#: ../../../src/GameStateConfigDesktop.cpp:188
 msgid ""
 "When enabled, this uses the screen DPI in addition to the window dimensions "
 "to scale the rendering resolution. Otherwise, only the window dimensions are"
@@ -296,67 +296,67 @@ msgstr ""
 "dimensiones de la ventana para escalar la resolución. De lo contrario, sólo "
 "se usarán las dimensiones de la ventana."
 
-#: ../../../src/GameStateConfigDesktop.cpp:190
+#: ../../../src/GameStateConfigDesktop.cpp:189
 msgid "Experimental"
 msgstr "Experimental"
 
-#: ../../../src/GameStateConfigDesktop.cpp:191
+#: ../../../src/GameStateConfigDesktop.cpp:190
 msgid "For handheld devices"
 msgstr "Para dispositivos móviles"
 
-#: ../../../src/GameStateConfigDesktop.cpp:209
+#: ../../../src/GameStateConfigDesktop.cpp:208
 msgid "Renderer"
 msgstr "Renderizador"
 
-#: ../../../src/GameStateConfigDesktop.cpp:225
+#: ../../../src/GameStateConfigDesktop.cpp:224
 msgid "Full Screen Mode"
 msgstr "Modo de pantalla completa"
 
-#: ../../../src/GameStateConfigDesktop.cpp:229
+#: ../../../src/GameStateConfigDesktop.cpp:228
 msgid "Move hero using mouse"
 msgstr "Mover héroe a través del ratón"
 
-#: ../../../src/GameStateConfigDesktop.cpp:233
+#: ../../../src/GameStateConfigDesktop.cpp:232
 msgid "Hardware surfaces"
 msgstr "Superficies de hardware"
 
-#: ../../../src/GameStateConfigDesktop.cpp:237
+#: ../../../src/GameStateConfigDesktop.cpp:236
 msgid "V-Sync"
 msgstr "V-Sync"
 
-#: ../../../src/GameStateConfigDesktop.cpp:241
+#: ../../../src/GameStateConfigDesktop.cpp:240
 msgid "Texture Filtering"
 msgstr "Filtro de textura"
 
-#: ../../../src/GameStateConfigDesktop.cpp:245
+#: ../../../src/GameStateConfigDesktop.cpp:244
 msgid "DPI scaling"
 msgstr "Escalado por PPP"
 
-#: ../../../src/GameStateConfigDesktop.cpp:249
+#: ../../../src/GameStateConfigDesktop.cpp:248
 msgid "Allow changing gamma"
 msgstr "Permitir cambiar gama"
 
-#: ../../../src/GameStateConfigDesktop.cpp:253
+#: ../../../src/GameStateConfigDesktop.cpp:252
 msgid "Gamma"
 msgstr "Gama"
 
-#: ../../../src/GameStateConfigDesktop.cpp:257
+#: ../../../src/GameStateConfigDesktop.cpp:256
 msgid "Use joystick"
 msgstr "Usar joystick"
 
-#: ../../../src/GameStateConfigDesktop.cpp:261
+#: ../../../src/GameStateConfigDesktop.cpp:260
 msgid "Joystick"
 msgstr "Joystick"
 
-#: ../../../src/GameStateConfigDesktop.cpp:277
+#: ../../../src/GameStateConfigDesktop.cpp:276
 msgid "Mouse aim"
 msgstr "Ratón para apuntar"
 
-#: ../../../src/GameStateConfigDesktop.cpp:281
+#: ../../../src/GameStateConfigDesktop.cpp:280
 msgid "Do not use mouse"
 msgstr "No usar ratón"
 
-#: ../../../src/GameStateConfigDesktop.cpp:285
+#: ../../../src/GameStateConfigDesktop.cpp:284
 msgid "Joystick Deadzone"
 msgstr "Zona sin joystick"
 
@@ -405,8 +405,8 @@ msgid "Invalid save"
 msgstr "Partida guardada inválida"
 
 #: ../../../src/GameStateLoad.cpp:755 ../../../src/ItemManager.cpp:747
-#: ../../../src/MenuPowers.cpp:777 ../../../src/MenuPowers.cpp:1143
-#: ../../../src/MenuPowers.cpp:1539
+#: ../../../src/MenuPowers.cpp:778 ../../../src/MenuPowers.cpp:1144
+#: ../../../src/MenuPowers.cpp:1542
 #, c-format
 msgid "Level %d"
 msgstr "Nivel %d"
@@ -611,21 +611,21 @@ msgstr "Ratón X2"
 msgid "Unknown Item"
 msgstr "Objeto desconocido"
 
-#: ../../../src/ItemManager.cpp:648 ../../../src/MenuPowers.cpp:886
+#: ../../../src/ItemManager.cpp:648 ../../../src/MenuPowers.cpp:887
 #, c-format
 msgid "%d%% Speed"
 msgstr "%d%% velocidad"
 
-#: ../../../src/ItemManager.cpp:652 ../../../src/MenuPowers.cpp:889
+#: ../../../src/ItemManager.cpp:652 ../../../src/MenuPowers.cpp:890
 #, c-format
 msgid "%d%% Attack Speed"
 msgstr "%d%% velocidad de ataque"
 
 #: ../../../src/ItemManager.cpp:674 ../../../src/MenuCharacter.cpp:354
-#: ../../../src/MenuPowers.cpp:832
+#: ../../../src/MenuPowers.cpp:833
 #, c-format
-msgid "%s Resistance"
-msgstr "%s Resistencia"
+msgid "Resistance (%s)"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:684
 #, c-format
@@ -651,14 +651,14 @@ msgstr "Absorber: %d-%d"
 msgid "Absorb: %d"
 msgstr "Absorber: %d"
 
-#: ../../../src/ItemManager.cpp:827 ../../../src/MenuPowers.cpp:1130
-#: ../../../src/MenuPowers.cpp:1133
+#: ../../../src/ItemManager.cpp:827 ../../../src/MenuPowers.cpp:1131
+#: ../../../src/MenuPowers.cpp:1134
 #, c-format
 msgid "Requires Level %d"
 msgstr "Requiere nivel %d"
 
-#: ../../../src/ItemManager.cpp:838 ../../../src/MenuPowers.cpp:1122
-#: ../../../src/MenuPowers.cpp:1124
+#: ../../../src/ItemManager.cpp:838 ../../../src/MenuPowers.cpp:1123
+#: ../../../src/MenuPowers.cpp:1125
 #, c-format
 msgid "Requires %s %d"
 msgstr "Requiere %s %d"
@@ -1067,164 +1067,164 @@ msgstr "Comerciar"
 msgid "Enter amount:"
 msgstr "Introduce cantidad:"
 
-#: ../../../src/MenuPowers.cpp:786
+#: ../../../src/MenuPowers.cpp:787
 msgid "Passive"
 msgstr "Pasivo"
 
-#: ../../../src/MenuPowers.cpp:791
+#: ../../../src/MenuPowers.cpp:792
 #, c-format
 msgid "Costs %d MP"
 msgstr "Costos %d PM"
 
-#: ../../../src/MenuPowers.cpp:795
+#: ../../../src/MenuPowers.cpp:796
 #, c-format
 msgid "Costs %d HP"
 msgstr "Costos %d HP"
 
-#: ../../../src/MenuPowers.cpp:800
+#: ../../../src/MenuPowers.cpp:801
 msgid "Cooldown:"
 msgstr "Enfriar:"
 
-#: ../../../src/MenuPowers.cpp:865 ../../../src/MenuPowers.cpp:868
+#: ../../../src/MenuPowers.cpp:866 ../../../src/MenuPowers.cpp:869
 msgid "Damage per second"
 msgstr "Daño por segundo"
 
-#: ../../../src/MenuPowers.cpp:871 ../../../src/MenuPowers.cpp:874
+#: ../../../src/MenuPowers.cpp:872 ../../../src/MenuPowers.cpp:875
 msgid "HP per second"
 msgstr "PV por segundo"
 
-#: ../../../src/MenuPowers.cpp:877 ../../../src/MenuPowers.cpp:880
+#: ../../../src/MenuPowers.cpp:878 ../../../src/MenuPowers.cpp:881
 msgid "MP per second"
 msgstr "PM por segundo"
 
-#: ../../../src/MenuPowers.cpp:884
+#: ../../../src/MenuPowers.cpp:885
 msgid "Immobilize"
 msgstr "Inmovilizar"
 
-#: ../../../src/MenuPowers.cpp:892
+#: ../../../src/MenuPowers.cpp:893
 msgid "Immunity"
 msgstr "Inmunidad"
 
-#: ../../../src/MenuPowers.cpp:895
+#: ../../../src/MenuPowers.cpp:896
 msgid "Immunity to damage over time"
 msgstr "Inmunidad al daño durante un tiempo"
 
-#: ../../../src/MenuPowers.cpp:898
+#: ../../../src/MenuPowers.cpp:899
 msgid "Immunity to slow"
 msgstr "Inmunidad a la lentidud"
 
-#: ../../../src/MenuPowers.cpp:901
+#: ../../../src/MenuPowers.cpp:902
 msgid "Immunity to stun"
 msgstr "Inmunidad al aturdimiento"
 
-#: ../../../src/MenuPowers.cpp:904
+#: ../../../src/MenuPowers.cpp:905
 msgid "Immunity to HP steal"
 msgstr "Inmunidad al robo de PV"
 
-#: ../../../src/MenuPowers.cpp:907
+#: ../../../src/MenuPowers.cpp:908
 msgid "Immunity to MP steal"
 msgstr "Inmunidad al robo de PM"
 
-#: ../../../src/MenuPowers.cpp:910
+#: ../../../src/MenuPowers.cpp:911
 msgid "Immunity to knockback"
 msgstr "Inmunidad al contragolpe"
 
-#: ../../../src/MenuPowers.cpp:913
+#: ../../../src/MenuPowers.cpp:914
 msgid "Immunity to damage reflection"
 msgstr "Inmunidad a la reflexión de daño"
 
-#: ../../../src/MenuPowers.cpp:916
+#: ../../../src/MenuPowers.cpp:917
 msgid "Stun"
 msgstr "Aturdir"
 
-#: ../../../src/MenuPowers.cpp:919
+#: ../../../src/MenuPowers.cpp:920
 msgid "Automatic revive on death"
 msgstr "Revivir automáticamente al morir"
 
-#: ../../../src/MenuPowers.cpp:922
+#: ../../../src/MenuPowers.cpp:923
 msgid "Convert"
 msgstr "Convertir"
 
-#: ../../../src/MenuPowers.cpp:925
+#: ../../../src/MenuPowers.cpp:926
 msgid "Fear"
 msgstr "Miedo"
 
-#: ../../../src/MenuPowers.cpp:928
+#: ../../../src/MenuPowers.cpp:929
 msgid "Lifespan"
 msgstr "Vida"
 
-#: ../../../src/MenuPowers.cpp:952
+#: ../../../src/MenuPowers.cpp:953
 msgid "Magical Shield"
 msgstr "Armadura mágica"
 
-#: ../../../src/MenuPowers.cpp:981
+#: ../../../src/MenuPowers.cpp:982
 msgid "Healing"
 msgstr "Sanación"
 
-#: ../../../src/MenuPowers.cpp:984
+#: ../../../src/MenuPowers.cpp:985
 msgid "Knockback"
 msgstr "Contragolpe"
 
-#: ../../../src/MenuPowers.cpp:1009
+#: ../../../src/MenuPowers.cpp:1010
 #, c-format
 msgid "%d%% chance"
 msgstr "%d%% probabilidad "
 
-#: ../../../src/MenuPowers.cpp:1061
+#: ../../../src/MenuPowers.cpp:1062
 msgid "Base Accuracy"
 msgstr "Exactitud base"
 
-#: ../../../src/MenuPowers.cpp:1081
+#: ../../../src/MenuPowers.cpp:1082
 msgid "Base Critical Chance"
 msgstr "Probabilidad base de crítico"
 
-#: ../../../src/MenuPowers.cpp:1089
+#: ../../../src/MenuPowers.cpp:1090
 msgid "Ignores Absorbtion"
 msgstr "Ignora absorción"
 
-#: ../../../src/MenuPowers.cpp:1094
+#: ../../../src/MenuPowers.cpp:1095
 msgid "Ignores Avoidance"
 msgstr "Ignora evitación"
 
-#: ../../../src/MenuPowers.cpp:1099
+#: ../../../src/MenuPowers.cpp:1100
 #, c-format
 msgid "%d%% Chance to crit slowed targets"
 msgstr "%d%% Probabilidad de crítico en objetivos lentos"
 
-#: ../../../src/MenuPowers.cpp:1104
+#: ../../../src/MenuPowers.cpp:1105
 #, c-format
-msgid "%s Elemental Damage"
-msgstr "%s daño elemental"
+msgid "Elemental Damage (%s)"
+msgstr ""
 
-#: ../../../src/MenuPowers.cpp:1113
+#: ../../../src/MenuPowers.cpp:1114
 #, c-format
 msgid "Requires a %s"
 msgstr "Requiere un/a %s"
 
-#: ../../../src/MenuPowers.cpp:1150 ../../../src/MenuPowers.cpp:1153
+#: ../../../src/MenuPowers.cpp:1151 ../../../src/MenuPowers.cpp:1154
 #, c-format
 msgid "Requires Power: %s"
 msgstr "Requiere Poder: %s"
 
-#: ../../../src/MenuPowers.cpp:1162
+#: ../../../src/MenuPowers.cpp:1163
 msgid "Click to Unlock (uses 1 Skill Point)"
 msgstr "Pulsa para desbloquear (usa 1 punto de habilidad)"
 
-#: ../../../src/MenuPowers.cpp:1166 ../../../src/MenuPowers.cpp:1168
+#: ../../../src/MenuPowers.cpp:1167 ../../../src/MenuPowers.cpp:1169
 msgid "Requires 1 Skill Point"
 msgstr "Requiere 1 punto de habilidad"
 
-#: ../../../src/MenuPowers.cpp:1352
+#: ../../../src/MenuPowers.cpp:1355
 #, c-format
 msgid "%d unspent skill point"
 msgstr "%d punto de habilidad restante"
 
-#: ../../../src/MenuPowers.cpp:1355
+#: ../../../src/MenuPowers.cpp:1358
 #, c-format
 msgid "%d unspent skill points"
 msgstr "%d puntos de habilidad restantes"
 
-#: ../../../src/MenuPowers.cpp:1385
+#: ../../../src/MenuPowers.cpp:1388
 msgid "Next Level:"
 msgstr "Siguiente nivel:"
 
