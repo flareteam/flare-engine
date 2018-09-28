@@ -47,31 +47,22 @@ SDLFontEngine::SDLFontEngine() : FontEngine(), active_font(NULL) {
 	// @CLASS SDLFontEngine: Font settings|Description of engine/font_settings.txt
 	FileParser infile;
 	if (infile.open("engine/font_settings.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
-		bool is_fallback = false;
 		while (infile.next()) {
 			if (infile.new_section && infile.section == "font") {
 				font_styles.push_back(SDLFontStyle());
-				is_fallback = false;
 			}
-			else if (infile.new_section && infile.section == "font_fallback") {
-				font_styles_fallback.push_back(SDLFontStyle());
-				is_fallback = true;
+			else if (infile.section == "font_fallback") {
+				if (infile.new_section)
+					infile.error("FontEngine: Support for 'font_fallback' has been removed.");
+				continue;
 			}
 
 			SDLFontStyle *style;
 
-			if (is_fallback) {
-				if (font_styles_fallback.empty())
-					continue;
+			if (font_styles.empty())
+				continue;
 
-				style = &(font_styles_fallback.back());
-			}
-			else {
-				if (font_styles.empty())
-					continue;
-
-				style = &(font_styles.back());
-			}
+			style = &(font_styles.back());
 
 			if (infile.key == "id") {
 				// @ATTR font.id|string|An identifier used to reference this font.
@@ -124,9 +115,6 @@ int SDLFontEngine::getFontHeight() {
  * For single-line text, just calculate the width
  */
 int SDLFontEngine::calc_width(const std::string& text) {
-	if (!font_styles_fallback.empty() && hasMissingGlyph(text))
-		setFontFallback(active_font->name);
-
 	int w, h;
 	TTF_SizeUTF8(active_font->ttfont, text.c_str(), &w, &h);
 
@@ -202,25 +190,6 @@ void SDLFontEngine::setFont(const std::string& _font) {
 			return;
 		}
 	}
-}
-
-void SDLFontEngine::setFontFallback(const std::string& _font) {
-	for (unsigned int i=0; i<font_styles_fallback.size(); i++) {
-		if (font_styles_fallback[i].name == _font) {
-			active_font = &(font_styles_fallback[i]);
-			return;
-		}
-	}
-}
-
-bool SDLFontEngine::hasMissingGlyph(const std::string& text) {
-	for (size_t i=0; i < text.size(); ++i) {
-		if (TTF_GlyphIsProvided(active_font->ttfont, text.at(i)) == 0) {
-			return true;
-		}
-	}
-
-	return false;
 }
 
 /**

@@ -41,11 +41,7 @@ public:
 class SDLFontEngine : public FontEngine {
 private:
 	std::vector<SDLFontStyle> font_styles;
-	std::vector<SDLFontStyle> font_styles_fallback;
 	SDLFontStyle *active_font;
-
-	void setFontFallback(const std::string& _font);
-	bool hasMissingGlyph(const std::string& text);
 
 protected:
 	void renderInternal(const std::string& text, int x, int y, int justify, Image *target, const Color& color);

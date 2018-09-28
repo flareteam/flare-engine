@@ -837,7 +837,7 @@ void GameStateConfigBase::refreshLanguages() {
 			std::string key = infile.key;
 			if (key != "") {
 				language_ISO.push_back(key);
-				language_lstb->append(infile.val, "");
+				language_lstb->append(infile.val, infile.val + " [" + infile.key + "]");
 
 				if (language_ISO.back() == settings->language) {
 					language_lstb->select(i);
