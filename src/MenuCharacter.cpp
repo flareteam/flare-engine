@@ -351,7 +351,7 @@ void MenuCharacter::refreshStats() {
 	if (show_resists) {
 		for (unsigned int j=0; j<pc->stats.vulnerable.size(); ++j) {
 			ss.str("");
-			ss << msg->get("%s Resistance", eset->elements.list[j].name) << ": " << (100 - pc->stats.vulnerable[j]) << "%";
+			ss << msg->get("Resistance (%s)", eset->elements.list[j].name) << ": " << (100 - pc->stats.vulnerable[j]) << "%";
 			statList->set(j+stat_index, ss.str(), msg->get("Reduces the damage taken from \"%s\" elemental attacks.", eset->elements.list[j].name));
 		}
 	}

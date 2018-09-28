@@ -4,6 +4,7 @@ Engine fixes:
 * Fixed shrinking tab widgets when widow was resized.
 * Remove broken 'font_fallback' from engine/font_settings.txt.
 * Add tooltips to language list to show language codes.
+* Make strings related to elements more translator-friendly.
 
 Translation updates:
 
