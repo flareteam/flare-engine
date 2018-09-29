@@ -10,6 +10,7 @@ Translation updates:
 
 * Brazilian Portuguese (pt_BR) update (Rui)
 * Portuguese (pt) update (Rui)
+* Vietnamese (vi) update (Nguyễn Gia Phong)
 
 
 
