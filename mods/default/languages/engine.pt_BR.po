@@ -625,7 +625,7 @@ msgstr "%d%% Velocidade de Ataque"
 #: ../../../src/MenuPowers.cpp:833
 #, c-format
 msgid "Resistance (%s)"
-msgstr ""
+msgstr "Resistência (%s)"
 
 #: ../../../src/ItemManager.cpp:684
 #, c-format
@@ -1192,7 +1192,7 @@ msgstr "%d%% Chance de acerto crítico a alvos desacelerados."
 #: ../../../src/MenuPowers.cpp:1105
 #, c-format
 msgid "Elemental Damage (%s)"
-msgstr ""
+msgstr "Dano Elemental (%s)"
 
 #: ../../../src/MenuPowers.cpp:1114
 #, c-format
