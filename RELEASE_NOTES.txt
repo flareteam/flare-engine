@@ -8,6 +8,7 @@ Engine fixes:
 
 Translation updates:
 
+* Scottish Gaelic (gd) update (GunChleoc)
 * Brazilian Portuguese (pt_BR) update (Rui)
 * Portuguese (pt) update (Rui)
 * Vietnamese (vi) update (Nguyễn Gia Phong)
