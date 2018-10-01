@@ -261,7 +261,7 @@ msgstr "Evgen Pavlov"
 
 #: ../cutscenes/credits.txt:66
 msgid "Fabio Loli"
-msgstr ""
+msgstr "Fabio Loli"
 
 #: ../cutscenes/credits.txt:67
 msgid "Gianfranco Del Borrello"

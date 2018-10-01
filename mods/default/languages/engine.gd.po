@@ -629,7 +629,7 @@ msgstr "Luaths ionnsaighe de %d%%"
 #: ../../../src/MenuPowers.cpp:833
 #, c-format
 msgid "Resistance (%s)"
-msgstr ""
+msgstr "Comas-seasaimh (%s)"
 
 #: ../../../src/ItemManager.cpp:684
 #, c-format
@@ -1200,7 +1200,7 @@ msgstr "Teans dhe %d%% gun dèan thu bualadh èiginneach air amas le maille air"
 #: ../../../src/MenuPowers.cpp:1105
 #, c-format
 msgid "Elemental Damage (%s)"
-msgstr ""
+msgstr "Dochann dùile (%s)"
 
 #: ../../../src/MenuPowers.cpp:1114
 #, c-format
