@@ -217,6 +217,7 @@ public:
 		std::string sfx_loot;
 		int drop_max;
 		int drop_radius;
+		float hide_radius;
 	};
 
 	class Tileset {

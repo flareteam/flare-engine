@@ -143,7 +143,25 @@ void LootManager::renderTooltips(const FPoint& cam) {
 			hover.w = eset->tileset.tile_w;
 			hover.h = eset->tileset.tile_h;
 
-			if ((settings->loot_tooltips && !inpt->pressing[Input::ALT]) || (!settings->loot_tooltips && inpt->pressing[Input::ALT]) || Utils::isWithinRect(hover, inpt->mouse)) {
+			bool forced_visibility = false;
+			bool default_visibility = (settings->loot_tooltips && !inpt->pressing[Input::ALT]) || (!settings->loot_tooltips && inpt->pressing[Input::ALT]);
+
+			if (default_visibility && eset->loot.hide_radius > 0) {
+				if (Utils::calcDist(pc->stats.pos, it->pos) < eset->loot.hide_radius) {
+					default_visibility = false;
+				}
+				else {
+					Enemy* test_enemy = enemym->getNearestEnemy(it->pos, !EnemyManager::GET_CORPSE, NULL, eset->loot.hide_radius);
+					if (test_enemy) {
+						default_visibility = false;
+					}
+				}
+			}
+
+			if (!default_visibility)
+				forced_visibility = Utils::isWithinRect(hover, inpt->mouse);
+
+			if (default_visibility || forced_visibility) {
 				it->tip_visible = true;
 
 				// create tooltip data if needed
@@ -157,7 +175,7 @@ void LootManager::renderTooltips(const FPoint& cam) {
 				tip->prerender(it->tip, dest, TooltipData::STYLE_TOPLABEL);
 				std::vector<Loot>::iterator test_it;
 				for (test_it = loot.begin(); test_it != it; ) {
-					if (Utils::rectsOverlap(test_it->tip_bounds, tip->bounds)) {
+					if (test_it->tip_visible && Utils::rectsOverlap(test_it->tip_bounds, tip->bounds)) {
 						if (tooltip_below)
 							dest.y = test_it->tip_bounds.y + test_it->tip_bounds.h + eset->tooltips.offset;
 						else

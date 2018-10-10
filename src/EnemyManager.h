@@ -60,7 +60,7 @@ public:
 	bool isCleared();
 	void spawn(const std::string& enemy_type, const Point& target);
 	Enemy *enemyFocus(const Point& mouse, const FPoint& cam, bool alive_only);
-	Enemy* getNearestEnemy(const FPoint& pos, bool get_corpse, float *saved_distance);
+	Enemy* getNearestEnemy(const FPoint& pos, bool get_corpse, float *saved_distance, float max_range);
 
 	// vars
 	std::vector<Enemy*> enemies;

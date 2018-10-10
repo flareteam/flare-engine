@@ -696,6 +696,7 @@ void EngineSettings::Loot::load() {
 	sfx_loot = "";
 	drop_max = 1;
 	drop_radius = 1;
+	hide_radius = 3.f;
 
 	FileParser infile;
 	// @CLASS EngineSettings: Loot|Description of engine/loot.txt
@@ -736,6 +737,10 @@ void EngineSettings::Loot::load() {
 			else if (infile.key == "drop_radius") {
 				// @ATTR drop_radius|int|The distance (in tiles) away from the origin that loot can drop
 				drop_radius = std::max(Parse::toInt(infile.val), 1);
+			}
+			else if (infile.key == "hide_radius") {
+				// @ATTR hide_radius|float|If an entity is within this radius relative to a piece of loot, the label will be hidden unless highlighted with the cursor.
+				hide_radius = Parse::toFloat(infile.val);
 			}
 			else {
 				infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());

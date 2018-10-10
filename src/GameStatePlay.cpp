@@ -170,7 +170,7 @@ void GameStatePlay::checkEnemyFocus() {
 			enemy = hazards->last_enemy;
 		}
 		else {
-			enemy = enemym->getNearestEnemy(pc->stats.pos, !EnemyManager::GET_CORPSE, NULL);
+			enemy = enemym->getNearestEnemy(pc->stats.pos, !EnemyManager::GET_CORPSE, NULL, eset->misc.interact_range);
 		}
 	}
 	else {
@@ -214,10 +214,10 @@ void GameStatePlay::checkEnemyFocus() {
 	}
 
 	// save the positions of the nearest enemies for powers that use "target_nearest"
-	Enemy *nearest = enemym->getNearestEnemy(src_pos, !EnemyManager::GET_CORPSE, &(pc->stats.target_nearest_dist));
+	Enemy *nearest = enemym->getNearestEnemy(src_pos, !EnemyManager::GET_CORPSE, &(pc->stats.target_nearest_dist), eset->misc.interact_range);
 	if (nearest)
 		pc->stats.target_nearest = &(nearest->stats);
-	Enemy *nearest_corpse = enemym->getNearestEnemy(src_pos, EnemyManager::GET_CORPSE, &(pc->stats.target_nearest_corpse_dist));
+	Enemy *nearest_corpse = enemym->getNearestEnemy(src_pos, EnemyManager::GET_CORPSE, &(pc->stats.target_nearest_corpse_dist), eset->misc.interact_range);
 	if (nearest_corpse)
 		pc->stats.target_nearest_corpse = &(nearest_corpse->stats);
 }

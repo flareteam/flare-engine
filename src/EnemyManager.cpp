@@ -424,7 +424,7 @@ Enemy* EnemyManager::enemyFocus(const Point& mouse, const FPoint& cam, bool aliv
 	return NULL;
 }
 
-Enemy* EnemyManager::getNearestEnemy(const FPoint& pos, bool get_corpse, float *saved_distance) {
+Enemy* EnemyManager::getNearestEnemy(const FPoint& pos, bool get_corpse, float *saved_distance, float max_range) {
 	Enemy* nearest = NULL;
 	float best_distance = std::numeric_limits<float>::max();
 
@@ -446,7 +446,7 @@ Enemy* EnemyManager::getNearestEnemy(const FPoint& pos, bool get_corpse, float *
 	if (nearest && saved_distance)
 		*saved_distance = best_distance;
 
-	if (!saved_distance && best_distance > eset->misc.interact_range)
+	if (!saved_distance && best_distance > max_range)
 		nearest = NULL;
 
 	return nearest;

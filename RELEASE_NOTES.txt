@@ -1,5 +1,9 @@
 Flare v1.09 (WIP)
 
+Engine features:
+
+* Loot tooltips are now hidden when entities are near pieces of loot. The setting "hide_radius" has been added to engine/loot.txt to control this.
+
 Engine fixes:
 * Fixed shrinking tab widgets when widow was resized.
 * Remove broken 'font_fallback' from engine/font_settings.txt.
