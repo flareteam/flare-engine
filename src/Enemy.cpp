@@ -177,6 +177,12 @@ Renderable Enemy::getRender() {
 	Renderable r = activeAnimation->getCurrentFrame(stats.direction);
 	r.map_pos.x = stats.pos.x;
 	r.map_pos.y = stats.pos.y;
+	if (stats.hp > 0) {
+		if (stats.hero_ally)
+			r.type = Renderable::TYPE_ALLY;
+		else if (stats.in_combat)
+			r.type = Renderable::TYPE_ENEMY;
+	}
 	return r;
 }
 

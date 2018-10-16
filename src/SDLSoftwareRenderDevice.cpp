@@ -325,7 +325,12 @@ int SDLSoftwareRenderDevice::render(Sprite *r) {
 
 	SDL_Rect src = m_clip;
 	SDL_Rect dest = m_dest;
-	return SDL_BlitSurface(static_cast<SDLSoftwareImage *>(r->getGraphics())->surface, &src, screen, &dest);
+
+	SDL_Surface *surface = static_cast<SDLSoftwareImage *>(r->getGraphics())->surface;
+	SDL_SetSurfaceColorMod(surface, r->color_mod.r, r->color_mod.g, r->color_mod.b);
+	SDL_SetSurfaceAlphaMod(surface, r->alpha_mod);
+
+	return SDL_BlitSurface(surface, &src, screen, &dest);
 }
 
 int SDLSoftwareRenderDevice::renderToImage(Image* src_image, Rect& src, Image* dest_image, Rect& dest) {

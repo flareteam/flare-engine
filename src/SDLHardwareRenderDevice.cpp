@@ -308,6 +308,11 @@ int SDLHardwareRenderDevice::render(Sprite *r) {
     SDL_Rect src = m_clip;
     SDL_Rect dest = m_dest;
 	SDL_SetRenderTarget(renderer, texture);
+
+	SDL_Texture *surface = static_cast<SDLHardwareImage *>(r->getGraphics())->surface;
+	SDL_SetTextureColorMod(surface, r->color_mod.r, r->color_mod.g, r->color_mod.b);
+	SDL_SetTextureAlphaMod(surface, r->alpha_mod);
+
 	return SDL_RenderCopy(renderer, static_cast<SDLHardwareImage *>(r->getGraphics())->surface, &src, &dest);
 }
 

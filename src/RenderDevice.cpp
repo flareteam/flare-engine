@@ -73,6 +73,8 @@ Sprite *Image::createSprite() {
  */
 Sprite::Sprite(Image *_image)
 	: local_frame(Rect())
+	, color_mod(255, 255, 255)
+	, alpha_mod(255)
 	, image(_image)
 	, src(Rect())
 	, offset()

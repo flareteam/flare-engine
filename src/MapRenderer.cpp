@@ -57,6 +57,8 @@ MapRenderer::MapRenderer()
 	, tip_pos()
 	, show_tooltip(false)
 	, shakycam()
+	, entity_hidden_normal(NULL)
+	, entity_hidden_enemy(NULL)
 	, cam()
 	, map_change(false)
 	, teleportation(false)
@@ -73,6 +75,20 @@ MapRenderer::MapRenderer()
 	, show_book("")
 	, index_objectlayer(0)
 {
+	// Load entity markers
+	Image *gfx = render_device->loadImage("images/menus/entity_hidden.png", RenderDevice::ERROR_NORMAL);
+	if (gfx) {
+		const int gfx_w = gfx->getWidth();
+		const int gfx_h = gfx->getHeight();
+
+		entity_hidden_normal = gfx->createSprite();
+		entity_hidden_normal->setClip(0, 0, gfx_w, gfx_h/2);
+
+		entity_hidden_enemy = gfx->createSprite();
+		entity_hidden_enemy->setClip(0, gfx_h/2, gfx_w, gfx_h/2);
+
+		gfx->unref();
+	}
 }
 
 void MapRenderer::clearQueues() {
@@ -350,6 +366,8 @@ void MapRenderer::render(std::vector<Renderable> &r, std::vector<Renderable> &r_
 		std::sort(r_dead.begin(), r_dead.end(), priocompare);
 		renderIso(r, r_dead);
 	}
+
+	drawHiddenEntityMarkers();
 }
 
 void MapRenderer::drawRenderable(std::vector<Renderable>::iterator r_cursor) {
@@ -508,6 +526,7 @@ void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 					dest.x = p.x - tile.offset.x;
 					dest.y = p.y - tile.offset.y;
 					tile.tile->setDestFromPoint(dest);
+					checkHiddenEntities(i, j, current_layer, r);
 					render_device->render(tile.tile);
 					drawn_tiles[i][j] = 1;
 				}
@@ -589,6 +608,7 @@ do_last_NE_tile:
 					dest.x = tile_SW_center.x - tile.offset.x;
 					dest.y = tile_SW_center.y - tile.offset.y;
 					tile.tile->setDestFromPoint(dest);
+					checkHiddenEntities(i, j, current_layer, r);
 					render_device->render(tile.tile);
 					drawn_tiles[i-2][j+2] = 1;
 				}
@@ -606,6 +626,7 @@ do_last_NE_tile:
 					dest.x = tile_NE_center.x - tile.offset.x;
 					dest.y = tile_NE_center.y - tile.offset.y;
 					tile.tile->setDestFromPoint(dest);
+					checkHiddenEntities(i, j, current_layer, r);
 					render_device->render(tile.tile);
 					drawn_tiles[i][j] = 1;
 				}
@@ -736,6 +757,7 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 				dest.x = p.x - tile.offset.x;
 				dest.y = p.y - tile.offset.y;
 				tile.tile->setDestFromPoint(dest);
+				checkHiddenEntities(i, j, layers[index_objectlayer], r);
 				render_device->render(tile.tile);
 			}
 			p.x += eset->tileset.tile_w;
@@ -1192,6 +1214,121 @@ void MapRenderer::drawDevHUD() {
 	}
 }
 
+void MapRenderer::drawHiddenEntityMarkers() {
+	std::vector<std::vector<Renderable>::iterator>::iterator hero_it = hidden_entities.end();
+	Point hidden_hero_pos(0, settings->view_h);
+
+	const int marker_w = entity_hidden_normal->getGraphicsWidth();
+	const int marker_h = entity_hidden_normal->getGraphicsHeight();
+
+	for (size_t i = 0; i < hidden_entities.size(); ++i) {
+		if (!hidden_entities[i]->image)
+			continue;
+
+		if (hidden_entities[i]->type == Renderable::TYPE_NORMAL)
+			continue;
+
+		Point dest;
+		Point p = Utils::mapToScreen(hidden_entities[i]->map_pos.x, hidden_entities[i]->map_pos.y, shakycam.x, shakycam.y);
+		dest.x = p.x - marker_w / 2;
+		dest.y = p.y - hidden_entities[i]->offset.y - marker_h;
+
+		// only take the highest point of the hero sprite
+		if (hidden_entities[i]->type == Renderable::TYPE_HERO) {
+			if (dest.y <= hidden_hero_pos.y) {
+				hero_it = hidden_entities.begin() + i;
+				hidden_hero_pos = dest;
+			}
+			continue;
+		}
+
+		if (hidden_entities[i]->type == Renderable::TYPE_ENEMY) {
+			entity_hidden_enemy->setDestFromPoint(dest);
+			entity_hidden_enemy->alpha_mod = hidden_entities[i]->alpha_mod;
+			render_device->render(entity_hidden_enemy);
+		}
+		else if (hidden_entities[i]->type == Renderable::TYPE_ALLY) {
+			entity_hidden_normal->setDestFromPoint(dest);
+			entity_hidden_normal->alpha_mod = hidden_entities[i]->alpha_mod;
+			render_device->render(entity_hidden_normal);
+		}
+	}
+
+	if (hero_it != hidden_entities.end()) {
+		entity_hidden_normal->setDestFromPoint(hidden_hero_pos);
+		render_device->render(entity_hidden_normal);
+	}
+
+	hidden_entities.clear();
+}
+
+void MapRenderer::checkHiddenEntities(const int_fast16_t x, const int_fast16_t y, const Map_Layer& layerdata, std::vector<Renderable> &r) {
+	Rect tile_bounds;
+	Point tile_center;
+	getTileBounds(x, y, layerdata, tile_bounds, tile_center);
+
+	const int tall_threshold = eset->tileset.orientation == eset->tileset.TILESET_ISOMETRIC ? eset->tileset.tile_h * 2 : eset->tileset.tile_h;
+	if (tile_bounds.h <= tall_threshold) {
+		return;
+	}
+
+	bool hero_is_hidden = false;
+
+	std::vector<Renderable>::iterator it = r.begin();
+	while (it != r.end()) {
+		if (it->type == Renderable::TYPE_NORMAL) {
+			++it;
+			continue;
+		}
+
+		const int it_x = static_cast<int>(it->map_pos.x);
+		const int it_y = static_cast<int>(it->map_pos.y);
+		if ((eset->tileset.orientation == eset->tileset.TILESET_ISOMETRIC && (x < it_x || y < it_y)) ||
+		    (eset->tileset.orientation == eset->tileset.TILESET_ORTHOGONAL && y < it_y))
+		{
+			++it;
+			continue;
+		}
+
+		bool is_hidden = false;
+
+		if (it->type == Renderable::TYPE_HERO && hero_is_hidden) {
+			is_hidden = true;
+		}
+		else if (it->type != Renderable::TYPE_NORMAL) {
+			Point p = Utils::mapToScreen(it->map_pos.x, it->map_pos.y, shakycam.x, shakycam.y);
+			p.x -= it->offset.x;
+			if (Utils::isWithinRect(tile_bounds, p)) {
+				is_hidden = true;
+			}
+			else {
+				p.x += it->offset.x * 2;
+				if (Utils::isWithinRect(tile_bounds, p)) {
+					is_hidden = true;
+				}
+			}
+		}
+
+		if (is_hidden) {
+			if (it->type == Renderable::TYPE_HERO)
+				hero_is_hidden = true;
+
+			bool already_hidden = false;
+			for (size_t i = 0; i < hidden_entities.size(); ++i) {
+				if (it == hidden_entities[i]) {
+					already_hidden = true;
+					break;
+				}
+			}
+
+			if (!already_hidden) {
+				hidden_entities.push_back(it);
+			}
+		}
+
+		++it;
+	}
+}
 MapRenderer::~MapRenderer() {
 	tip_buf.clear();
 	clearLayers();
@@ -1205,5 +1342,8 @@ MapRenderer::~MapRenderer() {
 		snd->unload(sids.back());
 		sids.pop_back();
 	}
+
+	delete entity_hidden_normal;
+	delete entity_hidden_enemy;
 }
 

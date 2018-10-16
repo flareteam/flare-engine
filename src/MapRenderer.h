@@ -37,6 +37,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Utils.h"
 
 class FileParser;
+class Sprite;
 class WidgetTooltip;
 
 class MapRenderer : public Map {
@@ -77,10 +78,19 @@ private:
 	void drawDevCursor();
 	void drawDevHUD();
 
+	void drawHiddenEntityMarkers();
+
+	void checkHiddenEntities(const int_fast16_t x, const int_fast16_t y, const Map_Layer& layerdata, std::vector<Renderable> &r);
+
 	FPoint shakycam;
 	TileSet tset;
 
 	MapParallax map_parallax;
+
+	Sprite* entity_hidden_normal;
+	Sprite* entity_hidden_enemy;
+
+	std::vector<std::vector<Renderable>::iterator> hidden_entities;
 
 public:
 	// functions

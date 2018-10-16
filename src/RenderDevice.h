@@ -53,6 +53,8 @@ public:
 	~Sprite();
 
 	Rect local_frame;
+	Color color_mod;
+	uint8_t alpha_mod;
 
 	Image * getGraphics();
 	void setOffset(const Point& _offset);
@@ -133,6 +135,13 @@ public:
 		BLEND_ADD = 1
 	};
 
+	enum {
+		TYPE_NORMAL = 0,
+		TYPE_HERO = 1,
+		TYPE_ENEMY = 2,
+		TYPE_ALLY = 3
+	};
+
 	Image *image; // image to be used
 	Rect src; // location on the sprite in pixel coordinates.
 
@@ -144,6 +153,8 @@ public:
 	Color color_mod;
 	uint8_t alpha_mod;
 
+	uint8_t type;
+
 	Renderable()
 		: image(NULL)
 		, src(Rect())
@@ -152,7 +163,8 @@ public:
 		, prio(0)
 		, blend_mode(BLEND_NORMAL)
 		, color_mod(255, 255, 255)
-		, alpha_mod(255) {
+		, alpha_mod(255)
+		, type(TYPE_NORMAL) {
 	}
 };
 

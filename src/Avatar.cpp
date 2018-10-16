@@ -965,6 +965,9 @@ void Avatar::addRenders(std::vector<Renderable> &r) {
 				ren.prio = i+1;
 				stats.effects.getCurrentColor(ren.color_mod);
 				stats.effects.getCurrentAlpha(ren.alpha_mod);
+				if (stats.hp > 0) {
+					ren.type = Renderable::TYPE_HERO;
+				}
 				r.push_back(ren);
 			}
 		}
@@ -974,6 +977,9 @@ void Avatar::addRenders(std::vector<Renderable> &r) {
 		ren.map_pos = stats.pos;
 		stats.effects.getCurrentColor(ren.color_mod);
 		stats.effects.getCurrentAlpha(ren.alpha_mod);
+		if (stats.hp > 0) {
+			ren.type = Renderable::TYPE_HERO;
+		}
 		r.push_back(ren);
 	}
 	// add effects
