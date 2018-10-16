@@ -144,7 +144,7 @@ void LootManager::renderTooltips(const FPoint& cam) {
 			hover.h = eset->tileset.tile_h;
 
 			bool forced_visibility = false;
-			bool default_visibility = (settings->loot_tooltips && !inpt->pressing[Input::ALT]) || (!settings->loot_tooltips && inpt->pressing[Input::ALT]);
+			bool default_visibility = settings->loot_tooltips;
 
 			if (default_visibility && eset->loot.hide_radius > 0) {
 				if (Utils::calcDist(pc->stats.pos, it->pos) < eset->loot.hide_radius) {
@@ -159,7 +159,7 @@ void LootManager::renderTooltips(const FPoint& cam) {
 			}
 
 			if (!default_visibility)
-				forced_visibility = Utils::isWithinRect(hover, inpt->mouse);
+				forced_visibility = Utils::isWithinRect(hover, inpt->mouse) || inpt->pressing[Input::ALT];
 
 			if (default_visibility || forced_visibility) {
 				it->tip_visible = true;
