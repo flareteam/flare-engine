@@ -312,8 +312,8 @@ msgid "Miro Jánošík"
 msgstr "Miro Jánošík"
 
 #: ../cutscenes/credits.txt:79
-msgid "Микола Франчук"
-msgstr "Микола Франчук"
+msgid "Mykola Franchuk"
+msgstr "Mykola Franchuk"
 
 #: ../cutscenes/credits.txt:80
 msgid "MOB2"

@@ -304,7 +304,7 @@ msgid "Miro Jánošík"
 msgstr ""
 
 #: ../cutscenes/credits.txt:79
-msgid "Микола Франчук"
+msgid "Mykola Franchuk"
 msgstr ""
 
 #: ../cutscenes/credits.txt:80
