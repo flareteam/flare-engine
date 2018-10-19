@@ -14,6 +14,7 @@ Engine fixes:
 
 Translation updates:
 
+* German (de) update (Fyrenic)
 * Scottish Gaelic (gd) update (GunChleoc)
 * Brazilian Portuguese (pt_BR) update (Rui)
 * Portuguese (pt) update (Rui)
