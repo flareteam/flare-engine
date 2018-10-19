@@ -5,13 +5,14 @@
 # Translators:
 # Justin Jacobs <jajdorkster@gmail.com>, 2018
 # Sergiy Borodych, 2018
+# igorko <mansonigor@gmail.com>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-09-28 13:25+\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Sergiy Borodych, 2018\n"
+"Last-Translator: igorko <mansonigor@gmail.com>, 2018\n"
 "Language-Team: Ukrainian (https://www.transifex.com/flareorg/teams/84925/uk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,11 +22,11 @@ msgstr ""
 
 #: ../engine/primary_stats.txt:3
 msgid "Physical"
-msgstr ""
+msgstr "Сила"
 
 #: ../engine/primary_stats.txt:7
 msgid "Mental"
-msgstr ""
+msgstr "Дух"
 
 #: ../engine/primary_stats.txt:11
 msgid "Offense"
@@ -41,47 +42,47 @@ msgstr "Врата від ближнього бою"
 
 #: ../engine/damage_types.txt:4
 msgid "Increases the damage done with swords and other melee weapons."
-msgstr ""
+msgstr "Збільшує шкоду завдану мечами та іншою ближньою зброєю."
 
 #: ../engine/damage_types.txt:5
 msgid "Melee Damage Min"
-msgstr ""
+msgstr "Ближня Шкода Мін"
 
 #: ../engine/damage_types.txt:6
 msgid "Melee Damage Max"
-msgstr ""
+msgstr "Ближня Шкода Макс"
 
 #: ../engine/damage_types.txt:12
 msgid "Ranged Damage"
-msgstr ""
+msgstr "Дальня Шкода"
 
 #: ../engine/damage_types.txt:13
 msgid "Increases the damage done with bows and other ranged weapons."
-msgstr ""
+msgstr "Збільшує шкоду завдану луками та іншою зброєю дальнього бою."
 
 #: ../engine/damage_types.txt:14
 msgid "Ranged Damage Min"
-msgstr ""
+msgstr "Дальня Шкода Мін"
 
 #: ../engine/damage_types.txt:15
 msgid "Ranged Damage Max"
-msgstr ""
+msgstr "Дальня Шкода Макс"
 
 #: ../engine/damage_types.txt:21
 msgid "Mental Damage"
-msgstr ""
+msgstr "Духовна Шкода"
 
 #: ../engine/damage_types.txt:22
 msgid "Increases the damage done with staves and other mental weapons."
-msgstr ""
+msgstr "Збільшує шкоду завдану посохами та іншою духовною зброєю."
 
 #: ../engine/damage_types.txt:23
 msgid "Mental Damage Min"
-msgstr ""
+msgstr "Духовна Шкода Мін"
 
 #: ../engine/damage_types.txt:24
 msgid "Mental Damage Max"
-msgstr ""
+msgstr "Духовна Шкода Макс"
 
 #: ../cutscenes/credits.txt:7
 msgid "Flare Engine Credits"
@@ -93,23 +94,23 @@ msgstr "Провідні програмісти"
 
 #: ../cutscenes/credits.txt:12
 msgid "Clint Bellanger"
-msgstr ""
+msgstr "Клінт Беланжер"
 
 #: ../cutscenes/credits.txt:13
 msgid "Henrik Andersson"
-msgstr ""
+msgstr "Генрік Андерсон"
 
 #: ../cutscenes/credits.txt:14
 msgid "Igor Paliychuk"
-msgstr ""
+msgstr "Ігор Палійчук"
 
 #: ../cutscenes/credits.txt:15
 msgid "Justin Jacobs"
-msgstr ""
+msgstr "Джастін Джакобс"
 
 #: ../cutscenes/credits.txt:16
 msgid "Stefan Beller"
-msgstr ""
+msgstr "Стефан Беллер"
 
 #: ../cutscenes/credits.txt:17
 msgid "Thane Brimhall"
@@ -121,11 +122,11 @@ msgstr "Програмісти"
 
 #: ../cutscenes/credits.txt:22
 msgid "Andrew Engelbrecht"
-msgstr ""
+msgstr "Ендрю Енгельбрехт"
 
 #: ../cutscenes/credits.txt:23
 msgid "Anton Golov"
-msgstr ""
+msgstr "Антон Голов"
 
 #: ../cutscenes/credits.txt:24
 msgid "Artur Rojek"
@@ -133,11 +134,11 @@ msgstr ""
 
 #: ../cutscenes/credits.txt:25
 msgid "blazindragon"
-msgstr ""
+msgstr "blazindragon"
 
 #: ../cutscenes/credits.txt:26
 msgid "Bonbadil"
-msgstr ""
+msgstr "Bonbadil"
 
 #: ../cutscenes/credits.txt:27
 msgid "Chris Oelmueller"
@@ -145,19 +146,19 @@ msgstr ""
 
 #: ../cutscenes/credits.txt:28
 msgid "David Bariod"
-msgstr ""
+msgstr "Девід Баріод"
 
 #: ../cutscenes/credits.txt:29
 msgid "Daniel Santos"
-msgstr ""
+msgstr "Даніель Сантос"
 
 #: ../cutscenes/credits.txt:30
 msgid "Gallaecio"
-msgstr ""
+msgstr "Gallaecio"
 
 #: ../cutscenes/credits.txt:31
 msgid "Joseph Bleu"
-msgstr ""
+msgstr "Жозеф Блю"
 
 #: ../cutscenes/credits.txt:32
 msgid "Juan PabloTamayo"
@@ -165,15 +166,15 @@ msgstr ""
 
 #: ../cutscenes/credits.txt:33
 msgid "Kitano"
-msgstr ""
+msgstr "Kitano"
 
 #: ../cutscenes/credits.txt:34
 msgid "Kyle Belanger"
-msgstr ""
+msgstr "Кайл Беланжер"
 
 #: ../cutscenes/credits.txt:35
 msgid "LongerDev"
-msgstr ""
+msgstr "LongerDev"
 
 #: ../cutscenes/credits.txt:36
 msgid "Manuel A. Fernandez Montecelo"
@@ -181,19 +182,19 @@ msgstr ""
 
 #: ../cutscenes/credits.txt:37
 msgid "Matthew Krohn"
-msgstr ""
+msgstr "Метью Крон"
 
 #: ../cutscenes/credits.txt:38
 msgid "Nojan"
-msgstr ""
+msgstr "Nojan"
 
 #: ../cutscenes/credits.txt:39
 msgid "Pavel Kirpichyov"
-msgstr ""
+msgstr "Павел Кірпічов"
 
 #: ../cutscenes/credits.txt:40
 msgid "runtime-x86"
-msgstr ""
+msgstr "runtime-x86"
 
 #: ../cutscenes/credits.txt:41
 msgid "Ryan Dansie"
@@ -201,15 +202,15 @@ msgstr ""
 
 #: ../cutscenes/credits.txt:44
 msgid "Default Art"
-msgstr ""
+msgstr "Базова графіка"
 
 #: ../cutscenes/credits.txt:49
 msgid "Translators"
-msgstr ""
+msgstr "Перекладачі"
 
 #: ../cutscenes/credits.txt:51
 msgid "Ademaro"
-msgstr ""
+msgstr "Ademaro"
 
 #: ../cutscenes/credits.txt:52
 msgid "Adrian Chaves Fernandez"
@@ -217,7 +218,7 @@ msgstr ""
 
 #: ../cutscenes/credits.txt:53
 msgid "Andrea Ranaldi"
-msgstr ""
+msgstr "Андреа Ранальді"
 
 #: ../cutscenes/credits.txt:54
 msgid "Andreas Berheim Brudin"
@@ -229,7 +230,7 @@ msgstr ""
 
 #: ../cutscenes/credits.txt:57
 msgid "Carlos Sanchez"
-msgstr ""
+msgstr "Карлос Санчез"
 
 #: ../cutscenes/credits.txt:59
 msgid "Christoph J. Thompson"
@@ -237,7 +238,7 @@ msgstr ""
 
 #: ../cutscenes/credits.txt:60
 msgid "Denis Lysenko"
-msgstr ""
+msgstr "Денис Лисенко"
 
 #: ../cutscenes/credits.txt:61
 msgid "Diego J. Romero López"
@@ -245,23 +246,23 @@ msgstr ""
 
 #: ../cutscenes/credits.txt:62
 msgid "dumaosen"
-msgstr ""
+msgstr "dumaosen"
 
 #: ../cutscenes/credits.txt:63
 msgid "Emil"
-msgstr ""
+msgstr "Emil"
 
 #: ../cutscenes/credits.txt:64
 msgid "Eric R"
-msgstr ""
+msgstr "Eric R"
 
 #: ../cutscenes/credits.txt:65
 msgid "Evgen Pavlov"
-msgstr ""
+msgstr "Євген Павлов"
 
 #: ../cutscenes/credits.txt:66
 msgid "Fabio Loli"
-msgstr ""
+msgstr "Фабіо Лолі"
 
 #: ../cutscenes/credits.txt:67
 msgid "Gianfranco Del Borrello"
@@ -269,11 +270,11 @@ msgstr ""
 
 #: ../cutscenes/credits.txt:68
 msgid "Giovanni Dalla Torre"
-msgstr ""
+msgstr "Джованні Делла Торре"
 
 #: ../cutscenes/credits.txt:69
 msgid "GunChleoc"
-msgstr ""
+msgstr "GunChleoc"
 
 #: ../cutscenes/credits.txt:70
 msgid "Hans Joachim Desserud"
@@ -281,11 +282,11 @@ msgstr ""
 
 #: ../cutscenes/credits.txt:71
 msgid "hark34"
-msgstr ""
+msgstr "hark34"
 
 #: ../cutscenes/credits.txt:73
 msgid "Janet Hunt"
-msgstr ""
+msgstr "Джанет Хант"
 
 #: ../cutscenes/credits.txt:74
 msgid "Juan Pablo Tamayo"
@@ -293,7 +294,7 @@ msgstr ""
 
 #: ../cutscenes/credits.txt:75
 msgid "losine"
-msgstr ""
+msgstr "losine"
 
 #: ../cutscenes/credits.txt:76
 msgid "Michael Papageorgiou"
@@ -301,11 +302,11 @@ msgstr ""
 
 #: ../cutscenes/credits.txt:77
 msgid "Mikhail Karalevich"
-msgstr ""
+msgstr "Михаїл Каралєвіч"
 
 #: ../cutscenes/credits.txt:78
 msgid "Miro Jánošík"
-msgstr ""
+msgstr "Міро Яношик"
 
 #: ../cutscenes/credits.txt:79
 msgid "Mykola Franchuk"
@@ -313,11 +314,11 @@ msgstr ""
 
 #: ../cutscenes/credits.txt:80
 msgid "MOB2"
-msgstr ""
+msgstr "MOB2"
 
 #: ../cutscenes/credits.txt:81
 msgid "Morgan Strauss"
-msgstr ""
+msgstr "Морган Штраус"
 
 #: ../cutscenes/credits.txt:82
 msgid "Nea Retrogamer"
@@ -329,39 +330,39 @@ msgstr ""
 
 #: ../cutscenes/credits.txt:84
 msgid "Nikita Vanku"
-msgstr ""
+msgstr "Нікіта Ванку"
 
 #: ../cutscenes/credits.txt:85
 msgid "Paul Wortmann"
-msgstr ""
+msgstr "Паул Вортман"
 
 #: ../cutscenes/credits.txt:86
 msgid "Pawel Puszczynski"
-msgstr ""
+msgstr "Павел Пущинський"
 
 #: ../cutscenes/credits.txt:87
 msgid "Quentin Stievenart"
-msgstr ""
+msgstr "Квентін Стівенарт"
 
 #: ../cutscenes/credits.txt:88
 msgid "Rui"
-msgstr ""
+msgstr "Rui"
 
 #: ../cutscenes/credits.txt:89
 msgid "Sergey Basalaev"
-msgstr ""
+msgstr "Сергей Басалаєв"
 
 #: ../cutscenes/credits.txt:90
 msgid "Sergiy Borodych"
-msgstr ""
+msgstr "Сергій Бородич"
 
 #: ../cutscenes/credits.txt:92
 msgid "Stefano Peris"
-msgstr ""
+msgstr "Стефано Періс"
 
 #: ../cutscenes/credits.txt:93
 msgid "sujiniku"
-msgstr ""
+msgstr "sujiniku"
 
 #: ../cutscenes/credits.txt:94
 msgid "Thomas Glamsch"
@@ -373,15 +374,15 @@ msgstr ""
 
 #: ../cutscenes/credits.txt:96
 msgid "Vicente Monteiro"
-msgstr ""
+msgstr "Вісенте Монтеіро"
 
 #: ../cutscenes/credits.txt:97
 msgid "Wuzzy2"
-msgstr ""
+msgstr "Wuzzy2"
 
 #: ../cutscenes/credits.txt:98
 msgid "Yannis Anthymidis"
-msgstr ""
+msgstr "Яніс Антімідіс"
 
 #: ../cutscenes/credits.txt:99
 msgid "Zmicer Turok"
@@ -389,15 +390,15 @@ msgstr ""
 
 #: ../cutscenes/credits.txt:102
 msgid "Distributors"
-msgstr ""
+msgstr "Розповсюджувачі"
 
 #: ../cutscenes/credits.txt:104
 msgid "Ablu"
-msgstr ""
+msgstr "Ablu"
 
 #: ../cutscenes/credits.txt:105
 msgid "Feillyne"
-msgstr ""
+msgstr "Feillyne"
 
 #: ../cutscenes/credits.txt:106
 msgid "Jan-Hendrik Peters"
@@ -405,7 +406,7 @@ msgstr ""
 
 #: ../cutscenes/credits.txt:108
 msgid "miffe"
-msgstr ""
+msgstr "miffe"
 
 #: ../cutscenes/credits.txt:111
 msgid "Special Thanks"
@@ -413,19 +414,19 @@ msgstr "Особлива подяка"
 
 #: ../cutscenes/credits.txt:115
 msgid "For giving constant feedback and testing:"
-msgstr ""
+msgstr "За постійні відгуки і тестування:"
 
 #: ../cutscenes/credits.txt:116
 msgid "Bart Kelsey"
-msgstr ""
+msgstr "Барт Келсі"
 
 #: ../cutscenes/credits.txt:117
 msgid "The community at OpenGameArt"
-msgstr "Товариство в OpenGameArt"
+msgstr "Спільноті OpenGameArt"
 
 #: ../cutscenes/credits.txt:121
 msgid "For Tiled and the Flare map exporter:"
-msgstr ""
+msgstr "За Tiled і експортер карт Flare:"
 
 #: ../cutscenes/credits.txt:122
 msgid "Thorbjørn Lindeijer"

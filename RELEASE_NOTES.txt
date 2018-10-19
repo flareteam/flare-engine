@@ -17,6 +17,7 @@ Translation updates:
 * Scottish Gaelic (gd) update (GunChleoc)
 * Brazilian Portuguese (pt_BR) update (Rui)
 * Portuguese (pt) update (Rui)
+* Ukranian (uk) update (Igor Paliychuk)
 * Vietnamese (vi) update (Nguyễn Gia Phong)
 
 

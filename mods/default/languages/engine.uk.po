@@ -95,6 +95,9 @@ msgid ""
 "\n"
 "Often slower, but less likely to have issues."
 msgstr ""
+"Програмний SDL рендерер\n"
+"\n"
+"Часто повільніший, але менш ймовірно проблемний."
 
 #: ../../../src/DeviceList.cpp:59
 msgid ""
@@ -102,6 +105,9 @@ msgid ""
 "\n"
 "The default renderer that is often faster than the SDL software renderer."
 msgstr ""
+"Апаратний SDL рендерер\n"
+"\n"
+"Стандартний рендерер, який часто швидший від програмного SDL рендерера."
 
 #: ../../../src/EngineSettings.cpp:557
 msgid "Adventurer"
@@ -267,12 +273,16 @@ msgid ""
 "Will try to store surfaces in video memory versus system memory. The effect "
 "this has on performance depends on the renderer."
 msgstr ""
+"Гра спробує зберігати поверхні у відеопам'яті а не в  оперативній пам'яті. "
+"Ефективність режиму залежить від вибраного рендерера."
 
 #: ../../../src/GameStateConfigDesktop.cpp:187
 msgid ""
 "Prevents screen tearing. Disable if you experience \"stuttering\" in "
 "windowed mode or input lag."
 msgstr ""
+"Запобігає смиканню екрану. Вимкніть, якщо ви помічаєте \"гальмування\" в "
+"віконному режимі або запізнілу реакцію на ввід користувача."
 
 #: ../../../src/GameStateConfigDesktop.cpp:188
 msgid ""
@@ -280,6 +290,9 @@ msgid ""
 "to scale the rendering resolution. Otherwise, only the window dimensions are"
 " used."
 msgstr ""
+"Якщо увімкнено, при масштабуванні разом з розмірами вікна буде також "
+"враховуватись роздільна здатність екрану. Інакше враховуються лише розміри "
+"вікна."
 
 #: ../../../src/GameStateConfigDesktop.cpp:189
 msgid "Experimental"
@@ -315,7 +328,7 @@ msgstr "Фільтр текстур"
 
 #: ../../../src/GameStateConfigDesktop.cpp:244
 msgid "DPI scaling"
-msgstr ""
+msgstr "Масштабування розлільної здатності"
 
 #: ../../../src/GameStateConfigDesktop.cpp:248
 msgid "Allow changing gamma"
@@ -402,7 +415,7 @@ msgstr "Створити"
 
 #: ../../../src/GameStateNew.cpp:76
 msgid "Randomize"
-msgstr ""
+msgstr "Випадково"
 
 #: ../../../src/GameStateNew.cpp:92
 msgid "Choose a Portrait"
@@ -604,18 +617,18 @@ msgstr "%d%% Швидкості"
 #: ../../../src/ItemManager.cpp:652 ../../../src/MenuPowers.cpp:890
 #, c-format
 msgid "%d%% Attack Speed"
-msgstr ""
+msgstr "%d%% Швидкості атаки"
 
 #: ../../../src/ItemManager.cpp:674 ../../../src/MenuCharacter.cpp:354
 #: ../../../src/MenuPowers.cpp:833
 #, c-format
 msgid "Resistance (%s)"
-msgstr ""
+msgstr "Опір (%s)"
 
 #: ../../../src/ItemManager.cpp:684
 #, c-format
 msgid "Requires %s"
-msgstr ""
+msgstr "Потребує %s"
 
 #: ../../../src/ItemManager.cpp:733
 msgid "Quest Item"
@@ -646,7 +659,7 @@ msgstr "Вимагає Рівень %d"
 #: ../../../src/MenuPowers.cpp:1125
 #, c-format
 msgid "Requires %s %d"
-msgstr ""
+msgstr "Потребує %s %d"
 
 #: ../../../src/ItemManager.cpp:849
 #, c-format
@@ -675,7 +688,7 @@ msgstr "Вартість продажу: %d %s кожен"
 
 #: ../../../src/ItemManager.cpp:897
 msgid "Set:"
-msgstr ""
+msgstr "Задати:"
 
 #: ../../../src/ItemManager.cpp:904
 #, c-format
@@ -700,7 +713,7 @@ msgstr "Гаряча клавіша: %s"
 
 #: ../../../src/MenuActionBar.cpp:580
 msgid "Not enough MP."
-msgstr ""
+msgstr "Недостатньо Мани."
 
 #: ../../../src/MenuActiveEffects.cpp:124
 #, c-format
@@ -709,12 +722,12 @@ msgstr "x %d"
 
 #: ../../../src/MenuActiveEffects.cpp:219
 msgid "Remaining:"
-msgstr ""
+msgstr "Залишилось:"
 
 #: ../../../src/MenuActiveEffects.cpp:225
 #, c-format
 msgid "x%d stacks"
-msgstr ""
+msgstr "x%d пачок"
 
 #: ../../../src/MenuCharacter.cpp:73 ../../../src/MenuCharacter.cpp:78
 msgid "Name"
@@ -727,17 +740,17 @@ msgstr "Рівень"
 #: ../../../src/MenuCharacter.cpp:310
 #, c-format
 msgid "%d unspent stat point"
-msgstr ""
+msgstr "%d навитрачене очко статистики"
 
 #: ../../../src/MenuCharacter.cpp:313
 #, c-format
 msgid "%d unspent stat points"
-msgstr ""
+msgstr "%d невитрачених очків статистики"
 
 #: ../../../src/MenuCharacter.cpp:355
 #, c-format
 msgid "Reduces the damage taken from \"%s\" elemental attacks."
-msgstr ""
+msgstr "Зменшує шкоду, завдану \"%s\" атаками стихій."
 
 #: ../../../src/MenuCharacter.cpp:365 ../../../src/MenuManager.cpp:287
 #, c-format
@@ -761,12 +774,12 @@ msgstr "Пов'язані характеристики:"
 #: ../../../src/MenuCharacter.cpp:421 ../../../src/MenuCharacter.cpp:445
 #, c-format
 msgid "Each level grants %d."
-msgstr ""
+msgstr "Кожен рівень додає %d."
 
 #: ../../../src/MenuCharacter.cpp:425 ../../../src/MenuCharacter.cpp:449
 #, c-format
 msgid "Each point of %s grants %d."
-msgstr ""
+msgstr "Кожне очко %s додає %d."
 
 #: ../../../src/MenuDevConsole.cpp:63
 msgid "Execute"
@@ -784,10 +797,11 @@ msgstr ""
 #: ../../../src/MenuDevConsole.cpp:146
 msgid "Arguments with spaces should be enclosed with double quotes. Example:"
 msgstr ""
+"Аргументи з пропусками мають бути оточені подвійними лапками. Приклад:"
 
 #: ../../../src/MenuDevConsole.cpp:147
 msgid "Type 'help' to get a list of commands."
-msgstr ""
+msgstr "Напишіть 'help' для отримання переліку команд."
 
 #: ../../../src/MenuDevConsole.cpp:209 ../../../src/MenuDevConsole.cpp:213
 msgid "px"
@@ -795,39 +809,39 @@ msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:224
 msgid "Distance"
-msgstr ""
+msgstr "Відстань"
 
 #: ../../../src/MenuDevConsole.cpp:239 ../../../src/MenuDevConsole.cpp:286
 msgid "Entity"
-msgstr ""
+msgstr "Сутність"
 
 #: ../../../src/MenuDevConsole.cpp:261 ../../../src/MenuDevConsole.cpp:268
 msgid "none"
-msgstr ""
+msgstr "нічого"
 
 #: ../../../src/MenuDevConsole.cpp:262 ../../../src/MenuDevConsole.cpp:264
 msgid "wall"
-msgstr ""
+msgstr "стіна"
 
 #: ../../../src/MenuDevConsole.cpp:263 ../../../src/MenuDevConsole.cpp:265
 msgid "short wall / pit"
-msgstr ""
+msgstr "коротка стіна/яма"
 
 #: ../../../src/MenuDevConsole.cpp:266
 msgid "entity"
-msgstr ""
+msgstr "сутність"
 
 #: ../../../src/MenuDevConsole.cpp:267
 msgid "entity, ally"
-msgstr ""
+msgstr "сутність/союзник"
 
 #: ../../../src/MenuDevConsole.cpp:274
 msgid "Tile"
-msgstr ""
+msgstr "Плитка"
 
 #: ../../../src/MenuDevConsole.cpp:360
 msgid "adds a power to the action bar"
-msgstr ""
+msgstr "додає уміння на панель дій"
 
 #: ../../../src/MenuDevConsole.cpp:361
 msgid "turns on/off all of the HUD elements"
@@ -842,10 +856,12 @@ msgid ""
 "Prints a list of powers that match a search term. No search term will list "
 "all items"
 msgstr ""
+"Виводить список умінь, які відповідають пошуковому запиту. Жоден пошуковий "
+"запит не покаже всіх умінь"
 
 #: ../../../src/MenuDevConsole.cpp:364
 msgid "Prints out all the map filenames located in the \"maps/\" directory."
-msgstr ""
+msgstr "Виводить назви всіх файлів з мапами що знаходяться в теці \"maps/\""
 
 #: ../../../src/MenuDevConsole.cpp:365
 msgid ""
@@ -858,6 +874,8 @@ msgid ""
 "Prints a list of items that match a search term. No search term will list "
 "all items"
 msgstr ""
+"Виводить список елементів, які відповідають пошуковому запиту. Жоден "
+"пошуковий запит не покаже всіх елементів"
 
 #: ../../../src/MenuDevConsole.cpp:367
 msgid ""
@@ -882,20 +900,20 @@ msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:529
 msgid "ERROR: Incorrect number of arguments"
-msgstr ""
+msgstr "ПОМИЛКА: Невірна кількість параметрів"
 
 #: ../../../src/MenuDevConsole.cpp:531 ../../../src/MenuDevConsole.cpp:559
 msgid "HINT:"
-msgstr "НАТЯК:"
+msgstr "ПОРАДА:"
 
 #: ../../../src/MenuDevConsole.cpp:531
 msgid "<id>"
-msgstr ""
+msgstr "<id>"
 
 #: ../../../src/MenuDevConsole.cpp:547
 #, c-format
 msgid "ERROR: '%s' is not a valid event key"
-msgstr ""
+msgstr "ПОМИЛКА: '%s' некоректний ключ події"
 
 #: ../../../src/MenuDevConsole.cpp:557
 msgid "ERROR: Too few arguments"
@@ -903,7 +921,7 @@ msgstr "ПОМИЛКА: Замало параметрів"
 
 #: ../../../src/MenuDevConsole.cpp:559
 msgid "<key>=<val> <key>=<val> ..."
-msgstr ""
+msgstr "<key>=<val> <key>=<val> ..."
 
 #: ../../../src/MenuDevConsole.cpp:564
 msgid "ERROR: Unknown command"
@@ -924,7 +942,7 @@ msgstr "Мертвий"
 
 #: ../../../src/MenuEnemy.cpp:161
 msgid "Destroyed"
-msgstr ""
+msgstr "Знищений"
 
 #: ../../../src/MenuExit.cpp:85 ../../../src/MenuExit.cpp:139
 msgid "Paused"
@@ -945,17 +963,17 @@ msgstr "Продовжити"
 #: ../../../src/MenuInventory.cpp:175
 #, c-format
 msgid "Lost %d%% of %s."
-msgstr ""
+msgstr "Втрачено %d%% з %s."
 
 #: ../../../src/MenuInventory.cpp:182
 #, c-format
 msgid "Lost %d%% of total XP."
-msgstr ""
+msgstr "Втрачено %d%% загального Досвіду."
 
 #: ../../../src/MenuInventory.cpp:187
 #, c-format
 msgid "Lost %d%% of current level XP."
-msgstr ""
+msgstr "Втрачено %d%% Досвіду поточного рівня."
 
 #: ../../../src/MenuInventory.cpp:213
 #, c-format
@@ -982,15 +1000,15 @@ msgstr "Модифікатори для %s"
 
 #: ../../../src/MenuInventory.cpp:302
 msgid "Select a quantity of item:"
-msgstr ""
+msgstr "Вкажіть кількість предметів:"
 
 #: ../../../src/MenuInventory.cpp:305
 msgid "Stash item stack:"
-msgstr ""
+msgstr "Пачку предметів в тайник:"
 
 #: ../../../src/MenuInventory.cpp:307
 msgid "Sell item stack:"
-msgstr ""
+msgstr "Продати пачку предметів:"
 
 #: ../../../src/MenuInventory.cpp:574
 msgid "You don't have enough of the required item."
@@ -998,7 +1016,7 @@ msgstr "У вас недостатньо потрібних предметів."
 
 #: ../../../src/MenuInventory.cpp:581
 msgid "You can't use this item right now."
-msgstr ""
+msgstr "Наразі неможливо використати цей предмет."
 
 #: ../../../src/MenuInventory.cpp:593
 msgid "This item can only be used from the action bar."
@@ -1015,7 +1033,7 @@ msgstr "Недостатньо %s."
 
 #: ../../../src/MenuInventory.cpp:851 ../../../src/MenuInventory.cpp:858
 msgid "This item can not be sold."
-msgstr ""
+msgstr "Цей предмет не можна продати."
 
 #: ../../../src/MenuLog.cpp:91
 msgid "Notes"
@@ -1032,7 +1050,7 @@ msgstr "Досвід: %d/%d"
 
 #: ../../../src/MenuManager.cpp:806
 msgid "This item can not be dropped."
-msgstr ""
+msgstr "Цей предмет не можна викинути."
 
 #: ../../../src/MenuNPCActions.cpp:75
 msgid "Trade"
@@ -1040,11 +1058,11 @@ msgstr "Торгувати"
 
 #: ../../../src/MenuNumPicker.cpp:60
 msgid "Enter amount:"
-msgstr ""
+msgstr "Вкажіть кількість:"
 
 #: ../../../src/MenuPowers.cpp:787
 msgid "Passive"
-msgstr ""
+msgstr "Пасивне"
 
 #: ../../../src/MenuPowers.cpp:792
 #, c-format
@@ -1058,23 +1076,23 @@ msgstr "Коштує %d Здоров'я"
 
 #: ../../../src/MenuPowers.cpp:801
 msgid "Cooldown:"
-msgstr ""
+msgstr "Очікування:"
 
 #: ../../../src/MenuPowers.cpp:866 ../../../src/MenuPowers.cpp:869
 msgid "Damage per second"
-msgstr ""
+msgstr "Шкоди за секунду"
 
 #: ../../../src/MenuPowers.cpp:872 ../../../src/MenuPowers.cpp:875
 msgid "HP per second"
-msgstr ""
+msgstr "Здоров'я за секунду"
 
 #: ../../../src/MenuPowers.cpp:878 ../../../src/MenuPowers.cpp:881
 msgid "MP per second"
-msgstr ""
+msgstr "Мани за секунду"
 
 #: ../../../src/MenuPowers.cpp:885
 msgid "Immobilize"
-msgstr ""
+msgstr "Сковування"
 
 #: ../../../src/MenuPowers.cpp:893
 msgid "Immunity"
@@ -1082,31 +1100,31 @@ msgstr "Імунітет"
 
 #: ../../../src/MenuPowers.cpp:896
 msgid "Immunity to damage over time"
-msgstr ""
+msgstr "Імунітет до завдання шкоди протягом часу"
 
 #: ../../../src/MenuPowers.cpp:899
 msgid "Immunity to slow"
-msgstr ""
+msgstr "Імунітет до уповільнення"
 
 #: ../../../src/MenuPowers.cpp:902
 msgid "Immunity to stun"
-msgstr ""
+msgstr "Імунітет до оглушення"
 
 #: ../../../src/MenuPowers.cpp:905
 msgid "Immunity to HP steal"
-msgstr ""
+msgstr "Імунітет до крадіжки Здоров'я"
 
 #: ../../../src/MenuPowers.cpp:908
 msgid "Immunity to MP steal"
-msgstr ""
+msgstr "Імунітет до крадіжки Мани"
 
 #: ../../../src/MenuPowers.cpp:911
 msgid "Immunity to knockback"
-msgstr ""
+msgstr "Імунітет до відкидання"
 
 #: ../../../src/MenuPowers.cpp:914
 msgid "Immunity to damage reflection"
-msgstr ""
+msgstr "Імунітет до відбиття шкоди."
 
 #: ../../../src/MenuPowers.cpp:917
 msgid "Stun"
@@ -1118,7 +1136,7 @@ msgstr "Автоматичне відродження при смерті"
 
 #: ../../../src/MenuPowers.cpp:923
 msgid "Convert"
-msgstr ""
+msgstr "Перетворення"
 
 #: ../../../src/MenuPowers.cpp:926
 msgid "Fear"
@@ -1126,7 +1144,7 @@ msgstr "Страх"
 
 #: ../../../src/MenuPowers.cpp:929
 msgid "Lifespan"
-msgstr ""
+msgstr "Тривалість"
 
 #: ../../../src/MenuPowers.cpp:953
 msgid "Magical Shield"
@@ -1138,7 +1156,7 @@ msgstr "Лікування"
 
 #: ../../../src/MenuPowers.cpp:985
 msgid "Knockback"
-msgstr ""
+msgstr "Відкидання"
 
 #: ../../../src/MenuPowers.cpp:1010
 #, c-format
@@ -1169,7 +1187,7 @@ msgstr "%d%% Шанс на кріт по сповільненим цілям"
 #: ../../../src/MenuPowers.cpp:1105
 #, c-format
 msgid "Elemental Damage (%s)"
-msgstr ""
+msgstr "Шкода від стихій (%s)"
 
 #: ../../../src/MenuPowers.cpp:1114
 #, c-format
@@ -1183,21 +1201,21 @@ msgstr "Вимагає Уміння: %s"
 
 #: ../../../src/MenuPowers.cpp:1163
 msgid "Click to Unlock (uses 1 Skill Point)"
-msgstr "Клацніть для вивчення (потребує 1 Очко Умінь)"
+msgstr "Клацніть для вивчення (потребує 1 очко Умінь)"
 
 #: ../../../src/MenuPowers.cpp:1167 ../../../src/MenuPowers.cpp:1169
 msgid "Requires 1 Skill Point"
-msgstr "Вимагає 1 Очко Умінь"
+msgstr "Вимагає 1 очко Умінь"
 
 #: ../../../src/MenuPowers.cpp:1355
 #, c-format
 msgid "%d unspent skill point"
-msgstr ""
+msgstr "%d невитрачене очко Умінь"
 
 #: ../../../src/MenuPowers.cpp:1358
 #, c-format
 msgid "%d unspent skill points"
-msgstr ""
+msgstr "%d невитрачених очок Умінь"
 
 #: ../../../src/MenuPowers.cpp:1388
 msgid "Next Level:"
@@ -1238,7 +1256,7 @@ msgstr "Не можу змінити форму в цьому місці."
 
 #: ../../../src/QuestLog.cpp:234
 msgid "Completed Quests"
-msgstr ""
+msgstr "Завершені квести"
 
 #: ../../../src/SaveLoad.cpp:243 ../../../src/SaveLoad.cpp:244
 msgid "Game saved."
@@ -1246,87 +1264,87 @@ msgstr "Гру збережено."
 
 #: ../../../src/SDLInputState.cpp:581
 msgid "Backspace"
-msgstr ""
+msgstr "Backspace"
 
 #: ../../../src/SDLInputState.cpp:582
 msgid "CapsLock"
-msgstr ""
+msgstr "CapsLock"
 
 #: ../../../src/SDLInputState.cpp:585
 msgid "End"
-msgstr ""
+msgstr "End"
 
 #: ../../../src/SDLInputState.cpp:586
 msgid "Escape"
-msgstr ""
+msgstr "Escape"
 
 #: ../../../src/SDLInputState.cpp:587
 msgid "Home"
-msgstr ""
+msgstr "Home"
 
 #: ../../../src/SDLInputState.cpp:588
 msgid "Insert"
-msgstr ""
+msgstr "Insert"
 
 #: ../../../src/SDLInputState.cpp:589
 msgid "Left Alt"
-msgstr ""
+msgstr "Лівий Alt"
 
 #: ../../../src/SDLInputState.cpp:590
 msgid "Left Ctrl"
-msgstr ""
+msgstr "Лівий Ctrl"
 
 #: ../../../src/SDLInputState.cpp:592
 msgid "Left Shift"
-msgstr ""
+msgstr "Лівий Shift"
 
 #: ../../../src/SDLInputState.cpp:593
 msgid "NumLock"
-msgstr ""
+msgstr "NumLock"
 
 #: ../../../src/SDLInputState.cpp:594
 msgid "PageDown"
-msgstr ""
+msgstr "PageDown"
 
 #: ../../../src/SDLInputState.cpp:595
 msgid "PageUp"
-msgstr ""
+msgstr "PageUp"
 
 #: ../../../src/SDLInputState.cpp:596
 msgid "Pause"
-msgstr ""
+msgstr "Pause"
 
 #: ../../../src/SDLInputState.cpp:597
 msgid "PrintScreen"
-msgstr ""
+msgstr "PrintScreen"
 
 #: ../../../src/SDLInputState.cpp:598
 msgid "Right Alt"
-msgstr ""
+msgstr "Правий Alt"
 
 #: ../../../src/SDLInputState.cpp:599
 msgid "Right Ctrl"
-msgstr ""
+msgstr "Правий Ctrl"
 
 #: ../../../src/SDLInputState.cpp:600
 msgid "Return"
-msgstr ""
+msgstr "Enter"
 
 #: ../../../src/SDLInputState.cpp:602
 msgid "Right Shift"
-msgstr ""
+msgstr "Правий Shift"
 
 #: ../../../src/SDLInputState.cpp:603
 msgid "ScrollLock"
-msgstr ""
+msgstr "ScrollLock"
 
 #: ../../../src/SDLInputState.cpp:604
 msgid "Space"
-msgstr ""
+msgstr "Пробіл"
 
 #: ../../../src/SDLInputState.cpp:605
 msgid "Tab"
-msgstr ""
+msgstr "Tab"
 
 #: ../../../src/SDLInputState.cpp:619
 #, c-format
@@ -1336,12 +1354,12 @@ msgstr "Мишка %d"
 #: ../../../src/SDLInputState.cpp:627
 #, c-format
 msgid "Axis %d -"
-msgstr ""
+msgstr "Вісь %d -"
 
 #: ../../../src/SDLInputState.cpp:629
 #, c-format
 msgid "Axis %d +"
-msgstr ""
+msgstr "Вісь %d +"
 
 #: ../../../src/SDLInputState.cpp:632
 #, c-format
@@ -1355,7 +1373,7 @@ msgstr "(нічого)"
 #: ../../../src/SDLInputState.cpp:677 ../../../src/SDLInputState.cpp:701
 #: ../../../src/SDLInputState.cpp:719
 msgid "Tap"
-msgstr ""
+msgstr "Торкніться"
 
 #: ../../../src/SDLInputState.cpp:677 ../../../src/SDLInputState.cpp:680
 #, c-format
@@ -1379,7 +1397,7 @@ msgstr "Максимум Здоров'я"
 
 #: ../../../src/Stats.cpp:39
 msgid "Total amount of HP."
-msgstr ""
+msgstr "Загальна кількість Здоров'я."
 
 #: ../../../src/Stats.cpp:43
 msgid "HP Regen"
@@ -1395,7 +1413,7 @@ msgstr "Максимум Мани"
 
 #: ../../../src/Stats.cpp:49
 msgid "Total amount of MP."
-msgstr ""
+msgstr "Загальна кількість Мани."
 
 #: ../../../src/Stats.cpp:53
 msgid "MP Regen"
@@ -1431,7 +1449,7 @@ msgstr "Мінімальне Поглинання"
 
 #: ../../../src/Stats.cpp:69 ../../../src/Stats.cpp:74
 msgid "Reduces the amount of damage taken."
-msgstr ""
+msgstr "Зменшує кількість отриманої шкоди."
 
 #: ../../../src/Stats.cpp:73
 msgid "Absorb Max"
@@ -1443,7 +1461,7 @@ msgstr "Шанс Критичного Удару"
 
 #: ../../../src/Stats.cpp:79
 msgid "Chance for an attack to do extra damage."
-msgstr ""
+msgstr "Ймовірність завдання додаткової шкоди атакою"
 
 #: ../../../src/Stats.cpp:83
 msgid "Bonus XP"
@@ -1498,11 +1516,11 @@ msgstr "Збільшує ймовірність повернення снаря�
 
 #: ../../../src/Stats.cpp:113
 msgid "Damage Reflection"
-msgstr "Повернення урону"
+msgstr "Відбиття шкоди"
 
 #: ../../../src/Stats.cpp:114
 msgid "Deals a percentage of damage taken back to the attacker."
-msgstr "Відсоток урону який повертається атакуючому."
+msgstr "Відсоток шкоди який повертається противнику."
 
 #: ../../../src/Stats.cpp:118
 msgid "HP Steal"
