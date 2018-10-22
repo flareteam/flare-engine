@@ -114,7 +114,7 @@ msgstr "Стефан Беллер"
 
 #: ../cutscenes/credits.txt:17
 msgid "Thane Brimhall"
-msgstr ""
+msgstr "Thane Brimhall"
 
 #: ../cutscenes/credits.txt:20
 msgid "Programmers"
@@ -130,7 +130,7 @@ msgstr "Антон Голов"
 
 #: ../cutscenes/credits.txt:24
 msgid "Artur Rojek"
-msgstr ""
+msgstr "Artur Rojek"
 
 #: ../cutscenes/credits.txt:25
 msgid "blazindragon"
@@ -142,7 +142,7 @@ msgstr "Bonbadil"
 
 #: ../cutscenes/credits.txt:27
 msgid "Chris Oelmueller"
-msgstr ""
+msgstr "Chris Oelmueller"
 
 #: ../cutscenes/credits.txt:28
 msgid "David Bariod"
@@ -162,7 +162,7 @@ msgstr "Жозеф Блю"
 
 #: ../cutscenes/credits.txt:32
 msgid "Juan PabloTamayo"
-msgstr ""
+msgstr "Juan PabloTamayo"
 
 #: ../cutscenes/credits.txt:33
 msgid "Kitano"
@@ -178,7 +178,7 @@ msgstr "LongerDev"
 
 #: ../cutscenes/credits.txt:36
 msgid "Manuel A. Fernandez Montecelo"
-msgstr ""
+msgstr "Manuel A. Fernandez Montecelo"
 
 #: ../cutscenes/credits.txt:37
 msgid "Matthew Krohn"
@@ -198,7 +198,7 @@ msgstr "runtime-x86"
 
 #: ../cutscenes/credits.txt:41
 msgid "Ryan Dansie"
-msgstr ""
+msgstr "Ryan Dansie"
 
 #: ../cutscenes/credits.txt:44
 msgid "Default Art"
@@ -214,7 +214,7 @@ msgstr "Ademaro"
 
 #: ../cutscenes/credits.txt:52
 msgid "Adrian Chaves Fernandez"
-msgstr ""
+msgstr "Adrian Chaves Fernandez"
 
 #: ../cutscenes/credits.txt:53
 msgid "Andrea Ranaldi"
@@ -222,11 +222,11 @@ msgstr "Андреа Ранальді"
 
 #: ../cutscenes/credits.txt:54
 msgid "Andreas Berheim Brudin"
-msgstr ""
+msgstr "Andreas Berheim Brudin"
 
 #: ../cutscenes/credits.txt:55
 msgid "Bas Doodeman"
-msgstr ""
+msgstr "Bas Doodeman"
 
 #: ../cutscenes/credits.txt:57
 msgid "Carlos Sanchez"
@@ -234,7 +234,7 @@ msgstr "Карлос Санчез"
 
 #: ../cutscenes/credits.txt:59
 msgid "Christoph J. Thompson"
-msgstr ""
+msgstr "Christoph J. Thompson"
 
 #: ../cutscenes/credits.txt:60
 msgid "Denis Lysenko"
@@ -242,7 +242,7 @@ msgstr "Денис Лисенко"
 
 #: ../cutscenes/credits.txt:61
 msgid "Diego J. Romero López"
-msgstr ""
+msgstr "Diego J. Romero López"
 
 #: ../cutscenes/credits.txt:62
 msgid "dumaosen"
@@ -266,7 +266,7 @@ msgstr "Фабіо Лолі"
 
 #: ../cutscenes/credits.txt:67
 msgid "Gianfranco Del Borrello"
-msgstr ""
+msgstr "Gianfranco Del Borrello"
 
 #: ../cutscenes/credits.txt:68
 msgid "Giovanni Dalla Torre"
@@ -278,7 +278,7 @@ msgstr "GunChleoc"
 
 #: ../cutscenes/credits.txt:70
 msgid "Hans Joachim Desserud"
-msgstr ""
+msgstr "Hans Joachim Desserud"
 
 #: ../cutscenes/credits.txt:71
 msgid "hark34"
@@ -290,7 +290,7 @@ msgstr "Джанет Хант"
 
 #: ../cutscenes/credits.txt:74
 msgid "Juan Pablo Tamayo"
-msgstr ""
+msgstr "Juan Pablo Tamayo"
 
 #: ../cutscenes/credits.txt:75
 msgid "losine"
@@ -298,7 +298,7 @@ msgstr "losine"
 
 #: ../cutscenes/credits.txt:76
 msgid "Michael Papageorgiou"
-msgstr ""
+msgstr "Michael Papageorgiou"
 
 #: ../cutscenes/credits.txt:77
 msgid "Mikhail Karalevich"
@@ -310,7 +310,7 @@ msgstr "Міро Яношик"
 
 #: ../cutscenes/credits.txt:79
 msgid "Mykola Franchuk"
-msgstr ""
+msgstr "Микола Франчук"
 
 #: ../cutscenes/credits.txt:80
 msgid "MOB2"
@@ -322,11 +322,11 @@ msgstr "Морган Штраус"
 
 #: ../cutscenes/credits.txt:82
 msgid "Nea Retrogamer"
-msgstr ""
+msgstr "Nea Retrogamer"
 
 #: ../cutscenes/credits.txt:83
 msgid "Nguyễn Gia Phong"
-msgstr ""
+msgstr "Nguyễn Gia Phong"
 
 #: ../cutscenes/credits.txt:84
 msgid "Nikita Vanku"
@@ -366,11 +366,11 @@ msgstr "sujiniku"
 
 #: ../cutscenes/credits.txt:94
 msgid "Thomas Glamsch"
-msgstr ""
+msgstr "Thomas Glamsch"
 
 #: ../cutscenes/credits.txt:95
 msgid "Timo Sievänen"
-msgstr ""
+msgstr "Timo Sievänen"
 
 #: ../cutscenes/credits.txt:96
 msgid "Vicente Monteiro"
@@ -386,7 +386,7 @@ msgstr "Яніс Антімідіс"
 
 #: ../cutscenes/credits.txt:99
 msgid "Zmicer Turok"
-msgstr ""
+msgstr "Zmicer Turok"
 
 #: ../cutscenes/credits.txt:102
 msgid "Distributors"
@@ -402,7 +402,7 @@ msgstr "Feillyne"
 
 #: ../cutscenes/credits.txt:106
 msgid "Jan-Hendrik Peters"
-msgstr ""
+msgstr "Jan-Hendrik Peters"
 
 #: ../cutscenes/credits.txt:108
 msgid "miffe"
@@ -430,8 +430,8 @@ msgstr "За Tiled і експортер карт Flare:"
 
 #: ../cutscenes/credits.txt:122
 msgid "Thorbjørn Lindeijer"
-msgstr ""
+msgstr "Thorbjørn Lindeijer"
 
 #: ../cutscenes/credits.txt:124
 msgid "Ranie Jade Ramiso"
-msgstr ""
+msgstr "Ranie Jade Ramiso"

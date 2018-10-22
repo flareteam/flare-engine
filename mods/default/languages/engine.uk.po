@@ -833,7 +833,7 @@ msgstr "сутність"
 
 #: ../../../src/MenuDevConsole.cpp:267
 msgid "entity, ally"
-msgstr "сутність/союзник"
+msgstr "сутність, союзник"
 
 #: ../../../src/MenuDevConsole.cpp:274
 msgid "Tile"

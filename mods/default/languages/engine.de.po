@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-09-28 13:25-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
+"Last-Translator: Fyrenic <fyrenic@protonmail.com>, 2018\n"
 "Language-Team: German (https://www.transifex.com/flareorg/teams/84925/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -441,7 +441,7 @@ msgstr "Spiel starten"
 
 #: ../../../src/GameStateTitle.cpp:111
 msgid "Enable a core mod to continue"
-msgstr "Aktiviere eine Kern-Mod zum Fortfahren"
+msgstr "Aktiviere eine Kern-Mod um fortzufahren"
 
 #: ../../../src/GameStateTitle.cpp:115
 msgid "Configuration"
@@ -625,7 +625,7 @@ msgstr "%d%% Angriffsgeschwindigkeit"
 #: ../../../src/MenuPowers.cpp:833
 #, c-format
 msgid "Resistance (%s)"
-msgstr ""
+msgstr "Widerstand (%s)"
 
 #: ../../../src/ItemManager.cpp:684
 #, c-format
@@ -1194,7 +1194,7 @@ msgstr "%d%% Wahrsch. für krit. verlangsamte Ziele"
 #: ../../../src/MenuPowers.cpp:1105
 #, c-format
 msgid "Elemental Damage (%s)"
-msgstr ""
+msgstr "Elementarschaden (%s)"
 
 #: ../../../src/MenuPowers.cpp:1114
 #, c-format
@@ -1263,7 +1263,7 @@ msgstr "An diesem Ort ist eine Zurückverwandlung nicht möglich."
 
 #: ../../../src/QuestLog.cpp:234
 msgid "Completed Quests"
-msgstr "Fertige Aufgaben"
+msgstr "Erledigte Aufgaben"
 
 #: ../../../src/SaveLoad.cpp:243 ../../../src/SaveLoad.cpp:244
 msgid "Game saved."

@@ -309,7 +309,7 @@ msgstr "Miro Jánošík"
 
 #: ../cutscenes/credits.txt:79
 msgid "Mykola Franchuk"
-msgstr "Mykola Franchuk"
+msgstr ""
 
 #: ../cutscenes/credits.txt:80
 msgid "MOB2"
