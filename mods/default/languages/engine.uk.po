@@ -273,7 +273,7 @@ msgid ""
 "Will try to store surfaces in video memory versus system memory. The effect "
 "this has on performance depends on the renderer."
 msgstr ""
-"Гра спробує зберігати поверхні у відеопам'яті а не в  оперативній пам'яті. "
+"Гра спробує зберігати поверхні у відеопам'яті, а не в  оперативній пам'яті. "
 "Ефективність режиму залежить від вибраного рендерера."
 
 #: ../../../src/GameStateConfigDesktop.cpp:187
@@ -282,7 +282,7 @@ msgid ""
 "windowed mode or input lag."
 msgstr ""
 "Запобігає смиканню екрану. Вимкніть, якщо ви помічаєте \"гальмування\" в "
-"віконному режимі або запізнілу реакцію на ввід користувача."
+"віконному режимі або запізнілу реакцію на дії користувача."
 
 #: ../../../src/GameStateConfigDesktop.cpp:188
 msgid ""
@@ -340,7 +340,7 @@ msgstr "Гама"
 
 #: ../../../src/GameStateConfigDesktop.cpp:256
 msgid "Use joystick"
-msgstr "Увімк. джойстик"
+msgstr "Увімкнути джойстик"
 
 #: ../../../src/GameStateConfigDesktop.cpp:260
 msgid "Joystick"
@@ -559,19 +559,19 @@ msgstr "Видалити"
 
 #: ../../../src/InputState.cpp:428
 msgid "ActionBar Accept"
-msgstr "Панель дій: Прийняти"
+msgstr "Дії: Прийняти"
 
 #: ../../../src/InputState.cpp:429
 msgid "ActionBar Left"
-msgstr "Панель дій: Вліво"
+msgstr "Дії: Вліво"
 
 #: ../../../src/InputState.cpp:430
 msgid "ActionBar Right"
-msgstr "Панель дій: Вправо"
+msgstr "Дії: Вправо"
 
 #: ../../../src/InputState.cpp:431
 msgid "ActionBar Use"
-msgstr "Панель дій: Використати"
+msgstr "Дії: Використати"
 
 #: ../../../src/InputState.cpp:432
 msgid "Developer Menu"
@@ -579,15 +579,15 @@ msgstr "Меню розробника"
 
 #: ../../../src/InputState.cpp:434
 msgid "Left Mouse"
-msgstr "Ліва Мишки"
+msgstr "ЛівКнМиш"
 
 #: ../../../src/InputState.cpp:435
 msgid "Middle Mouse"
-msgstr "Середня Мишки"
+msgstr "СерКнМиш"
 
 #: ../../../src/InputState.cpp:436
 msgid "Right Mouse"
-msgstr "Права Мишки"
+msgstr "ПрКнМиш"
 
 #: ../../../src/InputState.cpp:437
 msgid "Wheel Up"
@@ -792,7 +792,7 @@ msgstr "Консоль розробника"
 #: ../../../src/MenuDevConsole.cpp:141
 #, c-format
 msgid "Use '%s' to inspect with the cursor."
-msgstr ""
+msgstr "Для аналізу корсором використовуйте '%s'."
 
 #: ../../../src/MenuDevConsole.cpp:146
 msgid "Arguments with spaces should be enclosed with double quotes. Example:"
@@ -805,7 +805,7 @@ msgstr "Напишіть 'help' для отримання переліку ко�
 
 #: ../../../src/MenuDevConsole.cpp:209 ../../../src/MenuDevConsole.cpp:213
 msgid "px"
-msgstr ""
+msgstr "px"
 
 #: ../../../src/MenuDevConsole.cpp:224
 msgid "Distance"
@@ -845,7 +845,7 @@ msgstr "додає уміння на панель дій"
 
 #: ../../../src/MenuDevConsole.cpp:361
 msgid "turns on/off all of the HUD elements"
-msgstr ""
+msgstr "показує/приховує всі елементи інтерфейсу"
 
 #: ../../../src/MenuDevConsole.cpp:362
 msgid "turns on/off the developer hud"
@@ -868,6 +868,8 @@ msgid ""
 "Prints out the active campaign statuses that match a search term. No search "
 "term will list all active statuses"
 msgstr ""
+"Виводить статуси активної кампанії, які відповідають пошуковому запиту. "
+"Жоден пошуковий запит не покаже усіх активних статусів"
 
 #: ../../../src/MenuDevConsole.cpp:366
 msgid ""
@@ -880,7 +882,7 @@ msgstr ""
 #: ../../../src/MenuDevConsole.cpp:367
 msgid ""
 "parses a series of event components and executes them as a single event"
-msgstr ""
+msgstr "аналізує серію компонентів подій та виконує їх як окрему подію"
 
 #: ../../../src/MenuDevConsole.cpp:368
 msgid "clears the command history"
@@ -896,7 +898,7 @@ msgstr "Стан панелі розробника змінено"
 
 #: ../../../src/MenuDevConsole.cpp:380
 msgid "Toggled the hud"
-msgstr ""
+msgstr "Інтерфейс перемкнено"
 
 #: ../../../src/MenuDevConsole.cpp:529
 msgid "ERROR: Incorrect number of arguments"
@@ -1187,7 +1189,7 @@ msgstr "%d%% Шанс на кріт по сповільненим цілям"
 #: ../../../src/MenuPowers.cpp:1105
 #, c-format
 msgid "Elemental Damage (%s)"
-msgstr "Шкода від стихій (%s)"
+msgstr "Шкода від стихії (%s)"
 
 #: ../../../src/MenuPowers.cpp:1114
 #, c-format
@@ -1235,7 +1237,7 @@ msgstr "Тайник заповнений."
 
 #: ../../../src/MenuVendor.cpp:58
 msgid "Buyback"
-msgstr "Зворотня покупка"
+msgstr "Викуп"
 
 #: ../../../src/MenuVendor.cpp:279
 msgid "Vendor"
@@ -1432,6 +1434,8 @@ msgid ""
 "Accuracy rating. The enemy's Avoidance rating is subtracted from this value "
 "to calculate your likeliness to land a direct hit."
 msgstr ""
+"Відсоток Точності. Від цього значення віднімається значення Ухилення "
+"противника, щоб розрахувати ймовірність точного удару."
 
 #: ../../../src/Stats.cpp:63
 msgid "Avoidance"
@@ -1442,6 +1446,8 @@ msgid ""
 "Avoidance rating. This value is subtracted from the enemy's Accuracy rating "
 "to calculate their likeliness to land a direct hit."
 msgstr ""
+"Відсоток Ухилення. Це значення віднімається від значення Точності "
+"противника, щоб розрахувати ймовірність точного удару противником."
 
 #: ../../../src/Stats.cpp:68
 msgid "Absorb Min"
