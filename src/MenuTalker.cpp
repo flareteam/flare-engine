@@ -23,12 +23,16 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuTalker
  */
 
+#include "Avatar.h"
 #include "FileParser.h"
 #include "FontEngine.h"
 #include "InputState.h"
 #include "Menu.h"
-#include "MenuNPCActions.h"
+#include "MenuInventory.h"
+#include "MenuManager.h"
 #include "MenuTalker.h"
+#include "MenuVendor.h"
+#include "MessageEngine.h"
 #include "NPC.h"
 #include "RenderDevice.h"
 #include "SharedResources.h"
@@ -39,17 +43,32 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetLabel.h"
 #include "WidgetScrollBox.h"
 
-MenuTalker::MenuTalker(MenuNPCActions *_npc_menu)
+MenuTalker::Action::Action()
+	: btn(NULL)
+	, node_id(0)
+	, is_vendor(false)
+{}
+
+MenuTalker::Action::~Action()
+{}
+
+MenuTalker::MenuTalker()
 	: Menu()
-	, npc_menu(_npc_menu)
 	, portrait(NULL)
-	, dialog_node(0)
+	, dialog_node(-1)
 	, event_cursor(0)
 	, font_who("font_regular")
 	, font_dialog("font_regular")
+	, topic_color_normal(font->getColor(FontEngine::COLOR_MENU_BONUS))
+	, topic_color_hover(font->getColor(FontEngine::COLOR_WIDGET_NORMAL))
+	, topic_color_pressed(font->getColor(FontEngine::COLOR_WIDGET_DISABLED))
+	, trade_color_normal(font->getColor(FontEngine::COLOR_MENU_BONUS))
+	, trade_color_hover(font->getColor(FontEngine::COLOR_WIDGET_NORMAL))
+	, trade_color_pressed(font->getColor(FontEngine::COLOR_WIDGET_DISABLED))
 	, npc(NULL)
 	, advanceButton(new WidgetButton("images/menus/buttons/right.png"))
-	, closeButton(new WidgetButton("images/menus/buttons/button_x.png")) {
+	, closeButton(new WidgetButton("images/menus/buttons/button_x.png"))
+	, npc_from_map(true) {
 
 	setBackground("images/menus/dialog_box.png");
 
@@ -86,6 +105,20 @@ MenuTalker::MenuTalker(MenuNPCActions *_npc_menu)
 			// @ATTR font_dialog|predefined_string|Font style to use for the dialog text.
 			else if (infile.key == "font_dialog") font_dialog = infile.val;
 
+			// @ATTR topic_color_normal|color|The normal color for topic text.
+			else if (infile.key == "topic_color_normal") topic_color_normal = Parse::toRGB(infile.val);
+			// @ATTR topic_color_hover|color|The color for topic text when highlighted.
+			else if (infile.key == "topic_color_hover") topic_color_hover = Parse::toRGB(infile.val);
+			// @ATTR topic_color_normal|color|The color for topic text when clicked.
+			else if (infile.key == "topic_color_pressed") topic_color_pressed = Parse::toRGB(infile.val);
+
+			// @ATTR trade_color_normal|color|The normal color for the "Trade" text.
+			else if (infile.key == "trade_color_normal") trade_color_normal = Parse::toRGB(infile.val);
+			// @ATTR trade_color_hover|color|The color for the "Trade" text when highlighted.
+			else if (infile.key == "trade_color_hover") trade_color_hover = Parse::toRGB(infile.val);
+			// @ATTR trade_color_normal|color|The color for the "Trade" text when clicked.
+			else if (infile.key == "trade_color_pressed") trade_color_pressed = Parse::toRGB(infile.val);
+
 			else infile.error("MenuTalker: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
@@ -116,13 +149,25 @@ void MenuTalker::align() {
 void MenuTalker::chooseDialogNode(int request_dialog_node) {
 	event_cursor = 0;
 
-	if(request_dialog_node == -1)
-		return;
+	if(request_dialog_node == -1) {
+		// display the topic list (or automatically select a topic if there's only one)
+		dialog_node = -1;
+		createActionBuffer();
 
-	dialog_node = request_dialog_node;
-	npc->processEvent(dialog_node, event_cursor);
-	npc->processDialog(dialog_node, event_cursor);
-	createBuffer();
+		// need to set the portrait here since we don't call processDialog()
+		if (!npc->portraits.empty())
+			npc->npc_portrait = npc->portraits[0];
+
+		if (actions.size() == 1) {
+			executeAction(0);
+		}
+	}
+	else {
+		dialog_node = request_dialog_node;
+		npc->processEvent(dialog_node, event_cursor);
+		npc->processDialog(dialog_node, event_cursor);
+		createBuffer();
+	}
 }
 
 /**
@@ -130,61 +175,69 @@ void MenuTalker::chooseDialogNode(int request_dialog_node) {
  */
 void MenuTalker::logic() {
 
-	if (!visible || npc==NULL) return;
+	if (!visible || !npc)
+		return;
 
-	advanceButton->enabled = false;
-	closeButton->enabled = false;
+	tablist.logic();
 
-	// determine active button
-	if (static_cast<unsigned>(dialog_node) < npc->dialog.size() && !npc->dialog[dialog_node].empty() && event_cursor < npc->dialog[dialog_node].size()-1) {
-		if (npc->dialog[dialog_node][event_cursor+1].type != EventComponent::NONE) {
-			advanceButton->enabled = true;
-		}
-		else {
-			closeButton->enabled = true;
-		}
-	}
-	else {
-		closeButton->enabled = true;
-	}
-
-	bool more;
 	if (advanceButton->checkClick() || closeButton->checkClick()) {
 		// button was clicked
-		npc->processEvent(dialog_node, event_cursor);
-		event_cursor++;
-		more = npc->processDialog(dialog_node, event_cursor);
+		nextDialog();
 	}
 	else if	(inpt->pressing[Input::ACCEPT] && !inpt->lock[Input::ACCEPT]) {
-		inpt->lock[Input::ACCEPT] = true;
 		// pressed next/more
-		npc->processEvent(dialog_node, event_cursor);
-		event_cursor++;
-		more = npc->processDialog(dialog_node, event_cursor);
+		inpt->lock[Input::ACCEPT] = true;
+		nextDialog();
 	}
 	else {
 		textbox->logic();
-		return;
-	}
 
-	if (more) {
-		createBuffer();
-	}
-	else {
-		// show the NPC Action Menu
-		npc_menu->setNPC(npc);
+		Point mouse = textbox->input_assist(inpt->mouse);
+		for (size_t i = 0; i < actions.size(); ++i) {
+			if (actions[i].btn->checkClickAt(mouse.x, mouse.y)) {
+				executeAction(i);
+				break;
+			}
+		}
 
-		if (!npc_menu->selection())
-			npc_menu->visible = true;
-		else
-			npc_menu->setNPC(NULL);
-
-		// end dialog
-		setNPC(NULL);
+		Rect lock_area = dialog_pos;
+		lock_area.x += window_area.x;
+		lock_area.y += window_area.y;
+		if (inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1] && Utils::isWithinRect(lock_area, inpt->mouse)) {
+			inpt->lock[Input::MAIN1] = true;
+		}
 	}
 }
 
+void MenuTalker::createActionBuffer() {
+	createActionButtons();
+
+	int button_height = 0;
+	if (!actions.empty()) {
+		button_height = static_cast<int>(actions.size()) * actions[0].btn->pos.h;
+	}
+
+	for (size_t i = 0; i < actions.size(); ++i) {
+		actions[i].btn->pos.x = text_offset.x;
+		actions[i].btn->pos.y = (static_cast<int>(i) * actions[i].btn->pos.h);
+		actions[i].btn->refresh();
+	}
+
+	label_name->setText(npc->name);
+	label_name->setFont(font_who);
+	textbox->resize(textbox->pos.w, button_height);
+
+	align();
+
+	closeButton->enabled = true;
+	advanceButton->enabled = false;
+
+	setupTabList();
+}
+
 void MenuTalker::createBuffer() {
+	clearActionButtons();
+
 	if (static_cast<unsigned>(dialog_node) >= npc->dialog.size() || event_cursor >= npc->dialog[dialog_node].size())
 		return;
 
@@ -222,6 +275,17 @@ void MenuTalker::createBuffer() {
 	);
 
 	align();
+
+	if (!npc->dialog[dialog_node].empty() && event_cursor < npc->dialog[dialog_node].size()-1 && npc->dialog[dialog_node][event_cursor+1].type != EventComponent::NONE) {
+		advanceButton->enabled = true;
+		closeButton->enabled = false;
+	}
+	else {
+		advanceButton->enabled = false;
+		closeButton->enabled = true;
+	}
+
+	setupTabList();
 }
 
 void MenuTalker::render() {
@@ -280,23 +344,26 @@ void MenuTalker::render() {
 			}
 		}
 	}
+	else if (dialog_node == -1 && npc->npc_portrait) {
+		src.w = dest.w = portrait_he.w;
+		src.h = dest.h = portrait_he.h;
+		dest.x = offset_x + portrait_he.x;
+		dest.y = offset_y + portrait_he.y;
+
+		npc->npc_portrait->setClipFromRect(src);
+		npc->npc_portrait->setDestFromRect(dest);
+		render_device->render(npc->npc_portrait);
+	}
 
 	// name & dialog text
 	label_name->render();
 	textbox->render();
 
 	// show advance button if there are more event components, or close button if not
-	if (static_cast<unsigned>(dialog_node) < npc->dialog.size() && !npc->dialog[dialog_node].empty() && event_cursor < npc->dialog[dialog_node].size()-1) {
-		if (npc->dialog[dialog_node][event_cursor+1].type != EventComponent::NONE) {
-			advanceButton->render();
-		}
-		else {
-			closeButton->render();
-		}
-	}
-	else {
+	if (advanceButton->enabled)
+		advanceButton->render();
+	else if (closeButton->enabled)
 		closeButton->render();
-	}
 }
 
 void MenuTalker::setHero(StatBlock &stats) {
@@ -324,13 +391,113 @@ void MenuTalker::setNPC(NPC* _npc) {
 		return;
 	}
 
-	if (!visible) {
-		visible = true;
+	visible = true;
+}
+
+void MenuTalker::createActionButtons() {
+	if (!npc)
+		return;
+
+	clearActionButtons();
+
+	std::vector<int> nodes;
+	npc->getDialogNodes(nodes);
+
+	for (size_t i = nodes.size(); i > 0; i--) {
+		std::string topic = npc->getDialogTopic(nodes[i-1]);
+		if (topic.empty())
+			continue;
+
+		actions.push_back(Action());
+		actions.back().btn = new WidgetButton(WidgetButton::NO_FILE);
+		actions.back().btn->setLabel(topic);
+		actions.back().node_id = nodes[i-1];
+		actions.back().btn->setTextColor(WidgetButton::BUTTON_NORMAL, topic_color_normal);
+		actions.back().btn->setTextColor(WidgetButton::BUTTON_HOVER, topic_color_hover);
+		actions.back().btn->setTextColor(WidgetButton::BUTTON_PRESSED, topic_color_pressed);
+	}
+
+	if (npc->checkVendor()) {
+		actions.push_back(Action());
+		actions.back().btn = new WidgetButton(WidgetButton::NO_FILE);
+		actions.back().btn->setLabel(msg->get("Trade"));
+		actions.back().is_vendor = true;
+		actions.back().btn->setTextColor(WidgetButton::BUTTON_NORMAL, trade_color_normal);
+		actions.back().btn->setTextColor(WidgetButton::BUTTON_HOVER, trade_color_hover);
+		actions.back().btn->setTextColor(WidgetButton::BUTTON_PRESSED, trade_color_pressed);
+	}
+
+	for (size_t i = 0; i< actions.size(); ++i) {
+		textbox->addChildWidget(actions[i].btn);
+	}
+}
+
+void MenuTalker::clearActionButtons() {
+	for (size_t i = 0; i < actions.size(); ++i) {
+		delete actions[i].btn;
+	}
+	actions.clear();
+	textbox->clearChildWidgets();
+}
+
+void MenuTalker::executeAction(size_t index) {
+	if (actions[index].is_vendor) {
+		// begin trading
+		NPC *temp_npc = npc;
+		menu->closeAll();
+		menu->vendor->setNPC(temp_npc);
+		menu->inv->visible = true;
+	}
+	else if (actions[index].node_id != -1) {
+		// begin talking
+		chooseDialogNode(actions[index].node_id);
+		if (npc_from_map) {
+			pc->allow_movement = npc->checkMovement(actions[index].node_id);
+		}
+	}
+}
+
+void MenuTalker::nextDialog() {
+	bool more = false;
+
+	if (dialog_node != -1) {
+		npc->processEvent(dialog_node, event_cursor);
+		event_cursor++;
+		more = npc->processDialog(dialog_node, event_cursor);
+	}
+	else {
+		more = false;
+	}
+
+	if (more)
+		createBuffer();
+	else
+		setNPC(NULL); // end dialog
+}
+
+void MenuTalker::setupTabList() {
+	tablist.clear();
+
+	if (dialog_node == -1) {
+		for (size_t i = 0; i < actions.size(); ++i) {
+			tablist.add(actions[i].btn);
+		}
+	}
+
+	if (advanceButton->enabled) {
+		tablist.add(advanceButton);
+		tablist.setCurrent(advanceButton);
+	}
+	else if (closeButton->enabled) {
+		tablist.add(closeButton);
+		tablist.setCurrent(closeButton);
 	}
 }
 
 MenuTalker::~MenuTalker() {
-	if (portrait) delete portrait;
+	clearActionButtons();
+
+	delete portrait;
 	delete label_name;
 	delete textbox;
 	delete advanceButton;

@@ -141,7 +141,7 @@ void MenuBook::loadBook() {
 			buttons[i].button = new WidgetButton(buttons[i].image);
 
 		buttons[i].button->setBasePos(buttons[i].dest.x, buttons[i].dest.y, Utils::ALIGN_TOPLEFT);
-		buttons[i].button->label = msg->get(buttons[i].label);
+		buttons[i].button->setLabel(msg->get(buttons[i].label));
 		buttons[i].button->refresh();
 
 		tablist.add(buttons[i].button);

@@ -75,6 +75,11 @@ void WidgetScrollBox::addChildWidget(Widget* child) {
 
 }
 
+void WidgetScrollBox::clearChildWidgets() {
+	currentChild = -1;
+	children.clear();
+}
+
 void WidgetScrollBox::scroll(int amount) {
 	cursor += amount;
 	if (cursor < 0) {

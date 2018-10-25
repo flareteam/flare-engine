@@ -29,7 +29,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Widget.h"
 
 class CampaignManager;
-class MenuNPCActions;
 class NPC;
 class StatBlock;
 class WidgetButton;
@@ -38,7 +37,22 @@ class WidgetScrollBox;
 
 class MenuTalker : public Menu {
 private:
-	MenuNPCActions *npc_menu;
+	class Action {
+	public:
+		Action();
+		~Action();
+
+		WidgetButton* btn;
+		int node_id;
+		bool is_vendor;
+	};
+
+	void createActionButtons();
+	void clearActionButtons();
+	void createActionBuffer();
+	void executeAction(size_t index);
+	void nextDialog();
+	void setupTabList();
 
 	Sprite *portrait;
 	std::string hero_name;
@@ -59,8 +73,18 @@ private:
 	WidgetLabel *label_name;
 	WidgetScrollBox *textbox;
 
+	std::vector<Action> actions;
+
+	Color topic_color_normal;
+	Color topic_color_hover;
+	Color topic_color_pressed;
+
+	Color trade_color_normal;
+	Color trade_color_hover;
+	Color trade_color_pressed;
+
 public:
-	explicit MenuTalker(MenuNPCActions *_npc_menu);
+	explicit MenuTalker();
 	~MenuTalker();
 	void align();
 
@@ -75,6 +99,8 @@ public:
 
 	WidgetButton *advanceButton;
 	WidgetButton *closeButton;
+
+	bool npc_from_map;
 };
 
 #endif

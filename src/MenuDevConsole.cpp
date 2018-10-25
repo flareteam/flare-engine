@@ -60,7 +60,7 @@ MenuDevConsole::MenuDevConsole()
 	tablist.add(input_box);
 
 	button_confirm = new WidgetButton(WidgetButton::DEFAULT_FILE);
-	button_confirm->label = msg->get("Execute");
+	button_confirm->setLabel(msg->get("Execute"));
 	tablist.add(button_confirm);
 
 	// Load config settings

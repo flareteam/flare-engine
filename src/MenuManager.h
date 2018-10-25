@@ -38,7 +38,6 @@ class MenuActionBar;
 class MenuBook;
 class MenuStatBar;
 class MenuMiniMap;
-class MenuNPCActions;
 class MenuNumPicker;
 class MenuEnemy;
 class MenuVendor;
@@ -111,7 +110,6 @@ public:
 	MenuStatBar *mp;
 	MenuStatBar *xp;
 	MenuMiniMap *mini;
-	MenuNPCActions *npc;
 	MenuNumPicker *num_picker;
 	MenuEnemy *enemy;
 	MenuVendor *vendor;

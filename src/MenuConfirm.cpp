@@ -55,7 +55,7 @@ MenuConfirm::MenuConfirm(const std::string& _buttonMsg, const std::string& _boxM
 
 	if (hasConfirmButton) {
 		buttonConfirm = new WidgetButton(WidgetButton::DEFAULT_FILE);
-		buttonConfirm->label = _buttonMsg;
+		buttonConfirm->setLabel(_buttonMsg);
 		tablist.add(buttonConfirm);
 	}
 

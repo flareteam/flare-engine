@@ -105,20 +105,20 @@ GameStateTitle::GameStateTitle()
 		infile.close();
 	}
 
-	button_play->label = msg->get("Play Game");
+	button_play->setLabel(msg->get("Play Game"));
 	if (!eset->gameplay.enable_playgame) {
 		button_play->enabled = false;
 		button_play->tooltip = msg->get("Enable a core mod to continue");
 	}
 	button_play->refresh();
 
-	button_cfg->label = msg->get("Configuration");
+	button_cfg->setLabel(msg->get("Configuration"));
 	button_cfg->refresh();
 
-	button_credits->label = msg->get("Credits");
+	button_credits->setLabel(msg->get("Credits"));
 	button_credits->refresh();
 
-	button_exit->label = msg->get("Exit Game");
+	button_exit->setLabel(msg->get("Exit Game"));
 	button_exit->refresh();
 
 	// set up labels

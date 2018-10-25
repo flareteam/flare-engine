@@ -31,6 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetButton.h"
 
 const std::string WidgetButton::DEFAULT_FILE = "images/menus/buttons/button_default.png";
+const std::string WidgetButton::NO_FILE = "_NO_FILE_";
 
 WidgetButton::WidgetButton(const std::string& _fileName)
 	: Widget()
@@ -42,9 +43,15 @@ WidgetButton::WidgetButton(const std::string& _fileName)
 	, tooltip("")
 	, enabled(true)
 	, pressed(false)
-	, hover(false) {
+	, hover(false)
+{
 	focusable = true;
 	loadArt();
+
+	text_color_normal = font->getColor(FontEngine::COLOR_WIDGET_NORMAL);
+	text_color_pressed = text_color_normal;
+	text_color_hover = text_color_normal;
+	text_color_disabled = font->getColor(FontEngine::COLOR_WIDGET_DISABLED);
 }
 
 void WidgetButton::activate() {
@@ -57,7 +64,33 @@ void WidgetButton::setPos(int offset_x, int offset_y) {
 	refresh();
 }
 
+void WidgetButton::setLabel(const std::string& s) {
+	label = s;
+	refresh();
+
+	if (!buttons) {
+		pos.w = wlabel.getBounds()->w;
+		pos.h = wlabel.getBounds()->h;
+		refresh();
+		pos = *wlabel.getBounds();
+	}
+}
+
+void WidgetButton::setTextColor(int state, Color c) {
+	if (state == BUTTON_NORMAL)
+		text_color_normal = c;
+	else if (state == BUTTON_PRESSED)
+		text_color_pressed = c;
+	else if (state == BUTTON_HOVER)
+		text_color_hover = c;
+	else if (state == BUTTON_DISABLED)
+		text_color_disabled = c;
+}
+
 void WidgetButton::loadArt() {
+	if (fileName == NO_FILE)
+		return;
+
 	// load button images
 	Image *graphics;
 	graphics = render_device->loadImage(fileName, RenderDevice::ERROR_EXIT);
@@ -119,16 +152,22 @@ void WidgetButton::render() {
 	// the "button" surface contains button variations.
 	// choose which variation to display.
 	int y;
-	if (!enabled)
-		y = BUTTON_GFX_DISABLED * pos.h;
-	else if (pressed)
-		y = BUTTON_GFX_PRESSED * pos.h;
-	else if (hover)
-		y = BUTTON_GFX_HOVER * pos.h;
-	else if(in_focus)
-		y = BUTTON_GFX_HOVER * pos.h;
-	else
-		y = BUTTON_GFX_NORMAL * pos.h;
+	if (!enabled) {
+		y = BUTTON_DISABLED * pos.h;
+		wlabel.setColor(text_color_disabled);
+	}
+	else if (pressed) {
+		y = BUTTON_PRESSED * pos.h;
+		wlabel.setColor(text_color_pressed);
+	}
+	else if (hover || in_focus) {
+		y = BUTTON_HOVER * pos.h;
+		wlabel.setColor(text_color_hover);
+	}
+	else {
+		y = BUTTON_NORMAL * pos.h;
+		wlabel.setColor(text_color_normal);
+	}
 
 	if (buttons) {
 		buttons->local_frame = local_frame;
@@ -155,9 +194,16 @@ void WidgetButton::render() {
 void WidgetButton::refresh() {
 	if (label != "") {
 
-		wlabel.setPos(pos.x + (pos.w/2), pos.y + (pos.h/2));
-		wlabel.setJustify(FontEngine::JUSTIFY_CENTER);
-		wlabel.setVAlign(LabelInfo::VALIGN_CENTER);
+		if (buttons) {
+			wlabel.setPos(pos.x + (pos.w/2), pos.y + (pos.h/2));
+			wlabel.setJustify(FontEngine::JUSTIFY_CENTER);
+			wlabel.setVAlign(LabelInfo::VALIGN_CENTER);
+		}
+		else {
+			wlabel.setPos(pos.x, pos.y);
+			wlabel.setJustify(FontEngine::JUSTIFY_LEFT);
+			wlabel.setVAlign(LabelInfo::VALIGN_TOP);
+		}
 		wlabel.setText(label);
 
 		if (enabled)

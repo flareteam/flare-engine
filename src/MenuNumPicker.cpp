@@ -46,7 +46,7 @@ MenuNumPicker::MenuNumPicker()
 {
 
 	button_ok = new WidgetButton(WidgetButton::DEFAULT_FILE);
-	button_ok->label = msg->get("OK");
+	button_ok->setLabel(msg->get("OK"));
 
 	button_up = new WidgetButton("images/menus/buttons/up.png");
 	button_down = new WidgetButton("images/menus/buttons/down.png");

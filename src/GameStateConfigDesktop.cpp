@@ -539,15 +539,15 @@ void GameStateConfigDesktop::updateInput() {
 void GameStateConfigDesktop::updateKeybinds() {
 	// now do labels for keybinds that are set
 	for (unsigned int i = 0; i < key_count; i++) {
-		keybinds_btn[i]->label = inpt->getBindingString(i);
+		keybinds_btn[i]->setLabel(inpt->getBindingString(i));
 		keybinds_btn[i]->refresh();
 	}
 	for (unsigned int i = key_count; i < key_count*2; i++) {
-		keybinds_btn[i]->label = inpt->getBindingString(i-key_count, InputState::BINDING_ALT);
+		keybinds_btn[i]->setLabel(inpt->getBindingString(i-key_count, InputState::BINDING_ALT));
 		keybinds_btn[i]->refresh();
 	}
 	for (unsigned int i = key_count*2; i < keybinds_btn.size(); i++) {
-		keybinds_btn[i]->label = inpt->getBindingString(i-(key_count*2), InputState::BINDING_JOYSTICK);
+		keybinds_btn[i]->setLabel(inpt->getBindingString(i-(key_count*2), InputState::BINDING_JOYSTICK));
 		keybinds_btn[i]->refresh();
 	}
 	input_scrollbox->refresh();

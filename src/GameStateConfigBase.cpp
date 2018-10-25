@@ -114,9 +114,9 @@ GameStateConfigBase::GameStateConfigBase (bool do_init)
 
 	tab_control = new WidgetTabControl();
 
-	ok_button->label = msg->get("OK");
-	defaults_button->label = msg->get("Defaults");
-	cancel_button->label = msg->get("Cancel");
+	ok_button->setLabel(msg->get("OK"));
+	defaults_button->setLabel(msg->get("Defaults"));
+	cancel_button->setLabel(msg->get("Cancel"));
 
 	language_lstb->can_deselect = false;
 
@@ -335,13 +335,13 @@ bool GameStateConfigBase::parseKey(FileParser &infile, int &x1, int &y1, int &x2
 	}
 	else if (infile.key == "activemods_deactivate") {
 		// @ATTR activemods_deactivate|point|Position of the "Disable" button relative to the frame.
-		activemods_deactivate_btn->label = msg->get("<< Disable");
+		activemods_deactivate_btn->setLabel(msg->get("<< Disable"));
 		activemods_deactivate_btn->setBasePos(x1, y1, Utils::ALIGN_TOPLEFT);
 		activemods_deactivate_btn->refresh();
 	}
 	else if (infile.key == "inactivemods_activate") {
 		// @ATTR inactivemods_activate|point|Position of the "Enable" button relative to the frame.
-		inactivemods_activate_btn->label = msg->get("Enable >>");
+		inactivemods_activate_btn->setLabel(msg->get("Enable >>"));
 		inactivemods_activate_btn->setBasePos(x1, y1, Utils::ALIGN_TOPLEFT);
 		inactivemods_activate_btn->refresh();
 	}

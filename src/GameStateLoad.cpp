@@ -87,18 +87,18 @@ GameStateLoad::GameStateLoad() : GameState()
 	// Confirmation box to confirm deleting
 	confirm = new MenuConfirm(msg->get("Delete Save"), msg->get("Delete this save?"));
 	button_exit = new WidgetButton(WidgetButton::DEFAULT_FILE);
-	button_exit->label = msg->get("Exit to Title");
+	button_exit->setLabel(msg->get("Exit to Title"));
 
 	button_new = new WidgetButton(WidgetButton::DEFAULT_FILE);
-	button_new->label = msg->get("New Game");
+	button_new->setLabel(msg->get("New Game"));
 	button_new->enabled = true;
 
 	button_load = new WidgetButton(WidgetButton::DEFAULT_FILE);
-	button_load->label = msg->get("Choose a Slot");
+	button_load->setLabel(msg->get("Choose a Slot"));
 	button_load->enabled = false;
 
 	button_delete = new WidgetButton(WidgetButton::DEFAULT_FILE);
-	button_delete->label = msg->get("Delete Save");
+	button_delete->setLabel(msg->get("Delete Save"));
 	button_delete->enabled = false;
 
 	scrollbar = new WidgetScrollBar(WidgetScrollBar::DEFAULT_FILE);
@@ -586,7 +586,7 @@ void GameStateLoad::updateButtons() {
 			tablist.add(button_delete);
 		}
 
-		button_load->label = msg->get("Load Game");
+		button_load->setLabel(msg->get("Load Game"));
 		if (game_slots[selected_slot]->current_map == "") {
 			if (!Filesystem::fileExists(mods->locate("maps/spawn.txt"))) {
 				button_load->enabled = false;
@@ -597,7 +597,7 @@ void GameStateLoad::updateButtons() {
 	}
 	else {
 		// no slot selected: can't load/delete
-		button_load->label = msg->get("Choose a Slot");
+		button_load->setLabel(msg->get("Choose a Slot"));
 		button_load->enabled = false;
 		tablist.remove(button_load);
 

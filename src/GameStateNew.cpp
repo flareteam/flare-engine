@@ -62,10 +62,10 @@ GameStateNew::GameStateNew()
 {
 	// set up buttons
 	button_exit = new WidgetButton(WidgetButton::DEFAULT_FILE);
-	button_exit->label = msg->get("Cancel");
+	button_exit->setLabel(msg->get("Cancel"));
 
 	button_create = new WidgetButton(WidgetButton::DEFAULT_FILE);
-	button_create->label = msg->get("Create");
+	button_create->setLabel(msg->get("Create"));
 	button_create->enabled = false;
 	button_create->refresh();
 
@@ -73,7 +73,7 @@ GameStateNew::GameStateNew()
 	button_next = new WidgetButton("images/menus/buttons/right.png");
 
 	button_randomize = new WidgetButton(WidgetButton::DEFAULT_FILE);
-	button_randomize->label = msg->get("Randomize");
+	button_randomize->setLabel(msg->get("Randomize"));
 
 	input_name = new WidgetInput(WidgetInput::DEFAULT_FILE);
 	input_name->max_length = 20;

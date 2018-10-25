@@ -90,7 +90,6 @@ private:
 	bool checkPrimaryStat(const std::string& first, const std::string& second);
 
 	int npc_id;
-	bool npc_from_map;
 
 	std::vector<Title> titles;
 

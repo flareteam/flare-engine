@@ -57,7 +57,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuLog.h"
 #include "MenuManager.h"
 #include "MenuMiniMap.h"
-#include "MenuNPCActions.h"
 #include "MenuPowers.h"
 #include "MenuStash.h"
 #include "MenuTalker.h"
@@ -83,7 +82,6 @@ GameStatePlay::GameStatePlay()
 	: GameState()
 	, enemy(NULL)
 	, npc_id(-1)
-	, npc_from_map(true)
 	, is_first_map_load(true)
 {
 	second_timer.setDuration(settings->max_frames_per_sec);
@@ -696,11 +694,11 @@ void GameStatePlay::checkNPCInteraction() {
 			resetNPC();
 		}
 		npc_id = mapr->npc_id = npcs->getID(mapr->event_npc);
-		npc_from_map = false;
+		menu->talker->npc_from_map = false;
 	}
 	else if (mapr->npc_id != -1) {
 		npc_id = mapr->npc_id;
-		npc_from_map = true;
+		menu->talker->npc_from_map = true;
 	}
 	mapr->event_npc = "";
 	mapr->npc_id = -1;
@@ -710,7 +708,7 @@ void GameStatePlay::checkNPCInteraction() {
 
 	if (npc_id != -1) {
 		bool interact_with_npc = false;
-		if (npc_from_map) {
+		if (menu->talker->npc_from_map) {
 			float interact_distance = Utils::calcDist(pc->stats.pos, npcs->npcs[npc_id]->pos);
 
 			if (interact_distance < eset->misc.interact_range) {
@@ -733,35 +731,10 @@ void GameStatePlay::checkNPCInteraction() {
 				if (inpt->pressing[Input::MAIN1] && inpt->usingMouse()) inpt->lock[Input::MAIN1] = true;
 				if (inpt->pressing[Input::ACCEPT]) inpt->lock[Input::ACCEPT] = true;
 
-				menu->npc->setNPC(npcs->npcs[npc_id]);
-
-				// only show npc action menu if multiple actions are available
-				if (!menu->npc->empty() && !menu->npc->selection())
-					menu->npc->visible = true;
+				menu->talker->setNPC(npcs->npcs[npc_id]);
+				menu->talker->chooseDialogNode(-1);
 			}
 		}
-	}
-
-	// check if a NPC action selection is made
-	if (npc_id != -1 && menu->npc->selection()) {
-		if (menu->npc->vendor_selected && !menu->vendor->visible) {
-			// begin trading
-			menu->closeAll();
-			menu->vendor->setNPC(npcs->npcs[npc_id]);
-			menu->inv->visible = true;
-		}
-		else if (menu->npc->dialog_selected && !menu->talker->visible) {
-			// begin talking
-			menu->closeAll();
-			menu->talker->setNPC(npcs->npcs[npc_id]);
-			menu->talker->chooseDialogNode(menu->npc->selected_dialog_node);
-
-			if (npc_from_map) {
-				pc->allow_movement = npcs->npcs[npc_id]->checkMovement(menu->npc->selected_dialog_node);
-			}
-		}
-
-		menu->npc->setNPC(NULL);
 	}
 }
 
@@ -1081,8 +1054,7 @@ bool GameStatePlay::isPaused() {
 
 void GameStatePlay::resetNPC() {
 	npc_id = -1;
-	npc_from_map = true;
-	menu->npc->setNPC(NULL);
+	menu->talker->npc_from_map = true;
 	menu->vendor->setNPC(NULL);
 	menu->talker->setNPC(NULL);
 }

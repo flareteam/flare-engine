@@ -37,6 +37,7 @@ public:
 	void setPos(int offset_x, int offset_y);
 
 	void addChildWidget(Widget* child);
+	void clearChildWidgets();
 	Point input_assist(const Point& mouse);
 	void logic();
 	void logic(int x, int y);

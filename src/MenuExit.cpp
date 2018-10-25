@@ -91,9 +91,9 @@ MenuExit::MenuExit() : Menu() {
 	exit_msg1 = msg->get("Save & Exit");
 	exit_msg2 = msg->get("Exit");
 
-	buttonExit->label = eset->misc.save_onexit ? exit_msg1 : exit_msg2;
+	buttonExit->setLabel(eset->misc.save_onexit ? exit_msg1 : exit_msg2);
 
-	buttonClose->label = msg->get("Continue");
+	buttonClose->setLabel(msg->get("Continue"));
 
 	setBackground("images/menus/pause_menu.png");
 
@@ -196,7 +196,7 @@ void MenuExit::placeOptionWidgets(WidgetLabel *lb, Widget *w, int x1, int y1, in
 
 void MenuExit::disableSave() {
 	if (buttonExit) {
-		buttonExit->label = exit_msg2;
+		buttonExit->setLabel(exit_msg2);
 		buttonExit->refresh();
 	}
 }
