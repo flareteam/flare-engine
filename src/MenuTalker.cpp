@@ -158,8 +158,11 @@ void MenuTalker::chooseDialogNode(int request_dialog_node) {
 		if (!npc->portraits.empty())
 			npc->npc_portrait = npc->portraits[0];
 
-		if (actions.size() == 1) {
+		if (actions.size() == 1 && !actions[0].is_vendor) {
 			executeAction(0);
+		}
+		else if (actions.empty()) {
+			setNPC(NULL); // end dialog
 		}
 	}
 	else {
@@ -471,8 +474,20 @@ void MenuTalker::nextDialog() {
 
 	if (more)
 		createBuffer();
-	else
-		setNPC(NULL); // end dialog
+	else {
+		if (dialog_node != -1) {
+			// return to the topic selection
+			int prev_node = dialog_node;
+			chooseDialogNode(-1);
+
+			// when returning to the topic selection, a topic is auto-selected if there is only one
+			// in this case, we don't want to repeat the same topic, so we check for that here
+			if (actions.empty() && dialog_node == prev_node)
+				setNPC(NULL);
+		}
+		else
+			setNPC(NULL); // end dialog
+	}
 }
 
 void MenuTalker::setupTabList() {
