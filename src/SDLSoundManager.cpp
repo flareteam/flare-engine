@@ -212,7 +212,7 @@ void SDLSoundManager::play(SoundID sid, const std::string& channel, const FPoint
 	if (!loop && sid)
 		last_played_sid = sid;
 
-	if (!sid || !settings->audio || !settings->sound_volume)
+	if (!sid || !settings->audio)
 		return;
 
 	it = sounds.find(sid);
