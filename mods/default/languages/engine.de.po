@@ -30,7 +30,8 @@ msgstr "Du kannst ein Attribut im Charaktermenü erhöhen."
 #: ../../../src/Avatar.cpp:611
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
 msgstr ""
-"Du wurdest besiegt, das Spiel ist vorbei! Beende mit ${INPUT_CONTINUE}."
+"Du wurdest besiegt, das Spiel ist vorbei! Kehre mit ${INPUT_CONTINUE} zum "
+"Hauptmenü zurück."
 
 #: ../../../src/Avatar.cpp:617
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
@@ -39,7 +40,8 @@ msgstr "Du wurdest besiegt. Drücke ${INPUT_CONTINUE} um fortzufahren"
 #: ../../../src/Avatar.cpp:870
 msgid "Transformation expired. You have been moved back to a safe place."
 msgstr ""
-"Transformation ist aufgehoben. Du wurdest an einen sicheren Ort gebracht."
+"Die Transformation ist aufgehoben. Du wurdest an einen sicheren Ort "
+"gebracht."
 
 #: ../../../src/CampaignManager.cpp:153
 #, c-format
@@ -358,7 +360,7 @@ msgstr "Maus nicht benutzen"
 
 #: ../../../src/GameStateConfigDesktop.cpp:284
 msgid "Joystick Deadzone"
-msgstr "Joystick-Todeszone"
+msgstr "Joystick-Deadzone"
 
 #: ../../../src/GameState.cpp:37 ../../../src/GameState.cpp:58
 msgid "Loading..."
@@ -398,7 +400,7 @@ msgstr "Spielwelt wird betreten ..."
 
 #: ../../../src/GameStateLoad.cpp:698
 msgid "Loading saved game..."
-msgstr "Gespeichertes Spiel wird geladen ..."
+msgstr "Spielstand wird geladen ..."
 
 #: ../../../src/GameStateLoad.cpp:731
 msgid "Invalid save"
@@ -907,7 +909,7 @@ msgstr "HUD umgeschaltet"
 
 #: ../../../src/MenuDevConsole.cpp:529
 msgid "ERROR: Incorrect number of arguments"
-msgstr "FEHLER: Ungültige Anzahl Argumente"
+msgstr "FEHLER: Ungültige Anzahl an Argumenten"
 
 #: ../../../src/MenuDevConsole.cpp:531 ../../../src/MenuDevConsole.cpp:559
 msgid "HINT:"
@@ -1057,7 +1059,7 @@ msgstr "EP: %d/%d"
 
 #: ../../../src/MenuManager.cpp:806
 msgid "This item can not be dropped."
-msgstr "Dieser Gegenstand kann nicht abgesetzt werden."
+msgstr "Dieser Gegenstand kann nicht abgelegt werden."
 
 #: ../../../src/MenuNPCActions.cpp:75
 msgid "Trade"
@@ -1521,7 +1523,7 @@ msgstr ""
 
 #: ../../../src/Stats.cpp:108
 msgid "Missile Reflect Chance"
-msgstr "Rückwurf von Geschossen"
+msgstr "Reflektion von Geschossen"
 
 #: ../../../src/Stats.cpp:109
 msgid "Increases your chance of reflecting missiles back at enemies."

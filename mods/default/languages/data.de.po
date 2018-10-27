@@ -61,7 +61,8 @@ msgstr "Fernkampfschaden"
 #: ../engine/damage_types.txt:13
 msgid "Increases the damage done with bows and other ranged weapons."
 msgstr ""
-"Erhöht den Schaden, der mit Bögen und anderen Fernwaffen angerichtet wird."
+"Erhöht den Schaden, der mit Bögen und anderen Fernkampfwaffen angerichtet "
+"wird."
 
 #: ../engine/damage_types.txt:14
 msgid "Ranged Damage Min"
