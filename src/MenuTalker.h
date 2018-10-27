@@ -39,6 +39,9 @@ class MenuTalker : public Menu {
 private:
 	class Action {
 	public:
+		static const int NO_NODE = -1;
+		static const bool IS_VENDOR = true;
+
 		Action();
 		~Action();
 
@@ -47,12 +50,13 @@ private:
 		bool is_vendor;
 	};
 
-	void createActionButtons();
+	void createActionButtons(int node_id);
 	void clearActionButtons();
 	void createActionBuffer();
 	void executeAction(size_t index);
 	void nextDialog();
 	void setupTabList();
+	void addAction(const std::string& label, int node_id, bool is_vendor);
 
 	Sprite *portrait;
 	std::string hero_name;

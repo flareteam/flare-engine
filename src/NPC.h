@@ -59,13 +59,15 @@ private:
 
 public:
 	static const int VENDOR_MAX_STOCK = 80;
+	static const bool GET_RESPONSE_NODES = true;
 
 	NPC();
 	~NPC();
 	void load(const std::string& npc_id);
 	void logic();
 	bool playSoundIntro();
-	void getDialogNodes(std::vector<int> &result);
+	void getDialogNodes(std::vector<int> &result, bool allow_responses);
+	void getDialogResponses(std::vector<int>& result, size_t node_id, size_t event_cursor);
 	std::string getDialogTopic(unsigned int dialog_node);
 	bool checkMovement(unsigned int dialog_node);
 	bool checkVendor();

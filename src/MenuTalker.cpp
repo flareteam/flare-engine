@@ -168,8 +168,10 @@ void MenuTalker::chooseDialogNode(int request_dialog_node) {
 	else {
 		dialog_node = request_dialog_node;
 		npc->processEvent(dialog_node, event_cursor);
-		npc->processDialog(dialog_node, event_cursor);
-		createBuffer();
+		if (npc->processDialog(dialog_node, event_cursor))
+			createBuffer();
+		else
+			chooseDialogNode(-1);
 	}
 }
 
@@ -187,7 +189,7 @@ void MenuTalker::logic() {
 		// button was clicked
 		nextDialog();
 	}
-	else if	(inpt->pressing[Input::ACCEPT] && !inpt->lock[Input::ACCEPT]) {
+	else if	((advanceButton->enabled || closeButton->enabled) && inpt->pressing[Input::ACCEPT] && !inpt->lock[Input::ACCEPT]) {
 		// pressed next/more
 		inpt->lock[Input::ACCEPT] = true;
 		nextDialog();
@@ -213,7 +215,7 @@ void MenuTalker::logic() {
 }
 
 void MenuTalker::createActionBuffer() {
-	createActionButtons();
+	createActionButtons(-1);
 
 	int button_height = 0;
 	if (!actions.empty()) {
@@ -244,6 +246,13 @@ void MenuTalker::createBuffer() {
 	if (static_cast<unsigned>(dialog_node) >= npc->dialog.size() || event_cursor >= npc->dialog[dialog_node].size())
 		return;
 
+	createActionButtons(dialog_node);
+
+	int button_height = 0;
+	if (!actions.empty()) {
+		button_height = static_cast<int>(actions.size()) * actions[0].btn->pos.h;
+	}
+
 	std::string line;
 
 	// speaker name
@@ -265,7 +274,7 @@ void MenuTalker::createBuffer() {
 
 	// render dialog text to the scrollbox buffer
 	Point line_size = font->calc_size(line,textbox->pos.w-(text_offset.x*2));
-	textbox->resize(textbox->pos.w, line_size.y);
+	textbox->resize(textbox->pos.w, line_size.y + button_height);
 	font->setFont(font_dialog);
 	font->render(
 		line,
@@ -277,9 +286,19 @@ void MenuTalker::createBuffer() {
 		font->getColor(FontEngine::COLOR_MENU_NORMAL)
 	);
 
+	for (size_t i = 0; i < actions.size(); ++i) {
+		actions[i].btn->pos.x = text_offset.x;
+		actions[i].btn->pos.y = line_size.y + (static_cast<int>(i) * actions[i].btn->pos.h);
+		actions[i].btn->refresh();
+	}
+
 	align();
 
-	if (!npc->dialog[dialog_node].empty() && event_cursor < npc->dialog[dialog_node].size()-1 && npc->dialog[dialog_node][event_cursor+1].type != EventComponent::NONE) {
+	if (!actions.empty()) {
+		advanceButton->enabled = false;
+		closeButton->enabled = false;
+	}
+	else if (!npc->dialog[dialog_node].empty() && event_cursor < npc->dialog[dialog_node].size()-1 && npc->dialog[dialog_node][event_cursor+1].type != EventComponent::NONE) {
 		advanceButton->enabled = true;
 		closeButton->enabled = false;
 	}
@@ -397,37 +416,34 @@ void MenuTalker::setNPC(NPC* _npc) {
 	visible = true;
 }
 
-void MenuTalker::createActionButtons() {
+void MenuTalker::createActionButtons(int node_id) {
 	if (!npc)
 		return;
 
 	clearActionButtons();
 
 	std::vector<int> nodes;
-	npc->getDialogNodes(nodes);
+	if (node_id == -1) {
+		// primary topic selection
+		npc->getDialogNodes(nodes, !NPC::GET_RESPONSE_NODES);
+	}
+	else {
+		// dialog responses
+		npc->getDialogResponses(nodes, node_id, event_cursor);
+	}
 
+	// add standard topics
 	for (size_t i = nodes.size(); i > 0; i--) {
 		std::string topic = npc->getDialogTopic(nodes[i-1]);
 		if (topic.empty())
 			continue;
 
-		actions.push_back(Action());
-		actions.back().btn = new WidgetButton(WidgetButton::NO_FILE);
-		actions.back().btn->setLabel(topic);
-		actions.back().node_id = nodes[i-1];
-		actions.back().btn->setTextColor(WidgetButton::BUTTON_NORMAL, topic_color_normal);
-		actions.back().btn->setTextColor(WidgetButton::BUTTON_HOVER, topic_color_hover);
-		actions.back().btn->setTextColor(WidgetButton::BUTTON_PRESSED, topic_color_pressed);
+		addAction(topic, nodes[i-1], !Action::IS_VENDOR);
 	}
 
-	if (npc->checkVendor()) {
-		actions.push_back(Action());
-		actions.back().btn = new WidgetButton(WidgetButton::NO_FILE);
-		actions.back().btn->setLabel(msg->get("Trade"));
-		actions.back().is_vendor = true;
-		actions.back().btn->setTextColor(WidgetButton::BUTTON_NORMAL, trade_color_normal);
-		actions.back().btn->setTextColor(WidgetButton::BUTTON_HOVER, trade_color_hover);
-		actions.back().btn->setTextColor(WidgetButton::BUTTON_PRESSED, trade_color_pressed);
+	// add "Trade" topic
+	if (node_id == -1 && npc->checkVendor()) {
+		addAction(msg->get("Trade"), Action::NO_NODE, Action::IS_VENDOR);
 	}
 
 	for (size_t i = 0; i< actions.size(); ++i) {
@@ -506,6 +522,31 @@ void MenuTalker::setupTabList() {
 	else if (closeButton->enabled) {
 		tablist.add(closeButton);
 		tablist.setCurrent(closeButton);
+	}
+}
+
+void MenuTalker::addAction(const std::string& label, int node_id, bool is_vendor) {
+	if ((node_id != Action::NO_NODE && is_vendor) || (node_id == Action::NO_NODE && !is_vendor)) {
+		Utils::logError("MenuTalker: addAction() parameters are incompatible, skipping action.");
+		return;
+	}
+
+	actions.push_back(Action());
+
+	actions.back().btn = new WidgetButton(WidgetButton::NO_FILE);
+	actions.back().btn->setLabel(label);
+
+	if (node_id != Action::NO_NODE) {
+		actions.back().node_id = node_id;
+		actions.back().btn->setTextColor(WidgetButton::BUTTON_NORMAL, topic_color_normal);
+		actions.back().btn->setTextColor(WidgetButton::BUTTON_HOVER, topic_color_hover);
+		actions.back().btn->setTextColor(WidgetButton::BUTTON_PRESSED, topic_color_pressed);
+	}
+	else {
+		actions.back().is_vendor = true;
+		actions.back().btn->setTextColor(WidgetButton::BUTTON_NORMAL, trade_color_normal);
+		actions.back().btn->setTextColor(WidgetButton::BUTTON_HOVER, trade_color_hover);
+		actions.back().btn->setTextColor(WidgetButton::BUTTON_PRESSED, trade_color_pressed);
 	}
 }
 

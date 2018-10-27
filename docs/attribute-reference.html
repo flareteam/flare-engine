@@ -1597,6 +1597,8 @@ body {
 
 <p>Description of NPCs in npcs/</p>
 
+<p><strong>dialog.id</strong> | <code>string</code> | A unique identifer used to reference this dialog.</p>
+
 <p><strong>dialog.him</strong> | <code>repeatable(string)</code> | A line of dialog from the NPC.</p>
 
 <p><strong>dialog.her</strong> | <code>repeatable(string)</code> | A line of dialog from the NPC.</p>
@@ -1616,6 +1618,10 @@ body {
 <p><strong>dialog.portrait_her</strong> | <code>repeatable(filename)</code> | Filename of a portrait to display for the NPC during this dialog.</p>
 
 <p><strong>dialog.portrait_you</strong> | <code>repeatable(filename)</code> | Filename of a portrait to display for the player during this dialog.</p>
+
+<p><strong>dialog.response</strong> | <code>repeatable(string)</code> | A dialog ID to present as a selectable response. This key must precede the dialog text line.</p>
+
+<p><strong>dialog.response_only</strong> | <code>bool</code> | If true, this dialog topic will only appear when explicitly referenced with the &ldquo;response&rdquo; key.</p>
 
 <p><strong>name</strong> | <code>string</code> | NPC&rsquo;s name.</p>
 

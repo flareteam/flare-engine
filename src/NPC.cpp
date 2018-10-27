@@ -75,7 +75,12 @@ void NPC::load(const std::string& npc_id) {
 				}
 				EventComponent e;
 				e.type = EventComponent::NONE;
-				if (infile.key == "him" || infile.key == "her") {
+				if (infile.key == "id") {
+					// @ATTR dialog.id|string|A unique identifer used to reference this dialog.
+					e.type = EventComponent::NPC_DIALOG_ID;
+					e.s = infile.val;
+				}
+				else if (infile.key == "him" || infile.key == "her") {
 					// @ATTR dialog.him|repeatable(string)|A line of dialog from the NPC.
 					// @ATTR dialog.her|repeatable(string)|A line of dialog from the NPC.
 					e.type = EventComponent::NPC_DIALOG_THEM;
@@ -118,6 +123,16 @@ void NPC::load(const std::string& npc_id) {
 					e.type = EventComponent::NPC_PORTRAIT_YOU;
 					e.s = infile.val;
 					portrait_filenames.push_back(e.s);
+				}
+				else if (infile.key == "response") {
+					// @ATTR dialog.response|repeatable(string)|A dialog ID to present as a selectable response. This key must precede the dialog text line.
+					e.type = EventComponent::NPC_DIALOG_RESPONSE;
+					e.s = infile.val;
+				}
+				else if (infile.key == "response_only") {
+					// @ATTR dialog.response_only|bool|If true, this dialog topic will only appear when explicitly referenced with the "response" key.
+					e.type = EventComponent::NPC_DIALOG_RESPONSE_ONLY;
+					e.x = Parse::toBool(infile.val);
 				}
 				else {
 					Event ev;
@@ -328,7 +343,7 @@ bool NPC::playSoundQuest(int id) {
 /**
  * get list of available dialogs with NPC
  */
-void NPC::getDialogNodes(std::vector<int> &result) {
+void NPC::getDialogNodes(std::vector<int> &result, bool allow_responses) {
 	result.clear();
 	if (!talker)
 		return;
@@ -345,6 +360,12 @@ void NPC::getDialogNodes(std::vector<int> &result) {
 			if (dialog[i-1][j].type == EventComponent::NPC_DIALOG_GROUP) {
 				is_grouped = true;
 				group = dialog[i-1][j].s;
+			}
+			else if (dialog[i-1][j].type == EventComponent::NPC_DIALOG_RESPONSE_ONLY) {
+				if (dialog[i-1][j].x && !allow_responses) {
+					is_available = false;
+					break;
+				}
 			}
 			else {
 				if (camp->checkAllRequirements(dialog[i-1][j]))
@@ -383,6 +404,50 @@ void NPC::getDialogNodes(std::vector<int> &result) {
 		int di = it->second[rand() % it->second.size()];
 		result.push_back(di);
 		++it;
+	}
+}
+
+void NPC::getDialogResponses(std::vector<int>& result, size_t node_id, size_t event_cursor) {
+	if (node_id >= dialog.size())
+		return;
+
+	if (event_cursor >= dialog[node_id].size())
+		return;
+
+	std::vector<size_t> response_ids;
+	for (size_t i = event_cursor; i > 0; i--) {
+		if (isDialogType(dialog[node_id][i-1].type))
+			break;
+
+		if (dialog[node_id][i-1].type == EventComponent::NPC_DIALOG_RESPONSE)
+			response_ids.push_back(i-1);
+	}
+
+	if (response_ids.empty())
+		return;
+
+	std::vector<int> nodes;
+	getDialogNodes(nodes, GET_RESPONSE_NODES);
+
+	for (size_t i = 0; i < response_ids.size(); i++) {
+		for (size_t j = 0; j < nodes.size(); j++) {
+			std::string id;
+
+			for (size_t k = 0; k < dialog[nodes[j]].size(); k++) {
+				if (dialog[nodes[j]][k].type == EventComponent::NPC_DIALOG_ID) {
+					id = dialog[nodes[j]][k].s;
+					break;
+				}
+			}
+
+			if (id.empty())
+				continue;
+
+			if (id == dialog[node_id][response_ids[i]].s) {
+				result.push_back(nodes[j]);
+				break;
+			}
+		}
 	}
 }
 
@@ -471,6 +536,15 @@ bool NPC::processDialog(unsigned int dialog_node, unsigned int &event_cursor) {
 			// continue to next event component
 		}
 		else if (dialog[dialog_node][event_cursor].type == EventComponent::REQUIRES_NOT_CLASS) {
+			// continue to next event component
+		}
+		else if (dialog[dialog_node][event_cursor].type == EventComponent::NPC_DIALOG_ID) {
+			// continue to next event component
+		}
+		else if (dialog[dialog_node][event_cursor].type == EventComponent::NPC_DIALOG_RESPONSE) {
+			// continue to next event component
+		}
+		else if (dialog[dialog_node][event_cursor].type == EventComponent::NPC_DIALOG_RESPONSE_ONLY) {
 			// continue to next event component
 		}
 		else if (dialog[dialog_node][event_cursor].type == EventComponent::NPC_DIALOG_THEM) {

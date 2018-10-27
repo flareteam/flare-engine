@@ -6,6 +6,7 @@ Engine features:
 * Pressing 'Alt' will now always show all loot tooltips.
 * Overhead markers are now displayed for entities that are obscured by tall tiles.
 * Dialog options are no longer shown in a separate menu, but are instead part of the main dialog window.
+* Added support for dialog responses. For any line of dialog, a list of response topics can be given.
 
 Engine fixes:
 * Fixed shrinking tab widgets when widow was resized.
