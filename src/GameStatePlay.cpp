@@ -731,6 +731,7 @@ void GameStatePlay::checkNPCInteraction() {
 				if (inpt->pressing[Input::MAIN1] && inpt->usingMouse()) inpt->lock[Input::MAIN1] = true;
 				if (inpt->pressing[Input::ACCEPT]) inpt->lock[Input::ACCEPT] = true;
 
+				menu->closeAll();
 				menu->talker->setNPC(npcs->npcs[npc_id]);
 				menu->talker->chooseDialogNode(-1);
 			}
