@@ -42,6 +42,7 @@ Translations
 
 (be) Belarussian by Mikhail Karalevich
 (bg) Bulgarian by Emil
+(ca) Catalan by Marc Tormo i Bochaca
 (cs) Czech by Nikita Vanku (Zaraka), hark34
 (de) German by Thomas 'CruzR' Glamsch, Chris Oelmueller, Janet Hunt, Stefan Beller, and Wuzzy2
 (el) Greek by Yannis Anthymidis, Michael Papageorgiou, and Nea Retrogamer

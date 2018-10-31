@@ -73,6 +73,7 @@ text=Igor Paliychuk
 text=Janet Hunt
 text=Juan Pablo Tamayo
 text=losine
+text=Marc Tormo i Bochaca
 text=Michael Papageorgiou
 text=Mikhail Karalevich
 text=Miro Jánošík

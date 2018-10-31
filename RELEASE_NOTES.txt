@@ -15,6 +15,10 @@ Engine fixes:
 * Make strings related to elements more translator-friendly.
 * Fixed a bug where looped map sounds wouldn't play if the player entered the map with a sound volume of 0, but later raised the volume.
 
+New translations:
+
+* Catalan (ca) by Marc Tormo i Bochaca
+
 Translation updates:
 
 * German (de) update (Fyrenic)

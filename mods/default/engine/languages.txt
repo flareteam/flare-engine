@@ -8,6 +8,7 @@
 
 be=Беларуская
 bg=български
+ca=Catalan
 cs=Čeština
 de=Deutsch
 el=Ελληνικά
