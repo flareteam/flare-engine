@@ -392,6 +392,10 @@ void GameStatePlay::checkTeleport() {
 void GameStatePlay::checkCancel() {
 	bool save_on_exit = eset->misc.save_onexit && !(pc->stats.permadeath && pc->stats.cur_state == StatBlock::AVATAR_DEAD);
 
+	if (save_on_exit && eset->misc.save_pos_onexit) {
+		mapr->respawn_point = pc->stats.pos;
+	}
+
 	// if user has clicked exit game from exit menu
 	if (menu->requestingExit()) {
 		menu->closeAll();

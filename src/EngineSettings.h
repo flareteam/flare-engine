@@ -49,6 +49,7 @@ public:
 		bool menus_pause;
 		bool save_onload;
 		bool save_onexit;
+		bool save_pos_onexit;
 		float camera_speed;
 		bool save_buyback;
 		bool keep_buyback_on_map_change;
