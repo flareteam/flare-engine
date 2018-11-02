@@ -171,7 +171,7 @@ void MenuTalker::chooseDialogNode(int request_dialog_node) {
 		if (npc->processDialog(dialog_node, event_cursor))
 			createBuffer();
 		else
-			chooseDialogNode(-1);
+			setNPC(NULL); // end dialog
 	}
 }
 
@@ -470,7 +470,7 @@ void MenuTalker::executeAction(size_t index) {
 	else if (actions[index].node_id != -1) {
 		// begin talking
 		chooseDialogNode(actions[index].node_id);
-		if (npc_from_map) {
+		if (npc && npc_from_map) {
 			pc->allow_movement = npc->checkMovement(actions[index].node_id);
 		}
 	}
