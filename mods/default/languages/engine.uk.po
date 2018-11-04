@@ -3,14 +3,19 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
+# Translators:
+# Justin Jacobs <jajdorkster@gmail.com>, 2018
+# Sergiy Borodych, 2018
+# igorko <mansonigor@gmail.com>, 2018
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-09-28 13:25-0400\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
+"PO-Revision-Date: 2018-03-28 19:16+0000\n"
+"Last-Translator: igorko <mansonigor@gmail.com>, 2018\n"
 "Language-Team: Ukrainian (https://www.transifex.com/flareorg/teams/84925/uk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -204,7 +209,7 @@ msgstr "Завжди видимі мітки речей"
 
 #: ../../../src/GameStateConfigBase.cpp:298
 msgid "Always show stat bar labels"
-msgstr "Завжди показувати мітки з смужками статів"
+msgstr "Завжди показувати текст на смужках статів"
 
 #: ../../../src/GameStateConfigBase.cpp:302
 msgid "Automatically equip items"
@@ -291,8 +296,8 @@ msgid ""
 " used."
 msgstr ""
 "Якщо увімкнено, при масштабуванні разом з розмірами вікна буде також "
-"враховуватись роздільна здатність екрану. Інакше враховуються лише розміри "
-"вікна."
+"використовуватись роздільна здатність екрану. Інакше використовуються лише "
+"розміри вікна."
 
 #: ../../../src/GameStateConfigDesktop.cpp:189
 msgid "Experimental"
@@ -674,7 +679,7 @@ msgstr "Ціна купівлі: %d %s"
 #: ../../../src/ItemManager.cpp:866 ../../../src/ItemManager.cpp:878
 #, c-format
 msgid "Buy Price: %d %s each"
-msgstr "Вартість купівлі: %d %s кожен"
+msgstr "Ціна купівлі: %d %s кожен"
 
 #: ../../../src/ItemManager.cpp:886
 #, c-format
@@ -684,7 +689,7 @@ msgstr "Ціна продажу: %d %s"
 #: ../../../src/ItemManager.cpp:888
 #, c-format
 msgid "Sell Price: %d %s each"
-msgstr "Вартість продажу: %d %s кожен"
+msgstr "Ціна продажу: %d %s кожен"
 
 #: ../../../src/ItemManager.cpp:897
 msgid "Set:"
@@ -750,7 +755,7 @@ msgstr "%d невитрачених очків статистики"
 #: ../../../src/MenuCharacter.cpp:355
 #, c-format
 msgid "Reduces the damage taken from \"%s\" elemental attacks."
-msgstr "Зменшує шкоду, завдану \"%s\" атаками стихій."
+msgstr "Зменшує шкоду, завдану атаками стихії \"%s\"."
 
 #: ../../../src/MenuCharacter.cpp:365 ../../../src/MenuManager.cpp:287
 #, c-format
@@ -779,7 +784,7 @@ msgstr "Кожен рівень додає %d."
 #: ../../../src/MenuCharacter.cpp:425 ../../../src/MenuCharacter.cpp:449
 #, c-format
 msgid "Each point of %s grants %d."
-msgstr "Кожне очко %s додає %d."
+msgstr "Кожне очко витрачене на %s додає %d."
 
 #: ../../../src/MenuDevConsole.cpp:63
 msgid "Execute"
@@ -1002,7 +1007,7 @@ msgstr "Модифікатори для %s"
 
 #: ../../../src/MenuInventory.cpp:302
 msgid "Select a quantity of item:"
-msgstr "Вкажіть кількість предметів:"
+msgstr "Вказати кількість предметів:"
 
 #: ../../../src/MenuInventory.cpp:305
 msgid "Stash item stack:"
@@ -1102,7 +1107,7 @@ msgstr "Імунітет"
 
 #: ../../../src/MenuPowers.cpp:896
 msgid "Immunity to damage over time"
-msgstr "Імунітет до завдання шкоди протягом часу"
+msgstr "Імунітет до шкоди протягом часу"
 
 #: ../../../src/MenuPowers.cpp:899
 msgid "Immunity to slow"
@@ -1130,7 +1135,7 @@ msgstr "Імунітет до відбиття шкоди."
 
 #: ../../../src/MenuPowers.cpp:917
 msgid "Stun"
-msgstr "Оглушити"
+msgstr "Оглушення"
 
 #: ../../../src/MenuPowers.cpp:920
 msgid "Automatic revive on death"
@@ -1146,7 +1151,7 @@ msgstr "Страх"
 
 #: ../../../src/MenuPowers.cpp:929
 msgid "Lifespan"
-msgstr "Тривалість"
+msgstr "Тривалість життя"
 
 #: ../../../src/MenuPowers.cpp:953
 msgid "Magical Shield"
@@ -1184,7 +1189,7 @@ msgstr "Ігнорує Уникнення"
 #: ../../../src/MenuPowers.cpp:1100
 #, c-format
 msgid "%d%% Chance to crit slowed targets"
-msgstr "%d%% Шанс на кріт по сповільненим цілям"
+msgstr "%d%% Шанс на крит. сповільненої цілі"
 
 #: ../../../src/MenuPowers.cpp:1105
 #, c-format
@@ -1526,7 +1531,7 @@ msgstr "Відбиття шкоди"
 
 #: ../../../src/Stats.cpp:114
 msgid "Deals a percentage of damage taken back to the attacker."
-msgstr "Відсоток шкоди який повертається противнику."
+msgstr "Визначає який відсоток нанесеної шкоди повертається противнику."
 
 #: ../../../src/Stats.cpp:118
 msgid "HP Steal"
