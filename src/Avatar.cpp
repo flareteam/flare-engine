@@ -494,6 +494,12 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 					stats.cur_state = StatBlock::AVATAR_STANCE;
 					break;
 				}
+				else if (settings->mouse_move && inpt->pressing[Input::SHIFT]) {
+					// when moving with the mouse, pressing Shift should stop movement and begin attacking
+					stats.cur_state = StatBlock::AVATAR_STANCE;
+					inpt->lock[Input::MAIN1] = false;
+					break;
+				}
 
 				if (activeAnimation->getName() != "run")
 					stats.cur_state = StatBlock::AVATAR_STANCE;

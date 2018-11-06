@@ -15,6 +15,7 @@ Engine fixes:
 * Add tooltips to language list to show language codes.
 * Make strings related to elements more translator-friendly.
 * Fixed a bug where looped map sounds wouldn't play if the player entered the map with a sound volume of 0, but later raised the volume.
+* Pressing Shift while using mouse movement now lets the player begin attacking.
 
 New translations:
 
