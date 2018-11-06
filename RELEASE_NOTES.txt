@@ -19,6 +19,10 @@ Engine fixes:
 * Using mouse movement when attacking will now correctly let the player move once the current attack is finished.
 * Fixed "jittering" animation when melee attacking with mouse movement while pressing Shift.
 
+Game changes:
+
+* Fix the "Locked Out" quest not appearing in the completed quests list.
+
 New translations:
 
 * Catalan (ca) by Marc Tormo i Bochaca
