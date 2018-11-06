@@ -16,6 +16,8 @@ Engine fixes:
 * Make strings related to elements more translator-friendly.
 * Fixed a bug where looped map sounds wouldn't play if the player entered the map with a sound volume of 0, but later raised the volume.
 * Pressing Shift while using mouse movement now lets the player begin attacking.
+* Using mouse movement when attacking will now correctly let the player move once the current attack is finished.
+* Fixed "jittering" animation when melee attacking with mouse movement while pressing Shift.
 
 New translations:
 

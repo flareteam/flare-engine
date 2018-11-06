@@ -475,7 +475,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 				set_direction();
 
 				// mouse movement only: if we're close enough to our target while moving, begin attacking
-				if (settings->mouse_move && inpt->pressing[Input::MAIN1] && have_enemy && main1_id != 0) {
+				if (settings->mouse_move && inpt->pressing[Input::MAIN1] && !inpt->pressing[Input::SHIFT] && have_enemy && main1_id != 0) {
 					Power& p = powers->powers[main1_id];
 					if (p.type == Power::TYPE_FIXED && p.starting_pos == Power::STARTING_POS_MELEE && Utils::calcDist(stats.pos, enemy_pos) <= stats.melee_range) {
 						inpt->lock[Input::MAIN1] = false;
@@ -508,7 +508,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 			case StatBlock::AVATAR_ATTACK:
 				// mouse movement only: if we're too far away to attack (i.e. melee power), switch to movement state
-				if (settings->mouse_move && inpt->pressing[Input::MAIN1] && have_enemy && main1_id != 0) {
+				if (settings->mouse_move && inpt->pressing[Input::MAIN1] && !inpt->pressing[Input::SHIFT] && have_enemy && main1_id != 0) {
 					Power& p = powers->powers[main1_id];
 					if (p.type == Power::TYPE_FIXED && p.starting_pos == Power::STARTING_POS_MELEE && Utils::calcDist(stats.pos, enemy_pos) > stats.melee_range) {
 						inpt->lock[Input::MAIN1] = true;
@@ -546,11 +546,22 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 						stats.hold_state = true;
 				}
 
+				// animation is done, switch back to normal stance
 				if ((activeAnimation->isLastFrame() && stats.state_timer.isEnd()) || activeAnimation->getName() != attack_anim) {
 					stats.cur_state = StatBlock::AVATAR_STANCE;
 					stats.cooldown.reset(Timer::BEGIN);
 					allowed_to_use_power = false;
 					stats.prevent_interrupt = false;
+				}
+
+				// when using mouse movement, the player should be able to click in an empty area to start moving
+				if (settings->mouse_move && inpt->pressing[Input::MAIN1] && !inpt->pressing[Input::SHIFT] && !have_enemy && activeAnimation->isLastFrame() && activeAnimation->getName() == attack_anim && stats.state_timer.isEnd()) {
+					inpt->lock[Input::MAIN1] = true;
+					stats.cur_state = StatBlock::AVATAR_RUN;
+					allowed_to_use_power = false;
+					stats.prevent_interrupt = false;
+					stats.cooldown.reset(Timer::BEGIN);
+					break;
 				}
 
 				break;
