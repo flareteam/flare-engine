@@ -693,7 +693,7 @@ msgstr "Ціна продажу: %d %s кожен"
 
 #: ../../../src/ItemManager.cpp:897
 msgid "Set:"
-msgstr "Задати:"
+msgstr "Набір:"
 
 #: ../../../src/ItemManager.cpp:904
 #, c-format

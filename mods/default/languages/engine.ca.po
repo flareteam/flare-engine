@@ -3,13 +3,16 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
+# Translators:
+# Marc Tormo i Bochaca <mtbochaca@gmail.com>, 2018
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-09-28 13:25-0400\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2018-03-28 19:16+0000\n"
 "Last-Translator: Marc Tormo i Bochaca <mtbochaca@gmail.com>, 2018\n"
 "Language-Team: Catalan (https://www.transifex.com/flareorg/teams/84925/ca/)\n"
 "MIME-Version: 1.0\n"
@@ -117,7 +120,7 @@ msgstr "Aventurer"
 
 #: ../../../src/Entity.cpp:511
 msgid "miss"
-msgstr ""
+msgstr "faltar"
 
 #: ../../../src/Entity.cpp:548 ../../../src/PowerManager.cpp:1152
 #: ../../../src/StatBlock.cpp:810 ../../../src/StatBlock.cpp:816
@@ -275,12 +278,17 @@ msgid ""
 "Will try to store surfaces in video memory versus system memory. The effect "
 "this has on performance depends on the renderer."
 msgstr ""
+"Intentarà emmagatzemar les superfícies a la memòria de vídeo en comptes de "
+"la memòria del sistema. L'efecte que això tindrà sobre el rendiment, variarà"
+" segons el renderitzador. "
 
 #: ../../../src/GameStateConfigDesktop.cpp:187
 msgid ""
 "Prevents screen tearing. Disable if you experience \"stuttering\" in "
 "windowed mode or input lag."
 msgstr ""
+"Evita l'esquinçament de la pantalla. Desactiveu si experimenteu "
+"\"tartamudesa\" en mode finestra o retràs en les entrades. "
 
 #: ../../../src/GameStateConfigDesktop.cpp:188
 msgid ""
@@ -288,6 +296,9 @@ msgid ""
 "to scale the rendering resolution. Otherwise, only the window dimensions are"
 " used."
 msgstr ""
+"Quan està activat, utilitza els PPP de la pantalla juntament amb les mides "
+"de la finestra per escalar la resolució. Contràriament, només s'usaran les "
+"mides de la pantalla."
 
 #: ../../../src/GameStateConfigDesktop.cpp:189
 msgid "Experimental"
@@ -295,11 +306,11 @@ msgstr "Experimental"
 
 #: ../../../src/GameStateConfigDesktop.cpp:190
 msgid "For handheld devices"
-msgstr ""
+msgstr "Per a dispositius mòbils"
 
 #: ../../../src/GameStateConfigDesktop.cpp:208
 msgid "Renderer"
-msgstr ""
+msgstr "Renderitzador"
 
 #: ../../../src/GameStateConfigDesktop.cpp:224
 msgid "Full Screen Mode"
@@ -307,206 +318,206 @@ msgstr "Mode Pantalla Complerta"
 
 #: ../../../src/GameStateConfigDesktop.cpp:228
 msgid "Move hero using mouse"
-msgstr ""
+msgstr "Mou l'heroi utilitzant el ratolí"
 
 #: ../../../src/GameStateConfigDesktop.cpp:232
 msgid "Hardware surfaces"
-msgstr ""
+msgstr "Superfícies de maquinari"
 
 #: ../../../src/GameStateConfigDesktop.cpp:236
 msgid "V-Sync"
-msgstr ""
+msgstr "V-Sync"
 
 #: ../../../src/GameStateConfigDesktop.cpp:240
 msgid "Texture Filtering"
-msgstr ""
+msgstr "Filtre de Textura"
 
 #: ../../../src/GameStateConfigDesktop.cpp:244
 msgid "DPI scaling"
-msgstr ""
+msgstr "Escalat per PPP"
 
 #: ../../../src/GameStateConfigDesktop.cpp:248
 msgid "Allow changing gamma"
-msgstr ""
+msgstr "Permetre canviar gamma"
 
 #: ../../../src/GameStateConfigDesktop.cpp:252
 msgid "Gamma"
-msgstr ""
+msgstr "Gamma"
 
 #: ../../../src/GameStateConfigDesktop.cpp:256
 msgid "Use joystick"
-msgstr ""
+msgstr "Utilitzar joystick "
 
 #: ../../../src/GameStateConfigDesktop.cpp:260
 msgid "Joystick"
-msgstr ""
+msgstr "Joystick"
 
 #: ../../../src/GameStateConfigDesktop.cpp:276
 msgid "Mouse aim"
-msgstr ""
+msgstr "Objectiu amb ratolí"
 
 #: ../../../src/GameStateConfigDesktop.cpp:280
 msgid "Do not use mouse"
-msgstr ""
+msgstr "No utilitzar ratolí"
 
 #: ../../../src/GameStateConfigDesktop.cpp:284
 msgid "Joystick Deadzone"
-msgstr ""
+msgstr "Zona morta del joystick"
 
 #: ../../../src/GameState.cpp:37 ../../../src/GameState.cpp:58
 msgid "Loading..."
-msgstr ""
+msgstr "Carregant..."
 
 #: ../../../src/GameStateLoad.cpp:87 ../../../src/GameStateLoad.cpp:100
 msgid "Delete Save"
-msgstr ""
+msgstr "Esborrar i Desar"
 
 #: ../../../src/GameStateLoad.cpp:87
 msgid "Delete this save?"
-msgstr ""
+msgstr "Eliminar aquesta partida desada?"
 
 #: ../../../src/GameStateLoad.cpp:89
 msgid "Exit to Title"
-msgstr ""
+msgstr "Sortir als títols"
 
 #: ../../../src/GameStateLoad.cpp:92
 msgid "New Game"
-msgstr ""
+msgstr "Joc Nou"
 
 #: ../../../src/GameStateLoad.cpp:96 ../../../src/GameStateLoad.cpp:600
 msgid "Choose a Slot"
-msgstr ""
+msgstr "Elegiu un espai"
 
 #: ../../../src/GameStateLoad.cpp:573 ../../../src/GameStateLoad.cpp:594
 msgid "Enable a story mod to continue"
-msgstr ""
+msgstr "Habilitar un mod d'història per continuar"
 
 #: ../../../src/GameStateLoad.cpp:589
 msgid "Load Game"
-msgstr ""
+msgstr "Carregar Joc"
 
 #: ../../../src/GameStateLoad.cpp:695
 msgid "Entering game world..."
-msgstr ""
+msgstr "Entrant al mon del joc..."
 
 #: ../../../src/GameStateLoad.cpp:698
 msgid "Loading saved game..."
-msgstr ""
+msgstr "Carregant partida desada..."
 
 #: ../../../src/GameStateLoad.cpp:731
 msgid "Invalid save"
-msgstr ""
+msgstr "Desat erroni"
 
 #: ../../../src/GameStateLoad.cpp:755 ../../../src/ItemManager.cpp:747
 #: ../../../src/MenuPowers.cpp:778 ../../../src/MenuPowers.cpp:1144
 #: ../../../src/MenuPowers.cpp:1542
 #, c-format
 msgid "Level %d"
-msgstr ""
+msgstr "Nivell %d"
 
 #: ../../../src/GameStateNew.cpp:68
 msgid "Create"
-msgstr ""
+msgstr "Crear"
 
 #: ../../../src/GameStateNew.cpp:76
 msgid "Randomize"
-msgstr ""
+msgstr "Aleatoritzar"
 
 #: ../../../src/GameStateNew.cpp:92
 msgid "Choose a Portrait"
-msgstr ""
+msgstr "Elegeix un retrat"
 
 #: ../../../src/GameStateNew.cpp:96
 msgid "Choose a Name"
-msgstr ""
+msgstr "Tria un nom"
 
 #: ../../../src/GameStateNew.cpp:100
 msgid "Permadeath?"
-msgstr ""
+msgstr "Mort permanent?"
 
 #: ../../../src/GameStateNew.cpp:104
 msgid "Choose a Class"
-msgstr ""
+msgstr "Trieu una classe"
 
 #: ../../../src/GameStateTitle.cpp:108
 msgid "Play Game"
-msgstr ""
+msgstr "Jugar"
 
 #: ../../../src/GameStateTitle.cpp:111
 msgid "Enable a core mod to continue"
-msgstr ""
+msgstr "Activar un mod del nucli per a continuar"
 
 #: ../../../src/GameStateTitle.cpp:115
 msgid "Configuration"
-msgstr ""
+msgstr "Configuració"
 
 #: ../../../src/GameStateTitle.cpp:118
 msgid "Credits"
-msgstr ""
+msgstr "Crèdits"
 
 #: ../../../src/GameStateTitle.cpp:121
 msgid "Exit Game"
-msgstr ""
+msgstr "Sortir del Joc"
 
 #: ../../../src/InputState.cpp:403
 msgid "Accept"
-msgstr ""
+msgstr "Acceptar"
 
 #: ../../../src/InputState.cpp:404 ../../../src/SDLInputState.cpp:606
 msgid "Up"
-msgstr ""
+msgstr "Amunt"
 
 #: ../../../src/InputState.cpp:405 ../../../src/SDLInputState.cpp:584
 msgid "Down"
-msgstr ""
+msgstr "Avall"
 
 #: ../../../src/InputState.cpp:406 ../../../src/SDLInputState.cpp:591
 msgid "Left"
-msgstr ""
+msgstr "Esquerra"
 
 #: ../../../src/InputState.cpp:407 ../../../src/SDLInputState.cpp:601
 msgid "Right"
-msgstr ""
+msgstr "Dreta"
 
 #: ../../../src/InputState.cpp:408
 msgid "Bar1"
-msgstr ""
+msgstr "Bar1"
 
 #: ../../../src/InputState.cpp:409
 msgid "Bar2"
-msgstr ""
+msgstr "Bar2"
 
 #: ../../../src/InputState.cpp:410
 msgid "Bar3"
-msgstr ""
+msgstr "Bar3"
 
 #: ../../../src/InputState.cpp:411
 msgid "Bar4"
-msgstr ""
+msgstr "Bar4"
 
 #: ../../../src/InputState.cpp:412
 msgid "Bar5"
-msgstr ""
+msgstr "Bar5"
 
 #: ../../../src/InputState.cpp:413
 msgid "Bar6"
-msgstr ""
+msgstr "Bar6"
 
 #: ../../../src/InputState.cpp:414
 msgid "Bar7"
-msgstr ""
+msgstr "Bar7"
 
 #: ../../../src/InputState.cpp:415
 msgid "Bar8"
-msgstr ""
+msgstr "Bar8"
 
 #: ../../../src/InputState.cpp:416
 msgid "Bar9"
-msgstr ""
+msgstr "Bar9"
 
 #: ../../../src/InputState.cpp:417
 msgid "Bar0"
-msgstr ""
+msgstr "Bar0"
 
 #: ../../../src/InputState.cpp:418 ../../../src/MenuActionBar.cpp:76
 #: ../../../src/MenuCharacter.cpp:54
@@ -516,246 +527,246 @@ msgstr "Personatge"
 #: ../../../src/InputState.cpp:419 ../../../src/MenuActionBar.cpp:77
 #: ../../../src/MenuInventory.cpp:127 ../../../src/MenuVendor.cpp:57
 msgid "Inventory"
-msgstr ""
+msgstr "Inventari"
 
 #: ../../../src/InputState.cpp:420 ../../../src/MenuActionBar.cpp:78
 #: ../../../src/MenuPowers.cpp:168
 msgid "Powers"
-msgstr ""
+msgstr "Poders"
 
 #: ../../../src/InputState.cpp:421 ../../../src/MenuActionBar.cpp:79
 #: ../../../src/MenuLog.cpp:72
 msgid "Log"
-msgstr ""
+msgstr "Registre"
 
 #: ../../../src/InputState.cpp:422
 msgid "Main1"
-msgstr ""
+msgstr "Principal1"
 
 #: ../../../src/InputState.cpp:423
 msgid "Main2"
-msgstr ""
+msgstr "Principal2"
 
 #: ../../../src/InputState.cpp:424
 msgid "Ctrl"
-msgstr ""
+msgstr "Ctrl"
 
 #: ../../../src/InputState.cpp:425
 msgid "Shift"
-msgstr ""
+msgstr "Shift"
 
 #: ../../../src/InputState.cpp:426
 msgid "Alt"
-msgstr ""
+msgstr "Alt"
 
 #: ../../../src/InputState.cpp:427 ../../../src/SDLInputState.cpp:583
 msgid "Delete"
-msgstr ""
+msgstr "Esborrar"
 
 #: ../../../src/InputState.cpp:428
 msgid "ActionBar Accept"
-msgstr ""
+msgstr "Acceptació de la barra d'acció"
 
 #: ../../../src/InputState.cpp:429
 msgid "ActionBar Left"
-msgstr ""
+msgstr "Barra d'acció esquerra"
 
 #: ../../../src/InputState.cpp:430
 msgid "ActionBar Right"
-msgstr ""
+msgstr "Barra d'acció dreta"
 
 #: ../../../src/InputState.cpp:431
 msgid "ActionBar Use"
-msgstr ""
+msgstr "Utilitzar la barra d'acció"
 
 #: ../../../src/InputState.cpp:432
 msgid "Developer Menu"
-msgstr ""
+msgstr "Menú de desenvolupadors"
 
 #: ../../../src/InputState.cpp:434
 msgid "Left Mouse"
-msgstr ""
+msgstr "Botó esquerre del ratolí"
 
 #: ../../../src/InputState.cpp:435
 msgid "Middle Mouse"
-msgstr ""
+msgstr "Botó central del ratolí"
 
 #: ../../../src/InputState.cpp:436
 msgid "Right Mouse"
-msgstr ""
+msgstr "Botó dret del ratolí"
 
 #: ../../../src/InputState.cpp:437
 msgid "Wheel Up"
-msgstr ""
+msgstr "Roda amunt"
 
 #: ../../../src/InputState.cpp:438
 msgid "Wheel Down"
-msgstr ""
+msgstr "Roda avall"
 
 #: ../../../src/InputState.cpp:439
 msgid "Mouse X1"
-msgstr ""
+msgstr "Ratolí X1"
 
 #: ../../../src/InputState.cpp:440
 msgid "Mouse X2"
-msgstr ""
+msgstr "Ratolí X2"
 
 #: ../../../src/ItemManager.cpp:450 ../../../src/ItemManager.cpp:453
 msgid "Unknown Item"
-msgstr ""
+msgstr "Objecte desconegut"
 
 #: ../../../src/ItemManager.cpp:648 ../../../src/MenuPowers.cpp:887
 #, c-format
 msgid "%d%% Speed"
-msgstr ""
+msgstr "%d%% Velocitat"
 
 #: ../../../src/ItemManager.cpp:652 ../../../src/MenuPowers.cpp:890
 #, c-format
 msgid "%d%% Attack Speed"
-msgstr ""
+msgstr "%d%% Velocitat d'atac"
 
 #: ../../../src/ItemManager.cpp:674 ../../../src/MenuCharacter.cpp:354
 #: ../../../src/MenuPowers.cpp:833
 #, c-format
 msgid "Resistance (%s)"
-msgstr ""
+msgstr "Resistència (%s)"
 
 #: ../../../src/ItemManager.cpp:684
 #, c-format
 msgid "Requires %s"
-msgstr ""
+msgstr "Demana %s"
 
 #: ../../../src/ItemManager.cpp:733
 msgid "Quest Item"
-msgstr ""
+msgstr "Objecte de missió"
 
 #: ../../../src/ItemManager.cpp:760
 #, c-format
 msgid "Quality: %s"
-msgstr ""
+msgstr "Qualitat: %s"
 
 #: ../../../src/ItemManager.cpp:785
 #, c-format
 msgid "Absorb: %d-%d"
-msgstr ""
+msgstr "Amortidor: %d-%d"
 
 #: ../../../src/ItemManager.cpp:787
 #, c-format
 msgid "Absorb: %d"
-msgstr ""
+msgstr "Absorbir: %d"
 
 #: ../../../src/ItemManager.cpp:827 ../../../src/MenuPowers.cpp:1131
 #: ../../../src/MenuPowers.cpp:1134
 #, c-format
 msgid "Requires Level %d"
-msgstr ""
+msgstr "Demana nivell %d"
 
 #: ../../../src/ItemManager.cpp:838 ../../../src/MenuPowers.cpp:1123
 #: ../../../src/MenuPowers.cpp:1125
 #, c-format
 msgid "Requires %s %d"
-msgstr ""
+msgstr "Demana %s %d"
 
 #: ../../../src/ItemManager.cpp:849
 #, c-format
 msgid "Requires Class: %s"
-msgstr ""
+msgstr "Demana classe: %s"
 
 #: ../../../src/ItemManager.cpp:864 ../../../src/ItemManager.cpp:876
 #, c-format
 msgid "Buy Price: %d %s"
-msgstr ""
+msgstr "Preu de compra: %d %s"
 
 #: ../../../src/ItemManager.cpp:866 ../../../src/ItemManager.cpp:878
 #, c-format
 msgid "Buy Price: %d %s each"
-msgstr ""
+msgstr "Preu de compra: %d %s cadascun"
 
 #: ../../../src/ItemManager.cpp:886
 #, c-format
 msgid "Sell Price: %d %s"
-msgstr ""
+msgstr "Preu de venda: %d %s"
 
 #: ../../../src/ItemManager.cpp:888
 #, c-format
 msgid "Sell Price: %d %s each"
-msgstr ""
+msgstr "Preu de venda: %d %s cadascun"
 
 #: ../../../src/ItemManager.cpp:897
 msgid "Set:"
-msgstr ""
+msgstr "Conjunt:"
 
 #: ../../../src/ItemManager.cpp:904
 #, c-format
 msgid "%d items:"
-msgstr ""
+msgstr "%d objectes:"
 
 #: ../../../src/ItemManager.cpp:917
 #, c-format
 msgid "Press [%s] to use"
-msgstr ""
+msgstr "Premi [%s] per utilitzar"
 
 #: ../../../src/ItemManager.cpp:920
 #, c-format
 msgid "Press [%s] to read"
-msgstr ""
+msgstr "Premi [%s] per llegir"
 
 #: ../../../src/MenuActionBar.cpp:215 ../../../src/MenuActionBar.cpp:221
 #: ../../../src/MenuActionBar.cpp:226
 #, c-format
 msgid "Hotkey: %s"
-msgstr ""
+msgstr "Drecera: %s"
 
 #: ../../../src/MenuActionBar.cpp:580
 msgid "Not enough MP."
-msgstr ""
+msgstr "PM insuficients."
 
 #: ../../../src/MenuActiveEffects.cpp:124
 #, c-format
 msgid "x%d"
-msgstr ""
+msgstr "x%d"
 
 #: ../../../src/MenuActiveEffects.cpp:219
 msgid "Remaining:"
-msgstr ""
+msgstr "Restants:"
 
 #: ../../../src/MenuActiveEffects.cpp:225
 #, c-format
 msgid "x%d stacks"
-msgstr ""
+msgstr "x%d piles"
 
 #: ../../../src/MenuCharacter.cpp:73 ../../../src/MenuCharacter.cpp:78
 msgid "Name"
-msgstr ""
+msgstr "Nom"
 
 #: ../../../src/MenuCharacter.cpp:74 ../../../src/MenuCharacter.cpp:79
 msgid "Level"
-msgstr ""
+msgstr "Nivell"
 
 #: ../../../src/MenuCharacter.cpp:310
 #, c-format
 msgid "%d unspent stat point"
-msgstr ""
+msgstr "%d punt d'estat no gastat"
 
 #: ../../../src/MenuCharacter.cpp:313
 #, c-format
 msgid "%d unspent stat points"
-msgstr ""
+msgstr "%d punts d'estat no gastats"
 
 #: ../../../src/MenuCharacter.cpp:355
 #, c-format
 msgid "Reduces the damage taken from \"%s\" elemental attacks."
-msgstr ""
+msgstr "Redueix el dany rebut de \"%s\"  als atacs elementals."
 
 #: ../../../src/MenuCharacter.cpp:365 ../../../src/MenuManager.cpp:287
 #, c-format
 msgid "XP: %d"
-msgstr ""
+msgstr "Experiència: %d"
 
 #: ../../../src/MenuCharacter.cpp:367
 #, c-format
 msgid "Next: %d"
-msgstr ""
+msgstr "Següent: %d"
 
 #: ../../../src/MenuCharacter.cpp:373
 #, c-format
@@ -778,11 +789,11 @@ msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:63
 msgid "Execute"
-msgstr ""
+msgstr "Executar"
 
 #: ../../../src/MenuDevConsole.cpp:101 ../../../src/MenuDevConsole.cpp:151
 msgid "Developer Console"
-msgstr ""
+msgstr "Consola de desenvolupadors"
 
 #: ../../../src/MenuDevConsole.cpp:141
 #, c-format
@@ -799,23 +810,23 @@ msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:209 ../../../src/MenuDevConsole.cpp:213
 msgid "px"
-msgstr ""
+msgstr "px"
 
 #: ../../../src/MenuDevConsole.cpp:224
 msgid "Distance"
-msgstr ""
+msgstr "Distància"
 
 #: ../../../src/MenuDevConsole.cpp:239 ../../../src/MenuDevConsole.cpp:286
 msgid "Entity"
-msgstr ""
+msgstr "Entitat"
 
 #: ../../../src/MenuDevConsole.cpp:261 ../../../src/MenuDevConsole.cpp:268
 msgid "none"
-msgstr ""
+msgstr "cap"
 
 #: ../../../src/MenuDevConsole.cpp:262 ../../../src/MenuDevConsole.cpp:264
 msgid "wall"
-msgstr ""
+msgstr "mur"
 
 #: ../../../src/MenuDevConsole.cpp:263 ../../../src/MenuDevConsole.cpp:265
 msgid "short wall / pit"
@@ -823,7 +834,7 @@ msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:266
 msgid "entity"
-msgstr ""
+msgstr "entitat"
 
 #: ../../../src/MenuDevConsole.cpp:267
 msgid "entity, ally"
@@ -831,7 +842,7 @@ msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:274
 msgid "Tile"
-msgstr ""
+msgstr "Títol"
 
 #: ../../../src/MenuDevConsole.cpp:360
 msgid "adds a power to the action bar"
@@ -878,7 +889,7 @@ msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:369
 msgid "displays this text"
-msgstr ""
+msgstr "mostra aquest text"
 
 #: ../../../src/MenuDevConsole.cpp:376
 msgid "Toggled the developer hud"
@@ -894,7 +905,7 @@ msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:531 ../../../src/MenuDevConsole.cpp:559
 msgid "HINT:"
-msgstr ""
+msgstr "CONSELL:"
 
 #: ../../../src/MenuDevConsole.cpp:531
 msgid "<id>"
@@ -928,27 +939,27 @@ msgstr ""
 
 #: ../../../src/MenuEnemy.cpp:159
 msgid "Dead"
-msgstr ""
+msgstr "Mort"
 
 #: ../../../src/MenuEnemy.cpp:161
 msgid "Destroyed"
-msgstr ""
+msgstr "Destruït"
 
 #: ../../../src/MenuExit.cpp:85 ../../../src/MenuExit.cpp:139
 msgid "Paused"
-msgstr ""
+msgstr "Pausat"
 
 #: ../../../src/MenuExit.cpp:91
 msgid "Save & Exit"
-msgstr ""
+msgstr "Desar i sortir"
 
 #: ../../../src/MenuExit.cpp:92
 msgid "Exit"
-msgstr ""
+msgstr "Sortir"
 
 #: ../../../src/MenuExit.cpp:96
 msgid "Continue"
-msgstr ""
+msgstr "Continuar"
 
 #: ../../../src/MenuInventory.cpp:175
 #, c-format
@@ -1031,7 +1042,7 @@ msgstr "Notes"
 
 #: ../../../src/MenuLog.cpp:92
 msgid "Quests"
-msgstr ""
+msgstr "Missions"
 
 #: ../../../src/MenuManager.cpp:290
 #, c-format
@@ -1044,7 +1055,7 @@ msgstr ""
 
 #: ../../../src/MenuNPCActions.cpp:75
 msgid "Trade"
-msgstr ""
+msgstr "Comerç"
 
 #: ../../../src/MenuNumPicker.cpp:60
 msgid "Enter amount:"
@@ -1052,7 +1063,7 @@ msgstr ""
 
 #: ../../../src/MenuPowers.cpp:787
 msgid "Passive"
-msgstr ""
+msgstr "Passiu"
 
 #: ../../../src/MenuPowers.cpp:792
 #, c-format
@@ -1130,7 +1141,7 @@ msgstr ""
 
 #: ../../../src/MenuPowers.cpp:926
 msgid "Fear"
-msgstr ""
+msgstr "Por"
 
 #: ../../../src/MenuPowers.cpp:929
 msgid "Lifespan"
@@ -1262,7 +1273,7 @@ msgstr ""
 
 #: ../../../src/SDLInputState.cpp:585
 msgid "End"
-msgstr ""
+msgstr "Fi"
 
 #: ../../../src/SDLInputState.cpp:586
 msgid "Escape"
@@ -1302,7 +1313,7 @@ msgstr ""
 
 #: ../../../src/SDLInputState.cpp:596
 msgid "Pause"
-msgstr ""
+msgstr "Pausa"
 
 #: ../../../src/SDLInputState.cpp:597
 msgid "PrintScreen"
@@ -1330,11 +1341,11 @@ msgstr ""
 
 #: ../../../src/SDLInputState.cpp:604
 msgid "Space"
-msgstr ""
+msgstr "Espai"
 
 #: ../../../src/SDLInputState.cpp:605
 msgid "Tab"
-msgstr ""
+msgstr "Tabulador"
 
 #: ../../../src/SDLInputState.cpp:619
 #, c-format
@@ -1525,7 +1536,7 @@ msgstr "Robar PM"
 
 #: ../../../src/Stats.cpp:124
 msgid "Percentage of MP stolen per hit."
-msgstr ""
+msgstr "Percentatge de PM robats per cop."
 
 #: ../../../src/Stats.cpp:128
 msgid "Base HP"
