@@ -85,9 +85,9 @@ bool WidgetCheckBox::checkClickAt(int x, int y) {
 
 	// main button already in use, new click not allowed
 	if (inpt->lock[Input::MAIN1]) return false;
-	if (inpt->lock[Input::ACCEPT]) return false;
+	if (!inpt->usingMouse() && inpt->lock[Input::ACCEPT]) return false;
 
-	if (pressed && !inpt->lock[Input::MAIN1] && !inpt->lock[Input::ACCEPT] && (Utils::isWithinRect(pos, mouse) || activated)) { // this is a button release
+	if (pressed && !inpt->lock[Input::MAIN1] && (!inpt->lock[Input::ACCEPT] || inpt->usingMouse()) && (Utils::isWithinRect(pos, mouse) || activated)) { // this is a button release
 		activated = false;
 		pressed = false;
 		setChecked(!checked);

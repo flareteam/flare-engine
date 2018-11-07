@@ -18,6 +18,7 @@ Engine fixes:
 * Pressing Shift while using mouse movement now lets the player begin attacking.
 * Using mouse movement when attacking will now correctly let the player move once the current attack is finished.
 * Fixed "jittering" animation when melee attacking with mouse movement while pressing Shift.
+* Fix buttons and checkboxes not handling clicks while the "Accept" key is pressed.
 
 Game changes:
 
