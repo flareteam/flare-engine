@@ -49,6 +49,7 @@ private:
 	void checkMapForLoot();
 	void loadLootTables();
 	void getLootTable(const std::string &filename, std::vector<EventComponent> *ec_list);
+	void checkLootComponent(EventComponent* ec, FPoint *pos, std::vector<ItemStack> *itemstack_vec);
 
 	SoundID sfx_loot;
 

@@ -212,13 +212,15 @@ void LootManager::checkEnemiesForLoot() {
 
 		if (e->stats.quest_loot_id != 0) {
 			// quest loot
+			std::vector<EventComponent> quest_loot_table;
 			EventComponent ec;
 			ec.type = EventComponent::LOOT;
 			ec.c = e->stats.quest_loot_id;
 			ec.a = ec.b = 1;
 			ec.z = 0;
 
-			e->stats.loot_table.push_back(ec);
+			quest_loot_table.push_back(ec);
+			checkLoot(quest_loot_table, &e->stats.pos, NULL);
 		}
 
 		if (!e->stats.loot_table.empty()) {
@@ -279,48 +281,7 @@ void LootManager::checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos
 	for (size_t i = loot_table.size(); i > 0; i--) {
 		ec = &loot_table[i-1];
 		if (ec->z == 0) {
-			Point src;
-			if (pos) {
-				src = Point(*pos);
-			}
-			else {
-				src.x = ec->x;
-				src.y = ec->y;
-			}
-			p.x = static_cast<float>(src.x) + 0.5f;
-			p.y = static_cast<float>(src.y) + 0.5f;
-
-			if (!mapr->collider.isValidPosition(p.x, p.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_NORMAL)) {
-				p = mapr->collider.getRandomNeighbor(src, eset->loot.drop_radius, !MapCollision::IGNORE_BLOCKED);
-
-				if (!mapr->collider.isValidPosition(p.x, p.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_NORMAL)) {
-					p = pc->stats.pos;
-				}
-				else {
-					if (src.x == static_cast<int>(p.x) && src.y == static_cast<int>(p.y))
-						p = pc->stats.pos;
-
-					mapr->collider.block(p.x, p.y, !MapCollision::IS_ALLY);
-					tiles_to_unblock.push_back(Point(p));
-				}
-			}
-
-			new_loot.quantity = Math::randBetween(ec->a,ec->b);
-
-			// an item id of 0 means we should drop currency instead
-			if (ec->c == 0 || ec->c == eset->misc.currency_id) {
-				new_loot.item = eset->misc.currency_id;
-				new_loot.quantity = new_loot.quantity * (100 + pc->stats.get(Stats::CURRENCY_FIND)) / 100;
-			}
-			else {
-				new_loot.item = ec->c;
-			}
-
-			if (itemstack_vec)
-				itemstack_vec->push_back(new_loot);
-			else
-				addLoot(new_loot, p, !DROPPED_BY_HERO);
-
+			checkLootComponent(ec, pos, itemstack_vec);
 			loot_table.erase(loot_table.begin()+i-1);
 		}
 	}
@@ -354,50 +315,8 @@ void LootManager::checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos
 	if (!possible_ids.empty()) {
 		// if there was more than one item with the same chance, randomly pick one of them
 		size_t chosen_loot = static_cast<size_t>(rand()) % possible_ids.size();
-
 		ec = possible_ids[chosen_loot];
-
-		Point src;
-		if (pos) {
-			src = Point(*pos);
-		}
-		else {
-			src.x = ec->x;
-			src.y = ec->y;
-		}
-		p.x = static_cast<float>(src.x) + 0.5f;
-		p.y = static_cast<float>(src.y) + 0.5f;
-
-		if (!mapr->collider.isValidPosition(p.x, p.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_NORMAL)) {
-			p = mapr->collider.getRandomNeighbor(src, eset->loot.drop_radius, !MapCollision::IGNORE_BLOCKED);
-
-			if (!mapr->collider.isValidPosition(p.x, p.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_NORMAL)) {
-				p = pc->stats.pos;
-			}
-			else {
-				if (src.x == static_cast<int>(p.x) && src.y == static_cast<int>(p.y))
-					p = pc->stats.pos;
-
-				mapr->collider.block(p.x, p.y, !MapCollision::IS_ALLY);
-				tiles_to_unblock.push_back(Point(p));
-			}
-		}
-
-		new_loot.quantity = Math::randBetween(ec->a,ec->b);
-
-		// an item id of 0 means we should drop currency instead
-		if (ec->c == 0 || ec->c == eset->misc.currency_id) {
-			new_loot.item = eset->misc.currency_id;
-			new_loot.quantity = new_loot.quantity * (100 + pc->stats.get(Stats::CURRENCY_FIND)) / 100;
-		}
-		else {
-			new_loot.item = ec->c;
-		}
-
-		if (itemstack_vec)
-			itemstack_vec->push_back(new_loot);
-		else
-			addLoot(new_loot, p, !DROPPED_BY_HERO);
+		checkLootComponent(ec, pos, itemstack_vec);
 	}
 }
 
@@ -716,6 +635,53 @@ void LootManager::getLootTable(const std::string &filename, std::vector<EventCom
 			break;
 		}
 	}
+}
+
+void LootManager::checkLootComponent(EventComponent* ec, FPoint *pos, std::vector<ItemStack> *itemstack_vec) {
+	FPoint p;
+	ItemStack new_loot;
+	Point src;
+
+	if (pos) {
+		src = Point(*pos);
+	}
+	else {
+		src.x = ec->x;
+		src.y = ec->y;
+	}
+	p.x = static_cast<float>(src.x) + 0.5f;
+	p.y = static_cast<float>(src.y) + 0.5f;
+
+	if (!mapr->collider.isValidPosition(p.x, p.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_NORMAL)) {
+		p = mapr->collider.getRandomNeighbor(src, eset->loot.drop_radius, !MapCollision::IGNORE_BLOCKED);
+
+		if (!mapr->collider.isValidPosition(p.x, p.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_NORMAL)) {
+			p = pc->stats.pos;
+		}
+		else {
+			if (src.x == static_cast<int>(p.x) && src.y == static_cast<int>(p.y))
+				p = pc->stats.pos;
+
+			mapr->collider.block(p.x, p.y, !MapCollision::IS_ALLY);
+			tiles_to_unblock.push_back(Point(p));
+		}
+	}
+
+	new_loot.quantity = Math::randBetween(ec->a,ec->b);
+
+	// an item id of 0 means we should drop currency instead
+	if (ec->c == 0 || ec->c == eset->misc.currency_id) {
+		new_loot.item = eset->misc.currency_id;
+		new_loot.quantity = new_loot.quantity * (100 + pc->stats.get(Stats::CURRENCY_FIND)) / 100;
+	}
+	else {
+		new_loot.item = ec->c;
+	}
+
+	if (itemstack_vec)
+		itemstack_vec->push_back(new_loot);
+	else
+		addLoot(new_loot, p, !DROPPED_BY_HERO);
 }
 
 LootManager::~LootManager() {
