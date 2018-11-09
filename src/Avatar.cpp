@@ -492,6 +492,10 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 				}
 				else if (!move()) { // collide with wall
 					stats.cur_state = StatBlock::AVATAR_STANCE;
+					if (settings->mouse_move) {
+						drag_walking = true;
+						lockAttack = false;
+					}
 					break;
 				}
 				else if (settings->mouse_move && inpt->pressing[Input::SHIFT]) {
