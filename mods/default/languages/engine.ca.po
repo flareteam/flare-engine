@@ -771,21 +771,21 @@ msgstr "Següent: %d"
 #: ../../../src/MenuCharacter.cpp:373
 #, c-format
 msgid "base (%d), bonus (%d)"
-msgstr ""
+msgstr "base (%d), bonificació (%d)"
 
 #: ../../../src/MenuCharacter.cpp:381 ../../../src/MenuCharacter.cpp:395
 msgid "Related stats:"
-msgstr ""
+msgstr "Atributs relacionats:"
 
 #: ../../../src/MenuCharacter.cpp:421 ../../../src/MenuCharacter.cpp:445
 #, c-format
 msgid "Each level grants %d."
-msgstr ""
+msgstr "Cada nivell concedeix %d."
 
 #: ../../../src/MenuCharacter.cpp:425 ../../../src/MenuCharacter.cpp:449
 #, c-format
 msgid "Each point of %s grants %d."
-msgstr ""
+msgstr "Cada punt de %s concedeix %d."
 
 #: ../../../src/MenuDevConsole.cpp:63
 msgid "Execute"
@@ -798,15 +798,16 @@ msgstr "Consola de desenvolupadors"
 #: ../../../src/MenuDevConsole.cpp:141
 #, c-format
 msgid "Use '%s' to inspect with the cursor."
-msgstr ""
+msgstr "Usa '%s' per a inspeccionar amb el cursor."
 
 #: ../../../src/MenuDevConsole.cpp:146
 msgid "Arguments with spaces should be enclosed with double quotes. Example:"
 msgstr ""
+"Els arguments amb espais han d'estar entre cometes dobles. Per exemple:"
 
 #: ../../../src/MenuDevConsole.cpp:147
 msgid "Type 'help' to get a list of commands."
-msgstr ""
+msgstr "Escrigui 'help' per a obtenir una llista d'ordres."
 
 #: ../../../src/MenuDevConsole.cpp:209 ../../../src/MenuDevConsole.cpp:213
 msgid "px"
@@ -830,7 +831,7 @@ msgstr "mur"
 
 #: ../../../src/MenuDevConsole.cpp:263 ../../../src/MenuDevConsole.cpp:265
 msgid "short wall / pit"
-msgstr ""
+msgstr "paret curta / pou"
 
 #: ../../../src/MenuDevConsole.cpp:266
 msgid "entity"
@@ -838,7 +839,7 @@ msgstr "entitat"
 
 #: ../../../src/MenuDevConsole.cpp:267
 msgid "entity, ally"
-msgstr ""
+msgstr "entitat, aliat"
 
 #: ../../../src/MenuDevConsole.cpp:274
 msgid "Tile"
@@ -846,7 +847,7 @@ msgstr "Títol"
 
 #: ../../../src/MenuDevConsole.cpp:360
 msgid "adds a power to the action bar"
-msgstr ""
+msgstr "afegeix un poder a la barra d'acció"
 
 #: ../../../src/MenuDevConsole.cpp:361
 msgid "turns on/off all of the HUD elements"
@@ -935,7 +936,7 @@ msgstr ""
 #: ../../../src/MenuEnemy.cpp:135
 #, c-format
 msgid "%s level %d"
-msgstr ""
+msgstr "%s nivell %d"
 
 #: ../../../src/MenuEnemy.cpp:159
 msgid "Dead"
@@ -964,44 +965,44 @@ msgstr "Continuar"
 #: ../../../src/MenuInventory.cpp:175
 #, c-format
 msgid "Lost %d%% of %s."
-msgstr ""
+msgstr "Ha perdut %d%% de %s."
 
 #: ../../../src/MenuInventory.cpp:182
 #, c-format
 msgid "Lost %d%% of total XP."
-msgstr ""
+msgstr "Ha perdut %d%% de PX."
 
 #: ../../../src/MenuInventory.cpp:187
 #, c-format
 msgid "Lost %d%% of current level XP."
-msgstr ""
+msgstr "Ha perdut %d%% del nivell de PX actual."
 
 #: ../../../src/MenuInventory.cpp:213
 #, c-format
 msgid "Lost %s."
-msgstr ""
+msgstr "Ha perdut %s."
 
 #: ../../../src/MenuInventory.cpp:256 ../../../src/MenuStash.cpp:146
 #, c-format
 msgid "%d %s"
-msgstr ""
+msgstr "%d %s"
 
 #: ../../../src/MenuInventory.cpp:299
 msgid "Pick up item(s):"
-msgstr ""
+msgstr "Agafar objecte(s):"
 
 #: ../../../src/MenuInventory.cpp:300
 msgid "Use or equip item:"
-msgstr ""
+msgstr "Utilitzar o equipar-se amb l'objecte:"
 
 #: ../../../src/MenuInventory.cpp:301
 #, c-format
 msgid "%s modifiers"
-msgstr ""
+msgstr "%s modificadors"
 
 #: ../../../src/MenuInventory.cpp:302
 msgid "Select a quantity of item:"
-msgstr ""
+msgstr "Selecciona la quantitat d'objectes:"
 
 #: ../../../src/MenuInventory.cpp:305
 msgid "Stash item stack:"
@@ -1009,15 +1010,15 @@ msgstr ""
 
 #: ../../../src/MenuInventory.cpp:307
 msgid "Sell item stack:"
-msgstr ""
+msgstr "Vendre la pila d'objectes:"
 
 #: ../../../src/MenuInventory.cpp:574
 msgid "You don't have enough of the required item."
-msgstr ""
+msgstr "No en teniu prou del objecte requerit."
 
 #: ../../../src/MenuInventory.cpp:581
 msgid "You can't use this item right now."
-msgstr ""
+msgstr "No podeu utilitzar aquest objecte ara mateix."
 
 #: ../../../src/MenuInventory.cpp:593
 msgid "This item can only be used from the action bar."
@@ -1047,11 +1048,11 @@ msgstr "Missions"
 #: ../../../src/MenuManager.cpp:290
 #, c-format
 msgid "XP: %d/%d"
-msgstr ""
+msgstr "PX: %d/%d"
 
 #: ../../../src/MenuManager.cpp:806
 msgid "This item can not be dropped."
-msgstr ""
+msgstr "Aquest objecte no es pot deixar anar."
 
 #: ../../../src/MenuNPCActions.cpp:75
 msgid "Trade"
@@ -1059,7 +1060,7 @@ msgstr "Comerç"
 
 #: ../../../src/MenuNumPicker.cpp:60
 msgid "Enter amount:"
-msgstr ""
+msgstr "Introdueix l'import:"
 
 #: ../../../src/MenuPowers.cpp:787
 msgid "Passive"
@@ -1068,7 +1069,7 @@ msgstr "Passiu"
 #: ../../../src/MenuPowers.cpp:792
 #, c-format
 msgid "Costs %d MP"
-msgstr ""
+msgstr "Costs %d PM"
 
 #: ../../../src/MenuPowers.cpp:796
 #, c-format
@@ -1077,11 +1078,11 @@ msgstr "Costs %d PV"
 
 #: ../../../src/MenuPowers.cpp:801
 msgid "Cooldown:"
-msgstr ""
+msgstr "Refredar:"
 
 #: ../../../src/MenuPowers.cpp:866 ../../../src/MenuPowers.cpp:869
 msgid "Damage per second"
-msgstr ""
+msgstr "Dany per segon"
 
 #: ../../../src/MenuPowers.cpp:872 ../../../src/MenuPowers.cpp:875
 msgid "HP per second"
@@ -1089,15 +1090,15 @@ msgstr "PV per segon"
 
 #: ../../../src/MenuPowers.cpp:878 ../../../src/MenuPowers.cpp:881
 msgid "MP per second"
-msgstr ""
+msgstr "PM per segon"
 
 #: ../../../src/MenuPowers.cpp:885
 msgid "Immobilize"
-msgstr ""
+msgstr "Immobilitzar"
 
 #: ../../../src/MenuPowers.cpp:893
 msgid "Immunity"
-msgstr ""
+msgstr "Immunitat"
 
 #: ../../../src/MenuPowers.cpp:896
 msgid "Immunity to damage over time"
