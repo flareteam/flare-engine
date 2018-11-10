@@ -65,7 +65,6 @@ private:
 	void untransform();
 	void setAnimation(std::string name);
 
-	bool lockAttack;
 
 	std::vector<Step_sfx> step_def;
 
@@ -80,6 +79,8 @@ private:
 	std::string last_transform;
 
 	bool attack_cursor;
+
+	Timer mouse_move_cooldown;
 
 protected:
 	virtual void resetActiveAnimation();
