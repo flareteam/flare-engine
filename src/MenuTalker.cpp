@@ -57,6 +57,7 @@ MenuTalker::MenuTalker()
 	, portrait(NULL)
 	, dialog_node(-1)
 	, event_cursor(0)
+	, first_interaction(false)
 	, font_who("font_regular")
 	, font_dialog("font_regular")
 	, topic_color_normal(font->getColor(FontEngine::COLOR_MENU_BONUS))
@@ -158,7 +159,7 @@ void MenuTalker::chooseDialogNode(int request_dialog_node) {
 		if (!npc->portraits.empty())
 			npc->npc_portrait = npc->portraits[0];
 
-		if (actions.size() == 1 && !actions[0].is_vendor) {
+		if (actions.size() == 1 && (!actions[0].is_vendor || first_interaction)) {
 			executeAction(0);
 		}
 		else if (actions.empty()) {
@@ -173,6 +174,8 @@ void MenuTalker::chooseDialogNode(int request_dialog_node) {
 		else
 			setNPC(NULL); // end dialog
 	}
+
+	first_interaction = false;
 }
 
 /**
@@ -406,10 +409,15 @@ void MenuTalker::setHero(StatBlock &stats) {
 }
 
 void MenuTalker::setNPC(NPC* _npc) {
+	if (npc != _npc) {
+		first_interaction = true;
+	}
+
 	npc = _npc;
 
 	if (_npc == NULL) {
 		visible = false;
+		first_interaction = false;
 		return;
 	}
 

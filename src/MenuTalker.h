@@ -64,6 +64,7 @@ private:
 
 	int dialog_node;
 	unsigned int event_cursor;
+	bool first_interaction;
 
 	Rect dialog_pos;
 	Rect text_pos;
