@@ -668,17 +668,17 @@ std::string SDLInputState::getMovementString() {
 	ss << "[";
 
 	if (settings->enable_joystick) {
-		// can't rebind joystick axes
 		ss << getBindingString(Input::LEFT, InputState::BINDING_JOYSTICK) <<  "/";
 		ss << getBindingString(Input::RIGHT, InputState::BINDING_JOYSTICK) << "/";
 		ss << getBindingString(Input::UP, InputState::BINDING_JOYSTICK) << "/";
 		ss << getBindingString(Input::DOWN, InputState::BINDING_JOYSTICK);
 	}
 	else if (settings->touchscreen) {
+		// TODO update this for onscreen controls
 		ss << msg->get("%s on ground", msg->get("Tap"));
 	}
 	else if (settings->mouse_move) {
-		ss << msg->get("%s on ground", getBindingString(Input::MAIN1));
+		ss << getBindingString(Input::MAIN2);
 	}
 	else {
 		ss << getBindingString(Input::LEFT) <<  "/";
@@ -699,10 +699,8 @@ std::string SDLInputState::getAttackString() {
 		ss << getBindingString(Input::ACTIONBAR_USE, InputState::BINDING_JOYSTICK);
 	}
 	else if (settings->touchscreen) {
+		// TODO update this for onscreen controls
 		ss << msg->get("%s on enemy", msg->get("Tap"));
-	}
-	else if (settings->mouse_move) {
-		ss << msg->get("%s on enemy", getBindingString(Input::MAIN1));
 	}
 	else {
 		ss << getBindingString(Input::MAIN1);

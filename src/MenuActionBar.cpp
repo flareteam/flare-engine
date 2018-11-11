@@ -218,7 +218,12 @@ void MenuActionBar::align() {
 
 	for (unsigned int i = SLOT_MAIN1; i < static_cast<unsigned int>(SLOT_MAX); i++) {
 		if (i < slots.size() && slots[i]) {
-			labels[i] = msg->get("Hotkey: %s", inpt->getBindingString(i - SLOT_MAIN1 + Input::MAIN1));
+			if (settings->mouse_move && i == SLOT_MAIN2) {
+				labels[i] = msg->get("Hotkey: %s", inpt->getBindingString(Input::SHIFT) + " + " + inpt->getBindingString(i - SLOT_MAIN1 + Input::MAIN1));
+			}
+			else {
+				labels[i] = msg->get("Hotkey: %s", inpt->getBindingString(i - SLOT_MAIN1 + Input::MAIN1));
+			}
 		}
 	}
 	for (unsigned int i=0; i<menu_labels.size(); i++) {
@@ -501,6 +506,7 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 	}
 
 	bool enable_main1 = !platform.is_mobile_device || (!menu->menus_open && menu->touch_controls->checkAllowMain1());
+	bool enable_main2 = !settings->mouse_move || inpt->pressing[Input::SHIFT];
 
 	// check click and hotkey actions
 	for (unsigned i = 0; i < slots_count; i++) {
@@ -565,7 +571,7 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 			action.power = hotkeys_mod[10];
 			twostep_slot = -1;
 		}
-		else if (i==11 && inpt->pressing[Input::MAIN2] && !inpt->lock[Input::MAIN2] && !Utils::isWithinRect(window_area, inpt->mouse)) {
+		else if (i==11 && inpt->pressing[Input::MAIN2] && !inpt->lock[Input::MAIN2] && !Utils::isWithinRect(window_area, inpt->mouse) && enable_main2) {
 			have_aim = inpt->usingMouse();
 			action.power = hotkeys_mod[11];
 			twostep_slot = -1;

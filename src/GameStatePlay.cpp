@@ -226,14 +226,8 @@ void GameStatePlay::checkEnemyFocus() {
  */
 bool GameStatePlay::restrictPowerUse() {
 	if (settings->mouse_move) {
-		if(inpt->pressing[Input::MAIN1] && !inpt->pressing[Input::SHIFT] && !menu->act->isWithinSlots(inpt->mouse) && !menu->act->isWithinMenus(inpt->mouse)) {
-			if(enemy == NULL) {
-				return true;
-			}
-			else {
-				if(static_cast<unsigned>(MenuActionBar::SLOT_MAIN1) < menu->act->slots_count && menu->act->slot_enabled[MenuActionBar::SLOT_MAIN1] && (powers->powers[menu->act->hotkeys[MenuActionBar::SLOT_MAIN1]].target_party != enemy->stats.hero_ally))
-					return true;
-			}
+		if(inpt->pressing[Input::MAIN2] && !inpt->pressing[Input::SHIFT] && !menu->act->isWithinSlots(inpt->mouse) && !menu->act->isWithinMenus(inpt->mouse)) {
+			return true;
 		}
 	}
 
@@ -263,7 +257,7 @@ void GameStatePlay::checkLoot() {
 	}
 
 	// Normal pickups
-	if (!pc->stats.attacking) {
+	if (!pc->attacking_with_main1) {
 		pickup = loot->checkPickup(inpt->mouse, mapr->cam, pc->stats.pos);
 	}
 
@@ -677,7 +671,7 @@ void GameStatePlay::checkNotifications() {
  * If an NPC is giving a reward, process it
  */
 void GameStatePlay::checkNPCInteraction() {
-	if (pc->stats.attacking || !pc->stats.humanoid)
+	if (pc->attacking_with_main1 || !pc->stats.humanoid)
 		return;
 
 	// reset movement restrictions when we're not in dialog
@@ -871,7 +865,7 @@ void GameStatePlay::logic() {
 		checkTitle();
 
 		menu->act->checkAction(action_queue);
-		pc->logic(action_queue, restrictPowerUse(), npc_id != -1);
+		pc->logic(action_queue, restrictPowerUse());
 
 		// Transform powers change the actionbar layout,
 		// so we need to prevent accidental clicks if a new power is placed under the slot we clicked on.

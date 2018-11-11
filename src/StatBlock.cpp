@@ -175,7 +175,6 @@ StatBlock::StatBlock()
 	, prev_mp(0)
 	, summons()
 	, summoner(NULL)
-	, attacking(false)
 	, bleed_source_type(-1)
 {
 	primary.resize(eset->primary_stats.list.size(), 0);

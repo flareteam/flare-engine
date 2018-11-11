@@ -996,6 +996,7 @@ void MapRenderer::checkHotspots() {
 						}
 						if (!inpt->pressing[Input::MAIN1]) return;
 						else if (inpt->lock[Input::MAIN1]) return;
+						else if (pc->attacking_with_main1) return;
 
 						inpt->lock[Input::MAIN1] = true;
 						if (EventManager::executeEvent(*it))

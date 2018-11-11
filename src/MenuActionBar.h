@@ -69,6 +69,7 @@ public:
 	};
 
 	static const int SLOT_MAIN1 = 10;
+	static const int SLOT_MAIN2 = 11;
 	static const int SLOT_MAX = 12; // maximum number of slots in MenuActionBar
 
 	static const int USE_EMPTY_SLOT = 0;

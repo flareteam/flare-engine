@@ -332,7 +332,7 @@ void MenuManager::logic() {
 		handleKeyboardNavigation();
 
 	// Stop attacking if the cursor is inside an interactable menu
-	if (pc->stats.attacking) {
+	if (pc->attacking_with_main1 || pc->moving_with_main2) {
 		if (Utils::isWithinRect(act->window_area, inpt->mouse) ||
 			(book->visible && Utils::isWithinRect(book->window_area, inpt->mouse)) ||
 			(chr->visible && Utils::isWithinRect(chr->window_area, inpt->mouse)) ||
@@ -543,23 +543,53 @@ void MenuManager::logic() {
 	if (pc->stats.alive) {
 
 		// handle right-click
-		if (!mouse_dragging && inpt->pressing[Input::MAIN2] && !inpt->lock[Input::MAIN2]) {
+		if (!mouse_dragging && inpt->pressing[Input::MAIN2]) {
 			// exit menu
 			if (exit->visible && Utils::isWithinRect(exit->window_area, inpt->mouse)) {
 				inpt->lock[Input::MAIN2] = true;
+				inpt->pressing[Input::MAIN2] = false;
 			}
 
 			// book menu
-			if (book->visible && Utils::isWithinRect(book->window_area, inpt->mouse)) {
+			else if (book->visible && Utils::isWithinRect(book->window_area, inpt->mouse)) {
 				inpt->lock[Input::MAIN2] = true;
+				inpt->pressing[Input::MAIN2] = false;
 			}
 
-			// activate inventory item
+			// inventory
 			else if (inv->visible && Utils::isWithinRect(inv->window_area, inpt->mouse)) {
-				inpt->lock[Input::MAIN2] = true;
-				if (Utils::isWithinRect(inv->carried_area, inpt->mouse)) {
+				if (!inpt->lock[Input::MAIN2] && Utils::isWithinRect(inv->carried_area, inpt->mouse)) {
+					// activate inventory item
 					inv->activate(inpt->mouse);
 				}
+				inpt->lock[Input::MAIN2] = true;
+				inpt->pressing[Input::MAIN2] = false;
+			}
+
+			// other menus
+			else if (talker->visible && Utils::isWithinRect(talker->window_area, inpt->mouse)) {
+				inpt->lock[Input::MAIN2] = true;
+				inpt->pressing[Input::MAIN2] = false;
+			}
+			else if (pow->visible && Utils::isWithinRect(pow->window_area, inpt->mouse)) {
+				inpt->lock[Input::MAIN2] = true;
+				inpt->pressing[Input::MAIN2] = false;
+			}
+			else if (chr->visible && Utils::isWithinRect(chr->window_area, inpt->mouse)) {
+				inpt->lock[Input::MAIN2] = true;
+				inpt->pressing[Input::MAIN2] = false;
+			}
+			else if (questlog->visible && Utils::isWithinRect(questlog->window_area, inpt->mouse)) {
+				inpt->lock[Input::MAIN2] = true;
+				inpt->pressing[Input::MAIN2] = false;
+			}
+			else if (vendor->visible && Utils::isWithinRect(vendor->window_area, inpt->mouse)) {
+				inpt->lock[Input::MAIN2] = true;
+				inpt->pressing[Input::MAIN2] = false;
+			}
+			else if (stash->visible && Utils::isWithinRect(stash->window_area, inpt->mouse)) {
+				inpt->lock[Input::MAIN2] = true;
+				inpt->pressing[Input::MAIN2] = false;
 			}
 		}
 

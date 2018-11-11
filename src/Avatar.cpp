@@ -66,7 +66,9 @@ Avatar::Avatar()
 	, allow_movement(true)
 	, enemy_pos(FPoint(-1,-1))
 	, time_played(0)
-	, questlog_dismissed(false) {
+	, questlog_dismissed(false)
+	, attacking_with_main1(false)
+	, moving_with_main2(false) {
 
 	init();
 
@@ -111,11 +113,6 @@ Avatar::Avatar()
 	}
 
 	loadStepFX(stats.sfx_step);
-
-	// mouse movement post-attack cooldown (half a second)
-	// TODO should this be in engine/misc.txt?
-	mouse_move_cooldown.setDuration(settings->max_frames_per_sec / 2);
-	mouse_move_cooldown.reset(Timer::END);
 }
 
 void Avatar::init() {
@@ -297,7 +294,7 @@ bool Avatar::pressing_move() {
 		return false;
 	}
 	else if (settings->mouse_move) {
-		return inpt->pressing[Input::MAIN1];
+		return inpt->pressing[Input::MAIN2] && !inpt->pressing[Input::SHIFT];
 	}
 	else {
 		return (inpt->pressing[Input::UP] && !inpt->lock[Input::UP]) ||
@@ -341,7 +338,7 @@ void Avatar::set_direction() {
  * @param restrict_power_use Whether or not to allow power usage on mouse1
  * @param npc True if the player is talking to an NPC. Can limit ability to move/attack in certain conditions
  */
-void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_use, bool npc) {
+void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_use) {
 	// clear current space to allow correct movement
 	mapr->collider.unblock(stats.pos.x, stats.pos.y);
 
@@ -383,17 +380,13 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 	}
 
 	// assist mouse movement
-	if (!inpt->pressing[Input::MAIN1]) {
+	if (!inpt->pressing[Input::MAIN2]) {
 		drag_walking = false;
 	}
 
-	// block some interactions when attacking
-	if (!inpt->pressing[Input::MAIN1] && !inpt->pressing[Input::MAIN2]) {
-		stats.attacking = false;
-	}
-	else if((inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1]) || (inpt->pressing[Input::MAIN2] && !inpt->lock[Input::MAIN2])) {
-		stats.attacking = true;
-	}
+	// block some interactions when attacking/moving
+	attacking_with_main1 = inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1];
+	moving_with_main2 = inpt->pressing[Input::MAIN2] && !inpt->lock[Input::MAIN2];
 
 	// handle animation
 	if (!stats.effects.stun) {
@@ -410,17 +403,9 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 		transform_map = mapr->getFilename();
 	}
 
-	mouse_move_cooldown.tick();
-	if (!inpt->pressing[Input::MAIN1]) {
-		mouse_move_cooldown.reset(Timer::END);
-	}
-
 	if (!stats.effects.stun) {
 		bool allowed_to_move;
 		bool allowed_to_use_power = true;
-
-		bool have_enemy = (enemy_pos.x != -1 && enemy_pos.y != -1);
-		int main1_id = menu->act->getSlotPower(MenuActionBar::SLOT_MAIN1);
 
 		switch(stats.cur_state) {
 			case StatBlock::AVATAR_STANCE:
@@ -429,14 +414,11 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 				// allowed to move or use powers?
 				if (settings->mouse_move) {
-					if (!mouse_move_cooldown.isEnd()) {
-						// the post-attack mouse move pause is active; only allow new attacks if we have a target and prevent movement
-						allowed_to_move = false;
-						allowed_to_use_power = !inpt->pressing[Input::MAIN1] || have_enemy || inpt->pressing[Input::SHIFT];
-					}
-					else {
-						allowed_to_move = restrict_power_use && (!inpt->lock[Input::MAIN1] || drag_walking) && !npc;
-						allowed_to_use_power = !allowed_to_move;
+					allowed_to_move = restrict_power_use && (!inpt->lock[Input::MAIN2] || drag_walking);
+					allowed_to_use_power = true;
+
+					if (inpt->pressing[Input::MAIN2] && inpt->pressing[Input::SHIFT]) {
+						inpt->lock[Input::MAIN2] = false;
 					}
 				}
 				else {
@@ -450,17 +432,13 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 				if (pressing_move() && allowed_to_move) {
 					if (move()) { // no collision
-						if (settings->mouse_move && inpt->pressing[Input::MAIN1]) {
-							inpt->lock[Input::MAIN1] = true;
+						if (settings->mouse_move && inpt->pressing[Input::MAIN2]) {
+							inpt->lock[Input::MAIN2] = true;
 							drag_walking = true;
 						}
 
 						stats.cur_state = StatBlock::AVATAR_RUN;
 					}
-				}
-
-				if (settings->mouse_move && !inpt->pressing[Input::MAIN1]) {
-					inpt->lock[Input::MAIN1] = false;
 				}
 
 				break;
@@ -476,27 +454,8 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 						snd->play(sound_steps[stepfx], snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
 				}
 
-				// allowed to move or use powers?
-				if (settings->mouse_move) {
-					allowed_to_use_power = !(restrict_power_use && !inpt->lock[Input::MAIN1]);
-				}
-				else {
-					allowed_to_use_power = true;
-				}
-
 				// handle direction changes
 				set_direction();
-
-				// mouse movement only: if we're close enough to our target while moving, begin attacking
-				if (settings->mouse_move && inpt->pressing[Input::MAIN1] && !inpt->pressing[Input::SHIFT] && have_enemy && main1_id != 0) {
-					Power& p = powers->powers[main1_id];
-					if (p.type == Power::TYPE_FIXED && p.starting_pos == Power::STARTING_POS_MELEE && Utils::calcDist(stats.pos, enemy_pos) <= stats.melee_range) {
-						inpt->lock[Input::MAIN1] = false;
-						stats.cur_state = StatBlock::AVATAR_STANCE;
-						drag_walking = false;
-						break;
-					}
-				}
 
 				// handle transition to STANCE
 				if (!pressing_move()) {
@@ -505,13 +464,11 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 				}
 				else if (!move()) { // collide with wall
 					stats.cur_state = StatBlock::AVATAR_STANCE;
-					inpt->lock[Input::MAIN1] = false;
 					break;
 				}
 				else if (settings->mouse_move && inpt->pressing[Input::SHIFT]) {
 					// when moving with the mouse, pressing Shift should stop movement and begin attacking
 					stats.cur_state = StatBlock::AVATAR_STANCE;
-					inpt->lock[Input::MAIN1] = false;
 					break;
 				}
 
@@ -521,23 +478,6 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 				break;
 
 			case StatBlock::AVATAR_ATTACK:
-				// mouse-move mode has a post-attack pause when using the MAIN1 button
-				// this prevents the player from immediately moving if their cursor slips off the enemy
-				if (settings->mouse_move && inpt->pressing[Input::MAIN1] && main1_id != 0 && main1_id == current_power) {
-					mouse_move_cooldown.reset(Timer::BEGIN);
-				}
-
-				// mouse movement only: if we're too far away to attack (i.e. melee power), switch to movement state
-				if (settings->mouse_move && inpt->pressing[Input::MAIN1] && !inpt->pressing[Input::SHIFT] && have_enemy && main1_id != 0) {
-					Power& p = powers->powers[main1_id];
-					if (p.type == Power::TYPE_FIXED && p.starting_pos == Power::STARTING_POS_MELEE && Utils::calcDist(stats.pos, enemy_pos) > stats.melee_range) {
-						inpt->lock[Input::MAIN1] = true;
-						stats.cur_state = StatBlock::AVATAR_RUN;
-						allowed_to_use_power = false;
-						drag_walking = true;
-						break;
-					}
-				}
 
 				setAnimation(attack_anim);
 
@@ -571,17 +511,9 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 					stats.cooldown.reset(Timer::BEGIN);
 					allowed_to_use_power = false;
 					stats.prevent_interrupt = false;
-				}
-
-				// when using mouse movement, the player should be able to click in an empty area to start moving
-				if (settings->mouse_move && inpt->pressing[Input::MAIN1] && !inpt->pressing[Input::SHIFT] && !have_enemy && activeAnimation->isLastFrame() && activeAnimation->getName() == attack_anim && stats.state_timer.isEnd()) {
-					inpt->lock[Input::MAIN1] = false;
-					stats.cur_state = StatBlock::AVATAR_STANCE;
-					allowed_to_use_power = false;
-					stats.prevent_interrupt = false;
-					stats.cooldown.reset(Timer::BEGIN);
-					drag_walking = true;
-					break;
+					if (settings->mouse_move) {
+						drag_walking = true;
+					}
 				}
 
 				break;
@@ -609,9 +541,8 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 				if (activeAnimation->getTimesPlayed() >= 1 || activeAnimation->getName() != "hit") {
 					stats.cur_state = StatBlock::AVATAR_STANCE;
-					if (settings->mouse_move && inpt->pressing[Input::MAIN1]) {
-						inpt->lock[Input::MAIN1] = false;
-						allowed_to_use_power = false;
+					if (settings->mouse_move) {
+						drag_walking = true;
 					}
 				}
 

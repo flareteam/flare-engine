@@ -80,8 +80,6 @@ private:
 
 	bool attack_cursor;
 
-	Timer mouse_move_cooldown;
-
 protected:
 	virtual void resetActiveAnimation();
 
@@ -104,7 +102,7 @@ public:
 	void loadGraphics(std::vector<Layer_gfx> _img_gfx);
 	void loadStepFX(const std::string& stepname);
 
-	void logic(std::vector<ActionData> &action_queue, bool restrict_power_use, bool npc);
+	void logic(std::vector<ActionData> &action_queue, bool restrict_power_use);
 
 	// transformation handling
 	bool isTransforming() {
@@ -144,6 +142,8 @@ public:
 	FPoint enemy_pos; // positon of the highlighted enemy
 	unsigned long time_played;
 	bool questlog_dismissed;
+	bool attacking_with_main1;
+	bool moving_with_main2;
 };
 
 #endif
