@@ -28,6 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Utils.h"
 
 class MapCollision;
+class Sprite;
 class WidgetLabel;
 
 class MenuMiniMap : public Menu {
@@ -41,6 +42,7 @@ private:
 
 	Rect pos;
 	WidgetLabel *label;
+	Sprite *compass;
 
 	void createMapSurface();
 	void renderIso(const FPoint& hero_pos);

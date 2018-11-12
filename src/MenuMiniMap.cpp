@@ -44,6 +44,7 @@ MenuMiniMap::MenuMiniMap()
 	, color_hero(255,255,255,255)
 	, map_surface(NULL)
 	, label(new WidgetLabel())
+	, compass(NULL)
 {
 	std::string bg_filename;
 
@@ -81,12 +82,29 @@ MenuMiniMap::MenuMiniMap()
 	if (!bg_filename.empty())
 		setBackground(bg_filename);
 
+	// load compass image
+	Image *gfx = NULL;
+	if (eset->tileset.orientation == eset->tileset.TILESET_ISOMETRIC) {
+		gfx = render_device->loadImage("images/menus/compass_iso.png", RenderDevice::ERROR_NORMAL);
+	}
+	else if (eset->tileset.orientation == eset->tileset.TILESET_ORTHOGONAL) {
+		gfx = render_device->loadImage("images/menus/compass_ortho.png", RenderDevice::ERROR_NORMAL);
+	}
+	if (gfx) {
+		compass = gfx->createSprite();
+		gfx->unref();
+	}
+
 	align();
 }
 
 void MenuMiniMap::align() {
 	Menu::align();
 	label->setPos(window_area.x, window_area.y);
+
+	// compass
+	Point compass_pos(window_area.x + pos.x + pos.w - compass->getGraphicsWidth(), pos.y + window_area.y);
+	compass->setDestFromPoint(compass_pos);
 }
 
 void MenuMiniMap::setMapTitle(const std::string& map_title) {
@@ -122,6 +140,10 @@ void MenuMiniMap::render(const FPoint& hero_pos) {
 			renderIso(hero_pos);
 		else // eset->tileset.TILESET_ORTHOGONAL
 			renderOrtho(hero_pos);
+
+		if (compass) {
+			render_device->render(compass);
+		}
 	}
 }
 
@@ -279,4 +301,5 @@ MenuMiniMap::~MenuMiniMap() {
 		delete map_surface;
 
 	delete label;
+	delete compass;
 }

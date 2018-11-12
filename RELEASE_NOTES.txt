@@ -9,6 +9,7 @@ Engine features:
 * Added support for dialog responses. For any line of dialog, a list of response topics can be given.
 * Add 'save_pos_onexit' to engine/misc.txt for saving the player's current position upon exiting.
 * Added 'colorblind_highlight_offset' and listbox 'text_margin' to engine/widget_settings.txt.
+* Added a compass to the minimap.
 
 Engine fixes:
 * Fixed shrinking tab widgets when widow was resized.
