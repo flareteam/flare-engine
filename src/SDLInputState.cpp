@@ -674,8 +674,7 @@ std::string SDLInputState::getMovementString() {
 		ss << getBindingString(Input::DOWN, InputState::BINDING_JOYSTICK);
 	}
 	else if (settings->touchscreen) {
-		// TODO update this for onscreen controls
-		ss << msg->get("%s on ground", msg->get("Tap"));
+		ss << msg->get("Touch control D-Pad");
 	}
 	else if (settings->mouse_move) {
 		ss << getBindingString(Input::MAIN2);
@@ -699,8 +698,7 @@ std::string SDLInputState::getAttackString() {
 		ss << getBindingString(Input::ACTIONBAR_USE, InputState::BINDING_JOYSTICK);
 	}
 	else if (settings->touchscreen) {
-		// TODO update this for onscreen controls
-		ss << msg->get("%s on enemy", msg->get("Tap"));
+		ss << msg->get("Touch control buttons");
 	}
 	else {
 		ss << getBindingString(Input::MAIN1);

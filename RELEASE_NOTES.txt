@@ -17,6 +17,7 @@ Engine fixes:
 * Fixed a bug where looped map sounds wouldn't play if the player entered the map with a sound volume of 0, but later raised the volume.
 * Redesigned mouse movement to use the secondary button (right mouse) for movement.
 * Fix buttons and checkboxes not handling clicks while the "Accept" key is pressed.
+* Fix incorrect descriptions of controls on mobile devices.
 
 Game changes:
 
