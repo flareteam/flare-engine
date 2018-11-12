@@ -826,9 +826,11 @@ void EngineSettings::Tileset::load() {
 void EngineSettings::Widgets::load() {
 	// reset to defaults
 	selection_rect_color = Color(255, 248, 220, 255);
+	colorblind_highlight_offset = Point(2, 2);
 	tab_padding = Point(8, 0);
 	slot_quantity_label = LabelInfo();
 	slot_quantity_bg_color = Color(0, 0, 0, 0);
+	listbox_text_margin = Point(8, 8);
 
 	FileParser infile;
 	// @CLASS EngineSettings: Widgets|Description of engine/widget_settings.txt
@@ -838,6 +840,10 @@ void EngineSettings::Widgets::load() {
 				if (infile.key == "selection_rect_color") {
 					// @ATTR misc.selection_rect_color|color, int : Color, Alpha|Color of the selection rectangle when navigating widgets without a mouse.
 					selection_rect_color = Parse::toRGBA(infile.val);
+				}
+				else if (infile.key == "colorblind_highlight_offset") {
+					// @ATTR misc.colorblind_highlight_offset|int, int : X offset, Y offset|The pixel offset of the '*' marker on highlighted icons in colorblind mode.
+					colorblind_highlight_offset = Parse::toPoint(infile.val);
 				}
 			}
 			else if (infile.section == "tab") {
@@ -854,6 +860,12 @@ void EngineSettings::Widgets::load() {
 				else if (infile.key == "quantity_bg_color") {
 					// @ATTR slot.quantity_bg_color|color, int : Color, Alpha|If a slot has a quantity, a rectangle filled with this color will be placed beneath the text.
 					slot_quantity_bg_color = Parse::toRGBA(infile.val);
+				}
+			}
+			else if (infile.section == "listbox") {
+				if (infile.key == "text_margin") {
+					// @ATTR listbox.text_margin|int, int : Left margin, Right margin|The pixel margin to leave on the left and right sides of listbox element text.
+					listbox_text_margin = Parse::toPoint(infile.val);
 				}
 			}
 		}

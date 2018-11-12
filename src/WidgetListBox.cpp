@@ -418,11 +418,11 @@ void WidgetListBox::refresh() {
 		pos_scroll.w = scrollbar->pos_up.w;
 		pos_scroll.h = (pos.h*static_cast<int>(rows.size()))-scrollbar->pos_down.h-(scrollbar_offset*2);
 		scrollbar->refresh(pos_scroll.x, pos_scroll.y, pos_scroll.h, cursor, static_cast<int>(items.size()-rows.size()));
-		right_margin = scrollbar->pos_knob.w + 8;
+		right_margin = scrollbar->pos_knob.w + eset->widgets.listbox_text_margin.y;
 	}
 	else {
 		has_scroll_bar = false;
-		right_margin = 8;
+		right_margin = eset->widgets.listbox_text_margin.y;
 	}
 
 	// Update each row's hitbox and label
@@ -446,8 +446,7 @@ void WidgetListBox::refresh() {
 				temp = font->trimTextToWidth(items[i+cursor].value, pos.w-right_margin-padding, FontEngine::USE_ELLIPSIS, 0);
 		}
 
-		// TODO remove hardcoded +8
-		vlabels[i].setPos(rows[i].x + 8, rows[i].y + (rows[i].h/2));
+		vlabels[i].setPos(rows[i].x + eset->widgets.listbox_text_margin.x, rows[i].y + (rows[i].h/2));
 		vlabels[i].setVAlign(LabelInfo::VALIGN_CENTER);
 		vlabels[i].setText(temp);
 
