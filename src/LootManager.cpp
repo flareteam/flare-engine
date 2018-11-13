@@ -189,10 +189,6 @@ void LootManager::renderTooltips(const FPoint& cam) {
 
 				tip->render(it->tip, dest, TooltipData::STYLE_TOPLABEL);
 				it->tip_bounds = tip->bounds;
-
-				// only display one tooltip if we got it from hovering
-				if (!settings->loot_tooltips && !inpt->pressing[Input::ALT])
-					break;
 			}
 		}
 
