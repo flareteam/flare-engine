@@ -4,12 +4,13 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # Translators:
 # Marc Tormo i Bochaca <mtbochaca@gmail.com>, 2018
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-28 13:25+\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"POT-Creation-Date: 2018-11-13 17:21+\n"
+"PO-Revision-Date: 2018-03-28 19:16+0000\n"
 "Last-Translator: Marc Tormo i Bochaca <mtbochaca@gmail.com>, 2018\n"
 "Language-Team: Catalan (https://www.transifex.com/flareorg/teams/84925/ca/)\n"
 "MIME-Version: 1.0\n"
@@ -295,141 +296,145 @@ msgid "losine"
 msgstr "losine"
 
 #: ../cutscenes/credits.txt:76
+msgid "Marc Tormo i Bochaca"
+msgstr ""
+
+#: ../cutscenes/credits.txt:77
 msgid "Michael Papageorgiou"
 msgstr "Michael Papageorgiou"
 
-#: ../cutscenes/credits.txt:77
+#: ../cutscenes/credits.txt:78
 msgid "Mikhail Karalevich"
 msgstr "Mikhail Karalevich"
 
-#: ../cutscenes/credits.txt:78
+#: ../cutscenes/credits.txt:79
 msgid "Miro Jánošík"
 msgstr "Miro Jánošík"
 
-#: ../cutscenes/credits.txt:79
+#: ../cutscenes/credits.txt:80
 msgid "Mykola Franchuk"
 msgstr "Mykola Franchuk"
 
-#: ../cutscenes/credits.txt:80
+#: ../cutscenes/credits.txt:81
 msgid "MOB2"
 msgstr "MOB2"
 
-#: ../cutscenes/credits.txt:81
+#: ../cutscenes/credits.txt:82
 msgid "Morgan Strauss"
 msgstr "Morgan Strauss"
 
-#: ../cutscenes/credits.txt:82
+#: ../cutscenes/credits.txt:83
 msgid "Nea Retrogamer"
 msgstr "Nea Retrogamer"
 
-#: ../cutscenes/credits.txt:83
+#: ../cutscenes/credits.txt:84
 msgid "Nguyễn Gia Phong"
 msgstr "Nguyễn Gia Phong"
 
-#: ../cutscenes/credits.txt:84
+#: ../cutscenes/credits.txt:85
 msgid "Nikita Vanku"
 msgstr "Nikita Vanku"
 
-#: ../cutscenes/credits.txt:85
+#: ../cutscenes/credits.txt:86
 msgid "Paul Wortmann"
 msgstr "Paul Wortmann"
 
-#: ../cutscenes/credits.txt:86
+#: ../cutscenes/credits.txt:87
 msgid "Pawel Puszczynski"
 msgstr "Pawel Puszczynski"
 
-#: ../cutscenes/credits.txt:87
+#: ../cutscenes/credits.txt:88
 msgid "Quentin Stievenart"
 msgstr "Quentin Stievenart"
 
-#: ../cutscenes/credits.txt:88
+#: ../cutscenes/credits.txt:89
 msgid "Rui"
 msgstr "Rui"
 
-#: ../cutscenes/credits.txt:89
+#: ../cutscenes/credits.txt:90
 msgid "Sergey Basalaev"
 msgstr "Sergey Basalaev"
 
-#: ../cutscenes/credits.txt:90
+#: ../cutscenes/credits.txt:91
 msgid "Sergiy Borodych"
 msgstr "Sergiy Borodych"
 
-#: ../cutscenes/credits.txt:92
+#: ../cutscenes/credits.txt:93
 msgid "Stefano Peris"
 msgstr "Stefano Peris"
 
-#: ../cutscenes/credits.txt:93
+#: ../cutscenes/credits.txt:94
 msgid "sujiniku"
 msgstr "sujiniku"
 
-#: ../cutscenes/credits.txt:94
+#: ../cutscenes/credits.txt:95
 msgid "Thomas Glamsch"
 msgstr "Thomas Glamsch"
 
-#: ../cutscenes/credits.txt:95
+#: ../cutscenes/credits.txt:96
 msgid "Timo Sievänen"
 msgstr "Timo Sievänen"
 
-#: ../cutscenes/credits.txt:96
+#: ../cutscenes/credits.txt:97
 msgid "Vicente Monteiro"
 msgstr "Vicente Monteiro"
 
-#: ../cutscenes/credits.txt:97
+#: ../cutscenes/credits.txt:98
 msgid "Wuzzy2"
 msgstr "Wuzzy2"
 
-#: ../cutscenes/credits.txt:98
+#: ../cutscenes/credits.txt:99
 msgid "Yannis Anthymidis"
 msgstr "Yannis Anthymidis"
 
-#: ../cutscenes/credits.txt:99
+#: ../cutscenes/credits.txt:100
 msgid "Zmicer Turok"
 msgstr "Zmicer Turok"
 
-#: ../cutscenes/credits.txt:102
+#: ../cutscenes/credits.txt:103
 msgid "Distributors"
 msgstr "Distribuïdors"
 
-#: ../cutscenes/credits.txt:104
+#: ../cutscenes/credits.txt:105
 msgid "Ablu"
 msgstr "Ablu"
 
-#: ../cutscenes/credits.txt:105
+#: ../cutscenes/credits.txt:106
 msgid "Feillyne"
 msgstr "Feillyne"
 
-#: ../cutscenes/credits.txt:106
+#: ../cutscenes/credits.txt:107
 msgid "Jan-Hendrik Peters"
 msgstr "Jan-Hendrik Peters"
 
-#: ../cutscenes/credits.txt:108
+#: ../cutscenes/credits.txt:109
 msgid "miffe"
 msgstr "miffe"
 
-#: ../cutscenes/credits.txt:111
+#: ../cutscenes/credits.txt:112
 msgid "Special Thanks"
 msgstr "Agraïments especials"
 
-#: ../cutscenes/credits.txt:115
+#: ../cutscenes/credits.txt:116
 msgid "For giving constant feedback and testing:"
 msgstr "Per realitzar comentaris i proves constantment:"
 
-#: ../cutscenes/credits.txt:116
+#: ../cutscenes/credits.txt:117
 msgid "Bart Kelsey"
 msgstr "Bart Kelsey"
 
-#: ../cutscenes/credits.txt:117
+#: ../cutscenes/credits.txt:118
 msgid "The community at OpenGameArt"
 msgstr "La comunitat de OpenGameArt"
 
-#: ../cutscenes/credits.txt:121
+#: ../cutscenes/credits.txt:122
 msgid "For Tiled and the Flare map exporter:"
 msgstr "Per els mosaics i els exportadors de mapes de Flare:"
 
-#: ../cutscenes/credits.txt:122
+#: ../cutscenes/credits.txt:123
 msgid "Thorbjørn Lindeijer"
 msgstr "Thorbjørn Lindeijer"
 
-#: ../cutscenes/credits.txt:124
+#: ../cutscenes/credits.txt:125
 msgid "Ranie Jade Ramiso"
 msgstr "Ranie Jade Ramiso"

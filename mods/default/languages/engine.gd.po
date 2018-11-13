@@ -3,13 +3,17 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
+# Translators:
+# Justin Jacobs <jajdorkster@gmail.com>, 2018
+# GunChleoc, 2018
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-28 13:25-0400\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"POT-Creation-Date: 2018-11-13 17:21-0500\n"
+"PO-Revision-Date: 2018-03-28 19:16+0000\n"
 "Last-Translator: GunChleoc, 2018\n"
 "Language-Team: Gaelic, Scottish (https://www.transifex.com/flareorg/teams/84925/gd/)\n"
 "MIME-Version: 1.0\n"
@@ -27,16 +31,16 @@ msgstr "Meal do naidheachd, ràinig thu leibheil %d!"
 msgid "You may increase one attribute through the Character Menu."
 msgstr "Faodaidh tu buadh àrdachadh air clàr-taice a’ phearsa."
 
-#: ../../../src/Avatar.cpp:611
+#: ../../../src/Avatar.cpp:583
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
 msgstr ""
 "Chaidh do ruaig. Crìoch a’ gheama! ${INPUT_CONTINUE} gus fàgail gun tiotal."
 
-#: ../../../src/Avatar.cpp:617
+#: ../../../src/Avatar.cpp:589
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
 msgstr "Chaidh do ruaig. ${INPUT_CONTINUE} gus leantainn air adhart."
 
-#: ../../../src/Avatar.cpp:870
+#: ../../../src/Avatar.cpp:839
 msgid "Transformation expired. You have been moved back to a safe place."
 msgstr ""
 "Dh’fhalbh an ùine air a’ chruth-atharrachadh. Chaidh do ghluasad air ais gu "
@@ -114,7 +118,7 @@ msgstr ""
 "\n"
 "An t-inneal-reandaraidh tùsail a bhios nas luaithe mar as trice na an t-inneal-reandaraidh bathair-bhog SDL."
 
-#: ../../../src/EngineSettings.cpp:557
+#: ../../../src/EngineSettings.cpp:561
 msgid "Adventurer"
 msgstr "Baoghlair"
 
@@ -123,131 +127,127 @@ msgid "miss"
 msgstr "mì-amais"
 
 #: ../../../src/Entity.cpp:548 ../../../src/PowerManager.cpp:1152
-#: ../../../src/StatBlock.cpp:810 ../../../src/StatBlock.cpp:816
+#: ../../../src/StatBlock.cpp:805 ../../../src/StatBlock.cpp:811
 #, c-format
 msgid "+%d HP"
 msgstr "+%d puingean-beatha"
 
-#: ../../../src/Entity.cpp:555 ../../../src/StatBlock.cpp:821
-#: ../../../src/StatBlock.cpp:827
+#: ../../../src/Entity.cpp:555 ../../../src/StatBlock.cpp:816
+#: ../../../src/StatBlock.cpp:822
 #, c-format
 msgid "+%d MP"
 msgstr "+%d puingean-gluasaid"
 
-#: ../../../src/EventManager.cpp:729
+#: ../../../src/EventManager.cpp:738
 msgid "Unknown destination"
 msgstr "Ceann-uidhe neo-aithnichte"
 
-#: ../../../src/GameStateConfigBase.cpp:97
-#: ../../../src/GameStateConfigBase.cpp:118
+#: ../../../src/GameStateConfigBase.cpp:95
+#: ../../../src/GameStateConfigBase.cpp:116
 msgid "Defaults"
 msgstr "Bun-roghainnean"
 
-#: ../../../src/GameStateConfigBase.cpp:97
+#: ../../../src/GameStateConfigBase.cpp:95
 msgid "Reset ALL settings?"
 msgstr "A bheil thu airson GACH roghainn ath-shuidheachadh?"
 
-#: ../../../src/GameStateConfigBase.cpp:117 ../../../src/MenuNumPicker.cpp:50
+#: ../../../src/GameStateConfigBase.cpp:115 ../../../src/MenuNumPicker.cpp:49
 msgid "OK"
 msgstr "Ceart ma-thà"
 
-#: ../../../src/GameStateConfigBase.cpp:119 ../../../src/GameStateNew.cpp:65
-#: ../../../src/InputState.cpp:402 ../../../src/MenuNPCActions.cpp:76
+#: ../../../src/GameStateConfigBase.cpp:117 ../../../src/GameStateNew.cpp:65
+#: ../../../src/InputState.cpp:401
 msgid "Cancel"
 msgstr "Sguir dheth"
 
-#: ../../../src/GameStateConfigBase.cpp:168
+#: ../../../src/GameStateConfigBase.cpp:166
 #: ../../../src/GameStateConfigDesktop.cpp:128
 msgid "Audio"
 msgstr "Fuaim"
 
-#: ../../../src/GameStateConfigBase.cpp:169
+#: ../../../src/GameStateConfigBase.cpp:167
 #: ../../../src/GameStateConfigDesktop.cpp:129
 msgid "Interface"
 msgstr "Eadar-aghaidh"
 
-#: ../../../src/GameStateConfigBase.cpp:170
+#: ../../../src/GameStateConfigBase.cpp:168
 #: ../../../src/GameStateConfigDesktop.cpp:132
 msgid "Mods"
 msgstr "Tuilleadain"
 
-#: ../../../src/GameStateConfigBase.cpp:257 ../../../src/MenuExit.cpp:72
+#: ../../../src/GameStateConfigBase.cpp:255 ../../../src/MenuExit.cpp:72
 msgid "Music Volume"
 msgstr "Àirde a’ chiùil"
 
-#: ../../../src/GameStateConfigBase.cpp:261 ../../../src/MenuExit.cpp:77
+#: ../../../src/GameStateConfigBase.cpp:259 ../../../src/MenuExit.cpp:77
 msgid "Sound Volume"
 msgstr "Àirde na fuaime"
 
-#: ../../../src/GameStateConfigBase.cpp:265
+#: ../../../src/GameStateConfigBase.cpp:263
 msgid "Language"
 msgstr "Cànan"
 
-#: ../../../src/GameStateConfigBase.cpp:274
+#: ../../../src/GameStateConfigBase.cpp:272
 msgid "Show combat text"
 msgstr "Seall teacsa na còmhraige"
 
-#: ../../../src/GameStateConfigBase.cpp:278
+#: ../../../src/GameStateConfigBase.cpp:276
 msgid "Show FPS"
 msgstr "Seall FPS"
 
-#: ../../../src/GameStateConfigBase.cpp:282
+#: ../../../src/GameStateConfigBase.cpp:280
 msgid "Colorblind Mode"
 msgstr "Modh dath-dhoille"
 
-#: ../../../src/GameStateConfigBase.cpp:286
+#: ../../../src/GameStateConfigBase.cpp:284
 msgid "Hardware mouse cursor"
 msgstr "Cùrsair luchaige bathair-chruaidh"
 
-#: ../../../src/GameStateConfigBase.cpp:290
+#: ../../../src/GameStateConfigBase.cpp:288
 msgid "Developer Mode"
 msgstr "Modh an luchd-leasachaidh"
 
-#: ../../../src/GameStateConfigBase.cpp:294
-msgid "Always show loot labels"
-msgstr "Seall leubailean na spùinne an-còmhnaidh"
-
-#: ../../../src/GameStateConfigBase.cpp:298
+#: ../../../src/GameStateConfigBase.cpp:292
 msgid "Always show stat bar labels"
 msgstr "Seall leubailean bàr na stadastaireachd an-còmhnaidh"
 
-#: ../../../src/GameStateConfigBase.cpp:302
+#: ../../../src/GameStateConfigBase.cpp:296
 msgid "Automatically equip items"
 msgstr "Uidheamaich nithean gu fèin-obrachail"
 
-#: ../../../src/GameStateConfigBase.cpp:306
+#: ../../../src/GameStateConfigBase.cpp:300
 msgid "Subtitles"
 msgstr "Fo-thiotalan"
 
-#: ../../../src/GameStateConfigBase.cpp:310
+#: ../../../src/GameStateConfigBase.cpp:304
 msgid "Active Mods"
 msgstr "Tuilleadain ghnìomhach"
 
-#: ../../../src/GameStateConfigBase.cpp:319
+#: ../../../src/GameStateConfigBase.cpp:313
 msgid "Available Mods"
 msgstr "Tuilleadain ri làimh"
 
-#: ../../../src/GameStateConfigBase.cpp:338
+#: ../../../src/GameStateConfigBase.cpp:332
 msgid "<< Disable"
 msgstr "<< Cuir à comas"
 
-#: ../../../src/GameStateConfigBase.cpp:344
+#: ../../../src/GameStateConfigBase.cpp:338
 msgid "Enable >>"
 msgstr "Cuir an comas >>"
 
-#: ../../../src/GameStateConfigBase.cpp:924
+#: ../../../src/GameStateConfigBase.cpp:911
 msgid "Version:"
 msgstr "Tionndadh:"
 
-#: ../../../src/GameStateConfigBase.cpp:929
+#: ../../../src/GameStateConfigBase.cpp:916
 msgid "Game:"
 msgstr "Geama:"
 
-#: ../../../src/GameStateConfigBase.cpp:934
+#: ../../../src/GameStateConfigBase.cpp:921
 msgid "Engine version:"
 msgstr "Tionndadh an einnsein:"
 
-#: ../../../src/GameStateConfigBase.cpp:942
+#: ../../../src/GameStateConfigBase.cpp:929
 msgid "Requires mods:"
 msgstr "Feum air tuilleadain:"
 
@@ -368,23 +368,23 @@ msgstr "Marbh-sòn an joystick"
 msgid "Loading..."
 msgstr "’Ga luchdadh…"
 
-#: ../../../src/GameStateLoad.cpp:87 ../../../src/GameStateLoad.cpp:100
+#: ../../../src/GameStateLoad.cpp:88 ../../../src/GameStateLoad.cpp:101
 msgid "Delete Save"
 msgstr "Sguab às"
 
-#: ../../../src/GameStateLoad.cpp:87
+#: ../../../src/GameStateLoad.cpp:88
 msgid "Delete this save?"
 msgstr "An sguab sinn an geama às?"
 
-#: ../../../src/GameStateLoad.cpp:89
+#: ../../../src/GameStateLoad.cpp:90
 msgid "Exit to Title"
 msgstr "Fàg gun tiotal"
 
-#: ../../../src/GameStateLoad.cpp:92
+#: ../../../src/GameStateLoad.cpp:93
 msgid "New Game"
 msgstr "Geama ùr"
 
-#: ../../../src/GameStateLoad.cpp:96 ../../../src/GameStateLoad.cpp:600
+#: ../../../src/GameStateLoad.cpp:97 ../../../src/GameStateLoad.cpp:600
 msgid "Choose a Slot"
 msgstr "Tagh slot"
 
@@ -459,155 +459,155 @@ msgstr "Urram"
 msgid "Exit Game"
 msgstr "Fàg an geama"
 
-#: ../../../src/InputState.cpp:403
+#: ../../../src/InputState.cpp:402
 msgid "Accept"
 msgstr "Gabh ris"
 
-#: ../../../src/InputState.cpp:404 ../../../src/SDLInputState.cpp:606
+#: ../../../src/InputState.cpp:403 ../../../src/SDLInputState.cpp:607
 msgid "Up"
 msgstr "Suas"
 
-#: ../../../src/InputState.cpp:405 ../../../src/SDLInputState.cpp:584
+#: ../../../src/InputState.cpp:404 ../../../src/SDLInputState.cpp:585
 msgid "Down"
 msgstr "Sìos"
 
-#: ../../../src/InputState.cpp:406 ../../../src/SDLInputState.cpp:591
+#: ../../../src/InputState.cpp:405 ../../../src/SDLInputState.cpp:592
 msgid "Left"
 msgstr "Gu clì"
 
-#: ../../../src/InputState.cpp:407 ../../../src/SDLInputState.cpp:601
+#: ../../../src/InputState.cpp:406 ../../../src/SDLInputState.cpp:602
 msgid "Right"
 msgstr "Gu deas"
 
-#: ../../../src/InputState.cpp:408
+#: ../../../src/InputState.cpp:407
 msgid "Bar1"
 msgstr "Bàr 1"
 
-#: ../../../src/InputState.cpp:409
+#: ../../../src/InputState.cpp:408
 msgid "Bar2"
 msgstr "Bàr 2"
 
-#: ../../../src/InputState.cpp:410
+#: ../../../src/InputState.cpp:409
 msgid "Bar3"
 msgstr "Bàr 3"
 
-#: ../../../src/InputState.cpp:411
+#: ../../../src/InputState.cpp:410
 msgid "Bar4"
 msgstr "Bàr 4"
 
-#: ../../../src/InputState.cpp:412
+#: ../../../src/InputState.cpp:411
 msgid "Bar5"
 msgstr "Bàr 5"
 
-#: ../../../src/InputState.cpp:413
+#: ../../../src/InputState.cpp:412
 msgid "Bar6"
 msgstr "Bàr 6"
 
-#: ../../../src/InputState.cpp:414
+#: ../../../src/InputState.cpp:413
 msgid "Bar7"
 msgstr "Bàr 7"
 
-#: ../../../src/InputState.cpp:415
+#: ../../../src/InputState.cpp:414
 msgid "Bar8"
 msgstr "Bàr 8"
 
-#: ../../../src/InputState.cpp:416
+#: ../../../src/InputState.cpp:415
 msgid "Bar9"
 msgstr "Bàr 9"
 
-#: ../../../src/InputState.cpp:417
+#: ../../../src/InputState.cpp:416
 msgid "Bar0"
 msgstr "Bàr 0"
 
-#: ../../../src/InputState.cpp:418 ../../../src/MenuActionBar.cpp:76
+#: ../../../src/InputState.cpp:417 ../../../src/MenuActionBar.cpp:75
 #: ../../../src/MenuCharacter.cpp:54
 msgid "Character"
 msgstr "Pearsa"
 
-#: ../../../src/InputState.cpp:419 ../../../src/MenuActionBar.cpp:77
+#: ../../../src/InputState.cpp:418 ../../../src/MenuActionBar.cpp:76
 #: ../../../src/MenuInventory.cpp:127 ../../../src/MenuVendor.cpp:57
 msgid "Inventory"
 msgstr "Tasgadh"
 
-#: ../../../src/InputState.cpp:420 ../../../src/MenuActionBar.cpp:78
+#: ../../../src/InputState.cpp:419 ../../../src/MenuActionBar.cpp:77
 #: ../../../src/MenuPowers.cpp:168
 msgid "Powers"
 msgstr "Cumhachdan"
 
-#: ../../../src/InputState.cpp:421 ../../../src/MenuActionBar.cpp:79
+#: ../../../src/InputState.cpp:420 ../../../src/MenuActionBar.cpp:78
 #: ../../../src/MenuLog.cpp:72
 msgid "Log"
 msgstr "Leabhar-latha"
 
-#: ../../../src/InputState.cpp:422
+#: ../../../src/InputState.cpp:421
 msgid "Main1"
 msgstr "Prìomh-ghnìomh"
 
-#: ../../../src/InputState.cpp:423
+#: ../../../src/InputState.cpp:422
 msgid "Main2"
 msgstr "Gnìomh dàrnach"
 
-#: ../../../src/InputState.cpp:424
+#: ../../../src/InputState.cpp:423
 msgid "Ctrl"
 msgstr "Ctrl"
 
-#: ../../../src/InputState.cpp:425
+#: ../../../src/InputState.cpp:424
 msgid "Shift"
 msgstr "Shift"
 
-#: ../../../src/InputState.cpp:426
+#: ../../../src/InputState.cpp:425
 msgid "Alt"
 msgstr "Alt"
 
-#: ../../../src/InputState.cpp:427 ../../../src/SDLInputState.cpp:583
+#: ../../../src/InputState.cpp:426 ../../../src/SDLInputState.cpp:584
 msgid "Delete"
 msgstr "Delete"
 
-#: ../../../src/InputState.cpp:428
+#: ../../../src/InputState.cpp:427
 msgid "ActionBar Accept"
 msgstr "Bàr – Gabh ris"
 
-#: ../../../src/InputState.cpp:429
+#: ../../../src/InputState.cpp:428
 msgid "ActionBar Left"
 msgstr "Bàr – Gu clì"
 
-#: ../../../src/InputState.cpp:430
+#: ../../../src/InputState.cpp:429
 msgid "ActionBar Right"
 msgstr "Bàr – Gu deas"
 
-#: ../../../src/InputState.cpp:431
+#: ../../../src/InputState.cpp:430
 msgid "ActionBar Use"
 msgstr "Bàr – Cleachd"
 
-#: ../../../src/InputState.cpp:432
+#: ../../../src/InputState.cpp:431
 msgid "Developer Menu"
 msgstr "Clàr-taice an luchd-leasachaidh"
 
-#: ../../../src/InputState.cpp:434
+#: ../../../src/InputState.cpp:433
 msgid "Left Mouse"
 msgstr "Clì na luchaige"
 
-#: ../../../src/InputState.cpp:435
+#: ../../../src/InputState.cpp:434
 msgid "Middle Mouse"
 msgstr "Meadhanach na luchaige"
 
-#: ../../../src/InputState.cpp:436
+#: ../../../src/InputState.cpp:435
 msgid "Right Mouse"
 msgstr "Deas na luchaige"
 
-#: ../../../src/InputState.cpp:437
+#: ../../../src/InputState.cpp:436
 msgid "Wheel Up"
 msgstr "Cuibhle suas"
 
-#: ../../../src/InputState.cpp:438
+#: ../../../src/InputState.cpp:437
 msgid "Wheel Down"
 msgstr "Cuibhle sìos"
 
-#: ../../../src/InputState.cpp:439
+#: ../../../src/InputState.cpp:438
 msgid "Mouse X1"
 msgstr "X1 na luchaige"
 
-#: ../../../src/InputState.cpp:440
+#: ../../../src/InputState.cpp:439
 msgid "Mouse X2"
 msgstr "X2 na luchaige"
 
@@ -711,13 +711,32 @@ msgstr "Brùth air [%s] gus a chleachdadh"
 msgid "Press [%s] to read"
 msgstr "Brùth air [%s] gus a leughadh"
 
-#: ../../../src/MenuActionBar.cpp:215 ../../../src/MenuActionBar.cpp:221
-#: ../../../src/MenuActionBar.cpp:226
+#: ../../../src/MenuActionBar.cpp:79
+msgid "Loot Tooltip Visibility"
+msgstr ""
+
+#: ../../../src/MenuActionBar.cpp:222 ../../../src/MenuActionBar.cpp:229
+#: ../../../src/MenuActionBar.cpp:232 ../../../src/MenuActionBar.cpp:239
 #, c-format
 msgid "Hotkey: %s"
 msgstr "Grad-iuchair: %s"
 
-#: ../../../src/MenuActionBar.cpp:580
+#: ../../../src/MenuActionBar.cpp:442
+#, c-format
+msgid "Default. Temporarily show all loot tooltips with '%s'."
+msgstr ""
+
+#: ../../../src/MenuActionBar.cpp:444
+#, c-format
+msgid "Show All. Temporarily hide all loot tooltips with '%s'."
+msgstr ""
+
+#: ../../../src/MenuActionBar.cpp:446
+#, c-format
+msgid "Hide All. Temporarily show all loot tooltips with '%s'."
+msgstr ""
+
+#: ../../../src/MenuActionBar.cpp:602
 msgid "Not enough MP."
 msgstr "Chan fhoghainn na PG."
 
@@ -759,7 +778,7 @@ msgid "Reduces the damage taken from \"%s\" elemental attacks."
 msgstr ""
 "Ìslichidh seo an dochann a dh’fhulaingeas tu o ionnsaighean dùileach “%s”"
 
-#: ../../../src/MenuCharacter.cpp:365 ../../../src/MenuManager.cpp:287
+#: ../../../src/MenuCharacter.cpp:365 ../../../src/MenuManager.cpp:283
 #, c-format
 msgid "XP: %d"
 msgstr "Puingean-eòlais: %d"
@@ -944,16 +963,16 @@ msgstr "MEARACHD: Àithne nach aithne dhuinn"
 msgid "HINT: Type help"
 msgstr "OIDHEAM: Sgrìobh “help”"
 
-#: ../../../src/MenuEnemy.cpp:135
+#: ../../../src/MenuEnemy.cpp:138
 #, c-format
 msgid "%s level %d"
 msgstr "%s leibheil %d"
 
-#: ../../../src/MenuEnemy.cpp:159
+#: ../../../src/MenuEnemy.cpp:162
 msgid "Dead"
 msgstr "Marbh"
 
-#: ../../../src/MenuEnemy.cpp:161
+#: ../../../src/MenuEnemy.cpp:164
 msgid "Destroyed"
 msgstr "Air a mhilleadh"
 
@@ -993,58 +1012,58 @@ msgstr "Chaill thu %d%% dhe na puingean-eòlais airson an leibheil seo."
 msgid "Lost %s."
 msgstr "Chaill thu %s."
 
-#: ../../../src/MenuInventory.cpp:256 ../../../src/MenuStash.cpp:146
+#: ../../../src/MenuInventory.cpp:254 ../../../src/MenuStash.cpp:146
 #, c-format
 msgid "%d %s"
 msgstr "%d %s"
 
-#: ../../../src/MenuInventory.cpp:299
+#: ../../../src/MenuInventory.cpp:297
 msgid "Pick up item(s):"
 msgstr "Tog nì:"
 
-#: ../../../src/MenuInventory.cpp:300
+#: ../../../src/MenuInventory.cpp:298
 msgid "Use or equip item:"
 msgstr "Cleachd no uidheamaich nì:"
 
-#: ../../../src/MenuInventory.cpp:301
+#: ../../../src/MenuInventory.cpp:299
 #, c-format
 msgid "%s modifiers"
 msgstr "Atharraichearan air %s"
 
-#: ../../../src/MenuInventory.cpp:302
+#: ../../../src/MenuInventory.cpp:300
 msgid "Select a quantity of item:"
 msgstr "Tagh uiread dhen nì:"
 
-#: ../../../src/MenuInventory.cpp:305
+#: ../../../src/MenuInventory.cpp:303
 msgid "Stash item stack:"
 msgstr "Cuir stac nan nithean dhan stòr:"
 
-#: ../../../src/MenuInventory.cpp:307
+#: ../../../src/MenuInventory.cpp:305
 msgid "Sell item stack:"
 msgstr "Reic stac nan nithean:"
 
-#: ../../../src/MenuInventory.cpp:574
+#: ../../../src/MenuInventory.cpp:572
 msgid "You don't have enough of the required item."
 msgstr "Chan eil gu leòr dhen nì riatanach agad."
 
-#: ../../../src/MenuInventory.cpp:581
+#: ../../../src/MenuInventory.cpp:579
 msgid "You can't use this item right now."
 msgstr "Chan urrainn dhut an nì seo a chleachdadh an-dràsta."
 
-#: ../../../src/MenuInventory.cpp:593
+#: ../../../src/MenuInventory.cpp:591
 msgid "This item can only be used from the action bar."
 msgstr "Cha ghabh an nì seo cleachdadh ach on bhàr-ghnìomhan."
 
-#: ../../../src/MenuInventory.cpp:711
+#: ../../../src/MenuInventory.cpp:709
 msgid "Inventory is full."
 msgstr "Tha an tasgadh làn."
 
-#: ../../../src/MenuInventory.cpp:831
+#: ../../../src/MenuInventory.cpp:829
 #, c-format
 msgid "Not enough %s."
 msgstr "Chan eil %s gu leòr agad."
 
-#: ../../../src/MenuInventory.cpp:851 ../../../src/MenuInventory.cpp:858
+#: ../../../src/MenuInventory.cpp:849 ../../../src/MenuInventory.cpp:856
 msgid "This item can not be sold."
 msgstr "Cha ghabh an nì seo reic."
 
@@ -1056,20 +1075,16 @@ msgstr "Nòtaichean"
 msgid "Quests"
 msgstr "Cinn-thurais"
 
-#: ../../../src/MenuManager.cpp:290
+#: ../../../src/MenuManager.cpp:286
 #, c-format
 msgid "XP: %d/%d"
 msgstr "Puingean-eòlais: %d/%d"
 
-#: ../../../src/MenuManager.cpp:806
+#: ../../../src/MenuManager.cpp:827
 msgid "This item can not be dropped."
 msgstr "Chan urrainn dhut an nì seo a leigeil às."
 
-#: ../../../src/MenuNPCActions.cpp:75
-msgid "Trade"
-msgstr "Malart"
-
-#: ../../../src/MenuNumPicker.cpp:60
+#: ../../../src/MenuNumPicker.cpp:59
 msgid "Enter amount:"
 msgstr "Cuir a-steach àireamh:"
 
@@ -1246,6 +1261,10 @@ msgstr "Cha ghabh nithean cinn-thurais a chur dhan stòr."
 msgid "Stash is full."
 msgstr "Tha an stòr làn."
 
+#: ../../../src/MenuTalker.cpp:454
+msgid "Trade"
+msgstr "Malart"
+
 #: ../../../src/MenuVendor.cpp:58
 msgid "Buyback"
 msgstr "Na reic thu roimhe"
@@ -1277,131 +1296,128 @@ msgstr "Cinn-thurais air a choileanadh"
 msgid "Game saved."
 msgstr "Chaidh an geama a shàbhaladh."
 
-#: ../../../src/SDLInputState.cpp:581
+#: ../../../src/SDLInputState.cpp:582
 msgid "Backspace"
 msgstr "Backspace"
 
-#: ../../../src/SDLInputState.cpp:582
+#: ../../../src/SDLInputState.cpp:583
 msgid "CapsLock"
 msgstr "CapsLock"
 
-#: ../../../src/SDLInputState.cpp:585
+#: ../../../src/SDLInputState.cpp:586
 msgid "End"
 msgstr "End"
 
-#: ../../../src/SDLInputState.cpp:586
+#: ../../../src/SDLInputState.cpp:587
 msgid "Escape"
 msgstr "Escape"
 
-#: ../../../src/SDLInputState.cpp:587
+#: ../../../src/SDLInputState.cpp:588
 msgid "Home"
 msgstr "Home"
 
-#: ../../../src/SDLInputState.cpp:588
+#: ../../../src/SDLInputState.cpp:589
 msgid "Insert"
 msgstr "Insert"
 
-#: ../../../src/SDLInputState.cpp:589
+#: ../../../src/SDLInputState.cpp:590
 msgid "Left Alt"
 msgstr "Alt clì"
 
-#: ../../../src/SDLInputState.cpp:590
+#: ../../../src/SDLInputState.cpp:591
 msgid "Left Ctrl"
 msgstr "Ctrl clì"
 
-#: ../../../src/SDLInputState.cpp:592
+#: ../../../src/SDLInputState.cpp:593
 msgid "Left Shift"
 msgstr "Shift clì"
 
-#: ../../../src/SDLInputState.cpp:593
+#: ../../../src/SDLInputState.cpp:594
 msgid "NumLock"
 msgstr "NumLock"
 
-#: ../../../src/SDLInputState.cpp:594
+#: ../../../src/SDLInputState.cpp:595
 msgid "PageDown"
 msgstr "PageDown"
 
-#: ../../../src/SDLInputState.cpp:595
+#: ../../../src/SDLInputState.cpp:596
 msgid "PageUp"
 msgstr "PageUp"
 
-#: ../../../src/SDLInputState.cpp:596
+#: ../../../src/SDLInputState.cpp:597
 msgid "Pause"
 msgstr "Pause"
 
-#: ../../../src/SDLInputState.cpp:597
+#: ../../../src/SDLInputState.cpp:598
 msgid "PrintScreen"
 msgstr "PrintScreen"
 
-#: ../../../src/SDLInputState.cpp:598
+#: ../../../src/SDLInputState.cpp:599
 msgid "Right Alt"
 msgstr "Alt deas"
 
-#: ../../../src/SDLInputState.cpp:599
+#: ../../../src/SDLInputState.cpp:600
 msgid "Right Ctrl"
 msgstr "Ctrl deas"
 
-#: ../../../src/SDLInputState.cpp:600
+#: ../../../src/SDLInputState.cpp:601
 msgid "Return"
 msgstr "Return"
 
-#: ../../../src/SDLInputState.cpp:602
+#: ../../../src/SDLInputState.cpp:603
 msgid "Right Shift"
 msgstr "Shift deas"
 
-#: ../../../src/SDLInputState.cpp:603
+#: ../../../src/SDLInputState.cpp:604
 msgid "ScrollLock"
 msgstr "ScrollLock"
 
-#: ../../../src/SDLInputState.cpp:604
+#: ../../../src/SDLInputState.cpp:605
 msgid "Space"
 msgstr "Space"
 
-#: ../../../src/SDLInputState.cpp:605
+#: ../../../src/SDLInputState.cpp:606
 msgid "Tab"
 msgstr "Tab"
 
-#: ../../../src/SDLInputState.cpp:619
+#: ../../../src/SDLInputState.cpp:620
 #, c-format
 msgid "Mouse %d"
 msgstr "%d na luchaige"
 
-#: ../../../src/SDLInputState.cpp:627
+#: ../../../src/SDLInputState.cpp:628
 #, c-format
 msgid "Axis %d -"
 msgstr "Aiseal %d -"
 
-#: ../../../src/SDLInputState.cpp:629
+#: ../../../src/SDLInputState.cpp:630
 #, c-format
 msgid "Axis %d +"
 msgstr "Aiseal %d +"
 
-#: ../../../src/SDLInputState.cpp:632
+#: ../../../src/SDLInputState.cpp:633
 #, c-format
 msgid "Button %d"
 msgstr "Putan %d"
 
-#: ../../../src/SDLInputState.cpp:636
+#: ../../../src/SDLInputState.cpp:637
 msgid "(none)"
 msgstr "(chan eil gin)"
 
-#: ../../../src/SDLInputState.cpp:677 ../../../src/SDLInputState.cpp:701
-#: ../../../src/SDLInputState.cpp:719
+#: ../../../src/SDLInputState.cpp:677
+msgid "Touch control D-Pad"
+msgstr ""
+
+#: ../../../src/SDLInputState.cpp:701
+msgid "Touch control buttons"
+msgstr ""
+
+#: ../../../src/SDLInputState.cpp:716
 msgid "Tap"
 msgstr "Gnogadh"
 
-#: ../../../src/SDLInputState.cpp:677 ../../../src/SDLInputState.cpp:680
-#, c-format
-msgid "%s on ground"
-msgstr "%s air an làr"
-
-#: ../../../src/SDLInputState.cpp:701 ../../../src/SDLInputState.cpp:704
-#, c-format
-msgid "%s on enemy"
-msgstr "%s air an nàmhaid"
-
-#: ../../../src/SDLInputState.cpp:763 ../../../src/SDLInputState.cpp:767
-#: ../../../src/SDLInputState.cpp:771
+#: ../../../src/SDLInputState.cpp:760 ../../../src/SDLInputState.cpp:764
+#: ../../../src/SDLInputState.cpp:768
 #, c-format
 msgid "'%s' is no longer bound to:"
 msgstr "Chan eil “%s” naisgte tuilleadh ri:"
@@ -1566,16 +1582,16 @@ msgstr "Puingean-beatha bunasach"
 msgid "Base MP"
 msgstr "Puingean-gluasaid bunasach"
 
-#: ../../../src/Utils.cpp:297
+#: ../../../src/Utils.cpp:346
 msgid "k"
 msgstr "k"
 
-#: ../../../src/Utils.cpp:531
+#: ../../../src/Utils.cpp:580
 #, c-format
 msgid "%s second"
 msgstr "%s diog"
 
-#: ../../../src/Utils.cpp:534
+#: ../../../src/Utils.cpp:583
 #, c-format
 msgid "%s seconds"
 msgstr "%s diog(an)"
