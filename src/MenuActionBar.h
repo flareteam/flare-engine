@@ -65,8 +65,10 @@ public:
 		MENU_CHARACTER = 0,
 		MENU_INVENTORY = 1,
 		MENU_POWERS = 2,
-		MENU_LOG = 3
+		MENU_LOG = 3,
+		MENU_LOOT_TIPS = 4
 	};
+	static const unsigned MENU_COUNT = 5;
 
 	static const int SLOT_MAIN1 = 10;
 	static const int SLOT_MAIN2 = 11;
@@ -106,11 +108,11 @@ public:
 	std::vector<bool> locked; // if slot is locked, you cannot drop it
 	std::vector<bool> prevent_changing;
 	std::vector<WidgetSlot *> slots; // hotkey slots
-	WidgetSlot *menus[4]; // menu buttons
-	std::string menu_titles[4];
+	WidgetSlot *menus[MENU_COUNT]; // menu buttons
+	std::string menu_titles[MENU_COUNT];
 	std::vector<int> slot_item_count; // -1 means this power isn't item based.  0 means out of items.  1+ means sufficient items.
 	std::vector<bool> slot_enabled;
-	bool requires_attention[4];
+	bool requires_attention[MENU_COUNT];
 	std::vector<bool> slot_activated;
 	std::vector<int> slot_cooldown_size;
 

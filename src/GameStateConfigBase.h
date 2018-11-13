@@ -122,8 +122,6 @@ public:
 	WidgetLabel         * colorblind_lb;
 	WidgetCheckBox      * dev_mode_cb;
 	WidgetLabel         * dev_mode_lb;
-	WidgetCheckBox      * loot_tooltips_cb;
-	WidgetLabel         * loot_tooltips_lb;
 	WidgetCheckBox      * statbar_labels_cb;
 	WidgetLabel         * statbar_labels_lb;
 	WidgetCheckBox      * auto_equip_cb;

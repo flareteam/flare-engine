@@ -31,6 +31,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class Settings {
 public:
+	enum {
+		LOOT_TIPS_DEFAULT = 0,
+		LOOT_TIPS_SHOW_ALL = 1,
+		LOOT_TIPS_HIDE_ALL = 2
+	};
+
 	Settings();
 	void loadSettings();
 	void saveSettings();
@@ -69,7 +75,7 @@ public:
 	bool hardware_cursor;
 	bool dev_mode;
 	bool dev_hud;
-	bool loot_tooltips;
+	int loot_tooltips;
 	bool statbar_labels;
 	bool auto_equip;
 	bool subtitles;

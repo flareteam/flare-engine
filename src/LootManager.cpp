@@ -146,7 +146,7 @@ void LootManager::renderTooltips(const FPoint& cam) {
 			bool forced_visibility = false;
 			bool default_visibility = true;
 
-			if (!settings->loot_tooltips && eset->loot.hide_radius > 0) {
+			if (settings->loot_tooltips == Settings::LOOT_TIPS_DEFAULT && eset->loot.hide_radius > 0) {
 				if (Utils::calcDist(pc->stats.pos, it->pos) < eset->loot.hide_radius) {
 					default_visibility = false;
 				}
@@ -157,9 +157,15 @@ void LootManager::renderTooltips(const FPoint& cam) {
 					}
 				}
 			}
+			else if (settings->loot_tooltips == Settings::LOOT_TIPS_HIDE_ALL) {
+				default_visibility = false;
+			}
+			else if (settings->loot_tooltips == Settings::LOOT_TIPS_SHOW_ALL && inpt->pressing[Input::ALT]) {
+				default_visibility = false;
+			}
 
 			if (!default_visibility)
-				forced_visibility = Utils::isWithinRect(hover, inpt->mouse) || inpt->pressing[Input::ALT];
+				forced_visibility = Utils::isWithinRect(hover, inpt->mouse) || (inpt->pressing[Input::ALT] && settings->loot_tooltips != Settings::LOOT_TIPS_SHOW_ALL);
 
 			if (default_visibility || forced_visibility) {
 				it->tip_visible = true;
@@ -189,6 +195,9 @@ void LootManager::renderTooltips(const FPoint& cam) {
 
 				tip->render(it->tip, dest, TooltipData::STYLE_TOPLABEL);
 				it->tip_bounds = tip->bounds;
+
+				if (settings->loot_tooltips == Settings::LOOT_TIPS_HIDE_ALL && !inpt->pressing[Input::ALT])
+					break;
 			}
 		}
 

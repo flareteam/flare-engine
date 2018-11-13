@@ -61,22 +61,22 @@ MenuActionBar::MenuActionBar()
 	, updated(false)
 	, twostep_slot(-1) {
 
-	src.w = eset->resolutions.icon_size;
-	src.h = eset->resolutions.icon_size;
-
-	menu_labels.resize(4);
+	menu_labels.resize(MENU_COUNT);
 
 	tablist = TabList();
 	tablist.setScrollType(Widget::SCROLL_HORIZONTAL);
 	tablist.setInputs(Input::ACTIONBAR_BACK, Input::ACTIONBAR_FORWARD, Input::ACTIONBAR);
 
-	for (unsigned int i=0; i<4; i++) {
+	for (unsigned i=0; i<MENU_COUNT; i++) {
 		menus[i] = new WidgetSlot(-1, Input::ACTIONBAR);
+		menus[i]->pos.w = 0;
+		menus[i]->pos.h = 0;
 	}
 	menu_titles[MENU_CHARACTER] = msg->get("Character");
 	menu_titles[MENU_INVENTORY] = msg->get("Inventory");
 	menu_titles[MENU_POWERS] = msg->get("Powers");
 	menu_titles[MENU_LOG] = msg->get("Log");
+	menu_titles[MENU_LOOT_TIPS] = msg->get("Loot Tooltip Visibility");
 
 	// Read data from config file
 	FileParser infile;
@@ -146,13 +146,20 @@ MenuActionBar::MenuActionBar()
 				menus[MENU_LOG]->setBasePos(x, y, Utils::ALIGN_TOPLEFT);
 				menus[MENU_LOG]->pos.w = menus[MENU_LOG]->pos.h = eset->resolutions.icon_size;
 			}
+			// @ATTR loot_tip_toggle|point|Position for the button used to toggle loot tooltip visibility.
+			else if (infile.key == "loot_tip_toggle") {
+				int x = Parse::popFirstInt(infile.val);
+				int y = Parse::popFirstInt(infile.val);
+				menus[MENU_LOOT_TIPS]->setBasePos(x, y, Utils::ALIGN_TOPLEFT);
+				menus[MENU_LOOT_TIPS]->pos.w = menus[MENU_LOOT_TIPS]->pos.h = eset->resolutions.icon_size;
+			}
 
 			else infile.error("MenuActionBar: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
 	}
 
-	for (unsigned int i=0; i<4; i++) {
+	for (unsigned i=0; i<MENU_COUNT; i++) {
 		tablist.add(menus[i]);
 	}
 
@@ -200,23 +207,23 @@ void MenuActionBar::addSlot(unsigned index, int x, int y, bool is_locked) {
 void MenuActionBar::align() {
 	Menu::align();
 
-	for (unsigned int i = 0; i < slots_count; i++) {
+	for (unsigned i = 0; i < slots_count; i++) {
 		if (slots[i]) {
 			slots[i]->setPos(window_area.x, window_area.y);
 		}
 	}
-	for (unsigned int i=0; i<4; i++) {
+	for (unsigned i=0; i<MENU_COUNT; i++) {
 		menus[i]->setPos(window_area.x, window_area.y);
 	}
 
 	// set keybinding labels
-	for (unsigned int i = 0; i < static_cast<unsigned int>(SLOT_MAIN1); i++) {
+	for (unsigned i = 0; i < static_cast<unsigned>(SLOT_MAIN1); i++) {
 		if (i < slots.size() && slots[i]) {
 			labels[i] = msg->get("Hotkey: %s", inpt->getBindingString(i + Input::BAR_1));
 		}
 	}
 
-	for (unsigned int i = SLOT_MAIN1; i < static_cast<unsigned int>(SLOT_MAX); i++) {
+	for (unsigned i = SLOT_MAIN1; i < static_cast<unsigned>(SLOT_MAX); i++) {
 		if (i < slots.size() && slots[i]) {
 			if (settings->mouse_move && i == SLOT_MAIN2) {
 				labels[i] = msg->get("Hotkey: %s", inpt->getBindingString(Input::SHIFT) + " + " + inpt->getBindingString(i - SLOT_MAIN1 + Input::MAIN1));
@@ -226,15 +233,17 @@ void MenuActionBar::align() {
 			}
 		}
 	}
-	for (unsigned int i=0; i<menu_labels.size(); i++) {
+	for (unsigned i=0; i<menu_labels.size(); i++) {
 		menus[i]->setPos(window_area.x, window_area.y);
-		menu_labels[i] = msg->get("Hotkey: %s", inpt->getBindingString(i + Input::CHARACTER));
+		if (i < MENU_LOOT_TIPS) {
+			menu_labels[i] = msg->get("Hotkey: %s", inpt->getBindingString(i + Input::CHARACTER));
+		}
 	}
 }
 
 void MenuActionBar::clear() {
 	// clear action bar
-	for (unsigned int i = 0; i < slots_count; i++) {
+	for (unsigned i = 0; i < slots_count; i++) {
 		hotkeys[i] = 0;
 		hotkeys_temp[i] = 0;
 		hotkeys_mod[i] = 0;
@@ -247,7 +256,7 @@ void MenuActionBar::clear() {
 	}
 
 	// clear menu notifications
-	for (int i=0; i<4; i++)
+	for (unsigned i=0; i<MENU_COUNT; i++)
 		requires_attention[i] = false;
 
 	twostep_slot = -1;
@@ -391,7 +400,7 @@ void MenuActionBar::render() {
 	}
 
 	// render primary menu buttons
-	for (int i=0; i<4; i++) {
+	for (unsigned i=0; i<MENU_COUNT; i++) {
 		menus[i]->render();
 
 		if (requires_attention[i] && !menus[i]->in_focus) {
@@ -421,13 +430,21 @@ void MenuActionBar::renderTooltips(const Point& position) {
 	TooltipData tip_data;
 
 	// menus
-	for (int i = 0; i < 4; ++i) {
+	for (unsigned i = 0; i < MENU_COUNT; ++i) {
 		if (Utils::isWithinRect(menus[i]->pos, position)) {
 			if (settings->colorblind && requires_attention[i])
 				tip_data.addText(menu_titles[i] + " (*)");
 			else
 				tip_data.addText(menu_titles[i]);
 
+			if (i == MENU_LOOT_TIPS) {
+				if (settings->loot_tooltips == Settings::LOOT_TIPS_DEFAULT)
+					menu_labels[i] = msg->get("Default. Temporarily show all loot tooltips with '%s'.", inpt->getBindingString(Input::ALT));
+				else if (settings->loot_tooltips == Settings::LOOT_TIPS_SHOW_ALL)
+					menu_labels[i] = msg->get("Show All. Temporarily hide all loot tooltips with '%s'.", inpt->getBindingString(Input::ALT));
+				else if (settings->loot_tooltips == Settings::LOOT_TIPS_HIDE_ALL)
+					menu_labels[i] = msg->get("Hide All. Temporarily show all loot tooltips with '%s'.", inpt->getBindingString(Input::ALT));
+			}
 			tip_data.addText(menu_labels[i]);
 
 			tooltipm->push(tip_data, position, TooltipData::STYLE_FLOAT);
@@ -681,6 +698,12 @@ void MenuActionBar::checkMenu(bool &menu_c, bool &menu_i, bool &menu_p, bool &me
 		menu_l = true;
 		menus[MENU_LOG]->deactivate();
 	}
+	else if (menus[MENU_LOOT_TIPS]->checkClick()) {
+		settings->loot_tooltips++;
+		if (settings->loot_tooltips > Settings::LOOT_TIPS_HIDE_ALL)
+			settings->loot_tooltips = Settings::LOOT_TIPS_DEFAULT;
+		menus[MENU_LOOT_TIPS]->deactivate();
+	}
 
 	// also allow ACTIONBAR_USE to open menus
 	if (inpt->pressing[Input::ACTIONBAR_USE] && !inpt->lock[Input::ACTIONBAR_USE]) {
@@ -688,14 +711,19 @@ void MenuActionBar::checkMenu(bool &menu_c, bool &menu_i, bool &menu_p, bool &me
 
 		unsigned cur_slot = static_cast<unsigned>(tablist.getCurrent());
 
-		if (cur_slot == tablist.size()-4)
+		if (cur_slot == tablist.size() - MENU_COUNT)
 			menu_c = true;
-		else if (cur_slot == tablist.size()-3)
+		else if (cur_slot == tablist.size() - (MENU_COUNT - 1))
 			menu_i = true;
-		else if (cur_slot == tablist.size()-2)
+		else if (cur_slot == tablist.size() - (MENU_COUNT - 2))
 			menu_p = true;
-		else if (cur_slot == tablist.size()-1)
+		else if (cur_slot == tablist.size() - (MENU_COUNT - 3))
 			menu_l = true;
+		else if (cur_slot == tablist.size() - (MENU_COUNT - 4)) {
+			settings->loot_tooltips++;
+			if (settings->loot_tooltips > Settings::LOOT_TIPS_HIDE_ALL)
+				settings->loot_tooltips = Settings::LOOT_TIPS_DEFAULT;
+		}
 	}
 }
 
@@ -703,7 +731,7 @@ void MenuActionBar::checkMenu(bool &menu_c, bool &menu_i, bool &menu_p, bool &me
  * Set all hotkeys at once e.g. when loading a game
  */
 void MenuActionBar::set(std::vector<int> power_id) {
-	for (unsigned int i = 0; i < slots_count; i++) {
+	for (unsigned i = 0; i < slots_count; i++) {
 		if (static_cast<unsigned>(power_id[i]) >= powers->powers.size())
 			continue;
 
@@ -716,7 +744,7 @@ void MenuActionBar::set(std::vector<int> power_id) {
 }
 
 void MenuActionBar::resetSlots() {
-	for (unsigned int i = 0; i < slots_count; i++) {
+	for (unsigned i = 0; i < slots_count; i++) {
 		if (slots[i]) {
 			slots[i]->checked = false;
 			slots[i]->pressed = false;
@@ -782,7 +810,7 @@ bool MenuActionBar::isWithinSlots(const Point& mouse) {
 }
 
 bool MenuActionBar::isWithinMenus(const Point& mouse) {
-	for (unsigned i=0; i<4; i++) {
+	for (unsigned i=0; i<MENU_COUNT; i++) {
 		if (Utils::isWithinRect(menus[i]->pos, mouse))
 			return true;
 	}
@@ -844,7 +872,7 @@ Point MenuActionBar::getSlotPos(int slot) {
 	if (static_cast<unsigned>(slot) < slots.size()) {
 		return Point(slots[slot]->pos.x, slots[slot]->pos.y);
 	}
-	else if (static_cast<unsigned>(slot) < slots.size() + 4) {
+	else if (static_cast<unsigned>(slot) < slots.size() + MENU_COUNT) {
 		int slot_size = static_cast<int>(slots.size());
 		return Point(menus[slot - slot_size]->pos.x, menus[slot - slot_size]->pos.y);
 	}
@@ -874,7 +902,7 @@ MenuActionBar::~MenuActionBar() {
 	for (unsigned i = 0; i < slots_count; i++)
 		delete slots[i];
 
-	for (unsigned int i=0; i<4; i++)
+	for (unsigned i=0; i<MENU_COUNT; i++)
 		delete menus[i];
 
 	snd->unload(sfx_unable_to_cast);

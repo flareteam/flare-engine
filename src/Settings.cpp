@@ -87,7 +87,7 @@ Settings::Settings()
 	setConfigDefault(23, "hardware_cursor",   &typeid(hardware_cursor),    "0",            &hardware_cursor,    "use the system mouse cursor. 1 enable, 0 disable");
 	setConfigDefault(24, "dev_mode",          &typeid(dev_mode),           "0",            &dev_mode,           "allow opening the developer console. 1 enable, 0 disable");
 	setConfigDefault(25, "dev_hud",           &typeid(dev_hud),            "1",            &dev_hud,            "shows some additional information on-screen when developer mode is enabled. 1 enable, 0 disable");
-	setConfigDefault(26, "loot_tooltips",     &typeid(loot_tooltips),      "1",            &loot_tooltips,      "always show loot tooltips. 1 enable, 0 disable");
+	setConfigDefault(26, "loot_tooltips",     &typeid(loot_tooltips),      "0",            &loot_tooltips,      "loot tooltip mode. 0 normal, 1 show all, 2 hide all");
 	setConfigDefault(27, "statbar_labels",    &typeid(statbar_labels),     "0",            &statbar_labels,     "always show labels on HP/MP/XP bars. 1 enable, 0 disable");
 	setConfigDefault(28, "auto_equip",        &typeid(auto_equip),         "1",            &auto_equip,         "automatically equip items. 1 enable, 0 disable");
 	setConfigDefault(29, "subtitles",         &typeid(subtitles),          "0",            &subtitles,          "displays subtitles. 1 enable, 0 disable");

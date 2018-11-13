@@ -2,8 +2,8 @@ Flare v1.09 (WIP)
 
 Engine features:
 
-* Loot tooltips are now hidden when entities are near pieces of loot. The setting "hide_radius" has been added to engine/loot.txt to control this.
-* Pressing 'Alt' will now always show all loot tooltips.
+* Loot tooltips can now be hidden when entities are near pieces of loot. The setting "hide_radius" has been added to engine/loot.txt to control this.
+* Moved the loot tooltip setting to an actionbar button. Three different levels of visibility can be selected.
 * Overhead markers are now displayed for entities that are obscured by tall tiles.
 * Dialog options are no longer shown in a separate menu, but are instead part of the main dialog window.
 * Added support for dialog responses. For any line of dialog, a list of response topics can be given.

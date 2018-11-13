@@ -72,8 +72,6 @@ GameStateConfigBase::GameStateConfigBase (bool do_init)
 	, colorblind_lb(new WidgetLabel())
 	, dev_mode_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
 	, dev_mode_lb(new WidgetLabel())
-	, loot_tooltips_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
-	, loot_tooltips_lb(new WidgetLabel())
 	, statbar_labels_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
 	, statbar_labels_lb(new WidgetLabel())
 	, auto_equip_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
@@ -289,10 +287,6 @@ bool GameStateConfigBase::parseKey(FileParser &infile, int &x1, int &y1, int &x2
 		// @ATTR dev_mode|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Developer Mode" checkbox relative to the frame.
 		placeLabeledWidget(dev_mode_lb, dev_mode_cb, x1, y1, x2, y2, msg->get("Developer Mode"), FontEngine::JUSTIFY_RIGHT);
 	}
-	else if (infile.key == "loot_tooltips") {
-		// @ATTR loot_tooltips|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Always show loot labels" checkbox relative to the frame.
-		placeLabeledWidget(loot_tooltips_lb, loot_tooltips_cb, x1, y1, x2, y2, msg->get("Always show loot labels"), FontEngine::JUSTIFY_RIGHT);
-	}
 	else if (infile.key == "statbar_labels") {
 		// @ATTR statbar_labels|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Always show stat bar labels" checkbox relative to the frame.
 		placeLabeledWidget(statbar_labels_lb, statbar_labels_cb, x1, y1, x2, y2, msg->get("Always show stat bar labels"), FontEngine::JUSTIFY_RIGHT);
@@ -432,8 +426,6 @@ void GameStateConfigBase::addChildWidgets() {
 	addChildWidget(hardware_cursor_lb, INTERFACE_TAB);
 	addChildWidget(dev_mode_cb, INTERFACE_TAB);
 	addChildWidget(dev_mode_lb, INTERFACE_TAB);
-	addChildWidget(loot_tooltips_cb, INTERFACE_TAB);
-	addChildWidget(loot_tooltips_lb, INTERFACE_TAB);
 	addChildWidget(statbar_labels_cb, INTERFACE_TAB);
 	addChildWidget(statbar_labels_lb, INTERFACE_TAB);
 	addChildWidget(auto_equip_cb, INTERFACE_TAB);
@@ -475,7 +467,6 @@ void GameStateConfigBase::setupTabList() {
 	tablist_interface.add(colorblind_cb);
 	tablist_interface.add(hardware_cursor_cb);
 	tablist_interface.add(dev_mode_cb);
-	tablist_interface.add(loot_tooltips_cb);
 	tablist_interface.add(auto_equip_cb);
 	tablist_interface.add(subtitles_cb);
 	tablist_interface.add(language_lstb);
@@ -519,7 +510,6 @@ void GameStateConfigBase::updateInterface() {
 	colorblind_cb->setChecked(settings->colorblind);
 	hardware_cursor_cb->setChecked(settings->hardware_cursor);
 	dev_mode_cb->setChecked(settings->dev_mode);
-	loot_tooltips_cb->setChecked(settings->loot_tooltips);
 	statbar_labels_cb->setChecked(settings->statbar_labels);
 	auto_equip_cb->setChecked(settings->auto_equip);
 	subtitles_cb->setChecked(settings->subtitles);
@@ -717,9 +707,6 @@ void GameStateConfigBase::logicInterface() {
 	}
 	else if (dev_mode_cb->checkClick()) {
 		settings->dev_mode = dev_mode_cb->isChecked();
-	}
-	else if (loot_tooltips_cb->checkClick()) {
-		settings->loot_tooltips = loot_tooltips_cb->isChecked();
 	}
 	else if (statbar_labels_cb->checkClick()) {
 		settings->statbar_labels = statbar_labels_cb->isChecked();

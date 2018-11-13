@@ -459,7 +459,6 @@ void GameStateConfigDesktop::setupTabList() {
 	tablist_interface.add(colorblind_cb);
 	tablist_interface.add(hardware_cursor_cb);
 	tablist_interface.add(dev_mode_cb);
-	tablist_interface.add(loot_tooltips_cb);
 	tablist_interface.add(statbar_labels_cb);
 	tablist_interface.add(language_lstb);
 	tablist_interface.setPrevTabList(&tablist);
