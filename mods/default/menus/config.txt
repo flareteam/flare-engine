@@ -25,14 +25,11 @@ sound_volume=368,72,384,64
 
 [interface]
 language=104,16,32,32
-combat_text=568,36,584,32
-show_fps=568,68,584,64
-colorblind=568,100,584,96
-hardware_cursor=568,132,584,128
-dev_mode=568,164,584,160
-statbar_labels=568,196,584,192
-auto_equip=568,228,584,224
-subtitles=568,260,584,256
+show_fps=568,36,584,32
+colorblind=568,68,584,64
+hardware_cursor=568,100,584,96
+dev_mode=568,132,584,128
+subtitles=568,164,584,160
 
 [input]
 joystick_device=104,16,32,32

@@ -69,7 +69,7 @@ MenuManager::MenuManager()
 	, drag_stack()
 	, drag_power(0)
 	, drag_src(DRAG_SRC_NONE)
-	, drag_icon(new WidgetSlot(WidgetSlot::NO_ICON, Input::ACCEPT))
+	, drag_icon(new WidgetSlot(WidgetSlot::NO_ICON, Input::ACCEPT, WidgetSlot::SIZE_NORMAL))
 	, done(false)
 	, act_drag_hover(false)
 	, keydrag_pos(Point())
@@ -909,57 +909,61 @@ void MenuManager::dragAndDropWithKeyboard() {
 
 		if (slot_index < inv->getEquippedCount())
 			inv_slot = inv->inventory[MenuInventory::EQUIPMENT].slots[slot_index];
-		else
+		else if (slot_index < inv->getTotalSlotCount())
 			inv_slot = inv->inventory[MenuInventory::CARRIED].slots[slot_index - inv->getEquippedCount()];
+		else
+			inv_slot = NULL;
 
-		src_slot.x = inv_slot->pos.x;
-		src_slot.y = inv_slot->pos.y;
+		if (inv_slot) {
+			src_slot.x = inv_slot->pos.x;
+			src_slot.y = inv_slot->pos.y;
 
-		WidgetSlot::CLICK_TYPE slotClick = inv_slot->checkClick();
+			WidgetSlot::CLICK_TYPE slotClick = inv_slot->checkClick();
 
-		// pick up item
-		if (slotClick == WidgetSlot::CHECKED && drag_stack.empty()) {
-			drag_stack = inv->click(src_slot);
-			if (!drag_stack.empty()) {
-				keyboard_dragging = true;
-				drag_src = DRAG_SRC_INVENTORY;
-			}
-			if (drag_stack.quantity > 1) {
-				num_picker->setValueBounds(1, drag_stack.quantity);
-				num_picker->visible = true;
-			}
-		}
-		// rearrange item
-		else if (slotClick == WidgetSlot::CHECKED && !drag_stack.empty()) {
-			inv->drop(src_slot, drag_stack);
-			inv_slot->checked = false;
-			drag_src = DRAG_SRC_NONE;
-			drag_stack.clear();
-			keyboard_dragging = false;
-			sticky_dragging = false;
-		}
-		// sell, stash, or use item
-		else if (slotClick == WidgetSlot::ACTIVATED && !drag_stack.empty()) {
-			if (vendor->visible && inv->sell(drag_stack)) {
-				vendor->setTab(ItemManager::VENDOR_SELL);
-				vendor->add(drag_stack);
-			}
-			else if (stash->visible) {
-				if (!stash->add(drag_stack, MenuStash::NO_SLOT, MenuStash::ADD_PLAY_SOUND)) {
-					inv->itemReturn(stash->drop_stack.front());
-					stash->drop_stack.pop();
+			// pick up item
+			if (slotClick == WidgetSlot::CHECKED && drag_stack.empty()) {
+				drag_stack = inv->click(src_slot);
+				if (!drag_stack.empty()) {
+					keyboard_dragging = true;
+					drag_src = DRAG_SRC_INVENTORY;
+				}
+				if (drag_stack.quantity > 1) {
+					num_picker->setValueBounds(1, drag_stack.quantity);
+					num_picker->visible = true;
 				}
 			}
-			else {
-				inv->itemReturn(drag_stack);
-				if (!vendor->visible && !stash->visible)
-					inv->activate(src_slot);
+			// rearrange item
+			else if (slotClick == WidgetSlot::CHECKED && !drag_stack.empty()) {
+				inv->drop(src_slot, drag_stack);
+				inv_slot->checked = false;
+				drag_src = DRAG_SRC_NONE;
+				drag_stack.clear();
+				keyboard_dragging = false;
+				sticky_dragging = false;
 			}
-			inv->clearHighlight();
-			drag_src = DRAG_SRC_NONE;
-			drag_stack.clear();
-			keyboard_dragging = false;
-			sticky_dragging = false;
+			// sell, stash, or use item
+			else if (slotClick == WidgetSlot::ACTIVATED && !drag_stack.empty()) {
+				if (vendor->visible && inv->sell(drag_stack)) {
+					vendor->setTab(ItemManager::VENDOR_SELL);
+					vendor->add(drag_stack);
+				}
+				else if (stash->visible) {
+					if (!stash->add(drag_stack, MenuStash::NO_SLOT, MenuStash::ADD_PLAY_SOUND)) {
+						inv->itemReturn(stash->drop_stack.front());
+						stash->drop_stack.pop();
+					}
+				}
+				else {
+					inv->itemReturn(drag_stack);
+					if (!vendor->visible && !stash->visible)
+						inv->activate(src_slot);
+				}
+				inv->clearHighlight();
+				drag_src = DRAG_SRC_NONE;
+				drag_stack.clear();
+				keyboard_dragging = false;
+				sticky_dragging = false;
+			}
 		}
 	}
 
@@ -1312,9 +1316,14 @@ void MenuManager::handleKeyboardTooltips() {
 			keydrag_pos.x = inv->inventory[MenuInventory::EQUIPMENT].slots[slot_index]->pos.x;
 			keydrag_pos.y = inv->inventory[MenuInventory::EQUIPMENT].slots[slot_index]->pos.y;
 		}
-		else {
+		else if (slot_index < inv->getTotalSlotCount()) {
 			keydrag_pos.x = inv->inventory[MenuInventory::CARRIED].slots[slot_index - inv->getEquippedCount()]->pos.x;
 			keydrag_pos.y = inv->inventory[MenuInventory::CARRIED].slots[slot_index - inv->getEquippedCount()]->pos.y;
+		}
+		else {
+			Widget *temp_widget = inv->getCurrentTabList()->getWidgetByIndex(slot_index);
+			keydrag_pos.x = temp_widget->pos.x;
+			keydrag_pos.y = temp_widget->pos.y;
 		}
 
 		inv->renderTooltips(keydrag_pos);

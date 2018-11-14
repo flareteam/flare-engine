@@ -354,7 +354,7 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 	// create power slots
 	for (size_t i=0; i<slots.size(); i++) {
 		if (!power_cell[i].cells.empty() && static_cast<size_t>(power_cell[i].cells[0].id) < powers->powers.size()) {
-			slots[i] = new WidgetSlot(powers->powers[power_cell[i].cells[0].id].icon, Input::ACCEPT);
+			slots[i] = new WidgetSlot(powers->powers[power_cell[i].cells[0].id].icon, Input::ACCEPT, WidgetSlot::SIZE_NORMAL);
 			slots[i]->setBasePos(power_cell[i].pos.x, power_cell[i].pos.y, Utils::ALIGN_TOPLEFT);
 
 			if (!tablist_pow.empty()) {

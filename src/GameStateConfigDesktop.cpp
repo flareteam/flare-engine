@@ -454,12 +454,10 @@ void GameStateConfigDesktop::setupTabList() {
 	tablist_audio.setNextTabList(&tablist_main);
 	tablist_audio.lock();
 
-	tablist_interface.add(combat_text_cb);
 	tablist_interface.add(show_fps_cb);
 	tablist_interface.add(colorblind_cb);
 	tablist_interface.add(hardware_cursor_cb);
 	tablist_interface.add(dev_mode_cb);
-	tablist_interface.add(statbar_labels_cb);
 	tablist_interface.add(language_lstb);
 	tablist_interface.setPrevTabList(&tablist);
 	tablist_interface.setNextTabList(&tablist_main);

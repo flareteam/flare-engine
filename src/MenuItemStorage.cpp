@@ -51,7 +51,7 @@ void MenuItemStorage::initGrid(int _slot_number, const Rect& _area, int _nb_cols
 	grid_pos.x = _area.x;
 	grid_pos.y = _area.y;
 	for (int i = 0; i < _slot_number; i++) {
-		WidgetSlot *slot = new WidgetSlot(WidgetSlot::NO_ICON, Input::ACCEPT);
+		WidgetSlot *slot = new WidgetSlot(WidgetSlot::NO_ICON, Input::ACCEPT, WidgetSlot::SIZE_NORMAL);
 		slots.push_back(slot);
 	}
 	nb_cols = _nb_cols;
@@ -69,7 +69,7 @@ void MenuItemStorage::initGrid(int _slot_number, const Rect& _area, int _nb_cols
 void MenuItemStorage::initFromList(int _slot_number, const std::vector<Rect>& _area, const std::vector<std::string>& _slot_type) {
 	ItemStorage::init( _slot_number);
 	for (int i = 0; i < _slot_number; i++) {
-		WidgetSlot *slot = new WidgetSlot(WidgetSlot::NO_ICON, Input::ACCEPT);
+		WidgetSlot *slot = new WidgetSlot(WidgetSlot::NO_ICON, Input::ACCEPT, WidgetSlot::SIZE_NORMAL);
 		slot->pos = _area[i];
 		slot->setBasePos(slot->pos.x, slot->pos.y, Utils::ALIGN_TOPLEFT);
 		slots.push_back(slot);

@@ -31,7 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "WidgetSlot.h"
 
-WidgetSlot::WidgetSlot(int _icon_id, int _ACTIVATE)
+WidgetSlot::WidgetSlot(int _icon_id, int _ACTIVATE, int _size)
 	: Widget()
 	, slot_selected(NULL)
 	, slot_checked(NULL)
@@ -45,27 +45,47 @@ WidgetSlot::WidgetSlot(int _icon_id, int _ACTIVATE)
 	, enabled(true)
 	, checked(false)
 	, pressed(false)
-	, continuous(false) {
+	, continuous(false)
+{
 	focusable = true;
+	label_amount.setFromLabelInfo(eset->widgets.slot_quantity_label);
+
 	pos.x = pos.y = 0;
-	pos.w = eset->resolutions.icon_size;
-	pos.h = eset->resolutions.icon_size;
 
 	Rect src;
 	src.x = src.y = 0;
-	src.w = src.h = eset->resolutions.icon_size;
 
-	label_amount.setFromLabelInfo(eset->widgets.slot_quantity_label);
+	std::string selected_filename;
+	std::string checked_filename;
+
+	if (_size == SIZE_SMALL) {
+		// SIZE_SMALL slots are half the size of SIZE_NORMAL slots
+		pos.w = eset->resolutions.icon_size / 2;
+		pos.h = eset->resolutions.icon_size / 2;
+		src.w = src.h = eset->resolutions.icon_size / 2;
+
+		selected_filename = "images/menus/slot_selected_small.png";
+		checked_filename = "images/menus/slot_checked_small.png";
+	}
+	else {
+		// SIZE_NORMAL
+		pos.w = eset->resolutions.icon_size;
+		pos.h = eset->resolutions.icon_size;
+		src.w = src.h = eset->resolutions.icon_size;
+
+		selected_filename = "images/menus/slot_selected.png";
+		checked_filename = "images/menus/slot_checked.png";
+	}
 
 	Image *graphics;
-	graphics = render_device->loadImage("images/menus/slot_selected.png", RenderDevice::ERROR_NORMAL);
+	graphics = render_device->loadImage(selected_filename, RenderDevice::ERROR_NORMAL);
 	if (graphics) {
 		slot_selected = graphics->createSprite();
 		slot_selected->setClipFromRect(src);
 		graphics->unref();
 	}
 
-	graphics = render_device->loadImage("images/menus/slot_checked.png", RenderDevice::ERROR_NORMAL);
+	graphics = render_device->loadImage(checked_filename, RenderDevice::ERROR_NORMAL);
 	if (graphics) {
 		slot_checked = graphics->createSprite();
 		slot_checked->setClipFromRect(src);

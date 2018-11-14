@@ -68,15 +68,26 @@ MenuActionBar::MenuActionBar()
 	tablist.setInputs(Input::ACTIONBAR_BACK, Input::ACTIONBAR_FORWARD, Input::ACTIONBAR);
 
 	for (unsigned i=0; i<MENU_COUNT; i++) {
-		menus[i] = new WidgetSlot(-1, Input::ACTIONBAR);
+		if (i < MENU_LOOT_TIPS)
+			menus[i] = new WidgetSlot(-1, Input::ACTIONBAR, WidgetSlot::SIZE_NORMAL);
+		else
+			menus[i] = new WidgetSlot(-1, Input::ACTIONBAR, WidgetSlot::SIZE_SMALL);
+
+		// NOTE: This prevents these buttons from being clickable unless they get defined in the config file.
+		// However, it doesn't prevent them from being added to the tablist, so they can still be activated there despite being invisible
+		// Mods should be expected to define these slot positions. This just keeps things from getting *too* broken if they're not defined.
 		menus[i]->pos.w = 0;
 		menus[i]->pos.h = 0;
 	}
+
 	menu_titles[MENU_CHARACTER] = msg->get("Character");
 	menu_titles[MENU_INVENTORY] = msg->get("Inventory");
 	menu_titles[MENU_POWERS] = msg->get("Powers");
 	menu_titles[MENU_LOG] = msg->get("Log");
-	menu_titles[MENU_LOOT_TIPS] = msg->get("Loot Tooltip Visibility");
+	menu_titles[MENU_LOOT_TIPS] = msg->get("Loot tooltip visibility");
+	menu_titles[MENU_MINIMAP_MODE] = msg->get("Mini-map mode");
+	menu_titles[MENU_STATBARS_LABELS] = msg->get("Always show stat bar labels");
+	menu_titles[MENU_COMBAT_TEXT] = msg->get("Show combat text");
 
 	// Read data from config file
 	FileParser infile;
@@ -151,7 +162,28 @@ MenuActionBar::MenuActionBar()
 				int x = Parse::popFirstInt(infile.val);
 				int y = Parse::popFirstInt(infile.val);
 				menus[MENU_LOOT_TIPS]->setBasePos(x, y, Utils::ALIGN_TOPLEFT);
-				menus[MENU_LOOT_TIPS]->pos.w = menus[MENU_LOOT_TIPS]->pos.h = eset->resolutions.icon_size;
+				menus[MENU_LOOT_TIPS]->pos.w = menus[MENU_LOOT_TIPS]->pos.h = eset->resolutions.icon_size / 2; // small
+			}
+			// @ATTR minimap_mode_toggle|point|Position for the button used to toggle the mini-map mode.
+			else if (infile.key == "minimap_mode_toggle") {
+				int x = Parse::popFirstInt(infile.val);
+				int y = Parse::popFirstInt(infile.val);
+				menus[MENU_MINIMAP_MODE]->setBasePos(x, y, Utils::ALIGN_TOPLEFT);
+				menus[MENU_MINIMAP_MODE]->pos.w = menus[MENU_MINIMAP_MODE]->pos.h = eset->resolutions.icon_size / 2; // small
+			}
+			// @ATTR statbar_label_toggle|point|Position for the button used to toggle always showing the statbar labels.
+			else if (infile.key == "statbar_label_toggle") {
+				int x = Parse::popFirstInt(infile.val);
+				int y = Parse::popFirstInt(infile.val);
+				menus[MENU_STATBARS_LABELS]->setBasePos(x, y, Utils::ALIGN_TOPLEFT);
+				menus[MENU_STATBARS_LABELS]->pos.w = menus[MENU_STATBARS_LABELS]->pos.h = eset->resolutions.icon_size / 2; // small
+			}
+			// @ATTR combat_text_toggle|point|Position for the button used to toggle the display of combat text.
+			else if (infile.key == "combat_text_toggle") {
+				int x = Parse::popFirstInt(infile.val);
+				int y = Parse::popFirstInt(infile.val);
+				menus[MENU_COMBAT_TEXT]->setBasePos(x, y, Utils::ALIGN_TOPLEFT);
+				menus[MENU_COMBAT_TEXT]->pos.w = menus[MENU_COMBAT_TEXT]->pos.h = eset->resolutions.icon_size / 2; // small
 			}
 
 			else infile.error("MenuActionBar: '%s' is not a valid key.", infile.key.c_str());
@@ -193,7 +225,7 @@ void MenuActionBar::addSlot(unsigned index, int x, int y, bool is_locked) {
 		slots.resize(index+1, NULL);
 	}
 
-	slots[index] = new WidgetSlot(-1, Input::ACTIONBAR);
+	slots[index] = new WidgetSlot(-1, Input::ACTIONBAR, WidgetSlot::SIZE_NORMAL);
 	slots[index]->setBasePos(x, y, Utils::ALIGN_TOPLEFT);
 	slots[index]->pos.w = slots[index]->pos.h = eset->resolutions.icon_size;
 	slots[index]->continuous = true;
@@ -445,7 +477,28 @@ void MenuActionBar::renderTooltips(const Point& position) {
 				else if (settings->loot_tooltips == Settings::LOOT_TIPS_HIDE_ALL)
 					menu_labels[i] = msg->get("Hide All. Temporarily show all loot tooltips with '%s'.", inpt->getBindingString(Input::ALT));
 			}
-			tip_data.addText(menu_labels[i]);
+			else if (i == MENU_MINIMAP_MODE) {
+				if (settings->minimap_mode == Settings::MINIMAP_NORMAL)
+					menu_labels[i] = msg->get("Visible");
+				else if (settings->minimap_mode == Settings::MINIMAP_HIDDEN)
+					menu_labels[i] = msg->get("Hidden");
+			}
+			else if (i == MENU_STATBARS_LABELS) {
+				if (settings->statbar_labels)
+					menu_labels[i] = msg->get("Enabled");
+				else
+					menu_labels[i] = msg->get("Disabled");
+			}
+			else if (i == MENU_COMBAT_TEXT) {
+				if (settings->combat_text)
+					menu_labels[i] = msg->get("Enabled");
+				else
+					menu_labels[i] = msg->get("Disabled");
+			}
+
+			if (!menu_labels[i].empty()) {
+				tip_data.addText(menu_labels[i]);
+			}
 
 			tooltipm->push(tip_data, position, TooltipData::STYLE_FLOAT);
 			break;
@@ -704,6 +757,20 @@ void MenuActionBar::checkMenu(bool &menu_c, bool &menu_i, bool &menu_p, bool &me
 			settings->loot_tooltips = Settings::LOOT_TIPS_DEFAULT;
 		menus[MENU_LOOT_TIPS]->deactivate();
 	}
+	else if (menus[MENU_MINIMAP_MODE]->checkClick()) {
+		settings->minimap_mode++;
+		if (settings->minimap_mode > Settings::MINIMAP_HIDDEN)
+			settings->minimap_mode = Settings::MINIMAP_NORMAL;
+		menus[MENU_MINIMAP_MODE]->deactivate();
+	}
+	else if (menus[MENU_STATBARS_LABELS]->checkClick()) {
+		settings->statbar_labels = !settings->statbar_labels;
+		menus[MENU_STATBARS_LABELS]->deactivate();
+	}
+	else if (menus[MENU_COMBAT_TEXT]->checkClick()) {
+		settings->combat_text = !settings->combat_text;
+		menus[MENU_COMBAT_TEXT]->deactivate();
+	}
 
 	// also allow ACTIONBAR_USE to open menus
 	if (inpt->pressing[Input::ACTIONBAR_USE] && !inpt->lock[Input::ACTIONBAR_USE]) {
@@ -723,6 +790,20 @@ void MenuActionBar::checkMenu(bool &menu_c, bool &menu_i, bool &menu_p, bool &me
 			settings->loot_tooltips++;
 			if (settings->loot_tooltips > Settings::LOOT_TIPS_HIDE_ALL)
 				settings->loot_tooltips = Settings::LOOT_TIPS_DEFAULT;
+		}
+		else if (cur_slot == tablist.size() - (MENU_COUNT - 5)) {
+			settings->minimap_mode++;
+			if (settings->minimap_mode > Settings::MINIMAP_HIDDEN)
+				settings->minimap_mode = Settings::MINIMAP_NORMAL;
+			menus[MENU_MINIMAP_MODE]->deactivate();
+		}
+		else if (cur_slot == tablist.size() - (MENU_COUNT - 6)) {
+			settings->statbar_labels = !settings->statbar_labels;
+			menus[MENU_STATBARS_LABELS]->deactivate();
+		}
+		else if (cur_slot == tablist.size() - (MENU_COUNT - 7)) {
+			settings->combat_text = !settings->combat_text;
+			menus[MENU_COMBAT_TEXT]->deactivate();
 		}
 	}
 }

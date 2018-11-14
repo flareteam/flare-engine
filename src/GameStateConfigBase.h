@@ -112,8 +112,6 @@ public:
 	WidgetButton        * cancel_button;
 	Sprite              * background;
 
-	WidgetCheckBox      * combat_text_cb;
-	WidgetLabel         * combat_text_lb;
 	WidgetCheckBox      * show_fps_cb;
 	WidgetLabel         * show_fps_lb;
 	WidgetCheckBox      * hardware_cursor_cb;
@@ -122,10 +120,6 @@ public:
 	WidgetLabel         * colorblind_lb;
 	WidgetCheckBox      * dev_mode_cb;
 	WidgetLabel         * dev_mode_lb;
-	WidgetCheckBox      * statbar_labels_cb;
-	WidgetLabel         * statbar_labels_lb;
-	WidgetCheckBox      * auto_equip_cb;
-	WidgetLabel         * auto_equip_lb;
 	WidgetCheckBox      * subtitles_cb;
 	WidgetLabel         * subtitles_lb;
 	WidgetSlider        * music_volume_sl;

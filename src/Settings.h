@@ -37,6 +37,11 @@ public:
 		LOOT_TIPS_HIDE_ALL = 2
 	};
 
+	enum {
+		MINIMAP_NORMAL = 0,
+		MINIMAP_HIDDEN = 1
+	};
+
 	Settings();
 	void loadSettings();
 	void saveSettings();
@@ -79,6 +84,7 @@ public:
 	bool statbar_labels;
 	bool auto_equip;
 	bool subtitles;
+	int minimap_mode;
 
 	// Language Settings
 	std::string language;

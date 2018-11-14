@@ -619,8 +619,6 @@ body {
 
 <p><strong>language_height</strong> | <code>int</code> | Number of visible rows for the &ldquo;Language&rdquo; list box.</p>
 
-<p><strong>combat_text</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Show combat text&rdquo; checkbox relative to the frame.</p>
-
 <p><strong>show_fps</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Show FPS&rdquo; checkbox relative to the frame.</p>
 
 <p><strong>colorblind</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Colorblind Mode&rdquo; checkbox relative to the frame.</p>
@@ -628,10 +626,6 @@ body {
 <p><strong>hardware_cursor</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Hardware mouse cursor&rdquo; checkbox relative to the frame.</p>
 
 <p><strong>dev_mode</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Developer Mode&rdquo; checkbox relative to the frame.</p>
-
-<p><strong>statbar_labels</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Always show stat bar labels&rdquo; checkbox relative to the frame.</p>
-
-<p><strong>auto_equip</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Automatically equip items&rdquo; checkbox relative to the frame.</p>
 
 <p><strong>subtitles</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Subtitles&rdquo; checkbox relative to the frame.</p>
 
@@ -1225,6 +1219,12 @@ body {
 
 <p><strong>loot_tip_toggle</strong> | <code>point</code> | Position for the button used to toggle loot tooltip visibility.</p>
 
+<p><strong>minimap_mode_toggle</strong> | <code>point</code> | Position for the button used to toggle the mini-map mode.</p>
+
+<p><strong>statbar_label_toggle</strong> | <code>point</code> | Position for the button used to toggle always showing the statbar labels.</p>
+
+<p><strong>combat_text_toggle</strong> | <code>point</code> | Position for the button used to toggle the display of combat text.</p>
+
 <hr />
 
 <h4>MenuActiveEffects</h4>
@@ -1374,6 +1374,8 @@ body {
 <p>Description of menus/inventory.txt</p>
 
 <p><strong>close</strong> | <code>point</code> | Position of the close button.</p>
+
+<p><strong>auto_equip</strong> | <code>point</code> | Position of the auto-equip toggle switch.</p>
 
 <p><strong>equipment_slot</strong> | <code>repeatable(int, int, string) : X, Y, Slot Type</code> | Position and item type of an equipment slot.</p>
 

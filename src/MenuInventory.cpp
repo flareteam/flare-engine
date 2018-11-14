@@ -47,6 +47,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "TooltipManager.h"
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
+#include "WidgetCheckBox.h"
 #include "WidgetSlot.h"
 
 MenuInventory::MenuInventory()
@@ -66,6 +67,10 @@ MenuInventory::MenuInventory()
 	setBackground("images/menus/inventory.png");
 
 	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
+	autoEquipCheckBox = new WidgetCheckBox("images/menus/buttons/auto_equip.png");
+
+	autoEquipCheckBox->setChecked(settings->auto_equip);
+	autoEquipCheckBox->tooltip = msg->get("Automatically equip items");
 
 	// Load config settings
 	FileParser infile;
@@ -79,6 +84,11 @@ MenuInventory::MenuInventory()
 			if(infile.key == "close") {
 				Point pos = Parse::toPoint(infile.val);
 				closeButton->setBasePos(pos.x, pos.y, Utils::ALIGN_TOPLEFT);
+			}
+			// @ATTR auto_equip|point|Position of the auto-equip toggle switch.
+			else if (infile.key == "auto_equip") {
+				Point pos = Parse::toPoint(infile.val);
+				autoEquipCheckBox->setBasePos(pos.x, pos.y, Utils::ALIGN_TOPLEFT);
 			}
 			// @ATTR equipment_slot|repeatable(int, int, string) : X, Y, Slot Type|Position and item type of an equipment slot.
 			else if(infile.key == "equipment_slot") {
@@ -139,6 +149,8 @@ MenuInventory::MenuInventory()
 		tablist.add(inventory[CARRIED].slots[i]);
 	}
 
+	tablist.add(autoEquipCheckBox);
+
 	align();
 }
 
@@ -157,6 +169,7 @@ void MenuInventory::align() {
 	inventory[CARRIED].setPos(window_area.x, window_area.y);
 
 	closeButton->setPos(window_area.x, window_area.y);
+	autoEquipCheckBox->setPos(window_area.x, window_area.y);
 
 	label_inventory.setPos(window_area.x, window_area.y);
 	label_currency.setPos(window_area.x, window_area.y);
@@ -230,6 +243,10 @@ void MenuInventory::logic() {
 			visible = false;
 			snd->play(sfx_close, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
 		}
+		else if (autoEquipCheckBox->checkClick()) {
+			settings->auto_equip = !settings->auto_equip;
+		}
+
 		if (drag_prev_src == -1) {
 			clearHighlight();
 		}
@@ -246,6 +263,9 @@ void MenuInventory::render() {
 
 	// close button
 	closeButton->render();
+
+	// auto-equip toggle
+	autoEquipCheckBox->render();
 
 	// text overlay
 	label_inventory.render();
@@ -1104,6 +1124,10 @@ int MenuInventory::getEquippedCount() {
 	return static_cast<int>(equipped_area.size());
 }
 
+int MenuInventory::getTotalSlotCount() {
+	return MAX_CARRIED + MAX_EQUIPPED;
+}
+
 void MenuInventory::clearHighlight() {
 	inventory[EQUIPMENT].highlightClear();
 	inventory[CARRIED].highlightClear();
@@ -1203,4 +1227,5 @@ int MenuInventory::getPowerMod(int meta_power) {
 
 MenuInventory::~MenuInventory() {
 	delete closeButton;
+	delete autoEquipCheckBox;
 }

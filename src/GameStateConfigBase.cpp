@@ -62,8 +62,6 @@ GameStateConfigBase::GameStateConfigBase (bool do_init)
 	, defaults_button(new WidgetButton(WidgetButton::DEFAULT_FILE))
 	, cancel_button(new WidgetButton(WidgetButton::DEFAULT_FILE))
 	, background(NULL)
-	, combat_text_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
-	, combat_text_lb(new WidgetLabel())
 	, show_fps_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
 	, show_fps_lb(new WidgetLabel())
 	, hardware_cursor_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
@@ -72,10 +70,6 @@ GameStateConfigBase::GameStateConfigBase (bool do_init)
 	, colorblind_lb(new WidgetLabel())
 	, dev_mode_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
 	, dev_mode_lb(new WidgetLabel())
-	, statbar_labels_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
-	, statbar_labels_lb(new WidgetLabel())
-	, auto_equip_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
-	, auto_equip_lb(new WidgetLabel())
 	, subtitles_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
 	, subtitles_lb(new WidgetLabel())
 	, music_volume_sl(new WidgetSlider(WidgetSlider::DEFAULT_FILE))
@@ -267,10 +261,6 @@ bool GameStateConfigBase::parseKey(FileParser &infile, int &x1, int &y1, int &x2
 		// @ATTR language_height|int|Number of visible rows for the "Language" list box.
 		language_lstb->setHeight(x1);
 	}
-	else if (infile.key == "combat_text") {
-		// @ATTR combat_text|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Show combat text" checkbox relative to the frame.
-		placeLabeledWidget(combat_text_lb, combat_text_cb, x1, y1, x2, y2, msg->get("Show combat text"), FontEngine::JUSTIFY_RIGHT);
-	}
 	else if (infile.key == "show_fps") {
 		// @ATTR show_fps|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Show FPS" checkbox relative to the frame.
 		placeLabeledWidget(show_fps_lb, show_fps_cb, x1, y1, x2, y2, msg->get("Show FPS"), FontEngine::JUSTIFY_RIGHT);
@@ -286,14 +276,6 @@ bool GameStateConfigBase::parseKey(FileParser &infile, int &x1, int &y1, int &x2
 	else if (infile.key == "dev_mode") {
 		// @ATTR dev_mode|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Developer Mode" checkbox relative to the frame.
 		placeLabeledWidget(dev_mode_lb, dev_mode_cb, x1, y1, x2, y2, msg->get("Developer Mode"), FontEngine::JUSTIFY_RIGHT);
-	}
-	else if (infile.key == "statbar_labels") {
-		// @ATTR statbar_labels|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Always show stat bar labels" checkbox relative to the frame.
-		placeLabeledWidget(statbar_labels_lb, statbar_labels_cb, x1, y1, x2, y2, msg->get("Always show stat bar labels"), FontEngine::JUSTIFY_RIGHT);
-	}
-	else if (infile.key == "auto_equip") {
-		// @ATTR auto_equip|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Automatically equip items" checkbox relative to the frame.
-		placeLabeledWidget(auto_equip_lb, auto_equip_cb, x1, y1, x2, y2, msg->get("Automatically equip items"), FontEngine::JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "subtitles") {
 		// @ATTR subtitles|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Subtitles" checkbox relative to the frame.
@@ -416,8 +398,6 @@ void GameStateConfigBase::addChildWidgets() {
 	addChildWidget(sound_volume_sl, AUDIO_TAB);
 	addChildWidget(sound_volume_lb, AUDIO_TAB);
 
-	addChildWidget(combat_text_cb, INTERFACE_TAB);
-	addChildWidget(combat_text_lb, INTERFACE_TAB);
 	addChildWidget(show_fps_cb, INTERFACE_TAB);
 	addChildWidget(show_fps_lb, INTERFACE_TAB);
 	addChildWidget(colorblind_cb, INTERFACE_TAB);
@@ -426,10 +406,6 @@ void GameStateConfigBase::addChildWidgets() {
 	addChildWidget(hardware_cursor_lb, INTERFACE_TAB);
 	addChildWidget(dev_mode_cb, INTERFACE_TAB);
 	addChildWidget(dev_mode_lb, INTERFACE_TAB);
-	addChildWidget(statbar_labels_cb, INTERFACE_TAB);
-	addChildWidget(statbar_labels_lb, INTERFACE_TAB);
-	addChildWidget(auto_equip_cb, INTERFACE_TAB);
-	addChildWidget(auto_equip_lb, INTERFACE_TAB);
 	addChildWidget(subtitles_cb, INTERFACE_TAB);
 	addChildWidget(subtitles_lb, INTERFACE_TAB);
 	addChildWidget(language_lstb, INTERFACE_TAB);
@@ -462,12 +438,10 @@ void GameStateConfigBase::setupTabList() {
 	tablist_audio.setNextTabList(&tablist_main);
 	tablist_audio.lock();
 
-	tablist_interface.add(combat_text_cb);
 	tablist_interface.add(show_fps_cb);
 	tablist_interface.add(colorblind_cb);
 	tablist_interface.add(hardware_cursor_cb);
 	tablist_interface.add(dev_mode_cb);
-	tablist_interface.add(auto_equip_cb);
 	tablist_interface.add(subtitles_cb);
 	tablist_interface.add(language_lstb);
 	tablist_interface.setPrevTabList(&tablist);
@@ -505,13 +479,10 @@ void GameStateConfigBase::updateAudio() {
 }
 
 void GameStateConfigBase::updateInterface() {
-	combat_text_cb->setChecked(settings->combat_text);
 	show_fps_cb->setChecked(settings->show_fps);
 	colorblind_cb->setChecked(settings->colorblind);
 	hardware_cursor_cb->setChecked(settings->hardware_cursor);
 	dev_mode_cb->setChecked(settings->dev_mode);
-	statbar_labels_cb->setChecked(settings->statbar_labels);
-	auto_equip_cb->setChecked(settings->auto_equip);
 	subtitles_cb->setChecked(settings->subtitles);
 
 	refreshLanguages();
@@ -688,10 +659,7 @@ void GameStateConfigBase::logicAudio() {
 }
 
 void GameStateConfigBase::logicInterface() {
-	if (combat_text_cb->checkClick()) {
-		settings->combat_text = combat_text_cb->isChecked();
-	}
-	else if (language_lstb->checkClick()) {
+	if (language_lstb->checkClick()) {
 		int lang_id = language_lstb->getSelected();
 		if (lang_id != -1)
 			settings->language = language_ISO[lang_id];
@@ -707,12 +675,6 @@ void GameStateConfigBase::logicInterface() {
 	}
 	else if (dev_mode_cb->checkClick()) {
 		settings->dev_mode = dev_mode_cb->isChecked();
-	}
-	else if (statbar_labels_cb->checkClick()) {
-		settings->statbar_labels = statbar_labels_cb->isChecked();
-	}
-	else if (auto_equip_cb->checkClick()) {
-		settings->auto_equip = auto_equip_cb->isChecked();
 	}
 	else if (subtitles_cb->checkClick()) {
 		settings->subtitles = subtitles_cb->isChecked();
