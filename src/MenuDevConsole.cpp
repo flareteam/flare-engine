@@ -358,6 +358,7 @@ void MenuDevConsole::execute() {
 
 	if (args[0] == "help") {
 		log_history->add("add_power - " + msg->get("adds a power to the action bar"), WidgetLog::MSG_UNIQUE);
+		log_history->add("toggle_fps - " + msg->get("turns on/off the display of the FPS counter"), WidgetLog::MSG_UNIQUE);
 		log_history->add("toggle_hud - " + msg->get("turns on/off all of the HUD elements"), WidgetLog::MSG_UNIQUE);
 		log_history->add("toggle_devhud - " + msg->get("turns on/off the developer hud"), WidgetLog::MSG_UNIQUE);
 		log_history->add("list_powers - " + msg->get("Prints a list of powers that match a search term. No search term will list all items"), WidgetLog::MSG_UNIQUE);
@@ -378,6 +379,10 @@ void MenuDevConsole::execute() {
 	else if (args[0] == "toggle_hud") {
 		settings->show_hud = !settings->show_hud;
 		log_history->add(msg->get("Toggled the hud"), WidgetLog::MSG_UNIQUE);
+	}
+	else if (args[0] == "toggle_fps") {
+		settings->show_fps = !settings->show_fps;
+		log_history->add(msg->get("Toggled the FPS counter"), WidgetLog::MSG_UNIQUE);
 	}
 	else if (args[0] == "list_status") {
 		std::string search_terms;
