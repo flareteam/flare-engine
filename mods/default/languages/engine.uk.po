@@ -696,11 +696,11 @@ msgstr "Натисніть [%s] щоб прочитати"
 
 #: ../../../src/MenuActionBar.cpp:87
 msgid "Loot tooltip visibility"
-msgstr ""
+msgstr "Видимість міток речей"
 
 #: ../../../src/MenuActionBar.cpp:88
 msgid "Mini-map mode"
-msgstr ""
+msgstr "Режим міні-мапи"
 
 #: ../../../src/MenuActionBar.cpp:89
 msgid "Always show stat bar labels"
@@ -719,33 +719,33 @@ msgstr "Гаряча клавіша: %s"
 #: ../../../src/MenuActionBar.cpp:474
 #, c-format
 msgid "Default. Temporarily show all loot tooltips with '%s'."
-msgstr ""
+msgstr "Типово. Тимчасово показувати всі мітки з '%s'."
 
 #: ../../../src/MenuActionBar.cpp:476
 #, c-format
 msgid "Show All. Temporarily hide all loot tooltips with '%s'."
-msgstr ""
+msgstr "Показати всі. Тимчасово приховати всі мітки з '%s'."
 
 #: ../../../src/MenuActionBar.cpp:478
 #, c-format
 msgid "Hide All. Temporarily show all loot tooltips with '%s'."
-msgstr ""
+msgstr "Приховати всі. Тимчасово показувати всі мітки з '%s'"
 
 #: ../../../src/MenuActionBar.cpp:482
 msgid "Visible"
-msgstr ""
+msgstr "Видима"
 
 #: ../../../src/MenuActionBar.cpp:484
 msgid "Hidden"
-msgstr ""
+msgstr "Прихована"
 
 #: ../../../src/MenuActionBar.cpp:488 ../../../src/MenuActionBar.cpp:494
 msgid "Enabled"
-msgstr ""
+msgstr "Увімкнено"
 
 #: ../../../src/MenuActionBar.cpp:490 ../../../src/MenuActionBar.cpp:496
 msgid "Disabled"
-msgstr ""
+msgstr "Вимкнено"
 
 #: ../../../src/MenuActionBar.cpp:655
 msgid "Not enough MP."
@@ -1414,11 +1414,11 @@ msgstr "(нічого)"
 
 #: ../../../src/SDLInputState.cpp:677
 msgid "Touch control D-Pad"
-msgstr ""
+msgstr "Торкніться кнопок переміщення"
 
 #: ../../../src/SDLInputState.cpp:701
 msgid "Touch control buttons"
-msgstr ""
+msgstr "Торкніться кнопок керування"
 
 #: ../../../src/SDLInputState.cpp:716
 msgid "Tap"
