@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-13 17:21-0500\n"
+"POT-Creation-Date: 2018-11-14 00:57-0500\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
 "Last-Translator: Fabio Loli, 2018\n"
 "Language-Team: Italian (https://www.transifex.com/flareorg/teams/84925/it/)\n"
@@ -140,122 +140,110 @@ msgstr "+%d Mana"
 msgid "Unknown destination"
 msgstr "Destinazione sconosciuta"
 
-#: ../../../src/GameStateConfigBase.cpp:95
-#: ../../../src/GameStateConfigBase.cpp:116
+#: ../../../src/GameStateConfigBase.cpp:89
+#: ../../../src/GameStateConfigBase.cpp:110
 msgid "Defaults"
 msgstr "Predefiniti"
 
-#: ../../../src/GameStateConfigBase.cpp:95
+#: ../../../src/GameStateConfigBase.cpp:89
 msgid "Reset ALL settings?"
 msgstr "Resettare TUTTE le impostazioni?"
 
-#: ../../../src/GameStateConfigBase.cpp:115 ../../../src/MenuNumPicker.cpp:49
+#: ../../../src/GameStateConfigBase.cpp:109 ../../../src/MenuNumPicker.cpp:49
 msgid "OK"
 msgstr "Ok"
 
-#: ../../../src/GameStateConfigBase.cpp:117 ../../../src/GameStateNew.cpp:65
+#: ../../../src/GameStateConfigBase.cpp:111 ../../../src/GameStateNew.cpp:65
 #: ../../../src/InputState.cpp:401
 msgid "Cancel"
 msgstr "Annulla"
 
-#: ../../../src/GameStateConfigBase.cpp:166
+#: ../../../src/GameStateConfigBase.cpp:160
 #: ../../../src/GameStateConfigDesktop.cpp:128
 msgid "Audio"
 msgstr "Audio"
 
-#: ../../../src/GameStateConfigBase.cpp:167
+#: ../../../src/GameStateConfigBase.cpp:161
 #: ../../../src/GameStateConfigDesktop.cpp:129
 msgid "Interface"
 msgstr "Interfaccia"
 
-#: ../../../src/GameStateConfigBase.cpp:168
+#: ../../../src/GameStateConfigBase.cpp:162
 #: ../../../src/GameStateConfigDesktop.cpp:132
 msgid "Mods"
 msgstr "Mod"
 
-#: ../../../src/GameStateConfigBase.cpp:255 ../../../src/MenuExit.cpp:72
+#: ../../../src/GameStateConfigBase.cpp:249 ../../../src/MenuExit.cpp:72
 msgid "Music Volume"
 msgstr "Volume musica"
 
-#: ../../../src/GameStateConfigBase.cpp:259 ../../../src/MenuExit.cpp:77
+#: ../../../src/GameStateConfigBase.cpp:253 ../../../src/MenuExit.cpp:77
 msgid "Sound Volume"
 msgstr "Volume audio"
 
-#: ../../../src/GameStateConfigBase.cpp:263
+#: ../../../src/GameStateConfigBase.cpp:257
 msgid "Language"
 msgstr "Lingua"
 
-#: ../../../src/GameStateConfigBase.cpp:272
-msgid "Show combat text"
-msgstr "Mostra testo combattimento"
-
-#: ../../../src/GameStateConfigBase.cpp:276
+#: ../../../src/GameStateConfigBase.cpp:266
 msgid "Show FPS"
 msgstr "Mostra FPS"
 
-#: ../../../src/GameStateConfigBase.cpp:280
+#: ../../../src/GameStateConfigBase.cpp:270
 msgid "Colorblind Mode"
 msgstr "Modalità per daltonici"
 
-#: ../../../src/GameStateConfigBase.cpp:284
+#: ../../../src/GameStateConfigBase.cpp:274
 msgid "Hardware mouse cursor"
 msgstr "Hardware cursore mouse"
 
-#: ../../../src/GameStateConfigBase.cpp:288
+#: ../../../src/GameStateConfigBase.cpp:278
 msgid "Developer Mode"
 msgstr "Modalità Sviluppatore"
 
-#: ../../../src/GameStateConfigBase.cpp:292
-msgid "Always show stat bar labels"
-msgstr "Mostra sempre le etichette della barra"
-
-#: ../../../src/GameStateConfigBase.cpp:296
-msgid "Automatically equip items"
-msgstr "Equipaggia gli oggetti automaticamente"
-
-#: ../../../src/GameStateConfigBase.cpp:300
+#: ../../../src/GameStateConfigBase.cpp:282
 msgid "Subtitles"
 msgstr "Sottotitoli"
 
-#: ../../../src/GameStateConfigBase.cpp:304
+#: ../../../src/GameStateConfigBase.cpp:286
 msgid "Active Mods"
 msgstr "Mod attive"
 
-#: ../../../src/GameStateConfigBase.cpp:313
+#: ../../../src/GameStateConfigBase.cpp:295
 msgid "Available Mods"
 msgstr "Mod disponibili"
 
-#: ../../../src/GameStateConfigBase.cpp:332
+#: ../../../src/GameStateConfigBase.cpp:314
 msgid "<< Disable"
 msgstr "<< Disabilita"
 
-#: ../../../src/GameStateConfigBase.cpp:338
+#: ../../../src/GameStateConfigBase.cpp:320
 msgid "Enable >>"
 msgstr "Abilita >>"
 
-#: ../../../src/GameStateConfigBase.cpp:911
+#: ../../../src/GameStateConfigBase.cpp:873
 msgid "Version:"
 msgstr "Versione:"
 
-#: ../../../src/GameStateConfigBase.cpp:916
+#: ../../../src/GameStateConfigBase.cpp:878
 msgid "Game:"
 msgstr "Gioco:"
 
-#: ../../../src/GameStateConfigBase.cpp:921
+#: ../../../src/GameStateConfigBase.cpp:883
 msgid "Engine version:"
 msgstr "Versione motore di gioco:"
 
-#: ../../../src/GameStateConfigBase.cpp:929
+#: ../../../src/GameStateConfigBase.cpp:891
 msgid "Requires mods:"
 msgstr "Richiede mod:"
 
 #: ../../../src/GameStateConfigDesktop.cpp:81
-#: ../../../src/GameStateConfigDesktop.cpp:739
+#: ../../../src/GameStateConfigDesktop.cpp:737
 msgid "Clear"
 msgstr "Pulisci"
 
 #: ../../../src/GameStateConfigDesktop.cpp:81
-#: ../../../src/GameStateConfigDesktop.cpp:737
+#: ../../../src/GameStateConfigDesktop.cpp:735
 msgid "Assign:"
 msgstr "Assegnazioni:"
 
@@ -516,22 +504,22 @@ msgstr "Barra9"
 msgid "Bar0"
 msgstr "Barra0"
 
-#: ../../../src/InputState.cpp:417 ../../../src/MenuActionBar.cpp:75
+#: ../../../src/InputState.cpp:417 ../../../src/MenuActionBar.cpp:83
 #: ../../../src/MenuCharacter.cpp:54
 msgid "Character"
 msgstr "Personaggio"
 
-#: ../../../src/InputState.cpp:418 ../../../src/MenuActionBar.cpp:76
-#: ../../../src/MenuInventory.cpp:127 ../../../src/MenuVendor.cpp:57
+#: ../../../src/InputState.cpp:418 ../../../src/MenuActionBar.cpp:84
+#: ../../../src/MenuInventory.cpp:137 ../../../src/MenuVendor.cpp:57
 msgid "Inventory"
 msgstr "Inventario"
 
-#: ../../../src/InputState.cpp:419 ../../../src/MenuActionBar.cpp:77
+#: ../../../src/InputState.cpp:419 ../../../src/MenuActionBar.cpp:85
 #: ../../../src/MenuPowers.cpp:168
 msgid "Powers"
 msgstr "Poteri"
 
-#: ../../../src/InputState.cpp:420 ../../../src/MenuActionBar.cpp:78
+#: ../../../src/InputState.cpp:420 ../../../src/MenuActionBar.cpp:86
 #: ../../../src/MenuLog.cpp:72
 msgid "Log"
 msgstr "Diario"
@@ -708,32 +696,60 @@ msgstr "Premi [%s] per usare"
 msgid "Press [%s] to read"
 msgstr "Premi [%s] per leggere"
 
-#: ../../../src/MenuActionBar.cpp:79
-msgid "Loot Tooltip Visibility"
+#: ../../../src/MenuActionBar.cpp:87
+msgid "Loot tooltip visibility"
 msgstr ""
 
-#: ../../../src/MenuActionBar.cpp:222 ../../../src/MenuActionBar.cpp:229
-#: ../../../src/MenuActionBar.cpp:232 ../../../src/MenuActionBar.cpp:239
+#: ../../../src/MenuActionBar.cpp:88
+msgid "Mini-map mode"
+msgstr ""
+
+#: ../../../src/MenuActionBar.cpp:89
+msgid "Always show stat bar labels"
+msgstr "Mostra sempre le etichette della barra"
+
+#: ../../../src/MenuActionBar.cpp:90
+msgid "Show combat text"
+msgstr "Mostra testo combattimento"
+
+#: ../../../src/MenuActionBar.cpp:254 ../../../src/MenuActionBar.cpp:261
+#: ../../../src/MenuActionBar.cpp:264 ../../../src/MenuActionBar.cpp:271
 #, c-format
 msgid "Hotkey: %s"
 msgstr "Tasto rapido: %s"
 
-#: ../../../src/MenuActionBar.cpp:442
+#: ../../../src/MenuActionBar.cpp:474
 #, c-format
 msgid "Default. Temporarily show all loot tooltips with '%s'."
 msgstr ""
 
-#: ../../../src/MenuActionBar.cpp:444
+#: ../../../src/MenuActionBar.cpp:476
 #, c-format
 msgid "Show All. Temporarily hide all loot tooltips with '%s'."
 msgstr ""
 
-#: ../../../src/MenuActionBar.cpp:446
+#: ../../../src/MenuActionBar.cpp:478
 #, c-format
 msgid "Hide All. Temporarily show all loot tooltips with '%s'."
 msgstr ""
 
-#: ../../../src/MenuActionBar.cpp:602
+#: ../../../src/MenuActionBar.cpp:482
+msgid "Visible"
+msgstr ""
+
+#: ../../../src/MenuActionBar.cpp:484
+msgid "Hidden"
+msgstr ""
+
+#: ../../../src/MenuActionBar.cpp:488 ../../../src/MenuActionBar.cpp:494
+msgid "Enabled"
+msgstr ""
+
+#: ../../../src/MenuActionBar.cpp:490 ../../../src/MenuActionBar.cpp:496
+msgid "Disabled"
+msgstr ""
+
+#: ../../../src/MenuActionBar.cpp:655
 msgid "Not enough MP."
 msgstr ""
 
@@ -989,78 +1005,82 @@ msgstr "Esci"
 msgid "Continue"
 msgstr "Continua"
 
-#: ../../../src/MenuInventory.cpp:175
+#: ../../../src/MenuInventory.cpp:73
+msgid "Automatically equip items"
+msgstr "Equipaggia gli oggetti automaticamente"
+
+#: ../../../src/MenuInventory.cpp:188
 #, c-format
 msgid "Lost %d%% of %s."
 msgstr "Hai perso il %d%% di %s."
 
-#: ../../../src/MenuInventory.cpp:182
+#: ../../../src/MenuInventory.cpp:195
 #, c-format
 msgid "Lost %d%% of total XP."
 msgstr "Hai perso il %d%% di ESP totale."
 
-#: ../../../src/MenuInventory.cpp:187
+#: ../../../src/MenuInventory.cpp:200
 #, c-format
 msgid "Lost %d%% of current level XP."
 msgstr "Hai perso il %d%% del livello ESP attuale."
 
-#: ../../../src/MenuInventory.cpp:213
+#: ../../../src/MenuInventory.cpp:226
 #, c-format
 msgid "Lost %s."
 msgstr "Hai perso %s."
 
-#: ../../../src/MenuInventory.cpp:254 ../../../src/MenuStash.cpp:146
+#: ../../../src/MenuInventory.cpp:274 ../../../src/MenuStash.cpp:146
 #, c-format
 msgid "%d %s"
 msgstr "%d %s"
 
-#: ../../../src/MenuInventory.cpp:297
+#: ../../../src/MenuInventory.cpp:317
 msgid "Pick up item(s):"
 msgstr "Raccogli oggetto/i:"
 
-#: ../../../src/MenuInventory.cpp:298
+#: ../../../src/MenuInventory.cpp:318
 msgid "Use or equip item:"
 msgstr "Usa o equipaggia oggetto:"
 
-#: ../../../src/MenuInventory.cpp:299
+#: ../../../src/MenuInventory.cpp:319
 #, c-format
 msgid "%s modifiers"
 msgstr "%s modificatori"
 
-#: ../../../src/MenuInventory.cpp:300
+#: ../../../src/MenuInventory.cpp:320
 msgid "Select a quantity of item:"
 msgstr "Seleziona una quantità di oggetti:"
 
-#: ../../../src/MenuInventory.cpp:303
+#: ../../../src/MenuInventory.cpp:323
 msgid "Stash item stack:"
 msgstr "Accantona gruppo di oggetti:"
 
-#: ../../../src/MenuInventory.cpp:305
+#: ../../../src/MenuInventory.cpp:325
 msgid "Sell item stack:"
 msgstr "Vendi gruppo di oggetti:"
 
-#: ../../../src/MenuInventory.cpp:572
+#: ../../../src/MenuInventory.cpp:592
 msgid "You don't have enough of the required item."
 msgstr "Non ne hai a sufficienza."
 
-#: ../../../src/MenuInventory.cpp:579
+#: ../../../src/MenuInventory.cpp:599
 msgid "You can't use this item right now."
 msgstr "Adesso non puoi usare questo oggetto."
 
-#: ../../../src/MenuInventory.cpp:591
+#: ../../../src/MenuInventory.cpp:611
 msgid "This item can only be used from the action bar."
 msgstr "Questo elemento può essere usato solo dalla barra azioni."
 
-#: ../../../src/MenuInventory.cpp:709
+#: ../../../src/MenuInventory.cpp:729
 msgid "Inventory is full."
 msgstr "L'inventario è pieno."
 
-#: ../../../src/MenuInventory.cpp:829
+#: ../../../src/MenuInventory.cpp:849
 #, c-format
 msgid "Not enough %s."
 msgstr "Non hai abbastanza %s."
 
-#: ../../../src/MenuInventory.cpp:849 ../../../src/MenuInventory.cpp:856
+#: ../../../src/MenuInventory.cpp:869 ../../../src/MenuInventory.cpp:876
 msgid "This item can not be sold."
 msgstr "Questo oggetto non può essere venduto."
 
