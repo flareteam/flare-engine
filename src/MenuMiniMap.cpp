@@ -217,8 +217,8 @@ void MenuMiniMap::renderMapSurface(const FPoint& hero_pos) {
 
 	// draw the player cursor
 	Point center(window_area.x + pos.x + pos.w/2, window_area.y + pos.y + pos.h/2);
-	render_device->drawLine(center.x - current_zoom, center.y, center.x + current_zoom + 1, center.y, color_hero);
-	render_device->drawLine(center.x, center.y - current_zoom, center.x, center.y + current_zoom + 1, color_hero);
+	render_device->drawLine(center.x - current_zoom, center.y, center.x + current_zoom, center.y, color_hero);
+	render_device->drawLine(center.x, center.y - current_zoom, center.x, center.y + current_zoom, color_hero);
 }
 
 void MenuMiniMap::prerenderOrtho(MapCollision *collider, Sprite** target_surface, int zoom) {
