@@ -113,6 +113,8 @@ public:
 
 	virtual void fillWithColor(const Color& color) = 0;
 	virtual void drawPixel(int x, int y, const Color& color) = 0;
+	virtual void beginPixelBatch();
+	virtual void endPixelBatch();
 	virtual Image* resize(int width, int height) = 0;
 
 	class Sprite *createSprite();
@@ -196,6 +198,8 @@ public:
 		ERROR_EXIT = 2
 	};
 
+	static const unsigned char BITS_PER_PIXEL;
+
 	RenderDevice();
 	virtual ~RenderDevice();
 
@@ -228,8 +232,6 @@ public:
 	bool reloadGraphics();
 
 protected:
-	static const unsigned char BITS_PER_PIXEL;
-
 	/* Compute clipping and global position from local frame. */
 	bool localToGlobal(Sprite *r);
 

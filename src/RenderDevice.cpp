@@ -67,6 +67,11 @@ Sprite *Image::createSprite() {
 	return sprite;
 }
 
+void Image::beginPixelBatch() {
+}
+
+void Image::endPixelBatch() {
+}
 
 /*
  * Sprite

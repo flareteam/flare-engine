@@ -234,6 +234,8 @@ void MenuMiniMap::prerenderOrtho(MapCollision *collider, Sprite** target_surface
 
 	Color draw_color;
 
+	target_img->beginPixelBatch();
+
 	for (int i=0; i<std::min(target_w, map_size.x); i++) {
 		for (int j=0; j<std::min(target_h, map_size.y); j++) {
 			bool draw_tile = true;
@@ -252,6 +254,8 @@ void MenuMiniMap::prerenderOrtho(MapCollision *collider, Sprite** target_surface
 			}
 		}
 	}
+
+	target_img->endPixelBatch();
 }
 
 void MenuMiniMap::prerenderIso(MapCollision *collider, Sprite** target_surface, int zoom) {
@@ -274,6 +278,8 @@ void MenuMiniMap::prerenderIso(MapCollision *collider, Sprite** target_surface, 
 	Image* target_img = (*target_surface)->getGraphics();
 	const int target_w = (*target_surface)->getGraphicsWidth();
 	const int target_h = (*target_surface)->getGraphicsHeight();
+
+	target_img->beginPixelBatch();
 
 	// for each pixel row
 	for (int j=0; j<target_h; j++) {
@@ -327,6 +333,8 @@ void MenuMiniMap::prerenderIso(MapCollision *collider, Sprite** target_surface, 
 			tile_cursor.y += target_w/2;
 		}
 	}
+
+	target_img->endPixelBatch();
 }
 
 MenuMiniMap::~MenuMiniMap() {

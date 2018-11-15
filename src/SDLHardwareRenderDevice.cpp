@@ -40,12 +40,15 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 SDLHardwareImage::SDLHardwareImage(RenderDevice *_device, SDL_Renderer *_renderer)
 	: Image(_device)
 	, renderer(_renderer)
-	, surface(NULL) {
+	, surface(NULL)
+	, pixel_batch_surface(NULL) {
 }
 
 SDLHardwareImage::~SDLHardwareImage() {
 	if (surface)
 		SDL_DestroyTexture(surface);
+	if (pixel_batch_surface)
+		SDL_FreeSurface(pixel_batch_surface);
 }
 
 int SDLHardwareImage::getWidth() const {
@@ -76,11 +79,101 @@ void SDLHardwareImage::fillWithColor(const Color& color) {
 void SDLHardwareImage::drawPixel(int x, int y, const Color& color) {
 	if (!surface) return;
 
-	SDL_SetRenderTarget(renderer, surface);
-	SDL_SetTextureBlendMode(surface, SDL_BLENDMODE_BLEND);
-	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
-	SDL_RenderDrawPoint(renderer, x, y);
-	SDL_SetRenderTarget(renderer, NULL);
+	if (pixel_batch_surface) {
+		// Taken from SDLSoftwareImage::drawPixel()
+		Uint32 pixel = SDL_MapRGBA(pixel_batch_surface->format, color.r, color.g, color.b, color.a);
+
+		int bpp = pixel_batch_surface->format->BytesPerPixel;
+		/* Here p is the address to the pixel we want to set */
+		Uint8 *p = static_cast<Uint8*>(pixel_batch_surface->pixels) + y * pixel_batch_surface->pitch + x * bpp;
+
+		if (SDL_MUSTLOCK(pixel_batch_surface)) {
+			SDL_LockSurface(pixel_batch_surface);
+		}
+		switch(bpp) {
+			case 1:
+				*p = static_cast<Uint8>(pixel);
+				break;
+
+			case 2:
+				*(reinterpret_cast<Uint16*>(p)) = static_cast<Uint16>(pixel);
+				break;
+
+			case 3:
+#if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
+				p[0] = (pixel >> 16) & 0xff;
+				p[1] = (pixel >> 8) & 0xff;
+				p[2] = pixel & 0xff;
+#else
+				p[0] = pixel & 0xff;
+				p[1] = (pixel >> 8) & 0xff;
+				p[2] = (pixel >> 16) & 0xff;
+#endif
+				break;
+
+			case 4:
+				*(reinterpret_cast<Uint32*>(p)) = pixel;
+				break;
+		}
+		if (SDL_MUSTLOCK(pixel_batch_surface)) {
+			SDL_UnlockSurface(pixel_batch_surface);
+		}
+	}
+	else {
+		SDL_SetRenderTarget(renderer, surface);
+		SDL_SetTextureBlendMode(surface, SDL_BLENDMODE_BLEND);
+		SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+		SDL_RenderDrawPoint(renderer, x, y);
+		SDL_SetRenderTarget(renderer, NULL);
+	}
+}
+
+/**
+ * Creates a non-accelerated SDL_Surface as a pixel buffer
+ * The buffer is drawn when SDLHardwareImag::endPixelBatch() is called
+ * This way, the number of video card draw calls is vastly reduced, especially when we're drawing lots of pixels (aka the minimap)
+ *
+ * SDL_RenderDrawPoints() is supposed to be the "right" way to do this, but SDL_Surface provides a nice structure so we don't have to create the points array ourselves
+ * Performance-wise, it's probably the same, since it's a bunch of system-memory ops followed by one draw call
+ */
+void SDLHardwareImage::beginPixelBatch() {
+	if (!surface) return;
+
+	Uint32 rmask, gmask, bmask, amask;
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+	rmask = 0xff000000;
+	gmask = 0x00ff0000;
+	bmask = 0x0000ff00;
+	amask = 0x000000ff;
+#else
+	rmask = 0x000000ff;
+	gmask = 0x0000ff00;
+	bmask = 0x00ff0000;
+	amask = 0xff000000;
+#endif
+
+	if (pixel_batch_surface)
+		SDL_FreeSurface(pixel_batch_surface);
+
+	pixel_batch_surface = SDL_CreateRGBSurface(0, getWidth(), getHeight(), device->BITS_PER_PIXEL, rmask, gmask, bmask, amask);
+}
+
+void SDLHardwareImage::endPixelBatch() {
+	if (!surface || !pixel_batch_surface) return;
+
+	SDL_Texture *pixel_batch_texture = SDL_CreateTextureFromSurface(renderer, pixel_batch_surface);
+
+	if (pixel_batch_texture) {
+		SDL_SetRenderTarget(renderer, surface);
+		SDL_SetTextureBlendMode(surface, SDL_BLENDMODE_BLEND);
+		SDL_RenderCopy(renderer, pixel_batch_texture, NULL, NULL);
+		SDL_SetRenderTarget(renderer, NULL);
+
+		SDL_DestroyTexture(pixel_batch_texture);
+	}
+
+	SDL_FreeSurface(pixel_batch_surface);
+	pixel_batch_surface = NULL;
 }
 
 Image* SDLHardwareImage::resize(int width, int height) {

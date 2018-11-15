@@ -23,6 +23,7 @@ Engine fixes:
 * Redesigned mouse movement to use the secondary button (right mouse) for movement.
 * Fix buttons and checkboxes not handling clicks while the "Accept" key is pressed.
 * Fix incorrect descriptions of controls on mobile devices.
+* Add renderer support for batching calls to local pixel drawing. This speeds up the pre-render of the minimap.
 
 Game changes:
 

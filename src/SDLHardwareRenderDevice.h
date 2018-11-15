@@ -46,10 +46,14 @@ public:
 
 	void fillWithColor(const Color& color);
 	void drawPixel(int x, int y, const Color& color);
+	void beginPixelBatch();
+	void endPixelBatch();
 	Image* resize(int width, int height);
 
 	SDL_Renderer *renderer;
 	SDL_Texture *surface;
+
+	SDL_Surface *pixel_batch_surface;
 };
 
 class SDLHardwareRenderDevice : public RenderDevice {
