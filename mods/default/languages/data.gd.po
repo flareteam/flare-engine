@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-13 17:21+\n"
+"POT-Creation-Date: 2018-11-14 00:57+\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
 "Last-Translator: GunChleoc, 2018\n"
 "Language-Team: Gaelic, Scottish (https://www.transifex.com/flareorg/teams/84925/gd/)\n"
@@ -298,7 +298,7 @@ msgstr "losine"
 
 #: ../cutscenes/credits.txt:76
 msgid "Marc Tormo i Bochaca"
-msgstr ""
+msgstr "Marc Tormo i Bochaca"
 
 #: ../cutscenes/credits.txt:77
 msgid "Michael Papageorgiou"
