@@ -46,7 +46,6 @@ public:
 	virtual bool getPrev(); // if the widget has items internally that can be iterated
 	virtual void setBasePos(int x, int y, int a);
 	virtual void setPos(int offset_x, int offset_y);
-	bool render_to_alpha;
 	bool in_focus;
 	bool focusable;
 	bool enable_tablist_nav; // when disabled, this widget will be skipped during tablist navigation

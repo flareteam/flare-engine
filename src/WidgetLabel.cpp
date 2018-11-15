@@ -55,8 +55,6 @@ WidgetLabel::WidgetLabel()
 {
 	bounds.x = bounds.y = 0;
 	bounds.w = bounds.h = 0;
-
-	render_to_alpha = false;
 }
 
 void WidgetLabel::setMaxWidth(int width) {

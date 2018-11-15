@@ -23,8 +23,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Widget.h"
 
 Widget::Widget()
-	: render_to_alpha(false)
-	, in_focus(false)
+	: in_focus(false)
 	, focusable(false)
 	, enable_tablist_nav(true)
 	, scroll_type(SCROLL_TWO_DIRECTIONS)

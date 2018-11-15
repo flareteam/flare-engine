@@ -53,8 +53,13 @@ WidgetListBox::WidgetListBox(int height, const std::string& _fileName)
 	, disable_text_trim(false) {
 
 	// load ListBox images
-	Image *graphics;
-	graphics = render_device->loadImage(fileName, RenderDevice::ERROR_EXIT);
+	Image *graphics = NULL;
+	if (fileName != DEFAULT_FILE) {
+		graphics = render_device->loadImage(fileName, RenderDevice::ERROR_NORMAL);
+	}
+	if (!graphics) {
+		graphics = render_device->loadImage(DEFAULT_FILE, RenderDevice::ERROR_EXIT);
+	}
 	if (graphics) {
 		listboxs = graphics->createSprite();
 		pos.w = listboxs->getGraphicsWidth();

@@ -92,8 +92,13 @@ void WidgetButton::loadArt() {
 		return;
 
 	// load button images
-	Image *graphics;
-	graphics = render_device->loadImage(fileName, RenderDevice::ERROR_EXIT);
+	Image *graphics = NULL;
+	if (fileName != DEFAULT_FILE) {
+		graphics = render_device->loadImage(fileName, RenderDevice::ERROR_NORMAL);
+	}
+	if (!graphics) {
+		graphics = render_device->loadImage(DEFAULT_FILE, RenderDevice::ERROR_EXIT);
+	}
 	if (graphics) {
 		buttons = graphics->createSprite();
 		pos.w = buttons->getGraphicsWidth();

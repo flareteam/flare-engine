@@ -38,7 +38,6 @@ WidgetScrollBox::WidgetScrollBox(int width, int height)
 	currentChild = -1;
 	scrollbar = new WidgetScrollBar(WidgetScrollBar::DEFAULT_FILE);
 	update = true;
-	render_to_alpha = false;
 	resize(width, height);
 	tablist = TabList();
 	tablist.setScrollType(SCROLL_VERTICAL);

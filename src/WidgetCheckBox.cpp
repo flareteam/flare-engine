@@ -58,7 +58,6 @@ WidgetCheckBox::WidgetCheckBox (const std::string &fname)
 		cb->setClip(0, 0, pos.w, pos.h);
 		graphics->unref();
 	}
-	render_to_alpha = false;
 }
 
 void WidgetCheckBox::activate() {

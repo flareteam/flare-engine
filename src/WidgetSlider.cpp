@@ -44,8 +44,13 @@ WidgetSlider::WidgetSlider (const std::string& fname)
 	, maximum(0)
 	, value(0) {
 
-	Image *graphics;
-	graphics = render_device->loadImage(fname, RenderDevice::ERROR_EXIT);
+	Image *graphics = NULL;
+	if (fname != DEFAULT_FILE) {
+		graphics = render_device->loadImage(fname, RenderDevice::ERROR_NORMAL);
+	}
+	if (!graphics) {
+		graphics = render_device->loadImage(DEFAULT_FILE, RenderDevice::ERROR_EXIT);
+	}
 	if (graphics) {
 		sl = graphics->createSprite();
 		pos.w = sl->getGraphicsWidth();
@@ -54,8 +59,6 @@ WidgetSlider::WidgetSlider (const std::string& fname)
 		pos_knob.h = sl->getGraphicsHeight() / 2;
 		graphics->unref();
 	}
-
-	render_to_alpha = false;
 
 	scroll_type = SCROLL_HORIZONTAL;
 }

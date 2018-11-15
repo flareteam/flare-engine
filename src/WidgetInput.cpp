@@ -40,10 +40,7 @@ WidgetInput::WidgetInput(const std::string& filename)
 	, only_numbers(false)
 	, accept_to_defocus(true)
 {
-
 	loadGraphics(filename);
-
-	render_to_alpha = false;
 }
 
 void WidgetInput::setPos(int offset_x, int offset_y) {
@@ -57,8 +54,13 @@ void WidgetInput::setPos(int offset_x, int offset_y) {
 
 void WidgetInput::loadGraphics(const std::string& filename) {
 	// load input background image
-	Image *graphics;
-	graphics = render_device->loadImage(filename, RenderDevice::ERROR_EXIT);
+	Image *graphics = NULL;
+	if (filename != DEFAULT_FILE) {
+		graphics = render_device->loadImage(filename, RenderDevice::ERROR_NORMAL);
+	}
+	if (!graphics) {
+		graphics = render_device->loadImage(DEFAULT_FILE, RenderDevice::ERROR_EXIT);
+	}
 	if (graphics) {
 		background = graphics->createSprite();
 		pos.w = background->getGraphicsWidth();

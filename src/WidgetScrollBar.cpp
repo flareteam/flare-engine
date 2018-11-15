@@ -49,8 +49,13 @@ WidgetScrollBar::WidgetScrollBar(const std::string& _fileName)
 }
 
 void WidgetScrollBar::loadArt() {
-	Image *graphics;
-	graphics = render_device->loadImage(fileName, RenderDevice::ERROR_EXIT);
+	Image *graphics = NULL;
+	if (fileName != DEFAULT_FILE) {
+		graphics = render_device->loadImage(fileName, RenderDevice::ERROR_NORMAL);
+	}
+	if (!graphics) {
+		graphics = render_device->loadImage(DEFAULT_FILE, RenderDevice::ERROR_EXIT);
+	}
 	if (graphics) {
 		scrollbars = graphics->createSprite();
 		graphics->unref();
