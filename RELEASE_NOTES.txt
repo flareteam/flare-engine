@@ -12,6 +12,7 @@ Engine features:
 * Moved several interface options to the actionbar. Loot tooltips, combat text, statbar labels, and mini-map mode can be adjusted.
 * Moved the interface option for automatically equipping items to the Inventory menu.
 * Add 'toggle_fps' to the developer console commands.
+* Added a 2x zoom mode for the mini-map.
 
 Engine fixes:
 * Fixed shrinking tab widgets when widow was resized.

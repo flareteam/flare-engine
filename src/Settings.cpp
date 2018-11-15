@@ -91,7 +91,7 @@ Settings::Settings()
 	setConfigDefault(27, "statbar_labels",    &typeid(statbar_labels),     "0",            &statbar_labels,     "always show labels on HP/MP/XP bars. 1 enable, 0 disable");
 	setConfigDefault(28, "auto_equip",        &typeid(auto_equip),         "1",            &auto_equip,         "automatically equip items. 1 enable, 0 disable");
 	setConfigDefault(29, "subtitles",         &typeid(subtitles),          "0",            &subtitles,          "displays subtitles. 1 enable, 0 disable");
-	setConfigDefault(30, "minimap_mode",      &typeid(minimap_mode),       "0",            &minimap_mode,       "mini-map display mode. 0 is normal, 1 is hidden");
+	setConfigDefault(30, "minimap_mode",      &typeid(minimap_mode),       "0",            &minimap_mode,       "mini-map display mode. 0 is normal, 1 is 2x zoom, 2 is hidden");
 	setConfigDefault(31, "prev_save_slot",    &typeid(prev_save_slot),     "-1",           &prev_save_slot,     "index of the last used save slot");
 }
 

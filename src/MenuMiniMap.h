@@ -38,17 +38,21 @@ private:
 	Color color_hero;
 
 	Sprite *map_surface;
+	Sprite *map_surface_2x;
 	Point map_size;
 
 	Rect pos;
 	WidgetLabel *label;
 	Sprite *compass;
 
-	void createMapSurface();
-	void renderIso(const FPoint& hero_pos);
-	void renderOrtho(const FPoint& hero_pos);
-	void prerenderOrtho(MapCollision *collider);
-	void prerenderIso(MapCollision *collider);
+	int current_zoom;
+
+	void createMapSurface(Sprite** target_surface, int w, int h);
+	// void renderIso(const FPoint& hero_pos);
+	// void renderOrtho(const FPoint& hero_pos);
+	void renderMapSurface(const FPoint& hero_pos);
+	void prerenderOrtho(MapCollision *collider, Sprite** target_surface, int zoom);
+	void prerenderIso(MapCollision *collider, Sprite** target_surface, int zoom);
 
 public:
 	MenuMiniMap();

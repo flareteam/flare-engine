@@ -39,7 +39,8 @@ public:
 
 	enum {
 		MINIMAP_NORMAL = 0,
-		MINIMAP_HIDDEN = 1
+		MINIMAP_2X = 1,
+		MINIMAP_HIDDEN = 2
 	};
 
 	Settings();

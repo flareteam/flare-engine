@@ -480,6 +480,8 @@ void MenuActionBar::renderTooltips(const Point& position) {
 			else if (i == MENU_MINIMAP_MODE) {
 				if (settings->minimap_mode == Settings::MINIMAP_NORMAL)
 					menu_labels[i] = msg->get("Visible");
+				else if (settings->minimap_mode == Settings::MINIMAP_2X)
+					menu_labels[i] = msg->get("Visible (2x zoom)");
 				else if (settings->minimap_mode == Settings::MINIMAP_HIDDEN)
 					menu_labels[i] = msg->get("Hidden");
 			}
