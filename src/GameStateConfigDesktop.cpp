@@ -61,6 +61,8 @@ GameStateConfigDesktop::GameStateConfigDesktop(bool _enable_video_tab)
 	, texture_filter_lb(new WidgetLabel())
 	, dpi_scaling_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
 	, dpi_scaling_lb(new WidgetLabel())
+	, parallax_layers_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
+	, parallax_layers_lb(new WidgetLabel())
 	, change_gamma_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
 	, change_gamma_lb(new WidgetLabel())
 	, gamma_sl(new WidgetSlider(WidgetSlider::DEFAULT_FILE))
@@ -186,6 +188,7 @@ void GameStateConfigDesktop::readConfig() {
 	hwsurface_cb->tooltip = msg->get("Will try to store surfaces in video memory versus system memory. The effect this has on performance depends on the renderer.");
 	vsync_cb->tooltip = msg->get("Prevents screen tearing. Disable if you experience \"stuttering\" in windowed mode or input lag.");
 	dpi_scaling_cb->tooltip = msg->get("When enabled, this uses the screen DPI in addition to the window dimensions to scale the rendering resolution. Otherwise, only the window dimensions are used.");
+	parallax_layers_cb->tooltip = msg->get("This enables parallax (non-tile) layers. Disabling this setting can improve performance in some cases.");
 	change_gamma_cb->tooltip = msg->get("Experimental");
 	no_mouse_cb->tooltip = msg->get("For handheld devices");
 }
@@ -242,6 +245,10 @@ bool GameStateConfigDesktop::parseKeyDesktop(FileParser &infile, int &x1, int &y
 	else if (infile.key == "dpi_scaling") {
 		// @ATTR dpi_scaling|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "DPI scaling" checkbox relative to the frame.
 		placeLabeledWidget(dpi_scaling_lb, dpi_scaling_cb, x1, y1, x2, y2, msg->get("DPI scaling"), FontEngine::JUSTIFY_RIGHT);
+	}
+	else if (infile.key == "parallax_layers") {
+		// @ATTR parallax_layers|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Parallax Layers" checkbox relative to the frame.
+		placeLabeledWidget(parallax_layers_lb, parallax_layers_cb, x1, y1, x2, y2, msg->get("Parallax Layers"), FontEngine::JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "change_gamma") {
 		// @ATTR change_gamma|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Allow changing gamma" checkbox relative to the frame.
@@ -399,6 +406,8 @@ void GameStateConfigDesktop::addChildWidgetsDesktop() {
 		addChildWidget(texture_filter_lb, VIDEO_TAB);
 		addChildWidget(dpi_scaling_cb, VIDEO_TAB);
 		addChildWidget(dpi_scaling_lb, VIDEO_TAB);
+		addChildWidget(parallax_layers_cb, VIDEO_TAB);
+		addChildWidget(parallax_layers_lb, VIDEO_TAB);
 		addChildWidget(change_gamma_cb, VIDEO_TAB);
 		addChildWidget(change_gamma_lb, VIDEO_TAB);
 		addChildWidget(gamma_sl, VIDEO_TAB);
@@ -440,6 +449,7 @@ void GameStateConfigDesktop::setupTabList() {
 		tablist_video.add(vsync_cb);
 		tablist_video.add(texture_filter_cb);
 		tablist_video.add(dpi_scaling_cb);
+		tablist_video.add(parallax_layers_cb);
 		tablist_video.add(change_gamma_cb);
 		tablist_video.add(gamma_sl);
 		tablist_video.add(renderer_lstb);
@@ -503,6 +513,7 @@ void GameStateConfigDesktop::updateVideo() {
 	vsync_cb->setChecked(settings->vsync);
 	texture_filter_cb->setChecked(settings->texture_filter);
 	dpi_scaling_cb->setChecked(settings->dpi_scaling);
+	parallax_layers_cb->setChecked(settings->parallax_layers);
 	change_gamma_cb->setChecked(settings->change_gamma);
 
 	if (settings->change_gamma) {
@@ -633,6 +644,9 @@ void GameStateConfigDesktop::logicVideo() {
 		render_device->windowResize();
 		refreshWidgets();
 		force_refresh_background = true;
+	}
+	else if (parallax_layers_cb->checkClick()) {
+		settings->parallax_layers = parallax_layers_cb->isChecked();
 	}
 	else if (change_gamma_cb->checkClick()) {
 		settings->change_gamma = change_gamma_cb->isChecked();

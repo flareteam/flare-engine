@@ -43,6 +43,9 @@ void MapParallax::clear() {
 }
 
 void MapParallax::load(const std::string& filename) {
+	if (!settings->parallax_layers)
+		return;
+
 	clear();
 
 	// @CLASS MapParallax|Description of maps/parallax/
@@ -89,6 +92,9 @@ void MapParallax::setMapCenter(int x, int y) {
 }
 
 void MapParallax::render(const FPoint& cam, const std::string& map_layer) {
+	if (!settings->parallax_layers)
+		return;
+
 	if (map_layer.empty())
 		current_layer = 0;
 

@@ -61,6 +61,7 @@ public:
 	std::string render_device_name;
 	bool change_gamma;
 	float gamma;
+	bool parallax_layers;
 
 	// Audio Settings
 	unsigned short music_volume;

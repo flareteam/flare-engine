@@ -60,7 +60,7 @@ Settings::Settings()
 	, encounter_dist(0) // set in updateScreenVars()
 	, soft_reset(false)
 {
-	config.resize(32);
+	config.resize(33);
 	setConfigDefault(0,  "fullscreen",        &typeid(fullscreen),         "0",            &fullscreen,         "fullscreen mode. 1 enable, 0 disable.");
 	setConfigDefault(1,  "resolution_w",      &typeid(screen_w),           "640",          &screen_w,           "display resolution. 640x480 minimum.");
 	setConfigDefault(2,  "resolution_h",      &typeid(screen_h),           "480",          &screen_h,           "");
@@ -72,27 +72,28 @@ Settings::Settings()
 	setConfigDefault(8,  "vsync",             &typeid(vsync),              "1",            &vsync,              "");
 	setConfigDefault(9,  "texture_filter",    &typeid(texture_filter),     "1",            &texture_filter,     "texture filter quality. 0 nearest neighbor (worst), 1 linear (best)");
 	setConfigDefault(10, "dpi_scaling",       &typeid(dpi_scaling),        "0",            &dpi_scaling,        "toggle DPI-based render scaling. 1 enable, 0 disable");
-	setConfigDefault(11, "max_fps",           &typeid(max_frames_per_sec), "60",           &max_frames_per_sec, "maximum frames per second. default is 60");
-	setConfigDefault(12, "renderer",          &typeid(render_device_name), "sdl_hardware", &render_device_name, "default render device. 'sdl' is the default setting");
-	setConfigDefault(13, "enable_joystick",   &typeid(enable_joystick),    "0",            &enable_joystick,    "joystick settings.");
-	setConfigDefault(14, "joystick_device",   &typeid(joystick_device),    "0",            &joystick_device,    "");
-	setConfigDefault(15, "joystick_deadzone", &typeid(joy_deadzone),       "100",          &joy_deadzone,       "");
-	setConfigDefault(16, "language",          &typeid(language),           "en",           &language,           "2-letter language code.");
-	setConfigDefault(17, "change_gamma",      &typeid(change_gamma),       "0",            &change_gamma,       "allow changing gamma (experimental). 1 enable, 0 disable.");
-	setConfigDefault(18, "gamma",             &typeid(gamma),              "1.0",          &gamma,              "screen gamma (0.5 = darkest, 2.0 = lightest)");
-	setConfigDefault(19, "mouse_aim",         &typeid(mouse_aim),          "1",            &mouse_aim,          "use mouse to aim. 1 enable, 0 disable.");
-	setConfigDefault(20, "no_mouse",          &typeid(no_mouse),           "0",            &no_mouse,           "make using mouse secondary, give full control to keyboard. 1 enable, 0 disable.");
-	setConfigDefault(21, "show_fps",          &typeid(show_fps),           "0",            &show_fps,           "show frames per second. 1 enable, 0 disable.");
-	setConfigDefault(22, "colorblind",        &typeid(colorblind),         "0",            &colorblind,         "enable colorblind tooltips. 1 enable, 0 disable");
-	setConfigDefault(23, "hardware_cursor",   &typeid(hardware_cursor),    "0",            &hardware_cursor,    "use the system mouse cursor. 1 enable, 0 disable");
-	setConfigDefault(24, "dev_mode",          &typeid(dev_mode),           "0",            &dev_mode,           "allow opening the developer console. 1 enable, 0 disable");
-	setConfigDefault(25, "dev_hud",           &typeid(dev_hud),            "1",            &dev_hud,            "shows some additional information on-screen when developer mode is enabled. 1 enable, 0 disable");
-	setConfigDefault(26, "loot_tooltips",     &typeid(loot_tooltips),      "0",            &loot_tooltips,      "loot tooltip mode. 0 normal, 1 show all, 2 hide all");
-	setConfigDefault(27, "statbar_labels",    &typeid(statbar_labels),     "0",            &statbar_labels,     "always show labels on HP/MP/XP bars. 1 enable, 0 disable");
-	setConfigDefault(28, "auto_equip",        &typeid(auto_equip),         "1",            &auto_equip,         "automatically equip items. 1 enable, 0 disable");
-	setConfigDefault(29, "subtitles",         &typeid(subtitles),          "0",            &subtitles,          "displays subtitles. 1 enable, 0 disable");
-	setConfigDefault(30, "minimap_mode",      &typeid(minimap_mode),       "0",            &minimap_mode,       "mini-map display mode. 0 is normal, 1 is 2x zoom, 2 is hidden");
-	setConfigDefault(31, "prev_save_slot",    &typeid(prev_save_slot),     "-1",           &prev_save_slot,     "index of the last used save slot");
+	setConfigDefault(11, "parallax_layers",   &typeid(parallax_layers),    "1",            &parallax_layers,    "toggle rendering of parallax map layers. 1 enable, 0 disable");
+	setConfigDefault(12, "max_fps",           &typeid(max_frames_per_sec), "60",           &max_frames_per_sec, "maximum frames per second. default is 60");
+	setConfigDefault(13, "renderer",          &typeid(render_device_name), "sdl_hardware", &render_device_name, "default render device. 'sdl' is the default setting");
+	setConfigDefault(14, "enable_joystick",   &typeid(enable_joystick),    "0",            &enable_joystick,    "joystick settings.");
+	setConfigDefault(15, "joystick_device",   &typeid(joystick_device),    "0",            &joystick_device,    "");
+	setConfigDefault(16, "joystick_deadzone", &typeid(joy_deadzone),       "100",          &joy_deadzone,       "");
+	setConfigDefault(17, "language",          &typeid(language),           "en",           &language,           "2-letter language code.");
+	setConfigDefault(18, "change_gamma",      &typeid(change_gamma),       "0",            &change_gamma,       "allow changing gamma (experimental). 1 enable, 0 disable.");
+	setConfigDefault(19, "gamma",             &typeid(gamma),              "1.0",          &gamma,              "screen gamma (0.5 = darkest, 2.0 = lightest)");
+	setConfigDefault(20, "mouse_aim",         &typeid(mouse_aim),          "1",            &mouse_aim,          "use mouse to aim. 1 enable, 0 disable.");
+	setConfigDefault(21, "no_mouse",          &typeid(no_mouse),           "0",            &no_mouse,           "make using mouse secondary, give full control to keyboard. 1 enable, 0 disable.");
+	setConfigDefault(22, "show_fps",          &typeid(show_fps),           "0",            &show_fps,           "show frames per second. 1 enable, 0 disable.");
+	setConfigDefault(23, "colorblind",        &typeid(colorblind),         "0",            &colorblind,         "enable colorblind tooltips. 1 enable, 0 disable");
+	setConfigDefault(24, "hardware_cursor",   &typeid(hardware_cursor),    "0",            &hardware_cursor,    "use the system mouse cursor. 1 enable, 0 disable");
+	setConfigDefault(25, "dev_mode",          &typeid(dev_mode),           "0",            &dev_mode,           "allow opening the developer console. 1 enable, 0 disable");
+	setConfigDefault(26, "dev_hud",           &typeid(dev_hud),            "1",            &dev_hud,            "shows some additional information on-screen when developer mode is enabled. 1 enable, 0 disable");
+	setConfigDefault(27, "loot_tooltips",     &typeid(loot_tooltips),      "0",            &loot_tooltips,      "loot tooltip mode. 0 normal, 1 show all, 2 hide all");
+	setConfigDefault(28, "statbar_labels",    &typeid(statbar_labels),     "0",            &statbar_labels,     "always show labels on HP/MP/XP bars. 1 enable, 0 disable");
+	setConfigDefault(29, "auto_equip",        &typeid(auto_equip),         "1",            &auto_equip,         "automatically equip items. 1 enable, 0 disable");
+	setConfigDefault(30, "subtitles",         &typeid(subtitles),          "0",            &subtitles,          "displays subtitles. 1 enable, 0 disable");
+	setConfigDefault(31, "minimap_mode",      &typeid(minimap_mode),       "0",            &minimap_mode,       "mini-map display mode. 0 is normal, 1 is 2x zoom, 2 is hidden");
+	setConfigDefault(32, "prev_save_slot",    &typeid(prev_save_slot),     "-1",           &prev_save_slot,     "index of the last used save slot");
 }
 
 void Settings::setConfigDefault(size_t index, const std::string& name, const std::type_info *type, const std::string& default_val, void *storage, const std::string& comment) {

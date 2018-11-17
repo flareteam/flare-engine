@@ -13,6 +13,7 @@ Engine features:
 * Moved the interface option for automatically equipping items to the Inventory menu.
 * Add 'toggle_fps' to the developer console commands.
 * Added a 2x zoom mode for the mini-map.
+* Add a video setting to disable parallax layers.
 
 Engine fixes:
 * Fixed shrinking tab widgets when widow was resized.

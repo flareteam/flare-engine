@@ -16,8 +16,9 @@ hwsurface=568,68,584,64
 vsync=568,100,584,96
 texture_filter=568,132,584,128
 dpi_scaling=568,164,584,160
-change_gamma=568,196,584,192
-gamma=368,232,384,224
+parallax_layers=568,196,584,192
+change_gamma=568,228,584,224
+gamma=368,264,384,256
 
 [audio]
 music_volume=368,40,384,32
