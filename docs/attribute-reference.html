@@ -1249,6 +1249,8 @@ body {
 
 <p><strong>image.image</strong> | <code>filename</code> | Filename of the image.</p>
 
+<p><strong>image_icon</strong> | <code>icon_id</code> | Use an icon as the image instead of a file.</p>
+
 <p><strong>image.requires_status</strong> | <code>list(string)</code> | Image requires these campaign statuses in order to be visible.</p>
 
 <p><strong>image.requires_not_status</strong> | <code>list(string)</code> | Image must not have any of these campaign statuses in order to be visible.</p>
@@ -1268,6 +1270,12 @@ body {
 <p><strong>button.button_image</strong> | <code>filename</code> | Image file to use for this button. Default is the normal menu button.</p>
 
 <p><strong>button.text</strong> | <code>string</code> | Optional text label for the button.</p>
+
+<p><strong>book.${EVENT_COMPONENT}</strong> | <code>Event components to execute when the button is clicked. See the definitions in EventManager for possible attributes.</code> |</p>
+
+<p><strong>event_open.${EVENT_COMPONENT}</strong> | <code>Event components to execute when the book is opened. See the definitions in EventManager for possible attributes.</code> |</p>
+
+<p><strong>event_close.${EVENT_COMPONENT}</strong> | <code>Event components to execute when the book is closed. See the definitions in EventManager for possible attributes.</code> |</p>
 
 <hr />
 

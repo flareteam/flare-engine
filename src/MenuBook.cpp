@@ -22,9 +22,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "CampaignManager.h"
+#include "EngineSettings.h"
 #include "EventManager.h"
 #include "FileParser.h"
 #include "FontEngine.h"
+#include "IconManager.h"
 #include "InputState.h"
 #include "MenuBook.h"
 #include "MessageEngine.h"
@@ -128,7 +130,7 @@ void MenuBook::loadBook() {
 
 		if (images[i].image)
 			images[i].image->setDestFromPoint(images[i].dest);
-		else
+		else if (images[i].icon == -1)
 			images.erase(images.begin() + i);
 	}
 
@@ -163,12 +165,26 @@ void MenuBook::loadImage(FileParser &infile, BookImage& bimage) {
 	}
 	// @ATTR image.image|filename|Filename of the image.
 	else if (infile.key == "image") {
+		if (bimage.image) {
+			delete bimage.image;
+			bimage.image = NULL;
+		}
+
 		Image *graphics;
 		graphics = render_device->loadImage(Parse::popFirstString(infile.val), RenderDevice::ERROR_NORMAL);
 		if (graphics) {
 		  bimage.image = graphics->createSprite();
 		  graphics->unref();
 		}
+	}
+	// @ATTR image_icon|icon_id|Use an icon as the image instead of a file.
+	else if (infile.key == "image_icon") {
+		if (bimage.image) {
+			delete bimage.image;
+			bimage.image = NULL;
+		}
+
+		bimage.icon = Parse::toInt(infile.val);
 	}
 	// @ATTR image.requires_status|list(string)|Image requires these campaign statuses in order to be visible.
 	else if (infile.key == "requires_status") {
@@ -251,6 +267,7 @@ void MenuBook::loadButton(FileParser &infile, BookButton& bbutton) {
 		bbutton.label = Parse::popFirstString(infile.val);
 	}
 	else {
+		// @ATTR book.${EVENT_COMPONENT}|Event components to execute when the button is clicked. See the definitions in EventManager for possible attributes.
 		loadBookEvent(infile, bbutton.event);
 	}
 }
@@ -259,6 +276,8 @@ void MenuBook::loadBookEvent(FileParser &infile, Event& ev) {
 	// we use substr here to remove the trailing comma that was added in loadBook()
 	std::string trimmed = infile.val.substr(0, infile.val.length() - 1);
 
+	// @ATTR event_open.${EVENT_COMPONENT}|Event components to execute when the book is opened. See the definitions in EventManager for possible attributes.
+	// @ATTR event_close.${EVENT_COMPONENT}|Event components to execute when the book is closed. See the definitions in EventManager for possible attributes.
 	if (!EventManager::loadEventComponentString(infile.key, trimmed, &ev, NULL)) {
 		infile.error("MenuBook: '%s' is not a valid key.", infile.key.c_str());
 	}
@@ -273,7 +292,8 @@ void MenuBook::align() {
 		text[i].sprite->setDest(text[i].size.x + window_area.x, text[i].size.y + window_area.y);
 	}
 	for (size_t i = 0; i < images.size(); ++i) {
-		images[i].image->setDest(images[i].dest.x + window_area.x, images[i].dest.y + window_area.y);
+		if (images[i].image)
+			images[i].image->setDest(images[i].dest.x + window_area.x, images[i].dest.y + window_area.y);
 	}
 	for (size_t i = 0; i < buttons.size(); ++i) {
 		buttons[i].button->setPos(window_area.x, window_area.y);
@@ -430,7 +450,13 @@ void MenuBook::render() {
 		if (skip)
 			continue;
 
-		render_device->render(images[i].image);
+		if (images[i].image) {
+			render_device->render(images[i].image);
+		}
+		else if (images[i].icon != -1) {
+			icons->setIcon(images[i].icon, Point(images[i].dest.x + window_area.x, images[i].dest.y + window_area.y));
+			icons->render();
+		}
 	}
 	for (size_t i = 0; i < buttons.size(); ++i) {
 		buttons[i].button->render();
