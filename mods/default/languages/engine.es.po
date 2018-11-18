@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-14 00:57-0500\n"
+"POT-Creation-Date: 2018-11-17 21:50-0500\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
 "Last-Translator: Diego J. Romero López <diegojromerolopez@gmail.com>, 2018\n"
 "Language-Team: Spanish (https://www.transifex.com/flareorg/teams/84925/es/)\n"
@@ -159,17 +159,17 @@ msgid "Cancel"
 msgstr "Cancelar"
 
 #: ../../../src/GameStateConfigBase.cpp:160
-#: ../../../src/GameStateConfigDesktop.cpp:128
+#: ../../../src/GameStateConfigDesktop.cpp:130
 msgid "Audio"
 msgstr "Audio"
 
 #: ../../../src/GameStateConfigBase.cpp:161
-#: ../../../src/GameStateConfigDesktop.cpp:129
+#: ../../../src/GameStateConfigDesktop.cpp:131
 msgid "Interface"
 msgstr "Interfaz"
 
 #: ../../../src/GameStateConfigBase.cpp:162
-#: ../../../src/GameStateConfigDesktop.cpp:132
+#: ../../../src/GameStateConfigDesktop.cpp:134
 msgid "Mods"
 msgstr "Mods"
 
@@ -237,29 +237,29 @@ msgstr "Versión del motor de juego:"
 msgid "Requires mods:"
 msgstr "Mods requeridos:"
 
-#: ../../../src/GameStateConfigDesktop.cpp:81
-#: ../../../src/GameStateConfigDesktop.cpp:737
+#: ../../../src/GameStateConfigDesktop.cpp:83
+#: ../../../src/GameStateConfigDesktop.cpp:751
 msgid "Clear"
 msgstr "Limpiar"
 
-#: ../../../src/GameStateConfigDesktop.cpp:81
-#: ../../../src/GameStateConfigDesktop.cpp:735
+#: ../../../src/GameStateConfigDesktop.cpp:83
+#: ../../../src/GameStateConfigDesktop.cpp:749
 msgid "Assign:"
 msgstr "Asignar:"
 
-#: ../../../src/GameStateConfigDesktop.cpp:126
+#: ../../../src/GameStateConfigDesktop.cpp:128
 msgid "Video"
 msgstr "Vídeo"
 
-#: ../../../src/GameStateConfigDesktop.cpp:130
+#: ../../../src/GameStateConfigDesktop.cpp:132
 msgid "Input"
 msgstr "Entrada"
 
-#: ../../../src/GameStateConfigDesktop.cpp:131
+#: ../../../src/GameStateConfigDesktop.cpp:133
 msgid "Keybindings"
 msgstr "Teclas"
 
-#: ../../../src/GameStateConfigDesktop.cpp:186
+#: ../../../src/GameStateConfigDesktop.cpp:188
 msgid ""
 "Will try to store surfaces in video memory versus system memory. The effect "
 "this has on performance depends on the renderer."
@@ -267,7 +267,7 @@ msgstr ""
 "Intentará almacenar las superficies en la memoria de vídeo en vez de en la "
 "memoria del sistema. Esto afectará de forma distinta según el renderizador."
 
-#: ../../../src/GameStateConfigDesktop.cpp:187
+#: ../../../src/GameStateConfigDesktop.cpp:189
 msgid ""
 "Prevents screen tearing. Disable if you experience \"stuttering\" in "
 "windowed mode or input lag."
@@ -275,7 +275,7 @@ msgstr ""
 "Evita que la pantalla se muestre rota. Se puede desactivar si se detectan "
 "\"parpadeos\" de imagen en el modo ventana o retraso en las entradas"
 
-#: ../../../src/GameStateConfigDesktop.cpp:188
+#: ../../../src/GameStateConfigDesktop.cpp:190
 msgid ""
 "When enabled, this uses the screen DPI in addition to the window dimensions "
 "to scale the rendering resolution. Otherwise, only the window dimensions are"
@@ -285,67 +285,77 @@ msgstr ""
 "dimensiones de la ventana para escalar la resolución. De lo contrario, sólo "
 "se usarán las dimensiones de la ventana."
 
-#: ../../../src/GameStateConfigDesktop.cpp:189
+#: ../../../src/GameStateConfigDesktop.cpp:191
+msgid ""
+"This enables parallax (non-tile) layers. Disabling this setting can improve "
+"performance in some cases."
+msgstr ""
+
+#: ../../../src/GameStateConfigDesktop.cpp:192
 msgid "Experimental"
 msgstr "Experimental"
 
-#: ../../../src/GameStateConfigDesktop.cpp:190
+#: ../../../src/GameStateConfigDesktop.cpp:193
 msgid "For handheld devices"
 msgstr "Para dispositivos móviles"
 
-#: ../../../src/GameStateConfigDesktop.cpp:208
+#: ../../../src/GameStateConfigDesktop.cpp:211
 msgid "Renderer"
 msgstr "Renderizador"
 
-#: ../../../src/GameStateConfigDesktop.cpp:224
+#: ../../../src/GameStateConfigDesktop.cpp:227
 msgid "Full Screen Mode"
 msgstr "Modo de pantalla completa"
 
-#: ../../../src/GameStateConfigDesktop.cpp:228
+#: ../../../src/GameStateConfigDesktop.cpp:231
 msgid "Move hero using mouse"
 msgstr "Mover héroe a través del ratón"
 
-#: ../../../src/GameStateConfigDesktop.cpp:232
+#: ../../../src/GameStateConfigDesktop.cpp:235
 msgid "Hardware surfaces"
 msgstr "Superficies de hardware"
 
-#: ../../../src/GameStateConfigDesktop.cpp:236
+#: ../../../src/GameStateConfigDesktop.cpp:239
 msgid "V-Sync"
 msgstr "V-Sync"
 
-#: ../../../src/GameStateConfigDesktop.cpp:240
+#: ../../../src/GameStateConfigDesktop.cpp:243
 msgid "Texture Filtering"
 msgstr "Filtro de textura"
 
-#: ../../../src/GameStateConfigDesktop.cpp:244
+#: ../../../src/GameStateConfigDesktop.cpp:247
 msgid "DPI scaling"
 msgstr "Escalado por PPP"
 
-#: ../../../src/GameStateConfigDesktop.cpp:248
+#: ../../../src/GameStateConfigDesktop.cpp:251
+msgid "Parallax Layers"
+msgstr ""
+
+#: ../../../src/GameStateConfigDesktop.cpp:255
 msgid "Allow changing gamma"
 msgstr "Permitir cambiar gama"
 
-#: ../../../src/GameStateConfigDesktop.cpp:252
+#: ../../../src/GameStateConfigDesktop.cpp:259
 msgid "Gamma"
 msgstr "Gama"
 
-#: ../../../src/GameStateConfigDesktop.cpp:256
+#: ../../../src/GameStateConfigDesktop.cpp:263
 msgid "Use joystick"
 msgstr "Usar joystick"
 
-#: ../../../src/GameStateConfigDesktop.cpp:260
+#: ../../../src/GameStateConfigDesktop.cpp:267
 msgid "Joystick"
 msgstr "Joystick"
 
-#: ../../../src/GameStateConfigDesktop.cpp:276
+#: ../../../src/GameStateConfigDesktop.cpp:283
 msgid "Mouse aim"
 msgstr "Ratón para apuntar"
 
-#: ../../../src/GameStateConfigDesktop.cpp:280
+#: ../../../src/GameStateConfigDesktop.cpp:287
 msgid "Do not use mouse"
 msgstr "No usar ratón"
 
-#: ../../../src/GameStateConfigDesktop.cpp:284
+#: ../../../src/GameStateConfigDesktop.cpp:291
 msgid "Joystick Deadzone"
 msgstr "Zona sin joystick"
 
@@ -738,18 +748,22 @@ msgid "Visible"
 msgstr ""
 
 #: ../../../src/MenuActionBar.cpp:484
+msgid "Visible (2x zoom)"
+msgstr ""
+
+#: ../../../src/MenuActionBar.cpp:486
 msgid "Hidden"
 msgstr ""
 
-#: ../../../src/MenuActionBar.cpp:488 ../../../src/MenuActionBar.cpp:494
+#: ../../../src/MenuActionBar.cpp:490 ../../../src/MenuActionBar.cpp:496
 msgid "Enabled"
 msgstr ""
 
-#: ../../../src/MenuActionBar.cpp:490 ../../../src/MenuActionBar.cpp:496
+#: ../../../src/MenuActionBar.cpp:492 ../../../src/MenuActionBar.cpp:498
 msgid "Disabled"
 msgstr ""
 
-#: ../../../src/MenuActionBar.cpp:655
+#: ../../../src/MenuActionBar.cpp:657
 msgid "Not enough MP."
 msgstr "PM insuficientes."
 
@@ -882,15 +896,19 @@ msgid "adds a power to the action bar"
 msgstr "añade poder a la barra de acción"
 
 #: ../../../src/MenuDevConsole.cpp:361
+msgid "turns on/off the display of the FPS counter"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:362
 msgid "turns on/off all of the HUD elements"
 msgstr "Activa/Desactiva todos los elementos con información en pantalla"
 
-#: ../../../src/MenuDevConsole.cpp:362
+#: ../../../src/MenuDevConsole.cpp:363
 msgid "turns on/off the developer hud"
 msgstr ""
 "Activa/Desactiva todos la información en pantalla para desarrolladores"
 
-#: ../../../src/MenuDevConsole.cpp:363
+#: ../../../src/MenuDevConsole.cpp:364
 msgid ""
 "Prints a list of powers that match a search term. No search term will list "
 "all items"
@@ -898,11 +916,11 @@ msgstr ""
 "Muestra una lista de poderes que se emparejan con un término de búsqueda. Si"
 " no hay ningún término, se listarán todos los elementos"
 
-#: ../../../src/MenuDevConsole.cpp:364
+#: ../../../src/MenuDevConsole.cpp:365
 msgid "Prints out all the map filenames located in the \"maps/\" directory."
 msgstr "Muestra todos los ficheros de mapa del directorio \"maps/\"."
 
-#: ../../../src/MenuDevConsole.cpp:365
+#: ../../../src/MenuDevConsole.cpp:366
 msgid ""
 "Prints out the active campaign statuses that match a search term. No search "
 "term will list all active statuses"
@@ -910,7 +928,7 @@ msgstr ""
 "Muestra los estados de la campaña activa que emparejan con un término de "
 "búsqueda. Si no hay ningún término, se listarán todos los estados activos"
 
-#: ../../../src/MenuDevConsole.cpp:366
+#: ../../../src/MenuDevConsole.cpp:367
 msgid ""
 "Prints a list of items that match a search term. No search term will list "
 "all items"
@@ -918,59 +936,63 @@ msgstr ""
 "Muestra una lista de todos los objetos que emparejan con un término de "
 "búsqueda. Si no hay ningún término de búsqueda, listará todos los objetos"
 
-#: ../../../src/MenuDevConsole.cpp:367
+#: ../../../src/MenuDevConsole.cpp:368
 msgid ""
 "parses a series of event components and executes them as a single event"
 msgstr ""
 "analiza una serie de componentes de eventos y los ejecuta como un solo "
 "evento"
 
-#: ../../../src/MenuDevConsole.cpp:368
+#: ../../../src/MenuDevConsole.cpp:369
 msgid "clears the command history"
 msgstr "limpia el histórico de órdenes"
 
-#: ../../../src/MenuDevConsole.cpp:369
+#: ../../../src/MenuDevConsole.cpp:370
 msgid "displays this text"
 msgstr "muestra este texto"
 
-#: ../../../src/MenuDevConsole.cpp:376
+#: ../../../src/MenuDevConsole.cpp:377
 msgid "Toggled the developer hud"
 msgstr "Activar/Desactivar información para desarrolladores"
 
-#: ../../../src/MenuDevConsole.cpp:380
+#: ../../../src/MenuDevConsole.cpp:381
 msgid "Toggled the hud"
 msgstr "Estado de información en pantalla cambiado"
 
-#: ../../../src/MenuDevConsole.cpp:529
+#: ../../../src/MenuDevConsole.cpp:385
+msgid "Toggled the FPS counter"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:534
 msgid "ERROR: Incorrect number of arguments"
 msgstr "ERROR: número de argumentos incorrecto"
 
-#: ../../../src/MenuDevConsole.cpp:531 ../../../src/MenuDevConsole.cpp:559
+#: ../../../src/MenuDevConsole.cpp:536 ../../../src/MenuDevConsole.cpp:564
 msgid "HINT:"
 msgstr "CONSEJO:"
 
-#: ../../../src/MenuDevConsole.cpp:531
+#: ../../../src/MenuDevConsole.cpp:536
 msgid "<id>"
 msgstr "<id>"
 
-#: ../../../src/MenuDevConsole.cpp:547
+#: ../../../src/MenuDevConsole.cpp:552
 #, c-format
 msgid "ERROR: '%s' is not a valid event key"
 msgstr "ERROR: '%s' no es una clave válida de evento"
 
-#: ../../../src/MenuDevConsole.cpp:557
+#: ../../../src/MenuDevConsole.cpp:562
 msgid "ERROR: Too few arguments"
 msgstr "ERROR: muy pocos argumentos"
 
-#: ../../../src/MenuDevConsole.cpp:559
+#: ../../../src/MenuDevConsole.cpp:564
 msgid "<key>=<val> <key>=<val> ..."
 msgstr "<key>=<val> <key>=<val> ..."
 
-#: ../../../src/MenuDevConsole.cpp:564
+#: ../../../src/MenuDevConsole.cpp:569
 msgid "ERROR: Unknown command"
 msgstr "ERROR: orden desconocida"
 
-#: ../../../src/MenuDevConsole.cpp:566
+#: ../../../src/MenuDevConsole.cpp:571
 msgid "HINT: Type help"
 msgstr "CONSEJO: escribe help"
 
