@@ -67,7 +67,7 @@ void ItemStorage::setItems(const std::string& s) {
 		}
 		else if ((items->items.empty() && storage[i].item > 0) || static_cast<unsigned>(storage[i].item) > items->items.size()-1) {
 			Utils::logError("ItemStorage: Item id (%d) out of bounds 1-%d, marking as unknown", storage[i].item, static_cast<int>(items->items.size()));
-			items->addUnknownItem(storage[i].item);
+			items->addUnknownItem(storage[i].item, ItemManager::UNKNOWN_MAX_QUANTITY);
 		}
 	}
 }
@@ -132,7 +132,7 @@ void ItemStorage::clear() {
 ItemStack ItemStorage::add( ItemStack stack, int slot) {
 	if (!stack.empty()) {
 		if (items->items.empty() || stack.item <= 0 || static_cast<unsigned>(stack.item) > items->items.size()-1) {
-			items->addUnknownItem(stack.item);
+			items->addUnknownItem(stack.item, ItemManager::UNKNOWN_MAX_QUANTITY);
 		}
 
 		int max_quantity = items->items[stack.item].max_quantity;

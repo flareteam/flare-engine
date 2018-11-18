@@ -93,7 +93,7 @@ ItemManager::ItemManager()
 
 	// make sure we have at least 1 item
 	if (items.empty()) {
-		addUnknownItem(1);
+		addUnknownItem(1, !UNKNOWN_MAX_QUANTITY);
 	}
 }
 
@@ -152,7 +152,7 @@ void ItemManager::loadItems(const std::string& filename) {
 			// @ATTR id|item_id|An uniq id of the item used as reference from other classes.
 			id_line = true;
 			id = Parse::toInt(infile.val);
-			addUnknownItem(id);
+			addUnknownItem(id, !UNKNOWN_MAX_QUANTITY);
 
 			clear_req_stat = true;
 			clear_bonus = true;
@@ -496,11 +496,14 @@ int ItemManager::getItemIconOverlay(size_t id) {
 	return -1;
 }
 
-void ItemManager::addUnknownItem(unsigned id) {
+void ItemManager::addUnknownItem(unsigned id, bool set_max_quantity) {
 	if (id > 0) {
 		size_t new_size = id+1;
 		if (items.size() <= new_size)
 			items.resize(new_size);
+
+		if (set_max_quantity)
+			items[id].max_quantity = INT_MAX;
 	}
 }
 

@@ -205,6 +205,7 @@ public:
 	};
 
 	static const bool DEFAULT_SELL_PRICE = true;
+	static const bool UNKNOWN_MAX_QUANTITY = true;
 
 	ItemManager();
 	~ItemManager();
@@ -215,7 +216,7 @@ public:
 	std::string getItemType(const std::string& _type);
 	Color getItemColor(unsigned id);
 	int getItemIconOverlay(size_t id);
-	void addUnknownItem(unsigned id);
+	void addUnknownItem(unsigned id, bool set_max_quantity);
 	bool requirementsMet(const StatBlock *stats, int item);
 
 	std::vector<Item> items;
