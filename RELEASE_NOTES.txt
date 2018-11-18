@@ -26,6 +26,7 @@ Engine fixes:
 * Fix incorrect descriptions of controls on mobile devices.
 * Add renderer support for batching calls to local pixel drawing. This speeds up the pre-render of the minimap.
 * Widgets that use custom images can now fall back to the default image if the custom image is missing (instead of exiting in failure).
+* Using consumables from the Inventory menu will now subtract from the stack that was clicked on.
 
 Game changes:
 

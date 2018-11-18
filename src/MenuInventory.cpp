@@ -56,6 +56,8 @@ MenuInventory::MenuInventory()
 	, carried_cols(4)
 	, carried_rows(4)
 	, tap_to_activate_timer(settings->max_frames_per_sec / 3)
+	, activated_slot(-1)
+	, activated_item(0)
 	, currency(0)
 	, drag_prev_src(-1)
 	, changed_equipment(true)
@@ -592,6 +594,11 @@ void MenuInventory::activate(const Point& position) {
 				pc->logMsg(msg->get("You don't have enough of the required item."), Avatar::MSG_NORMAL);
 				return;
 			}
+
+			if (powers->powers[power_id].required_items[i].id == inventory[CARRIED][slot].item) {
+				activated_slot = slot;
+				activated_item = inventory[CARRIED][slot].item;
+			}
 		}
 
 		// check power & item requirements
@@ -775,7 +782,12 @@ bool MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound, bo
  * Remove one given item from the player's inventory.
  */
 bool MenuInventory::remove(int item) {
-	if(!inventory[CARRIED].remove(item, 1)) {
+	if (activated_item != 0 && activated_slot != -1 && item == activated_item) {
+		inventory[CARRIED].subtract(activated_slot, 1);
+		activated_item = 0;
+		activated_slot = -1;
+	}
+	else if(!inventory[CARRIED].remove(item, 1)) {
 		if (!inventory[EQUIPMENT].remove(item, 1)) {
 			return false;
 		}

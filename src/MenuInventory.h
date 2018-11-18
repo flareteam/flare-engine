@@ -61,6 +61,9 @@ private:
 
 	Timer tap_to_activate_timer;
 
+	int activated_slot;
+	int activated_item;
+
 public:
 	enum {
 		CTRL_NONE = 0,
