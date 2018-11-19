@@ -14,6 +14,7 @@ Engine features:
 * Add 'toggle_fps' to the developer console commands.
 * Added a 2x zoom mode for the mini-map.
 * Add a video setting to disable parallax layers.
+* Add ability to use icons in books.
 
 Engine fixes:
 * Fixed shrinking tab widgets when widow was resized.
@@ -28,6 +29,7 @@ Engine fixes:
 * Widgets that use custom images can now fall back to the default image if the custom image is missing (instead of exiting in failure).
 * Using consumables from the Inventory menu will now subtract from the stack that was clicked on.
 * Missing items now maintain their stack quantity when moved around.
+* Fix potential memory leak when redefining images in books.
 
 Game changes:
 
