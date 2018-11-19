@@ -71,12 +71,14 @@ private:
 		Color color;
 		Rect size;
 		int justify;
+		bool shadow;
 		std::vector<StatusID> requires_status;
 		std::vector<StatusID> requires_not_status;
 
 		BookText()
 			: sprite(NULL)
 			, justify(0)
+			, shadow(false)
 		{}
 	};
 

@@ -226,6 +226,10 @@ void MenuBook::loadText(FileParser &infile, BookText& btext) {
 		btext.color.b = static_cast<Uint8>(Parse::popFirstInt(infile.val));
 		btext.font= Parse::popFirstString(infile.val);
 	}
+	// @ATTR text.shadow|bool|If true, the text will have a black shadow like the text labels in various menus.
+	else if (infile.key == "text_shadow") {
+		btext.shadow = Parse::toBool(Parse::popFirstString(infile.val));
+	}
 	// @ATTR text.text|string|The text to be displayed.
 	else if (infile.key == "text") {
 		// we use substr here to remove the trailing comma that was added in loadBook()
@@ -351,7 +355,13 @@ void MenuBook::refreshText() {
 		// render text to surface
 		font->setFont(text[i].font);
 		Point pSize = font->calc_size(text[i].text, text[i].size.w);
-		Image *graphics = render_device->createImage(text[i].size.w, pSize.y);
+		Image *graphics = NULL;
+		if (text[i].shadow) {
+			graphics = render_device->createImage(text[i].size.w + 1, pSize.y + 1);
+		}
+		else {
+			graphics = render_device->createImage(text[i].size.w, pSize.y);
+		}
 
 		if (graphics) {
 			int x_offset = 0;
@@ -360,6 +370,9 @@ void MenuBook::refreshText() {
 			else if (text[i].justify == FontEngine::JUSTIFY_RIGHT)
 				x_offset = text[i].size.w;
 
+			if (text[i].shadow) {
+				font->render(text[i].text, x_offset + 1, 1, text[i].justify, graphics, text[i].size.w, font->getColor(FontEngine::COLOR_BLACK));
+			}
 			font->render(text[i].text, x_offset, 0, text[i].justify, graphics, text[i].size.w, text[i].color);
 			text[i].sprite = graphics->createSprite();
 			graphics->unref();
