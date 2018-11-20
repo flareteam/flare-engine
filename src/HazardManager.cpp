@@ -172,12 +172,6 @@ void HazardManager::checkNewHazards() {
 
 		h.push_back(new_haz);
 	}
-
-	// check hero hazards
-	if (pc->haz != NULL) {
-		h.push_back(pc->haz);
-		pc->haz = NULL;
-	}
 }
 
 /**

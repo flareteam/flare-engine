@@ -35,7 +35,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EnemyManager.h"
 #include "EngineSettings.h"
 #include "FileParser.h"
-#include "Hazard.h"
 #include "InputState.h"
 #include "MapRenderer.h"
 #include "MenuActionBar.h"
@@ -146,8 +145,6 @@ void Avatar::init() {
 	respawn = false;
 
 	stats.cooldown.reset(Timer::END);
-
-	haz = NULL;
 
 	body = -1;
 
@@ -992,6 +989,4 @@ Avatar::~Avatar() {
 
 	for (unsigned i=0; i<sound_steps.size(); i++)
 		snd->unload(sound_steps[i]);
-
-	delete haz;
 }

@@ -32,7 +32,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Utils.h"
 
 class Entity;
-class Hazard;
 class StatBlock;
 
 class ActionData {
@@ -129,7 +128,6 @@ public:
 	std::string transform_map;
 
 	// vars
-	Hazard *haz;
 	int current_power;
 	FPoint act_target;
 	bool drag_walking;
