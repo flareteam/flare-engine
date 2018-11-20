@@ -204,11 +204,10 @@ void GameStatePlay::checkEnemyFocus() {
 
 	// save the highlighted enemy position for auto-targeting purposes
 	if (enemy) {
-		pc->enemy_pos = enemy->stats.pos;
+		pc->cursor_enemy = enemy;
 	}
 	else {
-		pc->enemy_pos.x = -1;
-		pc->enemy_pos.y = -1;
+		pc->cursor_enemy = NULL;
 	}
 
 	// save the positions of the nearest enemies for powers that use "target_nearest"
@@ -329,6 +328,7 @@ void GameStatePlay::checkTeleport() {
 				Utils::logError("GameStatePlay: Spawn position (%d, %d) is blocked.", static_cast<int>(pc->stats.pos.x), static_cast<int>(pc->stats.pos.y));
 			}
 
+			pc->handleNewMap();
 			hazards->handleNewMap();
 			loot->handleNewMap();
 			powers->handleNewMap(&mapr->collider);
@@ -372,7 +372,6 @@ void GameStatePlay::checkTeleport() {
 		mapr->collider.block(pc->stats.pos.x, pc->stats.pos.y, !MapCollision::IS_ALLY);
 
 		pc->stats.teleportation = false;
-
 	}
 
 	if (!on_load_teleport && mapr->teleport_mapname.empty())

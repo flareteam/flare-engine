@@ -31,6 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Entity.h"
 #include "Utils.h"
 
+class Enemy;
 class Entity;
 class StatBlock;
 
@@ -98,6 +99,7 @@ public:
 	~Avatar();
 
 	void init();
+	void handleNewMap();
 	void loadGraphics(std::vector<Layer_gfx> _img_gfx);
 	void loadStepFX(const std::string& stepname);
 
@@ -137,7 +139,8 @@ public:
 	bool allow_movement;
 	std::vector<Timer> power_cooldown_timers;
 	std::vector<Timer> power_cast_timers;
-	FPoint enemy_pos; // positon of the highlighted enemy
+	Enemy* cursor_enemy; // enemy selected with the mouse cursor
+	Enemy* lock_enemy;
 	unsigned long time_played;
 	bool questlog_dismissed;
 	bool attacking_with_main1;

@@ -577,7 +577,7 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 	}
 
 	bool enable_main1 = !platform.is_mobile_device || (!menu->menus_open && menu->touch_controls->checkAllowMain1());
-	bool enable_main2 = !settings->mouse_move || inpt->pressing[Input::SHIFT];
+	bool enable_main2 = !settings->mouse_move || inpt->pressing[Input::SHIFT] || pc->lock_enemy;
 
 	// check click and hotkey actions
 	for (unsigned i = 0; i < slots_count; i++) {
@@ -964,7 +964,7 @@ Point MenuActionBar::getSlotPos(int slot) {
 
 int MenuActionBar::getSlotPower(int slot) {
 	if (static_cast<unsigned>(slot) < hotkeys.size()) {
-		return hotkeys[slot];
+		return hotkeys_mod[slot];
 	}
 	return 0;
 }

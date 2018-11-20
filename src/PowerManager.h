@@ -207,6 +207,7 @@ public:
 	float target_range;
 	bool target_party;
 	std::vector<std::string> target_categories;
+	float combat_range;
 
 	int mod_accuracy_mode;
 	int mod_accuracy_value;
@@ -320,6 +321,8 @@ private:
 	void activatePassiveByTrigger(int power_id, StatBlock *src_stats, bool& triggered_others);
 	void activatePassivePostPowers(StatBlock *src_stats);
 
+	void setCombatRange(size_t power_index);
+
 	std::vector<Animation*> power_animations;
 	std::vector<Animation*> effect_animations;
 
@@ -339,6 +342,7 @@ public:
 	int verifyID(int power_id, FileParser* infile, bool allow_zero);
 	bool checkNearestTargeting(const Power &pow, const StatBlock *src_stats, bool check_corpses);
 	bool checkRequiredItems(const Power &pow, const StatBlock *src_stats);
+	bool checkCombatRange(int power_index, StatBlock *src_stats, FPoint target);
 
 	EffectDef* getEffectDef(const std::string& id);
 

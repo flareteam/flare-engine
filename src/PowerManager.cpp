@@ -54,6 +54,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include <cmath>
 #include <climits>
+#include <float.h>
 
 Power::Power()
 	: is_empty(true)
@@ -868,10 +869,13 @@ void PowerManager::loadPowers() {
 	}
 	infile.close();
 
-	// verify wall/post power ids
 	for (size_t i=0; i<powers.size(); ++i) {
+		// verify wall/post power ids
 		powers[i].wall_power = verifyID(powers[i].wall_power, NULL, ALLOW_ZERO_ID);
 		powers[i].post_power = verifyID(powers[i].post_power, NULL, ALLOW_ZERO_ID);
+
+		// calculate effective combat range
+		setCombatRange(i);
 	}
 }
 
@@ -1714,6 +1718,57 @@ bool PowerManager::checkRequiredItems(const Power &pow, const StatBlock *src_sta
 	}
 
 	return true;
+}
+
+void PowerManager::setCombatRange(size_t power_index) {
+	Power& pow = powers[power_index];
+
+	pow.combat_range = 0;
+
+	// TODO apparently, missiles and repeaters don't need to have "use_hazard=true"?
+	if ((!pow.use_hazard && pow.type == Power::TYPE_FIXED) || pow.no_attack) {
+		return;
+	}
+
+	if (pow.type == Power::TYPE_FIXED) {
+		if (pow.relative_pos) {
+			pow.combat_range += pow.charge_speed * static_cast<float>(pow.lifespan);
+		}
+		if (pow.starting_pos == Power::STARTING_POS_TARGET) {
+			pow.combat_range = FLT_MAX - pow.radius;
+		}
+	}
+	else if (pow.type == Power::TYPE_MISSILE) {
+		pow.combat_range += pow.speed * static_cast<float>(pow.lifespan);
+	}
+	else if (pow.type == Power::TYPE_REPEATER) {
+		pow.combat_range += pow.speed * static_cast<float>(pow.count);
+	}
+	else {
+		pow.combat_range = 0;
+	}
+
+	pow.combat_range += (pow.radius / 2.f);
+}
+
+bool PowerManager::checkCombatRange(int power_index, StatBlock* src_stats, FPoint target) {
+	Power& pow = powers[power_index];
+
+	if (pow.combat_range == 0)
+		return false;
+
+	float combat_range = pow.combat_range;
+	float target_range = pow.target_range + (pow.radius / 2.f);
+
+	if (pow.starting_pos == Power::STARTING_POS_MELEE) {
+		combat_range += src_stats->melee_range;
+	}
+
+	if (pow.target_range > 0 && target_range < combat_range) {
+		combat_range = target_range;
+	}
+
+	return Utils::calcDist(src_stats->pos, target) <= combat_range;
 }
 
 PowerManager::~PowerManager() {
