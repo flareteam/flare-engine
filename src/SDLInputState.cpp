@@ -677,7 +677,7 @@ std::string SDLInputState::getMovementString() {
 		ss << msg->get("Touch control D-Pad");
 	}
 	else if (settings->mouse_move) {
-		ss << getBindingString(Input::MAIN2);
+		ss << (settings->mouse_move_swap ? getBindingString(Input::MAIN2) : getBindingString(Input::MAIN1));
 	}
 	else {
 		ss << getBindingString(Input::LEFT) <<  "/";
