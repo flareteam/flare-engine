@@ -38,7 +38,9 @@ enable_joystick=568,36,584,32
 mouse_move=568,68,584,64
 mouse_aim=568,100,584,96
 no_mouse=568,132,584,128
-joystick_deadzone=368,168,384,160
+mouse_move_swap=568,164,584,160
+mouse_move_attack=568,196,584,192
+joystick_deadzone=368,232,384,224
 
 [key_bindings]
 

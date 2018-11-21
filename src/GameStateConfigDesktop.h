@@ -121,6 +121,10 @@ private:
 	WidgetLabel         * mouse_aim_lb;
 	WidgetCheckBox      * no_mouse_cb;
 	WidgetLabel         * no_mouse_lb;
+	WidgetCheckBox      * mouse_move_swap_cb;
+	WidgetLabel         * mouse_move_swap_lb;
+	WidgetCheckBox      * mouse_move_attack_cb;
+	WidgetLabel         * mouse_move_attack_lb;
 	WidgetSlider        * joystick_deadzone_sl;
 	WidgetLabel         * joystick_deadzone_lb;
 

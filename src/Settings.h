@@ -69,6 +69,8 @@ public:
 
 	// Input Settings
 	bool mouse_move;
+	bool mouse_move_swap;
+	bool mouse_move_attack;
 	bool enable_joystick;
 	int joystick_device;
 	bool mouse_aim;

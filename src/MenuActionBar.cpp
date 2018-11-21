@@ -257,7 +257,7 @@ void MenuActionBar::align() {
 
 	for (unsigned i = SLOT_MAIN1; i < static_cast<unsigned>(SLOT_MAX); i++) {
 		if (i < slots.size() && slots[i]) {
-			if (settings->mouse_move && i == SLOT_MAIN2) {
+			if (settings->mouse_move && ((i == SLOT_MAIN2 && settings->mouse_move_swap) || (i == SLOT_MAIN1 && !settings->mouse_move_swap))) {
 				labels[i] = msg->get("Hotkey: %s", inpt->getBindingString(Input::SHIFT) + " + " + inpt->getBindingString(i - SLOT_MAIN1 + Input::MAIN1));
 			}
 			else {
@@ -576,8 +576,9 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 		slots[10]->in_focus = true;
 	}
 
-	bool enable_main1 = !platform.is_mobile_device || (!menu->menus_open && menu->touch_controls->checkAllowMain1());
-	bool enable_main2 = !settings->mouse_move || inpt->pressing[Input::SHIFT] || pc->lock_enemy;
+	bool enable_mm_attack = (!settings->mouse_move || inpt->pressing[Input::SHIFT] || pc->lock_enemy);
+	bool enable_main1 = (!platform.is_mobile_device || (!menu->menus_open && menu->touch_controls->checkAllowMain1())) && (settings->mouse_move_swap || enable_mm_attack);
+	bool enable_main2 = !settings->mouse_move_swap || enable_mm_attack;
 
 	// check click and hotkey actions
 	for (unsigned i = 0; i < slots_count; i++) {

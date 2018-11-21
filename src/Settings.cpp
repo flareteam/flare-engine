@@ -60,7 +60,7 @@ Settings::Settings()
 	, encounter_dist(0) // set in updateScreenVars()
 	, soft_reset(false)
 {
-	config.resize(33);
+	config.resize(35);
 	setConfigDefault(0,  "fullscreen",        &typeid(fullscreen),         "0",            &fullscreen,         "fullscreen mode. 1 enable, 0 disable.");
 	setConfigDefault(1,  "resolution_w",      &typeid(screen_w),           "640",          &screen_w,           "display resolution. 640x480 minimum.");
 	setConfigDefault(2,  "resolution_h",      &typeid(screen_h),           "480",          &screen_h,           "");
@@ -93,7 +93,9 @@ Settings::Settings()
 	setConfigDefault(29, "auto_equip",        &typeid(auto_equip),         "1",            &auto_equip,         "automatically equip items. 1 enable, 0 disable");
 	setConfigDefault(30, "subtitles",         &typeid(subtitles),          "0",            &subtitles,          "displays subtitles. 1 enable, 0 disable");
 	setConfigDefault(31, "minimap_mode",      &typeid(minimap_mode),       "0",            &minimap_mode,       "mini-map display mode. 0 is normal, 1 is 2x zoom, 2 is hidden");
-	setConfigDefault(32, "prev_save_slot",    &typeid(prev_save_slot),     "-1",           &prev_save_slot,     "index of the last used save slot");
+	setConfigDefault(32, "mouse_move_swap",   &typeid(mouse_move_swap),    "0",            &mouse_move_swap,    "use 'Main2' as the movement action when using mouse movement. 1 enable, 0 disable.");
+	setConfigDefault(33, "mouse_move_attack", &typeid(mouse_move_attack),  "1",            &mouse_move_attack,  "allows attacking with the mouse movement button if an enemy is targeted and in range. 1 enable, 0 disable.");
+	setConfigDefault(34, "prev_save_slot",    &typeid(prev_save_slot),     "-1",           &prev_save_slot,     "index of the last used save slot");
 }
 
 void Settings::setConfigDefault(size_t index, const std::string& name, const std::type_info *type, const std::string& default_val, void *storage, const std::string& comment) {

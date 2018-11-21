@@ -225,7 +225,8 @@ void GameStatePlay::checkEnemyFocus() {
  */
 bool GameStatePlay::restrictPowerUse() {
 	if (settings->mouse_move) {
-		if(inpt->pressing[Input::MAIN2] && !inpt->pressing[Input::SHIFT] && !menu->act->isWithinSlots(inpt->mouse) && !menu->act->isWithinMenus(inpt->mouse)) {
+		int mm_key = (settings->mouse_move_swap ? Input::MAIN2 : Input::MAIN1);
+		if(inpt->pressing[mm_key] && !inpt->pressing[Input::SHIFT] && !menu->act->isWithinSlots(inpt->mouse) && !menu->act->isWithinMenus(inpt->mouse)) {
 			return true;
 		}
 	}
@@ -256,7 +257,7 @@ void GameStatePlay::checkLoot() {
 	}
 
 	// Normal pickups
-	if (!pc->attacking_with_main1) {
+	if (!pc->using_main1) {
 		pickup = loot->checkPickup(inpt->mouse, mapr->cam, pc->stats.pos);
 	}
 
@@ -670,7 +671,7 @@ void GameStatePlay::checkNotifications() {
  * If an NPC is giving a reward, process it
  */
 void GameStatePlay::checkNPCInteraction() {
-	if (pc->attacking_with_main1 || !pc->stats.humanoid)
+	if (pc->using_main1 || !pc->stats.humanoid)
 		return;
 
 	// reset movement restrictions when we're not in dialog

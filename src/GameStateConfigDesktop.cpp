@@ -77,6 +77,10 @@ GameStateConfigDesktop::GameStateConfigDesktop(bool _enable_video_tab)
 	, mouse_aim_lb(new WidgetLabel())
 	, no_mouse_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
 	, no_mouse_lb(new WidgetLabel())
+	, mouse_move_swap_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
+	, mouse_move_swap_lb(new WidgetLabel())
+	, mouse_move_attack_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
+	, mouse_move_attack_lb(new WidgetLabel())
 	, joystick_deadzone_sl(new WidgetSlider(WidgetSlider::DEFAULT_FILE))
 	, joystick_deadzone_lb(new WidgetLabel())
 	, input_scrollbox(NULL)
@@ -191,6 +195,8 @@ void GameStateConfigDesktop::readConfig() {
 	parallax_layers_cb->tooltip = msg->get("This enables parallax (non-tile) layers. Disabling this setting can improve performance in some cases.");
 	change_gamma_cb->tooltip = msg->get("Experimental");
 	no_mouse_cb->tooltip = msg->get("For handheld devices");
+	mouse_move_swap_cb->tooltip = msg->get("When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero instead of 'Main1'.");
+	mouse_move_attack_cb->tooltip = msg->get("When 'Move hero using mouse' is enabled, this setting controls if the Power assigned to the movement button can be used by targeting an enemy. If this setting is disabled, it is required to use 'Shift' to access the Power assigned to the movement button.");
 }
 
 bool GameStateConfigDesktop::parseKeyDesktop(FileParser &infile, int &x1, int &y1, int &x2, int &y2) {
@@ -285,6 +291,14 @@ bool GameStateConfigDesktop::parseKeyDesktop(FileParser &infile, int &x1, int &y
 	else if (infile.key == "no_mouse") {
 		// @ATTR no_mouse|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Do not use mouse" checkbox relative to the frame.
 		placeLabeledWidget(no_mouse_lb, no_mouse_cb, x1, y1, x2, y2, msg->get("Do not use mouse"), FontEngine::JUSTIFY_RIGHT);
+	}
+	else if (infile.key == "mouse_move_swap") {
+		// @ATTR mouse_move_swap|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Swap mouse movement button" checkbox relative to the frame.
+		placeLabeledWidget(mouse_move_swap_lb, mouse_move_swap_cb, x1, y1, x2, y2, msg->get("Swap mouse movement button"), FontEngine::JUSTIFY_RIGHT);
+	}
+	else if (infile.key == "mouse_move_attack") {
+		// @ATTR mouse_move_attack|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Attack with mouse movement" checkbox relative to the frame.
+		placeLabeledWidget(mouse_move_attack_lb, mouse_move_attack_cb, x1, y1, x2, y2, msg->get("Attack with mouse movement"), FontEngine::JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "joystick_deadzone") {
 		// @ATTR joystick_deadzone|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Joystick Deadzone" slider relative to the frame.
@@ -422,6 +436,10 @@ void GameStateConfigDesktop::addChildWidgetsDesktop() {
 	addChildWidget(mouse_aim_lb, INPUT_TAB);
 	addChildWidget(no_mouse_cb, INPUT_TAB);
 	addChildWidget(no_mouse_lb, INPUT_TAB);
+	addChildWidget(mouse_move_swap_cb, INPUT_TAB);
+	addChildWidget(mouse_move_swap_lb, INPUT_TAB);
+	addChildWidget(mouse_move_attack_cb, INPUT_TAB);
+	addChildWidget(mouse_move_attack_lb, INPUT_TAB);
 	addChildWidget(joystick_deadzone_sl, INPUT_TAB);
 	addChildWidget(joystick_deadzone_lb, INPUT_TAB);
 	addChildWidget(joystick_device_lstb, INPUT_TAB);
@@ -477,6 +495,8 @@ void GameStateConfigDesktop::setupTabList() {
 	tablist_input.add(mouse_move_cb);
 	tablist_input.add(mouse_aim_cb);
 	tablist_input.add(no_mouse_cb);
+	tablist_input.add(mouse_move_swap_cb);
+	tablist_input.add(mouse_move_attack_cb);
 	tablist_input.add(joystick_deadzone_sl);
 	tablist_input.add(joystick_device_lstb);
 	tablist_input.setPrevTabList(&tablist);
@@ -534,6 +554,8 @@ void GameStateConfigDesktop::updateInput() {
 	mouse_aim_cb->setChecked(settings->mouse_aim);
 	no_mouse_cb->setChecked(settings->no_mouse);
 	mouse_move_cb->setChecked(settings->mouse_move);
+	mouse_move_swap_cb->setChecked(settings->mouse_move_swap);
+	mouse_move_attack_cb->setChecked(settings->mouse_move_attack);
 
 	if (settings->enable_joystick && inpt->getNumJoysticks() > 0) {
 		inpt->initJoystick();
@@ -701,6 +723,12 @@ void GameStateConfigDesktop::logicInput() {
 			disableMouseOptions();
 		}
 		else settings->no_mouse = false;
+	}
+	else if (mouse_move_swap_cb->checkClick()) {
+		settings->mouse_move_swap = mouse_move_swap_cb->isChecked();
+	}
+	else if (mouse_move_attack_cb->checkClick()) {
+		settings->mouse_move_attack = mouse_move_attack_cb->isChecked();
 	}
 	else if (enable_joystick_cb->checkClick()) {
 		if (enable_joystick_cb->isChecked()) {

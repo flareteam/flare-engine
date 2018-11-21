@@ -2,7 +2,8 @@ Flare v1.09 (WIP)
 
 Engine features:
 
-* Redesigned mouse movement to use the secondary button (right mouse) for movement.
+* Redesigned mouse movement with better handling of non-melee attacks.
+* New mouse movement options to swap the movement button and/or restrict the movement button to be movement-only.
 * Loot tooltips can now be hidden when entities are near pieces of loot. The setting "hide_radius" has been added to engine/loot.txt to control this.
 * Overhead markers are now displayed for entities that are obscured by tall tiles.
 * Dialog options are no longer shown in a separate menu, but are instead part of the main dialog window.

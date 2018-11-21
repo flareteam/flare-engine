@@ -332,7 +332,7 @@ void MenuManager::logic() {
 		handleKeyboardNavigation();
 
 	// Stop attacking if the cursor is inside an interactable menu
-	if (pc->attacking_with_main1 || pc->moving_with_main2) {
+	if (pc->using_main1 || pc->using_main2) {
 		if (Utils::isWithinRect(act->window_area, inpt->mouse) ||
 			(book->visible && Utils::isWithinRect(book->window_area, inpt->mouse)) ||
 			(chr->visible && Utils::isWithinRect(chr->window_area, inpt->mouse)) ||

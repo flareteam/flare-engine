@@ -80,6 +80,8 @@ private:
 
 	bool attack_cursor;
 
+	int mm_key; // mouse movement key
+
 protected:
 	virtual void resetActiveAnimation();
 
@@ -143,8 +145,8 @@ public:
 	Enemy* lock_enemy;
 	unsigned long time_played;
 	bool questlog_dismissed;
-	bool attacking_with_main1;
-	bool moving_with_main2;
+	bool using_main1;
+	bool using_main2;
 };
 
 #endif
