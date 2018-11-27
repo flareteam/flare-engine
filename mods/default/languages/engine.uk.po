@@ -288,6 +288,8 @@ msgid ""
 "This enables parallax (non-tile) layers. Disabling this setting can improve "
 "performance in some cases."
 msgstr ""
+"Вмикає шари оточення (сніг, дощ, туман...). Вимкнення цієї опції може інколи"
+" підвищити продуктивність."
 
 #: ../../../src/GameStateConfigDesktop.cpp:192
 msgid "Experimental"
@@ -327,7 +329,7 @@ msgstr "Масштабування розлільної здатності"
 
 #: ../../../src/GameStateConfigDesktop.cpp:251
 msgid "Parallax Layers"
-msgstr ""
+msgstr "Шари середовища"
 
 #: ../../../src/GameStateConfigDesktop.cpp:255
 msgid "Allow changing gamma"
@@ -747,7 +749,7 @@ msgstr "Видима"
 
 #: ../../../src/MenuActionBar.cpp:484
 msgid "Visible (2x zoom)"
-msgstr ""
+msgstr "Видима (2х)"
 
 #: ../../../src/MenuActionBar.cpp:486
 msgid "Hidden"
@@ -895,7 +897,7 @@ msgstr "додає уміння на панель дій"
 
 #: ../../../src/MenuDevConsole.cpp:361
 msgid "turns on/off the display of the FPS counter"
-msgstr ""
+msgstr "вмикає/вимикає відображення FPS"
 
 #: ../../../src/MenuDevConsole.cpp:362
 msgid "turns on/off all of the HUD elements"
@@ -956,7 +958,7 @@ msgstr "Інтерфейс перемкнено"
 
 #: ../../../src/MenuDevConsole.cpp:385
 msgid "Toggled the FPS counter"
-msgstr ""
+msgstr "Показ FPS перемкнений"
 
 #: ../../../src/MenuDevConsole.cpp:534
 msgid "ERROR: Incorrect number of arguments"
