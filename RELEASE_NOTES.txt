@@ -32,6 +32,7 @@ Engine fixes:
 * Using consumables from the Inventory menu will now subtract from the stack that was clicked on.
 * Missing items now maintain their stack quantity when moved around.
 * Fix potential memory leak when redefining images in books.
+* Fix book open sound effect not being played in all cases.
 
 Game changes:
 

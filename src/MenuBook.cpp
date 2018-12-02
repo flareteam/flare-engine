@@ -151,6 +151,8 @@ void MenuBook::loadBook() {
 
 	align();
 
+	snd->play(sfx_open, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
+
 	if (event_open && EventManager::isActive(*event_open)) {
 		EventManager::executeEvent(*event_open);
 	}

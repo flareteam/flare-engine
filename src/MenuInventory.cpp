@@ -563,8 +563,7 @@ void MenuInventory::activate(const Point& position) {
 		return;
 
 	// if the item is a book, open it
-	if (items->items[inventory[CARRIED][slot].item].book != "") {
-		snd->play(sfx_open, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
+	if (!items->items[inventory[CARRIED][slot].item].book.empty()) {
 		show_book = items->items[inventory[CARRIED][slot].item].book;
 	}
 	// use a consumable item
