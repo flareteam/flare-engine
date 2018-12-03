@@ -34,12 +34,16 @@ Engine fixes:
 * Missing items now maintain their stack quantity when moved around.
 * Fix potential memory leak when redefining images in books.
 * Fix book open sound effect not being played in all cases.
+* Closing a book with the 'Cancel' key no longer closes all other menus.
+* Fix handling of disabled widgets when using keyboard navigation.
 
 Game changes:
 
 * Fix the "Locked Out" quest not appearing in the completed quests list.
 * Add interface option buttons to the actionbar.
 * Add auto-equip checkbox to the Inventory menu.
+* Added script font for Cyrillic languages.
+* Made changes to the Wizard's Tower: Laboratory map to prevent attacking Metzger from outside the intended range.
 
 New translations:
 
