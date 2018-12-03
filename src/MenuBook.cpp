@@ -134,9 +134,7 @@ void MenuBook::loadBook() {
 			images.erase(images.begin() + i);
 	}
 
-	for (size_t i = buttons.size(); i > 0;) {
-		i--;
-
+	for (size_t i = 0; i < buttons.size(); ++i) {
 		if (buttons[i].image.empty())
 			buttons[i].button = new WidgetButton(WidgetButton::DEFAULT_FILE);
 		else
@@ -398,9 +396,17 @@ void MenuBook::logic() {
 
 	tablist.logic();
 
-	if (closeButton->checkClick() || (inpt->pressing[Input::ACCEPT] && !inpt->lock[Input::ACCEPT] && tablist.getCurrent() == -1)) {
-		if (inpt->pressing[Input::ACCEPT]) inpt->lock[Input::ACCEPT] = true;
-
+	if (closeButton->checkClick()) {
+		closeWindow();
+		snd->play(sfx_close, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
+	}
+	else if (inpt->pressing[Input::ACCEPT] && !inpt->lock[Input::ACCEPT] && tablist.getCurrent() == -1) {
+		inpt->lock[Input::ACCEPT] = true;
+		closeWindow();
+		snd->play(sfx_close, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
+	}
+	else if (inpt->pressing[Input::CANCEL] && !inpt->lock[Input::CANCEL]) {
+		inpt->lock[Input::CANCEL] = true;
 		closeWindow();
 		snd->play(sfx_close, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
 	}
