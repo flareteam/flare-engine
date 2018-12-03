@@ -63,6 +63,7 @@ Item::Item()
 	, quality("")
 	, type("")
 	, icon(0)
+	, book_is_readable(true)
 	, dmg_min((eset ? eset->damage_types.list.size() : 0), 0)
 	, dmg_max((eset ? eset->damage_types.list.size() : 0), 0)
 	, abs_min(0)
@@ -188,6 +189,10 @@ void ItemManager::loadItems(const std::string& filename) {
 		else if (infile.key == "book") {
 			// @ATTR book|filename|A book file to open when this item is activated.
 			items[id].book = infile.val;
+		}
+		else if (infile.key == "book_is_readable") {
+			// @ATTR book_is_readable|bool|If true, "read" is displayed in the tooltip instead of "use". Defaults to true.
+			items[id].book_is_readable = Parse::toBool(infile.val);
 		}
 		else if (infile.key == "quality") {
 			// @ATTR quality|predefined_string|Item quality matching an id in items/qualities.txt
@@ -918,7 +923,10 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 			tip.addColoredText('\n' + msg->get("Press [%s] to use", inpt->getBindingString(Input::MAIN2)), font->getColor(FontEngine::COLOR_ITEM_BONUS));
 		}
 		else if (!items[stack.item].book.empty()) {
-			tip.addColoredText('\n' + msg->get("Press [%s] to read", inpt->getBindingString(Input::MAIN2)), font->getColor(FontEngine::COLOR_ITEM_BONUS));
+			if (items[stack.item].book_is_readable)
+				tip.addColoredText('\n' + msg->get("Press [%s] to read", inpt->getBindingString(Input::MAIN2)), font->getColor(FontEngine::COLOR_ITEM_BONUS));
+			else
+				tip.addColoredText('\n' + msg->get("Press [%s] to use", inpt->getBindingString(Input::MAIN2)), font->getColor(FontEngine::COLOR_ITEM_BONUS));
 		}
 	}
 

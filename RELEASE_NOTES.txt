@@ -18,6 +18,7 @@ Engine features:
 * Add a video setting to disable parallax layers.
 * Add ability to use icons in books.
 * Add support for shadows on book text via 'text_shadow'.
+* Add item property 'book_is_readable' to control displaying 'read' vs 'use' in item tooltips.
 
 Engine fixes:
 * Fixed shrinking tab widgets when widow was resized.

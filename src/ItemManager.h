@@ -107,6 +107,7 @@ public:
 	std::vector<std::string> equip_flags;   // common values include: melee, ranged, mental, shield
 	int icon;             // icon index on small pixel sheet
 	std::string book;     // book file location
+	bool book_is_readable; // whether to display "use" or "read" in the tooltip
 	std::vector<int> dmg_min; // minimum damage amount
 	std::vector<int> dmg_max; // maximum damage amount
 	int abs_min;          // minimum absorb amount
