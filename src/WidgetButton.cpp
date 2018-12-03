@@ -117,6 +117,8 @@ bool WidgetButton::checkClick() {
  * If press and release, activate (return true)
  */
 bool WidgetButton::checkClickAt(int x, int y) {
+	enable_tablist_nav = enabled;
+
 	Point mouse(x,y);
 
 	checkTooltip(mouse);

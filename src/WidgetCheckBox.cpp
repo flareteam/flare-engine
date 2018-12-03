@@ -81,6 +81,8 @@ bool WidgetCheckBox::checkClick() {
 }
 
 bool WidgetCheckBox::checkClickAt(int x, int y) {
+	enable_tablist_nav = enabled;
+
 	if (!enabled) return false;
 
 	Point mouse(x,y);

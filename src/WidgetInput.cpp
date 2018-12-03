@@ -86,6 +86,7 @@ void WidgetInput::activate() {
 }
 
 bool WidgetInput::checkClick(const Point& mouse) {
+	enable_tablist_nav = enabled;
 
 	// disabled buttons can't be clicked;
 	if (!enabled) return false;
