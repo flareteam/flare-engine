@@ -4,6 +4,14 @@ Engine fixes:
 
 * Fixed assertion/crash when engaging in dialog.
 
+Game updates:
+
+* Fixed main weapon layer order when hero is facing east.
+
+Translation updates:
+
+* Ukranian (uk) update (Микола Франчук)
+
 
 
 Flare v1.09 (http://flarerpg.org/index.php/2018/12/09/flare-1-09/)
