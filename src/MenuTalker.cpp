@@ -468,6 +468,11 @@ void MenuTalker::clearActionButtons() {
 }
 
 void MenuTalker::executeAction(size_t index) {
+	if (index >= actions.size())
+		return;
+
+	int node_id = actions[index].node_id;
+
 	if (actions[index].is_vendor) {
 		// begin trading
 		NPC *temp_npc = npc;
@@ -475,11 +480,11 @@ void MenuTalker::executeAction(size_t index) {
 		menu->vendor->setNPC(temp_npc);
 		menu->inv->visible = true;
 	}
-	else if (actions[index].node_id != -1) {
+	else if (node_id != -1) {
 		// begin talking
-		chooseDialogNode(actions[index].node_id);
+		chooseDialogNode(node_id);
 		if (npc && npc_from_map) {
-			pc->allow_movement = npc->checkMovement(actions[index].node_id);
+			pc->allow_movement = npc->checkMovement(node_id);
 		}
 	}
 }

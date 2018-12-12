@@ -1,4 +1,12 @@
-Flare v1.09 (WIP)
+Flare v1.10 (WIP)
+
+Engine fixes:
+
+* Fixed assertion/crash when engaging in dialog.
+
+
+
+Flare v1.09 (http://flarerpg.org/index.php/2018/12/09/flare-1-09/)
 
 Engine features:
 
@@ -21,6 +29,7 @@ Engine features:
 * Add item property 'book_is_readable' to control displaying 'read' vs 'use' in item tooltips.
 
 Engine fixes:
+
 * Fixed shrinking tab widgets when widow was resized.
 * Remove broken 'font_fallback' from engine/font_settings.txt.
 * Add tooltips to language list to show language codes.
