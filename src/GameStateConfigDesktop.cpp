@@ -39,6 +39,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
 #include "WidgetCheckBox.h"
+#include "WidgetHorizontalList.h"
 #include "WidgetListBox.h"
 #include "WidgetScrollBox.h"
 #include "WidgetSlider.h"
@@ -49,7 +50,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 GameStateConfigDesktop::GameStateConfigDesktop(bool _enable_video_tab)
 	: GameStateConfigBase(!GameStateConfigBase::DO_INIT)
-	, renderer_lstb(new WidgetListBox(4, WidgetListBox::DEFAULT_FILE))
+	, renderer_lstb(new WidgetHorizontalList())
 	, renderer_lb(new WidgetLabel())
 	, fullscreen_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
 	, fullscreen_lb(new WidgetLabel())
@@ -67,7 +68,7 @@ GameStateConfigDesktop::GameStateConfigDesktop(bool _enable_video_tab)
 	, change_gamma_lb(new WidgetLabel())
 	, gamma_sl(new WidgetSlider(WidgetSlider::DEFAULT_FILE))
 	, gamma_lb(new WidgetLabel())
-	, joystick_device_lstb(new WidgetListBox(10, WidgetListBox::DEFAULT_FILE))
+	, joystick_device_lstb(new WidgetHorizontalList())
 	, joystick_device_lb(new WidgetLabel())
 	, enable_joystick_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
 	, enable_joystick_lb(new WidgetLabel())
@@ -206,27 +207,16 @@ bool GameStateConfigDesktop::parseKeyDesktop(FileParser &infile, int &x1, int &y
 
 	if (infile.key == "listbox_scrollbar_offset") {
 		// overrides same key in GameStateConfigBase
-		renderer_lstb->scrollbar_offset = x1;
-		joystick_device_lstb->scrollbar_offset = x1;
 		activemods_lstb->scrollbar_offset = x1;
 		inactivemods_lstb->scrollbar_offset = x1;
-		language_lstb->scrollbar_offset = x1;
 	}
 	else if (infile.key == "renderer") {
 		// @ATTR renderer|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Renderer" list box relative to the frame.
 		placeLabeledWidget(renderer_lb, renderer_lstb, x1, y1, x2, y2, msg->get("Renderer"));
 
-		renderer_lstb->can_select = true;
-		renderer_lstb->multi_select = false;
-		renderer_lstb->can_deselect = false;
-
 		refreshRenderers();
 
 		renderer_lb->setJustify(FontEngine::JUSTIFY_CENTER);
-	}
-	else if (infile.key == "renderer_height") {
-		// @ATTR renderer_height|int|Number of visible rows for the "Renderer" list box.
-		renderer_lstb->setHeight(x1);
 	}
 	else if (infile.key == "fullscreen") {
 		// @ATTR fullscreen|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Full Screen Mode" checkbox relative to the frame.
@@ -272,6 +262,7 @@ bool GameStateConfigDesktop::parseKeyDesktop(FileParser &infile, int &x1, int &y
 		// @ATTR joystick_device|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Joystick" list box relative to the frame.
 		placeLabeledWidget(joystick_device_lb, joystick_device_lstb, x1, y1, x2, y2, msg->get("Joystick"));
 
+		joystick_device_lstb->append(msg->get("(none)"), "");
 		for(int i = 0; i < inpt->getNumJoysticks(); i++) {
 			std::string joystick_name = inpt->getJoystickName(i);
 			if (joystick_name != "")
@@ -279,10 +270,6 @@ bool GameStateConfigDesktop::parseKeyDesktop(FileParser &infile, int &x1, int &y
 		}
 
 		joystick_device_lb->setJustify(FontEngine::JUSTIFY_CENTER);
-	}
-	else if (infile.key == "joystick_device_height") {
-		// @ATTR joystick_device_height|int|Number of visible rows for the "Joystick" list box.
-		joystick_device_lstb->setHeight(x1);
 	}
 	else if (infile.key == "mouse_aim") {
 		// @ATTR mouse_aim|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Mouse aim" checkbox relative to the frame.
@@ -559,9 +546,8 @@ void GameStateConfigDesktop::updateInput() {
 
 	if (settings->enable_joystick && inpt->getNumJoysticks() > 0) {
 		inpt->initJoystick();
-		joystick_device_lstb->select(settings->joystick_device);
+		joystick_device_lstb->select(settings->joystick_device + 1);
 	}
-	joystick_device_lstb->jumpToSelected();
 
 	joystick_deadzone_sl->set(0, 32768, settings->joy_deadzone);
 }
@@ -695,6 +681,7 @@ void GameStateConfigDesktop::logicInput() {
 	if (inpt->joysticks_changed) {
 		disableJoystickOptions();
 		joystick_device_lstb->clear();
+		joystick_device_lstb->append(msg->get("(none)"), "");
 		for(int i = 0; i < inpt->getNumJoysticks(); i++) {
 			std::string joystick_name = inpt->getJoystickName(i);
 			if (joystick_name != "")
@@ -736,11 +723,8 @@ void GameStateConfigDesktop::logicInput() {
 			if (inpt->getNumJoysticks() > 0) {
 				settings->joystick_device = 0;
 				inpt->initJoystick();
-				joystick_device_lstb->select(settings->joystick_device);
+				joystick_device_lstb->select(settings->joystick_device + 1);
 			}
-
-			if (inpt->getNumJoysticks() > 0)
-				joystick_device_lstb->jumpToSelected();
 		}
 		else {
 			disableJoystickOptions();
@@ -750,7 +734,7 @@ void GameStateConfigDesktop::logicInput() {
 		settings->joy_deadzone = joystick_deadzone_sl->getValue();
 	}
 	else if (joystick_device_lstb->checkClick()) {
-		settings->joystick_device = joystick_device_lstb->getSelected();
+		settings->joystick_device = static_cast<int>(joystick_device_lstb->getSelected()) - 1;
 		if (settings->joystick_device != -1) {
 			settings->enable_joystick = true;
 			if (inpt->getNumJoysticks() > 0) {
@@ -952,8 +936,10 @@ void GameStateConfigDesktop::disableJoystickOptions() {
 	settings->enable_joystick = false;
 	enable_joystick_cb->setChecked(settings->enable_joystick);
 
-	for (int i=0; i<joystick_device_lstb->getSize(); i++)
-		joystick_device_lstb->deselect(i);
+	// for (int i=0; i<joystick_device_lstb->getSize(); i++)
+	// 	joystick_device_lstb->deselect(i);
+
+	joystick_device_lstb->select(0);
 
 	if (inpt->getNumJoysticks() > 0)
 		joystick_device_lstb->refresh();
@@ -971,6 +957,4 @@ void GameStateConfigDesktop::refreshRenderers() {
 			renderer_lstb->select(static_cast<int>(i));
 		}
 	}
-
-	renderer_lstb->jumpToSelected();
 }

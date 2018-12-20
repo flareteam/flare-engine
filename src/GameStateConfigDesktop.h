@@ -34,6 +34,7 @@ class MenuConfirm;
 class Widget;
 class WidgetButton;
 class WidgetCheckBox;
+class WidgetHorizontalList;
 class WidgetInput;
 class WidgetLabel;
 class WidgetListBox;
@@ -93,7 +94,7 @@ private:
 	void disableJoystickOptions();
 	void refreshRenderers();
 
-	WidgetListBox       * renderer_lstb;
+	WidgetHorizontalList       * renderer_lstb;
 	WidgetLabel         * renderer_lb;
 	WidgetCheckBox      * fullscreen_cb;
 	WidgetLabel         * fullscreen_lb;
@@ -111,7 +112,7 @@ private:
 	WidgetLabel         * change_gamma_lb;
 	WidgetSlider        * gamma_sl;
 	WidgetLabel         * gamma_lb;
-	WidgetListBox       * joystick_device_lstb;
+	WidgetHorizontalList       * joystick_device_lstb;
 	WidgetLabel         * joystick_device_lb;
 	WidgetCheckBox      * enable_joystick_cb;
 	WidgetLabel         * enable_joystick_lb;

@@ -51,6 +51,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Version.h"
 #include "WidgetButton.h"
 #include "WidgetCheckBox.h"
+#include "WidgetHorizontalList.h"
 #include "WidgetListBox.h"
 #include "WidgetSlider.h"
 #include "WidgetTabControl.h"
@@ -80,7 +81,7 @@ GameStateConfigBase::GameStateConfigBase (bool do_init)
 	, activemods_lb(new WidgetLabel())
 	, inactivemods_lstb(new WidgetListBox(10, WidgetListBox::DEFAULT_FILE))
 	, inactivemods_lb(new WidgetLabel())
-	, language_lstb(new WidgetListBox(10, WidgetListBox::DEFAULT_FILE))
+	, language_lstb(new WidgetHorizontalList())
 	, language_lb(new WidgetLabel())
 	, activemods_shiftup_btn(new WidgetButton("images/menus/buttons/up.png"))
 	, activemods_shiftdown_btn(new WidgetButton("images/menus/buttons/down.png"))
@@ -109,8 +110,6 @@ GameStateConfigBase::GameStateConfigBase (bool do_init)
 	ok_button->setLabel(msg->get("OK"));
 	defaults_button->setLabel(msg->get("Defaults"));
 	cancel_button->setLabel(msg->get("Cancel"));
-
-	language_lstb->can_deselect = false;
 
 	// Finish Mods ListBoxes setup
 	activemods_lstb->multi_select = true;
@@ -232,7 +231,6 @@ bool GameStateConfigBase::parseKey(FileParser &infile, int &x1, int &y1, int &x2
 		// @ATTR listbox_scrollbar_offset|int|Horizontal offset from the right of listboxes (mods, languages, etc) to place the scrollbar.
 		activemods_lstb->scrollbar_offset = x1;
 		inactivemods_lstb->scrollbar_offset = x1;
-		language_lstb->scrollbar_offset = x1;
 	}
 	else if (infile.key == "frame_offset") {
 		// @ATTR frame_offset|point|Offset for all the widgets contained under each tab.
@@ -256,10 +254,6 @@ bool GameStateConfigBase::parseKey(FileParser &infile, int &x1, int &y1, int &x2
 		// @ATTR language|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Language" list box relative to the frame.
 		placeLabeledWidget(language_lb, language_lstb, x1, y1, x2, y2, msg->get("Language"));
 		language_lb->setJustify(FontEngine::JUSTIFY_CENTER);
-	}
-	else if (infile.key == "language_height") {
-		// @ATTR language_height|int|Number of visible rows for the "Language" list box.
-		language_lstb->setHeight(x1);
 	}
 	else if (infile.key == "show_fps") {
 		// @ATTR show_fps|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Show FPS" checkbox relative to the frame.
@@ -660,8 +654,8 @@ void GameStateConfigBase::logicAudio() {
 
 void GameStateConfigBase::logicInterface() {
 	if (language_lstb->checkClick()) {
-		int lang_id = language_lstb->getSelected();
-		if (lang_id != -1)
+		unsigned lang_id = language_lstb->getSelected();
+		if (lang_id != language_lstb->getSize())
 			settings->language = language_ISO[lang_id];
 	}
 	else if (show_fps_cb->checkClick()) {
@@ -797,8 +791,6 @@ void GameStateConfigBase::refreshLanguages() {
 		}
 		infile.close();
 	}
-
-	language_lstb->jumpToSelected();
 }
 
 void GameStateConfigBase::refreshFont() {

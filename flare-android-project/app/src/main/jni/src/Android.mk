@@ -112,6 +112,7 @@ LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c \
 	../../../../../../src/Widget.cpp \
 	../../../../../../src/WidgetCheckBox.cpp \
 	../../../../../../src/WidgetButton.cpp \
+	../../../../../../src/WidgetHorizontalList.cpp \
 	../../../../../../src/WidgetInput.cpp \
  	../../../../../../src/WidgetLabel.cpp \
  	../../../../../../src/WidgetListBox.cpp \

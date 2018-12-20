@@ -192,6 +192,7 @@ Set (FLARE_SOURCES
 	./src/Widget.cpp
 	./src/WidgetCheckBox.cpp
 	./src/WidgetButton.cpp
+	./src/WidgetHorizontalList.cpp
 	./src/WidgetInput.cpp
  	./src/WidgetLabel.cpp
  	./src/WidgetListBox.cpp
@@ -305,6 +306,7 @@ Set (FLARE_HEADERS
 	./src/Widget.h
 	./src/WidgetCheckBox.h
 	./src/WidgetButton.h
+	./src/WidgetHorizontalList.h
 	./src/WidgetInput.h
  	./src/WidgetLabel.h
  	./src/WidgetListBox.h

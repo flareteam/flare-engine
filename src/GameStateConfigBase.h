@@ -39,6 +39,7 @@ class Mod;
 class Widget;
 class WidgetButton;
 class WidgetCheckBox;
+class WidgetHorizontalList;
 class WidgetLabel;
 class WidgetListBox;
 class WidgetSlider;
@@ -130,7 +131,7 @@ public:
 	WidgetLabel         * activemods_lb;
 	WidgetListBox       * inactivemods_lstb;
 	WidgetLabel         * inactivemods_lb;
-	WidgetListBox       * language_lstb;
+	WidgetHorizontalList       * language_lstb;
 	WidgetLabel         * language_lb;
 	WidgetButton        * activemods_shiftup_btn;
 	WidgetButton        * activemods_shiftdown_btn;
