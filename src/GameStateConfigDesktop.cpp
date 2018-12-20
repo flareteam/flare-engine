@@ -70,8 +70,6 @@ GameStateConfigDesktop::GameStateConfigDesktop(bool _enable_video_tab)
 	, gamma_lb(new WidgetLabel())
 	, joystick_device_lstb(new WidgetHorizontalList())
 	, joystick_device_lb(new WidgetLabel())
-	, enable_joystick_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
-	, enable_joystick_lb(new WidgetLabel())
 	, mouse_move_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
 	, mouse_move_lb(new WidgetLabel())
 	, mouse_aim_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
@@ -254,10 +252,6 @@ bool GameStateConfigDesktop::parseKeyDesktop(FileParser &infile, int &x1, int &y
 		// @ATTR gamma|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Gamma" slider relative to the frame.
 		placeLabeledWidget(gamma_lb, gamma_sl, x1, y1, x2, y2, msg->get("Gamma"), FontEngine::JUSTIFY_RIGHT);
 	}
-	else if (infile.key == "enable_joystick") {
-		// @ATTR enable_joystick|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Use joystick" checkbox relative to the frame.
-		placeLabeledWidget(enable_joystick_lb, enable_joystick_cb, x1, y1, x2, y2, msg->get("Use joystick"), FontEngine::JUSTIFY_RIGHT);
-	}
 	else if (infile.key == "joystick_device") {
 		// @ATTR joystick_device|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Joystick" list box relative to the frame.
 		placeLabeledWidget(joystick_device_lb, joystick_device_lstb, x1, y1, x2, y2, msg->get("Joystick"));
@@ -417,8 +411,6 @@ void GameStateConfigDesktop::addChildWidgetsDesktop() {
 
 	addChildWidget(mouse_move_cb, INPUT_TAB);
 	addChildWidget(mouse_move_lb, INPUT_TAB);
-	addChildWidget(enable_joystick_cb, INPUT_TAB);
-	addChildWidget(enable_joystick_lb, INPUT_TAB);
 	addChildWidget(mouse_aim_cb, INPUT_TAB);
 	addChildWidget(mouse_aim_lb, INPUT_TAB);
 	addChildWidget(no_mouse_cb, INPUT_TAB);
@@ -478,7 +470,6 @@ void GameStateConfigDesktop::setupTabList() {
 	tablist_interface.setNextTabList(&tablist_main);
 	tablist_interface.lock();
 
-	tablist_input.add(enable_joystick_cb);
 	tablist_input.add(mouse_move_cb);
 	tablist_input.add(mouse_aim_cb);
 	tablist_input.add(no_mouse_cb);
@@ -537,7 +528,6 @@ void GameStateConfigDesktop::updateVideo() {
 }
 
 void GameStateConfigDesktop::updateInput() {
-	enable_joystick_cb->setChecked(settings->enable_joystick);
 	mouse_aim_cb->setChecked(settings->mouse_aim);
 	no_mouse_cb->setChecked(settings->no_mouse);
 	mouse_move_cb->setChecked(settings->mouse_move);
@@ -717,19 +707,6 @@ void GameStateConfigDesktop::logicInput() {
 	else if (mouse_move_attack_cb->checkClick()) {
 		settings->mouse_move_attack = mouse_move_attack_cb->isChecked();
 	}
-	else if (enable_joystick_cb->checkClick()) {
-		if (enable_joystick_cb->isChecked()) {
-			settings->enable_joystick = true;
-			if (inpt->getNumJoysticks() > 0) {
-				settings->joystick_device = 0;
-				inpt->initJoystick();
-				joystick_device_lstb->select(settings->joystick_device + 1);
-			}
-		}
-		else {
-			disableJoystickOptions();
-		}
-	}
 	else if (joystick_deadzone_sl->checkClick()) {
 		settings->joy_deadzone = joystick_deadzone_sl->getValue();
 	}
@@ -744,7 +721,6 @@ void GameStateConfigDesktop::logicInput() {
 		else {
 			settings->enable_joystick = false;
 		}
-		enable_joystick_cb->setChecked(settings->enable_joystick);
 	}
 }
 
@@ -934,7 +910,6 @@ void GameStateConfigDesktop::disableMouseOptions() {
 
 void GameStateConfigDesktop::disableJoystickOptions() {
 	settings->enable_joystick = false;
-	enable_joystick_cb->setChecked(settings->enable_joystick);
 
 	// for (int i=0; i<joystick_device_lstb->getSize(); i++)
 	// 	joystick_device_lstb->deselect(i);

@@ -114,8 +114,6 @@ private:
 	WidgetLabel         * gamma_lb;
 	WidgetHorizontalList       * joystick_device_lstb;
 	WidgetLabel         * joystick_device_lb;
-	WidgetCheckBox      * enable_joystick_cb;
-	WidgetLabel         * enable_joystick_lb;
 	WidgetCheckBox      * mouse_move_cb;
 	WidgetLabel         * mouse_move_lb;
 	WidgetCheckBox      * mouse_aim_cb;
