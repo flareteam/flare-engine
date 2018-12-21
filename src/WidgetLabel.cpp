@@ -55,6 +55,7 @@ WidgetLabel::WidgetLabel()
 {
 	bounds.x = bounds.y = 0;
 	bounds.w = bounds.h = 0;
+	enable_tablist_nav = false;
 }
 
 void WidgetLabel::setMaxWidth(int width) {

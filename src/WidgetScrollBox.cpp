@@ -40,7 +40,7 @@ WidgetScrollBox::WidgetScrollBox(int width, int height)
 	update = true;
 	resize(width, height);
 	tablist = TabList();
-	tablist.setScrollType(SCROLL_VERTICAL);
+	tablist.setScrollType(SCROLL_TWO_DIRECTIONS);
 
 	scroll_type = SCROLL_VERTICAL;
 }
@@ -127,7 +127,14 @@ Point WidgetScrollBox::input_assist(const Point& mouse) {
 void WidgetScrollBox::logic() {
 	logic(inpt->mouse.x,inpt->mouse.y);
 	if (in_focus) {
+		if (currentChild == -1 && !children.empty())
+			getNext();
 		tablist.logic();
+	}
+	else {
+		// TODO don't run every frame
+		tablist.defocus();
+		currentChild = -1;
 	}
 }
 
@@ -246,7 +253,7 @@ void WidgetScrollBox::render() {
 	}
 	update = false;
 
-	if (in_focus) {
+	if (in_focus && children.empty()) {
 		Point topLeft;
 		Point bottomRight;
 
@@ -273,47 +280,77 @@ void WidgetScrollBox::render() {
 
 bool WidgetScrollBox::getNext() {
 	if (children.empty()) {
+		int prev_cursor = cursor;
+		int bottom = contents ? contents->getGraphicsHeight() - pos.h : 0;
+
 		scrollDown();
+
+		if (cursor == bottom && prev_cursor == bottom)
+			return false;
+
 		return true;
 	}
 
-	if (currentChild != -1)
+	if (currentChild != -1) {
 		children[currentChild]->in_focus = false;
-	currentChild+=1;
-	currentChild = (static_cast<unsigned>(currentChild) == children.size()) ? 0 : currentChild;
-
-	if (children[currentChild]->pos.y > (cursor + pos.h) ||
-			(children[currentChild]->pos.y + children[currentChild]->pos.h) > (cursor + pos.h)) {
-		scrollTo(children[currentChild]->pos.y+children[currentChild]->pos.h-pos.h);
+		currentChild = tablist.getNextRelativeIndex(TabList::WIDGET_SELECT_DOWN);
+		tablist.setCurrent(children[currentChild]);
 	}
-	if (children[currentChild]->pos.y < cursor ||
-			(children[currentChild]->pos.y + children[currentChild]->pos.h) < cursor) {
+	else {
+		// TODO neaten this up?
+		currentChild = 0;
+		tablist.setCurrent(children[currentChild]);
+		currentChild = tablist.getNextRelativeIndex(TabList::WIDGET_SELECT_DOWN);
+		tablist.setCurrent(children[currentChild]);
+		currentChild = tablist.getNextRelativeIndex(TabList::WIDGET_SELECT_UP);
+		tablist.setCurrent(children[currentChild]);
+	}
+
+	if (currentChild != -1) {
+		children[currentChild]->in_focus = true;
 		scrollTo(children[currentChild]->pos.y);
 	}
-	children[currentChild]->in_focus = true;
+	else {
+		return false;
+	}
+
 	return true;
 }
 
 bool WidgetScrollBox::getPrev() {
 	if (children.empty()) {
+		int prev_cursor = cursor;
+
 		scrollUp();
+
+		if (cursor == 0 && prev_cursor == 0)
+			return false;
+
 		return true;
 	}
 
-	if (currentChild != -1)
+	if (currentChild != -1) {
 		children[currentChild]->in_focus = false;
-	currentChild-=1;
-	currentChild = (currentChild < 0) ? static_cast<int>(children.size()) - 1 : currentChild;
-
-	if (children[currentChild]->pos.y > (cursor + pos.h) ||
-			(children[currentChild]->pos.y + children[currentChild]->pos.h) > (cursor + pos.h)) {
-		scrollTo(children[currentChild]->pos.y+children[currentChild]->pos.h-pos.h);
+		currentChild = tablist.getNextRelativeIndex(TabList::WIDGET_SELECT_UP);
+		tablist.setCurrent(children[currentChild]);
 	}
-	if (children[currentChild]->pos.y < cursor ||
-			(children[currentChild]->pos.y + children[currentChild]->pos.h) < cursor) {
+	else {
+		currentChild = 0;
+		tablist.setCurrent(children[currentChild]);
+		currentChild = tablist.getNextRelativeIndex(TabList::WIDGET_SELECT_DOWN);
+		tablist.setCurrent(children[currentChild]);
+		currentChild = tablist.getNextRelativeIndex(TabList::WIDGET_SELECT_UP);
+		tablist.setCurrent(children[currentChild]);
+	}
+
+	if (currentChild != -1) {
+		children[currentChild]->in_focus = true;
 		scrollTo(children[currentChild]->pos.y);
 	}
-	children[currentChild]->in_focus = true;
+	else {
+		return false;
+	}
+
 	return true;
 }
 

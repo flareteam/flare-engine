@@ -73,6 +73,9 @@ public:
 	void select(unsigned index);
 	void scrollLeft();
 	void scrollRight();
+
+	bool getPrev();
+	bool getNext();
 };
 
 #endif

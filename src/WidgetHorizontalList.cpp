@@ -19,6 +19,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class WidgetHorizontalList
  */
 
+#include "EngineSettings.h"
 #include "FontEngine.h"
 #include "InputState.h"
 #include "RenderDevice.h"
@@ -37,6 +38,7 @@ WidgetHorizontalList::WidgetHorizontalList()
 	, cursor(0)
 {
 	focusable = true;
+	scroll_type = SCROLL_HORIZONTAL;
 	refresh();
 }
 
@@ -85,6 +87,30 @@ void WidgetHorizontalList::render() {
 	label.local_frame = local_frame;
 	label.local_offset = local_offset;
 	label.render();
+
+	if (in_focus) {
+		Point topLeft;
+		Point bottomRight;
+
+		topLeft.x = pos.x + local_frame.x - local_offset.x;
+		topLeft.y = pos.y + local_frame.y - local_offset.y;
+		bottomRight.x = topLeft.x + pos.w;
+		bottomRight.y = topLeft.y + pos.h;
+
+		// Only draw rectangle if it fits in local frame
+		bool draw = true;
+		if (local_frame.w &&
+				(topLeft.x<local_frame.x || bottomRight.x>(local_frame.x+local_frame.w))) {
+			draw = false;
+		}
+		if (local_frame.h &&
+				(topLeft.y<local_frame.y || bottomRight.y>(local_frame.y+local_frame.h))) {
+			draw = false;
+		}
+		if (draw || 1) {
+			render_device->drawRectangle(topLeft, bottomRight, eset->widgets.selection_rect_color);
+		}
+	}
 }
 
 void WidgetHorizontalList::refresh() {
@@ -190,6 +216,16 @@ void WidgetHorizontalList::scrollRight() {
 		cursor++;
 
 	refresh();
+}
+
+bool WidgetHorizontalList::getPrev() {
+	scrollLeft();
+	return true;
+}
+
+bool WidgetHorizontalList::getNext() {
+	scrollRight();
+	return true;
 }
 
 WidgetHorizontalList::~WidgetHorizontalList() {
