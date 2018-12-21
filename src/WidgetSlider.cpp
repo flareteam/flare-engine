@@ -207,7 +207,10 @@ void WidgetSlider::render () {
 
 		TooltipData tip_data;
 		tip_data.addText(ss.str());
-		tooltipm->push(tip_data, Point(pos_knob.x + pos_knob.w*2, pos_knob.y + (pos_knob.h/2)), TooltipData::STYLE_TOPLABEL);
+		Point new_mouse;
+		new_mouse.x = pos_knob.x + (pos_knob.w * 2) + local_frame.x - local_offset.x;
+		new_mouse.y = pos_knob.y + (pos_knob.h / 2) + local_frame.y - local_offset.y;
+		tooltipm->push(tip_data, new_mouse, TooltipData::STYLE_TOPLABEL);
 	}
 }
 

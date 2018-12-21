@@ -59,11 +59,11 @@ bool WidgetHorizontalList::checkClickAt(int x, int y) {
 
 	checkTooltip(mouse);
 
-	if (button_left->checkClick()) {
+	if (button_left->checkClickAt(mouse.x, mouse.y)) {
 		scrollLeft();
 		return true;
 	}
-	else if (button_right->checkClick()) {
+	else if (button_right->checkClickAt(mouse.x, mouse.y)) {
 		scrollRight();
 		return true;
 	}
@@ -103,7 +103,7 @@ void WidgetHorizontalList::refresh() {
 	button_right->enabled = !isEmpty();
 
 	pos.w = button_left->pos.w + button_right->pos.w + text_width;
-	pos.h = button_left->pos.h + button_right->pos.h + text_width;
+	pos.h = std::max(button_left->pos.h, label.getBounds()->h);
 
 	tooltip_area.x = pos.x + button_left->pos.w;
 	tooltip_area.y = std::min(pos.y, label.getBounds()->y);
@@ -118,7 +118,8 @@ void WidgetHorizontalList::checkTooltip(const Point& mouse) {
 	if (inpt->usingMouse() && Utils::isWithinRect(tooltip_area, mouse) && !list_items[cursor].tooltip.empty()) {
 		TooltipData tip_data;
 		tip_data.addText(list_items[cursor].tooltip);
-		tooltipm->push(tip_data, mouse, TooltipData::STYLE_FLOAT);
+		Point new_mouse(mouse.x + local_frame.x - local_offset.x, mouse.y + local_frame.y - local_offset.y);
+		tooltipm->push(tip_data, new_mouse, TooltipData::STYLE_FLOAT);
 	}
 }
 

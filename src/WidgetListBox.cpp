@@ -187,8 +187,10 @@ void WidgetListBox::checkTooltip(const Point& mouse) {
 		}
 	}
 
-	if (!tip_data.isEmpty())
-		tooltipm->push(tip_data, mouse, TooltipData::STYLE_FLOAT);
+	if (!tip_data.isEmpty()) {
+		Point new_mouse(mouse.x + local_frame.x - local_offset.x, mouse.y + local_frame.y - local_offset.y);
+		tooltipm->push(tip_data, new_mouse, TooltipData::STYLE_FLOAT);
+	}
 }
 
 /**

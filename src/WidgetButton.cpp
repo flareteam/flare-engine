@@ -224,7 +224,8 @@ void WidgetButton::checkTooltip(const Point& mouse) {
 	if (inpt->usingMouse() && Utils::isWithinRect(pos, mouse) && tooltip != "") {
 		TooltipData tip_data;
 		tip_data.addText(tooltip);
-		tooltipm->push(tip_data, mouse, TooltipData::STYLE_FLOAT);
+		Point new_mouse(mouse.x + local_frame.x - local_offset.x, mouse.y + local_frame.y - local_offset.y);
+		tooltipm->push(tip_data, new_mouse, TooltipData::STYLE_FLOAT);
 	}
 }
 
