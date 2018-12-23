@@ -1,5 +1,14 @@
 Flare v1.10 (WIP)
 
+Translation updates:
+
+* Belarusian (be) update (Zmicer Turok)
+* Catalan (ca) update (Marc Tormo i Bochaca)
+
+
+
+Flare v1.09.01 (http://flarerpg.org/index.php/2018/12/12/flare-1-09-01/)
+
 Engine fixes:
 
 * Fixed assertion/crash when engaging in dialog.
