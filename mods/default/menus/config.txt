@@ -9,16 +9,8 @@ button_cancel=0,0,bottom
 
 listbox_scrollbar_offset=2
 
-[video]
-renderer=104,16,32,32
-fullscreen=568,36,584,32
-hwsurface=568,68,584,64
-vsync=568,100,584,96
-texture_filter=568,132,584,128
-dpi_scaling=568,164,584,160
-parallax_layers=568,196,584,192
-change_gamma=568,228,584,224
-gamma=368,264,384,256
+scrollpane_padding=80,40
+scrollpane_separator_color=63,63,63
 
 [audio]
 music_volume=368,40,384,32

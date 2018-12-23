@@ -542,7 +542,7 @@ void ModManager::saveMods() {
 		}
 	}
 	if (outfile.bad())
-		Utils::logError("GameStateConfigBase: Unable to save mod list into file. No write access or disk is full!");
+		Utils::logError("GameStateConfig: Unable to save mod list into file. No write access or disk is full!");
 
 	outfile.close();
 	outfile.clear();

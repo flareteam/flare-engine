@@ -21,8 +21,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EngineSettings.h"
 #include "FileParser.h"
 #include "FontEngine.h"
-#include "GameStateConfigBase.h"
-#include "GameStateConfigDesktop.h"
+#include "GameStateConfig.h"
 #include "GameStateCutscene.h"
 #include "GameStateLoad.h"
 #include "GameStateTitle.h"
@@ -165,12 +164,14 @@ void GameStateTitle::logic() {
 	}
 	else if (button_cfg->checkClick()) {
 		showLoading();
-		if (platform.config_menu_type == Platform::CONFIG_MENU_TYPE_DESKTOP_NO_VIDEO)
-			setRequestedGameState(new GameStateConfigDesktop(!GameStateConfigDesktop::ENABLE_VIDEO_TAB));
-		else if (platform.config_menu_type == Platform::CONFIG_MENU_TYPE_DESKTOP)
-			setRequestedGameState(new GameStateConfigDesktop(GameStateConfigDesktop::ENABLE_VIDEO_TAB));
-		else
-			setRequestedGameState(new GameStateConfigBase(GameStateConfigBase::DO_INIT));
+		setRequestedGameState(new GameStateConfig());
+		// TODO platform-specific options
+		// if (platform.config_menu_type == Platform::CONFIG_MENU_TYPE_DESKTOP_NO_VIDEO)
+		// 	setRequestedGameState(new GameStateConfigDesktop(!GameStateConfigDesktop::ENABLE_VIDEO_TAB));
+		// else if (platform.config_menu_type == Platform::CONFIG_MENU_TYPE_DESKTOP)
+		// 	setRequestedGameState(new GameStateConfigDesktop(GameStateConfigDesktop::ENABLE_VIDEO_TAB));
+		// else
+		// 	setRequestedGameState(new GameStateConfigBase(GameStateConfigBase::DO_INIT));
 	}
 	else if (button_credits->checkClick()) {
 		showLoading();
