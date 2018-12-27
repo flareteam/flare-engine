@@ -77,6 +77,7 @@ void WidgetScrollBox::addChildWidget(Widget* child) {
 void WidgetScrollBox::clearChildWidgets() {
 	currentChild = -1;
 	children.clear();
+	tablist.clear();
 }
 
 void WidgetScrollBox::scroll(int amount) {
