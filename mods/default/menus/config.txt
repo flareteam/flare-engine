@@ -9,51 +9,11 @@ button_cancel=0,0,bottom
 
 listbox_scrollbar_offset=2
 
-scrollpane_padding=80,40
-scrollpane_separator_color=63,63,63
-
-[key_bindings]
-
 # scrollpane values are positions x, y and sizes width, height
 scrollpane=0,4,600,320
-# scrollpane_contents is the height of the scrollpane's internal area
-scrollpane_contents=940
-
-keybinds_bg_color=26,26,26
-cancel=120,14,138,10
-accept=120,44,138,40
-up=120,74,138,70
-down=120,104,138,100
-left=120,134,138,130
-right=120,164,138,160
-bar1=120,194,138,190
-bar2=120,224,138,220
-
-bar3=120,254,138,250
-bar4=120,284,138,280
-bar5=120,314,138,310
-bar6=120,344,138,340
-bar7=120,374,138,370
-bar8=120,404,138,400
-bar9=120,434,138,430
-bar0=120,464,138,460
-
-main1=120,494,138,490
-main2=120,524,138,520
-character=120,554,138,550
-inventory=120,584,138,580
-powers=120,614,138,610
-log=120,644,138,640
-ctrl=120,674,138,670
-shift=120,704,138,700
-alt=120,734,138,730
-delete=120,764,138,760
-actionbar=120,794,138,790
-actionbar_back=120,824,138,820
-actionbar_forward=120,854,138,850
-actionbar_use=120,884,138,880
-developer_menu=120,914,138,910
-secondary_offset=145,0
+scrollpane_padding=80,40
+# scrollpane_bg_color=26,26,26,127
+scrollpane_separator_color=63,63,63
 
 [mods]
 activemods=456,16,384,32

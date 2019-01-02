@@ -68,7 +68,6 @@ GameStateConfig::GameStateConfig ()
 	, defaults_button(new WidgetButton(WidgetButton::DEFAULT_FILE))
 	, cancel_button(new WidgetButton(WidgetButton::DEFAULT_FILE))
 	, background(NULL)
-	, input_scrollbox(NULL)
 	, input_confirm(new MenuConfirm(msg->get("Clear"),msg->get("Assign:")))
 	, defaults_confirm(new MenuConfirm(msg->get("Defaults"), msg->get("Reset ALL settings?")))
 
@@ -137,7 +136,7 @@ GameStateConfig::GameStateConfig ()
 	, frame(0,0)
 	, frame_offset(11,8)
 	, tab_offset(3,0)
-	, scrollpane_contents(0)
+	, scrollpane_color(0,0,0,0)
 	, scrollpane_padding(8, 40) // appropriate defaults for fantasycore widget sizes
 	, scrollpane_separator_color(font->getColor(FontEngine::COLOR_WIDGET_DISABLED))
 	, new_render_device(settings->render_device_name)
@@ -194,12 +193,8 @@ GameStateConfig::GameStateConfig ()
 	}
 
 	// Allocate KeyBindings
-	for (int i = 0; i < inpt->KEY_COUNT; i++) {
-		keybinds_lb.push_back(new WidgetLabel());
-		keybinds_lb[i]->setText(inpt->binding_name[i]);
-		keybinds_lb[i]->setJustify(FontEngine::JUSTIFY_RIGHT);
-	}
 	for (int i = 0; i < inpt->KEY_COUNT * 3; i++) {
+		keybinds_lb.push_back(new WidgetLabel());
 		keybinds_btn.push_back(new WidgetButton(WidgetButton::DEFAULT_FILE));
 	}
 
@@ -224,11 +219,12 @@ void GameStateConfig::init() {
 
 	readConfig();
 
-	cfg_tabs.resize(4);
+	cfg_tabs.resize(5);
 	cfg_tabs[VIDEO_TAB].options.resize(CFG_VIDEO_COUNT);
 	cfg_tabs[AUDIO_TAB].options.resize(CFG_AUDIO_COUNT);
 	cfg_tabs[INTERFACE_TAB].options.resize(CFG_INTERFACE_COUNT);
 	cfg_tabs[INPUT_TAB].options.resize(CFG_INPUT_COUNT);
+	cfg_tabs[KEYBINDS_TAB].options.resize(inpt->KEY_COUNT * 3);
 
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(CFG_VIDEO_RENDERER, renderer_lb, renderer_lstb, msg->get("Renderer"));
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(CFG_VIDEO_FULLSCREEN, fullscreen_lb, fullscreen_cb, msg->get("Full Screen Mode"));
@@ -258,6 +254,16 @@ void GameStateConfig::init() {
 	cfg_tabs[INPUT_TAB].setOptionWidgets(CFG_INPUT_MOUSE_MOVE_ATTACK, mouse_move_attack_lb, mouse_move_attack_cb, msg->get("Attack with mouse movement"));
 	cfg_tabs[INPUT_TAB].setOptionWidgets(CFG_INPUT_JOYSTICK_DEADZONE, joystick_deadzone_lb, joystick_deadzone_sl, msg->get("Joystick Deadzone"));
 
+
+	for (size_t i = 0; i < keybinds_btn.size(); ++i) {
+		if (i % 3 == 0) {
+			cfg_tabs[KEYBINDS_TAB].setOptionWidgets(static_cast<int>(i), keybinds_lb[i], keybinds_btn[i], inpt->binding_name[i/3]);
+			// TODO since these are blank, don't allocate?
+			cfg_tabs[KEYBINDS_TAB].setOptionWidgets(static_cast<int>(i+1), keybinds_lb[i+1], keybinds_btn[i+1], "");
+			cfg_tabs[KEYBINDS_TAB].setOptionWidgets(static_cast<int>(i+2), keybinds_lb[i+2], keybinds_btn[i+2], "");
+		}
+	}
+
 	// disable some options
 	// cfg_tabs[VIDEO_TAB].setOptionEnabled(CFG_VIDEO_TEXTURE_FILTER, false);
 
@@ -269,29 +275,12 @@ void GameStateConfig::init() {
 		// set up scrollbox
 		cfg_tabs[i].scrollbox = new WidgetScrollBox(scrollpane.w, scrollpane.h);
 		cfg_tabs[i].scrollbox->setBasePos(scrollpane.x, scrollpane.y, Utils::ALIGN_TOPLEFT);
+		cfg_tabs[i].scrollbox->bg = scrollpane_color;
 		cfg_tabs[i].scrollbox->resize(scrollpane.w, cfg_tabs[i].enabled_count * scrollpane_padding.y);
 
 		for (size_t j = 0; j < cfg_tabs[i].options.size(); ++j) {
 			placeLabeledWidgetAuto(static_cast<int>(i), static_cast<int>(j));
 		}
-	}
-
-	// Allocate KeyBindings ScrollBox
-	input_scrollbox = new WidgetScrollBox(scrollpane.w, scrollpane.h);
-	input_scrollbox->setBasePos(scrollpane.x, scrollpane.y, Utils::ALIGN_TOPLEFT);
-	input_scrollbox->bg = scrollpane_color;
-	input_scrollbox->resize(scrollpane.w, scrollpane_contents);
-
-	// Set positions of secondary key bindings
-	for (unsigned int i = key_count; i < key_count*2; i++) {
-		keybinds_btn[i]->pos.x = keybinds_btn[i-key_count]->pos.x + secondary_offset.x;
-		keybinds_btn[i]->pos.y = keybinds_btn[i-key_count]->pos.y + secondary_offset.y;
-	}
-
-	// Set positions of joystick bindings
-	for (unsigned int i = key_count*2; i < keybinds_btn.size(); i++) {
-		keybinds_btn[i]->pos.x = keybinds_btn[i-(key_count*2)]->pos.x + (secondary_offset.x*2);
-		keybinds_btn[i]->pos.y = keybinds_btn[i-(key_count*2)]->pos.y + (secondary_offset.y*2);
 	}
 
 	addChildWidgets();
@@ -365,8 +354,6 @@ bool GameStateConfig::parseKeyButtons(FileParser &infile) {
 	return true;
 }
 bool GameStateConfig::parseKey(FileParser &infile, int &x1, int &y1, int &x2, int &y2) {
-	int keybind_num = -1;
-
 	if (infile.key == "listbox_scrollbar_offset") {
 		// @ATTR listbox_scrollbar_offset|int|Horizontal offset from the right of listboxes (mods, languages, etc) to place the scrollbar.
 		activemods_lstb->scrollbar_offset = x1;
@@ -422,31 +409,12 @@ bool GameStateConfig::parseKey(FileParser &infile, int &x1, int &y1, int &x2, in
 		inactivemods_activate_btn->setBasePos(x1, y1, Utils::ALIGN_TOPLEFT);
 		inactivemods_activate_btn->refresh();
 	}
-	else if (infile.key == "secondary_offset") {
-		// @ATTR secondary_offset|point|Offset of the second (and third) columns of keybinds.
-		secondary_offset.x = x1;
-		secondary_offset.y = y1;
-	}
-	else if (infile.key == "keybinds_bg_color") {
-		// @ATTR keybinds_bg_color|color|Background color for the keybindings scrollbox.
-		scrollpane_color.r = static_cast<Uint8>(x1);
-		scrollpane_color.g = static_cast<Uint8>(y1);
-		scrollpane_color.b = static_cast<Uint8>(x2);
-	}
-	else if (infile.key == "keybinds_bg_alpha") {
-		// @ATTR keybinds_bg_alpha|int|Alpha value for the keybindings scrollbox background color.
-		scrollpane_color.a = static_cast<Uint8>(x1);
-	}
 	else if (infile.key == "scrollpane") {
 		// @ATTR scrollpane|rectangle|Position of the keybinding scrollbox relative to the frame.
 		scrollpane.x = x1;
 		scrollpane.y = y1;
 		scrollpane.w = x2;
 		scrollpane.h = y2;
-	}
-	else if (infile.key == "scrollpane_contents") {
-		// @ATTR scrollpane_contents|int|The vertical size of the keybinding scrollbox's contents.
-		scrollpane_contents = x1;
 	}
 	else if (infile.key == "scrollpane_padding") {
 		// @ATTR scrollpane_padding|int, int : Horizontal padding, Vertical padding|Pixel padding for each item listed in a tab's scroll box.
@@ -459,78 +427,15 @@ bool GameStateConfig::parseKey(FileParser &infile, int &x1, int &y1, int &x2, in
 		scrollpane_separator_color.g = static_cast<Uint8>(y1);
 		scrollpane_separator_color.b = static_cast<Uint8>(x2);
 	}
-
-	// @ATTR cancel|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Cancel" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "cancel") keybind_num = Input::CANCEL;
-	// @ATTR accept|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Accept" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "accept") keybind_num = Input::ACCEPT;
-	// @ATTR up|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Up" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "up") keybind_num = Input::UP;
-	// @ATTR down|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Down" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "down") keybind_num = Input::DOWN;
-	// @ATTR left|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Left" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "left") keybind_num = Input::LEFT;
-	// @ATTR right|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Right" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "right") keybind_num = Input::RIGHT;
-	// @ATTR bar1|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Bar1" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "bar1") keybind_num = Input::BAR_1;
-	// @ATTR bar2|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Bar2" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "bar2") keybind_num = Input::BAR_2;
-	// @ATTR bar3|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Bar3" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "bar3") keybind_num = Input::BAR_3;
-	// @ATTR bar4|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Bar4" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "bar4") keybind_num = Input::BAR_4;
-	// @ATTR bar5|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Bar5" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "bar5") keybind_num = Input::BAR_5;
-	// @ATTR bar6|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Bar6" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "bar6") keybind_num = Input::BAR_6;
-	// @ATTR bar7|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Bar7" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "bar7") keybind_num = Input::BAR_7;
-	// @ATTR Bar8|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Bar8" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "bar8") keybind_num = Input::BAR_8;
-	// @ATTR bar9|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Bar9" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "bar9") keybind_num = Input::BAR_9;
-	// @ATTR bar0|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Bar0" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "bar0") keybind_num = Input::BAR_0;
-	// @ATTR main1|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Main1" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "main1") keybind_num = Input::MAIN1;
-	// @ATTR main2|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Main2" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "main2") keybind_num = Input::MAIN2;
-	// @ATTR character|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Character" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "character") keybind_num = Input::CHARACTER;
-	// @ATTR inventory|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Inventory" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "inventory") keybind_num = Input::INVENTORY;
-	// @ATTR powers|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Powers" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "powers") keybind_num = Input::POWERS;
-	// @ATTR log|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Log" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "log") keybind_num = Input::LOG;
-	// @ATTR ctrl|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Ctrl" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "ctrl") keybind_num = Input::CTRL;
-	// @ATTR shift|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Shift" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "shift") keybind_num = Input::SHIFT;
-	// @ATTR alt|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Alt" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "alt") keybind_num = Input::ALT;
-	// @ATTR delete|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Delete" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "delete") keybind_num = Input::DEL;
-	// @ATTR actionbar|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "ActionBar Accept" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "actionbar") keybind_num = Input::ACTIONBAR;
-	// @ATTR actionbar_back|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "ActionBar Left" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "actionbar_back") keybind_num = Input::ACTIONBAR_BACK;
-	// @ATTR actionbar_forward|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "ActionBar Right" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "actionbar_forward") keybind_num = Input::ACTIONBAR_FORWARD;
-	// @ATTR actionbar_use|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "ActionBar Use" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "actionbar_use") keybind_num = Input::ACTIONBAR_USE;
-	// @ATTR developer_menu|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Developer Menu" keybind relative to the keybinding scrollbox.
-	else if (infile.key == "developer_menu") keybind_num = Input::DEVELOPER_MENU;
+	else if (infile.key == "scrollpane_bg_color") {
+		// @ATTR keybinds_bg_color|color, int: Color, Alpha|Background color and alpha for the keybindings scrollbox.
+		scrollpane_color.r = static_cast<Uint8>(x1);
+		scrollpane_color.g = static_cast<Uint8>(y1);
+		scrollpane_color.b = static_cast<Uint8>(x2);
+		scrollpane_color.a = static_cast<Uint8>(y2);
+	}
 
 	else return false;
-
-	if (keybind_num > -1 && static_cast<unsigned>(keybind_num) < keybinds_lb.size() && static_cast<unsigned>(keybind_num) < keybinds_btn.size()) {
-		//keybindings
-		keybinds_lb[keybind_num]->setPos(x1, y1);
-		keybinds_btn[keybind_num]->pos.x = x2;
-		keybinds_btn[keybind_num]->pos.y = y2;
-	}
 
 	return true;
 }
@@ -541,12 +446,12 @@ void GameStateConfig::addChildWidgets() {
 			if (cfg_tabs[i].options[j].enabled) {
 				cfg_tabs[i].scrollbox->addChildWidget(cfg_tabs[i].options[j].widget);
 				cfg_tabs[i].scrollbox->addChildWidget(cfg_tabs[i].options[j].label);
+
+				// only for memory management
+				addChildWidget(cfg_tabs[i].options[j].widget, NO_TAB);
+				addChildWidget(cfg_tabs[i].options[j].label, NO_TAB);
 			}
 		}
-	}
-
-	for (unsigned int i = 0; i < keybinds_btn.size(); i++) {
-		input_scrollbox->addChildWidget(keybinds_btn[i]);
 	}
 
 	addChildWidget(activemods_lstb, MODS_TAB);
@@ -594,7 +499,8 @@ void GameStateConfig::setupTabList() {
 	tablist_input.setNextTabList(&tablist_main);
 	tablist_input.lock();
 
-	tablist_keybinds.add(input_scrollbox);
+	tablist_keybinds.setScrollType(Widget::SCROLL_VERTICAL);
+	tablist_keybinds.add(cfg_tabs[KEYBINDS_TAB].scrollbox);
 	tablist_keybinds.setPrevTabList(&tablist);
 	tablist_keybinds.setNextTabList(&tablist_main);
 	tablist_keybinds.lock();
@@ -689,19 +595,18 @@ void GameStateConfig::updateInput() {
 
 void GameStateConfig::updateKeybinds() {
 	// now do labels for keybinds that are set
-	for (unsigned int i = 0; i < key_count; i++) {
-		keybinds_btn[i]->setLabel(inpt->getBindingString(i));
-		keybinds_btn[i]->refresh();
+	for (unsigned int i = 0; i < keybinds_btn.size(); i++) {
+		if (i % 3 == 0) {
+			keybinds_btn[i]->setLabel(inpt->getBindingString(i/3));
+			keybinds_btn[i+1]->setLabel(inpt->getBindingString(i/3, InputState::BINDING_ALT));
+			keybinds_btn[i+2]->setLabel(inpt->getBindingString(i/3, InputState::BINDING_JOYSTICK));
+
+			keybinds_btn[i]->refresh();
+			keybinds_btn[i+1]->refresh();
+			keybinds_btn[i+2]->refresh();
+		}
 	}
-	for (unsigned int i = key_count; i < key_count*2; i++) {
-		keybinds_btn[i]->setLabel(inpt->getBindingString(i-key_count, InputState::BINDING_ALT));
-		keybinds_btn[i]->refresh();
-	}
-	for (unsigned int i = key_count*2; i < keybinds_btn.size(); i++) {
-		keybinds_btn[i]->setLabel(inpt->getBindingString(i-(key_count*2), InputState::BINDING_JOYSTICK));
-		keybinds_btn[i]->refresh();
-	}
-	input_scrollbox->refresh();
+	cfg_tabs[KEYBINDS_TAB].scrollbox->refresh();
 }
 
 void GameStateConfig::updateMods() {
@@ -770,7 +675,7 @@ void GameStateConfig::logic() {
 
 bool GameStateConfig::logicMain() {
 	for (unsigned int i = 0; i < child_widget.size(); i++) {
-		if (child_widget[i]->in_focus) {
+		if (child_widget[i]->in_focus && optiontab[i] != NO_TAB) {
 			tab_control->setActiveTab(optiontab[i]);
 			break;
 		}
@@ -1036,16 +941,18 @@ void GameStateConfig::logicInput() {
 }
 
 void GameStateConfig::logicKeybinds() {
-	input_scrollbox->logic();
+	cfg_tabs[KEYBINDS_TAB].scrollbox->logic();
+	Point mouse = cfg_tabs[KEYBINDS_TAB].scrollbox->input_assist(inpt->mouse);
+
 	for (unsigned int i = 0; i < keybinds_btn.size(); i++) {
-		if (i >= static_cast<unsigned int>(inpt->KEY_COUNT * 2)) {
+		// if (i >= static_cast<unsigned int>(inpt->KEY_COUNT * 2)) {
+		if ((i+1) % 3 == 0) {
 			keybinds_btn[i]->enabled = settings->enable_joystick;
 			keybinds_btn[i]->refresh();
 		}
-		Point mouse = input_scrollbox->input_assist(inpt->mouse);
 		if (keybinds_btn[i]->checkClickAt(mouse.x,mouse.y)) {
 			std::string confirm_msg;
-			confirm_msg = msg->get("Assign:") + ' ' + inpt->binding_name[i%key_count];
+			confirm_msg = msg->get("Assign:") + ' ' + inpt->binding_name[i/3];
 			delete input_confirm;
 			input_confirm = new MenuConfirm(msg->get("Clear"),confirm_msg);
 			input_confirm_timer.reset(Timer::BEGIN);
@@ -1107,24 +1014,17 @@ void GameStateConfig::render() {
 }
 
 void GameStateConfig::renderTabContents() {
-	if (active_tab == KEYBINDS_TAB) {
-		if (input_scrollbox->update) {
-			input_scrollbox->refresh();
-		}
-		input_scrollbox->render();
-		for (unsigned int i = 0; i < keybinds_lb.size(); i++) {
-			keybinds_lb[i]->local_frame = input_scrollbox->pos;
-			keybinds_lb[i]->local_offset.y = input_scrollbox->getCursor();
-			keybinds_lb[i]->render();
-		}
-	}
-	else if (active_tab <= INPUT_TAB) {
+	if (active_tab <= KEYBINDS_TAB) {
 		if (cfg_tabs[active_tab].scrollbox->update) {
 			cfg_tabs[active_tab].scrollbox->refresh();
 
 			Image* render_target = cfg_tabs[active_tab].scrollbox->contents->getGraphics();
 
 			for (int i = 1; i < cfg_tabs[active_tab].enabled_count; ++i) {
+				if (active_tab == KEYBINDS_TAB) {
+					if (i % 3 != 0)
+						continue;
+				}
 				for (int j = scrollpane_padding.x; j < scrollpane.w - scrollpane_padding.x; ++j) {
 					render_target->drawPixel(j, i * scrollpane_padding.y, scrollpane_separator_color);
 				}
@@ -1134,7 +1034,8 @@ void GameStateConfig::renderTabContents() {
 	}
 
 	for (unsigned int i = 0; i < child_widget.size(); i++) {
-		if (optiontab[i] == active_tab) child_widget[i]->render();
+		if (optiontab[i] == active_tab && optiontab[i] != NO_TAB)
+			child_widget[i]->render();
 	}
 
 }
@@ -1205,7 +1106,8 @@ void GameStateConfig::refreshWidgets() {
 	frame.y = ((settings->view_h - eset->resolutions.frame_h)/2) + tab_control->getTabHeight() + frame_offset.y;
 
 	for (unsigned i=0; i<child_widget.size(); ++i) {
-		child_widget[i]->setPos(frame.x, frame.y);
+		if (optiontab[i] != NO_TAB)
+			child_widget[i]->setPos(frame.x, frame.y);
 	}
 
 	ok_button->setPos(0, 0);
@@ -1217,8 +1119,6 @@ void GameStateConfig::refreshWidgets() {
 	for (size_t i = 0; i < cfg_tabs.size(); ++i) {
 		cfg_tabs[i].scrollbox->setPos(frame.x, frame.y);
 	}
-
-	input_scrollbox->setPos(frame.x, frame.y);
 
 	input_confirm->align();
 }
@@ -1368,8 +1268,8 @@ void GameStateConfig::confirmKey(int button) {
 }
 
 void GameStateConfig::scanKey(int button) {
-	int column = button / key_count;
-	int real_button = button % key_count;
+	int column = button % 3;
+	int real_button = button / 3;
 
 	// clear the keybind if the user clicks "Clear" in the dialog
 	if (input_confirm->visible && input_confirm->confirmClicked) {
@@ -1482,29 +1382,11 @@ void GameStateConfig::cleanupTabContents() {
 	}
 	child_widget.clear();
 
-	for (unsigned int i = 0; i < keybinds_lb.size(); i++) {
-		if (keybinds_lb[i] != NULL) {
-			delete keybinds_lb[i];
-			keybinds_lb[i] = NULL;
-		}
-	}
-	for (unsigned int i = 0; i < keybinds_btn.size(); i++) {
-		if (keybinds_btn[i] != NULL) {
-			delete keybinds_btn[i];
-			keybinds_btn[i] = NULL;
-		}
-	}
-
 	for (size_t i = 0; i < cfg_tabs.size(); ++i) {
 		if (cfg_tabs[i].scrollbox != NULL) {
 			delete cfg_tabs[i].scrollbox;
 			cfg_tabs[i].scrollbox = NULL;
 		}
-	}
-
-	if (input_scrollbox != NULL) {
-		delete input_scrollbox;
-		input_scrollbox = NULL;
 	}
 }
 

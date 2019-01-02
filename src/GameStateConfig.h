@@ -160,6 +160,7 @@ public:
 		KEYBINDS_TAB = 4,
 		MODS_TAB = 5,
 	};
+	static const short NO_TAB = -1;
 
 	explicit GameStateConfig();
 	~GameStateConfig();
@@ -236,7 +237,6 @@ public:
 	WidgetButton               * defaults_button;
 	WidgetButton               * cancel_button;
 	Sprite                     * background;
-	WidgetScrollBox            * input_scrollbox;
 	MenuConfirm                * input_confirm;
 	MenuConfirm                * defaults_confirm;
 
@@ -308,7 +308,6 @@ public:
 	Point tab_offset;
 	Rect scrollpane;
 	Color scrollpane_color;
-	int scrollpane_contents;
 	Point scrollpane_padding;
 	Color scrollpane_separator_color;
 	Point secondary_offset;
