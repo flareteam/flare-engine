@@ -68,8 +68,6 @@ GameStateConfig::GameStateConfig ()
 	, defaults_button(new WidgetButton(WidgetButton::DEFAULT_FILE))
 	, cancel_button(new WidgetButton(WidgetButton::DEFAULT_FILE))
 	, background(NULL)
-	, video_scrollbox(NULL)
-	, audio_scrollbox(NULL)
 	, input_scrollbox(NULL)
 	, input_confirm(new MenuConfirm(msg->get("Clear"),msg->get("Assign:")))
 	, defaults_confirm(new MenuConfirm(msg->get("Defaults"), msg->get("Reset ALL settings?")))
@@ -187,6 +185,14 @@ GameStateConfig::GameStateConfig ()
 	}
 	inactivemods_lstb->sort();
 
+	// set up Joystick selection
+	joystick_device_lstb->append(msg->get("(none)"), "");
+	for(int i = 0; i < inpt->getNumJoysticks(); i++) {
+		std::string joystick_name = inpt->getJoystickName(i);
+		if (joystick_name != "")
+			joystick_device_lstb->append(joystick_name, joystick_name);
+	}
+
 	// Allocate KeyBindings
 	for (int i = 0; i < inpt->KEY_COUNT; i++) {
 		keybinds_lb.push_back(new WidgetLabel());
@@ -209,13 +215,6 @@ GameStateConfig::~GameStateConfig() {
 }
 
 void GameStateConfig::init() {
-	VIDEO_TAB = 0;
-	AUDIO_TAB = 1;
-	INTERFACE_TAB = 2;
-	INPUT_TAB = 3;
-	KEYBINDS_TAB = 4;
-	MODS_TAB = 5;
-
 	tab_control->setTabTitle(VIDEO_TAB, msg->get("Video"));
 	tab_control->setTabTitle(AUDIO_TAB, msg->get("Audio"));
 	tab_control->setTabTitle(INTERFACE_TAB, msg->get("Interface"));
@@ -225,28 +224,57 @@ void GameStateConfig::init() {
 
 	readConfig();
 
-	// Allocate Video ScrollBox
-	video_scrollbox = new WidgetScrollBox(scrollpane.w, scrollpane.h);
-	video_scrollbox->setBasePos(scrollpane.x, scrollpane.y, Utils::ALIGN_TOPLEFT);
-	video_scrollbox->resize(scrollpane.w, CFG_VIDEO_COUNT * scrollpane_padding.y);
+	cfg_tabs.resize(4);
+	cfg_tabs[VIDEO_TAB].options.resize(CFG_VIDEO_COUNT);
+	cfg_tabs[AUDIO_TAB].options.resize(CFG_AUDIO_COUNT);
+	cfg_tabs[INTERFACE_TAB].options.resize(CFG_INTERFACE_COUNT);
+	cfg_tabs[INPUT_TAB].options.resize(CFG_INPUT_COUNT);
 
-	placeLabeledWidgetAuto(CFG_VIDEO_RENDERER, renderer_lb, renderer_lstb, msg->get("Renderer"));
-	placeLabeledWidgetAuto(CFG_VIDEO_FULLSCREEN, fullscreen_lb, fullscreen_cb, msg->get("Full Screen Mode"));
-	placeLabeledWidgetAuto(CFG_VIDEO_HWSURFACE, hwsurface_lb, hwsurface_cb, msg->get("Hardware surfaces"));
-	placeLabeledWidgetAuto(CFG_VIDEO_VSYNC, vsync_lb, vsync_cb, msg->get("V-Sync"));
-	placeLabeledWidgetAuto(CFG_VIDEO_TEXTURE_FILTER, texture_filter_lb, texture_filter_cb, msg->get("Texture Filtering"));
-	placeLabeledWidgetAuto(CFG_VIDEO_DPI_SCALING, dpi_scaling_lb, dpi_scaling_cb, msg->get("DPI scaling"));
-	placeLabeledWidgetAuto(CFG_VIDEO_PARALLAX_LAYERS, parallax_layers_lb, parallax_layers_cb, msg->get("Parallax Layers"));
-	placeLabeledWidgetAuto(CFG_VIDEO_ENABLE_GAMMA, change_gamma_lb, change_gamma_cb, msg->get("Allow changing gamma"));
-	placeLabeledWidgetAuto(CFG_VIDEO_GAMMA, gamma_lb, gamma_sl, msg->get("Gamma"));
+	cfg_tabs[VIDEO_TAB].setOptionWidgets(CFG_VIDEO_RENDERER, renderer_lb, renderer_lstb, msg->get("Renderer"));
+	cfg_tabs[VIDEO_TAB].setOptionWidgets(CFG_VIDEO_FULLSCREEN, fullscreen_lb, fullscreen_cb, msg->get("Full Screen Mode"));
+	cfg_tabs[VIDEO_TAB].setOptionWidgets(CFG_VIDEO_HWSURFACE, hwsurface_lb, hwsurface_cb, msg->get("Hardware surfaces"));
+	cfg_tabs[VIDEO_TAB].setOptionWidgets(CFG_VIDEO_VSYNC, vsync_lb, vsync_cb, msg->get("V-Sync"));
+	cfg_tabs[VIDEO_TAB].setOptionWidgets(CFG_VIDEO_TEXTURE_FILTER, texture_filter_lb, texture_filter_cb, msg->get("Texture Filtering"));
+	cfg_tabs[VIDEO_TAB].setOptionWidgets(CFG_VIDEO_DPI_SCALING, dpi_scaling_lb, dpi_scaling_cb, msg->get("DPI scaling"));
+	cfg_tabs[VIDEO_TAB].setOptionWidgets(CFG_VIDEO_PARALLAX_LAYERS, parallax_layers_lb, parallax_layers_cb, msg->get("Parallax Layers"));
+	cfg_tabs[VIDEO_TAB].setOptionWidgets(CFG_VIDEO_ENABLE_GAMMA, change_gamma_lb, change_gamma_cb, msg->get("Allow changing gamma"));
+	cfg_tabs[VIDEO_TAB].setOptionWidgets(CFG_VIDEO_GAMMA, gamma_lb, gamma_sl, msg->get("Gamma"));
 
-	// Allocate Audio ScrollBox
-	audio_scrollbox = new WidgetScrollBox(scrollpane.w, scrollpane.h);
-	audio_scrollbox->setBasePos(scrollpane.x, scrollpane.y, Utils::ALIGN_TOPLEFT);
-	audio_scrollbox->resize(scrollpane.w, CFG_AUDIO_COUNT * scrollpane_padding.y);
+	cfg_tabs[AUDIO_TAB].setOptionWidgets(CFG_AUDIO_SFX, sound_volume_lb, sound_volume_sl, msg->get("Sound Volume"));
+	cfg_tabs[AUDIO_TAB].setOptionWidgets(CFG_AUDIO_MUSIC, music_volume_lb, music_volume_sl, msg->get("Music Volume"));
 
-	placeLabeledWidgetAuto(CFG_AUDIO_SFX, sound_volume_lb, sound_volume_sl, msg->get("Sound Volume"));
-	placeLabeledWidgetAuto(CFG_AUDIO_MUSIC, music_volume_lb, music_volume_sl, msg->get("Music Volume"));
+	cfg_tabs[INTERFACE_TAB].setOptionWidgets(CFG_INTERFACE_LANGUAGE, language_lb, language_lstb, msg->get("Language"));
+	cfg_tabs[INTERFACE_TAB].setOptionWidgets(CFG_INTERFACE_SHOW_FPS, show_fps_lb, show_fps_cb, msg->get("Show FPS"));
+	cfg_tabs[INTERFACE_TAB].setOptionWidgets(CFG_INTERFACE_HARDWARE_CURSOR, hardware_cursor_lb, hardware_cursor_cb, msg->get("Hardware mouse cursor"));
+	cfg_tabs[INTERFACE_TAB].setOptionWidgets(CFG_INTERFACE_COLORBLIND, colorblind_lb, colorblind_cb, msg->get("Colorblind Mode"));
+	cfg_tabs[INTERFACE_TAB].setOptionWidgets(CFG_INTERFACE_DEV_MODE, dev_mode_lb, dev_mode_cb, msg->get("Developer Mode"));
+	cfg_tabs[INTERFACE_TAB].setOptionWidgets(CFG_INTERFACE_SUBTITLES, subtitles_lb, subtitles_cb, msg->get("Subtitles"));
+
+	cfg_tabs[INPUT_TAB].setOptionWidgets(CFG_INPUT_JOYSTICK, joystick_device_lb, joystick_device_lstb, msg->get("Joystick"));
+	cfg_tabs[INPUT_TAB].setOptionWidgets(CFG_INPUT_MOUSE_MOVE, mouse_move_lb, mouse_move_cb, msg->get("Move hero using mouse"));
+	cfg_tabs[INPUT_TAB].setOptionWidgets(CFG_INPUT_MOUSE_AIM, mouse_aim_lb, mouse_aim_cb, msg->get("Mouse aim"));
+	cfg_tabs[INPUT_TAB].setOptionWidgets(CFG_INPUT_NO_MOUSE, no_mouse_lb, no_mouse_cb, msg->get("Do no use mouse"));
+	cfg_tabs[INPUT_TAB].setOptionWidgets(CFG_INPUT_MOUSE_MOVE_SWAP, mouse_move_swap_lb, mouse_move_swap_cb, msg->get("Swap mouse movement button"));
+	cfg_tabs[INPUT_TAB].setOptionWidgets(CFG_INPUT_MOUSE_MOVE_ATTACK, mouse_move_attack_lb, mouse_move_attack_cb, msg->get("Attack with mouse movement"));
+	cfg_tabs[INPUT_TAB].setOptionWidgets(CFG_INPUT_JOYSTICK_DEADZONE, joystick_deadzone_lb, joystick_deadzone_sl, msg->get("Joystick Deadzone"));
+
+	// disable some options
+	// cfg_tabs[VIDEO_TAB].setOptionEnabled(CFG_VIDEO_TEXTURE_FILTER, false);
+
+	for (size_t i = 0; i < cfg_tabs.size(); ++i) {
+		if (cfg_tabs[i].enabled_count == 0) {
+			tab_control->setEnabled(static_cast<unsigned>(i), false);
+		}
+
+		// set up scrollbox
+		cfg_tabs[i].scrollbox = new WidgetScrollBox(scrollpane.w, scrollpane.h);
+		cfg_tabs[i].scrollbox->setBasePos(scrollpane.x, scrollpane.y, Utils::ALIGN_TOPLEFT);
+		cfg_tabs[i].scrollbox->resize(scrollpane.w, cfg_tabs[i].enabled_count * scrollpane_padding.y);
+
+		for (size_t j = 0; j < cfg_tabs[i].options.size(); ++j) {
+			placeLabeledWidgetAuto(static_cast<int>(i), static_cast<int>(j));
+		}
+	}
 
 	// Allocate KeyBindings ScrollBox
 	input_scrollbox = new WidgetScrollBox(scrollpane.w, scrollpane.h);
@@ -354,31 +382,6 @@ bool GameStateConfig::parseKey(FileParser &infile, int &x1, int &y1, int &x2, in
 		tab_offset.x = x1;
 		tab_offset.y = y1;
 	}
-	else if (infile.key == "language") {
-		// @ATTR language|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Language" list box relative to the frame.
-		placeLabeledWidget(language_lb, language_lstb, x1, y1, x2, y2, msg->get("Language"));
-		language_lb->setJustify(FontEngine::JUSTIFY_CENTER);
-	}
-	else if (infile.key == "show_fps") {
-		// @ATTR show_fps|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Show FPS" checkbox relative to the frame.
-		placeLabeledWidget(show_fps_lb, show_fps_cb, x1, y1, x2, y2, msg->get("Show FPS"), FontEngine::JUSTIFY_RIGHT);
-	}
-	else if (infile.key == "colorblind") {
-		// @ATTR colorblind|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Colorblind Mode" checkbox relative to the frame.
-		placeLabeledWidget(colorblind_lb, colorblind_cb, x1, y1, x2, y2, msg->get("Colorblind Mode"), FontEngine::JUSTIFY_RIGHT);
-	}
-	else if (infile.key == "hardware_cursor") {
-		// @ATTR hardware_cursor|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Hardware mouse cursor" checkbox relative to the frame.
-		placeLabeledWidget(hardware_cursor_lb, hardware_cursor_cb, x1, y1, x2, y2, msg->get("Hardware mouse cursor"), FontEngine::JUSTIFY_RIGHT);
-	}
-	else if (infile.key == "dev_mode") {
-		// @ATTR dev_mode|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Developer Mode" checkbox relative to the frame.
-		placeLabeledWidget(dev_mode_lb, dev_mode_cb, x1, y1, x2, y2, msg->get("Developer Mode"), FontEngine::JUSTIFY_RIGHT);
-	}
-	else if (infile.key == "subtitles") {
-		// @ATTR subtitles|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Subtitles" checkbox relative to the frame.
-		placeLabeledWidget(subtitles_lb, subtitles_cb, x1, y1, x2, y2, msg->get("Subtitles"), FontEngine::JUSTIFY_RIGHT);
-	}
 	else if (infile.key == "activemods") {
 		// @ATTR activemods|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Active Mods" list box relative to the frame.
 		placeLabeledWidget(activemods_lb, activemods_lstb, x1, y1, x2, y2, msg->get("Active Mods"));
@@ -418,43 +421,6 @@ bool GameStateConfig::parseKey(FileParser &infile, int &x1, int &y1, int &x2, in
 		inactivemods_activate_btn->setLabel(msg->get("Enable >>"));
 		inactivemods_activate_btn->setBasePos(x1, y1, Utils::ALIGN_TOPLEFT);
 		inactivemods_activate_btn->refresh();
-	}
-	else if (infile.key == "mouse_move") {
-		// @ATTR mouse_move|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Move hero using mouse" checkbox relative to the frame.
-		placeLabeledWidget(mouse_move_lb, mouse_move_cb, x1, y1, x2, y2, msg->get("Move hero using mouse"), FontEngine::JUSTIFY_RIGHT);
-	}
-	else if (infile.key == "joystick_device") {
-		// @ATTR joystick_device|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Joystick" list box relative to the frame.
-		placeLabeledWidget(joystick_device_lb, joystick_device_lstb, x1, y1, x2, y2, msg->get("Joystick"));
-
-		joystick_device_lstb->append(msg->get("(none)"), "");
-		for(int i = 0; i < inpt->getNumJoysticks(); i++) {
-			std::string joystick_name = inpt->getJoystickName(i);
-			if (joystick_name != "")
-				joystick_device_lstb->append(joystick_name, joystick_name);
-		}
-
-		joystick_device_lb->setJustify(FontEngine::JUSTIFY_CENTER);
-	}
-	else if (infile.key == "mouse_aim") {
-		// @ATTR mouse_aim|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Mouse aim" checkbox relative to the frame.
-		placeLabeledWidget(mouse_aim_lb, mouse_aim_cb, x1, y1, x2, y2, msg->get("Mouse aim"), FontEngine::JUSTIFY_RIGHT);
-	}
-	else if (infile.key == "no_mouse") {
-		// @ATTR no_mouse|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Do not use mouse" checkbox relative to the frame.
-		placeLabeledWidget(no_mouse_lb, no_mouse_cb, x1, y1, x2, y2, msg->get("Do not use mouse"), FontEngine::JUSTIFY_RIGHT);
-	}
-	else if (infile.key == "mouse_move_swap") {
-		// @ATTR mouse_move_swap|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Swap mouse movement button" checkbox relative to the frame.
-		placeLabeledWidget(mouse_move_swap_lb, mouse_move_swap_cb, x1, y1, x2, y2, msg->get("Swap mouse movement button"), FontEngine::JUSTIFY_RIGHT);
-	}
-	else if (infile.key == "mouse_move_attack") {
-		// @ATTR mouse_move_attack|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Attack with mouse movement" checkbox relative to the frame.
-		placeLabeledWidget(mouse_move_attack_lb, mouse_move_attack_cb, x1, y1, x2, y2, msg->get("Attack with mouse movement"), FontEngine::JUSTIFY_RIGHT);
-	}
-	else if (infile.key == "joystick_deadzone") {
-		// @ATTR joystick_deadzone|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Joystick Deadzone" slider relative to the frame.
-		placeLabeledWidget(joystick_deadzone_lb, joystick_deadzone_sl, x1, y1, x2, y2, msg->get("Joystick Deadzone"), FontEngine::JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "secondary_offset") {
 		// @ATTR secondary_offset|point|Offset of the second (and third) columns of keybinds.
@@ -570,57 +536,14 @@ bool GameStateConfig::parseKey(FileParser &infile, int &x1, int &y1, int &x2, in
 }
 
 void GameStateConfig::addChildWidgets() {
-	video_scrollbox->addChildWidget(renderer_lstb);
-	video_scrollbox->addChildWidget(renderer_lb);
-	video_scrollbox->addChildWidget(fullscreen_cb);
-	video_scrollbox->addChildWidget(fullscreen_lb);
-	video_scrollbox->addChildWidget(hwsurface_cb);
-	video_scrollbox->addChildWidget(hwsurface_lb);
-	video_scrollbox->addChildWidget(vsync_cb);
-	video_scrollbox->addChildWidget(vsync_lb);
-	video_scrollbox->addChildWidget(texture_filter_cb);
-	video_scrollbox->addChildWidget(texture_filter_lb);
-	video_scrollbox->addChildWidget(dpi_scaling_cb);
-	video_scrollbox->addChildWidget(dpi_scaling_lb);
-	video_scrollbox->addChildWidget(parallax_layers_cb);
-	video_scrollbox->addChildWidget(parallax_layers_lb);
-	video_scrollbox->addChildWidget(change_gamma_cb);
-	video_scrollbox->addChildWidget(change_gamma_lb);
-	video_scrollbox->addChildWidget(gamma_sl);
-	video_scrollbox->addChildWidget(gamma_lb);
-
-	audio_scrollbox->addChildWidget(music_volume_sl);
-	audio_scrollbox->addChildWidget(music_volume_lb);
-	audio_scrollbox->addChildWidget(sound_volume_sl);
-	audio_scrollbox->addChildWidget(sound_volume_lb);
-
-	addChildWidget(show_fps_cb, INTERFACE_TAB);
-	addChildWidget(show_fps_lb, INTERFACE_TAB);
-	addChildWidget(colorblind_cb, INTERFACE_TAB);
-	addChildWidget(colorblind_lb, INTERFACE_TAB);
-	addChildWidget(hardware_cursor_cb, INTERFACE_TAB);
-	addChildWidget(hardware_cursor_lb, INTERFACE_TAB);
-	addChildWidget(dev_mode_cb, INTERFACE_TAB);
-	addChildWidget(dev_mode_lb, INTERFACE_TAB);
-	addChildWidget(subtitles_cb, INTERFACE_TAB);
-	addChildWidget(subtitles_lb, INTERFACE_TAB);
-	addChildWidget(language_lstb, INTERFACE_TAB);
-	addChildWidget(language_lb, INTERFACE_TAB);
-
-	addChildWidget(mouse_move_cb, INPUT_TAB);
-	addChildWidget(mouse_move_lb, INPUT_TAB);
-	addChildWidget(mouse_aim_cb, INPUT_TAB);
-	addChildWidget(mouse_aim_lb, INPUT_TAB);
-	addChildWidget(no_mouse_cb, INPUT_TAB);
-	addChildWidget(no_mouse_lb, INPUT_TAB);
-	addChildWidget(mouse_move_swap_cb, INPUT_TAB);
-	addChildWidget(mouse_move_swap_lb, INPUT_TAB);
-	addChildWidget(mouse_move_attack_cb, INPUT_TAB);
-	addChildWidget(mouse_move_attack_lb, INPUT_TAB);
-	addChildWidget(joystick_deadzone_sl, INPUT_TAB);
-	addChildWidget(joystick_deadzone_lb, INPUT_TAB);
-	addChildWidget(joystick_device_lstb, INPUT_TAB);
-	addChildWidget(joystick_device_lb, INPUT_TAB);
+	for (size_t i = 0; i < cfg_tabs.size(); ++i) {
+		for (size_t j = 0; j < cfg_tabs[i].options.size(); ++j) {
+			if (cfg_tabs[i].options[j].enabled) {
+				cfg_tabs[i].scrollbox->addChildWidget(cfg_tabs[i].options[j].widget);
+				cfg_tabs[i].scrollbox->addChildWidget(cfg_tabs[i].options[j].label);
+			}
+		}
+	}
 
 	for (unsigned int i = 0; i < keybinds_btn.size(); i++) {
 		input_scrollbox->addChildWidget(keybinds_btn[i]);
@@ -648,34 +571,25 @@ void GameStateConfig::setupTabList() {
 	tablist_main.lock();
 
 	tablist_video.setScrollType(Widget::SCROLL_VERTICAL);
-	tablist_video.add(video_scrollbox);
+	tablist_video.add(cfg_tabs[VIDEO_TAB].scrollbox);
 	tablist_video.setPrevTabList(&tablist);
 	tablist_video.setNextTabList(&tablist_main);
 	tablist_video.lock();
 
 	tablist_audio.setScrollType(Widget::SCROLL_VERTICAL);
-	tablist_audio.add(audio_scrollbox);
+	tablist_audio.add(cfg_tabs[AUDIO_TAB].scrollbox);
 	tablist_audio.setPrevTabList(&tablist);
 	tablist_audio.setNextTabList(&tablist_main);
 	tablist_audio.lock();
 
-	tablist_interface.add(show_fps_cb);
-	tablist_interface.add(colorblind_cb);
-	tablist_interface.add(hardware_cursor_cb);
-	tablist_interface.add(dev_mode_cb);
-	tablist_interface.add(subtitles_cb);
-	tablist_interface.add(language_lstb);
+	tablist_interface.setScrollType(Widget::SCROLL_VERTICAL);
+	tablist_interface.add(cfg_tabs[INTERFACE_TAB].scrollbox);
 	tablist_interface.setPrevTabList(&tablist);
 	tablist_interface.setNextTabList(&tablist_main);
 	tablist_interface.lock();
 
-	tablist_input.add(mouse_move_cb);
-	tablist_input.add(mouse_aim_cb);
-	tablist_input.add(no_mouse_cb);
-	tablist_input.add(mouse_move_swap_cb);
-	tablist_input.add(mouse_move_attack_cb);
-	tablist_input.add(joystick_deadzone_sl);
-	tablist_input.add(joystick_device_lstb);
+	tablist_input.setScrollType(Widget::SCROLL_VERTICAL);
+	tablist_input.add(cfg_tabs[INPUT_TAB].scrollbox);
 	tablist_input.setPrevTabList(&tablist);
 	tablist_input.setNextTabList(&tablist_main);
 	tablist_input.lock();
@@ -726,7 +640,7 @@ void GameStateConfig::updateVideo() {
 
 	refreshRenderers();
 
-	video_scrollbox->refresh();
+	cfg_tabs[VIDEO_TAB].scrollbox->refresh();
 }
 
 void GameStateConfig::updateAudio() {
@@ -740,6 +654,8 @@ void GameStateConfig::updateAudio() {
 		music_volume_sl->set(0,128,0);
 		sound_volume_sl->set(0,128,0);
 	}
+
+	cfg_tabs[AUDIO_TAB].scrollbox->refresh();
 }
 
 void GameStateConfig::updateInterface() {
@@ -750,6 +666,8 @@ void GameStateConfig::updateInterface() {
 	subtitles_cb->setChecked(settings->subtitles);
 
 	refreshLanguages();
+
+	cfg_tabs[INTERFACE_TAB].scrollbox->refresh();
 }
 
 void GameStateConfig::updateInput() {
@@ -765,6 +683,8 @@ void GameStateConfig::updateInput() {
 	}
 
 	joystick_deadzone_sl->set(0, 32768, settings->joy_deadzone);
+
+	cfg_tabs[INPUT_TAB].scrollbox->refresh();
 }
 
 void GameStateConfig::updateKeybinds() {
@@ -966,8 +886,8 @@ void GameStateConfig::logicCancel() {
 }
 
 void GameStateConfig::logicVideo() {
-	video_scrollbox->logic();
-	Point mouse = video_scrollbox->input_assist(inpt->mouse);
+	cfg_tabs[VIDEO_TAB].scrollbox->logic();
+	Point mouse = cfg_tabs[VIDEO_TAB].scrollbox->input_assist(inpt->mouse);
 
 	if (fullscreen_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->fullscreen = fullscreen_cb->isChecked();
@@ -1012,8 +932,8 @@ void GameStateConfig::logicVideo() {
 }
 
 void GameStateConfig::logicAudio() {
-	audio_scrollbox->logic();
-	Point mouse = audio_scrollbox->input_assist(inpt->mouse);
+	cfg_tabs[AUDIO_TAB].scrollbox->logic();
+	Point mouse = cfg_tabs[AUDIO_TAB].scrollbox->input_assist(inpt->mouse);
 
 	if (settings->audio) {
 		if (music_volume_sl->checkClickAt(mouse.x, mouse.y)) {
@@ -1030,29 +950,35 @@ void GameStateConfig::logicAudio() {
 }
 
 void GameStateConfig::logicInterface() {
-	if (language_lstb->checkClick()) {
+	cfg_tabs[INTERFACE_TAB].scrollbox->logic();
+	Point mouse = cfg_tabs[INTERFACE_TAB].scrollbox->input_assist(inpt->mouse);
+
+	if (language_lstb->checkClickAt(mouse.x, mouse.y)) {
 		unsigned lang_id = language_lstb->getSelected();
 		if (lang_id != language_lstb->getSize())
 			settings->language = language_ISO[lang_id];
 	}
-	else if (show_fps_cb->checkClick()) {
+	else if (show_fps_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->show_fps = show_fps_cb->isChecked();
 	}
-	else if (colorblind_cb->checkClick()) {
+	else if (colorblind_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->colorblind = colorblind_cb->isChecked();
 	}
-	else if (hardware_cursor_cb->checkClick()) {
+	else if (hardware_cursor_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->hardware_cursor = hardware_cursor_cb->isChecked();
 	}
-	else if (dev_mode_cb->checkClick()) {
+	else if (dev_mode_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->dev_mode = dev_mode_cb->isChecked();
 	}
-	else if (subtitles_cb->checkClick()) {
+	else if (subtitles_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->subtitles = subtitles_cb->isChecked();
 	}
 }
 
 void GameStateConfig::logicInput() {
+	cfg_tabs[INPUT_TAB].scrollbox->logic();
+	Point mouse = cfg_tabs[INPUT_TAB].scrollbox->input_assist(inpt->mouse);
+
 	if (inpt->joysticks_changed) {
 		disableJoystickOptions();
 		joystick_device_lstb->clear();
@@ -1065,37 +991,37 @@ void GameStateConfig::logicInput() {
 		inpt->joysticks_changed = false;
 	}
 
-	if (mouse_move_cb->checkClick()) {
+	if (mouse_move_cb->checkClickAt(mouse.x, mouse.y)) {
 		if (mouse_move_cb->isChecked()) {
 			settings->mouse_move = true;
 			enableMouseOptions();
 		}
 		else settings->mouse_move=false;
 	}
-	else if (mouse_aim_cb->checkClick()) {
+	else if (mouse_aim_cb->checkClickAt(mouse.x, mouse.y)) {
 		if (mouse_aim_cb->isChecked()) {
 			settings->mouse_aim = true;
 			enableMouseOptions();
 		}
 		else settings->mouse_aim=false;
 	}
-	else if (no_mouse_cb->checkClick()) {
+	else if (no_mouse_cb->checkClickAt(mouse.x, mouse.y)) {
 		if (no_mouse_cb->isChecked()) {
 			settings->no_mouse = true;
 			disableMouseOptions();
 		}
 		else settings->no_mouse = false;
 	}
-	else if (mouse_move_swap_cb->checkClick()) {
+	else if (mouse_move_swap_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->mouse_move_swap = mouse_move_swap_cb->isChecked();
 	}
-	else if (mouse_move_attack_cb->checkClick()) {
+	else if (mouse_move_attack_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->mouse_move_attack = mouse_move_attack_cb->isChecked();
 	}
-	else if (joystick_deadzone_sl->checkClick()) {
+	else if (joystick_deadzone_sl->checkClickAt(mouse.x, mouse.y)) {
 		settings->joy_deadzone = joystick_deadzone_sl->getValue();
 	}
-	else if (joystick_device_lstb->checkClick()) {
+	else if (joystick_device_lstb->checkClickAt(mouse.x, mouse.y)) {
 		settings->joystick_device = static_cast<int>(joystick_device_lstb->getSelected()) - 1;
 		if (settings->joystick_device != -1) {
 			settings->enable_joystick = true;
@@ -1192,33 +1118,19 @@ void GameStateConfig::renderTabContents() {
 			keybinds_lb[i]->render();
 		}
 	}
-	else if (active_tab == VIDEO_TAB) {
-		if (video_scrollbox->update) {
-			video_scrollbox->refresh();
+	else if (active_tab <= INPUT_TAB) {
+		if (cfg_tabs[active_tab].scrollbox->update) {
+			cfg_tabs[active_tab].scrollbox->refresh();
 
-			Image* render_target = video_scrollbox->contents->getGraphics();
+			Image* render_target = cfg_tabs[active_tab].scrollbox->contents->getGraphics();
 
-			for (int i = 1; i < CFG_VIDEO_COUNT; ++i) {
+			for (int i = 1; i < cfg_tabs[active_tab].enabled_count; ++i) {
 				for (int j = scrollpane_padding.x; j < scrollpane.w - scrollpane_padding.x; ++j) {
 					render_target->drawPixel(j, i * scrollpane_padding.y, scrollpane_separator_color);
 				}
 			}
 		}
-		video_scrollbox->render();
-	}
-	else if (active_tab == AUDIO_TAB) {
-		if (audio_scrollbox->update) {
-			audio_scrollbox->refresh();
-
-			Image* render_target = audio_scrollbox->contents->getGraphics();
-
-			for (int i = 1; i < CFG_AUDIO_COUNT; ++i) {
-				for (int j = scrollpane_padding.x; j < scrollpane.w - scrollpane_padding.x; ++j) {
-					render_target->drawPixel(j, i * scrollpane_padding.y, scrollpane_separator_color);
-				}
-			}
-		}
-		audio_scrollbox->render();
+		cfg_tabs[active_tab].scrollbox->render();
 	}
 
 	for (unsigned int i = 0; i < child_widget.size(); i++) {
@@ -1268,17 +1180,20 @@ void GameStateConfig::placeLabeledWidget(WidgetLabel *lb, Widget *w, int x1, int
 	}
 }
 
-void GameStateConfig::placeLabeledWidgetAuto(int cfg_index, WidgetLabel *lb, Widget *w, std::string const& str) {
+void GameStateConfig::placeLabeledWidgetAuto(int tab, int cfg_index) {
+	WidgetLabel *lb = cfg_tabs[tab].options[cfg_index].label;
+	Widget *w = cfg_tabs[tab].options[cfg_index].widget;
+	int enabled_index = cfg_tabs[tab].getEnabledIndex(cfg_index);
+
 	if (w) {
 		int y_offset = std::max(scrollpane_padding.y - w->pos.h, 0) / 2;
-		w->setBasePos(scrollpane.w - w->pos.w - scrollpane_padding.x, (cfg_index * scrollpane_padding.y) + y_offset, Utils::ALIGN_TOPLEFT);
+		w->setBasePos(scrollpane.w - w->pos.w - scrollpane_padding.x, (enabled_index * scrollpane_padding.y) + y_offset, Utils::ALIGN_TOPLEFT);
 		w->setPos(0,0);
 	}
 
 	if (lb) {
-		lb->setBasePos(scrollpane_padding.x, (cfg_index * scrollpane_padding.y) + scrollpane_padding.y / 2, Utils::ALIGN_TOPLEFT);
+		lb->setBasePos(scrollpane_padding.x, (enabled_index * scrollpane_padding.y) + scrollpane_padding.y / 2, Utils::ALIGN_TOPLEFT);
 		lb->setPos(0, 0);
-		lb->setText(str);
 		lb->setVAlign(LabelInfo::VALIGN_CENTER);
 	}
 }
@@ -1299,8 +1214,9 @@ void GameStateConfig::refreshWidgets() {
 
 	defaults_confirm->align();
 
-	video_scrollbox->setPos(frame.x, frame.y);
-	audio_scrollbox->setPos(frame.x, frame.y);
+	for (size_t i = 0; i < cfg_tabs.size(); ++i) {
+		cfg_tabs[i].scrollbox->setPos(frame.x, frame.y);
+	}
 
 	input_scrollbox->setPos(frame.x, frame.y);
 
@@ -1579,14 +1495,11 @@ void GameStateConfig::cleanupTabContents() {
 		}
 	}
 
-	if (video_scrollbox != NULL) {
-		delete video_scrollbox;
-		video_scrollbox = NULL;
-	}
-
-	if (audio_scrollbox != NULL) {
-		delete audio_scrollbox;
-		audio_scrollbox = NULL;
+	for (size_t i = 0; i < cfg_tabs.size(); ++i) {
+		if (cfg_tabs[i].scrollbox != NULL) {
+			delete cfg_tabs[i].scrollbox;
+			cfg_tabs[i].scrollbox = NULL;
+		}
 	}
 
 	if (input_scrollbox != NULL) {

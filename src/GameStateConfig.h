@@ -48,6 +48,63 @@ class WidgetTabControl;
 
 class GameStateConfig : public GameState {
 private:
+	class ConfigOption {
+	public:
+		ConfigOption()
+			: enabled(false)
+			, label(NULL)
+			, widget(NULL)
+		{}
+		~ConfigOption() {}
+
+		bool enabled;
+		WidgetLabel* label;
+		Widget* widget;
+	};
+
+	class ConfigTab {
+	public:
+		ConfigTab()
+			: scrollbox(NULL)
+			, enabled_count(0)
+		{}
+		~ConfigTab() {}
+		void setOptionWidgets(int index, WidgetLabel* lb, Widget* w, const std::string& lb_text) {
+			if (!options[index].enabled) {
+				options[index].enabled = true;
+				enabled_count++;
+			}
+			options[index].label = lb;
+			options[index].label->setText(lb_text);
+			options[index].widget = w;
+		}
+		void setOptionEnabled(int index, bool enable) {
+			if (options[index].enabled && !enable) {
+				options[index].enabled = false;
+				if (enabled_count > 0)
+					enabled_count--;
+			}
+			else if (!options[index].enabled && enable) {
+				options[index].enabled = true;
+				enabled_count++;
+			}
+		}
+		int getEnabledIndex(int option_index) {
+			int r = -1;
+			for (size_t i = 0; i < options.size(); ++i) {
+				if (options[i].enabled)
+					r++;
+				if (i == static_cast<size_t>(option_index))
+					break;
+			}
+			return (r == -1 ? 0 : r);
+		}
+
+		WidgetScrollBox* scrollbox;
+		int enabled_count;
+		std::vector<ConfigOption> options;
+	};
+
 	static const int GAMMA_MIN = 5;
 	static const int GAMMA_MAX = 15;
 
@@ -70,13 +127,39 @@ private:
 		CFG_AUDIO_MUSIC
 	};
 
+	static const int CFG_INTERFACE_COUNT = 6;
+	enum {
+		CFG_INTERFACE_LANGUAGE,
+		CFG_INTERFACE_SHOW_FPS,
+		CFG_INTERFACE_HARDWARE_CURSOR,
+		CFG_INTERFACE_COLORBLIND,
+		CFG_INTERFACE_DEV_MODE,
+		CFG_INTERFACE_SUBTITLES
+	};
+
+	static const int CFG_INPUT_COUNT = 7;
+	enum {
+		CFG_INPUT_JOYSTICK,
+		CFG_INPUT_MOUSE_MOVE,
+		CFG_INPUT_MOUSE_AIM,
+		CFG_INPUT_NO_MOUSE,
+		CFG_INPUT_MOUSE_MOVE_SWAP,
+		CFG_INPUT_MOUSE_MOVE_ATTACK,
+		CFG_INPUT_JOYSTICK_DEADZONE
+	};
+
+	std::vector<ConfigTab> cfg_tabs;
+
 public:
-	short VIDEO_TAB;
-	short AUDIO_TAB;
-	short INTERFACE_TAB;
-	short INPUT_TAB;
-	short KEYBINDS_TAB;
-	short MODS_TAB;
+	static const short TAB_COUNT = 6;
+	enum {
+		VIDEO_TAB = 0,
+		AUDIO_TAB = 1,
+		INTERFACE_TAB = 2,
+		INPUT_TAB = 3,
+		KEYBINDS_TAB = 4,
+		MODS_TAB = 5,
+	};
 
 	explicit GameStateConfig();
 	~GameStateConfig();
@@ -113,7 +196,7 @@ public:
 	void renderDialogs();
 
 	void placeLabeledWidget(WidgetLabel* lb, Widget* w, int x1, int y1, int x2, int y2, std::string const& str, int justify = 0);
-	void placeLabeledWidgetAuto(int cfg_index, WidgetLabel *lb, Widget *w, std::string const& str);
+	void placeLabeledWidgetAuto(int tab, int cfg_index);
 	void refreshWidgets();
 	void addChildWidget(Widget *w, int tab);
 	void refreshRenderers();
@@ -153,8 +236,6 @@ public:
 	WidgetButton               * defaults_button;
 	WidgetButton               * cancel_button;
 	Sprite                     * background;
-	WidgetScrollBox            * video_scrollbox;
-	WidgetScrollBox            * audio_scrollbox;
 	WidgetScrollBox            * input_scrollbox;
 	MenuConfirm                * input_confirm;
 	MenuConfirm                * defaults_confirm;

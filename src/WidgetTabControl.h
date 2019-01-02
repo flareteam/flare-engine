@@ -29,6 +29,9 @@ private:
 	void loadGraphics();
 	void renderTab(unsigned number);
 
+	unsigned getNextEnabledTab(unsigned tab);
+	unsigned getPrevEnabledTab(unsigned tab);
+
 	Sprite *active_tab_surface;
 	Sprite *inactive_tab_surface;
 
@@ -36,6 +39,7 @@ private:
 	std::vector<Rect> tabs; // Rectangles for each tab title on the tab header.
 	std::vector<WidgetLabel> active_labels;
 	std::vector<WidgetLabel> inactive_labels;
+	std::vector<bool> enabled;
 
 
 	unsigned active_tab;    // Index of the currently active tab.
@@ -53,6 +57,8 @@ public:
 	void setActiveTab(unsigned tab);
 
 	int getTabHeight();
+
+	void setEnabled(unsigned index, bool val);
 
 	void logic();
 	void logic(int x, int y);

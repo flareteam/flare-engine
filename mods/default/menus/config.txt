@@ -12,28 +12,6 @@ listbox_scrollbar_offset=2
 scrollpane_padding=80,40
 scrollpane_separator_color=63,63,63
 
-[audio]
-music_volume=368,40,384,32
-sound_volume=368,72,384,64
-
-[interface]
-language=104,16,32,32
-show_fps=568,36,584,32
-colorblind=568,68,584,64
-hardware_cursor=568,100,584,96
-dev_mode=568,132,584,128
-subtitles=568,164,584,160
-
-[input]
-joystick_device=104,16,32,32
-enable_joystick=568,36,584,32
-mouse_move=568,68,584,64
-mouse_aim=568,100,584,96
-no_mouse=568,132,584,128
-mouse_move_swap=568,164,584,160
-mouse_move_attack=568,196,584,192
-joystick_deadzone=368,232,384,224
-
 [key_bindings]
 
 # scrollpane values are positions x, y and sizes width, height

@@ -56,9 +56,11 @@ void WidgetTabControl::setTabTitle(unsigned index, const std::string& title) {
 		tabs.resize(index+1);
 		active_labels.resize(index+1);
 		inactive_labels.resize(index+1);
+		enabled.resize(index+1);
 	}
 
 	titles[index] = title;
+	enabled[index] = true;
 }
 
 /**
@@ -96,13 +98,14 @@ void WidgetTabControl::setMainArea(int x, int y) {
 	tabs_area.w = 0;
 	tabs_area.h = getTabHeight();
 
+	int x_offset = tabs_area.x;
+
 	// update individual tabs
 	for (unsigned i=0; i<tabs.size(); i++) {
 		tabs[i].y = tabs_area.y;
 		tabs[i].h = tabs_area.h;
 
-		if (i==0) tabs[i].x = tabs_area.x;
-		else tabs[i].x = tabs[i-1].x + tabs[i-1].w;
+		tabs[i].x = x_offset;
 
 		active_labels[i].setPos(tabs[i].x + eset->widgets.tab_padding.x, tabs[i].y + tabs[i].h/2 + eset->widgets.tab_padding.y);
 		active_labels[i].setVAlign(LabelInfo::VALIGN_CENTER);
@@ -114,9 +117,15 @@ void WidgetTabControl::setMainArea(int x, int y) {
 		inactive_labels[i].setText(titles[i]);
 		inactive_labels[i].setColor(font->getColor(FontEngine::COLOR_WIDGET_DISABLED));
 
-		tabs[i].w = active_labels[i].getBounds()->w + (eset->widgets.tab_padding.x * 2);
-		tabs_area.w += tabs[i].w;
+		if (enabled[i]) {
+			tabs[i].w = active_labels[i].getBounds()->w + (eset->widgets.tab_padding.x * 2);
+			tabs_area.w += tabs[i].w;
+			x_offset += tabs[i].w;
+		}
 	}
+
+	if (!enabled[active_tab])
+		getNext();
 }
 
 /**
@@ -152,7 +161,7 @@ void WidgetTabControl::logic(int x, int y) {
 	if(Utils::isWithinRect(tabs_area, mouse) && inpt->pressing[Input::MAIN1]) {
 		// Mark the clicked tab as active_tab.
 		for (unsigned i=0; i<tabs.size(); i++) {
-			if(Utils::isWithinRect(tabs[i], mouse)) {
+			if(Utils::isWithinRect(tabs[i], mouse) && enabled[i]) {
 				active_tab = i;
 				return;
 			}
@@ -188,6 +197,9 @@ void WidgetTabControl::render() {
  * Renders the given tab on the widget header.
  */
 void WidgetTabControl::renderTab(unsigned number) {
+	if (!enabled[number])
+		return;
+
 	unsigned i = number;
 	Rect src;
 	Rect dest;
@@ -265,15 +277,38 @@ void WidgetTabControl::renderTab(unsigned number) {
 }
 
 bool WidgetTabControl::getNext() {
-	setActiveTab(++active_tab);
+	setActiveTab(getNextEnabledTab(active_tab));
 	return true;
 }
 
 bool WidgetTabControl::getPrev() {
-	setActiveTab(--active_tab);
+	setActiveTab(getPrevEnabledTab(active_tab));
 	return true;
+}
+
+unsigned WidgetTabControl::getNextEnabledTab(unsigned tab) {
+	for (unsigned i = tab+1; i < tabs.size(); ++i) {
+		if (enabled[i])
+			return i;
+	}
+	return tab;
+}
+
+unsigned WidgetTabControl::getPrevEnabledTab(unsigned tab) {
+	for (unsigned i = tab-1; i < tabs.size(); i--) {
+		if (enabled[i])
+			return i;
+	}
+	return tab;
 }
 
 int WidgetTabControl::getTabHeight() {
 	return (active_tab_surface ? active_tab_surface->getGraphicsHeight() : 0);
+}
+
+void WidgetTabControl::setEnabled(unsigned index, bool val) {
+	if (index >= enabled.size())
+		return;
+
+	enabled[index] = val;
 }
