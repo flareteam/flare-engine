@@ -729,6 +729,8 @@ void GameStateConfig::logicDefaults() {
 }
 
 void GameStateConfig::logicAccept() {
+	new_render_device = renderer_lstb->getValue();
+
 	if (setMods()) {
 		snd->unloadMusic();
 		reload_music = true;
@@ -759,7 +761,6 @@ void GameStateConfig::logicAccept() {
 	delete tooltipm;
 
 	// we can't replace the render device in-place, so soft-reset the game
-	new_render_device = renderer_lstb->getValue();
 	if (new_render_device != settings->render_device_name) {
 		settings->render_device_name = new_render_device;
 		inpt->done = true;
