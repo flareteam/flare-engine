@@ -10,7 +10,8 @@ button_cancel=0,0,bottom
 listbox_scrollbar_offset=2
 
 # scrollpane values are positions x, y and sizes width, height
-scrollpane=0,4,600,320
+# scrollpane=0,4,600,320
+scrollpane=-6,-6,616,344
 scrollpane_padding=80,40
 # scrollpane_bg_color=26,26,26,127
 scrollpane_separator_color=63,63,63
