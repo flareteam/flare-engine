@@ -101,10 +101,7 @@ void WidgetLog::refresh() {
 		Image* render_target = scroll_box->contents->getGraphics();
 
 		if (!separators.empty() && separators[i-1]) {
-			for (int j=padding; j<padding+content_width; ++j) {
-				render_target->drawPixel(j, y2, font->getColor(FontEngine::COLOR_WIDGET_DISABLED));
-			}
-
+			render_target->drawLine(padding, y2, padding + content_width - 1, y2, font->getColor(FontEngine::COLOR_WIDGET_DISABLED));
 			y2 += paragraph_spacing;
 		}
 		font->renderShadowed(messages[i-1], padding, y2, FontEngine::JUSTIFY_LEFT, render_target, content_width, colors[i-1]);

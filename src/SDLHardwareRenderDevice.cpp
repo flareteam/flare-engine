@@ -128,6 +128,15 @@ void SDLHardwareImage::drawPixel(int x, int y, const Color& color) {
 	}
 }
 
+void SDLHardwareImage::drawLine(int x0, int y0, int x1, int y1, const Color& color) {
+	SDL_SetRenderTarget(renderer, surface);
+	SDL_SetTextureBlendMode(surface, SDL_BLENDMODE_BLEND);
+	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+	SDL_RenderDrawLine(renderer, x0, y0, x1, y1);
+	SDL_SetRenderTarget(renderer, NULL);
+}
+
+
 /**
  * Creates a non-accelerated SDL_Surface as a pixel buffer
  * The buffer is drawn when SDLHardwareImag::endPixelBatch() is called

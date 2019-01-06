@@ -46,6 +46,7 @@ public:
 
 	void fillWithColor(const Color& color);
 	void drawPixel(int x, int y, const Color& color);
+	void drawLine(int x0, int y0, int x1, int y1, const Color& color);
 	void beginPixelBatch();
 	void endPixelBatch();
 	Image* resize(int width, int height);

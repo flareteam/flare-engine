@@ -1026,9 +1026,7 @@ void GameStateConfig::renderTabContents() {
 					if (i % 3 != 0)
 						continue;
 				}
-				for (int j = scrollpane_padding.x; j < scrollpane.w - scrollpane_padding.x; ++j) {
-					render_target->drawPixel(j, i * scrollpane_padding.y, scrollpane_separator_color);
-				}
+				render_target->drawLine(scrollpane_padding.x, i * scrollpane_padding.y, scrollpane.w - scrollpane_padding.x - 1, i * scrollpane_padding.y, scrollpane_separator_color);
 			}
 		}
 		cfg_tabs[active_tab].scrollbox->render();
