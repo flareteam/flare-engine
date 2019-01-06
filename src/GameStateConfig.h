@@ -50,12 +50,8 @@ class GameStateConfig : public GameState {
 private:
 	class ConfigOption {
 	public:
-		ConfigOption()
-			: enabled(false)
-			, label(NULL)
-			, widget(NULL)
-		{}
-		~ConfigOption() {}
+		ConfigOption();
+		~ConfigOption();
 
 		bool enabled;
 		WidgetLabel* label;
@@ -64,41 +60,11 @@ private:
 
 	class ConfigTab {
 	public:
-		ConfigTab()
-			: scrollbox(NULL)
-			, enabled_count(0)
-		{}
-		~ConfigTab() {}
-		void setOptionWidgets(int index, WidgetLabel* lb, Widget* w, const std::string& lb_text) {
-			if (!options[index].enabled) {
-				options[index].enabled = true;
-				enabled_count++;
-			}
-			options[index].label = lb;
-			options[index].label->setText(lb_text);
-			options[index].widget = w;
-		}
-		void setOptionEnabled(int index, bool enable) {
-			if (options[index].enabled && !enable) {
-				options[index].enabled = false;
-				if (enabled_count > 0)
-					enabled_count--;
-			}
-			else if (!options[index].enabled && enable) {
-				options[index].enabled = true;
-				enabled_count++;
-			}
-		}
-		int getEnabledIndex(int option_index) {
-			int r = -1;
-			for (size_t i = 0; i < options.size(); ++i) {
-				if (options[i].enabled)
-					r++;
-				if (i == static_cast<size_t>(option_index))
-					break;
-			}
-			return (r == -1 ? 0 : r);
-		}
+		ConfigTab();
+		~ConfigTab();
+		void setOptionWidgets(int index, WidgetLabel* lb, Widget* w, const std::string& lb_text);
+		void setOptionEnabled(int index, bool enable);
+		int getEnabledIndex(int option_index);
 
 		WidgetScrollBox* scrollbox;
 		int enabled_count;

@@ -60,6 +60,56 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <limits.h>
 #include <iomanip>
 
+GameStateConfig::ConfigOption::ConfigOption()
+	: enabled(false)
+	, label(NULL)
+	, widget(NULL) {
+}
+
+GameStateConfig::ConfigOption::~ConfigOption() {
+}
+
+GameStateConfig::ConfigTab::ConfigTab()
+	: scrollbox(NULL)
+	, enabled_count(0) {
+}
+
+GameStateConfig::ConfigTab::~ConfigTab() {
+}
+
+void GameStateConfig::ConfigTab::setOptionWidgets(int index, WidgetLabel* lb, Widget* w, const std::string& lb_text) {
+	if (!options[index].enabled) {
+		options[index].enabled = true;
+		enabled_count++;
+	}
+	options[index].label = lb;
+	options[index].label->setText(lb_text);
+	options[index].widget = w;
+}
+
+void GameStateConfig::ConfigTab::setOptionEnabled(int index, bool enable) {
+	if (options[index].enabled && !enable) {
+		options[index].enabled = false;
+		if (enabled_count > 0)
+			enabled_count--;
+	}
+	else if (!options[index].enabled && enable) {
+		options[index].enabled = true;
+		enabled_count++;
+	}
+}
+
+int GameStateConfig::ConfigTab::getEnabledIndex(int option_index) {
+	int r = -1;
+	for (size_t i = 0; i < options.size(); ++i) {
+		if (options[i].enabled)
+			r++;
+		if (i == static_cast<size_t>(option_index))
+			break;
+	}
+	return (r == -1 ? 0 : r);
+}
+
 GameStateConfig::GameStateConfig ()
 	: GameState()
 	, child_widget()
@@ -265,7 +315,21 @@ void GameStateConfig::init() {
 	}
 
 	// disable some options
-	// cfg_tabs[VIDEO_TAB].setOptionEnabled(CFG_VIDEO_TEXTURE_FILTER, false);
+	bool is_play_mode = false;
+
+	if (is_play_mode) {
+		cfg_tabs[VIDEO_TAB].setOptionEnabled(CFG_VIDEO_RENDERER, false);
+		cfg_tabs[VIDEO_TAB].setOptionEnabled(CFG_VIDEO_FULLSCREEN, false);
+		cfg_tabs[VIDEO_TAB].setOptionEnabled(CFG_VIDEO_HWSURFACE, false);
+		cfg_tabs[VIDEO_TAB].setOptionEnabled(CFG_VIDEO_VSYNC, false);
+		cfg_tabs[VIDEO_TAB].setOptionEnabled(CFG_VIDEO_TEXTURE_FILTER, false);
+		cfg_tabs[VIDEO_TAB].setOptionEnabled(CFG_VIDEO_DPI_SCALING, false);
+
+		cfg_tabs[INTERFACE_TAB].setOptionEnabled(CFG_INTERFACE_LANGUAGE, false);
+		cfg_tabs[INTERFACE_TAB].setOptionEnabled(CFG_INTERFACE_DEV_MODE, false);
+
+		tab_control->setEnabled(static_cast<unsigned>(MODS_TAB), false);
+	}
 
 	for (size_t i = 0; i < cfg_tabs.size(); ++i) {
 		if (cfg_tabs[i].enabled_count == 0) {
@@ -795,28 +859,28 @@ void GameStateConfig::logicVideo() {
 	cfg_tabs[VIDEO_TAB].scrollbox->logic();
 	Point mouse = cfg_tabs[VIDEO_TAB].scrollbox->input_assist(inpt->mouse);
 
-	if (fullscreen_cb->checkClickAt(mouse.x, mouse.y)) {
+	if (cfg_tabs[VIDEO_TAB].options[CFG_VIDEO_FULLSCREEN].enabled && fullscreen_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->fullscreen = fullscreen_cb->isChecked();
 	}
-	else if (hwsurface_cb->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[VIDEO_TAB].options[CFG_VIDEO_HWSURFACE].enabled && hwsurface_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->hwsurface = hwsurface_cb->isChecked();
 	}
-	else if (vsync_cb->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[VIDEO_TAB].options[CFG_VIDEO_VSYNC].enabled && vsync_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->vsync = vsync_cb->isChecked();
 	}
-	else if (texture_filter_cb->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[VIDEO_TAB].options[CFG_VIDEO_TEXTURE_FILTER].enabled && texture_filter_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->texture_filter = texture_filter_cb->isChecked();
 	}
-	else if (dpi_scaling_cb->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[VIDEO_TAB].options[CFG_VIDEO_DPI_SCALING].enabled && dpi_scaling_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->dpi_scaling = dpi_scaling_cb->isChecked();
 		render_device->windowResize();
 		refreshWidgets();
 		force_refresh_background = true;
 	}
-	else if (parallax_layers_cb->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[VIDEO_TAB].options[CFG_VIDEO_PARALLAX_LAYERS].enabled && parallax_layers_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->parallax_layers = parallax_layers_cb->isChecked();
 	}
-	else if (change_gamma_cb->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[VIDEO_TAB].options[CFG_VIDEO_ENABLE_GAMMA].enabled && change_gamma_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->change_gamma = change_gamma_cb->isChecked();
 		if (settings->change_gamma) {
 			gamma_sl->enabled = true;
@@ -828,11 +892,11 @@ void GameStateConfig::logicVideo() {
 			render_device->resetGamma();
 		}
 	}
-	else if (gamma_sl->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[VIDEO_TAB].options[CFG_VIDEO_GAMMA].enabled && gamma_sl->checkClickAt(mouse.x, mouse.y)) {
 		settings->gamma = static_cast<float>(gamma_sl->getValue()) * 0.1f;
 		render_device->setGamma(settings->gamma);
 	}
-	else if (renderer_lstb->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[VIDEO_TAB].options[CFG_VIDEO_RENDERER].enabled && renderer_lstb->checkClickAt(mouse.x, mouse.y)) {
 		new_render_device = renderer_lstb->getValue();
 	}
 }
@@ -842,13 +906,13 @@ void GameStateConfig::logicAudio() {
 	Point mouse = cfg_tabs[AUDIO_TAB].scrollbox->input_assist(inpt->mouse);
 
 	if (settings->audio) {
-		if (music_volume_sl->checkClickAt(mouse.x, mouse.y)) {
+		if (cfg_tabs[AUDIO_TAB].options[CFG_AUDIO_MUSIC].enabled && music_volume_sl->checkClickAt(mouse.x, mouse.y)) {
 			if (settings->music_volume == 0)
 				reload_music = true;
 			settings->music_volume = static_cast<short>(music_volume_sl->getValue());
 			snd->setVolumeMusic(settings->music_volume);
 		}
-		else if (sound_volume_sl->checkClickAt(mouse.x, mouse.y)) {
+		else if (cfg_tabs[AUDIO_TAB].options[CFG_AUDIO_SFX].enabled && sound_volume_sl->checkClickAt(mouse.x, mouse.y)) {
 			settings->sound_volume = static_cast<short>(sound_volume_sl->getValue());
 			snd->setVolumeSFX(settings->sound_volume);
 		}
@@ -859,24 +923,24 @@ void GameStateConfig::logicInterface() {
 	cfg_tabs[INTERFACE_TAB].scrollbox->logic();
 	Point mouse = cfg_tabs[INTERFACE_TAB].scrollbox->input_assist(inpt->mouse);
 
-	if (language_lstb->checkClickAt(mouse.x, mouse.y)) {
+	if (cfg_tabs[INTERFACE_TAB].options[CFG_INTERFACE_LANGUAGE].enabled && language_lstb->checkClickAt(mouse.x, mouse.y)) {
 		unsigned lang_id = language_lstb->getSelected();
 		if (lang_id != language_lstb->getSize())
 			settings->language = language_ISO[lang_id];
 	}
-	else if (show_fps_cb->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[INTERFACE_TAB].options[CFG_INTERFACE_SHOW_FPS].enabled && show_fps_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->show_fps = show_fps_cb->isChecked();
 	}
-	else if (colorblind_cb->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[INTERFACE_TAB].options[CFG_INTERFACE_COLORBLIND].enabled && colorblind_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->colorblind = colorblind_cb->isChecked();
 	}
-	else if (hardware_cursor_cb->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[INTERFACE_TAB].options[CFG_INTERFACE_HARDWARE_CURSOR].enabled && hardware_cursor_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->hardware_cursor = hardware_cursor_cb->isChecked();
 	}
-	else if (dev_mode_cb->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[INTERFACE_TAB].options[CFG_INTERFACE_DEV_MODE].enabled && dev_mode_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->dev_mode = dev_mode_cb->isChecked();
 	}
-	else if (subtitles_cb->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[INTERFACE_TAB].options[CFG_INTERFACE_SUBTITLES].enabled && subtitles_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->subtitles = subtitles_cb->isChecked();
 	}
 }
@@ -897,37 +961,37 @@ void GameStateConfig::logicInput() {
 		inpt->joysticks_changed = false;
 	}
 
-	if (mouse_move_cb->checkClickAt(mouse.x, mouse.y)) {
+	if (cfg_tabs[INPUT_TAB].options[CFG_INPUT_MOUSE_MOVE].enabled && mouse_move_cb->checkClickAt(mouse.x, mouse.y)) {
 		if (mouse_move_cb->isChecked()) {
 			settings->mouse_move = true;
 			enableMouseOptions();
 		}
 		else settings->mouse_move=false;
 	}
-	else if (mouse_aim_cb->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[INPUT_TAB].options[CFG_INPUT_MOUSE_AIM].enabled && mouse_aim_cb->checkClickAt(mouse.x, mouse.y)) {
 		if (mouse_aim_cb->isChecked()) {
 			settings->mouse_aim = true;
 			enableMouseOptions();
 		}
 		else settings->mouse_aim=false;
 	}
-	else if (no_mouse_cb->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[INPUT_TAB].options[CFG_INPUT_NO_MOUSE].enabled && no_mouse_cb->checkClickAt(mouse.x, mouse.y)) {
 		if (no_mouse_cb->isChecked()) {
 			settings->no_mouse = true;
 			disableMouseOptions();
 		}
 		else settings->no_mouse = false;
 	}
-	else if (mouse_move_swap_cb->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[INPUT_TAB].options[CFG_INPUT_MOUSE_MOVE_SWAP].enabled && mouse_move_swap_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->mouse_move_swap = mouse_move_swap_cb->isChecked();
 	}
-	else if (mouse_move_attack_cb->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[INPUT_TAB].options[CFG_INPUT_MOUSE_MOVE_ATTACK].enabled && mouse_move_attack_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->mouse_move_attack = mouse_move_attack_cb->isChecked();
 	}
-	else if (joystick_deadzone_sl->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[INPUT_TAB].options[CFG_INPUT_JOYSTICK_DEADZONE].enabled && joystick_deadzone_sl->checkClickAt(mouse.x, mouse.y)) {
 		settings->joy_deadzone = joystick_deadzone_sl->getValue();
 	}
-	else if (joystick_device_lstb->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[INPUT_TAB].options[CFG_INPUT_JOYSTICK].enabled && joystick_device_lstb->checkClickAt(mouse.x, mouse.y)) {
 		settings->joystick_device = static_cast<int>(joystick_device_lstb->getSelected()) - 1;
 		if (settings->joystick_device != -1) {
 			settings->enable_joystick = true;
@@ -951,6 +1015,10 @@ void GameStateConfig::logicKeybinds() {
 			keybinds_btn[i]->enabled = settings->enable_joystick;
 			keybinds_btn[i]->refresh();
 		}
+
+		if (!cfg_tabs[KEYBINDS_TAB].options[i].enabled)
+			continue;
+
 		if (keybinds_btn[i]->checkClickAt(mouse.x,mouse.y)) {
 			std::string confirm_msg;
 			confirm_msg = msg->get("Assign:") + ' ' + inpt->binding_name[i/3];
