@@ -56,6 +56,7 @@ public:
 	int getCursor() {
 		return cursor;
 	}
+	void scrollToTop();
 
 private:
 	void scroll(int amount);

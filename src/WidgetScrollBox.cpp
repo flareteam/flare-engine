@@ -112,6 +112,10 @@ void WidgetScrollBox::scrollUp() {
 	scroll(-((contents_height * 5) / 100));
 }
 
+void WidgetScrollBox::scrollToTop() {
+	scrollTo(0);
+}
+
 Point WidgetScrollBox::input_assist(const Point& mouse) {
 	Point new_mouse;
 	if (Utils::isWithinRect(pos,mouse)) {

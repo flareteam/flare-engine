@@ -22,141 +22,41 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuExit
  */
 
-#include "Avatar.h"
-#include "EngineSettings.h"
-#include "FileParser.h"
-#include "FontEngine.h"
+#include "MenuConfig.h"
+#include "MenuConfirm.h"
 #include "MenuExit.h"
-#include "MessageEngine.h"
-#include "SharedResources.h"
-#include "SharedGameResources.h"
-#include "Settings.h"
-#include "SoundManager.h"
-#include "UtilsParsing.h"
-#include "WidgetButton.h"
-#include "WidgetSlider.h"
 
-MenuExit::MenuExit() : Menu() {
-
-	buttonExit = new WidgetButton(WidgetButton::DEFAULT_FILE);
-	buttonClose = new WidgetButton(WidgetButton::DEFAULT_FILE);
-
-	// widgets for game options
-	music_volume_sl = new WidgetSlider(WidgetSlider::DEFAULT_FILE);
-	sound_volume_sl = new WidgetSlider(WidgetSlider::DEFAULT_FILE);
-
-	// Load config settings
-	FileParser infile;
-	// @CLASS MenuExit|Description of menus/exit.txt
-	if(infile.open("menus/exit.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
-		while(infile.next()) {
-			if (parseMenuKey(infile.key, infile.val))
-				continue;
-			else if (infile.key == "title") {
-				// @ATTR title|label|Position of the "Paused" text.
-				title_lb.setFromLabelInfo(Parse::popLabelInfo(infile.val));
-			}
-			else if (infile.key == "exit") {
-				// @ATTR exit|point|Position of the "Save and Exit" button.
-				Point p = Parse::toPoint(infile.val);
-				buttonExit->setBasePos(p.x, p.y, Utils::ALIGN_TOPLEFT);
-			}
-			else if (infile.key == "continue") {
-				// @ATTR continue|point|Position of the "Continue" button.
-				Point p = Parse::toPoint(infile.val);
-				buttonClose->setBasePos(p.x, p.y, Utils::ALIGN_TOPLEFT);
-			}
-			else if (infile.key == "music_volume") {
-				// @ATTR music_volume|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Music Volume" slider relative to the frame.
-				Rect r = Parse::toRect(infile.val);
-				placeOptionWidgets(&music_volume_lb, music_volume_sl, r.x, r.y, r.w, r.h, msg->get("Music Volume"));
-			}
-			else if (infile.key == "sound_volume") {
-				// @ATTR sound_volume|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Sound Volume" slider relative to the frame.
-				Rect r = Parse::toRect(infile.val);
-				placeOptionWidgets(&sound_volume_lb, sound_volume_sl, r.x, r.y, r.w, r.h, msg->get("Sound Volume"));
-			}
-			else
-				infile.error("MenuExit: '%s' is not a valid key.", infile.key.c_str());
-		}
-		infile.close();
-	}
-
-	title_lb.setText(msg->get("Paused"));
-	title_lb.setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
-
-	exitClicked = false;
-	reload_music = false;
-
-	exit_msg1 = msg->get("Save & Exit");
-	exit_msg2 = msg->get("Exit");
-
-	buttonExit->setLabel(eset->misc.save_onexit ? exit_msg1 : exit_msg2);
-
-	buttonClose->setLabel(msg->get("Continue"));
-
-	setBackground("images/menus/pause_menu.png");
-
-	if (settings->audio) {
-		music_volume_sl->set(0, 128, settings->music_volume);
-		sound_volume_sl->set(0, 128, settings->sound_volume);
-	}
-	else {
-		music_volume_sl->set(0, 128, 0);
-		sound_volume_sl->set(0, 128, 0);
-	}
-
-	tablist.add(buttonClose);
-	tablist.add(buttonExit);
-	tablist.add(music_volume_sl);
-	tablist.add(sound_volume_sl);
-
+MenuExit::MenuExit()
+	: Menu()
+	, menu_config(new MenuConfig(!MenuConfig::IS_GAME_STATE))
+	, exitClicked(false)
+	, reload_music(false)
+{
 	align();
 }
 
 void MenuExit::align() {
 	Menu::align();
-
-	title_lb.setPos(window_area.x, window_area.y);
-
-	buttonExit->setPos(window_area.x, window_area.y);
-	buttonExit->refresh();
-
-	buttonClose->setPos(window_area.x, window_area.y);
-	buttonClose->refresh();
-
-	for (size_t i=0; i<option_labels.size(); ++i) {
-		option_labels[i]->setPos(window_area.x, window_area.y);
-	}
-
-	for (size_t i=0; i<option_widgets.size(); ++i) {
-		option_widgets[i]->setPos(window_area.x, window_area.y);
-	}
+	menu_config->refreshWidgets();
 }
 
 void MenuExit::logic() {
 	if (visible) {
-		std::string title_str = msg->get("Paused") + " [" + Utils::getTimeString(pc->time_played) + "]";
-		title_lb.setText(title_str);
+		menu_config->logic();
+	}
 
-		tablist.logic();
+	if (menu_config->reload_music) {
+		reload_music = true;
+		menu_config->reload_music = false;
+	}
 
-		if (buttonExit->checkClick()) {
-			exitClicked = true;
-		}
-		else if (buttonClose->checkClick()) {
-			visible = false;
-		}
-		else if (settings->audio && music_volume_sl->checkClick()) {
-			if (settings->music_volume == 0)
-				reload_music = true;
-			settings->music_volume = static_cast<short>(music_volume_sl->getValue());
-			snd->setVolumeMusic(settings->music_volume);
-		}
-		else if (settings->audio && sound_volume_sl->checkClick()) {
-			settings->sound_volume = static_cast<short>(sound_volume_sl->getValue());
-			snd->setVolumeSFX(settings->sound_volume);
-		}
+	if (menu_config->clicked_pause_continue) {
+		visible = false;
+		menu_config->clicked_pause_continue = false;
+	}
+	else if (menu_config->clicked_pause_exit) {
+		exitClicked = true;
+		menu_config->clicked_pause_exit = false;
 	}
 }
 
@@ -165,47 +65,27 @@ void MenuExit::render() {
 		// background
 		Menu::render();
 
-		title_lb.render();
-
-		buttonExit->render();
-		buttonClose->render();
-
-		for (size_t i=0; i<option_labels.size(); ++i) {
-			option_labels[i]->render();
-		}
-
-		for (size_t i=0; i<option_widgets.size(); ++i) {
-			option_widgets[i]->render();
-		}
-	}
-}
-
-void MenuExit::placeOptionWidgets(WidgetLabel *lb, Widget *w, int x1, int y1, int x2, int y2, std::string const& str) {
-	if (w) {
-		w->setBasePos(x2, y2, Utils::ALIGN_TOPLEFT);
-		option_widgets.push_back(w);
-	}
-
-	if (lb) {
-		lb->setBasePos(x1, y1, Utils::ALIGN_TOPLEFT);
-		lb->setText(str);
-		lb->setJustify(FontEngine::JUSTIFY_CENTER);
-		option_labels.push_back(lb);
+		menu_config->render();
 	}
 }
 
 void MenuExit::disableSave() {
-	if (buttonExit) {
-		buttonExit->setLabel(exit_msg2);
-		buttonExit->refresh();
+	menu_config->setPauseExitText(!MenuConfig::ENABLE_SAVE_GAME);
+}
+
+void MenuExit::handleCancel() {
+	if (!visible) {
+		menu_config->resetSelectedTab();
+		visible = true;
+	}
+	else {
+		if (!menu_config->input_confirm->visible) {
+			visible = false;
+		}
 	}
 }
 
 MenuExit::~MenuExit() {
-	delete buttonExit;
-	delete buttonClose;
-
-	delete music_volume_sl;
-	delete sound_volume_sl;
+	delete menu_config;
 }
 

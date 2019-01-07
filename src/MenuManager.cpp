@@ -435,7 +435,7 @@ void MenuManager::logic() {
 				closeAll();
 			}
 			else {
-				exit->visible = !exit->visible;
+				exit->handleCancel();
 			}
 		}
 	}

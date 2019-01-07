@@ -143,6 +143,7 @@ Set (FLARE_SOURCES
 	./src/MenuActiveEffects.cpp
 	./src/MenuBook.cpp
 	./src/MenuCharacter.cpp
+	./src/MenuConfig.cpp
 	./src/MenuConfirm.cpp
 	./src/MenuDevConsole.cpp
 	./src/MenuEnemy.cpp
@@ -256,6 +257,7 @@ Set (FLARE_HEADERS
 	./src/MenuActiveEffects.h
 	./src/MenuBook.h
 	./src/MenuCharacter.h
+	./src/MenuConfig.h
 	./src/MenuConfirm.h
 	./src/MenuDevConsole.h
 	./src/MenuEnemy.h

@@ -399,6 +399,7 @@ void GameStatePlay::checkCancel() {
 
 		// audio levels can be changed in the pause menu, so update our settings file
 		settings->saveSettings();
+		inpt->saveKeyBindings();
 
 		snd->stopMusic();
 		showLoading();
@@ -413,6 +414,9 @@ void GameStatePlay::checkCancel() {
 
 		if (save_on_exit)
 			save_load->saveGame();
+
+		settings->saveSettings();
+		inpt->saveKeyBindings();
 
 		snd->stopMusic();
 		exitRequested = true;

@@ -385,6 +385,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 	}
 
 	// assist mouse movement
+	mm_key = settings->mouse_move_swap ? Input::MAIN2 : Input::MAIN1;
 	if (!inpt->pressing[mm_key]) {
 		drag_walking = false;
 	}
