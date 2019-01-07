@@ -76,15 +76,18 @@ private:
 
 	std::vector<ConfigTab> cfg_tabs;
 
+	bool enable_gamestate_buttons;
+
 public:
-	static const short TAB_COUNT = 6;
+	static const short TAB_COUNT = 7;
 	enum {
-		VIDEO_TAB = 0,
-		AUDIO_TAB = 1,
-		INTERFACE_TAB = 2,
-		INPUT_TAB = 3,
-		KEYBINDS_TAB = 4,
-		MODS_TAB = 5,
+		EXIT_TAB = 0,
+		VIDEO_TAB = 1,
+		AUDIO_TAB = 2,
+		INTERFACE_TAB = 3,
+		INPUT_TAB = 4,
+		KEYBINDS_TAB = 5,
+		MODS_TAB = 6
 	};
 	static const short NO_TAB = -1;
 
@@ -111,6 +114,7 @@ public:
 	void logicDefaults();
 	void logicAccept();
 	void logicCancel();
+	void logicExit();
 	void logicVideo();
 	void logicAudio();
 	void logicInterface();
@@ -148,6 +152,7 @@ public:
 
 	TabList tablist;
 	TabList tablist_main;
+	TabList tablist_exit;
 	TabList tablist_video;
 	TabList tablist_audio;
 	TabList tablist_interface;
@@ -165,6 +170,13 @@ public:
 	Sprite                     * background;
 	MenuConfirm                * input_confirm;
 	MenuConfirm                * defaults_confirm;
+
+	WidgetLabel                * pause_continue_lb;
+	WidgetButton               * pause_continue_btn;
+	WidgetLabel                * pause_exit_lb;
+	WidgetButton               * pause_exit_btn;
+	WidgetLabel                * pause_time_lb;
+	WidgetLabel                * pause_time_text;
 
 	WidgetHorizontalList       * renderer_lstb;
 	WidgetLabel                * renderer_lb;

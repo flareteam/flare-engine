@@ -112,6 +112,7 @@ int GameStateConfig::ConfigTab::getEnabledIndex(int option_index) {
 
 GameStateConfig::GameStateConfig ()
 	: GameState()
+	, enable_gamestate_buttons(false)
 	, child_widget()
 	, tab_control(new WidgetTabControl())
 	, ok_button(new WidgetButton(WidgetButton::DEFAULT_FILE))
@@ -120,6 +121,13 @@ GameStateConfig::GameStateConfig ()
 	, background(NULL)
 	, input_confirm(new MenuConfirm(msg->get("Clear"),msg->get("Assign:")))
 	, defaults_confirm(new MenuConfirm(msg->get("Defaults"), msg->get("Reset ALL settings?")))
+
+	, pause_continue_lb(new WidgetLabel())
+	, pause_continue_btn(new WidgetButton(WidgetButton::DEFAULT_FILE))
+	, pause_exit_lb(new WidgetLabel())
+	, pause_exit_btn(new WidgetButton(WidgetButton::DEFAULT_FILE))
+	, pause_time_lb(new WidgetLabel())
+	, pause_time_text(new WidgetLabel())
 
 	, renderer_lstb(new WidgetHorizontalList())
 	, renderer_lb(new WidgetLabel())
@@ -211,6 +219,12 @@ GameStateConfig::GameStateConfig ()
 	defaults_button->setLabel(msg->get("Defaults"));
 	cancel_button->setLabel(msg->get("Cancel"));
 
+	pause_continue_btn->setLabel("Continue");
+	pause_exit_btn->setLabel(eset->misc.save_onexit ? msg->get("Save & Exit") : msg->get("Exit"));
+	pause_time_text->setText(Utils::getTimeString(0));
+	pause_time_text->setJustify(FontEngine::JUSTIFY_RIGHT);
+	pause_time_text->setVAlign(LabelInfo::VALIGN_CENTER);
+
 	// Finish Mods ListBoxes setup
 	activemods_lstb->multi_select = true;
 	for (unsigned int i = 0; i < mods->mod_list.size() ; i++) {
@@ -260,6 +274,7 @@ GameStateConfig::~GameStateConfig() {
 }
 
 void GameStateConfig::init() {
+	tab_control->setTabTitle(EXIT_TAB, msg->get("Exit"));
 	tab_control->setTabTitle(VIDEO_TAB, msg->get("Video"));
 	tab_control->setTabTitle(AUDIO_TAB, msg->get("Audio"));
 	tab_control->setTabTitle(INTERFACE_TAB, msg->get("Interface"));
@@ -269,12 +284,17 @@ void GameStateConfig::init() {
 
 	readConfig();
 
-	cfg_tabs.resize(5);
+	cfg_tabs.resize(6);
+	cfg_tabs[EXIT_TAB].options.resize(3);
 	cfg_tabs[VIDEO_TAB].options.resize(Platform::Video::COUNT);
 	cfg_tabs[AUDIO_TAB].options.resize(Platform::Audio::COUNT);
 	cfg_tabs[INTERFACE_TAB].options.resize(Platform::Interface::COUNT);
 	cfg_tabs[INPUT_TAB].options.resize(Platform::Input::COUNT);
 	cfg_tabs[KEYBINDS_TAB].options.resize(inpt->KEY_COUNT * 3);
+
+	cfg_tabs[EXIT_TAB].setOptionWidgets(0, pause_continue_lb, pause_continue_btn, msg->get("Paused"));
+	cfg_tabs[EXIT_TAB].setOptionWidgets(1, pause_exit_lb, pause_exit_btn, "");
+	cfg_tabs[EXIT_TAB].setOptionWidgets(2, pause_time_lb, pause_time_text, msg->get("Time Played"));
 
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::RENDERER, renderer_lb, renderer_lstb, msg->get("Renderer"));
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::FULLSCREEN, fullscreen_lb, fullscreen_cb, msg->get("Full Screen Mode"));
@@ -329,6 +349,14 @@ void GameStateConfig::init() {
 		cfg_tabs[INTERFACE_TAB].setOptionEnabled(Platform::Interface::DEV_MODE, false);
 
 		tab_control->setEnabled(static_cast<unsigned>(MODS_TAB), false);
+		tab_control->setEnabled(static_cast<unsigned>(EXIT_TAB), true);
+		enable_gamestate_buttons = false;
+	}
+	else {
+		cfg_tabs[EXIT_TAB].setOptionEnabled(0, false);
+		cfg_tabs[EXIT_TAB].setOptionEnabled(1, false);
+		tab_control->setEnabled(static_cast<unsigned>(EXIT_TAB), false);
+		enable_gamestate_buttons = true;
 	}
 
 	// disable platform-specific options
@@ -537,11 +565,11 @@ void GameStateConfig::addChildWidgets() {
 			if (cfg_tabs[i].options[j].enabled) {
 				cfg_tabs[i].scrollbox->addChildWidget(cfg_tabs[i].options[j].widget);
 				cfg_tabs[i].scrollbox->addChildWidget(cfg_tabs[i].options[j].label);
-
-				// only for memory management
-				addChildWidget(cfg_tabs[i].options[j].widget, NO_TAB);
-				addChildWidget(cfg_tabs[i].options[j].label, NO_TAB);
 			}
+
+			// only for memory management
+			addChildWidget(cfg_tabs[i].options[j].widget, NO_TAB);
+			addChildWidget(cfg_tabs[i].options[j].label, NO_TAB);
 		}
 	}
 
@@ -559,12 +587,20 @@ void GameStateConfig::setupTabList() {
 	tablist.add(tab_control);
 	tablist.setPrevTabList(&tablist_main);
 
-	tablist_main.add(ok_button);
-	tablist_main.add(defaults_button);
-	tablist_main.add(cancel_button);
+	if (enable_gamestate_buttons) {
+		tablist_main.add(ok_button);
+		tablist_main.add(defaults_button);
+		tablist_main.add(cancel_button);
+	}
 	tablist_main.setPrevTabList(&tablist);
 	tablist_main.setNextTabList(&tablist);
 	tablist_main.lock();
+
+	tablist_exit.setScrollType(Widget::SCROLL_VERTICAL);
+	tablist_exit.add(cfg_tabs[EXIT_TAB].scrollbox);
+	tablist_exit.setPrevTabList(&tablist);
+	tablist_exit.setNextTabList(&tablist_main);
+	tablist_exit.lock();
 
 	tablist_video.setScrollType(Widget::SCROLL_VERTICAL);
 	tablist_video.add(cfg_tabs[VIDEO_TAB].scrollbox);
@@ -731,6 +767,10 @@ void GameStateConfig::logic() {
 	// tab contents
 	active_tab = tab_control->getActiveTab();
 
+	if (active_tab == EXIT_TAB) {
+		tablist.setNextTabList(&tablist_exit);
+		logicExit();
+	}
 	if (active_tab == VIDEO_TAB) {
 		tablist.setNextTabList(&tablist_video);
 		logicVideo();
@@ -776,6 +816,7 @@ bool GameStateConfig::logicMain() {
 	tab_control->logic();
 	tablist.logic();
 	tablist_main.logic();
+	tablist_exit.logic();
 	tablist_video.logic();
 	tablist_audio.logic();
 	tablist_interface.logic();
@@ -783,22 +824,24 @@ bool GameStateConfig::logicMain() {
 	tablist_keybinds.logic();
 	tablist_mods.logic();
 
-	// Ok/Cancel Buttons
-	if (ok_button->checkClick()) {
-		logicAccept();
+	if (enable_gamestate_buttons) {
+		// Ok/Cancel Buttons
+		if (ok_button->checkClick()) {
+			logicAccept();
 
-		// GameStateConfig deconstructed, proceed with caution
-		return false;
-	}
-	else if (defaults_button->checkClick()) {
-		defaults_confirm->visible = true;
-		return true;
-	}
-	else if (cancel_button->checkClick() || (inpt->pressing[Input::CANCEL] && !inpt->lock[Input::CANCEL])) {
-		logicCancel();
+			// GameStateConfig deconstructed, proceed with caution
+			return false;
+		}
+		else if (defaults_button->checkClick()) {
+			defaults_confirm->visible = true;
+			return true;
+		}
+		else if (cancel_button->checkClick() || (inpt->pressing[Input::CANCEL] && !inpt->lock[Input::CANCEL])) {
+			logicCancel();
 
-		// GameStateConfig deconstructed, proceed with caution
-		return false;
+			// GameStateConfig deconstructed, proceed with caution
+			return false;
+		}
 	}
 
 	return true;
@@ -880,6 +923,18 @@ void GameStateConfig::logicCancel() {
 	render_device->updateTitleBar();
 	showLoading();
 	setRequestedGameState(new GameStateTitle());
+}
+
+void GameStateConfig::logicExit() {
+	cfg_tabs[EXIT_TAB].scrollbox->logic();
+	Point mouse = cfg_tabs[EXIT_TAB].scrollbox->input_assist(inpt->mouse);
+
+	if (cfg_tabs[EXIT_TAB].options[0].enabled && pause_continue_btn->checkClickAt(mouse.x, mouse.y)) {
+		Utils::logInfo("Continue clicked");
+	}
+	else if (cfg_tabs[EXIT_TAB].options[1].enabled && pause_exit_btn->checkClickAt(mouse.x, mouse.y)) {
+		Utils::logInfo("Exit clicked");
+	}
 }
 
 void GameStateConfig::logicVideo() {
@@ -1100,17 +1155,29 @@ void GameStateConfig::render() {
 
 	tab_control->render();
 
-	// render OK/Defaults/Cancel buttons
-	ok_button->render();
-	cancel_button->render();
-	defaults_button->render();
+	if (enable_gamestate_buttons) {
+		// render OK/Defaults/Cancel buttons
+		ok_button->render();
+		cancel_button->render();
+		defaults_button->render();
+	}
 
 	renderTabContents();
 	renderDialogs();
 }
 
 void GameStateConfig::renderTabContents() {
-	if (active_tab <= KEYBINDS_TAB) {
+	if (active_tab == EXIT_TAB) {
+		if (cfg_tabs[active_tab].scrollbox->update) {
+			cfg_tabs[active_tab].scrollbox->refresh();
+
+			// only draw a separator between the buttons and the time played text
+			Image* render_target = cfg_tabs[active_tab].scrollbox->contents->getGraphics();
+			render_target->drawLine(scrollpane_padding.x, 2 * scrollpane_padding.y, scrollpane.w - scrollpane_padding.x - 1, 2 * scrollpane_padding.y, scrollpane_separator_color);
+		}
+		cfg_tabs[active_tab].scrollbox->render();
+	}
+	else if (active_tab <= KEYBINDS_TAB) {
 		if (cfg_tabs[active_tab].scrollbox->update) {
 			cfg_tabs[active_tab].scrollbox->refresh();
 
