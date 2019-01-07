@@ -163,8 +163,16 @@ bool TabList::previous_is_valid() {
 }
 
 Widget* TabList::getNext(bool inner, uint8_t dir) {
-	if (widgets.empty())
+	if (widgets.empty()) {
+		if (next_tablist) {
+			// WARNING: Could result in infinite loop if all tablists are empty
+			defocus();
+			locked = true;
+			next_tablist->unlock();
+			return next_tablist->getNext(!GET_INNER, WIDGET_SELECT_AUTO);
+		}
 		return NULL;
+	}
 
 	if (current_is_valid()) {
 		if (inner && widgets.at(current)->getNext())
@@ -206,8 +214,16 @@ Widget* TabList::getNext(bool inner, uint8_t dir) {
 }
 
 Widget* TabList::getPrev(bool inner, uint8_t dir) {
-	if (widgets.empty())
+	if (widgets.empty()) {
+		if (prev_tablist) {
+			// WARNING: Could result in infinite loop if all tablists are empty
+			defocus();
+			locked = true;
+			prev_tablist->unlock();
+			return prev_tablist->getPrev(!GET_INNER, WIDGET_SELECT_AUTO);
+		}
 		return NULL;
+	}
 
 	if (current_is_valid()) {
 		if (inner && widgets.at(current)->getPrev())
