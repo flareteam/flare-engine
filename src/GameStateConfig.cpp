@@ -270,39 +270,39 @@ void GameStateConfig::init() {
 	readConfig();
 
 	cfg_tabs.resize(5);
-	cfg_tabs[VIDEO_TAB].options.resize(CFG_VIDEO_COUNT);
-	cfg_tabs[AUDIO_TAB].options.resize(CFG_AUDIO_COUNT);
-	cfg_tabs[INTERFACE_TAB].options.resize(CFG_INTERFACE_COUNT);
-	cfg_tabs[INPUT_TAB].options.resize(CFG_INPUT_COUNT);
+	cfg_tabs[VIDEO_TAB].options.resize(Platform::Video::COUNT);
+	cfg_tabs[AUDIO_TAB].options.resize(Platform::Audio::COUNT);
+	cfg_tabs[INTERFACE_TAB].options.resize(Platform::Interface::COUNT);
+	cfg_tabs[INPUT_TAB].options.resize(Platform::Input::COUNT);
 	cfg_tabs[KEYBINDS_TAB].options.resize(inpt->KEY_COUNT * 3);
 
-	cfg_tabs[VIDEO_TAB].setOptionWidgets(CFG_VIDEO_RENDERER, renderer_lb, renderer_lstb, msg->get("Renderer"));
-	cfg_tabs[VIDEO_TAB].setOptionWidgets(CFG_VIDEO_FULLSCREEN, fullscreen_lb, fullscreen_cb, msg->get("Full Screen Mode"));
-	cfg_tabs[VIDEO_TAB].setOptionWidgets(CFG_VIDEO_HWSURFACE, hwsurface_lb, hwsurface_cb, msg->get("Hardware surfaces"));
-	cfg_tabs[VIDEO_TAB].setOptionWidgets(CFG_VIDEO_VSYNC, vsync_lb, vsync_cb, msg->get("V-Sync"));
-	cfg_tabs[VIDEO_TAB].setOptionWidgets(CFG_VIDEO_TEXTURE_FILTER, texture_filter_lb, texture_filter_cb, msg->get("Texture Filtering"));
-	cfg_tabs[VIDEO_TAB].setOptionWidgets(CFG_VIDEO_DPI_SCALING, dpi_scaling_lb, dpi_scaling_cb, msg->get("DPI scaling"));
-	cfg_tabs[VIDEO_TAB].setOptionWidgets(CFG_VIDEO_PARALLAX_LAYERS, parallax_layers_lb, parallax_layers_cb, msg->get("Parallax Layers"));
-	cfg_tabs[VIDEO_TAB].setOptionWidgets(CFG_VIDEO_ENABLE_GAMMA, change_gamma_lb, change_gamma_cb, msg->get("Allow changing gamma"));
-	cfg_tabs[VIDEO_TAB].setOptionWidgets(CFG_VIDEO_GAMMA, gamma_lb, gamma_sl, msg->get("Gamma"));
+	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::RENDERER, renderer_lb, renderer_lstb, msg->get("Renderer"));
+	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::FULLSCREEN, fullscreen_lb, fullscreen_cb, msg->get("Full Screen Mode"));
+	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::HWSURFACE, hwsurface_lb, hwsurface_cb, msg->get("Hardware surfaces"));
+	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::VSYNC, vsync_lb, vsync_cb, msg->get("V-Sync"));
+	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::TEXTURE_FILTER, texture_filter_lb, texture_filter_cb, msg->get("Texture Filtering"));
+	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::DPI_SCALING, dpi_scaling_lb, dpi_scaling_cb, msg->get("DPI scaling"));
+	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::PARALLAX_LAYERS, parallax_layers_lb, parallax_layers_cb, msg->get("Parallax Layers"));
+	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::ENABLE_GAMMA, change_gamma_lb, change_gamma_cb, msg->get("Allow changing gamma"));
+	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::GAMMA, gamma_lb, gamma_sl, msg->get("Gamma"));
 
-	cfg_tabs[AUDIO_TAB].setOptionWidgets(CFG_AUDIO_SFX, sound_volume_lb, sound_volume_sl, msg->get("Sound Volume"));
-	cfg_tabs[AUDIO_TAB].setOptionWidgets(CFG_AUDIO_MUSIC, music_volume_lb, music_volume_sl, msg->get("Music Volume"));
+	cfg_tabs[AUDIO_TAB].setOptionWidgets(Platform::Audio::SFX, sound_volume_lb, sound_volume_sl, msg->get("Sound Volume"));
+	cfg_tabs[AUDIO_TAB].setOptionWidgets(Platform::Audio::MUSIC, music_volume_lb, music_volume_sl, msg->get("Music Volume"));
 
-	cfg_tabs[INTERFACE_TAB].setOptionWidgets(CFG_INTERFACE_LANGUAGE, language_lb, language_lstb, msg->get("Language"));
-	cfg_tabs[INTERFACE_TAB].setOptionWidgets(CFG_INTERFACE_SHOW_FPS, show_fps_lb, show_fps_cb, msg->get("Show FPS"));
-	cfg_tabs[INTERFACE_TAB].setOptionWidgets(CFG_INTERFACE_HARDWARE_CURSOR, hardware_cursor_lb, hardware_cursor_cb, msg->get("Hardware mouse cursor"));
-	cfg_tabs[INTERFACE_TAB].setOptionWidgets(CFG_INTERFACE_COLORBLIND, colorblind_lb, colorblind_cb, msg->get("Colorblind Mode"));
-	cfg_tabs[INTERFACE_TAB].setOptionWidgets(CFG_INTERFACE_DEV_MODE, dev_mode_lb, dev_mode_cb, msg->get("Developer Mode"));
-	cfg_tabs[INTERFACE_TAB].setOptionWidgets(CFG_INTERFACE_SUBTITLES, subtitles_lb, subtitles_cb, msg->get("Subtitles"));
+	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::LANGUAGE, language_lb, language_lstb, msg->get("Language"));
+	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::SHOW_FPS, show_fps_lb, show_fps_cb, msg->get("Show FPS"));
+	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::HARDWARE_CURSOR, hardware_cursor_lb, hardware_cursor_cb, msg->get("Hardware mouse cursor"));
+	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::COLORBLIND, colorblind_lb, colorblind_cb, msg->get("Colorblind Mode"));
+	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::DEV_MODE, dev_mode_lb, dev_mode_cb, msg->get("Developer Mode"));
+	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::SUBTITLES, subtitles_lb, subtitles_cb, msg->get("Subtitles"));
 
-	cfg_tabs[INPUT_TAB].setOptionWidgets(CFG_INPUT_JOYSTICK, joystick_device_lb, joystick_device_lstb, msg->get("Joystick"));
-	cfg_tabs[INPUT_TAB].setOptionWidgets(CFG_INPUT_MOUSE_MOVE, mouse_move_lb, mouse_move_cb, msg->get("Move hero using mouse"));
-	cfg_tabs[INPUT_TAB].setOptionWidgets(CFG_INPUT_MOUSE_AIM, mouse_aim_lb, mouse_aim_cb, msg->get("Mouse aim"));
-	cfg_tabs[INPUT_TAB].setOptionWidgets(CFG_INPUT_NO_MOUSE, no_mouse_lb, no_mouse_cb, msg->get("Do no use mouse"));
-	cfg_tabs[INPUT_TAB].setOptionWidgets(CFG_INPUT_MOUSE_MOVE_SWAP, mouse_move_swap_lb, mouse_move_swap_cb, msg->get("Swap mouse movement button"));
-	cfg_tabs[INPUT_TAB].setOptionWidgets(CFG_INPUT_MOUSE_MOVE_ATTACK, mouse_move_attack_lb, mouse_move_attack_cb, msg->get("Attack with mouse movement"));
-	cfg_tabs[INPUT_TAB].setOptionWidgets(CFG_INPUT_JOYSTICK_DEADZONE, joystick_deadzone_lb, joystick_deadzone_sl, msg->get("Joystick Deadzone"));
+	cfg_tabs[INPUT_TAB].setOptionWidgets(Platform::Input::JOYSTICK, joystick_device_lb, joystick_device_lstb, msg->get("Joystick"));
+	cfg_tabs[INPUT_TAB].setOptionWidgets(Platform::Input::MOUSE_MOVE, mouse_move_lb, mouse_move_cb, msg->get("Move hero using mouse"));
+	cfg_tabs[INPUT_TAB].setOptionWidgets(Platform::Input::MOUSE_AIM, mouse_aim_lb, mouse_aim_cb, msg->get("Mouse aim"));
+	cfg_tabs[INPUT_TAB].setOptionWidgets(Platform::Input::NO_MOUSE, no_mouse_lb, no_mouse_cb, msg->get("Do no use mouse"));
+	cfg_tabs[INPUT_TAB].setOptionWidgets(Platform::Input::MOUSE_MOVE_SWAP, mouse_move_swap_lb, mouse_move_swap_cb, msg->get("Swap mouse movement button"));
+	cfg_tabs[INPUT_TAB].setOptionWidgets(Platform::Input::MOUSE_MOVE_ATTACK, mouse_move_attack_lb, mouse_move_attack_cb, msg->get("Attack with mouse movement"));
+	cfg_tabs[INPUT_TAB].setOptionWidgets(Platform::Input::JOYSTICK_DEADZONE, joystick_deadzone_lb, joystick_deadzone_sl, msg->get("Joystick Deadzone"));
 
 
 	for (size_t i = 0; i < keybinds_btn.size(); ++i) {
@@ -318,19 +318,46 @@ void GameStateConfig::init() {
 	bool is_play_mode = false;
 
 	if (is_play_mode) {
-		cfg_tabs[VIDEO_TAB].setOptionEnabled(CFG_VIDEO_RENDERER, false);
-		cfg_tabs[VIDEO_TAB].setOptionEnabled(CFG_VIDEO_FULLSCREEN, false);
-		cfg_tabs[VIDEO_TAB].setOptionEnabled(CFG_VIDEO_HWSURFACE, false);
-		cfg_tabs[VIDEO_TAB].setOptionEnabled(CFG_VIDEO_VSYNC, false);
-		cfg_tabs[VIDEO_TAB].setOptionEnabled(CFG_VIDEO_TEXTURE_FILTER, false);
-		cfg_tabs[VIDEO_TAB].setOptionEnabled(CFG_VIDEO_DPI_SCALING, false);
+		cfg_tabs[VIDEO_TAB].setOptionEnabled(Platform::Video::RENDERER, false);
+		cfg_tabs[VIDEO_TAB].setOptionEnabled(Platform::Video::FULLSCREEN, false);
+		cfg_tabs[VIDEO_TAB].setOptionEnabled(Platform::Video::HWSURFACE, false);
+		cfg_tabs[VIDEO_TAB].setOptionEnabled(Platform::Video::VSYNC, false);
+		cfg_tabs[VIDEO_TAB].setOptionEnabled(Platform::Video::TEXTURE_FILTER, false);
+		cfg_tabs[VIDEO_TAB].setOptionEnabled(Platform::Video::DPI_SCALING, false);
 
-		cfg_tabs[INTERFACE_TAB].setOptionEnabled(CFG_INTERFACE_LANGUAGE, false);
-		cfg_tabs[INTERFACE_TAB].setOptionEnabled(CFG_INTERFACE_DEV_MODE, false);
+		cfg_tabs[INTERFACE_TAB].setOptionEnabled(Platform::Interface::LANGUAGE, false);
+		cfg_tabs[INTERFACE_TAB].setOptionEnabled(Platform::Interface::DEV_MODE, false);
 
 		tab_control->setEnabled(static_cast<unsigned>(MODS_TAB), false);
 	}
 
+	// disable platform-specific options
+	for (int i = 0; i < Platform::Video::COUNT; ++i) {
+		if (!platform.config_video[i])
+			cfg_tabs[VIDEO_TAB].setOptionEnabled(i, false);
+	}
+	for (int i = 0; i < Platform::Audio::COUNT; ++i) {
+		if (!platform.config_audio[i])
+			cfg_tabs[AUDIO_TAB].setOptionEnabled(i, false);
+	}
+	for (int i = 0; i < Platform::Interface::COUNT; ++i) {
+		if (!platform.config_interface[i])
+			cfg_tabs[INTERFACE_TAB].setOptionEnabled(i, false);
+	}
+	for (int i = 0; i < Platform::Input::COUNT; ++i) {
+		if (!platform.config_input[i])
+			cfg_tabs[INPUT_TAB].setOptionEnabled(i, false);
+	}
+	if (!platform.config_misc[Platform::Misc::KEYBINDS]) {
+		for (size_t i = 0; i < keybinds_btn.size(); ++i) {
+			cfg_tabs[KEYBINDS_TAB].setOptionEnabled(static_cast<int>(i), false);
+		}
+	}
+	if (!platform.config_misc[Platform::Misc::MODS]) {
+		tab_control->setEnabled(static_cast<unsigned>(MODS_TAB), false);
+	}
+
+	// place widgets
 	for (size_t i = 0; i < cfg_tabs.size(); ++i) {
 		if (cfg_tabs[i].enabled_count == 0) {
 			tab_control->setEnabled(static_cast<unsigned>(i), false);
@@ -859,28 +886,28 @@ void GameStateConfig::logicVideo() {
 	cfg_tabs[VIDEO_TAB].scrollbox->logic();
 	Point mouse = cfg_tabs[VIDEO_TAB].scrollbox->input_assist(inpt->mouse);
 
-	if (cfg_tabs[VIDEO_TAB].options[CFG_VIDEO_FULLSCREEN].enabled && fullscreen_cb->checkClickAt(mouse.x, mouse.y)) {
+	if (cfg_tabs[VIDEO_TAB].options[Platform::Video::FULLSCREEN].enabled && fullscreen_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->fullscreen = fullscreen_cb->isChecked();
 	}
-	else if (cfg_tabs[VIDEO_TAB].options[CFG_VIDEO_HWSURFACE].enabled && hwsurface_cb->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[VIDEO_TAB].options[Platform::Video::HWSURFACE].enabled && hwsurface_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->hwsurface = hwsurface_cb->isChecked();
 	}
-	else if (cfg_tabs[VIDEO_TAB].options[CFG_VIDEO_VSYNC].enabled && vsync_cb->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[VIDEO_TAB].options[Platform::Video::VSYNC].enabled && vsync_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->vsync = vsync_cb->isChecked();
 	}
-	else if (cfg_tabs[VIDEO_TAB].options[CFG_VIDEO_TEXTURE_FILTER].enabled && texture_filter_cb->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[VIDEO_TAB].options[Platform::Video::TEXTURE_FILTER].enabled && texture_filter_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->texture_filter = texture_filter_cb->isChecked();
 	}
-	else if (cfg_tabs[VIDEO_TAB].options[CFG_VIDEO_DPI_SCALING].enabled && dpi_scaling_cb->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[VIDEO_TAB].options[Platform::Video::DPI_SCALING].enabled && dpi_scaling_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->dpi_scaling = dpi_scaling_cb->isChecked();
 		render_device->windowResize();
 		refreshWidgets();
 		force_refresh_background = true;
 	}
-	else if (cfg_tabs[VIDEO_TAB].options[CFG_VIDEO_PARALLAX_LAYERS].enabled && parallax_layers_cb->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[VIDEO_TAB].options[Platform::Video::PARALLAX_LAYERS].enabled && parallax_layers_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->parallax_layers = parallax_layers_cb->isChecked();
 	}
-	else if (cfg_tabs[VIDEO_TAB].options[CFG_VIDEO_ENABLE_GAMMA].enabled && change_gamma_cb->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[VIDEO_TAB].options[Platform::Video::ENABLE_GAMMA].enabled && change_gamma_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->change_gamma = change_gamma_cb->isChecked();
 		if (settings->change_gamma) {
 			gamma_sl->enabled = true;
@@ -892,11 +919,11 @@ void GameStateConfig::logicVideo() {
 			render_device->resetGamma();
 		}
 	}
-	else if (cfg_tabs[VIDEO_TAB].options[CFG_VIDEO_GAMMA].enabled && gamma_sl->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[VIDEO_TAB].options[Platform::Video::GAMMA].enabled && gamma_sl->checkClickAt(mouse.x, mouse.y)) {
 		settings->gamma = static_cast<float>(gamma_sl->getValue()) * 0.1f;
 		render_device->setGamma(settings->gamma);
 	}
-	else if (cfg_tabs[VIDEO_TAB].options[CFG_VIDEO_RENDERER].enabled && renderer_lstb->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[VIDEO_TAB].options[Platform::Video::RENDERER].enabled && renderer_lstb->checkClickAt(mouse.x, mouse.y)) {
 		new_render_device = renderer_lstb->getValue();
 	}
 }
@@ -906,13 +933,13 @@ void GameStateConfig::logicAudio() {
 	Point mouse = cfg_tabs[AUDIO_TAB].scrollbox->input_assist(inpt->mouse);
 
 	if (settings->audio) {
-		if (cfg_tabs[AUDIO_TAB].options[CFG_AUDIO_MUSIC].enabled && music_volume_sl->checkClickAt(mouse.x, mouse.y)) {
+		if (cfg_tabs[AUDIO_TAB].options[Platform::Audio::MUSIC].enabled && music_volume_sl->checkClickAt(mouse.x, mouse.y)) {
 			if (settings->music_volume == 0)
 				reload_music = true;
 			settings->music_volume = static_cast<short>(music_volume_sl->getValue());
 			snd->setVolumeMusic(settings->music_volume);
 		}
-		else if (cfg_tabs[AUDIO_TAB].options[CFG_AUDIO_SFX].enabled && sound_volume_sl->checkClickAt(mouse.x, mouse.y)) {
+		else if (cfg_tabs[AUDIO_TAB].options[Platform::Audio::SFX].enabled && sound_volume_sl->checkClickAt(mouse.x, mouse.y)) {
 			settings->sound_volume = static_cast<short>(sound_volume_sl->getValue());
 			snd->setVolumeSFX(settings->sound_volume);
 		}
@@ -923,24 +950,24 @@ void GameStateConfig::logicInterface() {
 	cfg_tabs[INTERFACE_TAB].scrollbox->logic();
 	Point mouse = cfg_tabs[INTERFACE_TAB].scrollbox->input_assist(inpt->mouse);
 
-	if (cfg_tabs[INTERFACE_TAB].options[CFG_INTERFACE_LANGUAGE].enabled && language_lstb->checkClickAt(mouse.x, mouse.y)) {
+	if (cfg_tabs[INTERFACE_TAB].options[Platform::Interface::LANGUAGE].enabled && language_lstb->checkClickAt(mouse.x, mouse.y)) {
 		unsigned lang_id = language_lstb->getSelected();
 		if (lang_id != language_lstb->getSize())
 			settings->language = language_ISO[lang_id];
 	}
-	else if (cfg_tabs[INTERFACE_TAB].options[CFG_INTERFACE_SHOW_FPS].enabled && show_fps_cb->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[INTERFACE_TAB].options[Platform::Interface::SHOW_FPS].enabled && show_fps_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->show_fps = show_fps_cb->isChecked();
 	}
-	else if (cfg_tabs[INTERFACE_TAB].options[CFG_INTERFACE_COLORBLIND].enabled && colorblind_cb->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[INTERFACE_TAB].options[Platform::Interface::COLORBLIND].enabled && colorblind_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->colorblind = colorblind_cb->isChecked();
 	}
-	else if (cfg_tabs[INTERFACE_TAB].options[CFG_INTERFACE_HARDWARE_CURSOR].enabled && hardware_cursor_cb->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[INTERFACE_TAB].options[Platform::Interface::HARDWARE_CURSOR].enabled && hardware_cursor_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->hardware_cursor = hardware_cursor_cb->isChecked();
 	}
-	else if (cfg_tabs[INTERFACE_TAB].options[CFG_INTERFACE_DEV_MODE].enabled && dev_mode_cb->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[INTERFACE_TAB].options[Platform::Interface::DEV_MODE].enabled && dev_mode_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->dev_mode = dev_mode_cb->isChecked();
 	}
-	else if (cfg_tabs[INTERFACE_TAB].options[CFG_INTERFACE_SUBTITLES].enabled && subtitles_cb->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[INTERFACE_TAB].options[Platform::Interface::SUBTITLES].enabled && subtitles_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->subtitles = subtitles_cb->isChecked();
 	}
 }
@@ -961,37 +988,37 @@ void GameStateConfig::logicInput() {
 		inpt->joysticks_changed = false;
 	}
 
-	if (cfg_tabs[INPUT_TAB].options[CFG_INPUT_MOUSE_MOVE].enabled && mouse_move_cb->checkClickAt(mouse.x, mouse.y)) {
+	if (cfg_tabs[INPUT_TAB].options[Platform::Input::MOUSE_MOVE].enabled && mouse_move_cb->checkClickAt(mouse.x, mouse.y)) {
 		if (mouse_move_cb->isChecked()) {
 			settings->mouse_move = true;
 			enableMouseOptions();
 		}
 		else settings->mouse_move=false;
 	}
-	else if (cfg_tabs[INPUT_TAB].options[CFG_INPUT_MOUSE_AIM].enabled && mouse_aim_cb->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[INPUT_TAB].options[Platform::Input::MOUSE_AIM].enabled && mouse_aim_cb->checkClickAt(mouse.x, mouse.y)) {
 		if (mouse_aim_cb->isChecked()) {
 			settings->mouse_aim = true;
 			enableMouseOptions();
 		}
 		else settings->mouse_aim=false;
 	}
-	else if (cfg_tabs[INPUT_TAB].options[CFG_INPUT_NO_MOUSE].enabled && no_mouse_cb->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[INPUT_TAB].options[Platform::Input::NO_MOUSE].enabled && no_mouse_cb->checkClickAt(mouse.x, mouse.y)) {
 		if (no_mouse_cb->isChecked()) {
 			settings->no_mouse = true;
 			disableMouseOptions();
 		}
 		else settings->no_mouse = false;
 	}
-	else if (cfg_tabs[INPUT_TAB].options[CFG_INPUT_MOUSE_MOVE_SWAP].enabled && mouse_move_swap_cb->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[INPUT_TAB].options[Platform::Input::MOUSE_MOVE_SWAP].enabled && mouse_move_swap_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->mouse_move_swap = mouse_move_swap_cb->isChecked();
 	}
-	else if (cfg_tabs[INPUT_TAB].options[CFG_INPUT_MOUSE_MOVE_ATTACK].enabled && mouse_move_attack_cb->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[INPUT_TAB].options[Platform::Input::MOUSE_MOVE_ATTACK].enabled && mouse_move_attack_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->mouse_move_attack = mouse_move_attack_cb->isChecked();
 	}
-	else if (cfg_tabs[INPUT_TAB].options[CFG_INPUT_JOYSTICK_DEADZONE].enabled && joystick_deadzone_sl->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[INPUT_TAB].options[Platform::Input::JOYSTICK_DEADZONE].enabled && joystick_deadzone_sl->checkClickAt(mouse.x, mouse.y)) {
 		settings->joy_deadzone = joystick_deadzone_sl->getValue();
 	}
-	else if (cfg_tabs[INPUT_TAB].options[CFG_INPUT_JOYSTICK].enabled && joystick_device_lstb->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[INPUT_TAB].options[Platform::Input::JOYSTICK].enabled && joystick_device_lstb->checkClickAt(mouse.x, mouse.y)) {
 		settings->joystick_device = static_cast<int>(joystick_device_lstb->getSelected()) - 1;
 		if (settings->joystick_device != -1) {
 			settings->enable_joystick = true;

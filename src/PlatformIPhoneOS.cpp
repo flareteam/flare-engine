@@ -55,7 +55,33 @@ Platform::Platform()
 	, force_hardware_cursor(true)
 	, has_lock_file(false)
 	, config_menu_type(CONFIG_MENU_TYPE_BASE)
-	, default_renderer("sdl_hardware") {
+	, default_renderer("sdl_hardware")
+	, config_video(Platform::Video::COUNT, true)
+	, config_audio(Platform::Audio::COUNT, true)
+	, config_interface(Platform::Interface::COUNT, true)
+	, config_input(Platform::Input::COUNT, true)
+	, config_misc(Platform::Misc::COUNT, true)
+{
+	config_video[Platform::Video::RENDERER] = false;
+	config_video[Platform::Video::FULLSCREEN] = false;
+	config_video[Platform::Video::HWSURFACE] = false;
+	config_video[Platform::Video::VSYNC] = false;
+	config_video[Platform::Video::TEXTURE_FILTER] = false;
+	config_video[Platform::Video::DPI_SCALING] = false;
+	config_video[Platform::Video::ENABLE_GAMMA] = false;
+	config_video[Platform::Video::GAMMA] = false;
+
+	config_interface[Platform::Interface::HARDWARE_CURSOR] = false;
+
+	config_input[Platform::Input::JOYSTICK] = false;
+	config_input[Platform::Input::MOUSE_MOVE] = false;
+	config_input[Platform::Input::MOUSE_AIM] = false;
+	config_input[Platform::Input::NO_MOUSE] = false;
+	config_input[Platform::Input::MOUSE_MOVE_SWAP] = false;
+	config_input[Platform::Input::MOUSE_MOVE_ATTACK] = false;
+	config_input[Platform::Input::JOYSTICK_DEADZONE] = false;
+
+	config_misc[Platform::Misc::KEYBINDS] = false;
 }
 
 Platform::~Platform() {

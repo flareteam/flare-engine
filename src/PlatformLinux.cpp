@@ -41,7 +41,13 @@ Platform::Platform()
 	, force_hardware_cursor(false)
 	, has_lock_file(true)
 	, config_menu_type(CONFIG_MENU_TYPE_DESKTOP)
-	, default_renderer("") {
+	, default_renderer("")
+	, config_video(Platform::Video::COUNT, true)
+	, config_audio(Platform::Audio::COUNT, true)
+	, config_interface(Platform::Interface::COUNT, true)
+	, config_input(Platform::Input::COUNT, true)
+	, config_misc(Platform::Misc::COUNT, true)
+{
 }
 
 Platform::~Platform() {

@@ -28,6 +28,67 @@ public:
 		CONFIG_MENU_TYPE_DESKTOP_NO_VIDEO = 2
 	};
 
+	class Video {
+	public:
+		static const int COUNT = 9;
+		enum {
+			RENDERER,
+			FULLSCREEN,
+			HWSURFACE,
+			VSYNC,
+			TEXTURE_FILTER,
+			DPI_SCALING,
+			PARALLAX_LAYERS,
+			ENABLE_GAMMA,
+			GAMMA
+		};
+	};
+
+	class Audio {
+	public:
+		static const int COUNT = 2;
+		enum {
+			SFX,
+			MUSIC
+		};
+	};
+
+	class Interface {
+	public:
+		static const int COUNT = 6;
+		enum {
+			LANGUAGE,
+			SHOW_FPS,
+			HARDWARE_CURSOR,
+			COLORBLIND,
+			DEV_MODE,
+			SUBTITLES
+		};
+	};
+
+	class Input {
+	public:
+		static const int COUNT = 7;
+		enum {
+			JOYSTICK,
+			MOUSE_MOVE,
+			MOUSE_AIM,
+			NO_MOUSE,
+			MOUSE_MOVE_SWAP,
+			MOUSE_MOVE_ATTACK,
+			JOYSTICK_DEADZONE
+		};
+	};
+
+	class Misc {
+	public:
+		static const int COUNT = 2;
+		enum {
+			KEYBINDS,
+			MODS
+		};
+	};
+
 	Platform();
 	~Platform();
 
@@ -48,6 +109,12 @@ public:
 	bool has_lock_file;
 	unsigned char config_menu_type;
 	std::string default_renderer;
+
+	std::vector<bool> config_video;
+	std::vector<bool> config_audio;
+	std::vector<bool> config_interface;
+	std::vector<bool> config_input;
+	std::vector<bool> config_misc;
 };
 
 extern Platform platform;
