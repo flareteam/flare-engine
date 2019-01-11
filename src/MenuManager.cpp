@@ -734,7 +734,7 @@ void MenuManager::logic() {
 				}
 			}
 			// action bar
-			if (!inpt->touch_locked && (act->isWithinSlots(inpt->mouse) || act->isWithinMenus(inpt->mouse))) {
+			if (!exit->visible && !inpt->touch_locked && (act->isWithinSlots(inpt->mouse) || act->isWithinMenus(inpt->mouse))) {
 				inpt->lock[Input::MAIN1] = true;
 
 				// ctrl-click action bar to clear that slot
@@ -1247,8 +1247,10 @@ void MenuManager::render() {
 				pow->renderTooltips(inpt->mouse);
 				inv->renderTooltips(inpt->mouse);
 			}
-			effects->renderTooltips(inpt->mouse);
-			act->renderTooltips(inpt->mouse);
+			if (!exit->visible) {
+				effects->renderTooltips(inpt->mouse);
+				act->renderTooltips(inpt->mouse);
+			}
 		}
 	}
 

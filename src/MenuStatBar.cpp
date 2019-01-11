@@ -29,10 +29,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FontEngine.h"
 #include "InputState.h"
 #include "Menu.h"
+#include "MenuExit.h"
+#include "MenuManager.h"
 #include "MenuStatBar.h"
 #include "ModManager.h"
 #include "RenderDevice.h"
 #include "Settings.h"
+#include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "StatBlock.h"
 #include "WidgetLabel.h"
@@ -174,7 +177,7 @@ void MenuStatBar::render() {
 	// if mouseover, draw text
 	if (!text_pos.hidden) {
 
-		if (settings->statbar_labels || (inpt->usingMouse() && Utils::isWithinRect(bar_dest, inpt->mouse))) {
+		if (settings->statbar_labels || (inpt->usingMouse() && Utils::isWithinRect(bar_dest, inpt->mouse) && !menu->exit->visible)) {
 			std::stringstream ss;
 			if (!custom_string.empty())
 				ss << custom_string;
