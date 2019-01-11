@@ -121,9 +121,6 @@ void Subtitles::setTextByID(unsigned long id) {
 }
 
 void Subtitles::logic(unsigned long id) {
-	if (!settings->subtitles)
-		return;
-
 	setTextByID(id);
 
 	visible_timer.tick();
@@ -140,7 +137,7 @@ void Subtitles::logic(unsigned long id) {
 }
 
 void Subtitles::render() {
-	if (!visible)
+	if (!visible || !settings->subtitles)
 		return;
 
 	if (background) {
