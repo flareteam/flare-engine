@@ -66,12 +66,8 @@ public:
 		MENU_INVENTORY = 1,
 		MENU_POWERS = 2,
 		MENU_LOG = 3,
-		MENU_LOOT_TIPS = 4,
-		MENU_MINIMAP_MODE = 5,
-		MENU_STATBARS_LABELS = 6,
-		MENU_COMBAT_TEXT = 7
 	};
-	static const unsigned MENU_COUNT = 8;
+	static const unsigned MENU_COUNT = 4;
 
 	static const int SLOT_MAIN1 = 10;
 	static const int SLOT_MAIN2 = 11;

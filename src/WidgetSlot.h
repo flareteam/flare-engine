@@ -51,15 +51,10 @@ public:
 		ACTIVATED = 2
 	};
 
-	enum {
-		SIZE_NORMAL = 0,
-		SIZE_SMALL = 1
-	};
-
 	static const int NO_ICON = -1;
 	static const int NO_OVERLAY = -1;
 
-	WidgetSlot(int _icon_id, int _activate_key, int _size);
+	WidgetSlot(int _icon_id, int _activate_key);
 	~WidgetSlot();
 
 	void setPos(int offset_x, int offset_y);
