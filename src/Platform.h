@@ -55,14 +55,19 @@ public:
 
 	class Interface {
 	public:
-		static const int COUNT = 6;
+		static const int COUNT = 11;
 		enum {
 			LANGUAGE,
-			SHOW_FPS,
-			HARDWARE_CURSOR,
+			SUBTITLES,
+			LOOT_TOOLTIPS,
+			MINIMAP_MODE,
+			STATBAR_LABELS,
+			COMBAT_TEXT,
+			AUTO_EQUIP,
 			COLORBLIND,
+			HARDWARE_CURSOR,
+			SHOW_FPS,
 			DEV_MODE,
-			SUBTITLES
 		};
 	};
 
@@ -70,12 +75,12 @@ public:
 	public:
 		static const int COUNT = 7;
 		enum {
-			JOYSTICK,
 			MOUSE_MOVE,
-			MOUSE_AIM,
-			NO_MOUSE,
 			MOUSE_MOVE_SWAP,
 			MOUSE_MOVE_ATTACK,
+			MOUSE_AIM,
+			NO_MOUSE,
+			JOYSTICK,
 			JOYSTICK_DEADZONE
 		};
 	};

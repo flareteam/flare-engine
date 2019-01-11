@@ -162,6 +162,16 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	, dev_mode_lb(new WidgetLabel())
 	, subtitles_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
 	, subtitles_lb(new WidgetLabel())
+	, loot_tooltip_lstb(new WidgetHorizontalList())
+	, loot_tooltip_lb(new WidgetLabel())
+	, minimap_lstb(new WidgetHorizontalList())
+	, minimap_lb(new WidgetLabel())
+	, statbar_labels_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
+	, statbar_labels_lb(new WidgetLabel())
+	, combat_text_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
+	, combat_text_lb(new WidgetLabel())
+	, auto_equip_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
+	, auto_equip_lb(new WidgetLabel())
 
 	, joystick_device_lstb(new WidgetHorizontalList())
 	, joystick_device_lb(new WidgetLabel())
@@ -260,6 +270,16 @@ MenuConfig::MenuConfig (bool _is_game_state)
 
 	key_count = static_cast<unsigned>(keybinds_btn.size()/3);
 
+	// set up loot tooltip setting
+	loot_tooltip_lstb->append(msg->get("Default"), msg->get("Show all loot tooltips, except for those that would be obscured by the player or an enemy. Temporarily show all loot tooltips with 'Alt'."));
+	loot_tooltip_lstb->append(msg->get("Show all"), msg->get("Always show loot tooltips. Temporarily hide all loot tooltips with 'Alt'."));
+	loot_tooltip_lstb->append(msg->get("Hidden"), msg->get("Always hide loot tooltips, execpt for when a piece of loot is hovered with the mouse cursor. Temporarily show all loot tooltips with 'Alt'."));
+
+	// set up minimap setting
+	minimap_lstb->append(msg->get("Visible"), "");
+	minimap_lstb->append(msg->get("Visible (2x zoom)"), "");
+	minimap_lstb->append(msg->get("Hidden"), "");
+
 	init();
 
 	render_device->setBackgroundColor(Color(0,0,0,0));
@@ -311,11 +331,16 @@ void MenuConfig::init() {
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::COLORBLIND, colorblind_lb, colorblind_cb, msg->get("Colorblind Mode"));
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::DEV_MODE, dev_mode_lb, dev_mode_cb, msg->get("Developer Mode"));
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::SUBTITLES, subtitles_lb, subtitles_cb, msg->get("Subtitles"));
+	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::LOOT_TOOLTIPS, loot_tooltip_lb, loot_tooltip_lstb, msg->get("Loot tooltip visibility"));
+	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::MINIMAP_MODE, minimap_lb, minimap_lstb, msg->get("Mini-map mode"));
+	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::STATBAR_LABELS, statbar_labels_lb, statbar_labels_cb, msg->get("Always show stat bar labels"));
+	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::COMBAT_TEXT, combat_text_lb, combat_text_cb, msg->get("Show combat text"));
+	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::AUTO_EQUIP, auto_equip_lb, auto_equip_cb, msg->get("Automatically equip items"));
 
 	cfg_tabs[INPUT_TAB].setOptionWidgets(Platform::Input::JOYSTICK, joystick_device_lb, joystick_device_lstb, msg->get("Joystick"));
 	cfg_tabs[INPUT_TAB].setOptionWidgets(Platform::Input::MOUSE_MOVE, mouse_move_lb, mouse_move_cb, msg->get("Move hero using mouse"));
 	cfg_tabs[INPUT_TAB].setOptionWidgets(Platform::Input::MOUSE_AIM, mouse_aim_lb, mouse_aim_cb, msg->get("Mouse aim"));
-	cfg_tabs[INPUT_TAB].setOptionWidgets(Platform::Input::NO_MOUSE, no_mouse_lb, no_mouse_cb, msg->get("Do no use mouse"));
+	cfg_tabs[INPUT_TAB].setOptionWidgets(Platform::Input::NO_MOUSE, no_mouse_lb, no_mouse_cb, msg->get("Do not use mouse"));
 	cfg_tabs[INPUT_TAB].setOptionWidgets(Platform::Input::MOUSE_MOVE_SWAP, mouse_move_swap_lb, mouse_move_swap_cb, msg->get("Swap mouse movement button"));
 	cfg_tabs[INPUT_TAB].setOptionWidgets(Platform::Input::MOUSE_MOVE_ATTACK, mouse_move_attack_lb, mouse_move_attack_cb, msg->get("Attack with mouse movement"));
 	cfg_tabs[INPUT_TAB].setOptionWidgets(Platform::Input::JOYSTICK_DEADZONE, joystick_deadzone_lb, joystick_deadzone_sl, msg->get("Joystick Deadzone"));
@@ -689,6 +714,12 @@ void MenuConfig::updateInterface() {
 	hardware_cursor_cb->setChecked(settings->hardware_cursor);
 	dev_mode_cb->setChecked(settings->dev_mode);
 	subtitles_cb->setChecked(settings->subtitles);
+	statbar_labels_cb->setChecked(settings->statbar_labels);
+	combat_text_cb->setChecked(settings->combat_text);
+	auto_equip_cb->setChecked(settings->auto_equip);
+
+	loot_tooltip_lstb->select(settings->loot_tooltips);
+	minimap_lstb->select(settings->minimap_mode);
 
 	refreshLanguages();
 
@@ -960,6 +991,21 @@ void MenuConfig::logicInterface() {
 	}
 	else if (cfg_tabs[INTERFACE_TAB].options[Platform::Interface::SUBTITLES].enabled && subtitles_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->subtitles = subtitles_cb->isChecked();
+	}
+	else if (cfg_tabs[INTERFACE_TAB].options[Platform::Interface::LOOT_TOOLTIPS].enabled && loot_tooltip_lstb->checkClickAt(mouse.x, mouse.y)) {
+		settings->loot_tooltips = static_cast<int>(loot_tooltip_lstb->getSelected());
+	}
+	else if (cfg_tabs[INTERFACE_TAB].options[Platform::Interface::MINIMAP_MODE].enabled && minimap_lstb->checkClickAt(mouse.x, mouse.y)) {
+		settings->minimap_mode = static_cast<int>(minimap_lstb->getSelected());
+	}
+	else if (cfg_tabs[INTERFACE_TAB].options[Platform::Interface::STATBAR_LABELS].enabled && statbar_labels_cb->checkClickAt(mouse.x, mouse.y)) {
+		settings->statbar_labels = statbar_labels_cb->isChecked();
+	}
+	else if (cfg_tabs[INTERFACE_TAB].options[Platform::Interface::COMBAT_TEXT].enabled && combat_text_cb->checkClickAt(mouse.x, mouse.y)) {
+		settings->combat_text = combat_text_cb->isChecked();
+	}
+	else if (cfg_tabs[INTERFACE_TAB].options[Platform::Interface::AUTO_EQUIP].enabled && auto_equip_cb->checkClickAt(mouse.x, mouse.y)) {
+		settings->auto_equip = auto_equip_cb->isChecked();
 	}
 }
 

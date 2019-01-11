@@ -222,6 +222,16 @@ public:
 	WidgetLabel                * dev_mode_lb;
 	WidgetCheckBox             * subtitles_cb;
 	WidgetLabel                * subtitles_lb;
+	WidgetHorizontalList       * loot_tooltip_lstb;
+	WidgetLabel                * loot_tooltip_lb;
+	WidgetHorizontalList       * minimap_lstb;
+	WidgetLabel                * minimap_lb;
+	WidgetCheckBox             * statbar_labels_cb;
+	WidgetLabel                * statbar_labels_lb;
+	WidgetCheckBox             * combat_text_cb;
+	WidgetLabel                * combat_text_lb;
+	WidgetCheckBox             * auto_equip_cb;
+	WidgetLabel                * auto_equip_lb;
 
 	WidgetHorizontalList       * joystick_device_lstb;
 	WidgetLabel                * joystick_device_lb;
