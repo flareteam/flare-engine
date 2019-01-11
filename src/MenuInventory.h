@@ -34,7 +34,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class BonusData;
 class StatBlock;
 class WidgetButton;
-class WidgetCheckBox;
 
 class MenuInventory : public Menu {
 private:
@@ -47,7 +46,6 @@ private:
 	WidgetLabel label_inventory;
 	WidgetLabel label_currency;
 	WidgetButton *closeButton;
-	WidgetCheckBox *autoEquipCheckBox;
 
 	int MAX_EQUIPPED;
 	int MAX_CARRIED;
