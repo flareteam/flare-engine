@@ -25,6 +25,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuConfig.h"
 #include "MenuConfirm.h"
 #include "MenuExit.h"
+#include "SharedGameResources.h"
 
 MenuExit::MenuExit()
 	: Menu()
@@ -32,6 +33,7 @@ MenuExit::MenuExit()
 	, exitClicked(false)
 	, reload_music(false)
 {
+	menu_config->setHero(pc);
 	align();
 }
 

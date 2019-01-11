@@ -27,6 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Handle game Settings Menu
  */
 
+#include "Avatar.h"
 #include "CombatText.h"
 #include "CommonIncludes.h"
 #include "DeviceList.h"
@@ -110,6 +111,7 @@ int MenuConfig::ConfigTab::getEnabledIndex(int option_index) {
 MenuConfig::MenuConfig (bool _is_game_state)
 	: is_game_state(_is_game_state)
 	, enable_gamestate_buttons(false)
+	, hero(NULL)
 	, child_widget()
 	, tab_control(new WidgetTabControl())
 	, ok_button(new WidgetButton(WidgetButton::DEFAULT_FILE))
@@ -766,6 +768,9 @@ void MenuConfig::logic() {
 	active_tab = tab_control->getActiveTab();
 
 	if (active_tab == EXIT_TAB) {
+		if (hero) {
+			pause_time_text->setText(Utils::getTimeString(hero->time_played));
+		}
 		tablist.setNextTabList(&tablist_exit);
 		logicExit();
 	}
@@ -1522,3 +1527,6 @@ void MenuConfig::cleanupDialogs() {
 	}
 }
 
+void MenuConfig::setHero(Avatar* _hero) {
+	hero = _hero;
+}

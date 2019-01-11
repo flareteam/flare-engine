@@ -32,6 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "TooltipData.h"
 #include "Widget.h"
 
+class Avatar;
 class FileParser;
 class MenuConfirm;
 class Mod;
@@ -78,6 +79,7 @@ private:
 
 	bool is_game_state;
 	bool enable_gamestate_buttons;
+	Avatar *hero;
 
 public:
 	static const bool IS_GAME_STATE = true;
@@ -154,6 +156,8 @@ public:
 	void cleanup();
 	void cleanupTabContents();
 	void cleanupDialogs();
+
+	void setHero(Avatar* _hero);
 
 	TabList tablist;
 	TabList tablist_main;
