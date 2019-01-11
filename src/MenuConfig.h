@@ -135,6 +135,7 @@ public:
 	void refreshWidgets();
 	void addChildWidget(Widget *w, int tab);
 	void refreshRenderers();
+	void refreshJoysticks();
 	void refreshLanguages();
 	void refreshFont();
 	std::string getRenderDevice();

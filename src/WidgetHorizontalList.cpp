@@ -36,6 +36,8 @@ WidgetHorizontalList::WidgetHorizontalList()
 	, button_left(new WidgetButton(DEFAULT_FILE_LEFT))
 	, button_right(new WidgetButton(DEFAULT_FILE_RIGHT))
 	, cursor(0)
+	, changed_without_mouse(false)
+	, enabled(true)
 {
 	focusable = true;
 	scroll_type = SCROLL_HORIZONTAL;
@@ -69,6 +71,12 @@ bool WidgetHorizontalList::checkClickAt(int x, int y) {
 		scrollRight();
 		return true;
 	}
+	else if (changed_without_mouse) {
+		// getNext() or getPrev() was used to change the slider, so treat it as a "click"
+		changed_without_mouse = false;
+		return true;
+	}
+
 
 	return false;
 }
@@ -125,8 +133,8 @@ void WidgetHorizontalList::refresh() {
 	button_left->setPos(pos.x, pos.y);
 	button_right->setPos(pos.x + button_left->pos.w + text_width, pos.y);
 
-	button_left->enabled = !isEmpty();
-	button_right->enabled = !isEmpty();
+	button_left->enabled = !isEmpty() && enabled;
+	button_right->enabled = !isEmpty() && enabled;
 
 	pos.w = button_left->pos.w + button_right->pos.w + text_width;
 	pos.h = std::max(button_left->pos.h, label.getBounds()->h);
@@ -219,12 +227,18 @@ void WidgetHorizontalList::scrollRight() {
 }
 
 bool WidgetHorizontalList::getPrev() {
-	scrollLeft();
+	if (!isEmpty() && enabled) {
+		scrollLeft();
+		changed_without_mouse = true;
+	}
 	return true;
 }
 
 bool WidgetHorizontalList::getNext() {
-	scrollRight();
+	if (!isEmpty() && enabled) {
+		scrollRight();
+		changed_without_mouse = true;
+	}
 	return true;
 }
 

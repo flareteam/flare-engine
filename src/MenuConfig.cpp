@@ -250,13 +250,7 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	}
 	inactivemods_lstb->sort();
 
-	// set up Joystick selection
-	joystick_device_lstb->append(msg->get("(none)"), "");
-	for(int i = 0; i < inpt->getNumJoysticks(); i++) {
-		std::string joystick_name = inpt->getJoystickName(i);
-		if (joystick_name != "")
-			joystick_device_lstb->append(joystick_name, joystick_name);
-	}
+	refreshJoysticks();
 
 	// Allocate KeyBindings
 	for (int i = 0; i < inpt->KEY_COUNT * 3; i++) {
@@ -975,13 +969,7 @@ void MenuConfig::logicInput() {
 
 	if (inpt->joysticks_changed) {
 		disableJoystickOptions();
-		joystick_device_lstb->clear();
-		joystick_device_lstb->append(msg->get("(none)"), "");
-		for(int i = 0; i < inpt->getNumJoysticks(); i++) {
-			std::string joystick_name = inpt->getJoystickName(i);
-			if (joystick_name != "")
-				joystick_device_lstb->append(joystick_name, joystick_name);
-		}
+		refreshJoysticks();
 		inpt->joysticks_changed = false;
 	}
 
@@ -1439,6 +1427,20 @@ void MenuConfig::refreshRenderers() {
 			renderer_lstb->select(static_cast<int>(i));
 		}
 	}
+}
+
+void MenuConfig::refreshJoysticks() {
+	joystick_device_lstb->clear();
+	joystick_device_lstb->append(msg->get("(none)"), "");
+	joystick_device_lstb->enabled = inpt->getNumJoysticks() > 0;
+
+	for (int i = 0; i < inpt->getNumJoysticks(); ++i) {
+		std::string joystick_name = inpt->getJoystickName(i);
+		if (joystick_name != "")
+			joystick_device_lstb->append(joystick_name, joystick_name);
+	}
+
+	joystick_device_lstb->refresh();
 }
 
 std::string MenuConfig::getRenderDevice() {

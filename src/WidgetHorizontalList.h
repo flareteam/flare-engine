@@ -49,6 +49,7 @@ private:
 	WidgetButton *button_right;
 
 	unsigned cursor;
+	bool changed_without_mouse;
 	std::vector<HListItem> list_items;
 	Rect tooltip_area;
 
@@ -76,6 +77,8 @@ public:
 
 	bool getPrev();
 	bool getNext();
+
+	bool enabled;
 };
 
 #endif
