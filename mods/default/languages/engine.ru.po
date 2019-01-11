@@ -2,25 +2,29 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 # Translators:
 # Justin Jacobs <jajdorkster@gmail.com>, 2018
 # Ademaro <ademaro@ya.ru>, 2018
-# 
-#, fuzzy
+# Andrey Kapitonov <andrey.kapitonov@email.cz>, 2019
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-17 21:50-0500\n"
-"PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: Ademaro <ademaro@ya.ru>, 2018\n"
-"Language-Team: Russian (https://www.transifex.com/flareorg/teams/84925/ru/)\n"
+"PO-Revision-Date: 2019-01-11 20:09+0100\n"
+"Last-Translator: Andrey Kapitonov <andrey.kapitonov@email.cz>, 2019\n"
+"Language-Team: Russian (https://www.transifex.com/flareorg/teams/84925/"
+"ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ru\n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
+"%100>=11 && n%100<=14)? 2 : 3);\n"
+"X-Generator: Poedit 2.2\n"
 
 #: ../../../src/Avatar.cpp:367
 #, c-format
@@ -238,7 +242,7 @@ msgstr "Очистить"
 #: ../../../src/GameStateConfigDesktop.cpp:83
 #: ../../../src/GameStateConfigDesktop.cpp:749
 msgid "Assign:"
-msgstr ""
+msgstr "Назначение:"
 
 #: ../../../src/GameStateConfigDesktop.cpp:128
 msgid "Video"
@@ -267,8 +271,8 @@ msgstr ""
 #: ../../../src/GameStateConfigDesktop.cpp:190
 msgid ""
 "When enabled, this uses the screen DPI in addition to the window dimensions "
-"to scale the rendering resolution. Otherwise, only the window dimensions are"
-" used."
+"to scale the rendering resolution. Otherwise, only the window dimensions "
+"are used."
 msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:191
@@ -287,7 +291,7 @@ msgstr "Для наладонных устройств"
 
 #: ../../../src/GameStateConfigDesktop.cpp:211
 msgid "Renderer"
-msgstr ""
+msgstr "Рендерер"
 
 #: ../../../src/GameStateConfigDesktop.cpp:227
 msgid "Full Screen Mode"
@@ -402,7 +406,7 @@ msgstr "Создать"
 
 #: ../../../src/GameStateNew.cpp:76
 msgid "Randomize"
-msgstr ""
+msgstr "Случайно"
 
 #: ../../../src/GameStateNew.cpp:92
 msgid "Choose a Portrait"
@@ -604,18 +608,18 @@ msgstr "%d%% Скорости"
 #: ../../../src/ItemManager.cpp:652 ../../../src/MenuPowers.cpp:890
 #, c-format
 msgid "%d%% Attack Speed"
-msgstr ""
+msgstr "%d%% Скорость Атаки"
 
 #: ../../../src/ItemManager.cpp:674 ../../../src/MenuCharacter.cpp:354
 #: ../../../src/MenuPowers.cpp:833
 #, c-format
 msgid "Resistance (%s)"
-msgstr ""
+msgstr "Сопротивление (%s)"
 
 #: ../../../src/ItemManager.cpp:684
 #, c-format
 msgid "Requires %s"
-msgstr ""
+msgstr "Требуется %s"
 
 #: ../../../src/ItemManager.cpp:733
 msgid "Quest Item"
@@ -680,17 +684,17 @@ msgstr ""
 #: ../../../src/ItemManager.cpp:904
 #, c-format
 msgid "%d items:"
-msgstr "%d предметов:  "
+msgstr "%d предметов:"
 
 #: ../../../src/ItemManager.cpp:917
 #, c-format
 msgid "Press [%s] to use"
-msgstr ""
+msgstr "Нажмите [%s], чтобы использовать"
 
 #: ../../../src/ItemManager.cpp:920
 #, c-format
 msgid "Press [%s] to read"
-msgstr ""
+msgstr "Нажмите [%s], чтобы прочитать"
 
 #: ../../../src/MenuActionBar.cpp:87
 msgid "Loot tooltip visibility"
@@ -698,7 +702,7 @@ msgstr ""
 
 #: ../../../src/MenuActionBar.cpp:88
 msgid "Mini-map mode"
-msgstr ""
+msgstr "Режим мини-карты"
 
 #: ../../../src/MenuActionBar.cpp:89
 msgid "Always show stat bar labels"
@@ -731,27 +735,27 @@ msgstr ""
 
 #: ../../../src/MenuActionBar.cpp:482
 msgid "Visible"
-msgstr ""
+msgstr "Видимое"
 
 #: ../../../src/MenuActionBar.cpp:484
 msgid "Visible (2x zoom)"
-msgstr ""
+msgstr "Видимое (2х увеличение)"
 
 #: ../../../src/MenuActionBar.cpp:486
 msgid "Hidden"
-msgstr ""
+msgstr "Спрятанное"
 
 #: ../../../src/MenuActionBar.cpp:490 ../../../src/MenuActionBar.cpp:496
 msgid "Enabled"
-msgstr ""
+msgstr "Включено"
 
 #: ../../../src/MenuActionBar.cpp:492 ../../../src/MenuActionBar.cpp:498
 msgid "Disabled"
-msgstr ""
+msgstr "Выключено"
 
 #: ../../../src/MenuActionBar.cpp:657
 msgid "Not enough MP."
-msgstr ""
+msgstr "Недостаточно МР."
 
 #: ../../../src/MenuActiveEffects.cpp:124
 #, c-format
@@ -778,17 +782,17 @@ msgstr "Уровень"
 #: ../../../src/MenuCharacter.cpp:310
 #, c-format
 msgid "%d unspent stat point"
-msgstr ""
+msgstr "%d не потраченное очко"
 
 #: ../../../src/MenuCharacter.cpp:313
 #, c-format
 msgid "%d unspent stat points"
-msgstr ""
+msgstr "%d не потраченные очки"
 
 #: ../../../src/MenuCharacter.cpp:355
 #, c-format
 msgid "Reduces the damage taken from \"%s\" elemental attacks."
-msgstr ""
+msgstr "Снижает урон полученный от \"%s\" элементальной атаки."
 
 #: ../../../src/MenuCharacter.cpp:365 ../../../src/MenuManager.cpp:283
 #, c-format
@@ -812,12 +816,12 @@ msgstr "Связанные атрибуты:"
 #: ../../../src/MenuCharacter.cpp:421 ../../../src/MenuCharacter.cpp:445
 #, c-format
 msgid "Each level grants %d."
-msgstr ""
+msgstr "Каждый уровень дает %d."
 
 #: ../../../src/MenuCharacter.cpp:425 ../../../src/MenuCharacter.cpp:449
 #, c-format
 msgid "Each point of %s grants %d."
-msgstr ""
+msgstr "Каждое очко %s дает %d."
 
 #: ../../../src/MenuDevConsole.cpp:63
 msgid "Execute"
@@ -825,12 +829,12 @@ msgstr "Выполнить"
 
 #: ../../../src/MenuDevConsole.cpp:101 ../../../src/MenuDevConsole.cpp:151
 msgid "Developer Console"
-msgstr "Консоль Девелопера"
+msgstr "Консоль Разработчика"
 
 #: ../../../src/MenuDevConsole.cpp:141
 #, c-format
 msgid "Use '%s' to inspect with the cursor."
-msgstr ""
+msgstr "Используй '%s' чтобы исследовать с помощью курсора."
 
 #: ../../../src/MenuDevConsole.cpp:146
 msgid "Arguments with spaces should be enclosed with double quotes. Example:"
@@ -839,35 +843,35 @@ msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:147
 msgid "Type 'help' to get a list of commands."
-msgstr ""
+msgstr "Введи 'help' чтобы увидеть список команд."
 
 #: ../../../src/MenuDevConsole.cpp:209 ../../../src/MenuDevConsole.cpp:213
 msgid "px"
-msgstr ""
+msgstr "px"
 
 #: ../../../src/MenuDevConsole.cpp:224
 msgid "Distance"
-msgstr ""
+msgstr "Дистанция"
 
 #: ../../../src/MenuDevConsole.cpp:239 ../../../src/MenuDevConsole.cpp:286
 msgid "Entity"
-msgstr ""
+msgstr "Сущность"
 
 #: ../../../src/MenuDevConsole.cpp:261 ../../../src/MenuDevConsole.cpp:268
 msgid "none"
-msgstr ""
+msgstr "отсутствует"
 
 #: ../../../src/MenuDevConsole.cpp:262 ../../../src/MenuDevConsole.cpp:264
 msgid "wall"
-msgstr ""
+msgstr "стена"
 
 #: ../../../src/MenuDevConsole.cpp:263 ../../../src/MenuDevConsole.cpp:265
 msgid "short wall / pit"
-msgstr ""
+msgstr "короткая стена"
 
 #: ../../../src/MenuDevConsole.cpp:266
 msgid "entity"
-msgstr ""
+msgstr "частица"
 
 #: ../../../src/MenuDevConsole.cpp:267
 msgid "entity, ally"
@@ -875,7 +879,7 @@ msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:274
 msgid "Tile"
-msgstr ""
+msgstr "Плитка"
 
 #: ../../../src/MenuDevConsole.cpp:360
 msgid "adds a power to the action bar"
@@ -883,7 +887,7 @@ msgstr "добавляет силу в панель действий"
 
 #: ../../../src/MenuDevConsole.cpp:361
 msgid "turns on/off the display of the FPS counter"
-msgstr ""
+msgstr "включает/выключает счетчик FPS"
 
 #: ../../../src/MenuDevConsole.cpp:362
 msgid "turns on/off all of the HUD elements"
@@ -898,10 +902,12 @@ msgid ""
 "Prints a list of powers that match a search term. No search term will list "
 "all items"
 msgstr ""
+"Выводит список сил, которые удовлетворяют поиску. Ни один поиск не покажет "
+"все предметы"
 
 #: ../../../src/MenuDevConsole.cpp:365
 msgid "Prints out all the map filenames located in the \"maps/\" directory."
-msgstr "Печатает все названия фаилов карт в каталоге «maps»"
+msgstr "Печатает все названия файлов в каталоге \"maps/\"."
 
 #: ../../../src/MenuDevConsole.cpp:366
 msgid ""
@@ -909,7 +915,7 @@ msgid ""
 "term will list all active statuses"
 msgstr ""
 "Выводит найденные статусы активных кампаний. Если ничего не указать, "
-"показывает все активные статусы."
+"показывает все активные статусы"
 
 #: ../../../src/MenuDevConsole.cpp:367
 msgid ""
@@ -917,7 +923,7 @@ msgid ""
 "all items"
 msgstr ""
 "Выводит список найденных предметов. Если ничего не указать, показывает все "
-"предметы."
+"предметы"
 
 #: ../../../src/MenuDevConsole.cpp:368
 msgid ""
@@ -942,15 +948,15 @@ msgstr "Переключён интерфейс"
 
 #: ../../../src/MenuDevConsole.cpp:385
 msgid "Toggled the FPS counter"
-msgstr ""
+msgstr "Переключён счетчик FPS"
 
 #: ../../../src/MenuDevConsole.cpp:534
 msgid "ERROR: Incorrect number of arguments"
-msgstr ""
+msgstr "ОШИБКА: Неправильное количество аргументов"
 
 #: ../../../src/MenuDevConsole.cpp:536 ../../../src/MenuDevConsole.cpp:564
 msgid "HINT:"
-msgstr ""
+msgstr "ПОДСКАЗКА:"
 
 #: ../../../src/MenuDevConsole.cpp:536
 msgid "<id>"
@@ -988,7 +994,7 @@ msgstr "Мёртв"
 
 #: ../../../src/MenuEnemy.cpp:164
 msgid "Destroyed"
-msgstr ""
+msgstr "Уничтожен"
 
 #: ../../../src/MenuExit.cpp:85 ../../../src/MenuExit.cpp:139
 msgid "Paused"
@@ -1013,17 +1019,17 @@ msgstr "Сразу надевать предметы"
 #: ../../../src/MenuInventory.cpp:188
 #, c-format
 msgid "Lost %d%% of %s."
-msgstr ""
+msgstr "Потеряно %d%% из %s."
 
 #: ../../../src/MenuInventory.cpp:195
 #, c-format
 msgid "Lost %d%% of total XP."
-msgstr ""
+msgstr "Потеряно %d%% от общего XP."
 
 #: ../../../src/MenuInventory.cpp:200
 #, c-format
 msgid "Lost %d%% of current level XP."
-msgstr ""
+msgstr "Потеряно %d%% от актуального числа ХР."
 
 #: ../../../src/MenuInventory.cpp:226
 #, c-format
@@ -1066,7 +1072,7 @@ msgstr "Недостаточно требуемых предметов."
 
 #: ../../../src/MenuInventory.cpp:599
 msgid "You can't use this item right now."
-msgstr ""
+msgstr "Вы не можете использовать этот предмет сейчас."
 
 #: ../../../src/MenuInventory.cpp:611
 msgid "This item can only be used from the action bar."
@@ -1233,7 +1239,7 @@ msgstr "%d%% Шанс критического урона по замедлен�
 #: ../../../src/MenuPowers.cpp:1105
 #, c-format
 msgid "Elemental Damage (%s)"
-msgstr ""
+msgstr "Элементальный урон (%s)"
 
 #: ../../../src/MenuPowers.cpp:1114
 #, c-format
@@ -1256,12 +1262,12 @@ msgstr "Требуется 1 Очко Навыка"
 #: ../../../src/MenuPowers.cpp:1355
 #, c-format
 msgid "%d unspent skill point"
-msgstr ""
+msgstr "%d не потраченное очко опыта"
 
 #: ../../../src/MenuPowers.cpp:1358
 #, c-format
 msgid "%d unspent skill points"
-msgstr ""
+msgstr "%d не потраченные очки опыта"
 
 #: ../../../src/MenuPowers.cpp:1388
 msgid "Next Level:"
@@ -1306,7 +1312,7 @@ msgstr "Здесь нельзя растрансформироваться."
 
 #: ../../../src/QuestLog.cpp:234
 msgid "Completed Quests"
-msgstr ""
+msgstr "Выполненные Квесты"
 
 #: ../../../src/SaveLoad.cpp:243 ../../../src/SaveLoad.cpp:244
 msgid "Game saved."
@@ -1314,87 +1320,87 @@ msgstr "Игра сохранена."
 
 #: ../../../src/SDLInputState.cpp:582
 msgid "Backspace"
-msgstr ""
+msgstr "Backspace"
 
 #: ../../../src/SDLInputState.cpp:583
 msgid "CapsLock"
-msgstr ""
+msgstr "CapsLock"
 
 #: ../../../src/SDLInputState.cpp:586
 msgid "End"
-msgstr ""
+msgstr "End"
 
 #: ../../../src/SDLInputState.cpp:587
 msgid "Escape"
-msgstr ""
+msgstr "Escape"
 
 #: ../../../src/SDLInputState.cpp:588
 msgid "Home"
-msgstr ""
+msgstr "Home"
 
 #: ../../../src/SDLInputState.cpp:589
 msgid "Insert"
-msgstr ""
+msgstr "Insert"
 
 #: ../../../src/SDLInputState.cpp:590
 msgid "Left Alt"
-msgstr ""
+msgstr "Left Alt"
 
 #: ../../../src/SDLInputState.cpp:591
 msgid "Left Ctrl"
-msgstr ""
+msgstr "Left Ctrl"
 
 #: ../../../src/SDLInputState.cpp:593
 msgid "Left Shift"
-msgstr ""
+msgstr "Left Shift"
 
 #: ../../../src/SDLInputState.cpp:594
 msgid "NumLock"
-msgstr ""
+msgstr "NumLock"
 
 #: ../../../src/SDLInputState.cpp:595
 msgid "PageDown"
-msgstr ""
+msgstr "PageDown"
 
 #: ../../../src/SDLInputState.cpp:596
 msgid "PageUp"
-msgstr ""
+msgstr "PageUp"
 
 #: ../../../src/SDLInputState.cpp:597
 msgid "Pause"
-msgstr ""
+msgstr "Pause"
 
 #: ../../../src/SDLInputState.cpp:598
 msgid "PrintScreen"
-msgstr ""
+msgstr "PrintScreen"
 
 #: ../../../src/SDLInputState.cpp:599
 msgid "Right Alt"
-msgstr ""
+msgstr "Right Alt"
 
 #: ../../../src/SDLInputState.cpp:600
 msgid "Right Ctrl"
-msgstr ""
+msgstr "Right Ctrl"
 
 #: ../../../src/SDLInputState.cpp:601
 msgid "Return"
-msgstr ""
+msgstr "Return"
 
 #: ../../../src/SDLInputState.cpp:603
 msgid "Right Shift"
-msgstr ""
+msgstr "Right Shift"
 
 #: ../../../src/SDLInputState.cpp:604
 msgid "ScrollLock"
-msgstr ""
+msgstr "ScrollLock"
 
 #: ../../../src/SDLInputState.cpp:605
 msgid "Space"
-msgstr ""
+msgstr "Пробел"
 
 #: ../../../src/SDLInputState.cpp:606
 msgid "Tab"
-msgstr ""
+msgstr "Tab"
 
 #: ../../../src/SDLInputState.cpp:620
 #, c-format
@@ -1436,7 +1442,7 @@ msgstr "Коснитесь"
 #: ../../../src/SDLInputState.cpp:768
 #, c-format
 msgid "'%s' is no longer bound to:"
-msgstr ""
+msgstr "'%s' больше не привязана/о к:"
 
 #: ../../../src/Stats.cpp:38
 msgid "Max HP"
@@ -1444,7 +1450,7 @@ msgstr "Макс. Здоровье"
 
 #: ../../../src/Stats.cpp:39
 msgid "Total amount of HP."
-msgstr ""
+msgstr "Общее количество НР."
 
 #: ../../../src/Stats.cpp:43
 msgid "HP Regen"
@@ -1460,7 +1466,7 @@ msgstr "Макс. Мана"
 
 #: ../../../src/Stats.cpp:49
 msgid "Total amount of MP."
-msgstr ""
+msgstr "Общее количество МР."
 
 #: ../../../src/Stats.cpp:53
 msgid "MP Regen"
@@ -1496,7 +1502,7 @@ msgstr "Мин. Поглощение"
 
 #: ../../../src/Stats.cpp:69 ../../../src/Stats.cpp:74
 msgid "Reduces the amount of damage taken."
-msgstr ""
+msgstr "Уменьшает получаемый урон."
 
 #: ../../../src/Stats.cpp:73
 msgid "Absorb Max"
@@ -1508,7 +1514,7 @@ msgstr "Шанс Критического Урона"
 
 #: ../../../src/Stats.cpp:79
 msgid "Chance for an attack to do extra damage."
-msgstr ""
+msgstr "Шанс дополнительного урона при атаке."
 
 #: ../../../src/Stats.cpp:83
 msgid "Bonus XP"
@@ -1570,7 +1576,7 @@ msgstr "Часть полученного урона наносится обра
 
 #: ../../../src/Stats.cpp:118
 msgid "HP Steal"
-msgstr ""
+msgstr "Кража ХР"
 
 #: ../../../src/Stats.cpp:119
 msgid "Percentage of HP stolen per hit."
@@ -1578,7 +1584,7 @@ msgstr "Процент Жизни украденной за каждый уда�
 
 #: ../../../src/Stats.cpp:123
 msgid "MP Steal"
-msgstr ""
+msgstr "Кража МР"
 
 #: ../../../src/Stats.cpp:124
 msgid "Percentage of MP stolen per hit."
