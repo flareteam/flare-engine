@@ -75,6 +75,7 @@ public:
 	void destroyContext();
 	void windowResize();
 	void setBackgroundColor(Color color);
+	void setFullscreen(bool enable_fullscreen);
 	Image *createImage(int width, int height);
 	void setGamma(float g);
 	void resetGamma();

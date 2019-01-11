@@ -158,6 +158,7 @@ RenderDevice::RenderDevice()
 	, texture_filter(false)
 	, ignore_texture_filter(false)
 	, min_screen(640, 480)
+	, destructive_fullscreen(false)
 	, is_initialized(false)
 	, reload_graphics(false)
 	, ddpi(0)
@@ -362,6 +363,10 @@ void RenderDevice::setBackgroundColor(Color color) {
 	// print out the color to avoid unused variable compiler warning
 	Utils::logInfo("RenderDevice: Trying to set background color to (%d,%d,%d,%d).", color.r, color.g, color.b, color.a);
 	Utils::logError("RenderDevice: Renderer does not support setting background color!");
+}
+
+void RenderDevice::setFullscreen(bool enable_fullscreen) {
+	Utils::logInfo("RenderDevice: Trying to set fullscreen=%d, without recreating the rendering context, but setFullscreen() is not implemented for this renderer.", enable_fullscreen);
 }
 
 void RenderDevice::drawEllipse(int x0, int y0, int x1, int y1, const Color& color, float step) {

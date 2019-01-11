@@ -445,6 +445,10 @@ void MenuManager::logic() {
 		if (exit->isExitRequested()) {
 			done = true;
 		}
+		// if dpi scaling is changed, we need to realign the menus
+		if (inpt->window_resized) {
+			alignAll();
+		}
 	}
 	else {
 		bool clicking_character = false;

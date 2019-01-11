@@ -339,11 +339,9 @@ void MenuConfig::init() {
 	// disable some options
 	if (!is_game_state) {
 		cfg_tabs[VIDEO_TAB].setOptionEnabled(Platform::Video::RENDERER, false);
-		cfg_tabs[VIDEO_TAB].setOptionEnabled(Platform::Video::FULLSCREEN, false);
 		cfg_tabs[VIDEO_TAB].setOptionEnabled(Platform::Video::HWSURFACE, false);
 		cfg_tabs[VIDEO_TAB].setOptionEnabled(Platform::Video::VSYNC, false);
 		cfg_tabs[VIDEO_TAB].setOptionEnabled(Platform::Video::TEXTURE_FILTER, false);
-		cfg_tabs[VIDEO_TAB].setOptionEnabled(Platform::Video::DPI_SCALING, false);
 
 		cfg_tabs[INTERFACE_TAB].setOptionEnabled(Platform::Interface::LANGUAGE, false);
 		cfg_tabs[INTERFACE_TAB].setOptionEnabled(Platform::Interface::DEV_MODE, false);
@@ -883,6 +881,9 @@ void MenuConfig::logicVideo() {
 
 	if (cfg_tabs[VIDEO_TAB].options[Platform::Video::FULLSCREEN].enabled && fullscreen_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->fullscreen = fullscreen_cb->isChecked();
+		render_device->setFullscreen(settings->fullscreen);
+		inpt->window_resized = true;
+		refreshWidgets();
 	}
 	else if (cfg_tabs[VIDEO_TAB].options[Platform::Video::HWSURFACE].enabled && hwsurface_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->hwsurface = hwsurface_cb->isChecked();
@@ -896,6 +897,7 @@ void MenuConfig::logicVideo() {
 	else if (cfg_tabs[VIDEO_TAB].options[Platform::Video::DPI_SCALING].enabled && dpi_scaling_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->dpi_scaling = dpi_scaling_cb->isChecked();
 		render_device->windowResize();
+		inpt->window_resized = true;
 		refreshWidgets();
 		force_refresh_background = true;
 	}

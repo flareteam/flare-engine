@@ -237,7 +237,7 @@ SDLHardwareRenderDevice::SDLHardwareRenderDevice()
 }
 
 int SDLHardwareRenderDevice::createContextInternal() {
-	bool settings_changed = (fullscreen != settings->fullscreen ||
+	bool settings_changed = ((fullscreen != settings->fullscreen && destructive_fullscreen) ||
 			                 hwsurface != settings->hwsurface ||
 							 vsync != settings->vsync ||
 							 texture_filter != settings->texture_filter ||
@@ -633,4 +633,16 @@ void SDLHardwareRenderDevice::windowResize() {
 
 void SDLHardwareRenderDevice::setBackgroundColor(Color color) {
 	background_color = color;
+}
+
+void SDLHardwareRenderDevice::setFullscreen(bool enable_fullscreen) {
+	if (!destructive_fullscreen) {
+		if (enable_fullscreen) {
+			SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+		}
+		else {
+			SDL_SetWindowFullscreen(window, 0);
+		}
+		windowResize();
+	}
 }
