@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-17 21:50-0500\n"
-"PO-Revision-Date: 2019-01-11 20:09+0100\n"
-"Last-Translator: Andrey Kapitonov <andrey.kapitonov@email.cz>, 2019\n"
+"PO-Revision-Date: 2019-01-12 19:30+0100\n"
+"Last-Translator: Andrey Kapitonov <andrey.kapitonov@email.cz>\n"
 "Language-Team: Russian (https://www.transifex.com/flareorg/teams/84925/"
 "ru/)\n"
 "MIME-Version: 1.0\n"
@@ -105,6 +105,9 @@ msgid ""
 "\n"
 "Often slower, but less likely to have issues."
 msgstr ""
+"SDL software рендерер\n"
+"\n"
+"Чаще всего медленнее, но и проблемы возникают реже."
 
 #: ../../../src/DeviceList.cpp:59
 msgid ""
@@ -112,6 +115,9 @@ msgid ""
 "\n"
 "The default renderer that is often faster than the SDL software renderer."
 msgstr ""
+"SDL hardware рендерер\n"
+"\n"
+"Рендерер по-умолчанию. Быстрее, чем SDL software рендерер."
 
 #: ../../../src/EngineSettings.cpp:561
 msgid "Adventurer"
@@ -140,7 +146,7 @@ msgstr "Неизвестная цель"
 #: ../../../src/GameStateConfigBase.cpp:89
 #: ../../../src/GameStateConfigBase.cpp:110
 msgid "Defaults"
-msgstr "Дефаулт"
+msgstr "По-умолчанию"
 
 #: ../../../src/GameStateConfigBase.cpp:89
 msgid "Reset ALL settings?"
@@ -196,7 +202,7 @@ msgstr "Аппаратный курсор мыши"
 
 #: ../../../src/GameStateConfigBase.cpp:278
 msgid "Developer Mode"
-msgstr "Режим Девелоперов"
+msgstr "Режим Разработчика"
 
 #: ../../../src/GameStateConfigBase.cpp:282
 msgid "Subtitles"
@@ -261,6 +267,8 @@ msgid ""
 "Will try to store surfaces in video memory versus system memory. The effect "
 "this has on performance depends on the renderer."
 msgstr ""
+"Будет нагружать память видеокарты вместо системной памяти. Эффект зависит "
+"от рендерера."
 
 #: ../../../src/GameStateConfigDesktop.cpp:189
 msgid ""
@@ -299,7 +307,7 @@ msgstr "Полноэкранный Режим"
 
 #: ../../../src/GameStateConfigDesktop.cpp:231
 msgid "Move hero using mouse"
-msgstr "Управлять героя мышью"
+msgstr "Управлять героем мышью"
 
 #: ../../../src/GameStateConfigDesktop.cpp:235
 msgid "Hardware surfaces"
@@ -315,11 +323,11 @@ msgstr "Фильтрация Текстур"
 
 #: ../../../src/GameStateConfigDesktop.cpp:247
 msgid "DPI scaling"
-msgstr ""
+msgstr "Масштабирование DPI"
 
 #: ../../../src/GameStateConfigDesktop.cpp:251
 msgid "Parallax Layers"
-msgstr ""
+msgstr "Слои Параллакса"
 
 #: ../../../src/GameStateConfigDesktop.cpp:255
 msgid "Allow changing gamma"
@@ -566,7 +574,7 @@ msgstr "Панель действий: Использовать"
 
 #: ../../../src/InputState.cpp:431
 msgid "Developer Menu"
-msgstr "Меню Девелопера"
+msgstr "Меню Разработчика"
 
 #: ../../../src/InputState.cpp:433
 msgid "Left Mouse"
@@ -902,8 +910,8 @@ msgid ""
 "Prints a list of powers that match a search term. No search term will list "
 "all items"
 msgstr ""
-"Выводит список сил, которые удовлетворяют поиску. Ни один поиск не покажет "
-"все предметы"
+"Выводит найденные силы. Если ничего не указать, показывает все доступные "
+"силы"
 
 #: ../../../src/MenuDevConsole.cpp:365
 msgid "Prints out all the map filenames located in the \"maps/\" directory."
@@ -1428,11 +1436,11 @@ msgstr "(нет)"
 
 #: ../../../src/SDLInputState.cpp:677
 msgid "Touch control D-Pad"
-msgstr ""
+msgstr "Сенсорное управление D-Pad"
 
 #: ../../../src/SDLInputState.cpp:701
 msgid "Touch control buttons"
-msgstr ""
+msgstr "Сенсорные клавиши"
 
 #: ../../../src/SDLInputState.cpp:716
 msgid "Tap"
@@ -1485,6 +1493,8 @@ msgid ""
 "Accuracy rating. The enemy's Avoidance rating is subtracted from this value "
 "to calculate your likeliness to land a direct hit."
 msgstr ""
+"Шанс попадания. Шанс врага увернуться вычитается из этого значения, чтобы "
+"определить вероятность попадания."
 
 #: ../../../src/Stats.cpp:63
 msgid "Avoidance"
@@ -1495,6 +1505,8 @@ msgid ""
 "Avoidance rating. This value is subtracted from the enemy's Accuracy rating "
 "to calculate their likeliness to land a direct hit."
 msgstr ""
+"Шанс увернуться. Это значение вычитается из шанса попадания врага, чтобы "
+"определить вероятность попадания врага."
 
 #: ../../../src/Stats.cpp:68
 msgid "Absorb Min"
