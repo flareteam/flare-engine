@@ -232,6 +232,8 @@ public:
 	WidgetLabel                * combat_text_lb;
 	WidgetCheckBox             * auto_equip_cb;
 	WidgetLabel                * auto_equip_lb;
+	WidgetCheckBox             * entity_markers_cb;
+	WidgetLabel                * entity_markers_lb;
 
 	WidgetHorizontalList       * joystick_device_lstb;
 	WidgetLabel                * joystick_device_lb;

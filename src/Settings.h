@@ -89,6 +89,7 @@ public:
 	bool auto_equip;
 	bool subtitles;
 	int minimap_mode;
+	bool entity_markers;
 
 	// Language Settings
 	std::string language;

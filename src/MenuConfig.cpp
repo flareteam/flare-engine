@@ -172,6 +172,8 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	, combat_text_lb(new WidgetLabel())
 	, auto_equip_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
 	, auto_equip_lb(new WidgetLabel())
+	, entity_markers_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
+	, entity_markers_lb(new WidgetLabel())
 
 	, joystick_device_lstb(new WidgetHorizontalList())
 	, joystick_device_lb(new WidgetLabel())
@@ -336,6 +338,7 @@ void MenuConfig::init() {
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::STATBAR_LABELS, statbar_labels_lb, statbar_labels_cb, msg->get("Always show stat bar labels"));
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::COMBAT_TEXT, combat_text_lb, combat_text_cb, msg->get("Show combat text"));
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::AUTO_EQUIP, auto_equip_lb, auto_equip_cb, msg->get("Automatically equip items"));
+	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::ENTITY_MARKERS, entity_markers_lb, entity_markers_cb, msg->get("Show hidden entity markers"));
 
 	cfg_tabs[INPUT_TAB].setOptionWidgets(Platform::Input::JOYSTICK, joystick_device_lb, joystick_device_lstb, msg->get("Joystick"));
 	cfg_tabs[INPUT_TAB].setOptionWidgets(Platform::Input::MOUSE_MOVE, mouse_move_lb, mouse_move_cb, msg->get("Move hero using mouse"));
@@ -449,11 +452,13 @@ void MenuConfig::readConfig() {
 		infile.close();
 	}
 
+	// add description tooltips
 	hwsurface_cb->tooltip = msg->get("Will try to store surfaces in video memory versus system memory. The effect this has on performance depends on the renderer.");
 	vsync_cb->tooltip = msg->get("Prevents screen tearing. Disable if you experience \"stuttering\" in windowed mode or input lag.");
 	dpi_scaling_cb->tooltip = msg->get("When enabled, this uses the screen DPI in addition to the window dimensions to scale the rendering resolution. Otherwise, only the window dimensions are used.");
 	parallax_layers_cb->tooltip = msg->get("This enables parallax (non-tile) layers. Disabling this setting can improve performance in some cases.");
 	change_gamma_cb->tooltip = msg->get("Experimental");
+	entity_markers_cb->tooltip = msg->get("Shows a marker above enemies, allies, and the player when they are obscured by tall objects.");
 	no_mouse_cb->tooltip = msg->get("For handheld devices");
 	mouse_move_swap_cb->tooltip = msg->get("When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero instead of 'Main1'.");
 	mouse_move_attack_cb->tooltip = msg->get("When 'Move hero using mouse' is enabled, this setting controls if the Power assigned to the movement button can be used by targeting an enemy. If this setting is disabled, it is required to use 'Shift' to access the Power assigned to the movement button.");
@@ -717,6 +722,7 @@ void MenuConfig::updateInterface() {
 	statbar_labels_cb->setChecked(settings->statbar_labels);
 	combat_text_cb->setChecked(settings->combat_text);
 	auto_equip_cb->setChecked(settings->auto_equip);
+	entity_markers_cb->setChecked(settings->entity_markers);
 
 	loot_tooltip_lstb->select(settings->loot_tooltips);
 	minimap_lstb->select(settings->minimap_mode);
@@ -1006,6 +1012,9 @@ void MenuConfig::logicInterface() {
 	}
 	else if (cfg_tabs[INTERFACE_TAB].options[Platform::Interface::AUTO_EQUIP].enabled && auto_equip_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->auto_equip = auto_equip_cb->isChecked();
+	}
+	else if (cfg_tabs[INTERFACE_TAB].options[Platform::Interface::ENTITY_MARKERS].enabled && entity_markers_cb->checkClickAt(mouse.x, mouse.y)) {
+		settings->entity_markers = entity_markers_cb->isChecked();
 	}
 }
 
