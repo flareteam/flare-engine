@@ -1,0 +1,1633 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# Translators:
+# Justin Jacobs <jajdorkster@gmail.com>, 2018
+# Ademaro <ademaro@ya.ru>, 2018
+# Andrey Kapitonov <andrey.kapitonov@email.cz>, 2019
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-11-17 21:50-0500\n"
+"PO-Revision-Date: 2019-01-12 19:30+0100\n"
+"Last-Translator: Andrey Kapitonov <andrey.kapitonov@email.cz>\n"
+"Language-Team: Russian (https://www.transifex.com/flareorg/teams/84925/"
+"ru/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ru\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
+"%100>=11 && n%100<=14)? 2 : 3);\n"
+"X-Generator: Poedit 2.2\n"
+
+#: ../../../src/Avatar.cpp:367
+#, c-format
+msgid "Congratulations, you have reached level %d!"
+msgstr "Поздравляем! Вы достигли уровень %d!"
+
+#: ../../../src/Avatar.cpp:369
+msgid "You may increase one attribute through the Character Menu."
+msgstr "Вы можете увеличить один атрибут в Меню Персонажа."
+
+#: ../../../src/Avatar.cpp:583
+msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
+msgstr ""
+"Вы потерпели поражение. Игра окончена! Нажмите ${INPUT_CONTINUE}, чтобы "
+"выйти в Меню."
+
+#: ../../../src/Avatar.cpp:589
+msgid "You are defeated. ${INPUT_CONTINUE} to continue."
+msgstr "Вы потерпели поражение. Нажмите ${INPUT_CONTINUE}, чтобы продолжить."
+
+#: ../../../src/Avatar.cpp:839
+msgid "Transformation expired. You have been moved back to a safe place."
+msgstr "Трансформация завершилась. Вы были возвращены в безопасное место."
+
+#: ../../../src/CampaignManager.cpp:153
+#, c-format
+msgid "%d %s removed."
+msgstr "%d %s убрано."
+
+#: ../../../src/CampaignManager.cpp:162
+#, c-format
+msgid "%s removed."
+msgstr "%s убран."
+
+#: ../../../src/CampaignManager.cpp:175
+#, c-format
+msgid "You receive %s."
+msgstr "Вы получаете %s."
+
+#: ../../../src/CampaignManager.cpp:177
+#, c-format
+msgid "You receive %s x%d."
+msgstr "Вы получаете %s x%d."
+
+#: ../../../src/CampaignManager.cpp:186
+#, c-format
+msgid "You receive %d %s."
+msgstr "Вы получаете %d %s."
+
+#: ../../../src/CampaignManager.cpp:195
+#, c-format
+msgid "You receive %d XP."
+msgstr "Вы получаете %d опыта."
+
+#: ../../../src/CampaignManager.cpp:201
+msgid "HP restored."
+msgstr "Жизнь восстановлена."
+
+#: ../../../src/CampaignManager.cpp:205
+msgid "MP restored."
+msgstr "Мана восстановлена."
+
+#: ../../../src/CampaignManager.cpp:210
+msgid "HP and MP restored."
+msgstr "Жизнь и Мана восстановлены."
+
+#: ../../../src/CampaignManager.cpp:214
+msgid "Negative effects removed."
+msgstr "Отрицательные эффекты убраны."
+
+#: ../../../src/CampaignManager.cpp:220
+msgid "HP and MP restored, negative effects removed"
+msgstr "Жизнь и Мана восстановлены, отрицательные эффекты убраны"
+
+#: ../../../src/DeviceList.cpp:56
+msgid ""
+"SDL software renderer\n"
+"\n"
+"Often slower, but less likely to have issues."
+msgstr ""
+"SDL software рендерер\n"
+"\n"
+"Чаще всего медленнее, но и проблемы возникают реже."
+
+#: ../../../src/DeviceList.cpp:59
+msgid ""
+"SDL hardware renderer\n"
+"\n"
+"The default renderer that is often faster than the SDL software renderer."
+msgstr ""
+"SDL hardware рендерер\n"
+"\n"
+"Рендерер по-умолчанию. Быстрее, чем SDL software рендерер."
+
+#: ../../../src/EngineSettings.cpp:561
+msgid "Adventurer"
+msgstr "Авантюрист"
+
+#: ../../../src/Entity.cpp:511
+msgid "miss"
+msgstr "промах"
+
+#: ../../../src/Entity.cpp:548 ../../../src/PowerManager.cpp:1152
+#: ../../../src/StatBlock.cpp:805 ../../../src/StatBlock.cpp:811
+#, c-format
+msgid "+%d HP"
+msgstr "+%d Жизни"
+
+#: ../../../src/Entity.cpp:555 ../../../src/StatBlock.cpp:816
+#: ../../../src/StatBlock.cpp:822
+#, c-format
+msgid "+%d MP"
+msgstr "+%d Маны"
+
+#: ../../../src/EventManager.cpp:738
+msgid "Unknown destination"
+msgstr "Неизвестная цель"
+
+#: ../../../src/GameStateConfigBase.cpp:89
+#: ../../../src/GameStateConfigBase.cpp:110
+msgid "Defaults"
+msgstr "По-умолчанию"
+
+#: ../../../src/GameStateConfigBase.cpp:89
+msgid "Reset ALL settings?"
+msgstr "Сбросить ВСЕ настройки?"
+
+#: ../../../src/GameStateConfigBase.cpp:109 ../../../src/MenuNumPicker.cpp:49
+msgid "OK"
+msgstr "ОК"
+
+#: ../../../src/GameStateConfigBase.cpp:111 ../../../src/GameStateNew.cpp:65
+#: ../../../src/InputState.cpp:401
+msgid "Cancel"
+msgstr "Отмена"
+
+#: ../../../src/GameStateConfigBase.cpp:160
+#: ../../../src/GameStateConfigDesktop.cpp:130
+msgid "Audio"
+msgstr "Аудио"
+
+#: ../../../src/GameStateConfigBase.cpp:161
+#: ../../../src/GameStateConfigDesktop.cpp:131
+msgid "Interface"
+msgstr "Интерфейс"
+
+#: ../../../src/GameStateConfigBase.cpp:162
+#: ../../../src/GameStateConfigDesktop.cpp:134
+msgid "Mods"
+msgstr "Моды"
+
+#: ../../../src/GameStateConfigBase.cpp:249 ../../../src/MenuExit.cpp:72
+msgid "Music Volume"
+msgstr "Громкость Музыки"
+
+#: ../../../src/GameStateConfigBase.cpp:253 ../../../src/MenuExit.cpp:77
+msgid "Sound Volume"
+msgstr "Громкость Звука"
+
+#: ../../../src/GameStateConfigBase.cpp:257
+msgid "Language"
+msgstr "Язык"
+
+#: ../../../src/GameStateConfigBase.cpp:266
+msgid "Show FPS"
+msgstr "Показывать FPS"
+
+#: ../../../src/GameStateConfigBase.cpp:270
+msgid "Colorblind Mode"
+msgstr "Режим цветовой слепоты"
+
+#: ../../../src/GameStateConfigBase.cpp:274
+msgid "Hardware mouse cursor"
+msgstr "Аппаратный курсор мыши"
+
+#: ../../../src/GameStateConfigBase.cpp:278
+msgid "Developer Mode"
+msgstr "Режим Разработчика"
+
+#: ../../../src/GameStateConfigBase.cpp:282
+msgid "Subtitles"
+msgstr "Субтитры"
+
+#: ../../../src/GameStateConfigBase.cpp:286
+msgid "Active Mods"
+msgstr "Активные Моды"
+
+#: ../../../src/GameStateConfigBase.cpp:295
+msgid "Available Mods"
+msgstr "Доступные Моды"
+
+#: ../../../src/GameStateConfigBase.cpp:314
+msgid "<< Disable"
+msgstr "<< Отключить"
+
+#: ../../../src/GameStateConfigBase.cpp:320
+msgid "Enable >>"
+msgstr "Включить >>"
+
+#: ../../../src/GameStateConfigBase.cpp:873
+msgid "Version:"
+msgstr "Версия:"
+
+#: ../../../src/GameStateConfigBase.cpp:878
+msgid "Game:"
+msgstr "Игра:"
+
+#: ../../../src/GameStateConfigBase.cpp:883
+msgid "Engine version:"
+msgstr "Версия движка:"
+
+#: ../../../src/GameStateConfigBase.cpp:891
+msgid "Requires mods:"
+msgstr "Требуются моды:"
+
+#: ../../../src/GameStateConfigDesktop.cpp:83
+#: ../../../src/GameStateConfigDesktop.cpp:751
+msgid "Clear"
+msgstr "Очистить"
+
+#: ../../../src/GameStateConfigDesktop.cpp:83
+#: ../../../src/GameStateConfigDesktop.cpp:749
+msgid "Assign:"
+msgstr "Назначение:"
+
+#: ../../../src/GameStateConfigDesktop.cpp:128
+msgid "Video"
+msgstr "Видео"
+
+#: ../../../src/GameStateConfigDesktop.cpp:132
+msgid "Input"
+msgstr "Ввод"
+
+#: ../../../src/GameStateConfigDesktop.cpp:133
+msgid "Keybindings"
+msgstr "Привязки Клавиш"
+
+#: ../../../src/GameStateConfigDesktop.cpp:188
+msgid ""
+"Will try to store surfaces in video memory versus system memory. The effect "
+"this has on performance depends on the renderer."
+msgstr ""
+"Будет нагружать память видеокарты вместо системной памяти. Эффект зависит "
+"от рендерера."
+
+#: ../../../src/GameStateConfigDesktop.cpp:189
+msgid ""
+"Prevents screen tearing. Disable if you experience \"stuttering\" in "
+"windowed mode or input lag."
+msgstr ""
+
+#: ../../../src/GameStateConfigDesktop.cpp:190
+msgid ""
+"When enabled, this uses the screen DPI in addition to the window dimensions "
+"to scale the rendering resolution. Otherwise, only the window dimensions "
+"are used."
+msgstr ""
+
+#: ../../../src/GameStateConfigDesktop.cpp:191
+msgid ""
+"This enables parallax (non-tile) layers. Disabling this setting can improve "
+"performance in some cases."
+msgstr ""
+
+#: ../../../src/GameStateConfigDesktop.cpp:192
+msgid "Experimental"
+msgstr "Экспериментально"
+
+#: ../../../src/GameStateConfigDesktop.cpp:193
+msgid "For handheld devices"
+msgstr "Для наладонных устройств"
+
+#: ../../../src/GameStateConfigDesktop.cpp:211
+msgid "Renderer"
+msgstr "Рендерер"
+
+#: ../../../src/GameStateConfigDesktop.cpp:227
+msgid "Full Screen Mode"
+msgstr "Полноэкранный Режим"
+
+#: ../../../src/GameStateConfigDesktop.cpp:231
+msgid "Move hero using mouse"
+msgstr "Управлять героем мышью"
+
+#: ../../../src/GameStateConfigDesktop.cpp:235
+msgid "Hardware surfaces"
+msgstr "Аппаратные поверхности"
+
+#: ../../../src/GameStateConfigDesktop.cpp:239
+msgid "V-Sync"
+msgstr "Верт. Синхронизация"
+
+#: ../../../src/GameStateConfigDesktop.cpp:243
+msgid "Texture Filtering"
+msgstr "Фильтрация Текстур"
+
+#: ../../../src/GameStateConfigDesktop.cpp:247
+msgid "DPI scaling"
+msgstr "Масштабирование DPI"
+
+#: ../../../src/GameStateConfigDesktop.cpp:251
+msgid "Parallax Layers"
+msgstr "Слои Параллакса"
+
+#: ../../../src/GameStateConfigDesktop.cpp:255
+msgid "Allow changing gamma"
+msgstr "Включить изменение гаммы"
+
+#: ../../../src/GameStateConfigDesktop.cpp:259
+msgid "Gamma"
+msgstr "Гамма"
+
+#: ../../../src/GameStateConfigDesktop.cpp:263
+msgid "Use joystick"
+msgstr "Использовать джойстик"
+
+#: ../../../src/GameStateConfigDesktop.cpp:267
+msgid "Joystick"
+msgstr "Джойстик"
+
+#: ../../../src/GameStateConfigDesktop.cpp:283
+msgid "Mouse aim"
+msgstr "Целиться мышью"
+
+#: ../../../src/GameStateConfigDesktop.cpp:287
+msgid "Do not use mouse"
+msgstr "Не использовать мышь"
+
+#: ../../../src/GameStateConfigDesktop.cpp:291
+msgid "Joystick Deadzone"
+msgstr "Мёртвая зона джойстика"
+
+#: ../../../src/GameState.cpp:37 ../../../src/GameState.cpp:58
+msgid "Loading..."
+msgstr "Загрузка..."
+
+#: ../../../src/GameStateLoad.cpp:88 ../../../src/GameStateLoad.cpp:101
+msgid "Delete Save"
+msgstr "Удалить Игру"
+
+#: ../../../src/GameStateLoad.cpp:88
+msgid "Delete this save?"
+msgstr "Удалить эту сохранённую игру?"
+
+#: ../../../src/GameStateLoad.cpp:90
+msgid "Exit to Title"
+msgstr "Выйти в Меню"
+
+#: ../../../src/GameStateLoad.cpp:93
+msgid "New Game"
+msgstr "Новая Игра"
+
+#: ../../../src/GameStateLoad.cpp:97 ../../../src/GameStateLoad.cpp:600
+msgid "Choose a Slot"
+msgstr "Выберите Слот"
+
+#: ../../../src/GameStateLoad.cpp:573 ../../../src/GameStateLoad.cpp:594
+msgid "Enable a story mod to continue"
+msgstr "Включите сюжетный мод для продолжения"
+
+#: ../../../src/GameStateLoad.cpp:589
+msgid "Load Game"
+msgstr "Загрузить Игру"
+
+#: ../../../src/GameStateLoad.cpp:695
+msgid "Entering game world..."
+msgstr "Вход в игровой мир..."
+
+#: ../../../src/GameStateLoad.cpp:698
+msgid "Loading saved game..."
+msgstr "Загрузка сохранённой игры..."
+
+#: ../../../src/GameStateLoad.cpp:731
+msgid "Invalid save"
+msgstr "Недействительная игра"
+
+#: ../../../src/GameStateLoad.cpp:755 ../../../src/ItemManager.cpp:747
+#: ../../../src/MenuPowers.cpp:778 ../../../src/MenuPowers.cpp:1144
+#: ../../../src/MenuPowers.cpp:1542
+#, c-format
+msgid "Level %d"
+msgstr "Уровень %d"
+
+#: ../../../src/GameStateNew.cpp:68
+msgid "Create"
+msgstr "Создать"
+
+#: ../../../src/GameStateNew.cpp:76
+msgid "Randomize"
+msgstr "Случайно"
+
+#: ../../../src/GameStateNew.cpp:92
+msgid "Choose a Portrait"
+msgstr "Выберите Портрет"
+
+#: ../../../src/GameStateNew.cpp:96
+msgid "Choose a Name"
+msgstr "Выберите Имя"
+
+#: ../../../src/GameStateNew.cpp:100
+msgid "Permadeath?"
+msgstr "Одна Жизнь?"
+
+#: ../../../src/GameStateNew.cpp:104
+msgid "Choose a Class"
+msgstr "Выберите Класс"
+
+#: ../../../src/GameStateTitle.cpp:108
+msgid "Play Game"
+msgstr "Играть"
+
+#: ../../../src/GameStateTitle.cpp:111
+msgid "Enable a core mod to continue"
+msgstr "Включите основной мод для продолжения"
+
+#: ../../../src/GameStateTitle.cpp:115
+msgid "Configuration"
+msgstr "Настройки"
+
+#: ../../../src/GameStateTitle.cpp:118
+msgid "Credits"
+msgstr "Авторы"
+
+#: ../../../src/GameStateTitle.cpp:121
+msgid "Exit Game"
+msgstr "Выйти из Игры"
+
+#: ../../../src/InputState.cpp:402
+msgid "Accept"
+msgstr "Принять"
+
+#: ../../../src/InputState.cpp:403 ../../../src/SDLInputState.cpp:607
+msgid "Up"
+msgstr "Вверх"
+
+#: ../../../src/InputState.cpp:404 ../../../src/SDLInputState.cpp:585
+msgid "Down"
+msgstr "Вниз"
+
+#: ../../../src/InputState.cpp:405 ../../../src/SDLInputState.cpp:592
+msgid "Left"
+msgstr "Влево"
+
+#: ../../../src/InputState.cpp:406 ../../../src/SDLInputState.cpp:602
+msgid "Right"
+msgstr "Вправо"
+
+#: ../../../src/InputState.cpp:407
+msgid "Bar1"
+msgstr "Меню1"
+
+#: ../../../src/InputState.cpp:408
+msgid "Bar2"
+msgstr "Меню2"
+
+#: ../../../src/InputState.cpp:409
+msgid "Bar3"
+msgstr "Меню3"
+
+#: ../../../src/InputState.cpp:410
+msgid "Bar4"
+msgstr "Меню4"
+
+#: ../../../src/InputState.cpp:411
+msgid "Bar5"
+msgstr "Меню5"
+
+#: ../../../src/InputState.cpp:412
+msgid "Bar6"
+msgstr "Меню6"
+
+#: ../../../src/InputState.cpp:413
+msgid "Bar7"
+msgstr "Меню7"
+
+#: ../../../src/InputState.cpp:414
+msgid "Bar8"
+msgstr "Меню8"
+
+#: ../../../src/InputState.cpp:415
+msgid "Bar9"
+msgstr "Меню9"
+
+#: ../../../src/InputState.cpp:416
+msgid "Bar0"
+msgstr "Меню0"
+
+#: ../../../src/InputState.cpp:417 ../../../src/MenuActionBar.cpp:83
+#: ../../../src/MenuCharacter.cpp:54
+msgid "Character"
+msgstr "Персонаж"
+
+#: ../../../src/InputState.cpp:418 ../../../src/MenuActionBar.cpp:84
+#: ../../../src/MenuInventory.cpp:137 ../../../src/MenuVendor.cpp:57
+msgid "Inventory"
+msgstr "Инвентарь"
+
+#: ../../../src/InputState.cpp:419 ../../../src/MenuActionBar.cpp:85
+#: ../../../src/MenuPowers.cpp:168
+msgid "Powers"
+msgstr "Силы"
+
+#: ../../../src/InputState.cpp:420 ../../../src/MenuActionBar.cpp:86
+#: ../../../src/MenuLog.cpp:72
+msgid "Log"
+msgstr "Журнал"
+
+#: ../../../src/InputState.cpp:421
+msgid "Main1"
+msgstr "Главное1"
+
+#: ../../../src/InputState.cpp:422
+msgid "Main2"
+msgstr "Главное2"
+
+#: ../../../src/InputState.cpp:423
+msgid "Ctrl"
+msgstr "CTRL"
+
+#: ../../../src/InputState.cpp:424
+msgid "Shift"
+msgstr "SHIFT"
+
+#: ../../../src/InputState.cpp:425
+msgid "Alt"
+msgstr "ALT"
+
+#: ../../../src/InputState.cpp:426 ../../../src/SDLInputState.cpp:584
+msgid "Delete"
+msgstr "Удалить"
+
+#: ../../../src/InputState.cpp:427
+msgid "ActionBar Accept"
+msgstr "Панель действий: Принять"
+
+#: ../../../src/InputState.cpp:428
+msgid "ActionBar Left"
+msgstr "Панель действий: Влево"
+
+#: ../../../src/InputState.cpp:429
+msgid "ActionBar Right"
+msgstr "Панель действий: Вправо"
+
+#: ../../../src/InputState.cpp:430
+msgid "ActionBar Use"
+msgstr "Панель действий: Использовать"
+
+#: ../../../src/InputState.cpp:431
+msgid "Developer Menu"
+msgstr "Меню Разработчика"
+
+#: ../../../src/InputState.cpp:433
+msgid "Left Mouse"
+msgstr "Левая Кнопка Мыши"
+
+#: ../../../src/InputState.cpp:434
+msgid "Middle Mouse"
+msgstr "Средняя Кнопка Мыши"
+
+#: ../../../src/InputState.cpp:435
+msgid "Right Mouse"
+msgstr "Правая Кнопка Мыши"
+
+#: ../../../src/InputState.cpp:436
+msgid "Wheel Up"
+msgstr "Прокрутка Вверх"
+
+#: ../../../src/InputState.cpp:437
+msgid "Wheel Down"
+msgstr "Прокрутка Вниз"
+
+#: ../../../src/InputState.cpp:438
+msgid "Mouse X1"
+msgstr "Мышь X1"
+
+#: ../../../src/InputState.cpp:439
+msgid "Mouse X2"
+msgstr "Мышь X2"
+
+#: ../../../src/ItemManager.cpp:450 ../../../src/ItemManager.cpp:453
+msgid "Unknown Item"
+msgstr "Неизвестный Предмет"
+
+#: ../../../src/ItemManager.cpp:648 ../../../src/MenuPowers.cpp:887
+#, c-format
+msgid "%d%% Speed"
+msgstr "%d%% Скорости"
+
+#: ../../../src/ItemManager.cpp:652 ../../../src/MenuPowers.cpp:890
+#, c-format
+msgid "%d%% Attack Speed"
+msgstr "%d%% Скорость Атаки"
+
+#: ../../../src/ItemManager.cpp:674 ../../../src/MenuCharacter.cpp:354
+#: ../../../src/MenuPowers.cpp:833
+#, c-format
+msgid "Resistance (%s)"
+msgstr "Сопротивление (%s)"
+
+#: ../../../src/ItemManager.cpp:684
+#, c-format
+msgid "Requires %s"
+msgstr "Требуется %s"
+
+#: ../../../src/ItemManager.cpp:733
+msgid "Quest Item"
+msgstr "Предмет Задания"
+
+#: ../../../src/ItemManager.cpp:760
+#, c-format
+msgid "Quality: %s"
+msgstr "Качество: %s"
+
+#: ../../../src/ItemManager.cpp:785
+#, c-format
+msgid "Absorb: %d-%d"
+msgstr "Поглощение: %d-%d"
+
+#: ../../../src/ItemManager.cpp:787
+#, c-format
+msgid "Absorb: %d"
+msgstr "Поглощение: %d"
+
+#: ../../../src/ItemManager.cpp:827 ../../../src/MenuPowers.cpp:1131
+#: ../../../src/MenuPowers.cpp:1134
+#, c-format
+msgid "Requires Level %d"
+msgstr "Требуется Уровень %d"
+
+#: ../../../src/ItemManager.cpp:838 ../../../src/MenuPowers.cpp:1123
+#: ../../../src/MenuPowers.cpp:1125
+#, c-format
+msgid "Requires %s %d"
+msgstr "Требуется %s %d"
+
+#: ../../../src/ItemManager.cpp:849
+#, c-format
+msgid "Requires Class: %s"
+msgstr "Требуется Класс: %s"
+
+#: ../../../src/ItemManager.cpp:864 ../../../src/ItemManager.cpp:876
+#, c-format
+msgid "Buy Price: %d %s"
+msgstr "Цена Покупки: %d %s"
+
+#: ../../../src/ItemManager.cpp:866 ../../../src/ItemManager.cpp:878
+#, c-format
+msgid "Buy Price: %d %s each"
+msgstr "Цена Покупки: %d %s каждый"
+
+#: ../../../src/ItemManager.cpp:886
+#, c-format
+msgid "Sell Price: %d %s"
+msgstr "Цена Продажи: %d %s"
+
+#: ../../../src/ItemManager.cpp:888
+#, c-format
+msgid "Sell Price: %d %s each"
+msgstr "Цена Продажи: %d %s каждый"
+
+#: ../../../src/ItemManager.cpp:897
+msgid "Set:"
+msgstr ""
+
+#: ../../../src/ItemManager.cpp:904
+#, c-format
+msgid "%d items:"
+msgstr "%d предметов:"
+
+#: ../../../src/ItemManager.cpp:917
+#, c-format
+msgid "Press [%s] to use"
+msgstr "Нажмите [%s], чтобы использовать"
+
+#: ../../../src/ItemManager.cpp:920
+#, c-format
+msgid "Press [%s] to read"
+msgstr "Нажмите [%s], чтобы прочитать"
+
+#: ../../../src/MenuActionBar.cpp:87
+msgid "Loot tooltip visibility"
+msgstr ""
+
+#: ../../../src/MenuActionBar.cpp:88
+msgid "Mini-map mode"
+msgstr "Режим мини-карты"
+
+#: ../../../src/MenuActionBar.cpp:89
+msgid "Always show stat bar labels"
+msgstr "Всегда показывать метки в строке состояния"
+
+#: ../../../src/MenuActionBar.cpp:90
+msgid "Show combat text"
+msgstr "Показывать сообщения битвы"
+
+#: ../../../src/MenuActionBar.cpp:254 ../../../src/MenuActionBar.cpp:261
+#: ../../../src/MenuActionBar.cpp:264 ../../../src/MenuActionBar.cpp:271
+#, c-format
+msgid "Hotkey: %s"
+msgstr "Горячая клавиша: %s"
+
+#: ../../../src/MenuActionBar.cpp:474
+#, c-format
+msgid "Default. Temporarily show all loot tooltips with '%s'."
+msgstr ""
+
+#: ../../../src/MenuActionBar.cpp:476
+#, c-format
+msgid "Show All. Temporarily hide all loot tooltips with '%s'."
+msgstr ""
+
+#: ../../../src/MenuActionBar.cpp:478
+#, c-format
+msgid "Hide All. Temporarily show all loot tooltips with '%s'."
+msgstr ""
+
+#: ../../../src/MenuActionBar.cpp:482
+msgid "Visible"
+msgstr "Видимое"
+
+#: ../../../src/MenuActionBar.cpp:484
+msgid "Visible (2x zoom)"
+msgstr "Видимое (2х увеличение)"
+
+#: ../../../src/MenuActionBar.cpp:486
+msgid "Hidden"
+msgstr "Спрятанное"
+
+#: ../../../src/MenuActionBar.cpp:490 ../../../src/MenuActionBar.cpp:496
+msgid "Enabled"
+msgstr "Включено"
+
+#: ../../../src/MenuActionBar.cpp:492 ../../../src/MenuActionBar.cpp:498
+msgid "Disabled"
+msgstr "Выключено"
+
+#: ../../../src/MenuActionBar.cpp:657
+msgid "Not enough MP."
+msgstr "Недостаточно МР."
+
+#: ../../../src/MenuActiveEffects.cpp:124
+#, c-format
+msgid "x%d"
+msgstr "x%d"
+
+#: ../../../src/MenuActiveEffects.cpp:219
+msgid "Remaining:"
+msgstr "Осталось:"
+
+#: ../../../src/MenuActiveEffects.cpp:225
+#, c-format
+msgid "x%d stacks"
+msgstr ""
+
+#: ../../../src/MenuCharacter.cpp:73 ../../../src/MenuCharacter.cpp:78
+msgid "Name"
+msgstr "Имя"
+
+#: ../../../src/MenuCharacter.cpp:74 ../../../src/MenuCharacter.cpp:79
+msgid "Level"
+msgstr "Уровень"
+
+#: ../../../src/MenuCharacter.cpp:310
+#, c-format
+msgid "%d unspent stat point"
+msgstr "%d не потраченное очко"
+
+#: ../../../src/MenuCharacter.cpp:313
+#, c-format
+msgid "%d unspent stat points"
+msgstr "%d не потраченные очки"
+
+#: ../../../src/MenuCharacter.cpp:355
+#, c-format
+msgid "Reduces the damage taken from \"%s\" elemental attacks."
+msgstr "Снижает урон полученный от \"%s\" элементальной атаки."
+
+#: ../../../src/MenuCharacter.cpp:365 ../../../src/MenuManager.cpp:283
+#, c-format
+msgid "XP: %d"
+msgstr "Опыт: %d"
+
+#: ../../../src/MenuCharacter.cpp:367
+#, c-format
+msgid "Next: %d"
+msgstr "Следующий: %d"
+
+#: ../../../src/MenuCharacter.cpp:373
+#, c-format
+msgid "base (%d), bonus (%d)"
+msgstr "базовое (%d), бонус (%d)"
+
+#: ../../../src/MenuCharacter.cpp:381 ../../../src/MenuCharacter.cpp:395
+msgid "Related stats:"
+msgstr "Связанные атрибуты:"
+
+#: ../../../src/MenuCharacter.cpp:421 ../../../src/MenuCharacter.cpp:445
+#, c-format
+msgid "Each level grants %d."
+msgstr "Каждый уровень дает %d."
+
+#: ../../../src/MenuCharacter.cpp:425 ../../../src/MenuCharacter.cpp:449
+#, c-format
+msgid "Each point of %s grants %d."
+msgstr "Каждое очко %s дает %d."
+
+#: ../../../src/MenuDevConsole.cpp:63
+msgid "Execute"
+msgstr "Выполнить"
+
+#: ../../../src/MenuDevConsole.cpp:101 ../../../src/MenuDevConsole.cpp:151
+msgid "Developer Console"
+msgstr "Консоль Разработчика"
+
+#: ../../../src/MenuDevConsole.cpp:141
+#, c-format
+msgid "Use '%s' to inspect with the cursor."
+msgstr "Используй '%s' чтобы исследовать с помощью курсора."
+
+#: ../../../src/MenuDevConsole.cpp:146
+msgid "Arguments with spaces should be enclosed with double quotes. Example:"
+msgstr ""
+"Аргументы с пробелами должны быть заключены в двойные кавычки. Пример:"
+
+#: ../../../src/MenuDevConsole.cpp:147
+msgid "Type 'help' to get a list of commands."
+msgstr "Введи 'help' чтобы увидеть список команд."
+
+#: ../../../src/MenuDevConsole.cpp:209 ../../../src/MenuDevConsole.cpp:213
+msgid "px"
+msgstr "px"
+
+#: ../../../src/MenuDevConsole.cpp:224
+msgid "Distance"
+msgstr "Дистанция"
+
+#: ../../../src/MenuDevConsole.cpp:239 ../../../src/MenuDevConsole.cpp:286
+msgid "Entity"
+msgstr "Сущность"
+
+#: ../../../src/MenuDevConsole.cpp:261 ../../../src/MenuDevConsole.cpp:268
+msgid "none"
+msgstr "отсутствует"
+
+#: ../../../src/MenuDevConsole.cpp:262 ../../../src/MenuDevConsole.cpp:264
+msgid "wall"
+msgstr "стена"
+
+#: ../../../src/MenuDevConsole.cpp:263 ../../../src/MenuDevConsole.cpp:265
+msgid "short wall / pit"
+msgstr "короткая стена"
+
+#: ../../../src/MenuDevConsole.cpp:266
+msgid "entity"
+msgstr "частица"
+
+#: ../../../src/MenuDevConsole.cpp:267
+msgid "entity, ally"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:274
+msgid "Tile"
+msgstr "Плитка"
+
+#: ../../../src/MenuDevConsole.cpp:360
+msgid "adds a power to the action bar"
+msgstr "добавляет силу в панель действий"
+
+#: ../../../src/MenuDevConsole.cpp:361
+msgid "turns on/off the display of the FPS counter"
+msgstr "включает/выключает счетчик FPS"
+
+#: ../../../src/MenuDevConsole.cpp:362
+msgid "turns on/off all of the HUD elements"
+msgstr "переключает отображение элементов интерфейса"
+
+#: ../../../src/MenuDevConsole.cpp:363
+msgid "turns on/off the developer hud"
+msgstr "переключает интерфейс разработчика"
+
+#: ../../../src/MenuDevConsole.cpp:364
+msgid ""
+"Prints a list of powers that match a search term. No search term will list "
+"all items"
+msgstr ""
+"Выводит найденные силы. Если ничего не указать, показывает все доступные "
+"силы"
+
+#: ../../../src/MenuDevConsole.cpp:365
+msgid "Prints out all the map filenames located in the \"maps/\" directory."
+msgstr "Печатает все названия файлов в каталоге \"maps/\"."
+
+#: ../../../src/MenuDevConsole.cpp:366
+msgid ""
+"Prints out the active campaign statuses that match a search term. No search "
+"term will list all active statuses"
+msgstr ""
+"Выводит найденные статусы активных кампаний. Если ничего не указать, "
+"показывает все активные статусы"
+
+#: ../../../src/MenuDevConsole.cpp:367
+msgid ""
+"Prints a list of items that match a search term. No search term will list "
+"all items"
+msgstr ""
+"Выводит список найденных предметов. Если ничего не указать, показывает все "
+"предметы"
+
+#: ../../../src/MenuDevConsole.cpp:368
+msgid ""
+"parses a series of event components and executes them as a single event"
+msgstr "анализирует набор компонентов событий и выполняет их как одно событие"
+
+#: ../../../src/MenuDevConsole.cpp:369
+msgid "clears the command history"
+msgstr "очищает историю команд"
+
+#: ../../../src/MenuDevConsole.cpp:370
+msgid "displays this text"
+msgstr "показывает этот текст"
+
+#: ../../../src/MenuDevConsole.cpp:377
+msgid "Toggled the developer hud"
+msgstr "Переключён интерфейс разработчика"
+
+#: ../../../src/MenuDevConsole.cpp:381
+msgid "Toggled the hud"
+msgstr "Переключён интерфейс"
+
+#: ../../../src/MenuDevConsole.cpp:385
+msgid "Toggled the FPS counter"
+msgstr "Переключён счетчик FPS"
+
+#: ../../../src/MenuDevConsole.cpp:534
+msgid "ERROR: Incorrect number of arguments"
+msgstr "ОШИБКА: Неправильное количество аргументов"
+
+#: ../../../src/MenuDevConsole.cpp:536 ../../../src/MenuDevConsole.cpp:564
+msgid "HINT:"
+msgstr "ПОДСКАЗКА:"
+
+#: ../../../src/MenuDevConsole.cpp:536
+msgid "<id>"
+msgstr "<id>"
+
+#: ../../../src/MenuDevConsole.cpp:552
+#, c-format
+msgid "ERROR: '%s' is not a valid event key"
+msgstr "ОШИБКА: «%s» — недопустимый ключ события"
+
+#: ../../../src/MenuDevConsole.cpp:562
+msgid "ERROR: Too few arguments"
+msgstr "ОШИБКА: недостаточно аргументов"
+
+#: ../../../src/MenuDevConsole.cpp:564
+msgid "<key>=<val> <key>=<val> ..."
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:569
+msgid "ERROR: Unknown command"
+msgstr "ОШИБКА: неизвестная команда"
+
+#: ../../../src/MenuDevConsole.cpp:571
+msgid "HINT: Type help"
+msgstr "ПОДСКАЗКА: наберите help"
+
+#: ../../../src/MenuEnemy.cpp:138
+#, c-format
+msgid "%s level %d"
+msgstr "%s уровень %d"
+
+#: ../../../src/MenuEnemy.cpp:162
+msgid "Dead"
+msgstr "Мёртв"
+
+#: ../../../src/MenuEnemy.cpp:164
+msgid "Destroyed"
+msgstr "Уничтожен"
+
+#: ../../../src/MenuExit.cpp:85 ../../../src/MenuExit.cpp:139
+msgid "Paused"
+msgstr "Пауза"
+
+#: ../../../src/MenuExit.cpp:91
+msgid "Save & Exit"
+msgstr "Сохранить и выйти"
+
+#: ../../../src/MenuExit.cpp:92
+msgid "Exit"
+msgstr "Выйти"
+
+#: ../../../src/MenuExit.cpp:96
+msgid "Continue"
+msgstr "Продолжить"
+
+#: ../../../src/MenuInventory.cpp:73
+msgid "Automatically equip items"
+msgstr "Сразу надевать предметы"
+
+#: ../../../src/MenuInventory.cpp:188
+#, c-format
+msgid "Lost %d%% of %s."
+msgstr "Потеряно %d%% из %s."
+
+#: ../../../src/MenuInventory.cpp:195
+#, c-format
+msgid "Lost %d%% of total XP."
+msgstr "Потеряно %d%% от общего XP."
+
+#: ../../../src/MenuInventory.cpp:200
+#, c-format
+msgid "Lost %d%% of current level XP."
+msgstr "Потеряно %d%% от актуального числа ХР."
+
+#: ../../../src/MenuInventory.cpp:226
+#, c-format
+msgid "Lost %s."
+msgstr "Потеряно %s."
+
+#: ../../../src/MenuInventory.cpp:274 ../../../src/MenuStash.cpp:146
+#, c-format
+msgid "%d %s"
+msgstr "%d %s"
+
+#: ../../../src/MenuInventory.cpp:317
+msgid "Pick up item(s):"
+msgstr "Подобраны предметы:"
+
+#: ../../../src/MenuInventory.cpp:318
+msgid "Use or equip item:"
+msgstr "Использовать или надеть предмет:"
+
+#: ../../../src/MenuInventory.cpp:319
+#, c-format
+msgid "%s modifiers"
+msgstr "%s модификаторов"
+
+#: ../../../src/MenuInventory.cpp:320
+msgid "Select a quantity of item:"
+msgstr "Выберите количество предметов:"
+
+#: ../../../src/MenuInventory.cpp:323
+msgid "Stash item stack:"
+msgstr "Спрятать набор предметов в тайник:"
+
+#: ../../../src/MenuInventory.cpp:325
+msgid "Sell item stack:"
+msgstr "Продать набор предметов:"
+
+#: ../../../src/MenuInventory.cpp:592
+msgid "You don't have enough of the required item."
+msgstr "Недостаточно требуемых предметов."
+
+#: ../../../src/MenuInventory.cpp:599
+msgid "You can't use this item right now."
+msgstr "Вы не можете использовать этот предмет сейчас."
+
+#: ../../../src/MenuInventory.cpp:611
+msgid "This item can only be used from the action bar."
+msgstr "Этот предмет можно использовать только с панели действия."
+
+#: ../../../src/MenuInventory.cpp:729
+msgid "Inventory is full."
+msgstr "Инвентарь полон."
+
+#: ../../../src/MenuInventory.cpp:849
+#, c-format
+msgid "Not enough %s."
+msgstr "Недостаточно %s."
+
+#: ../../../src/MenuInventory.cpp:869 ../../../src/MenuInventory.cpp:876
+msgid "This item can not be sold."
+msgstr "Этот предмет нельзя продать."
+
+#: ../../../src/MenuLog.cpp:91
+msgid "Notes"
+msgstr "Заметки"
+
+#: ../../../src/MenuLog.cpp:92
+msgid "Quests"
+msgstr "Задания"
+
+#: ../../../src/MenuManager.cpp:286
+#, c-format
+msgid "XP: %d/%d"
+msgstr "Опыт: %d/%d"
+
+#: ../../../src/MenuManager.cpp:827
+msgid "This item can not be dropped."
+msgstr "Этот предмет нельзя выбросить."
+
+#: ../../../src/MenuNumPicker.cpp:59
+msgid "Enter amount:"
+msgstr "Введите количество:"
+
+#: ../../../src/MenuPowers.cpp:787
+msgid "Passive"
+msgstr "Пасивные"
+
+#: ../../../src/MenuPowers.cpp:792
+#, c-format
+msgid "Costs %d MP"
+msgstr "Стоит %d Маны"
+
+#: ../../../src/MenuPowers.cpp:796
+#, c-format
+msgid "Costs %d HP"
+msgstr "Стоит %d Жизни"
+
+#: ../../../src/MenuPowers.cpp:801
+msgid "Cooldown:"
+msgstr "Восстановление:"
+
+#: ../../../src/MenuPowers.cpp:866 ../../../src/MenuPowers.cpp:869
+msgid "Damage per second"
+msgstr "Урона в секунду"
+
+#: ../../../src/MenuPowers.cpp:872 ../../../src/MenuPowers.cpp:875
+msgid "HP per second"
+msgstr "Жизни в секунду"
+
+#: ../../../src/MenuPowers.cpp:878 ../../../src/MenuPowers.cpp:881
+msgid "MP per second"
+msgstr "Маны в секунду"
+
+#: ../../../src/MenuPowers.cpp:885
+msgid "Immobilize"
+msgstr "Зафиксировать"
+
+#: ../../../src/MenuPowers.cpp:893
+msgid "Immunity"
+msgstr "Устойчивость"
+
+#: ../../../src/MenuPowers.cpp:896
+msgid "Immunity to damage over time"
+msgstr "Устойчивость к урону в течение долгого времени"
+
+#: ../../../src/MenuPowers.cpp:899
+msgid "Immunity to slow"
+msgstr "Устойчивость к снегу"
+
+#: ../../../src/MenuPowers.cpp:902
+msgid "Immunity to stun"
+msgstr "Устойчивость к оглушению"
+
+#: ../../../src/MenuPowers.cpp:905
+msgid "Immunity to HP steal"
+msgstr "Устойчивость к краже жизни"
+
+#: ../../../src/MenuPowers.cpp:908
+msgid "Immunity to MP steal"
+msgstr "Устойчивость к краже маны"
+
+#: ../../../src/MenuPowers.cpp:911
+msgid "Immunity to knockback"
+msgstr "Устойчивость к сбиванию с ног"
+
+#: ../../../src/MenuPowers.cpp:914
+msgid "Immunity to damage reflection"
+msgstr "Устойчивость к отражению урона"
+
+#: ../../../src/MenuPowers.cpp:917
+msgid "Stun"
+msgstr "Оглушение"
+
+#: ../../../src/MenuPowers.cpp:920
+msgid "Automatic revive on death"
+msgstr "Автоматически возрождаться после смерти"
+
+#: ../../../src/MenuPowers.cpp:923
+msgid "Convert"
+msgstr "Преобразовать"
+
+#: ../../../src/MenuPowers.cpp:926
+msgid "Fear"
+msgstr "Страх"
+
+#: ../../../src/MenuPowers.cpp:929
+msgid "Lifespan"
+msgstr "Продолжительность жизни"
+
+#: ../../../src/MenuPowers.cpp:953
+msgid "Magical Shield"
+msgstr "Магический Щит"
+
+#: ../../../src/MenuPowers.cpp:982
+msgid "Healing"
+msgstr "Лечение"
+
+#: ../../../src/MenuPowers.cpp:985
+msgid "Knockback"
+msgstr "Сбивание с ног"
+
+#: ../../../src/MenuPowers.cpp:1010
+#, c-format
+msgid "%d%% chance"
+msgstr "%d%% шанс"
+
+#: ../../../src/MenuPowers.cpp:1062
+msgid "Base Accuracy"
+msgstr "Базовая Меткость"
+
+#: ../../../src/MenuPowers.cpp:1082
+msgid "Base Critical Chance"
+msgstr "Базовый шанс критического урона"
+
+#: ../../../src/MenuPowers.cpp:1090
+msgid "Ignores Absorbtion"
+msgstr "Игнорирует Поглощение"
+
+#: ../../../src/MenuPowers.cpp:1095
+msgid "Ignores Avoidance"
+msgstr "Игнорирует Уклонение"
+
+#: ../../../src/MenuPowers.cpp:1100
+#, c-format
+msgid "%d%% Chance to crit slowed targets"
+msgstr "%d%% Шанс критического урона по замедленным целям"
+
+#: ../../../src/MenuPowers.cpp:1105
+#, c-format
+msgid "Elemental Damage (%s)"
+msgstr "Элементальный урон (%s)"
+
+#: ../../../src/MenuPowers.cpp:1114
+#, c-format
+msgid "Requires a %s"
+msgstr "Требуется %s"
+
+#: ../../../src/MenuPowers.cpp:1151 ../../../src/MenuPowers.cpp:1154
+#, c-format
+msgid "Requires Power: %s"
+msgstr "Требуется Сила: %s"
+
+#: ../../../src/MenuPowers.cpp:1163
+msgid "Click to Unlock (uses 1 Skill Point)"
+msgstr "Щёлкните, чтобы разблокировать (за 1 очко навыка)"
+
+#: ../../../src/MenuPowers.cpp:1167 ../../../src/MenuPowers.cpp:1169
+msgid "Requires 1 Skill Point"
+msgstr "Требуется 1 Очко Навыка"
+
+#: ../../../src/MenuPowers.cpp:1355
+#, c-format
+msgid "%d unspent skill point"
+msgstr "%d не потраченное очко опыта"
+
+#: ../../../src/MenuPowers.cpp:1358
+#, c-format
+msgid "%d unspent skill points"
+msgstr "%d не потраченные очки опыта"
+
+#: ../../../src/MenuPowers.cpp:1388
+msgid "Next Level:"
+msgstr "Следующий уровень:"
+
+#: ../../../src/MenuStash.cpp:96
+msgid "Shared Stash"
+msgstr "Общие Запасы"
+
+#: ../../../src/MenuStash.cpp:209
+msgid "Can not store quest items in the stash."
+msgstr "Предметы заданий нельзя хранить в тайнике."
+
+#: ../../../src/MenuStash.cpp:219
+msgid "Stash is full."
+msgstr "Тайник заполнен."
+
+#: ../../../src/MenuTalker.cpp:454
+msgid "Trade"
+msgstr "Торговать"
+
+#: ../../../src/MenuVendor.cpp:58
+msgid "Buyback"
+msgstr "Выкуп"
+
+#: ../../../src/MenuVendor.cpp:279
+msgid "Vendor"
+msgstr "Торговец"
+
+#: ../../../src/PowerManager.cpp:1136
+#, c-format
+msgid "+%d Shield"
+msgstr "+%d Щит"
+
+#: ../../../src/PowerManager.cpp:1392
+msgid "You are already transformed, untransform first."
+msgstr "Вы уже трансформированы, сперва растрансформируйтесь."
+
+#: ../../../src/PowerManager.cpp:1404
+msgid "Could not untransform at this position."
+msgstr "Здесь нельзя растрансформироваться."
+
+#: ../../../src/QuestLog.cpp:234
+msgid "Completed Quests"
+msgstr "Выполненные Квесты"
+
+#: ../../../src/SaveLoad.cpp:243 ../../../src/SaveLoad.cpp:244
+msgid "Game saved."
+msgstr "Игра сохранена."
+
+#: ../../../src/SDLInputState.cpp:582
+msgid "Backspace"
+msgstr "Backspace"
+
+#: ../../../src/SDLInputState.cpp:583
+msgid "CapsLock"
+msgstr "CapsLock"
+
+#: ../../../src/SDLInputState.cpp:586
+msgid "End"
+msgstr "End"
+
+#: ../../../src/SDLInputState.cpp:587
+msgid "Escape"
+msgstr "Escape"
+
+#: ../../../src/SDLInputState.cpp:588
+msgid "Home"
+msgstr "Home"
+
+#: ../../../src/SDLInputState.cpp:589
+msgid "Insert"
+msgstr "Insert"
+
+#: ../../../src/SDLInputState.cpp:590
+msgid "Left Alt"
+msgstr "Left Alt"
+
+#: ../../../src/SDLInputState.cpp:591
+msgid "Left Ctrl"
+msgstr "Left Ctrl"
+
+#: ../../../src/SDLInputState.cpp:593
+msgid "Left Shift"
+msgstr "Left Shift"
+
+#: ../../../src/SDLInputState.cpp:594
+msgid "NumLock"
+msgstr "NumLock"
+
+#: ../../../src/SDLInputState.cpp:595
+msgid "PageDown"
+msgstr "PageDown"
+
+#: ../../../src/SDLInputState.cpp:596
+msgid "PageUp"
+msgstr "PageUp"
+
+#: ../../../src/SDLInputState.cpp:597
+msgid "Pause"
+msgstr "Pause"
+
+#: ../../../src/SDLInputState.cpp:598
+msgid "PrintScreen"
+msgstr "PrintScreen"
+
+#: ../../../src/SDLInputState.cpp:599
+msgid "Right Alt"
+msgstr "Right Alt"
+
+#: ../../../src/SDLInputState.cpp:600
+msgid "Right Ctrl"
+msgstr "Right Ctrl"
+
+#: ../../../src/SDLInputState.cpp:601
+msgid "Return"
+msgstr "Return"
+
+#: ../../../src/SDLInputState.cpp:603
+msgid "Right Shift"
+msgstr "Right Shift"
+
+#: ../../../src/SDLInputState.cpp:604
+msgid "ScrollLock"
+msgstr "ScrollLock"
+
+#: ../../../src/SDLInputState.cpp:605
+msgid "Space"
+msgstr "Пробел"
+
+#: ../../../src/SDLInputState.cpp:606
+msgid "Tab"
+msgstr "Tab"
+
+#: ../../../src/SDLInputState.cpp:620
+#, c-format
+msgid "Mouse %d"
+msgstr "Мышь %d"
+
+#: ../../../src/SDLInputState.cpp:628
+#, c-format
+msgid "Axis %d -"
+msgstr "Ось %d -"
+
+#: ../../../src/SDLInputState.cpp:630
+#, c-format
+msgid "Axis %d +"
+msgstr "Ось %d +"
+
+#: ../../../src/SDLInputState.cpp:633
+#, c-format
+msgid "Button %d"
+msgstr "Кнопка %d"
+
+#: ../../../src/SDLInputState.cpp:637
+msgid "(none)"
+msgstr "(нет)"
+
+#: ../../../src/SDLInputState.cpp:677
+msgid "Touch control D-Pad"
+msgstr "Сенсорное управление D-Pad"
+
+#: ../../../src/SDLInputState.cpp:701
+msgid "Touch control buttons"
+msgstr "Сенсорные клавиши"
+
+#: ../../../src/SDLInputState.cpp:716
+msgid "Tap"
+msgstr "Коснитесь"
+
+#: ../../../src/SDLInputState.cpp:760 ../../../src/SDLInputState.cpp:764
+#: ../../../src/SDLInputState.cpp:768
+#, c-format
+msgid "'%s' is no longer bound to:"
+msgstr "'%s' больше не привязана/о к:"
+
+#: ../../../src/Stats.cpp:38
+msgid "Max HP"
+msgstr "Макс. Здоровье"
+
+#: ../../../src/Stats.cpp:39
+msgid "Total amount of HP."
+msgstr "Общее количество НР."
+
+#: ../../../src/Stats.cpp:43
+msgid "HP Regen"
+msgstr "Восстановление Здоровья"
+
+#: ../../../src/Stats.cpp:44
+msgid "Ticks of HP regen per minute."
+msgstr "Восстановление единиц здоровья в минуту."
+
+#: ../../../src/Stats.cpp:48
+msgid "Max MP"
+msgstr "Макс. Мана"
+
+#: ../../../src/Stats.cpp:49
+msgid "Total amount of MP."
+msgstr "Общее количество МР."
+
+#: ../../../src/Stats.cpp:53
+msgid "MP Regen"
+msgstr "Восстановление Маны"
+
+#: ../../../src/Stats.cpp:54
+msgid "Ticks of MP regen per minute."
+msgstr "Восстановление единиц маны в минуту."
+
+#: ../../../src/Stats.cpp:58
+msgid "Accuracy"
+msgstr "Меткость"
+
+#: ../../../src/Stats.cpp:59
+msgid ""
+"Accuracy rating. The enemy's Avoidance rating is subtracted from this value "
+"to calculate your likeliness to land a direct hit."
+msgstr ""
+"Шанс попадания. Шанс врага увернуться вычитается из этого значения, чтобы "
+"определить вероятность попадания."
+
+#: ../../../src/Stats.cpp:63
+msgid "Avoidance"
+msgstr "Уклонение"
+
+#: ../../../src/Stats.cpp:64
+msgid ""
+"Avoidance rating. This value is subtracted from the enemy's Accuracy rating "
+"to calculate their likeliness to land a direct hit."
+msgstr ""
+"Шанс увернуться. Это значение вычитается из шанса попадания врага, чтобы "
+"определить вероятность попадания врага."
+
+#: ../../../src/Stats.cpp:68
+msgid "Absorb Min"
+msgstr "Мин. Поглощение"
+
+#: ../../../src/Stats.cpp:69 ../../../src/Stats.cpp:74
+msgid "Reduces the amount of damage taken."
+msgstr "Уменьшает получаемый урон."
+
+#: ../../../src/Stats.cpp:73
+msgid "Absorb Max"
+msgstr "Макс. Поглощение"
+
+#: ../../../src/Stats.cpp:78
+msgid "Critical Hit Chance"
+msgstr "Шанс Критического Урона"
+
+#: ../../../src/Stats.cpp:79
+msgid "Chance for an attack to do extra damage."
+msgstr "Шанс дополнительного урона при атаке."
+
+#: ../../../src/Stats.cpp:83
+msgid "Bonus XP"
+msgstr "Бонус Опыта"
+
+#: ../../../src/Stats.cpp:84
+msgid "Increases the XP gained per kill."
+msgstr "Увеличивает количество опыта, получаемого за убийство."
+
+#: ../../../src/Stats.cpp:88
+#, c-format
+msgid "Bonus %s"
+msgstr "Бонус %s"
+
+#: ../../../src/Stats.cpp:89
+#, c-format
+msgid "Increases the %s found per drop."
+msgstr "Увеличивает количество выпадающего %s."
+
+#: ../../../src/Stats.cpp:93
+msgid "Item Find Chance"
+msgstr "Бонус Нахождения Предметов"
+
+#: ../../../src/Stats.cpp:94
+msgid "Increases the chance that an enemy will drop an item."
+msgstr "Повышает вероятность выпадения предмета при смерти противника."
+
+#: ../../../src/Stats.cpp:98
+msgid "Stealth"
+msgstr "Скрытность"
+
+#: ../../../src/Stats.cpp:99
+msgid "Increases your ability to move undetected."
+msgstr "Улучшение способности двигаться незамеченным."
+
+#: ../../../src/Stats.cpp:103
+msgid "Poise"
+msgstr "Самообладание"
+
+#: ../../../src/Stats.cpp:104
+msgid "Reduces your chance of stumbling when hit."
+msgstr "Уменьшение вероятности оглушения при получении урона."
+
+#: ../../../src/Stats.cpp:108
+msgid "Missile Reflect Chance"
+msgstr "Шанс Отражения"
+
+#: ../../../src/Stats.cpp:109
+msgid "Increases your chance of reflecting missiles back at enemies."
+msgstr "Увеличение шанса отражения выстрелов обратно во врагов."
+
+#: ../../../src/Stats.cpp:113
+msgid "Damage Reflection"
+msgstr "Отражение Урона"
+
+#: ../../../src/Stats.cpp:114
+msgid "Deals a percentage of damage taken back to the attacker."
+msgstr "Часть полученного урона наносится обратно атакующему."
+
+#: ../../../src/Stats.cpp:118
+msgid "HP Steal"
+msgstr "Кража ХР"
+
+#: ../../../src/Stats.cpp:119
+msgid "Percentage of HP stolen per hit."
+msgstr "Процент Жизни украденной за каждый удар."
+
+#: ../../../src/Stats.cpp:123
+msgid "MP Steal"
+msgstr "Кража МР"
+
+#: ../../../src/Stats.cpp:124
+msgid "Percentage of MP stolen per hit."
+msgstr "Процент Маны украденной за каждый удар."
+
+#: ../../../src/Stats.cpp:128
+msgid "Base HP"
+msgstr "Базовая Жизнь"
+
+#: ../../../src/Stats.cpp:133
+msgid "Base MP"
+msgstr "Базовая Мана"
+
+#: ../../../src/Utils.cpp:346
+msgid "k"
+msgstr "к"
+
+#: ../../../src/Utils.cpp:580
+#, c-format
+msgid "%s second"
+msgstr "%s секунда"
+
+#: ../../../src/Utils.cpp:583
+#, c-format
+msgid "%s seconds"
+msgstr "%s секунды"
+
+#: ../../../src/Version.cpp:139
+msgid "or newer"
+msgstr "или выше"
+
+#: ../../../src/Version.cpp:142
+msgid "or older"
+msgstr "или ниже"
