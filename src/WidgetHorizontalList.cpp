@@ -123,18 +123,20 @@ void WidgetHorizontalList::render() {
 
 void WidgetHorizontalList::refresh() {
 	int text_width = 150;
+	bool is_enabled = !isEmpty() && enabled;
 
 	label.setText(getValue());
 	label.setPos(pos.x + button_left->pos.w + text_width/2, pos.y + button_left->pos.h / 2);
 	label.setMaxWidth(text_width);
 	label.setJustify(FontEngine::JUSTIFY_CENTER);
 	label.setVAlign(LabelInfo::VALIGN_CENTER);
+	label.setColor(is_enabled ? font->getColor(FontEngine::COLOR_WIDGET_NORMAL) : font->getColor(FontEngine::COLOR_WIDGET_DISABLED));
 
 	button_left->setPos(pos.x, pos.y);
 	button_right->setPos(pos.x + button_left->pos.w + text_width, pos.y);
 
-	button_left->enabled = !isEmpty() && enabled;
-	button_right->enabled = !isEmpty() && enabled;
+	button_left->enabled = is_enabled;
+	button_right->enabled = is_enabled;
 
 	pos.w = button_left->pos.w + button_right->pos.w + text_width;
 	pos.h = std::max(button_left->pos.h, label.getBounds()->h);
