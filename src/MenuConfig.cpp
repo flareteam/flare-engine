@@ -457,11 +457,14 @@ void MenuConfig::readConfig() {
 	vsync_cb->tooltip = msg->get("Prevents screen tearing. Disable if you experience \"stuttering\" in windowed mode or input lag.");
 	dpi_scaling_cb->tooltip = msg->get("When enabled, this uses the screen DPI in addition to the window dimensions to scale the rendering resolution. Otherwise, only the window dimensions are used.");
 	parallax_layers_cb->tooltip = msg->get("This enables parallax (non-tile) layers. Disabling this setting can improve performance in some cases.");
-	change_gamma_cb->tooltip = msg->get("Experimental");
+	change_gamma_cb->tooltip = msg->get("Enables the below setting that controls the screen gamma level. The behavior of the gamma setting can vary between platforms.");
+	colorblind_cb->tooltip = msg->get("Provides additional text for information that is primarily conveyed through color.");
+	auto_equip_cb->tooltip = msg->get("When enabled, empty equipment slots will be filled with applicable items when they are obtained.");
 	entity_markers_cb->tooltip = msg->get("Shows a marker above enemies, allies, and the player when they are obscured by tall objects.");
-	no_mouse_cb->tooltip = msg->get("For handheld devices");
+	no_mouse_cb->tooltip = msg->get("This allows the game to be controlled entirely with the keyboard (or joystick).");
 	mouse_move_swap_cb->tooltip = msg->get("When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero instead of 'Main1'.");
 	mouse_move_attack_cb->tooltip = msg->get("When 'Move hero using mouse' is enabled, this setting controls if the Power assigned to the movement button can be used by targeting an enemy. If this setting is disabled, it is required to use 'Shift' to access the Power assigned to the movement button.");
+	mouse_aim_cb->tooltip = msg->get("The player's attacks will be aimed in the direction of the mouse cursor when this is enabled.");
 }
 
 bool MenuConfig::parseKeyButtons(FileParser &infile) {
