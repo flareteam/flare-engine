@@ -595,174 +595,6 @@ body {
 
 <hr />
 
-<h4>GameStateConfigBase</h4>
-
-<p>Description of menus/config.txt</p>
-
-<p><strong>button_ok</strong> | <code>int, int, alignment : X, Y, Alignment</code> | Position of the &ldquo;OK&rdquo; button.</p>
-
-<p><strong>button_defaults</strong> | <code>int, int, alignment : X, Y, Alignment</code> | Position of the &ldquo;Defaults&rdquo; button.</p>
-
-<p><strong>button_cancel</strong> | <code>int, int, alignment : X, Y, Alignment</code> | Position of the &ldquo;Cancel&rdquo; button.</p>
-
-<p><strong>listbox_scrollbar_offset</strong> | <code>int</code> | Horizontal offset from the right of listboxes (mods, languages, etc) to place the scrollbar.</p>
-
-<p><strong>frame_offset</strong> | <code>point</code> | Offset for all the widgets contained under each tab.</p>
-
-<p><strong>tab_offset</strong> | <code>point</code> | Offset for the row of tabs.</p>
-
-<p><strong>music_volume</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Music Volume&rdquo; slider relative to the frame.</p>
-
-<p><strong>sound_volume</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Sound Volume&rdquo; slider relative to the frame.</p>
-
-<p><strong>language</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Language&rdquo; list box relative to the frame.</p>
-
-<p><strong>language_height</strong> | <code>int</code> | Number of visible rows for the &ldquo;Language&rdquo; list box.</p>
-
-<p><strong>show_fps</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Show FPS&rdquo; checkbox relative to the frame.</p>
-
-<p><strong>colorblind</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Colorblind Mode&rdquo; checkbox relative to the frame.</p>
-
-<p><strong>hardware_cursor</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Hardware mouse cursor&rdquo; checkbox relative to the frame.</p>
-
-<p><strong>dev_mode</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Developer Mode&rdquo; checkbox relative to the frame.</p>
-
-<p><strong>subtitles</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Subtitles&rdquo; checkbox relative to the frame.</p>
-
-<p><strong>activemods</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Active Mods&rdquo; list box relative to the frame.</p>
-
-<p><strong>activemods_height</strong> | <code>int</code> | Number of visible rows for the &ldquo;Active Mods&rdquo; list box.</p>
-
-<p><strong>inactivemods</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Available Mods&rdquo; list box relative to the frame.</p>
-
-<p><strong>inactivemods_height</strong> | <code>int</code> | Number of visible rows for the &ldquo;Available Mods&rdquo; list box.</p>
-
-<p><strong>activemods_shiftup</strong> | <code>point</code> | Position of the button to shift mods up in &ldquo;Active Mods&rdquo; relative to the frame.</p>
-
-<p><strong>activemods_shiftdown</strong> | <code>point</code> | Position of the button to shift mods down in &ldquo;Active Mods&rdquo; relative to the frame.</p>
-
-<p><strong>activemods_deactivate</strong> | <code>point</code> | Position of the &ldquo;Disable&rdquo; button relative to the frame.</p>
-
-<p><strong>inactivemods_activate</strong> | <code>point</code> | Position of the &ldquo;Enable&rdquo; button relative to the frame.</p>
-
-<hr />
-
-<h4>GameStateConfigDesktop</h4>
-
-<p>Description of menus/config.txt</p>
-
-<p><strong>renderer</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Renderer&rdquo; list box relative to the frame.</p>
-
-<p><strong>renderer_height</strong> | <code>int</code> | Number of visible rows for the &ldquo;Renderer&rdquo; list box.</p>
-
-<p><strong>fullscreen</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Full Screen Mode&rdquo; checkbox relative to the frame.</p>
-
-<p><strong>mouse_move</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Move hero using mouse&rdquo; checkbox relative to the frame.</p>
-
-<p><strong>hwsurface</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Hardware surfaces&rdquo; checkbox relative to the frame.</p>
-
-<p><strong>vsync</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;V-Sync&rdquo; checkbox relative to the frame.</p>
-
-<p><strong>texture_filter</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Texture Filtering&rdquo; checkbox relative to the frame.</p>
-
-<p><strong>dpi_scaling</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;DPI scaling&rdquo; checkbox relative to the frame.</p>
-
-<p><strong>parallax_layers</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Parallax Layers&rdquo; checkbox relative to the frame.</p>
-
-<p><strong>change_gamma</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Allow changing gamma&rdquo; checkbox relative to the frame.</p>
-
-<p><strong>gamma</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Gamma&rdquo; slider relative to the frame.</p>
-
-<p><strong>enable_joystick</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Use joystick&rdquo; checkbox relative to the frame.</p>
-
-<p><strong>joystick_device</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Joystick&rdquo; list box relative to the frame.</p>
-
-<p><strong>joystick_device_height</strong> | <code>int</code> | Number of visible rows for the &ldquo;Joystick&rdquo; list box.</p>
-
-<p><strong>mouse_aim</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Mouse aim&rdquo; checkbox relative to the frame.</p>
-
-<p><strong>no_mouse</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Do not use mouse&rdquo; checkbox relative to the frame.</p>
-
-<p><strong>mouse_move_swap</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Swap mouse movement button&rdquo; checkbox relative to the frame.</p>
-
-<p><strong>mouse_move_attack</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Attack with mouse movement&rdquo; checkbox relative to the frame.</p>
-
-<p><strong>joystick_deadzone</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Joystick Deadzone&rdquo; slider relative to the frame.</p>
-
-<p><strong>secondary_offset</strong> | <code>point</code> | Offset of the second (and third) columns of keybinds.</p>
-
-<p><strong>keybinds_bg_color</strong> | <code>color</code> | Background color for the keybindings scrollbox.</p>
-
-<p><strong>keybinds_bg_alpha</strong> | <code>int</code> | Alpha value for the keybindings scrollbox background color.</p>
-
-<p><strong>scrollpane</strong> | <code>rectangle</code> | Position of the keybinding scrollbox relative to the frame.</p>
-
-<p><strong>scrollpane_contents</strong> | <code>int</code> | The vertical size of the keybinding scrollbox&rsquo;s contents.</p>
-
-<p><strong>cancel</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Cancel&rdquo; keybind relative to the keybinding scrollbox.</p>
-
-<p><strong>accept</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Accept&rdquo; keybind relative to the keybinding scrollbox.</p>
-
-<p><strong>up</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Up&rdquo; keybind relative to the keybinding scrollbox.</p>
-
-<p><strong>down</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Down&rdquo; keybind relative to the keybinding scrollbox.</p>
-
-<p><strong>left</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Left&rdquo; keybind relative to the keybinding scrollbox.</p>
-
-<p><strong>right</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Right&rdquo; keybind relative to the keybinding scrollbox.</p>
-
-<p><strong>bar1</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Bar1&rdquo; keybind relative to the keybinding scrollbox.</p>
-
-<p><strong>bar2</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Bar2&rdquo; keybind relative to the keybinding scrollbox.</p>
-
-<p><strong>bar3</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Bar3&rdquo; keybind relative to the keybinding scrollbox.</p>
-
-<p><strong>bar4</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Bar4&rdquo; keybind relative to the keybinding scrollbox.</p>
-
-<p><strong>bar5</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Bar5&rdquo; keybind relative to the keybinding scrollbox.</p>
-
-<p><strong>bar6</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Bar6&rdquo; keybind relative to the keybinding scrollbox.</p>
-
-<p><strong>bar7</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Bar7&rdquo; keybind relative to the keybinding scrollbox.</p>
-
-<p><strong>Bar8</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Bar8&rdquo; keybind relative to the keybinding scrollbox.</p>
-
-<p><strong>bar9</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Bar9&rdquo; keybind relative to the keybinding scrollbox.</p>
-
-<p><strong>bar0</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Bar0&rdquo; keybind relative to the keybinding scrollbox.</p>
-
-<p><strong>main1</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Main1&rdquo; keybind relative to the keybinding scrollbox.</p>
-
-<p><strong>main2</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Main2&rdquo; keybind relative to the keybinding scrollbox.</p>
-
-<p><strong>character</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Character&rdquo; keybind relative to the keybinding scrollbox.</p>
-
-<p><strong>inventory</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Inventory&rdquo; keybind relative to the keybinding scrollbox.</p>
-
-<p><strong>powers</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Powers&rdquo; keybind relative to the keybinding scrollbox.</p>
-
-<p><strong>log</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Log&rdquo; keybind relative to the keybinding scrollbox.</p>
-
-<p><strong>ctrl</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Ctrl&rdquo; keybind relative to the keybinding scrollbox.</p>
-
-<p><strong>shift</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Shift&rdquo; keybind relative to the keybinding scrollbox.</p>
-
-<p><strong>alt</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Alt&rdquo; keybind relative to the keybinding scrollbox.</p>
-
-<p><strong>delete</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Delete&rdquo; keybind relative to the keybinding scrollbox.</p>
-
-<p><strong>actionbar</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;ActionBar Accept&rdquo; keybind relative to the keybinding scrollbox.</p>
-
-<p><strong>actionbar_back</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;ActionBar Left&rdquo; keybind relative to the keybinding scrollbox.</p>
-
-<p><strong>actionbar_forward</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;ActionBar Right&rdquo; keybind relative to the keybinding scrollbox.</p>
-
-<p><strong>actionbar_use</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;ActionBar Use&rdquo; keybind relative to the keybinding scrollbox.</p>
-
-<p><strong>developer_menu</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Developer Menu&rdquo; keybind relative to the keybinding scrollbox.</p>
-
-<hr />
-
 <h4>Cutscene</h4>
 
 <p>Description of cutscenes in cutscenes/</p>
@@ -1207,6 +1039,20 @@ body {
 
 <hr />
 
+<h4>Menu</h4>
+
+<p>Description of menus in menus/</p>
+
+<p><strong>pos</strong> | <code>rectangle</code> | Menu position and dimensions</p>
+
+<p><strong>align</strong> | <code>alignment</code> | Position relative to screen edges</p>
+
+<p><strong>soundfx_open</strong> | <code>filename</code> | Filename of a sound to play when opening this menu.</p>
+
+<p><strong>soundfx_close</strong> | <code>filename</code> | Filename of a sound to play when closing this menu.</p>
+
+<hr />
+
 <h4>MenuActionBar</h4>
 
 <p>Description of menus/actionbar.txt</p>
@@ -1224,14 +1070,6 @@ body {
 <p><strong>powers_menu</strong> | <code>point</code> | Position for the Powers menu button.</p>
 
 <p><strong>log_menu</strong> | <code>point</code> | Position for the Log menu button.</p>
-
-<p><strong>loot_tip_toggle</strong> | <code>point</code> | Position for the button used to toggle loot tooltip visibility.</p>
-
-<p><strong>minimap_mode_toggle</strong> | <code>point</code> | Position for the button used to toggle the mini-map mode.</p>
-
-<p><strong>statbar_label_toggle</strong> | <code>point</code> | Position for the button used to toggle always showing the statbar labels.</p>
-
-<p><strong>combat_text_toggle</strong> | <code>point</code> | Position for the button used to toggle the display of combat text.</p>
 
 <hr />
 
@@ -1325,17 +1163,45 @@ body {
 
 <hr />
 
-<h4>Menu</h4>
+<h4>MenuConfig</h4>
 
-<p>Description of menus in menus/</p>
+<p>Description of menus/config.txt</p>
 
-<p><strong>pos</strong> | <code>rectangle</code> | Menu position and dimensions</p>
+<p><strong>button_ok</strong> | <code>int, int, alignment : X, Y, Alignment</code> | Position of the &ldquo;OK&rdquo; button. Not used in the pause menu.</p>
 
-<p><strong>align</strong> | <code>alignment</code> | Position relative to screen edges</p>
+<p><strong>button_defaults</strong> | <code>int, int, alignment : X, Y, Alignment</code> | Position of the &ldquo;Defaults&rdquo; button. Not used in the pause menu.</p>
 
-<p><strong>soundfx_open</strong> | <code>filename</code> | Filename of a sound to play when opening this menu.</p>
+<p><strong>button_cancel</strong> | <code>int, int, alignment : X, Y, Alignment</code> | Position of the &ldquo;Cancel&rdquo; button. Not used in the pause menu.</p>
 
-<p><strong>soundfx_close</strong> | <code>filename</code> | Filename of a sound to play when closing this menu.</p>
+<p><strong>listbox_scrollbar_offset</strong> | <code>int</code> | Horizontal offset from the right of listboxes (mods, languages, etc) to place the scrollbar.</p>
+
+<p><strong>frame_offset</strong> | <code>point</code> | Offset for all the widgets contained under each tab.</p>
+
+<p><strong>tab_offset</strong> | <code>point</code> | Offset for the row of tabs.</p>
+
+<p><strong>activemods</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Active Mods&rdquo; list box relative to the frame.</p>
+
+<p><strong>activemods_height</strong> | <code>int</code> | Number of visible rows for the &ldquo;Active Mods&rdquo; list box.</p>
+
+<p><strong>inactivemods</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Available Mods&rdquo; list box relative to the frame.</p>
+
+<p><strong>inactivemods_height</strong> | <code>int</code> | Number of visible rows for the &ldquo;Available Mods&rdquo; list box.</p>
+
+<p><strong>activemods_shiftup</strong> | <code>point</code> | Position of the button to shift mods up in &ldquo;Active Mods&rdquo; relative to the frame.</p>
+
+<p><strong>activemods_shiftdown</strong> | <code>point</code> | Position of the button to shift mods down in &ldquo;Active Mods&rdquo; relative to the frame.</p>
+
+<p><strong>activemods_deactivate</strong> | <code>point</code> | Position of the &ldquo;Disable&rdquo; button relative to the frame.</p>
+
+<p><strong>inactivemods_activate</strong> | <code>point</code> | Position of the &ldquo;Enable&rdquo; button relative to the frame.</p>
+
+<p><strong>scrollpane</strong> | <code>rectangle</code> | Position of the keybinding scrollbox relative to the frame.</p>
+
+<p><strong>scrollpane_padding</strong> | <code>int, int : Horizontal padding, Vertical padding</code> | Pixel padding for each item listed in a tab&rsquo;s scroll box.</p>
+
+<p><strong>scrollpane_separator_color</strong> | <code>color</code> | Color of the separator line in between scroll box items.</p>
+
+<p><strong>keybinds_bg_color</strong> | <code>color, int : Color, Alpha</code> | Background color and alpha for the keybindings scrollbox.</p>
 
 <hr />
 
@@ -1363,22 +1229,6 @@ body {
 
 <p><strong>text_pos</strong> | <code>label</code> | Position of the text displaying the enemy&rsquo;s name and level.</p>
 
-<hr />
-
-<h4>MenuExit</h4>
-
-<p>Description of menus/exit.txt</p>
-
-<p><strong>title</strong> | <code>label</code> | Position of the &ldquo;Paused&rdquo; text.</p>
-
-<p><strong>exit</strong> | <code>point</code> | Position of the &ldquo;Save and Exit&rdquo; button.</p>
-
-<p><strong>continue</strong> | <code>point</code> | Position of the &ldquo;Continue&rdquo; button.</p>
-
-<p><strong>music_volume</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Music Volume&rdquo; slider relative to the frame.</p>
-
-<p><strong>sound_volume</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the &ldquo;Sound Volume&rdquo; slider relative to the frame.</p>
-
 <p><strong>enable_overlay</strong> | <code>bool</code> | If true, shows an overlay of the last message on top of other menus.</p>
 
 <p><strong>start_at_bottom</strong> | <code>bool</code> | If true, messages start at the bottom and get pushed up. If false, messages start at the top and get pushed down.</p>
@@ -1392,8 +1242,6 @@ body {
 <p>Description of menus/inventory.txt</p>
 
 <p><strong>close</strong> | <code>point</code> | Position of the close button.</p>
-
-<p><strong>auto_equip</strong> | <code>point</code> | Position of the auto-equip toggle switch.</p>
 
 <p><strong>equipment_slot</strong> | <code>repeatable(int, int, string) : X, Y, Slot Type</code> | Position and item type of an equipment slot.</p>
 

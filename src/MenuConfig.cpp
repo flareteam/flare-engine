@@ -468,21 +468,21 @@ bool MenuConfig::parseKeyButtons(FileParser &infile) {
 	// @CLASS MenuConfig|Description of menus/config.txt
 
 	if (infile.key == "button_ok") {
-		// @ATTR button_ok|int, int, alignment : X, Y, Alignment|Position of the "OK" button.
+		// @ATTR button_ok|int, int, alignment : X, Y, Alignment|Position of the "OK" button. Not used in the pause menu.
 		int x = Parse::popFirstInt(infile.val);
 		int y = Parse::popFirstInt(infile.val);
 		int a = Parse::toAlignment(Parse::popFirstString(infile.val));
 		ok_button->setBasePos(x, y, a);
 	}
 	else if (infile.key == "button_defaults") {
-		// @ATTR button_defaults|int, int, alignment : X, Y, Alignment|Position of the "Defaults" button.
+		// @ATTR button_defaults|int, int, alignment : X, Y, Alignment|Position of the "Defaults" button. Not used in the pause menu.
 		int x = Parse::popFirstInt(infile.val);
 		int y = Parse::popFirstInt(infile.val);
 		int a = Parse::toAlignment(Parse::popFirstString(infile.val));
 		defaults_button->setBasePos(x, y, a);
 	}
 	else if (infile.key == "button_cancel") {
-		// @ATTR button_cancel|int, int, alignment : X, Y, Alignment|Position of the "Cancel" button.
+		// @ATTR button_cancel|int, int, alignment : X, Y, Alignment|Position of the "Cancel" button. Not used in the pause menu.
 		int x = Parse::popFirstInt(infile.val);
 		int y = Parse::popFirstInt(infile.val);
 		int a = Parse::toAlignment(Parse::popFirstString(infile.val));
