@@ -5,7 +5,7 @@
 # 
 # Translators:
 # Justin Jacobs <jajdorkster@gmail.com>, 2018
-# Rui <xymarior@yandex.com>, 2018
+# Rui <xymarior@yandex.com>, 2019
 # 
 #, fuzzy
 msgid ""
@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-01-13 09:09-0500\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: Rui <xymarior@yandex.com>, 2018\n"
+"Last-Translator: Rui <xymarior@yandex.com>, 2019\n"
 "Language-Team: Portuguese (https://www.transifex.com/flareorg/teams/84925/pt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -161,7 +161,7 @@ msgstr "Novo Jogo"
 
 #: ../../../src/GameStateLoad.cpp:97 ../../../src/GameStateLoad.cpp:600
 msgid "Choose a Slot"
-msgstr "Escolhe o Espaço"
+msgstr "Escolher Compartimento"
 
 #: ../../../src/GameStateLoad.cpp:573 ../../../src/GameStateLoad.cpp:594
 msgid "Enable a story mod to continue"
@@ -589,22 +589,27 @@ msgstr "OK"
 
 #: ../../../src/MenuConfig.cpp:276
 msgid "Default"
-msgstr ""
+msgstr "Padrão"
 
 #: ../../../src/MenuConfig.cpp:276
 msgid ""
 "Show all loot tooltips, except for those that would be obscured by the "
 "player or an enemy. Temporarily show all loot tooltips with 'Alt'."
 msgstr ""
+"Mostrar todas as legendas de pilhagem, exceto aquelas que sejam ocultadas "
+"pelo jogador ou por um inimigo. Pode-se ver todas as legendas de pilhagens "
+"temporariamente com a tecla 'Alt'."
 
 #: ../../../src/MenuConfig.cpp:277
 msgid "Show all"
-msgstr ""
+msgstr "Mostrar tudo"
 
 #: ../../../src/MenuConfig.cpp:277
 msgid ""
 "Always show loot tooltips. Temporarily hide all loot tooltips with 'Alt'."
 msgstr ""
+"Mostrar sempre as legendas de pilhagens. Pode-se ocultar todas as legendas "
+"de pilhagens temporariamente com a tecla 'Alt'."
 
 #: ../../../src/MenuConfig.cpp:278 ../../../src/MenuConfig.cpp:283
 msgid "Hidden"
@@ -615,6 +620,9 @@ msgid ""
 "Always hide loot tooltips, execpt for when a piece of loot is hovered with "
 "the mouse cursor. Temporarily show all loot tooltips with 'Alt'."
 msgstr ""
+"Mostrar sempre as legendas das pilhagens, exceto quando o cursor passar por "
+"cima delas. Pode-se ver todas as legendas de pilhagens temporariamente com a"
+" tecla 'Alt'."
 
 #: ../../../src/MenuConfig.cpp:281
 msgid "Visible"
@@ -658,7 +666,7 @@ msgstr "Pausado"
 
 #: ../../../src/MenuConfig.cpp:315
 msgid "Time Played"
-msgstr ""
+msgstr "Tempo Jogado"
 
 #: ../../../src/MenuConfig.cpp:317
 msgid "Renderer"
@@ -730,7 +738,7 @@ msgstr "Subtítulos"
 
 #: ../../../src/MenuConfig.cpp:336
 msgid "Loot tooltip visibility"
-msgstr "Visibilidade das legendas dos saques"
+msgstr "Visibilidade das legendas da pilhagem"
 
 #: ../../../src/MenuConfig.cpp:337
 msgid "Mini-map mode"
@@ -750,7 +758,7 @@ msgstr "Equipar itens automaticamente"
 
 #: ../../../src/MenuConfig.cpp:341
 msgid "Show hidden entity markers"
-msgstr ""
+msgstr "Mostrar marcadores de entidades ocultas"
 
 #: ../../../src/MenuConfig.cpp:343
 msgid "Joystick"
@@ -770,11 +778,11 @@ msgstr "Não usar rato"
 
 #: ../../../src/MenuConfig.cpp:347
 msgid "Swap mouse movement button"
-msgstr ""
+msgstr "Trocar botão de movimento do rato"
 
 #: ../../../src/MenuConfig.cpp:348
 msgid "Attack with mouse movement"
-msgstr ""
+msgstr "Atacar com o movimento do rato"
 
 #: ../../../src/MenuConfig.cpp:349
 msgid "Joystick Deadzone"
@@ -819,30 +827,39 @@ msgid ""
 "Enables the below setting that controls the screen gamma level. The behavior"
 " of the gamma setting can vary between platforms."
 msgstr ""
+"Permite a configuração abaixo que controla o gama do ecrã. O comportamento "
+"da configuração do gama pode variar em plataformas diferentes."
 
 #: ../../../src/MenuConfig.cpp:461
 msgid ""
 "Provides additional text for information that is primarily conveyed through "
 "color."
 msgstr ""
+"Fornece texto adicional para informação que é transmitida através da cor."
 
 #: ../../../src/MenuConfig.cpp:462
 msgid ""
 "When enabled, empty equipment slots will be filled with applicable items "
 "when they are obtained."
 msgstr ""
+"Quando ativado, os compartimentos vagos do equipamento serão preenchidos com"
+" itens aplicáveis quando estes são obtidos."
 
 #: ../../../src/MenuConfig.cpp:463
 msgid ""
 "Shows a marker above enemies, allies, and the player when they are obscured "
 "by tall objects."
 msgstr ""
+"Mostrar um marcador por cima dos inimigos, aliados e o jogador quando "
+"estiverem ocultados por objetos altos."
 
 #: ../../../src/MenuConfig.cpp:464
 msgid ""
 "This allows the game to be controlled entirely with the keyboard (or "
 "joystick)."
 msgstr ""
+"Isto permite que o jogo seja controlado inteiramente com o teclado (ou "
+"joystick)."
 
 #: ../../../src/MenuConfig.cpp:465
 msgid ""
@@ -850,6 +867,9 @@ msgid ""
 " 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
 "instead of 'Main1'."
 msgstr ""
+"Quando a opção 'Mover herói utilizando o rato' está ativa, esta configuração"
+" controla se o 'Principal1' ou 'Principal2' é utilizado para mover o herói. "
+"Se ativado, o 'Principal2' irá mover o herói em vez do 'Principal1'."
 
 #: ../../../src/MenuConfig.cpp:466
 msgid ""
@@ -858,12 +878,19 @@ msgid ""
 "setting is disabled, it is required to use 'Shift' to access the Power "
 "assigned to the movement button."
 msgstr ""
+"Quando a opção 'Mover herói utilizando o rato' está ativada, esta "
+"configuração controla se a potência atribuída ao botão de movimento pode ser"
+" utilizada ao colocar em mira um inimigo. Se esta opção estiver desativada, "
+"é necessário usar a tecla 'Shift' para aceder à potência atribuída ao botão "
+"de movimento."
 
 #: ../../../src/MenuConfig.cpp:467
 msgid ""
 "The player's attacks will be aimed in the direction of the mouse cursor when"
 " this is enabled."
 msgstr ""
+"Os ataques do jogador serão direcionados na direção do cursor do rato quando"
+" isto está ativo."
 
 #: ../../../src/MenuConfig.cpp:518
 msgid "Active Mods"
