@@ -70,7 +70,8 @@ Avatar::Avatar()
 	, time_played(0)
 	, questlog_dismissed(false)
 	, using_main1(false)
-	, using_main2(false) {
+	, using_main2(false)
+	, teleport_camera_lock(false) {
 
 	init();
 
@@ -292,7 +293,7 @@ void Avatar::loadStepFX(const std::string& stepname) {
 
 
 bool Avatar::pressing_move() {
-	if (!allow_movement) {
+	if (!allow_movement || teleport_camera_lock) {
 		return false;
 	}
 	else if (stats.effects.knockback_speed != 0) {
@@ -310,9 +311,14 @@ bool Avatar::pressing_move() {
 }
 
 void Avatar::set_direction() {
+	if (teleport_camera_lock || !set_dir_timer.isEnd())
+		return;
+
+	int old_dir = stats.direction;
+
 	// handle direction changes
 	if (settings->mouse_move) {
-		FPoint target = Utils::screenToMap(inpt->mouse.x, inpt->mouse.y, stats.pos.x, stats.pos.y);
+		FPoint target = Utils::screenToMap(inpt->mouse.x, inpt->mouse.y, mapr->cam.x, mapr->cam.y);
 		stats.direction = Utils::calcDirection(stats.pos.x, stats.pos.y, target.x, target.y);
 	}
 	else {
@@ -330,6 +336,12 @@ void Avatar::set_direction() {
 				 (inpt->pressing[Input::LEFT] && !inpt->lock[Input::LEFT]) || (inpt->pressing[Input::RIGHT] && !inpt->lock[Input::RIGHT])))
 			stats.direction = static_cast<unsigned char>((stats.direction == 7) ? 0 : stats.direction + 1);
 	}
+
+	// give direction changing a 100ms cooldown
+	// this allows the player to quickly change direction on their own without becoming overly "jittery"
+	// the cooldown can be ended by releasing the move button, but the cooldown is so fast that it doesn't matter much (maybe a speed run tactic?)
+	if (stats.direction != old_dir)
+		set_dir_timer.setDuration(settings->max_frames_per_sec / 10);
 }
 
 /**
@@ -433,6 +445,15 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 				mm_can_use_power = false;
 			}
 		}
+	}
+
+	if (teleport_camera_lock && Utils::calcDist(stats.pos, mapr->cam) < 0.5f) {
+		teleport_camera_lock = false;
+	}
+
+	set_dir_timer.tick();
+	if (!pressing_move()) {
+		set_dir_timer.reset(Timer::END);
 	}
 
 	if (!stats.effects.stun) {

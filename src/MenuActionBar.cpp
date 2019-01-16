@@ -30,6 +30,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EngineSettings.h"
 #include "FileParser.h"
 #include "FontEngine.h"
+#include "MapRenderer.h"
 #include "Menu.h"
 #include "MenuActionBar.h"
 #include "MenuInventory.h"
@@ -738,9 +739,9 @@ FPoint MenuActionBar::setTarget(bool have_aim, const Power& pow) {
 	if (have_aim && settings->mouse_aim) {
 		FPoint map_pos;
 		if (pow.aim_assist)
-			map_pos = Utils::screenToMap(inpt->mouse.x,  inpt->mouse.y + eset->misc.aim_assist, pc->stats.pos.x, pc->stats.pos.y);
+			map_pos = Utils::screenToMap(inpt->mouse.x,  inpt->mouse.y + eset->misc.aim_assist, mapr->cam.x, mapr->cam.y);
 		else
-			map_pos = Utils::screenToMap(inpt->mouse.x,  inpt->mouse.y, pc->stats.pos.x, pc->stats.pos.y);
+			map_pos = Utils::screenToMap(inpt->mouse.x,  inpt->mouse.y, mapr->cam.x, mapr->cam.y);
 
 		if (pow.target_nearest > 0) {
 			if (!pow.requires_corpse && powers->checkNearestTargeting(pow, &pc->stats, false)) {

@@ -283,6 +283,7 @@ void GameStatePlay::checkTeleport() {
 			// during intermap teleport, we set the camera to the player position
 			pc->stats.pos.x = mapr->teleport_destination.x;
 			pc->stats.pos.y = mapr->teleport_destination.y;
+			pc->teleport_camera_lock = true;
 		}
 		else {
 			pc->stats.pos.x = pc->stats.teleport_destination.x;

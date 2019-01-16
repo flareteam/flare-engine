@@ -82,6 +82,8 @@ private:
 
 	int mm_key; // mouse movement key
 
+	Timer set_dir_timer;
+
 protected:
 	virtual void resetActiveAnimation();
 
@@ -147,6 +149,7 @@ public:
 	bool questlog_dismissed;
 	bool using_main1;
 	bool using_main2;
+	bool teleport_camera_lock;
 };
 
 #endif
