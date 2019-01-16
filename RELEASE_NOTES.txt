@@ -1,5 +1,16 @@
 Flare v1.10 (WIP)
 
+Engine features:
+
+* The configuration menu has been redesigned and is now used as the pause menu.
+* The interface features from version 1.09 have been reverted due to being accessible from the pause menu.
+* Added an Interface option to disable showing hidden entity markers.
+
+Engine fixes:
+
+* Fixed event activation being tied to distance to the camera position. It is now correctly tied to distance from the player.
+* Mouse movement and mouse aim now calculate direction relative to the player instead of relative to the screen.
+
 Translation updates:
 
 * Belarusian (be) update (Zmicer Turok)
