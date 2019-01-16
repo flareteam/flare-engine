@@ -984,7 +984,7 @@ void MapRenderer::checkHotspots() {
 					createTooltip(it->getComponent(EventComponent::TOOLTIP));
 
 					if (((it->reachable_from.w == 0 && it->reachable_from.h == 0) || Utils::isWithinRect(it->reachable_from, Point(cam)))
-							&& Utils::calcDist(cam, it->center) < eset->misc.interact_range) {
+							&& Utils::calcDist(pc->stats.pos, it->center) < eset->misc.interact_range) {
 
 						// only check events if the player is clicking
 						// and allowed to click
@@ -1030,7 +1030,7 @@ void MapRenderer::checkNearestEvent() {
 		// skip events on cooldown
 		if (!it->cooldown.isEnd() || !it->delay.isEnd()) continue;
 
-		float distance = Utils::calcDist(cam, it->center);
+		float distance = Utils::calcDist(pc->stats.pos, it->center);
 		if (((it->reachable_from.w == 0 && it->reachable_from.h == 0) || Utils::isWithinRect(it->reachable_from, Point(cam)))
 				&& distance < eset->misc.interact_range && distance < best_distance) {
 			best_distance = distance;
