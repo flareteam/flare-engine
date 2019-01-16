@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-13 09:09-0500\n"
+"POT-Creation-Date: 2019-01-16 15:35-0500\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
 "Last-Translator: Fabio Loli, 2018\n"
 "Language-Team: Italian (https://www.transifex.com/flareorg/teams/84925/it/)\n"
@@ -23,26 +23,26 @@ msgstr ""
 "Language: it\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../../../src/Avatar.cpp:372
+#: ../../../src/Avatar.cpp:384
 #, c-format
 msgid "Congratulations, you have reached level %d!"
 msgstr "Congratulazioni, hai raggiunto il livello %d!"
 
-#: ../../../src/Avatar.cpp:374
+#: ../../../src/Avatar.cpp:386
 msgid "You may increase one attribute through the Character Menu."
 msgstr "Puoi aumentare un attributo nel Menu Personaggio."
 
-#: ../../../src/Avatar.cpp:629
+#: ../../../src/Avatar.cpp:650
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
 msgstr ""
 "La morte ti ha raggiunto. Partita finita! Premi ${INPUT_CONTINUE} per "
 "tornare ai Titoli."
 
-#: ../../../src/Avatar.cpp:635
+#: ../../../src/Avatar.cpp:656
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
 msgstr "La morte ti ha raggiunto. Premi ${INPUT_CONTINUE} per continuare."
 
-#: ../../../src/Avatar.cpp:885
+#: ../../../src/Avatar.cpp:906
 msgid "Transformation expired. You have been moved back to a safe place."
 msgstr "Trasformazione finita. Sei stato riportato in un luogo sicuro."
 
@@ -300,22 +300,22 @@ msgstr "Barra9"
 msgid "Bar0"
 msgstr "Barra0"
 
-#: ../../../src/InputState.cpp:417 ../../../src/MenuActionBar.cpp:80
+#: ../../../src/InputState.cpp:417 ../../../src/MenuActionBar.cpp:81
 #: ../../../src/MenuCharacter.cpp:54
 msgid "Character"
 msgstr "Personaggio"
 
-#: ../../../src/InputState.cpp:418 ../../../src/MenuActionBar.cpp:81
+#: ../../../src/InputState.cpp:418 ../../../src/MenuActionBar.cpp:82
 #: ../../../src/MenuInventory.cpp:129 ../../../src/MenuVendor.cpp:57
 msgid "Inventory"
 msgstr "Inventario"
 
-#: ../../../src/InputState.cpp:419 ../../../src/MenuActionBar.cpp:82
+#: ../../../src/InputState.cpp:419 ../../../src/MenuActionBar.cpp:83
 #: ../../../src/MenuPowers.cpp:168
 msgid "Powers"
 msgstr "Poteri"
 
-#: ../../../src/InputState.cpp:420 ../../../src/MenuActionBar.cpp:83
+#: ../../../src/InputState.cpp:420 ../../../src/MenuActionBar.cpp:84
 #: ../../../src/MenuLog.cpp:72
 msgid "Log"
 msgstr "Diario"
@@ -492,13 +492,13 @@ msgstr "Premi [%s] per usare"
 msgid "Press [%s] to read"
 msgstr "Premi [%s] per leggere"
 
-#: ../../../src/MenuActionBar.cpp:219 ../../../src/MenuActionBar.cpp:226
-#: ../../../src/MenuActionBar.cpp:229 ../../../src/MenuActionBar.cpp:235
+#: ../../../src/MenuActionBar.cpp:220 ../../../src/MenuActionBar.cpp:227
+#: ../../../src/MenuActionBar.cpp:230 ../../../src/MenuActionBar.cpp:236
 #, c-format
 msgid "Hotkey: %s"
 msgstr "Tasto rapido: %s"
 
-#: ../../../src/MenuActionBar.cpp:592
+#: ../../../src/MenuActionBar.cpp:593
 msgid "Not enough MP."
 msgstr ""
 
@@ -613,7 +613,7 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:278
 msgid ""
-"Always hide loot tooltips, execpt for when a piece of loot is hovered with "
+"Always hide loot tooltips, except for when a piece of loot is hovered with "
 "the mouse cursor. Temporarily show all loot tooltips with 'Alt'."
 msgstr ""
 

@@ -275,7 +275,7 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	// set up loot tooltip setting
 	loot_tooltip_lstb->append(msg->get("Default"), msg->get("Show all loot tooltips, except for those that would be obscured by the player or an enemy. Temporarily show all loot tooltips with 'Alt'."));
 	loot_tooltip_lstb->append(msg->get("Show all"), msg->get("Always show loot tooltips. Temporarily hide all loot tooltips with 'Alt'."));
-	loot_tooltip_lstb->append(msg->get("Hidden"), msg->get("Always hide loot tooltips, execpt for when a piece of loot is hovered with the mouse cursor. Temporarily show all loot tooltips with 'Alt'."));
+	loot_tooltip_lstb->append(msg->get("Hidden"), msg->get("Always hide loot tooltips, except for when a piece of loot is hovered with the mouse cursor. Temporarily show all loot tooltips with 'Alt'."));
 
 	// set up minimap setting
 	minimap_lstb->append(msg->get("Visible"), "");
