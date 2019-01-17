@@ -620,6 +620,9 @@ msgid ""
 "Always hide loot tooltips, except for when a piece of loot is hovered with "
 "the mouse cursor. Temporarily show all loot tooltips with 'Alt'."
 msgstr ""
+"Mostrar sempre as legendas das pilhagens, exceto quando o cursor passar por "
+"cima delas. Pode-se ver todas as legendas de pilhagens temporariamente com a"
+" tecla 'Alt'."
 
 #: ../../../src/MenuConfig.cpp:281
 msgid "Visible"
