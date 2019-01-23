@@ -15,6 +15,7 @@ Translation updates:
 
 * Belarusian (be) update (Zmicer Turok)
 * Catalan (ca) update (Marc Tormo i Bochaca)
+* German (de) update (Fyrenic)
 * French (fr) update (syl_)
 * Portuguese (pt) update (Rui)
 * Russian (ru) update (Andrey Kapitonov, Igor Paliychuk)
