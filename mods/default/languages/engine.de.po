@@ -40,7 +40,7 @@ msgstr ""
 
 #: ../../../src/Avatar.cpp:656
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
-msgstr "Du wurdest besiegt. Drücke ${INPUT_CONTINUE} um fortzufahren"
+msgstr "Du wurdest besiegt. Drücke ${INPUT_CONTINUE}, um fortzufahren."
 
 #: ../../../src/Avatar.cpp:906
 msgid "Transformation expired. You have been moved back to a safe place."
@@ -168,7 +168,7 @@ msgstr "Eintrag wählen"
 
 #: ../../../src/GameStateLoad.cpp:573 ../../../src/GameStateLoad.cpp:594
 msgid "Enable a story mod to continue"
-msgstr "Aktiviere eine Erzähl-Mod um fortzufahren"
+msgstr "Aktiviere eine Erzähl-Mod, um fortzufahren"
 
 #: ../../../src/GameStateLoad.cpp:589
 msgid "Load Game"
@@ -228,7 +228,7 @@ msgstr "Spiel starten"
 
 #: ../../../src/GameStateTitle.cpp:110
 msgid "Enable a core mod to continue"
-msgstr "Aktiviere eine Kern-Mod um fortzufahren"
+msgstr "Aktiviere eine Kern-Mod, um fortzufahren"
 
 #: ../../../src/GameStateTitle.cpp:114
 msgid "Configuration"
@@ -558,7 +558,7 @@ msgstr "Basis (%d), Bonus (%d)"
 
 #: ../../../src/MenuCharacter.cpp:381 ../../../src/MenuCharacter.cpp:395
 msgid "Related stats:"
-msgstr "Verwandte Werte: "
+msgstr "Verwandte Werte:"
 
 #: ../../../src/MenuCharacter.cpp:421 ../../../src/MenuCharacter.cpp:445
 #, c-format
@@ -600,7 +600,7 @@ msgid ""
 "player or an enemy. Temporarily show all loot tooltips with 'Alt'."
 msgstr ""
 "Zeige alle Beute-Hinweise, außer diejenigen, welche durch den Spieler oder "
-"einen Gegner verdeckt werden. Zeige temporär alle Hinweise mit 'Alt'."
+"einen Gegner verdeckt werden. Zeige temporär alle Hinweise mit „Alt“."
 
 #: ../../../src/MenuConfig.cpp:277
 msgid "Show all"
@@ -610,7 +610,7 @@ msgstr "Alles anzeigen"
 msgid ""
 "Always show loot tooltips. Temporarily hide all loot tooltips with 'Alt'."
 msgstr ""
-"Zeige alle Beute-Hinweise. Verstecke temporär alle Hinweise mit 'Alt'."
+"Zeige alle Beute-Hinweise. Verstecke temporär alle Hinweise mit „Alt“."
 
 #: ../../../src/MenuConfig.cpp:278 ../../../src/MenuConfig.cpp:283
 msgid "Hidden"
@@ -621,8 +621,8 @@ msgid ""
 "Always hide loot tooltips, except for when a piece of loot is hovered with "
 "the mouse cursor. Temporarily show all loot tooltips with 'Alt'."
 msgstr ""
-"Verstecke alle Beute-Hinweise, außer der Mauszeiger schwebt über dem "
-"Gegenstand. Zeige temporär alle Hinweise mit 'Alt'."
+"Verstecke alle Beute-Hinweise, außer der Mauszeiger zeigt auf den "
+"Gegenstand. Zeige temporär alle Hinweise mit „Alt“."
 
 #: ../../../src/MenuConfig.cpp:281
 msgid "Visible"
@@ -630,7 +630,7 @@ msgstr "Sichtbar"
 
 #: ../../../src/MenuConfig.cpp:282
 msgid "Visible (2x zoom)"
-msgstr "Sichtbar (2x Zoom)"
+msgstr "Sichtbar (2×-Zoom)"
 
 #: ../../../src/MenuConfig.cpp:295 ../../../src/MenuConfig.cpp:1509
 msgid "Exit"
@@ -786,7 +786,7 @@ msgstr "Mit Maussteuerung angreifen"
 
 #: ../../../src/MenuConfig.cpp:349
 msgid "Joystick Deadzone"
-msgstr "Joystick-Deadzone"
+msgstr "Joystick-Todeszone"
 
 #: ../../../src/MenuConfig.cpp:456
 msgid ""
@@ -866,9 +866,10 @@ msgid ""
 " 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
 "instead of 'Main1'."
 msgstr ""
-"Wenn 'Maus steuert Bewegung' aktiviert ist, steuert diese Einstellung, "
-"welche Aktionstaste zur Bewegungssteuerung verwendet wird. Wenn aktiviert, "
-"steuert 'Aktionstaste2' die Bewegung."
+"Wenn „Maus steuert Bewegung“ aktiviert ist, legt diese Einstellung fest, "
+"ob „Aktionstaste 1“ oder „Aktionstaste 2“ benutzt wird, um den Helden zu "
+"bewegen. Falls aktiviert, steuert „Aktionstaste 2“ statt „Aktionstaste 1“ "
+"die Bewegung."
 
 #: ../../../src/MenuConfig.cpp:466
 msgid ""
@@ -877,16 +878,16 @@ msgid ""
 "setting is disabled, it is required to use 'Shift' to access the Power "
 "assigned to the movement button."
 msgstr ""
-"Wenn 'Maus steuert Bewegung' aktiviert ist, steuert diese Einstellung, ob "
+"Wenn „Maus steuert Bewegung“ aktiviert ist, steuert diese Einstellung, ob "
 "die auf Maustasten gelegte Attacke benutzt wird, indem auf einen Gegner "
-"gezielt wird. Wenn diese Einstellung deaktiviert ist, muss 'Umschalt' "
+"gezielt wird. Wenn diese Einstellung deaktiviert ist, muss „Umschalt“ "
 "verwendet werden, um die auf Maustasten gelegte Attacke auszuführen."
 
 #: ../../../src/MenuConfig.cpp:467
 msgid ""
 "The player's attacks will be aimed in the direction of the mouse cursor when"
 " this is enabled."
-msgstr "Wenn aktiviert greift der Spieler in die Richtung des Mauszeigers an."
+msgstr "Wenn aktiviert, greift der Spieler in die Richtung des Mauszeigers an."
 
 #: ../../../src/MenuConfig.cpp:518
 msgid "Active Mods"
@@ -945,7 +946,7 @@ msgstr "Benutze „%s“, um mit dem Mauszeiger zu untersuchen."
 msgid "Arguments with spaces should be enclosed with double quotes. Example:"
 msgstr ""
 "Argumente mit Leerzeichen sollten in doppelte Anführungszeichen gesetzt "
-"sein. Beispiel: "
+"sein. Beispiel:"
 
 #: ../../../src/MenuDevConsole.cpp:147
 msgid "Type 'help' to get a list of commands."
@@ -1068,7 +1069,7 @@ msgstr "TIPP:"
 
 #: ../../../src/MenuDevConsole.cpp:536
 msgid "<id>"
-msgstr "<id>"
+msgstr "<ID>"
 
 #: ../../../src/MenuDevConsole.cpp:552
 #, c-format
@@ -1081,7 +1082,7 @@ msgstr "FEHLER: zu wenig Argumente"
 
 #: ../../../src/MenuDevConsole.cpp:564
 msgid "<key>=<val> <key>=<val> ..."
-msgstr "<key>=<val> <key>=<val> ..."
+msgstr "<Schlüssel>=<Wert> <Schlüssel>=<Wert> ..."
 
 #: ../../../src/MenuDevConsole.cpp:569
 msgid "ERROR: Unknown command"
