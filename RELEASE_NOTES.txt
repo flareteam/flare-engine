@@ -10,6 +10,11 @@ Engine fixes:
 
 * Fixed event activation being tied to distance to the camera position. It is now correctly tied to distance from the player.
 * Mouse movement and mouse aim now calculate direction relative to the player instead of relative to the screen.
+* Fixed enemy AI so that enemies can now enter combat if a hero ally is in their proximity.
+
+Game updates:
+
+* Fixed an oversight that allowed easy farming of the Torture Chambers boss and loot chests.
 
 Translation updates:
 
