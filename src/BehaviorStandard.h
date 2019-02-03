@@ -46,7 +46,6 @@ protected:
 	bool path_found;
 	int chance_calc_path;
 
-	float hero_dist;
 	float target_dist;
 	FPoint pursue_pos;
 	// targeting vars

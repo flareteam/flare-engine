@@ -33,7 +33,10 @@ const float ALLY_TELEPORT_DISTANCE = 40;
 
 const unsigned short BLOCK_TICKS = 10;
 
-BehaviorAlly::BehaviorAlly(Enemy *_e) : BehaviorStandard(_e) {
+BehaviorAlly::BehaviorAlly(Enemy *_e)
+	: BehaviorStandard(_e)
+	, hero_dist(0)
+{
 }
 
 BehaviorAlly::~BehaviorAlly() {
@@ -135,8 +138,8 @@ void BehaviorAlly::findTarget() {
 	if (
 			e->stats.in_combat &&
 			e->stats.cur_state == StatBlock::ENEMY_STANCE &&
-			!move_to_safe_dist && hero_dist < e->stats.flee_range &&
-			hero_dist >= e->stats.melee_range &&
+			!move_to_safe_dist && target_dist < e->stats.flee_range &&
+			target_dist >= e->stats.melee_range &&
 			Math::percentChance(e->stats.chance_flee) &&
 			e->stats.flee_cooldown_timer.isEnd()
 		)
@@ -188,7 +191,7 @@ void BehaviorAlly::findTarget() {
 void BehaviorAlly::checkMoveStateStance() {
 
 	// If the enemy is capable of fleeing and is at a safe distance, have it hold its position instead of moving
-	if (hero_dist >= e->stats.flee_range && e->stats.chance_flee > 0) return;
+	if (target_dist >= e->stats.flee_range && e->stats.chance_flee > 0) return;
 
 	// try to move to the target if we're either:
 	// 1. too far away and chance_pursue roll succeeds

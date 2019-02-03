@@ -30,6 +30,8 @@ private:
 	virtual void findTarget();
 	virtual void checkMoveStateStance();
 	virtual void checkMoveStateMove();
+
+	float hero_dist;
 };
 
 #endif // BEHAVIORALLY_H

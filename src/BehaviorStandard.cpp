@@ -39,7 +39,6 @@ BehaviorStandard::BehaviorStandard(Enemy *_e)
 	, collided(false)
 	, path_found(false)
 	, chance_calc_path(0)
-	, hero_dist(0)
 	, target_dist(0)
 	, pursue_pos(-1, -1)
 	, los(false)
@@ -119,12 +118,34 @@ void BehaviorStandard::findTarget() {
 	// stunned enemies can't act
 	if (e->stats.effects.stun) return;
 
-	// check distance and line of sight between enemy and hero
-	if (pc->stats.alive)
-		hero_dist = Utils::calcDist(e->stats.pos, pc->stats.pos);
-	else
-		hero_dist = 0;
+	StatBlock *target_stats = NULL;
 
+	// check distance and line of sight between enemy and hero
+	// by default, the enemy pursues the hero directly
+	if (pc->stats.alive) {
+		target_dist = Utils::calcDist(e->stats.pos, pc->stats.pos);
+		target_stats = &pc->stats;
+	}
+	else {
+		target_dist = 0;
+	}
+
+	for (size_t i = 0; i < enemym->enemies.size(); ++i) {
+		if (!enemym->enemies[i]->stats.corpse && enemym->enemies[i]->stats.hero_ally) {
+			//now work out the distance to the minion and compare it to the distance to the current targer (we want to target the closest ally)
+			float ally_dist = Utils::calcDist(e->stats.pos, enemym->enemies[i]->stats.pos);
+			if (ally_dist < target_dist) {
+				target_stats = &enemym->enemies[i]->stats;
+				target_dist = ally_dist;
+			}
+		}
+	}
+
+	// check line-of-sight
+	if (target_stats && target_dist < e->stats.threat_range && pc->stats.alive)
+		los = mapr->collider.lineOfSight(e->stats.pos.x, e->stats.pos.y, target_stats->pos.x, target_stats->pos.y);
+	else
+		los = false;
 
 	// aggressive enemies are always in combat
 	if (!e->stats.in_combat && e->stats.combat_style == StatBlock::COMBAT_AGGRESSIVE) {
@@ -132,7 +153,13 @@ void BehaviorStandard::findTarget() {
 	}
 
 	// check entering combat (because the player got too close)
-	if (e->stats.alive && !e->stats.in_combat && los && hero_dist < stealth_threat_range && e->stats.combat_style != StatBlock::COMBAT_PASSIVE) {
+	bool close_to_target = false;
+	if (&pc->stats == target_stats)
+		close_to_target = target_dist < stealth_threat_range;
+	else if (target_stats)
+		close_to_target = target_dist < e->stats.threat_range;
+
+	if (e->stats.alive && !e->stats.in_combat && los && close_to_target && e->stats.combat_style != StatBlock::COMBAT_PASSIVE) {
 		e->stats.join_combat = true;
 	}
 
@@ -155,7 +182,7 @@ void BehaviorStandard::findTarget() {
 	}
 
 	// check exiting combat (player died or got too far away)
-	if (e->stats.in_combat && hero_dist > (e->stats.threat_range_far) && !e->stats.join_combat && e->stats.combat_style != StatBlock::COMBAT_AGGRESSIVE) {
+	if (e->stats.in_combat && target_dist > (e->stats.threat_range_far) && !e->stats.join_combat && e->stats.combat_style != StatBlock::COMBAT_AGGRESSIVE) {
 		e->stats.in_combat = false;
 	}
 
@@ -164,26 +191,7 @@ void BehaviorStandard::findTarget() {
 		e->stats.in_combat = false;
 	}
 
-	// by default, the enemy pursues the hero directly
-	pursue_pos.x = pc->stats.pos.x;
-	pursue_pos.y = pc->stats.pos.y;
-	target_dist = hero_dist;
-
-
-	//if there are player allies closer than the hero, target an ally instead
-	if(e->stats.in_combat) {
-		for (unsigned int i=0; i < enemym->enemies.size(); i++) {
-			if(!enemym->enemies[i]->stats.corpse && enemym->enemies[i]->stats.hero_ally) {
-				//now work out the distance to the minion and compare it to the distance to the current targer (we want to target the closest ally)
-				float ally_dist = Utils::calcDist(e->stats.pos, enemym->enemies[i]->stats.pos);
-				if (ally_dist < target_dist) {
-					pursue_pos.x = enemym->enemies[i]->stats.pos.x;
-					pursue_pos.y = enemym->enemies[i]->stats.pos.y;
-					target_dist = ally_dist;
-				}
-			}
-		}
-	}
+	pursue_pos = target_stats->pos;
 
 	// if we just started wandering, set the first waypoint
 	if (e->stats.wander && e->stats.waypoints.empty()) {
@@ -199,20 +207,14 @@ void BehaviorStandard::findTarget() {
 		pursue_pos.y = waypoint.y;
 	}
 
-	// check line-of-sight
-	if (target_dist < e->stats.threat_range && pc->stats.alive)
-		los = mapr->collider.lineOfSight(e->stats.pos.x, e->stats.pos.y, pc->stats.pos.x, pc->stats.pos.y);
-	else
-		los = false;
-
 	if(e->stats.effects.fear) fleeing = true;
 
 	// If we have a successful chance_flee roll, try to move to a safe distance
 	if (
 			e->stats.in_combat &&
 			e->stats.cur_state == StatBlock::ENEMY_STANCE &&
-			!move_to_safe_dist && hero_dist < e->stats.flee_range &&
-			hero_dist >= e->stats.melee_range &&
+			!move_to_safe_dist && target_dist < e->stats.flee_range &&
+			target_dist >= e->stats.melee_range &&
 			Math::percentChance(e->stats.chance_flee) &&
 			e->stats.flee_cooldown_timer.isEnd()
 		)
@@ -466,7 +468,7 @@ void BehaviorStandard::checkMove() {
 void BehaviorStandard::checkMoveStateStance() {
 
 	// If the enemy is capable of fleeing and is at a safe distance, have it hold its position instead of moving
-	if (hero_dist >= e->stats.flee_range && e->stats.chance_flee > 0 && e->stats.waypoints.empty()) return;
+	if (target_dist >= e->stats.flee_range && e->stats.chance_flee > 0 && e->stats.waypoints.empty()) return;
 
 	// try to move to the target if we're either:
 	// 1. too far away and chance_pursue roll succeeds
