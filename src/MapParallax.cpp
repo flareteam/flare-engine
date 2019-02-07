@@ -27,6 +27,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 MapParallax::MapParallax()
 	: current_layer(0)
+	, loaded(false)
+	, current_filename("")
 {
 }
 
@@ -40,13 +42,18 @@ void MapParallax::clear() {
 	}
 
 	layers.clear();
+
+	loaded = false;
 }
 
 void MapParallax::load(const std::string& filename) {
+	current_filename = filename;
+
+	if (loaded)
+		clear();
+
 	if (!settings->parallax_layers)
 		return;
-
-	clear();
 
 	// @CLASS MapParallax|Description of maps/parallax/
 	FileParser infile;
@@ -84,6 +91,8 @@ void MapParallax::load(const std::string& filename) {
 
 		infile.close();
 	}
+
+	loaded = true;
 }
 
 void MapParallax::setMapCenter(int x, int y) {
@@ -92,8 +101,15 @@ void MapParallax::setMapCenter(int x, int y) {
 }
 
 void MapParallax::render(const FPoint& cam, const std::string& map_layer) {
-	if (!settings->parallax_layers)
+	if (!settings->parallax_layers) {
+		if (loaded)
+			clear();
+
 		return;
+	}
+	else if (!loaded) {
+		load(current_filename);
+	}
 
 	if (map_layer.empty())
 		current_layer = 0;

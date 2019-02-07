@@ -52,6 +52,8 @@ private:
 	std::vector<MapParallaxLayer> layers;
 	FPoint map_center;
 	size_t current_layer;
+	bool loaded;
+	std::string current_filename;
 };
 
 #endif
