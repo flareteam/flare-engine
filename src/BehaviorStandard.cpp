@@ -191,7 +191,8 @@ void BehaviorStandard::findTarget() {
 		e->stats.in_combat = false;
 	}
 
-	pursue_pos = target_stats->pos;
+	if (target_stats)
+		pursue_pos = target_stats->pos;
 
 	// if we just started wandering, set the first waypoint
 	if (e->stats.wander && e->stats.waypoints.empty()) {
