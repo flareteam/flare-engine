@@ -370,7 +370,7 @@ int main(int argc, char *argv[]) {
 			}
 		}
 		else if (arg == "version") {
-			printf("%s\n", VersionInfo::createVersionStringFull().c_str());
+			Utils::logInfo("%s", VersionInfo::createVersionStringFull().c_str());
 			done = true;
 		}
 		else if (arg == "renderer") {
@@ -392,7 +392,7 @@ int main(int argc, char *argv[]) {
 			settings->load_script = parseArgValue(arg_full);
 		}
 		else if (arg == "help") {
-			printf("\
+			Utils::logInfo("Command line options:\n\
 --help                   Prints this message.\n\
 --version                Prints the release version.\n\
 --data-path=<PATH>       Specifies an exact path to look for mod data.\n\
