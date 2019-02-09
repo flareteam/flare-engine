@@ -504,10 +504,10 @@ void Utils::createSaveDir(int slot) {
 	std::stringstream ss;
 	ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/";
 
-	Filesystem::createDir(Filesystem::path(&ss));
+	Filesystem::createDir(Filesystem::convertSlashes(&ss));
 
 	ss << slot;
-	Filesystem::createDir(Filesystem::path(&ss));
+	Filesystem::createDir(Filesystem::convertSlashes(&ss));
 }
 
 void Utils::removeSaveDir(int slot) {
@@ -517,8 +517,8 @@ void Utils::removeSaveDir(int slot) {
 	std::stringstream ss;
 	ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/" << slot;
 
-	if (Filesystem::isDirectory(Filesystem::path(&ss))) {
-		Filesystem::removeDirRecursive(Filesystem::path(&ss));
+	if (Filesystem::isDirectory(Filesystem::convertSlashes(&ss))) {
+		Filesystem::removeDirRecursive(Filesystem::convertSlashes(&ss));
 	}
 }
 

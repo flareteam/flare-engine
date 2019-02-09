@@ -170,7 +170,7 @@ bool Filesystem::removeDirRecursive(const std::string &dir) {
 /**
  * Convert from stringstream to filesystem path string in an os-independent fashion
  */
-std::string Filesystem::path(const std::stringstream* ss) {
+std::string Filesystem::convertSlashes(const std::stringstream* ss) {
 	std::string path = ss->str();
 
 	bool is_windows_path = false;
