@@ -43,6 +43,8 @@ namespace Filesystem {
 	std::string path(const std::stringstream* ss);
 
 	bool renameFile(const std::string &oldfile, const std::string &newfile);
+
+	std::string removeTrailingSlash(const std::string& path);
 }
 
 

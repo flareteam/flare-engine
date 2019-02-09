@@ -358,11 +358,13 @@ int main(int argc, char *argv[]) {
 				settings->custom_path_data = std::string(getenv("HOME")) + "/" + path_end;
 			}
 
-			if (!settings->custom_path_data.empty() && settings->custom_path_data.at(settings->custom_path_data.length()-1) != '/')
-				settings->custom_path_data += "/";
+			if (!settings->custom_path_data.empty()) {
+				settings->custom_path_data = Filesystem::removeTrailingSlash(settings->custom_path_data);
+			}
 
 			if (Filesystem::pathExists(settings->custom_path_data)) {
 				Utils::logInfo("Custom data path: \"%s\"", settings->custom_path_data.c_str());
+				settings->custom_path_data += "/";
 			}
 			else {
 				Utils::logError("Invalid custom data path: \"%s\"", settings->custom_path_data.c_str());

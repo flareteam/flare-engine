@@ -37,7 +37,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 bool Filesystem::pathExists(const std::string &path) {
 	struct stat st;
-	return (stat(path.c_str(), &st) == 0);
+	return (stat(removeTrailingSlash(path).c_str(), &st) == 0);
 }
 
 /**
@@ -204,3 +204,17 @@ bool Filesystem::renameFile(const std::string &oldfile, const std::string &newfi
 	return true;
 }
 
+std::string Filesystem::removeTrailingSlash(const std::string& path) {
+	// windows
+	if (!path.empty() && path.at(path.length()-1) == '\\')
+		return path.substr(0, path.length()-1);
+
+	// everything else
+	// allow for *nix root /
+	else if (path.length() > 1 && path.at(path.length()-1) == '/')
+		return path.substr(0, path.length()-1);
+
+	// no trailing slash found
+	else
+		return path;
+}
