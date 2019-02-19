@@ -443,8 +443,9 @@ void MenuTalker::createActionButtons(int node_id) {
 	// add standard topics
 	for (size_t i = nodes.size(); i > 0; i--) {
 		std::string topic = npc->getDialogTopic(nodes[i-1]);
-		if (topic.empty())
-			continue;
+		if (topic.empty()) {
+			topic = msg->get("<dialog node %d>", i);
+		}
 
 		addAction(topic, nodes[i-1], !Action::IS_VENDOR);
 	}
