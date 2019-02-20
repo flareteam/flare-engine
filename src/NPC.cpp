@@ -31,6 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "ItemManager.h"
 #include "LootManager.h"
 #include "MessageEngine.h"
+#include "ModManager.h"
 #include "NPC.h"
 #include "RenderDevice.h"
 #include "SharedGameResources.h"
@@ -268,6 +269,15 @@ void NPC::load(const std::string& npc_id) {
 	std::sort(rand_itemstacks.begin(), rand_itemstacks.end(), compareItemStack);
 	for (size_t i=0; i<rand_itemstacks.size(); ++i) {
 		stock.add(rand_itemstacks[i], ItemStorage::NO_SLOT);
+	}
+
+	// warn if dialog nodes lack a topic
+	std::string full_filename = mods->locate(npc_id);
+	for (size_t i=0; i<dialog.size(); ++i) {
+		std::string topic = getDialogTopic(static_cast<int>(i));
+		if (topic.empty()) {
+			Utils::logInfo("[%s] NPC: Dialog node %d does not have a topic.", full_filename.c_str(), i);
+		}
 	}
 }
 
