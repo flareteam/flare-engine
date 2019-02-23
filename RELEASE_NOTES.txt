@@ -26,6 +26,7 @@ Translation updates:
 * French (fr) update (syl_)
 * Portuguese (pt) update (Rui)
 * Russian (ru) update (Andrey Kapitonov, Igor Paliychuk)
+* Chinese (zh) update (neverwin)
 
 
 
