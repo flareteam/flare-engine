@@ -4,8 +4,8 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Justin Jacobs <jajdorkster@gmail.com>, 2018
 # Wuzzy <almikes@aol.com>, 2018
+# Justin Jacobs <jajdorkster@gmail.com>, 2019
 # Fyrenic <fyrenic@protonmail.com>, 2019
 # 
 #, fuzzy
@@ -866,8 +866,8 @@ msgid ""
 " 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
 "instead of 'Main1'."
 msgstr ""
-"Wenn „Maus steuert Bewegung“ aktiviert ist, legt diese Einstellung fest, "
-"ob „Aktionstaste 1“ oder „Aktionstaste 2“ benutzt wird, um den Helden zu "
+"Wenn „Maus steuert Bewegung“ aktiviert ist, legt diese Einstellung fest, ob "
+"„Aktionstaste 1“ oder „Aktionstaste 2“ benutzt wird, um den Helden zu "
 "bewegen. Falls aktiviert, steuert „Aktionstaste 2“ statt „Aktionstaste 1“ "
 "die Bewegung."
 
@@ -887,7 +887,8 @@ msgstr ""
 msgid ""
 "The player's attacks will be aimed in the direction of the mouse cursor when"
 " this is enabled."
-msgstr "Wenn aktiviert, greift der Spieler in die Richtung des Mauszeigers an."
+msgstr ""
+"Wenn aktiviert, greift der Spieler in die Richtung des Mauszeigers an."
 
 #: ../../../src/MenuConfig.cpp:518
 msgid "Active Mods"
