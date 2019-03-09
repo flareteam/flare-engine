@@ -280,26 +280,26 @@ void LootManager::checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos
 	ItemStack new_loot;
 	std::vector<EventComponent*> possible_ids;
 
-	int chance = Math::randBetween(1,100);
+	float chance = Math::randBetweenF(0,100);
 
 	// first drop any 'fixed' (0% chance) items
 	for (size_t i = loot_table.size(); i > 0; i--) {
 		ec = &loot_table[i-1];
-		if (ec->z == 0) {
+		if (ec->f == 0) {
 			checkLootComponent(ec, pos, itemstack_vec);
 			loot_table.erase(loot_table.begin()+i-1);
 		}
 	}
 
 	// now pick up to 1 random item to drop
-	int threshold = pc->stats.get(Stats::ITEM_FIND) + 100;
+	float threshold = static_cast<float>(pc->stats.get(Stats::ITEM_FIND) + 100);
 	for (unsigned i = 0; i < loot_table.size(); i++) {
 		ec = &loot_table[i];
 
-		int real_chance = ec->z;
+		float real_chance = ec->f;
 
 		if (ec->c != 0 && ec->c != eset->misc.currency_id) {
-			real_chance = static_cast<int>(static_cast<float>(ec->z) * static_cast<float>(pc->stats.get(Stats::ITEM_FIND) + 100) / 100.f);
+			real_chance = ec->f * static_cast<float>(pc->stats.get(Stats::ITEM_FIND) + 100) / 100.f;
 		}
 
 		if (real_chance >= chance) {
@@ -523,8 +523,8 @@ void LootManager::parseLoot(std::string &val, EventComponent *e, std::vector<Eve
 
 		// drop chance
 		chance = Parse::popFirstString(val);
-		if (chance == "fixed") e->z = 0;
-		else e->z = Parse::toInt(chance);
+		if (chance == "fixed") e->f = 0;
+		else e->f = Parse::toFloat(chance);
 
 		// quantity min/max
 		e->a = std::max(Parse::popFirstInt(val), 1);
@@ -555,8 +555,8 @@ void LootManager::parseLoot(std::string &val, EventComponent *e, std::vector<Eve
 			}
 
 			chance = Parse::popFirstString(val);
-			if (chance == "fixed") ec->z = 0;
-			else ec->z = Parse::toInt(chance);
+			if (chance == "fixed") ec->f = 0;
+			else ec->f = Parse::toFloat(chance);
 
 			ec->a = std::max(Parse::popFirstInt(val), 1);
 			ec->b = std::max(Parse::popFirstInt(val), ec->a);
@@ -611,9 +611,9 @@ void LootManager::loadLootTables() {
 				}
 				else if (infile.key == "chance") {
 					if (infile.val == "fixed")
-						ec->z = 0;
+						ec->f = 0;
 					else
-						ec->z = Parse::toInt(infile.val);
+						ec->f = Parse::toFloat(infile.val);
 				}
 				else if (infile.key == "quantity") {
 					ec->a = std::max(Parse::popFirstInt(infile.val), 1);

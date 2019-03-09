@@ -45,7 +45,7 @@ Attribute descriptions are in the following format: section.attributename, `valu
 
 `label`, defined as: `"hidden"` **or** `int, int, ["left", "right", "center"], ["top", "center", "bottom"], string : X, Y, Justify, Vertical Align, Font style`. The font style can be any style defined in engine/font\_settings.txt.
 
-`loot`, defined as: `filename` **or** `["currency", item_id], ["fixed", int], int, int : Item, Drop chance, Min quantity, Max quantity`. There is a limitation when defining as part of a list(...): filenames can only be used in the first list element.
+`loot`, defined as: `filename` **or** `["currency", item_id], ["fixed", float], int, int : Item, Drop chance, Min quantity, Max quantity`. There is a limitation when defining as part of a list(...): filenames can only be used in the first list element.
 
 `version`, defined as: a string of three numbers, separated by dots (e.g. "1.2.03")
 

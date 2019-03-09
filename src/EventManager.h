@@ -101,6 +101,7 @@ public:
 	int a;
 	int b;
 	int c;
+	float f;
 
 	EventComponent()
 		: type(NONE)
@@ -111,7 +112,8 @@ public:
 		, z(0)
 		, a(0)
 		, b(0)
-		, c(0) {
+		, c(0)
+		, f(0) {
 	}
 };
 

@@ -5,6 +5,7 @@ Engine features:
 * The configuration menu has been redesigned and is now used as the pause menu.
 * The interface features from version 1.09 have been reverted due to being accessible from the pause menu.
 * Added an Interface option to disable showing hidden entity markers.
+* Support floating point values for loot drop chance values.
 
 Engine fixes:
 
@@ -13,6 +14,7 @@ Engine fixes:
 * Fixed enemy AI so that enemies can now enter combat if a hero ally is in their proximity.
 * Fix --data-path command line flag on Windows.
 * Fixed dialog not being available if it lacked a topic.
+* Fixed loot drop rate bonus having no effect when loot drop chance was too low.
 
 Game updates:
 

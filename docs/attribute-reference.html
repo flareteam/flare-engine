@@ -78,7 +78,7 @@ body {
 
 <p><code>label</code>, defined as: <code>"hidden"</code> <strong>or</strong> <code>int, int, ["left", "right", "center"], ["top", "center", "bottom"], string : X, Y, Justify, Vertical Align, Font style</code>. The font style can be any style defined in engine/font_settings.txt.</p>
 
-<p><code>loot</code>, defined as: <code>filename</code> <strong>or</strong> <code>["currency", item_id], ["fixed", int], int, int : Item, Drop chance, Min quantity, Max quantity</code>. There is a limitation when defining as part of a list(&hellip;): filenames can only be used in the first list element.</p>
+<p><code>loot</code>, defined as: <code>filename</code> <strong>or</strong> <code>["currency", item_id], ["fixed", float], int, int : Item, Drop chance, Min quantity, Max quantity</code>. There is a limitation when defining as part of a list(&hellip;): filenames can only be used in the first list element.</p>
 
 <p><code>version</code>, defined as: a string of three numbers, separated by dots (e.g. &ldquo;1.2.03&rdquo;)</p>
 
@@ -1039,20 +1039,6 @@ body {
 
 <hr />
 
-<h4>Menu</h4>
-
-<p>Description of menus in menus/</p>
-
-<p><strong>pos</strong> | <code>rectangle</code> | Menu position and dimensions</p>
-
-<p><strong>align</strong> | <code>alignment</code> | Position relative to screen edges</p>
-
-<p><strong>soundfx_open</strong> | <code>filename</code> | Filename of a sound to play when opening this menu.</p>
-
-<p><strong>soundfx_close</strong> | <code>filename</code> | Filename of a sound to play when closing this menu.</p>
-
-<hr />
-
 <h4>MenuActionBar</h4>
 
 <p>Description of menus/actionbar.txt</p>
@@ -1202,6 +1188,20 @@ body {
 <p><strong>scrollpane_separator_color</strong> | <code>color</code> | Color of the separator line in between scroll box items.</p>
 
 <p><strong>keybinds_bg_color</strong> | <code>color, int : Color, Alpha</code> | Background color and alpha for the keybindings scrollbox.</p>
+
+<hr />
+
+<h4>Menu</h4>
+
+<p>Description of menus in menus/</p>
+
+<p><strong>pos</strong> | <code>rectangle</code> | Menu position and dimensions</p>
+
+<p><strong>align</strong> | <code>alignment</code> | Position relative to screen edges</p>
+
+<p><strong>soundfx_open</strong> | <code>filename</code> | Filename of a sound to play when opening this menu.</p>
+
+<p><strong>soundfx_close</strong> | <code>filename</code> | Filename of a sound to play when closing this menu.</p>
 
 <hr />
 

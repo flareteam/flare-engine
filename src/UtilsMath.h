@@ -45,6 +45,11 @@ namespace Math {
 		return minVal + (rand() % (d + signum(d)));
 	}
 
+	inline float randBetweenF(float minVal, float maxVal) {
+		if (minVal == maxVal) return minVal;
+		return minVal + (static_cast<float>(rand()) / static_cast<float>(RAND_MAX)) * maxVal;
+	}
+
 	/**
 	 * Returns true with random percent chance.
 	 */
