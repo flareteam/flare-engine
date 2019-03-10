@@ -15,6 +15,7 @@ Engine fixes:
 * Fix --data-path command line flag on Windows.
 * Fixed dialog not being available if it lacked a topic.
 * Fixed loot drop rate bonus having no effect when loot drop chance was too low.
+* Fix bug where the wrong requirements were checked for passive powers that had been granted bonus points.
 
 Game updates:
 

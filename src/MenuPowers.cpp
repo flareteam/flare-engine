@@ -721,7 +721,7 @@ void MenuPowers::setUnlockedPowers() {
 		for (size_t j = 0; j < power_cell[i].cells.size(); ++j) {
 			MenuPowersCell* pcell = &power_cell[i].cells[j];
 
-			if (pcell != bonus_pcell || ((!checkRequirements(pcell) || (!pcell->is_unlocked && !isBonusCell(pcell))) && pcell->passive_on)) {
+			if (pcell != bonus_pcell || ((!checkRequirements(current_pcell) || (!pcell->is_unlocked && !isBonusCell(pcell))) && pcell->passive_on)) {
 				// passive power is activated, but does not meet requirements, so remove it
 				std::vector<int>::iterator passive_it = std::find(pc->stats.powers_passive.begin(), pc->stats.powers_passive.end(), pcell->id);
 				if (passive_it != pc->stats.powers_passive.end())
