@@ -47,7 +47,7 @@ namespace Math {
 
 	inline float randBetweenF(float minVal, float maxVal) {
 		if (minVal == maxVal) return minVal;
-		return minVal + (static_cast<float>(rand()) / static_cast<float>(RAND_MAX)) * maxVal;
+		return minVal + ((static_cast<float>(rand()) / static_cast<float>(RAND_MAX)) * (maxVal - minVal));
 	}
 
 	/**
