@@ -43,17 +43,23 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "UtilsFileSystem.h"
 
-MenuStatBar::MenuStatBar(const std::string& type)
+MenuStatBar::MenuStatBar(const std::string& _type)
 	: bar(NULL)
 	, stat_min(0)
 	, stat_cur(0)
+	, stat_cur_prev(0)
 	, stat_max(0)
 	, orientation(HORIZONTAL)
 	, custom_text_pos(false) // label will be placed in the middle of the bar
 	, custom_string("")
 	, bar_gfx("")
 	, bar_gfx_background("")
+	, auto_hide(false)
+	, hide_timeout(0)
+	, type("")
 {
+
+	type = _type;
 
 	label = new WidgetLabel();
 
@@ -86,6 +92,11 @@ MenuStatBar::MenuStatBar(const std::string& type)
 			else if (infile.key == "bar_gfx_background") {
 				bar_gfx_background = infile.val;
 			}
+			// @ATTR hide_timeout|int|Hide full bar if full for given ammount of seconds; 0 disable hiding. For XP bar longer times would be better.
+			else if (infile.key == "hide_timeout") {
+				hide_timeout = static_cast<uint8_t>(Parse::popFirstInt(infile.val));
+				if (hide_timeout > 0) auto_hide = true;
+			}
 			else {
 				infile.error("MenuStatBar: '%s' is not a valid key.", infile.key.c_str());
 			}
@@ -115,6 +126,7 @@ void MenuStatBar::loadGraphics() {
 }
 
 void MenuStatBar::update(unsigned long _stat_min, unsigned long _stat_cur, unsigned long _stat_max) {
+	stat_cur_prev = stat_cur; // save previous value
 	stat_min = _stat_min;
 	stat_cur = _stat_cur;
 	stat_max = _stat_max;
@@ -124,7 +136,38 @@ void MenuStatBar::setCustomString(const std::string& _custom_string) {
 	custom_string = _custom_string;
 }
 
+bool MenuStatBar::disappear() {
+	if (auto_hide) {
+		bool disappear = false;
+
+		// HP and MP bars disappear when are full
+		if (type == "hp" || type == "mp") {
+			if (stat_cur == stat_max && timeout.getDuration() == 0) {
+				timeout.setDuration(settings->max_frames_per_sec * hide_timeout);
+			}
+		// XP bar disappears when value is not changing
+		} else if (type == "xp") {
+			if (stat_cur_prev != stat_cur) {
+				timeout.setDuration(settings->max_frames_per_sec * hide_timeout);
+				disappear = false; //let xp bar reappear on change
+			}
+		}
+		timeout.tick();
+		if (timeout.isEnd()) disappear = true;
+		// let's HP and MP bar reappear
+		if ((type == "hp" || type == "mp") && stat_cur != stat_max) {
+			disappear = false;
+			timeout.setDuration(0);
+		}
+		return disappear;
+	}
+	return false;
+}
+
 void MenuStatBar::render() {
+
+	if (disappear()) return;
+
 	Rect src;
 	Rect dest;
 
