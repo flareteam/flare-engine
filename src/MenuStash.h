@@ -52,6 +52,7 @@ public:
 	bool add(ItemStack stack, int slot, bool play_sound);
 	void renderTooltips(const Point& position);
 	bool drop(const Point& position, ItemStack stack);
+	void validate(std::queue<ItemStack>& global_drop_stack);
 
 	void removeFromPrevSlot(int quantity);
 

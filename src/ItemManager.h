@@ -132,6 +132,7 @@ public:
 	std::string stepfx;        // sound effect played when walking (armors only)
 	std::vector<std::string> disable_slots; // if this item is equipped, it will disable slots that match the types in the list
 	bool quest_item;
+	bool no_stash;
 
 	int getPrice();
 	int getSellPrice(bool is_new_buyback);

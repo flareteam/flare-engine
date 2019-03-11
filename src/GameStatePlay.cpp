@@ -749,6 +749,7 @@ void GameStatePlay::checkStash() {
 		menu->inv->visible = true;
 		menu->stash->visible = true;
 		mapr->stash = false;
+		menu->stash->validate(menu->drop_stack);
 	}
 	else if (menu->stash->visible) {
 		// Close stash if inventory is closed

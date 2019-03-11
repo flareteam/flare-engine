@@ -7,6 +7,7 @@ Engine features:
 * Added an Interface option to disable showing hidden entity markers.
 * Support floating point values for loot drop chance values.
 * Add 'hide_timeout' option to statbar configuration to support auto-hiding (Leszek Cimała)
+* Add 'no_stash' property to item definitions to prevent items from being placed in the stash.
 
 Engine fixes:
 
@@ -17,10 +18,12 @@ Engine fixes:
 * Fixed dialog not being available if it lacked a topic.
 * Fixed loot drop rate bonus having no effect when loot drop chance was too low.
 * Fix bug where the wrong requirements were checked for passive powers that had been granted bonus points.
+* Items that can't be stashed are now dropped on the ground upon opening the stash.
 
 Game updates:
 
 * Fixed an oversight that allowed easy farming of the Torture Chambers boss and loot chests.
+* Made it so that potions and scrolls can not be stashed. This fixes an exploit where players could utilize a low level character to get these items for cheap.
 
 Translation updates:
 

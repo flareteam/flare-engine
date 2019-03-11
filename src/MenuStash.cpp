@@ -210,6 +210,11 @@ bool MenuStash::add(ItemStack stack, int slot, bool play_sound) {
 		drop_stack.push(stack);
 		return false;
 	}
+	else if (items->items[stack.item].no_stash) {
+		pc->logMsg(msg->get("This item can not be stored in the stash."), Avatar::MSG_NORMAL);
+		drop_stack.push(stack);
+		return false;
+	}
 
 	ItemStack leftover = stock.add(stack, slot);
 	if (!leftover.empty()) {
@@ -259,6 +264,22 @@ void MenuStash::removeFromPrevSlot(int quantity) {
 	if (drag_prev_slot > -1) {
 		stock.subtract(drag_prev_slot, quantity);
 	}
+}
+
+void MenuStash::validate(std::queue<ItemStack>& global_drop_stack) {
+	for (int i = 0; i < stock.getSlotNumber(); ++i) {
+		if (stock[i].empty())
+			continue;
+
+		ItemStack stack = stock[i];
+		if (items->items[stack.item].quest_item || items->items[stack.item].no_stash) {
+			pc->logMsg(msg->get("Can not store item in stash: %s", items->getItemName(stack.item).c_str()), Avatar::MSG_NORMAL);
+			global_drop_stack.push(stack);
+			stock[i].clear();
+			updated = true;
+		}
+	}
+
 }
 
 MenuStash::~MenuStash() {

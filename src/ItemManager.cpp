@@ -81,7 +81,8 @@ Item::Item()
 	, max_quantity(INT_MAX)
 	, pickup_status("")
 	, stepfx("")
-	, quest_item(false) {
+	, quest_item(false)
+	, no_stash(false) {
 }
 
 ItemManager::ItemManager()
@@ -353,6 +354,10 @@ void ItemManager::loadItems(const std::string& filename) {
 		else if (infile.key == "quest_item") {
 			// @ATTR quest_item|bool|If true, this item is a quest item and can not be dropped, stashed, or sold.
 			items[id].quest_item = Parse::toBool(infile.val);
+		}
+		else if (infile.key == "no_stash") {
+			// @ATTR no_stash|bool|If true, this item can not be stashed.
+			items[id].no_stash = Parse::toBool(infile.val);
 		}
 		else {
 			infile.error("ItemManager: '%s' is not a valid key.", infile.key.c_str());
