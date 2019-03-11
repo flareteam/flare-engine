@@ -168,6 +168,8 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	, minimap_lb(new WidgetLabel())
 	, statbar_labels_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
 	, statbar_labels_lb(new WidgetLabel())
+	, statbar_autohide_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
+	, statbar_autohide_lb(new WidgetLabel())
 	, combat_text_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
 	, combat_text_lb(new WidgetLabel())
 	, auto_equip_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
@@ -336,6 +338,7 @@ void MenuConfig::init() {
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::LOOT_TOOLTIPS, loot_tooltip_lb, loot_tooltip_lstb, msg->get("Loot tooltip visibility"));
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::MINIMAP_MODE, minimap_lb, minimap_lstb, msg->get("Mini-map mode"));
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::STATBAR_LABELS, statbar_labels_lb, statbar_labels_cb, msg->get("Always show stat bar labels"));
+	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::STATBAR_AUTOHIDE, statbar_autohide_lb, statbar_autohide_cb, msg->get("Allow stat bar auto-hiding"));
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::COMBAT_TEXT, combat_text_lb, combat_text_cb, msg->get("Show combat text"));
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::AUTO_EQUIP, auto_equip_lb, auto_equip_cb, msg->get("Automatically equip items"));
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::ENTITY_MARKERS, entity_markers_lb, entity_markers_cb, msg->get("Show hidden entity markers"));
@@ -459,6 +462,7 @@ void MenuConfig::readConfig() {
 	parallax_layers_cb->tooltip = msg->get("This enables parallax (non-tile) layers. Disabling this setting can improve performance in some cases.");
 	change_gamma_cb->tooltip = msg->get("Enables the below setting that controls the screen gamma level. The behavior of the gamma setting can vary between platforms.");
 	colorblind_cb->tooltip = msg->get("Provides additional text for information that is primarily conveyed through color.");
+	statbar_autohide_cb->tooltip = msg->get("Some mods will automatically hide the stat bars when they are inactive. Disabling this option will keep them displayed at all times.");
 	auto_equip_cb->tooltip = msg->get("When enabled, empty equipment slots will be filled with applicable items when they are obtained.");
 	entity_markers_cb->tooltip = msg->get("Shows a marker above enemies, allies, and the player when they are obscured by tall objects.");
 	no_mouse_cb->tooltip = msg->get("This allows the game to be controlled entirely with the keyboard (or joystick).");
@@ -723,6 +727,7 @@ void MenuConfig::updateInterface() {
 	dev_mode_cb->setChecked(settings->dev_mode);
 	subtitles_cb->setChecked(settings->subtitles);
 	statbar_labels_cb->setChecked(settings->statbar_labels);
+	statbar_autohide_cb->setChecked(settings->statbar_autohide);
 	combat_text_cb->setChecked(settings->combat_text);
 	auto_equip_cb->setChecked(settings->auto_equip);
 	entity_markers_cb->setChecked(settings->entity_markers);
@@ -1009,6 +1014,9 @@ void MenuConfig::logicInterface() {
 	}
 	else if (cfg_tabs[INTERFACE_TAB].options[Platform::Interface::STATBAR_LABELS].enabled && statbar_labels_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->statbar_labels = statbar_labels_cb->isChecked();
+	}
+	else if (cfg_tabs[INTERFACE_TAB].options[Platform::Interface::STATBAR_AUTOHIDE].enabled && statbar_autohide_cb->checkClickAt(mouse.x, mouse.y)) {
+		settings->statbar_autohide = statbar_autohide_cb->isChecked();
 	}
 	else if (cfg_tabs[INTERFACE_TAB].options[Platform::Interface::COMBAT_TEXT].enabled && combat_text_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->combat_text = combat_text_cb->isChecked();

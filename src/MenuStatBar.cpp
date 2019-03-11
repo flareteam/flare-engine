@@ -138,7 +138,7 @@ void MenuStatBar::setCustomString(const std::string& _custom_string) {
 }
 
 bool MenuStatBar::disappear() {
-	if (timeout.getDuration() > 0) {
+	if (timeout.getDuration() > 0 && settings->statbar_autohide) {
 		if (type == TYPE_HP || type == TYPE_MP) {
 			// HP and MP bars disappear when full
 			if (stat_cur != stat_max) {

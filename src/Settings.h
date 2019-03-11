@@ -86,6 +86,7 @@ public:
 	bool dev_hud;
 	int loot_tooltips;
 	bool statbar_labels;
+	bool statbar_autohide;
 	bool auto_equip;
 	bool subtitles;
 	int minimap_mode;

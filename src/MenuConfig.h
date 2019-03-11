@@ -228,6 +228,8 @@ public:
 	WidgetLabel                * minimap_lb;
 	WidgetCheckBox             * statbar_labels_cb;
 	WidgetLabel                * statbar_labels_lb;
+	WidgetCheckBox             * statbar_autohide_cb;
+	WidgetLabel                * statbar_autohide_lb;
 	WidgetCheckBox             * combat_text_cb;
 	WidgetLabel                * combat_text_lb;
 	WidgetCheckBox             * auto_equip_cb;

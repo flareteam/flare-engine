@@ -55,7 +55,7 @@ public:
 
 	class Interface {
 	public:
-		static const int COUNT = 12;
+		static const int COUNT = 13;
 		enum {
 			LANGUAGE,
 			MINIMAP_MODE,
@@ -63,6 +63,7 @@ public:
 			SUBTITLES,
 			COLORBLIND,
 			STATBAR_LABELS,
+			STATBAR_AUTOHIDE,
 			COMBAT_TEXT,
 			AUTO_EQUIP,
 			HARDWARE_CURSOR,
