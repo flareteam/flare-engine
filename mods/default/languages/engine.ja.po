@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-16 15:35-0500\n"
+"POT-Creation-Date: 2019-03-11 14:35-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
 "Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
 "Language-Team: Japanese (https://www.transifex.com/flareorg/teams/84925/ja/)\n"
@@ -174,7 +174,7 @@ msgstr "セーブデータをロードしています..."
 msgid "Invalid save"
 msgstr ""
 
-#: ../../../src/GameStateLoad.cpp:755 ../../../src/ItemManager.cpp:753
+#: ../../../src/GameStateLoad.cpp:755 ../../../src/ItemManager.cpp:758
 #: ../../../src/MenuPowers.cpp:778 ../../../src/MenuPowers.cpp:1144
 #: ../../../src/MenuPowers.cpp:1542
 #, c-format
@@ -182,7 +182,7 @@ msgid "Level %d"
 msgstr "レベル %d"
 
 #: ../../../src/GameStateNew.cpp:65 ../../../src/InputState.cpp:401
-#: ../../../src/MenuConfig.cpp:234
+#: ../../../src/MenuConfig.cpp:236
 msgid "Cancel"
 msgstr "キャンセル"
 
@@ -382,102 +382,102 @@ msgstr "マウス X1"
 msgid "Mouse X2"
 msgstr "マウス X2"
 
-#: ../../../src/ItemManager.cpp:456 ../../../src/ItemManager.cpp:459
+#: ../../../src/ItemManager.cpp:461 ../../../src/ItemManager.cpp:464
 msgid "Unknown Item"
 msgstr "不明なアイテム"
 
-#: ../../../src/ItemManager.cpp:654 ../../../src/MenuPowers.cpp:887
+#: ../../../src/ItemManager.cpp:659 ../../../src/MenuPowers.cpp:887
 #, c-format
 msgid "%d%% Speed"
 msgstr "%d%% スピード"
 
-#: ../../../src/ItemManager.cpp:658 ../../../src/MenuPowers.cpp:890
+#: ../../../src/ItemManager.cpp:663 ../../../src/MenuPowers.cpp:890
 #, c-format
 msgid "%d%% Attack Speed"
 msgstr "%d%% スピード"
 
-#: ../../../src/ItemManager.cpp:680 ../../../src/MenuCharacter.cpp:354
+#: ../../../src/ItemManager.cpp:685 ../../../src/MenuCharacter.cpp:354
 #: ../../../src/MenuPowers.cpp:833
 #, c-format
 msgid "Resistance (%s)"
 msgstr ""
 
-#: ../../../src/ItemManager.cpp:690
+#: ../../../src/ItemManager.cpp:695
 #, c-format
 msgid "Requires %s"
 msgstr ""
 
-#: ../../../src/ItemManager.cpp:739
+#: ../../../src/ItemManager.cpp:744
 msgid "Quest Item"
 msgstr "クエスト品"
 
-#: ../../../src/ItemManager.cpp:766
+#: ../../../src/ItemManager.cpp:771
 #, c-format
 msgid "Quality: %s"
 msgstr "品質: %s"
 
-#: ../../../src/ItemManager.cpp:791
+#: ../../../src/ItemManager.cpp:796
 #, c-format
 msgid "Absorb: %d-%d"
 msgstr "吸収: %d-%d"
 
-#: ../../../src/ItemManager.cpp:793
+#: ../../../src/ItemManager.cpp:798
 #, c-format
 msgid "Absorb: %d"
 msgstr "吸収: %d"
 
-#: ../../../src/ItemManager.cpp:833 ../../../src/MenuPowers.cpp:1131
+#: ../../../src/ItemManager.cpp:838 ../../../src/MenuPowers.cpp:1131
 #: ../../../src/MenuPowers.cpp:1134
 #, c-format
 msgid "Requires Level %d"
 msgstr "レベル %d が必要です"
 
-#: ../../../src/ItemManager.cpp:844 ../../../src/MenuPowers.cpp:1123
+#: ../../../src/ItemManager.cpp:849 ../../../src/MenuPowers.cpp:1123
 #: ../../../src/MenuPowers.cpp:1125
 #, c-format
 msgid "Requires %s %d"
 msgstr "%s %d が必要です"
 
-#: ../../../src/ItemManager.cpp:855
+#: ../../../src/ItemManager.cpp:860
 #, c-format
 msgid "Requires Class: %s"
 msgstr "必要なクラス: %s"
 
-#: ../../../src/ItemManager.cpp:870 ../../../src/ItemManager.cpp:882
+#: ../../../src/ItemManager.cpp:875 ../../../src/ItemManager.cpp:887
 #, c-format
 msgid "Buy Price: %d %s"
 msgstr "購入価格: %d %s"
 
-#: ../../../src/ItemManager.cpp:872 ../../../src/ItemManager.cpp:884
+#: ../../../src/ItemManager.cpp:877 ../../../src/ItemManager.cpp:889
 #, c-format
 msgid "Buy Price: %d %s each"
 msgstr "購入価格: %d %s ひとつあたり"
 
-#: ../../../src/ItemManager.cpp:892
+#: ../../../src/ItemManager.cpp:897
 #, c-format
 msgid "Sell Price: %d %s"
 msgstr "売却価格: %d %s"
 
-#: ../../../src/ItemManager.cpp:894
+#: ../../../src/ItemManager.cpp:899
 #, c-format
 msgid "Sell Price: %d %s each"
 msgstr "売却価格: %d %s ひとつあたり"
 
-#: ../../../src/ItemManager.cpp:903
+#: ../../../src/ItemManager.cpp:908
 msgid "Set:"
 msgstr "組合わせ:"
 
-#: ../../../src/ItemManager.cpp:910
+#: ../../../src/ItemManager.cpp:915
 #, c-format
 msgid "%d items:"
 msgstr "%d アイテム:"
 
-#: ../../../src/ItemManager.cpp:923 ../../../src/ItemManager.cpp:929
+#: ../../../src/ItemManager.cpp:928 ../../../src/ItemManager.cpp:934
 #, c-format
 msgid "Press [%s] to use"
 msgstr ""
 
-#: ../../../src/ItemManager.cpp:927
+#: ../../../src/ItemManager.cpp:932
 #, c-format
 msgid "Press [%s] to read"
 msgstr ""
@@ -558,15 +558,15 @@ msgstr "レベルごとに %d が付与されます。"
 msgid "Each point of %s grants %d."
 msgstr "%s の各点ごとに %d が付与されます。"
 
-#: ../../../src/MenuConfig.cpp:121 ../../../src/MenuConfig.cpp:1096
+#: ../../../src/MenuConfig.cpp:121 ../../../src/MenuConfig.cpp:1104
 msgid "Clear"
 msgstr "クリア"
 
-#: ../../../src/MenuConfig.cpp:121 ../../../src/MenuConfig.cpp:1094
+#: ../../../src/MenuConfig.cpp:121 ../../../src/MenuConfig.cpp:1102
 msgid "Assign:"
 msgstr "割り当て:"
 
-#: ../../../src/MenuConfig.cpp:122 ../../../src/MenuConfig.cpp:233
+#: ../../../src/MenuConfig.cpp:122 ../../../src/MenuConfig.cpp:235
 msgid "Defaults"
 msgstr "デフォルト"
 
@@ -574,266 +574,276 @@ msgstr "デフォルト"
 msgid "Reset ALL settings?"
 msgstr "すべての設定をリセット?"
 
-#: ../../../src/MenuConfig.cpp:232 ../../../src/MenuNumPicker.cpp:49
+#: ../../../src/MenuConfig.cpp:234 ../../../src/MenuNumPicker.cpp:49
 msgid "OK"
 msgstr "オーケー"
 
-#: ../../../src/MenuConfig.cpp:276
+#: ../../../src/MenuConfig.cpp:278
 msgid "Default"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:276
+#: ../../../src/MenuConfig.cpp:278
 msgid ""
 "Show all loot tooltips, except for those that would be obscured by the "
 "player or an enemy. Temporarily show all loot tooltips with 'Alt'."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:277
+#: ../../../src/MenuConfig.cpp:279
 msgid "Show all"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:277
+#: ../../../src/MenuConfig.cpp:279
 msgid ""
 "Always show loot tooltips. Temporarily hide all loot tooltips with 'Alt'."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:278 ../../../src/MenuConfig.cpp:283
+#: ../../../src/MenuConfig.cpp:280 ../../../src/MenuConfig.cpp:285
 msgid "Hidden"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:278
+#: ../../../src/MenuConfig.cpp:280
 msgid ""
 "Always hide loot tooltips, except for when a piece of loot is hovered with "
 "the mouse cursor. Temporarily show all loot tooltips with 'Alt'."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:281
+#: ../../../src/MenuConfig.cpp:283
 msgid "Visible"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:282
+#: ../../../src/MenuConfig.cpp:284
 msgid "Visible (2x zoom)"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:295 ../../../src/MenuConfig.cpp:1509
+#: ../../../src/MenuConfig.cpp:297 ../../../src/MenuConfig.cpp:1517
 msgid "Exit"
 msgstr "終了"
 
-#: ../../../src/MenuConfig.cpp:296
+#: ../../../src/MenuConfig.cpp:298
 msgid "Video"
 msgstr "ビデオ"
 
-#: ../../../src/MenuConfig.cpp:297
+#: ../../../src/MenuConfig.cpp:299
 msgid "Audio"
 msgstr "オーディオ"
 
-#: ../../../src/MenuConfig.cpp:298
+#: ../../../src/MenuConfig.cpp:300
 msgid "Interface"
 msgstr "インタフェース"
 
-#: ../../../src/MenuConfig.cpp:299
+#: ../../../src/MenuConfig.cpp:301
 msgid "Input"
 msgstr "入力"
 
-#: ../../../src/MenuConfig.cpp:300
+#: ../../../src/MenuConfig.cpp:302
 msgid "Keybindings"
 msgstr "キー設定"
 
-#: ../../../src/MenuConfig.cpp:301
+#: ../../../src/MenuConfig.cpp:303
 msgid "Mods"
 msgstr "モッズ"
 
-#: ../../../src/MenuConfig.cpp:313
+#: ../../../src/MenuConfig.cpp:315
 msgid "Paused"
 msgstr "ポーズ"
 
-#: ../../../src/MenuConfig.cpp:315
+#: ../../../src/MenuConfig.cpp:317
 msgid "Time Played"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:317
+#: ../../../src/MenuConfig.cpp:319
 msgid "Renderer"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:318
+#: ../../../src/MenuConfig.cpp:320
 msgid "Full Screen Mode"
 msgstr "フルスクリーンモード"
 
-#: ../../../src/MenuConfig.cpp:319
+#: ../../../src/MenuConfig.cpp:321
 msgid "Hardware surfaces"
 msgstr "ハードウェアサーフェス"
 
-#: ../../../src/MenuConfig.cpp:320
+#: ../../../src/MenuConfig.cpp:322
 msgid "V-Sync"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:321
+#: ../../../src/MenuConfig.cpp:323
 msgid "Texture Filtering"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:322
+#: ../../../src/MenuConfig.cpp:324
 msgid "DPI scaling"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:323
+#: ../../../src/MenuConfig.cpp:325
 msgid "Parallax Layers"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:324
+#: ../../../src/MenuConfig.cpp:326
 msgid "Allow changing gamma"
 msgstr "ガンマの変更許可"
 
-#: ../../../src/MenuConfig.cpp:325
+#: ../../../src/MenuConfig.cpp:327
 msgid "Gamma"
 msgstr "ガンマ"
 
-#: ../../../src/MenuConfig.cpp:327
+#: ../../../src/MenuConfig.cpp:329
 msgid "Sound Volume"
 msgstr "効果音の音量"
 
-#: ../../../src/MenuConfig.cpp:328
+#: ../../../src/MenuConfig.cpp:330
 msgid "Music Volume"
 msgstr "音楽の音量"
 
-#: ../../../src/MenuConfig.cpp:330
+#: ../../../src/MenuConfig.cpp:332
 msgid "Language"
 msgstr "言語"
 
-#: ../../../src/MenuConfig.cpp:331
+#: ../../../src/MenuConfig.cpp:333
 msgid "Show FPS"
 msgstr "FPSを表示"
 
-#: ../../../src/MenuConfig.cpp:332
+#: ../../../src/MenuConfig.cpp:334
 msgid "Hardware mouse cursor"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:333
+#: ../../../src/MenuConfig.cpp:335
 msgid "Colorblind Mode"
 msgstr "色盲モード"
 
-#: ../../../src/MenuConfig.cpp:334
+#: ../../../src/MenuConfig.cpp:336
 msgid "Developer Mode"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:335
+#: ../../../src/MenuConfig.cpp:337
 msgid "Subtitles"
 msgstr "字幕"
 
-#: ../../../src/MenuConfig.cpp:336
+#: ../../../src/MenuConfig.cpp:338
 msgid "Loot tooltip visibility"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:337
+#: ../../../src/MenuConfig.cpp:339
 msgid "Mini-map mode"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:338
+#: ../../../src/MenuConfig.cpp:340
 msgid "Always show stat bar labels"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:339
+#: ../../../src/MenuConfig.cpp:341
+msgid "Allow stat bar auto-hiding"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:342
 msgid "Show combat text"
 msgstr "戦闘のテキストを表示"
 
-#: ../../../src/MenuConfig.cpp:340
+#: ../../../src/MenuConfig.cpp:343
 msgid "Automatically equip items"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:341
+#: ../../../src/MenuConfig.cpp:344
 msgid "Show hidden entity markers"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:343
+#: ../../../src/MenuConfig.cpp:346
 msgid "Joystick"
 msgstr "ジョイスティック"
 
-#: ../../../src/MenuConfig.cpp:344
+#: ../../../src/MenuConfig.cpp:347
 msgid "Move hero using mouse"
 msgstr "マウスでキャラクターを動かす"
 
-#: ../../../src/MenuConfig.cpp:345
+#: ../../../src/MenuConfig.cpp:348
 msgid "Mouse aim"
 msgstr "マウスの狙い"
 
-#: ../../../src/MenuConfig.cpp:346
+#: ../../../src/MenuConfig.cpp:349
 msgid "Do not use mouse"
 msgstr "マウスの不利用"
 
-#: ../../../src/MenuConfig.cpp:347
+#: ../../../src/MenuConfig.cpp:350
 msgid "Swap mouse movement button"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:348
+#: ../../../src/MenuConfig.cpp:351
 msgid "Attack with mouse movement"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:349
+#: ../../../src/MenuConfig.cpp:352
 msgid "Joystick Deadzone"
 msgstr "Joystick Deadzone"
 
-#: ../../../src/MenuConfig.cpp:456
+#: ../../../src/MenuConfig.cpp:459
 msgid ""
 "Will try to store surfaces in video memory versus system memory. The effect "
 "this has on performance depends on the renderer."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:457
+#: ../../../src/MenuConfig.cpp:460
 msgid ""
 "Prevents screen tearing. Disable if you experience \"stuttering\" in "
 "windowed mode or input lag."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:458
+#: ../../../src/MenuConfig.cpp:461
 msgid ""
 "When enabled, this uses the screen DPI in addition to the window dimensions "
 "to scale the rendering resolution. Otherwise, only the window dimensions are"
 " used."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:459
+#: ../../../src/MenuConfig.cpp:462
 msgid ""
 "This enables parallax (non-tile) layers. Disabling this setting can improve "
 "performance in some cases."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:460
+#: ../../../src/MenuConfig.cpp:463
 msgid ""
 "Enables the below setting that controls the screen gamma level. The behavior"
 " of the gamma setting can vary between platforms."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:461
+#: ../../../src/MenuConfig.cpp:464
 msgid ""
 "Provides additional text for information that is primarily conveyed through "
 "color."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:462
+#: ../../../src/MenuConfig.cpp:465
+msgid ""
+"Some mods will automatically hide the stat bars when they are inactive. "
+"Disabling this option will keep them displayed at all times."
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:466
 msgid ""
 "When enabled, empty equipment slots will be filled with applicable items "
 "when they are obtained."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:463
+#: ../../../src/MenuConfig.cpp:467
 msgid ""
 "Shows a marker above enemies, allies, and the player when they are obscured "
 "by tall objects."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:464
+#: ../../../src/MenuConfig.cpp:468
 msgid ""
 "This allows the game to be controlled entirely with the keyboard (or "
 "joystick)."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:465
+#: ../../../src/MenuConfig.cpp:469
 msgid ""
 "When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or"
 " 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
 "instead of 'Main1'."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:466
+#: ../../../src/MenuConfig.cpp:470
 msgid ""
 "When 'Move hero using mouse' is enabled, this setting controls if the Power "
 "assigned to the movement button can be used by targeting an enemy. If this "
@@ -841,49 +851,49 @@ msgid ""
 "assigned to the movement button."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:467
+#: ../../../src/MenuConfig.cpp:471
 msgid ""
 "The player's attacks will be aimed in the direction of the mouse cursor when"
 " this is enabled."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:518
+#: ../../../src/MenuConfig.cpp:522
 msgid "Active Mods"
 msgstr "アクティブモッズ"
 
-#: ../../../src/MenuConfig.cpp:527
+#: ../../../src/MenuConfig.cpp:531
 msgid "Available Mods"
 msgstr "利用可能モッズ"
 
-#: ../../../src/MenuConfig.cpp:546
+#: ../../../src/MenuConfig.cpp:550
 msgid "<< Disable"
 msgstr "<< 無効"
 
-#: ../../../src/MenuConfig.cpp:552
+#: ../../../src/MenuConfig.cpp:556
 msgid "Enable >>"
 msgstr "有効 >>"
 
-#: ../../../src/MenuConfig.cpp:1368
+#: ../../../src/MenuConfig.cpp:1376
 msgid "Version:"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:1373
+#: ../../../src/MenuConfig.cpp:1381
 msgid "Game:"
 msgstr "ゲーム:"
 
-#: ../../../src/MenuConfig.cpp:1378
+#: ../../../src/MenuConfig.cpp:1386
 msgid "Engine version:"
 msgstr "必要バージョン:"
 
-#: ../../../src/MenuConfig.cpp:1386
+#: ../../../src/MenuConfig.cpp:1394
 msgid "Requires mods:"
 msgstr "必要モッズ:"
 
-#: ../../../src/MenuConfig.cpp:1492 ../../../src/SDLInputState.cpp:637
+#: ../../../src/MenuConfig.cpp:1500 ../../../src/SDLInputState.cpp:637
 msgid "(none)"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:1509
+#: ../../../src/MenuConfig.cpp:1517
 msgid "Save & Exit"
 msgstr "セーブ & 終了"
 
@@ -1318,11 +1328,25 @@ msgstr "共有スタッシュ"
 msgid "Can not store quest items in the stash."
 msgstr "クエスト品はスタッシュには保管できない。"
 
-#: ../../../src/MenuStash.cpp:219
+#: ../../../src/MenuStash.cpp:214
+msgid "This item can not be stored in the stash."
+msgstr ""
+
+#: ../../../src/MenuStash.cpp:224
 msgid "Stash is full."
 msgstr "スタッシュは満杯です。"
 
-#: ../../../src/MenuTalker.cpp:454
+#: ../../../src/MenuStash.cpp:276
+#, c-format
+msgid "Can not store item in stash: %s"
+msgstr ""
+
+#: ../../../src/MenuTalker.cpp:447
+#, c-format
+msgid "<dialog node %d>"
+msgstr ""
+
+#: ../../../src/MenuTalker.cpp:455
 msgid "Trade"
 msgstr "売買"
 
