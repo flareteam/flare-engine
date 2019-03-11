@@ -92,7 +92,7 @@ MenuStatBar::MenuStatBar(const std::string& _type)
 			else if (infile.key == "bar_gfx_background") {
 				bar_gfx_background = infile.val;
 			}
-			// @ATTR hide_timeout|int|Hide full bar if full for given ammount of seconds; 0 disable hiding. For XP bar longer times would be better.
+			// @ATTR hide_timeout|int|Hide HP and MP bar if full mana or health, after given amount of seconds; Hide XP bar if no changes in XP points for given amount of seconds. 0 disable hiding.
 			else if (infile.key == "hide_timeout") {
 				hide_timeout = static_cast<uint8_t>(Parse::popFirstInt(infile.val));
 				if (hide_timeout > 0) auto_hide = true;
