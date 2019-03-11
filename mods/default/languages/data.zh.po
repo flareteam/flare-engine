@@ -26,7 +26,7 @@ msgstr "物理"
 
 #: ../engine/primary_stats.txt:7
 msgid "Mental"
-msgstr "精神"
+msgstr "魔法"
 
 #: ../engine/primary_stats.txt:11
 msgid "Offense"
@@ -70,15 +70,15 @@ msgstr "范围伤害最大值"
 
 #: ../engine/damage_types.txt:21
 msgid "Mental Damage"
-msgstr "精神伤害"
+msgstr "魔法伤害"
 
 #: ../engine/damage_types.txt:22
 msgid "Increases the damage done with staves and other mental weapons."
-msgstr "增加杖和其他精神类武器的伤害。"
+msgstr "增加杖和其他魔法类武器的伤害。"
 
 #: ../engine/damage_types.txt:23
 msgid "Mental Damage Min"
-msgstr "精神伤害最小值"
+msgstr "魔法伤害最小值"
 
 #: ../engine/damage_types.txt:24
 msgid "Mental Damage Max"
@@ -194,7 +194,7 @@ msgstr "Pavel Kirpichyov"
 
 #: ../cutscenes/credits.txt:40
 msgid "runtime-x86"
-msgstr "x86 运行时"
+msgstr "runtime-x86"
 
 #: ../cutscenes/credits.txt:41
 msgid "Ryan Dansie"
