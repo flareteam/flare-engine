@@ -43,8 +43,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "UtilsFileSystem.h"
 
-MenuStatBar::MenuStatBar(const std::string& _type)
+MenuStatBar::MenuStatBar(short _type)
 	: bar(NULL)
+	, label(new WidgetLabel())
 	, stat_min(0)
 	, stat_cur(0)
 	, stat_cur_prev(0)
@@ -54,19 +55,20 @@ MenuStatBar::MenuStatBar(const std::string& _type)
 	, custom_string("")
 	, bar_gfx("")
 	, bar_gfx_background("")
-	, auto_hide(false)
-	, hide_timeout(0)
-	, type("")
+	, type(_type)
 {
-
-	type = _type;
-
-	label = new WidgetLabel();
+	std::string type_filename;
+	if (type == TYPE_HP)
+		type_filename = "hp";
+	else if (type == TYPE_MP)
+		type_filename = "mp";
+	else if (type == TYPE_XP)
+		type_filename = "xp";
 
 	// Load config settings
 	FileParser infile;
 	// @CLASS MenuStatBar|Description of menus/hp.txt, menus/mp.txt, menus/xp.txt
-	if(infile.open("menus/"+type+".txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
+	if(!type_filename.empty() && infile.open("menus/" + type_filename + ".txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while(infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
@@ -92,10 +94,9 @@ MenuStatBar::MenuStatBar(const std::string& _type)
 			else if (infile.key == "bar_gfx_background") {
 				bar_gfx_background = infile.val;
 			}
-			// @ATTR hide_timeout|int|Hide HP and MP bar if full mana or health, after given amount of seconds; Hide XP bar if no changes in XP points for given amount of seconds. 0 disable hiding.
+			// @ATTR hide_timeout|duration|Hide HP and MP bar if full mana or health, after given amount of seconds; Hide XP bar if no changes in XP points for given amount of seconds. 0 disable hiding.
 			else if (infile.key == "hide_timeout") {
-				hide_timeout = static_cast<uint8_t>(Parse::popFirstInt(infile.val));
-				if (hide_timeout > 0) auto_hide = true;
+				timeout.setDuration(Parse::toDuration(infile.val));
 			}
 			else {
 				infile.error("MenuStatBar: '%s' is not a valid key.", infile.key.c_str());
@@ -137,29 +138,22 @@ void MenuStatBar::setCustomString(const std::string& _custom_string) {
 }
 
 bool MenuStatBar::disappear() {
-	if (auto_hide) {
-		bool disappear = false;
-
-		// HP and MP bars disappear when are full
-		if (type == "hp" || type == "mp") {
-			if (stat_cur == stat_max && timeout.getDuration() == 0) {
-				timeout.setDuration(settings->max_frames_per_sec * hide_timeout);
+	if (timeout.getDuration() > 0) {
+		if (type == TYPE_HP || type == TYPE_MP) {
+			// HP and MP bars disappear when full
+			if (stat_cur != stat_max) {
+				timeout.reset(Timer::BEGIN);
 			}
-		// XP bar disappears when value is not changing
-		} else if (type == "xp") {
+		} else if (type == TYPE_XP) {
+			// XP bar disappears when value is not changing
 			if (stat_cur_prev != stat_cur) {
-				timeout.setDuration(settings->max_frames_per_sec * hide_timeout);
-				disappear = false; //let xp bar reappear on change
+				timeout.reset(Timer::BEGIN);
 			}
 		}
+
 		timeout.tick();
-		if (timeout.isEnd()) disappear = true;
-		// let's HP and MP bar reappear
-		if ((type == "hp" || type == "mp") && stat_cur != stat_max) {
-			disappear = false;
-			timeout.setDuration(0);
-		}
-		return disappear;
+		if (timeout.isEnd())
+			return true;
 	}
 	return false;
 }

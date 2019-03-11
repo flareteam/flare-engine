@@ -54,14 +54,18 @@ private:
 	std::string custom_string;
 	std::string bar_gfx;
 	std::string bar_gfx_background;
-	bool auto_hide;
-	uint8_t hide_timeout;
-	std::string type;
+	short type;
 	Timer timeout;
 
 
 public:
-	explicit MenuStatBar(const std::string& type);
+	enum {
+		TYPE_HP = 0,
+		TYPE_MP = 1,
+		TYPE_XP = 2
+	};
+
+	explicit MenuStatBar(short _type);
 	~MenuStatBar();
 	void loadGraphics();
 	void update(unsigned long _stat_min, unsigned long _stat_cur, unsigned long _stat_max);

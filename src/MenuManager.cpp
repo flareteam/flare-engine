@@ -98,9 +98,9 @@ MenuManager::MenuManager()
 	, pause(false)
 	, menus_open(false) {
 
-	hp = new MenuStatBar("hp");
-	mp = new MenuStatBar("mp");
-	xp = new MenuStatBar("xp");
+	hp = new MenuStatBar(MenuStatBar::TYPE_HP);
+	mp = new MenuStatBar(MenuStatBar::TYPE_MP);
+	xp = new MenuStatBar(MenuStatBar::TYPE_XP);
 	effects = new MenuActiveEffects();
 	hudlog = new MenuHUDLog();
 	act = new MenuActionBar();

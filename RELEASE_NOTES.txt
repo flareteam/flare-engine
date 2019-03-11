@@ -6,6 +6,7 @@ Engine features:
 * The interface features from version 1.09 have been reverted due to being accessible from the pause menu.
 * Added an Interface option to disable showing hidden entity markers.
 * Support floating point values for loot drop chance values.
+* Add 'hide_timeout' option to statbar configuration to support auto-hiding (Leszek Cimała)
 
 Engine fixes:
 
