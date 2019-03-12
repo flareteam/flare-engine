@@ -156,6 +156,26 @@ void SDLInputState::defaultQwertyKeyBindings () {
 	binding[Input::DEVELOPER_MENU] = binding_alt[Input::DEVELOPER_MENU] = SDLK_F5;
 }
 
+void SDLInputState::setFixedKeyBindings() {
+	binding[Input::MAIN1] = (SDL_BUTTON_LEFT+MOUSE_BIND_OFFSET) * (-1);
+
+	binding[Input::CTRL] = SDLK_LCTRL;
+	binding_alt[Input::CTRL] = SDLK_RCTRL;
+	binding_joy[Input::CTRL] = -1;
+
+	binding[Input::SHIFT] = SDLK_LSHIFT;
+	binding_alt[Input::SHIFT] = SDLK_RSHIFT;
+	binding_joy[Input::SHIFT] = -1;
+
+	binding[Input::DEL] = SDLK_DELETE;
+	binding_alt[Input::DEL] = SDLK_BACKSPACE;
+	binding_joy[Input::DEL] = -1;
+
+	binding[Input::ALT] = SDLK_LALT;
+	binding_alt[Input::ALT] = SDLK_RALT;
+	binding_joy[Input::ALT] = -1;
+}
+
 void SDLInputState::handle() {
 	InputState::handle();
 

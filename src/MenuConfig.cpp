@@ -267,12 +267,15 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	refreshJoysticks();
 
 	// Allocate KeyBindings
-	for (int i = 0; i < inpt->KEY_COUNT * 3; i++) {
+	for (int i = 0; i < inpt->KEY_COUNT_USER * 3; i++) {
 		keybinds_lb.push_back(new WidgetLabel());
 		keybinds_btn.push_back(new WidgetButton(WidgetButton::DEFAULT_FILE));
 	}
 
 	key_count = static_cast<unsigned>(keybinds_btn.size()/3);
+
+	// don't allow remapping the primary Main1 binding
+	keybinds_btn[Input::MAIN1 * 3]->enabled = false;
 
 	// set up loot tooltip setting
 	loot_tooltip_lstb->append(msg->get("Default"), msg->get("Show all loot tooltips, except for those that would be obscured by the player or an enemy. Temporarily show all loot tooltips with 'Alt'."));
@@ -310,7 +313,7 @@ void MenuConfig::init() {
 	cfg_tabs[AUDIO_TAB].options.resize(Platform::Audio::COUNT);
 	cfg_tabs[INTERFACE_TAB].options.resize(Platform::Interface::COUNT);
 	cfg_tabs[INPUT_TAB].options.resize(Platform::Input::COUNT);
-	cfg_tabs[KEYBINDS_TAB].options.resize(inpt->KEY_COUNT * 3);
+	cfg_tabs[KEYBINDS_TAB].options.resize(inpt->KEY_COUNT_USER * 3);
 
 	cfg_tabs[EXIT_TAB].setOptionWidgets(0, pause_continue_lb, pause_continue_btn, msg->get("Paused"));
 	cfg_tabs[EXIT_TAB].setOptionWidgets(1, pause_exit_lb, pause_exit_btn, "");
@@ -358,6 +361,10 @@ void MenuConfig::init() {
 			// TODO since these are blank, don't allocate?
 			cfg_tabs[KEYBINDS_TAB].setOptionWidgets(static_cast<int>(i+1), keybinds_lb[i+1], keybinds_btn[i+1], "");
 			cfg_tabs[KEYBINDS_TAB].setOptionWidgets(static_cast<int>(i+2), keybinds_lb[i+2], keybinds_btn[i+2], "");
+
+			keybinds_btn[i]->tooltip = msg->get("Primary binding: %s", inpt->binding_name[i/3].c_str());
+			keybinds_btn[i+1]->tooltip = msg->get("Alternate binding: %s", inpt->binding_name[i/3].c_str());
+			keybinds_btn[i+2]->tooltip = msg->get("Joystick binding: %s", inpt->binding_name[i/3].c_str());
 		}
 	}
 
@@ -1088,7 +1095,6 @@ void MenuConfig::logicKeybinds() {
 	Point mouse = cfg_tabs[KEYBINDS_TAB].scrollbox->input_assist(inpt->mouse);
 
 	for (unsigned int i = 0; i < keybinds_btn.size(); i++) {
-		// if (i >= static_cast<unsigned int>(inpt->KEY_COUNT * 2)) {
 		if ((i+1) % 3 == 0) {
 			keybinds_btn[i]->enabled = settings->enable_joystick;
 			keybinds_btn[i]->refresh();

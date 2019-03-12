@@ -259,6 +259,8 @@ void InputState::loadKeyBindings() {
 
 	}
 	infile.close();
+
+	setFixedKeyBindings();
 }
 
 /**

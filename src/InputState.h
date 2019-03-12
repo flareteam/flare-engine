@@ -49,15 +49,15 @@ namespace Input {
 		LOG = 19,
 		MAIN1 = 20,
 		MAIN2 = 21,
-		CTRL = 22,
-		SHIFT = 23,
-		ALT = 24,
-		DEL = 25,
-		ACTIONBAR = 26,
-		ACTIONBAR_BACK = 27,
-		ACTIONBAR_FORWARD = 28,
-		ACTIONBAR_USE = 29,
-		DEVELOPER_MENU = 30
+		ACTIONBAR = 22,
+		ACTIONBAR_BACK = 23,
+		ACTIONBAR_FORWARD = 24,
+		ACTIONBAR_USE = 25,
+		DEVELOPER_MENU = 26,
+		CTRL = 27,
+		SHIFT = 28,
+		ALT = 29,
+		DEL = 30
 	};
 }
 
@@ -87,6 +87,7 @@ public:
 	};
 
 	static const int KEY_COUNT = 31;
+	static const int KEY_COUNT_USER = KEY_COUNT - 4; // exclude CTRL, SHIFT, etc from keybinding menu
 	int binding[KEY_COUNT];
 	int binding_alt[KEY_COUNT];
 	int binding_joy[KEY_COUNT];
@@ -108,6 +109,7 @@ public:
 
 	virtual void handle();
 	virtual void defaultQwertyKeyBindings() = 0;
+	virtual void setFixedKeyBindings() = 0;
 	virtual void hideCursor() = 0;
 	virtual void showCursor() = 0;
 	virtual std::string getJoystickName(int index) = 0;

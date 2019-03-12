@@ -34,6 +34,7 @@ public:
 
 	void initJoystick();
 	void defaultQwertyKeyBindings();
+	void setFixedKeyBindings();
 	void handle();
 	void hideCursor();
 	void showCursor();
