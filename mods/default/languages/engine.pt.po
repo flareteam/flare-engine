@@ -750,7 +750,7 @@ msgstr "Mostrar sempre etiquetas na barra de estatísticas"
 
 #: ../../../src/MenuConfig.cpp:341
 msgid "Allow stat bar auto-hiding"
-msgstr ""
+msgstr "Permitir ocultar automaticamente a barra de estatísticas"
 
 #: ../../../src/MenuConfig.cpp:342
 msgid "Show combat text"
@@ -846,6 +846,9 @@ msgid ""
 "Some mods will automatically hide the stat bars when they are inactive. "
 "Disabling this option will keep them displayed at all times."
 msgstr ""
+"Alguns mods escondem automaticamente a barra de estatísticas quando estas "
+"estão inativas. Desativando esta opção, a barra de estatísticas estará "
+"sempre visível."
 
 #: ../../../src/MenuConfig.cpp:466
 msgid ""
@@ -1384,7 +1387,7 @@ msgstr "Não é possível armazenar itens no baú."
 
 #: ../../../src/MenuStash.cpp:214
 msgid "This item can not be stored in the stash."
-msgstr ""
+msgstr "Este item não pode ser guardado no baú."
 
 #: ../../../src/MenuStash.cpp:224
 msgid "Stash is full."
@@ -1393,12 +1396,12 @@ msgstr "O baú está cheio."
 #: ../../../src/MenuStash.cpp:276
 #, c-format
 msgid "Can not store item in stash: %s"
-msgstr ""
+msgstr "Não é possível guardar os itens no baú: %s"
 
 #: ../../../src/MenuTalker.cpp:447
 #, c-format
 msgid "<dialog node %d>"
-msgstr ""
+msgstr "<nó de diálogo %d>"
 
 #: ../../../src/MenuTalker.cpp:455
 msgid "Trade"
