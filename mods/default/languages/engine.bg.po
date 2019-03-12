@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-11 14:35-0400\n"
+"POT-Creation-Date: 2019-03-12 10:51-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
 "Last-Translator: 48719d321e4b4a9c2ca8c6a1f8b9cba8, 2018\n"
 "Language-Team: Bulgarian (https://www.transifex.com/flareorg/teams/84925/bg/)\n"
@@ -190,7 +190,7 @@ msgstr "Невалиден герой"
 msgid "Level %d"
 msgstr "Ниво %d"
 
-#: ../../../src/GameStateNew.cpp:65 ../../../src/InputState.cpp:401
+#: ../../../src/GameStateNew.cpp:65 ../../../src/InputState.cpp:403
 #: ../../../src/MenuConfig.cpp:236
 msgid "Cancel"
 msgstr "Отказ"
@@ -239,155 +239,155 @@ msgstr "Признания"
 msgid "Exit Game"
 msgstr "Изход"
 
-#: ../../../src/InputState.cpp:402
+#: ../../../src/InputState.cpp:404
 msgid "Accept"
 msgstr "Приемане"
 
-#: ../../../src/InputState.cpp:403 ../../../src/SDLInputState.cpp:607
+#: ../../../src/InputState.cpp:405 ../../../src/SDLInputState.cpp:627
 msgid "Up"
 msgstr "Up"
 
-#: ../../../src/InputState.cpp:404 ../../../src/SDLInputState.cpp:585
+#: ../../../src/InputState.cpp:406 ../../../src/SDLInputState.cpp:605
 msgid "Down"
 msgstr "Down"
 
-#: ../../../src/InputState.cpp:405 ../../../src/SDLInputState.cpp:592
+#: ../../../src/InputState.cpp:407 ../../../src/SDLInputState.cpp:612
 msgid "Left"
 msgstr "Left"
 
-#: ../../../src/InputState.cpp:406 ../../../src/SDLInputState.cpp:602
+#: ../../../src/InputState.cpp:408 ../../../src/SDLInputState.cpp:622
 msgid "Right"
 msgstr "Right"
 
-#: ../../../src/InputState.cpp:407
+#: ../../../src/InputState.cpp:409
 msgid "Bar1"
 msgstr "Лента1"
 
-#: ../../../src/InputState.cpp:408
+#: ../../../src/InputState.cpp:410
 msgid "Bar2"
 msgstr "Лента2"
 
-#: ../../../src/InputState.cpp:409
+#: ../../../src/InputState.cpp:411
 msgid "Bar3"
 msgstr "Лента3"
 
-#: ../../../src/InputState.cpp:410
+#: ../../../src/InputState.cpp:412
 msgid "Bar4"
 msgstr "Лента4"
 
-#: ../../../src/InputState.cpp:411
+#: ../../../src/InputState.cpp:413
 msgid "Bar5"
 msgstr "Лента5"
 
-#: ../../../src/InputState.cpp:412
+#: ../../../src/InputState.cpp:414
 msgid "Bar6"
 msgstr "Лента6"
 
-#: ../../../src/InputState.cpp:413
+#: ../../../src/InputState.cpp:415
 msgid "Bar7"
 msgstr "Лента7"
 
-#: ../../../src/InputState.cpp:414
+#: ../../../src/InputState.cpp:416
 msgid "Bar8"
 msgstr "Лента8"
 
-#: ../../../src/InputState.cpp:415
+#: ../../../src/InputState.cpp:417
 msgid "Bar9"
 msgstr "Лента9"
 
-#: ../../../src/InputState.cpp:416
+#: ../../../src/InputState.cpp:418
 msgid "Bar0"
 msgstr "Лента0"
 
-#: ../../../src/InputState.cpp:417 ../../../src/MenuActionBar.cpp:81
+#: ../../../src/InputState.cpp:419 ../../../src/MenuActionBar.cpp:81
 #: ../../../src/MenuCharacter.cpp:54
 msgid "Character"
 msgstr "Характер"
 
-#: ../../../src/InputState.cpp:418 ../../../src/MenuActionBar.cpp:82
+#: ../../../src/InputState.cpp:420 ../../../src/MenuActionBar.cpp:82
 #: ../../../src/MenuInventory.cpp:129 ../../../src/MenuVendor.cpp:57
 msgid "Inventory"
 msgstr "Инвентар"
 
-#: ../../../src/InputState.cpp:419 ../../../src/MenuActionBar.cpp:83
+#: ../../../src/InputState.cpp:421 ../../../src/MenuActionBar.cpp:83
 #: ../../../src/MenuPowers.cpp:168
 msgid "Powers"
 msgstr "Умения"
 
-#: ../../../src/InputState.cpp:420 ../../../src/MenuActionBar.cpp:84
+#: ../../../src/InputState.cpp:422 ../../../src/MenuActionBar.cpp:84
 #: ../../../src/MenuLog.cpp:72
 msgid "Log"
 msgstr "Дневник"
 
-#: ../../../src/InputState.cpp:421
+#: ../../../src/InputState.cpp:423
 msgid "Main1"
 msgstr "Главен1"
 
-#: ../../../src/InputState.cpp:422
+#: ../../../src/InputState.cpp:424
 msgid "Main2"
 msgstr "Главен2"
 
-#: ../../../src/InputState.cpp:423
+#: ../../../src/InputState.cpp:425
 msgid "Ctrl"
 msgstr "Ctrl"
 
-#: ../../../src/InputState.cpp:424
+#: ../../../src/InputState.cpp:426
 msgid "Shift"
 msgstr "Shift"
 
-#: ../../../src/InputState.cpp:425
+#: ../../../src/InputState.cpp:427
 msgid "Alt"
 msgstr "Alt"
 
-#: ../../../src/InputState.cpp:426 ../../../src/SDLInputState.cpp:584
+#: ../../../src/InputState.cpp:428 ../../../src/SDLInputState.cpp:604
 msgid "Delete"
 msgstr "Delete"
 
-#: ../../../src/InputState.cpp:427
+#: ../../../src/InputState.cpp:429
 msgid "ActionBar Accept"
 msgstr "ActionBar Accept"
 
-#: ../../../src/InputState.cpp:428
+#: ../../../src/InputState.cpp:430
 msgid "ActionBar Left"
 msgstr "ActionBar Left"
 
-#: ../../../src/InputState.cpp:429
+#: ../../../src/InputState.cpp:431
 msgid "ActionBar Right"
 msgstr "ActionBar Right"
 
-#: ../../../src/InputState.cpp:430
+#: ../../../src/InputState.cpp:432
 msgid "ActionBar Use"
 msgstr "ActionBar Use"
 
-#: ../../../src/InputState.cpp:431
+#: ../../../src/InputState.cpp:433
 msgid "Developer Menu"
 msgstr "Developer меню"
 
-#: ../../../src/InputState.cpp:433
+#: ../../../src/InputState.cpp:435
 msgid "Left Mouse"
 msgstr "Left Mouse"
 
-#: ../../../src/InputState.cpp:434
+#: ../../../src/InputState.cpp:436
 msgid "Middle Mouse"
 msgstr "Middle Mouse"
 
-#: ../../../src/InputState.cpp:435
+#: ../../../src/InputState.cpp:437
 msgid "Right Mouse"
 msgstr "Right Mouse"
 
-#: ../../../src/InputState.cpp:436
+#: ../../../src/InputState.cpp:438
 msgid "Wheel Up"
 msgstr "Wheel Up"
 
-#: ../../../src/InputState.cpp:437
+#: ../../../src/InputState.cpp:439
 msgid "Wheel Down"
 msgstr "Wheel Down"
 
-#: ../../../src/InputState.cpp:438
+#: ../../../src/InputState.cpp:440
 msgid "Mouse X1"
 msgstr "Mouse X1"
 
-#: ../../../src/InputState.cpp:439
+#: ../../../src/InputState.cpp:441
 msgid "Mouse X2"
 msgstr "Mouse X2"
 
@@ -567,11 +567,11 @@ msgstr "Всяко ниво дава %d."
 msgid "Each point of %s grants %d."
 msgstr "Всяка точка от %s дава %d."
 
-#: ../../../src/MenuConfig.cpp:121 ../../../src/MenuConfig.cpp:1104
+#: ../../../src/MenuConfig.cpp:121 ../../../src/MenuConfig.cpp:1110
 msgid "Clear"
 msgstr "Изчисти"
 
-#: ../../../src/MenuConfig.cpp:121 ../../../src/MenuConfig.cpp:1102
+#: ../../../src/MenuConfig.cpp:121 ../../../src/MenuConfig.cpp:1108
 msgid "Assign:"
 msgstr "Възложи"
 
@@ -587,204 +587,219 @@ msgstr "Нулирай всички настройки?"
 msgid "OK"
 msgstr "Добре"
 
-#: ../../../src/MenuConfig.cpp:278
+#: ../../../src/MenuConfig.cpp:281
 msgid "Default"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:278
+#: ../../../src/MenuConfig.cpp:281
 msgid ""
 "Show all loot tooltips, except for those that would be obscured by the "
 "player or an enemy. Temporarily show all loot tooltips with 'Alt'."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:279
+#: ../../../src/MenuConfig.cpp:282
 msgid "Show all"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:279
+#: ../../../src/MenuConfig.cpp:282
 msgid ""
 "Always show loot tooltips. Temporarily hide all loot tooltips with 'Alt'."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:280 ../../../src/MenuConfig.cpp:285
+#: ../../../src/MenuConfig.cpp:283 ../../../src/MenuConfig.cpp:288
 msgid "Hidden"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:280
+#: ../../../src/MenuConfig.cpp:283
 msgid ""
 "Always hide loot tooltips, except for when a piece of loot is hovered with "
 "the mouse cursor. Temporarily show all loot tooltips with 'Alt'."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:283
+#: ../../../src/MenuConfig.cpp:286
 msgid "Visible"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:284
+#: ../../../src/MenuConfig.cpp:287
 msgid "Visible (2x zoom)"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:297 ../../../src/MenuConfig.cpp:1517
+#: ../../../src/MenuConfig.cpp:300 ../../../src/MenuConfig.cpp:1523
 msgid "Exit"
 msgstr "Излез"
 
-#: ../../../src/MenuConfig.cpp:298
+#: ../../../src/MenuConfig.cpp:301
 msgid "Video"
 msgstr "Видео"
 
-#: ../../../src/MenuConfig.cpp:299
+#: ../../../src/MenuConfig.cpp:302
 msgid "Audio"
 msgstr "Звук"
 
-#: ../../../src/MenuConfig.cpp:300
+#: ../../../src/MenuConfig.cpp:303
 msgid "Interface"
 msgstr "Интерфейс"
 
-#: ../../../src/MenuConfig.cpp:301
+#: ../../../src/MenuConfig.cpp:304
 msgid "Input"
 msgstr "Вход"
 
-#: ../../../src/MenuConfig.cpp:302
+#: ../../../src/MenuConfig.cpp:305
 msgid "Keybindings"
 msgstr "Клавиши"
 
-#: ../../../src/MenuConfig.cpp:303
+#: ../../../src/MenuConfig.cpp:306
 msgid "Mods"
 msgstr "Модификации"
 
-#: ../../../src/MenuConfig.cpp:315
+#: ../../../src/MenuConfig.cpp:318
 msgid "Paused"
 msgstr "Пауза"
 
-#: ../../../src/MenuConfig.cpp:317
+#: ../../../src/MenuConfig.cpp:320
 msgid "Time Played"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:319
+#: ../../../src/MenuConfig.cpp:322
 msgid "Renderer"
 msgstr "Рендер"
 
-#: ../../../src/MenuConfig.cpp:320
+#: ../../../src/MenuConfig.cpp:323
 msgid "Full Screen Mode"
 msgstr "Режим на цял екран"
 
-#: ../../../src/MenuConfig.cpp:321
+#: ../../../src/MenuConfig.cpp:324
 msgid "Hardware surfaces"
 msgstr "Хардуерни повърхности"
 
-#: ../../../src/MenuConfig.cpp:322
+#: ../../../src/MenuConfig.cpp:325
 msgid "V-Sync"
 msgstr "Вертикална синхронизация (V-Sync)"
 
-#: ../../../src/MenuConfig.cpp:323
+#: ../../../src/MenuConfig.cpp:326
 msgid "Texture Filtering"
 msgstr "Текстурно филтриране"
 
-#: ../../../src/MenuConfig.cpp:324
+#: ../../../src/MenuConfig.cpp:327
 msgid "DPI scaling"
 msgstr "DPI мащабиране"
 
-#: ../../../src/MenuConfig.cpp:325
+#: ../../../src/MenuConfig.cpp:328
 msgid "Parallax Layers"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:326
+#: ../../../src/MenuConfig.cpp:329
 msgid "Allow changing gamma"
 msgstr "Разрешаване промяна на гамата"
 
-#: ../../../src/MenuConfig.cpp:327
+#: ../../../src/MenuConfig.cpp:330
 msgid "Gamma"
 msgstr "Гама"
 
-#: ../../../src/MenuConfig.cpp:329
+#: ../../../src/MenuConfig.cpp:332
 msgid "Sound Volume"
 msgstr "Сила на звука"
 
-#: ../../../src/MenuConfig.cpp:330
+#: ../../../src/MenuConfig.cpp:333
 msgid "Music Volume"
 msgstr "Сила на музиката"
 
-#: ../../../src/MenuConfig.cpp:332
+#: ../../../src/MenuConfig.cpp:335
 msgid "Language"
 msgstr "Език"
 
-#: ../../../src/MenuConfig.cpp:333
+#: ../../../src/MenuConfig.cpp:336
 msgid "Show FPS"
 msgstr "Показване на FPS"
 
-#: ../../../src/MenuConfig.cpp:334
+#: ../../../src/MenuConfig.cpp:337
 msgid "Hardware mouse cursor"
 msgstr "Хардуер за курсора на мишката"
 
-#: ../../../src/MenuConfig.cpp:335
+#: ../../../src/MenuConfig.cpp:338
 msgid "Colorblind Mode"
 msgstr "Режим за далтонисти"
 
-#: ../../../src/MenuConfig.cpp:336
+#: ../../../src/MenuConfig.cpp:339
 msgid "Developer Mode"
 msgstr "Режим за програмисти"
 
-#: ../../../src/MenuConfig.cpp:337
+#: ../../../src/MenuConfig.cpp:340
 msgid "Subtitles"
 msgstr "Субтитри"
 
-#: ../../../src/MenuConfig.cpp:338
+#: ../../../src/MenuConfig.cpp:341
 msgid "Loot tooltip visibility"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:339
+#: ../../../src/MenuConfig.cpp:342
 msgid "Mini-map mode"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:340
+#: ../../../src/MenuConfig.cpp:343
 msgid "Always show stat bar labels"
 msgstr "Винаги да се показват статистики"
 
-#: ../../../src/MenuConfig.cpp:341
+#: ../../../src/MenuConfig.cpp:344
 msgid "Allow stat bar auto-hiding"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:342
+#: ../../../src/MenuConfig.cpp:345
 msgid "Show combat text"
 msgstr "Показване на боен текст"
 
-#: ../../../src/MenuConfig.cpp:343
+#: ../../../src/MenuConfig.cpp:346
 msgid "Automatically equip items"
 msgstr "Автоматично екипиране с предмети"
 
-#: ../../../src/MenuConfig.cpp:344
+#: ../../../src/MenuConfig.cpp:347
 msgid "Show hidden entity markers"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:346
+#: ../../../src/MenuConfig.cpp:349
 msgid "Joystick"
 msgstr "Джойстик"
 
-#: ../../../src/MenuConfig.cpp:347
+#: ../../../src/MenuConfig.cpp:350
 msgid "Move hero using mouse"
 msgstr "Преместване на героя чрез мишка"
 
-#: ../../../src/MenuConfig.cpp:348
+#: ../../../src/MenuConfig.cpp:351
 msgid "Mouse aim"
 msgstr "Прицелване чрез мишка"
 
-#: ../../../src/MenuConfig.cpp:349
+#: ../../../src/MenuConfig.cpp:352
 msgid "Do not use mouse"
 msgstr "Да не се използва мишка"
 
-#: ../../../src/MenuConfig.cpp:350
+#: ../../../src/MenuConfig.cpp:353
 msgid "Swap mouse movement button"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:351
+#: ../../../src/MenuConfig.cpp:354
 msgid "Attack with mouse movement"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:352
+#: ../../../src/MenuConfig.cpp:355
 msgid "Joystick Deadzone"
 msgstr "Мъртва зона на джойстик"
 
-#: ../../../src/MenuConfig.cpp:459
+#: ../../../src/MenuConfig.cpp:365
+#, c-format
+msgid "Primary binding: %s"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:366
+#, c-format
+msgid "Alternate binding: %s"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:367
+#, c-format
+msgid "Joystick binding: %s"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:466
 msgid ""
 "Will try to store surfaces in video memory versus system memory. The effect "
 "this has on performance depends on the renderer."
@@ -793,7 +808,7 @@ msgstr ""
 "памет. Въздействието, което това има върху производителността зависи от "
 "рендера."
 
-#: ../../../src/MenuConfig.cpp:460
+#: ../../../src/MenuConfig.cpp:467
 msgid ""
 "Prevents screen tearing. Disable if you experience \"stuttering\" in "
 "windowed mode or input lag."
@@ -801,7 +816,7 @@ msgstr ""
 "Предотвратява накъсването (screen tearing). Изключете, ако изпитвате "
 "проблеми в прозоречен режим или закъснение при въвеждане."
 
-#: ../../../src/MenuConfig.cpp:461
+#: ../../../src/MenuConfig.cpp:468
 msgid ""
 "When enabled, this uses the screen DPI in addition to the window dimensions "
 "to scale the rendering resolution. Otherwise, only the window dimensions are"
@@ -811,56 +826,56 @@ msgstr ""
 " прозореца, за да мащабира разделителната способност на рендериране. В "
 "противен случай се използват само размерите на прозореца."
 
-#: ../../../src/MenuConfig.cpp:462
+#: ../../../src/MenuConfig.cpp:469
 msgid ""
 "This enables parallax (non-tile) layers. Disabling this setting can improve "
 "performance in some cases."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:463
+#: ../../../src/MenuConfig.cpp:470
 msgid ""
 "Enables the below setting that controls the screen gamma level. The behavior"
 " of the gamma setting can vary between platforms."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:464
+#: ../../../src/MenuConfig.cpp:471
 msgid ""
 "Provides additional text for information that is primarily conveyed through "
 "color."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:465
+#: ../../../src/MenuConfig.cpp:472
 msgid ""
 "Some mods will automatically hide the stat bars when they are inactive. "
 "Disabling this option will keep them displayed at all times."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:466
+#: ../../../src/MenuConfig.cpp:473
 msgid ""
 "When enabled, empty equipment slots will be filled with applicable items "
 "when they are obtained."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:467
+#: ../../../src/MenuConfig.cpp:474
 msgid ""
 "Shows a marker above enemies, allies, and the player when they are obscured "
 "by tall objects."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:468
+#: ../../../src/MenuConfig.cpp:475
 msgid ""
 "This allows the game to be controlled entirely with the keyboard (or "
 "joystick)."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:469
+#: ../../../src/MenuConfig.cpp:476
 msgid ""
 "When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or"
 " 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
 "instead of 'Main1'."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:470
+#: ../../../src/MenuConfig.cpp:477
 msgid ""
 "When 'Move hero using mouse' is enabled, this setting controls if the Power "
 "assigned to the movement button can be used by targeting an enemy. If this "
@@ -868,49 +883,49 @@ msgid ""
 "assigned to the movement button."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:471
+#: ../../../src/MenuConfig.cpp:478
 msgid ""
 "The player's attacks will be aimed in the direction of the mouse cursor when"
 " this is enabled."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:522
+#: ../../../src/MenuConfig.cpp:529
 msgid "Active Mods"
 msgstr "Включени модификации"
 
-#: ../../../src/MenuConfig.cpp:531
+#: ../../../src/MenuConfig.cpp:538
 msgid "Available Mods"
 msgstr "Налични модификации"
 
-#: ../../../src/MenuConfig.cpp:550
+#: ../../../src/MenuConfig.cpp:557
 msgid "<< Disable"
 msgstr "<< Изключи"
 
-#: ../../../src/MenuConfig.cpp:556
+#: ../../../src/MenuConfig.cpp:563
 msgid "Enable >>"
 msgstr "Включи >>"
 
-#: ../../../src/MenuConfig.cpp:1376
+#: ../../../src/MenuConfig.cpp:1382
 msgid "Version:"
 msgstr "Версия:"
 
-#: ../../../src/MenuConfig.cpp:1381
+#: ../../../src/MenuConfig.cpp:1387
 msgid "Game:"
 msgstr "Игра:"
 
-#: ../../../src/MenuConfig.cpp:1386
+#: ../../../src/MenuConfig.cpp:1392
 msgid "Engine version:"
 msgstr "Engine версия:"
 
-#: ../../../src/MenuConfig.cpp:1394
+#: ../../../src/MenuConfig.cpp:1400
 msgid "Requires mods:"
 msgstr "Изисква модификации:"
 
-#: ../../../src/MenuConfig.cpp:1500 ../../../src/SDLInputState.cpp:637
+#: ../../../src/MenuConfig.cpp:1506 ../../../src/SDLInputState.cpp:657
 msgid "(none)"
 msgstr "(няма)"
 
-#: ../../../src/MenuConfig.cpp:1517
+#: ../../../src/MenuConfig.cpp:1523
 msgid "Save & Exit"
 msgstr "Запази и излез"
 
@@ -1405,124 +1420,124 @@ msgstr "Завършени куестове"
 msgid "Game saved."
 msgstr "Играта е запазена."
 
-#: ../../../src/SDLInputState.cpp:582
+#: ../../../src/SDLInputState.cpp:602
 msgid "Backspace"
 msgstr "Backspace"
 
-#: ../../../src/SDLInputState.cpp:583
+#: ../../../src/SDLInputState.cpp:603
 msgid "CapsLock"
 msgstr "CapsLock"
 
-#: ../../../src/SDLInputState.cpp:586
+#: ../../../src/SDLInputState.cpp:606
 msgid "End"
 msgstr "End"
 
-#: ../../../src/SDLInputState.cpp:587
+#: ../../../src/SDLInputState.cpp:607
 msgid "Escape"
 msgstr "Escape"
 
-#: ../../../src/SDLInputState.cpp:588
+#: ../../../src/SDLInputState.cpp:608
 msgid "Home"
 msgstr "Home"
 
-#: ../../../src/SDLInputState.cpp:589
+#: ../../../src/SDLInputState.cpp:609
 msgid "Insert"
 msgstr "Insert"
 
-#: ../../../src/SDLInputState.cpp:590
+#: ../../../src/SDLInputState.cpp:610
 msgid "Left Alt"
 msgstr "Left Alt"
 
-#: ../../../src/SDLInputState.cpp:591
+#: ../../../src/SDLInputState.cpp:611
 msgid "Left Ctrl"
 msgstr "Left Ctrl"
 
-#: ../../../src/SDLInputState.cpp:593
+#: ../../../src/SDLInputState.cpp:613
 msgid "Left Shift"
 msgstr "Left Shift"
 
-#: ../../../src/SDLInputState.cpp:594
+#: ../../../src/SDLInputState.cpp:614
 msgid "NumLock"
 msgstr "NumLock"
 
-#: ../../../src/SDLInputState.cpp:595
+#: ../../../src/SDLInputState.cpp:615
 msgid "PageDown"
 msgstr "PageDown"
 
-#: ../../../src/SDLInputState.cpp:596
+#: ../../../src/SDLInputState.cpp:616
 msgid "PageUp"
 msgstr "PageUp"
 
-#: ../../../src/SDLInputState.cpp:597
+#: ../../../src/SDLInputState.cpp:617
 msgid "Pause"
 msgstr "Pause"
 
-#: ../../../src/SDLInputState.cpp:598
+#: ../../../src/SDLInputState.cpp:618
 msgid "PrintScreen"
 msgstr "PrintScreen"
 
-#: ../../../src/SDLInputState.cpp:599
+#: ../../../src/SDLInputState.cpp:619
 msgid "Right Alt"
 msgstr "Right Alt"
 
-#: ../../../src/SDLInputState.cpp:600
+#: ../../../src/SDLInputState.cpp:620
 msgid "Right Ctrl"
 msgstr "Right Ctrl"
 
-#: ../../../src/SDLInputState.cpp:601
+#: ../../../src/SDLInputState.cpp:621
 msgid "Return"
 msgstr "Return"
 
-#: ../../../src/SDLInputState.cpp:603
+#: ../../../src/SDLInputState.cpp:623
 msgid "Right Shift"
 msgstr "Right Shift"
 
-#: ../../../src/SDLInputState.cpp:604
+#: ../../../src/SDLInputState.cpp:624
 msgid "ScrollLock"
 msgstr "ScrollLock"
 
-#: ../../../src/SDLInputState.cpp:605
+#: ../../../src/SDLInputState.cpp:625
 msgid "Space"
 msgstr "Space"
 
-#: ../../../src/SDLInputState.cpp:606
+#: ../../../src/SDLInputState.cpp:626
 msgid "Tab"
 msgstr "Tab"
 
-#: ../../../src/SDLInputState.cpp:620
+#: ../../../src/SDLInputState.cpp:640
 #, c-format
 msgid "Mouse %d"
 msgstr "Mouse %d"
 
-#: ../../../src/SDLInputState.cpp:628
+#: ../../../src/SDLInputState.cpp:648
 #, c-format
 msgid "Axis %d -"
 msgstr "Axis %d -"
 
-#: ../../../src/SDLInputState.cpp:630
+#: ../../../src/SDLInputState.cpp:650
 #, c-format
 msgid "Axis %d +"
 msgstr "Axis %d +"
 
-#: ../../../src/SDLInputState.cpp:633
+#: ../../../src/SDLInputState.cpp:653
 #, c-format
 msgid "Button %d"
 msgstr "Бутон %d"
 
-#: ../../../src/SDLInputState.cpp:677
+#: ../../../src/SDLInputState.cpp:697
 msgid "Touch control D-Pad"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:701
+#: ../../../src/SDLInputState.cpp:721
 msgid "Touch control buttons"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:716
+#: ../../../src/SDLInputState.cpp:736
 msgid "Tap"
 msgstr "Натискане"
 
-#: ../../../src/SDLInputState.cpp:760 ../../../src/SDLInputState.cpp:764
-#: ../../../src/SDLInputState.cpp:768
+#: ../../../src/SDLInputState.cpp:780 ../../../src/SDLInputState.cpp:784
+#: ../../../src/SDLInputState.cpp:788
 #, c-format
 msgid "'%s' is no longer bound to:"
 msgstr "'%s' вече не е свързан с:"
