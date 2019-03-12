@@ -20,6 +20,8 @@ Engine fixes:
 * Fixed loot drop rate bonus having no effect when loot drop chance was too low.
 * Fix bug where the wrong requirements were checked for passive powers that had been granted bonus points.
 * Items that can't be stashed are now dropped on the ground upon opening the stash.
+* Prevent re-binding the primary Main1 binding, which could break many interactions.
+* Removed the ability to re-bind the Ctrl, Shift, Alt, and Delete keys, since they correspond to specific keyboard keys.
 
 Game updates:
 
