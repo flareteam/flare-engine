@@ -795,17 +795,17 @@ msgstr "Zona morta do joystick"
 #: ../../../src/MenuConfig.cpp:365
 #, c-format
 msgid "Primary binding: %s"
-msgstr ""
+msgstr "Atalho principal: %s"
 
 #: ../../../src/MenuConfig.cpp:366
 #, c-format
 msgid "Alternate binding: %s"
-msgstr ""
+msgstr "Atalho alternativo: %s"
 
 #: ../../../src/MenuConfig.cpp:367
 #, c-format
 msgid "Joystick binding: %s"
-msgstr ""
+msgstr "Atalho do joystick: %s"
 
 #: ../../../src/MenuConfig.cpp:466
 msgid ""
