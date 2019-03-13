@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-12 10:51-0400\n"
+"POT-Creation-Date: 2019-03-13 00:20-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
 "Last-Translator: Diego J. Romero López <diegojromerolopez@gmail.com>, 2018\n"
 "Language-Team: Spanish (https://www.transifex.com/flareorg/teams/84925/es/)\n"
@@ -244,19 +244,19 @@ msgstr "Salir del juego"
 msgid "Accept"
 msgstr "Aceptar"
 
-#: ../../../src/InputState.cpp:405 ../../../src/SDLInputState.cpp:627
+#: ../../../src/InputState.cpp:405 ../../../src/SDLInputState.cpp:646
 msgid "Up"
 msgstr "Arriba"
 
-#: ../../../src/InputState.cpp:406 ../../../src/SDLInputState.cpp:605
+#: ../../../src/InputState.cpp:406 ../../../src/SDLInputState.cpp:624
 msgid "Down"
 msgstr "Abajo"
 
-#: ../../../src/InputState.cpp:407 ../../../src/SDLInputState.cpp:612
+#: ../../../src/InputState.cpp:407 ../../../src/SDLInputState.cpp:631
 msgid "Left"
 msgstr "Izquierda"
 
-#: ../../../src/InputState.cpp:408 ../../../src/SDLInputState.cpp:622
+#: ../../../src/InputState.cpp:408 ../../../src/SDLInputState.cpp:641
 msgid "Right"
 msgstr "Derecha"
 
@@ -340,7 +340,7 @@ msgstr "Shift"
 msgid "Alt"
 msgstr "Alt"
 
-#: ../../../src/InputState.cpp:428 ../../../src/SDLInputState.cpp:604
+#: ../../../src/InputState.cpp:428 ../../../src/SDLInputState.cpp:623
 msgid "Delete"
 msgstr "Suprimir"
 
@@ -923,7 +923,7 @@ msgstr "Versión del motor de juego:"
 msgid "Requires mods:"
 msgstr "Mods requeridos:"
 
-#: ../../../src/MenuConfig.cpp:1506 ../../../src/SDLInputState.cpp:657
+#: ../../../src/MenuConfig.cpp:1506 ../../../src/SDLInputState.cpp:676
 msgid "(none)"
 msgstr "(ninguno)"
 
@@ -1419,131 +1419,136 @@ msgstr "No se puede quitar la transformación en esta posición."
 msgid "Completed Quests"
 msgstr "Gestas completadas"
 
-#: ../../../src/SaveLoad.cpp:243 ../../../src/SaveLoad.cpp:244
-msgid "Game saved."
-msgstr "Partida guardada."
-
-#: ../../../src/SDLInputState.cpp:602
+#: ../../../src/SDLInputState.cpp:621
 msgid "Backspace"
 msgstr "Retroceso"
 
-#: ../../../src/SDLInputState.cpp:603
+#: ../../../src/SDLInputState.cpp:622
 msgid "CapsLock"
 msgstr "BloqMayús"
 
-#: ../../../src/SDLInputState.cpp:606
+#: ../../../src/SDLInputState.cpp:625
 msgid "End"
 msgstr "Fin"
 
-#: ../../../src/SDLInputState.cpp:607
+#: ../../../src/SDLInputState.cpp:626
 msgid "Escape"
 msgstr "Escape"
 
-#: ../../../src/SDLInputState.cpp:608
+#: ../../../src/SDLInputState.cpp:627
 msgid "Home"
 msgstr "Inicio"
 
-#: ../../../src/SDLInputState.cpp:609
+#: ../../../src/SDLInputState.cpp:628
 msgid "Insert"
 msgstr "Insertar"
 
-#: ../../../src/SDLInputState.cpp:610
+#: ../../../src/SDLInputState.cpp:629
 msgid "Left Alt"
 msgstr "Alt Izquierdo"
 
-#: ../../../src/SDLInputState.cpp:611
+#: ../../../src/SDLInputState.cpp:630
 msgid "Left Ctrl"
 msgstr "Ctrl Izquierdo"
 
-#: ../../../src/SDLInputState.cpp:613
+#: ../../../src/SDLInputState.cpp:632
 msgid "Left Shift"
 msgstr "Mayús Izquierdo"
 
-#: ../../../src/SDLInputState.cpp:614
+#: ../../../src/SDLInputState.cpp:633
 msgid "NumLock"
 msgstr "BloqueoDeNúmeros"
 
-#: ../../../src/SDLInputState.cpp:615
+#: ../../../src/SDLInputState.cpp:634
 msgid "PageDown"
 msgstr "Avanzar Página"
 
-#: ../../../src/SDLInputState.cpp:616
+#: ../../../src/SDLInputState.cpp:635
 msgid "PageUp"
 msgstr "Retroceder Página"
 
-#: ../../../src/SDLInputState.cpp:617
+#: ../../../src/SDLInputState.cpp:636
 msgid "Pause"
 msgstr "Pausar"
 
-#: ../../../src/SDLInputState.cpp:618
+#: ../../../src/SDLInputState.cpp:637
 msgid "PrintScreen"
 msgstr "Imprimir Pantalla"
 
-#: ../../../src/SDLInputState.cpp:619
+#: ../../../src/SDLInputState.cpp:638
 msgid "Right Alt"
 msgstr "Alt Derecho"
 
-#: ../../../src/SDLInputState.cpp:620
+#: ../../../src/SDLInputState.cpp:639
 msgid "Right Ctrl"
 msgstr "Ctrl Derecho"
 
-#: ../../../src/SDLInputState.cpp:621
+#: ../../../src/SDLInputState.cpp:640
 msgid "Return"
 msgstr "Retorno"
 
-#: ../../../src/SDLInputState.cpp:623
+#: ../../../src/SDLInputState.cpp:642
 msgid "Right Shift"
 msgstr "Mayús. derecho"
 
-#: ../../../src/SDLInputState.cpp:624
+#: ../../../src/SDLInputState.cpp:643
 msgid "ScrollLock"
 msgstr "BloqDesplazamiento"
 
-#: ../../../src/SDLInputState.cpp:625
+#: ../../../src/SDLInputState.cpp:644
 msgid "Space"
 msgstr "Espacio"
 
-#: ../../../src/SDLInputState.cpp:626
+#: ../../../src/SDLInputState.cpp:645
 msgid "Tab"
 msgstr "Tabulador"
 
-#: ../../../src/SDLInputState.cpp:640
+#: ../../../src/SDLInputState.cpp:659
 #, c-format
 msgid "Mouse %d"
 msgstr "Ratón %d"
 
-#: ../../../src/SDLInputState.cpp:648
+#: ../../../src/SDLInputState.cpp:667
 #, c-format
 msgid "Axis %d -"
 msgstr "Eje %d -"
 
-#: ../../../src/SDLInputState.cpp:650
+#: ../../../src/SDLInputState.cpp:669
 #, c-format
 msgid "Axis %d +"
 msgstr "Eje %d +"
 
-#: ../../../src/SDLInputState.cpp:653
+#: ../../../src/SDLInputState.cpp:672
 #, c-format
 msgid "Button %d"
 msgstr "Botón %d"
 
-#: ../../../src/SDLInputState.cpp:697
+#: ../../../src/SDLInputState.cpp:716
 msgid "Touch control D-Pad"
 msgstr "Cruceta direccional"
 
-#: ../../../src/SDLInputState.cpp:721
+#: ../../../src/SDLInputState.cpp:740
 msgid "Touch control buttons"
 msgstr "Botones de control táctiles"
 
-#: ../../../src/SDLInputState.cpp:736
+#: ../../../src/SDLInputState.cpp:755
 msgid "Tap"
 msgstr "Palmadita"
 
-#: ../../../src/SDLInputState.cpp:780 ../../../src/SDLInputState.cpp:784
-#: ../../../src/SDLInputState.cpp:788
+#: ../../../src/SDLInputState.cpp:807 ../../../src/SDLInputState.cpp:809
+#, c-format
+msgid "Can not bind: %s"
+msgstr ""
+
+#: ../../../src/SDLInputState.cpp:821 ../../../src/SDLInputState.cpp:825
+#: ../../../src/SDLInputState.cpp:829
 #, c-format
 msgid "'%s' is no longer bound to:"
 msgstr "'%s' no está ligado más a:"
+
+#: ../../../src/SaveLoad.cpp:243 ../../../src/SaveLoad.cpp:244
+msgid "Game saved."
+msgstr "Partida guardada."
 
 #: ../../../src/Stats.cpp:38
 msgid "Max HP"
