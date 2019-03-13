@@ -54,6 +54,7 @@ public:
 
 private:
 	int getKeyFromName(const std::string& key_name);
+	void validateFixedKeyBinding(int action, int key, int bindings_list);
 
 	SDL_Joystick* joy;
 	int joy_num;

@@ -157,23 +157,42 @@ void SDLInputState::defaultQwertyKeyBindings () {
 }
 
 void SDLInputState::setFixedKeyBindings() {
-	binding[Input::MAIN1] = (SDL_BUTTON_LEFT+MOUSE_BIND_OFFSET) * (-1);
+	validateFixedKeyBinding(Input::MAIN1, (SDL_BUTTON_LEFT+MOUSE_BIND_OFFSET) * (-1), InputState::BINDING_DEFAULT);
 
-	binding[Input::CTRL] = SDLK_LCTRL;
-	binding_alt[Input::CTRL] = SDLK_RCTRL;
+	validateFixedKeyBinding(Input::CTRL, SDLK_LCTRL, InputState::BINDING_DEFAULT);
+	validateFixedKeyBinding(Input::CTRL, SDLK_RCTRL, InputState::BINDING_ALT);
 	binding_joy[Input::CTRL] = -1;
 
-	binding[Input::SHIFT] = SDLK_LSHIFT;
-	binding_alt[Input::SHIFT] = SDLK_RSHIFT;
+	validateFixedKeyBinding(Input::SHIFT, SDLK_LSHIFT, InputState::BINDING_DEFAULT);
+	validateFixedKeyBinding(Input::SHIFT, SDLK_RSHIFT, InputState::BINDING_ALT);
 	binding_joy[Input::SHIFT] = -1;
 
-	binding[Input::DEL] = SDLK_DELETE;
-	binding_alt[Input::DEL] = SDLK_BACKSPACE;
+	validateFixedKeyBinding(Input::DEL, SDLK_DELETE, InputState::BINDING_DEFAULT);
+	validateFixedKeyBinding(Input::DEL, SDLK_BACKSPACE, InputState::BINDING_ALT);
 	binding_joy[Input::DEL] = -1;
 
-	binding[Input::ALT] = SDLK_LALT;
-	binding_alt[Input::ALT] = SDLK_RALT;
+	validateFixedKeyBinding(Input::ALT, SDLK_LALT, InputState::BINDING_DEFAULT);
+	validateFixedKeyBinding(Input::ALT, SDLK_RALT, InputState::BINDING_ALT);
 	binding_joy[Input::ALT] = -1;
+}
+
+void SDLInputState::validateFixedKeyBinding(int action, int key, int bindings_list) {
+	for (int i = 0; i < KEY_COUNT; ++i) {
+		if (i == action) {
+			if (bindings_list == InputState::BINDING_DEFAULT)
+				binding[action] = key;
+			else if (bindings_list == InputState::BINDING_ALT)
+				binding_alt[action] = key;
+
+			continue;
+		}
+
+		if (binding[i] == key)
+			binding[i] = -1;
+
+		if (binding_alt[i] == key)
+			binding_alt[i] = -1;
+	}
 }
 
 void SDLInputState::handle() {
@@ -771,6 +790,28 @@ void SDLInputState::setKeybind(int key, int binding_button, int bindings_list, s
 
 	// unbind duplicate bindings for this key
 	if (key != -1) {
+
+		// prevent unmapping "fixed" keybinds
+		if (bindings_list != InputState::BINDING_JOYSTICK) {
+			if ((key == ((SDL_BUTTON_LEFT+MOUSE_BIND_OFFSET) * (-1)) && binding_button != Input::MAIN1) ||
+				key == SDLK_LCTRL ||
+				key == SDLK_RCTRL ||
+				key == SDLK_LSHIFT ||
+				key == SDLK_RSHIFT ||
+				key == SDLK_LALT ||
+				key == SDLK_RALT ||
+				key == SDLK_DELETE ||
+				key == SDLK_BACKSPACE) {
+
+				if (key < -1)
+					keybind_msg = msg->get("Can not bind: %s", getMouseButtonName(key).c_str());
+				else
+					keybind_msg = msg->get("Can not bind: %s", getKeyName(key).c_str());
+
+				return;
+			}
+		}
+
 		for (int i = 0; i < KEY_COUNT; ++i) {
 			// the same key can be bound to both default & alt binding lists for the same action
 			if (bindings_list != InputState::BINDING_JOYSTICK && i == binding_button)
