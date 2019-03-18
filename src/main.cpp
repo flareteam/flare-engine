@@ -118,12 +118,14 @@ static void init(const CmdLineArgs& cmd_line_args) {
 	font = getFontEngine();
 	anim = new AnimationManager();
 	comb = new CombatText();
-	inpt = getInputManager();
-	icons = NULL;
-
+	
 	// Load miscellaneous settings
 	eset = new EngineSettings();
 	eset->load();
+	
+	inpt = getInputManager();
+	icons = NULL;
+
 	Stats::init();
 
 	// platform-specific default screen size
