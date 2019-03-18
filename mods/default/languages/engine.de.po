@@ -750,7 +750,7 @@ msgstr "Immer Werteleistenbeschriftung anzeigen"
 
 #: ../../../src/MenuConfig.cpp:344
 msgid "Allow stat bar auto-hiding"
-msgstr ""
+msgstr "Erlaube automatisches Verstecken der Werteleiste."
 
 #: ../../../src/MenuConfig.cpp:345
 msgid "Show combat text"
@@ -795,17 +795,17 @@ msgstr "Joystick-Todeszone"
 #: ../../../src/MenuConfig.cpp:365
 #, c-format
 msgid "Primary binding: %s"
-msgstr ""
+msgstr "Primäre Belegung: %s"
 
 #: ../../../src/MenuConfig.cpp:366
 #, c-format
 msgid "Alternate binding: %s"
-msgstr ""
+msgstr "Alternative Belegung: %s"
 
 #: ../../../src/MenuConfig.cpp:367
 #, c-format
 msgid "Joystick binding: %s"
-msgstr ""
+msgstr "Joystick Belegung: %s"
 
 #: ../../../src/MenuConfig.cpp:466
 msgid ""
@@ -862,6 +862,8 @@ msgid ""
 "Some mods will automatically hide the stat bars when they are inactive. "
 "Disabling this option will keep them displayed at all times."
 msgstr ""
+"Einige Mods verstecken automatisch die Werteleisten, wenn inaktiv. Das "
+"Deaktivieren dieser Option wird sie durchgehend anzeigen."
 
 #: ../../../src/MenuConfig.cpp:473
 msgid ""
@@ -1398,7 +1400,7 @@ msgstr "Aufgabengegenstände können nicht eingelagert werden."
 
 #: ../../../src/MenuStash.cpp:214
 msgid "This item can not be stored in the stash."
-msgstr ""
+msgstr "Dieser Gegenstand kann nicht eingelagert werden."
 
 #: ../../../src/MenuStash.cpp:224
 msgid "Stash is full."
@@ -1407,12 +1409,12 @@ msgstr "Lagerraum ist voll."
 #: ../../../src/MenuStash.cpp:276
 #, c-format
 msgid "Can not store item in stash: %s"
-msgstr ""
+msgstr "Gegenstand kann nicht eingelagert werden: %s"
 
 #: ../../../src/MenuTalker.cpp:447
 #, c-format
 msgid "<dialog node %d>"
-msgstr ""
+msgstr "<dialog node %d>"
 
 #: ../../../src/MenuTalker.cpp:455
 msgid "Trade"
@@ -1562,7 +1564,7 @@ msgstr "Antippen"
 #: ../../../src/SDLInputState.cpp:807 ../../../src/SDLInputState.cpp:809
 #, c-format
 msgid "Can not bind: %s"
-msgstr ""
+msgstr "Kann nicht belegt werden: %s"
 
 #: ../../../src/SDLInputState.cpp:821 ../../../src/SDLInputState.cpp:825
 #: ../../../src/SDLInputState.cpp:829

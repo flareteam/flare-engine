@@ -1566,7 +1566,7 @@ msgstr "Toque"
 #: ../../../src/SDLInputState.cpp:807 ../../../src/SDLInputState.cpp:809
 #, c-format
 msgid "Can not bind: %s"
-msgstr ""
+msgstr "Não é possível associar: %s"
 
 #: ../../../src/SDLInputState.cpp:821 ../../../src/SDLInputState.cpp:825
 #: ../../../src/SDLInputState.cpp:829
