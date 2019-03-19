@@ -154,6 +154,12 @@ void SDLInputState::defaultQwertyKeyBindings () {
 	binding[Input::ACTIONBAR_USE] = binding_alt[Input::ACTIONBAR_USE] = SDLK_n;
 
 	binding[Input::DEVELOPER_MENU] = binding_alt[Input::DEVELOPER_MENU] = SDLK_F5;
+
+	// Convert SDL_Keycode to SDL_Scancode, skip mouse binding
+	for (int key=0; key<KEY_COUNT; key++) {
+		if (SDL_GetScancodeFromKey(binding[key]) > 0) binding[key] = SDL_GetScancodeFromKey(binding[key]);
+		if (SDL_GetScancodeFromKey(binding_alt[key]) > 0) binding_alt[key] = SDL_GetScancodeFromKey(binding_alt[key]);
+	}
 }
 
 void SDLInputState::setFixedKeyBindings() {
@@ -177,6 +183,7 @@ void SDLInputState::setFixedKeyBindings() {
 }
 
 void SDLInputState::validateFixedKeyBinding(int action, int key, int bindings_list) {
+	key = SDL_GetScancodeFromKey(key);
 	for (int i = 0; i < KEY_COUNT; ++i) {
 		if (i == action) {
 			if (bindings_list == InputState::BINDING_DEFAULT)
@@ -344,7 +351,7 @@ void SDLInputState::handle() {
 					last_is_joystick = false;
 
 				for (int key=0; key<KEY_COUNT; key++) {
-					if (event.key.keysym.sym == binding[key] || event.key.keysym.sym == binding_alt[key]) {
+					if (event.key.keysym.scancode == binding[key] || event.key.keysym.scancode == binding_alt[key]) {
 						pressing[key] = true;
 						un_press[key] = false;
 					}
@@ -358,11 +365,11 @@ void SDLInputState::handle() {
 					last_is_joystick = false;
 
 				for (int key=0; key<KEY_COUNT; key++) {
-					if (event.key.keysym.sym == binding[key] || event.key.keysym.sym == binding_alt[key]) {
+					if (event.key.keysym.scancode == binding[key] || event.key.keysym.scancode == binding_alt[key]) {
 						un_press[key] = true;
 					}
 				}
-				last_key = event.key.keysym.sym;
+				last_key = event.key.keysym.scancode;
 
 				if (event.key.keysym.sym == SDLK_UP) pressing_up = false;
 				if (event.key.keysym.sym == SDLK_DOWN) pressing_down = false;
@@ -616,6 +623,7 @@ std::string SDLInputState::getJoystickName(int index) {
 }
 
 std::string SDLInputState::getKeyName(int key) {
+	key = SDL_GetKeyFromScancode(static_cast<SDL_Scancode>(key));
 	// first, we try to provide a translation of the key
 	switch (static_cast<SDL_Keycode>(key)) {
 		case SDLK_BACKSPACE:    return msg->get("Backspace");
