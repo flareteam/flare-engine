@@ -24,6 +24,7 @@ Engine fixes:
 * Removed the ability to re-bind the Ctrl, Shift, Alt, and Delete keys, since they correspond to specific keyboard keys.
 * Fix crash when trying to load a mod that contained 'engine/default_keybindings.txt'. (nwtour)
 * Display XP stat bar value as relative to current level instead of total XP. (Leszek Cimała)
+* Fix key bindings not working when switched to a non-US keyboard layout. (nwtour)
 
 Game updates:
 
