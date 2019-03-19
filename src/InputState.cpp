@@ -66,7 +66,7 @@ InputState::InputState(void)
 	, current_touch()
 	, dump_event(false)
 	, file_version(new Version())
-	, file_version_min(new Version(1, 6, 28))
+	, file_version_min(new Version(1, 9, 20))
 {
 }
 
