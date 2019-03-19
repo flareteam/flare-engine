@@ -6,7 +6,7 @@ Engine features:
 * The interface features from version 1.09 have been reverted due to being accessible from the pause menu.
 * Added an Interface option to disable showing hidden entity markers.
 * Support floating point values for loot drop chance values.
-* Add 'hide_timeout' option to stat bar configuration to support auto-hiding (Leszek Cimała)
+* Add 'hide_timeout' option to stat bar configuration to support auto-hiding. (Leszek Cimała)
 * Added an Interface option to disable stat bar auto-hiding globally.
 * Add 'no_stash' property to item definitions to prevent items from being placed in the stash.
 
@@ -22,6 +22,8 @@ Engine fixes:
 * Items that can't be stashed are now dropped on the ground upon opening the stash.
 * Prevent re-binding the primary Main1 binding, which could break many interactions.
 * Removed the ability to re-bind the Ctrl, Shift, Alt, and Delete keys, since they correspond to specific keyboard keys.
+* Fix crash when trying to load a mod that contained 'engine/default_keybindings.txt'. (nwtour)
+* Display XP stat bar value as relative to current level instead of total XP. (Leszek Cimała)
 
 Game updates:
 

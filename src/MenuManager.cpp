@@ -283,9 +283,11 @@ void MenuManager::logic() {
 		xp->setCustomString(msg->get("XP: %d", pc->stats.xp));
 	}
 	else {
-		xp->setCustomString(msg->get("XP: %d/%d", pc->stats.xp, eset->xp.getLevelXP(pc->stats.level + 1)));
+		// displays xp relative to current pc level
+		xp->setCustomString(msg->get("XP: %d/%d", pc->stats.xp - eset->xp.getLevelXP(pc->stats.level), eset->xp.getLevelXP(pc->stats.level + 1) - eset->xp.getLevelXP(pc->stats.level)));
 	}
-	xp->update(eset->xp.getLevelXP(pc->stats.level), pc->stats.xp, eset->xp.getLevelXP(pc->stats.level + 1));
+	// xp relative to current level (from 0 to ammount need for next level)
+	xp->update(0, pc->stats.xp - eset->xp.getLevelXP(pc->stats.level), eset->xp.getLevelXP(pc->stats.level + 1) - eset->xp.getLevelXP(pc->stats.level));
 
 	// when selecting item quantities, don't process other menus
 	if (num_picker->visible) {
