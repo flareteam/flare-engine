@@ -587,34 +587,38 @@ msgstr "Сбросить ВСЕ настройки?"
 msgid "OK"
 msgstr "ОК"
 
+#: ../../../src/MenuConfig.cpp:238
+msgid "Continue"
+msgstr "Продолжить"
+
 #: ../../../src/MenuConfig.cpp:281
 msgid "Default"
-msgstr ""
+msgstr "По умолчанию"
 
 #: ../../../src/MenuConfig.cpp:281
 msgid ""
 "Show all loot tooltips, except for those that would be obscured by the "
 "player or an enemy. Temporarily show all loot tooltips with 'Alt'."
-msgstr ""
+msgstr "Выпадающие предметы подсвечиваются на удалении от игрока или врага, при нажатии клавиши 'Alt' и наведении курсора."
 
 #: ../../../src/MenuConfig.cpp:282
 msgid "Show all"
-msgstr ""
+msgstr "Показывать всегда"
 
 #: ../../../src/MenuConfig.cpp:282
 msgid ""
 "Always show loot tooltips. Temporarily hide all loot tooltips with 'Alt'."
-msgstr ""
+msgstr "Всегда подсвечивать выпадающие предметы. Временно скрыть подсветку клавишей 'Alt'."
 
 #: ../../../src/MenuConfig.cpp:283 ../../../src/MenuConfig.cpp:288
 msgid "Hidden"
-msgstr "Спрятанное"
+msgstr "Скрывать"
 
 #: ../../../src/MenuConfig.cpp:283
 msgid ""
 "Always hide loot tooltips, except for when a piece of loot is hovered with "
 "the mouse cursor. Temporarily show all loot tooltips with 'Alt'."
-msgstr ""
+msgstr "Не подсвечивать выпадающие предметы до наведения на них курсора. Временно подстветить все предметы клавишей 'Alt'."
 
 #: ../../../src/MenuConfig.cpp:286
 msgid "Visible"
@@ -658,7 +662,7 @@ msgstr "Пауза"
 
 #: ../../../src/MenuConfig.cpp:320
 msgid "Time Played"
-msgstr ""
+msgstr "Время в игре"
 
 #: ../../../src/MenuConfig.cpp:322
 msgid "Renderer"
@@ -718,7 +722,7 @@ msgstr "Аппаратный курсор мыши"
 
 #: ../../../src/MenuConfig.cpp:338
 msgid "Colorblind Mode"
-msgstr "Режим цветовой слепоты"
+msgstr "Режим адаптации для дальтоников"
 
 #: ../../../src/MenuConfig.cpp:339
 msgid "Developer Mode"
@@ -730,7 +734,7 @@ msgstr "Субтитры"
 
 #: ../../../src/MenuConfig.cpp:341
 msgid "Loot tooltip visibility"
-msgstr ""
+msgstr "Подсветка выпадающих вещей"
 
 #: ../../../src/MenuConfig.cpp:342
 msgid "Mini-map mode"
@@ -742,7 +746,7 @@ msgstr "Всегда показывать метки в строке состо�
 
 #: ../../../src/MenuConfig.cpp:344
 msgid "Allow stat bar auto-hiding"
-msgstr ""
+msgstr "Разрешить модам автоскрытие панелей"
 
 #: ../../../src/MenuConfig.cpp:345
 msgid "Show combat text"
@@ -754,7 +758,7 @@ msgstr "Сразу надевать предметы"
 
 #: ../../../src/MenuConfig.cpp:347
 msgid "Show hidden entity markers"
-msgstr ""
+msgstr "Помечать меткой скрытых врагов"
 
 #: ../../../src/MenuConfig.cpp:349
 msgid "Joystick"
@@ -836,25 +840,25 @@ msgstr ""
 msgid ""
 "Provides additional text for information that is primarily conveyed through "
 "color."
-msgstr ""
+msgstr "Предоставлять дополнительный текст для информации связанной с цветом."
 
 #: ../../../src/MenuConfig.cpp:472
 msgid ""
 "Some mods will automatically hide the stat bars when they are inactive. "
 "Disabling this option will keep them displayed at all times."
-msgstr ""
+msgstr "Некоторые моды автоматически скрывают панель опыта/маны/жизни. Отключив эту опцию панели будут отображаться постоянно."
 
 #: ../../../src/MenuConfig.cpp:473
 msgid ""
 "When enabled, empty equipment slots will be filled with applicable items "
 "when they are obtained."
-msgstr ""
+msgstr "Если включено, то пустые слоты предметов сразу будут заполняться подходящими предметами."
 
 #: ../../../src/MenuConfig.cpp:474
 msgid ""
 "Shows a marker above enemies, allies, and the player when they are obscured "
 "by tall objects."
-msgstr ""
+msgstr "Показывать метку над врагами и игроком, когда они скрыты высокими объектами."
 
 #: ../../../src/MenuConfig.cpp:475
 msgid ""
