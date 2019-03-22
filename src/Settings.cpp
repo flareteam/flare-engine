@@ -99,7 +99,7 @@ Settings::Settings()
 	setConfigDefault(35, "entity_markers",      &typeid(entity_markers),      "1",            &entity_markers,      "shows are marker above entities that are hidden behind tall tiles. 1 enable, 0 disable.");
 	setConfigDefault(36, "prev_save_slot",      &typeid(prev_save_slot),      "-1",           &prev_save_slot,      "index of the last used save slot");
 	setConfigDefault(37, "low_hp_warning_type", &typeid(low_hp_warning_type), "0",            &low_hp_warning_type, 
-			"low health warning type settings. 0 disable, 1 message, 2 sound, 3 cursor change, 4 message & sound, 5 message & cursor, 6 sound and cursor, 7 message, sound and cursor.");
+			"low health warning type settings. 0 disable, 1 all, 2 message & cursor, 3 message & sound, 4 cursor & sound , 5 message, 6 cursor, 7 sound.");
 	setConfigDefault(38, "low_hp_threshold",    &typeid(low_hp_threshold),    "20",           &low_hp_threshold,    "set HP threshold that triggers warning.");
 }
 

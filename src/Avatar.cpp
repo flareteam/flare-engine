@@ -1077,24 +1077,24 @@ bool Avatar::isDroppedToLowHp() {
 }
 
 bool Avatar::isLowHpMessageEnabled() {
-	return settings->low_hp_warning_type == settings->LHP_WTYPE_MESSAGE ||
-		settings->low_hp_warning_type == settings->LHP_WTYPE_MSG_CUR ||
-		settings->low_hp_warning_type == settings->LHP_WTYPE_MSG_SND ||
-		settings->low_hp_warning_type == settings->LHP_WTYPE_MSG_SND_CUR;
+	return settings->low_hp_warning_type == settings->LHP_WARN_TEXT ||
+		settings->low_hp_warning_type == settings->LHP_WARN_TEXT_CURSOR ||
+		settings->low_hp_warning_type == settings->LHP_WARN_TEXT_SOUND ||
+		settings->low_hp_warning_type == settings->LHP_WARN_ALL;
 }
 
 bool Avatar::isLowHpSoundEnabled() {
-	return settings->low_hp_warning_type == settings->LHP_WTYPE_SOUND ||
-		settings->low_hp_warning_type == settings->LHP_WTYPE_MSG_SND ||
-		settings->low_hp_warning_type == settings->LHP_WTYPE_SND_CUR ||
-		settings->low_hp_warning_type == settings->LHP_WTYPE_MSG_SND_CUR;
+	return settings->low_hp_warning_type == settings->LHP_WARN_SOUND ||
+		settings->low_hp_warning_type == settings->LHP_WARN_TEXT_SOUND ||
+		settings->low_hp_warning_type == settings->LHP_WARN_CURSOR_SOUND ||
+		settings->low_hp_warning_type == settings->LHP_WARN_ALL;
 }
 
 bool Avatar::isLowHpCursorEnabled() {
-	return settings->low_hp_warning_type == settings->LHP_WTYPE_CURSOR ||
-		settings->low_hp_warning_type == settings->LHP_WTYPE_MSG_CUR ||
-		settings->low_hp_warning_type == settings->LHP_WTYPE_SND_CUR ||
-		settings->low_hp_warning_type == settings->LHP_WTYPE_MSG_SND_CUR;
+	return settings->low_hp_warning_type == settings->LHP_WARN_CURSOR ||
+		settings->low_hp_warning_type == settings->LHP_WARN_TEXT_CURSOR ||
+		settings->low_hp_warning_type == settings->LHP_WARN_CURSOR_SOUND ||
+		settings->low_hp_warning_type == settings->LHP_WARN_ALL;
 }
 
 Avatar::~Avatar() {

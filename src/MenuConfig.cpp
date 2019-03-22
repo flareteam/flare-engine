@@ -293,13 +293,13 @@ MenuConfig::MenuConfig (bool _is_game_state)
 
 	// set up low hp notification type combinantions
 	low_hp_warning_lstb->append(msg->get("Disabled"), "Disables all low health notifications.");
-	low_hp_warning_lstb->append(msg->get("Message"), "Shows message on low health.");
-	low_hp_warning_lstb->append(msg->get("Sound"), "Plays sound on low health.");
-	low_hp_warning_lstb->append(msg->get("Cursor"), "Mouse cursor will change on low health.");
-	low_hp_warning_lstb->append(msg->get("Message & Sound"), "Shows message and plays a sound on low health.");
-	low_hp_warning_lstb->append(msg->get("Message & Cursor"), "Shows message and change cursor on low health.");
-	low_hp_warning_lstb->append(msg->get("Sound & Cursor"), "Changes cursor and plays a sound on low health.");
 	low_hp_warning_lstb->append(msg->get("All"), "Shows message, changes cursor and plays a sound on low health.");
+	low_hp_warning_lstb->append(msg->get("Message & Cursor"), "Shows message and change cursor on low health.");
+	low_hp_warning_lstb->append(msg->get("Message & Sound"), "Shows message and plays a sound on low health.");
+	low_hp_warning_lstb->append(msg->get("Sound & Cursor"), "Changes cursor and plays a sound on low health.");
+	low_hp_warning_lstb->append(msg->get("Message"), "Shows message on low health.");
+	low_hp_warning_lstb->append(msg->get("Cursor"), "Mouse cursor will change on low health.");
+	low_hp_warning_lstb->append(msg->get("Sound"), "Plays sound on low health.");
 
 	// set up low hp threshold combo
 	low_hp_threshold_lstb->append(msg->get("5%"), "When health drops below given threshold (in percents) notifications are be triggered if enabled.");
