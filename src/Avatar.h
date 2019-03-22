@@ -122,6 +122,9 @@ public:
 	void logMsg(const std::string& str, int type);
 
 	bool isLowHp();
+	bool isLowHpMessageEnabled();
+	bool isLowHpSoundEnabled();
+	bool isLowHpCursorEnabled();
 
 	std::vector<std::string> layer_reference_order;
 	std::vector<std::vector<unsigned> > layer_def;

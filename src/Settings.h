@@ -43,6 +43,17 @@ public:
 		MINIMAP_HIDDEN = 2
 	};
 
+	enum {
+		LHP_WTYPE_DISABLED = 0,
+		LHP_WTYPE_MESSAGE = 1,
+		LHP_WTYPE_SOUND = 2,
+		LHP_WTYPE_CURSOR = 3,
+		LHP_WTYPE_MSG_SND = 4,
+		LHP_WTYPE_MSG_CUR = 5,
+		LHP_WTYPE_SND_CUR = 6,
+		LHP_WTYPE_MSG_SND_CUR = 7
+	};
+
 	Settings();
 	void loadSettings();
 	void saveSettings();
@@ -91,9 +102,7 @@ public:
 	bool subtitles;
 	int minimap_mode;
 	bool entity_markers;
-	bool low_hp_warning_msg;
-	bool low_hp_warning_cur;
-	bool low_hp_warning_snd;
+	int low_hp_warning_type;
 	int low_hp_threshold;
 
 	// Language Settings

@@ -179,7 +179,7 @@ void GameStatePlay::checkEnemyFocus() {
 		else {
 			enemy = enemym->enemyFocus(inpt->mouse, mapr->cam, EnemyManager::IS_ALIVE);
 			if (enemy) {
-				if (settings->low_hp_warning_cur && pc->isLowHp()) {
+				if (pc->isLowHpCursorEnabled() && pc->isLowHp()) {
 					curs->setCursor(CursorManager::CURSOR_LHP_ATTACK);
 				} else {
 					curs->setCursor(CursorManager::CURSOR_ATTACK);

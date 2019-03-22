@@ -990,14 +990,14 @@ void MapRenderer::checkHotspots() {
 						// and allowed to click
 						if (is_npc) {
 							// show low hp cursor if below threshold
-							if (settings->low_hp_warning_cur && pc->isLowHp()) {
+							if (pc->isLowHpCursorEnabled() && pc->isLowHp()) {
 								curs->setCursor(CursorManager::CURSOR_LHP_TALK);
 							} else {
 								curs->setCursor(CursorManager::CURSOR_TALK);
 							}
 						}
 						else {
-							if (settings->low_hp_warning_cur && pc->isLowHp()) {
+							if (pc->isLowHpCursorEnabled() && pc->isLowHp()) {
 								curs->setCursor(CursorManager::CURSOR_LHP_INTERACT);
 							} else {
 								curs->setCursor(CursorManager::CURSOR_INTERACT);

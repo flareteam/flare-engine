@@ -55,7 +55,7 @@ public:
 
 	class Interface {
 	public:
-		static const int COUNT = 17;
+		static const int COUNT = 15;
 		enum {
 			LANGUAGE,
 			MINIMAP_MODE,
@@ -70,9 +70,7 @@ public:
 			ENTITY_MARKERS,
 			SHOW_FPS,
 			DEV_MODE,
-			LOW_HP_WARNING_MSG,
-			LOW_HP_WARNING_CUR,
-			LOW_HP_WARNING_SND,
+			LOW_HP_WARNING_TYPE,
 			LOW_HP_THRESHOLD
 		};
 	};

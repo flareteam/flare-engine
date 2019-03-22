@@ -380,17 +380,17 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 	// alert on low health
 	if (isDroppedToLowHp()) {
 		// show message if set
-		if (settings->low_hp_warning_msg) {
+		if (isLowHpMessageEnabled()) {
 			std::stringstream ss;
 			ss << msg->get("Your health is low!");
 			logMsg(ss.str(), MSG_NORMAL);
 		}
 		// play a sound if set in settings
-		if (settings->low_hp_warning_snd) {
+		if (isLowHpSoundEnabled()) {
 			snd->play(sound_lowhp, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
 		}
 	}
-	if (settings->low_hp_warning_cur && isLowHp()) {
+	if (isLowHpCursorEnabled() && isLowHp()) {
 		// change attack cursor to lowhp variant
 		curs->setCursor(CursorManager::CURSOR_LHP_NORMAL);
 	}
@@ -567,7 +567,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 				if (attack_cursor) {
 					// show low hp cursor if below threshold
-					if (settings->low_hp_warning_cur && isLowHp()) {
+					if (isLowHpCursorEnabled() && isLowHp()) {
 						curs->setCursor(CursorManager::CURSOR_LHP_ATTACK);
 					} else {
 						curs->setCursor(CursorManager::CURSOR_ATTACK);
@@ -1074,6 +1074,27 @@ bool Avatar::isDroppedToLowHp() {
 	float hp_one_perc = static_cast<float>(std::max(stats.get(Stats::HP_MAX), 1)) / 100.0f;
 	return static_cast<float>(stats.hp)/hp_one_perc < static_cast<float>(settings->low_hp_threshold) &&
 		static_cast<float>(prev_hp)/hp_one_perc >= static_cast<float>(settings->low_hp_threshold);
+}
+
+bool Avatar::isLowHpMessageEnabled() {
+	return settings->low_hp_warning_type == settings->LHP_WTYPE_MESSAGE ||
+		settings->low_hp_warning_type == settings->LHP_WTYPE_MSG_CUR ||
+		settings->low_hp_warning_type == settings->LHP_WTYPE_MSG_SND ||
+		settings->low_hp_warning_type == settings->LHP_WTYPE_MSG_SND_CUR;
+}
+
+bool Avatar::isLowHpSoundEnabled() {
+	return settings->low_hp_warning_type == settings->LHP_WTYPE_SOUND ||
+		settings->low_hp_warning_type == settings->LHP_WTYPE_MSG_SND ||
+		settings->low_hp_warning_type == settings->LHP_WTYPE_SND_CUR ||
+		settings->low_hp_warning_type == settings->LHP_WTYPE_MSG_SND_CUR;
+}
+
+bool Avatar::isLowHpCursorEnabled() {
+	return settings->low_hp_warning_type == settings->LHP_WTYPE_CURSOR ||
+		settings->low_hp_warning_type == settings->LHP_WTYPE_MSG_CUR ||
+		settings->low_hp_warning_type == settings->LHP_WTYPE_SND_CUR ||
+		settings->low_hp_warning_type == settings->LHP_WTYPE_MSG_SND_CUR;
 }
 
 Avatar::~Avatar() {
