@@ -38,7 +38,7 @@ Translation updates:
 * German (de) update (Fyrenic)
 * French (fr) update (syl_)
 * Portuguese (pt) update (Rui)
-* Russian (ru) update (Andrey Kapitonov, Igor Paliychuk)
+* Russian (ru) update (Andrey Kapitonov, Igor Paliychuk, nwtour)
 * Chinese (zh) update (dumaosen, neverwin)
 
 
