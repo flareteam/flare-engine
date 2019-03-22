@@ -41,15 +41,15 @@ msgstr "Урон в ближнем бою"
 
 #: ../engine/damage_types.txt:4
 msgid "Increases the damage done with swords and other melee weapons."
-msgstr ""
+msgstr "Увеличивает урон мечом и другим оружием ближнего боя."
 
 #: ../engine/damage_types.txt:5
 msgid "Melee Damage Min"
-msgstr "Мин. Урон"
+msgstr "Мин. Урон ближнего боя"
 
 #: ../engine/damage_types.txt:6
 msgid "Melee Damage Max"
-msgstr "Макс. Урон"
+msgstr "Макс. Урон ближнего боя"
 
 #: ../engine/damage_types.txt:12
 msgid "Ranged Damage"
@@ -57,15 +57,15 @@ msgstr "Урон в дальнем бою"
 
 #: ../engine/damage_types.txt:13
 msgid "Increases the damage done with bows and other ranged weapons."
-msgstr ""
+msgstr "Увеличивает урон из лука и другим оружием дальнего боя."
 
 #: ../engine/damage_types.txt:14
 msgid "Ranged Damage Min"
-msgstr "Мин. Урон"
+msgstr "Мин. Урон дальнего боя"
 
 #: ../engine/damage_types.txt:15
 msgid "Ranged Damage Max"
-msgstr "Макс. Урон"
+msgstr "Макс. Урон дальнего боя"
 
 #: ../engine/damage_types.txt:21
 msgid "Mental Damage"
@@ -73,15 +73,15 @@ msgstr "Ментальный Урон"
 
 #: ../engine/damage_types.txt:22
 msgid "Increases the damage done with staves and other mental weapons."
-msgstr ""
+msgstr "Увеличивает урон посохом и другим оружием ментального урона."
 
 #: ../engine/damage_types.txt:23
 msgid "Mental Damage Min"
-msgstr "Мин. Урон"
+msgstr "Мин. Ментальный урон"
 
 #: ../engine/damage_types.txt:24
 msgid "Mental Damage Max"
-msgstr "Макс. Урон"
+msgstr "Макс. Ментальный урон"
 
 #: ../cutscenes/credits.txt:7
 msgid "Flare Engine Credits"

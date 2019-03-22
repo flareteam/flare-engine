@@ -235,7 +235,7 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	defaults_button->setLabel(msg->get("Defaults"));
 	cancel_button->setLabel(msg->get("Cancel"));
 
-	pause_continue_btn->setLabel("Continue");
+	pause_continue_btn->setLabel(msg->get("Continue"));
 	setPauseExitText(MenuConfig::ENABLE_SAVE_GAME);
 	pause_time_text->setText(Utils::getTimeString(0));
 	pause_time_text->setJustify(FontEngine::JUSTIFY_RIGHT);
