@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-13 00:20-0400\n"
+"POT-Creation-Date: 2019-03-21 23:42-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
 "Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2019\n"
 "Language-Team: Russian (https://www.transifex.com/flareorg/teams/84925/ru/)\n"
@@ -243,19 +243,19 @@ msgstr "Выйти из Игры"
 msgid "Accept"
 msgstr "Принять"
 
-#: ../../../src/InputState.cpp:405 ../../../src/SDLInputState.cpp:646
+#: ../../../src/InputState.cpp:405 ../../../src/SDLInputState.cpp:654
 msgid "Up"
 msgstr "Вверх"
 
-#: ../../../src/InputState.cpp:406 ../../../src/SDLInputState.cpp:624
+#: ../../../src/InputState.cpp:406 ../../../src/SDLInputState.cpp:632
 msgid "Down"
 msgstr "Вниз"
 
-#: ../../../src/InputState.cpp:407 ../../../src/SDLInputState.cpp:631
+#: ../../../src/InputState.cpp:407 ../../../src/SDLInputState.cpp:639
 msgid "Left"
 msgstr "Влево"
 
-#: ../../../src/InputState.cpp:408 ../../../src/SDLInputState.cpp:641
+#: ../../../src/InputState.cpp:408 ../../../src/SDLInputState.cpp:649
 msgid "Right"
 msgstr "Вправо"
 
@@ -339,7 +339,7 @@ msgstr "SHIFT"
 msgid "Alt"
 msgstr "ALT"
 
-#: ../../../src/InputState.cpp:428 ../../../src/SDLInputState.cpp:623
+#: ../../../src/InputState.cpp:428 ../../../src/SDLInputState.cpp:631
 msgid "Delete"
 msgstr "Удалить"
 
@@ -599,7 +599,9 @@ msgstr "По умолчанию"
 msgid ""
 "Show all loot tooltips, except for those that would be obscured by the "
 "player or an enemy. Temporarily show all loot tooltips with 'Alt'."
-msgstr "Выпадающие предметы подсвечиваются на удалении от игрока или врага, при нажатии клавиши 'Alt' и наведении курсора."
+msgstr ""
+"Выпадающие предметы подсвечиваются на удалении от игрока или врага, при "
+"нажатии клавиши 'Alt' и наведении курсора."
 
 #: ../../../src/MenuConfig.cpp:282
 msgid "Show all"
@@ -608,7 +610,9 @@ msgstr "Показывать всегда"
 #: ../../../src/MenuConfig.cpp:282
 msgid ""
 "Always show loot tooltips. Temporarily hide all loot tooltips with 'Alt'."
-msgstr "Всегда подсвечивать выпадающие предметы. Временно скрыть подсветку клавишей 'Alt'."
+msgstr ""
+"Всегда подсвечивать выпадающие предметы. Временно скрыть подсветку клавишей "
+"'Alt'."
 
 #: ../../../src/MenuConfig.cpp:283 ../../../src/MenuConfig.cpp:288
 msgid "Hidden"
@@ -618,7 +622,9 @@ msgstr "Скрывать"
 msgid ""
 "Always hide loot tooltips, except for when a piece of loot is hovered with "
 "the mouse cursor. Temporarily show all loot tooltips with 'Alt'."
-msgstr "Не подсвечивать выпадающие предметы до наведения на них курсора. Временно подстветить все предметы клавишей 'Alt'."
+msgstr ""
+"Не подсвечивать выпадающие предметы до наведения на них курсора. Временно "
+"подстветить все предметы клавишей 'Alt'."
 
 #: ../../../src/MenuConfig.cpp:286
 msgid "Visible"
@@ -846,19 +852,24 @@ msgstr "Предоставлять дополнительный текст дл�
 msgid ""
 "Some mods will automatically hide the stat bars when they are inactive. "
 "Disabling this option will keep them displayed at all times."
-msgstr "Некоторые моды автоматически скрывают панель опыта/маны/жизни. Отключив эту опцию панели будут отображаться постоянно."
+msgstr ""
+"Некоторые моды автоматически скрывают панель опыта/маны/жизни. Отключив эту "
+"опцию панели будут отображаться постоянно."
 
 #: ../../../src/MenuConfig.cpp:473
 msgid ""
 "When enabled, empty equipment slots will be filled with applicable items "
 "when they are obtained."
-msgstr "Если включено, то пустые слоты предметов сразу будут заполняться подходящими предметами."
+msgstr ""
+"Если включено, то пустые слоты предметов сразу будут заполняться подходящими"
+" предметами."
 
 #: ../../../src/MenuConfig.cpp:474
 msgid ""
 "Shows a marker above enemies, allies, and the player when they are obscured "
 "by tall objects."
-msgstr "Показывать метку над врагами и игроком, когда они скрыты высокими объектами."
+msgstr ""
+"Показывать метку над врагами и игроком, когда они скрыты высокими объектами."
 
 #: ../../../src/MenuConfig.cpp:475
 msgid ""
@@ -919,7 +930,7 @@ msgstr "Версия движка:"
 msgid "Requires mods:"
 msgstr "Требуются моды:"
 
-#: ../../../src/MenuConfig.cpp:1506 ../../../src/SDLInputState.cpp:676
+#: ../../../src/MenuConfig.cpp:1506 ../../../src/SDLInputState.cpp:684
 msgid "(none)"
 msgstr "(нет)"
 
@@ -1183,12 +1194,12 @@ msgstr "Заметки"
 msgid "Quests"
 msgstr "Задания"
 
-#: ../../../src/MenuManager.cpp:286
+#: ../../../src/MenuManager.cpp:287
 #, c-format
 msgid "XP: %d/%d"
 msgstr "Опыт: %d/%d"
 
-#: ../../../src/MenuManager.cpp:831
+#: ../../../src/MenuManager.cpp:833
 msgid "This item can not be dropped."
 msgstr "Этот предмет нельзя выбросить."
 
@@ -1412,136 +1423,136 @@ msgstr "Здесь нельзя растрансформироваться."
 msgid "Completed Quests"
 msgstr "Выполненные Квесты"
 
-#: ../../../src/SDLInputState.cpp:621
+#: ../../../src/SaveLoad.cpp:243 ../../../src/SaveLoad.cpp:244
+msgid "Game saved."
+msgstr "Игра сохранена."
+
+#: ../../../src/SDLInputState.cpp:629
 msgid "Backspace"
 msgstr "Backspace"
 
-#: ../../../src/SDLInputState.cpp:622
+#: ../../../src/SDLInputState.cpp:630
 msgid "CapsLock"
 msgstr "CapsLock"
 
-#: ../../../src/SDLInputState.cpp:625
+#: ../../../src/SDLInputState.cpp:633
 msgid "End"
 msgstr "End"
 
-#: ../../../src/SDLInputState.cpp:626
+#: ../../../src/SDLInputState.cpp:634
 msgid "Escape"
 msgstr "Escape"
 
-#: ../../../src/SDLInputState.cpp:627
+#: ../../../src/SDLInputState.cpp:635
 msgid "Home"
 msgstr "Home"
 
-#: ../../../src/SDLInputState.cpp:628
+#: ../../../src/SDLInputState.cpp:636
 msgid "Insert"
 msgstr "Insert"
 
-#: ../../../src/SDLInputState.cpp:629
+#: ../../../src/SDLInputState.cpp:637
 msgid "Left Alt"
 msgstr "Left Alt"
 
-#: ../../../src/SDLInputState.cpp:630
+#: ../../../src/SDLInputState.cpp:638
 msgid "Left Ctrl"
 msgstr "Left Ctrl"
 
-#: ../../../src/SDLInputState.cpp:632
+#: ../../../src/SDLInputState.cpp:640
 msgid "Left Shift"
 msgstr "Left Shift"
 
-#: ../../../src/SDLInputState.cpp:633
+#: ../../../src/SDLInputState.cpp:641
 msgid "NumLock"
 msgstr "NumLock"
 
-#: ../../../src/SDLInputState.cpp:634
+#: ../../../src/SDLInputState.cpp:642
 msgid "PageDown"
 msgstr "PageDown"
 
-#: ../../../src/SDLInputState.cpp:635
+#: ../../../src/SDLInputState.cpp:643
 msgid "PageUp"
 msgstr "PageUp"
 
-#: ../../../src/SDLInputState.cpp:636
+#: ../../../src/SDLInputState.cpp:644
 msgid "Pause"
 msgstr "Pause"
 
-#: ../../../src/SDLInputState.cpp:637
+#: ../../../src/SDLInputState.cpp:645
 msgid "PrintScreen"
 msgstr "PrintScreen"
 
-#: ../../../src/SDLInputState.cpp:638
+#: ../../../src/SDLInputState.cpp:646
 msgid "Right Alt"
 msgstr "Right Alt"
 
-#: ../../../src/SDLInputState.cpp:639
+#: ../../../src/SDLInputState.cpp:647
 msgid "Right Ctrl"
 msgstr "Right Ctrl"
 
-#: ../../../src/SDLInputState.cpp:640
+#: ../../../src/SDLInputState.cpp:648
 msgid "Return"
 msgstr "Return"
 
-#: ../../../src/SDLInputState.cpp:642
+#: ../../../src/SDLInputState.cpp:650
 msgid "Right Shift"
 msgstr "Right Shift"
 
-#: ../../../src/SDLInputState.cpp:643
+#: ../../../src/SDLInputState.cpp:651
 msgid "ScrollLock"
 msgstr "ScrollLock"
 
-#: ../../../src/SDLInputState.cpp:644
+#: ../../../src/SDLInputState.cpp:652
 msgid "Space"
 msgstr "Пробел"
 
-#: ../../../src/SDLInputState.cpp:645
+#: ../../../src/SDLInputState.cpp:653
 msgid "Tab"
 msgstr "Tab"
 
-#: ../../../src/SDLInputState.cpp:659
+#: ../../../src/SDLInputState.cpp:667
 #, c-format
 msgid "Mouse %d"
 msgstr "Мышь %d"
 
-#: ../../../src/SDLInputState.cpp:667
+#: ../../../src/SDLInputState.cpp:675
 #, c-format
 msgid "Axis %d -"
 msgstr "Ось %d -"
 
-#: ../../../src/SDLInputState.cpp:669
+#: ../../../src/SDLInputState.cpp:677
 #, c-format
 msgid "Axis %d +"
 msgstr "Ось %d +"
 
-#: ../../../src/SDLInputState.cpp:672
+#: ../../../src/SDLInputState.cpp:680
 #, c-format
 msgid "Button %d"
 msgstr "Кнопка %d"
 
-#: ../../../src/SDLInputState.cpp:716
+#: ../../../src/SDLInputState.cpp:724
 msgid "Touch control D-Pad"
 msgstr "Сенсорное управление D-Pad"
 
-#: ../../../src/SDLInputState.cpp:740
+#: ../../../src/SDLInputState.cpp:748
 msgid "Touch control buttons"
 msgstr "Сенсорные клавиши"
 
-#: ../../../src/SDLInputState.cpp:755
+#: ../../../src/SDLInputState.cpp:763
 msgid "Tap"
 msgstr "Коснитесь"
 
-#: ../../../src/SDLInputState.cpp:807 ../../../src/SDLInputState.cpp:809
+#: ../../../src/SDLInputState.cpp:815 ../../../src/SDLInputState.cpp:817
 #, c-format
 msgid "Can not bind: %s"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:821 ../../../src/SDLInputState.cpp:825
-#: ../../../src/SDLInputState.cpp:829
+#: ../../../src/SDLInputState.cpp:829 ../../../src/SDLInputState.cpp:833
+#: ../../../src/SDLInputState.cpp:837
 #, c-format
 msgid "'%s' is no longer bound to:"
 msgstr "'%s' больше не привязана/о к:"
-
-#: ../../../src/SaveLoad.cpp:243 ../../../src/SaveLoad.cpp:244
-msgid "Game saved."
-msgstr "Игра сохранена."
 
 #: ../../../src/Stats.cpp:38
 msgid "Max HP"

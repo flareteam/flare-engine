@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-13 00:20-0400\n"
+"POT-Creation-Date: 2019-03-21 23:42-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
 "Last-Translator: igorko <mansonigor@gmail.com>, 2018\n"
 "Language-Team: Ukrainian (https://www.transifex.com/flareorg/teams/84925/uk/)\n"
@@ -242,19 +242,19 @@ msgstr "Вийти з гри"
 msgid "Accept"
 msgstr "Прийняти"
 
-#: ../../../src/InputState.cpp:405 ../../../src/SDLInputState.cpp:646
+#: ../../../src/InputState.cpp:405 ../../../src/SDLInputState.cpp:654
 msgid "Up"
 msgstr "Вверх"
 
-#: ../../../src/InputState.cpp:406 ../../../src/SDLInputState.cpp:624
+#: ../../../src/InputState.cpp:406 ../../../src/SDLInputState.cpp:632
 msgid "Down"
 msgstr "Вниз"
 
-#: ../../../src/InputState.cpp:407 ../../../src/SDLInputState.cpp:631
+#: ../../../src/InputState.cpp:407 ../../../src/SDLInputState.cpp:639
 msgid "Left"
 msgstr "Вліво"
 
-#: ../../../src/InputState.cpp:408 ../../../src/SDLInputState.cpp:641
+#: ../../../src/InputState.cpp:408 ../../../src/SDLInputState.cpp:649
 msgid "Right"
 msgstr "Вправо"
 
@@ -338,7 +338,7 @@ msgstr "Shift"
 msgid "Alt"
 msgstr "Alt"
 
-#: ../../../src/InputState.cpp:428 ../../../src/SDLInputState.cpp:623
+#: ../../../src/InputState.cpp:428 ../../../src/SDLInputState.cpp:631
 msgid "Delete"
 msgstr "Видалити"
 
@@ -585,6 +585,10 @@ msgstr "Скинути ВСІ налаштування?"
 #: ../../../src/MenuConfig.cpp:234 ../../../src/MenuNumPicker.cpp:49
 msgid "OK"
 msgstr "Гаразд"
+
+#: ../../../src/MenuConfig.cpp:238
+msgid "Continue"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:281
 msgid "Default"
@@ -921,7 +925,7 @@ msgstr "Версія движку:"
 msgid "Requires mods:"
 msgstr "Необхідні моди:"
 
-#: ../../../src/MenuConfig.cpp:1506 ../../../src/SDLInputState.cpp:676
+#: ../../../src/MenuConfig.cpp:1506 ../../../src/SDLInputState.cpp:684
 msgid "(none)"
 msgstr "(нічого)"
 
@@ -1185,12 +1189,12 @@ msgstr "Замітки"
 msgid "Quests"
 msgstr "Квести"
 
-#: ../../../src/MenuManager.cpp:286
+#: ../../../src/MenuManager.cpp:287
 #, c-format
 msgid "XP: %d/%d"
 msgstr "Досвід: %d/%d"
 
-#: ../../../src/MenuManager.cpp:831
+#: ../../../src/MenuManager.cpp:833
 msgid "This item can not be dropped."
 msgstr "Цей предмет не можна викинути."
 
@@ -1414,136 +1418,136 @@ msgstr "Не можу змінити форму в цьому місці."
 msgid "Completed Quests"
 msgstr "Завершені квести"
 
-#: ../../../src/SDLInputState.cpp:621
+#: ../../../src/SaveLoad.cpp:243 ../../../src/SaveLoad.cpp:244
+msgid "Game saved."
+msgstr "Гру збережено."
+
+#: ../../../src/SDLInputState.cpp:629
 msgid "Backspace"
 msgstr "Backspace"
 
-#: ../../../src/SDLInputState.cpp:622
+#: ../../../src/SDLInputState.cpp:630
 msgid "CapsLock"
 msgstr "CapsLock"
 
-#: ../../../src/SDLInputState.cpp:625
+#: ../../../src/SDLInputState.cpp:633
 msgid "End"
 msgstr "End"
 
-#: ../../../src/SDLInputState.cpp:626
+#: ../../../src/SDLInputState.cpp:634
 msgid "Escape"
 msgstr "Escape"
 
-#: ../../../src/SDLInputState.cpp:627
+#: ../../../src/SDLInputState.cpp:635
 msgid "Home"
 msgstr "Home"
 
-#: ../../../src/SDLInputState.cpp:628
+#: ../../../src/SDLInputState.cpp:636
 msgid "Insert"
 msgstr "Insert"
 
-#: ../../../src/SDLInputState.cpp:629
+#: ../../../src/SDLInputState.cpp:637
 msgid "Left Alt"
 msgstr "Лівий Alt"
 
-#: ../../../src/SDLInputState.cpp:630
+#: ../../../src/SDLInputState.cpp:638
 msgid "Left Ctrl"
 msgstr "Лівий Ctrl"
 
-#: ../../../src/SDLInputState.cpp:632
+#: ../../../src/SDLInputState.cpp:640
 msgid "Left Shift"
 msgstr "Лівий Shift"
 
-#: ../../../src/SDLInputState.cpp:633
+#: ../../../src/SDLInputState.cpp:641
 msgid "NumLock"
 msgstr "NumLock"
 
-#: ../../../src/SDLInputState.cpp:634
+#: ../../../src/SDLInputState.cpp:642
 msgid "PageDown"
 msgstr "PageDown"
 
-#: ../../../src/SDLInputState.cpp:635
+#: ../../../src/SDLInputState.cpp:643
 msgid "PageUp"
 msgstr "PageUp"
 
-#: ../../../src/SDLInputState.cpp:636
+#: ../../../src/SDLInputState.cpp:644
 msgid "Pause"
 msgstr "Pause"
 
-#: ../../../src/SDLInputState.cpp:637
+#: ../../../src/SDLInputState.cpp:645
 msgid "PrintScreen"
 msgstr "PrintScreen"
 
-#: ../../../src/SDLInputState.cpp:638
+#: ../../../src/SDLInputState.cpp:646
 msgid "Right Alt"
 msgstr "Правий Alt"
 
-#: ../../../src/SDLInputState.cpp:639
+#: ../../../src/SDLInputState.cpp:647
 msgid "Right Ctrl"
 msgstr "Правий Ctrl"
 
-#: ../../../src/SDLInputState.cpp:640
+#: ../../../src/SDLInputState.cpp:648
 msgid "Return"
 msgstr "Enter"
 
-#: ../../../src/SDLInputState.cpp:642
+#: ../../../src/SDLInputState.cpp:650
 msgid "Right Shift"
 msgstr "Правий Shift"
 
-#: ../../../src/SDLInputState.cpp:643
+#: ../../../src/SDLInputState.cpp:651
 msgid "ScrollLock"
 msgstr "ScrollLock"
 
-#: ../../../src/SDLInputState.cpp:644
+#: ../../../src/SDLInputState.cpp:652
 msgid "Space"
 msgstr "Пробіл"
 
-#: ../../../src/SDLInputState.cpp:645
+#: ../../../src/SDLInputState.cpp:653
 msgid "Tab"
 msgstr "Tab"
 
-#: ../../../src/SDLInputState.cpp:659
+#: ../../../src/SDLInputState.cpp:667
 #, c-format
 msgid "Mouse %d"
 msgstr "Мишка %d"
 
-#: ../../../src/SDLInputState.cpp:667
+#: ../../../src/SDLInputState.cpp:675
 #, c-format
 msgid "Axis %d -"
 msgstr "Вісь %d -"
 
-#: ../../../src/SDLInputState.cpp:669
+#: ../../../src/SDLInputState.cpp:677
 #, c-format
 msgid "Axis %d +"
 msgstr "Вісь %d +"
 
-#: ../../../src/SDLInputState.cpp:672
+#: ../../../src/SDLInputState.cpp:680
 #, c-format
 msgid "Button %d"
 msgstr "Кнопка %d"
 
-#: ../../../src/SDLInputState.cpp:716
+#: ../../../src/SDLInputState.cpp:724
 msgid "Touch control D-Pad"
 msgstr "Торкніться кнопок переміщення"
 
-#: ../../../src/SDLInputState.cpp:740
+#: ../../../src/SDLInputState.cpp:748
 msgid "Touch control buttons"
 msgstr "Торкніться кнопок керування"
 
-#: ../../../src/SDLInputState.cpp:755
+#: ../../../src/SDLInputState.cpp:763
 msgid "Tap"
 msgstr "Торкніться"
 
-#: ../../../src/SDLInputState.cpp:807 ../../../src/SDLInputState.cpp:809
+#: ../../../src/SDLInputState.cpp:815 ../../../src/SDLInputState.cpp:817
 #, c-format
 msgid "Can not bind: %s"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:821 ../../../src/SDLInputState.cpp:825
-#: ../../../src/SDLInputState.cpp:829
+#: ../../../src/SDLInputState.cpp:829 ../../../src/SDLInputState.cpp:833
+#: ../../../src/SDLInputState.cpp:837
 #, c-format
 msgid "'%s' is no longer bound to:"
 msgstr "'%s' більше не повязаний з:"
-
-#: ../../../src/SaveLoad.cpp:243 ../../../src/SaveLoad.cpp:244
-msgid "Game saved."
-msgstr "Гру збережено."
 
 #: ../../../src/Stats.cpp:38
 msgid "Max HP"
