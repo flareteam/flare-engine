@@ -236,6 +236,15 @@ public:
 	WidgetLabel                * auto_equip_lb;
 	WidgetCheckBox             * entity_markers_cb;
 	WidgetLabel                * entity_markers_lb;
+	WidgetCheckBox             * low_hp_warning_msg_cb;
+	WidgetLabel                * low_hp_warning_msg_lb;
+	WidgetCheckBox             * low_hp_warning_cur_cb;
+	WidgetLabel                * low_hp_warning_cur_lb;
+	WidgetCheckBox             * low_hp_warning_snd_cb;
+	WidgetLabel                * low_hp_warning_snd_lb;
+	WidgetHorizontalList       * low_hp_threshold_lstb;
+	WidgetLabel                * low_hp_threshold_lb;
+
 
 	WidgetHorizontalList       * joystick_device_lstb;
 	WidgetLabel                * joystick_device_lb;

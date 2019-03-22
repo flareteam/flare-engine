@@ -167,6 +167,7 @@ StatBlock::StatBlock()
 	, sfx_critdie()
 	, sfx_block()
 	, sfx_levelup("")
+	, sfx_lowhp("")
 	, max_spendable_stat_points(0)
 	, max_points_per_stat(0)
 	, prev_maxhp(0)
@@ -373,6 +374,10 @@ bool StatBlock::loadSfxStat(FileParser *infile) {
 	else if (infile->key == "sfx_levelup") {
 		// @ATTR sfx_levelup|filename|Filename of sound effect for leveling up.
 		sfx_levelup = infile->val;
+	}
+	else if (infile->key == "sfx_lowhp") {
+		// @ATTR sfx_lowhp|filename|Filename of sound effect for low health warning.
+		sfx_lowhp = infile->val;
 	}
 	else {
 		return false;

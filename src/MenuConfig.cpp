@@ -176,6 +176,14 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	, auto_equip_lb(new WidgetLabel())
 	, entity_markers_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
 	, entity_markers_lb(new WidgetLabel())
+	, low_hp_warning_msg_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
+	, low_hp_warning_msg_lb(new WidgetLabel())
+	, low_hp_warning_cur_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
+	, low_hp_warning_cur_lb(new WidgetLabel())
+	, low_hp_warning_snd_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
+	, low_hp_warning_snd_lb(new WidgetLabel())
+	, low_hp_threshold_lstb(new WidgetHorizontalList())
+	, low_hp_threshold_lb(new WidgetLabel())
 
 	, joystick_device_lstb(new WidgetHorizontalList())
 	, joystick_device_lb(new WidgetLabel())
@@ -287,6 +295,18 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	minimap_lstb->append(msg->get("Visible (2x zoom)"), "");
 	minimap_lstb->append(msg->get("Hidden"), "");
 
+	// set up low hp threshold combo
+	low_hp_threshold_lstb->append(msg->get("5%"), "");
+	low_hp_threshold_lstb->append(msg->get("10%"), "");
+	low_hp_threshold_lstb->append(msg->get("15%"), "");
+	low_hp_threshold_lstb->append(msg->get("20%"), "");
+	low_hp_threshold_lstb->append(msg->get("25%"), "");
+	low_hp_threshold_lstb->append(msg->get("30%"), "");
+	low_hp_threshold_lstb->append(msg->get("35%"), "");
+	low_hp_threshold_lstb->append(msg->get("40%"), "");
+	low_hp_threshold_lstb->append(msg->get("45%"), "");
+	low_hp_threshold_lstb->append(msg->get("50%"), "");
+
 	init();
 
 	render_device->setBackgroundColor(Color(0,0,0,0));
@@ -345,6 +365,11 @@ void MenuConfig::init() {
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::COMBAT_TEXT, combat_text_lb, combat_text_cb, msg->get("Show combat text"));
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::AUTO_EQUIP, auto_equip_lb, auto_equip_cb, msg->get("Automatically equip items"));
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::ENTITY_MARKERS, entity_markers_lb, entity_markers_cb, msg->get("Show hidden entity markers"));
+	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::LOW_HP_WARNING_MSG, low_hp_warning_msg_lb, low_hp_warning_msg_cb, msg->get("Show message on low health"));
+	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::LOW_HP_WARNING_CUR, low_hp_warning_cur_lb, low_hp_warning_cur_cb, msg->get("Change cursor on low health"));
+	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::LOW_HP_WARNING_SND, low_hp_warning_snd_lb, low_hp_warning_snd_cb, msg->get("Play sound on low health"));
+	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::LOW_HP_THRESHOLD, low_hp_threshold_lb, low_hp_threshold_lstb, msg->get("Low health threshold"));
+
 
 	cfg_tabs[INPUT_TAB].setOptionWidgets(Platform::Input::JOYSTICK, joystick_device_lb, joystick_device_lstb, msg->get("Joystick"));
 	cfg_tabs[INPUT_TAB].setOptionWidgets(Platform::Input::MOUSE_MOVE, mouse_move_lb, mouse_move_cb, msg->get("Move hero using mouse"));
@@ -472,6 +497,9 @@ void MenuConfig::readConfig() {
 	statbar_autohide_cb->tooltip = msg->get("Some mods will automatically hide the stat bars when they are inactive. Disabling this option will keep them displayed at all times.");
 	auto_equip_cb->tooltip = msg->get("When enabled, empty equipment slots will be filled with applicable items when they are obtained.");
 	entity_markers_cb->tooltip = msg->get("Shows a marker above enemies, allies, and the player when they are obscured by tall objects.");
+	low_hp_warning_msg_cb->tooltip = msg->get("Shows warning if you reach health lower then selected threshold.");
+	low_hp_warning_cur_cb->tooltip = msg->get("Changes cursor if you reach health lower then selected threshold.");
+	low_hp_warning_snd_cb->tooltip = msg->get("Plays a sound if you reach health lower then selected threshold.");
 	no_mouse_cb->tooltip = msg->get("This allows the game to be controlled entirely with the keyboard (or joystick).");
 	mouse_move_swap_cb->tooltip = msg->get("When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero instead of 'Main1'.");
 	mouse_move_attack_cb->tooltip = msg->get("When 'Move hero using mouse' is enabled, this setting controls if the Power assigned to the movement button can be used by targeting an enemy. If this setting is disabled, it is required to use 'Shift' to access the Power assigned to the movement button.");
@@ -738,6 +766,10 @@ void MenuConfig::updateInterface() {
 	combat_text_cb->setChecked(settings->combat_text);
 	auto_equip_cb->setChecked(settings->auto_equip);
 	entity_markers_cb->setChecked(settings->entity_markers);
+	low_hp_warning_msg_cb->setChecked(settings->low_hp_warning_msg);
+	low_hp_warning_cur_cb->setChecked(settings->low_hp_warning_cur);
+	low_hp_warning_snd_cb->setChecked(settings->low_hp_warning_snd);
+	low_hp_threshold_lstb->select((settings->low_hp_threshold/5)-1);
 
 	loot_tooltip_lstb->select(settings->loot_tooltips);
 	minimap_lstb->select(settings->minimap_mode);
@@ -1033,6 +1065,18 @@ void MenuConfig::logicInterface() {
 	}
 	else if (cfg_tabs[INTERFACE_TAB].options[Platform::Interface::ENTITY_MARKERS].enabled && entity_markers_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->entity_markers = entity_markers_cb->isChecked();
+	}
+	else if (cfg_tabs[INTERFACE_TAB].options[Platform::Interface::LOW_HP_WARNING_MSG].enabled && low_hp_warning_msg_cb->checkClickAt(mouse.x, mouse.y)) {
+		settings->low_hp_warning_msg = low_hp_warning_msg_cb->isChecked();
+	}
+	else if (cfg_tabs[INTERFACE_TAB].options[Platform::Interface::LOW_HP_WARNING_CUR].enabled && low_hp_warning_cur_cb->checkClickAt(mouse.x, mouse.y)) {
+		settings->low_hp_warning_cur = low_hp_warning_cur_cb->isChecked();
+	}
+	else if (cfg_tabs[INTERFACE_TAB].options[Platform::Interface::LOW_HP_WARNING_SND].enabled && low_hp_warning_snd_cb->checkClickAt(mouse.x, mouse.y)) {
+		settings->low_hp_warning_snd = low_hp_warning_snd_cb->isChecked();
+	}
+	else if (cfg_tabs[INTERFACE_TAB].options[Platform::Interface::LOW_HP_THRESHOLD].enabled && low_hp_threshold_lstb->checkClickAt(mouse.x, mouse.y)) {
+		settings->low_hp_threshold = (static_cast<int>(low_hp_threshold_lstb->getSelected())+1)*5;
 	}
 }
 

@@ -178,8 +178,13 @@ void GameStatePlay::checkEnemyFocus() {
 		}
 		else {
 			enemy = enemym->enemyFocus(inpt->mouse, mapr->cam, EnemyManager::IS_ALIVE);
-			if (enemy)
-				curs->setCursor(CursorManager::CURSOR_ATTACK);
+			if (enemy) {
+				if (settings->low_hp_warning_cur && pc->isLowHp()) {
+					curs->setCursor(CursorManager::CURSOR_LHP_ATTACK);
+				} else {
+					curs->setCursor(CursorManager::CURSOR_ATTACK);
+				}
+			}
 			src_pos = Utils::screenToMap(inpt->mouse.x, inpt->mouse.y, mapr->cam.x, mapr->cam.y);
 
 		}

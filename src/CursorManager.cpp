@@ -30,6 +30,10 @@ CursorManager::CursorManager()
 	, cursor_interact(NULL)
 	, cursor_talk(NULL)
 	, cursor_attack(NULL)
+	, cursor_lhp_normal(NULL)
+	, cursor_lhp_interact(NULL)
+	, cursor_lhp_talk(NULL)
+	, cursor_lhp_attack(NULL)
 	, cursor_current(NULL)
 	, offset_current(NULL) {
 	Image *graphics;
@@ -73,6 +77,44 @@ CursorManager::CursorManager()
 				}
 				offset_attack = Parse::toPoint(infile.val);
 			}
+			else if (infile.key == "lowhp_normal") {
+				// @ATTR lowhp_normal|filename|Filename of an image for the normal cursor when health is low.
+				graphics = render_device->loadImage(Parse::popFirstString(infile.val), RenderDevice::ERROR_NORMAL);
+				if (graphics) {
+					cursor_lhp_normal = graphics->createSprite();
+					graphics->unref();
+				}
+				offset_lhp_normal = Parse::toPoint(infile.val);
+			}
+			else if (infile.key == "lowhp_interact") {
+				// @ATTR lowhp_interact|filename|Filename of an image for the object interaction cursor when health is low.
+				graphics = render_device->loadImage(Parse::popFirstString(infile.val), RenderDevice::ERROR_NORMAL);
+				if (graphics) {
+					cursor_lhp_interact = graphics->createSprite();
+					graphics->unref();
+				}
+				offset_lhp_interact = Parse::toPoint(infile.val);
+			}
+			else if (infile.key == "lowhp_talk") {
+				// @ATTR lowhp_talk|filename|Filename of an image for the NPC interaction cursor when health is low.
+				graphics = render_device->loadImage(Parse::popFirstString(infile.val), RenderDevice::ERROR_NORMAL);
+				if (graphics) {
+					cursor_lhp_talk = graphics->createSprite();
+					graphics->unref();
+				}
+				offset_lhp_talk = Parse::toPoint(infile.val);
+			}
+			else if (infile.key == "lowhp_attack") {
+				// @ATTR lowhp_attack|filename|Filename of an image for the cursor when attacking enemies and health is low.
+				graphics = render_device->loadImage(Parse::popFirstString(infile.val), RenderDevice::ERROR_NORMAL);
+				if (graphics) {
+					cursor_lhp_attack = graphics->createSprite();
+					graphics->unref();
+				}
+				offset_lhp_attack = Parse::toPoint(infile.val);
+			}
+
+
 			else {
 				infile.error("CursorManager: '%s' is not a valid key.", infile.key.c_str());
 			}
@@ -86,6 +128,10 @@ CursorManager::~CursorManager() {
 	if (cursor_interact) delete cursor_interact;
 	if (cursor_talk) delete cursor_talk;
 	if (cursor_attack) delete cursor_attack;
+	if (cursor_lhp_normal) delete cursor_lhp_normal;
+	if (cursor_lhp_interact) delete cursor_lhp_interact;
+	if (cursor_lhp_talk) delete cursor_lhp_talk;
+	if (cursor_lhp_attack) delete cursor_lhp_attack;
 }
 
 void CursorManager::logic() {
@@ -143,6 +189,27 @@ void CursorManager::setCursor(int type) {
 		inpt->hideCursor();
 		cursor_current = cursor_attack;
 		offset_current = &offset_attack;
+	}
+
+	else if (type == CURSOR_LHP_INTERACT && cursor_lhp_interact) {
+		inpt->hideCursor();
+		cursor_current = cursor_lhp_interact;
+		offset_current = &offset_lhp_interact;
+	}
+	else if (type == CURSOR_LHP_TALK && cursor_lhp_talk) {
+		inpt->hideCursor();
+		cursor_current = cursor_lhp_talk;
+		offset_current = &offset_lhp_talk;
+	}
+	else if (type == CURSOR_LHP_ATTACK && cursor_lhp_attack) {
+		inpt->hideCursor();
+		cursor_current = cursor_lhp_attack;
+		offset_current = &offset_lhp_attack;
+	}
+	else if (type == CURSOR_LHP_NORMAL && cursor_lhp_normal) {
+		inpt->hideCursor();
+		cursor_current = cursor_lhp_normal;
+		offset_current = &offset_lhp_normal;
 	}
 	else if (cursor_normal) {
 		inpt->hideCursor();

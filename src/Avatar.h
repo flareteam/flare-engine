@@ -84,6 +84,8 @@ private:
 
 	Timer set_dir_timer;
 
+	bool isDroppedToLowHp();
+
 protected:
 	virtual void resetActiveAnimation();
 
@@ -119,6 +121,8 @@ public:
 
 	void logMsg(const std::string& str, int type);
 
+	bool isLowHp();
+
 	std::vector<std::string> layer_reference_order;
 	std::vector<std::vector<unsigned> > layer_def;
 
@@ -149,6 +153,7 @@ public:
 	bool questlog_dismissed;
 	bool using_main1;
 	bool using_main2;
+	int prev_hp;
 	bool teleport_camera_lock;
 };
 

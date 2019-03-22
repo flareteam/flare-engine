@@ -311,6 +311,7 @@ public:
 	std::vector<std::string> sfx_critdie;
 	std::vector<std::string> sfx_block;
 	std::string sfx_levelup;
+	std::string sfx_lowhp;
 
 	// formula numbers
 	int max_spendable_stat_points;

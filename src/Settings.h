@@ -91,6 +91,10 @@ public:
 	bool subtitles;
 	int minimap_mode;
 	bool entity_markers;
+	bool low_hp_warning_msg;
+	bool low_hp_warning_cur;
+	bool low_hp_warning_snd;
+	int low_hp_threshold;
 
 	// Language Settings
 	std::string language;
