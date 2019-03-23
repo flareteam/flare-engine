@@ -589,7 +589,7 @@ msgstr "OK"
 
 #: ../../../src/MenuConfig.cpp:238
 msgid "Continue"
-msgstr ""
+msgstr "Continuar"
 
 #: ../../../src/MenuConfig.cpp:281
 msgid "Default"
