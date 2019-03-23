@@ -41,7 +41,7 @@ msgstr "Obrażenia w zwarciu"
 
 #: ../engine/damage_types.txt:4
 msgid "Increases the damage done with swords and other melee weapons."
-msgstr ""
+msgstr "Zwiększa obrażenia zadawane przez miecze i inne bronie służące do walki w zwarciu."
 
 #: ../engine/damage_types.txt:5
 msgid "Melee Damage Min"
@@ -57,7 +57,7 @@ msgstr "Obrażenia Dystansowe"
 
 #: ../engine/damage_types.txt:13
 msgid "Increases the damage done with bows and other ranged weapons."
-msgstr ""
+msgstr "Zwiększa obrażenia zadawane przez łuki i inne bronie do walki dystansowej."
 
 #: ../engine/damage_types.txt:14
 msgid "Ranged Damage Min"
@@ -73,7 +73,7 @@ msgstr "Obrażenia Umysłowe"
 
 #: ../engine/damage_types.txt:22
 msgid "Increases the damage done with staves and other mental weapons."
-msgstr ""
+msgstr "Zwiększa obrażenia zadawane przez kostury i inne bronie korzystające z mocy umysłu."
 
 #: ../engine/damage_types.txt:23
 msgid "Mental Damage Min"
@@ -209,7 +209,7 @@ msgstr "Tłumacze"
 
 #: ../cutscenes/credits.txt:51
 msgid "Ademaro"
-msgstr ""
+msgstr "Ademaro"
 
 #: ../cutscenes/credits.txt:52
 msgid "Adrian Chaves Fernandez"
@@ -225,7 +225,7 @@ msgstr "Andreas Berheim Brudin"
 
 #: ../cutscenes/credits.txt:55
 msgid "Andrey Kapitonov"
-msgstr ""
+msgstr "Andrey Kapitonov"
 
 #: ../cutscenes/credits.txt:56
 msgid "Bas Doodeman"
@@ -249,15 +249,15 @@ msgstr "Diego J. Romero López"
 
 #: ../cutscenes/credits.txt:63
 msgid "dumaosen"
-msgstr ""
+msgstr "dumaosen"
 
 #: ../cutscenes/credits.txt:64
 msgid "Emil"
-msgstr ""
+msgstr "Emil"
 
 #: ../cutscenes/credits.txt:65
 msgid "Eric R"
-msgstr ""
+msgstr "Eric R"
 
 #: ../cutscenes/credits.txt:66
 msgid "Evgen Pavlov"
@@ -265,7 +265,7 @@ msgstr "Evgen Pavlov"
 
 #: ../cutscenes/credits.txt:67
 msgid "Fabio Loli"
-msgstr ""
+msgstr "Fabio Loli"
 
 #: ../cutscenes/credits.txt:68
 msgid "Gianfranco Del Borrello"
@@ -285,7 +285,7 @@ msgstr "Hans Joachim Desserud"
 
 #: ../cutscenes/credits.txt:72
 msgid "hark34"
-msgstr ""
+msgstr "hark34"
 
 #: ../cutscenes/credits.txt:74
 msgid "Janet Hunt"
@@ -301,7 +301,7 @@ msgstr "losine"
 
 #: ../cutscenes/credits.txt:77
 msgid "Marc Tormo i Bochaca"
-msgstr ""
+msgstr "Marc Tormo i Bochaca"
 
 #: ../cutscenes/credits.txt:78
 msgid "Michael Papageorgiou"
@@ -317,7 +317,7 @@ msgstr "Miro Jánošík"
 
 #: ../cutscenes/credits.txt:81
 msgid "Mykola Franchuk"
-msgstr ""
+msgstr "Mykola Franchuk"
 
 #: ../cutscenes/credits.txt:82
 msgid "MOB2"
@@ -333,7 +333,7 @@ msgstr "Nea Retrogamer"
 
 #: ../cutscenes/credits.txt:85
 msgid "Nguyễn Gia Phong"
-msgstr ""
+msgstr "Nguyễn Gia Phong"
 
 #: ../cutscenes/credits.txt:86
 msgid "Nikita Vanku"
@@ -373,7 +373,7 @@ msgstr "sujiniku"
 
 #: ../cutscenes/credits.txt:96
 msgid "syl_"
-msgstr ""
+msgstr "syl_"
 
 #: ../cutscenes/credits.txt:97
 msgid "Thomas Glamsch"
@@ -385,7 +385,7 @@ msgstr "Timo Sievänen"
 
 #: ../cutscenes/credits.txt:99
 msgid "Vicente Monteiro"
-msgstr ""
+msgstr "Vicente Monteiro"
 
 #: ../cutscenes/credits.txt:100
 msgid "Wuzzy2"
@@ -397,7 +397,7 @@ msgstr "Yannis Anthymidis"
 
 #: ../cutscenes/credits.txt:102
 msgid "Zmicer Turok"
-msgstr ""
+msgstr "Zmicer Turok"
 
 #: ../cutscenes/credits.txt:105
 msgid "Distributors"
