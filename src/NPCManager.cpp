@@ -114,15 +114,20 @@ void NPCManager::handleNewMap() {
 		// The hitbox for hovering/clicking on an npc is based on their first frame of animation
 		// This might cause some undesired behavior for npcs that have packed animations and a lot of variation
 		// However, it is sufficient for all of our current game data (fantasycore, no-name mod, polymorphable)
-		Renderable ren = npc->activeAnimation->getCurrentFrame(npc->direction);
-		ec.type = EventComponent::NPC_HOTSPOT;
-		ec.x = static_cast<int>(npc->pos.x);
-		ec.y = static_cast<int>(npc->pos.y);
-		ec.z = ren.offset.x;
-		ec.a = ren.offset.y;
-		ec.b = ren.src.w;
-		ec.c = ren.src.h;
-		ev.components.push_back(ec);
+		if (npc->activeAnimation) {
+			Renderable ren = npc->activeAnimation->getCurrentFrame(npc->direction);
+			ec.type = EventComponent::NPC_HOTSPOT;
+			ec.x = static_cast<int>(npc->pos.x);
+			ec.y = static_cast<int>(npc->pos.y);
+			ec.z = ren.offset.x;
+			ec.a = ren.offset.y;
+			ec.b = ren.src.w;
+			ec.c = ren.src.h;
+			ev.components.push_back(ec);
+		}
+		else {
+			Utils::logError("NPCManager: Unable to set click hotspot for '%s' due to lack of animation.", mn.id.c_str());
+		}
 
 		mapr->events.push_back(ev);
 	}

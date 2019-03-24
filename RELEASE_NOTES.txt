@@ -25,6 +25,7 @@ Engine fixes:
 * Fix crash when trying to load a mod that contained 'engine/default_keybindings.txt'. (nwtour)
 * Display XP stat bar value as relative to current level instead of total XP. (Leszek Cimała)
 * Fix key bindings not working when switched to a non-US keyboard layout. (nwtour)
+* Fix segfault when NPC filename is invalid.
 
 Game updates:
 
