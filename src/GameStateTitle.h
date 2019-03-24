@@ -29,6 +29,7 @@ class WidgetLabel;
 class GameStateTitle : public GameState {
 private:
 	void refreshWidgets();
+	void criticalErrorWidget();
 
 	Sprite *logo;
 	WidgetButton *button_play;
@@ -36,6 +37,7 @@ private:
 	WidgetButton *button_cfg;
 	WidgetButton *button_credits;
 	WidgetLabel *label_version;
+	WidgetLabel *label_error;
 
 	TabList tablist;
 

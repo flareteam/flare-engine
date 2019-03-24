@@ -74,6 +74,7 @@ public:
 	void showFPS(float fps);
 	void saveUserSettings();
 	bool done;
+	int critical_error_num;
 };
 
 #endif

@@ -347,6 +347,12 @@ void GameStatePlay::checkTeleport() {
 			// enemies and npcs should be initialized AFTER on_load events execute
 			enemym->handleNewMap();
 			npcs->handleNewMap();
+
+			if (npcs->critical_error_num) {
+				critical_error_num = npcs->critical_error_num;
+				return;
+			}
+
 			resetNPC();
 
 			menu->mini->prerender(&mapr->collider, mapr->w, mapr->h);
@@ -421,6 +427,12 @@ void GameStatePlay::checkCancel() {
 
 		snd->stopMusic();
 		exitRequested = true;
+	}
+
+	if (critical_error_num != ErrorHandler::STATUS_OK) {
+		menu->closeAll();
+		snd->stopMusic();
+		setRequestedGameState(new GameStateTitle());
 	}
 }
 
@@ -913,6 +925,9 @@ void GameStatePlay::logic() {
 	checkSaveEvent();
 	checkNotifications();
 	checkCancel();
+
+	if (critical_error_num != ErrorHandler::STATUS_OK)
+		return;
 
 	mapr->logic(isPaused());
 	mapr->enemies_cleared = enemym->isCleared();

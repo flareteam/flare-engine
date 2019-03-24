@@ -21,6 +21,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define GAMESTATE_H
 
 #include "CommonIncludes.h"
+#include "ErrorHandler.h"
 #include "WidgetTooltip.h"
 
 class GameState {
@@ -51,6 +52,7 @@ public:
 	bool save_settings_on_exit;
 
 	int load_counter;
+	int critical_error_num;
 
 protected:
 	GameState* requestedGameState;

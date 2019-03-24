@@ -26,6 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Animation.h"
 #include "CampaignManager.h"
+#include "ErrorHandler.h"
 #include "EventManager.h"
 #include "ItemManager.h"
 #include "MapRenderer.h"
@@ -53,6 +54,7 @@ void NPCManager::handleNewMap() {
 
 	Map_NPC mn;
 	ItemStack item_roll;
+	critical_error_num = ErrorHandler::STATUS_OK;
 
 	// remove existing NPCs
 	for (unsigned i=0; i<npcs.size(); i++)
@@ -80,6 +82,12 @@ void NPCManager::handleNewMap() {
 
 		NPC *npc = new NPC();
 		npc->load(mn.id);
+
+		if (npc->critical_error_num != ErrorHandler::STATUS_OK) {
+			critical_error_num = npc->critical_error_num;
+			return;
+		}
+
 		npc->pos.x = mn.pos.x;
 		npc->pos.y = mn.pos.y;
 

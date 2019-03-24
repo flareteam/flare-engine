@@ -71,6 +71,7 @@ GameSwitcher::GameSwitcher()
 
 	label_fps = new WidgetLabel();
 	done = false;
+	critical_error_num = ErrorHandler::STATUS_OK;
 	loadMusic();
 	loadFPS();
 
@@ -189,7 +190,7 @@ void GameSwitcher::logic() {
 				loadMusic();
 
 		// if this game state shows a background image, load it here
-		if (currentState->has_background)
+		if (currentState->has_background && critical_error_num == ErrorHandler::STATUS_OK)
 			loadBackgroundImage();
 		else
 			freeBackground();
@@ -201,7 +202,15 @@ void GameSwitcher::logic() {
 		currentState->force_refresh_background = false;
 	}
 
+	if (critical_error_num != ErrorHandler::STATUS_OK) {
+		// critical_error_num way : Childs -> GameStatePlay -> GameSwitcher -> GameStateTitle
+		currentState->critical_error_num = critical_error_num;
+		critical_error_num = ErrorHandler::STATUS_OK;
+	}
+
 	currentState->logic();
+
+	critical_error_num = currentState->critical_error_num;
 
 	// Check if the GameState wants to quit the application
 	done = currentState->isExitRequested();

@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
+#include "ErrorHandler.h"
 #include "GameState.h"
 #include "MessageEngine.h"
 #include "RenderDevice.h"
@@ -30,6 +31,7 @@ GameState::GameState()
 	, force_refresh_background(false)
 	, save_settings_on_exit(true)
 	, load_counter(0)
+	, critical_error_num(ErrorHandler::STATUS_OK)
 	, requestedGameState(NULL)
 	, exitRequested(false)
 	, loading_tip(new WidgetTooltip())
@@ -54,6 +56,7 @@ GameState& GameState::operator=(const GameState& other) {
 	load_counter = other.load_counter;
 	requestedGameState = other.requestedGameState;
 	exitRequested = other.exitRequested;
+	critical_error_num = other.critical_error_num;
 	loading_tip = new WidgetTooltip();
 	loading_tip_buf.addText(msg->get("Loading..."));
 

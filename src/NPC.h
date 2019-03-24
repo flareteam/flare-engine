@@ -26,6 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "Entity.h"
+#include "ErrorHandler.h"
 #include "ItemStorage.h"
 #include "Utils.h"
 
@@ -97,6 +98,8 @@ public:
 	// outer vector is addressing the dialog and the inner vector is
 	// addressing the events during one dialog
 	std::vector<std::vector<EventComponent> > dialog;
+
+	int critical_error_num;
 };
 
 #endif

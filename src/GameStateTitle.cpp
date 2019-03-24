@@ -126,6 +126,11 @@ GameStateTitle::GameStateTitle()
 	label_version->setText(VersionInfo::createVersionStringFull());
 	label_version->setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
+	label_error = new WidgetLabel();
+	label_error->setJustify(FontEngine::JUSTIFY_CENTER);
+	label_error->setColor(font->getColor(FontEngine::COLOR_MENU_PENALTY));
+	label_error->setPos((settings->view_w / 2), (settings->view_h / 5));
+
 	// Setup tab order
 	tablist.ignore_no_mouse = true;
 	tablist.add(button_play);
@@ -144,7 +149,7 @@ GameStateTitle::GameStateTitle()
 }
 
 void GameStateTitle::logic() {
-	if (inpt->window_resized)
+	if (inpt->window_resized || critical_error_num != ErrorHandler::STATUS_OK)
 		refreshWidgets();
 
 	button_play->enabled = eset->gameplay.enable_playgame;
@@ -191,6 +196,16 @@ void GameStateTitle::logic() {
 	}
 }
 
+void GameStateTitle::criticalErrorWidget() {
+	if (critical_error_num == ErrorHandler::CRITICAL_ERROR_NPC_FILE_NOT_FOUND) {
+		label_error->setText("Unable load NPC file");
+	}
+	else if (critical_error_num != ErrorHandler::STATUS_OK) {
+		label_error->setText("UNKNOWN ERROR");
+	}
+	critical_error_num = ErrorHandler::STATUS_OK;
+}
+
 void GameStateTitle::refreshWidgets() {
 	if (logo) {
 		Rect r;
@@ -208,6 +223,8 @@ void GameStateTitle::refreshWidgets() {
 	button_exit->setPos(0, 0);
 
 	label_version->setPos(settings->view_w, 0);
+
+	criticalErrorWidget();
 }
 
 void GameStateTitle::render() {
@@ -224,6 +241,8 @@ void GameStateTitle::render() {
 
 	// version number
 	label_version->render();
+
+	label_error->render();
 }
 
 GameStateTitle::~GameStateTitle() {

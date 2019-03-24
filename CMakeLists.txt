@@ -227,6 +227,7 @@ Set (FLARE_HEADERS
 	./src/EnemyGroupManager.h
 	./src/EnemyManager.h
 	./src/EngineSettings.h
+	./src/ErrorHandler.h
 	./src/EventManager.h
 	./src/FileParser.h
 	./src/FontEngine.h

@@ -29,6 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CombatText.h"
 #include "DeviceList.h"
 #include "EngineSettings.h"
+#include "ErrorHandler.h"
 #include "GameSwitcher.h"
 #include "InputState.h"
 #include "MessageEngine.h"
@@ -196,6 +197,11 @@ static void mainLoop () {
 				break;
 
 			gswitch->logic();
+
+			// Skip frame if found critical error in map verification
+			if (gswitch->critical_error_num != ErrorHandler::STATUS_OK)
+				break;
+
 			inpt->resetScroll();
 
 			// Engine done means the user escapes the main game menu.
@@ -220,6 +226,10 @@ static void mainLoop () {
 				break;
 			}
 		}
+
+		// Skip frame if found critical error in map verification
+		if (gswitch->critical_error_num != ErrorHandler::STATUS_OK)
+			continue;
 
 		if (!inpt->window_minimized) {
 			render_device->blankScreen();

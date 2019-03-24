@@ -48,6 +48,7 @@ public:
 	void logic();
 	void addRenders(std::vector<Renderable> &r);
 	int getID(const std::string& npcName);
+	int critical_error_num;
 };
 
 #endif

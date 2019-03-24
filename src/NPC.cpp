@@ -26,6 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "AnimationManager.h"
 #include "AnimationSet.h"
 #include "CampaignManager.h"
+#include "ErrorHandler.h"
 #include "EventManager.h"
 #include "FileParser.h"
 #include "ItemManager.h"
@@ -62,6 +63,7 @@ void NPC::load(const std::string& npc_id) {
 
 	FileParser infile;
 	ItemStack stack;
+	critical_error_num = ErrorHandler::STATUS_OK;
 
 	portrait_filenames.resize(1);
 
@@ -256,6 +258,10 @@ void NPC::load(const std::string& npc_id) {
 			}
 		}
 		infile.close();
+	}
+	else {
+		critical_error_num = ErrorHandler::CRITICAL_ERROR_NPC_FILE_NOT_FOUND;
+		return;
 	}
 	loadGraphics();
 
