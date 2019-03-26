@@ -43,6 +43,17 @@ public:
 		MINIMAP_HIDDEN = 2
 	};
 
+	enum {
+		LHP_WARN_NONE = 0,
+		LHP_WARN_ALL = 1,
+		LHP_WARN_TEXT_CURSOR = 2,
+		LHP_WARN_TEXT_SOUND = 3,
+		LHP_WARN_CURSOR_SOUND = 4,
+		LHP_WARN_TEXT = 5,
+		LHP_WARN_CURSOR = 6,
+		LHP_WARN_SOUND = 7
+	};
+
 	Settings();
 	void loadSettings();
 	void saveSettings();
@@ -91,6 +102,8 @@ public:
 	bool subtitles;
 	int minimap_mode;
 	bool entity_markers;
+	int low_hp_warning_type;
+	int low_hp_threshold;
 
 	// Language Settings
 	std::string language;

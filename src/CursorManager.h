@@ -36,7 +36,11 @@ public:
 		CURSOR_NORMAL,
 		CURSOR_INTERACT,
 		CURSOR_TALK,
-		CURSOR_ATTACK
+		CURSOR_ATTACK,
+		CURSOR_LHP_NORMAL,
+		CURSOR_LHP_INTERACT,
+		CURSOR_LHP_TALK,
+		CURSOR_LHP_ATTACK
 	};
 
 private:
@@ -44,11 +48,20 @@ private:
 	Sprite *cursor_interact;
 	Sprite *cursor_talk;
 	Sprite *cursor_attack;
+	Sprite *cursor_lhp_normal;
+	Sprite *cursor_lhp_interact;
+	Sprite *cursor_lhp_talk;
+	Sprite *cursor_lhp_attack;
 
 	Point offset_normal;
 	Point offset_interact;
 	Point offset_talk;
 	Point offset_attack;
+	Point offset_lhp_normal;
+	Point offset_lhp_interact;
+	Point offset_lhp_talk;
+	Point offset_lhp_attack;
+
 
 	Sprite *cursor_current;
 	Point* offset_current;

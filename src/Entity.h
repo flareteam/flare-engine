@@ -70,6 +70,7 @@ public:
 	std::vector<SoundID> sound_critdie;
 	std::vector<SoundID> sound_block;
 	SoundID sound_levelup;
+	SoundID sound_lowhp;
 
 	bool setAnimation(const std::string& animation);
 	Animation *activeAnimation;

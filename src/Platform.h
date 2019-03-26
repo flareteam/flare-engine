@@ -55,11 +55,13 @@ public:
 
 	class Interface {
 	public:
-		static const int COUNT = 13;
+		static const int COUNT = 15;
 		enum {
 			LANGUAGE,
 			MINIMAP_MODE,
 			LOOT_TOOLTIPS,
+			LOW_HP_WARNING_TYPE,
+			LOW_HP_THRESHOLD,
 			SUBTITLES,
 			COLORBLIND,
 			STATBAR_LABELS,
@@ -69,7 +71,7 @@ public:
 			HARDWARE_CURSOR,
 			ENTITY_MARKERS,
 			SHOW_FPS,
-			DEV_MODE,
+			DEV_MODE
 		};
 	};
 

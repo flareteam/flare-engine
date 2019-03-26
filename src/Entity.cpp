@@ -60,6 +60,7 @@ Entity::Entity()
 	, sound_critdie()
 	, sound_block()
 	, sound_levelup(0)
+	, sound_lowhp(0)
 	, activeAnimation(NULL)
 	, animationSet(NULL) {
 }
@@ -79,6 +80,7 @@ Entity& Entity::operator=(const Entity& e) {
 	sound_critdie = e.sound_critdie;
 	sound_block = e.sound_block;
 	sound_levelup = e.sound_levelup;
+	sound_lowhp = e.sound_lowhp;
 	activeAnimation = new Animation(*e.activeAnimation);
 	animationSet = e.animationSet;
 	stats = StatBlock(e.stats);
@@ -120,6 +122,9 @@ void Entity::loadSoundsFromStatBlock(StatBlock *src_stats) {
 
 	if (src_stats->sfx_levelup != "")
 		sound_levelup = snd->load(src_stats->sfx_levelup, "Entity leveled up");
+
+	if (src_stats->sfx_lowhp != "")
+		sound_lowhp = snd->load(src_stats->sfx_lowhp, "Entity has low hp");
 }
 
 void Entity::unloadSounds() {
@@ -143,6 +148,7 @@ void Entity::unloadSounds() {
 	}
 
 	snd->unload(sound_levelup);
+	snd->unload(sound_lowhp);
 }
 
 void Entity::playAttackSound(const std::string& attack_name) {

@@ -35,12 +35,14 @@ public:
 	static const std::string DEFAULT_CHANNEL;
 	static const FPoint NO_POS;
 	static const bool LOOP = true;
+	static const bool CLEANUP = true;
 
 	virtual ~SoundManager() {};
 
 	virtual SoundID load(const std::string& filename, const std::string& errormessage) = 0;
 	virtual void unload(SoundID) = 0;
-	virtual void play(SoundID, const std::string& channel, const FPoint& pos, bool loop) = 0;
+	virtual void play(SoundID, const std::string& channel, const FPoint& pos, bool loop, bool cleanup = true) = 0;
+	virtual void stopChannel(const std::string& channel) = 0;
 	virtual void pauseAll() = 0;
 	virtual void resumeAll() = 0;
 	virtual void setVolumeSFX(int value) = 0;
@@ -72,7 +74,8 @@ public:
 		, location(FPoint())
 		, loop(false)
 		, paused(false)
-		, finished(false) {
+		, finished(false)
+		, cleanup(true) {
 	}
 
 	SoundID sid;
@@ -81,6 +84,7 @@ public:
 	bool loop;
 	bool paused;
 	bool finished;
+	bool cleanup;
 };
 
 #endif

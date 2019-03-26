@@ -71,6 +71,8 @@ Avatar::Avatar()
 	, questlog_dismissed(false)
 	, using_main1(false)
 	, using_main2(false)
+	, prev_hp(0)
+	, playing_lowhp(false)
 	, teleport_camera_lock(false) {
 
 	init();
@@ -376,6 +378,34 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 	stats.logic();
 
+	// alert on low health
+	if (isDroppedToLowHp()) {
+		// show message if set
+		if (isLowHpMessageEnabled()) {
+			std::stringstream ss;
+			ss << msg->get("Your health is low!");
+			logMsg(ss.str(), MSG_NORMAL);
+		}
+		// play a sound if set in settings
+		if (isLowHpSoundEnabled() && !playing_lowhp) {
+			// if looping, then do not cleanup 
+			snd->play(sound_lowhp, "lowhp", snd->NO_POS, stats.sfx_lowhp_loop, !stats.sfx_lowhp_loop);
+			playing_lowhp = true;
+		}
+	}
+	// if looping, stop sounds when HP recovered above threshold
+	if (isLowHpSoundEnabled() && !isLowHp()
+			&& playing_lowhp && stats.sfx_lowhp_loop) {
+		snd->stopChannel("lowhp");
+		playing_lowhp = false;
+	}
+	if (isLowHpCursorEnabled() && isLowHp()) {
+		// change attack cursor to lowhp variant
+		curs->setCursor(CursorManager::CURSOR_LHP_NORMAL);
+	}
+	// we can not use stats.prev_hp here
+	prev_hp = stats.hp;
+
 	// check level up
 	if (stats.level < eset->xp.getMaxLevel() && stats.xp >= eset->xp.getLevelXP(stats.level + 1)) {
 		stats.level_up = true;
@@ -545,7 +575,12 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 				setAnimation(attack_anim);
 
 				if (attack_cursor) {
-					curs->setCursor(CursorManager::CURSOR_ATTACK);
+					// show low hp cursor if below threshold
+					if (isLowHpCursorEnabled() && isLowHp()) {
+						curs->setCursor(CursorManager::CURSOR_LHP_ATTACK);
+					} else {
+						curs->setCursor(CursorManager::CURSOR_ATTACK);
+					}
 				}
 
 				if (activeAnimation->isFirstFrame()) {
@@ -1035,6 +1070,40 @@ void Avatar::addRenders(std::vector<Renderable> &r) {
 
 void Avatar::logMsg(const std::string& str, int type) {
 	log_msg.push(std::pair<std::string, int>(str, type));
+}
+
+// isLowHp returns true if healht is below set threshold
+bool Avatar::isLowHp() {
+	float hp_one_perc = static_cast<float>(std::max(stats.get(Stats::HP_MAX), 1)) / 100.0f;
+	return static_cast<float>(stats.hp)/hp_one_perc < static_cast<float>(settings->low_hp_threshold);
+}
+
+// isDroppedToLowHp returns true only if player hp just dropped below threshold
+bool Avatar::isDroppedToLowHp() {
+	float hp_one_perc = static_cast<float>(std::max(stats.get(Stats::HP_MAX), 1)) / 100.0f;
+	return static_cast<float>(stats.hp)/hp_one_perc < static_cast<float>(settings->low_hp_threshold) &&
+		static_cast<float>(prev_hp)/hp_one_perc >= static_cast<float>(settings->low_hp_threshold);
+}
+
+bool Avatar::isLowHpMessageEnabled() {
+	return settings->low_hp_warning_type == settings->LHP_WARN_TEXT ||
+		settings->low_hp_warning_type == settings->LHP_WARN_TEXT_CURSOR ||
+		settings->low_hp_warning_type == settings->LHP_WARN_TEXT_SOUND ||
+		settings->low_hp_warning_type == settings->LHP_WARN_ALL;
+}
+
+bool Avatar::isLowHpSoundEnabled() {
+	return settings->low_hp_warning_type == settings->LHP_WARN_SOUND ||
+		settings->low_hp_warning_type == settings->LHP_WARN_TEXT_SOUND ||
+		settings->low_hp_warning_type == settings->LHP_WARN_CURSOR_SOUND ||
+		settings->low_hp_warning_type == settings->LHP_WARN_ALL;
+}
+
+bool Avatar::isLowHpCursorEnabled() {
+	return settings->low_hp_warning_type == settings->LHP_WARN_CURSOR ||
+		settings->low_hp_warning_type == settings->LHP_WARN_TEXT_CURSOR ||
+		settings->low_hp_warning_type == settings->LHP_WARN_CURSOR_SOUND ||
+		settings->low_hp_warning_type == settings->LHP_WARN_ALL;
 }
 
 Avatar::~Avatar() {

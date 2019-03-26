@@ -989,10 +989,19 @@ void MapRenderer::checkHotspots() {
 						// only check events if the player is clicking
 						// and allowed to click
 						if (is_npc) {
-							curs->setCursor(CursorManager::CURSOR_TALK);
+							// show low hp cursor if below threshold
+							if (pc->isLowHpCursorEnabled() && pc->isLowHp()) {
+								curs->setCursor(CursorManager::CURSOR_LHP_TALK);
+							} else {
+								curs->setCursor(CursorManager::CURSOR_TALK);
+							}
 						}
 						else {
-							curs->setCursor(CursorManager::CURSOR_INTERACT);
+							if (pc->isLowHpCursorEnabled() && pc->isLowHp()) {
+								curs->setCursor(CursorManager::CURSOR_LHP_INTERACT);
+							} else {
+								curs->setCursor(CursorManager::CURSOR_INTERACT);
+							}
 						}
 						if (!inpt->pressing[Input::MAIN1]) return;
 						else if (inpt->lock[Input::MAIN1]) return;
