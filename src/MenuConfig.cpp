@@ -305,7 +305,7 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	for (unsigned int i = 1; i <= 10 ; ++i) {
 		std::stringstream ss;
 		ss << i * 5;
-		low_hp_threshold_lstb->append(ss.str() + "%", msg->get("When health drops below given threshold notifications are be triggered if enabled."));
+		low_hp_threshold_lstb->append(ss.str() + "%", msg->get("When health drops below given threshold enabled notifications are triggered."));
 	}
 
 	init();
