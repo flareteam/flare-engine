@@ -83,8 +83,8 @@ void SDLSoundManager::logic(const FPoint& center) {
 
 	while(it != playback.end()) {
 
-		/* if sound is finished add it to cleanup and continue with next */
-		if (it->second.finished) {
+		/* if sound is finished and should be unloaded add it to cleanup and continue with next */
+		if (it->second.finished && it->second.cleanup) {
 			cleanup.push_back(it->first);
 			++it;
 			continue;
@@ -203,7 +203,7 @@ void SDLSoundManager::unload(SoundID sid) {
 
 
 
-void SDLSoundManager::play(SoundID sid, const std::string& channel, const FPoint& pos, bool loop) {
+void SDLSoundManager::play(SoundID sid, const std::string& channel, const FPoint& pos, bool loop, bool cleanup) {
 
 	SoundMapIterator it;
 	VirtualChannelMapIterator vcit = channels.end();
@@ -226,6 +226,7 @@ void SDLSoundManager::play(SoundID sid, const std::string& channel, const FPoint
 	p.virtual_channel = channel;
 	p.loop = loop;
 	p.finished = false;
+	p.cleanup = cleanup;
 
 	if (p.virtual_channel != DEFAULT_CHANNEL) {
 
@@ -261,6 +262,15 @@ void SDLSoundManager::play(SoundID sid, const std::string& channel, const FPoint
 		vcit->second = c;
 
 	playback.insert(std::pair<int, Playback>(c, p));
+}
+
+void SDLSoundManager::stopChannel(const std::string& channel) {
+	VirtualChannelMapIterator vcit = channels.end();
+
+	vcit = channels.find(channel);
+	if (vcit != channels.end()) {
+		Mix_HaltChannel(vcit->second);
+	}
 }
 
 void SDLSoundManager::pauseAll() {

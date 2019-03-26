@@ -72,6 +72,7 @@ Avatar::Avatar()
 	, using_main1(false)
 	, using_main2(false)
 	, prev_hp(0)
+	, playing_lowhp(false)
 	, teleport_camera_lock(false) {
 
 	init();
@@ -386,9 +387,17 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 			logMsg(ss.str(), MSG_NORMAL);
 		}
 		// play a sound if set in settings
-		if (isLowHpSoundEnabled()) {
-			snd->play(sound_lowhp, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
+		if (isLowHpSoundEnabled() && !playing_lowhp) {
+			// if looping, then do not cleanup 
+			snd->play(sound_lowhp, "lowhp", snd->NO_POS, stats.sfx_lowhp_loop, !stats.sfx_lowhp_loop);
+			playing_lowhp = true;
 		}
+	}
+	// if looping, stop sounds when HP recovered above threshold
+	if (isLowHpSoundEnabled() && !isLowHp()
+			&& playing_lowhp && stats.sfx_lowhp_loop) {
+		snd->stopChannel("lowhp");
+		playing_lowhp = false;
 	}
 	if (isLowHpCursorEnabled() && isLowHp()) {
 		// change attack cursor to lowhp variant

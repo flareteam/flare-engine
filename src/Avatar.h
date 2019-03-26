@@ -157,6 +157,7 @@ public:
 	bool using_main1;
 	bool using_main2;
 	int prev_hp;
+	bool playing_lowhp;
 	bool teleport_camera_lock;
 };
 

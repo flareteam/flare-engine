@@ -292,26 +292,21 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	minimap_lstb->append(msg->get("Hidden"), "");
 
 	// set up low hp notification type combinantions
-	low_hp_warning_lstb->append(msg->get("Disabled"), "Disables all low health notifications.");
-	low_hp_warning_lstb->append(msg->get("All"), "Shows message, changes cursor and plays a sound on low health.");
-	low_hp_warning_lstb->append(msg->get("Message & Cursor"), "Shows message and change cursor on low health.");
-	low_hp_warning_lstb->append(msg->get("Message & Sound"), "Shows message and plays a sound on low health.");
-	low_hp_warning_lstb->append(msg->get("Sound & Cursor"), "Changes cursor and plays a sound on low health.");
-	low_hp_warning_lstb->append(msg->get("Message"), "Shows message on low health.");
-	low_hp_warning_lstb->append(msg->get("Cursor"), "Mouse cursor will change on low health.");
-	low_hp_warning_lstb->append(msg->get("Sound"), "Plays sound on low health.");
+	low_hp_warning_lstb->append(msg->get("Disabled"), msg->get("Disables all low health notifications."));
+	low_hp_warning_lstb->append(msg->get("All"), msg->get("Shows message, changes cursor and plays a sound on low health."));
+	low_hp_warning_lstb->append(msg->get("Message & Cursor"), msg->get("Shows message and change cursor on low health."));
+	low_hp_warning_lstb->append(msg->get("Message & Sound"), msg->get("Shows message and plays a sound on low health."));
+	low_hp_warning_lstb->append(msg->get("Sound & Cursor"), msg->get("Changes cursor and plays a sound on low health."));
+	low_hp_warning_lstb->append(msg->get("Message"), msg->get("Shows message on low health."));
+	low_hp_warning_lstb->append(msg->get("Cursor"), msg->get("Mouse cursor will change on low health."));
+	low_hp_warning_lstb->append(msg->get("Sound"), msg->get("Plays sound on low health."));
 
 	// set up low hp threshold combo
-	low_hp_threshold_lstb->append(msg->get("5%"), "When health drops below given threshold (in percents) notifications are be triggered if enabled.");
-	low_hp_threshold_lstb->append(msg->get("10%"), "When health drops below given threshold (in percents) notifications are be triggered if enabled.");
-	low_hp_threshold_lstb->append(msg->get("15%"), "When health drops below given threshold (in percents) notifications are be triggered if enabled.");
-	low_hp_threshold_lstb->append(msg->get("20%"), "When health drops below given threshold (in percents) notifications are be triggered if enabled.");
-	low_hp_threshold_lstb->append(msg->get("25%"), "When health drops below given threshold (in percents) notifications are be triggered if enabled.");
-	low_hp_threshold_lstb->append(msg->get("30%"), "When health drops below given threshold (in percents) notifications are be triggered if enabled.");
-	low_hp_threshold_lstb->append(msg->get("35%"), "When health drops below given threshold (in percents) notifications are be triggered if enabled.");
-	low_hp_threshold_lstb->append(msg->get("40%"), "When health drops below given threshold (in percents) notifications are be triggered if enabled.");
-	low_hp_threshold_lstb->append(msg->get("45%"), "When health drops below given threshold (in percents) notifications are be triggered if enabled.");
-	low_hp_threshold_lstb->append(msg->get("50%"), "When health drops below given threshold (in percents) notifications are be triggered if enabled.");
+	for (unsigned int i = 1; i <= 10 ; ++i) {
+		std::stringstream ss;
+		ss << i * 5;
+		low_hp_threshold_lstb->append(ss.str() + "%", msg->get("When health drops below given threshold notifications are be triggered if enabled."));
+	}
 
 	init();
 
@@ -371,7 +366,7 @@ void MenuConfig::init() {
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::COMBAT_TEXT, combat_text_lb, combat_text_cb, msg->get("Show combat text"));
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::AUTO_EQUIP, auto_equip_lb, auto_equip_cb, msg->get("Automatically equip items"));
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::ENTITY_MARKERS, entity_markers_lb, entity_markers_cb, msg->get("Show hidden entity markers"));
-	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::LOW_HP_WARNING_TYPE, low_hp_warning_lb, low_hp_warning_lstb, msg->get("Select low health notification types"));
+	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::LOW_HP_WARNING_TYPE, low_hp_warning_lb, low_hp_warning_lstb, msg->get("Low health notification"));
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::LOW_HP_THRESHOLD, low_hp_threshold_lb, low_hp_threshold_lstb, msg->get("Low health threshold"));
 
 
