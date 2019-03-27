@@ -157,6 +157,14 @@ body {
 
 <p><strong>attack</strong> | <code>filename</code> | Filename of an image for the cursor when attacking enemies.</p>
 
+<p><strong>lowhp_normal</strong> | <code>filename</code> | Filename of an image for the normal cursor when health is low.</p>
+
+<p><strong>lowhp_interact</strong> | <code>filename</code> | Filename of an image for the object interaction cursor when health is low.</p>
+
+<p><strong>lowhp_talk</strong> | <code>filename</code> | Filename of an image for the NPC interaction cursor when health is low.</p>
+
+<p><strong>lowhp_attack</strong> | <code>filename</code> | Filename of an image for the cursor when attacking enemies and health is low.</p>
+
 <hr />
 
 <h4>EnemyGroupManager</h4>
@@ -1838,6 +1846,8 @@ body {
 <p><strong>sfx_block</strong> | <code>repeatable(filename)</code> | Filename of sound effect for blocking an incoming hit.</p>
 
 <p><strong>sfx_levelup</strong> | <code>filename</code> | Filename of sound effect for leveling up.</p>
+
+<p><strong>sfx_lowhp</strong> | <code>filename, bool : Sound file, loop</code> | Filename of sound effect for low health warning. Optionally, it can be looped.</p>
 
 <hr />
 
