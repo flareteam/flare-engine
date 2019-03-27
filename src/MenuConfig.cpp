@@ -293,19 +293,19 @@ MenuConfig::MenuConfig (bool _is_game_state)
 
 	// set up low hp notification type combinantions
 	low_hp_warning_lstb->append(msg->get("Disabled"), msg->get("Disables all low health notifications."));
-	low_hp_warning_lstb->append(msg->get("All"), msg->get("Shows message, changes cursor and plays a sound on low health."));
-	low_hp_warning_lstb->append(msg->get("Message & Cursor"), msg->get("Shows message and change cursor on low health."));
-	low_hp_warning_lstb->append(msg->get("Message & Sound"), msg->get("Shows message and plays a sound on low health."));
-	low_hp_warning_lstb->append(msg->get("Sound & Cursor"), msg->get("Changes cursor and plays a sound on low health."));
-	low_hp_warning_lstb->append(msg->get("Message"), msg->get("Shows message on low health."));
-	low_hp_warning_lstb->append(msg->get("Cursor"), msg->get("Mouse cursor will change on low health."));
-	low_hp_warning_lstb->append(msg->get("Sound"), msg->get("Plays sound on low health."));
+	low_hp_warning_lstb->append(msg->get("All"), msg->get("Shows a message, changes the mouse cursor, and plays a sound on low health."));
+	low_hp_warning_lstb->append(msg->get("Message & Cursor"), msg->get("Shows a message and changes the mouse cursor on low health."));
+	low_hp_warning_lstb->append(msg->get("Message & Sound"), msg->get("Shows a message and plays a sound on low health."));
+	low_hp_warning_lstb->append(msg->get("Sound & Cursor"), msg->get("Changes the mouse cursor and plays a sound on low health."));
+	low_hp_warning_lstb->append(msg->get("Message"), msg->get("Shows a message on low health."));
+	low_hp_warning_lstb->append(msg->get("Cursor"), msg->get("Changes the mouse cursor on low health."));
+	low_hp_warning_lstb->append(msg->get("Sound"), msg->get("Plays a sound on low health."));
 
 	// set up low hp threshold combo
 	for (unsigned int i = 1; i <= 10 ; ++i) {
 		std::stringstream ss;
 		ss << i * 5;
-		low_hp_threshold_lstb->append(ss.str() + "%", msg->get("When health drops below given threshold enabled notifications are triggered."));
+		low_hp_threshold_lstb->append(ss.str() + "%", msg->get("When the player's health drops below the given threshold, the low health notifications are triggered if one or more of them is enabled."));
 	}
 
 	init();
