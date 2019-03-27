@@ -178,6 +178,7 @@ void Avatar::init() {
 void Avatar::handleNewMap() {
 	cursor_enemy = NULL;
 	lock_enemy = NULL;
+	playing_lowhp = false;
 }
 
 /**
@@ -388,15 +389,22 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 		}
 		// play a sound if set in settings
 		if (isLowHpSoundEnabled() && !playing_lowhp) {
-			// if looping, then do not cleanup 
+			// if looping, then do not cleanup
 			snd->play(sound_lowhp, "lowhp", snd->NO_POS, stats.sfx_lowhp_loop, !stats.sfx_lowhp_loop);
 			playing_lowhp = true;
 		}
 	}
 	// if looping, stop sounds when HP recovered above threshold
-	if (isLowHpSoundEnabled() && !isLowHp()
-			&& playing_lowhp && stats.sfx_lowhp_loop) {
-		snd->stopChannel("lowhp");
+	if (isLowHpSoundEnabled() && !isLowHp() && playing_lowhp && stats.sfx_lowhp_loop) {
+		snd->pauseChannel("lowhp");
+		playing_lowhp = false;
+	}
+	else if (isLowHpSoundEnabled() && isLowHp() && !playing_lowhp && stats.sfx_lowhp_loop) {
+		snd->play(sound_lowhp, "lowhp", snd->NO_POS, stats.sfx_lowhp_loop, !stats.sfx_lowhp_loop);
+		playing_lowhp = true;
+	}
+	else if (!isLowHpSoundEnabled() && playing_lowhp) {
+		snd->pauseChannel("lowhp");
 		playing_lowhp = false;
 	}
 	if (isLowHpCursorEnabled() && isLowHp()) {
@@ -1074,6 +1082,8 @@ void Avatar::logMsg(const std::string& str, int type) {
 
 // isLowHp returns true if healht is below set threshold
 bool Avatar::isLowHp() {
+	if (stats.hp == 0)
+		return false;
 	float hp_one_perc = static_cast<float>(std::max(stats.get(Stats::HP_MAX), 1)) / 100.0f;
 	return static_cast<float>(stats.hp)/hp_one_perc < static_cast<float>(settings->low_hp_threshold);
 }

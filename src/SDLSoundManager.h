@@ -39,7 +39,7 @@ public:
 	SoundID load(const std::string& filename, const std::string& errormessage);
 	void unload(SoundID);
 	void play(SoundID, const std::string& channel, const FPoint& pos, bool loop, bool cleanup = true);
-	void stopChannel(const std::string& channel);
+	void pauseChannel(const std::string& channel);
 	void pauseAll();
 	void resumeAll();
 	void setVolumeSFX(int value);

@@ -230,10 +230,15 @@ void SDLSoundManager::play(SoundID sid, const std::string& channel, const FPoint
 
 	if (p.virtual_channel != DEFAULT_CHANNEL) {
 
-		/* if playback exists, stop it befor playin next sound */
+		/* if playback exists, stop it before playin next sound */
 		vcit = channels.find(p.virtual_channel);
-		if (vcit != channels.end())
+		if (vcit != channels.end()) {
+			// temporarily disable the channel finish callback to avoid setting the 'finished' flag when stopping the channel
+			if (!cleanup)
+				Mix_ChannelFinished(NULL);
+
 			Mix_HaltChannel(vcit->second);
+		}
 
 		vcit = channels.insert(std::pair<std::string, int>(p.virtual_channel, -1)).first;
 	}
@@ -264,12 +269,12 @@ void SDLSoundManager::play(SoundID sid, const std::string& channel, const FPoint
 	playback.insert(std::pair<int, Playback>(c, p));
 }
 
-void SDLSoundManager::stopChannel(const std::string& channel) {
+void SDLSoundManager::pauseChannel(const std::string& channel) {
 	VirtualChannelMapIterator vcit = channels.end();
 
 	vcit = channels.find(channel);
 	if (vcit != channels.end()) {
-		Mix_HaltChannel(vcit->second);
+		Mix_Pause(vcit->second);
 	}
 }
 
