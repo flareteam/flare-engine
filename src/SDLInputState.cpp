@@ -802,14 +802,14 @@ void SDLInputState::setKeybind(int key, int binding_button, int bindings_list, s
 		// prevent unmapping "fixed" keybinds
 		if (bindings_list != InputState::BINDING_JOYSTICK) {
 			if ((key == ((SDL_BUTTON_LEFT+MOUSE_BIND_OFFSET) * (-1)) && binding_button != Input::MAIN1) ||
-				key == SDLK_LCTRL ||
-				key == SDLK_RCTRL ||
-				key == SDLK_LSHIFT ||
-				key == SDLK_RSHIFT ||
-				key == SDLK_LALT ||
-				key == SDLK_RALT ||
-				key == SDLK_DELETE ||
-				key == SDLK_BACKSPACE) {
+				key == SDL_SCANCODE_LCTRL ||
+				key == SDL_SCANCODE_RCTRL ||
+				key == SDL_SCANCODE_LSHIFT ||
+				key == SDL_SCANCODE_RSHIFT ||
+				key == SDL_SCANCODE_LALT ||
+				key == SDL_SCANCODE_RALT ||
+				key == SDL_SCANCODE_DELETE ||
+				key == SDL_SCANCODE_BACKSPACE) {
 
 				if (key < -1)
 					keybind_msg = msg->get("Can not bind: %s", getMouseButtonName(key).c_str());
