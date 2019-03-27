@@ -9,6 +9,7 @@ Engine features:
 * Add 'hide_timeout' option to stat bar configuration to support auto-hiding. (Leszek Cimała)
 * Added an Interface option to disable stat bar auto-hiding globally.
 * Add 'no_stash' property to item definitions to prevent items from being placed in the stash.
+* Add low HP notification system. (Leszek Cimała)
 
 Engine fixes:
 
