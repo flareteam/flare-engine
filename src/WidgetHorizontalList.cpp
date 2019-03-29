@@ -122,7 +122,7 @@ void WidgetHorizontalList::render() {
 }
 
 void WidgetHorizontalList::refresh() {
-	int text_width = 150;
+	const int text_width = eset->widgets.horizontal_list_text_width;
 	bool is_enabled = !isEmpty() && enabled;
 
 	label.setText(getValue());

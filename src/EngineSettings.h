@@ -249,6 +249,7 @@ public:
 		LabelInfo slot_quantity_label;
 		Color slot_quantity_bg_color;
 		Point listbox_text_margin;
+		int horizontal_list_text_width;
 	};
 
 	class XPTable {

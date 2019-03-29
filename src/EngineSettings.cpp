@@ -831,6 +831,7 @@ void EngineSettings::Widgets::load() {
 	slot_quantity_label = LabelInfo();
 	slot_quantity_bg_color = Color(0, 0, 0, 0);
 	listbox_text_margin = Point(8, 8);
+	horizontal_list_text_width = 150;
 
 	FileParser infile;
 	// @CLASS EngineSettings: Widgets|Description of engine/widget_settings.txt
@@ -866,6 +867,12 @@ void EngineSettings::Widgets::load() {
 				if (infile.key == "text_margin") {
 					// @ATTR listbox.text_margin|int, int : Left margin, Right margin|The pixel margin to leave on the left and right sides of listbox element text.
 					listbox_text_margin = Parse::toPoint(infile.val);
+				}
+			}
+			else if (infile.section == "horizontal_list") {
+				if (infile.key == "text_width") {
+					// @ATTR horizontal_list.text_width|int|The pixel width of the text area that displays the currently selected item. Default is 150 pixels;
+					horizontal_list_text_width = Parse::toInt(infile.val);
 				}
 			}
 		}
