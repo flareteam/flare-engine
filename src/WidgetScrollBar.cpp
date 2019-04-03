@@ -138,6 +138,16 @@ int WidgetScrollBar::getValue() {
 	return value;
 }
 
+Rect WidgetScrollBar::getBounds() {
+	Rect r;
+	r.x = pos_up.x;
+	r.y = pos_up.y;
+	r.w = pos_up.w;
+	r.h = (pos_up.h * 2) + bar_height;
+
+	return r;
+}
+
 void WidgetScrollBar::render() {
 	Rect src_up, src_down, src_knob;
 

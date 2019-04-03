@@ -50,6 +50,7 @@ public:
 	int checkClickAt(int x, int y);
 	void set();
 	int getValue();
+	Rect getBounds();
 	void render();
 	void refresh(int x, int y, int h, int val, int max);
 

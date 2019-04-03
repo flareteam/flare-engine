@@ -261,11 +261,12 @@ void WidgetScrollBox::render() {
 	if (in_focus && children.empty()) {
 		Point topLeft;
 		Point bottomRight;
+		Rect sb_rect = scrollbar->getBounds();
 
-		topLeft.x = dest.x + local_frame.x - local_offset.x;
-		topLeft.y = dest.y + local_frame.y - local_offset.y;
-		bottomRight.x = topLeft.x + dest.w;
-		bottomRight.y = topLeft.y + dest.h;
+		topLeft.x = sb_rect.x + local_frame.x - local_offset.x;
+		topLeft.y = sb_rect.y + local_frame.y - local_offset.y;
+		bottomRight.x = topLeft.x + sb_rect.w;
+		bottomRight.y = topLeft.y + sb_rect.h;
 
 		// Only draw rectangle if it fits in local frame
 		bool draw = true;

@@ -523,11 +523,7 @@ void MenuTalker::nextDialog() {
 void MenuTalker::setupTabList() {
 	tablist.clear();
 
-	if (dialog_node == -1) {
-		for (size_t i = 0; i < actions.size(); ++i) {
-			tablist.add(actions[i].btn);
-		}
-	}
+	tablist.add(textbox);
 
 	if (advanceButton->enabled) {
 		tablist.add(advanceButton);
