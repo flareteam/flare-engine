@@ -1430,7 +1430,7 @@ int MenuPowers::click(const Point& mouse) {
 			}
 			else if (checkUnlocked(pcell) && !powers->powers[pcell->id].passive) {
 				// pick up and drag power
-				if (!settings->no_mouse) {
+				if (inpt->usingMouse()) {
 					slots[i]->defocus();
 					if (!tabs.empty()) {
 						tablist_pow[active_tab].setCurrent(NULL);
