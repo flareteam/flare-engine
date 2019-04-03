@@ -1284,6 +1284,9 @@ void MenuManager::render() {
 }
 
 void MenuManager::handleKeyboardTooltips() {
+	if (book->visible)
+		return;
+
 	if (vendor->visible && vendor->getCurrentTabList() && vendor->getCurrentTabList() != (&vendor->tablist)) {
 		int slot_index = vendor->getCurrentTabList()->getCurrent();
 
