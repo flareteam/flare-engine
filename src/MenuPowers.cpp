@@ -1430,12 +1430,14 @@ int MenuPowers::click(const Point& mouse) {
 			}
 			else if (checkUnlocked(pcell) && !powers->powers[pcell->id].passive) {
 				// pick up and drag power
-				slots[i]->defocus();
-				if (!tabs.empty()) {
-					tablist_pow[active_tab].setCurrent(NULL);
-				}
-				else {
-					tablist.setCurrent(NULL);
+				if (!settings->no_mouse) {
+					slots[i]->defocus();
+					if (!tabs.empty()) {
+						tablist_pow[active_tab].setCurrent(NULL);
+					}
+					else {
+						tablist.setCurrent(NULL);
+					}
 				}
 				return power_cell[i].getBonusCurrent(pcell)->id;
 			}

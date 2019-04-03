@@ -28,7 +28,8 @@ Engine fixes:
 * Fix key bindings not working when switched to a non-US keyboard layout. (nwtour)
 * Fix segfault when NPC filename is invalid.
 * Fix inventory tooltips covering books when using no mouse.
-* Fix navigation of talker menu when using no mouse.
+* Fix navigation of dialog menu when using no mouse.
+* Fix upgrading powers when using no mouse.
 
 Game updates:
 
