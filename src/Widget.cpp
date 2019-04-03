@@ -26,6 +26,7 @@ Widget::Widget()
 	: in_focus(false)
 	, focusable(false)
 	, enable_tablist_nav(true)
+	, tablist_nav_right(false)
 	, scroll_type(SCROLL_TWO_DIRECTIONS)
 	, alignment(Utils::ALIGN_TOPLEFT) {
 }
@@ -282,8 +283,13 @@ int TabList::getNextRelativeIndex(uint8_t dir) {
 		if (!widgets.at(i)->enable_tablist_nav)
 			continue;
 
-		FPoint p1(static_cast<float>(widgets.at(current)->pos.x), static_cast<float>(widgets.at(current)->pos.y));
-		FPoint p2(static_cast<float>(widgets.at(i)->pos.x), static_cast<float>(widgets.at(i)->pos.y));
+		Rect& c_pos = widgets.at(current)->pos;
+		Rect& i_pos = widgets.at(i)->pos;
+
+		int w_div = widgets.at(i)->tablist_nav_right ? 1 : 2;
+
+		FPoint p1(static_cast<float>(c_pos.x + c_pos.w / w_div), static_cast<float>(c_pos.y + c_pos.h / 2));
+		FPoint p2(static_cast<float>(i_pos.x + i_pos.w / w_div), static_cast<float>(i_pos.y + i_pos.h / 2));
 
 		if (dir == WIDGET_SELECT_LEFT && p1.x <= p2.x)
 			continue;

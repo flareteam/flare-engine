@@ -49,6 +49,7 @@ public:
 	bool in_focus;
 	bool focusable;
 	bool enable_tablist_nav; // when disabled, this widget will be skipped during tablist navigation
+	bool tablist_nav_right; // uses the center-right point for tablist nav instead of the center. Primarily for MenuConfig widgets
 	uint8_t scroll_type;
 	Rect pos; // This is the position of the button within the screen
 	Rect local_frame; // Local reference frame is this is a daughter widget
