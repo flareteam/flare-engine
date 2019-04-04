@@ -5,7 +5,7 @@
 # 
 # Translators:
 # Justin Jacobs <jajdorkster@gmail.com>, 2018
-# Zmicer Turok <zmicerturok@gmail.com>, 2018
+# Zmicer Turok <zmicerturok@gmail.com>, 2019
 # 
 #, fuzzy
 msgid ""
@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-21 23:42-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: Zmicer Turok <zmicerturok@gmail.com>, 2018\n"
+"Last-Translator: Zmicer Turok <zmicerturok@gmail.com>, 2019\n"
 "Language-Team: Belarusian (https://www.transifex.com/flareorg/teams/84925/be/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -407,7 +407,7 @@ msgstr "Хуткасць атакі %d%%"
 #: ../../../src/MenuPowers.cpp:833
 #, c-format
 msgid "Resistance (%s)"
-msgstr ""
+msgstr "Супраціўленне (%s)"
 
 #: ../../../src/ItemManager.cpp:695
 #, c-format
@@ -587,30 +587,34 @@ msgstr "Добра"
 
 #: ../../../src/MenuConfig.cpp:238
 msgid "Continue"
-msgstr ""
+msgstr "Працягнуць"
 
 #: ../../../src/MenuConfig.cpp:281
 msgid "Default"
-msgstr ""
+msgstr "Прадвызначана"
 
 #: ../../../src/MenuConfig.cpp:281
 msgid ""
 "Show all loot tooltips, except for those that would be obscured by the "
 "player or an enemy. Temporarily show all loot tooltips with 'Alt'."
 msgstr ""
+"Паказваць усе выплыўныя падказкі аб здабычы, за выключэннем схаваных гульцом"
+" альбо ворагам. Часова паказваць усе выплыўныя падказкі клавішай \"Alt\"."
 
 #: ../../../src/MenuConfig.cpp:282
 msgid "Show all"
-msgstr ""
+msgstr "Паказваць усе"
 
 #: ../../../src/MenuConfig.cpp:282
 msgid ""
 "Always show loot tooltips. Temporarily hide all loot tooltips with 'Alt'."
 msgstr ""
+"Заўсёды паказваць выплыўныя падказкі аб здабычы. Часова хаваць падказкі "
+"клавішай \"Alt\"."
 
 #: ../../../src/MenuConfig.cpp:283 ../../../src/MenuConfig.cpp:288
 msgid "Hidden"
-msgstr ""
+msgstr "Хаваць"
 
 #: ../../../src/MenuConfig.cpp:283
 msgid ""
@@ -1381,7 +1385,7 @@ msgstr ""
 #: ../../../src/MenuTalker.cpp:447
 #, c-format
 msgid "<dialog node %d>"
-msgstr ""
+msgstr "<dialog node %d>"
 
 #: ../../../src/MenuTalker.cpp:455
 msgid "Trade"
