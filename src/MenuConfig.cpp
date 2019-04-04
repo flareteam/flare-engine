@@ -293,14 +293,19 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	minimap_lstb->append(msg->get("Hidden"), "");
 
 	// set up low hp notification type combinantions
-	low_hp_warning_lstb->append(msg->get("Disabled"), msg->get("Disables all low health notifications."));
-	low_hp_warning_lstb->append(msg->get("All"), msg->get("Shows a message, changes the mouse cursor, and plays a sound on low health."));
-	low_hp_warning_lstb->append(msg->get("Message & Cursor"), msg->get("Shows a message and changes the mouse cursor on low health."));
-	low_hp_warning_lstb->append(msg->get("Message & Sound"), msg->get("Shows a message and plays a sound on low health."));
-	low_hp_warning_lstb->append(msg->get("Sound & Cursor"), msg->get("Changes the mouse cursor and plays a sound on low health."));
-	low_hp_warning_lstb->append(msg->get("Message"), msg->get("Shows a message on low health."));
-	low_hp_warning_lstb->append(msg->get("Cursor"), msg->get("Changes the mouse cursor on low health."));
-	low_hp_warning_lstb->append(msg->get("Sound"), msg->get("Plays a sound on low health."));
+	std::string lhpw_prefix = msg->get("Controls the type of warning to be activated when the player is below the low health threshold.");
+	std::string lhpw_warning1 = msg->get("- Display a message");
+	std::string lhpw_warning2 = msg->get("- Play a sound");
+	std::string lhpw_warning3 = msg->get("- Change the cursor");
+
+	low_hp_warning_lstb->append(msg->get("Disabled"), lhpw_prefix);
+	low_hp_warning_lstb->append(msg->get("All"), lhpw_prefix + "\n\n" + lhpw_warning1 + '\n' + lhpw_warning2 + '\n' + lhpw_warning3);
+	low_hp_warning_lstb->append(msg->get("Message & Cursor"), lhpw_prefix + "\n\n" + lhpw_warning1 + '\n' + lhpw_warning3);
+	low_hp_warning_lstb->append(msg->get("Message & Sound"), lhpw_prefix + "\n\n" + lhpw_warning1 + '\n' + lhpw_warning2);
+	low_hp_warning_lstb->append(msg->get("Sound & Cursor"), lhpw_prefix + "\n\n" + lhpw_warning2 + '\n' + lhpw_warning3);
+	low_hp_warning_lstb->append(msg->get("Message"), lhpw_prefix + "\n\n" + lhpw_warning1);
+	low_hp_warning_lstb->append(msg->get("Cursor"), lhpw_prefix + "\n\n" + lhpw_warning3);
+	low_hp_warning_lstb->append(msg->get("Sound"), lhpw_prefix + "\n\n" + lhpw_warning2);
 
 	// set up low hp threshold combo
 	for (unsigned int i = 1; i <= 10 ; ++i) {
