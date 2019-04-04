@@ -40,6 +40,7 @@ Game updates:
 Translation updates:
 
 * Belarusian (be) update (Zmicer Turok)
+* Brazilian Portuguese (pt_BR) update (Vinicius Rech)
 * Catalan (ca) update (Marc Tormo i Bochaca)
 * German (de) update (Fyrenic)
 * French (fr) update (syl_)
