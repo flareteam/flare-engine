@@ -10,6 +10,7 @@ Engine features:
 * Added an Interface option to disable stat bar auto-hiding globally.
 * Add 'no_stash' property to item definitions to prevent items from being placed in the stash.
 * Add low HP notification system. (Leszek Cimała)
+* Add ability to change the minimap zoom level by clicking on the minimap.
 
 Engine fixes:
 

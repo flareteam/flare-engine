@@ -1557,6 +1557,8 @@ void MenuConfig::setPauseExitText(bool enable_save) {
 }
 
 void MenuConfig::resetSelectedTab() {
+	update();
+
 	tab_control->setActiveTab(0);
 
 	for (size_t i = 0; i < cfg_tabs.size(); ++i) {

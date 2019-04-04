@@ -44,12 +44,12 @@ private:
 	Rect pos;
 	WidgetLabel *label;
 	Sprite *compass;
+	Rect map_area;
 
 	int current_zoom;
+	bool lock_zoom_change;
 
 	void createMapSurface(Sprite** target_surface, int w, int h);
-	// void renderIso(const FPoint& hero_pos);
-	// void renderOrtho(const FPoint& hero_pos);
 	void renderMapSurface(const FPoint& hero_pos);
 	void prerenderOrtho(MapCollision *collider, Sprite** target_surface, int zoom);
 	void prerenderIso(MapCollision *collider, Sprite** target_surface, int zoom);
@@ -58,6 +58,7 @@ public:
 	MenuMiniMap();
 	~MenuMiniMap();
 	void align();
+	void logic();
 
 	void render();
 	void render(const FPoint& hero_pos);

@@ -27,6 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EngineSettings.h"
 #include "FileParser.h"
 #include "FontEngine.h"
+#include "InputState.h"
 #include "MapCollision.h"
 #include "Menu.h"
 #include "MenuMiniMap.h"
@@ -47,6 +48,7 @@ MenuMiniMap::MenuMiniMap()
 	, label(new WidgetLabel())
 	, compass(NULL)
 	, current_zoom(1)
+	, lock_zoom_change(false)
 {
 	std::string bg_filename;
 
@@ -102,6 +104,11 @@ void MenuMiniMap::align() {
 	Menu::align();
 	label->setPos(window_area.x, window_area.y);
 
+	map_area.x = window_area.x + pos.x;
+	map_area.y = window_area.y + pos.y;
+	map_area.w = pos.w;
+	map_area.h = pos.h;
+
 	// compass
 	Point compass_pos(window_area.x + pos.x + pos.w - compass->getGraphicsWidth(), pos.y + window_area.y);
 	compass->setDestFromPoint(compass_pos);
@@ -126,6 +133,25 @@ void MenuMiniMap::createMapSurface(Sprite **target_surface, int w, int h) {
 		*target_surface = graphics->createSprite();
 		(*target_surface)->getGraphics()->fillWithColor(Color(0,0,0,0));
 		graphics->unref();
+	}
+}
+
+void MenuMiniMap::logic() {
+	if (settings->minimap_mode != Settings::MINIMAP_HIDDEN && inpt->usingMouse()) {
+		bool is_within_maparea = Utils::isWithinRect(map_area, inpt->mouse);
+
+		if (!lock_zoom_change)
+			lock_zoom_change = inpt->pressing[Input::MAIN1] && !is_within_maparea;
+		else if (!inpt->pressing[Input::MAIN1])
+			lock_zoom_change = false;
+
+		if (is_within_maparea && inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1] && !lock_zoom_change) {
+			inpt->lock[Input::MAIN1] = true;
+			if (settings->minimap_mode == Settings::MINIMAP_NORMAL)
+				settings->minimap_mode = Settings::MINIMAP_2X;
+			else if (settings->minimap_mode == Settings::MINIMAP_2X)
+				settings->minimap_mode = Settings::MINIMAP_NORMAL;
+		}
 	}
 }
 
@@ -185,12 +211,6 @@ void MenuMiniMap::renderMapSurface(const FPoint& hero_pos) {
 	clip.y = (current_zoom * hero_offset.y) - pos.h/2;
 	clip.w = pos.w;
 	clip.h = pos.h;
-
-	Rect map_area;
-	map_area.x = window_area.x + pos.x;
-	map_area.y = window_area.y + pos.y;
-	map_area.w = pos.w;
-	map_area.h = pos.h;
 
 	Sprite* target_surface = NULL;
 	if (settings->minimap_mode == Settings::MINIMAP_NORMAL && map_surface) {
