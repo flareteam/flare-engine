@@ -4,17 +4,17 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# 杜茂森 <dumaosen_main01@outlook.com>, 2018
 # Justin Jacobs <jajdorkster@gmail.com>, 2019
+# 杜茂森 <dumaosen_main01@outlook.com>, 2019
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-21 23:42-0400\n"
+"POT-Creation-Date: 2019-04-04 14:14-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2019\n"
+"Last-Translator: 杜茂森 <dumaosen_main01@outlook.com>, 2019\n"
 "Language-Team: Chinese (https://www.transifex.com/flareorg/teams/84925/zh/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22,24 +22,28 @@ msgstr ""
 "Language: zh\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: ../../../src/Avatar.cpp:384
+#: ../../../src/Avatar.cpp:387
+msgid "Your health is low!"
+msgstr ""
+
+#: ../../../src/Avatar.cpp:422
 #, c-format
 msgid "Congratulations, you have reached level %d!"
 msgstr "恭喜，你达到了等级%d!"
 
-#: ../../../src/Avatar.cpp:386
+#: ../../../src/Avatar.cpp:424
 msgid "You may increase one attribute through the Character Menu."
 msgstr "你可以在角色菜单增加一点属性。"
 
-#: ../../../src/Avatar.cpp:650
+#: ../../../src/Avatar.cpp:693
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
 msgstr "你被打败了，游戏结束！按下${INPUT_CONTINUE}返回到标题界面。"
 
-#: ../../../src/Avatar.cpp:656
+#: ../../../src/Avatar.cpp:699
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
 msgstr "你被打败了。按下${INPUT_CONTINUE}以继续。"
 
-#: ../../../src/Avatar.cpp:906
+#: ../../../src/Avatar.cpp:949
 msgid "Transformation expired. You have been moved back to a safe place."
 msgstr "传送已过期。你已回到了一个安全的地方。"
 
@@ -115,18 +119,18 @@ msgstr ""
 msgid "Adventurer"
 msgstr "冒险者"
 
-#: ../../../src/Entity.cpp:511
+#: ../../../src/Entity.cpp:517
 msgid "miss"
 msgstr "未击中"
 
-#: ../../../src/Entity.cpp:548 ../../../src/PowerManager.cpp:1156
-#: ../../../src/StatBlock.cpp:805 ../../../src/StatBlock.cpp:811
+#: ../../../src/Entity.cpp:554 ../../../src/PowerManager.cpp:1156
+#: ../../../src/StatBlock.cpp:812 ../../../src/StatBlock.cpp:818
 #, c-format
 msgid "+%d HP"
 msgstr "+%dHP"
 
-#: ../../../src/Entity.cpp:555 ../../../src/StatBlock.cpp:816
-#: ../../../src/StatBlock.cpp:822
+#: ../../../src/Entity.cpp:561 ../../../src/StatBlock.cpp:823
+#: ../../../src/StatBlock.cpp:829
 #, c-format
 msgid "+%d MP"
 msgstr "+%dMP"
@@ -181,13 +185,13 @@ msgstr "保存无效"
 
 #: ../../../src/GameStateLoad.cpp:755 ../../../src/ItemManager.cpp:758
 #: ../../../src/MenuPowers.cpp:778 ../../../src/MenuPowers.cpp:1144
-#: ../../../src/MenuPowers.cpp:1542
+#: ../../../src/MenuPowers.cpp:1544
 #, c-format
 msgid "Level %d"
 msgstr "等级 %d"
 
 #: ../../../src/GameStateNew.cpp:65 ../../../src/InputState.cpp:403
-#: ../../../src/MenuConfig.cpp:236
+#: ../../../src/MenuConfig.cpp:241
 msgid "Cancel"
 msgstr "取消"
 
@@ -563,311 +567,375 @@ msgstr "每一级增长%d。"
 msgid "Each point of %s grants %d."
 msgstr "每点%s增长%d。"
 
-#: ../../../src/MenuConfig.cpp:121 ../../../src/MenuConfig.cpp:1110
+#: ../../../src/MenuConfig.cpp:122 ../../../src/MenuConfig.cpp:1148
 msgid "Clear"
 msgstr "清空"
 
-#: ../../../src/MenuConfig.cpp:121 ../../../src/MenuConfig.cpp:1108
+#: ../../../src/MenuConfig.cpp:122 ../../../src/MenuConfig.cpp:1146
 msgid "Assign:"
 msgstr "分配："
 
-#: ../../../src/MenuConfig.cpp:122 ../../../src/MenuConfig.cpp:235
+#: ../../../src/MenuConfig.cpp:123 ../../../src/MenuConfig.cpp:240
 msgid "Defaults"
 msgstr "默认设置"
 
-#: ../../../src/MenuConfig.cpp:122
+#: ../../../src/MenuConfig.cpp:123
 msgid "Reset ALL settings?"
 msgstr "确定重置所有设置吗？"
 
-#: ../../../src/MenuConfig.cpp:234 ../../../src/MenuNumPicker.cpp:49
+#: ../../../src/MenuConfig.cpp:239 ../../../src/MenuNumPicker.cpp:49
 msgid "OK"
 msgstr "确定"
 
-#: ../../../src/MenuConfig.cpp:238
+#: ../../../src/MenuConfig.cpp:243
 msgid "Continue"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:281
+#: ../../../src/MenuConfig.cpp:286
 msgid "Default"
 msgstr "默认"
 
-#: ../../../src/MenuConfig.cpp:281
+#: ../../../src/MenuConfig.cpp:286
 msgid ""
 "Show all loot tooltips, except for those that would be obscured by the "
 "player or an enemy. Temporarily show all loot tooltips with 'Alt'."
 msgstr "显示全部的战利品提示，除了那些被玩家或敌人遮盖的。按‘Alt’临时显示全部的战利品提示。"
 
-#: ../../../src/MenuConfig.cpp:282
+#: ../../../src/MenuConfig.cpp:287
 msgid "Show all"
 msgstr "全部显示"
 
-#: ../../../src/MenuConfig.cpp:282
+#: ../../../src/MenuConfig.cpp:287
 msgid ""
 "Always show loot tooltips. Temporarily hide all loot tooltips with 'Alt'."
 msgstr "总是显示战利品提示。按‘Alt’临时隐藏全部的战利品提示。"
 
-#: ../../../src/MenuConfig.cpp:283 ../../../src/MenuConfig.cpp:288
+#: ../../../src/MenuConfig.cpp:288 ../../../src/MenuConfig.cpp:293
 msgid "Hidden"
 msgstr "隐藏"
 
-#: ../../../src/MenuConfig.cpp:283
+#: ../../../src/MenuConfig.cpp:288
 msgid ""
 "Always hide loot tooltips, except for when a piece of loot is hovered with "
 "the mouse cursor. Temporarily show all loot tooltips with 'Alt'."
 msgstr "总是隐藏战利品提示，除了鼠标指针指向的。按‘Alt’临时显示全部的战利品提示。"
 
-#: ../../../src/MenuConfig.cpp:286
+#: ../../../src/MenuConfig.cpp:291
 msgid "Visible"
 msgstr "可见"
 
-#: ../../../src/MenuConfig.cpp:287
+#: ../../../src/MenuConfig.cpp:292
 msgid "Visible (2x zoom)"
 msgstr "可见（两倍缩放）"
 
-#: ../../../src/MenuConfig.cpp:300 ../../../src/MenuConfig.cpp:1523
+#: ../../../src/MenuConfig.cpp:296
+msgid ""
+"Controls the type of warning to be activated when the player is below the "
+"low health threshold."
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:297
+msgid "- Display a message"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:298
+msgid "- Play a sound"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:299
+msgid "- Change the cursor"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:301
+msgid "Disabled"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:302
+msgid "All"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:303
+msgid "Message & Cursor"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:304
+msgid "Message & Sound"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:305
+msgid "Sound & Cursor"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:306
+msgid "Message"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:307
+msgid "Cursor"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:308
+msgid "Sound"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:314
+msgid ""
+"When the player's health drops below the given threshold, the low health "
+"notifications are triggered if one or more of them is enabled."
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:327 ../../../src/MenuConfig.cpp:1561
 msgid "Exit"
 msgstr "退出"
 
-#: ../../../src/MenuConfig.cpp:301
+#: ../../../src/MenuConfig.cpp:328
 msgid "Video"
 msgstr "画面"
 
-#: ../../../src/MenuConfig.cpp:302
+#: ../../../src/MenuConfig.cpp:329
 msgid "Audio"
 msgstr "声音"
 
-#: ../../../src/MenuConfig.cpp:303
+#: ../../../src/MenuConfig.cpp:330
 msgid "Interface"
 msgstr "界面"
 
-#: ../../../src/MenuConfig.cpp:304
+#: ../../../src/MenuConfig.cpp:331
 msgid "Input"
 msgstr "输入"
 
-#: ../../../src/MenuConfig.cpp:305
+#: ../../../src/MenuConfig.cpp:332
 msgid "Keybindings"
 msgstr "快捷键"
 
-#: ../../../src/MenuConfig.cpp:306
+#: ../../../src/MenuConfig.cpp:333
 msgid "Mods"
 msgstr "模块"
 
-#: ../../../src/MenuConfig.cpp:318
+#: ../../../src/MenuConfig.cpp:345
 msgid "Paused"
 msgstr "暂停"
 
-#: ../../../src/MenuConfig.cpp:320
+#: ../../../src/MenuConfig.cpp:347
 msgid "Time Played"
 msgstr "已玩时间"
 
-#: ../../../src/MenuConfig.cpp:322
+#: ../../../src/MenuConfig.cpp:349
 msgid "Renderer"
 msgstr "渲染器"
 
-#: ../../../src/MenuConfig.cpp:323
+#: ../../../src/MenuConfig.cpp:350
 msgid "Full Screen Mode"
 msgstr "全屏模式"
 
-#: ../../../src/MenuConfig.cpp:324
+#: ../../../src/MenuConfig.cpp:351
 msgid "Hardware surfaces"
 msgstr "硬件加速"
 
-#: ../../../src/MenuConfig.cpp:325
+#: ../../../src/MenuConfig.cpp:352
 msgid "V-Sync"
 msgstr "垂直同步"
 
-#: ../../../src/MenuConfig.cpp:326
+#: ../../../src/MenuConfig.cpp:353
 msgid "Texture Filtering"
 msgstr "纹理过滤"
 
-#: ../../../src/MenuConfig.cpp:327
+#: ../../../src/MenuConfig.cpp:354
 msgid "DPI scaling"
 msgstr "DPI缩放"
 
-#: ../../../src/MenuConfig.cpp:328
+#: ../../../src/MenuConfig.cpp:355
 msgid "Parallax Layers"
 msgstr "视差层"
 
-#: ../../../src/MenuConfig.cpp:329
+#: ../../../src/MenuConfig.cpp:356
 msgid "Allow changing gamma"
 msgstr "允许更改伽马"
 
-#: ../../../src/MenuConfig.cpp:330
+#: ../../../src/MenuConfig.cpp:357
 msgid "Gamma"
 msgstr "伽马"
 
-#: ../../../src/MenuConfig.cpp:332
+#: ../../../src/MenuConfig.cpp:359
 msgid "Sound Volume"
 msgstr "游戏音乐音量"
 
-#: ../../../src/MenuConfig.cpp:333
+#: ../../../src/MenuConfig.cpp:360
 msgid "Music Volume"
 msgstr "背景音乐音量"
 
-#: ../../../src/MenuConfig.cpp:335
+#: ../../../src/MenuConfig.cpp:362
 msgid "Language"
 msgstr "语言"
 
-#: ../../../src/MenuConfig.cpp:336
+#: ../../../src/MenuConfig.cpp:363
 msgid "Show FPS"
 msgstr "显示画面每秒帧数"
 
-#: ../../../src/MenuConfig.cpp:337
+#: ../../../src/MenuConfig.cpp:364
 msgid "Hardware mouse cursor"
 msgstr "硬件鼠标光标"
 
-#: ../../../src/MenuConfig.cpp:338
+#: ../../../src/MenuConfig.cpp:365
 msgid "Colorblind Mode"
 msgstr "色盲模式"
 
-#: ../../../src/MenuConfig.cpp:339
+#: ../../../src/MenuConfig.cpp:366
 msgid "Developer Mode"
 msgstr "开发者模式"
 
-#: ../../../src/MenuConfig.cpp:340
+#: ../../../src/MenuConfig.cpp:367
 msgid "Subtitles"
 msgstr "字幕"
 
-#: ../../../src/MenuConfig.cpp:341
+#: ../../../src/MenuConfig.cpp:368
 msgid "Loot tooltip visibility"
 msgstr "战利品提示可见性"
 
-#: ../../../src/MenuConfig.cpp:342
+#: ../../../src/MenuConfig.cpp:369
 msgid "Mini-map mode"
 msgstr "小地图模式"
 
-#: ../../../src/MenuConfig.cpp:343
+#: ../../../src/MenuConfig.cpp:370
 msgid "Always show stat bar labels"
 msgstr "始终显示进度条标签"
 
-#: ../../../src/MenuConfig.cpp:344
+#: ../../../src/MenuConfig.cpp:371
 msgid "Allow stat bar auto-hiding"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:345
+#: ../../../src/MenuConfig.cpp:372
 msgid "Show combat text"
 msgstr "显示战斗文字"
 
-#: ../../../src/MenuConfig.cpp:346
+#: ../../../src/MenuConfig.cpp:373
 msgid "Automatically equip items"
 msgstr "自动装备物品"
 
-#: ../../../src/MenuConfig.cpp:347
+#: ../../../src/MenuConfig.cpp:374
 msgid "Show hidden entity markers"
 msgstr "显示隐藏的敌人标记"
 
-#: ../../../src/MenuConfig.cpp:349
+#: ../../../src/MenuConfig.cpp:375
+msgid "Low health notification"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:376
+msgid "Low health threshold"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:379
 msgid "Joystick"
 msgstr "摇杆"
 
-#: ../../../src/MenuConfig.cpp:350
+#: ../../../src/MenuConfig.cpp:380
 msgid "Move hero using mouse"
 msgstr "使用鼠标移动英雄"
 
-#: ../../../src/MenuConfig.cpp:351
+#: ../../../src/MenuConfig.cpp:381
 msgid "Mouse aim"
 msgstr "使用鼠标瞄准敌人"
 
-#: ../../../src/MenuConfig.cpp:352
+#: ../../../src/MenuConfig.cpp:382
 msgid "Do not use mouse"
 msgstr "不要使用鼠标"
 
-#: ../../../src/MenuConfig.cpp:353
+#: ../../../src/MenuConfig.cpp:383
 msgid "Swap mouse movement button"
 msgstr "交换鼠标移动键"
 
-#: ../../../src/MenuConfig.cpp:354
+#: ../../../src/MenuConfig.cpp:384
 msgid "Attack with mouse movement"
 msgstr "用鼠标移动键攻击"
 
-#: ../../../src/MenuConfig.cpp:355
+#: ../../../src/MenuConfig.cpp:385
 msgid "Joystick Deadzone"
 msgstr "摇杆灵敏度"
 
-#: ../../../src/MenuConfig.cpp:365
+#: ../../../src/MenuConfig.cpp:395
 #, c-format
 msgid "Primary binding: %s"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:366
+#: ../../../src/MenuConfig.cpp:396
 #, c-format
 msgid "Alternate binding: %s"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:367
+#: ../../../src/MenuConfig.cpp:397
 #, c-format
 msgid "Joystick binding: %s"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:466
+#: ../../../src/MenuConfig.cpp:496
 msgid ""
 "Will try to store surfaces in video memory versus system memory. The effect "
 "this has on performance depends on the renderer."
 msgstr "将尝试在视频内存中存储表面而不是系统内存。这对性能的影响取决于渲染器。"
 
-#: ../../../src/MenuConfig.cpp:467
+#: ../../../src/MenuConfig.cpp:497
 msgid ""
 "Prevents screen tearing. Disable if you experience \"stuttering\" in "
 "windowed mode or input lag."
 msgstr "防止画面撕裂。如果在窗口模式或输入时“卡顿”则禁用。"
 
-#: ../../../src/MenuConfig.cpp:468
+#: ../../../src/MenuConfig.cpp:498
 msgid ""
 "When enabled, this uses the screen DPI in addition to the window dimensions "
 "to scale the rendering resolution. Otherwise, only the window dimensions are"
 " used."
 msgstr "启用后，除了窗口尺寸外，还会使用屏幕DPI来调整渲染分辨率。否则，只使用窗口尺寸。"
 
-#: ../../../src/MenuConfig.cpp:469
+#: ../../../src/MenuConfig.cpp:499
 msgid ""
 "This enables parallax (non-tile) layers. Disabling this setting can improve "
 "performance in some cases."
 msgstr "启用视差（非瓦片）层。 禁用此设置在一些情况下能提升性能。"
 
-#: ../../../src/MenuConfig.cpp:470
+#: ../../../src/MenuConfig.cpp:500
 msgid ""
 "Enables the below setting that controls the screen gamma level. The behavior"
 " of the gamma setting can vary between platforms."
 msgstr "启用以下设置来控制屏幕伽马级别。这个伽马设置的行为依平台而异。"
 
-#: ../../../src/MenuConfig.cpp:471
+#: ../../../src/MenuConfig.cpp:501
 msgid ""
 "Provides additional text for information that is primarily conveyed through "
 "color."
 msgstr "提供从颜色传递的额外的文字信息。"
 
-#: ../../../src/MenuConfig.cpp:472
+#: ../../../src/MenuConfig.cpp:502
 msgid ""
 "Some mods will automatically hide the stat bars when they are inactive. "
 "Disabling this option will keep them displayed at all times."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:473
+#: ../../../src/MenuConfig.cpp:503
 msgid ""
 "When enabled, empty equipment slots will be filled with applicable items "
 "when they are obtained."
 msgstr "当开启时，获取适当的物品的时候空的装备栏将被填充。"
 
-#: ../../../src/MenuConfig.cpp:474
+#: ../../../src/MenuConfig.cpp:504
 msgid ""
 "Shows a marker above enemies, allies, and the player when they are obscured "
 "by tall objects."
 msgstr "敌人、友军和玩家被高的物体遮蔽时在上面显示标记。"
 
-#: ../../../src/MenuConfig.cpp:475
+#: ../../../src/MenuConfig.cpp:505
 msgid ""
 "This allows the game to be controlled entirely with the keyboard (or "
 "joystick)."
 msgstr "允许游戏完全被键盘（或摇杆）控制。"
 
-#: ../../../src/MenuConfig.cpp:476
+#: ../../../src/MenuConfig.cpp:506
 msgid ""
 "When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or"
 " 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
 "instead of 'Main1'."
 msgstr "当开启‘使用鼠标移动英雄’时，这设置使用‘主按键1’还是‘主按键2’来移动英雄。开启时，使用‘主按键2’来移动英雄而不是‘主按键1’。"
 
-#: ../../../src/MenuConfig.cpp:477
+#: ../../../src/MenuConfig.cpp:507
 msgid ""
 "When 'Move hero using mouse' is enabled, this setting controls if the Power "
 "assigned to the movement button can be used by targeting an enemy. If this "
@@ -875,49 +943,49 @@ msgid ""
 "assigned to the movement button."
 msgstr "当开启‘使用鼠标移动英雄’时，这设置分配到移动键的技能是否能向敌人使用。如果这个设置被禁用，需要使用‘Shift’访问分配到移动键的技能。"
 
-#: ../../../src/MenuConfig.cpp:478
+#: ../../../src/MenuConfig.cpp:508
 msgid ""
 "The player's attacks will be aimed in the direction of the mouse cursor when"
 " this is enabled."
 msgstr "当开启时玩家的攻击将指向鼠标指针的方向。"
 
-#: ../../../src/MenuConfig.cpp:529
+#: ../../../src/MenuConfig.cpp:559
 msgid "Active Mods"
 msgstr "激活模块"
 
-#: ../../../src/MenuConfig.cpp:538
+#: ../../../src/MenuConfig.cpp:568
 msgid "Available Mods"
 msgstr "可用模块"
 
-#: ../../../src/MenuConfig.cpp:557
+#: ../../../src/MenuConfig.cpp:587
 msgid "<< Disable"
 msgstr "<< 禁用"
 
-#: ../../../src/MenuConfig.cpp:563
+#: ../../../src/MenuConfig.cpp:593
 msgid "Enable >>"
 msgstr "启用 >>"
 
-#: ../../../src/MenuConfig.cpp:1382
+#: ../../../src/MenuConfig.cpp:1420
 msgid "Version:"
 msgstr "版本号："
 
-#: ../../../src/MenuConfig.cpp:1387
+#: ../../../src/MenuConfig.cpp:1425
 msgid "Game:"
 msgstr "游戏："
 
-#: ../../../src/MenuConfig.cpp:1392
+#: ../../../src/MenuConfig.cpp:1430
 msgid "Engine version:"
 msgstr "引擎版本号："
 
-#: ../../../src/MenuConfig.cpp:1400
+#: ../../../src/MenuConfig.cpp:1438
 msgid "Requires mods:"
 msgstr "需要的模块："
 
-#: ../../../src/MenuConfig.cpp:1506 ../../../src/SDLInputState.cpp:684
+#: ../../../src/MenuConfig.cpp:1544 ../../../src/SDLInputState.cpp:684
 msgid "(none)"
 msgstr "（无）"
 
-#: ../../../src/MenuConfig.cpp:1523
+#: ../../../src/MenuConfig.cpp:1561
 msgid "Save & Exit"
 msgstr "保存并退出"
 
@@ -1175,7 +1243,7 @@ msgstr "任务"
 msgid "XP: %d/%d"
 msgstr "经验值：%d/%d"
 
-#: ../../../src/MenuManager.cpp:833
+#: ../../../src/MenuManager.cpp:836
 msgid "This item can not be dropped."
 msgstr "这个物品无法丢弃。"
 
