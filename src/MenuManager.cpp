@@ -271,6 +271,7 @@ void MenuManager::handleKeyboardNavigation() {
 		inpt->lock[Input::ACCEPT] = true;
 	}
 }
+
 void MenuManager::logic() {
 	ItemStack stack;
 
@@ -333,24 +334,25 @@ void MenuManager::logic() {
 	if (!inpt->usingMouse())
 		handleKeyboardNavigation();
 
+	// Check if the mouse is within any of the visible windows. Excludes the minimap and the exit/pause menu
+	bool is_within_menus = (Utils::isWithinRect(act->window_area, inpt->mouse) ||
+	(book->visible && Utils::isWithinRect(book->window_area, inpt->mouse)) ||
+	(chr->visible && Utils::isWithinRect(chr->window_area, inpt->mouse)) ||
+	(inv->visible && Utils::isWithinRect(inv->window_area, inpt->mouse)) ||
+	(vendor->visible && Utils::isWithinRect(vendor->window_area, inpt->mouse)) ||
+	(pow->visible && Utils::isWithinRect(pow->window_area, inpt->mouse)) ||
+	(questlog->visible && Utils::isWithinRect(questlog->window_area, inpt->mouse)) ||
+	(talker->visible && Utils::isWithinRect(talker->window_area, inpt->mouse)) ||
+	(stash->visible && Utils::isWithinRect(stash->window_area, inpt->mouse)) ||
+	(settings->dev_mode && devconsole->visible && Utils::isWithinRect(devconsole->window_area, inpt->mouse)));
+
 	// Stop attacking if the cursor is inside an interactable menu
-	if (pc->using_main1 || pc->using_main2) {
-		if (Utils::isWithinRect(act->window_area, inpt->mouse) ||
-			(book->visible && Utils::isWithinRect(book->window_area, inpt->mouse)) ||
-			(chr->visible && Utils::isWithinRect(chr->window_area, inpt->mouse)) ||
-			(inv->visible && Utils::isWithinRect(inv->window_area, inpt->mouse)) ||
-			(vendor->visible && Utils::isWithinRect(vendor->window_area, inpt->mouse)) ||
-			(pow->visible && Utils::isWithinRect(pow->window_area, inpt->mouse)) ||
-			(questlog->visible && Utils::isWithinRect(questlog->window_area, inpt->mouse)) ||
-			(talker->visible && Utils::isWithinRect(talker->window_area, inpt->mouse)) ||
-			(stash->visible && Utils::isWithinRect(stash->window_area, inpt->mouse)))
-		{
-			inpt->pressing[Input::MAIN1] = false;
-			inpt->pressing[Input::MAIN2] = false;
-		}
+	if ((pc->using_main1 || pc->using_main2) && is_within_menus) {
+		inpt->pressing[Input::MAIN1] = false;
+		inpt->pressing[Input::MAIN2] = false;
 	}
 
-	if (!exit->visible)
+	if (!exit->visible && !is_within_menus)
 		mini->logic();
 
 	book->logic();
