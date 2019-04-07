@@ -24,7 +24,7 @@ msgstr ""
 
 #: ../../../src/Avatar.cpp:387
 msgid "Your health is low!"
-msgstr ""
+msgstr "您已奄奄一息！"
 
 #: ../../../src/Avatar.cpp:422
 #, c-format
@@ -37,11 +37,11 @@ msgstr "你可以在角色菜单增加一点属性。"
 
 #: ../../../src/Avatar.cpp:693
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
-msgstr "你被打败了，游戏结束！按下${INPUT_CONTINUE}返回到标题界面。"
+msgstr "你被打败了，游戏结束！按下 ${INPUT_CONTINUE} 返回到标题界面。"
 
 #: ../../../src/Avatar.cpp:699
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
-msgstr "你被打败了。按下${INPUT_CONTINUE}以继续。"
+msgstr "你被打败了。按下 ${INPUT_CONTINUE} 以继续。"
 
 #: ../../../src/Avatar.cpp:949
 msgid "Transformation expired. You have been moved back to a safe place."
@@ -104,6 +104,7 @@ msgid ""
 "Often slower, but less likely to have issues."
 msgstr ""
 "SDL软件渲染器\n"
+"\n"
 "通常较慢，但出现问题几率更低。"
 
 #: ../../../src/DeviceList.cpp:59
@@ -113,7 +114,8 @@ msgid ""
 "The default renderer that is often faster than the SDL software renderer."
 msgstr ""
 "SDL硬件渲染器\n"
-"默认渲染器，通常比SDL软件渲染器更快。"
+"\n"
+"默认渲染器，通常比软件渲染器更快。"
 
 #: ../../../src/EngineSettings.cpp:561
 msgid "Adventurer"
@@ -201,7 +203,7 @@ msgstr "创建"
 
 #: ../../../src/GameStateNew.cpp:76
 msgid "Randomize"
-msgstr "随机化"
+msgstr "随机"
 
 #: ../../../src/GameStateNew.cpp:92
 msgid "Choose a Portrait"
@@ -589,7 +591,7 @@ msgstr "确定"
 
 #: ../../../src/MenuConfig.cpp:243
 msgid "Continue"
-msgstr ""
+msgstr "继续"
 
 #: ../../../src/MenuConfig.cpp:286
 msgid "Default"
@@ -618,7 +620,7 @@ msgstr "隐藏"
 msgid ""
 "Always hide loot tooltips, except for when a piece of loot is hovered with "
 "the mouse cursor. Temporarily show all loot tooltips with 'Alt'."
-msgstr "总是隐藏战利品提示，除了鼠标指针指向的。按‘Alt’临时显示全部的战利品提示。"
+msgstr "总是隐藏战利品提示，除了光标指向的。按 ‘Alt’ 显示全部的战利品提示。"
 
 #: ../../../src/MenuConfig.cpp:291
 msgid "Visible"
@@ -632,57 +634,57 @@ msgstr "可见（两倍缩放）"
 msgid ""
 "Controls the type of warning to be activated when the player is below the "
 "low health threshold."
-msgstr ""
+msgstr "这将控制玩家在低生命阈值以下时使用何种通知。"
 
 #: ../../../src/MenuConfig.cpp:297
 msgid "- Display a message"
-msgstr ""
+msgstr "- 显示消息"
 
 #: ../../../src/MenuConfig.cpp:298
 msgid "- Play a sound"
-msgstr ""
+msgstr "- 播放声音"
 
 #: ../../../src/MenuConfig.cpp:299
 msgid "- Change the cursor"
-msgstr ""
+msgstr "- 切换光标"
 
 #: ../../../src/MenuConfig.cpp:301
 msgid "Disabled"
-msgstr ""
+msgstr "已禁用"
 
 #: ../../../src/MenuConfig.cpp:302
 msgid "All"
-msgstr ""
+msgstr "全部"
 
 #: ../../../src/MenuConfig.cpp:303
 msgid "Message & Cursor"
-msgstr ""
+msgstr "消息和光标"
 
 #: ../../../src/MenuConfig.cpp:304
 msgid "Message & Sound"
-msgstr ""
+msgstr "消息和声音"
 
 #: ../../../src/MenuConfig.cpp:305
 msgid "Sound & Cursor"
-msgstr ""
+msgstr "声音和光标"
 
 #: ../../../src/MenuConfig.cpp:306
 msgid "Message"
-msgstr ""
+msgstr "消息"
 
 #: ../../../src/MenuConfig.cpp:307
 msgid "Cursor"
-msgstr ""
+msgstr "光标"
 
 #: ../../../src/MenuConfig.cpp:308
 msgid "Sound"
-msgstr ""
+msgstr "音效"
 
 #: ../../../src/MenuConfig.cpp:314
 msgid ""
 "When the player's health drops below the given threshold, the low health "
 "notifications are triggered if one or more of them is enabled."
-msgstr ""
+msgstr "当玩家的HP低于一个特定的阈值时，如果您已启用一种或更多低生命通知，它将被触发。"
 
 #: ../../../src/MenuConfig.cpp:327 ../../../src/MenuConfig.cpp:1561
 msgid "Exit"
@@ -774,7 +776,7 @@ msgstr "显示画面每秒帧数"
 
 #: ../../../src/MenuConfig.cpp:364
 msgid "Hardware mouse cursor"
-msgstr "硬件鼠标光标"
+msgstr "硬件光标"
 
 #: ../../../src/MenuConfig.cpp:365
 msgid "Colorblind Mode"
@@ -802,7 +804,7 @@ msgstr "始终显示进度条标签"
 
 #: ../../../src/MenuConfig.cpp:371
 msgid "Allow stat bar auto-hiding"
-msgstr ""
+msgstr "允许状态栏自动隐藏"
 
 #: ../../../src/MenuConfig.cpp:372
 msgid "Show combat text"
@@ -818,11 +820,11 @@ msgstr "显示隐藏的敌人标记"
 
 #: ../../../src/MenuConfig.cpp:375
 msgid "Low health notification"
-msgstr ""
+msgstr "低生命通知"
 
 #: ../../../src/MenuConfig.cpp:376
 msgid "Low health threshold"
-msgstr ""
+msgstr "低生命阈值"
 
 #: ../../../src/MenuConfig.cpp:379
 msgid "Joystick"
@@ -855,17 +857,17 @@ msgstr "摇杆灵敏度"
 #: ../../../src/MenuConfig.cpp:395
 #, c-format
 msgid "Primary binding: %s"
-msgstr ""
+msgstr "主要键位：%s"
 
 #: ../../../src/MenuConfig.cpp:396
 #, c-format
 msgid "Alternate binding: %s"
-msgstr ""
+msgstr "备用键位：%s"
 
 #: ../../../src/MenuConfig.cpp:397
 #, c-format
 msgid "Joystick binding: %s"
-msgstr ""
+msgstr "摇杆键位：%s"
 
 #: ../../../src/MenuConfig.cpp:496
 msgid ""
@@ -908,7 +910,7 @@ msgstr "提供从颜色传递的额外的文字信息。"
 msgid ""
 "Some mods will automatically hide the stat bars when they are inactive. "
 "Disabling this option will keep them displayed at all times."
-msgstr ""
+msgstr "当状态栏闲置时，一些组件会自动隐藏它。禁用它以让状态栏持续显示。"
 
 #: ../../../src/MenuConfig.cpp:503
 msgid ""
@@ -947,7 +949,7 @@ msgstr "当开启‘使用鼠标移动英雄’时，这设置分配到移动键
 msgid ""
 "The player's attacks will be aimed in the direction of the mouse cursor when"
 " this is enabled."
-msgstr "当开启时玩家的攻击将指向鼠标指针的方向。"
+msgstr "开启后玩家的攻击将指向光标。"
 
 #: ../../../src/MenuConfig.cpp:559
 msgid "Active Mods"
@@ -1000,7 +1002,7 @@ msgstr "开发者控制台"
 #: ../../../src/MenuDevConsole.cpp:141
 #, c-format
 msgid "Use '%s' to inspect with the cursor."
-msgstr "使用‘%s’使用鼠标检视"
+msgstr "使用‘%s’使用光标检视"
 
 #: ../../../src/MenuDevConsole.cpp:146
 msgid "Arguments with spaces should be enclosed with double quotes. Example:"
@@ -1422,7 +1424,7 @@ msgstr "不能在储物柜中存放任务物品。"
 
 #: ../../../src/MenuStash.cpp:214
 msgid "This item can not be stored in the stash."
-msgstr ""
+msgstr "此物品无法存放在储物柜中。"
 
 #: ../../../src/MenuStash.cpp:224
 msgid "Stash is full."
@@ -1431,12 +1433,12 @@ msgstr "储物柜已满。"
 #: ../../../src/MenuStash.cpp:276
 #, c-format
 msgid "Can not store item in stash: %s"
-msgstr ""
+msgstr "无法在储物柜中存放物品 %s"
 
 #: ../../../src/MenuTalker.cpp:447
 #, c-format
 msgid "<dialog node %d>"
-msgstr ""
+msgstr "<dialog node %d>"
 
 #: ../../../src/MenuTalker.cpp:455
 msgid "Trade"
@@ -1590,7 +1592,7 @@ msgstr "点按"
 #: ../../../src/SDLInputState.cpp:815 ../../../src/SDLInputState.cpp:817
 #, c-format
 msgid "Can not bind: %s"
-msgstr ""
+msgstr "无法绑定 %s"
 
 #: ../../../src/SDLInputState.cpp:829 ../../../src/SDLInputState.cpp:833
 #: ../../../src/SDLInputState.cpp:837
