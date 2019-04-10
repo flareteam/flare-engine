@@ -24,6 +24,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "Avatar.h"
+#include "Enemy.h"
 #include "FileParser.h"
 #include "FontEngine.h"
 #include "InputState.h"

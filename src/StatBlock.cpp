@@ -388,6 +388,30 @@ bool StatBlock::loadSfxStat(FileParser *infile) {
 	return true;
 }
 
+bool StatBlock::isNPCStat(FileParser *infile) {
+	if (infile->section == "npc") return true;
+	else if (infile->section == "dialog") return true;
+
+	if (infile->key == "gfx") {
+		infile->error("StatBlock: Warning! 'gfx' is deprecated. Use 'animations' instead.");
+		animations = infile->val;
+		return true;
+	}
+	else if (infile->key == "direction") return true;
+	else if (infile->key == "talker") return true;
+	else if (infile->key == "portrait") return true;
+	else if (infile->key == "vendor") return true;
+	else if (infile->key == "vendor_requires_status") return true;
+	else if (infile->key == "vendor_requires_not_status") return true;
+	else if (infile->key == "constant_stock") return true;
+	else if (infile->key == "status_stock") return true;
+	else if (infile->key == "random_stock") return true;
+	else if (infile->key == "random_stock_count") return true;
+	else if (infile->key == "vox_intro") return true;
+
+	return false;
+}
+
 /**
  * load a statblock, typically for an enemy definition
  */
@@ -408,7 +432,7 @@ void StatBlock::load(const std::string& filename) {
 
 		int num = Parse::toInt(infile.val);
 		float fnum = Parse::toFloat(infile.val);
-		bool valid = loadCoreStat(&infile) || loadSfxStat(&infile);
+		bool valid = loadCoreStat(&infile) || loadSfxStat(&infile) || isNPCStat(&infile);
 
 		// @ATTR name|string|Name
 		if (infile.key == "name") name = msg->get(infile.val);

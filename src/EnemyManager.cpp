@@ -50,6 +50,11 @@ EnemyManager::EnemyManager()
 	handleNewMap();
 }
 
+Enemy * EnemyManager::getEnemyPrototypeWithoutAnimationChanges(const std::string& type_id) {
+	Enemy* e = new Enemy(prototypes.at(loadEnemyPrototype(type_id)));
+	return e;
+}
+
 void EnemyManager::loadAnimations(Enemy *e) {
 	anim->increaseCount(e->stats.animations);
 	e->animationSet = anim->getAnimationSet(e->stats.animations);
