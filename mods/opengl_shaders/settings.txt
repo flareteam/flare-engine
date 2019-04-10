@@ -1,0 +1,2 @@
+description=OpenGL shaders, required for the 'opengl' renderer.
+game=default

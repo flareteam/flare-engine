@@ -4,6 +4,8 @@ cmake_minimum_required (VERSION 2.6)
 Set (PACKAGE "FLARE")
 Set (VERSION "1.09.01")
 
+option(USE_OPENGL "USE_OPENGL" Off)
+
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
 # Default definitions
@@ -319,6 +321,27 @@ Set (FLARE_HEADERS
 	./src/WidgetTooltip.h
 )
 
+If (USE_OPENGL)
+	Find_Package(OpenGL)
+	If (NOT OPENGL_FOUND)
+		Message (ERROR " Couldn't find OpenGL development files. OpenGL Renderer will be disabled")
+		Set (USE_OPENGL Off)
+	Else (NOT OPENGL_FOUND)
+		add_definitions(-DSUPPORT_OPENGL_RENDERER)
+		INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR})
+		SET(FLARE_SOURCES
+		${FLARE_SOURCES}
+		./src/OpenGLRenderDevice.cpp
+		./src/OpenGL_EXT.cpp
+		)
+		SET(FLARE_HEADERS
+		${FLARE_HEADERS}
+		./src/OpenGLRenderDevice.h
+		./src/OpenGL_EXT.h
+		)
+	EndIf (NOT OPENGL_FOUND)
+EndIf (USE_OPENGL)
+
 # Add icon and file info to executable for Windows systems
 IF (WIN32)
   SET(FLARE_SOURCES
@@ -334,7 +357,11 @@ If (NOT SDL2MAIN_LIBRARY)
   Set (SDL2MAIN_LIBRARY "")
 EndIf (NOT SDL2MAIN_LIBRARY)
 
-Target_Link_Libraries (flare ${CMAKE_LD_FLAGS} ${SDL2_LIBRARY} ${SDL2IMAGE_LIBRARY} ${SDL2MIXER_LIBRARY} ${SDL2TTF_LIBRARY} ${SDL2MAIN_LIBRARY})
+If (USE_OPENGL)
+	Target_Link_Libraries (flare ${CMAKE_LD_FLAGS} ${SDL2_LIBRARY} ${SDL2IMAGE_LIBRARY} ${SDL2MIXER_LIBRARY} ${SDL2TTF_LIBRARY} ${SDL2MAIN_LIBRARY} ${OPENGL_gl_LIBRARY})
+Else (USE_OPENGL)
+	Target_Link_Libraries (flare ${CMAKE_LD_FLAGS} ${SDL2_LIBRARY} ${SDL2IMAGE_LIBRARY} ${SDL2MIXER_LIBRARY} ${SDL2TTF_LIBRARY} ${SDL2MAIN_LIBRARY})
+EndIF (USE_OPENGL)
 
 
 # installing to the proper places

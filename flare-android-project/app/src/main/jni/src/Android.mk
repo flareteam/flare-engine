@@ -122,7 +122,9 @@ LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c \
 	../../../../../../src/WidgetSlider.cpp \
 	../../../../../../src/WidgetSlot.cpp \
  	../../../../../../src/WidgetTabControl.cpp \
-	../../../../../../src/WidgetTooltip.cpp
+	../../../../../../src/WidgetTooltip.cpp \
+	../../../../../../src/OpenGLRenderDevice.cpp \
+	../../../../../../src/OpenGL_EXT.cpp
 
 LOCAL_SHARED_LIBRARIES := SDL2 SDL2_image SDL2_mixer SDL2_ttf
 
