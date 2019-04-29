@@ -183,21 +183,25 @@ void SDLInputState::setFixedKeyBindings() {
 }
 
 void SDLInputState::validateFixedKeyBinding(int action, int key, int bindings_list) {
-	key = SDL_GetScancodeFromKey(key);
+	if (bindings_list != InputState::BINDING_DEFAULT && bindings_list != InputState::BINDING_ALT)
+		return;
+
+	int scan_key = (key < 0 ? key : SDL_GetScancodeFromKey(key));
+
 	for (int i = 0; i < KEY_COUNT; ++i) {
 		if (i == action) {
 			if (bindings_list == InputState::BINDING_DEFAULT)
-				binding[action] = key;
+				binding[action] = scan_key;
 			else if (bindings_list == InputState::BINDING_ALT)
-				binding_alt[action] = key;
+				binding_alt[action] = scan_key;
 
 			continue;
 		}
 
-		if (binding[i] == key)
+		if (binding[i] == scan_key)
 			binding[i] = -1;
 
-		if (binding_alt[i] == key)
+		if (binding_alt[i] == scan_key)
 			binding_alt[i] = -1;
 	}
 }
