@@ -45,6 +45,7 @@ Translation updates:
 * German (de) update (Fyrenic)
 * Spanish (es) update (Agustin Ferrario)
 * French (fr) update (syl_)
+* Scottish Gaelic (gd) update (GunChleoc)
 * Portuguese (pt) update (Rui)
 * Russian (ru) update (Andrey Kapitonov, Igor Paliychuk, nwtour)
 * Chinese (zh) update (dumaosen, neverwin)
