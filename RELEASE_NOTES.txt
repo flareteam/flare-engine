@@ -48,6 +48,7 @@ Translation updates:
 * Scottish Gaelic (gd) update (GunChleoc)
 * Portuguese (pt) update (Rui)
 * Russian (ru) update (Andrey Kapitonov, Igor Paliychuk, nwtour)
+* Ukranian (uk) update (Igor Paliychuk)
 * Chinese (zh) update (dumaosen, neverwin)
 
 
