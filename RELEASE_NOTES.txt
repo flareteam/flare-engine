@@ -47,6 +47,7 @@ Translation updates:
 * Spanish (es) update (Agustin Ferrario)
 * French (fr) update (syl_)
 * Scottish Gaelic (gd) update (GunChleoc)
+* Japanese (ja) update (Ooyama Yosiyuki)
 * Portuguese (pt) update (Rui)
 * Russian (ru) update (Andrey Kapitonov, Igor Paliychuk, nwtour)
 * Ukranian (uk) update (Igor Paliychuk)

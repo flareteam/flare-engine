@@ -5,6 +5,7 @@
 # 
 # Translators:
 # Justin Jacobs <jajdorkster@gmail.com>, 2018
+# Ooyama Yosiyuki <qqke6wd9k@apricot.ocn.ne.jp>, 2019
 # 
 #, fuzzy
 msgid ""
@@ -13,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-04 14:14-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
+"Last-Translator: Ooyama Yosiyuki <qqke6wd9k@apricot.ocn.ne.jp>, 2019\n"
 "Language-Team: Japanese (https://www.transifex.com/flareorg/teams/84925/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -32,7 +33,7 @@ msgstr "おめでとう、 レベル %d に達している!"
 
 #: ../../../src/Avatar.cpp:424
 msgid "You may increase one attribute through the Character Menu."
-msgstr "キャラクターメニューを介して 1つの属性を高めることが可能です。"
+msgstr "メニューのキャラクター画面を介して 1つの属性を高めることが可能です。"
 
 #: ../../../src/Avatar.cpp:693
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
@@ -101,14 +102,14 @@ msgid ""
 "SDL software renderer\n"
 "\n"
 "Often slower, but less likely to have issues."
-msgstr ""
+msgstr "SDL ソフトウェアレンダラーはおそいですが、いくつかのトラブルを無くせるかもしれません。"
 
 #: ../../../src/DeviceList.cpp:59
 msgid ""
 "SDL hardware renderer\n"
 "\n"
 "The default renderer that is often faster than the SDL software renderer."
-msgstr ""
+msgstr "SDL ハードウェアレンダラーは標準設定であり、SDLソフトウェアレンダラーよりも速いでしょう。"
 
 #: ../../../src/EngineSettings.cpp:561
 msgid "Adventurer"
@@ -196,7 +197,7 @@ msgstr "作る"
 
 #: ../../../src/GameStateNew.cpp:76
 msgid "Randomize"
-msgstr ""
+msgstr "ランダム"
 
 #: ../../../src/GameStateNew.cpp:92
 msgid "Choose a Portrait"
@@ -521,17 +522,17 @@ msgstr "レベル"
 #: ../../../src/MenuCharacter.cpp:310
 #, c-format
 msgid "%d unspent stat point"
-msgstr ""
+msgstr "statポイントが %d 未使用です"
 
 #: ../../../src/MenuCharacter.cpp:313
 #, c-format
 msgid "%d unspent stat points"
-msgstr ""
+msgstr "statポイントが %d 未使用です"
 
 #: ../../../src/MenuCharacter.cpp:355
 #, c-format
 msgid "Reduces the damage taken from \"%s\" elemental attacks."
-msgstr ""
+msgstr "%sエレメンタルの攻撃を受けたときのダメージを減らします。"
 
 #: ../../../src/MenuCharacter.cpp:365 ../../../src/MenuManager.cpp:283
 #, c-format
@@ -1148,7 +1149,7 @@ msgstr "死亡"
 
 #: ../../../src/MenuEnemy.cpp:164
 msgid "Destroyed"
-msgstr ""
+msgstr "破壊ずみ"
 
 #: ../../../src/MenuInventory.cpp:177
 #, c-format
@@ -1396,12 +1397,12 @@ msgstr "スキルポイント 1 個が 必要です"
 #: ../../../src/MenuPowers.cpp:1355
 #, c-format
 msgid "%d unspent skill point"
-msgstr ""
+msgstr "skill ポイントが %d 未使用です"
 
 #: ../../../src/MenuPowers.cpp:1358
 #, c-format
 msgid "%d unspent skill points"
-msgstr ""
+msgstr "skill ポイントが %d 未使用です"
 
 #: ../../../src/MenuPowers.cpp:1388
 msgid "Next Level:"
@@ -1599,7 +1600,7 @@ msgstr "最大HP"
 
 #: ../../../src/Stats.cpp:39
 msgid "Total amount of HP."
-msgstr ""
+msgstr "HP の 上限 です。"
 
 #: ../../../src/Stats.cpp:43
 msgid "HP Regen"
@@ -1615,7 +1616,7 @@ msgstr "最大MP"
 
 #: ../../../src/Stats.cpp:49
 msgid "Total amount of MP."
-msgstr ""
+msgstr "MP の 上限 です。"
 
 #: ../../../src/Stats.cpp:53
 msgid "MP Regen"
@@ -1651,7 +1652,7 @@ msgstr "吸収の最小"
 
 #: ../../../src/Stats.cpp:69 ../../../src/Stats.cpp:74
 msgid "Reduces the amount of damage taken."
-msgstr ""
+msgstr "攻撃を受けたときの ダメージ が どんだけ へるか のポイント"
 
 #: ../../../src/Stats.cpp:73
 msgid "Absorb Max"

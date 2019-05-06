@@ -603,6 +603,8 @@ msgid ""
 "Show all loot tooltips, except for those that would be obscured by the "
 "player or an enemy. Temporarily show all loot tooltips with 'Alt'."
 msgstr ""
+"Завжди показувати підказки предметів. крім тих, що будуть заступлені гравцем"
+" або ворогом. Тимчасово показати всі підказки за допомогою 'Alt'."
 
 #: ../../../src/MenuConfig.cpp:287
 msgid "Show all"
@@ -612,16 +614,20 @@ msgstr "Показати все"
 msgid ""
 "Always show loot tooltips. Temporarily hide all loot tooltips with 'Alt'."
 msgstr ""
+"Завжди показувати підказки предметів. Тимчасово приховати всі підказки за "
+"допомогою 'Alt'."
 
 #: ../../../src/MenuConfig.cpp:288 ../../../src/MenuConfig.cpp:293
 msgid "Hidden"
-msgstr "Прихована"
+msgstr "Приховано"
 
 #: ../../../src/MenuConfig.cpp:288
 msgid ""
 "Always hide loot tooltips, except for when a piece of loot is hovered with "
 "the mouse cursor. Temporarily show all loot tooltips with 'Alt'."
 msgstr ""
+"Завжди приховувати підказки предметів. крім випадків, коли на предмет "
+"наведено курсор миші. Тимчасово показати всі підказки за допомогою 'Alt'."
 
 #: ../../../src/MenuConfig.cpp:291
 msgid "Visible"
@@ -661,11 +667,11 @@ msgstr "Все"
 
 #: ../../../src/MenuConfig.cpp:303
 msgid "Message & Cursor"
-msgstr "Повідомлення і Курсор"
+msgstr "Текст і Курсор"
 
 #: ../../../src/MenuConfig.cpp:304
 msgid "Message & Sound"
-msgstr "Повідомлення і Звук"
+msgstr "Текст і Звук"
 
 #: ../../../src/MenuConfig.cpp:305
 msgid "Sound & Cursor"
@@ -673,7 +679,7 @@ msgstr "Звук і Курсор"
 
 #: ../../../src/MenuConfig.cpp:306
 msgid "Message"
-msgstr "Повідомлення"
+msgstr "Текст"
 
 #: ../../../src/MenuConfig.cpp:307
 msgid "Cursor"
@@ -688,6 +694,8 @@ msgid ""
 "When the player's health drops below the given threshold, the low health "
 "notifications are triggered if one or more of them is enabled."
 msgstr ""
+"Коли Здоров'я героя знижується нижче заданого порогу, активуються сповіщення"
+" про низький рівень Здоров'я, якщо одне або більше з них увімкнено."
 
 #: ../../../src/MenuConfig.cpp:327 ../../../src/MenuConfig.cpp:1561
 msgid "Exit"
@@ -807,7 +815,7 @@ msgstr "Завжди показувати текст на смужках ста�
 
 #: ../../../src/MenuConfig.cpp:371
 msgid "Allow stat bar auto-hiding"
-msgstr ""
+msgstr "Дозволити автоматичне приховування смужок статів"
 
 #: ../../../src/MenuConfig.cpp:372
 msgid "Show combat text"
@@ -819,11 +827,11 @@ msgstr "Автоматично одягати предмети"
 
 #: ../../../src/MenuConfig.cpp:374
 msgid "Show hidden entity markers"
-msgstr ""
+msgstr "Показувати маркери прихованих істот."
 
 #: ../../../src/MenuConfig.cpp:375
 msgid "Low health notification"
-msgstr "Повідомлення про низький рівень Здоров'я"
+msgstr "Дані про низький рівень Здоров'я"
 
 #: ../../../src/MenuConfig.cpp:376
 msgid "Low health threshold"
@@ -847,7 +855,7 @@ msgstr "Не користуватись мишкою"
 
 #: ../../../src/MenuConfig.cpp:383
 msgid "Swap mouse movement button"
-msgstr ""
+msgstr "Переставити кнопку переміщення миші"
 
 #: ../../../src/MenuConfig.cpp:384
 msgid "Attack with mouse movement"
@@ -911,18 +919,23 @@ msgid ""
 "Enables the below setting that controls the screen gamma level. The behavior"
 " of the gamma setting can vary between platforms."
 msgstr ""
+"Вмикає нижченаведену опцію, яка контролюює рівень гами екрану. Поведінка "
+"налаштування гами може відрізнятися для різних платформ."
 
 #: ../../../src/MenuConfig.cpp:501
 msgid ""
 "Provides additional text for information that is primarily conveyed through "
 "color."
 msgstr ""
+"Забезпечує додатковий текст для інформації, яка передається через колір."
 
 #: ../../../src/MenuConfig.cpp:502
 msgid ""
 "Some mods will automatically hide the stat bars when they are inactive. "
 "Disabling this option will keep them displayed at all times."
 msgstr ""
+"Деякі моди автоматично приховують смужки статів, коли вони неактивні. Якщо "
+"вимкнути цю опцію, вони будуть відображатись завжди."
 
 #: ../../../src/MenuConfig.cpp:503
 msgid ""
@@ -937,12 +950,15 @@ msgid ""
 "Shows a marker above enemies, allies, and the player when they are obscured "
 "by tall objects."
 msgstr ""
+"Показує маркер над ворогами, союзниками і героєм, коли вони знаходяться за "
+"високими об'єктами."
 
 #: ../../../src/MenuConfig.cpp:505
 msgid ""
 "This allows the game to be controlled entirely with the keyboard (or "
 "joystick)."
 msgstr ""
+"Дозволяє керувати грою повністю за допомогою клавіатури (або джойстика)."
 
 #: ../../../src/MenuConfig.cpp:506
 msgid ""
@@ -950,6 +966,9 @@ msgid ""
 " 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
 "instead of 'Main1'."
 msgstr ""
+"Якщо ввімкнено функцію \"Керувати рухом героя використовуючи мишку\", ця "
+"опція визначає, яка кнопка використовуються для переміщення героя: 'Дія1' чи"
+" 'Дія2'. Якщо увімкнено, 'Дія2' переміщуватиме героя замість 'Дія1'."
 
 #: ../../../src/MenuConfig.cpp:507
 msgid ""
@@ -958,6 +977,11 @@ msgid ""
 "setting is disabled, it is required to use 'Shift' to access the Power "
 "assigned to the movement button."
 msgstr ""
+"Якщо ввімкнено функцію \"Керувати рухом героя використовуючи мишку\", ця "
+"опція визначає, чи можна використовувати Уміння, призначене на кнопку "
+"переміщення, шляхом націлювання на ворога. Якщо це налаштування вимкнено, "
+"для доступу до Уміння, призначеного на кнопку переміщення, потрібно "
+"використовувати 'Shift'."
 
 #: ../../../src/MenuConfig.cpp:508
 msgid ""
