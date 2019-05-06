@@ -237,6 +237,13 @@ SDLHardwareRenderDevice::SDLHardwareRenderDevice()
 }
 
 int SDLHardwareRenderDevice::createContextInternal() {
+#ifdef _WIN32
+	// We make heavy use of SDL_TEXTUREACCESS_TARGET for things such as text and the minimap
+	// If we use the 'direct3d' backend on Windows, these textures get lost on window resizing events
+	// So to bypass this, we force 'opengl' on Windows
+	SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
+#endif
+
 	bool settings_changed = ((fullscreen != settings->fullscreen && destructive_fullscreen) ||
 			                 hwsurface != settings->hwsurface ||
 							 vsync != settings->vsync ||
