@@ -52,7 +52,7 @@ Translations
 (gd) Scottish Gaelic by GunChleoc
 (gl) Galacian by Adrian Chaves Fernandez (Gallaecio)
 (it) Italian by Giovanni Dalla Torre, Gianfranco Del Borrello, Stefano Peris, Andrea Ranaldi, MOB2, and Fabio Loli
-(ja) Japanese by Paul Wortmann, sujiniku, Ooyama Yosiyuki
+(ja) Japanese by Paul Wortmann, sujiniku
 (nb) Norwegian Bokmal by Hans Joachim Desserud
 (nl) Dutch by Bas Doodeman
 (pl) Polish by Paweł Puszczyński

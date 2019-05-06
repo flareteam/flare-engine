@@ -84,7 +84,6 @@ text=Morgan Strauss
 text=Nea Retrogamer
 text=Nguyễn Gia Phong
 text=Nikita Vanku
-text=Ooyama Yosiyuki
 text=Paul Wortmann
 text=Pawel Puszczynski
 text=Quentin Stievenart
