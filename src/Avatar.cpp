@@ -407,10 +407,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 		snd->pauseChannel("lowhp");
 		playing_lowhp = false;
 	}
-	if (isLowHpCursorEnabled() && isLowHp()) {
-		// change attack cursor to lowhp variant
-		curs->setCursor(CursorManager::CURSOR_LHP_NORMAL);
-	}
+
 	// we can not use stats.prev_hp here
 	prev_hp = stats.hp;
 
@@ -583,12 +580,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 				setAnimation(attack_anim);
 
 				if (attack_cursor) {
-					// show low hp cursor if below threshold
-					if (isLowHpCursorEnabled() && isLowHp()) {
-						curs->setCursor(CursorManager::CURSOR_LHP_ATTACK);
-					} else {
-						curs->setCursor(CursorManager::CURSOR_ATTACK);
-					}
+					curs->setCursor(CursorManager::CURSOR_ATTACK);
 				}
 
 				if (activeAnimation->isFirstFrame()) {
@@ -1080,7 +1072,7 @@ void Avatar::logMsg(const std::string& str, int type) {
 	log_msg.push(std::pair<std::string, int>(str, type));
 }
 
-// isLowHp returns true if healht is below set threshold
+// isLowHp returns true if health is below set threshold
 bool Avatar::isLowHp() {
 	if (stats.hp == 0)
 		return false;

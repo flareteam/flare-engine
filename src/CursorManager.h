@@ -28,6 +28,7 @@ public:
 	~CursorManager ();
 	void logic();
 	void render();
+	void setLowHP(bool val);
 	void setCursor(int type);
 
 	bool show_cursor;
@@ -37,10 +38,6 @@ public:
 		CURSOR_INTERACT,
 		CURSOR_TALK,
 		CURSOR_ATTACK,
-		CURSOR_LHP_NORMAL,
-		CURSOR_LHP_INTERACT,
-		CURSOR_LHP_TALK,
-		CURSOR_LHP_ATTACK
 	};
 
 private:
@@ -65,6 +62,8 @@ private:
 
 	Sprite *cursor_current;
 	Point* offset_current;
+
+	bool low_hp;
 };
 
 #endif

@@ -179,11 +179,7 @@ void GameStatePlay::checkEnemyFocus() {
 		else {
 			enemy = enemym->enemyFocus(inpt->mouse, mapr->cam, EnemyManager::IS_ALIVE);
 			if (enemy) {
-				if (pc->isLowHpCursorEnabled() && pc->isLowHp()) {
-					curs->setCursor(CursorManager::CURSOR_LHP_ATTACK);
-				} else {
-					curs->setCursor(CursorManager::CURSOR_ATTACK);
-				}
+				curs->setCursor(CursorManager::CURSOR_ATTACK);
 			}
 			src_pos = Utils::screenToMap(inpt->mouse.x, inpt->mouse.y, mapr->cam.x, mapr->cam.y);
 
@@ -852,6 +848,8 @@ void GameStatePlay::logic() {
 	if (inpt->window_resized)
 		refreshWidgets();
 
+	curs->setLowHP(pc->isLowHpCursorEnabled() && pc->isLowHp());
+
 	checkCutscene();
 
 	// check menus first (top layer gets mouse click priority)
@@ -1108,6 +1106,8 @@ bool GameStatePlay::checkPrimaryStat(const std::string& first, const std::string
 }
 
 GameStatePlay::~GameStatePlay() {
+	curs->setLowHP(false);
+
 	delete quests;
 	delete npcs;
 	delete hazards;
