@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-04 14:14-0400\n"
+"POT-Creation-Date: 2019-05-09 08:53-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
 "Last-Translator: 杜茂森 <dumaosen_main01@outlook.com>, 2019\n"
 "Language-Team: Chinese (https://www.transifex.com/flareorg/teams/84925/zh/)\n"
@@ -26,24 +26,24 @@ msgstr ""
 msgid "Your health is low!"
 msgstr "您已奄奄一息！"
 
-#: ../../../src/Avatar.cpp:422
+#: ../../../src/Avatar.cpp:419
 #, c-format
 msgid "Congratulations, you have reached level %d!"
 msgstr "恭喜，你达到了等级%d!"
 
-#: ../../../src/Avatar.cpp:424
-msgid "You may increase one attribute through the Character Menu."
-msgstr "你可以在角色菜单增加一点属性。"
+#: ../../../src/Avatar.cpp:421
+msgid "You may increase one or more attributes through the Character Menu."
+msgstr ""
 
-#: ../../../src/Avatar.cpp:693
+#: ../../../src/Avatar.cpp:685
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
 msgstr "你被打败了，游戏结束！按下 ${INPUT_CONTINUE} 返回到标题界面。"
 
-#: ../../../src/Avatar.cpp:699
+#: ../../../src/Avatar.cpp:691
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
 msgstr "你被打败了。按下 ${INPUT_CONTINUE} 以继续。"
 
-#: ../../../src/Avatar.cpp:949
+#: ../../../src/Avatar.cpp:941
 msgid "Transformation expired. You have been moved back to a safe place."
 msgstr "传送已过期。你已回到了一个安全的地方。"
 
@@ -245,19 +245,19 @@ msgstr "退出游戏"
 msgid "Accept"
 msgstr "确定"
 
-#: ../../../src/InputState.cpp:405 ../../../src/SDLInputState.cpp:654
+#: ../../../src/InputState.cpp:405 ../../../src/SDLInputState.cpp:658
 msgid "Up"
 msgstr "上"
 
-#: ../../../src/InputState.cpp:406 ../../../src/SDLInputState.cpp:632
+#: ../../../src/InputState.cpp:406 ../../../src/SDLInputState.cpp:636
 msgid "Down"
 msgstr "下"
 
-#: ../../../src/InputState.cpp:407 ../../../src/SDLInputState.cpp:639
+#: ../../../src/InputState.cpp:407 ../../../src/SDLInputState.cpp:643
 msgid "Left"
 msgstr "左"
 
-#: ../../../src/InputState.cpp:408 ../../../src/SDLInputState.cpp:649
+#: ../../../src/InputState.cpp:408 ../../../src/SDLInputState.cpp:653
 msgid "Right"
 msgstr "右"
 
@@ -341,7 +341,7 @@ msgstr "Shift"
 msgid "Alt"
 msgstr "Alt"
 
-#: ../../../src/InputState.cpp:428 ../../../src/SDLInputState.cpp:631
+#: ../../../src/InputState.cpp:428 ../../../src/SDLInputState.cpp:635
 msgid "Delete"
 msgstr "Delete"
 
@@ -540,7 +540,7 @@ msgstr "%d个未使用的属性点数"
 msgid "Reduces the damage taken from \"%s\" elemental attacks."
 msgstr "减少来自“%s”的元素攻击伤害。"
 
-#: ../../../src/MenuCharacter.cpp:365 ../../../src/MenuManager.cpp:283
+#: ../../../src/MenuCharacter.cpp:365 ../../../src/MenuManager.cpp:284
 #, c-format
 msgid "XP: %d"
 msgstr "经验值XP：%d"
@@ -983,7 +983,7 @@ msgstr "引擎版本号："
 msgid "Requires mods:"
 msgstr "需要的模块："
 
-#: ../../../src/MenuConfig.cpp:1544 ../../../src/SDLInputState.cpp:684
+#: ../../../src/MenuConfig.cpp:1544 ../../../src/SDLInputState.cpp:688
 msgid "(none)"
 msgstr "（无）"
 
@@ -1240,12 +1240,12 @@ msgstr "提示"
 msgid "Quests"
 msgstr "任务"
 
-#: ../../../src/MenuManager.cpp:287
+#: ../../../src/MenuManager.cpp:288
 #, c-format
 msgid "XP: %d/%d"
 msgstr "经验值：%d/%d"
 
-#: ../../../src/MenuManager.cpp:836
+#: ../../../src/MenuManager.cpp:838
 msgid "This item can not be dropped."
 msgstr "这个物品无法丢弃。"
 
@@ -1473,129 +1473,129 @@ msgstr "完成的任务"
 msgid "Game saved."
 msgstr "游戏已保存。"
 
-#: ../../../src/SDLInputState.cpp:629
+#: ../../../src/SDLInputState.cpp:633
 msgid "Backspace"
 msgstr "Backspace"
 
-#: ../../../src/SDLInputState.cpp:630
+#: ../../../src/SDLInputState.cpp:634
 msgid "CapsLock"
 msgstr "CapsLock"
 
-#: ../../../src/SDLInputState.cpp:633
+#: ../../../src/SDLInputState.cpp:637
 msgid "End"
 msgstr "End"
 
-#: ../../../src/SDLInputState.cpp:634
+#: ../../../src/SDLInputState.cpp:638
 msgid "Escape"
 msgstr "Escape"
 
-#: ../../../src/SDLInputState.cpp:635
+#: ../../../src/SDLInputState.cpp:639
 msgid "Home"
 msgstr "Home"
 
-#: ../../../src/SDLInputState.cpp:636
+#: ../../../src/SDLInputState.cpp:640
 msgid "Insert"
 msgstr "Insert"
 
-#: ../../../src/SDLInputState.cpp:637
+#: ../../../src/SDLInputState.cpp:641
 msgid "Left Alt"
 msgstr "左Alt"
 
-#: ../../../src/SDLInputState.cpp:638
+#: ../../../src/SDLInputState.cpp:642
 msgid "Left Ctrl"
 msgstr "左Ctrl"
 
-#: ../../../src/SDLInputState.cpp:640
+#: ../../../src/SDLInputState.cpp:644
 msgid "Left Shift"
 msgstr "左Shift"
 
-#: ../../../src/SDLInputState.cpp:641
+#: ../../../src/SDLInputState.cpp:645
 msgid "NumLock"
 msgstr "NumLock"
 
-#: ../../../src/SDLInputState.cpp:642
+#: ../../../src/SDLInputState.cpp:646
 msgid "PageDown"
 msgstr "PageDown"
 
-#: ../../../src/SDLInputState.cpp:643
+#: ../../../src/SDLInputState.cpp:647
 msgid "PageUp"
 msgstr "PageUp"
 
-#: ../../../src/SDLInputState.cpp:644
+#: ../../../src/SDLInputState.cpp:648
 msgid "Pause"
 msgstr "Pause"
 
-#: ../../../src/SDLInputState.cpp:645
+#: ../../../src/SDLInputState.cpp:649
 msgid "PrintScreen"
 msgstr "PrintScreen"
 
-#: ../../../src/SDLInputState.cpp:646
+#: ../../../src/SDLInputState.cpp:650
 msgid "Right Alt"
 msgstr "右Alt"
 
-#: ../../../src/SDLInputState.cpp:647
+#: ../../../src/SDLInputState.cpp:651
 msgid "Right Ctrl"
 msgstr "右Ctrl"
 
-#: ../../../src/SDLInputState.cpp:648
+#: ../../../src/SDLInputState.cpp:652
 msgid "Return"
 msgstr "Return"
 
-#: ../../../src/SDLInputState.cpp:650
+#: ../../../src/SDLInputState.cpp:654
 msgid "Right Shift"
 msgstr "右Shift"
 
-#: ../../../src/SDLInputState.cpp:651
+#: ../../../src/SDLInputState.cpp:655
 msgid "ScrollLock"
 msgstr "ScrollLock"
 
-#: ../../../src/SDLInputState.cpp:652
+#: ../../../src/SDLInputState.cpp:656
 msgid "Space"
 msgstr "Space"
 
-#: ../../../src/SDLInputState.cpp:653
+#: ../../../src/SDLInputState.cpp:657
 msgid "Tab"
 msgstr "Tab"
 
-#: ../../../src/SDLInputState.cpp:667
+#: ../../../src/SDLInputState.cpp:671
 #, c-format
 msgid "Mouse %d"
 msgstr "鼠标 %d"
 
-#: ../../../src/SDLInputState.cpp:675
+#: ../../../src/SDLInputState.cpp:679
 #, c-format
 msgid "Axis %d -"
 msgstr "摇杆轴 %d-"
 
-#: ../../../src/SDLInputState.cpp:677
+#: ../../../src/SDLInputState.cpp:681
 #, c-format
 msgid "Axis %d +"
 msgstr "摇杆轴 %d+"
 
-#: ../../../src/SDLInputState.cpp:680
+#: ../../../src/SDLInputState.cpp:684
 #, c-format
 msgid "Button %d"
 msgstr "按钮 %d"
 
-#: ../../../src/SDLInputState.cpp:724
+#: ../../../src/SDLInputState.cpp:728
 msgid "Touch control D-Pad"
 msgstr "触摸控制D-Pad"
 
-#: ../../../src/SDLInputState.cpp:748
+#: ../../../src/SDLInputState.cpp:752
 msgid "Touch control buttons"
 msgstr "触摸控制按钮"
 
-#: ../../../src/SDLInputState.cpp:763
+#: ../../../src/SDLInputState.cpp:767
 msgid "Tap"
 msgstr "点按"
 
-#: ../../../src/SDLInputState.cpp:815 ../../../src/SDLInputState.cpp:817
+#: ../../../src/SDLInputState.cpp:819 ../../../src/SDLInputState.cpp:821
 #, c-format
 msgid "Can not bind: %s"
 msgstr "无法绑定 %s"
 
-#: ../../../src/SDLInputState.cpp:829 ../../../src/SDLInputState.cpp:833
-#: ../../../src/SDLInputState.cpp:837
+#: ../../../src/SDLInputState.cpp:833 ../../../src/SDLInputState.cpp:837
+#: ../../../src/SDLInputState.cpp:841
 #, c-format
 msgid "'%s' is no longer bound to:"
 msgstr "‘%s’不再绑定到："

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-04 14:14-0400\n"
+"POT-Creation-Date: 2019-05-09 08:53-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
 "Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
 "Language-Team: Vietnamese (https://www.transifex.com/flareorg/teams/84925/vi/)\n"
@@ -25,26 +25,26 @@ msgstr ""
 msgid "Your health is low!"
 msgstr ""
 
-#: ../../../src/Avatar.cpp:422
+#: ../../../src/Avatar.cpp:419
 #, c-format
 msgid "Congratulations, you have reached level %d!"
 msgstr "Chúc mừng, bạn đã đạt cấp độ %d!"
 
-#: ../../../src/Avatar.cpp:424
-msgid "You may increase one attribute through the Character Menu."
-msgstr "Bạn có thể tăng một chỉ số qua menu Nhân vật."
+#: ../../../src/Avatar.cpp:421
+msgid "You may increase one or more attributes through the Character Menu."
+msgstr ""
 
-#: ../../../src/Avatar.cpp:693
+#: ../../../src/Avatar.cpp:685
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
 msgstr ""
 "Bạn đã bị đánh bại. Trò chơi kết thúc! Nhấn ${INPUT_CONTINUE} để thoát ra "
 "Trang đầu."
 
-#: ../../../src/Avatar.cpp:699
+#: ../../../src/Avatar.cpp:691
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
 msgstr "Bạn đã bị đánh bại. Nhấn ${INPUT_CONTINUE} để tiếp tục."
 
-#: ../../../src/Avatar.cpp:949
+#: ../../../src/Avatar.cpp:941
 msgid "Transformation expired. You have been moved back to a safe place."
 msgstr "Sự biến đổi kết thúc. Bạn đã được chuyển về vị trí an toàn."
 
@@ -244,19 +244,19 @@ msgstr "Thoát trò chơi"
 msgid "Accept"
 msgstr "Đồng ý"
 
-#: ../../../src/InputState.cpp:405 ../../../src/SDLInputState.cpp:654
+#: ../../../src/InputState.cpp:405 ../../../src/SDLInputState.cpp:658
 msgid "Up"
 msgstr "Lên"
 
-#: ../../../src/InputState.cpp:406 ../../../src/SDLInputState.cpp:632
+#: ../../../src/InputState.cpp:406 ../../../src/SDLInputState.cpp:636
 msgid "Down"
 msgstr "Xuống"
 
-#: ../../../src/InputState.cpp:407 ../../../src/SDLInputState.cpp:639
+#: ../../../src/InputState.cpp:407 ../../../src/SDLInputState.cpp:643
 msgid "Left"
 msgstr "Trái"
 
-#: ../../../src/InputState.cpp:408 ../../../src/SDLInputState.cpp:649
+#: ../../../src/InputState.cpp:408 ../../../src/SDLInputState.cpp:653
 msgid "Right"
 msgstr "Phải"
 
@@ -340,7 +340,7 @@ msgstr ""
 msgid "Alt"
 msgstr ""
 
-#: ../../../src/InputState.cpp:428 ../../../src/SDLInputState.cpp:631
+#: ../../../src/InputState.cpp:428 ../../../src/SDLInputState.cpp:635
 msgid "Delete"
 msgstr ""
 
@@ -539,7 +539,7 @@ msgstr "%d điểm thuộc tính chưa dùng"
 msgid "Reduces the damage taken from \"%s\" elemental attacks."
 msgstr "Giảm sát thương từ nguyên tố %s."
 
-#: ../../../src/MenuCharacter.cpp:365 ../../../src/MenuManager.cpp:283
+#: ../../../src/MenuCharacter.cpp:365 ../../../src/MenuManager.cpp:284
 #, c-format
 msgid "XP: %d"
 msgstr "Điểm kinh nghiệm: %d"
@@ -988,7 +988,7 @@ msgstr "Phiên bản engine:"
 msgid "Requires mods:"
 msgstr "Yêu cầu bản mod:"
 
-#: ../../../src/MenuConfig.cpp:1544 ../../../src/SDLInputState.cpp:684
+#: ../../../src/MenuConfig.cpp:1544 ../../../src/SDLInputState.cpp:688
 msgid "(none)"
 msgstr "(không)"
 
@@ -1253,12 +1253,12 @@ msgstr "Ghi chú"
 msgid "Quests"
 msgstr "Nhiệm vụ"
 
-#: ../../../src/MenuManager.cpp:287
+#: ../../../src/MenuManager.cpp:288
 #, c-format
 msgid "XP: %d/%d"
 msgstr "Điểm kinh nghiệm: %d/%d"
 
-#: ../../../src/MenuManager.cpp:836
+#: ../../../src/MenuManager.cpp:838
 msgid "This item can not be dropped."
 msgstr "Không thể vứt vật này."
 
@@ -1486,129 +1486,129 @@ msgstr "Nhiệm vụ đã hoàn thành"
 msgid "Game saved."
 msgstr "Đã lưư trò chơi."
 
-#: ../../../src/SDLInputState.cpp:629
+#: ../../../src/SDLInputState.cpp:633
 msgid "Backspace"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:630
+#: ../../../src/SDLInputState.cpp:634
 msgid "CapsLock"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:633
+#: ../../../src/SDLInputState.cpp:637
 msgid "End"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:634
+#: ../../../src/SDLInputState.cpp:638
 msgid "Escape"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:635
+#: ../../../src/SDLInputState.cpp:639
 msgid "Home"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:636
+#: ../../../src/SDLInputState.cpp:640
 msgid "Insert"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:637
+#: ../../../src/SDLInputState.cpp:641
 msgid "Left Alt"
 msgstr "Alt trái"
 
-#: ../../../src/SDLInputState.cpp:638
+#: ../../../src/SDLInputState.cpp:642
 msgid "Left Ctrl"
 msgstr "Ctrl trái"
 
-#: ../../../src/SDLInputState.cpp:640
+#: ../../../src/SDLInputState.cpp:644
 msgid "Left Shift"
 msgstr "Shift trái"
 
-#: ../../../src/SDLInputState.cpp:641
+#: ../../../src/SDLInputState.cpp:645
 msgid "NumLock"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:642
+#: ../../../src/SDLInputState.cpp:646
 msgid "PageDown"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:643
+#: ../../../src/SDLInputState.cpp:647
 msgid "PageUp"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:644
+#: ../../../src/SDLInputState.cpp:648
 msgid "Pause"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:645
+#: ../../../src/SDLInputState.cpp:649
 msgid "PrintScreen"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:646
+#: ../../../src/SDLInputState.cpp:650
 msgid "Right Alt"
 msgstr "Alt phải"
 
-#: ../../../src/SDLInputState.cpp:647
+#: ../../../src/SDLInputState.cpp:651
 msgid "Right Ctrl"
 msgstr "Ctrl phải"
 
-#: ../../../src/SDLInputState.cpp:648
+#: ../../../src/SDLInputState.cpp:652
 msgid "Return"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:650
+#: ../../../src/SDLInputState.cpp:654
 msgid "Right Shift"
 msgstr "Shift phải"
 
-#: ../../../src/SDLInputState.cpp:651
+#: ../../../src/SDLInputState.cpp:655
 msgid "ScrollLock"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:652
+#: ../../../src/SDLInputState.cpp:656
 msgid "Space"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:653
+#: ../../../src/SDLInputState.cpp:657
 msgid "Tab"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:667
+#: ../../../src/SDLInputState.cpp:671
 #, c-format
 msgid "Mouse %d"
 msgstr "Chuột %d"
 
-#: ../../../src/SDLInputState.cpp:675
+#: ../../../src/SDLInputState.cpp:679
 #, c-format
 msgid "Axis %d -"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:677
+#: ../../../src/SDLInputState.cpp:681
 #, c-format
 msgid "Axis %d +"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:680
+#: ../../../src/SDLInputState.cpp:684
 #, c-format
 msgid "Button %d"
 msgstr "Nút %d"
 
-#: ../../../src/SDLInputState.cpp:724
+#: ../../../src/SDLInputState.cpp:728
 msgid "Touch control D-Pad"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:748
+#: ../../../src/SDLInputState.cpp:752
 msgid "Touch control buttons"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:763
+#: ../../../src/SDLInputState.cpp:767
 msgid "Tap"
 msgstr "Vỗ"
 
-#: ../../../src/SDLInputState.cpp:815 ../../../src/SDLInputState.cpp:817
+#: ../../../src/SDLInputState.cpp:819 ../../../src/SDLInputState.cpp:821
 #, c-format
 msgid "Can not bind: %s"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:829 ../../../src/SDLInputState.cpp:833
-#: ../../../src/SDLInputState.cpp:837
+#: ../../../src/SDLInputState.cpp:833 ../../../src/SDLInputState.cpp:837
+#: ../../../src/SDLInputState.cpp:841
 #, c-format
 msgid "'%s' is no longer bound to:"
 msgstr "[%s] không còn được gán với:"
