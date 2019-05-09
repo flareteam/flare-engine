@@ -405,7 +405,7 @@ msgstr "%d%% スピード"
 #: ../../../src/MenuPowers.cpp:833
 #, c-format
 msgid "Resistance (%s)"
-msgstr ""
+msgstr "抵抗（%s）"
 
 #: ../../../src/ItemManager.cpp:695
 #, c-format
@@ -585,7 +585,7 @@ msgstr "オーケー"
 
 #: ../../../src/MenuConfig.cpp:243
 msgid "Continue"
-msgstr ""
+msgstr "続行"
 
 #: ../../../src/MenuConfig.cpp:286
 msgid "Default"
@@ -714,7 +714,7 @@ msgstr "ポーズ"
 
 #: ../../../src/MenuConfig.cpp:347
 msgid "Time Played"
-msgstr ""
+msgstr "プレイ時間"
 
 #: ../../../src/MenuConfig.cpp:349
 msgid "Renderer"
@@ -1461,7 +1461,7 @@ msgstr "この位置では、変身をとくことは、できない。"
 
 #: ../../../src/QuestLog.cpp:234
 msgid "Completed Quests"
-msgstr ""
+msgstr "完了したクエスト"
 
 #: ../../../src/SaveLoad.cpp:243 ../../../src/SaveLoad.cpp:244
 msgid "Game saved."
