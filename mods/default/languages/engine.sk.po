@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-09 08:53-0400\n"
+"POT-Creation-Date: 2019-05-09 09:01-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
 "Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
 "Language-Team: Slovak (https://www.transifex.com/flareorg/teams/84925/sk/)\n"
@@ -34,15 +34,19 @@ msgstr "Gratulujem, dosiahol si stupeň %d!"
 msgid "You may increase one or more attributes through the Character Menu."
 msgstr ""
 
-#: ../../../src/Avatar.cpp:685
+#: ../../../src/Avatar.cpp:425
+msgid "You may unlock one or more abilities through the Powers Menu."
+msgstr ""
+
+#: ../../../src/Avatar.cpp:688
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
 msgstr ""
 
-#: ../../../src/Avatar.cpp:691
+#: ../../../src/Avatar.cpp:694
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
 msgstr ""
 
-#: ../../../src/Avatar.cpp:941
+#: ../../../src/Avatar.cpp:944
 msgid "Transformation expired. You have been moved back to a safe place."
 msgstr ""
 
