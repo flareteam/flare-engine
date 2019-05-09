@@ -37,6 +37,8 @@ Game updates:
 
 * Fixed an oversight that allowed easy farming of the Torture Chambers boss and loot chests.
 * Made it so that potions and scrolls can not be stashed. This fixes an exploit where players could utilize a low level character to get these items for cheap.
+* Added new attack and interact cursors.
+* Added sound effect and cursors for indicating low health.
 
 Translation updates:
 
