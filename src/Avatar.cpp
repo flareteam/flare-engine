@@ -421,6 +421,9 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 			ss << " " << msg->get("You may increase one or more attributes through the Character Menu.");
 			newLevelNotification = true;
 		}
+		if (pc->stats.power_points_per_level > 0) {
+			ss << " " << msg->get("You may unlock one or more abilities through the Powers Menu.");
+		}
 		logMsg(ss.str(), MSG_NORMAL);
 		stats.recalc();
 		snd->play(sound_levelup, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
