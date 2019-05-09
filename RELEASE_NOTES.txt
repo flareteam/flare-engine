@@ -32,6 +32,7 @@ Engine fixes:
 * Fix navigation of dialog menu when using no mouse.
 * Fix upgrading powers when using no mouse.
 * When using the sdl_hardware renderer on Windows, OpenGL will now be used instead of Direct3D. This fixes the loss of some textures when resizing the window.
+* Fixed the "level up" string to represent the ability to allocate multiple stat points.
 
 Game updates:
 

@@ -417,8 +417,8 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 		stats.level++;
 		std::stringstream ss;
 		ss << msg->get("Congratulations, you have reached level %d!", stats.level);
-		if (stats.level < stats.max_spendable_stat_points) {
-			ss << " " << msg->get("You may increase one attribute through the Character Menu.");
+		if (pc->stats.stat_points_per_level > 0) {
+			ss << " " << msg->get("You may increase one or more attributes through the Character Menu.");
 			newLevelNotification = true;
 		}
 		logMsg(ss.str(), MSG_NORMAL);
