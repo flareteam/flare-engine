@@ -103,13 +103,13 @@ void WidgetScrollBox::scrollTo(int amount) {
 }
 
 void WidgetScrollBox::scrollDown() {
-	int contents_height = (contents ? contents->getGraphicsHeight() : 0);
-	scroll((contents_height * 5) / 100);
+	int amount = pos.h / 4;
+	scroll(amount);
 }
 
 void WidgetScrollBox::scrollUp() {
-	int contents_height = (contents ? contents->getGraphicsHeight() : 0);
-	scroll(-((contents_height * 5) / 100));
+	int amount = pos.h / 4;
+	scroll(-amount);
 }
 
 void WidgetScrollBox::scrollToTop() {
