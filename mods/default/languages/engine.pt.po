@@ -24,7 +24,7 @@ msgstr ""
 
 #: ../../../src/Avatar.cpp:387
 msgid "Your health is low!"
-msgstr ""
+msgstr "Tens pouca vida!"
 
 #: ../../../src/Avatar.cpp:419
 #, c-format
@@ -33,11 +33,11 @@ msgstr "Parabéns, alcançaste o nível %d!"
 
 #: ../../../src/Avatar.cpp:421
 msgid "You may increase one or more attributes through the Character Menu."
-msgstr ""
+msgstr "Podes aumentar um ou mais atributos através do menu Personagem."
 
 #: ../../../src/Avatar.cpp:425
 msgid "You may unlock one or more abilities through the Powers Menu."
-msgstr ""
+msgstr "Podes desbloquear uma ou mais habilidades através do menu Poderes."
 
 #: ../../../src/Avatar.cpp:688
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
@@ -649,56 +649,60 @@ msgid ""
 "Controls the type of warning to be activated when the player is below the "
 "low health threshold."
 msgstr ""
+"Controla o tipo de aviso a ser ativado quando o jogador tem a vida abaixo do"
+" limiar."
 
 #: ../../../src/MenuConfig.cpp:297
 msgid "- Display a message"
-msgstr ""
+msgstr "- Mostrar uma mensagem"
 
 #: ../../../src/MenuConfig.cpp:298
 msgid "- Play a sound"
-msgstr ""
+msgstr "- Reproduzir um som"
 
 #: ../../../src/MenuConfig.cpp:299
 msgid "- Change the cursor"
-msgstr ""
+msgstr "- Alterar o cursor"
 
 #: ../../../src/MenuConfig.cpp:301
 msgid "Disabled"
-msgstr ""
+msgstr "Desativado"
 
 #: ../../../src/MenuConfig.cpp:302
 msgid "All"
-msgstr ""
+msgstr "Tudo"
 
 #: ../../../src/MenuConfig.cpp:303
 msgid "Message & Cursor"
-msgstr ""
+msgstr "Mensagem e cursor"
 
 #: ../../../src/MenuConfig.cpp:304
 msgid "Message & Sound"
-msgstr ""
+msgstr "Mensagem e som"
 
 #: ../../../src/MenuConfig.cpp:305
 msgid "Sound & Cursor"
-msgstr ""
+msgstr "Som e cursor"
 
 #: ../../../src/MenuConfig.cpp:306
 msgid "Message"
-msgstr ""
+msgstr "Mensagem"
 
 #: ../../../src/MenuConfig.cpp:307
 msgid "Cursor"
-msgstr ""
+msgstr "Cursor"
 
 #: ../../../src/MenuConfig.cpp:308
 msgid "Sound"
-msgstr ""
+msgstr "Som"
 
 #: ../../../src/MenuConfig.cpp:314
 msgid ""
 "When the player's health drops below the given threshold, the low health "
 "notifications are triggered if one or more of them is enabled."
 msgstr ""
+"Quando a vida do jogador desce abaixo do limiar definido, são ativadas as "
+"notificações de pouca vida se uma ou mais notificações estiverem ativadas."
 
 #: ../../../src/MenuConfig.cpp:327 ../../../src/MenuConfig.cpp:1561
 msgid "Exit"
@@ -834,11 +838,11 @@ msgstr "Mostrar marcadores de entidades ocultas"
 
 #: ../../../src/MenuConfig.cpp:375
 msgid "Low health notification"
-msgstr ""
+msgstr "Notificação de pouca vida"
 
 #: ../../../src/MenuConfig.cpp:376
 msgid "Low health threshold"
-msgstr ""
+msgstr "Limiar de pouca vida"
 
 #: ../../../src/MenuConfig.cpp:379
 msgid "Joystick"

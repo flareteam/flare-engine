@@ -24,7 +24,7 @@ msgstr ""
 
 #: ../../../src/Avatar.cpp:387
 msgid "Your health is low!"
-msgstr ""
+msgstr "ヘルスが低いです!"
 
 #: ../../../src/Avatar.cpp:419
 #, c-format
@@ -33,11 +33,11 @@ msgstr "おめでとう、 レベル %d に達している!"
 
 #: ../../../src/Avatar.cpp:421
 msgid "You may increase one or more attributes through the Character Menu."
-msgstr ""
+msgstr "メニューのキャラクターを通して属性を上げることができます。"
 
 #: ../../../src/Avatar.cpp:425
 msgid "You may unlock one or more abilities through the Powers Menu."
-msgstr ""
+msgstr "メニューのパワーを通してアビリティー解放ができます。"
 
 #: ../../../src/Avatar.cpp:688
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
@@ -484,7 +484,7 @@ msgstr "%d アイテム:"
 #: ../../../src/ItemManager.cpp:928 ../../../src/ItemManager.cpp:934
 #, c-format
 msgid "Press [%s] to use"
-msgstr ""
+msgstr "使用は[%s]"
 
 #: ../../../src/ItemManager.cpp:932
 #, c-format

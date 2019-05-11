@@ -33,11 +33,13 @@ msgstr "Meal do naidheachd, ràinig thu leibheil %d!"
 
 #: ../../../src/Avatar.cpp:421
 msgid "You may increase one or more attributes through the Character Menu."
-msgstr ""
+msgstr "Faodaidh tu buadh no dhà àrdachadh air clàr-taice a’ phearsa."
 
 #: ../../../src/Avatar.cpp:425
 msgid "You may unlock one or more abilities through the Powers Menu."
 msgstr ""
+"Faodaidh tu a’ ghlas a thoirt far comas no dhà air clàr-taice nan "
+"cumhachdan."
 
 #: ../../../src/Avatar.cpp:688
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
