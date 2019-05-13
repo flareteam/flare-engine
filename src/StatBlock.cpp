@@ -925,10 +925,7 @@ bool StatBlock::canUsePower(int powerid, bool allow_passive) const {
 			&& !power.meta_power
 			&& (!effects.stun || (allow_passive && power.passive))
 			&& (power.sacrifice || hp > power.requires_hp)
-			&& (power.requires_max_hp == -1 || (power.requires_max_hp >= 0 && hp >= (current[Stats::HP_MAX] * power.requires_max_hp) / 100))
-			&& (power.requires_not_max_hp == -1 || (power.requires_not_max_hp >= 0 && hp < (current[Stats::HP_MAX] * power.requires_not_max_hp) / 100))
-			&& (power.requires_max_mp  == -1 || (power.requires_max_mp >= 0 && mp >= (current[Stats::MP_MAX] * power.requires_max_mp) / 100))
-			&& (power.requires_not_max_mp == -1 || (power.requires_not_max_mp >= 0 && mp < (current[Stats::MP_MAX]) * power.requires_not_max_mp / 100))
+			&& powers->checkRequiredMaxHPMP(power, this)
 			&& (!power.requires_corpse || (target_corpse && !target_corpse->corpse_timer.isEnd()) || (target_nearest_corpse && powers->checkNearestTargeting(power, this, true) && !target_nearest_corpse->corpse_timer.isEnd()))
 			&& (checkRequiredSpawns(power.requires_spawns))
 			&& (menu_powers && menu_powers->meetsUsageStats(powerid))

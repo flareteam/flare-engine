@@ -1627,7 +1627,7 @@ body {
 
 <p><strong>power.cooldown</strong> | <code>duration</code> | Specify the duration for cooldown of the power in &lsquo;ms&rsquo; or &rsquo;s'.</p>
 
-<p><strong>power.requires_hpmp_state</strong> | <code>["hp", "mp"], ["percent", "not_percent", "ignore"], int : Stat, Current state, Percentage value</code> | Power can only be used when HP/MP matches the specified state</p>
+<p><strong>power.requires_hpmp_state</strong> | <code>["all", "any"], ["percent", "not_percent", "ignore"], int , ["percent", "not_percent", "ignore"], int : Mode, HP state, HP Percentage value, MP state, MP Percentage value</code> | Power can only be used when HP/MP matches the specified state. In &lsquo;all&rsquo; mode, both HP and MP must meet the requirements, where as only one must in &lsquo;any&rsquo; mode. To check a single stat, use &lsquo;all&rsquo; mode and set the &lsquo;ignore&rsquo; state for the other stat.</p>
 
 <p><strong>power.animation</strong> | <code>filename</code> | The filename of the power animation.</p>
 

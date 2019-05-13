@@ -84,10 +84,7 @@ Power::Power()
 	, requires_targeting(false)
 	, requires_spawns(0)
 	, cooldown(0)
-	, requires_max_hp(-1)
-	, requires_max_mp(-1)
-	, requires_not_max_hp(-1)
-	, requires_not_max_mp(-1)
+	, requires_max_hpmp()
 	, animation_name("")
 	, sfx_index(-1)
 	, sfx_hit(0)
@@ -433,39 +430,72 @@ void PowerManager::loadPowers() {
 			// @ATTR power.cooldown|duration|Specify the duration for cooldown of the power in 'ms' or 's'.
 			powers[input_id].cooldown = Parse::toDuration(infile.val);
 		else if (infile.key == "requires_hpmp_state") {
-			// @ATTR power.requires_hpmp_state|["hp", "mp"], ["percent", "not_percent", "ignore"], int : Stat, Current state, Percentage value|Power can only be used when HP/MP matches the specified state
-			std::string stat = Parse::popFirstString(infile.val);
-			std::string cur_state = Parse::popFirstString(infile.val);
-			int percent = Parse::popFirstInt(infile.val);
+			// @ATTR power.requires_hpmp_state|["all", "any"], ["percent", "not_percent", "ignore"], int , ["percent", "not_percent", "ignore"], int: Mode, HP state, HP Percentage value, MP state, MP Percentage value|Power can only be used when HP/MP matches the specified state. In 'all' mode, both HP and MP must meet the requirements, where as only one must in 'any' mode. To check a single stat, use 'all' mode and set the 'ignore' state for the other stat.
 
-			bool is_req = false;
-			bool invert = false;
-			if (cur_state == "percent") {
-				is_req = true;
-				invert = false;
+			std::string mode = Parse::popFirstString(infile.val);
+			std::string state_hp = Parse::popFirstString(infile.val);
+			std::string state_hp_val = Parse::popFirstString(infile.val);
+			std::string state_mp = Parse::popFirstString(infile.val);
+			std::string state_mp_val = Parse::popFirstString(infile.val);
+
+			powers[input_id].requires_max_hpmp.hp = state_hp_val.empty() ? -1 : Parse::toInt(state_hp_val);
+			powers[input_id].requires_max_hpmp.mp = state_mp_val.empty() ? -1 : Parse::toInt(state_mp_val);
+
+			if (state_hp == "percent") {
+				powers[input_id].requires_max_hpmp.hp_state = Power::HPMPSTATE_PERCENT;
 			}
-			else if (cur_state == "not_percent") {
-				is_req = true;
-				invert = true;
+			else if (state_hp == "not_percent") {
+				powers[input_id].requires_max_hpmp.hp_state = Power::HPMPSTATE_NOT_PERCENT;
 			}
-			else if (cur_state == "ignore") {
-				is_req = false;
+			else if (state_hp == "ignore" || state_hp.empty()) {
+				powers[input_id].requires_max_hpmp.hp_state = Power::HPMPSTATE_IGNORE;
+				powers[input_id].requires_max_hpmp.hp = -1;
 			}
 			else {
-				is_req = false;
-				infile.error("PowerManager: '%s' is not a valid hp/mp state. Use 'percent', 'not_percent', or 'ignore'.", cur_state.c_str());
+				infile.error("PowerManager: '%s' is not a valid hp/mp state. Use 'percent', 'not_percent', or 'ignore'.", state_hp.c_str());
 			}
 
-			if (stat == "hp") {
-				powers[input_id].requires_max_hp = (is_req && !invert) ? percent : -1;
-				powers[input_id].requires_not_max_hp = (is_req && invert) ? percent : -1;
+			if (state_mp == "percent") {
+				powers[input_id].requires_max_hpmp.mp_state = Power::HPMPSTATE_PERCENT;
 			}
-			else if (stat == "mp") {
-				powers[input_id].requires_max_mp = (is_req && !invert) ? percent : -1;
-				powers[input_id].requires_not_max_mp = (is_req && invert) ? percent : -1;
+			else if (state_mp == "not_percent") {
+				powers[input_id].requires_max_hpmp.mp_state = Power::HPMPSTATE_NOT_PERCENT;
+			}
+			else if (state_mp == "ignore" || state_mp.empty()) {
+				powers[input_id].requires_max_hpmp.mp_state = Power::HPMPSTATE_IGNORE;
+				powers[input_id].requires_max_hpmp.mp = -1;
 			}
 			else {
-				infile.error("PowerManager: Please specify 'hp' or 'mp'.");
+				infile.error("PowerManager: '%s' is not a valid hp/mp state. Use 'percent', 'not_percent', or 'ignore'.", state_mp.c_str());
+			}
+
+			if (mode == "any") {
+				powers[input_id].requires_max_hpmp.mode = Power::HPMPSTATE_ANY;
+			}
+			else if (mode == "all") {
+				powers[input_id].requires_max_hpmp.mode = Power::HPMPSTATE_ALL;
+			}
+			else if (mode == "hp") {
+				// TODO deprecated
+				infile.error("PowerManager: 'hp' has been deprecated. Use 'all' or 'any'.");
+
+				powers[input_id].requires_max_hpmp.mode = Power::HPMPSTATE_ALL;
+				powers[input_id].requires_max_hpmp.mp_state = Power::HPMPSTATE_IGNORE;
+				powers[input_id].requires_max_hpmp.mp = -1;
+			}
+			else if (mode == "mp") {
+				// TODO deprecated
+				infile.error("PowerManager: 'mp' has been deprecated. Use 'any' or 'all'.");
+
+				// use the HP values for MP, then ignore the HP stat
+				powers[input_id].requires_max_hpmp.mode = Power::HPMPSTATE_ALL;
+				powers[input_id].requires_max_hpmp.mp_state = powers[input_id].requires_max_hpmp.hp_state;
+				powers[input_id].requires_max_hpmp.mp = powers[input_id].requires_max_hpmp.hp;
+				powers[input_id].requires_max_hpmp.hp_state = Power::HPMPSTATE_IGNORE;
+				powers[input_id].requires_max_hpmp.hp = -1;
+			}
+			else {
+				infile.error("PowerManager: Please specify 'any' or 'all'.");
 			}
 		}
 		// animation info
@@ -1718,6 +1748,28 @@ bool PowerManager::checkRequiredItems(const Power &pow, const StatBlock *src_sta
 	}
 
 	return true;
+}
+
+bool PowerManager::checkRequiredMaxHPMP(const Power &pow, const StatBlock *src_stats) {
+	bool hp_ok = true;
+	bool mp_ok = true;
+
+	if (pow.requires_max_hpmp.hp_state == Power::HPMPSTATE_PERCENT && src_stats->hp < (src_stats->get(Stats::HP_MAX) * pow.requires_max_hpmp.hp) / 100)
+		hp_ok = false;
+	else if (pow.requires_max_hpmp.hp_state == Power::HPMPSTATE_NOT_PERCENT && src_stats->hp >= (src_stats->get(Stats::HP_MAX) * pow.requires_max_hpmp.hp) / 100)
+		hp_ok = false;
+
+	if (pow.requires_max_hpmp.mp_state == Power::HPMPSTATE_PERCENT && src_stats->mp < (src_stats->get(Stats::MP_MAX) * pow.requires_max_hpmp.mp) / 100)
+		mp_ok = false;
+	else if (pow.requires_max_hpmp.mp_state == Power::HPMPSTATE_NOT_PERCENT && src_stats->mp >= (src_stats->get(Stats::MP_MAX) * pow.requires_max_hpmp.mp) / 100)
+		mp_ok = false;
+
+	if (pow.requires_max_hpmp.mode == Power::HPMPSTATE_ALL)
+		return hp_ok && mp_ok;
+	else if (pow.requires_max_hpmp.mode == Power::HPMPSTATE_ANY)
+		return hp_ok || mp_ok;
+	else
+		return true;
 }
 
 void PowerManager::setCombatRange(size_t power_index) {

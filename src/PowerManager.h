@@ -77,6 +77,32 @@ public:
 class Power {
 public:
 	enum {
+		HPMPSTATE_ANY = 0,
+		HPMPSTATE_ALL = 1
+	};
+	enum {
+		HPMPSTATE_IGNORE = 0,
+		HPMPSTATE_PERCENT = 1,
+		HPMPSTATE_NOT_PERCENT = 2
+	};
+	class HPMPState {
+	public:
+		int mode;
+		int hp_state;
+		int mp_state;
+		int hp;
+		int mp;
+		HPMPState()
+			: mode(HPMPSTATE_ANY)
+			, hp_state(HPMPSTATE_IGNORE)
+			, mp_state(HPMPSTATE_IGNORE)
+			, hp(-1)
+			, mp(-1)
+		{}
+		~HPMPState() {}
+	};
+
+	enum {
 		TYPE_FIXED = 0,
 		TYPE_MISSILE = 1,
 		TYPE_REPEATER = 2,
@@ -169,10 +195,7 @@ public:
 	bool requires_targeting; // power only makes sense when using click-to-target
 	int requires_spawns;
 	int cooldown; // milliseconds before you can use the power again
-	int requires_max_hp;
-	int requires_max_mp;
-	int requires_not_max_hp;
-	int requires_not_max_mp;
+	HPMPState requires_max_hpmp;
 
 	// animation info
 	std::string animation_name;
@@ -342,6 +365,7 @@ public:
 	int verifyID(int power_id, FileParser* infile, bool allow_zero);
 	bool checkNearestTargeting(const Power &pow, const StatBlock *src_stats, bool check_corpses);
 	bool checkRequiredItems(const Power &pow, const StatBlock *src_stats);
+	bool checkRequiredMaxHPMP(const Power &pow, const StatBlock *src_stats);
 	bool checkCombatRange(int power_index, StatBlock *src_stats, FPoint target);
 
 	EffectDef* getEffectDef(const std::string& id);

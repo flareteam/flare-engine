@@ -168,13 +168,13 @@ public:
 	std::vector<int> per_level; // value increases each level after level 1
 	std::vector< std::vector<int> > per_primary;
 
-	int get(Stats::STAT stat) {
+	int get(Stats::STAT stat) const {
 		return current[stat];
 	}
-	int getDamageMin(size_t dmg_type) {
+	int getDamageMin(size_t dmg_type) const {
 		return current[Stats::COUNT + (dmg_type * 2)];
 	}
-	int getDamageMax(size_t dmg_type) {
+	int getDamageMax(size_t dmg_type) const {
 		return current[Stats::COUNT + (dmg_type * 2) + 1];
 	}
 
