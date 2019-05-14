@@ -201,7 +201,7 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		e->s = msg->get(val);
 	}
 	else if (key == "power_path") {
-		// @ATTR event.power_path|["hero", point]|Event power path
+		// @ATTR event.power_path|int, int, ["hero", point] : Source X, Source Y, Destination|Path that an event power will take.
 		e->type = EventComponent::POWER_PATH;
 
 		// x,y are src, if s=="hero" we target the hero,
