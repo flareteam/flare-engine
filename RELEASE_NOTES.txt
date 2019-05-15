@@ -35,6 +35,7 @@ Engine fixes:
 * Fixed the "level up" string to represent the ability to allocate multiple stat points. Also note if Power points can be allocated.
 * Refactored 'requires_hpmp_state' for Powers to check against both stats at once. See the attribute reference for syntax changes.
 * Greatly improved performance of loot tooltips.
+* Fix bug where high item find chance prevented the player from finding currency.
 
 Game updates:
 

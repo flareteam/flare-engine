@@ -302,7 +302,7 @@ void LootManager::checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos
 
 		float real_chance = ec->f;
 
-		if (ec->c != 0 && ec->c != eset->misc.currency_id) {
+		if (ec->c != 0) {
 			real_chance = ec->f * static_cast<float>(pc->stats.get(Stats::ITEM_FIND) + 100) / 100.f;
 		}
 
