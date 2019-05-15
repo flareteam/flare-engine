@@ -22,10 +22,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "AnimationSet.h"
 #include "Loot.h"
 #include "SharedResources.h"
+#include "WidgetTooltip.h"
 
 Loot::Loot()
 	: gfx("")
 	, animation(NULL)
+	, wtip(new WidgetTooltip())
 	, tip_visible(false)
 	, dropped_by_hero(false)
 	, on_ground(false)
@@ -36,6 +38,7 @@ Loot::Loot()
 Loot::Loot(const Loot &other)
 	: gfx("")
 	, animation(NULL)
+	, wtip(new WidgetTooltip())
 {
 	*this = other;
 }
@@ -60,7 +63,7 @@ Loot& Loot::operator= (const Loot &other) {
 	pos.x = other.pos.x;
 	pos.y = other.pos.y;
 	tip = other.tip;
-	tip_bounds = other.tip_bounds;
+	wtip = new WidgetTooltip();
 	tip_visible = other.tip_visible;
 	dropped_by_hero = other.dropped_by_hero;
 	on_ground = other.on_ground;
@@ -89,5 +92,6 @@ Loot::~Loot() {
 	if (gfx != "")
 		anim->decreaseCount(gfx);
 	delete animation;
+	delete wtip;
 }
 

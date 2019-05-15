@@ -53,8 +53,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <math.h>
 
 LootManager::LootManager()
-	: tip(new WidgetTooltip())
-	, sfx_loot(snd->load(eset->loot.sfx_loot, "LootManager dropping loot"))
+	: sfx_loot(snd->load(eset->loot.sfx_loot, "LootManager dropping loot"))
 {
 	loadGraphics();
 	loadLootTables();
@@ -91,7 +90,7 @@ void LootManager::logic() {
 		// animate flying loot
 		if (it->animation) {
 			it->animation->advanceFrame();
-			if (it->animation->isSecondLastFrame()) {
+			if (!it->on_ground && it->animation->isSecondLastFrame()) {
 				it->on_ground = true;
 			}
 		}
@@ -123,6 +122,7 @@ void LootManager::renderTooltips(const FPoint& cam) {
 
 	Point dest;
 	bool tooltip_below = true;
+	Rect screen_rect(0, 0, settings->view_w, settings->view_h);
 
 	std::vector<Loot>::iterator it;
 	for (it = loot.begin(); it != loot.end(); ) {
@@ -130,6 +130,11 @@ void LootManager::renderTooltips(const FPoint& cam) {
 
 		if (it->on_ground) {
 			Point p = Utils::mapToScreen(it->pos.x, it->pos.y, cam.x, cam.y);
+			if (!Utils::isWithinRect(screen_rect, p)) {
+				++it;
+				continue;
+			}
+
 			dest.x = p.x;
 			dest.y = p.y + eset->tileset.tile_h_half;
 
@@ -178,23 +183,22 @@ void LootManager::renderTooltips(const FPoint& cam) {
 				}
 
 				// try to prevent tooltips from overlapping
-				tip->prerender(it->tip, dest, TooltipData::STYLE_TOPLABEL);
+				it->wtip->prerender(it->tip, dest, TooltipData::STYLE_TOPLABEL);
 				std::vector<Loot>::iterator test_it;
 				for (test_it = loot.begin(); test_it != it; ) {
-					if (test_it->tip_visible && Utils::rectsOverlap(test_it->tip_bounds, tip->bounds)) {
+					if (test_it->tip_visible && Utils::rectsOverlap(test_it->wtip->bounds, it->wtip->bounds)) {
 						if (tooltip_below)
-							dest.y = test_it->tip_bounds.y + test_it->tip_bounds.h + eset->tooltips.offset;
+							dest.y = test_it->wtip->bounds.y + test_it->wtip->bounds.h + eset->tooltips.offset;
 						else
-							dest.y = test_it->tip_bounds.y - test_it->tip_bounds.h + eset->tooltips.offset;
+							dest.y = test_it->wtip->bounds.y - test_it->wtip->bounds.h + eset->tooltips.offset;
 
-						tip->bounds.y = dest.y;
+						it->wtip->bounds.y = dest.y;
 					}
 
 					++test_it;
 				}
 
-				tip->render(it->tip, dest, TooltipData::STYLE_TOPLABEL);
-				it->tip_bounds = tip->bounds;
+				it->wtip->render(it->tip, dest, TooltipData::STYLE_TOPLABEL);
 
 				if (settings->loot_tooltips == Settings::LOOT_TIPS_HIDE_ALL && !inpt->pressing[Input::ALT])
 					break;
@@ -338,6 +342,18 @@ void LootManager::addLoot(ItemStack stack, const FPoint& pos, bool dropped_by_he
 	ld.pos.align(); // prevent "rounding jitter"
 	ld.dropped_by_hero = dropped_by_hero;
 
+	// merge stacks that have the same item id and position
+	std::vector<Loot>::iterator it;
+	for (it = loot.end(); it != loot.begin(); ) {
+		--it;
+		if (it->stack.item == ld.stack.item && it->pos.x == ld.pos.x && it->pos.y == ld.pos.y) {
+			it->stack.quantity += ld.stack.quantity;
+			it->tip.clear();
+			snd->play(sfx_loot, snd->DEFAULT_CHANNEL, pos, false);
+			return;
+		}
+	}
+
 	if (!items->items[stack.item].loot_animation.empty()) {
 		size_t index = items->items[stack.item].loot_animation.size()-1;
 
@@ -387,7 +403,7 @@ ItemStack LootManager::checkPickup(const Point& mouse, const FPoint& cam, const 
 				r.w = eset->tileset.tile_w;
 				r.h = eset->tileset.tile_h;
 
-				if (it_tip == loot.end() && it->tip_visible && Utils::isWithinRect(it->tip_bounds, mouse)) {
+				if (it_tip == loot.end() && it->tip_visible && Utils::isWithinRect(it->wtip->bounds, mouse)) {
 					// clicked on a tooltip
 					curs->setCursor(CursorManager::CURSOR_INTERACT);
 					if (inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1] && !it->stack.empty()) {
@@ -706,6 +722,4 @@ LootManager::~LootManager() {
 	anim->cleanUp();
 
 	snd->unload(sfx_loot);
-
-	delete tip;
 }

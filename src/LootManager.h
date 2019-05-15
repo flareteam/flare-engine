@@ -36,13 +36,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class Animation;
 
 class EnemyManager;
-class WidgetTooltip;
 
 class LootManager {
 private:
-
-	WidgetTooltip *tip;
-
 	// functions
 	void loadGraphics();
 	void checkEnemiesForLoot();
