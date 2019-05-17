@@ -34,11 +34,11 @@ msgstr "Вітаємо, Ви перейшли на рівень %d!"
 
 #: ../../../src/Avatar.cpp:421
 msgid "You may increase one or more attributes through the Character Menu."
-msgstr ""
+msgstr "Ви можете покращити одну чи кілька характеристик в Меню Персонажа."
 
 #: ../../../src/Avatar.cpp:425
 msgid "You may unlock one or more abilities through the Powers Menu."
-msgstr ""
+msgstr "Ви можете розблокувати одне чи кілька умінь в Меню Умінь."
 
 #: ../../../src/Avatar.cpp:688
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
@@ -703,7 +703,7 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:327 ../../../src/MenuConfig.cpp:1561
 msgid "Exit"
-msgstr "Вийти"
+msgstr "Вихід"
 
 #: ../../../src/MenuConfig.cpp:328
 msgid "Video"
@@ -731,7 +731,7 @@ msgstr "Моди"
 
 #: ../../../src/MenuConfig.cpp:345
 msgid "Paused"
-msgstr "Призупинено"
+msgstr "Гру призупинено"
 
 #: ../../../src/MenuConfig.cpp:347
 msgid "Time Played"
