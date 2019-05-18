@@ -1,4 +1,12 @@
-Flare v1.10 (WIP)
+Flare v1.11 (WIP)
+
+Engine fixes:
+
+* Fix bug where items could be dragged from the vendor window and dropped in the opposite vendor tab.
+
+
+
+Flare v1.10 (http://flarerpg.org/index.php/2019/05/17/flare-1-10/)
 
 Engine features:
 

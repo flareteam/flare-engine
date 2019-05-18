@@ -47,6 +47,7 @@ private:
 	int slots_cols;
 	int slots_rows;
 	int activetab;
+	int drag_prev_tab;
 
 	WidgetTooltip* tip;
 
