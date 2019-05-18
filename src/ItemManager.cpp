@@ -78,7 +78,7 @@ Item::Item()
 	, price(0)
 	, price_per_level(0)
 	, price_sell(0)
-	, max_quantity(-1)
+	, max_quantity(INT_MAX)
 	, pickup_status("")
 	, stepfx("")
 	, quest_item(false)
@@ -157,7 +157,7 @@ void ItemManager::loadItems(const std::string& filename) {
 			addUnknownItem(id);
 
 			// set the max quantity if it has not been done yet
-			if (items[id].max_quantity == -1)
+			if (items[id].max_quantity == INT_MAX)
 				items[id].max_quantity = 1;
 
 			clear_req_stat = true;
