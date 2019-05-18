@@ -3,6 +3,7 @@ Flare v1.11 (WIP)
 Engine fixes:
 
 * Fix bug where items could be dragged from the vendor window and dropped in the opposite vendor tab.
+* Fix bug that caused item max_quantity to be reset when attempting to append an item definition.
 
 
 
