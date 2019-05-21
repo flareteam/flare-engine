@@ -1,5 +1,9 @@
 Flare v1.11 (WIP)
 
+Engine features:
+
+* Players now have their own private stash in addition to the shared stash.
+
 Engine fixes:
 
 * Fix bug where items could be dragged from the vendor window and dropped in the opposite vendor tab.

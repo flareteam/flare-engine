@@ -30,16 +30,26 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class NPC;
 class StatBlock;
 class WidgetButton;
+class WidgetTabControl;
 
 class MenuStash : public Menu {
 private:
 	WidgetButton *closeButton;
+	WidgetTabControl *tab_control;
 	WidgetLabel label_title;
 	WidgetLabel label_currency;
+
+	int activetab;
+	int drag_prev_tab;
 
 public:
 	static const int NO_SLOT = -1;
 	static const bool ADD_PLAY_SOUND = true;
+
+	enum {
+		STASH_PRIVATE = 0,
+		STASH_SHARED = 1
+	};
 
 	explicit MenuStash();
 	~MenuStash();
@@ -55,12 +65,24 @@ public:
 	void validate(std::queue<ItemStack>& global_drop_stack);
 
 	void removeFromPrevSlot(int quantity);
+	void enableSharedTab(bool permadeath);
+
+	void setTab(int tab);
+	int getTab() { return activetab; }
+
+	void lockTabControl();
+	void unlockTabControl();
+	TabList* getCurrentTabList();
+	void defocusTabLists();
 
 	Rect slots_area;
-	MenuItemStorage stock;
+	MenuItemStorage stock[2];
 	bool updated;
 
 	std::queue<ItemStack> drop_stack;
+
+	TabList tablist_private;
+	TabList tablist_shared;
 };
 
 

@@ -39,13 +39,21 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
 #include "WidgetSlot.h"
+#include "WidgetTabControl.h"
 
 MenuStash::MenuStash()
 	: Menu()
 	, closeButton(new WidgetButton("images/menus/buttons/button_x.png"))
+	, tab_control(new WidgetTabControl())
+	, activetab(STASH_PRIVATE)
+	, drag_prev_tab(-1)
 	, stock()
 	, updated(false)
 {
+
+	tab_control->setTabTitle(STASH_PRIVATE, msg->get("Private"));
+	if (!pc->stats.permadeath)
+		tab_control->setTabTitle(STASH_SHARED, msg->get("Shared"));
 
 	setBackground("images/menus/stash.png");
 
@@ -93,7 +101,7 @@ MenuStash::MenuStash()
 		infile.close();
 	}
 
-	label_title.setText(msg->get("Shared Stash"));
+	label_title.setText(msg->get("Stash"));
 	label_title.setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
 	label_currency.setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
@@ -102,9 +110,19 @@ MenuStash::MenuStash()
 	slots_area.w = slots_cols * eset->resolutions.icon_size;
 	slots_area.h = slots_rows * eset->resolutions.icon_size;
 
-	stock.initGrid(stash_slots, slots_area, slots_cols);
+	stock[STASH_PRIVATE].initGrid(stash_slots, slots_area, slots_cols);
+	stock[STASH_SHARED].initGrid(stash_slots, slots_area, slots_cols);
+
+	tablist.add(tab_control);
+	tablist_private.setPrevTabList(&tablist);
+	tablist_shared.setPrevTabList(&tablist);
+
+	tablist_private.lock();
+	tablist_shared.lock();
+
 	for (int i = 0; i < stash_slots; i++) {
-		tablist.add(stock.slots[i]);
+		tablist_private.add(stock[STASH_PRIVATE].slots[i]);
+		tablist_shared.add(stock[STASH_SHARED].slots[i]);
 	}
 
 	align();
@@ -113,8 +131,15 @@ MenuStash::MenuStash()
 void MenuStash::align() {
 	Menu::align();
 
+	Rect tabs_area = slots_area;
+	tabs_area.x += window_area.x;
+	tabs_area.y += window_area.y;
+
+	tab_control->setMainArea(tabs_area.x, tabs_area.y - tab_control->getTabHeight());
+
 	closeButton->setPos(window_area.x, window_area.y);
-	stock.setPos(window_area.x, window_area.y);
+	stock[STASH_PRIVATE].setPos(window_area.x, window_area.y);
+	stock[STASH_SHARED].setPos(window_area.x, window_area.y);
 
 	label_title.setPos(window_area.x, window_area.y);
 	label_currency.setPos(window_area.x, window_area.y);
@@ -124,6 +149,30 @@ void MenuStash::logic() {
 	if (!visible) return;
 
 	tablist.logic();
+	tablist_private.logic();
+	tablist_shared.logic();
+
+	// disable tab control if we're dragging something from one of the stash stocks
+	if (stock[STASH_PRIVATE].drag_prev_slot == -1 && stock[STASH_SHARED].drag_prev_slot == -1)
+		tab_control->logic();
+
+	if (settings->touchscreen && activetab != tab_control->getActiveTab()) {
+		tablist_private.defocus();
+		tablist_shared.defocus();
+	}
+	activetab = tab_control->getActiveTab();
+
+	if (activetab == MenuStash::STASH_PRIVATE)
+		tablist.setNextTabList(&tablist_private);
+	else if (activetab == MenuStash::STASH_SHARED)
+		tablist.setNextTabList(&tablist_shared);
+
+	if (settings->touchscreen) {
+		if (activetab == MenuStash::STASH_PRIVATE && tablist_private.getCurrent() == -1)
+			stock[MenuStash::STASH_PRIVATE].current_slot = NULL;
+		else if (activetab == MenuStash::STASH_SHARED && tablist_shared.getCurrent() == -1)
+			stock[MenuStash::STASH_SHARED].current_slot = NULL;
+	}
 
 	if (closeButton->checkClick()) {
 		visible = false;
@@ -143,13 +192,14 @@ void MenuStash::render() {
 	// text overlay
 	label_title.render();
 	if (!label_currency.isHidden()) {
-		label_currency.setText(msg->get("%d %s", stock.count(eset->misc.currency_id), eset->loot.currency));
+		label_currency.setText(msg->get("%d %s", stock[activetab].count(eset->misc.currency_id), eset->loot.currency));
 		label_currency.render();
 	}
 
+	tab_control->render();
 
 	// show stock
-	stock.render();
+	stock[activetab].render();
 }
 
 /**
@@ -166,22 +216,22 @@ bool MenuStash::drop(const Point& position, ItemStack stack) {
 
 	items->playSound(stack.item);
 
-	slot = stock.slotOver(position);
-	drag_prev_slot = stock.drag_prev_slot;
+	slot = stock[activetab].slotOver(position);
+	drag_prev_slot = stock[activetab].drag_prev_slot;
 
 	if (slot == -1) {
 		success = add(stack, slot, !ADD_PLAY_SOUND);
 	}
 	else if (drag_prev_slot != -1) {
-		if (stock[slot].item == stack.item || stock[slot].empty()) {
+		if (stock[activetab][slot].item == stack.item || stock[activetab][slot].empty()) {
 			// Drop the stack, merging if needed
 			success = add(stack, slot, !ADD_PLAY_SOUND);
 		}
-		else if (drag_prev_slot != -1 && stock[drag_prev_slot].empty()) {
+		else if (drag_prev_slot != -1 && stock[activetab][drag_prev_slot].empty()) {
 			// Check if the previous slot is free (could still be used if SHIFT was used).
 			// Swap the two stacks
-			itemReturn(stock[slot]);
-			stock[slot] = stack;
+			itemReturn(stock[activetab][slot]);
+			stock[activetab][slot] = stack;
 			updated = true;
 		}
 		else {
@@ -216,7 +266,7 @@ bool MenuStash::add(ItemStack stack, int slot, bool play_sound) {
 		return false;
 	}
 
-	ItemStack leftover = stock.add(stack, slot);
+	ItemStack leftover = stock[activetab].add(stack, slot);
 	if (!leftover.empty()) {
 		if (leftover.quantity != stack.quantity) {
 			updated = true;
@@ -237,9 +287,12 @@ bool MenuStash::add(ItemStack stack, int slot, bool play_sound) {
  * Players can drag an item to their inventory.
  */
 ItemStack MenuStash::click(const Point& position) {
-	ItemStack stack = stock.click(position);
+	ItemStack stack = stock[activetab].click(position);
 	if (settings->touchscreen) {
-		tablist.setCurrent(stock.current_slot);
+		if (activetab == STASH_PRIVATE)
+			tablist_private.setCurrent(stock[activetab].current_slot);
+		else if (activetab == STASH_SHARED)
+			tablist_shared.setCurrent(stock[activetab].current_slot);
 	}
 	return stack;
 }
@@ -248,38 +301,81 @@ ItemStack MenuStash::click(const Point& position) {
  * Cancel the dragging initiated by the click()
  */
 void MenuStash::itemReturn(ItemStack stack) {
-	stock.itemReturn(stack);
+	stock[activetab].itemReturn(stack);
 }
 
 void MenuStash::renderTooltips(const Point& position) {
 	if (!visible || !Utils::isWithinRect(window_area, position))
 		return;
 
-	TooltipData tip_data = stock.checkTooltip(position, &pc->stats, ItemManager::PLAYER_INV);
+	TooltipData tip_data = stock[activetab].checkTooltip(position, &pc->stats, ItemManager::PLAYER_INV);
 	tooltipm->push(tip_data, position, TooltipData::STYLE_FLOAT);
 }
 
 void MenuStash::removeFromPrevSlot(int quantity) {
-	int drag_prev_slot = stock.drag_prev_slot;
+	int drag_prev_slot = stock[activetab].drag_prev_slot;
 	if (drag_prev_slot > -1) {
-		stock.subtract(drag_prev_slot, quantity);
+		stock[activetab].subtract(drag_prev_slot, quantity);
 	}
 }
 
 void MenuStash::validate(std::queue<ItemStack>& global_drop_stack) {
-	for (int i = 0; i < stock.getSlotNumber(); ++i) {
-		if (stock[i].empty())
+	for (int i = 0; i < stock[activetab].getSlotNumber(); ++i) {
+		if (stock[activetab][i].empty())
 			continue;
 
-		ItemStack stack = stock[i];
+		ItemStack stack = stock[activetab][i];
 		if (items->items[stack.item].quest_item || items->items[stack.item].no_stash) {
 			pc->logMsg(msg->get("Can not store item in stash: %s", items->getItemName(stack.item).c_str()), Avatar::MSG_NORMAL);
 			global_drop_stack.push(stack);
-			stock[i].clear();
+			stock[activetab][i].clear();
 			updated = true;
 		}
 	}
 
+}
+
+void MenuStash::enableSharedTab(bool permadeath) {
+	if (permadeath)
+		tab_control->setEnabled(STASH_SHARED, false);
+}
+
+void MenuStash::setTab(int tab) {
+	if (settings->touchscreen && activetab != tab) {
+		tablist_private.defocus();
+		tablist_shared.defocus();
+	}
+	tab_control->setActiveTab(tab);
+	activetab = tab;
+}
+
+void MenuStash::lockTabControl() {
+	tablist_private.setPrevTabList(NULL);
+	tablist_shared.setPrevTabList(NULL);
+}
+
+void MenuStash::unlockTabControl() {
+	tablist_private.setPrevTabList(&tablist);
+	tablist_shared.setPrevTabList(&tablist);
+}
+
+TabList* MenuStash::getCurrentTabList() {
+	if (tablist.getCurrent() != -1)
+		return (&tablist);
+	else if (tablist_private.getCurrent() != -1) {
+		return (&tablist_private);
+	}
+	else if (tablist_shared.getCurrent() != -1) {
+		return (&tablist_shared);
+	}
+
+	return NULL;
+}
+
+void MenuStash::defocusTabLists() {
+	tablist.defocus();
+	tablist_private.defocus();
+	tablist_shared.defocus();
 }
 
 MenuStash::~MenuStash() {

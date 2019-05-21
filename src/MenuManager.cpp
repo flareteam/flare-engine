@@ -188,7 +188,8 @@ void MenuManager::setDragIconItem(ItemStack stack) {
 
 void MenuManager::handleKeyboardNavigation() {
 
-	stash->tablist.setNextTabList(NULL);
+	stash->tablist_private.setNextTabList(NULL);
+	stash->tablist_shared.setNextTabList(NULL);
 	vendor->tablist_buy.setNextTabList(NULL);
 	vendor->tablist_sell.setNextTabList(NULL);
 	chr->tablist.setNextTabList(NULL);
@@ -213,7 +214,8 @@ void MenuManager::handleKeyboardNavigation() {
 
 	if (drag_src == DRAG_SRC_NONE) {
 		if (inv->visible) {
-			stash->tablist.setNextTabList(&inv->tablist);
+			stash->tablist_private.setNextTabList(&inv->tablist);
+			stash->tablist_shared.setNextTabList(&inv->tablist);
 			vendor->tablist_buy.setNextTabList(&inv->tablist);
 			vendor->tablist_sell.setNextTabList(&inv->tablist);
 			chr->tablist.setNextTabList(&inv->tablist);
@@ -233,7 +235,8 @@ void MenuManager::handleKeyboardNavigation() {
 			}
 		}
 		else if (pow->visible) {
-			stash->tablist.setNextTabList(&pow->tablist);
+			stash->tablist_private.setNextTabList(&pow->tablist);
+			stash->tablist_shared.setNextTabList(&pow->tablist);
 			vendor->tablist_buy.setNextTabList(&pow->tablist);
 			vendor->tablist_sell.setNextTabList(&pow->tablist);
 			chr->tablist.setNextTabList(&pow->tablist);
@@ -250,7 +253,11 @@ void MenuManager::handleKeyboardNavigation() {
 	}
 
 	// stash and vendor always start locked
-	if (!stash->visible) stash->tablist.lock();
+	if (!stash->visible) {
+		stash->tablist.lock();
+		stash->tablist_private.lock();
+		stash->tablist_shared.lock();
+	}
 	if (!vendor->visible) {
 		vendor->tablist.lock();
 		vendor->tablist_buy.lock();
@@ -821,7 +828,8 @@ void MenuManager::logic() {
 					}
 				}
 				else if (stash->visible && Utils::isWithinRect(stash->window_area, inpt->mouse)) {
-					stash->stock.drag_prev_slot = -1;
+					stash->stock[MenuStash::STASH_PRIVATE].drag_prev_slot = -1;
+					stash->stock[MenuStash::STASH_SHARED].drag_prev_slot = -1;
 					if (!stash->drop(inpt->mouse, drag_stack)) {
 						inv->itemReturn(stash->drop_stack.front());
 						stash->drop_stack.pop();
@@ -1034,8 +1042,9 @@ void MenuManager::dragAndDropWithKeyboard() {
 	// stash menu
 	if (stash->visible && stash->getCurrentTabList() && drag_src != DRAG_SRC_ACTIONBAR) {
 		int slot_index = stash->getCurrentTabList()->getCurrent();
-		WidgetSlot::CLICK_TYPE slotClick = stash->stock.slots[slot_index]->checkClick();
-		Point src_slot(stash->stock.slots[slot_index]->pos.x, stash->stock.slots[slot_index]->pos.y);
+		int tab = stash->getTab();
+		WidgetSlot::CLICK_TYPE slotClick = stash->stock[tab].slots[slot_index]->checkClick();
+		Point src_slot(stash->stock[tab].slots[slot_index]->pos.x, stash->stock[tab].slots[slot_index]->pos.y);
 
 		// pick up item
 		if (slotClick == WidgetSlot::CHECKED && drag_stack.empty()) {
@@ -1051,7 +1060,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 		}
 		// rearrange item
 		else if (slotClick == WidgetSlot::CHECKED && !drag_stack.empty()) {
-			stash->stock.slots[slot_index]->checked = false;
+			stash->stock[tab].slots[slot_index]->checked = false;
 			if (!stash->drop(src_slot, drag_stack)) {
 				drop_stack.push(stash->drop_stack.front());
 				stash->drop_stack.pop();
@@ -1179,7 +1188,8 @@ void MenuManager::resetDrag() {
 
 	vendor->stock[ItemManager::VENDOR_BUY].drag_prev_slot = -1;
 	vendor->stock[ItemManager::VENDOR_SELL].drag_prev_slot = -1;
-	stash->stock.drag_prev_slot = -1;
+	stash->stock[MenuStash::STASH_PRIVATE].drag_prev_slot = -1;
+	stash->stock[MenuStash::STASH_SHARED].drag_prev_slot = -1;
 	inv->drag_prev_src = -1;
 	inv->inventory[MenuInventory::EQUIPMENT].drag_prev_slot = -1;
 	inv->inventory[MenuInventory::CARRIED].drag_prev_slot = -1;
@@ -1309,9 +1319,10 @@ void MenuManager::handleKeyboardTooltips() {
 
 	if (stash->visible && stash->getCurrentTabList()) {
 		int slot_index = stash->getCurrentTabList()->getCurrent();
+		int tab = stash->getTab();
 
-		keydrag_pos.x = stash->stock.slots[slot_index]->pos.x;
-		keydrag_pos.y = stash->stock.slots[slot_index]->pos.y;
+		keydrag_pos.x = stash->stock[tab].slots[slot_index]->pos.x;
+		keydrag_pos.y = stash->stock[tab].slots[slot_index]->pos.y;
 
 		stash->renderTooltips(keydrag_pos);
 	}
