@@ -10,6 +10,10 @@ Engine fixes:
 * Fix bug where items could be dragged from the vendor window and dropped in the opposite vendor tab.
 * Fix bug that caused item max_quantity to be reset when attempting to append an item definition.
 
+Game updates:
+
+* Items that couldn't be stashed in the last update can now be put in the private stash.
+
 
 
 Flare v1.10 (http://flarerpg.org/index.php/2019/05/17/flare-1-10/)
