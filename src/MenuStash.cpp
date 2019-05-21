@@ -260,8 +260,18 @@ bool MenuStash::add(ItemStack stack, int slot, bool play_sound) {
 		drop_stack.push(stack);
 		return false;
 	}
-	else if (items->items[stack.item].no_stash) {
+	else if (items->items[stack.item].no_stash == Item::NO_STASH_ALL) {
 		pc->logMsg(msg->get("This item can not be stored in the stash."), Avatar::MSG_NORMAL);
+		drop_stack.push(stack);
+		return false;
+	}
+	else if (activetab == STASH_PRIVATE && items->items[stack.item].no_stash == Item::NO_STASH_PRIVATE) {
+		pc->logMsg(msg->get("This item can not be stored in the private stash."), Avatar::MSG_NORMAL);
+		drop_stack.push(stack);
+		return false;
+	}
+	else if (activetab == STASH_SHARED && items->items[stack.item].no_stash == Item::NO_STASH_SHARED) {
+		pc->logMsg(msg->get("This item can not be stored in the shared stash."), Avatar::MSG_NORMAL);
 		drop_stack.push(stack);
 		return false;
 	}
@@ -325,7 +335,7 @@ void MenuStash::validate(std::queue<ItemStack>& global_drop_stack) {
 			continue;
 
 		ItemStack stack = stock[activetab][i];
-		if (items->items[stack.item].quest_item || items->items[stack.item].no_stash) {
+		if (items->items[stack.item].quest_item || items->items[stack.item].no_stash != Item::NO_STASH_IGNORE) {
 			pc->logMsg(msg->get("Can not store item in stash: %s", items->getItemName(stack.item).c_str()), Avatar::MSG_NORMAL);
 			global_drop_stack.push(stack);
 			stock[activetab][i].clear();

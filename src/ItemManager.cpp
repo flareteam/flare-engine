@@ -82,7 +82,7 @@ Item::Item()
 	, pickup_status("")
 	, stepfx("")
 	, quest_item(false)
-	, no_stash(false) {
+	, no_stash(NO_STASH_IGNORE) {
 }
 
 ItemManager::ItemManager()
@@ -359,8 +359,18 @@ void ItemManager::loadItems(const std::string& filename) {
 			items[id].quest_item = Parse::toBool(infile.val);
 		}
 		else if (infile.key == "no_stash") {
-			// @ATTR no_stash|bool|If true, this item can not be stashed.
-			items[id].no_stash = Parse::toBool(infile.val);
+			// @ATTR no_stash|["ignore", "private", "shared", "all"]|If not set to 'ignore', this item will not be able to be put in the corresponding stash.
+			std::string temp = Parse::popFirstString(infile.val);
+			if (temp == "ignore")
+				items[id].no_stash = Item::NO_STASH_IGNORE;
+			else if (temp == "private")
+				items[id].no_stash = Item::NO_STASH_PRIVATE;
+			else if (temp == "shared")
+				items[id].no_stash = Item::NO_STASH_SHARED;
+			else if (temp == "all")
+				items[id].no_stash = Item::NO_STASH_ALL;
+			else
+				infile.error("ItemManager: '%s' is not a valid value for 'no_stash'. Use 'ignore', 'private', 'shared', or 'all'.", temp.c_str());
 		}
 		else {
 			infile.error("ItemManager: '%s' is not a valid key.", infile.key.c_str());

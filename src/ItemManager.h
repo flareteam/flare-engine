@@ -98,6 +98,13 @@ private:
 	friend class ItemManager;
 
 public:
+	enum {
+		NO_STASH_IGNORE = 0,
+		NO_STASH_PRIVATE = 1,
+		NO_STASH_SHARED = 2,
+		NO_STASH_ALL = 3
+	};
+
 	bool has_name;        // flag that is set when the item name is parsed
 	std::string flavor;   // optional flavor text describing the item
 	int level;            // rough estimate of quality, used in the loot algorithm
@@ -132,7 +139,7 @@ public:
 	std::string stepfx;        // sound effect played when walking (armors only)
 	std::vector<std::string> disable_slots; // if this item is equipped, it will disable slots that match the types in the list
 	bool quest_item;
-	bool no_stash;
+	int no_stash;
 
 	int getPrice();
 	int getSellPrice(bool is_new_buyback);
