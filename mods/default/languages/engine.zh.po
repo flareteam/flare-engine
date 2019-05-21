@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-09 09:01-0400\n"
+"POT-Creation-Date: 2019-05-21 14:40-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
 "Last-Translator: 杜茂森 <dumaosen_main01@outlook.com>, 2019\n"
 "Language-Team: Chinese (https://www.transifex.com/flareorg/teams/84925/zh/)\n"
@@ -129,7 +129,7 @@ msgstr "冒险者"
 msgid "miss"
 msgstr "未击中"
 
-#: ../../../src/Entity.cpp:554 ../../../src/PowerManager.cpp:1156
+#: ../../../src/Entity.cpp:554 ../../../src/PowerManager.cpp:1186
 #: ../../../src/StatBlock.cpp:812 ../../../src/StatBlock.cpp:818
 #, c-format
 msgid "+%d HP"
@@ -189,7 +189,7 @@ msgstr "载入游戏……"
 msgid "Invalid save"
 msgstr "保存无效"
 
-#: ../../../src/GameStateLoad.cpp:755 ../../../src/ItemManager.cpp:758
+#: ../../../src/GameStateLoad.cpp:755 ../../../src/ItemManager.cpp:761
 #: ../../../src/MenuPowers.cpp:778 ../../../src/MenuPowers.cpp:1144
 #: ../../../src/MenuPowers.cpp:1544
 #, c-format
@@ -397,102 +397,102 @@ msgstr "鼠标X1"
 msgid "Mouse X2"
 msgstr "鼠标X2"
 
-#: ../../../src/ItemManager.cpp:461 ../../../src/ItemManager.cpp:464
+#: ../../../src/ItemManager.cpp:464 ../../../src/ItemManager.cpp:467
 msgid "Unknown Item"
 msgstr "未知物品"
 
-#: ../../../src/ItemManager.cpp:659 ../../../src/MenuPowers.cpp:887
+#: ../../../src/ItemManager.cpp:662 ../../../src/MenuPowers.cpp:887
 #, c-format
 msgid "%d%% Speed"
 msgstr "%d%%速度"
 
-#: ../../../src/ItemManager.cpp:663 ../../../src/MenuPowers.cpp:890
+#: ../../../src/ItemManager.cpp:666 ../../../src/MenuPowers.cpp:890
 #, c-format
 msgid "%d%% Attack Speed"
 msgstr "%d%%攻击速度"
 
-#: ../../../src/ItemManager.cpp:685 ../../../src/MenuCharacter.cpp:354
+#: ../../../src/ItemManager.cpp:688 ../../../src/MenuCharacter.cpp:354
 #: ../../../src/MenuPowers.cpp:833
 #, c-format
 msgid "Resistance (%s)"
 msgstr "抗性（%s）"
 
-#: ../../../src/ItemManager.cpp:695
+#: ../../../src/ItemManager.cpp:698
 #, c-format
 msgid "Requires %s"
 msgstr "需要%s"
 
-#: ../../../src/ItemManager.cpp:744
+#: ../../../src/ItemManager.cpp:747
 msgid "Quest Item"
 msgstr "任务物品"
 
-#: ../../../src/ItemManager.cpp:771
+#: ../../../src/ItemManager.cpp:774
 #, c-format
 msgid "Quality: %s"
 msgstr "质量：%s"
 
-#: ../../../src/ItemManager.cpp:796
+#: ../../../src/ItemManager.cpp:799
 #, c-format
 msgid "Absorb: %d-%d"
 msgstr "伤害吸收：%d-%d"
 
-#: ../../../src/ItemManager.cpp:798
+#: ../../../src/ItemManager.cpp:801
 #, c-format
 msgid "Absorb: %d"
 msgstr "伤害吸收：%d"
 
-#: ../../../src/ItemManager.cpp:838 ../../../src/MenuPowers.cpp:1131
+#: ../../../src/ItemManager.cpp:841 ../../../src/MenuPowers.cpp:1131
 #: ../../../src/MenuPowers.cpp:1134
 #, c-format
 msgid "Requires Level %d"
 msgstr "需要等级%d"
 
-#: ../../../src/ItemManager.cpp:849 ../../../src/MenuPowers.cpp:1123
+#: ../../../src/ItemManager.cpp:852 ../../../src/MenuPowers.cpp:1123
 #: ../../../src/MenuPowers.cpp:1125
 #, c-format
 msgid "Requires %s %d"
 msgstr "需要%s %d"
 
-#: ../../../src/ItemManager.cpp:860
+#: ../../../src/ItemManager.cpp:863
 #, c-format
 msgid "Requires Class: %s"
 msgstr "需要职业：%s"
 
-#: ../../../src/ItemManager.cpp:875 ../../../src/ItemManager.cpp:887
+#: ../../../src/ItemManager.cpp:878 ../../../src/ItemManager.cpp:890
 #, c-format
 msgid "Buy Price: %d %s"
 msgstr "购买价格：%d %s"
 
-#: ../../../src/ItemManager.cpp:877 ../../../src/ItemManager.cpp:889
+#: ../../../src/ItemManager.cpp:880 ../../../src/ItemManager.cpp:892
 #, c-format
 msgid "Buy Price: %d %s each"
 msgstr "购买单价：%d 每个%s"
 
-#: ../../../src/ItemManager.cpp:897
+#: ../../../src/ItemManager.cpp:900
 #, c-format
 msgid "Sell Price: %d %s"
 msgstr "出售价格：%d %s"
 
-#: ../../../src/ItemManager.cpp:899
+#: ../../../src/ItemManager.cpp:902
 #, c-format
 msgid "Sell Price: %d %s each"
 msgstr "出售单价：%d 每个%s"
 
-#: ../../../src/ItemManager.cpp:908
+#: ../../../src/ItemManager.cpp:911
 msgid "Set:"
 msgstr "设置："
 
-#: ../../../src/ItemManager.cpp:915
+#: ../../../src/ItemManager.cpp:918
 #, c-format
 msgid "%d items:"
 msgstr "%d个物品："
 
-#: ../../../src/ItemManager.cpp:928 ../../../src/ItemManager.cpp:934
+#: ../../../src/ItemManager.cpp:931 ../../../src/ItemManager.cpp:937
 #, c-format
 msgid "Press [%s] to use"
 msgstr "按[%s]使用"
 
-#: ../../../src/ItemManager.cpp:932
+#: ../../../src/ItemManager.cpp:935
 #, c-format
 msgid "Press [%s] to read"
 msgstr "按[%s]阅读"
@@ -544,7 +544,7 @@ msgstr "%d个未使用的属性点数"
 msgid "Reduces the damage taken from \"%s\" elemental attacks."
 msgstr "减少来自“%s”的元素攻击伤害。"
 
-#: ../../../src/MenuCharacter.cpp:365 ../../../src/MenuManager.cpp:284
+#: ../../../src/MenuCharacter.cpp:365 ../../../src/MenuManager.cpp:291
 #, c-format
 msgid "XP: %d"
 msgstr "经验值XP：%d"
@@ -1181,7 +1181,7 @@ msgstr "失去%d%%当前等级的XP。"
 msgid "Lost %s."
 msgstr "失去%s。"
 
-#: ../../../src/MenuInventory.cpp:257 ../../../src/MenuStash.cpp:146
+#: ../../../src/MenuInventory.cpp:257 ../../../src/MenuStash.cpp:195
 #, c-format
 msgid "%d %s"
 msgstr "%d个%s"
@@ -1244,12 +1244,12 @@ msgstr "提示"
 msgid "Quests"
 msgstr "任务"
 
-#: ../../../src/MenuManager.cpp:288
+#: ../../../src/MenuManager.cpp:295
 #, c-format
 msgid "XP: %d/%d"
 msgstr "经验值：%d/%d"
 
-#: ../../../src/MenuManager.cpp:838
+#: ../../../src/MenuManager.cpp:846
 msgid "This item can not be dropped."
 msgstr "这个物品无法丢弃。"
 
@@ -1418,23 +1418,31 @@ msgstr "%d个未使用的技能点数"
 msgid "Next Level:"
 msgstr "下一级："
 
-#: ../../../src/MenuStash.cpp:96
-msgid "Shared Stash"
-msgstr "储物柜"
+#: ../../../src/MenuStash.cpp:54
+msgid "Private"
+msgstr ""
 
-#: ../../../src/MenuStash.cpp:209
+#: ../../../src/MenuStash.cpp:56
+msgid "Shared"
+msgstr ""
+
+#: ../../../src/MenuStash.cpp:104
+msgid "Stash"
+msgstr ""
+
+#: ../../../src/MenuStash.cpp:259
 msgid "Can not store quest items in the stash."
 msgstr "不能在储物柜中存放任务物品。"
 
-#: ../../../src/MenuStash.cpp:214
+#: ../../../src/MenuStash.cpp:264
 msgid "This item can not be stored in the stash."
 msgstr "此物品无法存放在储物柜中。"
 
-#: ../../../src/MenuStash.cpp:224
+#: ../../../src/MenuStash.cpp:274
 msgid "Stash is full."
 msgstr "储物柜已满。"
 
-#: ../../../src/MenuStash.cpp:276
+#: ../../../src/MenuStash.cpp:329
 #, c-format
 msgid "Can not store item in stash: %s"
 msgstr "无法在储物柜中存放物品 %s"
@@ -1452,20 +1460,20 @@ msgstr "交易"
 msgid "Buyback"
 msgstr "购回"
 
-#: ../../../src/MenuVendor.cpp:279
+#: ../../../src/MenuVendor.cpp:281
 msgid "Vendor"
 msgstr "商人"
 
-#: ../../../src/PowerManager.cpp:1140
+#: ../../../src/PowerManager.cpp:1170
 #, c-format
 msgid "+%d Shield"
 msgstr "+%d护盾"
 
-#: ../../../src/PowerManager.cpp:1396
+#: ../../../src/PowerManager.cpp:1426
 msgid "You are already transformed, untransform first."
 msgstr "你已经被传送了，得先反传送。"
 
-#: ../../../src/PowerManager.cpp:1408
+#: ../../../src/PowerManager.cpp:1438
 msgid "Could not untransform at this position."
 msgstr "不能反传送回这个位置。"
 
@@ -1473,7 +1481,7 @@ msgstr "不能反传送回这个位置。"
 msgid "Completed Quests"
 msgstr "完成的任务"
 
-#: ../../../src/SaveLoad.cpp:243 ../../../src/SaveLoad.cpp:244
+#: ../../../src/SaveLoad.cpp:263 ../../../src/SaveLoad.cpp:264
 msgid "Game saved."
 msgstr "游戏已保存。"
 

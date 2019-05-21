@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-09 09:01-0400\n"
+"POT-Creation-Date: 2019-05-21 14:40-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
 "Last-Translator: Ooyama Yosiyuki <qqke6wd9k@apricot.ocn.ne.jp>, 2019\n"
 "Language-Team: Japanese (https://www.transifex.com/flareorg/teams/84925/ja/)\n"
@@ -123,7 +123,7 @@ msgstr "冒険家"
 msgid "miss"
 msgstr "ミス"
 
-#: ../../../src/Entity.cpp:554 ../../../src/PowerManager.cpp:1156
+#: ../../../src/Entity.cpp:554 ../../../src/PowerManager.cpp:1186
 #: ../../../src/StatBlock.cpp:812 ../../../src/StatBlock.cpp:818
 #, c-format
 msgid "+%d HP"
@@ -183,7 +183,7 @@ msgstr "セーブデータをロードしています..."
 msgid "Invalid save"
 msgstr ""
 
-#: ../../../src/GameStateLoad.cpp:755 ../../../src/ItemManager.cpp:758
+#: ../../../src/GameStateLoad.cpp:755 ../../../src/ItemManager.cpp:761
 #: ../../../src/MenuPowers.cpp:778 ../../../src/MenuPowers.cpp:1144
 #: ../../../src/MenuPowers.cpp:1544
 #, c-format
@@ -391,102 +391,102 @@ msgstr "マウス X1"
 msgid "Mouse X2"
 msgstr "マウス X2"
 
-#: ../../../src/ItemManager.cpp:461 ../../../src/ItemManager.cpp:464
+#: ../../../src/ItemManager.cpp:464 ../../../src/ItemManager.cpp:467
 msgid "Unknown Item"
 msgstr "不明なアイテム"
 
-#: ../../../src/ItemManager.cpp:659 ../../../src/MenuPowers.cpp:887
+#: ../../../src/ItemManager.cpp:662 ../../../src/MenuPowers.cpp:887
 #, c-format
 msgid "%d%% Speed"
 msgstr "%d%% スピード"
 
-#: ../../../src/ItemManager.cpp:663 ../../../src/MenuPowers.cpp:890
+#: ../../../src/ItemManager.cpp:666 ../../../src/MenuPowers.cpp:890
 #, c-format
 msgid "%d%% Attack Speed"
 msgstr "%d%% スピード"
 
-#: ../../../src/ItemManager.cpp:685 ../../../src/MenuCharacter.cpp:354
+#: ../../../src/ItemManager.cpp:688 ../../../src/MenuCharacter.cpp:354
 #: ../../../src/MenuPowers.cpp:833
 #, c-format
 msgid "Resistance (%s)"
 msgstr "抵抗（%s）"
 
-#: ../../../src/ItemManager.cpp:695
+#: ../../../src/ItemManager.cpp:698
 #, c-format
 msgid "Requires %s"
 msgstr ""
 
-#: ../../../src/ItemManager.cpp:744
+#: ../../../src/ItemManager.cpp:747
 msgid "Quest Item"
 msgstr "クエスト品"
 
-#: ../../../src/ItemManager.cpp:771
+#: ../../../src/ItemManager.cpp:774
 #, c-format
 msgid "Quality: %s"
 msgstr "品質: %s"
 
-#: ../../../src/ItemManager.cpp:796
+#: ../../../src/ItemManager.cpp:799
 #, c-format
 msgid "Absorb: %d-%d"
 msgstr "吸収: %d-%d"
 
-#: ../../../src/ItemManager.cpp:798
+#: ../../../src/ItemManager.cpp:801
 #, c-format
 msgid "Absorb: %d"
 msgstr "吸収: %d"
 
-#: ../../../src/ItemManager.cpp:838 ../../../src/MenuPowers.cpp:1131
+#: ../../../src/ItemManager.cpp:841 ../../../src/MenuPowers.cpp:1131
 #: ../../../src/MenuPowers.cpp:1134
 #, c-format
 msgid "Requires Level %d"
 msgstr "レベル %d が必要です"
 
-#: ../../../src/ItemManager.cpp:849 ../../../src/MenuPowers.cpp:1123
+#: ../../../src/ItemManager.cpp:852 ../../../src/MenuPowers.cpp:1123
 #: ../../../src/MenuPowers.cpp:1125
 #, c-format
 msgid "Requires %s %d"
 msgstr "%s %d が必要です"
 
-#: ../../../src/ItemManager.cpp:860
+#: ../../../src/ItemManager.cpp:863
 #, c-format
 msgid "Requires Class: %s"
 msgstr "必要なクラス: %s"
 
-#: ../../../src/ItemManager.cpp:875 ../../../src/ItemManager.cpp:887
+#: ../../../src/ItemManager.cpp:878 ../../../src/ItemManager.cpp:890
 #, c-format
 msgid "Buy Price: %d %s"
 msgstr "購入価格: %d %s"
 
-#: ../../../src/ItemManager.cpp:877 ../../../src/ItemManager.cpp:889
+#: ../../../src/ItemManager.cpp:880 ../../../src/ItemManager.cpp:892
 #, c-format
 msgid "Buy Price: %d %s each"
 msgstr "購入価格: %d %s ひとつあたり"
 
-#: ../../../src/ItemManager.cpp:897
+#: ../../../src/ItemManager.cpp:900
 #, c-format
 msgid "Sell Price: %d %s"
 msgstr "売却価格: %d %s"
 
-#: ../../../src/ItemManager.cpp:899
+#: ../../../src/ItemManager.cpp:902
 #, c-format
 msgid "Sell Price: %d %s each"
 msgstr "売却価格: %d %s ひとつあたり"
 
-#: ../../../src/ItemManager.cpp:908
+#: ../../../src/ItemManager.cpp:911
 msgid "Set:"
 msgstr "組合わせ:"
 
-#: ../../../src/ItemManager.cpp:915
+#: ../../../src/ItemManager.cpp:918
 #, c-format
 msgid "%d items:"
 msgstr "%d アイテム:"
 
-#: ../../../src/ItemManager.cpp:928 ../../../src/ItemManager.cpp:934
+#: ../../../src/ItemManager.cpp:931 ../../../src/ItemManager.cpp:937
 #, c-format
 msgid "Press [%s] to use"
 msgstr "使用は[%s]"
 
-#: ../../../src/ItemManager.cpp:932
+#: ../../../src/ItemManager.cpp:935
 #, c-format
 msgid "Press [%s] to read"
 msgstr ""
@@ -538,7 +538,7 @@ msgstr "statポイントが %d 未使用です"
 msgid "Reduces the damage taken from \"%s\" elemental attacks."
 msgstr "%sエレメンタルの攻撃を受けたときのダメージを減らします。"
 
-#: ../../../src/MenuCharacter.cpp:365 ../../../src/MenuManager.cpp:284
+#: ../../../src/MenuCharacter.cpp:365 ../../../src/MenuManager.cpp:291
 #, c-format
 msgid "XP: %d"
 msgstr "XP: %d"
@@ -1175,7 +1175,7 @@ msgstr "現在レベルXPを %d%% 失った。"
 msgid "Lost %s."
 msgstr "%s を失った。"
 
-#: ../../../src/MenuInventory.cpp:257 ../../../src/MenuStash.cpp:146
+#: ../../../src/MenuInventory.cpp:257 ../../../src/MenuStash.cpp:195
 #, c-format
 msgid "%d %s"
 msgstr "%d %s"
@@ -1238,12 +1238,12 @@ msgstr "メモ"
 msgid "Quests"
 msgstr "クエスト"
 
-#: ../../../src/MenuManager.cpp:288
+#: ../../../src/MenuManager.cpp:295
 #, c-format
 msgid "XP: %d/%d"
 msgstr "XP: %d/%d"
 
-#: ../../../src/MenuManager.cpp:838
+#: ../../../src/MenuManager.cpp:846
 msgid "This item can not be dropped."
 msgstr "このアイテムを すてることは、できない。"
 
@@ -1412,23 +1412,31 @@ msgstr "skill ポイントが %d 未使用です"
 msgid "Next Level:"
 msgstr "次のレベル:"
 
-#: ../../../src/MenuStash.cpp:96
-msgid "Shared Stash"
-msgstr "共有スタッシュ"
+#: ../../../src/MenuStash.cpp:54
+msgid "Private"
+msgstr ""
 
-#: ../../../src/MenuStash.cpp:209
+#: ../../../src/MenuStash.cpp:56
+msgid "Shared"
+msgstr ""
+
+#: ../../../src/MenuStash.cpp:104
+msgid "Stash"
+msgstr ""
+
+#: ../../../src/MenuStash.cpp:259
 msgid "Can not store quest items in the stash."
 msgstr "クエスト品はスタッシュには保管できない。"
 
-#: ../../../src/MenuStash.cpp:214
+#: ../../../src/MenuStash.cpp:264
 msgid "This item can not be stored in the stash."
 msgstr ""
 
-#: ../../../src/MenuStash.cpp:224
+#: ../../../src/MenuStash.cpp:274
 msgid "Stash is full."
 msgstr "スタッシュは満杯です。"
 
-#: ../../../src/MenuStash.cpp:276
+#: ../../../src/MenuStash.cpp:329
 #, c-format
 msgid "Can not store item in stash: %s"
 msgstr ""
@@ -1446,20 +1454,20 @@ msgstr "売買"
 msgid "Buyback"
 msgstr "買い戻し"
 
-#: ../../../src/MenuVendor.cpp:279
+#: ../../../src/MenuVendor.cpp:281
 msgid "Vendor"
 msgstr "売り手"
 
-#: ../../../src/PowerManager.cpp:1140
+#: ../../../src/PowerManager.cpp:1170
 #, c-format
 msgid "+%d Shield"
 msgstr "+%d シールド"
 
-#: ../../../src/PowerManager.cpp:1396
+#: ../../../src/PowerManager.cpp:1426
 msgid "You are already transformed, untransform first."
 msgstr ""
 
-#: ../../../src/PowerManager.cpp:1408
+#: ../../../src/PowerManager.cpp:1438
 msgid "Could not untransform at this position."
 msgstr "この位置では、変身をとくことは、できない。"
 
@@ -1467,7 +1475,7 @@ msgstr "この位置では、変身をとくことは、できない。"
 msgid "Completed Quests"
 msgstr "完了したクエスト"
 
-#: ../../../src/SaveLoad.cpp:243 ../../../src/SaveLoad.cpp:244
+#: ../../../src/SaveLoad.cpp:263 ../../../src/SaveLoad.cpp:264
 msgid "Game saved."
 msgstr "ゲームをセーブしました。"
 
