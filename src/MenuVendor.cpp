@@ -49,7 +49,6 @@ MenuVendor::MenuVendor()
 	, slots_cols(1)
 	, slots_rows(1)
 	, activetab(ItemManager::VENDOR_BUY)
-	, drag_prev_tab(-1)
 	, tip (new WidgetTooltip())
 	, npc(NULL)
 	, buyback_stock() {
@@ -145,7 +144,9 @@ void MenuVendor::logic() {
 	tablist_buy.logic();
 	tablist_sell.logic();
 
-	tabControl->logic();
+	if (stock[ItemManager::VENDOR_BUY].drag_prev_slot == -1 && stock[ItemManager::VENDOR_SELL].drag_prev_slot == -1)
+		tabControl->logic();
+
 	if (settings->touchscreen && activetab != tabControl->getActiveTab()) {
 		tablist_buy.defocus();
 		tablist_sell.defocus();
@@ -203,7 +204,6 @@ void MenuVendor::render() {
  * Players can drag an item to their inventory to purchase.
  */
 ItemStack MenuVendor::click(const Point& position) {
-	drag_prev_tab = activetab;
 	ItemStack stack = stock[activetab].click(position);
 	saveInventory();
 	if (settings->touchscreen) {
@@ -219,11 +219,9 @@ ItemStack MenuVendor::click(const Point& position) {
  * Cancel the dragging initiated by the clic()
  */
 void MenuVendor::itemReturn(ItemStack stack) {
-	if (drag_prev_tab != -1) {
-		items->playSound(stack.item);
-		stock[drag_prev_tab].itemReturn(stack);
-		saveInventory();
-	}
+	items->playSound(stack.item);
+	stock[activetab].itemReturn(stack);
+	saveInventory();
 }
 
 void MenuVendor::add(ItemStack stack) {
