@@ -1466,15 +1466,15 @@ msgstr "Натсупний рівень:"
 
 #: ../../../src/MenuStash.cpp:54
 msgid "Private"
-msgstr ""
+msgstr "Особистий"
 
 #: ../../../src/MenuStash.cpp:56
 msgid "Shared"
-msgstr ""
+msgstr "Загальний"
 
 #: ../../../src/MenuStash.cpp:104
 msgid "Stash"
-msgstr ""
+msgstr "Тайник"
 
 #: ../../../src/MenuStash.cpp:259
 msgid "Can not store quest items in the stash."

@@ -14,6 +14,10 @@ Game updates:
 
 * Items that couldn't be stashed in the last update can now be put in the private stash.
 
+Translation updates:
+
+* Ukranian (uk) update (Igor Paliychuk)
+
 
 
 Flare v1.10 (http://flarerpg.org/index.php/2019/05/17/flare-1-10/)
