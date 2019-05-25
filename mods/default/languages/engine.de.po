@@ -4,9 +4,9 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Wuzzy <almikes@aol.com>, 2018
 # Justin Jacobs <jajdorkster@gmail.com>, 2019
 # Fyrenic <fyrenic@protonmail.com>, 2019
+# Wuzzy <almikes@aol.com>, 2019
 # 
 #, fuzzy
 msgid ""
@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-21 14:40-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: Fyrenic <fyrenic@protonmail.com>, 2019\n"
+"Last-Translator: Wuzzy <almikes@aol.com>, 2019\n"
 "Language-Team: German (https://www.transifex.com/flareorg/teams/84925/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -25,7 +25,7 @@ msgstr ""
 
 #: ../../../src/Avatar.cpp:387
 msgid "Your health is low!"
-msgstr ""
+msgstr "Deine Gesundheit ist niedrig!"
 
 #: ../../../src/Avatar.cpp:419
 #, c-format
@@ -34,11 +34,12 @@ msgstr "Glückwunsch, du hast Stufe %d erreicht!"
 
 #: ../../../src/Avatar.cpp:421
 msgid "You may increase one or more attributes through the Character Menu."
-msgstr ""
+msgstr "Du kannst einen oder mehrere Attribute im Charakter-Menü erhöhen."
 
 #: ../../../src/Avatar.cpp:425
 msgid "You may unlock one or more abilities through the Powers Menu."
 msgstr ""
+"Du kannst eine oder mehrere Fähigkeiten im Fähigkeiten-Menü freischalten."
 
 #: ../../../src/Avatar.cpp:688
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
@@ -104,7 +105,7 @@ msgstr "Negative Wirkungen entfernt."
 
 #: ../../../src/CampaignManager.cpp:220
 msgid "HP and MP restored, negative effects removed"
-msgstr "TP und MP wiederhergestellt, Negativwirkungen entfernt."
+msgstr "TP und MP wiederhergestellt, Negativwirkungen entfernt"
 
 #: ../../../src/DeviceList.cpp:56
 msgid ""
@@ -600,7 +601,7 @@ msgstr "OK"
 
 #: ../../../src/MenuConfig.cpp:243
 msgid "Continue"
-msgstr ""
+msgstr "Fortfahren"
 
 #: ../../../src/MenuConfig.cpp:286
 msgid "Default"
@@ -649,56 +650,60 @@ msgid ""
 "Controls the type of warning to be activated when the player is below the "
 "low health threshold."
 msgstr ""
+"Legt die Art der Warnung fest, die benutzt wird, wenn sich die "
+"Spielergesundheit unter dem Niedrige-Gesundheit-Schwellwert befindet."
 
 #: ../../../src/MenuConfig.cpp:297
 msgid "- Display a message"
-msgstr ""
+msgstr "- Nachricht anzeigen"
 
 #: ../../../src/MenuConfig.cpp:298
 msgid "- Play a sound"
-msgstr ""
+msgstr "- Ton abspielen"
 
 #: ../../../src/MenuConfig.cpp:299
 msgid "- Change the cursor"
-msgstr ""
+msgstr "- Mauszeiger ändern"
 
 #: ../../../src/MenuConfig.cpp:301
 msgid "Disabled"
-msgstr ""
+msgstr "Deaktiviert"
 
 #: ../../../src/MenuConfig.cpp:302
 msgid "All"
-msgstr ""
+msgstr "Alle"
 
 #: ../../../src/MenuConfig.cpp:303
 msgid "Message & Cursor"
-msgstr ""
+msgstr "Nachricht u. Mauszeiger"
 
 #: ../../../src/MenuConfig.cpp:304
 msgid "Message & Sound"
-msgstr ""
+msgstr "Nachricht u. Ton"
 
 #: ../../../src/MenuConfig.cpp:305
 msgid "Sound & Cursor"
-msgstr ""
+msgstr "Ton u. Mauszeiger"
 
 #: ../../../src/MenuConfig.cpp:306
 msgid "Message"
-msgstr ""
+msgstr "Nachricht"
 
 #: ../../../src/MenuConfig.cpp:307
 msgid "Cursor"
-msgstr ""
+msgstr "Mauszeiger"
 
 #: ../../../src/MenuConfig.cpp:308
 msgid "Sound"
-msgstr ""
+msgstr "Ton"
 
 #: ../../../src/MenuConfig.cpp:314
 msgid ""
 "When the player's health drops below the given threshold, the low health "
 "notifications are triggered if one or more of them is enabled."
 msgstr ""
+"Wenn die Spielergesundheit unter den angegebenem Wert fällt, werden die "
+"Warnungen für niedrige Gesundheit aktiviert, wenn eine davon aktiviert ist."
 
 #: ../../../src/MenuConfig.cpp:327 ../../../src/MenuConfig.cpp:1561
 msgid "Exit"
@@ -818,7 +823,7 @@ msgstr "Immer Werteleistenbeschriftung anzeigen"
 
 #: ../../../src/MenuConfig.cpp:371
 msgid "Allow stat bar auto-hiding"
-msgstr "Erlaube automatisches Verstecken der Werteleiste."
+msgstr "Erlaube automatisches Verstecken der Werteleiste"
 
 #: ../../../src/MenuConfig.cpp:372
 msgid "Show combat text"
@@ -834,11 +839,11 @@ msgstr "Zeige versteckte Entitätsmarker"
 
 #: ../../../src/MenuConfig.cpp:375
 msgid "Low health notification"
-msgstr ""
+msgstr "Niedrige-Gesundheit-Warnung"
 
 #: ../../../src/MenuConfig.cpp:376
 msgid "Low health threshold"
-msgstr ""
+msgstr "Niedrige-Gesundheit-Schwellwert"
 
 #: ../../../src/MenuConfig.cpp:379
 msgid "Joystick"
@@ -1410,7 +1415,7 @@ msgstr "%d%% Wahrscheinlichkeit"
 
 #: ../../../src/MenuPowers.cpp:1062
 msgid "Base Accuracy"
-msgstr "Basis-Genauigkeit:"
+msgstr "Basis-Genauigkeit"
 
 #: ../../../src/MenuPowers.cpp:1082
 msgid "Base Critical Chance"
@@ -1468,15 +1473,15 @@ msgstr "Nächste Stufe:"
 
 #: ../../../src/MenuStash.cpp:54
 msgid "Private"
-msgstr ""
+msgstr "Privat"
 
 #: ../../../src/MenuStash.cpp:56
 msgid "Shared"
-msgstr ""
+msgstr "Gemeinsam"
 
 #: ../../../src/MenuStash.cpp:104
 msgid "Stash"
-msgstr ""
+msgstr "Lagerraum"
 
 #: ../../../src/MenuStash.cpp:259
 msgid "Can not store quest items in the stash."
@@ -1744,7 +1749,7 @@ msgstr "Bonus-EP"
 
 #: ../../../src/Stats.cpp:84
 msgid "Increases the XP gained per kill."
-msgstr "Erhöht die EP für getötete Gegner"
+msgstr "Erhöht die EP für getötete Gegner."
 
 #: ../../../src/Stats.cpp:88
 #, c-format
@@ -1754,7 +1759,7 @@ msgstr "Bonus-%s"
 #: ../../../src/Stats.cpp:89
 #, c-format
 msgid "Increases the %s found per drop."
-msgstr "Erhöht die Chance auf %s"
+msgstr "Erhöht die Chance auf %s."
 
 #: ../../../src/Stats.cpp:93
 msgid "Item Find Chance"

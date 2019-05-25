@@ -16,6 +16,7 @@ Game updates:
 
 Translation updates:
 
+* German (de) update (Wuzzy2)
 * Ukranian (uk) update (Igor Paliychuk)
 
 
