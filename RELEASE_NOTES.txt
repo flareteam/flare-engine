@@ -13,6 +13,7 @@ Engine fixes:
 Game updates:
 
 * Items that couldn't be stashed in the last update can now be put in the private stash.
+* Salted Field: moved chest to the south end of the map to prevent easy farming.
 
 Translation updates:
 
