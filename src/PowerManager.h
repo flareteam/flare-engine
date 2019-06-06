@@ -367,6 +367,7 @@ public:
 	bool checkRequiredItems(const Power &pow, const StatBlock *src_stats);
 	bool checkRequiredMaxHPMP(const Power &pow, const StatBlock *src_stats);
 	bool checkCombatRange(int power_index, StatBlock *src_stats, FPoint target);
+	int checkReplaceByEffect(int power_index, StatBlock *src_stats);
 
 	EffectDef* getEffectDef(const std::string& id);
 

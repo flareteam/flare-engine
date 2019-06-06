@@ -1495,18 +1495,22 @@ bool PowerManager::block(int power_index, StatBlock *src_stats) {
 	return true;
 }
 
+int PowerManager::checkReplaceByEffect(int power_index, StatBlock *src_stats) {
+	for (size_t i = 0; i < powers[power_index].replace_by_effect.size(); ++i) {
+		if (src_stats->effects.hasEffect(powers[power_index].replace_by_effect[i].effect_id, powers[power_index].replace_by_effect[i].count)) {
+			return powers[power_index].replace_by_effect[i].power_id;
+		}
+	}
+
+	return power_index;
+}
+
 /**
  * Activate is basically a switch/redirect to the appropriate function
  */
 bool PowerManager::activate(int power_index, StatBlock *src_stats, const FPoint& target) {
 	if (static_cast<unsigned>(power_index) >= powers.size())
 		return false;
-
-	for (size_t i = 0; i < powers[power_index].replace_by_effect.size(); ++i) {
-		if (src_stats->effects.hasEffect(powers[power_index].replace_by_effect[i].effect_id, powers[power_index].replace_by_effect[i].count)) {
-			return activate(powers[power_index].replace_by_effect[i].power_id, src_stats, target);
-		}
-	}
 
 	if (src_stats->hero) {
 		if (powers[power_index].requires_mp > src_stats->mp)

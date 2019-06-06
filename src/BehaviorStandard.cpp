@@ -580,7 +580,7 @@ void BehaviorStandard::updateState() {
 				break;
 			}
 
-			power_id = e->stats.activated_power->id;
+			power_id = powers->checkReplaceByEffect(e->stats.activated_power->id, &e->stats);
 			power_state = powers->powers[power_id].new_state;
 			e->stats.prevent_interrupt = powers->powers[power_id].prevent_interrupt;
 

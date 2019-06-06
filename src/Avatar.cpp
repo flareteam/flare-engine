@@ -735,26 +735,27 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 			for (unsigned i=0; i<action_queue.size(); i++) {
 				ActionData &action = action_queue[i];
-				const Power &power = powers->powers[action.power];
+				int power_id = powers->checkReplaceByEffect(action.power, &stats);
+				const Power &power = powers->powers[power_id];
 
 				if (power.type == Power::TYPE_BLOCK)
 					blocking = true;
 
-				if (action.power != 0 && (stats.cooldown.isEnd() || action.instant_item)) {
+				if (power_id != 0 && (stats.cooldown.isEnd() || action.instant_item)) {
 					FPoint target = action.target;
 
 					// check requirements
 					if ((stats.cur_state == StatBlock::AVATAR_ATTACK || stats.cur_state == StatBlock::AVATAR_HIT) && !action.instant_item)
 						continue;
-					if (!stats.canUsePower(action.power, !StatBlock::CAN_USE_PASSIVE))
+					if (!stats.canUsePower(power_id, !StatBlock::CAN_USE_PASSIVE))
 						continue;
 					if (power.requires_los && !mapr->collider.lineOfSight(stats.pos.x, stats.pos.y, target.x, target.y))
 						continue;
 					if (power.requires_empty_target && !mapr->collider.isEmpty(target.x, target.y))
 						continue;
-					if (!power_cooldown_timers[action.power].isEnd())
+					if (!power_cooldown_timers[power_id].isEnd())
 						continue;
-					if (!powers->hasValidTarget(action.power, &stats, target))
+					if (!powers->hasValidTarget(power_id, &stats, target))
 						continue;
 
 					// automatically target the selected enemy with melee attacks
@@ -768,7 +769,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 					}
 
 					if (power.new_state != Power::STATE_INSTANT) {
-						current_power = action.power;
+						current_power = power_id;
 						act_target = target;
 						attack_anim = power.attack_anim;
 					}
@@ -791,14 +792,14 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 							break;
 
 						case Power::STATE_INSTANT:	// handle instant powers
-							powers->activate(action.power, &stats, target);
-							power_cooldown_timers[action.power].setDuration(power.cooldown);
+							powers->activate(power_id, &stats, target);
+							power_cooldown_timers[power_id].setDuration(power.cooldown);
 							break;
 
 						default:
 							if (power.type == Power::TYPE_BLOCK) {
 								stats.cur_state = StatBlock::AVATAR_BLOCK;
-								powers->activate(action.power, &stats, target);
+								powers->activate(power_id, &stats, target);
 								stats.refresh_stats = true;
 							}
 							break;
