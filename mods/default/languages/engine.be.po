@@ -5,7 +5,7 @@
 # 
 # Translators:
 # Justin Jacobs <jajdorkster@gmail.com>, 2018
-# Zmicer Turok <zmicerturok@gmail.com>, 2019
+# Zmicer Turok <nashtlumach@gmail.com>, 2019
 # 
 #, fuzzy
 msgid ""
@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-21 14:40-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: Zmicer Turok <zmicerturok@gmail.com>, 2019\n"
+"Last-Translator: Zmicer Turok <nashtlumach@gmail.com>, 2019\n"
 "Language-Team: Belarusian (https://www.transifex.com/flareorg/teams/84925/be/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: ../../../src/Avatar.cpp:387
 msgid "Your health is low!"
-msgstr ""
+msgstr "Ваша жыццё сыходзіць!"
 
 #: ../../../src/Avatar.cpp:419
 #, c-format
@@ -33,17 +33,17 @@ msgstr "Віншуем, вы дасягнулі %d ўзроўня!"
 
 #: ../../../src/Avatar.cpp:421
 msgid "You may increase one or more attributes through the Character Menu."
-msgstr ""
+msgstr "Вы можаце палепшыць адзін альбо некалькі атрыбутаў у меню персанажа."
 
 #: ../../../src/Avatar.cpp:425
 msgid "You may unlock one or more abilities through the Powers Menu."
-msgstr ""
+msgstr "Вы можаце разблакаваць адзін альбо некалькі талентаў у меню талентаў."
 
 #: ../../../src/Avatar.cpp:688
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
 msgstr ""
-"Вы зазналі паразу. Гульня завершана. Націсніце ${INPUT_CONTINUE}, каб выйсці"
-" ў меню."
+"Вы зазналі паразу. Гульня завершаная. Націсніце ${INPUT_CONTINUE}, каб "
+"выйсці ў меню."
 
 #: ../../../src/Avatar.cpp:694
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
@@ -51,7 +51,7 @@ msgstr "Вы зазналі паразу. Націсніце ${INPUT_CONTINUE}, 
 
 #: ../../../src/Avatar.cpp:944
 msgid "Transformation expired. You have been moved back to a safe place."
-msgstr "Трансфармацыя завершана. Вы вярнуліся ў бяспечнае месца."
+msgstr "Трансфармацыя завершаная. Вы вярнуліся ў бяспечнае месца."
 
 #: ../../../src/CampaignManager.cpp:153
 #, c-format
@@ -89,19 +89,19 @@ msgstr "Жыццё адноўлена."
 
 #: ../../../src/CampaignManager.cpp:205
 msgid "MP restored."
-msgstr "Мана адноўлена."
+msgstr "Мана адноўленая."
 
 #: ../../../src/CampaignManager.cpp:210
 msgid "HP and MP restored."
-msgstr "Жыццё і мана адноўлены."
+msgstr "Жыццё і мана адноўленыя."
 
 #: ../../../src/CampaignManager.cpp:214
 msgid "Negative effects removed."
-msgstr "Негатыўныя эфекты прыбраны."
+msgstr "Негатыўныя эфекты прыбраныя."
 
 #: ../../../src/CampaignManager.cpp:220
 msgid "HP and MP restored, negative effects removed"
-msgstr "Жыццё і мана адноўлены, негатыўныя эфекты зніклі"
+msgstr "Жыццё і мана адноўленыя, негатыўныя эфекты зніклі"
 
 #: ../../../src/DeviceList.cpp:56
 msgid ""
@@ -207,7 +207,7 @@ msgstr "Стварыць"
 
 #: ../../../src/GameStateNew.cpp:76
 msgid "Randomize"
-msgstr "Перамяшайце"
+msgstr "Перамяшаць"
 
 #: ../../../src/GameStateNew.cpp:92
 msgid "Choose a Portrait"
@@ -629,70 +629,77 @@ msgid ""
 "Always hide loot tooltips, except for when a piece of loot is hovered with "
 "the mouse cursor. Temporarily show all loot tooltips with 'Alt'."
 msgstr ""
+"Заўсёды хаваць выплыўныя падказкі пра здабычу, за выключэннем калі частка "
+"здабычы знаходзіцца пад курсорам мышы. Часова паказваць усе выплыўныя "
+"падказкі «Alt»."
 
 #: ../../../src/MenuConfig.cpp:291
 msgid "Visible"
-msgstr ""
+msgstr "Паказваць"
 
 #: ../../../src/MenuConfig.cpp:292
 msgid "Visible (2x zoom)"
-msgstr ""
+msgstr "Паказваць (2х)"
 
 #: ../../../src/MenuConfig.cpp:296
 msgid ""
 "Controls the type of warning to be activated when the player is below the "
 "low health threshold."
 msgstr ""
+"Кіруе тыпам папярэджання, якое мусіць актывавацца калі ўзровень жыцця "
+"апускаецца ніжэй за парог."
 
 #: ../../../src/MenuConfig.cpp:297
 msgid "- Display a message"
-msgstr ""
+msgstr "- Вывесці паведамленне"
 
 #: ../../../src/MenuConfig.cpp:298
 msgid "- Play a sound"
-msgstr ""
+msgstr "- Прайграць гук"
 
 #: ../../../src/MenuConfig.cpp:299
 msgid "- Change the cursor"
-msgstr ""
+msgstr "- Змяніць курсор"
 
 #: ../../../src/MenuConfig.cpp:301
 msgid "Disabled"
-msgstr ""
+msgstr "Выключана"
 
 #: ../../../src/MenuConfig.cpp:302
 msgid "All"
-msgstr ""
+msgstr "Усё"
 
 #: ../../../src/MenuConfig.cpp:303
 msgid "Message & Cursor"
-msgstr ""
+msgstr "Паведамленне і курсор"
 
 #: ../../../src/MenuConfig.cpp:304
 msgid "Message & Sound"
-msgstr ""
+msgstr "Паведамленне і гук"
 
 #: ../../../src/MenuConfig.cpp:305
 msgid "Sound & Cursor"
-msgstr ""
+msgstr "Гук і курсор"
 
 #: ../../../src/MenuConfig.cpp:306
 msgid "Message"
-msgstr ""
+msgstr "Паведамленне"
 
 #: ../../../src/MenuConfig.cpp:307
 msgid "Cursor"
-msgstr ""
+msgstr "Курсор"
 
 #: ../../../src/MenuConfig.cpp:308
 msgid "Sound"
-msgstr ""
+msgstr "Гук"
 
 #: ../../../src/MenuConfig.cpp:314
 msgid ""
 "When the player's health drops below the given threshold, the low health "
 "notifications are triggered if one or more of them is enabled."
 msgstr ""
+"Калі жыццё гульца зніжаецца за прызначаны парог, паведамленні выведуцца, "
+"калі адно альбо некалькі з іх уключаныя."
 
 #: ../../../src/MenuConfig.cpp:327 ../../../src/MenuConfig.cpp:1561
 msgid "Exit"
@@ -728,7 +735,7 @@ msgstr "Прыпыніць"
 
 #: ../../../src/MenuConfig.cpp:347
 msgid "Time Played"
-msgstr ""
+msgstr "Час гульні"
 
 #: ../../../src/MenuConfig.cpp:349
 msgid "Renderer"
@@ -756,7 +763,7 @@ msgstr "Маштабаванне DPI"
 
 #: ../../../src/MenuConfig.cpp:355
 msgid "Parallax Layers"
-msgstr ""
+msgstr "Пласты Parallax"
 
 #: ../../../src/MenuConfig.cpp:356
 msgid "Allow changing gamma"
@@ -796,15 +803,15 @@ msgstr "Рэжым распрацоўшчыка"
 
 #: ../../../src/MenuConfig.cpp:367
 msgid "Subtitles"
-msgstr "Субтытры"
+msgstr "Субцітры"
 
 #: ../../../src/MenuConfig.cpp:368
 msgid "Loot tooltip visibility"
-msgstr ""
+msgstr "Паказваць падказкі пра здабычу"
 
 #: ../../../src/MenuConfig.cpp:369
 msgid "Mini-map mode"
-msgstr ""
+msgstr "Рэжым мінімапы"
 
 #: ../../../src/MenuConfig.cpp:370
 msgid "Always show stat bar labels"
@@ -812,7 +819,7 @@ msgstr "Заўсёды паказваць адмеціны ў радку ста�
 
 #: ../../../src/MenuConfig.cpp:371
 msgid "Allow stat bar auto-hiding"
-msgstr ""
+msgstr "Уключыць аўтаматычнае хаванне радку стану"
 
 #: ../../../src/MenuConfig.cpp:372
 msgid "Show combat text"
@@ -824,15 +831,15 @@ msgstr "Аўтаматычна апранаць прадметы"
 
 #: ../../../src/MenuConfig.cpp:374
 msgid "Show hidden entity markers"
-msgstr ""
+msgstr "Паказваць схаваныя пазнакі"
 
 #: ../../../src/MenuConfig.cpp:375
 msgid "Low health notification"
-msgstr ""
+msgstr "Апавяшчэнне пра нізкае жыццё"
 
 #: ../../../src/MenuConfig.cpp:376
 msgid "Low health threshold"
-msgstr ""
+msgstr "Мінімальны парог жыцця"
 
 #: ../../../src/MenuConfig.cpp:379
 msgid "Joystick"
@@ -852,11 +859,11 @@ msgstr "Не выкарыстоўваць мыш"
 
 #: ../../../src/MenuConfig.cpp:383
 msgid "Swap mouse movement button"
-msgstr ""
+msgstr "Пераключыць кнопку руху мышы"
 
 #: ../../../src/MenuConfig.cpp:384
 msgid "Attack with mouse movement"
-msgstr ""
+msgstr "Атакаваць рухамі мышшу"
 
 #: ../../../src/MenuConfig.cpp:385
 msgid "Joystick Deadzone"
@@ -865,24 +872,24 @@ msgstr "Мёртвая зона джойсціка"
 #: ../../../src/MenuConfig.cpp:395
 #, c-format
 msgid "Primary binding: %s"
-msgstr ""
+msgstr "Першасныя значэнні: %s"
 
 #: ../../../src/MenuConfig.cpp:396
 #, c-format
 msgid "Alternate binding: %s"
-msgstr ""
+msgstr "Альтэрнатыўныя значэнні: %s"
 
 #: ../../../src/MenuConfig.cpp:397
 #, c-format
 msgid "Joystick binding: %s"
-msgstr ""
+msgstr "Значэнні джойсціка: %s"
 
 #: ../../../src/MenuConfig.cpp:496
 msgid ""
 "Will try to store surfaces in video memory versus system memory. The effect "
 "this has on performance depends on the renderer."
 msgstr ""
-"Паспрабуйце апрацоўваць паверхні ў відэапамяці, а не ў сістэмнай памяці. "
+"Спрабаваць апрацоўваць паверхні ў відэапамяці, а не ў сістэмнай памяці. "
 "Эфект залежыць ад адмалёўшчыка."
 
 #: ../../../src/MenuConfig.cpp:497
@@ -907,42 +914,54 @@ msgid ""
 "This enables parallax (non-tile) layers. Disabling this setting can improve "
 "performance in some cases."
 msgstr ""
+"Выключае пласты parallax. Выключэнне гэтага параметра ў некаторых выпадках "
+"можа палепшыць прадукцыйнасць."
 
 #: ../../../src/MenuConfig.cpp:500
 msgid ""
 "Enables the below setting that controls the screen gamma level. The behavior"
 " of the gamma setting can vary between platforms."
 msgstr ""
+"Уключае параметр, што кіруе ўзроўнем гамы экрана. Паводзіны параметра могуць"
+" змяняцца ў залежнасці ад платформы."
 
 #: ../../../src/MenuConfig.cpp:501
 msgid ""
 "Provides additional text for information that is primarily conveyed through "
 "color."
 msgstr ""
+"Падае дадатковы тэкст для інфармацыі, што пераважна падаецца праз колер."
 
 #: ../../../src/MenuConfig.cpp:502
 msgid ""
 "Some mods will automatically hide the stat bars when they are inactive. "
 "Disabling this option will keep them displayed at all times."
 msgstr ""
+"Некаторыя мадыфікацыі аўтаматычна хаваюць радкі стану, калі яны неактыўныя. "
+"Калі выключыць гэты параметр, то яны будуць адлюстроўвацца заўсёды."
 
 #: ../../../src/MenuConfig.cpp:503
 msgid ""
 "When enabled, empty equipment slots will be filled with applicable items "
 "when they are obtained."
 msgstr ""
+"Калі параметр уключаны, пустыя слоты будуць запаўняцца адпаведнымі "
+"прадметамі пры іх атрыманні."
 
 #: ../../../src/MenuConfig.cpp:504
 msgid ""
 "Shows a marker above enemies, allies, and the player when they are obscured "
 "by tall objects."
 msgstr ""
+"Паказвае адзнаку над ворагамі, сябрамі і гульцамі, калі яны схаваныя "
+"высокімі аб'ектамі."
 
 #: ../../../src/MenuConfig.cpp:505
 msgid ""
 "This allows the game to be controlled entirely with the keyboard (or "
 "joystick)."
 msgstr ""
+"Дазваляе поўнасцю кіраваць гульнёй пры дапамозе клавіятуры альбо джойсціка."
 
 #: ../../../src/MenuConfig.cpp:506
 msgid ""
@@ -950,6 +969,9 @@ msgid ""
 " 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
 "instead of 'Main1'."
 msgstr ""
+"Калі параметр \"Перамяшчаць героя пры дапамозе мышы\" уключаны, то параметр "
+"вызначае ці выкарыстоўваецца \"Галоўнае1\" ці \"Галоўнае2\" для перамяшчэння"
+" героя. Калі ўключана \"Галоўнае2\" перамясціць героя замест \"Галоўнае1\"."
 
 #: ../../../src/MenuConfig.cpp:507
 msgid ""
@@ -958,12 +980,18 @@ msgid ""
 "setting is disabled, it is required to use 'Shift' to access the Power "
 "assigned to the movement button."
 msgstr ""
+"Калі параметр \"Перамяшчаць героя пры дапамозе мышы\" уключаны, то параметр "
+"вызначае ці можна выкарыстоўваць талент, прызначаны кнопцы руху для "
+"вызначэння ворага. Калі параметр выключаны, для гэтага неабходна "
+"выкарыстоўваць \"Shift\"."
 
 #: ../../../src/MenuConfig.cpp:508
 msgid ""
 "The player's attacks will be aimed in the direction of the mouse cursor when"
 " this is enabled."
 msgstr ""
+"Калі ўключана, атакі гульца будуць накіроўваца адпаведна накірунка курсора "
+"мышы."
 
 #: ../../../src/MenuConfig.cpp:559
 msgid "Active Mods"
@@ -1056,7 +1084,7 @@ msgstr "аб'ект"
 
 #: ../../../src/MenuDevConsole.cpp:267
 msgid "entity, ally"
-msgstr "аб'ект/памочнік"
+msgstr "аб'ект/памагаты"
 
 #: ../../../src/MenuDevConsole.cpp:274
 msgid "Tile"
@@ -1068,7 +1096,7 @@ msgstr "дадае таленты на панэль дзеянняў"
 
 #: ../../../src/MenuDevConsole.cpp:361
 msgid "turns on/off the display of the FPS counter"
-msgstr ""
+msgstr "уключыць/выключыць адлюставанне лічыльніка FPS"
 
 #: ../../../src/MenuDevConsole.cpp:362
 msgid "turns on/off all of the HUD elements"
@@ -1128,7 +1156,7 @@ msgstr "Інтэрфейс пераключаны"
 
 #: ../../../src/MenuDevConsole.cpp:385
 msgid "Toggled the FPS counter"
-msgstr ""
+msgstr "Пераключыць лічыльнік FPS"
 
 #: ../../../src/MenuDevConsole.cpp:534
 msgid "ERROR: Incorrect number of arguments"
@@ -1399,7 +1427,7 @@ msgstr "%d%% шанец нанесці крытычны ўрон запавол�
 #: ../../../src/MenuPowers.cpp:1105
 #, c-format
 msgid "Elemental Damage (%s)"
-msgstr ""
+msgstr "Стыхійны ўрон (%s)"
 
 #: ../../../src/MenuPowers.cpp:1114
 #, c-format
@@ -1435,15 +1463,15 @@ msgstr "Наступны ўзровень:"
 
 #: ../../../src/MenuStash.cpp:54
 msgid "Private"
-msgstr ""
+msgstr "Асабістае"
 
 #: ../../../src/MenuStash.cpp:56
 msgid "Shared"
-msgstr ""
+msgstr "Абагульнена"
 
 #: ../../../src/MenuStash.cpp:104
 msgid "Stash"
-msgstr ""
+msgstr "Схованка"
 
 #: ../../../src/MenuStash.cpp:259
 msgid "Can not store quest items in the stash."
@@ -1451,7 +1479,7 @@ msgstr "Прадметы заданняў нельга захоўваць у с�
 
 #: ../../../src/MenuStash.cpp:264
 msgid "This item can not be stored in the stash."
-msgstr ""
+msgstr "Гэты аб'ект немагчыма захоўваць у схованцы."
 
 #: ../../../src/MenuStash.cpp:274
 msgid "Stash is full."
@@ -1460,7 +1488,7 @@ msgstr "Схованка поўная."
 #: ../../../src/MenuStash.cpp:329
 #, c-format
 msgid "Can not store item in stash: %s"
-msgstr ""
+msgstr "Немагчыма захоўваць у схованцы: %s"
 
 #: ../../../src/MenuTalker.cpp:447
 #, c-format
@@ -1486,11 +1514,11 @@ msgstr "+%d Шчыт"
 
 #: ../../../src/PowerManager.cpp:1426
 msgid "You are already transformed, untransform first."
-msgstr "Вы ўжо трансфарміраваны, спачатку растрансфарміруўцеся."
+msgstr "Вы ўжо трансфарманыя, спачатку растрансфармуўцеся."
 
 #: ../../../src/PowerManager.cpp:1438
 msgid "Could not untransform at this position."
-msgstr "Тут немагчыма растрансфарміравацца"
+msgstr "Тут немагчыма растрансфармавацца"
 
 #: ../../../src/QuestLog.cpp:234
 msgid "Completed Quests"
@@ -1498,7 +1526,7 @@ msgstr "Завершаныя заданні"
 
 #: ../../../src/SaveLoad.cpp:263 ../../../src/SaveLoad.cpp:264
 msgid "Game saved."
-msgstr "Гульня захавана."
+msgstr "Гульня захаваная."
 
 #: ../../../src/SDLInputState.cpp:633
 msgid "Backspace"
@@ -1606,11 +1634,11 @@ msgstr "Кнопка %d"
 
 #: ../../../src/SDLInputState.cpp:728
 msgid "Touch control D-Pad"
-msgstr ""
+msgstr "Сэнсарнае кіраванне D-Pad"
 
 #: ../../../src/SDLInputState.cpp:752
 msgid "Touch control buttons"
-msgstr ""
+msgstr "Сэнсарныя кнопкі кіравання"
 
 #: ../../../src/SDLInputState.cpp:767
 msgid "Tap"
@@ -1619,7 +1647,7 @@ msgstr "Дакраніцеся"
 #: ../../../src/SDLInputState.cpp:819 ../../../src/SDLInputState.cpp:821
 #, c-format
 msgid "Can not bind: %s"
-msgstr ""
+msgstr "Немагчыма прызначыць: %s"
 
 #: ../../../src/SDLInputState.cpp:833 ../../../src/SDLInputState.cpp:837
 #: ../../../src/SDLInputState.cpp:841

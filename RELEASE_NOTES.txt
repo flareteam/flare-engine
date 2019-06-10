@@ -18,6 +18,7 @@ Game updates:
 
 Translation updates:
 
+* Belarusian (be) update (Zmicer Turok)
 * German (de) update (Wuzzy2)
 * Ukranian (uk) update (Igor Paliychuk)
 
