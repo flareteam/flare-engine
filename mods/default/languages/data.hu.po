@@ -1,0 +1,393 @@
+# Copyright (C) 2011 Clint Bellanger
+# This file is distributed under the same license as the FLARE package.
+#
+# FIRST AUTHOR <bztsrc@gitlab>, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-05-29 16:45+\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Hunagrian <LL@li.org>\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../engine/primary_stats.txt:3
+msgid "Physical"
+msgstr "Fizikai"
+
+#: ../engine/primary_stats.txt:7
+msgid "Mental"
+msgstr "Mentális"
+
+#: ../engine/primary_stats.txt:11
+msgid "Offense"
+msgstr "Támadó"
+
+#: ../engine/primary_stats.txt:15
+msgid "Defense"
+msgstr "Védő"
+
+#: ../engine/damage_types.txt:3
+msgid "Melee Damage"
+msgstr "Közeharc Sebzés"
+
+#: ../engine/damage_types.txt:4
+msgid "Melee Damage Min"
+msgstr "Közelharc Sebzés Min"
+
+#: ../engine/damage_types.txt:5
+msgid "Melee Damage Max"
+msgstr "Közelharc Sebzés Max"
+
+#: ../engine/damage_types.txt:11
+msgid "Ranged Damage"
+msgstr "Lővegyver Sebzés"
+
+#: ../engine/damage_types.txt:12
+msgid "Ranged Damage Min"
+msgstr "Lőfegyver Sebzés Min"
+
+#: ../engine/damage_types.txt:13
+msgid "Ranged Damage Max"
+msgstr "Lőfegyver Sebzés Max"
+
+#: ../engine/damage_types.txt:19
+msgid "Mental Damage"
+msgstr "Mentális Sebzés"
+
+#: ../engine/damage_types.txt:20
+msgid "Mental Damage Min"
+msgstr "Mentális Sebzés Min"
+
+#: ../engine/damage_types.txt:21
+msgid "Mental Damage Max"
+msgstr "Mentális Sebzés Max"
+
+#: ../cutscenes/credits.txt:7
+msgid "Flare Engine Credits"
+msgstr "Flare Motor Készítők"
+
+#: ../cutscenes/credits.txt:10
+msgid "Lead Programmers"
+msgstr "Vezető fejlesztők"
+
+#: ../cutscenes/credits.txt:12
+msgid "Clint Bellanger"
+msgstr ""
+
+#: ../cutscenes/credits.txt:13
+msgid "Henrik Andersson"
+msgstr ""
+
+#: ../cutscenes/credits.txt:14
+msgid "Igor Paliychuk"
+msgstr ""
+
+#: ../cutscenes/credits.txt:15
+msgid "Justin Jacobs"
+msgstr ""
+
+#: ../cutscenes/credits.txt:16
+msgid "Stefan Beller"
+msgstr ""
+
+#: ../cutscenes/credits.txt:17
+msgid "Thane Brimhall"
+msgstr ""
+
+#: ../cutscenes/credits.txt:20
+msgid "Programmers"
+msgstr "Programozók"
+
+#: ../cutscenes/credits.txt:22
+msgid "Andrew Engelbrecht"
+msgstr ""
+
+#: ../cutscenes/credits.txt:23
+msgid "Anton Golov"
+msgstr ""
+
+#: ../cutscenes/credits.txt:24
+msgid "Artur Rojek"
+msgstr ""
+
+#: ../cutscenes/credits.txt:25
+msgid "blazindragon"
+msgstr ""
+
+#: ../cutscenes/credits.txt:26
+msgid "Bonbadil"
+msgstr ""
+
+#: ../cutscenes/credits.txt:27
+msgid "Chris Oelmueller"
+msgstr ""
+
+#: ../cutscenes/credits.txt:28
+msgid "David Bariod"
+msgstr ""
+
+#: ../cutscenes/credits.txt:29
+msgid "Daniel Santos"
+msgstr ""
+
+#: ../cutscenes/credits.txt:30
+msgid "Gallaecio"
+msgstr ""
+
+#: ../cutscenes/credits.txt:31
+msgid "Joseph Bleu"
+msgstr ""
+
+#: ../cutscenes/credits.txt:32
+msgid "Juan PabloTamayo"
+msgstr ""
+
+#: ../cutscenes/credits.txt:33
+msgid "Kitano"
+msgstr ""
+
+#: ../cutscenes/credits.txt:34
+msgid "Kyle Belanger"
+msgstr ""
+
+#: ../cutscenes/credits.txt:35
+msgid "LongerDev"
+msgstr ""
+
+#: ../cutscenes/credits.txt:36
+msgid "Manuel A. Fernandez Montecelo"
+msgstr ""
+
+#: ../cutscenes/credits.txt:37
+msgid "Matthew Krohn"
+msgstr ""
+
+#: ../cutscenes/credits.txt:38
+msgid "Nojan"
+msgstr ""
+
+#: ../cutscenes/credits.txt:39
+msgid "Pavel Kirpichyov"
+msgstr ""
+
+#: ../cutscenes/credits.txt:40
+msgid "runtime-x86"
+msgstr ""
+
+#: ../cutscenes/credits.txt:41
+msgid "Ryan Dansie"
+msgstr ""
+
+#: ../cutscenes/credits.txt:44
+msgid "Alap megjelenés"
+msgstr ""
+
+#: ../cutscenes/credits.txt:49
+msgid "Fordítók"
+msgstr ""
+
+#: ../cutscenes/credits.txt:51
+msgid "Ademaro"
+msgstr ""
+
+#: ../cutscenes/credits.txt:52
+msgid "Adrian Chaves Fernandez"
+msgstr ""
+
+#: ../cutscenes/credits.txt:53
+msgid "Andrea Ranaldi"
+msgstr ""
+
+#: ../cutscenes/credits.txt:54
+msgid "Andreas Berheim Brudin"
+msgstr ""
+
+#: ../cutscenes/credits.txt:55
+msgid "Bas Doodeman"
+msgstr ""
+
+#: ../cutscenes/credits.txt:57
+msgid "Carlos Sanchez"
+msgstr ""
+
+#: ../cutscenes/credits.txt:59
+msgid "Christoph J. Thompson"
+msgstr ""
+
+#: ../cutscenes/credits.txt:60
+msgid "Denis Lysenko"
+msgstr ""
+
+#: ../cutscenes/credits.txt:61
+msgid "Diego J. Romero López"
+msgstr ""
+
+#: ../cutscenes/credits.txt:62
+msgid "Eric R"
+msgstr ""
+
+#: ../cutscenes/credits.txt:63
+msgid "Evgen Pavlov"
+msgstr ""
+
+#: ../cutscenes/credits.txt:64
+msgid "Gianfranco Del Borrello"
+msgstr ""
+
+#: ../cutscenes/credits.txt:65
+msgid "Giovanni Dalla Torre"
+msgstr ""
+
+#: ../cutscenes/credits.txt:66
+msgid "GunChleoc"
+msgstr ""
+
+#: ../cutscenes/credits.txt:67
+msgid "Hans Joachim Desserud"
+msgstr ""
+
+#: ../cutscenes/credits.txt:69
+msgid "Janet Hunt"
+msgstr ""
+
+#: ../cutscenes/credits.txt:70
+msgid "Juan Pablo Tamayo"
+msgstr ""
+
+#: ../cutscenes/credits.txt:71
+msgid "losine"
+msgstr ""
+
+#: ../cutscenes/credits.txt:72
+msgid "Michael Papageorgiou"
+msgstr ""
+
+#: ../cutscenes/credits.txt:73
+msgid "Mikhail Karalevich"
+msgstr ""
+
+#: ../cutscenes/credits.txt:74
+msgid "Miro Jánošík"
+msgstr ""
+
+#: ../cutscenes/credits.txt:75
+msgid "Микола Франчук"
+msgstr ""
+
+#: ../cutscenes/credits.txt:76
+msgid "MOB2"
+msgstr ""
+
+#: ../cutscenes/credits.txt:77
+msgid "Morgan Strauss"
+msgstr ""
+
+#: ../cutscenes/credits.txt:78
+msgid "Nea Retrogamer"
+msgstr ""
+
+#: ../cutscenes/credits.txt:79
+msgid "Nikita Vanku"
+msgstr ""
+
+#: ../cutscenes/credits.txt:80
+msgid "Paul Wortmann"
+msgstr ""
+
+#: ../cutscenes/credits.txt:81
+msgid "Pawel Puszczynski"
+msgstr ""
+
+#: ../cutscenes/credits.txt:82
+msgid "Quentin Stievenart"
+msgstr ""
+
+#: ../cutscenes/credits.txt:83
+msgid "Rui"
+msgstr ""
+
+#: ../cutscenes/credits.txt:84
+msgid "Sergey Basalaev"
+msgstr ""
+
+#: ../cutscenes/credits.txt:85
+msgid "Sergiy Borodych"
+msgstr ""
+
+#: ../cutscenes/credits.txt:87
+msgid "Stefano Peris"
+msgstr ""
+
+#: ../cutscenes/credits.txt:88
+msgid "sujiniku"
+msgstr ""
+
+#: ../cutscenes/credits.txt:89
+msgid "Thomas Glamsch"
+msgstr ""
+
+#: ../cutscenes/credits.txt:90
+msgid "Timo Sievänen"
+msgstr ""
+
+#: ../cutscenes/credits.txt:91
+msgid "Wuzzy2"
+msgstr ""
+
+#: ../cutscenes/credits.txt:92
+msgid "Yannis Anthymidis"
+msgstr ""
+
+#: ../cutscenes/credits.txt:95
+msgid "Distributors"
+msgstr "Terjesztők"
+
+#: ../cutscenes/credits.txt:97
+msgid "Ablu"
+msgstr ""
+
+#: ../cutscenes/credits.txt:98
+msgid "Feillyne"
+msgstr ""
+
+#: ../cutscenes/credits.txt:99
+msgid "Jan-Hendrik Peters"
+msgstr ""
+
+#: ../cutscenes/credits.txt:101
+msgid "miffe"
+msgstr ""
+
+#: ../cutscenes/credits.txt:104
+msgid "Special Thanks"
+msgstr "Külön köszönet"
+
+#: ../cutscenes/credits.txt:108
+msgid "For giving constant feedback and testing:"
+msgstr "a folyamatos visszajelzésért és tesztelésért:"
+
+#: ../cutscenes/credits.txt:109
+msgid "Bart Kelsey"
+msgstr ""
+
+#: ../cutscenes/credits.txt:110
+msgid "The community at OpenGameArt"
+msgstr "Az OpenGameArt közösség"
+
+#: ../cutscenes/credits.txt:114
+msgid "For Tiled and the Flare map exporter:"
+msgstr "A Tiled és Flare térkép exporerért:"
+
+#: ../cutscenes/credits.txt:115
+msgid "Thorbjørn Lindeijer"
+msgstr ""
+
+#: ../cutscenes/credits.txt:117
+msgid "Ranie Jade Ramiso"
+msgstr ""
+

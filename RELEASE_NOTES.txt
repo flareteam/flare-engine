@@ -20,6 +20,7 @@ Translation updates:
 
 * Belarusian (be) update (Zmicer Turok)
 * German (de) update (Wuzzy2)
+* Hungarian (hu) by bzt
 * Ukranian (uk) update (Igor Paliychuk)
 
 
