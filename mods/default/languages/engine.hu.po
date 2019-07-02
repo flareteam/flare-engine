@@ -93,20 +93,14 @@ msgid ""
 "SDL software renderer\n"
 "\n"
 "Often slower, but less likely to have issues."
-msgstr ""
-"SDL szoftver megjelenítő"
-"\n"
-"Általában lassabb, de tutira működik."
+msgstr "SDL szoftver megjelenítő\nÁltalában lassabb, de tutira működik."
 
 #: ../../../src/DeviceList.cpp:59
 msgid ""
 "SDL hardware renderer\n"
 "\n"
 "The default renderer that is often faster than the SDL software renderer."
-msgstr ""
-"SDL hardver megjelenítő"
-"\n"
-"Alapértelmezett, általában gyorsabb, mint a szoftveres."
+msgstr "SDL hardver megjelenítő\nAlapértelmezett, általában gyorsabb, mint a szoftveres."
 
 #: ../../../src/Entity.cpp:513
 msgid "miss"
@@ -131,7 +125,7 @@ msgstr "Ismeretlen célállomás"
 #: ../../../src/GameStateConfigBase.cpp:96
 #: ../../../src/GameStateConfigBase.cpp:119
 msgid "Defaults"
-msgstr "Alapértelmezettek"
+msgstr "Alapértelmezés"
 
 #: ../../../src/GameStateConfigBase.cpp:96
 msgid "Reset ALL settings?"
@@ -175,7 +169,7 @@ msgstr "Nyelv"
 
 #: ../../../src/GameStateConfigBase.cpp:276
 msgid "Show combat text"
-msgstr "Közdelem szövegesen"
+msgstr "Küzdelem kiírása szövegesen"
 
 #: ../../../src/GameStateConfigBase.cpp:280
 msgid "Show FPS"
@@ -269,7 +263,7 @@ msgid ""
 "this has on performance depends on the renderer."
 msgstr ""
 "A felületeket a videó memóriában próbálja tárolni a rendszermemória helyett."
-"A sebességnövekedés megjelenítőtől is függ."
+"A sebességnövekedés a megjelenítőtől is függ."
 
 #: ../../../src/GameStateConfigDesktop.cpp:192
 msgid ""
@@ -335,11 +329,11 @@ msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:261
 msgid "Use joystick"
-msgstr "Joystick használata"
+msgstr "Botkormány használata"
 
 #: ../../../src/GameStateConfigDesktop.cpp:265
 msgid "Joystick"
-msgstr ""
+msgstr "Botkormány"
 
 #: ../../../src/GameStateConfigDesktop.cpp:281
 msgid "Mouse aim"
@@ -351,7 +345,7 @@ msgstr "Ne használja az egeret"
 
 #: ../../../src/GameStateConfigDesktop.cpp:289
 msgid "Joystick Deadzone"
-msgstr ""
+msgstr "Botkormány holttér"
 
 #: ../../../src/GameState.cpp:37 ../../../src/GameState.cpp:51
 #: ../../../src/GameState.cpp:67
@@ -465,43 +459,43 @@ msgid "Right"
 msgstr "Jobbra"
 
 #: ../../../src/InputState.cpp:378
-msgid "Bar1"
+msgid "Gyorsgomb1"
 msgstr ""
 
 #: ../../../src/InputState.cpp:379
-msgid "Bar2"
+msgid "Gyorsgomb2"
 msgstr ""
 
 #: ../../../src/InputState.cpp:380
-msgid "Bar3"
+msgid "Gyorsgomb3"
 msgstr ""
 
 #: ../../../src/InputState.cpp:381
-msgid "Bar4"
+msgid "Gyorsgomb4"
 msgstr ""
 
 #: ../../../src/InputState.cpp:382
-msgid "Bar5"
+msgid "Gyorsgomb5"
 msgstr ""
 
 #: ../../../src/InputState.cpp:383
-msgid "Bar6"
+msgid "Gyorsgomb6"
 msgstr ""
 
 #: ../../../src/InputState.cpp:384
-msgid "Bar7"
+msgid "Gyorsgomb7"
 msgstr ""
 
 #: ../../../src/InputState.cpp:385
-msgid "Bar8"
+msgid "Gyorsgomb8"
 msgstr ""
 
 #: ../../../src/InputState.cpp:386
-msgid "Bar9"
+msgid "Gyorsgomb9"
 msgstr ""
 
 #: ../../../src/InputState.cpp:387
-msgid "Bar0"
+msgid "Gyorsgomb0"
 msgstr ""
 
 #: ../../../src/InputState.cpp:388 ../../../src/MenuActionBar.cpp:398
@@ -527,11 +521,11 @@ msgstr "Jegyzetek"
 
 #: ../../../src/InputState.cpp:392
 msgid "Main1"
-msgstr ""
+msgstr "Támad1"
 
 #: ../../../src/InputState.cpp:393
 msgid "Main2"
-msgstr ""
+msgstr "Támad2"
 
 #: ../../../src/InputState.cpp:394
 msgid "Ctrl"
@@ -551,7 +545,7 @@ msgstr "Törlés"
 
 #: ../../../src/InputState.cpp:398
 msgid "ActionBar Accept"
-msgstr "AkcióSáv Elfogadás"
+msgstr "AkcióSáv Elfogad"
 
 #: ../../../src/InputState.cpp:399
 msgid "ActionBar Left"
@@ -563,7 +557,7 @@ msgstr "AkcióSáv Jobb"
 
 #: ../../../src/InputState.cpp:401
 msgid "ActionBar Use"
-msgstr "AkcióSáv Használat"
+msgstr "AkcióSáv Használ"
 
 #: ../../../src/InputState.cpp:402
 msgid "Developer Menu"
@@ -619,12 +613,12 @@ msgstr "%s ellenállás"
 
 #: ../../../src/ItemManager.cpp:664
 msgid "Quest Item"
-msgstr "Köldetéstárgy"
+msgstr "Küldetéstárgy"
 
 #: ../../../src/ItemManager.cpp:691
 #, c-format
 msgid "Quality: %s"
-msgstr "Mennyiség: %s"
+msgstr "Gyakoriság: %s"
 
 #: ../../../src/ItemManager.cpp:716
 #, c-format
@@ -1427,7 +1421,7 @@ msgstr "Lopakodás"
 
 #: ../../../src/Stats.cpp:98
 msgid "Increases your ability to move undetected."
-msgstr "Növeli az esélyét, hogy észrevegyenek."
+msgstr "Növeli az esélyét, hogy ne vegyenek észre."
 
 #: ../../../src/Stats.cpp:102
 msgid "Poise"
@@ -1443,7 +1437,7 @@ msgstr "Lövedék elhárítás esélye"
 
 #: ../../../src/Stats.cpp:108
 msgid "Increases your chance of reflecting missiles back at enemies."
-msgstr "Növeli az esélyét hogy visszaköldöd a lövedéket a támadóra."
+msgstr "Növeli az esélyét hogy visszaküldöd a lövedéket a támadóra."
 
 #: ../../../src/Stats.cpp:112
 msgid "Damage Reflection"
@@ -1451,7 +1445,7 @@ msgstr "Sebzés vissza"
 
 #: ../../../src/Stats.cpp:113
 msgid "Deals a percentage of damage taken back to the attacker."
-msgstr "A sebzést addott százalékban a támadóra hárítja."
+msgstr "A sebzést adott százalékban a visszahárítja a támadóra."
 
 #: ../../../src/Stats.cpp:117
 msgid "HP Steal"
