@@ -144,6 +144,8 @@ g++ -I /usr/include/SDL src/*.cpp -o flare -lSDL2 -lSDL2_image -lSDL2_mixer -lSD
 
 **Windows** plus [MinGW]:
 
+(Note: Due to an [issue](https://github.com/flareteam/flare-engine/issues/1723#issuecomment-511621267) with compilers that aren't VC++, it is recommended to use SDL\_image 2.0.4)
+
 ```
 g++ -I C:\MinGW\include\SDL src\*.cpp -o flare.exe -lmingw32 -lSDLmain -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf
 ```
