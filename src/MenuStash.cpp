@@ -330,19 +330,21 @@ void MenuStash::removeFromPrevSlot(int quantity) {
 }
 
 void MenuStash::validate(std::queue<ItemStack>& global_drop_stack) {
-	for (int i = 0; i < stock[activetab].getSlotNumber(); ++i) {
-		if (stock[activetab][i].empty())
-			continue;
+	for (int tab = 0; tab < 2; ++tab) {
+		for (int i = 0; i < stock[activetab].getSlotNumber(); ++i) {
+			if (stock[tab][i].empty())
+				continue;
 
-		ItemStack stack = stock[activetab][i];
-		if (items->items[stack.item].quest_item || items->items[stack.item].no_stash != Item::NO_STASH_IGNORE) {
-			pc->logMsg(msg->get("Can not store item in stash: %s", items->getItemName(stack.item).c_str()), Avatar::MSG_NORMAL);
-			global_drop_stack.push(stack);
-			stock[activetab][i].clear();
-			updated = true;
+			ItemStack stack = stock[tab][i];
+			int no_stash = items->items[stack.item].no_stash;
+			if (items->items[stack.item].quest_item || no_stash == Item::NO_STASH_ALL || (tab == STASH_PRIVATE && no_stash == Item::NO_STASH_PRIVATE) || (tab == STASH_SHARED && no_stash == Item::NO_STASH_SHARED)) {
+				pc->logMsg(msg->get("Can not store item in stash: %s", items->getItemName(stack.item).c_str()), Avatar::MSG_NORMAL);
+				global_drop_stack.push(stack);
+				stock[tab][i].clear();
+				updated = true;
+			}
 		}
 	}
-
 }
 
 void MenuStash::enableSharedTab(bool permadeath) {
