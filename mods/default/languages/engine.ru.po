@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-21 14:40-0400\n"
+"POT-Creation-Date: 2019-07-29 09:34-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
 "Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2019\n"
 "Language-Team: Russian (https://www.transifex.com/flareorg/teams/84925/ru/)\n"
@@ -49,7 +49,7 @@ msgstr ""
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
 msgstr "Вы потерпели поражение. Нажмите ${INPUT_CONTINUE}, чтобы продолжить."
 
-#: ../../../src/Avatar.cpp:944
+#: ../../../src/Avatar.cpp:945
 msgid "Transformation expired. You have been moved back to a safe place."
 msgstr "Трансформация завершилась. Вы были возвращены в безопасное место."
 
@@ -191,7 +191,7 @@ msgstr "Загрузка сохранённой игры..."
 msgid "Invalid save"
 msgstr "Недействительная игра"
 
-#: ../../../src/GameStateLoad.cpp:755 ../../../src/ItemManager.cpp:761
+#: ../../../src/GameStateLoad.cpp:755 ../../../src/ItemManager.cpp:771
 #: ../../../src/MenuPowers.cpp:778 ../../../src/MenuPowers.cpp:1144
 #: ../../../src/MenuPowers.cpp:1544
 #, c-format
@@ -399,102 +399,102 @@ msgstr "Мышь X1"
 msgid "Mouse X2"
 msgstr "Мышь X2"
 
-#: ../../../src/ItemManager.cpp:464 ../../../src/ItemManager.cpp:467
+#: ../../../src/ItemManager.cpp:474 ../../../src/ItemManager.cpp:477
 msgid "Unknown Item"
 msgstr "Неизвестный Предмет"
 
-#: ../../../src/ItemManager.cpp:662 ../../../src/MenuPowers.cpp:887
+#: ../../../src/ItemManager.cpp:672 ../../../src/MenuPowers.cpp:887
 #, c-format
 msgid "%d%% Speed"
 msgstr "%d%% Скорости"
 
-#: ../../../src/ItemManager.cpp:666 ../../../src/MenuPowers.cpp:890
+#: ../../../src/ItemManager.cpp:676 ../../../src/MenuPowers.cpp:890
 #, c-format
 msgid "%d%% Attack Speed"
 msgstr "%d%% Скорость Атаки"
 
-#: ../../../src/ItemManager.cpp:688 ../../../src/MenuCharacter.cpp:354
+#: ../../../src/ItemManager.cpp:698 ../../../src/MenuCharacter.cpp:354
 #: ../../../src/MenuPowers.cpp:833
 #, c-format
 msgid "Resistance (%s)"
 msgstr "Сопротивление (%s)"
 
-#: ../../../src/ItemManager.cpp:698
+#: ../../../src/ItemManager.cpp:708
 #, c-format
 msgid "Requires %s"
 msgstr "Требуется %s"
 
-#: ../../../src/ItemManager.cpp:747
+#: ../../../src/ItemManager.cpp:757
 msgid "Quest Item"
 msgstr "Предмет Задания"
 
-#: ../../../src/ItemManager.cpp:774
+#: ../../../src/ItemManager.cpp:784
 #, c-format
 msgid "Quality: %s"
 msgstr "Качество: %s"
 
-#: ../../../src/ItemManager.cpp:799
+#: ../../../src/ItemManager.cpp:809
 #, c-format
 msgid "Absorb: %d-%d"
 msgstr "Поглощение: %d-%d"
 
-#: ../../../src/ItemManager.cpp:801
+#: ../../../src/ItemManager.cpp:811
 #, c-format
 msgid "Absorb: %d"
 msgstr "Поглощение: %d"
 
-#: ../../../src/ItemManager.cpp:841 ../../../src/MenuPowers.cpp:1131
+#: ../../../src/ItemManager.cpp:851 ../../../src/MenuPowers.cpp:1131
 #: ../../../src/MenuPowers.cpp:1134
 #, c-format
 msgid "Requires Level %d"
 msgstr "Требуется Уровень %d"
 
-#: ../../../src/ItemManager.cpp:852 ../../../src/MenuPowers.cpp:1123
+#: ../../../src/ItemManager.cpp:862 ../../../src/MenuPowers.cpp:1123
 #: ../../../src/MenuPowers.cpp:1125
 #, c-format
 msgid "Requires %s %d"
 msgstr "Требуется %s %d"
 
-#: ../../../src/ItemManager.cpp:863
+#: ../../../src/ItemManager.cpp:873
 #, c-format
 msgid "Requires Class: %s"
 msgstr "Требуется Класс: %s"
 
-#: ../../../src/ItemManager.cpp:878 ../../../src/ItemManager.cpp:890
+#: ../../../src/ItemManager.cpp:888 ../../../src/ItemManager.cpp:900
 #, c-format
 msgid "Buy Price: %d %s"
 msgstr "Цена Покупки: %d %s"
 
-#: ../../../src/ItemManager.cpp:880 ../../../src/ItemManager.cpp:892
+#: ../../../src/ItemManager.cpp:890 ../../../src/ItemManager.cpp:902
 #, c-format
 msgid "Buy Price: %d %s each"
 msgstr "Цена Покупки: %d %s каждый"
 
-#: ../../../src/ItemManager.cpp:900
+#: ../../../src/ItemManager.cpp:910
 #, c-format
 msgid "Sell Price: %d %s"
 msgstr "Цена Продажи: %d %s"
 
-#: ../../../src/ItemManager.cpp:902
+#: ../../../src/ItemManager.cpp:912
 #, c-format
 msgid "Sell Price: %d %s each"
 msgstr "Цена Продажи: %d %s каждый"
 
-#: ../../../src/ItemManager.cpp:911
+#: ../../../src/ItemManager.cpp:921
 msgid "Set:"
 msgstr ""
 
-#: ../../../src/ItemManager.cpp:918
+#: ../../../src/ItemManager.cpp:928
 #, c-format
 msgid "%d items:"
 msgstr "%d предметов:"
 
-#: ../../../src/ItemManager.cpp:931 ../../../src/ItemManager.cpp:937
+#: ../../../src/ItemManager.cpp:941 ../../../src/ItemManager.cpp:947
 #, c-format
 msgid "Press [%s] to use"
 msgstr "Нажмите [%s], чтобы использовать"
 
-#: ../../../src/ItemManager.cpp:935
+#: ../../../src/ItemManager.cpp:945
 #, c-format
 msgid "Press [%s] to read"
 msgstr "Нажмите [%s], чтобы прочитать"
@@ -1460,11 +1460,19 @@ msgstr "Предметы заданий нельзя хранить в тайн�
 msgid "This item can not be stored in the stash."
 msgstr ""
 
+#: ../../../src/MenuStash.cpp:269
+msgid "This item can not be stored in the private stash."
+msgstr ""
+
 #: ../../../src/MenuStash.cpp:274
+msgid "This item can not be stored in the shared stash."
+msgstr ""
+
+#: ../../../src/MenuStash.cpp:284
 msgid "Stash is full."
 msgstr "Тайник заполнен."
 
-#: ../../../src/MenuStash.cpp:329
+#: ../../../src/MenuStash.cpp:341
 #, c-format
 msgid "Can not store item in stash: %s"
 msgstr ""
