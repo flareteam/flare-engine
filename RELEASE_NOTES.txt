@@ -1,4 +1,13 @@
-Flare v1.11 (WIP)
+Flare v1.12 (WIP)
+
+Translation updates:
+
+* Norwegian (nb) update (Elias Nykrem)
+* Slovak (sk) update (MiroslavR)
+
+
+
+Flare v1.11 (http://flarerpg.org/index.php/2019/07/27/flare-1-11/)
 
 Engine features:
 

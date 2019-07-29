@@ -54,13 +54,13 @@ Translations
 (hu) Hungarian by bzt
 (it) Italian by Giovanni Dalla Torre, Gianfranco Del Borrello, Stefano Peris, Andrea Ranaldi, MOB2, and Fabio Loli
 (ja) Japanese by Paul Wortmann, sujiniku
-(nb) Norwegian Bokmal by Hans Joachim Desserud
+(nb) Norwegian Bokmal by Hans Joachim Desserud, Elias Nykrem
 (nl) Dutch by Bas Doodeman
 (pl) Polish by Paweł Puszczyński
 (pt) Portuguese by Rui
 (pt_BR) Brazilian Portuguese by Vicente Monteiro
 (ru) Russian by Sergey Basalaev, Evgen Pavlov, Ademaro, and Andrey Kapitonov
-(sk) Slovak by Miro Jánošík
+(sk) Slovak by Miro Jánošík, MiroslavR
 (sv) Swedish by Andreas Berheim Brudin
 (uk) Ukrainian by Igor Paliychuk, Denis Lysenko, Микола Франчук, Sergiy Borodych
 (vi) Vietnamese by Nguyễn Gia Phong

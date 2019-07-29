@@ -2,12 +2,16 @@
 # This file is distributed under the same license as the FLARE package.
 # 
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Translators:
+# Elias Nykrem <bloodaxeNOR@protonmail.com>, 2019
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-13 09:09+\n"
+"POT-Creation-Date: 2019-05-21 14:40+\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
+"Last-Translator: Elias Nykrem <bloodaxeNOR@protonmail.com>, 2019\n"
 "Language-Team: Norwegian Bokmål (https://www.transifex.com/flareorg/teams/84925/nb/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,75 +21,75 @@ msgstr ""
 
 #: ../engine/primary_stats.txt:3
 msgid "Physical"
-msgstr ""
+msgstr "Fysisk"
 
 #: ../engine/primary_stats.txt:7
 msgid "Mental"
-msgstr ""
+msgstr "Mental"
 
 #: ../engine/primary_stats.txt:11
 msgid "Offense"
-msgstr ""
+msgstr "Offensiv"
 
 #: ../engine/primary_stats.txt:15
 msgid "Defense"
-msgstr ""
+msgstr "Defensiv"
 
 #: ../engine/damage_types.txt:3
 msgid "Melee Damage"
-msgstr ""
+msgstr "Nærkamp Skade"
 
 #: ../engine/damage_types.txt:4
 msgid "Increases the damage done with swords and other melee weapons."
-msgstr ""
+msgstr "Øker skade gjort med sverd og andre nærkampsvåpen."
 
 #: ../engine/damage_types.txt:5
 msgid "Melee Damage Min"
-msgstr ""
+msgstr "Nærkamp Skade Min"
 
 #: ../engine/damage_types.txt:6
 msgid "Melee Damage Max"
-msgstr ""
+msgstr "Nærkamp Skade Maks"
 
 #: ../engine/damage_types.txt:12
 msgid "Ranged Damage"
-msgstr ""
+msgstr "Distanse Skade"
 
 #: ../engine/damage_types.txt:13
 msgid "Increases the damage done with bows and other ranged weapons."
-msgstr ""
+msgstr "Øker skade gjort med buer og andre distansevåpen."
 
 #: ../engine/damage_types.txt:14
 msgid "Ranged Damage Min"
-msgstr ""
+msgstr "Distanse Skade Min"
 
 #: ../engine/damage_types.txt:15
 msgid "Ranged Damage Max"
-msgstr ""
+msgstr "Distanse Skade Maks"
 
 #: ../engine/damage_types.txt:21
 msgid "Mental Damage"
-msgstr ""
+msgstr "Mental Skade"
 
 #: ../engine/damage_types.txt:22
 msgid "Increases the damage done with staves and other mental weapons."
-msgstr ""
+msgstr "Øker skade gjort med staver og andre mentalvåpen."
 
 #: ../engine/damage_types.txt:23
 msgid "Mental Damage Min"
-msgstr ""
+msgstr "Mental Skade Min"
 
 #: ../engine/damage_types.txt:24
 msgid "Mental Damage Max"
-msgstr ""
+msgstr "Mental Skade Maks"
 
 #: ../cutscenes/credits.txt:7
 msgid "Flare Engine Credits"
-msgstr ""
+msgstr "Flare Engine Rulletekst"
 
 #: ../cutscenes/credits.txt:10
 msgid "Lead Programmers"
-msgstr ""
+msgstr "Ledende Programmerere"
 
 #: ../cutscenes/credits.txt:12
 msgid "Clint Bellanger"
@@ -113,7 +117,7 @@ msgstr ""
 
 #: ../cutscenes/credits.txt:20
 msgid "Programmers"
-msgstr ""
+msgstr "Programmerere"
 
 #: ../cutscenes/credits.txt:22
 msgid "Andrew Engelbrecht"
@@ -197,11 +201,11 @@ msgstr ""
 
 #: ../cutscenes/credits.txt:44
 msgid "Default Art"
-msgstr ""
+msgstr "Standard Kunst"
 
 #: ../cutscenes/credits.txt:49
 msgid "Translators"
-msgstr ""
+msgstr "Oversettere"
 
 #: ../cutscenes/credits.txt:51
 msgid "Ademaro"
@@ -417,11 +421,11 @@ msgstr ""
 
 #: ../cutscenes/credits.txt:114
 msgid "Special Thanks"
-msgstr ""
+msgstr "Spesielt takk til"
 
 #: ../cutscenes/credits.txt:118
 msgid "For giving constant feedback and testing:"
-msgstr ""
+msgstr "For konstant testing og tilbakemelding:"
 
 #: ../cutscenes/credits.txt:119
 msgid "Bart Kelsey"
@@ -429,11 +433,11 @@ msgstr ""
 
 #: ../cutscenes/credits.txt:120
 msgid "The community at OpenGameArt"
-msgstr ""
+msgstr "Fellesskapet ved OpenGameArt"
 
 #: ../cutscenes/credits.txt:124
 msgid "For Tiled and the Flare map exporter:"
-msgstr ""
+msgstr "Til Tiled og Flare kart eksportør:"
 
 #: ../cutscenes/credits.txt:125
 msgid "Thorbjørn Lindeijer"
