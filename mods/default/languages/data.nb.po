@@ -25,7 +25,7 @@ msgstr "Fysisk"
 
 #: ../engine/primary_stats.txt:7
 msgid "Mental"
-msgstr "Mental"
+msgstr "Mentalitet"
 
 #: ../engine/primary_stats.txt:11
 msgid "Offense"
@@ -73,7 +73,7 @@ msgstr "Mental Skade"
 
 #: ../engine/damage_types.txt:22
 msgid "Increases the damage done with staves and other mental weapons."
-msgstr "Øker skade gjort med staver og andre mentalvåpen."
+msgstr "Øker skade gjort med staver og andre mentalitetsvåpen."
 
 #: ../engine/damage_types.txt:23
 msgid "Mental Damage Min"
@@ -105,7 +105,7 @@ msgstr "Oversettere"
 
 #: ../cutscenes/credits.txt:108
 msgid "Distributors"
-msgstr ""
+msgstr "Distributører"
 
 #: ../cutscenes/credits.txt:117
 msgid "Special Thanks"

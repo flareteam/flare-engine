@@ -24,7 +24,7 @@ msgstr ""
 
 #: ../../../src/Avatar.cpp:387
 msgid "Your health is low!"
-msgstr ""
+msgstr "Vaše zdravie je nízke!"
 
 #: ../../../src/Avatar.cpp:419
 #, c-format
@@ -127,7 +127,7 @@ msgstr "Dobrodruh"
 
 #: ../../../src/Entity.cpp:517
 msgid "miss"
-msgstr ""
+msgstr "minutie"
 
 #: ../../../src/Entity.cpp:554 ../../../src/PowerManager.cpp:1186
 #: ../../../src/StatBlock.cpp:812 ../../../src/StatBlock.cpp:818
@@ -151,7 +151,7 @@ msgstr "Načítava sa..."
 
 #: ../../../src/GameStateLoad.cpp:88 ../../../src/GameStateLoad.cpp:101
 msgid "Delete Save"
-msgstr "Zmazať Pozíciu"
+msgstr "Zmazať pozíciu"
 
 #: ../../../src/GameStateLoad.cpp:88
 msgid "Delete this save?"
@@ -167,7 +167,7 @@ msgstr "Nová hra"
 
 #: ../../../src/GameStateLoad.cpp:97 ../../../src/GameStateLoad.cpp:600
 msgid "Choose a Slot"
-msgstr "Vyber priečinok"
+msgstr "Vyberte pozíciu"
 
 #: ../../../src/GameStateLoad.cpp:573 ../../../src/GameStateLoad.cpp:594
 msgid "Enable a story mod to continue"
@@ -194,7 +194,7 @@ msgstr "Neplatná uložená pozícia"
 #: ../../../src/MenuPowers.cpp:1544
 #, c-format
 msgid "Level %d"
-msgstr "Stupeň %d"
+msgstr "Úroveň %d"
 
 #: ../../../src/GameStateNew.cpp:65 ../../../src/InputState.cpp:403
 #: ../../../src/MenuConfig.cpp:241
@@ -367,7 +367,7 @@ msgstr ""
 
 #: ../../../src/InputState.cpp:433
 msgid "Developer Menu"
-msgstr ""
+msgstr "Vývojárska ponuka"
 
 #: ../../../src/InputState.cpp:435
 msgid "Left Mouse"
@@ -383,11 +383,11 @@ msgstr "Pravé tlačidlo myši"
 
 #: ../../../src/InputState.cpp:438
 msgid "Wheel Up"
-msgstr ""
+msgstr "Koliesko myši nahor"
 
 #: ../../../src/InputState.cpp:439
 msgid "Wheel Down"
-msgstr ""
+msgstr "Koliesko myši nadol"
 
 #: ../../../src/InputState.cpp:440
 msgid "Mouse X1"
@@ -420,7 +420,7 @@ msgstr ""
 #: ../../../src/ItemManager.cpp:708
 #, c-format
 msgid "Requires %s"
-msgstr ""
+msgstr "Vyžaduje %s"
 
 #: ../../../src/ItemManager.cpp:757
 msgid "Quest Item"
@@ -480,7 +480,7 @@ msgstr ""
 
 #: ../../../src/ItemManager.cpp:921
 msgid "Set:"
-msgstr ""
+msgstr "Súprava:"
 
 #: ../../../src/ItemManager.cpp:928
 #, c-format
@@ -490,12 +490,12 @@ msgstr ""
 #: ../../../src/ItemManager.cpp:941 ../../../src/ItemManager.cpp:947
 #, c-format
 msgid "Press [%s] to use"
-msgstr ""
+msgstr "Použijete stlačením [%s]"
 
 #: ../../../src/ItemManager.cpp:945
 #, c-format
 msgid "Press [%s] to read"
-msgstr ""
+msgstr "Prečítate stlačením [%s]"
 
 #: ../../../src/MenuActionBar.cpp:220 ../../../src/MenuActionBar.cpp:227
 #: ../../../src/MenuActionBar.cpp:230 ../../../src/MenuActionBar.cpp:236
@@ -505,7 +505,7 @@ msgstr ""
 
 #: ../../../src/MenuActionBar.cpp:593
 msgid "Not enough MP."
-msgstr ""
+msgstr "Nedostatok MP."
 
 #: ../../../src/MenuActiveEffects.cpp:124
 #, c-format
@@ -780,7 +780,7 @@ msgstr "Zobrazovať FPS"
 
 #: ../../../src/MenuConfig.cpp:364
 msgid "Hardware mouse cursor"
-msgstr ""
+msgstr "Hardvérový kurzor myši"
 
 #: ../../../src/MenuConfig.cpp:365
 msgid "Colorblind Mode"
@@ -800,7 +800,7 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:369
 msgid "Mini-map mode"
-msgstr ""
+msgstr "Režim minimapy"
 
 #: ../../../src/MenuConfig.cpp:370
 msgid "Always show stat bar labels"
@@ -812,11 +812,11 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:372
 msgid "Show combat text"
-msgstr ""
+msgstr "Zobrazovať text o boji"
 
 #: ../../../src/MenuConfig.cpp:373
 msgid "Automatically equip items"
-msgstr ""
+msgstr "Automaticky sa vystrojiť predmetmi"
 
 #: ../../../src/MenuConfig.cpp:374
 msgid "Show hidden entity markers"
@@ -824,11 +824,11 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:375
 msgid "Low health notification"
-msgstr ""
+msgstr "Oznámenie o nízkom zdraví"
 
 #: ../../../src/MenuConfig.cpp:376
 msgid "Low health threshold"
-msgstr ""
+msgstr "Prah nízkeho zdravia"
 
 #: ../../../src/MenuConfig.cpp:379
 msgid "Joystick"
@@ -836,15 +836,15 @@ msgstr "Joystick"
 
 #: ../../../src/MenuConfig.cpp:380
 msgid "Move hero using mouse"
-msgstr ""
+msgstr "Ovládať pohyb hrdinu pomocou myši"
 
 #: ../../../src/MenuConfig.cpp:381
 msgid "Mouse aim"
-msgstr ""
+msgstr "Mierenie myšou"
 
 #: ../../../src/MenuConfig.cpp:382
 msgid "Do not use mouse"
-msgstr ""
+msgstr "Nepoužívať myš"
 
 #: ../../../src/MenuConfig.cpp:383
 msgid "Swap mouse movement button"
@@ -856,7 +856,7 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:385
 msgid "Joystick Deadzone"
-msgstr ""
+msgstr "Mŕtva zóna joysticku"
 
 #: ../../../src/MenuConfig.cpp:395
 #, c-format
@@ -913,6 +913,7 @@ msgid ""
 "Provides additional text for information that is primarily conveyed through "
 "color."
 msgstr ""
+"Poskytne doplnkové texty pre informácie, ktoré sú vyjadrené hlavne farbami."
 
 #: ../../../src/MenuConfig.cpp:502
 msgid ""
@@ -936,7 +937,7 @@ msgstr ""
 msgid ""
 "This allows the game to be controlled entirely with the keyboard (or "
 "joystick)."
-msgstr ""
+msgstr "Umožní ovládať hru výlučne pomocou klávesnice (alebo joysticku)."
 
 #: ../../../src/MenuConfig.cpp:506
 msgid ""
@@ -1015,6 +1016,8 @@ msgstr ""
 #: ../../../src/MenuDevConsole.cpp:146
 msgid "Arguments with spaces should be enclosed with double quotes. Example:"
 msgstr ""
+"Argumenty obsahujúce medzery by mali byť uzavreté v dvojitých úvodzovkách. "
+"Napríklad:"
 
 #: ../../../src/MenuDevConsole.cpp:147
 msgid "Type 'help' to get a list of commands."
@@ -1121,11 +1124,11 @@ msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:534
 msgid "ERROR: Incorrect number of arguments"
-msgstr ""
+msgstr "CHYBA: Nesprávny počet argumentov"
 
 #: ../../../src/MenuDevConsole.cpp:536 ../../../src/MenuDevConsole.cpp:564
 msgid "HINT:"
-msgstr ""
+msgstr "TIP:"
 
 #: ../../../src/MenuDevConsole.cpp:536
 msgid "<id>"
@@ -1138,7 +1141,7 @@ msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:562
 msgid "ERROR: Too few arguments"
-msgstr ""
+msgstr "CHYBA: Príliš málo argumentov"
 
 #: ../../../src/MenuDevConsole.cpp:564
 msgid "<key>=<val> <key>=<val> ..."
@@ -1146,7 +1149,7 @@ msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:569
 msgid "ERROR: Unknown command"
-msgstr ""
+msgstr "CHYBA: Neznámy príkaz"
 
 #: ../../../src/MenuDevConsole.cpp:571
 msgid "HINT: Type help"
@@ -1366,7 +1369,7 @@ msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1062
 msgid "Base Accuracy"
-msgstr ""
+msgstr "Základná presnosť"
 
 #: ../../../src/MenuPowers.cpp:1082
 msgid "Base Critical Chance"
@@ -1432,7 +1435,7 @@ msgstr ""
 
 #: ../../../src/MenuStash.cpp:104
 msgid "Stash"
-msgstr ""
+msgstr "Úložisko"
 
 #: ../../../src/MenuStash.cpp:259
 msgid "Can not store quest items in the stash."
@@ -1440,24 +1443,24 @@ msgstr "Predmety úloh nemožno vložiť do úložiska."
 
 #: ../../../src/MenuStash.cpp:264
 msgid "This item can not be stored in the stash."
-msgstr ""
+msgstr "Tento predmet nemožno vložiť do úložiska."
 
 #: ../../../src/MenuStash.cpp:269
 msgid "This item can not be stored in the private stash."
-msgstr ""
+msgstr "Tento predmet nemožno vložiť do súkromného úložiska."
 
 #: ../../../src/MenuStash.cpp:274
 msgid "This item can not be stored in the shared stash."
-msgstr ""
+msgstr "Tento predmet nemožno vložiť do zdieľaného úložiska."
 
 #: ../../../src/MenuStash.cpp:284
 msgid "Stash is full."
-msgstr ""
+msgstr "Úložisko je plné."
 
 #: ../../../src/MenuStash.cpp:341
 #, c-format
 msgid "Can not store item in stash: %s"
-msgstr ""
+msgstr "Do úložiska nemožno vložiť predmet: %s"
 
 #: ../../../src/MenuTalker.cpp:447
 #, c-format
