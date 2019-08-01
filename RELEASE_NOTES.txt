@@ -3,6 +3,8 @@ Flare v1.12 (WIP)
 Translation updates:
 
 * Norwegian (nb) update (Elias Nykrem)
+* Portuguese (pt) update (Rui)
+* Russian (ru) update (Igor Polyakov)
 * Slovak (sk) update (MiroslavR)
 
 
