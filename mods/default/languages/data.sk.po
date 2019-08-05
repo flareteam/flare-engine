@@ -21,11 +21,11 @@ msgstr ""
 
 #: ../engine/primary_stats.txt:3
 msgid "Physical"
-msgstr ""
+msgstr "Fyzické"
 
 #: ../engine/primary_stats.txt:7
 msgid "Mental"
-msgstr ""
+msgstr "Mentálne"
 
 #: ../engine/primary_stats.txt:11
 msgid "Offense"
@@ -37,51 +37,51 @@ msgstr "Obrana"
 
 #: ../engine/damage_types.txt:3
 msgid "Melee Damage"
-msgstr "Poškodenie nablízko"
+msgstr "Zranenie nablízko"
 
 #: ../engine/damage_types.txt:4
 msgid "Increases the damage done with swords and other melee weapons."
-msgstr "Zvyšuje poškodenie spôsobené mečmi a inými zbraňami nablízko."
+msgstr "Zvyšuje zranenie spôsobené mečmi a inými zbraňami nablízko."
 
 #: ../engine/damage_types.txt:5
 msgid "Melee Damage Min"
-msgstr "Min. poškodenie nablízko"
+msgstr "Min. zranenie nablízko"
 
 #: ../engine/damage_types.txt:6
 msgid "Melee Damage Max"
-msgstr "Max. poškodenie nablízko"
+msgstr "Max. zranenie nablízko"
 
 #: ../engine/damage_types.txt:12
 msgid "Ranged Damage"
-msgstr "Poškodenie na diaľku"
+msgstr "Zranenie na diaľku"
 
 #: ../engine/damage_types.txt:13
 msgid "Increases the damage done with bows and other ranged weapons."
-msgstr "Zvyšuje poškodenie spôsobené lukmi a inými zbraňami na diaľku."
+msgstr "Zvyšuje zranenie spôsobené lukmi a inými zbraňami na diaľku."
 
 #: ../engine/damage_types.txt:14
 msgid "Ranged Damage Min"
-msgstr "Min. poškodenie na diaľku"
+msgstr "Min. zranenie na diaľku"
 
 #: ../engine/damage_types.txt:15
 msgid "Ranged Damage Max"
-msgstr "Max. poškodenie na diaľku"
+msgstr "Max. zranenie na diaľku"
 
 #: ../engine/damage_types.txt:21
 msgid "Mental Damage"
-msgstr "Mentálne poškodenie"
+msgstr "Mentálne zranenie"
 
 #: ../engine/damage_types.txt:22
 msgid "Increases the damage done with staves and other mental weapons."
-msgstr "Zvyšuje poškodenie spôsobené palicami a inými mentálnymi zbraňami."
+msgstr "Zvyšuje zranenie spôsobené palicami a inými mentálnymi zbraňami."
 
 #: ../engine/damage_types.txt:23
 msgid "Mental Damage Min"
-msgstr "Min. mentálne poškodenie"
+msgstr "Min. mentálne zranenie"
 
 #: ../engine/damage_types.txt:24
 msgid "Mental Damage Max"
-msgstr "Max. mentálne poškodenie"
+msgstr "Max. mentálne zranenie"
 
 #: ../cutscenes/credits.txt:7
 msgid "Flare Engine Credits"
