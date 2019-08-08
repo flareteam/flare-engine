@@ -1493,11 +1493,12 @@ msgstr "Dieser Gegenstand kann nicht eingelagert werden."
 
 #: ../../../src/MenuStash.cpp:269
 msgid "This item can not be stored in the private stash."
-msgstr ""
+msgstr "Dieser Gegenstand kann nicht im privaten Lager eingelagert werden."
 
 #: ../../../src/MenuStash.cpp:274
 msgid "This item can not be stored in the shared stash."
 msgstr ""
+"Dieser Gegenstand kann nicht im Gemeinschaftslager eingelagert werden."
 
 #: ../../../src/MenuStash.cpp:284
 msgid "Stash is full."

@@ -76,7 +76,7 @@ msgstr "Dostali ste %s x%d."
 #: ../../../src/CampaignManager.cpp:186
 #, c-format
 msgid "You receive %d %s."
-msgstr ""
+msgstr "Dostali ste %d %s."
 
 #: ../../../src/CampaignManager.cpp:195
 #, c-format
@@ -85,23 +85,23 @@ msgstr "Dostali ste %d XP."
 
 #: ../../../src/CampaignManager.cpp:201
 msgid "HP restored."
-msgstr ""
+msgstr "HP boli obnovené."
 
 #: ../../../src/CampaignManager.cpp:205
 msgid "MP restored."
-msgstr ""
+msgstr "MP boli obnovené."
 
 #: ../../../src/CampaignManager.cpp:210
 msgid "HP and MP restored."
-msgstr ""
+msgstr "HP a MP boli obnovené."
 
 #: ../../../src/CampaignManager.cpp:214
 msgid "Negative effects removed."
-msgstr ""
+msgstr "Negatívne efekty boli odstránené."
 
 #: ../../../src/CampaignManager.cpp:220
 msgid "HP and MP restored, negative effects removed"
-msgstr ""
+msgstr "HP a MP boli obnovené, negatívne efekty odstránené"
 
 #: ../../../src/DeviceList.cpp:56
 msgid ""
@@ -417,7 +417,7 @@ msgstr ""
 #: ../../../src/MenuPowers.cpp:833
 #, c-format
 msgid "Resistance (%s)"
-msgstr ""
+msgstr "Odolnosť (%s)"
 
 #: ../../../src/ItemManager.cpp:708
 #, c-format
@@ -431,7 +431,7 @@ msgstr "Predmet úlohy"
 #: ../../../src/ItemManager.cpp:784
 #, c-format
 msgid "Quality: %s"
-msgstr ""
+msgstr "Kvalita: %s"
 
 #: ../../../src/ItemManager.cpp:809
 #, c-format
@@ -1803,7 +1803,7 @@ msgstr "Základné MP"
 
 #: ../../../src/Utils.cpp:346
 msgid "k"
-msgstr ""
+msgstr " tis."
 
 #: ../../../src/Utils.cpp:580
 #, c-format
@@ -1817,8 +1817,8 @@ msgstr "%s sekúnd/-y"
 
 #: ../../../src/Version.cpp:139
 msgid "or newer"
-msgstr ""
+msgstr "alebo novšia"
 
 #: ../../../src/Version.cpp:142
 msgid "or older"
-msgstr ""
+msgstr "alebo staršia"

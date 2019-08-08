@@ -1061,7 +1061,7 @@ msgstr "Skriv 'help' for å motta en liste over tilgjengelige kommandoer."
 
 #: ../../../src/MenuDevConsole.cpp:209 ../../../src/MenuDevConsole.cpp:213
 msgid "px"
-msgstr ""
+msgstr "px"
 
 #: ../../../src/MenuDevConsole.cpp:224
 msgid "Distance"
@@ -1483,11 +1483,11 @@ msgstr "Denne gjenstanden kan ikke oppbevares i lageret. "
 
 #: ../../../src/MenuStash.cpp:269
 msgid "This item can not be stored in the private stash."
-msgstr ""
+msgstr "Denne gjenstanden kan ikke oppbevares i privatlageret."
 
 #: ../../../src/MenuStash.cpp:274
 msgid "This item can not be stored in the shared stash."
-msgstr ""
+msgstr "Denne gjenstanden kan ikke oppbevares i det delte lageret."
 
 #: ../../../src/MenuStash.cpp:284
 msgid "Stash is full."
@@ -1542,11 +1542,11 @@ msgstr "Tilbaketast"
 
 #: ../../../src/SDLInputState.cpp:634
 msgid "CapsLock"
-msgstr ""
+msgstr "CapsLock"
 
 #: ../../../src/SDLInputState.cpp:637
 msgid "End"
-msgstr ""
+msgstr "End"
 
 #: ../../../src/SDLInputState.cpp:638
 msgid "Escape"
@@ -1558,7 +1558,7 @@ msgstr "Hjem"
 
 #: ../../../src/SDLInputState.cpp:640
 msgid "Insert"
-msgstr ""
+msgstr "Insert"
 
 #: ../../../src/SDLInputState.cpp:641
 msgid "Left Alt"
@@ -1574,23 +1574,23 @@ msgstr "Venstre Shift"
 
 #: ../../../src/SDLInputState.cpp:645
 msgid "NumLock"
-msgstr ""
+msgstr "NumLock"
 
 #: ../../../src/SDLInputState.cpp:646
 msgid "PageDown"
-msgstr ""
+msgstr "PageDown"
 
 #: ../../../src/SDLInputState.cpp:647
 msgid "PageUp"
-msgstr ""
+msgstr "PageUp"
 
 #: ../../../src/SDLInputState.cpp:648
 msgid "Pause"
-msgstr ""
+msgstr "Pause"
 
 #: ../../../src/SDLInputState.cpp:649
 msgid "PrintScreen"
-msgstr ""
+msgstr "PrintScreen"
 
 #: ../../../src/SDLInputState.cpp:650
 msgid "Right Alt"
@@ -1602,7 +1602,7 @@ msgstr "Høyre Ctrl"
 
 #: ../../../src/SDLInputState.cpp:652
 msgid "Return"
-msgstr ""
+msgstr "Return"
 
 #: ../../../src/SDLInputState.cpp:654
 msgid "Right Shift"
@@ -1610,7 +1610,7 @@ msgstr "Høyre Shift"
 
 #: ../../../src/SDLInputState.cpp:655
 msgid "ScrollLock"
-msgstr ""
+msgstr "ScrollLock"
 
 #: ../../../src/SDLInputState.cpp:656
 msgid "Space"
@@ -1618,7 +1618,7 @@ msgstr "Mellomrom"
 
 #: ../../../src/SDLInputState.cpp:657
 msgid "Tab"
-msgstr ""
+msgstr "Tab"
 
 #: ../../../src/SDLInputState.cpp:671
 #, c-format
@@ -1823,7 +1823,7 @@ msgstr "Kjerne MP"
 
 #: ../../../src/Utils.cpp:346
 msgid "k"
-msgstr ""
+msgstr "k"
 
 #: ../../../src/Utils.cpp:580
 #, c-format
