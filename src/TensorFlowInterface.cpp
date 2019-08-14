@@ -22,8 +22,15 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "Utils.h"
 
+// display prediction output in terminal
+// FOR DEBUGGING ONLY (LAGS GAME SIGNIFICANTLY)
+const bool DISPLAY_OUTPUT = false;
+
+// previous
+// /Users/leopekelis/flare/flare-ai/models/median_time_to_damage_20180805_094041_saved_model
+
 TensorFlowInterface::TensorFlowInterface()
-	: saved_model_path("/Users/lpekelis/flare/flare-ai/models/median_time_to_damage_20180611_003221_saved_model")
+	: saved_model_path("/Users/leopekelis/flare/flare-ai/models/mdp_v0_20190814_210649_saved_model")
 {
 	logInfo("Hello from TensorFlow C library version %s\n", TF_Version());
 	TF_SessionOptions* opts = TF_NewSessionOptions();
@@ -48,7 +55,6 @@ void TensorFlowInterface::tensor_free_none(void * data, size_t len, void* arg) {
 }
 
 float * TensorFlowInterface::predict(std::array<float, TENSOR_IN_LENGTH> game_data) {
-
 	// int64_t input_num_values = current_game_data.size();
 	// const int num_dims = 2;
 	// int64_t dims[num_dims] = {1, input_num_values};
@@ -58,7 +64,7 @@ float * TensorFlowInterface::predict(std::array<float, TENSOR_IN_LENGTH> game_da
 	// int64_t out_dims[num_dims] = {1, output_num_values};
 	//
 	//
-	// printf("Input data length: %d\n", input_num_values);
+	//printf("Input data length: %d\n", input_num_values);
 	//
 	// // TF_Tensor* tensor_in = TF_AllocateTensor(TF_FLOAT, dims, num_dims, sizeof(float) * input_num_values);
   // // memcpy(TF_TensorData(tensor_in), game_data, sizeof(float) * input_num_values);
@@ -76,29 +82,39 @@ float * TensorFlowInterface::predict(std::array<float, TENSOR_IN_LENGTH> game_da
 
 	float* tensor_in_ptr = (float *)TF_TensorData(tensor_in);
 
-	//logInfo("TensorFlowInterface: Prediction, input vector is length %d, with size of %d, sizeof float %d",
-	//				game_data.size(), sizeof(game_data[0]), sizeof(float));
+	if(DISPLAY_OUTPUT) {
+		logInfo("TensorFlowInterface: Prediction, input vector is length %d, with size of %d, sizeof float %d",
+						game_data.size(), sizeof(game_data[0]), sizeof(float));
+	}
 
 	//std::memcpy(tensor_in_ptr, &game_data[0], sizeof(float)*TENSOR_IN_LENGTH);
 	std::copy(game_data.begin(), game_data.end(), tensor_in_ptr);
-  //printf("Input tensor filled.\n");
+	if(DISPLAY_OUTPUT) {
+		logInfo("TensorFlowInterface: Input tensor filled.");
+	}
 
 	// Operations
-	TF_Operation * op_in = TF_GraphOperationByName(graph, "InputData/X");
-	TF_Operation * op_out = TF_GraphOperationByName(graph, "FullyConnected_4/Softmax");
-	//printf("Operations set.\n");
+	//TF_Operation * op_in = TF_GraphOperationByName(graph, "InputData/X");
+	//TF_Operation * op_out = TF_GraphOperationByName(graph, "FullyConnected_4/Softmax");
+	TF_Operation * op_in = TF_GraphOperationByName(graph, "batch_normalization_input");
+	TF_Operation * op_out = TF_GraphOperationByName(graph, "dense_2/BiasAdd");
+	if(DISPLAY_OUTPUT) {
+		logInfo("TensorFlowInterface: Operations set.");
+	}
 
 	// Session Inputs
 	TF_Output input_operations[] = { op_in, 0 };
 	TF_Tensor ** input_tensors = {&tensor_in};
-	//printf("Session inputs.\n");
+	if(DISPLAY_OUTPUT) {
+		logInfo("TensorFlowInterface: Session inputs.");
+	}
 
 	// Session Outputs
 	TF_Output output_operations[] = { op_out, 0 };
 	TF_Tensor ** output_tensors = {&tensor_out};
-	//printf("Session outputs.\n");
-
-	//printf("Starting session run.\n");
+	if(DISPLAY_OUTPUT) {
+		logInfo("TensorFlowInterface: Session outputs.");
+	}
 
 	TF_SessionRun(session, NULL,
 			// Inputs
@@ -109,10 +125,13 @@ float * TensorFlowInterface::predict(std::array<float, TENSOR_IN_LENGTH> game_da
 			NULL, 0, NULL,
 			status);
 
-	//printf("Session Run Status: %d - %s\n", TF_GetCode(status), TF_Message(status) );
-	//printf("Output Tensor Type: %d\n", TF_TensorType(tensor_out));
+	if(DISPLAY_OUTPUT) {
+		logInfo("TensorFlowInterface: Session Run Status: %d - %s", TF_GetCode(status), TF_Message(status));
+	}
 	float* outval = (float *)TF_TensorData(tensor_out);
-	//printf("Output Tensor Value: %.2f\n", (*outval));
+	if(DISPLAY_OUTPUT) {
+		logInfo("TensorFlowInterface: Output Tensor: type = %d, value = %.6f", TF_TensorType(tensor_out), (*outval));
+	}
 
 	// de-allocate
 	TF_DeleteTensor(tensor_in);

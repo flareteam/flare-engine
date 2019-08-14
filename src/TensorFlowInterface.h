@@ -24,8 +24,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <tensorflow/c/c_api.h>
 
-static const int TENSOR_IN_LENGTH = 108;
-static const int TENSOR_OUT_LENGTH = 2;
+// static const int TENSOR_IN_LENGTH = 108;
+// static const int TENSOR_OUT_LENGTH = 2;
+static const int TENSOR_IN_LENGTH = 113;
+static const int TENSOR_OUT_LENGTH = 1;
+
 static const int NUM_DIMS = 2;
 
 class TensorFlowInterface {
