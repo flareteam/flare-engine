@@ -33,7 +33,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "UtilsMath.h"
 
-// TODO(LEO): tf
 #include "BehaviorTF.h"
 
 #include <math.h>
@@ -121,9 +120,7 @@ unsigned char Enemy::faceNextBest(float mapx, float mapy) {
  */
 void Enemy::logic() {
 
-	eb->logic();
-
-	//TODO(LEO): tf
+	// eb->logic();
 	eb_tf->logic();
 
 	//need to check whether the enemy was converted here
@@ -197,4 +194,5 @@ Renderable Enemy::getRender() {
 
 Enemy::~Enemy() {
 	delete eb;
+	delete eb_tf;
 }

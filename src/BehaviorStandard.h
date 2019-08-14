@@ -29,17 +29,19 @@ class BehaviorStandard : public EnemyBehavior {
 private:
 
 	// logic steps
-	void doUpkeep();
 	virtual void findTarget();
-	void checkPower();
-	void checkMove();
 	virtual void checkMoveStateStance();
 	virtual void checkMoveStateMove();
-	void updateState();
 	FPoint getWanderPoint();
 	void doRandomBehavior();
 
 protected:
+	// logic steps
+	void doUpkeep();
+	void checkPower();
+	void checkMove();
+	void updateState();
+	
 	//variables for patfinding
 	std::vector<FPoint> path;
 	FPoint prev_target;

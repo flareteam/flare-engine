@@ -32,15 +32,13 @@ enum class ACTION {
 	MOVE_SOUTH = 3,
 	MOVE_WEST  = 4
 };
+const int NUM_ACTIONS = 5;
 enum FEATURE { HP = 0 };
 
 // entity featurizes game state in a VISION_DIM x VISION_DIM grid around them
 const int VISION_DIM = 10;
 const int RELATIVE_OVERLAY_LENGTH = 100; // VISION_DIM x VISION_DIM
 
-//TODO(LEO): remove test tf
-// class WidgetTooltip;
-// class TooltipData;
 class TensorFlowInterface;
 
 class BehaviorTF : public BehaviorStandard {
@@ -51,18 +49,27 @@ public:
 	void logic();
 protected:
 private:
+	void decideDirection();
+	void decideCombat();
+	void decideFlee();
+
+	ACTION chooseAction(std::array<int, NUM_ACTIONS> pred_ints);
+	FPoint moveAction(ACTION action, FPoint start_pos);
+
 	// TODO(Leo): can move to UTILS_MATH_H
-	std::array<float, 2> const distEntities(float x1, float y1, float x2, float y2) const;
+	std::array<float, 2> const distEntities(FPoint pos1, FPoint pos2) const;
 	int flatPosition(float x, float y, int vision_dim);
-	int flatRelativePosition(float x1, float y1, float x2, float y2, int vision_dim);
-	std::array<float, RELATIVE_OVERLAY_LENGTH> featureToRelativeOverlay(FEATURE feature, float x, float y);
+	int flatRelativePosition(FPoint pos1, FPoint pos2, int vision_dim);
+	float normalCDF(float x);
+
+	std::array<float, NUM_ACTIONS> featurizeAction(ACTION action);
+	std::array<float, RELATIVE_OVERLAY_LENGTH> featureToRelativeOverlay(FEATURE feature, FPoint entity_pos);
 	std::array<float, TENSOR_IN_LENGTH> getGameStateData(ACTION action = ACTION::NONE);
+
+	std::array<int, NUM_ACTIONS> normalizePredictions(std::array<float, NUM_ACTIONS> preds, float min_pred, float max_pred);
 
 	TensorFlowInterface* tf_model;
 
-	//TODO(LEO): remove test tf
-	// WidgetTooltip *tip;
-	// TooltipData *tip_buf;
 };
 
 #endif // BEHAVIORTF_H
