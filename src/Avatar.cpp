@@ -54,6 +54,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
 
+// flag for AI controlled Avatar (player charater)
+const bool AVATAR_AI = true;
+const float JOIN_COMBAT_DIST = 1.42f;
+
 Avatar::Avatar()
 	: Entity()
 	, attack_cursor(false)
@@ -324,7 +328,7 @@ void Avatar::set_direction() {
 		FPoint target = Utils::screenToMap(inpt->mouse.x, inpt->mouse.y, mapr->cam.x, mapr->cam.y);
 		stats.direction = Utils::calcDirection(stats.pos.x, stats.pos.y, target.x, target.y);
 	}
-	else {
+	else if(inpt->pressing[Input::UP] || inpt->pressing[Input::DOWN] || inpt->pressing[Input::LEFT] || inpt->pressing[Input::RIGHT] || !AVATAR_AI) {
 		if (inpt->pressing[Input::UP] && !inpt->lock[Input::UP] && inpt->pressing[Input::LEFT] && !inpt->lock[Input::LEFT]) stats.direction = 1;
 		else if (inpt->pressing[Input::UP] && !inpt->lock[Input::UP] && inpt->pressing[Input::RIGHT] && !inpt->lock[Input::RIGHT]) stats.direction = 3;
 		else if (inpt->pressing[Input::DOWN] && !inpt->lock[Input::DOWN] && inpt->pressing[Input::RIGHT] && !inpt->lock[Input::RIGHT]) stats.direction = 5;
@@ -338,6 +342,12 @@ void Avatar::set_direction() {
 				((inpt->pressing[Input::UP] && !inpt->lock[Input::UP]) || (inpt->pressing[Input::DOWN] && !inpt->lock[Input::UP]) ||
 				 (inpt->pressing[Input::LEFT] && !inpt->lock[Input::LEFT]) || (inpt->pressing[Input::RIGHT] && !inpt->lock[Input::RIGHT])))
 			stats.direction = static_cast<unsigned char>((stats.direction == 7) ? 0 : stats.direction + 1);
+	}
+	else {
+		// no input from player, AI faces nearest enemy
+		if (stats.target_nearest) {
+			stats.direction = calcDirection(stats.pos.x, stats.pos.y, stats.target_nearest->pos.x, stats.target_nearest->pos.y);
+		}
 	}
 
 	// give direction changing a 100ms cooldown
@@ -518,11 +528,12 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 				}
 
 				// handle transitions to RUN
-				if (allowed_to_move)
+				if (allowed_to_move) {
 					set_direction();
 
-				if (pressing_move() && allowed_to_move) {
+				if ((pressing_move() || AVATAR_AI) && allowed_to_move) {
 					if (move()) { // no collision
+						// if (MOUSE_MOVE && inpt->pressing[MAIN1]) {
 						if (settings->mouse_move && inpt->pressing[mm_key]) {
 							inpt->lock[mm_key] = true;
 							drag_walking = true;
@@ -554,7 +565,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 				set_direction();
 
 				// handle transition to STANCE
-				if (!pressing_move()) {
+				if (!(pressing_move() || AVATAR_AI)) {
 					stats.cur_state = StatBlock::AVATAR_STANCE;
 					break;
 				}
@@ -732,6 +743,14 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 		// handle power usage
 		if (allowed_to_use_power) {
 			bool blocking = false;
+
+			// avatar AI takes over action if no inputs on deck
+			if (stats.target_nearest && action_queue.size() == 0 && AVATAR_AI) {
+				float nearest_dist = calcDist(stats.pos, stats.target_nearest->pos);
+				inpt->pressing[MAIN1] = nearest_dist < JOIN_COMBAT_DIST;
+				// handle direction changes
+				set_direction();
+			}
 
 			for (unsigned i=0; i<action_queue.size(); i++) {
 				ActionData &action = action_queue[i];
