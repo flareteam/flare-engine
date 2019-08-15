@@ -179,7 +179,9 @@ static void mainLoop () {
 	time_t now = time(NULL);
 	timenow = gmtime(&now);
 	strftime(log_state_file_name, sizeof(log_state_file_name),
-					 "/Users/lpekelis/flare/flare-ai/log/GAME_STATES_%Y-%m-%d_%H_%M_%S", timenow);
+					 "/Users/leopekelis/flare/flare-ai/log/GAME_STATES_%Y-%m-%d_%H_%M_%S", timenow);
+
+	logInfo("Saving logs to path: \"%s\"", log_state_file_name);
 
 	while ( !done ) {
 		int loops = 0;
