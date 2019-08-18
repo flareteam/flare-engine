@@ -392,5 +392,6 @@ void MenuStash::defocusTabLists() {
 
 MenuStash::~MenuStash() {
 	delete closeButton;
+	delete tab_control;
 }
 
