@@ -1,5 +1,9 @@
 Flare v1.12 (WIP)
 
+Engine fixes:
+
+* Fix memory leak of tab control in stash menu (MiroslavR)
+
 Translation updates:
 
 * German (de) update (Wuzzy2)
