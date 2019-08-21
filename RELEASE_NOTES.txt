@@ -1,5 +1,9 @@
 Flare v1.12 (WIP)
 
+Engine features:
+
+* NPC interactions are now canceled when the player is attacked. 'combat_aborts_npc_interact' has been added to engine/misc.txt to control this setting.
+
 Engine fixes:
 
 * Fix memory leak of tab control in stash menu (MiroslavR)

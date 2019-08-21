@@ -69,6 +69,7 @@ void EngineSettings::Misc::load() {
 	save_buyback = true;
 	keep_buyback_on_map_change = true;
 	sfx_unable_to_cast = "";
+	combat_aborts_npc_interact = true;
 
 	FileParser infile;
 	// @CLASS EngineSettings: Misc|Description of engine/misc.txt
@@ -142,6 +143,9 @@ void EngineSettings::Misc::load() {
 			// @ATTR sfx_unable_to_cast|filename|Sound to play when the player lacks the MP to cast a power.
 			else if (infile.key == "sfx_unable_to_cast")
 				sfx_unable_to_cast = infile.val;
+			// @ATTR combat_aborts_npc_interact|bool|If true, the NPC dialog and vendor menus will be closed if the player is attacked.
+			else if (infile.key == "combat_aborts_npc_interact")
+				combat_aborts_npc_interact = Parse::toBool(infile.val);
 
 			else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
 		}

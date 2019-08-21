@@ -178,6 +178,7 @@ StatBlock::StatBlock()
 	, summons()
 	, summoner(NULL)
 	, bleed_source_type(-1)
+	, abort_npc_interact(false)
 {
 	primary.resize(eset->primary_stats.list.size(), 0);
 	primary_starting.resize(eset->primary_stats.list.size(), 0);
