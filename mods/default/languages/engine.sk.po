@@ -758,7 +758,7 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:355
 msgid "Parallax Layers"
-msgstr ""
+msgstr "Paralaxné vrstvy"
 
 #: ../../../src/MenuConfig.cpp:356
 msgid "Allow changing gamma"
@@ -905,6 +905,8 @@ msgid ""
 "This enables parallax (non-tile) layers. Disabling this setting can improve "
 "performance in some cases."
 msgstr ""
+"Povolí paralaxné (nedlaždicové) vrstvy. Zakázaním tohto nastavenia môžete v "
+"niektorých prípadoch zlepšiť výkon."
 
 #: ../../../src/MenuConfig.cpp:500
 msgid ""
@@ -1421,21 +1423,21 @@ msgstr "Vyžaduje silu: %s"
 
 #: ../../../src/MenuPowers.cpp:1163
 msgid "Click to Unlock (uses 1 Skill Point)"
-msgstr ""
+msgstr "Odomknete kliknutím (použije 1 bod zručnosti)"
 
 #: ../../../src/MenuPowers.cpp:1167 ../../../src/MenuPowers.cpp:1169
 msgid "Requires 1 Skill Point"
-msgstr ""
+msgstr "Vyžaduje 1 bod zručnosti"
 
 #: ../../../src/MenuPowers.cpp:1355
 #, c-format
 msgid "%d unspent skill point"
-msgstr ""
+msgstr "Počet nepoužitých bodov zručnosti: %d "
 
 #: ../../../src/MenuPowers.cpp:1358
 #, c-format
 msgid "%d unspent skill points"
-msgstr ""
+msgstr "Počet nepoužitých bodov zručnosti: %d "
 
 #: ../../../src/MenuPowers.cpp:1388
 msgid "Next Level:"
@@ -1803,7 +1805,7 @@ msgstr "Základné MP"
 
 #: ../../../src/Utils.cpp:346
 msgid "k"
-msgstr " tis."
+msgstr "k"
 
 #: ../../../src/Utils.cpp:580
 #, c-format
