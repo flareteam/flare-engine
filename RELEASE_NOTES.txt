@@ -15,6 +15,7 @@ Translation updates:
 * Portuguese (pt) update (Rui)
 * Russian (ru) update (Igor Polyakov)
 * Slovak (sk) update (MiroslavR)
+* Chinese (zh) update (sakura09123)
 
 
 
