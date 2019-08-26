@@ -38,6 +38,9 @@ private:
 	Rect bar_pos;
 	LabelInfo text_pos;
 	bool custom_text_pos;
+	Point bar_fill_offset;
+	Point bar_fill_size;
+
 	WidgetLabel label_text;
 	WidgetLabel label_stats;
 public:

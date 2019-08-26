@@ -56,6 +56,8 @@ private:
 	std::string bar_gfx_background;
 	short type;
 	Timer timeout;
+	Point bar_fill_offset;
+	Point bar_fill_size;
 
 
 public:

@@ -56,6 +56,8 @@ MenuStatBar::MenuStatBar(short _type)
 	, bar_gfx("")
 	, bar_gfx_background("")
 	, type(_type)
+	, bar_fill_offset()
+	, bar_fill_size(-1, -1)
 {
 	std::string type_filename;
 	if (type == TYPE_HP)
@@ -98,11 +100,25 @@ MenuStatBar::MenuStatBar(short _type)
 			else if (infile.key == "hide_timeout") {
 				timeout.setDuration(Parse::toDuration(infile.val));
 			}
+			// @ATTR bar_fill_offset|point|Offset of the bar's fill graphics relative to the bar_pos X/Y.
+			else if (infile.key == "bar_fill_offset") {
+				bar_fill_offset = Parse::toPoint(infile.val);
+			}
+			// @ATTR bar_fill_size|int, int : Width, Height|Size of the bar's fill graphics. If not defined, the width/height of bar_pos is used.
+			else if (infile.key == "bar_fill_size") {
+				bar_fill_size = Parse::toPoint(infile.val);
+			}
 			else {
 				infile.error("MenuStatBar: '%s' is not a valid key.", infile.key.c_str());
 			}
 		}
 		infile.close();
+	}
+
+	// default to bar_pos size if bar_fill_size is undefined
+	if (bar_fill_size.x == -1 || bar_fill_size.y == -1) {
+		bar_fill_size.x = bar_pos.w;
+		bar_fill_size.y = bar_pos.h;
 	}
 
 	loadGraphics();
@@ -187,22 +203,26 @@ void MenuStatBar::render() {
 
 	// draw bar progress based on orientation
 	if (orientation == HORIZONTAL) {
-		unsigned long bar_length = (normalized_max == 0) ? 0 : (normalized_cur * static_cast<unsigned long>(bar_pos.w)) / normalized_max;
+		unsigned long bar_length = (normalized_max == 0) ? 0 : (normalized_cur * static_cast<unsigned long>(bar_fill_size.x)) / normalized_max;
+		if (bar_length == 0 && normalized_cur > 0)
+			bar_length = 1;
 		src.x = 0;
 		src.y = 0;
 		src.w = static_cast<int>(bar_length);
-		src.h = bar_pos.h;
-		dest.x = bar_dest.x;
-		dest.y = bar_dest.y;
+		src.h = bar_fill_size.y;
+		dest.x = bar_dest.x + bar_fill_offset.x;
+		dest.y = bar_dest.y + bar_fill_offset.y;
 	}
 	else if (orientation == VERTICAL) {
-		unsigned long bar_length = (normalized_max == 0) ? 0 : (normalized_cur * static_cast<unsigned long>(bar_pos.h)) / normalized_max;
+		unsigned long bar_length = (normalized_max == 0) ? 0 : (normalized_cur * static_cast<unsigned long>(bar_fill_size.y)) / normalized_max;
+		if (bar_length == 0 && normalized_cur > 0)
+			bar_length = 1;
 		src.x = 0;
-		src.y = bar_pos.h-static_cast<int>(bar_length);
-		src.w = bar_pos.w;
+		src.y = bar_fill_size.y-static_cast<int>(bar_length);
+		src.w = bar_fill_size.x;
 		src.h = static_cast<int>(bar_length);
-		dest.x = bar_dest.x;
-		dest.y = bar_dest.y+src.y;
+		dest.x = bar_dest.x + bar_fill_offset.x;
+		dest.y = bar_dest.y + bar_fill_offset.y + src.y;
 	}
 
 	if (bar) {

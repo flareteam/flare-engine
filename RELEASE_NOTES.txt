@@ -3,10 +3,12 @@ Flare v1.12 (WIP)
 Engine features:
 
 * NPC interactions are now canceled when the player is attacked. 'combat_aborts_npc_interact' has been added to engine/misc.txt to control this setting.
+* Added 'bar_fill_offset' and 'bar_fill_size' to MenuStatBar and MenuEnemy properties.
 
 Engine fixes:
 
 * Fix memory leak of tab control in stash menu (MiroslavR)
+* Fixed stat bars not having any fill when the value they were representing was non-zero. Now they will always show at least 1 pixel of the bar's fill graphics.
 
 Translation updates:
 

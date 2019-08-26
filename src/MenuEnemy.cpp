@@ -41,6 +41,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 MenuEnemy::MenuEnemy()
 	: bar_hp(NULL)
 	, custom_text_pos(false)
+	, bar_fill_offset()
+	, bar_fill_size(-1, -1)
 	, enemy(NULL)
 {
 	// disappear after 10 seconds
@@ -65,11 +67,25 @@ MenuEnemy::MenuEnemy()
 				custom_text_pos = true;
 				text_pos = Parse::popLabelInfo(infile.val);
 			}
+			// @ATTR bar_fill_offset|point|Offset of the bar's fill graphics relative to the bar_pos X/Y.
+			else if (infile.key == "bar_fill_offset") {
+				bar_fill_offset = Parse::toPoint(infile.val);
+			}
+			// @ATTR bar_fill_size|int, int : Width, Height|Size of the bar's fill graphics. If not defined, the width/height of bar_pos is used.
+			else if (infile.key == "bar_fill_size") {
+				bar_fill_size = Parse::toPoint(infile.val);
+			}
 			else {
 				infile.error("MenuEnemy: '%s' is not a valid key.", infile.key.c_str());
 			}
 		}
 		infile.close();
+	}
+
+	// default to bar_pos size if bar_fill_size is undefined
+	if (bar_fill_size.x == -1 || bar_fill_size.y == -1) {
+		bar_fill_size.x = bar_pos.w;
+		bar_fill_size.y = bar_pos.h;
 	}
 
 	loadGraphics();
@@ -116,8 +132,11 @@ void MenuEnemy::render() {
 	int hp_bar_length = 0;
 	if (enemy->stats.get(Stats::HP_MAX) == 0)
 		hp_bar_length = 0;
-	else if (bar_hp)
-		hp_bar_length = (enemy->stats.hp * bar_hp->getGraphics()->getWidth()) / enemy->stats.get(Stats::HP_MAX);
+	else if (bar_hp) {
+		hp_bar_length = (enemy->stats.hp * bar_fill_size.x) / enemy->stats.get(Stats::HP_MAX);
+		if (hp_bar_length == 0 && enemy->stats.hp > 0)
+			hp_bar_length = 1;
+	}
 
 	// draw hp bar background
 	setBackgroundClip(src);
@@ -127,9 +146,14 @@ void MenuEnemy::render() {
 	// draw hp bar fill
 	if (bar_hp) {
 		src.w = hp_bar_length;
-		src.h = bar_pos.h;
+		src.h = bar_fill_size.y;
+
+		dest.x += bar_fill_offset.x;
+		dest.y += bar_fill_offset.y;
+
 		bar_hp->setClipFromRect(src);
 		bar_hp->setDestFromRect(dest);
+
 		render_device->render(bar_hp);
 	}
 

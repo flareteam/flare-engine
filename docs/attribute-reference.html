@@ -223,6 +223,8 @@ body {
 
 <p><strong>sfx_unable_to_cast</strong> | <code>filename</code> | Sound to play when the player lacks the MP to cast a power.</p>
 
+<p><strong>combat_aborts_npc_interact</strong> | <code>bool</code> | If true, the NPC dialog and vendor menus will be closed if the player is attacked.</p>
+
 <hr />
 
 <h4>EngineSettings: Resolution</h4>
@@ -1241,6 +1243,10 @@ body {
 
 <p><strong>text_pos</strong> | <code>label</code> | Position of the text displaying the enemy&rsquo;s name and level.</p>
 
+<p><strong>bar_fill_offset</strong> | <code>point</code> | Offset of the bar&rsquo;s fill graphics relative to the bar_pos X/Y.</p>
+
+<p><strong>bar_fill_size</strong> | <code>int, int : Width, Height</code> | Size of the bar&rsquo;s fill graphics. If not defined, the width/height of bar_pos is used.</p>
+
 <p><strong>enable_overlay</strong> | <code>bool</code> | If true, shows an overlay of the last message on top of other menus.</p>
 
 <p><strong>start_at_bottom</strong> | <code>bool</code> | If true, messages start at the bottom and get pushed up. If false, messages start at the top and get pushed down.</p>
@@ -1406,6 +1412,10 @@ body {
 <p><strong>bar_gfx_background</strong> | <code>filename</code> | Filename of the image to use for the base of the bar.</p>
 
 <p><strong>hide_timeout</strong> | <code>duration</code> | Hide HP and MP bar if full mana or health, after given amount of seconds; Hide XP bar if no changes in XP points for given amount of seconds. 0 disable hiding.</p>
+
+<p><strong>bar_fill_offset</strong> | <code>point</code> | Offset of the bar&rsquo;s fill graphics relative to the bar_pos X/Y.</p>
+
+<p><strong>bar_fill_size</strong> | <code>int, int : Width, Height</code> | Size of the bar&rsquo;s fill graphics. If not defined, the width/height of bar_pos is used.</p>
 
 <hr />
 
