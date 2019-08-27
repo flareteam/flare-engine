@@ -70,6 +70,7 @@ private:
 
 	Color msg_color[5];
 	int duration;
+	int fade_duration;
 	float speed;
 	int offset;
 };
