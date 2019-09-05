@@ -1486,15 +1486,15 @@ msgstr "An t-ath leibheil:"
 
 #: ../../../src/MenuStash.cpp:54
 msgid "Private"
-msgstr ""
+msgstr "Prìobhaideach"
 
 #: ../../../src/MenuStash.cpp:56
 msgid "Shared"
-msgstr ""
+msgstr "Co-roinnte"
 
 #: ../../../src/MenuStash.cpp:104
 msgid "Stash"
-msgstr ""
+msgstr "Stòr"
 
 #: ../../../src/MenuStash.cpp:259
 msgid "Can not store quest items in the stash."
@@ -1506,11 +1506,11 @@ msgstr "Cha ghabh an nì seo a chur dhan stòr."
 
 #: ../../../src/MenuStash.cpp:269
 msgid "This item can not be stored in the private stash."
-msgstr ""
+msgstr "Cha ghabh an nì seo a chur dhan stòr phrìobhaideach."
 
 #: ../../../src/MenuStash.cpp:274
 msgid "This item can not be stored in the shared stash."
-msgstr ""
+msgstr "Cha ghabh an nì seo a chur dhan stòr cho-roinnte."
 
 #: ../../../src/MenuStash.cpp:284
 msgid "Stash is full."

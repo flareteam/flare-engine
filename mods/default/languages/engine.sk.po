@@ -608,6 +608,9 @@ msgid ""
 "Show all loot tooltips, except for those that would be obscured by the "
 "player or an enemy. Temporarily show all loot tooltips with 'Alt'."
 msgstr ""
+"Zobrazovať všetky popisy predmetov na zemi okrem tých, ktoré zakrýva hráč "
+"alebo nepriateľ. Stlačením klávesu Alt môžete dočasne zobraziť všetky "
+"popisy."
 
 #: ../../../src/MenuConfig.cpp:287
 msgid "Show all"
@@ -617,6 +620,8 @@ msgstr ""
 msgid ""
 "Always show loot tooltips. Temporarily hide all loot tooltips with 'Alt'."
 msgstr ""
+"Vždy zobrazovať popisy predmetov na zemi. Stlačením klávesu Alt môžete "
+"dočasne skryť všetky popisy."
 
 #: ../../../src/MenuConfig.cpp:288 ../../../src/MenuConfig.cpp:293
 msgid "Hidden"
@@ -627,6 +632,8 @@ msgid ""
 "Always hide loot tooltips, except for when a piece of loot is hovered with "
 "the mouse cursor. Temporarily show all loot tooltips with 'Alt'."
 msgstr ""
+"Vždy skrývať popisy predmetov na zemi okrem prípadu, že na predmet ukazuje "
+"kurzor myši. Stlačením klávesu Alt môžete dočasne zobraziť všetky popisy."
 
 #: ../../../src/MenuConfig.cpp:291
 msgid "Visible"
@@ -892,6 +899,8 @@ msgid ""
 "Prevents screen tearing. Disable if you experience \"stuttering\" in "
 "windowed mode or input lag."
 msgstr ""
+"Zabraňuje trhaniu obrazovky. V prípade „koktania“ v režime okna alebo "
+"oneskorenia vstupu toto nastavenie zakážte."
 
 #: ../../../src/MenuConfig.cpp:498
 msgid ""
@@ -1255,7 +1264,7 @@ msgstr "Inventár je plný."
 #: ../../../src/MenuInventory.cpp:841
 #, c-format
 msgid "Not enough %s."
-msgstr ""
+msgstr "Nedostatok %s."
 
 #: ../../../src/MenuInventory.cpp:861 ../../../src/MenuInventory.cpp:868
 msgid "This item can not be sold."
@@ -1354,7 +1363,7 @@ msgstr "Omráčenie"
 
 #: ../../../src/MenuPowers.cpp:920
 msgid "Automatic revive on death"
-msgstr ""
+msgstr "Automatické oživenie po smrti"
 
 #: ../../../src/MenuPowers.cpp:923
 msgid "Convert"
