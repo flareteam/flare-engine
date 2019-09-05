@@ -14,7 +14,9 @@ Engine fixes:
 Translation updates:
 
 * German (de) update (Wuzzy2)
+* Basque (eu) by aitzkora
 * Scottish Gaelic (gd) update (GunChleoc)
+* Hungarian (hu) update (litoll)
 * Norwegian (nb) update (Elias Nykrem)
 * Portuguese (pt) update (Rui)
 * Russian (ru) update (Igor Polyakov)
