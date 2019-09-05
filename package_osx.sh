@@ -55,10 +55,13 @@ elif [ $FLARE_DEPS_SRC == "homebrew" ]; then
   cp /usr/local/opt/sdl2_mixer/lib/libSDL2_mixer-2.0.0.dylib $LIB
   cp /usr/local/opt/sdl2_ttf/lib/libSDL2_ttf-2.0.0.dylib $LIB
   # VORBIS
-  cp /usr/local/opt/libvorbis/lib/COPYING $LIB/VORBIS-COPYING
-  cp /usr/local/opt/libvorbis/lib/libvorbisfile.0.dylib $LIB
+  cp /usr/local/opt/libvorbis/COPYING $LIB/VORBIS-COPYING
+  cp /usr/local/opt/libvorbis/lib/libvorbis.0.dylib $LIB
   cp /usr/local/opt/libvorbis/lib/libvorbisenc.2.dylib $LIB
   cp /usr/local/opt/libvorbis/lib/libvorbisfile.3.dylib $LIB
+  # OGG
+  cp /usr/local/opt/libogg/COPYING $LIB/OGG-COPYING
+  cp /usr/local/opt/libogg/lib/libogg.0.dylib $LIB
 else
   echo "'$FLARE_DEPS_SRC' unknown dependency source"
   exit 1
@@ -71,5 +74,5 @@ chmod +x ${DST}/start.sh
 
 echo "packaging"
 tar -zcf flare_osx.tar.gz -C ${DST} .
-#rm -fr ${DST}
+rm -fr ${DST}
 echo "done"
