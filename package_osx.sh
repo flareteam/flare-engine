@@ -66,6 +66,26 @@ elif [ ${FLARE_DEPS_SRC} == "homebrew" ]; then
   # OGG
   cp /usr/local/opt/libogg/COPYING ${LIB}/OGG-COPYING
   cp /usr/local/opt/libogg/lib/libogg.0.dylib ${LIB}
+  # PNG
+  cp /usr/local/opt/libpng/lib/libpng16.16.dylib ${LIB}
+
+  # Verify all homebrew deps using using otool
+  for DYLIB in ${LIB}/*.dylib; do
+    #echo "dylib: ${DYLIB}"
+    for LINE in $(otool -L ${DYLIB}); do
+      #echo "line: ${LINE}"
+      if [[ $LINE == *"/usr/local/opt/"* ]]; then
+	NEED=$(basename ${LINE})
+	#echo "${DYLIB} need: ${NEED}"
+	FILE="${LIB}/${NEED}"
+	if [ ! -f "${FILE}" ]; then
+          echo "${NEED} not found, copying"
+	  cp ${LINE} ${LIB}
+        fi
+      fi
+    done
+  done
+
 else
   echo "'${FLARE_DEPS_SRC}' unknown dependency source"
   exit 1
