@@ -10,6 +10,7 @@ Engine fixes:
 
 * Fix memory leak of tab control in stash menu (MiroslavR)
 * Fixed stat bars not having any fill when the value they were representing was non-zero. Now they will always show at least 1 pixel of the bar's fill graphics.
+* Fixed a bug where the game window could be resized below the minimum size after exiting fullscreen mode.
 
 Translation updates:
 
