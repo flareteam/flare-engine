@@ -46,7 +46,6 @@ MenuStash::MenuStash()
 	, closeButton(new WidgetButton("images/menus/buttons/button_x.png"))
 	, tab_control(new WidgetTabControl())
 	, activetab(STASH_PRIVATE)
-	, drag_prev_tab(-1)
 	, stock()
 	, updated(false)
 {

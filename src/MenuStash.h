@@ -40,7 +40,6 @@ private:
 	WidgetLabel label_currency;
 
 	int activetab;
-	int drag_prev_tab;
 
 public:
 	static const int NO_SLOT = -1;

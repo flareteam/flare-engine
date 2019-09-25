@@ -134,8 +134,6 @@ private:
 
 	bool tree_loaded;
 
-	size_t prev_powers_list_size;
-
 	int default_power_tab;
 
 public:

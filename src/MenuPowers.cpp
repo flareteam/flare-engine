@@ -132,7 +132,6 @@ MenuPowers::MenuPowers()
 	, label_unspent(new WidgetLabel)
 	, tab_control(NULL)
 	, tree_loaded(false)
-	, prev_powers_list_size(0)
 	, default_power_tab(-1)
 	, newPowerNotification(false)
 {
