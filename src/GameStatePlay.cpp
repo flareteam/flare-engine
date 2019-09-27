@@ -804,7 +804,7 @@ void GameStatePlay::checkCutscene() {
 		mapr->respawn_point = pc->stats.pos;
 	}
 
-	if (eset->misc.save_onload)
+	if (eset->misc.save_oncutscene)
 		save_load->saveGame();
 
 	if (menu->devconsole) {

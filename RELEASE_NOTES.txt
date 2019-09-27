@@ -5,6 +5,7 @@ Engine features:
 * NPC interactions are now canceled when the player is attacked. 'combat_aborts_npc_interact' has been added to engine/misc.txt to control this setting.
 * Added 'bar_fill_offset' and 'bar_fill_size' to MenuStatBar and MenuEnemy properties.
 * Added support for fading out combat text. See the 'fade_duration' property in engine/combat.txt.
+* Added 'save_oncutscene' property to engine/misc.txt. Saving before a cutscene was previously controlled with 'save_onload', which caused issues with cutscenes when set to false.
 
 Engine fixes:
 
