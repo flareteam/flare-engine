@@ -1,12 +1,29 @@
 Flare v1.12 (WIP)
 
+Engine features:
+
+* NPC interactions are now canceled when the player is attacked. 'combat_aborts_npc_interact' has been added to engine/misc.txt to control this setting.
+* Added 'bar_fill_offset' and 'bar_fill_size' to MenuStatBar and MenuEnemy properties.
+* Added support for fading out combat text. See the 'fade_duration' property in engine/combat.txt.
+* Added 'save_oncutscene' property to engine/misc.txt. Saving before a cutscene was previously controlled with 'save_onload', which caused issues with cutscenes when set to false.
+
+Engine fixes:
+
+* Fix memory leak of tab control in stash menu (MiroslavR)
+* Fixed stat bars not having any fill when the value they were representing was non-zero. Now they will always show at least 1 pixel of the bar's fill graphics.
+* Fixed a bug where the game window could be resized below the minimum size after exiting fullscreen mode.
+
 Translation updates:
 
 * German (de) update (Wuzzy2)
+* Basque (eu) by aitzkora
+* Scottish Gaelic (gd) update (GunChleoc)
+* Hungarian (hu) update (litoll)
 * Norwegian (nb) update (Elias Nykrem)
 * Portuguese (pt) update (Rui)
 * Russian (ru) update (Igor Polyakov)
 * Slovak (sk) update (MiroslavR)
+* Chinese (zh) update (sakura09123)
 
 
 

@@ -3,10 +3,6 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
-# Translators:
-# Justin Jacobs <jajdorkster@gmail.com>, 2018
-# MiroslavR <miroslavr256@gmail.com>, 2019
-# 
 #, fuzzy
 msgid ""
 msgstr ""
@@ -14,44 +10,41 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-07-29 09:34-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: MiroslavR <miroslavr256@gmail.com>, 2019\n"
-"Language-Team: Slovak (https://www.transifex.com/flareorg/teams/84925/sk/)\n"
+"Language-Team: Basque (https://www.transifex.com/flareorg/teams/84925/eu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sk\n"
-"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);\n"
+"Language: eu\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../../../src/Avatar.cpp:387
 msgid "Your health is low!"
-msgstr "Vaše zdravie je nízke!"
+msgstr ""
 
 #: ../../../src/Avatar.cpp:419
 #, c-format
 msgid "Congratulations, you have reached level %d!"
-msgstr "Gratulujeme, dosiahli ste úroveň %d!"
+msgstr ""
 
 #: ../../../src/Avatar.cpp:421
 msgid "You may increase one or more attributes through the Character Menu."
-msgstr "Cez ponuku Postava si môžete vylepšiť jeden alebo viacero atribútov."
+msgstr ""
 
 #: ../../../src/Avatar.cpp:425
 msgid "You may unlock one or more abilities through the Powers Menu."
-msgstr "Cez ponuku Sily si môžete odomknúť jednu alebo viacero schopností."
+msgstr ""
 
 #: ../../../src/Avatar.cpp:688
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
 msgstr ""
-"Utrpeli ste porážku. Hra sa končí! Stlačením ${INPUT_CONTINUE} sa vrátite na"
-" úvod."
 
 #: ../../../src/Avatar.cpp:694
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
-msgstr "Utrpeli ste porážku. Pokračujte stlačením ${INPUT_CONTINUE}."
+msgstr ""
 
 #: ../../../src/Avatar.cpp:945
 msgid "Transformation expired. You have been moved back to a safe place."
-msgstr "Čas premeny vypršal. Presunuli ste sa naspäť na bezpečné miesto."
+msgstr ""
 
 #: ../../../src/CampaignManager.cpp:153
 #, c-format
@@ -66,42 +59,42 @@ msgstr ""
 #: ../../../src/CampaignManager.cpp:175
 #, c-format
 msgid "You receive %s."
-msgstr "Dostali ste %s."
+msgstr ""
 
 #: ../../../src/CampaignManager.cpp:177
 #, c-format
 msgid "You receive %s x%d."
-msgstr "Dostali ste %s x%d."
+msgstr ""
 
 #: ../../../src/CampaignManager.cpp:186
 #, c-format
 msgid "You receive %d %s."
-msgstr "Dostali ste %d %s."
+msgstr ""
 
 #: ../../../src/CampaignManager.cpp:195
 #, c-format
 msgid "You receive %d XP."
-msgstr "Dostali ste %d XP."
+msgstr ""
 
 #: ../../../src/CampaignManager.cpp:201
 msgid "HP restored."
-msgstr "HP boli obnovené."
+msgstr ""
 
 #: ../../../src/CampaignManager.cpp:205
 msgid "MP restored."
-msgstr "MP boli obnovené."
+msgstr ""
 
 #: ../../../src/CampaignManager.cpp:210
 msgid "HP and MP restored."
-msgstr "HP a MP boli obnovené."
+msgstr ""
 
 #: ../../../src/CampaignManager.cpp:214
 msgid "Negative effects removed."
-msgstr "Negatívne efekty boli odstránené."
+msgstr ""
 
 #: ../../../src/CampaignManager.cpp:220
 msgid "HP and MP restored, negative effects removed"
-msgstr "HP a MP boli obnovené, negatívne efekty odstránené"
+msgstr ""
 
 #: ../../../src/DeviceList.cpp:56
 msgid ""
@@ -109,9 +102,6 @@ msgid ""
 "\n"
 "Often slower, but less likely to have issues."
 msgstr ""
-"Softvérové vykresľovanie pomocou SDL\n"
-"\n"
-"Často pomalšie, ale menej náchylné na chyby."
 
 #: ../../../src/DeviceList.cpp:59
 msgid ""
@@ -119,57 +109,54 @@ msgid ""
 "\n"
 "The default renderer that is often faster than the SDL software renderer."
 msgstr ""
-"Hardvérové vykresľovanie pomocou SDL\n"
-"\n"
-"Predvolené vykresľovanie, ktoré je často rýchlejšie ako softvérové vykresľovanie pomocou SDL."
 
 #: ../../../src/EngineSettings.cpp:561
 msgid "Adventurer"
-msgstr "Dobrodruh"
+msgstr ""
 
 #: ../../../src/Entity.cpp:517
 msgid "miss"
-msgstr "minutie"
+msgstr ""
 
 #: ../../../src/Entity.cpp:554 ../../../src/PowerManager.cpp:1186
 #: ../../../src/StatBlock.cpp:812 ../../../src/StatBlock.cpp:818
 #, c-format
 msgid "+%d HP"
-msgstr "+%d HP"
+msgstr ""
 
 #: ../../../src/Entity.cpp:561 ../../../src/StatBlock.cpp:823
 #: ../../../src/StatBlock.cpp:829
 #, c-format
 msgid "+%d MP"
-msgstr "+%d MP"
+msgstr ""
 
 #: ../../../src/EventManager.cpp:738
 msgid "Unknown destination"
-msgstr "Neznámy cieľ"
+msgstr ""
 
 #: ../../../src/GameState.cpp:37 ../../../src/GameState.cpp:58
 msgid "Loading..."
-msgstr "Načítava sa..."
+msgstr ""
 
 #: ../../../src/GameStateLoad.cpp:88 ../../../src/GameStateLoad.cpp:101
 msgid "Delete Save"
-msgstr "Zmazať pozíciu"
+msgstr ""
 
 #: ../../../src/GameStateLoad.cpp:88
 msgid "Delete this save?"
-msgstr "Zmazať túto pozíciu?"
+msgstr ""
 
 #: ../../../src/GameStateLoad.cpp:90
 msgid "Exit to Title"
-msgstr "Návrat na úvod"
+msgstr ""
 
 #: ../../../src/GameStateLoad.cpp:93
 msgid "New Game"
-msgstr "Nová hra"
+msgstr ""
 
 #: ../../../src/GameStateLoad.cpp:97 ../../../src/GameStateLoad.cpp:600
 msgid "Choose a Slot"
-msgstr "Vyberte pozíciu"
+msgstr ""
 
 #: ../../../src/GameStateLoad.cpp:573 ../../../src/GameStateLoad.cpp:594
 msgid "Enable a story mod to continue"
@@ -177,59 +164,59 @@ msgstr ""
 
 #: ../../../src/GameStateLoad.cpp:589
 msgid "Load Game"
-msgstr "Načítať hru"
+msgstr ""
 
 #: ../../../src/GameStateLoad.cpp:695
 msgid "Entering game world..."
-msgstr "Vstupuje sa do sveta hry..."
+msgstr ""
 
 #: ../../../src/GameStateLoad.cpp:698
 msgid "Loading saved game..."
-msgstr "Načítava sa uložená hra..."
+msgstr ""
 
 #: ../../../src/GameStateLoad.cpp:731
 msgid "Invalid save"
-msgstr "Neplatná uložená pozícia"
+msgstr ""
 
 #: ../../../src/GameStateLoad.cpp:755 ../../../src/ItemManager.cpp:771
 #: ../../../src/MenuPowers.cpp:778 ../../../src/MenuPowers.cpp:1144
 #: ../../../src/MenuPowers.cpp:1544
 #, c-format
 msgid "Level %d"
-msgstr "Úroveň %d"
+msgstr ""
 
 #: ../../../src/GameStateNew.cpp:65 ../../../src/InputState.cpp:403
 #: ../../../src/MenuConfig.cpp:241
 msgid "Cancel"
-msgstr "Zrušiť"
+msgstr ""
 
 #: ../../../src/GameStateNew.cpp:68
 msgid "Create"
-msgstr "Vytvoriť"
+msgstr ""
 
 #: ../../../src/GameStateNew.cpp:76
 msgid "Randomize"
-msgstr "Vybrať náhodne"
+msgstr ""
 
 #: ../../../src/GameStateNew.cpp:92
 msgid "Choose a Portrait"
-msgstr "Vyberte si vzhľad"
+msgstr ""
 
 #: ../../../src/GameStateNew.cpp:96
 msgid "Choose a Name"
-msgstr "Vyberte si meno"
+msgstr ""
 
 #: ../../../src/GameStateNew.cpp:100
 msgid "Permadeath?"
-msgstr "Trvalá smrť?"
+msgstr ""
 
 #: ../../../src/GameStateNew.cpp:104
 msgid "Choose a Class"
-msgstr "Vyberte si triedu"
+msgstr ""
 
 #: ../../../src/GameStateTitle.cpp:107
 msgid "Play Game"
-msgstr "Hrať hru"
+msgstr ""
 
 #: ../../../src/GameStateTitle.cpp:110
 msgid "Enable a core mod to continue"
@@ -237,159 +224,159 @@ msgstr ""
 
 #: ../../../src/GameStateTitle.cpp:114
 msgid "Configuration"
-msgstr "Konfigurácia"
+msgstr ""
 
 #: ../../../src/GameStateTitle.cpp:117
 msgid "Credits"
-msgstr "Autori"
+msgstr ""
 
 #: ../../../src/GameStateTitle.cpp:120
 msgid "Exit Game"
-msgstr "Ukončiť hru"
+msgstr ""
 
 #: ../../../src/InputState.cpp:404
 msgid "Accept"
-msgstr "Prijať"
+msgstr ""
 
 #: ../../../src/InputState.cpp:405 ../../../src/SDLInputState.cpp:658
 msgid "Up"
-msgstr "Nahor"
+msgstr ""
 
 #: ../../../src/InputState.cpp:406 ../../../src/SDLInputState.cpp:636
 msgid "Down"
-msgstr "Nadol"
+msgstr ""
 
 #: ../../../src/InputState.cpp:407 ../../../src/SDLInputState.cpp:643
 msgid "Left"
-msgstr "Doľava"
+msgstr ""
 
 #: ../../../src/InputState.cpp:408 ../../../src/SDLInputState.cpp:653
 msgid "Right"
-msgstr "Doprava"
+msgstr ""
 
 #: ../../../src/InputState.cpp:409
 msgid "Bar1"
-msgstr "Panel 1"
+msgstr ""
 
 #: ../../../src/InputState.cpp:410
 msgid "Bar2"
-msgstr "Panel 2"
+msgstr ""
 
 #: ../../../src/InputState.cpp:411
 msgid "Bar3"
-msgstr "Panel 3"
+msgstr ""
 
 #: ../../../src/InputState.cpp:412
 msgid "Bar4"
-msgstr "Panel 4"
+msgstr ""
 
 #: ../../../src/InputState.cpp:413
 msgid "Bar5"
-msgstr "Panel 5"
+msgstr ""
 
 #: ../../../src/InputState.cpp:414
 msgid "Bar6"
-msgstr "Panel 6"
+msgstr ""
 
 #: ../../../src/InputState.cpp:415
 msgid "Bar7"
-msgstr "Panel 7"
+msgstr ""
 
 #: ../../../src/InputState.cpp:416
 msgid "Bar8"
-msgstr "Panel 8"
+msgstr ""
 
 #: ../../../src/InputState.cpp:417
 msgid "Bar9"
-msgstr "Panel 9"
+msgstr ""
 
 #: ../../../src/InputState.cpp:418
 msgid "Bar0"
-msgstr "Panel 0"
+msgstr ""
 
 #: ../../../src/InputState.cpp:419 ../../../src/MenuActionBar.cpp:81
 #: ../../../src/MenuCharacter.cpp:54
 msgid "Character"
-msgstr "Postava"
+msgstr ""
 
 #: ../../../src/InputState.cpp:420 ../../../src/MenuActionBar.cpp:82
 #: ../../../src/MenuInventory.cpp:129 ../../../src/MenuVendor.cpp:57
 msgid "Inventory"
-msgstr "Inventár"
+msgstr ""
 
 #: ../../../src/InputState.cpp:421 ../../../src/MenuActionBar.cpp:83
 #: ../../../src/MenuPowers.cpp:168
 msgid "Powers"
-msgstr "Sily"
+msgstr ""
 
 #: ../../../src/InputState.cpp:422 ../../../src/MenuActionBar.cpp:84
 #: ../../../src/MenuLog.cpp:72
 msgid "Log"
-msgstr "Denník"
+msgstr ""
 
 #: ../../../src/InputState.cpp:423
 msgid "Main1"
-msgstr "Hlavná akcia 1"
+msgstr ""
 
 #: ../../../src/InputState.cpp:424
 msgid "Main2"
-msgstr "Hlavná akcia 2"
+msgstr ""
 
 #: ../../../src/InputState.cpp:425
 msgid "Ctrl"
-msgstr "Ctrl"
+msgstr ""
 
 #: ../../../src/InputState.cpp:426
 msgid "Shift"
-msgstr "Shift"
+msgstr ""
 
 #: ../../../src/InputState.cpp:427
 msgid "Alt"
-msgstr "Alt"
+msgstr ""
 
 #: ../../../src/InputState.cpp:428 ../../../src/SDLInputState.cpp:635
 msgid "Delete"
-msgstr "Delete"
+msgstr ""
 
 #: ../../../src/InputState.cpp:429
 msgid "ActionBar Accept"
-msgstr "Akčný panel: prijať"
+msgstr ""
 
 #: ../../../src/InputState.cpp:430
 msgid "ActionBar Left"
-msgstr "Akčný panel: doľava"
+msgstr ""
 
 #: ../../../src/InputState.cpp:431
 msgid "ActionBar Right"
-msgstr "Akčný panel: doprava"
+msgstr ""
 
 #: ../../../src/InputState.cpp:432
 msgid "ActionBar Use"
-msgstr "Akčný panel: použiť"
+msgstr ""
 
 #: ../../../src/InputState.cpp:433
 msgid "Developer Menu"
-msgstr "Vývojárska ponuka"
+msgstr ""
 
 #: ../../../src/InputState.cpp:435
 msgid "Left Mouse"
-msgstr "Ľavé tlačidlo myši"
+msgstr ""
 
 #: ../../../src/InputState.cpp:436
 msgid "Middle Mouse"
-msgstr "Stredné tlačidlo myši"
+msgstr ""
 
 #: ../../../src/InputState.cpp:437
 msgid "Right Mouse"
-msgstr "Pravé tlačidlo myši"
+msgstr ""
 
 #: ../../../src/InputState.cpp:438
 msgid "Wheel Up"
-msgstr "Koliesko myši nahor"
+msgstr ""
 
 #: ../../../src/InputState.cpp:439
 msgid "Wheel Down"
-msgstr "Koliesko myši nadol"
+msgstr ""
 
 #: ../../../src/InputState.cpp:440
 msgid "Mouse X1"
@@ -401,7 +388,7 @@ msgstr ""
 
 #: ../../../src/ItemManager.cpp:474 ../../../src/ItemManager.cpp:477
 msgid "Unknown Item"
-msgstr "Neznámy predmet"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:672 ../../../src/MenuPowers.cpp:887
 #, c-format
@@ -417,37 +404,37 @@ msgstr ""
 #: ../../../src/MenuPowers.cpp:833
 #, c-format
 msgid "Resistance (%s)"
-msgstr "Odolnosť (%s)"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:708
 #, c-format
 msgid "Requires %s"
-msgstr "Vyžaduje %s"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:757
 msgid "Quest Item"
-msgstr "Predmet úlohy"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:784
 #, c-format
 msgid "Quality: %s"
-msgstr "Kvalita: %s"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:809
 #, c-format
 msgid "Absorb: %d-%d"
-msgstr "Pohlť: %d-%d"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:811
 #, c-format
 msgid "Absorb: %d"
-msgstr "Pohlť: %d"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:851 ../../../src/MenuPowers.cpp:1131
 #: ../../../src/MenuPowers.cpp:1134
 #, c-format
 msgid "Requires Level %d"
-msgstr "Vyžaduje úroveň %d"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:862 ../../../src/MenuPowers.cpp:1123
 #: ../../../src/MenuPowers.cpp:1125
@@ -458,31 +445,31 @@ msgstr ""
 #: ../../../src/ItemManager.cpp:873
 #, c-format
 msgid "Requires Class: %s"
-msgstr "Vyžaduje triedu: %s"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:888 ../../../src/ItemManager.cpp:900
 #, c-format
 msgid "Buy Price: %d %s"
-msgstr "Kúpna cena: %d %s"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:890 ../../../src/ItemManager.cpp:902
 #, c-format
 msgid "Buy Price: %d %s each"
-msgstr "Kúpna cena: %d %s za kus"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:910
 #, c-format
 msgid "Sell Price: %d %s"
-msgstr "Predajná cena: %d %s"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:912
 #, c-format
 msgid "Sell Price: %d %s each"
-msgstr "Predajná cena: %d %s za kus"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:921
 msgid "Set:"
-msgstr "Súprava:"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:928
 #, c-format
@@ -492,22 +479,22 @@ msgstr ""
 #: ../../../src/ItemManager.cpp:941 ../../../src/ItemManager.cpp:947
 #, c-format
 msgid "Press [%s] to use"
-msgstr "Použijete stlačením [%s]"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:945
 #, c-format
 msgid "Press [%s] to read"
-msgstr "Prečítate stlačením [%s]"
+msgstr ""
 
 #: ../../../src/MenuActionBar.cpp:220 ../../../src/MenuActionBar.cpp:227
 #: ../../../src/MenuActionBar.cpp:230 ../../../src/MenuActionBar.cpp:236
 #, c-format
 msgid "Hotkey: %s"
-msgstr "Klávesová skratka: %s"
+msgstr ""
 
 #: ../../../src/MenuActionBar.cpp:593
 msgid "Not enough MP."
-msgstr "Nedostatok MP."
+msgstr ""
 
 #: ../../../src/MenuActiveEffects.cpp:124
 #, c-format
@@ -525,11 +512,11 @@ msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:73 ../../../src/MenuCharacter.cpp:78
 msgid "Name"
-msgstr "Meno"
+msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:74 ../../../src/MenuCharacter.cpp:79
 msgid "Level"
-msgstr "Stupeň"
+msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:310
 #, c-format
@@ -544,31 +531,31 @@ msgstr ""
 #: ../../../src/MenuCharacter.cpp:355
 #, c-format
 msgid "Reduces the damage taken from \"%s\" elemental attacks."
-msgstr "Znižuje zranenie utŕžené zo živelných útokov „%s“."
+msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:365 ../../../src/MenuManager.cpp:291
 #, c-format
 msgid "XP: %d"
-msgstr "XP: %d"
+msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:367
 #, c-format
 msgid "Next: %d"
-msgstr "Nasl.: %d"
+msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:373
 #, c-format
 msgid "base (%d), bonus (%d)"
-msgstr "základ (%d), bonus (%d)"
+msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:381 ../../../src/MenuCharacter.cpp:395
 msgid "Related stats:"
-msgstr "Súvisiace charakteristiky:"
+msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:421 ../../../src/MenuCharacter.cpp:445
 #, c-format
 msgid "Each level grants %d."
-msgstr "Každá úroveň pridá %d."
+msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:425 ../../../src/MenuCharacter.cpp:449
 #, c-format
@@ -577,27 +564,27 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:122 ../../../src/MenuConfig.cpp:1148
 msgid "Clear"
-msgstr "Vymazať"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:122 ../../../src/MenuConfig.cpp:1146
 msgid "Assign:"
-msgstr "Priradiť:"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:123 ../../../src/MenuConfig.cpp:240
 msgid "Defaults"
-msgstr "Predvolené"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:123
 msgid "Reset ALL settings?"
-msgstr "Vrátiť VŠETKY nastavenia?"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:239 ../../../src/MenuNumPicker.cpp:49
 msgid "OK"
-msgstr "OK"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:243
 msgid "Continue"
-msgstr "Pokračovať"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:286
 msgid "Default"
@@ -608,9 +595,6 @@ msgid ""
 "Show all loot tooltips, except for those that would be obscured by the "
 "player or an enemy. Temporarily show all loot tooltips with 'Alt'."
 msgstr ""
-"Zobrazovať všetky popisy predmetov na zemi okrem tých, ktoré zakrýva hráč "
-"alebo nepriateľ. Stlačením klávesu Alt môžete dočasne zobraziť všetky "
-"popisy."
 
 #: ../../../src/MenuConfig.cpp:287
 msgid "Show all"
@@ -620,8 +604,6 @@ msgstr ""
 msgid ""
 "Always show loot tooltips. Temporarily hide all loot tooltips with 'Alt'."
 msgstr ""
-"Vždy zobrazovať popisy predmetov na zemi. Stlačením klávesu Alt môžete "
-"dočasne skryť všetky popisy."
 
 #: ../../../src/MenuConfig.cpp:288 ../../../src/MenuConfig.cpp:293
 msgid "Hidden"
@@ -632,132 +614,126 @@ msgid ""
 "Always hide loot tooltips, except for when a piece of loot is hovered with "
 "the mouse cursor. Temporarily show all loot tooltips with 'Alt'."
 msgstr ""
-"Vždy skrývať popisy predmetov na zemi okrem prípadu, že na predmet ukazuje "
-"kurzor myši. Stlačením klávesu Alt môžete dočasne zobraziť všetky popisy."
 
 #: ../../../src/MenuConfig.cpp:291
 msgid "Visible"
-msgstr "Viditeľná"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:292
 msgid "Visible (2x zoom)"
-msgstr "Viditeľná (2x priblíženie)"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:296
 msgid ""
 "Controls the type of warning to be activated when the player is below the "
 "low health threshold."
 msgstr ""
-"Ovláda typ upozornenia, ktoré sa aktivuje, keď zdravie hráča klesne pod prah"
-" nízkeho zdravia."
 
 #: ../../../src/MenuConfig.cpp:297
 msgid "- Display a message"
-msgstr "- Zobrazenie správy"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:298
 msgid "- Play a sound"
-msgstr "- Prehratie zvuku"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:299
 msgid "- Change the cursor"
-msgstr "- Zmena kurzora"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:301
 msgid "Disabled"
-msgstr "Zakázané"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:302
 msgid "All"
-msgstr "Všetky"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:303
 msgid "Message & Cursor"
-msgstr "Správa a kurzor"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:304
 msgid "Message & Sound"
-msgstr "Správa a zvuk"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:305
 msgid "Sound & Cursor"
-msgstr "Zvuk a kurzor"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:306
 msgid "Message"
-msgstr "Správa"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:307
 msgid "Cursor"
-msgstr "Kurzor"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:308
 msgid "Sound"
-msgstr "Zvuk"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:314
 msgid ""
 "When the player's health drops below the given threshold, the low health "
 "notifications are triggered if one or more of them is enabled."
 msgstr ""
-"Keď zdravie hráča klesne pod tento prah, spustia sa oznámenia o nízkom "
-"zdraví, ak je povolené aspoň jedno z nich."
 
 #: ../../../src/MenuConfig.cpp:327 ../../../src/MenuConfig.cpp:1561
 msgid "Exit"
-msgstr "Ukončiť"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:328
 msgid "Video"
-msgstr "Obraz"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:329
 msgid "Audio"
-msgstr "Zvuk"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:330
 msgid "Interface"
-msgstr "Rozhranie"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:331
 msgid "Input"
-msgstr "Vstup"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:332
 msgid "Keybindings"
-msgstr "Priradenie klávesov"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:333
 msgid "Mods"
-msgstr "Modifikácie"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:345
 msgid "Paused"
-msgstr "Hra pozastavená"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:347
 msgid "Time Played"
-msgstr "Odohraný čas"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:349
 msgid "Renderer"
-msgstr "Vykresľovanie"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:350
 msgid "Full Screen Mode"
-msgstr "Režim celej obrazovky"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:351
 msgid "Hardware surfaces"
-msgstr "Hardvérové povrchy"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:352
 msgid "V-Sync"
-msgstr "Vertikálna synchronizácia"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:353
 msgid "Texture Filtering"
-msgstr "Filtrovanie textúr"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:354
 msgid "DPI scaling"
@@ -765,47 +741,47 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:355
 msgid "Parallax Layers"
-msgstr "Paralaxné vrstvy"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:356
 msgid "Allow changing gamma"
-msgstr "Povoliť zmenu hodnoty gama"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:357
 msgid "Gamma"
-msgstr "Gama"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:359
 msgid "Sound Volume"
-msgstr "Hlasitosť zvukov"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:360
 msgid "Music Volume"
-msgstr "Hlasitosť hudby"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:362
 msgid "Language"
-msgstr "Jazyk"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:363
 msgid "Show FPS"
-msgstr "Zobrazovať FPS"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:364
 msgid "Hardware mouse cursor"
-msgstr "Hardvérový kurzor myši"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:365
 msgid "Colorblind Mode"
-msgstr "Režim pre farboslepých"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:366
 msgid "Developer Mode"
-msgstr "Vývojársky režim"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:367
 msgid "Subtitles"
-msgstr "Titulky"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:368
 msgid "Loot tooltip visibility"
@@ -813,23 +789,23 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:369
 msgid "Mini-map mode"
-msgstr "Režim minimapy"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:370
 msgid "Always show stat bar labels"
-msgstr "Vždy zobrazovať textové označenie indikátorov charakteristík"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:371
 msgid "Allow stat bar auto-hiding"
-msgstr "Povoliť automatické skrývanie indikátorov charakteristík"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:372
 msgid "Show combat text"
-msgstr "Zobrazovať text o boji"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:373
 msgid "Automatically equip items"
-msgstr "Automaticky sa vystrojiť predmetmi"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:374
 msgid "Show hidden entity markers"
@@ -837,27 +813,27 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:375
 msgid "Low health notification"
-msgstr "Oznámenie o nízkom zdraví"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:376
 msgid "Low health threshold"
-msgstr "Prah nízkeho zdravia"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:379
 msgid "Joystick"
-msgstr "Joystick"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:380
 msgid "Move hero using mouse"
-msgstr "Ovládať pohyb hrdinu pomocou myši"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:381
 msgid "Mouse aim"
-msgstr "Mierenie myšou"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:382
 msgid "Do not use mouse"
-msgstr "Nepoužívať myš"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:383
 msgid "Swap mouse movement button"
@@ -869,38 +845,34 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:385
 msgid "Joystick Deadzone"
-msgstr "Mŕtva zóna joysticku"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:395
 #, c-format
 msgid "Primary binding: %s"
-msgstr "Primárne priradenie: %s"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:396
 #, c-format
 msgid "Alternate binding: %s"
-msgstr "Alternatívne priradenie: %s"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:397
 #, c-format
 msgid "Joystick binding: %s"
-msgstr "Priradenie pre joystick: %s"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:496
 msgid ""
 "Will try to store surfaces in video memory versus system memory. The effect "
 "this has on performance depends on the renderer."
 msgstr ""
-"Pokúsi sa ukladať povrchy do grafickej pamäte na rozdiel od operačnej "
-"pamäte. Vplyv na výkon závisí od typu vykresľovania."
 
 #: ../../../src/MenuConfig.cpp:497
 msgid ""
 "Prevents screen tearing. Disable if you experience \"stuttering\" in "
 "windowed mode or input lag."
 msgstr ""
-"Zabraňuje trhaniu obrazovky. V prípade „koktania“ v režime okna alebo "
-"oneskorenia vstupu toto nastavenie zakážte."
 
 #: ../../../src/MenuConfig.cpp:498
 msgid ""
@@ -914,39 +886,30 @@ msgid ""
 "This enables parallax (non-tile) layers. Disabling this setting can improve "
 "performance in some cases."
 msgstr ""
-"Povolí paralaxné (nedlaždicové) vrstvy. Zakázaním tohto nastavenia môžete v "
-"niektorých prípadoch zlepšiť výkon."
 
 #: ../../../src/MenuConfig.cpp:500
 msgid ""
 "Enables the below setting that controls the screen gamma level. The behavior"
 " of the gamma setting can vary between platforms."
 msgstr ""
-"Povolí nižšie uvedené nastavenie, ktoré ovláda hodnotu gama obrazovky. "
-"Správanie nastavenia gama sa môže líšiť v závislosti od platformy."
 
 #: ../../../src/MenuConfig.cpp:501
 msgid ""
 "Provides additional text for information that is primarily conveyed through "
 "color."
 msgstr ""
-"Poskytne doplnkové texty pre informácie, ktoré sú vyjadrené hlavne farbami."
 
 #: ../../../src/MenuConfig.cpp:502
 msgid ""
 "Some mods will automatically hide the stat bars when they are inactive. "
 "Disabling this option will keep them displayed at all times."
 msgstr ""
-"Niektoré modifikácie automaticky skrývajú indikátory charakteristík, keď "
-"neprejavujú aktivitu. Zakázaním tejto možnosti sa budú zobrazovať vždy."
 
 #: ../../../src/MenuConfig.cpp:503
 msgid ""
 "When enabled, empty equipment slots will be filled with applicable items "
 "when they are obtained."
 msgstr ""
-"Ak je toto nastavenie povolené, získanie vhodných predmetov automaticky "
-"obsadí prázdne pozície výstroje."
 
 #: ../../../src/MenuConfig.cpp:504
 msgid ""
@@ -958,7 +921,7 @@ msgstr ""
 msgid ""
 "This allows the game to be controlled entirely with the keyboard (or "
 "joystick)."
-msgstr "Umožní ovládať hru výlučne pomocou klávesnice (alebo joysticku)."
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:506
 msgid ""
@@ -980,40 +943,38 @@ msgid ""
 "The player's attacks will be aimed in the direction of the mouse cursor when"
 " this is enabled."
 msgstr ""
-"Ak je toto nastavenie povolené, útoky hráča budú mierené smerom ku kurzoru "
-"myši."
 
 #: ../../../src/MenuConfig.cpp:559
 msgid "Active Mods"
-msgstr "Aktívne modifikácie"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:568
 msgid "Available Mods"
-msgstr "Dostupné modifikácie"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:587
 msgid "<< Disable"
-msgstr "<< Zakázať"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:593
 msgid "Enable >>"
-msgstr "Povoliť >>"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:1420
 msgid "Version:"
-msgstr "Verzia:"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:1425
 msgid "Game:"
-msgstr "Hra:"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:1430
 msgid "Engine version:"
-msgstr "Verzia jadra:"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:1438
 msgid "Requires mods:"
-msgstr "Požadované modifikácie:"
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:1544 ../../../src/SDLInputState.cpp:688
 msgid "(none)"
@@ -1021,94 +982,90 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:1561
 msgid "Save & Exit"
-msgstr "Uložiť a ukončiť"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:63
 msgid "Execute"
-msgstr "Vykonať"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:101 ../../../src/MenuDevConsole.cpp:151
 msgid "Developer Console"
-msgstr "Vývojárska konzola"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:141
 #, c-format
 msgid "Use '%s' to inspect with the cursor."
-msgstr "‚%s‘ preskúma miesto, na ktorom je kurzor."
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:146
 msgid "Arguments with spaces should be enclosed with double quotes. Example:"
 msgstr ""
-"Argumenty obsahujúce medzery by mali byť uzavreté v dvojitých úvodzovkách. "
-"Napríklad:"
 
 #: ../../../src/MenuDevConsole.cpp:147
 msgid "Type 'help' to get a list of commands."
-msgstr "Ak chetete získať zoznam príkazov, napíšte ‚help‘."
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:209 ../../../src/MenuDevConsole.cpp:213
 msgid "px"
-msgstr "px"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:224
 msgid "Distance"
-msgstr "Vzdialenosť"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:239 ../../../src/MenuDevConsole.cpp:286
 msgid "Entity"
-msgstr "Entita"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:261 ../../../src/MenuDevConsole.cpp:268
 msgid "none"
-msgstr "žiadna"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:262 ../../../src/MenuDevConsole.cpp:264
 msgid "wall"
-msgstr "stena"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:263 ../../../src/MenuDevConsole.cpp:265
 msgid "short wall / pit"
-msgstr "nízka stena / priepasť"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:266
 msgid "entity"
-msgstr "entita"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:267
 msgid "entity, ally"
-msgstr "entita, spojenecká"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:274
 msgid "Tile"
-msgstr "Dlaždica"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:360
 msgid "adds a power to the action bar"
-msgstr "pridá silu do akčného panelu"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:361
 msgid "turns on/off the display of the FPS counter"
-msgstr "vypne/zapne zobrazovanie počítadla FPS"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:362
 msgid "turns on/off all of the HUD elements"
-msgstr "vypne/zapne všetky elementy HUD"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:363
 msgid "turns on/off the developer hud"
-msgstr "vypne/zapne HUD pre vývojárov"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:364
 msgid ""
 "Prints a list of powers that match a search term. No search term will list "
 "all items"
 msgstr ""
-"Vypíše zoznam síl, ktoré zodpovedajú hľadanému výrazu. Neexistuje hľadaný "
-"výraz, ktorý by ich vymenoval všetky"
 
 #: ../../../src/MenuDevConsole.cpp:365
 msgid "Prints out all the map filenames located in the \"maps/\" directory."
-msgstr "Vypíše všetky názvy súborov máp umiestnených v adresári „maps/“."
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:366
 msgid ""
@@ -1121,8 +1078,6 @@ msgid ""
 "Prints a list of items that match a search term. No search term will list "
 "all items"
 msgstr ""
-"Vypíše zoznam predmetov, ktoré zodpovedajú hľadanému výrazu. Neexistuje "
-"hľadaný výraz, ktorý by vymenoval všetky predmety"
 
 #: ../../../src/MenuDevConsole.cpp:368
 msgid ""
@@ -1131,31 +1086,31 @@ msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:369
 msgid "clears the command history"
-msgstr "vymaže históriu príkazov"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:370
 msgid "displays this text"
-msgstr "zobrazí tento text"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:377
 msgid "Toggled the developer hud"
-msgstr "Bolo prepnuté zobrazovanie HUD pre vývojárov"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:381
 msgid "Toggled the hud"
-msgstr "Bolo prepnuté zobrazovanie HUD"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:385
 msgid "Toggled the FPS counter"
-msgstr "Bolo prepnuté zobrazovanie počítadla FPS"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:534
 msgid "ERROR: Incorrect number of arguments"
-msgstr "CHYBA: Nesprávny počet argumentov"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:536 ../../../src/MenuDevConsole.cpp:564
 msgid "HINT:"
-msgstr "TIP:"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:536
 msgid "<id>"
@@ -1168,28 +1123,28 @@ msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:562
 msgid "ERROR: Too few arguments"
-msgstr "CHYBA: Príliš málo argumentov"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:564
 msgid "<key>=<val> <key>=<val> ..."
-msgstr "<kľúč>=<hodnota> <kľúč>=<hodnota> ..."
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:569
 msgid "ERROR: Unknown command"
-msgstr "CHYBA: Neznámy príkaz"
+msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:571
 msgid "HINT: Type help"
-msgstr "TIP: Napíšte help"
+msgstr ""
 
 #: ../../../src/MenuEnemy.cpp:138
 #, c-format
 msgid "%s level %d"
-msgstr "%s stupeň %d"
+msgstr ""
 
 #: ../../../src/MenuEnemy.cpp:162
 msgid "Dead"
-msgstr "Mŕtvy"
+msgstr ""
 
 #: ../../../src/MenuEnemy.cpp:164
 msgid "Destroyed"
@@ -1198,17 +1153,17 @@ msgstr ""
 #: ../../../src/MenuInventory.cpp:177
 #, c-format
 msgid "Lost %d%% of %s."
-msgstr "Stratili ste %d %% z %s."
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:184
 #, c-format
 msgid "Lost %d%% of total XP."
-msgstr "Stratili ste %d %% z celkového XP."
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:189
 #, c-format
 msgid "Lost %d%% of current level XP."
-msgstr "Stratili ste %d %% z XP aktuálnej úrovne."
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:215
 #, c-format
@@ -1222,88 +1177,88 @@ msgstr ""
 
 #: ../../../src/MenuInventory.cpp:300
 msgid "Pick up item(s):"
-msgstr "Zobratie predmetu/-ov:"
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:301
 msgid "Use or equip item:"
-msgstr "Použitie alebo vystrojenie predmetom:"
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:302
 #, c-format
 msgid "%s modifiers"
-msgstr "Modifikátory pre %s"
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:303
 msgid "Select a quantity of item:"
-msgstr "Výber množstva predmetu:"
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:306
 msgid "Stash item stack:"
-msgstr "Uschovanie hromady predmetov:"
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:308
 msgid "Sell item stack:"
-msgstr "Predaj hromady predmetov:"
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:574
 msgid "You don't have enough of the required item."
-msgstr "Nemáte dostatočné množstvo vyžadovaného predmetu."
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:586
 msgid "You can't use this item right now."
-msgstr "Tento predmet nemožno momentálne použiť."
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:598
 msgid "This item can only be used from the action bar."
-msgstr "Tento predmet môžeš použiť iba z pruhu akcií."
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:716
 msgid "Inventory is full."
-msgstr "Inventár je plný."
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:841
 #, c-format
 msgid "Not enough %s."
-msgstr "Nedostatok %s."
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:861 ../../../src/MenuInventory.cpp:868
 msgid "This item can not be sold."
-msgstr "Tento predmet nemožno predať."
+msgstr ""
 
 #: ../../../src/MenuLog.cpp:91
 msgid "Notes"
-msgstr "Poznámky"
+msgstr ""
 
 #: ../../../src/MenuLog.cpp:92
 msgid "Quests"
-msgstr "Úlohy"
+msgstr ""
 
 #: ../../../src/MenuManager.cpp:295
 #, c-format
 msgid "XP: %d/%d"
-msgstr "XP: %d/%d"
+msgstr ""
 
 #: ../../../src/MenuManager.cpp:846
 msgid "This item can not be dropped."
-msgstr "Tento predmet nemožno položiť na zem."
+msgstr ""
 
 #: ../../../src/MenuNumPicker.cpp:59
 msgid "Enter amount:"
-msgstr "Zadajte množstvo:"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:787
 msgid "Passive"
-msgstr "Pasívna"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:792
 #, c-format
 msgid "Costs %d MP"
-msgstr "Spotrebuje %d MP"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:796
 #, c-format
 msgid "Costs %d HP"
-msgstr "Spotrebuje %d HP"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:801
 msgid "Cooldown:"
@@ -1311,15 +1266,15 @@ msgstr ""
 
 #: ../../../src/MenuPowers.cpp:866 ../../../src/MenuPowers.cpp:869
 msgid "Damage per second"
-msgstr "Zranenie za sekundu"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:872 ../../../src/MenuPowers.cpp:875
 msgid "HP per second"
-msgstr "HP za sekundu"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:878 ../../../src/MenuPowers.cpp:881
 msgid "MP per second"
-msgstr "MP za sekundu"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:885
 msgid "Immobilize"
@@ -1327,43 +1282,43 @@ msgstr ""
 
 #: ../../../src/MenuPowers.cpp:893
 msgid "Immunity"
-msgstr "Imunita"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:896
 msgid "Immunity to damage over time"
-msgstr "Imunita voči zraneniu postupom času"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:899
 msgid "Immunity to slow"
-msgstr "Imunita voči spomaleniu"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:902
 msgid "Immunity to stun"
-msgstr "Imunita voči omráčeniu"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:905
 msgid "Immunity to HP steal"
-msgstr "Imunita voči krádeži HP"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:908
 msgid "Immunity to MP steal"
-msgstr "Imunita voči krádeži MP"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:911
 msgid "Immunity to knockback"
-msgstr "Imunita voči odhodeniu"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:914
 msgid "Immunity to damage reflection"
-msgstr "Imunita voči odrazu zranenia"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:917
 msgid "Stun"
-msgstr "Omráčenie"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:920
 msgid "Automatic revive on death"
-msgstr "Automatické oživenie po smrti"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:923
 msgid "Convert"
@@ -1379,7 +1334,7 @@ msgstr ""
 
 #: ../../../src/MenuPowers.cpp:953
 msgid "Magical Shield"
-msgstr "Magický štít"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:982
 msgid "Healing"
@@ -1387,20 +1342,20 @@ msgstr ""
 
 #: ../../../src/MenuPowers.cpp:985
 msgid "Knockback"
-msgstr "Odhodenie"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1010
 #, c-format
 msgid "%d%% chance"
-msgstr "%d %% šanca"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1062
 msgid "Base Accuracy"
-msgstr "Základná presnosť"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1082
 msgid "Base Critical Chance"
-msgstr "Základná šanca na kritický zásah"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1090
 msgid "Ignores Absorbtion"
@@ -1413,81 +1368,81 @@ msgstr ""
 #: ../../../src/MenuPowers.cpp:1100
 #, c-format
 msgid "%d%% Chance to crit slowed targets"
-msgstr "%d %% šanca kriticky zasiahnuť spomalené ciele"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1105
 #, c-format
 msgid "Elemental Damage (%s)"
-msgstr "Živelné zranenie (%s)"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1114
 #, c-format
 msgid "Requires a %s"
-msgstr "Vyžaduje %s"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1151 ../../../src/MenuPowers.cpp:1154
 #, c-format
 msgid "Requires Power: %s"
-msgstr "Vyžaduje silu: %s"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1163
 msgid "Click to Unlock (uses 1 Skill Point)"
-msgstr "Odomknete kliknutím (použije 1 bod zručnosti)"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1167 ../../../src/MenuPowers.cpp:1169
 msgid "Requires 1 Skill Point"
-msgstr "Vyžaduje 1 bod zručnosti"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1355
 #, c-format
 msgid "%d unspent skill point"
-msgstr "Počet nepoužitých bodov zručnosti: %d "
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1358
 #, c-format
 msgid "%d unspent skill points"
-msgstr "Počet nepoužitých bodov zručnosti: %d "
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1388
 msgid "Next Level:"
-msgstr "Ďalšia úroveň:"
+msgstr ""
 
 #: ../../../src/MenuStash.cpp:54
 msgid "Private"
-msgstr "Súkromné"
+msgstr ""
 
 #: ../../../src/MenuStash.cpp:56
 msgid "Shared"
-msgstr "Zdieľané"
+msgstr ""
 
 #: ../../../src/MenuStash.cpp:104
 msgid "Stash"
-msgstr "Úložisko"
+msgstr ""
 
 #: ../../../src/MenuStash.cpp:259
 msgid "Can not store quest items in the stash."
-msgstr "Predmety úloh nemožno vložiť do úložiska."
+msgstr ""
 
 #: ../../../src/MenuStash.cpp:264
 msgid "This item can not be stored in the stash."
-msgstr "Tento predmet nemožno vložiť do úložiska."
+msgstr ""
 
 #: ../../../src/MenuStash.cpp:269
 msgid "This item can not be stored in the private stash."
-msgstr "Tento predmet nemožno vložiť do súkromného úložiska."
+msgstr ""
 
 #: ../../../src/MenuStash.cpp:274
 msgid "This item can not be stored in the shared stash."
-msgstr "Tento predmet nemožno vložiť do zdieľaného úložiska."
+msgstr ""
 
 #: ../../../src/MenuStash.cpp:284
 msgid "Stash is full."
-msgstr "Úložisko je plné."
+msgstr ""
 
 #: ../../../src/MenuStash.cpp:341
 #, c-format
 msgid "Can not store item in stash: %s"
-msgstr "Do úložiska nemožno vložiť predmet: %s"
+msgstr ""
 
 #: ../../../src/MenuTalker.cpp:447
 #, c-format
@@ -1496,15 +1451,15 @@ msgstr ""
 
 #: ../../../src/MenuTalker.cpp:455
 msgid "Trade"
-msgstr "Obchodovať"
+msgstr ""
 
 #: ../../../src/MenuVendor.cpp:58
 msgid "Buyback"
-msgstr "Spätná kúpa"
+msgstr ""
 
 #: ../../../src/MenuVendor.cpp:281
 msgid "Vendor"
-msgstr "Predavač"
+msgstr ""
 
 #: ../../../src/PowerManager.cpp:1170
 #, c-format
@@ -1513,103 +1468,103 @@ msgstr ""
 
 #: ../../../src/PowerManager.cpp:1426
 msgid "You are already transformed, untransform first."
-msgstr "Už ste raz prešli premenou, najprv ju zvráťte."
+msgstr ""
 
 #: ../../../src/PowerManager.cpp:1438
 msgid "Could not untransform at this position."
-msgstr "Na tomto mieste nemožno zvrátiť premenu."
+msgstr ""
 
 #: ../../../src/QuestLog.cpp:234
 msgid "Completed Quests"
-msgstr "Dokončené úlohy"
+msgstr ""
 
 #: ../../../src/SaveLoad.cpp:263 ../../../src/SaveLoad.cpp:264
 msgid "Game saved."
-msgstr "Hra uložená."
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:633
 msgid "Backspace"
-msgstr "Backspace"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:634
 msgid "CapsLock"
-msgstr "CapsLock"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:637
 msgid "End"
-msgstr "End"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:638
 msgid "Escape"
-msgstr "Escape"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:639
 msgid "Home"
-msgstr "Home"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:640
 msgid "Insert"
-msgstr "Insert"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:641
 msgid "Left Alt"
-msgstr "Ľavý Alt"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:642
 msgid "Left Ctrl"
-msgstr "Ľavý Ctrl"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:644
 msgid "Left Shift"
-msgstr "Ľavý Shift"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:645
 msgid "NumLock"
-msgstr "NumLock"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:646
 msgid "PageDown"
-msgstr "PageDown"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:647
 msgid "PageUp"
-msgstr "PageUp"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:648
 msgid "Pause"
-msgstr "Pause"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:649
 msgid "PrintScreen"
-msgstr "PrintScreen"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:650
 msgid "Right Alt"
-msgstr "Pravý Alt"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:651
 msgid "Right Ctrl"
-msgstr "Pravý Ctrl"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:652
 msgid "Return"
-msgstr "Return"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:654
 msgid "Right Shift"
-msgstr "Pravý Shift"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:655
 msgid "ScrollLock"
-msgstr "ScrollLock"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:656
 msgid "Space"
-msgstr "Medzerník"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:657
 msgid "Tab"
-msgstr "Tab"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:671
 #, c-format
@@ -1619,17 +1574,17 @@ msgstr ""
 #: ../../../src/SDLInputState.cpp:679
 #, c-format
 msgid "Axis %d -"
-msgstr "Os %d -"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:681
 #, c-format
 msgid "Axis %d +"
-msgstr "Os %d +"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:684
 #, c-format
 msgid "Button %d"
-msgstr "Tlačidlo %d"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:728
 msgid "Touch control D-Pad"
@@ -1646,7 +1601,7 @@ msgstr ""
 #: ../../../src/SDLInputState.cpp:819 ../../../src/SDLInputState.cpp:821
 #, c-format
 msgid "Can not bind: %s"
-msgstr "Nemožno priradiť: %s"
+msgstr ""
 
 #: ../../../src/SDLInputState.cpp:833 ../../../src/SDLInputState.cpp:837
 #: ../../../src/SDLInputState.cpp:841
@@ -1660,11 +1615,11 @@ msgstr ""
 
 #: ../../../src/Stats.cpp:39
 msgid "Total amount of HP."
-msgstr "Celkové množstvo HP."
+msgstr ""
 
 #: ../../../src/Stats.cpp:43
 msgid "HP Regen"
-msgstr "Regenerácia HP"
+msgstr ""
 
 #: ../../../src/Stats.cpp:44
 msgid "Ticks of HP regen per minute."
@@ -1676,11 +1631,11 @@ msgstr ""
 
 #: ../../../src/Stats.cpp:49
 msgid "Total amount of MP."
-msgstr "Celkové množstvo MP."
+msgstr ""
 
 #: ../../../src/Stats.cpp:53
 msgid "MP Regen"
-msgstr "Regenerácia MP"
+msgstr ""
 
 #: ../../../src/Stats.cpp:54
 msgid "Ticks of MP regen per minute."
@@ -1688,27 +1643,23 @@ msgstr ""
 
 #: ../../../src/Stats.cpp:58
 msgid "Accuracy"
-msgstr "Presnosť"
+msgstr ""
 
 #: ../../../src/Stats.cpp:59
 msgid ""
 "Accuracy rating. The enemy's Avoidance rating is subtracted from this value "
 "to calculate your likeliness to land a direct hit."
 msgstr ""
-"Hodnotenie presnosti. Vaša pravdepodobnosť priameho zásahu sa počíta "
-"odčítaním hodnotenia vyhýbania nepriateľa od tejto hodnoty."
 
 #: ../../../src/Stats.cpp:63
 msgid "Avoidance"
-msgstr "Vyhýbanie"
+msgstr ""
 
 #: ../../../src/Stats.cpp:64
 msgid ""
 "Avoidance rating. This value is subtracted from the enemy's Accuracy rating "
 "to calculate their likeliness to land a direct hit."
 msgstr ""
-"Hodnotenie vyhýbania. Nepriateľova pravdepobnosť priameho zásahu sa počíta "
-"odčítaním tejto hodnoty od jeho hodnotenia presnosti."
 
 #: ../../../src/Stats.cpp:68
 msgid "Absorb Min"
@@ -1716,7 +1667,7 @@ msgstr ""
 
 #: ../../../src/Stats.cpp:69 ../../../src/Stats.cpp:74
 msgid "Reduces the amount of damage taken."
-msgstr "Znižuje množstvo utŕženého zranenia."
+msgstr ""
 
 #: ../../../src/Stats.cpp:73
 msgid "Absorb Max"
@@ -1724,19 +1675,19 @@ msgstr ""
 
 #: ../../../src/Stats.cpp:78
 msgid "Critical Hit Chance"
-msgstr "Šanca na kritický zásah"
+msgstr ""
 
 #: ../../../src/Stats.cpp:79
 msgid "Chance for an attack to do extra damage."
-msgstr "Šanca, že útok spôsobí väčšie zranenie."
+msgstr ""
 
 #: ../../../src/Stats.cpp:83
 msgid "Bonus XP"
-msgstr "Bonusové XP"
+msgstr ""
 
 #: ../../../src/Stats.cpp:84
 msgid "Increases the XP gained per kill."
-msgstr "Zvyšuje XP získané za zabitie."
+msgstr ""
 
 #: ../../../src/Stats.cpp:88
 #, c-format
@@ -1750,47 +1701,47 @@ msgstr ""
 
 #: ../../../src/Stats.cpp:93
 msgid "Item Find Chance"
-msgstr "Šanca na nájdenie predmetu"
+msgstr ""
 
 #: ../../../src/Stats.cpp:94
 msgid "Increases the chance that an enemy will drop an item."
-msgstr "Zvyšuje šancu, že nepriateľ za sebou zanechá predmet."
+msgstr ""
 
 #: ../../../src/Stats.cpp:98
 msgid "Stealth"
-msgstr "Skrývanie"
+msgstr ""
 
 #: ../../../src/Stats.cpp:99
 msgid "Increases your ability to move undetected."
-msgstr "Zvyšuje vašu schopnosť nepozorovane sa pohybovať."
+msgstr ""
 
 #: ../../../src/Stats.cpp:103
 msgid "Poise"
-msgstr "Rovnováha"
+msgstr ""
 
 #: ../../../src/Stats.cpp:104
 msgid "Reduces your chance of stumbling when hit."
-msgstr "Znižuje šancu, že pri zásahu stratíte rovnováhu."
+msgstr ""
 
 #: ../../../src/Stats.cpp:108
 msgid "Missile Reflect Chance"
-msgstr "Šanca na odraz striel"
+msgstr ""
 
 #: ../../../src/Stats.cpp:109
 msgid "Increases your chance of reflecting missiles back at enemies."
-msgstr "Zvyšuje vašu šancu odraziť strely naspäť k nepriateľom."
+msgstr ""
 
 #: ../../../src/Stats.cpp:113
 msgid "Damage Reflection"
-msgstr "Odraz zranenia"
+msgstr ""
 
 #: ../../../src/Stats.cpp:114
 msgid "Deals a percentage of damage taken back to the attacker."
-msgstr "Spôsobí časť utŕženého zranenia späť útočníkovi. "
+msgstr ""
 
 #: ../../../src/Stats.cpp:118
 msgid "HP Steal"
-msgstr "Krádež HP"
+msgstr ""
 
 #: ../../../src/Stats.cpp:119
 msgid "Percentage of HP stolen per hit."
@@ -1798,7 +1749,7 @@ msgstr ""
 
 #: ../../../src/Stats.cpp:123
 msgid "MP Steal"
-msgstr "Krádež MP"
+msgstr ""
 
 #: ../../../src/Stats.cpp:124
 msgid "Percentage of MP stolen per hit."
@@ -1806,30 +1757,30 @@ msgstr ""
 
 #: ../../../src/Stats.cpp:128
 msgid "Base HP"
-msgstr "Základné HP"
+msgstr ""
 
 #: ../../../src/Stats.cpp:133
 msgid "Base MP"
-msgstr "Základné MP"
+msgstr ""
 
 #: ../../../src/Utils.cpp:346
 msgid "k"
-msgstr "k"
+msgstr ""
 
 #: ../../../src/Utils.cpp:580
 #, c-format
 msgid "%s second"
-msgstr "%s sekunda"
+msgstr ""
 
 #: ../../../src/Utils.cpp:583
 #, c-format
 msgid "%s seconds"
-msgstr "%s sekúnd/-y"
+msgstr ""
 
 #: ../../../src/Version.cpp:139
 msgid "or newer"
-msgstr "alebo novšia"
+msgstr ""
 
 #: ../../../src/Version.cpp:142
 msgid "or older"
-msgstr "alebo staršia"
+msgstr ""

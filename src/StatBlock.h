@@ -335,6 +335,8 @@ public:
 
 	std::vector<StatusID> invincible_requires_status;
 	std::vector<StatusID> invincible_requires_not_status;
+
+	bool abort_npc_interact;
 };
 
 #endif

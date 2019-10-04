@@ -586,7 +586,9 @@ bool Entity::takeHit(Hazard &h) {
 
 	// interrupted to new state
 	if (dmg > 0) {
-		bool chance_poise = Math::percentChance(stats.get(Stats::POISE));
+		if (stats.hero) {
+			stats.abort_npc_interact = true;
+		}
 
 		if(stats.hp <= 0) {
 			stats.effects.triggered_death = true;
@@ -630,6 +632,8 @@ bool Entity::takeHit(Hazard &h) {
 
 		// don't go through a hit animation if stunned or successfully poised
 		// however, critical hits ignore poise
+		bool chance_poise = Math::percentChance(stats.get(Stats::POISE));
+
 		if(stats.cooldown_hit.isEnd()) {
 			stats.cooldown_hit.reset(Timer::BEGIN);
 

@@ -669,6 +669,13 @@ void SDLSoftwareRenderDevice::setFullscreen(bool enable_fullscreen) {
 		}
 		else {
 			SDL_SetWindowFullscreen(window, 0);
+
+			// restore window to the default size
+			SDL_SetWindowMinimumSize(window, eset->resolutions.min_screen_w, eset->resolutions.min_screen_h);
+			SDL_SetWindowSize(window, eset->resolutions.min_screen_w, eset->resolutions.min_screen_h);
+			windowResize();
+			// setting minimum size might move the window, so set position again
+			SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 		}
 		windowResize();
 	}

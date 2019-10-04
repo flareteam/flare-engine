@@ -31,8 +31,6 @@ const float ALLY_FOLLOW_DISTANCE_WALK = 5.5;
 const float ALLY_FOLLOW_DISTANCE_STOP = 5;
 const float ALLY_TELEPORT_DISTANCE = 40;
 
-const unsigned short BLOCK_TICKS = 10;
-
 BehaviorAlly::BehaviorAlly(Enemy *_e)
 	: BehaviorStandard(_e)
 	, hero_dist(0)

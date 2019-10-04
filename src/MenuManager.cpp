@@ -284,6 +284,7 @@ void MenuManager::logic() {
 
 	subtitles->logic(snd->getLastPlayedSID());
 
+	// refresh statbar values from player statblock
 	hp->update(0, pc->stats.hp, pc->stats.get(Stats::HP_MAX));
 	mp->update(0, pc->stats.mp, pc->stats.get(Stats::MP_MAX));
 
@@ -296,6 +297,13 @@ void MenuManager::logic() {
 	}
 	// xp relative to current level (from 0 to ammount need for next level)
 	xp->update(0, pc->stats.xp - eset->xp.getLevelXP(pc->stats.level), eset->xp.getLevelXP(pc->stats.level + 1) - eset->xp.getLevelXP(pc->stats.level));
+
+	// close talker/vendor menu if player is attacked
+	if (pc->stats.abort_npc_interact && eset->misc.combat_aborts_npc_interact) {
+		talker->setNPC(NULL);
+		vendor->setNPC(NULL);
+	}
+	pc->stats.abort_npc_interact = false;
 
 	// when selecting item quantities, don't process other menus
 	if (num_picker->visible) {

@@ -48,6 +48,7 @@ WidgetLabel::WidgetLabel()
 	, update_flag(UPDATE_NONE)
 	, hidden(false)
 	, window_resize_flag(false)
+	, alpha(255)
 	, label(NULL)
 	, text("")
 	, font_style(DEFAULT_FONT)
@@ -113,6 +114,13 @@ void WidgetLabel::setFont(const std::string& _font) {
 	}
 }
 
+void WidgetLabel::setAlpha(uint8_t _alpha) {
+	if (_alpha != alpha) {
+		alpha = _alpha;
+		setUpdateFlag(UPDATE_POS);
+	}
+}
+
 void WidgetLabel::setFromLabelInfo(const LabelInfo& label_info) {
 	if (pos_base.x != label_info.x || pos_base.y != label_info.y)
 		setUpdateFlag(UPDATE_POS);
@@ -166,6 +174,7 @@ void WidgetLabel::applyOffsets() {
 
 	if (label) {
 		label->setDestFromRect(bounds);
+		label->alpha_mod = alpha;
 	}
 }
 

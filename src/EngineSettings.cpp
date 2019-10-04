@@ -65,10 +65,12 @@ void EngineSettings::Misc::load() {
 	save_onload = true;
 	save_onexit = true;
 	save_pos_onexit = false;
+	save_oncutscene = true;
 	camera_speed = 10.f;
 	save_buyback = true;
 	keep_buyback_on_map_change = true;
 	sfx_unable_to_cast = "";
+	combat_aborts_npc_interact = true;
 
 	FileParser infile;
 	// @CLASS EngineSettings: Misc|Description of engine/misc.txt
@@ -127,6 +129,9 @@ void EngineSettings::Misc::load() {
 			// @ATTR save_pos_onexit|bool|If the game gets saved on exiting, store the player's current position instead of the map spawn position.
 			else if (infile.key == "save_pos_onexit")
 				save_pos_onexit = Parse::toBool(infile.val);
+			// @ATTR save_oncutscene|bool|Saves the game when triggering any cutscene via an Event.
+			else if (infile.key == "save_oncutscene")
+				save_oncutscene = Parse::toBool(infile.val);
 			// @ATTR camera_speed|float|Modifies how fast the camera moves to recenter on the player. Larger values mean a slower camera. Default value is 10.
 			else if (infile.key == "camera_speed") {
 				camera_speed = Parse::toFloat(infile.val);
@@ -142,6 +147,9 @@ void EngineSettings::Misc::load() {
 			// @ATTR sfx_unable_to_cast|filename|Sound to play when the player lacks the MP to cast a power.
 			else if (infile.key == "sfx_unable_to_cast")
 				sfx_unable_to_cast = infile.val;
+			// @ATTR combat_aborts_npc_interact|bool|If true, the NPC dialog and vendor menus will be closed if the player is attacked.
+			else if (infile.key == "combat_aborts_npc_interact")
+				combat_aborts_npc_interact = Parse::toBool(infile.val);
 
 			else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
 		}

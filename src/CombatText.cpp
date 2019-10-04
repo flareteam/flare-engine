@@ -55,6 +55,7 @@ CombatText::CombatText() {
 	msg_color[MSG_MISS] = font->getColor(FontEngine::COLOR_COMBAT_MISS);
 
 	duration = settings->max_frames_per_sec; // 1 second
+	fade_duration = 0;
 	speed = 60.f / settings->max_frames_per_sec;
 	offset = 48; // average height of flare-game enemies, so a sensible default
 
@@ -75,12 +76,19 @@ CombatText::CombatText() {
 				// @ATTR offset|int|The vertical offset for the combat text's starting position.
 				offset = Parse::toInt(infile.val);
 			}
+			else if (infile.key == "fade_duration") {
+				// @ATTR fade_duration|duration|How long the combat text will spend fading out in 'ms' or 's'.
+				fade_duration = Parse::toDuration(infile.val);
+			}
 			else {
 				infile.error("CombatText: '%s' is not a valid key.",infile.key.c_str());
 			}
 		}
 		infile.close();
 	}
+
+	if (fade_duration > duration)
+		fade_duration = duration;
 }
 
 CombatText::~CombatText() {
@@ -146,8 +154,13 @@ void CombatText::render() {
 	if (!settings->show_hud) return;
 
 	for(std::vector<Combat_Text_Item>::iterator it = combat_text.begin(); it != combat_text.end(); ++it) {
-		if (it->lifespan > 0)
+		if (it->lifespan > 0) {
+			// fade out
+			if (it->lifespan < fade_duration)
+				it->label->setAlpha(static_cast<uint8_t>((static_cast<float>(it->lifespan) / static_cast<float>(fade_duration)) * 255.f));
+
 			it->label->render();
+		}
 	}
 }
 
