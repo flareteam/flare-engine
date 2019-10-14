@@ -126,6 +126,8 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	, pause_continue_btn(new WidgetButton(WidgetButton::DEFAULT_FILE))
 	, pause_exit_lb(new WidgetLabel())
 	, pause_exit_btn(new WidgetButton(WidgetButton::DEFAULT_FILE))
+	, pause_save_lb(new WidgetLabel())
+	, pause_save_btn(new WidgetButton(WidgetButton::DEFAULT_FILE))
 	, pause_time_lb(new WidgetLabel())
 	, pause_time_text(new WidgetLabel())
 
@@ -227,6 +229,7 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	, reload_music(false)
 	, clicked_pause_continue(false)
 	, clicked_pause_exit(false)
+	, clicked_pause_save(false)
 {
 
 	Image *graphics;
@@ -242,6 +245,7 @@ MenuConfig::MenuConfig (bool _is_game_state)
 
 	pause_continue_btn->setLabel(msg->get("Continue"));
 	setPauseExitText(MenuConfig::ENABLE_SAVE_GAME);
+	setPauseSaveText(MenuConfig::ENABLE_SAVE_GAME);
 	pause_time_text->setText(Utils::getTimeString(0));
 	pause_time_text->setJustify(FontEngine::JUSTIFY_RIGHT);
 	pause_time_text->setVAlign(LabelInfo::VALIGN_CENTER);
@@ -335,7 +339,7 @@ void MenuConfig::init() {
 	readConfig();
 
 	cfg_tabs.resize(6);
-	cfg_tabs[EXIT_TAB].options.resize(3);
+	cfg_tabs[EXIT_TAB].options.resize(4);
 	cfg_tabs[VIDEO_TAB].options.resize(Platform::Video::COUNT);
 	cfg_tabs[AUDIO_TAB].options.resize(Platform::Audio::COUNT);
 	cfg_tabs[INTERFACE_TAB].options.resize(Platform::Interface::COUNT);
@@ -344,6 +348,7 @@ void MenuConfig::init() {
 
 	cfg_tabs[EXIT_TAB].setOptionWidgets(0, pause_continue_lb, pause_continue_btn, msg->get("Paused"));
 	cfg_tabs[EXIT_TAB].setOptionWidgets(1, pause_exit_lb, pause_exit_btn, "");
+	cfg_tabs[EXIT_TAB].setOptionWidgets(2, pause_save_lb, pause_save_btn, msg->get(""));
 	cfg_tabs[EXIT_TAB].setOptionWidgets(2, pause_time_lb, pause_time_text, msg->get("Time Played"));
 
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::RENDERER, renderer_lb, renderer_lstb, msg->get("Renderer"));
@@ -415,6 +420,7 @@ void MenuConfig::init() {
 	else {
 		cfg_tabs[EXIT_TAB].setOptionEnabled(0, false);
 		cfg_tabs[EXIT_TAB].setOptionEnabled(1, false);
+		cfg_tabs[EXIT_TAB].setOptionEnabled(2, false);
 		tab_control->setEnabled(static_cast<unsigned>(EXIT_TAB), false);
 		enable_gamestate_buttons = true;
 	}
@@ -950,6 +956,9 @@ void MenuConfig::logicExit() {
 	}
 	else if (cfg_tabs[EXIT_TAB].options[1].enabled && pause_exit_btn->checkClickAt(mouse.x, mouse.y)) {
 		clicked_pause_exit = true;
+	}
+	else if (cfg_tabs[EXIT_TAB].options[2].enabled && pause_save_btn->checkClickAt(mouse.x, mouse.y)) {
+		clicked_pause_save = true;
 	}
 }
 
@@ -1559,6 +1568,10 @@ std::string MenuConfig::getRenderDevice() {
 
 void MenuConfig::setPauseExitText(bool enable_save) {
 	pause_exit_btn->setLabel((eset->misc.save_onexit && enable_save) ? msg->get("Save & Exit") : msg->get("Exit"));
+}
+
+void MenuConfig::setPauseSaveText(bool enable_save) {
+	pause_save_btn->setLabel((eset->misc.save_anywhere && enable_save) ? msg->get("Save Game") : msg->get("Nothing"));
 }
 
 void MenuConfig::resetSelectedTab() {

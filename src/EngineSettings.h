@@ -51,6 +51,7 @@ public:
 		bool save_onexit;
 		bool save_pos_onexit;
 		bool save_oncutscene;
+		bool save_anywhere;
 		float camera_speed;
 		bool save_buyback;
 		bool keep_buyback_on_map_change;

@@ -140,6 +140,7 @@ public:
 	void refreshFont();
 	std::string getRenderDevice();
 	void setPauseExitText(bool enable_save);
+	void setPauseSaveText(bool enable_save);
 	void resetSelectedTab();
 
 	void confirmKey(int button);
@@ -185,6 +186,8 @@ public:
 	WidgetButton               * pause_continue_btn;
 	WidgetLabel                * pause_exit_lb;
 	WidgetButton               * pause_exit_btn;
+	WidgetLabel                * pause_save_lb;
+	WidgetButton               * pause_save_btn;
 	WidgetLabel                * pause_time_lb;
 	WidgetLabel                * pause_time_text;
 
@@ -302,6 +305,7 @@ public:
 	bool reload_music;
 	bool clicked_pause_continue;
 	bool clicked_pause_exit;
+	bool clicked_pause_save;
 };
 
 #endif
