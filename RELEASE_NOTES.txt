@@ -6,6 +6,7 @@ Engine features:
 * Added 'bar_fill_offset' and 'bar_fill_size' to MenuStatBar and MenuEnemy properties.
 * Added support for fading out combat text. See the 'fade_duration' property in engine/combat.txt.
 * Added 'save_oncutscene' property to engine/misc.txt. Saving before a cutscene was previously controlled with 'save_onload', which caused issues with cutscenes when set to false.
+* Added 'save_anywhere' property to engine/misc.txt. This allows for saving via the pause menu. (m7600)
 
 Engine fixes:
 
