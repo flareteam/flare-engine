@@ -140,7 +140,7 @@ public:
 	void refreshFont();
 	std::string getRenderDevice();
 	void setPauseExitText(bool enable_save);
-	void setPauseSaveText(bool enable_save);
+	void setPauseSaveEnabled(bool enable_save);
 	void resetSelectedTab();
 
 	void confirmKey(int button);

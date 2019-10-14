@@ -85,7 +85,7 @@ void MenuExit::render() {
 
 void MenuExit::disableSave() {
 	menu_config->setPauseExitText(!MenuConfig::ENABLE_SAVE_GAME);
-	menu_config->setPauseSaveText(!MenuConfig::ENABLE_SAVE_GAME);
+	menu_config->setPauseSaveEnabled(!MenuConfig::ENABLE_SAVE_GAME);
 }
 
 void MenuExit::handleCancel() {
