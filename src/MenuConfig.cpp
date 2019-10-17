@@ -126,6 +126,8 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	, pause_continue_btn(new WidgetButton(WidgetButton::DEFAULT_FILE))
 	, pause_exit_lb(new WidgetLabel())
 	, pause_exit_btn(new WidgetButton(WidgetButton::DEFAULT_FILE))
+	, pause_save_lb(new WidgetLabel())
+	, pause_save_btn(new WidgetButton(WidgetButton::DEFAULT_FILE))
 	, pause_time_lb(new WidgetLabel())
 	, pause_time_text(new WidgetLabel())
 
@@ -227,6 +229,7 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	, reload_music(false)
 	, clicked_pause_continue(false)
 	, clicked_pause_exit(false)
+	, clicked_pause_save(false)
 {
 
 	Image *graphics;
@@ -242,6 +245,8 @@ MenuConfig::MenuConfig (bool _is_game_state)
 
 	pause_continue_btn->setLabel(msg->get("Continue"));
 	setPauseExitText(MenuConfig::ENABLE_SAVE_GAME);
+	pause_save_btn->setLabel(msg->get("Save Game"));
+	setPauseSaveEnabled(MenuConfig::ENABLE_SAVE_GAME);
 	pause_time_text->setText(Utils::getTimeString(0));
 	pause_time_text->setJustify(FontEngine::JUSTIFY_RIGHT);
 	pause_time_text->setVAlign(LabelInfo::VALIGN_CENTER);
@@ -334,8 +339,10 @@ void MenuConfig::init() {
 
 	readConfig();
 
+	bool save_anywhere = MenuConfig::ENABLE_SAVE_GAME && eset->misc.save_anywhere;
+
 	cfg_tabs.resize(6);
-	cfg_tabs[EXIT_TAB].options.resize(3);
+	cfg_tabs[EXIT_TAB].options.resize(save_anywhere ? 4 : 3);
 	cfg_tabs[VIDEO_TAB].options.resize(Platform::Video::COUNT);
 	cfg_tabs[AUDIO_TAB].options.resize(Platform::Audio::COUNT);
 	cfg_tabs[INTERFACE_TAB].options.resize(Platform::Interface::COUNT);
@@ -343,8 +350,15 @@ void MenuConfig::init() {
 	cfg_tabs[KEYBINDS_TAB].options.resize(inpt->KEY_COUNT_USER * 3);
 
 	cfg_tabs[EXIT_TAB].setOptionWidgets(0, pause_continue_lb, pause_continue_btn, msg->get("Paused"));
-	cfg_tabs[EXIT_TAB].setOptionWidgets(1, pause_exit_lb, pause_exit_btn, "");
-	cfg_tabs[EXIT_TAB].setOptionWidgets(2, pause_time_lb, pause_time_text, msg->get("Time Played"));
+	if (save_anywhere) {
+		cfg_tabs[EXIT_TAB].setOptionWidgets(1, pause_save_lb, pause_save_btn, "");
+		cfg_tabs[EXIT_TAB].setOptionWidgets(2, pause_exit_lb, pause_exit_btn, "");
+		cfg_tabs[EXIT_TAB].setOptionWidgets(3, pause_time_lb, pause_time_text, msg->get("Time Played"));
+	}
+	else {
+		cfg_tabs[EXIT_TAB].setOptionWidgets(1, pause_exit_lb, pause_exit_btn, "");
+		cfg_tabs[EXIT_TAB].setOptionWidgets(2, pause_time_lb, pause_time_text, msg->get("Time Played"));
+	}
 
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::RENDERER, renderer_lb, renderer_lstb, msg->get("Renderer"));
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::FULLSCREEN, fullscreen_lb, fullscreen_cb, msg->get("Full Screen Mode"));
@@ -415,6 +429,7 @@ void MenuConfig::init() {
 	else {
 		cfg_tabs[EXIT_TAB].setOptionEnabled(0, false);
 		cfg_tabs[EXIT_TAB].setOptionEnabled(1, false);
+		cfg_tabs[EXIT_TAB].setOptionEnabled(2, false);
 		tab_control->setEnabled(static_cast<unsigned>(EXIT_TAB), false);
 		enable_gamestate_buttons = true;
 	}
@@ -951,6 +966,9 @@ void MenuConfig::logicExit() {
 	else if (cfg_tabs[EXIT_TAB].options[1].enabled && pause_exit_btn->checkClickAt(mouse.x, mouse.y)) {
 		clicked_pause_exit = true;
 	}
+	else if (cfg_tabs[EXIT_TAB].options[2].enabled && pause_save_btn->checkClickAt(mouse.x, mouse.y)) {
+		clicked_pause_save = true;
+	}
 }
 
 void MenuConfig::logicVideo() {
@@ -1208,7 +1226,8 @@ void MenuConfig::renderTabContents() {
 
 			// only draw a separator between the buttons and the time played text
 			Image* render_target = cfg_tabs[active_tab].scrollbox->contents->getGraphics();
-			render_target->drawLine(scrollpane_padding.x, 2 * scrollpane_padding.y, scrollpane.w - scrollpane_padding.x - 1, 2 * scrollpane_padding.y, scrollpane_separator_color);
+			int offset = (MenuConfig::ENABLE_SAVE_GAME && eset->misc.save_anywhere) ? 3 : 2;
+			render_target->drawLine(scrollpane_padding.x, offset * scrollpane_padding.y, scrollpane.w - scrollpane_padding.x - 1, offset * scrollpane_padding.y, scrollpane_separator_color);
 		}
 		cfg_tabs[active_tab].scrollbox->render();
 	}
@@ -1559,6 +1578,10 @@ std::string MenuConfig::getRenderDevice() {
 
 void MenuConfig::setPauseExitText(bool enable_save) {
 	pause_exit_btn->setLabel((eset->misc.save_onexit && enable_save) ? msg->get("Save & Exit") : msg->get("Exit"));
+}
+
+void MenuConfig::setPauseSaveEnabled(bool enable_save) {
+	pause_save_btn->enabled = enable_save && eset->misc.save_anywhere;
 }
 
 void MenuConfig::resetSelectedTab() {

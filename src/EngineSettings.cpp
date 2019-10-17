@@ -66,6 +66,7 @@ void EngineSettings::Misc::load() {
 	save_onexit = true;
 	save_pos_onexit = false;
 	save_oncutscene = true;
+	save_anywhere = false;
 	camera_speed = 10.f;
 	save_buyback = true;
 	keep_buyback_on_map_change = true;
@@ -132,6 +133,9 @@ void EngineSettings::Misc::load() {
 			// @ATTR save_oncutscene|bool|Saves the game when triggering any cutscene via an Event.
 			else if (infile.key == "save_oncutscene")
 				save_oncutscene = Parse::toBool(infile.val);
+			// @ATTR save_anywhere|bool|Saves the game when using a button.
+			else if (infile.key == "save_anywhere")
+				save_anywhere = Parse::toBool(infile.val);
 			// @ATTR camera_speed|float|Modifies how fast the camera moves to recenter on the player. Larger values mean a slower camera. Default value is 10.
 			else if (infile.key == "camera_speed") {
 				camera_speed = Parse::toFloat(infile.val);
