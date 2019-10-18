@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-07-29 09:34-0400\n"
-"PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
+"PO-Revision-Date: 2019-10-18 11:07+0700\n"
+"Last-Translator: Nguyễn Gia Phong <vn.mcsinyx@gmail.com>, 2019\n"
 "Language-Team: Vietnamese (https://www.transifex.com/flareorg/teams/84925/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -23,7 +23,7 @@ msgstr ""
 
 #: ../../../src/Avatar.cpp:387
 msgid "Your health is low!"
-msgstr ""
+msgstr "Điểm thể chất thấp!"
 
 #: ../../../src/Avatar.cpp:419
 #, c-format
@@ -32,11 +32,11 @@ msgstr "Chúc mừng, bạn đã đạt cấp độ %d!"
 
 #: ../../../src/Avatar.cpp:421
 msgid "You may increase one or more attributes through the Character Menu."
-msgstr ""
+msgstr "Bạn có thể tăng các thuộc tính trong Menu Nhân vật."
 
 #: ../../../src/Avatar.cpp:425
 msgid "You may unlock one or more abilities through the Powers Menu."
-msgstr ""
+msgstr "Bạn có thể mở kĩ năng mới trong Menu Sức mạnh."
 
 #: ../../../src/Avatar.cpp:688
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
@@ -109,7 +109,7 @@ msgid ""
 "Often slower, but less likely to have issues."
 msgstr ""
 "Kết xuất đồ hoạ SDL bằng phần mềm\n"
-"Thường chậm hơn, nhưng ít khi có vấn đề hơn."
+"Thường chậm hơn, nhưng ít gặp vấn đề hơn."
 
 #: ../../../src/DeviceList.cpp:59
 msgid ""
@@ -334,19 +334,19 @@ msgstr "Chính2"
 
 #: ../../../src/InputState.cpp:425
 msgid "Ctrl"
-msgstr ""
+msgstr "Ctrl"
 
 #: ../../../src/InputState.cpp:426
 msgid "Shift"
-msgstr ""
+msgstr "Shift"
 
 #: ../../../src/InputState.cpp:427
 msgid "Alt"
-msgstr ""
+msgstr "Alt"
 
 #: ../../../src/InputState.cpp:428 ../../../src/SDLInputState.cpp:635
 msgid "Delete"
-msgstr ""
+msgstr "Delete"
 
 #: ../../../src/InputState.cpp:429
 msgid "ActionBar Accept"
@@ -509,7 +509,7 @@ msgstr "Không đủ ma pháp."
 #: ../../../src/MenuActiveEffects.cpp:124
 #, c-format
 msgid "x%d"
-msgstr ""
+msgstr "x%d"
 
 #: ../../../src/MenuActiveEffects.cpp:219
 msgid "Remaining:"
@@ -590,104 +590,111 @@ msgstr "Thiết lập lại TẤT CẢ?"
 
 #: ../../../src/MenuConfig.cpp:239 ../../../src/MenuNumPicker.cpp:49
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: ../../../src/MenuConfig.cpp:243
 msgid "Continue"
-msgstr ""
+msgstr "Tiếp"
 
 #: ../../../src/MenuConfig.cpp:286
 msgid "Default"
-msgstr ""
+msgstr "Mặc định"
 
 #: ../../../src/MenuConfig.cpp:286
 msgid ""
 "Show all loot tooltips, except for those that would be obscured by the "
 "player or an enemy. Temporarily show all loot tooltips with 'Alt'."
 msgstr ""
+"Hiển thị tất cả chú giải của chiến lợi phẩm, trừ đồ bị nhân vật che khuất."
 
 #: ../../../src/MenuConfig.cpp:287
 msgid "Show all"
-msgstr ""
+msgstr "Hiển thị tất cả"
 
 #: ../../../src/MenuConfig.cpp:287
 msgid ""
 "Always show loot tooltips. Temporarily hide all loot tooltips with 'Alt'."
 msgstr ""
+"Luôn hiển thị chú giải của chiến lợi phẩm. Tạm thời ẩn tất cả các chú giải "
+"này bằng phím 'Alt'."
 
 #: ../../../src/MenuConfig.cpp:288 ../../../src/MenuConfig.cpp:293
 msgid "Hidden"
-msgstr ""
+msgstr "Ẩn"
 
 #: ../../../src/MenuConfig.cpp:288
 msgid ""
 "Always hide loot tooltips, except for when a piece of loot is hovered with "
 "the mouse cursor. Temporarily show all loot tooltips with 'Alt'."
 msgstr ""
+"Luôn ẩn chú giải của chiến lợi phẩm, trừ khi đặt con trỏ chuột lên chiến lợi "
+"phẩm. Tạm thời hiển thị tất cả các chú giải này bằng phím 'Alt'."
 
 #: ../../../src/MenuConfig.cpp:291
 msgid "Visible"
-msgstr ""
+msgstr "Hiển thị"
 
 #: ../../../src/MenuConfig.cpp:292
 msgid "Visible (2x zoom)"
-msgstr ""
+msgstr "Hiển thị (phóng đại 2x)"
 
 #: ../../../src/MenuConfig.cpp:296
 msgid ""
 "Controls the type of warning to be activated when the player is below the "
 "low health threshold."
-msgstr ""
+msgstr "Điều chỉnh loại cảnh báo khi điểm thể chất người chơi ở dưới mức thấp."
 
 #: ../../../src/MenuConfig.cpp:297
 msgid "- Display a message"
-msgstr ""
+msgstr "- Hiển thị thông báo"
 
 #: ../../../src/MenuConfig.cpp:298
 msgid "- Play a sound"
-msgstr ""
+msgstr "- Phát âm thanh"
 
 #: ../../../src/MenuConfig.cpp:299
 msgid "- Change the cursor"
-msgstr ""
+msgstr "- Thay đổi con trỏ"
 
 #: ../../../src/MenuConfig.cpp:301
 msgid "Disabled"
-msgstr ""
+msgstr "Tắt"
 
 #: ../../../src/MenuConfig.cpp:302
 msgid "All"
-msgstr ""
+msgstr "Tất cả"
 
 #: ../../../src/MenuConfig.cpp:303
 msgid "Message & Cursor"
-msgstr ""
+msgstr "Thông điệp & Con trỏ"
 
 #: ../../../src/MenuConfig.cpp:304
 msgid "Message & Sound"
-msgstr ""
+msgstr "Thông điệp & Âm thanh"
 
 #: ../../../src/MenuConfig.cpp:305
 msgid "Sound & Cursor"
-msgstr ""
+msgstr "Âm thanh & Con trỏ"
 
 #: ../../../src/MenuConfig.cpp:306
 msgid "Message"
-msgstr ""
+msgstr "Thông điệp"
 
 #: ../../../src/MenuConfig.cpp:307
 msgid "Cursor"
-msgstr ""
+msgstr "Con trỏ"
 
 #: ../../../src/MenuConfig.cpp:308
 msgid "Sound"
-msgstr ""
+msgstr "Âm thanh"
 
 #: ../../../src/MenuConfig.cpp:314
 msgid ""
 "When the player's health drops below the given threshold, the low health "
 "notifications are triggered if one or more of them is enabled."
 msgstr ""
+"Khi điểm thể chất người chơi xuống dưới mức đã định, bật thông báo điểm thể "
+"chất thấp nếu một trong số chúng được bật."
 
 #: ../../../src/MenuConfig.cpp:327 ../../../src/MenuConfig.cpp:1561
 msgid "Exit"
@@ -723,7 +730,7 @@ msgstr "Đang tạm dừng"
 
 #: ../../../src/MenuConfig.cpp:347
 msgid "Time Played"
-msgstr ""
+msgstr "Thời gian chơi"
 
 #: ../../../src/MenuConfig.cpp:349
 msgid "Renderer"
@@ -739,7 +746,7 @@ msgstr "Kết xuất bề mặt bằng phần cứng"
 
 #: ../../../src/MenuConfig.cpp:352
 msgid "V-Sync"
-msgstr ""
+msgstr "V-Sync"
 
 #: ../../../src/MenuConfig.cpp:353
 msgid "Texture Filtering"
@@ -751,7 +758,7 @@ msgstr "Phóng theo DPI"
 
 #: ../../../src/MenuConfig.cpp:355
 msgid "Parallax Layers"
-msgstr ""
+msgstr "Các lớp thị sai"
 
 #: ../../../src/MenuConfig.cpp:356
 msgid "Allow changing gamma"
@@ -759,7 +766,7 @@ msgstr "Cho phép thay đổi gamma"
 
 #: ../../../src/MenuConfig.cpp:357
 msgid "Gamma"
-msgstr ""
+msgstr "Gamma"
 
 #: ../../../src/MenuConfig.cpp:359
 msgid "Sound Volume"
@@ -795,19 +802,19 @@ msgstr "Phụ đề"
 
 #: ../../../src/MenuConfig.cpp:368
 msgid "Loot tooltip visibility"
-msgstr ""
+msgstr "Hiển thị chú giải của chiến lợi phẩm"
 
 #: ../../../src/MenuConfig.cpp:369
 msgid "Mini-map mode"
-msgstr ""
+msgstr "Chế độ bản đồ mini"
 
 #: ../../../src/MenuConfig.cpp:370
 msgid "Always show stat bar labels"
-msgstr "Luôn hiển thị nhãn thanh thuộc tính"
+msgstr "Luôn hiển thị nhãn các thanh trạng thái"
 
 #: ../../../src/MenuConfig.cpp:371
 msgid "Allow stat bar auto-hiding"
-msgstr ""
+msgstr "Cho phép tự động ẩn thanh trạng thái"
 
 #: ../../../src/MenuConfig.cpp:372
 msgid "Show combat text"
@@ -819,19 +826,19 @@ msgstr "Tự động trang bị đồ"
 
 #: ../../../src/MenuConfig.cpp:374
 msgid "Show hidden entity markers"
-msgstr ""
+msgstr "Hiển thị các dấu thực thể bị ẩn"
 
 #: ../../../src/MenuConfig.cpp:375
 msgid "Low health notification"
-msgstr ""
+msgstr "Thông báo điểm thể chất thấp"
 
 #: ../../../src/MenuConfig.cpp:376
 msgid "Low health threshold"
-msgstr ""
+msgstr "Ngưỡng điểm thể chất thấp"
 
 #: ../../../src/MenuConfig.cpp:379
 msgid "Joystick"
-msgstr ""
+msgstr "Joystick"
 
 #: ../../../src/MenuConfig.cpp:380
 msgid "Move hero using mouse"
@@ -847,11 +854,11 @@ msgstr "Không sử dụng chuột"
 
 #: ../../../src/MenuConfig.cpp:383
 msgid "Swap mouse movement button"
-msgstr ""
+msgstr "Tráo nút chuột"
 
 #: ../../../src/MenuConfig.cpp:384
 msgid "Attack with mouse movement"
-msgstr ""
+msgstr "Tấn công bằng chuột"
 
 #: ../../../src/MenuConfig.cpp:385
 msgid "Joystick Deadzone"
@@ -860,39 +867,39 @@ msgstr "Khoảng chết của joystick"
 #: ../../../src/MenuConfig.cpp:395
 #, c-format
 msgid "Primary binding: %s"
-msgstr ""
+msgstr "Phím điều khiển chính: %s"
 
 #: ../../../src/MenuConfig.cpp:396
 #, c-format
 msgid "Alternate binding: %s"
-msgstr ""
+msgstr "Phím điều khiển thay thế: %s"
 
 #: ../../../src/MenuConfig.cpp:397
 #, c-format
 msgid "Joystick binding: %s"
-msgstr ""
+msgstr "Phím joystick: %s"
 
 #: ../../../src/MenuConfig.cpp:496
 msgid ""
 "Will try to store surfaces in video memory versus system memory. The effect "
 "this has on performance depends on the renderer."
 msgstr ""
-"Lưu dữ liệu bề mặt vào bộ nhớ đồ hoạ thay cho RAM. Hiệu quả của tuỳ chọn này"
-" phụ thuộc vào thiết bị kết xuất."
+"Lưu dữ liệu bề mặt vào bộ nhớ đồ hoạ thay cho RAM. Hiệu quả của tuỳ chọn này "
+"phụ thuộc vào thiết bị kết xuất."
 
 #: ../../../src/MenuConfig.cpp:497
 msgid ""
 "Prevents screen tearing. Disable if you experience \"stuttering\" in "
 "windowed mode or input lag."
 msgstr ""
-"Giúp tránh rách hình. Tắt nếu bạn thấy lag khi điều khiển hoặc chế độ cửa sổ"
-" bị \"lắp\"."
+"Giúp tránh rách hình. Tắt nếu bạn thấy lag khi điều khiển hoặc chế độ cửa sổ "
+"bị \"lắp\"."
 
 #: ../../../src/MenuConfig.cpp:498
 msgid ""
 "When enabled, this uses the screen DPI in addition to the window dimensions "
-"to scale the rendering resolution. Otherwise, only the window dimensions are"
-" used."
+"to scale the rendering resolution. Otherwise, only the window dimensions are "
+"used."
 msgstr ""
 "Khi bật, sử dụng thêm DPI màn hình cùng kích thước cửa sổ để phóng đồ hoạ. "
 "Nếu không, chỉ sử dụng kích thước cửa sổ."
@@ -902,49 +909,59 @@ msgid ""
 "This enables parallax (non-tile) layers. Disabling this setting can improve "
 "performance in some cases."
 msgstr ""
+"Bật các lớp thị sai (không phải của ô bản đồ). Tắt lựa chọn này có thể cải "
+"thiện hiệu suất trong một số trường hợp."
 
 #: ../../../src/MenuConfig.cpp:500
 msgid ""
-"Enables the below setting that controls the screen gamma level. The behavior"
-" of the gamma setting can vary between platforms."
+"Enables the below setting that controls the screen gamma level. The behavior "
+"of the gamma setting can vary between platforms."
 msgstr ""
+"Bật tuỳ chọn điều chỉnh gamma phía dưới. Ý nghĩa của việc thay đổi gamma có "
+"thể khác nhau giữa các nền tảng."
 
 #: ../../../src/MenuConfig.cpp:501
 msgid ""
 "Provides additional text for information that is primarily conveyed through "
 "color."
-msgstr ""
+msgstr "Cung cấp thêm bằng chữ thông tin thường được truyền tải bằng màu sắc."
 
 #: ../../../src/MenuConfig.cpp:502
 msgid ""
 "Some mods will automatically hide the stat bars when they are inactive. "
 "Disabling this option will keep them displayed at all times."
 msgstr ""
+"Một số bản mod khi không hoạt động tự động ẩn các thanh trạng thái. Tắt lựa "
+"chọn này sẽ giữ chúng luôn luôn hiển thị."
 
 #: ../../../src/MenuConfig.cpp:503
 msgid ""
 "When enabled, empty equipment slots will be filled with applicable items "
 "when they are obtained."
-msgstr ""
+msgstr "Khi bật, trang bị sẽ khi nhận được sẽ tự động điền vào chỗ trống."
 
 #: ../../../src/MenuConfig.cpp:504
 msgid ""
 "Shows a marker above enemies, allies, and the player when they are obscured "
 "by tall objects."
-msgstr ""
+msgstr "Đánhh dấu trên đầu các nhân vật bị các vật cản che khuất."
 
 #: ../../../src/MenuConfig.cpp:505
 msgid ""
 "This allows the game to be controlled entirely with the keyboard (or "
 "joystick)."
 msgstr ""
+"Cho phép trò chơi được điều khiển hoàn toàn bằng bàn phím (hoặc joysticks)."
 
 #: ../../../src/MenuConfig.cpp:506
 msgid ""
-"When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or"
-" 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
+"When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or "
+"'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
 "instead of 'Main1'."
 msgstr ""
+"Khi \"Di chuyển nhân vật bằng chuột\" được bật, tuỳ chọn này điều khiển việc "
+"phím \"Chính1\" hay \"Chính2\" được dùng đề di chuyển nhân vật: Nếu bật, "
+"\"Chính2\" sẽ được dùng thay thế \"Chính1\"."
 
 #: ../../../src/MenuConfig.cpp:507
 msgid ""
@@ -953,12 +970,15 @@ msgid ""
 "setting is disabled, it is required to use 'Shift' to access the Power "
 "assigned to the movement button."
 msgstr ""
+"Khi \"Di chuyển nhân vật bằng chuột\" được bật, tuỳ chọn này điều khiển việc "
+"kĩ năng được gán vào phím di chuyển có thể được dùng để nhắm vào kẻ thù: Nếu "
+"tắt, cần giữ \"Shift\" để sử dụng kĩ năng đã gán vào phím di chuyển."
 
 #: ../../../src/MenuConfig.cpp:508
 msgid ""
-"The player's attacks will be aimed in the direction of the mouse cursor when"
-" this is enabled."
-msgstr ""
+"The player's attacks will be aimed in the direction of the mouse cursor when "
+"this is enabled."
+msgstr "Nhân vật ngắm đánh theo hướng con trỏ chuột nếu tuỳ chọn này được bật."
 
 #: ../../../src/MenuConfig.cpp:559
 msgid "Active Mods"
@@ -1023,7 +1043,7 @@ msgstr "Gõ 'help' để in danh sách các lệnh."
 
 #: ../../../src/MenuDevConsole.cpp:209 ../../../src/MenuDevConsole.cpp:213
 msgid "px"
-msgstr ""
+msgstr "px"
 
 #: ../../../src/MenuDevConsole.cpp:224
 msgid "Distance"
@@ -1055,7 +1075,7 @@ msgstr "thực thể, liên kết"
 
 #: ../../../src/MenuDevConsole.cpp:274
 msgid "Tile"
-msgstr "Ô"
+msgstr "Ô bản đồ"
 
 #: ../../../src/MenuDevConsole.cpp:360
 msgid "adds a power to the action bar"
@@ -1063,7 +1083,7 @@ msgstr "thêm một sức mạnh vào thanh hành động"
 
 #: ../../../src/MenuDevConsole.cpp:361
 msgid "turns on/off the display of the FPS counter"
-msgstr ""
+msgstr "bật/tắt hiển thị FPS"
 
 #: ../../../src/MenuDevConsole.cpp:362
 msgid "turns on/off all of the HUD elements"
@@ -1098,12 +1118,11 @@ msgid ""
 "Prints a list of items that match a search term. No search term will list "
 "all items"
 msgstr ""
-"In các đồ vật khớp với từ khoá tìm kiếm. Nếu không cung cấp từ khoá, liệt kê"
-" tất cả."
+"In các đồ vật khớp với từ khoá tìm kiếm. Nếu không cung cấp từ khoá, liệt kê "
+"tất cả."
 
 #: ../../../src/MenuDevConsole.cpp:368
-msgid ""
-"parses a series of event components and executes them as a single event"
+msgid "parses a series of event components and executes them as a single event"
 msgstr ""
 "nhận một chuỗi các bộ phận sự kiện và thực hiện chúng như một sự kiện duy "
 "nhất"
@@ -1126,7 +1145,7 @@ msgstr "Đã bật/tắt HUD"
 
 #: ../../../src/MenuDevConsole.cpp:385
 msgid "Toggled the FPS counter"
-msgstr ""
+msgstr "Đã bật/tắt hiển thị FPS"
 
 #: ../../../src/MenuDevConsole.cpp:534
 msgid "ERROR: Incorrect number of arguments"
@@ -1138,7 +1157,7 @@ msgstr "GỌI Ý:"
 
 #: ../../../src/MenuDevConsole.cpp:536
 msgid "<id>"
-msgstr ""
+msgstr "<id>"
 
 #: ../../../src/MenuDevConsole.cpp:552
 #, c-format
@@ -1151,7 +1170,7 @@ msgstr "LỖI: Quá ít tham số"
 
 #: ../../../src/MenuDevConsole.cpp:564
 msgid "<key>=<val> <key>=<val> ..."
-msgstr "<key>=<giá trị> <key>=<giá trị> ..."
+msgstr "<từ khoá>=<giá trị> <từ khoá>=<giá trị> ..."
 
 #: ../../../src/MenuDevConsole.cpp:569
 msgid "ERROR: Unknown command"
@@ -1197,7 +1216,7 @@ msgstr "Mất %s."
 #: ../../../src/MenuInventory.cpp:257 ../../../src/MenuStash.cpp:195
 #, c-format
 msgid "%d %s"
-msgstr ""
+msgstr "%d %s"
 
 #: ../../../src/MenuInventory.cpp:300
 msgid "Pick up item(s):"
@@ -1433,15 +1452,15 @@ msgstr "Cấp độ tiếp:"
 
 #: ../../../src/MenuStash.cpp:54
 msgid "Private"
-msgstr ""
+msgstr "Riêng"
 
 #: ../../../src/MenuStash.cpp:56
 msgid "Shared"
-msgstr ""
+msgstr "Chung"
 
 #: ../../../src/MenuStash.cpp:104
 msgid "Stash"
-msgstr ""
+msgstr "Hòm"
 
 #: ../../../src/MenuStash.cpp:259
 msgid "Can not store quest items in the stash."
@@ -1449,15 +1468,15 @@ msgstr "Không thể giữ đồ nhiệm vụ trong hòm."
 
 #: ../../../src/MenuStash.cpp:264
 msgid "This item can not be stored in the stash."
-msgstr ""
+msgstr "Đồ vật này không thể giữ trong hòm."
 
 #: ../../../src/MenuStash.cpp:269
 msgid "This item can not be stored in the private stash."
-msgstr ""
+msgstr "Đồ vật này không thể giữ trong hòm riêng."
 
 #: ../../../src/MenuStash.cpp:274
 msgid "This item can not be stored in the shared stash."
-msgstr ""
+msgstr "Đồ vật này không thể giữ trong hòm chung."
 
 #: ../../../src/MenuStash.cpp:284
 msgid "Stash is full."
@@ -1466,12 +1485,12 @@ msgstr "Hòm đã đầy."
 #: ../../../src/MenuStash.cpp:341
 #, c-format
 msgid "Can not store item in stash: %s"
-msgstr ""
+msgstr "Không thể giữ trong hòm: %s"
 
 #: ../../../src/MenuTalker.cpp:447
 #, c-format
 msgid "<dialog node %d>"
-msgstr ""
+msgstr "<nút hộp thoại %d>"
 
 #: ../../../src/MenuTalker.cpp:455
 msgid "Trade"
@@ -1508,27 +1527,27 @@ msgstr "Đã lưư trò chơi."
 
 #: ../../../src/SDLInputState.cpp:633
 msgid "Backspace"
-msgstr ""
+msgstr "Backspace"
 
 #: ../../../src/SDLInputState.cpp:634
 msgid "CapsLock"
-msgstr ""
+msgstr "CapsLock"
 
 #: ../../../src/SDLInputState.cpp:637
 msgid "End"
-msgstr ""
+msgstr "End"
 
 #: ../../../src/SDLInputState.cpp:638
 msgid "Escape"
-msgstr ""
+msgstr "Escape"
 
 #: ../../../src/SDLInputState.cpp:639
 msgid "Home"
-msgstr ""
+msgstr "Home"
 
 #: ../../../src/SDLInputState.cpp:640
 msgid "Insert"
-msgstr ""
+msgstr "Insert"
 
 #: ../../../src/SDLInputState.cpp:641
 msgid "Left Alt"
@@ -1544,23 +1563,23 @@ msgstr "Shift trái"
 
 #: ../../../src/SDLInputState.cpp:645
 msgid "NumLock"
-msgstr ""
+msgstr "NumLock"
 
 #: ../../../src/SDLInputState.cpp:646
 msgid "PageDown"
-msgstr ""
+msgstr "PageDown"
 
 #: ../../../src/SDLInputState.cpp:647
 msgid "PageUp"
-msgstr ""
+msgstr "PageUp"
 
 #: ../../../src/SDLInputState.cpp:648
 msgid "Pause"
-msgstr ""
+msgstr "Pause"
 
 #: ../../../src/SDLInputState.cpp:649
 msgid "PrintScreen"
-msgstr ""
+msgstr "PrintScreen"
 
 #: ../../../src/SDLInputState.cpp:650
 msgid "Right Alt"
@@ -1572,7 +1591,7 @@ msgstr "Ctrl phải"
 
 #: ../../../src/SDLInputState.cpp:652
 msgid "Return"
-msgstr ""
+msgstr "Enter"
 
 #: ../../../src/SDLInputState.cpp:654
 msgid "Right Shift"
@@ -1580,15 +1599,15 @@ msgstr "Shift phải"
 
 #: ../../../src/SDLInputState.cpp:655
 msgid "ScrollLock"
-msgstr ""
+msgstr "ScrollLock"
 
 #: ../../../src/SDLInputState.cpp:656
 msgid "Space"
-msgstr ""
+msgstr "Phím cách"
 
 #: ../../../src/SDLInputState.cpp:657
 msgid "Tab"
-msgstr ""
+msgstr "Tab"
 
 #: ../../../src/SDLInputState.cpp:671
 #, c-format
@@ -1598,12 +1617,12 @@ msgstr "Chuột %d"
 #: ../../../src/SDLInputState.cpp:679
 #, c-format
 msgid "Axis %d -"
-msgstr ""
+msgstr "Trục %d -"
 
 #: ../../../src/SDLInputState.cpp:681
 #, c-format
 msgid "Axis %d +"
-msgstr ""
+msgstr "Trục %d +"
 
 #: ../../../src/SDLInputState.cpp:684
 #, c-format
@@ -1612,11 +1631,11 @@ msgstr "Nút %d"
 
 #: ../../../src/SDLInputState.cpp:728
 msgid "Touch control D-Pad"
-msgstr ""
+msgstr "D-Pad điều khiển chạm"
 
 #: ../../../src/SDLInputState.cpp:752
 msgid "Touch control buttons"
-msgstr ""
+msgstr "Phím điều khiển chạm"
 
 #: ../../../src/SDLInputState.cpp:767
 msgid "Tap"
@@ -1625,7 +1644,7 @@ msgstr "Vỗ"
 #: ../../../src/SDLInputState.cpp:819 ../../../src/SDLInputState.cpp:821
 #, c-format
 msgid "Can not bind: %s"
-msgstr ""
+msgstr "Không thể gán: %s"
 
 #: ../../../src/SDLInputState.cpp:833 ../../../src/SDLInputState.cpp:837
 #: ../../../src/SDLInputState.cpp:841
@@ -1791,7 +1810,7 @@ msgstr "Ma pháp khởi điểm"
 
 #: ../../../src/Utils.cpp:346
 msgid "k"
-msgstr ""
+msgstr "k"
 
 #: ../../../src/Utils.cpp:580
 #, c-format
