@@ -49,7 +49,7 @@ msgstr "Sát thương tầm gần tối thiểu"
 
 #: ../engine/damage_types.txt:6
 msgid "Melee Damage Max"
-msgstr "Sát thương tàm gần tối đa"
+msgstr "Sát thương tầm gần tối đa"
 
 #: ../engine/damage_types.txt:12
 msgid "Ranged Damage"
@@ -113,7 +113,7 @@ msgstr "Đặc biệt cảm ơn"
 
 #: ../cutscenes/credits.txt:121
 msgid "For giving constant feedback and testing:"
-msgstr "Về việc thử nghiệm và phản hồi thường xuyên:"
+msgstr "Trong việc thử nghiệm và phản hồi thường xuyên:"
 
 #: ../cutscenes/credits.txt:123
 msgid "The community at OpenGameArt"
@@ -121,4 +121,4 @@ msgstr "Cộng đồng ở OpenGameArt"
 
 #: ../cutscenes/credits.txt:127
 msgid "For Tiled and the Flare map exporter:"
-msgstr "Về Tiled và công cụ kết xuất bản đồ cho Flare:"
+msgstr "Cho Tiled và công cụ kết xuất bản đồ cho Flare:"
