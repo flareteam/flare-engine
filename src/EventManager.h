@@ -1,17 +1,13 @@
 /*
 Copyright © 2013 Igor Paliychuk
 Copyright © 2013-2016 Justin Jacobs
-
 This file is part of FLARE.
-
 FLARE is free software: you can redistribute it and/or modify it under the terms
 of the GNU General Public License as published by the Free Software Foundation,
 either version 3 of the License, or (at your option) any later version.
-
 FLARE is distributed in the hope that it will be useful, but WITHOUT ANY
 WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
 You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
@@ -90,8 +86,10 @@ public:
 		NPC_PORTRAIT_YOU = 56,
 		QUEST_TEXT = 57,
 		WAS_INSIDE_EVENT_AREA = 58,
-		REQUIRES_COUNTER = 59,
-		REQUIRES_NOT_COUNTER = 60
+		SET_COUNTER = 59,
+		UNSET_COUNTER = 60
+		REQUIRES_COUNTER = 61,
+		REQUIRES_NOT_COUNTER = 62
 	};
 
 	int type;
