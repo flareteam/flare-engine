@@ -97,6 +97,13 @@ public:
 	};
 	static const short NO_TAB = -1;
 
+	enum {
+		EXIT_OPTION_CONTINUE = 0,
+		EXIT_OPTION_SAVE = 1,
+		EXIT_OPTION_EXIT = 2,
+		EXIT_OPTION_TIME_PLAYED = 3,
+	};
+
 	explicit MenuConfig(bool _is_game_state);
 	~MenuConfig();
 

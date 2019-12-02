@@ -339,25 +339,21 @@ void MenuConfig::init() {
 
 	readConfig();
 
-	bool save_anywhere = MenuConfig::ENABLE_SAVE_GAME && eset->misc.save_anywhere;
-
 	cfg_tabs.resize(6);
-	cfg_tabs[EXIT_TAB].options.resize(save_anywhere ? 4 : 3);
+	cfg_tabs[EXIT_TAB].options.resize(4);
 	cfg_tabs[VIDEO_TAB].options.resize(Platform::Video::COUNT);
 	cfg_tabs[AUDIO_TAB].options.resize(Platform::Audio::COUNT);
 	cfg_tabs[INTERFACE_TAB].options.resize(Platform::Interface::COUNT);
 	cfg_tabs[INPUT_TAB].options.resize(Platform::Input::COUNT);
 	cfg_tabs[KEYBINDS_TAB].options.resize(inpt->KEY_COUNT_USER * 3);
 
-	cfg_tabs[EXIT_TAB].setOptionWidgets(0, pause_continue_lb, pause_continue_btn, msg->get("Paused"));
-	if (save_anywhere) {
-		cfg_tabs[EXIT_TAB].setOptionWidgets(1, pause_save_lb, pause_save_btn, "");
-		cfg_tabs[EXIT_TAB].setOptionWidgets(2, pause_exit_lb, pause_exit_btn, "");
-		cfg_tabs[EXIT_TAB].setOptionWidgets(3, pause_time_lb, pause_time_text, msg->get("Time Played"));
-	}
-	else {
-		cfg_tabs[EXIT_TAB].setOptionWidgets(1, pause_exit_lb, pause_exit_btn, "");
-		cfg_tabs[EXIT_TAB].setOptionWidgets(2, pause_time_lb, pause_time_text, msg->get("Time Played"));
+	cfg_tabs[EXIT_TAB].setOptionWidgets(EXIT_OPTION_CONTINUE, pause_continue_lb, pause_continue_btn, msg->get("Paused"));
+	cfg_tabs[EXIT_TAB].setOptionWidgets(EXIT_OPTION_SAVE, pause_save_lb, pause_save_btn, "");
+	cfg_tabs[EXIT_TAB].setOptionWidgets(EXIT_OPTION_EXIT, pause_exit_lb, pause_exit_btn, "");
+	cfg_tabs[EXIT_TAB].setOptionWidgets(EXIT_OPTION_TIME_PLAYED, pause_time_lb, pause_time_text, msg->get("Time Played"));
+
+	if (!(MenuConfig::ENABLE_SAVE_GAME && eset->misc.save_anywhere)) {
+		cfg_tabs[EXIT_TAB].setOptionEnabled(EXIT_OPTION_SAVE, false);
 	}
 
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::RENDERER, renderer_lb, renderer_lstb, msg->get("Renderer"));
@@ -427,9 +423,10 @@ void MenuConfig::init() {
 		enable_gamestate_buttons = false;
 	}
 	else {
-		cfg_tabs[EXIT_TAB].setOptionEnabled(0, false);
-		cfg_tabs[EXIT_TAB].setOptionEnabled(1, false);
-		cfg_tabs[EXIT_TAB].setOptionEnabled(2, false);
+		cfg_tabs[EXIT_TAB].setOptionEnabled(EXIT_OPTION_CONTINUE, false);
+		cfg_tabs[EXIT_TAB].setOptionEnabled(EXIT_OPTION_SAVE, false);
+		cfg_tabs[EXIT_TAB].setOptionEnabled(EXIT_OPTION_EXIT, false);
+		cfg_tabs[EXIT_TAB].setOptionEnabled(EXIT_OPTION_TIME_PLAYED, false);
 		tab_control->setEnabled(static_cast<unsigned>(EXIT_TAB), false);
 		enable_gamestate_buttons = true;
 	}
@@ -960,14 +957,14 @@ void MenuConfig::logicExit() {
 	cfg_tabs[EXIT_TAB].scrollbox->logic();
 	Point mouse = cfg_tabs[EXIT_TAB].scrollbox->input_assist(inpt->mouse);
 
-	if (cfg_tabs[EXIT_TAB].options[0].enabled && pause_continue_btn->checkClickAt(mouse.x, mouse.y)) {
+	if (cfg_tabs[EXIT_TAB].options[EXIT_OPTION_CONTINUE].enabled && pause_continue_btn->checkClickAt(mouse.x, mouse.y)) {
 		clicked_pause_continue = true;
 	}
-	else if (cfg_tabs[EXIT_TAB].options[1].enabled && pause_exit_btn->checkClickAt(mouse.x, mouse.y)) {
-		clicked_pause_exit = true;
-	}
-	else if (cfg_tabs[EXIT_TAB].options[2].enabled && pause_save_btn->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[EXIT_TAB].options[EXIT_OPTION_SAVE].enabled && pause_save_btn->checkClickAt(mouse.x, mouse.y)) {
 		clicked_pause_save = true;
+	}
+	else if (cfg_tabs[EXIT_TAB].options[EXIT_OPTION_EXIT].enabled && pause_exit_btn->checkClickAt(mouse.x, mouse.y)) {
+		clicked_pause_exit = true;
 	}
 }
 
