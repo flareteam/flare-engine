@@ -16,6 +16,7 @@ Engine fixes:
 
 Translation updates:
 
+* Belarusian (be) update (Zmicer Turok)
 * German (de) update (Wuzzy2)
 * Basque (eu) by aitzkora
 * Scottish Gaelic (gd) update (GunChleoc)
