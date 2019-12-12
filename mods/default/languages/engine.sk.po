@@ -353,19 +353,19 @@ msgstr "Delete"
 
 #: ../../../src/InputState.cpp:429
 msgid "ActionBar Accept"
-msgstr "Akčný panel: prijať"
+msgstr "Panel akcií: prijať"
 
 #: ../../../src/InputState.cpp:430
 msgid "ActionBar Left"
-msgstr "Akčný panel: doľava"
+msgstr "Panel akcií: doľava"
 
 #: ../../../src/InputState.cpp:431
 msgid "ActionBar Right"
-msgstr "Akčný panel: doprava"
+msgstr "Panel akcií: doprava"
 
 #: ../../../src/InputState.cpp:432
 msgid "ActionBar Use"
-msgstr "Akčný panel: použiť"
+msgstr "Panel akcií: použiť"
 
 #: ../../../src/InputState.cpp:433
 msgid "Developer Menu"
@@ -436,12 +436,12 @@ msgstr "Kvalita: %s"
 #: ../../../src/ItemManager.cpp:809
 #, c-format
 msgid "Absorb: %d-%d"
-msgstr "Pohlť: %d-%d"
+msgstr "Pohltenie: %d-%d"
 
 #: ../../../src/ItemManager.cpp:811
 #, c-format
 msgid "Absorb: %d"
-msgstr "Pohlť: %d"
+msgstr "Pohltenie: %d"
 
 #: ../../../src/ItemManager.cpp:851 ../../../src/MenuPowers.cpp:1131
 #: ../../../src/MenuPowers.cpp:1134
@@ -1084,7 +1084,7 @@ msgstr "Dlaždica"
 
 #: ../../../src/MenuDevConsole.cpp:360
 msgid "adds a power to the action bar"
-msgstr "pridá silu do akčného panelu"
+msgstr "pridá silu do panelu akcií"
 
 #: ../../../src/MenuDevConsole.cpp:361
 msgid "turns on/off the display of the FPS counter"
@@ -1164,7 +1164,7 @@ msgstr ""
 #: ../../../src/MenuDevConsole.cpp:552
 #, c-format
 msgid "ERROR: '%s' is not a valid event key"
-msgstr ""
+msgstr "CHYBA: „%s“ nie je platný kľúč udalosti"
 
 #: ../../../src/MenuDevConsole.cpp:562
 msgid "ERROR: Too few arguments"
@@ -1255,7 +1255,7 @@ msgstr "Tento predmet nemožno momentálne použiť."
 
 #: ../../../src/MenuInventory.cpp:598
 msgid "This item can only be used from the action bar."
-msgstr "Tento predmet môžeš použiť iba z pruhu akcií."
+msgstr "Tento predmet možno použiť iba z panelu akcií."
 
 #: ../../../src/MenuInventory.cpp:716
 msgid "Inventory is full."
@@ -1404,11 +1404,11 @@ msgstr "Základná šanca na kritický zásah"
 
 #: ../../../src/MenuPowers.cpp:1090
 msgid "Ignores Absorbtion"
-msgstr ""
+msgstr "Ignoruje pohltenie"
 
 #: ../../../src/MenuPowers.cpp:1095
 msgid "Ignores Avoidance"
-msgstr ""
+msgstr "Ignoruje vyhýbanie"
 
 #: ../../../src/MenuPowers.cpp:1100
 #, c-format
