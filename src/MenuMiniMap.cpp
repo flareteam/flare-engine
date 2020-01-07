@@ -221,15 +221,6 @@ void MenuMiniMap::renderMapSurface(const FPoint& hero_pos) {
 	}
 
 	if (target_surface) {
-		// ensure the clip doesn't exceed the surface dimensions
-		// TODO should this be in RenderDevice?
-		const int target_w = target_surface->getGraphicsWidth();
-		const int target_h = target_surface->getGraphicsHeight();
-		if (clip.x + clip.w > target_w)
-			clip.w = target_w - clip.x;
-		if (clip.y + clip.h > target_h)
-			clip.h = target_h - clip.y;
-
 		target_surface->setClipFromRect(clip);
 		target_surface->setDestFromRect(map_area);
 		render_device->render(target_surface);

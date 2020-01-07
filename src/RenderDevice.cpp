@@ -101,13 +101,18 @@ const Point& Sprite::getOffset() {
 
 void Sprite::setClipFromRect(const Rect& clip) {
 	src = clip;
+
+	// don't exceed the dimensions of the image
+	const int target_w = getGraphicsWidth();
+	const int target_h = getGraphicsHeight();
+	if (src.x + src.w > target_w)
+		src.w = target_w - src.x;
+	if (src.y + src.h > target_h)
+		src.h = target_h - src.y;
 }
 
 void Sprite::setClip(const int x, const int y, const int w, const int h) {
-	src.x = x;
-	src.y = y;
-	src.w = w;
-	src.h = h;
+	setClipFromRect(Rect(x, y, w, h));
 }
 
 const Rect& Sprite::getClip() {
