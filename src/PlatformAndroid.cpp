@@ -78,14 +78,14 @@ Platform::Platform()
 	, force_hardware_cursor(true)
 	, has_lock_file(false)
 	, config_menu_type(CONFIG_MENU_TYPE_BASE)
-	, default_renderer("sdl_hardware")
+	, default_renderer("")
 	, config_video(Platform::Video::COUNT, true)
 	, config_audio(Platform::Audio::COUNT, true)
 	, config_interface(Platform::Interface::COUNT, true)
 	, config_input(Platform::Input::COUNT, true)
 	, config_misc(Platform::Misc::COUNT, true)
 {
-	config_video[Platform::Video::RENDERER] = false;
+	config_video[Platform::Video::RENDERER] = true;
 	config_video[Platform::Video::FULLSCREEN] = false;
 	config_video[Platform::Video::HWSURFACE] = false;
 	config_video[Platform::Video::VSYNC] = false;
