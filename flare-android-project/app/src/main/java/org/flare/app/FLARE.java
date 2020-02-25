@@ -1,7 +1,7 @@
 package org.flare.app; 
 
-import org.libsdl.app.SDLActivity; 
-import android.os.*; 
+import org.libsdl.app.SDLActivity;
+import android.os.*;
 
 /* 
  * A sample wrapper class that just calls SDLActivity 
