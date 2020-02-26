@@ -152,7 +152,7 @@ void Platform::setPaths() {
 		path_data = true;
 	}
 	else if (!settings->custom_path_data.empty()) {
-		Utils::logError("Settings: Could not find specified game data directory.");
+		Utils::logError("Platform: Could not find specified game data directory.");
 		settings->custom_path_data = "";
 	}
 

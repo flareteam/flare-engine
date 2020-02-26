@@ -159,7 +159,7 @@ void Platform::setPaths() {
 	}
 
 	if (settings->path_data.empty()) {
-		Utils::logError("Settings: Android external storage unavailable: %s", SDL_GetError());
+		Utils::logError("Platform: Android external storage unavailable: %s", SDL_GetError());
 	}
 
 	if (settings->path_user.empty() || !Filesystem::pathExists(settings->path_user)) {
@@ -181,6 +181,15 @@ void Platform::setPaths() {
 	settings->path_conf += "/";
 	settings->path_user += "/";
 	settings->path_data += "/";
+
+	// create a .nomedia file to prevent game data being added to the Android media library
+	std::ofstream nomedia;
+	nomedia.open(settings->path_user + ".nomedia", std::ios::out);
+	if (nomedia.bad()) {
+		Utils::logError("Platform: Unable to create Android .nomedia file.");
+	}
+	nomedia.close();
+	nomedia.clear();
 }
 
 void Platform::setExitEventFilter() {
