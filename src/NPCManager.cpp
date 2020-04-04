@@ -107,6 +107,7 @@ void NPCManager::handleNewMap() {
 		ec.x = static_cast<int>(npcs.size())-1;
 		ev.components.push_back(ec);
 
+		ec = EventComponent();
 		ec.type = EventComponent::TOOLTIP;
 		ec.s = npc->name;
 		ev.components.push_back(ec);
@@ -116,6 +117,7 @@ void NPCManager::handleNewMap() {
 		// However, it is sufficient for all of our current game data (fantasycore, no-name mod, polymorphable)
 		if (npc->activeAnimation) {
 			Renderable ren = npc->activeAnimation->getCurrentFrame(npc->direction);
+			ec = EventComponent();
 			ec.type = EventComponent::NPC_HOTSPOT;
 			ec.x = static_cast<int>(npc->pos.x);
 			ec.y = static_cast<int>(npc->pos.y);
@@ -123,6 +125,11 @@ void NPCManager::handleNewMap() {
 			ec.a = ren.offset.y;
 			ec.b = ren.src.w;
 			ec.c = ren.src.h;
+			ev.components.push_back(ec);
+
+			ec = EventComponent();
+			ec.type = EventComponent::SHOW_ON_MINIMAP;
+			ec.x = static_cast<int>(npc->show_on_minimap);
 			ev.components.push_back(ec);
 		}
 		else {

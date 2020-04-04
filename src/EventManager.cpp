@@ -641,6 +641,12 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		if (!use_engine_defaults.empty())
 			e->y = static_cast<int>(Parse::toBool(use_engine_defaults));
 	}
+	else if (key == "show_on_minimap") {
+		// @ATTR event.show_on_minimap|bool|If true, this event will be shown on the minimap if it is the appropriate type (e.g. an intermap teleport).
+		e->type = EventComponent::SHOW_ON_MINIMAP;
+
+		e->x = static_cast<int>(Parse::toBool(val));
+	}
 	else {
 		return false;
 	}

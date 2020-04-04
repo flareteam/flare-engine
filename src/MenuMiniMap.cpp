@@ -546,6 +546,10 @@ void MenuMiniMap::fillEntities() {
 	}
 
 	for (size_t i=0; i<mapr->events.size(); ++i) {
+		EventComponent* ec_minimap = mapr->events[i].getComponent(EventComponent::SHOW_ON_MINIMAP);
+		if (ec_minimap && !ec_minimap->x)
+			continue;
+
 		if (mapr->events[i].getComponent(EventComponent::NPC_HOTSPOT) && EventManager::isActive(mapr->events[i])) {
 			entities[mapr->events[i].location.x][mapr->events[i].location.y] = TILE_NPC;
 		}

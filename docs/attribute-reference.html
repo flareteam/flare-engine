@@ -567,6 +567,8 @@ body {
 
 <p><strong>event.respec</strong> | <code>["xp", "stats", "powers"], bool : Respec mode, Ignore class defaults</code> | Resets various aspects of the character&rsquo;s progression. Resetting &ldquo;xp&rdquo; also resets &ldquo;stats&rdquo;. Resetting &ldquo;stats&rdquo; also resets &ldquo;powers&rdquo;.</p>
 
+<p><strong>event.show_on_minimap</strong> | <code>bool</code> | If true, this event will be shown on the minimap if it is the appropriate type (e.g. an intermap teleport).</p>
+
 <hr />
 
 <h4>EventManager: Random Map List</h4>
@@ -1546,6 +1548,8 @@ body {
 <p><strong>gfx</strong> | <code>filename</code> | Filename of an animation definition.</p>
 
 <p><strong>direction</strong> | <code>direction</code> | The direction to use for this NPC&rsquo;s stance animation.</p>
+
+<p><strong>show_on_minimap</strong> | <code>bool</code> | If true, this NPC will be shown on the minimap. The default is true.</p>
 
 <p><strong>talker</strong> | <code>bool</code> | Allows this NPC to be talked to.</p>
 

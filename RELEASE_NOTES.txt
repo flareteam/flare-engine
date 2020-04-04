@@ -9,6 +9,8 @@ Engine features:
 * Added 'save_anywhere' property to engine/misc.txt. This allows for saving via the pause menu. (m7600)
 * Added display of enemies, allies, NPCs, and intermap teleport events to the minimap.
 * Added support for defining the colors of tiles and entities on the minimap.
+* Added 'show_on_minimap' event component. Currently, this only applies to intermap teleport events.
+* Added 'show_on_minimap' property to NPCs.
 
 Engine fixes:
 
