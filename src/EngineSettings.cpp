@@ -237,14 +237,6 @@ void EngineSettings::Resolutions::load() {
 	if (settings->screen_w < min_screen_w) settings->screen_w = min_screen_w;
 	if (settings->screen_h < min_screen_h) settings->screen_h = min_screen_h;
 
-	// set the default virtual height if it's not defined
-	if (settings->view_h == 0) {
-		Utils::logError("EngineSettings: virtual_height is undefined. Setting it to %d.", min_screen_h);
-		virtual_heights.push_back(min_screen_h);
-		settings->view_h = min_screen_h;
-		settings->view_h_half = settings->view_h / 2;
-	}
-
 	// icon size can not be zero, so we set a default of 32x32, which is fantasycore's icon size
 	if (icon_size == 0) {
 		Utils::logError("EngineSettings: icon_size is undefined. Setting it to 32.");
