@@ -923,12 +923,22 @@ void MapRenderer::checkHotspots() {
 	for (it = events.end(); it != events.begin(); ) {
 		--it;
 
+		// skip inactive events
+		if (!EventManager::isActive(*it)) continue;
+
+		// skip events without hotspots
+		if (it->hotspot.h == 0) continue;
+
+		// skip events on cooldown
+		if (!it->cooldown.isEnd() || !it->delay.isEnd()) continue;
+
+		EventComponent* npc = (*it).getComponent(EventComponent::NPC_HOTSPOT);
+
 		for (int x=it->hotspot.x; x < it->hotspot.x + it->hotspot.w; ++x) {
 			for (int y=it->hotspot.y; y < it->hotspot.y + it->hotspot.h; ++y) {
 				bool matched = false;
 				bool is_npc = false;
 
-				EventComponent* npc = (*it).getComponent(EventComponent::NPC_HOTSPOT);
 				if (npc) {
 					is_npc = true;
 
@@ -971,15 +981,6 @@ void MapRenderer::checkHotspots() {
 				}
 
 				if (matched) {
-					// skip inactive events
-					if (!EventManager::isActive(*it)) continue;
-
-					// skip events without hotspots
-					if (it->hotspot.h == 0) continue;
-
-					// skip events on cooldown
-					if (!it->cooldown.isEnd() || !it->delay.isEnd()) continue;
-
 					// new tooltip?
 					createTooltip(it->getComponent(EventComponent::TOOLTIP));
 
