@@ -172,8 +172,8 @@ void ModManager::loadModList() {
 		std::string line;
 		std::string starts_with;
 
-		std::string place1 = settings->path_conf + "mods.txt";
-		std::string place2 = settings->path_data + "mods/mods.txt";
+		std::string place1 = Filesystem::convertSlashes(settings->path_conf + "mods.txt");
+		std::string place2 = Filesystem::convertSlashes(settings->path_data + "mods/mods.txt");
 
 		infile.open(place1.c_str(), std::ios::in);
 
@@ -239,7 +239,9 @@ void ModManager::loadModList() {
  * Find the location (mod file name) for this data file.
  * Use private loc_cache to prevent excessive disk I/O
  */
-std::string ModManager::locate(const std::string& filename) {
+std::string ModManager::locate(const std::string& _filename) {
+	std::string filename = Filesystem::convertSlashes(_filename);
+
 	// if we have this location already cached, return it
 	if (loc_cache.find(filename) != loc_cache.end()) {
 		return loc_cache[filename];
@@ -250,7 +252,7 @@ std::string ModManager::locate(const std::string& filename) {
 
 	for (size_t i = mod_list.size(); i > 0; i--) {
 		for (size_t j = 0; j < mod_paths.size(); j++) {
-			test_path = mod_paths[j] + "mods/" + mod_list[i-1].name + "/" + filename;
+			test_path = Filesystem::convertSlashes(mod_paths[j] + "mods/" + mod_list[i-1].name + "/" + filename);
 			if (Filesystem::fileExists(test_path)) {
 				loc_cache[filename] = test_path;
 				return test_path;
@@ -259,7 +261,7 @@ std::string ModManager::locate(const std::string& filename) {
 	}
 
 	// all else failing, simply return the filename if it exists
-	test_path = settings->path_data + filename;
+	test_path = Filesystem::convertSlashes(settings->path_data + filename);
 	if (!Filesystem::fileExists(test_path))
 		test_path = "";
 
@@ -283,7 +285,7 @@ std::vector<std::string> ModManager::list(const std::string &path, bool full_pat
 
 	for (size_t i = 0; i < mod_list.size(); ++i) {
 		for (size_t j = mod_paths.size(); j > 0; j--) {
-			test_path = mod_paths[j-1] + "mods/" + mod_list[i].name + "/" + path;
+			test_path = Filesystem::convertSlashes(mod_paths[j-1] + "mods/" + mod_list[i].name + "/" + path);
 			amendPathToVector(test_path, ret);
 		}
 	}
@@ -334,7 +336,7 @@ Mod ModManager::loadMod(const std::string& name) {
 
 	// @CLASS ModManager|Description of mod settings.txt
 	for (unsigned i=0; i<mod_paths.size(); ++i) {
-		std::string path = mod_paths[i] + "mods/" + name + "/settings.txt";
+		std::string path = Filesystem::convertSlashes(mod_paths[i] + "mods/" + name + "/settings.txt");
 		infile.open(path.c_str(), std::ios::in);
 
 		while (infile.good()) {
@@ -527,7 +529,7 @@ bool ModManager::haveFallbackMod() {
 
 void ModManager::saveMods() {
 	std::ofstream outfile;
-	outfile.open((settings->path_conf + "mods.txt").c_str(), std::ios::out);
+	outfile.open((Filesystem::convertSlashes(settings->path_conf + "mods.txt")).c_str(), std::ios::out);
 
 	if (outfile.is_open()) {
 		// comment

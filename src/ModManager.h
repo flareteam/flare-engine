@@ -79,7 +79,7 @@ public:
 
 	// Returns the filename within the latest mod, in which the provided generic
 	// filename was found.
-	std::string locate(const std::string& filename);
+	std::string locate(const std::string& _filename);
 
 	// Returns a list of filenames, going through all mods, in which the provided
 	// generic filename is found.

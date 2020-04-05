@@ -86,7 +86,7 @@ void SaveLoad::saveGame() {
 	std::stringstream ss;
 	ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/" << game_slot << "/avatar.txt";
 
-	outfile.open(Filesystem::convertSlashes(&ss).c_str(), std::ios::out);
+	outfile.open(Filesystem::convertSlashes(ss.str()).c_str(), std::ios::out);
 
 	if (outfile.is_open()) {
 
@@ -214,7 +214,7 @@ void SaveLoad::saveGame() {
 	// Save stash
 	ss.str("");
 	ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/" << game_slot <<"/stash_HC.txt";
-	outfile.open(Filesystem::convertSlashes(&ss).c_str(), std::ios::out);
+	outfile.open(Filesystem::convertSlashes(ss.str()).c_str(), std::ios::out);
 
 	if (outfile.is_open()) {
 
@@ -237,7 +237,7 @@ void SaveLoad::saveGame() {
 	if (!pc->stats.permadeath) {
 		ss.str("");
 		ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/stash.txt";
-		outfile.open(Filesystem::convertSlashes(&ss).c_str(), std::ios::out);
+		outfile.open(Filesystem::convertSlashes(ss.str()).c_str(), std::ios::out);
 
 		if (outfile.is_open()) {
 
@@ -281,7 +281,7 @@ void SaveLoad::loadGame() {
 	std::stringstream ss;
 	ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/" << game_slot << "/avatar.txt";
 
-	if (infile.open(Filesystem::convertSlashes(&ss), !FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
+	if (infile.open(ss.str(), !FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			if (infile.key == "name") pc->stats.name = infile.val;
 			else if (infile.key == "permadeath") {
@@ -503,7 +503,7 @@ void SaveLoad::loadStash() {
 
 	ss.str("");
 	ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/" << game_slot << "/stash_HC.txt";
-	if (infile.open(Filesystem::convertSlashes(&ss), !FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
+	if (infile.open(ss.str(), !FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
 		while (infile.next()) {
 			if (infile.key == "item") {
 				menu->stash->stock[MenuStash::STASH_PRIVATE].setItems(infile.val);
@@ -520,7 +520,7 @@ void SaveLoad::loadStash() {
 	if (!pc->stats.permadeath) {
 		ss.str("");
 		ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/stash.txt";
-		if (infile.open(Filesystem::convertSlashes(&ss), !FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
+		if (infile.open(ss.str(), !FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
 			while (infile.next()) {
 				if (infile.key == "item") {
 					menu->stash->stock[MenuStash::STASH_SHARED].setItems(infile.val);

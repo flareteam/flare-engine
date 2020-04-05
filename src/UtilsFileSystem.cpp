@@ -37,7 +37,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 bool Filesystem::pathExists(const std::string &path) {
 	struct stat st;
-	return (stat(removeTrailingSlash(path).c_str(), &st) == 0);
+	return (stat(convertSlashes(path).c_str(), &st) == 0);
 }
 
 /**
@@ -48,7 +48,7 @@ void Filesystem::createDir(const std::string &path) {
 	if (isDirectory(path, false))
 		return;
 
-	platform.dirCreate(path);
+	platform.dirCreate(convertSlashes(path));
 }
 
 /**
@@ -56,9 +56,10 @@ void Filesystem::createDir(const std::string &path) {
  * The filename parameter should include the entire path to this file
  */
 bool Filesystem::fileExists(const std::string &filename) {
-	if (isDirectory(filename, false)) return false;
+	if (isDirectory(filename, false))
+		return false;
 
-	std::ifstream infile(filename.c_str());
+	std::ifstream infile(convertSlashes(filename).c_str());
 	bool exists = infile.is_open();
 	if (exists) infile.close();
 
@@ -69,11 +70,10 @@ bool Filesystem::fileExists(const std::string &filename) {
  * Returns a vector containing all filenames in a given folder with the given extension
  */
 int Filesystem::getFileList(const std::string &dir, const std::string &ext, std::vector<std::string> &files) {
-
 	DIR *dp;
 	struct dirent *dirp;
 
-	if((dp  = opendir(dir.c_str())) == NULL)
+	if((dp = opendir(convertSlashes(dir).c_str())) == NULL)
 		return errno;
 
 	size_t extlen = ext.length();
@@ -81,7 +81,7 @@ int Filesystem::getFileList(const std::string &dir, const std::string &ext, std:
 		std::string filename = std::string(dirp->d_name);
 		if (filename.length() > extlen)
 			if(filename.substr(filename.length() - extlen,extlen) == ext)
-				files.push_back(dir + "/" + filename);
+				files.push_back(convertSlashes(dir + "/" + filename));
 	}
 	closedir(dp);
 	return 0;
@@ -103,7 +103,7 @@ int Filesystem::getDirList(const std::string &dir, std::vector<std::string> &dir
 	while ((dirp = readdir(dp)) != NULL) {
 		//	do not use dirp->d_type, it's not portable
 		std::string directory = std::string(dirp->d_name);
-		std::string mod_dir = dir + "/" + directory;
+		std::string mod_dir = convertSlashes(dir + "/" + directory);
 		if ((stat(mod_dir.c_str(), &st) != -1)
 				&& S_ISDIR(st.st_mode)
 				&& directory != "."
@@ -117,10 +117,11 @@ int Filesystem::getDirList(const std::string &dir, std::vector<std::string> &dir
 }
 
 bool Filesystem::isDirectory(const std::string &path, bool show_error) {
+	std::string clean_path = convertSlashes(path);
 	struct stat st;
-	if (stat(path.c_str(), &st) == -1) {
+	if (stat(clean_path.c_str(), &st) == -1) {
 		if (show_error) {
-			std::string error_msg = "Filesystem::isDirectory (" + path + ")";
+			std::string error_msg = "Filesystem::isDirectory (" + clean_path + ")";
 			perror(error_msg.c_str());
 		}
 		return false;
@@ -131,8 +132,9 @@ bool Filesystem::isDirectory(const std::string &path, bool show_error) {
 }
 
 bool Filesystem::removeFile(const std::string &file) {
-	if (remove(file.c_str()) != 0) {
-		std::string error_msg = "Filesystem::removeFile (" + file + ")";
+	std::string clean_path = convertSlashes(file);
+	if (remove(clean_path.c_str()) != 0) {
+		std::string error_msg = "Filesystem::removeFile (" + clean_path + ")";
 		perror(error_msg.c_str());
 		return false;
 	}
@@ -143,7 +145,7 @@ bool Filesystem::removeDir(const std::string &dir) {
 	if (!isDirectory(dir))
 		return false;
 
-	return platform.dirRemove(dir);
+	return platform.dirRemove(convertSlashes(dir));
 }
 
 bool Filesystem::removeDirRecursive(const std::string &dir) {
@@ -168,39 +170,38 @@ bool Filesystem::removeDirRecursive(const std::string &dir) {
 }
 
 /**
- * Convert from stringstream to filesystem path string in an os-independent fashion
+ * Convert from string to filesystem path string in an os-independent fashion
  */
-std::string Filesystem::convertSlashes(const std::stringstream* ss) {
-	std::string path = ss->str();
+std::string Filesystem::convertSlashes(const std::string _path) {
+	std::string path = _path;
 
-	bool is_windows_path = false;
+#ifdef _WIN32
+	char good_sep = '\\';
+	char bad_sep = '/';
+#else
+	char good_sep = '/';
+	char bad_sep = '\\';
+#endif
 
-	size_t len = path.length();
-	// fix mixed '\' and '/' on windows
-	for (size_t i = 0; i < len; i++) {
-		if (path[i] == '\\') {
-			is_windows_path = true;
-		}
-		if (is_windows_path && path[i] == '/') {
-			// isDirectory does not like trailing '\', so terminate string if last char
-			if (i == len - 1) {
-				path[i] = 0;
-			}
-			else {
-				path[i] = '\\';
-			}
+	for (size_t i = 0; i < path.length(); i++) {
+		if (path[i] == bad_sep) {
+			path[i] = good_sep;
 		}
 	}
 
-	return path;
+	return removeTrailingSlash(path);
 }
 
-bool Filesystem::renameFile(const std::string &oldfile, const std::string &newfile) {
+bool Filesystem::renameFile(const std::string &_oldfile, const std::string &_newfile) {
+	std::string oldfile = convertSlashes(_oldfile);
+	std::string newfile = convertSlashes(_newfile);
+
 	if (rename(oldfile.c_str(), newfile.c_str()) != 0) {
 		std::string error_msg = "Filesystem::renameFile (" + oldfile + " -> " + newfile + ")";
 		perror(error_msg.c_str());
 		return false;
 	}
+
 	return true;
 }
 

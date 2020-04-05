@@ -504,10 +504,10 @@ void Utils::createSaveDir(int slot) {
 	std::stringstream ss;
 	ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/";
 
-	Filesystem::createDir(Filesystem::convertSlashes(&ss));
+	Filesystem::createDir(ss.str());
 
 	ss << slot;
-	Filesystem::createDir(Filesystem::convertSlashes(&ss));
+	Filesystem::createDir(ss.str());
 }
 
 void Utils::removeSaveDir(int slot) {
@@ -517,8 +517,8 @@ void Utils::removeSaveDir(int slot) {
 	std::stringstream ss;
 	ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/" << slot;
 
-	if (Filesystem::isDirectory(Filesystem::convertSlashes(&ss))) {
-		Filesystem::removeDirRecursive(Filesystem::convertSlashes(&ss));
+	if (Filesystem::isDirectory(ss.str())) {
+		Filesystem::removeDirRecursive(ss.str());
 	}
 }
 
@@ -712,7 +712,7 @@ void Utils::lockFileRead() {
 	if (!platform.has_lock_file)
 		return;
 
-	std::string lock_file_path = settings->path_conf + "flare_lock";
+	std::string lock_file_path = Filesystem::convertSlashes(settings->path_conf + "flare_lock");
 
 	std::ifstream infile;
 	infile.open(lock_file_path.c_str(), std::ios::in);

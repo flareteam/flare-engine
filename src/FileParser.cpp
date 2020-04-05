@@ -43,10 +43,10 @@ bool FileParser::open(const std::string& _filename, bool _is_mod_file, int _erro
 
 	filenames.clear();
 	if (is_mod_file) {
-		filenames = mods->list(_filename, ModManager::LIST_FULL_PATHS);
+		filenames = mods->list(Filesystem::convertSlashes(_filename), ModManager::LIST_FULL_PATHS);
 	}
 	else {
-		filenames.push_back(_filename);
+		filenames.push_back(Filesystem::convertSlashes(_filename));
 	}
 	current_index = 0;
 	line_number = 0;
