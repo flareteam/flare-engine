@@ -21,6 +21,7 @@ Engine fixes:
 * Removed the default resolution scaling when virtual_heights is undefined.
 * Improved performance when checking map event hotspots.
 * Fix Windows-style paths with backslashes not working on non-Windows systems.
+* Prevent allies counting as attack targets when using mouse movement.
 
 Game updates:
 

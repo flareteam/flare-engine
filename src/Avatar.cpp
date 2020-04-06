@@ -532,7 +532,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 					}
 				}
 
-				if (settings->mouse_move &&  settings->mouse_move_attack && cursor_enemy && mm_can_use_power && powers->checkCombatRange(mm_attack_id, &stats, cursor_enemy->stats.pos)) {
+				if (settings->mouse_move &&  settings->mouse_move_attack && cursor_enemy && !cursor_enemy->stats.hero_ally && mm_can_use_power && powers->checkCombatRange(mm_attack_id, &stats, cursor_enemy->stats.pos)) {
 					stats.cur_state = StatBlock::AVATAR_STANCE;
 					lock_enemy = cursor_enemy;
 				}
@@ -571,7 +571,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 				if (activeAnimation->getName() != "run")
 					stats.cur_state = StatBlock::AVATAR_STANCE;
 
-				if (settings->mouse_move && settings->mouse_move_attack && cursor_enemy && mm_can_use_power && powers->checkCombatRange(mm_attack_id, &stats, cursor_enemy->stats.pos)) {
+				if (settings->mouse_move && settings->mouse_move_attack && cursor_enemy && !cursor_enemy->stats.hero_ally && mm_can_use_power && powers->checkCombatRange(mm_attack_id, &stats, cursor_enemy->stats.pos)) {
 					stats.cur_state = StatBlock::AVATAR_STANCE;
 					lock_enemy = cursor_enemy;
 				}
