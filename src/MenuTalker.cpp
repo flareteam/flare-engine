@@ -475,6 +475,9 @@ void MenuTalker::executeAction(size_t index) {
 	int node_id = actions[index].node_id;
 
 	if (actions[index].is_vendor) {
+		// defocus the talker menu tablist. Otherwise, CANCEL needs to be pressed twice to exit the vendor screen
+		defocusTabLists();
+
 		// begin trading
 		NPC *temp_npc = npc;
 		menu->closeAll();

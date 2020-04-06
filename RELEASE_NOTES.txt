@@ -22,6 +22,7 @@ Engine fixes:
 * Improved performance when checking map event hotspots.
 * Fix Windows-style paths with backslashes not working on non-Windows systems.
 * Prevent allies counting as attack targets when using mouse movement.
+* Fix needing to press the 'Cancel' key twice to exit the vendor menu.
 
 Game updates:
 
