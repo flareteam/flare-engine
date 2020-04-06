@@ -568,6 +568,14 @@ void SDLInputState::handle() {
 				break;
 			case SDL_QUIT:
 				done = 1;
+				// Clear inputs when quit is triggered.
+				// Doing this prevents unintended actions being triggered when exiting via an OS keyboard shortcut.
+				// For example, using Win+Esc as a global "close window" command while having CANCEL bound to Esc would cause a crash if it was used on the New Game screen.
+				for (int key=0; key<KEY_COUNT; key++) {
+					pressing[key] = false;
+					un_press[key] = false;
+					lock[key] = false;
+				}
 				break;
 			default:
 				break;
