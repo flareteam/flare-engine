@@ -45,6 +45,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "SoundManager.h"
 #include "Utils.h"
+#include "UtilsFilesystem.h"
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
 #include "WidgetTooltip.h"
@@ -648,7 +649,7 @@ void LootManager::getLootTable(const std::string &filename, std::vector<EventCom
 
 	std::map<std::string, std::vector<EventComponent> >::iterator it;
 	for (it = loot_tables.begin(); it != loot_tables.end(); ++it) {
-		if (it->first == filename) {
+		if (it->first == Filesystem::convertSlashes(filename)) {
 			std::vector<EventComponent> *loot_defs = &it->second;
 			for (unsigned i=0; i<loot_defs->size(); ++i) {
 				ec_list->push_back((*loot_defs)[i]);
