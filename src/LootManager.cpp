@@ -45,7 +45,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "SoundManager.h"
 #include "Utils.h"
-#include "UtilsFilesystem.h"
+#include "UtilsFileSystem.h"
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
 #include "WidgetTooltip.h"
