@@ -77,7 +77,9 @@ GameStateLoad::GameStateLoad() : GameState()
 	, scroll_offset(0)
 	, has_scroll_bar(false)
 	, game_slot_max(4)
-	, text_trim_boundary(0) {
+	, text_trim_boundary(0)
+	, portrait_align(Utils::ALIGN_FRAME_TOPLEFT)
+	, gameslot_align(Utils::ALIGN_FRAME_TOPLEFT) {
 
 	if (items == NULL)
 		items = new ItemManager();
@@ -110,6 +112,11 @@ GameStateLoad::GameStateLoad() : GameState()
 	tablist.add(button_exit);
 	tablist.add(button_new);
 
+	// Some widgets default to being aligned to the menu frame
+	button_new->alignment = Utils::ALIGN_FRAME_TOPLEFT;
+	button_load->alignment = Utils::ALIGN_FRAME_TOPLEFT;
+	button_delete->alignment = Utils::ALIGN_FRAME_TOPLEFT;
+
 	// Read positions from config file
 	FileParser infile;
 
@@ -120,21 +127,21 @@ GameStateLoad::GameStateLoad() : GameState()
 			if (infile.key == "button_new") {
 				int x = Parse::popFirstInt(infile.val);
 				int y = Parse::popFirstInt(infile.val);
-				int a = Parse::toAlignment(Parse::popFirstString(infile.val));
+				int a = Parse::toAlignment(Parse::popFirstString(infile.val), Utils::ALIGN_FRAME_TOPLEFT);
 				button_new->setBasePos(x, y, a);
 			}
 			// @ATTR button_load|int, int, alignment : X, Y, Alignment|Position of the "Load Game" button.
 			else if (infile.key == "button_load") {
 				int x = Parse::popFirstInt(infile.val);
 				int y = Parse::popFirstInt(infile.val);
-				int a = Parse::toAlignment(Parse::popFirstString(infile.val));
+				int a = Parse::toAlignment(Parse::popFirstString(infile.val), Utils::ALIGN_FRAME_TOPLEFT);
 				button_load->setBasePos(x, y, a);
 			}
 			// @ATTR button_delete|int, int, alignment : X, Y, Alignment|Position of the "Delete Save" button.
 			else if (infile.key == "button_delete") {
 				int x = Parse::popFirstInt(infile.val);
 				int y = Parse::popFirstInt(infile.val);
-				int a = Parse::toAlignment(Parse::popFirstString(infile.val));
+				int a = Parse::toAlignment(Parse::popFirstString(infile.val), Utils::ALIGN_FRAME_TOPLEFT);
 				button_delete->setBasePos(x, y, a);
 			}
 			// @ATTR button_exit|int, int, alignment : X, Y, Alignment|Position of the "Exit to Title" button.
@@ -250,6 +257,7 @@ void GameStateLoad::loadGraphics() {
 	graphics = render_device->loadImage("images/menus/portrait_border.png", RenderDevice::ERROR_NORMAL);
 	if (graphics) {
 		portrait_border = graphics->createSprite();
+		portrait_border->setClip(0, 0, portrait_dest.w, portrait_dest.h);
 		graphics->unref();
 	}
 }
@@ -614,20 +622,23 @@ void GameStateLoad::updateButtons() {
 
 void GameStateLoad::refreshWidgets() {
 	button_exit->setPos(0, 0);
-	button_new->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);
-	button_load->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);
-	button_delete->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);
+	button_new->setPos(0, 0);
+	button_load->setPos(0, 0);
+	button_delete->setPos(0, 0);
 
 	if (portrait) {
-		portrait->setDest(portrait_dest.x + ((settings->view_w - eset->resolutions.frame_w)/2), portrait_dest.y + ((settings->view_h - eset->resolutions.frame_h)/2));
+		Rect portrait_rect = portrait_dest;
+		Utils::alignToScreenEdge(portrait_align, &portrait_rect);
+		portrait->setDest(portrait_rect.x, portrait_rect.y);
 	}
 
 	slot_pos.resize(visible_slots);
 	for (size_t i=0; i<slot_pos.size(); i++) {
-		slot_pos[i].x = gameslot_pos.x + (settings->view_w - eset->resolutions.frame_w)/2;
+		slot_pos[i].x = gameslot_pos.x;
 		slot_pos[i].h = gameslot_pos.h;
-		slot_pos[i].y = gameslot_pos.y + (settings->view_h - eset->resolutions.frame_h)/2 + (static_cast<int>(i) * gameslot_pos.h);
+		slot_pos[i].y = gameslot_pos.y + (static_cast<int>(i) * gameslot_pos.h);
 		slot_pos[i].w = gameslot_pos.w;
+		Utils::alignToScreenEdge(gameslot_align, &slot_pos[i]);
 	}
 
 	refreshScrollBar();

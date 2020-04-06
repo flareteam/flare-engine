@@ -37,7 +37,7 @@ Attribute descriptions are in the following format: section.attributename, `valu
 
 `predefined_string`, same as a string, but uses a value defined elsewhere
 
-`alignment`, defined as: `["topleft", "top", "topright", "left", "center", "right", "bottomleft", "bottom", "bottomright"]`
+`alignment`, defined as: `["topleft", "top", "topright", "left", "center", "right", "bottomleft", "bottom", "bottomright", "frame_topleft", "frame_top", "frame_topright", "frame_left", "frame_center", "frame_right", "frame_bottomleft", "frame_bottom", "frame_bottomright"]`
 
 `direction`, defined as: `["N", "NE", "E", "SE", "S", "SW", "W", "NW", int]`. If defined as an integer, the value must be between 0-7 inclusive.
 

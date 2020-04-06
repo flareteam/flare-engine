@@ -277,8 +277,8 @@ int Parse::toDirection(const std::string& s) {
 	return dir;
 }
 
-int Parse::toAlignment(const std::string &s) {
-	int align = Utils::ALIGN_TOPLEFT;
+int Parse::toAlignment(const std::string &s, int default_value) {
+	int align = default_value;
 
 	if (s == "topleft")
 		align = Utils::ALIGN_TOPLEFT;
@@ -298,6 +298,24 @@ int Parse::toAlignment(const std::string &s) {
 		align = Utils::ALIGN_BOTTOM;
 	else if (s == "bottomright")
 		align = Utils::ALIGN_BOTTOMRIGHT;
+	else if (s == "frame_topleft")
+		align = Utils::ALIGN_FRAME_TOPLEFT;
+	else if (s == "frame_top")
+		align = Utils::ALIGN_FRAME_TOP;
+	else if (s == "frame_topright")
+		align = Utils::ALIGN_FRAME_TOPRIGHT;
+	else if (s == "frame_left")
+		align = Utils::ALIGN_FRAME_LEFT;
+	else if (s == "frame_center")
+		align = Utils::ALIGN_FRAME_CENTER;
+	else if (s == "frame_right")
+		align = Utils::ALIGN_FRAME_RIGHT;
+	else if (s == "frame_bottomleft")
+		align = Utils::ALIGN_FRAME_BOTTOMLEFT;
+	else if (s == "frame_bottom")
+		align = Utils::ALIGN_FRAME_BOTTOM;
+	else if (s == "frame_bottomright")
+		align = Utils::ALIGN_FRAME_BOTTOMRIGHT;
 
 	return align;
 }

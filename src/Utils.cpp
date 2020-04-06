@@ -382,6 +382,42 @@ void Utils::alignToScreenEdge(int alignment, Rect *r) {
 		r->x = (settings->view_w - r->w) + r->x;
 		r->y = (settings->view_h - r->h) + r->y;
 	}
+	else if (alignment == ALIGN_FRAME_TOPLEFT) {
+		r->x = ((settings->view_w - eset->resolutions.frame_w)/2) + r->x;
+		r->y = ((settings->view_h - eset->resolutions.frame_h)/2) + r->y;
+	}
+	else if (alignment == ALIGN_FRAME_TOP) {
+		r->x = ((settings->view_w - eset->resolutions.frame_w)/2) + (eset->resolutions.frame_w/2 - r->w/2) + r->x;
+		r->y = ((settings->view_h - eset->resolutions.frame_h)/2) + r->y;
+	}
+	else if (alignment == ALIGN_FRAME_TOPRIGHT) {
+		r->x = ((settings->view_w - eset->resolutions.frame_w)/2) + (eset->resolutions.frame_w - r->w) + r->x;
+		r->y = ((settings->view_h - eset->resolutions.frame_h)/2) + r->y;
+	}
+	else if (alignment == ALIGN_FRAME_LEFT) {
+		r->x = ((settings->view_w - eset->resolutions.frame_w)/2) + r->x;
+		r->y = ((settings->view_h - eset->resolutions.frame_h)/2) + (eset->resolutions.frame_h/2 - r->h/2) + r->y;
+	}
+	else if (alignment == ALIGN_FRAME_CENTER) {
+		r->x = ((settings->view_w - eset->resolutions.frame_w)/2) + (eset->resolutions.frame_w/2 - r->w/2) + r->x;
+		r->y = ((settings->view_h - eset->resolutions.frame_h)/2) + (eset->resolutions.frame_h/2 - r->h/2) + r->y;
+	}
+	else if (alignment == ALIGN_FRAME_RIGHT) {
+		r->x = ((settings->view_w - eset->resolutions.frame_w)/2) + (eset->resolutions.frame_w - r->w) + r->x;
+		r->y = ((settings->view_h - eset->resolutions.frame_h)/2) + (eset->resolutions.frame_h/2 - r->h/2) + r->y;
+	}
+	else if (alignment == ALIGN_FRAME_BOTTOMLEFT) {
+		r->x = ((settings->view_w - eset->resolutions.frame_w)/2) + r->x;
+		r->y = ((settings->view_h - eset->resolutions.frame_h)/2) + (eset->resolutions.frame_h - r->h) + r->y;
+	}
+	else if (alignment == ALIGN_FRAME_BOTTOM) {
+		r->x = ((settings->view_w - eset->resolutions.frame_w)/2) + (eset->resolutions.frame_w/2 - r->w/2) + r->x;
+		r->y = ((settings->view_h - eset->resolutions.frame_h)/2) + (eset->resolutions.frame_h - r->h) + r->y;
+	}
+	else if (alignment == ALIGN_FRAME_BOTTOMRIGHT) {
+		r->x = ((settings->view_w - eset->resolutions.frame_w)/2) + (eset->resolutions.frame_w - r->w) + r->x;
+		r->y = ((settings->view_h - eset->resolutions.frame_h)/2) + (eset->resolutions.frame_h - r->h) + r->y;
+	}
 	else {
 		// do nothing
 	}

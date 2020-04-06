@@ -49,7 +49,7 @@ namespace Parse {
 
 	int toDuration(const std::string& s);
 	int toDirection(const std::string& s);
-	int toAlignment(const std::string& s);
+	int toAlignment(const std::string& s, int default_value = Utils::ALIGN_TOPLEFT);
 
 	int popFirstInt(std::string& s, char separator = 0);
 	std::string popFirstString(std::string& s, char separator = 0);

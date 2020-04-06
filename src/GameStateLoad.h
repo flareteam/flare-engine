@@ -125,6 +125,8 @@ private:
 	bool has_scroll_bar;
 	int game_slot_max;
 	int text_trim_boundary;
+	int portrait_align;
+	int gameslot_align;
 
 public:
 	GameStateLoad();

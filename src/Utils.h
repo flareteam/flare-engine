@@ -97,7 +97,7 @@ public:
 };
 
 namespace Utils {
-	// Alignment: For aligning objects relative to the screen
+	// Alignment: For aligning objects. 0-8 are screen-relative, 9-17 are menu frame relative.
 	enum {
 		ALIGN_TOPLEFT = 0,
 		ALIGN_TOP = 1,
@@ -107,7 +107,16 @@ namespace Utils {
 		ALIGN_RIGHT = 5,
 		ALIGN_BOTTOMLEFT = 6,
 		ALIGN_BOTTOM = 7,
-		ALIGN_BOTTOMRIGHT = 8
+		ALIGN_BOTTOMRIGHT = 8,
+		ALIGN_FRAME_TOPLEFT = 9,
+		ALIGN_FRAME_TOP = 10,
+		ALIGN_FRAME_TOPRIGHT = 11,
+		ALIGN_FRAME_LEFT = 12,
+		ALIGN_FRAME_CENTER = 13,
+		ALIGN_FRAME_RIGHT = 14,
+		ALIGN_FRAME_BOTTOMLEFT = 15,
+		ALIGN_FRAME_BOTTOM = 16,
+		ALIGN_FRAME_BOTTOMRIGHT = 17
 	};
 
 	extern int LOCK_INDEX;

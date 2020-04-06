@@ -46,6 +46,7 @@ WidgetInput::WidgetInput(const std::string& filename)
 void WidgetInput::setPos(int offset_x, int offset_y) {
 	pos.x = pos_base.x + offset_x + local_frame.x - local_offset.x;
 	pos.y = pos_base.y + offset_y + local_frame.y - local_offset.y;
+	Utils::alignToScreenEdge(alignment, &pos);
 
 	font->setFont("font_regular");
 	font_pos.x = pos.x + (font->getFontHeight()/2);
