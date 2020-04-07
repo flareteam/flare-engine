@@ -33,6 +33,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "Utils.h"
+#include "AnimationMedia.h"
 
 class Animation {
 protected:
@@ -40,7 +41,7 @@ protected:
 
 	const std::string name;
 	const int type;
-	Image *sprite;
+	AnimationMedia *sprite;
 	uint8_t blend_mode;
 	uint8_t alpha_mod;
 	Color color_mod;
@@ -63,7 +64,7 @@ protected:
 
 	// Frame data, all vectors must have the same length:
 	// These are indexed as 8*cur_frame_index + direction.
-	std::vector<Rect> gfx; // position on the spritesheet to be used.
+	std::vector<std::pair<std::string, Rect> > gfx; // position on the spritesheet to be used.
 	std::vector<Point> render_offset; // "virtual point on the floor"
 	std::vector<unsigned short> frames; // a list of frames to play on each tick
 
@@ -86,7 +87,7 @@ protected:
 	};
 
 public:
-	Animation(const std::string &_name, const std::string &_type, Image *_sprite, uint8_t _blend_mode, uint8_t _alpha_mod, Color _color_mod);
+	Animation(const std::string &_name, const std::string &_type, AnimationMedia *_sprite, uint8_t _blend_mode, uint8_t _alpha_mod, Color _color_mod);
 
 	// Traditional way to create an animation.
 	// The frames are stored in a grid like fashion, so the individual frame
@@ -101,7 +102,7 @@ public:
 	void setup(unsigned short _frames, unsigned short _duration, unsigned short _maxkinds = 8);
 
 	// kind can be used for direction(enemies, hero) or randomness(powers)
-	void addFrame(unsigned short index, unsigned short kind, const Rect& rect, const Point& _render_offset);
+	void addFrame(unsigned short index, unsigned short kind, const Rect& rect, const Point& _render_offset, const std::string &key);
 
 	// advance the animation one frame
 	void advanceFrame();

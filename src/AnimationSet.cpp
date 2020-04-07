@@ -57,9 +57,9 @@ AnimationSet::AnimationSet(const std::string &animationname)
 	: name(animationname)
 	, loaded(false)
 	, parent(NULL)
-	, animations()
-	, sprite(NULL) {
-	defaultAnimation = new Animation("default", "play_once", NULL, Renderable::BLEND_NORMAL, 255, Color(255,255,255));
+	, animations() {
+	sprite = new AnimationMedia();
+	defaultAnimation = new Animation("default", "play_once", sprite, Renderable::BLEND_NORMAL, 255, Color(255,255,255));
 	defaultAnimation->setupUncompressed(Point(), Point(), 0, 1, 0);
 }
 
@@ -112,14 +112,7 @@ void AnimationSet::load() {
 		if (parser.section.empty()) {
 			if (parser.key == "image") {
 				// @ATTR image|filename|Filename of sprite-sheet image.
-				if (sprite != NULL) {
-					parser.error("AnimationSet: Multiple images specified. Dragons be here!");
-					Utils::logErrorDialog("AnimationSet: Multiple images specified. Dragons be here!");
-					mods->resetModConfig();
-					Utils::Exit(128);
-				}
-
-				sprite = render_device->loadImage(parser.val, RenderDevice::ERROR_NORMAL);
+				sprite->loadImage(parser.val);
 			}
 			else if (parser.key == "render_size") {
 				// @ATTR render_size|int, int : Width, Height|Width and height of animation.
@@ -202,7 +195,7 @@ void AnimationSet::load() {
 					animations.push_back(newanim);
 					compressed_loading = true;
 				}
-				// frame = index, direction, x, y, w, h, offsetx, offsety
+				// frame = index, direction, x, y, w, h, offsetx, offsety, image
 				Rect r;
 				Point offset;
 				const unsigned short index = static_cast<unsigned short>(Parse::popFirstInt(parser.val));
@@ -213,7 +206,8 @@ void AnimationSet::load() {
 				r.h = Parse::popFirstInt(parser.val);
 				offset.x = Parse::popFirstInt(parser.val);
 				offset.y = Parse::popFirstInt(parser.val);
-				newanim->addFrame(index, direction, r, offset);
+				std::string key = parser.val;
+				newanim->addFrame(index, direction, r, offset, key);
 			}
 			else {
 				parser.error("AnimationSet: '%s' is not a valid key.", parser.key.c_str());
@@ -250,5 +244,6 @@ AnimationSet::~AnimationSet() {
 	for (unsigned i = 0; i < animations.size(); ++i)
 		delete animations[i];
 	delete defaultAnimation;
+	delete sprite;
 }
 

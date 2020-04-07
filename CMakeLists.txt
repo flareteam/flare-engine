@@ -97,6 +97,7 @@ Set (FLARE_SOURCES
 	./src/BehaviorAlly.cpp
 	./src/Entity.cpp
 	./src/Animation.cpp
+	./src/AnimationMedia.cpp
 	./src/AnimationManager.cpp
 	./src/AnimationSet.cpp
 	./src/AStarContainer.cpp
@@ -210,6 +211,7 @@ Set (FLARE_HEADERS
 	./src/BehaviorAlly.h
 	./src/Entity.h
 	./src/Animation.h
+	./src/AnimationMedia.h
 	./src/AnimationManager.h
 	./src/AnimationSet.h
 	./src/AStarContainer.h
