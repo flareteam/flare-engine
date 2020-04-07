@@ -1184,7 +1184,7 @@ void MapRenderer::drawDevHUD() {
 	int cross_size = eset->tileset.tile_h_half / 4;
 
 	// ellipses are distorted for isometric tilesets
-	int distort = eset->tileset.orientation == eset->tileset.TILESET_ORTHOGONAL ? 0 : 2;
+	int distort = eset->tileset.orientation == eset->tileset.TILESET_ORTHOGONAL ? 1 : 2;
 
 	// player
 	{
