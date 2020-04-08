@@ -18,6 +18,7 @@ LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c \
 	../../../../../../src/Entity.cpp \
 	../../../../../../src/Animation.cpp \
 	../../../../../../src/AnimationManager.cpp \
+	../../../../../../src/AnimationMedia.cpp \
 	../../../../../../src/AnimationSet.cpp \
 	../../../../../../src/AStarContainer.cpp \
 	../../../../../../src/AStarNode.cpp \
