@@ -64,7 +64,7 @@ protected:
 
 	// Frame data, all vectors must have the same length:
 	// These are indexed as 8*cur_frame_index + direction.
-	std::vector<std::pair<std::string, Rect> > gfx; // position on the spritesheet to be used.
+	std::vector<std::pair<Image*, Rect> > gfx; // position on the spritesheet to be used.
 	std::vector<Point> render_offset; // "virtual point on the floor"
 	std::vector<unsigned short> frames; // a list of frames to play on each tick
 

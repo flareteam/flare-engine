@@ -111,8 +111,10 @@ void AnimationSet::load() {
 		}
 		if (parser.section.empty()) {
 			if (parser.key == "image") {
-				// @ATTR image|filename|Filename of sprite-sheet image.
-				sprite->loadImage(parser.val);
+				// @ATTR image|filename, string : Filename, ID|Filename of sprite-sheet image along with an identifier string. The identifier string may be omitted if there is only a single image.
+				std::string img_filename = Parse::popFirstString(parser.val);
+				std::string img_id = Parse::popFirstString(parser.val);
+				sprite->loadImage(img_filename, img_id);
 			}
 			else if (parser.key == "render_size") {
 				// @ATTR render_size|int, int : Width, Height|Width and height of animation.
@@ -185,7 +187,7 @@ void AnimationSet::load() {
 				}
 			}
 			else if (parser.key == "frame") {
-				// @ATTR animation.frame|int, int, int, int, int, int, int, int : Index, Direction, X, Y, Width, Height, X offset, Y offset|A single frame of a compressed animation.
+				// @ATTR animation.frame|int, int, int, int, int, int, int, int, string: Index, Direction, X, Y, Width, Height, X offset, Y offset, Image ID|A single frame of a compressed animation. The image ID may be omitted, in which case the first available image will be used.
 				if (compressed_loading == false) { // first frame statement in section
 					newanim = new Animation(_name, type, sprite, blend_mode, alpha_mod, color_mod);
 					newanim->setup(frames, duration);

@@ -67,6 +67,8 @@ void Animation::setupUncompressed(const Point& _render_size, const Point& _rende
 	for (unsigned short i = 0 ; i < _frames; i++) {
 		int base_index = max_kinds*i;
 		for (unsigned short kind = 0 ; kind < max_kinds; kind++) {
+			// TODO handle multiple images for uncompressed animation defintions
+			gfx[base_index + kind].first = sprite->getImageFromKey("");
 			gfx[base_index + kind].second.x = _render_size.x * (_position + i);
 			gfx[base_index + kind].second.y = _render_size.y * kind;
 			gfx[base_index + kind].second.w = _render_size.x;
@@ -162,7 +164,7 @@ void Animation::addFrame(unsigned short index, unsigned short kind, const Rect& 
 	}
 
 	unsigned i = max_kinds*index+kind;
-	gfx[i].first = key == "" ? sprite->getFirstKey() : key;
+	gfx[i].first = sprite->getImageFromKey(key);
 	gfx[i].second = rect;
 	render_offset[i] = _render_offset;
 }
@@ -241,7 +243,7 @@ Renderable Animation::getCurrentFrame(int kind) {
 		r.src.h = gfx[index].second.h;
 		r.offset.x = render_offset[index].x;
 		r.offset.y = render_offset[index].y;
-		r.image = sprite->getImage(gfx[index].first);
+		r.image = gfx[index].first;
 		r.blend_mode = blend_mode;
 		r.color_mod = color_mod;
 		r.alpha_mod = alpha_mod;

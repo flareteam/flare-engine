@@ -89,7 +89,7 @@ body {
 
 <p>Description of animations in animations/</p>
 
-<p><strong>image</strong> | <code>filename</code> | Filename of sprite-sheet image.</p>
+<p><strong>image</strong> | <code>filename, string : Filename, ID</code> | Filename of sprite-sheet image along with an identifier string. The identifier string may be omitted if there is only a single image.</p>
 
 <p><strong>render_size</strong> | <code>int, int : Width, Height</code> | Width and height of animation.</p>
 
@@ -111,7 +111,7 @@ body {
 
 <p><strong>animation.active_frame</strong> | <code>[list(int), "all"]</code> | A list of frames marked as &ldquo;active&rdquo;. Also, &ldquo;all&rdquo; can be used to mark all frames as active.</p>
 
-<p><strong>animation.frame</strong> | <code>int, int, int, int, int, int, int, int : Index, Direction, X, Y, Width, Height, X offset, Y offset</code> | A single frame of a compressed animation.</p>
+<p><strong>animation.frame</strong> | <code>int, int, int, int, int, int, int, int, string : Index, Direction, X, Y, Width, Height, X offset, Y offset, Image ID</code> | A single frame of a compressed animation. The image ID may be omitted, in which case the first available image will be used.</p>
 
 <hr />
 
