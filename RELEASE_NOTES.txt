@@ -12,6 +12,7 @@ Engine features:
 * Added 'show_on_minimap' event component. Currently, this only applies to intermap teleport events.
 * Added 'show_on_minimap' property to NPCs.
 * Properties that take an alignment can now be aligned to the menu frame.
+* Support multiple images in animation definitions. (bloodhero)
 
 Engine fixes:
 

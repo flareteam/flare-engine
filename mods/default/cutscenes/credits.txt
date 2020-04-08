@@ -23,6 +23,7 @@ text=Andrew Engelbrecht
 text=Anton Golov
 text=Artur Rojek
 text=blazindragon
+text=bloodhero
 text=Bonbadil
 text=Chris Oelmueller
 text=David Bariod
