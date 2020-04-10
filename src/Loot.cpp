@@ -38,8 +38,9 @@ Loot::Loot()
 Loot::Loot(const Loot &other)
 	: gfx("")
 	, animation(NULL)
-	, wtip(new WidgetTooltip())
+	, wtip(NULL)
 {
+	// operator= creates a new animation and tooltip
 	*this = other;
 }
 

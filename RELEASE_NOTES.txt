@@ -26,6 +26,7 @@ Engine fixes:
 * Fix needing to press the 'Cancel' key twice to exit the vendor menu.
 * Fix unintended key presses being registered when quitting the game via an OS keyboard shortcut.
 * Fix divide-by-zero crash when using the dev HUD with a game that uses orthogonal rendering.
+* Fixed a memory leak in Loot copy constructor.
 
 Game updates:
 
