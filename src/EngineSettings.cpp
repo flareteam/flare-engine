@@ -290,19 +290,19 @@ void EngineSettings::Combat::load() {
 	if (infile.open("engine/combat.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			if (infile.key == "absorb_percent") {
-				// @ATTR absorb_percent|int, int : Minimum, Maximum|Limits the percentage of damage that can be absorbed.
+				// @ATTR absorb_percent|int, int : Minimum, Maximum|Limits the percentage of damage that can be absorbed. A max value less than 100 will ensure that the target always takes at least 1 damage from non-elemental attacks.
 				min_absorb = Parse::popFirstInt(infile.val);
 				max_absorb = Parse::popFirstInt(infile.val);
 				max_absorb = std::max(max_absorb, min_absorb);
 			}
 			else if (infile.key == "resist_percent") {
-				// @ATTR resist_percent|int, int : Minimum, Maximum|Limits the percentage of damage that can be resisted.
+				// @ATTR resist_percent|int, int : Minimum, Maximum|Limits the percentage of damage that can be resisted. A max value less than 100 will ensure that the target always takes at least 1 damage from elemental attacks.
 				min_resist = Parse::popFirstInt(infile.val);
 				max_resist = Parse::popFirstInt(infile.val);
 				max_resist = std::max(max_resist, min_resist);
 			}
 			else if (infile.key == "block_percent") {
-				// @ATTR block_percent|int, int : Minimum, Maximum|Limits the percentage of damage that can be blocked.
+				// @ATTR block_percent|int, int : Minimum, Maximum|Limits the percentage of damage that can be absorbed when the target is in the 'block' animation state. A max value less than 100 will ensure that the target always takes at least 1 damage from non-elemental attacks.
 				min_block = Parse::popFirstInt(infile.val);
 				max_block = Parse::popFirstInt(infile.val);
 				max_block = std::max(max_block, min_block);

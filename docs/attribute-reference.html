@@ -267,11 +267,11 @@ body {
 
 <p>Description of engine/combat.txt</p>
 
-<p><strong>absorb_percent</strong> | <code>int, int : Minimum, Maximum</code> | Limits the percentage of damage that can be absorbed.</p>
+<p><strong>absorb_percent</strong> | <code>int, int : Minimum, Maximum</code> | Limits the percentage of damage that can be absorbed. A max value less than 100 will ensure that the target always takes at least 1 damage from non-elemental attacks.</p>
 
-<p><strong>resist_percent</strong> | <code>int, int : Minimum, Maximum</code> | Limits the percentage of damage that can be resisted.</p>
+<p><strong>resist_percent</strong> | <code>int, int : Minimum, Maximum</code> | Limits the percentage of damage that can be resisted. A max value less than 100 will ensure that the target always takes at least 1 damage from elemental attacks.</p>
 
-<p><strong>block_percent</strong> | <code>int, int : Minimum, Maximum</code> | Limits the percentage of damage that can be blocked.</p>
+<p><strong>block_percent</strong> | <code>int, int : Minimum, Maximum</code> | Limits the percentage of damage that can be absorbed when the target is in the &lsquo;block&rsquo; animation state. A max value less than 100 will ensure that the target always takes at least 1 damage from non-elemental attacks.</p>
 
 <p><strong>avoidance_percent</strong> | <code>int, int : Minimum, Maximum</code> | Limits the percentage chance that damage will be avoided.</p>
 
