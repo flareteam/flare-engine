@@ -250,7 +250,11 @@ public:
 		Point colorblind_highlight_offset;
 		Point tab_padding;
 		LabelInfo slot_quantity_label;
+		Color slot_quantity_color;
 		Color slot_quantity_bg_color;
+		LabelInfo slot_hotkey_label;
+		Color slot_hotkey_color;
+		Color slot_hotkey_bg_color;
 		Point listbox_text_margin;
 		int horizontal_list_text_width;
 	};

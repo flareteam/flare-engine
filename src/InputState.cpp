@@ -62,6 +62,7 @@ InputState::InputState(void)
 	, pressing_up(false)
 	, pressing_down(false)
 	, joysticks_changed(false)
+	, refresh_hotkeys(false)
 	, un_press()
 	, current_touch()
 	, dump_event(false)
@@ -331,6 +332,8 @@ void InputState::saveKeyBindings() {
 }
 
 void InputState::handle() {
+	refresh_hotkeys = false;
+
 	if (lock_all) return;
 
 	inkeys = "";

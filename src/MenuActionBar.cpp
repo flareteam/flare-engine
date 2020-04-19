@@ -70,6 +70,7 @@ MenuActionBar::MenuActionBar()
 
 	for (unsigned i=0; i<MENU_COUNT; i++) {
 		menus[i] = new WidgetSlot(-1, Input::ACTIONBAR);
+		menus[i]->setHotkey(Input::CHARACTER + i);
 
 		// NOTE: This prevents these buttons from being clickable unless they get defined in the config file.
 		// However, it doesn't prevent them from being added to the tablist, so they can still be activated there despite being invisible
@@ -195,6 +196,11 @@ void MenuActionBar::addSlot(unsigned index, int x, int y, bool is_locked) {
 	slots[index]->setBasePos(x, y, Utils::ALIGN_TOPLEFT);
 	slots[index]->pos.w = slots[index]->pos.h = eset->resolutions.icon_size;
 	slots[index]->continuous = true;
+
+	if (index < 10)
+		slots[index]->setHotkey(Input::BAR_1 + index);
+	else if (index < 12)
+		slots[index]->setHotkey(Input::MAIN1 + index - 10);
 
 	prevent_changing.resize(slots.size());
 	prevent_changing[index] = is_locked;

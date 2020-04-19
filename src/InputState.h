@@ -86,6 +86,7 @@ public:
 		BINDING_JOYSTICK = 2
 	};
 
+	static const bool GET_SHORT_STRING = true;
 	static const int KEY_COUNT = 31;
 	static const int KEY_COUNT_USER = KEY_COUNT - 4; // exclude CTRL, SHIFT, etc from keybinding menu
 	int binding[KEY_COUNT];
@@ -113,10 +114,10 @@ public:
 	virtual void hideCursor() = 0;
 	virtual void showCursor() = 0;
 	virtual std::string getJoystickName(int index) = 0;
-	virtual std::string getKeyName(int key) = 0;
-	virtual std::string getMouseButtonName(int button) = 0;
-	virtual std::string getJoystickButtonName(int button) = 0;
-	virtual std::string getBindingString(int key, int bindings_list = BINDING_DEFAULT) = 0;
+	virtual std::string getKeyName(int key, bool get_short_string = !GET_SHORT_STRING) = 0;
+	virtual std::string getMouseButtonName(int button, bool get_short_string = !GET_SHORT_STRING) = 0;
+	virtual std::string getJoystickButtonName(int button, bool get_short_string = !GET_SHORT_STRING) = 0;
+	virtual std::string getBindingString(int key, int bindings_list = BINDING_DEFAULT, bool get_short_string = !GET_SHORT_STRING) = 0;
 	virtual std::string getMovementString() = 0;
 	virtual std::string getAttackString() = 0;
 	virtual std::string getContinueString() = 0;
@@ -154,6 +155,7 @@ public:
 	bool pressing_up;
 	bool pressing_down;
 	bool joysticks_changed;
+	bool refresh_hotkeys;
 
 protected:
 	Point scaleMouse(unsigned int x, unsigned int y);

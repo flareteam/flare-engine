@@ -1476,6 +1476,8 @@ void MenuConfig::confirmKey(int button) {
 	input_confirm_timer.reset(Timer::END);
 	keybind_tip_timer.reset(Timer::END);
 
+	inpt->refresh_hotkeys = true;
+
 	updateKeybinds();
 }
 

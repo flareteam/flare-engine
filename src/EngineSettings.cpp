@@ -21,6 +21,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "EngineSettings.h"
 #include "FileParser.h"
+#include "FontEngine.h"
 #include "MenuActionBar.h"
 #include "MessageEngine.h"
 #include "ModManager.h"
@@ -837,10 +838,19 @@ void EngineSettings::Widgets::load() {
 	// reset to defaults
 	selection_rect_color = Color(255, 248, 220, 255);
 	colorblind_highlight_offset = Point(2, 2);
+
 	tab_padding = Point(8, 0);
+
 	slot_quantity_label = LabelInfo();
+	slot_quantity_color = font->getColor(FontEngine::COLOR_WIDGET_NORMAL);
 	slot_quantity_bg_color = Color(0, 0, 0, 0);
+	slot_hotkey_label = LabelInfo();
+	slot_hotkey_color = font->getColor(FontEngine::COLOR_WIDGET_NORMAL);
+	slot_hotkey_label.hidden = true;
+	slot_hotkey_bg_color = Color(0, 0, 0, 0);
+
 	listbox_text_margin = Point(8, 8);
+
 	horizontal_list_text_width = 150;
 
 	FileParser infile;
@@ -868,9 +878,25 @@ void EngineSettings::Widgets::load() {
 					// @ATTR slot.quantity_label|label|Setting for the slot quantity text.
 					slot_quantity_label = Parse::popLabelInfo(infile.val);
 				}
+				else if (infile.key == "quantity_color") {
+					// @ATTR slot.quantity_color|color|Text color for the slot quantity text.
+					slot_quantity_color = Parse::toRGB(infile.val);
+				}
 				else if (infile.key == "quantity_bg_color") {
 					// @ATTR slot.quantity_bg_color|color, int : Color, Alpha|If a slot has a quantity, a rectangle filled with this color will be placed beneath the text.
 					slot_quantity_bg_color = Parse::toRGBA(infile.val);
+				}
+				else if (infile.key == "hotkey_label") {
+					// @ATTR slot.hotkey_label|label|Setting for the slot hotkey text.
+					slot_hotkey_label = Parse::popLabelInfo(infile.val);
+				}
+				else if (infile.key == "hotkey_color") {
+					// @ATTR slot.hotkey_color|color|Text color for the slot hotkey text.
+					slot_hotkey_color = Parse::toRGB(infile.val);
+				}
+				else if (infile.key == "hotkey_bg_color") {
+					// @ATTR slot.hotkey_bg_color|color, int : Color, Alpha|If a slot has a hotkey, a rectangle filled with this color will be placed beneath the text.
+					slot_hotkey_bg_color = Parse::toRGBA(infile.val);
 				}
 			}
 			else if (infile.section == "listbox") {

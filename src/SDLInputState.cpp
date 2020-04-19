@@ -634,88 +634,140 @@ std::string SDLInputState::getJoystickName(int index) {
 	return std::string(SDL_JoystickNameForIndex(index));
 }
 
-std::string SDLInputState::getKeyName(int key) {
+std::string SDLInputState::getKeyName(int key, bool get_short_string) {
 	key = SDL_GetKeyFromScancode(static_cast<SDL_Scancode>(key));
+
 	// first, we try to provide a translation of the key
-	switch (static_cast<SDL_Keycode>(key)) {
-		case SDLK_BACKSPACE:    return msg->get("Backspace");
-		case SDLK_CAPSLOCK:     return msg->get("CapsLock");
-		case SDLK_DELETE:       return msg->get("Delete");
-		case SDLK_DOWN:         return msg->get("Down");
-		case SDLK_END:          return msg->get("End");
-		case SDLK_ESCAPE:       return msg->get("Escape");
-		case SDLK_HOME:         return msg->get("Home");
-		case SDLK_INSERT:       return msg->get("Insert");
-		case SDLK_LALT:         return msg->get("Left Alt");
-		case SDLK_LCTRL:        return msg->get("Left Ctrl");
-		case SDLK_LEFT:         return msg->get("Left");
-		case SDLK_LSHIFT:       return msg->get("Left Shift");
-		case SDLK_NUMLOCKCLEAR: return msg->get("NumLock");
-		case SDLK_PAGEDOWN:     return msg->get("PageDown");
-		case SDLK_PAGEUP:       return msg->get("PageUp");
-		case SDLK_PAUSE:        return msg->get("Pause");
-		case SDLK_PRINTSCREEN:  return msg->get("PrintScreen");
-		case SDLK_RALT:         return msg->get("Right Alt");
-		case SDLK_RCTRL:        return msg->get("Right Ctrl");
-		case SDLK_RETURN:       return msg->get("Return");
-		case SDLK_RIGHT:        return msg->get("Right");
-		case SDLK_RSHIFT:       return msg->get("Right Shift");
-		case SDLK_SCROLLLOCK:   return msg->get("ScrollLock");
-		case SDLK_SPACE:        return msg->get("Space");
-		case SDLK_TAB:          return msg->get("Tab");
-		case SDLK_UP:           return msg->get("Up");
+	if (get_short_string) {
+		switch (static_cast<SDL_Keycode>(key)) {
+			case SDLK_BACKSPACE:    return msg->get("BkSp");
+			case SDLK_CAPSLOCK:     return msg->get("Caps");
+			case SDLK_DELETE:       return msg->get("Del");
+			case SDLK_DOWN:         return msg->get("Down");
+			case SDLK_END:          return msg->get("End");
+			case SDLK_ESCAPE:       return msg->get("Esc");
+			case SDLK_HOME:         return msg->get("Home");
+			case SDLK_INSERT:       return msg->get("Ins");
+			case SDLK_LALT:         return msg->get("LAlt");
+			case SDLK_LCTRL:        return msg->get("LCtrl");
+			case SDLK_LEFT:         return msg->get("Left");
+			case SDLK_LSHIFT:       return msg->get("LShft");
+			case SDLK_NUMLOCKCLEAR: return msg->get("Num");
+			case SDLK_PAGEDOWN:     return msg->get("PgDn");
+			case SDLK_PAGEUP:       return msg->get("PgUp");
+			case SDLK_PAUSE:        return msg->get("Pause");
+			case SDLK_PRINTSCREEN:  return msg->get("Print");
+			case SDLK_RALT:         return msg->get("RAlt");
+			case SDLK_RCTRL:        return msg->get("RCtrl");
+			case SDLK_RETURN:       return msg->get("Ret");
+			case SDLK_RIGHT:        return msg->get("Right");
+			case SDLK_RSHIFT:       return msg->get("RShft");
+			case SDLK_SCROLLLOCK:   return msg->get("SLock");
+			case SDLK_SPACE:        return msg->get("Spc");
+			case SDLK_TAB:          return msg->get("Tab");
+			case SDLK_UP:           return msg->get("Up");
+		}
+	}
+	else {
+		switch (static_cast<SDL_Keycode>(key)) {
+			case SDLK_BACKSPACE:    return msg->get("Backspace");
+			case SDLK_CAPSLOCK:     return msg->get("CapsLock");
+			case SDLK_DELETE:       return msg->get("Delete");
+			case SDLK_DOWN:         return msg->get("Down");
+			case SDLK_END:          return msg->get("End");
+			case SDLK_ESCAPE:       return msg->get("Escape");
+			case SDLK_HOME:         return msg->get("Home");
+			case SDLK_INSERT:       return msg->get("Insert");
+			case SDLK_LALT:         return msg->get("Left Alt");
+			case SDLK_LCTRL:        return msg->get("Left Ctrl");
+			case SDLK_LEFT:         return msg->get("Left");
+			case SDLK_LSHIFT:       return msg->get("Left Shift");
+			case SDLK_NUMLOCKCLEAR: return msg->get("NumLock");
+			case SDLK_PAGEDOWN:     return msg->get("PageDown");
+			case SDLK_PAGEUP:       return msg->get("PageUp");
+			case SDLK_PAUSE:        return msg->get("Pause");
+			case SDLK_PRINTSCREEN:  return msg->get("PrintScreen");
+			case SDLK_RALT:         return msg->get("Right Alt");
+			case SDLK_RCTRL:        return msg->get("Right Ctrl");
+			case SDLK_RETURN:       return msg->get("Return");
+			case SDLK_RIGHT:        return msg->get("Right");
+			case SDLK_RSHIFT:       return msg->get("Right Shift");
+			case SDLK_SCROLLLOCK:   return msg->get("ScrollLock");
+			case SDLK_SPACE:        return msg->get("Space");
+			case SDLK_TAB:          return msg->get("Tab");
+			case SDLK_UP:           return msg->get("Up");
+		}
 	}
 
 	// no translation for this key, so just get the name straight from SDL
 	return std::string(SDL_GetKeyName(static_cast<SDL_Keycode>(key)));
 }
 
-std::string SDLInputState::getMouseButtonName(int button) {
+std::string SDLInputState::getMouseButtonName(int button, bool get_short_string) {
 	int real_button = (button + MOUSE_BIND_OFFSET) * (-1);
 
-	if (real_button > 0 && real_button <= MOUSE_BUTTON_NAME_COUNT)
-		return mouse_button[real_button - 1];
-	else
-		return msg->get("Mouse %d", real_button);
+	if (get_short_string) {
+		return msg->get("M%d", real_button);
+	}
+	else {
+		if (real_button > 0 && real_button <= MOUSE_BUTTON_NAME_COUNT)
+			return mouse_button[real_button - 1];
+		else
+			return msg->get("Mouse %d", real_button);
+	}
 }
 
-std::string SDLInputState::getJoystickButtonName(int button) {
+std::string SDLInputState::getJoystickButtonName(int button, bool get_short_string) {
 	if (button < -1) {
 		int axis = (button + JOY_AXIS_OFFSET) * (-1);
 
-		if (axis % 2 == 0)
-			return msg->get("Axis %d -", axis/2);
-		else
-			return msg->get("Axis %d +", axis/2);
+		if (axis % 2 == 0) {
+			if (get_short_string)
+				return msg->get("JX%d-", axis/2);
+			else
+				return msg->get("Axis %d -", axis/2);
+		}
+		else {
+			if (get_short_string)
+				return msg->get("JX%d+", axis/2);
+			else
+				return msg->get("Axis %d +", axis/2);
+		}
 	}
-	else
-		return msg->get("Button %d", button);
+	else {
+		if (get_short_string)
+			return msg->get("JB%d", button);
+		else
+			return msg->get("Button %d", button);
+	}
 }
 
-std::string SDLInputState::getBindingString(int key, int bindings_list) {
-	std::string none = msg->get("(none)");
+std::string SDLInputState::getBindingString(int key, int bindings_list, bool get_short_string) {
+	std::string none = "";
+	if (!get_short_string)
+		none = msg->get("(none)");
 
 	if (bindings_list == InputState::BINDING_DEFAULT) {
 		if (binding[key] == 0 || binding[key] == -1)
 			return none;
 		else if (binding[key] < -1)
-			return getMouseButtonName(binding[key]);
+			return getMouseButtonName(binding[key], get_short_string);
 		else
-			return getKeyName(binding[key]);
+			return getKeyName(binding[key], get_short_string);
 	}
 	else if (bindings_list == InputState::BINDING_ALT) {
 		if (binding_alt[key] == 0 || binding_alt[key] == -1)
 			return none;
 		else if (binding_alt[key] < -1)
-			return getMouseButtonName(binding_alt[key]);
+			return getMouseButtonName(binding_alt[key], get_short_string);
 		else
-			return getKeyName(binding_alt[key]);
+			return getKeyName(binding_alt[key], get_short_string);
 	}
 	else if (bindings_list == InputState::BINDING_JOYSTICK) {
 		if (binding_joy[key] == -1)
 			return none;
 		else
-			return getJoystickButtonName(binding_joy[key]);
+			return getJoystickButtonName(binding_joy[key], get_short_string);
 	}
 	else {
 		return none;

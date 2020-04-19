@@ -35,13 +35,15 @@ WidgetSlot::WidgetSlot(int _icon_id, int _ACTIVATE)
 	: Widget()
 	, slot_selected(NULL)
 	, slot_checked(NULL)
-	, label_bg(NULL)
+	, label_amount_bg(NULL)
+	, label_hotkey_bg(NULL)
 	, icon_id(_icon_id)
 	, overlay_id(NO_ICON)
 	, amount(1)
 	, max_amount(1)
 	, amount_str("")
 	, activate_key(_ACTIVATE)
+	, hotkey(-1)
 	, enabled(true)
 	, checked(false)
 	, pressed(false)
@@ -49,6 +51,13 @@ WidgetSlot::WidgetSlot(int _icon_id, int _ACTIVATE)
 {
 	focusable = true;
 	label_amount.setFromLabelInfo(eset->widgets.slot_quantity_label);
+	label_amount.setColor(eset->widgets.slot_quantity_color);
+	label_hotkey.setFromLabelInfo(eset->widgets.slot_hotkey_label);
+	label_hotkey.setColor(eset->widgets.slot_hotkey_color);
+
+	// in case the hotkey string is long (we only have a fixed set of short keynames), keep the label width to the icon size
+	// TODO should this be done for the quantity as well?
+	label_hotkey.setMaxWidth(eset->resolutions.icon_size);
 
 	pos.x = pos.y = 0;
 
@@ -85,10 +94,16 @@ void WidgetSlot::setPos(int offset_x, int offset_y) {
 	Widget::setPos(offset_x, offset_y);
 
 	label_amount.setPos(pos.x + icons->text_offset.x, pos.y + icons->text_offset.y);
+	label_hotkey.setPos(pos.x + icons->text_offset.x, pos.y + icons->text_offset.y);
 
-	if (label_bg) {
+	if (label_amount_bg) {
 		Rect *r = label_amount.getBounds();
-		label_bg->setDest(r->x, r->y);
+		label_amount_bg->setDest(r->x, r->y);
+	}
+
+	if (label_hotkey_bg) {
+		Rect *r = label_hotkey.getBounds();
+		label_hotkey_bg->setDest(r->x, r->y);
 	}
 }
 
@@ -197,30 +212,62 @@ void WidgetSlot::setAmount(int _amount, int _max_amount) {
 
 	amount_str = Utils::abbreviateKilo(amount);
 
-	if (amount > 1 || max_amount > 1) {
+	if ((amount > 1 || max_amount > 1) && !eset->widgets.slot_quantity_label.hidden) {
 		label_amount.setPos(pos.x + icons->text_offset.x, pos.y + icons->text_offset.y);
 		label_amount.setText(amount_str);
 		label_amount.local_frame = local_frame;
 		label_amount.local_offset = local_offset;
 
 		Rect* r = label_amount.getBounds();
-		if (!label_bg || label_bg->getGraphicsWidth() != r->w || label_bg->getGraphicsHeight() != r->h) {
-			if (label_bg) {
-				delete label_bg;
-				label_bg = NULL;
+		if (!label_amount_bg || label_amount_bg->getGraphicsWidth() != r->w || label_amount_bg->getGraphicsHeight() != r->h) {
+			if (label_amount_bg) {
+				delete label_amount_bg;
+				label_amount_bg = NULL;
 			}
 
 			if (eset->widgets.slot_quantity_bg_color.a != 0) {
 				Image *temp = render_device->createImage(r->w, r->h);
 				if (temp) {
 					temp->fillWithColor(eset->widgets.slot_quantity_bg_color);
-					label_bg = temp->createSprite();
+					label_amount_bg = temp->createSprite();
 					temp->unref();
 				}
 			}
 
-			if (label_bg) {
-				label_bg->setDest(r->x, r->y);
+			if (label_amount_bg) {
+				label_amount_bg->setDest(r->x, r->y);
+			}
+		}
+	}
+}
+
+void WidgetSlot::setHotkey(int key) {
+	hotkey = key;
+
+	if (hotkey != -1 && !eset->widgets.slot_hotkey_label.hidden) {
+		label_hotkey.setPos(pos.x + icons->text_offset.x, pos.y + icons->text_offset.y);
+		label_hotkey.setText(inpt->getBindingString(hotkey, InputState::BINDING_DEFAULT, InputState::GET_SHORT_STRING));
+		label_hotkey.local_frame = local_frame;
+		label_hotkey.local_offset = local_offset;
+
+		Rect* r = label_hotkey.getBounds();
+		if (!label_hotkey_bg || label_hotkey_bg->getGraphicsWidth() != r->w || label_hotkey_bg->getGraphicsHeight() != r->h) {
+			if (label_hotkey_bg) {
+				delete label_hotkey_bg;
+				label_hotkey_bg = NULL;
+			}
+
+			if (eset->widgets.slot_hotkey_bg_color.a != 0) {
+				Image *temp = render_device->createImage(r->w, r->h);
+				if (temp) {
+					temp->fillWithColor(eset->widgets.slot_hotkey_bg_color);
+					label_hotkey_bg = temp->createSprite();
+					temp->unref();
+				}
+			}
+
+			if (label_hotkey_bg) {
+				label_hotkey_bg->setDest(r->x, r->y);
 			}
 		}
 	}
@@ -239,9 +286,19 @@ void WidgetSlot::render() {
 		}
 
 		if (amount > 1 || max_amount > 1) {
-			render_device->render(label_bg);
+			if (label_amount_bg)
+				render_device->render(label_amount_bg);
 			label_amount.render();
 		}
+	}
+	if (hotkey != -1) {
+		// reload the hotkey label if keybindings have changed
+		if (inpt->refresh_hotkeys)
+			setHotkey(hotkey);
+
+		if (label_hotkey_bg)
+			render_device->render(label_hotkey_bg);
+		label_hotkey.render();
 	}
 	renderSelection();
 }
@@ -269,5 +326,6 @@ void WidgetSlot::renderSelection() {
 WidgetSlot::~WidgetSlot() {
 	delete slot_selected;
 	delete slot_checked;
-	delete label_bg;
+	delete label_amount_bg;
+	delete label_hotkey_bg;
 }

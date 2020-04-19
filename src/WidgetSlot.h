@@ -34,15 +34,18 @@ class WidgetSlot : public Widget {
 private:
 	Sprite *slot_selected;
 	Sprite *slot_checked;
-	Sprite *label_bg;
+	Sprite *label_amount_bg;
+	Sprite *label_hotkey_bg;
 
 	WidgetLabel label_amount;
+	WidgetLabel label_hotkey;
 	int icon_id;		// current slot id
 	int overlay_id;     // icon id for the overlay image
 	int amount;			// entries amount in slot
 	int max_amount;		// if > 1 always display amount
 	std::string amount_str; // formatted display of amount
 	int activate_key;
+	int hotkey; // for display in label_hotkey only
 
 public:
 	enum CLICK_TYPE {
@@ -70,6 +73,7 @@ public:
 	int getIcon();
 	void setIcon(int _icon_id, int _overlay_id);
 	void setAmount(int _amount, int _max_amount);
+	void setHotkey(int key);
 	void render();
 	void renderSelection();
 

@@ -39,10 +39,10 @@ public:
 	void hideCursor();
 	void showCursor();
 	std::string getJoystickName(int index);
-	std::string getKeyName(int key);
-	std::string getMouseButtonName(int button);
-	std::string getJoystickButtonName(int button);
-	std::string getBindingString(int key, int bindings_list = InputState::BINDING_DEFAULT);
+	std::string getKeyName(int key, bool get_short_string = !InputState::GET_SHORT_STRING);
+	std::string getMouseButtonName(int button, bool get_short_string = !InputState::GET_SHORT_STRING);
+	std::string getJoystickButtonName(int button, bool get_short_string = !InputState::GET_SHORT_STRING);
+	std::string getBindingString(int key, int bindings_list = InputState::BINDING_DEFAULT, bool get_short_string = !InputState::GET_SHORT_STRING);
 	std::string getMovementString();
 	std::string getAttackString();
 	std::string getContinueString();

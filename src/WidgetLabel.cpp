@@ -190,8 +190,11 @@ void WidgetLabel::recacheTextSprite() {
 		label = NULL;
 	}
 
-	if (text.empty())
+	if (text.empty()) {
+		bounds.w = 0;
+		bounds.h = 0;
 		return;
+	}
 
 	std::string temp_text = text;
 

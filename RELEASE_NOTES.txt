@@ -13,6 +13,8 @@ Engine features:
 * Added 'show_on_minimap' property to NPCs.
 * Properties that take an alignment can now be aligned to the menu frame.
 * Support multiple images in animation definitions. (bloodhero)
+* Expanded slot widget configuration in engine/widget_settings.txt. Quantity text color can be changed, as well as label settings for displaying hotkeys.
+* Re-implemented displaying hotkeys on action bar slots.
 
 Engine fixes:
 
