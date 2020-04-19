@@ -431,9 +431,14 @@ bool Entity::takeHit(Hazard &h) {
 	if (h.power->trait_elemental >= 0 && static_cast<size_t>(h.power->trait_elemental) < stats.vulnerable.size()) {
 		size_t i = h.power->trait_elemental;
 
-		int vulnerable = std::max(stats.vulnerable[i], eset->combat.min_resist);
-		if (stats.vulnerable[i] < 100)
-			vulnerable = std::min(vulnerable, eset->combat.max_resist);
+		int vulnerable = stats.vulnerable[i];
+		// vulnerable values >100 are weakness, and are unaffected by min/max resist setting
+		if (vulnerable <= 100) {
+			if (100 - vulnerable < eset->combat.min_resist)
+				vulnerable = 100 - eset->combat.min_resist;
+			if (100 - vulnerable > eset->combat.max_resist)
+				vulnerable = 100 - eset->combat.max_resist;
+		}
 
 		dmg = (dmg * vulnerable) / 100;
 	}
