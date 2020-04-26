@@ -30,6 +30,7 @@ Engine fixes:
 * Fix divide-by-zero crash when using the dev HUD with a game that uses orthogonal rendering.
 * Fixed a memory leak in Loot copy constructor.
 * Fixed 'resist_percent' property of engine/combat.txt not working when targets had 100% resistance.
+* Support attack_speed effects with a magnitude less than 100%.
 
 Game updates:
 

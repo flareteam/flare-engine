@@ -325,11 +325,6 @@ void EffectManager::addEffectInternal(EffectDef &effect, int duration, int magni
 	if (effect_type == Effect::KNOCKBACK && knockback_speed != 0)
 		return;
 
-	if (effect_type == Effect::ATTACK_SPEED && magnitude < 100) {
-		Utils::logInfo("EffectManager: Attack speeds less than 100 are unsupported.");
-		return;
-	}
-
 	bool insert_effect = false;
 	int stacks_applied = 0;
 	size_t insert_pos;

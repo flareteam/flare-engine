@@ -589,6 +589,10 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 				if (activeAnimation->isFirstFrame()) {
 					float attack_speed = (stats.effects.getAttackSpeed(attack_anim) * powers->powers[current_power].attack_speed) / 100.0f;
 					activeAnimation->setSpeed(attack_speed);
+					for (size_t i=0; i<anims.size(); ++i) {
+						if (anims[i])
+							anims[i]->setSpeed(attack_speed);
+					}
 					playAttackSound(attack_anim);
 					power_cast_timers[current_power].setDuration(activeAnimation->getDuration());
 				}

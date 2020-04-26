@@ -314,7 +314,7 @@ void Animation::setActiveFrames(const std::vector<short> &_active_frames) {
 }
 
 bool Animation::isFirstFrame() {
-	return cur_frame_index == 0;
+	return cur_frame_index == 0 && static_cast<float>(cur_frame_index) == cur_frame_index_f;
 }
 
 bool Animation::isLastFrame() {
@@ -328,11 +328,11 @@ bool Animation::isSecondLastFrame() {
 bool Animation::isActiveFrame() {
 	if (type == ANIMTYPE_BACK_FORTH) {
 		if (std::find(active_frames.begin(), active_frames.end(), elapsed_frames) != active_frames.end())
-			return cur_frame_index == getLastFrameIndex(cur_frame);
+			return cur_frame_index == getLastFrameIndex(cur_frame) && static_cast<float>(cur_frame_index) == cur_frame_index_f;
 	}
 	else {
 		if (std::find(active_frames.begin(), active_frames.end(), cur_frame) != active_frames.end()) {
-			if (cur_frame_index == getLastFrameIndex(cur_frame)) {
+			if (cur_frame_index == getLastFrameIndex(cur_frame) && static_cast<float>(cur_frame_index) == cur_frame_index_f) {
 				if (type == ANIMTYPE_PLAY_ONCE)
 					active_frame_triggered = true;
 
