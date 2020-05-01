@@ -552,19 +552,21 @@ bool Entity::takeHit(Hazard &h) {
 		powers->effect(&stats, h.src_stats, static_cast<int>(h.power_index), h.source_type);
 
 		// HP/MP steal is cumulative between stat bonus and power bonus
-		int hp_steal = h.power->hp_steal + h.src_stats->get(Stats::HP_STEAL);
-		if (!stats.effects.immunity_hp_steal && hp_steal != 0) {
-			int steal_amt = (std::min(dmg, prev_hp) * hp_steal) / 100;
-			if (steal_amt == 0) steal_amt = 1;
-			combat_text->addString(msg->get("+%d HP",steal_amt), h.src_stats->pos, CombatText::MSG_BUFF);
-			h.src_stats->hp = std::min(h.src_stats->hp + steal_amt, h.src_stats->get(Stats::HP_MAX));
-		}
-		int mp_steal = h.power->mp_steal + h.src_stats->get(Stats::MP_STEAL);
-		if (!stats.effects.immunity_mp_steal && mp_steal != 0) {
-			int steal_amt = (std::min(dmg, prev_hp) * mp_steal) / 100;
-			if (steal_amt == 0) steal_amt = 1;
-			combat_text->addString(msg->get("+%d MP",steal_amt), h.src_stats->pos, CombatText::MSG_BUFF);
-			h.src_stats->mp = std::min(h.src_stats->mp + steal_amt, h.src_stats->get(Stats::MP_MAX));
+		if (h.src_stats->hp > 0) {
+			int hp_steal = h.power->hp_steal + h.src_stats->get(Stats::HP_STEAL);
+			if (!stats.effects.immunity_hp_steal && hp_steal != 0) {
+				int steal_amt = (std::min(dmg, prev_hp) * hp_steal) / 100;
+				if (steal_amt == 0) steal_amt = 1;
+				combat_text->addString(msg->get("+%d HP",steal_amt), h.src_stats->pos, CombatText::MSG_BUFF);
+				h.src_stats->hp = std::min(h.src_stats->hp + steal_amt, h.src_stats->get(Stats::HP_MAX));
+			}
+			int mp_steal = h.power->mp_steal + h.src_stats->get(Stats::MP_STEAL);
+			if (!stats.effects.immunity_mp_steal && mp_steal != 0) {
+				int steal_amt = (std::min(dmg, prev_hp) * mp_steal) / 100;
+				if (steal_amt == 0) steal_amt = 1;
+				combat_text->addString(msg->get("+%d MP",steal_amt), h.src_stats->pos, CombatText::MSG_BUFF);
+				h.src_stats->mp = std::min(h.src_stats->mp + steal_amt, h.src_stats->get(Stats::MP_MAX));
+			}
 		}
 
 		// deal return damage
