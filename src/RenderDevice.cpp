@@ -20,9 +20,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "RenderDevice.h"
 #include "Settings.h"
 #include "SharedResources.h"
+#include "UtilsMath.h"
 
 #include <assert.h>
-#include <math.h>
 #include <stdio.h>
 
 /*

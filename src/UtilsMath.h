@@ -22,7 +22,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <cstdlib>
 #include <algorithm> // for std::min()/std::max()
-#include "math.h"
+#include <math.h>
+
+#ifdef _MSC_VER
+#define _USE_MATH_DEFINES
+#endif
 
 #ifndef M_PI
 #define M_PI 3.1415926535898f
