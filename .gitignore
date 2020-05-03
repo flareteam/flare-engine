@@ -54,3 +54,7 @@ gmon.out
 
 # emscripten output
 emscripten/
+
+# visual studio and its cmake
+.vs/
+CMakeSettings.json
