@@ -113,6 +113,22 @@ and copy it to `$MICROSOFT_VISUAL_CPP_FOLDER\VC\include\`.
 
 [dirent.h]: https://github.com/tronkko/dirent
 
+To get SDL2 [vcpkg](https://github.com/Microsoft/vcpkg) can be used. Its an elegant solution to manage C/C++ dependencies
+in a central place.
+
+Use Windows PowerShell or Git Bash and change to a directory where you want to store the dependencies:
+```bash
+#get the vcpkg code
+git clone https://github.com/Microsoft/vcpkg.git
+cd vcpkg
+#bootstrap vcpkg
+./bootstrap-vcpkg.bat
+#install the dependencies (for 64bit builds, you can use x86-windows triplet instead if you want 32bit)
+./vcpkg install sdl2:x64-windows sdl2-image:x64-windows sdl2-mixer:x64-windows sdl2-ttf:x64-windows
+```
+After that the dependencies have been downloaded and build. You can use them in your cmake projects by adding the path of the 
+toolchain file to your cmake configuration command line options: `-DCMAKE_TOOLCHAIN_FILE=[vcpkg root]\scripts\buildsystems\vcpkg.cmake`
+
 <a name="install_system_wide"></a>
 ## Install Flare system-wide
 
