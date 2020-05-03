@@ -22,6 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 
 #include <assert.h>
+#define _USE_MATH_DEFINES
 #include <math.h>
 #include <stdio.h>
 
