@@ -55,7 +55,7 @@
     <script>
 
           (function() {
-            var memoryInitializer = 'index.html.mem';
+            var memoryInitializer = 'index.wasm';
             if (typeof Module['locateFile'] === 'function') {
               memoryInitializer = Module['locateFile'](memoryInitializer);
             } else if (Module['memoryInitializerPrefixURL']) {

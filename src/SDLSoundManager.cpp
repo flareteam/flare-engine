@@ -362,12 +362,7 @@ bool SDLSoundManager::isPlayingMusic() {
 }
 
 int SDLSoundManager::SetChannelPosition(int channel, Sint16 angle, Uint8 distance) {
-#ifdef __EMSCRIPTEN__
-	// TODO fix for Emscripten
-	return 0;
-#else
 	return Mix_SetPosition(channel, angle, distance);
-#endif
 }
 
 SoundID SDLSoundManager::getLastPlayedSID() {

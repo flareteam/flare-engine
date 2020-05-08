@@ -9,6 +9,7 @@ cp -r ../flare-game/mods/empyrean_campaign mods/empyrean_campaign
 cmake .
 
 emcc \
+	-v \
     -Isrc/ \
     src/*.cpp \
     -O3 \
@@ -18,6 +19,9 @@ emcc \
     -s USE_SDL_IMAGE=2 \
     -s SDL2_IMAGE_FORMATS='["png"]' \
 	-s USE_SDL_TTF=2 \
+	-s USE_SDL_MIXER=2 \
+	-s "EXTRA_EXPORTED_RUNTIME_METHODS=['print']" \
+	-lidbfs.js \
     --preload-file mods \
     -o emscripten/index.html
 

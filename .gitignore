@@ -54,6 +54,8 @@ gmon.out
 
 # emscripten output
 emscripten/
+a.out.js
+a.out.wasm
 
 # visual studio and its cmake
 .vs/
