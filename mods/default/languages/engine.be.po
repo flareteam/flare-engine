@@ -5,7 +5,7 @@
 # 
 # Translators:
 # Justin Jacobs <jajdorkster@gmail.com>, 2018
-# Zmicer Turok <nashtlumach@gmail.com>, 2019
+# Zmicer Turok <nashtlumach@gmail.com>, 2020
 # 
 #, fuzzy
 msgid ""
@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-07-29 09:34-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: Zmicer Turok <nashtlumach@gmail.com>, 2019\n"
+"Last-Translator: Zmicer Turok <nashtlumach@gmail.com>, 2020\n"
 "Language-Team: Belarusian (https://www.transifex.com/flareorg/teams/84925/be/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1483,11 +1483,11 @@ msgstr "Гэты аб'ект немагчыма захоўваць у схова
 
 #: ../../../src/MenuStash.cpp:269
 msgid "This item can not be stored in the private stash."
-msgstr ""
+msgstr "Гэты аб'ект немагчыма захоўваць у асабістай схованцы."
 
 #: ../../../src/MenuStash.cpp:274
 msgid "This item can not be stored in the shared stash."
-msgstr ""
+msgstr "Гэты аб'ект немагчыма захоўваць у агульнай схованцы."
 
 #: ../../../src/MenuStash.cpp:284
 msgid "Stash is full."
