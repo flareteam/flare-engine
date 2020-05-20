@@ -138,11 +138,11 @@ bool CampaignManager::checkCurrency(int quantity) {
 	return menu->inv->inventory[MenuInventory::CARRIED].contain(eset->misc.currency_id, quantity);
 }
 
-bool CampaignManager::checkItem(int item_id) {
-	if (menu->inv->inventory[MenuInventory::CARRIED].contain(item_id, 1))
+bool CampaignManager::checkItem(ItemStack istack) {
+	if (menu->inv->inventory[MenuInventory::CARRIED].contain(istack.item, istack.quantity))
 		return true;
 	else
-		return menu->inv->inventory[MenuInventory::EQUIPMENT].contain(item_id, 1);
+		return menu->inv->inventory[MenuInventory::EQUIPMENT].contain(istack.item, istack.quantity);
 }
 
 void CampaignManager::removeCurrency(int quantity) {
@@ -155,12 +155,17 @@ void CampaignManager::removeCurrency(int quantity) {
 	}
 }
 
-void CampaignManager::removeItem(int item_id) {
-	if (item_id < 0 || static_cast<unsigned>(item_id) >= items->items.size()) return;
+void CampaignManager::removeItem(ItemStack istack) {
+	if (istack.empty() || static_cast<unsigned>(istack.item) >= items->items.size())
+		return;
 
-	if (menu->inv->remove(item_id)) {
-		pc->logMsg(msg->get("%s removed.", items->getItemName(item_id)), Avatar::MSG_UNIQUE);
-		items->playSound(item_id);
+	// TODO display message even if remove() fails? This could happen when trying to remove more than the player is carrying...
+	if (menu->inv->remove(istack.item, istack.quantity)) {
+		if (istack.quantity > 1)
+			pc->logMsg(msg->get("%s x%d removed.", items->getItemName(istack.item), istack.quantity), Avatar::MSG_UNIQUE);
+		else
+			pc->logMsg(msg->get("%s removed.", items->getItemName(istack.item)), Avatar::MSG_UNIQUE);
+		items->playSound(istack.item);
 	}
 }
 
@@ -239,11 +244,11 @@ bool CampaignManager::checkAllRequirements(const EventComponent& ec) {
 			return true;
 	}
 	else if (ec.type == EventComponent::REQUIRES_ITEM) {
-		if (checkItem(ec.x))
+		if (checkItem(ItemStack(ec.x, ec.y)))
 			return true;
 	}
 	else if (ec.type == EventComponent::REQUIRES_NOT_ITEM) {
-		if (!checkItem(ec.x))
+		if (!checkItem(ItemStack(ec.x, ec.y)))
 			return true;
 	}
 	else if (ec.type == EventComponent::REQUIRES_LEVEL) {

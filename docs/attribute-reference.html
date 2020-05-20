@@ -523,9 +523,9 @@ body {
 
 <p><strong>event.requires_not_currency</strong> | <code>int</code> | Event requires no more than this much currency</p>
 
-<p><strong>event.requires_item</strong> | <code>list(item_id)</code> | Event requires specific item (not equipped)</p>
+<p><strong>event.requires_item</strong> | <code>list(item_id)</code> | Event requires specific item (not equipped). Quantity can be specified by appending &ldquo; Q&rdquo; to the item_id, where Q is an integer.</p>
 
-<p><strong>event.requires_not_item</strong> | <code>list(item_id)</code> | Event requires not having a specific item (not equipped)</p>
+<p><strong>event.requires_not_item</strong> | <code>list(item_id)</code> | Event requires not having a specific item (not equipped). Quantity can be specified by appending &ldquo; Q&rdquo; to the item_id, where Q is an integer.</p>
 
 <p><strong>event.requires_class</strong> | <code>predefined_string</code> | Event requires this base class</p>
 
@@ -537,13 +537,15 @@ body {
 
 <p><strong>event.remove_currency</strong> | <code>int</code> | Removes specified amount of currency from hero inventory</p>
 
-<p><strong>event.remove_item</strong> | <code>list(item_id)</code> | Removes specified item from hero inventory</p>
+<p><strong>event.remove_item</strong> | <code>list(item_id)</code> | Removes specified item from hero inventory. Quantity can be specified by appending &ldquo; Q&rdquo; to the item_id, where Q is an integer.</p>
 
 <p><strong>event.reward_xp</strong> | <code>int</code> | Reward hero with specified amount of experience points.</p>
 
 <p><strong>event.reward_currency</strong> | <code>int</code> | Reward hero with specified amount of currency.</p>
 
-<p><strong>event.reward_item</strong> | <code>item_id, int : Item, Quantity</code> | Reward hero with y number of item x.</p>
+<p><strong>event.reward_item(list(item_id)</strong> | <code>Reward hero with a specified item. Quantity can be specified by appending " : Q" to the item_id, where Q is an integer. To maintain backwards compatibility, the quantity must be defined for at least the first item in the list in order to use this syntax.</code> |</p>
+
+<p><strong>event.reward_item</strong> | <code>item_id, int : Item, Quantity</code> | Reward hero with y number of item x. NOTE  This syntax is maintained for backwards compatibility. It is recommended to use the above syntax instead.</p>
 
 <p><strong>event.reward_loot</strong> | <code>list(loot)</code> | Reward hero with random loot.</p>
 

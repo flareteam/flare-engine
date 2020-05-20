@@ -387,10 +387,12 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		e->x = Parse::popFirstInt(val);
 	}
 	else if (key == "requires_item") {
-		// @ATTR event.requires_item|list(item_id)|Event requires specific item (not equipped)
+		// @ATTR event.requires_item|list(item_id)|Event requires specific item (not equipped). Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.
 		e->type = EventComponent::REQUIRES_ITEM;
 
-		e->x = Parse::popFirstInt(val);
+		Point item_stack = Parse::toItemQuantityPair(Parse::popFirstString(val));
+		e->x = item_stack.x;
+		e->y = item_stack.y;
 
 		// add repeating requires_item
 		if (evnt) {
@@ -399,17 +401,21 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 				evnt->components.push_back(EventComponent());
 				e = &evnt->components.back();
 				e->type = EventComponent::REQUIRES_ITEM;
-				e->x = Parse::toInt(repeat_val);
+				item_stack = Parse::toItemQuantityPair(repeat_val);
+				e->x = item_stack.x;
+				e->y = item_stack.y;
 
 				repeat_val = Parse::popFirstString(val);
 			}
 		}
 	}
 	else if (key == "requires_not_item") {
-		// @ATTR event.requires_not_item|list(item_id)|Event requires not having a specific item (not equipped)
+		// @ATTR event.requires_not_item|list(item_id)|Event requires not having a specific item (not equipped). Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.
 		e->type = EventComponent::REQUIRES_NOT_ITEM;
 
-		e->x = Parse::popFirstInt(val);
+		Point item_stack = Parse::toItemQuantityPair(Parse::popFirstString(val));
+		e->x = item_stack.x;
+		e->y = item_stack.y;
 
 		// add repeating requires_not_item
 		if (evnt) {
@@ -418,7 +424,9 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 				evnt->components.push_back(EventComponent());
 				e = &evnt->components.back();
 				e->type = EventComponent::REQUIRES_NOT_ITEM;
-				e->x = Parse::toInt(repeat_val);
+				item_stack = Parse::toItemQuantityPair(repeat_val);
+				e->x = item_stack.x;
+				e->y = item_stack.y;
 
 				repeat_val = Parse::popFirstString(val);
 			}
@@ -481,10 +489,12 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		e->x = std::max(Parse::toInt(val), 0);
 	}
 	else if (key == "remove_item") {
-		// @ATTR event.remove_item|list(item_id)|Removes specified item from hero inventory
+		// @ATTR event.remove_item|list(item_id)|Removes specified item from hero inventory. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.
 		e->type = EventComponent::REMOVE_ITEM;
 
-		e->x = Parse::popFirstInt(val);
+		Point item_stack = Parse::toItemQuantityPair(Parse::popFirstString(val));
+		e->x = item_stack.x;
+		e->y = item_stack.y;
 
 		// add repeating remove_item
 		if (evnt) {
@@ -493,7 +503,9 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 				evnt->components.push_back(EventComponent());
 				e = &evnt->components.back();
 				e->type = EventComponent::REMOVE_ITEM;
-				e->x = Parse::toInt(repeat_val);
+				item_stack = Parse::toItemQuantityPair(repeat_val);
+				e->x = item_stack.x;
+				e->y = item_stack.y;
 
 				repeat_val = Parse::popFirstString(val);
 			}
@@ -512,11 +524,37 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		e->x = std::max(Parse::toInt(val), 0);
 	}
 	else if (key == "reward_item") {
-		// @ATTR event.reward_item|item_id, int : Item, Quantity|Reward hero with y number of item x.
+		// @ATTR event.reward_item(list(item_id)|Reward hero with a specified item. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer. To maintain backwards compatibility, the quantity must be defined for at least the first item in the list in order to use this syntax.
+		// @ATTR event.reward_item|item_id, int : Item, Quantity|Reward hero with y number of item x. NOTE: This syntax is maintained for backwards compatibility. It is recommended to use the above syntax instead.
 		e->type = EventComponent::REWARD_ITEM;
 
-		e->x = Parse::popFirstInt(val);
-		e->y = std::max(Parse::popFirstInt(val), 1);
+		bool check_pair = false;
+		Point item_stack = Parse::toItemQuantityPair(Parse::popFirstString(val), &check_pair);
+
+		if (!check_pair) {
+			// item:quantity syntax not detected, falling back to the old syntax
+			e->x = item_stack.x;
+			e->y = std::max(Parse::popFirstInt(val), 1);
+		}
+		else {
+			e->x = item_stack.x;
+			e->y = item_stack.y;
+
+			// add repeating reward_item
+			if (evnt) {
+				std::string repeat_val = Parse::popFirstString(val);
+				while (repeat_val != "") {
+					evnt->components.push_back(EventComponent());
+					e = &evnt->components.back();
+					e->type = EventComponent::REWARD_ITEM;
+					item_stack = Parse::toItemQuantityPair(repeat_val);
+					e->x = item_stack.x;
+					e->y = item_stack.y;
+
+					repeat_val = Parse::popFirstString(val);
+				}
+			}
+		}
 	}
 	else if (key == "reward_loot") {
 		// @ATTR event.reward_loot|list(loot)|Reward hero with random loot.
@@ -819,7 +857,7 @@ bool EventManager::executeEventInternal(Event &ev, bool skip_delay) {
 			camp->removeCurrency(ec->x);
 		}
 		else if (ec->type == EventComponent::REMOVE_ITEM) {
-			camp->removeItem(ec->x);
+			camp->removeItem(ItemStack(ec->x, ec->y));
 		}
 		else if (ec->type == EventComponent::REWARD_XP) {
 			camp->rewardXP(ec->x, CampaignManager::XP_SHOW_MSG);
@@ -828,10 +866,7 @@ bool EventManager::executeEventInternal(Event &ev, bool skip_delay) {
 			camp->rewardCurrency(ec->x);
 		}
 		else if (ec->type == EventComponent::REWARD_ITEM) {
-			ItemStack istack;
-			istack.item = ec->x;
-			istack.quantity = ec->y;
-			camp->rewardItem(istack);
+			camp->rewardItem(ItemStack(ec->x, ec->y));
 		}
 		else if (ec->type == EventComponent::REWARD_LOOT) {
 			std::vector<EventComponent> random_table;

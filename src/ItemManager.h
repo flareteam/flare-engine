@@ -169,18 +169,21 @@ public:
 
 class ItemStack {
 public:
-	ItemStack()
-		: item(0)
-		, quantity(0)
+	ItemStack(int _item = 0, int _quantity = 0)
+		: item(_item)
+		, quantity(_quantity)
 		, can_buyback(false) {
 	}
 	~ItemStack() {}
+	explicit ItemStack(const Point& _p);
+	bool operator > (const ItemStack &param) const;
+
+	bool empty();
+	void clear();
+
 	int item;
 	int quantity;
 	bool can_buyback;
-	bool operator > (const ItemStack &param) const;
-	bool empty();
-	void clear();
 };
 
 class ItemType {

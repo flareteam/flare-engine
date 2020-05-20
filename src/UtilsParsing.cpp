@@ -387,3 +387,20 @@ LabelInfo Parse::popLabelInfo(std::string val) {
 	return info;
 }
 
+Point Parse::toItemQuantityPair(std::string value, bool* check_pair) {
+	Point r;
+
+	if (check_pair) {
+		*check_pair = (value.find_first_of(':') != std::string::npos);
+	}
+
+	value += ':';
+	r.x = popFirstInt(value, ':');
+	r.y = popFirstInt(value, ':');
+
+	// quantity is always >= 1
+	if (r.y == 0)
+		r.y = 1;
+
+	return r;
+}

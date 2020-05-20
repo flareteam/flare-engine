@@ -92,7 +92,7 @@ public:
 	void activate(const Point& position);
 
 	bool add(ItemStack stack, int area, int slot, bool play_sound, bool auto_equip);
-	bool remove(int item);
+	bool remove(int item, int quantity);
 	void removeFromPrevSlot(int quantity);
 	void addCurrency(int count);
 	void removeCurrency(int count);

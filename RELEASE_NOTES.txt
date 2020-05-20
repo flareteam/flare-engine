@@ -15,6 +15,7 @@ Engine features:
 * Support multiple images in animation definitions. (bloodhero)
 * Expanded slot widget configuration in engine/widget_settings.txt. Quantity text color can be changed, as well as label settings for displaying hotkeys.
 * Re-implemented displaying hotkeys on action bar slots.
+* Support for 'item:quantity' syntax for Event properties: 'requires_item', 'requires_not_item', 'remove_item', and 'reward_item'.
 
 Engine fixes:
 

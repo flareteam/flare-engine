@@ -49,9 +49,9 @@ public:
 	void resetAllStatuses();
 	void getSetStatusStrings(std::vector<std::string>& status_strings);
 	bool checkCurrency(int quantity);
-	bool checkItem(int item_id);
+	bool checkItem(ItemStack istack);
 	void removeCurrency(int quantity);
-	void removeItem(int item_id);
+	void removeItem(ItemStack istack);
 	void rewardItem(ItemStack istack);
 	void rewardCurrency(int amount);
 	void rewardXP(int amount, bool show_message);

@@ -54,6 +54,8 @@ namespace Parse {
 	int popFirstInt(std::string& s, char separator = 0);
 	std::string popFirstString(std::string& s, char separator = 0);
 	LabelInfo popLabelInfo(std::string val);
+
+	Point toItemQuantityPair(std::string value, bool* check_pair = NULL);
 }
 
 #endif

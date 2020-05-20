@@ -54,6 +54,12 @@ bool compareItemStack(const ItemStack &stack1, const ItemStack &stack2) {
 	return stack1.item < stack2.item;
 }
 
+ItemStack::ItemStack(const Point& _p)
+	: item(_p.x)
+	, quantity(_p.y)
+	, can_buyback(false)
+{}
+
 Item::Item()
 	: name("")
 	, has_name(false)

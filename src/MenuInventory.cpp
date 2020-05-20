@@ -211,7 +211,7 @@ void MenuInventory::logic() {
 			}
 			if (!removable_items.empty()) {
 				size_t random_item = static_cast<size_t>(rand()) % removable_items.size();
-				remove(removable_items[random_item]);
+				remove(removable_items[random_item], 1);
 				death_message += msg->get("Lost %s.",items->getItemName(removable_items[random_item]));
 			}
 		}
@@ -761,14 +761,14 @@ bool MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound, bo
 /**
  * Remove one given item from the player's inventory.
  */
-bool MenuInventory::remove(int item) {
+bool MenuInventory::remove(int item, int quantity) {
 	if (activated_item != 0 && activated_slot != -1 && item == activated_item) {
 		inventory[CARRIED].subtract(activated_slot, 1);
 		activated_item = 0;
 		activated_slot = -1;
 	}
-	else if(!inventory[CARRIED].remove(item, 1)) {
-		if (!inventory[EQUIPMENT].remove(item, 1)) {
+	else if(!inventory[CARRIED].remove(item, quantity)) {
+		if (!inventory[EQUIPMENT].remove(item, quantity)) {
 			return false;
 		}
 		else {

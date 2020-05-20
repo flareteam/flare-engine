@@ -637,7 +637,7 @@ void GameStatePlay::checkLootDrop() {
  */
 void GameStatePlay::checkUsedItems() {
 	for (unsigned i=0; i<powers->used_items.size(); i++) {
-		menu->inv->remove(powers->used_items[i]);
+		menu->inv->remove(powers->used_items[i], 1);
 	}
 	for (unsigned i=0; i<powers->used_equipped_items.size(); i++) {
 		menu->inv->inventory[MenuInventory::EQUIPMENT].remove(powers->used_equipped_items[i], 1);
