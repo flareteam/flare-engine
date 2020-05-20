@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-29 09:34-0400\n"
+"POT-Creation-Date: 2020-05-20 16:39-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
 "Last-Translator: 杜茂森 <dumaosen_main01@outlook.com>, 2019\n"
 "Language-Team: Chinese (https://www.transifex.com/flareorg/teams/84925/zh/)\n"
@@ -39,15 +39,15 @@ msgstr ""
 msgid "You may unlock one or more abilities through the Powers Menu."
 msgstr ""
 
-#: ../../../src/Avatar.cpp:688
+#: ../../../src/Avatar.cpp:692
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
 msgstr "你被打败了，游戏结束！按下 ${INPUT_CONTINUE} 返回到标题界面。"
 
-#: ../../../src/Avatar.cpp:694
+#: ../../../src/Avatar.cpp:698
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
 msgstr "你被打败了。按下 ${INPUT_CONTINUE} 以继续。"
 
-#: ../../../src/Avatar.cpp:945
+#: ../../../src/Avatar.cpp:949
 msgid "Transformation expired. You have been moved back to a safe place."
 msgstr "传送已过期。你已回到了一个安全的地方。"
 
@@ -56,48 +56,53 @@ msgstr "传送已过期。你已回到了一个安全的地方。"
 msgid "%d %s removed."
 msgstr "%d个%s已移除。"
 
-#: ../../../src/CampaignManager.cpp:162
+#: ../../../src/CampaignManager.cpp:165
+#, c-format
+msgid "%s x%d removed."
+msgstr ""
+
+#: ../../../src/CampaignManager.cpp:167
 #, c-format
 msgid "%s removed."
 msgstr "%s已移除。"
 
-#: ../../../src/CampaignManager.cpp:175
+#: ../../../src/CampaignManager.cpp:180
 #, c-format
 msgid "You receive %s."
 msgstr "你收到%s。"
 
-#: ../../../src/CampaignManager.cpp:177
+#: ../../../src/CampaignManager.cpp:182
 #, c-format
 msgid "You receive %s x%d."
 msgstr "你收到%s x%d。"
 
-#: ../../../src/CampaignManager.cpp:186
+#: ../../../src/CampaignManager.cpp:191
 #, c-format
 msgid "You receive %d %s."
 msgstr "你得到%d个%s。"
 
-#: ../../../src/CampaignManager.cpp:195
+#: ../../../src/CampaignManager.cpp:200
 #, c-format
 msgid "You receive %d XP."
 msgstr "你得到%dXP。"
 
-#: ../../../src/CampaignManager.cpp:201
+#: ../../../src/CampaignManager.cpp:206
 msgid "HP restored."
 msgstr "HP已恢复。"
 
-#: ../../../src/CampaignManager.cpp:205
+#: ../../../src/CampaignManager.cpp:210
 msgid "MP restored."
 msgstr "MP已恢复。"
 
-#: ../../../src/CampaignManager.cpp:210
+#: ../../../src/CampaignManager.cpp:215
 msgid "HP and MP restored."
 msgstr "HP和MP已恢复。"
 
-#: ../../../src/CampaignManager.cpp:214
+#: ../../../src/CampaignManager.cpp:219
 msgid "Negative effects removed."
 msgstr "负面效果已消除。"
 
-#: ../../../src/CampaignManager.cpp:220
+#: ../../../src/CampaignManager.cpp:225
 msgid "HP and MP restored, negative effects removed"
 msgstr "HP和MP已恢复，负面效果已消除。"
 
@@ -121,27 +126,27 @@ msgstr ""
 "\n"
 "默认渲染器，通常比软件渲染器更快。"
 
-#: ../../../src/EngineSettings.cpp:561
+#: ../../../src/EngineSettings.cpp:572
 msgid "Adventurer"
 msgstr "冒险者"
 
-#: ../../../src/Entity.cpp:517
+#: ../../../src/Entity.cpp:522
 msgid "miss"
 msgstr "未击中"
 
-#: ../../../src/Entity.cpp:554 ../../../src/PowerManager.cpp:1186
-#: ../../../src/StatBlock.cpp:812 ../../../src/StatBlock.cpp:818
+#: ../../../src/Entity.cpp:560 ../../../src/PowerManager.cpp:1186
+#: ../../../src/StatBlock.cpp:813 ../../../src/StatBlock.cpp:819
 #, c-format
 msgid "+%d HP"
 msgstr "+%dHP"
 
-#: ../../../src/Entity.cpp:561 ../../../src/StatBlock.cpp:823
-#: ../../../src/StatBlock.cpp:829
+#: ../../../src/Entity.cpp:567 ../../../src/StatBlock.cpp:824
+#: ../../../src/StatBlock.cpp:830
 #, c-format
 msgid "+%d MP"
 msgstr "+%dMP"
 
-#: ../../../src/EventManager.cpp:738
+#: ../../../src/EventManager.cpp:782
 msgid "Unknown destination"
 msgstr "无法进入"
 
@@ -149,55 +154,55 @@ msgstr "无法进入"
 msgid "Loading..."
 msgstr "载入中……"
 
-#: ../../../src/GameStateLoad.cpp:88 ../../../src/GameStateLoad.cpp:101
+#: ../../../src/GameStateLoad.cpp:90 ../../../src/GameStateLoad.cpp:103
 msgid "Delete Save"
 msgstr "删除存档"
 
-#: ../../../src/GameStateLoad.cpp:88
+#: ../../../src/GameStateLoad.cpp:90
 msgid "Delete this save?"
 msgstr "确定删除存档？"
 
-#: ../../../src/GameStateLoad.cpp:90
+#: ../../../src/GameStateLoad.cpp:92
 msgid "Exit to Title"
 msgstr "回到标题界面"
 
-#: ../../../src/GameStateLoad.cpp:93
+#: ../../../src/GameStateLoad.cpp:95
 msgid "New Game"
 msgstr "新游戏"
 
-#: ../../../src/GameStateLoad.cpp:97 ../../../src/GameStateLoad.cpp:600
+#: ../../../src/GameStateLoad.cpp:99 ../../../src/GameStateLoad.cpp:608
 msgid "Choose a Slot"
 msgstr "选择一个人物存档"
 
-#: ../../../src/GameStateLoad.cpp:573 ../../../src/GameStateLoad.cpp:594
+#: ../../../src/GameStateLoad.cpp:581 ../../../src/GameStateLoad.cpp:602
 msgid "Enable a story mod to continue"
 msgstr "启用故事模块以继续"
 
-#: ../../../src/GameStateLoad.cpp:589
+#: ../../../src/GameStateLoad.cpp:597
 msgid "Load Game"
 msgstr "载入游戏"
 
-#: ../../../src/GameStateLoad.cpp:695
+#: ../../../src/GameStateLoad.cpp:706
 msgid "Entering game world..."
 msgstr "进入游戏世界……"
 
-#: ../../../src/GameStateLoad.cpp:698
+#: ../../../src/GameStateLoad.cpp:709
 msgid "Loading saved game..."
 msgstr "载入游戏……"
 
-#: ../../../src/GameStateLoad.cpp:731
+#: ../../../src/GameStateLoad.cpp:742
 msgid "Invalid save"
 msgstr "保存无效"
 
-#: ../../../src/GameStateLoad.cpp:755 ../../../src/ItemManager.cpp:771
-#: ../../../src/MenuPowers.cpp:778 ../../../src/MenuPowers.cpp:1144
-#: ../../../src/MenuPowers.cpp:1544
+#: ../../../src/GameStateLoad.cpp:766 ../../../src/ItemManager.cpp:777
+#: ../../../src/MenuPowers.cpp:777 ../../../src/MenuPowers.cpp:1143
+#: ../../../src/MenuPowers.cpp:1543
 #, c-format
 msgid "Level %d"
 msgstr "等级 %d"
 
-#: ../../../src/GameStateNew.cpp:65 ../../../src/InputState.cpp:403
-#: ../../../src/MenuConfig.cpp:241
+#: ../../../src/GameStateNew.cpp:65 ../../../src/InputState.cpp:406
+#: ../../../src/MenuConfig.cpp:244
 msgid "Cancel"
 msgstr "取消"
 
@@ -245,265 +250,269 @@ msgstr "致谢"
 msgid "Exit Game"
 msgstr "退出游戏"
 
-#: ../../../src/InputState.cpp:404
+#: ../../../src/InputState.cpp:407
 msgid "Accept"
 msgstr "确定"
 
-#: ../../../src/InputState.cpp:405 ../../../src/SDLInputState.cpp:658
+#: ../../../src/InputState.cpp:408 ../../../src/SDLInputState.cpp:668
+#: ../../../src/SDLInputState.cpp:698
 msgid "Up"
 msgstr "上"
 
-#: ../../../src/InputState.cpp:406 ../../../src/SDLInputState.cpp:636
+#: ../../../src/InputState.cpp:409 ../../../src/SDLInputState.cpp:646
+#: ../../../src/SDLInputState.cpp:676
 msgid "Down"
 msgstr "下"
 
-#: ../../../src/InputState.cpp:407 ../../../src/SDLInputState.cpp:643
+#: ../../../src/InputState.cpp:410 ../../../src/SDLInputState.cpp:653
+#: ../../../src/SDLInputState.cpp:683
 msgid "Left"
 msgstr "左"
 
-#: ../../../src/InputState.cpp:408 ../../../src/SDLInputState.cpp:653
+#: ../../../src/InputState.cpp:411 ../../../src/SDLInputState.cpp:663
+#: ../../../src/SDLInputState.cpp:693
 msgid "Right"
 msgstr "右"
 
-#: ../../../src/InputState.cpp:409
+#: ../../../src/InputState.cpp:412
 msgid "Bar1"
 msgstr "槽1"
 
-#: ../../../src/InputState.cpp:410
+#: ../../../src/InputState.cpp:413
 msgid "Bar2"
 msgstr "槽2"
 
-#: ../../../src/InputState.cpp:411
+#: ../../../src/InputState.cpp:414
 msgid "Bar3"
 msgstr "槽3"
 
-#: ../../../src/InputState.cpp:412
+#: ../../../src/InputState.cpp:415
 msgid "Bar4"
 msgstr "槽4"
 
-#: ../../../src/InputState.cpp:413
+#: ../../../src/InputState.cpp:416
 msgid "Bar5"
 msgstr "槽5"
 
-#: ../../../src/InputState.cpp:414
+#: ../../../src/InputState.cpp:417
 msgid "Bar6"
 msgstr "槽6"
 
-#: ../../../src/InputState.cpp:415
+#: ../../../src/InputState.cpp:418
 msgid "Bar7"
 msgstr "槽7"
 
-#: ../../../src/InputState.cpp:416
+#: ../../../src/InputState.cpp:419
 msgid "Bar8"
 msgstr "槽8"
 
-#: ../../../src/InputState.cpp:417
+#: ../../../src/InputState.cpp:420
 msgid "Bar9"
 msgstr "槽9"
 
-#: ../../../src/InputState.cpp:418
+#: ../../../src/InputState.cpp:421
 msgid "Bar0"
 msgstr "槽0"
 
-#: ../../../src/InputState.cpp:419 ../../../src/MenuActionBar.cpp:81
+#: ../../../src/InputState.cpp:422 ../../../src/MenuActionBar.cpp:82
 #: ../../../src/MenuCharacter.cpp:54
 msgid "Character"
 msgstr "角色"
 
-#: ../../../src/InputState.cpp:420 ../../../src/MenuActionBar.cpp:82
+#: ../../../src/InputState.cpp:423 ../../../src/MenuActionBar.cpp:83
 #: ../../../src/MenuInventory.cpp:129 ../../../src/MenuVendor.cpp:57
 msgid "Inventory"
 msgstr "物品"
 
-#: ../../../src/InputState.cpp:421 ../../../src/MenuActionBar.cpp:83
-#: ../../../src/MenuPowers.cpp:168
+#: ../../../src/InputState.cpp:424 ../../../src/MenuActionBar.cpp:84
+#: ../../../src/MenuPowers.cpp:167
 msgid "Powers"
 msgstr "技能"
 
-#: ../../../src/InputState.cpp:422 ../../../src/MenuActionBar.cpp:84
+#: ../../../src/InputState.cpp:425 ../../../src/MenuActionBar.cpp:85
 #: ../../../src/MenuLog.cpp:72
 msgid "Log"
 msgstr "日志"
 
-#: ../../../src/InputState.cpp:423
+#: ../../../src/InputState.cpp:426
 msgid "Main1"
 msgstr "主按键1"
 
-#: ../../../src/InputState.cpp:424
+#: ../../../src/InputState.cpp:427
 msgid "Main2"
 msgstr "主按键2"
 
-#: ../../../src/InputState.cpp:425
+#: ../../../src/InputState.cpp:428
 msgid "Ctrl"
 msgstr "Ctrl"
 
-#: ../../../src/InputState.cpp:426
+#: ../../../src/InputState.cpp:429
 msgid "Shift"
 msgstr "Shift"
 
-#: ../../../src/InputState.cpp:427
+#: ../../../src/InputState.cpp:430
 msgid "Alt"
 msgstr "Alt"
 
-#: ../../../src/InputState.cpp:428 ../../../src/SDLInputState.cpp:635
+#: ../../../src/InputState.cpp:431 ../../../src/SDLInputState.cpp:675
 msgid "Delete"
 msgstr "Delete"
 
-#: ../../../src/InputState.cpp:429
+#: ../../../src/InputState.cpp:432
 msgid "ActionBar Accept"
 msgstr "操作栏接受"
 
-#: ../../../src/InputState.cpp:430
+#: ../../../src/InputState.cpp:433
 msgid "ActionBar Left"
 msgstr "操作栏左"
 
-#: ../../../src/InputState.cpp:431
+#: ../../../src/InputState.cpp:434
 msgid "ActionBar Right"
 msgstr "操作栏右"
 
-#: ../../../src/InputState.cpp:432
+#: ../../../src/InputState.cpp:435
 msgid "ActionBar Use"
 msgstr "操作栏使用"
 
-#: ../../../src/InputState.cpp:433
+#: ../../../src/InputState.cpp:436
 msgid "Developer Menu"
 msgstr "开发者菜单"
 
-#: ../../../src/InputState.cpp:435
+#: ../../../src/InputState.cpp:438
 msgid "Left Mouse"
 msgstr "鼠标左键"
 
-#: ../../../src/InputState.cpp:436
+#: ../../../src/InputState.cpp:439
 msgid "Middle Mouse"
 msgstr "鼠标中键"
 
-#: ../../../src/InputState.cpp:437
+#: ../../../src/InputState.cpp:440
 msgid "Right Mouse"
 msgstr "鼠标右键"
 
-#: ../../../src/InputState.cpp:438
+#: ../../../src/InputState.cpp:441
 msgid "Wheel Up"
 msgstr "滚轮向上"
 
-#: ../../../src/InputState.cpp:439
+#: ../../../src/InputState.cpp:442
 msgid "Wheel Down"
 msgstr "滚轮向下"
 
-#: ../../../src/InputState.cpp:440
+#: ../../../src/InputState.cpp:443
 msgid "Mouse X1"
 msgstr "鼠标X1"
 
-#: ../../../src/InputState.cpp:441
+#: ../../../src/InputState.cpp:444
 msgid "Mouse X2"
 msgstr "鼠标X2"
 
-#: ../../../src/ItemManager.cpp:474 ../../../src/ItemManager.cpp:477
+#: ../../../src/ItemManager.cpp:480 ../../../src/ItemManager.cpp:483
 msgid "Unknown Item"
 msgstr "未知物品"
 
-#: ../../../src/ItemManager.cpp:672 ../../../src/MenuPowers.cpp:887
+#: ../../../src/ItemManager.cpp:678 ../../../src/MenuPowers.cpp:886
 #, c-format
 msgid "%d%% Speed"
 msgstr "%d%%速度"
 
-#: ../../../src/ItemManager.cpp:676 ../../../src/MenuPowers.cpp:890
+#: ../../../src/ItemManager.cpp:682 ../../../src/MenuPowers.cpp:889
 #, c-format
 msgid "%d%% Attack Speed"
 msgstr "%d%%攻击速度"
 
-#: ../../../src/ItemManager.cpp:698 ../../../src/MenuCharacter.cpp:354
-#: ../../../src/MenuPowers.cpp:833
+#: ../../../src/ItemManager.cpp:704 ../../../src/MenuCharacter.cpp:354
+#: ../../../src/MenuPowers.cpp:832
 #, c-format
 msgid "Resistance (%s)"
 msgstr "抗性（%s）"
 
-#: ../../../src/ItemManager.cpp:708
+#: ../../../src/ItemManager.cpp:714
 #, c-format
 msgid "Requires %s"
 msgstr "需要%s"
 
-#: ../../../src/ItemManager.cpp:757
+#: ../../../src/ItemManager.cpp:763
 msgid "Quest Item"
 msgstr "任务物品"
 
-#: ../../../src/ItemManager.cpp:784
+#: ../../../src/ItemManager.cpp:790
 #, c-format
 msgid "Quality: %s"
 msgstr "质量：%s"
 
-#: ../../../src/ItemManager.cpp:809
+#: ../../../src/ItemManager.cpp:815
 #, c-format
 msgid "Absorb: %d-%d"
 msgstr "伤害吸收：%d-%d"
 
-#: ../../../src/ItemManager.cpp:811
+#: ../../../src/ItemManager.cpp:817
 #, c-format
 msgid "Absorb: %d"
 msgstr "伤害吸收：%d"
 
-#: ../../../src/ItemManager.cpp:851 ../../../src/MenuPowers.cpp:1131
-#: ../../../src/MenuPowers.cpp:1134
+#: ../../../src/ItemManager.cpp:857 ../../../src/MenuPowers.cpp:1130
+#: ../../../src/MenuPowers.cpp:1133
 #, c-format
 msgid "Requires Level %d"
 msgstr "需要等级%d"
 
-#: ../../../src/ItemManager.cpp:862 ../../../src/MenuPowers.cpp:1123
-#: ../../../src/MenuPowers.cpp:1125
+#: ../../../src/ItemManager.cpp:868 ../../../src/MenuPowers.cpp:1122
+#: ../../../src/MenuPowers.cpp:1124
 #, c-format
 msgid "Requires %s %d"
 msgstr "需要%s %d"
 
-#: ../../../src/ItemManager.cpp:873
+#: ../../../src/ItemManager.cpp:879
 #, c-format
 msgid "Requires Class: %s"
 msgstr "需要职业：%s"
 
-#: ../../../src/ItemManager.cpp:888 ../../../src/ItemManager.cpp:900
+#: ../../../src/ItemManager.cpp:894 ../../../src/ItemManager.cpp:906
 #, c-format
 msgid "Buy Price: %d %s"
 msgstr "购买价格：%d %s"
 
-#: ../../../src/ItemManager.cpp:890 ../../../src/ItemManager.cpp:902
+#: ../../../src/ItemManager.cpp:896 ../../../src/ItemManager.cpp:908
 #, c-format
 msgid "Buy Price: %d %s each"
 msgstr "购买单价：%d 每个%s"
 
-#: ../../../src/ItemManager.cpp:910
+#: ../../../src/ItemManager.cpp:916
 #, c-format
 msgid "Sell Price: %d %s"
 msgstr "出售价格：%d %s"
 
-#: ../../../src/ItemManager.cpp:912
+#: ../../../src/ItemManager.cpp:918
 #, c-format
 msgid "Sell Price: %d %s each"
 msgstr "出售单价：%d 每个%s"
 
-#: ../../../src/ItemManager.cpp:921
+#: ../../../src/ItemManager.cpp:927
 msgid "Set:"
 msgstr "设置："
 
-#: ../../../src/ItemManager.cpp:928
+#: ../../../src/ItemManager.cpp:934
 #, c-format
 msgid "%d items:"
 msgstr "%d个物品："
 
-#: ../../../src/ItemManager.cpp:941 ../../../src/ItemManager.cpp:947
+#: ../../../src/ItemManager.cpp:947 ../../../src/ItemManager.cpp:953
 #, c-format
 msgid "Press [%s] to use"
 msgstr "按[%s]使用"
 
-#: ../../../src/ItemManager.cpp:945
+#: ../../../src/ItemManager.cpp:951
 #, c-format
 msgid "Press [%s] to read"
 msgstr "按[%s]阅读"
 
-#: ../../../src/MenuActionBar.cpp:220 ../../../src/MenuActionBar.cpp:227
-#: ../../../src/MenuActionBar.cpp:230 ../../../src/MenuActionBar.cpp:236
+#: ../../../src/MenuActionBar.cpp:226 ../../../src/MenuActionBar.cpp:233
+#: ../../../src/MenuActionBar.cpp:236 ../../../src/MenuActionBar.cpp:242
 #, c-format
 msgid "Hotkey: %s"
 msgstr "快捷键：%s"
 
-#: ../../../src/MenuActionBar.cpp:593
+#: ../../../src/MenuActionBar.cpp:599
 msgid "Not enough MP."
 msgstr "MP不足。"
 
@@ -544,7 +553,7 @@ msgstr "%d个未使用的属性点数"
 msgid "Reduces the damage taken from \"%s\" elemental attacks."
 msgstr "减少来自“%s”的元素攻击伤害。"
 
-#: ../../../src/MenuCharacter.cpp:365 ../../../src/MenuManager.cpp:291
+#: ../../../src/MenuCharacter.cpp:365 ../../../src/MenuManager.cpp:292
 #, c-format
 msgid "XP: %d"
 msgstr "经验值XP：%d"
@@ -573,15 +582,15 @@ msgstr "每一级增长%d。"
 msgid "Each point of %s grants %d."
 msgstr "每点%s增长%d。"
 
-#: ../../../src/MenuConfig.cpp:122 ../../../src/MenuConfig.cpp:1148
+#: ../../../src/MenuConfig.cpp:122 ../../../src/MenuConfig.cpp:1163
 msgid "Clear"
 msgstr "清空"
 
-#: ../../../src/MenuConfig.cpp:122 ../../../src/MenuConfig.cpp:1146
+#: ../../../src/MenuConfig.cpp:122 ../../../src/MenuConfig.cpp:1161
 msgid "Assign:"
 msgstr "分配："
 
-#: ../../../src/MenuConfig.cpp:123 ../../../src/MenuConfig.cpp:240
+#: ../../../src/MenuConfig.cpp:123 ../../../src/MenuConfig.cpp:243
 msgid "Defaults"
 msgstr "默认设置"
 
@@ -589,359 +598,363 @@ msgstr "默认设置"
 msgid "Reset ALL settings?"
 msgstr "确定重置所有设置吗？"
 
-#: ../../../src/MenuConfig.cpp:239 ../../../src/MenuNumPicker.cpp:49
+#: ../../../src/MenuConfig.cpp:242 ../../../src/MenuNumPicker.cpp:49
 msgid "OK"
 msgstr "确定"
 
-#: ../../../src/MenuConfig.cpp:243
+#: ../../../src/MenuConfig.cpp:246
 msgid "Continue"
 msgstr "继续"
 
-#: ../../../src/MenuConfig.cpp:286
+#: ../../../src/MenuConfig.cpp:248
+msgid "Save Game"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:291
 msgid "Default"
 msgstr "默认"
 
-#: ../../../src/MenuConfig.cpp:286
+#: ../../../src/MenuConfig.cpp:291
 msgid ""
 "Show all loot tooltips, except for those that would be obscured by the "
 "player or an enemy. Temporarily show all loot tooltips with 'Alt'."
 msgstr "显示全部的战利品提示，除了那些被玩家或敌人遮盖的。按‘Alt’临时显示全部的战利品提示。"
 
-#: ../../../src/MenuConfig.cpp:287
+#: ../../../src/MenuConfig.cpp:292
 msgid "Show all"
 msgstr "全部显示"
 
-#: ../../../src/MenuConfig.cpp:287
+#: ../../../src/MenuConfig.cpp:292
 msgid ""
 "Always show loot tooltips. Temporarily hide all loot tooltips with 'Alt'."
 msgstr "总是显示战利品提示。按‘Alt’临时隐藏全部的战利品提示。"
 
-#: ../../../src/MenuConfig.cpp:288 ../../../src/MenuConfig.cpp:293
+#: ../../../src/MenuConfig.cpp:293 ../../../src/MenuConfig.cpp:298
 msgid "Hidden"
 msgstr "隐藏"
 
-#: ../../../src/MenuConfig.cpp:288
+#: ../../../src/MenuConfig.cpp:293
 msgid ""
 "Always hide loot tooltips, except for when a piece of loot is hovered with "
 "the mouse cursor. Temporarily show all loot tooltips with 'Alt'."
 msgstr "总是隐藏战利品提示，除了光标指向的。按 ‘Alt’ 显示全部的战利品提示。"
 
-#: ../../../src/MenuConfig.cpp:291
+#: ../../../src/MenuConfig.cpp:296
 msgid "Visible"
 msgstr "可见"
 
-#: ../../../src/MenuConfig.cpp:292
+#: ../../../src/MenuConfig.cpp:297
 msgid "Visible (2x zoom)"
 msgstr "可见（两倍缩放）"
 
-#: ../../../src/MenuConfig.cpp:296
+#: ../../../src/MenuConfig.cpp:301
 msgid ""
 "Controls the type of warning to be activated when the player is below the "
 "low health threshold."
 msgstr "这将控制玩家在低生命阈值以下时使用何种通知。"
 
-#: ../../../src/MenuConfig.cpp:297
+#: ../../../src/MenuConfig.cpp:302
 msgid "- Display a message"
 msgstr "- 显示消息"
 
-#: ../../../src/MenuConfig.cpp:298
+#: ../../../src/MenuConfig.cpp:303
 msgid "- Play a sound"
 msgstr "- 播放声音"
 
-#: ../../../src/MenuConfig.cpp:299
+#: ../../../src/MenuConfig.cpp:304
 msgid "- Change the cursor"
 msgstr "- 切换光标"
 
-#: ../../../src/MenuConfig.cpp:301
+#: ../../../src/MenuConfig.cpp:306
 msgid "Disabled"
 msgstr "已禁用"
 
-#: ../../../src/MenuConfig.cpp:302
+#: ../../../src/MenuConfig.cpp:307
 msgid "All"
 msgstr "全部"
 
-#: ../../../src/MenuConfig.cpp:303
+#: ../../../src/MenuConfig.cpp:308
 msgid "Message & Cursor"
 msgstr "消息和光标"
 
-#: ../../../src/MenuConfig.cpp:304
+#: ../../../src/MenuConfig.cpp:309
 msgid "Message & Sound"
 msgstr "消息和声音"
 
-#: ../../../src/MenuConfig.cpp:305
+#: ../../../src/MenuConfig.cpp:310
 msgid "Sound & Cursor"
 msgstr "声音和光标"
 
-#: ../../../src/MenuConfig.cpp:306
+#: ../../../src/MenuConfig.cpp:311
 msgid "Message"
 msgstr "消息"
 
-#: ../../../src/MenuConfig.cpp:307
+#: ../../../src/MenuConfig.cpp:312
 msgid "Cursor"
 msgstr "光标"
 
-#: ../../../src/MenuConfig.cpp:308
+#: ../../../src/MenuConfig.cpp:313
 msgid "Sound"
 msgstr "音效"
 
-#: ../../../src/MenuConfig.cpp:314
+#: ../../../src/MenuConfig.cpp:319
 msgid ""
 "When the player's health drops below the given threshold, the low health "
 "notifications are triggered if one or more of them is enabled."
 msgstr "当玩家的HP低于一个特定的阈值时，如果您已启用一种或更多低生命通知，它将被触发。"
 
-#: ../../../src/MenuConfig.cpp:327 ../../../src/MenuConfig.cpp:1561
+#: ../../../src/MenuConfig.cpp:332 ../../../src/MenuConfig.cpp:1579
 msgid "Exit"
 msgstr "退出"
 
-#: ../../../src/MenuConfig.cpp:328
+#: ../../../src/MenuConfig.cpp:333
 msgid "Video"
 msgstr "画面"
 
-#: ../../../src/MenuConfig.cpp:329
+#: ../../../src/MenuConfig.cpp:334
 msgid "Audio"
 msgstr "声音"
 
-#: ../../../src/MenuConfig.cpp:330
+#: ../../../src/MenuConfig.cpp:335
 msgid "Interface"
 msgstr "界面"
 
-#: ../../../src/MenuConfig.cpp:331
+#: ../../../src/MenuConfig.cpp:336
 msgid "Input"
 msgstr "输入"
 
-#: ../../../src/MenuConfig.cpp:332
+#: ../../../src/MenuConfig.cpp:337
 msgid "Keybindings"
 msgstr "快捷键"
 
-#: ../../../src/MenuConfig.cpp:333
+#: ../../../src/MenuConfig.cpp:338
 msgid "Mods"
 msgstr "模块"
 
-#: ../../../src/MenuConfig.cpp:345
+#: ../../../src/MenuConfig.cpp:350
 msgid "Paused"
 msgstr "暂停"
 
-#: ../../../src/MenuConfig.cpp:347
+#: ../../../src/MenuConfig.cpp:353
 msgid "Time Played"
 msgstr "已玩时间"
 
-#: ../../../src/MenuConfig.cpp:349
+#: ../../../src/MenuConfig.cpp:359
 msgid "Renderer"
 msgstr "渲染器"
 
-#: ../../../src/MenuConfig.cpp:350
+#: ../../../src/MenuConfig.cpp:360
 msgid "Full Screen Mode"
 msgstr "全屏模式"
 
-#: ../../../src/MenuConfig.cpp:351
+#: ../../../src/MenuConfig.cpp:361
 msgid "Hardware surfaces"
 msgstr "硬件加速"
 
-#: ../../../src/MenuConfig.cpp:352
+#: ../../../src/MenuConfig.cpp:362
 msgid "V-Sync"
 msgstr "垂直同步"
 
-#: ../../../src/MenuConfig.cpp:353
+#: ../../../src/MenuConfig.cpp:363
 msgid "Texture Filtering"
 msgstr "纹理过滤"
 
-#: ../../../src/MenuConfig.cpp:354
+#: ../../../src/MenuConfig.cpp:364
 msgid "DPI scaling"
 msgstr "DPI缩放"
 
-#: ../../../src/MenuConfig.cpp:355
+#: ../../../src/MenuConfig.cpp:365
 msgid "Parallax Layers"
 msgstr "视差层"
 
-#: ../../../src/MenuConfig.cpp:356
+#: ../../../src/MenuConfig.cpp:366
 msgid "Allow changing gamma"
 msgstr "允许更改伽马"
 
-#: ../../../src/MenuConfig.cpp:357
+#: ../../../src/MenuConfig.cpp:367
 msgid "Gamma"
 msgstr "伽马"
 
-#: ../../../src/MenuConfig.cpp:359
+#: ../../../src/MenuConfig.cpp:369
 msgid "Sound Volume"
 msgstr "游戏音乐音量"
 
-#: ../../../src/MenuConfig.cpp:360
+#: ../../../src/MenuConfig.cpp:370
 msgid "Music Volume"
 msgstr "背景音乐音量"
 
-#: ../../../src/MenuConfig.cpp:362
+#: ../../../src/MenuConfig.cpp:372
 msgid "Language"
 msgstr "语言"
 
-#: ../../../src/MenuConfig.cpp:363
+#: ../../../src/MenuConfig.cpp:373
 msgid "Show FPS"
 msgstr "显示画面每秒帧数"
 
-#: ../../../src/MenuConfig.cpp:364
+#: ../../../src/MenuConfig.cpp:374
 msgid "Hardware mouse cursor"
 msgstr "硬件光标"
 
-#: ../../../src/MenuConfig.cpp:365
+#: ../../../src/MenuConfig.cpp:375
 msgid "Colorblind Mode"
 msgstr "色盲模式"
 
-#: ../../../src/MenuConfig.cpp:366
+#: ../../../src/MenuConfig.cpp:376
 msgid "Developer Mode"
 msgstr "开发者模式"
 
-#: ../../../src/MenuConfig.cpp:367
+#: ../../../src/MenuConfig.cpp:377
 msgid "Subtitles"
 msgstr "字幕"
 
-#: ../../../src/MenuConfig.cpp:368
+#: ../../../src/MenuConfig.cpp:378
 msgid "Loot tooltip visibility"
 msgstr "战利品提示可见性"
 
-#: ../../../src/MenuConfig.cpp:369
+#: ../../../src/MenuConfig.cpp:379
 msgid "Mini-map mode"
 msgstr "小地图模式"
 
-#: ../../../src/MenuConfig.cpp:370
+#: ../../../src/MenuConfig.cpp:380
 msgid "Always show stat bar labels"
 msgstr "始终显示进度条标签"
 
-#: ../../../src/MenuConfig.cpp:371
+#: ../../../src/MenuConfig.cpp:381
 msgid "Allow stat bar auto-hiding"
 msgstr "允许状态栏自动隐藏"
 
-#: ../../../src/MenuConfig.cpp:372
+#: ../../../src/MenuConfig.cpp:382
 msgid "Show combat text"
 msgstr "显示战斗文字"
 
-#: ../../../src/MenuConfig.cpp:373
+#: ../../../src/MenuConfig.cpp:383
 msgid "Automatically equip items"
 msgstr "自动装备物品"
 
-#: ../../../src/MenuConfig.cpp:374
+#: ../../../src/MenuConfig.cpp:384
 msgid "Show hidden entity markers"
 msgstr "显示隐藏的敌人标记"
 
-#: ../../../src/MenuConfig.cpp:375
+#: ../../../src/MenuConfig.cpp:385
 msgid "Low health notification"
 msgstr "低生命通知"
 
-#: ../../../src/MenuConfig.cpp:376
+#: ../../../src/MenuConfig.cpp:386
 msgid "Low health threshold"
 msgstr "低生命阈值"
 
-#: ../../../src/MenuConfig.cpp:379
+#: ../../../src/MenuConfig.cpp:389
 msgid "Joystick"
 msgstr "摇杆"
 
-#: ../../../src/MenuConfig.cpp:380
+#: ../../../src/MenuConfig.cpp:390
 msgid "Move hero using mouse"
 msgstr "使用鼠标移动英雄"
 
-#: ../../../src/MenuConfig.cpp:381
+#: ../../../src/MenuConfig.cpp:391
 msgid "Mouse aim"
 msgstr "使用鼠标瞄准敌人"
 
-#: ../../../src/MenuConfig.cpp:382
+#: ../../../src/MenuConfig.cpp:392
 msgid "Do not use mouse"
 msgstr "不要使用鼠标"
 
-#: ../../../src/MenuConfig.cpp:383
+#: ../../../src/MenuConfig.cpp:393
 msgid "Swap mouse movement button"
 msgstr "交换鼠标移动键"
 
-#: ../../../src/MenuConfig.cpp:384
+#: ../../../src/MenuConfig.cpp:394
 msgid "Attack with mouse movement"
 msgstr "用鼠标移动键攻击"
 
-#: ../../../src/MenuConfig.cpp:385
+#: ../../../src/MenuConfig.cpp:395
 msgid "Joystick Deadzone"
 msgstr "摇杆灵敏度"
 
-#: ../../../src/MenuConfig.cpp:395
+#: ../../../src/MenuConfig.cpp:405
 #, c-format
 msgid "Primary binding: %s"
 msgstr "主要键位：%s"
 
-#: ../../../src/MenuConfig.cpp:396
+#: ../../../src/MenuConfig.cpp:406
 #, c-format
 msgid "Alternate binding: %s"
 msgstr "备用键位：%s"
 
-#: ../../../src/MenuConfig.cpp:397
+#: ../../../src/MenuConfig.cpp:407
 #, c-format
 msgid "Joystick binding: %s"
 msgstr "摇杆键位：%s"
 
-#: ../../../src/MenuConfig.cpp:496
+#: ../../../src/MenuConfig.cpp:508
 msgid ""
 "Will try to store surfaces in video memory versus system memory. The effect "
 "this has on performance depends on the renderer."
 msgstr "将尝试在视频内存中存储表面而不是系统内存。这对性能的影响取决于渲染器。"
 
-#: ../../../src/MenuConfig.cpp:497
+#: ../../../src/MenuConfig.cpp:509
 msgid ""
 "Prevents screen tearing. Disable if you experience \"stuttering\" in "
 "windowed mode or input lag."
 msgstr "防止画面撕裂。如果在窗口模式或输入时“卡顿”则禁用。"
 
-#: ../../../src/MenuConfig.cpp:498
+#: ../../../src/MenuConfig.cpp:510
 msgid ""
 "When enabled, this uses the screen DPI in addition to the window dimensions "
 "to scale the rendering resolution. Otherwise, only the window dimensions are"
 " used."
 msgstr "启用后，除了窗口尺寸外，还会使用屏幕DPI来调整渲染分辨率。否则，只使用窗口尺寸。"
 
-#: ../../../src/MenuConfig.cpp:499
+#: ../../../src/MenuConfig.cpp:511
 msgid ""
 "This enables parallax (non-tile) layers. Disabling this setting can improve "
 "performance in some cases."
 msgstr "启用视差（非瓦片）层。 禁用此设置在一些情况下能提升性能。"
 
-#: ../../../src/MenuConfig.cpp:500
+#: ../../../src/MenuConfig.cpp:512
 msgid ""
 "Enables the below setting that controls the screen gamma level. The behavior"
 " of the gamma setting can vary between platforms."
 msgstr "启用以下设置来控制屏幕伽马级别。这个伽马设置的行为依平台而异。"
 
-#: ../../../src/MenuConfig.cpp:501
+#: ../../../src/MenuConfig.cpp:513
 msgid ""
 "Provides additional text for information that is primarily conveyed through "
 "color."
 msgstr "提供从颜色传递的额外的文字信息。"
 
-#: ../../../src/MenuConfig.cpp:502
+#: ../../../src/MenuConfig.cpp:514
 msgid ""
 "Some mods will automatically hide the stat bars when they are inactive. "
 "Disabling this option will keep them displayed at all times."
 msgstr "当状态栏闲置时，一些组件会自动隐藏它。禁用它以让状态栏持续显示。"
 
-#: ../../../src/MenuConfig.cpp:503
+#: ../../../src/MenuConfig.cpp:515
 msgid ""
 "When enabled, empty equipment slots will be filled with applicable items "
 "when they are obtained."
 msgstr "当开启时，获取适当的物品的时候空的装备栏将被填充。"
 
-#: ../../../src/MenuConfig.cpp:504
+#: ../../../src/MenuConfig.cpp:516
 msgid ""
 "Shows a marker above enemies, allies, and the player when they are obscured "
 "by tall objects."
 msgstr "敌人、友军和玩家被高的物体遮蔽时在上面显示标记。"
 
-#: ../../../src/MenuConfig.cpp:505
+#: ../../../src/MenuConfig.cpp:517
 msgid ""
 "This allows the game to be controlled entirely with the keyboard (or "
 "joystick)."
 msgstr "允许游戏完全被键盘（或摇杆）控制。"
 
-#: ../../../src/MenuConfig.cpp:506
+#: ../../../src/MenuConfig.cpp:518
 msgid ""
 "When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or"
 " 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
 "instead of 'Main1'."
 msgstr "当开启‘使用鼠标移动英雄’时，这设置使用‘主按键1’还是‘主按键2’来移动英雄。开启时，使用‘主按键2’来移动英雄而不是‘主按键1’。"
 
-#: ../../../src/MenuConfig.cpp:507
+#: ../../../src/MenuConfig.cpp:519
 msgid ""
 "When 'Move hero using mouse' is enabled, this setting controls if the Power "
 "assigned to the movement button can be used by targeting an enemy. If this "
@@ -949,49 +962,49 @@ msgid ""
 "assigned to the movement button."
 msgstr "当开启‘使用鼠标移动英雄’时，这设置分配到移动键的技能是否能向敌人使用。如果这个设置被禁用，需要使用‘Shift’访问分配到移动键的技能。"
 
-#: ../../../src/MenuConfig.cpp:508
+#: ../../../src/MenuConfig.cpp:520
 msgid ""
 "The player's attacks will be aimed in the direction of the mouse cursor when"
 " this is enabled."
 msgstr "开启后玩家的攻击将指向光标。"
 
-#: ../../../src/MenuConfig.cpp:559
+#: ../../../src/MenuConfig.cpp:571
 msgid "Active Mods"
 msgstr "激活模块"
 
-#: ../../../src/MenuConfig.cpp:568
+#: ../../../src/MenuConfig.cpp:580
 msgid "Available Mods"
 msgstr "可用模块"
 
-#: ../../../src/MenuConfig.cpp:587
+#: ../../../src/MenuConfig.cpp:599
 msgid "<< Disable"
 msgstr "<< 禁用"
 
-#: ../../../src/MenuConfig.cpp:593
+#: ../../../src/MenuConfig.cpp:605
 msgid "Enable >>"
 msgstr "启用 >>"
 
-#: ../../../src/MenuConfig.cpp:1420
+#: ../../../src/MenuConfig.cpp:1436
 msgid "Version:"
 msgstr "版本号："
 
-#: ../../../src/MenuConfig.cpp:1425
+#: ../../../src/MenuConfig.cpp:1441
 msgid "Game:"
 msgstr "游戏："
 
-#: ../../../src/MenuConfig.cpp:1430
+#: ../../../src/MenuConfig.cpp:1446
 msgid "Engine version:"
 msgstr "引擎版本号："
 
-#: ../../../src/MenuConfig.cpp:1438
+#: ../../../src/MenuConfig.cpp:1454
 msgid "Requires mods:"
 msgstr "需要的模块："
 
-#: ../../../src/MenuConfig.cpp:1544 ../../../src/SDLInputState.cpp:688
+#: ../../../src/MenuConfig.cpp:1562 ../../../src/SDLInputState.cpp:748
 msgid "(none)"
 msgstr "（无）"
 
-#: ../../../src/MenuConfig.cpp:1561
+#: ../../../src/MenuConfig.cpp:1579
 msgid "Save & Exit"
 msgstr "保存并退出"
 
@@ -1148,16 +1161,16 @@ msgstr "错误：未知命令"
 msgid "HINT: Type help"
 msgstr "提示：类型帮助"
 
-#: ../../../src/MenuEnemy.cpp:138
+#: ../../../src/MenuEnemy.cpp:162
 #, c-format
 msgid "%s level %d"
 msgstr "%s 等级%d"
 
-#: ../../../src/MenuEnemy.cpp:162
+#: ../../../src/MenuEnemy.cpp:186
 msgid "Dead"
 msgstr "死亡"
 
-#: ../../../src/MenuEnemy.cpp:164
+#: ../../../src/MenuEnemy.cpp:188
 msgid "Destroyed"
 msgstr "摧毁"
 
@@ -1181,7 +1194,7 @@ msgstr "失去%d%%当前等级的XP。"
 msgid "Lost %s."
 msgstr "失去%s。"
 
-#: ../../../src/MenuInventory.cpp:257 ../../../src/MenuStash.cpp:195
+#: ../../../src/MenuInventory.cpp:257 ../../../src/MenuStash.cpp:194
 #, c-format
 msgid "%d %s"
 msgstr "%d个%s"
@@ -1244,12 +1257,12 @@ msgstr "提示"
 msgid "Quests"
 msgstr "任务"
 
-#: ../../../src/MenuManager.cpp:295
+#: ../../../src/MenuManager.cpp:296
 #, c-format
 msgid "XP: %d/%d"
 msgstr "经验值：%d/%d"
 
-#: ../../../src/MenuManager.cpp:846
+#: ../../../src/MenuManager.cpp:854
 msgid "This item can not be dropped."
 msgstr "这个物品无法丢弃。"
 
@@ -1257,200 +1270,200 @@ msgstr "这个物品无法丢弃。"
 msgid "Enter amount:"
 msgstr "输入数目："
 
-#: ../../../src/MenuPowers.cpp:787
+#: ../../../src/MenuPowers.cpp:786
 msgid "Passive"
 msgstr "被动"
 
-#: ../../../src/MenuPowers.cpp:792
+#: ../../../src/MenuPowers.cpp:791
 #, c-format
 msgid "Costs %d MP"
 msgstr "消耗%dMP"
 
-#: ../../../src/MenuPowers.cpp:796
+#: ../../../src/MenuPowers.cpp:795
 #, c-format
 msgid "Costs %d HP"
 msgstr "消耗%dHP"
 
-#: ../../../src/MenuPowers.cpp:801
+#: ../../../src/MenuPowers.cpp:800
 msgid "Cooldown:"
 msgstr "冷却："
 
-#: ../../../src/MenuPowers.cpp:866 ../../../src/MenuPowers.cpp:869
+#: ../../../src/MenuPowers.cpp:865 ../../../src/MenuPowers.cpp:868
 msgid "Damage per second"
 msgstr "每秒伤害："
 
-#: ../../../src/MenuPowers.cpp:872 ../../../src/MenuPowers.cpp:875
+#: ../../../src/MenuPowers.cpp:871 ../../../src/MenuPowers.cpp:874
 msgid "HP per second"
 msgstr "每秒HP"
 
-#: ../../../src/MenuPowers.cpp:878 ../../../src/MenuPowers.cpp:881
+#: ../../../src/MenuPowers.cpp:877 ../../../src/MenuPowers.cpp:880
 msgid "MP per second"
 msgstr "每秒MP"
 
-#: ../../../src/MenuPowers.cpp:885
+#: ../../../src/MenuPowers.cpp:884
 msgid "Immobilize"
 msgstr "固定"
 
-#: ../../../src/MenuPowers.cpp:893
+#: ../../../src/MenuPowers.cpp:892
 msgid "Immunity"
 msgstr "豁免"
 
-#: ../../../src/MenuPowers.cpp:896
+#: ../../../src/MenuPowers.cpp:895
 msgid "Immunity to damage over time"
 msgstr "慢性伤害豁免"
 
-#: ../../../src/MenuPowers.cpp:899
+#: ../../../src/MenuPowers.cpp:898
 msgid "Immunity to slow"
 msgstr "减速豁免"
 
-#: ../../../src/MenuPowers.cpp:902
+#: ../../../src/MenuPowers.cpp:901
 msgid "Immunity to stun"
 msgstr "击晕豁免"
 
-#: ../../../src/MenuPowers.cpp:905
+#: ../../../src/MenuPowers.cpp:904
 msgid "Immunity to HP steal"
 msgstr "HP偷取豁免"
 
-#: ../../../src/MenuPowers.cpp:908
+#: ../../../src/MenuPowers.cpp:907
 msgid "Immunity to MP steal"
 msgstr "MP偷取豁免"
 
-#: ../../../src/MenuPowers.cpp:911
+#: ../../../src/MenuPowers.cpp:910
 msgid "Immunity to knockback"
 msgstr "击退豁免"
 
-#: ../../../src/MenuPowers.cpp:914
+#: ../../../src/MenuPowers.cpp:913
 msgid "Immunity to damage reflection"
 msgstr "伤害反射豁免"
 
-#: ../../../src/MenuPowers.cpp:917
+#: ../../../src/MenuPowers.cpp:916
 msgid "Stun"
 msgstr "击晕"
 
-#: ../../../src/MenuPowers.cpp:920
+#: ../../../src/MenuPowers.cpp:919
 msgid "Automatic revive on death"
 msgstr "死亡自动复活"
 
-#: ../../../src/MenuPowers.cpp:923
+#: ../../../src/MenuPowers.cpp:922
 msgid "Convert"
 msgstr "转换"
 
-#: ../../../src/MenuPowers.cpp:926
+#: ../../../src/MenuPowers.cpp:925
 msgid "Fear"
 msgstr "恐惧"
 
-#: ../../../src/MenuPowers.cpp:929
+#: ../../../src/MenuPowers.cpp:928
 msgid "Lifespan"
 msgstr "有效期"
 
-#: ../../../src/MenuPowers.cpp:953
+#: ../../../src/MenuPowers.cpp:952
 msgid "Magical Shield"
 msgstr "魔法盾"
 
-#: ../../../src/MenuPowers.cpp:982
+#: ../../../src/MenuPowers.cpp:981
 msgid "Healing"
 msgstr "治疗"
 
-#: ../../../src/MenuPowers.cpp:985
+#: ../../../src/MenuPowers.cpp:984
 msgid "Knockback"
 msgstr "击退"
 
-#: ../../../src/MenuPowers.cpp:1010
+#: ../../../src/MenuPowers.cpp:1009
 #, c-format
 msgid "%d%% chance"
 msgstr "%d%%几率"
 
-#: ../../../src/MenuPowers.cpp:1062
+#: ../../../src/MenuPowers.cpp:1061
 msgid "Base Accuracy"
 msgstr "基础精准度"
 
-#: ../../../src/MenuPowers.cpp:1082
+#: ../../../src/MenuPowers.cpp:1081
 msgid "Base Critical Chance"
 msgstr "基础致命一击几率"
 
-#: ../../../src/MenuPowers.cpp:1090
+#: ../../../src/MenuPowers.cpp:1089
 msgid "Ignores Absorbtion"
 msgstr "无视伤害吸收"
 
-#: ../../../src/MenuPowers.cpp:1095
+#: ../../../src/MenuPowers.cpp:1094
 msgid "Ignores Avoidance"
 msgstr "无视闪避"
 
-#: ../../../src/MenuPowers.cpp:1100
+#: ../../../src/MenuPowers.cpp:1099
 #, c-format
 msgid "%d%% Chance to crit slowed targets"
 msgstr "%d%%几率重击减慢的敌人"
 
-#: ../../../src/MenuPowers.cpp:1105
+#: ../../../src/MenuPowers.cpp:1104
 #, c-format
 msgid "Elemental Damage (%s)"
 msgstr "元素伤害（%s）"
 
-#: ../../../src/MenuPowers.cpp:1114
+#: ../../../src/MenuPowers.cpp:1113
 #, c-format
 msgid "Requires a %s"
 msgstr "需要一个%s"
 
-#: ../../../src/MenuPowers.cpp:1151 ../../../src/MenuPowers.cpp:1154
+#: ../../../src/MenuPowers.cpp:1150 ../../../src/MenuPowers.cpp:1153
 #, c-format
 msgid "Requires Power: %s"
 msgstr "需要技能点：%s"
 
-#: ../../../src/MenuPowers.cpp:1163
+#: ../../../src/MenuPowers.cpp:1162
 msgid "Click to Unlock (uses 1 Skill Point)"
 msgstr "点击以解锁（使用一个技能点）"
 
-#: ../../../src/MenuPowers.cpp:1167 ../../../src/MenuPowers.cpp:1169
+#: ../../../src/MenuPowers.cpp:1166 ../../../src/MenuPowers.cpp:1168
 msgid "Requires 1 Skill Point"
 msgstr "需要一个技能点"
 
-#: ../../../src/MenuPowers.cpp:1355
+#: ../../../src/MenuPowers.cpp:1354
 #, c-format
 msgid "%d unspent skill point"
 msgstr "%d个未使用的技能点数"
 
-#: ../../../src/MenuPowers.cpp:1358
+#: ../../../src/MenuPowers.cpp:1357
 #, c-format
 msgid "%d unspent skill points"
 msgstr "%d个未使用的技能点数"
 
-#: ../../../src/MenuPowers.cpp:1388
+#: ../../../src/MenuPowers.cpp:1387
 msgid "Next Level:"
 msgstr "下一级："
 
-#: ../../../src/MenuStash.cpp:54
+#: ../../../src/MenuStash.cpp:53
 msgid "Private"
 msgstr ""
 
-#: ../../../src/MenuStash.cpp:56
+#: ../../../src/MenuStash.cpp:55
 msgid "Shared"
 msgstr ""
 
-#: ../../../src/MenuStash.cpp:104
+#: ../../../src/MenuStash.cpp:103
 msgid "Stash"
 msgstr ""
 
-#: ../../../src/MenuStash.cpp:259
+#: ../../../src/MenuStash.cpp:258
 msgid "Can not store quest items in the stash."
 msgstr "不能在储物柜中存放任务物品。"
 
-#: ../../../src/MenuStash.cpp:264
+#: ../../../src/MenuStash.cpp:263
 msgid "This item can not be stored in the stash."
 msgstr "此物品无法存放在储物柜中。"
 
-#: ../../../src/MenuStash.cpp:269
+#: ../../../src/MenuStash.cpp:268
 msgid "This item can not be stored in the private stash."
 msgstr ""
 
-#: ../../../src/MenuStash.cpp:274
+#: ../../../src/MenuStash.cpp:273
 msgid "This item can not be stored in the shared stash."
 msgstr ""
 
-#: ../../../src/MenuStash.cpp:284
+#: ../../../src/MenuStash.cpp:283
 msgid "Stash is full."
 msgstr "储物柜已满。"
 
-#: ../../../src/MenuStash.cpp:341
+#: ../../../src/MenuStash.cpp:340
 #, c-format
 msgid "Can not store item in stash: %s"
 msgstr "无法在储物柜中存放物品 %s"
@@ -1493,129 +1506,221 @@ msgstr "完成的任务"
 msgid "Game saved."
 msgstr "游戏已保存。"
 
-#: ../../../src/SDLInputState.cpp:633
-msgid "Backspace"
-msgstr "Backspace"
+#: ../../../src/SDLInputState.cpp:643
+msgid "BkSp"
+msgstr ""
 
-#: ../../../src/SDLInputState.cpp:634
-msgid "CapsLock"
-msgstr "CapsLock"
+#: ../../../src/SDLInputState.cpp:644
+msgid "Caps"
+msgstr ""
 
-#: ../../../src/SDLInputState.cpp:637
+#: ../../../src/SDLInputState.cpp:645
+msgid "Del"
+msgstr ""
+
+#: ../../../src/SDLInputState.cpp:647 ../../../src/SDLInputState.cpp:677
 msgid "End"
 msgstr "End"
 
-#: ../../../src/SDLInputState.cpp:638
-msgid "Escape"
-msgstr "Escape"
+#: ../../../src/SDLInputState.cpp:648
+msgid "Esc"
+msgstr ""
 
-#: ../../../src/SDLInputState.cpp:639
+#: ../../../src/SDLInputState.cpp:649 ../../../src/SDLInputState.cpp:679
 msgid "Home"
 msgstr "Home"
 
-#: ../../../src/SDLInputState.cpp:640
-msgid "Insert"
-msgstr "Insert"
+#: ../../../src/SDLInputState.cpp:650
+msgid "Ins"
+msgstr ""
 
-#: ../../../src/SDLInputState.cpp:641
-msgid "Left Alt"
-msgstr "左Alt"
+#: ../../../src/SDLInputState.cpp:651
+msgid "LAlt"
+msgstr ""
 
-#: ../../../src/SDLInputState.cpp:642
-msgid "Left Ctrl"
-msgstr "左Ctrl"
+#: ../../../src/SDLInputState.cpp:652
+msgid "LCtrl"
+msgstr ""
 
-#: ../../../src/SDLInputState.cpp:644
-msgid "Left Shift"
-msgstr "左Shift"
+#: ../../../src/SDLInputState.cpp:654
+msgid "LShft"
+msgstr ""
 
-#: ../../../src/SDLInputState.cpp:645
-msgid "NumLock"
-msgstr "NumLock"
+#: ../../../src/SDLInputState.cpp:655
+msgid "Num"
+msgstr ""
 
-#: ../../../src/SDLInputState.cpp:646
-msgid "PageDown"
-msgstr "PageDown"
+#: ../../../src/SDLInputState.cpp:656
+msgid "PgDn"
+msgstr ""
 
-#: ../../../src/SDLInputState.cpp:647
-msgid "PageUp"
-msgstr "PageUp"
+#: ../../../src/SDLInputState.cpp:657
+msgid "PgUp"
+msgstr ""
 
-#: ../../../src/SDLInputState.cpp:648
+#: ../../../src/SDLInputState.cpp:658 ../../../src/SDLInputState.cpp:688
 msgid "Pause"
 msgstr "Pause"
 
-#: ../../../src/SDLInputState.cpp:649
-msgid "PrintScreen"
-msgstr "PrintScreen"
+#: ../../../src/SDLInputState.cpp:659
+msgid "Print"
+msgstr ""
 
-#: ../../../src/SDLInputState.cpp:650
-msgid "Right Alt"
-msgstr "右Alt"
+#: ../../../src/SDLInputState.cpp:660
+msgid "RAlt"
+msgstr ""
 
-#: ../../../src/SDLInputState.cpp:651
-msgid "Right Ctrl"
-msgstr "右Ctrl"
+#: ../../../src/SDLInputState.cpp:661
+msgid "RCtrl"
+msgstr ""
 
-#: ../../../src/SDLInputState.cpp:652
-msgid "Return"
-msgstr "Return"
+#: ../../../src/SDLInputState.cpp:662
+msgid "Ret"
+msgstr ""
 
-#: ../../../src/SDLInputState.cpp:654
-msgid "Right Shift"
-msgstr "右Shift"
+#: ../../../src/SDLInputState.cpp:664
+msgid "RShft"
+msgstr ""
 
-#: ../../../src/SDLInputState.cpp:655
-msgid "ScrollLock"
-msgstr "ScrollLock"
+#: ../../../src/SDLInputState.cpp:665
+msgid "SLock"
+msgstr ""
 
-#: ../../../src/SDLInputState.cpp:656
-msgid "Space"
-msgstr "Space"
+#: ../../../src/SDLInputState.cpp:666
+msgid "Spc"
+msgstr ""
 
-#: ../../../src/SDLInputState.cpp:657
+#: ../../../src/SDLInputState.cpp:667 ../../../src/SDLInputState.cpp:697
 msgid "Tab"
 msgstr "Tab"
 
-#: ../../../src/SDLInputState.cpp:671
+#: ../../../src/SDLInputState.cpp:673
+msgid "Backspace"
+msgstr "Backspace"
+
+#: ../../../src/SDLInputState.cpp:674
+msgid "CapsLock"
+msgstr "CapsLock"
+
+#: ../../../src/SDLInputState.cpp:678
+msgid "Escape"
+msgstr "Escape"
+
+#: ../../../src/SDLInputState.cpp:680
+msgid "Insert"
+msgstr "Insert"
+
+#: ../../../src/SDLInputState.cpp:681
+msgid "Left Alt"
+msgstr "左Alt"
+
+#: ../../../src/SDLInputState.cpp:682
+msgid "Left Ctrl"
+msgstr "左Ctrl"
+
+#: ../../../src/SDLInputState.cpp:684
+msgid "Left Shift"
+msgstr "左Shift"
+
+#: ../../../src/SDLInputState.cpp:685
+msgid "NumLock"
+msgstr "NumLock"
+
+#: ../../../src/SDLInputState.cpp:686
+msgid "PageDown"
+msgstr "PageDown"
+
+#: ../../../src/SDLInputState.cpp:687
+msgid "PageUp"
+msgstr "PageUp"
+
+#: ../../../src/SDLInputState.cpp:689
+msgid "PrintScreen"
+msgstr "PrintScreen"
+
+#: ../../../src/SDLInputState.cpp:690
+msgid "Right Alt"
+msgstr "右Alt"
+
+#: ../../../src/SDLInputState.cpp:691
+msgid "Right Ctrl"
+msgstr "右Ctrl"
+
+#: ../../../src/SDLInputState.cpp:692
+msgid "Return"
+msgstr "Return"
+
+#: ../../../src/SDLInputState.cpp:694
+msgid "Right Shift"
+msgstr "右Shift"
+
+#: ../../../src/SDLInputState.cpp:695
+msgid "ScrollLock"
+msgstr "ScrollLock"
+
+#: ../../../src/SDLInputState.cpp:696
+msgid "Space"
+msgstr "Space"
+
+#: ../../../src/SDLInputState.cpp:710
+#, c-format
+msgid "M%d"
+msgstr ""
+
+#: ../../../src/SDLInputState.cpp:716
 #, c-format
 msgid "Mouse %d"
 msgstr "鼠标 %d"
 
-#: ../../../src/SDLInputState.cpp:679
+#: ../../../src/SDLInputState.cpp:726
+#, c-format
+msgid "JX%d-"
+msgstr ""
+
+#: ../../../src/SDLInputState.cpp:728
 #, c-format
 msgid "Axis %d -"
 msgstr "摇杆轴 %d-"
 
-#: ../../../src/SDLInputState.cpp:681
+#: ../../../src/SDLInputState.cpp:732
+#, c-format
+msgid "JX%d+"
+msgstr ""
+
+#: ../../../src/SDLInputState.cpp:734
 #, c-format
 msgid "Axis %d +"
 msgstr "摇杆轴 %d+"
 
-#: ../../../src/SDLInputState.cpp:684
+#: ../../../src/SDLInputState.cpp:739
+#, c-format
+msgid "JB%d"
+msgstr ""
+
+#: ../../../src/SDLInputState.cpp:741
 #, c-format
 msgid "Button %d"
 msgstr "按钮 %d"
 
-#: ../../../src/SDLInputState.cpp:728
+#: ../../../src/SDLInputState.cpp:788
 msgid "Touch control D-Pad"
 msgstr "触摸控制D-Pad"
 
-#: ../../../src/SDLInputState.cpp:752
+#: ../../../src/SDLInputState.cpp:812
 msgid "Touch control buttons"
 msgstr "触摸控制按钮"
 
-#: ../../../src/SDLInputState.cpp:767
+#: ../../../src/SDLInputState.cpp:827
 msgid "Tap"
 msgstr "点按"
 
-#: ../../../src/SDLInputState.cpp:819 ../../../src/SDLInputState.cpp:821
+#: ../../../src/SDLInputState.cpp:879 ../../../src/SDLInputState.cpp:881
 #, c-format
 msgid "Can not bind: %s"
 msgstr "无法绑定 %s"
 
-#: ../../../src/SDLInputState.cpp:833 ../../../src/SDLInputState.cpp:837
-#: ../../../src/SDLInputState.cpp:841
+#: ../../../src/SDLInputState.cpp:893 ../../../src/SDLInputState.cpp:897
+#: ../../../src/SDLInputState.cpp:901
 #, c-format
 msgid "'%s' is no longer bound to:"
 msgstr "‘%s’不再绑定到："
@@ -1778,12 +1883,12 @@ msgstr "基础MP"
 msgid "k"
 msgstr "k"
 
-#: ../../../src/Utils.cpp:580
+#: ../../../src/Utils.cpp:616
 #, c-format
 msgid "%s second"
 msgstr "%s秒"
 
-#: ../../../src/Utils.cpp:583
+#: ../../../src/Utils.cpp:619
 #, c-format
 msgid "%s seconds"
 msgstr "%s秒"
