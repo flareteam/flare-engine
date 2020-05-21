@@ -54,6 +54,7 @@ GameStateNew::GameStateNew()
 	, portrait_image(NULL)
 	, portrait_border(NULL)
 	, show_classlist(true)
+	, show_randomize(true)
 	, modified_name(false)
 	, delete_items(true)
 	, random_option(false)
@@ -153,7 +154,7 @@ GameStateNew::GameStateNew()
 				int a = Parse::toAlignment(Parse::popFirstString(infile.val), Utils::ALIGN_FRAME_TOPLEFT);
 				button_permadeath->setBasePos(x, y, a);
 			}
-			// @ATTR bytton_randomize|int, int, alignment : X, Y, Alignment|Position of the "Randomize" button.
+			// @ATTR button_randomize|int, int, alignment : X, Y, Alignment|Position of the "Randomize" button.
 			else if (infile.key == "button_randomize") {
 				int x = Parse::popFirstInt(infile.val);
 				int y = Parse::popFirstInt(infile.val);
@@ -202,6 +203,10 @@ GameStateNew::GameStateNew()
 			else if (infile.key == "show_classlist") {
 				show_classlist = Parse::toBool(infile.val);
 			}
+			// @ATTR show_randomize|bool|Toggles the visibility of the "Randomize" button.
+			else if (infile.key == "show_randomize") {
+				show_randomize = Parse::toBool(infile.val);
+			}
 			// @ATTR random_option|bool|Initially picks a random character option (aka portrait/name).
 			else if (infile.key == "random_option") {
 				random_option = Parse::toBool(infile.val);
@@ -244,10 +249,14 @@ GameStateNew::GameStateNew()
 	tablist.add(button_create);
 	tablist.add(input_name);
 	tablist.add(button_permadeath);
-	tablist.add(button_randomize);
+	if (show_randomize) {
+		tablist.add(button_randomize);
+	}
 	tablist.add(button_prev);
 	tablist.add(button_next);
-	tablist.add(class_list);
+	if (show_classlist) {
+		tablist.add(class_list);
+	}
 
 	refreshWidgets();
 
@@ -449,7 +458,7 @@ void GameStateNew::logic() {
 		setHeroOption(OPTION_PREV);
 	}
 
-	if (button_randomize->checkClick()) {
+	if (show_randomize && button_randomize->checkClick()) {
 		if (!eset->hero_classes.list.empty()) {
 			int class_index = static_cast<int>(rand() % eset->hero_classes.list.size());
 			class_list->select(class_index);
@@ -488,7 +497,10 @@ void GameStateNew::render() {
 	button_next->render();
 	input_name->render();
 	button_permadeath->render();
-	button_randomize->render();
+
+	if (show_randomize) {
+		button_randomize->render();
+	}
 
 	// display portrait option
 	Rect src;
