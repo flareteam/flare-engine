@@ -33,6 +33,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FontEngine.h"
 #include "Menu.h"
 #include "MenuActionBar.h"
+#include "MenuInventory.h"
 #include "MenuManager.h"
 #include "MenuPowers.h"
 #include "MessageEngine.h"
@@ -729,6 +730,9 @@ void MenuPowers::setUnlockedPowers() {
 				pc->stats.effects.removeEffectPassive(pcell->id);
 				pcell->passive_on = false;
 				pc->stats.refresh_stats = true;
+
+				// passive powers can lock equipment slots, so update equipment here
+				menu->inv->applyEquipment();
 			}
 			else if (pcell == bonus_pcell && checkRequirements(current_pcell) && !pcell->passive_on) {
 				// passive power has not been activated, so activate it here
@@ -740,6 +744,9 @@ void MenuPowers::setUnlockedPowers() {
 				// for passives without special triggers, we need to trigger them here
 				if (pc->stats.effects.triggered_others)
 					powers->activateSinglePassive(&pc->stats, pcell->id);
+
+				// passive powers can lock equipment slots, so update equipment here
+				menu->inv->applyEquipment();
 			}
 		}
 

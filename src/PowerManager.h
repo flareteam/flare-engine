@@ -312,6 +312,8 @@ public:
 
 	float target_nearest;
 
+	std::vector<std::string> disable_equip_slots;
+
 	Power();
 	~Power() {
 	}

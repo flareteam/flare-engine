@@ -559,12 +559,9 @@ void GameStatePlay::checkTitle() {
 }
 
 void GameStatePlay::checkEquipmentChange() {
-	// force the actionbar to update when we change gear
 	if (menu->inv->changed_equipment) {
+		// force the actionbar to update when we change gear
 		menu->act->updated = true;
-	}
-
-	if (menu->inv->changed_equipment) {
 
 		int feet_index = -1;
 		std::vector<Avatar::Layer_gfx> img_gfx;

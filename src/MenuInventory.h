@@ -117,6 +117,8 @@ public:
 
 	int getPowerMod(int meta_power);
 
+	void disableEquipmentSlot(const std::string& slot_type);
+
 	Rect carried_area;
 	std::vector<Rect> equipped_area;
 	std::vector<std::string> slot_type;

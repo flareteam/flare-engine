@@ -989,19 +989,30 @@ void MenuInventory::applyEquipment() {
 	for (int i=0; i<MAX_EQUIPPED; ++i) {
 		int id = inventory[EQUIPMENT][i].item;
 		for (unsigned j=0; j<items->items[id].disable_slots.size(); ++j) {
-			for (int k=0; k<MAX_EQUIPPED; ++k) {
-				if (slot_type[k] == items->items[id].disable_slots[j]) {
-					if (!inventory[EQUIPMENT].storage[k].empty()) {
-						add(inventory[EQUIPMENT].storage[k], CARRIED, ItemStorage::NO_SLOT, ADD_PLAY_SOUND, !ADD_AUTO_EQUIP);
-						inventory[EQUIPMENT].storage[k].clear();
-						updateEquipment(k);
-						applyEquipment();
-					}
-					inventory[EQUIPMENT].slots[k]->enabled = false;
-				}
-			}
+			disableEquipmentSlot(items->items[id].disable_slots[j]);
 		}
 	}
+
+	// disable equipment slots via passive powers
+	for (size_t i=0; i<pc->stats.powers_passive.size(); ++i) {
+		int id = pc->stats.powers_passive[i];
+		if (!powers->powers[id].passive)
+			continue;
+
+		for (size_t j=0; j<powers->powers[id].disable_equip_slots.size(); ++j) {
+			disableEquipmentSlot(powers->powers[id].disable_equip_slots[j]);
+		}
+	}
+	for (size_t i=0; i<pc->stats.powers_list_items.size(); ++i) {
+		int id = pc->stats.powers_list_items[i];
+		if (!powers->powers[id].passive)
+			continue;
+
+		for (size_t j=0; j<powers->powers[id].disable_equip_slots.size(); ++j) {
+			disableEquipmentSlot(powers->powers[id].disable_equip_slots[j]);
+		}
+	}
+
 	// update stat display
 	pc->stats.refresh_stats = true;
 }
@@ -1215,6 +1226,20 @@ int MenuInventory::getPowerMod(int meta_power) {
 	}
 
 	return 0;
+}
+
+void MenuInventory::disableEquipmentSlot(const std::string& disable_slot_type) {
+	for (int i=0; i<MAX_EQUIPPED; ++i) {
+		if (slot_type[i] == disable_slot_type) {
+			if (!inventory[EQUIPMENT].storage[i].empty()) {
+				add(inventory[EQUIPMENT].storage[i], CARRIED, ItemStorage::NO_SLOT, ADD_PLAY_SOUND, !ADD_AUTO_EQUIP);
+				inventory[EQUIPMENT].storage[i].clear();
+				updateEquipment(i);
+				applyEquipment();
+			}
+			inventory[EQUIPMENT].slots[i]->enabled = false;
+		}
+	}
 }
 
 MenuInventory::~MenuInventory() {

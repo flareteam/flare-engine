@@ -17,6 +17,7 @@ Engine features:
 * Re-implemented displaying hotkeys on action bar slots.
 * Support for 'item:quantity' syntax for Event properties: 'requires_item', 'requires_not_item', 'remove_item', and 'reward_item'.
 * Added 'show_randomize' property to new game menu configuration.
+* Added 'disable_equip_slots' property for passive powers.
 
 Engine fixes:
 

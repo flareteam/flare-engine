@@ -894,6 +894,16 @@ void PowerManager::loadPowers() {
 			// @ATTR power.target_nearest|float|Will automatically target the nearest enemy within the specified range.
 			powers[input_id].target_nearest = Parse::toFloat(infile.val);
 		}
+		else if (infile.key == "disable_equip_slots") {
+			// @ATTR power.disable_equip_slots|list(predefined_string)|Passive powers only. A comma separated list of equip slot types to disable when this power is active.
+			powers[input_id].disable_equip_slots.clear();
+			std::string slot_type = Parse::popFirstString(infile.val);
+
+			while (slot_type != "") {
+				powers[input_id].disable_equip_slots.push_back(slot_type);
+				slot_type = Parse::popFirstString(infile.val);
+			}
+		}
 
 		else infile.error("PowerManager: '%s' is not a valid key", infile.key.c_str());
 	}
@@ -1623,6 +1633,9 @@ void PowerManager::activatePassives(StatBlock *src_stats) {
 	src_stats->effects.triggered_death = false;
 
 	activatePassivePostPowers(src_stats);
+
+	// passive powers can lock equipment slots, so update equipment here
+	menu->inv->applyEquipment();
 }
 
 void PowerManager::activatePassiveByTrigger(int power_id, StatBlock *src_stats, bool& triggered_others) {
