@@ -27,6 +27,9 @@
 
     #loadingDiv {
         text-align: center;
+        font-family: monospace;
+        font-weight: bold;
+        font-size: 150%;
     }
 </style>
     </head>
@@ -45,6 +48,18 @@
             onRuntimeInitialized: function() {
                 var e = document.getElementById('loadingDiv');
                 e.style.visibility = 'hidden';
+            },
+            setStatus: function(text) {
+                var e = document.getElementById('loadingDiv');
+                if (text.search("Downloading data...") != -1) {
+                    var download_str = text.split("(")[1].split(")")[0];
+                    var download_progress = parseInt(download_str.split("/")[0]);
+                    var download_total = parseInt(download_str.split("/")[1]);
+                    e.innerHTML = "Downloading data... " + Math.round((download_progress / download_total) * 100) + "%";
+                }
+                else {
+                    e.innerHTML = text;
+                }
             },
             canvas: (function() {
                 var canvas = document.getElementById('canvas');
