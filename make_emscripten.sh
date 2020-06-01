@@ -23,6 +23,7 @@ emcc \
 	-s "EXTRA_EXPORTED_RUNTIME_METHODS=['print']" \
 	-lidbfs.js \
 	--preload-file mods \
+	--use-preload-cache \
 	-o emscripten/index.html
 
 rm -rf mods/fantasycore
