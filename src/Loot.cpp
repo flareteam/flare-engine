@@ -56,7 +56,7 @@ Loot& Loot::operator= (const Loot &other) {
 	animation = NULL;
 
 	loadAnimation(other.gfx);
-	if (animation)
+	if (animation && other.animation)
 		animation->syncTo(other.animation);
 
 	stack.item = other.stack.item;

@@ -78,6 +78,10 @@ Effect& Effect::operator=(const Effect& other) {
 		return *this;
 
 	unloadAnimation();
+	animation_name = other.animation_name;
+	loadAnimation(animation_name);
+	if (animation && other.animation)
+		animation->syncTo(other.animation);
 
 	id = other.id;
 	name = other.name;
@@ -87,8 +91,6 @@ Effect& Effect::operator=(const Effect& other) {
 	type = other.type;
 	magnitude = other.magnitude;
 	magnitude_max = other.magnitude_max;
-	animation_name = other.animation_name;
-	loadAnimation(animation_name);
 	item = other.item;
 	trigger = other.trigger;
 	render_above = other.render_above;

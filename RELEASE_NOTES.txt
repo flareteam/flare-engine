@@ -36,6 +36,7 @@ Engine fixes:
 * Support attack_speed effects with a magnitude less than 100%.
 * Fixed bug where dead entities could steal HP/MP.
 * Fix broken parsing of engine/default_keybindings.txt.
+* Fix Effect animations not being synced properly in some cases.
 
 Game updates:
 
