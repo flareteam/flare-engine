@@ -35,6 +35,7 @@ Engine fixes:
 * Fixed 'resist_percent' property of engine/combat.txt not working when targets had 100% resistance.
 * Support attack_speed effects with a magnitude less than 100%.
 * Fixed bug where dead entities could steal HP/MP.
+* Fix broken parsing of engine/default_keybindings.txt.
 
 Game updates:
 

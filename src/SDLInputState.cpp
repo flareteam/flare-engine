@@ -913,7 +913,7 @@ void SDLInputState::setKeybind(int key, int binding_button, int bindings_list, s
 }
 
 int SDLInputState::getKeyFromName(const std::string& key_name) {
-	return SDL_GetKeyFromName(key_name.c_str());
+	return SDL_GetScancodeFromName(key_name.c_str());
 }
 
 SDLInputState::~SDLInputState() {
