@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Hashtable;
+import java.util.Locale;
 import java.lang.reflect.Method;
 import java.lang.Math;
 
@@ -62,6 +63,7 @@ public class SDLActivity extends Activity implements View.OnSystemUiVisibilityCh
     protected static final int SDL_ORIENTATION_PORTRAIT_FLIPPED = 4;
 
     protected static int mCurrentOrientation;
+    protected static Locale mCurrentLocale;
 
     // Handle the state of the native layer
     public enum NativeState {
@@ -258,6 +260,15 @@ public class SDLActivity extends Activity implements View.OnSystemUiVisibilityCh
         // Only record current orientation
         SDLActivity.onNativeOrientationChanged(mCurrentOrientation);
 
+        try {
+            if (Build.VERSION.SDK_INT < 24) {
+                mCurrentLocale = getContext().getResources().getConfiguration().locale;
+            } else {
+                mCurrentLocale = getContext().getResources().getConfiguration().getLocales().get(0);
+            }
+        } catch(Exception ignored) {
+        }
+
         setContentView(mLayout);
 
         setWindowStyle(false);
@@ -405,6 +416,17 @@ public class SDLActivity extends Activity implements View.OnSystemUiVisibilityCh
         }
 
         SDLActivity.nativeLowMemory();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        Log.v(TAG, "onConfigurationChanged()");
+        super.onConfigurationChanged(newConfig);
+
+        if (mCurrentLocale == null || !mCurrentLocale.equals(newConfig.locale)) {
+            mCurrentLocale = newConfig.locale;
+            SDLActivity.onNativeLocaleChanged();
+        }
     }
 
     @Override
@@ -784,6 +806,7 @@ public class SDLActivity extends Activity implements View.OnSystemUiVisibilityCh
     public static native void onNativeOrientationChanged(int orientation);
     public static native void nativeAddTouch(int touchId, String name);
     public static native void nativePermissionResult(int requestCode, boolean result);
+    public static native void onNativeLocaleChanged();
 
     /**
      * This method is called by SDL using JNI.
@@ -820,10 +843,6 @@ public class SDLActivity extends Activity implements View.OnSystemUiVisibilityCh
     {
         int orientation_landscape = -1;
         int orientation_portrait = -1;
-
-        // HACK: if resizable is true, the screen can be rotated even when locked to landscape
-        // SDL window hints don't seem to affect it, so we enforce it here
-        resizable = false;
 
         /* If set, hint "explicitly controls which UI orientations are allowed". */
         if (hint.contains("LandscapeRight") && hint.contains("LandscapeLeft")) {
@@ -876,7 +895,7 @@ public class SDLActivity extends Activity implements View.OnSystemUiVisibilityCh
             }
         }
 
-        Log.v("SDL", "setOrientation() requestedOrientation=" + req + " width=" + w +" height="+ h +" resizable=" + resizable + " hint=" + hint);
+        Log.v(TAG, "setOrientation() requestedOrientation=" + req + " width=" + w +" height="+ h +" resizable=" + resizable + " hint=" + hint);
         mSingleton.setRequestedOrientation(req);
     }
 
@@ -1016,6 +1035,9 @@ public class SDLActivity extends Activity implements View.OnSystemUiVisibilityCh
     public static boolean isTablet() {
         DisplayMetrics metrics = new DisplayMetrics();
         Activity activity = (Activity)getContext();
+        if (activity == null) {
+            return false;
+        }
         activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         double dWidthInches = metrics.widthPixels / (double)metrics.xdpi;
@@ -1066,6 +1088,10 @@ public class SDLActivity extends Activity implements View.OnSystemUiVisibilityCh
      */
     public static boolean getManifestEnvironmentVariables() {
         try {
+            if (getContext() == null) {
+                return false;
+            }
+
             ApplicationInfo applicationInfo = getContext().getPackageManager().getApplicationInfo(getContext().getPackageName(), PackageManager.GET_META_DATA);
             Bundle bundle = applicationInfo.metaData;
             if (bundle == null) {
@@ -1083,7 +1109,7 @@ public class SDLActivity extends Activity implements View.OnSystemUiVisibilityCh
             /* environment variables set! */
             return true;
         } catch (Exception e) {
-           Log.v("SDL", "exception " + e.toString());
+           Log.v(TAG, "exception " + e.toString());
         }
         return false;
     }
@@ -1869,6 +1895,19 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
         int deviceId = event.getDeviceId();
         int source = event.getSource();
 
+        if (source == InputDevice.SOURCE_UNKNOWN) {
+            InputDevice device = InputDevice.getDevice(deviceId);
+            if (device != null) {
+                source = device.getSources();
+            }
+        }
+
+//		if (event.getAction() == KeyEvent.ACTION_DOWN) {
+//			Log.v("SDL", "key down: " + keyCode + ", deviceId = " + deviceId + ", source = " + source);
+//		} else if (event.getAction() == KeyEvent.ACTION_UP) {
+//			Log.v("SDL", "key up: " + keyCode + ", deviceId = " + deviceId + ", source = " + source);
+//		}
+
         // Dispatch the different events depending on where they come from
         // Some SOURCE_JOYSTICK, SOURCE_DPAD or SOURCE_GAMEPAD are also SOURCE_KEYBOARD
         // So, we try to process them as JOYSTICK/DPAD/GAMEPAD events first, if that fails we try them as KEYBOARD
@@ -1889,24 +1928,14 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
             }
         }
 
-        if (source == InputDevice.SOURCE_UNKNOWN) {
-            InputDevice device = InputDevice.getDevice(deviceId);
-            if (device != null) {
-                source = device.getSources();
-            }
-        }
-
         if ((source & InputDevice.SOURCE_KEYBOARD) != 0) {
             if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                //Log.v("SDL", "key down: " + keyCode);
                 if (SDLActivity.isTextInputEvent(event)) {
                     SDLInputConnection.nativeCommitText(String.valueOf((char) event.getUnicodeChar()), 1);
                 }
                 SDLActivity.onNativeKeyDown(keyCode);
                 return true;
-            }
-            else if (event.getAction() == KeyEvent.ACTION_UP) {
-                //Log.v("SDL", "key up: " + keyCode);
+            } else if (event.getAction() == KeyEvent.ACTION_UP) {
                 SDLActivity.onNativeKeyUp(keyCode);
                 return true;
             }
