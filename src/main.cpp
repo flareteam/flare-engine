@@ -118,11 +118,11 @@ static void init(const CmdLineArgs& cmd_line_args) {
 	font = getFontEngine();
 	anim = new AnimationManager();
 	comb = new CombatText();
-	
+
 	// Load miscellaneous settings
 	eset = new EngineSettings();
 	eset->load();
-	
+
 	inpt = getInputManager();
 	icons = NULL;
 
@@ -420,7 +420,7 @@ soft_reset:
 		srand(static_cast<unsigned int>(time(NULL)));
 #ifdef __EMSCRIPTEN__
 		platform.FSInit();
-		emscripten_set_main_loop(EmscriptenMainLoop, 0, 1);
+		emscripten_set_main_loop(EmscriptenMainLoop, settings->max_frames_per_sec, 1);
 #else
 		init(cmd_line_args);
 
