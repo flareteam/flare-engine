@@ -660,6 +660,18 @@ bool Entity::takeHit(Hazard &h) {
 					stats.transform_duration = 0;
 			}
 		}
+
+		// handle block post-power
+		if (stats.block_power != 0) {
+			int block_post_power = powers->powers[stats.block_power].post_power;
+
+			if (block_post_power != 0 && stats.getPowerCooldown(block_post_power) == 0) {
+				if (Math::percentChance(powers->powers[stats.block_power].post_power_chance)) {
+					powers->activate(powers->powers[stats.block_power].post_power, &stats, stats.pos);
+					stats.setPowerCooldown(block_post_power, powers->powers[block_post_power].cooldown);
+				}
+			}
+		}
 	}
 
 	return true;

@@ -716,7 +716,7 @@ void PowerManager::loadPowers() {
 			}
 		}
 		else if (infile.key == "post_power") {
-			// @ATTR power.post_power|power_id, int : Power, Chance to cast|Trigger a power if the hazard did damage.
+			// @ATTR power.post_power|power_id, int : Power, Chance to cast|Trigger a power if the hazard did damage. For 'block' type powers, this power will be triggered when the blocker takes damage.
 			powers[input_id].post_power = Parse::popFirstInt(infile.val);
 			std::string chance = Parse::popFirstString(infile.val);
 			if (!chance.empty()) {
@@ -1697,6 +1697,10 @@ void PowerManager::activatePassivePostPowers(StatBlock *src_stats) {
 			continue;
 
 		if (powers[post_power].new_state != Power::STATE_INSTANT)
+			continue;
+
+		// blocking powers use a passive trigger, but we only want to activate their post_power when the blocker takes a hit
+		if (powers[src_stats->powers_passive[i]].type == Power::TYPE_BLOCK)
 			continue;
 
 		if (src_stats->getPowerCooldown(post_power) == 0 && src_stats->canUsePower(post_power, !StatBlock::CAN_USE_PASSIVE)) {
