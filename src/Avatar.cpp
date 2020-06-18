@@ -375,6 +375,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 		stats.effects.triggered_block = false;
 		stats.effects.clearTriggerEffects(Power::TRIGGER_BLOCK);
 		stats.refresh_stats = true;
+		stats.block_power = 0;
 	}
 
 	stats.logic();
