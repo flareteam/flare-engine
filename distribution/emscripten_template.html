@@ -114,6 +114,24 @@
 		  body.addEventListener('keydown', preventScroll, false);
 		  body.addEventListener('click', activateCanvas, false);
 		  canvas.addEventListener('mousedown', handleMouseDown, false);
+
+		  // Work-around chromium autoplay policy
+		  // https://github.com/emscripten-core/emscripten/issues/6511
+		  function resumeAudio(e) {
+		  if (typeof Module === 'undefined'
+			  || typeof Module.SDL2 == 'undefined'
+			  || typeof Module.SDL2.audioContext == 'undefined')
+			  return;
+		  if (Module.SDL2.audioContext.state == 'suspended') {
+			  Module.SDL2.audioContext.resume();
+		  }
+		  if (Module.SDL2.audioContext.state == 'running') {
+			  document.getElementById('canvas').removeEventListener('click', resumeAudio);
+			  document.removeEventListener('keydown', resumeAudio);
+		  }
+		  }
+		  document.getElementById('canvas').addEventListener('click', resumeAudio);
+		  document.addEventListener('keydown', resumeAudio);
 		}
 </script>
 
