@@ -769,18 +769,22 @@ int MenuPowers::getPointsUsed() {
 	return used;
 }
 
-void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, bool show_unlock_prompt) {
-	if (!pcell)
-		return;
+void MenuPowers::createTooltipFromPowerIndex(TooltipData* tip_data, int power_index, int tooltip_length) {
+	createTooltip(tip_data, getCellByPowerIndex(power_index), power_index, false, tooltip_length);
+}
 
-	MenuPowersCell* pcell_bonus = power_cell[pcell->group].getBonusCurrent(pcell);
+void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, int power_index, bool show_unlock_prompt, int tooltip_length) {
 
-	const Power &pwr = powers->powers[pcell_bonus->id];
+	MenuPowersCell* pcell_bonus = NULL;
+	if (pcell) {
+		pcell_bonus = power_cell[pcell->group].getBonusCurrent(pcell);
+	}
+	const Power &pwr = pcell_bonus ? powers->powers[pcell_bonus->id] : powers->powers[power_index];
 
 	{
 		std::stringstream ss;
 		ss << pwr.name;
-		if (pcell->upgrade_level > 0) {
+		if (pcell && pcell->upgrade_level > 0) {
 			ss << " (" << msg->get("Level %d", pcell->upgrade_level);
 			int bonus_levels = power_cell[pcell->group].getBonusLevels();
 			if (bonus_levels > 0)
@@ -790,8 +794,13 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, boo
 		tip_data->addText(ss.str());
 	}
 
+	if (tooltip_length == MenuPowers::TOOLTIP_SHORT || (!pcell && tooltip_length != MenuPowers::TOOLTIP_LONG_ALL))
+		return;
+
 	if (pwr.passive) tip_data->addText(msg->get("Passive"));
-	tip_data->addColoredText(Utils::substituteVarsInString(pwr.description, pc), font->getColor(FontEngine::COLOR_ITEM_FLAVOR));
+	if (pwr.description != "") {
+		tip_data->addColoredText(Utils::substituteVarsInString(pwr.description, pc), font->getColor(FontEngine::COLOR_ITEM_FLAVOR));
+	}
 
 	// add mana cost
 	if (pwr.requires_mp > 0) {
@@ -1122,57 +1131,59 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, boo
 		}
 	}
 
-	// add requirement
-	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
-		if (pcell->requires_primary[i] > 0) {
-			if (pc->stats.get_primary(i) < pcell->requires_primary[i])
-				tip_data->addColoredText(msg->get("Requires %s %d", eset->primary_stats.list[i].name, pcell->requires_primary[i]), font->getColor(FontEngine::COLOR_MENU_PENALTY));
+	if (pcell) {
+		// add requirement
+		for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
+			if (pcell->requires_primary[i] > 0) {
+				if (pc->stats.get_primary(i) < pcell->requires_primary[i])
+					tip_data->addColoredText(msg->get("Requires %s %d", eset->primary_stats.list[i].name, pcell->requires_primary[i]), font->getColor(FontEngine::COLOR_MENU_PENALTY));
+				else
+					tip_data->addText(msg->get("Requires %s %d", eset->primary_stats.list[i].name, pcell->requires_primary[i]));
+			}
+		}
+
+		// Draw required Level Tooltip
+		if ((pcell->requires_level > 0) && pc->stats.level < pcell->requires_level) {
+			tip_data->addColoredText(msg->get("Requires Level %d", pcell->requires_level), font->getColor(FontEngine::COLOR_MENU_PENALTY));
+		}
+		else if ((pcell->requires_level > 0) && pc->stats.level >= pcell->requires_level) {
+			tip_data->addText(msg->get("Requires Level %d", pcell->requires_level));
+		}
+
+		for (size_t j=0; j < pcell->requires_power.size(); ++j) {
+			MenuPowersCell* req_cell = getCellByPowerIndex(pcell->requires_power[j]);
+			if (!req_cell)
+				continue;
+
+			std::string req_power_name;
+			if (req_cell->upgrade_level > 0)
+				req_power_name = powers->powers[req_cell->id].name + " (" + msg->get("Level %d", req_cell->upgrade_level) + ")";
 			else
-				tip_data->addText(msg->get("Requires %s %d", eset->primary_stats.list[i].name, pcell->requires_primary[i]));
-		}
-	}
-
-	// Draw required Level Tooltip
-	if ((pcell->requires_level > 0) && pc->stats.level < pcell->requires_level) {
-		tip_data->addColoredText(msg->get("Requires Level %d", pcell->requires_level), font->getColor(FontEngine::COLOR_MENU_PENALTY));
-	}
-	else if ((pcell->requires_level > 0) && pc->stats.level >= pcell->requires_level) {
-		tip_data->addText(msg->get("Requires Level %d", pcell->requires_level));
-	}
-
-	for (size_t j=0; j < pcell->requires_power.size(); ++j) {
-		MenuPowersCell* req_cell = getCellByPowerIndex(pcell->requires_power[j]);
-		if (!req_cell)
-			continue;
-
-		std::string req_power_name;
-		if (req_cell->upgrade_level > 0)
-			req_power_name = powers->powers[req_cell->id].name + " (" + msg->get("Level %d", req_cell->upgrade_level) + ")";
-		else
-			req_power_name = powers->powers[req_cell->id].name;
+				req_power_name = powers->powers[req_cell->id].name;
 
 
-		// Required Power Tooltip
-		if (!checkUnlocked(req_cell)) {
-			tip_data->addColoredText(msg->get("Requires Power: %s", req_power_name), font->getColor(FontEngine::COLOR_MENU_PENALTY));
-		}
-		else {
-			tip_data->addText(msg->get("Requires Power: %s", req_power_name));
+			// Required Power Tooltip
+			if (!checkUnlocked(req_cell)) {
+				tip_data->addColoredText(msg->get("Requires Power: %s", req_power_name), font->getColor(FontEngine::COLOR_MENU_PENALTY));
+			}
+			else {
+				tip_data->addText(msg->get("Requires Power: %s", req_power_name));
+			}
+
 		}
 
-	}
-
-	// Draw unlock power Tooltip
-	if (pcell->requires_point && !(std::find(pc->stats.powers_list.begin(), pc->stats.powers_list.end(), pcell->id) != pc->stats.powers_list.end())) {
-		MenuPowersCell* unlock_cell = getCellByPowerIndex(pcell->id);
-		if (show_unlock_prompt && points_left > 0 && checkUnlock(unlock_cell)) {
-			tip_data->addColoredText(msg->get("Click to Unlock (uses 1 Skill Point)"), font->getColor(FontEngine::COLOR_MENU_BONUS));
-		}
-		else {
-			if (pcell->requires_point && points_left < 1)
-				tip_data->addColoredText(msg->get("Requires 1 Skill Point"), font->getColor(FontEngine::COLOR_MENU_PENALTY));
-			else
-				tip_data->addText(msg->get("Requires 1 Skill Point"));
+		// Draw unlock power Tooltip
+		if (pcell->requires_point && !(std::find(pc->stats.powers_list.begin(), pc->stats.powers_list.end(), pcell->id) != pc->stats.powers_list.end())) {
+			MenuPowersCell* unlock_cell = getCellByPowerIndex(pcell->id);
+			if (show_unlock_prompt && points_left > 0 && checkUnlock(unlock_cell)) {
+				tip_data->addColoredText(msg->get("Click to Unlock (uses 1 Skill Point)"), font->getColor(FontEngine::COLOR_MENU_BONUS));
+			}
+			else {
+				if (pcell->requires_point && points_left < 1)
+					tip_data->addColoredText(msg->get("Requires 1 Skill Point"), font->getColor(FontEngine::COLOR_MENU_PENALTY));
+				else
+					tip_data->addText(msg->get("Requires 1 Skill Point"));
+			}
 		}
 	}
 }
@@ -1389,10 +1400,10 @@ void MenuPowers::renderTooltips(const Point& position) {
 		if (slots[i] && Utils::isWithinRect(slots[i]->pos, position)) {
 			bool base_unlocked = checkUnlocked(tip_cell);
 
-			createTooltip(&tip_data, tip_cell, !base_unlocked);
+			createTooltip(&tip_data, tip_cell, tip_cell->id, !base_unlocked, MenuPowers::TOOLTIP_LONG_MENU);
 			if (tip_cell->next) {
 				tip_data.addText("\n" + msg->get("Next Level:"));
-				createTooltip(&tip_data, tip_cell->next, base_unlocked);
+				createTooltip(&tip_data, tip_cell->next, tip_cell->next->id, base_unlocked, MenuPowers::TOOLTIP_LONG_MENU);
 			}
 
 			tooltipm->push(tip_data, position, TooltipData::STYLE_FLOAT);

@@ -60,6 +60,8 @@ private:
 
 	SoundID sfx_unable_to_cast;
 
+	int tooltip_length;
+
 public:
 	enum {
 		MENU_CHARACTER = 0,

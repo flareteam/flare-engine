@@ -110,7 +110,7 @@ private:
 
 	int getPointsUsed();
 
-	void createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, bool show_unlock_prompt);
+	void createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, int power_index, bool show_unlock_prompt, int tooltip_length);
 	void renderPowers(int tab_num);
 
 	std::vector<MenuPowersCellGroup> power_cell;
@@ -137,6 +137,12 @@ private:
 	int default_power_tab;
 
 public:
+	enum {
+		TOOLTIP_SHORT = 0,
+		TOOLTIP_LONG_MENU = 1,
+		TOOLTIP_LONG_ALL = 2
+	};
+
 	MenuPowers();
 	~MenuPowers();
 	void align();
@@ -159,6 +165,8 @@ public:
 	void clearBonusLevels();
 	void addBonusLevels(int power_index, int bonus_levels);
 	std::string getItemBonusPowerReqString(int power_index);
+
+	void createTooltipFromPowerIndex(TooltipData* tip_data, int power_index, int tooltip_length);
 
 	std::vector<WidgetSlot*> slots; // power slot Widgets
 

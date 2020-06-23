@@ -35,6 +35,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuActionBar.h"
 #include "MenuInventory.h"
 #include "MenuManager.h"
+#include "MenuPowers.h"
 #include "MenuTouchControls.h"
 #include "MessageEngine.h"
 #include "Platform.h"
@@ -57,6 +58,7 @@ MenuActionBar::MenuActionBar()
 	, sprite_disabled(NULL)
 	, sprite_attention(NULL)
 	, sfx_unable_to_cast(0)
+	, tooltip_length(MenuPowers::TOOLTIP_LONG_MENU)
 	, slots_count(0)
 	, drag_prev_slot(-1)
 	, updated(false)
@@ -151,6 +153,17 @@ MenuActionBar::MenuActionBar()
 				int y = Parse::popFirstInt(infile.val);
 				menus[MENU_LOG]->setBasePos(x, y, Utils::ALIGN_TOPLEFT);
 				menus[MENU_LOG]->pos.w = menus[MENU_LOG]->pos.h = eset->resolutions.icon_size;
+			}
+			// @ATTR tooltip_length|["short", "long_menu", "long_all"]|The length of power descriptions in tooltips. 'short' will display only the power name. 'long_menu' (the default setting) will display full tooltips, but only for powers that are in the Powers menu. 'long_all' will display full tooltips for all powers.
+			else if (infile.key == "tooltip_length") {
+				if (infile.val == "short")
+					tooltip_length = MenuPowers::TOOLTIP_SHORT;
+				else if (infile.val == "long_menu")
+					tooltip_length = MenuPowers::TOOLTIP_LONG_MENU;
+				else if (infile.val == "long_all")
+					tooltip_length = MenuPowers::TOOLTIP_LONG_ALL;
+				else
+					infile.error("MenuActionBar: '%s' is not a valid tooltip_length setting.", infile.val.c_str());
 			}
 
 			else infile.error("MenuActionBar: '%s' is not a valid key.", infile.key.c_str());
@@ -452,7 +465,7 @@ void MenuActionBar::renderTooltips(const Point& position) {
 	for (unsigned i = 0; i < slots_count; i++) {
 		if (slots[i] && Utils::isWithinRect(slots[i]->pos, position)) {
 			if (hotkeys_mod[i] != 0) {
-				tip_data.addText(powers->powers[hotkeys_mod[i]].name);
+				menu->pow->createTooltipFromPowerIndex(&tip_data, hotkeys_mod[i], tooltip_length);
 			}
 			tip_data.addText(labels[i]);
 		}
