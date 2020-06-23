@@ -38,6 +38,7 @@ Engine fixes:
 * Fixed bug where dead entities could steal HP/MP.
 * Fix broken parsing of engine/default_keybindings.txt.
 * Fix Effect animations not being synced properly in some cases.
+* Removed hard-coded restrictions on using items from the inventory. Now any item that has a power and is not equipment can be used.
 
 Game updates:
 

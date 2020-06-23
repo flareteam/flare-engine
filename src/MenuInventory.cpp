@@ -547,11 +547,8 @@ void MenuInventory::activate(const Point& position) {
 	if (!items->items[inventory[CARRIED][slot].item].book.empty()) {
 		show_book = items->items[inventory[CARRIED][slot].item].book;
 	}
-	// use a consumable item
-	else if (!items->items[inventory[CARRIED][slot].item].quest_item &&
-             items->items[inventory[CARRIED][slot].item].type == "consumable" &&
-	         items->items[inventory[CARRIED][slot].item].power > 0) {
-
+	// use a power attached to a non-equipment item
+	else if (items->items[inventory[CARRIED][slot].item].power > 0 && getEquipSlotFromItem(inventory[CARRIED][slot].item, !ONLY_EMPTY_SLOTS) == -1) {
 		int power_id = items->items[inventory[CARRIED][slot].item].power;
 
 		// equipment might want to replace powers, so do it here
