@@ -166,7 +166,7 @@ public:
 	void addBonusLevels(int power_index, int bonus_levels);
 	std::string getItemBonusPowerReqString(int power_index);
 
-	void createTooltipFromPowerIndex(TooltipData* tip_data, int power_index, int tooltip_length);
+	void createTooltipFromActionBar(TooltipData* tip_data, unsigned slot, int tooltip_length);
 
 	std::vector<WidgetSlot*> slots; // power slot Widgets
 

@@ -465,7 +465,7 @@ void MenuActionBar::renderTooltips(const Point& position) {
 	for (unsigned i = 0; i < slots_count; i++) {
 		if (slots[i] && Utils::isWithinRect(slots[i]->pos, position)) {
 			if (hotkeys_mod[i] != 0) {
-				menu->pow->createTooltipFromPowerIndex(&tip_data, hotkeys_mod[i], tooltip_length);
+				menu->pow->createTooltipFromActionBar(&tip_data, i, tooltip_length);
 			}
 			tip_data.addText(labels[i]);
 		}

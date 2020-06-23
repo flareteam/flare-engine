@@ -769,8 +769,30 @@ int MenuPowers::getPointsUsed() {
 	return used;
 }
 
-void MenuPowers::createTooltipFromPowerIndex(TooltipData* tip_data, int power_index, int tooltip_length) {
-	createTooltip(tip_data, getCellByPowerIndex(power_index), power_index, false, tooltip_length);
+void MenuPowers::createTooltipFromActionBar(TooltipData* tip_data, unsigned slot, int tooltip_length) {
+	if (slot >= menu->act->hotkeys.size() || slot >= menu->act->hotkeys_mod.size())
+		return;
+
+	int power_index = menu->act->hotkeys[slot];
+	int mod_power_index = menu->act->hotkeys_mod[slot];
+
+	int pindex = mod_power_index;
+	MenuPowersCell* pcell = getCellByPowerIndex(pindex);
+
+	// action bar slot is modded and not found in the menu
+	if (power_index != mod_power_index && !pcell) {
+		int test_pindex = power_index;
+		MenuPowersCell* test_pcell = getCellByPowerIndex(test_pindex);
+
+		// non-modded power found in the menu; use it instead
+		if (test_pcell) {
+			pindex = test_pindex;
+			pcell = test_pcell;
+		}
+		// else, neither is found in the menu, so default to the modded power
+	}
+
+	createTooltip(tip_data, pcell, pindex, false, tooltip_length);
 }
 
 void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, int power_index, bool show_unlock_prompt, int tooltip_length) {
