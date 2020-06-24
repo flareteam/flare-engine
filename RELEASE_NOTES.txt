@@ -19,7 +19,7 @@ Engine features:
 * Added 'show_randomize' property to new game menu configuration.
 * Added 'disable_equip_slots' property for passive powers.
 * 'Block' powers can now use post_power to trigger a power when taking damage.
-* Power descriptions are now displayed in action bar tooltips. This can be controlled with the 'tooltip_height' property in menus/actionbar.txt.
+* Power descriptions are now displayed in action bar tooltips. This can be controlled with the 'tooltip_length' property in menus/actionbar.txt.
 
 Engine fixes:
 
