@@ -40,6 +40,7 @@ Engine fixes:
 * Fix broken parsing of engine/default_keybindings.txt.
 * Fix Effect animations not being synced properly in some cases.
 * Removed hard-coded restrictions on using items from the inventory. Now any item that has a power and is not equipment can be used.
+* Fix crash when fonts are missing. The engine will try to fall back to the next available font for the current language.
 
 Game updates:
 

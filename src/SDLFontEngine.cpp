@@ -31,10 +31,16 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 #include "UtilsParsing.h"
 
-SDLFontStyle::SDLFontStyle() : FontStyle(), ttfont(NULL) {
+SDLFontStyle::SDLFontStyle()
+	: FontStyle()
+	, ttfont(NULL)
+{
 }
 
-SDLFontEngine::SDLFontEngine() : FontEngine(), active_font(NULL) {
+SDLFontEngine::SDLFontEngine()
+	: FontEngine()
+	, active_font(NULL)
+{
 	// Initiate SDL_ttf
 	if(!TTF_WasInit() && TTF_Init()==-1) {
 		Utils::logError("SDLFontEngine: TTF_Init: %s", TTF_GetError());
@@ -95,19 +101,27 @@ SDLFontEngine::SDLFontEngine() : FontEngine(), active_font(NULL) {
 
 	// Attempt to set the default active font
 	setFont("font_regular");
-	if (!active_font) {
+	if (!isActiveFontValid()) {
 		Utils::logError("FontEngine: Unable to determine default font!");
 		Utils::logErrorDialog("FontEngine: Unable to determine default font!");
-		mods->resetModConfig();
-		Utils::Exit(1);
 	}
 }
 
+bool SDLFontEngine::isActiveFontValid() {
+	return active_font && active_font->ttfont;
+}
+
 int SDLFontEngine::getLineHeight() {
+	if (!isActiveFontValid())
+		return 1;
+
 	return active_font->line_height;
 }
 
 int SDLFontEngine::getFontHeight() {
+	if (!isActiveFontValid())
+		return 1;
+
 	return active_font->font_height;
 }
 
@@ -115,6 +129,9 @@ int SDLFontEngine::getFontHeight() {
  * For single-line text, just calculate the width
  */
 int SDLFontEngine::calc_width(const std::string& text) {
+	if (!isActiveFontValid())
+		return 1;
+
 	int w, h;
 	TTF_SizeUTF8(active_font->ttfont, text.c_str(), &w, &h);
 
@@ -185,11 +202,22 @@ std::string SDLFontEngine::trimTextToWidth(const std::string& text, const int wi
 
 void SDLFontEngine::setFont(const std::string& _font) {
 	for (unsigned int i=0; i<font_styles.size(); i++) {
-		if (font_styles[i].name == _font) {
+		if (font_styles[i].ttfont != NULL && font_styles[i].name == _font) {
 			active_font = &(font_styles[i]);
 			return;
 		}
 	}
+
+	// Unable to find a matching font. Try the first available font style instead
+	for (unsigned int i=0; i<font_styles.size(); i++) {
+		if (font_styles[i].ttfont != NULL) {
+			Utils::logError("FontEngine: Invalid font '%s'. Falling back to '%s'.", _font.c_str(), font_styles[i].name.c_str());
+			active_font = &(font_styles[i]);
+			return;
+		}
+	}
+
+	Utils::logError("FontEngine: Invalid font '%s'. No fallback available.", _font.c_str());
 }
 
 /**
@@ -197,7 +225,7 @@ void SDLFontEngine::setFont(const std::string& _font) {
  * Justify is left, right, or center
  */
 void SDLFontEngine::renderInternal(const std::string& text, int x, int y, int justify, Image *target, const Color& color) {
-	if (text.empty())
+	if (!isActiveFontValid() || text.empty())
 		return;
 
 	Image *graphics;
