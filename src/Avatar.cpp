@@ -40,6 +40,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MapRenderer.h"
 #include "MenuActionBar.h"
 #include "MenuExit.h"
+#include "MenuGameOver.h"
 #include "MenuManager.h"
 #include "MessageEngine.h"
 #include "ModManager.h"
@@ -684,19 +685,18 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 					playSound(Entity::SOUND_DIE);
 
+					logMsg(msg->get("You are defeated."), MSG_NORMAL);
+
 					if (stats.permadeath) {
 						// ignore death penalty on permadeath and instead delete the player's saved game
 						stats.death_penalty = false;
 						Utils::removeSaveDir(save_load->getGameSlot());
 						menu->exit->disableSave();
-
-						logMsg(Utils::substituteVarsInString(msg->get("You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."), this), MSG_NORMAL);
+						menu->game_over->disableSave();
 					}
 					else {
 						// raise the death penalty flag.  This is handled in MenuInventory
 						stats.death_penalty = true;
-
-						logMsg(Utils::substituteVarsInString(msg->get("You are defeated. ${INPUT_CONTINUE} to continue."), this), MSG_NORMAL);
 					}
 
 					// if the player is attacking, we need to block further input
@@ -704,16 +704,18 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 						inpt->lock[Input::MAIN1] = true;
 				}
 
-				if (activeAnimation->getTimesPlayed() >= 1 || activeAnimation->getName() != "die") {
+				if (!stats.corpse && (activeAnimation->getTimesPlayed() >= 1 || activeAnimation->getName() != "die")) {
 					stats.corpse = true;
+					menu->game_over->visible = true;
 				}
 
 				// allow respawn with Accept if not permadeath
-				if ((inpt->pressing[Input::ACCEPT] || (settings->touchscreen && inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1])) && stats.corpse) {
-					if (inpt->pressing[Input::ACCEPT]) inpt->lock[Input::ACCEPT] = true;
-					if (settings->touchscreen && inpt->pressing[Input::MAIN1]) inpt->lock[Input::MAIN1] = true;
+				if (menu->game_over->visible && menu->game_over->continue_clicked) {
+					menu->game_over->close();
+
 					mapr->teleportation = true;
 					mapr->teleport_mapname = mapr->respawn_map;
+
 					if (stats.permadeath) {
 						// set these positions so it doesn't flash before jumping to Title
 						mapr->teleport_destination.x = stats.pos.x;

@@ -29,24 +29,25 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "ItemManager.h"
 
 class Menu;
-class MenuInventory;
-class MenuPowers;
-class MenuCharacter;
-class MenuLog;
-class MenuHUDLog;
 class MenuActionBar;
+class MenuActiveEffects;
 class MenuBook;
-class MenuStatBar;
+class MenuCharacter;
+class MenuDevConsole;
+class MenuEnemy;
+class MenuExit;
+class MenuGameOver;
+class MenuHUDLog;
+class MenuInventory;
+class MenuLog;
 class MenuMiniMap;
 class MenuNumPicker;
-class MenuEnemy;
-class MenuVendor;
-class MenuTalker;
-class MenuExit;
-class MenuActiveEffects;
+class MenuPowers;
 class MenuStash;
-class MenuDevConsole;
+class MenuStatBar;
+class MenuTalker;
 class MenuTouchControls;
+class MenuVendor;
 class StatBlock;
 class Subtitles;
 class WidgetSlot;
@@ -117,6 +118,7 @@ public:
 	MenuExit *exit;
 	MenuActiveEffects *effects;
 	MenuStash *stash;
+	MenuGameOver *game_over;
 
 	MenuDevConsole *devconsole;
 	MenuTouchControls *touch_controls;
