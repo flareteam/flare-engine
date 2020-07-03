@@ -57,6 +57,7 @@ Translation updates:
 * Scottish Gaelic (gd) update (GunChleoc)
 * Hungarian (hu) update (litoll)
 * Norwegian (nb) update (Elias Nykrem)
+* Polish (pl) update (Błażej Pęksyk)
 * Portuguese (pt) update (Rui)
 * Russian (ru) update (Igor Polyakov)
 * Slovak (sk) update (MiroslavR)
