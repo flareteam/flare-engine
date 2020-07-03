@@ -48,6 +48,7 @@ Game updates:
 * New graphics for HP and MP status bars
 * Reworked art for the Cleave power
 * Cleave power radius reduced to closer match its artwork
+* Reduced the strength and radius of Rakk's freeze attack
 
 Translation updates:
 
