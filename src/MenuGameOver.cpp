@@ -15,14 +15,11 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
-#include "Avatar.h"
-#include "EngineSettings.h"
 #include "FileParser.h"
 #include "FontEngine.h"
 #include "InputState.h"
 #include "MenuGameOver.h"
 #include "MessageEngine.h"
-#include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
