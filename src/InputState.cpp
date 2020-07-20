@@ -31,6 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Platform.h"
 #include "Settings.h"
 #include "SharedResources.h"
+#include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
 #include "Version.h"
 
@@ -116,9 +117,17 @@ void InputState::loadKeyBindings() {
 			opened_file = true;
 		}
 	}
-	// if there are no mod keybinds, fall back to global config
-	else if (infile.open(settings->path_conf + "keybindings.txt", !FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
-		opened_file = true;
+	else {
+		// if there are no mod keybinds, fall back to global config
+		if (infile.open(settings->path_conf + "keybindings.txt", !FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
+			opened_file = true;
+		}
+
+		// clean up mod keybinds if engine/default_keybindings.txt is not present
+		if (Filesystem::fileExists(settings->path_user + "saves/" + eset->misc.save_prefix + "/keybindings.txt")) {
+			Utils::logInfo("InputState: Found unexpected save prefix keybinding file. Removing it now.");
+			Filesystem::removeFile(settings->path_user + "saves/" + eset->misc.save_prefix + "/keybindings.txt");
+		}
 	}
 
 	if (!opened_file) {
@@ -270,6 +279,7 @@ void InputState::loadKeyBindings() {
 void InputState::saveKeyBindings() {
 	std::string out_path;
 	if (mods->locate("engine/default_keybindings.txt") != "") {
+		Filesystem::createDir(settings->path_user + "saves/" + eset->misc.save_prefix);
 		out_path = settings->path_user + "saves/" + eset->misc.save_prefix + "/keybindings.txt";
 	}
 	else {
