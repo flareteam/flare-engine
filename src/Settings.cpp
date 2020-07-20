@@ -60,7 +60,7 @@ Settings::Settings()
 	, encounter_dist(0) // set in updateScreenVars()
 	, soft_reset(false)
 {
-	config.resize(39);
+	config.resize(40);
 	setConfigDefault(0,  "fullscreen",          &typeid(fullscreen),          "0",            &fullscreen,          "fullscreen mode. 1 enable, 0 disable.");
 	setConfigDefault(1,  "resolution_w",        &typeid(screen_w),            "640",          &screen_w,            "display resolution. 640x480 minimum.");
 	setConfigDefault(2,  "resolution_h",        &typeid(screen_h),            "480",          &screen_h,            "");
@@ -76,7 +76,7 @@ Settings::Settings()
 	setConfigDefault(12, "max_fps",             &typeid(max_frames_per_sec),  "60",           &max_frames_per_sec,  "maximum frames per second. default is 60");
 	setConfigDefault(13, "renderer",            &typeid(render_device_name),  "sdl_hardware", &render_device_name,  "default render device. 'sdl' is the default setting");
 	setConfigDefault(14, "enable_joystick",     &typeid(enable_joystick),     "0",            &enable_joystick,     "joystick settings.");
-	setConfigDefault(15, "joystick_device",     &typeid(joystick_device),     "0",            &joystick_device,     "");
+	setConfigDefault(15, "joystick_device",     &typeid(joystick_device),     "-1",            &joystick_device,     "");
 	setConfigDefault(16, "joystick_deadzone",   &typeid(joy_deadzone),        "100",          &joy_deadzone,        "");
 	setConfigDefault(17, "language",            &typeid(language),            "en",           &language,            "2-letter language code.");
 	setConfigDefault(18, "change_gamma",        &typeid(change_gamma),        "0",            &change_gamma,        "allow changing gamma (experimental). 1 enable, 0 disable.");
@@ -98,9 +98,10 @@ Settings::Settings()
 	setConfigDefault(34, "mouse_move_attack",   &typeid(mouse_move_attack),   "1",            &mouse_move_attack,   "allows attacking with the mouse movement button if an enemy is targeted and in range. 1 enable, 0 disable.");
 	setConfigDefault(35, "entity_markers",      &typeid(entity_markers),      "1",            &entity_markers,      "shows are marker above entities that are hidden behind tall tiles. 1 enable, 0 disable.");
 	setConfigDefault(36, "prev_save_slot",      &typeid(prev_save_slot),      "-1",           &prev_save_slot,      "index of the last used save slot");
-	setConfigDefault(37, "low_hp_warning_type", &typeid(low_hp_warning_type), "0",            &low_hp_warning_type, 
+	setConfigDefault(37, "low_hp_warning_type", &typeid(low_hp_warning_type), "0",            &low_hp_warning_type,
 			"low health warning type settings. 0 disable, 1 all, 2 message & cursor, 3 message & sound, 4 cursor & sound , 5 message, 6 cursor, 7 sound.");
 	setConfigDefault(38, "low_hp_threshold",    &typeid(low_hp_threshold),    "20",           &low_hp_threshold,    "set HP threshold that triggers warning.");
+	setConfigDefault(39, "move_type_dimissed",  &typeid(move_type_dimissed),  "0",            &move_type_dimissed,  "flag that is set once the player picks a movement type after first launching the game");
 }
 
 void Settings::setConfigDefault(size_t index, const std::string& name, const std::type_info *type, const std::string& default_val, void *storage, const std::string& comment) {

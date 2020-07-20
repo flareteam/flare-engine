@@ -156,6 +156,7 @@ Set (FLARE_SOURCES
 	./src/MenuLog.cpp
 	./src/MenuManager.cpp
 	./src/MenuMiniMap.cpp
+	./src/MenuMovementType.cpp
 	./src/MenuNumPicker.cpp
 	./src/MenuPowers.cpp
 	./src/MenuStash.cpp
@@ -272,6 +273,7 @@ Set (FLARE_HEADERS
 	./src/MenuLog.h
 	./src/MenuManager.h
 	./src/MenuMiniMap.h
+	./src/MenuMovementType.h
 	./src/MenuNumPicker.h
 	./src/MenuPowers.h
 	./src/MenuStash.h

@@ -26,6 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "GameStateLoad.h"
 #include "GameStateTitle.h"
 #include "InputState.h"
+#include "MenuMovementType.h"
 #include "MessageEngine.h"
 #include "Platform.h"
 #include "RenderDevice.h"
@@ -42,17 +43,16 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 GameStateTitle::GameStateTitle()
 	: GameState()
 	, logo(NULL)
+	, button_play(new WidgetButton(WidgetButton::DEFAULT_FILE))
+	, button_exit(new WidgetButton(WidgetButton::DEFAULT_FILE))
+	, button_cfg(new WidgetButton(WidgetButton::DEFAULT_FILE))
+	, button_credits(new WidgetButton(WidgetButton::DEFAULT_FILE))
+	, label_version(new WidgetLabel())
+	, menu_movement_type(NULL)
 	, align_logo(Utils::ALIGN_CENTER)
 	, exit_game(false)
 	, load_game(false)
 {
-
-	// set up buttons
-	button_play = new WidgetButton(WidgetButton::DEFAULT_FILE);
-	button_exit = new WidgetButton(WidgetButton::DEFAULT_FILE);
-	button_cfg = new WidgetButton(WidgetButton::DEFAULT_FILE);
-	button_credits = new WidgetButton(WidgetButton::DEFAULT_FILE);
-
 	FileParser infile;
 	// @CLASS GameStateTitle|Description of menus/gametitle.txt
 	if (infile.open("menus/gametitle.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
@@ -121,7 +121,6 @@ GameStateTitle::GameStateTitle()
 	button_exit->refresh();
 
 	// set up labels
-	label_version = new WidgetLabel();
 	label_version->setJustify(FontEngine::JUSTIFY_RIGHT);
 	label_version->setText(VersionInfo::createVersionStringFull());
 	label_version->setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
@@ -141,6 +140,13 @@ GameStateTitle::GameStateTitle()
 	}
 
 	render_device->setBackgroundColor(Color(0,0,0,0));
+
+	// NOTE The presence of the mouse move setting is used to determine if the
+	// movement type dialog is displayed. Is this adequate?
+	if (!settings->move_type_dimissed && platform.config_input[Platform::Input::MOUSE_MOVE]) {
+		menu_movement_type = new MenuMovementType();
+		menu_movement_type->visible = true;
+	}
 }
 
 void GameStateTitle::logic() {
@@ -156,38 +162,36 @@ void GameStateTitle::logic() {
 		exitRequested = true;
 	}
 
-	tablist.logic();
+	if (menu_movement_type && menu_movement_type->visible) {
+		menu_movement_type->logic();
+	}
+	else {
+		tablist.logic();
 
-	if (button_play->checkClick()) {
-		showLoading();
-		setRequestedGameState(new GameStateLoad());
-	}
-	else if (button_cfg->checkClick()) {
-		showLoading();
-		setRequestedGameState(new GameStateConfig());
-		// TODO platform-specific options
-		// if (platform.config_menu_type == Platform::CONFIG_MENU_TYPE_DESKTOP_NO_VIDEO)
-		// 	setRequestedGameState(new GameStateConfigDesktop(!GameStateConfigDesktop::ENABLE_VIDEO_TAB));
-		// else if (platform.config_menu_type == Platform::CONFIG_MENU_TYPE_DESKTOP)
-		// 	setRequestedGameState(new GameStateConfigDesktop(GameStateConfigDesktop::ENABLE_VIDEO_TAB));
-		// else
-		// 	setRequestedGameState(new GameStateConfigBase(GameStateConfigBase::DO_INIT));
-	}
-	else if (button_credits->checkClick()) {
-		showLoading();
-		GameStateTitle *title = new GameStateTitle();
-		GameStateCutscene *credits = new GameStateCutscene(title);
+		if (button_play->checkClick()) {
+			showLoading();
+			setRequestedGameState(new GameStateLoad());
+		}
+		else if (button_cfg->checkClick()) {
+			showLoading();
+			setRequestedGameState(new GameStateConfig());
+		}
+		else if (button_credits->checkClick()) {
+			showLoading();
+			GameStateTitle *title = new GameStateTitle();
+			GameStateCutscene *credits = new GameStateCutscene(title);
 
-		if (!credits->load("cutscenes/credits.txt")) {
-			delete credits;
-			delete title;
+			if (!credits->load("cutscenes/credits.txt")) {
+				delete credits;
+				delete title;
+			}
+			else {
+				setRequestedGameState(credits);
+			}
 		}
-		else {
-			setRequestedGameState(credits);
+		else if (platform.has_exit_button && button_exit->checkClick()) {
+			exitRequested = true;
 		}
-	}
-	else if (platform.has_exit_button && button_exit->checkClick()) {
-		exitRequested = true;
 	}
 }
 
@@ -208,19 +212,27 @@ void GameStateTitle::refreshWidgets() {
 	button_exit->setPos(0, 0);
 
 	label_version->setPos(settings->view_w, 0);
+
+	if (menu_movement_type)
+		menu_movement_type->align();
 }
 
 void GameStateTitle::render() {
-	// display logo
-	render_device->render(logo);
+	if (!menu_movement_type || !menu_movement_type->visible) {
+		// display logo
+		render_device->render(logo);
 
-	// display buttons
-	button_play->render();
-	button_cfg->render();
-	button_credits->render();
+		// display buttons
+		button_play->render();
+		button_cfg->render();
+		button_credits->render();
 
-	if (platform.has_exit_button)
-		button_exit->render();
+		if (platform.has_exit_button)
+			button_exit->render();
+		}
+	else {
+		menu_movement_type->render();
+	}
 
 	// version number
 	label_version->render();
@@ -233,4 +245,5 @@ GameStateTitle::~GameStateTitle() {
 	delete button_credits;
 	delete button_exit;
 	delete label_version;
+	delete menu_movement_type;
 }

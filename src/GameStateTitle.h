@@ -23,6 +23,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "GameState.h"
 #include "Widget.h"
 
+class MenuMovementType;
 class WidgetButton;
 class WidgetLabel;
 
@@ -36,6 +37,7 @@ private:
 	WidgetButton *button_cfg;
 	WidgetButton *button_credits;
 	WidgetLabel *label_version;
+	MenuMovementType *menu_movement_type;
 
 	TabList tablist;
 

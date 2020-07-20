@@ -1,0 +1,15 @@
+# Configuration for the "Select a Movement Type" dialog
+
+pos=0,0,480,192
+align=center
+
+label_title=240,8,center,top
+label_config_hint=240,28,center,top
+
+button_keyboard=19,144
+button_mouse=169,144
+button_joystick=319,144
+
+icon_keyboard=58,64
+icon_mouse=208,64
+icon_joystick=358,64

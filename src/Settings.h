@@ -110,6 +110,7 @@ public:
 
 	// Misc
 	int prev_save_slot;
+	bool move_type_dimissed;
 
 	/**
 	 * NOTE Everything below is not part of the user's settings.txt, but somehow ended up here
