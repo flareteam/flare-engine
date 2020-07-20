@@ -414,7 +414,7 @@ void TabList::logic() {
 
 	// Also defocus if we start using the mouse
 	// we need to disable this for touchscreen devices so that item tooltips will work
-	if (!settings->touchscreen && current != -1 && inpt->usingMouse()) {
+	if (!settings->touchscreen && current != -1 && inpt->usingMouse() && !ignore_no_mouse) {
 		defocus();
 	}
 }
