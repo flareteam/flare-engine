@@ -217,7 +217,7 @@ SDLHardwareRenderDevice::SDLHardwareRenderDevice()
 	, texture(NULL)
 	, titlebar_icon(NULL)
 	, title(NULL)
-	, background_color(0,0,0,0)
+	, background_color(0,0,0,255)
 {
 	Utils::logInfo("Using Render Device: SDLHardwareRenderDevice (hardware, SDL 2, %s)", SDL_GetCurrentVideoDriver());
 
@@ -486,9 +486,10 @@ void SDLHardwareRenderDevice::drawRectangle(const Point& p0, const Point& p1, co
 }
 
 void SDLHardwareRenderDevice::blankScreen() {
-	SDL_SetRenderDrawColor(renderer, background_color.r, background_color.g, background_color.b, background_color.a);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_SetRenderTarget(renderer, NULL);
 	SDL_RenderClear(renderer);
+	SDL_SetRenderDrawColor(renderer, background_color.r, background_color.g, background_color.b, background_color.a);
 	SDL_SetRenderTarget(renderer, texture);
 	SDL_RenderClear(renderer);
 	return;
@@ -640,6 +641,7 @@ void SDLHardwareRenderDevice::windowResize() {
 
 void SDLHardwareRenderDevice::setBackgroundColor(Color color) {
 	background_color = color;
+	background_color.a = 255; // always 100% alpha
 }
 
 void SDLHardwareRenderDevice::setFullscreen(bool enable_fullscreen) {

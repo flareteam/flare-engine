@@ -670,7 +670,7 @@ void SDLSoftwareRenderDevice::windowResize() {
 }
 
 void SDLSoftwareRenderDevice::setBackgroundColor(Color color) {
-	background_color = SDL_MapRGBA(screen->format, color.r, color.g, color.b, color.a);
+	background_color = SDL_MapRGBA(screen->format, color.r, color.g, color.b, 255);
 }
 
 void SDLSoftwareRenderDevice::setFullscreen(bool enable_fullscreen) {
