@@ -102,3 +102,4 @@ In addition, there is a `mods` directory in this location, which can be used to 
 | `--mods`          | Starts the game with only these mods enabled.
 | `--load-slot`     | Loads a save slot by numerical index.
 | `--load-script`   | Execute's a script upon loading a saved game. The script path is mod-relative.
+| `--safe-video`    | Launches with the minimum video settings.

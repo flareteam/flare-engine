@@ -145,6 +145,8 @@ public:
 
 	bool soft_reset;
 
+	bool safe_video;
+
 private:
 	class ConfigEntry {
 	public:

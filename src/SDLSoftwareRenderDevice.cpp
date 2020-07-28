@@ -205,6 +205,17 @@ SDLSoftwareRenderDevice::SDLSoftwareRenderDevice()
 }
 
 int SDLSoftwareRenderDevice::createContextInternal() {
+	if (settings->safe_video) {
+		settings->safe_video = false;
+		Utils::logInfo("RenderDevice: Safe mode is enabled. Using minimum video settings.");
+		settings->fullscreen = false;
+		settings->hwsurface = false;
+		settings->vsync = false;
+		settings->texture_filter = false;
+		settings->screen_w = eset->resolutions.min_screen_w;
+		settings->screen_h = eset->resolutions.min_screen_h;
+	}
+
 	bool settings_changed = ((fullscreen != settings->fullscreen && destructive_fullscreen) ||
 			                 hwsurface != settings->hwsurface ||
 							 vsync != settings->vsync ||

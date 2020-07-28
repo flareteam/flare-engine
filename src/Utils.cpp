@@ -807,12 +807,13 @@ void Utils::lockFileCheck() {
 			{ SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT|SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Quit" },
 			{ 0, 1, "Continue" },
 			{ 0, 2, "Reset" },
+			{ 0, 3, "Safe Video" },
 		};
 		const SDL_MessageBoxData messageboxdata = {
 			SDL_MESSAGEBOX_INFORMATION,
 			NULL,
 			"Flare",
-			"Flare appears to already be running.\n\nYou may either:\n- 'Quit' Flare (safe, recommended)\n- 'Continue' to launch another copy of Flare.\n- 'Reset' the counter which tracks the number of copies of Flare that are currently running.\n  If this dialog is shown every time you launch Flare, this option should fix it.",
+			"Flare is unable to launch properly. This may be because it did not exit properly, or because there is another instance running.\n\nIf Flare crashed, it is recommended to try 'Safe Video' mode. This will try launching Flare with the minimum video settings.\n\nIf Flare is already running, you may:\n- 'Quit' Flare (safe, recommended)\n- 'Continue' to launch another copy of Flare.\n- 'Reset' the counter which tracks the number of copies of Flare that are currently running.\n  If this dialog is shown every time you launch Flare, this option should fix it.",
 			static_cast<int>(SDL_arraysize(buttons)),
 			buttons,
 			NULL
@@ -825,6 +826,10 @@ void Utils::lockFileCheck() {
 		}
 		else if (buttonid == 2) {
 			LOCK_INDEX = 0;
+		}
+		else if (buttonid == 3) {
+			LOCK_INDEX = 0;
+			settings->safe_video = true;
 		}
 	}
 

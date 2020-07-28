@@ -22,6 +22,7 @@ Engine features:
 * Power descriptions are now displayed in action bar tooltips. This can be controlled with the 'tooltip_length' property in menus/actionbar.txt.
 * A dialog box is now displayed instead of a log message when the player dies, giving the options to exit or respawn (if applicable).
 * Added movement input type dialog box. It is displayed for new players to easily select between keyboard, mouse, and joystick movement.
+* Added '--safe-video' command line option. For troubleshooting purposes, this feature is displayed as an option when starting after a potential crash.
 
 Engine fixes:
 

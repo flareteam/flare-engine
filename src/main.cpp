@@ -132,7 +132,9 @@ static void init(const CmdLineArgs& cmd_line_args) {
 	platform.setScreenSize();
 
 	// Create render Device and Rendering Context.
-	if (platform.default_renderer != "")
+	if (settings->safe_video)
+		render_device = getRenderDevice(settings->render_device_name);
+	else if (platform.default_renderer != "")
 		render_device = getRenderDevice(platform.default_renderer);
 	else if (cmd_line_args.render_device_name != "")
 		render_device = getRenderDevice(cmd_line_args.render_device_name);
@@ -395,6 +397,9 @@ int main(int argc, char *argv[]) {
 		else if (arg == "load-script") {
 			settings->load_script = parseArgValue(arg_full);
 		}
+		else if (arg == "safe-video") {
+			settings->safe_video = true;
+		}
 		else if (arg == "help") {
 			Utils::logInfo("Command line options:\n\
 --help                   Prints this message.\n\
@@ -407,7 +412,8 @@ int main(int argc, char *argv[]) {
 --mods=<MOD>,...         Starts the game with only these mods enabled.\n\
 --load-slot=<SLOT>       Loads a save slot by numerical index.\n\
 --load-script=<SCRIPT>   Execute's a script upon loading a saved game.\n\
-                         The script path is mod-relative.\n");
+                         The script path is mod-relative.\n\
+--safe-video             Launches with the minimum video settings.");
 			done = true;
 		}
 		else {

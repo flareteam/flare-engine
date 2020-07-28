@@ -59,6 +59,7 @@ Settings::Settings()
 	, show_hud(true)
 	, encounter_dist(0) // set in updateScreenVars()
 	, soft_reset(false)
+	, safe_video(false)
 {
 	config.resize(40);
 	setConfigDefault(0,  "fullscreen",          &typeid(fullscreen),          "0",            &fullscreen,          "fullscreen mode. 1 enable, 0 disable.");
@@ -134,25 +135,35 @@ void Settings::loadSettings() {
 	}
 
 	// try read from file
+	bool found_settings = false;
+
 	FileParser infile;
-	if (!infile.open(settings->path_conf + "settings.txt", !FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
-		loadMobileDefaults();
-		if (!infile.open("engine/default_settings.txt", FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
-			saveSettings();
-			return;
-		}
-		else saveSettings();
+	if (infile.open(settings->path_conf + "settings.txt", !FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
+		found_settings = true;
+	}
+	else if (infile.open("engine/default_settings.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
+		found_settings = true;
 	}
 
-	while (infile.next()) {
-		size_t entry = getConfigEntry(infile.key);
-		if (entry != config.size()) {
-			Parse::tryParseValue(*config[entry].type, infile.val, config[entry].storage);
-		}
+	if (!found_settings) {
+		saveSettings();
 	}
-	infile.close();
+	else {
+		while (infile.next()) {
+			size_t entry = getConfigEntry(infile.key);
+			if (entry != config.size()) {
+				Parse::tryParseValue(*config[entry].type, infile.val, config[entry].storage);
+			}
+		}
+		infile.close();
+	}
 
 	loadMobileDefaults();
+
+	// Force using the software renderer if safe mode is enabled
+	if (safe_video) {
+		render_device_name = "sdl";
+	}
 }
 
 /**

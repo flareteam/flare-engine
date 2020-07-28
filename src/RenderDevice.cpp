@@ -180,6 +180,7 @@ int RenderDevice::createContext() {
 	int status = createContextInternal();
 
 	if (status == -1) {
+		Utils::logError("RenderDevice: createContext() failed, trying previous settings.");
 		// try previous setting first
 		settings->fullscreen = fullscreen;
 		settings->hwsurface = hwsurface;
@@ -190,6 +191,7 @@ int RenderDevice::createContext() {
 	}
 
 	if (status == -1) {
+		Utils::logError("RenderDevice: createContext() failed, disabling all options.");
 		// last resort, try turning everything off
 		settings->fullscreen = false;
 		settings->hwsurface = false;
