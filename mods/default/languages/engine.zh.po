@@ -5,7 +5,7 @@
 # 
 # Translators:
 # Justin Jacobs <jajdorkster@gmail.com>, 2019
-# 杜茂森 <dumaosen_main01@outlook.com>, 2019
+# 杜茂森 <dumaosen_main01@outlook.com>, 2020
 # 
 #, fuzzy
 msgid ""
@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-05-20 16:39-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: 杜茂森 <dumaosen_main01@outlook.com>, 2019\n"
+"Last-Translator: 杜茂森 <dumaosen_main01@outlook.com>, 2020\n"
 "Language-Team: Chinese (https://www.transifex.com/flareorg/teams/84925/zh/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -33,11 +33,11 @@ msgstr "恭喜，你达到了等级%d!"
 
 #: ../../../src/Avatar.cpp:421
 msgid "You may increase one or more attributes through the Character Menu."
-msgstr ""
+msgstr "你可以在角色菜单增加一点或多点属性。"
 
 #: ../../../src/Avatar.cpp:425
 msgid "You may unlock one or more abilities through the Powers Menu."
-msgstr ""
+msgstr "你可以在技能菜单增加一点或多点技能。"
 
 #: ../../../src/Avatar.cpp:692
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
@@ -59,7 +59,7 @@ msgstr "%d个%s已移除。"
 #: ../../../src/CampaignManager.cpp:165
 #, c-format
 msgid "%s x%d removed."
-msgstr ""
+msgstr "%s个%d已移除。"
 
 #: ../../../src/CampaignManager.cpp:167
 #, c-format
@@ -608,7 +608,7 @@ msgstr "继续"
 
 #: ../../../src/MenuConfig.cpp:248
 msgid "Save Game"
-msgstr ""
+msgstr "保存游戏"
 
 #: ../../../src/MenuConfig.cpp:291
 msgid "Default"
@@ -1433,15 +1433,15 @@ msgstr "下一级："
 
 #: ../../../src/MenuStash.cpp:53
 msgid "Private"
-msgstr ""
+msgstr "隐私"
 
 #: ../../../src/MenuStash.cpp:55
 msgid "Shared"
-msgstr ""
+msgstr "公用"
 
 #: ../../../src/MenuStash.cpp:103
 msgid "Stash"
-msgstr ""
+msgstr "储物柜"
 
 #: ../../../src/MenuStash.cpp:258
 msgid "Can not store quest items in the stash."
@@ -1453,11 +1453,11 @@ msgstr "此物品无法存放在储物柜中。"
 
 #: ../../../src/MenuStash.cpp:268
 msgid "This item can not be stored in the private stash."
-msgstr ""
+msgstr "此物品无法存放在私人储物柜中。"
 
 #: ../../../src/MenuStash.cpp:273
 msgid "This item can not be stored in the shared stash."
-msgstr ""
+msgstr "此物品无法存放在公用储物柜中。"
 
 #: ../../../src/MenuStash.cpp:283
 msgid "Stash is full."
@@ -1508,15 +1508,15 @@ msgstr "游戏已保存。"
 
 #: ../../../src/SDLInputState.cpp:643
 msgid "BkSp"
-msgstr ""
+msgstr "回格键"
 
 #: ../../../src/SDLInputState.cpp:644
 msgid "Caps"
-msgstr ""
+msgstr "大写锁定"
 
 #: ../../../src/SDLInputState.cpp:645
 msgid "Del"
-msgstr ""
+msgstr "删除键"
 
 #: ../../../src/SDLInputState.cpp:647 ../../../src/SDLInputState.cpp:677
 msgid "End"
@@ -1524,7 +1524,7 @@ msgstr "End"
 
 #: ../../../src/SDLInputState.cpp:648
 msgid "Esc"
-msgstr ""
+msgstr "退出键"
 
 #: ../../../src/SDLInputState.cpp:649 ../../../src/SDLInputState.cpp:679
 msgid "Home"
@@ -1532,31 +1532,31 @@ msgstr "Home"
 
 #: ../../../src/SDLInputState.cpp:650
 msgid "Ins"
-msgstr ""
+msgstr "Ins"
 
 #: ../../../src/SDLInputState.cpp:651
 msgid "LAlt"
-msgstr ""
+msgstr "左Alt"
 
 #: ../../../src/SDLInputState.cpp:652
 msgid "LCtrl"
-msgstr ""
+msgstr "左Ctrl"
 
 #: ../../../src/SDLInputState.cpp:654
 msgid "LShft"
-msgstr ""
+msgstr "左Shift"
 
 #: ../../../src/SDLInputState.cpp:655
 msgid "Num"
-msgstr ""
+msgstr "Num"
 
 #: ../../../src/SDLInputState.cpp:656
 msgid "PgDn"
-msgstr ""
+msgstr "PgDn"
 
 #: ../../../src/SDLInputState.cpp:657
 msgid "PgUp"
-msgstr ""
+msgstr "PgUp"
 
 #: ../../../src/SDLInputState.cpp:658 ../../../src/SDLInputState.cpp:688
 msgid "Pause"
@@ -1564,31 +1564,31 @@ msgstr "Pause"
 
 #: ../../../src/SDLInputState.cpp:659
 msgid "Print"
-msgstr ""
+msgstr "Print"
 
 #: ../../../src/SDLInputState.cpp:660
 msgid "RAlt"
-msgstr ""
+msgstr "右Alt"
 
 #: ../../../src/SDLInputState.cpp:661
 msgid "RCtrl"
-msgstr ""
+msgstr "右Ctrl"
 
 #: ../../../src/SDLInputState.cpp:662
 msgid "Ret"
-msgstr ""
+msgstr "Ret"
 
 #: ../../../src/SDLInputState.cpp:664
 msgid "RShft"
-msgstr ""
+msgstr "右Shift"
 
 #: ../../../src/SDLInputState.cpp:665
 msgid "SLock"
-msgstr ""
+msgstr "SLock"
 
 #: ../../../src/SDLInputState.cpp:666
 msgid "Spc"
-msgstr ""
+msgstr "Spc"
 
 #: ../../../src/SDLInputState.cpp:667 ../../../src/SDLInputState.cpp:697
 msgid "Tab"
@@ -1665,7 +1665,7 @@ msgstr "Space"
 #: ../../../src/SDLInputState.cpp:710
 #, c-format
 msgid "M%d"
-msgstr ""
+msgstr "M%d"
 
 #: ../../../src/SDLInputState.cpp:716
 #, c-format
@@ -1675,7 +1675,7 @@ msgstr "鼠标 %d"
 #: ../../../src/SDLInputState.cpp:726
 #, c-format
 msgid "JX%d-"
-msgstr ""
+msgstr "JX%d-"
 
 #: ../../../src/SDLInputState.cpp:728
 #, c-format
@@ -1685,7 +1685,7 @@ msgstr "摇杆轴 %d-"
 #: ../../../src/SDLInputState.cpp:732
 #, c-format
 msgid "JX%d+"
-msgstr ""
+msgstr "JX%d+"
 
 #: ../../../src/SDLInputState.cpp:734
 #, c-format
@@ -1695,7 +1695,7 @@ msgstr "摇杆轴 %d+"
 #: ../../../src/SDLInputState.cpp:739
 #, c-format
 msgid "JB%d"
-msgstr ""
+msgstr "JB%d"
 
 #: ../../../src/SDLInputState.cpp:741
 #, c-format
@@ -1833,7 +1833,7 @@ msgstr "增加你不被发现地移动的能力。"
 
 #: ../../../src/Stats.cpp:103
 msgid "Poise"
-msgstr "毒"
+msgstr "平稳"
 
 #: ../../../src/Stats.cpp:104
 msgid "Reduces your chance of stumbling when hit."

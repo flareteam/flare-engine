@@ -66,7 +66,7 @@ Translation updates:
 * Russian (ru) update (Igor Polyakov)
 * Slovak (sk) update (MiroslavR)
 * Vietnamese (vi) update (Nguyễn Gia Phong)
-* Chinese (zh) update (sakura09123)
+* Chinese (zh) update (dumaosen, sakura09123)
 
 
 
