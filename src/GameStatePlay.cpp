@@ -804,9 +804,7 @@ void GameStatePlay::checkCutscene() {
 	if (eset->misc.save_oncutscene)
 		save_load->saveGame();
 
-	if (menu->devconsole) {
-		menu->devconsole->closeWindow();
-	}
+	menu->closeAll();
 
 	setRequestedGameState(cutscene);
 }
