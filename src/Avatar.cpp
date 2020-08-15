@@ -673,6 +673,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 				if (!stats.corpse && activeAnimation->isFirstFrame() && activeAnimation->getTimesPlayed() < 1) {
 					stats.effects.clearEffects();
+					stats.powers_passive.clear();
 
 					// reset power cooldowns
 					for (size_t i = 0; i < power_cooldown_timers.size(); i++) {
@@ -875,6 +876,10 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 }
 
 void Avatar::transform() {
+	// dead players can't transform
+	if (stats.hp <= 0)
+		return;
+
 	// calling a transform power locks the actionbar, so we unlock it here
 	inpt->unlockActionBar();
 
