@@ -23,6 +23,7 @@ Engine features:
 * A dialog box is now displayed instead of a log message when the player dies, giving the options to exit or respawn (if applicable).
 * Added movement input type dialog box. It is displayed for new players to easily select between keyboard, mouse, and joystick movement.
 * Added '--safe-video' command line option. For troubleshooting purposes, this feature is displayed as an option when starting after a potential crash.
+* The 'categories' property has been extended to the player character. The Power property 'target_categories' can now be used for the player as a result.
 
 Engine fixes:
 

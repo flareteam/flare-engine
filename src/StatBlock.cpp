@@ -307,6 +307,15 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 		}
 		return true;
 	}
+	else if (infile->key == "categories") {
+		// @ATTR categories|list(string)|Categories that this entity belongs to.
+		categories.clear();
+		std::string cat;
+		while ((cat = Parse::popFirstString(infile->val)) != "") {
+			categories.push_back(cat);
+		}
+		return true;
+	}
 
 	return false;
 }
@@ -561,15 +570,6 @@ void StatBlock::load(const std::string& filename) {
 
 		// @ATTR suppress_hp|bool|Hides the enemy HP bar for this creature.
 		else if (infile.key == "suppress_hp") suppress_hp = Parse::toBool(infile.val);
-
-		else if (infile.key == "categories") {
-			// @ATTR categories|list(string)|Categories that this enemy belongs to.
-			categories.clear();
-			std::string cat;
-			while ((cat = Parse::popFirstString(infile.val)) != "") {
-				categories.push_back(cat);
-			}
-		}
 
 		// @ATTR flee_duration|duration|The minimum amount of time that this creature will flee. They may flee longer than the specified time.
 		else if (infile.key == "flee_duration") flee_timer.setDuration(Parse::toDuration(infile.val));

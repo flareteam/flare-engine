@@ -302,7 +302,7 @@ bool Entity::move() {
 bool Entity::takeHit(Hazard &h) {
 
 	//check if this enemy should be affected by this hazard based on the category
-	if(!powers->powers[h.power_index].target_categories.empty() && !stats.hero) {
+	if(!powers->powers[h.power_index].target_categories.empty()) {
 		//the power has a target category requirement, so if it doesnt match, dont continue
 		bool match_found = false;
 		for (unsigned int i=0; i<stats.categories.size(); i++) {
