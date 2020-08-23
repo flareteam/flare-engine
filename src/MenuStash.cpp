@@ -254,12 +254,7 @@ bool MenuStash::add(ItemStack stack, int slot, bool play_sound) {
 		items->playSound(stack.item);
 	}
 
-	if (items->items[stack.item].quest_item) {
-		pc->logMsg(msg->get("Can not store quest items in the stash."), Avatar::MSG_NORMAL);
-		drop_stack.push(stack);
-		return false;
-	}
-	else if (items->items[stack.item].no_stash == Item::NO_STASH_ALL) {
+	if (items->items[stack.item].no_stash == Item::NO_STASH_ALL) {
 		pc->logMsg(msg->get("This item can not be stored in the stash."), Avatar::MSG_NORMAL);
 		drop_stack.push(stack);
 		return false;
@@ -336,7 +331,7 @@ void MenuStash::validate(std::queue<ItemStack>& global_drop_stack) {
 
 			ItemStack stack = stock[tab][i];
 			int no_stash = items->items[stack.item].no_stash;
-			if (items->items[stack.item].quest_item || no_stash == Item::NO_STASH_ALL || (tab == STASH_PRIVATE && no_stash == Item::NO_STASH_PRIVATE) || (tab == STASH_SHARED && no_stash == Item::NO_STASH_SHARED)) {
+			if (no_stash == Item::NO_STASH_ALL || (tab == STASH_PRIVATE && no_stash == Item::NO_STASH_PRIVATE) || (tab == STASH_SHARED && no_stash == Item::NO_STASH_SHARED)) {
 				pc->logMsg(msg->get("Can not store item in stash: %s", items->getItemName(stack.item).c_str()), Avatar::MSG_NORMAL);
 				global_drop_stack.push(stack);
 				stock[tab][i].clear();

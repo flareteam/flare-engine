@@ -943,7 +943,7 @@ body {
 
 <p><strong>disable_slots</strong> | <code>list(predefined_string)</code> | A comma separated list of equip slot types to disable when this item is equipped.</p>
 
-<p><strong>quest_item</strong> | <code>bool</code> | If true, this item is a quest item and can not be dropped, stashed, or sold.</p>
+<p><strong>quest_item</strong> | <code>bool</code> | If true, this item is a quest item and can not be dropped or sold. The item also can&rsquo;t be stashed, unless the no_stash property is set to something other than &ldquo;all&rdquo;.</p>
 
 <p><strong>no_stash</strong> | <code>["ignore", "private", "shared", "all"]</code> | If not set to &lsquo;ignore&rsquo;, this item will not be able to be put in the corresponding stash.</p>
 

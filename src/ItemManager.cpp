@@ -88,7 +88,7 @@ Item::Item()
 	, pickup_status("")
 	, stepfx("")
 	, quest_item(false)
-	, no_stash(NO_STASH_IGNORE) {
+	, no_stash(NO_STASH_NULL) {
 }
 
 ItemManager::ItemManager()
@@ -361,8 +361,12 @@ void ItemManager::loadItems(const std::string& filename) {
 			}
 		}
 		else if (infile.key == "quest_item") {
-			// @ATTR quest_item|bool|If true, this item is a quest item and can not be dropped, stashed, or sold.
+			// @ATTR quest_item|bool|If true, this item is a quest item and can not be dropped or sold. The item also can't be stashed, unless the no_stash property is set to something other than "all".
 			items[id].quest_item = Parse::toBool(infile.val);
+
+			// for legacy reasons, quest items can't be stashed by default
+			if (items[id].no_stash == Item::NO_STASH_NULL)
+				items[id].no_stash = Item::NO_STASH_ALL;
 		}
 		else if (infile.key == "no_stash") {
 			// @ATTR no_stash|["ignore", "private", "shared", "all"]|If not set to 'ignore', this item will not be able to be put in the corresponding stash.
@@ -384,6 +388,13 @@ void ItemManager::loadItems(const std::string& filename) {
 
 	}
 	infile.close();
+
+	// normal items can be stored in either stash
+	for (size_t i=0; i<items.size(); ++i) {
+		if (items[i].no_stash == Item::NO_STASH_NULL) {
+			items[i].no_stash = Item::NO_STASH_IGNORE;
+		}
+	}
 }
 
 /**

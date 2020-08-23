@@ -99,10 +99,11 @@ private:
 
 public:
 	enum {
-		NO_STASH_IGNORE = 0,
-		NO_STASH_PRIVATE = 1,
-		NO_STASH_SHARED = 2,
-		NO_STASH_ALL = 3
+		NO_STASH_NULL = 0,
+		NO_STASH_IGNORE = 1,
+		NO_STASH_PRIVATE = 2,
+		NO_STASH_SHARED = 3,
+		NO_STASH_ALL = 4
 	};
 
 	bool has_name;        // flag that is set when the item name is parsed
