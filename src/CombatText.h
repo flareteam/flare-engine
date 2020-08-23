@@ -44,6 +44,8 @@ public:
 	float floating_offset;
 	std::string text;
 	int displaytype;
+	bool is_int;
+	int int_value;
 };
 
 class CombatText {

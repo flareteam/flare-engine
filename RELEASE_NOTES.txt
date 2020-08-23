@@ -50,6 +50,7 @@ Engine fixes:
 * Fix crash when loading a cutscene from a book event.
 * Fix infinite transformation loop when dying in a transformed state that was activated by a passive power.
 * Fix bug where the player wasn't returned to their normal state after dying in a transformed state.
+* Prevent combat text from overlapping.
 
 Game updates:
 
