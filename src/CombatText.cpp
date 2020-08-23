@@ -45,6 +45,7 @@ Combat_Text_Item::Combat_Text_Item()
 {}
 
 Combat_Text_Item::~Combat_Text_Item() {
+	// label deletion is handled by CombatText class
 }
 
 CombatText::CombatText() {
@@ -100,33 +101,33 @@ CombatText::~CombatText() {
 }
 
 void CombatText::addString(const std::string& message, const FPoint& location, int displaytype) {
-	if (settings->combat_text) {
-		Combat_Text_Item *c = new Combat_Text_Item();
-		WidgetLabel *label = new WidgetLabel();
-		c->pos.x = location.x;
-		c->pos.y = location.y;
-		c->floating_offset = static_cast<float>(offset);
-		c->label = label;
-		c->text = message;
-		c->lifespan = duration;
-		c->displaytype = displaytype;
+	if (!settings->combat_text)
+		return;
 
-		c->label->setPos(static_cast<int>(c->pos.x), static_cast<int>(c->pos.y));
-		c->label->setJustify(FontEngine::JUSTIFY_CENTER);
-		c->label->setVAlign(LabelInfo::VALIGN_BOTTOM);
-		c->label->setText(c->text);
-		c->label->setColor(msg_color[c->displaytype]);
-		combat_text.push_back(*c);
-		delete c;
-	}
+	Combat_Text_Item c;
+	c.pos.x = location.x;
+	c.pos.y = location.y;
+	c.floating_offset = static_cast<float>(offset);
+	c.text = message;
+	c.lifespan = duration;
+	c.displaytype = displaytype;
+
+	c.label = new WidgetLabel();
+	c.label->setPos(static_cast<int>(c.pos.x), static_cast<int>(c.pos.y));
+	c.label->setJustify(FontEngine::JUSTIFY_CENTER);
+	c.label->setVAlign(LabelInfo::VALIGN_BOTTOM);
+	c.label->setText(c.text);
+	c.label->setColor(msg_color[c.displaytype]);
+	combat_text.push_back(c);
 }
 
 void CombatText::addInt(int num, const FPoint& location, int displaytype) {
-	if (settings->combat_text) {
-		std::stringstream ss;
-		ss << num;
-		addString(ss.str(), location, displaytype);
-	}
+	if (!settings->combat_text)
+		return;
+
+	std::stringstream ss;
+	ss << num;
+	addString(ss.str(), location, displaytype);
 }
 
 void CombatText::logic(const FPoint& _cam) {
@@ -165,5 +166,8 @@ void CombatText::render() {
 }
 
 void CombatText::clear() {
-	combat_text.clear();
+	while (combat_text.size()) {
+		delete combat_text.begin()->label;
+		combat_text.erase(combat_text.begin());
+	}
 }
