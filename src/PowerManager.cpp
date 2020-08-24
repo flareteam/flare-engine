@@ -1637,7 +1637,7 @@ void PowerManager::activatePassives(StatBlock *src_stats) {
 	activatePassivePostPowers(src_stats);
 
 	// passive powers can lock equipment slots, so update equipment here
-	if (activated_passive)
+	if (activated_passive && src_stats->hero)
 		menu->inv->applyEquipment();
 }
 
