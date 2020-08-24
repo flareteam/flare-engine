@@ -640,13 +640,22 @@ void StatBlock::recalc() {
  */
 void StatBlock::calcBase() {
 	// bonuses are skipped for the default level 1 of a stat
-	int lev0 = std::max(level - 1, 0);
+	const int lev0 = std::max(level - 1, 0);
 
-	for (size_t i = 0; i < Stats::COUNT + eset->damage_types.count; ++i) {
-		base[i] = starting[i];
-		base[i] += lev0 * per_level[i];
+	if (per_primary.empty()) {
+		for (size_t i = 0; i < Stats::COUNT + eset->damage_types.count; ++i) {
+			base[i] = starting[i] + (lev0 * per_level[i]);
+		}
+	}
+	else {
 		for (size_t j = 0; j < per_primary.size(); ++j) {
-			base[i] += std::max(get_primary(j) - 1, 0) * per_primary[j][i];
+			const int current_primary = std::max(get_primary(j) - 1, 0);
+			const std::vector<int>& per_primary_vec = per_primary[j];
+			for (size_t i = 0; i < Stats::COUNT + eset->damage_types.count; ++i) {
+				if (j==0)
+					base[i] = starting[i] + (lev0 * per_level[i]);
+				base[i] += (current_primary * per_primary_vec[i]);
+			}
 		}
 	}
 
@@ -669,7 +678,6 @@ void StatBlock::calcBase() {
  * Recalc derived stats from base stats + effect bonuses
  */
 void StatBlock::applyEffects() {
-
 	// preserve hp/mp states
 	// max HP and MP can't drop below 1
 	prev_maxhp = std::max(get(Stats::HP_MAX), 1);
@@ -688,11 +696,11 @@ void StatBlock::applyEffects() {
 
 	calcBase();
 
-	for (size_t i=0; i<Stats::COUNT + eset->damage_types.count; i++) {
+	for (size_t i = 0; i < Stats::COUNT + eset->damage_types.count; ++i) {
 		current[i] = base[i] + effects.bonus[i];
 	}
 
-	for (unsigned i=0; i<effects.bonus_resist.size(); i++) {
+	for (size_t i = 0; i < effects.bonus_resist.size(); ++i) {
 		vulnerable[i] = vulnerable_base[i] - effects.bonus_resist[i];
 	}
 
