@@ -296,7 +296,9 @@ void MapRenderer::logic(bool paused) {
 
 	// handle statblock logic for map powers
 	for (unsigned i=0; i<statblocks.size(); ++i) {
-		statblocks[i].logic();
+		for (size_t j=0; j<statblocks[i].powers_ai.size(); ++j) {
+			statblocks[i].powers_ai[j].cooldown.tick();
+		}
 	}
 
 	// handle event cooldowns
