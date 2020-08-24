@@ -1613,19 +1613,21 @@ void PowerManager::payPowerCost(int power_index, StatBlock *src_stats) {
  * Activate an entity's passive powers
  */
 void PowerManager::activatePassives(StatBlock *src_stats) {
+	bool activated_passive = false;
 	bool triggered_others = false;
 	// unlocked powers
 	for (unsigned i=0; i<src_stats->powers_passive.size(); i++) {
-		activatePassiveByTrigger(src_stats->powers_passive[i], src_stats, triggered_others);
+		activated_passive |= activatePassiveByTrigger(src_stats->powers_passive[i], src_stats, triggered_others);
 	}
 
 	// item powers
 	for (unsigned i=0; i<src_stats->powers_list_items.size(); i++) {
-		activatePassiveByTrigger(src_stats->powers_list_items[i], src_stats, triggered_others);
+		activated_passive |= activatePassiveByTrigger(src_stats->powers_list_items[i], src_stats, triggered_others);
 	}
 
 	// Only trigger normal passives once
-	if (triggered_others) src_stats->effects.triggered_others = true;
+	if (triggered_others)
+		src_stats->effects.triggered_others = true;
 
 	// the hit/death triggers can be triggered more than once, so reset them here
 	// the block trigger is handled in the Avatar class
@@ -1635,28 +1637,39 @@ void PowerManager::activatePassives(StatBlock *src_stats) {
 	activatePassivePostPowers(src_stats);
 
 	// passive powers can lock equipment slots, so update equipment here
-	menu->inv->applyEquipment();
+	if (activated_passive)
+		menu->inv->applyEquipment();
 }
 
-void PowerManager::activatePassiveByTrigger(int power_id, StatBlock *src_stats, bool& triggered_others) {
+bool PowerManager::activatePassiveByTrigger(int power_id, StatBlock *src_stats, bool& triggered_others) {
 	if (powers[power_id].passive) {
 		int trigger = powers[power_id].passive_trigger;
 
 		if (trigger == -1) {
-			if (src_stats->effects.triggered_others) return;
-			else triggered_others = true;
+			if (src_stats->effects.triggered_others)
+				return false;
+			else
+				triggered_others = true;
 		}
-		else if (trigger == Power::TRIGGER_BLOCK && !src_stats->effects.triggered_block) return;
-		else if (trigger == Power::TRIGGER_HIT && !src_stats->effects.triggered_hit) return;
+		else if (trigger == Power::TRIGGER_BLOCK && !src_stats->effects.triggered_block)
+			return false;
+		else if (trigger == Power::TRIGGER_HIT && !src_stats->effects.triggered_hit)
+			return false;
 		else if (trigger == Power::TRIGGER_HALFDEATH && !src_stats->effects.triggered_halfdeath) {
-			if (src_stats->hp > src_stats->get(Stats::HP_MAX)/2) return;
-			else src_stats->effects.triggered_halfdeath = true;
+			if (src_stats->hp > src_stats->get(Stats::HP_MAX)/2)
+				return false;
+			else
+				src_stats->effects.triggered_halfdeath = true;
 		}
 		else if (trigger == Power::TRIGGER_JOINCOMBAT && !src_stats->effects.triggered_joincombat) {
-			if (!src_stats->in_combat) return;
-			else src_stats->effects.triggered_joincombat = true;
+			if (!src_stats->in_combat)
+				return false;
+			else
+				src_stats->effects.triggered_joincombat = true;
 		}
-		else if (trigger == Power::TRIGGER_DEATH && !src_stats->effects.triggered_death) return;
+		else if (trigger == Power::TRIGGER_DEATH && !src_stats->effects.triggered_death) {
+			return false;
+		}
 
 		activate(power_id, src_stats, src_stats->pos);
 		src_stats->refresh_stats = true;
@@ -1665,7 +1678,10 @@ void PowerManager::activatePassiveByTrigger(int power_id, StatBlock *src_stats, 
 		if (post_power > 0) {
 			src_stats->setPowerCooldown(post_power, powers[post_power].cooldown);
 		}
+
+		return true;
 	}
+	return false;
 }
 
 /**
