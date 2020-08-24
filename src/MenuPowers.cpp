@@ -721,32 +721,34 @@ void MenuPowers::setUnlockedPowers() {
 		for (size_t j = 0; j < power_cell[i].cells.size(); ++j) {
 			MenuPowersCell* pcell = &power_cell[i].cells[j];
 
-			if (pcell != bonus_pcell || ((!checkRequirements(current_pcell) || (!pcell->is_unlocked && !isBonusCell(pcell))) && pcell->passive_on)) {
+			if (pcell != bonus_pcell || (pcell->passive_on && powers->powers[pcell->id].passive && (!checkRequirements(current_pcell) || (!pcell->is_unlocked && !isBonusCell(pcell))))) {
 				// passive power is activated, but does not meet requirements, so remove it
 				std::vector<int>::iterator passive_it = std::find(pc->stats.powers_passive.begin(), pc->stats.powers_passive.end(), pcell->id);
-				if (passive_it != pc->stats.powers_passive.end())
+				if (passive_it != pc->stats.powers_passive.end()) {
 					pc->stats.powers_passive.erase(passive_it);
 
-				pc->stats.effects.removeEffectPassive(pcell->id);
-				pcell->passive_on = false;
-				pc->stats.refresh_stats = true;
+					pc->stats.effects.removeEffectPassive(pcell->id);
+					pcell->passive_on = false;
+					pc->stats.refresh_stats = true;
 
-				// passive powers can lock equipment slots, so update equipment here
-				menu->inv->applyEquipment();
+					// passive powers can lock equipment slots, so update equipment here
+					menu->inv->applyEquipment();
+				}
 			}
-			else if (pcell == bonus_pcell && checkRequirements(current_pcell) && !pcell->passive_on) {
+			else if (pcell == bonus_pcell && !pcell->passive_on && powers->powers[pcell->id].passive && checkRequirements(current_pcell)) {
 				// passive power has not been activated, so activate it here
 				std::vector<int>::iterator passive_it = std::find(pc->stats.powers_passive.begin(), pc->stats.powers_passive.end(), pcell->id);
-				if (passive_it == pc->stats.powers_passive.end())
+				if (passive_it == pc->stats.powers_passive.end()) {
 					pc->stats.powers_passive.push_back(pcell->id);
 
-				pcell->passive_on = true;
-				// for passives without special triggers, we need to trigger them here
-				if (pc->stats.effects.triggered_others)
-					powers->activateSinglePassive(&pc->stats, pcell->id);
+					pcell->passive_on = true;
+					// for passives without special triggers, we need to trigger them here
+					if (pc->stats.effects.triggered_others)
+						powers->activateSinglePassive(&pc->stats, pcell->id);
 
-				// passive powers can lock equipment slots, so update equipment here
-				menu->inv->applyEquipment();
+					// passive powers can lock equipment slots, so update equipment here
+					menu->inv->applyEquipment();
+				}
 			}
 		}
 
