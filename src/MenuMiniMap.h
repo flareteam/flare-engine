@@ -29,6 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class MapCollision;
 class Sprite;
+class WidgetButton;
 class WidgetLabel;
 
 class MenuMiniMap : public Menu {
@@ -59,6 +60,7 @@ private:
 	WidgetLabel *label;
 	Sprite *compass;
 	Rect map_area;
+	WidgetButton* button_config;
 
 	int current_zoom;
 	bool lock_zoom_change;
@@ -84,6 +86,8 @@ public:
 	void render(const FPoint& hero_pos);
 	void prerender(MapCollision *collider, int map_w, int map_h);
 	void setMapTitle(const std::string& map_title);
+
+	bool clicked_config;
 };
 
 

@@ -25,6 +25,7 @@ Engine features:
 * Added '--safe-video' command line option. For troubleshooting purposes, this feature is displayed as an option when starting after a potential crash.
 * The 'categories' property has been extended to the player character. The Power property 'target_categories' can now be used for the player as a result.
 * The ability to stash quest items can now be controlled with the 'no_stash' property.
+* Added a button for opening the pause/configuration menu as part of the minimap.
 
 Engine fixes:
 

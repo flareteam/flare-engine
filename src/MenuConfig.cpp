@@ -1601,6 +1601,10 @@ void MenuConfig::resetSelectedTab() {
 	tablist_input.defocus();
 	tablist_keybinds.defocus();
 	tablist_mods.defocus();
+
+	input_confirm->visible = false;
+	input_confirm_timer.reset(Timer::END);
+	keybind_tip_timer.reset(Timer::END);
 }
 
 void MenuConfig::cleanup() {

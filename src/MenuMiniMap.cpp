@@ -35,11 +35,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MapRenderer.h"
 #include "Menu.h"
 #include "MenuMiniMap.h"
+#include "MessageEngine.h"
 #include "RenderDevice.h"
 #include "Settings.h"
 #include "SharedResources.h"
 #include "SharedGameResources.h"
 #include "UtilsParsing.h"
+#include "WidgetButton.h"
 #include "WidgetLabel.h"
 
 #include <cmath>
@@ -58,8 +60,10 @@ MenuMiniMap::MenuMiniMap()
 	, map_surface_entities_2x(NULL)
 	, label(new WidgetLabel())
 	, compass(NULL)
+	, button_config(NULL)
 	, current_zoom(1)
 	, lock_zoom_change(false)
+	, clicked_config(false)
 {
 	std::string bg_filename;
 
@@ -111,6 +115,14 @@ MenuMiniMap::MenuMiniMap()
 			else if (infile.key == "color_teleport") {
 				color_teleport = Parse::toRGBA(infile.val);
 			}
+			// @ATTR button_config|point|Position of the 'Configuration' button. The button will be hidden if not defined.
+			else if (infile.key == "button_config") {
+				if (!button_config) {
+					button_config = new WidgetButton("images/menus/buttons/button_config.png");
+				}
+				Point p = Parse::toPoint(infile.val);
+				button_config->setBasePos(p.x, p.y, Utils::ALIGN_TOPLEFT);
+			}
 			else {
 				infile.error("MenuMiniMap: '%s' is not a valid key.", infile.key.c_str());
 			}
@@ -136,12 +148,18 @@ MenuMiniMap::MenuMiniMap()
 		gfx->unref();
 	}
 
+	if (button_config)
+		button_config->tooltip = msg->get("Configuration");
+
 	align();
 }
 
 void MenuMiniMap::align() {
 	Menu::align();
 	label->setPos(window_area.x, window_area.y);
+
+	if (button_config)
+		button_config->setPos(window_area.x, window_area.y);
 
 	map_area.x = window_area.x + pos.x;
 	map_area.y = window_area.y + pos.y;
@@ -176,7 +194,10 @@ void MenuMiniMap::createMapSurface(Sprite **target_surface, int w, int h) {
 }
 
 void MenuMiniMap::logic() {
-	if (settings->minimap_mode != Settings::MINIMAP_HIDDEN && inpt->usingMouse()) {
+	if (!settings->show_hud || settings->minimap_mode == Settings::MINIMAP_HIDDEN)
+		return;
+
+	if (inpt->usingMouse()) {
 		bool is_within_maparea = Utils::isWithinRect(map_area, inpt->mouse);
 
 		if (!lock_zoom_change)
@@ -190,6 +211,13 @@ void MenuMiniMap::logic() {
 				settings->minimap_mode = Settings::MINIMAP_2X;
 			else if (settings->minimap_mode == Settings::MINIMAP_2X)
 				settings->minimap_mode = Settings::MINIMAP_NORMAL;
+		}
+	}
+
+	if (button_config) {
+		button_config->enabled = !pc->stats.corpse;
+		if (button_config->checkClick()) {
+			clicked_config = true;
 		}
 	}
 }
@@ -215,6 +243,9 @@ void MenuMiniMap::render(const FPoint& hero_pos) {
 	if (compass) {
 		render_device->render(compass);
 	}
+
+	if (button_config)
+		button_config->render();
 }
 
 void MenuMiniMap::prerender(MapCollision *collider, int map_w, int map_h) {
@@ -585,4 +616,5 @@ MenuMiniMap::~MenuMiniMap() {
 
 	delete label;
 	delete compass;
+	delete button_config;
 }

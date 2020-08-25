@@ -465,6 +465,10 @@ void MenuManager::logic() {
 			}
 		}
 	}
+	if (mini->clicked_config) {
+		mini->clicked_config = false;
+		showExitMenu();
+	}
 
 	if (exit->visible) {
 		exit->logic();
@@ -1436,8 +1440,12 @@ void MenuManager::showExitMenu() {
 
 	pause = true;
 	closeAll();
-	if (exit)
-		exit->visible = true;
+	if (exit) {
+		// handleCancel() will show the menu, but only if it is already hidden
+		// we use handleCancel() here because it will reset the menu to the "Exit" tab
+		exit->visible = false;
+		exit->handleCancel();
+	}
 }
 
 MenuManager::~MenuManager() {
