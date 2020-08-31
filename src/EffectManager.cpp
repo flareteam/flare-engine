@@ -33,7 +33,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 EffectDef::EffectDef()
 	: id("")
-	, type("")
+	, type(Effect::NONE)
 	, name("")
 	, icon(-1)
 	, animation("")
@@ -52,7 +52,7 @@ Effect::Effect()
 	, icon(-1)
 	, ticks(0)
 	, duration(-1)
-	, type(NONE)
+	, type(Effect::NONE)
 	, magnitude(0)
 	, magnitude_max(0)
 	, animation_name("")
@@ -126,6 +126,67 @@ void Effect::unloadAnimation() {
 	}
 }
 
+int Effect::getTypeFromString(const std::string& type_str) {
+	if (type_str.empty()) return Effect::NONE;
+
+	if (type_str == "damage") return Effect::DAMAGE;
+	else if (type_str == "damage_percent") return Effect::DAMAGE_PERCENT;
+	else if (type_str == "hpot") return Effect::HPOT;
+	else if (type_str == "hpot_percent") return Effect::HPOT_PERCENT;
+	else if (type_str == "mpot") return Effect::MPOT;
+	else if (type_str == "mpot_percent") return Effect::MPOT_PERCENT;
+	else if (type_str == "speed") return Effect::SPEED;
+	else if (type_str == "attack_speed") return Effect::ATTACK_SPEED;
+	else if (type_str == "immunity") return Effect::IMMUNITY;
+	else if (type_str == "immunity_damage") return Effect::IMMUNITY_DAMAGE;
+	else if (type_str == "immunity_slow") return Effect::IMMUNITY_SLOW;
+	else if (type_str == "immunity_stun") return Effect::IMMUNITY_STUN;
+	else if (type_str == "immunity_hp_steal") return Effect::IMMUNITY_HP_STEAL;
+	else if (type_str == "immunity_mp_steal") return Effect::IMMUNITY_MP_STEAL;
+	else if (type_str == "immunity_knockback") return Effect::IMMUNITY_KNOCKBACK;
+	else if (type_str == "immunity_damage_reflect") return Effect::IMMUNITY_DAMAGE_REFLECT;
+	else if (type_str == "immunity_stat_debuff") return Effect::IMMUNITY_STAT_DEBUFF;
+	else if (type_str == "stun") return Effect::STUN;
+	else if (type_str == "revive") return Effect::REVIVE;
+	else if (type_str == "convert") return Effect::CONVERT;
+	else if (type_str == "fear") return Effect::FEAR;
+	else if (type_str == "death_sentence") return Effect::DEATH_SENTENCE;
+	else if (type_str == "shield") return Effect::SHIELD;
+	else if (type_str == "heal") return Effect::HEAL;
+	else if (type_str == "knockback") return Effect::KNOCKBACK;
+	else {
+		for (int i=0; i<Stats::COUNT; ++i) {
+			if (type_str == Stats::KEY[i]) {
+				return Effect::TYPE_COUNT + i;
+			}
+		}
+
+		for (size_t i=0; i<eset->damage_types.list.size(); ++i) {
+			if (type_str == eset->damage_types.list[i].min) {
+				return Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(i*2);
+			}
+			else if (type_str == eset->damage_types.list[i].max) {
+				return Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(i*2) + 1;
+			}
+		}
+
+		for (size_t i=0; i<eset->elements.list.size(); ++i) {
+			if (type_str == eset->elements.list[i].id + "_resist") {
+				return Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count + i);
+			}
+		}
+
+		for (size_t i=0; i<eset->primary_stats.list.size(); ++i) {
+			if (type_str == eset->primary_stats.list[i].id) {
+				return Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count) + static_cast<int>(eset->elements.list.size() + i);
+			}
+		}
+	}
+
+	Utils::logError("EffectManager: '%s' is not a valid effect type.", type_str.c_str());
+	return Effect::NONE;
+}
+
 EffectManager::EffectManager()
 	: bonus(std::vector<int>(Stats::COUNT + eset->damage_types.count, 0))
 	, bonus_resist(std::vector<int>(eset->elements.list.size(), 0))
@@ -182,16 +243,18 @@ void EffectManager::clearStatus() {
 void EffectManager::logic() {
 	clearStatus();
 
-	for (unsigned i=0; i<effect_list.size(); i++) {
+	for (size_t i=0; i<effect_list.size(); ++i) {
+		Effect& ei = effect_list[i];
+
 		// @CLASS EffectManager|Description of "type" in powers/effects.txt
 		// expire timed effects and total up magnitudes of active effects
-		if (effect_list[i].duration >= 0) {
-			if (effect_list[i].duration > 0) {
-				if (effect_list[i].ticks > 0) effect_list[i].ticks--;
-				if (effect_list[i].ticks == 0) {
+		if (ei.duration >= 0) {
+			if (ei.duration > 0) {
+				if (ei.ticks > 0) ei.ticks--;
+				if (ei.ticks == 0) {
 					//death sentence is only applied at the end of the timer
 					// @TYPE death_sentence|Causes sudden death at the end of the effect duration.
-					if (effect_list[i].type == Effect::DEATH_SENTENCE) death_sentence = true;
+					if (ei.type == Effect::DEATH_SENTENCE) death_sentence = true;
 					removeEffect(i);
 					i--;
 					continue;
@@ -199,24 +262,24 @@ void EffectManager::logic() {
 			}
 
 			// @TYPE damage|Damage per second
-			if (effect_list[i].type == Effect::DAMAGE && effect_list[i].ticks % settings->max_frames_per_sec == 1) damage += effect_list[i].magnitude;
+			if (ei.type == Effect::DAMAGE && ei.ticks % settings->max_frames_per_sec == 1) damage += ei.magnitude;
 			// @TYPE damage_percent|Damage per second (percentage of max HP)
-			else if (effect_list[i].type == Effect::DAMAGE_PERCENT && effect_list[i].ticks % settings->max_frames_per_sec == 1) damage_percent += effect_list[i].magnitude;
+			else if (ei.type == Effect::DAMAGE_PERCENT && ei.ticks % settings->max_frames_per_sec == 1) damage_percent += ei.magnitude;
 			// @TYPE hpot|HP restored per second
-			else if (effect_list[i].type == Effect::HPOT && effect_list[i].ticks % settings->max_frames_per_sec == 1) hpot += effect_list[i].magnitude;
+			else if (ei.type == Effect::HPOT && ei.ticks % settings->max_frames_per_sec == 1) hpot += ei.magnitude;
 			// @TYPE hpot_percent|HP restored per second (percentage of max HP)
-			else if (effect_list[i].type == Effect::HPOT_PERCENT && effect_list[i].ticks % settings->max_frames_per_sec == 1) hpot_percent += effect_list[i].magnitude;
+			else if (ei.type == Effect::HPOT_PERCENT && ei.ticks % settings->max_frames_per_sec == 1) hpot_percent += ei.magnitude;
 			// @TYPE mpot|MP restored per second
-			else if (effect_list[i].type == Effect::MPOT && effect_list[i].ticks % settings->max_frames_per_sec == 1) mpot += effect_list[i].magnitude;
+			else if (ei.type == Effect::MPOT && ei.ticks % settings->max_frames_per_sec == 1) mpot += ei.magnitude;
 			// @TYPE mpot_percent|MP restored per second (percentage of max MP)
-			else if (effect_list[i].type == Effect::MPOT_PERCENT && effect_list[i].ticks % settings->max_frames_per_sec == 1) mpot_percent += effect_list[i].magnitude;
+			else if (ei.type == Effect::MPOT_PERCENT && ei.ticks % settings->max_frames_per_sec == 1) mpot_percent += ei.magnitude;
 			// @TYPE speed|Changes movement speed. A magnitude of 100 is 100% speed (aka normal speed).
-			else if (effect_list[i].type == Effect::SPEED) speed = (static_cast<float>(effect_list[i].magnitude) * speed) / 100.f;
+			else if (ei.type == Effect::SPEED) speed = (static_cast<float>(ei.magnitude) * speed) / 100.f;
 			// @TYPE attack_speed|Changes attack speed. A magnitude of 100 is 100% speed (aka normal speed).
 			// attack speed is calculated when getAttackSpeed() is called
 
 			// @TYPE immunity|Applies all immunity effects. Magnitude is ignored.
-			else if (effect_list[i].type == Effect::IMMUNITY) {
+			else if (ei.type == Effect::IMMUNITY) {
 				immunity_damage = true;
 				immunity_slow = true;
 				immunity_stun = true;
@@ -227,63 +290,63 @@ void EffectManager::logic() {
 				immunity_stat_debuff = true;
 			}
 			// @TYPE immunity_damage|Removes and prevents damage over time. Magnitude is ignored.
-			else if (effect_list[i].type == Effect::IMMUNITY_DAMAGE) immunity_damage = true;
+			else if (ei.type == Effect::IMMUNITY_DAMAGE) immunity_damage = true;
 			// @TYPE immunity_slow|Removes and prevents slow effects. Magnitude is ignored.
-			else if (effect_list[i].type == Effect::IMMUNITY_SLOW) immunity_slow = true;
+			else if (ei.type == Effect::IMMUNITY_SLOW) immunity_slow = true;
 			// @TYPE immunity_stun|Removes and prevents stun effects. Magnitude is ignored.
-			else if (effect_list[i].type == Effect::IMMUNITY_STUN) immunity_stun = true;
+			else if (ei.type == Effect::IMMUNITY_STUN) immunity_stun = true;
 			// @TYPE immunity_hp_steal|Prevents HP stealing. Magnitude is ignored.
-			else if (effect_list[i].type == Effect::IMMUNITY_HP_STEAL) immunity_hp_steal = true;
+			else if (ei.type == Effect::IMMUNITY_HP_STEAL) immunity_hp_steal = true;
 			// @TYPE immunity_mp_steal|Prevents MP stealing. Magnitude is ignored.
-			else if (effect_list[i].type == Effect::IMMUNITY_MP_STEAL) immunity_mp_steal = true;
+			else if (ei.type == Effect::IMMUNITY_MP_STEAL) immunity_mp_steal = true;
 			// @TYPE immunity_knockback|Removes and prevents knockback effects. Magnitude is ignored.
-			else if (effect_list[i].type == Effect::IMMUNITY_KNOCKBACK) immunity_knockback = true;
+			else if (ei.type == Effect::IMMUNITY_KNOCKBACK) immunity_knockback = true;
 			// @TYPE immunity_damage_reflect|Prevents damage reflection. Magnitude is ignored.
-			else if (effect_list[i].type == Effect::IMMUNITY_DAMAGE_REFLECT) immunity_damage_reflect = true;
+			else if (ei.type == Effect::IMMUNITY_DAMAGE_REFLECT) immunity_damage_reflect = true;
 			// @TYPE immunity_stat_debuff|Prevents stat value altering effects that have a magnitude less than 0. Magnitude is ignored.
-			else if (effect_list[i].type == Effect::IMMUNITY_STAT_DEBUFF) immunity_stat_debuff = true;
+			else if (ei.type == Effect::IMMUNITY_STAT_DEBUFF) immunity_stat_debuff = true;
 
 			// @TYPE stun|Can't move or attack. Being attacked breaks stun.
-			else if (effect_list[i].type == Effect::STUN) stun = true;
+			else if (ei.type == Effect::STUN) stun = true;
 			// @TYPE revive|Revives the player. Typically attached to a power that triggers when the player dies.
-			else if (effect_list[i].type == Effect::REVIVE) revive = true;
+			else if (ei.type == Effect::REVIVE) revive = true;
 			// @TYPE convert|Causes an enemy or an ally to switch allegiance
-			else if (effect_list[i].type == Effect::CONVERT) convert = true;
+			else if (ei.type == Effect::CONVERT) convert = true;
 			// @TYPE fear|Causes enemies to run away
-			else if (effect_list[i].type == Effect::FEAR) fear = true;
+			else if (ei.type == Effect::FEAR) fear = true;
 			// @TYPE knockback|Pushes the target away from the source caster. Speed is the given value divided by the framerate cap.
-			else if (effect_list[i].type == Effect::KNOCKBACK) knockback_speed = static_cast<float>(effect_list[i].magnitude)/static_cast<float>(settings->max_frames_per_sec);
+			else if (ei.type == Effect::KNOCKBACK) knockback_speed = static_cast<float>(ei.magnitude)/static_cast<float>(settings->max_frames_per_sec);
 
 			// @TYPE ${STATNAME}|Increases ${STATNAME}, where ${STATNAME} is any of the base stats. Examples: hp, avoidance, xp_gain
 			// @TYPE ${DAMAGE_TYPE}|Increases a damage min or max, where ${DAMAGE_TYPE} is any 'min' or 'max' value found in engine/damage_types.txt. Example: dmg_melee_min
-			else if (effect_list[i].type >= Effect::TYPE_COUNT && effect_list[i].type < Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count)) {
-				bonus[effect_list[i].type - Effect::TYPE_COUNT] += effect_list[i].magnitude;
+			else if (ei.type >= Effect::TYPE_COUNT && ei.type < Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count)) {
+				bonus[ei.type - Effect::TYPE_COUNT] += ei.magnitude;
 			}
-			// else if (effect_list[i].type >= Effect::TYPE_COUNT + Stats::COUNT && effect_list[i].type < Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count)) {
-			// 	bonus[effect_list[i].type - Effect::TYPE_COUNT] += effect_list[i].magnitude;
+			// else if (ei.type >= Effect::TYPE_COUNT + Stats::COUNT && ei.type < Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count)) {
+			// 	bonus[ei.type - Effect::TYPE_COUNT] += ei.magnitude;
 			// }
 			// @TYPE ${ELEMENT}_resist|Increase Resistance % to ${ELEMENT}, where ${ELEMENT} is any found in engine/elements.txt. Example: fire_resist
-			else if (effect_list[i].type >= Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count) && effect_list[i].type < Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count) + static_cast<int>(eset->elements.list.size())) {
-				bonus_resist[effect_list[i].type - Effect::TYPE_COUNT - Stats::COUNT - eset->damage_types.count] += effect_list[i].magnitude;
+			else if (ei.type >= Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count) && ei.type < Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count) + static_cast<int>(eset->elements.list.size())) {
+				bonus_resist[ei.type - Effect::TYPE_COUNT - Stats::COUNT - eset->damage_types.count] += ei.magnitude;
 			}
 			// @TYPE ${PRIMARYSTAT}|Increases ${PRIMARYSTAT}, where ${PRIMARYSTAT} is any of the primary stats defined in engine/primary_stats.txt. Example: physical
-			else if (effect_list[i].type >= Effect::TYPE_COUNT) {
-				bonus_primary[effect_list[i].type - Effect::TYPE_COUNT - Stats::COUNT - eset->damage_types.count - eset->elements.list.size()] += effect_list[i].magnitude;
+			else if (ei.type >= Effect::TYPE_COUNT) {
+				bonus_primary[ei.type - Effect::TYPE_COUNT - Stats::COUNT - eset->damage_types.count - eset->elements.list.size()] += ei.magnitude;
 			}
 		}
 		// expire shield effects
-		if (effect_list[i].magnitude_max > 0 && effect_list[i].magnitude == 0) {
+		if (ei.magnitude_max > 0 && ei.magnitude == 0) {
 			// @TYPE shield|Create a damage absorbing barrier based on Mental damage stat. Duration is ignored.
-			if (effect_list[i].type == Effect::SHIELD) {
+			if (ei.type == Effect::SHIELD) {
 				removeEffect(i);
 				i--;
 				continue;
 			}
 		}
 		// expire effects based on animations
-		if ((effect_list[i].animation && effect_list[i].animation->isLastFrame()) || !effect_list[i].animation) {
+		if ((ei.animation && ei.animation->isLastFrame()) || !ei.animation) {
 			// @TYPE heal|Restore HP based on Mental damage stat.
-			if (effect_list[i].type == Effect::HEAL) {
+			if (ei.type == Effect::HEAL) {
 				removeEffect(i);
 				i--;
 				continue;
@@ -291,9 +354,9 @@ void EffectManager::logic() {
 		}
 
 		// animate
-		if (effect_list[i].animation) {
-			if (!effect_list[i].animation->isCompleted())
-				effect_list[i].animation->advanceFrame();
+		if (ei.animation) {
+			if (!ei.animation->isCompleted())
+				ei.animation->advanceFrame();
 		}
 	}
 }
@@ -308,50 +371,53 @@ void EffectManager::addItemEffect(EffectDef &effect, int duration, int magnitude
 }
 
 void EffectManager::addEffectInternal(EffectDef &effect, int duration, int magnitude, int source_type, bool item, size_t power_id) {
-	int effect_type = getType(effect.type);
 	refresh_stats = true;
 
 	// if we're already immune, don't add negative effects
-	if (immunity_damage && (effect_type == Effect::DAMAGE || effect_type == Effect::DAMAGE_PERCENT))
+	if (immunity_damage && (effect.type == Effect::DAMAGE || effect.type == Effect::DAMAGE_PERCENT))
 		return;
-	else if (immunity_slow && effect_type == Effect::SPEED && magnitude < 100)
+	else if (immunity_slow && effect.type == Effect::SPEED && magnitude < 100)
 		return;
-	else if (immunity_stun && effect_type == Effect::STUN)
+	else if (immunity_stun && effect.type == Effect::STUN)
 		return;
-	else if (immunity_knockback && effect_type == Effect::KNOCKBACK)
+	else if (immunity_knockback && effect.type == Effect::KNOCKBACK)
 		return;
-	else if (immunity_stat_debuff && effect_type > Effect::TYPE_COUNT && magnitude < 0)
+	else if (immunity_stat_debuff && effect.type > Effect::TYPE_COUNT && magnitude < 0)
 		return;
 
 	// only allow one knockback effect at a time
-	if (effect_type == Effect::KNOCKBACK && knockback_speed != 0)
+	if (effect.type == Effect::KNOCKBACK && knockback_speed != 0)
 		return;
 
 	bool insert_effect = false;
-	int stacks_applied = 0;
 	size_t insert_pos;
+	int stacks_applied = 0;
 	int trigger = power_id > 0 ? powers->powers[power_id].passive_trigger : -1;
 	size_t passive_id = (power_id > 0 && powers->powers[power_id].passive) ? power_id : 0;
 
 	for (size_t i=effect_list.size(); i>0; i--) {
-		if (effect_list[i-1].id == effect.id) {
-			if (trigger > -1 && effect_list[i-1].trigger == trigger)
+		Effect& ei = effect_list[i-1];
+
+		// while checking only id would be sufficient, it is a slow string compare
+		// so we check the type first, which is an int compare, before taking the slow path
+		if (ei.type == effect.type && ei.id == effect.id) {
+			if (trigger > -1 && ei.trigger == trigger)
 				return; // trigger effects can only be cast once per trigger
 
 			if (!effect.can_stack) {
 				removeEffect(i-1);
 			}
 			else{
-				if(effect_type == Effect::SHIELD && effect.group_stack){
-					effect_list[i-1].magnitude += magnitude;
+				if(effect.type == Effect::SHIELD && effect.group_stack){
+					ei.magnitude += magnitude;
 
 					if(effect.max_stacks == -1
-						|| (magnitude != 0 && effect_list[i-1].magnitude_max/magnitude < effect.max_stacks)){
-						effect_list[i-1].magnitude_max += magnitude;
+						|| (magnitude != 0 && ei.magnitude_max/magnitude < effect.max_stacks)){
+						ei.magnitude_max += magnitude;
 					}
 
-					if(effect_list[i-1].magnitude > effect_list[i-1].magnitude_max){
-						effect_list[i-1].magnitude = effect_list[i-1].magnitude_max;
+					if(ei.magnitude > ei.magnitude_max){
+						ei.magnitude = ei.magnitude_max;
 					}
 
 					return;
@@ -368,15 +434,15 @@ void EffectManager::addEffectInternal(EffectDef &effect, int duration, int magni
 			}
 		}
 		// if we're adding an immunity effect, remove all negative effects
-		if (effect_type == Effect::IMMUNITY)
+		if (effect.type == Effect::IMMUNITY)
 			clearNegativeEffects();
-		else if (effect_type == Effect::IMMUNITY_DAMAGE)
+		else if (effect.type == Effect::IMMUNITY_DAMAGE)
 			clearNegativeEffects(Effect::IMMUNITY_DAMAGE);
-		else if (effect_type == Effect::IMMUNITY_SLOW)
+		else if (effect.type == Effect::IMMUNITY_SLOW)
 			clearNegativeEffects(Effect::IMMUNITY_SLOW);
-		else if (effect_type == Effect::IMMUNITY_STUN)
+		else if (effect.type == Effect::IMMUNITY_STUN)
 			clearNegativeEffects(Effect::IMMUNITY_STUN);
-		else if (effect_type == Effect::IMMUNITY_KNOCKBACK)
+		else if (effect.type == Effect::IMMUNITY_KNOCKBACK)
 			clearNegativeEffects(Effect::IMMUNITY_KNOCKBACK);
 	}
 
@@ -385,14 +451,14 @@ void EffectManager::addEffectInternal(EffectDef &effect, int duration, int magni
 	e.id = effect.id;
 	e.name = effect.name;
 	e.icon = effect.icon;
-	e.type = effect_type;
+	e.type = effect.type;
 	e.render_above = effect.render_above;
 	e.group_stack = effect.group_stack;
 	e.color_mod = effect.color_mod;
 	e.alpha_mod = effect.alpha_mod;
 	e.attack_speed_anim = effect.attack_speed_anim;
 
-	if (effect.animation != "") {
+	if (!effect.animation.empty()) {
 		e.loadAnimation(effect.animation);
 	}
 
@@ -403,18 +469,20 @@ void EffectManager::addEffectInternal(EffectDef &effect, int duration, int magni
 	e.passive_id = passive_id;
 	e.source_type = source_type;
 
-	if(insert_effect && effect.max_stacks != -1 && stacks_applied >= effect.max_stacks){
-		//Remove the oldest effect of the type
-		removeEffect(insert_pos-stacks_applied);
+	if (insert_effect) {
+		if (effect.max_stacks != -1 && stacks_applied >= effect.max_stacks){
+			//Remove the oldest effect of the type
+			removeEffect(insert_pos-stacks_applied);
 
-		//All elemnts have shiftef to left
-		insert_pos--;
-	}
+			//All elemnts have shiftef to left
+			insert_pos--;
+		}
 
-	if (insert_effect)
 		effect_list.insert(effect_list.begin() + insert_pos, e);
-	else
+	}
+	else {
 		effect_list.push_back(e);
+	}
 }
 
 void EffectManager::removeEffect(size_t id) {
@@ -508,67 +576,6 @@ int EffectManager::damageShields(int dmg) {
 	}
 
 	return over_dmg;
-}
-
-int EffectManager::getType(const std::string& type) {
-	if (type.empty()) return Effect::NONE;
-
-	if (type == "damage") return Effect::DAMAGE;
-	else if (type == "damage_percent") return Effect::DAMAGE_PERCENT;
-	else if (type == "hpot") return Effect::HPOT;
-	else if (type == "hpot_percent") return Effect::HPOT_PERCENT;
-	else if (type == "mpot") return Effect::MPOT;
-	else if (type == "mpot_percent") return Effect::MPOT_PERCENT;
-	else if (type == "speed") return Effect::SPEED;
-	else if (type == "attack_speed") return Effect::ATTACK_SPEED;
-	else if (type == "immunity") return Effect::IMMUNITY;
-	else if (type == "immunity_damage") return Effect::IMMUNITY_DAMAGE;
-	else if (type == "immunity_slow") return Effect::IMMUNITY_SLOW;
-	else if (type == "immunity_stun") return Effect::IMMUNITY_STUN;
-	else if (type == "immunity_hp_steal") return Effect::IMMUNITY_HP_STEAL;
-	else if (type == "immunity_mp_steal") return Effect::IMMUNITY_MP_STEAL;
-	else if (type == "immunity_knockback") return Effect::IMMUNITY_KNOCKBACK;
-	else if (type == "immunity_damage_reflect") return Effect::IMMUNITY_DAMAGE_REFLECT;
-	else if (type == "immunity_stat_debuff") return Effect::IMMUNITY_STAT_DEBUFF;
-	else if (type == "stun") return Effect::STUN;
-	else if (type == "revive") return Effect::REVIVE;
-	else if (type == "convert") return Effect::CONVERT;
-	else if (type == "fear") return Effect::FEAR;
-	else if (type == "death_sentence") return Effect::DEATH_SENTENCE;
-	else if (type == "shield") return Effect::SHIELD;
-	else if (type == "heal") return Effect::HEAL;
-	else if (type == "knockback") return Effect::KNOCKBACK;
-	else {
-		for (int i=0; i<Stats::COUNT; i++) {
-			if (type == Stats::KEY[i]) {
-				return Effect::TYPE_COUNT + i;
-			}
-		}
-
-		for (unsigned i=0; i<eset->damage_types.list.size(); i++) {
-			if (type == eset->damage_types.list[i].min) {
-				return Effect::TYPE_COUNT + Stats::COUNT + (i*2);
-			}
-			else if (type == eset->damage_types.list[i].max) {
-				return Effect::TYPE_COUNT + Stats::COUNT + (i*2) + 1;
-			}
-		}
-
-		for (unsigned i=0; i<bonus_resist.size(); i++) {
-			if (type == eset->elements.list[i].id + "_resist") {
-				return Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count) + i;
-			}
-		}
-
-		for (unsigned i=0; i<bonus_primary.size(); i++) {
-			if (type == eset->primary_stats.list[i].id) {
-				return Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count) + static_cast<int>(eset->elements.list.size()) + i;
-			}
-		}
-	}
-
-	Utils::logError("EffectManager: '%s' is not a valid effect type.", type.c_str());
-	return Effect::NONE;
 }
 
 bool EffectManager::isDebuffed() {

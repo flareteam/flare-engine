@@ -901,73 +901,76 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, int
 			}
 		}
 		else {
-			if (effect_ptr->type == "damage") {
+			if (effect_ptr->type == Effect::DAMAGE) {
 				ss << pwr.post_effects[i].magnitude << " " << msg->get("Damage per second");
 			}
-			else if (effect_ptr->type == "damage_percent") {
+			else if (effect_ptr->type == Effect::DAMAGE_PERCENT) {
 				ss << pwr.post_effects[i].magnitude << "% " << msg->get("Damage per second");
 			}
-			else if (effect_ptr->type == "hpot") {
+			else if (effect_ptr->type == Effect::HPOT) {
 				ss << pwr.post_effects[i].magnitude << " " << msg->get("HP per second");
 			}
-			else if (effect_ptr->type == "hpot_percent") {
+			else if (effect_ptr->type == Effect::HPOT_PERCENT) {
 				ss << pwr.post_effects[i].magnitude << "% " << msg->get("HP per second");
 			}
-			else if (effect_ptr->type == "mpot") {
+			else if (effect_ptr->type == Effect::MPOT) {
 				ss << pwr.post_effects[i].magnitude << " " << msg->get("MP per second");
 			}
-			else if (effect_ptr->type == "mpot_percent") {
+			else if (effect_ptr->type == Effect::MPOT_PERCENT) {
 				ss << pwr.post_effects[i].magnitude << "% " << msg->get("MP per second");
 			}
-			else if (effect_ptr->type == "speed") {
+			else if (effect_ptr->type == Effect::SPEED) {
 				if (pwr.post_effects[i].magnitude == 0)
 					ss << msg->get("Immobilize");
 				else
 					ss << msg->get("%d%% Speed", pwr.post_effects[i].magnitude);
 			}
-			else if (effect_ptr->type == "attack_speed") {
+			else if (effect_ptr->type == Effect::ATTACK_SPEED) {
 				ss << msg->get("%d%% Attack Speed", pwr.post_effects[i].magnitude);
 			}
-			else if (effect_ptr->type == "immunity") {
+			else if (effect_ptr->type == Effect::IMMUNITY) {
 				ss << msg->get("Immunity");
 			}
-			else if (effect_ptr->type == "immunity_damage") {
+			else if (effect_ptr->type == Effect::IMMUNITY_DAMAGE) {
 				ss << msg->get("Immunity to damage over time");
 			}
-			else if (effect_ptr->type == "immunity_slow") {
+			else if (effect_ptr->type == Effect::IMMUNITY_SLOW) {
 				ss << msg->get("Immunity to slow");
 			}
-			else if (effect_ptr->type == "immunity_stun") {
+			else if (effect_ptr->type == Effect::IMMUNITY_STUN) {
 				ss << msg->get("Immunity to stun");
 			}
-			else if (effect_ptr->type == "immunity_hp_steal") {
+			else if (effect_ptr->type == Effect::IMMUNITY_HP_STEAL) {
 				ss << msg->get("Immunity to HP steal");
 			}
-			else if (effect_ptr->type == "immunity_mp_steal") {
+			else if (effect_ptr->type == Effect::IMMUNITY_MP_STEAL) {
 				ss << msg->get("Immunity to MP steal");
 			}
-			else if (effect_ptr->type == "immunity_knockback") {
+			else if (effect_ptr->type == Effect::IMMUNITY_KNOCKBACK) {
 				ss << msg->get("Immunity to knockback");
 			}
-			else if (effect_ptr->type == "immunity_damage_reflect") {
+			else if (effect_ptr->type == Effect::IMMUNITY_DAMAGE_REFLECT) {
 				ss << msg->get("Immunity to damage reflection");
 			}
-			else if (effect_ptr->type == "stun") {
+
+			// TODO Effect::IMMUNITY_STAT_DEBUFF?
+
+			else if (effect_ptr->type == Effect::STUN) {
 				ss << msg->get("Stun");
 			}
-			else if (effect_ptr->type == "revive") {
+			else if (effect_ptr->type == Effect::REVIVE) {
 				ss << msg->get("Automatic revive on death");
 			}
-			else if (effect_ptr->type == "convert") {
+			else if (effect_ptr->type == Effect::CONVERT) {
 				ss << msg->get("Convert");
 			}
-			else if (effect_ptr->type == "fear") {
+			else if (effect_ptr->type == Effect::FEAR) {
 				ss << msg->get("Fear");
 			}
-			else if (effect_ptr->type == "death_sentence") {
+			else if (effect_ptr->type == Effect::DEATH_SENTENCE) {
 				ss << msg->get("Lifespan");
 			}
-			else if (effect_ptr->type == "shield") {
+			else if (effect_ptr->type == Effect::SHIELD) {
 				if (pwr.base_damage == eset->damage_types.list.size())
 					continue;
 
@@ -991,7 +994,7 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, int
 
 				ss << " " << msg->get("Magical Shield");
 			}
-			else if (effect_ptr->type == "heal") {
+			else if (effect_ptr->type == Effect::HEAL) {
 				if (pwr.base_damage == eset->damage_types.list.size())
 					continue;
 
@@ -1020,7 +1023,7 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, int
 
 				ss << " " << msg->get("Healing");
 			}
-			else if (effect_ptr->type == "knockback") {
+			else if (effect_ptr->type == Effect::KNOCKBACK) {
 				ss << pwr.post_effects[i].magnitude << " " << msg->get("Knockback");
 			}
 			else if (!effect_ptr->name.empty() && pwr.post_effects[i].magnitude > 0) {
@@ -1035,7 +1038,7 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, int
 
 		if (!ss.str().empty()) {
 			if (pwr.post_effects[i].duration > 0) {
-				if (effect_ptr && effect_ptr->type == "death_sentence") {
+				if (effect_ptr && effect_ptr->type == Effect::DEATH_SENTENCE) {
 					ss << ": " << Utils::getDurationString(pwr.post_effects[i].duration, 2);
 				}
 				else {

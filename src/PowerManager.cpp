@@ -208,7 +208,7 @@ void PowerManager::loadEffects() {
 		}
 		else if (infile.key == "type") {
 			// @ATTR effect.type|string|Defines the type of effect
-			effects.back().type = infile.val;
+			effects.back().type = Effect::getTypeFromString(infile.val);
 		}
 		else if (infile.key == "name") {
 			// @ATTR effect.name|string|A displayed name that is shown when hovering the mouse over the effect icon.
@@ -1156,14 +1156,14 @@ bool PowerManager::effect(StatBlock *target_stats, StatBlock *caster_stats, int 
 		int duration = pe.duration;
 
 		StatBlock *dest_stats = pe.target_src ? caster_stats : target_stats;
-		if (dest_stats->hp <= 0 && !(effect_data.type == "revive" || (effect_data.type.empty() && pe.id == "revive")))
+		if (dest_stats->hp <= 0 && !(effect_data.type == Effect::REVIVE || (effect_data.type == Effect::NONE && pe.id == "revive")))
 			continue;
 
 		if (effect_ptr != NULL) {
 			// effects loaded from powers/effects.txt
 			effect_data = (*effect_ptr);
 
-			if (effect_data.type == "shield") {
+			if (effect_data.type == Effect::SHIELD) {
 				if (pwr.base_damage == eset->damage_types.list.size())
 					continue;
 
@@ -1179,7 +1179,7 @@ bool PowerManager::effect(StatBlock *target_stats, StatBlock *caster_stats, int 
 
 				comb->addString(msg->get("+%d Shield",magnitude), dest_stats->pos, CombatText::MSG_BUFF);
 			}
-			else if (effect_data.type == "heal") {
+			else if (effect_data.type == Effect::HEAL) {
 				if (pwr.base_damage == eset->damage_types.list.size())
 					continue;
 
@@ -1197,7 +1197,7 @@ bool PowerManager::effect(StatBlock *target_stats, StatBlock *caster_stats, int 
 				dest_stats->hp += magnitude;
 				if (dest_stats->hp > dest_stats->get(Stats::HP_MAX)) dest_stats->hp = dest_stats->get(Stats::HP_MAX);
 			}
-			else if (effect_data.type == "knockback") {
+			else if (effect_data.type == Effect::KNOCKBACK) {
 				if (dest_stats->speed_default == 0) {
 					// enemies that can't move can't be knocked back
 					continue;
@@ -1208,7 +1208,8 @@ bool PowerManager::effect(StatBlock *target_stats, StatBlock *caster_stats, int 
 		}
 		else {
 			// all other effects
-			effect_data.id = effect_data.type = pe.id;
+			effect_data.id = pe.id;
+			effect_data.type = Effect::getTypeFromString(pe.id);
 		}
 
 		dest_stats->effects.addEffect(effect_data, duration, magnitude, source_type, power_index);

@@ -1092,30 +1092,32 @@ void MenuInventory::applyBonus(const BonusData* bdata) {
 	EffectDef ed;
 
 	if (bdata->is_speed) {
-		ed.id = ed.type = "speed";
+		ed.id = "speed";
 	}
 	else if (bdata->is_attack_speed) {
-		ed.id = ed.type = "attack_speed";
+		ed.id = "attack_speed";
 	}
 	else if (bdata->stat_index != -1) {
-		ed.id = ed.type = Stats::KEY[bdata->stat_index];
+		ed.id = Stats::KEY[bdata->stat_index];
 	}
 	else if (bdata->damage_index_min != -1) {
-		ed.id = ed.type = eset->damage_types.list[bdata->damage_index_min].min;
+		ed.id = eset->damage_types.list[bdata->damage_index_min].min;
 	}
 	else if (bdata->damage_index_max != -1) {
-		ed.id = ed.type = eset->damage_types.list[bdata->damage_index_max].max;
+		ed.id = eset->damage_types.list[bdata->damage_index_max].max;
 	}
 	else if (bdata->resist_index != -1) {
-		ed.id = ed.type = eset->elements.list[bdata->resist_index].id + "_resist";
+		ed.id = eset->elements.list[bdata->resist_index].id + "_resist";
 	}
 	else if (bdata->base_index > -1 && static_cast<size_t>(bdata->base_index) < eset->primary_stats.list.size()) {
-		ed.id = ed.type = eset->primary_stats.list[bdata->base_index].id;
+		ed.id = eset->primary_stats.list[bdata->base_index].id;
 	}
 	else if (bdata->power_id > 0) {
 		menu->pow->addBonusLevels(bdata->power_id, bdata->value);
 		return; // don't add item effect
 	}
+
+	ed.type = Effect::getTypeFromString(ed.id);
 
 	pc->stats.effects.addItemEffect(ed, 0, bdata->value);
 }
