@@ -408,23 +408,23 @@ void EffectManager::addEffectInternal(EffectDef &effect, int duration, int magni
 				removeEffect(i-1);
 			}
 			else{
-				if(effect.type == Effect::SHIELD && effect.group_stack){
+				if (effect.type == Effect::SHIELD && effect.group_stack){
 					ei.magnitude += magnitude;
 
-					if(effect.max_stacks == -1
+					if (effect.max_stacks == -1
 						|| (magnitude != 0 && ei.magnitude_max/magnitude < effect.max_stacks)){
 						ei.magnitude_max += magnitude;
 					}
 
-					if(ei.magnitude > ei.magnitude_max){
+					if (ei.magnitude > ei.magnitude_max){
 						ei.magnitude = ei.magnitude_max;
 					}
 
 					return;
 				}
 
-				 if (insert_effect == false) {
-					// to keep matching effects together, they are inserted after the most recent matching effect
+				if (insert_effect == false && effect.max_stacks != -1) {
+					// to keep stackable effects together, they are inserted after the most recent matching effect
 					// otherwise, they are added to the end of the effect list
 					insert_effect = true;
 					insert_pos = i;
@@ -474,7 +474,7 @@ void EffectManager::addEffectInternal(EffectDef &effect, int duration, int magni
 			//Remove the oldest effect of the type
 			removeEffect(insert_pos-stacks_applied);
 
-			//All elemnts have shiftef to left
+			//All elements have shifted to left
 			insert_pos--;
 		}
 
