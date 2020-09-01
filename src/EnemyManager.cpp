@@ -526,12 +526,15 @@ void EnemyManager::addRenders(std::vector<Renderable> &r, std::vector<Renderable
 			(dead ? r_dead : r).push_back(re);
 
 			// add effects
-			for (unsigned i = 0; i < (*it)->stats.effects.effect_list.size(); ++i) {
-				if ((*it)->stats.effects.effect_list[i].animation) {
-					Renderable ren = (*it)->stats.effects.effect_list[i].animation->getCurrentFrame(0);
+			for (size_t i = 0; i < (*it)->stats.effects.effect_list.size(); ++i) {
+				Effect& ei = (*it)->stats.effects.effect_list[i];
+				if (ei.animation) {
+					Renderable ren = ei.animation->getCurrentFrame(0);
 					ren.map_pos = (*it)->stats.pos;
-					if ((*it)->stats.effects.effect_list[i].render_above) ren.prio = 2;
-					else ren.prio = 0;
+					if (ei.render_above)
+						ren.prio = 2;
+					else
+						ren.prio = 0;
 					r.push_back(ren);
 				}
 			}
