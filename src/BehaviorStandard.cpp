@@ -39,6 +39,8 @@ BehaviorStandard::BehaviorStandard(Enemy *_e)
 	, collided(false)
 	, path_found(false)
 	, chance_calc_path(0)
+	, path_found_fails(0)
+	, path_found_fail_timer()
 	, target_dist(0)
 	, pursue_pos(-1, -1)
 	, los(false)
@@ -46,6 +48,9 @@ BehaviorStandard::BehaviorStandard(Enemy *_e)
 	, move_to_safe_dist(false)
 	, turn_timer()
 {
+	// wait when PATH_FOUND_FAIL_THRESHOLD is exceeded
+	path_found_fail_timer.setDuration(settings->max_frames_per_sec * PATH_FOUND_FAIL_WAIT_SECONDS);
+	path_found_fail_timer.reset(Timer::END);
 }
 
 /**
@@ -359,6 +364,8 @@ void BehaviorStandard::checkMove() {
 	// clear current space to allow correct movement
 	mapr->collider.unblock(e->stats.pos.x, e->stats.pos.y);
 
+	path_found_fail_timer.tick();
+
 	// update direction
 	if (e->stats.facing) {
 		turn_timer.tick();
@@ -371,45 +378,66 @@ void BehaviorStandard::checkMove() {
 
 				bool recalculate_path = false;
 
-				//if theres no path, it needs to be calculated
-				if(path.empty())
-					recalculate_path = true;
-
-				//if the target moved more than 1 tile away, recalculate
-				if(Utils::calcDist(FPoint(Point(prev_target)), FPoint(Point(pursue_pos))) > 1.f)
-					recalculate_path = true;
-
-				//if a collision ocurred then recalculate
-				if(collided)
-					recalculate_path = true;
-
-				//add a 5% chance to recalculate on every frame. This prevents reclaulating lots of entities in the same frame
+				// add a 5% chance to recalculate on every frame. This prevents reclaulating lots of entities in the same frame
 				chance_calc_path += 5;
 
-				if(Math::percentChance(chance_calc_path))
+				bool calc_path_success = Math::percentChance(chance_calc_path);
+				if (calc_path_success)
 					recalculate_path = true;
 
-				//dont recalculate if we were blocked and no path was found last time
-				//this makes sure that pathfinding calculation is not spammed when the target is unreachable and the entity is as close as its going to get
-				if(!path_found && collided && !Math::percentChance(chance_calc_path))
+				// if a collision ocurred then recalculate
+				if (collided)
+					recalculate_path = true;
+
+				// if theres no path, it needs to be calculated
+				if (!recalculate_path && path.empty())
+					recalculate_path = true;
+
+				// if the target moved more than 1 tile away, recalculate
+				if (!recalculate_path && Utils::calcDist(FPoint(Point(prev_target)), FPoint(Point(pursue_pos))) > 1.f)
+					recalculate_path = true;
+
+				// dont recalculate if we were blocked and no path was found last time
+				// this makes sure that pathfinding calculation is not spammed when the target is unreachable and the entity is as close as its going to get
+				if (!path_found && collided && !calc_path_success) {
 					recalculate_path = false;
-				else//reset the collision flag only if we dont want the cooldown in place
+				}
+				else {
+					// reset the collision flag only if we dont want the cooldown in place
 					collided = false;
+				}
+
+				if (!path_found_fail_timer.isEnd()) {
+					recalculate_path = false;
+					chance_calc_path = -100;
+				}
 
 				prev_target = pursue_pos;
 
 				// target first waypoint
-				if(recalculate_path) {
+				if (recalculate_path) {
 					chance_calc_path = -100;
 					path.clear();
 					path_found = mapr->collider.computePath(e->stats.pos, pursue_pos, path, e->stats.movement_type, MapCollision::DEFAULT_PATH_LIMIT);
+
+					if (!path_found) {
+						path_found_fails++;
+						if (path_found_fails >= PATH_FOUND_FAIL_THRESHOLD) {
+							// could not find a path after several tries, so wait a little before the next attempt
+							path_found_fail_timer.reset(Timer::BEGIN);
+						}
+					}
+					else {
+						path_found_fails = 0;
+						path_found_fail_timer.reset(Timer::END);
+					}
 				}
 
-				if(!path.empty()) {
+				if (!path.empty()) {
 					pursue_pos = path.back();
 
-					//if distance to node is lower than a tile size, the node is going to be passed and can be removed
-					if(Utils::calcDist(e->stats.pos, pursue_pos) <= 1.f)
+					// if distance to node is lower than a tile size, the node is going to be passed and can be removed
+					if (Utils::calcDist(e->stats.pos, pursue_pos) <= 1.f)
 						path.pop_back();
 				}
 			}
