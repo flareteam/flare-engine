@@ -611,11 +611,12 @@ void EffectManager::getCurrentAlpha(uint8_t& alpha_mod) {
 	uint8_t no_alpha = 255;
 
 	for (size_t i=effect_list.size(); i > 0; i--) {
-		if (effect_list[i-1].alpha_mod == no_alpha)
+		Effect& ei = effect_list[i-1];
+		if (ei.alpha_mod == no_alpha)
 			continue;
 
-		if (effect_list[i-1].alpha_mod != default_alpha) {
-			alpha_mod = effect_list[i-1].alpha_mod;
+		if (ei.alpha_mod != default_alpha) {
+			alpha_mod = ei.alpha_mod;
 			return;
 		}
 	}
