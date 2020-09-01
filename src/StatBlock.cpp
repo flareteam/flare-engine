@@ -731,11 +731,12 @@ void StatBlock::logic() {
 			Power *buff_power = &powers->powers[power_index];
 
 			for (size_t i=0; i < enemym->enemies.size(); ++i) {
-				if(enemym->enemies[i]->stats.hp > 0 &&
-				   ((enemym->enemies[i]->stats.hero_ally && hero) || (enemym->enemies[i]->stats.enemy_ally && enemym->enemies[i]->stats.summoner == this)) &&
-				   (buff_power->buff_party_power_id == 0 || buff_power->buff_party_power_id == enemym->enemies[i]->stats.summoned_power_index)
+				Enemy* party_member = enemym->enemies[i];
+				if(party_member->stats.hp > 0 &&
+				   ((party_member->stats.hero_ally && hero) || (party_member->stats.enemy_ally && party_member->stats.summoner == this)) &&
+				   (buff_power->buff_party_power_id == 0 || buff_power->buff_party_power_id == party_member->stats.summoned_power_index)
 				) {
-					powers->effect(&enemym->enemies[i]->stats, this, power_index, (hero ? Power::SOURCE_TYPE_HERO : Power::SOURCE_TYPE_ENEMY));
+					powers->effect(&(party_member->stats), this, power_index, (hero ? Power::SOURCE_TYPE_HERO : Power::SOURCE_TYPE_ENEMY));
 				}
 			}
 		}
@@ -894,8 +895,9 @@ void StatBlock::logic() {
 	// check for bleeding to death
 	if (hp <= 0 && !hero && cur_state != ENEMY_DEAD && cur_state != ENEMY_CRITDEAD) {
 		for (size_t i = 0; i < effects.effect_list.size(); ++i) {
-			if (effects.effect_list[i].type == Effect::DAMAGE || effects.effect_list[i].type == Effect::DAMAGE_PERCENT) {
-				bleed_source_type = effects.effect_list[i].source_type;
+			Effect& ei = effects.effect_list[i];
+			if (ei.type == Effect::DAMAGE || ei.type == Effect::DAMAGE_PERCENT) {
+				bleed_source_type = ei.source_type;
 				break;
 			}
 		}
