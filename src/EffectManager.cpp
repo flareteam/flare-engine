@@ -63,7 +63,7 @@ Effect::Effect()
 	, passive_id(0)
 	, source_type(Power::SOURCE_TYPE_HERO)
 	, group_stack(false)
-	, color_mod(255, 255, 255)
+	, color_mod(Color(255,255,255).encodeRGBA())
 	, alpha_mod(255)
 	, attack_speed_anim("") {
 }
@@ -454,7 +454,7 @@ void EffectManager::addEffectInternal(EffectDef &effect, int duration, int magni
 	e.type = effect.type;
 	e.render_above = effect.render_above;
 	e.group_stack = effect.group_stack;
-	e.color_mod = effect.color_mod;
+	e.color_mod = effect.color_mod.encodeRGBA();
 	e.alpha_mod = effect.alpha_mod;
 	e.attack_speed_anim = effect.attack_speed_anim;
 
@@ -591,15 +591,16 @@ bool EffectManager::isDebuffed() {
 }
 
 void EffectManager::getCurrentColor(Color& color_mod) {
-	Color default_color = color_mod;
-	Color no_color = Color(255, 255, 255);
+	uint32_t default_color = color_mod.encodeRGBA();
+	uint32_t no_color = Color(255, 255, 255).encodeRGBA();
 
 	for (size_t i=effect_list.size(); i > 0; i--) {
-		if (effect_list[i-1].color_mod == no_color)
+		Effect& ei = effect_list[i-1];
+		if (ei.color_mod == no_color)
 			continue;
 
-		if (effect_list[i-1].color_mod != default_color) {
-			color_mod = effect_list[i-1].color_mod;
+		if (ei.color_mod != default_color) {
+			color_mod.decodeRGBA(ei.color_mod);
 			return;
 		}
 	}

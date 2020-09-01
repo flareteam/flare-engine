@@ -156,6 +156,21 @@ bool Color::operator !=(const Color &other) {
 	return !((*this) == other);
 }
 
+uint32_t Color::encodeRGBA() {
+	uint32_t result = static_cast<uint32_t>(a);
+	result |= static_cast<uint32_t>(r) << 24;
+	result |= static_cast<uint32_t>(g) << 16;
+	result |= static_cast<uint32_t>(b) << 8;
+	return result;
+}
+
+void Color::decodeRGBA(const uint32_t encoded) {
+	a = static_cast<uint8_t>(encoded);
+	r = static_cast<uint8_t>(encoded >> 24);
+	g = static_cast<uint8_t>(encoded >> 16);
+	b = static_cast<uint8_t>(encoded >> 8);
+}
+
 Timer::Timer(unsigned _duration)
 	: current(0)
 	, duration(_duration)

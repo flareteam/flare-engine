@@ -73,6 +73,8 @@ public:
 	operator SDL_Color() const;
 	bool operator ==(const Color &other);
 	bool operator !=(const Color &other);
+	uint32_t encodeRGBA();
+	void decodeRGBA(const uint32_t encoded);
 };
 
 class Timer {

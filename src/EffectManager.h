@@ -88,7 +88,7 @@ public:
 	size_t passive_id;
 	int source_type;
 	bool group_stack;
-	Color color_mod;
+	uint32_t color_mod;
 	uint8_t alpha_mod;
 	std::string attack_speed_anim;
 };
