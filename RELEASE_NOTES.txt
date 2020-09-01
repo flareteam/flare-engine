@@ -52,6 +52,8 @@ Engine fixes:
 * Fix infinite transformation loop when dying in a transformed state that was activated by a passive power.
 * Fix bug where the player wasn't returned to their normal state after dying in a transformed state.
 * Prevent combat text from overlapping.
+* Improved performance when handling many status effects.
+* Improved performance when an entity is repeatedly unable to find a path to thier target.
 
 Game updates:
 
