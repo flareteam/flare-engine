@@ -204,6 +204,10 @@ void Settings::saveSettings() {
 void Settings::loadDefaults() {
 	// HACK init defaults except video
 	for (size_t i = 3; i < config.size(); i++) {
+		// don't reset the flag for the initial input method prompt
+		if (i == 39)
+			continue;
+
 		Parse::tryParseValue(*config[i].type, config[i].default_val, config[i].storage);
 	}
 
