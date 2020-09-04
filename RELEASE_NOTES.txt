@@ -69,6 +69,7 @@ Translation updates:
 
 * Belarusian (be) update (Zmicer Turok)
 * German (de) update (Wuzzy2)
+* Spanish (es) update (Agustin Ferrario)
 * Basque (eu) by aitzkora
 * Scottish Gaelic (gd) update (GunChleoc)
 * Hungarian (hu) update (litoll)
@@ -77,6 +78,7 @@ Translation updates:
 * Portuguese (pt) update (Rui)
 * Russian (ru) update (Igor Polyakov)
 * Slovak (sk) update (MiroslavR)
+* Ukranian (uk) update (Sergiy Borodych)
 * Vietnamese (vi) update (Nguyễn Gia Phong)
 * Chinese (zh) update (dumaosen, sakura09123)
 
