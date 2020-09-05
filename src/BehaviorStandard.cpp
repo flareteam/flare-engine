@@ -91,12 +91,6 @@ void BehaviorStandard::doUpkeep() {
 
 	e->stats.logic();
 
-	// bleeding to death
-	if (e->stats.bleed_source_type != -1) {
-		e->doRewards(e->stats.bleed_source_type);
-		e->stats.bleed_source_type = -1;
-	}
-
 	// check for teleport powers
 	if (e->stats.teleportation) {
 

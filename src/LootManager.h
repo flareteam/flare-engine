@@ -53,7 +53,7 @@ private:
 	std::vector<Loot> loot;
 
 	// enemies which should drop loot, but didnt yet.
-	std::vector<class Enemy*> enemiesDroppingLoot;
+	std::vector<class StatBlock*> enemiesDroppingLoot;
 
 	// loot tables defined in files under "loot/"
 	std::map<std::string, std::vector<EventComponent> > loot_tables;
@@ -76,7 +76,7 @@ public:
 	void renderTooltips(const FPoint& cam);
 
 	// called by enemy, who definitly wants to drop loot.
-	void addEnemyLoot(Enemy *e);
+	void addEnemyLoot(StatBlock *e);
 	void addLoot(ItemStack stack, const FPoint& pos, bool dropped_by_hero);
 	void checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos, std::vector<ItemStack> *itemstack_vec);
 	ItemStack checkPickup(const Point& mouse, const FPoint& cam, const FPoint& hero_pos);

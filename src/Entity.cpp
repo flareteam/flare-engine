@@ -541,7 +541,7 @@ bool Entity::takeHit(Hazard &h) {
 	bool was_debuffed = stats.effects.isDebuffed();
 
 	// apply damage
-	stats.takeDamage(dmg);
+	stats.takeDamage(dmg, crit, h.source_type);
 
 	// after effects
 	if (dmg > 0 || powers->powers[h.power_index].ignore_zero_damage) {
@@ -576,7 +576,14 @@ bool Entity::takeHit(Hazard &h) {
 			if (dmg_return == 0)
 				dmg_return = 1;
 
-			h.src_stats->takeDamage(dmg_return);
+			// swap the source type when dealing return damage
+			int return_source_type = Power::SOURCE_TYPE_NEUTRAL;
+			if (h.source_type == Power::SOURCE_TYPE_HERO || h.source_type == Power::SOURCE_TYPE_ALLY)
+				return_source_type = Power::SOURCE_TYPE_ENEMY;
+			else if (h.source_type == Power::SOURCE_TYPE_ENEMY)
+				return_source_type = stats.hero ? Power::SOURCE_TYPE_HERO : Power::SOURCE_TYPE_ALLY;
+
+			h.src_stats->takeDamage(dmg_return, !StatBlock::TAKE_DMG_CRIT, return_source_type);
 			comb->addInt(dmg_return, h.src_stats->pos, CombatText::MSG_GIVEDMG);
 		}
 	}
@@ -597,21 +604,9 @@ bool Entity::takeHit(Hazard &h) {
 			stats.abort_npc_interact = true;
 		}
 
-		if(stats.hp <= 0) {
-			stats.effects.triggered_death = true;
-			if(stats.hero)
-				stats.cur_state = StatBlock::AVATAR_DEAD;
-			else {
-				doRewards(h.source_type);
-				if (crit)
-					stats.cur_state = StatBlock::ENEMY_CRITDEAD;
-				else
-					stats.cur_state = StatBlock::ENEMY_DEAD;
-				mapr->collider.unblock(stats.pos.x,stats.pos.y);
-			}
-
+		// entity is dead, no need to contine
+		if (stats.hp <= 0)
 			return true;
-		}
 
 		// play hit sound effect, but only if the hit cooldown is done
 		if (stats.cooldown_hit.isEnd())

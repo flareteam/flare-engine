@@ -40,7 +40,6 @@ public:
 	~Enemy();
 	void logic();
 	unsigned char faceNextBest(float mapx, float mapy);
-	virtual void doRewards(int source_type);
 
 	std::string type;
 
@@ -49,9 +48,7 @@ public:
 	EnemyBehavior *eb;
 
 	// other flags
-	bool reward_xp;
 	bool instant_power;
-	int kill_source_type;
 
 };
 

@@ -97,12 +97,13 @@ public:
 	};
 
 	static const bool CAN_USE_PASSIVE = true;
+	static const bool TAKE_DMG_CRIT = true;
 
 	StatBlock();
 	~StatBlock();
 
 	void load(const std::string& filename);
-	void takeDamage(int dmg);
+	void takeDamage(int dmg, bool crit, int source_type);
 	void recalc();
 	void applyEffects();
 	void calcBase();
@@ -330,8 +331,6 @@ public:
 	std::queue<int> party_buffs;
 
 	std::vector<int> power_filter;
-
-	int bleed_source_type;
 
 	std::vector<StatusID> invincible_requires_status;
 	std::vector<StatusID> invincible_requires_not_status;

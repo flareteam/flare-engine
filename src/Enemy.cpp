@@ -43,18 +43,14 @@ Enemy::Enemy() : Entity() {
 	stats.in_combat = false;
 	stats.join_combat = false;
 
-	reward_xp = false;
 	instant_power = false;
-	kill_source_type = Power::SOURCE_TYPE_NEUTRAL;
 	eb = NULL;
 }
 
 Enemy::Enemy(const Enemy& e)
 	: Entity(e)
 	, type(e.type)
-	, reward_xp(e.reward_xp)
-	, instant_power(e.instant_power)
-	, kill_source_type(e.kill_source_type) {
+	, instant_power(e.instant_power) {
 	eb = new BehaviorStandard(this); // Putting a 'this' into the init list will make MSVS complain, hence it's in the body of the ctor
 }
 
@@ -64,9 +60,7 @@ Enemy& Enemy::operator=(const Enemy& e) {
 
 	Entity::operator=(e);
 	type = e.type;
-	reward_xp = e.reward_xp;
 	instant_power = e.instant_power;
-	kill_source_type = e.kill_source_type;
 	eb = new BehaviorStandard(this);
 
 	return *this;
@@ -130,42 +124,6 @@ void Enemy::logic() {
 	}
 
 	return;
-}
-
-/**
- * Upon enemy death, handle rewards (currency, xp, loot)
- */
-void Enemy::doRewards(int source_type) {
-
-	if(stats.hero_ally && !stats.converted)
-		return;
-
-	reward_xp = true;
-	kill_source_type = source_type;
-
-	// some creatures create special loot if we're on a quest
-	if (stats.quest_loot_requires_status != 0) {
-		// the loot manager will check quest_loot_id
-		// if set (not zero), the loot manager will 100% generate that loot.
-		if (!(camp->checkStatus(stats.quest_loot_requires_status) && !camp->checkStatus(stats.quest_loot_requires_not_status))) {
-			stats.quest_loot_id = 0;
-		}
-	}
-
-	// some creatures drop special loot the first time they are defeated
-	// this must be done in conjunction with defeat status
-	if (stats.first_defeat_loot > 0) {
-		if (!camp->checkStatus(stats.defeat_status)) {
-			stats.quest_loot_id = stats.first_defeat_loot;
-		}
-	}
-
-	// defeating some creatures (e.g. bosses) affects the story
-	if (stats.defeat_status != 0) {
-		camp->setStatus(stats.defeat_status);
-	}
-
-	loot->addEnemyLoot(this);
 }
 
 /**

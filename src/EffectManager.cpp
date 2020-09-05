@@ -650,3 +650,23 @@ float EffectManager::getAttackSpeed(const std::string& anim_name) {
 
 	return attack_speed;
 }
+
+int EffectManager::getDamageSourceType(int dmg_mode) {
+	if (dmg_mode != Effect::DAMAGE || dmg_mode != Effect::DAMAGE_PERCENT)
+		return -1;
+
+	int source_type = Power::SOURCE_TYPE_NEUTRAL;
+
+	for (size_t i = 0; i < effect_list.size(); ++i) {
+		Effect& ei = effect_list[i];
+		if (ei.type == dmg_mode) {
+			// anything other than ally source type take precedence, so we can return early
+			if (ei.source_type != Power::SOURCE_TYPE_ALLY)
+				return ei.source_type;
+
+			source_type = ei.source_type;
+		}
+	}
+
+	return source_type;
+}

@@ -54,6 +54,7 @@ Engine fixes:
 * Prevent combat text from overlapping.
 * Improved performance when handling many status effects.
 * Improved performance when an entity is repeatedly unable to find a path to thier target.
+* Fix bug where killing an enemy with return damage would not set defeat status or reward XP/loot.
 
 Game updates:
 

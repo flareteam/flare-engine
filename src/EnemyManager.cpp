@@ -452,23 +452,6 @@ Enemy* EnemyManager::getNearestEnemy(const FPoint& pos, bool get_corpse, float *
 	return nearest;
 }
 
-/**
- * If an enemy has died, reward the hero with experience points
- */
-void EnemyManager::checkEnemiesforXP() {
-	for (unsigned int i=0; i < enemies.size(); i++) {
-		if (enemies[i]->reward_xp) {
-			//adjust for party exp if necessary
-			float xp_multiplier = 1;
-			if(enemies[i]->kill_source_type == Power::SOURCE_TYPE_ALLY)
-				xp_multiplier = static_cast<float>(eset->misc.party_exp_percentage) / 100.0f;
-
-			camp->rewardXP(static_cast<int>((static_cast<float>(enemies[i]->stats.xp) * xp_multiplier)), !CampaignManager::XP_SHOW_MSG);
-			enemies[i]->reward_xp = false; // clear flag
-		}
-	}
-}
-
 bool EnemyManager::isCleared() {
 	if (enemies.empty()) return true;
 

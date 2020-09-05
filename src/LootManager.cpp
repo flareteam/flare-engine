@@ -218,35 +218,35 @@ void LootManager::renderTooltips(const FPoint& cam) {
  */
 void LootManager::checkEnemiesForLoot() {
 	for (unsigned i=0; i < enemiesDroppingLoot.size(); ++i) {
-		Enemy *e = enemiesDroppingLoot[i];
+		StatBlock *e = enemiesDroppingLoot[i];
 
-		if (e->stats.quest_loot_id != 0) {
+		if (e->quest_loot_id != 0) {
 			// quest loot
 			std::vector<EventComponent> quest_loot_table;
 			EventComponent ec;
 			ec.type = EventComponent::LOOT;
-			ec.c = e->stats.quest_loot_id;
+			ec.c = e->quest_loot_id;
 			ec.a = ec.b = 1;
 			ec.z = 0;
 
 			quest_loot_table.push_back(ec);
-			checkLoot(quest_loot_table, &e->stats.pos, NULL);
+			checkLoot(quest_loot_table, &e->pos, NULL);
 		}
 
-		if (!e->stats.loot_table.empty()) {
+		if (!e->loot_table.empty()) {
 			unsigned drops;
-			if (e->stats.loot_count.y != 0) {
-				drops = Math::randBetween(e->stats.loot_count.x, e->stats.loot_count.y);
+			if (e->loot_count.y != 0) {
+				drops = Math::randBetween(e->loot_count.x, e->loot_count.y);
 			}
 			else {
 				drops = Math::randBetween(1, eset->loot.drop_max);
 			}
 
 			for (unsigned j=0; j<drops; ++j) {
-				checkLoot(e->stats.loot_table, &e->stats.pos, NULL);
+				checkLoot(e->loot_table, &e->pos, NULL);
 			}
 
-			e->stats.loot_table.clear();
+			e->loot_table.clear();
 		}
 	}
 	enemiesDroppingLoot.clear();
@@ -275,7 +275,7 @@ void LootManager::checkMapForLoot() {
 	}
 }
 
-void LootManager::addEnemyLoot(Enemy *e) {
+void LootManager::addEnemyLoot(StatBlock *e) {
 	enemiesDroppingLoot.push_back(e);
 }
 

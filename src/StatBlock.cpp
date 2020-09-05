@@ -177,7 +177,6 @@ StatBlock::StatBlock()
 	, prev_mp(0)
 	, summons()
 	, summoner(NULL)
-	, bleed_source_type(-1)
 	, abort_npc_interact(false)
 {
 	primary.resize(eset->primary_stats.list.size(), 0);
@@ -188,6 +187,10 @@ StatBlock::StatBlock()
 	for (size_t i = 0; i < per_primary.size(); ++i) {
 		per_primary[i].resize(Stats::COUNT + eset->damage_types.count, 0);
 	}
+}
+
+StatBlock::~StatBlock() {
+	removeFromSummons();
 }
 
 bool StatBlock::loadCoreStat(FileParser *infile) {
@@ -598,10 +601,59 @@ void StatBlock::load(const std::string& filename) {
 /**
  * Reduce temphp first, then hp
  */
-void StatBlock::takeDamage(int dmg) {
+void StatBlock::takeDamage(int dmg, bool crit, int source_type) {
 	hp -= effects.damageShields(dmg);
 	if (hp <= 0) {
 		hp = 0;
+
+		effects.triggered_death = true;
+		if (hero) {
+			cur_state = StatBlock::AVATAR_DEAD;
+		}
+		else {
+			// enemy died; do rewards
+			if (!hero_ally || converted) {
+				// some creatures create special loot if we're on a quest
+				if (quest_loot_requires_status != 0) {
+					// the loot manager will check quest_loot_id
+					// if set (not zero), the loot manager will 100% generate that loot.
+					if (!(camp->checkStatus(quest_loot_requires_status) && !camp->checkStatus(quest_loot_requires_not_status))) {
+						quest_loot_id = 0;
+					}
+				}
+
+				// some creatures drop special loot the first time they are defeated
+				// this must be done in conjunction with defeat status
+				if (first_defeat_loot > 0) {
+					if (!camp->checkStatus(defeat_status)) {
+						quest_loot_id = first_defeat_loot;
+					}
+				}
+
+				// defeating some creatures (e.g. bosses) affects the story
+				if (defeat_status != 0) {
+					camp->setStatus(defeat_status);
+				}
+
+				// reward XP; adjust for party exp if necessary
+				float xp_multiplier = 1;
+				if (source_type == Power::SOURCE_TYPE_ALLY)
+					xp_multiplier = static_cast<float>(eset->misc.party_exp_percentage) / 100.0f;
+
+				camp->rewardXP(static_cast<int>((static_cast<float>(xp) * xp_multiplier)), !CampaignManager::XP_SHOW_MSG);
+
+				// drop loot
+				loot->addEnemyLoot(this);
+			}
+
+			if (crit)
+				cur_state = StatBlock::ENEMY_CRITDEAD;
+			else
+				cur_state = StatBlock::ENEMY_DEAD;
+
+			mapr->collider.unblock(pos.x, pos.y);
+		}
+
 	}
 }
 
@@ -795,12 +847,12 @@ void StatBlock::logic() {
 
 	// apply bleed
 	if (effects.damage > 0 && hp > 0) {
-		takeDamage(effects.damage);
+		takeDamage(effects.damage, !StatBlock::TAKE_DMG_CRIT, effects.getDamageSourceType(Effect::DAMAGE));
 		comb->addInt(effects.damage, pos, CombatText::MSG_TAKEDMG);
 	}
 	if (effects.damage_percent > 0 && hp > 0) {
 		int damage = (get(Stats::HP_MAX)*effects.damage_percent)/100;
-		takeDamage(damage);
+		takeDamage(damage, !StatBlock::TAKE_DMG_CRIT, effects.getDamageSourceType(Effect::DAMAGE_PERCENT));
 		comb->addInt(damage, pos, CombatText::MSG_TAKEDMG);
 	}
 
@@ -891,27 +943,6 @@ void StatBlock::logic() {
 		else
 			cur_state = ENEMY_STANCE;
 	}
-
-	// check for bleeding to death
-	if (hp <= 0 && !hero && cur_state != ENEMY_DEAD && cur_state != ENEMY_CRITDEAD) {
-		for (size_t i = 0; i < effects.effect_list.size(); ++i) {
-			Effect& ei = effects.effect_list[i];
-			if (ei.type == Effect::DAMAGE || ei.type == Effect::DAMAGE_PERCENT) {
-				bleed_source_type = ei.source_type;
-				break;
-			}
-		}
-		effects.triggered_death = true;
-		cur_state = ENEMY_DEAD;
-	}
-	else if (hp <= 0 && hero && cur_state != AVATAR_DEAD) {
-		effects.triggered_death = true;
-		cur_state = AVATAR_DEAD;
-	}
-}
-
-StatBlock::~StatBlock() {
-	removeFromSummons();
 }
 
 bool StatBlock::canUsePower(int powerid, bool allow_passive) const {

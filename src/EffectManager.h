@@ -136,6 +136,7 @@ public:
 	void getCurrentAlpha(uint8_t& alpha_mod);
 	bool hasEffect(const std::string& id, int req_count);
 	float getAttackSpeed(const std::string& anim_name);
+	int getDamageSourceType(int dmg_mode);
 
 	std::vector<Effect> effect_list;
 

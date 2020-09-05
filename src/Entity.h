@@ -61,7 +61,6 @@ public:
 	void playSound(int sound_type);
 	bool move();
 	bool takeHit(Hazard &h);
-	virtual void doRewards(int) {}
 
 	// sound effects
 	std::vector<std::pair<std::string, std::vector<SoundID> > > sound_attack;
