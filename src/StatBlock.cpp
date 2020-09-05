@@ -607,6 +607,9 @@ void StatBlock::takeDamage(int dmg, bool crit, int source_type) {
 		hp = 0;
 
 		effects.triggered_death = true;
+		// TODO should effects.clearEffects() be here as well?
+		// what about other things that happen in the "dead" entity states?
+
 		if (hero) {
 			cur_state = StatBlock::AVATAR_DEAD;
 		}
@@ -857,7 +860,7 @@ void StatBlock::logic() {
 	}
 
 	if(effects.death_sentence)
-		hp = 0;
+		takeDamage(get(Stats::HP_MAX), !StatBlock::TAKE_DMG_CRIT, Power::SOURCE_TYPE_NEUTRAL);
 
 	cooldown_hit.tick();
 
@@ -1039,13 +1042,7 @@ void StatBlock::loadHeroSFX() {
  */
 void StatBlock::removeSummons() {
 	for (std::vector<StatBlock*>::iterator it = summons.begin(); it != summons.end(); ++it) {
-		(*it)->hp = 0;
-		(*it)->effects.triggered_death = true;
-		(*it)->effects.clearEffects();
-		if (!(*it)->hero && !(*it)->corpse) {
-			(*it)->cur_state = ENEMY_DEAD;
-			(*it)->corpse_timer.reset(Timer::BEGIN);
-		}
+		(*it)->takeDamage((*it)->get(Stats::HP_MAX), !StatBlock::TAKE_DMG_CRIT, Power::SOURCE_TYPE_NEUTRAL);
 		(*it)->removeSummons();
 		(*it)->summoner = NULL;
 	}
