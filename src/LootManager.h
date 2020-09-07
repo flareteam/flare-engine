@@ -34,8 +34,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Utils.h"
 
 class Animation;
-
 class EnemyManager;
+class StatBlock;
 
 class LootManager {
 private:
@@ -86,6 +86,8 @@ public:
 	void addRenders(std::vector<Renderable> &ren, std::vector<Renderable> &ren_dead);
 
 	void parseLoot(std::string &val, EventComponent *e, std::vector<EventComponent> *ec_list);
+
+	void removeFromEnemiesDroppingLoot(StatBlock* sb);
 };
 
 #endif

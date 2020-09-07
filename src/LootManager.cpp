@@ -82,6 +82,7 @@ void LootManager::loadGraphics() {
 
 void LootManager::handleNewMap() {
 	loot.clear();
+	enemiesDroppingLoot.clear();
 }
 
 void LootManager::logic() {
@@ -219,6 +220,9 @@ void LootManager::renderTooltips(const FPoint& cam) {
 void LootManager::checkEnemiesForLoot() {
 	for (unsigned i=0; i < enemiesDroppingLoot.size(); ++i) {
 		StatBlock *e = enemiesDroppingLoot[i];
+
+		if (!e)
+			continue;
 
 		if (e->quest_loot_id != 0) {
 			// quest loot
@@ -704,6 +708,14 @@ void LootManager::checkLootComponent(EventComponent* ec, FPoint *pos, std::vecto
 		itemstack_vec->push_back(new_loot);
 	else
 		addLoot(new_loot, p, !DROPPED_BY_HERO);
+}
+
+void LootManager::removeFromEnemiesDroppingLoot(StatBlock* sb) {
+	for (size_t i = enemiesDroppingLoot.size(); i > 0; i--) {
+		// enemies will actually be removed the next time checkEnemiesForLoot() runs
+		if (enemiesDroppingLoot[i-1] == sb)
+			enemiesDroppingLoot[i-1] = NULL;
+	}
 }
 
 LootManager::~LootManager() {

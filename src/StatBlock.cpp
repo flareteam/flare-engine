@@ -191,6 +191,8 @@ StatBlock::StatBlock()
 
 StatBlock::~StatBlock() {
 	removeFromSummons();
+	if (loot)
+		loot->removeFromEnemiesDroppingLoot(this);
 }
 
 bool StatBlock::loadCoreStat(FileParser *infile) {
