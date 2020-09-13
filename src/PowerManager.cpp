@@ -1778,7 +1778,12 @@ bool PowerManager::checkRequiredItems(const Power &pow, const StatBlock *src_sta
 				if (!items->requirementsMet(src_stats, pow.required_items[i].id)) {
 					return false;
 				}
-				if (!menu->inv->inventory[MenuInventory::CARRIED].contain(pow.required_items[i].id, pow.required_items[i].quantity)) {
+
+				// Cap the lower bound of quantity to 1.
+				// We can set required quantity to 0 in order to not consume the item,
+				// but checking for presence of the item requires >0 quantity
+				int quantity = std::max(1, pow.required_items[i].quantity);
+				if (!menu->inv->inventory[MenuInventory::CARRIED].contain(pow.required_items[i].id, quantity)) {
 					return false;
 				}
 			}
