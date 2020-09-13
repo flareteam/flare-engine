@@ -416,7 +416,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 	// check level up
 	if (stats.level < eset->xp.getMaxLevel() && stats.xp >= eset->xp.getLevelXP(stats.level + 1)) {
 		stats.level_up = true;
-		stats.level++;
+		stats.level = eset->xp.getLevelFromXP(stats.xp);
 		std::stringstream ss;
 		ss << msg->get("Congratulations, you have reached level %d!", stats.level);
 		if (pc->stats.stat_points_per_level > 0) {

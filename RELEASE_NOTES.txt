@@ -57,6 +57,7 @@ Engine fixes:
 * Fix bug where killing an enemy with return damage would not set defeat status or reward XP/loot.
 * Fix check of item requirements when a power requires an item but doesn't consume it.
 * Fix 'respec' events to no longer remove item-based powers from the action bar.
+* Fix log message when gaining more than one level at once.
 
 Game updates:
 

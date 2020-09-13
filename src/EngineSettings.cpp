@@ -943,7 +943,7 @@ void EngineSettings::XPTable::load() {
 }
 
 unsigned long EngineSettings::XPTable::getLevelXP(int level) {
-	if (level <= 1)
+	if (level <= 1 || xp_table.empty())
 		return 0;
 	else if (level > static_cast<int>(xp_table.size()))
 		return xp_table.back();
