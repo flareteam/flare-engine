@@ -360,7 +360,7 @@ void SaveLoad::loadGame() {
 						hotkeys[i] = 0;
 					}
 				}
-				menu->act->set(hotkeys);
+				menu->act->set(hotkeys, !MenuActionBar::SET_SKIP_EMPTY);
 			}
 			else if (infile.key == "transformed") {
 				pc->stats.transform_type = Parse::popFirstString(infile.val);
@@ -473,7 +473,7 @@ void SaveLoad::loadClass(int index) {
 		StatusID class_status = camp->registerStatus(eset->hero_classes.list[index].statuses[i]);
 		camp->setStatus(class_status);
 	}
-	menu->act->set(eset->hero_classes.list[index].hotkeys);
+	menu->act->set(eset->hero_classes.list[index].hotkeys, !MenuActionBar::SET_SKIP_EMPTY);
 
 	// Add carried items
 	std::string carried = eset->hero_classes.list[index].carried;

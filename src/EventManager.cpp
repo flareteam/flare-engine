@@ -1003,9 +1003,9 @@ bool EventManager::executeEventInternal(Event &ev, bool skip_delay) {
 				}
 				menu_powers->setUnlockedPowers();
 
-				menu_act->clear();
+				menu_act->clear(MenuActionBar::CLEAR_SKIP_ITEMS);
 				if (pc_class && !use_engine_defaults) {
-					menu->act->set(pc_class->hotkeys);
+					menu->act->set(pc_class->hotkeys, MenuActionBar::SET_SKIP_EMPTY);
 				}
 				menu->pow->newPowerNotification = false;
 

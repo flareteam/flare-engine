@@ -187,7 +187,7 @@ MenuActionBar::MenuActionBar()
 	slot_cooldown_size.resize(slots_count);
 	slot_fail_cooldown.resize(slots_count);
 
-	clear();
+	clear(!MenuActionBar::CLEAR_SKIP_ITEMS);
 
 	loadGraphics();
 
@@ -256,9 +256,18 @@ void MenuActionBar::align() {
 	}
 }
 
-void MenuActionBar::clear() {
+void MenuActionBar::clear(bool skip_items) {
 	// clear action bar
 	for (unsigned i = 0; i < slots_count; i++) {
+		if (skip_items && powers) {
+			if (hotkeys[i] > 0 && static_cast<unsigned>(hotkeys_mod[i]) < powers->powers.size()) {
+				const Power &power = powers->powers[hotkeys_mod[i]];
+				if (!power.required_items.empty()) {
+					continue;
+				}
+			}
+		}
+
 		hotkeys[i] = 0;
 		hotkeys_temp[i] = 0;
 		hotkeys_mod[i] = 0;
@@ -729,7 +738,7 @@ void MenuActionBar::checkMenu(bool &menu_c, bool &menu_i, bool &menu_p, bool &me
 /**
  * Set all hotkeys at once e.g. when loading a game
  */
-void MenuActionBar::set(std::vector<int> power_id) {
+void MenuActionBar::set(std::vector<int> power_id, bool skip_empty) {
 	for (unsigned i = 0; i < slots_count; i++) {
 		if (static_cast<unsigned>(power_id[i]) >= powers->powers.size())
 			continue;
@@ -737,7 +746,8 @@ void MenuActionBar::set(std::vector<int> power_id) {
 		if (powers->powers[power_id[i]].no_actionbar)
 			continue;
 
-		hotkeys[i] = power_id[i];
+		if (!skip_empty || hotkeys[i] == 0)
+			hotkeys[i] = power_id[i];
 	}
 	updated = true;
 }

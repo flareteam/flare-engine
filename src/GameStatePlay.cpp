@@ -125,7 +125,7 @@ void GameStatePlay::resetGame() {
 	camp->resetAllStatuses();
 	pc->init();
 	pc->stats.currency = 0;
-	menu->act->clear();
+	menu->act->clear(!MenuActionBar::CLEAR_SKIP_ITEMS);
 	menu->inv->inventory[0].clear();
 	menu->inv->inventory[1].clear();
 	menu->inv->changed_equipment = true;

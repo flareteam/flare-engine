@@ -78,6 +78,8 @@ public:
 	static const int USE_EMPTY_SLOT = 0;
 
 	static const bool REORDER = true;
+	static const bool CLEAR_SKIP_ITEMS = true;
+	static const bool SET_SKIP_EMPTY = true;
 
 	MenuActionBar();
 	~MenuActionBar();
@@ -91,8 +93,8 @@ public:
 	void drop(const Point& mouse, int power_index, bool rearranging);
 	void actionReturn(int power_index);
 	void remove(const Point& mouse);
-	void set(std::vector<int> power_id);
-	void clear();
+	void set(std::vector<int> power_id, bool skip_empty);
+	void clear(bool skip_items);
 	void resetSlots();
 	Point getSlotPos(int slot);
 	int getSlotPower(int slot);
