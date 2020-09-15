@@ -8,29 +8,29 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
 # Default definitions
 if (NOT MSVC)
-  set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wunused -Wshadow -Woverloaded-virtual -Wunreachable-code -Wconversion -Wno-sign-conversion -Wformat-security ${CMAKE_CXX_FLAGS}")
-  set(CMAKE_CXX_FLAGS "-fno-math-errno -fno-exceptions ${CMAKE_CXX_FLAGS}")
-  set(CMAKE_CXX_FLAGS "-std=c++98 ${CMAKE_CXX_FLAGS}")
+	set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wunused -Wshadow -Woverloaded-virtual -Wunreachable-code -Wconversion -Wno-sign-conversion -Wformat-security ${CMAKE_CXX_FLAGS}")
+	set(CMAKE_CXX_FLAGS "-fno-math-errno -fno-exceptions ${CMAKE_CXX_FLAGS}")
+	set(CMAKE_CXX_FLAGS "-std=c++98 ${CMAKE_CXX_FLAGS}")
 else (NOT MSVC)
-  add_definitions(-D_CRT_SECURE_NO_WARNINGS)
-  add_definitions(-D_CRT_SECURE_NO_DEPRECATE)
-  add_definitions(-D_CRT_NONSTDC_NO_DEPRECATE)
+	add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+	add_definitions(-D_CRT_SECURE_NO_DEPRECATE)
+	add_definitions(-D_CRT_NONSTDC_NO_DEPRECATE)
 endif (NOT MSVC)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
-  set(CMAKE_CXX_FLAGS_RELEASE "-O2 -g0")
-  if(MINGW)
-	set(CMAKE_CXX_FLAGS_RELEASE "-Wl,-subsystem,windows ${CMAKE_CXX_FLAGS_RELEASE}")
-  endif()
+	set(CMAKE_CXX_FLAGS_RELEASE "-O2 -g0")
+	if(MINGW)
+		set(CMAKE_CXX_FLAGS_RELEASE "-Wl,-subsystem,windows ${CMAKE_CXX_FLAGS_RELEASE}")
+	endif()
 elseif(CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
-  set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
+	set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
 elseif(CMAKE_BUILD_TYPE STREQUAL "MinSizeRel")
-  set(CMAKE_CXX_FLAGS_MINSIZEREL "-Os -g0")
+	set(CMAKE_CXX_FLAGS_MINSIZEREL "-Os -g0")
 elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
-  set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g3 -pg")
-  set(CMAKE_EXE_LINKER_FLAGS_DEBUG "-pg")
-  set(CMAKE_SHARED_LINKER_FLAGS_DEBUG "-pg")
-  set(CMAKE_MODULE_LINKER_FLAGS_DEBUG "-pg")
+	set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g3 -pg")
+	set(CMAKE_EXE_LINKER_FLAGS_DEBUG "-pg")
+	set(CMAKE_SHARED_LINKER_FLAGS_DEBUG "-pg")
+	set(CMAKE_MODULE_LINKER_FLAGS_DEBUG "-pg")
 endif()
 
 set(BINDIR  "games"             CACHE STRING "Directory from CMAKE_INSTALL_PREFIX where game executable will be installed.")
@@ -327,17 +327,17 @@ Set (FLARE_HEADERS
 
 # Add icon and file info to executable for Windows systems
 IF (WIN32)
-  SET(FLARE_SOURCES
-    ${FLARE_SOURCES}
-    ./src/Flare.rc
-    )
+	SET(FLARE_SOURCES
+	${FLARE_SOURCES}
+	./src/Flare.rc
+	)
 ENDIF (WIN32)
 
 Add_Executable (flare ${FLARE_SOURCES} ${FLARE_HEADERS})
 
 # libSDLMain comes with libSDL if needed on certain platforms
 If (NOT SDL2MAIN_LIBRARY)
-  Set (SDL2MAIN_LIBRARY "")
+	Set (SDL2MAIN_LIBRARY "")
 EndIf (NOT SDL2MAIN_LIBRARY)
 
 Target_Link_Libraries (flare ${CMAKE_LD_FLAGS} ${SDL2_LIBRARY} ${SDL2IMAGE_LIBRARY} ${SDL2MIXER_LIBRARY} ${SDL2TTF_LIBRARY} ${SDL2MAIN_LIBRARY})
@@ -345,19 +345,19 @@ Target_Link_Libraries (flare ${CMAKE_LD_FLAGS} ${SDL2_LIBRARY} ${SDL2IMAGE_LIBRA
 
 # installing to the proper places
 install(PROGRAMS
-  ${CMAKE_CURRENT_BINARY_DIR}/flare
-  DESTINATION ${BINDIR})
+	${CMAKE_CURRENT_BINARY_DIR}/flare
+	DESTINATION ${BINDIR})
 install(DIRECTORY
-  "${CMAKE_CURRENT_SOURCE_DIR}/mods"
-  DESTINATION ${DATADIR})
+	"${CMAKE_CURRENT_SOURCE_DIR}/mods"
+	DESTINATION ${DATADIR})
 install(FILES
-  "${CMAKE_CURRENT_SOURCE_DIR}/distribution/flare.man"
-  DESTINATION ${MANDIR}/man6
-  RENAME flare.6)
+	"${CMAKE_CURRENT_SOURCE_DIR}/distribution/flare.man"
+	DESTINATION ${MANDIR}/man6
+	RENAME flare.6)
 install(FILES
-  "${CMAKE_CURRENT_BINARY_DIR}/flare.desktop"
-  DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications)
+	"${CMAKE_CURRENT_BINARY_DIR}/flare.desktop"
+	DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications)
 install(FILES
-  "${CMAKE_CURRENT_SOURCE_DIR}/distribution/flare_logo.svg"
-  DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/scalable/apps
-  RENAME flare.svg)
+	"${CMAKE_CURRENT_SOURCE_DIR}/distribution/flare_logo.svg"
+	DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/scalable/apps
+	RENAME flare.svg)
