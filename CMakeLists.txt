@@ -7,31 +7,42 @@ Set (VERSION "1.11")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
 # Default definitions
-if (NOT MSVC)
-	set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wunused -Wshadow -Woverloaded-virtual -Wunreachable-code -Wconversion -Wno-sign-conversion -Wformat-security ${CMAKE_CXX_FLAGS}")
-	set(CMAKE_CXX_FLAGS "-fno-math-errno -fno-exceptions ${CMAKE_CXX_FLAGS}")
-	set(CMAKE_CXX_FLAGS "-std=c++98 ${CMAKE_CXX_FLAGS}")
-else (NOT MSVC)
+if (MSVC)
 	add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 	add_definitions(-D_CRT_SECURE_NO_DEPRECATE)
 	add_definitions(-D_CRT_NONSTDC_NO_DEPRECATE)
-endif (NOT MSVC)
+else ()
+	add_compile_options(
+		-Wall -Wextra -Wunused -Wshadow -Woverloaded-virtual -Wunreachable-code -Wconversion -Wno-sign-conversion -Wformat-security
+		-fno-math-errno -fno-exceptions
+		-std=c++98
+	)
+endif ()
 
-if(CMAKE_BUILD_TYPE STREQUAL "Release")
-	set(CMAKE_CXX_FLAGS_RELEASE "-O2 -g0")
-	if(MINGW)
-		set(CMAKE_CXX_FLAGS_RELEASE "-Wl,-subsystem,windows ${CMAKE_CXX_FLAGS_RELEASE}")
-	endif()
-elseif(CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
-	set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
-elseif(CMAKE_BUILD_TYPE STREQUAL "MinSizeRel")
-	set(CMAKE_CXX_FLAGS_MINSIZEREL "-Os -g0")
-elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
-	set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g3 -pg")
-	set(CMAKE_EXE_LINKER_FLAGS_DEBUG "-pg")
-	set(CMAKE_SHARED_LINKER_FLAGS_DEBUG "-pg")
-	set(CMAKE_MODULE_LINKER_FLAGS_DEBUG "-pg")
+add_compile_options(
+	"$<$<CONFIG:RELEASE>:-O2>"
+	"$<$<CONFIG:RELEASE>:-g0>"
+
+	"$<$<CONFIG:RELWITHDEBINFO>:-O2>"
+	"$<$<CONFIG:RELWITHDEBINFO>:-g>"
+
+	"$<$<CONFIG:MINSIZEREL>:-Os>"
+	"$<$<CONFIG:MINSIZEREL>:-g0>"
+
+	"$<$<CONFIG:DEBUG>:-O0>"
+	"$<$<CONFIG:DEBUG>:-g3>"
+	"$<$<CONFIG:DEBUG>:-pg>"
+)
+
+if (MINGW)
+	add_compile_options(
+		"$<$<CONFIG:RELEASE>:-Wl,-subsystem,windows>"
+	)
 endif()
+
+add_link_options(
+	"$<$<CONFIG:DEBUG>:-pg>"
+)
 
 set(BINDIR  "games"             CACHE STRING "Directory from CMAKE_INSTALL_PREFIX where game executable will be installed.")
 set(DATADIR "share/games/flare" CACHE STRING "Directory from CMAKE_INSTALL_PREFIX where game data files will be installed.")
