@@ -40,9 +40,17 @@ if (MINGW)
 	)
 endif()
 
-add_link_options(
-	"$<$<CONFIG:DEBUG>:-pg>"
-)
+# Not supported by CMake 3.12!
+# Travis uses this version so we have to stick to modifying the strings...
+# add_link_options(
+# 	"$<$<CONFIG:DEBUG>:-pg>"
+# )
+
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+	set(CMAKE_EXE_LINKER_FLAGS_DEBUG "-pg ${CMAKE_EXE_LINKER_FLAGS_DEBUG}")
+	set(CMAKE_SHARED_LINKER_FLAGS_DEBUG "-pg ${CMAKE_SHARED_LINKER_FLAGS_DEBUG}")
+	set(CMAKE_MODULE_LINKER_FLAGS_DEBUG "-pg ${CMAKE_MODULE_LINKER_FLAGS_DEBUG}")
+endif()
 
 set(BINDIR  "games"             CACHE STRING "Directory from CMAKE_INSTALL_PREFIX where game executable will be installed.")
 set(DATADIR "share/games/flare" CACHE STRING "Directory from CMAKE_INSTALL_PREFIX where game data files will be installed.")
