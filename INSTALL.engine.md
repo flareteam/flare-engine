@@ -105,6 +105,32 @@ brew install cmake libvorbis sdl2 sdl2_image sdl2_mixer sdl2_ttf
 
 ### Windows
 
+#### MSYS2 / MinGW
+
+We use [MSYS2](https://www.msys2.org/) as our official development environment on Windows. We use the 32-bit MinGW environment, but these instructions should work with the 64-bit MinGW environment by swapping out the relevant bits.
+
+```
+# install the build environment with SDL2 libraries
+pacman -S git mingw-w64-i686-SDL2 mingw-w64-i686-SDL2_image mingw-w64-i686-SDL2_mixer mingw-w64-i686-SDL2_ttf mingw-w64-i686-cmake mingw-w64-i686-gcc mingw-w64-i686-make
+git clone https://github.com/flareteam/flare-engine.git
+cd flare-engine
+cmake . -DCMAKE_BUILD_TYPE=Release -G "MinGW Makefiles"
+mingw32-make
+```
+
+If you want a debug build, simply replace `Release` with `Debug` as the CMake build type.
+
+It is highly recommended that you add `C:\msys64\mingw32\bin` to your Windows PATH variable for running flare.exe outside of the MSYS environment.
+
+To obtain and use the game files, continue from the previous set of commands:
+
+```
+cd ../
+git clone https://github.com/flareteam/flare-game.git
+cd flare-game
+cp -r mods/* ../flare-engine/mods/
+```
+
 #### Microsoft Visual C++
 
 If you want to build flare under Microsoft Visual C++,
@@ -126,8 +152,8 @@ cd vcpkg
 #install the dependencies (for 64bit builds, you can use x86-windows triplet instead if you want 32bit)
 ./vcpkg install sdl2:x64-windows sdl2-image:x64-windows sdl2-mixer:x64-windows sdl2-ttf:x64-windows
 ```
-After that the dependencies have been downloaded and build. You can use them in your cmake projects by adding the path of the 
-toolchain file to your cmake configuration command line options: `-DCMAKE_TOOLCHAIN_FILE=[vcpkg root]\scripts\buildsystems\vcpkg.cmake`
+After that the dependencies have been downloaded and build. You can use them in your cmake projects by adding the path of the
+ toolchain file to your cmake configuration command line options: `-DCMAKE_TOOLCHAIN_FILE=[vcpkg root]\scripts\buildsystems\vcpkg.cmake`
 
 <a name="install_system_wide"></a>
 ## Install Flare system-wide
