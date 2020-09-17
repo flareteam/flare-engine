@@ -107,11 +107,15 @@ brew install cmake libvorbis sdl2 sdl2_image sdl2_mixer sdl2_ttf
 
 #### MSYS2 / MinGW
 
-We use [MSYS2](https://www.msys2.org/) as our official development environment on Windows. We use the 32-bit MinGW environment, but these instructions should work with the 64-bit MinGW environment by swapping out the relevant bits.
+We use [MSYS2](https://www.msys2.org/) as our official development environment on Windows.
 
 ```
 # install the build environment with SDL2 libraries
+# 32-bit
 pacman -S git mingw-w64-i686-SDL2 mingw-w64-i686-SDL2_image mingw-w64-i686-SDL2_mixer mingw-w64-i686-SDL2_ttf mingw-w64-i686-cmake mingw-w64-i686-gcc mingw-w64-i686-make
+# 64-bit
+pacman -S git mingw-w64-x86_64-SDL2 mingw-w64-x86_64-SDL2_image mingw-w64-x86_64-SDL2_mixer mingw-w64-x86_64-SDL2_ttf mingw-w64-x86_64-cmake mingw-w64-x86_64-gcc mingw-w64-x86_64-make
+
 git clone https://github.com/flareteam/flare-engine.git
 cd flare-engine
 cmake . -DCMAKE_BUILD_TYPE=Release -G "MinGW Makefiles"
