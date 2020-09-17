@@ -124,7 +124,7 @@ mingw32-make
 
 If you want a debug build, simply replace `Release` with `Debug` as the CMake build type.
 
-It is highly recommended that you add `C:\msys64\mingw32\bin` to your Windows PATH variable for running flare.exe outside of the MSYS environment.
+It is highly recommended that you add `C:\msys64\mingw32\bin` (or `C:\msys64\mingw64\bin` for 64-bit) to your Windows PATH variable for running flare.exe outside of the MSYS environment.
 
 To obtain and use the game files, continue from the previous set of commands:
 
