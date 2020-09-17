@@ -6,6 +6,11 @@ Set (VERSION "1.11")
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
+# can't use add_compile_options here. Seems to have something to do with add_compile_options appending it after the "-O3 -DNDEBUG" flags
+if (MINGW AND CMAKE_BUILD_TYPE STREQUAL "Release")
+	set(CMAKE_CXX_FLAGS_RELEASE "-Wl,-subsystem,windows ${CMAKE_CXX_FLAGS_RELEASE}")
+endif()
+
 # Default definitions
 if (MSVC)
 	add_definitions(-D_CRT_SECURE_NO_WARNINGS)
@@ -33,12 +38,6 @@ add_compile_options(
 	"$<$<CONFIG:DEBUG>:-g3>"
 	"$<$<CONFIG:DEBUG>:-pg>"
 )
-
-if (MINGW)
-	add_compile_options(
-		"$<$<CONFIG:RELEASE>:-Wl,-subsystem,windows>"
-	)
-endif()
 
 # Not supported by CMake 3.12!
 # Travis uses this version so we have to stick to modifying the strings...
