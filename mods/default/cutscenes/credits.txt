@@ -82,6 +82,7 @@ text=Janet Hunt
 text=Juan Pablo Tamayo
 text=losine
 text=Marc Tormo i Bochaca
+text=Maria Cano
 text=McSinyx
 text=Michael Papageorgiou
 text=Mikhail Karalevich

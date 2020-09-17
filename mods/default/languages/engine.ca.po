@@ -5,6 +5,7 @@
 # 
 # Translators:
 # Marc Tormo i Bochaca <mtbochaca@gmail.com>, 2019
+# Maria Cano <mariacdavila98@gmail.com>, 2020
 # 
 #, fuzzy
 msgid ""
@@ -13,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-05-20 16:39-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: Marc Tormo i Bochaca <mtbochaca@gmail.com>, 2019\n"
+"Last-Translator: Maria Cano <mariacdavila98@gmail.com>, 2020\n"
 "Language-Team: Catalan (https://www.transifex.com/flareorg/teams/84925/ca/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -23,20 +24,20 @@ msgstr ""
 
 #: ../../../src/Avatar.cpp:387
 msgid "Your health is low!"
-msgstr ""
+msgstr "Tens la salut baixa!"
 
 #: ../../../src/Avatar.cpp:419
 #, c-format
 msgid "Congratulations, you have reached level %d!"
-msgstr "Felicitacions, has arribat al nivell %d!"
+msgstr "Felicitats, has pujat a nivell %d!"
 
 #: ../../../src/Avatar.cpp:421
 msgid "You may increase one or more attributes through the Character Menu."
-msgstr ""
+msgstr "Pots augmentar un atribut o més al Menú del Personatge."
 
 #: ../../../src/Avatar.cpp:425
 msgid "You may unlock one or more abilities through the Powers Menu."
-msgstr ""
+msgstr "Pots desbloquejar una habilitat o més al Menú de Poders."
 
 #: ../../../src/Avatar.cpp:692
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
@@ -60,7 +61,7 @@ msgstr "%d %s eliminat."
 #: ../../../src/CampaignManager.cpp:165
 #, c-format
 msgid "%s x%d removed."
-msgstr ""
+msgstr "%s%d eliminat."
 
 #: ../../../src/CampaignManager.cpp:167
 #, c-format
@@ -133,7 +134,7 @@ msgstr "Aventurer"
 
 #: ../../../src/Entity.cpp:522
 msgid "miss"
-msgstr "faltar"
+msgstr "fallar"
 
 #: ../../../src/Entity.cpp:560 ../../../src/PowerManager.cpp:1186
 #: ../../../src/StatBlock.cpp:813 ../../../src/StatBlock.cpp:819
@@ -169,11 +170,11 @@ msgstr "Sortir als títols"
 
 #: ../../../src/GameStateLoad.cpp:95
 msgid "New Game"
-msgstr "Joc Nou"
+msgstr "Partida nova"
 
 #: ../../../src/GameStateLoad.cpp:99 ../../../src/GameStateLoad.cpp:608
 msgid "Choose a Slot"
-msgstr "Elegiu un espai"
+msgstr "Triar un espai"
 
 #: ../../../src/GameStateLoad.cpp:581 ../../../src/GameStateLoad.cpp:602
 msgid "Enable a story mod to continue"
@@ -181,11 +182,11 @@ msgstr "Habilitar un mod d'història per continuar"
 
 #: ../../../src/GameStateLoad.cpp:597
 msgid "Load Game"
-msgstr "Carregar Joc"
+msgstr "Carregar la partida"
 
 #: ../../../src/GameStateLoad.cpp:706
 msgid "Entering game world..."
-msgstr "Entrant al mon del joc..."
+msgstr "Entrant al món del joc..."
 
 #: ../../../src/GameStateLoad.cpp:709
 msgid "Loading saved game..."
@@ -217,7 +218,7 @@ msgstr "Aleatoritzar"
 
 #: ../../../src/GameStateNew.cpp:92
 msgid "Choose a Portrait"
-msgstr "Elegeix un retrat"
+msgstr "Tria un retrat"
 
 #: ../../../src/GameStateNew.cpp:96
 msgid "Choose a Name"
@@ -361,7 +362,7 @@ msgstr "Esborrar"
 
 #: ../../../src/InputState.cpp:432
 msgid "ActionBar Accept"
-msgstr "Acceptació de la barra d'acció"
+msgstr "Acceptar barra d'acció"
 
 #: ../../../src/InputState.cpp:433
 msgid "ActionBar Left"
@@ -455,18 +456,18 @@ msgstr "Absorbir: %d"
 #: ../../../src/MenuPowers.cpp:1133
 #, c-format
 msgid "Requires Level %d"
-msgstr "Demana nivell %d"
+msgstr "Fa falta el nivell %d"
 
 #: ../../../src/ItemManager.cpp:868 ../../../src/MenuPowers.cpp:1122
 #: ../../../src/MenuPowers.cpp:1124
 #, c-format
 msgid "Requires %s %d"
-msgstr "Demana %s %d"
+msgstr "Requereix%s %d"
 
 #: ../../../src/ItemManager.cpp:879
 #, c-format
 msgid "Requires Class: %s"
-msgstr "Demana classe: %s"
+msgstr "Requereix la classe: %s"
 
 #: ../../../src/ItemManager.cpp:894 ../../../src/ItemManager.cpp:906
 #, c-format
@@ -500,12 +501,12 @@ msgstr "%d objectes:"
 #: ../../../src/ItemManager.cpp:947 ../../../src/ItemManager.cpp:953
 #, c-format
 msgid "Press [%s] to use"
-msgstr "Premi [%s] per utilitzar"
+msgstr "Prem [%s] per utilitzar"
 
 #: ../../../src/ItemManager.cpp:951
 #, c-format
 msgid "Press [%s] to read"
-msgstr "Premi [%s] per llegir"
+msgstr "Prem [%s] per llegir"
 
 #: ../../../src/MenuActionBar.cpp:226 ../../../src/MenuActionBar.cpp:233
 #: ../../../src/MenuActionBar.cpp:236 ../../../src/MenuActionBar.cpp:242
@@ -609,7 +610,7 @@ msgstr "Continuar"
 
 #: ../../../src/MenuConfig.cpp:248
 msgid "Save Game"
-msgstr ""
+msgstr "Guardar la partida"
 
 #: ../../../src/MenuConfig.cpp:291
 msgid "Default"
@@ -620,6 +621,9 @@ msgid ""
 "Show all loot tooltips, except for those that would be obscured by the "
 "player or an enemy. Temporarily show all loot tooltips with 'Alt'."
 msgstr ""
+"Mostra tots els consells d'eines de saqueig, excepte aquells que serien "
+"ocultats pel jugador o l'enemic. Mostra temporalment tots les consells "
+"d'eines de saqueig prement la tecla 'Alt'."
 
 #: ../../../src/MenuConfig.cpp:292
 msgid "Show all"
@@ -629,6 +633,8 @@ msgstr "Mostrar tot"
 msgid ""
 "Always show loot tooltips. Temporarily hide all loot tooltips with 'Alt'."
 msgstr ""
+"Sempre mostra consells d'eines de saqueig. Amaga temporalment tots els "
+"consells d'eines de saqueig prement la tecla 'Alt'."
 
 #: ../../../src/MenuConfig.cpp:293 ../../../src/MenuConfig.cpp:298
 msgid "Hidden"
@@ -639,6 +645,9 @@ msgid ""
 "Always hide loot tooltips, except for when a piece of loot is hovered with "
 "the mouse cursor. Temporarily show all loot tooltips with 'Alt'."
 msgstr ""
+"Amaga sempre els consells d'eines de saqueig excepte quan passis el cursor "
+"per sobre d'una peça de saqueig. Mostra temporalment tots els consells "
+"d'eines de saquieg prement la tecla 'Alt'."
 
 #: ../../../src/MenuConfig.cpp:296
 msgid "Visible"
@@ -653,56 +662,60 @@ msgid ""
 "Controls the type of warning to be activated when the player is below the "
 "low health threshold."
 msgstr ""
+"Controla el tipus d'avís que s'ha d'activar quan la salut del jugador està "
+"per sota del llindar."
 
 #: ../../../src/MenuConfig.cpp:302
 msgid "- Display a message"
-msgstr ""
+msgstr "- Mostra un missatge"
 
 #: ../../../src/MenuConfig.cpp:303
 msgid "- Play a sound"
-msgstr ""
+msgstr "- Fes sonar un soroll"
 
 #: ../../../src/MenuConfig.cpp:304
 msgid "- Change the cursor"
-msgstr ""
+msgstr "- Canvia el cursor"
 
 #: ../../../src/MenuConfig.cpp:306
 msgid "Disabled"
-msgstr ""
+msgstr "Desactivat"
 
 #: ../../../src/MenuConfig.cpp:307
 msgid "All"
-msgstr ""
+msgstr "Tots"
 
 #: ../../../src/MenuConfig.cpp:308
 msgid "Message & Cursor"
-msgstr ""
+msgstr "Missatge i Cursor"
 
 #: ../../../src/MenuConfig.cpp:309
 msgid "Message & Sound"
-msgstr ""
+msgstr "Missatge i So"
 
 #: ../../../src/MenuConfig.cpp:310
 msgid "Sound & Cursor"
-msgstr ""
+msgstr "So i Cursor"
 
 #: ../../../src/MenuConfig.cpp:311
 msgid "Message"
-msgstr ""
+msgstr "Missatge"
 
 #: ../../../src/MenuConfig.cpp:312
 msgid "Cursor"
-msgstr ""
+msgstr "Cursor"
 
 #: ../../../src/MenuConfig.cpp:313
 msgid "Sound"
-msgstr ""
+msgstr "So"
 
 #: ../../../src/MenuConfig.cpp:319
 msgid ""
 "When the player's health drops below the given threshold, the low health "
 "notifications are triggered if one or more of them is enabled."
 msgstr ""
+"Quan la salut del jugador cau sota el llindar, es disparen les notificacions"
+" si una o més d'elles estan activades."
 
 #: ../../../src/MenuConfig.cpp:332 ../../../src/MenuConfig.cpp:1579
 msgid "Exit"
@@ -738,7 +751,7 @@ msgstr "Pausat"
 
 #: ../../../src/MenuConfig.cpp:353
 msgid "Time Played"
-msgstr ""
+msgstr "Temps de joc"
 
 #: ../../../src/MenuConfig.cpp:359
 msgid "Renderer"
@@ -766,7 +779,7 @@ msgstr "Escalat per PPP"
 
 #: ../../../src/MenuConfig.cpp:365
 msgid "Parallax Layers"
-msgstr ""
+msgstr "Capes Parallax"
 
 #: ../../../src/MenuConfig.cpp:366
 msgid "Allow changing gamma"
@@ -810,7 +823,7 @@ msgstr "Subtítols"
 
 #: ../../../src/MenuConfig.cpp:378
 msgid "Loot tooltip visibility"
-msgstr ""
+msgstr "Visibilitat de consells d'eines de saqueig"
 
 #: ../../../src/MenuConfig.cpp:379
 msgid "Mini-map mode"
@@ -822,7 +835,7 @@ msgstr "Mostrar sempre les etiquetes de la barra d'atributs"
 
 #: ../../../src/MenuConfig.cpp:381
 msgid "Allow stat bar auto-hiding"
-msgstr ""
+msgstr "Permet auto-amagar la barra d'estats"
 
 #: ../../../src/MenuConfig.cpp:382
 msgid "Show combat text"
@@ -834,15 +847,15 @@ msgstr "Equipar objectes automàticament"
 
 #: ../../../src/MenuConfig.cpp:384
 msgid "Show hidden entity markers"
-msgstr ""
+msgstr "Mostra els marcadors d'entitat ocults"
 
 #: ../../../src/MenuConfig.cpp:385
 msgid "Low health notification"
-msgstr ""
+msgstr "Notificació de salut baixa"
 
 #: ../../../src/MenuConfig.cpp:386
 msgid "Low health threshold"
-msgstr ""
+msgstr "Llindar de salut baixa"
 
 #: ../../../src/MenuConfig.cpp:389
 msgid "Joystick"
@@ -862,11 +875,11 @@ msgstr "No utilitzar ratolí"
 
 #: ../../../src/MenuConfig.cpp:393
 msgid "Swap mouse movement button"
-msgstr ""
+msgstr "Moviment de ratolí per botó de canvi "
 
 #: ../../../src/MenuConfig.cpp:394
 msgid "Attack with mouse movement"
-msgstr ""
+msgstr "Atacar amb moviment de ratolí"
 
 #: ../../../src/MenuConfig.cpp:395
 msgid "Joystick Deadzone"
@@ -875,17 +888,17 @@ msgstr "Zona morta del joystick"
 #: ../../../src/MenuConfig.cpp:405
 #, c-format
 msgid "Primary binding: %s"
-msgstr ""
+msgstr "Vincle primari: %s"
 
 #: ../../../src/MenuConfig.cpp:406
 #, c-format
 msgid "Alternate binding: %s"
-msgstr ""
+msgstr "Vincle alternatiu: %s"
 
 #: ../../../src/MenuConfig.cpp:407
 #, c-format
 msgid "Joystick binding: %s"
-msgstr ""
+msgstr "Vincle del Joystick: %s"
 
 #: ../../../src/MenuConfig.cpp:508
 msgid ""
@@ -919,24 +932,32 @@ msgid ""
 "This enables parallax (non-tile) layers. Disabling this setting can improve "
 "performance in some cases."
 msgstr ""
+"Això activa les capes parallax (sense rajoles). Desactivar aquesta opció pot"
+" millorar el rendiment en alguns casos."
 
 #: ../../../src/MenuConfig.cpp:512
 msgid ""
 "Enables the below setting that controls the screen gamma level. The behavior"
 " of the gamma setting can vary between platforms."
 msgstr ""
+"Activa l'opció de sota que controla el nivel gamma de la pantalla. El "
+"comportament de l'opció gamma pot variar entre plataformes."
 
 #: ../../../src/MenuConfig.cpp:513
 msgid ""
 "Provides additional text for information that is primarily conveyed through "
 "color."
 msgstr ""
+"T'ofereix text addicional per informació que es transmet principalment a "
+"través de color."
 
 #: ../../../src/MenuConfig.cpp:514
 msgid ""
 "Some mods will automatically hide the stat bars when they are inactive. "
 "Disabling this option will keep them displayed at all times."
 msgstr ""
+"Alguns mods amagaran automàticament les barres d'estat quan estiguin "
+"inactives. Deshabilitar aquesta opció lesmantindrà visibles en tot moment."
 
 #: ../../../src/MenuConfig.cpp:515
 msgid ""

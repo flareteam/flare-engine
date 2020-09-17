@@ -72,9 +72,11 @@ Game updates:
 Translation updates:
 
 * Belarusian (be) update (Zmicer Turok)
+* Catalan (ca) update (Maria Cano)
 * German (de) update (Wuzzy2)
 * Spanish (es) update (Agustin Ferrario)
 * Basque (eu) by aitzkora
+* French (fr) update (leø)
 * Scottish Gaelic (gd) update (GunChleoc)
 * Hungarian (hu) update (litoll)
 * Norwegian (nb) update (Elias Nykrem)

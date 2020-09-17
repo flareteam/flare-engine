@@ -6,8 +6,8 @@
 # Translators:
 # Justin Jacobs <jajdorkster@gmail.com>, 2018
 # Eric R, 2018
-# Diego J. Romero López <diegojromerolopez@gmail.com>, 2018
 # Agustin Ferrario <agustin.ferrario@hotmail.com.ar>, 2020
+# Diego J. Romero López <diegojromerolopez@gmail.com>, 2020
 # 
 #, fuzzy
 msgid ""
@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-05-20 16:39-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: Agustin Ferrario <agustin.ferrario@hotmail.com.ar>, 2020\n"
+"Last-Translator: Diego J. Romero López <diegojromerolopez@gmail.com>, 2020\n"
 "Language-Team: Spanish (https://www.transifex.com/flareorg/teams/84925/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -623,6 +623,8 @@ msgid ""
 "Show all loot tooltips, except for those that would be obscured by the "
 "player or an enemy. Temporarily show all loot tooltips with 'Alt'."
 msgstr ""
+"Mostrar los consejos referidos al botín, exceptuando aquellos ocultos por el"
+" jugador o un enemigo. Para mostrar todos los consejos pulsa \"Alt\"."
 
 #: ../../../src/MenuConfig.cpp:292
 msgid "Show all"
@@ -644,6 +646,9 @@ msgid ""
 "Always hide loot tooltips, except for when a piece of loot is hovered with "
 "the mouse cursor. Temporarily show all loot tooltips with 'Alt'."
 msgstr ""
+"Ocultar siempre los consejos referidos al botín, exceptuando cuando uno de "
+"los objetos tenga el cursor del ratón encima. Para mostrar todos los "
+"consejos pulsa \"Alt\"."
 
 #: ../../../src/MenuConfig.cpp:296
 msgid "Visible"
@@ -658,56 +663,61 @@ msgid ""
 "Controls the type of warning to be activated when the player is below the "
 "low health threshold."
 msgstr ""
+"Controla el tipo de aviso que se activará cuando la salud del jugador esté "
+"por debajo del umbral de bajo nivel de salud."
 
 #: ../../../src/MenuConfig.cpp:302
 msgid "- Display a message"
-msgstr ""
+msgstr "- Muestra un mensaje"
 
 #: ../../../src/MenuConfig.cpp:303
 msgid "- Play a sound"
-msgstr ""
+msgstr "- Reproduce un sonido"
 
 #: ../../../src/MenuConfig.cpp:304
 msgid "- Change the cursor"
-msgstr ""
+msgstr "- Cambia el cursor"
 
 #: ../../../src/MenuConfig.cpp:306
 msgid "Disabled"
-msgstr ""
+msgstr "Deshabilitado"
 
 #: ../../../src/MenuConfig.cpp:307
 msgid "All"
-msgstr ""
+msgstr "Todos"
 
 #: ../../../src/MenuConfig.cpp:308
 msgid "Message & Cursor"
-msgstr ""
+msgstr "Mensaje y cursor"
 
 #: ../../../src/MenuConfig.cpp:309
 msgid "Message & Sound"
-msgstr ""
+msgstr "Mensaje y sonido"
 
 #: ../../../src/MenuConfig.cpp:310
 msgid "Sound & Cursor"
-msgstr ""
+msgstr "Sonido y cursor"
 
 #: ../../../src/MenuConfig.cpp:311
 msgid "Message"
-msgstr ""
+msgstr "Mensaje"
 
 #: ../../../src/MenuConfig.cpp:312
 msgid "Cursor"
-msgstr ""
+msgstr "Cursor"
 
 #: ../../../src/MenuConfig.cpp:313
 msgid "Sound"
-msgstr ""
+msgstr "Sonido"
 
 #: ../../../src/MenuConfig.cpp:319
 msgid ""
 "When the player's health drops below the given threshold, the low health "
 "notifications are triggered if one or more of them is enabled."
 msgstr ""
+"Cuando la salud del jugador esté por debajo de un umbral determinado, las "
+"notificaciones de baja saludo se activarán si al menos una de de ellas están"
+" activadas."
 
 #: ../../../src/MenuConfig.cpp:332 ../../../src/MenuConfig.cpp:1579
 msgid "Exit"
@@ -743,7 +753,7 @@ msgstr "Pausado"
 
 #: ../../../src/MenuConfig.cpp:353
 msgid "Time Played"
-msgstr ""
+msgstr "Tiempo de juego"
 
 #: ../../../src/MenuConfig.cpp:359
 msgid "Renderer"
@@ -827,7 +837,7 @@ msgstr "Mostrar etiquetas en las barra de atributos"
 
 #: ../../../src/MenuConfig.cpp:381
 msgid "Allow stat bar auto-hiding"
-msgstr ""
+msgstr "Permitir ocultar automáticamente la barra de estado"
 
 #: ../../../src/MenuConfig.cpp:382
 msgid "Show combat text"
@@ -839,15 +849,15 @@ msgstr "Automáticamente equipar con objetos"
 
 #: ../../../src/MenuConfig.cpp:384
 msgid "Show hidden entity markers"
-msgstr ""
+msgstr "Mostrar marcadores de entidad ocultos"
 
 #: ../../../src/MenuConfig.cpp:385
 msgid "Low health notification"
-msgstr ""
+msgstr "Notificación de salud baja"
 
 #: ../../../src/MenuConfig.cpp:386
 msgid "Low health threshold"
-msgstr ""
+msgstr "Notificación de salud baja"
 
 #: ../../../src/MenuConfig.cpp:389
 msgid "Joystick"
@@ -867,11 +877,11 @@ msgstr "No usar ratón"
 
 #: ../../../src/MenuConfig.cpp:393
 msgid "Swap mouse movement button"
-msgstr ""
+msgstr "Intercambiar botón de movimiento de ratón"
 
 #: ../../../src/MenuConfig.cpp:394
 msgid "Attack with mouse movement"
-msgstr ""
+msgstr "Atacar con movimiento de ratón"
 
 #: ../../../src/MenuConfig.cpp:395
 msgid "Joystick Deadzone"
@@ -880,17 +890,17 @@ msgstr "Zona sin joystick"
 #: ../../../src/MenuConfig.cpp:405
 #, c-format
 msgid "Primary binding: %s"
-msgstr ""
+msgstr "Vinculación primaria: %s"
 
 #: ../../../src/MenuConfig.cpp:406
 #, c-format
 msgid "Alternate binding: %s"
-msgstr ""
+msgstr "Vinculación alternativa: %s"
 
 #: ../../../src/MenuConfig.cpp:407
 #, c-format
 msgid "Joystick binding: %s"
-msgstr ""
+msgstr "Vinculación con Joystick: %s"
 
 #: ../../../src/MenuConfig.cpp:508
 msgid ""
@@ -931,36 +941,48 @@ msgid ""
 "Enables the below setting that controls the screen gamma level. The behavior"
 " of the gamma setting can vary between platforms."
 msgstr ""
+"Activa la opción inferior que controla el nivel de transparencia de la "
+"pantalla. El comportamiento de transparencia puede variar entre plataformas."
 
 #: ../../../src/MenuConfig.cpp:513
 msgid ""
 "Provides additional text for information that is primarily conveyed through "
 "color."
 msgstr ""
+"Proporciona text adicional para la información que se muestra principalmente"
+" mediante colores."
 
 #: ../../../src/MenuConfig.cpp:514
 msgid ""
 "Some mods will automatically hide the stat bars when they are inactive. "
 "Disabling this option will keep them displayed at all times."
 msgstr ""
+"Algunos mods ocultan automáticamente las barras de estado cuando no están "
+"activas. Desactivar esta opción hace que se muestren siempre."
 
 #: ../../../src/MenuConfig.cpp:515
 msgid ""
 "When enabled, empty equipment slots will be filled with applicable items "
 "when they are obtained."
 msgstr ""
+"Cuando está activado, las ranuras de equipamiento libres se asignarán con "
+"elementos que se puedan usar en cuanto se obtengan."
 
 #: ../../../src/MenuConfig.cpp:516
 msgid ""
 "Shows a marker above enemies, allies, and the player when they are obscured "
 "by tall objects."
 msgstr ""
+"Muestra un marcador por encima de los enemigos, aliados y el jugador cuando "
+"se vean tapados por objetos de gran altura."
 
 #: ../../../src/MenuConfig.cpp:517
 msgid ""
 "This allows the game to be controlled entirely with the keyboard (or "
 "joystick)."
 msgstr ""
+"Esto permite controlar el juego por completo con el teclado (o con un "
+"joystick)."
 
 #: ../../../src/MenuConfig.cpp:518
 msgid ""
@@ -968,6 +990,9 @@ msgid ""
 " 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
 "instead of 'Main1'."
 msgstr ""
+"Cuando \"Mover héroe usando el ratón\" está activado, esta opción controla "
+"si \"Principal1\" o \"Principal2\" se usan para moverlo. Si activado, se "
+"usará \"Principal2\" en vez de \"Principal1\"."
 
 #: ../../../src/MenuConfig.cpp:519
 msgid ""
@@ -976,12 +1001,18 @@ msgid ""
 "setting is disabled, it is required to use 'Shift' to access the Power "
 "assigned to the movement button."
 msgstr ""
+"Cuando la opción de \"Mover héroe usando el ratón\" está activa, esta opción"
+" controla si el Poder asignado al botón de movimiento puede usarse en cuanto"
+" se apunta a un enemigo. Si esta opción está desactivada, se necesita usar "
+"el botón \"Mayús\" para acceder al Poder asignado al botón de movimiento."
 
 #: ../../../src/MenuConfig.cpp:520
 msgid ""
 "The player's attacks will be aimed in the direction of the mouse cursor when"
 " this is enabled."
 msgstr ""
+"Los ataques del jugador se dirigirán a la dirección del cursor del ratón "
+"cuando esta opción esté activada."
 
 #: ../../../src/MenuConfig.cpp:571
 msgid "Active Mods"
@@ -1243,7 +1274,7 @@ msgstr "Selecciona la cantidad de elementos:"
 
 #: ../../../src/MenuInventory.cpp:306
 msgid "Stash item stack:"
-msgstr "Devolver un objeto a la pila:"
+msgstr "Devolver un objeto al almacén:"
 
 #: ../../../src/MenuInventory.cpp:308
 msgid "Sell item stack:"
@@ -1458,15 +1489,15 @@ msgstr "Siguiente nivel:"
 
 #: ../../../src/MenuStash.cpp:53
 msgid "Private"
-msgstr ""
+msgstr "Privado"
 
 #: ../../../src/MenuStash.cpp:55
 msgid "Shared"
-msgstr ""
+msgstr "Compartido"
 
 #: ../../../src/MenuStash.cpp:103
 msgid "Stash"
-msgstr ""
+msgstr "Almacén"
 
 #: ../../../src/MenuStash.cpp:258
 msgid "Can not store quest items in the stash."
@@ -1474,15 +1505,15 @@ msgstr "No puedes guardar objetos de gesta en tu almacén."
 
 #: ../../../src/MenuStash.cpp:263
 msgid "This item can not be stored in the stash."
-msgstr ""
+msgstr "Este objeto no se puede guardar en el almacén."
 
 #: ../../../src/MenuStash.cpp:268
 msgid "This item can not be stored in the private stash."
-msgstr ""
+msgstr "Este objeto no se puede guardar en el almacén privado."
 
 #: ../../../src/MenuStash.cpp:273
 msgid "This item can not be stored in the shared stash."
-msgstr ""
+msgstr "Este objeto no se puede guardar en el almacén compartido."
 
 #: ../../../src/MenuStash.cpp:283
 msgid "Stash is full."
@@ -1491,12 +1522,12 @@ msgstr "Almacén lleno."
 #: ../../../src/MenuStash.cpp:340
 #, c-format
 msgid "Can not store item in stash: %s"
-msgstr ""
+msgstr "No se puede guardar objeto en el amacén: %s"
 
 #: ../../../src/MenuTalker.cpp:447
 #, c-format
 msgid "<dialog node %d>"
-msgstr ""
+msgstr "<dialog node %d>"
 
 #: ../../../src/MenuTalker.cpp:455
 msgid "Trade"
@@ -1533,15 +1564,15 @@ msgstr "Partida guardada."
 
 #: ../../../src/SDLInputState.cpp:643
 msgid "BkSp"
-msgstr ""
+msgstr "Retroceso"
 
 #: ../../../src/SDLInputState.cpp:644
 msgid "Caps"
-msgstr ""
+msgstr "BloqMayús"
 
 #: ../../../src/SDLInputState.cpp:645
 msgid "Del"
-msgstr ""
+msgstr "Suprimir"
 
 #: ../../../src/SDLInputState.cpp:647 ../../../src/SDLInputState.cpp:677
 msgid "End"
@@ -1549,7 +1580,7 @@ msgstr "Fin"
 
 #: ../../../src/SDLInputState.cpp:648
 msgid "Esc"
-msgstr ""
+msgstr "Esc"
 
 #: ../../../src/SDLInputState.cpp:649 ../../../src/SDLInputState.cpp:679
 msgid "Home"
@@ -1557,31 +1588,31 @@ msgstr "Inicio"
 
 #: ../../../src/SDLInputState.cpp:650
 msgid "Ins"
-msgstr ""
+msgstr "Ins"
 
 #: ../../../src/SDLInputState.cpp:651
 msgid "LAlt"
-msgstr ""
+msgstr "AltIzq"
 
 #: ../../../src/SDLInputState.cpp:652
 msgid "LCtrl"
-msgstr ""
+msgstr "CtrlIzq"
 
 #: ../../../src/SDLInputState.cpp:654
 msgid "LShft"
-msgstr ""
+msgstr "MayúsIzq"
 
 #: ../../../src/SDLInputState.cpp:655
 msgid "Num"
-msgstr ""
+msgstr "BloqNum"
 
 #: ../../../src/SDLInputState.cpp:656
 msgid "PgDn"
-msgstr ""
+msgstr "AvPág"
 
 #: ../../../src/SDLInputState.cpp:657
 msgid "PgUp"
-msgstr ""
+msgstr "RePág"
 
 #: ../../../src/SDLInputState.cpp:658 ../../../src/SDLInputState.cpp:688
 msgid "Pause"
@@ -1589,31 +1620,31 @@ msgstr "Pausar"
 
 #: ../../../src/SDLInputState.cpp:659
 msgid "Print"
-msgstr ""
+msgstr "Impr"
 
 #: ../../../src/SDLInputState.cpp:660
 msgid "RAlt"
-msgstr ""
+msgstr "AltDch"
 
 #: ../../../src/SDLInputState.cpp:661
 msgid "RCtrl"
-msgstr ""
+msgstr "CtrlDch"
 
 #: ../../../src/SDLInputState.cpp:662
 msgid "Ret"
-msgstr ""
+msgstr "Intro"
 
 #: ../../../src/SDLInputState.cpp:664
 msgid "RShft"
-msgstr ""
+msgstr "MayúsDch"
 
 #: ../../../src/SDLInputState.cpp:665
 msgid "SLock"
-msgstr ""
+msgstr "BloqDespl"
 
 #: ../../../src/SDLInputState.cpp:666
 msgid "Spc"
-msgstr ""
+msgstr "Esp"
 
 #: ../../../src/SDLInputState.cpp:667 ../../../src/SDLInputState.cpp:697
 msgid "Tab"
@@ -1690,7 +1721,7 @@ msgstr "Espacio"
 #: ../../../src/SDLInputState.cpp:710
 #, c-format
 msgid "M%d"
-msgstr ""
+msgstr "M%d"
 
 #: ../../../src/SDLInputState.cpp:716
 #, c-format
@@ -1700,7 +1731,7 @@ msgstr "Ratón %d"
 #: ../../../src/SDLInputState.cpp:726
 #, c-format
 msgid "JX%d-"
-msgstr ""
+msgstr "JX%d-"
 
 #: ../../../src/SDLInputState.cpp:728
 #, c-format
@@ -1710,7 +1741,7 @@ msgstr "Eje %d -"
 #: ../../../src/SDLInputState.cpp:732
 #, c-format
 msgid "JX%d+"
-msgstr ""
+msgstr "JX%d+"
 
 #: ../../../src/SDLInputState.cpp:734
 #, c-format
@@ -1720,7 +1751,7 @@ msgstr "Eje %d +"
 #: ../../../src/SDLInputState.cpp:739
 #, c-format
 msgid "JB%d"
-msgstr ""
+msgstr "JB%d"
 
 #: ../../../src/SDLInputState.cpp:741
 #, c-format
@@ -1742,7 +1773,7 @@ msgstr "Palmadita"
 #: ../../../src/SDLInputState.cpp:879 ../../../src/SDLInputState.cpp:881
 #, c-format
 msgid "Can not bind: %s"
-msgstr ""
+msgstr "No se puede vincular: %s"
 
 #: ../../../src/SDLInputState.cpp:893 ../../../src/SDLInputState.cpp:897
 #: ../../../src/SDLInputState.cpp:901
