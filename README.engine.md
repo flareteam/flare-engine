@@ -70,6 +70,10 @@ Settings are stored in one of these places:
 ### Windows
 	%APPDATA%\flare\config
 	config\
+### Linux (Snap)
+    $HOME/snap/flare-rpg/current/.config/flare/
+### Linux (Flatpak)
+    $HOME/.var/app/org.flarerpg.Flare/config/flare/
 
 Here you can enable fullscreen, change the game resolution, enable mouse-move, and change keybindings.
 The settings files are created the first time you run Flare.
@@ -85,6 +89,11 @@ Save files are stored in one of these places:
 ### Windows
 	%APPDATA%\flare\userdata
 	userdata\
+### Linux (Snap)
+    $HOME/snap/flare-rpg/current/.local/share/flare/
+### Linux (Flatpak)
+    $HOME/.var/app/org.flarerpg.Flare/data/flare/
+
 
 If permissions are correct, the game is automatically saved when you exit.
 In addition, there is a `mods` directory in this location, which can be used to override system-wide mods.
