@@ -65,9 +65,8 @@ void ItemStorage::setItems(const std::string& s) {
 			Utils::logError("ItemStorage: Item on position %d has negative id, skipping", i);
 			storage[i].clear();
 		}
-		else if ((items->items.empty() && storage[i].item > 0) || static_cast<unsigned>(storage[i].item) > items->items.size()-1) {
-			Utils::logError("ItemStorage: Item id (%d) out of bounds 1-%d, marking as unknown", storage[i].item, static_cast<int>(items->items.size()));
-			items->addUnknownItem(storage[i].item);
+		else if (storage[i].item > 0 && !items->items[storage[i].item].has_name) {
+			Utils::logError("ItemStorage: Item id (%d) has no name, marking as unknown", storage[i].item);
 		}
 	}
 }
@@ -131,10 +130,6 @@ void ItemStorage::clear() {
  */
 ItemStack ItemStorage::add( ItemStack stack, int slot) {
 	if (!stack.empty()) {
-		if (items->items.empty() || stack.item <= 0 || static_cast<unsigned>(stack.item) > items->items.size()-1) {
-			items->addUnknownItem(stack.item);
-		}
-
 		int max_quantity = items->items[stack.item].max_quantity;
 		if (slot > -1) {
 			// a slot is specified

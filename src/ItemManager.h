@@ -228,12 +228,11 @@ public:
 	std::string getItemType(const std::string& _type);
 	Color getItemColor(unsigned id);
 	int getItemIconOverlay(size_t id);
-	void addUnknownItem(unsigned id);
 	bool requirementsMet(const StatBlock *stats, int item);
 
-	std::vector<Item> items;
+	std::map<size_t, Item> items;
 	std::vector<ItemType> item_types;
-	std::vector<ItemSet> item_sets;
+	std::map<size_t, ItemSet> item_sets;
 	std::vector<ItemQuality> item_qualities;
 };
 

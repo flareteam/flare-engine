@@ -156,7 +156,7 @@ void CampaignManager::removeCurrency(int quantity) {
 }
 
 void CampaignManager::removeItem(ItemStack istack) {
-	if (istack.empty() || static_cast<unsigned>(istack.item) >= items->items.size())
+	if (istack.empty())
 		return;
 
 	// TODO display message even if remove() fails? This could happen when trying to remove more than the player is carrying...

@@ -65,17 +65,17 @@ LootManager::LootManager()
  * Here we load all the animations used by the item database.
  */
 void LootManager::loadGraphics() {
-	animations.resize(items->items.size());
-
 	// check all items in the item database
-	for (unsigned int i=0; i < items->items.size(); i++) {
-		if (items->items[i].loot_animation.empty()) continue;
+	std::map<size_t, Item>::iterator item_it;
+	for (item_it = items->items.begin(); item_it != items->items.end(); ++item_it) {
+		if (item_it->second.loot_animation.empty())
+			continue;
 
-		animations[i].resize(items->items[i].loot_animation.size());
+		animations[item_it->first].resize(item_it->second.loot_animation.size());
 
-		for (unsigned int j=0; j<items->items[i].loot_animation.size(); j++) {
-			anim->increaseCount(items->items[i].loot_animation[j].name);
-			animations[i][j] = anim->getAnimationSet(items->items[i].loot_animation[j].name)->getAnimation("");
+		for (size_t i = 0; i < item_it->second.loot_animation.size(); ++i) {
+			anim->increaseCount(item_it->second.loot_animation[i].name);
+			animations[item_it->first][i] = anim->getAnimationSet(item_it->second.loot_animation[i].name)->getAnimation("");
 		}
 	}
 }
@@ -335,11 +335,6 @@ void LootManager::checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos
 }
 
 void LootManager::addLoot(ItemStack stack, const FPoint& pos, bool dropped_by_hero) {
-	if (static_cast<size_t>(stack.item) >= items->items.size()) {
-		Utils::logError("LootManager: Loot item with id %d is not valid.", stack.item);
-		return;
-	}
-
 	Loot ld;
 	ld.stack = stack;
 	ld.pos.x = pos.x;
@@ -720,12 +715,14 @@ void LootManager::removeFromEnemiesDroppingLoot(StatBlock* sb) {
 
 LootManager::~LootManager() {
 	// remove all items in the item database
-	for (unsigned int i=0; i < items->items.size(); i++) {
-		if (items->items[i].loot_animation.empty()) continue;
+	std::map<size_t, Item>::iterator item_it;
+	for (item_it = items->items.begin(); item_it != items->items.end(); ++item_it) {
+		if (item_it->second.loot_animation.empty())
+			continue;
 
-		for (unsigned int j=0; j<items->items[i].loot_animation.size(); j++) {
-			anim->decreaseCount(items->items[i].loot_animation[j].name);
-			delete animations[i][j];
+		for (size_t i = 0; i < item_it->second.loot_animation.size(); ++i) {
+			anim->decreaseCount(item_it->second.loot_animation[i].name);
+			delete animations[item_it->first][i];
 		}
 	}
 

@@ -62,7 +62,7 @@ private:
 	// we block tiles that have loot dropped on them
 	std::vector<Point> tiles_to_unblock;
 
-	std::vector< std::vector<Animation*> > animations;
+	std::map< size_t, std::vector<Animation*> > animations;
 
 public:
 	static const bool DROPPED_BY_HERO = true;

@@ -93,16 +93,7 @@ Item::Item()
 
 ItemManager::ItemManager()
 {
-	// These values are a bit arbitrary, but they should be a good starting point.
-	items.reserve(1000);
-	item_sets.reserve(100);
-
 	loadAll();
-
-	// make sure we have at least 1 item
-	if (items.empty()) {
-		addUnknownItem(1);
-	}
 }
 
 /**
@@ -115,21 +106,6 @@ void ItemManager::loadAll() {
 	this->loadTypes("items/types.txt");
 	this->loadSets("items/sets.txt");
 	this->loadQualities("items/qualities.txt");
-
-	/*
-	 * Shrinks the items vector to the absolute needed size.
-	 *
-	 * While loading the items, the item vector grows dynamically. To have
-	 * no much time overhead for reallocating the vector, a new reallocation
-	 * is twice as large as the needed item id, which means in the worst case
-	 * the item vector was reallocated for loading the last element, so the
-	 * vector is twice as large as needed. This memory is definitly not used,
-	 * so we can free it.
-	 */
-	if (items.capacity() != items.size())
-		std::vector<Item>(items).swap(items);
-	if (item_sets.capacity() != item_sets.size())
-		std::vector<ItemSet>(item_sets).swap(item_sets);
 
 	if (items.empty())
 		Utils::logInfo("ItemManager: No items were found.");
@@ -160,7 +136,7 @@ void ItemManager::loadItems(const std::string& filename) {
 			// @ATTR id|item_id|An uniq id of the item used as reference from other classes.
 			id_line = true;
 			id = Parse::toInt(infile.val);
-			addUnknownItem(id);
+			items[id] = Item();
 
 			// set the max quantity if it has not been done yet
 			if (items[id].max_quantity == INT_MAX)
@@ -178,8 +154,6 @@ void ItemManager::loadItems(const std::string& filename) {
 			continue;
 		}
 		if (id_line) continue;
-
-		assert(items.size() > std::size_t(id));
 
 		if (infile.key == "name") {
 			// @ATTR name|string|Item name displayed on long and short tooltips.
@@ -390,9 +364,10 @@ void ItemManager::loadItems(const std::string& filename) {
 	infile.close();
 
 	// normal items can be stored in either stash
-	for (size_t i=0; i<items.size(); ++i) {
-		if (items[i].no_stash == Item::NO_STASH_NULL) {
-			items[i].no_stash = Item::NO_STASH_IGNORE;
+	std::map<size_t, Item>::iterator item_it;
+	for (item_it = items.begin(); item_it != items.end(); ++item_it) {
+		if (item_it->second.no_stash == Item::NO_STASH_NULL) {
+			item_it->second.no_stash = Item::NO_STASH_IGNORE;
 		}
 	}
 }
@@ -488,8 +463,6 @@ void ItemManager::loadQualities(const std::string& filename) {
 }
 
 std::string ItemManager::getItemName(unsigned id) {
-	if (id >= items.size()) return msg->get("Unknown Item");
-
 	if (!items[id].has_name)
 		items[id].name = msg->get("Unknown Item");
 
@@ -506,9 +479,6 @@ std::string ItemManager::getItemType(const std::string& _type) {
 }
 
 Color ItemManager::getItemColor(unsigned id) {
-	if (id < 1 || id > items.size())
-		return font->getColor(FontEngine::COLOR_WIDGET_NORMAL);
-
 	if (items[id].set > 0) {
 		return item_sets[items[id].set].color;
 	}
@@ -524,9 +494,6 @@ Color ItemManager::getItemColor(unsigned id) {
 }
 
 int ItemManager::getItemIconOverlay(size_t id) {
-	if (id < 1 || id > items.size())
-		return -1;
-
 	for (size_t i=0; i < item_qualities.size(); ++i) {
 		if (item_qualities[i].id == items[id].quality) {
 			return item_qualities[i].overlay_icon;
@@ -535,14 +502,6 @@ int ItemManager::getItemIconOverlay(size_t id) {
 
 	// no overlay icon
 	return -1;
-}
-
-void ItemManager::addUnknownItem(unsigned id) {
-	if (id > 0) {
-		size_t new_size = id+1;
-		if (items.size() <= new_size)
-			items.resize(new_size);
-	}
 }
 
 /**
@@ -568,9 +527,7 @@ void ItemManager::loadSets(const std::string& filename) {
 			id = Parse::toInt(infile.val);
 
 			if (id > 0) {
-				size_t new_size = id+1;
-				if (item_sets.size() <= new_size)
-					item_sets.resize(new_size);
+				item_sets[id] = ItemSet();
 			}
 
 			clear_bonus = true;
@@ -583,8 +540,6 @@ void ItemManager::loadSets(const std::string& filename) {
 		}
 		if (id_line) continue;
 
-		assert(item_sets.size() > std::size_t(id));
-
 		if (infile.key == "name") {
 			// @ATTR name|string|Name of the item set.
 			item_sets[id].name = msg->get(infile.val);
@@ -595,14 +550,8 @@ void ItemManager::loadSets(const std::string& filename) {
 			std::string item_id = Parse::popFirstString(infile.val);
 			while (item_id != "") {
 				int temp_id = Parse::toInt(item_id);
-				if (temp_id > 0 && temp_id < static_cast<int>(items.size())) {
-					items[temp_id].set = id;
-					item_sets[id].items.push_back(temp_id);
-				}
-				else {
-					const int maxsize = static_cast<int>(items.size()-1);
-					infile.error("ItemManager: Item index out of bounds 1-%d, skipping item.", maxsize);
-				}
+				items[temp_id].set = id;
+				item_sets[id].items.push_back(temp_id);
 				item_id = Parse::popFirstString(infile.val);
 			}
 		}

@@ -404,12 +404,12 @@ void GameStateLoad::loadPreview(GameSlot* slot) {
 	}
 
 	for (unsigned int i=0; i<slot->equipped.size(); i++) {
-		if (static_cast<unsigned>(slot->equipped[i]) > items->items.size()-1) {
-			Utils::logError("GameStateLoad: Item in save slot %d with id=%d is out of bounds 1-%d. Your savegame is broken or you might be using an incompatible savegame/mod", slot->id, slot->equipped[i], static_cast<int>(items->items.size())-1);
+		if (slot->equipped[i] != 0 && !items->items[slot->equipped[i]].has_name) {
+			Utils::logError("GameStateLoad: Item in save slot %d with id=%d is unknown. Your savegame is broken or you might be using an incompatible savegame/mod", slot->id, slot->equipped[i]);
 			continue;
 		}
 
-		if (slot->equipped[i] > 0 && !preview_layer.empty() && static_cast<unsigned>(slot->equipped[i]) < items->items.size()) {
+		if (slot->equipped[i] > 0 && !preview_layer.empty()) {
 			std::vector<std::string>::iterator found = find(preview_layer.begin(), preview_layer.end(), items->items[slot->equipped[i]].type);
 			if (found != preview_layer.end())
 				img_gfx[distance(preview_layer.begin(), found)] = items->items[slot->equipped[i]].gfx;
