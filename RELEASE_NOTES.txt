@@ -58,6 +58,7 @@ Engine fixes:
 * Fix check of item requirements when a power requires an item but doesn't consume it.
 * Fix 'respec' events to no longer remove item-based powers from the action bar.
 * Fix log message when gaining more than one level at once.
+* Fixed excessive memory usage when using Items, ItemSets, and Powers with high-value IDs.
 
 Game updates:
 
