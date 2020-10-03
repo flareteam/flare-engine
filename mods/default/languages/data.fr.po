@@ -5,14 +5,15 @@
 # Translators:
 # Justin Jacobs <jajdorkster@gmail.com>, 2018
 # syl_, 2019
+# leø <leoboudet@orne-libre.fr>, 2020
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-29 09:34+\n"
+"POT-Creation-Date: 2020-05-20 16:39+\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: syl_, 2019\n"
+"Last-Translator: leø <leoboudet@orne-libre.fr>, 2020\n"
 "Language-Team: French (https://www.transifex.com/flareorg/teams/84925/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -97,30 +98,30 @@ msgstr "Programmeurs principaux"
 msgid "Programmers"
 msgstr "Programmeurs"
 
-#: ../cutscenes/credits.txt:44
+#: ../cutscenes/credits.txt:48
 msgid "Default Art"
-msgstr ""
+msgstr "Illustrateurs"
 
-#: ../cutscenes/credits.txt:49
+#: ../cutscenes/credits.txt:53
 msgid "Translators"
 msgstr "Traducteurs"
 
-#: ../cutscenes/credits.txt:108
+#: ../cutscenes/credits.txt:112
 msgid "Distributors"
 msgstr "Distributeurs"
 
-#: ../cutscenes/credits.txt:117
+#: ../cutscenes/credits.txt:121
 msgid "Special Thanks"
 msgstr "Remerciements spéciaux"
 
-#: ../cutscenes/credits.txt:121
+#: ../cutscenes/credits.txt:125
 msgid "For giving constant feedback and testing:"
 msgstr "Pour constamment donner leur avis et tester :"
 
-#: ../cutscenes/credits.txt:123
+#: ../cutscenes/credits.txt:127
 msgid "The community at OpenGameArt"
 msgstr "La communauté OpenGameArt"
 
-#: ../cutscenes/credits.txt:127
+#: ../cutscenes/credits.txt:131
 msgid "For Tiled and the Flare map exporter:"
 msgstr "Pour Tiled et l'exportateur de carte de Flare :"
