@@ -274,28 +274,28 @@ void PowerManager::loadPowers() {
 	bool clear_post_effects = true;
 
 	int input_id = 0;
-	bool skippingEntry = false;
+	bool id_line = false;
 
 	while (infile.next()) {
 		// id needs to be the first component of each power.  That is how we write
 		// data to the correct power.
 		if (infile.key == "id") {
 			// @ATTR power.id|power_id|Uniq identifier for the power definition.
+			id_line = true;
 			input_id = Parse::toInt(infile.val);
-			skippingEntry = input_id < 1;
-			if (skippingEntry)
-				infile.error("PowerManager: Power index out of bounds 1-%d, skipping power.", INT_MAX);
-			if (static_cast<int>(powers.size()) < input_id + 1) {
-				powers.resize(input_id + 1);
-				power_animations.resize(powers.size());
-			}
+			powers[input_id] = Power();
 
 			clear_post_effects = true;
 			powers[input_id].is_empty = false;
 
 			continue;
 		}
-		if (skippingEntry)
+		else id_line = false;
+
+		if (input_id < 1) {
+			if (id_line) infile.error("PowerManager: Power index out of bounds 1-%d, skipping power.", INT_MAX);
+		}
+		if (id_line)
 			continue;
 
 		if (infile.key == "type") {
@@ -909,13 +909,43 @@ void PowerManager::loadPowers() {
 	}
 	infile.close();
 
-	for (size_t i=0; i<powers.size(); ++i) {
+	std::map<size_t, Power>::iterator power_it;
+	for (power_it = powers.begin(); power_it != powers.end(); ++power_it) {
+		Power& power = power_it->second;
+
 		// verify wall/post power ids
-		powers[i].wall_power = verifyID(powers[i].wall_power, NULL, ALLOW_ZERO_ID);
-		powers[i].post_power = verifyID(powers[i].post_power, NULL, ALLOW_ZERO_ID);
+		power.wall_power = verifyID(power.wall_power, NULL, ALLOW_ZERO_ID);
+		power.post_power = verifyID(power.post_power, NULL, ALLOW_ZERO_ID);
 
 		// calculate effective combat range
-		setCombatRange(i);
+		{
+			power.combat_range = 0;
+
+			// TODO apparently, missiles and repeaters don't need to have "use_hazard=true"?
+			if ((!power.use_hazard && power.type == Power::TYPE_FIXED) || power.no_attack) {
+				return;
+			}
+
+			if (power.type == Power::TYPE_FIXED) {
+				if (power.relative_pos) {
+					power.combat_range += power.charge_speed * static_cast<float>(power.lifespan);
+				}
+				if (power.starting_pos == Power::STARTING_POS_TARGET) {
+					power.combat_range = FLT_MAX - power.radius;
+				}
+			}
+			else if (power.type == Power::TYPE_MISSILE) {
+				power.combat_range += power.speed * static_cast<float>(power.lifespan);
+			}
+			else if (power.type == Power::TYPE_REPEATER) {
+				power.combat_range += power.speed * static_cast<float>(power.count);
+			}
+			else {
+				power.combat_range = 0;
+			}
+
+			power.combat_range += (power.radius / 2.f);
+		}
 	}
 }
 
@@ -1520,7 +1550,7 @@ int PowerManager::checkReplaceByEffect(int power_index, StatBlock *src_stats) {
  * Activate is basically a switch/redirect to the appropriate function
  */
 bool PowerManager::activate(int power_index, StatBlock *src_stats, const FPoint& target) {
-	if (static_cast<unsigned>(power_index) >= powers.size())
+	if (powers[power_index].is_empty)
 		return false;
 
 	if (src_stats->hero) {
@@ -1739,8 +1769,8 @@ EffectDef* PowerManager::getEffectDef(const std::string& id) {
 }
 
 int PowerManager::verifyID(int power_id, FileParser* infile, bool allow_zero) {
-	bool lower_bound = (allow_zero && power_id < 0) || (!allow_zero && power_id < 1);
-	if (lower_bound || static_cast<unsigned>(power_id) >= powers.size()) {
+	bool lower_bound = (allow_zero && power_id < 0);
+	if (lower_bound) {
 		if (infile != NULL)
 			infile->error("PowerManager: %d is not a valid power id.", power_id);
 		else
@@ -1815,37 +1845,6 @@ bool PowerManager::checkRequiredMaxHPMP(const Power &pow, const StatBlock *src_s
 		return true;
 }
 
-void PowerManager::setCombatRange(size_t power_index) {
-	Power& pow = powers[power_index];
-
-	pow.combat_range = 0;
-
-	// TODO apparently, missiles and repeaters don't need to have "use_hazard=true"?
-	if ((!pow.use_hazard && pow.type == Power::TYPE_FIXED) || pow.no_attack) {
-		return;
-	}
-
-	if (pow.type == Power::TYPE_FIXED) {
-		if (pow.relative_pos) {
-			pow.combat_range += pow.charge_speed * static_cast<float>(pow.lifespan);
-		}
-		if (pow.starting_pos == Power::STARTING_POS_TARGET) {
-			pow.combat_range = FLT_MAX - pow.radius;
-		}
-	}
-	else if (pow.type == Power::TYPE_MISSILE) {
-		pow.combat_range += pow.speed * static_cast<float>(pow.lifespan);
-	}
-	else if (pow.type == Power::TYPE_REPEATER) {
-		pow.combat_range += pow.speed * static_cast<float>(pow.count);
-	}
-	else {
-		pow.combat_range = 0;
-	}
-
-	pow.combat_range += (pow.radius / 2.f);
-}
-
 bool PowerManager::checkCombatRange(int power_index, StatBlock* src_stats, FPoint target) {
 	Power& pow = powers[power_index];
 
@@ -1867,14 +1866,15 @@ bool PowerManager::checkCombatRange(int power_index, StatBlock* src_stats, FPoin
 }
 
 PowerManager::~PowerManager() {
-	for (size_t i = 0; i < powers.size(); ++i) {
-		if (powers[i].animation_name.empty())
+	std::map<size_t, Power>::iterator power_it;
+	for (power_it = powers.begin(); power_it != powers.end(); ++power_it) {
+		if (power_it->second.animation_name.empty())
 			continue;
 
-		anim->decreaseCount(powers[i].animation_name);
+		anim->decreaseCount(power_it->second.animation_name);
 
-		if (power_animations[i])
-			delete power_animations[i];
+		if (power_animations[power_it->first])
+			delete power_animations[power_it->first];
 	}
 
 	for (size_t i = 0; i < effects.size(); ++i) {

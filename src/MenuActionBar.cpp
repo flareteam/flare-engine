@@ -260,7 +260,7 @@ void MenuActionBar::clear(bool skip_items) {
 	// clear action bar
 	for (unsigned i = 0; i < slots_count; i++) {
 		if (skip_items && powers) {
-			if (hotkeys[i] > 0 && static_cast<unsigned>(hotkeys_mod[i]) < powers->powers.size()) {
+			if (hotkeys[i] > 0) {
 				const Power &power = powers->powers[hotkeys_mod[i]];
 				if (!power.required_items.empty()) {
 					continue;
@@ -325,7 +325,7 @@ void MenuActionBar::logic() {
 	for (unsigned i = 0; i < slots_count; i++) {
 		if (!slots[i]) continue;
 
-		if (hotkeys[i] > 0 && static_cast<unsigned>(hotkeys_mod[i]) < powers->powers.size()) {
+		if (hotkeys[i] > 0) {
 			const Power &power = powers->powers[hotkeys_mod[i]];
 
 			if (power.required_items.empty()) {
@@ -613,7 +613,7 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 		}
 
 		// a power slot was activated
-		if (action.power > 0 && static_cast<unsigned>(action.power) < powers->powers.size()) {
+		if (action.power > 0) {
 			const Power& power = powers->powers[action.power];
 
 			if (pc->stats.mp < power.requires_mp && slot_fail_cooldown[i] == 0) {
@@ -740,9 +740,6 @@ void MenuActionBar::checkMenu(bool &menu_c, bool &menu_i, bool &menu_p, bool &me
  */
 void MenuActionBar::set(std::vector<int> power_id, bool skip_empty) {
 	for (unsigned i = 0; i < slots_count; i++) {
-		if (static_cast<unsigned>(power_id[i]) >= powers->powers.size())
-			continue;
-
 		if (powers->powers[power_id[i]].no_actionbar)
 			continue;
 
@@ -831,9 +828,6 @@ bool MenuActionBar::isWithinMenus(const Point& mouse) {
  * So a target_id of 0 will place the power in an empty slot, if available
  */
 void MenuActionBar::addPower(const int id, const int target_id) {
-	if (static_cast<unsigned>(id) >= powers->powers.size())
-		return;
-
 	// some powers are explicitly prevented from being placed on the actionbar
 	if (powers->powers[id].no_actionbar)
 		return;

@@ -346,9 +346,7 @@ private:
 	bool activatePassiveByTrigger(int power_id, StatBlock *src_stats, bool& triggered_others);
 	void activatePassivePostPowers(StatBlock *src_stats);
 
-	void setCombatRange(size_t power_index);
-
-	std::vector<Animation*> power_animations;
+	std::map<size_t, Animation*> power_animations;
 	std::vector<Animation*> effect_animations;
 
 public:
@@ -374,7 +372,7 @@ public:
 	EffectDef* getEffectDef(const std::string& id);
 
 	std::vector<EffectDef> effects;
-	std::vector<Power> powers;
+	std::map<size_t, Power> powers;
 	std::queue<Hazard *> hazards; // output; read by HazardManager
 	std::queue<Map_Enemy> map_enemies; // output; read by PowerManager
 

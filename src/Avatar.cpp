@@ -160,20 +160,20 @@ void Avatar::init() {
 	revertPowers = false;
 	last_transform = "";
 
+	power_cooldown_timers.clear();
+	power_cast_timers.clear();
+
 	// Find untransform power index to use for manual untransfrom ability
 	untransform_power = 0;
-	for (unsigned id=0; id<powers->powers.size(); id++) {
-		if (powers->powers[id].spawn_type == "untransform" && powers->powers[id].required_items.empty()) {
-			untransform_power = id;
-			break;
+	std::map<size_t, Power>::iterator power_it;
+	for (power_it = powers->powers.begin(); power_it != powers->powers.end(); ++power_it) {
+		if (untransform_power == 0 && power_it->second.required_items.empty() && power_it->second.spawn_type == "untransform") {
+			untransform_power = static_cast<int>(power_it->first);
 		}
+
+		power_cooldown_timers[power_it->first] = Timer();
+		power_cast_timers[power_it->first] = Timer();
 	}
-
-	power_cooldown_timers.clear();
-	power_cooldown_timers.resize(powers->powers.size());
-	power_cast_timers.clear();
-	power_cast_timers.resize(powers->powers.size());
-
 }
 
 void Avatar::handleNewMap() {
@@ -676,9 +676,10 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 					stats.powers_passive.clear();
 
 					// reset power cooldowns
-					for (size_t i = 0; i < power_cooldown_timers.size(); i++) {
-						power_cooldown_timers[i].reset(Timer::END);
-						power_cast_timers[i].reset(Timer::END);
+					std::map<size_t, Timer>::iterator pct_it;
+					for (pct_it = power_cooldown_timers.begin(); pct_it != power_cooldown_timers.end(); ++pct_it) {
+						pct_it->second.reset(Timer::END);
+						power_cast_timers[pct_it->first].reset(Timer::END);
 					}
 
 					// close menus in GameStatePlay
@@ -860,9 +861,10 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 	mapr->checkEvents(stats.pos);
 
 	// decrement all cooldowns
-	for (unsigned i = 0; i < power_cooldown_timers.size(); i++) {
-		power_cooldown_timers[i].tick();
-		power_cast_timers[i].tick();
+	std::map<size_t, Timer>::iterator pct_it;
+	for (pct_it = power_cooldown_timers.begin(); pct_it != power_cooldown_timers.end(); ++pct_it) {
+		pct_it->second.tick();
+		power_cast_timers[pct_it->first].tick();
 	}
 
 	// make the current square solid

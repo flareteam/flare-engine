@@ -351,11 +351,7 @@ void SaveLoad::loadGame() {
 						Utils::logError("SaveLoad: Hotkey power on position %d has negative id, skipping", i);
 						hotkeys[i] = 0;
 					}
-					else if (static_cast<unsigned>(hotkeys[i]) > powers->powers.size()-1) {
-						Utils::logError("SaveLoad: Hotkey power id (%d) out of bounds 1-%d, skipping", hotkeys[i], static_cast<int>(powers->powers.size()));
-						hotkeys[i] = 0;
-					}
-					else if (hotkeys[i] != 0 && static_cast<unsigned>(hotkeys[i]) < powers->powers.size() && powers->powers[hotkeys[i]].name == "") {
+					else if (hotkeys[i] != 0 && powers->powers[hotkeys[i]].is_empty) {
 						Utils::logError("SaveLoad: Hotkey power with id=%d, found on position %d does not exist, skipping", hotkeys[i], i);
 						hotkeys[i] = 0;
 					}

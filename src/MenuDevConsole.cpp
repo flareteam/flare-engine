@@ -426,15 +426,16 @@ void MenuDevConsole::execute() {
 
 		std::vector<size_t> matching_ids;
 
-		for (size_t i=1; i<items->items.size(); ++i) {
-			if (!items->items[i].has_name)
+		std::map<size_t, Item>::iterator item_it;
+		for (item_it = items->items.begin(); item_it != items->items.end(); ++item_it) {
+			if (!item_it->second.has_name)
 				continue;
 
-			std::string item_name = items->getItemName(static_cast<int>(i));
+			std::string item_name = items->getItemName(static_cast<int>(item_it->first));
 			if (!search_terms.empty() && Utils::stringFindCaseInsensitive(item_name, search_terms) == std::string::npos)
 				continue;
 
-			matching_ids.push_back(i);
+			matching_ids.push_back(item_it->first);
 		}
 
 		if (!matching_ids.empty()) {
@@ -503,15 +504,15 @@ void MenuDevConsole::execute() {
 
 		std::vector<size_t> matching_ids;
 
-		for (size_t i=1; i<powers->powers.size(); ++i) {
-			if (powers->powers[i].is_empty)
+		std::map<size_t, Power>::iterator power_it;
+		for (power_it = powers->powers.begin(); power_it != powers->powers.end(); ++power_it) {
+			if (power_it->second.is_empty)
 				continue;
 
-			std::string item_name = powers->powers[i].name;
-			if (!search_terms.empty() && Utils::stringFindCaseInsensitive(item_name, search_terms) == std::string::npos)
+			if (!search_terms.empty() && Utils::stringFindCaseInsensitive(power_it->second.name, search_terms) == std::string::npos)
 				continue;
 
-			matching_ids.push_back(i);
+			matching_ids.push_back(power_it->first);
 		}
 
 		if (!matching_ids.empty()) {

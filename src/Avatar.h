@@ -148,8 +148,8 @@ public:
 	bool respawn;
 	bool close_menus;
 	bool allow_movement;
-	std::vector<Timer> power_cooldown_timers;
-	std::vector<Timer> power_cast_timers;
+	std::map<size_t, Timer> power_cooldown_timers;
+	std::map<size_t, Timer> power_cast_timers;
 	Enemy* cursor_enemy; // enemy selected with the mouse cursor
 	Enemy* lock_enemy;
 	unsigned long time_played;
