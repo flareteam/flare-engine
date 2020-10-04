@@ -141,6 +141,7 @@ public:
 	std::vector<std::string> disable_slots; // if this item is equipped, it will disable slots that match the types in the list
 	bool quest_item;
 	int no_stash;
+	std::string script;
 
 	int getPrice();
 	int getSellPrice(bool is_new_buyback);

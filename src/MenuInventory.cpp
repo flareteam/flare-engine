@@ -28,6 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "EffectManager.h"
 #include "EngineSettings.h"
+#include "EventManager.h"
 #include "FileParser.h"
 #include "FontEngine.h"
 #include "Hazard.h"
@@ -543,8 +544,12 @@ void MenuInventory::activate(const Point& position) {
 	if (inventory[CARRIED][slot].empty())
 		return;
 
+	// run the item's script if it has one
+	if (!items->items[inventory[CARRIED][slot].item].script.empty()) {
+		EventManager::executeScript(items->items[inventory[CARRIED][slot].item].script, pc->stats.pos.x, pc->stats.pos.y);
+	}
 	// if the item is a book, open it
-	if (!items->items[inventory[CARRIED][slot].item].book.empty()) {
+	else if (!items->items[inventory[CARRIED][slot].item].book.empty()) {
 		show_book = items->items[inventory[CARRIED][slot].item].book;
 	}
 	// use a power attached to a non-equipment item

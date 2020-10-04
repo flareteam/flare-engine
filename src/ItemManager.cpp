@@ -88,7 +88,8 @@ Item::Item()
 	, pickup_status("")
 	, stepfx("")
 	, quest_item(false)
-	, no_stash(NO_STASH_NULL) {
+	, no_stash(NO_STASH_NULL)
+	, script("") {
 }
 
 ItemManager::ItemManager()
@@ -355,6 +356,10 @@ void ItemManager::loadItems(const std::string& filename) {
 				items[id].no_stash = Item::NO_STASH_ALL;
 			else
 				infile.error("ItemManager: '%s' is not a valid value for 'no_stash'. Use 'ignore', 'private', 'shared', or 'all'.", temp.c_str());
+		}
+		else if (infile.key == "script") {
+			// @ATTR item.script|filename|Loads and executes a script file when the item is activated from the player's inventory.
+			items[id].script = Parse::popFirstString(infile.val);
 		}
 		else {
 			infile.error("ItemManager: '%s' is not a valid key.", infile.key.c_str());
@@ -902,15 +907,14 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	// input hint for consumables/books
 	// TODO hint when not using mouse control. The action for using an item there is hard to describe
 	if (context == PLAYER_INV && !settings->no_mouse) {
-		int power_id = items[stack.item].power;
-		if (power_id > 0 && items[stack.item].type == "consumable") {
-			tip.addColoredText('\n' + msg->get("Press [%s] to use", inpt->getBindingString(Input::MAIN2)), font->getColor(FontEngine::COLOR_ITEM_BONUS));
+		if (!items[stack.item].book.empty() && items[stack.item].book_is_readable) {
+			tip.addColoredText('\n' + msg->get("Press [%s] to read", inpt->getBindingString(Input::MAIN2)), font->getColor(FontEngine::COLOR_ITEM_BONUS));
 		}
-		else if (!items[stack.item].book.empty()) {
-			if (items[stack.item].book_is_readable)
-				tip.addColoredText('\n' + msg->get("Press [%s] to read", inpt->getBindingString(Input::MAIN2)), font->getColor(FontEngine::COLOR_ITEM_BONUS));
-			else
-				tip.addColoredText('\n' + msg->get("Press [%s] to use", inpt->getBindingString(Input::MAIN2)), font->getColor(FontEngine::COLOR_ITEM_BONUS));
+		else if (!items[stack.item].script.empty() ||
+		         !items[stack.item].book.empty() ||
+		         (items[stack.item].power > 0 && items[stack.item].type == "consumable"))
+		{
+			tip.addColoredText('\n' + msg->get("Press [%s] to use", inpt->getBindingString(Input::MAIN2)), font->getColor(FontEngine::COLOR_ITEM_BONUS));
 		}
 	}
 
