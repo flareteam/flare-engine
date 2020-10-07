@@ -922,29 +922,27 @@ void PowerManager::loadPowers() {
 			power.combat_range = 0;
 
 			// TODO apparently, missiles and repeaters don't need to have "use_hazard=true"?
-			if ((!power.use_hazard && power.type == Power::TYPE_FIXED) || power.no_attack) {
-				return;
-			}
-
-			if (power.type == Power::TYPE_FIXED) {
-				if (power.relative_pos) {
-					power.combat_range += power.charge_speed * static_cast<float>(power.lifespan);
+			if (!( (!power.use_hazard && power.type == Power::TYPE_FIXED) || power.no_attack) ) {
+				if (power.type == Power::TYPE_FIXED) {
+					if (power.relative_pos) {
+						power.combat_range += power.charge_speed * static_cast<float>(power.lifespan);
+					}
+					if (power.starting_pos == Power::STARTING_POS_TARGET) {
+						power.combat_range = FLT_MAX - power.radius;
+					}
 				}
-				if (power.starting_pos == Power::STARTING_POS_TARGET) {
-					power.combat_range = FLT_MAX - power.radius;
+				else if (power.type == Power::TYPE_MISSILE) {
+					power.combat_range += power.speed * static_cast<float>(power.lifespan);
 				}
-			}
-			else if (power.type == Power::TYPE_MISSILE) {
-				power.combat_range += power.speed * static_cast<float>(power.lifespan);
-			}
-			else if (power.type == Power::TYPE_REPEATER) {
-				power.combat_range += power.speed * static_cast<float>(power.count);
-			}
-			else {
-				power.combat_range = 0;
-			}
+				else if (power.type == Power::TYPE_REPEATER) {
+					power.combat_range += power.speed * static_cast<float>(power.count);
+				}
+				else {
+					power.combat_range = 0;
+				}
 
-			power.combat_range += (power.radius / 2.f);
+				power.combat_range += (power.radius / 2.f);
+			}
 		}
 	}
 }
