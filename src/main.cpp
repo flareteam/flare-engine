@@ -89,6 +89,11 @@ static void init(const CmdLineArgs& cmd_line_args) {
 	Utils::createLogFile();
 	Utils::logInfo(VersionInfo::createVersionStringFull().c_str());
 
+	// log common paths
+	Utils::logInfo("main: PATH_CONF = '%s'", settings->path_conf.c_str());
+	Utils::logInfo("main: PATH_USER = '%s'", settings->path_user.c_str());
+	Utils::logInfo("main: PATH_DATA = '%s'", settings->path_data.c_str());
+
 	// SDL Inits
 	if ( SDL_Init (SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK) < 0 ) {
 		Utils::logError("main: Could not initialize SDL: %s", SDL_GetError());
