@@ -97,7 +97,7 @@ size_t EnemyManager::loadEnemyPrototype(const std::string& type_id) {
 	size_t prototype = prototypes.size() - 1;
 
 	for (size_t i = 0; i < e.stats.powers_ai.size(); i++) {
-		int power_index = e.stats.powers_ai[i].id;
+		PowerID power_index = e.stats.powers_ai[i].id;
 		const std::string& spawn_type = powers->powers[power_index].spawn_type;
 		if (power_index != 0 && spawn_type != "" && spawn_type != "untransform") {
 			std::vector<Enemy_Level> spawn_enemies = enemyg->getEnemiesInCategory(spawn_type);
@@ -199,7 +199,7 @@ void EnemyManager::handleNewMap () {
 
 	// load enemies that can be spawn by avatar's powers
 	for (size_t i = 0; i < pc->stats.powers_list.size(); i++) {
-		int power_index = pc->stats.powers_list[i];
+		PowerID power_index = pc->stats.powers_list[i];
 		const std::string& spawn_type = powers->powers[power_index].spawn_type;
 		if (spawn_type != "" && spawn_type != "untransform") {
 			std::vector<Enemy_Level> spawn_enemies = enemyg->getEnemiesInCategory(spawn_type);
@@ -212,7 +212,7 @@ void EnemyManager::handleNewMap () {
 	// load enemies that can be spawn by powers in the action bar
 	if (menu_act != NULL) {
 		for (size_t i = 0; i < menu_act->hotkeys.size(); i++) {
-			int power_index = menu_act->hotkeys[i];
+			PowerID power_index = menu_act->hotkeys[i];
 			const std::string& spawn_type = powers->powers[power_index].spawn_type;
 			if (power_index != 0 && spawn_type != "" && spawn_type != "untransform") {
 				std::vector<Enemy_Level> spawn_enemies = enemyg->getEnemiesInCategory(spawn_type);
@@ -348,7 +348,7 @@ void EnemyManager::handleSpawn() {
 		//synchronise tha party passives in the pc stat block with the passives in the allies stat blocks
 		//at the time the summon is spawned, it takes the passives available at that time. if the passives change later, the changes wont affect summons retrospectively. could be exploited with equipment switching
 		for (unsigned i=0; i< pc->stats.powers_passive.size(); i++) {
-			int pwr = pc->stats.powers_passive[i];
+			PowerID pwr = pc->stats.powers_passive[i];
 			if (powers->powers[pwr].passive && powers->powers[pwr].buff_party && (e->stats.hero_ally || e->stats.enemy_ally)
 					&& (powers->powers[pwr].buff_party_power_id == 0 || powers->powers[pwr].buff_party_power_id == e->stats.summoned_power_index)) {
 
@@ -357,7 +357,7 @@ void EnemyManager::handleSpawn() {
 		}
 
 		for (unsigned i=0; i<pc->stats.powers_list_items.size(); i++) {
-			int pwr = pc->stats.powers_list_items[i];
+			PowerID pwr = pc->stats.powers_list_items[i];
 			if (powers->powers[pwr].passive && powers->powers[pwr].buff_party && (e->stats.hero_ally || e->stats.enemy_ally)
 					&& (powers->powers[pwr].buff_party_power_id == 0 || powers->powers[pwr].buff_party_power_id == e->stats.summoned_power_index)) {
 

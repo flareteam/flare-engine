@@ -71,7 +71,7 @@ private:
 	bool keyboard_dragging;
 	bool sticky_dragging;
 	ItemStack drag_stack;
-	int drag_power;
+	PowerID drag_power;
 	int drag_src;
 	WidgetSlot *drag_icon;
 

@@ -554,15 +554,15 @@ void MenuInventory::activate(const Point& position) {
 	}
 	// use a power attached to a non-equipment item
 	else if (items->items[inventory[CARRIED][slot].item].power > 0 && getEquipSlotFromItem(inventory[CARRIED][slot].item, !ONLY_EMPTY_SLOTS) == -1) {
-		int power_id = items->items[inventory[CARRIED][slot].item].power;
+		PowerID power_id = items->items[inventory[CARRIED][slot].item].power;
 
 		// equipment might want to replace powers, so do it here
 		for (int i = 0; i < inventory[EQUIPMENT].getSlotNumber(); ++i) {
 			ItemID id = inventory[EQUIPMENT][i].item;
 
 			for (size_t j = 0; j < items->items[id].replace_power.size(); ++j) {
-				if (power_id == items->items[id].replace_power[j].x) {
-					power_id = items->items[id].replace_power[j].y;
+				if (power_id == items->items[id].replace_power[j].first) {
+					power_id = items->items[id].replace_power[j].second;
 					break;
 				}
 			}
@@ -963,7 +963,7 @@ void MenuInventory::applyEquipment() {
 
 	// defaults
 	for (unsigned i=0; i<pc->stats.powers_list_items.size(); ++i) {
-		int id = pc->stats.powers_list_items[i];
+		PowerID id = pc->stats.powers_list_items[i];
 		// pc->stats.hp > 0 is hack to keep on_death revive passives working
 		if (powers->powers[id].passive && pc->stats.hp > 0)
 			pc->stats.effects.removeEffectPassive(id);
@@ -997,7 +997,7 @@ void MenuInventory::applyEquipment() {
 
 	// disable equipment slots via passive powers
 	for (size_t i=0; i<pc->stats.powers_passive.size(); ++i) {
-		int id = pc->stats.powers_passive[i];
+		PowerID id = pc->stats.powers_passive[i];
 		if (!powers->powers[id].passive)
 			continue;
 
@@ -1006,7 +1006,7 @@ void MenuInventory::applyEquipment() {
 		}
 	}
 	for (size_t i=0; i<pc->stats.powers_list_items.size(); ++i) {
-		int id = pc->stats.powers_list_items[i];
+		PowerID id = pc->stats.powers_list_items[i];
 		if (!powers->powers[id].passive)
 			continue;
 
@@ -1218,13 +1218,13 @@ int MenuInventory::getEquipSlotFromItem(ItemID item, bool only_empty_slots) {
 	return equip_slot;
 }
 
-int MenuInventory::getPowerMod(int meta_power) {
+PowerID MenuInventory::getPowerMod(PowerID meta_power) {
 	for (int i = 0; i < inventory[EQUIPMENT].getSlotNumber(); ++i) {
 		ItemID id = inventory[EQUIPMENT][i].item;
 
 		for (size_t j=0; j<items->items[id].replace_power.size(); j++) {
-			if (items->items[id].replace_power[j].x == meta_power && items->items[id].replace_power[j].y != meta_power) {
-				return items->items[id].replace_power[j].y;
+			if (items->items[id].replace_power[j].first == meta_power && items->items[id].replace_power[j].second != meta_power) {
+				return items->items[id].replace_power[j].second;
 			}
 		}
 	}

@@ -439,7 +439,7 @@ void MenuPowers::loadPower(FileParser &infile) {
 	// @ATTR power.requires_level|int|Power requires at least this level for the hero.
 	else if (infile.key == "requires_level") power_cell.back().cells.back().requires_level = Parse::toInt(infile.val);
 	// @ATTR power.requires_power|power_id|Power requires another power id.
-	else if (infile.key == "requires_power") power_cell.back().cells.back().requires_power.push_back(Parse::toInt(infile.val));
+	else if (infile.key == "requires_power") power_cell.back().cells.back().requires_power.push_back(Parse::toPowerID(infile.val));
 
 	// @ATTR power.visible_requires_status|repeatable(string)|Hide the power if we don't have this campaign status.
 	else if (infile.key == "visible_requires_status") power_cell.back().cells.back().visible_requires_status.push_back(camp->registerStatus(infile.val));
@@ -451,7 +451,7 @@ void MenuPowers::loadPower(FileParser &infile) {
 		std::string repeat_val = Parse::popFirstString(infile.val);
 		while (repeat_val != "") {
 			power_cell.back().cells.push_back(MenuPowersCell());
-			power_cell.back().cells.back().id = Parse::toInt(repeat_val);
+			power_cell.back().cells.back().id = Parse::toPowerID(repeat_val);
 			repeat_val = Parse::popFirstString(infile.val);
 		}
 
@@ -501,7 +501,7 @@ void MenuPowers::loadUpgrade(FileParser &infile, std::vector<MenuPowersCell>& po
 	// @ATTR upgrade.requires_level|int|Upgrade requires at least this level for the hero.
 	else if (infile.key == "requires_level") power_cell_upgrade.back().requires_level = Parse::toInt(infile.val);
 	// @ATTR upgrade.requires_power|int|Upgrade requires another power id.
-	else if (infile.key == "requires_power") power_cell_upgrade.back().requires_power.push_back(Parse::toInt(infile.val));
+	else if (infile.key == "requires_power") power_cell_upgrade.back().requires_power.push_back(Parse::toPowerID(infile.val));
 
 	// @ATTR upgrade.visible_requires_status|repeatable(string)|Hide the upgrade if we don't have this campaign status.
 	else if (infile.key == "visible_requires_status") power_cell_upgrade.back().visible_requires_status.push_back(camp->registerStatus(infile.val));
@@ -601,7 +601,7 @@ void MenuPowers::lockCell(MenuPowersCell* pcell) {
 
 	// remove passive effects
 	if (powers->powers[pcell->id].passive && pcell->passive_on) {
-		std::vector<int>::iterator passive_it = std::find(pc->stats.powers_passive.begin(), pc->stats.powers_passive.end(), pcell->id);
+		std::vector<PowerID>::iterator passive_it = std::find(pc->stats.powers_passive.begin(), pc->stats.powers_passive.end(), pcell->id);
 		if (passive_it != pc->stats.powers_passive.end())
 			pc->stats.powers_passive.erase(passive_it);
 
@@ -611,7 +611,7 @@ void MenuPowers::lockCell(MenuPowersCell* pcell) {
 	}
 
 	// remove from player's power list
-	std::vector<int>::iterator it = std::find(pc->stats.powers_list.begin(), pc->stats.powers_list.end(), pcell->id);
+	std::vector<PowerID>::iterator it = std::find(pc->stats.powers_list.begin(), pc->stats.powers_list.end(), pcell->id);
 	if (it != pc->stats.powers_list.end())
 		pc->stats.powers_list.erase(it);
 
@@ -636,9 +636,9 @@ bool MenuPowers::isBonusCell(MenuPowersCell* pcell) {
 	return pcell == power_cell[pcell->group].getBonusCurrent(power_cell[pcell->group].getCurrent());
 }
 
-MenuPowersCell* MenuPowers::getCellByPowerIndex(int power_index) {
+MenuPowersCell* MenuPowers::getCellByPowerIndex(PowerID power_index) {
 	// Powers can not have an id of 0
-	if (power_index <= 0)
+	if (power_index == 0)
 		return NULL;
 
 	// Find cell with our power
@@ -723,7 +723,7 @@ void MenuPowers::setUnlockedPowers() {
 
 			if (pcell != bonus_pcell || (pcell->passive_on && powers->powers[pcell->id].passive && (!checkRequirements(current_pcell) || (!pcell->is_unlocked && !isBonusCell(pcell))))) {
 				// passive power is activated, but does not meet requirements, so remove it
-				std::vector<int>::iterator passive_it = std::find(pc->stats.powers_passive.begin(), pc->stats.powers_passive.end(), pcell->id);
+				std::vector<PowerID>::iterator passive_it = std::find(pc->stats.powers_passive.begin(), pc->stats.powers_passive.end(), pcell->id);
 				if (passive_it != pc->stats.powers_passive.end()) {
 					pc->stats.powers_passive.erase(passive_it);
 
@@ -737,7 +737,7 @@ void MenuPowers::setUnlockedPowers() {
 			}
 			else if (pcell == bonus_pcell && !pcell->passive_on && powers->powers[pcell->id].passive && checkRequirements(current_pcell)) {
 				// passive power has not been activated, so activate it here
-				std::vector<int>::iterator passive_it = std::find(pc->stats.powers_passive.begin(), pc->stats.powers_passive.end(), pcell->id);
+				std::vector<PowerID>::iterator passive_it = std::find(pc->stats.powers_passive.begin(), pc->stats.powers_passive.end(), pcell->id);
 				if (passive_it == pc->stats.powers_passive.end()) {
 					pc->stats.powers_passive.push_back(pcell->id);
 
@@ -775,15 +775,15 @@ void MenuPowers::createTooltipFromActionBar(TooltipData* tip_data, unsigned slot
 	if (slot >= menu->act->hotkeys.size() || slot >= menu->act->hotkeys_mod.size())
 		return;
 
-	int power_index = menu->act->hotkeys[slot];
-	int mod_power_index = menu->act->hotkeys_mod[slot];
+	PowerID power_index = menu->act->hotkeys[slot];
+	PowerID mod_power_index = menu->act->hotkeys_mod[slot];
 
-	int pindex = mod_power_index;
+	PowerID pindex = mod_power_index;
 	MenuPowersCell* pcell = getCellByPowerIndex(pindex);
 
 	// action bar slot is modded and not found in the menu
 	if (power_index != mod_power_index && !pcell) {
-		int test_pindex = power_index;
+		PowerID test_pindex = power_index;
 		MenuPowersCell* test_pcell = getCellByPowerIndex(test_pindex);
 
 		// non-modded power found in the menu; use it instead
@@ -797,7 +797,7 @@ void MenuPowers::createTooltipFromActionBar(TooltipData* tip_data, unsigned slot
 	createTooltip(tip_data, pcell, pindex, false, tooltip_length);
 }
 
-void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, int power_index, bool show_unlock_prompt, int tooltip_length) {
+void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, PowerID power_index, bool show_unlock_prompt, int tooltip_length) {
 
 	MenuPowersCell* pcell_bonus = NULL;
 	if (pcell) {
@@ -1442,7 +1442,7 @@ void MenuPowers::renderTooltips(const Point& position) {
 /**
  * Click-to-drag a power (to the action bar)
  */
-int MenuPowers::click(const Point& mouse) {
+PowerID MenuPowers::click(const Point& mouse) {
 	int active_tab = (tab_control) ? tab_control->getActiveTab() : 0;
 
 	for (size_t i=0; i<power_cell.size(); i++) {
@@ -1517,7 +1517,7 @@ void MenuPowers::resetToBasePowers() {
 /**
  * Return true if required stats for power usage are met. Else return false.
  */
-bool MenuPowers::meetsUsageStats(int power_index) {
+bool MenuPowers::meetsUsageStats(PowerID power_index) {
 	// Find cell with our power
 	MenuPowersCell* pcell = getCellByPowerIndex(power_index);
 
@@ -1556,7 +1556,7 @@ void MenuPowers::clearBonusLevels() {
 	}
 }
 
-void MenuPowers::addBonusLevels(int power_index, int bonus_levels) {
+void MenuPowers::addBonusLevels(PowerID power_index, int bonus_levels) {
 	MenuPowersCell* pcell = getCellByPowerIndex(power_index);
 
 	if (!pcell)
@@ -1576,7 +1576,7 @@ void MenuPowers::addBonusLevels(int power_index, int bonus_levels) {
 	pgroup->bonus_levels.push_back(bonus);
 }
 
-std::string MenuPowers::getItemBonusPowerReqString(int power_index) {
+std::string MenuPowers::getItemBonusPowerReqString(PowerID power_index) {
 	MenuPowersCell* pcell = getCellByPowerIndex(power_index);
 
 	if (!pcell)

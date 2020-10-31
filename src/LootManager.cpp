@@ -66,7 +66,7 @@ LootManager::LootManager()
  */
 void LootManager::loadGraphics() {
 	// check all items in the item database
-	std::map<size_t, Item>::iterator item_it;
+	std::map<ItemID, Item>::iterator item_it;
 	for (item_it = items->items.begin(); item_it != items->items.end(); ++item_it) {
 		if (item_it->second.loot_animation.empty())
 			continue;
@@ -715,7 +715,7 @@ void LootManager::removeFromEnemiesDroppingLoot(StatBlock* sb) {
 
 LootManager::~LootManager() {
 	// remove all items in the item database
-	std::map<size_t, Item>::iterator item_it;
+	std::map<ItemID, Item>::iterator item_it;
 	for (item_it = items->items.begin(); item_it != items->items.end(); ++item_it) {
 		if (item_it->second.loot_animation.empty())
 			continue;

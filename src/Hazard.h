@@ -50,7 +50,6 @@ public:
 	void setAngle(const float& _angle);
 	bool isDangerousNow();
 	void addRenderable(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
-	void setPower(size_t power_index);
 
 	bool active;
 	bool remove_now;
@@ -71,7 +70,7 @@ public:
 
 	StatBlock *src_stats;
 	Power *power;
-	size_t power_index;
+	PowerID power_index;
 
 	FPoint pos;
 	FPoint speed;

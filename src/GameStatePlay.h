@@ -44,7 +44,7 @@ class Title {
 public:
 	std::string title;
 	int level;
-	int power;
+	PowerID power;
 	std::vector<StatusID> requires_status;
 	std::vector<StatusID> requires_not_status;
 	std::string primary_stat_1;

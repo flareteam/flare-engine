@@ -658,7 +658,7 @@ bool Entity::takeHit(Hazard &h) {
 
 		// handle block post-power
 		if (stats.block_power != 0) {
-			int block_post_power = powers->powers[stats.block_power].post_power;
+			PowerID block_post_power = powers->powers[stats.block_power].post_power;
 
 			if (block_post_power != 0 && stats.getPowerCooldown(block_post_power) == 0) {
 				if (Math::percentChance(powers->powers[stats.block_power].post_power_chance)) {

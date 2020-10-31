@@ -485,7 +485,7 @@ void GameStatePlay::loadTitles() {
 			}
 			else if (infile.key == "power") {
 				// @ATTR title.power|power_id|Requires power.
-				titles.back().power = Parse::toInt(infile.val);
+				titles.back().power = Parse::toPowerID(infile.val);
 			}
 			else if (infile.key == "requires_status") {
 				// @ATTR title.requires_status|list(string)|Requires status.
@@ -828,7 +828,7 @@ void GameStatePlay::updateActionBar(unsigned index) {
 	for (unsigned i = index; i < menu->act->slots_count; i++) {
 		if (menu->act->hotkeys[i] == 0) continue;
 
-		int id = menu->inv->getPowerMod(menu->act->hotkeys_mod[i]);
+		PowerID id = menu->inv->getPowerMod(menu->act->hotkeys_mod[i]);
 		if (id > 0) {
 			menu->act->hotkeys_mod[i] = id;
 			return updateActionBar(i);

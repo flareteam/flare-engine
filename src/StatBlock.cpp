@@ -307,7 +307,7 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 		// @ATTR power_filter|list(power_id)|Only these powers are allowed to hit this entity.
 		std::string power_id = Parse::popFirstString(infile->val);
 		while (!power_id.empty()) {
-			power_filter.push_back(Parse::toInt(power_id));
+			power_filter.push_back(Parse::toPowerID(power_id));
 			power_id = Parse::popFirstString(infile->val);
 		}
 		return true;
@@ -500,7 +500,7 @@ void StatBlock::load(const std::string& filename) {
 
 			std::string ai_type = Parse::popFirstString(infile.val);
 
-			ai_power.id = powers->verifyID(Parse::popFirstInt(infile.val), &infile, !PowerManager::ALLOW_ZERO_ID);
+			ai_power.id = powers->verifyID(Parse::toPowerID(Parse::popFirstString(infile.val)), &infile, !PowerManager::ALLOW_ZERO_ID);
 			if (ai_power.id == 0)
 				continue; // verifyID() will print our error message
 
@@ -530,11 +530,11 @@ void StatBlock::load(const std::string& filename) {
 			powers_passive.clear();
 			std::string p = Parse::popFirstString(infile.val);
 			while (p != "") {
-				powers_passive.push_back(Parse::toInt(p));
+				powers_passive.push_back(Parse::toPowerID(p));
 				p = Parse::popFirstString(infile.val);
 
 				// if a passive power has a post power, add it to the AI power list so we can track its cooldown
-				int post_power = powers->powers[powers_passive.back()].post_power;
+				PowerID post_power = powers->powers[powers_passive.back()].post_power;
 				if (post_power > 0) {
 					AIPower passive_post_power;
 					passive_post_power.type = AI_POWER_PASSIVE_POST;
@@ -783,7 +783,7 @@ void StatBlock::logic() {
 	// handle party buffs
 	if (enemym && powers) {
 		while (!party_buffs.empty()) {
-			int power_index = party_buffs.front();
+			PowerID power_index = party_buffs.front();
 			party_buffs.pop();
 			Power *buff_power = &powers->powers[power_index];
 
@@ -950,7 +950,7 @@ void StatBlock::logic() {
 	}
 }
 
-bool StatBlock::canUsePower(int powerid, bool allow_passive) const {
+bool StatBlock::canUsePower(PowerID powerid, bool allow_passive) const {
 	const Power& power = powers->powers[powerid];
 
 	if (!alive) {
@@ -1066,7 +1066,7 @@ void StatBlock::removeFromSummons() {
 	removeSummons();
 }
 
-bool StatBlock::summonLimitReached(int power_id) const {
+bool StatBlock::summonLimitReached(PowerID power_id) const {
 
 	//find the limit
 	Power *spawn_power = &powers->powers[power_id];
@@ -1193,7 +1193,7 @@ bool StatBlock::checkRequiredSpawns(int req_amount) const {
 	return true;
 }
 
-int StatBlock::getPowerCooldown(int power_id) {
+int StatBlock::getPowerCooldown(PowerID power_id) {
 	if (hero) {
 		return pc->power_cooldown_timers[power_id].getDuration();
 	}
@@ -1207,7 +1207,7 @@ int StatBlock::getPowerCooldown(int power_id) {
 	return 0;
 }
 
-void StatBlock::setPowerCooldown(int power_id, int power_cooldown) {
+void StatBlock::setPowerCooldown(PowerID power_id, int power_cooldown) {
 	if (hero) {
 		pc->power_cooldown_timers[power_id].setDuration(power_cooldown);
 	}

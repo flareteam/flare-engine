@@ -37,7 +37,7 @@ class StatBlock;
 
 class ActionData {
 public:
-	int power;
+	PowerID power;
 	unsigned hotkey;
 	bool instant_item;
 	FPoint target;
@@ -134,22 +134,22 @@ public:
 	std::string attack_anim;
 	bool setPowers;
 	bool revertPowers;
-	int untransform_power;
+	PowerID untransform_power;
 	StatBlock *hero_stats;
 	StatBlock *charmed_stats;
 	FPoint transform_pos;
 	std::string transform_map;
 
 	// vars
-	int current_power;
+	PowerID current_power;
 	FPoint act_target;
 	bool drag_walking;
 	bool newLevelNotification;
 	bool respawn;
 	bool close_menus;
 	bool allow_movement;
-	std::map<size_t, Timer> power_cooldown_timers;
-	std::map<size_t, Timer> power_cast_timers;
+	std::map<PowerID, Timer> power_cooldown_timers;
+	std::map<PowerID, Timer> power_cast_timers;
 	Enemy* cursor_enemy; // enemy selected with the mouse cursor
 	Enemy* lock_enemy;
 	unsigned long time_played;

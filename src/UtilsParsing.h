@@ -43,6 +43,7 @@ namespace Parse {
 	unsigned long toUnsignedLong(const std::string& s, unsigned long default_value = 0);
 	size_t toSizeT(const std::string& s, size_t default_value = 0);
 	ItemID toItemID(const std::string& s, ItemID default_value = 0);
+	PowerID toPowerID(const std::string& s, PowerID default_value = 0);
 	bool toBool(std::string value);
 
 	Point toPoint(std::string value);

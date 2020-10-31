@@ -268,15 +268,15 @@ public:
 	bool buff;
 	bool buff_teleport;
 	bool buff_party;
-	int buff_party_power_id;
+	PowerID buff_party_power_id;
 
 	std::vector<PostEffect> post_effects;
 
-	int pre_power;
+	PowerID pre_power;
 	int pre_power_chance;
-	int post_power;
+	PowerID post_power;
 	int post_power_chance;
-	int wall_power;
+	PowerID wall_power;
 	int wall_power_chance;
 	bool wall_reflect;
 
@@ -330,23 +330,23 @@ private:
 	bool isValidEffect(const std::string& type);
 	int loadSFX(const std::string& filename);
 
-	void initHazard(int powernum, StatBlock *src_stats, const FPoint& target, Hazard *haz);
-	void buff(int power_index, StatBlock *src_stats, const FPoint& target);
-	void playSound(int power_index);
+	void initHazard(PowerID power_index, StatBlock *src_stats, const FPoint& target, Hazard *haz);
+	void buff(PowerID power_index, StatBlock *src_stats, const FPoint& target);
+	void playSound(PowerID power_index);
 
-	bool fixed(int powernum, StatBlock *src_stats, const FPoint& target);
-	bool missile(int powernum, StatBlock *src_stats, const FPoint& target);
-	bool repeater(int powernum, StatBlock *src_stats, const FPoint& target);
-	bool spawn(int powernum, StatBlock *src_stats, const FPoint& target);
-	bool transform(int powernum, StatBlock *src_stats, const FPoint& target);
-	bool block(int power_index, StatBlock *src_stats);
+	bool fixed(PowerID power_index, StatBlock *src_stats, const FPoint& target);
+	bool missile(PowerID power_index, StatBlock *src_stats, const FPoint& target);
+	bool repeater(PowerID power_index, StatBlock *src_stats, const FPoint& target);
+	bool spawn(PowerID power_index, StatBlock *src_stats, const FPoint& target);
+	bool transform(PowerID power_index, StatBlock *src_stats, const FPoint& target);
+	bool block(PowerID power_index, StatBlock *src_stats);
 
-	void payPowerCost(int power_index, StatBlock *src_stats);
+	void payPowerCost(PowerID power_index, StatBlock *src_stats);
 
-	bool activatePassiveByTrigger(int power_id, StatBlock *src_stats, bool& triggered_others);
+	bool activatePassiveByTrigger(PowerID power_id, StatBlock *src_stats, bool& triggered_others);
 	void activatePassivePostPowers(StatBlock *src_stats);
 
-	std::map<size_t, Animation*> power_animations;
+	std::map<PowerID, Animation*> power_animations;
 	std::vector<Animation*> effect_animations;
 
 public:
@@ -356,23 +356,23 @@ public:
 	~PowerManager();
 
 	void handleNewMap(MapCollision *_collider);
-	bool activate(int power_index, StatBlock *src_stats, const FPoint& target);
-	bool canUsePower(unsigned id) const;
-	bool hasValidTarget(int power_index, StatBlock *src_stats, const FPoint& target);
-	bool effect(StatBlock *target_stats, StatBlock *caster_stats, int power_index, int source_type);
+	bool activate(PowerID power_index, StatBlock *src_stats, const FPoint& target);
+	bool canUsePower(PowerID id) const;
+	bool hasValidTarget(PowerID power_index, StatBlock *src_stats, const FPoint& target);
+	bool effect(StatBlock *target_stats, StatBlock *caster_stats, PowerID power_index, int source_type);
 	void activatePassives(StatBlock *src_stats);
-	void activateSinglePassive(StatBlock *src_stats, int id);
-	int verifyID(int power_id, FileParser* infile, bool allow_zero);
+	void activateSinglePassive(StatBlock *src_stats, PowerID id);
+	PowerID verifyID(PowerID power_id, FileParser* infile, bool allow_zero);
 	bool checkNearestTargeting(const Power &pow, const StatBlock *src_stats, bool check_corpses);
 	bool checkRequiredItems(const Power &pow, const StatBlock *src_stats);
 	bool checkRequiredMaxHPMP(const Power &pow, const StatBlock *src_stats);
-	bool checkCombatRange(int power_index, StatBlock *src_stats, FPoint target);
-	int checkReplaceByEffect(int power_index, StatBlock *src_stats);
+	bool checkCombatRange(PowerID power_index, StatBlock *src_stats, FPoint target);
+	PowerID checkReplaceByEffect(PowerID power_index, StatBlock *src_stats);
 
 	EffectDef* getEffectDef(const std::string& id);
 
 	std::vector<EffectDef> effects;
-	std::map<size_t, Power> powers;
+	std::map<PowerID, Power> powers;
 	std::queue<Hazard *> hazards; // output; read by HazardManager
 	std::queue<Map_Enemy> map_enemies; // output; read by PowerManager
 

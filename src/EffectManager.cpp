@@ -361,7 +361,7 @@ void EffectManager::logic() {
 	}
 }
 
-void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, int source_type, size_t power_id) {
+void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, int source_type, PowerID power_id) {
 	addEffectInternal(effect, duration, magnitude, source_type, false, power_id);
 }
 
@@ -370,7 +370,7 @@ void EffectManager::addItemEffect(EffectDef &effect, int duration, int magnitude
 	addEffectInternal(effect, duration, magnitude, Power::SOURCE_TYPE_HERO, true, NO_POWER);
 }
 
-void EffectManager::addEffectInternal(EffectDef &effect, int duration, int magnitude, int source_type, bool item, size_t power_id) {
+void EffectManager::addEffectInternal(EffectDef &effect, int duration, int magnitude, int source_type, bool item, PowerID power_id) {
 	refresh_stats = true;
 
 	// if we're already immune, don't add negative effects

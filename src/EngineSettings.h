@@ -152,8 +152,8 @@ public:
 			std::string equipment;
 			std::string carried;
 			std::vector<int> primary;
-			std::vector<int> hotkeys;
-			std::vector<int> powers;
+			std::vector<PowerID> hotkeys;
+			std::vector<PowerID> powers;
 			std::vector<std::string> statuses;
 			std::string power_tree;
 			int default_power_tab;

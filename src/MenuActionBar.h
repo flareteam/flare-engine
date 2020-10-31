@@ -88,26 +88,26 @@ public:
 	void logic();
 	void render();
 	void checkAction(std::vector<ActionData> &action_queue);
-	int checkDrag(const Point& mouse);
+	PowerID checkDrag(const Point& mouse);
 	void checkMenu(bool &menu_c, bool &menu_i, bool &menu_p, bool &menu_l);
-	void drop(const Point& mouse, int power_index, bool rearranging);
-	void actionReturn(int power_index);
+	void drop(const Point& mouse, PowerID power_index, bool rearranging);
+	void actionReturn(PowerID power_index);
 	void remove(const Point& mouse);
-	void set(std::vector<int> power_id, bool skip_empty);
+	void set(std::vector<PowerID> power_id, bool skip_empty);
 	void clear(bool skip_items);
 	void resetSlots();
 	Point getSlotPos(int slot);
-	int getSlotPower(int slot);
+	PowerID getSlotPower(int slot);
 
 	void renderTooltips(const Point& position);
 	bool isWithinSlots(const Point& mouse);
 	bool isWithinMenus(const Point& mouse);
-	void addPower(const int id, const int target_id);
+	void addPower(const PowerID id, const PowerID target_id);
 
 	unsigned slots_count;
-	std::vector<int> hotkeys; // refer to power_index in PowerManager
-	std::vector<int> hotkeys_temp; // temp for shapeshifting
-	std::vector<int> hotkeys_mod; // hotkeys can be changed by items
+	std::vector<PowerID> hotkeys; // refer to power_index in PowerManager
+	std::vector<PowerID> hotkeys_temp; // temp for shapeshifting
+	std::vector<PowerID> hotkeys_mod; // hotkeys can be changed by items
 	std::vector<bool> locked; // if slot is locked, you cannot drop it
 	std::vector<bool> prevent_changing;
 	std::vector<WidgetSlot *> slots; // hotkey slots

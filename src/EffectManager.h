@@ -115,13 +115,13 @@ class EffectManager {
 private:
 	void removeEffect(size_t id);
 	void clearStatus();
-	void addEffectInternal(EffectDef &effect, int duration, int magnitude, int source_type, bool item, size_t power_id);
+	void addEffectInternal(EffectDef &effect, int duration, int magnitude, int source_type, bool item, PowerID power_id);
 
 public:
 	EffectManager();
 	~EffectManager();
 	void logic();
-	void addEffect(EffectDef &effect, int duration, int magnitude, int source_type, size_t power_id);
+	void addEffect(EffectDef &effect, int duration, int magnitude, int source_type, PowerID power_id);
 	void addItemEffect(EffectDef &effect, int duration, int magnitude);
 	void removeEffectType(const int type);
 	void removeEffectPassive(size_t id);

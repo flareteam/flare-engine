@@ -577,7 +577,7 @@ void BehaviorStandard::updateState() {
 	// stunned enemies can't act
 	if (e->stats.effects.stun) return;
 
-	int power_id;
+	PowerID power_id;
 	int power_state;
 
 	// continue current animations

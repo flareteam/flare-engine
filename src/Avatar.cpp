@@ -165,10 +165,10 @@ void Avatar::init() {
 
 	// Find untransform power index to use for manual untransfrom ability
 	untransform_power = 0;
-	std::map<size_t, Power>::iterator power_it;
+	std::map<PowerID, Power>::iterator power_it;
 	for (power_it = powers->powers.begin(); power_it != powers->powers.end(); ++power_it) {
 		if (untransform_power == 0 && power_it->second.required_items.empty() && power_it->second.spawn_type == "untransform") {
-			untransform_power = static_cast<int>(power_it->first);
+			untransform_power = power_it->first;
 		}
 
 		power_cooldown_timers[power_it->first] = Timer();
@@ -461,7 +461,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 		transform_map = mapr->getFilename();
 	}
 
-	int mm_attack_id = (settings->mouse_move_swap ? menu->act->getSlotPower(MenuActionBar::SLOT_MAIN2) : menu->act->getSlotPower(MenuActionBar::SLOT_MAIN1));
+	PowerID mm_attack_id = (settings->mouse_move_swap ? menu->act->getSlotPower(MenuActionBar::SLOT_MAIN2) : menu->act->getSlotPower(MenuActionBar::SLOT_MAIN1));
 	bool mm_can_use_power = true;
 
 	if (settings->mouse_move) {
@@ -744,7 +744,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 			for (unsigned i=0; i<action_queue.size(); i++) {
 				ActionData &action = action_queue[i];
-				int power_id = powers->checkReplaceByEffect(action.power, &stats);
+				PowerID power_id = powers->checkReplaceByEffect(action.power, &stats);
 				const Power &power = powers->powers[power_id];
 
 				if (power.type == Power::TYPE_BLOCK)

@@ -264,7 +264,7 @@ void ItemManager::loadItems(const std::string& filename) {
 		else if (infile.key == "bonus_power_level") {
 			// @ATTR bonus_power_level|repeatable(power_id, int) : Base power, Bonus levels|Grants bonus levels to a given base power.
 			BonusData bdata;
-			bdata.power_id = Parse::popFirstInt(infile.val);
+			bdata.power_id = Parse::toPowerID(Parse::popFirstString(infile.val));
 			bdata.value = Parse::popFirstInt(infile.val);
 			items[id].bonus.push_back(bdata);
 		}
@@ -301,7 +301,9 @@ void ItemManager::loadItems(const std::string& filename) {
 				items[id].replace_power.clear();
 				clear_replace_power = false;
 			}
-			Point power_ids = Parse::toPoint(infile.val);
+			std::pair<PowerID, PowerID> power_ids;
+			power_ids.first = Parse::toPowerID(Parse::popFirstString(infile.val));
+			power_ids.second = Parse::toPowerID(Parse::popFirstString(infile.val));
 			items[id].replace_power.push_back(power_ids);
 		}
 		else if (infile.key == "power_desc")
@@ -369,7 +371,7 @@ void ItemManager::loadItems(const std::string& filename) {
 	infile.close();
 
 	// normal items can be stored in either stash
-	std::map<size_t, Item>::iterator item_it;
+	std::map<ItemID, Item>::iterator item_it;
 	for (item_it = items.begin(); item_it != items.end(); ++item_it) {
 		if (item_it->second.no_stash == Item::NO_STASH_NULL) {
 			item_it->second.no_stash = Item::NO_STASH_IGNORE;
@@ -579,7 +581,7 @@ void ItemManager::loadSets(const std::string& filename) {
 			// @ATTR bonus_power_level|repeatable(int, power_id, int) : Required set item count, Base power, Bonus levels|Grants bonus levels to a given base power.
 			SetBonusData bonus;
 			bonus.requirement = Parse::popFirstInt(infile.val);
-			bonus.power_id = Parse::popFirstInt(infile.val);
+			bonus.power_id = Parse::toPowerID(Parse::popFirstString(infile.val));
 			bonus.value = Parse::popFirstInt(infile.val);
 			item_sets[id].bonus.push_back(bonus);
 		}

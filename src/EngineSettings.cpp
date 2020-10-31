@@ -466,7 +466,7 @@ EngineSettings::HeroClasses::HeroClass::HeroClass()
 	, equipment("")
 	, carried("")
 	, primary((eset ? eset->primary_stats.list.size() : 0), 0)
-	, hotkeys(std::vector<int>(MenuActionBar::SLOT_MAX, 0))
+	, hotkeys(std::vector<PowerID>(MenuActionBar::SLOT_MAX, 0))
 	, power_tree("")
 	, default_power_tab(-1)
 {
@@ -520,14 +520,14 @@ void EngineSettings::HeroClasses::load() {
 				else if (infile.key == "actionbar") {
 					// @ATTR actionbar|list(power_id)|A list of powers to place in the action bar for the class.
 					for (int i=0; i<12; i++) {
-						list.back().hotkeys[i] = Parse::popFirstInt(infile.val);
+						list.back().hotkeys[i] = Parse::toPowerID(Parse::popFirstString(infile.val));
 					}
 				}
 				else if (infile.key == "powers") {
 					// @ATTR powers|list(power_id)|A list of powers that are unlocked when starting this class.
 					std::string power;
 					while ( (power = Parse::popFirstString(infile.val)) != "") {
-						list.back().powers.push_back(Parse::toInt(power));
+						list.back().powers.push_back(Parse::toPowerID(power));
 					}
 				}
 				else if (infile.key == "campaign") {

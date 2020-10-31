@@ -276,7 +276,7 @@ void SaveLoad::loadGame() {
 	Version save_version(VersionInfo::MIN);
 
 	FileParser infile;
-	std::vector<int> hotkeys(MenuActionBar::SLOT_MAX, -1);
+	std::vector<PowerID> hotkeys(MenuActionBar::SLOT_MAX, -1);
 
 	std::stringstream ss;
 	ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/" << game_slot << "/avatar.txt";
@@ -347,11 +347,7 @@ void SaveLoad::loadGame() {
 			else if (infile.key == "actionbar") {
 				for (int i = 0; i < MenuActionBar::SLOT_MAX; i++) {
 					hotkeys[i] = Parse::popFirstInt(infile.val);
-					if (hotkeys[i] < 0) {
-						Utils::logError("SaveLoad: Hotkey power on position %d has negative id, skipping", i);
-						hotkeys[i] = 0;
-					}
-					else if (hotkeys[i] != 0 && powers->powers[hotkeys[i]].is_empty) {
+					if (hotkeys[i] != 0 && powers->powers[hotkeys[i]].is_empty) {
 						Utils::logError("SaveLoad: Hotkey power with id=%d, found on position %d does not exist, skipping", hotkeys[i], i);
 						hotkeys[i] = 0;
 					}

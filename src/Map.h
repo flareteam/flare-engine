@@ -95,7 +95,7 @@ public:
 	int wander_radius;
 	bool hero_ally;
 	bool enemy_ally;
-	int summon_power_index;
+	PowerID summon_power_index;
 	StatBlock* summoner;
 	std::vector<StatusID> requires_status;
 	std::vector<StatusID> requires_not_status;

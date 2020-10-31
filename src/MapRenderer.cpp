@@ -1086,8 +1086,8 @@ void MapRenderer::createTooltip(EventComponent *ec) {
 /**
  * Activate a power that is attached to an event
  */
-void MapRenderer::activatePower(int power_index, unsigned statblock_index, FPoint &target) {
-	if (power_index < 0 || powers->powers[power_index].is_empty) {
+void MapRenderer::activatePower(PowerID power_index, unsigned statblock_index, FPoint &target) {
+	if (powers->powers[power_index].is_empty) {
 		Utils::logError("MapRenderer: Power index %d is not valid.", power_index);
 		return;
 	}

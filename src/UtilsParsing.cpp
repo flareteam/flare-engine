@@ -184,6 +184,10 @@ ItemID Parse::toItemID(const std::string& s, ItemID default_value) {
 	return Parse::toSizeT(s, default_value);
 }
 
+PowerID Parse::toPowerID(const std::string& s, PowerID default_value) {
+	return Parse::toSizeT(s, default_value);
+}
+
 bool Parse::toBool(std::string value) {
 	trim(value);
 

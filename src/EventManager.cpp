@@ -579,7 +579,7 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		// @ATTR event.power|power_id|Specify power coupled with event.
 		e->type = EventComponent::POWER;
 
-		e->x = Parse::toInt(val);
+		e->id = Parse::toPowerID(val);
 	}
 	else if (key == "spawn") {
 		// @ATTR event.spawn|list(predefined_string, int, int) : Enemy category, X, Y|Spawn an enemy from this category at location
@@ -924,9 +924,9 @@ bool EventManager::executeEventInternal(Event &ev, bool skip_delay) {
 				target.y = static_cast<float>(ev.location.y) + 0.5f;
 			}
 
-			// ec->x is power id
-			// ec->y is statblock index
-			mapr->activatePower(ec->x, ec->y, target);
+			// ec->id is power id
+			// ec->x is statblock index
+			mapr->activatePower(ec->id, ec->x, target);
 		}
 		else if (ec->type == EventComponent::STASH) {
 			mapr->stash = ec->x == 0 ? false : true;
@@ -1060,7 +1060,7 @@ void EventManager::executeScript(const std::string& filename, float x, float y) 
 			// create StatBlocks if we need them
 			EventComponent *ec_power = script_evnt.front().getComponent(EventComponent::POWER);
 			if (ec_power) {
-				ec_power->y = mapr->addEventStatBlock(script_evnt.front());
+				ec_power->x = mapr->addEventStatBlock(script_evnt.front());
 			}
 
 			if (isActive(script_evnt.front())) {

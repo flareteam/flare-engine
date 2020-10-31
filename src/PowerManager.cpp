@@ -273,7 +273,7 @@ void PowerManager::loadPowers() {
 
 	bool clear_post_effects = true;
 
-	int input_id = 0;
+	PowerID input_id = 0;
 	bool id_line = false;
 
 	while (infile.next()) {
@@ -282,7 +282,7 @@ void PowerManager::loadPowers() {
 		if (infile.key == "id") {
 			// @ATTR power.id|power_id|Uniq identifier for the power definition.
 			id_line = true;
-			input_id = Parse::toInt(infile.val);
+			input_id = Parse::toPowerID(infile.val);
 			powers[input_id] = Power();
 
 			clear_post_effects = true;
@@ -909,7 +909,7 @@ void PowerManager::loadPowers() {
 	}
 	infile.close();
 
-	std::map<size_t, Power>::iterator power_it;
+	std::map<PowerID, Power>::iterator power_it;
 	for (power_it = powers.begin(); power_it != powers.end(); ++power_it) {
 		Power& power = power_it->second;
 
@@ -1010,7 +1010,7 @@ void PowerManager::handleNewMap(MapCollision *_collider) {
 /**
  * Check if the target is valid (not an empty area or a wall)
  */
-bool PowerManager::hasValidTarget(int power_index, StatBlock *src_stats, const FPoint& target) {
+bool PowerManager::hasValidTarget(PowerID power_index, StatBlock *src_stats, const FPoint& target) {
 
 	if (!collider) return false;
 
@@ -1037,7 +1037,7 @@ bool PowerManager::hasValidTarget(int power_index, StatBlock *src_stats, const F
  * @param target Aim position in map coordinates
  * @param haz A newly-initialized hazard
  */
-void PowerManager::initHazard(int power_index, StatBlock *src_stats, const FPoint& target, Hazard *haz) {
+void PowerManager::initHazard(PowerID power_index, StatBlock *src_stats, const FPoint& target, Hazard *haz) {
 
 	//the hazard holds the statblock of its source
 	haz->src_stats = src_stats;
@@ -1113,7 +1113,7 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, const FPoin
  * Any attack-based effects are handled by hazards.
  * Self-enhancements (buffs) are handled by this function.
  */
-void PowerManager::buff(int power_index, StatBlock *src_stats, const FPoint& target) {
+void PowerManager::buff(PowerID power_index, StatBlock *src_stats, const FPoint& target) {
 
 	// teleport to the target location
 	if (powers[power_index].buff_teleport) {
@@ -1164,12 +1164,12 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, const FPoint& tar
  * Play the sound effect for this power
  * Equipped items may have unique sounds
  */
-void PowerManager::playSound(int power_index) {
+void PowerManager::playSound(PowerID power_index) {
 	if (powers[power_index].sfx_index != -1)
 		snd->play(sfx[powers[power_index].sfx_index], snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
 }
 
-bool PowerManager::effect(StatBlock *target_stats, StatBlock *caster_stats, int power_index, int source_type) {
+bool PowerManager::effect(StatBlock *target_stats, StatBlock *caster_stats, PowerID power_index, int source_type) {
 	const Power& pwr = powers[power_index];
 	for (unsigned i=0; i<powers[power_index].post_effects.size(); i++) {
 		const PostEffect& pe = pwr.post_effects[i];
@@ -1254,7 +1254,7 @@ bool PowerManager::effect(StatBlock *target_stats, StatBlock *caster_stats, int 
  * @param target The mouse cursor position in map coordinates
  * return boolean true if successful
  */
-bool PowerManager::fixed(int power_index, StatBlock *src_stats, const FPoint& target) {
+bool PowerManager::fixed(PowerID power_index, StatBlock *src_stats, const FPoint& target) {
 
 	if (powers[power_index].use_hazard) {
 		int delay_iterator = 0;
@@ -1290,7 +1290,7 @@ bool PowerManager::fixed(int power_index, StatBlock *src_stats, const FPoint& ta
  * @param target The mouse cursor position in map coordinates
  * return boolean true if successful
  */
-bool PowerManager::missile(int power_index, StatBlock *src_stats, const FPoint& target) {
+bool PowerManager::missile(PowerID power_index, StatBlock *src_stats, const FPoint& target) {
 	FPoint src;
 	if (powers[power_index].starting_pos == Power::STARTING_POS_TARGET) {
 		src = target;
@@ -1345,7 +1345,7 @@ bool PowerManager::missile(int power_index, StatBlock *src_stats, const FPoint& 
 /**
  * Repeaters are multiple hazards that spawn in a straight line
  */
-bool PowerManager::repeater(int power_index, StatBlock *src_stats, const FPoint& target) {
+bool PowerManager::repeater(PowerID power_index, StatBlock *src_stats, const FPoint& target) {
 
 	payPowerCost(power_index, src_stats);
 
@@ -1401,7 +1401,7 @@ bool PowerManager::repeater(int power_index, StatBlock *src_stats, const FPoint&
 /**
  * Spawn a creature. Does not create a hazard
  */
-bool PowerManager::spawn(int power_index, StatBlock *src_stats, const FPoint& target) {
+bool PowerManager::spawn(PowerID power_index, StatBlock *src_stats, const FPoint& target) {
 	Map_Enemy espawn;
 	espawn.type = powers[power_index].spawn_type;
 	espawn.summoner = src_stats;
@@ -1457,7 +1457,7 @@ bool PowerManager::spawn(int power_index, StatBlock *src_stats, const FPoint& ta
 /**
  * Transform into a creature. Fully replaces entity characteristics
  */
-bool PowerManager::transform(int power_index, StatBlock *src_stats, const FPoint& target) {
+bool PowerManager::transform(PowerID power_index, StatBlock *src_stats, const FPoint& target) {
 	// locking the actionbar prevents power usage until after the hero is transformed
 	inpt->lockActionBar();
 
@@ -1513,7 +1513,7 @@ bool PowerManager::transform(int power_index, StatBlock *src_stats, const FPoint
  * Stationary blocking with optional buffs/debuffs
  * Only the hero can block
  */
-bool PowerManager::block(int power_index, StatBlock *src_stats) {
+bool PowerManager::block(PowerID power_index, StatBlock *src_stats) {
 	// if the hero is blocking, we can't activate any more blocking powers
 	if (src_stats->effects.triggered_block)
 		return false;
@@ -1534,7 +1534,7 @@ bool PowerManager::block(int power_index, StatBlock *src_stats) {
 	return true;
 }
 
-int PowerManager::checkReplaceByEffect(int power_index, StatBlock *src_stats) {
+PowerID PowerManager::checkReplaceByEffect(PowerID power_index, StatBlock *src_stats) {
 	for (size_t i = 0; i < powers[power_index].replace_by_effect.size(); ++i) {
 		if (src_stats->effects.hasEffect(powers[power_index].replace_by_effect[i].effect_id, powers[power_index].replace_by_effect[i].count)) {
 			return powers[power_index].replace_by_effect[i].power_id;
@@ -1547,7 +1547,7 @@ int PowerManager::checkReplaceByEffect(int power_index, StatBlock *src_stats) {
 /**
  * Activate is basically a switch/redirect to the appropriate function
  */
-bool PowerManager::activate(int power_index, StatBlock *src_stats, const FPoint& target) {
+bool PowerManager::activate(PowerID power_index, StatBlock *src_stats, const FPoint& target) {
 	if (powers[power_index].is_empty)
 		return false;
 
@@ -1601,7 +1601,7 @@ bool PowerManager::activate(int power_index, StatBlock *src_stats, const FPoint&
 /**
  * pay costs, i.e. remove mana or items.
  */
-void PowerManager::payPowerCost(int power_index, StatBlock *src_stats) {
+void PowerManager::payPowerCost(PowerID power_index, StatBlock *src_stats) {
 	if (src_stats) {
 		if (src_stats->hero) {
 			src_stats->mp -= powers[power_index].requires_mp;
@@ -1670,7 +1670,7 @@ void PowerManager::activatePassives(StatBlock *src_stats) {
 		menu->inv->applyEquipment();
 }
 
-bool PowerManager::activatePassiveByTrigger(int power_id, StatBlock *src_stats, bool& triggered_others) {
+bool PowerManager::activatePassiveByTrigger(PowerID power_id, StatBlock *src_stats, bool& triggered_others) {
 	if (powers[power_id].passive) {
 		int trigger = powers[power_id].passive_trigger;
 
@@ -1703,7 +1703,7 @@ bool PowerManager::activatePassiveByTrigger(int power_id, StatBlock *src_stats, 
 		activate(power_id, src_stats, src_stats->pos);
 		src_stats->refresh_stats = true;
 
-		int post_power = powers[power_id].post_power;
+		PowerID post_power = powers[power_id].post_power;
 		if (post_power > 0) {
 			src_stats->setPowerCooldown(post_power, powers[post_power].cooldown);
 		}
@@ -1717,7 +1717,7 @@ bool PowerManager::activatePassiveByTrigger(int power_id, StatBlock *src_stats, 
  * Activate a single passive
  * this is used when unlocking powers in MenuPowers
  */
-void PowerManager::activateSinglePassive(StatBlock *src_stats, int id) {
+void PowerManager::activateSinglePassive(StatBlock *src_stats, PowerID id) {
 	if (!powers[id].passive) return;
 
 	if (powers[id].passive_trigger == -1) {
@@ -1725,7 +1725,7 @@ void PowerManager::activateSinglePassive(StatBlock *src_stats, int id) {
 		src_stats->refresh_stats = true;
 		src_stats->effects.triggered_others = true;
 
-		int post_power = powers[id].post_power;
+		PowerID post_power = powers[id].post_power;
 		if (post_power > 0) {
 			src_stats->setPowerCooldown(post_power, powers[post_power].cooldown);
 		}
@@ -1737,7 +1737,7 @@ void PowerManager::activateSinglePassive(StatBlock *src_stats, int id) {
  */
 void PowerManager::activatePassivePostPowers(StatBlock *src_stats) {
 	for (size_t i = 0; i < src_stats->powers_passive.size(); ++i) {
-		const int post_power = powers[src_stats->powers_passive[i]].post_power;
+		const PowerID post_power = powers[src_stats->powers_passive[i]].post_power;
 		if (post_power <= 0)
 			continue;
 
@@ -1766,9 +1766,9 @@ EffectDef* PowerManager::getEffectDef(const std::string& id) {
 	return NULL;
 }
 
-int PowerManager::verifyID(int power_id, FileParser* infile, bool allow_zero) {
-	bool lower_bound = (allow_zero && power_id < 0);
-	if (lower_bound) {
+PowerID PowerManager::verifyID(PowerID power_id, FileParser* infile, bool allow_zero) {
+	bool is_valid = (allow_zero || (!allow_zero && power_id > 0));
+	if (!is_valid) {
 		if (infile != NULL)
 			infile->error("PowerManager: %d is not a valid power id.", power_id);
 		else
@@ -1843,7 +1843,7 @@ bool PowerManager::checkRequiredMaxHPMP(const Power &pow, const StatBlock *src_s
 		return true;
 }
 
-bool PowerManager::checkCombatRange(int power_index, StatBlock* src_stats, FPoint target) {
+bool PowerManager::checkCombatRange(PowerID power_index, StatBlock* src_stats, FPoint target) {
 	Power& pow = powers[power_index];
 
 	if (pow.combat_range == 0)
@@ -1864,7 +1864,7 @@ bool PowerManager::checkCombatRange(int power_index, StatBlock* src_stats, FPoin
 }
 
 PowerManager::~PowerManager() {
-	std::map<size_t, Power>::iterator power_it;
+	std::map<PowerID, Power>::iterator power_it;
 	for (power_it = powers.begin(); power_it != powers.end(); ++power_it) {
 		if (power_it->second.animation_name.empty())
 			continue;

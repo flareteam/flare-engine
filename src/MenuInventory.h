@@ -115,7 +115,7 @@ public:
 
 	int getMaxPurchasable(ItemStack item, int vendor_tab);
 
-	int getPowerMod(int meta_power);
+	PowerID getPowerMod(PowerID meta_power);
 
 	void disableEquipmentSlot(const std::string& slot_type);
 

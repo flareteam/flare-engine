@@ -55,7 +55,7 @@ public:
 	bool is_speed;
 	bool is_attack_speed;
 	int value;
-	int power_id; // for bonus_power_level
+	PowerID power_id; // for bonus_power_level
 	BonusData()
 		: stat_index(-1)
 		, damage_index_min(-1)
@@ -129,8 +129,8 @@ public:
 	SoundID sfx_id;
 	std::string gfx;           // the sprite layer shown when this item is equipped
 	std::vector<LootAnimation> loot_animation;// the flying loot animation for this item
-	int power;            // this item can be dragged to the action bar and used as a power
-	std::vector<Point> replace_power;        // alter powers when this item is equipped. Power id 'x' is replaced with id 'y'
+	PowerID power;            // this item can be dragged to the action bar and used as a power
+	std::vector< std::pair<PowerID, PowerID> > replace_power;        // alter powers when this item is equipped. The first PowerID is replaced with the second.
 	std::string power_desc;    // shows up in green text on the tooltip
 	int price;            // if price = 0 the item cannot be sold
 	int price_per_level;  // additional price for each character level above 1

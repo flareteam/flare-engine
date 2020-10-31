@@ -486,7 +486,7 @@ void MenuActionBar::renderTooltips(const Point& position) {
 /**
  * After dragging a power or item onto the action bar, set as new hotkey
  */
-void MenuActionBar::drop(const Point& mouse, int power_index, bool rearranging) {
+void MenuActionBar::drop(const Point& mouse, PowerID power_index, bool rearranging) {
 	for (unsigned i = 0; i < slots_count; i++) {
 		if (slots[i] && !powers->powers[power_index].no_actionbar && Utils::isWithinRect(slots[i]->pos, mouse)) {
 			if (rearranging) {
@@ -511,7 +511,7 @@ void MenuActionBar::drop(const Point& mouse, int power_index, bool rearranging) 
 /**
  * Return the power to the last clicked on slot
  */
-void MenuActionBar::actionReturn(int power_index) {
+void MenuActionBar::actionReturn(PowerID power_index) {
 	drop(last_mouse, power_index, !REORDER);
 }
 
@@ -676,8 +676,8 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 /**
  * If clicking while a menu is open, assume the player wants to rearrange the action bar
  */
-int MenuActionBar::checkDrag(const Point& mouse) {
-	int power_index;
+PowerID MenuActionBar::checkDrag(const Point& mouse) {
+	PowerID power_index;
 
 	for (unsigned i=0; i<slots_count; i++) {
 		if (slots[i] && Utils::isWithinRect(slots[i]->pos, mouse)) {
@@ -738,7 +738,7 @@ void MenuActionBar::checkMenu(bool &menu_c, bool &menu_i, bool &menu_p, bool &me
 /**
  * Set all hotkeys at once e.g. when loading a game
  */
-void MenuActionBar::set(std::vector<int> power_id, bool skip_empty) {
+void MenuActionBar::set(std::vector<PowerID> power_id, bool skip_empty) {
 	for (unsigned i = 0; i < slots_count; i++) {
 		if (powers->powers[power_id[i]].no_actionbar)
 			continue;
@@ -827,7 +827,7 @@ bool MenuActionBar::isWithinMenus(const Point& mouse) {
  * Replaces the power(s) in slots that match the target_id with the power of id
  * So a target_id of 0 will place the power in an empty slot, if available
  */
-void MenuActionBar::addPower(const int id, const int target_id) {
+void MenuActionBar::addPower(const PowerID id, const PowerID target_id) {
 	// some powers are explicitly prevented from being placed on the actionbar
 	if (powers->powers[id].no_actionbar)
 		return;
@@ -882,7 +882,7 @@ Point MenuActionBar::getSlotPos(int slot) {
 	return Point();
 }
 
-int MenuActionBar::getSlotPower(int slot) {
+PowerID MenuActionBar::getSlotPower(int slot) {
 	if (static_cast<unsigned>(slot) < hotkeys.size()) {
 		return hotkeys_mod[slot];
 	}

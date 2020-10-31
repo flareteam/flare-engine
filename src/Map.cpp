@@ -125,7 +125,7 @@ int Map::load(const std::string& fname) {
 		EventComponent *ec_power = events[i].getComponent(EventComponent::POWER);
 		if (ec_power) {
 			// store the index of this StatBlock so that we can find it when the event is activated
-			ec_power->y = addEventStatBlock(events[i]);
+			ec_power->x = addEventStatBlock(events[i]);
 		}
 	}
 
