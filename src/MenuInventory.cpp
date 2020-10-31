@@ -196,7 +196,7 @@ void MenuInventory::logic() {
 
 		// remove a random carried item
 		if (eset->death_penalty.item) {
-			std::vector<int> removable_items;
+			std::vector<ItemID> removable_items;
 			removable_items.clear();
 			for (int i=0; i < MAX_EQUIPPED; i++) {
 				if (!inventory[EQUIPMENT][i].empty()) {
@@ -558,7 +558,7 @@ void MenuInventory::activate(const Point& position) {
 
 		// equipment might want to replace powers, so do it here
 		for (int i = 0; i < inventory[EQUIPMENT].getSlotNumber(); ++i) {
-			int id = inventory[EQUIPMENT][i].item;
+			ItemID id = inventory[EQUIPMENT][i].item;
 
 			for (size_t j = 0; j < items->items[id].replace_power.size(); ++j) {
 				if (power_id == items->items[id].replace_power[j].x) {
@@ -763,7 +763,7 @@ bool MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound, bo
 /**
  * Remove one given item from the player's inventory.
  */
-bool MenuInventory::remove(int item, int quantity) {
+bool MenuInventory::remove(ItemID item, int quantity) {
 	if (activated_item != 0 && activated_slot != -1 && item == activated_item) {
 		inventory[CARRIED].subtract(activated_slot, 1);
 		activated_item = 0;
@@ -897,7 +897,7 @@ void MenuInventory::applyEquipment() {
 	if (items->items.empty())
 		return;
 
-	int item_id;
+	ItemID item_id;
 
 	// calculate bonuses to basic stats, added by items
 	bool checkRequired = true;
@@ -923,9 +923,9 @@ void MenuInventory::applyEquipment() {
 		}
 
 		// calculate bonuses. added by item sets
-		std::vector<int> set;
+		std::vector<ItemSetID> set;
+		std::vector<ItemSetID>::iterator it;
 		std::vector<int> quantity;
-		std::vector<int>::iterator it;
 
 		for (int i=0; i<MAX_EQUIPPED; i++) {
 			item_id = inventory[EQUIPMENT].storage[i].item;
@@ -989,7 +989,7 @@ void MenuInventory::applyEquipment() {
 	}
 	// disable any incompatible slots, unequipping items if neccessary
 	for (int i=0; i<MAX_EQUIPPED; ++i) {
-		int id = inventory[EQUIPMENT][i].item;
+		ItemID id = inventory[EQUIPMENT][i].item;
 		for (unsigned j=0; j<items->items[id].disable_slots.size(); ++j) {
 			disableEquipmentSlot(items->items[id].disable_slots[j]);
 		}
@@ -1031,7 +1031,7 @@ void MenuInventory::applyItemStats() {
 
 	// apply stats from all items
 	for (int i=0; i<MAX_EQUIPPED; i++) {
-		int item_id = inventory[EQUIPMENT].storage[i].item;
+		ItemID item_id = inventory[EQUIPMENT].storage[i].item;
 		const Item &item = items->items[item_id];
 
 		// apply base stats
@@ -1067,12 +1067,12 @@ void MenuInventory::applyItemStats() {
 
 void MenuInventory::applyItemSetBonuses() {
 	// calculate bonuses. added by item sets
-	std::vector<int> set;
+	std::vector<ItemSetID> set;
+	std::vector<ItemSetID>::iterator it;
 	std::vector<int> quantity;
-	std::vector<int>::iterator it;
 
 	for (int i=0; i<MAX_EQUIPPED; i++) {
-		int item_id = inventory[EQUIPMENT].storage[i].item;
+		ItemID item_id = inventory[EQUIPMENT].storage[i].item;
 		it = std::find(set.begin(), set.end(), items->items[item_id].set);
 		if (items->items[item_id].set > 0 && it != set.end()) {
 			quantity[std::distance(set.begin(), it)] += 1;
@@ -1146,7 +1146,7 @@ void MenuInventory::clearHighlight() {
 void MenuInventory::fillEquipmentSlots() {
 	// create temporary arrays
 	int slot_number = MAX_EQUIPPED;
-	int *equip_item = new int[slot_number];
+	ItemID *equip_item = new ItemID[slot_number];
 	int *equip_quantity = new int[slot_number];;
 
 	// initialize arrays
@@ -1194,7 +1194,7 @@ int MenuInventory::getMaxPurchasable(ItemStack item, int vendor_tab) {
 		return 0;
 }
 
-int MenuInventory::getEquipSlotFromItem(int item, bool only_empty_slots) {
+int MenuInventory::getEquipSlotFromItem(ItemID item, bool only_empty_slots) {
 	if (!items->requirementsMet(&pc->stats, item))
 		return -2;
 
@@ -1220,7 +1220,7 @@ int MenuInventory::getEquipSlotFromItem(int item, bool only_empty_slots) {
 
 int MenuInventory::getPowerMod(int meta_power) {
 	for (int i = 0; i < inventory[EQUIPMENT].getSlotNumber(); ++i) {
-		int id = inventory[EQUIPMENT][i].item;
+		ItemID id = inventory[EQUIPMENT][i].item;
 
 		for (size_t j=0; j<items->items[id].replace_power.size(); j++) {
 			if (items->items[id].replace_power[j].x == meta_power && items->items[id].replace_power[j].y != meta_power) {

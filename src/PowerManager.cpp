@@ -400,7 +400,7 @@ void PowerManager::loadPowers() {
 		else if (infile.key == "requires_item") {
 			// @ATTR power.requires_item|repeatable(item_id, int) : Item, Quantity|Requires a specific item of a specific quantity in inventory. If quantity > 0, then the item will be removed.
 			PowerRequiredItem pri;
-			pri.id = Parse::popFirstInt(infile.val);
+			pri.id = Parse::toItemID(Parse::popFirstString(infile.val));
 			pri.quantity = Parse::toInt(Parse::popFirstString(infile.val), 1);
 			pri.equipped = false;
 			powers[input_id].required_items.push_back(pri);
@@ -408,7 +408,7 @@ void PowerManager::loadPowers() {
 		else if (infile.key == "requires_equipped_item") {
 			// @ATTR power.requires_equipped_item|repeatable(item_id, int) : Item, Quantity|Requires a specific item of a specific quantity to be equipped on hero. If quantity > 0, then the item will be removed.
 			PowerRequiredItem pri;
-			pri.id = Parse::popFirstInt(infile.val);
+			pri.id = Parse::toItemID(Parse::popFirstString(infile.val));
 			pri.quantity = Parse::popFirstInt(infile.val);
 			pri.equipped = true;
 

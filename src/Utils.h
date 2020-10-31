@@ -36,6 +36,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 typedef unsigned long SoundID;
 typedef unsigned long StatusID;
 
+typedef size_t ItemID;
+typedef size_t ItemSetID;
+typedef size_t PowerID;
+
 class Avatar;
 class FPoint; // needed for Point -> FPoint constructor
 

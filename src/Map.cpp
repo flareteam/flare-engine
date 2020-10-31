@@ -395,10 +395,10 @@ int Map::addEventStatBlock(Event &evnt) {
 	if (ec_damage) {
 		for (size_t i = 0; i < eset->damage_types.count; ++i) {
 			if (i % 2 == 0) {
-				statb->starting[Stats::COUNT + i] = ec_damage->a; // min
+				statb->starting[Stats::COUNT + i] = ec_damage->x; // min
 			}
 			else {
-				statb->starting[Stats::COUNT + i] = ec_damage->b; // max
+				statb->starting[Stats::COUNT + i] = ec_damage->y; // max
 			}
 		}
 	}

@@ -293,8 +293,8 @@ public:
 	StatusID convert_status;
 	StatusID quest_loot_requires_status;
 	StatusID quest_loot_requires_not_status;
-	int quest_loot_id;
-	int first_defeat_loot;
+	ItemID quest_loot_id;
+	ItemID first_defeat_loot;
 
 	// player look options
 	std::string gfx_base; // folder in /images/avatar

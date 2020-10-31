@@ -59,13 +59,8 @@ ItemStack & ItemStorage::operator [] (int slot) {
 void ItemStorage::setItems(const std::string& s) {
 	std::string item_list = s + ',';
 	for (int i=0; i<slot_number; i++) {
-		storage[i].item = Parse::popFirstInt(item_list);
-		// check if such item exists to avoid crash if savegame was modified manually
-		if (storage[i].item < 0) {
-			Utils::logError("ItemStorage: Item on position %d has negative id, skipping", i);
-			storage[i].clear();
-		}
-		else if (storage[i].item > 0 && !items->items[storage[i].item].has_name) {
+		storage[i].item = Parse::toItemID(Parse::popFirstString(item_list));
+		if (storage[i].item > 0 && !items->items[storage[i].item].has_name) {
 			Utils::logError("ItemStorage: Item id (%d) has no name, marking as unknown", storage[i].item);
 		}
 	}
@@ -194,7 +189,7 @@ void ItemStorage::subtract(int slot, int quantity) {
 /**
  * Remove a quantity of a given item by its ID
  */
-bool ItemStorage::remove(int item, int quantity) {
+bool ItemStorage::remove(ItemID item, int quantity) {
 	if (item == 0)
 		return false;
 
@@ -262,7 +257,7 @@ bool ItemStorage::full(ItemStack stack) {
 /**
  * Get the number of the specified item carried (not equipped)
  */
-int ItemStorage::count(int item) {
+int ItemStorage::count(ItemID item) {
 	int item_count=0;
 	for (int i=0; i<slot_number; i++) {
 		if (storage[i].item == item) {
@@ -275,7 +270,7 @@ int ItemStorage::count(int item) {
 /**
  * Check to see if the given item is equipped
  */
-bool ItemStorage::contain(int item, int quantity) {
+bool ItemStorage::contain(ItemID item, int quantity) {
 	int total_quantity = 0;
 	for (int i=0; i<slot_number; i++) {
 		if (storage[i].item == item)

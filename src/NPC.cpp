@@ -206,7 +206,7 @@ void NPC::load(const std::string& npc_id) {
 				else if (infile.key == "constant_stock") {
 					// @ATTR constant_stock|repeatable(list(item_id))|A list of items this vendor has for sale. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.
 					while (infile.val != "") {
-						stack = ItemStack(Parse::toItemQuantityPair(Parse::popFirstString(infile.val)));
+						stack = Parse::toItemQuantityPair(Parse::popFirstString(infile.val));
 						stock.add(stack, ItemStorage::NO_SLOT);
 					}
 				}
@@ -214,7 +214,7 @@ void NPC::load(const std::string& npc_id) {
 					// @ATTR status_stock|repeatable(string, list(item_id)) : Required status, Item(s)|A list of items this vendor will have for sale if the required status is met. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.
 					if (camp->checkStatus(camp->registerStatus(Parse::popFirstString(infile.val)))) {
 						while (infile.val != "") {
-							stack = ItemStack(Parse::toItemQuantityPair(Parse::popFirstString(infile.val)));
+							stack = Parse::toItemQuantityPair(Parse::popFirstString(infile.val));
 							stock.add(stack, ItemStorage::NO_SLOT);
 						}
 					}

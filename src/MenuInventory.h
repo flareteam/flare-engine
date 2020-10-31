@@ -41,7 +41,7 @@ private:
 
 	void loadGraphics();
 	void updateEquipment(int slot);
-	int getEquipSlotFromItem(int item, bool only_empty_slots);
+	int getEquipSlotFromItem(ItemID item, bool only_empty_slots);
 
 	WidgetLabel label_inventory;
 	WidgetLabel label_currency;
@@ -60,7 +60,7 @@ private:
 	Timer tap_to_activate_timer;
 
 	int activated_slot;
-	int activated_item;
+	ItemID activated_item;
 
 public:
 	enum {
@@ -92,14 +92,14 @@ public:
 	void activate(const Point& position);
 
 	bool add(ItemStack stack, int area, int slot, bool play_sound, bool auto_equip);
-	bool remove(int item, int quantity);
+	bool remove(ItemID item, int quantity);
 	void removeFromPrevSlot(int quantity);
 	void addCurrency(int count);
 	void removeCurrency(int count);
 	bool buy(ItemStack stack, int tab, bool dragging);
 	bool sell(ItemStack stack);
 
-	bool requirementsMet(int item);
+	bool requirementsMet(ItemID item);
 
 	void applyEquipment();
 	void applyItemStats();

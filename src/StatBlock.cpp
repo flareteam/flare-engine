@@ -468,12 +468,12 @@ void StatBlock::load(const std::string& filename) {
 		// @ATTR convert_status|string|Campaign status to set upon being converted to a player ally.
 		else if (infile.key == "convert_status") convert_status = camp->registerStatus(infile.val);
 		// @ATTR first_defeat_loot|item_id|Drops this item upon first death.
-		else if (infile.key == "first_defeat_loot") first_defeat_loot = num;
+		else if (infile.key == "first_defeat_loot") first_defeat_loot = Parse::toItemID(infile.val);
 		// @ATTR quest_loot|string, string, item_id : Required status, Required not status, Item|Drops this item when campaign status is met.
 		else if (infile.key == "quest_loot") {
 			quest_loot_requires_status = camp->registerStatus(Parse::popFirstString(infile.val));
 			quest_loot_requires_not_status = camp->registerStatus(Parse::popFirstString(infile.val));
-			quest_loot_id = Parse::popFirstInt(infile.val);
+			quest_loot_id = Parse::toItemID(Parse::popFirstString(infile.val));
 		}
 
 		// behavior stats

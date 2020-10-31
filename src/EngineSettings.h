@@ -44,7 +44,7 @@ public:
 		int party_exp_percentage;
 		bool enable_ally_collision;
 		bool enable_ally_collision_ai;
-		int currency_id;
+		ItemID currency_id;
 		float interact_range;
 		bool menus_pause;
 		bool save_onload;

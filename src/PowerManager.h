@@ -63,7 +63,7 @@ public:
 
 class PowerRequiredItem {
 public:
-	int id;
+	ItemID id;
 	int quantity;
 	bool equipped;
 
@@ -379,8 +379,8 @@ public:
 	// shared sounds for power special effects
 	std::vector<SoundID> sfx;
 
-	std::vector<int> used_items;
-	std::vector<int> used_equipped_items;
+	std::vector<ItemID> used_items;
+	std::vector<ItemID> used_equipped_items;
 };
 
 #endif

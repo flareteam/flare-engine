@@ -130,13 +130,13 @@ void ItemManager::loadItems(const std::string& filename) {
 	bool clear_loot_anim = true;
 	bool clear_replace_power = true;
 
-	int id = 0;
+	ItemID id = 0;
 	bool id_line = false;
 	while (infile.next()) {
 		if (infile.key == "id") {
 			// @ATTR id|item_id|An uniq id of the item used as reference from other classes.
 			id_line = true;
-			id = Parse::toInt(infile.val);
+			id = Parse::toItemID(infile.val);
 			items[id] = Item();
 
 			// set the max quantity if it has not been done yet
@@ -467,7 +467,7 @@ void ItemManager::loadQualities(const std::string& filename) {
 	}
 }
 
-std::string ItemManager::getItemName(unsigned id) {
+std::string ItemManager::getItemName(ItemID id) {
 	if (!items[id].has_name)
 		items[id].name = msg->get("Unknown Item");
 
@@ -483,7 +483,7 @@ std::string ItemManager::getItemType(const std::string& _type) {
 	return _type;
 }
 
-Color ItemManager::getItemColor(unsigned id) {
+Color ItemManager::getItemColor(ItemID id) {
 	if (items[id].set > 0) {
 		return item_sets[items[id].set].color;
 	}
@@ -523,13 +523,13 @@ void ItemManager::loadSets(const std::string& filename) {
 
 	bool clear_bonus = true;
 
-	int id = 0;
+	ItemSetID id = 0;
 	bool id_line;
 	while (infile.next()) {
 		if (infile.key == "id") {
 			// @ATTR id|int|A uniq id for the item set.
 			id_line = true;
-			id = Parse::toInt(infile.val);
+			id = Parse::toSizeT(infile.val);
 
 			if (id > 0) {
 				item_sets[id] = ItemSet();
@@ -554,7 +554,7 @@ void ItemManager::loadSets(const std::string& filename) {
 			item_sets[id].items.clear();
 			std::string item_id = Parse::popFirstString(infile.val);
 			while (item_id != "") {
-				int temp_id = Parse::toInt(item_id);
+				ItemID temp_id = Parse::toItemID(item_id);
 				items[temp_id].set = id;
 				item_sets[id].items.push_back(temp_id);
 				item_id = Parse::popFirstString(infile.val);
@@ -681,7 +681,7 @@ void ItemManager::getBonusString(std::stringstream& ss, BonusData* bdata) {
 	}
 }
 
-void ItemManager::playSound(int item, const Point& pos) {
+void ItemManager::playSound(ItemID item, const Point& pos) {
 	std::stringstream channel_name;
 	channel_name << "item_" << items[item].sfx_id;
 	snd->play(items[item].sfx_id, channel_name.str(), FPoint(pos), false);
@@ -924,7 +924,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 /**
  * Check requirements on an item
  */
-bool ItemManager::requirementsMet(const StatBlock *stats, int item) {
+bool ItemManager::requirementsMet(const StatBlock *stats, ItemID item) {
 	if (!stats) return false;
 
 	// level

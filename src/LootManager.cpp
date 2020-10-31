@@ -229,7 +229,7 @@ void LootManager::checkEnemiesForLoot() {
 			std::vector<EventComponent> quest_loot_table;
 			EventComponent ec;
 			ec.type = EventComponent::LOOT;
-			ec.c = e->quest_loot_id;
+			ec.id = e->quest_loot_id;
 			ec.a = ec.b = 1;
 			ec.z = 0;
 
@@ -307,7 +307,7 @@ void LootManager::checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos
 
 		float real_chance = ec->f;
 
-		if (ec->c != 0) {
+		if (ec->id != 0) {
 			real_chance = ec->f * static_cast<float>(pc->stats.get(Stats::ITEM_FIND) + 100) / 100.f;
 		}
 
@@ -518,9 +518,9 @@ void LootManager::parseLoot(std::string &val, EventComponent *e, std::vector<Eve
 	e->s = Parse::popFirstString(val);
 
 	if (e->s == "currency")
-		e->c = eset->misc.currency_id;
+		e->id = eset->misc.currency_id;
 	else if (Parse::toInt(e->s, -1) != -1)
-		e->c = Parse::toInt(e->s);
+		e->id = Parse::toItemID(e->s);
 	else if (ec_list) {
 		// load entire loot table
 		std::string filename = e->s;
@@ -557,9 +557,9 @@ void LootManager::parseLoot(std::string &val, EventComponent *e, std::vector<Eve
 
 			ec->s = repeat_val;
 			if (ec->s == "currency")
-				ec->c = eset->misc.currency_id;
+				ec->id = eset->misc.currency_id;
 			else if (Parse::toInt(ec->s, -1) != -1)
-				ec->c = Parse::toInt(ec->s);
+				ec->id = Parse::toItemID(ec->s);
 			else {
 				// remove the last event component, since getLootTable() will create a new one
 				ec_list->pop_back();
@@ -617,9 +617,9 @@ void LootManager::loadLootTables() {
 					ec->s = infile.val;
 
 					if (ec->s == "currency")
-						ec->c = eset->misc.currency_id;
+						ec->id = eset->misc.currency_id;
 					else if (Parse::toInt(ec->s, -1) != -1)
-						ec->c = Parse::toInt(ec->s);
+						ec->id = Parse::toItemID(ec->s);
 					else {
 						skip_to_next = true;
 						infile.error("LootManager: Invalid item id for loot.");
@@ -691,12 +691,12 @@ void LootManager::checkLootComponent(EventComponent* ec, FPoint *pos, std::vecto
 	new_loot.quantity = Math::randBetween(ec->a,ec->b);
 
 	// an item id of 0 means we should drop currency instead
-	if (ec->c == 0 || ec->c == eset->misc.currency_id) {
+	if (ec->id == 0 || ec->id == eset->misc.currency_id) {
 		new_loot.item = eset->misc.currency_id;
 		new_loot.quantity = new_loot.quantity * (100 + pc->stats.get(Stats::CURRENCY_FIND)) / 100;
 	}
 	else {
-		new_loot.item = ec->c;
+		new_loot.item = ec->id;
 	}
 
 	if (itemstack_vec)

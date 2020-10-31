@@ -20,6 +20,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "FontEngine.h"
+#include "ItemManager.h"
 #include "Settings.h"
 #include "SharedResources.h"
 #include "UtilsParsing.h"
@@ -170,6 +171,17 @@ unsigned long Parse::toUnsignedLong(const std::string& s, unsigned long  default
 	if (!(std::stringstream(s) >> result))
 		result = default_value;
 	return result;
+}
+
+size_t Parse::toSizeT(const std::string& s, size_t default_value) {
+	size_t result;
+	if (!(std::stringstream(s) >> result))
+		result = default_value;
+	return result;
+}
+
+ItemID Parse::toItemID(const std::string& s, ItemID default_value) {
+	return Parse::toSizeT(s, default_value);
 }
 
 bool Parse::toBool(std::string value) {
@@ -387,20 +399,20 @@ LabelInfo Parse::popLabelInfo(std::string val) {
 	return info;
 }
 
-Point Parse::toItemQuantityPair(std::string value, bool* check_pair) {
-	Point r;
+ItemStack Parse::toItemQuantityPair(std::string value, bool* check_pair) {
+	ItemStack r;
 
 	if (check_pair) {
 		*check_pair = (value.find_first_of(':') != std::string::npos);
 	}
 
 	value += ':';
-	r.x = popFirstInt(value, ':');
-	r.y = popFirstInt(value, ':');
+	r.item = toItemID(popFirstString(value, ':'));
+	r.quantity = popFirstInt(value, ':');
 
 	// quantity is always >= 1
-	if (r.y == 0)
-		r.y = 1;
+	if (r.quantity == 0)
+		r.quantity = 1;
 
 	return r;
 }

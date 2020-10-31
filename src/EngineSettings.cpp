@@ -110,7 +110,7 @@ void EngineSettings::Misc::load() {
 				enable_ally_collision_ai = Parse::toBool(infile.val);
 			else if (infile.key == "currency_id") {
 				// @ATTR currency_id|item_id|An item id that will be used as currency.
-				currency_id = Parse::toInt(infile.val);
+				currency_id = Parse::toItemID(infile.val);
 				if (currency_id < 1) {
 					currency_id = 1;
 					Utils::logError("EngineSettings: Currency ID below the minimum allowed value. Resetting it to %d", currency_id);

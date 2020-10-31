@@ -103,6 +103,7 @@ public:
 	int b;
 	int c;
 	float f;
+	size_t id;
 
 	EventComponent()
 		: type(NONE)
@@ -114,7 +115,8 @@ public:
 		, a(0)
 		, b(0)
 		, c(0)
-		, f(0) {
+		, f(0)
+		, id(0) {
 	}
 };
 

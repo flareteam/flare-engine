@@ -244,11 +244,11 @@ bool CampaignManager::checkAllRequirements(const EventComponent& ec) {
 			return true;
 	}
 	else if (ec.type == EventComponent::REQUIRES_ITEM) {
-		if (checkItem(ItemStack(ec.x, ec.y)))
+		if (checkItem(ItemStack(ec.id, ec.x)))
 			return true;
 	}
 	else if (ec.type == EventComponent::REQUIRES_NOT_ITEM) {
-		if (!checkItem(ItemStack(ec.x, ec.y)))
+		if (!checkItem(ItemStack(ec.id, ec.x)))
 			return true;
 	}
 	else if (ec.type == EventComponent::REQUIRES_LEVEL) {
