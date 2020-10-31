@@ -524,7 +524,7 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		e->x = std::max(Parse::toInt(val), 0);
 	}
 	else if (key == "reward_item") {
-		// @ATTR event.reward_item(list(item_id)|Reward hero with a specified item. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer. To maintain backwards compatibility, the quantity must be defined for at least the first item in the list in order to use this syntax.
+		// @ATTR event.reward_item|(list(item_id)|Reward hero with a specified item. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer. To maintain backwards compatibility, the quantity must be defined for at least the first item in the list in order to use this syntax.
 		// @ATTR event.reward_item|item_id, int : Item, Quantity|Reward hero with y number of item x. NOTE: This syntax is maintained for backwards compatibility. It is recommended to use the above syntax instead.
 		e->type = EventComponent::REWARD_ITEM;
 
