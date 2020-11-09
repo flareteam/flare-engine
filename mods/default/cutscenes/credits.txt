@@ -64,6 +64,7 @@ text=bzt
 text=Carlos Sanchez
 text=Chris Oelmueller
 text=Christoph J. Thompson
+text=Christophe Nemo
 text=Denis Lysenko
 text=Diego J. Romero López
 text=dumaosen

@@ -78,7 +78,7 @@ Translation updates:
 * German (de) update (Wuzzy2)
 * Spanish (es) update (Agustin Ferrario)
 * Basque (eu) by aitzkora
-* French (fr) update (leø)
+* French (fr) update (leø, Christophe Nemo)
 * Scottish Gaelic (gd) update (GunChleoc)
 * Hungarian (hu) update (litoll)
 * Norwegian (nb) update (Elias Nykrem)
