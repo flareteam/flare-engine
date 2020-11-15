@@ -1279,6 +1279,13 @@ void MenuPowers::logic() {
 
 	setUnlockedPowers();
 
+	points_left = (pc->stats.level * pc->stats.power_points_per_level) - getPointsUsed();
+	if (points_left > 0) {
+		newPowerNotification = true;
+	}
+
+	if (!visible) return;
+
 	for (size_t i=0; i<power_cell.size(); i++) {
 		// make sure invisible cells are skipped in the tablist
 		if (slots[i])
@@ -1298,13 +1305,6 @@ void MenuPowers::logic() {
 			}
 		}
 	}
-
-	points_left = (pc->stats.level * pc->stats.power_points_per_level) - getPointsUsed();
-	if (points_left > 0) {
-		newPowerNotification = true;
-	}
-
-	if (!visible) return;
 
 	tablist.logic();
 	if (!tabs.empty()) {
