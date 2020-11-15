@@ -1927,6 +1927,8 @@ body {
 
 <p><strong>categories</strong> | <code>list(string)</code> | Categories that this entity belongs to.</p>
 
+<p><strong>melee_range</strong> | <code>float</code> | Determines the distance from the caster that some powers will be placed. For AI entities, it also means the minimum distance from target required to use melee powers.</p>
+
 <hr />
 
 <h4>StatBlock: Sound effects</h4>
@@ -1992,8 +1994,6 @@ body {
 <p><strong>power</strong> | <code>["melee", "ranged", "beacon", "on_hit", "on_death", "on_half_dead", "on_join_combat", "on_debuff"], power_id, int : State, Power, Chance</code> | A power that has a chance of being triggered in a certain state.</p>
 
 <p><strong>passive_powers</strong> | <code>list(power_id)</code> | A list of passive powers this creature has.</p>
-
-<p><strong>melee_range</strong> | <code>float</code> | Minimum distance from target required to use melee powers.</p>
 
 <p><strong>threat_range</strong> | <code>float, float : Engage distance, Stop distance</code> | The first value is the radius of the area this creature will be able to start chasing the hero. The second, optional, value is the radius at which this creature will stop pursuing their target and defaults to double the first value.</p>
 

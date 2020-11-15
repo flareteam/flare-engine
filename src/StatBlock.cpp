@@ -321,6 +321,11 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 		}
 		return true;
 	}
+	else if (infile->key == "melee_range") {
+		// @ATTR melee_range|float|Determines the distance from the caster that some powers will be placed. For AI entities, it also means the minimum distance from target required to use melee powers.
+		melee_range = Parse::toFloat(infile->val);
+		return true;
+	}
 
 	return false;
 }
@@ -545,8 +550,6 @@ void StatBlock::load(const std::string& filename) {
 			}
 		}
 
-		// @ATTR melee_range|float|Minimum distance from target required to use melee powers.
-		else if (infile.key == "melee_range") melee_range = fnum;
 		// @ATTR threat_range|float, float: Engage distance, Stop distance|The first value is the radius of the area this creature will be able to start chasing the hero. The second, optional, value is the radius at which this creature will stop pursuing their target and defaults to double the first value.
 		else if (infile.key == "threat_range") {
 			threat_range = Parse::toFloat(Parse::popFirstString(infile.val));

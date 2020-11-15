@@ -27,6 +27,7 @@ Engine features:
 * The ability to stash quest items can now be controlled with the 'no_stash' property.
 * Added a button for opening the pause/configuration menu as part of the minimap.
 * Added 'script' property to items. This removes the need to create a power in order to execute a script via activating an item.
+* Player 'melee_range' is now configurable in engine/stats.txt.
 
 Engine fixes:
 
