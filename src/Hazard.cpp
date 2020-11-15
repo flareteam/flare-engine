@@ -60,7 +60,6 @@ Hazard::Hazard(MapCollision *_collider)
 	, collider(_collider)
 	, activeAnimation(NULL)
 	, animation_name("")
-	, first_frame(true)
 {
 }
 
@@ -169,25 +168,22 @@ void Hazard::logic() {
 
 	// handle movement
 	bool check_collide = false;
-	// movement calculation is skipped on the first frame, since entity collision is done in HazardManager after this function runs
-	if (!first_frame) {
-		if (!(speed.x == 0 && speed.y == 0)) {
-			pos.x += speed.x;
-			pos.y += speed.y;
-			check_collide = true;
-		}
-		else if (!(pos_offset.x == 0 && pos_offset.y == 0)) {
-			pos.x = src_stats->pos.x - pos_offset.x;
-			pos.y = src_stats->pos.y - pos_offset.y;
-			check_collide = true;
-		}
-		else if (relative_pos) {
-			pos.x = src_stats->pos.x;
-			pos.y = src_stats->pos.y;
-		}
+	if (!(speed.x == 0 && speed.y == 0)) {
+		pos.x += speed.x;
+		pos.y += speed.y;
+		check_collide = true;
+	}
+	else if (!(pos_offset.x == 0 && pos_offset.y == 0)) {
+		pos.x = src_stats->pos.x - pos_offset.x;
+		pos.y = src_stats->pos.y - pos_offset.y;
+		check_collide = true;
+	}
+	else if (relative_pos) {
+		pos.x = src_stats->pos.x;
+		pos.y = src_stats->pos.y;
 	}
 
-	if (check_collide || first_frame) {
+	if (check_collide) {
 		// very simplified collider, could skim around corners
 		// or even pass through thin walls if speed > tilesize
 		if (!collider->isValidPosition(pos.x, pos.y, power->movement_type, MapCollision::COLLIDE_NO_ENTITY)) {
@@ -204,8 +200,6 @@ void Hazard::logic() {
 		    }
 		}
 	}
-
-	first_frame = false;
 }
 
 void Hazard::reflect() {

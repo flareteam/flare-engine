@@ -91,8 +91,6 @@ private:
 
 	// Keeps track of entities already hit
 	std::vector<Entity*> entitiesCollided;
-
-	bool first_frame;
 };
 
 #endif
