@@ -60,6 +60,7 @@ Engine fixes:
 * Fix 'respec' events to no longer remove item-based powers from the action bar.
 * Fix log message when gaining more than one level at once.
 * Fixed excessive memory usage when using Items, ItemSets, and Powers with high-value IDs.
+* Fix bug where moving hazards wouldn't collide at their starting position.
 
 Game updates:
 
