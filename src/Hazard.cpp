@@ -165,6 +165,8 @@ void Hazard::logic() {
 	if (activeAnimation)
 		activeAnimation->advanceFrame();
 
+	prev_pos = pos;
+
 	// handle movement
 	bool check_collide = false;
 	// movement calculation is skipped on the first frame, since entity collision is done in HazardManager after this function runs

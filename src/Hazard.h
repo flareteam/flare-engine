@@ -80,6 +80,8 @@ public:
 	Hazard* parent;
 	std::vector<Hazard*> children;
 
+	FPoint prev_pos;
+
 private:
     void reflect();
 
