@@ -71,6 +71,9 @@ Game updates:
 * Fixed the Goblin Thief being able to steal potions from a Summoned Zombie
 * Reduced the hitbox for spike traps
 * Greatly reduced the damage for spike traps in the Underworld. In exchange, the traps now inflict bleeding.
+* Overall reduced drop rates for alchemy items
+* Added animations for immunity and ice-based slow status effects
+* Redesigned the Torture Chambers map and quest (again)
 
 Translation updates:
 
