@@ -23,6 +23,7 @@ hu=Magyar
 # he=עברית
 it=Italiano
 ja=Japanese
+ko=Korean
 nb=Norsk Bokmål
 nl=Nederlands
 pl=Polski

@@ -85,6 +85,7 @@ Translation updates:
 * French (fr) update (leø, Christophe Nemo)
 * Scottish Gaelic (gd) update (GunChleoc)
 * Hungarian (hu) update (litoll)
+* Korean (ko) by bnk159hair
 * Norwegian (nb) update (Elias Nykrem)
 * Polish (pl) update (Błażej Pęksyk)
 * Portuguese (pt) update (Rui)
