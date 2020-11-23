@@ -1015,3 +1015,12 @@ int Item::getSellPrice(bool is_new_buyback) {
 	return new_price;
 }
 
+// Bonus documentation
+
+// @CLASS ItemManager|Description of "bonus" attribute in items/items.txt
+// @TYPE speed|Movement speed. A value of 100 is 100% speed (aka normal speed).
+// @TYPE attack_speed|Attack animation speed. A value of 100 is 100% speed (aka normal speed).
+// @TYPE ${STATNAME}|Increases ${STATNAME}, where ${STATNAME} is any of the base stats. Examples: hp, avoidance, xp_gain
+// @TYPE ${DAMAGE_TYPE}|Increases a damage min or max, where ${DAMAGE_TYPE} is any 'min' or 'max' value found in engine/damage_types.txt. Example: dmg_melee_min
+// @TYPE ${ELEMENT}_resist|Increase Resistance % to ${ELEMENT}, where ${ELEMENT} is any found in engine/elements.txt. Example: fire_resist
+// @TYPE ${PRIMARYSTAT}|Increases ${PRIMARYSTAT}, where ${PRIMARYSTAT} is any of the primary stats defined in engine/primary_stats.txt. Example: physical

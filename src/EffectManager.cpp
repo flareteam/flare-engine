@@ -322,9 +322,6 @@ void EffectManager::logic() {
 			else if (ei.type >= Effect::TYPE_COUNT && ei.type < Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count)) {
 				bonus[ei.type - Effect::TYPE_COUNT] += ei.magnitude;
 			}
-			// else if (ei.type >= Effect::TYPE_COUNT + Stats::COUNT && ei.type < Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count)) {
-			// 	bonus[ei.type - Effect::TYPE_COUNT] += ei.magnitude;
-			// }
 			// @TYPE ${ELEMENT}_resist|Increase Resistance % to ${ELEMENT}, where ${ELEMENT} is any found in engine/elements.txt. Example: fire_resist
 			else if (ei.type >= Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count) && ei.type < Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count) + static_cast<int>(eset->elements.list.size())) {
 				bonus_resist[ei.type - Effect::TYPE_COUNT - Stats::COUNT - eset->damage_types.count] += ei.magnitude;
