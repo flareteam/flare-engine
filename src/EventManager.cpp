@@ -538,7 +538,7 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		}
 		else {
 			e->id = item_stack.item;
-			e->y = item_stack.quantity;
+			e->x = item_stack.quantity;
 
 			// add repeating reward_item
 			if (evnt) {
