@@ -5,7 +5,7 @@
 # 
 # Translators:
 # Justin Jacobs <jajdorkster@gmail.com>, 2018
-# GunChleoc, 2019
+# GunChleoc, 2020
 # 
 #, fuzzy
 msgid ""
@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-05-20 16:39-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: GunChleoc, 2019\n"
+"Last-Translator: GunChleoc, 2020\n"
 "Language-Team: Gaelic, Scottish (https://www.transifex.com/flareorg/teams/84925/gd/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -64,7 +64,7 @@ msgstr "Chaidh %d %s a thoirt air falbh."
 #: ../../../src/CampaignManager.cpp:165
 #, c-format
 msgid "%s x%d removed."
-msgstr ""
+msgstr "Chaidh %s x%d a thoirt air falbh."
 
 #: ../../../src/CampaignManager.cpp:167
 #, c-format
@@ -559,7 +559,7 @@ msgstr "%d puing(ean)-pearsa nach deach a chleachdadh"
 #, c-format
 msgid "Reduces the damage taken from \"%s\" elemental attacks."
 msgstr ""
-"Ìslichidh seo an dochann a dh’fhulaingeas tu o ionnsaighean dùileach “%s”"
+"Ìslichidh seo an dochann a dh’fhulaingeas tu o ionnsaighean dùileach “%s”."
 
 #: ../../../src/MenuCharacter.cpp:365 ../../../src/MenuManager.cpp:292
 #, c-format
@@ -616,7 +616,7 @@ msgstr "Lean air adhart"
 
 #: ../../../src/MenuConfig.cpp:248
 msgid "Save Game"
-msgstr ""
+msgstr "Sàbhail an geama"
 
 #: ../../../src/MenuConfig.cpp:291
 msgid "Default"
@@ -1576,15 +1576,15 @@ msgstr "Chaidh an geama a shàbhaladh."
 
 #: ../../../src/SDLInputState.cpp:643
 msgid "BkSp"
-msgstr ""
+msgstr "BkSp"
 
 #: ../../../src/SDLInputState.cpp:644
 msgid "Caps"
-msgstr ""
+msgstr "Caps"
 
 #: ../../../src/SDLInputState.cpp:645
 msgid "Del"
-msgstr ""
+msgstr "Del"
 
 #: ../../../src/SDLInputState.cpp:647 ../../../src/SDLInputState.cpp:677
 msgid "End"
@@ -1592,7 +1592,7 @@ msgstr "End"
 
 #: ../../../src/SDLInputState.cpp:648
 msgid "Esc"
-msgstr ""
+msgstr "Esc"
 
 #: ../../../src/SDLInputState.cpp:649 ../../../src/SDLInputState.cpp:679
 msgid "Home"
@@ -1600,31 +1600,31 @@ msgstr "Home"
 
 #: ../../../src/SDLInputState.cpp:650
 msgid "Ins"
-msgstr ""
+msgstr "Ins"
 
 #: ../../../src/SDLInputState.cpp:651
 msgid "LAlt"
-msgstr ""
+msgstr "Alt clì"
 
 #: ../../../src/SDLInputState.cpp:652
 msgid "LCtrl"
-msgstr ""
+msgstr "Ctrl clì"
 
 #: ../../../src/SDLInputState.cpp:654
 msgid "LShft"
-msgstr ""
+msgstr "Shift clì"
 
 #: ../../../src/SDLInputState.cpp:655
 msgid "Num"
-msgstr ""
+msgstr "Num"
 
 #: ../../../src/SDLInputState.cpp:656
 msgid "PgDn"
-msgstr ""
+msgstr "PgDn"
 
 #: ../../../src/SDLInputState.cpp:657
 msgid "PgUp"
-msgstr ""
+msgstr "PgUp"
 
 #: ../../../src/SDLInputState.cpp:658 ../../../src/SDLInputState.cpp:688
 msgid "Pause"
@@ -1632,31 +1632,31 @@ msgstr "Pause"
 
 #: ../../../src/SDLInputState.cpp:659
 msgid "Print"
-msgstr ""
+msgstr "Print"
 
 #: ../../../src/SDLInputState.cpp:660
 msgid "RAlt"
-msgstr ""
+msgstr "Alt deas"
 
 #: ../../../src/SDLInputState.cpp:661
 msgid "RCtrl"
-msgstr ""
+msgstr "Ctrl deas"
 
 #: ../../../src/SDLInputState.cpp:662
 msgid "Ret"
-msgstr ""
+msgstr "Return"
 
 #: ../../../src/SDLInputState.cpp:664
 msgid "RShft"
-msgstr ""
+msgstr "Shift deas"
 
 #: ../../../src/SDLInputState.cpp:665
 msgid "SLock"
-msgstr ""
+msgstr "SLock"
 
 #: ../../../src/SDLInputState.cpp:666
 msgid "Spc"
-msgstr ""
+msgstr "Spc"
 
 #: ../../../src/SDLInputState.cpp:667 ../../../src/SDLInputState.cpp:697
 msgid "Tab"
@@ -1733,7 +1733,7 @@ msgstr "Space"
 #: ../../../src/SDLInputState.cpp:710
 #, c-format
 msgid "M%d"
-msgstr ""
+msgstr "Luch%d"
 
 #: ../../../src/SDLInputState.cpp:716
 #, c-format
@@ -1743,7 +1743,7 @@ msgstr "%d na luchaige"
 #: ../../../src/SDLInputState.cpp:726
 #, c-format
 msgid "JX%d-"
-msgstr ""
+msgstr "BiorX%d-"
 
 #: ../../../src/SDLInputState.cpp:728
 #, c-format
@@ -1753,7 +1753,7 @@ msgstr "Aiseal %d -"
 #: ../../../src/SDLInputState.cpp:732
 #, c-format
 msgid "JX%d+"
-msgstr ""
+msgstr "BiorX%d+"
 
 #: ../../../src/SDLInputState.cpp:734
 #, c-format
@@ -1763,7 +1763,7 @@ msgstr "Aiseal %d +"
 #: ../../../src/SDLInputState.cpp:739
 #, c-format
 msgid "JB%d"
-msgstr ""
+msgstr "BiorPut%d"
 
 #: ../../../src/SDLInputState.cpp:741
 #, c-format
