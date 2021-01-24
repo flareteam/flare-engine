@@ -79,6 +79,9 @@ void SDLHardwareImage::fillWithColor(const Color& color) {
 void SDLHardwareImage::drawPixel(int x, int y, const Color& color) {
 	if (!surface) return;
 
+	if (x < 0 || y < 0 || x >= getWidth() || y >= getHeight())
+		return;
+
 	if (pixel_batch_surface) {
 		// Taken from SDLSoftwareImage::drawPixel()
 		Uint32 pixel = SDL_MapRGBA(pixel_batch_surface->format, color.r, color.g, color.b, color.a);

@@ -72,6 +72,9 @@ void SDLSoftwareImage::fillWithColor(const Color& color) {
 void SDLSoftwareImage::drawPixel(int x, int y, const Color& color) {
 	if (!surface) return;
 
+	if (x < 0 || y < 0 || x >= getWidth() || y >= getHeight())
+		return;
+
 	Uint32 pixel = MapRGBA(color.r, color.g, color.b, color.a);
 
 	int bpp = surface->format->BytesPerPixel;
