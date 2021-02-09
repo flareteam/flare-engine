@@ -1284,27 +1284,43 @@ void MenuPowers::logic() {
 		newPowerNotification = true;
 	}
 
-	if (!visible) return;
-
 	for (size_t i=0; i<power_cell.size(); i++) {
 		// make sure invisible cells are skipped in the tablist
-		if (slots[i])
+		if (visible && slots[i])
 			slots[i]->enable_tablist_nav = power_cell[i].getCurrent()->isVisible();
 
-		//upgrade buttons logic
+		// disable upgrade buttons by default
 		if (power_cell[i].upgrade_button != NULL) {
 			power_cell[i].upgrade_button->enabled = false;
-			if (pc->stats.hp > 0) {
-				// enable button only if current level is unlocked and next level can be unlocked
-				if (checkUpgrade(power_cell[i].getCurrent())) {
-					power_cell[i].upgrade_button->enabled = true;
-				}
-				if ((!tab_control || power_cell[i].tab == tab_control->getActiveTab()) && power_cell[i].upgrade_button->checkClick()) {
-					upgradePower(power_cell[i].getCurrent(), !UPGRADE_POWER_ALL_TABS);
-				}
+		}
+
+		// try to automatically upgrade powers is no power point is required
+		MenuPowersCell* pcell = power_cell[i].getCurrent();
+		while (checkUpgrade(pcell)) {
+			if (pcell->next && !pcell->next->requires_point) {
+				// automatic upgrade possible; do upgrade and re-check upgrade possibility
+				upgradePower(pcell, UPGRADE_POWER_ALL_TABS);
+				pcell = power_cell[i].getCurrent();
+				if (power_cell[i].upgrade_button != NULL)
+					power_cell[i].upgrade_button->enabled = (checkUpgrade(pcell) && pc->stats.hp > 0);
+			}
+			else {
+				// power point required or no upgrade available; stop trying to upgrade
+				if (power_cell[i].upgrade_button != NULL)
+					power_cell[i].upgrade_button->enabled = pc->stats.hp > 0;
+				break;
+			}
+		}
+
+		// handle clicking of upgrade button
+		if (visible && pc->stats.hp > 0 && power_cell[i].upgrade_button != NULL) {
+			if ((!tab_control || power_cell[i].tab == tab_control->getActiveTab()) && power_cell[i].upgrade_button->checkClick()) {
+				upgradePower(power_cell[i].getCurrent(), !UPGRADE_POWER_ALL_TABS);
 			}
 		}
 	}
+
+	if (!visible) return;
 
 	tablist.logic();
 	if (!tabs.empty()) {
