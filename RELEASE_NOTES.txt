@@ -63,6 +63,7 @@ Engine fixes:
 * Fixed excessive memory usage when using Items, ItemSets, and Powers with high-value IDs.
 * Fix bug where power upgrades that didn't require power points would not automatically upgrade if other requirements were met.
 * Fix infinite loop bug when a power's list of upgrades contains the base power ID.
+* Fix infinite loop bug when locking power upgrades.
 
 Game updates:
 

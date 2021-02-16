@@ -624,11 +624,9 @@ void MenuPowers::lockCell(MenuPowersCell* pcell) {
 	// remove from action bar
 	menu->act->addPower(0, pcell->id);
 
-	// lock higher levels as well
-	MenuPowersCell* next_cell = pcell->next;
-	while (next_cell) {
-		lockCell(next_cell);
-		next_cell = next_cell->next;
+	// lock higher levels as well (careful: recursion)
+	if (pcell->next) {
+		lockCell(pcell->next);
 	}
 }
 
