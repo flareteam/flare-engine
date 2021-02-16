@@ -450,8 +450,14 @@ void MenuPowers::loadPower(FileParser &infile) {
 	else if (infile.key == "upgrades") {
 		std::string repeat_val = Parse::popFirstString(infile.val);
 		while (repeat_val != "") {
-			power_cell.back().cells.push_back(MenuPowersCell());
-			power_cell.back().cells.back().id = Parse::toPowerID(repeat_val);
+			PowerID test_id = Parse::toPowerID(repeat_val);
+			if (test_id == power_cell.back().cells[0].id) {
+				infile.error("MenuPowers: Upgrade ID '%d' is the same as the base ID. Ignoring.", test_id);
+			}
+			else {
+				power_cell.back().cells.push_back(MenuPowersCell());
+				power_cell.back().cells.back().id = test_id;
+			}
 			repeat_val = Parse::popFirstString(infile.val);
 		}
 
