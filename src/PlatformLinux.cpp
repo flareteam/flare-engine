@@ -162,7 +162,7 @@ void Platform::setPaths() {
 	if (!path_data && Filesystem::pathExists(settings->path_data)) path_data = true;
 
 	// finally assume the local folder
-	if (!path_data)	settings->path_data = "./";
+	if (!path_data)	settings->path_data = dirGetLocal();
 }
 
 bool Platform::dirCreate(const std::string& path) {
@@ -181,6 +181,24 @@ bool Platform::dirRemove(const std::string& path) {
 		return false;
 	}
 	return true;
+}
+
+std::string Platform::dirGetLocal() {
+    char abs_path[1024];
+    ssize_t len = readlink("/proc/self/exe", abs_path, 1024);
+    if(len < 0|| len >= 1024)  {
+        return "./";
+    }
+    //remove executable name from abs_path
+    char break_point = '/';
+    char break_string = '\0';
+    for(ssize_t i = len; i >= 0; --i) {
+        if(abs_path[i] == break_point) {
+            abs_path[i + 1] = break_string;
+            break;
+        }
+    }
+    return abs_path;
 }
 
 // unused
