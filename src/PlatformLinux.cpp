@@ -186,10 +186,9 @@ bool Platform::dirRemove(const std::string& path) {
 std::string Platform::dirGetLocal() {
     char abs_path[1024];
     ssize_t len = readlink("/proc/self/exe", abs_path, 1024);
-    if(len < 0|| len >= 1024)  {
+    if (len < 0 || len >= 1024)
         return "./";
-    }
-    //remove executable name from abs_path
+    // remove executable name from abs_path
     char break_point = '/';
     char break_string = '\0';
     for(ssize_t i = len; i >= 0; --i) {
