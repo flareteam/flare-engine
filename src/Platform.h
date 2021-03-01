@@ -105,7 +105,6 @@ public:
 	void setExitEventFilter();
 	bool dirCreate(const std::string& path);
 	bool dirRemove(const std::string& path);
-	std::string dirGetLocal();
 
 	void FSInit();
 	bool FSCheckReady();
