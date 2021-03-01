@@ -64,6 +64,7 @@ Engine fixes:
 * Fix bug where power upgrades that didn't require power points would not automatically upgrade if other requirements were met.
 * Fix infinite loop bug when a power's list of upgrades contains the base power ID.
 * Fix infinite loop bug when locking power upgrades.
+* The executable directory is now used when trying to find PATH_DATA on Linux. (r-a-cristian-93)
 
 Game updates:
 
