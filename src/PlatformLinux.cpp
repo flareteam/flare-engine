@@ -165,18 +165,22 @@ void Platform::setPaths() {
 	if (!path_data)	{
 		char abs_path[1024];
 		ssize_t len = readlink("/proc/self/exe", abs_path, 1024);
-		if (len < 0 || len >= 1024)	settings->path_data =  "./";
-		
-		// remove executable name from abs_path
-		const char BREAK_POINT = '/';
-		const char BREAK_STRING = '\0';
-		for(ssize_t i = len; i >= 0; --i) {
-			if(abs_path[i] == BREAK_POINT) {
-				abs_path[i + 1] = BREAK_STRING;
-				break;
+		if (len >= 0 && len < 1024) {
+			// remove executable name from abs_path
+			const char BREAK_POINT = '/';
+			const char BREAK_STRING = '\0';
+			for(ssize_t i = len; i >= 0; --i) {
+				if(abs_path[i] == BREAK_POINT) {
+					abs_path[i + 1] = BREAK_STRING;
+					break;
+				}
 			}
+			settings->path_data = std::string(abs_path);
 		}
-		settings->path_data = std::string(abs_path);
+		else {
+			// unable to get executable path, so just use the working directory
+			settings->path_data =  "./";
+		}
 	}
 }
 
