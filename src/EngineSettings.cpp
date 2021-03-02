@@ -83,7 +83,7 @@ void EngineSettings::Misc::load() {
 				save_hpmp = Parse::toBool(infile.val);
 			// @ATTR corpse_timeout|duration|Duration that a corpse can exist on the map in 'ms' or 's'.
 			else if (infile.key == "corpse_timeout")
-				corpse_timeout = Parse::toDirection(infile.val);
+				corpse_timeout = Parse::toDuration(infile.val);
 			// @ATTR sell_without_vendor|bool|Allows selling items when not at a vendor via CTRL-Click.
 			else if (infile.key == "sell_without_vendor")
 				sell_without_vendor = Parse::toBool(infile.val);
