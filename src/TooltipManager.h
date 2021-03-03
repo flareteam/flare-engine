@@ -30,9 +30,9 @@ class WidgetTooltip;
 class TooltipManager {
 private:
 	WidgetTooltip *tip;
-	TooltipData tip_data;
-	Point pos;
-	uint8_t style;
+	std::vector<TooltipData> tip_data;
+	std::vector<Point> pos;
+	std::vector<uint8_t> style;
 
 public:
 	enum {
