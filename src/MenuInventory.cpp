@@ -321,8 +321,10 @@ void MenuInventory::renderTooltips(const Point& position) {
 
 	if (inventory[area][slot].item > 0) {
 		tip_data = inventory[area].checkTooltip(position, &pc->stats, ItemManager::PLAYER_INV);
-		tip_data.addText("COM");
-		tooltipm->push_com(tip_data, Point(100, 100), TooltipData::STYLE_FLOAT);
+		if (area != EQUIPMENT) {
+			tip_data.addText("COM");
+			tooltipm->push_com(tip_data, Point(100, 100), TooltipData::STYLE_FLOAT);
+		}
 	}
 	else if (area == EQUIPMENT && inventory[area][slot].empty()) {
 		tip_data.addText(msg->get(items->getItemType(slot_type[slot])));		

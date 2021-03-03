@@ -30,7 +30,7 @@ class WidgetTooltip;
 class TooltipManager {
 private:
 	WidgetTooltip *tip;
-	TooltipData tip_data;
+	TooltipData tip_data;	//Better make it an array. hero can have two rings.
 	TooltipData tip_com;
 	Point pos;
 	Point pos_com;
