@@ -25,6 +25,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 TooltipManager::TooltipManager()
 	: tip(new WidgetTooltip())
 	, style(TooltipData::STYLE_FLOAT)
+	, style_com(TooltipData::STYLE_FLOAT)
 	, context(CONTEXT_NONE)
 {}
 
@@ -34,10 +35,11 @@ TooltipManager::~TooltipManager() {
 
 void TooltipManager::clear() {
 	tip_data.clear();
+	tip_com.clear();
 }
 
 bool TooltipManager::isEmpty() {
-	return tip_data.isEmpty();
+	return tip_data.isEmpty() && tip_com.isEmpty();
 }
 
 void TooltipManager::push(const TooltipData& _tip_data, const Point& _pos, uint8_t _style) {
@@ -49,6 +51,15 @@ void TooltipManager::push(const TooltipData& _tip_data, const Point& _pos, uint8
 	style = _style;
 }
 
+void TooltipManager::push_com(const TooltipData& _tip_data, const Point& _pos, uint8_t _style) {
+	if (_tip_data.isEmpty())
+		return;
+
+	tip_com = _tip_data;
+	pos_com = _pos;
+	style_com = _style;
+}
+
 void TooltipManager::render() {
 	if (!isEmpty()) {
 		context = CONTEXT_MENU;
@@ -58,4 +69,5 @@ void TooltipManager::render() {
 	}
 
 	tip->render(tip_data, pos, style);
+	tip->render(tip_com, pos_com, style_com);
 }

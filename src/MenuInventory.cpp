@@ -53,8 +53,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 MenuInventory::MenuInventory()
 	: MAX_EQUIPPED(4)
 	, MAX_CARRIED(64)
-	, carried_cols(4)
-	, carried_rows(4)
+	, carried_cols(8)
+	, carried_rows(8)
 	, tap_to_activate_timer(settings->max_frames_per_sec / 3)
 	, activated_slot(-1)
 	, activated_item(0)
@@ -321,12 +321,14 @@ void MenuInventory::renderTooltips(const Point& position) {
 
 	if (inventory[area][slot].item > 0) {
 		tip_data = inventory[area].checkTooltip(position, &pc->stats, ItemManager::PLAYER_INV);
+		tip_data.addText("COM");
+		tooltipm->push_com(tip_data, Point(100, 100), TooltipData::STYLE_FLOAT);
 	}
 	else if (area == EQUIPMENT && inventory[area][slot].empty()) {
-		tip_data.addText(msg->get(items->getItemType(slot_type[slot])));
+		tip_data.addText(msg->get(items->getItemType(slot_type[slot])));		
 	}
-
-	tooltipm->push(tip_data, position, TooltipData::STYLE_FLOAT);
+	
+	tooltipm->push(tip_data, position, TooltipData::STYLE_FLOAT);	
 }
 
 /**

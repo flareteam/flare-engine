@@ -31,8 +31,11 @@ class TooltipManager {
 private:
 	WidgetTooltip *tip;
 	TooltipData tip_data;
+	TooltipData tip_com;
 	Point pos;
+	Point pos_com;
 	uint8_t style;
+	uint8_t style_com;
 
 public:
 	enum {
@@ -48,6 +51,7 @@ public:
 	void clear();
 	bool isEmpty();
 	void push(const TooltipData& _tip_data, const Point& _pos, uint8_t _style);
+	void push_com(const TooltipData& _tip_data, const Point& _pos, uint8_t _style);
 	void render();
 
 	uint8_t context;
