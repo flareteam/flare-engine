@@ -49,12 +49,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
 #include "WidgetSlot.h"
+#include "WidgetTooltip.h"
 
 MenuInventory::MenuInventory()
 	: MAX_EQUIPPED(4)
 	, MAX_CARRIED(64)
-	, carried_cols(8)
-	, carried_rows(8)
+	, carried_cols(4)
+	, carried_rows(4)
 	, tap_to_activate_timer(settings->max_frames_per_sec / 3)
 	, activated_slot(-1)
 	, activated_item(0)
@@ -322,18 +323,44 @@ void MenuInventory::renderTooltips(const Point& position) {
 	if (inventory[area][slot].item > 0) {
 		tip_data = inventory[area].checkTooltip(position, &pc->stats, ItemManager::PLAYER_INV);
 		if (area != EQUIPMENT) {
-			tip_data.addText("COM");
-			tooltipm->push(tip_data, Point(100, 100), TooltipData::STYLE_FLOAT);
-			tooltipm->push(tip_data, Point(200, 100), TooltipData::STYLE_FLOAT);
-			tooltipm->push(tip_data, Point(300, 100), TooltipData::STYLE_FLOAT);
-			tooltipm->push(tip_data, Point(400, 100), TooltipData::STYLE_FLOAT);
+			//identify hovered inventory item type
+			long unsigned int hovered_id = inventory[area][slot].item;
+			std::string hovered_type = items->items[hovered_id].type;
+
+			//get equiped items of the same type
+			int comparables = 0;
+			for(int i = 0; i < MAX_EQUIPPED; i++) {
+				if (slot_type[i] == hovered_type) {		//if hovered type matches equipment slot type
+					if(!inventory[EQUIPMENT].storage[i].empty()) {		//add only non empty equipment slots
+						comparables++;
+						Point eq_pos(equipped_area.at(i).x, equipped_area.at(i).y);
+
+						TooltipData comparable;
+						comparable = inventory[EQUIPMENT].checkTooltip(eq_pos, &pc->stats, ItemManager::PLAYER_INV);
+						comparable.addColoredText("Equiped", font->getColor(FontEngine::COLOR_ITEM_FLAVOR));
+						
+						//calculate position for comparable tooltip
+						WidgetTooltip *temp = new WidgetTooltip();
+						if (comparables <= 1) {
+							temp->prerender(tip_data, position, TooltipData::STYLE_FLOAT);
+						}
+						else {
+							temp->prerender(comparable, position, TooltipData::STYLE_FLOAT);
+						}
+						
+						Point point(position.x - comparables * temp->bounds.w, position.y);
+
+						tooltipm->push(comparable, point, TooltipData::STYLE_FLOAT);
+					}
+				}
+			}
 		}
 	}
 	else if (area == EQUIPMENT && inventory[area][slot].empty()) {
-		tip_data.addText(msg->get(items->getItemType(slot_type[slot])));		
+		tip_data.addText(msg->get(items->getItemType(slot_type[slot])));
 	}
-	
-	tooltipm->push(tip_data, position, TooltipData::STYLE_FLOAT);	
+
+	tooltipm->push(tip_data, position, TooltipData::STYLE_FLOAT);
 }
 
 /**
