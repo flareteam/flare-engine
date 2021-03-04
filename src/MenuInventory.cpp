@@ -327,30 +327,27 @@ void MenuInventory::renderTooltips(const Point& position) {
 			long unsigned int hovered_id = inventory[area][slot].item;
 			std::string hovered_type = items->items[hovered_id].type;
 
+			TooltipData last_comp = tip_data;
+			int last_x = position.x;
+
 			//get equiped items of the same type
-			int comparables = 0;
 			for(int i = 0; i < MAX_EQUIPPED; i++) {
 				if (slot_type[i] == hovered_type) {		//if hovered type matches equipment slot type
 					if(!inventory[EQUIPMENT].storage[i].empty()) {		//add only non empty equipment slots
-						comparables++;
 						Point eq_pos(equipped_area.at(i).x, equipped_area.at(i).y);
 
 						TooltipData comparable;
 						comparable = inventory[EQUIPMENT].checkTooltip(eq_pos, &pc->stats, ItemManager::PLAYER_INV);
 						comparable.addColoredText("Equiped", font->getColor(FontEngine::COLOR_ITEM_FLAVOR));
-						
-						//calculate position for comparable tooltip
-						WidgetTooltip *temp = new WidgetTooltip();
-						if (comparables <= 1) {
-							temp->prerender(tip_data, position, TooltipData::STYLE_FLOAT);
-						}
-						else {
-							temp->prerender(comparable, position, TooltipData::STYLE_FLOAT);
-						}
-						
-						Point point(position.x - comparables * temp->bounds.w, position.y);
 
-						tooltipm->push(comparable, point, TooltipData::STYLE_FLOAT);
+						//get last element X position
+						WidgetTooltip *temp = new WidgetTooltip();
+						temp->prerender(last_comp, Point(last_x, position.y), TooltipData::STYLE_FLOAT);
+
+						last_comp = comparable;
+						last_x = temp->bounds.x;
+
+						tooltipm->push(comparable, Point(temp->bounds.x, position.y), TooltipData::STYLE_FLOAT);
 					}
 				}
 			}
