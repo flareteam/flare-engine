@@ -30,12 +30,9 @@ class WidgetTooltip;
 class TooltipManager {
 private:
 	WidgetTooltip *tip;
-	TooltipData tip_data;	//Better make it an array. hero can have two rings.
-	TooltipData tip_com;
-	Point pos;
-	Point pos_com;
-	uint8_t style;
-	uint8_t style_com;
+	std::vector<TooltipData> tip_data;
+	std::vector<Point> pos;
+	std::vector<uint8_t> style;
 
 public:
 	enum {
@@ -51,7 +48,6 @@ public:
 	void clear();
 	bool isEmpty();
 	void push(const TooltipData& _tip_data, const Point& _pos, uint8_t _style);
-	void push_com(const TooltipData& _tip_data, const Point& _pos, uint8_t _style);
 	void render();
 
 	uint8_t context;

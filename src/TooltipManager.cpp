@@ -24,8 +24,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 TooltipManager::TooltipManager()
 	: tip(new WidgetTooltip())
-	, style(TooltipData::STYLE_FLOAT)
-	, style_com(TooltipData::STYLE_FLOAT)
 	, context(CONTEXT_NONE)
 {}
 
@@ -35,13 +33,14 @@ TooltipManager::~TooltipManager() {
 
 void TooltipManager::clear() {
 	tip_data.clear();
-	tip_com.clear();
+	pos.clear();
+	style.clear();
 }
 
 bool TooltipManager::isEmpty() {
-	return tip_data.isEmpty() && tip_com.isEmpty();
+	return tip_data.empty();
 }
-
+/*
 void TooltipManager::push(const TooltipData& _tip_data, const Point& _pos, uint8_t _style) {
 	if (_tip_data.isEmpty())
 		return;
@@ -50,14 +49,15 @@ void TooltipManager::push(const TooltipData& _tip_data, const Point& _pos, uint8
 	pos = _pos;
 	style = _style;
 }
+*/
 
-void TooltipManager::push_com(const TooltipData& _tip_data, const Point& _pos, uint8_t _style) {
+void TooltipManager::push(const TooltipData& _tip_data, const Point& _pos, uint8_t _style) {
 	if (_tip_data.isEmpty())
 		return;
 
-	tip_com = _tip_data;
-	pos_com = _pos;
-	style_com = _style;
+	tip_data.push_back(_tip_data);
+	pos.push_back(_pos);
+	style.push_back(_style);
 }
 
 void TooltipManager::render() {
@@ -68,6 +68,7 @@ void TooltipManager::render() {
 		context = CONTEXT_NONE;
 	}
 
-	tip->render(tip_data, pos, style);
-	tip->render(tip_com, pos_com, style_com);
+	for (unsigned i = 0; i < tip_data.size(); i++) {
+		tip->render(tip_data.at(i), pos.at(i), style.at(i));
+	}
 }
