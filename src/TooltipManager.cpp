@@ -40,16 +40,6 @@ void TooltipManager::clear() {
 bool TooltipManager::isEmpty() {
 	return tip_data.empty();
 }
-/*
-void TooltipManager::push(const TooltipData& _tip_data, const Point& _pos, uint8_t _style) {
-	if (_tip_data.isEmpty())
-		return;
-
-	tip_data = _tip_data;
-	pos = _pos;
-	style = _style;
-}
-*/
 
 void TooltipManager::push(const TooltipData& _tip_data, const Point& _pos, uint8_t _style) {
 	if (_tip_data.isEmpty())
