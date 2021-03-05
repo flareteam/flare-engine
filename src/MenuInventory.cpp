@@ -49,7 +49,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
 #include "WidgetSlot.h"
-#include "WidgetTooltip.h"
 
 MenuInventory::MenuInventory()
 	: MAX_EQUIPPED(4)

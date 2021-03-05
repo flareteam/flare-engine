@@ -62,12 +62,7 @@ public:
 	void logic();
 	void setTab(int tab);
 	int getTab() {
-		if (visible) {
-			return activetab;
-		}
-		else {
-			return -3;
-		}
+		return activetab;
 	}
 	void render();
 	ItemStack click(const Point& position);
