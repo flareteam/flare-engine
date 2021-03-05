@@ -86,6 +86,7 @@ private:
 
 	void handleKeyboardNavigation();
 	void dragAndDropWithKeyboard();
+	void pushMatchingItemsOf(const Point& hov_pos);
 
 public:
 	explicit MenuManager();

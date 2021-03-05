@@ -61,6 +61,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
 #include "WidgetSlot.h"
+#include "WidgetTooltip.h"
+#include "TooltipManager.h"
 
 MenuManager::MenuManager()
 	: key_lock(false)
@@ -1280,6 +1282,8 @@ void MenuManager::render() {
 		else {
 			// Find tooltips depending on mouse position
 			if (!book->visible) {
+				pushMatchingItemsOf(inpt->mouse);
+
 				chr->renderTooltips(inpt->mouse);
 				vendor->renderTooltips(inpt->mouse);
 				stash->renderTooltips(inpt->mouse);
@@ -1446,6 +1450,79 @@ void MenuManager::showExitMenu() {
 		exit->visible = false;
 		exit->handleCancel();
 	}
+}
+
+void MenuManager::pushMatchingItemsOf(const Point& hov_pos) {
+	TooltipData hov_tooltip;
+	int area = -1;
+	int hov_slot;
+	ItemStack hov_stack;
+	ItemID hov_id;
+	std::string hov_type;
+	bool fromCarried = false;
+	
+	if (inv->visible && Utils::isWithinRect(inv->carried_area, hov_pos)) {
+		area = inv->areaOver(hov_pos);
+		if(area == MenuInventory::CARRIED) {
+			hov_tooltip = inv->inventory[area].checkTooltip(inpt->mouse, &pc->stats, area);	
+			hov_slot = inv->inventory[area].slotOver(hov_pos);
+			hov_stack = inv->inventory[area][hov_slot];
+			hov_id = hov_stack.item;
+			hov_type = items->items[hov_id].type;
+			fromCarried = true;
+		}
+	}
+	else if (vendor->visible && Utils::isWithinRect(vendor->slots_area, hov_pos)) {
+		area = vendor->getTab();
+		if(area >= 0) {
+			hov_tooltip = vendor->stock[area].checkTooltip(inpt->mouse, &pc->stats, area);
+			hov_slot = vendor->stock[area].slotOver(hov_pos);
+			hov_stack = vendor->stock[area][hov_slot];
+			hov_id = hov_stack.item;
+			hov_type = items->items[hov_id].type;
+		}
+	}
+	else if (stash->visible && Utils::isWithinRect(stash->slots_area, hov_pos)) {
+		area = stash->getTab();
+		if (area >= 0) {
+			hov_tooltip = stash->stock[area].checkTooltip(inpt->mouse, &pc->stats, area);
+			hov_slot = stash->stock[area].slotOver(hov_pos);
+			hov_stack = stash->stock[area][hov_slot];
+			hov_id = hov_stack.item;
+			hov_type = items->items[hov_id].type;
+		}
+	}	
+	
+	if (!hov_tooltip.isEmpty()) {
+		TooltipData last_comp = hov_tooltip;
+		int last_x = hov_pos.x;
+
+		//get equiped items of the same type
+		for(long unsigned i = 0; i < inv->equipped_area.size(); i++) {
+			if (inv->slot_type[i] == hov_type) {
+				if(!inv->inventory[MenuInventory::EQUIPMENT].storage[i].empty()) {
+					Point match_pos(inv->equipped_area.at(i).x, inv->equipped_area.at(i).y);
+
+					TooltipData match;
+					match = inv->inventory[MenuInventory::EQUIPMENT].checkTooltip(match_pos, &pc->stats, ItemManager::PLAYER_INV);
+					match.addColoredText("Equiped", font->getColor(FontEngine::COLOR_ITEM_FLAVOR));
+
+					WidgetTooltip *temp = new WidgetTooltip();
+					temp->prerender(last_comp, Point(last_x, hov_pos.y), TooltipData::STYLE_FLOAT);
+
+					last_comp = match;
+					if (fromCarried) {
+						last_x = temp->bounds.x;
+					}
+					else {
+						last_x = temp->bounds.x + temp->bounds.w;
+					}
+
+					tooltipm->push(last_comp, Point(last_x, hov_pos.y), TooltipData::STYLE_FLOAT);
+				}
+			}
+		}
+	}	
 }
 
 MenuManager::~MenuManager() {

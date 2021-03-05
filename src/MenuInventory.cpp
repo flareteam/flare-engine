@@ -322,36 +322,6 @@ void MenuInventory::renderTooltips(const Point& position) {
 
 	if (inventory[area][slot].item > 0) {
 		tip_data = inventory[area].checkTooltip(position, &pc->stats, ItemManager::PLAYER_INV);
-		if (area != EQUIPMENT) {
-			//identify hovered inventory item type
-			long unsigned int hovered_id = inventory[area][slot].item;
-			std::string hovered_type = items->items[hovered_id].type;
-
-			TooltipData last_comp = tip_data;
-			int last_x = position.x;
-
-			//get equiped items of the same type
-			for(int i = 0; i < MAX_EQUIPPED; i++) {
-				if (slot_type[i] == hovered_type) {		//if hovered type matches equipment slot type
-					if(!inventory[EQUIPMENT].storage[i].empty()) {		//add only non empty equipment slots
-						Point eq_pos(equipped_area.at(i).x, equipped_area.at(i).y);
-
-						TooltipData comparable;
-						comparable = inventory[EQUIPMENT].checkTooltip(eq_pos, &pc->stats, ItemManager::PLAYER_INV);
-						comparable.addColoredText("Equiped", font->getColor(FontEngine::COLOR_ITEM_FLAVOR));
-
-						//get last element X position
-						WidgetTooltip *temp = new WidgetTooltip();
-						temp->prerender(last_comp, Point(last_x, position.y), TooltipData::STYLE_FLOAT);
-
-						last_comp = comparable;
-						last_x = temp->bounds.x;
-
-						tooltipm->push(comparable, Point(temp->bounds.x, position.y), TooltipData::STYLE_FLOAT);
-					}
-				}
-			}
-		}
 	}
 	else if (area == EQUIPMENT && inventory[area][slot].empty()) {
 		tip_data.addText(msg->get(items->getItemType(slot_type[slot])));
