@@ -36,6 +36,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "SoundManager.h"
+#include "TooltipManager.h"
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
 #include "WidgetSlot.h"
@@ -243,7 +244,7 @@ void MenuVendor::renderTooltips(const Point& position) {
 
 	int vendor_view = (activetab == ItemManager::VENDOR_BUY) ? ItemManager::VENDOR_BUY : ItemManager::VENDOR_SELL;
 	TooltipData tip_data = stock[activetab].checkTooltip(position, &pc->stats, vendor_view);
-	tip->render(tip_data, position, TooltipData::STYLE_FLOAT);
+	tooltipm->push(tip_data, position, TooltipData::STYLE_FLOAT);
 }
 
 /**
