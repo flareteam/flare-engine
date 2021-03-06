@@ -232,6 +232,14 @@ void MenuItemStorage::highlightClear() {
 	}
 }
 
+ItemStack MenuItemStorage::getItemStackAtPos(const Point& position) {
+	int slot_over = slotOver(position);
+	if (slot_over > -1) {
+		return storage[slot_over];
+	}
+	return ItemStack();
+}
+
 MenuItemStorage::~MenuItemStorage() {
 	if (highlight_image)
 		delete highlight_image;

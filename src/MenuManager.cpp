@@ -1340,6 +1340,7 @@ void MenuManager::handleKeyboardTooltips() {
 			keydrag_pos.y = vendor->stock[ItemManager::VENDOR_SELL].slots[slot_index]->pos.y;
 		}
 
+		pushMatchingItemsOf(keydrag_pos);
 		vendor->renderTooltips(keydrag_pos);
 	}
 
@@ -1350,6 +1351,7 @@ void MenuManager::handleKeyboardTooltips() {
 		keydrag_pos.x = stash->stock[tab].slots[slot_index]->pos.x;
 		keydrag_pos.y = stash->stock[tab].slots[slot_index]->pos.y;
 
+		pushMatchingItemsOf(keydrag_pos);
 		stash->renderTooltips(keydrag_pos);
 	}
 
@@ -1379,6 +1381,7 @@ void MenuManager::handleKeyboardTooltips() {
 			keydrag_pos.y = temp_widget->pos.y;
 		}
 
+		pushMatchingItemsOf(keydrag_pos);
 		inv->renderTooltips(keydrag_pos);
 	}
 
@@ -1453,76 +1456,47 @@ void MenuManager::showExitMenu() {
 }
 
 void MenuManager::pushMatchingItemsOf(const Point& hov_pos) {
-	TooltipData hov_tooltip;
 	int area = -1;
-	int hov_slot;
 	ItemStack hov_stack;
-	ItemID hov_id;
-	std::string hov_type;
-	bool fromCarried = false;
-	
-	if (inv->visible && Utils::isWithinRect(inv->carried_area, hov_pos)) {
+
+	if (inv->visible && Utils::isWithinRect(inv->window_area, hov_pos)) {
 		area = inv->areaOver(hov_pos);
-		if(area == MenuInventory::CARRIED) {
-			hov_tooltip = inv->inventory[area].checkTooltip(inpt->mouse, &pc->stats, area);	
-			hov_slot = inv->inventory[area].slotOver(hov_pos);
-			hov_stack = inv->inventory[area][hov_slot];
-			hov_id = hov_stack.item;
-			hov_type = items->items[hov_id].type;
-			fromCarried = true;
-		}
+		if (area == MenuInventory::CARRIED)
+			hov_stack = inv->inventory[area].getItemStackAtPos(hov_pos);
 	}
-	else if (vendor->visible && Utils::isWithinRect(vendor->slots_area, hov_pos)) {
+	else if (vendor->visible && Utils::isWithinRect(vendor->window_area, hov_pos)) {
 		area = vendor->getTab();
-		if(area >= 0) {
-			hov_tooltip = vendor->stock[area].checkTooltip(inpt->mouse, &pc->stats, area);
-			hov_slot = vendor->stock[area].slotOver(hov_pos);
-			hov_stack = vendor->stock[area][hov_slot];
-			hov_id = hov_stack.item;
-			hov_type = items->items[hov_id].type;
-		}
+		if (area >= 0)
+			hov_stack = vendor->stock[area].getItemStackAtPos(hov_pos);
 	}
-	else if (stash->visible && Utils::isWithinRect(stash->slots_area, hov_pos)) {
+	else if (stash->visible && Utils::isWithinRect(stash->window_area, hov_pos)) {
 		area = stash->getTab();
-		if (area >= 0) {
-			hov_tooltip = stash->stock[area].checkTooltip(inpt->mouse, &pc->stats, area);
-			hov_slot = stash->stock[area].slotOver(hov_pos);
-			hov_stack = stash->stock[area][hov_slot];
-			hov_id = hov_stack.item;
-			hov_type = items->items[hov_id].type;
-		}
-	}	
-	
-	if (!hov_tooltip.isEmpty()) {
-		TooltipData last_comp = hov_tooltip;
-		int last_x = hov_pos.x;
+		if (area >= 0)
+			hov_stack = stash->stock[area].getItemStackAtPos(hov_pos);
+	}
 
-		//get equiped items of the same type
-		for(long unsigned i = 0; i < inv->equipped_area.size(); i++) {
-			if (inv->slot_type[i] == hov_type) {
-				if(!inv->inventory[MenuInventory::EQUIPMENT].storage[i].empty()) {
-					Point match_pos(inv->equipped_area.at(i).x, inv->equipped_area.at(i).y);
+	// we assume that a non-empty item type means that there is a primary tooltip
+	if (hov_stack.item > 0 && !items->items[hov_stack.item].type.empty()) {
+		size_t tip_index = 1;
 
-					TooltipData match;
-					match = inv->inventory[MenuInventory::EQUIPMENT].checkTooltip(match_pos, &pc->stats, ItemManager::PLAYER_INV);
-					match.addColoredText("Equiped", font->getColor(FontEngine::COLOR_ITEM_FLAVOR));
+		//get equipped items of the same type
+		for (size_t i = 0; i < inv->equipped_area.size(); i++) {
+			if (tip_index >= TooltipManager::TOOLTIP_COUNT)
+				break; // can't show any more tooltips
 
-					WidgetTooltip *temp = new WidgetTooltip();
-					temp->prerender(last_comp, Point(last_x, hov_pos.y), TooltipData::STYLE_FLOAT);
+			if (inv->slot_type[i] == items->items[hov_stack.item].type) {
+				if (!inv->inventory[MenuInventory::EQUIPMENT].storage[i].empty()) {
+					Point match_pos(inv->equipped_area[i].x, inv->equipped_area[i].y);
 
-					last_comp = match;
-					if (fromCarried) {
-						last_x = temp->bounds.x;
-					}
-					else {
-						last_x = temp->bounds.x + temp->bounds.w;
-					}
+					TooltipData match = inv->inventory[MenuInventory::EQUIPMENT].checkTooltip(match_pos, &pc->stats, ItemManager::PLAYER_INV);
+					match.addColoredText(msg->get("Equipped"), font->getColor(FontEngine::COLOR_ITEM_FLAVOR));
 
-					tooltipm->push(last_comp, Point(last_x, hov_pos.y), TooltipData::STYLE_FLOAT);
+					tooltipm->push(match, hov_pos, TooltipData::STYLE_FLOAT, tip_index);
+					tip_index++;
 				}
 			}
 		}
-	}	
+	}
 }
 
 MenuManager::~MenuManager() {

@@ -56,6 +56,7 @@ public:
 	void highlightMatching(const std::string& type);
 	void highlightClear();
 	void setPos(int x, int y);
+	ItemStack getItemStackAtPos(const Point& position);
 	std::vector<std::string> slot_type;
 
 	int drag_prev_slot;

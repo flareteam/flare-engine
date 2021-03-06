@@ -28,13 +28,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class WidgetTooltip;
 
 class TooltipManager {
-private:
-	WidgetTooltip *tip;
-	std::vector<TooltipData> tip_data;
-	std::vector<Point> pos;
-	std::vector<uint8_t> style;
-
 public:
+	static const size_t TOOLTIP_COUNT = 3;
 	enum {
 		CONTEXT_NONE = 0,
 		CONTEXT_MENU = 1,
@@ -47,10 +42,17 @@ public:
 
 	void clear();
 	bool isEmpty();
-	void push(const TooltipData& _tip_data, const Point& _pos, uint8_t _style);
+	void push(const TooltipData& _tip_data, const Point& _pos, uint8_t _style, size_t tip_index=0);
 	void render();
 
 	uint8_t context;
+
+private:
+	WidgetTooltip* tip[TOOLTIP_COUNT];
+	TooltipData tip_data[TOOLTIP_COUNT];
+	Point pos[TOOLTIP_COUNT];
+	uint8_t style[TOOLTIP_COUNT];
+
 };
 
 #endif

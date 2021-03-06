@@ -23,31 +23,47 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetTooltip.h"
 
 TooltipManager::TooltipManager()
-	: tip(new WidgetTooltip())
-	, context(CONTEXT_NONE)
-{}
+	: context(CONTEXT_NONE)
+{
+	for (size_t i = 0; i < TOOLTIP_COUNT; ++i) {
+		tip[i] = new WidgetTooltip();
+		if (i > 0) {
+			tip[i]->parent = tip[i-1];
+		}
+
+		tip_data[i] = TooltipData();
+		pos[i] = Point();
+		style[i] = 0;
+	}
+}
 
 TooltipManager::~TooltipManager() {
-	delete tip;
+	for (size_t i = 0; i < TOOLTIP_COUNT; ++i) {
+		delete tip[i];
+	}
 }
 
 void TooltipManager::clear() {
-	tip_data.clear();
-	pos.clear();
-	style.clear();
+	for (size_t i = 0; i < TOOLTIP_COUNT; ++i) {
+		tip_data[i].clear();
+	}
 }
 
 bool TooltipManager::isEmpty() {
-	return tip_data.empty();
+	for (size_t i = 0; i < TOOLTIP_COUNT; ++i) {
+		if (!tip_data[i].isEmpty())
+			return false;
+	}
+	return true;
 }
 
-void TooltipManager::push(const TooltipData& _tip_data, const Point& _pos, uint8_t _style) {
-	if (_tip_data.isEmpty())
+void TooltipManager::push(const TooltipData& _tip_data, const Point& _pos, uint8_t _style, size_t tip_index) {
+	if (_tip_data.isEmpty() || tip_index >= TOOLTIP_COUNT)
 		return;
 
-	tip_data.push_back(_tip_data);
-	pos.push_back(_pos);
-	style.push_back(_style);
+	tip_data[tip_index] = _tip_data;
+	pos[tip_index] = _pos;
+	style[tip_index] = _style;
 }
 
 void TooltipManager::render() {
@@ -58,7 +74,7 @@ void TooltipManager::render() {
 		context = CONTEXT_NONE;
 	}
 
-	for (unsigned i = 0; i < tip_data.size(); i++) {
-		tip->render(tip_data.at(i), pos.at(i), style.at(i));
+	for (size_t i = 0; i < TOOLTIP_COUNT; ++i) {
+		tip[i]->render(tip_data[i], pos[i], style[i]);
 	}
 }

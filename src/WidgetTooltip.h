@@ -39,6 +39,7 @@ public:
 	bool createBuffer(TooltipData &tip);
 
 	Rect bounds;
+	WidgetTooltip *parent;
 
 private:
 	Image *background;
