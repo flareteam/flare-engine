@@ -62,47 +62,46 @@ Settings::Settings()
 	, safe_video(false)
 {
 	config.resize(40);
-	setConfigDefault(0,  "fullscreen",          &typeid(fullscreen),          "0",            &fullscreen,          "fullscreen mode. 1 enable, 0 disable.");
-	setConfigDefault(1,  "resolution_w",        &typeid(screen_w),            "640",          &screen_w,            "display resolution. 640x480 minimum.");
-	setConfigDefault(2,  "resolution_h",        &typeid(screen_h),            "480",          &screen_h,            "");
-	setConfigDefault(3,  "music_volume",        &typeid(music_volume),        "96",           &music_volume,        "music and sound volume (0 = silent, 128 = max)");
-	setConfigDefault(4,  "sound_volume",        &typeid(sound_volume),        "128",          &sound_volume,        "");
-	setConfigDefault(5,  "combat_text",         &typeid(combat_text),         "1",            &combat_text,         "display floating damage text. 1 enable, 0 disable.");
-	setConfigDefault(6,  "mouse_move",          &typeid(mouse_move),          "0",            &mouse_move,          "use mouse to move (experimental). 1 enable, 0 disable.");
-	setConfigDefault(7,  "hwsurface",           &typeid(hwsurface),           "1",            &hwsurface,           "hardware surfaces, v-sync. Try disabling for performance. 1 enable, 0 disable.");
-	setConfigDefault(8,  "vsync",               &typeid(vsync),               "1",            &vsync,               "");
-	setConfigDefault(9,  "texture_filter",      &typeid(texture_filter),      "1",            &texture_filter,      "texture filter quality. 0 nearest neighbor (worst), 1 linear (best)");
-	setConfigDefault(10, "dpi_scaling",         &typeid(dpi_scaling),         "0",            &dpi_scaling,         "toggle DPI-based render scaling. 1 enable, 0 disable");
-	setConfigDefault(11, "parallax_layers",     &typeid(parallax_layers),     "1",            &parallax_layers,     "toggle rendering of parallax map layers. 1 enable, 0 disable");
-	setConfigDefault(12, "max_fps",             &typeid(max_frames_per_sec),  "60",           &max_frames_per_sec,  "maximum frames per second. default is 60");
-	setConfigDefault(13, "renderer",            &typeid(render_device_name),  "sdl_hardware", &render_device_name,  "default render device. 'sdl' is the default setting");
-	setConfigDefault(14, "enable_joystick",     &typeid(enable_joystick),     "0",            &enable_joystick,     "joystick settings.");
-	setConfigDefault(15, "joystick_device",     &typeid(joystick_device),     "-1",            &joystick_device,     "");
-	setConfigDefault(16, "joystick_deadzone",   &typeid(joy_deadzone),        "100",          &joy_deadzone,        "");
-	setConfigDefault(17, "language",            &typeid(language),            "en",           &language,            "2-letter language code.");
-	setConfigDefault(18, "change_gamma",        &typeid(change_gamma),        "0",            &change_gamma,        "allow changing gamma (experimental). 1 enable, 0 disable.");
-	setConfigDefault(19, "gamma",               &typeid(gamma),               "1.0",          &gamma,               "screen gamma (0.5 = darkest, 2.0 = lightest)");
-	setConfigDefault(20, "mouse_aim",           &typeid(mouse_aim),           "1",            &mouse_aim,           "use mouse to aim. 1 enable, 0 disable.");
-	setConfigDefault(21, "no_mouse",            &typeid(no_mouse),            "0",            &no_mouse,            "make using mouse secondary, give full control to keyboard. 1 enable, 0 disable.");
-	setConfigDefault(22, "show_fps",            &typeid(show_fps),            "0",            &show_fps,            "show frames per second. 1 enable, 0 disable.");
-	setConfigDefault(23, "colorblind",          &typeid(colorblind),          "0",            &colorblind,          "enable colorblind tooltips. 1 enable, 0 disable");
-	setConfigDefault(24, "hardware_cursor",     &typeid(hardware_cursor),     "0",            &hardware_cursor,     "use the system mouse cursor. 1 enable, 0 disable");
-	setConfigDefault(25, "dev_mode",            &typeid(dev_mode),            "0",            &dev_mode,            "allow opening the developer console. 1 enable, 0 disable");
-	setConfigDefault(26, "dev_hud",             &typeid(dev_hud),             "1",            &dev_hud,             "shows some additional information on-screen when developer mode is enabled. 1 enable, 0 disable");
-	setConfigDefault(27, "loot_tooltips",       &typeid(loot_tooltips),       "0",            &loot_tooltips,       "loot tooltip mode. 0 normal, 1 show all, 2 hide all");
-	setConfigDefault(28, "statbar_labels",      &typeid(statbar_labels),      "0",            &statbar_labels,      "always show labels on HP/MP/XP bars. 1 enable, 0 disable");
-	setConfigDefault(29, "statbar_autohide",    &typeid(statbar_autohide),    "1",            &statbar_autohide,    "allows the HP/MP/XP bars to auto-hide on inactivity. 1 enable, 0 disable");
-	setConfigDefault(30, "auto_equip",          &typeid(auto_equip),          "1",            &auto_equip,          "automatically equip items. 1 enable, 0 disable");
-	setConfigDefault(31, "subtitles",           &typeid(subtitles),           "0",            &subtitles,           "displays subtitles. 1 enable, 0 disable");
-	setConfigDefault(32, "minimap_mode",        &typeid(minimap_mode),        "0",            &minimap_mode,        "mini-map display mode. 0 is normal, 1 is 2x zoom, 2 is hidden");
-	setConfigDefault(33, "mouse_move_swap",     &typeid(mouse_move_swap),     "0",            &mouse_move_swap,     "use 'Main2' as the movement action when using mouse movement. 1 enable, 0 disable.");
-	setConfigDefault(34, "mouse_move_attack",   &typeid(mouse_move_attack),   "1",            &mouse_move_attack,   "allows attacking with the mouse movement button if an enemy is targeted and in range. 1 enable, 0 disable.");
-	setConfigDefault(35, "entity_markers",      &typeid(entity_markers),      "1",            &entity_markers,      "shows are marker above entities that are hidden behind tall tiles. 1 enable, 0 disable.");
-	setConfigDefault(36, "prev_save_slot",      &typeid(prev_save_slot),      "-1",           &prev_save_slot,      "index of the last used save slot");
-	setConfigDefault(37, "low_hp_warning_type", &typeid(low_hp_warning_type), "1",            &low_hp_warning_type,
-			"low health warning type settings. 0 disable, 1 all, 2 message & cursor, 3 message & sound, 4 cursor & sound , 5 message, 6 cursor, 7 sound.");
-	setConfigDefault(38, "low_hp_threshold",    &typeid(low_hp_threshold),    "20",           &low_hp_threshold,    "set HP threshold that triggers warning.");
-	setConfigDefault(39, "move_type_dimissed",  &typeid(move_type_dimissed),  "0",            &move_type_dimissed,  "flag that is set once the player picks a movement type after first launching the game");
+	setConfigDefault(0,  "move_type_dimissed",  &typeid(move_type_dimissed),  "0",            &move_type_dimissed,  "One time flag for initial movement type dialog | 0 = show dialog, 1 = no dialog");
+	setConfigDefault(1,  "fullscreen",          &typeid(fullscreen),          "0",            &fullscreen,          "Fullscreen mode | 0 = disable, 1 = enable");
+	setConfigDefault(2,  "resolution_w",        &typeid(screen_w),            "640",          &screen_w,            "Window size");
+	setConfigDefault(3,  "resolution_h",        &typeid(screen_h),            "480",          &screen_h,            "");
+	setConfigDefault(4,  "music_volume",        &typeid(music_volume),        "96",           &music_volume,        "Music and sound volume | 0 = silent, 128 = maximum");
+	setConfigDefault(5,  "sound_volume",        &typeid(sound_volume),        "128",          &sound_volume,        "");
+	setConfigDefault(6,  "combat_text",         &typeid(combat_text),         "1",            &combat_text,         "Display floating damage text | 0 = disable, 1 = enable");
+	setConfigDefault(7,  "mouse_move",          &typeid(mouse_move),          "0",            &mouse_move,          "Use mouse to move | 0 = disable, 1 = enable");
+	setConfigDefault(8,  "hwsurface",           &typeid(hwsurface),           "1",            &hwsurface,           "Hardware surfaces & V-sync. Try disabling for performance. | 0 = disable, 1 = enable");
+	setConfigDefault(9,  "vsync",               &typeid(vsync),               "1",            &vsync,               "");
+	setConfigDefault(10, "texture_filter",      &typeid(texture_filter),      "1",            &texture_filter,      "Texture filter quality | 0 = nearest neighbor (worst), 1 = linear (best)");
+	setConfigDefault(11, "dpi_scaling",         &typeid(dpi_scaling),         "0",            &dpi_scaling,         "DPI-based render scaling | 0 = disable, 1 = enable");
+	setConfigDefault(12, "parallax_layers",     &typeid(parallax_layers),     "1",            &parallax_layers,     "Rendering of parallax map layers | 0 = disable, 1 = enable");
+	setConfigDefault(13, "max_fps",             &typeid(max_frames_per_sec),  "60",           &max_frames_per_sec,  "Maximum frames per second | 60 = default");
+	setConfigDefault(14, "renderer",            &typeid(render_device_name),  "sdl_hardware", &render_device_name,  "Default render device. | sdl_hardware = default, Try sdl for compatibility");
+	setConfigDefault(15, "enable_joystick",     &typeid(enable_joystick),     "0",            &enable_joystick,     "Joystick settings.");
+	setConfigDefault(16, "joystick_device",     &typeid(joystick_device),     "-1",           &joystick_device,     "");
+	setConfigDefault(17, "joystick_deadzone",   &typeid(joy_deadzone),        "100",          &joy_deadzone,        "");
+	setConfigDefault(18, "language",            &typeid(language),            "en",           &language,            "2-letter language code.");
+	setConfigDefault(19, "change_gamma",        &typeid(change_gamma),        "0",            &change_gamma,        "Allow changing screen gamma (experimental) | 0 = disable, 1 = enable");
+	setConfigDefault(20, "gamma",               &typeid(gamma),               "1.0",          &gamma,               "Screen gamma. Requires change_gamma=1 | 0.5 = darkest, 2.0 = lightest");
+	setConfigDefault(21, "mouse_aim",           &typeid(mouse_aim),           "1",            &mouse_aim,           "Use mouse to aim | 0 = disable, 1 = enable");
+	setConfigDefault(22, "no_mouse",            &typeid(no_mouse),            "0",            &no_mouse,            "Make using mouse secondary, give full control to keyboard | 0 = disable, 1 = enable");
+	setConfigDefault(23, "show_fps",            &typeid(show_fps),            "0",            &show_fps,            "Show frames per second | 0 = disable, 1 = enable");
+	setConfigDefault(24, "colorblind",          &typeid(colorblind),          "0",            &colorblind,          "Enable colorblind help text | 0 = disable, 1 = enable");
+	setConfigDefault(25, "hardware_cursor",     &typeid(hardware_cursor),     "0",            &hardware_cursor,     "Use the system mouse cursor | 0 = disable, 1 = enable");
+	setConfigDefault(26, "dev_mode",            &typeid(dev_mode),            "0",            &dev_mode,            "Developer mode | 0 = disable, 1 = enable");
+	setConfigDefault(27, "dev_hud",             &typeid(dev_hud),             "1",            &dev_hud,             "Show additional information on-screen when dev_mode=1 | 0 = disable, 1 = enable");
+	setConfigDefault(28, "loot_tooltips",       &typeid(loot_tooltips),       "0",            &loot_tooltips,       "Loot tooltip mode | 0 = normal, 1 = show all, 2 = hide all");
+	setConfigDefault(29, "statbar_labels",      &typeid(statbar_labels),      "0",            &statbar_labels,      "Always show labels on HP/MP/XP bars | 0 = disable, 1 = enable");
+	setConfigDefault(30, "statbar_autohide",    &typeid(statbar_autohide),    "1",            &statbar_autohide,    "Allow the HP/MP/XP bars to auto-hide on inactivity | 0 = disable, 1 = enable");
+	setConfigDefault(31, "auto_equip",          &typeid(auto_equip),          "1",            &auto_equip,          "Automatically equip items | 0 = enable, 1 = enable");
+	setConfigDefault(32, "subtitles",           &typeid(subtitles),           "0",            &subtitles,           "Subtitles | 0 = disable, 1 = enable");
+	setConfigDefault(33, "minimap_mode",        &typeid(minimap_mode),        "0",            &minimap_mode,        "Mini-map display mode | 0 = normal, 1 = 2x zoom, 2 = hidden");
+	setConfigDefault(34, "mouse_move_swap",     &typeid(mouse_move_swap),     "0",            &mouse_move_swap,     "Use 'Main2' as the movement action when mouse_move=1 | 0 = disable, 1 = enable");
+	setConfigDefault(35, "mouse_move_attack",   &typeid(mouse_move_attack),   "1",            &mouse_move_attack,   "Allow attacking with the mouse movement button if an enemy is targeted and in range | 0 = disable, 1 = enable");
+	setConfigDefault(36, "entity_markers",      &typeid(entity_markers),      "1",            &entity_markers,      "Shows a marker above entities that are hidden behind tall tiles | 0 = disable, 1 = enable");
+	setConfigDefault(37, "prev_save_slot",      &typeid(prev_save_slot),      "-1",           &prev_save_slot,      "Index of the last used save slot");
+	setConfigDefault(38, "low_hp_warning_type", &typeid(low_hp_warning_type), "1",            &low_hp_warning_type, "Low health warning type settings | 0 = disable, 1 = all, 2 = message & cursor, 3 = message & sound, 4 = cursor & sound , 5 = message, 6 = cursor, 7 = sound");
+	setConfigDefault(39, "low_hp_threshold",    &typeid(low_hp_threshold),    "20",           &low_hp_threshold,    "Low HP warning threshold percentage");
 }
 
 void Settings::setConfigDefault(size_t index, const std::string& name, const std::type_info *type, const std::string& default_val, void *storage, const std::string& comment) {
@@ -202,12 +201,8 @@ void Settings::saveSettings() {
  * Load all default settings, except video settings.
  */
 void Settings::loadDefaults() {
-	// HACK init defaults except video
-	for (size_t i = 3; i < config.size(); i++) {
-		// don't reset the flag for the initial input method prompt
-		if (i == 39)
-			continue;
-
+	// HACK init defaults except video and one-time flags
+	for (size_t i = 4; i < config.size(); i++) {
 		Parse::tryParseValue(*config[i].type, config[i].default_val, config[i].storage);
 	}
 
