@@ -848,6 +848,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 
 	// buy or sell price
 	if (items[stack.item].getPrice() > 0 && stack.item != eset->misc.currency_id) {
+		Color currency_color = getItemColor(eset->misc.currency_id);
 
 		int price_per_unit;
 		if (context == VENDOR_BUY) {
@@ -855,7 +856,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 			if (stats->currency < price_per_unit)
 				color = font->getColor(FontEngine::COLOR_REQUIREMENTS_NOT_MET);
 			else
-				color = font->getColor(FontEngine::COLOR_WIDGET_NORMAL);
+				color = currency_color;
 
 			if (items[stack.item].max_quantity <= 1)
 				tip.addColoredText(msg->get("Buy Price: %d %s", price_per_unit, eset->loot.currency), color);
@@ -867,7 +868,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 			if (stats->currency < price_per_unit)
 				color = font->getColor(FontEngine::COLOR_REQUIREMENTS_NOT_MET);
 			else
-				color = font->getColor(FontEngine::COLOR_WIDGET_NORMAL);
+				color = currency_color;
 
 			if (items[stack.item].max_quantity <= 1)
 				tip.addColoredText(msg->get("Buy Price: %d %s", price_per_unit, eset->loot.currency), color);
@@ -880,9 +881,9 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 				price_per_unit = 1;
 
 			if (items[stack.item].max_quantity <= 1)
-				tip.addText(msg->get("Sell Price: %d %s", price_per_unit, eset->loot.currency));
+				tip.addColoredText(msg->get("Sell Price: %d %s", price_per_unit, eset->loot.currency), currency_color);
 			else
-				tip.addText(msg->get("Sell Price: %d %s each", price_per_unit, eset->loot.currency));
+				tip.addColoredText(msg->get("Sell Price: %d %s each", price_per_unit, eset->loot.currency), currency_color);
 		}
 	}
 
