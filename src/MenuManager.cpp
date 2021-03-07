@@ -1456,6 +1456,9 @@ void MenuManager::showExitMenu() {
 }
 
 void MenuManager::pushMatchingItemsOf(const Point& hov_pos) {
+	if (!settings->item_compare_tips)
+		return;
+
 	int area = -1;
 	ItemStack hov_stack;
 

@@ -61,7 +61,7 @@ Settings::Settings()
 	, soft_reset(false)
 	, safe_video(false)
 {
-	config.resize(40);
+	config.resize(41);
 	setConfigDefault(0,  "move_type_dimissed",  &typeid(move_type_dimissed),  "0",            &move_type_dimissed,  "One time flag for initial movement type dialog | 0 = show dialog, 1 = no dialog");
 	setConfigDefault(1,  "fullscreen",          &typeid(fullscreen),          "0",            &fullscreen,          "Fullscreen mode | 0 = disable, 1 = enable");
 	setConfigDefault(2,  "resolution_w",        &typeid(screen_w),            "640",          &screen_w,            "Window size");
@@ -102,6 +102,7 @@ Settings::Settings()
 	setConfigDefault(37, "prev_save_slot",      &typeid(prev_save_slot),      "-1",           &prev_save_slot,      "Index of the last used save slot");
 	setConfigDefault(38, "low_hp_warning_type", &typeid(low_hp_warning_type), "1",            &low_hp_warning_type, "Low health warning type settings | 0 = disable, 1 = all, 2 = message & cursor, 3 = message & sound, 4 = cursor & sound , 5 = message, 6 = cursor, 7 = sound");
 	setConfigDefault(39, "low_hp_threshold",    &typeid(low_hp_threshold),    "20",           &low_hp_threshold,    "Low HP warning threshold percentage");
+	setConfigDefault(40, "item_compare_tips",   &typeid(item_compare_tips),   "1",            &item_compare_tips,   "Show comparison tooltips for equipped items of the same type | 0 = disable, 1 = enable");
 }
 
 void Settings::setConfigDefault(size_t index, const std::string& name, const std::type_info *type, const std::string& default_val, void *storage, const std::string& comment) {

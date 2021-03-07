@@ -250,6 +250,8 @@ public:
 	WidgetLabel                * low_hp_warning_lb;
 	WidgetHorizontalList       * low_hp_threshold_lstb;
 	WidgetLabel                * low_hp_threshold_lb;
+	WidgetCheckBox             * item_compare_tips_cb;
+	WidgetLabel                * item_compare_tips_lb;
 
 
 	WidgetHorizontalList       * joystick_device_lstb;

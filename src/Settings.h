@@ -104,6 +104,7 @@ public:
 	bool entity_markers;
 	int low_hp_warning_type;
 	int low_hp_threshold;
+	bool item_compare_tips;
 
 	// Language Settings
 	std::string language;
