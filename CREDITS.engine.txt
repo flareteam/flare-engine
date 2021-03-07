@@ -25,6 +25,7 @@ Manuel A. Fernandez Montecelo
 Matthew Krohn | https://github.com/makrohn
 Nojan
 Pavel Kirpichyov "Cheshire"
+r-a-cristian-93
 runtime-x86
 Ryan Dansie | https://github.com/RyanDansie
 Stefan Beller | https://github.com/stefanbeller

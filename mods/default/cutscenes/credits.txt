@@ -41,6 +41,7 @@ text=m7600
 text=Nojan
 text=nwtour
 text=Pavel Kirpichyov
+text=r-a-cristian-93
 text=runtime-x86
 text=Ryan Dansie
 separator=32
