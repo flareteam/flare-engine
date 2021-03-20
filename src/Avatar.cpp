@@ -833,29 +833,21 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 	// calc new cam position from player position
 	// cam is focused at player position
-	float cam_dx = (Utils::calcDist(FPoint(mapr->cam.x, stats.pos.y), stats.pos)) / eset->misc.camera_speed;
-	float cam_dy = (Utils::calcDist(FPoint(stats.pos.x, mapr->cam.y), stats.pos)) / eset->misc.camera_speed;
+	float cam_dx = (mapr->cam.x - stats.pos.x) / eset->misc.camera_speed;
+	float cam_dy = (mapr->cam.y - stats.pos.y) / eset->misc.camera_speed;
 
-	if (mapr->cam.x < stats.pos.x) {
-		mapr->cam.x += cam_dx;
-		if (mapr->cam.x > stats.pos.x)
-			mapr->cam.x = stats.pos.x;
+	if (stats.cur_state == StatBlock::AVATAR_STANCE) {
+		Point hero_scr = Utils::mapToScreen(stats.pos.x, stats.pos.y, mapr->cam.x, mapr->cam.y);
+		Point cam_scr = Utils::mapToScreen(mapr->cam.x, mapr->cam.y, mapr->cam.x, mapr->cam.y);
+		float scr_delta = Utils::calcDist(FPoint(hero_scr.x, hero_scr.y), FPoint(cam_scr.x, cam_scr.y));
+
+		if (scr_delta < eset->misc.camera_speed / 2) {
+			cam_dx = cam_dy = 0;
+		}
 	}
-	else if (mapr->cam.x > stats.pos.x) {
-		mapr->cam.x -= cam_dx;
-		if (mapr->cam.x < stats.pos.x)
-			mapr->cam.x = stats.pos.x;
-	}
-	if (mapr->cam.y < stats.pos.y) {
-		mapr->cam.y += cam_dy;
-		if (mapr->cam.y > stats.pos.y)
-			mapr->cam.y = stats.pos.y;
-	}
-	else if (mapr->cam.y > stats.pos.y) {
-		mapr->cam.y -= cam_dy;
-		if (mapr->cam.y < stats.pos.y)
-			mapr->cam.y = stats.pos.y;
-	}
+
+	mapr->cam.x -= cam_dx;
+	mapr->cam.y -= cam_dy;
 
 	// check for map events
 	mapr->checkEvents(stats.pos);
