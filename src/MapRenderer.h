@@ -120,6 +120,8 @@ public:
 	bool isValidTile(const unsigned &tile);
 	Point centerTile(const Point& p);
 
+	void setMapParallax(const std::string& mp_filename);
+
 	// cam(x,y) is where on the map the camera is pointing
 	FPoint cam;
 

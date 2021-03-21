@@ -685,6 +685,12 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 
 		e->x = static_cast<int>(Parse::toBool(val));
 	}
+	else if (key == "parallax_layers") {
+		// @ATTR event.parallax_layers|filename|Filename of a parallax layers definition to load.
+		e->type = EventComponent::PARALLAX_LAYERS;
+
+		e->s = val;
+	}
 	else {
 		return false;
 	}
@@ -1012,6 +1018,9 @@ bool EventManager::executeEventInternal(Event &ev, bool skip_delay) {
 				pc->respawn = true; // re-applies equipment, also revives the player
 				pc->stats.refresh_stats = true;
 			}
+		}
+		else if (ec->type == EventComponent::PARALLAX_LAYERS) {
+			mapr->setMapParallax(ec->s);
 		}
 	}
 	return !ev.keep_after_trigger;

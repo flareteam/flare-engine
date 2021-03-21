@@ -197,10 +197,6 @@ int MapRenderer::load(const std::string& fname) {
 
 	show_tooltip = false;
 
-	parallax_filename = "";
-
-	background_color = Color(0,0,0,0);
-
 	Map::load(fname);
 
 	loadMusic();
@@ -251,8 +247,7 @@ int MapRenderer::load(const std::string& fname) {
 		}
 	}
 
-	map_parallax.load(parallax_filename);
-	map_parallax.setMapCenter(w/2, h/2);
+	setMapParallax(parallax_filename);
 
 	render_device->setBackgroundColor(background_color);
 
@@ -1338,6 +1333,12 @@ void MapRenderer::checkHiddenEntities(const int_fast16_t x, const int_fast16_t y
 		++it;
 	}
 }
+
+void MapRenderer::setMapParallax(const std::string& mp_filename) {
+	map_parallax.load(mp_filename);
+	map_parallax.setMapCenter(w/2, h/2);
+}
+
 MapRenderer::~MapRenderer() {
 	tip_buf.clear();
 	clearLayers();

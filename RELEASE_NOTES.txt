@@ -29,6 +29,7 @@ Engine features:
 * Added 'script' property to items. This removes the need to create a power in order to execute a script via activating an item.
 * Player 'melee_range' is now configurable in engine/stats.txt.
 * Added comparison tooltips for items. These can be disabled in the Interface settings. (r-a-cristian-93, Justin Jacobs)
+* Added 'parallax_layers' property to Events. This functions exactly like the Map property of the same name.
 
 Engine fixes:
 

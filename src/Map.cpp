@@ -78,6 +78,8 @@ int Map::load(const std::string& fname) {
 	clearQueues();
 
 	music_filename = "";
+	parallax_filename = "";
+	background_color = Color(0,0,0,0);
 
 	collision_layer = -1;
 	w = 1;
