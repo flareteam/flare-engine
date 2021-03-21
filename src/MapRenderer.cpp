@@ -1178,10 +1178,18 @@ void MapRenderer::drawDevHUD() {
 
 	Color color_hazard(255,0,0,255);
 	Color color_entity(0,255,0,255);
+	Color color_cam(255,255,0,255);
 	int cross_size = eset->tileset.tile_h_half / 4;
 
 	// ellipses are distorted for isometric tilesets
 	int distort = eset->tileset.orientation == eset->tileset.TILESET_ORTHOGONAL ? 1 : 2;
+
+	// camera
+	{
+		Point p0 = Utils::mapToScreen(cam.x, cam.y, shakycam.x, shakycam.y);
+		render_device->drawLine(p0.x - cross_size, p0.y, p0.x + cross_size, p0.y, color_cam);
+		render_device->drawLine(p0.x, p0.y - cross_size, p0.x, p0.y + cross_size, color_cam);
+	}
 
 	// player
 	{
