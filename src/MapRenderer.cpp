@@ -20,6 +20,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 #include "Avatar.h"
+#include "Camera.h"
 #include "CampaignManager.h"
 #include "CombatText.h"
 #include "CommonIncludes.h"
@@ -56,7 +57,6 @@ MapRenderer::MapRenderer()
 	, tip(new WidgetTooltip())
 	, tip_pos()
 	, show_tooltip(false)
-	, shakycam()
 	, entity_hidden_normal(NULL)
 	, entity_hidden_enemy(NULL)
 	, cam()
@@ -66,7 +66,6 @@ MapRenderer::MapRenderer()
 	, respawn_point()
 	, cutscene(false)
 	, cutscene_file("")
-	, shaky_cam_timer()
 	, stash(false)
 	, stash_pos()
 	, enemies_cleared(false)
@@ -276,19 +275,6 @@ void MapRenderer::logic(bool paused) {
 	if (paused)
 		return;
 
-	// handle camera shaking timer
-	shaky_cam_timer.tick();
-
-	if (shaky_cam_timer.isEnd()) {
-		shakycam.x = cam.x;
-		shakycam.y = cam.y;
-	}
-	else {
-		shakycam.x = cam.x + static_cast<float>((rand() % 16 - 8)) * 0.0078125f;
-		shakycam.y = cam.y + static_cast<float>((rand() % 16 - 8)) * 0.0078125f;
-	}
-
-
 	// handle statblock logic for map powers
 	for (unsigned i=0; i<statblocks.size(); ++i) {
 		for (size_t j=0; j<statblocks[i].powers_ai.size(); ++j) {
@@ -316,6 +302,8 @@ void MapRenderer::logic(bool paused) {
 			it = delayed_events.erase(it);
 		}
 	}
+
+	cam.logic();
 }
 
 bool priocompare(const Renderable &r1, const Renderable &r2) {
@@ -347,7 +335,7 @@ void calculatePriosOrtho(std::vector<Renderable> &r) {
 
 void MapRenderer::render(std::vector<Renderable> &r, std::vector<Renderable> &r_dead) {
 
-	map_parallax.render(shakycam, "");
+	map_parallax.render(cam.shake, "");
 
 	if (eset->tileset.orientation == eset->tileset.TILESET_ORTHOGONAL) {
 		calculatePriosOrtho(r);
@@ -370,7 +358,7 @@ void MapRenderer::render(std::vector<Renderable> &r, std::vector<Renderable> &r_
 void MapRenderer::drawRenderable(std::vector<Renderable>::iterator r_cursor) {
 	if (r_cursor->image != NULL) {
 		Rect dest;
-		Point p = Utils::mapToScreen(r_cursor->map_pos.x, r_cursor->map_pos.y, shakycam.x, shakycam.y);
+		Point p = Utils::mapToScreen(r_cursor->map_pos.x, r_cursor->map_pos.y, cam.shake.x, cam.shake.y);
 		dest.x = p.x - r_cursor->offset.x;
 		dest.y = p.y - r_cursor->offset.y;
 		render_device->render(*r_cursor, dest);
@@ -381,7 +369,7 @@ void MapRenderer::renderIsoLayer(const Map_Layer& layerdata) {
 	int_fast16_t i; // first index of the map array
 	int_fast16_t j; // second index of the map array
 	Point dest;
-	const Point upperleft(Utils::screenToMap(0, 0, shakycam.x, shakycam.y));
+	const Point upperleft(Utils::screenToMap(0, 0, cam.shake.x, cam.shake.y));
 	const int_fast16_t max_tiles_width =   static_cast<int_fast16_t>((settings->view_w / eset->tileset.tile_w) + 2*tset.max_size_x);
 	const int_fast16_t max_tiles_height = static_cast<int_fast16_t>((2 * settings->view_h / eset->tileset.tile_h) + 2*(tset.max_size_y+1));
 
@@ -410,7 +398,7 @@ void MapRenderer::renderIsoLayer(const Map_Layer& layerdata) {
 		// lower left (south west) corner is caught by having 0 in there, so j>0
 		const int_fast16_t j_end = std::max(static_cast<int_fast16_t>(j+i-w+1),	std::max(static_cast<int_fast16_t>(j - max_tiles_width), static_cast<int_fast16_t>(0)));
 
-		Point p = Utils::mapToScreen(float(i), float(j), shakycam.x, shakycam.y);
+		Point p = Utils::mapToScreen(float(i), float(j), cam.shake.x, cam.shake.y);
 		p = centerTile(p);
 
 		// draw one horizontal line
@@ -449,7 +437,7 @@ void MapRenderer::renderIsoBackObjects(std::vector<Renderable> &r) {
 void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 	Point dest;
 
-	const Point upperleft(Utils::screenToMap(0, 0, shakycam.x, shakycam.y));
+	const Point upperleft(Utils::screenToMap(0, 0, cam.shake.x, cam.shake.y));
 	const int_fast16_t max_tiles_width = static_cast<int_fast16_t>((settings->view_w / eset->tileset.tile_w) + 2 * tset.max_size_x);
 	const int_fast16_t max_tiles_height = static_cast<int_fast16_t>(((settings->view_h / eset->tileset.tile_h) + 2 * tset.max_size_y)*2);
 
@@ -490,7 +478,7 @@ void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 		const int_fast16_t j_end = std::max(static_cast<int_fast16_t>(j+i-w+1), std::max(static_cast<int_fast16_t>(j - max_tiles_width), static_cast<int_fast16_t>(0)));
 
 		// draw one horizontal line
-		Point p = Utils::mapToScreen(float(i), float(j), shakycam.x, shakycam.y);
+		Point p = Utils::mapToScreen(float(i), float(j), cam.shake.x, cam.shake.y);
 		p = centerTile(p);
 		const Map_Layer &current_layer = layers[index_objectlayer];
 		bool is_last_NE_tile = false;
@@ -560,7 +548,7 @@ do_last_NE_tile:
 					draw_NE_tile = !is_last_NE_tile;
 
 					// r_cursor left/right side
-					Point r_cursor_left = Utils::mapToScreen(r_cursor->map_pos.x, r_cursor->map_pos.y, shakycam.x, shakycam.y);
+					Point r_cursor_left = Utils::mapToScreen(r_cursor->map_pos.x, r_cursor->map_pos.y, cam.shake.x, cam.shake.y);
 					r_cursor_left.y -= r_cursor->offset.y;
 					Point r_cursor_right = r_cursor_left;
 					r_cursor_left.x -= r_cursor->offset.x;
@@ -665,18 +653,18 @@ void MapRenderer::renderIso(std::vector<Renderable> &r, std::vector<Renderable> 
 	size_t index = 0;
 	while (index < index_objectlayer) {
 		renderIsoLayer(layers[index]);
-		map_parallax.render(shakycam, layernames[index]);
+		map_parallax.render(cam.shake, layernames[index]);
 		index++;
 	}
 
 	renderIsoBackObjects(r_dead);
 	renderIsoFrontObjects(r);
-	map_parallax.render(shakycam, layernames[index]);
+	map_parallax.render(cam.shake, layernames[index]);
 
 	index++;
 	while (index < layers.size()) {
 		renderIsoLayer(layers[index]);
-		map_parallax.render(shakycam, layernames[index]);
+		map_parallax.render(cam.shake, layernames[index]);
 		index++;
 	}
 
@@ -689,7 +677,7 @@ void MapRenderer::renderIso(std::vector<Renderable> &r, std::vector<Renderable> 
 void MapRenderer::renderOrthoLayer(const Map_Layer& layerdata) {
 
 	Point dest;
-	const Point upperleft(Utils::screenToMap(0, 0, shakycam.x, shakycam.y));
+	const Point upperleft(Utils::screenToMap(0, 0, cam.shake.x, cam.shake.y));
 
 	short int startj = static_cast<short int>(std::max(0, upperleft.y));
 	short int starti = static_cast<short int>(std::max(0, upperleft.x));
@@ -700,7 +688,7 @@ void MapRenderer::renderOrthoLayer(const Map_Layer& layerdata) {
 	short int j;
 
 	for (j = startj; j < max_tiles_height; j++) {
-		Point p = Utils::mapToScreen(starti, j, shakycam.x, shakycam.y);
+		Point p = Utils::mapToScreen(starti, j, cam.shake.x, cam.shake.y);
 		p = centerTile(p);
 		for (i = starti; i < max_tiles_width; i++) {
 
@@ -731,7 +719,7 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 	std::vector<Renderable>::iterator r_cursor = r.begin();
 	std::vector<Renderable>::iterator r_end = r.end();
 
-	const Point upperleft(Utils::screenToMap(0, 0, shakycam.x, shakycam.y));
+	const Point upperleft(Utils::screenToMap(0, 0, cam.shake.x, cam.shake.y));
 
 	short int startj = static_cast<short int>(std::max(0, upperleft.y));
 	short int starti = static_cast<short int>(std::max(0, upperleft.x));
@@ -745,7 +733,7 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 		return;
 
 	for (j = startj; j < max_tiles_height; j++) {
-		Point p = Utils::mapToScreen(starti, j, shakycam.x, shakycam.y);
+		Point p = Utils::mapToScreen(starti, j, cam.shake.x, cam.shake.y);
 		p = centerTile(p);
 		for (i = starti; i<max_tiles_width; i++) {
 
@@ -775,18 +763,18 @@ void MapRenderer::renderOrtho(std::vector<Renderable> &r, std::vector<Renderable
 	unsigned index = 0;
 	while (index < index_objectlayer) {
 		renderOrthoLayer(layers[index]);
-		map_parallax.render(shakycam, layernames[index]);
+		map_parallax.render(cam.shake, layernames[index]);
 		index++;
 	}
 
 	renderOrthoBackObjects(r_dead);
 	renderOrthoFrontObjects(r);
-	map_parallax.render(shakycam, layernames[index]);
+	map_parallax.render(cam.shake, layernames[index]);
 
 	index++;
 	while (index < layers.size()) {
 		renderOrthoLayer(layers[index]);
-		map_parallax.render(shakycam, layernames[index]);
+		map_parallax.render(cam.shake, layernames[index]);
 		index++;
 	}
 
@@ -939,7 +927,7 @@ void MapRenderer::checkHotspots() {
 				if (npc) {
 					is_npc = true;
 
-					Point p = Utils::mapToScreen(float(npc->x), float(npc->y), shakycam.x, shakycam.y);
+					Point p = Utils::mapToScreen(float(npc->x), float(npc->y), cam.shake.x, cam.shake.y);
 					p = centerTile(p);
 
 					Rect dest;
@@ -956,7 +944,7 @@ void MapRenderer::checkHotspots() {
 				}
 				else {
 					for (unsigned index = 0; index <= index_objectlayer; ++index) {
-						Point p = Utils::mapToScreen(float(x), float(y), shakycam.x, shakycam.y);
+						Point p = Utils::mapToScreen(float(x), float(y), cam.shake.x, cam.shake.y);
 						p = centerTile(p);
 
 						if (const short current_tile = layers[index][x][y]) {
@@ -970,7 +958,7 @@ void MapRenderer::checkHotspots() {
 
 							if (Utils::isWithinRect(dest, inpt->mouse)) {
 								matched = true;
-								tip_pos = Utils::mapToScreen(it->center.x, it->center.y, shakycam.x, shakycam.y);
+								tip_pos = Utils::mapToScreen(it->center.x, it->center.y, cam.shake.x, cam.shake.y);
 								tip_pos.y -= eset->tileset.tile_h;
 							}
 						}
@@ -981,7 +969,7 @@ void MapRenderer::checkHotspots() {
 					// new tooltip?
 					createTooltip(it->getComponent(EventComponent::TOOLTIP));
 
-					if (((it->reachable_from.w == 0 && it->reachable_from.h == 0) || Utils::isWithinRect(it->reachable_from, Point(cam)))
+					if (((it->reachable_from.w == 0 && it->reachable_from.h == 0) || Utils::isWithinRect(it->reachable_from, Point(cam.pos)))
 							&& Utils::calcDist(pc->stats.pos, it->center) < eset->misc.interact_range) {
 
 						// only check events if the player is clicking
@@ -1029,7 +1017,7 @@ void MapRenderer::checkNearestEvent() {
 		if (!it->cooldown.isEnd() || !it->delay.isEnd()) continue;
 
 		float distance = Utils::calcDist(pc->stats.pos, it->center);
-		if (((it->reachable_from.w == 0 && it->reachable_from.h == 0) || Utils::isWithinRect(it->reachable_from, Point(cam)))
+		if (((it->reachable_from.w == 0 && it->reachable_from.h == 0) || Utils::isWithinRect(it->reachable_from, Point(cam.pos)))
 				&& distance < eset->misc.interact_range && distance < best_distance) {
 			best_distance = distance;
 			nearest = it;
@@ -1041,7 +1029,7 @@ void MapRenderer::checkNearestEvent() {
 		if (!inpt->usingMouse() || settings->touchscreen) {
 			// new tooltip?
 			createTooltip(nearest->getComponent(EventComponent::TOOLTIP));
-			tip_pos = Utils::mapToScreen(nearest->center.x, nearest->center.y, shakycam.x, shakycam.y);
+			tip_pos = Utils::mapToScreen(nearest->center.x, nearest->center.y, cam.shake.x, cam.shake.y);
 			if (nearest->getComponent(EventComponent::NPC_HOTSPOT)) {
 				tip_pos.y -= eset->tooltips.margin_npc;
 			}
@@ -1127,7 +1115,7 @@ void MapRenderer::getTileBounds(const int_fast16_t x, const int_fast16_t y, cons
 			const Tile_Def &tile = tset.tiles[tile_index];
 			if (!tile.tile)
 				return;
-			center = centerTile(Utils::mapToScreen(float(x), float(y), shakycam.x, shakycam.y));
+			center = centerTile(Utils::mapToScreen(float(x), float(y), cam.shake.x, cam.shake.y));
 			bounds.x = center.x - tile.offset.x;
 			bounds.y = center.y - tile.offset.y;
 			bounds.w = tile.tile->getClip().w;
@@ -1142,17 +1130,17 @@ void MapRenderer::drawDevCursor() {
 		return;
 
 	Color dev_cursor_color = Color(255,255,0,255);
-	FPoint target = Utils::screenToMap(inpt->mouse.x,  inpt->mouse.y, shakycam.x, shakycam.y);
+	FPoint target = Utils::screenToMap(inpt->mouse.x,  inpt->mouse.y, cam.shake.x, cam.shake.y);
 
 	if (!collider.isOutsideMap(floorf(target.x), floorf(target.y))) {
 		if (eset->tileset.orientation == eset->tileset.TILESET_ORTHOGONAL) {
-			Point p_topleft = Utils::mapToScreen(floorf(target.x), floorf(target.y), shakycam.x, shakycam.y);
+			Point p_topleft = Utils::mapToScreen(floorf(target.x), floorf(target.y), cam.shake.x, cam.shake.y);
 			Point p_bottomright(p_topleft.x + eset->tileset.tile_w, p_topleft.y + eset->tileset.tile_h);
 
 			render_device->drawRectangle(p_topleft, p_bottomright, dev_cursor_color);
 		}
 		else {
-			Point p_left = Utils::mapToScreen(floorf(target.x), floorf(target.y+1), shakycam.x, shakycam.y);
+			Point p_left = Utils::mapToScreen(floorf(target.x), floorf(target.y+1), cam.shake.x, cam.shake.y);
 			Point p_top(p_left.x + eset->tileset.tile_w_half, p_left.y - eset->tileset.tile_h_half);
 			Point p_right(p_left.x + eset->tileset.tile_w, p_left.y);
 			Point p_bottom(p_left.x + eset->tileset.tile_w_half, p_left.y + eset->tileset.tile_h_half);
@@ -1165,8 +1153,8 @@ void MapRenderer::drawDevCursor() {
 
 		// draw distance line
 		if (menu->devconsole->distance_timer.isEnd()) {
-			Point p0 = Utils::mapToScreen(menu->devconsole->target.x, menu->devconsole->target.y, shakycam.x, shakycam.y);
-			Point p1 = Utils::mapToScreen(pc->stats.pos.x, pc->stats.pos.y, shakycam.x, shakycam.y);
+			Point p0 = Utils::mapToScreen(menu->devconsole->target.x, menu->devconsole->target.y, cam.shake.x, cam.shake.y);
+			Point p1 = Utils::mapToScreen(pc->stats.pos.x, pc->stats.pos.y, cam.shake.x, cam.shake.y);
 			render_device->drawLine(p0.x, p0.y, p1.x, p1.y, dev_cursor_color);
 		}
 	}
@@ -1186,21 +1174,21 @@ void MapRenderer::drawDevHUD() {
 
 	// camera
 	{
-		Point p0 = Utils::mapToScreen(cam.x, cam.y, shakycam.x, shakycam.y);
+		Point p0 = Utils::mapToScreen(cam.pos.x, cam.pos.y, cam.shake.x, cam.shake.y);
 		render_device->drawLine(p0.x - cross_size, p0.y, p0.x + cross_size, p0.y, color_cam);
 		render_device->drawLine(p0.x, p0.y - cross_size, p0.x, p0.y + cross_size, color_cam);
 	}
 
 	// player
 	{
-		Point p0 = Utils::mapToScreen(pc->stats.pos.x, pc->stats.pos.y, shakycam.x, shakycam.y);
+		Point p0 = Utils::mapToScreen(pc->stats.pos.x, pc->stats.pos.y, cam.shake.x, cam.shake.y);
 		render_device->drawLine(p0.x - cross_size, p0.y, p0.x + cross_size, p0.y, color_entity);
 		render_device->drawLine(p0.x, p0.y - cross_size, p0.x, p0.y + cross_size, color_entity);
 	}
 
 	// enemies
 	for (size_t i = 0; i < enemym->enemies.size(); ++i) {
-		Point p0 = Utils::mapToScreen(enemym->enemies[i]->stats.pos.x, enemym->enemies[i]->stats.pos.y, shakycam.x, shakycam.y);
+		Point p0 = Utils::mapToScreen(enemym->enemies[i]->stats.pos.x, enemym->enemies[i]->stats.pos.y, cam.shake.x, cam.shake.y);
 		render_device->drawLine(p0.x - cross_size, p0.y, p0.x + cross_size, p0.y, color_entity);
 		render_device->drawLine(p0.x, p0.y - cross_size, p0.x, p0.y + cross_size, color_entity);
 	}
@@ -1210,8 +1198,8 @@ void MapRenderer::drawDevHUD() {
 		if (hazards->h[i]->delay_frames != 0)
 			continue;
 
-		Point p0 = Utils::mapToScreen(hazards->h[i]->pos.x, hazards->h[i]->pos.y, shakycam.x, shakycam.y);
-		Point p1 = Utils::mapToScreen(hazards->h[i]->pos.x + hazards->h[i]->power->radius, hazards->h[i]->pos.y, shakycam.x, shakycam.y);
+		Point p0 = Utils::mapToScreen(hazards->h[i]->pos.x, hazards->h[i]->pos.y, cam.shake.x, cam.shake.y);
+		Point p1 = Utils::mapToScreen(hazards->h[i]->pos.x + hazards->h[i]->power->radius, hazards->h[i]->pos.y, cam.shake.x, cam.shake.y);
 		int radius = p1.x - p0.x;
 		render_device->drawLine(p0.x - cross_size, p0.y, p0.x + cross_size, p0.y, color_hazard);
 		render_device->drawLine(p0.x, p0.y - cross_size, p0.x, p0.y + cross_size, color_hazard);
@@ -1238,7 +1226,7 @@ void MapRenderer::drawHiddenEntityMarkers() {
 			continue;
 
 		Point dest;
-		Point p = Utils::mapToScreen(hidden_entities[i]->map_pos.x, hidden_entities[i]->map_pos.y, shakycam.x, shakycam.y);
+		Point p = Utils::mapToScreen(hidden_entities[i]->map_pos.x, hidden_entities[i]->map_pos.y, cam.shake.x, cam.shake.y);
 		dest.x = p.x - marker_w / 2;
 		dest.y = p.y - hidden_entities[i]->offset.y - marker_h;
 
@@ -1308,7 +1296,7 @@ void MapRenderer::checkHiddenEntities(const int_fast16_t x, const int_fast16_t y
 			is_hidden = true;
 		}
 		else if (it->type != Renderable::TYPE_NORMAL) {
-			Point p = Utils::mapToScreen(it->map_pos.x, it->map_pos.y, shakycam.x, shakycam.y);
+			Point p = Utils::mapToScreen(it->map_pos.x, it->map_pos.y, cam.shake.x, cam.shake.y);
 			p.x -= it->offset.x;
 			if (Utils::isWithinRect(tile_bounds, p)) {
 				is_hidden = true;

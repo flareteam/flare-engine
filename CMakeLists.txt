@@ -122,6 +122,7 @@ Set (FLARE_SOURCES
 	./src/AStarNode.cpp
 	./src/Avatar.cpp
 	./src/BehaviorStandard.cpp
+	./src/Camera.cpp
 	./src/CampaignManager.cpp
 	./src/CombatText.cpp
 	./src/CursorManager.cpp
@@ -238,6 +239,7 @@ Set (FLARE_HEADERS
 	./src/AStarNode.h
 	./src/Avatar.h
 	./src/BehaviorStandard.h
+	./src/Camera.h
 	./src/CampaignManager.h
 	./src/CombatText.h
 	./src/CommonIncludes.h

@@ -505,7 +505,7 @@ bool Entity::takeHit(Hazard &h) {
 		// default is dmg * 2
 		dmg = (dmg * Math::randBetween(eset->combat.min_crit_damage, eset->combat.max_crit_damage)) / 100;
 		if(!stats.hero)
-			mapr->shaky_cam_timer.setDuration(settings->max_frames_per_sec/2);
+			mapr->cam.shake_timer.setDuration(settings->max_frames_per_sec/2);
 	}
 	else if (is_overhit) {
 		dmg = (dmg * Math::randBetween(eset->combat.min_overhit_damage, eset->combat.max_overhit_damage)) / 100;

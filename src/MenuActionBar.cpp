@@ -765,9 +765,9 @@ FPoint MenuActionBar::setTarget(bool have_aim, const Power& pow) {
 	if (have_aim && settings->mouse_aim) {
 		FPoint map_pos;
 		if (pow.aim_assist)
-			map_pos = Utils::screenToMap(inpt->mouse.x,  inpt->mouse.y + eset->misc.aim_assist, mapr->cam.x, mapr->cam.y);
+			map_pos = Utils::screenToMap(inpt->mouse.x,  inpt->mouse.y + eset->misc.aim_assist, mapr->cam.pos.x, mapr->cam.pos.y);
 		else
-			map_pos = Utils::screenToMap(inpt->mouse.x,  inpt->mouse.y, mapr->cam.x, mapr->cam.y);
+			map_pos = Utils::screenToMap(inpt->mouse.x,  inpt->mouse.y, mapr->cam.pos.x, mapr->cam.pos.y);
 
 		if (pow.target_nearest > 0) {
 			if (!pow.requires_corpse && powers->checkNearestTargeting(pow, &pc->stats, false)) {

@@ -177,11 +177,11 @@ void GameStatePlay::checkEnemyFocus() {
 			hazards->last_enemy = NULL;
 		}
 		else {
-			enemy = enemym->enemyFocus(inpt->mouse, mapr->cam, EnemyManager::IS_ALIVE);
+			enemy = enemym->enemyFocus(inpt->mouse, mapr->cam.pos, EnemyManager::IS_ALIVE);
 			if (enemy) {
 				curs->setCursor(CursorManager::CURSOR_ATTACK);
 			}
-			src_pos = Utils::screenToMap(inpt->mouse.x, inpt->mouse.y, mapr->cam.x, mapr->cam.y);
+			src_pos = Utils::screenToMap(inpt->mouse.x, inpt->mouse.y, mapr->cam.pos.x, mapr->cam.pos.y);
 
 		}
 	}
@@ -195,7 +195,7 @@ void GameStatePlay::checkEnemyFocus() {
 	}
 	else if (inpt->usingMouse()) {
 		// if we're using a mouse and we didn't select an enemy, try selecting a dead one instead
-		Enemy *temp_enemy = enemym->enemyFocus(inpt->mouse, mapr->cam, !EnemyManager::IS_ALIVE);
+		Enemy *temp_enemy = enemym->enemyFocus(inpt->mouse, mapr->cam.pos, !EnemyManager::IS_ALIVE);
 		if (temp_enemy) {
 			pc->stats.target_corpse = &(temp_enemy->stats);
 			menu->enemy->enemy = temp_enemy;
@@ -259,7 +259,7 @@ void GameStatePlay::checkLoot() {
 
 	// Normal pickups
 	if (!pc->using_main1) {
-		pickup = loot->checkPickup(inpt->mouse, mapr->cam, pc->stats.pos);
+		pickup = loot->checkPickup(inpt->mouse, mapr->cam.pos, pc->stats.pos);
 	}
 
 	if (!pickup.empty()) {
@@ -306,8 +306,7 @@ void GameStatePlay::checkTeleport() {
 
 		// process intermap teleport
 		if (mapr->teleportation && !mapr->teleport_mapname.empty()) {
-			mapr->cam.x = pc->stats.pos.x;
-			mapr->cam.y = pc->stats.pos.y;
+			mapr->cam.warpTo(pc->stats.pos);
 			std::string teleport_mapname = mapr->teleport_mapname;
 			mapr->teleport_mapname = "";
 			inpt->lock_all = (teleport_mapname == "maps/spawn.txt");
@@ -318,8 +317,9 @@ void GameStatePlay::checkTeleport() {
 
 			// use the default hero spawn position for this map
 			if (mapr->teleport_destination.x == -1 && mapr->teleport_destination.y == -1) {
-				mapr->cam.x = pc->stats.pos.x = mapr->hero_pos.x;
-				mapr->cam.y = pc->stats.pos.y = mapr->hero_pos.y;
+				pc->stats.pos.x = mapr->hero_pos.x;
+				pc->stats.pos.y = mapr->hero_pos.y;
+				mapr->cam.warpTo(pc->stats.pos);
 			}
 
 			// store this as the new respawn point (provided the tile is open)
@@ -890,7 +890,7 @@ void GameStatePlay::logic() {
 
 		snd->logic(pc->stats.pos);
 
-		comb->logic(mapr->cam);
+		comb->logic(mapr->cam.pos);
 	}
 
 	// close menus when the player dies, but still allow them to be reopened
@@ -1035,7 +1035,7 @@ void GameStatePlay::render() {
 	mapr->render(rens, rens_dead);
 
 	// mouseover tooltips
-	loot->renderTooltips(mapr->cam);
+	loot->renderTooltips(mapr->cam.pos);
 
 	if (mapr->map_change) {
 		menu->mini->prerender(&mapr->collider, mapr->w, mapr->h);

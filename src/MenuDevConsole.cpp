@@ -194,7 +194,7 @@ void MenuDevConsole::logic() {
 
 		if (inpt->pressing[Input::MAIN2] && !inpt->lock[Input::MAIN2]) {
 			inpt->lock[Input::MAIN2] = true;
-			target = Utils::screenToMap(inpt->mouse.x,  inpt->mouse.y, mapr->cam.x, mapr->cam.y);
+			target = Utils::screenToMap(inpt->mouse.x,  inpt->mouse.y, mapr->cam.pos.x, mapr->cam.pos.y);
 
 			log_history->addSeparator();
 

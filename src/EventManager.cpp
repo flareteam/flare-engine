@@ -857,7 +857,7 @@ bool EventManager::executeEventInternal(Event &ev, bool skip_delay) {
 			pc->logMsg(ec->s, Avatar::MSG_UNIQUE);
 		}
 		else if (ec->type == EventComponent::SHAKYCAM) {
-			mapr->shaky_cam_timer.setDuration(ec->x);
+			mapr->cam.shake_timer.setDuration(ec->x);
 		}
 		else if (ec->type == EventComponent::REMOVE_CURRENCY) {
 			camp->removeCurrency(ec->x);

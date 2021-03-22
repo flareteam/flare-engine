@@ -59,8 +59,6 @@ Avatar::Avatar()
 	: Entity()
 	, attack_cursor(false)
 	, mm_key(settings->mouse_move_swap ? Input::MAIN2 : Input::MAIN1)
-	, prev_cam_dx(0)
-	, prev_cam_dy(0)
 	, hero_stats(NULL)
 	, charmed_stats(NULL)
 	, act_target()
@@ -324,7 +322,7 @@ void Avatar::set_direction() {
 
 	// handle direction changes
 	if (settings->mouse_move) {
-		FPoint target = Utils::screenToMap(inpt->mouse.x, inpt->mouse.y, mapr->cam.x, mapr->cam.y);
+		FPoint target = Utils::screenToMap(inpt->mouse.x, inpt->mouse.y, mapr->cam.pos.x, mapr->cam.pos.y);
 		stats.direction = Utils::calcDirection(stats.pos.x, stats.pos.y, target.x, target.y);
 	}
 	else {
@@ -489,7 +487,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 		}
 	}
 
-	if (teleport_camera_lock && Utils::calcDist(stats.pos, mapr->cam) < 0.5f) {
+	if (teleport_camera_lock && Utils::calcDist(stats.pos, mapr->cam.pos) < 0.5f) {
 		teleport_camera_lock = false;
 	}
 
@@ -833,68 +831,8 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 	}
 
-	// calc new cam position from player position
-	// cam is focused at player position
-	float cam_delta = Utils::calcDist(mapr->cam, stats.pos);
-	float cam_dx = (Utils::calcDist(FPoint(mapr->cam.x, stats.pos.y), stats.pos)) / eset->misc.camera_speed;
-	float cam_dy = (Utils::calcDist(FPoint(stats.pos.x, mapr->cam.y), stats.pos)) / eset->misc.camera_speed;
-	float cam_threshold = eset->misc.camera_speed / 50.f;
-
-	if (prev_cam_target.x == stats.pos.x && prev_cam_target.y == stats.pos.y) {
-		// target hasn't changed
-
-		if (cam_delta == 0 || cam_delta >= cam_threshold) {
-			// camera is stationary or moving fast enough, so store the deltas
-			prev_cam_dx = cam_dx;
-			prev_cam_dy = cam_dy;
-		}
-		else if (cam_delta < cam_threshold) {
-			if (cam_dx < prev_cam_dx || cam_dy < prev_cam_dy) {
-				// maintain camera speed
-				cam_dx = prev_cam_dx;
-				cam_dy = prev_cam_dy;
-			}
-			else {
-				// camera didn't get a chance to speed up, so set the minimum speed
-				float b = fabsf(mapr->cam.x - stats.pos.x);
-				float alpha = acosf(b / cam_delta);
-
-				float fast_dx = cam_threshold * cosf(alpha);
-				float fast_dy = cam_threshold * sinf(alpha);
-
-				prev_cam_dx = fast_dx / eset->misc.camera_speed;
-				prev_cam_dy = fast_dy / eset->misc.camera_speed;
-			}
-		}
-	}
-	else {
-		// target changed, reset
-		prev_cam_target = stats.pos;
-		prev_cam_dx = 0;
-		prev_cam_dy = 0;
-	}
-
-	// camera movement might overshoot its target, so compensate for that here
-	if (mapr->cam.x < stats.pos.x) {
-		mapr->cam.x += cam_dx;
-		if (mapr->cam.x > stats.pos.x)
-			mapr->cam.x = stats.pos.x;
-	}
-	else if (mapr->cam.x > stats.pos.x) {
-		mapr->cam.x -= cam_dx;
-		if (mapr->cam.x < stats.pos.x)
-			mapr->cam.x = stats.pos.x;
-	}
-	if (mapr->cam.y < stats.pos.y) {
-		mapr->cam.y += cam_dy;
-		if (mapr->cam.y > stats.pos.y)
-			mapr->cam.y = stats.pos.y;
-	}
-	else if (mapr->cam.y > stats.pos.y) {
-		mapr->cam.y -= cam_dy;
-		if (mapr->cam.y < stats.pos.y)
-			mapr->cam.y = stats.pos.y;
-	}
+	// update camera
+	mapr->cam.setTarget(stats.pos);
 
 	// check for map events
 	mapr->checkEvents(stats.pos);

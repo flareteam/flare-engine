@@ -28,6 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef MAP_RENDERER_H
 #define MAP_RENDERER_H
 
+#include "Camera.h"
 #include "CommonIncludes.h"
 #include "Map.h"
 #include "MapCollision.h"
@@ -82,7 +83,6 @@ private:
 
 	void checkHiddenEntities(const int_fast16_t x, const int_fast16_t y, const Map_Layer& layerdata, std::vector<Renderable> &r);
 
-	FPoint shakycam;
 	TileSet tset;
 
 	MapParallax map_parallax;
@@ -122,8 +122,8 @@ public:
 
 	void setMapParallax(const std::string& mp_filename);
 
-	// cam(x,y) is where on the map the camera is pointing
-	FPoint cam;
+	// cam is where on the map the camera is pointing
+	Camera cam;
 
 	// indicates that the map was changed by an event, so the GameStatePlay
 	// will tell the mini map to update.
@@ -145,9 +145,6 @@ public:
 	// cutscene handling
 	bool cutscene;
 	std::string cutscene_file;
-
-	// shaky cam
-	Timer shaky_cam_timer;
 
 	// stash handling
 	bool stash;
