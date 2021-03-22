@@ -86,6 +86,11 @@ private:
 
 	bool isDroppedToLowHp();
 
+	// camera
+	float prev_cam_dx;
+	float prev_cam_dy;
+	FPoint prev_cam_target;
+
 protected:
 	virtual void resetActiveAnimation();
 
