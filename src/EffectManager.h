@@ -71,6 +71,15 @@ public:
 	void unloadAnimation();
 
 	static int getTypeFromString(const std::string& _type);
+	static bool typeIsStat(int t);
+	static bool typeIsDmgMin(int t);
+	static bool typeIsDmgMax(int t);
+	static bool typeIsResist(int t);
+	static bool typeIsPrimary(int t);
+	static int getStatFromType(int t);
+	static size_t getDmgFromType(int t);
+	static size_t getResistFromType(int t);
+	static size_t getPrimaryFromType(int t);
 
 	std::string id;
 	std::string name;

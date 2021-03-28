@@ -187,6 +187,42 @@ int Effect::getTypeFromString(const std::string& type_str) {
 	return Effect::NONE;
 }
 
+bool Effect::typeIsStat(int t) {
+	return t >= Effect::TYPE_COUNT && t < Effect::TYPE_COUNT + Stats::COUNT;
+}
+
+bool Effect::typeIsDmgMin(int t) {
+	return t >= Effect::TYPE_COUNT + Stats::COUNT && t < Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count) && (t - Stats::COUNT - Effect::TYPE_COUNT) % 2 == 0;
+}
+
+bool Effect::typeIsDmgMax(int t) {
+	return t >= Effect::TYPE_COUNT + Stats::COUNT && t < Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count) && (t - Stats::COUNT - Effect::TYPE_COUNT) % 2 == 1;
+}
+
+bool Effect::typeIsResist(int t) {
+	return t >= Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count) && t < Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count) + static_cast<int>(eset->elements.list.size());
+}
+
+bool Effect::typeIsPrimary(int t) {
+	return t >= Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count) + static_cast<int>(eset->elements.list.size()) && t < Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count) + static_cast<int>(eset->elements.list.size()) + static_cast<int>(eset->primary_stats.list.size());
+}
+
+int Effect::getStatFromType(int t) {
+	return t - Effect::TYPE_COUNT;
+}
+
+size_t Effect::getDmgFromType(int t) {
+	return static_cast<size_t>(t - Effect::TYPE_COUNT - Stats::COUNT);
+}
+
+size_t Effect::getResistFromType(int t) {
+	return static_cast<size_t>(t - Effect::TYPE_COUNT - Stats::COUNT) - eset->damage_types.count;
+}
+
+size_t Effect::getPrimaryFromType(int t) {
+	return static_cast<size_t>(t - Effect::TYPE_COUNT - Stats::COUNT) - eset->damage_types.count - eset->elements.list.size();
+}
+
 EffectManager::EffectManager()
 	: bonus(std::vector<int>(Stats::COUNT + eset->damage_types.count, 0))
 	, bonus_resist(std::vector<int>(eset->elements.list.size(), 0))

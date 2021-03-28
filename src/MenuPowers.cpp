@@ -849,200 +849,186 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 		std::stringstream ss;
 		EffectDef* effect_ptr = powers->getEffectDef(pwr.post_effects[i].id);
 
-		// base stats
-		if (effect_ptr == NULL) {
+		int effect_type = Effect::NONE;
+		if (effect_ptr) {
+			effect_type = effect_ptr->type;
+		}
+		else {
+			effect_type = Effect::getTypeFromString(pwr.post_effects[i].id);
+		}
+
+		if (Effect::typeIsStat(effect_type) ||
+		    Effect::typeIsDmgMin(effect_type) ||
+		    Effect::typeIsDmgMax(effect_type) ||
+		    Effect::typeIsResist(effect_type) ||
+		    Effect::typeIsPrimary(effect_type))
+		{
 			if (pwr.post_effects[i].magnitude > 0) {
 				ss << "+";
 			}
-
 			ss << pwr.post_effects[i].magnitude;
-			bool found_key = false;
-
-			for (int j=0; j<Stats::COUNT; ++j) {
-				if (pwr.post_effects[i].id == Stats::KEY[j]) {
-					if (Stats::PERCENT[j])
-						ss << "%";
-
-					ss << " " << Stats::NAME[j];
-
-					found_key = true;
-					break;
-				}
-			}
-
-			if (!found_key) {
-				for (size_t j=0; j<eset->elements.list.size(); ++j) {
-					if (pwr.post_effects[i].id == eset->elements.list[j].id + "_resist") {
-						ss << "% " << msg->get("Resistance (%s)", eset->elements.list[j].name);
-						found_key = true;
-						break;
-					}
-				}
-			}
-
-			if (!found_key) {
-				for (size_t j=0; j<eset->primary_stats.list.size(); ++j) {
-					if (pwr.post_effects[i].id == eset->primary_stats.list[j].id) {
-						ss << " " << eset->primary_stats.list[j].name;
-						found_key = true;
-						break;
-					}
-				}
-			}
-
-			// NOTE don't need to set found_key after this, since this is the last set of keys to check
-			if (!found_key) {
-				for (size_t j=0; j<eset->damage_types.list.size(); ++j) {
-					if (pwr.post_effects[i].id == eset->damage_types.list[j].min) {
-						ss << " " << eset->damage_types.list[j].name_min;
-						break;
-					}
-					else if (pwr.post_effects[i].id == eset->damage_types.list[j].max) {
-						ss << " " << eset->damage_types.list[j].name_max;
-						break;
-					}
-				}
-			}
 		}
-		else {
-			if (effect_ptr->type == Effect::DAMAGE) {
-				ss << pwr.post_effects[i].magnitude << " " << msg->get("Damage per second");
+
+		if (Effect::typeIsStat(effect_type)) {
+			int index = Effect::getStatFromType(effect_type);
+			if (Stats::PERCENT[index]) {
+				ss << "%";
 			}
-			else if (effect_ptr->type == Effect::DAMAGE_PERCENT) {
-				ss << pwr.post_effects[i].magnitude << "% " << msg->get("Damage per second");
+			ss << " " << Stats::NAME[index];
+		}
+		else if (Effect::typeIsDmgMin(effect_type)) {
+			size_t index = Effect::getDmgFromType(effect_type);
+			ss << " " << eset->damage_types.list[index].name_min;
+		}
+		else if (Effect::typeIsDmgMax(effect_type)) {
+			size_t index = Effect::getDmgFromType(effect_type);
+			ss << " " << eset->damage_types.list[index].name_max;
+		}
+		else if (Effect::typeIsResist(effect_type)) {
+			size_t index = Effect::getResistFromType(effect_type);
+			ss << "% " << msg->get("Resistance (%s)", eset->elements.list[index].name);
+		}
+		else if (Effect::typeIsPrimary(effect_type)) {
+			size_t index = Effect::getPrimaryFromType(effect_type);
+			ss << " " << eset->primary_stats.list[index].name;
+		}
+		else if (effect_type == Effect::DAMAGE) {
+			ss << pwr.post_effects[i].magnitude << " " << msg->get("Damage per second");
+		}
+		else if (effect_type == Effect::DAMAGE_PERCENT) {
+			ss << pwr.post_effects[i].magnitude << "% " << msg->get("Damage per second");
+		}
+		else if (effect_type == Effect::HPOT) {
+			ss << pwr.post_effects[i].magnitude << " " << msg->get("HP per second");
+		}
+		else if (effect_type == Effect::HPOT_PERCENT) {
+			ss << pwr.post_effects[i].magnitude << "% " << msg->get("HP per second");
+		}
+		else if (effect_type == Effect::MPOT) {
+			ss << pwr.post_effects[i].magnitude << " " << msg->get("MP per second");
+		}
+		else if (effect_type == Effect::MPOT_PERCENT) {
+			ss << pwr.post_effects[i].magnitude << "% " << msg->get("MP per second");
+		}
+		else if (effect_type == Effect::SPEED) {
+			if (pwr.post_effects[i].magnitude == 0)
+				ss << msg->get("Immobilize");
+			else
+				ss << msg->get("%d%% Speed", pwr.post_effects[i].magnitude);
+		}
+		else if (effect_type == Effect::ATTACK_SPEED) {
+			ss << msg->get("%d%% Attack Speed", pwr.post_effects[i].magnitude);
+		}
+		else if (effect_type == Effect::IMMUNITY) {
+			ss << msg->get("Immunity");
+		}
+		else if (effect_type == Effect::IMMUNITY_DAMAGE) {
+			ss << msg->get("Immunity to damage over time");
+		}
+		else if (effect_type == Effect::IMMUNITY_SLOW) {
+			ss << msg->get("Immunity to slow");
+		}
+		else if (effect_type == Effect::IMMUNITY_STUN) {
+			ss << msg->get("Immunity to stun");
+		}
+		else if (effect_type == Effect::IMMUNITY_HP_STEAL) {
+			ss << msg->get("Immunity to HP steal");
+		}
+		else if (effect_type == Effect::IMMUNITY_MP_STEAL) {
+			ss << msg->get("Immunity to MP steal");
+		}
+		else if (effect_type == Effect::IMMUNITY_KNOCKBACK) {
+			ss << msg->get("Immunity to knockback");
+		}
+		else if (effect_type == Effect::IMMUNITY_DAMAGE_REFLECT) {
+			ss << msg->get("Immunity to damage reflection");
+		}
+
+		// TODO Effect::IMMUNITY_STAT_DEBUFF?
+
+		else if (effect_type == Effect::STUN) {
+			ss << msg->get("Stun");
+		}
+		else if (effect_type == Effect::REVIVE) {
+			ss << msg->get("Automatic revive on death");
+		}
+		else if (effect_type == Effect::CONVERT) {
+			ss << msg->get("Convert");
+		}
+		else if (effect_type == Effect::FEAR) {
+			ss << msg->get("Fear");
+		}
+		else if (effect_type == Effect::DEATH_SENTENCE) {
+			ss << msg->get("Lifespan");
+		}
+		else if (effect_type == Effect::SHIELD) {
+			if (pwr.base_damage == eset->damage_types.list.size())
+				continue;
+
+			if (pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_MULTIPLY) {
+				int magnitude = pc->stats.getDamageMax(pwr.base_damage) * pwr.mod_damage_value_min / 100;
+				ss << magnitude;
 			}
-			else if (effect_ptr->type == Effect::HPOT) {
-				ss << pwr.post_effects[i].magnitude << " " << msg->get("HP per second");
+			else if (pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_ADD) {
+				int magnitude = pc->stats.getDamageMax(pwr.base_damage) + pwr.mod_damage_value_min;
+				ss << magnitude;
 			}
-			else if (effect_ptr->type == Effect::HPOT_PERCENT) {
-				ss << pwr.post_effects[i].magnitude << "% " << msg->get("HP per second");
-			}
-			else if (effect_ptr->type == Effect::MPOT) {
-				ss << pwr.post_effects[i].magnitude << " " << msg->get("MP per second");
-			}
-			else if (effect_ptr->type == Effect::MPOT_PERCENT) {
-				ss << pwr.post_effects[i].magnitude << "% " << msg->get("MP per second");
-			}
-			else if (effect_ptr->type == Effect::SPEED) {
-				if (pwr.post_effects[i].magnitude == 0)
-					ss << msg->get("Immobilize");
+			else if (pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_ABSOLUTE) {
+				if (pwr.mod_damage_value_max == 0 || pwr.mod_damage_value_min == pwr.mod_damage_value_max)
+					ss << pwr.mod_damage_value_min;
 				else
-					ss << msg->get("%d%% Speed", pwr.post_effects[i].magnitude);
+					ss << pwr.mod_damage_value_min << "-" << pwr.mod_damage_value_max;
 			}
-			else if (effect_ptr->type == Effect::ATTACK_SPEED) {
-				ss << msg->get("%d%% Attack Speed", pwr.post_effects[i].magnitude);
-			}
-			else if (effect_ptr->type == Effect::IMMUNITY) {
-				ss << msg->get("Immunity");
-			}
-			else if (effect_ptr->type == Effect::IMMUNITY_DAMAGE) {
-				ss << msg->get("Immunity to damage over time");
-			}
-			else if (effect_ptr->type == Effect::IMMUNITY_SLOW) {
-				ss << msg->get("Immunity to slow");
-			}
-			else if (effect_ptr->type == Effect::IMMUNITY_STUN) {
-				ss << msg->get("Immunity to stun");
-			}
-			else if (effect_ptr->type == Effect::IMMUNITY_HP_STEAL) {
-				ss << msg->get("Immunity to HP steal");
-			}
-			else if (effect_ptr->type == Effect::IMMUNITY_MP_STEAL) {
-				ss << msg->get("Immunity to MP steal");
-			}
-			else if (effect_ptr->type == Effect::IMMUNITY_KNOCKBACK) {
-				ss << msg->get("Immunity to knockback");
-			}
-			else if (effect_ptr->type == Effect::IMMUNITY_DAMAGE_REFLECT) {
-				ss << msg->get("Immunity to damage reflection");
+			else {
+				ss << pc->stats.getDamageMax(pwr.base_damage);
 			}
 
-			// TODO Effect::IMMUNITY_STAT_DEBUFF?
+			ss << " " << msg->get("Magical Shield");
+		}
+		else if (effect_type == Effect::HEAL) {
+			if (pwr.base_damage == eset->damage_types.list.size())
+				continue;
 
-			else if (effect_ptr->type == Effect::STUN) {
-				ss << msg->get("Stun");
-			}
-			else if (effect_ptr->type == Effect::REVIVE) {
-				ss << msg->get("Automatic revive on death");
-			}
-			else if (effect_ptr->type == Effect::CONVERT) {
-				ss << msg->get("Convert");
-			}
-			else if (effect_ptr->type == Effect::FEAR) {
-				ss << msg->get("Fear");
-			}
-			else if (effect_ptr->type == Effect::DEATH_SENTENCE) {
-				ss << msg->get("Lifespan");
-			}
-			else if (effect_ptr->type == Effect::SHIELD) {
-				if (pwr.base_damage == eset->damage_types.list.size())
-					continue;
+			int mag_min = pc->stats.getDamageMin(pwr.base_damage);
+			int mag_max = pc->stats.getDamageMax(pwr.base_damage);
 
-				if (pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_MULTIPLY) {
-					int magnitude = pc->stats.getDamageMax(pwr.base_damage) * pwr.mod_damage_value_min / 100;
-					ss << magnitude;
-				}
-				else if (pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_ADD) {
-					int magnitude = pc->stats.getDamageMax(pwr.base_damage) + pwr.mod_damage_value_min;
-					ss << magnitude;
-				}
-				else if (pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_ABSOLUTE) {
-					if (pwr.mod_damage_value_max == 0 || pwr.mod_damage_value_min == pwr.mod_damage_value_max)
-						ss << pwr.mod_damage_value_min;
-					else
-						ss << pwr.mod_damage_value_min << "-" << pwr.mod_damage_value_max;
-				}
-				else {
-					ss << pc->stats.getDamageMax(pwr.base_damage);
-				}
+			if (pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_MULTIPLY) {
+				mag_min = mag_min * pwr.mod_damage_value_min / 100;
+				mag_max = mag_max * pwr.mod_damage_value_min / 100;
+				ss << mag_min << "-" << mag_max;
+			}
+			else if (pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_ADD) {
+				mag_min = mag_min + pwr.mod_damage_value_min;
+				mag_max = mag_max + pwr.mod_damage_value_min;
+				ss << mag_min << "-" << mag_max;
+			}
+			else if (pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_ABSOLUTE) {
+				if (pwr.mod_damage_value_max == 0 || pwr.mod_damage_value_min == pwr.mod_damage_value_max)
+					ss << pwr.mod_damage_value_min;
+				else
+					ss << pwr.mod_damage_value_min << "-" << pwr.mod_damage_value_max;
+			}
+			else {
+				ss << mag_min << "-" << mag_max;
+			}
 
-				ss << " " << msg->get("Magical Shield");
-			}
-			else if (effect_ptr->type == Effect::HEAL) {
-				if (pwr.base_damage == eset->damage_types.list.size())
-					continue;
-
-				int mag_min = pc->stats.getDamageMin(pwr.base_damage);
-				int mag_max = pc->stats.getDamageMax(pwr.base_damage);
-
-				if (pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_MULTIPLY) {
-					mag_min = mag_min * pwr.mod_damage_value_min / 100;
-					mag_max = mag_max * pwr.mod_damage_value_min / 100;
-					ss << mag_min << "-" << mag_max;
-				}
-				else if (pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_ADD) {
-					mag_min = mag_min + pwr.mod_damage_value_min;
-					mag_max = mag_max + pwr.mod_damage_value_min;
-					ss << mag_min << "-" << mag_max;
-				}
-				else if (pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_ABSOLUTE) {
-					if (pwr.mod_damage_value_max == 0 || pwr.mod_damage_value_min == pwr.mod_damage_value_max)
-						ss << pwr.mod_damage_value_min;
-					else
-						ss << pwr.mod_damage_value_min << "-" << pwr.mod_damage_value_max;
-				}
-				else {
-					ss << mag_min << "-" << mag_max;
-				}
-
-				ss << " " << msg->get("Healing");
-			}
-			else if (effect_ptr->type == Effect::KNOCKBACK) {
-				ss << pwr.post_effects[i].magnitude << " " << msg->get("Knockback");
-			}
-			else if (!effect_ptr->name.empty() && pwr.post_effects[i].magnitude > 0) {
-				if (effect_ptr->can_stack)
-					ss << "+";
-				ss << pwr.post_effects[i].magnitude << " " << msg->get(effect_ptr->name);
-			}
-			else if (pwr.post_effects[i].magnitude == 0) {
-				// nothing
-			}
+			ss << " " << msg->get("Healing");
+		}
+		else if (effect_type == Effect::KNOCKBACK) {
+			ss << pwr.post_effects[i].magnitude << " " << msg->get("Knockback");
+		}
+		else if (effect_ptr && !effect_ptr->name.empty() && pwr.post_effects[i].magnitude > 0) {
+			if (effect_ptr->can_stack)
+				ss << "+";
+			ss << pwr.post_effects[i].magnitude << " " << msg->get(effect_ptr->name);
+		}
+		else if (pwr.post_effects[i].magnitude == 0) {
+			// nothing
 		}
 
 		if (!ss.str().empty()) {
 			if (pwr.post_effects[i].duration > 0) {
-				if (effect_ptr && effect_ptr->type == Effect::DEATH_SENTENCE) {
+				if (effect_type == Effect::DEATH_SENTENCE) {
 					ss << ": " << Utils::getDurationString(pwr.post_effects[i].duration, 2);
 				}
 				else {
