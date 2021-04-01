@@ -96,7 +96,7 @@ void EventManager::loadEvent(FileParser &infile, Event* evnt) {
 		evnt->type = infile.val;
 	}
 	else if (infile.key == "activate") {
-		// @ATTR event.activate|["on_trigger", "on_load", "on_leave", "on_mapexit", "on_clear", "static"]|Set the state in which the event will be activated (map events only).
+		// @ATTR event.activate|["on_trigger", "on_load", "on_leave", "on_mapexit", "on_clear", "static"]|Set the state in which the event will be activated (map events only). on_trigger = the player is standing in the event area or the player interacts with the hotspot. on_mapexit = as the player leaves the map. on_leave = as the player steps outside of an event area they were previously inside of. on_load = as the player enters a map. on_clear = all of the enemies on a map have been defeated. static = constantly, every frame.
 		if (infile.val == "on_trigger") {
 			evnt->activate_type = Event::ACTIVATE_ON_TRIGGER;
 		}
