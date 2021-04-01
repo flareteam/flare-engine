@@ -70,6 +70,7 @@ Engine fixes:
 * Fix 'corpse_timeout' in engine/misc.txt being parsed incorrectly (r-a-cristian-93)
 * Reworked camera speed curve to prevent graphical "wiggle" during slow movement.
 * Fix missing effect description text in power tooltips when using built-in types.
+* Fix static events not executing on the same frame as on_load events.
 
 Game updates:
 

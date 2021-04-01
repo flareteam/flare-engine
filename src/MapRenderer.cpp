@@ -814,6 +814,21 @@ void MapRenderer::executeOnLoadEvents() {
 				it = events.erase(it);
 		}
 	}
+
+	// Also check static events, as they should execute alongside on_load events
+	// Yet, this should be done *after* the on_load events to not break old behavior.
+	// That's why we don't just check static events in the above loop
+	for (it = events.end(); it != events.begin(); ) {
+		--it;
+
+		// skip inactive events
+		if (!EventManager::isActive(*it)) continue;
+
+		if ((*it).activate_type == Event::ACTIVATE_STATIC) {
+			if (EventManager::executeEvent(*it))
+				it = events.erase(it);
+		}
+	}
 }
 
 void MapRenderer::executeOnMapExitEvents() {
