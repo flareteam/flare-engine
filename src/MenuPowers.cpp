@@ -394,12 +394,16 @@ void MenuPowers::loadTab(FileParser &infile) {
 }
 
 void MenuPowers::loadPower(FileParser &infile) {
+	// base power cell storage hasn't been set up!
+	if (power_cell.back().cells.empty())
+		return;
+
 	// @ATTR power.id|int|A power id from powers/powers.txt for this slot.
 	if (infile.key == "id") {
 		int id = Parse::popFirstInt(infile.val);
 		if (id > 0) {
 			skip_section = false;
-			power_cell.back().cells.back().id = id;
+			power_cell.back().cells[0].id = id;
 		}
 		else {
 			infile.error("MenuPowers: Power index out of bounds 1-%d, skipping power.", INT_MAX);
@@ -407,7 +411,7 @@ void MenuPowers::loadPower(FileParser &infile) {
 		return;
 	}
 
-	if (power_cell.back().cells.back().id <= 0) {
+	if (power_cell.back().cells[0].id <= 0) {
 		skip_section = true;
 		power_cell.pop_back();
 		slots.pop_back();
@@ -428,23 +432,23 @@ void MenuPowers::loadPower(FileParser &infile) {
 		size_t prim_stat_index = eset->primary_stats.getIndexByID(prim_stat);
 
 		if (prim_stat_index != eset->primary_stats.list.size()) {
-			power_cell.back().cells.back().requires_primary[prim_stat_index] = Parse::toInt(infile.val);
+			power_cell.back().cells[0].requires_primary[prim_stat_index] = Parse::toInt(infile.val);
 		}
 		else {
 			infile.error("MenuPowers: '%s' is not a valid primary stat.", prim_stat.c_str());
 		}
 	}
 	// @ATTR power.requires_point|bool|Power requires a power point to unlock.
-	else if (infile.key == "requires_point") power_cell.back().cells.back().requires_point = Parse::toBool(infile.val);
+	else if (infile.key == "requires_point") power_cell.back().cells[0].requires_point = Parse::toBool(infile.val);
 	// @ATTR power.requires_level|int|Power requires at least this level for the hero.
-	else if (infile.key == "requires_level") power_cell.back().cells.back().requires_level = Parse::toInt(infile.val);
+	else if (infile.key == "requires_level") power_cell.back().cells[0].requires_level = Parse::toInt(infile.val);
 	// @ATTR power.requires_power|power_id|Power requires another power id.
-	else if (infile.key == "requires_power") power_cell.back().cells.back().requires_power.push_back(Parse::toPowerID(infile.val));
+	else if (infile.key == "requires_power") power_cell.back().cells[0].requires_power.push_back(Parse::toPowerID(infile.val));
 
 	// @ATTR power.visible_requires_status|repeatable(string)|Hide the power if we don't have this campaign status.
-	else if (infile.key == "visible_requires_status") power_cell.back().cells.back().visible_requires_status.push_back(camp->registerStatus(infile.val));
+	else if (infile.key == "visible_requires_status") power_cell.back().cells[0].visible_requires_status.push_back(camp->registerStatus(infile.val));
 	// @ATTR power.visible_requires_not_status|repeatable(string)|Hide the power if we have this campaign status.
-	else if (infile.key == "visible_requires_not_status") power_cell.back().cells.back().visible_requires_not.push_back(camp->registerStatus(infile.val));
+	else if (infile.key == "visible_requires_not_status") power_cell.back().cells[0].visible_requires_not.push_back(camp->registerStatus(infile.val));
 
 	// @ATTR power.upgrades|list(power_id)|A list of upgrade power ids that this power slot can upgrade to. Each of these powers should have a matching upgrade section.
 	else if (infile.key == "upgrades") {
