@@ -52,15 +52,18 @@ public:
 class MenuPowersCell {
 public:
 	MenuPowersCell();
-	bool isVisible();
 
 	PowerID id;
-	int requires_level;
 	bool requires_point;
+
+	int requires_level;
 	std::vector<int> requires_primary;
 	std::vector<PowerID> requires_power;
-	std::vector<StatusID> visible_requires_status;
-	std::vector<StatusID> visible_requires_not;
+	std::vector<StatusID> requires_status;
+	std::vector<StatusID> requires_not_status;
+
+	bool visible;
+	bool visible_when_locked;
 
 	int upgrade_level;
 	bool passive_on;
@@ -103,6 +106,7 @@ private:
 	bool checkUpgrade(MenuPowersCell* pcell);
 	void lockCell(MenuPowersCell* pcell);
 	bool isBonusCell(MenuPowersCell* pcell);
+	bool isCellVisible(MenuPowersCell* pcell);
 
 	MenuPowersCell* getCellByPowerIndex(PowerID power_index);
 

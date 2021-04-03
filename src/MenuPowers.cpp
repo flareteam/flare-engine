@@ -55,29 +55,19 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 MenuPowersCell::MenuPowersCell()
 	: id(-1)
-	, requires_level(0)
 	, requires_point(false)
+	, requires_level(0)
 	, requires_primary(eset->primary_stats.list.size(), 0)
 	, requires_power()
-	, visible_requires_status()
-	, visible_requires_not()
+	, requires_status()
+	, requires_not_status()
+	, visible(true)
+	, visible_when_locked(true)
 	, upgrade_level(0)
 	, passive_on(false)
 	, is_unlocked(false)
 	, group(0)
 	, next(NULL) {
-}
-
-bool MenuPowersCell::isVisible() {
-	for (size_t i = 0; i < visible_requires_status.size(); ++i)
-		if (!camp->checkStatus(visible_requires_status[i]))
-			return false;
-
-	for (size_t i = 0; i < visible_requires_not.size(); ++i)
-		if (camp->checkStatus(visible_requires_not[i]))
-			return false;
-
-	return true;
 }
 
 MenuPowersCellGroup::MenuPowersCellGroup()
@@ -426,6 +416,9 @@ void MenuPowers::loadPower(FileParser &infile) {
 	// @ATTR power.position|point|Position of this power icon; relative to MenuPowers "pos".
 	else if (infile.key == "position") power_cell.back().pos = Parse::toPoint(infile.val);
 
+	// @ATTR power.requires_point|bool|Power requires a power point to unlock.
+	else if (infile.key == "requires_point") power_cell.back().cells[0].requires_point = Parse::toBool(infile.val);
+
 	// @ATTR power.requires_primary|predefined_string, int : Primary stat name, Required value|Power requires this primary stat to be at least the specificed value.
 	else if (infile.key == "requires_primary") {
 		std::string prim_stat = Parse::popFirstString(infile.val);
@@ -438,17 +431,27 @@ void MenuPowers::loadPower(FileParser &infile) {
 			infile.error("MenuPowers: '%s' is not a valid primary stat.", prim_stat.c_str());
 		}
 	}
-	// @ATTR power.requires_point|bool|Power requires a power point to unlock.
-	else if (infile.key == "requires_point") power_cell.back().cells[0].requires_point = Parse::toBool(infile.val);
 	// @ATTR power.requires_level|int|Power requires at least this level for the hero.
 	else if (infile.key == "requires_level") power_cell.back().cells[0].requires_level = Parse::toInt(infile.val);
 	// @ATTR power.requires_power|power_id|Power requires another power id.
 	else if (infile.key == "requires_power") power_cell.back().cells[0].requires_power.push_back(Parse::toPowerID(infile.val));
+	// @ATTR power.requires_status|repeatable(string)|Power requires this campaign status.
+	else if (infile.key == "requires_status") power_cell.back().cells[0].requires_status.push_back(camp->registerStatus(infile.val));
+	// @ATTR power.requires_not_status|repeatable(string)|Power requires not having this campaign status.
+	else if (infile.key == "requires_not_status") power_cell.back().cells[0].requires_not_status.push_back(camp->registerStatus(infile.val));
 
-	// @ATTR power.visible_requires_status|repeatable(string)|Hide the power if we don't have this campaign status.
-	else if (infile.key == "visible_requires_status") power_cell.back().cells[0].visible_requires_status.push_back(camp->registerStatus(infile.val));
-	// @ATTR power.visible_requires_not_status|repeatable(string)|Hide the power if we have this campaign status.
-	else if (infile.key == "visible_requires_not_status") power_cell.back().cells[0].visible_requires_not.push_back(camp->registerStatus(infile.val));
+	// @ATTR power.visible_requires_status|repeatable(string)|(Deprecated as of v1.11.75) Hide the power if we don't have this campaign status.
+	else if (infile.key == "visible_requires_status") {
+		infile.error("MenuPowers: visible_requires_status is deprecated. Use requires_status and visible_when_locked=false instead.");
+		power_cell.back().cells[0].requires_status.push_back(camp->registerStatus(infile.val));
+		power_cell.back().cells[0].visible_when_locked = false;
+	}
+	// @ATTR power.visible_requires_not_status|repeatable(string)|(Deprecated as of v1.11.75) Hide the power if we have this campaign status.
+	else if (infile.key == "visible_requires_not_status") {
+		infile.error("MenuPowers: visible_requires_not_status is deprecated. Use requires_not_status and visible_when_locked=false instead.");
+		power_cell.back().cells[0].requires_not_status.push_back(camp->registerStatus(infile.val));
+		power_cell.back().cells[0].visible_when_locked = false;
+	}
 
 	// @ATTR power.upgrades|list(power_id)|A list of upgrade power ids that this power slot can upgrade to. Each of these powers should have a matching upgrade section.
 	else if (infile.key == "upgrades") {
@@ -471,6 +474,11 @@ void MenuPowers::loadPower(FileParser &infile) {
 				power_cell.back().upgrade_button = new WidgetButton("images/menus/buttons/button_plus.png");
 		}
 	}
+
+	// @ATTR power.visible|bool|Controls whether or not a power is visible or hidden regardless of unlocked state. Defaults to true.
+	else if (infile.key == "visible") power_cell.back().cells[0].visible = Parse::toBool(infile.val);
+	// @ATTR power.visible_when_locked|bool|Controls whether or not a power is visible or hidden when the power is locked. Defaults to true.
+	else if (infile.key == "visible_when_locked") power_cell.back().cells[0].visible_when_locked = Parse::toBool(infile.val);
 
 	else infile.error("MenuPowers: '%s' is not a valid key.", infile.key.c_str());
 }
@@ -512,11 +520,28 @@ void MenuPowers::loadUpgrade(FileParser &infile, std::vector<MenuPowersCell>& po
 	else if (infile.key == "requires_level") power_cell_upgrade.back().requires_level = Parse::toInt(infile.val);
 	// @ATTR upgrade.requires_power|int|Upgrade requires another power id.
 	else if (infile.key == "requires_power") power_cell_upgrade.back().requires_power.push_back(Parse::toPowerID(infile.val));
+	// @ATTR upgrade.requires_status|repeatable(string)|Upgrade requires this campaign status.
+	else if (infile.key == "requires_status") power_cell_upgrade.back().requires_status.push_back(camp->registerStatus(infile.val));
+	// @ATTR upgrade.requires_not_status|repeatable(string)|Upgrade requires not having this campaign status.
+	else if (infile.key == "requires_not_status") power_cell_upgrade.back().requires_not_status.push_back(camp->registerStatus(infile.val));
 
-	// @ATTR upgrade.visible_requires_status|repeatable(string)|Hide the upgrade if we don't have this campaign status.
-	else if (infile.key == "visible_requires_status") power_cell_upgrade.back().visible_requires_status.push_back(camp->registerStatus(infile.val));
-	// @ATTR upgrade.visible_requires_not_status|repeatable(string)|Hide the upgrade if we have this campaign status.
-	else if (infile.key == "visible_requires_not_status") power_cell_upgrade.back().visible_requires_not.push_back(camp->registerStatus(infile.val));
+	// @ATTR upgrade.visible_requires_status|repeatable(string)|(Deprecated as of v1.11.75) Hide the upgrade if we don't have this campaign status.
+	else if (infile.key == "visible_requires_status") {
+		infile.error("MenuPowers: visible_requires_status is deprecated. Use requires_status and visible_when_locked=false instead.");
+		power_cell_upgrade.back().requires_status.push_back(camp->registerStatus(infile.val));
+		power_cell_upgrade.back().visible_when_locked = false;
+	}
+	// @ATTR upgrade.visible_requires_not_status|repeatable(string)|(Deprecated as of v1.11.75) Hide the upgrade if we have this campaign status.
+	else if (infile.key == "visible_requires_not_status") {
+		infile.error("MenuPowers: visible_requires_not_status is deprecated. Use requires_not_status and visible_when_locked=false instead.");
+		power_cell_upgrade.back().requires_not_status.push_back(camp->registerStatus(infile.val));
+		power_cell_upgrade.back().visible_when_locked = false;
+	}
+
+	// @ATTR upgrade.visible|bool|Controls whether or not a power is visible or hidden regardless of unlocked state. Defaults to true.
+	else if (infile.key == "visible") power_cell_upgrade.back().visible = Parse::toBool(infile.val);
+	// @ATTR upgrade.visible_when_locked|bool|Controls whether or not a power is visible or hidden when the power is locked. Defaults to true.
+	else if (infile.key == "visible_when_locked") power_cell_upgrade.back().visible_when_locked = Parse::toBool(infile.val);
 
 	else infile.error("MenuPowers: '%s' is not a valid key.", infile.key.c_str());
 }
@@ -525,13 +550,13 @@ bool MenuPowers::checkRequirements(MenuPowersCell* pcell) {
 	if (!pcell)
 		return false;
 
+	if (pc->stats.level < pcell->requires_level)
+		return false;
+
 	for (size_t i = 0; i < pcell->requires_power.size(); ++i) {
 		if (!checkUnlocked(getCellByPowerIndex(pcell->requires_power[i])))
 			return false;
 	}
-
-	if (pc->stats.level < pcell->requires_level)
-		return false;
 
 	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 		if (pc->stats.get_primary(i) < pcell->requires_primary[i])
@@ -545,6 +570,14 @@ bool MenuPowers::checkRequirements(MenuPowersCell* pcell) {
 			return false;
 	}
 
+	for (size_t i = 0; i < pcell->requires_status.size(); ++i)
+		if (!camp->checkStatus(pcell->requires_status[i]))
+			return false;
+
+	for (size_t i = 0; i < pcell->requires_not_status.size(); ++i)
+		if (camp->checkStatus(pcell->requires_not_status[i]))
+			return false;
+
 	return true;
 }
 
@@ -552,9 +585,6 @@ bool MenuPowers::checkUnlocked(MenuPowersCell* pcell) {
 	// If this power is not in the menu, than it has no requirements
 	if (!pcell)
 		return true;
-
-	if (!pcell->isVisible())
-		return false;
 
 	// If power_id is saved into vector, it's unlocked anyway
 	// check if the unlocked flag is set and check the player's power list
@@ -578,9 +608,6 @@ bool MenuPowers::checkUnlock(MenuPowersCell* pcell) {
 	// If this power is not in the menu, than it has no requirements
 	if (!pcell)
 		return true;
-
-	if (!pcell->isVisible())
-		return false;
 
 	// If we already have a power, don't try to unlock it
 	if (checkUnlocked(pcell))
@@ -644,6 +671,19 @@ bool MenuPowers::isBonusCell(MenuPowersCell* pcell) {
 	return pcell == power_cell[pcell->group].getBonusCurrent(power_cell[pcell->group].getCurrent());
 }
 
+bool MenuPowers::isCellVisible(MenuPowersCell* pcell) {
+	if (!pcell)
+		return false;
+
+	if (!pcell->visible)
+		return false;
+
+	if (!pcell->visible_when_locked && !checkUnlocked(pcell))
+		return false;
+
+	return true;
+}
+
 MenuPowersCell* MenuPowers::getCellByPowerIndex(PowerID power_index) {
 	// Powers can not have an id of 0
 	if (power_index == 0)
@@ -695,7 +735,7 @@ void MenuPowers::setUnlockedPowers() {
 			}
 
 			if (power_cell[i].cells[j].is_unlocked) {
-				if (!power_cell[i].cells[j].isVisible() || !checkRequirements(&power_cell[i].cells[j])) {
+				if (!checkRequirements(&power_cell[i].cells[j])) {
 					lockCell(&power_cell[i].cells[j]);
 					did_cell_lock = true;
 				}
@@ -1220,7 +1260,7 @@ void MenuPowers::renderPowers(int tab_num) {
 		if (power_cell[i].tab != tab_num) continue;
 
 		MenuPowersCell* slot_cell = power_cell[i].getCurrent();
-		if (!slot_cell || !slot_cell->isVisible())
+		if (!slot_cell || !isCellVisible(slot_cell))
 			continue;
 
 		if (slots[i])
@@ -1281,7 +1321,7 @@ void MenuPowers::logic() {
 	for (size_t i=0; i<power_cell.size(); i++) {
 		// make sure invisible cells are skipped in the tablist
 		if (visible && slots[i])
-			slots[i]->enable_tablist_nav = power_cell[i].getCurrent()->isVisible();
+			slots[i]->enable_tablist_nav = isCellVisible(power_cell[i].getCurrent());
 
 		// disable upgrade buttons by default
 		if (power_cell[i].upgrade_button != NULL) {
@@ -1296,12 +1336,12 @@ void MenuPowers::logic() {
 				upgradePower(pcell, UPGRADE_POWER_ALL_TABS);
 				pcell = power_cell[i].getCurrent();
 				if (power_cell[i].upgrade_button != NULL)
-					power_cell[i].upgrade_button->enabled = (checkUpgrade(pcell) && pc->stats.hp > 0);
+					power_cell[i].upgrade_button->enabled = (pc->stats.hp > 0 && isCellVisible(pcell) && checkUpgrade(pcell));
 			}
 			else {
 				// power point required or no upgrade available; stop trying to upgrade
 				if (power_cell[i].upgrade_button != NULL)
-					power_cell[i].upgrade_button->enabled = pc->stats.hp > 0;
+					power_cell[i].upgrade_button->enabled = (pc->stats.hp > 0 && isCellVisible(pcell));
 				break;
 			}
 		}
@@ -1431,7 +1471,7 @@ void MenuPowers::renderTooltips(const Point& position) {
 			continue;
 
 		MenuPowersCell* tip_cell = power_cell[i].getCurrent();
-		if (!tip_cell->isVisible())
+		if (!isCellVisible(tip_cell))
 			continue;
 
 		if (slots[i] && Utils::isWithinRect(slots[i]->pos, position)) {
@@ -1471,7 +1511,7 @@ PowerID MenuPowers::click(const Point& mouse) {
 			}
 
 			MenuPowersCell* pcell = power_cell[i].getCurrent();
-			if (!pcell)
+			if (!pcell || !isCellVisible(pcell))
 				return 0;
 
 			if (checkUnlock(pcell) && points_left > 0 && pcell->requires_point) {

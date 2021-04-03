@@ -30,6 +30,8 @@ Engine features:
 * Player 'melee_range' is now configurable in engine/stats.txt.
 * Added comparison tooltips for items. These can be disabled in the Interface settings. (r-a-cristian-93, Justin Jacobs)
 * Added 'parallax_layers' property to Events. This functions exactly like the Map property of the same name.
+* Added 'visible' and 'visible_when_locked' to powers and upgrades in power trees.
+* Added 'requires_status' and 'requires_not_status' to powers and upgrades in power trees. 'visible_requires_status' and 'visible_requires_not_status' have been marked as deprecated.
 
 Engine fixes:
 
