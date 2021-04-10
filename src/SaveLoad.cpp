@@ -211,45 +211,30 @@ void SaveLoad::saveGame() {
 		platform.FSCommit();
 	}
 
-	// Save stash
-	ss.str("");
-	ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/" << game_slot <<"/stash_HC.txt";
-	outfile.open(Filesystem::convertSlashes(ss.str()).c_str(), std::ios::out);
+	// Save stashes
+	for (size_t i = 0; i < menu->stash->tabs.size(); ++i) {
+		// shared stashes are not saved for permadeath characters
+		if (pc->stats.permadeath && !menu->stash->tabs[i].is_private)
+			continue;
 
-	if (outfile.is_open()) {
-
-		// comment
-		outfile << "## flare-engine stash file ##" << "\n";
-
-		outfile << "quantity=" << menu->stash->stock[MenuStash::STASH_PRIVATE].getQuantities() << "\n";
-		outfile << "item=" << menu->stash->stock[MenuStash::STASH_PRIVATE].getItems() << "\n";
-
-		outfile << std::endl;
-
-		if (outfile.bad()) Utils::logError("SaveLoad: Unable to save stash. No write access or disk is full!");
-		outfile.close();
-		outfile.clear();
-
-		platform.FSCommit();
-	}
-
-	// shared stash. Not used by permadeath characters
-	if (!pc->stats.permadeath) {
 		ss.str("");
-		ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/stash.txt";
+		ss << settings->path_user << "saves/" << eset->misc.save_prefix;
+		if (menu->stash->tabs[i].is_private)
+			ss << "/" << game_slot;
+		ss << "/" << menu->stash->tabs[i].filename;
 		outfile.open(Filesystem::convertSlashes(ss.str()).c_str(), std::ios::out);
 
 		if (outfile.is_open()) {
 
 			// comment
-			outfile << "## flare-engine shared stash file ##" << "\n";
+			outfile << "# flare-engine stash file: \"" << menu->stash->tabs[i].id << "\"\n";
 
-			outfile << "quantity=" << menu->stash->stock[MenuStash::STASH_SHARED].getQuantities() << "\n";
-			outfile << "item=" << menu->stash->stock[MenuStash::STASH_SHARED].getItems() << "\n";
+			outfile << "quantity=" << menu->stash->tabs[i].stock.getQuantities() << "\n";
+			outfile << "item=" << menu->stash->tabs[i].stock.getItems() << "\n";
 
 			outfile << std::endl;
 
-			if (outfile.bad()) Utils::logError("SaveLoad: Unable to save shared stash. No write access or disk is full!");
+			if (outfile.bad()) Utils::logError("SaveLoad: Unable to save stash. No write access or disk is full!");
 			outfile.close();
 			outfile.clear();
 
@@ -493,41 +478,32 @@ void SaveLoad::loadStash() {
 	FileParser infile;
 	std::stringstream ss;
 
-	ss.str("");
-	ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/" << game_slot << "/stash_HC.txt";
-	if (infile.open(ss.str(), !FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
-		while (infile.next()) {
-			if (infile.key == "item") {
-				menu->stash->stock[MenuStash::STASH_PRIVATE].setItems(infile.val);
-			}
-			else if (infile.key == "quantity") {
-				menu->stash->stock[MenuStash::STASH_PRIVATE].setQuantities(infile.val);
-			}
-		}
-		infile.close();
-	}
-	else Utils::logInfo("SaveLoad: Could not open stash file '%s'. This may be because it hasn't been created yet.", ss.str().c_str());
+	for (size_t i = 0; i < menu->stash->tabs.size(); ++i) {
+		// shared stashes are not loaded for permadeath characters
+		if (pc->stats.permadeath && !menu->stash->tabs[i].is_private)
+			continue;
 
-	// load the shared stash for non-permadeath characters
-	if (!pc->stats.permadeath) {
 		ss.str("");
-		ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/stash.txt";
+		ss << settings->path_user << "saves/" << eset->misc.save_prefix;
+		if (menu->stash->tabs[i].is_private)
+			ss << "/" << game_slot;
+		ss << "/" << menu->stash->tabs[i].filename;
+
 		if (infile.open(ss.str(), !FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
 			while (infile.next()) {
 				if (infile.key == "item") {
-					menu->stash->stock[MenuStash::STASH_SHARED].setItems(infile.val);
+					menu->stash->tabs[i].stock.setItems(infile.val);
 				}
 				else if (infile.key == "quantity") {
-					menu->stash->stock[MenuStash::STASH_SHARED].setQuantities(infile.val);
+					menu->stash->tabs[i].stock.setQuantities(infile.val);
 				}
 			}
 			infile.close();
 		}
-		else Utils::logInfo("SaveLoad: Could not open shared stash file '%s'. This may be because it hasn't been created yet.", ss.str().c_str());
-	}
+		else Utils::logInfo("SaveLoad: Could not open stash file '%s'. This may be because it hasn't been created yet.", ss.str().c_str());
 
-	menu->stash->stock[MenuStash::STASH_PRIVATE].clean();
-	menu->stash->stock[MenuStash::STASH_SHARED].clean();
+		menu->stash->tabs[i].stock.clean();
+	}
 }
 
 /**

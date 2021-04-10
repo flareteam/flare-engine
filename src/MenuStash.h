@@ -32,6 +32,23 @@ class StatBlock;
 class WidgetButton;
 class WidgetTabControl;
 
+class MenuStashTab {
+public:
+	static const bool IS_PRIVATE = true;
+
+	MenuStashTab(const std::string& id, const std::string& _name, const std::string& _filename, bool _is_private);
+	~MenuStashTab();
+
+	std::string id;
+	std::string name;
+	std::string filename;
+	bool is_private;
+	bool is_legacy;
+
+	MenuItemStorage stock;
+	TabList tablist;
+};
+
 class MenuStash : public Menu {
 private:
 	WidgetButton *closeButton;
@@ -39,16 +56,11 @@ private:
 	WidgetLabel label_title;
 	WidgetLabel label_currency;
 
-	int activetab;
+	size_t activetab;
 
 public:
 	static const int NO_SLOT = -1;
 	static const bool ADD_PLAY_SOUND = true;
-
-	enum {
-		STASH_PRIVATE = 0,
-		STASH_SHARED = 1
-	};
 
 	explicit MenuStash();
 	~MenuStash();
@@ -66,8 +78,8 @@ public:
 	void removeFromPrevSlot(int quantity);
 	void enableSharedTab(bool permadeath);
 
-	void setTab(int tab);
-	int getTab() { return activetab; }
+	void setTab(size_t tab);
+	size_t getTab();
 
 	void lockTabControl();
 	void unlockTabControl();
@@ -75,13 +87,10 @@ public:
 	void defocusTabLists();
 
 	Rect slots_area;
-	MenuItemStorage stock[2];
+	std::vector<MenuStashTab> tabs;
 	bool updated;
 
 	std::queue<ItemStack> drop_stack;
-
-	TabList tablist_private;
-	TabList tablist_shared;
 };
 
 

@@ -77,11 +77,26 @@ int WidgetTabControl::getActiveTab() {
  */
 void WidgetTabControl::setActiveTab(unsigned tab) {
 	if (tab > tabs.size())
-		active_tab = 0;
+		tab = 0;
 	else if (tab == tabs.size())
-		active_tab = static_cast<unsigned>(tabs.size())-1;
-	else
-		active_tab = tab;
+		tab = static_cast<unsigned>(tabs.size()-1);
+
+	// Set the tab. If the specified tab is not enabled, get the first enabled tab.
+	for (unsigned i = tab; tab < tabs.size(); ++i) {
+		if (enabled[i]) {
+			active_tab = i;
+			return;
+		}
+	}
+	for (unsigned i = 0; i < tab; ++i) {
+		if (enabled[i]) {
+			active_tab = i;
+			return;
+		}
+	}
+
+	// no enabled tabs, just return what we started with
+	active_tab = tab;
 }
 
 /**

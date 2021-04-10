@@ -193,8 +193,9 @@ void MenuManager::setDragIconItem(ItemStack stack) {
 
 void MenuManager::handleKeyboardNavigation() {
 
-	stash->tablist_private.setNextTabList(NULL);
-	stash->tablist_shared.setNextTabList(NULL);
+	for (size_t i = 0; i < stash->tabs.size(); ++i) {
+		stash->tabs[i].tablist.setNextTabList(NULL);
+	}
 	vendor->tablist_buy.setNextTabList(NULL);
 	vendor->tablist_sell.setNextTabList(NULL);
 	chr->tablist.setNextTabList(NULL);
@@ -219,8 +220,9 @@ void MenuManager::handleKeyboardNavigation() {
 
 	if (drag_src == DRAG_SRC_NONE) {
 		if (inv->visible) {
-			stash->tablist_private.setNextTabList(&inv->tablist);
-			stash->tablist_shared.setNextTabList(&inv->tablist);
+			for (size_t i = 0; i < stash->tabs.size(); ++i) {
+				stash->tabs[i].tablist.setNextTabList(&inv->tablist);
+			}
 			vendor->tablist_buy.setNextTabList(&inv->tablist);
 			vendor->tablist_sell.setNextTabList(&inv->tablist);
 			chr->tablist.setNextTabList(&inv->tablist);
@@ -240,8 +242,9 @@ void MenuManager::handleKeyboardNavigation() {
 			}
 		}
 		else if (pow->visible) {
-			stash->tablist_private.setNextTabList(&pow->tablist);
-			stash->tablist_shared.setNextTabList(&pow->tablist);
+			for (size_t i = 0; i < stash->tabs.size(); ++i) {
+				stash->tabs[i].tablist.setNextTabList(&pow->tablist);
+			}
 			vendor->tablist_buy.setNextTabList(&pow->tablist);
 			vendor->tablist_sell.setNextTabList(&pow->tablist);
 			chr->tablist.setNextTabList(&pow->tablist);
@@ -260,8 +263,9 @@ void MenuManager::handleKeyboardNavigation() {
 	// stash and vendor always start locked
 	if (!stash->visible) {
 		stash->tablist.lock();
-		stash->tablist_private.lock();
-		stash->tablist_shared.lock();
+		for (size_t i = 0; i < stash->tabs.size(); ++i) {
+			stash->tabs[i].tablist.lock();
+		}
 	}
 	if (!vendor->visible) {
 		vendor->tablist.lock();
@@ -852,8 +856,9 @@ void MenuManager::logic() {
 					}
 				}
 				else if (stash->visible && Utils::isWithinRect(stash->window_area, inpt->mouse)) {
-					stash->stock[MenuStash::STASH_PRIVATE].drag_prev_slot = -1;
-					stash->stock[MenuStash::STASH_SHARED].drag_prev_slot = -1;
+					for (size_t i = 0; i < stash->tabs.size(); ++i) {
+						stash->tabs[i].stock.drag_prev_slot = -1;
+					}
 					if (!stash->drop(inpt->mouse, drag_stack)) {
 						inv->itemReturn(stash->drop_stack.front());
 						stash->drop_stack.pop();
@@ -1066,9 +1071,9 @@ void MenuManager::dragAndDropWithKeyboard() {
 	// stash menu
 	if (stash->visible && stash->getCurrentTabList() && drag_src != DRAG_SRC_ACTIONBAR) {
 		int slot_index = stash->getCurrentTabList()->getCurrent();
-		int tab = stash->getTab();
-		WidgetSlot::CLICK_TYPE slotClick = stash->stock[tab].slots[slot_index]->checkClick();
-		Point src_slot(stash->stock[tab].slots[slot_index]->pos.x, stash->stock[tab].slots[slot_index]->pos.y);
+		size_t tab = stash->getTab();
+		WidgetSlot::CLICK_TYPE slotClick = stash->tabs[tab].stock.slots[slot_index]->checkClick();
+		Point src_slot(stash->tabs[tab].stock.slots[slot_index]->pos.x, stash->tabs[tab].stock.slots[slot_index]->pos.y);
 
 		// pick up item
 		if (slotClick == WidgetSlot::CHECKED && drag_stack.empty()) {
@@ -1084,7 +1089,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 		}
 		// rearrange item
 		else if (slotClick == WidgetSlot::CHECKED && !drag_stack.empty()) {
-			stash->stock[tab].slots[slot_index]->checked = false;
+			stash->tabs[tab].stock.slots[slot_index]->checked = false;
 			if (!stash->drop(src_slot, drag_stack)) {
 				drop_stack.push(stash->drop_stack.front());
 				stash->drop_stack.pop();
@@ -1212,8 +1217,9 @@ void MenuManager::resetDrag() {
 
 	vendor->stock[ItemManager::VENDOR_BUY].drag_prev_slot = -1;
 	vendor->stock[ItemManager::VENDOR_SELL].drag_prev_slot = -1;
-	stash->stock[MenuStash::STASH_PRIVATE].drag_prev_slot = -1;
-	stash->stock[MenuStash::STASH_SHARED].drag_prev_slot = -1;
+	for (size_t i = 0; i < stash->tabs.size(); ++i) {
+		stash->tabs[i].stock.drag_prev_slot = -1;
+	}
 	inv->drag_prev_src = -1;
 	inv->inventory[MenuInventory::EQUIPMENT].drag_prev_slot = -1;
 	inv->inventory[MenuInventory::CARRIED].drag_prev_slot = -1;
@@ -1346,10 +1352,10 @@ void MenuManager::handleKeyboardTooltips() {
 
 	if (stash->visible && stash->getCurrentTabList()) {
 		int slot_index = stash->getCurrentTabList()->getCurrent();
-		int tab = stash->getTab();
+		size_t tab = stash->getTab();
 
-		keydrag_pos.x = stash->stock[tab].slots[slot_index]->pos.x;
-		keydrag_pos.y = stash->stock[tab].slots[slot_index]->pos.y;
+		keydrag_pos.x = stash->tabs[tab].stock.slots[slot_index]->pos.x;
+		keydrag_pos.y = stash->tabs[tab].stock.slots[slot_index]->pos.y;
 
 		pushMatchingItemsOf(keydrag_pos);
 		stash->renderTooltips(keydrag_pos);
@@ -1473,9 +1479,9 @@ void MenuManager::pushMatchingItemsOf(const Point& hov_pos) {
 			hov_stack = vendor->stock[area].getItemStackAtPos(hov_pos);
 	}
 	else if (stash->visible && Utils::isWithinRect(stash->window_area, hov_pos)) {
-		area = stash->getTab();
+		area = static_cast<int>(stash->getTab());
 		if (area >= 0)
-			hov_stack = stash->stock[area].getItemStackAtPos(hov_pos);
+			hov_stack = stash->tabs[area].stock.getItemStackAtPos(hov_pos);
 	}
 
 	// we assume that a non-empty item type means that there is a primary tooltip
