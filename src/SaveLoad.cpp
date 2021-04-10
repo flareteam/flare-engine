@@ -200,7 +200,9 @@ void SaveLoad::saveGame() {
 			}
 		}
 
-		outfile << "questlog_dismissed=" << !menu->act->requires_attention[MenuActionBar::MENU_LOG];
+		outfile << "questlog_dismissed=" << !menu->act->requires_attention[MenuActionBar::MENU_LOG] << "\n";
+
+		outfile << "stash_tab=" << menu->stash->getTab();
 
 		outfile << std::endl;
 
@@ -258,6 +260,7 @@ void SaveLoad::loadGame() {
 	int saved_hp = 0;
 	int saved_mp = 0;
 	int currency = 0;
+	size_t stash_tab = 0;
 	Version save_version(VersionInfo::MIN);
 
 	FileParser infile;
@@ -371,6 +374,7 @@ void SaveLoad::loadGame() {
 				}
 			}
 			else if (infile.key == "questlog_dismissed") pc->questlog_dismissed = Parse::toBool(infile.val);
+			else if (infile.key == "stash_tab") stash_tab = Parse::toInt(infile.val);
 		}
 
 		infile.close();
@@ -422,6 +426,8 @@ void SaveLoad::loadGame() {
 
 	// disable the shared stash for permadeath characters
 	menu->stash->enableSharedTab(pc->stats.permadeath);
+
+	menu->stash->setTab(stash_tab);
 }
 
 /**

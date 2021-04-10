@@ -451,8 +451,14 @@ void MenuStash::setTab(size_t tab) {
 			tabs[i].tablist.defocus();
 		}
 	}
-	tab_control->setActiveTab(static_cast<unsigned>(tab));
-	activetab = tab;
+	if (tab >= tabs.size()) {
+		tab_control->setActiveTab(0);
+		activetab = 0;
+	}
+	else {
+		tab_control->setActiveTab(static_cast<unsigned>(tab));
+		activetab = tab;
+	}
 }
 
 size_t MenuStash::getTab() {

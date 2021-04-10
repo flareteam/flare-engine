@@ -746,8 +746,6 @@ void GameStatePlay::checkStash() {
 		menu->closeAll();
 		menu->inv->visible = true;
 		menu->stash->visible = true;
-		// TODO remember last used tab per-save
-		menu->stash->setTab(0);
 		mapr->stash = false;
 		menu->stash->validate(menu->drop_stack);
 	}
