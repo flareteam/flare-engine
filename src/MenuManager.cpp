@@ -706,7 +706,7 @@ void MenuManager::logic() {
 						stash->itemReturn(inv->drop_stack.front());
 						inv->drop_stack.pop();
 					}
-					stash->updated = true;
+					stash->tabs[stash->getTab()].updated = true;
 				}
 				else {
 					// start dragging a stash item
@@ -903,7 +903,7 @@ void MenuManager::logic() {
 						stash->itemReturn(inv->drop_stack.front());
 						inv->drop_stack.pop();
 					}
-					stash->updated = true;
+					stash->tabs[stash->getTab()].updated = true;
 				}
 				else if (stash->visible && Utils::isWithinRect(stash->window_area, inpt->mouse)) {
 					if (!stash->drop(inpt->mouse,drag_stack)) {
@@ -913,7 +913,7 @@ void MenuManager::logic() {
 				}
 				else {
 					drop_stack.push(drag_stack);
-					stash->updated = true;
+					stash->tabs[stash->getTab()].updated = true;
 				}
 			}
 
@@ -1109,7 +1109,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 			drag_stack.clear();
 			keyboard_dragging = false;
 			sticky_dragging = false;
-			stash->updated = true;
+			stash->tabs[stash->getTab()].updated = true;
 		}
 	}
 

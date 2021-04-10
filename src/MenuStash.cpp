@@ -47,6 +47,7 @@ MenuStashTab::MenuStashTab(const std::string& _id, const std::string& _name, con
 	, filename(_filename)
 	, is_private(_is_private)
 	, is_legacy(false)
+	, updated(false)
 	, stock()
 {}
 
@@ -59,7 +60,6 @@ MenuStash::MenuStash()
 	, tab_control(new WidgetTabControl())
 	, activetab(0)
 	, tabs()
-	, updated(false)
 {
 	setBackground("images/menus/stash.png");
 
@@ -313,11 +313,11 @@ bool MenuStash::drop(const Point& position, ItemStack stack) {
 			// Swap the two stacks
 			itemReturn(tabs[activetab].stock[slot]);
 			tabs[activetab].stock[slot] = stack;
-			updated = true;
+			tabs[activetab].updated = true;
 		}
 		else {
 			itemReturn(stack);
-			updated = true;
+			tabs[activetab].updated = true;
 		}
 	}
 	else {
@@ -355,14 +355,14 @@ bool MenuStash::add(ItemStack stack, int slot, bool play_sound) {
 	ItemStack leftover = tabs[activetab].stock.add(stack, slot);
 	if (!leftover.empty()) {
 		if (leftover.quantity != stack.quantity) {
-			updated = true;
+			tabs[activetab].updated = true;
 		}
 		pc->logMsg(msg->get("Stash is full."), Avatar::MSG_NORMAL);
 		drop_stack.push(leftover);
 		return false;
 	}
 	else {
-		updated = true;
+		tabs[activetab].updated = true;
 	}
 
 	return true;
@@ -414,10 +414,29 @@ void MenuStash::validate(std::queue<ItemStack>& global_drop_stack) {
 				pc->logMsg(msg->get("Can not store item in stash: %s", items->getItemName(stack.item).c_str()), Avatar::MSG_NORMAL);
 				global_drop_stack.push(stack);
 				tabs[tab].stock[i].clear();
-				updated = true;
+				tabs[tab].updated = true;
 			}
 		}
 	}
+}
+
+bool MenuStash::checkUpdates() {
+	bool updated = false;
+
+	for (size_t i = 0; i < tabs.size(); ++i) {
+		if (tabs[i].updated) {
+			tabs[i].updated = false;
+
+			if (eset->misc.save_onstash == EngineSettings::Misc::SAVE_ONSTASH_ALL)
+				updated = true;
+			else if (tabs[i].is_private && eset->misc.save_onstash == EngineSettings::Misc::SAVE_ONSTASH_PRIVATE)
+				updated = true;
+			else if (!tabs[i].is_private && eset->misc.save_onstash == EngineSettings::Misc::SAVE_ONSTASH_SHARED)
+				updated = true;
+		}
+	}
+
+	return updated;
 }
 
 void MenuStash::enableSharedTab(bool permadeath) {

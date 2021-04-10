@@ -44,6 +44,7 @@ public:
 	std::string filename;
 	bool is_private;
 	bool is_legacy;
+	bool updated;
 
 	MenuItemStorage stock;
 	TabList tablist;
@@ -74,6 +75,7 @@ public:
 	void renderTooltips(const Point& position);
 	bool drop(const Point& position, ItemStack stack);
 	void validate(std::queue<ItemStack>& global_drop_stack);
+	bool checkUpdates();
 
 	void removeFromPrevSlot(int quantity);
 	void enableSharedTab(bool permadeath);
@@ -88,7 +90,6 @@ public:
 
 	Rect slots_area;
 	std::vector<MenuStashTab> tabs;
-	bool updated;
 
 	std::queue<ItemStack> drop_stack;
 };

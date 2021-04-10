@@ -768,8 +768,7 @@ void GameStatePlay::checkStash() {
 	}
 
 	// If the stash has been updated, save the game
-	if (menu->stash->updated) {
-		menu->stash->updated = false;
+	if (menu->stash->checkUpdates()) {
 		save_load->saveGame();
 	}
 }

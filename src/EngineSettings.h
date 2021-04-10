@@ -34,6 +34,13 @@ public:
 	public:
 		void load();
 
+		enum {
+			SAVE_ONSTASH_NONE = 0,
+			SAVE_ONSTASH_PRIVATE = 1,
+			SAVE_ONSTASH_SHARED = 2,
+			SAVE_ONSTASH_ALL = 3,
+		};
+
 		bool save_hpmp;
 		int corpse_timeout;
 		bool sell_without_vendor;
@@ -51,6 +58,7 @@ public:
 		bool save_onexit;
 		bool save_pos_onexit;
 		bool save_oncutscene;
+		int save_onstash;
 		bool save_anywhere;
 		float camera_speed;
 		bool save_buyback;

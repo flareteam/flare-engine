@@ -67,6 +67,7 @@ void EngineSettings::Misc::load() {
 	save_onexit = true;
 	save_pos_onexit = false;
 	save_oncutscene = true;
+	save_onstash = SAVE_ONSTASH_ALL;
 	save_anywhere = false;
 	camera_speed = 10.f;
 	save_buyback = true;
@@ -134,6 +135,19 @@ void EngineSettings::Misc::load() {
 			// @ATTR save_oncutscene|bool|Saves the game when triggering any cutscene via an Event.
 			else if (infile.key == "save_oncutscene")
 				save_oncutscene = Parse::toBool(infile.val);
+			// @ATTR save_onstash|[bool, "private", "shared"]|Saves the game when changing the contents of a stash. The default is true (i.e. save when using both stash types). Use caution with the values "private" and false, since not saving shared stashes exposes an item duplication exploit.
+			else if (infile.key == "save_onstash") {
+				if (infile.val == "private")
+					save_onstash = SAVE_ONSTASH_PRIVATE;
+				else if (infile.val == "shared")
+					save_onstash = SAVE_ONSTASH_SHARED;
+				else {
+					if (Parse::toBool(infile.val))
+						save_onstash = SAVE_ONSTASH_ALL;
+					else
+						save_onstash = SAVE_ONSTASH_NONE;
+				}
+			}
 			// @ATTR save_anywhere|bool|Saves the game when using a button.
 			else if (infile.key == "save_anywhere")
 				save_anywhere = Parse::toBool(infile.val);
