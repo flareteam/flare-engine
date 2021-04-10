@@ -584,7 +584,7 @@ void MenuMiniMap::fillEntities() {
 		if (mapr->events[i].getComponent(EventComponent::NPC_HOTSPOT) && EventManager::isActive(mapr->events[i])) {
 			entities[mapr->events[i].location.x][mapr->events[i].location.y] = TILE_NPC;
 		}
-		else if (mapr->events[i].activate_type == Event::ACTIVATE_ON_TRIGGER && mapr->events[i].getComponent(EventComponent::INTERMAP) && EventManager::isActive(mapr->events[i])) {
+		else if ((mapr->events[i].activate_type == Event::ACTIVATE_ON_TRIGGER || mapr->events[i].activate_type == Event::ACTIVATE_ON_INTERACT) && mapr->events[i].getComponent(EventComponent::INTERMAP) && EventManager::isActive(mapr->events[i])) {
 			// TODO use location when hotspot is inappropriate?
 			Point event_pos(mapr->events[i].location.x, mapr->events[i].location.y);
 			for (int j=event_pos.x; j<event_pos.x + mapr->events[i].location.w; ++j) {

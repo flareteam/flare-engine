@@ -894,7 +894,7 @@ void MapRenderer::checkEvents(const FPoint& loc) {
 				}
 			}
 		}
-		else if ((*it).activate_type == -1 || (*it).activate_type == Event::ACTIVATE_ON_TRIGGER) {
+		else if ((*it).activate_type == Event::ACTIVATE_ON_TRIGGER) {
 			if (inside)
 				if (EventManager::executeEvent(*it))
 					it = events.erase(it);
