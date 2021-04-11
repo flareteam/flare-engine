@@ -230,7 +230,7 @@ void GameStatePlay::checkNPCFocus() {
 		focus_npc = npcs->getNearestNPC(pc->stats.pos);
 	}
 	else {
-		focus_npc = npcs->npcFocus(inpt->mouse, mapr->cam, true);
+		focus_npc = npcs->npcFocus(inpt->mouse, mapr->cam.pos, true);
 	}
 
 	if (focus_npc) {
@@ -242,7 +242,7 @@ void GameStatePlay::checkNPCFocus() {
 	}
 	else if (inpt->usingMouse()) {
 		// if we're using a mouse and we didn't select an npc, try selecting a dead one instead
-		Enemy *temp_npc = npcs->npcFocus(inpt->mouse, mapr->cam, false);
+		Enemy *temp_npc = npcs->npcFocus(inpt->mouse, mapr->cam.pos, false);
 		if (temp_npc) {
 			menu->enemy->enemy = temp_npc;
 			menu->enemy->timeout.reset(Timer::BEGIN);
