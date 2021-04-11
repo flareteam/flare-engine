@@ -127,7 +127,7 @@ void EnemyManager::handleNewMap () {
 	// delete existing enemies
 	for (unsigned int i=0; i < enemies.size(); i++) {
 		anim->decreaseCount(enemies[i]->animationSet->getName());
-		if(enemies[i]->stats.hero_ally && !enemies[i]->stats.corpse && enemies[i]->stats.cur_state != StatBlock::ENEMY_DEAD && enemies[i]->stats.cur_state != StatBlock::ENEMY_CRITDEAD && enemies[i]->stats.speed > 0.0f)
+		if(enemies[i]->stats.hero_ally && !enemies[i]->stats.corpse && enemies[i]->stats.cur_state != StatBlock::ENTITY_DEAD && enemies[i]->stats.cur_state != StatBlock::ENTITY_CRITDEAD && enemies[i]->stats.speed > 0.0f)
 			allies.push(enemies[i]);
 		else {
 			enemies[i]->unloadSounds();
@@ -343,7 +343,7 @@ void EnemyManager::handleSpawn() {
 		}
 
 		// special animation state for spawning enemies
-		e->stats.cur_state = StatBlock::ENEMY_SPAWN;
+		e->stats.cur_state = StatBlock::ENTITY_SPAWN;
 
 		//now apply post effects to the spawned enemy
 		if(e->stats.summoned_power_index > 0)
@@ -410,7 +410,7 @@ Enemy* EnemyManager::enemyFocus(const Point& mouse, const FPoint& cam, bool aliv
 	Point p;
 	Rect r;
 	for(unsigned int i = 0; i < enemies.size(); i++) {
-		if(alive_only && (enemies[i]->stats.cur_state == StatBlock::ENEMY_DEAD || enemies[i]->stats.cur_state == StatBlock::ENEMY_CRITDEAD)) {
+		if(alive_only && (enemies[i]->stats.cur_state == StatBlock::ENTITY_DEAD || enemies[i]->stats.cur_state == StatBlock::ENTITY_CRITDEAD)) {
 			continue;
 		}
 		p = Utils::mapToScreen(enemies[i]->stats.pos.x, enemies[i]->stats.pos.y, cam.x, cam.y);
@@ -434,7 +434,7 @@ Enemy* EnemyManager::getNearestEnemy(const FPoint& pos, bool get_corpse, float *
 	float best_distance = std::numeric_limits<float>::max();
 
 	for (unsigned i=0; i<enemies.size(); i++) {
-		if(!get_corpse && (enemies[i]->stats.cur_state == StatBlock::ENEMY_DEAD || enemies[i]->stats.cur_state == StatBlock::ENEMY_CRITDEAD)) {
+		if(!get_corpse && (enemies[i]->stats.cur_state == StatBlock::ENTITY_DEAD || enemies[i]->stats.cur_state == StatBlock::ENTITY_CRITDEAD)) {
 			continue;
 		}
 		if (get_corpse && !enemies[i]->stats.corpse) {

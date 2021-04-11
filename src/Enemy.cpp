@@ -38,7 +38,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 Enemy::Enemy() : Entity() {
 
-	stats.cur_state = StatBlock::ENEMY_STANCE;
+	stats.cur_state = StatBlock::ENTITY_STANCE;
 	stats.cooldown.reset(Timer::END);
 	stats.in_combat = false;
 	stats.join_combat = false;

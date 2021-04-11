@@ -195,7 +195,7 @@ Enemy* NPCManager::npcFocus(const Point& mouse, const FPoint& cam, bool alive_on
 	Point p;
 	Rect r;
 	for(unsigned int i = 0; i < npcs.size(); i++) {
-		if(alive_only && (npcs[i]->stats.cur_state == StatBlock::ENEMY_DEAD || npcs[i]->stats.cur_state == StatBlock::ENEMY_CRITDEAD)) {
+		if(alive_only && (npcs[i]->stats.cur_state == StatBlock::ENTITY_DEAD || npcs[i]->stats.cur_state == StatBlock::ENTITY_CRITDEAD)) {
 			continue;
 		}
 		if (!npcs[i]->stats.hero_ally) {
@@ -222,7 +222,7 @@ Enemy* NPCManager::getNearestNPC(const FPoint& pos, bool get_corpse) {
 	float best_distance = std::numeric_limits<float>::max();
 
 	for (unsigned i=0; i<npcs.size(); i++) {
-		if(!get_corpse && (npcs[i]->stats.cur_state == StatBlock::ENEMY_DEAD || npcs[i]->stats.cur_state == StatBlock::ENEMY_CRITDEAD)) {
+		if(!get_corpse && (npcs[i]->stats.cur_state == StatBlock::ENTITY_DEAD || npcs[i]->stats.cur_state == StatBlock::ENTITY_CRITDEAD)) {
 			continue;
 		}
 		if (get_corpse && !npcs[i]->stats.corpse) {

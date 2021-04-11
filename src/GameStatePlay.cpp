@@ -383,7 +383,7 @@ void GameStatePlay::checkTeleport() {
 			menu->mini->prerender(&mapr->collider, mapr->w, mapr->h);
 
 			// return to title (permadeath) OR auto-save
-			if (pc->stats.permadeath && pc->stats.cur_state == StatBlock::AVATAR_DEAD) {
+			if (pc->stats.permadeath && pc->stats.cur_state == StatBlock::ENTITY_DEAD) {
 				snd->stopMusic();
 				showLoading();
 				setRequestedGameState(new GameStateTitle());
@@ -416,7 +416,7 @@ void GameStatePlay::checkTeleport() {
  * Also check closing the game window entirely.
  */
 void GameStatePlay::checkCancel() {
-	bool save_on_exit = eset->misc.save_onexit && !(pc->stats.permadeath && pc->stats.cur_state == StatBlock::AVATAR_DEAD);
+	bool save_on_exit = eset->misc.save_onexit && !(pc->stats.permadeath && pc->stats.cur_state == StatBlock::ENTITY_DEAD);
 
 	if (save_on_exit && eset->misc.save_pos_onexit) {
 		mapr->respawn_point = pc->stats.pos;
@@ -1003,7 +1003,7 @@ void GameStatePlay::logic() {
 	if (pc->respawn) {
 		pc->stats.alive = true;
 		pc->stats.corpse = false;
-		pc->stats.cur_state = StatBlock::AVATAR_STANCE;
+		pc->stats.cur_state = StatBlock::ENTITY_STANCE;
 		menu->inv->applyEquipment();
 		menu->inv->changed_equipment = true;
 		checkEquipmentChange();

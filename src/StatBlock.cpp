@@ -640,7 +640,7 @@ void StatBlock::takeDamage(int dmg, bool crit, int source_type) {
 		// what about other things that happen in the "dead" entity states?
 
 		if (hero) {
-			cur_state = StatBlock::AVATAR_DEAD;
+			cur_state = StatBlock::ENTITY_DEAD;
 		}
 		else {
 			// enemy died; do rewards
@@ -679,9 +679,9 @@ void StatBlock::takeDamage(int dmg, bool crit, int source_type) {
 			}
 
 			if (crit)
-				cur_state = StatBlock::ENEMY_CRITDEAD;
+				cur_state = StatBlock::ENTITY_CRITDEAD;
 			else
-				cur_state = StatBlock::ENEMY_DEAD;
+				cur_state = StatBlock::ENTITY_DEAD;
 
 			mapr->collider.unblock(pos.x, pos.y);
 		}
@@ -970,10 +970,7 @@ void StatBlock::logic() {
 		hp = get(Stats::HP_MAX);
 		alive = true;
 		corpse = false;
-		if (hero)
-			cur_state = AVATAR_STANCE;
-		else
-			cur_state = ENEMY_STANCE;
+		cur_state = ENTITY_STANCE;
 	}
 }
 
@@ -1124,9 +1121,9 @@ bool StatBlock::summonLimitReached(PowerID power_id) const {
 
 	for (unsigned int i=0; i < summons.size(); i++) {
 		if(!summons[i]->corpse && summons[i]->summoned_power_index == power_id
-				&& summons[i]->cur_state != ENEMY_SPAWN
-				&& summons[i]->cur_state != ENEMY_DEAD
-				&& summons[i]->cur_state != ENEMY_CRITDEAD) {
+				&& summons[i]->cur_state != ENTITY_SPAWN
+				&& summons[i]->cur_state != ENTITY_DEAD
+				&& summons[i]->cur_state != ENTITY_CRITDEAD) {
 			qty_summons++;
 		}
 	}
