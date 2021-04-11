@@ -115,7 +115,7 @@ StatBlock::StatBlock()
 	, direction(0)
 	, cooldown_hit()
 	, cooldown_hit_enabled(false)
-	, cur_state(0)
+	, cur_state(ENTITY_STANCE)
 	, state_timer()
 	, hold_state(false)
 	, prevent_interrupt(false)
@@ -187,6 +187,8 @@ StatBlock::StatBlock()
 	for (size_t i = 0; i < per_primary.size(); ++i) {
 		per_primary[i].resize(Stats::COUNT + eset->damage_types.count, 0);
 	}
+
+	cooldown.reset(Timer::END);
 }
 
 StatBlock::~StatBlock() {

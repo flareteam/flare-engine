@@ -112,8 +112,6 @@ EndIf (NOT SDL2TTF_FOUND)
 # Sources
 
 Set (FLARE_SOURCES
-	./src/BehaviorAlly.cpp
-	./src/Entity.cpp
 	./src/Animation.cpp
 	./src/AnimationMedia.cpp
 	./src/AnimationManager.cpp
@@ -121,7 +119,6 @@ Set (FLARE_SOURCES
 	./src/AStarContainer.cpp
 	./src/AStarNode.cpp
 	./src/Avatar.cpp
-	./src/BehaviorStandard.cpp
 	./src/Camera.cpp
 	./src/CampaignManager.cpp
 	./src/CombatText.cpp
@@ -129,10 +126,11 @@ Set (FLARE_SOURCES
 	./src/DeviceList.cpp
 	./src/EffectManager.cpp
 	./src/Enemy.cpp
-	./src/EnemyBehavior.cpp
 	./src/EnemyGroupManager.cpp
 	./src/EnemyManager.cpp
 	./src/EngineSettings.cpp
+	./src/Entity.cpp
+	./src/EntityBehavior.cpp
 	./src/EventManager.cpp
 	./src/FileParser.cpp
 	./src/FontEngine.cpp
@@ -229,8 +227,6 @@ Set (FLARE_SOURCES
 )
 
 Set (FLARE_HEADERS
-	./src/BehaviorAlly.h
-	./src/Entity.h
 	./src/Animation.h
 	./src/AnimationMedia.h
 	./src/AnimationManager.h
@@ -238,7 +234,6 @@ Set (FLARE_HEADERS
 	./src/AStarContainer.h
 	./src/AStarNode.h
 	./src/Avatar.h
-	./src/BehaviorStandard.h
 	./src/Camera.h
 	./src/CampaignManager.h
 	./src/CombatText.h
@@ -247,10 +242,11 @@ Set (FLARE_HEADERS
 	./src/DeviceList.h
 	./src/EffectManager.h
 	./src/Enemy.h
-	./src/EnemyBehavior.h
 	./src/EnemyGroupManager.h
 	./src/EnemyManager.h
 	./src/EngineSettings.h
+	./src/Entity.h
+	./src/EntityBehavior.h
 	./src/EventManager.h
 	./src/FileParser.h
 	./src/FontEngine.h

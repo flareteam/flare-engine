@@ -29,7 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Entity.h"
 #include "Utils.h"
 
-class EnemyBehavior;
+class EntityBehavior;
 
 class Enemy : public Entity {
 
@@ -39,16 +39,10 @@ public:
 	Enemy& operator=(const Enemy& e);
 	~Enemy();
 	void logic();
-	unsigned char faceNextBest(float mapx, float mapy);
-
-	std::string type;
 
 	Renderable getRender();
 
-	EnemyBehavior *eb;
-
-	// other flags
-	bool instant_power;
+	EntityBehavior *eb;
 
 };
 

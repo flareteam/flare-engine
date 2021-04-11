@@ -23,13 +23,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "AnimationSet.h"
 #include "Avatar.h"
 #include "BehaviorAlly.h"
-#include "BehaviorStandard.h"
 #include "CampaignManager.h"
 #include "Enemy.h"
-#include "EnemyBehavior.h"
+#include "EntityBehavior.h"
 #include "EnemyGroupManager.h"
 #include "EnemyManager.h"
 #include "EngineSettings.h"
+#include "EntityBehavior.h"
 #include "EventManager.h"
 #include "Hazard.h"
 #include "MapRenderer.h"
@@ -69,16 +69,16 @@ Enemy *EnemyManager::getEnemyPrototype(const std::string& type_id) {
 
 size_t EnemyManager::loadEnemyPrototype(const std::string& type_id) {
 	for (size_t i = 0; i < prototypes.size(); i++) {
-		if (prototypes[i].type == type_id) {
+		if (prototypes[i].type_filename == type_id) {
 			return i;
 		}
 	}
 
 	Enemy e = Enemy();
 
-	e.eb = new BehaviorStandard(&e);
+	e.eb = new EntityBehavior(&e);
 	e.stats.load(type_id);
-	e.type = type_id;
+	e.type_filename = type_id;
 
 	if (e.stats.animations == "")
 		Utils::logError("EnemyManager: No animation file specified for entity: %s", type_id.c_str());
@@ -191,7 +191,7 @@ void EnemyManager::handleNewMap () {
 		allies.pop();
 
 		//dont need the result of this. its only called to handle animation and sound
-		Enemy* temp = getEnemyPrototype(e->type);
+		Enemy* temp = getEnemyPrototype(e->type_filename);
 		delete temp;
 
 		e->stats.pos = spawn_pos;
@@ -258,11 +258,7 @@ void EnemyManager::handleSpawn() {
 		mapr->collider.unblock(espawn.pos.x, espawn.pos.y);
 
 		Enemy *e = new Enemy();
-		// factory
-		if(espawn.hero_ally)
-			e->eb = new BehaviorAlly(e);
-		else
-			e->eb = new BehaviorStandard(e);
+		e->eb = new EntityBehavior(e);
 
 		e->stats.hero_ally = espawn.hero_ally;
 		e->stats.enemy_ally = espawn.enemy_ally;
@@ -277,7 +273,7 @@ void EnemyManager::handleSpawn() {
 		e->stats.direction = static_cast<unsigned char>(espawn.direction);
 
 		Enemy_Level el = enemyg->getRandomEnemy(espawn.type, 0, 0);
-		e->type = el.type;
+		e->type_filename = el.type;
 
 		if (el.type != "") {
 			e->stats.load(el.type);

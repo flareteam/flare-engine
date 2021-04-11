@@ -26,6 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "AnimationManager.h"
 #include "AnimationSet.h"
 #include "CampaignManager.h"
+#include "EntityBehavior.h"
 #include "EventManager.h"
 #include "FileParser.h"
 #include "ItemManager.h"
@@ -57,7 +58,7 @@ NPC::NPC(const Enemy& e)
 	, stock()
 	, dialog()
 {
-	eb = new BehaviorAlly(this);
+	eb = new EntityBehavior(this);
 	stock.init(VENDOR_MAX_STOCK);
 }
 

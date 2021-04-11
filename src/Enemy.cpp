@@ -20,11 +20,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Animation.h"
 #include "Avatar.h"
 #include "BehaviorAlly.h"
-#include "BehaviorStandard.h"
 #include "CampaignManager.h"
 #include "CommonIncludes.h"
 #include "Enemy.h"
-#include "EnemyBehavior.h"
+#include "EntityBehavior.h"
 #include "LootManager.h"
 #include "PowerManager.h"
 #include "RenderDevice.h"
@@ -37,21 +36,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <cassert>
 
 Enemy::Enemy() : Entity() {
-
-	stats.cur_state = StatBlock::ENTITY_STANCE;
-	stats.cooldown.reset(Timer::END);
-	stats.in_combat = false;
-	stats.join_combat = false;
-
-	instant_power = false;
 	eb = NULL;
 }
 
 Enemy::Enemy(const Enemy& e)
 	: Entity(e)
-	, type(e.type)
-	, instant_power(e.instant_power) {
-	eb = new BehaviorStandard(this); // Putting a 'this' into the init list will make MSVS complain, hence it's in the body of the ctor
+{
+	eb = new EntityBehavior(this); // Putting a 'this' into the init list will make MSVS complain, hence it's in the body of the ctor
 }
 
 Enemy& Enemy::operator=(const Enemy& e) {
@@ -59,46 +50,9 @@ Enemy& Enemy::operator=(const Enemy& e) {
 		return *this;
 
 	Entity::operator=(e);
-	type = e.type;
-	instant_power = e.instant_power;
-	eb = new BehaviorStandard(this);
+	eb = new EntityBehavior(this);
 
 	return *this;
-}
-
-/**
- * The current direction leads to a wall.  Try the next best direction, if one is available.
- */
-unsigned char Enemy::faceNextBest(float mapx, float mapy) {
-	float dx = static_cast<float>(fabs(mapx - stats.pos.x));
-	float dy = static_cast<float>(fabs(mapy - stats.pos.y));
-	switch (stats.direction) {
-		case 0:
-			if (dy > dx) return 7;
-			else return 1;
-		case 1:
-			if (mapy > stats.pos.y) return 0;
-			else return 2;
-		case 2:
-			if (dx > dy) return 1;
-			else return 3;
-		case 3:
-			if (mapx < stats.pos.x) return 2;
-			else return 4;
-		case 4:
-			if (dy > dx) return 3;
-			else return 5;
-		case 5:
-			if (mapy < stats.pos.y) return 4;
-			else return 6;
-		case 6:
-			if (dx > dy) return 5;
-			else return 7;
-		case 7:
-			if (mapx > stats.pos.x) return 6;
-			else return 0;
-	}
-	return 0;
 }
 
 /**
@@ -114,8 +68,6 @@ void Enemy::logic() {
 	//need to check whether the enemy was converted here
 	//cant do it in behaviour because the behaviour object would be replaced by this
 	if(stats.effects.convert != stats.converted) {
-		delete eb;
-		eb = stats.hero_ally ? new BehaviorStandard(this) : new BehaviorAlly(this);
 		stats.converted = !stats.converted;
 		stats.hero_ally = !stats.hero_ally;
 		if (stats.convert_status != 0) {

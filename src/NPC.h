@@ -24,7 +24,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef NPC_H
 #define NPC_H
 
-#include "BehaviorAlly.h"
 #include "Enemy.h"
 #include "ItemStorage.h"
 

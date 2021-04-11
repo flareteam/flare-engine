@@ -14,8 +14,6 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/$(SDL_PATH)/include \
 # Add your application source files here...
 LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c \
 	../../../../../../src/main.cpp \
-	../../../../../../src/BehaviorAlly.cpp \
-	../../../../../../src/Entity.cpp \
 	../../../../../../src/Animation.cpp \
 	../../../../../../src/AnimationManager.cpp \
 	../../../../../../src/AnimationMedia.cpp \
@@ -34,6 +32,8 @@ LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c \
 	../../../../../../src/EnemyBehavior.cpp \
 	../../../../../../src/EnemyGroupManager.cpp \
 	../../../../../../src/EnemyManager.cpp \
+	../../../../../../src/Entity.cpp \
+	../../../../../../src/EntityBehavior.cpp \
 	../../../../../../src/EngineSettings.cpp \
 	../../../../../../src/EventManager.cpp \
 	../../../../../../src/FileParser.cpp \

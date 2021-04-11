@@ -48,6 +48,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define M_SQRT2 sqrt(2.0)
 #endif
 
+// TODO make these not global
 const int directionDeltaX[8] =   {-1, -1, -1,  0,  1,  1,  1,  0};
 const int directionDeltaY[8] =   { 1,  0, -1, -1, -1,  0,  1,  1};
 const float speedMultiplyer[8] = { static_cast<float>(1.0/M_SQRT2), 1.0f, static_cast<float>(1.0/M_SQRT2), 1.0f, static_cast<float>(1.0/M_SQRT2), 1.0f, static_cast<float>(1.0/M_SQRT2), 1.0f};
@@ -62,7 +63,8 @@ Entity::Entity()
 	, sound_levelup(0)
 	, sound_lowhp(0)
 	, activeAnimation(NULL)
-	, animationSet(NULL) {
+	, animationSet(NULL)
+	, type_filename("") {
 }
 
 Entity::Entity(const Entity& e) {
@@ -84,6 +86,7 @@ Entity& Entity::operator=(const Entity& e) {
 	activeAnimation = new Animation(*e.activeAnimation);
 	animationSet = e.animationSet;
 	stats = StatBlock(e.stats);
+	type_filename = e.type_filename;
 
 	return *this;
 }
@@ -689,6 +692,41 @@ bool Entity::setAnimation(const std::string& animationName) {
 		Utils::logError("Entity::setAnimation(%s): not found", animationName.c_str());
 
 	return activeAnimation == NULL;
+}
+
+/**
+ * The current direction leads to a wall.  Try the next best direction, if one is available.
+ */
+unsigned char Entity::faceNextBest(float mapx, float mapy) {
+	float dx = static_cast<float>(fabs(mapx - stats.pos.x));
+	float dy = static_cast<float>(fabs(mapy - stats.pos.y));
+	switch (stats.direction) {
+		case 0:
+			if (dy > dx) return 7;
+			else return 1;
+		case 1:
+			if (mapy > stats.pos.y) return 0;
+			else return 2;
+		case 2:
+			if (dx > dy) return 1;
+			else return 3;
+		case 3:
+			if (mapx < stats.pos.x) return 2;
+			else return 4;
+		case 4:
+			if (dy > dx) return 3;
+			else return 5;
+		case 5:
+			if (mapy < stats.pos.y) return 4;
+			else return 6;
+		case 6:
+			if (dx > dy) return 5;
+			else return 7;
+		case 7:
+			if (mapx > stats.pos.x) return 6;
+			else return 0;
+	}
+	return 0;
 }
 
 Entity::~Entity () {

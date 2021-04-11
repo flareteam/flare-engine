@@ -76,6 +76,10 @@ public:
 	AnimationSet *animationSet;
 
 	StatBlock stats;
+
+	unsigned char faceNextBest(float mapx, float mapy);
+
+	std::string type_filename;
 };
 
 extern const int directionDeltaX[];
