@@ -43,7 +43,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 Event::Event()
 	: type("")
-	, activate_type(-1)
+	, activate_type(ACTIVATE_ON_TRIGGER)
 	, components(std::vector<EventComponent>())
 	, location(Rect())
 	, hotspot(Rect())
