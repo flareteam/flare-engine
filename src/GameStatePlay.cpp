@@ -120,8 +120,6 @@ void GameStatePlay::refreshWidgets() {
  * Reset all game states to a new game.
  */
 void GameStatePlay::resetGame() {
-	mapr->load("maps/spawn.txt");
-	setLoadingFrame();
 	camp->resetAllStatuses();
 	pc->init();
 	pc->stats.currency = 0;
@@ -138,7 +136,8 @@ void GameStatePlay::resetGame() {
 	menu->talker->setHero(pc->stats);
 	pc->loadSounds();
 
-	mapr->executeOnLoadEvents();
+	mapr->teleportation = true;
+	mapr->teleport_mapname = "maps/spawn.txt";
 }
 
 /**

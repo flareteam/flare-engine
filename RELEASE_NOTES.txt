@@ -78,6 +78,7 @@ Engine fixes:
 * Fix missing effect description text in power tooltips when using built-in types.
 * Fix static events not executing on the same frame as on_load events.
 * Fix parsing bug in power trees that would save base power properties to an upgrade power.
+* Fix on_load events with requires_class not working in maps/spawn.txt
 
 Game updates:
 
