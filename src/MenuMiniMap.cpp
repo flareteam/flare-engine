@@ -26,7 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Avatar.h"
 #include "CommonIncludes.h"
 #include "Enemy.h"
-#include "EnemyManager.h"
+#include "EntityManager.h"
 #include "EngineSettings.h"
 #include "FileParser.h"
 #include "FontEngine.h"
@@ -595,8 +595,8 @@ void MenuMiniMap::fillEntities() {
 		}
 	}
 
-	for (size_t i=0; i<enemym->enemies.size(); ++i) {
-		Enemy *e = enemym->enemies[i];
+	for (size_t i=0; i<entitym->entities.size(); ++i) {
+		Entity *e = entitym->entities[i];
 		if (e->stats.hp > 0) {
 			if (e->stats.hero_ally) {
 				entities[static_cast<int>(e->stats.pos.x)][static_cast<int>(e->stats.pos.y)] = TILE_ALLY;

@@ -31,7 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "CursorManager.h"
 #include "Enemy.h"
-#include "EnemyManager.h"
+#include "EntityManager.h"
 #include "EngineSettings.h"
 #include "FileParser.h"
 #include "InputState.h"
@@ -158,7 +158,7 @@ void LootManager::renderTooltips(const FPoint& cam) {
 					default_visibility = false;
 				}
 				else {
-					Enemy* test_enemy = enemym->getNearestEnemy(it->pos, !EnemyManager::GET_CORPSE, NULL, eset->loot.hide_radius);
+					Entity* test_enemy = entitym->getNearestEntity(it->pos, !EntityManager::GET_CORPSE, NULL, eset->loot.hide_radius);
 					if (test_enemy) {
 						default_visibility = false;
 					}

@@ -22,7 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Avatar.h"
 #include "CampaignManager.h"
 #include "Enemy.h"
-#include "EnemyManager.h"
+#include "EntityManager.h"
 #include "EventManager.h"
 #include "FileParser.h"
 #include "FontEngine.h"
@@ -277,8 +277,8 @@ void MenuDevConsole::getTileInfo() {
 
 void MenuDevConsole::getEnemyInfo() {
 	std::stringstream ss;
-	for (size_t i = 0; i < enemym->enemies.size(); ++i) {
-		const Enemy* e = enemym->enemies[i];
+	for (size_t i = 0; i < entitym->entities.size(); ++i) {
+		const Entity* e = entitym->entities[i];
 		if (!(static_cast<int>(target.x) == static_cast<int>(e->stats.pos.x) && static_cast<int>(target.y) == static_cast<int>(e->stats.pos.y)))
 			continue;
 

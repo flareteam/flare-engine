@@ -42,8 +42,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
 
-NPC::NPC(const Enemy& e)
-	: Enemy(e)
+NPC::NPC(const Entity& e)
+	: Entity(e)
 	, gfx("")
 	, vox_intro()
 	, vox_quests()
@@ -58,7 +58,6 @@ NPC::NPC(const Enemy& e)
 	, stock()
 	, dialog()
 {
-	eb = new EntityBehavior(this);
 	stock.init(VENDOR_MAX_STOCK);
 }
 
@@ -347,7 +346,7 @@ void NPC::logic() {
 		// TODO: check logic
 		mapr->collider.unblock(stats.pos.x, stats.pos.y);
 
-		Enemy::logic();
+		Entity::logic();
 		moveMapEvents();
 	}
 	else

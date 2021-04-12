@@ -22,7 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class Avatar;
 class CampaignManager;
 class EnemyGroupManager;
-class EnemyManager;
+class EntityManager;
 class HazardManager;
 class ItemManager;
 class LootManager;
@@ -38,7 +38,7 @@ class PowerManager;
 extern Avatar *pc;
 extern CampaignManager *camp;
 extern EnemyGroupManager *enemyg;
-extern EnemyManager *enemym;
+extern EntityManager *entitym;
 extern HazardManager *hazards;
 extern ItemManager *items;
 extern LootManager *loot;

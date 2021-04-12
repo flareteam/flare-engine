@@ -33,7 +33,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CursorManager.h"
 #include "EnemyGroupManager.h"
 #include "Enemy.h"
-#include "EnemyManager.h"
+#include "EntityManager.h"
 #include "EngineSettings.h"
 #include "FileParser.h"
 #include "InputState.h"
@@ -354,12 +354,15 @@ void Avatar::set_direction() {
  * - move the avatar based on buttons pressed
  * - calculate the next frame of animation
  * - calculate camera position based on avatar position
- *
- * @param action The actionbar power activated and the target.  action.power == 0 means no power.
- * @param restrict_power_use Whether or not to allow power usage on mouse1
- * @param npc True if the player is talking to an NPC. Can limit ability to move/attack in certain conditions
  */
-void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_use) {
+void Avatar::logic() {
+	bool restrict_power_use = false;
+	if (settings->mouse_move) {
+		if(inpt->pressing[mm_key] && !inpt->pressing[Input::SHIFT] && !menu->act->isWithinSlots(inpt->mouse) && !menu->act->isWithinMenus(inpt->mouse)) {
+			restrict_power_use = true;
+		}
+	}
+
 	// clear current space to allow correct movement
 	mapr->collider.unblock(stats.pos.x, stats.pos.y);
 

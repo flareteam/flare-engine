@@ -30,7 +30,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Utils.h"
 #include "WidgetLabel.h"
 
-class Enemy;
+class Entity;
 
 class MenuEnemy : public Menu {
 private:
@@ -46,7 +46,7 @@ private:
 public:
 	MenuEnemy();
 	~MenuEnemy();
-	Enemy *enemy;
+	Entity *enemy;
 	void loadGraphics();
 	void handleNewMap();
 	void logic();

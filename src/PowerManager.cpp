@@ -30,7 +30,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Avatar.h"
 #include "CombatText.h"
 #include "EffectManager.h"
-#include "EnemyManager.h"
+#include "EntityManager.h"
 #include "EngineSettings.h"
 #include "EventManager.h"
 #include "FileParser.h"

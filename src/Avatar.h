@@ -31,7 +31,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Entity.h"
 #include "Utils.h"
 
-class Enemy;
 class Entity;
 class StatBlock;
 
@@ -109,7 +108,7 @@ public:
 	void loadGraphics(std::vector<Layer_gfx> _img_gfx);
 	void loadStepFX(const std::string& stepname);
 
-	void logic(std::vector<ActionData> &action_queue, bool restrict_power_use);
+	void logic();
 
 	// transformation handling
 	bool isTransforming() {
@@ -150,8 +149,8 @@ public:
 	bool allow_movement;
 	std::map<PowerID, Timer> power_cooldown_timers;
 	std::map<PowerID, Timer> power_cast_timers;
-	Enemy* cursor_enemy; // enemy selected with the mouse cursor
-	Enemy* lock_enemy;
+	Entity* cursor_enemy; // enemy selected with the mouse cursor
+	Entity* lock_enemy;
 	unsigned long time_played;
 	bool questlog_dismissed;
 	bool using_main1;
@@ -159,6 +158,8 @@ public:
 	int prev_hp;
 	bool playing_lowhp;
 	bool teleport_camera_lock;
+
+	std::vector<ActionData> action_queue;
 };
 
 #endif

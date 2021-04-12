@@ -127,10 +127,10 @@ Set (FLARE_SOURCES
 	./src/EffectManager.cpp
 	./src/Enemy.cpp
 	./src/EnemyGroupManager.cpp
-	./src/EnemyManager.cpp
 	./src/EngineSettings.cpp
 	./src/Entity.cpp
 	./src/EntityBehavior.cpp
+	./src/EntityManager.cpp
 	./src/EventManager.cpp
 	./src/FileParser.cpp
 	./src/FontEngine.cpp
@@ -243,10 +243,10 @@ Set (FLARE_HEADERS
 	./src/EffectManager.h
 	./src/Enemy.h
 	./src/EnemyGroupManager.h
-	./src/EnemyManager.h
 	./src/EngineSettings.h
 	./src/Entity.h
 	./src/EntityBehavior.h
+	./src/EntityManager.h
 	./src/EventManager.h
 	./src/FileParser.h
 	./src/FontEngine.h

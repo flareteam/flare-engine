@@ -19,41 +19,40 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 /*
- * class EnemyManager
+ * class EntityManager
  */
 
 
-#ifndef ENEMY_MANAGER_H
-#define ENEMY_MANAGER_H
+#ifndef ENTITY_MANAGER_H
+#define ENTITY_MANAGER_H
 
 #include "CommonIncludes.h"
 #include "Utils.h"
 
 class Animation;
-class Enemy;
+class Entity;
 
-class EnemyManager {
+class EntityManager {
 private:
 
-	void loadAnimations(Enemy *e);
+	void loadAnimations(Entity *e);
 
 	std::vector<std::string> anim_prefixes;
 	std::vector<std::vector<Animation*> > anim_entities;
 
 protected:
 	/**
-	 * callee is responsible for deleting returned enemy object
+	 * callee is responsible for deleting returned entity object
 	 */
-	Enemy *getEnemyPrototype(const std::string& type_id);
-	size_t loadEnemyPrototype(const std::string& type_id);
+	size_t loadEntityPrototype(const std::string& type_id);
 
-	std::vector<Enemy> prototypes;
+	std::vector<Entity> prototypes;
 
 public:
-	EnemyManager();
-	~EnemyManager();
+	EntityManager();
+	~EntityManager();
 
-	Enemy *getEnemyPrototypeWithoutAnimationChanges(const std::string& type_id);
+	Entity *getEntityPrototype(const std::string& type_id);
 
 	void handleNewMap();
 	void handleSpawn();
@@ -62,12 +61,12 @@ public:
 	void addRenders(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
 	void checkEnemiesforXP();
 	bool isCleared();
-	void spawn(const std::string& enemy_type, const Point& target);
-	Enemy *enemyFocus(const Point& mouse, const FPoint& cam, bool alive_only);
-	Enemy* getNearestEnemy(const FPoint& pos, bool get_corpse, float *saved_distance, float max_range);
+	void spawn(const std::string& entity_type, const Point& target);
+	Entity *entityFocus(const Point& mouse, const FPoint& cam, bool alive_only);
+	Entity* getNearestEntity(const FPoint& pos, bool get_corpse, float *saved_distance, float max_range);
 
 	// vars
-	std::vector<Enemy*> enemies;
+	std::vector<Entity*> entities;
 	int hero_stealth;
 
 	bool player_blocked;

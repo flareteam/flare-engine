@@ -29,7 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CampaignManager.h"
 #include "CombatText.h"
 #include "Enemy.h"
-#include "EnemyManager.h"
+#include "EntityManager.h"
 #include "EngineSettings.h"
 #include "FileParser.h"
 #include "Hazard.h"
@@ -810,14 +810,14 @@ void StatBlock::logic() {
 	alive = !(hp <= 0 && !effects.triggered_death && !effects.revive);
 
 	// handle party buffs
-	if (enemym && powers) {
+	if (entitym && powers) {
 		while (!party_buffs.empty()) {
 			PowerID power_index = party_buffs.front();
 			party_buffs.pop();
 			Power *buff_power = &powers->powers[power_index];
 
-			for (size_t i=0; i < enemym->enemies.size(); ++i) {
-				Enemy* party_member = enemym->enemies[i];
+			for (size_t i=0; i < entitym->entities.size(); ++i) {
+				Entity* party_member = entitym->entities[i];
 				if(party_member->stats.hp > 0 &&
 				   ((party_member->stats.hero_ally && hero) || (party_member->stats.enemy_ally && party_member->stats.summoner == this)) &&
 				   (buff_power->buff_party_power_id == 0 || buff_power->buff_party_power_id == party_member->stats.summoned_power_index)
@@ -974,6 +974,15 @@ void StatBlock::logic() {
 		corpse = false;
 		cur_state = ENTITY_STANCE;
 	}
+
+	// non-hero entities can have their disposition reversed
+	if (!hero && effects.convert != converted) {
+		converted = !converted;
+		hero_ally = !hero_ally;
+		if (convert_status != 0) {
+			camp->setStatus(convert_status);
+		}
+	}
 }
 
 bool StatBlock::canUsePower(PowerID powerid, bool allow_passive) const {
@@ -1005,7 +1014,7 @@ bool StatBlock::canUsePower(PowerID powerid, bool allow_passive) const {
 			&& (power.type == Power::TYPE_SPAWN ? !summonLimitReached(powerid) : true)
 			&& !(power.spawn_type == "untransform" && !transformed)
 			&& std::includes(equip_flags.begin(), equip_flags.end(), power.requires_flags.begin(), power.requires_flags.end())
-			&& (!power.buff_party || (power.buff_party && enemym && enemym->checkPartyMembers()))
+			&& (!power.buff_party || (power.buff_party && entitym && entitym->checkPartyMembers()))
 			&& powers->checkRequiredItems(power, this)
 		);
 	}

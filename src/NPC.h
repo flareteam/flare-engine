@@ -24,12 +24,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef NPC_H
 #define NPC_H
 
-#include "Enemy.h"
+#include "Entity.h"
 #include "ItemStorage.h"
 
 class EventComponent;
 
-class NPC : public Enemy {
+class NPC : public Entity {
 private:
 	enum {
 		VOX_INTRO = 0,
@@ -59,7 +59,7 @@ public:
 	static const int VENDOR_MAX_STOCK = 80;
 	static const bool GET_RESPONSE_NODES = true;
 
-	NPC(const Enemy& e);
+	NPC(const Entity& e);
 	~NPC();
 	void load(const std::string& npc_id);
 	void logic();

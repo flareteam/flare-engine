@@ -30,8 +30,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Avatar.h"
 #include "CommonIncludes.h"
 #include "Enemy.h"
-#include "EnemyManager.h"
+#include "EntityManager.h"
 #include "EngineSettings.h"
+#include "Entity.h"
 #include "EntityBehavior.h"
 #include "MapRenderer.h"
 #include "PowerManager.h"
@@ -41,7 +42,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "StatBlock.h"
 #include "UtilsMath.h"
 
-EntityBehavior::EntityBehavior(Enemy *_e)
+EntityBehavior::EntityBehavior(Entity *_e)
 	: e(_e)
 	, path()
 	, prev_target()
@@ -151,23 +152,23 @@ void EntityBehavior::findTarget() {
 	}
 
 	bool enemies_in_combat = false;
-	for (size_t i = 0; i < enemym->enemies.size(); ++i) {
-		Enemy* enemy = enemym->enemies[i];
-		if (!enemy->stats.alive)
+	for (size_t i = 0; i < entitym->entities.size(); ++i) {
+		Entity* entity = entitym->entities[i];
+		if (!entity->stats.alive)
 			continue;
 
-		if ((!is_ally && enemy->stats.hero_ally) || (is_ally && !enemy->stats.hero_ally && enemy->stats.in_combat)) {
-			float entity_dist = Utils::calcDist(e->stats.pos, enemy->stats.pos);
+		if ((!is_ally && entity->stats.hero_ally) || (is_ally && !entity->stats.hero_ally && entity->stats.in_combat)) {
+			float entity_dist = Utils::calcDist(e->stats.pos, entity->stats.pos);
 			if (!target_stats || (is_ally && target_stats && target_stats->hero)) {
 				// pick the first available target if none is already selected
-				target_stats = &enemym->enemies[i]->stats;
+				target_stats = &entitym->entities[i]->stats;
 				target_dist = entity_dist;
 				e->stats.in_combat = true;
 				enemies_in_combat = true;
 			}
 			else if (entity_dist < target_dist) {
 				// pick a new target if it's closer
-				target_stats = &enemym->enemies[i]->stats;
+				target_stats = &entitym->entities[i]->stats;
 				target_dist = entity_dist;
 			}
 		}
@@ -255,15 +256,15 @@ void EntityBehavior::findTarget() {
 	// need to set the flag player_blocked so that other allies know to get out of the way as well
 	// if hero is facing the summon
 	if (is_ally && eset->misc.enable_ally_collision_ai) {
-		if (!enemym->player_blocked && hero_dist < ALLY_FLEE_DISTANCE
+		if (!entitym->player_blocked && hero_dist < ALLY_FLEE_DISTANCE
 				&& mapr->collider.isFacing(pc->stats.pos.x,pc->stats.pos.y,pc->stats.direction,e->stats.pos.x,e->stats.pos.y)) {
-			enemym->player_blocked = true;
-			enemym->player_blocked_timer.reset(Timer::BEGIN);
+			entitym->player_blocked = true;
+			entitym->player_blocked_timer.reset(Timer::BEGIN);
 		}
 
 		bool player_closer_than_target = Utils::calcDist(e->stats.pos, pursue_pos) > Utils::calcDist(e->stats.pos, pc->stats.pos);
 
-		if (enemym->player_blocked && (!e->stats.in_combat || player_closer_than_target)
+		if (entitym->player_blocked && (!e->stats.in_combat || player_closer_than_target)
 				&& mapr->collider.isFacing(pc->stats.pos.x,pc->stats.pos.y,pc->stats.direction,e->stats.pos.x,e->stats.pos.y)) {
 			fleeing = true;
 			pursue_pos = pc->stats.pos;
@@ -626,7 +627,7 @@ void EntityBehavior::checkMoveStateMove() {
 		e->stats.direction = e->faceNextBest(pursue_pos.x, pursue_pos.y);
 		if (!e->move()) {
 			// this prevents an ally trying to move perpendicular to a 1-tile-wide path if the player gets close to it in a certain position and gets blocked
-			if (e->stats.hero_ally && enemym->player_blocked && !e->stats.in_combat) {
+			if (e->stats.hero_ally && entitym->player_blocked && !e->stats.in_combat) {
 				e->stats.direction = pc->stats.direction;
 				if (!e->move()) {
 					e->stats.cur_state = StatBlock::ENTITY_STANCE;

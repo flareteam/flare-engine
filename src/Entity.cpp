@@ -32,10 +32,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "EngineSettings.h"
 #include "Entity.h"
+#include "EntityBehavior.h"
 #include "Hazard.h"
 #include "MapRenderer.h"
 #include "MessageEngine.h"
 #include "PowerManager.h"
+#include "RenderDevice.h"
 #include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
@@ -64,7 +66,11 @@ Entity::Entity()
 	, sound_lowhp(0)
 	, activeAnimation(NULL)
 	, animationSet(NULL)
-	, type_filename("") {
+	, stats()
+	, type_filename("")
+{
+	// MSVC complains if you use 'this' in the init list
+	behavior = new EntityBehavior(this);
 }
 
 Entity::Entity(const Entity& e) {
@@ -83,12 +89,22 @@ Entity& Entity::operator=(const Entity& e) {
 	sound_block = e.sound_block;
 	sound_levelup = e.sound_levelup;
 	sound_lowhp = e.sound_lowhp;
-	activeAnimation = new Animation(*e.activeAnimation);
+
+	if (e.activeAnimation)
+		activeAnimation = new Animation(*e.activeAnimation);
 	animationSet = e.animationSet;
+
 	stats = StatBlock(e.stats);
+
 	type_filename = e.type_filename;
 
+	behavior = new EntityBehavior(this);
+
 	return *this;
+}
+
+void Entity::logic() {
+	behavior->logic();
 }
 
 void Entity::loadSounds() {
@@ -729,7 +745,26 @@ unsigned char Entity::faceNextBest(float mapx, float mapy) {
 	return 0;
 }
 
+/**
+ * getRender()
+ * Map objects need to be drawn in Z order, so we allow a parent object (GameEngine)
+ * to collect all mobile sprites each frame.
+ */
+Renderable Entity::getRender() {
+	Renderable r = activeAnimation->getCurrentFrame(stats.direction);
+	r.map_pos.x = stats.pos.x;
+	r.map_pos.y = stats.pos.y;
+	if (stats.hp > 0) {
+		if (stats.hero_ally)
+			r.type = Renderable::TYPE_ALLY;
+		else if (stats.in_combat)
+			r.type = Renderable::TYPE_ENEMY;
+	}
+	return r;
+}
+
 Entity::~Entity () {
 	delete activeAnimation;
+	delete behavior;
 }
 

@@ -22,12 +22,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "AnimationManager.h"
 #include "AnimationSet.h"
 #include "Avatar.h"
-#include "BehaviorAlly.h"
 #include "CampaignManager.h"
-#include "Enemy.h"
-#include "EntityBehavior.h"
 #include "EnemyGroupManager.h"
-#include "EnemyManager.h"
+#include "Entity.h"
+#include "EntityBehavior.h"
+#include "EntityManager.h"
 #include "EngineSettings.h"
 #include "EntityBehavior.h"
 #include "EventManager.h"
@@ -42,46 +41,39 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <limits>
 
-EnemyManager::EnemyManager()
-	: enemies()
+EntityManager::EntityManager()
+	: entities()
 	, hero_stealth(0)
 	, player_blocked(false)
 	, player_blocked_timer(settings->max_frames_per_sec / 6) {
 	handleNewMap();
 }
 
-Enemy * EnemyManager::getEnemyPrototypeWithoutAnimationChanges(const std::string& type_id) {
-	Enemy* e = new Enemy(prototypes.at(loadEnemyPrototype(type_id)));
-	return e;
-}
-
-void EnemyManager::loadAnimations(Enemy *e) {
+void EntityManager::loadAnimations(Entity *e) {
 	anim->increaseCount(e->stats.animations);
 	e->animationSet = anim->getAnimationSet(e->stats.animations);
 	e->activeAnimation = e->animationSet->getAnimation("");
 }
 
-Enemy *EnemyManager::getEnemyPrototype(const std::string& type_id) {
-	Enemy* e = new Enemy(prototypes.at(loadEnemyPrototype(type_id)));
-	anim->increaseCount(e->stats.animations);
+Entity *EntityManager::getEntityPrototype(const std::string& type_id) {
+	Entity* e = new Entity(prototypes.at(loadEntityPrototype(type_id)));
 	return e;
 }
 
-size_t EnemyManager::loadEnemyPrototype(const std::string& type_id) {
+size_t EntityManager::loadEntityPrototype(const std::string& type_id) {
 	for (size_t i = 0; i < prototypes.size(); i++) {
 		if (prototypes[i].type_filename == type_id) {
 			return i;
 		}
 	}
 
-	Enemy e = Enemy();
+	Entity e = Entity();
 
-	e.eb = new EntityBehavior(&e);
 	e.stats.load(type_id);
 	e.type_filename = type_id;
 
 	if (e.stats.animations == "")
-		Utils::logError("EnemyManager: No animation file specified for entity: %s", type_id.c_str());
+		Utils::logError("EntityManager: No animation file specified for entity: %s", type_id.c_str());
 
 	loadAnimations(&e);
 	e.loadSounds();
@@ -107,7 +99,7 @@ size_t EnemyManager::loadEnemyPrototype(const std::string& type_id) {
 		if (power_index != 0 && spawn_type != "" && spawn_type != "untransform") {
 			std::vector<Enemy_Level> spawn_enemies = enemyg->getEnemiesInCategory(spawn_type);
 			for (size_t j = 0; j < spawn_enemies.size(); j++) {
-				loadEnemyPrototype(spawn_enemies[j].type);
+				loadEntityPrototype(spawn_enemies[j].type);
 			}
 		}
 	}
@@ -116,25 +108,25 @@ size_t EnemyManager::loadEnemyPrototype(const std::string& type_id) {
 }
 
 /**
- * When loading a new map, we eliminate existing enemies and load the new ones.
- * The map will have loaded Entity blocks into an array; retrieve the Enemies and init them
+ * When loading a new map, we eliminate existing entities and load the new ones.
+ * The map will have loaded Entity blocks into an array; retrieve the entities and init them
  */
-void EnemyManager::handleNewMap () {
+void EntityManager::handleNewMap () {
 
 	Map_Enemy me;
-	std::queue<Enemy *> allies;
+	std::queue<Entity *> allies;
 
-	// delete existing enemies
-	for (unsigned int i=0; i < enemies.size(); i++) {
-		anim->decreaseCount(enemies[i]->animationSet->getName());
-		if(enemies[i]->stats.hero_ally && !enemies[i]->stats.corpse && enemies[i]->stats.cur_state != StatBlock::ENTITY_DEAD && enemies[i]->stats.cur_state != StatBlock::ENTITY_CRITDEAD && enemies[i]->stats.speed > 0.0f)
-			allies.push(enemies[i]);
+	// delete existing entities
+	for (unsigned int i=0; i < entities.size(); i++) {
+		anim->decreaseCount(entities[i]->animationSet->getName());
+		if(entities[i]->stats.hero_ally && !entities[i]->stats.corpse && entities[i]->stats.cur_state != StatBlock::ENTITY_DEAD && entities[i]->stats.cur_state != StatBlock::ENTITY_CRITDEAD && entities[i]->stats.speed > 0.0f)
+			allies.push(entities[i]);
 		else {
-			enemies[i]->unloadSounds();
-			delete enemies[i];
+			entities[i]->unloadSounds();
+			delete entities[i];
 		}
 	}
-	enemies.clear();
+	entities.clear();
 
 
 	for (unsigned int i=0; i < prototypes.size(); i++) {
@@ -143,19 +135,19 @@ void EnemyManager::handleNewMap () {
 	}
 	prototypes.clear();
 
-	// load new enemies
+	// load new entities
 	while (!mapr->enemies.empty()) {
 		me = mapr->enemies.front();
 		mapr->enemies.pop();
 
 		if (me.type.empty()) {
-			Utils::logError("EnemyManager: Enemy(%f, %f) doesn't have type attribute set, skipping", me.pos.x, me.pos.y);
+			Utils::logError("EntityManager: Entity(%f, %f) doesn't have type attribute set, skipping", me.pos.x, me.pos.y);
 			continue;
 		}
 
 
 		bool status_reqs_met = true;
-		//if the status requirements arent met, dont load the enemy
+		//if the status requirements arent met, dont load the entity
 		for(unsigned int i = 0; i < me.requires_status.size(); i++) {
 			if (!camp->checkStatus(me.requires_status[i]))
 				status_reqs_met = false;
@@ -168,7 +160,8 @@ void EnemyManager::handleNewMap () {
 			continue;
 
 
-		Enemy *e = getEnemyPrototype(me.type);
+		Entity *e = getEntityPrototype(me.type);
+		anim->increaseCount(e->stats.animations);
 
 		e->stats.waypoints = me.waypoints;
 		e->stats.pos.x = me.pos.x;
@@ -179,7 +172,7 @@ void EnemyManager::handleNewMap () {
 		e->stats.invincible_requires_status = me.invincible_requires_status;
 		e->stats.invincible_requires_not_status = me.invincible_requires_not_status;
 
-		enemies.push_back(e);
+		entities.push_back(e);
 
 		mapr->collider.block(me.pos.x, me.pos.y, !MapCollision::IS_ALLY);
 	}
@@ -187,34 +180,35 @@ void EnemyManager::handleNewMap () {
 	FPoint spawn_pos = mapr->collider.getRandomNeighbor(Point(pc->stats.pos), 1, !MapCollision::IGNORE_BLOCKED);
 	while (!allies.empty()) {
 
-		Enemy *e = allies.front();
+		Entity *e = allies.front();
 		allies.pop();
 
 		//dont need the result of this. its only called to handle animation and sound
-		Enemy* temp = getEnemyPrototype(e->type_filename);
+		Entity* temp = getEntityPrototype(e->type_filename);
+		anim->increaseCount(temp->stats.animations);
 		delete temp;
 
 		e->stats.pos = spawn_pos;
 		e->stats.direction = pc->stats.direction;
 
-		enemies.push_back(e);
+		entities.push_back(e);
 
 		mapr->collider.block(e->stats.pos.x, e->stats.pos.y, MapCollision::IS_ALLY);
 	}
 
-	// load enemies that can be spawn by avatar's powers
+	// load entities that can be spawn by avatar's powers
 	for (size_t i = 0; i < pc->stats.powers_list.size(); i++) {
 		PowerID power_index = pc->stats.powers_list[i];
 		const std::string& spawn_type = powers->powers[power_index].spawn_type;
 		if (spawn_type != "" && spawn_type != "untransform") {
 			std::vector<Enemy_Level> spawn_enemies = enemyg->getEnemiesInCategory(spawn_type);
 			for (size_t j = 0; j < spawn_enemies.size(); j++) {
-				loadEnemyPrototype(spawn_enemies[j].type);
+				loadEntityPrototype(spawn_enemies[j].type);
 			}
 		}
 	}
 
-	// load enemies that can be spawn by powers in the action bar
+	// load entities that can be spawn by powers in the action bar
 	if (menu_act != NULL) {
 		for (size_t i = 0; i < menu_act->hotkeys.size(); i++) {
 			PowerID power_index = menu_act->hotkeys[i];
@@ -222,19 +216,19 @@ void EnemyManager::handleNewMap () {
 			if (power_index != 0 && spawn_type != "" && spawn_type != "untransform") {
 				std::vector<Enemy_Level> spawn_enemies = enemyg->getEnemiesInCategory(spawn_type);
 				for (size_t j = 0; j < spawn_enemies.size(); j++) {
-					loadEnemyPrototype(spawn_enemies[j].type);
+					loadEntityPrototype(spawn_enemies[j].type);
 				}
 			}
 		}
 	}
 
-	// load enemies that can be spawn by map events
+	// load entities that can be spawn by map events
 	for (size_t i = 0; i < mapr->events.size(); i++) {
 		for (size_t j = 0; j < mapr->events[i].components.size(); j++) {
 			if (mapr->events[i].components[j].type == EventComponent::SPAWN) {
 				std::vector<Enemy_Level> spawn_enemies = enemyg->getEnemiesInCategory(mapr->events[i].components[j].s);
 				for (size_t k = 0; k < spawn_enemies.size(); k++) {
-					loadEnemyPrototype(spawn_enemies[k].type);
+					loadEntityPrototype(spawn_enemies[k].type);
 				}
 			}
 		}
@@ -244,10 +238,10 @@ void EnemyManager::handleNewMap () {
 }
 
 /**
- * Powers can cause new enemies to spawn
- * Check PowerManager for any new queued enemies
+ * Powers can cause new entities to spawn
+ * Check PowerManager for any new queued entities
  */
-void EnemyManager::handleSpawn() {
+void EntityManager::handleSpawn() {
 
 	Map_Enemy espawn;
 
@@ -257,8 +251,7 @@ void EnemyManager::handleSpawn() {
 
 		mapr->collider.unblock(espawn.pos.x, espawn.pos.y);
 
-		Enemy *e = new Enemy();
-		e->eb = new EntityBehavior(e);
+		Entity *e = new Entity();
 
 		e->stats.hero_ally = espawn.hero_ally;
 		e->stats.enemy_ally = espawn.enemy_ally;
@@ -279,7 +272,7 @@ void EnemyManager::handleSpawn() {
 			e->stats.load(el.type);
 		}
 		else {
-			Utils::logError("EnemyManager: Could not spawn creature type '%s'", espawn.type.c_str());
+			Utils::logError("EntityManager: Could not spawn creature type '%s'", espawn.type.c_str());
 			delete e;
 			return;
 		}
@@ -291,10 +284,10 @@ void EnemyManager::handleSpawn() {
 			if (e->animationSet)
 				e->activeAnimation = e->animationSet->getAnimation("");
 			else
-				Utils::logError("EnemyManager: Animations file could not be loaded for %s", espawn.type.c_str());
+				Utils::logError("EntityManager: Animations file could not be loaded for %s", espawn.type.c_str());
 		}
 		else {
-			Utils::logError("EnemyManager: No animation file specified for entity: %s", espawn.type.c_str());
+			Utils::logError("EntityManager: No animation file specified for entity: %s", espawn.type.c_str());
 		}
 		e->loadSounds();
 
@@ -338,10 +331,10 @@ void EnemyManager::handleSpawn() {
 			e->stats.pos.y = pc->stats.pos.y;
 		}
 
-		// special animation state for spawning enemies
+		// special animation state for spawning entities
 		e->stats.cur_state = StatBlock::ENTITY_SPAWN;
 
-		//now apply post effects to the spawned enemy
+		//now apply post effects to the spawned entity
 		if(e->stats.summoned_power_index > 0)
 			powers->effect(&e->stats, (espawn.summoner != NULL ? espawn.summoner : &e->stats), e->stats.summoned_power_index, e->stats.hero_ally ? Power::SOURCE_TYPE_HERO : Power::SOURCE_TYPE_ENEMY);
 
@@ -366,15 +359,15 @@ void EnemyManager::handleSpawn() {
 			}
 		}
 
-		enemies.push_back(e);
+		entities.push_back(e);
 
 		mapr->collider.block(e->stats.pos.x, e->stats.pos.y, e->stats.hero_ally);
 	}
 }
 
-bool EnemyManager::checkPartyMembers() {
-	for (unsigned int i=0; i < enemies.size(); i++) {
-		if(enemies[i]->stats.hero_ally && enemies[i]->stats.hp > 0) {
+bool EntityManager::checkPartyMembers() {
+	for (unsigned int i=0; i < entities.size(); i++) {
+		if(entities[i]->stats.hero_ally && entities[i]->stats.hp > 0) {
 			return true;
 		}
 	}
@@ -382,9 +375,9 @@ bool EnemyManager::checkPartyMembers() {
 }
 
 /**
- * perform logic() for all enemies
+ * perform logic() for all entities
  */
-void EnemyManager::logic() {
+void EntityManager::logic() {
 
 	if (player_blocked) {
 		player_blocked_timer.tick();
@@ -394,53 +387,53 @@ void EnemyManager::logic() {
 
 	handleSpawn();
 
-	std::vector<Enemy*>::iterator it;
-	for (it = enemies.begin(); it != enemies.end(); ++it) {
+	std::vector<Entity*>::iterator it;
+	for (it = entities.begin(); it != entities.end(); ++it) {
 		// new actions this round
 		(*it)->stats.hero_stealth = hero_stealth;
 		(*it)->logic();
 	}
 }
 
-Enemy* EnemyManager::enemyFocus(const Point& mouse, const FPoint& cam, bool alive_only) {
+Entity* EntityManager::entityFocus(const Point& mouse, const FPoint& cam, bool alive_only) {
 	Point p;
 	Rect r;
-	for(unsigned int i = 0; i < enemies.size(); i++) {
-		if(alive_only && (enemies[i]->stats.cur_state == StatBlock::ENTITY_DEAD || enemies[i]->stats.cur_state == StatBlock::ENTITY_CRITDEAD)) {
+	for(unsigned int i = 0; i < entities.size(); i++) {
+		if(alive_only && (entities[i]->stats.cur_state == StatBlock::ENTITY_DEAD || entities[i]->stats.cur_state == StatBlock::ENTITY_CRITDEAD)) {
 			continue;
 		}
-		p = Utils::mapToScreen(enemies[i]->stats.pos.x, enemies[i]->stats.pos.y, cam.x, cam.y);
+		p = Utils::mapToScreen(entities[i]->stats.pos.x, entities[i]->stats.pos.y, cam.x, cam.y);
 
-		Renderable ren = enemies[i]->getRender();
+		Renderable ren = entities[i]->getRender();
 		r.w = ren.src.w;
 		r.h = ren.src.h;
 		r.x = p.x - ren.offset.x;
 		r.y = p.y - ren.offset.y;
 
 		if (Utils::isWithinRect(r, mouse)) {
-			Enemy *enemy = enemies[i];
-			return enemy;
+			Entity *entity = entities[i];
+			return entity;
 		}
 	}
 	return NULL;
 }
 
-Enemy* EnemyManager::getNearestEnemy(const FPoint& pos, bool get_corpse, float *saved_distance, float max_range) {
-	Enemy* nearest = NULL;
+Entity* EntityManager::getNearestEntity(const FPoint& pos, bool get_corpse, float *saved_distance, float max_range) {
+	Entity* nearest = NULL;
 	float best_distance = std::numeric_limits<float>::max();
 
-	for (unsigned i=0; i<enemies.size(); i++) {
-		if(!get_corpse && (enemies[i]->stats.cur_state == StatBlock::ENTITY_DEAD || enemies[i]->stats.cur_state == StatBlock::ENTITY_CRITDEAD)) {
+	for (unsigned i=0; i<entities.size(); i++) {
+		if(!get_corpse && (entities[i]->stats.cur_state == StatBlock::ENTITY_DEAD || entities[i]->stats.cur_state == StatBlock::ENTITY_CRITDEAD)) {
 			continue;
 		}
-		if (get_corpse && !enemies[i]->stats.corpse) {
+		if (get_corpse && !entities[i]->stats.corpse) {
 			continue;
 		}
 
-		float distance = Utils::calcDist(pos, enemies[i]->stats.pos);
+		float distance = Utils::calcDist(pos, entities[i]->stats.pos);
 		if (distance < best_distance) {
 			best_distance = distance;
-			nearest = enemies[i];
+			nearest = entities[i];
 		}
 	}
 
@@ -453,21 +446,21 @@ Enemy* EnemyManager::getNearestEnemy(const FPoint& pos, bool get_corpse, float *
 	return nearest;
 }
 
-bool EnemyManager::isCleared() {
-	if (enemies.empty()) return true;
+bool EntityManager::isCleared() {
+	if (entities.empty()) return true;
 
-	for (unsigned int i=0; i < enemies.size(); i++) {
-		if (enemies[i]->stats.alive && !enemies[i]->stats.hero_ally)
+	for (unsigned int i=0; i < entities.size(); i++) {
+		if (entities[i]->stats.alive && !entities[i]->stats.hero_ally)
 			return false;
 	}
 
 	return true;
 }
 
-void EnemyManager::spawn(const std::string& enemy_type, const Point& target) {
+void EntityManager::spawn(const std::string& entity_type, const Point& target) {
 	Map_Enemy espawn;
 
-	espawn.type = enemy_type;
+	espawn.type = entity_type;
 	espawn.pos = FPoint(target);
 	espawn.pos.x += 0.5f;
 	espawn.pos.y += 0.5f;
@@ -490,9 +483,9 @@ void EnemyManager::spawn(const std::string& enemy_type, const Point& target) {
  * Map objects need to be drawn in Z order, so we allow a parent object (GameEngine)
  * to collect all mobile sprites each frame.
  */
-void EnemyManager::addRenders(std::vector<Renderable> &r, std::vector<Renderable> &r_dead) {
-	std::vector<Enemy*>::iterator it;
-	for (it = enemies.begin(); it != enemies.end(); ++it) {
+void EntityManager::addRenders(std::vector<Renderable> &r, std::vector<Renderable> &r_dead) {
+	std::vector<Entity*>::iterator it;
+	for (it = entities.begin(); it != entities.end(); ++it) {
 		bool dead = (*it)->stats.corpse;
 		if (!dead || !(*it)->stats.corpse_timer.isEnd()) {
 			Renderable re = (*it)->getRender();
@@ -526,11 +519,11 @@ void EnemyManager::addRenders(std::vector<Renderable> &r, std::vector<Renderable
 	}
 }
 
-EnemyManager::~EnemyManager() {
-	for (unsigned int i=0; i < enemies.size(); i++) {
-		anim->decreaseCount(enemies[i]->animationSet->getName());
-		enemies[i]->unloadSounds();
-		delete enemies[i];
+EntityManager::~EntityManager() {
+	for (unsigned int i=0; i < entities.size(); i++) {
+		anim->decreaseCount(entities[i]->animationSet->getName());
+		entities[i]->unloadSounds();
+		delete entities[i];
 	}
 	for (unsigned int i=0; i < prototypes.size(); i++) {
 		anim->decreaseCount(prototypes[i].animationSet->getName());

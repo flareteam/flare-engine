@@ -32,7 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class StatBlock;
 class NPC;
 class WidgetTooltip;
-class Enemy;
+class Entity;
 
 class NPCManager {
 private:
@@ -50,8 +50,8 @@ public:
 	void logic();
 	void addRenders(std::vector<Renderable> &r);
 	int getID(const std::string& npcName);
-	Enemy* npcFocus(const Point& mouse, const FPoint& cam, bool alive_only);
-	Enemy* getNearestNPC(const FPoint& pos, bool get_corpse = false);
+	Entity* npcFocus(const Point& mouse, const FPoint& cam, bool alive_only);
+	Entity* getNearestNPC(const FPoint& pos, bool get_corpse = false);
 };
 
 #endif

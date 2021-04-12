@@ -18,7 +18,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Avatar.h"
 #include "CampaignManager.h"
-#include "EnemyManager.h"
+#include "EntityManager.h"
 #include "EngineSettings.h"
 #include "EventManager.h"
 #include "FileParser.h"
@@ -910,7 +910,7 @@ bool EventManager::executeEventInternal(Event &ev, bool skip_delay) {
 			Point spawn_pos;
 			spawn_pos.x = ec->x;
 			spawn_pos.y = ec->y;
-			enemym->spawn(ec->s, spawn_pos);
+			entitym->spawn(ec->s, spawn_pos);
 		}
 		else if (ec->type == EventComponent::POWER) {
 			EventComponent *ec_path = ev.getComponent(EventComponent::POWER_PATH);

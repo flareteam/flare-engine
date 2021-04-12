@@ -19,6 +19,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Avatar.h"
 #include "CampaignManager.h"
 #include "EnemyGroupManager.h"
+#include "EntityManager.h"
 #include "HazardManager.h"
 #include "LootManager.h"
 #include "MenuActionBar.h"
@@ -30,7 +31,7 @@ Avatar *pc = NULL;
 MenuManager *menu = NULL;
 CampaignManager *camp = NULL;
 EnemyGroupManager *enemyg = NULL;
-EnemyManager *enemym = NULL;
+EntityManager *entitym = NULL;
 HazardManager *hazards = NULL;
 ItemManager *items = NULL;
 LootManager *loot = NULL;

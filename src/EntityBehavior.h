@@ -30,7 +30,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef ENTITY_BEHAVIOR_H
 #define ENTITY_BEHAVIOR_H
 
-class Enemy;
+class Entity;
 
 class EntityBehavior {
 private:
@@ -50,7 +50,7 @@ private:
 	FPoint getWanderPoint();
 
 protected:
-	Enemy *e;
+	Entity *e;
 
 	static const int PATH_FOUND_FAIL_THRESHOLD = 1;
 	static const int PATH_FOUND_FAIL_WAIT_SECONDS = 2;
@@ -69,7 +69,7 @@ protected:
 	FPoint pursue_pos;
 	// targeting vars
 	bool los;
-	//when fleeing, the enemy moves away from the pursue_pos
+	//when fleeing, the entity moves away from the pursue_pos
 	bool fleeing;
 	bool move_to_safe_dist;
 	Timer turn_timer;
@@ -77,7 +77,7 @@ protected:
 	bool instant_power;
 
 public:
-	EntityBehavior(Enemy *_e);
+	EntityBehavior(Entity *_e);
 	~EntityBehavior();
 	void logic();
 };

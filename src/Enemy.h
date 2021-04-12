@@ -35,15 +35,8 @@ class Enemy : public Entity {
 
 public:
 	Enemy();
-	Enemy(const Enemy& e);
-	Enemy& operator=(const Enemy& e);
 	~Enemy();
 	void logic();
-
-	Renderable getRender();
-
-	EntityBehavior *eb;
-
 };
 
 

@@ -31,9 +31,9 @@ LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c \
 	../../../../../../src/Enemy.cpp \
 	../../../../../../src/EnemyBehavior.cpp \
 	../../../../../../src/EnemyGroupManager.cpp \
-	../../../../../../src/EnemyManager.cpp \
 	../../../../../../src/Entity.cpp \
 	../../../../../../src/EntityBehavior.cpp \
+	../../../../../../src/EntityManager.cpp \
 	../../../../../../src/EngineSettings.cpp \
 	../../../../../../src/EventManager.cpp \
 	../../../../../../src/FileParser.cpp \

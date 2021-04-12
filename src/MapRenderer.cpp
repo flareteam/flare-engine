@@ -27,7 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CursorManager.h"
 #include "Enemy.h"
 #include "EnemyGroupManager.h"
-#include "EnemyManager.h"
+#include "EntityManager.h"
 #include "EngineSettings.h"
 #include "EventManager.h"
 #include "Hazard.h"
@@ -1204,8 +1204,8 @@ void MapRenderer::drawDevHUD() {
 	}
 
 	// enemies
-	for (size_t i = 0; i < enemym->enemies.size(); ++i) {
-		Point p0 = Utils::mapToScreen(enemym->enemies[i]->stats.pos.x, enemym->enemies[i]->stats.pos.y, cam.shake.x, cam.shake.y);
+	for (size_t i = 0; i < entitym->entities.size(); ++i) {
+		Point p0 = Utils::mapToScreen(entitym->entities[i]->stats.pos.x, entitym->entities[i]->stats.pos.y, cam.shake.x, cam.shake.y);
 		render_device->drawLine(p0.x - cross_size, p0.y, p0.x + cross_size, p0.y, color_entity);
 		render_device->drawLine(p0.x, p0.y - cross_size, p0.x, p0.y + cross_size, color_entity);
 	}
