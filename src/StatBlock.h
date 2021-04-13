@@ -91,6 +91,10 @@ public:
 	static const bool CAN_USE_PASSIVE = true;
 	static const bool TAKE_DMG_CRIT = true;
 
+	static const float DIRECTION_DELTA_X[8];
+	static const float DIRECTION_DELTA_Y[8];
+	static const float SPEED_MULTIPLIER[8];
+
 	StatBlock();
 	~StatBlock();
 

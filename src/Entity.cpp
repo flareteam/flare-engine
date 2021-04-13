@@ -44,17 +44,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SoundManager.h"
 #include "UtilsMath.h"
 
-#include <math.h>
-
-#ifndef M_SQRT2
-#define M_SQRT2 sqrt(2.0)
-#endif
-
-// TODO make these not global
-const int directionDeltaX[8] =   {-1, -1, -1,  0,  1,  1,  1,  0};
-const int directionDeltaY[8] =   { 1,  0, -1, -1, -1,  0,  1,  1};
-const float speedMultiplyer[8] = { static_cast<float>(1.0/M_SQRT2), 1.0f, static_cast<float>(1.0/M_SQRT2), 1.0f, static_cast<float>(1.0/M_SQRT2), 1.0f, static_cast<float>(1.0/M_SQRT2), 1.0f};
-
 Entity::Entity()
 	: sprites(NULL)
 	, sound_attack()
@@ -303,9 +292,9 @@ bool Entity::move() {
 	if (stats.charge_speed != 0.0f)
 		return false;
 
-	float speed = stats.speed * speedMultiplyer[stats.direction] * stats.effects.speed / 100;
-	float dx = speed * static_cast<float>(directionDeltaX[stats.direction]);
-	float dy = speed * static_cast<float>(directionDeltaY[stats.direction]);
+	float speed = stats.speed * StatBlock::SPEED_MULTIPLIER[stats.direction] * stats.effects.speed / 100;
+	float dx = speed * StatBlock::DIRECTION_DELTA_X[stats.direction];
+	float dy = speed * StatBlock::DIRECTION_DELTA_Y[stats.direction];
 
 	bool full_move = mapr->collider.move(stats.pos.x, stats.pos.y, dx, dy, stats.movement_type, mapr->collider.getCollideType(stats.hero));
 

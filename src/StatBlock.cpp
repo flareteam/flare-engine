@@ -48,6 +48,15 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <limits>
 
+#include <math.h>
+#ifndef M_SQRT2
+#define M_SQRT2 sqrt(2.0)
+#endif
+
+const float StatBlock::DIRECTION_DELTA_X[8] =   {-1, -1, -1,  0,  1,  1,  1,  0};
+const float StatBlock::DIRECTION_DELTA_Y[8] =   { 1,  0, -1, -1, -1,  0,  1,  1};
+const float StatBlock::SPEED_MULTIPLIER[8] = { static_cast<float>(1.0/M_SQRT2), 1.0f, static_cast<float>(1.0/M_SQRT2), 1.0f, static_cast<float>(1.0/M_SQRT2), 1.0f, static_cast<float>(1.0/M_SQRT2), 1.0f};
+
 StatBlock::StatBlock()
 	: statsLoaded(false)
 	, alive(true)
@@ -946,9 +955,9 @@ void StatBlock::logic() {
 		mapr->collider.block(pos.x, pos.y, hero_ally);
 	}
 	else if (charge_speed != 0.0f) {
-		float tmp_speed = charge_speed * speedMultiplyer[direction];
-		float dx = tmp_speed * static_cast<float>(directionDeltaX[direction]);
-		float dy = tmp_speed * static_cast<float>(directionDeltaY[direction]);
+		float tmp_speed = charge_speed * SPEED_MULTIPLIER[direction];
+		float dx = tmp_speed * DIRECTION_DELTA_X[direction];
+		float dy = tmp_speed * DIRECTION_DELTA_Y[direction];
 
 		mapr->collider.unblock(pos.x, pos.y);
 		mapr->collider.move(pos.x, pos.y, dx, dy, movement_type, mapr->collider.getCollideType(hero));

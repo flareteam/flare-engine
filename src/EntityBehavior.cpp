@@ -238,8 +238,6 @@ void EntityBehavior::findTarget() {
 			e->stats.in_combat = false;
 	}
 
-	// TODO default ally target to player?
-
 	if (target_stats)
 		pursue_pos = target_stats->pos;
 
@@ -408,7 +406,7 @@ void EntityBehavior::checkMove() {
 		return;
 	}
 
-	float real_speed = e->stats.speed * speedMultiplyer[e->stats.direction] * e->stats.effects.speed / 100;
+	float real_speed = e->stats.speed * StatBlock::SPEED_MULTIPLIER[e->stats.direction] * e->stats.effects.speed / 100;
 
 	unsigned turn_ticks = turn_timer.getCurrent();
 	turn_timer.setDuration(e->stats.turn_delay);
