@@ -564,7 +564,7 @@ void EntityBehavior::checkMoveStateStance() {
 	// 1. too far away and chance_pursue roll succeeds
 	// 2. within range, but lack line-of-sight (required to attack)
 	bool ally_targeting_hero = e->stats.hero_ally && !e->stats.in_combat && hero_dist > ALLY_FOLLOW_DISTANCE_WALK;
-	bool should_move_to_target = e->stats.in_combat && ((target_dist > e->stats.melee_range && Math::percentChance(e->stats.chance_pursue)) || (target_dist <= e->stats.melee_range && !los));
+	bool should_move_to_target = (e->stats.in_combat || !e->stats.waypoints.empty()) && ((target_dist > e->stats.melee_range && Math::percentChance(e->stats.chance_pursue)) || (target_dist <= e->stats.melee_range && !los));
 
 	if (should_move_to_target || fleeing || ally_targeting_hero) {
 
