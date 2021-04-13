@@ -341,21 +341,13 @@ int NPC::loadSound(const std::string& fname, int vox_type) {
 }
 
 void NPC::logic() {
+	mapr->collider.unblock(stats.pos.x, stats.pos.y);
 
-	if (stats.hero_ally) {
-		// TODO: check logic
-		mapr->collider.unblock(stats.pos.x, stats.pos.y);
+	Entity::logic();
+	moveMapEvents();
 
-		Entity::logic();
-		moveMapEvents();
-	}
-	else
-	{
-		// TODO: check logic
-		if (activeAnimation)
-			activeAnimation->advanceFrame();
+	if (!stats.hero_ally)
 		mapr->collider.block(stats.pos.x, stats.pos.y, true);
-	}
 }
 
 bool NPC::playSoundIntro() {
