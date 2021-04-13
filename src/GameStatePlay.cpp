@@ -220,6 +220,37 @@ void GameStatePlay::checkEnemyFocus() {
 }
 
 /**
+ * Similar to the above checkEnemyFocus(), but handles NPCManager instead
+ */
+void GameStatePlay::checkNPCFocus() {
+	Enemy *focus_npc;
+
+	if (!inpt->usingMouse() && (!menu->enemy->enemy || (menu->enemy->enemy && menu->enemy->enemy->stats.hero_ally))) {
+		// TODO bug? If mixed monster allies and npc allies, npc allies will always be highlighted, regardless of distance to player
+		focus_npc = npcs->getNearestNPC(pc->stats.pos);
+	}
+	else {
+		focus_npc = npcs->npcFocus(inpt->mouse, mapr->cam, true);
+	}
+
+	if (focus_npc) {
+		// set the actual menu with the npc selected above
+		if (!focus_npc->stats.suppress_hp) {
+			menu->enemy->enemy = focus_npc;
+			menu->enemy->timeout.reset(Timer::BEGIN);
+		}
+	}
+	else if (inpt->usingMouse()) {
+		// if we're using a mouse and we didn't select an npc, try selecting a dead one instead
+		Enemy *temp_npc = npcs->npcFocus(inpt->mouse, mapr->cam, false);
+		if (temp_npc) {
+			menu->enemy->enemy = temp_npc;
+			menu->enemy->timeout.reset(Timer::BEGIN);
+		}
+	}
+}
+
+/**
  * If mouse_move is enabled, and the mouse is over a live enemy,
  * Do not allow power use with button MAIN1
  */
@@ -709,7 +740,7 @@ void GameStatePlay::checkNPCInteraction() {
 	if (npc_id != -1) {
 		bool interact_with_npc = false;
 		if (menu->talker->npc_from_map) {
-			float interact_distance = Utils::calcDist(pc->stats.pos, npcs->npcs[npc_id]->pos);
+			float interact_distance = Utils::calcDist(pc->stats.pos, npcs->npcs[npc_id]->stats.pos);
 
 			if (interact_distance < eset->misc.interact_range) {
 				interact_with_npc = true;
@@ -859,6 +890,7 @@ void GameStatePlay::logic() {
 		// these actions only occur when the game isn't paused
 		if (pc->stats.alive) checkLoot();
 		checkEnemyFocus();
+		checkNPCFocus();
 		if (pc->stats.alive) {
 			mapr->checkHotspots();
 			mapr->checkNearestEvent();

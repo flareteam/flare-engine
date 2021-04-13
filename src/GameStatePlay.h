@@ -70,6 +70,7 @@ private:
 
 	bool restrictPowerUse();
 	void checkEnemyFocus();
+	void checkNPCFocus();
 	void checkLoot();
 	void checkLootDrop();
 	void checkTeleport();

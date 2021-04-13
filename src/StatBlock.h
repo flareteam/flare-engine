@@ -38,6 +38,7 @@ class StatBlock {
 private:
 	bool loadCoreStat(FileParser *infile);
 	bool loadSfxStat(FileParser *infile);
+	bool isNPCStat(FileParser *infile);
 	void loadHeroStats();
 	bool checkRequiredSpawns(int req_amount) const;
 	bool statsLoaded;

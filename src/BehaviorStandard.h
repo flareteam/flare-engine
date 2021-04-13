@@ -20,7 +20,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define BEHAVIOR_STANDARD_H
 
 #include "EnemyBehavior.h"
-#include "Utils.h"
 
 class Enemy;
 class Point;
