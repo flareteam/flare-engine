@@ -30,6 +30,7 @@ class MapRenderer;
 class MenuActionBar;
 class MenuManager;
 class MenuPowers;
+class NPCManager;
 class PowerManager;
 
 /* These objects are created in the GameStatePlay constructor and deleted in the GameStatePlay destructor
@@ -46,6 +47,7 @@ extern MapRenderer *mapr;
 extern MenuActionBar *menu_act;
 extern MenuManager *menu;
 extern MenuPowers *menu_powers;
+extern NPCManager *npcs;
 extern PowerManager *powers;
 
 #endif // SHAREDGAMEOBJECTS_H

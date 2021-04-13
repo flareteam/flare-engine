@@ -34,7 +34,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class Avatar;
 class Entity;
 class MenuManager;
-class NPCManager;
 class QuestLog;
 class WidgetLabel;
 
@@ -65,7 +64,6 @@ class GameStatePlay : public GameState {
 private:
 	Entity *enemy;
 
-	NPCManager *npcs;
 	QuestLog *quests;
 
 	bool restrictPowerUse();

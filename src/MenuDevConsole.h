@@ -37,7 +37,7 @@ protected:
 	void execute();
 	void getPlayerInfo();
 	void getTileInfo();
-	void getEnemyInfo();
+	void getEntityInfo();
 	void reset();
 
 	WidgetButton *button_close;

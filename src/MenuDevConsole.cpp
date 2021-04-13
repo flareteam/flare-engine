@@ -33,6 +33,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuManager.h"
 #include "MessageEngine.h"
 #include "ModManager.h"
+#include "NPC.h"
+#include "NPCManager.h"
 #include "PowerManager.h"
 #include "Settings.h"
 #include "SharedGameResources.h"
@@ -202,7 +204,7 @@ void MenuDevConsole::logic() {
 			std::stringstream ss;
 			if (!mapr->collider.isOutsideMap(floorf(target.x), floorf(target.y))) {
 				getTileInfo();
-				getEnemyInfo();
+				getEntityInfo();
 				getPlayerInfo();
 
 				ss << "X=" << target.x << ", Y=" << target.y;
@@ -275,8 +277,9 @@ void MenuDevConsole::getTileInfo() {
 	log_history->add(ss.str(), WidgetLog::MSG_NORMAL);
 }
 
-void MenuDevConsole::getEnemyInfo() {
+void MenuDevConsole::getEntityInfo() {
 	std::stringstream ss;
+	// enemies & ally creatures
 	for (size_t i = 0; i < entitym->entities.size(); ++i) {
 		const Entity* e = entitym->entities[i];
 		if (!(static_cast<int>(target.x) == static_cast<int>(e->stats.pos.x) && static_cast<int>(target.y) == static_cast<int>(e->stats.pos.y)))
@@ -287,7 +290,21 @@ void MenuDevConsole::getEnemyInfo() {
 		log_history->setNextColor(font->getColor(FontEngine::COLOR_MENU_BONUS));
 		log_history->add(ss.str(), WidgetLog::MSG_NORMAL);
 
-		// TODO print more enemy data
+		// TODO print more entity data
+	}
+
+	// non-ally NPCs
+	for (size_t i = 0; i < npcs->npcs.size(); ++i) {
+		const Entity* e = npcs->npcs[i];
+		if (!(static_cast<int>(target.x) == static_cast<int>(e->stats.pos.x) && static_cast<int>(target.y) == static_cast<int>(e->stats.pos.y)))
+			continue;
+
+		ss.str("");
+		ss << msg->get("Entity") << ": " << e->stats.name << "  |  X=" << e->stats.pos.x << ", Y=" << e->stats.pos.y;
+		log_history->setNextColor(font->getColor(FontEngine::COLOR_MENU_BONUS));
+		log_history->add(ss.str(), WidgetLog::MSG_NORMAL);
+
+		// TODO print more entity data
 	}
 }
 

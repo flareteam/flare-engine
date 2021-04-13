@@ -24,6 +24,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "LootManager.h"
 #include "MenuActionBar.h"
 #include "MenuPowers.h"
+#include "NPCManager.h"
 #include "PowerManager.h"
 #include "SharedGameResources.h"
 
@@ -38,4 +39,5 @@ LootManager *loot = NULL;
 MapRenderer *mapr = NULL;
 MenuActionBar *menu_act= NULL;
 MenuPowers *menu_powers = NULL;
+NPCManager *npcs = NULL;
 PowerManager *powers = NULL;
