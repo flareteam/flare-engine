@@ -25,7 +25,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Avatar.h"
 #include "Animation.h"
-#include "Enemy.h"
+#include "Entity.h"
 #include "EntityManager.h"
 #include "EventManager.h"
 #include "Hazard.h"

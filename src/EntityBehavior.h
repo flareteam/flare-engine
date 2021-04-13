@@ -34,10 +34,10 @@ class Entity;
 
 class EntityBehavior {
 private:
-	static const float ALLY_FLEE_DISTANCE = 2;
-	static const float ALLY_FOLLOW_DISTANCE_WALK = 5.5;
-	static const float ALLY_FOLLOW_DISTANCE_STOP = 5;
-	static const float ALLY_TELEPORT_DISTANCE = 40;
+	static const float ALLY_FLEE_DISTANCE;
+	static const float ALLY_FOLLOW_DISTANCE_WALK;
+	static const float ALLY_FOLLOW_DISTANCE_STOP;
+	static const float ALLY_TELEPORT_DISTANCE;
 
 	// logic steps
 	void doUpkeep();

@@ -125,7 +125,6 @@ Set (FLARE_SOURCES
 	./src/CursorManager.cpp
 	./src/DeviceList.cpp
 	./src/EffectManager.cpp
-	./src/Enemy.cpp
 	./src/EnemyGroupManager.cpp
 	./src/EngineSettings.cpp
 	./src/Entity.cpp
@@ -241,7 +240,6 @@ Set (FLARE_HEADERS
 	./src/CursorManager.h
 	./src/DeviceList.h
 	./src/EffectManager.h
-	./src/Enemy.h
 	./src/EnemyGroupManager.h
 	./src/EngineSettings.h
 	./src/Entity.h

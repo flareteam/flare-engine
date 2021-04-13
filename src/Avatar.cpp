@@ -32,7 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "CursorManager.h"
 #include "EnemyGroupManager.h"
-#include "Enemy.h"
+#include "Entity.h"
 #include "EntityManager.h"
 #include "EngineSettings.h"
 #include "FileParser.h"

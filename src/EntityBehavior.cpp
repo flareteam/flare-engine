@@ -29,7 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Animation.h"
 #include "Avatar.h"
 #include "CommonIncludes.h"
-#include "Enemy.h"
+#include "Entity.h"
 #include "EntityManager.h"
 #include "EngineSettings.h"
 #include "Entity.h"
@@ -41,6 +41,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "StatBlock.h"
 #include "UtilsMath.h"
+
+const float EntityBehavior::ALLY_FLEE_DISTANCE = 2;
+const float EntityBehavior::ALLY_FOLLOW_DISTANCE_WALK = 5.5;
+const float EntityBehavior::ALLY_FOLLOW_DISTANCE_STOP = 5;
+const float EntityBehavior::ALLY_TELEPORT_DISTANCE = 40;
 
 EntityBehavior::EntityBehavior(Entity *_e)
 	: e(_e)

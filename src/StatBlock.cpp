@@ -28,7 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Avatar.h"
 #include "CampaignManager.h"
 #include "CombatText.h"
-#include "Enemy.h"
+#include "Entity.h"
 #include "EntityManager.h"
 #include "EngineSettings.h"
 #include "FileParser.h"

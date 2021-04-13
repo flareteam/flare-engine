@@ -21,15 +21,12 @@ LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c \
 	../../../../../../src/AStarContainer.cpp \
 	../../../../../../src/AStarNode.cpp \
 	../../../../../../src/Avatar.cpp \
-	../../../../../../src/BehaviorStandard.cpp \
 	../../../../../../src/Camera.cpp \
 	../../../../../../src/CampaignManager.cpp \
 	../../../../../../src/CombatText.cpp \
 	../../../../../../src/CursorManager.cpp \
 	../../../../../../src/DeviceList.cpp \
 	../../../../../../src/EffectManager.cpp \
-	../../../../../../src/Enemy.cpp \
-	../../../../../../src/EnemyBehavior.cpp \
 	../../../../../../src/EnemyGroupManager.cpp \
 	../../../../../../src/Entity.cpp \
 	../../../../../../src/EntityBehavior.cpp \
