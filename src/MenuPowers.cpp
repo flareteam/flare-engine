@@ -553,20 +553,8 @@ bool MenuPowers::checkRequirements(MenuPowersCell* pcell) {
 	if (pc->stats.level < pcell->requires_level)
 		return false;
 
-	for (size_t i = 0; i < pcell->requires_power.size(); ++i) {
-		if (!checkUnlocked(getCellByPowerIndex(pcell->requires_power[i])))
-			return false;
-	}
-
 	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 		if (pc->stats.get_primary(i) < pcell->requires_primary[i])
-			return false;
-	}
-
-	// NOTE if the player is dies, canUsePower() fails and causes passive powers to be locked
-	// so we can guard against this be checking player HP > 0
-	if (powers->powers[pcell->id].passive && pc->stats.hp > 0) {
-		if (!pc->stats.canUsePower(pcell->id, StatBlock::CAN_USE_PASSIVE))
 			return false;
 	}
 
@@ -577,6 +565,18 @@ bool MenuPowers::checkRequirements(MenuPowersCell* pcell) {
 	for (size_t i = 0; i < pcell->requires_not_status.size(); ++i)
 		if (camp->checkStatus(pcell->requires_not_status[i]))
 			return false;
+
+	for (size_t i = 0; i < pcell->requires_power.size(); ++i) {
+		if (!checkUnlocked(getCellByPowerIndex(pcell->requires_power[i])))
+			return false;
+	}
+
+	// NOTE if the player is dies, canUsePower() fails and causes passive powers to be locked
+	// so we can guard against this be checking player HP > 0
+	if (powers->powers[pcell->id].passive && pc->stats.hp > 0) {
+		if (!pc->stats.canUsePower(pcell->id, StatBlock::CAN_USE_PASSIVE))
+			return false;
+	}
 
 	return true;
 }
