@@ -36,6 +36,7 @@ Engine features:
 * Support an arbitrary number of Stash tabs. Each tab has a display name and an 'is_private' flag.
 * Added 'save_onstash' property to engine/misc.txt, so it is now possible to disable the automatic save when modifying stash contents.
 * The player's last used Stash tab is now remembered across sessions.
+* Added the ability for NPCs to join the player's party. (Igor Paliychuk)
 
 Engine fixes:
 
