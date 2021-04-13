@@ -1011,6 +1011,8 @@ void GameStatePlay::logic() {
  * Render all graphics for a single frame
  */
 void GameStatePlay::render() {
+	if (mapr->is_spawn_map)
+		return;
 
 	// Create a list of Renderables from all objects not already on the map.
 	// split the list into the beings alive (may move) and dead beings (must not move)

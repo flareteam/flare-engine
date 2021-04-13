@@ -73,6 +73,7 @@ MapRenderer::MapRenderer()
 	, npc_id(-1)
 	, show_book("")
 	, index_objectlayer(0)
+	, is_spawn_map(false)
 {
 	// Load entity markers
 	Image *gfx = render_device->loadImage("images/menus/entity_hidden.png", RenderDevice::ERROR_NORMAL);
@@ -195,6 +196,7 @@ int MapRenderer::load(const std::string& fname) {
 	comb->clear();
 
 	show_tooltip = false;
+	is_spawn_map = (fname == "maps/spawn.txt");
 
 	Map::load(fname);
 

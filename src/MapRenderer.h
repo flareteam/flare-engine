@@ -175,6 +175,9 @@ public:
 	 * before that are painted below objects; Layers after are painted on top.
 	 */
 	unsigned index_objectlayer;
+
+	// flag used to prevent rendering when in maps/spawn.txt
+	bool is_spawn_map;
 };
 
 
