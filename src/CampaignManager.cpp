@@ -159,13 +159,22 @@ void CampaignManager::removeItem(ItemStack istack) {
 	if (istack.empty())
 		return;
 
-	// TODO display message even if remove() fails? This could happen when trying to remove more than the player is carrying...
-	if (menu->inv->remove(istack.item, istack.quantity)) {
-		if (istack.quantity > 1)
-			pc->logMsg(msg->get("%s x%d removed.", items->getItemName(istack.item), istack.quantity), Avatar::MSG_UNIQUE);
-		else
+	if (istack.item == eset->misc.currency_id) {
+		removeCurrency(istack.quantity);
+		return;
+	}
+
+	int item_count = menu->inv->inventory[MenuInventory::CARRIED].count(istack.item) + menu->inv->inventory[MenuInventory::EQUIPMENT].count(istack.item);
+	int max_amount = std::min(item_count, istack.quantity);
+
+	if (menu->inv->remove(istack.item, max_amount)) {
+		if (max_amount > 1)
+			pc->logMsg(msg->get("%s x%d removed.", items->getItemName(istack.item), max_amount), Avatar::MSG_UNIQUE);
+		else if (max_amount == 1)
 			pc->logMsg(msg->get("%s removed.", items->getItemName(istack.item)), Avatar::MSG_UNIQUE);
-		items->playSound(istack.item);
+
+		if (max_amount > 0)
+			items->playSound(istack.item);
 	}
 }
 
@@ -175,11 +184,14 @@ void CampaignManager::rewardItem(ItemStack istack) {
 
 	menu->inv->add(istack, MenuInventory::CARRIED, ItemStorage::NO_SLOT, MenuInventory::ADD_PLAY_SOUND, MenuInventory::ADD_AUTO_EQUIP);
 
-	if (istack.item != eset->misc.currency_id) {
-		if (istack.quantity <= 1)
-			pc->logMsg(msg->get("You receive %s.", items->getItemName(istack.item)), Avatar::MSG_UNIQUE);
+	if (istack.item == eset->misc.currency_id) {
+		pc->logMsg(msg->get("You receive %d %s.", istack.quantity, eset->loot.currency), Avatar::MSG_UNIQUE);
+	}
+	else {
 		if (istack.quantity > 1)
 			pc->logMsg(msg->get("You receive %s x%d.", items->getItemName(istack.item), istack.quantity), Avatar::MSG_UNIQUE);
+		else if (istack.quantity == 1)
+			pc->logMsg(msg->get("You receive %s.", items->getItemName(istack.item)), Avatar::MSG_UNIQUE);
 	}
 }
 
@@ -188,7 +200,6 @@ void CampaignManager::rewardCurrency(int amount) {
 	stack.item = eset->misc.currency_id;
 	stack.quantity = amount;
 
-	pc->logMsg(msg->get("You receive %d %s.", amount, eset->loot.currency), Avatar::MSG_UNIQUE);
 	rewardItem(stack);
 }
 
