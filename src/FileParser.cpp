@@ -232,7 +232,7 @@ void FileParser::error(const char* format, ...) {
 	va_list args;
 
 	va_start(args, format);
-	vsprintf(buffer, format, args);
+	vsnprintf(buffer, 4096, format, args);
 	va_end(args);
 
 	errorBuf(buffer);
