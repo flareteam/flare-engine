@@ -63,7 +63,7 @@ public:
 	std::vector<WidgetSlot*> slots;
 	WidgetSlot *current_slot;
 
-	bool * highlight;
+	std::vector<bool> highlight;
 	Sprite *highlight_image;
 	Sprite *overlay_disabled;
 };

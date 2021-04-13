@@ -40,7 +40,7 @@ MenuItemStorage::MenuItemStorage()
 	, drag_prev_slot(-1)
 	, slots()
 	, current_slot(NULL)
-	, highlight(NULL)
+	, highlight()
 	, highlight_image(NULL)
 	, overlay_disabled(NULL) {
 }
@@ -55,7 +55,7 @@ void MenuItemStorage::initGrid(int _slot_number, const Rect& _area, int _nb_cols
 		slots.push_back(slot);
 	}
 	nb_cols = _nb_cols;
-	highlight = new bool[_slot_number];
+	highlight.resize(_slot_number);
 	for (int i=0; i<_slot_number; i++) {
 		highlight[i] = false;
 		slots[i]->pos.x = grid_area.x + (i % nb_cols * eset->resolutions.icon_size);
@@ -76,7 +76,7 @@ void MenuItemStorage::initFromList(int _slot_number, const std::vector<Rect>& _a
 	}
 	nb_cols = 0;
 	slot_type = _slot_type;
-	highlight = new bool[_slot_number];
+	highlight.resize(_slot_number);
 	for (int i=0; i<_slot_number; i++) {
 		highlight[i] = false;
 	}
@@ -243,8 +243,6 @@ ItemStack MenuItemStorage::getItemStackAtPos(const Point& position) {
 MenuItemStorage::~MenuItemStorage() {
 	if (highlight_image)
 		delete highlight_image;
-
-	delete[] highlight;
 
 	if (overlay_disabled)
 		delete overlay_disabled;
