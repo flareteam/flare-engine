@@ -81,6 +81,7 @@ Engine fixes:
 * Fix parsing bug in power trees that would save base power properties to an upgrade power.
 * Fix on_load events with requires_class not working in maps/spawn.txt
 * Fix timing of Effects so that the first "tick" happens immediately.
+* Fix "Press button to use" prompt no showing up for some items.
 
 Game updates:
 

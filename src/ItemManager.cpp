@@ -31,6 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FontEngine.h"
 #include "InputState.h"
 #include "ItemManager.h"
+#include "MenuInventory.h"
 #include "MenuManager.h"
 #include "MenuPowers.h"
 #include "MessageEngine.h"
@@ -913,10 +914,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 		if (!items[stack.item].book.empty() && items[stack.item].book_is_readable) {
 			tip.addColoredText('\n' + msg->get("Press [%s] to read", inpt->getBindingString(Input::MAIN2)), font->getColor(FontEngine::COLOR_ITEM_BONUS));
 		}
-		else if (!items[stack.item].script.empty() ||
-		         !items[stack.item].book.empty() ||
-		         (items[stack.item].power > 0 && items[stack.item].type == "consumable"))
-		{
+		else if (menu->inv->canActivateItem(stack.item)) {
 			tip.addColoredText('\n' + msg->get("Press [%s] to use", inpt->getBindingString(Input::MAIN2)), font->getColor(FontEngine::COLOR_ITEM_BONUS));
 		}
 	}

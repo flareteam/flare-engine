@@ -1246,6 +1246,17 @@ void MenuInventory::disableEquipmentSlot(const std::string& disable_slot_type) {
 	}
 }
 
+bool MenuInventory::canActivateItem(ItemID item) {
+	if (!items->items[item].script.empty())
+		return true;
+	if (!items->items[item].book.empty())
+		return true;
+	if (items->items[item].power > 0 && getEquipSlotFromItem(item, !ONLY_EMPTY_SLOTS) == -1)
+		return true;
+
+	return false;
+}
+
 MenuInventory::~MenuInventory() {
 	delete closeButton;
 }

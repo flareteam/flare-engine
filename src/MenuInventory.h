@@ -27,6 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define MENU_INVENTORY_H
 
 #include "CommonIncludes.h"
+#include "Menu.h"
 #include "MenuItemStorage.h"
 #include "Utils.h"
 #include "WidgetLabel.h"
@@ -118,6 +119,8 @@ public:
 	PowerID getPowerMod(PowerID meta_power);
 
 	void disableEquipmentSlot(const std::string& slot_type);
+
+	bool canActivateItem(ItemID item);
 
 	Rect carried_area;
 	std::vector<Rect> equipped_area;
