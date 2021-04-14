@@ -50,8 +50,7 @@ Effect::Effect()
 	: id("")
 	, name("")
 	, icon(-1)
-	, ticks(0)
-	, duration(-1)
+	, timer()
 	, type(Effect::NONE)
 	, magnitude(0)
 	, magnitude_max(0)
@@ -86,8 +85,7 @@ Effect& Effect::operator=(const Effect& other) {
 	id = other.id;
 	name = other.name;
 	icon = other.icon;
-	ticks = other.ticks;
-	duration = other.duration;
+	timer = other.timer;
 	type = other.type;
 	magnitude = other.magnitude;
 	magnitude_max = other.magnitude_max;
@@ -284,89 +282,89 @@ void EffectManager::logic() {
 
 		// @CLASS EffectManager|Description of "type" in powers/effects.txt
 		// expire timed effects and total up magnitudes of active effects
-		if (ei.duration >= 0) {
-			if (ei.duration > 0) {
-				if (ei.ticks > 0) ei.ticks--;
-				if (ei.ticks == 0) {
-					//death sentence is only applied at the end of the timer
-					// @TYPE death_sentence|Causes sudden death at the end of the effect duration.
-					if (ei.type == Effect::DEATH_SENTENCE) death_sentence = true;
-					removeEffect(i);
-					i--;
-					continue;
-				}
-			}
-
-			// @TYPE damage|Damage per second
-			if (ei.type == Effect::DAMAGE && ei.ticks % settings->max_frames_per_sec == 1) damage += ei.magnitude;
-			// @TYPE damage_percent|Damage per second (percentage of max HP)
-			else if (ei.type == Effect::DAMAGE_PERCENT && ei.ticks % settings->max_frames_per_sec == 1) damage_percent += ei.magnitude;
-			// @TYPE hpot|HP restored per second
-			else if (ei.type == Effect::HPOT && ei.ticks % settings->max_frames_per_sec == 1) hpot += ei.magnitude;
-			// @TYPE hpot_percent|HP restored per second (percentage of max HP)
-			else if (ei.type == Effect::HPOT_PERCENT && ei.ticks % settings->max_frames_per_sec == 1) hpot_percent += ei.magnitude;
-			// @TYPE mpot|MP restored per second
-			else if (ei.type == Effect::MPOT && ei.ticks % settings->max_frames_per_sec == 1) mpot += ei.magnitude;
-			// @TYPE mpot_percent|MP restored per second (percentage of max MP)
-			else if (ei.type == Effect::MPOT_PERCENT && ei.ticks % settings->max_frames_per_sec == 1) mpot_percent += ei.magnitude;
-			// @TYPE speed|Changes movement speed. A magnitude of 100 is 100% speed (aka normal speed).
-			else if (ei.type == Effect::SPEED) speed = (static_cast<float>(ei.magnitude) * speed) / 100.f;
-			// @TYPE attack_speed|Changes attack speed. A magnitude of 100 is 100% speed (aka normal speed).
-			// attack speed is calculated when getAttackSpeed() is called
-
-			// @TYPE immunity|Applies all immunity effects. Magnitude is ignored.
-			else if (ei.type == Effect::IMMUNITY) {
-				immunity_damage = true;
-				immunity_slow = true;
-				immunity_stun = true;
-				immunity_hp_steal = true;
-				immunity_mp_steal = true;
-				immunity_knockback = true;
-				immunity_damage_reflect = true;
-				immunity_stat_debuff = true;
-			}
-			// @TYPE immunity_damage|Removes and prevents damage over time. Magnitude is ignored.
-			else if (ei.type == Effect::IMMUNITY_DAMAGE) immunity_damage = true;
-			// @TYPE immunity_slow|Removes and prevents slow effects. Magnitude is ignored.
-			else if (ei.type == Effect::IMMUNITY_SLOW) immunity_slow = true;
-			// @TYPE immunity_stun|Removes and prevents stun effects. Magnitude is ignored.
-			else if (ei.type == Effect::IMMUNITY_STUN) immunity_stun = true;
-			// @TYPE immunity_hp_steal|Prevents HP stealing. Magnitude is ignored.
-			else if (ei.type == Effect::IMMUNITY_HP_STEAL) immunity_hp_steal = true;
-			// @TYPE immunity_mp_steal|Prevents MP stealing. Magnitude is ignored.
-			else if (ei.type == Effect::IMMUNITY_MP_STEAL) immunity_mp_steal = true;
-			// @TYPE immunity_knockback|Removes and prevents knockback effects. Magnitude is ignored.
-			else if (ei.type == Effect::IMMUNITY_KNOCKBACK) immunity_knockback = true;
-			// @TYPE immunity_damage_reflect|Prevents damage reflection. Magnitude is ignored.
-			else if (ei.type == Effect::IMMUNITY_DAMAGE_REFLECT) immunity_damage_reflect = true;
-			// @TYPE immunity_stat_debuff|Prevents stat value altering effects that have a magnitude less than 0. Magnitude is ignored.
-			else if (ei.type == Effect::IMMUNITY_STAT_DEBUFF) immunity_stat_debuff = true;
-
-			// @TYPE stun|Can't move or attack. Being attacked breaks stun.
-			else if (ei.type == Effect::STUN) stun = true;
-			// @TYPE revive|Revives the player. Typically attached to a power that triggers when the player dies.
-			else if (ei.type == Effect::REVIVE) revive = true;
-			// @TYPE convert|Causes an enemy or an ally to switch allegiance
-			else if (ei.type == Effect::CONVERT) convert = true;
-			// @TYPE fear|Causes enemies to run away
-			else if (ei.type == Effect::FEAR) fear = true;
-			// @TYPE knockback|Pushes the target away from the source caster. Speed is the given value divided by the framerate cap.
-			else if (ei.type == Effect::KNOCKBACK) knockback_speed = static_cast<float>(ei.magnitude)/static_cast<float>(settings->max_frames_per_sec);
-
-			// @TYPE ${STATNAME}|Increases ${STATNAME}, where ${STATNAME} is any of the base stats. Examples: hp, avoidance, xp_gain
-			// @TYPE ${DAMAGE_TYPE}|Increases a damage min or max, where ${DAMAGE_TYPE} is any 'min' or 'max' value found in engine/damage_types.txt. Example: dmg_melee_min
-			else if (ei.type >= Effect::TYPE_COUNT && ei.type < Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count)) {
-				bonus[ei.type - Effect::TYPE_COUNT] += ei.magnitude;
-			}
-			// @TYPE ${ELEMENT}_resist|Increase Resistance % to ${ELEMENT}, where ${ELEMENT} is any found in engine/elements.txt. Example: fire_resist
-			else if (ei.type >= Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count) && ei.type < Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count) + static_cast<int>(eset->elements.list.size())) {
-				bonus_resist[ei.type - Effect::TYPE_COUNT - Stats::COUNT - eset->damage_types.count] += ei.magnitude;
-			}
-			// @TYPE ${PRIMARYSTAT}|Increases ${PRIMARYSTAT}, where ${PRIMARYSTAT} is any of the primary stats defined in engine/primary_stats.txt. Example: physical
-			else if (ei.type >= Effect::TYPE_COUNT) {
-				bonus_primary[ei.type - Effect::TYPE_COUNT - Stats::COUNT - eset->damage_types.count - eset->elements.list.size()] += ei.magnitude;
+		if (ei.timer.getDuration() > 0) {
+			if (ei.timer.isEnd()) {
+				//death sentence is only applied at the end of the timer
+				// @TYPE death_sentence|Causes sudden death at the end of the effect duration.
+				if (ei.type == Effect::DEATH_SENTENCE) death_sentence = true;
+				removeEffect(i);
+				i--;
+				continue;
 			}
 		}
+
+		// @TYPE damage|Damage per second
+		if (ei.type == Effect::DAMAGE && ei.timer.isWholeSecond()) damage += ei.magnitude;
+		// @TYPE damage_percent|Damage per second (percentage of max HP)
+		else if (ei.type == Effect::DAMAGE_PERCENT && ei.timer.isWholeSecond()) damage_percent += ei.magnitude;
+		// @TYPE hpot|HP restored per second
+		else if (ei.type == Effect::HPOT && ei.timer.isWholeSecond()) hpot += ei.magnitude;
+		// @TYPE hpot_percent|HP restored per second (percentage of max HP)
+		else if (ei.type == Effect::HPOT_PERCENT && ei.timer.isWholeSecond()) hpot_percent += ei.magnitude;
+		// @TYPE mpot|MP restored per second
+		else if (ei.type == Effect::MPOT && ei.timer.isWholeSecond()) mpot += ei.magnitude;
+		// @TYPE mpot_percent|MP restored per second (percentage of max MP)
+		else if (ei.type == Effect::MPOT_PERCENT && ei.timer.isWholeSecond()) mpot_percent += ei.magnitude;
+		// @TYPE speed|Changes movement speed. A magnitude of 100 is 100% speed (aka normal speed).
+		else if (ei.type == Effect::SPEED) speed = (static_cast<float>(ei.magnitude) * speed) / 100.f;
+		// @TYPE attack_speed|Changes attack speed. A magnitude of 100 is 100% speed (aka normal speed).
+		// attack speed is calculated when getAttackSpeed() is called
+
+		// @TYPE immunity|Applies all immunity effects. Magnitude is ignored.
+		else if (ei.type == Effect::IMMUNITY) {
+			immunity_damage = true;
+			immunity_slow = true;
+			immunity_stun = true;
+			immunity_hp_steal = true;
+			immunity_mp_steal = true;
+			immunity_knockback = true;
+			immunity_damage_reflect = true;
+			immunity_stat_debuff = true;
+		}
+		// @TYPE immunity_damage|Removes and prevents damage over time. Magnitude is ignored.
+		else if (ei.type == Effect::IMMUNITY_DAMAGE) immunity_damage = true;
+		// @TYPE immunity_slow|Removes and prevents slow effects. Magnitude is ignored.
+		else if (ei.type == Effect::IMMUNITY_SLOW) immunity_slow = true;
+		// @TYPE immunity_stun|Removes and prevents stun effects. Magnitude is ignored.
+		else if (ei.type == Effect::IMMUNITY_STUN) immunity_stun = true;
+		// @TYPE immunity_hp_steal|Prevents HP stealing. Magnitude is ignored.
+		else if (ei.type == Effect::IMMUNITY_HP_STEAL) immunity_hp_steal = true;
+		// @TYPE immunity_mp_steal|Prevents MP stealing. Magnitude is ignored.
+		else if (ei.type == Effect::IMMUNITY_MP_STEAL) immunity_mp_steal = true;
+		// @TYPE immunity_knockback|Removes and prevents knockback effects. Magnitude is ignored.
+		else if (ei.type == Effect::IMMUNITY_KNOCKBACK) immunity_knockback = true;
+		// @TYPE immunity_damage_reflect|Prevents damage reflection. Magnitude is ignored.
+		else if (ei.type == Effect::IMMUNITY_DAMAGE_REFLECT) immunity_damage_reflect = true;
+		// @TYPE immunity_stat_debuff|Prevents stat value altering effects that have a magnitude less than 0. Magnitude is ignored.
+		else if (ei.type == Effect::IMMUNITY_STAT_DEBUFF) immunity_stat_debuff = true;
+
+		// @TYPE stun|Can't move or attack. Being attacked breaks stun.
+		else if (ei.type == Effect::STUN) stun = true;
+		// @TYPE revive|Revives the player. Typically attached to a power that triggers when the player dies.
+		else if (ei.type == Effect::REVIVE) revive = true;
+		// @TYPE convert|Causes an enemy or an ally to switch allegiance
+		else if (ei.type == Effect::CONVERT) convert = true;
+		// @TYPE fear|Causes enemies to run away
+		else if (ei.type == Effect::FEAR) fear = true;
+		// @TYPE knockback|Pushes the target away from the source caster. Speed is the given value divided by the framerate cap.
+		else if (ei.type == Effect::KNOCKBACK) knockback_speed = static_cast<float>(ei.magnitude)/static_cast<float>(settings->max_frames_per_sec);
+
+		// @TYPE ${STATNAME}|Increases ${STATNAME}, where ${STATNAME} is any of the base stats. Examples: hp, avoidance, xp_gain
+		// @TYPE ${DAMAGE_TYPE}|Increases a damage min or max, where ${DAMAGE_TYPE} is any 'min' or 'max' value found in engine/damage_types.txt. Example: dmg_melee_min
+		else if (ei.type >= Effect::TYPE_COUNT && ei.type < Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count)) {
+			bonus[ei.type - Effect::TYPE_COUNT] += ei.magnitude;
+		}
+		// @TYPE ${ELEMENT}_resist|Increase Resistance % to ${ELEMENT}, where ${ELEMENT} is any found in engine/elements.txt. Example: fire_resist
+		else if (ei.type >= Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count) && ei.type < Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count) + static_cast<int>(eset->elements.list.size())) {
+			bonus_resist[ei.type - Effect::TYPE_COUNT - Stats::COUNT - eset->damage_types.count] += ei.magnitude;
+		}
+		// @TYPE ${PRIMARYSTAT}|Increases ${PRIMARYSTAT}, where ${PRIMARYSTAT} is any of the primary stats defined in engine/primary_stats.txt. Example: physical
+		else if (ei.type >= Effect::TYPE_COUNT) {
+			bonus_primary[ei.type - Effect::TYPE_COUNT - Stats::COUNT - eset->damage_types.count - eset->elements.list.size()] += ei.magnitude;
+		}
+
+		ei.timer.tick();
+
 		// expire shield effects
 		if (ei.magnitude_max > 0 && ei.magnitude == 0) {
 			// @TYPE shield|Create a damage absorbing barrier based on Mental damage stat. Duration is ignored.
@@ -495,7 +493,7 @@ void EffectManager::addEffectInternal(EffectDef &effect, int duration, int magni
 		e.loadAnimation(effect.animation);
 	}
 
-	e.ticks = e.duration = duration;
+	e.timer.setDuration(duration);
 	e.magnitude = e.magnitude_max = magnitude;
 	e.item = item;
 	e.trigger = trigger;

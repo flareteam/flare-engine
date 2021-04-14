@@ -100,6 +100,7 @@ public:
 	bool isEnd();
 	bool isBegin();
 	void reset(int type);
+	bool isWholeSecond();
 };
 
 namespace Utils {

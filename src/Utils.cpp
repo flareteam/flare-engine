@@ -220,6 +220,10 @@ void Timer::reset(int type) {
 		current = duration;
 }
 
+bool Timer::isWholeSecond() {
+	return current % settings->max_frames_per_sec == 0;
+}
+
 FPoint Utils::screenToMap(int x, int y, float camx, float camy) {
 	FPoint r;
 	if (eset->tileset.orientation == eset->tileset.TILESET_ISOMETRIC) {

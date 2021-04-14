@@ -90,7 +90,7 @@ void MenuActiveEffects::logic() {
 		if (pc->stats.effects.effect_list[i].icon == -1)
 			continue;
 
-		const Effect &ed = pc->stats.effects.effect_list[i];
+		Effect &ed = pc->stats.effects.effect_list[i];
 
 		size_t most_recent_id = effect_icons.size()-1;
 		if(ed.group_stack){
@@ -105,13 +105,13 @@ void MenuActiveEffects::logic() {
 				}else if (ed.type == Effect::HEAL){
 					//No special behavior
 				}else{
-					if(ed.ticks < effect_icons[most_recent_id].current){
-						if (ed.duration > 0)
-							effect_icons[most_recent_id].overlay.y = (eset->resolutions.icon_size * ed.ticks) / ed.duration;
+					if (ed.timer.getCurrent() < static_cast<unsigned>(effect_icons[most_recent_id].current)){
+						if (ed.timer.getDuration() > 0)
+							effect_icons[most_recent_id].overlay.y = (eset->resolutions.icon_size * ed.timer.getCurrent()) / ed.timer.getDuration();
 						else
 							effect_icons[most_recent_id].overlay.y = eset->resolutions.icon_size;
-						effect_icons[most_recent_id].current = ed.ticks;
-						effect_icons[most_recent_id].max = ed.duration;
+						effect_icons[most_recent_id].current = ed.timer.getCurrent();
+						effect_icons[most_recent_id].max = ed.timer.getDuration();
 					}
 				}
 
@@ -158,12 +158,12 @@ void MenuActiveEffects::logic() {
 			// current and max are ignored
 		}
 		else {
-			if (ed.duration > 0)
-				ei.overlay.y = (eset->resolutions.icon_size * ed.ticks) / ed.duration;
+			if (ed.timer.getDuration() > 0)
+				ei.overlay.y = (eset->resolutions.icon_size * ed.timer.getCurrent()) / ed.timer.getDuration();
 			else
 				ei.overlay.y = eset->resolutions.icon_size;
-			ei.current = ed.ticks;
-			ei.max = ed.duration;
+			ei.current = ed.timer.getCurrent();
+			ei.max = ed.timer.getDuration();
 		}
 		ei.overlay.h = eset->resolutions.icon_size - ei.overlay.y;
 

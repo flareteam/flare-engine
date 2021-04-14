@@ -84,8 +84,7 @@ public:
 	std::string id;
 	std::string name;
 	int icon;
-	int ticks;
-	int duration;
+	Timer timer;
 	int type;
 	int magnitude;
 	int magnitude_max;
