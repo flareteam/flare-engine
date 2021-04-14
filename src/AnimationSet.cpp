@@ -69,7 +69,7 @@ void AnimationSet::load() {
 
 	FileParser parser;
 	// @CLASS AnimationSet|Description of animations in animations/
-	if (!parser.open(name, FileParser::MOD_FILE, FileParser::ERROR_NORMAL))
+	if (name.empty() || !parser.open(name, FileParser::MOD_FILE, FileParser::ERROR_NORMAL))
 		return;
 
 	std::string _name = "";
