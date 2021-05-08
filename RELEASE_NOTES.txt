@@ -94,6 +94,7 @@ Game updates:
 * Greatly reduced the damage for spike traps in the Underworld. In exchange, the traps now inflict bleeding.
 * Overall reduced drop rates for alchemy items
 * Added animations for immunity and ice-based slow status effects
+* Redesigned the Family Crypt map and quest
 * Redesigned the Torture Chambers map and quest (again)
 * Mortar & Pestle can now be placed on the action bar
 
