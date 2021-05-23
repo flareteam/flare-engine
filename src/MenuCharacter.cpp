@@ -305,14 +305,12 @@ void MenuCharacter::refreshStats() {
 		cstat[i+2].value->setColor(bonusColor(pc->stats.primary_additional[i]));
 	}
 
-	ss.str("");
-	if (skill_points == 1) {
-		ss << msg->get("%d unspent stat point", skill_points);
+	if (skill_points >= 1) {
+		labelUnspent->setText(msg->get("Available stat points: %d", skill_points));
 	}
-	else if (skill_points > 1) {
-		ss << msg->get("%d unspent stat points", skill_points);
+	else {
+		labelUnspent->setText("");
 	}
-	labelUnspent->setText(ss.str());
 
 	// scrolling stat list
 	unsigned stat_index = 0;

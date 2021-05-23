@@ -884,9 +884,7 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 	}
 	// add cooldown time
 	if (pwr.cooldown > 0) {
-		std::stringstream ss;
-		ss << msg->get("Cooldown:") << " " << Utils::getDurationString(pwr.cooldown, 2);
-		tip_data->addText(ss.str());
+		tip_data->addText(msg->get("Cooldown:") + " " + Utils::getDurationString(pwr.cooldown, 2));
 	}
 
 	for (size_t i=0; i<pwr.post_effects.size(); ++i) {
@@ -1442,16 +1440,12 @@ void MenuPowers::render() {
 
 	// stats
 	if (!label_unspent->isHidden()) {
-		std::stringstream ss;
-
-		ss.str("");
-		if (points_left == 1) {
-			ss << msg->get("%d unspent skill point", points_left);
+		if (points_left >= 1) {
+			label_unspent->setText(msg->get("Available skill points: %d", points_left));
 		}
-		else if (points_left > 1) {
-			ss << msg->get("%d unspent skill points", points_left);
+		else {
+			label_unspent->setText("");
 		}
-		label_unspent->setText(ss.str());
 		label_unspent->render();
 	}
 }
@@ -1632,13 +1626,12 @@ std::string MenuPowers::getItemBonusPowerReqString(PowerID power_index) {
 	if (!pcell)
 		return "";
 
-	std::stringstream ss;
-	ss << powers->powers[power_index].name;
+	std::string output = powers->powers[power_index].name;
 	if (pcell->upgrade_level > 0) {
-		ss << " (" << msg->get("Level %d", pcell->upgrade_level) << ")";
+		output += " (" + msg->get("Level %d", pcell->upgrade_level) + ")";
 	}
 
-	return ss.str();
+	return output;
 }
 
 bool MenuPowers::isTabListSelected() {
