@@ -134,16 +134,15 @@ ModManager::ModManager(const std::vector<std::string> *_cmd_line_mods)
 	loadModList();
 	applyDepends();
 
-	std::stringstream ss;
-	ss << "Active mods: ";
+	std::string active_mods_str = "Active mods: ";
 	for (size_t i = 0; i < mod_list.size(); ++i) {
-		ss << mod_list[i].name;
+		active_mods_str += mod_list[i].name;
 		if (*mod_list[i].version != VersionInfo::MIN)
-			ss << " (" << mod_list[i].version->getString() << ")";
+			active_mods_str += " (" + mod_list[i].version->getString() + ")";
 		if (i < mod_list.size()-1)
-			ss << ", ";
+			active_mods_str += ", ";
 	}
-	Utils::logInfo(ss.str().c_str());
+	Utils::logInfo(active_mods_str.c_str());
 }
 
 /**

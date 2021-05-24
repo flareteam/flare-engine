@@ -30,7 +30,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <SDL.h>
 
-Version VersionInfo::ENGINE(1, 11, 88);
+Version VersionInfo::ENGINE(1, 11, 89);
 Version VersionInfo::MIN(0, 0, 0);
 Version VersionInfo::MAX(USHRT_MAX, USHRT_MAX, USHRT_MAX);
 
@@ -148,8 +148,5 @@ std::string VersionInfo::createVersionReqString(Version& v1, Version& v2) {
 
 std::string VersionInfo::createVersionStringFull() {
 	// example output: Flare 1.0 (Linux)
-	std::stringstream ss;
-	ss << NAME << ' ' << ENGINE.getString();
-	ss << " (" << SDL_GetPlatform() << ")";
-	return ss.str();
+	return NAME + " " + ENGINE.getString() + " (" + std::string(SDL_GetPlatform()) + ")";
 }

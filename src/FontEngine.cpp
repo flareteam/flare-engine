@@ -130,35 +130,35 @@ Point FontEngine::calc_size(const std::string& text_with_newlines, int width) {
 	int max_width = 0;
 
 	std::string next_word;
-	std::stringstream builder;
-	std::stringstream builder_prev;
+	std::string builder("");
+	std::string builder_prev("");
 	char space = 32;
 	size_t cursor = 0;
 	std::string fulltext = text + " ";
 	std::string long_token;
 
-	builder.str("");
-	builder_prev.str("");
+	builder.reserve(BUILDER_RESERVE);
+	builder_prev.reserve(BUILDER_RESERVE);
 
 	next_word = getNextToken(fulltext, cursor, space);
 
 	while(cursor != std::string::npos) {
 		size_t old_cursor = cursor;
 
-		builder << next_word;
+		builder += next_word;
 
-		if (calc_width(builder.str()) > width) {
+		if (calc_width(builder) > width) {
 
 			// this word can't fit on this line, so word wrap
-			if (!builder_prev.str().empty()) {
+			if (!builder_prev.empty()) {
 				height += getLineHeight();
-				if (calc_width(builder_prev.str()) > max_width) {
-					max_width = calc_width(builder_prev.str());
+				if (calc_width(builder_prev) > max_width) {
+					max_width = calc_width(builder_prev);
 				}
 			}
 
-			builder_prev.str("");
-			builder.str("");
+			builder = "";
+			builder_prev = "";
 
 			long_token = popTokenByWidth(next_word, width);
 
@@ -177,12 +177,12 @@ Point FontEngine::calc_size(const std::string& text_with_newlines, int width) {
 				}
 			}
 
-			builder << next_word << " ";
-			builder_prev.str(builder.str());
+			builder += next_word + " ";
+			builder_prev = builder;
 		}
 		else {
-			builder <<  " ";
-			builder_prev.str(builder.str());
+			builder +=  " ";
+			builder_prev = builder;
 		}
 
 		next_word = getNextToken(fulltext, cursor, space); // next word
@@ -192,10 +192,11 @@ Point FontEngine::calc_size(const std::string& text_with_newlines, int width) {
 			break;
 	}
 
-	builder.str(Parse::trim(builder.str())); //removes whitespace that shouldn't be included in the size
-	if (!builder.str().empty())
+	builder = Parse::trim(builder); //removes whitespace that shouldn't be included in the size
+	if (!builder.empty())
 		height += getLineHeight();
-	if (calc_width(builder.str()) > max_width) max_width = calc_width(builder.str());
+	if (calc_width(builder) > max_width)
+		max_width = calc_width(builder);
 
 	// handle blank lines
 	if (text_with_newlines == " ")
@@ -244,29 +245,29 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, Imag
 	std::string fulltext = text + " ";
 	cursor_y = y;
 	std::string next_word;
-	std::stringstream builder;
-	std::stringstream builder_prev;
+	std::string builder("");
+	std::string builder_prev("");
 	char space = 32;
 	size_t cursor = 0;
 	std::string long_token;
 
-	builder.str("");
-	builder_prev.str("");
+	builder.reserve(BUILDER_RESERVE);
+	builder_prev.reserve(BUILDER_RESERVE);
 
 	next_word = getNextToken(fulltext, cursor, space);
 
 	while(cursor != std::string::npos) {
 		size_t old_cursor = cursor;
 
-		builder << next_word;
+		builder += next_word;
 
-		if (calc_width(builder.str()) > width) {
-			if (!builder_prev.str().empty()) {
-				renderInternal(builder_prev.str(), x, cursor_y, justify, target, color);
+		if (calc_width(builder) > width) {
+			if (!builder_prev.empty()) {
+				renderInternal(builder_prev, x, cursor_y, justify, target, color);
 				cursor_y += getLineHeight();
 			}
-			builder_prev.str("");
-			builder.str("");
+			builder = "";
+			builder_prev = "";
 
 			long_token = popTokenByWidth(next_word, width);
 
@@ -283,12 +284,12 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, Imag
 				}
 			}
 
-			builder << next_word << " ";
-			builder_prev.str(builder.str());
+			builder += next_word + " ";
+			builder_prev = builder;
 		}
 		else {
-			builder << " ";
-			builder_prev.str(builder.str());
+			builder += " ";
+			builder_prev = builder;
 		}
 
 		next_word = getNextToken(fulltext, cursor, space); // next word
@@ -298,7 +299,7 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, Imag
 			break;
 	}
 
-	renderInternal(builder.str(), x, cursor_y, justify, target, color);
+	renderInternal(builder, x, cursor_y, justify, target, color);
 	cursor_y += getLineHeight();
 
 }

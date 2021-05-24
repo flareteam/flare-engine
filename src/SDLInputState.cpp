@@ -775,64 +775,61 @@ std::string SDLInputState::getBindingString(int key, int bindings_list, bool get
 }
 
 std::string SDLInputState::getMovementString() {
-	std::stringstream ss;
-	ss << "[";
+	std::string output = "[";
 
 	if (settings->enable_joystick) {
-		ss << getBindingString(Input::LEFT, InputState::BINDING_JOYSTICK) <<  "/";
-		ss << getBindingString(Input::RIGHT, InputState::BINDING_JOYSTICK) << "/";
-		ss << getBindingString(Input::UP, InputState::BINDING_JOYSTICK) << "/";
-		ss << getBindingString(Input::DOWN, InputState::BINDING_JOYSTICK);
+		output += getBindingString(Input::LEFT, InputState::BINDING_JOYSTICK) +  "/";
+		output += getBindingString(Input::RIGHT, InputState::BINDING_JOYSTICK) + "/";
+		output += getBindingString(Input::UP, InputState::BINDING_JOYSTICK) + "/";
+		output += getBindingString(Input::DOWN, InputState::BINDING_JOYSTICK);
 	}
 	else if (settings->touchscreen) {
-		ss << msg->get("Touch control D-Pad");
+		output += msg->get("Touch control D-Pad");
 	}
 	else if (settings->mouse_move) {
-		ss << (settings->mouse_move_swap ? getBindingString(Input::MAIN2) : getBindingString(Input::MAIN1));
+		output += (settings->mouse_move_swap ? getBindingString(Input::MAIN2) : getBindingString(Input::MAIN1));
 	}
 	else {
-		ss << getBindingString(Input::LEFT) <<  "/";
-		ss << getBindingString(Input::RIGHT) << "/";
-		ss << getBindingString(Input::UP) << "/";
-		ss << getBindingString(Input::DOWN);
+		output += getBindingString(Input::LEFT) + "/";
+		output += getBindingString(Input::RIGHT) + "/";
+		output += getBindingString(Input::UP) + "/";
+		output += getBindingString(Input::DOWN);
 	}
 
-	ss << "]";
-	return ss.str();
+	output += "]";
+	return output;
 }
 
 std::string SDLInputState::getAttackString() {
-	std::stringstream ss;
-	ss << "[";
+	std::string output = "[";
 
 	if (settings->enable_joystick) {
-		ss << getBindingString(Input::ACTIONBAR_USE, InputState::BINDING_JOYSTICK);
+		output += getBindingString(Input::ACTIONBAR_USE, InputState::BINDING_JOYSTICK);
 	}
 	else if (settings->touchscreen) {
-		ss << msg->get("Touch control buttons");
+		output += msg->get("Touch control buttons");
 	}
 	else {
-		ss << getBindingString(Input::MAIN1);
+		output += getBindingString(Input::MAIN1);
 	}
 
-	ss << "]";
-	return ss.str();
+	output += "]";
+	return output;
 }
 
 std::string SDLInputState::getContinueString() {
-	std::stringstream ss;
-	ss << "[";
+	std::string output = "[";
 
 	if (settings->touchscreen) {
-		ss << msg->get("Tap");
+		output += msg->get("Tap");
 	}
 	else {
 		int binding_type = (settings->enable_joystick ? InputState::BINDING_JOYSTICK : InputState::BINDING_DEFAULT);
-		ss << getBindingString(Input::ACCEPT, binding_type);
+		output += getBindingString(Input::ACCEPT, binding_type);
 	}
 
-	ss << "]";
-	return ss.str();
+	output += "]";
+	return output;
 }
 
 int SDLInputState::getNumJoysticks() {

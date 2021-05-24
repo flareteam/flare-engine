@@ -77,21 +77,20 @@ void CampaignManager::setAll(const std::string& s) {
  * Convert status array to savefile campaign= (status csv)
  */
 std::string CampaignManager::getAll() {
-	std::stringstream ss;
-	ss.str("");
+	std::string output("");
 
 	StatusMap::iterator it;
 	for (it = status.begin(); it != status.end(); ++it) {
 		if (it->second.first)
-			ss << it->second.second;
+			output += it->second.second;
 
 		StatusMap::iterator temp = it;
 		temp++;
 		if (temp != status.end() && temp->second.first) {
-			ss << ',';
+			output += ',';
 		}
 	}
-	return ss.str();
+	return output;
 }
 
 bool CampaignManager::checkStatus(const StatusID s) {

@@ -388,9 +388,7 @@ void Avatar::logic() {
 	if (isDroppedToLowHp()) {
 		// show message if set
 		if (isLowHpMessageEnabled()) {
-			std::stringstream ss;
-			ss << msg->get("Your health is low!");
-			logMsg(ss.str(), MSG_NORMAL);
+			logMsg(msg->get("Your health is low!"), MSG_NORMAL);
 		}
 		// play a sound if set in settings
 		if (isLowHpSoundEnabled() && !playing_lowhp) {
@@ -420,16 +418,14 @@ void Avatar::logic() {
 	if (stats.level < eset->xp.getMaxLevel() && stats.xp >= eset->xp.getLevelXP(stats.level + 1)) {
 		stats.level_up = true;
 		stats.level = eset->xp.getLevelFromXP(stats.xp);
-		std::stringstream ss;
-		ss << msg->get("Congratulations, you have reached level %d!", stats.level);
+		logMsg(msg->get("Congratulations, you have reached level %d!", stats.level), MSG_NORMAL);
 		if (pc->stats.stat_points_per_level > 0) {
-			ss << " " << msg->get("You may increase one or more attributes through the Character Menu.");
+			logMsg(msg->get("You may increase one or more attributes through the Character Menu."), MSG_NORMAL);
 			newLevelNotification = true;
 		}
 		if (pc->stats.power_points_per_level > 0) {
-			ss << " " << msg->get("You may unlock one or more abilities through the Powers Menu.");
+			logMsg(msg->get("You may unlock one or more abilities through the Powers Menu."), MSG_NORMAL);
 		}
-		logMsg(ss.str(), MSG_NORMAL);
 		stats.recalc();
 		snd->play(sound_levelup, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
 

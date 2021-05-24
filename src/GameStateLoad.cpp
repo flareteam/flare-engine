@@ -287,7 +287,7 @@ void GameStateLoad::loadPortrait(int slot) {
 
 void GameStateLoad::readGameSlots() {
 	FileParser infile;
-	std::stringstream filename;
+	std::string save_root = settings->path_user + "saves/" + eset->misc.save_prefix + "/";
 	std::vector<std::string> save_dirs;
 
 	Filesystem::getDirList(settings->path_user + "saves/" + eset->misc.save_prefix, save_dirs);
@@ -305,10 +305,9 @@ void GameStateLoad::readGameSlots() {
 
 	for (size_t i=0; i<save_dirs.size(); ++i){
 		// save data is stored in slot#/avatar.txt
-		filename.str("");
-		filename << settings->path_user << "saves/" << eset->misc.save_prefix << "/" << save_dirs[i] << "/avatar.txt";
+		std::string filename = save_root + save_dirs[i] + "/avatar.txt";
 
-		if (!infile.open(filename.str(), !FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) continue;
+		if (!infile.open(filename, !FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) continue;
 
 		game_slots[i] = new GameSlot();
 		game_slots[i]->id = Parse::toInt(save_dirs[i]);
