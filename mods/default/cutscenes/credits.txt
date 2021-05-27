@@ -76,6 +76,7 @@ text=Evgen Pavlov
 text=Fabio Loli
 text=Gianfranco Del Borrello
 text=Giovanni Dalla Torre
+text=Grzegorz Szymaszek
 text=GunChleoc
 text=Hans Joachim Desserud
 text=hark34

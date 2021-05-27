@@ -59,7 +59,7 @@ Translations
 (ja) Japanese by Paul Wortmann, sujiniku
 (nb) Norwegian Bokmal by Hans Joachim Desserud, Elias Nykrem
 (nl) Dutch by Bas Doodeman
-(pl) Polish by Paweł Puszczyński and Błażej Pęksyk
+(pl) Polish by Paweł Puszczyński, Błażej Pęksyk, and Grzegorz Szymaszek
 (pt) Portuguese by Rui
 (pt_BR) Brazilian Portuguese by Vicente Monteiro
 (ru) Russian by Sergey Basalaev, Evgen Pavlov, Ademaro, and Andrey Kapitonov

@@ -110,7 +110,7 @@ Translation updates:
 * Hungarian (hu) update (litoll)
 * Korean (ko) by Kor_OfenTHource (team members: bnk159hair, kangdonghun1230, HunSeongPark and paparad0x)
 * Norwegian (nb) update (Elias Nykrem)
-* Polish (pl) update (Błażej Pęksyk)
+* Polish (pl) update (Błażej Pęksyk, Grzegorz Szymaszek)
 * Portuguese (pt) update (Rui)
 * Russian (ru) update (Igor Polyakov)
 * Slovak (sk) update (MiroslavR)
