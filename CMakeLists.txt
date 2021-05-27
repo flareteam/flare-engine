@@ -192,7 +192,7 @@ Set (FLARE_SOURCES
 	./src/SDLSoftwareRenderDevice.cpp
 	./src/SDLSoundManager.cpp
 	./src/SDLHardwareRenderDevice.cpp
- 	./src/SDLFontEngine.cpp
+	./src/SDLFontEngine.cpp
 	./src/Settings.cpp
 	./src/SharedGameResources.cpp
 	./src/SharedResources.cpp
@@ -213,14 +213,14 @@ Set (FLARE_SOURCES
 	./src/WidgetButton.cpp
 	./src/WidgetHorizontalList.cpp
 	./src/WidgetInput.cpp
- 	./src/WidgetLabel.cpp
- 	./src/WidgetListBox.cpp
+	./src/WidgetLabel.cpp
+	./src/WidgetListBox.cpp
 	./src/WidgetLog.cpp
 	./src/WidgetScrollBar.cpp
 	./src/WidgetScrollBox.cpp
 	./src/WidgetSlider.cpp
 	./src/WidgetSlot.cpp
- 	./src/WidgetTabControl.cpp
+	./src/WidgetTabControl.cpp
 	./src/WidgetTooltip.cpp
 	./src/main.cpp
 )
@@ -328,14 +328,14 @@ Set (FLARE_HEADERS
 	./src/WidgetButton.h
 	./src/WidgetHorizontalList.h
 	./src/WidgetInput.h
- 	./src/WidgetLabel.h
- 	./src/WidgetListBox.h
+	./src/WidgetLabel.h
+	./src/WidgetListBox.h
 	./src/WidgetLog.h
 	./src/WidgetScrollBar.h
 	./src/WidgetScrollBox.h
 	./src/WidgetSlider.h
 	./src/WidgetSlot.h
- 	./src/WidgetTabControl.h
+	./src/WidgetTabControl.h
 	./src/WidgetTooltip.h
 )
 
