@@ -12,7 +12,7 @@ after_script: cppcheck --quiet --verbose --enable=all `git ls-files src/\*.cpp`
 notifications:
   irc:
     channels:
-      - "irc.freenode.org#flarerpg"
+      - "ircs://irc.freegamedev.net:6697/#flarerpg"
     on_success: always
     on_failure: always
     use_notice: true
