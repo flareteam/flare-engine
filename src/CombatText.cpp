@@ -151,7 +151,7 @@ void CombatText::logic(const FPoint& _cam) {
 	cam = _cam;
 
 	for(std::vector<Combat_Text_Item>::iterator it = combat_text.end(); it != combat_text.begin();) {
-		it--;
+		--it;
 
 		it->lifespan--;
 		it->floating_offset += speed;
@@ -164,7 +164,7 @@ void CombatText::logic(const FPoint& _cam) {
 
 		// try to prevent messages from overlapping
 		for (std::vector<Combat_Text_Item>::iterator overlap_it = it; overlap_it != combat_text.begin();) {
-			overlap_it--;
+			--overlap_it;
 			Rect bounds = *(it->label->getBounds());
 			Rect overlap_bounds = *(overlap_it->label->getBounds());
 			if (Utils::rectsOverlap(bounds, overlap_bounds)) {

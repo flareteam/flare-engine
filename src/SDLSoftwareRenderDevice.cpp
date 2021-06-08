@@ -205,6 +205,14 @@ SDLSoftwareRenderDevice::SDLSoftwareRenderDevice()
 		// we only support display #0
 		Utils::logInfo("RenderDevice: %d display(s), using display 0 (%dx%d @ %dhz)", SDL_GetNumVideoDisplays(), desktop.w, desktop.h, desktop.refresh_rate);
 	}
+
+	// we store the gamma when launching the game in case we need to reset it
+	// these are initilized to 0 since we set them properly with SDL_GetWindowGammaRamp() later
+	for (int i = 0; i < 256; ++i) {
+		gamma_r[i] = 0;
+		gamma_g[i] = 0;
+		gamma_b[i] = 0;
+	}
 }
 
 int SDLSoftwareRenderDevice::createContextInternal() {

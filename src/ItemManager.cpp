@@ -132,7 +132,7 @@ void ItemManager::loadItems(const std::string& filename) {
 	bool clear_replace_power = true;
 
 	ItemID id = 0;
-	bool id_line = false;
+	bool id_line;
 	while (infile.next()) {
 		if (infile.key == "id") {
 			// @ATTR id|item_id|An uniq id of the item used as reference from other classes.

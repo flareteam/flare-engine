@@ -59,7 +59,7 @@ Image* AnimationMedia::getImageFromKey(std::string key) {
 
 void AnimationMedia::unref() {
     std::map<std::string, Image*>::iterator it;
-    for (it = sprites.begin(); it != sprites.end(); it++) {
+    for (it = sprites.begin(); it != sprites.end(); ++it) {
         it->second->unref();
     }
 	sprites.clear();

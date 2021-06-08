@@ -308,7 +308,7 @@ bool MenuStash::drop(const Point& position, ItemStack stack) {
 			// Drop the stack, merging if needed
 			success = add(stack, slot, !ADD_PLAY_SOUND);
 		}
-		else if (drag_prev_slot != -1 && tabs[activetab].stock[drag_prev_slot].empty()) {
+		else if (tabs[activetab].stock[drag_prev_slot].empty()) {
 			// Check if the previous slot is free (could still be used if SHIFT was used).
 			// Swap the two stacks
 			itemReturn(tabs[activetab].stock[slot]);
@@ -441,7 +441,7 @@ bool MenuStash::checkUpdates() {
 
 void MenuStash::enableSharedTab(bool permadeath) {
 	for (size_t i = 0; i < tabs.size(); ++i) {
-		tab_control->setEnabled(static_cast<unsigned>(i), (!permadeath || (permadeath && tabs[i].is_private)));
+		tab_control->setEnabled(static_cast<unsigned>(i), (!permadeath || tabs[i].is_private));
 	}
 }
 

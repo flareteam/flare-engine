@@ -270,9 +270,7 @@ void SDLSoundManager::play(SoundID sid, const std::string& channel, const FPoint
 }
 
 void SDLSoundManager::pauseChannel(const std::string& channel) {
-	VirtualChannelMapIterator vcit = channels.end();
-
-	vcit = channels.find(channel);
+	VirtualChannelMapIterator vcit = channels.find(channel);
 	if (vcit != channels.end()) {
 		Mix_Pause(vcit->second);
 	}

@@ -401,7 +401,7 @@ void MenuPowers::loadPower(FileParser &infile) {
 		return;
 	}
 
-	if (power_cell.back().cells[0].id <= 0) {
+	if (power_cell.back().cells[0].id == 0) {
 		skip_section = true;
 		power_cell.pop_back();
 		slots.pop_back();

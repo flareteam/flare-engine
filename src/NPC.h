@@ -59,7 +59,7 @@ public:
 	static const int VENDOR_MAX_STOCK = 80;
 	static const bool GET_RESPONSE_NODES = true;
 
-	NPC(const Entity& e);
+	explicit NPC(const Entity& e);
 	~NPC();
 	void load(const std::string& npc_id);
 	void logic();

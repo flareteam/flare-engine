@@ -224,12 +224,12 @@ void WidgetTabControl::renderTab(unsigned number) {
 	int width_to_render = tabs[i].w - eset->widgets.tab_padding.x; // don't draw the right edge yet
 	int render_cursor = 0;
 
-	src.x = src.y = 0;
+	src.y = 0;
 	src.h = tabs[i].h;
-	dest.x = tabs[i].x;
 	dest.y = tabs[i].y;
 
 	// repeat the middle part of the image for long tabs
+	// src.x and dest.x are assigned here
 	while (render_cursor < width_to_render) {
 		dest.x = tabs[i].x + render_cursor;
 		if (render_cursor == 0) {

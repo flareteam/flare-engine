@@ -442,7 +442,33 @@ void GameStateLoad::logic() {
 		game_slots[i]->preview.logic();
 	}
 
-	if (!confirm->visible) {
+	if (confirm->visible) {
+		confirm->logic();
+		if (confirm->confirmClicked) {
+			Utils::removeSaveDir(game_slots[selected_slot]->id);
+
+			delete game_slots[selected_slot];
+			game_slots[selected_slot] = NULL;
+			game_slots.erase(game_slots.begin()+selected_slot);
+
+			visible_slots = (game_slot_max > static_cast<int>(game_slots.size()) ? static_cast<int>(game_slots.size()) : game_slot_max);
+			setSelectedSlot(-1);
+
+			while (scroll_offset + visible_slots > static_cast<int>(game_slots.size())) {
+				scroll_offset--;
+			}
+
+			updateButtons();
+
+			confirm->visible = false;
+			confirm->confirmClicked = false;
+
+			refreshSavePaths();
+
+			settings->prev_save_slot = -1;
+		}
+	}
+	else {
 		tablist.logic();
 		if (button_exit->checkClick() || (inpt->pressing[Input::CANCEL] && !inpt->lock[Input::CANCEL])) {
 			inpt->lock[Input::CANCEL] = true;
@@ -526,32 +552,6 @@ void GameStateLoad::logic() {
 				scrollToSelected();
 				updateButtons();
 			}
-		}
-	}
-	else if (confirm->visible) {
-		confirm->logic();
-		if (confirm->confirmClicked) {
-			Utils::removeSaveDir(game_slots[selected_slot]->id);
-
-			delete game_slots[selected_slot];
-			game_slots[selected_slot] = NULL;
-			game_slots.erase(game_slots.begin()+selected_slot);
-
-			visible_slots = (game_slot_max > static_cast<int>(game_slots.size()) ? static_cast<int>(game_slots.size()) : game_slot_max);
-			setSelectedSlot(-1);
-
-			while (scroll_offset + visible_slots > static_cast<int>(game_slots.size())) {
-				scroll_offset--;
-			}
-
-			updateButtons();
-
-			confirm->visible = false;
-			confirm->confirmClicked = false;
-
-			refreshSavePaths();
-
-			settings->prev_save_slot = -1;
 		}
 	}
 }
@@ -677,7 +677,6 @@ void GameStateLoad::refreshScrollBar() {
 		Rect scroll_pos;
 		scroll_pos.x = slot_pos[0].x + slot_pos[0].w;
 		scroll_pos.y = slot_pos[0].y;
-		scroll_pos.w = scrollbar->pos_up.w;
 		scroll_pos.h = (slot_pos[0].h * game_slot_max) - scrollbar->pos_down.h;
 		scrollbar->refresh(scroll_pos.x, scroll_pos.y, scroll_pos.h, scroll_offset, static_cast<int>(game_slots.size()) - visible_slots);
 	}

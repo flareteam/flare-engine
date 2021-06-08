@@ -49,7 +49,7 @@ private:
 	Point tip_pos;
 	bool show_tooltip;
 
-	bool enemyGroupPlaceEnemy(float x, float y, Map_Group &g);
+	bool enemyGroupPlaceEnemy(float x, float y, const Map_Group &g);
 	void pushEnemyGroup(Map_Group &g);
 
 	void clearQueues();
@@ -115,7 +115,7 @@ public:
 	void executeOnMapExitEvents();
 
 	// some events can trigger powers
-	void activatePower(PowerID power_index, unsigned statblock_index, FPoint &target);
+	void activatePower(PowerID power_index, unsigned statblock_index, const FPoint &target);
 
 	bool isValidTile(const unsigned &tile);
 	Point centerTile(const Point& p);

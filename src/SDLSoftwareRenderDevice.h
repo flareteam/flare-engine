@@ -99,6 +99,11 @@ private:
 	SDL_Surface* titlebar_icon;
 	char* title;
 	uint32_t background_color;
+
+	/* Stores the system gamma levels so they can be restored later */
+	uint16_t gamma_r[256];
+	uint16_t gamma_g[256];
+	uint16_t gamma_b[256];
 };
 
 #endif // SDLSOFTWARERENDERDEVICE_H

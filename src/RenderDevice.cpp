@@ -168,9 +168,6 @@ RenderDevice::RenderDevice()
 	, reload_graphics(false)
 	, ddpi(0)
 {
-	// don't bother initializing gamma_r, gamma_g, gamma_b
-	// it is up to the implemented render device to initialize them
-	// for example, SDL_GetWindowGammaRamp() can fill them in
 }
 
 RenderDevice::~RenderDevice() {

@@ -96,7 +96,7 @@ void MapRenderer::clearQueues() {
 	loot.clear();
 }
 
-bool MapRenderer::enemyGroupPlaceEnemy(float x, float y, Map_Group &g) {
+bool MapRenderer::enemyGroupPlaceEnemy(float x, float y, const Map_Group &g) {
 	if (collider.isEmpty(x, y)) {
 		Enemy_Level enemy_lev = enemyg->getRandomEnemy(g.category, g.levelmin, g.levelmax);
 		if (!enemy_lev.type.empty()) {
@@ -571,7 +571,7 @@ do_last_NE_tile:
 
 					if (is_behind_SW)
 						render_behind_SW.push(r_cursor);
-					else if (!is_behind_SW && is_behind_NE)
+					else if (is_behind_NE)
 						render_behind_NE.push(r_cursor);
 					else
 						render_behind_none.push(r_cursor);
@@ -1086,7 +1086,7 @@ void MapRenderer::createTooltip(EventComponent *ec) {
 /**
  * Activate a power that is attached to an event
  */
-void MapRenderer::activatePower(PowerID power_index, unsigned statblock_index, FPoint &target) {
+void MapRenderer::activatePower(PowerID power_index, unsigned statblock_index, const FPoint &target) {
 	if (powers->powers[power_index].is_empty) {
 		Utils::logError("MapRenderer: Power index %d is not valid.", power_index);
 		return;

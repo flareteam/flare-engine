@@ -486,7 +486,7 @@ void Scene::render() {
 
 	// only display the back button if there's more than one scene or subscene
 	bool only_scene = is_first_scene && is_last_scene;
-	if (!only_scene || (only_scene && cutscene_type == CUTSCENE_STATIC && subscenes.size() > 1))
+	if (!only_scene || (cutscene_type == CUTSCENE_STATIC && subscenes.size() > 1))
 		button_prev->render();
 
 	button_advance->render();

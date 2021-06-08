@@ -683,7 +683,7 @@ float EffectManager::getAttackSpeed(const std::string& anim_name) {
 }
 
 int EffectManager::getDamageSourceType(int dmg_mode) {
-	if (dmg_mode != Effect::DAMAGE || dmg_mode != Effect::DAMAGE_PERCENT)
+	if (!(dmg_mode == Effect::DAMAGE || dmg_mode == Effect::DAMAGE_PERCENT))
 		return -1;
 
 	int source_type = Power::SOURCE_TYPE_NEUTRAL;

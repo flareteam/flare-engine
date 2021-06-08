@@ -1465,7 +1465,7 @@ void MenuManager::pushMatchingItemsOf(const Point& hov_pos) {
 	if (!settings->item_compare_tips)
 		return;
 
-	int area = -1;
+	int area;
 	ItemStack hov_stack;
 
 	if (inv->visible && Utils::isWithinRect(inv->window_area, hov_pos)) {

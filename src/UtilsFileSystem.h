@@ -40,7 +40,7 @@ namespace Filesystem {
 	bool removeDir(const std::string &dir);
 	bool removeDirRecursive(const std::string &dir);
 
-	std::string convertSlashes(const std::string _path);
+	std::string convertSlashes(const std::string& _path);
 
 	bool renameFile(const std::string &_oldfile, const std::string &_newfile);
 

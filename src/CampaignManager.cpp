@@ -85,7 +85,7 @@ std::string CampaignManager::getAll() {
 			output += it->second.second;
 
 		StatusMap::iterator temp = it;
-		temp++;
+		++temp;
 		if (temp != status.end() && temp->second.first) {
 			output += ',';
 		}

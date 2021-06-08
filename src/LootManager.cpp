@@ -552,7 +552,7 @@ void LootManager::parseLoot(std::string &val, EventComponent *e, std::vector<Eve
 		std::string repeat_val = Parse::popFirstString(val);
 		while (repeat_val != "") {
 			ec_list->push_back(EventComponent());
-			EventComponent *ec = &ec_list->back();
+			EventComponent *ec = &ec_list->at(ec_list->size()-1);
 			ec->type = EventComponent::LOOT;
 
 			ec->s = repeat_val;
@@ -598,14 +598,14 @@ void LootManager::loadLootTables() {
 			if (infile.section == "") {
 				if (infile.key == "loot") {
 					ec_list->push_back(EventComponent());
-					ec = &ec_list->back();
+					ec = &ec_list->at(ec_list->size()-1);
 					parseLoot(infile.val, ec, ec_list);
 				}
 			}
 			else if (infile.section == "loot") {
 				if (infile.new_section) {
 					ec_list->push_back(EventComponent());
-					ec = &ec_list->back();
+					ec = &ec_list->at(ec_list->size()-1);
 					ec->type = EventComponent::LOOT;
 					skip_to_next = false;
 				}

@@ -225,7 +225,7 @@ void GameStatePlay::checkEnemyFocus() {
 void GameStatePlay::checkNPCFocus() {
 	Entity *focus_npc;
 
-	if (!inpt->usingMouse() && (!menu->enemy->enemy || (menu->enemy->enemy && menu->enemy->enemy->stats.hero_ally))) {
+	if (!inpt->usingMouse() && (!menu->enemy->enemy || menu->enemy->enemy->stats.hero_ally)) {
 		// TODO bug? If mixed monster allies and npc allies, npc allies will always be highlighted, regardless of distance to player
 		focus_npc = npcs->getNearestNPC(pc->stats.pos);
 	}
@@ -248,21 +248,6 @@ void GameStatePlay::checkNPCFocus() {
 			menu->enemy->timeout.reset(Timer::BEGIN);
 		}
 	}
-}
-
-/**
- * If mouse_move is enabled, and the mouse is over a live enemy,
- * Do not allow power use with button MAIN1
- */
-bool GameStatePlay::restrictPowerUse() {
-	if (settings->mouse_move) {
-		int mm_key = (settings->mouse_move_swap ? Input::MAIN2 : Input::MAIN1);
-		if(inpt->pressing[mm_key] && !inpt->pressing[Input::SHIFT] && !menu->act->isWithinSlots(inpt->mouse) && !menu->act->isWithinMenus(inpt->mouse)) {
-			return true;
-		}
-	}
-
-	return false;
 }
 
 /**
@@ -1123,7 +1108,7 @@ bool GameStatePlay::checkPrimaryStat(const std::string& first, const std::string
 		if (low_index != eset->primary_stats.list.size() && second != eset->primary_stats.list[low_index].id)
 			return false;
 	}
-	else if (second.empty() && pc->stats.get_primary(high_index) == pc->stats.get_primary(low_index)) {
+	else if (pc->stats.get_primary(high_index) == pc->stats.get_primary(low_index)) {
 		// titles that require a single stat are ignored if two stats are equal
 		return false;
 	}

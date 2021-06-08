@@ -223,12 +223,12 @@ void EngineSettings::Resolutions::load() {
 				virtual_heights.clear();
 				std::string v_height = Parse::popFirstString(infile.val);
 				while (!v_height.empty()) {
-					unsigned short test_v_height = static_cast<unsigned short>(Parse::toInt(v_height));
+					int test_v_height = Parse::toInt(v_height);
 					if (test_v_height <= 0) {
 						Utils::logError("EngineSettings: virtual_height must be greater than zero.");
 					}
 					else {
-						virtual_heights.push_back(static_cast<unsigned short>(Parse::toInt(v_height)));
+						virtual_heights.push_back(static_cast<unsigned short>(test_v_height));
 					}
 					v_height = Parse::popFirstString(infile.val);
 				}

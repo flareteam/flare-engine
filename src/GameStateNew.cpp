@@ -299,7 +299,7 @@ void GameStateNew::loadOptions(const std::string& filename) {
 	// @CLASS GameStateNew: Hero options|Description of engine/hero_options.txt
 	if (!fin.open("engine/" + filename, FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) return;
 
-	int cur_index = -1;
+	int cur_index;
 	while (fin.next()) {
 		// @ATTR option|int, string, string, filename, string : Index, Base, Head, Portrait, Name|A default body, head, portrait, and name for a hero.
 		if (fin.key == "option") {

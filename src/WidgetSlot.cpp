@@ -152,7 +152,7 @@ WidgetSlot::CLICK_TYPE WidgetSlot::checkClick(int x, int y) {
 	if (inpt->lock[Input::MAIN2]) return NO_CLICK;
 	if (inpt->lock[activate_key]) return NO_CLICK;
 
-	if (pressed && !inpt->lock[Input::MAIN1] && !inpt->lock[Input::MAIN2] && !inpt->lock[activate_key]) { // this is a button release
+	if (pressed && !inpt->lock[Input::MAIN1] && !inpt->lock[Input::MAIN2]) { // this is a button release
 		pressed = false;
 
 		checked = !checked;

@@ -399,16 +399,6 @@ void WidgetListBox::render() {
 	}
 }
 
-void WidgetListBox::jumpToSelected() {
-	int index = getSelected();
-	int index_offset = static_cast<int>(rows.size() / 2) - 1;
-	int max_index = static_cast<int>(items.size() - rows.size());
-
-	cursor = std::max(0, max_index - std::max(0, max_index + index_offset - index));
-
-	refresh();
-}
-
 /**
  * Create the text buffer
  * Also, toggle the scrollbar based on the size of the list
@@ -528,13 +518,6 @@ void WidgetListBox::select(int index) {
 		items[sel].selected = false;
 	}
 	items[index].selected = true;
-}
-
-void WidgetListBox::deselect(int index) {
-	if (items.empty())
-		return;
-
-	items[index].selected = false;
 }
 
 bool WidgetListBox::isSelected(int index) {

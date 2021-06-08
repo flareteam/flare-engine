@@ -158,7 +158,6 @@ Point FontEngine::calc_size(const std::string& text_with_newlines, int width) {
 			}
 
 			builder = "";
-			builder_prev = "";
 
 			long_token = popTokenByWidth(next_word, width);
 
@@ -267,7 +266,6 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, Imag
 				cursor_y += getLineHeight();
 			}
 			builder = "";
-			builder_prev = "";
 
 			long_token = popTokenByWidth(next_word, width);
 

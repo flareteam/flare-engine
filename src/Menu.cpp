@@ -60,11 +60,11 @@ void Menu::setBackground(const std::string& background_image) {
 	}
 }
 
-void Menu::setBackgroundDest(Rect &dest) {
+void Menu::setBackgroundDest(const Rect &dest) {
 	if (background) background->setDestFromRect(dest);
 }
 
-void Menu::setBackgroundClip(Rect &clip) {
+void Menu::setBackgroundClip(const Rect &clip) {
 	if (background) background->setClipFromRect(clip);
 }
 

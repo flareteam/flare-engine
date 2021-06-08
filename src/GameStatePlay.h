@@ -66,7 +66,6 @@ private:
 
 	QuestLog *quests;
 
-	bool restrictPowerUse();
 	void checkEnemyFocus();
 	void checkNPCFocus();
 	void checkLoot();

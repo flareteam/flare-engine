@@ -84,7 +84,6 @@ public:
 	void scrollUp();
 	void scrollDown();
 	void render();
-	void jumpToSelected();
 	void refresh();
 	void sort();
 
@@ -93,7 +92,6 @@ public:
 	void defocus();
 
 	void select(int index);
-	void deselect(int index);
 	bool isSelected(int index);
 
 	void setHeight(int new_size);

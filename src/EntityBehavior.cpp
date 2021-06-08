@@ -164,7 +164,7 @@ void EntityBehavior::findTarget() {
 
 		if ((!is_ally && entity->stats.hero_ally) || (is_ally && !entity->stats.hero_ally && entity->stats.in_combat)) {
 			float entity_dist = Utils::calcDist(e->stats.pos, entity->stats.pos);
-			if (!target_stats || (is_ally && target_stats && target_stats->hero)) {
+			if (!target_stats || (is_ally && target_stats->hero)) {
 				// pick the first available target if none is already selected
 				target_stats = &entitym->entities[i]->stats;
 				target_dist = entity_dist;

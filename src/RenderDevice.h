@@ -264,11 +264,6 @@ protected:
 	Rect m_clip;
 	Rect m_dest;
 
-	/* Stores the system gamma levels so they can be restored later */
-	uint16_t gamma_r[256];
-	uint16_t gamma_g[256];
-	uint16_t gamma_b[256];
-
 private:
 	typedef std::map<std::string, Image *> IMAGE_CACHE_CONTAINER;
 	typedef IMAGE_CACHE_CONTAINER::iterator IMAGE_CACHE_CONTAINER_ITER;

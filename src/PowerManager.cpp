@@ -114,6 +114,7 @@ Power::Power()
 	, movement_type(MapCollision::MOVE_FLYING)
 	, target_range(0)
 	, target_party(false)
+	, combat_range(0)
 	, mod_accuracy_mode(-1)
 	, mod_accuracy_value(100)
 	, mod_crit_mode(-1)
@@ -274,7 +275,7 @@ void PowerManager::loadPowers() {
 	bool clear_post_effects = true;
 
 	PowerID input_id = 0;
-	bool id_line = false;
+	bool id_line;
 
 	while (infile.next()) {
 		// id needs to be the first component of each power.  That is how we write
@@ -919,8 +920,6 @@ void PowerManager::loadPowers() {
 
 		// calculate effective combat range
 		{
-			power.combat_range = 0;
-
 			// TODO apparently, missiles and repeaters don't need to have "use_hazard=true"?
 			if (!( (!power.use_hazard && power.type == Power::TYPE_FIXED) || power.no_attack) ) {
 				if (power.type == Power::TYPE_FIXED) {
@@ -936,9 +935,6 @@ void PowerManager::loadPowers() {
 				}
 				else if (power.type == Power::TYPE_REPEATER) {
 					power.combat_range += power.speed * static_cast<float>(power.count);
-				}
-				else {
-					power.combat_range = 0;
 				}
 
 				power.combat_range += (power.radius / 2.f);
@@ -1738,7 +1734,7 @@ void PowerManager::activateSinglePassive(StatBlock *src_stats, PowerID id) {
 void PowerManager::activatePassivePostPowers(StatBlock *src_stats) {
 	for (size_t i = 0; i < src_stats->powers_passive.size(); ++i) {
 		const PowerID post_power = powers[src_stats->powers_passive[i]].post_power;
-		if (post_power <= 0)
+		if (post_power == 0)
 			continue;
 
 		if (powers[post_power].new_state != Power::STATE_INSTANT)
@@ -1767,8 +1763,7 @@ EffectDef* PowerManager::getEffectDef(const std::string& id) {
 }
 
 PowerID PowerManager::verifyID(PowerID power_id, FileParser* infile, bool allow_zero) {
-	bool is_valid = (allow_zero || (!allow_zero && power_id > 0));
-	if (!is_valid) {
+	if (!allow_zero && power_id == 0) {
 		if (infile != NULL)
 			infile->error("PowerManager: %d is not a valid power id.", power_id);
 		else
@@ -1844,7 +1839,7 @@ bool PowerManager::checkRequiredMaxHPMP(const Power &pow, const StatBlock *src_s
 }
 
 bool PowerManager::checkCombatRange(PowerID power_index, StatBlock* src_stats, FPoint target) {
-	Power& pow = powers[power_index];
+	const Power& pow = powers[power_index];
 
 	if (pow.combat_range == 0)
 		return false;
