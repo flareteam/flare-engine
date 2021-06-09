@@ -2,8 +2,8 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="org.flare.app"
-      android:versionCode="020"
-      android:versionName="1.0pre"
+      android:versionCode="111"
+      android:versionName="1.11"
       android:installLocation="auto">
 
     <application android:label="@string/app_name"
@@ -30,5 +30,4 @@
 
     <!-- Allow writing to external storage -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-	<uses-permission android:name="android.permission.INTERNET" />
 </manifest>
