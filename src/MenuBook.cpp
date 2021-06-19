@@ -177,7 +177,7 @@ void MenuBook::loadImage(FileParser &infile, BookImage& bimage) {
 		  graphics->unref();
 		}
 	}
-	// @ATTR image_icon|icon_id|Use an icon as the image instead of a file.
+	// @ATTR image.image_icon|icon_id|Use an icon as the image instead of a file.
 	else if (infile.key == "image_icon") {
 		if (bimage.image) {
 			delete bimage.image;
@@ -226,7 +226,7 @@ void MenuBook::loadText(FileParser &infile, BookText& btext) {
 		btext.color.b = static_cast<Uint8>(Parse::popFirstInt(infile.val));
 		btext.font= Parse::popFirstString(infile.val);
 	}
-	// @ATTR text.shadow|bool|If true, the text will have a black shadow like the text labels in various menus.
+	// @ATTR text.text_shadow|bool|If true, the text will have a black shadow like the text labels in various menus.
 	else if (infile.key == "text_shadow") {
 		btext.shadow = Parse::toBool(Parse::popFirstString(infile.val));
 	}
@@ -271,7 +271,7 @@ void MenuBook::loadButton(FileParser &infile, BookButton& bbutton) {
 		bbutton.label = Parse::popFirstString(infile.val);
 	}
 	else {
-		// @ATTR book.${EVENT_COMPONENT}|Event components to execute when the button is clicked. See the definitions in EventManager for possible attributes.
+		// @ATTR button.${EVENT_COMPONENT}|Event components to execute when the button is clicked. See the definitions in EventManager for possible attributes.
 		loadBookEvent(infile, bbutton.event);
 	}
 }
