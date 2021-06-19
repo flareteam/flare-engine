@@ -790,6 +790,7 @@ bool EventManager::executeEventInternal(Event &ev, bool skip_delay) {
 			else {
 				ev.keep_after_trigger = false;
 				pc->logMsg(msg->get("Unknown destination"), Avatar::MSG_UNIQUE);
+				Utils::logInfo("EventManager: Unknown intermap destination (%s)", ec->s.c_str());
 			}
 		}
 		else if (ec->type == EventComponent::INTRAMAP) {
