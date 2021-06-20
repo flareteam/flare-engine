@@ -97,8 +97,10 @@ Game updates:
 * Overall reduced drop rates for alchemy items
 * Added animations for immunity and ice-based slow status effects
 * Redesigned the Family Crypt map and quest
+* Redesigned the Nazia Mines maps and quest
 * Redesigned the Torture Chambers map and quest (again)
 * Mortar & Pestle can now be placed on the action bar
+* All quest items can be stored in the player's private stash.
 
 Translation updates:
 
