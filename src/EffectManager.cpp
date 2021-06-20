@@ -293,18 +293,20 @@ void EffectManager::logic() {
 			}
 		}
 
+		bool do_timed_effect = ei.timer.isWholeSecond() || (ei.timer.getDuration() < settings->max_frames_per_sec && ei.timer.isBegin());
+
 		// @TYPE damage|Damage per second
-		if (ei.type == Effect::DAMAGE && ei.timer.isWholeSecond()) damage += ei.magnitude;
+		if (ei.type == Effect::DAMAGE && do_timed_effect) damage += ei.magnitude;
 		// @TYPE damage_percent|Damage per second (percentage of max HP)
-		else if (ei.type == Effect::DAMAGE_PERCENT && ei.timer.isWholeSecond()) damage_percent += ei.magnitude;
+		else if (ei.type == Effect::DAMAGE_PERCENT && do_timed_effect) damage_percent += ei.magnitude;
 		// @TYPE hpot|HP restored per second
-		else if (ei.type == Effect::HPOT && ei.timer.isWholeSecond()) hpot += ei.magnitude;
+		else if (ei.type == Effect::HPOT && do_timed_effect) hpot += ei.magnitude;
 		// @TYPE hpot_percent|HP restored per second (percentage of max HP)
-		else if (ei.type == Effect::HPOT_PERCENT && ei.timer.isWholeSecond()) hpot_percent += ei.magnitude;
+		else if (ei.type == Effect::HPOT_PERCENT && do_timed_effect) hpot_percent += ei.magnitude;
 		// @TYPE mpot|MP restored per second
-		else if (ei.type == Effect::MPOT && ei.timer.isWholeSecond()) mpot += ei.magnitude;
+		else if (ei.type == Effect::MPOT && do_timed_effect) mpot += ei.magnitude;
 		// @TYPE mpot_percent|MP restored per second (percentage of max MP)
-		else if (ei.type == Effect::MPOT_PERCENT && ei.timer.isWholeSecond()) mpot_percent += ei.magnitude;
+		else if (ei.type == Effect::MPOT_PERCENT && do_timed_effect) mpot_percent += ei.magnitude;
 		// @TYPE speed|Changes movement speed. A magnitude of 100 is 100% speed (aka normal speed).
 		else if (ei.type == Effect::SPEED) speed = (static_cast<float>(ei.magnitude) * speed) / 100.f;
 		// @TYPE attack_speed|Changes attack speed. A magnitude of 100 is 100% speed (aka normal speed).
