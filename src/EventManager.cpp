@@ -1066,7 +1066,14 @@ void EventManager::executeScript(const std::string& filename, float x, float y) 
 				continue;
 			}
 
-			loadEventComponent(script_file, &script_evnt.back(), NULL);
+			if (script_file.key == "delay") {
+				// 'delay' is not an EventComponent, but we allow it in scripts
+				script_evnt.back().delay.setDuration(Parse::toDuration(script_file.val));
+				script_evnt.back().delay.reset(Timer::BEGIN);
+			}
+			else {
+				loadEventComponent(script_file, &script_evnt.back(), NULL);
+			}
 		}
 		script_file.close();
 
@@ -1077,7 +1084,11 @@ void EventManager::executeScript(const std::string& filename, float x, float y) 
 				ec_power->x = mapr->addEventStatBlock(script_evnt.front());
 			}
 
-			if (isActive(script_evnt.front())) {
+			if (script_evnt.front().delay.getDuration() > 0) {
+				// handle delayed events
+				mapr->delayed_events.push_back(script_evnt.front());
+			}
+			else if (isActive(script_evnt.front())) {
 				executeEvent(script_evnt.front());
 			}
 			script_evnt.pop();
