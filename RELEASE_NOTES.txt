@@ -82,6 +82,7 @@ Engine fixes:
 * Fix on_load events with requires_class not working in maps/spawn.txt
 * Fix timing of Effects so that the first "tick" happens immediately.
 * Fix "Press button to use" prompt no showing up for some items.
+* Fix loud loot drop sound effect when there are a large number of drops at once.
 
 Game updates:
 

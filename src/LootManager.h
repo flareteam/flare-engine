@@ -48,6 +48,7 @@ private:
 	void checkLootComponent(EventComponent* ec, FPoint *pos, std::vector<ItemStack> *itemstack_vec);
 
 	SoundID sfx_loot;
+	std::string sfx_loot_channel;
 
 	// loot refers to ItemManager indices
 	std::vector<Loot> loot;
