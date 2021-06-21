@@ -63,7 +63,8 @@ public:
 	std::vector<StatusID> requires_not_status;
 
 	bool visible;
-	bool visible_when_locked;
+	bool visible_check_locked;
+	bool visible_check_status;
 
 	int upgrade_level;
 	bool passive_on;
@@ -101,6 +102,7 @@ private:
 	void loadUpgrade(FileParser &infile, std::vector<MenuPowersCell>& power_cell_upgrade);
 
 	bool checkRequirements(MenuPowersCell* pcell);
+	bool checkRequirementStatus(MenuPowersCell* pcell);
 	bool checkUnlocked(MenuPowersCell* pcell);
 	bool checkUnlock(MenuPowersCell* pcell);
 	bool checkUpgrade(MenuPowersCell* pcell);

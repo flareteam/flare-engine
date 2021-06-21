@@ -62,7 +62,8 @@ MenuPowersCell::MenuPowersCell()
 	, requires_status()
 	, requires_not_status()
 	, visible(true)
-	, visible_when_locked(true)
+	, visible_check_locked(false)
+	, visible_check_status(false)
 	, upgrade_level(0)
 	, passive_on(false)
 	, is_unlocked(false)
@@ -442,15 +443,15 @@ void MenuPowers::loadPower(FileParser &infile) {
 
 	// @ATTR power.visible_requires_status|repeatable(string)|(Deprecated as of v1.11.75) Hide the power if we don't have this campaign status.
 	else if (infile.key == "visible_requires_status") {
-		infile.error("MenuPowers: visible_requires_status is deprecated. Use requires_status and visible_when_locked=false instead.");
+		infile.error("MenuPowers: visible_requires_status is deprecated. Use requires_status and visible_check_status=true instead.");
 		power_cell.back().cells[0].requires_status.push_back(camp->registerStatus(infile.val));
-		power_cell.back().cells[0].visible_when_locked = false;
+		power_cell.back().cells[0].visible_check_status = true;
 	}
 	// @ATTR power.visible_requires_not_status|repeatable(string)|(Deprecated as of v1.11.75) Hide the power if we have this campaign status.
 	else if (infile.key == "visible_requires_not_status") {
-		infile.error("MenuPowers: visible_requires_not_status is deprecated. Use requires_not_status and visible_when_locked=false instead.");
+		infile.error("MenuPowers: visible_requires_not_status is deprecated. Use requires_not_status and visible_check_status=true instead.");
 		power_cell.back().cells[0].requires_not_status.push_back(camp->registerStatus(infile.val));
-		power_cell.back().cells[0].visible_when_locked = false;
+		power_cell.back().cells[0].visible_check_status = true;
 	}
 
 	// @ATTR power.upgrades|list(power_id)|A list of upgrade power ids that this power slot can upgrade to. Each of these powers should have a matching upgrade section.
@@ -477,8 +478,10 @@ void MenuPowers::loadPower(FileParser &infile) {
 
 	// @ATTR power.visible|bool|Controls whether or not a power is visible or hidden regardless of unlocked state. Defaults to true.
 	else if (infile.key == "visible") power_cell.back().cells[0].visible = Parse::toBool(infile.val);
-	// @ATTR power.visible_when_locked|bool|Controls whether or not a power is visible or hidden when the power is locked. Defaults to true.
-	else if (infile.key == "visible_when_locked") power_cell.back().cells[0].visible_when_locked = Parse::toBool(infile.val);
+	// @ATTR power.visible_check_locked|bool|When set to true, the power will be hidden if it is locked. Defaults to false.
+	else if (infile.key == "visible_check_locked") power_cell.back().cells[0].visible_check_locked = Parse::toBool(infile.val);
+	// @ATTR power.visible_check_status|bool|When set to true, the power will be hidden if its status requirements are not met. Defaults to false.
+	else if (infile.key == "visible_check_status") power_cell.back().cells[0].visible_check_status = Parse::toBool(infile.val);
 
 	else infile.error("MenuPowers: '%s' is not a valid key.", infile.key.c_str());
 }
@@ -527,21 +530,23 @@ void MenuPowers::loadUpgrade(FileParser &infile, std::vector<MenuPowersCell>& po
 
 	// @ATTR upgrade.visible_requires_status|repeatable(string)|(Deprecated as of v1.11.75) Hide the upgrade if we don't have this campaign status.
 	else if (infile.key == "visible_requires_status") {
-		infile.error("MenuPowers: visible_requires_status is deprecated. Use requires_status and visible_when_locked=false instead.");
+		infile.error("MenuPowers: visible_requires_status is deprecated. Use requires_status and visible_check_status=true instead.");
 		power_cell_upgrade.back().requires_status.push_back(camp->registerStatus(infile.val));
-		power_cell_upgrade.back().visible_when_locked = false;
+		power_cell_upgrade.back().visible_check_status = true;
 	}
 	// @ATTR upgrade.visible_requires_not_status|repeatable(string)|(Deprecated as of v1.11.75) Hide the upgrade if we have this campaign status.
 	else if (infile.key == "visible_requires_not_status") {
-		infile.error("MenuPowers: visible_requires_not_status is deprecated. Use requires_not_status and visible_when_locked=false instead.");
+		infile.error("MenuPowers: visible_requires_not_status is deprecated. Use requires_not_status and visible_check_status=true instead.");
 		power_cell_upgrade.back().requires_not_status.push_back(camp->registerStatus(infile.val));
-		power_cell_upgrade.back().visible_when_locked = false;
+		power_cell_upgrade.back().visible_check_status = true;
 	}
 
 	// @ATTR upgrade.visible|bool|Controls whether or not a power is visible or hidden regardless of unlocked state. Defaults to true.
 	else if (infile.key == "visible") power_cell_upgrade.back().visible = Parse::toBool(infile.val);
-	// @ATTR upgrade.visible_when_locked|bool|Controls whether or not a power is visible or hidden when the power is locked. Defaults to true.
-	else if (infile.key == "visible_when_locked") power_cell_upgrade.back().visible_when_locked = Parse::toBool(infile.val);
+	// @ATTR upgrade.visible_check_locked|bool|When set to true, the power will be hidden if it is locked. Defaults to false.
+	else if (infile.key == "visible_check_locked") power_cell_upgrade.back().visible_check_locked = Parse::toBool(infile.val);
+	// @ATTR upgrade.visible_check_status|bool|When set to true, the power will be hidden if its status requirements are not met. Defaults to false.
+	else if (infile.key == "visible_check_status") power_cell_upgrade.back().visible_check_status = Parse::toBool(infile.val);
 
 	else infile.error("MenuPowers: '%s' is not a valid key.", infile.key.c_str());
 }
@@ -577,6 +582,21 @@ bool MenuPowers::checkRequirements(MenuPowersCell* pcell) {
 		if (!pc->stats.canUsePower(pcell->id, StatBlock::CAN_USE_PASSIVE))
 			return false;
 	}
+
+	return true;
+}
+
+bool MenuPowers::checkRequirementStatus(MenuPowersCell* pcell) {
+	if (!pcell)
+		return false;
+
+	for (size_t i = 0; i < pcell->requires_status.size(); ++i)
+		if (!camp->checkStatus(pcell->requires_status[i]))
+			return false;
+
+	for (size_t i = 0; i < pcell->requires_not_status.size(); ++i)
+		if (camp->checkStatus(pcell->requires_not_status[i]))
+			return false;
 
 	return true;
 }
@@ -678,7 +698,9 @@ bool MenuPowers::isCellVisible(MenuPowersCell* pcell) {
 	if (!pcell->visible)
 		return false;
 
-	if (!pcell->visible_when_locked && !checkUnlocked(pcell))
+	if (pcell->visible_check_status && !checkRequirementStatus(pcell))
+		return false;
+	else if (pcell->visible_check_locked && !checkUnlocked(pcell))
 		return false;
 
 	return true;
