@@ -967,7 +967,7 @@ void StatBlock::logic() {
 
 	// enemies heal rapidly while not in combat
 	if (!in_combat && !hero_ally && !hero) {
-		if (alive && pc->stats.alive) {
+		if (alive && pc->stats.alive && Utils::calcDist(pc->stats.pos, pos) > threat_range_far) {
 			hp++;
 			if (hp > get(Stats::HP_MAX))
 				hp = get(Stats::HP_MAX);
