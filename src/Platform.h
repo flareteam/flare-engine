@@ -30,12 +30,13 @@ public:
 
 	class Video {
 	public:
-		static const int COUNT = 9;
+		static const int COUNT = 10;
 		enum {
 			RENDERER,
 			FULLSCREEN,
 			HWSURFACE,
 			VSYNC,
+			FRAME_LIMIT,
 			TEXTURE_FILTER,
 			DPI_SCALING,
 			PARALLAX_LAYERS,

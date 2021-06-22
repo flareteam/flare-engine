@@ -149,6 +149,8 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	, change_gamma_lb(new WidgetLabel())
 	, gamma_sl(new WidgetSlider(WidgetSlider::DEFAULT_FILE))
 	, gamma_lb(new WidgetLabel())
+	, frame_limit_lstb(new WidgetHorizontalList())
+	, frame_limit_lb(new WidgetLabel())
 
 	, music_volume_sl(new WidgetSlider(WidgetSlider::DEFAULT_FILE))
 	, music_volume_lb(new WidgetLabel())
@@ -321,6 +323,27 @@ MenuConfig::MenuConfig (bool _is_game_state)
 		low_hp_threshold_lstb->append(ss.str() + "%", msg->get("When the player's health drops below the given threshold, the low health notifications are triggered if one or more of them is enabled."));
 	}
 
+	// set up the frame limits
+	frame_limits.push_back(30);
+	frame_limits.push_back(60);
+	frame_limits.push_back(120);
+	frame_limits.push_back(240);
+	if (std::find(frame_limits.begin(), frame_limits.end(), settings->max_frames_per_sec) == frame_limits.end())
+		frame_limits.push_back(settings->max_frames_per_sec);
+	unsigned short refresh_rate = render_device->getRefreshRate();
+	if (refresh_rate > 0 && std::find(frame_limits.begin(), frame_limits.end(), refresh_rate) == frame_limits.end())
+		frame_limits.push_back(refresh_rate);
+
+	std::sort(frame_limits.begin(), frame_limits.end());
+	for (size_t i = 0; i < frame_limits.size(); ++i) {
+		std::stringstream ss;
+		ss << frame_limits[i];
+		frame_limit_lstb->append(ss.str(), "");
+
+		if (frame_limits[i] == settings->max_frames_per_sec)
+			frame_limit_lstb->select(static_cast<int>(i));
+	}
+
 	init();
 
 	render_device->setBackgroundColor(Color(0,0,0,0));
@@ -362,6 +385,7 @@ void MenuConfig::init() {
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::FULLSCREEN, fullscreen_lb, fullscreen_cb, msg->get("Full Screen Mode"));
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::HWSURFACE, hwsurface_lb, hwsurface_cb, msg->get("Hardware surfaces"));
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::VSYNC, vsync_lb, vsync_cb, msg->get("V-Sync"));
+	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::FRAME_LIMIT, frame_limit_lb, frame_limit_lstb, msg->get("Frame Limit"));
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::TEXTURE_FILTER, texture_filter_lb, texture_filter_cb, msg->get("Texture Filtering"));
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::DPI_SCALING, dpi_scaling_lb, dpi_scaling_cb, msg->get("DPI scaling"));
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::PARALLAX_LAYERS, parallax_layers_lb, parallax_layers_cb, msg->get("Parallax Layers"));
@@ -417,6 +441,7 @@ void MenuConfig::init() {
 		cfg_tabs[VIDEO_TAB].setOptionEnabled(Platform::Video::HWSURFACE, false);
 		cfg_tabs[VIDEO_TAB].setOptionEnabled(Platform::Video::VSYNC, false);
 		cfg_tabs[VIDEO_TAB].setOptionEnabled(Platform::Video::TEXTURE_FILTER, false);
+		cfg_tabs[VIDEO_TAB].setOptionEnabled(Platform::Video::FRAME_LIMIT, false);
 
 		cfg_tabs[INTERFACE_TAB].setOptionEnabled(Platform::Interface::LANGUAGE, false);
 		cfg_tabs[INTERFACE_TAB].setOptionEnabled(Platform::Interface::DEV_MODE, false);
@@ -1020,6 +1045,9 @@ void MenuConfig::logicVideo() {
 	}
 	else if (cfg_tabs[VIDEO_TAB].options[Platform::Video::RENDERER].enabled && renderer_lstb->checkClickAt(mouse.x, mouse.y)) {
 		new_render_device = renderer_lstb->getValue();
+	}
+	else if (cfg_tabs[VIDEO_TAB].options[Platform::Video::FRAME_LIMIT].enabled && frame_limit_lstb->checkClickAt(mouse.x, mouse.y)) {
+		// handled in setFrameLimit(), which GameStateConfig::logicAccept() calls
 	}
 }
 
@@ -1679,4 +1707,16 @@ void MenuConfig::cleanupDialogs() {
 
 void MenuConfig::setHero(Avatar* _hero) {
 	hero = _hero;
+}
+
+bool MenuConfig::setFrameLimit() {
+	size_t frame_limit_index = frame_limit_lstb->getSelected();
+	if (frame_limit_index < frame_limits.size()) {
+		if (settings->max_frames_per_sec != frame_limits[frame_limit_index]) {
+			Utils::logInfo("MenuConfig: Changing frame limit from %d to %d.", settings->max_frames_per_sec, frame_limits[frame_limit_index]);
+			settings->max_frames_per_sec = frame_limits[frame_limit_index];
+			return true;
+		}
+	}
+	return false;
 }

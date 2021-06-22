@@ -81,6 +81,8 @@ private:
 	bool enable_gamestate_buttons;
 	Avatar *hero;
 
+	std::vector<unsigned short> frame_limits;
+
 public:
 	static const bool IS_GAME_STATE = true;
 	static const bool ENABLE_SAVE_GAME = true;
@@ -168,6 +170,8 @@ public:
 
 	void setHero(Avatar* _hero);
 
+	bool setFrameLimit();
+
 	TabList tablist;
 	TabList tablist_main;
 	TabList tablist_exit;
@@ -216,6 +220,8 @@ public:
 	WidgetLabel                * change_gamma_lb;
 	WidgetSlider               * gamma_sl;
 	WidgetLabel                * gamma_lb;
+	WidgetHorizontalList       * frame_limit_lstb;
+	WidgetLabel                * frame_limit_lb;
 
 	WidgetSlider               * music_volume_sl;
 	WidgetLabel                * music_volume_lb;

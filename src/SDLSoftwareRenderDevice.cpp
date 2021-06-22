@@ -702,3 +702,10 @@ void SDLSoftwareRenderDevice::setFullscreen(bool enable_fullscreen) {
 		windowResize();
 	}
 }
+
+unsigned short SDLSoftwareRenderDevice::getRefreshRate() {
+	SDL_DisplayMode mode;
+	SDL_GetCurrentDisplayMode(0, &mode);
+	return static_cast<unsigned short>(mode.refresh_rate);
+}
+

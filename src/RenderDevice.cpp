@@ -395,3 +395,8 @@ void RenderDevice::drawEllipse(int x0, int y0, int x1, int y1, const Color& colo
 		lasty = cury;
 	}
 }
+
+unsigned short RenderDevice::getRefreshRate() {
+	Utils::logInfo("RenderDevice: getRefreshRate() not implemented");
+	return 0;
+}

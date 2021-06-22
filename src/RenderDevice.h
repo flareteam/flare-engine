@@ -230,6 +230,7 @@ public:
 	virtual void windowResize() = 0;
 	virtual void setBackgroundColor(Color color);
 	virtual void setFullscreen(bool enable_fullscreen);
+	virtual unsigned short getRefreshRate();
 
 	bool reloadGraphics();
 

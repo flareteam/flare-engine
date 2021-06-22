@@ -38,6 +38,7 @@ Engine features:
 * The player's last used Stash tab is now remembered across sessions.
 * Added the ability for NPCs to join the player's party. (Igor Paliychuk)
 * Added support for the 'delay' property used by Events contained in script files.
+* Added 'Frame Limit' option to Video settings.
 
 Engine fixes:
 

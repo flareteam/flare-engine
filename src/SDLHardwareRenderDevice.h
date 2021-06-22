@@ -80,6 +80,7 @@ public:
 	void setGamma(float g);
 	void resetGamma();
 	void updateTitleBar();
+	unsigned short getRefreshRate();
 
 	Image* loadImage(const std::string& filename, int error_type);
 
