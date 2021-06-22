@@ -31,6 +31,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class Settings {
 public:
+	static const float LOGIC_FPS = 60.f;
+
 	enum {
 		LOOT_TIPS_DEFAULT = 0,
 		LOOT_TIPS_SHOW_ALL = 1,

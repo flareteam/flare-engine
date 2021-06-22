@@ -26,6 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Camera.h"
 #include "CommonIncludes.h"
 #include "EngineSettings.h"
+#include "Settings.h"
 #include "SharedResources.h"
 #include "Utils.h"
 #include "UtilsMath.h"
@@ -37,7 +38,7 @@ Camera::Camera()
 	, prev_cam_target()
 	, prev_cam_dx(0)
 	, prev_cam_dy(0)
-	, cam_threshold(eset->misc.camera_speed / 50.f)
+	, cam_threshold(eset->misc.camera_speed / Settings::LOGIC_FPS / 50.f)
 	, shake_strength(8)
 {
 }

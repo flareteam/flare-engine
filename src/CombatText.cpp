@@ -59,7 +59,7 @@ CombatText::CombatText() {
 
 	duration = settings->max_frames_per_sec; // 1 second
 	fade_duration = 0;
-	speed = 60.f / settings->max_frames_per_sec;
+	speed = Settings::LOGIC_FPS / settings->max_frames_per_sec;
 	offset = 48; // average height of flare-game enemies, so a sensible default
 
 	// Load config settings
@@ -73,7 +73,7 @@ CombatText::CombatText() {
 			}
 			else if(infile.key == "speed") {
 				// @ATTR speed|int|Motion speed of the combat text.
-				speed = static_cast<float>(Parse::toInt(infile.val) * 60) / settings->max_frames_per_sec;
+				speed = (static_cast<float>(Parse::toInt(infile.val)) * Settings::LOGIC_FPS) / settings->max_frames_per_sec;
 			}
 			else if (infile.key == "offset") {
 				// @ATTR offset|int|The vertical offset for the combat text's starting position.

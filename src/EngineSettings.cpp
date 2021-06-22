@@ -69,7 +69,7 @@ void EngineSettings::Misc::load() {
 	save_oncutscene = true;
 	save_onstash = SAVE_ONSTASH_ALL;
 	save_anywhere = false;
-	camera_speed = 10.f;
+	camera_speed = 10.f * (static_cast<float>(settings->max_frames_per_sec) / Settings::LOGIC_FPS);
 	save_buyback = true;
 	keep_buyback_on_map_change = true;
 	sfx_unable_to_cast = "";
