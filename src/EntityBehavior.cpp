@@ -134,7 +134,6 @@ void EntityBehavior::findTarget() {
 
 	StatBlock *target_stats = NULL;
 	float stealth_threat_range = (e->stats.threat_range * (100 - static_cast<float>(e->stats.hero_stealth))) / 100;
-	bool is_ally = e->stats.hero_ally;
 
 	// check distance and line of sight between enemy and hero
 	// by default, the enemy pursues the hero directly
@@ -148,7 +147,7 @@ void EntityBehavior::findTarget() {
 	hero_dist = target_dist;
 
 	// if the minion gets too far, transport it to the player pos
-	if (is_ally && hero_dist > ALLY_TELEPORT_DISTANCE && !e->stats.in_combat) {
+	if (e->stats.hero_ally && hero_dist > ALLY_TELEPORT_DISTANCE && !e->stats.in_combat) {
 		mapr->collider.unblock(e->stats.pos.x, e->stats.pos.y);
 		e->stats.pos.x = pc->stats.pos.x;
 		e->stats.pos.y = pc->stats.pos.y;
@@ -156,20 +155,19 @@ void EntityBehavior::findTarget() {
 		hero_dist = 0;
 	}
 
-	bool enemies_in_combat = false;
+	// AI can target other AI
 	for (size_t i = 0; i < entitym->entities.size(); ++i) {
 		Entity* entity = entitym->entities[i];
 		if (!entity->stats.alive)
 			continue;
 
-		if ((!is_ally && entity->stats.hero_ally) || (is_ally && !entity->stats.hero_ally && entity->stats.in_combat)) {
+		if ((!e->stats.hero_ally && entity->stats.hero_ally) || (e->stats.hero_ally && !entity->stats.hero_ally && entity->stats.in_combat)) {
 			float entity_dist = Utils::calcDist(e->stats.pos, entity->stats.pos);
-			if (!target_stats || (is_ally && target_stats->hero)) {
+			if (!target_stats || (e->stats.hero_ally && target_stats->hero)) {
 				// pick the first available target if none is already selected
 				target_stats = &entitym->entities[i]->stats;
 				target_dist = entity_dist;
 				e->stats.in_combat = true;
-				enemies_in_combat = true;
 			}
 			else if (entity_dist < target_dist) {
 				// pick a new target if it's closer
@@ -178,10 +176,6 @@ void EntityBehavior::findTarget() {
 			}
 		}
 	}
-
-	//break combat if the player gets too far or all enemies die
-	if(!enemies_in_combat)
-		e->stats.in_combat = false;
 
 	// check line-of-sight
 	if (target_stats && target_dist < e->stats.threat_range && pc->stats.alive)
@@ -196,7 +190,7 @@ void EntityBehavior::findTarget() {
 
 	// check entering combat (because the player got too close)
 	bool close_to_target = false;
-	if (!is_ally && &pc->stats == target_stats)
+	if (!e->stats.hero_ally && &pc->stats == target_stats)
 		close_to_target = target_dist < stealth_threat_range;
 	else if (target_stats && &pc->stats != target_stats)
 		close_to_target = target_dist < e->stats.threat_range;
@@ -211,7 +205,7 @@ void EntityBehavior::findTarget() {
 		e->stats.in_combat = true;
 
 		StatBlock::AIPower* ai_power;
-		if (!is_ally) {
+		if (!e->stats.hero_ally) {
 			ai_power = e->stats.getAIPower(StatBlock::AI_POWER_BEACON);
 			if (ai_power != NULL) {
 				powers->activate(ai_power->id, &e->stats, e->stats.pos); //emit beacon
@@ -227,16 +221,19 @@ void EntityBehavior::findTarget() {
 		e->stats.join_combat = false;
 	}
 
-	// check exiting combat
+	// exit combat if target got too far away
 	if (e->stats.combat_style != StatBlock::COMBAT_AGGRESSIVE) {
-		// target got too far away
 		if (target_dist > e->stats.threat_range_far && !e->stats.join_combat)
 			e->stats.in_combat = false;
-
-		// either party is dead
-		if (!e->stats.alive || !pc->stats.alive)
-			e->stats.in_combat = false;
 	}
+
+	// exit combat if either party is dead
+	if (!e->stats.alive || !pc->stats.alive || (target_stats && !target_stats->alive))
+		e->stats.in_combat = false;
+
+	// exit combat if ally is targeting player
+	if (e->stats.hero_ally && target_stats == &pc->stats)
+		e->stats.in_combat = false;
 
 	if (target_stats)
 		pursue_pos = target_stats->pos;
@@ -258,7 +255,7 @@ void EntityBehavior::findTarget() {
 	// if the player is blocked, all summons which the player is facing to move away for the specified frames
 	// need to set the flag player_blocked so that other allies know to get out of the way as well
 	// if hero is facing the summon
-	if (is_ally && eset->misc.enable_ally_collision_ai) {
+	if (e->stats.hero_ally && eset->misc.enable_ally_collision_ai) {
 		if (!entitym->player_blocked && hero_dist < ALLY_FLEE_DISTANCE
 				&& mapr->collider.isFacing(pc->stats.pos.x,pc->stats.pos.y,pc->stats.direction,e->stats.pos.x,e->stats.pos.y)) {
 			entitym->player_blocked = true;
