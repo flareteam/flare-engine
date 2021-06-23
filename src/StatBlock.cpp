@@ -98,9 +98,9 @@ StatBlock::StatBlock()
 	, character_class("")
 	, character_subclass("")
 	, hp(0)
-	, hp_ticker(0)
+	, hp_f(0)
 	, mp(0)
-	, mp_ticker(0)
+	, mp_f(0)
 	, speed_default(0.1f)
 	, dmg_min_add(eset->damage_types.list.size(), 0)
 	, dmg_max_add(eset->damage_types.list.size(), 0)
@@ -866,22 +866,31 @@ void StatBlock::logic() {
 		powers_ai[i].cooldown.tick();
 	}
 
+	// sync hp/mp with their floating point counterparts
+	if (static_cast<int>(hp_f) != hp)
+		hp_f = static_cast<float>(hp);
+	if (static_cast<int>(mp_f) != mp)
+		mp_f = static_cast<float>(mp);
+
 	// HP regen
-	if (get(Stats::HP_REGEN) > 0 && hp < get(Stats::HP_MAX) && hp > 0) {
-		hp_ticker++;
-		if (hp_ticker >= (60 * settings->max_frames_per_sec) / get(Stats::HP_REGEN)) {
-			hp++;
-			hp_ticker = 0;
+	if (hp < get(Stats::HP_MAX) && hp > 0) {
+		float hp_regen_per_frame;
+		if (!in_combat && !hero_ally && !hero && pc->stats.alive) {
+			// enemies heal rapidly (full heal in 5 seconds) while not in combat
+			hp_regen_per_frame = static_cast<float>(get(Stats::HP_MAX)) / 5.f / settings->max_frames_per_sec;
 		}
+		else {
+			hp_regen_per_frame = static_cast<float>(get(Stats::HP_REGEN)) / 60.f / settings->max_frames_per_sec;
+		}
+		hp_f += hp_regen_per_frame;
+		hp = std::min(static_cast<int>(hp_f), get(Stats::HP_MAX));
 	}
 
 	// MP regen
-	if (get(Stats::MP_REGEN) > 0 && mp < get(Stats::MP_MAX) && hp > 0) {
-		mp_ticker++;
-		if (mp_ticker >= (60 * settings->max_frames_per_sec) / get(Stats::MP_REGEN)) {
-			mp++;
-			mp_ticker = 0;
-		}
+	if (mp < get(Stats::MP_MAX) && hp > 0) {
+		float mp_regen_per_frame = static_cast<float>(get(Stats::MP_REGEN)) / 60.f / settings->max_frames_per_sec;
+		mp_f += mp_regen_per_frame;
+		mp = std::min(static_cast<int>(mp_f), get(Stats::MP_MAX));
 	}
 
 	// handle buff/debuff durations
@@ -962,16 +971,6 @@ void StatBlock::logic() {
 		mapr->collider.unblock(pos.x, pos.y);
 		mapr->collider.move(pos.x, pos.y, dx, dy, movement_type, mapr->collider.getCollideType(hero));
 		mapr->collider.block(pos.x, pos.y, hero_ally);
-	}
-
-
-	// enemies heal rapidly while not in combat
-	if (!in_combat && !hero_ally && !hero) {
-		if (alive && pc->stats.alive) {
-			hp++;
-			if (hp > get(Stats::HP_MAX))
-				hp = get(Stats::HP_MAX);
-		}
 	}
 
 	waypoint_timer.tick();

@@ -190,11 +190,11 @@ public:
 
 	// physical stats
 	int hp;
-	int hp_ticker;
+	float hp_f;
 
 	// mental stats
 	int mp;
-	int mp_ticker;
+	float mp_f;
 
 	float speed_default;
 
