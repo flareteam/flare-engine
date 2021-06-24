@@ -41,6 +41,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "Version.h"
 
+const float Settings::LOGIC_FPS = 60.f;
+
 Settings::Settings()
 	: path_conf("")
 	, path_user("")
