@@ -122,6 +122,8 @@ public:
 
 	bool canActivateItem(ItemID item);
 
+	int getEquippedSetCount(size_t set_id);
+
 	Rect carried_area;
 	std::vector<Rect> equipped_area;
 	std::vector<std::string> slot_type;

@@ -1257,6 +1257,17 @@ bool MenuInventory::canActivateItem(ItemID item) {
 	return false;
 }
 
+int MenuInventory::getEquippedSetCount(size_t set_id) {
+	int quantity = 0;
+	for (int i=0; i<MAX_EQUIPPED; i++) {
+		ItemID item_id = inventory[EQUIPMENT].storage[i].item;
+		if (items->items[item_id].set == set_id) {
+			quantity++;
+		}
+	}
+	return quantity;
+}
+
 MenuInventory::~MenuInventory() {
 	delete closeButton;
 }

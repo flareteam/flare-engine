@@ -889,6 +889,8 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	}
 
 	if (items[stack.item].set > 0) {
+		int set_count = menu->inv->getEquippedSetCount(items[stack.item].set);
+
 		// item set bonuses
 		ItemSet set = item_sets[items[stack.item].set];
 		bonus_counter = 0;
@@ -903,7 +905,10 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 			ss << msg->get("%d items:", bdata->requirement) << ' ';
 
 			getBonusString(ss, bdata);
-			tip.addColoredText(ss.str(), set.color);
+			if (bdata->requirement <= set_count)
+				tip.addColoredText(ss.str(), set.color);
+			else
+				tip.addColoredText(ss.str(), font->getColor(FontEngine::COLOR_WIDGET_DISABLED));
 			bonus_counter++;
 		}
 	}
