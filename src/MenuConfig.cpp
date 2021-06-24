@@ -151,6 +151,8 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	, gamma_lb(new WidgetLabel())
 	, frame_limit_lstb(new WidgetHorizontalList())
 	, frame_limit_lb(new WidgetLabel())
+	, max_render_size_lstb(new WidgetHorizontalList())
+	, max_render_size_lb(new WidgetLabel())
 
 	, music_volume_sl(new WidgetSlider(WidgetSlider::DEFAULT_FILE))
 	, music_volume_lb(new WidgetLabel())
@@ -339,9 +341,19 @@ MenuConfig::MenuConfig (bool _is_game_state)
 		std::stringstream ss;
 		ss << frame_limits[i];
 		frame_limit_lstb->append(ss.str(), "");
+	}
 
-		if (frame_limits[i] == settings->max_frames_per_sec)
-			frame_limit_lstb->select(static_cast<int>(i));
+	// set up render resolutions
+	max_render_size_lstb->append(msg->get("Default"), "");
+	virtual_heights = eset->resolutions.virtual_heights;
+	if (settings->max_render_size > 0 && std::find(virtual_heights.begin(), virtual_heights.end(), settings->max_render_size) == virtual_heights.end())
+		virtual_heights.push_back(settings->max_render_size);
+
+	std::sort(virtual_heights.begin(), virtual_heights.end());
+	for (size_t i = 0; i < virtual_heights.size(); ++i) {
+		std::stringstream ss;
+		ss << virtual_heights[i];
+		max_render_size_lstb->append(ss.str(), "");
 	}
 
 	init();
@@ -385,12 +397,13 @@ void MenuConfig::init() {
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::FULLSCREEN, fullscreen_lb, fullscreen_cb, msg->get("Full Screen Mode"));
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::HWSURFACE, hwsurface_lb, hwsurface_cb, msg->get("Hardware surfaces"));
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::VSYNC, vsync_lb, vsync_cb, msg->get("V-Sync"));
-	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::FRAME_LIMIT, frame_limit_lb, frame_limit_lstb, msg->get("Frame Limit"));
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::TEXTURE_FILTER, texture_filter_lb, texture_filter_cb, msg->get("Texture Filtering"));
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::DPI_SCALING, dpi_scaling_lb, dpi_scaling_cb, msg->get("DPI scaling"));
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::PARALLAX_LAYERS, parallax_layers_lb, parallax_layers_cb, msg->get("Parallax Layers"));
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::ENABLE_GAMMA, change_gamma_lb, change_gamma_cb, msg->get("Allow changing gamma"));
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::GAMMA, gamma_lb, gamma_sl, msg->get("Gamma"));
+	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::MAX_RENDER_SIZE, max_render_size_lb, max_render_size_lstb, msg->get("Maximum Render Size"));
+	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::FRAME_LIMIT, frame_limit_lb, frame_limit_lstb, msg->get("Frame Limit"));
 
 	cfg_tabs[AUDIO_TAB].setOptionWidgets(Platform::Audio::SFX, sound_volume_lb, sound_volume_sl, msg->get("Sound Volume"));
 	cfg_tabs[AUDIO_TAB].setOptionWidgets(Platform::Audio::MUSIC, music_volume_lb, music_volume_sl, msg->get("Music Volume"));
@@ -780,6 +793,26 @@ void MenuConfig::updateVideo() {
 
 	refreshRenderers();
 
+	for (size_t i = 0; i < frame_limits.size(); ++i) {
+		if (frame_limits[i] == settings->max_frames_per_sec) {
+			frame_limit_lstb->select(static_cast<int>(i));
+			break;
+		}
+	}
+
+	if (settings->max_render_size == 0) {
+		max_render_size_lstb->select(0);
+	}
+	else {
+		for (size_t i = 0; i < virtual_heights.size(); ++i) {
+			if (virtual_heights[i] == settings->max_render_size) {
+				max_render_size_lstb->select(static_cast<int>(i+1));
+				break;
+			}
+		}
+	}
+	refreshWindowSize();
+
 	cfg_tabs[VIDEO_TAB].scrollbox->refresh();
 }
 
@@ -977,7 +1010,7 @@ void MenuConfig::logicDefaults() {
 		inpt->defaultQwertyKeyBindings();
 		inpt->defaultJoystickBindings();
 		update();
-		render_device->windowResize();
+		refreshWindowSize();
 		defaults_confirm->visible = false;
 		defaults_confirm->confirmClicked = false;
 	}
@@ -1005,8 +1038,7 @@ void MenuConfig::logicVideo() {
 	if (cfg_tabs[VIDEO_TAB].options[Platform::Video::FULLSCREEN].enabled && fullscreen_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->fullscreen = fullscreen_cb->isChecked();
 		render_device->setFullscreen(settings->fullscreen);
-		inpt->window_resized = true;
-		refreshWidgets();
+		refreshWindowSize();
 	}
 	else if (cfg_tabs[VIDEO_TAB].options[Platform::Video::HWSURFACE].enabled && hwsurface_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->hwsurface = hwsurface_cb->isChecked();
@@ -1019,10 +1051,7 @@ void MenuConfig::logicVideo() {
 	}
 	else if (cfg_tabs[VIDEO_TAB].options[Platform::Video::DPI_SCALING].enabled && dpi_scaling_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->dpi_scaling = dpi_scaling_cb->isChecked();
-		render_device->windowResize();
-		inpt->window_resized = true;
-		refreshWidgets();
-		force_refresh_background = true;
+		refreshWindowSize();
 	}
 	else if (cfg_tabs[VIDEO_TAB].options[Platform::Video::PARALLAX_LAYERS].enabled && parallax_layers_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->parallax_layers = parallax_layers_cb->isChecked();
@@ -1048,6 +1077,16 @@ void MenuConfig::logicVideo() {
 	}
 	else if (cfg_tabs[VIDEO_TAB].options[Platform::Video::FRAME_LIMIT].enabled && frame_limit_lstb->checkClickAt(mouse.x, mouse.y)) {
 		// handled in setFrameLimit(), which GameStateConfig::logicAccept() calls
+	}
+	else if (cfg_tabs[VIDEO_TAB].options[Platform::Video::MAX_RENDER_SIZE].enabled && max_render_size_lstb->checkClickAt(mouse.x, mouse.y)) {
+		int index = max_render_size_lstb->getSelected();
+		if (index == 0) {
+			settings->max_render_size = 0;
+		}
+		else {
+			settings->max_render_size = virtual_heights[index-1];
+		}
+		refreshWindowSize();
 	}
 }
 
@@ -1369,6 +1408,13 @@ void MenuConfig::refreshWidgets() {
 	}
 
 	input_confirm->align();
+}
+
+void MenuConfig::refreshWindowSize() {
+	render_device->windowResize();
+	inpt->window_resized = true;
+	refreshWidgets();
+	force_refresh_background = true;
 }
 
 void MenuConfig::addChildWidget(Widget *w, int tab) {
@@ -1720,3 +1766,4 @@ bool MenuConfig::setFrameLimit() {
 	}
 	return false;
 }
+

@@ -82,6 +82,7 @@ private:
 	Avatar *hero;
 
 	std::vector<unsigned short> frame_limits;
+	std::vector<unsigned short> virtual_heights;
 
 public:
 	static const bool IS_GAME_STATE = true;
@@ -142,6 +143,7 @@ public:
 	void placeLabeledWidget(WidgetLabel* lb, Widget* w, int x1, int y1, int x2, int y2, std::string const& str, int justify = 0);
 	void placeLabeledWidgetAuto(int tab, int cfg_index);
 	void refreshWidgets();
+	void refreshWindowSize();
 	void addChildWidget(Widget *w, int tab);
 	void refreshRenderers();
 	void refreshJoysticks();
@@ -222,6 +224,8 @@ public:
 	WidgetLabel                * gamma_lb;
 	WidgetHorizontalList       * frame_limit_lstb;
 	WidgetLabel                * frame_limit_lb;
+	WidgetHorizontalList       * max_render_size_lstb;
+	WidgetLabel                * max_render_size_lb;
 
 	WidgetSlider               * music_volume_sl;
 	WidgetLabel                * music_volume_lb;

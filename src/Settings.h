@@ -75,6 +75,7 @@ public:
 	bool change_gamma;
 	float gamma;
 	bool parallax_layers;
+	unsigned short max_render_size;
 
 	// Audio Settings
 	unsigned short music_volume;

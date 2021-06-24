@@ -39,6 +39,7 @@ Engine features:
 * Added the ability for NPCs to join the player's party. (Igor Paliychuk)
 * Added support for the 'delay' property used by Events contained in script files.
 * Added 'Frame Limit' option to Video settings.
+* Added 'Maximum Render Size' option to Video settings.
 
 Engine fixes:
 

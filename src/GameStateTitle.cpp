@@ -133,6 +133,7 @@ GameStateTitle::GameStateTitle()
 	tablist.add(button_exit);
 
 	refreshWidgets();
+	force_refresh_background = true;
 
 	if (eset->gameplay.enable_playgame && !settings->load_slot.empty()) {
 		showLoading();

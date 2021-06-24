@@ -335,11 +335,17 @@ void RenderDevice::windowResizeInternal() {
 	settings->view_h = temp_screen_h;
 
 	// scale virtual height when outside of VIRTUAL_HEIGHTS range
+	unsigned short max_render_size;
+	if (settings->max_render_size == 0)
+		max_render_size = eset->resolutions.virtual_heights.back();
+	else
+		max_render_size = settings->max_render_size;
+
 	if (!eset->resolutions.virtual_heights.empty()) {
 		if (temp_screen_h < eset->resolutions.virtual_heights.front())
 			settings->view_h = eset->resolutions.virtual_heights.front();
-		else if (temp_screen_h >= eset->resolutions.virtual_heights.back())
-			settings->view_h = eset->resolutions.virtual_heights.back();
+		else if (temp_screen_h >= max_render_size)
+			settings->view_h = max_render_size;
 	}
 
 	settings->view_h_half = settings->view_h / 2;
