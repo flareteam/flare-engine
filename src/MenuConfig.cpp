@@ -1005,6 +1005,7 @@ void MenuConfig::logicDefaults() {
 	defaults_confirm->logic();
 	if (defaults_confirm->confirmClicked) {
 		settings->fullscreen = false;
+		render_device->setFullscreen(settings->fullscreen);
 		settings->loadDefaults();
 		eset->load();
 		inpt->defaultQwertyKeyBindings();

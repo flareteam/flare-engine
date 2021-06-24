@@ -138,6 +138,7 @@ void GameStateConfig::logicCancel() {
 	refreshFont();
 	menu_config->update();
 	menu_config->cleanup();
+	render_device->setFullscreen(settings->fullscreen);
 	render_device->windowResize();
 	render_device->updateTitleBar();
 	showLoading();

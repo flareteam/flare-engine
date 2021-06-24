@@ -88,6 +88,7 @@ Engine fixes:
 * Fix loud loot drop sound effect when there are a large number of drops at once.
 * Fix incorrect HP/MP regen for high regen values and high frame limits.
 * Fix camera, parallax layer, and cutscene speeds when using alternative frame limits.
+* Fix not restoring fullscreen option when pressing Cancel or Defaults in config menu.
 
 Game updates:
 
