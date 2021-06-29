@@ -30,6 +30,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Camera.h"
 #include "CommonIncludes.h"
+#include "FogOfWar.h"
 #include "Map.h"
 #include "MapCollision.h"
 #include "MapParallax.h"
@@ -130,6 +131,7 @@ public:
 	bool map_change;
 
 	MapCollision collider;
+	FogOfWar fogOfWar;
 
 	// event-created loot or items
 	std::vector<EventComponent> loot;

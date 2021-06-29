@@ -132,6 +132,7 @@ Set (FLARE_SOURCES
 	./src/EntityManager.cpp
 	./src/EventManager.cpp
 	./src/FileParser.cpp
+	./src/FogOfWar.cpp
 	./src/FontEngine.cpp
 	./src/GameSlotPreview.cpp
 	./src/GameState.cpp
@@ -247,6 +248,7 @@ Set (FLARE_HEADERS
 	./src/EntityManager.h
 	./src/EventManager.h
 	./src/FileParser.h
+	./src/FogOfWar.h
 	./src/FontEngine.h
 	./src/GameSlotPreview.h
 	./src/GameState.h

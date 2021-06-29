@@ -218,6 +218,20 @@ int MapRenderer::load(const std::string& fname) {
 		if (layernames[i] == "object")
 			index_objectlayer = i;
 
+	for (unsigned i = 0; i < layers.size(); ++i) {
+		if (layernames[i] == "fogofwar") {
+			short width = static_cast<short>(layers[i].size());
+			if (width == 0) {
+				Utils::logError("MapRenderer: Map width is 0. Can't set fogOfWar layer.");
+				break;
+			}
+			short height = static_cast<short>(layers[i][0].size());
+			fogOfWar.setMap(layers[i], width, height);
+			std::cout << "WxH " << width << "x" << height << std::endl;
+			removeLayer(i);
+		}
+	}
+
 	while (!enemy_groups.empty()) {
 		pushEnemyGroup(enemy_groups.front());
 		enemy_groups.pop();
@@ -664,6 +678,7 @@ void MapRenderer::renderIso(std::vector<Renderable> &r, std::vector<Renderable> 
 	map_parallax.render(cam.shake, layernames[index]);
 
 	index++;
+	std::cout << "layers.size" << layers.size() << std::endl;
 	while (index < layers.size()) {
 		renderIsoLayer(layers[index]);
 		map_parallax.render(cam.shake, layernames[index]);
