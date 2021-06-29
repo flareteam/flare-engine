@@ -138,6 +138,15 @@ int Map::load(const std::string& fname) {
 			layers.back()[i].resize(h, 0);
 		}
 	}
+	// ensure that our map contains a fog of war layer
+	if (std::find(layernames.begin(), layernames.end(), "fogofwar") == layernames.end()) {
+		layernames.push_back("fogofwar");
+		layers.resize(layers.size()+1);
+		layers.back().resize(w);
+		for (size_t i=0; i<layers.back().size(); ++i) {
+			layers.back()[i].resize(h, 0);
+		}
+	}
 
 	if (!hero_pos_enabled) {
 		Utils::logError("Map: Hero spawn position (hero_pos) not defined in map header. Defaulting to (0,0).");
