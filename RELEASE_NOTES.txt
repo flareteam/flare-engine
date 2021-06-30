@@ -42,6 +42,7 @@ Engine features:
 * Added 'Maximum Render Size' option to Video settings.
 * Improved visual indication of which item set bonuses are active.
 * Support enabling touch screen controls on non-Android systems.
+* Support fullscreen mode in the Emscripten port.
 
 Engine fixes:
 

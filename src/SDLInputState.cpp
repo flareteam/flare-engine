@@ -114,7 +114,14 @@ void SDLInputState::defaultQwertyKeyBindings () {
 	binding[Input::LEFT] = SDLK_a;
 	binding[Input::RIGHT] = SDLK_d;
 
-	binding_alt[Input::CANCEL] = SDLK_ESCAPE;
+	if (platform.needs_alt_escape_key) {
+		// web browsers reserve Escape for exiting fullscreen, so we provide an alternate binding
+		// backslash is used due to its general proximity to Enter on both ANSI and ISO layouts
+		binding_alt[Input::CANCEL] = SDLK_BACKSLASH;
+	}
+	else {
+		binding_alt[Input::CANCEL] = SDLK_ESCAPE;
+	}
 	binding_alt[Input::UP] = SDLK_UP;
 	binding_alt[Input::DOWN] = SDLK_DOWN;
 	binding_alt[Input::LEFT] = SDLK_LEFT;

@@ -115,11 +115,14 @@ public:
 	void FSCommit();
 
 	void setScreenSize();
+	void setFullscreen(bool enable);
 
 	bool has_exit_button;
 	bool is_mobile_device;
 	bool force_hardware_cursor;
 	bool has_lock_file;
+	bool needs_alt_escape_key;
+	bool fullscreen_bypass;
 	unsigned char config_menu_type;
 	std::string default_renderer;
 

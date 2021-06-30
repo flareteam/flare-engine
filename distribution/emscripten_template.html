@@ -15,16 +15,6 @@
         display:block
     }
 
-    /* p#fullScreenButton { */
-    /*     text-align: center; */
-    /*     background-color: #FF890A; */
-    /*     font-family: Sans-Serif; */
-    /*     padding: 10px; */
-    /*     user-select: none; */
-    /*     cursor: pointer; */
-    /*     color: #fff; */
-    /* } */
-
     #loadingDiv {
         text-align: center;
         font-family: monospace;
@@ -38,12 +28,13 @@
       <div id="loadingDiv">Loading...</div>
       <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()"></canvas>
       <div style="width:200px; margin-left:auto; margin-right:auto">
-      <!-- <p id="fullScreenButton" onclick="Module.requestFullscreen(false, false)">Click for full&#45;screen</p> -->
       </div>
 
 
 
     <script type='text/javascript'>
+        var parentDocument = document;
+
         var Module = {
             onRuntimeInitialized: function() {
                 var e = document.getElementById('loadingDiv');

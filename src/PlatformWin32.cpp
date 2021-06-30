@@ -35,6 +35,8 @@ Platform::Platform()
 	, is_mobile_device(false)
 	, force_hardware_cursor(false)
 	, has_lock_file(true)
+	, needs_alt_escape_key(false)
+	, fullscreen_bypass(false)
 	, config_menu_type(CONFIG_MENU_TYPE_DESKTOP)
 	, default_renderer("")
 	, config_video(Platform::Video::COUNT, true)
@@ -103,6 +105,7 @@ void Platform::FSInit() {}
 bool Platform::FSCheckReady() { return true; }
 void Platform::FSCommit() {}
 void Platform::setScreenSize() {}
+void Platform::setFullscreen(bool) {}
 void Platform::setExitEventFilter() {}
 
 
