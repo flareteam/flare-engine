@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-23 20:34-0400\n"
+"POT-Creation-Date: 2021-06-30 17:43-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
 "Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2019\n"
 "Language-Team: Hungarian (https://www.transifex.com/flareorg/teams/84925/hu/)\n"
@@ -127,14 +127,14 @@ msgstr "Kalandozó"
 msgid "miss"
 msgstr "elvétve"
 
-#: ../../../src/Entity.cpp:565 ../../../src/PowerManager.cpp:1224
-#: ../../../src/StatBlock.cpp:917 ../../../src/StatBlock.cpp:923
+#: ../../../src/Entity.cpp:565 ../../../src/PowerManager.cpp:1220
+#: ../../../src/StatBlock.cpp:926 ../../../src/StatBlock.cpp:932
 #, c-format
 msgid "+%d HP"
 msgstr "+%d ÉP"
 
-#: ../../../src/Entity.cpp:572 ../../../src/StatBlock.cpp:928
-#: ../../../src/StatBlock.cpp:934
+#: ../../../src/Entity.cpp:572 ../../../src/StatBlock.cpp:937
+#: ../../../src/StatBlock.cpp:943
 #, c-format
 msgid "+%d MP"
 msgstr ""
@@ -175,27 +175,27 @@ msgstr "Engedélyezz egy sztori mod-ot a folytatáshoz"
 msgid "Load Game"
 msgstr "Betöltés"
 
-#: ../../../src/GameStateLoad.cpp:705
+#: ../../../src/GameStateLoad.cpp:704
 msgid "Entering game world..."
 msgstr "Belépés a játék világába..."
 
-#: ../../../src/GameStateLoad.cpp:708
+#: ../../../src/GameStateLoad.cpp:707
 msgid "Loading saved game..."
 msgstr "Elmentett játék betöltése..."
 
-#: ../../../src/GameStateLoad.cpp:741
+#: ../../../src/GameStateLoad.cpp:740
 msgid "Invalid save"
 msgstr "Hibás mentés"
 
-#: ../../../src/GameStateLoad.cpp:765 ../../../src/ItemManager.cpp:745
-#: ../../../src/MenuPowers.cpp:860 ../../../src/MenuPowers.cpp:1219
-#: ../../../src/MenuPowers.cpp:1631
+#: ../../../src/GameStateLoad.cpp:764 ../../../src/ItemManager.cpp:745
+#: ../../../src/MenuPowers.cpp:882 ../../../src/MenuPowers.cpp:1241
+#: ../../../src/MenuPowers.cpp:1653
 #, c-format
 msgid "Level %d"
 msgstr "%d. szint"
 
 #: ../../../src/GameStateNew.cpp:66 ../../../src/InputState.cpp:416
-#: ../../../src/MenuConfig.cpp:246
+#: ../../../src/MenuConfig.cpp:252
 msgid "Cancel"
 msgstr "Mégsem"
 
@@ -248,26 +248,26 @@ msgid "Accept"
 msgstr "Elfogad"
 
 #: ../../../src/InputState.cpp:418 ../../../src/MenuMovementType.cpp:123
-#: ../../../src/MenuMovementType.cpp:132 ../../../src/SDLInputState.cpp:668
-#: ../../../src/SDLInputState.cpp:698
+#: ../../../src/MenuMovementType.cpp:132 ../../../src/SDLInputState.cpp:670
+#: ../../../src/SDLInputState.cpp:700
 msgid "Up"
 msgstr "Fel"
 
 #: ../../../src/InputState.cpp:419 ../../../src/MenuMovementType.cpp:125
-#: ../../../src/MenuMovementType.cpp:134 ../../../src/SDLInputState.cpp:646
-#: ../../../src/SDLInputState.cpp:676
+#: ../../../src/MenuMovementType.cpp:134 ../../../src/SDLInputState.cpp:648
+#: ../../../src/SDLInputState.cpp:678
 msgid "Down"
 msgstr "Le"
 
 #: ../../../src/InputState.cpp:420 ../../../src/MenuMovementType.cpp:124
-#: ../../../src/MenuMovementType.cpp:133 ../../../src/SDLInputState.cpp:653
-#: ../../../src/SDLInputState.cpp:683
+#: ../../../src/MenuMovementType.cpp:133 ../../../src/SDLInputState.cpp:655
+#: ../../../src/SDLInputState.cpp:685
 msgid "Left"
 msgstr "Balra"
 
 #: ../../../src/InputState.cpp:421 ../../../src/MenuMovementType.cpp:126
-#: ../../../src/MenuMovementType.cpp:135 ../../../src/SDLInputState.cpp:663
-#: ../../../src/SDLInputState.cpp:693
+#: ../../../src/MenuMovementType.cpp:135 ../../../src/SDLInputState.cpp:665
+#: ../../../src/SDLInputState.cpp:695
 msgid "Right"
 msgstr "Jobbra"
 
@@ -322,7 +322,7 @@ msgid "Inventory"
 msgstr "Felszerelés"
 
 #: ../../../src/InputState.cpp:434 ../../../src/MenuActionBar.cpp:86
-#: ../../../src/MenuPowers.cpp:158
+#: ../../../src/MenuPowers.cpp:159
 msgid "Powers"
 msgstr "Erők"
 
@@ -351,7 +351,7 @@ msgstr ""
 msgid "Alt"
 msgstr ""
 
-#: ../../../src/InputState.cpp:441 ../../../src/SDLInputState.cpp:675
+#: ../../../src/InputState.cpp:441 ../../../src/SDLInputState.cpp:677
 msgid "Delete"
 msgstr "Törlés"
 
@@ -407,18 +407,18 @@ msgstr "Egér X2"
 msgid "Unknown Item"
 msgstr "Ismeretlen tárgy"
 
-#: ../../../src/ItemManager.cpp:646 ../../../src/MenuPowers.cpp:959
+#: ../../../src/ItemManager.cpp:646 ../../../src/MenuPowers.cpp:981
 #, c-format
 msgid "%d%% Speed"
 msgstr "%d%% sebesség"
 
-#: ../../../src/ItemManager.cpp:650 ../../../src/MenuPowers.cpp:962
+#: ../../../src/ItemManager.cpp:650 ../../../src/MenuPowers.cpp:984
 #, c-format
 msgid "%d%% Attack Speed"
 msgstr "%d%% támadás sebesség"
 
 #: ../../../src/ItemManager.cpp:672 ../../../src/MenuCharacter.cpp:352
-#: ../../../src/MenuPowers.cpp:931
+#: ../../../src/MenuPowers.cpp:953
 #, c-format
 msgid "Resistance (%s)"
 msgstr ""
@@ -447,14 +447,14 @@ msgstr "Felfog: %d-%d"
 msgid "Absorb: %d"
 msgstr "Felfog: %d"
 
-#: ../../../src/ItemManager.cpp:825 ../../../src/MenuPowers.cpp:1206
-#: ../../../src/MenuPowers.cpp:1209
+#: ../../../src/ItemManager.cpp:825 ../../../src/MenuPowers.cpp:1228
+#: ../../../src/MenuPowers.cpp:1231
 #, c-format
 msgid "Requires Level %d"
 msgstr "%d szint kell hozzá"
 
-#: ../../../src/ItemManager.cpp:836 ../../../src/MenuPowers.cpp:1198
-#: ../../../src/MenuPowers.cpp:1200
+#: ../../../src/ItemManager.cpp:836 ../../../src/MenuPowers.cpp:1220
+#: ../../../src/MenuPowers.cpp:1222
 #, c-format
 msgid "Requires %s %d"
 msgstr "%s %d kell hozzá"
@@ -484,21 +484,21 @@ msgstr "Eladási ár: %d %s"
 msgid "Sell Price: %d %s each"
 msgstr "Eladási ár: %d %s per db"
 
-#: ../../../src/ItemManager.cpp:896
+#: ../../../src/ItemManager.cpp:898
 msgid "Set:"
 msgstr "Gyűjtemény:"
 
-#: ../../../src/ItemManager.cpp:903
+#: ../../../src/ItemManager.cpp:905
 #, c-format
 msgid "%d items:"
 msgstr "%d tárgy:"
 
-#: ../../../src/ItemManager.cpp:915
+#: ../../../src/ItemManager.cpp:920
 #, c-format
 msgid "Press [%s] to read"
 msgstr "Üsd le a [%s]-t az elolvasáshoz"
 
-#: ../../../src/ItemManager.cpp:918
+#: ../../../src/ItemManager.cpp:923
 #, c-format
 msgid "Press [%s] to use"
 msgstr "Üsd le a [%s]-t a használathoz"
@@ -574,15 +574,15 @@ msgstr "Minden szint %d-t ad."
 msgid "Each point of %s grants %d."
 msgstr "Minden %s pont ad %d-t."
 
-#: ../../../src/MenuConfig.cpp:122 ../../../src/MenuConfig.cpp:1171
+#: ../../../src/MenuConfig.cpp:122 ../../../src/MenuConfig.cpp:1248
 msgid "Clear"
 msgstr "Törlés"
 
-#: ../../../src/MenuConfig.cpp:122 ../../../src/MenuConfig.cpp:1169
+#: ../../../src/MenuConfig.cpp:122 ../../../src/MenuConfig.cpp:1246
 msgid "Assign:"
 msgstr "Hozzáad:"
 
-#: ../../../src/MenuConfig.cpp:123 ../../../src/MenuConfig.cpp:245
+#: ../../../src/MenuConfig.cpp:123 ../../../src/MenuConfig.cpp:251
 msgid "Defaults"
 msgstr "Alapértelmezés"
 
@@ -590,301 +590,324 @@ msgstr "Alapértelmezés"
 msgid "Reset ALL settings?"
 msgstr "Minden beállítást visszaállítsak?"
 
-#: ../../../src/MenuConfig.cpp:244 ../../../src/MenuNumPicker.cpp:49
+#: ../../../src/MenuConfig.cpp:250 ../../../src/MenuNumPicker.cpp:49
 msgid "OK"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:248 ../../../src/MenuGameOver.cpp:72
+#: ../../../src/MenuConfig.cpp:254 ../../../src/MenuGameOver.cpp:72
 msgid "Continue"
 msgstr "Folytatás"
 
-#: ../../../src/MenuConfig.cpp:250
+#: ../../../src/MenuConfig.cpp:256
 msgid "Save Game"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:293
+#: ../../../src/MenuConfig.cpp:299 ../../../src/MenuConfig.cpp:350
 msgid "Default"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:293
+#: ../../../src/MenuConfig.cpp:299
 msgid ""
 "Show all loot tooltips, except for those that would be obscured by the "
 "player or an enemy. Temporarily show all loot tooltips with 'Alt'."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:294
+#: ../../../src/MenuConfig.cpp:300
 msgid "Show all"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:294
+#: ../../../src/MenuConfig.cpp:300
 msgid ""
 "Always show loot tooltips. Temporarily hide all loot tooltips with 'Alt'."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:295 ../../../src/MenuConfig.cpp:300
+#: ../../../src/MenuConfig.cpp:301 ../../../src/MenuConfig.cpp:306
 msgid "Hidden"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:295
+#: ../../../src/MenuConfig.cpp:301
 msgid ""
 "Always hide loot tooltips, except for when a piece of loot is hovered with "
 "the mouse cursor. Temporarily show all loot tooltips with 'Alt'."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:298
+#: ../../../src/MenuConfig.cpp:304
 msgid "Visible"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:299
+#: ../../../src/MenuConfig.cpp:305
 msgid "Visible (2x zoom)"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:303
+#: ../../../src/MenuConfig.cpp:309
 msgid ""
 "Controls the type of warning to be activated when the player is below the "
 "low health threshold."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:304
+#: ../../../src/MenuConfig.cpp:310
 msgid "- Display a message"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:305
+#: ../../../src/MenuConfig.cpp:311
 msgid "- Play a sound"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:306
+#: ../../../src/MenuConfig.cpp:312
 msgid "- Change the cursor"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:308
+#: ../../../src/MenuConfig.cpp:314
 msgid "Disabled"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:309
+#: ../../../src/MenuConfig.cpp:315
 msgid "All"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:310
+#: ../../../src/MenuConfig.cpp:316
 msgid "Message & Cursor"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:311
+#: ../../../src/MenuConfig.cpp:317
 msgid "Message & Sound"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:312
+#: ../../../src/MenuConfig.cpp:318
 msgid "Sound & Cursor"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:313
+#: ../../../src/MenuConfig.cpp:319
 msgid "Message"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:314
+#: ../../../src/MenuConfig.cpp:320
 msgid "Cursor"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:315
+#: ../../../src/MenuConfig.cpp:321
 msgid "Sound"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:321
+#: ../../../src/MenuConfig.cpp:327
 msgid ""
 "When the player's health drops below the given threshold, the low health "
 "notifications are triggered if one or more of them is enabled."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:334 ../../../src/MenuConfig.cpp:1587
+#: ../../../src/MenuConfig.cpp:345
+msgid "The maximum frame rate that the game will be allowed to run at."
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:349
+msgid ""
+"The render size refers to the height in pixels of the surface used to draw "
+"the game. Mods define the allowed render sizes, but this option allows "
+"overriding the maximum size."
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:372 ../../../src/MenuConfig.cpp:1671
 #: ../../../src/MenuGameOver.cpp:116
 msgid "Exit"
 msgstr "Kilépés"
 
-#: ../../../src/MenuConfig.cpp:335
+#: ../../../src/MenuConfig.cpp:373
 msgid "Video"
 msgstr "Videó"
 
-#: ../../../src/MenuConfig.cpp:336
+#: ../../../src/MenuConfig.cpp:374
 msgid "Audio"
 msgstr "Hang"
 
-#: ../../../src/MenuConfig.cpp:337
+#: ../../../src/MenuConfig.cpp:375
 msgid "Interface"
 msgstr "Felület"
 
-#: ../../../src/MenuConfig.cpp:338
+#: ../../../src/MenuConfig.cpp:376
 msgid "Input"
 msgstr "Bemenet"
 
-#: ../../../src/MenuConfig.cpp:339
+#: ../../../src/MenuConfig.cpp:377
 msgid "Keybindings"
 msgstr "Billentyűk"
 
-#: ../../../src/MenuConfig.cpp:340
+#: ../../../src/MenuConfig.cpp:378
 msgid "Mods"
 msgstr "Modok"
 
-#: ../../../src/MenuConfig.cpp:352
+#: ../../../src/MenuConfig.cpp:390
 msgid "Paused"
 msgstr "Megállítva"
 
-#: ../../../src/MenuConfig.cpp:355
+#: ../../../src/MenuConfig.cpp:393
 msgid "Time Played"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:361
+#: ../../../src/MenuConfig.cpp:399
 msgid "Renderer"
 msgstr "Megjelenítő"
 
-#: ../../../src/MenuConfig.cpp:362
+#: ../../../src/MenuConfig.cpp:400
 msgid "Full Screen Mode"
 msgstr "Teljes képernyő"
 
-#: ../../../src/MenuConfig.cpp:363
+#: ../../../src/MenuConfig.cpp:401
 msgid "Hardware surfaces"
 msgstr "Hardveres felületek"
 
-#: ../../../src/MenuConfig.cpp:364
+#: ../../../src/MenuConfig.cpp:402
 msgid "V-Sync"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:365
+#: ../../../src/MenuConfig.cpp:403
 msgid "Texture Filtering"
 msgstr "Textúra szűrő"
 
-#: ../../../src/MenuConfig.cpp:366
+#: ../../../src/MenuConfig.cpp:404
 msgid "DPI scaling"
 msgstr "DPI skálázás"
 
-#: ../../../src/MenuConfig.cpp:367
+#: ../../../src/MenuConfig.cpp:405
 msgid "Parallax Layers"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:368
+#: ../../../src/MenuConfig.cpp:406
 msgid "Allow changing gamma"
 msgstr "Gamma korrekció engedélyezés"
 
-#: ../../../src/MenuConfig.cpp:369
+#: ../../../src/MenuConfig.cpp:407
 msgid "Gamma"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:371
+#: ../../../src/MenuConfig.cpp:408
+msgid "Maximum Render Size"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:409
+msgid "Frame Limit"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:411
 msgid "Sound Volume"
 msgstr "Effektek hangereje"
 
-#: ../../../src/MenuConfig.cpp:372
+#: ../../../src/MenuConfig.cpp:412
 msgid "Music Volume"
 msgstr "Zene hangereje"
 
-#: ../../../src/MenuConfig.cpp:374
+#: ../../../src/MenuConfig.cpp:414
 msgid "Language"
 msgstr "Nyelv"
 
-#: ../../../src/MenuConfig.cpp:375
+#: ../../../src/MenuConfig.cpp:415
 msgid "Show FPS"
 msgstr "FPS mutatása"
 
-#: ../../../src/MenuConfig.cpp:376
+#: ../../../src/MenuConfig.cpp:416
 msgid "Hardware mouse cursor"
 msgstr "Hardveres egérmutató"
 
-#: ../../../src/MenuConfig.cpp:377
+#: ../../../src/MenuConfig.cpp:417
 msgid "Colorblind Mode"
 msgstr "Színvak mód"
 
-#: ../../../src/MenuConfig.cpp:378
+#: ../../../src/MenuConfig.cpp:418
 msgid "Developer Mode"
 msgstr "Fejlesztői mód"
 
-#: ../../../src/MenuConfig.cpp:379
+#: ../../../src/MenuConfig.cpp:419
 msgid "Subtitles"
 msgstr "Feliratok"
 
-#: ../../../src/MenuConfig.cpp:380
+#: ../../../src/MenuConfig.cpp:420
 msgid "Loot tooltip visibility"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:381
+#: ../../../src/MenuConfig.cpp:421
 msgid "Mini-map mode"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:382
+#: ../../../src/MenuConfig.cpp:422
 msgid "Always show stat bar labels"
 msgstr "Mindig mutassa a státusz cimkéit"
 
-#: ../../../src/MenuConfig.cpp:383
+#: ../../../src/MenuConfig.cpp:423
 msgid "Allow stat bar auto-hiding"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:384
+#: ../../../src/MenuConfig.cpp:424
 msgid "Show combat text"
 msgstr "Küzdelem kiírása szövegesen"
 
-#: ../../../src/MenuConfig.cpp:385
+#: ../../../src/MenuConfig.cpp:425
 msgid "Automatically equip items"
 msgstr "Automatikusan használja a tárgyakat"
 
-#: ../../../src/MenuConfig.cpp:386
+#: ../../../src/MenuConfig.cpp:426
 msgid "Show hidden entity markers"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:387
+#: ../../../src/MenuConfig.cpp:427
 msgid "Low health notification"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:388
+#: ../../../src/MenuConfig.cpp:428
 msgid "Low health threshold"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:389
+#: ../../../src/MenuConfig.cpp:429
 msgid "Show item comparison tooltips"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:392 ../../../src/MenuMovementType.cpp:94
+#: ../../../src/MenuConfig.cpp:432 ../../../src/MenuMovementType.cpp:94
 #: ../../../src/MenuMovementType.cpp:131
 msgid "Joystick"
 msgstr "Botkormány"
 
-#: ../../../src/MenuConfig.cpp:393
+#: ../../../src/MenuConfig.cpp:433
 msgid "Move hero using mouse"
 msgstr "Hős mozgatása egérrel"
 
-#: ../../../src/MenuConfig.cpp:394
+#: ../../../src/MenuConfig.cpp:434
 msgid "Mouse aim"
 msgstr "Egérrel célzás"
 
-#: ../../../src/MenuConfig.cpp:395
+#: ../../../src/MenuConfig.cpp:435
 msgid "Do not use mouse"
 msgstr "Ne használja az egeret"
 
-#: ../../../src/MenuConfig.cpp:396
+#: ../../../src/MenuConfig.cpp:436
 msgid "Swap mouse movement button"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:397
+#: ../../../src/MenuConfig.cpp:437
 msgid "Attack with mouse movement"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:398
+#: ../../../src/MenuConfig.cpp:438
 msgid "Joystick Deadzone"
 msgstr "Botkormány holttér"
 
-#: ../../../src/MenuConfig.cpp:408
+#: ../../../src/MenuConfig.cpp:439
+msgid "Touch Controls"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:449
 #, c-format
 msgid "Primary binding: %s"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:409
+#: ../../../src/MenuConfig.cpp:450
 #, c-format
 msgid "Alternate binding: %s"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:410
+#: ../../../src/MenuConfig.cpp:451
 #, c-format
 msgid "Joystick binding: %s"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:511
+#: ../../../src/MenuConfig.cpp:553
 msgid ""
 "Will try to store surfaces in video memory versus system memory. The effect "
 "this has on performance depends on the renderer."
@@ -892,7 +915,7 @@ msgstr ""
 "A felületeket a videó memóriában próbálja tárolni a rendszermemória "
 "helyett.A sebességnövekedés a megjelenítőtől is függ."
 
-#: ../../../src/MenuConfig.cpp:512
+#: ../../../src/MenuConfig.cpp:554
 msgid ""
 "Prevents screen tearing. Disable if you experience \"stuttering\" in "
 "windowed mode or input lag."
@@ -900,7 +923,7 @@ msgstr ""
 "Megakadályozza a villogást. Kapcsold ki, ha szaggat ablakosmódban vagy "
 "lassan reagál a bemenetre."
 
-#: ../../../src/MenuConfig.cpp:513
+#: ../../../src/MenuConfig.cpp:555
 msgid ""
 "When enabled, this uses the screen DPI in addition to the window dimensions "
 "to scale the rendering resolution. Otherwise, only the window dimensions are"
@@ -909,62 +932,62 @@ msgstr ""
 "Ha be van kapcsolva, a képernyő DPI-t is használja a felbontás mellé, hogy a"
 " végleges megjelenítést kiszámolja. Máskülönben csak az ablak mérete számít."
 
-#: ../../../src/MenuConfig.cpp:514
+#: ../../../src/MenuConfig.cpp:556
 msgid ""
 "This enables parallax (non-tile) layers. Disabling this setting can improve "
 "performance in some cases."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:515
+#: ../../../src/MenuConfig.cpp:557
 msgid ""
 "Enables the below setting that controls the screen gamma level. The behavior"
 " of the gamma setting can vary between platforms."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:516
+#: ../../../src/MenuConfig.cpp:558
 msgid ""
 "Provides additional text for information that is primarily conveyed through "
 "color."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:517
+#: ../../../src/MenuConfig.cpp:559
 msgid ""
 "Some mods will automatically hide the stat bars when they are inactive. "
 "Disabling this option will keep them displayed at all times."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:518
+#: ../../../src/MenuConfig.cpp:560
 msgid ""
 "When enabled, empty equipment slots will be filled with applicable items "
 "when they are obtained."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:519
+#: ../../../src/MenuConfig.cpp:561
 msgid ""
 "Shows a marker above enemies, allies, and the player when they are obscured "
 "by tall objects."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:520
+#: ../../../src/MenuConfig.cpp:562
 msgid ""
 "When enabled, tooltips for equipped items of the same type are shown next to"
 " standard item tooltips."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:521
+#: ../../../src/MenuConfig.cpp:563
 msgid ""
 "This allows the game to be controlled entirely with the keyboard (or "
 "joystick)."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:522
+#: ../../../src/MenuConfig.cpp:564
 msgid ""
 "When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or"
 " 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
 "instead of 'Main1'."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:523
+#: ../../../src/MenuConfig.cpp:565
 msgid ""
 "When 'Move hero using mouse' is enabled, this setting controls if the Power "
 "assigned to the movement button can be used by targeting an enemy. If this "
@@ -972,49 +995,55 @@ msgid ""
 "assigned to the movement button."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:524
+#: ../../../src/MenuConfig.cpp:566
 msgid ""
 "The player's attacks will be aimed in the direction of the mouse cursor when"
 " this is enabled."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:575
+#: ../../../src/MenuConfig.cpp:567
+msgid ""
+"When enabled, a virtual gamepad will be added in-game. Other interactions, "
+"such as drag-and-drop behavior, are also altered to better suit touch input."
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:618
 msgid "Active Mods"
 msgstr "Aktív modok"
 
-#: ../../../src/MenuConfig.cpp:584
+#: ../../../src/MenuConfig.cpp:627
 msgid "Available Mods"
 msgstr "Rendelkezésreálló modok"
 
-#: ../../../src/MenuConfig.cpp:603
+#: ../../../src/MenuConfig.cpp:646
 msgid "<< Disable"
 msgstr "<< Kikapcsol"
 
-#: ../../../src/MenuConfig.cpp:609
+#: ../../../src/MenuConfig.cpp:652
 msgid "Enable >>"
 msgstr "Bekapcsol >>"
 
-#: ../../../src/MenuConfig.cpp:1444
+#: ../../../src/MenuConfig.cpp:1528
 msgid "Version:"
 msgstr "Verzió:"
 
-#: ../../../src/MenuConfig.cpp:1449
+#: ../../../src/MenuConfig.cpp:1533
 msgid "Game:"
 msgstr "Játék:"
 
-#: ../../../src/MenuConfig.cpp:1454
+#: ../../../src/MenuConfig.cpp:1538
 msgid "Engine version:"
 msgstr "Motor verzió:"
 
-#: ../../../src/MenuConfig.cpp:1462
+#: ../../../src/MenuConfig.cpp:1546
 msgid "Requires mods:"
 msgstr "Szükséges modok:"
 
-#: ../../../src/MenuConfig.cpp:1570 ../../../src/SDLInputState.cpp:748
+#: ../../../src/MenuConfig.cpp:1654 ../../../src/SDLInputState.cpp:750
 msgid "(none)"
 msgstr "(nincs)"
 
-#: ../../../src/MenuConfig.cpp:1587 ../../../src/MenuGameOver.cpp:73
+#: ../../../src/MenuConfig.cpp:1671 ../../../src/MenuGameOver.cpp:73
 msgid "Save & Exit"
 msgstr "Mentés, kilépés"
 
@@ -1311,159 +1340,159 @@ msgstr ""
 msgid "Enter amount:"
 msgstr "Add meg a mennyiséget:"
 
-#: ../../../src/MenuPowers.cpp:872
+#: ../../../src/MenuPowers.cpp:894
 msgid "Passive"
 msgstr "Passzív"
 
-#: ../../../src/MenuPowers.cpp:879
+#: ../../../src/MenuPowers.cpp:901
 #, c-format
 msgid "Costs %d MP"
 msgstr "%d MP-be kerül"
 
-#: ../../../src/MenuPowers.cpp:883
+#: ../../../src/MenuPowers.cpp:905
 #, c-format
 msgid "Costs %d HP"
 msgstr "%d ÉP-be kerül"
 
-#: ../../../src/MenuPowers.cpp:887
+#: ../../../src/MenuPowers.cpp:909
 msgid "Cooldown:"
 msgstr "Lehűlés:"
 
-#: ../../../src/MenuPowers.cpp:938 ../../../src/MenuPowers.cpp:941
+#: ../../../src/MenuPowers.cpp:960 ../../../src/MenuPowers.cpp:963
 msgid "Damage per second"
 msgstr "Sebzés per másodperc"
 
-#: ../../../src/MenuPowers.cpp:944 ../../../src/MenuPowers.cpp:947
+#: ../../../src/MenuPowers.cpp:966 ../../../src/MenuPowers.cpp:969
 msgid "HP per second"
 msgstr "ÉP per másodperc"
 
-#: ../../../src/MenuPowers.cpp:950 ../../../src/MenuPowers.cpp:953
+#: ../../../src/MenuPowers.cpp:972 ../../../src/MenuPowers.cpp:975
 msgid "MP per second"
 msgstr "MP per másodperc"
 
-#: ../../../src/MenuPowers.cpp:957
+#: ../../../src/MenuPowers.cpp:979
 msgid "Immobilize"
 msgstr "Megbénítás"
 
-#: ../../../src/MenuPowers.cpp:965
+#: ../../../src/MenuPowers.cpp:987
 msgid "Immunity"
 msgstr "Immunitás"
 
-#: ../../../src/MenuPowers.cpp:968
+#: ../../../src/MenuPowers.cpp:990
 msgid "Immunity to damage over time"
 msgstr "Idővel immunis a sebzésre"
 
-#: ../../../src/MenuPowers.cpp:971
+#: ../../../src/MenuPowers.cpp:993
 msgid "Immunity to slow"
 msgstr "Immunis a lassításra"
 
-#: ../../../src/MenuPowers.cpp:974
+#: ../../../src/MenuPowers.cpp:996
 msgid "Immunity to stun"
 msgstr "Immunis a bénításra"
 
-#: ../../../src/MenuPowers.cpp:977
+#: ../../../src/MenuPowers.cpp:999
 msgid "Immunity to HP steal"
 msgstr "Immunis az ÉP lopásra"
 
-#: ../../../src/MenuPowers.cpp:980
+#: ../../../src/MenuPowers.cpp:1002
 msgid "Immunity to MP steal"
 msgstr "Immunis az MP lopásra"
 
-#: ../../../src/MenuPowers.cpp:983
+#: ../../../src/MenuPowers.cpp:1005
 msgid "Immunity to knockback"
 msgstr "Immunis a leütésre"
 
-#: ../../../src/MenuPowers.cpp:986
+#: ../../../src/MenuPowers.cpp:1008
 msgid "Immunity to damage reflection"
 msgstr "Immunis a sebzésvisszaküldésre"
 
-#: ../../../src/MenuPowers.cpp:992
+#: ../../../src/MenuPowers.cpp:1014
 msgid "Stun"
 msgstr "Bénítás"
 
-#: ../../../src/MenuPowers.cpp:995
+#: ../../../src/MenuPowers.cpp:1017
 msgid "Automatic revive on death"
 msgstr "Halál esetén visszahoz"
 
-#: ../../../src/MenuPowers.cpp:998
+#: ../../../src/MenuPowers.cpp:1020
 msgid "Convert"
 msgstr "Konvertálás"
 
-#: ../../../src/MenuPowers.cpp:1001
+#: ../../../src/MenuPowers.cpp:1023
 msgid "Fear"
 msgstr "Félelem"
 
-#: ../../../src/MenuPowers.cpp:1004
+#: ../../../src/MenuPowers.cpp:1026
 msgid "Lifespan"
 msgstr "Élettartam"
 
-#: ../../../src/MenuPowers.cpp:1028
+#: ../../../src/MenuPowers.cpp:1050
 msgid "Magical Shield"
 msgstr "Mágikus pajzs"
 
-#: ../../../src/MenuPowers.cpp:1057
+#: ../../../src/MenuPowers.cpp:1079
 msgid "Healing"
 msgstr "Gyógyítás"
 
-#: ../../../src/MenuPowers.cpp:1060
+#: ../../../src/MenuPowers.cpp:1082
 msgid "Knockback"
 msgstr "Leütés"
 
-#: ../../../src/MenuPowers.cpp:1084
+#: ../../../src/MenuPowers.cpp:1106
 #, c-format
 msgid "%d%% chance"
 msgstr "%d%% esély"
 
-#: ../../../src/MenuPowers.cpp:1136
+#: ../../../src/MenuPowers.cpp:1158
 msgid "Base Accuracy"
 msgstr "Alap pontosság"
 
-#: ../../../src/MenuPowers.cpp:1156
+#: ../../../src/MenuPowers.cpp:1178
 msgid "Base Critical Chance"
 msgstr "Alap kritikus találat"
 
-#: ../../../src/MenuPowers.cpp:1164
+#: ../../../src/MenuPowers.cpp:1186
 msgid "Ignores Absorbtion"
 msgstr "Felfogást kivédi"
 
-#: ../../../src/MenuPowers.cpp:1169
+#: ../../../src/MenuPowers.cpp:1191
 msgid "Ignores Avoidance"
 msgstr "Kitérést kivédi"
 
-#: ../../../src/MenuPowers.cpp:1174
+#: ../../../src/MenuPowers.cpp:1196
 #, c-format
 msgid "%d%% Chance to crit slowed targets"
 msgstr "%d%% esély a kritikusra lassítottnál"
 
-#: ../../../src/MenuPowers.cpp:1179
+#: ../../../src/MenuPowers.cpp:1201
 #, c-format
 msgid "Elemental Damage (%s)"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:1188
+#: ../../../src/MenuPowers.cpp:1210
 #, c-format
 msgid "Requires a %s"
 msgstr "%s kell hozzá"
 
-#: ../../../src/MenuPowers.cpp:1226 ../../../src/MenuPowers.cpp:1229
+#: ../../../src/MenuPowers.cpp:1248 ../../../src/MenuPowers.cpp:1251
 #, c-format
 msgid "Requires Power: %s"
 msgstr "%s erő kell hozzá"
 
-#: ../../../src/MenuPowers.cpp:1238
+#: ../../../src/MenuPowers.cpp:1260
 msgid "Click to Unlock (uses 1 Skill Point)"
 msgstr "Kattint a feloldáshoz (1 tulajdonság pontért)"
 
-#: ../../../src/MenuPowers.cpp:1242 ../../../src/MenuPowers.cpp:1244
+#: ../../../src/MenuPowers.cpp:1264 ../../../src/MenuPowers.cpp:1266
 msgid "Requires 1 Skill Point"
 msgstr "1 tulajdonság pont kell hozzá"
 
-#: ../../../src/MenuPowers.cpp:1444
+#: ../../../src/MenuPowers.cpp:1466
 #, c-format
 msgid "Available skill points: %d"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:1476
+#: ../../../src/MenuPowers.cpp:1498
 msgid "Next Level:"
 msgstr "Következő szint:"
 
@@ -1517,16 +1546,16 @@ msgstr "Visszavásárol"
 msgid "Vendor"
 msgstr "Eladó"
 
-#: ../../../src/PowerManager.cpp:1208
+#: ../../../src/PowerManager.cpp:1204
 #, c-format
 msgid "+%d Shield"
 msgstr "+%d pajzs"
 
-#: ../../../src/PowerManager.cpp:1465
+#: ../../../src/PowerManager.cpp:1461
 msgid "You are already transformed, untransform first."
 msgstr "Már transzformáltál, változz vissza előbb."
 
-#: ../../../src/PowerManager.cpp:1477
+#: ../../../src/PowerManager.cpp:1473
 msgid "Could not untransform at this position."
 msgstr "Itt nem lehet vissza változni."
 
@@ -1538,221 +1567,221 @@ msgstr ""
 msgid "Game saved."
 msgstr "Játék elmentve."
 
-#: ../../../src/SDLInputState.cpp:643
+#: ../../../src/SDLInputState.cpp:645
 msgid "BkSp"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:644
+#: ../../../src/SDLInputState.cpp:646
 msgid "Caps"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:645
+#: ../../../src/SDLInputState.cpp:647
 msgid "Del"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:647 ../../../src/SDLInputState.cpp:677
+#: ../../../src/SDLInputState.cpp:649 ../../../src/SDLInputState.cpp:679
 msgid "End"
 msgstr "Vége"
 
-#: ../../../src/SDLInputState.cpp:648
+#: ../../../src/SDLInputState.cpp:650
 msgid "Esc"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:649 ../../../src/SDLInputState.cpp:679
+#: ../../../src/SDLInputState.cpp:651 ../../../src/SDLInputState.cpp:681
 msgid "Home"
 msgstr "Eleje"
 
-#: ../../../src/SDLInputState.cpp:650
+#: ../../../src/SDLInputState.cpp:652
 msgid "Ins"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:651
+#: ../../../src/SDLInputState.cpp:653
 msgid "LAlt"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:652
+#: ../../../src/SDLInputState.cpp:654
 msgid "LCtrl"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:654
+#: ../../../src/SDLInputState.cpp:656
 msgid "LShft"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:655
+#: ../../../src/SDLInputState.cpp:657
 msgid "Num"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:656
+#: ../../../src/SDLInputState.cpp:658
 msgid "PgDn"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:657
+#: ../../../src/SDLInputState.cpp:659
 msgid "PgUp"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:658 ../../../src/SDLInputState.cpp:688
+#: ../../../src/SDLInputState.cpp:660 ../../../src/SDLInputState.cpp:690
 msgid "Pause"
 msgstr "Állj"
 
-#: ../../../src/SDLInputState.cpp:659
+#: ../../../src/SDLInputState.cpp:661
 msgid "Print"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:660
+#: ../../../src/SDLInputState.cpp:662
 msgid "RAlt"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:661
+#: ../../../src/SDLInputState.cpp:663
 msgid "RCtrl"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:662
+#: ../../../src/SDLInputState.cpp:664
 msgid "Ret"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:664
+#: ../../../src/SDLInputState.cpp:666
 msgid "RShft"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:665
+#: ../../../src/SDLInputState.cpp:667
 msgid "SLock"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:666
+#: ../../../src/SDLInputState.cpp:668
 msgid "Spc"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:667 ../../../src/SDLInputState.cpp:697
+#: ../../../src/SDLInputState.cpp:669 ../../../src/SDLInputState.cpp:699
 msgid "Tab"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:673
+#: ../../../src/SDLInputState.cpp:675
 msgid "Backspace"
 msgstr "Visszatörlés"
 
-#: ../../../src/SDLInputState.cpp:674
+#: ../../../src/SDLInputState.cpp:676
 msgid "CapsLock"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:678
+#: ../../../src/SDLInputState.cpp:680
 msgid "Escape"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:680
+#: ../../../src/SDLInputState.cpp:682
 msgid "Insert"
 msgstr "Beszúr"
 
-#: ../../../src/SDLInputState.cpp:681
+#: ../../../src/SDLInputState.cpp:683
 msgid "Left Alt"
 msgstr "Bal Alt"
 
-#: ../../../src/SDLInputState.cpp:682
+#: ../../../src/SDLInputState.cpp:684
 msgid "Left Ctrl"
 msgstr "Bal Ctrl"
 
-#: ../../../src/SDLInputState.cpp:684
+#: ../../../src/SDLInputState.cpp:686
 msgid "Left Shift"
 msgstr "Bal Shift"
 
-#: ../../../src/SDLInputState.cpp:685
+#: ../../../src/SDLInputState.cpp:687
 msgid "NumLock"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:686
+#: ../../../src/SDLInputState.cpp:688
 msgid "PageDown"
 msgstr "LapozásLe"
 
-#: ../../../src/SDLInputState.cpp:687
+#: ../../../src/SDLInputState.cpp:689
 msgid "PageUp"
 msgstr "LapozásFel"
 
-#: ../../../src/SDLInputState.cpp:689
+#: ../../../src/SDLInputState.cpp:691
 msgid "PrintScreen"
 msgstr "Képernyőnyomtatás"
 
-#: ../../../src/SDLInputState.cpp:690
+#: ../../../src/SDLInputState.cpp:692
 msgid "Right Alt"
 msgstr "Jobb Alt"
 
-#: ../../../src/SDLInputState.cpp:691
+#: ../../../src/SDLInputState.cpp:693
 msgid "Right Ctrl"
 msgstr "Jobb Ctrl"
 
-#: ../../../src/SDLInputState.cpp:692
+#: ../../../src/SDLInputState.cpp:694
 msgid "Return"
 msgstr "Kocsivissza"
 
-#: ../../../src/SDLInputState.cpp:694
+#: ../../../src/SDLInputState.cpp:696
 msgid "Right Shift"
 msgstr "Jobb Shift"
 
-#: ../../../src/SDLInputState.cpp:695
+#: ../../../src/SDLInputState.cpp:697
 msgid "ScrollLock"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:696
+#: ../../../src/SDLInputState.cpp:698
 msgid "Space"
 msgstr "Szóköz"
 
-#: ../../../src/SDLInputState.cpp:710
+#: ../../../src/SDLInputState.cpp:712
 #, c-format
 msgid "M%d"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:716
+#: ../../../src/SDLInputState.cpp:718
 #, c-format
 msgid "Mouse %d"
 msgstr "Egér %d"
 
-#: ../../../src/SDLInputState.cpp:726
+#: ../../../src/SDLInputState.cpp:728
 #, c-format
 msgid "JX%d-"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:728
+#: ../../../src/SDLInputState.cpp:730
 #, c-format
 msgid "Axis %d -"
 msgstr "Tengely %d -"
 
-#: ../../../src/SDLInputState.cpp:732
+#: ../../../src/SDLInputState.cpp:734
 #, c-format
 msgid "JX%d+"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:734
+#: ../../../src/SDLInputState.cpp:736
 #, c-format
 msgid "Axis %d +"
 msgstr "Tengely %d +"
 
-#: ../../../src/SDLInputState.cpp:739
+#: ../../../src/SDLInputState.cpp:741
 #, c-format
 msgid "JB%d"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:741
+#: ../../../src/SDLInputState.cpp:743
 #, c-format
 msgid "Button %d"
 msgstr "Gomb %d"
 
-#: ../../../src/SDLInputState.cpp:787
+#: ../../../src/SDLInputState.cpp:789
 msgid "Touch control D-Pad"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:810
+#: ../../../src/SDLInputState.cpp:812
 msgid "Touch control buttons"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:824
+#: ../../../src/SDLInputState.cpp:826
 msgid "Tap"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:876 ../../../src/SDLInputState.cpp:878
+#: ../../../src/SDLInputState.cpp:878 ../../../src/SDLInputState.cpp:880
 #, c-format
 msgid "Can not bind: %s"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:890 ../../../src/SDLInputState.cpp:894
-#: ../../../src/SDLInputState.cpp:898
+#: ../../../src/SDLInputState.cpp:892 ../../../src/SDLInputState.cpp:896
+#: ../../../src/SDLInputState.cpp:900
 #, c-format
 msgid "'%s' is no longer bound to:"
 msgstr "'%s' nem kötődik ehhez: "
