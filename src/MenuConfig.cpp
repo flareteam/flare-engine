@@ -342,11 +342,12 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	for (size_t i = 0; i < frame_limits.size(); ++i) {
 		std::stringstream ss;
 		ss << frame_limits[i];
-		frame_limit_lstb->append(ss.str(), "");
+		frame_limit_lstb->append(ss.str(), msg->get("The maximum frame rate that the game will be allowed to run at."));
 	}
 
 	// set up render resolutions
-	max_render_size_lstb->append(msg->get("Default"), "");
+	std::string max_render_size_tooltip = msg->get("The render size refers to the height in pixels of the surface used to draw the game. Mods define the allowed render sizes, but this option allows overriding the maximum size.");
+	max_render_size_lstb->append(msg->get("Default"), max_render_size_tooltip);
 	virtual_heights = eset->resolutions.virtual_heights;
 	if (settings->max_render_size > 0 && std::find(virtual_heights.begin(), virtual_heights.end(), settings->max_render_size) == virtual_heights.end())
 		virtual_heights.push_back(settings->max_render_size);
@@ -355,7 +356,7 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	for (size_t i = 0; i < virtual_heights.size(); ++i) {
 		std::stringstream ss;
 		ss << virtual_heights[i];
-		max_render_size_lstb->append(ss.str(), "");
+		max_render_size_lstb->append(ss.str(), max_render_size_tooltip);
 	}
 
 	init();
@@ -563,6 +564,7 @@ void MenuConfig::readConfig() {
 	mouse_move_swap_cb->tooltip = msg->get("When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero instead of 'Main1'.");
 	mouse_move_attack_cb->tooltip = msg->get("When 'Move hero using mouse' is enabled, this setting controls if the Power assigned to the movement button can be used by targeting an enemy. If this setting is disabled, it is required to use 'Shift' to access the Power assigned to the movement button.");
 	mouse_aim_cb->tooltip = msg->get("The player's attacks will be aimed in the direction of the mouse cursor when this is enabled.");
+	touch_controls_cb->tooltip = msg->get("When enabled, a virtual gamepad will be added in-game. Other interactions, such as drag-and-drop behavior, are also altered to better suit touch input.");
 }
 
 bool MenuConfig::parseKeyButtons(FileParser &infile) {
