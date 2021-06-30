@@ -5,7 +5,7 @@
 # 
 # Translators:
 # Justin Jacobs <jajdorkster@gmail.com>, 2018
-# GunChleoc, 2020
+# GunChleoc, 2021
 # 
 #, fuzzy
 msgid ""
@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-23 20:34-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: GunChleoc, 2020\n"
+"Last-Translator: GunChleoc, 2021\n"
 "Language-Team: Gaelic, Scottish (https://www.transifex.com/flareorg/teams/84925/gd/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -29,7 +29,7 @@ msgstr "Tha droch-shlàinte ort!"
 #: ../../../src/Avatar.cpp:421
 #, c-format
 msgid "Congratulations, you have reached level %d!"
-msgstr "Meal do naidheachd, ràinig thu leibheil %d!"
+msgstr "Meal do naidheachd, ràinig thu rang %d!"
 
 #: ../../../src/Avatar.cpp:423
 msgid "You may increase one or more attributes through the Character Menu."
@@ -43,7 +43,7 @@ msgstr ""
 
 #: ../../../src/Avatar.cpp:689
 msgid "You are defeated."
-msgstr ""
+msgstr "Chaidh do ruaig."
 
 #: ../../../src/Avatar.cpp:935
 msgid "Transformation expired. You have been moved back to a safe place."
@@ -106,7 +106,7 @@ msgstr "Chaidh èifeachdan dona a thoirt air falbh."
 msgid "HP and MP restored, negative effects removed"
 msgstr ""
 "Chaidh puingean-beatha is puingean-gluasaid a leigheas is èifeachdan dona a "
-"thoirt air falbh."
+"thoirt air falbh"
 
 #: ../../../src/DeviceList.cpp:56
 msgid ""
@@ -201,7 +201,7 @@ msgstr "Geama air a shàbhaladh mì-dhligheach"
 #: ../../../src/MenuPowers.cpp:1631
 #, c-format
 msgid "Level %d"
-msgstr "Leibheil %d"
+msgstr "Rang %d"
 
 #: ../../../src/GameStateNew.cpp:66 ../../../src/InputState.cpp:416
 #: ../../../src/MenuConfig.cpp:246
@@ -460,7 +460,7 @@ msgstr "Ceapadh: %d"
 #: ../../../src/MenuPowers.cpp:1209
 #, c-format
 msgid "Requires Level %d"
-msgstr "Feum air leibheil %d"
+msgstr "Feum air rang %d"
 
 #: ../../../src/ItemManager.cpp:836 ../../../src/MenuPowers.cpp:1198
 #: ../../../src/MenuPowers.cpp:1200
@@ -542,12 +542,12 @@ msgstr "Ainm"
 
 #: ../../../src/MenuCharacter.cpp:74 ../../../src/MenuCharacter.cpp:79
 msgid "Level"
-msgstr "Leibheil"
+msgstr "Rang"
 
 #: ../../../src/MenuCharacter.cpp:309
 #, c-format
 msgid "Available stat points: %d"
-msgstr ""
+msgstr "Puingean staide ri fhaighinn: %d"
 
 #: ../../../src/MenuCharacter.cpp:353
 #, c-format
@@ -572,12 +572,12 @@ msgstr "bunait (%d), duais (%d)"
 
 #: ../../../src/MenuCharacter.cpp:379 ../../../src/MenuCharacter.cpp:393
 msgid "Related stats:"
-msgstr "Stadastaireachd cho-cheangailte:"
+msgstr "Staid cho-cheangailte:"
 
 #: ../../../src/MenuCharacter.cpp:419 ../../../src/MenuCharacter.cpp:443
 #, c-format
 msgid "Each level grants %d."
-msgstr "Bheir gach leibheil %d dhut."
+msgstr "Bheir gach rang %d dhut."
 
 #: ../../../src/MenuCharacter.cpp:423 ../../../src/MenuCharacter.cpp:447
 #, c-format
@@ -832,11 +832,11 @@ msgstr "Modh a’ mheanbh-mhapa"
 
 #: ../../../src/MenuConfig.cpp:382
 msgid "Always show stat bar labels"
-msgstr "Seall leubailean bàr na stadastaireachd an-còmhnaidh"
+msgstr "Seall leubailean na bàr-staide an-còmhnaidh"
 
 #: ../../../src/MenuConfig.cpp:383
 msgid "Allow stat bar auto-hiding"
-msgstr "Ceadaich falach fèin-obrachail air bàr na stadastaireachd"
+msgstr "Ceadaich falach fèin-obrachail air a’ bhàr-staide"
 
 #: ../../../src/MenuConfig.cpp:384
 msgid "Show combat text"
@@ -860,7 +860,7 @@ msgstr "Stairsneach na droch-shlàinte"
 
 #: ../../../src/MenuConfig.cpp:389
 msgid "Show item comparison tooltips"
-msgstr ""
+msgstr "Seall gliocasan coimeis nan nithean"
 
 #: ../../../src/MenuConfig.cpp:392 ../../../src/MenuMovementType.cpp:94
 #: ../../../src/MenuMovementType.cpp:131
@@ -963,9 +963,8 @@ msgid ""
 "Some mods will automatically hide the stat bars when they are inactive. "
 "Disabling this option will keep them displayed at all times."
 msgstr ""
-"Falaichidh cuid a thuilleadain bàraichean na stadastaireachd nuair a bhios "
-"iad à comas. Ma chuireas tu an roghainn seo à comas, thèid an sealltainn an-"
-"còmhnaidh."
+"Falaichidh cuid a thuilleadain bàraichean-staide nuair a bhios iad à comas. "
+"Ma chuireas tu an roghainn seo à comas, thèid an sealltainn an-còmhnaidh."
 
 #: ../../../src/MenuConfig.cpp:518
 msgid ""
@@ -988,6 +987,9 @@ msgid ""
 "When enabled, tooltips for equipped items of the same type are shown next to"
 " standard item tooltips."
 msgstr ""
+"Nuair a bhios seo an comas, thèid gliocasan-sgrìn nan nithean dhen aon "
+"seòrsa a dh’uidheamaich thu a shealltainn ri taobh gliocasan-sgrìn nan "
+"nithean àbhaisteach."
 
 #: ../../../src/MenuConfig.cpp:521
 msgid ""
@@ -1237,7 +1239,7 @@ msgstr "OIDHEAM: Sgrìobh “help”"
 #: ../../../src/MenuEnemy.cpp:162
 #, c-format
 msgid "%s level %d"
-msgstr "%s leibheil %d"
+msgstr "%s rang %d"
 
 #: ../../../src/MenuEnemy.cpp:186
 msgid "Dead"
@@ -1249,7 +1251,7 @@ msgstr "Air a mhilleadh"
 
 #: ../../../src/MenuGameOver.cpp:69
 msgid "Game Over"
-msgstr ""
+msgstr "Crìoch a’ gheama"
 
 #: ../../../src/MenuInventory.cpp:178
 #, c-format
@@ -1264,7 +1266,7 @@ msgstr "Chaill thu %d%% dhe na puingean-eòlais iomlan."
 #: ../../../src/MenuInventory.cpp:190
 #, c-format
 msgid "Lost %d%% of current level XP."
-msgstr "Chaill thu %d%% dhe na puingean-eòlais airson an leibheil seo."
+msgstr "Chaill thu %d%% dhe na puingean-eòlais airson an rang seo."
 
 #: ../../../src/MenuInventory.cpp:216
 #, c-format
@@ -1345,27 +1347,28 @@ msgstr "Chan urrainn dhut an nì seo a leigeil às."
 
 #: ../../../src/MenuManager.cpp:1501
 msgid "Equipped"
-msgstr ""
+msgstr "Uidheamaichte"
 
 #: ../../../src/MenuMovementType.cpp:87
 msgid "Select a Movement Type"
-msgstr ""
+msgstr "Tagh seòrsa a’ ghluasaid"
 
 #: ../../../src/MenuMovementType.cpp:89
 msgid "Can be changed later in the Configuration menu."
 msgstr ""
+"Gabhaidh seo atharrachadh air clàr-taice an rèiteachaidh uair sam bith."
 
 #: ../../../src/MenuMovementType.cpp:92 ../../../src/MenuMovementType.cpp:122
 msgid "Keyboard"
-msgstr ""
+msgstr "Meur-chlàr"
 
 #: ../../../src/MenuMovementType.cpp:93 ../../../src/MenuMovementType.cpp:128
 msgid "Mouse"
-msgstr ""
+msgstr "Luchag"
 
 #: ../../../src/MenuMovementType.cpp:129
 msgid "Button"
-msgstr ""
+msgstr "Putan"
 
 #: ../../../src/MenuNumPicker.cpp:59
 msgid "Enter amount:"
@@ -1521,11 +1524,11 @@ msgstr "Feum air 1 phuing-sgil"
 #: ../../../src/MenuPowers.cpp:1444
 #, c-format
 msgid "Available skill points: %d"
-msgstr ""
+msgstr "Puingean sgil ri fhaighinn: %d"
 
 #: ../../../src/MenuPowers.cpp:1476
 msgid "Next Level:"
-msgstr "An t-ath leibheil:"
+msgstr "An t-ath rang:"
 
 #: ../../../src/MenuStash.cpp:80 ../../../src/MenuStash.cpp:161
 msgid "Stash"
