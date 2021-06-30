@@ -129,6 +129,7 @@ Translation updates:
 * Ukranian (uk) update (Sergiy Borodych)
 * Vietnamese (vi) update (Nguyễn Gia Phong)
 * Chinese (zh) update (dumaosen, sakura09123)
+* Chinese (Taiwan) (zh_TW) by RedBug312
 
 
 
