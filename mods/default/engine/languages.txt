@@ -20,7 +20,8 @@ fr=Français
 gd=Gàidhlig
 gl=Galego
 hu=Magyar
-# he=עברית
+he=עברית
+id=Indonesian
 it=Italiano
 ja=Japanese
 ko=Korean
@@ -35,4 +36,5 @@ sv=Svenska
 uk=Українська
 vi=Tiếng Việt
 zh=Chinese
+zh_TW=Chinese (Taiwan)
 
