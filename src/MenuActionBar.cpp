@@ -540,7 +540,7 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 	}
 
 	bool enable_mm_attack = (!settings->mouse_move || inpt->pressing[Input::SHIFT] || pc->lock_enemy);
-	bool enable_main1 = (!platform.is_mobile_device || (!menu->menus_open && menu->touch_controls->checkAllowMain1())) && (settings->mouse_move_swap || enable_mm_attack);
+	bool enable_main1 = (!settings->touchscreen || (!menu->menus_open && menu->touch_controls->checkAllowMain1())) && (settings->mouse_move_swap || enable_mm_attack);
 	bool enable_main2 = !settings->mouse_move_swap || enable_mm_attack;
 
 	// check click and hotkey actions
@@ -762,7 +762,7 @@ void MenuActionBar::resetSlots() {
  * Set a target depending on how a power was triggered
  */
 FPoint MenuActionBar::setTarget(bool have_aim, const Power& pow) {
-	if (have_aim && settings->mouse_aim) {
+	if (have_aim && settings->mouse_aim && !settings->touchscreen) {
 		FPoint map_pos;
 		if (pow.aim_assist)
 			map_pos = Utils::screenToMap(inpt->mouse.x,  inpt->mouse.y + eset->misc.aim_assist, mapr->cam.pos.x, mapr->cam.pos.y);

@@ -80,7 +80,7 @@ public:
 
 	class Input {
 	public:
-		static const int COUNT = 7;
+		static const int COUNT = 8;
 		enum {
 			MOUSE_MOVE,
 			MOUSE_MOVE_SWAP,
@@ -88,7 +88,8 @@ public:
 			MOUSE_AIM,
 			NO_MOUSE,
 			JOYSTICK,
-			JOYSTICK_DEADZONE
+			JOYSTICK_DEADZONE,
+			TOUCH_CONTROLS
 		};
 	};
 

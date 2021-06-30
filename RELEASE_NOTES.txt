@@ -41,6 +41,7 @@ Engine features:
 * Added 'Frame Limit' option to Video settings.
 * Added 'Maximum Render Size' option to Video settings.
 * Improved visual indication of which item set bonuses are active.
+* Support enabling touch screen controls on non-Android systems.
 
 Engine fixes:
 

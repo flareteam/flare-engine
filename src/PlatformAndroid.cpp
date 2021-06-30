@@ -102,6 +102,7 @@ Platform::Platform()
 	config_input[Platform::Input::MOUSE_MOVE_SWAP] = false;
 	config_input[Platform::Input::MOUSE_MOVE_ATTACK] = false;
 	config_input[Platform::Input::JOYSTICK_DEADZONE] = false;
+	config_input[Platform::Input::TOUCH_CONTROLS] = false;
 
 	config_misc[Platform::Misc::KEYBINDS] = false;
 }
