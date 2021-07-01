@@ -136,8 +136,10 @@ CursorManager::~CursorManager() {
 }
 
 void CursorManager::logic() {
-	if (!show_cursor)
+	if (!show_cursor) {
+		inpt->hideCursor();
 		return;
+	}
 
 	if (settings->hardware_cursor) {
 		inpt->showCursor();

@@ -114,7 +114,14 @@ void SDLInputState::defaultQwertyKeyBindings () {
 	binding[Input::LEFT] = SDLK_a;
 	binding[Input::RIGHT] = SDLK_d;
 
-	binding_alt[Input::CANCEL] = SDLK_ESCAPE;
+	if (platform.needs_alt_escape_key) {
+		// web browsers reserve Escape for exiting fullscreen, so we provide an alternate binding
+		// backslash is used due to its general proximity to Enter on both ANSI and ISO layouts
+		binding_alt[Input::CANCEL] = SDLK_BACKSLASH;
+	}
+	else {
+		binding_alt[Input::CANCEL] = SDLK_ESCAPE;
+	}
 	binding_alt[Input::UP] = SDLK_UP;
 	binding_alt[Input::DOWN] = SDLK_DOWN;
 	binding_alt[Input::LEFT] = SDLK_LEFT;
@@ -228,46 +235,38 @@ void SDLInputState::handle() {
 		switch (event.type) {
 			case SDL_MOUSEMOTION:
 				last_is_joystick = false;
-				if (!platform.is_mobile_device) {
-					mouse = scaleMouse(event.motion.x, event.motion.y);
-					curs->show_cursor = true;
-				}
+				mouse = scaleMouse(event.motion.x, event.motion.y);
+				curs->show_cursor = true;
 				break;
 			case SDL_MOUSEWHEEL:
 				last_is_joystick = false;
-				if (!platform.is_mobile_device) {
-					if (event.wheel.y > 0) {
-						scroll_up = true;
-					} else if (event.wheel.y < 0) {
-						scroll_down = true;
-					}
+				if (event.wheel.y > 0) {
+					scroll_up = true;
+				} else if (event.wheel.y < 0) {
+					scroll_down = true;
 				}
 				break;
 			case SDL_MOUSEBUTTONDOWN:
 				last_is_joystick = false;
-				if (!platform.is_mobile_device) {
-					mouse = scaleMouse(event.button.x, event.button.y);
-					bind_button = (event.button.button + MOUSE_BIND_OFFSET) * (-1);
-					for (int key=0; key<KEY_COUNT; key++) {
-						if (bind_button == binding[key] || bind_button == binding_alt[key]) {
-							pressing[key] = true;
-							un_press[key] = false;
-						}
+				mouse = scaleMouse(event.button.x, event.button.y);
+				bind_button = (event.button.button + MOUSE_BIND_OFFSET) * (-1);
+				for (int key=0; key<KEY_COUNT; key++) {
+					if (bind_button == binding[key] || bind_button == binding_alt[key]) {
+						pressing[key] = true;
+						un_press[key] = false;
 					}
 				}
 				break;
 			case SDL_MOUSEBUTTONUP:
 				last_is_joystick = false;
-				if (!platform.is_mobile_device) {
-					mouse = scaleMouse(event.button.x, event.button.y);
-					bind_button = (event.button.button + MOUSE_BIND_OFFSET) * (-1);
-					for (int key=0; key<KEY_COUNT; key++) {
-						if (bind_button == binding[key] || bind_button == binding_alt[key]) {
-							un_press[key] = true;
-						}
+				mouse = scaleMouse(event.button.x, event.button.y);
+				bind_button = (event.button.button + MOUSE_BIND_OFFSET) * (-1);
+				for (int key=0; key<KEY_COUNT; key++) {
+					if (bind_button == binding[key] || bind_button == binding_alt[key]) {
+						un_press[key] = true;
 					}
-					last_button = bind_button;
 				}
+				last_button = bind_button;
 				break;
 			case SDL_WINDOWEVENT:
 				if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
@@ -295,7 +294,8 @@ void SDLInputState::handle() {
 			// NOTE Should these be limited to mobile only?
 			case SDL_FINGERMOTION:
 				last_is_joystick = false;
-				if (platform.is_mobile_device) {
+				if (settings->touchscreen) {
+					curs->show_cursor = false;
 					mouse.x = static_cast<int>((event.tfinger.x + event.tfinger.dx) * settings->view_w);
 					mouse.y = static_cast<int>((event.tfinger.y + event.tfinger.dy) * settings->view_h);
 
@@ -315,7 +315,8 @@ void SDLInputState::handle() {
 				break;
 			case SDL_FINGERDOWN:
 				last_is_joystick = false;
-				if (platform.is_mobile_device) {
+				if (settings->touchscreen) {
+					curs->show_cursor = false;
 					touch_locked = true;
 					mouse.x = static_cast<int>(event.tfinger.x * settings->view_w);
 					mouse.y = static_cast<int>(event.tfinger.y * settings->view_h);
@@ -331,7 +332,8 @@ void SDLInputState::handle() {
 				break;
 			case SDL_FINGERUP:
 				last_is_joystick = false;
-				if (platform.is_mobile_device) {
+				if (settings->touchscreen) {
+					curs->show_cursor = false;
 					for (size_t i = 0; i < touch_fingers.size(); ++i) {
 						if (touch_fingers[i].id == event.tfinger.fingerId) {
 							touch_fingers.erase(touch_fingers.begin() + i);

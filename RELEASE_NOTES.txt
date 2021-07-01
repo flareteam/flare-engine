@@ -41,6 +41,8 @@ Engine features:
 * Added 'Frame Limit' option to Video settings.
 * Added 'Maximum Render Size' option to Video settings.
 * Improved visual indication of which item set bonuses are active.
+* Support enabling touch screen controls on non-Android systems.
+* Support fullscreen mode in the Emscripten port.
 
 Engine fixes:
 
@@ -127,6 +129,7 @@ Translation updates:
 * Ukranian (uk) update (Sergiy Borodych)
 * Vietnamese (vi) update (Nguyễn Gia Phong)
 * Chinese (zh) update (dumaosen, sakura09123)
+* Chinese (Taiwan) (zh_TW) by RedBug312
 
 
 

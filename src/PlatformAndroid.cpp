@@ -77,6 +77,8 @@ Platform::Platform()
 	, is_mobile_device(true)
 	, force_hardware_cursor(true)
 	, has_lock_file(false)
+	, needs_alt_escape_key(false)
+	, fullscreen_bypass(false)
 	, config_menu_type(CONFIG_MENU_TYPE_BASE)
 	, default_renderer("")
 	, config_video(Platform::Video::COUNT, true)
@@ -102,6 +104,7 @@ Platform::Platform()
 	config_input[Platform::Input::MOUSE_MOVE_SWAP] = false;
 	config_input[Platform::Input::MOUSE_MOVE_ATTACK] = false;
 	config_input[Platform::Input::JOYSTICK_DEADZONE] = false;
+	config_input[Platform::Input::TOUCH_CONTROLS] = false;
 
 	config_misc[Platform::Misc::KEYBINDS] = false;
 }
@@ -219,6 +222,7 @@ void Platform::FSInit() {}
 bool Platform::FSCheckReady() { return true; }
 void Platform::FSCommit() {}
 void Platform::setScreenSize() {}
+void Platform::setFullscreen(bool) {}
 
 #endif // PLATFORM_CPP
 #endif // PLATFORM_CPP_INCLUDE

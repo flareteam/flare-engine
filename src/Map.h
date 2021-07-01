@@ -133,7 +133,6 @@ protected:
 
 	std::string filename;
 	std::string tileset;
-
 public:
 	Map();
 	~Map();

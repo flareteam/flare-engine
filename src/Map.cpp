@@ -141,7 +141,7 @@ int Map::load(const std::string& fname) {
 			layers.back()[i].resize(h, 0);
 		}
 	}
-	
+
 	// ensure that our map contains a fog of war layer
 	if (std::find(layernames.begin(), layernames.end(), "fogofwar") == layernames.end()) {
 		layernames.push_back("fogofwar");
@@ -218,8 +218,11 @@ void Map::loadLayer(FileParser &infile) {
 			layers.back()[i].resize(h);
 		}
 		layernames.push_back(infile.val);
+<<<<<<< HEAD
 		std::cout << "Loaded layer from map file " << infile.val << std::endl;
 		std::cout << "layers.size() " << layers.size() << "layernames.size() " <<  layernames.size() <<std::endl;
+=======
+>>>>>>> master
 	}
 	else if (infile.key == "format") {
 		// @ATTR layer.format|string|Format for map layer, must be 'dec'

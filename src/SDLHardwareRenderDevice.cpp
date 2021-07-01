@@ -31,6 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "InputState.h"
 #include "MessageEngine.h"
 #include "ModManager.h"
+#include "Platform.h"
 #include "SharedResources.h"
 #include "Settings.h"
 
@@ -658,18 +659,28 @@ void SDLHardwareRenderDevice::setBackgroundColor(Color color) {
 void SDLHardwareRenderDevice::setFullscreen(bool enable_fullscreen) {
 	if (!destructive_fullscreen) {
 		if (enable_fullscreen) {
-			SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+			if (platform.fullscreen_bypass) {
+				platform.setFullscreen(true);
+			}
+			else {
+				SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+			}
 			fullscreen = true;
 		}
 		else if (fullscreen) {
-			SDL_SetWindowFullscreen(window, 0);
+			if (platform.fullscreen_bypass) {
+				platform.setFullscreen(false);
+			}
+			else {
+				SDL_SetWindowFullscreen(window, 0);
 
-			// restore window to the default size
-			SDL_SetWindowMinimumSize(window, eset->resolutions.min_screen_w, eset->resolutions.min_screen_h);
-			SDL_SetWindowSize(window, eset->resolutions.min_screen_w, eset->resolutions.min_screen_h);
-			windowResize();
-			// setting minimum size might move the window, so set position again
-			SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+				// restore window to the default size
+				SDL_SetWindowMinimumSize(window, eset->resolutions.min_screen_w, eset->resolutions.min_screen_h);
+				SDL_SetWindowSize(window, eset->resolutions.min_screen_w, eset->resolutions.min_screen_h);
+				windowResize();
+				// setting minimum size might move the window, so set position again
+				SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+			}
 			fullscreen = false;
 		}
 		windowResize();
