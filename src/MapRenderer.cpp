@@ -216,20 +216,6 @@ int MapRenderer::load(const std::string& fname) {
 		if (layernames[i] == "object")
 			index_objectlayer = i;
 
-	for (unsigned i = 0; i < layers.size(); ++i) {
-		if (layernames[i] == "fogofwar") {
-			short width = static_cast<short>(layers[i].size());
-			if (width == 0) {
-				Utils::logError("MapRenderer: Map width is 0. Can't set fogOfWar layer.");
-				break;
-			}
-			short height = static_cast<short>(layers[i][0].size());
-			fogOfWar.setMap(layers[i], width, height);
-			std::cout << "WxH " << width << "x" << height << std::endl;
-			removeLayer(i);
-		}
-	}
-
 	while (!enemy_groups.empty()) {
 		pushEnemyGroup(enemy_groups.front());
 		enemy_groups.pop();
@@ -421,7 +407,6 @@ void MapRenderer::renderIsoLayer(const Map_Layer& layerdata) {
 			++i;
 			++tiles_width;
 			p.x += eset->tileset.tile_w;
-
 			if (const uint_fast16_t current_tile = layerdata[i][j]) {
 				const Tile_Def &tile = tset.tiles[current_tile];
 				dest.x = p.x - tile.offset.x;
@@ -665,7 +650,9 @@ do_last_NE_tile:
 
 void MapRenderer::renderIso(std::vector<Renderable> &r, std::vector<Renderable> &r_dead) {
 	size_t index = 0;
+
 	while (index < index_objectlayer) {
+		std::cout << "rendering layer object " << layernames[index] << " " << index << std::endl;
 		renderIsoLayer(layers[index]);
 		map_parallax.render(cam.shake, layernames[index]);
 		index++;
@@ -673,11 +660,12 @@ void MapRenderer::renderIso(std::vector<Renderable> &r, std::vector<Renderable> 
 
 	renderIsoBackObjects(r_dead);
 	renderIsoFrontObjects(r);
+	std::cout << "rendering layer dead " << layernames[index] << " " << index << std::endl;
 	map_parallax.render(cam.shake, layernames[index]);
 
 	index++;
-	std::cout << "layers.size" << layers.size() << std::endl;
 	while (index < layers.size()) {
+		std::cout << "rendering layer iso " << layernames[index] << " " << index << std::endl;
 		renderIsoLayer(layers[index]);
 		map_parallax.render(cam.shake, layernames[index]);
 		index++;
