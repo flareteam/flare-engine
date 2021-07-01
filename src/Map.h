@@ -134,7 +134,6 @@ protected:
 	std::string filename;
 	std::string tileset;
 
-	int collision_layer;
 public:
 	Map();
 	~Map();

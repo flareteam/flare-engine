@@ -35,7 +35,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 Map::Map()
 	: filename("")
-	, collision_layer(-1)
 	, layers()
 	, events()
 	, w(1)
@@ -52,6 +51,7 @@ Map::~Map() {
 void Map::clearLayers() {
 	layers.clear();
 	layernames.clear();
+	std::cout << "CLEAR ALL LAYERS. NEW SIZE:  " << layers.size() << " " << layernames.size() << std::endl;
 }
 
 void Map::clearQueues() {
@@ -66,8 +66,10 @@ void Map::clearEvents() {
 }
 
 void Map::removeLayer(unsigned index) {
+	std::cout << "SIZE BEFORE REMOVE COLLISION: " << layers.size() << std::endl;
 	layernames.erase(layernames.begin() + index);
 	layers.erase(layers.begin() + index);
+	std::cout << "SIZE AFTER REMOVE COLLISION: " << layers.size() << std::endl;
 }
 
 int Map::load(const std::string& fname) {
@@ -81,7 +83,6 @@ int Map::load(const std::string& fname) {
 	parallax_filename = "";
 	background_color = Color(0,0,0,0);
 
-	collision_layer = -1;
 	w = 1;
 	h = 1;
 	hero_pos_enabled = false;
@@ -139,16 +140,17 @@ int Map::load(const std::string& fname) {
 		for (size_t i=0; i<layers.back().size(); ++i) {
 			layers.back()[i].resize(h, 0);
 		}
-		collision_layer = static_cast<int>(layers.size())-1;
 	}
+	
 	// ensure that our map contains a fog of war layer
 	if (std::find(layernames.begin(), layernames.end(), "fogofwar") == layernames.end()) {
 		layernames.push_back("fogofwar");
 		layers.resize(layers.size()+1);
 		layers.back().resize(w);
 		for (size_t i=0; i<layers.back().size(); ++i) {
-			layers.back()[i].resize(h, 0);
+			layers.back()[i].resize(h, 31);
 		}
+		std::cout << "SAFE ADDING FOGOFWAR LAYER " << layers.size()-1 << std::endl;
 	}
 
 	if (!hero_pos_enabled) {
@@ -216,8 +218,8 @@ void Map::loadLayer(FileParser &infile) {
 			layers.back()[i].resize(h);
 		}
 		layernames.push_back(infile.val);
-		if (infile.val == "collision")
-			collision_layer = static_cast<int>(layernames.size())-1;
+		std::cout << "Loaded layer from map file " << infile.val << std::endl;
+		std::cout << "layers.size() " << layers.size() << "layernames.size() " <<  layernames.size() <<std::endl;
 	}
 	else if (infile.key == "format") {
 		// @ATTR layer.format|string|Format for map layer, must be 'dec'
