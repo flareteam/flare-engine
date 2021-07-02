@@ -298,6 +298,8 @@ void SDLInputState::handle() {
 					curs->show_cursor = false;
 					mouse.x = static_cast<int>((event.tfinger.x + event.tfinger.dx) * settings->view_w);
 					mouse.y = static_cast<int>((event.tfinger.y + event.tfinger.dy) * settings->view_h);
+					pressing[Input::MAIN1] = true;
+					un_press[Input::MAIN1] = false;
 
 					if (event.tfinger.dy > 0) {
 						scroll_up = true;
@@ -333,6 +335,9 @@ void SDLInputState::handle() {
 			case SDL_FINGERUP:
 				last_is_joystick = false;
 				if (settings->touchscreen) {
+					// MAIN1 might have been set to un-press from a SDL_MOUSEBUTTONUP event
+					un_press[Input::MAIN1] = false;
+
 					curs->show_cursor = false;
 					for (size_t i = 0; i < touch_fingers.size(); ++i) {
 						if (touch_fingers[i].id == event.tfinger.fingerId) {
