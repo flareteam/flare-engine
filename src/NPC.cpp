@@ -179,9 +179,8 @@ void NPC::load(const std::string& npc_id) {
 					// @ATTR name|string|NPC's name.
 					name = msg->get(infile.val);
 				}
-				else if (infile.key == "gfx") {
-					// TODO deprecate this!
-					// Currently handled in StatBlock::isNPCStat()
+				else if (infile.key == "animations" || infile.key == "gfx") {
+					// TODO "gfx" is deprecated
 				}
 				else if (infile.key == "direction") {
 					// @ATTR direction|direction|The direction to use for this NPC's stance animation.
