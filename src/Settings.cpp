@@ -242,3 +242,43 @@ void Settings::updateScreenVars() {
 	}
 }
 
+void Settings::logSettings() {
+	for (size_t i = 0; i < config.size(); ++i) {
+		Utils::logInfo("Settings: %s=%s", config[i].name.c_str(), configValueToString(*config[i].type, config[i].storage).c_str());
+	}
+}
+
+std::string Settings::configValueToString(const std::type_info &type, void *storage) {
+	std::stringstream stream;
+
+	if (type == typeid(bool)) {
+		stream << *(static_cast<bool*>(storage));
+	}
+	else if (type == typeid(int)) {
+		stream << *(static_cast<int*>(storage));
+	}
+	else if (type == typeid(unsigned int)) {
+		stream << *(static_cast<unsigned int*>(storage));
+	}
+	else if (type == typeid(short)) {
+		stream << *(static_cast<short*>(storage));
+	}
+	else if (type == typeid(unsigned short)) {
+		stream << *(static_cast<unsigned short*>(storage));
+	}
+	else if (type == typeid(char)) {
+		stream << *(static_cast<char*>(storage));
+	}
+	else if (type == typeid(unsigned char)) {
+		stream << *(static_cast<unsigned char*>(storage));
+	}
+	else if (type == typeid(float)) {
+		stream << *(static_cast<float*>(storage));
+	}
+	else if (type == typeid(std::string)) {
+		stream << *(static_cast<std::string*>(storage));
+	}
+
+	return stream.str();
+}
+

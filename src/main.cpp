@@ -117,6 +117,7 @@ static void init(const CmdLineArgs& cmd_line_args) {
 	}
 
 	settings->loadSettings();
+	settings->logSettings();
 
 	save_load = new SaveLoad();
 	msg = new MessageEngine();
