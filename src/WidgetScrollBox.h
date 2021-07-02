@@ -53,20 +53,22 @@ public:
 	bool getNext();
 	bool getPrev();
 	void activate();
-	int getCursor() {
-		return cursor;
-	}
 	void scrollToTop();
 
 private:
+	static const int SCROLL_SPEED_COARSE_MOD = 4;
+	static const int SCROLL_SPEED_SMOOTH_MOD = 3;
+
 	void scroll(int amount);
 	void scrollTo(int amount);
+	void scrollToSmooth(int amount);
 	void scrollDown();
 	void scrollUp();
 	std::vector<Widget*> children;
 	int currentChild;
 
-	int cursor;
+	float cursor;
+	float cursor_target;
 	WidgetScrollBar * scrollbar;
 };
 
