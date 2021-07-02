@@ -206,6 +206,8 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	, joystick_deadzone_lb(new WidgetLabel())
 	, touch_controls_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
 	, touch_controls_lb(new WidgetLabel())
+	, touch_scale_sl(new WidgetSlider(WidgetSlider::DEFAULT_FILE))
+	, touch_scale_lb(new WidgetLabel())
 
 	, activemods_lstb(new WidgetListBox(10, WidgetListBox::DEFAULT_FILE))
 	, activemods_lb(new WidgetLabel())
@@ -437,6 +439,7 @@ void MenuConfig::init() {
 	cfg_tabs[INPUT_TAB].setOptionWidgets(Platform::Input::MOUSE_MOVE_ATTACK, mouse_move_attack_lb, mouse_move_attack_cb, msg->get("Attack with mouse movement"));
 	cfg_tabs[INPUT_TAB].setOptionWidgets(Platform::Input::JOYSTICK_DEADZONE, joystick_deadzone_lb, joystick_deadzone_sl, msg->get("Joystick Deadzone"));
 	cfg_tabs[INPUT_TAB].setOptionWidgets(Platform::Input::TOUCH_CONTROLS, touch_controls_lb, touch_controls_cb, msg->get("Touch Controls"));
+	cfg_tabs[INPUT_TAB].setOptionWidgets(Platform::Input::TOUCH_SCALE, touch_scale_lb, touch_scale_sl, msg->get("Touch Gamepad Scaling"));
 
 
 	for (size_t i = 0; i < keybinds_btn.size(); ++i) {
@@ -873,6 +876,7 @@ void MenuConfig::updateInput() {
 	}
 
 	joystick_deadzone_sl->set(0, 32768, settings->joy_deadzone);
+	touch_scale_sl->set(TOUCH_SCALE_MIN, TOUCH_SCALE_MAX, static_cast<int>(settings->touch_scale * 100.0));
 
 	cfg_tabs[INPUT_TAB].scrollbox->refresh();
 }
@@ -1225,6 +1229,10 @@ void MenuConfig::logicInput() {
 	}
 	else if (cfg_tabs[INPUT_TAB].options[Platform::Input::TOUCH_CONTROLS].enabled && touch_controls_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->touchscreen = touch_controls_cb->isChecked();
+	}
+	else if (cfg_tabs[INPUT_TAB].options[Platform::Input::TOUCH_SCALE].enabled && touch_scale_sl->checkClickAt(mouse.x, mouse.y)) {
+		settings->touch_scale = static_cast<float>(touch_scale_sl->getValue()) * 0.01f;
+		inpt->window_resized = true;
 	}
 }
 

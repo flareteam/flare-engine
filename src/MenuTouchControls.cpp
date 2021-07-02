@@ -24,20 +24,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 MenuTouchControls::MenuTouchControls()
 	: Menu()
-	, move_radius(settings->view_h / 4)
 	, move_center(0,0)
-	, move_center_base(move_radius, -(move_radius / 2))
 	, move_align(Utils::ALIGN_BOTTOMLEFT)
-	, move_deadzone(settings->view_h / 20)
-	, main1_radius(settings->view_h / 6)
 	, main1_center(0,0)
-	, main1_center_base(-main1_radius - (settings->view_h / 4), -(settings->view_h / 8))
 	, main1_align(Utils::ALIGN_BOTTOMRIGHT)
-	, main2_radius(settings->view_h / 6)
 	, main2_center(0,0)
-	, main2_center_base(0, -(settings->view_h / 6))
 	, main2_align(Utils::ALIGN_BOTTOMRIGHT)
-	, radius_padding(settings->view_h / 20)
 {
 	visible = true;
 	align();
@@ -55,6 +47,21 @@ void MenuTouchControls::alignInput(Point& center, const Point& center_base, cons
 }
 
 void MenuTouchControls::align() {
+	move_radius = static_cast<int>(settings->view_h / 4 * settings->touch_scale);
+	move_center_base.x = move_radius;
+	move_center_base.y = -(move_radius / 2);
+	move_deadzone = static_cast<int>(settings->view_h / 20 * settings->touch_scale);
+
+	main1_radius = static_cast<int>(settings->view_h / 6 * settings->touch_scale);
+	main1_center_base.x = -main1_radius - static_cast<int>((settings->view_h / 4) * settings->touch_scale);
+	main1_center_base.y = static_cast<int>(-(settings->view_h / 8) * settings->touch_scale);
+
+	main2_radius = static_cast<int>(settings->view_h / 6 * settings->touch_scale);
+	main2_center_base.x = 0;
+	main2_center_base.y = static_cast<int>(-(settings->view_h / 6) * settings->touch_scale);
+
+	radius_padding = static_cast<int>(settings->view_h / 20 * settings->touch_scale);
+
 	alignInput(move_center, move_center_base, move_radius, move_align);
 	alignInput(main1_center, main1_center_base, main1_radius, main1_align);
 	alignInput(main2_center, main2_center_base, main2_radius, main2_align);

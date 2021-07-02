@@ -74,6 +74,8 @@ private:
 
 	static const int GAMMA_MIN = 5;
 	static const int GAMMA_MAX = 15;
+	static const int TOUCH_SCALE_MIN = 75;
+	static const int TOUCH_SCALE_MAX = 125;
 
 	std::vector<ConfigTab> cfg_tabs;
 
@@ -280,6 +282,8 @@ public:
 	WidgetLabel                * joystick_deadzone_lb;
 	WidgetCheckBox             * touch_controls_cb;
 	WidgetLabel                * touch_controls_lb;
+	WidgetSlider               * touch_scale_sl;
+	WidgetLabel                * touch_scale_lb;
 
 	WidgetListBox              * activemods_lstb;
 	WidgetLabel                * activemods_lb;
