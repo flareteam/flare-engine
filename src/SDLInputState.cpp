@@ -301,9 +301,9 @@ void SDLInputState::handle() {
 					pressing[Input::MAIN1] = true;
 					un_press[Input::MAIN1] = false;
 
-					if (event.tfinger.dy > 0) {
+					if (event.tfinger.dy > 0.005) {
 						scroll_up = true;
-					} else if (event.tfinger.dy < 0) {
+					} else if (event.tfinger.dy < -0.005) {
 						scroll_down = true;
 					}
 
