@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-30 17:43-0400\n"
+"POT-Creation-Date: 2021-07-02 13:26-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
 "Last-Translator: Christophe Nemo <djlittlenemo@gmail.com>, 2020\n"
 "Language-Team: French (https://www.transifex.com/flareorg/teams/84925/fr/)\n"
@@ -200,7 +200,7 @@ msgid "Level %d"
 msgstr "Niveau %d"
 
 #: ../../../src/GameStateNew.cpp:66 ../../../src/InputState.cpp:416
-#: ../../../src/MenuConfig.cpp:252
+#: ../../../src/MenuConfig.cpp:254
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -579,15 +579,15 @@ msgstr "Chaque niveau donne %d."
 msgid "Each point of %s grants %d."
 msgstr "Chaque point de %s donne %d."
 
-#: ../../../src/MenuConfig.cpp:122 ../../../src/MenuConfig.cpp:1248
+#: ../../../src/MenuConfig.cpp:122 ../../../src/MenuConfig.cpp:1256
 msgid "Clear"
 msgstr "Effacer"
 
-#: ../../../src/MenuConfig.cpp:122 ../../../src/MenuConfig.cpp:1246
+#: ../../../src/MenuConfig.cpp:122 ../../../src/MenuConfig.cpp:1254
 msgid "Assign:"
 msgstr "Assigner :"
 
-#: ../../../src/MenuConfig.cpp:123 ../../../src/MenuConfig.cpp:251
+#: ../../../src/MenuConfig.cpp:123 ../../../src/MenuConfig.cpp:253
 msgid "Defaults"
 msgstr "Par défaut"
 
@@ -595,23 +595,23 @@ msgstr "Par défaut"
 msgid "Reset ALL settings?"
 msgstr "Réinitaliser TOUS les réglages ?"
 
-#: ../../../src/MenuConfig.cpp:250 ../../../src/MenuNumPicker.cpp:49
+#: ../../../src/MenuConfig.cpp:252 ../../../src/MenuNumPicker.cpp:49
 msgid "OK"
 msgstr "OK"
 
-#: ../../../src/MenuConfig.cpp:254 ../../../src/MenuGameOver.cpp:72
+#: ../../../src/MenuConfig.cpp:256 ../../../src/MenuGameOver.cpp:72
 msgid "Continue"
 msgstr "Continuer"
 
-#: ../../../src/MenuConfig.cpp:256
+#: ../../../src/MenuConfig.cpp:258
 msgid "Save Game"
 msgstr "Sauvegarder la partie"
 
-#: ../../../src/MenuConfig.cpp:299 ../../../src/MenuConfig.cpp:350
+#: ../../../src/MenuConfig.cpp:301 ../../../src/MenuConfig.cpp:352
 msgid "Default"
 msgstr "Défaut"
 
-#: ../../../src/MenuConfig.cpp:299
+#: ../../../src/MenuConfig.cpp:301
 msgid ""
 "Show all loot tooltips, except for those that would be obscured by the "
 "player or an enemy. Temporarily show all loot tooltips with 'Alt'."
@@ -620,22 +620,22 @@ msgstr ""
 "masquées par le joueur ou un ennemi. Afficher toutes les infobulles de butin"
 " temporairement avec la touche 'Alt'."
 
-#: ../../../src/MenuConfig.cpp:300
+#: ../../../src/MenuConfig.cpp:302
 msgid "Show all"
 msgstr "Afficher tout"
 
-#: ../../../src/MenuConfig.cpp:300
+#: ../../../src/MenuConfig.cpp:302
 msgid ""
 "Always show loot tooltips. Temporarily hide all loot tooltips with 'Alt'."
 msgstr ""
 "Toujours montrer les infobulles de butin. Cacher temporairement les "
 "infobulles de butin avec la touche 'Alt'."
 
-#: ../../../src/MenuConfig.cpp:301 ../../../src/MenuConfig.cpp:306
+#: ../../../src/MenuConfig.cpp:303 ../../../src/MenuConfig.cpp:308
 msgid "Hidden"
 msgstr "Caché"
 
-#: ../../../src/MenuConfig.cpp:301
+#: ../../../src/MenuConfig.cpp:303
 msgid ""
 "Always hide loot tooltips, except for when a piece of loot is hovered with "
 "the mouse cursor. Temporarily show all loot tooltips with 'Alt'."
@@ -644,15 +644,15 @@ msgstr ""
 " survolée par la souris. Montrer temporairement toutes les infobulles de "
 "butin avec la touche 'Alt'."
 
-#: ../../../src/MenuConfig.cpp:304
+#: ../../../src/MenuConfig.cpp:306
 msgid "Visible"
 msgstr "Visible"
 
-#: ../../../src/MenuConfig.cpp:305
+#: ../../../src/MenuConfig.cpp:307
 msgid "Visible (2x zoom)"
 msgstr "Visible (zoom x2)"
 
-#: ../../../src/MenuConfig.cpp:309
+#: ../../../src/MenuConfig.cpp:311
 msgid ""
 "Controls the type of warning to be activated when the player is below the "
 "low health threshold."
@@ -660,51 +660,51 @@ msgstr ""
 "Contrôle le type d'alerte activée lorsque la santé du joueur est sous le "
 "seuil de santé bas."
 
-#: ../../../src/MenuConfig.cpp:310
+#: ../../../src/MenuConfig.cpp:312
 msgid "- Display a message"
 msgstr "- Afficher un message"
 
-#: ../../../src/MenuConfig.cpp:311
+#: ../../../src/MenuConfig.cpp:313
 msgid "- Play a sound"
 msgstr "- Jouer un son"
 
-#: ../../../src/MenuConfig.cpp:312
+#: ../../../src/MenuConfig.cpp:314
 msgid "- Change the cursor"
 msgstr "- Changer le curseur"
 
-#: ../../../src/MenuConfig.cpp:314
+#: ../../../src/MenuConfig.cpp:316
 msgid "Disabled"
 msgstr "Désactivé"
 
-#: ../../../src/MenuConfig.cpp:315
+#: ../../../src/MenuConfig.cpp:317
 msgid "All"
 msgstr "Tout"
 
-#: ../../../src/MenuConfig.cpp:316
+#: ../../../src/MenuConfig.cpp:318
 msgid "Message & Cursor"
 msgstr "Message & Curseur"
 
-#: ../../../src/MenuConfig.cpp:317
+#: ../../../src/MenuConfig.cpp:319
 msgid "Message & Sound"
 msgstr "Message & Son"
 
-#: ../../../src/MenuConfig.cpp:318
+#: ../../../src/MenuConfig.cpp:320
 msgid "Sound & Cursor"
 msgstr "Son & Curseur"
 
-#: ../../../src/MenuConfig.cpp:319
+#: ../../../src/MenuConfig.cpp:321
 msgid "Message"
 msgstr "Message"
 
-#: ../../../src/MenuConfig.cpp:320
+#: ../../../src/MenuConfig.cpp:322
 msgid "Cursor"
 msgstr "Curseur"
 
-#: ../../../src/MenuConfig.cpp:321
+#: ../../../src/MenuConfig.cpp:323
 msgid "Sound"
 msgstr "Son"
 
-#: ../../../src/MenuConfig.cpp:327
+#: ../../../src/MenuConfig.cpp:329
 msgid ""
 "When the player's health drops below the given threshold, the low health "
 "notifications are triggered if one or more of them is enabled."
@@ -713,219 +713,223 @@ msgstr ""
 "notifications de santé basse sont déclenchées si au moins l'une d'entre "
 "elles est activée."
 
-#: ../../../src/MenuConfig.cpp:345
+#: ../../../src/MenuConfig.cpp:347
 msgid "The maximum frame rate that the game will be allowed to run at."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:349
+#: ../../../src/MenuConfig.cpp:351
 msgid ""
 "The render size refers to the height in pixels of the surface used to draw "
 "the game. Mods define the allowed render sizes, but this option allows "
 "overriding the maximum size."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:372 ../../../src/MenuConfig.cpp:1671
+#: ../../../src/MenuConfig.cpp:374 ../../../src/MenuConfig.cpp:1679
 #: ../../../src/MenuGameOver.cpp:116
 msgid "Exit"
 msgstr "Quitter"
 
-#: ../../../src/MenuConfig.cpp:373
+#: ../../../src/MenuConfig.cpp:375
 msgid "Video"
 msgstr "Vidéo"
 
-#: ../../../src/MenuConfig.cpp:374
+#: ../../../src/MenuConfig.cpp:376
 msgid "Audio"
 msgstr "Audio"
 
-#: ../../../src/MenuConfig.cpp:375
+#: ../../../src/MenuConfig.cpp:377
 msgid "Interface"
 msgstr "Interface"
 
-#: ../../../src/MenuConfig.cpp:376
+#: ../../../src/MenuConfig.cpp:378
 msgid "Input"
 msgstr "Entrée"
 
-#: ../../../src/MenuConfig.cpp:377
+#: ../../../src/MenuConfig.cpp:379
 msgid "Keybindings"
 msgstr "Commandes"
 
-#: ../../../src/MenuConfig.cpp:378
+#: ../../../src/MenuConfig.cpp:380
 msgid "Mods"
 msgstr "Mods"
 
-#: ../../../src/MenuConfig.cpp:390
+#: ../../../src/MenuConfig.cpp:392
 msgid "Paused"
 msgstr "En pause"
 
-#: ../../../src/MenuConfig.cpp:393
+#: ../../../src/MenuConfig.cpp:395
 msgid "Time Played"
 msgstr "Temps de jeu"
 
-#: ../../../src/MenuConfig.cpp:399
+#: ../../../src/MenuConfig.cpp:401
 msgid "Renderer"
 msgstr "Rendu"
 
-#: ../../../src/MenuConfig.cpp:400
+#: ../../../src/MenuConfig.cpp:402
 msgid "Full Screen Mode"
 msgstr "Mode plein écran"
 
-#: ../../../src/MenuConfig.cpp:401
+#: ../../../src/MenuConfig.cpp:403
 msgid "Hardware surfaces"
 msgstr "Surfaces matérielles"
 
-#: ../../../src/MenuConfig.cpp:402
+#: ../../../src/MenuConfig.cpp:404
 msgid "V-Sync"
 msgstr "V-Sync"
 
-#: ../../../src/MenuConfig.cpp:403
+#: ../../../src/MenuConfig.cpp:405
 msgid "Texture Filtering"
 msgstr "Filtrage de textures"
 
-#: ../../../src/MenuConfig.cpp:404
+#: ../../../src/MenuConfig.cpp:406
 msgid "DPI scaling"
 msgstr "Echelonnage DPI"
 
-#: ../../../src/MenuConfig.cpp:405
+#: ../../../src/MenuConfig.cpp:407
 msgid "Parallax Layers"
 msgstr "Couches parallax"
 
-#: ../../../src/MenuConfig.cpp:406
+#: ../../../src/MenuConfig.cpp:408
 msgid "Allow changing gamma"
 msgstr "Régler le gamma"
 
-#: ../../../src/MenuConfig.cpp:407
+#: ../../../src/MenuConfig.cpp:409
 msgid "Gamma"
 msgstr "Gamma"
 
-#: ../../../src/MenuConfig.cpp:408
+#: ../../../src/MenuConfig.cpp:410
 msgid "Maximum Render Size"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:409
+#: ../../../src/MenuConfig.cpp:411
 msgid "Frame Limit"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:411
+#: ../../../src/MenuConfig.cpp:413
 msgid "Sound Volume"
 msgstr "Volume des sons"
 
-#: ../../../src/MenuConfig.cpp:412
+#: ../../../src/MenuConfig.cpp:414
 msgid "Music Volume"
 msgstr "Volume de la musique"
 
-#: ../../../src/MenuConfig.cpp:414
+#: ../../../src/MenuConfig.cpp:416
 msgid "Language"
 msgstr "Langues"
 
-#: ../../../src/MenuConfig.cpp:415
+#: ../../../src/MenuConfig.cpp:417
 msgid "Show FPS"
 msgstr "Afficher les FPS"
 
-#: ../../../src/MenuConfig.cpp:416
+#: ../../../src/MenuConfig.cpp:418
 msgid "Hardware mouse cursor"
 msgstr "Curseur matériel"
 
-#: ../../../src/MenuConfig.cpp:417
+#: ../../../src/MenuConfig.cpp:419
 msgid "Colorblind Mode"
 msgstr "Mode daltonien"
 
-#: ../../../src/MenuConfig.cpp:418
+#: ../../../src/MenuConfig.cpp:420
 msgid "Developer Mode"
 msgstr "Mode développeur"
 
-#: ../../../src/MenuConfig.cpp:419
+#: ../../../src/MenuConfig.cpp:421
 msgid "Subtitles"
 msgstr "Sous-titres"
 
-#: ../../../src/MenuConfig.cpp:420
+#: ../../../src/MenuConfig.cpp:422
 msgid "Loot tooltip visibility"
 msgstr "Visibilité infobulle butin"
 
-#: ../../../src/MenuConfig.cpp:421
+#: ../../../src/MenuConfig.cpp:423
 msgid "Mini-map mode"
 msgstr "Mode mini-carte"
 
-#: ../../../src/MenuConfig.cpp:422
+#: ../../../src/MenuConfig.cpp:424
 msgid "Always show stat bar labels"
 msgstr "Toujours montrer les étiquettes de la barre de statistiques"
 
-#: ../../../src/MenuConfig.cpp:423
+#: ../../../src/MenuConfig.cpp:425
 msgid "Allow stat bar auto-hiding"
 msgstr "Autorise le masquage auto de la barre de statut"
 
-#: ../../../src/MenuConfig.cpp:424
+#: ../../../src/MenuConfig.cpp:426
 msgid "Show combat text"
 msgstr "Afficher le texte des combats"
 
-#: ../../../src/MenuConfig.cpp:425
+#: ../../../src/MenuConfig.cpp:427
 msgid "Automatically equip items"
 msgstr "Équiper automatiquement les objets"
 
-#: ../../../src/MenuConfig.cpp:426
+#: ../../../src/MenuConfig.cpp:428
 msgid "Show hidden entity markers"
 msgstr "Montre les marqueurs d'entité cachés"
 
-#: ../../../src/MenuConfig.cpp:427
+#: ../../../src/MenuConfig.cpp:429
 msgid "Low health notification"
 msgstr "Notification de santé basse"
 
-#: ../../../src/MenuConfig.cpp:428
+#: ../../../src/MenuConfig.cpp:430
 msgid "Low health threshold"
 msgstr "Seuil de santé basse"
 
-#: ../../../src/MenuConfig.cpp:429
+#: ../../../src/MenuConfig.cpp:431
 msgid "Show item comparison tooltips"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:432 ../../../src/MenuMovementType.cpp:94
+#: ../../../src/MenuConfig.cpp:434 ../../../src/MenuMovementType.cpp:94
 #: ../../../src/MenuMovementType.cpp:131
 msgid "Joystick"
 msgstr "Manette"
 
-#: ../../../src/MenuConfig.cpp:433
+#: ../../../src/MenuConfig.cpp:435
 msgid "Move hero using mouse"
 msgstr "Déplacement du héro à la souris"
 
-#: ../../../src/MenuConfig.cpp:434
+#: ../../../src/MenuConfig.cpp:436
 msgid "Mouse aim"
 msgstr "Visée à la souris"
 
-#: ../../../src/MenuConfig.cpp:435
+#: ../../../src/MenuConfig.cpp:437
 msgid "Do not use mouse"
 msgstr "Ne pas utiliser la souris"
 
-#: ../../../src/MenuConfig.cpp:436
+#: ../../../src/MenuConfig.cpp:438
 msgid "Swap mouse movement button"
 msgstr "Inverser les boutons de mouvement de la souris"
 
-#: ../../../src/MenuConfig.cpp:437
+#: ../../../src/MenuConfig.cpp:439
 msgid "Attack with mouse movement"
 msgstr "Attaquer avec les mouvement de la souris"
 
-#: ../../../src/MenuConfig.cpp:438
+#: ../../../src/MenuConfig.cpp:440
 msgid "Joystick Deadzone"
 msgstr "Zone morte du joystick"
 
-#: ../../../src/MenuConfig.cpp:439
+#: ../../../src/MenuConfig.cpp:441
 msgid "Touch Controls"
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:449
+#: ../../../src/MenuConfig.cpp:442
+msgid "Touch Gamepad Scaling"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:452
 #, c-format
 msgid "Primary binding: %s"
 msgstr "Affectation principale : %s"
 
-#: ../../../src/MenuConfig.cpp:450
+#: ../../../src/MenuConfig.cpp:453
 #, c-format
 msgid "Alternate binding: %s"
 msgstr "Affectation secondaire : %s"
 
-#: ../../../src/MenuConfig.cpp:451
+#: ../../../src/MenuConfig.cpp:454
 #, c-format
 msgid "Joystick binding: %s"
 msgstr "Affectation de la manette : %s"
 
-#: ../../../src/MenuConfig.cpp:553
+#: ../../../src/MenuConfig.cpp:556
 msgid ""
 "Will try to store surfaces in video memory versus system memory. The effect "
 "this has on performance depends on the renderer."
@@ -933,7 +937,7 @@ msgstr ""
 "Tentera de stocker les surfaces dans la mémoire vidéo plutôt que la mémoire "
 "du système. L'effet sur les performances dépend de la carte vidéo."
 
-#: ../../../src/MenuConfig.cpp:554
+#: ../../../src/MenuConfig.cpp:557
 msgid ""
 "Prevents screen tearing. Disable if you experience \"stuttering\" in "
 "windowed mode or input lag."
@@ -941,7 +945,7 @@ msgstr ""
 "Evite l'apparition de déchirement d'écran. A désactiver si vous subissez des"
 " 'bégaiements' en mode fenêtré ou des retards de saisie.  "
 
-#: ../../../src/MenuConfig.cpp:555
+#: ../../../src/MenuConfig.cpp:558
 msgid ""
 "When enabled, this uses the screen DPI in addition to the window dimensions "
 "to scale the rendering resolution. Otherwise, only the window dimensions are"
@@ -951,7 +955,7 @@ msgstr ""
 "pour échelonner la résolution de rendu. Autrement, seule les dimensions de "
 "la fenêtre sont utilisées."
 
-#: ../../../src/MenuConfig.cpp:556
+#: ../../../src/MenuConfig.cpp:559
 msgid ""
 "This enables parallax (non-tile) layers. Disabling this setting can improve "
 "performance in some cases."
@@ -959,7 +963,7 @@ msgstr ""
 "Active les couches parallax. La désactivation de cette option peut améliorer"
 " les performances dans certains cas."
 
-#: ../../../src/MenuConfig.cpp:557
+#: ../../../src/MenuConfig.cpp:560
 msgid ""
 "Enables the below setting that controls the screen gamma level. The behavior"
 " of the gamma setting can vary between platforms."
@@ -967,7 +971,7 @@ msgstr ""
 "Active le réglage ci-dessous qui contrôle le niveau gamma de l'écran. Le "
 "comportement du paramètre gamma peut varier selon les plateformes."
 
-#: ../../../src/MenuConfig.cpp:558
+#: ../../../src/MenuConfig.cpp:561
 msgid ""
 "Provides additional text for information that is primarily conveyed through "
 "color."
@@ -975,7 +979,7 @@ msgstr ""
 "Fournit du texte supplémentaire aux informations principalement transmises "
 "par la couleur."
 
-#: ../../../src/MenuConfig.cpp:559
+#: ../../../src/MenuConfig.cpp:562
 msgid ""
 "Some mods will automatically hide the stat bars when they are inactive. "
 "Disabling this option will keep them displayed at all times."
@@ -983,7 +987,7 @@ msgstr ""
 "Certains mods cachent automatiquement les barres de statistiques quand ils "
 "sont inactifs. Désactiver cette option les affichera en permanence."
 
-#: ../../../src/MenuConfig.cpp:560
+#: ../../../src/MenuConfig.cpp:563
 msgid ""
 "When enabled, empty equipment slots will be filled with applicable items "
 "when they are obtained."
@@ -991,7 +995,7 @@ msgstr ""
 "En activant cette option, les emplacements d'équipement vides seront remplis"
 " des objets adéquats obtenus."
 
-#: ../../../src/MenuConfig.cpp:561
+#: ../../../src/MenuConfig.cpp:564
 msgid ""
 "Shows a marker above enemies, allies, and the player when they are obscured "
 "by tall objects."
@@ -999,13 +1003,13 @@ msgstr ""
 "Place un marqueur au-dessus des ennemis, des alliés et du joueur lorsqu'ils "
 "sont masqués par de grands objets."
 
-#: ../../../src/MenuConfig.cpp:562
+#: ../../../src/MenuConfig.cpp:565
 msgid ""
 "When enabled, tooltips for equipped items of the same type are shown next to"
 " standard item tooltips."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:563
+#: ../../../src/MenuConfig.cpp:566
 msgid ""
 "This allows the game to be controlled entirely with the keyboard (or "
 "joystick)."
@@ -1013,7 +1017,7 @@ msgstr ""
 "Cela permet au jeu d'être entièrement contrôlé via le clavier (ou le "
 "joystick)."
 
-#: ../../../src/MenuConfig.cpp:564
+#: ../../../src/MenuConfig.cpp:567
 msgid ""
 "When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or"
 " 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
@@ -1023,7 +1027,7 @@ msgstr ""
 " 'Principal1' ou 'Principal2' est utilisé pour déplacer le héros. S'il est "
 "activé, 'Principal2' déplacera le héros à la place de 'Principal1'."
 
-#: ../../../src/MenuConfig.cpp:565
+#: ../../../src/MenuConfig.cpp:568
 msgid ""
 "When 'Move hero using mouse' is enabled, this setting controls if the Power "
 "assigned to the movement button can be used by targeting an enemy. If this "
@@ -1035,7 +1039,7 @@ msgstr ""
 "ennemi. S'il est désactivé, il est nécessaire d'utiliser la touche 'Shift' "
 "pour activer le Pouvoir assigné au bouton de mouvement."
 
-#: ../../../src/MenuConfig.cpp:566
+#: ../../../src/MenuConfig.cpp:569
 msgid ""
 "The player's attacks will be aimed in the direction of the mouse cursor when"
 " this is enabled."
@@ -1043,49 +1047,49 @@ msgstr ""
 "L'attaque du joueur sera dirigée dans la direction du curseur de la souris "
 "si ce paramètre est activé."
 
-#: ../../../src/MenuConfig.cpp:567
+#: ../../../src/MenuConfig.cpp:570
 msgid ""
 "When enabled, a virtual gamepad will be added in-game. Other interactions, "
 "such as drag-and-drop behavior, are also altered to better suit touch input."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:618
+#: ../../../src/MenuConfig.cpp:621
 msgid "Active Mods"
 msgstr "Mods actifs"
 
-#: ../../../src/MenuConfig.cpp:627
+#: ../../../src/MenuConfig.cpp:630
 msgid "Available Mods"
 msgstr "Mods disponibles"
 
-#: ../../../src/MenuConfig.cpp:646
+#: ../../../src/MenuConfig.cpp:649
 msgid "<< Disable"
 msgstr "<< Désactiver"
 
-#: ../../../src/MenuConfig.cpp:652
+#: ../../../src/MenuConfig.cpp:655
 msgid "Enable >>"
 msgstr "Activer >>"
 
-#: ../../../src/MenuConfig.cpp:1528
+#: ../../../src/MenuConfig.cpp:1536
 msgid "Version:"
 msgstr "Version :"
 
-#: ../../../src/MenuConfig.cpp:1533
+#: ../../../src/MenuConfig.cpp:1541
 msgid "Game:"
 msgstr "Jeu :"
 
-#: ../../../src/MenuConfig.cpp:1538
+#: ../../../src/MenuConfig.cpp:1546
 msgid "Engine version:"
 msgstr "Version du moteur :"
 
-#: ../../../src/MenuConfig.cpp:1546
+#: ../../../src/MenuConfig.cpp:1554
 msgid "Requires mods:"
 msgstr "Mods nécessaires :"
 
-#: ../../../src/MenuConfig.cpp:1654 ../../../src/SDLInputState.cpp:750
+#: ../../../src/MenuConfig.cpp:1662 ../../../src/SDLInputState.cpp:750
 msgid "(none)"
 msgstr "(rien)"
 
-#: ../../../src/MenuConfig.cpp:1671 ../../../src/MenuGameOver.cpp:73
+#: ../../../src/MenuConfig.cpp:1679 ../../../src/MenuGameOver.cpp:73
 msgid "Save & Exit"
 msgstr "Sauvegarder & Quitter"
 
