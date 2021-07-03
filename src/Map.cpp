@@ -41,6 +41,7 @@ Map::Map()
 	, h(1)
 	, hero_pos_enabled(false)
 	, hero_pos()
+	, tileset_fogofwar("tilesetdefs/tileset_fogofwar.txt")
 	, background_color(0,0,0,0) {
 }
 
@@ -51,7 +52,6 @@ Map::~Map() {
 void Map::clearLayers() {
 	layers.clear();
 	layernames.clear();
-	std::cout << "CLEAR ALL LAYERS. NEW SIZE:  " << layers.size() << " " << layernames.size() << std::endl;
 }
 
 void Map::clearQueues() {
@@ -66,10 +66,8 @@ void Map::clearEvents() {
 }
 
 void Map::removeLayer(unsigned index) {
-	std::cout << "SIZE BEFORE REMOVE COLLISION: " << layers.size() << std::endl;
 	layernames.erase(layernames.begin() + index);
 	layers.erase(layers.begin() + index);
-	std::cout << "SIZE AFTER REMOVE COLLISION: " << layers.size() << std::endl;
 }
 
 int Map::load(const std::string& fname) {
@@ -148,9 +146,8 @@ int Map::load(const std::string& fname) {
 		layers.resize(layers.size()+1);
 		layers.back().resize(w);
 		for (size_t i=0; i<layers.back().size(); ++i) {
-			layers.back()[i].resize(h, 31);
+			layers.back()[i].resize(h, 1);
 		}
-		std::cout << "SAFE ADDING FOGOFWAR LAYER " << layers.size()-1 << std::endl;
 	}
 
 	if (!hero_pos_enabled) {

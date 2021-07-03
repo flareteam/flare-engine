@@ -586,6 +586,25 @@ void Avatar::logic() {
 					stats.cur_state = StatBlock::ENTITY_STANCE;
 					lock_enemy = cursor_enemy;
 				}
+				
+				//update fogofwar				
+				for (unsigned int li = 0; li<mapr->layernames.size(); li++) {
+					if (mapr->layernames[li] == "fogofwar") {
+						Map_Layer fogLayer = mapr->layers[li];
+						for (unsigned int lx = 0; lx < fogLayer.size(); lx++) {
+							for (unsigned int ly = 0; ly < fogLayer[0].size(); ly++) {
+								if (fogLayer[lx][ly] != 0) {
+									Point lPoint(lx, ly);									
+									float delta = Utils::calcDist(FPoint(lPoint), FPoint(stats.pos));
+									if (delta < 9) {
+										mapr->layers[li][lx][ly] = 0;
+									}									
+								}
+							}							
+						}
+						break;
+					}
+				}			
 
 				break;
 

@@ -222,6 +222,7 @@ int MapRenderer::load(const std::string& fname) {
 	}
 
 	tset.load(this->tileset);
+	tset_fogofwar.load(this->tileset_fogofwar);
 
 	std::vector<unsigned> corrupted;
 	for (unsigned i = 0; i < layers.size(); ++i) {
@@ -269,6 +270,7 @@ void MapRenderer::logic(bool paused) {
 
 	// handle tile set logic e.g. animations
 	tset.logic();
+	tset_fogofwar.logic();
 
 	// TODO there's a bit too much "logic" here for a class that's supposed to be dedicated to rendering
 	// some of these timers should be moved out at some point
@@ -415,6 +417,66 @@ void MapRenderer::renderIsoLayer(const Map_Layer& layerdata) {
 				// by SDL_BlitSurface
 				tile.tile->setDestFromPoint(dest);
 				render_device->render(tile.tile);
+			}
+		}
+		j = static_cast<int_fast16_t>(j + tiles_width);
+		i = static_cast<int_fast16_t>(i - tiles_width);
+		// Go one line deeper, the starting position goes zig-zag
+		if (y % 2)
+			i++;
+		else
+			j++;
+	}
+}
+
+void MapRenderer::renderIsoLayerFogOfWar(const Map_Layer& layerdata) {
+	int_fast16_t i; // first index of the map array
+	int_fast16_t j; // second index of the map array
+	Point dest;
+	const Point upperleft(Utils::screenToMap(0, 0, cam.shake.x, cam.shake.y));
+	const int_fast16_t max_tiles_width =   static_cast<int_fast16_t>((settings->view_w / eset->tileset.tile_w) + 2*tset_fogofwar.max_size_x);
+	const int_fast16_t max_tiles_height = static_cast<int_fast16_t>((2 * settings->view_h / eset->tileset.tile_h) + 2*(tset_fogofwar.max_size_y+1));
+
+	j = static_cast<int_fast16_t>(upperleft.y - tset_fogofwar.max_size_y/2 + tset_fogofwar.max_size_x);
+	i = static_cast<int_fast16_t>(upperleft.x - tset_fogofwar.max_size_y/2 - tset_fogofwar.max_size_x);
+
+	for (uint_fast16_t y = max_tiles_height ; y; --y) {
+		int_fast16_t tiles_width = 0;
+
+		// make sure the isometric corners are not rendered:
+		// corner north west, upper left  (i < 0)
+		if (i < -1) {
+			j = static_cast<int_fast16_t>(j + i + 1);
+			tiles_width = static_cast<int_fast16_t>(tiles_width - (i + 1));
+			i = -1;
+		}
+		// corner north east, upper right (j > mapheight)
+		const int_fast16_t d = static_cast<int_fast16_t>(j - h);
+		if (d >= 0) {
+			j = static_cast<int_fast16_t>(j - d);
+			tiles_width = static_cast<int_fast16_t>(tiles_width + d);
+			i = static_cast<int_fast16_t>(i + d);
+		}
+
+		// lower right (south east) corner is covered by (j+i-w+1)
+		// lower left (south west) corner is caught by having 0 in there, so j>0
+		const int_fast16_t j_end = std::max(static_cast<int_fast16_t>(j+i-w+1),	std::max(static_cast<int_fast16_t>(j - max_tiles_width), static_cast<int_fast16_t>(0)));
+
+		Point p = Utils::mapToScreen(float(i), float(j), cam.shake.x, cam.shake.y);
+		p = centerTile(p);
+
+		// draw one horizontal line
+		while (j > j_end) {
+			--j;
+			++i;
+			++tiles_width;
+			p.x += eset->tileset.tile_w;
+			if (const uint_fast16_t current_tile = layerdata[i][j]) {
+				const Tile_Def &tile_fow = tset_fogofwar.tiles[1];
+				dest.x = p.x - tile_fow.offset.x;
+				dest.y = p.y - tile_fow.offset.y;
+				tile_fow.tile->setDestFromPoint(dest);
+				render_device->render(tile_fow.tile);
 			}
 		}
 		j = static_cast<int_fast16_t>(j + tiles_width);
@@ -652,7 +714,6 @@ void MapRenderer::renderIso(std::vector<Renderable> &r, std::vector<Renderable> 
 	size_t index = 0;
 
 	while (index < index_objectlayer) {
-		std::cout << "rendering layer object " << layernames[index] << " " << index << std::endl;
 		renderIsoLayer(layers[index]);
 		map_parallax.render(cam.shake, layernames[index]);
 		index++;
@@ -660,14 +721,18 @@ void MapRenderer::renderIso(std::vector<Renderable> &r, std::vector<Renderable> 
 
 	renderIsoBackObjects(r_dead);
 	renderIsoFrontObjects(r);
-	std::cout << "rendering layer dead " << layernames[index] << " " << index << std::endl;
 	map_parallax.render(cam.shake, layernames[index]);
 
 	index++;
 	while (index < layers.size()) {
-		std::cout << "rendering layer iso " << layernames[index] << " " << index << std::endl;
-		renderIsoLayer(layers[index]);
-		map_parallax.render(cam.shake, layernames[index]);
+		if (layernames[index] == "fogofwar") {
+			renderIsoLayerFogOfWar(layers[index]);
+			map_parallax.render(cam.shake, layernames[index]);
+		}
+		else {
+			renderIsoLayer(layers[index]);
+			map_parallax.render(cam.shake, layernames[index]);
+		}
 		index++;
 	}
 
