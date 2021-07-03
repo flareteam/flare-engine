@@ -30,6 +30,7 @@ MenuTouchControls::MenuTouchControls()
 	, main1_align(Utils::ALIGN_BOTTOMRIGHT)
 	, main2_center(0,0)
 	, main2_align(Utils::ALIGN_BOTTOMRIGHT)
+	, prev_touch_scale(settings->touch_scale)
 {
 	visible = true;
 	align();
@@ -70,6 +71,12 @@ void MenuTouchControls::align() {
 void MenuTouchControls::logic() {
 	if (!visible || !settings->touchscreen)
 		return;
+
+	// update scaling from settings
+	if (settings->touch_scale != prev_touch_scale) {
+		align();
+		prev_touch_scale = settings->touch_scale;
+	}
 
 	inpt->pressing[Input::LEFT] = inpt->pressing[Input::RIGHT] = inpt->pressing[Input::UP] = inpt->pressing[Input::DOWN] = false;
 	inpt->pressing[Input::MAIN2] = false;

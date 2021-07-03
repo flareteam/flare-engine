@@ -1232,7 +1232,6 @@ void MenuConfig::logicInput() {
 	}
 	else if (cfg_tabs[INPUT_TAB].options[Platform::Input::TOUCH_SCALE].enabled && touch_scale_sl->checkClickAt(mouse.x, mouse.y)) {
 		settings->touch_scale = static_cast<float>(touch_scale_sl->getValue()) * 0.01f;
-		inpt->window_resized = true;
 	}
 }
 
