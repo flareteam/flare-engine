@@ -45,6 +45,7 @@ Engine features:
 * Added 'Touch Gamepad Scale' option to Input settings.
 * Support fullscreen mode in the Emscripten port.
 * Added scrollbar.bg_color to engine/widget_settings.txt.
+* Updates to package_osx.sh, including usage of Homebrew for dependencies (ludoza)
 
 Engine fixes:
 
