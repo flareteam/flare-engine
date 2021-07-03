@@ -38,6 +38,11 @@ private:
 	int value;
 	int bar_height;
 	int maximum;
+	bool lock_main1;
+	bool dragging;
+
+	Rect up_to_knob;
+	Rect knob_to_down;
 
 public:
 	static const std::string DEFAULT_FILE;

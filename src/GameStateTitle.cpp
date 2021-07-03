@@ -35,7 +35,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SoundManager.h"
 #include "WidgetButton.h"
 #include "WidgetLabel.h"
-#include "WidgetScrollBox.h"
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
 #include "Version.h"

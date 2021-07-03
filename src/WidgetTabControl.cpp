@@ -29,6 +29,8 @@ WidgetTabControl::WidgetTabControl()
 	: active_tab_surface(NULL)
 	, inactive_tab_surface(NULL)
 	, active_tab(0)
+	, lock_main1(false)
+	, dragging(false)
 {
 
 	loadGraphics();
@@ -173,14 +175,28 @@ void WidgetTabControl::logic() {
 void WidgetTabControl::logic(int x, int y) {
 	Point mouse(x, y);
 	// If the click was in the tabs area;
-	if(Utils::isWithinRect(tabs_area, mouse) && inpt->pressing[Input::MAIN1]) {
-		// Mark the clicked tab as active_tab.
-		for (unsigned i=0; i<tabs.size(); i++) {
-			if(Utils::isWithinRect(tabs[i], mouse) && enabled[i]) {
-				active_tab = i;
-				return;
+	if (Utils::isWithinRect(tabs_area, mouse) && (!lock_main1 || dragging)) {
+		lock_main1 = false;
+		dragging = false;
+
+		if (inpt->pressing[Input::MAIN1]) {
+			inpt->lock[Input::MAIN1] = true;
+			dragging = true;
+
+			// Mark the clicked tab as active_tab.
+			for (unsigned i=0; i<tabs.size(); i++) {
+				if(Utils::isWithinRect(tabs[i], mouse) && enabled[i]) {
+					active_tab = i;
+					return;
+				}
 			}
 		}
+	}
+	else {
+		lock_main1 = inpt->pressing[Input::MAIN1];
+	}
+	if (!inpt->pressing[Input::MAIN1]) {
+		dragging = false;
 	}
 }
 

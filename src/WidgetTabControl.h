@@ -44,6 +44,8 @@ private:
 
 	unsigned active_tab;    // Index of the currently active tab.
 	Rect tabs_area;    // Area the tab titles are displayed.
+	bool lock_main1;
+	bool dragging;
 
 public:
 

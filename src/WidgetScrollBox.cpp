@@ -136,7 +136,8 @@ Point WidgetScrollBox::input_assist(const Point& mouse) {
 		new_mouse.y = mouse.y-pos.y + static_cast<int>(cursor);
 	}
 	else {
-		new_mouse.x = -1;
+		// x position is maintained for dragging of WidgetSlider knobs
+		new_mouse.x = mouse.x-pos.x;
 		new_mouse.y = -1;
 	}
 	return new_mouse;
