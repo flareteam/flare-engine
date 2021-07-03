@@ -41,6 +41,7 @@ Map::Map()
 	, h(1)
 	, hero_pos_enabled(false)
 	, hero_pos()
+	, tileset_fogofwar("tilesetdefs/tileset_fogofwar.txt")
 	, background_color(0,0,0,0) {
 }
 
@@ -148,7 +149,7 @@ int Map::load(const std::string& fname) {
 		layers.resize(layers.size()+1);
 		layers.back().resize(w);
 		for (size_t i=0; i<layers.back().size(); ++i) {
-			layers.back()[i].resize(h, 31);
+			layers.back()[i].resize(h, 0);
 		}
 		std::cout << "SAFE ADDING FOGOFWAR LAYER " << layers.size()-1 << std::endl;
 	}
@@ -218,11 +219,9 @@ void Map::loadLayer(FileParser &infile) {
 			layers.back()[i].resize(h);
 		}
 		layernames.push_back(infile.val);
-<<<<<<< HEAD
+
 		std::cout << "Loaded layer from map file " << infile.val << std::endl;
 		std::cout << "layers.size() " << layers.size() << "layernames.size() " <<  layernames.size() <<std::endl;
-=======
->>>>>>> master
 	}
 	else if (infile.key == "format") {
 		// @ATTR layer.format|string|Format for map layer, must be 'dec'
