@@ -716,7 +716,6 @@ void MapRenderer::renderIso(std::vector<Renderable> &r, std::vector<Renderable> 
 	size_t index = 0;
 
 	while (index < index_objectlayer) {
-		std::cout << "rendering layer object " << layernames[index] << " " << index << std::endl;
 		renderIsoLayer(layers[index]);
 		map_parallax.render(cam.shake, layernames[index]);
 		index++;
@@ -724,12 +723,10 @@ void MapRenderer::renderIso(std::vector<Renderable> &r, std::vector<Renderable> 
 
 	renderIsoBackObjects(r_dead);
 	renderIsoFrontObjects(r);
-	std::cout << "rendering layer dead " << layernames[index] << " " << index << std::endl;
 	map_parallax.render(cam.shake, layernames[index]);
 
 	index++;
 	while (index < layers.size()) {
-		std::cout << "rendering layer iso " << layernames[index] << " " << index << std::endl;
 		if (layernames[index] == "fogofwar") {
 			renderIsoLayerFogOfWar(layers[index]);
 			map_parallax.render(cam.shake, layernames[index]);

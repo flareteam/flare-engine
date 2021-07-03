@@ -52,7 +52,6 @@ Map::~Map() {
 void Map::clearLayers() {
 	layers.clear();
 	layernames.clear();
-	std::cout << "CLEAR ALL LAYERS. NEW SIZE:  " << layers.size() << " " << layernames.size() << std::endl;
 }
 
 void Map::clearQueues() {
@@ -67,10 +66,8 @@ void Map::clearEvents() {
 }
 
 void Map::removeLayer(unsigned index) {
-	std::cout << "SIZE BEFORE REMOVE COLLISION: " << layers.size() << std::endl;
 	layernames.erase(layernames.begin() + index);
 	layers.erase(layers.begin() + index);
-	std::cout << "SIZE AFTER REMOVE COLLISION: " << layers.size() << std::endl;
 }
 
 int Map::load(const std::string& fname) {
@@ -149,9 +146,8 @@ int Map::load(const std::string& fname) {
 		layers.resize(layers.size()+1);
 		layers.back().resize(w);
 		for (size_t i=0; i<layers.back().size(); ++i) {
-			layers.back()[i].resize(h, 0);
+			layers.back()[i].resize(h, 1);
 		}
-		std::cout << "SAFE ADDING FOGOFWAR LAYER " << layers.size()-1 << std::endl;
 	}
 
 	if (!hero_pos_enabled) {
@@ -219,9 +215,6 @@ void Map::loadLayer(FileParser &infile) {
 			layers.back()[i].resize(h);
 		}
 		layernames.push_back(infile.val);
-
-		std::cout << "Loaded layer from map file " << infile.val << std::endl;
-		std::cout << "layers.size() " << layers.size() << "layernames.size() " <<  layernames.size() <<std::endl;
 	}
 	else if (infile.key == "format") {
 		// @ATTR layer.format|string|Format for map layer, must be 'dec'
