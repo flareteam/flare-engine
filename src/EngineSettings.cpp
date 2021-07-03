@@ -867,6 +867,8 @@ void EngineSettings::Widgets::load() {
 
 	horizontal_list_text_width = 150;
 
+	scrollbar_bg_color = Color(0,0,0,64);
+
 	FileParser infile;
 	// @CLASS EngineSettings: Widgets|Description of engine/widget_settings.txt
 	if (infile.open("engine/widget_settings.txt", FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
@@ -923,6 +925,12 @@ void EngineSettings::Widgets::load() {
 				if (infile.key == "text_width") {
 					// @ATTR horizontal_list.text_width|int|The pixel width of the text area that displays the currently selected item. Default is 150 pixels;
 					horizontal_list_text_width = Parse::toInt(infile.val);
+				}
+			}
+			else if (infile.section == "scrollbar") {
+				if (infile.key == "bg_color") {
+					// @ATTR scrollbar.bg_color|color, int : Color, Alpha|The background color for the entire scrollbar.
+					scrollbar_bg_color = Parse::toRGBA(infile.val);
 				}
 			}
 		}

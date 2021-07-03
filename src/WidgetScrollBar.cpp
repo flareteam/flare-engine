@@ -22,6 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class WidgetScrollBar
  */
 
+#include "EngineSettings.h"
 #include "InputState.h"
 #include "RenderDevice.h"
 #include "SharedResources.h"
@@ -38,6 +39,7 @@ WidgetScrollBar::WidgetScrollBar(const std::string& _fileName)
 	, maximum(0)
 	, lock_main1(false)
 	, dragging(false)
+	, bg(NULL)
 	, pressed_up(false)
 	, pressed_down(false)
 	, pressed_knob(false) {
@@ -188,9 +190,16 @@ void WidgetScrollBar::render() {
 	src_knob.w = pos_knob.w;
 	src_knob.h = pos_knob.h;
 
+	if (bg) {
+		bg->local_frame = local_frame;
+		bg->setOffset(local_offset);
+		bg->setDestFromRect(pos_up);
+		render_device->render(bg);
+	}
 	if (scrollbars) {
 		scrollbars->local_frame = local_frame;
 		scrollbars->setOffset(local_offset);
+
 		scrollbars->setClipFromRect(src_up);
 		scrollbars->setDestFromRect(pos_up);
 		render_device->render(scrollbars);
@@ -209,6 +218,7 @@ void WidgetScrollBar::render() {
  * Updates the scrollbar's location
  */
 void WidgetScrollBar::refresh(int x, int y, int h, int val, int max) {
+	Rect before = getBounds();
 	maximum = max;
 	value = val;
 	pos_up.x = pos_down.x = pos_knob.x = x;
@@ -216,9 +226,29 @@ void WidgetScrollBar::refresh(int x, int y, int h, int val, int max) {
 	pos_down.y = y+h;
 	bar_height = pos_down.y-(pos_up.y+pos_up.h);
 	set();
+
+	Rect after = getBounds();
+	if (before.h != after.h) {
+		// create background surface
+		if (bg) {
+			delete bg;
+			bg = NULL;
+		}
+		Image *graphics;
+		graphics = render_device->createImage(after.w,after.h);
+		if (graphics) {
+			bg = graphics->createSprite();
+			graphics->unref();
+		}
+
+		if (bg) {
+			bg->getGraphics()->fillWithColor(eset->widgets.scrollbar_bg_color);
+		}
+	}
 }
 
 WidgetScrollBar::~WidgetScrollBar() {
 	if (scrollbars) delete scrollbars;
+	if (bg) delete bg;
 }
 

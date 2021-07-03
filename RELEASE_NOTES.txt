@@ -44,6 +44,7 @@ Engine features:
 * Support enabling touch screen controls on non-Android systems.
 * Added 'Touch Gamepad Scale' option to Input settings.
 * Support fullscreen mode in the Emscripten port.
+* Added scrollbar.bg_color to engine/widget_settings.txt.
 
 Engine fixes:
 

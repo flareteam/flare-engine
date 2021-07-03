@@ -265,6 +265,7 @@ public:
 		Color slot_hotkey_bg_color;
 		Point listbox_text_margin;
 		int horizontal_list_text_width;
+		Color scrollbar_bg_color;
 	};
 
 	class XPTable {
