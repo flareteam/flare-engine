@@ -54,11 +54,11 @@ void MenuTouchControls::align() {
 
 	main1_radius = static_cast<int>(settings->view_h / 6 * settings->touch_scale);
 	main1_center_base.x = -main1_radius - static_cast<int>((settings->view_h / 4) * settings->touch_scale);
-	main1_center_base.y = static_cast<int>(-(settings->view_h / 8) * settings->touch_scale);
+	main1_center_base.y = static_cast<int>((settings->view_h / 8) * settings->touch_scale * -1);
 
 	main2_radius = static_cast<int>(settings->view_h / 6 * settings->touch_scale);
 	main2_center_base.x = 0;
-	main2_center_base.y = static_cast<int>(-(settings->view_h / 6) * settings->touch_scale);
+	main2_center_base.y = static_cast<int>((settings->view_h / 6) * settings->touch_scale * -1);
 
 	radius_padding = static_cast<int>(settings->view_h / 20 * settings->touch_scale);
 
