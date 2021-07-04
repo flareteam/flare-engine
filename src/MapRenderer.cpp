@@ -474,7 +474,7 @@ void MapRenderer::renderIsoLayerFogOfWar(const Map_Layer& layerdata) {
 			++tiles_width;
 			p.x += eset->tileset.tile_w;
 			if (const uint_fast16_t current_tile = layerdata[i][j]) {
-				const Tile_Def &tile_fow = tset_fogofwar.tiles[1];
+				const Tile_Def &tile_fow = tset_fogofwar.tiles[current_tile];
 				dest.x = p.x - tile_fow.offset.x;
 				dest.y = p.y - tile_fow.offset.y;
 				tile_fow.tile->setDestFromPoint(dest);
