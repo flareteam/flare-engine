@@ -84,6 +84,8 @@ private:
 	Timer set_dir_timer;
 
 	bool isDroppedToLowHp();
+	
+	void updateFogOfWar();
 
 protected:
 	virtual void resetActiveAnimation();
@@ -158,6 +160,7 @@ public:
 	int prev_hp;
 	bool playing_lowhp;
 	bool teleport_camera_lock;
+	unsigned short sight;
 
 	std::vector<ActionData> action_queue;
 };

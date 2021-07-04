@@ -74,7 +74,8 @@ Avatar::Avatar()
 	, using_main2(false)
 	, prev_hp(0)
 	, playing_lowhp(false)
-	, teleport_camera_lock(false) {
+	, teleport_camera_lock(false)
+	, sight(9) {
 
 	init();
 
@@ -587,24 +588,8 @@ void Avatar::logic() {
 					lock_enemy = cursor_enemy;
 				}
 				
-				//update fogofwar				
-				for (unsigned int li = 0; li<mapr->layernames.size(); li++) {
-					if (mapr->layernames[li] == "fogofwar") {
-						Map_Layer fogLayer = mapr->layers[li];
-						for (unsigned int lx = 0; lx < fogLayer.size(); lx++) {
-							for (unsigned int ly = 0; ly < fogLayer[0].size(); ly++) {
-								if (fogLayer[lx][ly] != 0) {
-									Point lPoint(lx, ly);									
-									float delta = Utils::calcDist(FPoint(lPoint), FPoint(stats.pos));
-									if (delta < 9) {
-										mapr->layers[li][lx][ly] = 0;
-									}									
-								}
-							}							
-						}
-						break;
-					}
-				}			
+				updateFogOfWar();
+		
 
 				break;
 
@@ -1129,6 +1114,39 @@ bool Avatar::isLowHpCursorEnabled() {
 		settings->low_hp_warning_type == settings->LHP_WARN_TEXT_CURSOR ||
 		settings->low_hp_warning_type == settings->LHP_WARN_CURSOR_SOUND ||
 		settings->low_hp_warning_type == settings->LHP_WARN_ALL;
+}
+
+void Avatar::updateFogOfWar() {
+	short start_x;
+	short start_y;
+	short end_x;
+	short end_y;
+	start_x = static_cast<short>(stats.pos.x-sight);
+	start_y = static_cast<short>(stats.pos.y-sight);
+	end_x = static_cast<short>(stats.pos.x+sight);
+	end_y = static_cast<short>(stats.pos.y+sight);
+	
+	if (start_x < 0) start_x = 0;
+	if (start_y < 0) start_y = 0;
+	if (end_x > mapr->w) end_x = mapr->w;
+	if (end_y > mapr->h) end_y = mapr->h;				
+	
+	for (unsigned int li = 0; li<mapr->layernames.size(); li++) {
+		if (mapr->layernames[li] == "fogofwar") {
+			for (unsigned short lx = start_x; lx < end_x; lx++) {
+				for (unsigned short ly = start_y; ly < end_y; ly++) {
+					if (mapr->layers[li][lx][ly] != 0) {
+						Point lPoint(lx, ly);									
+						float delta = Utils::calcDist(FPoint(lPoint), FPoint(stats.pos));
+						if (delta < sight) {
+							mapr->layers[li][lx][ly] = 0;
+						}									
+					}
+				}							
+			}
+			break;
+		}
+	}	
 }
 
 Avatar::~Avatar() {
