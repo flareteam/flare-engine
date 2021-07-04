@@ -36,6 +36,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 Map::Map()
 	: filename("")
 	, layers()
+	, fogofwar()
 	, events()
 	, w(1)
 	, h(1)
@@ -215,6 +216,14 @@ void Map::loadLayer(FileParser &infile) {
 			layers.back()[i].resize(h);
 		}
 		layernames.push_back(infile.val);
+		
+		if (infile.val == "fogofwar") {
+			fogofwar.resize(w);
+			for (size_t i=0; i<fogofwar.size(); ++i) {
+				fogofwar[i].resize(h);
+			}
+			std::cout << "SIZE" << fogofwar.size() << " " << fogofwar[0].size() << std::endl;
+		}
 	}
 	else if (infile.key == "format") {
 		// @ATTR layer.format|string|Format for map layer, must be 'dec'
@@ -247,8 +256,13 @@ void Map::loadLayer(FileParser &infile) {
 				Utils::Exit(1);
 			}
 
-			for (int i=0; i<w; i++)
-				layers.back()[i][j] = static_cast<unsigned short>(Parse::popFirstInt(val));
+			for (int i=0; i<w; i++){
+				const unsigned short new_value = static_cast<unsigned short>(Parse::popFirstInt(val));
+				if (layernames.back() == "fogofwar") {
+					fogofwar[i][j] = new_value;
+				}
+				layers.back()[i][j] = new_value;
+			}
 		}
 	}
 	else {
