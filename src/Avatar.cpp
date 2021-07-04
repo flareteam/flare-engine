@@ -1125,24 +1125,22 @@ void Avatar::updateFogOfWar() {
 	start_y = static_cast<short>(stats.pos.y-sight);
 	end_x = static_cast<short>(stats.pos.x+sight);
 	end_y = static_cast<short>(stats.pos.y+sight);
-	
+
 	if (start_x < 0) start_x = 0;
 	if (start_y < 0) start_y = 0;
 	if (end_x > mapr->w) end_x = mapr->w;
-	if (end_y > mapr->h) end_y = mapr->h;				
-	
+	if (end_y > mapr->h) end_y = mapr->h;
+
 	for (unsigned int li = 0; li<mapr->layernames.size(); li++) {
 		if (mapr->layernames[li] == "fogofwar") {
 			for (unsigned short lx = start_x; lx < end_x; lx++) {
 				for (unsigned short ly = start_y; ly < end_y; ly++) {
-					if (mapr->layers[li][lx][ly] != 0) {
-						Point lPoint(lx, ly);									
-						float delta = Utils::calcDist(FPoint(lPoint), FPoint(stats.pos));
-						if (delta < sight) {
-							mapr->layers[li][lx][ly] = 0;
-						}									
+					Point lPoint(lx, ly);									
+					float delta = Utils::calcDist(FPoint(lPoint), FPoint(stats.pos));
+					if (delta < sight) {
+						mapr->layers[li][lx][ly] = 0;
 					}
-				}							
+				}
 			}
 			break;
 		}
