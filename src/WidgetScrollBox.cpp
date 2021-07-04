@@ -25,24 +25,26 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EngineSettings.h"
 #include "InputState.h"
 #include "RenderDevice.h"
+#include "Settings.h"
 #include "WidgetScrollBox.h"
 
 WidgetScrollBox::WidgetScrollBox(int width, int height)
-	: contents(NULL) {
+	: contents(NULL)
+	, update(true)
+	, bg(0,0,0,0)
+	, tablist()
+	, cursor(0)
+	, cursor_target(0)
+	, scrollbar(new WidgetScrollBar(WidgetScrollBar::DEFAULT_FILE))
+{
 	pos.x = pos.y = 0;
 	pos.w = width;
 	pos.h = height;
-	cursor = 0;
-	bg.r = bg.g = bg.b = 0;
-	bg.a = 0;
 	currentChild = -1;
-	scrollbar = new WidgetScrollBar(WidgetScrollBar::DEFAULT_FILE);
-	update = true;
-	resize(width, height);
-	tablist = TabList();
-	tablist.setScrollType(SCROLL_TWO_DIRECTIONS);
-
 	scroll_type = SCROLL_VERTICAL;
+
+	resize(width, height);
+	tablist.setScrollType(SCROLL_TWO_DIRECTIONS);
 }
 
 WidgetScrollBox::~WidgetScrollBox() {
@@ -54,8 +56,7 @@ void WidgetScrollBox::setPos(int offset_x, int offset_y) {
 	Widget::setPos(offset_x, offset_y);
 
 	if (contents && scrollbar) {
-		scrollbar->refresh(pos.x+pos.w, pos.y, pos.h-scrollbar->pos_down.h, cursor,
-						   contents->getGraphicsHeight()-pos.h);
+		scrollbar->refresh(pos.x+pos.w, pos.y, pos.h-scrollbar->pos_down.h, static_cast<int>(cursor), contents->getGraphicsHeight()-pos.h);
 	}
 }
 
@@ -81,34 +82,46 @@ void WidgetScrollBox::clearChildWidgets() {
 }
 
 void WidgetScrollBox::scroll(int amount) {
-	cursor += amount;
-	if (cursor < 0) {
-		cursor = 0;
+	cursor_target += static_cast<float>(amount);
+	if (cursor_target < 0) {
+		cursor_target = 0;
 	}
-	else if (contents && cursor > contents->getGraphicsHeight() - pos.h) {
-		cursor = contents->getGraphicsHeight() - pos.h;
+	else if (contents && cursor_target > static_cast<float>(contents->getGraphicsHeight() - pos.h)) {
+		cursor_target = static_cast<float>(contents->getGraphicsHeight() - pos.h);
 	}
 	refresh();
 }
 
 void WidgetScrollBox::scrollTo(int amount) {
-	cursor = amount;
+	cursor = static_cast<float>(amount);
 	if (cursor < 0) {
 		cursor = 0;
 	}
-	else if (contents && cursor > contents->getGraphicsHeight() - pos.h) {
-		cursor = contents->getGraphicsHeight() - pos.h;
+	else if (contents && cursor > static_cast<float>(contents->getGraphicsHeight() - pos.h)) {
+		cursor = static_cast<float>(contents->getGraphicsHeight() - pos.h);
+	}
+	cursor_target = cursor;
+	refresh();
+}
+
+void WidgetScrollBox::scrollToSmooth(int amount) {
+	cursor_target = static_cast<float>(amount);
+	if (cursor_target < 0) {
+		cursor_target = 0;
+	}
+	else if (contents && cursor_target > static_cast<float>(contents->getGraphicsHeight() - pos.h)) {
+		cursor_target = static_cast<float>(contents->getGraphicsHeight() - pos.h);
 	}
 	refresh();
 }
 
 void WidgetScrollBox::scrollDown() {
-	int amount = pos.h / 4;
+	int amount = pos.h / SCROLL_SPEED_COARSE_MOD;
 	scroll(amount);
 }
 
 void WidgetScrollBox::scrollUp() {
-	int amount = pos.h / 4;
+	int amount = pos.h / SCROLL_SPEED_COARSE_MOD;
 	scroll(-amount);
 }
 
@@ -120,10 +133,11 @@ Point WidgetScrollBox::input_assist(const Point& mouse) {
 	Point new_mouse;
 	if (Utils::isWithinRect(pos,mouse)) {
 		new_mouse.x = mouse.x-pos.x;
-		new_mouse.y = mouse.y-pos.y+cursor;
+		new_mouse.y = mouse.y-pos.y + static_cast<int>(cursor);
 	}
 	else {
-		new_mouse.x = -1;
+		// x position is maintained for dragging of WidgetSlider knobs
+		new_mouse.x = mouse.x-pos.x;
 		new_mouse.y = -1;
 	}
 	return new_mouse;
@@ -165,11 +179,22 @@ void WidgetScrollBox::logic(int x, int y) {
 				scrollDown();
 				break;
 			case 3:
-				cursor = scrollbar->getValue();
+				cursor = cursor_target = static_cast<float>(scrollbar->getValue());
 				break;
 			default:
 				break;
 		}
+	}
+
+	if (cursor_target < cursor) {
+		cursor -= (static_cast<float>(pos.h * SCROLL_SPEED_SMOOTH_MOD) + (cursor - cursor_target)) / settings->max_frames_per_sec;
+		if (cursor < cursor_target)
+			cursor = cursor_target;
+	}
+	else if (cursor_target > cursor) {
+		cursor += (static_cast<float>(pos.h * SCROLL_SPEED_SMOOTH_MOD) + (cursor_target - cursor)) / settings->max_frames_per_sec;
+		if (cursor > cursor_target)
+			cursor = cursor_target;
 	}
 }
 
@@ -195,7 +220,7 @@ void WidgetScrollBox::resize(int w, int h) {
 		contents->getGraphics()->fillWithColor(bg);
 	}
 
-	cursor = 0;
+	cursor = cursor_target = 0;
 	refresh();
 }
 
@@ -224,7 +249,7 @@ void WidgetScrollBox::refresh() {
 	}
 
 	if (contents && scrollbar) {
-		scrollbar->refresh(pos.x+pos.w, pos.y, pos.h-scrollbar->pos_down.h, cursor,
+		scrollbar->refresh(pos.x+pos.w, pos.y, pos.h-scrollbar->pos_down.h, static_cast<int>(cursor_target),
 						   contents->getGraphicsHeight()-pos.h);
 	}
 }
@@ -233,7 +258,7 @@ void WidgetScrollBox::render() {
 	Rect src,dest;
 	dest = pos;
 	src.x = 0;
-	src.y = cursor;
+	src.y = static_cast<int>(cursor);
 	src.w = pos.w;
 	src.h = pos.h;
 
@@ -247,7 +272,7 @@ void WidgetScrollBox::render() {
 
 	for (unsigned i = 0; i < children.size(); i++) {
 		children[i]->local_frame = pos;
-		children[i]->local_offset.y = cursor;
+		children[i]->local_offset.y = static_cast<int>(cursor);
 		children[i]->render();
 	}
 
@@ -286,12 +311,12 @@ void WidgetScrollBox::render() {
 
 bool WidgetScrollBox::getNext() {
 	if (children.empty()) {
-		int prev_cursor = cursor;
+		int prev_cursor = static_cast<int>(cursor);
 		int bottom = contents ? contents->getGraphicsHeight() - pos.h : 0;
 
 		scrollDown();
 
-		if (cursor == bottom && prev_cursor == bottom)
+		if (static_cast<int>(cursor) == bottom && prev_cursor == bottom)
 			return false;
 
 		return true;
@@ -314,7 +339,7 @@ bool WidgetScrollBox::getNext() {
 
 	if (currentChild != -1) {
 		children[currentChild]->in_focus = true;
-		scrollTo(children[currentChild]->pos.y);
+		scrollToSmooth(children[currentChild]->pos.y);
 	}
 	else {
 		return false;
@@ -325,7 +350,7 @@ bool WidgetScrollBox::getNext() {
 
 bool WidgetScrollBox::getPrev() {
 	if (children.empty()) {
-		int prev_cursor = cursor;
+		int prev_cursor = static_cast<int>(cursor);
 
 		scrollUp();
 
@@ -351,7 +376,7 @@ bool WidgetScrollBox::getPrev() {
 
 	if (currentChild != -1) {
 		children[currentChild]->in_focus = true;
-		scrollTo(children[currentChild]->pos.y);
+		scrollToSmooth(children[currentChild]->pos.y);
 	}
 	else {
 		return false;

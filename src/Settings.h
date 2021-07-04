@@ -61,6 +61,7 @@ public:
 	void saveSettings();
 	void loadDefaults();
 	void updateScreenVars();
+	void logSettings();
 
 	// Video Settings
 	bool fullscreen;
@@ -90,6 +91,7 @@ public:
 	bool mouse_aim;
 	bool no_mouse;
 	int joy_deadzone;
+	float touch_scale;
 
 	// Interface Settings
 	bool combat_text;
@@ -165,5 +167,6 @@ private:
 	void setConfigDefault(size_t index, const std::string& name, const std::type_info *type, const std::string& default_val, void *storage, const std::string& comment);
 	size_t getConfigEntry(const std::string& name);
 	void loadMobileDefaults();
+	std::string configValueToString(const std::type_info &type, void *storage);
 };
 #endif

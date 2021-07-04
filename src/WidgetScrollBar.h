@@ -28,6 +28,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "Widget.h"
 
+class Sprite;
+
 class WidgetScrollBar : public Widget {
 private:
 
@@ -38,6 +40,13 @@ private:
 	int value;
 	int bar_height;
 	int maximum;
+	bool lock_main1;
+	bool dragging;
+
+	Sprite *bg;
+
+	Rect up_to_knob;
+	Rect knob_to_down;
 
 public:
 	static const std::string DEFAULT_FILE;

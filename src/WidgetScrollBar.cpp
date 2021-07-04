@@ -22,6 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class WidgetScrollBar
  */
 
+#include "EngineSettings.h"
 #include "InputState.h"
 #include "RenderDevice.h"
 #include "SharedResources.h"
@@ -36,6 +37,9 @@ WidgetScrollBar::WidgetScrollBar(const std::string& _fileName)
 	, value(0)
 	, bar_height(0)
 	, maximum(0)
+	, lock_main1(false)
+	, dragging(false)
+	, bg(NULL)
 	, pressed_up(false)
 	, pressed_down(false)
 	, pressed_knob(false) {
@@ -73,58 +77,71 @@ int WidgetScrollBar::checkClick() {
 int WidgetScrollBar::checkClickAt(int x, int y) {
 	Point mouse = Point(x,y);
 
-	// main ScrollBar already in use, new click not allowed
-	//if (inpt->lock[Input::MAIN1]) return 0;
+	bool in_bounds = Utils::isWithinRect(getBounds(), mouse);
+	bool in_up = Utils::isWithinRect(pos_up, mouse) || Utils::isWithinRect(up_to_knob, mouse);
+	bool in_down = Utils::isWithinRect(pos_down, mouse) || Utils::isWithinRect(knob_to_down, mouse);
+	bool in_knob = Utils::isWithinRect(pos_knob, mouse);
 
+	// detect new click
+	if (in_bounds && (!lock_main1 || dragging)) {
+		lock_main1 = false;
+		dragging = false;
+
+		if (inpt->pressing[Input::MAIN1]) {
+			inpt->lock[Input::MAIN1] = true;
+			if (in_up && !pressed_knob) {
+				pressed_up = true;
+			}
+			else if (in_down && !pressed_knob) {
+				pressed_down = true;
+			}
+			else if (in_knob && !pressed_up && !pressed_down) {
+				pressed_knob = true;
+				dragging = true;
+			}
+			else if (in_bounds && pressed_knob) {
+				dragging = true;
+			}
+		}
+	}
+	else {
+		lock_main1 = inpt->pressing[Input::MAIN1];
+	}
+
+	int ret = 0;
 	// main click released, so the ScrollBar state goes back to unpressed
-	if (pressed_up && !inpt->lock[Input::MAIN1]) {
+	if (pressed_up && !inpt->pressing[Input::MAIN1]) {
 		pressed_up = false;
-		if (Utils::isWithinRect(pos_up, mouse)) {
+		if (in_up) {
 			// activate upon release
-			return 1;
+			ret = 1;
 		}
 	}
-	if (pressed_down && !inpt->lock[Input::MAIN1]) {
+	else if (pressed_down && !inpt->pressing[Input::MAIN1]) {
 		pressed_down = false;
-		if (Utils::isWithinRect(pos_down, mouse)) {
+		if (in_down) {
 			// activate upon release
-			return 2;
+			ret = 2;
 		}
 	}
-	if (pressed_knob) {
-		if (!inpt->lock[Input::MAIN1]) {
-			pressed_knob = false;
-		}
+	else if (pressed_knob && dragging) {
 		int tmp = mouse.y - pos_up.y - pos_up.h;
 
 		if (bar_height < 1) bar_height = 1;
 		value = (tmp * maximum)/bar_height;
 		set();
 
-		return 3;
+		ret = 3;
 	}
 
-	pressed_up = false;
-	pressed_down = false;
-	pressed_knob = false;
-
-	// detect new click
-	if (inpt->pressing[Input::MAIN1]) {
-		if (Utils::isWithinRect(pos_up, mouse)) {
-			inpt->lock[Input::MAIN1] = true;
-			pressed_up = true;
-		}
-		else if (Utils::isWithinRect(pos_down, mouse)) {
-			inpt->lock[Input::MAIN1] = true;
-			pressed_down = true;
-		}
-		else if (Utils::isWithinRect(pos_knob, mouse)) {
-			inpt->lock[Input::MAIN1] = true;
-			pressed_knob = true;
-		}
-
+	if (!inpt->pressing[Input::MAIN1]) {
+		dragging = false;
+		pressed_knob = false;
+		pressed_up = false;
+		pressed_down = false;
 	}
-	return 0;
+
+	return ret;
 
 }
 
@@ -132,6 +149,13 @@ void WidgetScrollBar::set() {
 	if (maximum < 1) maximum = 1;
 	value = std::max(0, std::min(maximum, value));
 	pos_knob.y = pos_up.y + pos_up.h + (value * (bar_height - pos_up.h) / maximum);
+
+	up_to_knob.x = knob_to_down.x = pos_knob.x;
+	up_to_knob.w = knob_to_down.w = pos_knob.w;
+	up_to_knob.y = pos_up.y + pos_up.h;
+	up_to_knob.h = pos_knob.y - up_to_knob.y;
+	knob_to_down.y = pos_knob.y + pos_knob.h;
+	knob_to_down.h = pos_down.y - knob_to_down.y;
 }
 
 int WidgetScrollBar::getValue() {
@@ -166,9 +190,16 @@ void WidgetScrollBar::render() {
 	src_knob.w = pos_knob.w;
 	src_knob.h = pos_knob.h;
 
+	if (bg) {
+		bg->local_frame = local_frame;
+		bg->setOffset(local_offset);
+		bg->setDestFromRect(pos_up);
+		render_device->render(bg);
+	}
 	if (scrollbars) {
 		scrollbars->local_frame = local_frame;
 		scrollbars->setOffset(local_offset);
+
 		scrollbars->setClipFromRect(src_up);
 		scrollbars->setDestFromRect(pos_up);
 		render_device->render(scrollbars);
@@ -187,6 +218,7 @@ void WidgetScrollBar::render() {
  * Updates the scrollbar's location
  */
 void WidgetScrollBar::refresh(int x, int y, int h, int val, int max) {
+	Rect before = getBounds();
 	maximum = max;
 	value = val;
 	pos_up.x = pos_down.x = pos_knob.x = x;
@@ -194,9 +226,29 @@ void WidgetScrollBar::refresh(int x, int y, int h, int val, int max) {
 	pos_down.y = y+h;
 	bar_height = pos_down.y-(pos_up.y+pos_up.h);
 	set();
+
+	Rect after = getBounds();
+	if (before.h != after.h) {
+		// create background surface
+		if (bg) {
+			delete bg;
+			bg = NULL;
+		}
+		Image *graphics;
+		graphics = render_device->createImage(after.w,after.h);
+		if (graphics) {
+			bg = graphics->createSprite();
+			graphics->unref();
+		}
+
+		if (bg) {
+			bg->getGraphics()->fillWithColor(eset->widgets.scrollbar_bg_color);
+		}
+	}
 }
 
 WidgetScrollBar::~WidgetScrollBar() {
 	if (scrollbars) delete scrollbars;
+	if (bg) delete bg;
 }
 

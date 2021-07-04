@@ -63,7 +63,7 @@ Settings::Settings()
 	, soft_reset(false)
 	, safe_video(false)
 {
-	config.resize(43);
+	config.resize(44);
 	setConfigDefault(0,  "move_type_dimissed",  &typeid(move_type_dimissed),  "0",            &move_type_dimissed,  "One time flag for initial movement type dialog | 0 = show dialog, 1 = no dialog");
 	setConfigDefault(1,  "fullscreen",          &typeid(fullscreen),          "0",            &fullscreen,          "Fullscreen mode | 0 = disable, 1 = enable");
 	setConfigDefault(2,  "resolution_w",        &typeid(screen_w),            "640",          &screen_w,            "Window size");
@@ -107,6 +107,7 @@ Settings::Settings()
 	setConfigDefault(40, "item_compare_tips",   &typeid(item_compare_tips),   "1",            &item_compare_tips,   "Show comparison tooltips for equipped items of the same type | 0 = disable, 1 = enable");
 	setConfigDefault(41, "max_render_size",     &typeid(max_render_size),     "0",            &max_render_size,     "Overrides the maximum height (in pixels) of the internal render surface | 0 = ignore this setting");
 	setConfigDefault(42, "touch_controls",      &typeid(touchscreen),         "0",            &touchscreen,         "Enables touch screen controls | 0 = disable, 1 = enable");
+	setConfigDefault(43, "touch_scale",         &typeid(touch_scale),         "1.0",          &touch_scale,         "Factor used to scale the touch controls | 1.0 = 100 percent scale");
 }
 
 void Settings::setConfigDefault(size_t index, const std::string& name, const std::type_info *type, const std::string& default_val, void *storage, const std::string& comment) {
@@ -240,5 +241,45 @@ void Settings::updateScreenVars() {
 		else if (eset->tileset.orientation == eset->tileset.TILESET_ORTHOGONAL)
 			encounter_dist = sqrtf(powf(static_cast<float>(view_w/eset->tileset.tile_w), 2.f) + powf(static_cast<float>(view_h/eset->tileset.tile_h), 2.f)) / 2.f;
 	}
+}
+
+void Settings::logSettings() {
+	for (size_t i = 0; i < config.size(); ++i) {
+		Utils::logInfo("Settings: %s=%s", config[i].name.c_str(), configValueToString(*config[i].type, config[i].storage).c_str());
+	}
+}
+
+std::string Settings::configValueToString(const std::type_info &type, void *storage) {
+	std::stringstream stream;
+
+	if (type == typeid(bool)) {
+		stream << *(static_cast<bool*>(storage));
+	}
+	else if (type == typeid(int)) {
+		stream << *(static_cast<int*>(storage));
+	}
+	else if (type == typeid(unsigned int)) {
+		stream << *(static_cast<unsigned int*>(storage));
+	}
+	else if (type == typeid(short)) {
+		stream << *(static_cast<short*>(storage));
+	}
+	else if (type == typeid(unsigned short)) {
+		stream << *(static_cast<unsigned short*>(storage));
+	}
+	else if (type == typeid(char)) {
+		stream << *(static_cast<char*>(storage));
+	}
+	else if (type == typeid(unsigned char)) {
+		stream << *(static_cast<unsigned char*>(storage));
+	}
+	else if (type == typeid(float)) {
+		stream << *(static_cast<float*>(storage));
+	}
+	else if (type == typeid(std::string)) {
+		stream << *(static_cast<std::string*>(storage));
+	}
+
+	return stream.str();
 }
 

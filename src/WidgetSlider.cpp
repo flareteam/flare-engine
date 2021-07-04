@@ -82,9 +82,7 @@ bool WidgetSlider::checkClickAt(int x, int y) {
 
 	if (!enabled) return false;
 	Point mouse(x, y);
-	//
 	//	We are just grabbing the knob
-	//
 	if (!pressed && inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1]) {
 		if (Utils::isWithinRect(pos_knob, mouse)) {
 			pressed = true;
@@ -105,9 +103,7 @@ bool WidgetSlider::checkClickAt(int x, int y) {
 	if (inpt->lock[Input::DOWN]) return false;
 
 	if (pressed) {
-		//
 		// The knob has been released
-		//
 		// create a temporary Rect slightly wider than the slider
 		Rect tmp_pos;
 		tmp_pos.x = pos.x - (pos_knob.w*2);
@@ -115,10 +111,6 @@ bool WidgetSlider::checkClickAt(int x, int y) {
 		tmp_pos.w = pos.w + (pos_knob.w*4);
 		tmp_pos.h = pos.h;
 
-		if (!Utils::isWithinRect(tmp_pos, mouse)) {
-			pressed = false;
-			return false;
-		}
 		if (!inpt->lock[Input::MAIN1]) {
 			pressed = false;
 		}
