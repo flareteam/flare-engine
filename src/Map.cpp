@@ -42,7 +42,6 @@ Map::Map()
 	, h(1)
 	, hero_pos_enabled(false)
 	, hero_pos()
-	, tileset_fogofwar("tilesetdefs/tileset_fogofwar.txt")
 	, background_color(0,0,0,0) {
 }
 
@@ -80,6 +79,7 @@ int Map::load(const std::string& fname) {
 
 	music_filename = "";
 	parallax_filename = "";
+	tileset_fogofwar = "tilesetdefs/tileset_fogofwar.txt";
 	background_color = Color(0,0,0,0);
 
 	w = 1;
