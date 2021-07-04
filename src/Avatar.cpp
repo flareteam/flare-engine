@@ -75,7 +75,7 @@ Avatar::Avatar()
 	, prev_hp(0)
 	, playing_lowhp(false)
 	, teleport_camera_lock(false)
-	, sight(9) {
+	, sight(8) {
 
 	init();
 
@@ -1111,10 +1111,10 @@ void Avatar::updateFogOfWar() {
 	short start_y;
 	short end_x;
 	short end_y;
-	start_x = static_cast<short>(stats.pos.x-sight);
-	start_y = static_cast<short>(stats.pos.y-sight);
-	end_x = static_cast<short>(stats.pos.x+sight);
-	end_y = static_cast<short>(stats.pos.y+sight);
+	start_x = static_cast<short>(stats.pos.x-sight-2);
+	start_y = static_cast<short>(stats.pos.y-sight-2);
+	end_x = static_cast<short>(stats.pos.x+sight+2);
+	end_y = static_cast<short>(stats.pos.y+sight+2);
 
 	if (start_x < 0) start_x = 0;
 	if (start_y < 0) start_y = 0;
@@ -1129,6 +1129,9 @@ void Avatar::updateFogOfWar() {
 					float delta = Utils::calcDist(FPoint(lPoint), FPoint(stats.pos));
 					if (delta < sight) {
 						mapr->layers[li][lx][ly] = 0;
+					}
+					else if (mapr->layers[li][lx][ly] == 0) {
+						mapr->layers[li][lx][ly] = 2;
 					}
 				}
 			}
