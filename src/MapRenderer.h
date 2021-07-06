@@ -56,8 +56,7 @@ private:
 
 	void drawRenderable(std::vector<Renderable>::iterator r_cursor);
 
-	void renderIsoLayer(const Map_Layer& layerdata);
-	void renderIsoLayerFogOfWar(const Map_Layer& layerdata);	
+	void renderIsoLayer(const Map_Layer& layerdata, const TileSet& tile_set);
 
 	// renders only objects
 	void renderIsoBackObjects(std::vector<Renderable> &r);
