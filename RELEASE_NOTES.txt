@@ -125,6 +125,7 @@ Translation updates:
 * French (fr) update (leø, Christophe Nemo)
 * Scottish Gaelic (gd) update (GunChleoc)
 * Hungarian (hu) update (litoll)
+* Indonesian (id) by Kirim Saja
 * Korean (ko) by Kor_OfenTHource (team members: bnk159hair, kangdonghun1230, HunSeongPark and paparad0x)
 * Norwegian (nb) update (Elias Nykrem)
 * Polish (pl) update (Błażej Pęksyk, Grzegorz Szymaszek)
