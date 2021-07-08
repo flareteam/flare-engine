@@ -54,6 +54,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Utils.h"
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
+#include "FogOfWar.h"
 
 Avatar::Avatar()
 	: Entity()
@@ -181,7 +182,7 @@ void Avatar::handleNewMap() {
 	cursor_enemy = NULL;
 	lock_enemy = NULL;
 	playing_lowhp = false;
-	updateFogOfWar();
+	fow->update();
 }
 
 /**
@@ -589,8 +590,8 @@ void Avatar::logic() {
 					lock_enemy = cursor_enemy;
 				}
 				
-				updateFogOfWar();
-		
+				fow->update();
+
 
 				break;
 
@@ -1115,40 +1116,6 @@ bool Avatar::isLowHpCursorEnabled() {
 		settings->low_hp_warning_type == settings->LHP_WARN_TEXT_CURSOR ||
 		settings->low_hp_warning_type == settings->LHP_WARN_CURSOR_SOUND ||
 		settings->low_hp_warning_type == settings->LHP_WARN_ALL;
-}
-
-void Avatar::updateFogOfWar() {
-	short start_x;
-	short start_y;
-	short end_x;
-	short end_y;
-	start_x = static_cast<short>(stats.pos.x-sight-2);
-	start_y = static_cast<short>(stats.pos.y-sight-2);
-	end_x = static_cast<short>(stats.pos.x+sight+2);
-	end_y = static_cast<short>(stats.pos.y+sight+2);
-
-	if (start_x < 0) start_x = 0;
-	if (start_y < 0) start_y = 0;
-	if (end_x > mapr->w) end_x = mapr->w;
-	if (end_y > mapr->h) end_y = mapr->h;
-
-	for (unsigned int li = 0; li<mapr->layernames.size(); li++) {
-		if (mapr->layernames[li] == "fogofwar") {
-			for (unsigned short lx = start_x; lx < end_x; lx++) {
-				for (unsigned short ly = start_y; ly < end_y; ly++) {
-					Point lPoint(lx, ly);									
-					float delta = Utils::calcDist(FPoint(lPoint), FPoint(stats.pos));
-					if (delta < sight) {
-						mapr->layers[li][lx][ly] = 0;
-					}
-					else if (mapr->layers[li][lx][ly] == 0) {
-						mapr->layers[li][lx][ly] = 2;
-					}
-				}
-			}
-			break;
-		}
-	}	
 }
 
 Avatar::~Avatar() {

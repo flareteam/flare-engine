@@ -84,8 +84,6 @@ private:
 	Timer set_dir_timer;
 
 	bool isDroppedToLowHp();
-	
-	void updateFogOfWar();
 
 protected:
 	virtual void resetActiveAnimation();

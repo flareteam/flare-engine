@@ -30,6 +30,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EntityManager.h"
 #include "EngineSettings.h"
 #include "EventManager.h"
+#include "FogOfWar.h"
 #include "Hazard.h"
 #include "HazardManager.h"
 #include "InputState.h"
@@ -215,6 +216,9 @@ int MapRenderer::load(const std::string& fname) {
 	for (unsigned i = 0; i < layers.size(); ++i)
 		if (layernames[i] == "object")
 			index_objectlayer = i;
+	for (unsigned short i = 0; i < layers.size(); ++i)
+		if (layernames[i] == "fogofwar")			
+			fow->layer_id = i;
 
 	while (!enemy_groups.empty()) {
 		pushEnemyGroup(enemy_groups.front());

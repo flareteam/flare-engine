@@ -36,6 +36,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EntityManager.h"
 #include "EngineSettings.h"
 #include "FileParser.h"
+#include "FogOfWar.h"
 #include "GameState.h"
 #include "GameStateCutscene.h"
 #include "GameStatePlay.h"
@@ -97,6 +98,7 @@ GameStatePlay::GameStatePlay()
 
 	loot = new LootManager();
 	powers = new PowerManager();
+	fow = new FogOfWar();
 	mapr = new MapRenderer();
 	pc = new Avatar();
 	entitym = new EntityManager();
