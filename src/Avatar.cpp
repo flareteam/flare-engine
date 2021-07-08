@@ -182,7 +182,7 @@ void Avatar::handleNewMap() {
 	cursor_enemy = NULL;
 	lock_enemy = NULL;
 	playing_lowhp = false;
-	fow->update();
+	fow->logic();
 }
 
 /**
@@ -590,7 +590,7 @@ void Avatar::logic() {
 					lock_enemy = cursor_enemy;
 				}
 				
-				fow->update();
+				fow->logic();
 
 
 				break;

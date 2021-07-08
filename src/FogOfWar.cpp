@@ -34,7 +34,7 @@ FogOfWar::FogOfWar()
 	: layer_id(0) {	
 }
 
-void FogOfWar::update() {
+void FogOfWar::logic() {
 	short start_x;
 	short start_y;
 	short end_x;
