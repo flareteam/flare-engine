@@ -6,6 +6,8 @@
 # Translators:
 # Ademaro <ademaro@ya.ru>, 2018
 # Justin Jacobs <jajdorkster@gmail.com>, 2019
+# Igor Polyakov <igorpolyakov@protonmail.com>, 2021
+# David Bell <ooliterplus@gmail.com>, 2021
 # 
 #, fuzzy
 msgid ""
@@ -14,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-02 13:26-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2019\n"
+"Last-Translator: David Bell <ooliterplus@gmail.com>, 2021\n"
 "Language-Team: Russian (https://www.transifex.com/flareorg/teams/84925/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -55,7 +57,7 @@ msgstr "%d %s убрано."
 #: ../../../src/CampaignManager.cpp:171
 #, c-format
 msgid "%s x%d removed."
-msgstr ""
+msgstr "%d x%s убрано."
 
 #: ../../../src/CampaignManager.cpp:173
 #, c-format
@@ -603,7 +605,7 @@ msgstr "Продолжить"
 
 #: ../../../src/MenuConfig.cpp:258
 msgid "Save Game"
-msgstr ""
+msgstr "Сохранить Игру"
 
 #: ../../../src/MenuConfig.cpp:301 ../../../src/MenuConfig.cpp:352
 msgid "Default"
@@ -692,11 +694,11 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:322
 msgid "Cursor"
-msgstr ""
+msgstr "Курсор"
 
 #: ../../../src/MenuConfig.cpp:323
 msgid "Sound"
-msgstr ""
+msgstr "Звук"
 
 #: ../../../src/MenuConfig.cpp:329
 msgid ""
@@ -1345,11 +1347,11 @@ msgstr ""
 
 #: ../../../src/MenuMovementType.cpp:92 ../../../src/MenuMovementType.cpp:122
 msgid "Keyboard"
-msgstr ""
+msgstr "Клавиатура"
 
 #: ../../../src/MenuMovementType.cpp:93 ../../../src/MenuMovementType.cpp:128
 msgid "Mouse"
-msgstr ""
+msgstr "Мышь"
 
 #: ../../../src/MenuMovementType.cpp:129
 msgid "Button"
