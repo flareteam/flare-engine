@@ -36,7 +36,7 @@ class FogOfWar {
 public:
 	unsigned short layer_id;
 
-	void update();
+	void logic();
 
 	FogOfWar();
 	~FogOfWar();
