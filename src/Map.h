@@ -148,7 +148,6 @@ public:
 
 	std::vector<Map_Layer> layers; // visible layers in maprenderer
 	std::vector<std::string> layernames;
-	Map_Layer fogofwar;  // explored and unexplored layers
 
 	void clearEvents();
 

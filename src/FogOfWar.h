@@ -33,12 +33,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Utils.h"
 
 class FogOfWar {
-public:	
-	Map_Layer colmap;
-	Point map_size;
-	
-	void setMap(const Map_Layer& _colmap, unsigned short w, unsigned short h);
-	
+public:
+	unsigned short layer_id;
+
+	void update();
+
 	FogOfWar();
 	~FogOfWar();
 };

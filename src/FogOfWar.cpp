@@ -25,26 +25,43 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Contains logic and rendering routines for fog of war.
  */
 
+#include "Avatar.h"
 #include "FogOfWar.h"
 #include "MapRenderer.h"
+#include "SharedGameResources.h"
 
 FogOfWar::FogOfWar()
-	: map_size(Point()) {	
+	: layer_id(0) {	
 }
 
-void FogOfWar::setMap(const Map_Layer& _colmap, unsigned short w, unsigned short h) {
-	colmap.resize(w);
-	for (unsigned i=0; i<w; ++i) {
-		colmap[i].resize(h);
+void FogOfWar::update() {
+	short start_x;
+	short start_y;
+	short end_x;
+	short end_y;
+	start_x = static_cast<short>(pc->stats.pos.x-pc->sight-2);
+	start_y = static_cast<short>(pc->stats.pos.y-pc->sight-2);
+	end_x = static_cast<short>(pc->stats.pos.x+pc->sight+2);
+	end_y = static_cast<short>(pc->stats.pos.y+pc->sight+2);
+
+	if (start_x < 0) start_x = 0;
+	if (start_y < 0) start_y = 0;
+	if (end_x > mapr->w) end_x = mapr->w;
+	if (end_y > mapr->h) end_y = mapr->h;
+
+	for (unsigned short lx = start_x; lx < end_x; lx++) {
+		for (unsigned short ly = start_y; ly < end_y; ly++) {
+			Point lPoint(lx, ly);									
+			float delta = Utils::calcDist(FPoint(lPoint), FPoint(pc->stats.pos));
+			if (delta < pc->sight) {
+				mapr->layers[layer_id][lx][ly] = 0;
+			}
+			else if (mapr->layers[layer_id][lx][ly] == 0) {
+				mapr->layers[layer_id][lx][ly] = 2;
+			}
+		}
 	}
-	for (unsigned i=0; i<w; i++)
-		for (unsigned j=0; j<h; j++)
-			colmap[i][j] = _colmap[i][j];
-
-	map_size.x = w;
-	map_size.y = h;	
-
-	std::cout << "FogOfWar layer loaded" << std:: endl;	}
+}
 
 FogOfWar::~FogOfWar() {
 }

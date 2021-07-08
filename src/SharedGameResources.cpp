@@ -41,3 +41,4 @@ MenuActionBar *menu_act= NULL;
 MenuPowers *menu_powers = NULL;
 NPCManager *npcs = NULL;
 PowerManager *powers = NULL;
+FogOfWar *fow = NULL;
