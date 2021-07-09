@@ -1623,8 +1623,9 @@ void PowerManager::payPowerCost(PowerID power_index, StatBlock *src_stats) {
 				}
 			}
 		}
-		src_stats->hp -= powers[power_index].requires_hp;
-		src_stats->hp = (src_stats->hp < 0 ? 0 : src_stats->hp);
+		if (powers[power_index].requires_hp > 0) {
+			src_stats->takeDamage(powers[power_index].requires_hp, !StatBlock::TAKE_DMG_CRIT, Power::SOURCE_TYPE_NEUTRAL);
+		}
 
 		// consume corpses
 		if (powers[power_index].requires_corpse && powers[power_index].remove_corpse && src_stats->target_corpse) {

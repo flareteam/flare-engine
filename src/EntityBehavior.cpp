@@ -734,8 +734,10 @@ void EntityBehavior::updateState() {
 					instant_power = false;
 
 				e->stats.activated_power = NULL;
-				e->stats.cur_state = StatBlock::ENTITY_STANCE;
 				e->stats.prevent_interrupt = false;
+				if (e->stats.hp > 0) {
+					e->stats.cur_state = StatBlock::ENTITY_STANCE;
+				}
 			}
 			break;
 
