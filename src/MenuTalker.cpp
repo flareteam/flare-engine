@@ -191,12 +191,24 @@ void MenuTalker::logic() {
 
 	if (advanceButton->checkClick() || closeButton->checkClick()) {
 		// button was clicked
-		nextDialog();
+		if (closeButton->enabled) {
+			nextDialog();
+			setNPC(NULL);
+		}
+		else {
+			nextDialog();
+		}
 	}
 	else if	((advanceButton->enabled || closeButton->enabled) && inpt->pressing[Input::ACCEPT] && !inpt->lock[Input::ACCEPT]) {
 		// pressed next/more
 		inpt->lock[Input::ACCEPT] = true;
-		nextDialog();
+		if (closeButton->enabled) {
+			nextDialog();
+			setNPC(NULL);
+		}
+		else {
+			nextDialog();
+		}
 	}
 	else {
 		textbox->logic();
