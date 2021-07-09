@@ -97,6 +97,7 @@ Engine fixes:
 * Fix not restoring fullscreen option when pressing Cancel or Defaults in config menu.
 * Smoother scrolling in WidgetScrollBox.
 * Fix click-and-drag behavior on WidgetTabControl, WidgetSlider, and WidgetScrollBar.
+* Fix dialog topics being auto-selected when they shouldn't for non-vendor NPCs.
 
 Game updates:
 

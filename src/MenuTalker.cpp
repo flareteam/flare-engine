@@ -160,7 +160,7 @@ void MenuTalker::chooseDialogNode(int request_dialog_node) {
 		if (!npc->portraits.empty())
 			npc->npc_portrait = npc->portraits[0];
 
-		if (actions.size() == 1 && (!actions[0].is_vendor || first_interaction)) {
+		if (actions.size() == 1 && first_interaction) {
 			executeAction(0);
 		}
 		else if (actions.empty()) {
