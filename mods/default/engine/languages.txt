@@ -20,7 +20,6 @@ fr=Français
 gd=Gàidhlig
 gl=Galego
 hu=Magyar
-he=עברית
 id=Indonesian
 it=Italiano
 ja=Japanese
