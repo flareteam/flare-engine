@@ -129,6 +129,9 @@ void EntityBehavior::findTarget() {
 	// dying enemies can't target anything
 	if (e->stats.cur_state == StatBlock::ENTITY_DEAD || e->stats.cur_state == StatBlock::ENTITY_CRITDEAD) return;
 
+	// standard NPCs don't target anything
+	if (e->stats.npc && !e->stats.hero_ally) return;
+
 	// stunned enemies can't act
 	if (e->stats.effects.stun) return;
 

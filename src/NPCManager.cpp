@@ -101,6 +101,7 @@ void NPCManager::handleNewMap() {
 		npc->stats.pos.x = mn.pos.x;
 		npc->stats.pos.y = mn.pos.y;
 		npc->stats.hero_ally = false;
+		npc->stats.npc = true;
 
 		// npc->stock.sort();
 		npcs.push_back(npc);

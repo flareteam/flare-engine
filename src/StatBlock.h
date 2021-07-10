@@ -122,6 +122,7 @@ public:
 	bool hero; // else, enemy or other
 	bool hero_ally;
 	bool enemy_ally;
+	bool npc;
 	bool humanoid; // true for human, sceleton...; false for wyvern, snake...
 	bool lifeform;
 	bool permadeath;
