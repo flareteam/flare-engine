@@ -42,7 +42,7 @@ miffe
 
 Translations
 
-(be) Belarussian by Mikhail Karalevich
+(be) Belarussian by Mikhail Karalevich and Źmicier Turok
 (bg) Bulgarian by Emil
 (ca) Catalan by Marc Tormo i Bochaca and Maria Cano
 (cs) Czech by Nikita Vanku (Zaraka), hark34
