@@ -65,6 +65,8 @@ public:
 		bool keep_buyback_on_map_change;
 		std::string sfx_unable_to_cast;
 		bool combat_aborts_npc_interact;
+		bool fogofwar;
+		bool save_fogofwar;
 	};
 
 	class Resolutions {

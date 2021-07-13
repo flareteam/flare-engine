@@ -216,9 +216,11 @@ int MapRenderer::load(const std::string& fname) {
 	for (unsigned i = 0; i < layers.size(); ++i)
 		if (layernames[i] == "object")
 			index_objectlayer = i;
-	for (unsigned short i = 0; i < layers.size(); ++i)
-		if (layernames[i] == "fogofwar")			
-			fow->layer_id = i;
+	if (eset->misc.fogofwar) {
+		for (unsigned short i = 0; i < layers.size(); ++i)
+			if (layernames[i] == "fogofwar")			
+				fow->layer_id = i;
+	}
 
 	while (!enemy_groups.empty()) {
 		pushEnemyGroup(enemy_groups.front());
@@ -226,7 +228,8 @@ int MapRenderer::load(const std::string& fname) {
 	}
 
 	tset.load(this->tileset);
-	tset_fogofwar.load(this->tileset_fogofwar);
+	if (eset->misc.fogofwar)
+		fow->load();
 
 	std::vector<unsigned> corrupted;
 	for (unsigned i = 0; i < layers.size(); ++i) {
@@ -274,7 +277,8 @@ void MapRenderer::logic(bool paused) {
 
 	// handle tile set logic e.g. animations
 	tset.logic();
-	tset_fogofwar.logic();
+	if (eset->misc.fogofwar)
+		fow->tset.logic();
 
 	// TODO there's a bit too much "logic" here for a class that's supposed to be dedicated to rendering
 	// some of these timers should be moved out at some point
@@ -669,8 +673,8 @@ void MapRenderer::renderIso(std::vector<Renderable> &r, std::vector<Renderable> 
 
 	index++;
 	while (index < layers.size()) {
-		if (layernames[index] == "fogofwar") {
-			renderIsoLayer(layers[index],tset_fogofwar);
+		if (eset->misc.fogofwar && layernames[index] == "fogofwar") {
+			renderIsoLayer(layers[index],fow->tset);
 			map_parallax.render(cam.shake, layernames[index]);
 		}
 		else {

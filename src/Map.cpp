@@ -78,7 +78,6 @@ int Map::load(const std::string& fname) {
 
 	music_filename = "";
 	parallax_filename = "";
-	tileset_fogofwar = "tilesetdefs/tileset_fogofwar.txt";
 	background_color = Color(0,0,0,0);
 
 	w = 1;

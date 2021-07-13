@@ -30,13 +30,17 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "MapCollision.h"
+#include "TileSet.h"
 #include "Utils.h"
 
 class FogOfWar {
 public:
-	unsigned short layer_id;
+	unsigned short layer_id;	
+	std::string tileset;
+	TileSet tset;
 
 	void logic();
+	int load();
 
 	FogOfWar();
 	~FogOfWar();

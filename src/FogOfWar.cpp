@@ -31,9 +31,15 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedGameResources.h"
 
 FogOfWar::FogOfWar()
-	: layer_id(0) {	
+	: layer_id(0)
+	, tileset("tilesetdefs/tileset_fogofwar.txt") {	
 }
 
+int FogOfWar::load() {
+	tset.load(tileset);
+
+	return 0;
+}
 void FogOfWar::logic() {
 	short start_x;
 	short start_y;

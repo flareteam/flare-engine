@@ -182,7 +182,8 @@ void Avatar::handleNewMap() {
 	cursor_enemy = NULL;
 	lock_enemy = NULL;
 	playing_lowhp = false;
-	fow->logic();
+	if (eset->misc.fogofwar)
+		fow->logic();
 }
 
 /**
@@ -590,7 +591,8 @@ void Avatar::logic() {
 					lock_enemy = cursor_enemy;
 				}
 				
-				fow->logic();
+				if (eset->misc.fogofwar)
+					fow->logic();
 
 
 				break;
