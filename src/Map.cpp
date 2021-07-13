@@ -25,9 +25,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EventManager.h"
 #include "FileParser.h"
 #include "Map.h"
+#include "MapRenderer.h"
 #include "MessageEngine.h"
 #include "ModManager.h"
 #include "PowerManager.h"
+#include "SaveLoad.h"
+#include "Settings.h"
 #include "SharedResources.h"
 #include "SharedGameResources.h"
 #include "StatBlock.h"
@@ -71,7 +74,7 @@ void Map::removeLayer(unsigned index) {
 
 int Map::load(const std::string& fname) {
 	FileParser infile;
-
+	std::cout << "LOADING MAP " << fname << std::endl;
 	clearEvents();
 	clearLayers();
 	clearQueues();
@@ -140,12 +143,27 @@ int Map::load(const std::string& fname) {
 	}
 
 	// ensure that our map contains a fog of war layer
-	if (std::find(layernames.begin(), layernames.end(), "fogofwar") == layernames.end()) {		
-		layernames.push_back("fogofwar");
-		layers.resize(layers.size()+1);
-		layers.back().resize(w);
-		for (size_t i=0; i<layers.back().size(); ++i) {
-			layers.back()[i].resize(h, 1);
+	if (eset->misc.fogofwar) {
+		if (eset->misc.save_fogofwar) {
+			std::stringstream ss;
+			ss.str("");
+			ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/" << save_load->getGameSlot() << "/" << mapr->getFilename();
+			if (infile.open(ss.str(), !FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
+				while (infile.next()) {
+					if (infile.section == "layer") {
+						loadLayer(infile);
+					}
+				}
+				infile.close();
+			}
+		}
+		if (std::find(layernames.begin(), layernames.end(), "fogofwar") == layernames.end()) {
+			layernames.push_back("fogofwar");
+			layers.resize(layers.size()+1);
+			layers.back().resize(w);
+			for (size_t i=0; i<layers.back().size(); ++i) {
+				layers.back()[i].resize(h, 1);
+			}
 		}
 	}
 

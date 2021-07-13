@@ -259,10 +259,12 @@ void SaveLoad::saveGame() {
 			outfile << "data=" << std::endl;
 
 			std::string layer = "";
-			for (int line = 0; line < mapr->h; line++)		{
+			for (int line = 0; line < mapr->h; line++) {
 				std::stringstream map_row;
-				for (int tile = 0; tile < mapr->w; tile++)			{
-					map_row << mapr->layers[fow->layer_id][tile][line] << ",";
+				for (int tile = 0; tile < mapr->w; tile++) {
+					unsigned short val = mapr->layers[fow->layer_id][tile][line];
+					if (val == 0) val = 2;
+					map_row << val << ",";
 				}
 				layer += map_row.str();
 				layer += '\n';
