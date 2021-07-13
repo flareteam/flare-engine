@@ -307,6 +307,8 @@ void GameStatePlay::checkTeleport() {
 			pc->stats.pos.x = pc->stats.teleport_destination.x;
 			pc->stats.pos.y = pc->stats.teleport_destination.y;
 		}
+		
+		fow->logic();
 
 		// if we're not changing map, move allies to a the player's new position
 		// when changing maps, entitym->handleNewMap() does something similar to this
@@ -329,6 +331,7 @@ void GameStatePlay::checkTeleport() {
 			inpt->lock_all = (teleport_mapname == "maps/spawn.txt");
 			mapr->executeOnMapExitEvents();
 			showLoading();
+			save_load->saveGame();
 			mapr->load(teleport_mapname);
 			setLoadingFrame();
 
