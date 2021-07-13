@@ -84,7 +84,6 @@ private:
 	void checkHiddenEntities(const int_fast16_t x, const int_fast16_t y, const Map_Layer& layerdata, std::vector<Renderable> &r);
 
 	TileSet tset;
-	TileSet tset_fogofwar;
 
 	MapParallax map_parallax;
 
