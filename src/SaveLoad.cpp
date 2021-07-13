@@ -33,6 +33,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "EngineSettings.h"
 #include "FileParser.h"
+#include "FogOfWar.h"
 #include "GameStatePlay.h"
 #include "MapRenderer.h"
 #include "Menu.h"
@@ -237,6 +238,41 @@ void SaveLoad::saveGame() {
 			outfile << std::endl;
 
 			if (outfile.bad()) Utils::logError("SaveLoad: Unable to save stash. No write access or disk is full!");
+			outfile.close();
+			outfile.clear();
+
+			platform.FSCommit();
+		}
+	}
+	
+	// Save fow
+	if (eset->misc.fogofwar && eset->misc.save_fogofwar) {
+		ss.str("");
+		ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/" << game_slot << "/" << mapr->getFilename();
+
+		outfile.open(Filesystem::convertSlashes(ss.str()).c_str(), std::ios::out);
+		
+		if (outfile.is_open()) {
+			outfile << "[layer]" << std::endl;
+
+			outfile << "type=" << mapr->layernames[fow->layer_id] << std::endl;
+			outfile << "data=" << std::endl;
+
+			std::string layer = "";
+			for (int line = 0; line < mapr->h; line++)		{
+				std::stringstream map_row;
+				for (int tile = 0; tile < mapr->w; tile++)			{
+					map_row << mapr->layers[fow->layer_id][tile][line] << ",";
+				}
+				layer += map_row.str();
+				layer += '\n';
+			}
+			layer.erase(layer.end()-2, layer.end());
+			layer += '\n';
+
+			outfile << layer << std::endl;
+			
+			if (outfile.bad()) Utils::logError("SaveLoad: Unable to save map data. No write access or disk is full!");
 			outfile.close();
 			outfile.clear();
 
@@ -555,4 +591,3 @@ void SaveLoad::loadPowerTree() {
 	// fall back to the default power tree
 	menu->pow->loadPowerTree("powers/trees/default.txt");
 }
-
