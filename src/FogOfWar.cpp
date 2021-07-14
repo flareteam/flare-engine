@@ -41,10 +41,16 @@ int FogOfWar::load() {
 	return 0;
 }
 void FogOfWar::logic() {
-	short start_x;
-	short start_y;
-	short end_x;
-	short end_y;
+	calcBoundaries();
+	updateTiles(0);
+}
+
+void FogOfWar::handleIntramapTeleport() {
+	calcBoundaries();
+	updateTiles(2);
+}
+
+void FogOfWar::calcBoundaries() {
 	start_x = static_cast<short>(pc->stats.pos.x-pc->sight-2);
 	start_y = static_cast<short>(pc->stats.pos.y-pc->sight-2);
 	end_x = static_cast<short>(pc->stats.pos.x+pc->sight+2);
@@ -54,13 +60,15 @@ void FogOfWar::logic() {
 	if (start_y < 0) start_y = 0;
 	if (end_x > mapr->w) end_x = mapr->w;
 	if (end_y > mapr->h) end_y = mapr->h;
+}
 
+void FogOfWar::updateTiles(unsigned short sight_tile) {
 	for (unsigned short lx = start_x; lx < end_x; lx++) {
 		for (unsigned short ly = start_y; ly < end_y; ly++) {
 			Point lPoint(lx, ly);									
 			float delta = Utils::calcDist(FPoint(lPoint), FPoint(pc->stats.pos));
 			if (delta < pc->sight) {
-				mapr->layers[layer_id][lx][ly] = 0;
+				mapr->layers[layer_id][lx][ly] = sight_tile;
 			}
 			else if (mapr->layers[layer_id][lx][ly] == 0) {
 				mapr->layers[layer_id][lx][ly] = 2;

@@ -38,12 +38,23 @@ public:
 	unsigned short layer_id;	
 	std::string tileset;
 	TileSet tset;
+	bool isSet;
 
 	void logic();
 	int load();
+	void handleIntramapTeleport();
 
 	FogOfWar();
 	~FogOfWar();
+	
+private:
+	short start_x;
+	short start_y;
+	short end_x;
+	short end_y;
+	
+	void calcBoundaries();
+	void updateTiles(unsigned short sight_tile);
 };
 
 #endif

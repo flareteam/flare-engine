@@ -294,6 +294,10 @@ void GameStatePlay::checkTeleport() {
 	// both map events and player powers can cause teleportation
 	if (mapr->teleportation || pc->stats.teleportation) {
 
+		if (eset->misc.fogofwar)
+			if(fow->layer_id != 0)
+				fow->handleIntramapTeleport();
+
 		mapr->collider.unblock(pc->stats.pos.x, pc->stats.pos.y);
 
 		if (mapr->teleportation) {
@@ -307,8 +311,6 @@ void GameStatePlay::checkTeleport() {
 			pc->stats.pos.x = pc->stats.teleport_destination.x;
 			pc->stats.pos.y = pc->stats.teleport_destination.y;
 		}
-		
-		fow->logic();
 
 		// if we're not changing map, move allies to a the player's new position
 		// when changing maps, entitym->handleNewMap() does something similar to this
@@ -393,6 +395,9 @@ void GameStatePlay::checkTeleport() {
 		}
 
 		mapr->collider.block(pc->stats.pos.x, pc->stats.pos.y, !MapCollision::IS_ALLY);
+
+		if (eset->misc.fogofwar)
+			fow->logic();
 
 		pc->stats.teleportation = false;
 	}
