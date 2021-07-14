@@ -101,10 +101,13 @@ void NPCManager::handleNewMap() {
 		npc->stats.pos.x = mn.pos.x;
 		npc->stats.pos.y = mn.pos.y;
 		npc->stats.hero_ally = false;
+		npc->stats.npc = true;
 
 		// npc->stock.sort();
 		npcs.push_back(npc);
 		createMapEvent(*npc, npcs.size());
+		if (!mapr->collider.isEmpty(npc->stats.pos.x, npc->stats.pos.y))
+			Utils::logInfo("NPC: Collision tile detected at NPC position (%.2f, %.2f).", npc->stats.pos.x, npc->stats.pos.y);
 	}
 
 	FPoint spawn_pos = mapr->collider.getRandomNeighbor(Point(pc->stats.pos), 1, !MapCollision::IGNORE_BLOCKED);

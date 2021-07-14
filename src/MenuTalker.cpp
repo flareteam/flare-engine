@@ -160,7 +160,7 @@ void MenuTalker::chooseDialogNode(int request_dialog_node) {
 		if (!npc->portraits.empty())
 			npc->npc_portrait = npc->portraits[0];
 
-		if (actions.size() == 1 && (!actions[0].is_vendor || first_interaction)) {
+		if (actions.size() == 1 && first_interaction) {
 			executeAction(0);
 		}
 		else if (actions.empty()) {
@@ -191,12 +191,24 @@ void MenuTalker::logic() {
 
 	if (advanceButton->checkClick() || closeButton->checkClick()) {
 		// button was clicked
-		nextDialog();
+		if (closeButton->enabled) {
+			nextDialog();
+			setNPC(NULL);
+		}
+		else {
+			nextDialog();
+		}
 	}
 	else if	((advanceButton->enabled || closeButton->enabled) && inpt->pressing[Input::ACCEPT] && !inpt->lock[Input::ACCEPT]) {
 		// pressed next/more
 		inpt->lock[Input::ACCEPT] = true;
-		nextDialog();
+		if (closeButton->enabled) {
+			nextDialog();
+			setNPC(NULL);
+		}
+		else {
+			nextDialog();
+		}
 	}
 	else {
 		textbox->logic();

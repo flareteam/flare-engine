@@ -97,6 +97,7 @@ Engine fixes:
 * Fix not restoring fullscreen option when pressing Cancel or Defaults in config menu.
 * Smoother scrolling in WidgetScrollBox.
 * Fix click-and-drag behavior on WidgetTabControl, WidgetSlider, and WidgetScrollBar.
+* Fix dialog topics being auto-selected when they shouldn't for non-vendor NPCs.
 
 Game updates:
 
@@ -117,18 +118,20 @@ Game updates:
 
 Translation updates:
 
-* Belarusian (be) update (Zmicer Turok)
+* Belarusian (be) update (Źmicier Turok)
 * Catalan (ca) update (Maria Cano)
 * German (de) update (Wuzzy2)
 * Spanish (es) update (Agustin Ferrario)
 * Basque (eu) by aitzkora
-* French (fr) update (leø, Christophe Nemo)
+* French (fr) update (leø, Christophe Nemo, Bafy)
 * Scottish Gaelic (gd) update (GunChleoc)
 * Hungarian (hu) update (litoll)
+* Indonesian (id) by Kirim Saja
 * Korean (ko) by Kor_OfenTHource (team members: bnk159hair, kangdonghun1230, HunSeongPark and paparad0x)
 * Norwegian (nb) update (Elias Nykrem)
 * Polish (pl) update (Błażej Pęksyk, Grzegorz Szymaszek)
 * Portuguese (pt) update (Rui)
+* Portuguese (Brazilian) (pt_BR) update (Vicente Monteiro)
 * Russian (ru) update (Igor Polyakov)
 * Slovak (sk) update (MiroslavR)
 * Ukranian (uk) update (Sergiy Borodych)
