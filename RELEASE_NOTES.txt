@@ -123,7 +123,7 @@ Translation updates:
 * German (de) update (Wuzzy2)
 * Spanish (es) update (Agustin Ferrario)
 * Basque (eu) by aitzkora
-* French (fr) update (leø, Christophe Nemo)
+* French (fr) update (leø, Christophe Nemo, Bafy)
 * Scottish Gaelic (gd) update (GunChleoc)
 * Hungarian (hu) update (litoll)
 * Indonesian (id) by Kirim Saja

@@ -59,6 +59,7 @@ text=Adrian Chaves Fernandez
 text=Andrea Ranaldi
 text=Andreas Berheim Brudin
 text=Andrey Kapitonov
+text=Bafy
 text=Bas Doodeman
 text=Błażej Pęksyk
 text=Bonbadil
