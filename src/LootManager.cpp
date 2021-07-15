@@ -132,6 +132,13 @@ void LootManager::renderTooltips(const FPoint& cam) {
 		it->tip_visible = false;
 
 		if (it->on_ground) {
+			if (eset->misc.fogofwar) {
+				float delta = Utils::calcDist(pc->stats.pos, it->pos);
+				if (delta > pc->sight) {
+					break;
+				}
+			}
+
 			Point p = Utils::mapToScreen(it->pos.x, it->pos.y, cam.x, cam.y);
 			if (!Utils::isWithinRect(screen_rect, p)) {
 				++it;
@@ -501,6 +508,13 @@ ItemStack LootManager::checkNearestPickup(const FPoint& hero_pos) {
 void LootManager::addRenders(std::vector<Renderable> &ren, std::vector<Renderable> &ren_dead) {
 	std::vector<Loot>::iterator it;
 	for (it = loot.begin(); it != loot.end(); ++it) {
+		if (eset->misc.fogofwar) {
+			float delta = Utils::calcDist(pc->stats.pos, it->pos);
+			if (delta > pc->sight) {
+				continue;
+			}
+		}
+
 		if (it->animation) {
 			Renderable r = it->animation->getCurrentFrame(0);
 			r.map_pos.x = it->pos.x;
