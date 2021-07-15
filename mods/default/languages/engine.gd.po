@@ -719,7 +719,7 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:347
 msgid "The maximum frame rate that the game will be allowed to run at."
-msgstr ""
+msgstr "Seo an reat fhrèamaichean as motha air an ruith an geama."
 
 #: ../../../src/MenuConfig.cpp:351
 msgid ""
@@ -727,6 +727,10 @@ msgid ""
 "the game. Mods define the allowed render sizes, but this option allows "
 "overriding the maximum size."
 msgstr ""
+"Tha meud an reandaraidh a’ ciallachadh àirde an uachdair ann am piogsailean "
+"air an dèid an geama a tharraing. Mìnichidh tuilleadain meudan an "
+"reandaraidh a tha ceadaichte ach leigidh an roghainn seo leat am meud as "
+"motha a thar-àithneadh."
 
 #: ../../../src/MenuConfig.cpp:374 ../../../src/MenuConfig.cpp:1679
 #: ../../../src/MenuGameOver.cpp:116
@@ -803,11 +807,11 @@ msgstr "Gamma"
 
 #: ../../../src/MenuConfig.cpp:410
 msgid "Maximum Render Size"
-msgstr ""
+msgstr "Meud as motha an reandaraidh"
 
 #: ../../../src/MenuConfig.cpp:411
 msgid "Frame Limit"
-msgstr ""
+msgstr "Cuingeachadh nam frèama"
 
 #: ../../../src/MenuConfig.cpp:413
 msgid "Sound Volume"
@@ -912,11 +916,11 @@ msgstr "Marbh-sòn an joystick"
 
 #: ../../../src/MenuConfig.cpp:441
 msgid "Touch Controls"
-msgstr ""
+msgstr "Stiùireadh le suathadh"
 
 #: ../../../src/MenuConfig.cpp:442
 msgid "Touch Gamepad Scaling"
-msgstr ""
+msgstr "Sgèileadh pada-geama suathaidh"
 
 #: ../../../src/MenuConfig.cpp:452
 #, c-format
@@ -1063,6 +1067,9 @@ msgid ""
 "When enabled, a virtual gamepad will be added in-game. Other interactions, "
 "such as drag-and-drop behavior, are also altered to better suit touch input."
 msgstr ""
+"Nuair a bhios seo an comas, chì thu pada-geama biortail sa gheama. Thèid "
+"eadar-ghnìomhan eile, can giùlan an t-slaodaidh is leigeil às, atharrachadh "
+"cuideachd airson an t-ion-chur le suathadh a dhèanamh nas fhasa."
 
 #: ../../../src/MenuConfig.cpp:621
 msgid "Active Mods"
