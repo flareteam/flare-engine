@@ -486,33 +486,43 @@ void EntityManager::spawn(const std::string& entity_type, const Point& target) {
 void EntityManager::addRenders(std::vector<Renderable> &r, std::vector<Renderable> &r_dead) {
 	std::vector<Entity*>::iterator it;
 	for (it = entities.begin(); it != entities.end(); ++it) {
-		bool dead = (*it)->stats.corpse;
-		if (!dead || !(*it)->stats.corpse_timer.isEnd()) {
-			Renderable re = (*it)->getRender();
-			re.prio = 1;
-			(*it)->stats.effects.getCurrentColor(re.color_mod);
-			(*it)->stats.effects.getCurrentAlpha(re.alpha_mod);
-
-			// fade out corpses
-			unsigned fade_time = (eset->misc.corpse_timeout > settings->max_frames_per_sec) ? settings->max_frames_per_sec : eset->misc.corpse_timeout;
-			if (dead && fade_time != 0 && (*it)->stats.corpse_timer.getCurrent() <= fade_time) {
-				re.alpha_mod = static_cast<uint8_t>(static_cast<float>((*it)->stats.corpse_timer.getCurrent()) * (re.alpha_mod / static_cast<float>(fade_time)));
+		bool skip = false;
+		if (eset->misc.fogofwar) {
+			float delta = Utils::calcDist(pc->stats.pos, (*it)->stats.pos);
+			if (delta > pc->sight) {
+				skip = true;
 			}
+		}
 
-			// draw corpses below objects so that floor loot is more visible
-			(dead ? r_dead : r).push_back(re);
+		if (!skip) {
+			bool dead = (*it)->stats.corpse;
+			if (!dead || !(*it)->stats.corpse_timer.isEnd()) {
+				Renderable re = (*it)->getRender();
+				re.prio = 1;
+				(*it)->stats.effects.getCurrentColor(re.color_mod);
+				(*it)->stats.effects.getCurrentAlpha(re.alpha_mod);
 
-			// add effects
-			for (size_t i = 0; i < (*it)->stats.effects.effect_list.size(); ++i) {
-				Effect& ei = (*it)->stats.effects.effect_list[i];
-				if (ei.animation) {
-					Renderable ren = ei.animation->getCurrentFrame(0);
-					ren.map_pos = (*it)->stats.pos;
-					if (ei.render_above)
-						ren.prio = 2;
-					else
-						ren.prio = 0;
-					r.push_back(ren);
+				// fade out corpses
+				unsigned fade_time = (eset->misc.corpse_timeout > settings->max_frames_per_sec) ? settings->max_frames_per_sec : eset->misc.corpse_timeout;
+				if (dead && fade_time != 0 && (*it)->stats.corpse_timer.getCurrent() <= fade_time) {
+					re.alpha_mod = static_cast<uint8_t>(static_cast<float>((*it)->stats.corpse_timer.getCurrent()) * (re.alpha_mod / static_cast<float>(fade_time)));
+				}
+
+				// draw corpses below objects so that floor loot is more visible
+				(dead ? r_dead : r).push_back(re);
+
+				// add effects
+				for (size_t i = 0; i < (*it)->stats.effects.effect_list.size(); ++i) {
+					Effect& ei = (*it)->stats.effects.effect_list[i];
+					if (ei.animation) {
+						Renderable ren = ei.animation->getCurrentFrame(0);
+						ren.map_pos = (*it)->stats.pos;
+						if (ei.render_above)
+							ren.prio = 2;
+						else
+							ren.prio = 0;
+						r.push_back(ren);
+					}
 				}
 			}
 		}
