@@ -150,23 +150,17 @@ void Animation::setup(unsigned short _frames, unsigned short _duration, unsigned
 	render_offset.resize(i);
 }
 
-void Animation::addFrame(unsigned short index, unsigned short kind, const Rect& rect, const Point& _render_offset, const std::string& key) {
-
-	if (index >= gfx.size()/max_kinds) {
-		Utils::logError("Animation: Animation(%s) adding rect(%d, %d, %d, %d) to frame index(%u) out of bounds. must be in [0, %d]",
-				name.c_str(), rect.x, rect.y, rect.w, rect.h, index, static_cast<int>(gfx.size())/max_kinds);
-		return;
-	}
-	if (kind > max_kinds-1) {
-		Utils::logError("Animation: Animation(%s) adding rect(%d, %d, %d, %d) to frame(%u) kind(%u) out of bounds. must be in [0, %d]",
-				name.c_str(), rect.x, rect.y, rect.w, rect.h, index, kind, max_kinds-1);
-		return;
+bool Animation::addFrame(unsigned short index, unsigned short kind, const Rect& rect, const Point& _render_offset, const std::string& key) {
+	if (index >= gfx.size()/max_kinds || kind > max_kinds-1) {
+		return false;
 	}
 
 	unsigned i = max_kinds*index+kind;
 	gfx[i].first = sprite->getImageFromKey(key);
 	gfx[i].second = rect;
 	render_offset[i] = _render_offset;
+
+	return true;
 }
 
 void Animation::advanceFrame() {
