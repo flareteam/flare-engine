@@ -719,7 +719,7 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:347
 msgid "The maximum frame rate that the game will be allowed to run at."
-msgstr "Seo an reat fhrèamaichean as motha air an ruith an geama."
+msgstr "Seo an reat fhrèaman as motha air an ruith an geama."
 
 #: ../../../src/MenuConfig.cpp:351
 msgid ""
