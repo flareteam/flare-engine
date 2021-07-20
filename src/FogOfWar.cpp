@@ -28,6 +28,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Avatar.h"
 #include "FogOfWar.h"
 #include "MapRenderer.h"
+#include "Menu.h"
+#include "MenuManager.h"
+#include "MenuMiniMap.h"
 #include "SharedGameResources.h"
 
 FogOfWar::FogOfWar()
@@ -43,11 +46,13 @@ int FogOfWar::load() {
 void FogOfWar::logic() {
 	calcBoundaries();
 	updateTiles(0);
+	menu->mini->prerender(&mapr->collider, mapr->w, mapr->h);
 }
 
 void FogOfWar::handleIntramapTeleport() {
 	calcBoundaries();
 	updateTiles(2);
+	menu->mini->prerender(&mapr->collider, mapr->w, mapr->h);
 }
 
 void FogOfWar::calcBoundaries() {
