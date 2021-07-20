@@ -303,9 +303,6 @@ void MenuMiniMap::renderMapSurface(const FPoint& hero_pos) {
 	}
 
 	if (target_surface_entities) {
-		if (eset->misc.fogofwar)
-			prerender(&mapr->collider, mapr->w, mapr->h);
-
 		if (eset->tileset.orientation == eset->tileset.TILESET_ISOMETRIC) {
 			renderEntitiesIso(target_surface_entities, current_zoom);
 		}

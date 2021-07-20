@@ -43,6 +43,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuGameOver.h"
 #include "MenuManager.h"
 #include "MessageEngine.h"
+#include "MenuMiniMap.h"
 #include "ModManager.h"
 #include "PowerManager.h"
 #include "RenderDevice.h"
@@ -580,9 +581,11 @@ void Avatar::logic() {
 					stats.cur_state = StatBlock::ENTITY_STANCE;
 					lock_enemy = cursor_enemy;
 				}
-				
-				if (eset->misc.fogofwar)
+
+				if (eset->misc.fogofwar) {
 					fow->logic();
+					menu->mini->prerender(&mapr->collider, mapr->w, mapr->h);
+				}
 
 
 				break;
