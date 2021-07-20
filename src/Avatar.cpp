@@ -582,11 +582,8 @@ void Avatar::logic() {
 					lock_enemy = cursor_enemy;
 				}
 
-				if (eset->misc.fogofwar) {
+				if (eset->misc.fogofwar) 
 					fow->logic();
-					menu->mini->prerender(&mapr->collider, mapr->w, mapr->h);
-				}
-
 
 				break;
 
