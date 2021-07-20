@@ -29,6 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EntityManager.h"
 #include "EngineSettings.h"
 #include "FileParser.h"
+#include "FogOfWar.h"
 #include "FontEngine.h"
 #include "InputState.h"
 #include "MapCollision.h"
@@ -302,6 +303,9 @@ void MenuMiniMap::renderMapSurface(const FPoint& hero_pos) {
 	}
 
 	if (target_surface_entities) {
+		if (eset->misc.fogofwar)
+			prerender(&mapr->collider, mapr->w, mapr->h);
+
 		if (eset->tileset.orientation == eset->tileset.TILESET_ISOMETRIC) {
 			renderEntitiesIso(target_surface_entities, current_zoom);
 		}
@@ -394,6 +398,10 @@ void MenuMiniMap::prerenderIso(MapCollision *collider, Sprite** tile_surface, Sp
 				if (tile_type == 1 || tile_type == 5) draw_color = color_wall;
 				else if (tile_type == 2 || tile_type == 6) draw_color = color_obst;
 				else draw_tile = false;
+
+				if (eset->misc.fogofwar)
+					if (mapr->layers[fow->layer_id][tile_cursor.x][tile_cursor.y] == 1)
+						draw_tile = false;
 
 				if (draw_tile && draw_color.a != 0) {
 					if (odd_row) {
