@@ -1,0 +1,2 @@
+description=Isometric fow assets.
+game=flare-game
