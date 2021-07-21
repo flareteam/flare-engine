@@ -3,15 +3,15 @@
 # 
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # Translators:
-# Zmicer Turok <nashtlumach@gmail.com>, 2018
+# Źmicier Turok <nashtlumach@gmail.com>, 2021
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-29 09:34+\n"
+"POT-Creation-Date: 2021-07-02 13:26+\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: Zmicer Turok <nashtlumach@gmail.com>, 2018\n"
+"Last-Translator: Źmicier Turok <nashtlumach@gmail.com>, 2021\n"
 "Language-Team: Belarusian (https://www.transifex.com/flareorg/teams/84925/be/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -95,30 +95,30 @@ msgstr "Вядучыя праграмісты"
 msgid "Programmers"
 msgstr "Праграмісты"
 
-#: ../cutscenes/credits.txt:44
+#: ../cutscenes/credits.txt:49
 msgid "Default Art"
 msgstr "Графіка"
 
-#: ../cutscenes/credits.txt:49
+#: ../cutscenes/credits.txt:54
 msgid "Translators"
 msgstr "Перакладчыкі"
 
-#: ../cutscenes/credits.txt:108
+#: ../cutscenes/credits.txt:119
 msgid "Distributors"
 msgstr "Распаўсюджвальнікі"
 
-#: ../cutscenes/credits.txt:117
+#: ../cutscenes/credits.txt:128
 msgid "Special Thanks"
 msgstr "Шчырыя падзякі"
 
-#: ../cutscenes/credits.txt:121
+#: ../cutscenes/credits.txt:132
 msgid "For giving constant feedback and testing:"
 msgstr "За шматлікія водгукі і тэставанне:"
 
-#: ../cutscenes/credits.txt:123
+#: ../cutscenes/credits.txt:134
 msgid "The community at OpenGameArt"
 msgstr "Суполка OpenGameArt"
 
-#: ../cutscenes/credits.txt:127
+#: ../cutscenes/credits.txt:138
 msgid "For Tiled and the Flare map exporter:"
-msgstr "За Tiled і экспарт мапаў Flare:"
+msgstr "За кампанаванне і экспарт мапаў Flare:"

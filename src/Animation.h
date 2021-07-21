@@ -102,7 +102,7 @@ public:
 	void setup(unsigned short _frames, unsigned short _duration, unsigned short _maxkinds = 8);
 
 	// kind can be used for direction(enemies, hero) or randomness(powers)
-	void addFrame(unsigned short index, unsigned short kind, const Rect& rect, const Point& _render_offset, const std::string &key);
+	bool addFrame(unsigned short index, unsigned short kind, const Rect& rect, const Point& _render_offset, const std::string &key);
 
 	// advance the animation one frame
 	void advanceFrame();

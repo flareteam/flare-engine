@@ -209,7 +209,9 @@ void AnimationSet::load() {
 				offset.x = Parse::popFirstInt(parser.val);
 				offset.y = Parse::popFirstInt(parser.val);
 				std::string key = parser.val;
-				newanim->addFrame(index, direction, r, offset, key);
+				if (!newanim->addFrame(index, direction, r, offset, key)) {
+					parser.error("AnimationSet: Frame index (%u) is out of bounds [0, %hu].", index, frames);
+				}
 			}
 			else {
 				parser.error("AnimationSet: '%s' is not a valid key.", parser.key.c_str());
