@@ -48,6 +48,12 @@ NPCManager::NPCManager()
 
 void NPCManager::addRenders(std::vector<Renderable> &r) {
 	for (unsigned i=0; i<npcs.size(); i++) {
+		if (eset->misc.fogofwar != FogOfWar::TYPE_NONE) {
+			float delta = Utils::calcDist(pc->stats.pos, npcs[i]->stats.pos);
+			if (delta > pc->sight) {
+				continue;
+			}
+		}
 		r.push_back(npcs[i]->getRender());
 	}
 }

@@ -74,7 +74,7 @@ void EngineSettings::Misc::load() {
 	keep_buyback_on_map_change = true;
 	sfx_unable_to_cast = "";
 	combat_aborts_npc_interact = true;
-	fogofwar = true;
+	fogofwar = 2;
 	save_fogofwar = false;
 
 	FileParser infile;
@@ -171,9 +171,9 @@ void EngineSettings::Misc::load() {
 			// @ATTR combat_aborts_npc_interact|bool|If true, the NPC dialog and vendor menus will be closed if the player is attacked.
 			else if (infile.key == "combat_aborts_npc_interact")
 				combat_aborts_npc_interact = Parse::toBool(infile.val);
-			// @ATTR fogofwar|bool|If true, enables rendering of fog of war layer.
+			// @ATTR fogofwar|int|0-disabled, 1-tint 2-overlay
 			else if (infile.key == "fogofwar")
-				fogofwar = Parse::toBool(infile.val);
+				fogofwar = Parse::toInt(infile.val);
 			// @ATTR fogofwar|bool|If true, the fog of war layer keeps track of the progress.
 			else if (infile.key == "save_fogofwar")
 				save_fogofwar = Parse::toBool(infile.val);

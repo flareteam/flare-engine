@@ -35,24 +35,36 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class FogOfWar {
 public:
-	unsigned short layer_id;	
+	enum {
+		TYPE_NONE = 0;
+		TYPE_TINT = 1;
+		TYPE_OVERLAY = 2;
+	}
+
+	unsigned short layer_id;
 	std::string tileset;
 	TileSet tset;
-	bool isSet;
 
 	void logic();
 	int load();
 	void handleIntramapTeleport();
+	Color getTileColorMod(const int_fast16_t x, const int_fast16_t y);
 
 	FogOfWar();
 	~FogOfWar();
-	
+
 private:
 	short start_x;
 	short start_y;
 	short end_x;
 	short end_y;
-	
+
+	Color color_sight;
+	Color color_visited;
+	Color color_hidden;
+
+	bool update_minimap;
+
 	void calcBoundaries();
 	void updateTiles(unsigned short sight_tile);
 };
