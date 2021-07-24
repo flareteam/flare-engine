@@ -30,6 +30,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EntityManager.h"
 #include "EngineSettings.h"
 #include "EventManager.h"
+#include "FogOfWar.h"
 #include "ItemManager.h"
 #include "MapRenderer.h"
 #include "NPC.h"

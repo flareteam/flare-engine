@@ -279,7 +279,7 @@ void MapRenderer::logic(bool paused) {
 
 	// handle tile set logic e.g. animations
 	tset.logic();
-	if (eset->misc.fogofwar = FogOfWar::TYPE_OVERLAY)
+	if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY)
 		fow->tset.logic();
 
 	// TODO there's a bit too much "logic" here for a class that's supposed to be dedicated to rendering
@@ -687,7 +687,7 @@ void MapRenderer::renderIso(std::vector<Renderable> &r, std::vector<Renderable> 
 
 	index++;
 	while (index < layers.size()) {
-		if (eset->misc.fogofwar != FogOfWar::TYPE_NONE && layernames[index] == "fogofwar") {
+		if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY && layernames[index] == "fogofwar") {
 			renderIsoLayer(layers[index],fow->tset);
 			map_parallax.render(cam.shake, layernames[index]);
 		}

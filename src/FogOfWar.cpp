@@ -35,18 +35,18 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 FogOfWar::FogOfWar()
 	: layer_id(0)
+	, tileset("tilesetdefs/tileset_fogofwar.txt")
 	, color_sight(255,255,255)
 	, color_visited(128,128,128)
 	, color_hidden(0,0,0)
-	, tileset("tilesetdefs/tileset_fogofwar.txt")
 	, update_minimap(true) {
 }
 
 int FogOfWar::load() {
 	tset.load(tileset);
-
 	return 0;
 }
+
 void FogOfWar::logic() {
 	calcBoundaries();
 	updateTiles(0);

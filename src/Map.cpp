@@ -74,7 +74,6 @@ void Map::removeLayer(unsigned index) {
 
 int Map::load(const std::string& fname) {
 	FileParser infile;
-	std::cout << "LOADING MAP " << fname << std::endl;
 	clearEvents();
 	clearLayers();
 	clearQueues();

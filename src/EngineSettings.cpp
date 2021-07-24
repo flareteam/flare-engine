@@ -173,7 +173,7 @@ void EngineSettings::Misc::load() {
 				combat_aborts_npc_interact = Parse::toBool(infile.val);
 			// @ATTR fogofwar|int|0-disabled, 1-tint 2-overlay
 			else if (infile.key == "fogofwar")
-				fogofwar = Parse::toInt(infile.val);
+				fogofwar = static_cast<unsigned short>(Parse::toInt(infile.val));
 			// @ATTR fogofwar|bool|If true, the fog of war layer keeps track of the progress.
 			else if (infile.key == "save_fogofwar")
 				save_fogofwar = Parse::toBool(infile.val);

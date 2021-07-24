@@ -36,10 +36,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class FogOfWar {
 public:
 	enum {
-		TYPE_NONE = 0;
-		TYPE_TINT = 1;
-		TYPE_OVERLAY = 2;
-	}
+		TYPE_NONE = 0,
+		TYPE_TINT = 1,
+		TYPE_OVERLAY = 2
+	};
 
 	unsigned short layer_id;
 	std::string tileset;
