@@ -216,9 +216,9 @@ int MapRenderer::load(const std::string& fname) {
 	for (unsigned i = 0; i < layers.size(); ++i)
 		if (layernames[i] == "object")
 			index_objectlayer = i;
-	if (eset->misc.fogofwar) {
+	if (eset->misc.fogofwar != FogOfWar::TYPE_NONE) {
 		for (unsigned short i = 0; i < layers.size(); ++i)
-			if (layernames[i] == "fogofwar")			
+			if (layernames[i] == "fogofwar")
 				fow->layer_id = i;
 	}
 
@@ -228,7 +228,7 @@ int MapRenderer::load(const std::string& fname) {
 	}
 
 	tset.load(this->tileset);
-	if (eset->misc.fogofwar)
+	if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY)
 		fow->load();
 
 	std::vector<unsigned> corrupted;
@@ -277,7 +277,7 @@ void MapRenderer::logic(bool paused) {
 
 	// handle tile set logic e.g. animations
 	tset.logic();
-	if (eset->misc.fogofwar)
+	if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY)
 		fow->tset.logic();
 
 	// TODO there's a bit too much "logic" here for a class that's supposed to be dedicated to rendering
@@ -424,6 +424,9 @@ void MapRenderer::renderIsoLayer(const Map_Layer& layerdata, const TileSet& tile
 				// no need to set w and h in dest, as it is ignored
 				// by SDL_BlitSurface
 				tile.tile->setDestFromPoint(dest);
+				if (eset->misc.fogofwar == FogOfWar::TYPE_TINT) {
+					tile.tile->color_mod = fow->getTileColorMod(i, j);
+				}
 				render_device->render(tile.tile);
 			}
 		}
@@ -521,6 +524,9 @@ void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 					dest.y = p.y - tile.offset.y;
 					tile.tile->setDestFromPoint(dest);
 					checkHiddenEntities(i, j, current_layer, r);
+					if (eset->misc.fogofwar == FogOfWar::TYPE_TINT) {
+						tile.tile->color_mod = fow->getTileColorMod(i, j);
+					}
 					render_device->render(tile.tile);
 					drawn_tiles[i][j] = 1;
 				}
@@ -603,6 +609,9 @@ do_last_NE_tile:
 					dest.y = tile_SW_center.y - tile.offset.y;
 					tile.tile->setDestFromPoint(dest);
 					checkHiddenEntities(i, j, current_layer, r);
+					if (eset->misc.fogofwar == FogOfWar::TYPE_TINT) {
+						tile.tile->color_mod = fow->getTileColorMod(i, j);
+					}
 					render_device->render(tile.tile);
 					drawn_tiles[i-2][j+2] = 1;
 				}
@@ -621,6 +630,9 @@ do_last_NE_tile:
 					dest.y = tile_NE_center.y - tile.offset.y;
 					tile.tile->setDestFromPoint(dest);
 					checkHiddenEntities(i, j, current_layer, r);
+					if (eset->misc.fogofwar == FogOfWar::TYPE_TINT) {
+						tile.tile->color_mod = fow->getTileColorMod(i, j);
+					}
 					render_device->render(tile.tile);
 					drawn_tiles[i][j] = 1;
 				}
@@ -673,7 +685,7 @@ void MapRenderer::renderIso(std::vector<Renderable> &r, std::vector<Renderable> 
 
 	index++;
 	while (index < layers.size()) {
-		if (eset->misc.fogofwar && layernames[index] == "fogofwar") {
+		if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY && layernames[index] == "fogofwar") {
 			renderIsoLayer(layers[index],fow->tset);
 			map_parallax.render(cam.shake, layernames[index]);
 		}
@@ -713,6 +725,9 @@ void MapRenderer::renderOrthoLayer(const Map_Layer& layerdata) {
 				dest.x = p.x - tile.offset.x;
 				dest.y = p.y - tile.offset.y;
 				tile.tile->setDestFromPoint(dest);
+				if (eset->misc.fogofwar == FogOfWar::TYPE_TINT) {
+					tile.tile->color_mod = fow->getTileColorMod(i, j);
+				}
 				render_device->render(tile.tile);
 			}
 			p.x += eset->tileset.tile_w;
@@ -759,6 +774,9 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 				dest.y = p.y - tile.offset.y;
 				tile.tile->setDestFromPoint(dest);
 				checkHiddenEntities(i, j, layers[index_objectlayer], r);
+				if (eset->misc.fogofwar == FogOfWar::TYPE_TINT) {
+					tile.tile->color_mod = fow->getTileColorMod(i, j);
+				}
 				render_device->render(tile.tile);
 			}
 			p.x += eset->tileset.tile_w;

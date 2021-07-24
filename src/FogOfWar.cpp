@@ -35,24 +35,43 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 FogOfWar::FogOfWar()
 	: layer_id(0)
-	, tileset("tilesetdefs/tileset_fogofwar.txt") {	
+	, tileset("tilesetdefs/tileset_fogofwar.txt")
+	, color_sight(255,255,255)
+	, color_visited(128,128,128)
+	, color_hidden(0,0,0)
+	, update_minimap(true) {
 }
 
 int FogOfWar::load() {
 	tset.load(tileset);
-
 	return 0;
 }
+
 void FogOfWar::logic() {
 	calcBoundaries();
 	updateTiles(0);
-	menu->mini->prerender(&mapr->collider, mapr->w, mapr->h);
+	if (update_minimap) {
+		menu->mini->prerender(&mapr->collider, mapr->w, mapr->h);
+		update_minimap = false;
+	}
 }
 
 void FogOfWar::handleIntramapTeleport() {
 	calcBoundaries();
 	updateTiles(2);
-	menu->mini->prerender(&mapr->collider, mapr->w, mapr->h);
+	if (update_minimap) {
+		menu->mini->prerender(&mapr->collider, mapr->w, mapr->h);
+		update_minimap = false;
+	}
+}
+
+Color FogOfWar::getTileColorMod(const int_fast16_t x, const int_fast16_t y) {
+	if (mapr->layers[layer_id][x][y] == 2)
+		return color_visited;
+	else if (mapr->layers[layer_id][x][y] == 1)
+		return color_hidden;
+	else
+		return color_sight;
 }
 
 void FogOfWar::calcBoundaries() {
@@ -70,13 +89,17 @@ void FogOfWar::calcBoundaries() {
 void FogOfWar::updateTiles(unsigned short sight_tile) {
 	for (unsigned short lx = start_x; lx < end_x; lx++) {
 		for (unsigned short ly = start_y; ly < end_y; ly++) {
-			Point lPoint(lx, ly);									
+			Point lPoint(lx, ly);
 			float delta = Utils::calcDist(FPoint(lPoint), FPoint(pc->stats.pos));
+			unsigned short prev_tile = mapr->layers[layer_id][lx][ly];
 			if (delta < pc->sight) {
 				mapr->layers[layer_id][lx][ly] = sight_tile;
 			}
 			else if (mapr->layers[layer_id][lx][ly] == 0) {
 				mapr->layers[layer_id][lx][ly] = 2;
+			}
+			if (prev_tile == 1 && prev_tile != mapr->layers[layer_id][lx][ly]) {
+				update_minimap = true;
 			}
 		}
 	}
