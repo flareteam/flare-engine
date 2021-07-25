@@ -37,8 +37,9 @@ class FogOfWar {
 public:
 	enum {
 		TYPE_NONE = 0,
-		TYPE_TINT = 1,
-		TYPE_OVERLAY = 2
+		TYPE_MINIMAP = 1,
+		TYPE_TINT = 2,
+		TYPE_OVERLAY = 3,
 	};
 
 	unsigned short layer_id;

@@ -218,7 +218,7 @@ int MapRenderer::load(const std::string& fname) {
 	for (unsigned i = 0; i < layers.size(); ++i)
 		if (layernames[i] == "object")
 			index_objectlayer = i;
-	if (eset->misc.fogofwar != FogOfWar::TYPE_NONE) {
+	if (eset->misc.fogofwar) {
 		for (unsigned short i = 0; i < layers.size(); ++i)
 			if (layernames[i] == "fogofwar")
 				fow->layer_id = i;
