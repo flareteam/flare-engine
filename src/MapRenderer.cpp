@@ -419,6 +419,7 @@ void MapRenderer::renderIsoLayer(const Map_Layer& layerdata, const TileSet& tile
 			++i;
 			++tiles_width;
 			p.x += eset->tileset.tile_w;
+
 			if (const uint_fast16_t current_tile = layerdata[i][j]) {
 				const Tile_Def &tile = tile_set.tiles[current_tile];
 				dest.x = p.x - tile.offset.x;
