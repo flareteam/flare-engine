@@ -587,6 +587,12 @@ void MenuMiniMap::fillEntities() {
 			continue;
 
 		if (mapr->events[i].getComponent(EventComponent::NPC_HOTSPOT) && EventManager::isActive(mapr->events[i])) {
+			if (eset->misc.fogofwar) {
+				float delta = Utils::calcDist(pc->stats.pos, mapr->events[i].center);
+				if (delta > pc->sight) {
+					continue;
+				}
+			}
 			entities[mapr->events[i].location.x][mapr->events[i].location.y] = TILE_NPC;
 		}
 		else if ((mapr->events[i].activate_type == Event::ACTIVATE_ON_TRIGGER || mapr->events[i].activate_type == Event::ACTIVATE_ON_INTERACT) && mapr->events[i].getComponent(EventComponent::INTERMAP) && EventManager::isActive(mapr->events[i])) {
@@ -594,6 +600,11 @@ void MenuMiniMap::fillEntities() {
 			Point event_pos(mapr->events[i].location.x, mapr->events[i].location.y);
 			for (int j=event_pos.x; j<event_pos.x + mapr->events[i].location.w; ++j) {
 				for (int k=event_pos.y; k<event_pos.y + mapr->events[i].location.h; ++k) {
+					if (eset->misc.fogofwar) {
+						if (mapr->layers[fow->layer_id][event_pos.x][event_pos.y] == 1) {
+							continue;
+						}
+					}
 					entities[j][k] = TILE_TELEPORT;
 				}
 			}
@@ -603,6 +614,12 @@ void MenuMiniMap::fillEntities() {
 	for (size_t i=0; i<entitym->entities.size(); ++i) {
 		Entity *e = entitym->entities[i];
 		if (e->stats.hp > 0) {
+			if (eset->misc.fogofwar) {
+				float delta = Utils::calcDist(pc->stats.pos, e->stats.pos);
+				if (delta > pc->sight) {
+					continue;
+				}
+			}
 			if (e->stats.hero_ally) {
 				entities[static_cast<int>(e->stats.pos.x)][static_cast<int>(e->stats.pos.y)] = TILE_ALLY;
 			}
