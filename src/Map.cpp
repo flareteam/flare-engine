@@ -74,6 +74,7 @@ void Map::removeLayer(unsigned index) {
 
 int Map::load(const std::string& fname) {
 	FileParser infile;
+
 	clearEvents();
 	clearLayers();
 	clearQueues();
@@ -263,9 +264,8 @@ void Map::loadLayer(FileParser &infile) {
 				Utils::Exit(1);
 			}
 
-			for (int i=0; i<w; i++){
+			for (int i=0; i<w; i++)
 				layers.back()[i][j] = static_cast<unsigned short>(Parse::popFirstInt(val));
-			}
 		}
 	}
 	else {
