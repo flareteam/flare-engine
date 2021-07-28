@@ -51,7 +51,7 @@ void FogOfWar::logic() {
 	calcBoundaries();
 	updateTiles(0);
 	if (update_minimap) {
-		menu->mini->prerender(&mapr->collider, mapr->w, mapr->h);
+		menu->mini->update(&mapr->collider);
 		update_minimap = false;
 	}
 }
@@ -60,7 +60,7 @@ void FogOfWar::handleIntramapTeleport() {
 	calcBoundaries();
 	updateTiles(2);
 	if (update_minimap) {
-		menu->mini->prerender(&mapr->collider, mapr->w, mapr->h);
+		menu->mini->update(&mapr->collider);
 		update_minimap = false;
 	}
 }
