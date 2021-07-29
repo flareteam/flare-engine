@@ -2,12 +2,16 @@
 # This file is distributed under the same license as the FLARE package.
 # 
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Translators:
+# Kirim Saja <kirim.aja1111@gmail.com>, 2021
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-23 20:34+\n"
+"POT-Creation-Date: 2021-07-02 13:26+\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
+"Last-Translator: Kirim Saja <kirim.aja1111@gmail.com>, 2021\n"
 "Language-Team: Indonesian (https://www.transifex.com/flareorg/teams/84925/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,104 +21,110 @@ msgstr ""
 
 #: ../engine/primary_stats.txt:3
 msgid "Physical"
-msgstr ""
+msgstr "Fisik"
 
 #: ../engine/primary_stats.txt:7
 msgid "Mental"
-msgstr ""
+msgstr "Mental"
 
 #: ../engine/primary_stats.txt:11
 msgid "Offense"
-msgstr ""
+msgstr "Penyerangan"
 
 #: ../engine/primary_stats.txt:15
 msgid "Defense"
-msgstr ""
+msgstr "Pertahanan"
 
 #: ../engine/damage_types.txt:3
 msgid "Melee Damage"
-msgstr ""
+msgstr "Damage Jarak Dekat"
 
 #: ../engine/damage_types.txt:4
 msgid "Increases the damage done with swords and other melee weapons."
 msgstr ""
+"Meningkatkan damage yang dilakukan dengan pedang dan senjata jarak dekat "
+"lainnya."
 
 #: ../engine/damage_types.txt:5
 msgid "Melee Damage Min"
-msgstr ""
+msgstr "Damage Minimal Jarak Dekat"
 
 #: ../engine/damage_types.txt:6
 msgid "Melee Damage Max"
-msgstr ""
+msgstr "Damage Maksimal Jarak Dekat"
 
 #: ../engine/damage_types.txt:12
 msgid "Ranged Damage"
-msgstr ""
+msgstr "Damage Jarak Jauh"
 
 #: ../engine/damage_types.txt:13
 msgid "Increases the damage done with bows and other ranged weapons."
 msgstr ""
+"Meningkatkan damage yang dilakukan dengan busur dan senjata jarak jauh "
+"lainnya."
 
 #: ../engine/damage_types.txt:14
 msgid "Ranged Damage Min"
-msgstr ""
+msgstr "Damage Minimal Jarak Jauh"
 
 #: ../engine/damage_types.txt:15
 msgid "Ranged Damage Max"
-msgstr ""
+msgstr "Damage Maksimal Jarak Jauh"
 
 #: ../engine/damage_types.txt:21
 msgid "Mental Damage"
-msgstr ""
+msgstr "Damage Mental"
 
 #: ../engine/damage_types.txt:22
 msgid "Increases the damage done with staves and other mental weapons."
 msgstr ""
+"Meningkatkan damage yang dilakukan dengan tongkat dan senjata mental "
+"lainnya."
 
 #: ../engine/damage_types.txt:23
 msgid "Mental Damage Min"
-msgstr ""
+msgstr "Damage Minimal Mental"
 
 #: ../engine/damage_types.txt:24
 msgid "Mental Damage Max"
-msgstr ""
+msgstr "Damage Maksimal Mental"
 
 #: ../cutscenes/credits.txt:7
 msgid "Flare Engine Credits"
-msgstr ""
+msgstr "Kredit Flare Engine"
 
 #: ../cutscenes/credits.txt:10
 msgid "Lead Programmers"
-msgstr ""
+msgstr "Pemimpin Programmer"
 
 #: ../cutscenes/credits.txt:20
 msgid "Programmers"
-msgstr ""
+msgstr "Programmer"
 
 #: ../cutscenes/credits.txt:49
 msgid "Default Art"
-msgstr ""
+msgstr "Seni Default"
 
 #: ../cutscenes/credits.txt:54
 msgid "Translators"
-msgstr ""
+msgstr "Penerjemah"
 
-#: ../cutscenes/credits.txt:118
+#: ../cutscenes/credits.txt:119
 msgid "Distributors"
-msgstr ""
+msgstr "Distributor"
 
-#: ../cutscenes/credits.txt:127
+#: ../cutscenes/credits.txt:128
 msgid "Special Thanks"
-msgstr ""
+msgstr "Terima Kasih Khusus"
 
-#: ../cutscenes/credits.txt:131
+#: ../cutscenes/credits.txt:132
 msgid "For giving constant feedback and testing:"
-msgstr ""
+msgstr "Untuk memberikan umpan balik dan pengujian yang konstan:"
 
-#: ../cutscenes/credits.txt:133
+#: ../cutscenes/credits.txt:134
 msgid "The community at OpenGameArt"
-msgstr ""
+msgstr "Komunitas di OpenGameArt"
 
-#: ../cutscenes/credits.txt:137
+#: ../cutscenes/credits.txt:138
 msgid "For Tiled and the Flare map exporter:"
-msgstr ""
+msgstr "Untuk Tiled dan eksportir peta Flare:"

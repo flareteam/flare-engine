@@ -54,6 +54,7 @@ Translations
 (gd) Scottish Gaelic by GunChleoc
 (gl) Galacian by Adrian Chaves Fernandez (Gallaecio)
 (hu) Hungarian by bzt
+(id) Indonesian by Kirim Saja
 (it) Italian by Giovanni Dalla Torre, Gianfranco Del Borrello, Stefano Peris, Andrea Ranaldi, MOB2, and Fabio Loli
 (ko) Korean by bnk159hair
 (ja) Japanese by Paul Wortmann, sujiniku
