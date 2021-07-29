@@ -36,6 +36,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 FogOfWar::FogOfWar()
 	: layer_id(0)
 	, tileset("tilesetdefs/tileset_fogofwar.txt")
+	, bounds(0,0,0,0)
 	, color_sight(255,255,255)
 	, color_visited(128,128,128)
 	, color_hidden(0,0,0)
@@ -51,7 +52,7 @@ void FogOfWar::logic() {
 	calcBoundaries();
 	updateTiles(0);
 	if (update_minimap) {
-		menu->mini->update(&mapr->collider);
+		menu->mini->update(&mapr->collider, &bounds);
 		update_minimap = false;
 	}
 }
@@ -60,7 +61,7 @@ void FogOfWar::handleIntramapTeleport() {
 	calcBoundaries();
 	updateTiles(2);
 	if (update_minimap) {
-		menu->mini->update(&mapr->collider);
+		menu->mini->update(&mapr->collider, &bounds);
 		update_minimap = false;
 	}
 }
@@ -75,30 +76,30 @@ Color FogOfWar::getTileColorMod(const int_fast16_t x, const int_fast16_t y) {
 }
 
 void FogOfWar::calcBoundaries() {
-	start_x = static_cast<short>(pc->stats.pos.x-pc->sight-2);
-	start_y = static_cast<short>(pc->stats.pos.y-pc->sight-2);
-	end_x = static_cast<short>(pc->stats.pos.x+pc->sight+2);
-	end_y = static_cast<short>(pc->stats.pos.y+pc->sight+2);
+	bounds.x = static_cast<short>(pc->stats.pos.x-pc->sight-2);
+	bounds.y = static_cast<short>(pc->stats.pos.y-pc->sight-2);
+	bounds.w = static_cast<short>(pc->stats.pos.x+pc->sight+2);
+	bounds.h = static_cast<short>(pc->stats.pos.y+pc->sight+2);
 
-	if (start_x < 0) start_x = 0;
-	if (start_y < 0) start_y = 0;
-	if (end_x > mapr->w) end_x = mapr->w;
-	if (end_y > mapr->h) end_y = mapr->h;
+	if (bounds.x < 0) bounds.x = 0;
+	if (bounds.y < 0) bounds.y = 0;
+	if (bounds.w > mapr->w) bounds.w = mapr->w;
+	if (bounds.h > mapr->h) bounds.h = mapr->h;
 }
 
 void FogOfWar::updateTiles(unsigned short sight_tile) {
-	for (unsigned short lx = start_x; lx < end_x; lx++) {
-		for (unsigned short ly = start_y; ly < end_y; ly++) {
-			Point lPoint(lx, ly);
-			float delta = Utils::calcDist(FPoint(lPoint), FPoint(pc->stats.pos));
-			unsigned short prev_tile = mapr->layers[layer_id][lx][ly];
+	for (int x = bounds.x; x < bounds.w; x++) {
+		for (int y = bounds.y; y < bounds.h; y++) {
+			Point tile(x, y);
+			float delta = Utils::calcDist(FPoint(tile), FPoint(pc->stats.pos));
+			unsigned short prev_tile = mapr->layers[layer_id][x][y];
 			if (delta < pc->sight) {
-				mapr->layers[layer_id][lx][ly] = sight_tile;
+				mapr->layers[layer_id][x][y] = sight_tile;
 			}
-			else if (mapr->layers[layer_id][lx][ly] == 0) {
-				mapr->layers[layer_id][lx][ly] = 2;
+			else if (mapr->layers[layer_id][x][y] == 0) {
+				mapr->layers[layer_id][x][y] = 2;
 			}
-			if (prev_tile == 1 && prev_tile != mapr->layers[layer_id][lx][ly]) {
+			if (prev_tile == 1 && prev_tile != mapr->layers[layer_id][x][y]) {
 				update_minimap = true;
 			}
 		}

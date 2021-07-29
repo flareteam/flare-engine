@@ -266,15 +266,15 @@ void MenuMiniMap::prerender(MapCollision *collider, int map_w, int map_h) {
 		prerenderOrtho(collider, &map_surface_2x, &map_surface_entities_2x, 2);
 	}
 }
-void MenuMiniMap::update(MapCollision *collider) {
+void MenuMiniMap::update(MapCollision *collider, Rect *bounds) {
 	if (eset->tileset.orientation == eset->tileset.TILESET_ISOMETRIC) {
-		updateIso(collider, &map_surface, 1);
-		updateIso(collider, &map_surface_2x, 2);
+		updateIso(collider, &map_surface, 1, bounds);
+		updateIso(collider, &map_surface_2x, 2, bounds);
 	}
 	else {
 		// eset->tileset.TILESET_ORTHOGONAL
-		//updateOrtho(collider, &map_surface, &map_surface_entities, 1);
-		//updateOrtho(collider, &map_surface_2x, &map_surface_entities_2x, 2);
+		updateOrtho(collider, &map_surface, 1, bounds);
+		updateOrtho(collider, &map_surface_2x, 2, bounds);
 	}
 }
 
@@ -353,6 +353,46 @@ void MenuMiniMap::prerenderOrtho(MapCollision *collider, Sprite** tile_surface, 
 			if (tile_type == 1 || tile_type == 5) draw_color = color_wall;
 			else if (tile_type == 2 || tile_type == 6) draw_color = color_obst;
 			else draw_tile = false;
+
+			if (eset->misc.fogofwar) {
+				tile_type = mapr->layers[fow->layer_id][i][j];
+				if (tile_type == 1) draw_tile = false;
+			}
+
+			if (draw_tile && draw_color.a != 0) {
+				for (int l = 0; l < zoom; l++) {
+					for (int k =0; k < zoom; k++) {
+						target_img->drawPixel((zoom*i)+k, (zoom*j)+l, draw_color);
+					}
+				}
+			}
+		}
+	}
+
+	target_img->endPixelBatch();
+}
+void MenuMiniMap::updateOrtho(MapCollision *collider, Sprite** tile_surface, int zoom, Rect *bounds) {
+
+	if (!(*tile_surface))
+		return;
+
+	Image* target_img = (*tile_surface)->getGraphics();
+
+	Color draw_color;
+
+	target_img->beginPixelBatch();
+
+	for (int i=bounds->x; i<=bounds->w; i++) {
+		for (int j=bounds->y; j<=bounds->h; j++) {
+			bool draw_tile = true;
+			int tile_type = collider->colmap[i][j];
+
+			if (tile_type == 1 || tile_type == 5) draw_color = color_wall;
+			else if (tile_type == 2 || tile_type == 6) draw_color = color_obst;
+			else draw_tile = false;
+
+			tile_type = mapr->layers[fow->layer_id][i][j];
+			if (tile_type != 0) draw_tile = false;
 
 			if (draw_tile && draw_color.a != 0) {
 				for (int l = 0; l < zoom; l++) {
@@ -452,7 +492,7 @@ void MenuMiniMap::prerenderIso(MapCollision *collider, Sprite** tile_surface, Sp
 	target_img->endPixelBatch();
 }
 
-void MenuMiniMap::updateIso(MapCollision *collider, Sprite** tile_surface, int zoom) {
+void MenuMiniMap::updateIso(MapCollision *collider, Sprite** tile_surface, int zoom, Rect *bounds) {
 		
 	if (!(*tile_surface))
 		return;
@@ -480,7 +520,7 @@ void MenuMiniMap::updateIso(MapCollision *collider, Sprite** tile_surface, int z
 		for (int i=0; i<target_w; i+=2) {
 
 			// if this tile is the max map size
-			if (tile_cursor.x >= 0 && tile_cursor.y >= 0 && tile_cursor.x < map_size.x && tile_cursor.y < map_size.y) {
+			if (tile_cursor.x >= bounds->x && tile_cursor.y >= bounds->y && tile_cursor.x < bounds->w && tile_cursor.y < bounds->h) {
 
 				tile_type = collider->colmap[tile_cursor.x][tile_cursor.y];
 				bool draw_tile = true;

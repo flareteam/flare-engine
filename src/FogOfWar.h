@@ -55,10 +55,7 @@ public:
 	~FogOfWar();
 
 private:
-	short start_x;
-	short start_y;
-	short end_x;
-	short end_y;
+	Rect bounds;
 
 	Color color_sight;
 	Color color_visited;

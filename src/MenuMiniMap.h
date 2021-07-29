@@ -71,7 +71,8 @@ private:
 	void renderMapSurface(const FPoint& hero_pos);
 	void prerenderOrtho(MapCollision *collider, Sprite** tile_surface, Sprite** entity_surface, int zoom);
 	void prerenderIso(MapCollision *collider, Sprite** tile_surface, Sprite** entity_surface, int zoom);
-	void updateIso(MapCollision *collider, Sprite** tile_surface, int zoom);
+	void updateIso(MapCollision *collider, Sprite** tile_surface, int zoom, Rect *bounds);
+	void updateOrtho(MapCollision *collider, Sprite** tile_surface, int zoom, Rect *bounds);
 	void renderEntitiesOrtho(Sprite* entity_surface, int zoom);
 	void renderEntitiesIso(Sprite* entity_surface, int zoom);
 	void clearEntities();
@@ -88,7 +89,7 @@ public:
 	void render(const FPoint& hero_pos);
 	void prerender(MapCollision *collider, int map_w, int map_h);
 	void setMapTitle(const std::string& map_title);
-	void update(MapCollision *collider);
+	void update(MapCollision *collider, Rect *bounds);
 
 	bool clicked_config;
 };

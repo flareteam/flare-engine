@@ -75,7 +75,7 @@ void EngineSettings::Misc::load() {
 	sfx_unable_to_cast = "";
 	combat_aborts_npc_interact = true;
 	fogofwar = 2;
-	save_fogofwar = false;
+	save_fogofwar = true;
 
 	FileParser infile;
 	// @CLASS EngineSettings: Misc|Description of engine/misc.txt
