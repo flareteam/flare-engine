@@ -1290,12 +1290,12 @@ msgstr "Hilang %d%% dari total XP."
 #: ../../../src/MenuInventory.cpp:190
 #, c-format
 msgid "Lost %d%% of current level XP."
-msgstr ""
+msgstr "Hilang %d%% dari level XP saat ini."
 
 #: ../../../src/MenuInventory.cpp:216
 #, c-format
 msgid "Lost %s."
-msgstr ""
+msgstr "Hilang %s."
 
 #: ../../../src/MenuInventory.cpp:258 ../../../src/MenuStash.cpp:276
 #, c-format
@@ -1304,36 +1304,36 @@ msgstr "%d %s"
 
 #: ../../../src/MenuInventory.cpp:301
 msgid "Pick up item(s):"
-msgstr ""
+msgstr "Mengambil item(s):"
 
 #: ../../../src/MenuInventory.cpp:302
 msgid "Use or equip item:"
-msgstr ""
+msgstr "Gunakan atau lengkapi item:"
 
 #: ../../../src/MenuInventory.cpp:303
 #, c-format
 msgid "%s modifiers"
-msgstr ""
+msgstr "%s pengubah"
 
 #: ../../../src/MenuInventory.cpp:304
 msgid "Select a quantity of item:"
-msgstr ""
+msgstr "Pilih jumlah item:"
 
 #: ../../../src/MenuInventory.cpp:307
 msgid "Stash item stack:"
-msgstr ""
+msgstr "Penyimpanan tumpukan item:"
 
 #: ../../../src/MenuInventory.cpp:309
 msgid "Sell item stack:"
-msgstr ""
+msgstr "Jual item tumpukan:"
 
 #: ../../../src/MenuInventory.cpp:576
 msgid "You don't have enough of the required item."
-msgstr ""
+msgstr "Anda tidak cukup memiliki dari item yang diperlukan."
 
 #: ../../../src/MenuInventory.cpp:588
 msgid "You can't use this item right now."
-msgstr ""
+msgstr "Kamu tidak bisa menggunakan item ini saat ini."
 
 #: ../../../src/MenuInventory.cpp:600
 msgid "This item can only be used from the action bar."
@@ -1341,24 +1341,24 @@ msgstr "Item ini hanya bisa digunakan dari action bar"
 
 #: ../../../src/MenuInventory.cpp:718
 msgid "Inventory is full."
-msgstr ""
+msgstr "Inventaris Penuh."
 
 #: ../../../src/MenuInventory.cpp:843
 #, c-format
 msgid "Not enough %s."
-msgstr ""
+msgstr "Tidak cukup %s."
 
 #: ../../../src/MenuInventory.cpp:863 ../../../src/MenuInventory.cpp:870
 msgid "This item can not be sold."
-msgstr ""
+msgstr "Item ini tidak bisa dijual."
 
 #: ../../../src/MenuLog.cpp:91
 msgid "Notes"
-msgstr ""
+msgstr "Catatan."
 
 #: ../../../src/MenuLog.cpp:92
 msgid "Quests"
-msgstr ""
+msgstr "Pencarian"
 
 #: ../../../src/MenuManager.cpp:305
 #, c-format
@@ -1367,15 +1367,15 @@ msgstr "XP: %d/%d"
 
 #: ../../../src/MenuManager.cpp:875
 msgid "This item can not be dropped."
-msgstr ""
+msgstr "Item ini tidak bisa dijatuhkan."
 
 #: ../../../src/MenuManager.cpp:1501
 msgid "Equipped"
-msgstr ""
+msgstr "Diperlengkapi"
 
 #: ../../../src/MenuMovementType.cpp:87
 msgid "Select a Movement Type"
-msgstr ""
+msgstr "Pilih Tipe Pergerakan"
 
 #: ../../../src/MenuMovementType.cpp:89
 msgid "Can be changed later in the Configuration menu."
@@ -1383,242 +1383,242 @@ msgstr "Dapat diubah nanti di menu Konfigurasi."
 
 #: ../../../src/MenuMovementType.cpp:92 ../../../src/MenuMovementType.cpp:122
 msgid "Keyboard"
-msgstr ""
+msgstr "Keyboard"
 
 #: ../../../src/MenuMovementType.cpp:93 ../../../src/MenuMovementType.cpp:128
 msgid "Mouse"
-msgstr ""
+msgstr "Mouse"
 
 #: ../../../src/MenuMovementType.cpp:129
 msgid "Button"
-msgstr ""
+msgstr "Tombol"
 
 #: ../../../src/MenuNumPicker.cpp:59
 msgid "Enter amount:"
-msgstr ""
+msgstr "Masukan jumlah:"
 
 #: ../../../src/MenuPowers.cpp:894
 msgid "Passive"
-msgstr ""
+msgstr "Pasif"
 
 #: ../../../src/MenuPowers.cpp:901
 #, c-format
 msgid "Costs %d MP"
-msgstr ""
+msgstr "Biaya %d MP"
 
 #: ../../../src/MenuPowers.cpp:905
 #, c-format
 msgid "Costs %d HP"
-msgstr ""
+msgstr "Biaya %d HP"
 
 #: ../../../src/MenuPowers.cpp:909
 msgid "Cooldown:"
-msgstr ""
+msgstr "Cooldown:"
 
 #: ../../../src/MenuPowers.cpp:960 ../../../src/MenuPowers.cpp:963
 msgid "Damage per second"
-msgstr ""
+msgstr "Damage per detik"
 
 #: ../../../src/MenuPowers.cpp:966 ../../../src/MenuPowers.cpp:969
 msgid "HP per second"
-msgstr ""
+msgstr "HP per detik"
 
 #: ../../../src/MenuPowers.cpp:972 ../../../src/MenuPowers.cpp:975
 msgid "MP per second"
-msgstr ""
+msgstr "MP per detik"
 
 #: ../../../src/MenuPowers.cpp:979
 msgid "Immobilize"
-msgstr ""
+msgstr "Melumpuhkan"
 
 #: ../../../src/MenuPowers.cpp:987
 msgid "Immunity"
-msgstr ""
+msgstr "Kekebalan"
 
 #: ../../../src/MenuPowers.cpp:990
 msgid "Immunity to damage over time"
-msgstr ""
+msgstr "Kekebalan dari damage dari waktu ke waktu"
 
 #: ../../../src/MenuPowers.cpp:993
 msgid "Immunity to slow"
-msgstr ""
+msgstr "Kekebalan dari melambat"
 
 #: ../../../src/MenuPowers.cpp:996
 msgid "Immunity to stun"
-msgstr ""
+msgstr "Kekebalan dari pingsan"
 
 #: ../../../src/MenuPowers.cpp:999
 msgid "Immunity to HP steal"
-msgstr ""
+msgstr "Kekebalan dari pencurian HP"
 
 #: ../../../src/MenuPowers.cpp:1002
 msgid "Immunity to MP steal"
-msgstr ""
+msgstr "Kekebalan dari pencurian MP"
 
 #: ../../../src/MenuPowers.cpp:1005
 msgid "Immunity to knockback"
-msgstr ""
+msgstr "Kekebalan dari dorongan ke belakang"
 
 #: ../../../src/MenuPowers.cpp:1008
 msgid "Immunity to damage reflection"
-msgstr ""
+msgstr "Kekebalan dari refleksi damage"
 
 #: ../../../src/MenuPowers.cpp:1014
 msgid "Stun"
-msgstr ""
+msgstr "Pingsan"
 
 #: ../../../src/MenuPowers.cpp:1017
 msgid "Automatic revive on death"
-msgstr ""
+msgstr "Otomatis menghidupkan kembali di kematian"
 
 #: ../../../src/MenuPowers.cpp:1020
 msgid "Convert"
-msgstr ""
+msgstr "Tukar"
 
 #: ../../../src/MenuPowers.cpp:1023
 msgid "Fear"
-msgstr ""
+msgstr "Takut"
 
 #: ../../../src/MenuPowers.cpp:1026
 msgid "Lifespan"
-msgstr ""
+msgstr "Masa hidup"
 
 #: ../../../src/MenuPowers.cpp:1050
 msgid "Magical Shield"
-msgstr ""
+msgstr "Perisai Magis"
 
 #: ../../../src/MenuPowers.cpp:1079
 msgid "Healing"
-msgstr ""
+msgstr "Menyembuhkan"
 
 #: ../../../src/MenuPowers.cpp:1082
 msgid "Knockback"
-msgstr ""
+msgstr "Didorong ke belakang"
 
 #: ../../../src/MenuPowers.cpp:1106
 #, c-format
 msgid "%d%% chance"
-msgstr ""
+msgstr "%d%% peluang"
 
 #: ../../../src/MenuPowers.cpp:1158
 msgid "Base Accuracy"
-msgstr ""
+msgstr "Akurasi Dasar"
 
 #: ../../../src/MenuPowers.cpp:1178
 msgid "Base Critical Chance"
-msgstr ""
+msgstr "Peluang Kritis dasar"
 
 #: ../../../src/MenuPowers.cpp:1186
 msgid "Ignores Absorbtion"
-msgstr ""
+msgstr "Mengabaikan Penyerapan"
 
 #: ../../../src/MenuPowers.cpp:1191
 msgid "Ignores Avoidance"
-msgstr ""
+msgstr "Mengabaikan Penghindaran"
 
 #: ../../../src/MenuPowers.cpp:1196
 #, c-format
 msgid "%d%% Chance to crit slowed targets"
-msgstr ""
+msgstr "%d%% Peluang untuk mengkritisi target yang diperlambat"
 
 #: ../../../src/MenuPowers.cpp:1201
 #, c-format
 msgid "Elemental Damage (%s)"
-msgstr ""
+msgstr "Damage Elemen (%s)"
 
 #: ../../../src/MenuPowers.cpp:1210
 #, c-format
 msgid "Requires a %s"
-msgstr ""
+msgstr "Membutuhkan %s"
 
 #: ../../../src/MenuPowers.cpp:1248 ../../../src/MenuPowers.cpp:1251
 #, c-format
 msgid "Requires Power: %s"
-msgstr ""
+msgstr "Membutuhkan Kekuatan: %s"
 
 #: ../../../src/MenuPowers.cpp:1260
 msgid "Click to Unlock (uses 1 Skill Point)"
-msgstr ""
+msgstr "Klik untuk Membuka (gunakan 1 Poin Skill)"
 
 #: ../../../src/MenuPowers.cpp:1264 ../../../src/MenuPowers.cpp:1266
 msgid "Requires 1 Skill Point"
-msgstr ""
+msgstr "Membutuhkan 1 Poin Skill"
 
 #: ../../../src/MenuPowers.cpp:1466
 #, c-format
 msgid "Available skill points: %d"
-msgstr ""
+msgstr "Tersedia Poin Skill: %d"
 
 #: ../../../src/MenuPowers.cpp:1498
 msgid "Next Level:"
-msgstr ""
+msgstr "Level Berikutnya:"
 
 #: ../../../src/MenuStash.cpp:80 ../../../src/MenuStash.cpp:161
 msgid "Stash"
-msgstr ""
+msgstr "Penyimpanan"
 
 #: ../../../src/MenuStash.cpp:174 ../../../src/MenuStash.cpp:188
 msgid "Private"
-msgstr ""
+msgstr "Privasi"
 
 #: ../../../src/MenuStash.cpp:175
 msgid "Shared"
-msgstr ""
+msgstr "Dibagi"
 
 #: ../../../src/MenuStash.cpp:340
 msgid "This item can not be stored in the stash."
-msgstr ""
+msgstr "Item ini tidak dapat disimpan di penyimpanan."
 
 #: ../../../src/MenuStash.cpp:345
 msgid "This item can not be stored in the private stash."
-msgstr ""
+msgstr "Item ini tidak dapat disimpan di penyimpanan pribadi."
 
 #: ../../../src/MenuStash.cpp:350
 msgid "This item can not be stored in the shared stash."
-msgstr ""
+msgstr "Item ini tidak dapat disimpan di penyimpanan bersama."
 
 #: ../../../src/MenuStash.cpp:360
 msgid "Stash is full."
-msgstr ""
+msgstr "Penyimpanan Penuh"
 
 #: ../../../src/MenuStash.cpp:414
 #, c-format
 msgid "Can not store item in stash: %s"
-msgstr ""
+msgstr "Tidak dapat menyimpan item di penyimpanan: %s"
 
 #: ../../../src/MenuTalker.cpp:448
 #, c-format
 msgid "<dialog node %d>"
-msgstr ""
+msgstr "<dialog node %d>"
 
 #: ../../../src/MenuTalker.cpp:456
 msgid "Trade"
-msgstr ""
+msgstr "Dagang"
 
 #: ../../../src/MenuVendor.cpp:60
 msgid "Buyback"
-msgstr ""
+msgstr "Beli kembali"
 
 #: ../../../src/MenuVendor.cpp:283
 msgid "Vendor"
-msgstr ""
+msgstr "Penjual"
 
 #: ../../../src/PowerManager.cpp:1204
 #, c-format
 msgid "+%d Shield"
-msgstr ""
+msgstr "+%d Perisai"
 
 #: ../../../src/PowerManager.cpp:1461
 msgid "You are already transformed, untransform first."
-msgstr ""
+msgstr "Anda sudah bertransformasi, batalkan transformasi dulu."
 
 #: ../../../src/PowerManager.cpp:1473
 msgid "Could not untransform at this position."
-msgstr ""
+msgstr "Tidak dapat membatalkan transformasi pada posisi ini."
 
 #: ../../../src/QuestLog.cpp:234
 msgid "Completed Quests"
-msgstr ""
+msgstr "Pencarian  Selesai"
 
 #: ../../../src/SaveLoad.cpp:250 ../../../src/SaveLoad.cpp:251
 msgid "Game saved."
@@ -1626,395 +1626,399 @@ msgstr "Game tersimpan."
 
 #: ../../../src/SDLInputState.cpp:645
 msgid "BkSp"
-msgstr ""
+msgstr "BkSp"
 
 #: ../../../src/SDLInputState.cpp:646
 msgid "Caps"
-msgstr ""
+msgstr "Caps"
 
 #: ../../../src/SDLInputState.cpp:647
 msgid "Del"
-msgstr ""
+msgstr "Del"
 
 #: ../../../src/SDLInputState.cpp:649 ../../../src/SDLInputState.cpp:679
 msgid "End"
-msgstr ""
+msgstr "End"
 
 #: ../../../src/SDLInputState.cpp:650
 msgid "Esc"
-msgstr ""
+msgstr "Esc"
 
 #: ../../../src/SDLInputState.cpp:651 ../../../src/SDLInputState.cpp:681
 msgid "Home"
-msgstr ""
+msgstr "Home"
 
 #: ../../../src/SDLInputState.cpp:652
 msgid "Ins"
-msgstr ""
+msgstr "Ins"
 
 #: ../../../src/SDLInputState.cpp:653
 msgid "LAlt"
-msgstr ""
+msgstr "LAlt"
 
 #: ../../../src/SDLInputState.cpp:654
 msgid "LCtrl"
-msgstr ""
+msgstr "LCtrl"
 
 #: ../../../src/SDLInputState.cpp:656
 msgid "LShft"
-msgstr ""
+msgstr "LShft"
 
 #: ../../../src/SDLInputState.cpp:657
 msgid "Num"
-msgstr ""
+msgstr "Num"
 
 #: ../../../src/SDLInputState.cpp:658
 msgid "PgDn"
-msgstr ""
+msgstr "PgDn"
 
 #: ../../../src/SDLInputState.cpp:659
 msgid "PgUp"
-msgstr ""
+msgstr "PgUp"
 
 #: ../../../src/SDLInputState.cpp:660 ../../../src/SDLInputState.cpp:690
 msgid "Pause"
-msgstr ""
+msgstr "Pause"
 
 #: ../../../src/SDLInputState.cpp:661
 msgid "Print"
-msgstr ""
+msgstr "Print"
 
 #: ../../../src/SDLInputState.cpp:662
 msgid "RAlt"
-msgstr ""
+msgstr "RAlt"
 
 #: ../../../src/SDLInputState.cpp:663
 msgid "RCtrl"
-msgstr ""
+msgstr "RCtrl"
 
 #: ../../../src/SDLInputState.cpp:664
 msgid "Ret"
-msgstr ""
+msgstr "Ret"
 
 #: ../../../src/SDLInputState.cpp:666
 msgid "RShft"
-msgstr ""
+msgstr "RShft"
 
 #: ../../../src/SDLInputState.cpp:667
 msgid "SLock"
-msgstr ""
+msgstr "SLock"
 
 #: ../../../src/SDLInputState.cpp:668
 msgid "Spc"
-msgstr ""
+msgstr "Spc"
 
 #: ../../../src/SDLInputState.cpp:669 ../../../src/SDLInputState.cpp:699
 msgid "Tab"
-msgstr ""
+msgstr "Tab"
 
 #: ../../../src/SDLInputState.cpp:675
 msgid "Backspace"
-msgstr ""
+msgstr "Backspace"
 
 #: ../../../src/SDLInputState.cpp:676
 msgid "CapsLock"
-msgstr ""
+msgstr "CapsLock"
 
 #: ../../../src/SDLInputState.cpp:680
 msgid "Escape"
-msgstr ""
+msgstr "Escape"
 
 #: ../../../src/SDLInputState.cpp:682
 msgid "Insert"
-msgstr ""
+msgstr "Insert"
 
 #: ../../../src/SDLInputState.cpp:683
 msgid "Left Alt"
-msgstr ""
+msgstr "Left Alt"
 
 #: ../../../src/SDLInputState.cpp:684
 msgid "Left Ctrl"
-msgstr ""
+msgstr "Left Ctrl"
 
 #: ../../../src/SDLInputState.cpp:686
 msgid "Left Shift"
-msgstr ""
+msgstr "Left Shift"
 
 #: ../../../src/SDLInputState.cpp:687
 msgid "NumLock"
-msgstr ""
+msgstr "NumLock"
 
 #: ../../../src/SDLInputState.cpp:688
 msgid "PageDown"
-msgstr ""
+msgstr "PageDown"
 
 #: ../../../src/SDLInputState.cpp:689
 msgid "PageUp"
-msgstr ""
+msgstr "PageUp"
 
 #: ../../../src/SDLInputState.cpp:691
 msgid "PrintScreen"
-msgstr ""
+msgstr "PrintScreen"
 
 #: ../../../src/SDLInputState.cpp:692
 msgid "Right Alt"
-msgstr ""
+msgstr "Right Alt"
 
 #: ../../../src/SDLInputState.cpp:693
 msgid "Right Ctrl"
-msgstr ""
+msgstr "Right Ctrl"
 
 #: ../../../src/SDLInputState.cpp:694
 msgid "Return"
-msgstr ""
+msgstr "Kembali"
 
 #: ../../../src/SDLInputState.cpp:696
 msgid "Right Shift"
-msgstr ""
+msgstr "Right Shift"
 
 #: ../../../src/SDLInputState.cpp:697
 msgid "ScrollLock"
-msgstr ""
+msgstr "ScrollLock"
 
 #: ../../../src/SDLInputState.cpp:698
 msgid "Space"
-msgstr ""
+msgstr "Space"
 
 #: ../../../src/SDLInputState.cpp:712
 #, c-format
 msgid "M%d"
-msgstr ""
+msgstr "M%d"
 
 #: ../../../src/SDLInputState.cpp:718
 #, c-format
 msgid "Mouse %d"
-msgstr ""
+msgstr "Mouse %d"
 
 #: ../../../src/SDLInputState.cpp:728
 #, c-format
 msgid "JX%d-"
-msgstr ""
+msgstr "JX%d-"
 
 #: ../../../src/SDLInputState.cpp:730
 #, c-format
 msgid "Axis %d -"
-msgstr ""
+msgstr "Axis %d -"
 
 #: ../../../src/SDLInputState.cpp:734
 #, c-format
 msgid "JX%d+"
-msgstr ""
+msgstr "JX%d+"
 
 #: ../../../src/SDLInputState.cpp:736
 #, c-format
 msgid "Axis %d +"
-msgstr ""
+msgstr "Axis %d +"
 
 #: ../../../src/SDLInputState.cpp:741
 #, c-format
 msgid "JB%d"
-msgstr ""
+msgstr "JB%d"
 
 #: ../../../src/SDLInputState.cpp:743
 #, c-format
 msgid "Button %d"
-msgstr ""
+msgstr "Tombol %d"
 
 #: ../../../src/SDLInputState.cpp:789
 msgid "Touch control D-Pad"
-msgstr ""
+msgstr "D-Pad Kontrol sentuh"
 
 #: ../../../src/SDLInputState.cpp:812
 msgid "Touch control buttons"
-msgstr ""
+msgstr "Tombol kontrol sentuh"
 
 #: ../../../src/SDLInputState.cpp:826
 msgid "Tap"
-msgstr ""
+msgstr "Ketuk"
 
 #: ../../../src/SDLInputState.cpp:878 ../../../src/SDLInputState.cpp:880
 #, c-format
 msgid "Can not bind: %s"
-msgstr ""
+msgstr "Tidak bisa mengikat: %s"
 
 #: ../../../src/SDLInputState.cpp:892 ../../../src/SDLInputState.cpp:896
 #: ../../../src/SDLInputState.cpp:900
 #, c-format
 msgid "'%s' is no longer bound to:"
-msgstr ""
+msgstr "'%s' tidak lagi terikat pada:"
 
 #: ../../../src/Stats.cpp:38
 msgid "Max HP"
-msgstr ""
+msgstr "HP Maksimal"
 
 #: ../../../src/Stats.cpp:39
 msgid "Total amount of HP."
-msgstr ""
+msgstr "Jumlah total HP."
 
 #: ../../../src/Stats.cpp:43
 msgid "HP Regen"
-msgstr ""
+msgstr "Regenerasi HP"
 
 #: ../../../src/Stats.cpp:44
 msgid "Ticks of HP regen per minute."
-msgstr ""
+msgstr "Kutu regenerasi HP per menit."
 
 #: ../../../src/Stats.cpp:48
 msgid "Max MP"
-msgstr ""
+msgstr "MP Maksimal"
 
 #: ../../../src/Stats.cpp:49
 msgid "Total amount of MP."
-msgstr ""
+msgstr "Jumlah total MP."
 
 #: ../../../src/Stats.cpp:53
 msgid "MP Regen"
-msgstr ""
+msgstr "Regenerasi MP"
 
 #: ../../../src/Stats.cpp:54
 msgid "Ticks of MP regen per minute."
-msgstr ""
+msgstr "Kutu regenerasi MP per menit."
 
 #: ../../../src/Stats.cpp:58
 msgid "Accuracy"
-msgstr ""
+msgstr "Akurasi"
 
 #: ../../../src/Stats.cpp:59
 msgid ""
 "Accuracy rating. The enemy's Avoidance rating is subtracted from this value "
 "to calculate your likeliness to land a direct hit."
 msgstr ""
+"Peringkat akurasi. Peringkat Penghindaran musuh dikurangi dari nilai ini "
+"untuk menghitung kemungkinan Anda mendaratkan pukulan langsung."
 
 #: ../../../src/Stats.cpp:63
 msgid "Avoidance"
-msgstr ""
+msgstr "Penghindaran"
 
 #: ../../../src/Stats.cpp:64
 msgid ""
 "Avoidance rating. This value is subtracted from the enemy's Accuracy rating "
 "to calculate their likeliness to land a direct hit."
 msgstr ""
+"Peringkat penghindaran. Nilai ini dikurangi dari peringkat Akurasi musuh "
+"untuk menghitung kemungkinan mereka mendaratkan serangan langsung."
 
 #: ../../../src/Stats.cpp:68
 msgid "Absorb Min"
-msgstr ""
+msgstr "Minimal Penyerapan"
 
 #: ../../../src/Stats.cpp:69 ../../../src/Stats.cpp:74
 msgid "Reduces the amount of damage taken."
-msgstr ""
+msgstr "Mengurangi jumlah damage yang diterima."
 
 #: ../../../src/Stats.cpp:73
 msgid "Absorb Max"
-msgstr ""
+msgstr "Maksimal Penyerapan"
 
 #: ../../../src/Stats.cpp:78
 msgid "Critical Hit Chance"
-msgstr ""
+msgstr "Peluang Pukulan Kritis"
 
 #: ../../../src/Stats.cpp:79
 msgid "Chance for an attack to do extra damage."
-msgstr ""
+msgstr "Peluang serangan untuk melakukan damage tambahan."
 
 #: ../../../src/Stats.cpp:83
 msgid "Bonus XP"
-msgstr ""
+msgstr "XP Bonus"
 
 #: ../../../src/Stats.cpp:84
 msgid "Increases the XP gained per kill."
-msgstr ""
+msgstr "Meningkatkan XP yang diperoleh tiap membunuh."
 
 #: ../../../src/Stats.cpp:88
 #, c-format
 msgid "Bonus %s"
-msgstr ""
+msgstr "Bonus %s"
 
 #: ../../../src/Stats.cpp:89
 #, c-format
 msgid "Increases the %s found per drop."
-msgstr ""
+msgstr "meningkatkan %s penemuan tiap menjatuhkan."
 
 #: ../../../src/Stats.cpp:93
 msgid "Item Find Chance"
-msgstr ""
+msgstr "Peluang Penemukan Item"
 
 #: ../../../src/Stats.cpp:94
 msgid "Increases the chance that an enemy will drop an item."
-msgstr ""
+msgstr "Meningkatkan kemungkinan musuh akan menjatuhkan item."
 
 #: ../../../src/Stats.cpp:98
 msgid "Stealth"
-msgstr ""
+msgstr "Sembunyi"
 
 #: ../../../src/Stats.cpp:99
 msgid "Increases your ability to move undetected."
-msgstr ""
+msgstr "Meningkatkan kemampuan Anda untuk bergerak tanpa terdeteksi."
 
 #: ../../../src/Stats.cpp:103
 msgid "Poise"
-msgstr ""
+msgstr "Seimbang"
 
 #: ../../../src/Stats.cpp:104
 msgid "Reduces your chance of stumbling when hit."
-msgstr ""
+msgstr "Mengurangi kemungkinan Anda tersandung saat terkena."
 
 #: ../../../src/Stats.cpp:108
 msgid "Missile Reflect Chance"
-msgstr ""
+msgstr "Peluang Refleksi Rudal"
 
 #: ../../../src/Stats.cpp:109
 msgid "Increases your chance of reflecting missiles back at enemies."
-msgstr ""
+msgstr "Meningkatkan peluang Anda untuk memantulkan rudal kembali ke musuh."
 
 #: ../../../src/Stats.cpp:113
 msgid "Damage Reflection"
-msgstr ""
+msgstr "Damage Refleksi"
 
 #: ../../../src/Stats.cpp:114
 msgid "Deals a percentage of damage taken back to the attacker."
-msgstr ""
+msgstr "Memberikan persentase kerusakan yang dikembalikan ke penyerang."
 
 #: ../../../src/Stats.cpp:118
 msgid "HP Steal"
-msgstr ""
+msgstr "Pencurian HP"
 
 #: ../../../src/Stats.cpp:119
 msgid "Percentage of HP stolen per hit."
-msgstr ""
+msgstr "Persentase HP yang dicuri per pukulan."
 
 #: ../../../src/Stats.cpp:123
 msgid "MP Steal"
-msgstr ""
+msgstr "Pencurian MP"
 
 #: ../../../src/Stats.cpp:124
 msgid "Percentage of MP stolen per hit."
-msgstr ""
+msgstr "Persentase MP yang dicuri per pukulan."
 
 #: ../../../src/Stats.cpp:128
 msgid "Base HP"
-msgstr ""
+msgstr "HP Dasar"
 
 #: ../../../src/Stats.cpp:133
 msgid "Base MP"
-msgstr ""
+msgstr "MP Dasar"
 
 #: ../../../src/Utils.cpp:365
 msgid "k"
-msgstr ""
+msgstr "k"
 
 #: ../../../src/Utils.cpp:635
 #, c-format
 msgid "%s second"
-msgstr ""
+msgstr "%s detik"
 
 #: ../../../src/Utils.cpp:638
 #, c-format
 msgid "%s seconds"
-msgstr ""
+msgstr "%s detik"
 
 #: ../../../src/Version.cpp:139
 msgid "or newer"
-msgstr ""
+msgstr "atau lebih baru"
 
 #: ../../../src/Version.cpp:142
 msgid "or older"
-msgstr ""
+msgstr "atau lebih lama"
