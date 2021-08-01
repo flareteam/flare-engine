@@ -111,6 +111,7 @@ Game updates:
 * New alchemy ingredient: Mushrooms
 * Added 4 new potion recipes
 * Overall reduced drop rates for alchemy items
+* Added Alchemy quest
 * Added animations for immunity and ice-based slow status effects
 * Redesigned the Family Crypt map and quest
 * Redesigned the Nazia Mines maps and quest
