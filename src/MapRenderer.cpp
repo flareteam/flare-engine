@@ -423,9 +423,9 @@ void MapRenderer::renderIsoLayer(const Map_Layer& layerdata, const TileSet& tile
 				dest.x = p.x - tile.offset.x;
 				dest.y = p.y - tile.offset.y;
 
-				if (eset->misc.fogofwar > FogOfWar::TYPE_MINIMAP)
+				if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY)
 					if (&layerdata != &layers[fow->layer_id])
-						if (layers[fow->layer_id][i][j] == 1) continue;
+						if (layers[fow->layer_id][i][j] == FogOfWar::TILE_HIDDEN) continue;
 
 				// no need to set w and h in dest, as it is ignored
 				// by SDL_BlitSurface
@@ -527,9 +527,9 @@ void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 				if (const uint_fast16_t current_tile = current_layer[i][j]) {
 					const Tile_Def &tile = tset.tiles[current_tile];
 
-					if (eset->misc.fogofwar > FogOfWar::TYPE_MINIMAP)
+					if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY)
 						if (&current_layer != &layers[fow->layer_id])
-							if (layers[fow->layer_id][i][j] == 1) continue;
+							if (layers[fow->layer_id][i][j] == FogOfWar::TILE_HIDDEN) continue;
 
 					dest.x = p.x - tile.offset.x;
 					dest.y = p.y - tile.offset.y;
@@ -736,9 +736,9 @@ void MapRenderer::renderOrthoLayer(const Map_Layer& layerdata) {
 				dest.x = p.x - tile.offset.x;
 				dest.y = p.y - tile.offset.y;
 
-				if (eset->misc.fogofwar > FogOfWar::TYPE_MINIMAP)
+				if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY)
 					if (&layerdata != &layers[fow->layer_id])
-						if (layers[fow->layer_id][i][j] == 1) continue;
+						if (layers[fow->layer_id][i][j] == FogOfWar::TILE_HIDDEN) continue;
 
 				tile.tile->setDestFromPoint(dest);
 				if (eset->misc.fogofwar == FogOfWar::TYPE_TINT) {
@@ -789,9 +789,9 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 				dest.x = p.x - tile.offset.x;
 				dest.y = p.y - tile.offset.y;
 
-				if (eset->misc.fogofwar > FogOfWar::TYPE_MINIMAP)
+				if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY)
 					if (&layers[index_objectlayer] != &layers[fow->layer_id])
-						if (layers[fow->layer_id][i][j] == 1) continue;
+						if (layers[fow->layer_id][i][j] == FogOfWar::TILE_HIDDEN) continue;
 
 				tile.tile->setDestFromPoint(dest);
 				checkHiddenEntities(i, j, layers[index_objectlayer], r);

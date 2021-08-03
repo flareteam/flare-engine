@@ -734,11 +734,9 @@ void MenuMiniMap::fillEntities() {
 			Point event_pos(mapr->events[i].location.x, mapr->events[i].location.y);
 			for (int j=event_pos.x; j<event_pos.x + mapr->events[i].location.w; ++j) {
 				for (int k=event_pos.y; k<event_pos.y + mapr->events[i].location.h; ++k) {
-					if (eset->misc.fogofwar) {
-						if (mapr->layers[fow->layer_id][event_pos.x][event_pos.y] == 1) {
-							continue;
-						}
-					}
+					if (eset->misc.fogofwar)
+						if (mapr->layers[fow->layer_id][event_pos.x][event_pos.y] == FogOfWar::TILE_HIDDEN) continue;
+
 					entities[j][k] = TILE_TELEPORT;
 				}
 			}
