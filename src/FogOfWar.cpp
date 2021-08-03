@@ -50,7 +50,7 @@ int FogOfWar::load() {
 
 void FogOfWar::logic() {
 	calcBoundaries();
-	updateTiles(0);
+	updateTiles(TILE_SIGHT);
 	if (update_minimap) {
 		menu->mini->update(&mapr->collider, &bounds);
 		update_minimap = false;
@@ -59,7 +59,7 @@ void FogOfWar::logic() {
 
 void FogOfWar::handleIntramapTeleport() {
 	calcBoundaries();
-	updateTiles(2);
+	updateTiles(TILE_VISITED);
 	if (update_minimap) {
 		menu->mini->update(&mapr->collider, &bounds);
 		update_minimap = false;
@@ -67,9 +67,9 @@ void FogOfWar::handleIntramapTeleport() {
 }
 
 Color FogOfWar::getTileColorMod(const int_fast16_t x, const int_fast16_t y) {
-	if (mapr->layers[layer_id][x][y] == 2)
+	if (mapr->layers[layer_id][x][y] == TILE_VISITED)
 		return color_visited;
-	else if (mapr->layers[layer_id][x][y] == 1)
+	else if (mapr->layers[layer_id][x][y] == TILE_HIDDEN)
 		return color_hidden;
 	else
 		return color_sight;
@@ -96,10 +96,10 @@ void FogOfWar::updateTiles(unsigned short sight_tile) {
 			if (delta < pc->sight) {
 				mapr->layers[layer_id][x][y] = sight_tile;
 			}
-			else if (mapr->layers[layer_id][x][y] == 0) {
-				mapr->layers[layer_id][x][y] = 2;
+			else if (mapr->layers[layer_id][x][y] == TILE_SIGHT) {
+				mapr->layers[layer_id][x][y] = TILE_VISITED;
 			}
-			if (prev_tile == 1 && prev_tile != mapr->layers[layer_id][x][y]) {
+			if (prev_tile == TILE_HIDDEN && prev_tile != mapr->layers[layer_id][x][y]) {
 				update_minimap = true;
 			}
 		}

@@ -40,6 +40,10 @@ public:
 		TYPE_MINIMAP = 1,
 		TYPE_TINT = 2,
 		TYPE_OVERLAY = 3,
+
+		TILE_SIGHT = 0,
+		TILE_HIDDEN = 1,
+		TILE_VISITED = 2,
 	};
 
 	unsigned short layer_id;
