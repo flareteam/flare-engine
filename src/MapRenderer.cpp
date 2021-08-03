@@ -423,13 +423,9 @@ void MapRenderer::renderIsoLayer(const Map_Layer& layerdata, const TileSet& tile
 				dest.x = p.x - tile.offset.x;
 				dest.y = p.y - tile.offset.y;
 
-				if (eset->misc.fogofwar > FogOfWar::TYPE_MINIMAP) {
-					FPoint tile_map_pos = FPoint(static_cast<float>(i), static_cast<float>(j));
-					int delta = static_cast<int>(Utils::calcDist(pc->stats.pos, tile_map_pos));
-					if (&layerdata != &layers[fow->layer_id]) {
-						if (layers[fow->layer_id][i][j] == 1 && delta > pc->sight) continue;
-					}
-				}
+				if (eset->misc.fogofwar > FogOfWar::TYPE_MINIMAP)
+					if (&layerdata != &layers[fow->layer_id])
+						if (layers[fow->layer_id][i][j] == 1) continue;
 
 				// no need to set w and h in dest, as it is ignored
 				// by SDL_BlitSurface
@@ -527,17 +523,14 @@ void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 				++r_pre_cursor;
 			}
 
-			if (eset->misc.fogofwar > FogOfWar::TYPE_MINIMAP) {
-				FPoint tile_map_pos = FPoint(static_cast<float>(i), static_cast<float>(j));
-				int delta = static_cast<int>(Utils::calcDist(pc->stats.pos, tile_map_pos));
-				if (&current_layer != &layers[fow->layer_id]) {
-					if (layers[fow->layer_id][i][j] == 1 && delta > pc->sight) draw_tile = false;
-				}
-			}
-
 			if (draw_tile && !drawn_tiles[i][j]) {
 				if (const uint_fast16_t current_tile = current_layer[i][j]) {
 					const Tile_Def &tile = tset.tiles[current_tile];
+
+					if (eset->misc.fogofwar > FogOfWar::TYPE_MINIMAP)
+						if (&current_layer != &layers[fow->layer_id])
+							if (layers[fow->layer_id][i][j] == 1) continue;
+
 					dest.x = p.x - tile.offset.x;
 					dest.y = p.y - tile.offset.y;
 					tile.tile->setDestFromPoint(dest);
@@ -743,13 +736,9 @@ void MapRenderer::renderOrthoLayer(const Map_Layer& layerdata) {
 				dest.x = p.x - tile.offset.x;
 				dest.y = p.y - tile.offset.y;
 
-				if (eset->misc.fogofwar > FogOfWar::TYPE_MINIMAP) {
-					FPoint tile_map_pos = FPoint(static_cast<float>(i), static_cast<float>(j));
-					int delta = static_cast<int>(Utils::calcDist(pc->stats.pos, tile_map_pos));
-					if (&layerdata != &layers[fow->layer_id]) {
-						if (layers[fow->layer_id][i][j] == 1 && delta > pc->sight) continue;
-					}
-				}
+				if (eset->misc.fogofwar > FogOfWar::TYPE_MINIMAP)
+					if (&layerdata != &layers[fow->layer_id])
+						if (layers[fow->layer_id][i][j] == 1) continue;
 
 				tile.tile->setDestFromPoint(dest);
 				if (eset->misc.fogofwar == FogOfWar::TYPE_TINT) {
@@ -800,13 +789,9 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 				dest.x = p.x - tile.offset.x;
 				dest.y = p.y - tile.offset.y;
 
-				if (eset->misc.fogofwar > FogOfWar::TYPE_MINIMAP) {
-					FPoint tile_map_pos = FPoint(static_cast<float>(i), static_cast<float>(j));
-					int delta = static_cast<int>(Utils::calcDist(pc->stats.pos, tile_map_pos));
-					if (&layers[index_objectlayer] != &layers[fow->layer_id]) {
-						if (layers[fow->layer_id][i][j] == 1 && delta > pc->sight) continue;
-					}
-				}
+				if (eset->misc.fogofwar > FogOfWar::TYPE_MINIMAP)
+					if (&layers[index_objectlayer] != &layers[fow->layer_id])
+						if (layers[fow->layer_id][i][j] == 1) continue;
 
 				tile.tile->setDestFromPoint(dest);
 				checkHiddenEntities(i, j, layers[index_objectlayer], r);
