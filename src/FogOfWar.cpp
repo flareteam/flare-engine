@@ -26,12 +26,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "Avatar.h"
+#include "EngineSettings.h"
 #include "FogOfWar.h"
 #include "MapRenderer.h"
 #include "Menu.h"
 #include "MenuManager.h"
 #include "MenuMiniMap.h"
 #include "SharedGameResources.h"
+#include "SharedResources.h"
 
 FogOfWar::FogOfWar()
 	: layer_id(0)
@@ -67,7 +69,7 @@ void FogOfWar::handleIntramapTeleport() {
 }
 
 Color FogOfWar::getTileColorMod(const int_fast16_t x, const int_fast16_t y) {
-	if (mapr->layers[layer_id][x][y] == TILE_VISITED)
+	if (mapr->layers[layer_id][x][y] == TILE_VISITED || mapr->layers[layer_id][x][y] == TILE_HIDDEN_BOUNDARY)
 		return color_visited;
 	else if (mapr->layers[layer_id][x][y] == TILE_HIDDEN)
 		return color_hidden;
@@ -99,8 +101,27 @@ void FogOfWar::updateTiles(unsigned short sight_tile) {
 			else if (mapr->layers[layer_id][x][y] == TILE_SIGHT) {
 				mapr->layers[layer_id][x][y] = TILE_VISITED;
 			}
-			if (prev_tile == TILE_HIDDEN && prev_tile != mapr->layers[layer_id][x][y]) {
+			if ((prev_tile == TILE_HIDDEN || prev_tile == TILE_HIDDEN_BOUNDARY) && prev_tile != mapr->layers[layer_id][x][y]) {
 				update_minimap = true; 
+			}
+		}
+	}
+	
+	if (eset->misc.fogofwar == TYPE_OVERLAY) {
+		for (int x = bounds.x; x < bounds.w; x++) {
+			for (int y = bounds.y; y < bounds.h; y++) {
+				if (mapr->layers[layer_id][x][y] == TILE_HIDDEN) {
+					for (int i=x-1; i<=x+1; i++) {
+						for (int j=y-1; j<=y+1; j++) {
+							if (i>=0 && j>=0 && i<mapr->w && j<mapr->h) {
+								if (mapr->layers[layer_id][i][j] == TILE_SIGHT || mapr->layers[layer_id][i][j] == TILE_VISITED) {
+									mapr->layers[layer_id][x][y] = TILE_HIDDEN_BOUNDARY;
+									continue;
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 	}
