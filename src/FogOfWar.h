@@ -43,7 +43,9 @@ public:
 
 		TILE_SIGHT = 0,
 		TILE_HIDDEN = 1,
-		TILE_VISITED = 2,
+		TILE_HIDDEN_BOUNDARY = 2,
+		TILE_VISITED = 11,
+		TILE_VISITED_BOUNDARY = 12,
 	};
 
 	unsigned short layer_id;

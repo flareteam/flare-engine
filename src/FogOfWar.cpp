@@ -100,7 +100,7 @@ void FogOfWar::updateTiles(unsigned short sight_tile) {
 				mapr->layers[layer_id][x][y] = TILE_VISITED;
 			}
 			if (prev_tile == TILE_HIDDEN && prev_tile != mapr->layers[layer_id][x][y]) {
-				update_minimap = true;
+				update_minimap = true; 
 			}
 		}
 	}
