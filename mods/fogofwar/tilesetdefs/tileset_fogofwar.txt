@@ -1,9 +1,11 @@
-
 img=images/tilesets/tileset_fogofwar.png
 
-tile=1,0,0,64,34,32,51
-tile=2,64,0,64,34,32,51
-animation=2,64,0,75ms; 64,34,75ms; 64,68,75ms; 64,102,75ms; 64,136,75ms; 64,170,75ms; 64,136,75ms; 64,102,75ms; 64,68,75ms; 64,34,75ms;
+#hidden
+#tile=1,0,0,64,32,32,16
+#visited
+#tile=3,64,0,64,32,32,16
 
-tile=98,0,0,128,68,64,14
-tile=99,0,0,64,34,32,7
+#hidden_boundary
+tile=2,200,0,200,100,100,50
+#visited_boundary
+tile=4,400,0,200,100,100,50
