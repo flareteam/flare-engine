@@ -162,7 +162,7 @@ int Map::load(const std::string& fname) {
 			layers.resize(layers.size()+1);
 			layers.back().resize(w);
 			for (size_t i=0; i<layers.back().size(); ++i) {
-				layers.back()[i].resize(h, 1);
+				layers.back()[i].resize(h, 511);
 			}
 		}
 	}

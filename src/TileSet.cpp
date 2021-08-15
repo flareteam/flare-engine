@@ -102,7 +102,9 @@ void TileSet::load(const std::string& filename) {
 				size_t index = Parse::popFirstInt(infile.val);
 
 				if (index >= tiles.size()) {
+					if (index==511) std::cout << "LOADED BIG INDEX TILE\n";
 					tiles.resize(index + 1);
+					std::cout << "NEW SIZE: " << tiles.size() << "\n";
 					tile_images.resize(index + 1);
 					tile_clips.resize(index + 1);
 					tile_offsets.resize(index + 1);

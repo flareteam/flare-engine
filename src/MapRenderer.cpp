@@ -236,7 +236,13 @@ int MapRenderer::load(const std::string& fname) {
 		for (unsigned x = 0; x < layers[i].size(); ++x) {
 			for (unsigned y = 0; y < layers[i][x].size(); ++y) {
 				const unsigned tile_id = layers[i][x][y];
-				if (tile_id > 0 && (tile_id >= tset.tiles.size() || tset.tiles[tile_id].tile == NULL)) {
+				TileSet* tile_set = &tset;
+				
+				if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY && i == fow->layer_id) {
+					tile_set = &fow->tset;				
+			    }
+				
+				if (tile_id > 0 && (tile_id >= tile_set->tiles.size() || tile_set->tiles[tile_id].tile == NULL)) {
 					if (std::find(corrupted.begin(), corrupted.end(), tile_id) == corrupted.end()) {
 						corrupted.push_back(tile_id);
 					}
@@ -697,8 +703,8 @@ void MapRenderer::renderIso(std::vector<Renderable> &r, std::vector<Renderable> 
 	index++;
 	while (index < layers.size()) {
 		if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY && layernames[index] == "fogofwar") {
-			renderIsoLayer(layers[index],fow->tset);
-			map_parallax.render(cam.shake, layernames[index]);
+			//renderIsoLayer(layers[index],fow->tset);
+			//map_parallax.render(cam.shake, layernames[index]);
 		}
 		else {
 			renderIsoLayer(layers[index], tset);

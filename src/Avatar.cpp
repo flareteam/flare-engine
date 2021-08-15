@@ -77,7 +77,7 @@ Avatar::Avatar()
 	, prev_hp(0)
 	, playing_lowhp(false)
 	, teleport_camera_lock(false)
-	, sight(8) {
+	, sight(9) {
 
 	init();
 
