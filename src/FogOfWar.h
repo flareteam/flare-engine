@@ -80,7 +80,7 @@ public:
 		TYPE_OVERLAY = 3,
 
 		TILE_SIGHT = 0,
-		TILE_HIDDEN = 1,
+		TILE_HIDDEN = 511,
 		TILE_VISITED = 2,
 	};
 
@@ -93,6 +93,7 @@ public:
 	int load();
 	void handleIntramapTeleport();
 	Color getTileColorMod(const int_fast16_t x, const int_fast16_t y);
+	std::vector<Sprite*> tile_numbers;
 
 	FogOfWar();
 	~FogOfWar();
@@ -107,6 +108,7 @@ private:
 	bool update_minimap;
 
 	void calcBoundaries();
+	void calcMiniBoundaries();
 	void updateTiles(unsigned short sight_tile);
 	static const unsigned short CIRCLE_MASK[NUM_FOW_RADII][FOW_MAX_RADIUS_LENGTH * FOW_MAX_RADIUS_LENGTH];
 };

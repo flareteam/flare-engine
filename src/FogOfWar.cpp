@@ -28,10 +28,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Avatar.h"
 #include "EngineSettings.h"
 #include "FogOfWar.h"
+#include "FontEngine.h"
 #include "MapRenderer.h"
 #include "Menu.h"
 #include "MenuManager.h"
 #include "MenuMiniMap.h"
+#include "RenderDevice.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 
@@ -158,32 +160,38 @@ FogOfWar::FogOfWar()
 	, color_visited(128,128,128)
 	, color_hidden(0,0,0)
 	, update_minimap(true) {
+
+	for (int i=0; i<512; i++) {
+		std::stringstream ss;
+		ss << i;
+
+		Image* tile_num = render_device->createImage(64,32);
+		font->render(ss.str(), 16, 5, FontEngine::JUSTIFY_LEFT, tile_num, 0, Color(255,0,0,255));
+		Sprite* tile_spr = tile_num->createSprite();
+
+		tile_numbers.resize(tile_numbers.size()+1, tile_spr);
+	}
 }
 
 int FogOfWar::load() {
 	tset.load(tileset);
-	for (int x = 0; x < mapr->w; x++) {
-		for (int y = 0; y < mapr->h; y++) {
-			std::cout << mapr->layers[layer_id][x][y] << ", ";
-		}
-		std::cout << std::endl;
-	}
+
 	return 0;
 }
 
 void FogOfWar::logic() {
-	calcBoundaries();
 	updateTiles(TILE_SIGHT);
 	if (update_minimap) {
+		calcMiniBoundaries();
 		menu->mini->update(&mapr->collider, &bounds);
 		update_minimap = false;
 	}
 }
 
 void FogOfWar::handleIntramapTeleport() {
-	calcBoundaries();
 	updateTiles(TILE_VISITED);
 	if (update_minimap) {
+		calcMiniBoundaries();
 		menu->mini->update(&mapr->collider, &bounds);
 		update_minimap = false;
 	}
@@ -203,44 +211,37 @@ void FogOfWar::calcBoundaries() {
 	bounds.y = static_cast<short>(pc->stats.pos.y-pc->sight);
 	bounds.w = static_cast<short>(pc->stats.pos.x+pc->sight);
 	bounds.h = static_cast<short>(pc->stats.pos.y+pc->sight);
+}
 
-	//if (bounds.x < 0) bounds.x = 0;
-	//if (bounds.y < 0) bounds.y = 0;
-	//if (bounds.w > mapr->w) bounds.w = mapr->w;
-	//if (bounds.h > mapr->h) bounds.h = mapr->h;
+void FogOfWar::calcMiniBoundaries() {
+	bounds.x = static_cast<short>(pc->stats.pos.x-pc->sight);
+	bounds.y = static_cast<short>(pc->stats.pos.y-pc->sight);
+	bounds.w = static_cast<short>(pc->stats.pos.x+pc->sight);
+	bounds.h = static_cast<short>(pc->stats.pos.y+pc->sight);
+
+	if (bounds.x < 0) bounds.x = 0;
+	if (bounds.y < 0) bounds.y = 0;
+	if (bounds.w > mapr->w) bounds.w = mapr->w;
+	if (bounds.h > mapr->h) bounds.h = mapr->h;
 }
-/*
-void FogOfWar::updateTiles(unsigned short sight_tile) {
-	for (int x = bounds.x; x < bounds.w; x++) {
-		for (int y = bounds.y; y < bounds.h; y++) {
-			Point tile(x, y);
-			float delta = Utils::calcDist(FPoint(tile), FPoint(pc->stats.pos));
-			unsigned short prev_tile = mapr->layers[layer_id][x][y];
-			if (delta < pc->sight) {
-				mapr->layers[layer_id][x][y] = sight_tile;
-			}
-			else if (mapr->layers[layer_id][x][y] == TILE_SIGHT) {
-				mapr->layers[layer_id][x][y] = TILE_VISITED;
-			}
-			if ((prev_tile == TILE_HIDDEN) && prev_tile != mapr->layers[layer_id][x][y]) {
-				update_minimap = true; 
-			}
-		}
-	}
-}
-*/
+
 void FogOfWar::updateTiles(unsigned short sight_tile) {
 	applyMask();
 }
 
 void FogOfWar::applyMask() {
+	calcBoundaries();
 	int radius = 9;
 	const unsigned short * mask = &CIRCLE_MASK[radius - FOW_RADIUS_MIN][0];
 	  
   	for (int x = bounds.x; x < bounds.w+1; x++) {
 		for (int y = bounds.y; y < bounds.h+1; y++) {
-			if (x>0 && y>0 && x < mapr->w && y < mapr->h) {
+			if (x>=0 && y>=0 && x < mapr->w && y < mapr->h) {
+				unsigned short prev_tile = mapr->layers[layer_id][x][y];
 				mapr->layers[layer_id][x][y] &= *mask;
+				if ((prev_tile == TILE_HIDDEN) && prev_tile != mapr->layers[layer_id][x][y]) {
+					update_minimap = true;
+				}
 			}
 			mask++;
 		}

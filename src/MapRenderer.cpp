@@ -31,6 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EngineSettings.h"
 #include "EventManager.h"
 #include "FogOfWar.h"
+#include "FontEngine.h"
 #include "Hazard.h"
 #include "HazardManager.h"
 #include "InputState.h"
@@ -440,6 +441,13 @@ void MapRenderer::renderIsoLayer(const Map_Layer& layerdata, const TileSet& tile
 					tile.tile->color_mod = fow->getTileColorMod(i, j);
 				}
 				render_device->render(tile.tile);
+
+				if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY)
+					if (&layerdata == &layers[fow->layer_id]) {
+						Sprite* tile_spr = fow->tile_numbers[current_tile];
+						tile_spr->setDestFromPoint(dest);
+						render_device->render(tile_spr);
+					}
 			}
 		}
 		j = static_cast<int_fast16_t>(j + tiles_width);
@@ -703,8 +711,8 @@ void MapRenderer::renderIso(std::vector<Renderable> &r, std::vector<Renderable> 
 	index++;
 	while (index < layers.size()) {
 		if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY && layernames[index] == "fogofwar") {
-			//renderIsoLayer(layers[index],fow->tset);
-			//map_parallax.render(cam.shake, layernames[index]);
+			renderIsoLayer(layers[index],fow->tset);
+			map_parallax.render(cam.shake, layernames[index]);
 		}
 		else {
 			renderIsoLayer(layers[index], tset);

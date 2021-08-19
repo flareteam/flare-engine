@@ -356,7 +356,7 @@ void MenuMiniMap::prerenderOrtho(MapCollision *collider, Sprite** tile_surface, 
 
 			if (eset->misc.fogofwar) {
 				tile_type = mapr->layers[fow->layer_id][i][j];
-				if (tile_type == 1) draw_tile = false;
+				if (tile_type == FogOfWar::TILE_HIDDEN) draw_tile = false;
 			}
 
 			if (draw_tile && draw_color.a != 0) {
@@ -450,7 +450,7 @@ void MenuMiniMap::prerenderIso(MapCollision *collider, Sprite** tile_surface, Sp
 				
 				if (eset->misc.fogofwar) {
 					tile_type = mapr->layers[fow->layer_id][tile_cursor.x][tile_cursor.y];
-					if (tile_type == 1) draw_tile = false;
+					if (tile_type == FogOfWar::TILE_HIDDEN) draw_tile = false;
 				}
 				
 				if (draw_tile && draw_color.a != 0) {
