@@ -207,17 +207,17 @@ Color FogOfWar::getTileColorMod(const int_fast16_t x, const int_fast16_t y) {
 }
 
 void FogOfWar::calcBoundaries() {
-	bounds.x = static_cast<short>(pc->stats.pos.x-pc->sight);
-	bounds.y = static_cast<short>(pc->stats.pos.y-pc->sight);
-	bounds.w = static_cast<short>(pc->stats.pos.x+pc->sight);
-	bounds.h = static_cast<short>(pc->stats.pos.y+pc->sight);
+	bounds.x = static_cast<short>(pc->stats.pos.x)-pc->sight;
+	bounds.y = static_cast<short>(pc->stats.pos.y)-pc->sight;
+	bounds.w = static_cast<short>(pc->stats.pos.x)+pc->sight;
+	bounds.h = static_cast<short>(pc->stats.pos.y)+pc->sight;
 }
 
 void FogOfWar::calcMiniBoundaries() {
-	bounds.x = static_cast<short>(pc->stats.pos.x-pc->sight);
-	bounds.y = static_cast<short>(pc->stats.pos.y-pc->sight);
-	bounds.w = static_cast<short>(pc->stats.pos.x+pc->sight);
-	bounds.h = static_cast<short>(pc->stats.pos.y+pc->sight);
+	bounds.x = static_cast<short>(pc->stats.pos.x)-pc->sight;
+	bounds.y = static_cast<short>(pc->stats.pos.y)-pc->sight;
+	bounds.w = static_cast<short>(pc->stats.pos.x)+pc->sight;
+	bounds.h = static_cast<short>(pc->stats.pos.y)+pc->sight;
 
 	if (bounds.x < 0) bounds.x = 0;
 	if (bounds.y < 0) bounds.y = 0;
@@ -231,11 +231,11 @@ void FogOfWar::updateTiles(unsigned short sight_tile) {
 
 void FogOfWar::applyMask() {
 	calcBoundaries();
-	int radius = 9;
+	int radius = pc->sight;
 	const unsigned short * mask = &CIRCLE_MASK[radius - FOW_RADIUS_MIN][0];
 	  
-  	for (int x = bounds.x; x < bounds.w+1; x++) {
-		for (int y = bounds.y; y < bounds.h+1; y++) {
+	for (int x = bounds.x; x <= bounds.w; x++) {
+		for (int y = bounds.y; y <= bounds.h; y++) {
 			if (x>=0 && y>=0 && x < mapr->w && y < mapr->h) {
 				unsigned short prev_tile = mapr->layers[layer_id][x][y];
 				mapr->layers[layer_id][x][y] &= *mask;
