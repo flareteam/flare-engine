@@ -218,9 +218,12 @@ int MapRenderer::load(const std::string& fname) {
 		if (layernames[i] == "object")
 			index_objectlayer = i;
 	if (eset->misc.fogofwar) {
-		for (unsigned short i = 0; i < layers.size(); ++i)
-			if (layernames[i] == "fogofwar")
-				fow->layer_id = i;
+		for (unsigned short i = 0; i < layers.size(); ++i) {
+			if (layernames[i] == "fow_dark")
+				fow->dark_layer_id = i;
+			if (layernames[i] == "fow_fog")
+				fow->fog_layer_id = i;
+		}
 	}
 
 	while (!enemy_groups.empty()) {
@@ -239,9 +242,13 @@ int MapRenderer::load(const std::string& fname) {
 				const unsigned tile_id = layers[i][x][y];
 				TileSet* tile_set = &tset;
 				
-				if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY && i == fow->layer_id) {
-					tile_set = &fow->tset;				
+				if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY) {
+					if (i == fow->dark_layer_id) tile_set = &fow->tset_dark;
+					if (i == fow->fog_layer_id) tile_set = &fow->tset_fog;
 			    }
+			    if (eset->misc.fogofwar)
+					if (i == fow->dark_layer_id || i == fow->fog_layer_id)
+						continue;
 				
 				if (tile_id > 0 && (tile_id >= tile_set->tiles.size() || tile_set->tiles[tile_id].tile == NULL)) {
 					if (std::find(corrupted.begin(), corrupted.end(), tile_id) == corrupted.end()) {
@@ -284,8 +291,10 @@ void MapRenderer::logic(bool paused) {
 
 	// handle tile set logic e.g. animations
 	tset.logic();
-	if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY)
-		fow->tset.logic();
+	if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY) {
+		fow->tset_dark.logic();
+		fow->tset_fog.logic();
+	}
 
 	// TODO there's a bit too much "logic" here for a class that's supposed to be dedicated to rendering
 	// some of these timers should be moved out at some point
@@ -431,8 +440,8 @@ void MapRenderer::renderIsoLayer(const Map_Layer& layerdata, const TileSet& tile
 				dest.y = p.y - tile.offset.y;
 
 				if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY)
-					if (&layerdata != &layers[fow->layer_id])
-						if (layers[fow->layer_id][i][j] == FogOfWar::TILE_HIDDEN) continue;
+					if (&layerdata != &layers[fow->dark_layer_id] && &layerdata != &layers[fow->fog_layer_id])
+						if (layers[fow->dark_layer_id][i][j] == FogOfWar::TILE_HIDDEN) continue;
 
 				// no need to set w and h in dest, as it is ignored
 				// by SDL_BlitSurface
@@ -442,12 +451,13 @@ void MapRenderer::renderIsoLayer(const Map_Layer& layerdata, const TileSet& tile
 				}
 				render_device->render(tile.tile);
 
-				if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY)
-					if (&layerdata == &layers[fow->layer_id]) {
+				//debug fow tiles
+/*				if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY)
+					if (&layerdata == &layers[fow->dark_layer_id]) {
 						Sprite* tile_spr = fow->tile_numbers[current_tile];
 						tile_spr->setDestFromPoint(dest);
 						render_device->render(tile_spr);
-					}
+					}*/
 			}
 		}
 		j = static_cast<int_fast16_t>(j + tiles_width);
@@ -542,8 +552,8 @@ void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 					const Tile_Def &tile = tset.tiles[current_tile];
 
 					if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY)
-						if (&current_layer != &layers[fow->layer_id])
-							if (layers[fow->layer_id][i][j] == FogOfWar::TILE_HIDDEN) continue;
+						if (&current_layer != &layers[fow->dark_layer_id] && &current_layer != &layers[fow->fog_layer_id])
+							if (layers[fow->dark_layer_id][i][j] == FogOfWar::TILE_HIDDEN) continue;
 
 					dest.x = p.x - tile.offset.x;
 					dest.y = p.y - tile.offset.y;
@@ -710,14 +720,18 @@ void MapRenderer::renderIso(std::vector<Renderable> &r, std::vector<Renderable> 
 
 	index++;
 	while (index < layers.size()) {
-		if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY && layernames[index] == "fogofwar") {
-			renderIsoLayer(layers[index],fow->tset);
-			map_parallax.render(cam.shake, layernames[index]);
+		if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY) {
+			if (layernames[index] == "fow_dark") {
+				renderIsoLayer(layers[index],fow->tset_dark);
+			}
+			if (layernames[index] == "fow_fog") {
+				renderIsoLayer(layers[index],fow->tset_fog);
+			}
 		}
-		else {
+		else if (layernames[index] != "fow_dark" && layernames[index] != "fow_fog") {
 			renderIsoLayer(layers[index], tset);
-			map_parallax.render(cam.shake, layernames[index]);
 		}
+		map_parallax.render(cam.shake, layernames[index]);
 		index++;
 	}
 
@@ -751,8 +765,8 @@ void MapRenderer::renderOrthoLayer(const Map_Layer& layerdata) {
 				dest.y = p.y - tile.offset.y;
 
 				if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY)
-					if (&layerdata != &layers[fow->layer_id])
-						if (layers[fow->layer_id][i][j] == FogOfWar::TILE_HIDDEN) continue;
+					if (&layerdata != &layers[fow->dark_layer_id] && &layerdata != &layers[fow->fog_layer_id])
+						if (layers[fow->dark_layer_id][i][j] == FogOfWar::TILE_HIDDEN) continue;
 
 				tile.tile->setDestFromPoint(dest);
 				if (eset->misc.fogofwar == FogOfWar::TYPE_TINT) {
@@ -804,8 +818,8 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 				dest.y = p.y - tile.offset.y;
 
 				if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY)
-					if (&layers[index_objectlayer] != &layers[fow->layer_id])
-						if (layers[fow->layer_id][i][j] == FogOfWar::TILE_HIDDEN) continue;
+					if (&layers[index_objectlayer] != &layers[fow->dark_layer_id] && &layers[index_objectlayer] != &layers[fow->fog_layer_id])
+						if (layers[fow->dark_layer_id][i][j] == FogOfWar::TILE_HIDDEN) continue;
 
 				tile.tile->setDestFromPoint(dest);
 				checkHiddenEntities(i, j, layers[index_objectlayer], r);

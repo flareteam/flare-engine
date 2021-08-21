@@ -149,12 +149,38 @@ const unsigned short FogOfWar::CIRCLE_MASK[NUM_FOW_RADII][FOW_MAX_RADIUS_LENGTH 
 		fow_all,fow_all,fow_all,fow_CSW,fow_SSS,fow_JSW,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_JSE,fow_SSS,fow_CSE,fow_all,fow_all,fow_all,
 		fow_all,fow_all,fow_all,fow_all,fow_all,fow_CSW,fow_SSS,fow_JSW,fow_non,fow_non,fow_non,fow_JSE,fow_SSS,fow_CSE,fow_all,fow_all,fow_all,fow_all,fow_all,
 		fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_CSW,fow_SSS,fow_SSS,fow_SSS,fow_CSE,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,
+	},
+		// radius 10
+	{
+		fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,
+		fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_CNW,fow_NNN,fow_NNN,fow_NNN,fow_CNE,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,
+		fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_CNW,fow_NNN,fow_JNW,fow_non,fow_non,fow_non,fow_JNE,fow_NNN,fow_CNE,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,
+		fow_all,fow_all,fow_all,fow_all,fow_CNW,fow_NNN,fow_JNW,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_JNE,fow_NNN,fow_CNE,fow_all,fow_all,fow_all,fow_all,
+		fow_all,fow_all,fow_all,fow_CNW,fow_JNW,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_JNE,fow_CNE,fow_all,fow_all,fow_all,
+		fow_all,fow_all,fow_all,fow_WWW,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_EEE,fow_all,fow_all,fow_all,
+		fow_all,fow_all,fow_CNW,fow_JNW,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_JNE,fow_CNE,fow_all,fow_all,
+		fow_all,fow_all,fow_WWW,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_EEE,fow_all,fow_all,
+		fow_all,fow_CNW,fow_JNW,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_JNE,fow_CNE,fow_all,
+		fow_all,fow_WWW,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_EEE,fow_all,
+		fow_all,fow_WWW,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_EEE,fow_all,
+		fow_all,fow_WWW,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_EEE,fow_all,
+		fow_all,fow_CSW,fow_JSW,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_JSE,fow_CSE,fow_all,
+		fow_all,fow_all,fow_WWW,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_EEE,fow_all,fow_all,
+		fow_all,fow_all,fow_CSW,fow_JSW,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_JSE,fow_CSE,fow_all,fow_all,
+		fow_all,fow_all,fow_all,fow_WWW,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_EEE,fow_all,fow_all,fow_all,
+		fow_all,fow_all,fow_all,fow_CSW,fow_JSW,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_JSE,fow_CSE,fow_all,fow_all,fow_all,
+		fow_all,fow_all,fow_all,fow_all,fow_CSW,fow_SSS,fow_JSW,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_non,fow_JSE,fow_SSS,fow_CSE,fow_all,fow_all,fow_all,fow_all,
+		fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_CSW,fow_SSS,fow_JSW,fow_non,fow_non,fow_non,fow_JSE,fow_SSS,fow_CSE,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,
+		fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_CSW,fow_SSS,fow_SSS,fow_SSS,fow_CSE,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,
+		fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,fow_all,
 	}
 };
 
 FogOfWar::FogOfWar()
-	: layer_id(0)
-	, tileset("tilesetdefs/tileset_fogofwar.txt")
+	: dark_layer_id(0)
+	, fog_layer_id(0)
+	, tileset_dark("tilesetdefs/tileset_fow_dark.txt")
+	, tileset_fog("tilesetdefs/tileset_fow_fog.txt")
 	, bounds(0,0,0,0)
 	, color_sight(255,255,255)
 	, color_visited(128,128,128)
@@ -174,13 +200,13 @@ FogOfWar::FogOfWar()
 }
 
 int FogOfWar::load() {
-	tset.load(tileset);
-
+	tset_dark.load(tileset_dark);
+	tset_fog.load(tileset_fog);
 	return 0;
 }
 
 void FogOfWar::logic() {
-	updateTiles(TILE_SIGHT);
+	updateTiles();
 	if (update_minimap) {
 		calcMiniBoundaries();
 		menu->mini->update(&mapr->collider, &bounds);
@@ -189,20 +215,23 @@ void FogOfWar::logic() {
 }
 
 void FogOfWar::handleIntramapTeleport() {
-	updateTiles(TILE_VISITED);
-	if (update_minimap) {
-		calcMiniBoundaries();
-		menu->mini->update(&mapr->collider, &bounds);
-		update_minimap = false;
+	calcBoundaries();
+	
+	for (int x = bounds.x; x <= bounds.w; x++) {
+		for (int y = bounds.y; y <= bounds.h; y++) {
+			if (x>=0 && y>=0 && x < mapr->w && y < mapr->h) {
+				mapr->layers[fog_layer_id][x][y] = TILE_HIDDEN;
+			}
+		}
 	}
 }
 
 Color FogOfWar::getTileColorMod(const int_fast16_t x, const int_fast16_t y) {
-	if (mapr->layers[layer_id][x][y] == TILE_VISITED)
+	if (mapr->layers[dark_layer_id][x][y] == 0 && mapr->layers[fog_layer_id][x][y] > 0)
 		return color_visited;
-	else if (mapr->layers[layer_id][x][y] == TILE_HIDDEN)
+	else if (mapr->layers[dark_layer_id][x][y] > 0)
 		return color_hidden;
-	else
+	else 
 		return color_sight;
 }
 
@@ -225,11 +254,7 @@ void FogOfWar::calcMiniBoundaries() {
 	if (bounds.h > mapr->h) bounds.h = mapr->h;
 }
 
-void FogOfWar::updateTiles(unsigned short sight_tile) {
-	applyMask();
-}
-
-void FogOfWar::applyMask() {
+void FogOfWar::updateTiles() {
 	calcBoundaries();
 	int radius = pc->sight;
 	const unsigned short * mask = &CIRCLE_MASK[radius - FOW_RADIUS_MIN][0];
@@ -237,9 +262,10 @@ void FogOfWar::applyMask() {
 	for (int x = bounds.x; x <= bounds.w; x++) {
 		for (int y = bounds.y; y <= bounds.h; y++) {
 			if (x>=0 && y>=0 && x < mapr->w && y < mapr->h) {
-				unsigned short prev_tile = mapr->layers[layer_id][x][y];
-				mapr->layers[layer_id][x][y] &= *mask;
-				if ((prev_tile == TILE_HIDDEN) && prev_tile != mapr->layers[layer_id][x][y]) {
+				unsigned short prev_tile = mapr->layers[dark_layer_id][x][y];
+				mapr->layers[dark_layer_id][x][y] &= *mask;
+				mapr->layers[fog_layer_id][x][y] = *mask;
+				if ((prev_tile == TILE_HIDDEN) && prev_tile != mapr->layers[dark_layer_id][x][y]) {
 					update_minimap = true;
 				}
 			}
@@ -247,7 +273,6 @@ void FogOfWar::applyMask() {
 		}
 	}
 }
-
 
 FogOfWar::~FogOfWar() {
 }

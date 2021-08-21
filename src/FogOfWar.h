@@ -58,7 +58,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define	fow_JSE					(FOW_BIT_S | FOW_BIT_SE | FOW_BIT_E)
 
 #define	FOW_RADIUS_MIN			3
-#define	FOW_RADIUS_MAX			9
+#define	FOW_RADIUS_MAX			10
 #define	NUM_FOW_RADII			((FOW_RADIUS_MAX - FOW_RADIUS_MIN) + 1)
 
 #define	FOW_MAX_RADIUS_LENGTH	((FOW_RADIUS_MAX * 2) + 1)
@@ -84,14 +84,16 @@ public:
 		TILE_VISITED = 2,
 	};
 
-	unsigned short layer_id;
-	std::string tileset;
-	TileSet tset;
+	unsigned short dark_layer_id;
+	unsigned short fog_layer_id;
+	std::string tileset_dark;
+	std::string tileset_fog;
+	TileSet tset_dark;
+	TileSet tset_fog;
 
 	void logic();
-	void applyMask();
-	int load();
 	void handleIntramapTeleport();
+	int load();
 	Color getTileColorMod(const int_fast16_t x, const int_fast16_t y);
 	std::vector<Sprite*> tile_numbers;
 
@@ -109,7 +111,7 @@ private:
 
 	void calcBoundaries();
 	void calcMiniBoundaries();
-	void updateTiles(unsigned short sight_tile);
+	void updateTiles();
 	static const unsigned short CIRCLE_MASK[NUM_FOW_RADII][FOW_MAX_RADIUS_LENGTH * FOW_MAX_RADIUS_LENGTH];
 };
 

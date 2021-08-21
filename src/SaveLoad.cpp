@@ -245,25 +245,23 @@ void SaveLoad::saveGame() {
 		}
 	}
 	
-	// Save fow
+	// Save fow dark layer
 	if (eset->misc.fogofwar && eset->misc.save_fogofwar) {
 		ss.str("");
 		ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/" << game_slot << "/" << mapr->getFilename();
 
 		outfile.open(Filesystem::convertSlashes(ss.str()).c_str(), std::ios::out);
-		
+
 		if (outfile.is_open()) {
 			outfile << "[layer]" << std::endl;
-
-			outfile << "type=" << mapr->layernames[fow->layer_id] << std::endl;
+			outfile << "type=" << mapr->layernames[fow->dark_layer_id] << std::endl;
 			outfile << "data=" << std::endl;
 
 			std::string layer = "";
 			for (int line = 0; line < mapr->h; line++) {
 				std::stringstream map_row;
 				for (int tile = 0; tile < mapr->w; tile++) {
-					unsigned short val = mapr->layers[fow->layer_id][tile][line];
-					//if (val == FogOfWar::TILE_SIGHT) val = FogOfWar::TILE_VISITED;
+					unsigned short val = mapr->layers[fow->dark_layer_id][tile][line];
 					map_row << val << ",";
 				}
 				layer += map_row.str();
@@ -271,7 +269,6 @@ void SaveLoad::saveGame() {
 			}
 			layer.erase(layer.end()-2, layer.end());
 			layer += '\n';
-
 			outfile << layer << std::endl;
 			
 			if (outfile.bad()) Utils::logError("SaveLoad: Unable to save map data. No write access or disk is full!");

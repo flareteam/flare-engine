@@ -355,7 +355,7 @@ void MenuMiniMap::prerenderOrtho(MapCollision *collider, Sprite** tile_surface, 
 			else draw_tile = false;
 
 			if (eset->misc.fogofwar) {
-				tile_type = mapr->layers[fow->layer_id][i][j];
+				tile_type = mapr->layers[fow->dark_layer_id][i][j];
 				if (tile_type == FogOfWar::TILE_HIDDEN) draw_tile = false;
 			}
 
@@ -391,7 +391,7 @@ void MenuMiniMap::updateOrtho(MapCollision *collider, Sprite** tile_surface, int
 			else if (tile_type == 2 || tile_type == 6) draw_color = color_obst;
 			else draw_tile = false;
 
-			tile_type = mapr->layers[fow->layer_id][i][j];
+			tile_type = mapr->layers[fow->dark_layer_id][i][j];
 			if (tile_type != 0) draw_tile = false;
 
 			if (draw_tile && draw_color.a != 0) {
@@ -449,7 +449,7 @@ void MenuMiniMap::prerenderIso(MapCollision *collider, Sprite** tile_surface, Sp
 				else draw_tile = false;
 				
 				if (eset->misc.fogofwar) {
-					tile_type = mapr->layers[fow->layer_id][tile_cursor.x][tile_cursor.y];
+					tile_type = mapr->layers[fow->dark_layer_id][tile_cursor.x][tile_cursor.y];
 					if (tile_type == FogOfWar::TILE_HIDDEN) draw_tile = false;
 				}
 				
@@ -531,7 +531,7 @@ void MenuMiniMap::updateIso(MapCollision *collider, Sprite** tile_surface, int z
 				else draw_tile = false;
 				
 				// fog of war
-				tile_type = mapr->layers[fow->layer_id][tile_cursor.x][tile_cursor.y];
+				tile_type = mapr->layers[fow->dark_layer_id][tile_cursor.x][tile_cursor.y];
 				if (tile_type != 0) draw_tile = false;
 
 				if (draw_tile) {
@@ -735,7 +735,7 @@ void MenuMiniMap::fillEntities() {
 			for (int j=event_pos.x; j<event_pos.x + mapr->events[i].location.w; ++j) {
 				for (int k=event_pos.y; k<event_pos.y + mapr->events[i].location.h; ++k) {
 					if (eset->misc.fogofwar)
-						if (mapr->layers[fow->layer_id][event_pos.x][event_pos.y] == FogOfWar::TILE_HIDDEN) continue;
+						if (mapr->layers[fow->dark_layer_id][event_pos.x][event_pos.y] == FogOfWar::TILE_HIDDEN) continue;
 
 					entities[j][k] = TILE_TELEPORT;
 				}

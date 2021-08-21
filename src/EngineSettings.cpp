@@ -74,7 +74,7 @@ void EngineSettings::Misc::load() {
 	keep_buyback_on_map_change = true;
 	sfx_unable_to_cast = "";
 	combat_aborts_npc_interact = true;
-	fogofwar = 2;
+	fogofwar = 1;
 	save_fogofwar = true;
 
 	FileParser infile;
