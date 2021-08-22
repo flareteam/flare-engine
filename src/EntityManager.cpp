@@ -118,6 +118,9 @@ void EntityManager::handleNewMap () {
 
 	// delete existing entities
 	for (unsigned int i=0; i < entities.size(); i++) {
+		if (entities[i]->stats.npc)
+			continue;
+
 		anim->decreaseCount(entities[i]->animationSet->getName());
 		if(entities[i]->stats.hero_ally && !entities[i]->stats.corpse && entities[i]->stats.cur_state != StatBlock::ENTITY_DEAD && entities[i]->stats.cur_state != StatBlock::ENTITY_CRITDEAD && entities[i]->stats.speed > 0.0f)
 			allies.push(entities[i]);
@@ -391,7 +394,9 @@ void EntityManager::logic() {
 	for (it = entities.begin(); it != entities.end(); ++it) {
 		// new actions this round
 		(*it)->stats.hero_stealth = hero_stealth;
-		(*it)->logic();
+		if (!(*it)->stats.npc) {
+			(*it)->logic();
+		}
 	}
 }
 
@@ -521,6 +526,9 @@ void EntityManager::addRenders(std::vector<Renderable> &r, std::vector<Renderabl
 
 EntityManager::~EntityManager() {
 	for (unsigned int i=0; i < entities.size(); i++) {
+		if (entities[i]->stats.npc)
+			continue;
+
 		anim->decreaseCount(entities[i]->animationSet->getName());
 		entities[i]->unloadSounds();
 		delete entities[i];

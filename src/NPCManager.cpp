@@ -61,7 +61,7 @@ void NPCManager::handleNewMap() {
 
 	// remove existing NPCs
 	for (unsigned i=0; i<npcs.size(); i++) {
-		if (npcs[i]->stats.hero_ally) {
+		if (npcs[i]->stats.hero_ally && !npcs[i]->stats.corpse && npcs[i]->stats.cur_state != StatBlock::ENTITY_DEAD && npcs[i]->stats.cur_state != StatBlock::ENTITY_CRITDEAD && npcs[i]->stats.speed > 0.0f) {
 			allies[npcs[i]->filename] = npcs[i];
 		}
 		else {
@@ -122,6 +122,8 @@ void NPCManager::handleNewMap() {
 		createMapEvent(*npc, npcs.size());
 
 		mapr->collider.block(npc->stats.pos.x, npc->stats.pos.y, !MapCollision::IS_ALLY);
+
+		entitym->entities.push_back(npc);
 	}
 
 }

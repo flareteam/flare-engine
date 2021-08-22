@@ -27,6 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "AnimationSet.h"
 #include "CampaignManager.h"
 #include "EntityBehavior.h"
+#include "EntityManager.h"
 #include "EventManager.h"
 #include "FileParser.h"
 #include "ItemManager.h"
@@ -631,7 +632,19 @@ bool NPC::processDialog(unsigned int dialog_node, unsigned int &event_cursor) {
 			}
 		}
 		else if (dialog[dialog_node][event_cursor].type == EventComponent::NPC_TAKE_A_PARTY) {
-			stats.hero_ally = dialog[dialog_node][event_cursor].x == 0 ? false : true;
+			bool new_hero_ally = dialog[dialog_node][event_cursor].x == 0 ? false : true;
+			if (stats.hero_ally != new_hero_ally) {
+				stats.hero_ally = new_hero_ally;
+				if (stats.hero_ally) {
+					entitym->entities.push_back(this);
+				}
+				else {
+					for (size_t i = entitym->entities.size(); i > 0; --i) {
+						if (entitym->entities[i-1] == this)
+							entitym->entities.erase(entitym->entities.begin() + i - 1);
+					}
+				}
+			}
 		}
 		else if (dialog[dialog_node][event_cursor].type == EventComponent::NONE) {
 			// conversation ends
