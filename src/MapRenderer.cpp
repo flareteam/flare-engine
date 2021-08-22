@@ -550,14 +550,25 @@ void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 			if (draw_tile && !drawn_tiles[i][j]) {
 				if (const uint_fast16_t current_tile = current_layer[i][j]) {
 					const Tile_Def &tile = tset.tiles[current_tile];
-
-					if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY)
-						if (&current_layer != &layers[fow->dark_layer_id] && &current_layer != &layers[fow->fog_layer_id])
-							if (layers[fow->dark_layer_id][i][j] == FogOfWar::TILE_HIDDEN) continue;
-
 					dest.x = p.x - tile.offset.x;
 					dest.y = p.y - tile.offset.y;
 					tile.tile->setDestFromPoint(dest);
+
+					//skip rendering tiles that are underneath fow hidden tiles
+					if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY) {
+						if (&current_layer != &layers[fow->dark_layer_id] && &current_layer != &layers[fow->fog_layer_id]) {
+							if (layers[fow->dark_layer_id][i][j] == FogOfWar::TILE_HIDDEN) {
+								FPoint tile_tip = Utils::screenToMap(dest.x, dest.y, pc->stats.pos.x, pc->stats.pos.y);
+								short j_tile_tip = static_cast<short>(tile_tip.y-1);
+								if (j_tile_tip < 0) j_tile_tip = 0;
+
+								if (layers[fow->dark_layer_id][i][j_tile_tip] == FogOfWar::TILE_HIDDEN) {
+									continue;
+								}
+							}
+						}
+					}
+
 					checkHiddenEntities(i, j, current_layer, r);
 					if (eset->misc.fogofwar == FogOfWar::TYPE_TINT) {
 						tile.tile->color_mod = fow->getTileColorMod(i, j);

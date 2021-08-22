@@ -258,7 +258,7 @@ void FogOfWar::updateTiles() {
 	calcBoundaries();
 	int radius = pc->sight;
 	const unsigned short * mask = &CIRCLE_MASK[radius - FOW_RADIUS_MIN][0];
-	  
+
 	for (int x = bounds.x; x <= bounds.w; x++) {
 		for (int y = bounds.y; y <= bounds.h; y++) {
 			if (x>=0 && y>=0 && x < mapr->w && y < mapr->h) {
