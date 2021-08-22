@@ -3,6 +3,9 @@ Flare v1.13 (WIP)
 Engine fixes:
 
 * Fix enemies not being able to target NPC followers
+* Fix loot and sound effects being cleared in StatBlock files with multiple sections
+
+
 
 Flare v1.12 (https://flarerpg.org/2021/08/02/flare-1-12/)
 

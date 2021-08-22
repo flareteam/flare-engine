@@ -348,7 +348,7 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 bool StatBlock::loadSfxStat(FileParser *infile) {
 	// @CLASS StatBlock: Sound effects|Description of heroes in engine/avatar/ and enemies in enemies/
 
-	if (infile->new_section) {
+	if (infile->new_section && (infile->section.empty() || infile->section == "stats")) {
 		sfx_attack.clear();
 		sfx_hit.clear();
 		sfx_die.clear();
@@ -457,7 +457,7 @@ void StatBlock::load(const std::string& filename) {
 	bool flee_range_defined = false;
 
 	while (infile.next()) {
-		if (infile.new_section) {
+		if (infile.new_section && (infile.section.empty() || infile.section == "stats")) {
 			// APPENDed file
 			clear_loot = true;
 		}
