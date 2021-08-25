@@ -1,6 +1,6 @@
 .\" -*- nroff -*-
 
-.TH FLARE 1 "November 2014"
+.TH FLARE 6 "November 2014"
 
 .SH NAME
 flare \- action role-playing engine
