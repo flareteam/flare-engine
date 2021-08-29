@@ -1,6 +1,8 @@
 ### Attribute description
 Attribute descriptions are in the following format: section.attributename, `valuetype`, short attribute description
 
+**This reference is generated from in-source documentation, so please do not edit it directly.**
+
 #### Valuetype syntax
 
 `[val1, ...]`, Multiple values between a set of square brackets denotes possible types/values for a single field.
@@ -39,7 +41,7 @@ Attribute descriptions are in the following format: section.attributename, `valu
 
 `alignment`, defined as: `["topleft", "top", "topright", "left", "center", "right", "bottomleft", "bottom", "bottomright", "frame_topleft", "frame_top", "frame_topright", "frame_left", "frame_center", "frame_right", "frame_bottomleft", "frame_bottom", "frame_bottomright"]`
 
-`direction`, defined as: `["N", "NE", "E", "SE", "S", "SW", "W", "NW", int]`. If defined as an integer, the value must be between 0-7 inclusive.
+`direction`, defined as: `["N", "NE", "E", "SE", "S", "SW", "W", "NW", int]`. If defined as an integer, the value must be between 0-7 inclusive, mapping to `["W", "NW", "N", "NE", "E", "SE", "S", "SW"]` respectively.
 
 `duration`, durations can be specified in seconds and milliseconds with integer suffix s, ms (eg. 20s, 20000ms)
 
