@@ -52,6 +52,7 @@ public:
 	std::string mask_definition;
 	TileSet tset_dark;
 	TileSet tset_fog;
+	int mask_radius;
 
 	void logic();
 	void handleIntramapTeleport();
@@ -63,7 +64,6 @@ public:
 	~FogOfWar();
 
 private:
-	int mask_radius;
 	int bits_per_tile;
 	std::map<std::string, int> def_bits;
 	std::map<std::string, int> def_tiles;

@@ -135,7 +135,7 @@ void LootManager::renderTooltips(const FPoint& cam) {
 		if (it->on_ground) {
 			if (eset->misc.fogofwar > FogOfWar::TYPE_MINIMAP) {
 				float delta = Utils::calcDist(pc->stats.pos, it->pos);
-				if (delta > pc->sight-1.0) {
+				if (delta > fow->mask_radius-1.0) {
 					break;
 				}
 			}
@@ -511,7 +511,7 @@ void LootManager::addRenders(std::vector<Renderable> &ren, std::vector<Renderabl
 	for (it = loot.begin(); it != loot.end(); ++it) {
 		if (eset->misc.fogofwar > FogOfWar::TYPE_MINIMAP) {
 			float delta = Utils::calcDist(pc->stats.pos, it->pos);
-			if (delta > pc->sight-1.0) {
+			if (delta > fow->mask_radius-1.0) {
 				continue;
 			}
 		}

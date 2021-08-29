@@ -158,7 +158,6 @@ public:
 	int prev_hp;
 	bool playing_lowhp;
 	bool teleport_camera_lock;
-	unsigned short sight;
 
 	std::vector<ActionData> action_queue;
 };

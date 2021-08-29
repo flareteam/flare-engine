@@ -723,7 +723,7 @@ void MenuMiniMap::fillEntities() {
 		if (mapr->events[i].getComponent(EventComponent::NPC_HOTSPOT) && EventManager::isActive(mapr->events[i])) {
 			if (eset->misc.fogofwar) {
 				float delta = Utils::calcDist(pc->stats.pos, mapr->events[i].center);
-				if (delta > pc->sight) {
+				if (delta > fow->mask_radius) {
 					continue;
 				}
 			}
@@ -748,7 +748,7 @@ void MenuMiniMap::fillEntities() {
 		if (e->stats.hp > 0) {
 			if (eset->misc.fogofwar) {
 				float delta = Utils::calcDist(pc->stats.pos, e->stats.pos);
-				if (delta > pc->sight) {
+				if (delta > fow->mask_radius) {
 					continue;
 				}
 			}
