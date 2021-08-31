@@ -438,7 +438,7 @@ void MapRenderer::renderIsoLayer(const Map_Layer& layerdata, const TileSet& tile
 				dest.y = p.y - tile.offset.y;
 
 				if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY)
-					if (&layerdata != &layers[fow->dark_layer_id] && &layerdata != &layers[fow->fog_layer_id])
+					if (&layerdata != &layers[fow->dark_layer_id])
 						if (layers[fow->dark_layer_id][i][j] == FogOfWar::TILE_HIDDEN) continue;
 
 				// no need to set w and h in dest, as it is ignored
@@ -546,7 +546,7 @@ void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 
 					//skip rendering tiles that are underneath fow hidden tiles
 					if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY) {
-						if (&current_layer != &layers[fow->dark_layer_id] && &current_layer != &layers[fow->fog_layer_id]) {
+						if (&current_layer != &layers[fow->dark_layer_id]) {
 							if (layers[fow->dark_layer_id][i][j] == FogOfWar::TILE_HIDDEN) {
 								FPoint tile_tip = Utils::screenToMap(dest.x, dest.y, pc->stats.pos.x, pc->stats.pos.y);
 								short j_tile_tip = static_cast<short>(tile_tip.y-1);
@@ -766,7 +766,7 @@ void MapRenderer::renderOrthoLayer(const Map_Layer& layerdata) {
 				dest.y = p.y - tile.offset.y;
 
 				if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY)
-					if (&layerdata != &layers[fow->dark_layer_id] && &layerdata != &layers[fow->fog_layer_id])
+					if (&layerdata != &layers[fow->dark_layer_id])
 						if (layers[fow->dark_layer_id][i][j] == FogOfWar::TILE_HIDDEN) continue;
 
 				tile.tile->setDestFromPoint(dest);
@@ -818,9 +818,20 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 				dest.x = p.x - tile.offset.x;
 				dest.y = p.y - tile.offset.y;
 
-				if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY)
-					if (&layers[index_objectlayer] != &layers[fow->dark_layer_id] && &layers[index_objectlayer] != &layers[fow->fog_layer_id])
-						if (layers[fow->dark_layer_id][i][j] == FogOfWar::TILE_HIDDEN) continue;
+				//skip rendering tiles that are underneath fow hidden tiles
+				if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY) {
+					if (&layers[index_objectlayer] != &layers[fow->dark_layer_id]) {
+						if (layers[fow->dark_layer_id][i][j] == FogOfWar::TILE_HIDDEN) {
+							FPoint tile_tip = Utils::screenToMap(dest.x, dest.y, pc->stats.pos.x, pc->stats.pos.y);
+							short j_tile_tip = static_cast<short>(tile_tip.y-1);
+							if (j_tile_tip < 0) j_tile_tip = 0;
+
+							if (layers[fow->dark_layer_id][i][j_tile_tip] == FogOfWar::TILE_HIDDEN) {
+								continue;
+							}
+						}
+					}
+				}
 
 				tile.tile->setDestFromPoint(dest);
 				checkHiddenEntities(i, j, layers[index_objectlayer], r);
