@@ -334,6 +334,8 @@ void GameStatePlay::checkTeleport() {
 			mapr->executeOnMapExitEvents();
 			showLoading();
 			save_load->saveGame();
+			if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY)
+				fow->load();
 			mapr->load(teleport_mapname);
 			setLoadingFrame();
 

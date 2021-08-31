@@ -39,11 +39,9 @@ public:
 		TYPE_MINIMAP = 1,
 		TYPE_TINT = 2,
 		TYPE_OVERLAY = 3,
-
-		TILE_SIGHT = 0,
-		TILE_HIDDEN = 511,
-		TILE_VISITED = 2,
 	};
+
+	static short unsigned TILE_HIDDEN;
 
 	unsigned short dark_layer_id;
 	unsigned short fog_layer_id;
@@ -58,7 +56,6 @@ public:
 	void handleIntramapTeleport();
 	int load();
 	Color getTileColorMod(const int_fast16_t x, const int_fast16_t y);
-	std::vector<Sprite*> tile_numbers;
 
 	FogOfWar();
 	~FogOfWar();

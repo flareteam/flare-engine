@@ -232,8 +232,6 @@ int MapRenderer::load(const std::string& fname) {
 	}
 
 	tset.load(this->tileset);
-	if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY)
-		fow->load();
 
 	std::vector<unsigned> corrupted;
 	for (unsigned i = 0; i < layers.size(); ++i) {

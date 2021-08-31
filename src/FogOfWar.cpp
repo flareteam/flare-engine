@@ -39,6 +39,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "UtilsParsing.h"
 
+short unsigned FogOfWar::TILE_HIDDEN = 0;
+
 FogOfWar::FogOfWar()
 	: dark_layer_id(0)
 	, fog_layer_id(0)
@@ -50,17 +52,6 @@ FogOfWar::FogOfWar()
 	, color_visited(128,128,128)
 	, color_hidden(0,0,0)
 	, update_minimap(true) {
-
-	for (int i=0; i<512; i++) {
-		std::stringstream ss;
-		ss << i;
-
-		Image* tile_num = render_device->createImage(64,32);
-		font->render(ss.str(), 16, 5, FontEngine::JUSTIFY_LEFT, tile_num, 0, Color(255,0,0,255));
-		Sprite* tile_spr = tile_num->createSprite();
-
-		tile_numbers.resize(tile_numbers.size()+1, tile_spr);
-	}
 }
 
 int FogOfWar::load() {
@@ -83,6 +74,9 @@ int FogOfWar::load() {
 	}
 
 	infile.close();
+
+	for (unsigned short i=0; i<bits_per_tile; i++)
+		TILE_HIDDEN |= (1<<i);
 
 	tset_dark.load(tileset_dark);
 	tset_fog.load(tileset_fog);
