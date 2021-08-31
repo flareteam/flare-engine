@@ -448,14 +448,6 @@ void MapRenderer::renderIsoLayer(const Map_Layer& layerdata, const TileSet& tile
 					tile.tile->color_mod = fow->getTileColorMod(i, j);
 				}
 				render_device->render(tile.tile);
-
-				//debug fow tiles
-/*				if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY)
-					if (&layerdata == &layers[fow->dark_layer_id]) {
-						Sprite* tile_spr = fow->tile_numbers[current_tile];
-						tile_spr->setDestFromPoint(dest);
-						render_device->render(tile_spr);
-					}*/
 			}
 		}
 		j = static_cast<int_fast16_t>(j + tiles_width);
