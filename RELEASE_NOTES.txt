@@ -7,6 +7,12 @@ Engine fixes:
 * Fix potential crash when removing summons that would be out-of-bounds on the next map.
 * Fix bug where a damage type with no name could be removed if another damage type was defined after it.
 
+Game updates:
+
+* New formula for the 'Shield' power. Instead of Mental Damage, it is now based off a combination of player level, Mental stat, and Defense stat. This should increase its usefulness on mixed builds.
+* Added 'Super' and 'Ultra' variants of Health and Mana potions. They can be obtained through the Alchemy system.
+* Fixed Alchemist's Skirt so that it works with all potions.
+
 
 
 Flare v1.12 (https://flarerpg.org/2021/08/02/flare-1-12/)
