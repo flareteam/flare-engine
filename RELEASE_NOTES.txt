@@ -4,6 +4,7 @@ Engine fixes:
 
 * Fix enemies not being able to target NPC followers
 * Fix loot and sound effects being cleared in StatBlock files with multiple sections
+* Fix potential crash when removing summons that would be out-of-bounds on the next map.
 
 
 
