@@ -612,10 +612,6 @@ void EngineSettings::DamageTypes::load() {
 		while (infile.next()) {
 			if (infile.new_section) {
 				if (infile.section == "damage_type") {
-					// damage types must have a printable name
-					if (!list.empty() && list.back().name == "") {
-						list.pop_back();
-					}
 					list.resize(list.size()+1);
 				}
 			}
@@ -645,6 +641,19 @@ void EngineSettings::DamageTypes::load() {
 		infile.close();
 	}
 	count = list.size() * 2;
+
+	// use the IDs if the damage type doesn't have printable names
+	for (size_t i = 0; i < list.size(); ++i) {
+		if (list[i].name.empty()) {
+			list[i].name = list[i].id;
+		}
+		if (list[i].name_min.empty()) {
+			list[i].name_min = list[i].min;
+		}
+		if (list[i].name_max.empty()) {
+			list[i].name_max = list[i].max;
+		}
+	}
 }
 
 void EngineSettings::DeathPenalty::load() {
