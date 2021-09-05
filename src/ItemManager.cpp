@@ -698,7 +698,7 @@ TooltipData ItemManager::getShortTooltip(ItemStack stack) {
 
 	// name
 	if (stack.quantity > 1) {
-		ss << stack.quantity << " " << getItemName(stack.item);
+		ss << getItemName(stack.item) << " (" << stack.quantity << ")";
 	}
 	else {
 		ss << getItemName(stack.item);
