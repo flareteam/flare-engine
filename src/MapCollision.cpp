@@ -504,6 +504,9 @@ void MapCollision::block(const float& map_x, const float& map_y, bool is_ally) {
 	const int tile_x = int(map_x);
 	const int tile_y = int(map_y);
 
+	if (isTileOutsideMap(tile_x, tile_y))
+		return;
+
 	if (colmap[tile_x][tile_y] == BLOCKS_NONE) {
 		if(is_ally)
 			colmap[tile_x][tile_y] = BLOCKS_ENEMIES;
@@ -516,6 +519,9 @@ void MapCollision::block(const float& map_x, const float& map_y, bool is_ally) {
 void MapCollision::unblock(const float& map_x, const float& map_y) {
 	const int tile_x = int(map_x);
 	const int tile_y = int(map_y);
+
+	if (isTileOutsideMap(tile_x, tile_y))
+		return;
 
 	if (colmap[tile_x][tile_y] == BLOCKS_ENTITIES || colmap[tile_x][tile_y] == BLOCKS_ENEMIES) {
 		colmap[tile_x][tile_y] = BLOCKS_NONE;
