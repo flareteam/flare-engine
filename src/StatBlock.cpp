@@ -874,7 +874,7 @@ void StatBlock::logic() {
 		mp_f = static_cast<float>(mp);
 
 	// HP regen
-	if (hp < get(Stats::HP_MAX) && hp > 0) {
+	if (hp <= get(Stats::HP_MAX) && hp > 0) {
 		float hp_regen_per_frame;
 		if (!in_combat && !hero_ally && !hero && pc->stats.alive) {
 			// enemies heal rapidly (full heal in 5 seconds) while not in combat
@@ -884,14 +884,14 @@ void StatBlock::logic() {
 			hp_regen_per_frame = static_cast<float>(get(Stats::HP_REGEN)) / 60.f / settings->max_frames_per_sec;
 		}
 		hp_f += hp_regen_per_frame;
-		hp = std::min(static_cast<int>(hp_f), get(Stats::HP_MAX));
+		hp = std::max(0, std::min(static_cast<int>(hp_f), get(Stats::HP_MAX)));
 	}
 
 	// MP regen
-	if (mp < get(Stats::MP_MAX) && hp > 0) {
+	if (mp <= get(Stats::MP_MAX) && hp > 0) {
 		float mp_regen_per_frame = static_cast<float>(get(Stats::MP_REGEN)) / 60.f / settings->max_frames_per_sec;
 		mp_f += mp_regen_per_frame;
-		mp = std::min(static_cast<int>(mp_f), get(Stats::MP_MAX));
+		mp = std::max(0, std::min(static_cast<int>(mp_f), get(Stats::MP_MAX)));
 	}
 
 	// handle buff/debuff durations

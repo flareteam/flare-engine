@@ -7,6 +7,8 @@ Engine fixes:
 * Fix potential crash when removing summons that would be out-of-bounds on the next map.
 * Fix bug where a damage type with no name could be removed if another damage type was defined after it.
 * Don't show hidden stats under 'Related Stats' section of tooltips of Character menu.
+* Fix bug where negative regen wouldn't work if the resource was 100% full.
+* Fix bug where negative regen would overflow after reaching zero.
 
 Game updates:
 
