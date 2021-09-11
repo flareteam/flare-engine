@@ -374,21 +374,21 @@ void MenuCharacter::refreshStats() {
 			// damage types are displayed before absorb
 			if (i == Stats::ABS_MIN) {
 				for (size_t k = 0; k < eset->damage_types.count; ++k) {
-					if (base_bonus[j-2]->at(Stats::COUNT + k) > 0) {
+					if (base_bonus[j-2]->at(Stats::COUNT + k) > 0 && (show_stat[Stats::COUNT + k] || show_stat[Stats::COUNT + k + 1])) {
 						if (!have_bonus) {
 							cstat[j].tip.addText("\n" + msg->get("Related stats:"));
 							have_bonus = true;
 						}
-						if (k % 2 == 0)
+						if (k % 2 == 0 && show_stat[Stats::COUNT + k])
 							cstat[j].tip.addText(eset->damage_types.list[k / 2].name_min);
-						else
+						else if (show_stat[Stats::COUNT + k + 1])
 							cstat[j].tip.addText(eset->damage_types.list[k / 2].name_max);
 					}
 				}
 			}
 
 			// non-damage bonuses
-			if (base_bonus[j-2]->at(i) > 0) {
+			if (base_bonus[j-2]->at(i) > 0 && show_stat[i]) {
 				if (!have_bonus) {
 					cstat[j].tip.addText("\n" + msg->get("Related stats:"));
 					have_bonus = true;

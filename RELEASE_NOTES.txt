@@ -6,6 +6,7 @@ Engine fixes:
 * Fix loot and sound effects being cleared in StatBlock files with multiple sections
 * Fix potential crash when removing summons that would be out-of-bounds on the next map.
 * Fix bug where a damage type with no name could be removed if another damage type was defined after it.
+* Don't show hidden stats under 'Related Stats' section of tooltips of Character menu.
 
 Game updates:
 
