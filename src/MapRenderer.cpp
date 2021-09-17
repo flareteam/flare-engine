@@ -448,14 +448,25 @@ void MapRenderer::renderIsoLayer(const Map_Layer& layerdata, const TileSet& tile
 							Point b_l(Utils::screenToMap(dest.x, dest.y + tile.tile->getClip().h, cam.shake.x, cam.shake.y));
 							Point b_r(Utils::screenToMap(dest.x + tile.tile->getClip().w, dest.y + tile.tile->getClip().h, cam.shake.x, cam.shake.y));
 
+							//limit to map bounds
 							if (t_l.x < 0) t_l.x = 0;
+							if (t_l.x >= w) t_l.x = w-1;
 							if (t_l.y < 0) t_l.y = 0;
+							if (t_l.y >= h) t_l.y = h-1;
+
+							if (t_r.x < 0) t_r.x = 0;
 							if (t_r.x >= w) t_r.x = w-1;
 							if (t_r.y < 0) t_r.y = 0;
+							if (t_r.y >= h) t_r.y = h-1;
 
 							if (b_l.x < 0) b_l.x = 0;
+							if (b_l.x >= w) b_l.x = w-1;
+							if (b_l.y < 0) b_l.y = 0;
 							if (b_l.y >= h) b_l.y = h-1;
+
+							if (b_r.x < 0) b_r.x = 0;
 							if (b_r.x >= w) b_r.x = w-1;
+							if (b_r.y < 0) b_r.y = 0;
 							if (b_r.y >= h) b_r.y = h-1;
 
 							if (layers[fow->dark_layer_id][t_l.x][t_l.y] == FogOfWar::TILE_HIDDEN) {
@@ -585,14 +596,25 @@ void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 								Point b_l(Utils::screenToMap(dest.x, dest.y + tile.tile->getClip().h, cam.shake.x, cam.shake.y));
 								Point b_r(Utils::screenToMap(dest.x + tile.tile->getClip().w, dest.y + tile.tile->getClip().h, cam.shake.x, cam.shake.y));
 
+								//limit to map bounds
 								if (t_l.x < 0) t_l.x = 0;
+								if (t_l.x >= w) t_l.x = w-1;
 								if (t_l.y < 0) t_l.y = 0;
+								if (t_l.y >= h) t_l.y = h-1;
+
+								if (t_r.x < 0) t_r.x = 0;
 								if (t_r.x >= w) t_r.x = w-1;
 								if (t_r.y < 0) t_r.y = 0;
+								if (t_r.y >= h) t_r.y = h-1;
 
 								if (b_l.x < 0) b_l.x = 0;
+								if (b_l.x >= w) b_l.x = w-1;
+								if (b_l.y < 0) b_l.y = 0;
 								if (b_l.y >= h) b_l.y = h-1;
+
+								if (b_r.x < 0) b_r.x = 0;
 								if (b_r.x >= w) b_r.x = w-1;
+								if (b_r.y < 0) b_r.y = 0;
 								if (b_r.y >= h) b_r.y = h-1;
 
 								if (layers[fow->dark_layer_id][t_l.x][t_l.y] == FogOfWar::TILE_HIDDEN) {
