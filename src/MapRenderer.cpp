@@ -239,7 +239,7 @@ int MapRenderer::load(const std::string& fname) {
 			for (unsigned y = 0; y < layers[i][x].size(); ++y) {
 				const unsigned tile_id = layers[i][x][y];
 				TileSet* tile_set = &tset;
-				
+
 				if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY) {
 					if (i == fow->dark_layer_id) tile_set = &fow->tset_dark;
 					if (i == fow->fog_layer_id) tile_set = &fow->tset_fog;
@@ -247,7 +247,7 @@ int MapRenderer::load(const std::string& fname) {
 			    if (eset->misc.fogofwar)
 					if (i == fow->dark_layer_id || i == fow->fog_layer_id)
 						continue;
-				
+
 				if (tile_id > 0 && (tile_id >= tile_set->tiles.size() || tile_set->tiles[tile_id].tile == NULL)) {
 					if (std::find(corrupted.begin(), corrupted.end(), tile_id) == corrupted.end()) {
 						corrupted.push_back(tile_id);
@@ -796,8 +796,11 @@ void MapRenderer::renderIso(std::vector<Renderable> &r, std::vector<Renderable> 
 			if (layernames[index] == "fow_dark") {
 				renderIsoLayer(layers[index],fow->tset_dark);
 			}
-			if (layernames[index] == "fow_fog") {
+			else if (layernames[index] == "fow_fog") {
 				renderIsoLayer(layers[index],fow->tset_fog);
+			}
+			else {
+				renderIsoLayer(layers[index], tset);
 			}
 		}
 		else if (layernames[index] != "fow_dark" && layernames[index] != "fow_fog") {
