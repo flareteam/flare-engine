@@ -354,7 +354,7 @@ void MenuMiniMap::prerenderOrtho(MapCollision *collider, Sprite** tile_surface, 
 			else if (tile_type == 2 || tile_type == 6) draw_color = color_obst;
 			else draw_tile = false;
 
-			if (eset->misc.fogofwar) {
+			if (mapr->fogofwar) {
 				tile_type = mapr->layers[fow->dark_layer_id][i][j];
 				if (tile_type == FogOfWar::TILE_HIDDEN) draw_tile = false;
 			}
@@ -448,7 +448,7 @@ void MenuMiniMap::prerenderIso(MapCollision *collider, Sprite** tile_surface, Sp
 				else if (tile_type == 2 || tile_type == 6) draw_color = color_obst;
 				else draw_tile = false;
 				
-				if (eset->misc.fogofwar) {
+				if (mapr->fogofwar) {
 					tile_type = mapr->layers[fow->dark_layer_id][tile_cursor.x][tile_cursor.y];
 					if (tile_type == FogOfWar::TILE_HIDDEN) draw_tile = false;
 				}
@@ -721,7 +721,7 @@ void MenuMiniMap::fillEntities() {
 			continue;
 
 		if (mapr->events[i].getComponent(EventComponent::NPC_HOTSPOT) && EventManager::isActive(mapr->events[i])) {
-			if (eset->misc.fogofwar) {
+			if (mapr->fogofwar) {
 				float delta = Utils::calcDist(pc->stats.pos, mapr->events[i].center);
 				if (delta > fow->mask_radius) {
 					continue;
@@ -734,7 +734,7 @@ void MenuMiniMap::fillEntities() {
 			Point event_pos(mapr->events[i].location.x, mapr->events[i].location.y);
 			for (int j=event_pos.x; j<event_pos.x + mapr->events[i].location.w; ++j) {
 				for (int k=event_pos.y; k<event_pos.y + mapr->events[i].location.h; ++k) {
-					if (eset->misc.fogofwar)
+					if (mapr->fogofwar)
 						if (mapr->layers[fow->dark_layer_id][event_pos.x][event_pos.y] == FogOfWar::TILE_HIDDEN) continue;
 
 					entities[j][k] = TILE_TELEPORT;
@@ -746,7 +746,7 @@ void MenuMiniMap::fillEntities() {
 	for (size_t i=0; i<entitym->entities.size(); ++i) {
 		Entity *e = entitym->entities[i];
 		if (e->stats.hp > 0) {
-			if (eset->misc.fogofwar) {
+			if (mapr->fogofwar) {
 				float delta = Utils::calcDist(pc->stats.pos, e->stats.pos);
 				if (delta > fow->mask_radius) {
 					continue;

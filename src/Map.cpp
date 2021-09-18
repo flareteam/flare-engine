@@ -45,7 +45,9 @@ Map::Map()
 	, h(1)
 	, hero_pos_enabled(false)
 	, hero_pos()
-	, background_color(0,0,0,0) {
+	, background_color(0,0,0,0)
+	, fogofwar(eset->misc.fogofwar)
+	, save_fogofwar(eset->misc.save_fogofwar) {
 }
 
 Map::~Map() {
@@ -83,6 +85,8 @@ int Map::load(const std::string& fname) {
 	music_filename = "";
 	parallax_filename = "";
 	background_color = Color(0,0,0,0);
+	fogofwar = eset->misc.fogofwar;
+	save_fogofwar = eset->misc.save_fogofwar;
 
 	w = 1;
 	h = 1;
@@ -144,8 +148,8 @@ int Map::load(const std::string& fname) {
 	}
 
 	// ensure that our map contains a fog of war layer
-	if (eset->misc.fogofwar) {
-		if (eset->misc.save_fogofwar) {
+	if (fogofwar) {
+		if (save_fogofwar) {
 			std::stringstream ss;
 			ss.str("");
 			ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/" << save_load->getGameSlot() << "/" << mapr->getFilename();
@@ -218,6 +222,14 @@ void Map::loadHeader(FileParser &infile) {
 	else if (infile.key == "background_color") {
 		// @ATTR background_color|color, int : Color, alpha|Background color for the map.
 		background_color = Parse::toRGBA(infile.val);
+	}
+	else if (infile.key == "fogofwar") {
+		// @ATTR fogofwar|int|0-disabled, 1-minimap, 2-tint, 3-overlay. Overrides engine settings.
+		fogofwar = static_cast<unsigned short>(Parse::toInt(infile.val));
+	}
+	else if (infile.key == "save_fogofwar") {
+		// @ATTR fogofwar|bool|If true, the fog of war layer keeps track of the progress. Overrides engine settings.
+		save_fogofwar = Parse::toBool(infile.val);
 	}
 	else if (infile.key == "tilewidth") {
 		// @ATTR tilewidth|int|Inherited from Tiled map file. Unused by engine.

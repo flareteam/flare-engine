@@ -246,7 +246,7 @@ void SaveLoad::saveGame() {
 	}
 	
 	// Save fow dark layer
-	if (eset->misc.fogofwar && eset->misc.save_fogofwar) {
+	if (mapr->fogofwar && mapr->save_fogofwar) {
 		ss.str("");
 		ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/" << game_slot << "/" << mapr->getFilename();
 

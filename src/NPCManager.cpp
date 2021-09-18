@@ -49,7 +49,7 @@ NPCManager::NPCManager()
 
 void NPCManager::addRenders(std::vector<Renderable> &r) {
 	for (unsigned i=0; i<npcs.size(); i++) {
-		if (eset->misc.fogofwar > FogOfWar::TYPE_MINIMAP) {
+		if (mapr->fogofwar > FogOfWar::TYPE_MINIMAP) {
 			float delta = Utils::calcDist(pc->stats.pos, npcs[i]->stats.pos);
 			if (delta > fow->mask_radius-1.0) {
 				continue;

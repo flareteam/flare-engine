@@ -217,7 +217,7 @@ int MapRenderer::load(const std::string& fname) {
 	for (unsigned i = 0; i < layers.size(); ++i)
 		if (layernames[i] == "object")
 			index_objectlayer = i;
-	if (eset->misc.fogofwar) {
+	if (fogofwar) {
 		for (unsigned short i = 0; i < layers.size(); ++i) {
 			if (layernames[i] == "fow_dark")
 				fow->dark_layer_id = i;
@@ -240,11 +240,11 @@ int MapRenderer::load(const std::string& fname) {
 				const unsigned tile_id = layers[i][x][y];
 				TileSet* tile_set = &tset;
 
-				if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY) {
+				if (fogofwar == FogOfWar::TYPE_OVERLAY) {
 					if (i == fow->dark_layer_id) tile_set = &fow->tset_dark;
 					if (i == fow->fog_layer_id) tile_set = &fow->tset_fog;
 			    }
-			    if (eset->misc.fogofwar)
+			    if (fogofwar)
 					if (i == fow->dark_layer_id || i == fow->fog_layer_id)
 						continue;
 
@@ -289,7 +289,7 @@ void MapRenderer::logic(bool paused) {
 
 	// handle tile set logic e.g. animations
 	tset.logic();
-	if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY) {
+	if (fogofwar == FogOfWar::TYPE_OVERLAY) {
 		fow->tset_dark.logic();
 		fow->tset_fog.logic();
 	}
@@ -438,7 +438,7 @@ void MapRenderer::renderIsoLayer(const Map_Layer& layerdata, const TileSet& tile
 				dest.y = p.y - tile.offset.y;
 
 				//skip rendering tiles that are underneath fow hidden tiles
-				if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY) {
+				if (fogofwar == FogOfWar::TYPE_OVERLAY) {
 					if (&layerdata != &layers[fow->dark_layer_id]) {
 						if (layers[fow->dark_layer_id][i][j] == FogOfWar::TILE_HIDDEN) {
 
@@ -485,7 +485,7 @@ void MapRenderer::renderIsoLayer(const Map_Layer& layerdata, const TileSet& tile
 				// no need to set w and h in dest, as it is ignored
 				// by SDL_BlitSurface
 				tile.tile->setDestFromPoint(dest);
-				if (eset->misc.fogofwar == FogOfWar::TYPE_TINT) {
+				if (fogofwar == FogOfWar::TYPE_TINT) {
 					tile.tile->color_mod = fow->getTileColorMod(i, j);
 				}
 				render_device->render(tile.tile);
@@ -586,7 +586,7 @@ void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 					tile.tile->setDestFromPoint(dest);
 
 					//skip rendering tiles that are underneath fow hidden tiles
-					if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY) {
+					if (fogofwar == FogOfWar::TYPE_OVERLAY) {
 						if (&current_layer != &layers[fow->dark_layer_id]) {
 							if (layers[fow->dark_layer_id][i][j] == FogOfWar::TILE_HIDDEN) {
 
@@ -631,7 +631,7 @@ void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 					}
 
 					checkHiddenEntities(i, j, current_layer, r);
-					if (eset->misc.fogofwar == FogOfWar::TYPE_TINT) {
+					if (fogofwar == FogOfWar::TYPE_TINT) {
 						tile.tile->color_mod = fow->getTileColorMod(i, j);
 					}
 					render_device->render(tile.tile);
@@ -716,7 +716,7 @@ do_last_NE_tile:
 					dest.y = tile_SW_center.y - tile.offset.y;
 					tile.tile->setDestFromPoint(dest);
 					checkHiddenEntities(i, j, current_layer, r);
-					if (eset->misc.fogofwar == FogOfWar::TYPE_TINT) {
+					if (fogofwar == FogOfWar::TYPE_TINT) {
 						tile.tile->color_mod = fow->getTileColorMod(i, j);
 					}
 					render_device->render(tile.tile);
@@ -737,7 +737,7 @@ do_last_NE_tile:
 					dest.y = tile_NE_center.y - tile.offset.y;
 					tile.tile->setDestFromPoint(dest);
 					checkHiddenEntities(i, j, current_layer, r);
-					if (eset->misc.fogofwar == FogOfWar::TYPE_TINT) {
+					if (fogofwar == FogOfWar::TYPE_TINT) {
 						tile.tile->color_mod = fow->getTileColorMod(i, j);
 					}
 					render_device->render(tile.tile);
@@ -792,7 +792,7 @@ void MapRenderer::renderIso(std::vector<Renderable> &r, std::vector<Renderable> 
 
 	index++;
 	while (index < layers.size()) {
-		if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY) {
+		if (fogofwar == FogOfWar::TYPE_OVERLAY) {
 			if (layernames[index] == "fow_dark") {
 				renderIsoLayer(layers[index],fow->tset_dark);
 			}
@@ -839,12 +839,12 @@ void MapRenderer::renderOrthoLayer(const Map_Layer& layerdata) {
 				dest.x = p.x - tile.offset.x;
 				dest.y = p.y - tile.offset.y;
 
-				if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY)
+				if (fogofwar == FogOfWar::TYPE_OVERLAY)
 					if (&layerdata != &layers[fow->dark_layer_id])
 						if (layers[fow->dark_layer_id][i][j] == FogOfWar::TILE_HIDDEN) continue;
 
 				tile.tile->setDestFromPoint(dest);
-				if (eset->misc.fogofwar == FogOfWar::TYPE_TINT) {
+				if (fogofwar == FogOfWar::TYPE_TINT) {
 					tile.tile->color_mod = fow->getTileColorMod(i, j);
 				}
 				render_device->render(tile.tile);
@@ -893,7 +893,7 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 				dest.y = p.y - tile.offset.y;
 
 				//skip rendering tiles that are underneath fow hidden tiles
-				if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY) {
+				if (fogofwar == FogOfWar::TYPE_OVERLAY) {
 					if (&layers[index_objectlayer] != &layers[fow->dark_layer_id]) {
 						if (layers[fow->dark_layer_id][i][j] == FogOfWar::TILE_HIDDEN) {
 							FPoint tile_tip = Utils::screenToMap(dest.x, dest.y, pc->stats.pos.x, pc->stats.pos.y);
@@ -909,7 +909,7 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 
 				tile.tile->setDestFromPoint(dest);
 				checkHiddenEntities(i, j, layers[index_objectlayer], r);
-				if (eset->misc.fogofwar == FogOfWar::TYPE_TINT) {
+				if (fogofwar == FogOfWar::TYPE_TINT) {
 					tile.tile->color_mod = fow->getTileColorMod(i, j);
 				}
 				render_device->render(tile.tile);

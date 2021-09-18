@@ -165,6 +165,8 @@ public:
 	FPoint hero_pos;
 	std::string parallax_filename;
 	Color background_color;
+	unsigned short fogofwar;
+	bool save_fogofwar;
 
 };
 

@@ -171,7 +171,7 @@ void EngineSettings::Misc::load() {
 			// @ATTR combat_aborts_npc_interact|bool|If true, the NPC dialog and vendor menus will be closed if the player is attacked.
 			else if (infile.key == "combat_aborts_npc_interact")
 				combat_aborts_npc_interact = Parse::toBool(infile.val);
-			// @ATTR fogofwar|int|0-disabled, 1-tint 2-overlay
+			// @ATTR fogofwar|int|0-disabled, 1-minimap, 2-tint, 3-overlay.
 			else if (infile.key == "fogofwar")
 				fogofwar = static_cast<unsigned short>(Parse::toInt(infile.val));
 			// @ATTR fogofwar|bool|If true, the fog of war layer keeps track of the progress.

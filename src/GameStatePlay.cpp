@@ -294,7 +294,7 @@ void GameStatePlay::checkTeleport() {
 	// both map events and player powers can cause teleportation
 	if (mapr->teleportation || pc->stats.teleportation) {
 		
-		if (eset->misc.fogofwar)
+		if (mapr->fogofwar)
 			if(fow->fog_layer_id != 0)
 				fow->handleIntramapTeleport();
 
@@ -334,7 +334,7 @@ void GameStatePlay::checkTeleport() {
 			mapr->executeOnMapExitEvents();
 			showLoading();
 			save_load->saveGame();
-			if (eset->misc.fogofwar == FogOfWar::TYPE_OVERLAY)
+			if (mapr->fogofwar == FogOfWar::TYPE_OVERLAY)
 				fow->load();
 			mapr->load(teleport_mapname);
 			setLoadingFrame();
@@ -398,7 +398,7 @@ void GameStatePlay::checkTeleport() {
 
 		mapr->collider.block(pc->stats.pos.x, pc->stats.pos.y, !MapCollision::IS_ALLY);
 
-		if (eset->misc.fogofwar)
+		if (mapr->fogofwar)
 			fow->logic();
 
 		pc->stats.teleportation = false;
