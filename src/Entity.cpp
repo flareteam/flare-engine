@@ -345,25 +345,7 @@ bool Entity::takeHit(Hazard &h) {
 
 	// some enemies can be invicible based on campaign status
 	if (!stats.hero && !stats.hero_ally && h.source_type != Power::SOURCE_TYPE_ENEMY) {
-		bool invincible = false;
-		for (size_t i = 0; i < stats.invincible_requires_status.size(); ++i) {
-			if (!camp->checkStatus(stats.invincible_requires_status[i])) {
-				invincible = false;
-				break;
-			}
-			invincible = true;
-		}
-		if (invincible)
-			return false;
-
-		for (size_t i = 0; i < stats.invincible_requires_not_status.size(); ++i) {
-			if (camp->checkStatus(stats.invincible_requires_not_status[i])) {
-				invincible = false;
-				break;
-			}
-			invincible = true;
-		}
-		if (invincible)
+		if (!stats.invincible_requirements.empty() && camp->checkRequirementsInVector(stats.invincible_requirements))
 			return false;
 	}
 

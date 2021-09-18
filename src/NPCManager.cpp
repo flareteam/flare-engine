@@ -76,17 +76,7 @@ void NPCManager::handleNewMap() {
 		mn = mapr->npcs.front();
 		mapr->npcs.pop();
 
-		bool status_reqs_met = true;
-		//if the status requirements arent met, dont load the enemy
-		for (unsigned i = 0; i < mn.requires_status.size(); ++i)
-			if (!camp->checkStatus(mn.requires_status[i]))
-				status_reqs_met = false;
-
-		for (unsigned i = 0; i < mn.requires_not_status.size(); ++i)
-			if (camp->checkStatus(mn.requires_not_status[i]))
-				status_reqs_met = false;
-
-		if(!status_reqs_met)
+		if (!camp->checkRequirementsInVector(mn.requirements))
 			continue;
 
 		// ally npc that was moved from another map should not be loaded once again

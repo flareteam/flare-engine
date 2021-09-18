@@ -173,26 +173,7 @@ void QuestLog::createQuestList() {
 
 	// check quest requirements
 	for (size_t i=0; i<quest_sections.size(); i++) {
-		bool requirements_met = false;
-
-		for (size_t j=0; j<quest_sections[i].size(); j++) {
-			if (quest_sections[i][j].type == EventComponent::QUEST_TEXT) {
-				continue;
-			}
-			else {
-				// check requirements
-				// break (skip to next dialog node) if any requirement fails
-				// if we reach an event that is not a requirement, succeed
-				if (!camp->checkAllRequirements(quest_sections[i][j])) {
-					requirements_met = false;
-					break;
-				}
-			}
-
-			requirements_met = true;
-		}
-
-		if (requirements_met) {
+		if (camp->checkRequirementsInVector(quest_sections[i])) {
 			// passed requirement checks, add ID to active quest list
 			temp_quest_ids.push_back(i);
 		}

@@ -148,20 +148,8 @@ void EntityManager::handleNewMap () {
 			continue;
 		}
 
-
-		bool status_reqs_met = true;
-		//if the status requirements arent met, dont load the entity
-		for(unsigned int i = 0; i < me.requires_status.size(); i++) {
-			if (!camp->checkStatus(me.requires_status[i]))
-				status_reqs_met = false;
-		}
-		for(unsigned int i = 0; i < me.requires_not_status.size(); i++) {
-			if (camp->checkStatus(me.requires_not_status[i]))
-				status_reqs_met = false;
-		}
-		if(!status_reqs_met)
+		if (!camp->checkRequirementsInVector(me.requirements))
 			continue;
-
 
 		Entity *e = getEntityPrototype(me.type);
 		anim->increaseCount(e->stats.animations);
@@ -172,8 +160,7 @@ void EntityManager::handleNewMap () {
 		e->stats.direction = static_cast<unsigned char>(me.direction);
 		e->stats.wander = me.wander_radius > 0;
 		e->stats.setWanderArea(me.wander_radius);
-		e->stats.invincible_requires_status = me.invincible_requires_status;
-		e->stats.invincible_requires_not_status = me.invincible_requires_not_status;
+		e->stats.invincible_requirements = me.invincible_requirements;
 
 		entities.push_back(e);
 

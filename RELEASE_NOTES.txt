@@ -1,5 +1,9 @@
 Flare v1.13 (WIP)
 
+Engine features:
+
+* Added additional requirement properties to enemy and NPC map objects. The properties now match what is available for map events.
+
 Engine fixes:
 
 * Fix enemies not being able to target NPC followers

@@ -329,8 +329,7 @@ public:
 
 	std::vector<PowerID> power_filter;
 
-	std::vector<StatusID> invincible_requires_status;
-	std::vector<StatusID> invincible_requires_not_status;
+	std::vector<EventComponent> invincible_requirements;
 
 	bool abort_npc_interact;
 };

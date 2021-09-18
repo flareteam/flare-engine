@@ -44,10 +44,8 @@ public:
 	int direction;
 	std::queue<FPoint> waypoints;
 	int wander_radius;
-	std::vector<StatusID> requires_status;
-	std::vector<StatusID> requires_not_status;
-	std::vector<StatusID> invincible_requires_status;
-	std::vector<StatusID> invincible_requires_not_status;
+	std::vector<EventComponent> requirements;
+	std::vector<EventComponent> invincible_requirements;
 
 	Map_Group()
 		: type("")
@@ -62,10 +60,8 @@ public:
 		, direction(-1)
 		, waypoints(std::queue<FPoint>())
 		, wander_radius(4)
-		, requires_status()
-		, requires_not_status()
-		, invincible_requires_status()
-		, invincible_requires_not_status() {
+		, requirements()
+		, invincible_requirements() {
 	}
 };
 
@@ -74,15 +70,13 @@ public:
 	std::string type;
 	std::string id;
 	FPoint pos;
-	std::vector<StatusID> requires_status;
-	std::vector<StatusID> requires_not_status;
+	std::vector<EventComponent> requirements;
 
 	Map_NPC()
 		: type("")
 		, id("")
 		, pos()
-		, requires_status()
-		, requires_not_status() {
+		, requirements() {
 	}
 };
 
@@ -97,10 +91,8 @@ public:
 	bool enemy_ally;
 	PowerID summon_power_index;
 	StatBlock* summoner;
-	std::vector<StatusID> requires_status;
-	std::vector<StatusID> requires_not_status;
-	std::vector<StatusID> invincible_requires_status;
-	std::vector<StatusID> invincible_requires_not_status;
+	std::vector<EventComponent> requirements;
+	std::vector<EventComponent> invincible_requirements;
 
 	Map_Enemy(const std::string& _type="", FPoint _pos=FPoint())
 		: type(_type)
@@ -112,10 +104,8 @@ public:
 		, enemy_ally(false)
 		, summon_power_index(0)
 		, summoner(NULL)
-		, requires_status()
-		, requires_not_status()
-		, invincible_requires_status()
-		, invincible_requires_not_status() {
+		, requirements()
+		, invincible_requirements() {
 	}
 };
 

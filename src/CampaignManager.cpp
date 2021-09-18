@@ -287,5 +287,14 @@ bool CampaignManager::checkAllRequirements(const EventComponent& ec) {
 	return false;
 }
 
+bool CampaignManager::checkRequirementsInVector(const std::vector<EventComponent>& ec_vec) {
+	for (size_t i = 0; i < ec_vec.size(); ++i) {
+		if (!checkAllRequirements(ec_vec[i]))
+			return false;
+	}
+
+	return true;
+}
+
 CampaignManager::~CampaignManager() {
 }

@@ -1033,11 +1033,7 @@ bool EventManager::executeEventInternal(Event &ev, bool skip_delay) {
 
 
 bool EventManager::isActive(const Event &e) {
-	for (size_t i=0; i < e.components.size(); i++) {
-		if (!camp->checkAllRequirements(e.components[i]))
-			return false;
-	}
-	return true;
+	return camp->checkRequirementsInVector(e.components);
 }
 
 void EventManager::executeScript(const std::string& filename, float x, float y) {

@@ -1049,9 +1049,25 @@ body {
 
 <p><strong>enemygroup.wander_radius</strong> | <code>int</code> | The radius (in tiles) that an enemy will wander around randomly; negates waypoints</p>
 
-<p><strong>enemygroup.requires_status</strong> | <code>list(string)</code> | Status required for loading enemies</p>
+<p><strong>enemygroup.requires_status</strong> | <code>list(string)</code> | Statuses required to be set for enemy group to load</p>
 
-<p><strong>enemygroup.requires_not_status</strong> | <code>list(string)</code> | Status required to be missing for loading enemies</p>
+<p><strong>enemygroup.requires_not_status</strong> | <code>list(string)</code> | Statuses required to be unset for enemy group to load</p>
+
+<p><strong>enemygroup.requires_level</strong> | <code>int</code> | Player level must be equal or greater to load enemy group</p>
+
+<p><strong>enemygroup.requires_not_level</strong> | <code>int</code> | Player level must be lesser to load enemy group</p>
+
+<p><strong>enemygroup.requires_currency</strong> | <code>int</code> | Player currency must be equal or greater to load enemy group</p>
+
+<p><strong>enemygroup.requires_not_currency</strong> | <code>int</code> | Player currency must be lesser to load enemy group</p>
+
+<p><strong>enemygroup.requires_item</strong> | <code>list(item_id)</code> | Item required to exist in player inventory to load enemy group. Quantity can be specified by appending &ldquo; Q&rdquo; to the item_id, where Q is an integer.</p>
+
+<p><strong>enemygroup.requires_not_item</strong> | <code>list(item_id)</code> | Item required to not exist in player inventory to load enemy group. Quantity can be specified by appending &ldquo; Q&rdquo; to the item_id, where Q is an integer.</p>
+
+<p><strong>enemygroup.requires_class</strong> | <code>predefined_string</code> | Player base class required to load enemy group</p>
+
+<p><strong>enemygroup.requires_not_class</strong> | <code>predefined_string</code> | Player base class not required to load enemy group</p>
 
 <p><strong>enemygroup.invincible_requires_status</strong> | <code>list(string)</code> | Enemies in this group are invincible to hero attacks when these statuses are set.</p>
 
@@ -1061,11 +1077,27 @@ body {
 
 <p><strong>npc.filename</strong> | <code>string</code> | Filename of an NPC definition.</p>
 
-<p><strong>npc.requires_status</strong> | <code>list(string)</code> | Status required for NPC load. There can be multiple states, separated by comma</p>
-
-<p><strong>npc.requires_not_status</strong> | <code>list(string)</code> | Status required to be missing for NPC load. There can be multiple states, separated by comma</p>
-
 <p><strong>npc.location</strong> | <code>point</code> | Location of NPC</p>
+
+<p><strong>npc.requires_status</strong> | <code>list(string)</code> | Statuses required to be set for NPC load</p>
+
+<p><strong>npc.requires_not_status</strong> | <code>list(string)</code> | Statuses required to be unset for NPC load</p>
+
+<p><strong>npc.requires_level</strong> | <code>int</code> | Player level must be equal or greater to load NPC</p>
+
+<p><strong>npc.requires_not_level</strong> | <code>int</code> | Player level must be lesser to load NPC</p>
+
+<p><strong>npc.requires_currency</strong> | <code>int</code> | Player currency must be equal or greater to load NPC</p>
+
+<p><strong>npc.requires_not_currency</strong> | <code>int</code> | Player currency must be lesser to load NPC</p>
+
+<p><strong>npc.requires_item</strong> | <code>list(item_id)</code> | Item required to exist in player inventory to load NPC. Quantity can be specified by appending &ldquo; Q&rdquo; to the item_id, where Q is an integer.</p>
+
+<p><strong>npc.requires_not_item</strong> | <code>list(item_id)</code> | Item required to not exist in player inventory to load NPC. Quantity can be specified by appending &ldquo; Q&rdquo; to the item_id, where Q is an integer.</p>
+
+<p><strong>npc.requires_class</strong> | <code>predefined_string</code> | Player base class required to load NPC</p>
+
+<p><strong>npc.requires_not_class</strong> | <code>predefined_string</code> | Player base class not required to load NPC</p>
 
 <hr />
 

@@ -308,31 +308,109 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 		}
 	}
 	else if (infile.key == "requires_status") {
-		// @ATTR enemygroup.requires_status|list(string)|Status required for loading enemies
+		// @ATTR enemygroup.requires_status|list(string)|Statuses required to be set for enemy group to load
 		std::string s;
-		while ((s = Parse::popFirstString(infile.val)) != "") {
-			group->requires_status.push_back(camp->registerStatus(s));
+		while ( (s = Parse::popFirstString(infile.val)) != "") {
+			EventComponent ec;
+			ec.type = EventComponent::REQUIRES_STATUS;
+			ec.status = camp->registerStatus(s);
+			group->requirements.push_back(ec);
 		}
 	}
 	else if (infile.key == "requires_not_status") {
-		// @ATTR enemygroup.requires_not_status|list(string)|Status required to be missing for loading enemies
+		// @ATTR enemygroup.requires_not_status|list(string)|Statuses required to be unset for enemy group to load
 		std::string s;
-		while ((s = Parse::popFirstString(infile.val)) != "") {
-			group->requires_not_status.push_back(camp->registerStatus(s));
+		while ( (s = Parse::popFirstString(infile.val)) != "") {
+			EventComponent ec;
+			ec.type = EventComponent::REQUIRES_NOT_STATUS;
+			ec.status = camp->registerStatus(s);
+			group->requirements.push_back(ec);
 		}
+	}
+	else if (infile.key == "requires_level") {
+		// @ATTR enemygroup.requires_level|int|Player level must be equal or greater to load enemy group
+		EventComponent ec;
+		ec.type = EventComponent::REQUIRES_LEVEL;
+		ec.x = Parse::popFirstInt(infile.val);
+		group->requirements.push_back(ec);
+	}
+	else if (infile.key == "requires_not_level") {
+		// @ATTR enemygroup.requires_not_level|int|Player level must be lesser to load enemy group
+		EventComponent ec;
+		ec.type = EventComponent::REQUIRES_NOT_LEVEL;
+		ec.x = Parse::popFirstInt(infile.val);
+		group->requirements.push_back(ec);
+	}
+	else if (infile.key == "requires_currency") {
+		// @ATTR enemygroup.requires_currency|int|Player currency must be equal or greater to load enemy group
+		EventComponent ec;
+		ec.type = EventComponent::REQUIRES_CURRENCY;
+		ec.x = Parse::popFirstInt(infile.val);
+		group->requirements.push_back(ec);
+	}
+	else if (infile.key == "requires_not_currency") {
+		// @ATTR enemygroup.requires_not_currency|int|Player currency must be lesser to load enemy group
+		EventComponent ec;
+		ec.type = EventComponent::REQUIRES_NOT_CURRENCY;
+		ec.x = Parse::popFirstInt(infile.val);
+		group->requirements.push_back(ec);
+	}
+	else if (infile.key == "requires_item") {
+		// @ATTR enemygroup.requires_item|list(item_id)|Item required to exist in player inventory to load enemy group. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.
+		std::string s;
+		while ( (s = Parse::popFirstString(infile.val)) != "") {
+			ItemStack item_stack = Parse::toItemQuantityPair(s);
+			EventComponent ec;
+			ec.type = EventComponent::REQUIRES_ITEM;
+			ec.id = item_stack.item;
+			ec.x = item_stack.quantity;
+			group->requirements.push_back(ec);
+		}
+	}
+	else if (infile.key == "requires_not_item") {
+		// @ATTR enemygroup.requires_not_item|list(item_id)|Item required to not exist in player inventory to load enemy group. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.
+		std::string s;
+		while ( (s = Parse::popFirstString(infile.val)) != "") {
+			ItemStack item_stack = Parse::toItemQuantityPair(s);
+			EventComponent ec;
+			ec.type = EventComponent::REQUIRES_NOT_ITEM;
+			ec.id = item_stack.item;
+			ec.x = item_stack.quantity;
+			group->requirements.push_back(ec);
+		}
+	}
+	else if (infile.key == "requires_class") {
+		// @ATTR enemygroup.requires_class|predefined_string|Player base class required to load enemy group
+		EventComponent ec;
+		ec.type = EventComponent::REQUIRES_CLASS;
+		ec.s = Parse::popFirstString(infile.val);
+		group->requirements.push_back(ec);
+	}
+	else if (infile.key == "requires_not_class") {
+		// @ATTR enemygroup.requires_not_class|predefined_string|Player base class not required to load enemy group
+		EventComponent ec;
+		ec.type = EventComponent::REQUIRES_NOT_CLASS;
+		ec.s = Parse::popFirstString(infile.val);
+		group->requirements.push_back(ec);
 	}
 	else if (infile.key == "invincible_requires_status") {
 		// @ATTR enemygroup.invincible_requires_status|list(string)|Enemies in this group are invincible to hero attacks when these statuses are set.
 		std::string s;
 		while ((s = Parse::popFirstString(infile.val)) != "") {
-			group->invincible_requires_status.push_back(camp->registerStatus(s));
+			EventComponent ec;
+			ec.type = EventComponent::REQUIRES_STATUS;
+			ec.status = camp->registerStatus(s);
+			group->invincible_requirements.push_back(ec);
 		}
 	}
 	else if (infile.key == "invincible_requires_not_status") {
 		// @ATTR enemygroup.invincible_requires_not_status|list(string)|Enemies in this group are invincible to hero attacks when these statuses are not set.
 		std::string s;
 		while ((s = Parse::popFirstString(infile.val)) != "") {
-			group->invincible_requires_not_status.push_back(camp->registerStatus(s));
+			EventComponent ec;
+			ec.type = EventComponent::REQUIRES_NOT_STATUS;
+			ec.status = camp->registerStatus(s);
+			group->invincible_requirements.push_back(ec);
 		}
 	}
 	else {
@@ -341,7 +419,6 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 }
 
 void Map::loadNPC(FileParser &infile) {
-	std::string s;
 	if (infile.key == "type") {
 		// @ATTR npc.type|string|(IGNORED BY ENGINE) The "type" field, as used by Tiled and other mapping tools.
 		npcs.back().type = infile.val;
@@ -350,20 +427,96 @@ void Map::loadNPC(FileParser &infile) {
 		// @ATTR npc.filename|string|Filename of an NPC definition.
 		npcs.back().id = infile.val;
 	}
-	else if (infile.key == "requires_status") {
-		// @ATTR npc.requires_status|list(string)|Status required for NPC load. There can be multiple states, separated by comma
-		while ( (s = Parse::popFirstString(infile.val)) != "")
-			npcs.back().requires_status.push_back(camp->registerStatus(s));
-	}
-	else if (infile.key == "requires_not_status") {
-		// @ATTR npc.requires_not_status|list(string)|Status required to be missing for NPC load. There can be multiple states, separated by comma
-		while ( (s = Parse::popFirstString(infile.val)) != "")
-			npcs.back().requires_not_status.push_back(camp->registerStatus(s));
-	}
 	else if (infile.key == "location") {
 		// @ATTR npc.location|point|Location of NPC
 		npcs.back().pos.x = static_cast<float>(Parse::popFirstInt(infile.val)) + 0.5f;
 		npcs.back().pos.y = static_cast<float>(Parse::popFirstInt(infile.val)) + 0.5f;
+	}
+	else if (infile.key == "requires_status") {
+		// @ATTR npc.requires_status|list(string)|Statuses required to be set for NPC load
+		std::string s;
+		while ( (s = Parse::popFirstString(infile.val)) != "") {
+			EventComponent ec;
+			ec.type = EventComponent::REQUIRES_STATUS;
+			ec.status = camp->registerStatus(s);
+			npcs.back().requirements.push_back(ec);
+		}
+	}
+	else if (infile.key == "requires_not_status") {
+		// @ATTR npc.requires_not_status|list(string)|Statuses required to be unset for NPC load
+		std::string s;
+		while ( (s = Parse::popFirstString(infile.val)) != "") {
+			EventComponent ec;
+			ec.type = EventComponent::REQUIRES_NOT_STATUS;
+			ec.status = camp->registerStatus(s);
+			npcs.back().requirements.push_back(ec);
+		}
+	}
+	else if (infile.key == "requires_level") {
+		// @ATTR npc.requires_level|int|Player level must be equal or greater to load NPC
+		EventComponent ec;
+		ec.type = EventComponent::REQUIRES_LEVEL;
+		ec.x = Parse::popFirstInt(infile.val);
+		npcs.back().requirements.push_back(ec);
+	}
+	else if (infile.key == "requires_not_level") {
+		// @ATTR npc.requires_not_level|int|Player level must be lesser to load NPC
+		EventComponent ec;
+		ec.type = EventComponent::REQUIRES_NOT_LEVEL;
+		ec.x = Parse::popFirstInt(infile.val);
+		npcs.back().requirements.push_back(ec);
+	}
+	else if (infile.key == "requires_currency") {
+		// @ATTR npc.requires_currency|int|Player currency must be equal or greater to load NPC
+		EventComponent ec;
+		ec.type = EventComponent::REQUIRES_CURRENCY;
+		ec.x = Parse::popFirstInt(infile.val);
+		npcs.back().requirements.push_back(ec);
+	}
+	else if (infile.key == "requires_not_currency") {
+		// @ATTR npc.requires_not_currency|int|Player currency must be lesser to load NPC
+		EventComponent ec;
+		ec.type = EventComponent::REQUIRES_NOT_CURRENCY;
+		ec.x = Parse::popFirstInt(infile.val);
+		npcs.back().requirements.push_back(ec);
+	}
+	else if (infile.key == "requires_item") {
+		// @ATTR npc.requires_item|list(item_id)|Item required to exist in player inventory to load NPC. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.
+		std::string s;
+		while ( (s = Parse::popFirstString(infile.val)) != "") {
+			ItemStack item_stack = Parse::toItemQuantityPair(s);
+			EventComponent ec;
+			ec.type = EventComponent::REQUIRES_ITEM;
+			ec.id = item_stack.item;
+			ec.x = item_stack.quantity;
+			npcs.back().requirements.push_back(ec);
+		}
+	}
+	else if (infile.key == "requires_not_item") {
+		// @ATTR npc.requires_not_item|list(item_id)|Item required to not exist in player inventory to load NPC. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.
+		std::string s;
+		while ( (s = Parse::popFirstString(infile.val)) != "") {
+			ItemStack item_stack = Parse::toItemQuantityPair(s);
+			EventComponent ec;
+			ec.type = EventComponent::REQUIRES_NOT_ITEM;
+			ec.id = item_stack.item;
+			ec.x = item_stack.quantity;
+			npcs.back().requirements.push_back(ec);
+		}
+	}
+	else if (infile.key == "requires_class") {
+		// @ATTR npc.requires_class|predefined_string|Player base class required to load NPC
+		EventComponent ec;
+		ec.type = EventComponent::REQUIRES_CLASS;
+		ec.s = Parse::popFirstString(infile.val);
+		npcs.back().requirements.push_back(ec);
+	}
+	else if (infile.key == "requires_not_class") {
+		// @ATTR npc.requires_not_class|predefined_string|Player base class not required to load NPC
+		EventComponent ec;
+		ec.type = EventComponent::REQUIRES_NOT_CLASS;
+		ec.s = Parse::popFirstString(infile.val);
+		npcs.back().requirements.push_back(ec);
 	}
 	else {
 		infile.error("Map: '%s' is not a valid key.", infile.key.c_str());

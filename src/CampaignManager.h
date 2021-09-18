@@ -57,6 +57,7 @@ public:
 	void rewardXP(int amount, bool show_message);
 	void restoreHPMP(const std::string& s);
 	bool checkAllRequirements(const EventComponent& ec);
+	bool checkRequirementsInVector(const std::vector<EventComponent>& ec_vec);
 
 	std::queue<ItemStack> drop_stack;
 
