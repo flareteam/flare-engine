@@ -497,6 +497,7 @@ void Avatar::logic() {
 
 	if (!stats.effects.stun) {
 		bool allowed_to_move;
+		bool allowed_to_turn;
 		bool allowed_to_use_power = true;
 
 		switch(stats.cur_state) {
@@ -507,19 +508,26 @@ void Avatar::logic() {
 				// allowed to move or use powers?
 				if (settings->mouse_move) {
 					allowed_to_move = restrict_power_use && (!inpt->lock[mm_key] || drag_walking) && !lock_enemy;
+					allowed_to_turn = allowed_to_move;
 					allowed_to_use_power = true;
 
 					if ((inpt->pressing[mm_key] && inpt->pressing[Input::SHIFT]) || lock_enemy) {
 						inpt->lock[mm_key] = false;
 					}
 				}
+				else if (!settings->mouse_aim) {
+					allowed_to_move = !inpt->pressing[Input::SHIFT];
+					allowed_to_turn = true;
+					allowed_to_use_power = true;
+				}
 				else {
 					allowed_to_move = true;
+					allowed_to_turn = true;
 					allowed_to_use_power = true;
 				}
 
 				// handle transitions to RUN
-				if (allowed_to_move)
+				if (allowed_to_turn)
 					set_direction();
 
 				if (pressing_move() && allowed_to_move) {
@@ -563,8 +571,10 @@ void Avatar::logic() {
 					stats.cur_state = StatBlock::ENTITY_STANCE;
 					break;
 				}
-				else if (settings->mouse_move && inpt->pressing[Input::SHIFT]) {
-					// when moving with the mouse, pressing Shift should stop movement and begin attacking
+				else if ((settings->mouse_move || !settings->mouse_aim) && inpt->pressing[Input::SHIFT]) {
+					// Shift should stop movement in some cases.
+					// With mouse_move, it allows the player to stop moving and begin attacking.
+					// With mouse_aim disabled, it allows the player to aim their attacks without having to move.
 					stats.cur_state = StatBlock::ENTITY_STANCE;
 					break;
 				}
