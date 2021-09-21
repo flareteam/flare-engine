@@ -35,9 +35,13 @@ WidgetHorizontalList::WidgetHorizontalList()
 	: Widget()
 	, button_left(new WidgetButton(DEFAULT_FILE_LEFT))
 	, button_right(new WidgetButton(DEFAULT_FILE_RIGHT))
+	, button_action(new WidgetButton(WidgetButton::DEFAULT_FILE))
 	, cursor(0)
 	, changed_without_mouse(false)
+	, action_triggered(false)
+	, activated(false)
 	, enabled(true)
+	, has_action(false)
 {
 	focusable = true;
 	scroll_type = SCROLL_HORIZONTAL;
@@ -76,9 +80,28 @@ bool WidgetHorizontalList::checkClickAt(int x, int y) {
 		changed_without_mouse = false;
 		return true;
 	}
-
+	else if (has_action && button_action->checkClickAt(mouse.x, mouse.y)) {
+		action_triggered = true;
+		return true;
+	}
+	else if (has_action && activated) {
+		activated = false;
+		button_action->activate();
+	}
 
 	return false;
+}
+
+bool WidgetHorizontalList::checkAction() {
+	if (action_triggered) {
+		action_triggered = false;
+		return true;
+	}
+	return false;
+}
+
+void WidgetHorizontalList::activate() {
+	activated = true;
 }
 
 void WidgetHorizontalList::render() {
@@ -91,10 +114,17 @@ void WidgetHorizontalList::render() {
 	button_left->render();
 	button_right->render();
 
-	// render label
-	label.local_frame = local_frame;
-	label.local_offset = local_offset;
-	label.render();
+	if (has_action) {
+		button_action->local_frame = local_frame;
+		button_action->local_offset = local_offset;
+		button_action->render();
+	}
+	else {
+		// render label
+		label.local_frame = local_frame;
+		label.local_offset = local_offset;
+		label.render();
+	}
 
 	if (in_focus) {
 		Point topLeft;
@@ -122,32 +152,52 @@ void WidgetHorizontalList::render() {
 }
 
 void WidgetHorizontalList::refresh() {
-	const int text_width = eset->widgets.horizontal_list_text_width;
+	int content_width = eset->widgets.horizontal_list_text_width;
 	bool is_enabled = !isEmpty() && enabled;
-
-	label.setText(getValue());
-	label.setPos(pos.x + button_left->pos.w + text_width/2, pos.y + button_left->pos.h / 2);
-	label.setMaxWidth(text_width);
-	label.setJustify(FontEngine::JUSTIFY_CENTER);
-	label.setVAlign(LabelInfo::VALIGN_CENTER);
-	label.setColor(is_enabled ? font->getColor(FontEngine::COLOR_WIDGET_NORMAL) : font->getColor(FontEngine::COLOR_WIDGET_DISABLED));
-
-	button_left->setPos(pos.x, pos.y);
-	button_right->setPos(pos.x + button_left->pos.w + text_width, pos.y);
 
 	button_left->enabled = is_enabled;
 	button_right->enabled = is_enabled;
+	button_action->enabled = is_enabled;
 
-	pos.w = button_left->pos.w + button_right->pos.w + text_width;
-	pos.h = std::max(button_left->pos.h, label.getBounds()->h);
+	button_left->setPos(pos.x, pos.y);
 
-	tooltip_area.x = pos.x + button_left->pos.w;
-	tooltip_area.y = std::min(pos.y, label.getBounds()->y);
-	tooltip_area.w = text_width;
-	tooltip_area.h = std::max(button_left->pos.h, label.getBounds()->h);
+	if (has_action) {
+		content_width = button_action->pos.w;
+
+		button_action->setPos(pos.x + button_left->pos.w, pos.y + (button_left->pos.h / 2) - (button_action->pos.h / 2));
+
+		button_action->setLabel(getValue());
+		if (cursor < list_items.size()) {
+			button_action->tooltip = list_items[cursor].tooltip;
+		}
+
+		pos.h = std::max(button_left->pos.h, button_action->pos.h);
+	}
+	else {
+		label.setText(getValue());
+		label.setPos(pos.x + button_left->pos.w + content_width/2, pos.y + button_left->pos.h / 2);
+		label.setMaxWidth(content_width);
+		label.setJustify(FontEngine::JUSTIFY_CENTER);
+		label.setVAlign(LabelInfo::VALIGN_CENTER);
+		label.setColor(is_enabled ? font->getColor(FontEngine::COLOR_WIDGET_NORMAL) : font->getColor(FontEngine::COLOR_WIDGET_DISABLED));
+
+		pos.h = std::max(button_left->pos.h, label.getBounds()->h);
+
+		tooltip_area.x = pos.x + button_left->pos.w;
+		tooltip_area.y = std::min(pos.y, label.getBounds()->y);
+		tooltip_area.w = content_width;
+		tooltip_area.h = std::max(button_left->pos.h, label.getBounds()->h);
+	}
+
+	button_right->setPos(pos.x + button_left->pos.w + content_width, pos.y);
+	pos.w = button_left->pos.w + button_right->pos.w + content_width;
 }
 
 void WidgetHorizontalList::checkTooltip(const Point& mouse) {
+	// WidgetButton will handle the tooltip if the action button is enabled
+	if (has_action)
+		return;
+
 	if (isEmpty())
 		return;
 
@@ -177,6 +227,12 @@ std::string WidgetHorizontalList::getValue() {
 	}
 
 	return "";
+}
+
+void WidgetHorizontalList::setValue(unsigned index, const std::string& value) {
+	if (index < getSize()) {
+		list_items[index].value = value;
+	}
 }
 
 unsigned WidgetHorizontalList::getSelected() {
@@ -247,5 +303,6 @@ bool WidgetHorizontalList::getNext() {
 WidgetHorizontalList::~WidgetHorizontalList() {
 	delete button_left;
 	delete button_right;
+	delete button_action;
 }
 

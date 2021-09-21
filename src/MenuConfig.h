@@ -313,11 +313,10 @@ public:
 	std::vector<Rect> video_modes;
 
 	std::vector<WidgetLabel *> keybinds_lb;
-	std::vector<WidgetButton *> keybinds_btn;
+	std::vector<WidgetHorizontalList *> keybinds_lstb;
 
 	Timer input_confirm_timer;
 	int input_key;
-	unsigned key_count;
 
 	std::string keybind_msg;
 	Timer keybind_tip_timer;

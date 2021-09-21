@@ -230,7 +230,6 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	, new_render_device(settings->render_device_name)
 	, input_confirm_timer(settings->max_frames_per_sec * 10) // 10 seconds
 	, input_key(0)
-	, key_count(0)
 	, keybind_tip_timer(settings->max_frames_per_sec * 5) // 5 seconds
 	, keybind_tip(new WidgetTooltip())
 	, clicked_accept(false)
@@ -287,15 +286,11 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	refreshJoysticks();
 
 	// Allocate KeyBindings
-	for (int i = 0; i < inpt->KEY_COUNT_USER * 3; i++) {
+	for (int i = 0; i < inpt->KEY_COUNT_USER; i++) {
 		keybinds_lb.push_back(new WidgetLabel());
-		keybinds_btn.push_back(new WidgetButton(WidgetButton::DEFAULT_FILE));
+		keybinds_lstb.push_back(new WidgetHorizontalList());
+		keybinds_lstb.back()->has_action = true;
 	}
-
-	key_count = static_cast<unsigned>(keybinds_btn.size()/3);
-
-	// don't allow remapping the primary Main1 binding
-	keybinds_btn[Input::MAIN1 * 3]->enabled = false;
 
 	// set up loot tooltip setting
 	loot_tooltip_lstb->append(msg->get("Default"), msg->get("Show all loot tooltips, except for those that would be obscured by the player or an enemy. Temporarily show all loot tooltips with 'Alt'."));
@@ -387,7 +382,7 @@ void MenuConfig::init() {
 	cfg_tabs[AUDIO_TAB].options.resize(Platform::Audio::COUNT);
 	cfg_tabs[INTERFACE_TAB].options.resize(Platform::Interface::COUNT);
 	cfg_tabs[INPUT_TAB].options.resize(Platform::Input::COUNT);
-	cfg_tabs[KEYBINDS_TAB].options.resize(inpt->KEY_COUNT_USER * 3);
+	cfg_tabs[KEYBINDS_TAB].options.resize(inpt->KEY_COUNT_USER);
 
 	cfg_tabs[EXIT_TAB].setOptionWidgets(EXIT_OPTION_CONTINUE, pause_continue_lb, pause_continue_btn, msg->get("Paused"));
 	cfg_tabs[EXIT_TAB].setOptionWidgets(EXIT_OPTION_SAVE, pause_save_lb, pause_save_btn, "");
@@ -442,17 +437,12 @@ void MenuConfig::init() {
 	cfg_tabs[INPUT_TAB].setOptionWidgets(Platform::Input::TOUCH_SCALE, touch_scale_lb, touch_scale_sl, msg->get("Touch Gamepad Scaling"));
 
 
-	for (size_t i = 0; i < keybinds_btn.size(); ++i) {
-		if (i % 3 == 0) {
-			cfg_tabs[KEYBINDS_TAB].setOptionWidgets(static_cast<int>(i), keybinds_lb[i], keybinds_btn[i], inpt->binding_name[i/3]);
-			// TODO since these are blank, don't allocate?
-			cfg_tabs[KEYBINDS_TAB].setOptionWidgets(static_cast<int>(i+1), keybinds_lb[i+1], keybinds_btn[i+1], "");
-			cfg_tabs[KEYBINDS_TAB].setOptionWidgets(static_cast<int>(i+2), keybinds_lb[i+2], keybinds_btn[i+2], "");
+	for (size_t i = 0; i < keybinds_lstb.size(); ++i) {
+		cfg_tabs[KEYBINDS_TAB].setOptionWidgets(static_cast<int>(i), keybinds_lb[i], keybinds_lstb[i], inpt->binding_name[i]);
 
-			keybinds_btn[i]->tooltip = msg->get("Primary binding: %s", inpt->binding_name[i/3].c_str());
-			keybinds_btn[i+1]->tooltip = msg->get("Alternate binding: %s", inpt->binding_name[i/3].c_str());
-			keybinds_btn[i+2]->tooltip = msg->get("Joystick binding: %s", inpt->binding_name[i/3].c_str());
-		}
+		keybinds_lstb[i]->append(inpt->getBindingString(static_cast<int>(i)), msg->get("Primary binding: %s", inpt->binding_name[i].c_str()));
+		keybinds_lstb[i]->append(inpt->getBindingString(static_cast<int>(i), InputState::BINDING_ALT), msg->get("Alternate binding: %s", inpt->binding_name[i].c_str()));
+		keybinds_lstb[i]->append(inpt->getBindingString(static_cast<int>(i), InputState::BINDING_JOYSTICK), msg->get("Joystick binding: %s", inpt->binding_name[i].c_str()));
 	}
 
 	// disable some options
@@ -497,7 +487,7 @@ void MenuConfig::init() {
 			cfg_tabs[INPUT_TAB].setOptionEnabled(i, false);
 	}
 	if (!platform.config_misc[Platform::Misc::KEYBINDS]) {
-		for (size_t i = 0; i < keybinds_btn.size(); ++i) {
+		for (size_t i = 0; i < keybinds_lstb.size(); ++i) {
 			cfg_tabs[KEYBINDS_TAB].setOptionEnabled(static_cast<int>(i), false);
 		}
 	}
@@ -883,16 +873,11 @@ void MenuConfig::updateInput() {
 
 void MenuConfig::updateKeybinds() {
 	// now do labels for keybinds that are set
-	for (unsigned int i = 0; i < keybinds_btn.size(); i++) {
-		if (i % 3 == 0) {
-			keybinds_btn[i]->setLabel(inpt->getBindingString(i/3));
-			keybinds_btn[i+1]->setLabel(inpt->getBindingString(i/3, InputState::BINDING_ALT));
-			keybinds_btn[i+2]->setLabel(inpt->getBindingString(i/3, InputState::BINDING_JOYSTICK));
-
-			keybinds_btn[i]->refresh();
-			keybinds_btn[i+1]->refresh();
-			keybinds_btn[i+2]->refresh();
-		}
+	for (unsigned int i = 0; i < keybinds_lstb.size(); i++) {
+		keybinds_lstb[i]->setValue(0, inpt->getBindingString(i));
+		keybinds_lstb[i]->setValue(1, inpt->getBindingString(i, InputState::BINDING_ALT));
+		keybinds_lstb[i]->setValue(2, inpt->getBindingString(i, InputState::BINDING_JOYSTICK));
+		keybinds_lstb[i]->refresh();
 	}
 	cfg_tabs[KEYBINDS_TAB].scrollbox->refresh();
 }
@@ -1239,26 +1224,23 @@ void MenuConfig::logicKeybinds() {
 	cfg_tabs[KEYBINDS_TAB].scrollbox->logic();
 	Point mouse = cfg_tabs[KEYBINDS_TAB].scrollbox->input_assist(inpt->mouse);
 
-	for (unsigned int i = 0; i < keybinds_btn.size(); i++) {
-		if ((i+1) % 3 == 0) {
-			keybinds_btn[i]->enabled = settings->enable_joystick;
-			keybinds_btn[i]->refresh();
-		}
-
+	for (unsigned int i = 0; i < keybinds_lstb.size(); i++) {
 		if (!cfg_tabs[KEYBINDS_TAB].options[i].enabled)
 			continue;
 
-		if (keybinds_btn[i]->checkClickAt(mouse.x,mouse.y)) {
-			std::string confirm_msg;
-			confirm_msg = msg->get("Assign:") + ' ' + inpt->binding_name[i/3];
-			delete input_confirm;
-			input_confirm = new MenuConfirm(msg->get("Clear"),confirm_msg);
-			input_confirm_timer.reset(Timer::BEGIN);
-			input_confirm->visible = true;
-			input_key = i;
-			inpt->last_button = -1;
-			inpt->last_key = -1;
-			inpt->last_joybutton = -1;
+		if (keybinds_lstb[i]->checkClickAt(mouse.x,mouse.y)) {
+			if (keybinds_lstb[i]->checkAction()) {
+				std::string confirm_msg;
+				confirm_msg = msg->get("Assign:") + ' ' + inpt->binding_name[i];
+				delete input_confirm;
+				input_confirm = new MenuConfirm(msg->get("Clear"),confirm_msg);
+				input_confirm_timer.reset(Timer::BEGIN);
+				input_confirm->visible = true;
+				input_key = (i * 3) + keybinds_lstb[i]->getSelected();
+				inpt->last_button = -1;
+				inpt->last_key = -1;
+				inpt->last_joybutton = -1;
+			}
 		}
 	}
 }
@@ -1327,10 +1309,6 @@ void MenuConfig::renderTabContents() {
 			Image* render_target = cfg_tabs[active_tab].scrollbox->contents->getGraphics();
 
 			for (int i = 1; i < cfg_tabs[active_tab].enabled_count; ++i) {
-				if (active_tab == KEYBINDS_TAB) {
-					if (i % 3 != 0)
-						continue;
-				}
 				render_target->drawLine(scrollpane_padding.x, i * scrollpane_padding.y, scrollpane.w - scrollpane_padding.x - 1, i * scrollpane_padding.y, scrollpane_separator_color);
 			}
 		}

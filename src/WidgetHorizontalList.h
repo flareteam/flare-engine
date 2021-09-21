@@ -47,9 +47,12 @@ private:
 	WidgetLabel label;
 	WidgetButton *button_left;
 	WidgetButton *button_right;
+	WidgetButton *button_action;
 
 	unsigned cursor;
 	bool changed_without_mouse;
+	bool action_triggered;
+	bool activated;
 	std::vector<HListItem> list_items;
 	Rect tooltip_area;
 
@@ -61,12 +64,15 @@ public:
 
 	bool checkClick();
 	bool checkClickAt(int x, int y);
+	bool checkAction();
+	void activate();
 	void render();
 	void refresh();
 
 	void append(const std::string& value, const std::string& tooltip);
 	void clear();
 	std::string getValue();
+	void setValue(unsigned index, const std::string& value);
 	unsigned getSelected();
 	unsigned getSize();
 	bool isEmpty();
@@ -79,6 +85,7 @@ public:
 	bool getNext();
 
 	bool enabled;
+	bool has_action;
 };
 
 #endif
