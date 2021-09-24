@@ -816,7 +816,7 @@ void MapRenderer::renderIso(std::vector<Renderable> &r, std::vector<Renderable> 
 	drawDevCursor();
 }
 
-void MapRenderer::renderOrthoLayer(const Map_Layer& layerdata) {
+void MapRenderer::renderOrthoLayer(const Map_Layer& layerdata, const TileSet& tile_set) {
 
 	Point dest;
 	const Point upperleft(Utils::screenToMap(0, 0, cam.shake.x, cam.shake.y));
@@ -835,13 +835,54 @@ void MapRenderer::renderOrthoLayer(const Map_Layer& layerdata) {
 		for (i = starti; i < max_tiles_width; i++) {
 
 			if (const unsigned short current_tile = layerdata[i][j]) {
-				const Tile_Def &tile = tset.tiles[current_tile];
+				const Tile_Def &tile = tile_set.tiles[current_tile];
 				dest.x = p.x - tile.offset.x;
 				dest.y = p.y - tile.offset.y;
 
-				if (fogofwar == FogOfWar::TYPE_OVERLAY)
-					if (&layerdata != &layers[fow->dark_layer_id])
-						if (layers[fow->dark_layer_id][i][j] == FogOfWar::TILE_HIDDEN) continue;
+				//skip rendering tiles that are underneath fow hidden tiles
+				if (fogofwar == FogOfWar::TYPE_OVERLAY) {
+					if (&layerdata != &layers[fow->dark_layer_id]) {
+						if (layers[fow->dark_layer_id][i][j] == FogOfWar::TILE_HIDDEN) {
+
+							//check tile's corners
+							Point t_l(Utils::screenToMap(dest.x, dest.y, cam.shake.x, cam.shake.y));
+							Point t_r(Utils::screenToMap(dest.x + tile.tile->getClip().w, dest.y, cam.shake.x, cam.shake.y));
+							Point b_l(Utils::screenToMap(dest.x, dest.y + tile.tile->getClip().h, cam.shake.x, cam.shake.y));
+							Point b_r(Utils::screenToMap(dest.x + tile.tile->getClip().w, dest.y + tile.tile->getClip().h, cam.shake.x, cam.shake.y));
+
+							//limit to map bounds
+							if (t_l.x < 0) t_l.x = 0;
+							if (t_l.x >= w) t_l.x = w-1;
+							if (t_l.y < 0) t_l.y = 0;
+							if (t_l.y >= h) t_l.y = h-1;
+
+							if (t_r.x < 0) t_r.x = 0;
+							if (t_r.x >= w) t_r.x = w-1;
+							if (t_r.y < 0) t_r.y = 0;
+							if (t_r.y >= h) t_r.y = h-1;
+
+							if (b_l.x < 0) b_l.x = 0;
+							if (b_l.x >= w) b_l.x = w-1;
+							if (b_l.y < 0) b_l.y = 0;
+							if (b_l.y >= h) b_l.y = h-1;
+
+							if (b_r.x < 0) b_r.x = 0;
+							if (b_r.x >= w) b_r.x = w-1;
+							if (b_r.y < 0) b_r.y = 0;
+							if (b_r.y >= h) b_r.y = h-1;
+
+							if (layers[fow->dark_layer_id][t_l.x][t_l.y] == FogOfWar::TILE_HIDDEN) {
+								if (layers[fow->dark_layer_id][t_r.x][t_r.y] == FogOfWar::TILE_HIDDEN) {
+									if (layers[fow->dark_layer_id][b_l.x][b_l.y] == FogOfWar::TILE_HIDDEN) {
+										if (layers[fow->dark_layer_id][b_r.x][b_r.y] == FogOfWar::TILE_HIDDEN) {
+											continue;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
 
 				tile.tile->setDestFromPoint(dest);
 				if (fogofwar == FogOfWar::TYPE_TINT) {
@@ -891,23 +932,53 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 				const Tile_Def &tile = tset.tiles[current_tile];
 				dest.x = p.x - tile.offset.x;
 				dest.y = p.y - tile.offset.y;
+				tile.tile->setDestFromPoint(dest);
 
 				//skip rendering tiles that are underneath fow hidden tiles
 				if (fogofwar == FogOfWar::TYPE_OVERLAY) {
 					if (&layers[index_objectlayer] != &layers[fow->dark_layer_id]) {
 						if (layers[fow->dark_layer_id][i][j] == FogOfWar::TILE_HIDDEN) {
-							FPoint tile_tip = Utils::screenToMap(dest.x, dest.y, pc->stats.pos.x, pc->stats.pos.y);
-							short j_tile_tip = static_cast<short>(tile_tip.y-1);
-							if (j_tile_tip < 0) j_tile_tip = 0;
 
-							if (layers[fow->dark_layer_id][i][j_tile_tip] == FogOfWar::TILE_HIDDEN) {
-								continue;
+							//check tile's corners
+							Point t_l(Utils::screenToMap(dest.x, dest.y, cam.shake.x, cam.shake.y));
+							Point t_r(Utils::screenToMap(dest.x + tile.tile->getClip().w, dest.y, cam.shake.x, cam.shake.y));
+							Point b_l(Utils::screenToMap(dest.x, dest.y + tile.tile->getClip().h, cam.shake.x, cam.shake.y));
+							Point b_r(Utils::screenToMap(dest.x + tile.tile->getClip().w, dest.y + tile.tile->getClip().h, cam.shake.x, cam.shake.y));
+
+							//limit to map bounds
+							if (t_l.x < 0) t_l.x = 0;
+							if (t_l.x >= w) t_l.x = w-1;
+							if (t_l.y < 0) t_l.y = 0;
+							if (t_l.y >= h) t_l.y = h-1;
+
+							if (t_r.x < 0) t_r.x = 0;
+							if (t_r.x >= w) t_r.x = w-1;
+							if (t_r.y < 0) t_r.y = 0;
+							if (t_r.y >= h) t_r.y = h-1;
+
+							if (b_l.x < 0) b_l.x = 0;
+							if (b_l.x >= w) b_l.x = w-1;
+							if (b_l.y < 0) b_l.y = 0;
+							if (b_l.y >= h) b_l.y = h-1;
+
+							if (b_r.x < 0) b_r.x = 0;
+							if (b_r.x >= w) b_r.x = w-1;
+							if (b_r.y < 0) b_r.y = 0;
+							if (b_r.y >= h) b_r.y = h-1;
+
+							if (layers[fow->dark_layer_id][t_l.x][t_l.y] == FogOfWar::TILE_HIDDEN) {
+								if (layers[fow->dark_layer_id][t_r.x][t_r.y] == FogOfWar::TILE_HIDDEN) {
+									if (layers[fow->dark_layer_id][b_l.x][b_l.y] == FogOfWar::TILE_HIDDEN) {
+										if (layers[fow->dark_layer_id][b_r.x][b_r.y] == FogOfWar::TILE_HIDDEN) {
+											continue;
+										}
+									}
+								}
 							}
 						}
 					}
 				}
 
-				tile.tile->setDestFromPoint(dest);
 				checkHiddenEntities(i, j, layers[index_objectlayer], r);
 				if (fogofwar == FogOfWar::TYPE_TINT) {
 					tile.tile->color_mod = fow->getTileColorMod(i, j);
@@ -931,7 +1002,7 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 void MapRenderer::renderOrtho(std::vector<Renderable> &r, std::vector<Renderable> &r_dead) {
 	unsigned index = 0;
 	while (index < index_objectlayer) {
-		renderOrthoLayer(layers[index]);
+		renderOrthoLayer(layers[index], tset);
 		map_parallax.render(cam.shake, layernames[index]);
 		index++;
 	}
@@ -942,7 +1013,20 @@ void MapRenderer::renderOrtho(std::vector<Renderable> &r, std::vector<Renderable
 
 	index++;
 	while (index < layers.size()) {
-		renderOrthoLayer(layers[index]);
+		if (fogofwar == FogOfWar::TYPE_OVERLAY) {
+			if (layernames[index] == "fow_dark") {
+				renderOrthoLayer(layers[index],fow->tset_dark);
+			}
+			else if (layernames[index] == "fow_fog") {
+				renderOrthoLayer(layers[index],fow->tset_fog);
+			}
+			else {
+				renderOrthoLayer(layers[index], tset);
+			}
+		}
+		else if (layernames[index] != "fow_dark" && layernames[index] != "fow_fog") {
+			renderOrthoLayer(layers[index], tset);
+		}
 		map_parallax.render(cam.shake, layernames[index]);
 		index++;
 	}

@@ -65,7 +65,7 @@ private:
 	void renderIsoFrontObjects(std::vector<Renderable> &r);
 	void renderIso(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
 
-	void renderOrthoLayer(const Map_Layer& layerdata);
+	void renderOrthoLayer(const Map_Layer& layerdata, const TileSet& tile_set);
 	void renderOrthoBackObjects(std::vector<Renderable> &r);
 	void renderOrthoFrontObjects(std::vector<Renderable> &r);
 	void renderOrtho(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);

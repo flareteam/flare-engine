@@ -128,6 +128,8 @@ int Map::load(const std::string& fname) {
 
 	infile.close();
 
+	if (fogofwar) fow->load();
+
 	// create StatBlocks for events that need powers
 	for (unsigned i=0; i<events.size(); ++i) {
 		EventComponent *ec_power = events[i].getComponent(EventComponent::POWER);

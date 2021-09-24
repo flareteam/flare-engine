@@ -78,8 +78,10 @@ int FogOfWar::load() {
 	for (unsigned short i=0; i<bits_per_tile; i++)
 		TILE_HIDDEN |= (1<<i);
 
-	tset_dark.load(tileset_dark);
-	tset_fog.load(tileset_fog);
+	if (mapr->fogofwar == FogOfWar::TYPE_OVERLAY) {
+		tset_dark.load(tileset_dark);
+		tset_fog.load(tileset_fog);
+	}
 
 	return 0;
 }
