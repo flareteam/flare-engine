@@ -219,6 +219,7 @@ void WidgetHorizontalList::append(const std::string& value, const std::string& t
 
 void WidgetHorizontalList::clear() {
 	list_items.clear();
+	cursor = 0;
 }
 
 std::string WidgetHorizontalList::getValue() {

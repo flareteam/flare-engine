@@ -55,12 +55,35 @@ namespace Input {
 		ACTIONBAR_FORWARD = 25,
 		ACTIONBAR_USE = 26,
 		DEVELOPER_MENU = 27,
+
+		// non-modifiable
 		CTRL = 28,
 		SHIFT = 29,
 		ALT = 30,
-		DEL = 31
+		DEL = 31,
+		TEXTEDIT_UP = 32,
+		TEXTEDIT_DOWN = 33,
 	};
 }
+
+class InputBind {
+public:
+	enum {
+		KEY = 0,
+		MOUSE = 1,
+		GAMEPAD = 2,
+		GAMEPAD_AXIS = 3,
+	};
+
+	int type;
+	int bind;
+
+	InputBind()
+		: type(-1)
+		, bind(-1)
+	{}
+	~InputBind() {}
+};
 
 /**
  * class InputState
@@ -70,29 +93,15 @@ namespace Input {
 
 class InputState {
 protected:
-	// we store mouse bindings and keyboard bindings together
-	// keyboard keycodes are all positive integers, so we use negative integers for mouse buttons
-	// -1 is reserved for unbound keys, so we start mouse bindings at -2
-	// adding MOUSE_BIND_OFFSET to a mouse bind gives us the appropriate mouse button (mouse buttons start at 1)
-	static const int MOUSE_BIND_OFFSET = 2;
-	static const int JOY_AXIS_OFFSET = 2;
-
 	// some mouse buttons are named (e.g. "Left Mouse")
 	static const int MOUSE_BUTTON_NAME_COUNT = 7;
 
 public:
-	enum {
-		BINDING_DEFAULT = 0,
-		BINDING_ALT = 1,
-		BINDING_JOYSTICK = 2
-	};
-
 	static const bool GET_SHORT_STRING = true;
-	static const int KEY_COUNT = 32;
-	static const int KEY_COUNT_USER = KEY_COUNT - 4; // exclude CTRL, SHIFT, etc from keybinding menu
-	int binding[KEY_COUNT];
-	int binding_alt[KEY_COUNT];
-	int binding_joy[KEY_COUNT];
+	static const int KEY_COUNT = 34;
+	static const int KEY_COUNT_USER = KEY_COUNT - 6; // exclude CTRL, SHIFT, etc from keybinding menu
+
+	std::vector<InputBind> binding[KEY_COUNT];
 
 	std::string binding_name[KEY_COUNT];
 	std::string mouse_button[MOUSE_BUTTON_NAME_COUNT];
@@ -100,33 +109,31 @@ public:
 	InputState(void);
 	virtual ~InputState();
 
+	void setBind(int action, int type, int bind);
+	void removeBind(int action, size_t index);
+
 	virtual void initJoystick() = 0;
-	void defaultJoystickBindings();
 	void loadKeyBindings();
 	void saveKeyBindings();
 	void resetScroll();
 	void lockActionBar();
 	void unlockActionBar();
-	void setKeybindNames();
+	virtual void setCommonStrings() = 0;
 
 	virtual void handle();
-	virtual void defaultQwertyKeyBindings() = 0;
-	virtual void setFixedKeyBindings() = 0;
+	virtual void initBindings() = 0;
 	virtual void hideCursor() = 0;
 	virtual void showCursor() = 0;
 	virtual std::string getJoystickName(int index) = 0;
-	virtual std::string getKeyName(int key, bool get_short_string = !GET_SHORT_STRING) = 0;
-	virtual std::string getMouseButtonName(int button, bool get_short_string = !GET_SHORT_STRING) = 0;
-	virtual std::string getJoystickButtonName(int button, bool get_short_string = !GET_SHORT_STRING) = 0;
-	virtual std::string getBindingString(int key, int bindings_list = BINDING_DEFAULT, bool get_short_string = !GET_SHORT_STRING) = 0;
+	virtual std::string getBindingString(int key, bool get_short_string = !GET_SHORT_STRING) = 0;
+	virtual std::string getBindingStringByIndex(int key, int binding_index, bool get_short_string = !GET_SHORT_STRING) = 0;
+	virtual std::string getGamepadBindingString(int key, bool get_short_string = !GET_SHORT_STRING) = 0;
 	virtual std::string getMovementString() = 0;
 	virtual std::string getAttackString() = 0;
-	virtual std::string getContinueString() = 0;
 	virtual int getNumJoysticks() = 0;
 	virtual bool usingMouse() = 0;
 	virtual void startTextInput() = 0;
 	virtual void stopTextInput() = 0;
-	virtual void setKeybind(int key, int binding_button, int bindings_list, std::string& keybind_msg) = 0;
 
 	void enableEventLog();
 
@@ -153,14 +160,12 @@ public:
 	bool window_minimized;
 	bool window_restored;
 	bool window_resized;
-	bool pressing_up;
-	bool pressing_down;
 	bool joysticks_changed;
 	bool refresh_hotkeys;
 
 protected:
 	Point scaleMouse(unsigned int x, unsigned int y);
-	virtual int getKeyFromName(const std::string& key_name) = 0;
+	virtual int getBindFromString(const std::string& bind, int type) = 0;
 
 	bool un_press[KEY_COUNT];
 	Point current_touch;
@@ -175,6 +180,8 @@ protected:
 
 	Version* file_version;
 	Version* file_version_min;
+
+	std::string config_keys[KEY_COUNT_USER];
 };
 
 #endif

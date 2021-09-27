@@ -684,9 +684,6 @@ std::string Utils::substituteVarsInString(const std::string &_s, Avatar* avatar)
 		else if (var == "${INPUT_ATTACK}") {
 			s.replace(begin, var_len, inpt->getAttackString());
 		}
-		else if (var == "${INPUT_CONTINUE}") {
-			s.replace(begin, var_len, inpt->getContinueString());
-		}
 		else {
 			logError("'%s' is not a valid string variable name.", var.c_str());
 			// strip the brackets from the variable

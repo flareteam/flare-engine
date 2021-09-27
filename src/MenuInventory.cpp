@@ -440,12 +440,12 @@ void MenuInventory::renderTooltips(const Point& position) {
 			tip_data.addText(msg->get("Pick up item(s):") + " " + inpt->getBindingString(Input::MAIN1));
 			tip_data.addText(msg->get("Use or equip item:") + " " + inpt->getBindingString(Input::MAIN2) + "\n");
 			tip_data.addText(msg->get("%s modifiers", inpt->getBindingString(Input::MAIN1)));
-			tip_data.addText(msg->get("Select a quantity of item:") + " " + inpt->getBindingString(Input::SHIFT) + " / " + inpt->getBindingString(Input::SHIFT, InputState::BINDING_ALT));
+			tip_data.addText(msg->get("Select a quantity of item:") + " " + inpt->getBindingString(Input::SHIFT));
 
 			if (inv_ctrl == CTRL_STASH)
-				tip_data.addText(msg->get("Stash item stack:") + " " + inpt->getBindingString(Input::CTRL) + " / " + inpt->getBindingString(Input::CTRL, InputState::BINDING_ALT));
+				tip_data.addText(msg->get("Stash item stack:") + " " + inpt->getBindingString(Input::CTRL));
 			else if (inv_ctrl == CTRL_VENDOR || eset->misc.sell_without_vendor)
-				tip_data.addText(msg->get("Sell item stack:") + " " + inpt->getBindingString(Input::CTRL) + " / " + inpt->getBindingString(Input::CTRL, InputState::BINDING_ALT));
+				tip_data.addText(msg->get("Sell item stack:") + " " + inpt->getBindingString(Input::CTRL));
 		}
 		tooltipm->push(tip_data, position, TooltipData::STYLE_FLOAT);
 	}

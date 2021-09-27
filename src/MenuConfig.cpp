@@ -229,7 +229,7 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	, scrollpane_separator_color(font->getColor(FontEngine::COLOR_WIDGET_DISABLED))
 	, new_render_device(settings->render_device_name)
 	, input_confirm_timer(settings->max_frames_per_sec * 10) // 10 seconds
-	, input_key(0)
+	, input_action(0)
 	, keybind_tip_timer(settings->max_frames_per_sec * 5) // 5 seconds
 	, keybind_tip(new WidgetTooltip())
 	, clicked_accept(false)
@@ -439,10 +439,6 @@ void MenuConfig::init() {
 
 	for (size_t i = 0; i < keybinds_lstb.size(); ++i) {
 		cfg_tabs[KEYBINDS_TAB].setOptionWidgets(static_cast<int>(i), keybinds_lb[i], keybinds_lstb[i], inpt->binding_name[i]);
-
-		keybinds_lstb[i]->append(inpt->getBindingString(static_cast<int>(i)), msg->get("Primary binding: %s", inpt->binding_name[i].c_str()));
-		keybinds_lstb[i]->append(inpt->getBindingString(static_cast<int>(i), InputState::BINDING_ALT), msg->get("Alternate binding: %s", inpt->binding_name[i].c_str()));
-		keybinds_lstb[i]->append(inpt->getBindingString(static_cast<int>(i), InputState::BINDING_JOYSTICK), msg->get("Joystick binding: %s", inpt->binding_name[i].c_str()));
 	}
 
 	// disable some options
@@ -872,11 +868,28 @@ void MenuConfig::updateInput() {
 }
 
 void MenuConfig::updateKeybinds() {
+	std::stringstream ss;
+
 	// now do labels for keybinds that are set
 	for (unsigned int i = 0; i < keybinds_lstb.size(); i++) {
-		keybinds_lstb[i]->setValue(0, inpt->getBindingString(i));
-		keybinds_lstb[i]->setValue(1, inpt->getBindingString(i, InputState::BINDING_ALT));
-		keybinds_lstb[i]->setValue(2, inpt->getBindingString(i, InputState::BINDING_JOYSTICK));
+		keybinds_lstb[i]->clear();
+		if (inpt->binding[i].empty()) {
+			keybinds_lstb[i]->append(inpt->getBindingStringByIndex(static_cast<int>(i), -1), "");
+		}
+		else {
+			ss.str("");
+			ss << msg->get("Bindings for:") << " " << inpt->binding_name[i] << "\n";
+
+			for (size_t j = 0; j < inpt->binding[i].size(); ++j) {
+				ss << inpt->getBindingStringByIndex(static_cast<int>(i), static_cast<int>(j));
+				if (j+1 != inpt->binding[i].size()) {
+					ss << "\n";
+				}
+			}
+			for (size_t j = 0; j < inpt->binding[i].size(); ++j) {
+				keybinds_lstb[i]->append(inpt->getBindingStringByIndex(static_cast<int>(i), static_cast<int>(j)), ss.str());
+			}
+		}
 		keybinds_lstb[i]->refresh();
 	}
 	cfg_tabs[KEYBINDS_TAB].scrollbox->refresh();
@@ -899,7 +912,7 @@ void MenuConfig::logic() {
 	else if (input_confirm->visible) {
 		// assign a keybind
 		input_confirm->logic();
-		scanKey(input_key);
+		scanKey(input_action);
 		input_confirm_timer.tick();
 		if (input_confirm_timer.isEnd())
 			input_confirm->visible = false;
@@ -1003,8 +1016,7 @@ void MenuConfig::logicDefaults() {
 		render_device->setFullscreen(settings->fullscreen);
 		settings->loadDefaults();
 		eset->load();
-		inpt->defaultQwertyKeyBindings();
-		inpt->defaultJoystickBindings();
+		inpt->initBindings();
 		update();
 		refreshWindowSize();
 		defaults_confirm->visible = false;
@@ -1202,15 +1214,8 @@ void MenuConfig::logicInput() {
 	}
 	else if (cfg_tabs[INPUT_TAB].options[Platform::Input::JOYSTICK].enabled && joystick_device_lstb->checkClickAt(mouse.x, mouse.y)) {
 		settings->joystick_device = static_cast<int>(joystick_device_lstb->getSelected()) - 1;
-		if (settings->joystick_device != -1) {
-			settings->enable_joystick = true;
-			if (inpt->getNumJoysticks() > 0) {
-				inpt->initJoystick();
-			}
-		}
-		else {
-			settings->enable_joystick = false;
-		}
+		settings->enable_joystick = (settings->joystick_device != -1);
+		inpt->initJoystick();
 	}
 	else if (cfg_tabs[INPUT_TAB].options[Platform::Input::TOUCH_CONTROLS].enabled && touch_controls_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->touchscreen = touch_controls_cb->isChecked();
@@ -1236,7 +1241,7 @@ void MenuConfig::logicKeybinds() {
 				input_confirm = new MenuConfirm(msg->get("Clear"),confirm_msg);
 				input_confirm_timer.reset(Timer::BEGIN);
 				input_confirm->visible = true;
-				input_key = (i * 3) + keybinds_lstb[i]->getSelected();
+				input_action = i;
 				inpt->last_button = -1;
 				inpt->last_key = -1;
 				inpt->last_joybutton = -1;
@@ -1545,9 +1550,9 @@ std::string MenuConfig::createModTooltip(Mod *mod) {
 	return ret;
 }
 
-void MenuConfig::confirmKey(int button) {
-	inpt->pressing[button] = false;
-	inpt->lock[button] = false;
+void MenuConfig::confirmKey(int action) {
+	inpt->pressing[action] = false;
+	inpt->lock[action] = false;
 
 	input_confirm->visible = false;
 	input_confirm_timer.reset(Timer::END);
@@ -1558,39 +1563,34 @@ void MenuConfig::confirmKey(int button) {
 	updateKeybinds();
 }
 
-void MenuConfig::scanKey(int button) {
-	int column = button % 3;
-	int real_button = button / 3;
-
+void MenuConfig::scanKey(int action) {
 	// clear the keybind if the user clicks "Clear" in the dialog
 	if (input_confirm->visible && input_confirm->confirmClicked) {
-		inpt->setKeybind(-1, real_button, column, keybind_msg);
-		confirmKey(real_button);
+		inpt->removeBind(action, keybinds_lstb[action]->getSelected());
+		confirmKey(action);
 		return;
 	}
 
 	if (input_confirm->visible && !input_confirm->isWithinButtons) {
-		// keyboard & mouse
-		if (column == InputState::BINDING_DEFAULT || column == InputState::BINDING_ALT) {
-			if (inpt->last_button != -1) {
-				// mouse
-				inpt->setKeybind(inpt->last_button, real_button, column, keybind_msg);
-				confirmKey(real_button);
-			}
-			else if (inpt->last_key != -1) {
-				// keyboard
-				inpt->setKeybind(inpt->last_key, real_button, column, keybind_msg);
-				confirmKey(real_button);
-			}
+		if (inpt->last_key != -1) {
+			// keyboard
+			inpt->setBind(action, InputBind::KEY, inpt->last_key);
+			confirmKey(action);
 		}
-		// joystick
-		else if (column == InputState::BINDING_JOYSTICK && inpt->last_joybutton != -1) {
-			inpt->setKeybind(inpt->last_joybutton, real_button, column, keybind_msg);
-			confirmKey(real_button);
+		else if (inpt->last_button != -1) {
+			// mouse
+			inpt->setBind(action, InputBind::MOUSE, inpt->last_button);
+			confirmKey(action);
 		}
-		else if (column == InputState::BINDING_JOYSTICK && inpt->last_joyaxis != -1) {
-			inpt->setKeybind(inpt->last_joyaxis, real_button, column, keybind_msg);
-			confirmKey(real_button);
+		else if (inpt->last_joybutton != -1) {
+			// gamepad button
+			inpt->setBind(action, InputBind::GAMEPAD, inpt->last_joybutton);
+			confirmKey(action);
+		}
+		else if (inpt->last_joyaxis != -1) {
+			// gamepad axis
+			inpt->setBind(action, InputBind::GAMEPAD_AXIS, inpt->last_joyaxis);
+			confirmKey(action);
 		}
 	}
 }

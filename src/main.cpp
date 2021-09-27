@@ -95,7 +95,7 @@ static void init(const CmdLineArgs& cmd_line_args) {
 	Utils::logInfo("main: PATH_DATA = '%s'", settings->path_data.c_str());
 
 	// SDL Inits
-	if ( SDL_Init (SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK) < 0 ) {
+	if ( SDL_Init (SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMECONTROLLER) < 0 ) {
 		Utils::logError("main: Could not initialize SDL: %s", SDL_GetError());
 		Utils::logErrorDialog("main: Could not initialize SDL: %s", SDL_GetError());
 		Utils::Exit(1);

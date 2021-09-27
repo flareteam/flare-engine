@@ -156,8 +156,8 @@ public:
 	void setPauseSaveEnabled(bool enable_save);
 	void resetSelectedTab();
 
-	void confirmKey(int button);
-	void scanKey(int button);
+	void confirmKey(int action);
+	void scanKey(int action);
 
 	void enableMouseOptions();
 	void disableMouseOptions();
@@ -316,7 +316,7 @@ public:
 	std::vector<WidgetHorizontalList *> keybinds_lstb;
 
 	Timer input_confirm_timer;
-	int input_key;
+	int input_action;
 
 	std::string keybind_msg;
 	Timer keybind_tip_timer;

@@ -33,38 +33,38 @@ public:
 	~SDLInputState();
 
 	void initJoystick();
-	void defaultQwertyKeyBindings();
-	void setFixedKeyBindings();
+	void initBindings();
 	void handle();
 	void hideCursor();
 	void showCursor();
 	std::string getJoystickName(int index);
 	std::string getKeyName(int key, bool get_short_string = !InputState::GET_SHORT_STRING);
 	std::string getMouseButtonName(int button, bool get_short_string = !InputState::GET_SHORT_STRING);
-	std::string getJoystickButtonName(int button, bool get_short_string = !InputState::GET_SHORT_STRING);
-	std::string getBindingString(int key, int bindings_list = InputState::BINDING_DEFAULT, bool get_short_string = !InputState::GET_SHORT_STRING);
+	std::string getJoystickButtonName(int button);
+	std::string getJoystickAxisName(int axis);
+	std::string getBindingString(int key, bool get_short_string = !InputState::GET_SHORT_STRING);
+	std::string getBindingStringByIndex(int key, int binding_index, bool get_short_string = !GET_SHORT_STRING);
+	std::string getGamepadBindingString(int key, bool get_short_string = !InputState::GET_SHORT_STRING);
 	std::string getMovementString();
 	std::string getAttackString();
-	std::string getContinueString();
 	int getNumJoysticks();
 	bool usingMouse();
 	void startTextInput();
 	void stopTextInput();
-	void setKeybind(int key, int binding_button, int bindings_list, std::string& keybind_msg);
+	void setCommonStrings();
 
 private:
-	int getKeyFromName(const std::string& key_name);
-	void validateFixedKeyBinding(int action, int key, int bindings_list);
+	int getBindFromString(const std::string& bind, int type);
 
-	SDL_Joystick* joy;
-	int joy_num;
-	int joy_axis_num;
 	Timer resize_cooldown;
 	bool joystick_init;
 	bool text_input;
 
-	std::vector<int> joy_axis_prev;
-	std::vector<int> joy_axis_deltas;
+	std::vector<int> gamepad_ids;
+	SDL_GameController* gamepad;
+
+	std::string xbox_buttons[SDL_CONTROLLER_BUTTON_MAX];
+	std::string xbox_axes[SDL_CONTROLLER_AXIS_MAX*2]; // doubled because we need both positive and negative axis names
 };
 
 #endif

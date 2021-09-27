@@ -247,7 +247,7 @@ void WidgetSlot::setHotkey(int key) {
 
 	if (hotkey != -1 && !eset->widgets.slot_hotkey_label.hidden) {
 		label_hotkey.setPos(pos.x + icons->text_offset.x, pos.y + icons->text_offset.y);
-		label_hotkey.setText(inpt->getBindingString(hotkey, InputState::BINDING_DEFAULT, InputState::GET_SHORT_STRING));
+		label_hotkey.setText(inpt->getBindingString(hotkey, InputState::GET_SHORT_STRING));
 		label_hotkey.local_frame = local_frame;
 		label_hotkey.local_offset = local_offset;
 

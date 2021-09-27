@@ -39,8 +39,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 InputState::InputState(void)
 	: binding()
-	, binding_alt()
-	, binding_joy()
 	, pressing()
 	, lock()
 	, slow_repeat()
@@ -60,16 +58,41 @@ InputState::InputState(void)
 	, window_minimized(false)
 	, window_restored(false)
 	, window_resized(false)
-	, pressing_up(false)
-	, pressing_down(false)
 	, joysticks_changed(false)
 	, refresh_hotkeys(false)
 	, un_press()
 	, current_touch()
 	, dump_event(false)
 	, file_version(new Version())
-	, file_version_min(new Version(1, 9, 20))
+	, file_version_min(new Version(1, 12, 24))
 {
+	config_keys[Input::CANCEL] = "cancel";
+	config_keys[Input::ACCEPT] = "accept";
+	config_keys[Input::UP] = "up";
+	config_keys[Input::DOWN] = "down";
+	config_keys[Input::LEFT] = "left";
+	config_keys[Input::RIGHT] = "right";
+	config_keys[Input::BAR_1] = "bar1";
+	config_keys[Input::BAR_2] = "bar2";
+	config_keys[Input::BAR_3] = "bar3";
+	config_keys[Input::BAR_4] = "bar4";
+	config_keys[Input::BAR_5] = "bar5";
+	config_keys[Input::BAR_6] = "bar6";
+	config_keys[Input::BAR_7] = "bar7";
+	config_keys[Input::BAR_8] = "bar8";
+	config_keys[Input::BAR_9] = "bar9";
+	config_keys[Input::BAR_0] = "bar0";
+	config_keys[Input::MAIN1] = "main1";
+	config_keys[Input::MAIN2] = "main2";
+	config_keys[Input::CHARACTER] = "character";
+	config_keys[Input::INVENTORY] = "inventory";
+	config_keys[Input::POWERS] = "powers";
+	config_keys[Input::LOG] = "log";
+	config_keys[Input::ACTIONBAR] = "actionbar";
+	config_keys[Input::ACTIONBAR_BACK] = "actionbar_back";
+	config_keys[Input::ACTIONBAR_FORWARD] = "actionbar_forward";
+	config_keys[Input::ACTIONBAR_USE] = "actionbar_use";
+	config_keys[Input::DEVELOPER_MENU] = "developer_menu";
 }
 
 InputState::~InputState() {
@@ -77,26 +100,30 @@ InputState::~InputState() {
 	delete file_version_min;
 }
 
-void InputState::defaultJoystickBindings () {
-	// most joystick buttons are unbound by default
-	for (int key=0; key<KEY_COUNT; key++) {
-		binding_joy[key] = -1;
+void InputState::setBind(int action, int type, int bind) {
+	if (action < 0 || action >= KEY_COUNT)
+		return;
+
+	for (size_t i = 0; i < binding[action].size(); ++i) {
+		if (binding[action][i].type == type && binding[action][i].bind == bind)
+			return;
 	}
 
-	binding_joy[Input::CANCEL] = 0;
-	binding_joy[Input::ACCEPT] = 1;
-	binding_joy[Input::ACTIONBAR] = 2;
-	binding_joy[Input::ACTIONBAR_USE] = 3;
-	binding_joy[Input::ACTIONBAR_BACK] = 4;
-	binding_joy[Input::ACTIONBAR_FORWARD] = 5;
+	InputBind input_bind;
+	input_bind.type = type;
+	input_bind.bind = bind;
 
-	// axis 0
-	binding_joy[Input::LEFT] = JOY_AXIS_OFFSET * (-1);
-	binding_joy[Input::RIGHT] = (JOY_AXIS_OFFSET+1) * (-1);
+	binding[action].push_back(input_bind);
+}
 
-	// axis 1
-	binding_joy[Input::UP] = (JOY_AXIS_OFFSET+2) * (-1);
-	binding_joy[Input::DOWN] = (JOY_AXIS_OFFSET+3) * (-1);
+void InputState::removeBind(int action, size_t index) {
+	if (action < 0 || action >= KEY_COUNT)
+		return;
+
+	if (index >= binding[action].size())
+		return;
+
+	binding[action].erase(binding[action].begin() + index);
 }
 
 /**
@@ -152,127 +179,63 @@ void InputState::loadKeyBindings() {
 			continue;
 		}
 
-		int key1 = -1;
-		int key2 = -1;
-		int key3 = -1;
-
-		if (infile.section == "user") {
-			// this is a traditional keybindings file that has been written by the engine via saveKeyBindings()
-			key1 = Parse::toInt(Parse::popFirstString(infile.val), -1);
-			key2 = Parse::toInt(Parse::popFirstString(infile.val), -1);
-			key3 = Parse::toInt(Parse::popFirstString(infile.val), -1);
+		if (infile.new_section && infile.section == "user") {
+			for (int key = 0; key < KEY_COUNT_USER; ++key) {
+				binding[key].clear();
+			}
 		}
-		else if (infile.section == "default") {
-			// this is a set of default keybindings located in a mod
-			std::string str1 = Parse::popFirstString(infile.val);
-			std::string str2 = Parse::popFirstString(infile.val);
-			std::string str3 = Parse::popFirstString(infile.val);
 
-			if (str1.length() > 6 && str1.substr(0, 6) == "mouse_")
-				key1 = (Parse::toInt(str1.substr(6))+ 1 + MOUSE_BIND_OFFSET) * (-1);
-			else if (str1 != "-1")
-				key1 = getKeyFromName(str1);
+		// @CLASS InputState: Default Keybindings|Description of engine/default_keybindings.txt. Use a bind value of '-1' to clear all bindings for an action. Type may be any of the follwing: 0 = Keyboard, 1 = Mouse, 2 = Gamepad button, 3 = Gamepad Axis. Human-readable key and gamepad mapping names may be used by prefixing the bind with "SDL:" (e.g. "SDL:space" or "SDL:leftstick"). If using the "SDL:" prefix for a gamepad axis, add ":-" to the end of the bind to get the negative direction (e.g. "SDL:leftx:-").
+		// @ATTR default.cancel|[int, string], int : Bind, Type|Bindings for "Cancel".
+		// @ATTR default.accept|[int, string], int : Bind, Type|Bindings for "Accept".
+		// @ATTR default.up|[int, string], int : Bind, Type|Bindings for "Up".
+		// @ATTR default.down|[int, string], int : Bind, Type|Bindings for "Down".
+		// @ATTR default.left|[int, string], int : Bind, Type|Bindings for "Left".
+		// @ATTR default.right|[int, string], int : Bind, Type|Bindings for "Right".
+		// @ATTR default.bar1|[int, string], int : Bind, Type|Bindings for "Bar1".
+		// @ATTR default.bar2|[int, string], int : Bind, Type|Bindings for "Bar2".
+		// @ATTR default.bar3|[int, string], int : Bind, Type|Bindings for "Bar3".
+		// @ATTR default.bar4|[int, string], int : Bind, Type|Bindings for "Bar4".
+		// @ATTR default.bar5|[int, string], int : Bind, Type|Bindings for "Bar5".
+		// @ATTR default.bar6|[int, string], int : Bind, Type|Bindings for "Bar6".
+		// @ATTR default.bar7|[int, string], int : Bind, Type|Bindings for "Bar7".
+		// @ATTR default.bar8|[int, string], int : Bind, Type|Bindings for "Bar8".
+		// @ATTR default.bar9|[int, string], int : Bind, Type|Bindings for "Bar9".
+		// @ATTR default.bar0|[int, string], int : Bind, Type|Bindings for "Bar0".
+		// @ATTR default.main1|[int, string], int : Bind, Type|Bindings for "Main1".
+		// @ATTR default.main2|[int, string], int : Bind, Type|Bindings for "Main2".
+		// @ATTR default.character|[int, string], int : Bind, Type|Bindings for "Character".
+		// @ATTR default.inventory|[int, string], int : Bind, Type|Bindings for "Inventory".
+		// @ATTR default.powers|[int, string], int : Bind, Type|Bindings for "Powers".
+		// @ATTR default.log|[int, string], int : Bind, Type|Bindings for "Log".
+		// @ATTR default.actionbar|[int, string], int : Bind, Type|Bindings for "Actionbar Accept".
+		// @ATTR default.actionbar_back|[int, string], int : Bind, Type|Bindings for "Actionbar Left".
+		// @ATTR default.actionbar_forward|[int, string], int : Bind, Type|Bindings for "Actionbar Right".
+		// @ATTR default.actionbar_use|[int, string], int : Bind, Type|Bindings for "Actionbar Use".
+		// @ATTR default.developer_menu|[int, string], int : Bind, Type|Bindings for "Developer Menu".
 
-			if (str2.length() > 6 && str2.substr(0, 6) == "mouse_")
-				key2 = (Parse::toInt(str1.substr(6))+ 1 + MOUSE_BIND_OFFSET) * (-1);
-			else if (str2 != "-1")
-				key2 = getKeyFromName(str2);
+		if (infile.section == "user" || infile.section == "default") {
+			for (int key = 0; key < KEY_COUNT_USER; ++key) {
+				if (infile.key == config_keys[key]) {
+					std::string bind = Parse::popFirstString(infile.val);
+					int type = Parse::popFirstInt(infile.val);
 
-			if (str3.length() > 5 && str3.substr(0, 5) == "axis_") {
-				size_t pos_minus = str3.find('-');
-				size_t pos_plus = str3.find('+');
-				if (pos_minus != std::string::npos) {
-					key3 = ((Parse::toInt(str3.substr(5, pos_minus)) * 2) + JOY_AXIS_OFFSET) * (-1);
-				}
-				else if (pos_plus != std::string::npos) {
-					key3 = ((Parse::toInt(str3.substr(5, pos_plus)) * 2) + 1 + JOY_AXIS_OFFSET) * (-1);
+					InputBind input_bind;
+					input_bind.type = type;
+
+					input_bind.bind = getBindFromString(bind, input_bind.type);
+
+					if (input_bind.bind == -1) {
+						binding[key].clear();
+					}
+					else {
+						binding[key].push_back(input_bind);
+					}
 				}
 			}
-			else if (str3.length() > 4 && str3.substr(0, 4) == "joy_")
-				key3 = Parse::toInt(str3.substr(4));
 		}
-		else
-			continue;
-
-		// @CLASS InputState: Default Keybindings|Description of engine/default_keybindings.txt. Use **-1** for no binding. Keyboard values can be any of the key names listed in the [SDL docs](https://wiki.libsdl.org/SDL_Keycode). Mouse values are in the format **mouse_0**. Joystick buttons are in the format **joy_0**. Joystick axis are in the format **axis_0-** or **axis_0+**.
-		// @ATTR default.cancel|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Cancel".
-		// @ATTR default.accept|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Accept".
-		// @ATTR default.up|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Up".
-		// @ATTR default.down|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Down".
-		// @ATTR default.left|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Left".
-		// @ATTR default.right|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Right".
-		// @ATTR default.bar1|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Bar1".
-		// @ATTR default.bar2|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Bar2".
-		// @ATTR default.bar3|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Bar3".
-		// @ATTR default.bar4|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Bar4".
-		// @ATTR default.bar5|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Bar5".
-		// @ATTR default.bar6|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Bar6".
-		// @ATTR default.bar7|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Bar7".
-		// @ATTR default.bar8|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Bar8".
-		// @ATTR default.bar9|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Bar9".
-		// @ATTR default.bar0|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Bar0".
-		// @ATTR default.main1|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Main1".
-		// @ATTR default.main2|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Main2".
-		// @ATTR default.swap|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Equipment swap".
-		// @ATTR default.character|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Character".
-		// @ATTR default.inventory|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Inventory".
-		// @ATTR default.powers|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Powers".
-		// @ATTR default.log|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Log".
-		// @ATTR default.ctrl|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Ctrl".
-		// @ATTR default.shift|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Shift".
-		// @ATTR default.alt|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Alt".
-		// @ATTR default.delete|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Delete".
-		// @ATTR default.actionbar|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Actionbar Accept".
-		// @ATTR default.actionbar_back|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Actionbar Left".
-		// @ATTR default.actionbar_forward|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Actionbar Right".
-		// @ATTR default.actionbar_use|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Actionbar Use".
-		// @ATTR default.developer_menu|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Developer Menu".
-
-		int cursor = -1;
-
-		if (infile.key == "cancel") cursor = Input::CANCEL;
-		else if (infile.key == "accept") cursor = Input::ACCEPT;
-		else if (infile.key == "up") cursor = Input::UP;
-		else if (infile.key == "down") cursor = Input::DOWN;
-		else if (infile.key == "left") cursor = Input::LEFT;
-		else if (infile.key == "right") cursor = Input::RIGHT;
-		else if (infile.key == "bar1") cursor = Input::BAR_1;
-		else if (infile.key == "bar2") cursor = Input::BAR_2;
-		else if (infile.key == "bar3") cursor = Input::BAR_3;
-		else if (infile.key == "bar4") cursor = Input::BAR_4;
-		else if (infile.key == "bar5") cursor = Input::BAR_5;
-		else if (infile.key == "bar6") cursor = Input::BAR_6;
-		else if (infile.key == "bar7") cursor = Input::BAR_7;
-		else if (infile.key == "bar8") cursor = Input::BAR_8;
-		else if (infile.key == "bar9") cursor = Input::BAR_9;
-		else if (infile.key == "bar0") cursor = Input::BAR_0;
-		else if (infile.key == "main1") cursor = Input::MAIN1;
-		else if (infile.key == "main2") cursor = Input::MAIN2;
-		else if (infile.key == "swap") cursor = Input::SWAP;
-		else if (infile.key == "character") cursor = Input::CHARACTER;
-		else if (infile.key == "inventory") cursor = Input::INVENTORY;
-		else if (infile.key == "powers") cursor = Input::POWERS;
-		else if (infile.key == "log") cursor = Input::LOG;
-		else if (infile.key == "ctrl") cursor = Input::CTRL;
-		else if (infile.key == "shift") cursor = Input::SHIFT;
-		else if (infile.key == "alt") cursor = Input::ALT;
-		else if (infile.key == "delete") cursor = Input::DEL;
-		else if (infile.key == "actionbar") cursor = Input::ACTIONBAR;
-		else if (infile.key == "actionbar_back") cursor = Input::ACTIONBAR_BACK;
-		else if (infile.key == "actionbar_forward") cursor = Input::ACTIONBAR_FORWARD;
-		else if (infile.key == "actionbar_use") cursor = Input::ACTIONBAR_USE;
-		else if (infile.key == "developer_menu") cursor = Input::DEVELOPER_MENU;
-
-		if (cursor != -1) {
-			binding[cursor] = key1;
-			binding_alt[cursor] = key2;
-			binding_joy[cursor] = key3;
-		}
-
 	}
 	infile.close();
-
-	setFixedKeyBindings();
 }
 
 /**
@@ -292,48 +255,26 @@ void InputState::saveKeyBindings() {
 
 	if (outfile.is_open()) {
 		outfile << "# Keybindings\n";
-		outfile << "# FORMAT: {ACTION}={BIND},{BIND_ALT},{BIND_JOY}\n";
-		outfile << "# A bind value of -1 means unbound\n";
-		outfile << "# For BIND and BIND_ALT, a value of 0 is also unbound\n";
-		outfile << "# For BIND and BIND_ALT, any value less than -1 is a mouse button\n";
-		outfile << "# As an example, mouse button 1 would be -3 here. Button 2 would be -4, etc.\n\n";
+		outfile << "# FORMAT: {ACTION}={BIND},{TYPE}\n";
+		outfile << "# A bind value of -1 means unbound and will clear any existing bindings for that action\n";
+		outfile << "# Type may be any of the follwing: 0 = Keyboard, 1 = Mouse, 2 = Gamepad button, 3 = Gamepad Axis.\n";
+		outfile << "# Human-readable key and gamepad mapping names may be used by prefixing the bind with \"SDL:\" (e.g. \"SDL:space\" or \"SDL:leftstick\").\n";
+		outfile << "# If using the \"SDL:\" prefix for a gamepad axis, add \":-\" to the end of the bind to get the negative direction (e.g. \"SDL:leftx:-\").\n\n";
 
 		*file_version = *file_version_min;
 		outfile << "file_version=" << file_version->getString() << "\n\n";
 
 		outfile << "[user]\n";
-		outfile << "cancel=" << binding[Input::CANCEL] << "," << binding_alt[Input::CANCEL] << "," << binding_joy[Input::CANCEL] << "\n";
-		outfile << "accept=" << binding[Input::ACCEPT] << "," << binding_alt[Input::ACCEPT] << "," << binding_joy[Input::ACCEPT] << "\n";
-		outfile << "up=" << binding[Input::UP] << "," << binding_alt[Input::UP] << "," << binding_joy[Input::UP] << "\n";
-		outfile << "down=" << binding[Input::DOWN] << "," << binding_alt[Input::DOWN] << "," << binding_joy[Input::DOWN] << "\n";
-		outfile << "left=" << binding[Input::LEFT] << "," << binding_alt[Input::LEFT] << "," << binding_joy[Input::LEFT] << "\n";
-		outfile << "right=" << binding[Input::RIGHT] << "," << binding_alt[Input::RIGHT] << "," << binding_joy[Input::RIGHT] << "\n";
-		outfile << "bar1=" << binding[Input::BAR_1] << "," << binding_alt[Input::BAR_1] << "," << binding_joy[Input::BAR_1] << "\n";
-		outfile << "bar2=" << binding[Input::BAR_2] << "," << binding_alt[Input::BAR_2] << "," << binding_joy[Input::BAR_2] << "\n";
-		outfile << "bar3=" << binding[Input::BAR_3] << "," << binding_alt[Input::BAR_3] << "," << binding_joy[Input::BAR_3] << "\n";
-		outfile << "bar4=" << binding[Input::BAR_4] << "," << binding_alt[Input::BAR_4] << "," << binding_joy[Input::BAR_4] << "\n";
-		outfile << "bar5=" << binding[Input::BAR_5] << "," << binding_alt[Input::BAR_5] << "," << binding_joy[Input::BAR_5] << "\n";
-		outfile << "bar6=" << binding[Input::BAR_6] << "," << binding_alt[Input::BAR_6] << "," << binding_joy[Input::BAR_6] << "\n";
-		outfile << "bar7=" << binding[Input::BAR_7] << "," << binding_alt[Input::BAR_7] << "," << binding_joy[Input::BAR_7] << "\n";
-		outfile << "bar8=" << binding[Input::BAR_8] << "," << binding_alt[Input::BAR_8] << "," << binding_joy[Input::BAR_8] << "\n";
-		outfile << "bar9=" << binding[Input::BAR_9] << "," << binding_alt[Input::BAR_9] << "," << binding_joy[Input::BAR_9] << "\n";
-		outfile << "bar0=" << binding[Input::BAR_0] << "," << binding_alt[Input::BAR_0] << "," << binding_joy[Input::BAR_0] << "\n";
-		outfile << "main1=" << binding[Input::MAIN1] << "," << binding_alt[Input::MAIN1] << "," << binding_joy[Input::MAIN1] << "\n";
-		outfile << "main2=" << binding[Input::MAIN2] << "," << binding_alt[Input::MAIN2] << "," << binding_joy[Input::MAIN2] << "\n";
-		outfile << "swap=" << binding[Input::SWAP] << "," << binding_alt[Input::SWAP] << "," << binding_joy[Input::SWAP] << "\n";
-		outfile << "character=" << binding[Input::CHARACTER] << "," << binding_alt[Input::CHARACTER] << "," << binding_joy[Input::CHARACTER] << "\n";
-		outfile << "inventory=" << binding[Input::INVENTORY] << "," << binding_alt[Input::INVENTORY] << "," << binding_joy[Input::INVENTORY] << "\n";
-		outfile << "powers=" << binding[Input::POWERS] << "," << binding_alt[Input::POWERS] << "," << binding_joy[Input::POWERS] << "\n";
-		outfile << "log=" << binding[Input::LOG] << "," << binding_alt[Input::LOG] << "," << binding_joy[Input::LOG] << "\n";
-		outfile << "ctrl=" << binding[Input::CTRL] << "," << binding_alt[Input::CTRL] << "," << binding_joy[Input::CTRL] << "\n";
-		outfile << "shift=" << binding[Input::SHIFT] << "," << binding_alt[Input::SHIFT] << "," << binding_joy[Input::SHIFT] << "\n";
-		outfile << "alt=" << binding[Input::ALT] << "," << binding_alt[Input::ALT] << "," << binding_joy[Input::ALT] << "\n";
-		outfile << "delete=" << binding[Input::DEL] << "," << binding_alt[Input::DEL] << "," << binding_joy[Input::DEL] << "\n";
-		outfile << "actionbar=" << binding[Input::ACTIONBAR] << "," << binding_alt[Input::ACTIONBAR] << "," << binding_joy[Input::ACTIONBAR] << "\n";
-		outfile << "actionbar_back=" << binding[Input::ACTIONBAR_BACK] << "," << binding_alt[Input::ACTIONBAR_BACK] << "," << binding_joy[Input::ACTIONBAR_BACK] << "\n";
-		outfile << "actionbar_forward=" << binding[Input::ACTIONBAR_FORWARD] << "," << binding_alt[Input::ACTIONBAR_FORWARD] << "," << binding_joy[Input::ACTIONBAR_FORWARD] << "\n";
-		outfile << "actionbar_use=" << binding[Input::ACTIONBAR_USE] << "," << binding_alt[Input::ACTIONBAR_USE] << "," << binding_joy[Input::ACTIONBAR_USE] << "\n";
-		outfile << "developer_menu=" << binding[Input::DEVELOPER_MENU] << "," << binding_alt[Input::DEVELOPER_MENU] << "," << binding_joy[Input::DEVELOPER_MENU] << "\n";
+		for (int key = 0; key < KEY_COUNT_USER; ++key) {
+			if (binding[key].empty()) {
+				outfile << config_keys[key] << "=-1\n";
+			}
+			else {
+				for (size_t i = 0; i < binding[key].size(); ++i) {
+					outfile << config_keys[key] << "=" << binding[key][i].bind << "," << binding[key][i].type << "\n";
+				}
+			}
+		}
 
 		if (outfile.bad()) Utils::logError("InputState: Unable to write keybindings config file. No write access or disk is full!");
 		outfile.close();
@@ -413,49 +354,6 @@ void InputState::unlockActionBar() {
 	lock[Input::MAIN1] = false;
 	lock[Input::MAIN2] = false;
 	lock[Input::ACTIONBAR_USE] = false;
-}
-
-void InputState::setKeybindNames() {
-	binding_name[Input::CANCEL] = msg->get("Cancel");
-	binding_name[Input::ACCEPT] = msg->get("Accept");
-	binding_name[Input::UP] = msg->get("Up");
-	binding_name[Input::DOWN] = msg->get("Down");
-	binding_name[Input::LEFT] = msg->get("Left");
-	binding_name[Input::RIGHT] = msg->get("Right");
-	binding_name[Input::BAR_1] = msg->get("Bar1");
-	binding_name[Input::BAR_2] = msg->get("Bar2");
-	binding_name[Input::BAR_3] = msg->get("Bar3");
-	binding_name[Input::BAR_4] = msg->get("Bar4");
-	binding_name[Input::BAR_5] = msg->get("Bar5");
-	binding_name[Input::BAR_6] = msg->get("Bar6");
-	binding_name[Input::BAR_7] = msg->get("Bar7");
-	binding_name[Input::BAR_8] = msg->get("Bar8");
-	binding_name[Input::BAR_9] = msg->get("Bar9");
-	binding_name[Input::BAR_0] = msg->get("Bar0");
-	binding_name[Input::CHARACTER] = msg->get("Character");
-	binding_name[Input::INVENTORY] = msg->get("Inventory");
-	binding_name[Input::POWERS] = msg->get("Powers");
-	binding_name[Input::LOG] = msg->get("Log");
-	binding_name[Input::MAIN1] = msg->get("Main1");
-	binding_name[Input::MAIN2] = msg->get("Main2");
-	binding_name[Input::SWAP] = msg->get("Equipment swap");
-	binding_name[Input::CTRL] = msg->get("Ctrl");
-	binding_name[Input::SHIFT] = msg->get("Shift");
-	binding_name[Input::ALT] = msg->get("Alt");
-	binding_name[Input::DEL] = msg->get("Delete");
-	binding_name[Input::ACTIONBAR] = msg->get("ActionBar Accept");
-	binding_name[Input::ACTIONBAR_BACK] = msg->get("ActionBar Left");
-	binding_name[Input::ACTIONBAR_FORWARD] = msg->get("ActionBar Right");
-	binding_name[Input::ACTIONBAR_USE] = msg->get("ActionBar Use");
-	binding_name[Input::DEVELOPER_MENU] = msg->get("Developer Menu");
-
-	mouse_button[0] = msg->get("Left Mouse");
-	mouse_button[1] = msg->get("Middle Mouse");
-	mouse_button[2] = msg->get("Right Mouse");
-	mouse_button[3] = msg->get("Wheel Up");
-	mouse_button[4] = msg->get("Wheel Down");
-	mouse_button[5] = msg->get("Mouse X1");
-	mouse_button[6] = msg->get("Mouse X2");
 }
 
 void InputState::enableEventLog() {

@@ -172,16 +172,16 @@ void MenuDevConsole::logic() {
 			inpt->lock[Input::ACCEPT] = true;
 			execute();
 		}
-		else if (input_box->edit_mode && inpt->pressing_up) {
-			inpt->pressing_up = false;
+		else if (input_box->edit_mode && inpt->pressing[Input::TEXTEDIT_UP] && !inpt->lock[Input::TEXTEDIT_UP]) {
+			inpt->lock[Input::TEXTEDIT_UP] = true;
 			if (!input_scrollback.empty()) {
 				if (input_scrollback_pos != 0)
 					input_scrollback_pos--;
 				input_box->setText(input_scrollback[input_scrollback_pos]);
 			}
 		}
-		else if (input_box->edit_mode && inpt->pressing_down) {
-			inpt->pressing_down = false;
+		else if (input_box->edit_mode && inpt->pressing[Input::TEXTEDIT_DOWN] && !inpt->lock[Input::TEXTEDIT_DOWN]) {
+			inpt->lock[Input::TEXTEDIT_DOWN] = true;
 			if (!input_scrollback.empty()) {
 				input_scrollback_pos++;
 				if (input_scrollback_pos < input_scrollback.size()) {

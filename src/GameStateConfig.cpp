@@ -94,7 +94,7 @@ void GameStateConfig::logicAccept() {
 	delete msg;
 	msg = new MessageEngine();
 	inpt->saveKeyBindings();
-	inpt->setKeybindNames();
+	inpt->setCommonStrings();
 	eset->load();
 	Stats::init();
 	refreshFont();
@@ -132,7 +132,7 @@ void GameStateConfig::logicCancel() {
 	inpt->loadKeyBindings();
 	delete msg;
 	msg = new MessageEngine();
-	inpt->setKeybindNames();
+	inpt->setCommonStrings();
 	eset->load();
 	Stats::init();
 	refreshFont();

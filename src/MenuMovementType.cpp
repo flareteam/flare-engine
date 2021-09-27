@@ -129,10 +129,10 @@ MenuMovementType::MenuMovementType()
 							msg->get("Button") + ": " + inpt->getBindingString(settings->mouse_move_swap ? Input::MAIN2 : Input::MAIN1);
 
 	button_joystick->tooltip = msg->get("Joystick") + "\n\n" + \
-							   msg->get("Up") + ": " + inpt->getBindingString(Input::UP, InputState::BINDING_JOYSTICK) + "\n" + \
-							   msg->get("Left") + ": " + inpt->getBindingString(Input::LEFT, InputState::BINDING_JOYSTICK) + "\n" + \
-							   msg->get("Down") + ": " + inpt->getBindingString(Input::DOWN, InputState::BINDING_JOYSTICK) + "\n" + \
-							   msg->get("Right") + ": " + inpt->getBindingString(Input::RIGHT, InputState::BINDING_JOYSTICK);
+							   msg->get("Up") + ": " + inpt->getGamepadBindingString(Input::UP) + "\n" + \
+							   msg->get("Left") + ": " + inpt->getGamepadBindingString(Input::LEFT) + "\n" + \
+							   msg->get("Down") + ": " + inpt->getGamepadBindingString(Input::DOWN) + "\n" + \
+							   msg->get("Right") + ": " + inpt->getGamepadBindingString(Input::RIGHT);
 
 	align();
 

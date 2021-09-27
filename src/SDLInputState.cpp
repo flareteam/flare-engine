@@ -25,6 +25,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "CursorManager.h"
+#include "InputState.h"
 #include "MenuManager.h"
 #include "MessageEngine.h"
 #include "Platform.h"
@@ -42,17 +43,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 SDLInputState::SDLInputState(void)
 	: InputState()
-	, joy(NULL)
-	, joy_num(0)
-	, joy_axis_num(0)
 	, resize_cooldown()
 	, joystick_init(false)
 	, text_input(false)
+	, gamepad(NULL)
 {
 	platform.setExitEventFilter();
 
-	defaultQwertyKeyBindings();
-	defaultJoystickBindings();
+	initBindings();
 
 	for (int key=0; key<KEY_COUNT; key++) {
 		pressing[key] = false;
@@ -61,166 +59,154 @@ SDLInputState::SDLInputState(void)
 	}
 
 	loadKeyBindings();
-	setKeybindNames();
+	setCommonStrings();
 
-	// print some information to the console about connected joysticks
-	if(SDL_NumJoysticks() > 0) {
-		Utils::logInfo("InputState: %d joystick(s) found.", SDL_NumJoysticks());
-		joy_num = SDL_NumJoysticks();
-	}
-	else {
-		Utils::logInfo("InputState: No joysticks were found.");
-		settings->enable_joystick = false;
-		return;
+	// get the joystick ids for all valid game controllers
+	for (int i = 0; i < SDL_NumJoysticks(); i++) {
+		if (SDL_IsGameController(i)) {
+			gamepad_ids.push_back(i);
+		}
 	}
 
-	for(int i = 0; i < SDL_NumJoysticks(); i++) {
-		Utils::logInfo("InputState: Joystick %d, %s", i, getJoystickName(i).c_str());
-	}
+	initJoystick();
 }
 
 void SDLInputState::initJoystick() {
-	// close our joystick handle if it's open
-	if (joy) {
-		SDL_JoystickClose(joy);
-		joy = NULL;
+	// close our gamepad handle if it's open
+	if (gamepad) {
+		SDL_GameControllerClose(gamepad);
+		gamepad = NULL;
 	}
 
-	joy_num = SDL_NumJoysticks();
-	if (settings->enable_joystick && joy_num > 0) {
-		joy = SDL_JoystickOpen(settings->joystick_device);
-		Utils::logInfo("InputState: Using joystick %d.", settings->joystick_device);
+	// get the joystick ids for all valid game controllers
+	gamepad_ids.clear();
+	for (int i = 0; i < SDL_NumJoysticks(); i++) {
+		if (SDL_IsGameController(i)) {
+			gamepad_ids.push_back(i);
+		}
 	}
 
-	if (joy) {
-		joy_axis_num = SDL_JoystickNumAxes(joy);
-		joy_axis_prev.resize(joy_axis_num*2, 0);
-		joy_axis_deltas.resize(joy_axis_num*2, 0);
+	bool enable_log_msg = !joystick_init || joysticks_changed;
+
+	if (gamepad_ids.empty()) {
+		if (enable_log_msg) {
+			Utils::logInfo("InputState: No gamepads were found.");
+		}
+		settings->enable_joystick = false;
+	}
+	else {
+		if (enable_log_msg) {
+			Utils::logInfo("InputState: %d gamepads(s) found.", gamepad_ids.size());
+		}
+	}
+
+	for (size_t i = 0; i < gamepad_ids.size(); ++i) {
+		if (settings->enable_joystick && i == static_cast<size_t>(settings->joystick_device)) {
+			gamepad = SDL_GameControllerOpen(gamepad_ids[i]);
+		}
+		if (enable_log_msg) {
+			Utils::logInfo("InputState: Gamepad #%d, %s", i, SDL_GameControllerNameForIndex(static_cast<int>(i)));
+		}
 	}
 }
 
-void SDLInputState::defaultQwertyKeyBindings () {
-	if (platform.is_mobile_device) {
-		binding[Input::CANCEL] = SDLK_AC_BACK;
-		binding_alt[Input::ACCEPT] = SDLK_MENU;
+void SDLInputState::initBindings() {
+	// clear all bindings first
+	for (int key=0; key<KEY_COUNT; key++) {
+		binding[key].clear();
 	}
-	else {
-		binding[Input::CANCEL] = SDLK_ESCAPE;
-		binding_alt[Input::ACCEPT] = SDLK_SPACE;
-	}
-	binding[Input::ACCEPT] = SDLK_RETURN;
-	binding[Input::UP] = SDLK_w;
-	binding[Input::DOWN] = SDLK_s;
-	binding[Input::LEFT] = SDLK_a;
-	binding[Input::RIGHT] = SDLK_d;
 
 	if (platform.needs_alt_escape_key) {
 		// web browsers reserve Escape for exiting fullscreen, so we provide an alternate binding
 		// backslash is used due to its general proximity to Enter on both ANSI and ISO layouts
-		binding_alt[Input::CANCEL] = SDLK_BACKSLASH;
+		setBind(Input::CANCEL, InputBind::KEY, SDL_SCANCODE_BACKSLASH);
 	}
 	else {
-		binding_alt[Input::CANCEL] = SDLK_ESCAPE;
+		setBind(Input::CANCEL, InputBind::KEY, SDL_SCANCODE_ESCAPE);
 	}
-	binding_alt[Input::UP] = SDLK_UP;
-	binding_alt[Input::DOWN] = SDLK_DOWN;
-	binding_alt[Input::LEFT] = SDLK_LEFT;
-	binding_alt[Input::RIGHT] = SDLK_RIGHT;
 
-	binding[Input::BAR_1] = binding_alt[Input::BAR_1] = SDLK_q;
-	binding[Input::BAR_2] = binding_alt[Input::BAR_2] = SDLK_e;
-	binding[Input::BAR_3] = binding_alt[Input::BAR_3] = SDLK_r;
-	binding[Input::BAR_4] = binding_alt[Input::BAR_4] = SDLK_f;
-	binding[Input::BAR_5] = binding_alt[Input::BAR_5] = SDLK_1;
-	binding[Input::BAR_6] = binding_alt[Input::BAR_6] = SDLK_2;
-	binding[Input::BAR_7] = binding_alt[Input::BAR_7] = SDLK_3;
-	binding[Input::BAR_8] = binding_alt[Input::BAR_8] = SDLK_4;
-	binding[Input::BAR_9] = binding_alt[Input::BAR_9] = SDLK_5;
-	binding[Input::BAR_0] = binding_alt[Input::BAR_0] = SDLK_6;
+	setBind(Input::ACCEPT, InputBind::KEY, SDL_SCANCODE_RETURN);
+	setBind(Input::ACCEPT, InputBind::KEY, SDL_SCANCODE_SPACE);
 
-	binding[Input::CHARACTER] = binding_alt[Input::CHARACTER] = SDLK_c;
-	binding[Input::INVENTORY] = binding_alt[Input::INVENTORY] = SDLK_i;
-	binding[Input::POWERS] = binding_alt[Input::POWERS] = SDLK_p;
-	binding[Input::LOG] = binding_alt[Input::LOG] = SDLK_l;
-
-	binding[Input::MAIN1] = binding_alt[Input::MAIN1] = (SDL_BUTTON_LEFT+MOUSE_BIND_OFFSET) * (-1);
-	binding[Input::MAIN2] = binding_alt[Input::MAIN2] = (SDL_BUTTON_RIGHT+MOUSE_BIND_OFFSET) * (-1);
-
-	binding[Input::SWAP] = binding_alt[Input::SWAP] = SDLK_TAB;
-
-	binding[Input::CTRL] = SDLK_LCTRL;
-	binding_alt[Input::CTRL] = SDLK_RCTRL;
-	binding[Input::SHIFT] = SDLK_LSHIFT;
-	binding_alt[Input::SHIFT] = SDLK_RSHIFT;
-	binding[Input::DEL] = SDLK_DELETE;
-	binding_alt[Input::DEL] = SDLK_BACKSPACE;
-	binding[Input::ALT] = SDLK_LALT;
-	binding_alt[Input::ALT] = SDLK_RALT;
-
-	binding[Input::ACTIONBAR] = binding_alt[Input::ACTIONBAR] = SDLK_b;
-	binding[Input::ACTIONBAR_BACK] = binding_alt[Input::ACTIONBAR_BACK] = SDLK_z;
-	binding[Input::ACTIONBAR_FORWARD] = binding_alt[Input::ACTIONBAR_FORWARD] = SDLK_x;
-	binding[Input::ACTIONBAR_USE] = binding_alt[Input::ACTIONBAR_USE] = SDLK_n;
-
-	binding[Input::DEVELOPER_MENU] = binding_alt[Input::DEVELOPER_MENU] = SDLK_F5;
-
-	// Convert SDL_Keycode to SDL_Scancode, skip mouse binding
-	for (int key=0; key<KEY_COUNT; key++) {
-		if (SDL_GetScancodeFromKey(binding[key]) > 0) binding[key] = SDL_GetScancodeFromKey(binding[key]);
-		if (SDL_GetScancodeFromKey(binding_alt[key]) > 0) binding_alt[key] = SDL_GetScancodeFromKey(binding_alt[key]);
+	if (platform.is_mobile_device) {
+		setBind(Input::CANCEL, InputBind::KEY, SDL_SCANCODE_AC_BACK);
+		setBind(Input::ACCEPT, InputBind::KEY, SDL_SCANCODE_MENU);
 	}
-}
 
-void SDLInputState::setFixedKeyBindings() {
-	validateFixedKeyBinding(Input::MAIN1, (SDL_BUTTON_LEFT+MOUSE_BIND_OFFSET) * (-1), InputState::BINDING_DEFAULT);
+	setBind(Input::UP, InputBind::KEY, SDL_SCANCODE_W);
+	setBind(Input::UP, InputBind::KEY, SDL_SCANCODE_UP);
 
-	validateFixedKeyBinding(Input::CTRL, SDLK_LCTRL, InputState::BINDING_DEFAULT);
-	validateFixedKeyBinding(Input::CTRL, SDLK_RCTRL, InputState::BINDING_ALT);
-	binding_joy[Input::CTRL] = -1;
+	setBind(Input::DOWN, InputBind::KEY, SDL_SCANCODE_S);
+	setBind(Input::DOWN, InputBind::KEY, SDL_SCANCODE_DOWN);
 
-	validateFixedKeyBinding(Input::SHIFT, SDLK_LSHIFT, InputState::BINDING_DEFAULT);
-	validateFixedKeyBinding(Input::SHIFT, SDLK_RSHIFT, InputState::BINDING_ALT);
-	binding_joy[Input::SHIFT] = -1;
+	setBind(Input::LEFT, InputBind::KEY, SDL_SCANCODE_A);
+	setBind(Input::LEFT, InputBind::KEY, SDL_SCANCODE_LEFT);
 
-	validateFixedKeyBinding(Input::DEL, SDLK_DELETE, InputState::BINDING_DEFAULT);
-	validateFixedKeyBinding(Input::DEL, SDLK_BACKSPACE, InputState::BINDING_ALT);
-	binding_joy[Input::DEL] = -1;
+	setBind(Input::RIGHT, InputBind::KEY, SDL_SCANCODE_D);
+	setBind(Input::RIGHT, InputBind::KEY, SDL_SCANCODE_RIGHT);
 
-	validateFixedKeyBinding(Input::ALT, SDLK_LALT, InputState::BINDING_DEFAULT);
-	validateFixedKeyBinding(Input::ALT, SDLK_RALT, InputState::BINDING_ALT);
-	binding_joy[Input::ALT] = -1;
-}
+	setBind(Input::BAR_1, InputBind::KEY, SDL_SCANCODE_Q);
+	setBind(Input::BAR_2, InputBind::KEY, SDL_SCANCODE_E);
+	setBind(Input::BAR_3, InputBind::KEY, SDL_SCANCODE_R);
+	setBind(Input::BAR_4, InputBind::KEY, SDL_SCANCODE_F);
+	setBind(Input::BAR_5, InputBind::KEY, SDL_SCANCODE_1);
+	setBind(Input::BAR_6, InputBind::KEY, SDL_SCANCODE_2);
+	setBind(Input::BAR_7, InputBind::KEY, SDL_SCANCODE_3);
+	setBind(Input::BAR_8, InputBind::KEY, SDL_SCANCODE_4);
+	setBind(Input::BAR_9, InputBind::KEY, SDL_SCANCODE_5);
+	setBind(Input::BAR_0, InputBind::KEY, SDL_SCANCODE_6);
 
-void SDLInputState::validateFixedKeyBinding(int action, int key, int bindings_list) {
-	if (bindings_list != InputState::BINDING_DEFAULT && bindings_list != InputState::BINDING_ALT)
-		return;
+	setBind(Input::CHARACTER, InputBind::KEY, SDL_SCANCODE_C);
+	setBind(Input::INVENTORY, InputBind::KEY, SDL_SCANCODE_I);
+	setBind(Input::POWERS, InputBind::KEY, SDL_SCANCODE_P);
+	setBind(Input::LOG, InputBind::KEY, SDL_SCANCODE_L);
 
-	int scan_key = (key < 0 ? key : SDL_GetScancodeFromKey(key));
+	setBind(Input::MAIN1, InputBind::MOUSE, SDL_BUTTON_LEFT);
+	setBind(Input::MAIN2, InputBind::MOUSE, SDL_BUTTON_RIGHT);
 
-	for (int i = 0; i < KEY_COUNT; ++i) {
-		if (i == action) {
-			if (bindings_list == InputState::BINDING_DEFAULT)
-				binding[action] = scan_key;
-			else if (bindings_list == InputState::BINDING_ALT)
-				binding_alt[action] = scan_key;
+	setBind(Input::ACTIONBAR, InputBind::KEY, SDL_SCANCODE_B);
+	setBind(Input::ACTIONBAR_BACK, InputBind::KEY, SDL_SCANCODE_Z);
+	setBind(Input::ACTIONBAR_FORWARD, InputBind::KEY, SDL_SCANCODE_X);
+	setBind(Input::ACTIONBAR_USE, InputBind::KEY, SDL_SCANCODE_N);
 
-			continue;
-		}
+	setBind(Input::DEVELOPER_MENU, InputBind::KEY, SDL_SCANCODE_F5);
 
-		if (binding[i] == scan_key)
-			binding[i] = -1;
+	setBind(Input::SWAP, InputBind::KEY, SDL_SCANCODE_TAB);
 
-		if (binding_alt[i] == scan_key)
-			binding_alt[i] = -1;
-	}
+	// Gamepad bindings
+	setBind(Input::CANCEL, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_B);
+	setBind(Input::ACCEPT, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_A);
+
+	setBind(Input::RIGHT, InputBind::GAMEPAD_AXIS, (SDL_CONTROLLER_AXIS_LEFTX*2));
+	setBind(Input::DOWN, InputBind::GAMEPAD_AXIS, (SDL_CONTROLLER_AXIS_LEFTY*2));
+	setBind(Input::LEFT, InputBind::GAMEPAD_AXIS, (SDL_CONTROLLER_AXIS_LEFTX*2) + 1);
+	setBind(Input::UP, InputBind::GAMEPAD_AXIS, (SDL_CONTROLLER_AXIS_LEFTY*2) + 1);
+
+	setBind(Input::LEFT, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_DPAD_LEFT);
+	setBind(Input::RIGHT, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_DPAD_RIGHT);
+	setBind(Input::UP, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_DPAD_UP);
+	setBind(Input::DOWN, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_DPAD_DOWN);
+
+	setBind(Input::MAIN1, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER);
+	setBind(Input::MAIN2, InputBind::GAMEPAD_AXIS, (SDL_CONTROLLER_AXIS_TRIGGERRIGHT*2));
+
+	// Not user-modifiable
+	setBind(Input::CTRL, InputBind::KEY, SDL_SCANCODE_LCTRL);
+	setBind(Input::CTRL, InputBind::KEY, SDL_SCANCODE_RCTRL);
+	setBind(Input::SHIFT, InputBind::KEY, SDL_SCANCODE_LSHIFT);
+	setBind(Input::SHIFT, InputBind::KEY, SDL_SCANCODE_RSHIFT);
+	setBind(Input::ALT, InputBind::KEY, SDL_SCANCODE_LALT);
+	setBind(Input::ALT, InputBind::KEY, SDL_SCANCODE_RALT);
+	setBind(Input::DEL, InputBind::KEY, SDL_SCANCODE_DELETE);
+	setBind(Input::DEL, InputBind::KEY, SDL_SCANCODE_BACKSPACE);
+	setBind(Input::TEXTEDIT_UP, InputBind::KEY, SDL_SCANCODE_UP);
+	setBind(Input::TEXTEDIT_DOWN, InputBind::KEY, SDL_SCANCODE_DOWN);
 }
 
 void SDLInputState::handle() {
 	InputState::handle();
 
 	SDL_Event event;
-	int bind_button = 0;
-	bool joy_hat_event = false;
 
 	/* Check for events */
 	while (SDL_PollEvent (&event)) {
@@ -251,24 +237,26 @@ void SDLInputState::handle() {
 			case SDL_MOUSEBUTTONDOWN:
 				last_is_joystick = false;
 				mouse = scaleMouse(event.button.x, event.button.y);
-				bind_button = (event.button.button + MOUSE_BIND_OFFSET) * (-1);
 				for (int key=0; key<KEY_COUNT; key++) {
-					if (bind_button == binding[key] || bind_button == binding_alt[key]) {
-						pressing[key] = true;
-						un_press[key] = false;
+					for (size_t i = 0; i < binding[key].size(); ++i) {
+						if (binding[key][i].type == InputBind::MOUSE && binding[key][i].bind == event.button.button) {
+							pressing[key] = true;
+							un_press[key] = false;
+						}
 					}
 				}
 				break;
 			case SDL_MOUSEBUTTONUP:
 				last_is_joystick = false;
 				mouse = scaleMouse(event.button.x, event.button.y);
-				bind_button = (event.button.button + MOUSE_BIND_OFFSET) * (-1);
 				for (int key=0; key<KEY_COUNT; key++) {
-					if (bind_button == binding[key] || bind_button == binding_alt[key]) {
-						un_press[key] = true;
+					for (size_t i = 0; i < binding[key].size(); ++i) {
+						if (binding[key][i].type == InputBind::MOUSE && binding[key][i].bind == event.button.button) {
+							un_press[key] = true;
+						}
 					}
 				}
-				last_button = bind_button;
+				last_button = event.button.button;
 				break;
 			case SDL_WINDOWEVENT:
 				if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
@@ -350,7 +338,13 @@ void SDLInputState::handle() {
 					if (touch_fingers.empty()) {
 						touch_locked = false;
 						un_press[Input::MAIN1] = true;
-						last_button = binding[Input::MAIN1];
+						// TODO need a permanant MAIN1 binding
+						for (size_t i = 0; i < binding[Input::MAIN1].size(); ++i) {
+							if (binding[Input::MAIN1][i].type == InputBind::MOUSE) {
+								last_button = binding[Input::MAIN1][i].bind;
+								break;
+							}
+						}
 					}
 					else {
 						mouse.x = touch_fingers.back().pos.x;
@@ -358,204 +352,107 @@ void SDLInputState::handle() {
 					}
 				}
 				break;
-
 			case SDL_KEYDOWN:
 				if (!settings->no_mouse)
 					last_is_joystick = false;
 
 				for (int key=0; key<KEY_COUNT; key++) {
-					if (event.key.keysym.scancode == binding[key] || event.key.keysym.scancode == binding_alt[key]) {
-						pressing[key] = true;
-						un_press[key] = false;
-					}
-				}
-
-				if (event.key.keysym.sym == SDLK_UP) pressing_up = true;
-				if (event.key.keysym.sym == SDLK_DOWN) pressing_down = true;
-				break;
-			case SDL_KEYUP:
-				if (!settings->no_mouse)
-					last_is_joystick = false;
-
-				for (int key=0; key<KEY_COUNT; key++) {
-					if (event.key.keysym.scancode == binding[key] || event.key.keysym.scancode == binding_alt[key]) {
-						un_press[key] = true;
-					}
-				}
-				last_key = event.key.keysym.scancode;
-
-				if (event.key.keysym.sym == SDLK_UP) pressing_up = false;
-				if (event.key.keysym.sym == SDLK_DOWN) pressing_down = false;
-				break;
-			case SDL_JOYHATMOTION:
-				if (joy && SDL_JoystickInstanceID(joy) == event.jhat.which && settings->enable_joystick) {
-					last_is_joystick = true;
-					curs->show_cursor = false;
-					hideCursor();
-					joy_hat_event = true;
-					switch (event.jhat.value) {
-						case SDL_HAT_CENTERED:
-							un_press[Input::UP] = true;
-							un_press[Input::DOWN] = true;
-							un_press[Input::LEFT] = true;
-							un_press[Input::RIGHT] = true;
-							break;
-						case SDL_HAT_UP:
-							pressing[Input::UP] = true;
-							un_press[Input::UP] = false;
-							pressing[Input::DOWN] = false;
-							lock[Input::DOWN] = false;
-							pressing[Input::LEFT] = false;
-							lock[Input::LEFT] = false;
-							pressing[Input::RIGHT] = false;
-							lock[Input::RIGHT] = false;
-							break;
-						case SDL_HAT_DOWN:
-							pressing[Input::UP] = false;
-							lock[Input::UP] = false;
-							pressing[Input::DOWN] = true;
-							un_press[Input::DOWN] = false;
-							pressing[Input::LEFT] = false;
-							lock[Input::LEFT] = false;
-							pressing[Input::RIGHT] = false;
-							lock[Input::RIGHT] = false;
-							break;
-						case SDL_HAT_LEFT:
-							pressing[Input::UP] = false;
-							lock[Input::UP] = false;
-							pressing[Input::DOWN] = false;
-							lock[Input::DOWN] = false;
-							pressing[Input::LEFT] = true;
-							un_press[Input::LEFT] = false;
-							pressing[Input::RIGHT] = false;
-							lock[Input::RIGHT] = false;
-							break;
-						case SDL_HAT_RIGHT:
-							pressing[Input::UP] = false;
-							lock[Input::UP] = false;
-							pressing[Input::DOWN] = false;
-							lock[Input::DOWN] = false;
-							pressing[Input::LEFT] = false;
-							lock[Input::LEFT] = false;
-							pressing[Input::RIGHT] = true;
-							un_press[Input::RIGHT] = false;
-							break;
-						case SDL_HAT_LEFTUP:
-							pressing[Input::UP] = true;
-							un_press[Input::UP] = false;
-							pressing[Input::DOWN] = false;
-							lock[Input::DOWN] = false;
-							pressing[Input::LEFT] = true;
-							un_press[Input::LEFT] = false;
-							pressing[Input::RIGHT] = false;
-							lock[Input::RIGHT] = false;
-							break;
-						case SDL_HAT_LEFTDOWN:
-							pressing[Input::UP] = false;
-							lock[Input::UP] = false;
-							pressing[Input::DOWN] = true;
-							un_press[Input::DOWN] = false;
-							pressing[Input::LEFT] = true;
-							un_press[Input::LEFT] = false;
-							pressing[Input::RIGHT] = false;
-							lock[Input::RIGHT] = false;
-							break;
-						case SDL_HAT_RIGHTUP:
-							pressing[Input::UP] = true;
-							un_press[Input::UP] = false;
-							pressing[Input::DOWN] = false;
-							lock[Input::DOWN] = false;
-							pressing[Input::LEFT] = false;
-							lock[Input::LEFT] = false;
-							pressing[Input::RIGHT] = true;
-							un_press[Input::RIGHT] = false;
-							break;
-						case SDL_HAT_RIGHTDOWN:
-							pressing[Input::UP] = false;
-							lock[Input::UP] = false;
-							pressing[Input::DOWN] = true;
-							un_press[Input::DOWN] = false;
-							pressing[Input::LEFT] = false;
-							lock[Input::LEFT] = false;
-							pressing[Input::RIGHT] = true;
-							un_press[Input::RIGHT] = false;
-							break;
-					}
-				}
-				break;
-			case SDL_JOYBUTTONDOWN:
-				if (joy && SDL_JoystickInstanceID(joy) == event.jbutton.which && settings->enable_joystick) {
-					for (int key=0; key<KEY_COUNT; key++) {
-						if (event.jbutton.button == binding_joy[key]) {
-							last_is_joystick = true;
-							curs->show_cursor = false;
-							hideCursor();
+					for (size_t i = 0; i < binding[key].size(); ++i) {
+						if (binding[key][i].type == InputBind::KEY && binding[key][i].bind == event.key.keysym.scancode) {
 							pressing[key] = true;
 							un_press[key] = false;
 						}
 					}
 				}
 				break;
-			case SDL_JOYBUTTONUP:
-				if (joy && SDL_JoystickInstanceID(joy) == event.jbutton.which && settings->enable_joystick) {
-					for (int key=0; key<KEY_COUNT; key++) {
-						if (event.jbutton.button == binding_joy[key]) {
-							last_is_joystick = true;
+			case SDL_KEYUP:
+				if (!settings->no_mouse)
+					last_is_joystick = false;
+
+				for (int key=0; key<KEY_COUNT; key++) {
+					for (size_t i = 0; i < binding[key].size(); ++i) {
+						if (binding[key][i].type == InputBind::KEY && binding[key][i].bind == event.key.keysym.scancode) {
+							pressing[key] = true;
 							un_press[key] = true;
 						}
-						last_joybutton = event.jbutton.button;
 					}
 				}
+
+				last_key = event.key.keysym.scancode;
 				break;
-			case SDL_JOYAXISMOTION:
-				if(settings->enable_joystick && joy_axis_num > 0 && !joy_hat_event) {
-					std::vector<bool> joy_axis_pressed;
-					joy_axis_pressed.resize(joy_axis_num*2, false);
-					last_joyaxis = -1;
-
-					for (int i=0; i<joy_axis_num*2; i++) {
-						int axis = SDL_JoystickGetAxis(joy, i/2);
-
-						joy_axis_deltas[i] = (axis - joy_axis_prev[i])/2;
-						joy_axis_prev[i] = axis;
-
-						if (i % 2 == 0) {
-							if (axis < -(settings->joy_deadzone))
-								joy_axis_pressed[i] = true;
-							else if (axis <= settings->joy_deadzone)
-								joy_axis_pressed[i] = false;
-						}
-						else {
-							if (axis > settings->joy_deadzone)
-								joy_axis_pressed[i] = true;
-							else if (axis >= -(settings->joy_deadzone))
-								joy_axis_pressed[i] = false;
-						}
-					}
-					for (int i=0; i<joy_axis_num*2; i++) {
-						int bind_axis = (i+JOY_AXIS_OFFSET) * (-1);
+			case SDL_CONTROLLERBUTTONDOWN:
+				if (settings->enable_joystick && gamepad) {
+					SDL_JoystickID joy_id = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(gamepad));
+					if (joy_id == event.jbutton.which) {
 						for (int key=0; key<KEY_COUNT; key++) {
-							if (bind_axis == binding_joy[key]) {
-								if (joy_axis_pressed[i]) {
+							for (size_t i = 0; i < binding[key].size(); ++i) {
+								if (binding[key][i].type == InputBind::GAMEPAD && binding[key][i].bind == event.cbutton.button) {
+									last_is_joystick = true;
+									curs->show_cursor = false;
+									hideCursor();
 									pressing[key] = true;
 									un_press[key] = false;
 								}
-								else {
-									if (pressing[key]) {
-										un_press[key] = true;
-									}
-									pressing[key] = false;
-									lock[key] = false;
+							}
+						}
+					}
+				}
+				break;
+			case SDL_CONTROLLERBUTTONUP:
+				if (settings->enable_joystick && gamepad) {
+					SDL_JoystickID joy_id = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(gamepad));
+					if (joy_id == event.jbutton.which) {
+						for (int key=0; key<KEY_COUNT; key++) {
+							for (size_t i = 0; i < binding[key].size(); ++i) {
+								if (binding[key][i].type == InputBind::GAMEPAD && binding[key][i].bind == event.cbutton.button) {
+									last_is_joystick = true;
+									un_press[key] = true;
 								}
 							}
 						}
+						last_joybutton = event.cbutton.button;
+					}
+				}
+				break;
+			case SDL_CONTROLLERAXISMOTION:
+				if (settings->enable_joystick && gamepad) {
+					last_joyaxis = -1;
 
-						if (joy_axis_pressed[i] && joy_axis_deltas[i] != 0) {
-							last_is_joystick = true;
-							curs->show_cursor = false;
-							hideCursor();
-							last_joyaxis = (i+JOY_AXIS_OFFSET) * (-1);
+					SDL_JoystickID joy_id = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(gamepad));
+					if (joy_id == event.jbutton.which) {
+						for (int key=0; key<KEY_COUNT; key++) {
+							for (size_t i = 0; i < binding[key].size(); ++i) {
+								if (binding[key][i].type == InputBind::GAMEPAD_AXIS && binding[key][i].bind / 2 == event.caxis.axis) {
+									bool is_down = false;
+									if (binding[key][i].bind % 2 == 0) {
+										if (event.caxis.value >= settings->joy_deadzone) {
+											is_down = true;
+										}
+									}
+									else {
+										if (event.caxis.value <= -(settings->joy_deadzone)) {
+											is_down = true;
+										}
+									}
+									if (is_down) {
+										last_is_joystick = true;
+										curs->show_cursor = false;
+										hideCursor();
+										pressing[key] = true;
+										un_press[key] = false;
+									}
+									else if (pressing[key]) {
+										un_press[key] = true;
+										pressing[key] = false;
+										lock[key] = false;
+									}
+								}
+							}
 						}
+						if (event.caxis.value >= settings->joy_deadzone)
+							last_joyaxis = event.caxis.axis * 2;
+						else if (event.caxis.value <= -(settings->joy_deadzone))
+							last_joyaxis = (event.caxis.axis * 2) + 1;
 					}
 				}
 				break;
@@ -640,7 +537,7 @@ void SDLInputState::showCursor() {
 }
 
 std::string SDLInputState::getJoystickName(int index) {
-	return std::string(SDL_JoystickNameForIndex(index));
+	return std::string(SDL_GameControllerNameForIndex(index));
 }
 
 std::string SDLInputState::getKeyName(int key, bool get_short_string) {
@@ -713,84 +610,91 @@ std::string SDLInputState::getKeyName(int key, bool get_short_string) {
 }
 
 std::string SDLInputState::getMouseButtonName(int button, bool get_short_string) {
-	int real_button = (button + MOUSE_BIND_OFFSET) * (-1);
-
 	if (get_short_string) {
-		return msg->get("M%d", real_button);
+		return msg->get("M%d", button);
 	}
 	else {
-		if (real_button > 0 && real_button <= MOUSE_BUTTON_NAME_COUNT)
-			return mouse_button[real_button - 1];
+		if (button > 0 && button <= MOUSE_BUTTON_NAME_COUNT)
+			return mouse_button[button - 1];
 		else
-			return msg->get("Mouse %d", real_button);
+			return msg->get("Mouse %d", button);
 	}
 }
 
-std::string SDLInputState::getJoystickButtonName(int button, bool get_short_string) {
-	if (button < -1) {
-		int axis = (button + JOY_AXIS_OFFSET) * (-1);
-
-		if (axis % 2 == 0) {
-			if (get_short_string)
-				return msg->get("JX%d-", axis/2);
-			else
-				return msg->get("Axis %d -", axis/2);
-		}
-		else {
-			if (get_short_string)
-				return msg->get("JX%d+", axis/2);
-			else
-				return msg->get("Axis %d +", axis/2);
-		}
+std::string SDLInputState::getJoystickButtonName(int button) {
+	if (button < SDL_CONTROLLER_BUTTON_MAX) {
+		return xbox_buttons[button];
 	}
 	else {
-		if (get_short_string)
-			return msg->get("JB%d", button);
-		else
-			return msg->get("Button %d", button);
+		return msg->get("(unknown)");
 	}
 }
 
-std::string SDLInputState::getBindingString(int key, int bindings_list, bool get_short_string) {
+std::string SDLInputState::getJoystickAxisName(int axis) {
+	if (axis < SDL_CONTROLLER_AXIS_MAX*2) {
+		return xbox_axes[axis];
+	}
+	else {
+		return msg->get("(unknown)");
+	}
+}
+
+std::string SDLInputState::getBindingString(int key, bool get_short_string) {
+	return getBindingStringByIndex(key, -1, get_short_string);
+}
+
+std::string SDLInputState::getBindingStringByIndex(int key, int binding_index, bool get_short_string) {
 	std::string none = "";
 	if (!get_short_string)
 		none = msg->get("(none)");
 
-	if (bindings_list == InputState::BINDING_DEFAULT) {
-		if (binding[key] == 0 || binding[key] == -1)
-			return none;
-		else if (binding[key] < -1)
-			return getMouseButtonName(binding[key], get_short_string);
-		else
-			return getKeyName(binding[key], get_short_string);
-	}
-	else if (bindings_list == InputState::BINDING_ALT) {
-		if (binding_alt[key] == 0 || binding_alt[key] == -1)
-			return none;
-		else if (binding_alt[key] < -1)
-			return getMouseButtonName(binding_alt[key], get_short_string);
-		else
-			return getKeyName(binding_alt[key], get_short_string);
-	}
-	else if (bindings_list == InputState::BINDING_JOYSTICK) {
-		if (binding_joy[key] == -1)
-			return none;
-		else
-			return getJoystickButtonName(binding_joy[key], get_short_string);
-	}
-	else {
+	if (binding[key].empty()) {
 		return none;
 	}
+
+	int bi = 0;
+	if (binding_index != -1 && static_cast<size_t>(binding_index) < binding[key].size())
+		bi = binding_index;
+
+	if (binding[key][bi].type == InputBind::KEY)
+		return getKeyName(binding[key][bi].bind, get_short_string);
+	else if (binding[key][bi].type == InputBind::MOUSE)
+		return getMouseButtonName(binding[key][bi].bind, get_short_string);
+	else if (binding[key][bi].type == InputBind::GAMEPAD)
+		return getJoystickButtonName(binding[key][bi].bind);
+	else if (binding[key][bi].type == InputBind::GAMEPAD_AXIS)
+		return getJoystickAxisName(binding[key][bi].bind);
+	else
+		return none;
+}
+
+std::string SDLInputState::getGamepadBindingString(int key, bool get_short_string) {
+	std::string none = "";
+	if (!get_short_string)
+		none = msg->get("(none)");
+
+	if (binding[key].empty()) {
+		return none;
+	}
+
+	for (size_t i = 0; i < binding[key].size(); ++i) {
+		if (binding[key][i].type == InputBind::GAMEPAD)
+			return getJoystickButtonName(binding[key][i].bind);
+		else if (binding[key][i].type == InputBind::GAMEPAD_AXIS)
+			return getJoystickAxisName(binding[key][i].bind);
+	}
+
+	return none;
 }
 
 std::string SDLInputState::getMovementString() {
 	std::string output = "[";
 
 	if (settings->enable_joystick) {
-		output += getBindingString(Input::LEFT, InputState::BINDING_JOYSTICK) +  "/";
-		output += getBindingString(Input::RIGHT, InputState::BINDING_JOYSTICK) + "/";
-		output += getBindingString(Input::UP, InputState::BINDING_JOYSTICK) + "/";
-		output += getBindingString(Input::DOWN, InputState::BINDING_JOYSTICK);
+		output += getGamepadBindingString(Input::LEFT) +  "/";
+		output += getGamepadBindingString(Input::RIGHT) + "/";
+		output += getGamepadBindingString(Input::UP) + "/";
+		output += getGamepadBindingString(Input::DOWN);
 	}
 	else if (settings->touchscreen) {
 		output += msg->get("Touch control D-Pad");
@@ -812,10 +716,7 @@ std::string SDLInputState::getMovementString() {
 std::string SDLInputState::getAttackString() {
 	std::string output = "[";
 
-	if (settings->enable_joystick) {
-		output += getBindingString(Input::ACTIONBAR_USE, InputState::BINDING_JOYSTICK);
-	}
-	else if (settings->touchscreen) {
+	if (settings->touchscreen) {
 		output += msg->get("Touch control buttons");
 	}
 	else {
@@ -826,23 +727,8 @@ std::string SDLInputState::getAttackString() {
 	return output;
 }
 
-std::string SDLInputState::getContinueString() {
-	std::string output = "[";
-
-	if (settings->touchscreen) {
-		output += msg->get("Tap");
-	}
-	else {
-		int binding_type = (settings->enable_joystick ? InputState::BINDING_JOYSTICK : InputState::BINDING_DEFAULT);
-		output += getBindingString(Input::ACCEPT, binding_type);
-	}
-
-	output += "]";
-	return output;
-}
-
 int SDLInputState::getNumJoysticks() {
-	return joy_num;
+	return static_cast<int>(gamepad_ids.size());
 }
 
 bool SDLInputState::usingMouse() {
@@ -863,66 +749,111 @@ void SDLInputState::stopTextInput() {
 	}
 }
 
-void SDLInputState::setKeybind(int key, int binding_button, int bindings_list, std::string& keybind_msg) {
-	keybind_msg = "";
+int SDLInputState::getBindFromString(const std::string& bind, int type) {
+	// -1 is used to clear all bindings
+	if (bind == "-1")
+		return -1;
 
-	// unbind duplicate bindings for this key
-	if (key != -1) {
+	// mouse buttons are always just plain ints
+	if (type == InputBind::MOUSE)
+		return Parse::toInt(bind);
 
-		// prevent unmapping "fixed" keybinds
-		if (bindings_list != InputState::BINDING_JOYSTICK) {
-			if ((key == ((SDL_BUTTON_LEFT+MOUSE_BIND_OFFSET) * (-1)) && binding_button != Input::MAIN1) ||
-				key == SDL_SCANCODE_LCTRL ||
-				key == SDL_SCANCODE_RCTRL ||
-				key == SDL_SCANCODE_LSHIFT ||
-				key == SDL_SCANCODE_RSHIFT ||
-				key == SDL_SCANCODE_LALT ||
-				key == SDL_SCANCODE_RALT ||
-				key == SDL_SCANCODE_DELETE ||
-				key == SDL_SCANCODE_BACKSPACE) {
-
-				if (key < -1)
-					keybind_msg = msg->get("Can not bind: %s", getMouseButtonName(key).c_str());
-				else
-					keybind_msg = msg->get("Can not bind: %s", getKeyName(key).c_str());
-
-				return;
-			}
+	// handle human-readable binds
+	std::string temp = bind;
+	if (Parse::popFirstString(temp, ':') == "SDL") {
+		if (type == InputBind::KEY) {
+			return SDL_GetScancodeFromName(temp.c_str());
 		}
+		else if (type == InputBind::GAMEPAD) {
+			return SDL_GameControllerGetButtonFromString(temp.c_str());
+		}
+		else if (type == InputBind::GAMEPAD_AXIS) {
+			std::string axis_name = Parse::popFirstString(temp, ':');
+			int axis = SDL_GameControllerGetAxisFromString(axis_name.c_str()) * 2;
 
-		for (int i = 0; i < KEY_COUNT; ++i) {
-			// the same key can be bound to both default & alt binding lists for the same action
-			if (bindings_list != InputState::BINDING_JOYSTICK && i == binding_button)
-				continue;
+			// "+" requires no change
+			if (temp == "-")
+				axis += 1;
 
-			if ((bindings_list == InputState::BINDING_DEFAULT && binding[i] == key && i != binding_button) || (bindings_list == InputState::BINDING_ALT && binding[i] == key)) {
-				keybind_msg = msg->get("'%s' is no longer bound to:", getBindingString(i, InputState::BINDING_DEFAULT)) + " '" + binding_name[i] + "'";
-				binding[i] = -1;
-			}
-			if ((bindings_list == InputState::BINDING_DEFAULT && binding_alt[i] == key) || (bindings_list == InputState::BINDING_ALT && binding_alt[i] == key && i != binding_button)) {
-				keybind_msg = msg->get("'%s' is no longer bound to:", getBindingString(i, InputState::BINDING_ALT)) + " '" + binding_name[i] + "'";
-				binding_alt[i] = -1;
-			}
-			if (bindings_list == InputState::BINDING_JOYSTICK && binding_joy[i] == key && i != binding_button) {
-				keybind_msg = msg->get("'%s' is no longer bound to:", getBindingString(i, InputState::BINDING_JOYSTICK)) + " '" + binding_name[i] + "'";
-				binding_joy[i] = -1;
-			}
+			return axis;
 		}
 	}
 
-	if (bindings_list == InputState::BINDING_DEFAULT)
-		binding[binding_button] = key;
-	else if (bindings_list == InputState::BINDING_ALT)
-		binding_alt[binding_button] = key;
-	else if (bindings_list == InputState::BINDING_JOYSTICK)
-		binding_joy[binding_button] = key;
+	// bind is probably just an int (most likely written by engine)
+	return Parse::toInt(bind);
 }
 
-int SDLInputState::getKeyFromName(const std::string& key_name) {
-	return SDL_GetScancodeFromName(key_name.c_str());
+void SDLInputState::setCommonStrings() {
+	binding_name[Input::CANCEL] = msg->get("Cancel");
+	binding_name[Input::ACCEPT] = msg->get("Accept");
+	binding_name[Input::UP] = msg->get("Up");
+	binding_name[Input::DOWN] = msg->get("Down");
+	binding_name[Input::LEFT] = msg->get("Left");
+	binding_name[Input::RIGHT] = msg->get("Right");
+	binding_name[Input::BAR_1] = msg->get("Bar1");
+	binding_name[Input::BAR_2] = msg->get("Bar2");
+	binding_name[Input::BAR_3] = msg->get("Bar3");
+	binding_name[Input::BAR_4] = msg->get("Bar4");
+	binding_name[Input::BAR_5] = msg->get("Bar5");
+	binding_name[Input::BAR_6] = msg->get("Bar6");
+	binding_name[Input::BAR_7] = msg->get("Bar7");
+	binding_name[Input::BAR_8] = msg->get("Bar8");
+	binding_name[Input::BAR_9] = msg->get("Bar9");
+	binding_name[Input::BAR_0] = msg->get("Bar0");
+	binding_name[Input::CHARACTER] = msg->get("Character");
+	binding_name[Input::INVENTORY] = msg->get("Inventory");
+	binding_name[Input::POWERS] = msg->get("Powers");
+	binding_name[Input::LOG] = msg->get("Log");
+	binding_name[Input::MAIN1] = msg->get("Main1");
+	binding_name[Input::MAIN2] = msg->get("Main2");
+	binding_name[Input::SWAP] = msg->get("Equipment swap");
+	binding_name[Input::CTRL] = msg->get("Ctrl");
+	binding_name[Input::SHIFT] = msg->get("Shift");
+	binding_name[Input::ALT] = msg->get("Alt");
+	binding_name[Input::DEL] = msg->get("Delete");
+	binding_name[Input::ACTIONBAR] = msg->get("ActionBar Accept");
+	binding_name[Input::ACTIONBAR_BACK] = msg->get("ActionBar Left");
+	binding_name[Input::ACTIONBAR_FORWARD] = msg->get("ActionBar Right");
+	binding_name[Input::ACTIONBAR_USE] = msg->get("ActionBar Use");
+	binding_name[Input::DEVELOPER_MENU] = msg->get("Developer Menu");
+
+	mouse_button[0] = msg->get("Left Mouse");
+	mouse_button[1] = msg->get("Middle Mouse");
+	mouse_button[2] = msg->get("Right Mouse");
+	mouse_button[3] = msg->get("Wheel Up");
+	mouse_button[4] = msg->get("Wheel Down");
+	mouse_button[5] = msg->get("Mouse X1");
+	mouse_button[6] = msg->get("Mouse X2");
+
+	xbox_buttons[SDL_CONTROLLER_BUTTON_A] = msg->get("X360: A");
+	xbox_buttons[SDL_CONTROLLER_BUTTON_B] = msg->get("X360: B");
+	xbox_buttons[SDL_CONTROLLER_BUTTON_X] = msg->get("X360: X");
+	xbox_buttons[SDL_CONTROLLER_BUTTON_Y] = msg->get("X360: Y");
+	xbox_buttons[SDL_CONTROLLER_BUTTON_BACK] = msg->get("X360: Back");
+	xbox_buttons[SDL_CONTROLLER_BUTTON_GUIDE] = msg->get("X360: Guide");
+	xbox_buttons[SDL_CONTROLLER_BUTTON_START] = msg->get("X360: Start");
+	xbox_buttons[SDL_CONTROLLER_BUTTON_LEFTSTICK] = msg->get("X360: L3");
+	xbox_buttons[SDL_CONTROLLER_BUTTON_RIGHTSTICK] = msg->get("X360: R3");
+	xbox_buttons[SDL_CONTROLLER_BUTTON_LEFTSHOULDER] = msg->get("X360: L1");
+	xbox_buttons[SDL_CONTROLLER_BUTTON_RIGHTSHOULDER] = msg->get("X360: R1");
+	xbox_buttons[SDL_CONTROLLER_BUTTON_DPAD_UP] = msg->get("X360: D-Up");
+	xbox_buttons[SDL_CONTROLLER_BUTTON_DPAD_DOWN] = msg->get("X360: D-Down");
+	xbox_buttons[SDL_CONTROLLER_BUTTON_DPAD_LEFT] = msg->get("X360: D-Left");
+	xbox_buttons[SDL_CONTROLLER_BUTTON_DPAD_RIGHT] = msg->get("X360: D-Right");
+
+	xbox_axes[(SDL_CONTROLLER_AXIS_LEFTX*2)] = msg->get("X360: Left X+");
+	xbox_axes[(SDL_CONTROLLER_AXIS_LEFTX*2)+1] = msg->get("X360: Left X-");
+	xbox_axes[(SDL_CONTROLLER_AXIS_LEFTY*2)] = msg->get("X360: Left Y+");
+	xbox_axes[(SDL_CONTROLLER_AXIS_LEFTY*2)+1] = msg->get("X360: Left Y-");
+	xbox_axes[(SDL_CONTROLLER_AXIS_RIGHTX*2)] = msg->get("X360: Right X+");
+	xbox_axes[(SDL_CONTROLLER_AXIS_RIGHTX*2)+1] = msg->get("X360: Right X-");
+	xbox_axes[(SDL_CONTROLLER_AXIS_RIGHTY*2)] = msg->get("X360: Right Y+");
+	xbox_axes[(SDL_CONTROLLER_AXIS_RIGHTY*2)+1] = msg->get("X360: Right Y-");
+	xbox_axes[(SDL_CONTROLLER_AXIS_TRIGGERLEFT*2)] = msg->get("X360: L2");
+	xbox_axes[(SDL_CONTROLLER_AXIS_TRIGGERRIGHT*2)] = msg->get("X360: R2");
 }
 
 SDLInputState::~SDLInputState() {
-	if (joy)
-		SDL_JoystickClose(joy);
+	if (gamepad)
+		SDL_GameControllerClose(gamepad);
 }
