@@ -140,13 +140,11 @@ void Platform::setPaths() {
 	externalSDList.push_back("/storage/extSdCard");
 	externalSDList.push_back("/mnt/m_external_sd");
 
-	settings->path_conf = std::string(SDL_AndroidGetInternalStoragePath()) + "/config";
-
-	const std::string package_name = PlatformAndroid::getPackageName();
-	const std::string user_folder = "Android/data/" + package_name + "/files";
-
 	if (SDL_AndroidGetExternalStorageState() != 0) {
 		settings->path_data = std::string(SDL_AndroidGetExternalStoragePath());
+	}
+	else {
+		Utils::logError("Platform: Android external storage unavailable: %s", SDL_GetError());
 	}
 
 	for (int i = 0; i < internalSDList.size(); i++) {
@@ -154,15 +152,13 @@ void Platform::setPaths() {
 			settings->path_user = internalSDList[i] + "/Flare";
 			settings->path_conf = settings->path_user + "/config";
 
-			if (settings->path_data.empty())
-				settings->path_data = internalSDList[i] + "/" + user_folder;
+			if (settings->path_data.empty()) {
+				// This basically gives the same results as SDL_AndroidGetExternalStoragePath(). Should we even bother?
+				settings->path_data = internalSDList[i] + "/Android/data/" + PlatformAndroid::getPackageName() + "/files";
+			}
 
 			break;
 		}
-	}
-
-	if (settings->path_data.empty()) {
-		Utils::logError("Platform: Android external storage unavailable: %s", SDL_GetError());
 	}
 
 	if (settings->path_user.empty() || !Filesystem::pathExists(settings->path_user)) {
@@ -174,6 +170,12 @@ void Platform::setPaths() {
 				break;
 			}
 		}
+	}
+
+	// unable to create /Flare directory, use app directory instead
+	if (!Filesystem::pathExists(settings->path_user)) {
+		settings->path_user = settings->path_data + "/userdata";
+		settings->path_conf = settings->path_data + "/config";
 	}
 
 	Filesystem::createDir(settings->path_user);
