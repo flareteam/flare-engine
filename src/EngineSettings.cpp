@@ -74,8 +74,8 @@ void EngineSettings::Misc::load() {
 	keep_buyback_on_map_change = true;
 	sfx_unable_to_cast = "";
 	combat_aborts_npc_interact = true;
-	fogofwar = 1;
-	save_fogofwar = true;
+	fogofwar = 0;
+	save_fogofwar = false;
 
 	FileParser infile;
 	// @CLASS EngineSettings: Misc|Description of engine/misc.txt
