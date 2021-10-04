@@ -549,6 +549,9 @@ void MenuTalker::setupTabList() {
 		tablist.add(closeButton);
 		tablist.setCurrent(closeButton);
 	}
+	else {
+		tablist.setCurrent(textbox);
+	}
 }
 
 void MenuTalker::addAction(const std::string& label, int node_id, bool is_vendor) {
