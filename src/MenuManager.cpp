@@ -276,15 +276,11 @@ void MenuManager::handleKeyboardNavigation() {
 	// inventory always starts unlocked
 	if (!inv->visible) inv->tablist.unlock();
 
-	// position the drag hover icon depending on the last key press
-	if (!act_drag_hover && (inpt->pressing[Input::ACTIONBAR_BACK] || inpt->pressing[Input::ACTIONBAR_FORWARD] || inpt->pressing[Input::ACTIONBAR]))
-		act_drag_hover = true;
-	else if (act_drag_hover && (inpt->pressing[Input::LEFT] || inpt->pressing[Input::RIGHT] || inpt->pressing[Input::UP] || inpt->pressing[Input::DOWN]) && !(inpt->pressing[Input::ACTIONBAR_BACK] || inpt->pressing[Input::ACTIONBAR_FORWARD]))
-		act_drag_hover = false;
-
-	// don't allow dropping actionbar items in other menus
-	if (keyboard_dragging && drag_src == DRAG_SRC_ACTIONBAR) {
-		inpt->lock[Input::ACCEPT] = true;
+	if (act->getCurrentTabList()) {
+		inv->tablist.lock();
+	}
+	else {
+		act->tablist.lock();
 	}
 }
 
@@ -467,6 +463,7 @@ void MenuManager::logic() {
 				closeAll();
 			}
 			else if (!game_over->visible) {
+				act->defocusTabLists();
 				exit->handleCancel();
 			}
 		}
@@ -510,6 +507,7 @@ void MenuManager::logic() {
 			}
 			else {
 				closeRight();
+				defocusLeft();
 				act->requires_attention[MenuActionBar::MENU_INVENTORY] = false;
 				inv->visible = true;
 				snd->play(inv->sfx_open, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
@@ -526,6 +524,7 @@ void MenuManager::logic() {
 			}
 			else {
 				closeRight();
+				defocusLeft();
 				act->requires_attention[MenuActionBar::MENU_POWERS] = false;
 				pow->visible = true;
 				snd->play(pow->sfx_open, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
@@ -541,6 +540,7 @@ void MenuManager::logic() {
 			}
 			else {
 				closeLeft();
+				defocusRight();
 				act->requires_attention[MenuActionBar::MENU_CHARACTER] = false;
 				chr->visible = true;
 				snd->play(chr->sfx_open, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
@@ -558,6 +558,7 @@ void MenuManager::logic() {
 			}
 			else {
 				closeLeft();
+				defocusRight();
 				act->requires_attention[MenuActionBar::MENU_LOG] = false;
 				questlog->visible = true;
 				snd->play(questlog->sfx_open, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
@@ -1391,7 +1392,7 @@ void MenuManager::handleKeyboardTooltips() {
 		inv->renderTooltips(keydrag_pos);
 	}
 
-	if (act_drag_hover && act->getCurrentTabList()) {
+	if (act->getCurrentTabList()) {
 		int slot_index = act->getCurrentTabList()->getCurrent();
 
 		keydrag_pos = act->getSlotPos(slot_index);
@@ -1508,6 +1509,18 @@ void MenuManager::pushMatchingItemsOf(const Point& hov_pos) {
 			}
 		}
 	}
+}
+
+void MenuManager::defocusLeft() {
+	chr->defocusTabLists();
+	questlog->defocusTabLists();
+	stash->defocusTabLists();
+	vendor->defocusTabLists();
+}
+
+void MenuManager::defocusRight() {
+	inv->defocusTabLists();
+	pow->defocusTabLists();
 }
 
 MenuManager::~MenuManager() {

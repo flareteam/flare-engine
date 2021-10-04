@@ -164,10 +164,8 @@ void SDLInputState::initBindings() {
 	setBind(Input::MAIN1, InputBind::MOUSE, SDL_BUTTON_LEFT);
 	setBind(Input::MAIN2, InputBind::MOUSE, SDL_BUTTON_RIGHT);
 
-	setBind(Input::ACTIONBAR, InputBind::KEY, SDL_SCANCODE_B);
-	setBind(Input::ACTIONBAR_BACK, InputBind::KEY, SDL_SCANCODE_Z);
-	setBind(Input::ACTIONBAR_FORWARD, InputBind::KEY, SDL_SCANCODE_X);
-	setBind(Input::ACTIONBAR_USE, InputBind::KEY, SDL_SCANCODE_N);
+	setBind(Input::MENU_PAGE_NEXT, InputBind::KEY, SDL_SCANCODE_PAGEDOWN);
+	setBind(Input::MENU_PAGE_PREV, InputBind::KEY, SDL_SCANCODE_PAGEUP);
 
 	setBind(Input::DEVELOPER_MENU, InputBind::KEY, SDL_SCANCODE_F5);
 
@@ -189,6 +187,14 @@ void SDLInputState::initBindings() {
 
 	setBind(Input::MAIN1, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER);
 	setBind(Input::MAIN2, InputBind::GAMEPAD_AXIS, (SDL_CONTROLLER_AXIS_TRIGGERRIGHT*2));
+
+	setBind(Input::ACTIONBAR, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_BACK);
+
+	setBind(Input::MENU_PAGE_NEXT, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER);
+	setBind(Input::MENU_PAGE_PREV, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_LEFTSHOULDER);
+	setBind(Input::MENU_ACTIVATE, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_X);
+
+	setBind(Input::PAUSE, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_START);
 
 	// Not user-modifiable
 	setBind(Input::CTRL, InputBind::KEY, SDL_SCANCODE_LCTRL);
@@ -807,15 +813,16 @@ void SDLInputState::setCommonStrings() {
 	binding_name[Input::MAIN1] = msg->get("Main1");
 	binding_name[Input::MAIN2] = msg->get("Main2");
 	binding_name[Input::SWAP] = msg->get("Equipment swap");
+	binding_name[Input::ACTIONBAR] = msg->get("Action Bar");
+	binding_name[Input::MENU_PAGE_NEXT] = msg->get("Menu: Next Page");
+	binding_name[Input::MENU_PAGE_PREV] = msg->get("Menu: Previous Page");
+	binding_name[Input::MENU_ACTIVATE] = msg->get("Menu: Activate");
+	binding_name[Input::PAUSE] = msg->get("Pause");
+	binding_name[Input::DEVELOPER_MENU] = msg->get("Developer Menu");
 	binding_name[Input::CTRL] = msg->get("Ctrl");
 	binding_name[Input::SHIFT] = msg->get("Shift");
 	binding_name[Input::ALT] = msg->get("Alt");
 	binding_name[Input::DEL] = msg->get("Delete");
-	binding_name[Input::ACTIONBAR] = msg->get("ActionBar Accept");
-	binding_name[Input::ACTIONBAR_BACK] = msg->get("ActionBar Left");
-	binding_name[Input::ACTIONBAR_FORWARD] = msg->get("ActionBar Right");
-	binding_name[Input::ACTIONBAR_USE] = msg->get("ActionBar Use");
-	binding_name[Input::DEVELOPER_MENU] = msg->get("Developer Menu");
 
 	mouse_button[0] = msg->get("Left Mouse");
 	mouse_button[1] = msg->get("Middle Mouse");

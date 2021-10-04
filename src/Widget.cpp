@@ -131,6 +131,7 @@ void TabList::setCurrent(Widget* widget) {
 	for (unsigned i=0; i<widgets.size(); ++i) {
 		if (widgets[i] == widget) {
 			current = i;
+			widgets[i]->in_focus = true;
 		}
 		else {
 			widgets[i]->defocus();

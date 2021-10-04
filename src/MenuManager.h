@@ -99,6 +99,8 @@ public:
 	void closeLeft();
 	void closeRight();
 	void resetDrag();
+	void defocusLeft();
+	void defocusRight();
 
 	std::vector<Menu*> menus;
 	MenuInventory *inv;

@@ -30,6 +30,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EngineSettings.h"
 #include "FileParser.h"
 #include "FontEngine.h"
+#include "InputState.h"
 #include "MapRenderer.h"
 #include "Menu.h"
 #include "MenuActionBar.h"
@@ -67,11 +68,11 @@ MenuActionBar::MenuActionBar()
 	menu_labels.resize(MENU_COUNT);
 
 	tablist = TabList();
-	tablist.setScrollType(Widget::SCROLL_HORIZONTAL);
-	tablist.setInputs(Input::ACTIONBAR_BACK, Input::ACTIONBAR_FORWARD, Input::ACTIONBAR);
+	tablist.setScrollType(Widget::SCROLL_TWO_DIRECTIONS);
+	tablist.lock();
 
 	for (unsigned i=0; i<MENU_COUNT; i++) {
-		menus[i] = new WidgetSlot(-1, Input::ACTIONBAR);
+		menus[i] = new WidgetSlot(-1, Input::ACCEPT);
 		menus[i]->setHotkey(Input::CHARACTER + i);
 
 		// NOTE: This prevents these buttons from being clickable unless they get defined in the config file.
@@ -205,7 +206,7 @@ void MenuActionBar::addSlot(unsigned index, int x, int y, bool is_locked) {
 		slots.resize(index+1, NULL);
 	}
 
-	slots[index] = new WidgetSlot(-1, Input::ACTIONBAR);
+	slots[index] = new WidgetSlot(-1, Input::ACCEPT);
 	slots[index]->setBasePos(x, y, Utils::ALIGN_TOPLEFT);
 	slots[index]->pos.w = slots[index]->pos.h = eset->resolutions.icon_size;
 	slots[index]->continuous = true;
@@ -317,6 +318,21 @@ void MenuActionBar::loadGraphics() {
 
 void MenuActionBar::logic() {
 	tablist.logic();
+	if (inpt->pressing[Input::ACTIONBAR] && !inpt->lock[Input::ACTIONBAR]) {
+		inpt->lock[Input::ACTIONBAR] = true;
+		if (tablist.getCurrent() == -1) {
+			tablist.unlock();
+			tablist.setCurrent(menus[MENU_INVENTORY]);
+			menu->defocusLeft();
+			menu->defocusRight();
+		}
+		else {
+			tablist.defocus();
+		}
+	}
+	if (tablist.getCurrent() == -1) {
+		tablist.lock();
+	}
 
 	// hero has no powers
 	if (pc->power_cast_timers.empty())
@@ -534,11 +550,6 @@ void MenuActionBar::remove(const Point& mouse) {
  * add that power to the action queue
  */
 void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
-	if (inpt->pressing[Input::ACTIONBAR_USE] && tablist.getCurrent() == -1 && slots_count > 10) {
-		tablist.setCurrent(slots[10]);
-		slots[10]->in_focus = true;
-	}
-
 	bool enable_mm_attack = (!settings->mouse_move || inpt->pressing[Input::SHIFT] || pc->lock_enemy);
 	bool enable_main1 = (!settings->touchscreen || (!menu->menus_open && menu->touch_controls->checkAllowMain1())) && (settings->mouse_move_swap || enable_mm_attack);
 	bool enable_main2 = !settings->mouse_move_swap || enable_mm_attack;
@@ -588,7 +599,7 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 		}
 
 		// joystick/keyboard action button
-		else if (inpt->pressing[Input::ACTIONBAR_USE] && static_cast<unsigned>(tablist.getCurrent()) == i) {
+		else if (inpt->pressing[Input::MENU_ACTIVATE] && static_cast<unsigned>(tablist.getCurrent()) == i) {
 			have_aim = false;
 			slot_activated[i] = true;
 			action.power = hotkeys_mod[i];
@@ -701,26 +712,18 @@ PowerID MenuActionBar::checkDrag(const Point& mouse) {
  * if clicking a menu, act as if the player pressed that menu's hotkey
  */
 void MenuActionBar::checkMenu(bool &menu_c, bool &menu_i, bool &menu_p, bool &menu_l) {
-	if (menus[MENU_CHARACTER]->checkClick()) {
+	if (menus[MENU_CHARACTER]->checkClick())
 		menu_c = true;
-		menus[MENU_CHARACTER]->deactivate();
-	}
-	else if (menus[MENU_INVENTORY]->checkClick()) {
+	else if (menus[MENU_INVENTORY]->checkClick())
 		menu_i = true;
-		menus[MENU_INVENTORY]->deactivate();
-	}
-	else if (menus[MENU_POWERS]->checkClick()) {
+	else if (menus[MENU_POWERS]->checkClick())
 		menu_p = true;
-		menus[MENU_POWERS]->deactivate();
-	}
-	else if (menus[MENU_LOG]->checkClick()) {
+	else if (menus[MENU_LOG]->checkClick())
 		menu_l = true;
-		menus[MENU_LOG]->deactivate();
-	}
 
 	// also allow ACTIONBAR_USE to open menus
-	if (inpt->pressing[Input::ACTIONBAR_USE] && !inpt->lock[Input::ACTIONBAR_USE]) {
-		inpt->lock[Input::ACTIONBAR_USE] = true;
+	if (inpt->pressing[Input::MENU_ACTIVATE] && !inpt->lock[Input::MENU_ACTIVATE]) {
+		inpt->lock[Input::MENU_ACTIVATE] = true;
 
 		unsigned cur_slot = static_cast<unsigned>(tablist.getCurrent());
 
@@ -732,6 +735,23 @@ void MenuActionBar::checkMenu(bool &menu_c, bool &menu_i, bool &menu_p, bool &me
 			menu_p = true;
 		else if (cur_slot == tablist.size() - (MENU_COUNT - 3))
 			menu_l = true;
+	}
+
+	if (menu_c) {
+		menus[MENU_CHARACTER]->deactivate();
+		defocusTabLists();
+	}
+	else if (menu_i) {
+		menus[MENU_INVENTORY]->deactivate();
+		defocusTabLists();
+	}
+	else if (menu_p) {
+		menus[MENU_POWERS]->deactivate();
+		defocusTabLists();
+	}
+	else if (menu_l) {
+		menus[MENU_LOG]->deactivate();
+		defocusTabLists();
 	}
 }
 

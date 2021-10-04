@@ -51,18 +51,19 @@ namespace Input {
 		MAIN2 = 21,
 		SWAP = 22,
 		ACTIONBAR = 23,
-		ACTIONBAR_BACK = 24,
-		ACTIONBAR_FORWARD = 25,
-		ACTIONBAR_USE = 26,
-		DEVELOPER_MENU = 27,
+		MENU_PAGE_NEXT = 24,
+		MENU_PAGE_PREV = 25,
+		MENU_ACTIVATE = 26,
+		PAUSE = 27,
+		DEVELOPER_MENU = 28,
 
 		// non-modifiable
-		CTRL = 28,
-		SHIFT = 29,
-		ALT = 30,
-		DEL = 31,
-		TEXTEDIT_UP = 32,
-		TEXTEDIT_DOWN = 33,
+		CTRL = 29,
+		SHIFT = 30,
+		ALT = 31,
+		DEL = 32,
+		TEXTEDIT_UP = 33,
+		TEXTEDIT_DOWN = 34,
 	};
 }
 
@@ -98,7 +99,7 @@ protected:
 
 public:
 	static const bool GET_SHORT_STRING = true;
-	static const int KEY_COUNT = 34;
+	static const int KEY_COUNT = 35;
 	static const int KEY_COUNT_USER = KEY_COUNT - 6; // exclude CTRL, SHIFT, etc from keybinding menu
 
 	std::vector<InputBind> binding[KEY_COUNT];

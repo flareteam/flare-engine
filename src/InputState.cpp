@@ -64,7 +64,7 @@ InputState::InputState(void)
 	, current_touch()
 	, dump_event(false)
 	, file_version(new Version())
-	, file_version_min(new Version(1, 12, 24))
+	, file_version_min(new Version(1, 12, 25))
 {
 	config_keys[Input::CANCEL] = "cancel";
 	config_keys[Input::ACCEPT] = "accept";
@@ -89,9 +89,10 @@ InputState::InputState(void)
 	config_keys[Input::POWERS] = "powers";
 	config_keys[Input::LOG] = "log";
 	config_keys[Input::ACTIONBAR] = "actionbar";
-	config_keys[Input::ACTIONBAR_BACK] = "actionbar_back";
-	config_keys[Input::ACTIONBAR_FORWARD] = "actionbar_forward";
-	config_keys[Input::ACTIONBAR_USE] = "actionbar_use";
+	config_keys[Input::MENU_PAGE_NEXT] = "menu_page_next";
+	config_keys[Input::MENU_PAGE_PREV] = "menu_page_prev";
+	config_keys[Input::MENU_ACTIVATE] = "menu_activate";
+	config_keys[Input::PAUSE] = "pause";
 	config_keys[Input::DEVELOPER_MENU] = "developer_menu";
 }
 
@@ -324,7 +325,7 @@ void InputState::lockActionBar() {
 	pressing[Input::BAR_0] = false;
 	pressing[Input::MAIN1] = false;
 	pressing[Input::MAIN2] = false;
-	pressing[Input::ACTIONBAR_USE] = false;
+	pressing[Input::MENU_ACTIVATE] = false;
 	lock[Input::BAR_1] = true;
 	lock[Input::BAR_2] = true;
 	lock[Input::BAR_3] = true;
@@ -337,7 +338,7 @@ void InputState::lockActionBar() {
 	lock[Input::BAR_0] = true;
 	lock[Input::MAIN1] = true;
 	lock[Input::MAIN2] = true;
-	lock[Input::ACTIONBAR_USE] = true;
+	lock[Input::MENU_ACTIVATE] = true;
 }
 
 void InputState::unlockActionBar() {
@@ -353,7 +354,7 @@ void InputState::unlockActionBar() {
 	lock[Input::BAR_0] = false;
 	lock[Input::MAIN1] = false;
 	lock[Input::MAIN2] = false;
-	lock[Input::ACTIONBAR_USE] = false;
+	lock[Input::MENU_ACTIVATE] = false;
 }
 
 void InputState::enableEventLog() {
