@@ -72,7 +72,7 @@ MenuActionBar::MenuActionBar()
 	tablist.lock();
 
 	for (unsigned i=0; i<MENU_COUNT; i++) {
-		menus[i] = new WidgetSlot(-1, Input::ACCEPT);
+		menus[i] = new WidgetSlot(WidgetSlot::NO_ICON);
 		menus[i]->setHotkey(Input::CHARACTER + i);
 
 		// NOTE: This prevents these buttons from being clickable unless they get defined in the config file.
@@ -206,7 +206,7 @@ void MenuActionBar::addSlot(unsigned index, int x, int y, bool is_locked) {
 		slots.resize(index+1, NULL);
 	}
 
-	slots[index] = new WidgetSlot(-1, Input::ACCEPT);
+	slots[index] = new WidgetSlot(WidgetSlot::NO_ICON);
 	slots[index]->setBasePos(x, y, Utils::ALIGN_TOPLEFT);
 	slots[index]->pos.w = slots[index]->pos.h = eset->resolutions.icon_size;
 	slots[index]->continuous = true;
@@ -572,7 +572,7 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 		}
 
 		// mouse/touch click
-		else if (inpt->usingMouse() && slots[i]->checkClick() == WidgetSlot::ACTIVATED) {
+		else if (inpt->usingMouse() && slots[i]->checkClick() == WidgetSlot::ACTIVATE) {
 			have_aim = false;
 			slot_activated[i] = true;
 			action.power = hotkeys_mod[i];
@@ -599,7 +599,7 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 		}
 
 		// joystick/keyboard action button
-		else if (inpt->pressing[Input::MENU_ACTIVATE] && static_cast<unsigned>(tablist.getCurrent()) == i) {
+		else if (!inpt->usingMouse() && slots[i]->checkClick() == WidgetSlot::ACTIVATE) {
 			have_aim = false;
 			slot_activated[i] = true;
 			action.power = hotkeys_mod[i];
@@ -712,44 +712,23 @@ PowerID MenuActionBar::checkDrag(const Point& mouse) {
  * if clicking a menu, act as if the player pressed that menu's hotkey
  */
 void MenuActionBar::checkMenu(bool &menu_c, bool &menu_i, bool &menu_p, bool &menu_l) {
-	if (menus[MENU_CHARACTER]->checkClick())
+	if (menus[MENU_CHARACTER]->checkClick()) {
 		menu_c = true;
-	else if (menus[MENU_INVENTORY]->checkClick())
-		menu_i = true;
-	else if (menus[MENU_POWERS]->checkClick())
-		menu_p = true;
-	else if (menus[MENU_LOG]->checkClick())
-		menu_l = true;
-
-	// also allow ACTIONBAR_USE to open menus
-	if (inpt->pressing[Input::MENU_ACTIVATE] && !inpt->lock[Input::MENU_ACTIVATE]) {
-		inpt->lock[Input::MENU_ACTIVATE] = true;
-
-		unsigned cur_slot = static_cast<unsigned>(tablist.getCurrent());
-
-		if (cur_slot == tablist.size() - MENU_COUNT)
-			menu_c = true;
-		else if (cur_slot == tablist.size() - (MENU_COUNT - 1))
-			menu_i = true;
-		else if (cur_slot == tablist.size() - (MENU_COUNT - 2))
-			menu_p = true;
-		else if (cur_slot == tablist.size() - (MENU_COUNT - 3))
-			menu_l = true;
-	}
-
-	if (menu_c) {
 		menus[MENU_CHARACTER]->deactivate();
 		defocusTabLists();
 	}
-	else if (menu_i) {
+	else if (menus[MENU_INVENTORY]->checkClick()) {
+		menu_i = true;
 		menus[MENU_INVENTORY]->deactivate();
 		defocusTabLists();
 	}
-	else if (menu_p) {
+	else if (menus[MENU_POWERS]->checkClick()) {
+		menu_p = true;
 		menus[MENU_POWERS]->deactivate();
 		defocusTabLists();
 	}
-	else if (menu_l) {
+	else if (menus[MENU_LOG]->checkClick()) {
+		menu_l = true;
 		menus[MENU_LOG]->deactivate();
 		defocusTabLists();
 	}
@@ -770,12 +749,7 @@ void MenuActionBar::set(std::vector<PowerID> power_id, bool skip_empty) {
 }
 
 void MenuActionBar::resetSlots() {
-	for (unsigned i = 0; i < slots_count; i++) {
-		if (slots[i]) {
-			slots[i]->checked = false;
-			slots[i]->pressed = false;
-		}
-	}
+	// TODO remove
 }
 
 /**

@@ -33,7 +33,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class WidgetSlot : public Widget {
 private:
 	Sprite *slot_selected;
-	Sprite *slot_checked;
 	Sprite *label_amount_bg;
 	Sprite *label_hotkey_bg;
 
@@ -44,26 +43,25 @@ private:
 	int amount;			// entries amount in slot
 	int max_amount;		// if > 1 always display amount
 	std::string amount_str; // formatted display of amount
-	int activate_key;
 	int hotkey; // for display in label_hotkey only
+	bool activated;
 
 public:
 	enum CLICK_TYPE {
 		NO_CLICK = 0,
-		CHECKED = 1,
-		ACTIVATED = 2
+		DRAG = 1,
+		ACTIVATE = 2
 	};
 
 	static const int NO_ICON = -1;
 	static const int NO_OVERLAY = -1;
 
-	WidgetSlot(int _icon_id, int _activate_key);
+	WidgetSlot(int _icon_id);
 	~WidgetSlot();
 
 	void setPos(int offset_x, int offset_y);
 
 	void activate();
-	void deactivate();
 	void defocus();
 	bool getNext();
 	bool getPrev();
@@ -78,8 +76,6 @@ public:
 	void renderSelection();
 
 	bool enabled;
-	bool checked;
-	bool pressed;
 	bool continuous;	// allow holding key to keep slot activated
 
 	bool visible;

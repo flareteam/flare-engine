@@ -27,14 +27,15 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EngineSettings.h"
 #include "FontEngine.h"
 #include "IconManager.h"
+#include "InputState.h"
 #include "RenderDevice.h"
 #include "SharedResources.h"
+#include "Utils.h"
 #include "WidgetSlot.h"
 
-WidgetSlot::WidgetSlot(int _icon_id, int _ACTIVATE)
+WidgetSlot::WidgetSlot(int _icon_id)
 	: Widget()
 	, slot_selected(NULL)
-	, slot_checked(NULL)
 	, label_amount_bg(NULL)
 	, label_hotkey_bg(NULL)
 	, icon_id(_icon_id)
@@ -42,11 +43,9 @@ WidgetSlot::WidgetSlot(int _icon_id, int _ACTIVATE)
 	, amount(1)
 	, max_amount(1)
 	, amount_str("")
-	, activate_key(_ACTIVATE)
 	, hotkey(-1)
+	, activated(false)
 	, enabled(true)
-	, checked(false)
-	, pressed(false)
 	, continuous(false)
 	, visible(true)
 {
@@ -73,20 +72,12 @@ WidgetSlot::WidgetSlot(int _icon_id, int _ACTIVATE)
 	src.w = src.h = eset->resolutions.icon_size;
 
 	selected_filename = "images/menus/slot_selected.png";
-	checked_filename = "images/menus/slot_checked.png";
 
 	Image *graphics;
 	graphics = render_device->loadImage(selected_filename, RenderDevice::ERROR_NORMAL);
 	if (graphics) {
 		slot_selected = graphics->createSprite();
 		slot_selected->setClipFromRect(src);
-		graphics->unref();
-	}
-
-	graphics = render_device->loadImage(checked_filename, RenderDevice::ERROR_NORMAL);
-	if (graphics) {
-		slot_checked = graphics->createSprite();
-		slot_checked->setClipFromRect(src);
 		graphics->unref();
 	}
 }
@@ -109,29 +100,18 @@ void WidgetSlot::setPos(int offset_x, int offset_y) {
 }
 
 void WidgetSlot::activate() {
-	pressed = true;
-}
-
-void WidgetSlot::deactivate() {
-	pressed = false;
-	checked = false;
+	activated = true;
 }
 
 void WidgetSlot::defocus() {
 	in_focus = false;
-	pressed = false;
-	checked = false;
 }
 
 bool WidgetSlot::getNext() {
-	pressed = false;
-	checked = false;
 	return false;
 }
 
 bool WidgetSlot::getPrev() {
-	pressed = false;
-	checked = false;
 	return false;
 }
 
@@ -140,62 +120,51 @@ WidgetSlot::CLICK_TYPE WidgetSlot::checkClick() {
 }
 
 WidgetSlot::CLICK_TYPE WidgetSlot::checkClick(int x, int y) {
-	// disabled slots can't be clicked;
-	if (!enabled) return NO_CLICK;
+	if (!enabled) {
+		return NO_CLICK;
+	}
 
 	Point mouse(x,y);
+	bool mouse_in_rect = Utils::isWithinRect(pos, mouse);
 
-	if (continuous && pressed && checked && (inpt->lock[Input::MAIN2] || inpt->lock[activate_key] || (inpt->touch_locked && Utils::isWithinRect(pos, mouse))))
-		return ACTIVATED;
-
-	// main button already in use, new click not allowed
-	if (inpt->lock[Input::MAIN1]) return NO_CLICK;
-	if (inpt->lock[Input::MAIN2]) return NO_CLICK;
-	if (inpt->lock[activate_key]) return NO_CLICK;
-
-	if (pressed && !inpt->lock[Input::MAIN1] && !inpt->lock[Input::MAIN2]) { // this is a button release
-		pressed = false;
-
-		checked = !checked;
-		if (checked)
-			return CHECKED;
-		else if (continuous)
-			return NO_CLICK;
-		else
-			return ACTIVATED;
+	if (mouse_in_rect && inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1]) {
+		inpt->lock[Input::MAIN1] = true;
+		Utils::logInfo("%p: MAIN1 drag", this);
+		return DRAG;
+	}
+	else if (mouse_in_rect && inpt->pressing[Input::MAIN2] && !inpt->lock[Input::MAIN2]) {
+		inpt->lock[Input::MAIN2] = true;
+		Utils::logInfo("%p: MAIN2 activate", this);
+		return ACTIVATE;
+	}
+	else if (in_focus && inpt->pressing[Input::ACCEPT] && !inpt->lock[Input::ACCEPT]) {
+		// TODO This probably isn't needed, since Input::ACCEPT is handled by TabList (which calls activate())
+		inpt->lock[Input::ACCEPT] = true;
+		Utils::logInfo("%p: ACCEPT drag", this);
+		return DRAG;
+	}
+	else if (in_focus && inpt->pressing[Input::MENU_ACTIVATE] && !inpt->lock[Input::MENU_ACTIVATE]) {
+		inpt->lock[Input::MENU_ACTIVATE] = true;
+		Utils::logInfo("%p: MENU_ACTIVATE activate", this);
+		return ACTIVATE;
+	}
+	else if (activated) {
+		// activate() was called
+		activated = false;
+		Utils::logInfo("%p: activate() drag", this);
+		return DRAG;
 	}
 
-	// detect new click
-	// use MAIN1 only for selecting
-	if (inpt->pressing[Input::MAIN1]) {
-		if (Utils::isWithinRect(pos, mouse)) {
+	if (continuous) {
+		bool continuous_mouse = mouse_in_rect && (inpt->lock[Input::MAIN2] || inpt->touch_locked);
+		bool continuous_button = in_focus && inpt->lock[Input::MENU_ACTIVATE];
 
-			inpt->lock[Input::MAIN1] = true;
-			pressed = true;
-			checked = false;
-		}
-	}
-	// use MAIN2 only for activating
-	if (inpt->pressing[Input::MAIN2]) {
-		if (Utils::isWithinRect(pos, mouse)) {
-
-			inpt->lock[Input::MAIN2] = true;
-			pressed = true;
-			checked = true;
-		}
-	}
-
-	// handle touch presses for action bar
-	if (continuous && inpt->touch_locked) {
-		if (Utils::isWithinRect(pos, mouse)) {
-			pressed = true;
-			checked = true;
-			return ACTIVATED;
+		if (continuous_mouse || continuous_button) {
+			return ACTIVATE;
 		}
 	}
 
 	return NO_CLICK;
-
 }
 
 int WidgetSlot::getIcon() {
@@ -312,25 +281,16 @@ void WidgetSlot::render() {
 void WidgetSlot::renderSelection() {
 	if (!visible) return;
 
-	if (in_focus) {
-		if (slot_checked && checked) {
-			slot_checked->local_frame = local_frame;
-			slot_checked->setOffset(local_offset);
-			slot_checked->setDestFromRect(pos);
-			render_device->render(slot_checked);
-		}
-		else if (slot_selected) {
-			slot_selected->local_frame = local_frame;
-			slot_selected->setOffset(local_offset);
-			slot_selected->setDestFromRect(pos);
-			render_device->render(slot_selected);
-		}
+	if (in_focus && slot_selected) {
+		slot_selected->local_frame = local_frame;
+		slot_selected->setOffset(local_offset);
+		slot_selected->setDestFromRect(pos);
+		render_device->render(slot_selected);
 	}
 }
 
 WidgetSlot::~WidgetSlot() {
 	delete slot_selected;
-	delete slot_checked;
 	delete label_amount_bg;
 	delete label_hotkey_bg;
 }
