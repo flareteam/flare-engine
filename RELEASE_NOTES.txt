@@ -14,6 +14,7 @@ Engine fixes:
 * Don't show hidden stats under 'Related Stats' section of tooltips of Character menu.
 * Fix bug where negative regen wouldn't work if the resource was 100% full.
 * Fix bug where negative regen would overflow after reaching zero.
+* Fix bug that caused built-in effect types to be ignored by Power post_effect.
 
 Game updates:
 

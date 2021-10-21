@@ -974,6 +974,9 @@ bool PowerManager::isValidEffect(const std::string& type) {
 	if (getEffectDef(type) != NULL)
 		return true;
 
+	if (Effect::getTypeFromString(type) != Effect::NONE)
+		return true;
+
 	return false;
 }
 
