@@ -120,9 +120,11 @@ void SDLInputState::initBindings() {
 		// web browsers reserve Escape for exiting fullscreen, so we provide an alternate binding
 		// backslash is used due to its general proximity to Enter on both ANSI and ISO layouts
 		setBind(Input::CANCEL, InputBind::KEY, SDL_SCANCODE_BACKSLASH);
+		setBind(Input::PAUSE, InputBind::KEY, SDL_SCANCODE_BACKSLASH);
 	}
 	else {
 		setBind(Input::CANCEL, InputBind::KEY, SDL_SCANCODE_ESCAPE);
+		setBind(Input::PAUSE, InputBind::KEY, SDL_SCANCODE_ESCAPE);
 	}
 
 	setBind(Input::ACCEPT, InputBind::KEY, SDL_SCANCODE_RETURN);

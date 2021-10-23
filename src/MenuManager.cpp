@@ -426,43 +426,43 @@ void MenuManager::logic() {
 	if (settings->dev_mode && devconsole->inputFocus())
 		key_lock = true;
 
-	// cancel dragging and defocus menu tablists
+	// stop dragging with cancel key
 	if (!key_lock && inpt->pressing[Input::CANCEL] && !inpt->lock[Input::CANCEL] && !pc->stats.corpse) {
 		if (keyboard_dragging || mouse_dragging) {
 			inpt->lock[Input::CANCEL] = true;
 			resetDrag();
-		}
-		for (size_t i=0; i<menus.size(); i++) {
-			TabList *tablist = menus[i]->getCurrentTabList();
-			if (tablist) {
-				inpt->lock[Input::CANCEL] = true;
-				menus[i]->defocusTabLists();
-			}
-			if (settings->dev_mode) {
-				tablist = devconsole->getCurrentTabList();
-				if (tablist) {
-					inpt->lock[Input::CANCEL] = true;
-					devconsole->defocusTabLists();
-				}
-			}
 		}
 	}
 
 	// exit menu toggle
 	if (!key_lock && !mouse_dragging && !keyboard_dragging) {
 		if (inpt->pressing[Input::CANCEL] && !inpt->lock[Input::CANCEL]) {
-			inpt->lock[Input::CANCEL] = true;
 			key_lock = true;
 			if (act->twostep_slot != -1) {
+				inpt->lock[Input::CANCEL] = true;
 				act->twostep_slot = -1;
 			}
 			else if (settings->dev_mode && devconsole->visible) {
+				inpt->lock[Input::CANCEL] = true;
 				devconsole->closeWindow();
 			}
 			else if (menus_open) {
+				inpt->lock[Input::CANCEL] = true;
 				closeAll();
 			}
-			else if (!game_over->visible) {
+		}
+
+		if (inpt->pressing[Input::PAUSE] && !inpt->lock[Input::PAUSE] && !inpt->lock[Input::CANCEL]) {
+			inpt->lock[Input::PAUSE] = true;
+
+			// perform all "cancel" actions
+			resetDrag();
+			act->twostep_slot = -1;
+			if (menus_open) {
+				closeAll();
+			}
+
+			if (!game_over->visible) {
 				act->defocusTabLists();
 				exit->handleCancel();
 			}
