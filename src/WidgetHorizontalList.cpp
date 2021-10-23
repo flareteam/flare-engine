@@ -43,7 +43,6 @@ WidgetHorizontalList::WidgetHorizontalList()
 	, enabled(true)
 	, has_action(false)
 {
-	focusable = true;
 	scroll_type = SCROLL_HORIZONTAL;
 	refresh();
 }

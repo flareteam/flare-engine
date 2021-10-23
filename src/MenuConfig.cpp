@@ -366,13 +366,13 @@ MenuConfig::~MenuConfig() {
 }
 
 void MenuConfig::init() {
-	tab_control->setTabTitle(EXIT_TAB, msg->get("Exit"));
-	tab_control->setTabTitle(VIDEO_TAB, msg->get("Video"));
-	tab_control->setTabTitle(AUDIO_TAB, msg->get("Audio"));
-	tab_control->setTabTitle(INTERFACE_TAB, msg->get("Interface"));
-	tab_control->setTabTitle(INPUT_TAB, msg->get("Input"));
-	tab_control->setTabTitle(KEYBINDS_TAB, msg->get("Keybindings"));
-	tab_control->setTabTitle(MODS_TAB, msg->get("Mods"));
+	tab_control->setupTab(EXIT_TAB, msg->get("Exit"), &tablist_exit);
+	tab_control->setupTab(VIDEO_TAB, msg->get("Video"), &tablist_video);
+	tab_control->setupTab(AUDIO_TAB, msg->get("Audio"), &tablist_audio);
+	tab_control->setupTab(INTERFACE_TAB, msg->get("Interface"), &tablist_interface);
+	tab_control->setupTab(INPUT_TAB, msg->get("Input"), &tablist_input);
+	tab_control->setupTab(KEYBINDS_TAB, msg->get("Keybindings"), &tablist_keybinds);
+	tab_control->setupTab(MODS_TAB, msg->get("Mods"), &tablist_mods);
 
 	readConfig();
 
@@ -698,13 +698,20 @@ void MenuConfig::addChildWidgets() {
 }
 
 void MenuConfig::setupTabList() {
-	tablist.add(tab_control);
-	tablist.setPrevTabList(&tablist_main);
-
 	if (enable_gamestate_buttons) {
 		tablist_main.add(ok_button);
 		tablist_main.add(defaults_button);
 		tablist_main.add(cancel_button);
+
+		tablist.setPrevTabList(&tablist_main);
+
+		tablist_exit.setNextTabList(&tablist_main);
+		tablist_video.setNextTabList(&tablist_main);
+		tablist_audio.setNextTabList(&tablist_main);
+		tablist_interface.setNextTabList(&tablist_main);
+		tablist_input.setNextTabList(&tablist_main);
+		tablist_keybinds.setNextTabList(&tablist_main);
+		tablist_mods.setNextTabList(&tablist_main);
 	}
 	tablist_main.setPrevTabList(&tablist);
 	tablist_main.setNextTabList(&tablist);
@@ -712,38 +719,26 @@ void MenuConfig::setupTabList() {
 
 	tablist_exit.setScrollType(Widget::SCROLL_VERTICAL);
 	tablist_exit.add(cfg_tabs[EXIT_TAB].scrollbox);
-	tablist_exit.setPrevTabList(&tablist);
-	tablist_exit.setNextTabList(&tablist_main);
 	tablist_exit.lock();
 
 	tablist_video.setScrollType(Widget::SCROLL_VERTICAL);
 	tablist_video.add(cfg_tabs[VIDEO_TAB].scrollbox);
-	tablist_video.setPrevTabList(&tablist);
-	tablist_video.setNextTabList(&tablist_main);
 	tablist_video.lock();
 
 	tablist_audio.setScrollType(Widget::SCROLL_VERTICAL);
 	tablist_audio.add(cfg_tabs[AUDIO_TAB].scrollbox);
-	tablist_audio.setPrevTabList(&tablist);
-	tablist_audio.setNextTabList(&tablist_main);
 	tablist_audio.lock();
 
 	tablist_interface.setScrollType(Widget::SCROLL_VERTICAL);
 	tablist_interface.add(cfg_tabs[INTERFACE_TAB].scrollbox);
-	tablist_interface.setPrevTabList(&tablist);
-	tablist_interface.setNextTabList(&tablist_main);
 	tablist_interface.lock();
 
 	tablist_input.setScrollType(Widget::SCROLL_VERTICAL);
 	tablist_input.add(cfg_tabs[INPUT_TAB].scrollbox);
-	tablist_input.setPrevTabList(&tablist);
-	tablist_input.setNextTabList(&tablist_main);
 	tablist_input.lock();
 
 	tablist_keybinds.setScrollType(Widget::SCROLL_VERTICAL);
 	tablist_keybinds.add(cfg_tabs[KEYBINDS_TAB].scrollbox);
-	tablist_keybinds.setPrevTabList(&tablist);
-	tablist_keybinds.setNextTabList(&tablist_main);
 	tablist_keybinds.lock();
 
 	tablist_mods.add(inactivemods_lstb);
@@ -752,8 +747,6 @@ void MenuConfig::setupTabList() {
 	tablist_mods.add(activemods_deactivate_btn);
 	tablist_mods.add(activemods_shiftup_btn);
 	tablist_mods.add(activemods_shiftdown_btn);
-	tablist_mods.setPrevTabList(&tablist);
-	tablist_mods.setNextTabList(&tablist_main);
 	tablist_mods.lock();
 }
 
@@ -931,18 +924,22 @@ void MenuConfig::logic() {
 			pause_time_text->setText(Utils::getTimeString(hero->time_played));
 		}
 		tablist.setNextTabList(&tablist_exit);
+		tablist_main.setPrevTabList(&tablist_exit);
 		logicExit();
 	}
 	if (active_tab == VIDEO_TAB) {
 		tablist.setNextTabList(&tablist_video);
+		tablist_main.setPrevTabList(&tablist_video);
 		logicVideo();
 	}
 	else if (active_tab == AUDIO_TAB) {
 		tablist.setNextTabList(&tablist_audio);
+		tablist_main.setPrevTabList(&tablist_audio);
 		logicAudio();
 	}
 	else if (active_tab == INTERFACE_TAB) {
 		tablist.setNextTabList(&tablist_interface);
+		tablist_main.setPrevTabList(&tablist_interface);
 		logicInterface();
 
 		// TODO remove this?
@@ -954,14 +951,17 @@ void MenuConfig::logic() {
 	}
 	else if (active_tab == INPUT_TAB) {
 		tablist.setNextTabList(&tablist_input);
+		tablist_main.setPrevTabList(&tablist_input);
 		logicInput();
 	}
 	else if (active_tab == KEYBINDS_TAB) {
 		tablist.setNextTabList(&tablist_keybinds);
+		tablist_main.setPrevTabList(&tablist_keybinds);
 		logicKeybinds();
 	}
 	else if (active_tab == MODS_TAB) {
 		tablist.setNextTabList(&tablist_mods);
+		tablist_main.setPrevTabList(&tablist_mods);
 		logicMods();
 	}
 }

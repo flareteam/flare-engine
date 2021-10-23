@@ -64,7 +64,7 @@ InputState::InputState(void)
 	, current_touch()
 	, dump_event(false)
 	, file_version(new Version())
-	, file_version_min(new Version(1, 12, 25))
+	, file_version_min(new Version(1, 12, 27))
 {
 	config_keys[Input::CANCEL] = "cancel";
 	config_keys[Input::ACCEPT] = "accept";

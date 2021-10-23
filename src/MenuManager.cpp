@@ -1031,7 +1031,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 
 		WidgetSlot::CLICK_TYPE slotClick = vendor_slot->checkClick();
 
-		// buy item
+		// pick up item
 		if (slotClick == WidgetSlot::DRAG && drag_stack.empty()) {
 			drag_stack = vendor->click(src_slot);
 			if (!drag_stack.empty()) {
@@ -1051,22 +1051,19 @@ void MenuManager::dragAndDropWithKeyboard() {
 				}
 			}
 		}
-
-		// if we selected a single item buy it imediately
-		// otherwise, wait until we get a result from num_picker
-		// TODO replace "checked"
-		// if (vendor_slot->checked && !drag_stack.empty() && !num_picker->visible) {
-		// 	if (!inv->buy(drag_stack, vendor->getTab(), !MenuInventory::IS_DRAGGING)) {
-		// 		vendor->itemReturn(inv->drop_stack.front());
-		// 		inv->drop_stack.pop();
-		// 	}
-		// 	drag_src = DRAG_SRC_NONE;
-		// 	drag_stack.clear();
-		// 	keyboard_dragging = false;
-		// 	sticky_dragging = false;
-		// 	vendor_slot->checked = false;
-		// 	vendor->unlockTabControl();
-		// }
+		// buy item
+		else if (slotClick == WidgetSlot::ACTIVATE && !drag_stack.empty() && !num_picker->visible) {
+			if (!inv->buy(drag_stack, vendor->getTab(), !MenuInventory::IS_DRAGGING)) {
+				vendor->itemReturn(inv->drop_stack.front());
+				inv->drop_stack.pop();
+			}
+			drag_src = DRAG_SRC_NONE;
+			drag_stack.clear();
+			keyboard_dragging = false;
+			sticky_dragging = false;
+			vendor->unlockTabControl();
+			vendor->resetDrag();
+		}
 	}
 
 	// stash menu
@@ -1094,6 +1091,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 				drop_stack.push(stash->drop_stack.front());
 				stash->drop_stack.pop();
 			}
+			inv->clearHighlight();
 			drag_src = DRAG_SRC_NONE;
 			drag_stack.clear();
 			keyboard_dragging = false;
@@ -1315,31 +1313,45 @@ void MenuManager::handleKeyboardTooltips() {
 	if (book->visible)
 		return;
 
-	if (vendor->visible && vendor->getCurrentTabList() && vendor->getCurrentTabList() != (&vendor->tablist)) {
-		int slot_index = vendor->getCurrentTabList()->getCurrent();
+	if (vendor->visible) {
+		TabList* cur_tablist = vendor->getCurrentTabList();
+		if (cur_tablist && cur_tablist != &(vendor->tablist)) {
+			int slot_index = cur_tablist->getCurrent();
 
-		if (vendor->getTab() == ItemManager::VENDOR_BUY) {
-			keydrag_pos.x = vendor->stock[ItemManager::VENDOR_BUY].slots[slot_index]->pos.x;
-			keydrag_pos.y = vendor->stock[ItemManager::VENDOR_BUY].slots[slot_index]->pos.y;
-		}
-		else if (vendor->getTab() == ItemManager::VENDOR_SELL) {
-			keydrag_pos.x = vendor->stock[ItemManager::VENDOR_SELL].slots[slot_index]->pos.x;
-			keydrag_pos.y = vendor->stock[ItemManager::VENDOR_SELL].slots[slot_index]->pos.y;
-		}
+			if (vendor->getTab() == ItemManager::VENDOR_BUY) {
+				keydrag_pos.x = vendor->stock[ItemManager::VENDOR_BUY].slots[slot_index]->pos.x;
+				keydrag_pos.y = vendor->stock[ItemManager::VENDOR_BUY].slots[slot_index]->pos.y;
+			}
+			else if (vendor->getTab() == ItemManager::VENDOR_SELL) {
+				keydrag_pos.x = vendor->stock[ItemManager::VENDOR_SELL].slots[slot_index]->pos.x;
+				keydrag_pos.y = vendor->stock[ItemManager::VENDOR_SELL].slots[slot_index]->pos.y;
+			}
 
-		pushMatchingItemsOf(keydrag_pos);
-		vendor->renderTooltips(keydrag_pos);
+			Point tooltip_pos = keydrag_pos;
+			tooltip_pos.x += eset->resolutions.icon_size / 2;
+			tooltip_pos.y += eset->resolutions.icon_size / 2;
+
+			pushMatchingItemsOf(tooltip_pos);
+			vendor->renderTooltips(tooltip_pos);
+		}
 	}
 
-	if (stash->visible && stash->getCurrentTabList()) {
-		int slot_index = stash->getCurrentTabList()->getCurrent();
-		size_t tab = stash->getTab();
+	if (stash->visible) {
+		TabList* cur_tablist = stash->getCurrentTabList();
+		if (cur_tablist && cur_tablist != &(stash->tablist)) {
+			int slot_index = stash->getCurrentTabList()->getCurrent();
+			size_t tab = stash->getTab();
 
-		keydrag_pos.x = stash->tabs[tab].stock.slots[slot_index]->pos.x;
-		keydrag_pos.y = stash->tabs[tab].stock.slots[slot_index]->pos.y;
+			keydrag_pos.x = stash->tabs[tab].stock.slots[slot_index]->pos.x;
+			keydrag_pos.y = stash->tabs[tab].stock.slots[slot_index]->pos.y;
 
-		pushMatchingItemsOf(keydrag_pos);
-		stash->renderTooltips(keydrag_pos);
+			Point tooltip_pos = keydrag_pos;
+			tooltip_pos.x += eset->resolutions.icon_size / 2;
+			tooltip_pos.y += eset->resolutions.icon_size / 2;
+
+			pushMatchingItemsOf(tooltip_pos);
+			stash->renderTooltips(tooltip_pos);
+		}
 	}
 
 	if (pow->visible && pow->isTabListSelected()) {
@@ -1348,7 +1360,11 @@ void MenuManager::handleKeyboardTooltips() {
 		keydrag_pos.x = pow->slots[slot_index]->pos.x;
 		keydrag_pos.y = pow->slots[slot_index]->pos.y;
 
-		pow->renderTooltips(keydrag_pos);
+		Point tooltip_pos = keydrag_pos;
+		tooltip_pos.x += eset->resolutions.icon_size / 2;
+		tooltip_pos.y += eset->resolutions.icon_size / 2;
+
+		pow->renderTooltips(tooltip_pos);
 	}
 
 	if (inv->visible && inv->getCurrentTabList()) {
@@ -1368,8 +1384,12 @@ void MenuManager::handleKeyboardTooltips() {
 			keydrag_pos.y = temp_widget->pos.y;
 		}
 
-		pushMatchingItemsOf(keydrag_pos);
-		inv->renderTooltips(keydrag_pos);
+		Point tooltip_pos = keydrag_pos;
+		tooltip_pos.x += eset->resolutions.icon_size / 2;
+		tooltip_pos.y += eset->resolutions.icon_size / 2;
+
+		pushMatchingItemsOf(tooltip_pos);
+		inv->renderTooltips(tooltip_pos);
 	}
 
 	if (act->getCurrentTabList()) {
@@ -1377,7 +1397,11 @@ void MenuManager::handleKeyboardTooltips() {
 
 		keydrag_pos = act->getSlotPos(slot_index);
 
-		act->renderTooltips(keydrag_pos);
+		Point tooltip_pos = keydrag_pos;
+		tooltip_pos.x += eset->resolutions.icon_size / 2;
+		tooltip_pos.y += eset->resolutions.icon_size / 2;
+
+		act->renderTooltips(tooltip_pos);
 	}
 }
 

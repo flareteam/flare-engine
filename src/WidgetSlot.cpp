@@ -49,7 +49,6 @@ WidgetSlot::WidgetSlot(int _icon_id)
 	, continuous(false)
 	, visible(true)
 {
-	focusable = true;
 	label_amount.setFromLabelInfo(eset->widgets.slot_quantity_label);
 	label_amount.setColor(eset->widgets.slot_quantity_color);
 	label_hotkey.setFromLabelInfo(eset->widgets.slot_hotkey_label);

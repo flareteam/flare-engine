@@ -167,8 +167,6 @@ MenuStash::MenuStash()
 	slots_area.w = slots_cols * eset->resolutions.icon_size;
 	slots_area.h = slots_rows * eset->resolutions.icon_size;
 
-	tablist.add(tab_control);
-
 	// default tabs if none are defined in the config file
 	if (tabs.empty()) {
 		tabs.push_back(MenuStashTab("Private", msg->get("Private"), "stash_HC.txt", MenuStashTab::IS_PRIVATE));
@@ -190,10 +188,8 @@ MenuStash::MenuStash()
 
 	for (size_t i = 0; i < tabs.size(); ++i) {
 		tabs[i].stock.initGrid(stash_slots, slots_area, slots_cols);
-		tab_control->setTabTitle(static_cast<unsigned>(i), tabs[i].name);
+		tab_control->setupTab(static_cast<unsigned>(i), tabs[i].name, &(tabs[i].tablist));
 
-		// "tablist" keyboard navigation
-		tabs[i].tablist.setPrevTabList(&tablist);
 		tabs[i].tablist.lock();
 		for (int j = 0; j < stash_slots; ++j) {
 			tabs[i].tablist.add(tabs[i].stock.slots[j]);
@@ -232,10 +228,12 @@ void MenuStash::logic() {
 
 	// disable tab control if we're dragging something from one of the stash stocks
 	bool dragging = false;
-	for (size_t i = 0; i < tabs.size(); ++i) {
-		if (tabs[i].stock.drag_prev_slot != -1) {
-			dragging = true;
-			break;
+	if (inpt->usingMouse()) {
+		for (size_t i = 0; i < tabs.size(); ++i) {
+			if (tabs[i].stock.drag_prev_slot != -1) {
+				dragging = true;
+				break;
+			}
 		}
 	}
 	if (!dragging)

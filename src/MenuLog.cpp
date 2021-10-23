@@ -74,7 +74,6 @@ MenuLog::MenuLog() {
 
 	// Initialize the tab control.
 	tabControl = new WidgetTabControl();
-	tablist.add(tabControl);
 
 	// Store the amount of displayed log messages on each log, and the maximum.
 	tablist_log.resize(TYPE_COUNT);
@@ -88,8 +87,8 @@ MenuLog::MenuLog() {
 	}
 
 	// Define the header.
-	tabControl->setTabTitle(TYPE_MESSAGES, msg->get("Notes"));
-	tabControl->setTabTitle(TYPE_QUESTS, msg->get("Quests"));
+	tabControl->setupTab(TYPE_QUESTS, msg->get("Quests"), &tablist_log[TYPE_QUESTS]);
+	tabControl->setupTab(TYPE_MESSAGES, msg->get("Notes"), &tablist_log[TYPE_MESSAGES]);
 
 	setBackground("images/menus/log.png");
 

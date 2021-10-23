@@ -326,20 +326,19 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 
 	// If we have more than one tab, create tab_control
 	if (!tabs.empty()) {
+		tablist_pow.resize(tabs.size());
+
 		tab_control = new WidgetTabControl();
 
 		if (tab_control) {
 			// Define the header.
-			for (size_t i=0; i<tabs.size(); i++)
-				tab_control->setTabTitle(static_cast<unsigned>(i), msg->get(tabs[i].title));
+			for (size_t i=0; i<tabs.size(); i++) {
+				tab_control->setupTab(static_cast<unsigned>(i), msg->get(tabs[i].title), &tablist_pow[i]);
+			}
 
 			// Initialize the tab control.
 			tab_control->setMainArea(window_area.x + tab_area.x, window_area.y + tab_area.y);
-
-			tablist.add(tab_control);
 		}
-
-		tablist_pow.resize(tabs.size());
 	}
 
 	// create power slots

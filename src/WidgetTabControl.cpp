@@ -46,23 +46,21 @@ WidgetTabControl::~WidgetTabControl() {
 }
 
 /**
- * Sets the title of a tab
- * Adds a new tab if the index is greater than the amount of tabs
- *
- * @param index         Integer index that relates to this tab
- * @param title         Tab title.
+ * Initialize a tab at a given index. A new tab will be allocated if it does not exist.
  */
-void WidgetTabControl::setTabTitle(unsigned index, const std::string& title) {
+void WidgetTabControl::setupTab(unsigned index, const std::string& title, TabList* tl) {
 	if (index+1 >titles.size()) {
 		titles.resize(index+1);
 		tabs.resize(index+1);
 		active_labels.resize(index+1);
 		inactive_labels.resize(index+1);
 		enabled.resize(index+1);
+		tablists.resize(index+1, NULL);
 	}
 
 	titles[index] = title;
 	enabled[index] = true;
+	tablists[index] = tl;
 }
 
 /**
@@ -83,22 +81,39 @@ void WidgetTabControl::setActiveTab(unsigned tab) {
 	else if (tab == tabs.size())
 		tab = static_cast<unsigned>(tabs.size()-1);
 
-	// Set the tab. If the specified tab is not enabled, get the first enabled tab.
-	for (unsigned i = tab; tab < tabs.size(); ++i) {
-		if (enabled[i]) {
-			active_tab = i;
-			return;
-		}
-	}
 	for (unsigned i = 0; i < tab; ++i) {
-		if (enabled[i]) {
-			active_tab = i;
-			return;
+		if (tablists[i]) {
+			tablists[i]->defocus();
 		}
 	}
 
-	// no enabled tabs, just return what we started with
-	active_tab = tab;
+	// Set the tab. If the specified tab is not enabled, get the first enabled tab.
+	bool found_tab = false;
+	for (unsigned i = tab; tab < tabs.size(); ++i) {
+		if (enabled[i]) {
+			active_tab = i;
+			found_tab = true;
+			break;
+		}
+	}
+	if (!found_tab) {
+		for (unsigned i = 0; i < tab; ++i) {
+			if (enabled[i]) {
+				active_tab = i;
+				found_tab = true;
+				break;
+			}
+		}
+	}
+
+	if (!found_tab) {
+		// no enabled tabs, just return what we started with
+		active_tab = tab;
+	}
+
+	if (tablists[active_tab]) {
+		tablists[active_tab]->unlock();
+	}
 }
 
 /**
@@ -187,7 +202,8 @@ void WidgetTabControl::logic(int x, int y) {
 			for (unsigned i=0; i<tabs.size(); i++) {
 				if(Utils::isWithinRect(tabs[i], mouse) && enabled[i]) {
 					active_tab = i;
-					return;
+					break;
+					// return;
 				}
 			}
 		}
@@ -197,6 +213,35 @@ void WidgetTabControl::logic(int x, int y) {
 	}
 	if (!inpt->pressing[Input::MAIN1]) {
 		dragging = false;
+	}
+
+	if (tablists[active_tab] && tablists[active_tab]->getCurrent() != -1) {
+		if (inpt->pressing[Input::MENU_PAGE_NEXT] && !inpt->lock[Input::MENU_PAGE_NEXT] && active_tab < tabs.size()) {
+			for (unsigned i = active_tab + 1; i < tabs.size(); ++i) {
+				if (enabled[i] && tablists[i]) {
+					inpt->lock[Input::MENU_PAGE_NEXT] = true;
+					tablists[active_tab]->defocus();
+					tablists[active_tab]->lock();
+					tablists[i]->unlock();
+					tablists[i]->getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
+					active_tab = i;
+					break;
+				}
+			}
+		}
+		else if (inpt->pressing[Input::MENU_PAGE_PREV] && !inpt->lock[Input::MENU_PAGE_PREV] && active_tab > 0) {
+			for (unsigned i = active_tab; i > 0; --i) {
+				if (enabled[i-1] && tablists[i-1]) {
+					inpt->lock[Input::MENU_PAGE_PREV] = true;
+					tablists[active_tab]->defocus();
+					tablists[active_tab]->lock();
+					tablists[i-1]->unlock();
+					tablists[i-1]->getPrev(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
+					active_tab = i-1;
+					break;
+				}
+			}
+		}
 	}
 }
 

@@ -42,8 +42,6 @@ WidgetCheckBox::WidgetCheckBox (const std::string &fname)
 	, pressed(false)
 	, activated(false)
 {
-	focusable = true;
-
 	Image *graphics = NULL;
 	if (fname != DEFAULT_FILE) {
 		graphics = render_device->loadImage(fname, RenderDevice::ERROR_NORMAL);

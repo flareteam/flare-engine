@@ -47,7 +47,6 @@ public:
 	virtual void setBasePos(int x, int y, int a);
 	virtual void setPos(int offset_x, int offset_y);
 	bool in_focus;
-	bool focusable;
 	bool enable_tablist_nav; // when disabled, this widget will be skipped during tablist navigation
 	bool tablist_nav_right; // uses the center-right point for tablist nav instead of the center. Primarily for MenuConfig widgets
 	uint8_t scroll_type;
@@ -97,6 +96,8 @@ public:
 	unsigned size();
 	Widget* getNext(bool inner, uint8_t dir);	// Increment current selected, return widget
 	Widget* getPrev(bool inner, uint8_t dir);	// Decrement current selected, return widget
+	int getNextIndex();
+	int getPrevIndex();
 	int getNextRelativeIndex(uint8_t dir);
 	void deactivatePrevious();
 	void activate();					// Fire off what happens when the user presses 'accept'

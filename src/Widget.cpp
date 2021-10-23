@@ -24,7 +24,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 Widget::Widget()
 	: in_focus(false)
-	, focusable(false)
 	, enable_tablist_nav(true)
 	, tablist_nav_right(false)
 	, scroll_type(SCROLL_TWO_DIRECTIONS)
@@ -166,12 +165,17 @@ bool TabList::previous_is_valid() {
 
 Widget* TabList::getNext(bool inner, uint8_t dir) {
 	if (widgets.empty()) {
-		if (next_tablist) {
-			// WARNING: Could result in infinite loop if all tablists are empty
+		if (next_tablist && next_tablist->size() > 0) {
 			defocus();
 			locked = true;
 			next_tablist->unlock();
 			return next_tablist->getNext(!GET_INNER, WIDGET_SELECT_AUTO);
+		}
+		else if (prev_tablist && prev_tablist->size() > 0) {
+			defocus();
+			locked = true;
+			prev_tablist->unlock();
+			return prev_tablist->getPrev(!GET_INNER, WIDGET_SELECT_AUTO);
 		}
 		return NULL;
 	}
@@ -183,24 +187,21 @@ Widget* TabList::getNext(bool inner, uint8_t dir) {
 		widgets.at(current)->defocus();
 	}
 
+	int next = -1;
 	if (dir == WIDGET_SELECT_AUTO) {
-		++current;
-
-		if (current >= static_cast<int>(widgets.size()))
-			current = 0;
-
-		// TODO handle enable_tablist_nav here?
+		next = getNextIndex();
+		if (next != -1)
+			current = next;
 	}
 	else {
-		int next = getNextRelativeIndex(dir);
+		next = getNextRelativeIndex(dir);
 		if (next != -1)
 			current = next;
 		else {
 			if (!next_tablist) {
-				++current;
-
-				if (current >= static_cast<int>(widgets.size()))
-					current = 0;
+				next = getNextIndex();
+				if (next != -1)
+					current = next;
 			}
 			else {
 				defocus();
@@ -217,12 +218,17 @@ Widget* TabList::getNext(bool inner, uint8_t dir) {
 
 Widget* TabList::getPrev(bool inner, uint8_t dir) {
 	if (widgets.empty()) {
-		if (prev_tablist) {
-			// WARNING: Could result in infinite loop if all tablists are empty
+		if (prev_tablist && prev_tablist->size() > 0) {
 			defocus();
 			locked = true;
 			prev_tablist->unlock();
 			return prev_tablist->getPrev(!GET_INNER, WIDGET_SELECT_AUTO);
+		}
+		else if (next_tablist && next_tablist->size() > 0) {
+			defocus();
+			locked = true;
+			next_tablist->unlock();
+			return next_tablist->getNext(!GET_INNER, WIDGET_SELECT_AUTO);
 		}
 		return NULL;
 	}
@@ -234,28 +240,26 @@ Widget* TabList::getPrev(bool inner, uint8_t dir) {
 		widgets.at(current)->defocus();
 	}
 
+	int next = -1;
 	if (current == -1) {
-		current = 0;
+		next = getNextIndex();
+		if (next != -1)
+			current = next;
 	}
 	else if (dir == WIDGET_SELECT_AUTO) {
-		--current;
-
-		if (current <= -1)
-			current = static_cast<unsigned>(widgets.size()-1);
-
-		// TODO handle enable_tablist_nav here?
+		next = getPrevIndex();
+		if (next != -1)
+			current = next;
 	}
 	else {
-		int next = getNextRelativeIndex(dir);
+		next = getNextRelativeIndex(dir);
 		if (next != -1)
 			current = next;
 		else {
-
 			if (!prev_tablist) {
-				--current;
-
-				if (current <= -1)
-					current = static_cast<unsigned>(widgets.size()-1);
+				next = getPrevIndex();
+				if (next != -1)
+					current = next;
 			}
 			else {
 				defocus();
@@ -270,8 +274,55 @@ Widget* TabList::getPrev(bool inner, uint8_t dir) {
 	return widgets.at(current);
 }
 
-int TabList::getNextRelativeIndex(uint8_t dir) {
+int TabList::getNextIndex() {
+	int next_widget = -1;
+
+	for (size_t i = current + 1; i < widgets.size(); ++i) {
+		if (widgets.at(i)->enable_tablist_nav) {
+			next_widget = static_cast<int>(i);
+			break;
+		}
+	}
+
+	if (next_widget == -1 && current >= 0) {
+		for (size_t i = 0; i < static_cast<size_t>(current); ++i) {
+			if (widgets.at(i)->enable_tablist_nav) {
+				next_widget = static_cast<int>(i);
+				break;
+			}
+		}
+	}
+
+	return next_widget;
+}
+
+int TabList::getPrevIndex() {
 	if (current == -1)
+		return getNextIndex();
+
+	int prev_widget = -1;
+
+	for (size_t i = current; i > 0 ; --i) {
+		if (widgets.at(i-1)->enable_tablist_nav) {
+			prev_widget = static_cast<int>(i-1);
+			break;
+		}
+	}
+
+	if (prev_widget == -1) {
+		for (size_t i = widgets.size() - 1; i > static_cast<size_t>(current); --i) {
+			if (widgets.at(i)->enable_tablist_nav) {
+				prev_widget = static_cast<int>(i);
+				break;
+			}
+		}
+	}
+
+	return prev_widget;
+}
+
+int TabList::getNextRelativeIndex(uint8_t dir) {
+	if (current == -1 || static_cast<size_t>(current) >= widgets.size())
 		return -1;
 
 	int next = current;

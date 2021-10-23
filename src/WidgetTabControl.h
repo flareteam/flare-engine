@@ -40,6 +40,7 @@ private:
 	std::vector<WidgetLabel> active_labels;
 	std::vector<WidgetLabel> inactive_labels;
 	std::vector<bool> enabled;
+	std::vector<TabList*> tablists;
 
 
 	unsigned active_tab;    // Index of the currently active tab.
@@ -52,7 +53,7 @@ public:
 	WidgetTabControl();
 	~WidgetTabControl();
 
-	void setTabTitle(unsigned index, const std::string& title);
+	void setupTab(unsigned index, const std::string& title, TabList* tl);
 	void setMainArea(int x, int y);
 
 	int getActiveTab();

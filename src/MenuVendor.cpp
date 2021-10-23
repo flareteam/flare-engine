@@ -56,8 +56,8 @@ MenuVendor::MenuVendor()
 	, buyback_stock() {
 	setBackground("images/menus/vendor.png");
 
-	tabControl->setTabTitle(ItemManager::VENDOR_BUY, msg->get("Inventory"));
-	tabControl->setTabTitle(ItemManager::VENDOR_SELL, msg->get("Buyback"));
+	tabControl->setupTab(ItemManager::VENDOR_BUY, msg->get("Inventory"), &tablist_buy);
+	tabControl->setupTab(ItemManager::VENDOR_SELL, msg->get("Buyback"), &tablist_sell);
 
 	// Load config settings
 	FileParser infile;
@@ -105,9 +105,7 @@ MenuVendor::MenuVendor()
 	stock[ItemManager::VENDOR_BUY].initGrid(VENDOR_SLOTS, slots_area, slots_cols);
 	stock[ItemManager::VENDOR_SELL].initGrid(VENDOR_SLOTS, slots_area, slots_cols);
 
-	tablist.add(tabControl);
-	tablist_buy.setPrevTabList(&tablist);
-	tablist_sell.setPrevTabList(&tablist);
+	tablist.setNextTabList(&tablist_buy);
 
 	tablist_buy.lock();
 	tablist_sell.lock();
@@ -344,6 +342,11 @@ void MenuVendor::defocusTabLists() {
 	tablist.defocus();
 	tablist_buy.defocus();
 	tablist_sell.defocus();
+}
+
+void MenuVendor::resetDrag() {
+	stock[ItemManager::VENDOR_BUY].drag_prev_slot = -1;
+	stock[ItemManager::VENDOR_SELL].drag_prev_slot = -1;
 }
 
 MenuVendor::~MenuVendor() {

@@ -196,6 +196,15 @@ void WidgetScrollBox::logic(int x, int y) {
 		if (cursor > cursor_target)
 			cursor = cursor_target;
 	}
+
+	// getPrev() and getNext() aren't called when pressing left and right
+	int current_child = tablist.getCurrent();
+	if (current_child != -1) {
+		if (children[current_child]->in_focus) {
+			if (children[current_child]->pos.y < static_cast<int>(cursor) || children[current_child]->pos.y > static_cast<int>(cursor) + pos.h)
+				scrollToSmooth(children[current_child]->pos.y);
+		}
+	}
 }
 
 void WidgetScrollBox::resize(int w, int h) {
