@@ -83,7 +83,7 @@ void MenuConfig::ConfigTab::setOptionWidgets(int index, WidgetLabel* lb, Widget*
 	options[index].label = lb;
 	options[index].label->setText(lb_text);
 	options[index].widget = w;
-	options[index].widget->tablist_nav_right = true;
+	options[index].widget->tablist_nav_align = TabList::NAV_ALIGN_RIGHT;
 }
 
 void MenuConfig::ConfigTab::setOptionEnabled(int index, bool enable) {

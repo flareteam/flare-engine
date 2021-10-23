@@ -25,7 +25,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 Widget::Widget()
 	: in_focus(false)
 	, enable_tablist_nav(true)
-	, tablist_nav_right(false)
+	, tablist_nav_align(TabList::NAV_ALIGN_CENTER)
 	, scroll_type(SCROLL_TWO_DIRECTIONS)
 	, alignment(Utils::ALIGN_TOPLEFT) {
 }
@@ -338,10 +338,16 @@ int TabList::getNextRelativeIndex(uint8_t dir) {
 		Rect& c_pos = widgets.at(current)->pos;
 		Rect& i_pos = widgets.at(i)->pos;
 
-		int w_div = widgets.at(i)->tablist_nav_right ? 1 : 2;
-
-		FPoint p1(static_cast<float>(c_pos.x + c_pos.w / w_div), static_cast<float>(c_pos.y + c_pos.h / 2));
-		FPoint p2(static_cast<float>(i_pos.x + i_pos.w / w_div), static_cast<float>(i_pos.y + i_pos.h / 2));
+		FPoint p1(static_cast<float>(c_pos.x), static_cast<float>(c_pos.y + c_pos.h / 2));
+		FPoint p2(static_cast<float>(i_pos.x), static_cast<float>(i_pos.y + i_pos.h / 2));
+		if (widgets.at(i)->tablist_nav_align == TabList::NAV_ALIGN_CENTER) {
+			p1.x += static_cast<float>(c_pos.w / 2);
+			p2.x += static_cast<float>(i_pos.w / 2);
+		}
+		else if (widgets.at(i)->tablist_nav_align == TabList::NAV_ALIGN_RIGHT) {
+			p1.x += static_cast<float>(c_pos.w);
+			p2.x += static_cast<float>(i_pos.w);
+		}
 
 		if (dir == WIDGET_SELECT_LEFT && p1.x <= p2.x)
 			continue;

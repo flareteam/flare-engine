@@ -48,7 +48,7 @@ public:
 	virtual void setPos(int offset_x, int offset_y);
 	bool in_focus;
 	bool enable_tablist_nav; // when disabled, this widget will be skipped during tablist navigation
-	bool tablist_nav_right; // uses the center-right point for tablist nav instead of the center. Primarily for MenuConfig widgets
+	uint8_t tablist_nav_align; // used to determine the "center" point used when calculating relative distance between tablist widgets
 	uint8_t scroll_type;
 	Rect pos; // This is the position of the button within the screen
 	Rect local_frame; // Local reference frame is this is a daughter widget
@@ -78,6 +78,12 @@ public:
 		WIDGET_SELECT_RIGHT = 2,
 		WIDGET_SELECT_UP = 3,
 		WIDGET_SELECT_DOWN = 4
+	};
+
+	enum {
+		NAV_ALIGN_CENTER = 0,
+		NAV_ALIGN_LEFT = 1,
+		NAV_ALIGN_RIGHT = 2
 	};
 
 	static const bool GET_INNER = true;

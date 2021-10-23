@@ -469,6 +469,7 @@ void MenuTalker::createActionButtons(int node_id) {
 	}
 
 	for (size_t i = 0; i< actions.size(); ++i) {
+		actions[i].btn->tablist_nav_align = TabList::NAV_ALIGN_LEFT;
 		textbox->addChildWidget(actions[i].btn);
 	}
 }
