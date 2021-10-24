@@ -74,7 +74,8 @@ TabList::TabList()
 	, ACTIVATE(Input::ACCEPT)
 	, prev_tablist(NULL)
 	, next_tablist(NULL)
-	, ignore_no_mouse(false) {
+	, ignore_no_mouse(false)
+	, enable_activate(true) {
 }
 
 TabList::~TabList() {
@@ -458,7 +459,7 @@ void TabList::logic() {
 			}
 		}
 
-		if (inpt->pressing[ACTIVATE] && !inpt->lock[ACTIVATE]) {
+		if (inpt->pressing[ACTIVATE] && !inpt->lock[ACTIVATE] && enable_activate) {
 			inpt->lock[ACTIVATE] = true;
 			deactivatePrevious(); //Deactivate previously activated item
 			activate();	// Activate the currently infocus item

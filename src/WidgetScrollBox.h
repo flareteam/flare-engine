@@ -47,6 +47,7 @@ public:
 
 	Sprite *contents;
 	bool update;
+	bool show_focus_when_scrollbar_disabled;
 	Color bg;
 
 	TabList tablist;

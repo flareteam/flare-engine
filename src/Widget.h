@@ -116,6 +116,7 @@ public:
 	void logic();
 
 	bool ignore_no_mouse;
+	bool enable_activate; // when disabled, Input::ACCEPT won't trigger activate()
 };
 
 #endif

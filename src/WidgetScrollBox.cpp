@@ -31,6 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 WidgetScrollBox::WidgetScrollBox(int width, int height)
 	: contents(NULL)
 	, update(true)
+	, show_focus_when_scrollbar_disabled(true)
 	, bg(0,0,0,0)
 	, tablist()
 	, cursor(0)
@@ -264,6 +265,8 @@ void WidgetScrollBox::refresh() {
 }
 
 void WidgetScrollBox::render() {
+	update = false;
+
 	Rect src,dest;
 	dest = pos;
 	src.x = 0;
@@ -271,7 +274,11 @@ void WidgetScrollBox::render() {
 	src.w = pos.w;
 	src.h = pos.h;
 
+	int content_height = 0;
+
+	// draw content buffer, minus child widgets
 	if (contents) {
+		content_height = contents->getGraphicsHeight();
 		contents->local_frame = local_frame;
 		contents->setOffset(local_offset);
 		contents->setClipFromRect(src);
@@ -279,20 +286,22 @@ void WidgetScrollBox::render() {
 		render_device->render(contents);
 	}
 
+	// draw child widgets
 	for (unsigned i = 0; i < children.size(); i++) {
 		children[i]->local_frame = pos;
 		children[i]->local_offset.y = static_cast<int>(cursor);
 		children[i]->render();
 	}
 
-	if (contents && contents->getGraphicsHeight() > pos.h && scrollbar) {
+	// draw scrollbar
+	if (content_height > pos.h && scrollbar) {
 		scrollbar->local_frame = local_frame;
 		scrollbar->local_offset = local_offset;
 		scrollbar->render();
 	}
-	update = false;
 
-	if (in_focus && children.empty()) {
+	// draw focus rectangle around the scrollbar
+	if (in_focus && children.empty() && (show_focus_when_scrollbar_disabled || content_height > pos.h)) {
 		Point topLeft;
 		Point bottomRight;
 		Rect sb_rect = scrollbar->getBounds();

@@ -132,6 +132,7 @@ MenuTalker::MenuTalker()
 
 	textbox = new WidgetScrollBox(text_pos.w, text_pos.h-(text_offset.y*2));
 	textbox->setBasePos(text_pos.x, text_pos.y + text_offset.y, Utils::ALIGN_TOPLEFT);
+	textbox->show_focus_when_scrollbar_disabled = false;
 
 	align();
 }
@@ -186,6 +187,11 @@ void MenuTalker::logic() {
 
 	if (!visible || !npc)
 		return;
+
+	if (!inpt->usingMouse() && tablist.getCurrent() == -1) {
+		tablist.setCurrent(textbox);
+	}
+	tablist.enable_activate = !actions.empty();
 
 	tablist.logic();
 
@@ -541,18 +547,6 @@ void MenuTalker::setupTabList() {
 	tablist.clear();
 
 	tablist.add(textbox);
-
-	if (advanceButton->enabled) {
-		tablist.add(advanceButton);
-		tablist.setCurrent(advanceButton);
-	}
-	else if (closeButton->enabled) {
-		tablist.add(closeButton);
-		tablist.setCurrent(closeButton);
-	}
-	else {
-		tablist.setCurrent(textbox);
-	}
 }
 
 void MenuTalker::addAction(const std::string& label, int node_id, bool is_vendor) {
