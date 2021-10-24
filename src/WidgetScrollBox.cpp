@@ -337,13 +337,14 @@ bool WidgetScrollBox::getNext() {
 		tablist.setCurrent(children[currentChild]);
 	}
 	else {
-		// TODO neaten this up?
-		currentChild = 0;
-		tablist.setCurrent(children[currentChild]);
-		currentChild = tablist.getNextRelativeIndex(TabList::WIDGET_SELECT_DOWN);
-		tablist.setCurrent(children[currentChild]);
-		currentChild = tablist.getNextRelativeIndex(TabList::WIDGET_SELECT_UP);
-		tablist.setCurrent(children[currentChild]);
+		if (!children[0]->enable_tablist_nav) {
+			tablist.getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
+			currentChild = tablist.getCurrent();
+		}
+		else {
+			currentChild = 0;
+			tablist.setCurrent(children[currentChild]);
+		}
 	}
 
 	if (currentChild != -1) {
@@ -375,12 +376,14 @@ bool WidgetScrollBox::getPrev() {
 		tablist.setCurrent(children[currentChild]);
 	}
 	else {
-		currentChild = 0;
-		tablist.setCurrent(children[currentChild]);
-		currentChild = tablist.getNextRelativeIndex(TabList::WIDGET_SELECT_DOWN);
-		tablist.setCurrent(children[currentChild]);
-		currentChild = tablist.getNextRelativeIndex(TabList::WIDGET_SELECT_UP);
-		tablist.setCurrent(children[currentChild]);
+		if (!children[0]->enable_tablist_nav) {
+			currentChild = tablist.getNextRelativeIndex(TabList::WIDGET_SELECT_DOWN);
+			tablist.setCurrent(children[currentChild]);
+		}
+		else {
+			currentChild = 0;
+			tablist.setCurrent(children[currentChild]);
+		}
 	}
 
 	if (currentChild != -1) {
