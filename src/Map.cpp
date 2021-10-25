@@ -226,11 +226,11 @@ void Map::loadHeader(FileParser &infile) {
 		background_color = Parse::toRGBA(infile.val);
 	}
 	else if (infile.key == "fogofwar") {
-		// @ATTR fogofwar|int|0-disabled, 1-minimap, 2-tint, 3-overlay. Overrides engine settings.
+		// @ATTR fogofwar|int|Set the fog of war type. 0-disabled, 1-minimap, 2-tint, 3-overlay. Overrides engine settings.
 		fogofwar = static_cast<unsigned short>(Parse::toInt(infile.val));
 	}
 	else if (infile.key == "save_fogofwar") {
-		// @ATTR fogofwar|bool|If true, the fog of war layer keeps track of the progress. Overrides engine settings.
+		// @ATTR save_fogofwar|bool|If true, the fog of war layer keeps track of the progress. Overrides engine settings.
 		save_fogofwar = Parse::toBool(infile.val);
 	}
 	else if (infile.key == "tilewidth") {

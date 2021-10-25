@@ -46,12 +46,11 @@ body {
 <li>Join us on IRC (#flarerpg at freenode)</li>
 </ul>
 
-
 <h2>Pull Requests</h2>
 
 <p>When possible, use small pull requests that keep the engine in a stable state. It is far better to have many small pull requests than to wait until your change is too large to merge.</p>
 
-<p>If you&rsquo;re working on more than one feature, submit pull requests separately for these. Some times we need to accept one change and reject the other; if your pull request is all combined I have to reject the entire thing.</p>
+<p>If you're working on more than one feature, submit pull requests separately for these. Some times we need to accept one change and reject the other; if your pull request is all combined I have to reject the entire thing.</p>
 
 <h2>Cross-platform considerations</h2>
 
@@ -61,17 +60,17 @@ body {
 
 <p>My code is simple (some would say not elegant). I start by coding it the simplest possible way that would work. I have a deep disdain for overengineering.</p>
 
-<p>Action RPGs are a really simple genre. We don&rsquo;t need fully OOP Entity system to create these games.</p>
+<p>Action RPGs are a really simple genre. We don't need fully OOP Entity system to create these games.</p>
 
-<p>We have introduced OOP as needed, when the solution makes much more sense than the added complexity. We won&rsquo;t needlessly refactor working code.</p>
+<p>We have introduced OOP as needed, when the solution makes much more sense than the added complexity. We won't needlessly refactor working code.</p>
 
 <h2>No C++11 / C++0x</h2>
 
-<p>Maybe we&rsquo;ll allow this kind of code in the future. But Flare has a presence on obscure platforms; I can&rsquo;t guarantee that the compilers have kept up.</p>
+<p>Maybe we'll allow this kind of code in the future. But Flare has a presence on obscure platforms; I can't guarantee that the compilers have kept up.</p>
 
 <h2>Indentation</h2>
 
-<p>I try to use tabs. I don&rsquo;t really care though, as long as a single file is internally consistent.</p>
+<p>I try to use tabs. I don't really care though, as long as a single file is internally consistent.</p>
 
 <h2>Naming Conventions</h2>
 
@@ -81,19 +80,18 @@ body {
 <li>ClassName::functionName</li>
 <li>ClassName::class_variable</li>
 <li>local_variable</li>
-<li>ENUM_OR_CONSTANT</li>
+<li>ENUM<em>OR</em>CONSTANT</li>
 </ul>
-
 
 <h2>Commenting</h2>
 
-<p>I try to use Javadoc style comments on functions, especially if they&rsquo;re non-obvious.</p>
+<p>I try to use Javadoc style comments on functions, especially if they're non-obvious.</p>
 
-<p>I try to avoid block comments inside functions (so it&rsquo;s easy to block comment out an entire function).</p>
+<p>I try to avoid block comments inside functions (so it's easy to block comment out an entire function).</p>
 
 <h2>Namespaces</h2>
 
-<p>Avoid polluting the project&rsquo;s namespace. This means no <code>using namespace std</code>. Instead, prefix the appropriate names with the <code>std::</code> syntax (e.g. <code>std::vector</code>, <code>std::string</code>, <code>std::min()</code>, etc)</p>
+<p>Avoid polluting the project's namespace. This means no <code>using namespace std</code>. Instead, prefix the appropriate names with the <code>std::</code> syntax (e.g. <code>std::vector</code>, <code>std::string</code>, <code>std::min()</code>, etc)</p>
 
 </div>
 

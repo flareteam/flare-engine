@@ -56,7 +56,7 @@ FogOfWar::FogOfWar()
 
 int FogOfWar::load() {
 	FileParser infile;
-
+	// @CLASS FogOfWar|Description of engine/fow_mask.txt
 	if (!infile.open(mask_definition, FileParser::MOD_FILE, FileParser::ERROR_NORMAL))
 		return 0;
 
@@ -65,10 +65,13 @@ int FogOfWar::load() {
 	while (infile.next()) {
 		if (infile.section == "header")
 			loadHeader(infile);
+		// @ATTR bits.${}|int/A bit definition can have any name. Better to keep it simple and short. There must be a bit definition that has the value 0. Example: If we have 4 bits per tile then we define: BIT_0=0, BIT_N=1, BIT_W=2, BIT_S=3, BIT_E=4.
 		else if (infile.section == "bits")
 			loadDefBit(infile);
+		// @ATTR tiles.${}|int/A tile definition can have any name. Better to keep it simple and short. There must be a tile definition that contains no bits and a tile definition that contains all bits. Example: A tile containing North and West bits will be NW=BIT_N,BIT_W.
 		else if (infile.section == "tiles")
 			loadDefTile(infile);
+		// @ATTR mask.data|raw/The mask definition is a matrix (2*radius+1 by 2*radius+1) that contains tiles. All the margins of the matrix must be the tile definition that contains all bits.
 		else if (infile.section == "mask")
 			loadDefMask(infile);
 	}
@@ -156,11 +159,11 @@ void FogOfWar::updateTiles() {
 
 void FogOfWar::loadHeader(FileParser &infile) {
 	if (infile.key == "radius") {
-		// @ATTR masK_radius|int|Fog of war mask radius
+		// @ATTR header.radius|int|Fog of war mask radius, also how far the player can see.
 		this->mask_radius = Parse::toInt(infile.val);
 	}
 	else if (infile.key == "bits_per_tile") {
-		// @ATTR bits_per_tile|int|Number of "sub-tiles"
+		// @ATTR header.bits_per_tile|int|How may bits(subdivisions) a tile is made of. In powers of two. Example: if it is set to 4 then the tile will be subdivided in 4, let's say North, South, East, West.
 		this->bits_per_tile = static_cast<unsigned short>(std::max(Parse::toInt(infile.val), 1));
 	}
 	else {
