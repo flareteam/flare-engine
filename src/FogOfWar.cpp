@@ -44,8 +44,6 @@ short unsigned FogOfWar::TILE_HIDDEN = 0;
 FogOfWar::FogOfWar()
 	: dark_layer_id(0)
 	, fog_layer_id(0)
-	, tileset_dark("tilesetdefs/tileset_fow_dark.txt")
-	, tileset_fog("tilesetdefs/tileset_fow_fog.txt")
 	, mask_definition("engine/fow_mask.txt")
 	, bounds(0,0,0,0)
 	, color_sight(255,255,255)
@@ -65,13 +63,13 @@ int FogOfWar::load() {
 	while (infile.next()) {
 		if (infile.section == "header")
 			loadHeader(infile);
-		// @ATTR bits.${}|int/A bit definition can have any name. Better to keep it simple and short. There must be a bit definition that has the value 0. Example: If we have 4 bits per tile then we define: BIT_0=0, BIT_N=1, BIT_W=2, BIT_S=3, BIT_E=4.
+		// @ATTR bits.${}|int|A bit definition can have any name. Better to keep it simple and short. There must be a bit definition that has the value 0. Example: If we have 4 bits per tile then we define: BIT_0=0, BIT_N=1, BIT_W=2, BIT_S=3, BIT_E=4.
 		else if (infile.section == "bits")
 			loadDefBit(infile);
-		// @ATTR tiles.${}|int/A tile definition can have any name. Better to keep it simple and short. There must be a tile definition that contains no bits and a tile definition that contains all bits. Example: A tile containing North and West bits will be NW=BIT_N,BIT_W.
+		// @ATTR tiles.${}|int|A tile definition can have any name. Better to keep it simple and short. There must be a tile definition that contains no bits and a tile definition that contains all bits. Example: A tile containing North and West bits will be NW=BIT_N,BIT_W.
 		else if (infile.section == "tiles")
 			loadDefTile(infile);
-		// @ATTR mask.data|raw/The mask definition is a matrix (2*radius+1 by 2*radius+1) that contains tiles. All the margins of the matrix must be the tile definition that contains all bits.
+		// @ATTR mask.data|raw|The mask definition is a matrix (2*radius+1 by 2*radius+1) that contains tiles. All the margins of the matrix must be the tile definition that contains all bits.
 		else if (infile.section == "mask")
 			loadDefMask(infile);
 	}
@@ -79,9 +77,17 @@ int FogOfWar::load() {
 	infile.close();
 
 	for (unsigned short i=0; i<bits_per_tile; i++)
-		TILE_HIDDEN |= (1<<i);
+		TILE_HIDDEN |= static_cast<unsigned short>(1<<i);
 
 	if (mapr->fogofwar == FogOfWar::TYPE_OVERLAY) {
+		if (this->tileset_dark.empty()) {
+			Utils::logError("FogOfWar: tileset_dark is not set");
+			Utils::Exit(1);
+		}
+		if (this->tileset_fog.empty()) {
+			Utils::logError("FogOfWar: tileset_fog is not set");
+			Utils::Exit(1);
+		}
 		tset_dark.load(tileset_dark);
 		tset_fog.load(tileset_fog);
 	}
@@ -165,6 +171,14 @@ void FogOfWar::loadHeader(FileParser &infile) {
 	else if (infile.key == "bits_per_tile") {
 		// @ATTR header.bits_per_tile|int|How may bits(subdivisions) a tile is made of. In powers of two. Example: if it is set to 4 then the tile will be subdivided in 4, let's say North, South, East, West.
 		this->bits_per_tile = static_cast<unsigned short>(std::max(Parse::toInt(infile.val), 1));
+	}
+	else if (infile.key == "tileset_dark") {
+		// @ATTR tileset_dark|filename|Filename of a tileset definition to use for unvisited areas.
+		this->tileset_dark = infile.val;
+	}
+	else if (infile.key == "tileset_fog") {
+		// @ATTR tileset_fog|filename|Filename of a tileset definition to use for foggy areas.
+		this->tileset_fog = infile.val;
 	}
 	else {
 		infile.error("FOW: '%s' is not a valid key.", infile.key.c_str());
