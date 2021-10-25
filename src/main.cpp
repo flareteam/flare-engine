@@ -160,8 +160,6 @@ static void init(const CmdLineArgs& cmd_line_args) {
 
 	snd = getSoundManager();
 
-	inpt->initJoystick();
-
 	tooltipm = new TooltipManager();
 
 	gswitch = new GameSwitcher();

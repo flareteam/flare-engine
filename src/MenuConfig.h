@@ -161,7 +161,6 @@ public:
 
 	void enableMouseOptions();
 	void disableMouseOptions();
-	void disableJoystickOptions();
 
 	void enableMods();
 	void disableMods();

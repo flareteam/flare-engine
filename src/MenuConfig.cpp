@@ -356,6 +356,9 @@ MenuConfig::MenuConfig (bool _is_game_state)
 		max_render_size_lstb->append(ss.str(), max_render_size_tooltip);
 	}
 
+	// reset this flag, as it may have been set when plugging in gamepads outside the config menu
+	inpt->joysticks_changed = false;
+
 	init();
 
 	render_device->setBackgroundColor(Color(0,0,0,0));
@@ -1177,8 +1180,15 @@ void MenuConfig::logicInput() {
 	Point mouse = cfg_tabs[INPUT_TAB].scrollbox->input_assist(inpt->mouse);
 
 	if (inpt->joysticks_changed) {
-		disableJoystickOptions();
 		refreshJoysticks();
+		if (settings->enable_joystick && inpt->getNumJoysticks() > 0) {
+			inpt->initJoystick();
+			joystick_device_lstb->select(settings->joystick_device + 1);
+		}
+		else {
+			joystick_device_lstb->select(0);
+		}
+
 		inpt->joysticks_changed = false;
 	}
 
@@ -1215,7 +1225,9 @@ void MenuConfig::logicInput() {
 	else if (cfg_tabs[INPUT_TAB].options[Platform::Input::JOYSTICK].enabled && joystick_device_lstb->checkClickAt(mouse.x, mouse.y)) {
 		settings->joystick_device = static_cast<int>(joystick_device_lstb->getSelected()) - 1;
 		settings->enable_joystick = (settings->joystick_device != -1);
+		inpt->joysticks_changed = true;
 		inpt->initJoystick();
+		inpt->joysticks_changed = false;
 	}
 	else if (cfg_tabs[INPUT_TAB].options[Platform::Input::TOUCH_CONTROLS].enabled && touch_controls_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->touchscreen = touch_controls_cb->isChecked();
@@ -1609,15 +1621,6 @@ void MenuConfig::disableMouseOptions() {
 
 	settings->no_mouse = true;
 	no_mouse_cb->setChecked(settings->no_mouse);
-}
-
-void MenuConfig::disableJoystickOptions() {
-	settings->enable_joystick = false;
-
-	joystick_device_lstb->select(0);
-
-	if (inpt->getNumJoysticks() > 0)
-		joystick_device_lstb->refresh();
 }
 
 void MenuConfig::refreshRenderers() {

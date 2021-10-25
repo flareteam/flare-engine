@@ -96,16 +96,24 @@ void SDLInputState::initJoystick() {
 	}
 	else {
 		if (enable_log_msg) {
-			Utils::logInfo("InputState: %d gamepads(s) found.", gamepad_ids.size());
+			Utils::logInfo("InputState: %d gamepad(s) found.", gamepad_ids.size());
 		}
 	}
+
+	if (static_cast<size_t>(settings->joystick_device) >= gamepad_ids.size())
+		settings->joystick_device = 0;
 
 	for (size_t i = 0; i < gamepad_ids.size(); ++i) {
 		if (settings->enable_joystick && i == static_cast<size_t>(settings->joystick_device)) {
 			gamepad = SDL_GameControllerOpen(gamepad_ids[i]);
 		}
 		if (enable_log_msg) {
-			Utils::logInfo("InputState: Gamepad #%d, %s", i, SDL_GameControllerNameForIndex(static_cast<int>(i)));
+			if (settings->enable_joystick && i == static_cast<size_t>(settings->joystick_device)) {
+				Utils::logInfo("InputState: Gamepad #%d, %s [*]", i, SDL_GameControllerNameForIndex(static_cast<int>(i)));
+			}
+			else {
+				Utils::logInfo("InputState: Gamepad #%d, %s", i, SDL_GameControllerNameForIndex(static_cast<int>(i)));
+			}
 		}
 	}
 }
@@ -481,7 +489,6 @@ void SDLInputState::handle() {
 			case SDL_JOYDEVICEREMOVED:
 				Utils::logInfo("InputState: Joystick removed.");
 				joysticks_changed = true;
-				settings->enable_joystick = false;
 				initJoystick();
 				break;
 			case SDL_QUIT:
