@@ -47,8 +47,8 @@ FogOfWar::FogOfWar()
 	, mask_definition("engine/fow_mask.txt")
 	, bounds(0,0,0,0)
 	, color_sight(255,255,255)
-	, color_visited(128,128,128)
-	, color_hidden(0,0,0)
+	, color_fog(128,128,128)
+	, color_dark(0,0,0)
 	, update_minimap(true) {
 }
 
@@ -118,9 +118,9 @@ void FogOfWar::handleIntramapTeleport() {
 
 Color FogOfWar::getTileColorMod(const int_fast16_t x, const int_fast16_t y) {
 	if (mapr->layers[dark_layer_id][x][y] == 0 && mapr->layers[fog_layer_id][x][y] > 0)
-		return color_visited;
+		return color_fog;
 	else if (mapr->layers[dark_layer_id][x][y] > 0)
-		return color_hidden;
+		return color_dark;
 	else 
 		return color_sight;
 }
@@ -172,12 +172,20 @@ void FogOfWar::loadHeader(FileParser &infile) {
 		// @ATTR header.bits_per_tile|int|How may bits(subdivisions) a tile is made of. In powers of two. Example: if it is set to 4 then the tile will be subdivided in 4, let's say North, South, East, West.
 		this->bits_per_tile = static_cast<unsigned short>(std::max(Parse::toInt(infile.val), 1));
 	}
+	else if (infile.key == "color_dark") {
+		// @ATTR color_dark|color|Tint color for dark tiles. Used by fog of war type 2-tint.
+		this->color_dark = Parse::toRGB(infile.val);
+	}
+	else if (infile.key == "color_fog") {
+		// @ATTR color_fog|color|Tint color for fog tiles. Used by fog of war type 2-tint.
+		this->color_fog = Parse::toRGB(infile.val);
+	}
 	else if (infile.key == "tileset_dark") {
-		// @ATTR tileset_dark|filename|Filename of a tileset definition to use for unvisited areas.
+		// @ATTR tileset_dark|filename|Filename of a tileset definition to use for unvisited areas. Used by fog of war type 3-overlay.
 		this->tileset_dark = infile.val;
 	}
 	else if (infile.key == "tileset_fog") {
-		// @ATTR tileset_fog|filename|Filename of a tileset definition to use for foggy areas.
+		// @ATTR tileset_fog|filename|Filename of a tileset definition to use for foggy areas. Used by fog of war type 3-overlay.
 		this->tileset_fog = infile.val;
 	}
 	else {

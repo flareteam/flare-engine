@@ -74,8 +74,8 @@ private:
 	Rect bounds;
 
 	Color color_sight;
-	Color color_visited;
-	Color color_hidden;
+	Color color_fog;
+	Color color_dark;
 
 	bool update_minimap;
 
