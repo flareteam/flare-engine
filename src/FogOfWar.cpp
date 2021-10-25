@@ -63,13 +63,10 @@ int FogOfWar::load() {
 	while (infile.next()) {
 		if (infile.section == "header")
 			loadHeader(infile);
-		// @ATTR bits.${}|int|A bit definition can have any name. Better to keep it simple and short. There must be a bit definition that has the value 0. Example: If we have 4 bits per tile then we define: BIT_0=0, BIT_N=1, BIT_W=2, BIT_S=3, BIT_E=4.
 		else if (infile.section == "bits")
 			loadDefBit(infile);
-		// @ATTR tiles.${}|int|A tile definition can have any name. Better to keep it simple and short. There must be a tile definition that contains no bits and a tile definition that contains all bits. Example: A tile containing North and West bits will be NW=BIT_N,BIT_W.
 		else if (infile.section == "tiles")
 			loadDefTile(infile);
-		// @ATTR mask.data|raw|The mask definition is a matrix (2*radius+1 by 2*radius+1) that contains tiles. All the margins of the matrix must be the tile definition that contains all bits.
 		else if (infile.section == "mask")
 			loadDefMask(infile);
 	}
@@ -165,11 +162,11 @@ void FogOfWar::updateTiles() {
 
 void FogOfWar::loadHeader(FileParser &infile) {
 	if (infile.key == "radius") {
-		// @ATTR header.radius|int|Fog of war mask radius, also how far the player can see.
+		// @ATTR radius|int|Fog of war mask radius, also how far the player can see.
 		this->mask_radius = Parse::toInt(infile.val);
 	}
 	else if (infile.key == "bits_per_tile") {
-		// @ATTR header.bits_per_tile|int|How may bits(subdivisions) a tile is made of. In powers of two. Example: if it is set to 4 then the tile will be subdivided in 4, let's say North, South, East, West.
+		// @ATTR bits_per_tile|int|How may bits(subdivisions) a tile is made of. In powers of two. Example: if it is set to 4 then the tile will be subdivided in 4, let's say North, South, East, West.
 		this->bits_per_tile = static_cast<unsigned short>(std::max(Parse::toInt(infile.val), 1));
 	}
 	else if (infile.key == "color_dark") {
@@ -195,6 +192,7 @@ void FogOfWar::loadHeader(FileParser &infile) {
 }
 
 void FogOfWar::loadDefBit(FileParser &infile) {
+	// @ATTR bits.${}|int|A bit definition can have any name. Better to keep it simple and short. There must be a bit definition that has the value 0. Example: If we have 4 bits per tile then we define: BIT_0=0, BIT_N=1, BIT_W=2, BIT_S=3, BIT_E=4.
 	int val = Parse::toInt(infile.val);
 	int bit = 0;
 
@@ -211,6 +209,7 @@ void FogOfWar::loadDefBit(FileParser &infile) {
 }
 
 void FogOfWar::loadDefTile(FileParser &infile) {
+	// @ATTR tiles.${}|int|A tile definition can have any name. Better to keep it simple and short. There must be a tile definition that contains no bits and a tile definition that contains all bits. Example: A tile containing North and West bits will be NW=BIT_N,BIT_W.
 	std::string val = Parse::stripCarriageReturn(infile.val);
 	std::string bit;
 	std::map<std::string, int>::iterator it;
@@ -242,6 +241,7 @@ void FogOfWar::loadDefTile(FileParser &infile) {
 }
 
 void FogOfWar::loadDefMask(FileParser &infile) {
+	// @ATTR mask.data|raw|The mask definition is a matrix (2*radius+1 by 2*radius+1) that contains tiles. All the margins of the matrix must be the tile definition that contains all bits.
 	if (infile.key == "data") {
 		def_mask = new short unsigned[(mask_radius*2+1) * (mask_radius*2+1)];
 		std::string val;
