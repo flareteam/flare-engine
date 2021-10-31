@@ -79,14 +79,16 @@ int FogOfWar::load() {
 	if (mapr->fogofwar == FogOfWar::TYPE_OVERLAY) {
 		if (this->tileset_dark.empty()) {
 			Utils::logError("FogOfWar: tileset_dark is not set");
-			Utils::Exit(1);
+			mapr->fogofwar = FogOfWar::TYPE_NONE;
 		}
 		if (this->tileset_fog.empty()) {
 			Utils::logError("FogOfWar: tileset_fog is not set");
-			Utils::Exit(1);
+			mapr->fogofwar = FogOfWar::TYPE_NONE;
 		}
-		tset_dark.load(tileset_dark);
-		tset_fog.load(tileset_fog);
+		if (mapr->fogofwar == FogOfWar::TYPE_OVERLAY) {
+			tset_dark.load(tileset_dark);
+			tset_fog.load(tileset_fog);
+		}
 	}
 
 	return 0;
@@ -142,6 +144,9 @@ void FogOfWar::calcMiniBoundaries() {
 }
 
 void FogOfWar::updateTiles() {
+	if (!def_mask)
+		return;
+
 	calcBoundaries();
 	const unsigned short * mask = &def_mask[0];
 
@@ -187,7 +192,6 @@ void FogOfWar::loadHeader(FileParser &infile) {
 	}
 	else {
 		infile.error("FogOfWar: '%s' is not a valid key.", infile.key.c_str());
-		Utils::Exit(1);
 	}
 }
 
@@ -210,12 +214,10 @@ void FogOfWar::loadDefBit(FileParser &infile) {
 			def_bits.insert(std::pair<std::string, int>(bit_name, bit));
 		else {
 			infile.error("FogOfWar: bits_per_tile is '%u' but found more", bits_per_tile);
-			Utils::Exit(1);
 		}
 	}
 	else {
-		infile.error("FogOfWar: no bit definition found");
-		Utils::Exit(1);
+		infile.error("FogOfWar: '%s' is not a valid key.", infile.key.c_str());
 	}
 }
 
@@ -248,7 +250,6 @@ void FogOfWar::loadDefTile(FileParser &infile) {
 				tile_bits = tile_bits | it->second;
 			else {
 				infile.error("FogOfWar: Bit definition '%s' not found.", bit.c_str());
-				Utils::Exit(1);
 			}
 
 			prev_comma = comma;
@@ -280,8 +281,12 @@ void FogOfWar::loadDefMask(FileParser &infile) {
 				if (val[i] == ',') comma_count++;
 			}
 			if (comma_count != mask_radius*2+1) {
+				// mask data is broken! Clear def_mask and abort.
 				infile.error("FogOfWar: A row of mask data has a width not equal to %d.", mask_radius*2+1);
-				Utils::Exit(1);
+				delete def_mask;
+				def_mask = NULL;
+				mapr->fogofwar = FogOfWar::TYPE_NONE;
+				break;
 			}
 
 			for (int i=0; i<mask_radius*2+1; i++) {
