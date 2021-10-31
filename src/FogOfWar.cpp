@@ -167,27 +167,27 @@ void FogOfWar::updateTiles() {
 
 void FogOfWar::loadHeader(FileParser &infile) {
 	if (infile.key == "radius") {
-		// @ATTR radius|int|Fog of war mask radius, also how far the player can see.
+		// @ATTR header.radius|int|Fog of war mask radius, also how far the player can see.
 		this->mask_radius = Parse::toInt(infile.val);
 	}
 	else if (infile.key == "bits_per_tile") {
-		// @ATTR bits_per_tile|int|How may bits(subdivisions) a tile is made of. In powers of two. Example: if it is set to 4 then the tile will be subdivided in 4, let's say North, South, East, West.
+		// @ATTR header.bits_per_tile|int|How may bits(subdivisions) a tile is made of. In powers of two. Example: if it is set to 4 then the tile will be subdivided in 4, let's say North, South, East, West.
 		this->bits_per_tile = static_cast<unsigned short>(std::max(Parse::toInt(infile.val), 1));
 	}
 	else if (infile.key == "color_dark") {
-		// @ATTR color_dark|color|Tint color for dark tiles. Used by fog of war type 2-tint.
+		// @ATTR header.color_dark|color|Tint color for dark tiles. Used by fog of war type 2-tint.
 		this->color_dark = Parse::toRGB(infile.val);
 	}
 	else if (infile.key == "color_fog") {
-		// @ATTR color_fog|color|Tint color for fog tiles. Used by fog of war type 2-tint.
+		// @ATTR header.color_fog|color|Tint color for fog tiles. Used by fog of war type 2-tint.
 		this->color_fog = Parse::toRGB(infile.val);
 	}
 	else if (infile.key == "tileset_dark") {
-		// @ATTR tileset_dark|filename|Filename of a tileset definition to use for unvisited areas. Used by fog of war type 3-overlay.
+		// @ATTR header.tileset_dark|filename|Filename of a tileset definition to use for unvisited areas. Used by fog of war type 3-overlay.
 		this->tileset_dark = infile.val;
 	}
 	else if (infile.key == "tileset_fog") {
-		// @ATTR tileset_fog|filename|Filename of a tileset definition to use for foggy areas. Used by fog of war type 3-overlay.
+		// @ATTR header.tileset_fog|filename|Filename of a tileset definition to use for foggy areas. Used by fog of war type 3-overlay.
 		this->tileset_fog = infile.val;
 	}
 	else {

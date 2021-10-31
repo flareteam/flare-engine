@@ -235,9 +235,9 @@ body {
 
 <p><strong>combat_aborts_npc_interact</strong> | <code>bool</code> | If true, the NPC dialog and vendor menus will be closed if the player is attacked.</p>
 
-<p><strong>fogofwar</strong> | <code>int</code> | 0-disabled, 1-minimap, 2-tint, 3-overlay.</p>
+<p><strong>fogofwar</strong> | <code>int</code> | Set the fog of war type. 0-disabled, 1-minimap, 2-tint, 3-overlay.</p>
 
-<p><strong>fogofwar</strong> | <code>bool</code> | If true, the fog of war layer keeps track of the progress.</p>
+<p><strong>save_fogofwar</strong> | <code>bool</code> | If true, the fog of war layer keeps track of the progress.</p>
 
 <hr />
 
@@ -599,9 +599,29 @@ body {
 
 <p><strong>map</strong> | <code>filename, int, int : Map file, X, Y</code> | Adds a map and optional spawn position to the random list of maps to teleport to.</p>
 
-<p><strong>masK_radius</strong> | <code>int</code> | Fog of war mask radius</p>
+<hr />
 
-<p><strong>bits_per_tile</strong> | <code>int</code> | Number of "sub-tiles"</p>
+<h4>FogOfWar</h4>
+
+<p>Description of engine/fow_mask.txt</p>
+
+<p><strong>header.radius</strong> | <code>int</code> | Fog of war mask radius, also how far the player can see.</p>
+
+<p><strong>header.bits_per_tile</strong> | <code>int</code> | How may bits(subdivisions) a tile is made of. In powers of two. Example  if it is set to 4 then the tile will be subdivided in 4, let's say North, South, East, West.</p>
+
+<p><strong>header.color_dark</strong> | <code>color</code> | Tint color for dark tiles. Used by fog of war type 2-tint.</p>
+
+<p><strong>header.color_fog</strong> | <code>color</code> | Tint color for fog tiles. Used by fog of war type 2-tint.</p>
+
+<p><strong>header.tileset_dark</strong> | <code>filename</code> | Filename of a tileset definition to use for unvisited areas. Used by fog of war type 3-overlay.</p>
+
+<p><strong>header.tileset_fog</strong> | <code>filename</code> | Filename of a tileset definition to use for foggy areas. Used by fog of war type 3-overlay.</p>
+
+<p><strong>bits.bit</strong> | <code>string, int : Name, Value</code> | A fog of war bit definition can have any name. Better to keep it simple and short. There must be a bit definition that has the value 0. Example  If we have 4 bits per tile then we define  bit=BIT_0,0, bit=BIT_N,1, bit=BIT_W,2, bit=BIT_S,3, bit=BIT_E,4.</p>
+
+<p><strong>tiles.tile</strong> | <code>string, repeatable(predefined_string) : Name, Bit definitions</code> | A fog of war tile definition can have any name. Better to keep it simple and short. There must be a tile definition that contains no bits and a tile definition that contains all bits. Example  A tile containing North and West bits will be tile=NW,BIT_N,BIT_W.</p>
+
+<p><strong>mask.data</strong> | <code>raw</code> | The mask definition is a matrix (2*radius+1 by 2*radius+1) that contains fog of war tile definitions. All the margins of the matrix must be the tile definition that contains all bits.</p>
 
 <hr />
 
@@ -1029,9 +1049,9 @@ body {
 
 <p><strong>background_color</strong> | <code>color, int : Color, alpha</code> | Background color for the map.</p>
 
-<p><strong>fogofwar</strong> | <code>int</code> | 0-disabled, 1-minimap, 2-tint, 3-overlay. Overrides engine settings.</p>
+<p><strong>fogofwar</strong> | <code>int</code> | Set the fog of war type. 0-disabled, 1-minimap, 2-tint, 3-overlay. Overrides engine settings.</p>
 
-<p><strong>fogofwar</strong> | <code>bool</code> | If true, the fog of war layer keeps track of the progress. Overrides engine settings.</p>
+<p><strong>save_fogofwar</strong> | <code>bool</code> | If true, the fog of war layer keeps track of the progress. Overrides engine settings.</p>
 
 <p><strong>tilewidth</strong> | <code>int</code> | Inherited from Tiled map file. Unused by engine.</p>
 
@@ -1193,11 +1213,11 @@ body {
 
 <p><strong>button.text</strong> | <code>string</code> | Optional text label for the button.</p>
 
-<p><strong>button.${EVENT_COMPONENT}</strong> | <code>Event components to execute when the button is clicked. See the definitions in EventManager for possible attributes.</code> | </p>
+<p><strong>button.${EVENT_COMPONENT}</strong> | <code>Event components to execute when the button is clicked. See the definitions in EventManager for possible attributes.</code> |</p>
 
-<p><strong>event_open.${EVENT_COMPONENT}</strong> | <code>Event components to execute when the book is opened. See the definitions in EventManager for possible attributes.</code> | </p>
+<p><strong>event_open.${EVENT_COMPONENT}</strong> | <code>Event components to execute when the book is opened. See the definitions in EventManager for possible attributes.</code> |</p>
 
-<p><strong>event_close.${EVENT_COMPONENT}</strong> | <code>Event components to execute when the book is closed. See the definitions in EventManager for possible attributes.</code> | </p>
+<p><strong>event_close.${EVENT_COMPONENT}</strong> | <code>Event components to execute when the book is closed. See the definitions in EventManager for possible attributes.</code> |</p>
 
 <hr />
 
