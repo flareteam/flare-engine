@@ -447,12 +447,12 @@ void MenuMiniMap::prerenderIso(MapCollision *collider, Sprite** tile_surface, Sp
 				if (tile_type == 1 || tile_type == 5) draw_color = color_wall;
 				else if (tile_type == 2 || tile_type == 6) draw_color = color_obst;
 				else draw_tile = false;
-				
+
 				if (mapr->fogofwar) {
 					tile_type = mapr->layers[fow->dark_layer_id][tile_cursor.x][tile_cursor.y];
 					if (tile_type == FogOfWar::TILE_HIDDEN) draw_tile = false;
 				}
-				
+
 				if (draw_tile && draw_color.a != 0) {
 					if (odd_row) {
 						for (int l = 0; l < zoom; l++) {
@@ -493,7 +493,7 @@ void MenuMiniMap::prerenderIso(MapCollision *collider, Sprite** tile_surface, Sp
 }
 
 void MenuMiniMap::updateIso(MapCollision *collider, Sprite** tile_surface, int zoom, Rect *bounds) {
-		
+
 	if (!(*tile_surface))
 		return;
 
@@ -529,7 +529,7 @@ void MenuMiniMap::updateIso(MapCollision *collider, Sprite** tile_surface, int z
 				if (tile_type == 1 || tile_type == 5) draw_color = color_wall;
 				else if (tile_type == 2 || tile_type == 6) draw_color = color_obst;
 				else draw_tile = false;
-				
+
 				// fog of war
 				tile_type = mapr->layers[fow->dark_layer_id][tile_cursor.x][tile_cursor.y];
 				if (tile_type != 0) draw_tile = false;
@@ -723,7 +723,7 @@ void MenuMiniMap::fillEntities() {
 		if (mapr->events[i].getComponent(EventComponent::NPC_HOTSPOT) && EventManager::isActive(mapr->events[i])) {
 			if (mapr->fogofwar) {
 				float delta = Utils::calcDist(pc->stats.pos, mapr->events[i].center);
-				if (delta > fow->mask_radius) {
+				if (delta > static_cast<float>(fow->mask_radius)) {
 					continue;
 				}
 			}
@@ -748,7 +748,7 @@ void MenuMiniMap::fillEntities() {
 		if (e->stats.hp > 0) {
 			if (mapr->fogofwar) {
 				float delta = Utils::calcDist(pc->stats.pos, e->stats.pos);
-				if (delta > fow->mask_radius) {
+				if (delta > static_cast<float>(fow->mask_radius)) {
 					continue;
 				}
 			}
