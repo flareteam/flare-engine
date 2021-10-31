@@ -563,8 +563,8 @@ void Utils::createSaveDir(int slot) {
 
 	ss << slot;
 	Filesystem::createDir(ss.str());
-	
-	ss << "/maps/";
+
+	ss << "/fow/";
 	Filesystem::createDir(ss.str());
 }
 

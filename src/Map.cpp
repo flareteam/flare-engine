@@ -35,6 +35,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "SharedGameResources.h"
 #include "StatBlock.h"
+#include "Utils.h"
 #include "UtilsParsing.h"
 
 Map::Map()
@@ -154,7 +155,7 @@ int Map::load(const std::string& fname) {
 		if (save_fogofwar) {
 			std::stringstream ss;
 			ss.str("");
-			ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/" << save_load->getGameSlot() << "/" << mapr->getFilename();
+			ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/" << save_load->getGameSlot() << "/fow/" << Utils::hashString(mapr->getFilename()) << ".txt";
 			if (infile.open(ss.str(), !FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 				while (infile.next()) {
 					if (infile.section == "layer") {
