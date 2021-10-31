@@ -192,56 +192,74 @@ void FogOfWar::loadHeader(FileParser &infile) {
 }
 
 void FogOfWar::loadDefBit(FileParser &infile) {
-	// @ATTR bits.${}|int|A bit definition can have any name. Better to keep it simple and short. There must be a bit definition that has the value 0. Example: If we have 4 bits per tile then we define: BIT_0=0, BIT_N=1, BIT_W=2, BIT_S=3, BIT_E=4.
-	int val = Parse::toInt(infile.val);
+	// @ATTR bits.bit|string, int: Name, Value|A fog of war bit definition can have any name. Better to keep it simple and short. There must be a bit definition that has the value 0. Example: If we have 4 bits per tile then we define: bit=BIT_0,0, bit=BIT_N,1, bit=BIT_W,2, bit=BIT_S,3, bit=BIT_E,4.
+
+	int val = 0;
 	int bit = 0;
+	std::string bit_name;
+	
+	if (infile.key == "bit") {
+		bit_name = Parse::popFirstString(infile.val);
+		val = Parse::popFirstInt(infile.val);
 
-	if (val > 0) {
-		bit = 1 << (val - 1);
+		if (val > 0) {
+			bit = 1 << (val - 1);
+		}
+
+		if (def_bits.size() < static_cast<unsigned long>(bits_per_tile)+1)
+			def_bits.insert(std::pair<std::string, int>(bit_name, bit));
+		else {
+			infile.error("FOW: bits_per_tile is '%u' but found more", bits_per_tile);
+			Utils::Exit(1);
+		}
 	}
-
-	if (def_bits.size() < static_cast<unsigned long>(bits_per_tile)+1)
-		def_bits.insert(std::pair<std::string, int>(infile.key, bit));
 	else {
-		infile.error("FOW: bits_per_tile is '%u' but found more", bits_per_tile);
+		infile.error("FOW: no bit definition found");
 		Utils::Exit(1);
 	}
 }
 
 void FogOfWar::loadDefTile(FileParser &infile) {
-	// @ATTR tiles.${}|int|A tile definition can have any name. Better to keep it simple and short. There must be a tile definition that contains no bits and a tile definition that contains all bits. Example: A tile containing North and West bits will be NW=BIT_N,BIT_W.
-	std::string val = Parse::stripCarriageReturn(infile.val);
+	// @ATTR tiles.tile|string, repeatable(predefined_string): Name, Bit definitions|A fog of war tile definition can have any name. Better to keep it simple and short. There must be a tile definition that contains no bits and a tile definition that contains all bits. Example: A tile containing North and West bits will be tile=NW,BIT_N,BIT_W.
+	
+	std::string val;
 	std::string bit;
 	std::map<std::string, int>::iterator it;
+	std::string tile_name;
 	int tile_bits = 0;
 	unsigned long prev_comma = 0;
 	unsigned long comma = 0;
+	
+	if(infile.key == "tile") {
+		tile_name = Parse::popFirstString(infile.val);		
+		val = Parse::stripCarriageReturn(infile.val);
 
-	while (prev_comma < val.length()) {
-		comma = val.find(",", prev_comma+1);
-		if(prev_comma == 0)
-			bit = val.substr(0, comma-prev_comma);
-		else
-			bit = val.substr(prev_comma+1, comma-prev_comma-1);
+		while (prev_comma < val.length()) {
+			comma = val.find(",", prev_comma+1);
+			if(prev_comma == 0)
+				bit = val.substr(0, comma-prev_comma);
+			else
+				bit = val.substr(prev_comma+1, comma-prev_comma-1);
 
-		bit = Parse::trim(bit);
-		it = def_bits.find(bit);
+			bit = Parse::trim(bit);
+			it = def_bits.find(bit);
 
-		if (it != def_bits.end())
-			tile_bits = tile_bits | it->second;
-		else {
-			infile.error("FOW: Bit definition '%s' not found.", bit.c_str());
-			Utils::Exit(1);
+			if (it != def_bits.end())
+				tile_bits = tile_bits | it->second;
+			else {
+				infile.error("FOW: Bit definition '%s' not found.", bit.c_str());
+				Utils::Exit(1);
+			}
+
+			prev_comma = comma;
 		}
-
-		prev_comma = comma;
 	}
 
-	def_tiles.insert(std::pair<std::string, int>(infile.key, tile_bits));
+	def_tiles.insert(std::pair<std::string, int>(tile_name, tile_bits));
 }
 
 void FogOfWar::loadDefMask(FileParser &infile) {
-	// @ATTR mask.data|raw|The mask definition is a matrix (2*radius+1 by 2*radius+1) that contains tiles. All the margins of the matrix must be the tile definition that contains all bits.
+	// @ATTR mask.data|raw(predefined_string)|The mask definition is a matrix (2\*radius+1 by 2\*radius+1) that contains fog of war tile definitions. All the margins of the matrix must be the tile definition that contains all bits.
 	if (infile.key == "data") {
 		def_mask = new short unsigned[(mask_radius*2+1) * (mask_radius*2+1)];
 		std::string val;
