@@ -58,7 +58,7 @@ int FogOfWar::load() {
 	if (!infile.open(mask_definition, FileParser::MOD_FILE, FileParser::ERROR_NORMAL))
 		return 0;
 
-	Utils::logInfo("FOW: Loading mask '%s'", mask_definition.c_str());
+	Utils::logInfo("FogOfWar: Loading mask '%s'", mask_definition.c_str());
 
 	while (infile.next()) {
 		if (infile.section == "header")
@@ -186,7 +186,7 @@ void FogOfWar::loadHeader(FileParser &infile) {
 		this->tileset_fog = infile.val;
 	}
 	else {
-		infile.error("FOW: '%s' is not a valid key.", infile.key.c_str());
+		infile.error("FogOfWar: '%s' is not a valid key.", infile.key.c_str());
 		Utils::Exit(1);
 	}
 }
@@ -209,12 +209,12 @@ void FogOfWar::loadDefBit(FileParser &infile) {
 		if (def_bits.size() < static_cast<unsigned long>(bits_per_tile)+1)
 			def_bits.insert(std::pair<std::string, int>(bit_name, bit));
 		else {
-			infile.error("FOW: bits_per_tile is '%u' but found more", bits_per_tile);
+			infile.error("FogOfWar: bits_per_tile is '%u' but found more", bits_per_tile);
 			Utils::Exit(1);
 		}
 	}
 	else {
-		infile.error("FOW: no bit definition found");
+		infile.error("FogOfWar: no bit definition found");
 		Utils::Exit(1);
 	}
 }
@@ -247,7 +247,7 @@ void FogOfWar::loadDefTile(FileParser &infile) {
 			if (it != def_bits.end())
 				tile_bits = tile_bits | it->second;
 			else {
-				infile.error("FOW: Bit definition '%s' not found.", bit.c_str());
+				infile.error("FogOfWar: Bit definition '%s' not found.", bit.c_str());
 				Utils::Exit(1);
 			}
 
@@ -280,7 +280,7 @@ void FogOfWar::loadDefMask(FileParser &infile) {
 				if (val[i] == ',') comma_count++;
 			}
 			if (comma_count != mask_radius*2+1) {
-				infile.error("FOW: A row of mask data has a width not equal to %d.", mask_radius*2+1);
+				infile.error("FogOfWar: A row of mask data has a width not equal to %d.", mask_radius*2+1);
 				Utils::Exit(1);
 			}
 
@@ -291,7 +291,7 @@ void FogOfWar::loadDefMask(FileParser &infile) {
 					def_mask[k++] = static_cast<unsigned short>(it->second);
 				}
 				else
-					infile.error("FOW: Tile definition '%s' not found.", tile_def.c_str());
+					infile.error("FogOfWar: Tile definition '%s' not found.", tile_def.c_str());
 			}
 		}
 		def_tiles.clear();
