@@ -103,7 +103,7 @@ void FogOfWar::logic() {
 
 void FogOfWar::handleIntramapTeleport() {
 	calcBoundaries();
-	
+
 	for (int x = bounds.x; x <= bounds.w; x++) {
 		for (int y = bounds.y; y <= bounds.h; y++) {
 			if (x>=0 && y>=0 && x < mapr->w && y < mapr->h) {
@@ -118,7 +118,7 @@ Color FogOfWar::getTileColorMod(const int_fast16_t x, const int_fast16_t y) {
 		return color_fog;
 	else if (mapr->layers[dark_layer_id][x][y] > 0)
 		return color_dark;
-	else 
+	else
 		return color_sight;
 }
 
@@ -197,7 +197,7 @@ void FogOfWar::loadDefBit(FileParser &infile) {
 	int val = 0;
 	int bit = 0;
 	std::string bit_name;
-	
+
 	if (infile.key == "bit") {
 		bit_name = Parse::popFirstString(infile.val);
 		val = Parse::popFirstInt(infile.val);
@@ -221,7 +221,7 @@ void FogOfWar::loadDefBit(FileParser &infile) {
 
 void FogOfWar::loadDefTile(FileParser &infile) {
 	// @ATTR tiles.tile|string, repeatable(predefined_string): Name, Bit definitions|A fog of war tile definition can have any name. Better to keep it simple and short. There must be a tile definition that contains no bits and a tile definition that contains all bits. Example: A tile containing North and West bits will be tile=NW,BIT_N,BIT_W.
-	
+
 	std::string val;
 	std::string bit;
 	std::map<std::string, int>::iterator it;
@@ -229,9 +229,9 @@ void FogOfWar::loadDefTile(FileParser &infile) {
 	int tile_bits = 0;
 	unsigned long prev_comma = 0;
 	unsigned long comma = 0;
-	
+
 	if(infile.key == "tile") {
-		tile_name = Parse::popFirstString(infile.val);		
+		tile_name = Parse::popFirstString(infile.val);
 		val = Parse::stripCarriageReturn(infile.val);
 
 		while (prev_comma < val.length()) {
@@ -259,7 +259,7 @@ void FogOfWar::loadDefTile(FileParser &infile) {
 }
 
 void FogOfWar::loadDefMask(FileParser &infile) {
-	// @ATTR mask.data|raw(predefined_string)|The mask definition is a matrix (2\*radius+1 by 2\*radius+1) that contains fog of war tile definitions. All the margins of the matrix must be the tile definition that contains all bits.
+	// @ATTR mask.data|raw|The mask definition is a matrix (2\*radius+1 by 2\*radius+1) that contains fog of war tile definitions. All the margins of the matrix must be the tile definition that contains all bits.
 	if (infile.key == "data") {
 		def_mask = new short unsigned[(mask_radius*2+1) * (mask_radius*2+1)];
 		std::string val;
