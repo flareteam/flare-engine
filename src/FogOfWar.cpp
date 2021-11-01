@@ -82,11 +82,11 @@ int FogOfWar::load() {
 	if (mapr->fogofwar == FogOfWar::TYPE_OVERLAY) {
 		if (this->tileset_dark.empty()) {
 			Utils::logError("FogOfWar: tileset_dark is not set");
-			mapr->fogofwar = FogOfWar::TYPE_NONE;
+			mapr->fogofwar = FogOfWar::TYPE_TINT;
 		}
 		if (this->tileset_fog.empty()) {
 			Utils::logError("FogOfWar: tileset_fog is not set");
-			mapr->fogofwar = FogOfWar::TYPE_NONE;
+			mapr->fogofwar = FogOfWar::TYPE_TINT;
 		}
 		if (mapr->fogofwar == FogOfWar::TYPE_OVERLAY) {
 			tset_dark.load(tileset_dark);
