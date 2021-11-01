@@ -78,6 +78,7 @@ private:
 	Color color_dark;
 
 	bool update_minimap;
+	bool loaded;
 
 	void calcBoundaries();
 	void calcMiniBoundaries();

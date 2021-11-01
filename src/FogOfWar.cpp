@@ -52,7 +52,8 @@ FogOfWar::FogOfWar()
 	, color_sight(255,255,255)
 	, color_fog(128,128,128)
 	, color_dark(0,0,0)
-	, update_minimap(true) {
+	, update_minimap(true)
+	, loaded(false) {
 }
 
 int FogOfWar::load() {
@@ -61,38 +62,46 @@ int FogOfWar::load() {
 	if (!infile.open(mask_definition, FileParser::MOD_FILE, FileParser::ERROR_NORMAL))
 		return 0;
 
-	Utils::logInfo("FogOfWar: Loading mask '%s'", mask_definition.c_str());
+	if (!loaded) {
+		Utils::logInfo("FogOfWar: Loading mask '%s'", mask_definition.c_str());
 
-	while (infile.next()) {
-		if (infile.section == "header")
-			loadHeader(infile);
-		else if (infile.section == "bits")
-			loadDefBit(infile);
-		else if (infile.section == "tiles")
-			loadDefTile(infile);
-		else if (infile.section == "mask")
-			loadDefMask(infile);
+		while (infile.next()) {
+			if (infile.section == "header")
+				loadHeader(infile);
+			else if (infile.section == "bits")
+				loadDefBit(infile);
+			else if (infile.section == "tiles")
+				loadDefTile(infile);
+			else if (infile.section == "mask")
+				loadDefMask(infile);
+		}
+
+		infile.close();
+
+		for (unsigned short i=0; i<bits_per_tile; i++)
+			TILE_HIDDEN |= static_cast<unsigned short>(1<<i);
 	}
-
-	infile.close();
-
-	for (unsigned short i=0; i<bits_per_tile; i++)
-		TILE_HIDDEN |= static_cast<unsigned short>(1<<i);
 
 	if (mapr->fogofwar == FogOfWar::TYPE_OVERLAY) {
 		if (this->tileset_dark.empty()) {
-			Utils::logError("FogOfWar: tileset_dark is not set");
+			if (!loaded)
+				Utils::logError("FogOfWar: tileset_dark is not set");
+
 			mapr->fogofwar = FogOfWar::TYPE_TINT;
 		}
 		if (this->tileset_fog.empty()) {
-			Utils::logError("FogOfWar: tileset_fog is not set");
+			if (!loaded)
+				Utils::logError("FogOfWar: tileset_fog is not set");
+
 			mapr->fogofwar = FogOfWar::TYPE_TINT;
 		}
-		if (mapr->fogofwar == FogOfWar::TYPE_OVERLAY) {
+		if (!loaded && mapr->fogofwar == FogOfWar::TYPE_OVERLAY) {
 			tset_dark.load(tileset_dark);
 			tset_fog.load(tileset_fog);
 		}
 	}
+
+	loaded = true;
 
 	return 0;
 }
