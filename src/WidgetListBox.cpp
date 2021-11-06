@@ -458,42 +458,62 @@ void WidgetListBox::refresh() {
 }
 
 bool WidgetListBox::getNext() {
-	if (items.size() < 1) return false;
+	if (can_select) {
+		if (items.size() < 1)
+			return false;
 
-	int sel = getSelected();
-	if (sel != -1)
-		items[sel].selected = false;
-	else
-		sel = cursor-1;
+		int sel = getSelected();
+		if (sel != -1)
+			items[sel].selected = false;
+		else
+			sel = cursor-1;
 
-	if(sel == static_cast<int>(items.size())-1) {
-		items[0].selected = true;
-		while (getSelected() < cursor) scrollUp();
+		if(sel == static_cast<int>(items.size())-1) {
+			items[0].selected = true;
+			while (getSelected() < cursor) {
+				scrollUp();
+			}
+		}
+		else {
+			items[sel+1].selected = true;
+			while (getSelected() > cursor + static_cast<int>(rows.size()) - 1) {
+				scrollDown();
+			}
+		}
 	}
 	else {
-		items[sel+1].selected = true;
-		while (getSelected() > cursor + static_cast<int>(rows.size()) - 1) scrollDown();
+		scrollDown();
 	}
 
 	return true;
 }
 
 bool WidgetListBox::getPrev() {
-	if (items.size() < 1) return false;
+	if (can_select) {
+		if (items.size() < 1)
+			return false;
 
-	int sel = getSelected();
-	if (sel != -1)
-		items[sel].selected = false;
-	else
-		sel = cursor;
+		int sel = getSelected();
+		if (sel != -1)
+			items[sel].selected = false;
+		else
+			sel = cursor;
 
-	if(sel == 0) {
-		items[items.size()-1].selected = true;
-		while (getSelected() > cursor + static_cast<int>(rows.size()) - 1) scrollDown();
+		if(sel == 0) {
+			items[items.size()-1].selected = true;
+			while (getSelected() > cursor + static_cast<int>(rows.size()) - 1) {
+				scrollDown();
+			}
+		}
+		else {
+			items[sel-1].selected = true;
+			while (getSelected() < cursor) {
+				scrollUp();
+			}
+		}
 	}
 	else {
-		items[sel-1].selected = true;
-		while (getSelected() < cursor) scrollUp();
+		scrollUp();
 	}
 
 	return true;
