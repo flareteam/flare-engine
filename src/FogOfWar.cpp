@@ -37,6 +37,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "RenderDevice.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
+#include "Utils.h"
 #include "UtilsParsing.h"
 
 short unsigned FogOfWar::TILE_HIDDEN = 0;
@@ -62,24 +63,92 @@ int FogOfWar::load() {
 	if (!infile.open(mask_definition, FileParser::MOD_FILE, FileParser::ERROR_NORMAL))
 		return 0;
 
+	bool invalid_config = false;
+
 	if (!loaded) {
 		Utils::logInfo("FogOfWar: Loading mask '%s'", mask_definition.c_str());
 
 		while (infile.next()) {
-			if (infile.section == "header")
+			if (infile.section == "header") {
 				loadHeader(infile);
-			else if (infile.section == "bits")
+			}
+			else if (infile.section == "bits") {
+				if (infile.new_section) {
+					def_bits.clear();
+					def_tiles.clear();
+					if (def_mask) {
+						delete def_mask;
+						def_mask = NULL;
+					}
+				}
+
 				loadDefBit(infile);
-			else if (infile.section == "tiles")
+			}
+			else if (infile.section == "tiles") {
+				if (infile.new_section) {
+					def_tiles.clear();
+					if (def_mask) {
+						delete def_mask;
+						def_mask = NULL;
+					}
+					if (def_bits.empty()) {
+						infile.error("FogOfWar: Unable to load tile section because no bits are defined.");
+					}
+				}
+
 				loadDefTile(infile);
-			else if (infile.section == "mask")
+			}
+			else if (infile.section == "mask") {
+				if (infile.new_section) {
+					if (def_mask) {
+						delete def_mask;
+						def_mask = NULL;
+					}
+					if (def_tiles.empty()) {
+						infile.error("FogOfWar: Unable to load mask section because no tiles are defined.");
+					}
+				}
+
 				loadDefMask(infile);
+			}
 		}
 
 		infile.close();
 
-		for (unsigned short i=0; i<bits_per_tile; i++)
-			TILE_HIDDEN |= static_cast<unsigned short>(1<<i);
+		if (bits_per_tile > 0 && def_bits.empty()) {
+			Utils::logError("FogOfWar: No bits defined, but bits_per_tile > 0");
+			invalid_config = true;
+		}
+		else if (static_cast<size_t>(bits_per_tile + 1) != def_bits.size()) {
+			Utils::logError("FogOfWar: Found %u bits, but bits_per_tile is %d. Setting bits_per_tile to %u.", def_bits.size()-1, bits_per_tile, def_bits.size()-1);
+			bits_per_tile = static_cast<int>(def_bits.size()) - 1;
+		}
+
+		if (!def_mask) {
+			Utils::logError("FogOfWar: No mask defined.");
+			invalid_config = true;
+		}
+
+		if (invalid_config) {
+			bits_per_tile = 0;
+			if (def_mask) {
+				delete def_mask;
+				def_mask = NULL;
+			}
+		}
+		else {
+			for (unsigned short i=0; i<bits_per_tile; i++) {
+				TILE_HIDDEN |= static_cast<unsigned short>(1<<i);
+			}
+		}
+
+		def_tiles.clear();
+		def_bits.clear();
+	}
+
+	if (!def_mask) {
+		mapr->fogofwar = FogOfWar::TYPE_NONE;
+		invalid_config = true;
 	}
 
 	if (mapr->fogofwar == FogOfWar::TYPE_OVERLAY) {
@@ -95,7 +164,7 @@ int FogOfWar::load() {
 
 			mapr->fogofwar = FogOfWar::TYPE_TINT;
 		}
-		if (!loaded && mapr->fogofwar == FogOfWar::TYPE_OVERLAY) {
+		if (!invalid_config && !loaded && mapr->fogofwar == FogOfWar::TYPE_OVERLAY) {
 			tset_dark.load(tileset_dark);
 			tset_fog.load(tileset_fog);
 		}
@@ -244,7 +313,10 @@ void FogOfWar::loadDefTile(FileParser &infile) {
 	unsigned long prev_comma = 0;
 	unsigned long comma = 0;
 
-	if(infile.key == "tile") {
+	if (infile.key == "tile") {
+		if (def_bits.empty())
+			return;
+
 		tile_name = Parse::popFirstString(infile.val);
 		val = Parse::stripCarriageReturn(infile.val);
 
@@ -266,14 +338,17 @@ void FogOfWar::loadDefTile(FileParser &infile) {
 
 			prev_comma = comma;
 		}
-	}
 
-	def_tiles.insert(std::pair<std::string, int>(tile_name, tile_bits));
+		def_tiles.insert(std::pair<std::string, int>(tile_name, tile_bits));
+	}
 }
 
 void FogOfWar::loadDefMask(FileParser &infile) {
 	// @ATTR mask.data|raw|The mask definition is a matrix (2\*radius+1 by 2\*radius+1) that contains fog of war tile definitions. All the margins of the matrix must be the tile definition that contains all bits.
 	if (infile.key == "data") {
+		if (def_tiles.empty())
+			return;
+
 		def_mask = new short unsigned[(mask_radius*2+1) * (mask_radius*2+1)];
 		std::string val;
 		std::string tile_def;
@@ -294,10 +369,9 @@ void FogOfWar::loadDefMask(FileParser &infile) {
 			}
 			if (comma_count != mask_radius*2+1) {
 				// mask data is broken! Clear def_mask and abort.
-				infile.error("FogOfWar: A row of mask data has a width not equal to %d.", mask_radius*2+1);
+				infile.error("FogOfWar: Mask data row %d/%d has a width not equal to %d.", j+1, mask_radius*2+1, mask_radius*2+1);
 				delete def_mask;
 				def_mask = NULL;
-				mapr->fogofwar = FogOfWar::TYPE_NONE;
 				break;
 			}
 
@@ -311,8 +385,6 @@ void FogOfWar::loadDefMask(FileParser &infile) {
 					infile.error("FogOfWar: Tile definition '%s' not found.", tile_def.c_str());
 			}
 		}
-		def_tiles.clear();
-		def_bits.clear();
 	}
 }
 
