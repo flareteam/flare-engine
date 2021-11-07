@@ -47,6 +47,7 @@ private:
 	WidgetLabel label_inventory;
 	WidgetLabel label_currency;
 	WidgetButton *closeButton;
+	std::vector<WidgetButton*> equipmentSetButton;
 
 	int MAX_EQUIPPED;
 	int MAX_CARRIED;
@@ -106,6 +107,7 @@ public:
 	void applyItemStats();
 	void applyItemSetBonuses();
 	void applyBonus(const BonusData* bdata);
+	void applyEquipmentSet(unsigned set);
 
 	int getEquippedCount();
 	int getTotalSlotCount();
@@ -127,8 +129,10 @@ public:
 	Rect carried_area;
 	std::vector<Rect> equipped_area;
 	std::vector<std::string> slot_type;
+	std::vector<unsigned int> equipment_set;
 
 	MenuItemStorage inventory[2];
+	unsigned active_equipped_set;
 	int currency;
 	int drag_prev_src;
 
