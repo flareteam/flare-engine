@@ -1493,15 +1493,17 @@ void MenuManager::pushMatchingItemsOf(const Point& hov_pos) {
 			if (tip_index >= TooltipManager::TOOLTIP_COUNT)
 				break; // can't show any more tooltips
 
-			if (inv->slot_type[i] == items->items[hov_stack.item].type) {
-				if (!inv->inventory[MenuInventory::EQUIPMENT].storage[i].empty()) {
-					Point match_pos(inv->equipped_area[i].x, inv->equipped_area[i].y);
+			if (inv->isActive(i)){
+				if (inv->slot_type[i] == items->items[hov_stack.item].type) {
+					if (!inv->inventory[MenuInventory::EQUIPMENT].storage[i].empty()) {
+						Point match_pos(inv->equipped_area[i].x, inv->equipped_area[i].y);
 
-					TooltipData match = inv->inventory[MenuInventory::EQUIPMENT].checkTooltip(match_pos, &pc->stats, ItemManager::PLAYER_INV);
-					match.addColoredText(msg->get("Equipped"), font->getColor(FontEngine::COLOR_ITEM_FLAVOR));
+						TooltipData match = inv->inventory[MenuInventory::EQUIPMENT].checkTooltip(match_pos, &pc->stats, ItemManager::PLAYER_INV);
+						match.addColoredText(msg->get("Equipped"), font->getColor(FontEngine::COLOR_ITEM_FLAVOR));
 
-					tooltipm->push(match, hov_pos, TooltipData::STYLE_FLOAT, tip_index);
-					tip_index++;
+						tooltipm->push(match, hov_pos, TooltipData::STYLE_FLOAT, tip_index);
+						tip_index++;
+					}
 				}
 			}
 		}

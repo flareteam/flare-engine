@@ -108,6 +108,7 @@ public:
 	void applyItemSetBonuses();
 	void applyBonus(const BonusData* bdata);
 	void applyEquipmentSet(unsigned set);
+	bool isActive(size_t equipped);
 
 	int getEquippedCount();
 	int getTotalSlotCount();

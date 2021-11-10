@@ -359,7 +359,7 @@ void MenuInventory::renderTooltips(const Point& position) {
 	tip_data.clear();
 
 	if (area == EQUIPMENT)
-		if (equipment_set[slot] != 0 && equipment_set[slot] != active_equipped_set)
+		if (!isActive(slot))
 			return;
 
 	if (inventory[area][slot].item > 0) {
@@ -952,7 +952,7 @@ void MenuInventory::applyEquipment() {
 		}
 
 		for (int i = 0; i < MAX_EQUIPPED; i++) {
-			if (equipment_set[i] == 0 || equipment_set[i] == active_equipped_set) {
+			if (isActive(i)) {
 				item_id = inventory[EQUIPMENT].storage[i].item;
 				const Item &item = items->items[item_id];
 				unsigned bonus_counter = 0;
@@ -973,7 +973,7 @@ void MenuInventory::applyEquipment() {
 		std::vector<int> quantity;
 
 		for (int i=0; i<MAX_EQUIPPED; i++) {
-			if (equipment_set[i] == 0 || equipment_set[i] == active_equipped_set) {
+			if (isActive(i)) {
 				item_id = inventory[EQUIPMENT].storage[i].item;
 				it = std::find(set.begin(), set.end(), items->items[item_id].set);
 				if (items->items[item_id].set > 0 && it != set.end()) {
@@ -1000,7 +1000,7 @@ void MenuInventory::applyEquipment() {
 		}
 		// check that each equipped item fit requirements
 		for (int i = 0; i < MAX_EQUIPPED; i++) {
-			if (equipment_set[i] == 0 || equipment_set[i] == active_equipped_set) {
+			if (isActive(i)) {
 				if (!items->requirementsMet(&pc->stats, inventory[EQUIPMENT].storage[i].item)) {
 					add(inventory[EQUIPMENT].storage[i], CARRIED, ItemStorage::NO_SLOT, ADD_PLAY_SOUND, !ADD_AUTO_EQUIP);
 					inventory[EQUIPMENT].storage[i].clear();
@@ -1080,7 +1080,7 @@ void MenuInventory::applyItemStats() {
 
 	// apply stats from all items
 	for (int i=0; i<MAX_EQUIPPED; i++) {
-		if (equipment_set[i] == 0 || equipment_set[i] == active_equipped_set) {
+		if (isActive(i)) {
 			ItemID item_id = inventory[EQUIPMENT].storage[i].item;
 			const Item &item = items->items[item_id];
 
@@ -1123,7 +1123,7 @@ void MenuInventory::applyItemSetBonuses() {
 	std::vector<int> quantity;
 
 	for (int i=0; i<MAX_EQUIPPED; i++) {
-		if (equipment_set[i] == 0 || equipment_set[i] == active_equipped_set) {
+		if (isActive(i)) {
 			ItemID item_id = inventory[EQUIPMENT].storage[i].item;
 			it = std::find(set.begin(), set.end(), items->items[item_id].set);
 			if (items->items[item_id].set > 0 && it != set.end()) {
@@ -1190,6 +1190,14 @@ void MenuInventory::applyEquipmentSet(unsigned set) {
 			active_equipped_set = static_cast<unsigned>(set);
 		}
 	}
+}
+
+bool MenuInventory::isActive(size_t equipped) {
+	if (equipment_set[equipped] == 0 || equipment_set[equipped]==active_equipped_set) {
+		return true;
+	}
+
+	return false;
 }
 
 int MenuInventory::getEquippedCount() {

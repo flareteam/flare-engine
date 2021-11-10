@@ -124,8 +124,7 @@ void MenuItemStorage::render() {
 			render = true;
 		}
 		else if (nb_cols == 0) {
-			unsigned int eq_set = menu->inv->equipment_set[i];
-			if (eq_set == 0 || eq_set == menu->inv->active_equipped_set) {
+			if (menu->inv->isActive(i)) {
 				render = true;
 			}
 		}
