@@ -161,7 +161,7 @@ int MenuItemStorage::slotOver(const Point& position) {
 	else if (nb_cols == 0) {
 		for (unsigned int i=0; i<slots.size(); i++) {
 			unsigned int eq_set = menu->inv->equipment_set[i];
-			if (eq_set == 0 || eq_set == menu->inv->active_equipped_set) {
+			if (eq_set == 0 || eq_set == menu->inv->active_equipment_set) {
 				if (Utils::isWithinRect(slots[i]->pos, position)) {
 					return i;
 				}

@@ -126,7 +126,7 @@ void SaveLoad::saveGame() {
 		outfile << "equipped=" << menu->inv->inventory[MenuInventory::EQUIPMENT].getItems() << "\n";
 
 		// active equipped set
-		outfile << "active_equipped_set=" << menu->inv->active_equipped_set << "\n";
+		outfile << "active_equipment_set=" << menu->inv->active_equipment_set << "\n";
 
 		// carried items
 		outfile << "carried_quantity=" << menu->inv->inventory[MenuInventory::CARRIED].getQuantities() << "\n";
@@ -348,7 +348,7 @@ void SaveLoad::loadGame() {
 			else if (infile.key == "equipped_quantity") {
 				menu->inv->inventory[MenuInventory::EQUIPMENT].setQuantities(infile.val);
 			}
-			else if (infile.key == "active_equipped_set") {
+			else if (infile.key == "active_equipment_set") {
 				menu->inv->applyEquipmentSet(Parse::toInt(infile.val));
 			}
 			else if (infile.key == "carried") {

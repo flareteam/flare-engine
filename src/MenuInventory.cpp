@@ -58,7 +58,8 @@ MenuInventory::MenuInventory()
 	, tap_to_activate_timer(settings->max_frames_per_sec / 3)
 	, activated_slot(-1)
 	, activated_item(0)
-	, active_equipped_set(0)
+	, active_equipment_set(0)
+	, max_equipment_set(1)
 	, currency(0)
 	, drag_prev_src(-1)
 	, changed_equipment(true)
@@ -91,6 +92,27 @@ MenuInventory::MenuInventory()
 				std::string icon = Parse::popFirstString(infile.val);
 				equipmentSetButton.push_back(new WidgetButton(icon));
 				equipmentSetButton.back()->setBasePos(px, py, Utils::ALIGN_TOPLEFT);
+			}
+			// @ATTR set_previous|int, int, filename : Widget X, Widget Y, Image file|Position and image filename for an equipment swap set previous button.
+			else if(infile.key == "set_previous") {
+				int px = Parse::popFirstInt(infile.val);
+				int py = Parse::popFirstInt(infile.val);
+				std::string icon = Parse::popFirstString(infile.val);
+				equipmentSetPrevious = new WidgetButton(icon);
+				equipmentSetPrevious->setBasePos(px, py, Utils::ALIGN_TOPLEFT);
+			}
+			// @ATTR set_next|int, int, filename : Widget X, Widget Y, Image file|Position and image filename for an equipment swap set next button.
+			else if(infile.key == "set_next") {
+				int px = Parse::popFirstInt(infile.val);
+				int py = Parse::popFirstInt(infile.val);
+				std::string icon = Parse::popFirstString(infile.val);
+				equipmentSetNext = new WidgetButton(icon);
+				equipmentSetNext->setBasePos(px, py, Utils::ALIGN_TOPLEFT);
+			}
+			// @ATTR label_equipment_set|label|Label showing the active equipment set.
+			else if(infile.key == "label_equipment_set") {
+				equipmentSetLabel = new WidgetLabel;
+				equipmentSetLabel->setFromLabelInfo(Parse::popLabelInfo(infile.val));
 			}
 			// @ATTR equipment_slot|repeatable(int, int, string, int) : X, Y, Slot Type, Equipment set|Position, item type and equipment set number of an equipment slot. Equipment set number is "0" for shared items."
 			else if(infile.key == "equipment_slot") {
@@ -157,8 +179,18 @@ MenuInventory::MenuInventory()
 		tablist.add(inventory[CARRIED].slots[i]);
 	}
 
-	if (!equipmentSetButton.empty()) {
-		applyEquipmentSet(static_cast<unsigned>(equipmentSetButton.size()));
+	for (size_t i=0; i<equipment_set.size(); i++) {
+		if (equipment_set[i] > max_equipment_set) {
+			max_equipment_set = equipment_set[i];
+		}
+	}
+	applyEquipmentSet(max_equipment_set);
+
+	if (equipmentSetLabel) {
+		std::stringstream label;
+		label << active_equipment_set << "/" << max_equipment_set;
+		equipmentSetLabel->setText(label.str());
+		equipmentSetLabel->setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 	}
 
 	align();
@@ -180,9 +212,15 @@ void MenuInventory::align() {
 
 	closeButton->setPos(window_area.x, window_area.y);
 
-	for (size_t i=0; i<equipmentSetButton.size(); i++) {
-		equipmentSetButton[i]->setPos(window_area.x, window_area.y);
+	if (!equipmentSetButton.empty()) {
+		for (size_t i=0; i<equipmentSetButton.size(); i++) {
+			equipmentSetButton[i]->setPos(window_area.x, window_area.y);
+		}
 	}
+
+	if (equipmentSetPrevious) equipmentSetPrevious->setPos(window_area.x, window_area.y);
+	if (equipmentSetNext) equipmentSetNext->setPos(window_area.x, window_area.y);
+	if (equipmentSetLabel) equipmentSetLabel->setPos(window_area.x, window_area.y);
 
 	label_inventory.setPos(window_area.x, window_area.y);
 	label_currency.setPos(window_area.x, window_area.y);
@@ -270,6 +308,20 @@ void MenuInventory::logic() {
 				}
 			}
 		}
+
+		if (equipmentSetNext) {
+			if (equipmentSetNext->checkClick()) {
+				applyNextEquipmentSet();
+				applyEquipment();
+			}
+		}
+
+		if (equipmentSetPrevious) {
+			if (equipmentSetPrevious->checkClick()) {
+				applyPreviousEquipmentSet();
+				applyEquipment();
+			}
+		}
 	}
 
 	tap_to_activate_timer.tick();
@@ -290,6 +342,10 @@ void MenuInventory::render() {
 			equipmentSetButton[i]->render();
 		}
 	}
+	if (equipmentSetPrevious) equipmentSetPrevious->render();
+	if (equipmentSetNext) equipmentSetNext->render();
+	if (equipmentSetLabel) equipmentSetLabel->render();
+
 	// text overlay
 	label_inventory.render();
 
@@ -1180,20 +1236,58 @@ void MenuInventory::applyBonus(const BonusData* bdata) {
 	pc->stats.effects.addItemEffect(ed, 0, bdata->value);
 }
 
-
 void MenuInventory::applyEquipmentSet(unsigned set) {
-	if (!equipmentSetButton.empty()) {
-		if (active_equipped_set > 0)
-			equipmentSetButton[active_equipped_set-1]->enabled = true;
-		if (set > 0) {
-			equipmentSetButton[set-1]->enabled = false;
-			active_equipped_set = static_cast<unsigned>(set);
-		}
+	if (set > 0 && set <= max_equipment_set) {
+		active_equipment_set = set;
+		updateEquipmentSetWidgets();
 	}
 }
 
+void MenuInventory::applyNextEquipmentSet() {
+	if (active_equipment_set < max_equipment_set) {
+		active_equipment_set++;
+	}
+	else {
+		active_equipment_set = 1;
+	}
+	updateEquipmentSetWidgets();
+}
+
+void MenuInventory::applyPreviousEquipmentSet() {
+	if (active_equipment_set > 1) {
+		active_equipment_set--;
+	}
+	else {
+		active_equipment_set = max_equipment_set;
+	}
+	updateEquipmentSetWidgets();
+}
+
+void MenuInventory::updateEquipmentSetWidgets() {
+	if (!equipmentSetButton.empty()) {
+		for (size_t i=0; i<equipmentSetButton.size(); i++) {
+			if (active_equipment_set > 0) {
+				if (i == active_equipment_set-1) {
+					equipmentSetButton[i]->enabled = false;
+				}
+				else {
+					equipmentSetButton[i]->enabled = true;
+				}
+			}
+		}
+	}
+
+	if (equipmentSetLabel) {
+		std::stringstream label;
+		label << active_equipment_set << "/" << max_equipment_set;
+		equipmentSetLabel->setText(label.str());
+		equipmentSetLabel->setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
+	}
+}
+
+
 bool MenuInventory::isActive(size_t equipped) {
-	if (equipment_set[equipped] == 0 || equipment_set[equipped]==active_equipped_set) {
+	if (equipment_set[equipped] == 0 || equipment_set[equipped]==active_equipment_set) {
 		return true;
 	}
 
@@ -1346,4 +1440,9 @@ MenuInventory::~MenuInventory() {
 	for (size_t i=0; i<equipmentSetButton.size(); i++) {
 		delete equipmentSetButton[i];
 	}
+
+	delete equipmentSetNext;
+	delete equipmentSetPrevious;
+	delete equipmentSetLabel;
+
 }
