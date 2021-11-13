@@ -213,6 +213,7 @@ void InputState::loadKeyBindings() {
 		// @ATTR default.bar0|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Bar0".
 		// @ATTR default.main1|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Main1".
 		// @ATTR default.main2|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Main2".
+		// @ATTR default.swap|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Equipment swap".
 		// @ATTR default.character|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Character".
 		// @ATTR default.inventory|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Inventory".
 		// @ATTR default.powers|string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick|Bindings for "Powers".
@@ -247,6 +248,7 @@ void InputState::loadKeyBindings() {
 		else if (infile.key == "bar0") cursor = Input::BAR_0;
 		else if (infile.key == "main1") cursor = Input::MAIN1;
 		else if (infile.key == "main2") cursor = Input::MAIN2;
+		else if (infile.key == "swap") cursor = Input::SWAP;
 		else if (infile.key == "character") cursor = Input::CHARACTER;
 		else if (infile.key == "inventory") cursor = Input::INVENTORY;
 		else if (infile.key == "powers") cursor = Input::POWERS;
@@ -318,6 +320,7 @@ void InputState::saveKeyBindings() {
 		outfile << "bar0=" << binding[Input::BAR_0] << "," << binding_alt[Input::BAR_0] << "," << binding_joy[Input::BAR_0] << "\n";
 		outfile << "main1=" << binding[Input::MAIN1] << "," << binding_alt[Input::MAIN1] << "," << binding_joy[Input::MAIN1] << "\n";
 		outfile << "main2=" << binding[Input::MAIN2] << "," << binding_alt[Input::MAIN2] << "," << binding_joy[Input::MAIN2] << "\n";
+		outfile << "swap=" << binding[Input::SWAP] << "," << binding_alt[Input::SWAP] << "," << binding_joy[Input::SWAP] << "\n";
 		outfile << "character=" << binding[Input::CHARACTER] << "," << binding_alt[Input::CHARACTER] << "," << binding_joy[Input::CHARACTER] << "\n";
 		outfile << "inventory=" << binding[Input::INVENTORY] << "," << binding_alt[Input::INVENTORY] << "," << binding_joy[Input::INVENTORY] << "\n";
 		outfile << "powers=" << binding[Input::POWERS] << "," << binding_alt[Input::POWERS] << "," << binding_joy[Input::POWERS] << "\n";
@@ -435,6 +438,7 @@ void InputState::setKeybindNames() {
 	binding_name[Input::LOG] = msg->get("Log");
 	binding_name[Input::MAIN1] = msg->get("Main1");
 	binding_name[Input::MAIN2] = msg->get("Main2");
+	binding_name[Input::SWAP] = msg->get("Equipment swap");
 	binding_name[Input::CTRL] = msg->get("Ctrl");
 	binding_name[Input::SHIFT] = msg->get("Shift");
 	binding_name[Input::ALT] = msg->get("Alt");

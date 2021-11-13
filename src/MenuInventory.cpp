@@ -324,6 +324,14 @@ void MenuInventory::logic() {
 		}
 	}
 
+	if (max_equipment_set > 0) {
+		if (inpt->pressing[Input::SWAP] && !inpt->lock[Input::SWAP]) {
+			inpt->lock[Input::SWAP] = true;
+			applyNextEquipmentSet();
+			applyEquipment();
+		}
+	}
+
 	tap_to_activate_timer.tick();
 }
 
