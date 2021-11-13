@@ -35,6 +35,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "ItemManager.h"
 #include "Menu.h"
 #include "MenuActionBar.h"
+#include "MenuHUDLog.h"
 #include "MenuInventory.h"
 #include "MenuManager.h"
 #include "MenuPowers.h"
@@ -184,13 +185,12 @@ MenuInventory::MenuInventory()
 	// create equipment swap buttons
 	std::map<unsigned, std::string>::iterator it;
 	for (it = raw_set_button.begin(); it != raw_set_button.end(); it++) {
-		std::cout << it->first << " " << it->second << std::endl;
-
 		int px = Parse::popFirstInt(it->second);
 		int py = Parse::popFirstInt(it->second);
 		std::string icon = Parse::popFirstString(it->second);
 		equipmentSetButton.push_back(new WidgetButton(icon));
 		equipmentSetButton.back()->setBasePos(px, py, Utils::ALIGN_TOPLEFT);
+		tablist.add(equipmentSetButton.back());
 	}
 	raw_set_button.clear();
 
@@ -200,6 +200,7 @@ MenuInventory::MenuInventory()
 		std::string icon = Parse::popFirstString(raw_previous);
 		equipmentSetPrevious = new WidgetButton(icon);
 		equipmentSetPrevious->setBasePos(px, py, Utils::ALIGN_TOPLEFT);
+		tablist.add(equipmentSetPrevious);
 	}
 
 	if (!raw_next.empty()) {
@@ -208,6 +209,7 @@ MenuInventory::MenuInventory()
 		std::string icon = Parse::popFirstString(raw_next);
 		equipmentSetNext = new WidgetButton(icon);
 		equipmentSetNext->setBasePos(px, py, Utils::ALIGN_TOPLEFT);
+		tablist.add(equipmentSetNext);
 	}
 
 	if (!raw_label.empty()) {
@@ -1319,6 +1321,14 @@ void MenuInventory::updateEquipmentSetWidgets() {
 		label << active_equipment_set << "/" << max_equipment_set;
 		equipmentSetLabel->setText(label.str());
 		equipmentSetLabel->setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
+	}
+
+	if (active_equipment_set > 0) {
+		if (menu) {
+			std::stringstream ss;
+			ss << "Equipped set " << active_equipment_set << ".";
+			menu->hudlog->add(msg->get(ss.str()), MenuHUDLog::MSG_NORMAL);
+		}
 	}
 }
 
