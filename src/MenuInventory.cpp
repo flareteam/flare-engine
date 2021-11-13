@@ -72,6 +72,12 @@ MenuInventory::MenuInventory()
 
 	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
 
+	// raw data for equipment swap buttons
+	std::map<unsigned, std::string> raw_set_button;
+	std::string raw_previous;
+	std::string raw_next;
+	std::string raw_label;
+
 	// Load config settings
 	FileParser infile;
 	// @CLASS MenuInventory|Description of menus/inventory.txt
@@ -85,34 +91,24 @@ MenuInventory::MenuInventory()
 				Point pos = Parse::toPoint(infile.val);
 				closeButton->setBasePos(pos.x, pos.y, Utils::ALIGN_TOPLEFT);
 			}
-			// @ATTR set_button|int, int, filename : Widget X, Widget Y, Image file|Position and image filename for an equipment swap set button.
+			// @ATTR set_button|int, int, int, filename : ID, Widget X, Widget Y, Image file|Set number, position and image filename for an equipment swap set button.
 			else if(infile.key == "set_button") {
-				int px = Parse::popFirstInt(infile.val);
-				int py = Parse::popFirstInt(infile.val);
-				std::string icon = Parse::popFirstString(infile.val);
-				equipmentSetButton.push_back(new WidgetButton(icon));
-				equipmentSetButton.back()->setBasePos(px, py, Utils::ALIGN_TOPLEFT);
+				unsigned id = static_cast<unsigned>(Parse::popFirstInt(infile.val));
+				std::pair<unsigned, std::string> set_button(id, infile.val);
+				raw_set_button.insert(set_button);
+				raw_set_button[id] = infile.val;
 			}
 			// @ATTR set_previous|int, int, filename : Widget X, Widget Y, Image file|Position and image filename for an equipment swap set previous button.
 			else if(infile.key == "set_previous") {
-				int px = Parse::popFirstInt(infile.val);
-				int py = Parse::popFirstInt(infile.val);
-				std::string icon = Parse::popFirstString(infile.val);
-				equipmentSetPrevious = new WidgetButton(icon);
-				equipmentSetPrevious->setBasePos(px, py, Utils::ALIGN_TOPLEFT);
+				raw_previous = infile.val;
 			}
 			// @ATTR set_next|int, int, filename : Widget X, Widget Y, Image file|Position and image filename for an equipment swap set next button.
 			else if(infile.key == "set_next") {
-				int px = Parse::popFirstInt(infile.val);
-				int py = Parse::popFirstInt(infile.val);
-				std::string icon = Parse::popFirstString(infile.val);
-				equipmentSetNext = new WidgetButton(icon);
-				equipmentSetNext->setBasePos(px, py, Utils::ALIGN_TOPLEFT);
+				raw_next = infile.val;
 			}
 			// @ATTR label_equipment_set|label|Label showing the active equipment set.
 			else if(infile.key == "label_equipment_set") {
-				equipmentSetLabel = new WidgetLabel;
-				equipmentSetLabel->setFromLabelInfo(Parse::popLabelInfo(infile.val));
+				raw_label = infile.val;
 			}
 			// @ATTR equipment_slot|repeatable(int, int, string, int) : X, Y, Slot Type, Equipment set|Position, item type and equipment set number of an equipment slot. Equipment set number is "0" for shared items."
 			else if(infile.key == "equipment_slot") {
@@ -184,14 +180,47 @@ MenuInventory::MenuInventory()
 			max_equipment_set = equipment_set[i];
 		}
 	}
-	applyEquipmentSet(max_equipment_set);
 
-	if (equipmentSetLabel) {
+	// create equipment swap buttons
+	std::map<unsigned, std::string>::iterator it;
+	for (it = raw_set_button.begin(); it != raw_set_button.end(); it++) {
+		std::cout << it->first << " " << it->second << std::endl;
+
+		int px = Parse::popFirstInt(it->second);
+		int py = Parse::popFirstInt(it->second);
+		std::string icon = Parse::popFirstString(it->second);
+		equipmentSetButton.push_back(new WidgetButton(icon));
+		equipmentSetButton.back()->setBasePos(px, py, Utils::ALIGN_TOPLEFT);
+	}
+	raw_set_button.clear();
+
+	if (!raw_previous.empty()) {
+		int px = Parse::popFirstInt(raw_previous);
+		int py = Parse::popFirstInt(raw_previous);
+		std::string icon = Parse::popFirstString(raw_previous);
+		equipmentSetPrevious = new WidgetButton(icon);
+		equipmentSetPrevious->setBasePos(px, py, Utils::ALIGN_TOPLEFT);
+	}
+
+	if (!raw_next.empty()) {
+		int px = Parse::popFirstInt(raw_next);
+		int py = Parse::popFirstInt(raw_next);
+		std::string icon = Parse::popFirstString(raw_next);
+		equipmentSetNext = new WidgetButton(icon);
+		equipmentSetNext->setBasePos(px, py, Utils::ALIGN_TOPLEFT);
+	}
+
+	if (!raw_label.empty()) {
+		equipmentSetLabel = new WidgetLabel;
+		equipmentSetLabel->setFromLabelInfo(Parse::popLabelInfo(raw_label));
+
 		std::stringstream label;
 		label << active_equipment_set << "/" << max_equipment_set;
 		equipmentSetLabel->setText(label.str());
 		equipmentSetLabel->setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 	}
+
+	applyEquipmentSet(max_equipment_set);
 
 	align();
 }

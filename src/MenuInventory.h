@@ -48,6 +48,8 @@ private:
 	WidgetLabel label_inventory;
 	WidgetLabel label_currency;
 	WidgetButton *closeButton;
+
+	// equipment swap buttons
 	std::vector<WidgetButton*> equipmentSetButton;
 	WidgetButton* equipmentSetPrevious;
 	WidgetButton* equipmentSetNext;
