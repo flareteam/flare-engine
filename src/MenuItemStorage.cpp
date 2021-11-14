@@ -25,9 +25,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "EngineSettings.h"
 #include "ItemManager.h"
-#include "MenuInventory.h"
 #include "MenuItemStorage.h"
-#include "MenuManager.h"
 #include "Settings.h"
 #include "RenderDevice.h"
 #include "SharedResources.h"
@@ -115,40 +113,27 @@ void MenuItemStorage::render() {
 	Rect disabled_src;
 	disabled_src.x = disabled_src.y = 0;
 	disabled_src.w = disabled_src.h = eset->resolutions.icon_size;
-	bool render;
 
 	for (int i=0; i<slot_number; i++) {
-		render = false;
-
-		if (nb_cols > 0) {
-			render = true;
+		if (storage[i].item > 0) {
+			slots[i]->setIcon(items->items[storage[i].item].icon, items->getItemIconOverlay(storage[i].item));
+			slots[i]->setAmount(storage[i].quantity, items->items[storage[i].item].max_quantity);
 		}
-		else if (nb_cols == 0) {
-			if (menu->inv->isActive(i)) {
-				render = true;
+		else {
+			slots[i]->setIcon(WidgetSlot::NO_ICON, WidgetSlot::NO_OVERLAY);
+		}
+		slots[i]->render();
+		if (!slots[i]->enabled) {
+			if (overlay_disabled) {
+				overlay_disabled->setClipFromRect(disabled_src);
+				overlay_disabled->setDestFromRect(slots[i]->pos);
+				render_device->render(overlay_disabled);
 			}
 		}
-		if (render) {
-			if (storage[i].item > 0) {
-				slots[i]->setIcon(items->items[storage[i].item].icon, items->getItemIconOverlay(storage[i].item));
-				slots[i]->setAmount(storage[i].quantity, items->items[storage[i].item].max_quantity);
-			}
-			else {
-				slots[i]->setIcon(WidgetSlot::NO_ICON, WidgetSlot::NO_OVERLAY);
-			}
-			slots[i]->render();
-			if (!slots[i]->enabled) {
-				if (overlay_disabled) {
-					overlay_disabled->setClipFromRect(disabled_src);
-					overlay_disabled->setDestFromRect(slots[i]->pos);
-					render_device->render(overlay_disabled);
-				}
-			}
-			if (highlight[i] && !slots[i]->in_focus) {
-				if (highlight_image) {
-					highlight_image->setDestFromRect(slots[i]->pos);
-					render_device->render(highlight_image);
-				}
+		if (highlight[i] && !slots[i]->in_focus) {
+			if (highlight_image) {
+				highlight_image->setDestFromRect(slots[i]->pos);
+				render_device->render(highlight_image);
 			}
 		}
 	}
@@ -160,12 +145,8 @@ int MenuItemStorage::slotOver(const Point& position) {
 	}
 	else if (nb_cols == 0) {
 		for (unsigned int i=0; i<slots.size(); i++) {
-			unsigned int eq_set = menu->inv->equipment_set[i];
-			if (eq_set == 0 || eq_set == menu->inv->active_equipment_set) {
-				if (Utils::isWithinRect(slots[i]->pos, position)) {
-					return i;
-				}
-			}
+			if (slots[i]->visible)
+				if (Utils::isWithinRect(slots[i]->pos, position)) return i;
 		}
 	}
 	return -1;
@@ -242,7 +223,8 @@ void MenuItemStorage::itemReturn(ItemStack stack) {
 
 void MenuItemStorage::highlightMatching(const std::string& type) {
 	for (int i=0; i<slot_number; i++) {
-		if (slot_type[i] == type) highlight[i] = true;
+		if (slots[i]->visible)
+			if (slot_type[i] == type) highlight[i] = true;
 	}
 }
 

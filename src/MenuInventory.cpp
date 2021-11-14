@@ -360,6 +360,7 @@ void MenuInventory::logic() {
 			inpt->lock[Input::SWAP] = true;
 			applyNextEquipmentSet();
 			applyEquipment();
+			clearHighlight();
 		}
 	}
 
@@ -1303,6 +1304,15 @@ void MenuInventory::applyPreviousEquipmentSet() {
 }
 
 void MenuInventory::updateEquipmentSetWidgets() {
+	for (int i=0; i<MAX_EQUIPPED; i++) {
+		if (isActive(i)) {
+			inventory[EQUIPMENT].slots[i]->visible = true;
+		}
+		else {
+			inventory[EQUIPMENT].slots[i]->visible = false;
+		}
+	}
+
 	if (!equipmentSetButton.empty()) {
 		for (size_t i=0; i<equipmentSetButton.size(); i++) {
 			if (active_equipment_set > 0) {
@@ -1324,10 +1334,8 @@ void MenuInventory::updateEquipmentSetWidgets() {
 	}
 
 	if (active_equipment_set > 0) {
-		if (menu) {
-			std::stringstream ss;
-			ss << "Equipped set " << active_equipment_set << ".";
-			menu->hudlog->add(msg->get(ss.str()), MenuHUDLog::MSG_NORMAL);
+		if (!visible && menu && menu->hudlog) {
+			menu->hudlog->add(msg->get("Equipped set %d.", static_cast<int>(active_equipment_set)), MenuHUDLog::MSG_NORMAL);
 		}
 	}
 }
