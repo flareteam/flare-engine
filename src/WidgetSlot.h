@@ -81,6 +81,8 @@ public:
 	bool checked;
 	bool pressed;
 	bool continuous;	// allow holding key to keep slot activated
+
+	bool visible;
 };
 
 #endif

@@ -49,15 +49,16 @@ namespace Input {
 		LOG = 19,
 		MAIN1 = 20,
 		MAIN2 = 21,
-		ACTIONBAR = 22,
-		ACTIONBAR_BACK = 23,
-		ACTIONBAR_FORWARD = 24,
-		ACTIONBAR_USE = 25,
-		DEVELOPER_MENU = 26,
-		CTRL = 27,
-		SHIFT = 28,
-		ALT = 29,
-		DEL = 30
+		SWAP = 22,
+		ACTIONBAR = 23,
+		ACTIONBAR_BACK = 24,
+		ACTIONBAR_FORWARD = 25,
+		ACTIONBAR_USE = 26,
+		DEVELOPER_MENU = 27,
+		CTRL = 28,
+		SHIFT = 29,
+		ALT = 30,
+		DEL = 31
 	};
 }
 
@@ -87,13 +88,13 @@ public:
 	};
 
 	static const bool GET_SHORT_STRING = true;
-	static const int KEY_COUNT = 31;
+	static const int KEY_COUNT = 32;
 	static const int KEY_COUNT_USER = KEY_COUNT - 4; // exclude CTRL, SHIFT, etc from keybinding menu
 	int binding[KEY_COUNT];
 	int binding_alt[KEY_COUNT];
 	int binding_joy[KEY_COUNT];
 
-	std::string binding_name[31];
+	std::string binding_name[KEY_COUNT];
 	std::string mouse_button[MOUSE_BUTTON_NAME_COUNT];
 
 	InputState(void);

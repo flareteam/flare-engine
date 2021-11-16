@@ -145,7 +145,8 @@ int MenuItemStorage::slotOver(const Point& position) {
 	}
 	else if (nb_cols == 0) {
 		for (unsigned int i=0; i<slots.size(); i++) {
-			if (Utils::isWithinRect(slots[i]->pos, position)) return i;
+			if (slots[i]->visible)
+				if (Utils::isWithinRect(slots[i]->pos, position)) return i;
 		}
 	}
 	return -1;
@@ -222,7 +223,8 @@ void MenuItemStorage::itemReturn(ItemStack stack) {
 
 void MenuItemStorage::highlightMatching(const std::string& type) {
 	for (int i=0; i<slot_number; i++) {
-		if (slot_type[i] == type) highlight[i] = true;
+		if (slots[i]->visible)
+			if (slot_type[i] == type) highlight[i] = true;
 	}
 }
 

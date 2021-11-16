@@ -146,6 +146,8 @@ void SDLInputState::defaultQwertyKeyBindings () {
 	binding[Input::MAIN1] = binding_alt[Input::MAIN1] = (SDL_BUTTON_LEFT+MOUSE_BIND_OFFSET) * (-1);
 	binding[Input::MAIN2] = binding_alt[Input::MAIN2] = (SDL_BUTTON_RIGHT+MOUSE_BIND_OFFSET) * (-1);
 
+	binding[Input::SWAP] = binding_alt[Input::SWAP] = SDLK_TAB;
+
 	binding[Input::CTRL] = SDLK_LCTRL;
 	binding_alt[Input::CTRL] = SDLK_RCTRL;
 	binding[Input::SHIFT] = SDLK_LSHIFT;

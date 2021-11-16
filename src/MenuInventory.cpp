@@ -35,6 +35,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "ItemManager.h"
 #include "Menu.h"
 #include "MenuActionBar.h"
+#include "MenuHUDLog.h"
 #include "MenuInventory.h"
 #include "MenuManager.h"
 #include "MenuPowers.h"
@@ -58,6 +59,8 @@ MenuInventory::MenuInventory()
 	, tap_to_activate_timer(settings->max_frames_per_sec / 3)
 	, activated_slot(-1)
 	, activated_item(0)
+	, active_equipment_set(0)
+	, max_equipment_set(1)
 	, currency(0)
 	, drag_prev_src(-1)
 	, changed_equipment(true)
@@ -69,6 +72,12 @@ MenuInventory::MenuInventory()
 	setBackground("images/menus/inventory.png");
 
 	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
+
+	// raw data for equipment swap buttons
+	std::map<unsigned, std::string> raw_set_button;
+	std::string raw_previous;
+	std::string raw_next;
+	std::string raw_label;
 
 	// Load config settings
 	FileParser infile;
@@ -83,17 +92,42 @@ MenuInventory::MenuInventory()
 				Point pos = Parse::toPoint(infile.val);
 				closeButton->setBasePos(pos.x, pos.y, Utils::ALIGN_TOPLEFT);
 			}
-			// @ATTR equipment_slot|repeatable(int, int, string) : X, Y, Slot Type|Position and item type of an equipment slot.
+			// @ATTR set_button|int, int, int, filename : ID, Widget X, Widget Y, Image file|Set number, position and image filename for an equipment swap set button.
+			else if(infile.key == "set_button") {
+				unsigned id = static_cast<unsigned>(Parse::popFirstInt(infile.val));
+				std::pair<unsigned, std::string> set_button(id, infile.val);
+				raw_set_button.insert(set_button);
+				raw_set_button[id] = infile.val;
+			}
+			// @ATTR set_previous|int, int, filename : Widget X, Widget Y, Image file|Position and image filename for an equipment swap set previous button.
+			else if(infile.key == "set_previous") {
+				raw_previous = infile.val;
+			}
+			// @ATTR set_next|int, int, filename : Widget X, Widget Y, Image file|Position and image filename for an equipment swap set next button.
+			else if(infile.key == "set_next") {
+				raw_next = infile.val;
+			}
+			// @ATTR label_equipment_set|label|Label showing the active equipment set.
+			else if(infile.key == "label_equipment_set") {
+				raw_label = infile.val;
+			}
+			// @ATTR equipment_slot|repeatable(int, int, string, int) : X, Y, Slot Type, Equipment set|Position, item type and equipment set number of an equipment slot. Equipment set number is "0" for shared items."
 			else if(infile.key == "equipment_slot") {
 				Rect area;
 				Point pos;
+				std::string slt_type;
+				int eq_set;
 
 				pos.x = area.x = Parse::popFirstInt(infile.val);
 				pos.y = area.y = Parse::popFirstInt(infile.val);
+				slt_type = Parse::popFirstString(infile.val);
+				eq_set = Parse::popFirstInt(infile.val);
 				area.w = area.h = eset->resolutions.icon_size;
+
 				equipped_area.push_back(area);
 				equipped_pos.push_back(pos);
-				slot_type.push_back(Parse::popFirstString(infile.val));
+				slot_type.push_back(slt_type);
+				equipment_set.push_back(eq_set);
 			}
 			// @ATTR carried_area|point|Position of the first normal inventory slot.
 			else if(infile.key == "carried_area") {
@@ -142,6 +176,54 @@ MenuInventory::MenuInventory()
 		tablist.add(inventory[CARRIED].slots[i]);
 	}
 
+	for (size_t i=0; i<equipment_set.size(); i++) {
+		if (equipment_set[i] > max_equipment_set) {
+			max_equipment_set = equipment_set[i];
+		}
+	}
+
+	// create equipment swap buttons
+	std::map<unsigned, std::string>::iterator it;
+	for (it = raw_set_button.begin(); it != raw_set_button.end(); it++) {
+		int px = Parse::popFirstInt(it->second);
+		int py = Parse::popFirstInt(it->second);
+		std::string icon = Parse::popFirstString(it->second);
+		equipmentSetButton.push_back(new WidgetButton(icon));
+		equipmentSetButton.back()->setBasePos(px, py, Utils::ALIGN_TOPLEFT);
+		tablist.add(equipmentSetButton.back());
+	}
+	raw_set_button.clear();
+
+	if (!raw_previous.empty()) {
+		int px = Parse::popFirstInt(raw_previous);
+		int py = Parse::popFirstInt(raw_previous);
+		std::string icon = Parse::popFirstString(raw_previous);
+		equipmentSetPrevious = new WidgetButton(icon);
+		equipmentSetPrevious->setBasePos(px, py, Utils::ALIGN_TOPLEFT);
+		tablist.add(equipmentSetPrevious);
+	}
+
+	if (!raw_next.empty()) {
+		int px = Parse::popFirstInt(raw_next);
+		int py = Parse::popFirstInt(raw_next);
+		std::string icon = Parse::popFirstString(raw_next);
+		equipmentSetNext = new WidgetButton(icon);
+		equipmentSetNext->setBasePos(px, py, Utils::ALIGN_TOPLEFT);
+		tablist.add(equipmentSetNext);
+	}
+
+	if (!raw_label.empty()) {
+		equipmentSetLabel = new WidgetLabel;
+		equipmentSetLabel->setFromLabelInfo(Parse::popLabelInfo(raw_label));
+
+		std::stringstream label;
+		label << active_equipment_set << "/" << max_equipment_set;
+		equipmentSetLabel->setText(label.str());
+		equipmentSetLabel->setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
+	}
+
+	applyEquipmentSet(max_equipment_set);
+
 	align();
 }
 
@@ -160,6 +242,16 @@ void MenuInventory::align() {
 	inventory[CARRIED].setPos(window_area.x, window_area.y);
 
 	closeButton->setPos(window_area.x, window_area.y);
+
+	if (!equipmentSetButton.empty()) {
+		for (size_t i=0; i<equipmentSetButton.size(); i++) {
+			equipmentSetButton[i]->setPos(window_area.x, window_area.y);
+		}
+	}
+
+	if (equipmentSetPrevious) equipmentSetPrevious->setPos(window_area.x, window_area.y);
+	if (equipmentSetNext) equipmentSetNext->setPos(window_area.x, window_area.y);
+	if (equipmentSetLabel) equipmentSetLabel->setPos(window_area.x, window_area.y);
 
 	label_inventory.setPos(window_area.x, window_area.y);
 	label_currency.setPos(window_area.x, window_area.y);
@@ -225,16 +317,49 @@ void MenuInventory::logic() {
 	// a copy of currency is kept in stats, to help with various situations
 	pc->stats.currency = currency = inventory[CARRIED].count(eset->misc.currency_id);
 
-	// check close button
 	if (visible) {
 		tablist.logic();
 
+		// check close button
 		if (closeButton->checkClick()) {
 			visible = false;
 			snd->play(sfx_close, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
 		}
 
 		if (drag_prev_src == -1) {
+			clearHighlight();
+		}
+
+		//check equipment set buttons
+		if (!equipmentSetButton.empty()) {
+			for (size_t i=0; i<equipmentSetButton.size(); i++) {
+				if(equipmentSetButton[i]->checkClick()) {
+					applyEquipmentSet(static_cast<unsigned>(i)+1);
+					applyEquipment();
+				}
+			}
+		}
+
+		if (equipmentSetNext) {
+			if (equipmentSetNext->checkClick()) {
+				applyNextEquipmentSet();
+				applyEquipment();
+			}
+		}
+
+		if (equipmentSetPrevious) {
+			if (equipmentSetPrevious->checkClick()) {
+				applyPreviousEquipmentSet();
+				applyEquipment();
+			}
+		}
+	}
+
+	if (max_equipment_set > 0) {
+		if (inpt->pressing[Input::SWAP] && !inpt->lock[Input::SWAP]) {
+			inpt->lock[Input::SWAP] = true;
+			applyNextEquipmentSet();
+			applyEquipment();
 			clearHighlight();
 		}
 	}
@@ -250,6 +375,16 @@ void MenuInventory::render() {
 
 	// close button
 	closeButton->render();
+
+	// equipment set buttons
+	if (!equipmentSetButton.empty()) {
+		for (size_t i=0; i<equipmentSetButton.size(); i++) {
+			equipmentSetButton[i]->render();
+		}
+	}
+	if (equipmentSetPrevious) equipmentSetPrevious->render();
+	if (equipmentSetNext) equipmentSetNext->render();
+	if (equipmentSetLabel) equipmentSetLabel->render();
 
 	// text overlay
 	label_inventory.render();
@@ -268,7 +403,7 @@ int MenuInventory::areaOver(const Point& position) {
 		return CARRIED;
 	}
 	else {
-		for (unsigned int i=0; i<equipped_area.size(); i++) {
+		for (unsigned i=0; i<equipped_area.size(); i++) {
 			if (Utils::isWithinRect(equipped_area[i], position)) {
 				return EQUIPMENT;
 			}
@@ -318,6 +453,10 @@ void MenuInventory::renderTooltips(const Point& position) {
 		return;
 
 	tip_data.clear();
+
+	if (area == EQUIPMENT)
+		if (!isActive(slot))
+			return;
 
 	if (inventory[area][slot].item > 0) {
 		tip_data = inventory[area].checkTooltip(position, &pc->stats, ItemManager::PLAYER_INV);
@@ -909,16 +1048,18 @@ void MenuInventory::applyEquipment() {
 		}
 
 		for (int i = 0; i < MAX_EQUIPPED; i++) {
-			item_id = inventory[EQUIPMENT].storage[i].item;
-			const Item &item = items->items[item_id];
-			unsigned bonus_counter = 0;
-			while (bonus_counter < item.bonus.size()) {
-				for (size_t j = 0; j < eset->primary_stats.list.size(); ++j) {
-					if (item.bonus[bonus_counter].base_index == static_cast<int>(j))
-						pc->stats.primary_additional[j] += item.bonus[bonus_counter].value;
-				}
+			if (isActive(i)) {
+				item_id = inventory[EQUIPMENT].storage[i].item;
+				const Item &item = items->items[item_id];
+				unsigned bonus_counter = 0;
+				while (bonus_counter < item.bonus.size()) {
+					for (size_t j = 0; j < eset->primary_stats.list.size(); ++j) {
+						if (item.bonus[bonus_counter].base_index == static_cast<int>(j))
+							pc->stats.primary_additional[j] += item.bonus[bonus_counter].value;
+					}
 
-				bonus_counter++;
+					bonus_counter++;
+				}
 			}
 		}
 
@@ -928,14 +1069,16 @@ void MenuInventory::applyEquipment() {
 		std::vector<int> quantity;
 
 		for (int i=0; i<MAX_EQUIPPED; i++) {
-			item_id = inventory[EQUIPMENT].storage[i].item;
-			it = std::find(set.begin(), set.end(), items->items[item_id].set);
-			if (items->items[item_id].set > 0 && it != set.end()) {
-				quantity[std::distance(set.begin(), it)] += 1;
-			}
-			else if (items->items[item_id].set > 0) {
-				set.push_back(items->items[item_id].set);
-				quantity.push_back(1);
+			if (isActive(i)) {
+				item_id = inventory[EQUIPMENT].storage[i].item;
+				it = std::find(set.begin(), set.end(), items->items[item_id].set);
+				if (items->items[item_id].set > 0 && it != set.end()) {
+					quantity[std::distance(set.begin(), it)] += 1;
+				}
+				else if (items->items[item_id].set > 0) {
+					set.push_back(items->items[item_id].set);
+					quantity.push_back(1);
+				}
 			}
 		}
 		// calculate bonuses to basic stats, added by item sets
@@ -953,10 +1096,12 @@ void MenuInventory::applyEquipment() {
 		}
 		// check that each equipped item fit requirements
 		for (int i = 0; i < MAX_EQUIPPED; i++) {
-			if (!items->requirementsMet(&pc->stats, inventory[EQUIPMENT].storage[i].item)) {
-				add(inventory[EQUIPMENT].storage[i], CARRIED, ItemStorage::NO_SLOT, ADD_PLAY_SOUND, !ADD_AUTO_EQUIP);
-				inventory[EQUIPMENT].storage[i].clear();
-				checkRequired = true;
+			if (isActive(i)) {
+				if (!items->requirementsMet(&pc->stats, inventory[EQUIPMENT].storage[i].item)) {
+					add(inventory[EQUIPMENT].storage[i], CARRIED, ItemStorage::NO_SLOT, ADD_PLAY_SOUND, !ADD_AUTO_EQUIP);
+					inventory[EQUIPMENT].storage[i].clear();
+					checkRequired = true;
+				}
 			}
 		}
 	}
@@ -1031,36 +1176,38 @@ void MenuInventory::applyItemStats() {
 
 	// apply stats from all items
 	for (int i=0; i<MAX_EQUIPPED; i++) {
-		ItemID item_id = inventory[EQUIPMENT].storage[i].item;
-		const Item &item = items->items[item_id];
+		if (isActive(i)) {
+			ItemID item_id = inventory[EQUIPMENT].storage[i].item;
+			const Item &item = items->items[item_id];
 
-		// apply base stats
-		for (size_t j = 0; j < eset->damage_types.list.size(); ++j) {
-			pc->stats.dmg_min_add[j] += item.dmg_min[j];
-			pc->stats.dmg_max_add[j] += item.dmg_max[j];
-		}
+			// apply base stats
+			for (size_t j = 0; j < eset->damage_types.list.size(); ++j) {
+				pc->stats.dmg_min_add[j] += item.dmg_min[j];
+				pc->stats.dmg_max_add[j] += item.dmg_max[j];
+			}
 
-		// set equip flags
-		for (unsigned j=0; j<item.equip_flags.size(); ++j) {
-			pc->stats.equip_flags.insert(item.equip_flags[j]);
-		}
+			// set equip flags
+			for (unsigned j=0; j<item.equip_flags.size(); ++j) {
+				pc->stats.equip_flags.insert(item.equip_flags[j]);
+			}
 
-		// apply absorb bonus
-		pc->stats.absorb_min_add += item.abs_min;
-		pc->stats.absorb_max_add += item.abs_max;
+			// apply absorb bonus
+			pc->stats.absorb_min_add += item.abs_min;
+			pc->stats.absorb_max_add += item.abs_max;
 
-		// apply various bonuses
-		unsigned bonus_counter = 0;
-		while (bonus_counter < item.bonus.size()) {
-			applyBonus(&item.bonus[bonus_counter]);
-			bonus_counter++;
-		}
+			// apply various bonuses
+			unsigned bonus_counter = 0;
+			while (bonus_counter < item.bonus.size()) {
+				applyBonus(&item.bonus[bonus_counter]);
+				bonus_counter++;
+			}
 
-		// add item powers
-		if (item.power > 0) {
-			pc->stats.powers_list_items.push_back(item.power);
-			if (pc->stats.effects.triggered_others)
-				powers->activateSinglePassive(&pc->stats, item.power);
+			// add item powers
+			if (item.power > 0) {
+				pc->stats.powers_list_items.push_back(item.power);
+				if (pc->stats.effects.triggered_others)
+					powers->activateSinglePassive(&pc->stats, item.power);
+			}
 		}
 	}
 }
@@ -1072,14 +1219,16 @@ void MenuInventory::applyItemSetBonuses() {
 	std::vector<int> quantity;
 
 	for (int i=0; i<MAX_EQUIPPED; i++) {
-		ItemID item_id = inventory[EQUIPMENT].storage[i].item;
-		it = std::find(set.begin(), set.end(), items->items[item_id].set);
-		if (items->items[item_id].set > 0 && it != set.end()) {
-			quantity[std::distance(set.begin(), it)] += 1;
-		}
-		else if (items->items[item_id].set > 0) {
-			set.push_back(items->items[item_id].set);
-			quantity.push_back(1);
+		if (isActive(i)) {
+			ItemID item_id = inventory[EQUIPMENT].storage[i].item;
+			it = std::find(set.begin(), set.end(), items->items[item_id].set);
+			if (items->items[item_id].set > 0 && it != set.end()) {
+				quantity[std::distance(set.begin(), it)] += 1;
+			}
+			else if (items->items[item_id].set > 0) {
+				set.push_back(items->items[item_id].set);
+				quantity.push_back(1);
+			}
 		}
 	}
 	// apply item set bonuses
@@ -1125,6 +1274,79 @@ void MenuInventory::applyBonus(const BonusData* bdata) {
 	ed.type = Effect::getTypeFromString(ed.id);
 
 	pc->stats.effects.addItemEffect(ed, 0, bdata->value);
+}
+
+void MenuInventory::applyEquipmentSet(unsigned set) {
+	if (set > 0 && set <= max_equipment_set) {
+		active_equipment_set = set;
+		updateEquipmentSetWidgets();
+	}
+}
+
+void MenuInventory::applyNextEquipmentSet() {
+	if (active_equipment_set < max_equipment_set) {
+		active_equipment_set++;
+	}
+	else {
+		active_equipment_set = 1;
+	}
+	updateEquipmentSetWidgets();
+}
+
+void MenuInventory::applyPreviousEquipmentSet() {
+	if (active_equipment_set > 1) {
+		active_equipment_set--;
+	}
+	else {
+		active_equipment_set = max_equipment_set;
+	}
+	updateEquipmentSetWidgets();
+}
+
+void MenuInventory::updateEquipmentSetWidgets() {
+	for (int i=0; i<MAX_EQUIPPED; i++) {
+		if (isActive(i)) {
+			inventory[EQUIPMENT].slots[i]->visible = true;
+		}
+		else {
+			inventory[EQUIPMENT].slots[i]->visible = false;
+		}
+	}
+
+	if (!equipmentSetButton.empty()) {
+		for (size_t i=0; i<equipmentSetButton.size(); i++) {
+			if (active_equipment_set > 0) {
+				if (i == active_equipment_set-1) {
+					equipmentSetButton[i]->enabled = false;
+				}
+				else {
+					equipmentSetButton[i]->enabled = true;
+				}
+			}
+		}
+	}
+
+	if (equipmentSetLabel) {
+		std::stringstream label;
+		label << active_equipment_set << "/" << max_equipment_set;
+		equipmentSetLabel->setText(label.str());
+		equipmentSetLabel->setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
+	}
+
+	if (active_equipment_set > 0) {
+		if (!visible && menu && menu->hudlog) {
+			menu->hudlog->add(msg->get("Equipped set %d.", static_cast<int>(active_equipment_set)), MenuHUDLog::MSG_NORMAL);
+		}
+	}
+}
+
+
+bool MenuInventory::isActive(size_t equipped) {
+	if (equipment_set[equipped] == 0 || equipment_set[equipped]==active_equipment_set) {
+		return true;
+	}
+
+	return false;
 }
 
 int MenuInventory::getEquippedCount() {
@@ -1270,4 +1492,12 @@ int MenuInventory::getEquippedSetCount(size_t set_id) {
 
 MenuInventory::~MenuInventory() {
 	delete closeButton;
+	for (size_t i=0; i<equipmentSetButton.size(); i++) {
+		delete equipmentSetButton[i];
+	}
+
+	delete equipmentSetNext;
+	delete equipmentSetPrevious;
+	delete equipmentSetLabel;
+
 }

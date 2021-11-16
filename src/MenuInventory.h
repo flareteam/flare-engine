@@ -42,11 +42,18 @@ private:
 
 	void loadGraphics();
 	void updateEquipment(int slot);
+	void updateEquipmentSetWidgets();
 	int getEquipSlotFromItem(ItemID item, bool only_empty_slots);
 
 	WidgetLabel label_inventory;
 	WidgetLabel label_currency;
 	WidgetButton *closeButton;
+
+	// equipment swap buttons
+	std::vector<WidgetButton*> equipmentSetButton;
+	WidgetButton* equipmentSetPrevious;
+	WidgetButton* equipmentSetNext;
+	WidgetLabel* equipmentSetLabel;
 
 	int MAX_EQUIPPED;
 	int MAX_CARRIED;
@@ -106,6 +113,10 @@ public:
 	void applyItemStats();
 	void applyItemSetBonuses();
 	void applyBonus(const BonusData* bdata);
+	void applyEquipmentSet(unsigned set);
+	void applyNextEquipmentSet();
+	void applyPreviousEquipmentSet();
+	bool isActive(size_t equipped);
 
 	int getEquippedCount();
 	int getTotalSlotCount();
@@ -127,8 +138,11 @@ public:
 	Rect carried_area;
 	std::vector<Rect> equipped_area;
 	std::vector<std::string> slot_type;
+	std::vector<unsigned int> equipment_set;
 
 	MenuItemStorage inventory[2];
+	unsigned active_equipment_set;
+	unsigned max_equipment_set;
 	int currency;
 	int drag_prev_src;
 

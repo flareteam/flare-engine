@@ -48,6 +48,7 @@ WidgetSlot::WidgetSlot(int _icon_id, int _ACTIVATE)
 	, checked(false)
 	, pressed(false)
 	, continuous(false)
+	, visible(true)
 {
 	focusable = true;
 	label_amount.setFromLabelInfo(eset->widgets.slot_quantity_label);
@@ -274,6 +275,8 @@ void WidgetSlot::setHotkey(int key) {
 }
 
 void WidgetSlot::render() {
+	if (!visible) return;
+
 	Rect src;
 
 	if (icon_id != -1 && icons) {
@@ -307,6 +310,8 @@ void WidgetSlot::render() {
  * We can use this function if slot is grayed out to refresh selection frame
  */
 void WidgetSlot::renderSelection() {
+	if (!visible) return;
+
 	if (in_focus) {
 		if (slot_checked && checked) {
 			slot_checked->local_frame = local_frame;
