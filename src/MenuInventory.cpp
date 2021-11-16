@@ -1306,12 +1306,24 @@ void MenuInventory::applyPreviousEquipmentSet() {
 }
 
 void MenuInventory::updateEquipmentSetWidgets() {
+	Widget* first_active_slot = NULL;
+	Widget* current_tablist_widget = tablist.getWidgetByIndex(tablist.getCurrent());
+	bool reset_tablist_cursor = false;
+
 	for (int i=0; i<MAX_EQUIPPED; i++) {
 		if (isActive(i)) {
+			if (!first_active_slot) {
+				first_active_slot = inventory[EQUIPMENT].slots[i];
+			}
 			inventory[EQUIPMENT].slots[i]->visible = true;
+			inventory[EQUIPMENT].slots[i]->enable_tablist_nav = true;
 		}
 		else {
 			inventory[EQUIPMENT].slots[i]->visible = false;
+			inventory[EQUIPMENT].slots[i]->enable_tablist_nav = false;
+			if (current_tablist_widget && inventory[EQUIPMENT].slots[i] == current_tablist_widget) {
+				reset_tablist_cursor = true;
+			}
 		}
 	}
 
@@ -1320,12 +1332,20 @@ void MenuInventory::updateEquipmentSetWidgets() {
 			if (active_equipment_set > 0) {
 				if (i == active_equipment_set-1) {
 					equipmentSetButton[i]->enabled = false;
+					if (current_tablist_widget && equipmentSetButton[i] == current_tablist_widget) {
+						reset_tablist_cursor = true;
+					}
+
 				}
 				else {
 					equipmentSetButton[i]->enabled = true;
 				}
 			}
 		}
+	}
+
+	if (reset_tablist_cursor && first_active_slot) {
+		tablist.setCurrent(first_active_slot);
 	}
 
 	if (equipmentSetLabel) {
