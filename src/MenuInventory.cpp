@@ -224,7 +224,7 @@ MenuInventory::MenuInventory()
 		equipmentSetLabel->setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 	}
 
-	applyEquipmentSet(max_equipment_set);
+	applyEquipmentSet(1);
 
 	align();
 }
