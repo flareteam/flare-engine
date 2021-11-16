@@ -52,7 +52,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetSlot.h"
 
 MenuInventory::MenuInventory()
-	: MAX_EQUIPPED(4)
+	: closeButton(new WidgetButton("images/menus/buttons/button_x.png"))
+	, equipmentSetPrevious(NULL)
+	, equipmentSetNext(NULL)
+	, equipmentSetLabel(NULL)
+	, MAX_EQUIPPED(4)
 	, MAX_CARRIED(64)
 	, carried_cols(4)
 	, carried_rows(4)
@@ -70,8 +74,6 @@ MenuInventory::MenuInventory()
 	visible = false;
 
 	setBackground("images/menus/inventory.png");
-
-	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
 
 	// raw data for equipment swap buttons
 	std::map<unsigned, std::string> raw_set_button;
