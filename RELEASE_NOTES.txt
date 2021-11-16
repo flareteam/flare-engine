@@ -5,6 +5,7 @@ Engine features:
 * Added additional requirement properties to enemy and NPC map objects. The properties now match what is available for map events.
 * When 'mouse aim' is disabled, the Shift key can now be used with the direction keys to change the player's orientation without moving.
 * Added 'fog-of-war' feature (r-a-cristian-93)
+* Added support for multiple equipment sets (r-a-cristian-93)
 
 Engine fixes:
 

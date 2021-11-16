@@ -887,6 +887,8 @@ body {
 
 <p><strong>default.main2</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for "Main2".</p>
 
+<p><strong>default.swap</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for "Equipment swap".</p>
+
 <p><strong>default.character</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for "Character".</p>
 
 <p><strong>default.inventory</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for "Inventory".</p>
@@ -1375,7 +1377,15 @@ body {
 
 <p><strong>close</strong> | <code>point</code> | Position of the close button.</p>
 
-<p><strong>equipment_slot</strong> | <code>repeatable(int, int, string) : X, Y, Slot Type</code> | Position and item type of an equipment slot.</p>
+<p><strong>set_button</strong> | <code>int, int, int, filename : ID, Widget X, Widget Y, Image file</code> | Set number, position and image filename for an equipment swap set button.</p>
+
+<p><strong>set_previous</strong> | <code>int, int, filename : Widget X, Widget Y, Image file</code> | Position and image filename for an equipment swap set previous button.</p>
+
+<p><strong>set_next</strong> | <code>int, int, filename : Widget X, Widget Y, Image file</code> | Position and image filename for an equipment swap set next button.</p>
+
+<p><strong>label_equipment_set</strong> | <code>label</code> | Label showing the active equipment set.</p>
+
+<p><strong>equipment_slot</strong> | <code>repeatable(int, int, string, int) : X, Y, Slot Type, Equipment set</code> | Position, item type and equipment set number of an equipment slot. Equipment set number is "0" for shared items."</p>
 
 <p><strong>carried_area</strong> | <code>point</code> | Position of the first normal inventory slot.</p>
 
