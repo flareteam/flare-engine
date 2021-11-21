@@ -17,6 +17,7 @@ Engine fixes:
 * Fix bug where negative regen wouldn't work if the resource was 100% full.
 * Fix bug where negative regen would overflow after reaching zero.
 * Fix bug that caused built-in effect types to be ignored by Power post_effect.
+* Fix disappearing sprites due to render priority overflow.
 
 Game updates:
 
