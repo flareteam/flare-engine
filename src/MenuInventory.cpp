@@ -64,7 +64,7 @@ MenuInventory::MenuInventory()
 	, activated_slot(-1)
 	, activated_item(0)
 	, active_equipment_set(0)
-	, max_equipment_set(1)
+	, max_equipment_set(0)
 	, currency(0)
 	, drag_prev_src(-1)
 	, changed_equipment(true)
@@ -224,7 +224,9 @@ MenuInventory::MenuInventory()
 		equipmentSetLabel->setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 	}
 
-	applyEquipmentSet(1);
+	if (max_equipment_set > 0) {
+		applyEquipmentSet(1);
+	}
 
 	align();
 }
