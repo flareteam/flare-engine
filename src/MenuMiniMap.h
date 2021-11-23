@@ -32,6 +32,14 @@ class Sprite;
 class WidgetButton;
 class WidgetLabel;
 
+class PixelEntity {
+public:
+	int x;
+	int y;
+	Color* color;
+	PixelEntity(int _x, int _y, Color* _color);
+};
+
 class MenuMiniMap : public Menu {
 private:
 	enum {
@@ -62,10 +70,11 @@ private:
 	Rect map_area;
 	WidgetButton* button_config;
 
+	float visible_radius;
 	int current_zoom;
 	bool lock_zoom_change;
 
-	std::vector< std::vector<unsigned short> > entities;
+	std::vector<PixelEntity*> entities;
 
 	void createMapSurface(Sprite** target_surface, int w, int h);
 	void renderMapSurface(const FPoint& hero_pos);
@@ -73,8 +82,8 @@ private:
 	void prerenderIso(MapCollision *collider, Sprite** tile_surface, Sprite** entity_surface, int zoom);
 	void updateIso(MapCollision *collider, Sprite** tile_surface, int zoom, Rect *bounds);
 	void updateOrtho(MapCollision *collider, Sprite** tile_surface, int zoom, Rect *bounds);
-	void renderEntitiesOrtho(Sprite* entity_surface, int zoom);
-	void renderEntitiesIso(Sprite* entity_surface, int zoom);
+	void renderEntitiesOrtho(Sprite* entity_surface, int zoom, const Point& entity_offset);
+	void renderEntitiesIso(Sprite* entity_surface, int zoom, const Point& entity_offset);
 	void clearEntities();
 	void fillEntities();
 

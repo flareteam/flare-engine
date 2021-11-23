@@ -57,6 +57,7 @@ public:
 	FPoint();
 	FPoint(float _x, float _y);
 	explicit FPoint(Point _p);
+	FPoint(int _x, int _y);
 	void align();
 };
 
