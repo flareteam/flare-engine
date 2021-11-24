@@ -82,6 +82,11 @@ FPoint::FPoint(Point _p)
 	, y(static_cast<float>(_p.y))
 {}
 
+FPoint::FPoint(int _x, int _y)
+	: x(static_cast<float>(_x))
+	, y(static_cast<float>(_y))
+{}
+
 void FPoint::align() {
 	// this rounds the float values to the nearest multiple of 1/(2^4)
 	// 1/(2^4) was chosen because it's a "nice" floating point number, removing 99% of rounding errors
