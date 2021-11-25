@@ -44,6 +44,8 @@ public:
 	void align();
 	virtual void render();
 
+	void setConfirmEnabled(bool enabled);
+
 	bool confirmClicked;
 	bool cancelClicked;
 	bool isWithinButtons;

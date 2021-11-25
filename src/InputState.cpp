@@ -64,7 +64,7 @@ InputState::InputState(void)
 	, current_touch()
 	, dump_event(false)
 	, file_version(new Version())
-	, file_version_min(new Version(1, 12, 29))
+	, file_version_min(new Version(1, 12, 34))
 {
 	config_keys[Input::CANCEL] = "cancel";
 	config_keys[Input::ACCEPT] = "accept";
@@ -99,32 +99,6 @@ InputState::InputState(void)
 InputState::~InputState() {
 	delete file_version;
 	delete file_version_min;
-}
-
-void InputState::setBind(int action, int type, int bind) {
-	if (action < 0 || action >= KEY_COUNT)
-		return;
-
-	for (size_t i = 0; i < binding[action].size(); ++i) {
-		if (binding[action][i].type == type && binding[action][i].bind == bind)
-			return;
-	}
-
-	InputBind input_bind;
-	input_bind.type = type;
-	input_bind.bind = bind;
-
-	binding[action].push_back(input_bind);
-}
-
-void InputState::removeBind(int action, size_t index) {
-	if (action < 0 || action >= KEY_COUNT)
-		return;
-
-	if (index >= binding[action].size())
-		return;
-
-	binding[action].erase(binding[action].begin() + index);
 }
 
 /**

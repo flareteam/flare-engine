@@ -117,6 +117,12 @@ void MenuConfirm::render() {
 	buttonClose->render();
 }
 
+void MenuConfirm::setConfirmEnabled(bool enabled) {
+	if (hasConfirmButton) {
+		buttonConfirm->enabled = enabled;
+	}
+}
+
 MenuConfirm::~MenuConfirm() {
 	if (hasConfirmButton) delete buttonConfirm;
 	delete buttonClose;

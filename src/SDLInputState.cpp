@@ -50,6 +50,16 @@ SDLInputState::SDLInputState(void)
 {
 	platform.setExitEventFilter();
 
+	restricted_bindings.push_back(InputBind(InputBind::MOUSE, SDL_BUTTON_LEFT));
+	restricted_bindings.push_back(InputBind(InputBind::KEY, SDL_SCANCODE_LCTRL));
+	restricted_bindings.push_back(InputBind(InputBind::KEY, SDL_SCANCODE_RCTRL));
+	restricted_bindings.push_back(InputBind(InputBind::KEY, SDL_SCANCODE_LSHIFT));
+	restricted_bindings.push_back(InputBind(InputBind::KEY, SDL_SCANCODE_RSHIFT));
+	restricted_bindings.push_back(InputBind(InputBind::KEY, SDL_SCANCODE_LALT));
+	restricted_bindings.push_back(InputBind(InputBind::KEY, SDL_SCANCODE_RALT));
+	restricted_bindings.push_back(InputBind(InputBind::KEY, SDL_SCANCODE_DELETE));
+	restricted_bindings.push_back(InputBind(InputBind::KEY, SDL_SCANCODE_BACKSPACE));
+
 	initBindings();
 
 	for (int key=0; key<KEY_COUNT; key++) {
@@ -69,6 +79,53 @@ SDLInputState::SDLInputState(void)
 	}
 
 	initJoystick();
+}
+
+void SDLInputState::setBind(int action, int type, int bind, std::string *keybind_msg) {
+	if (action < 0 || action >= KEY_COUNT)
+		return;
+
+	for (size_t i = 0; i < binding[action].size(); ++i) {
+		// exact binding already exists for this action
+		if (binding[action][i].type == type && binding[action][i].bind == bind)
+			return;
+	}
+
+	if (keybind_msg) {
+		// prevent binding reserved keys
+		for (size_t i = 0; i < restricted_bindings.size(); ++i) {
+			if (type == restricted_bindings[i].type && bind == restricted_bindings[i].bind) {
+				*keybind_msg = msg->get("Can not bind: %s", getInputBindName(type, bind));
+				return;
+			}
+		}
+
+		// unbind other actions that have this same bind
+		for (int i = 0; i < KEY_COUNT_USER; ++i) {
+			for (size_t j = binding[i].size(); j > 0; --j) {
+				if (type == binding[i][j-1].type && bind == binding[i][j-1].bind) {
+					*keybind_msg = msg->get("'%s' is no longer bound to:", getInputBindName(type, bind)) + " '" + binding_name[i] + "'";
+					removeBind(i, j-1);
+				}
+			}
+		}
+	}
+
+	InputBind input_bind;
+	input_bind.type = type;
+	input_bind.bind = bind;
+
+	binding[action].push_back(input_bind);
+}
+
+void SDLInputState::removeBind(int action, size_t index) {
+	if (action < 0 || action >= KEY_COUNT)
+		return;
+
+	if (index >= binding[action].size())
+		return;
+
+	binding[action].erase(binding[action].begin() + index);
 }
 
 void SDLInputState::initJoystick() {
@@ -127,100 +184,98 @@ void SDLInputState::initBindings() {
 	if (platform.needs_alt_escape_key) {
 		// web browsers reserve Escape for exiting fullscreen, so we provide an alternate binding
 		// backslash is used due to its general proximity to Enter on both ANSI and ISO layouts
-		setBind(Input::CANCEL, InputBind::KEY, SDL_SCANCODE_BACKSLASH);
-		setBind(Input::PAUSE, InputBind::KEY, SDL_SCANCODE_BACKSLASH);
+		setBind(Input::CANCEL, InputBind::KEY, SDL_SCANCODE_BACKSLASH, NULL);
 	}
 	else {
-		setBind(Input::CANCEL, InputBind::KEY, SDL_SCANCODE_ESCAPE);
-		setBind(Input::PAUSE, InputBind::KEY, SDL_SCANCODE_ESCAPE);
+		setBind(Input::CANCEL, InputBind::KEY, SDL_SCANCODE_ESCAPE, NULL);
 	}
 
-	setBind(Input::ACCEPT, InputBind::KEY, SDL_SCANCODE_RETURN);
-	setBind(Input::ACCEPT, InputBind::KEY, SDL_SCANCODE_SPACE);
+	setBind(Input::ACCEPT, InputBind::KEY, SDL_SCANCODE_RETURN, NULL);
+	setBind(Input::ACCEPT, InputBind::KEY, SDL_SCANCODE_SPACE, NULL);
 
 	if (platform.is_mobile_device) {
-		setBind(Input::CANCEL, InputBind::KEY, SDL_SCANCODE_AC_BACK);
-		setBind(Input::ACCEPT, InputBind::KEY, SDL_SCANCODE_MENU);
+		setBind(Input::CANCEL, InputBind::KEY, SDL_SCANCODE_AC_BACK, NULL);
+		setBind(Input::ACCEPT, InputBind::KEY, SDL_SCANCODE_MENU, NULL);
 	}
 
-	setBind(Input::UP, InputBind::KEY, SDL_SCANCODE_W);
-	setBind(Input::UP, InputBind::KEY, SDL_SCANCODE_UP);
+	setBind(Input::UP, InputBind::KEY, SDL_SCANCODE_W, NULL);
+	setBind(Input::UP, InputBind::KEY, SDL_SCANCODE_UP, NULL);
 
-	setBind(Input::DOWN, InputBind::KEY, SDL_SCANCODE_S);
-	setBind(Input::DOWN, InputBind::KEY, SDL_SCANCODE_DOWN);
+	setBind(Input::DOWN, InputBind::KEY, SDL_SCANCODE_S, NULL);
+	setBind(Input::DOWN, InputBind::KEY, SDL_SCANCODE_DOWN, NULL);
 
-	setBind(Input::LEFT, InputBind::KEY, SDL_SCANCODE_A);
-	setBind(Input::LEFT, InputBind::KEY, SDL_SCANCODE_LEFT);
+	setBind(Input::LEFT, InputBind::KEY, SDL_SCANCODE_A, NULL);
+	setBind(Input::LEFT, InputBind::KEY, SDL_SCANCODE_LEFT, NULL);
 
-	setBind(Input::RIGHT, InputBind::KEY, SDL_SCANCODE_D);
-	setBind(Input::RIGHT, InputBind::KEY, SDL_SCANCODE_RIGHT);
+	setBind(Input::RIGHT, InputBind::KEY, SDL_SCANCODE_D, NULL);
+	setBind(Input::RIGHT, InputBind::KEY, SDL_SCANCODE_RIGHT, NULL);
 
-	setBind(Input::BAR_1, InputBind::KEY, SDL_SCANCODE_Q);
-	setBind(Input::BAR_2, InputBind::KEY, SDL_SCANCODE_E);
-	setBind(Input::BAR_3, InputBind::KEY, SDL_SCANCODE_R);
-	setBind(Input::BAR_4, InputBind::KEY, SDL_SCANCODE_F);
-	setBind(Input::BAR_5, InputBind::KEY, SDL_SCANCODE_1);
-	setBind(Input::BAR_6, InputBind::KEY, SDL_SCANCODE_2);
-	setBind(Input::BAR_7, InputBind::KEY, SDL_SCANCODE_3);
-	setBind(Input::BAR_8, InputBind::KEY, SDL_SCANCODE_4);
-	setBind(Input::BAR_9, InputBind::KEY, SDL_SCANCODE_5);
-	setBind(Input::BAR_0, InputBind::KEY, SDL_SCANCODE_6);
+	setBind(Input::BAR_1, InputBind::KEY, SDL_SCANCODE_Q, NULL);
+	setBind(Input::BAR_2, InputBind::KEY, SDL_SCANCODE_E, NULL);
+	setBind(Input::BAR_3, InputBind::KEY, SDL_SCANCODE_R, NULL);
+	setBind(Input::BAR_4, InputBind::KEY, SDL_SCANCODE_F, NULL);
+	setBind(Input::BAR_5, InputBind::KEY, SDL_SCANCODE_1, NULL);
+	setBind(Input::BAR_6, InputBind::KEY, SDL_SCANCODE_2, NULL);
+	setBind(Input::BAR_7, InputBind::KEY, SDL_SCANCODE_3, NULL);
+	setBind(Input::BAR_8, InputBind::KEY, SDL_SCANCODE_4, NULL);
+	setBind(Input::BAR_9, InputBind::KEY, SDL_SCANCODE_5, NULL);
+	setBind(Input::BAR_0, InputBind::KEY, SDL_SCANCODE_6, NULL);
 
-	setBind(Input::CHARACTER, InputBind::KEY, SDL_SCANCODE_C);
-	setBind(Input::INVENTORY, InputBind::KEY, SDL_SCANCODE_I);
-	setBind(Input::POWERS, InputBind::KEY, SDL_SCANCODE_P);
-	setBind(Input::LOG, InputBind::KEY, SDL_SCANCODE_L);
+	setBind(Input::CHARACTER, InputBind::KEY, SDL_SCANCODE_C, NULL);
+	setBind(Input::INVENTORY, InputBind::KEY, SDL_SCANCODE_I, NULL);
+	setBind(Input::POWERS, InputBind::KEY, SDL_SCANCODE_P, NULL);
+	setBind(Input::LOG, InputBind::KEY, SDL_SCANCODE_L, NULL);
 
-	setBind(Input::MAIN1, InputBind::MOUSE, SDL_BUTTON_LEFT);
-	setBind(Input::MAIN2, InputBind::MOUSE, SDL_BUTTON_RIGHT);
+	setBind(Input::MAIN1, InputBind::MOUSE, SDL_BUTTON_LEFT, NULL);
+	setBind(Input::MAIN2, InputBind::MOUSE, SDL_BUTTON_RIGHT, NULL);
 
-	setBind(Input::MENU_PAGE_NEXT, InputBind::KEY, SDL_SCANCODE_PAGEDOWN);
-	setBind(Input::MENU_PAGE_PREV, InputBind::KEY, SDL_SCANCODE_PAGEUP);
+	setBind(Input::MENU_PAGE_NEXT, InputBind::KEY, SDL_SCANCODE_PAGEDOWN, NULL);
+	setBind(Input::MENU_PAGE_PREV, InputBind::KEY, SDL_SCANCODE_PAGEUP, NULL);
 
-	setBind(Input::DEVELOPER_MENU, InputBind::KEY, SDL_SCANCODE_F5);
+	setBind(Input::DEVELOPER_MENU, InputBind::KEY, SDL_SCANCODE_F5, NULL);
 
-	setBind(Input::SWAP, InputBind::KEY, SDL_SCANCODE_TAB);
+	setBind(Input::SWAP, InputBind::KEY, SDL_SCANCODE_TAB, NULL);
 
 	// Gamepad bindings
-	setBind(Input::CANCEL, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_B);
-	setBind(Input::ACCEPT, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_A);
+	setBind(Input::CANCEL, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_B, NULL);
+	setBind(Input::ACCEPT, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_A, NULL);
 
-	setBind(Input::RIGHT, InputBind::GAMEPAD_AXIS, (SDL_CONTROLLER_AXIS_LEFTX*2));
-	setBind(Input::DOWN, InputBind::GAMEPAD_AXIS, (SDL_CONTROLLER_AXIS_LEFTY*2));
-	setBind(Input::LEFT, InputBind::GAMEPAD_AXIS, (SDL_CONTROLLER_AXIS_LEFTX*2) + 1);
-	setBind(Input::UP, InputBind::GAMEPAD_AXIS, (SDL_CONTROLLER_AXIS_LEFTY*2) + 1);
+	setBind(Input::RIGHT, InputBind::GAMEPAD_AXIS, (SDL_CONTROLLER_AXIS_LEFTX*2), NULL);
+	setBind(Input::DOWN, InputBind::GAMEPAD_AXIS, (SDL_CONTROLLER_AXIS_LEFTY*2), NULL);
+	setBind(Input::LEFT, InputBind::GAMEPAD_AXIS, (SDL_CONTROLLER_AXIS_LEFTX*2) + 1, NULL);
+	setBind(Input::UP, InputBind::GAMEPAD_AXIS, (SDL_CONTROLLER_AXIS_LEFTY*2) + 1, NULL);
 
-	setBind(Input::LEFT, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_DPAD_LEFT);
-	setBind(Input::RIGHT, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_DPAD_RIGHT);
-	setBind(Input::UP, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_DPAD_UP);
-	setBind(Input::DOWN, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_DPAD_DOWN);
+	setBind(Input::LEFT, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_DPAD_LEFT, NULL);
+	setBind(Input::RIGHT, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_DPAD_RIGHT, NULL);
+	setBind(Input::UP, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_DPAD_UP, NULL);
+	setBind(Input::DOWN, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_DPAD_DOWN, NULL);
 
 	// TODO implement input contexts so that MAIN1 doesn't interfere with MENU_PAGE_NEXT
-	// setBind(Input::MAIN1, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER);
-	// setBind(Input::MAIN2, InputBind::GAMEPAD_AXIS, (SDL_CONTROLLER_AXIS_TRIGGERRIGHT*2));
+	// setBind(Input::MAIN1, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER, NULL);
+	// setBind(Input::MAIN2, InputBind::GAMEPAD_AXIS, (SDL_CONTROLLER_AXIS_TRIGGERRIGHT*2), NULL);
 
-	setBind(Input::MAIN1, InputBind::GAMEPAD_AXIS, (SDL_CONTROLLER_AXIS_TRIGGERRIGHT*2));
-	setBind(Input::MAIN2, InputBind::GAMEPAD_AXIS, (SDL_CONTROLLER_AXIS_TRIGGERLEFT*2));
+	setBind(Input::MAIN1, InputBind::GAMEPAD_AXIS, (SDL_CONTROLLER_AXIS_TRIGGERRIGHT*2), NULL);
+	setBind(Input::MAIN2, InputBind::GAMEPAD_AXIS, (SDL_CONTROLLER_AXIS_TRIGGERLEFT*2), NULL);
 
-	setBind(Input::ACTIONBAR, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_BACK);
+	setBind(Input::ACTIONBAR, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_BACK, NULL);
 
-	setBind(Input::MENU_PAGE_NEXT, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER);
-	setBind(Input::MENU_PAGE_PREV, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_LEFTSHOULDER);
-	setBind(Input::MENU_ACTIVATE, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_X);
+	setBind(Input::MENU_PAGE_NEXT, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER, NULL);
+	setBind(Input::MENU_PAGE_PREV, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_LEFTSHOULDER, NULL);
+	setBind(Input::MENU_ACTIVATE, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_X, NULL);
 
-	setBind(Input::PAUSE, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_START);
+	setBind(Input::PAUSE, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_START, NULL);
 
 	// Not user-modifiable
-	setBind(Input::CTRL, InputBind::KEY, SDL_SCANCODE_LCTRL);
-	setBind(Input::CTRL, InputBind::KEY, SDL_SCANCODE_RCTRL);
-	setBind(Input::SHIFT, InputBind::KEY, SDL_SCANCODE_LSHIFT);
-	setBind(Input::SHIFT, InputBind::KEY, SDL_SCANCODE_RSHIFT);
-	setBind(Input::ALT, InputBind::KEY, SDL_SCANCODE_LALT);
-	setBind(Input::ALT, InputBind::KEY, SDL_SCANCODE_RALT);
-	setBind(Input::DEL, InputBind::KEY, SDL_SCANCODE_DELETE);
-	setBind(Input::DEL, InputBind::KEY, SDL_SCANCODE_BACKSPACE);
-	setBind(Input::TEXTEDIT_UP, InputBind::KEY, SDL_SCANCODE_UP);
-	setBind(Input::TEXTEDIT_DOWN, InputBind::KEY, SDL_SCANCODE_DOWN);
+	setBind(Input::CTRL, InputBind::KEY, SDL_SCANCODE_LCTRL, NULL);
+	setBind(Input::CTRL, InputBind::KEY, SDL_SCANCODE_RCTRL, NULL);
+	setBind(Input::SHIFT, InputBind::KEY, SDL_SCANCODE_LSHIFT, NULL);
+	setBind(Input::SHIFT, InputBind::KEY, SDL_SCANCODE_RSHIFT, NULL);
+	setBind(Input::ALT, InputBind::KEY, SDL_SCANCODE_LALT, NULL);
+	setBind(Input::ALT, InputBind::KEY, SDL_SCANCODE_RALT, NULL);
+	setBind(Input::DEL, InputBind::KEY, SDL_SCANCODE_DELETE, NULL);
+	setBind(Input::DEL, InputBind::KEY, SDL_SCANCODE_BACKSPACE, NULL);
+	setBind(Input::TEXTEDIT_UP, InputBind::KEY, SDL_SCANCODE_UP, NULL);
+	setBind(Input::TEXTEDIT_DOWN, InputBind::KEY, SDL_SCANCODE_DOWN, NULL);
 }
 
 void SDLInputState::handle() {
@@ -871,6 +926,22 @@ void SDLInputState::setCommonStrings() {
 	xbox_axes[(SDL_CONTROLLER_AXIS_RIGHTY*2)+1] = msg->get("X360: Right Y-");
 	xbox_axes[(SDL_CONTROLLER_AXIS_TRIGGERLEFT*2)] = msg->get("X360: L2");
 	xbox_axes[(SDL_CONTROLLER_AXIS_TRIGGERRIGHT*2)] = msg->get("X360: R2");
+}
+
+std::string SDLInputState::getInputBindName(int type, int bind) {
+	if (type == InputBind::KEY) {
+		return getKeyName(bind);
+	}
+	else if (type == InputBind::MOUSE) {
+		return getMouseButtonName(bind);
+	}
+	else if (type == InputBind::GAMEPAD) {
+		return getJoystickButtonName(bind);
+	}
+	else if (type == InputBind::GAMEPAD_AXIS) {
+		return getJoystickAxisName(bind);
+	}
+	return "";
 }
 
 SDLInputState::~SDLInputState() {

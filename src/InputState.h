@@ -79,9 +79,9 @@ public:
 	int type;
 	int bind;
 
-	InputBind()
-		: type(-1)
-		, bind(-1)
+	InputBind(int _type = -1, int _bind = -1)
+		: type(_type)
+		, bind(_bind)
 	{}
 	~InputBind() {}
 };
@@ -110,8 +110,8 @@ public:
 	InputState(void);
 	virtual ~InputState();
 
-	void setBind(int action, int type, int bind);
-	void removeBind(int action, size_t index);
+	virtual void setBind(int action, int type, int bind, std::string *keybind_msg) = 0;
+	virtual void removeBind(int action, size_t index) = 0;
 
 	virtual void initJoystick() = 0;
 	void loadKeyBindings();

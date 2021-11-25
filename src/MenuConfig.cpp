@@ -1251,6 +1251,7 @@ void MenuConfig::logicKeybinds() {
 				confirm_msg = msg->get("Assign:") + ' ' + inpt->binding_name[i];
 				delete input_confirm;
 				input_confirm = new MenuConfirm(msg->get("Clear"),confirm_msg);
+				input_confirm->setConfirmEnabled(!(i == Input::MAIN1 && keybinds_lstb[i]->getSelected() == 0));
 				input_confirm_timer.reset(Timer::BEGIN);
 				input_confirm->visible = true;
 				input_action = i;
@@ -1586,22 +1587,22 @@ void MenuConfig::scanKey(int action) {
 	if (input_confirm->visible && !input_confirm->isWithinButtons) {
 		if (inpt->last_key != -1) {
 			// keyboard
-			inpt->setBind(action, InputBind::KEY, inpt->last_key);
+			inpt->setBind(action, InputBind::KEY, inpt->last_key, &keybind_msg);
 			confirmKey(action);
 		}
 		else if (inpt->last_button != -1) {
 			// mouse
-			inpt->setBind(action, InputBind::MOUSE, inpt->last_button);
+			inpt->setBind(action, InputBind::MOUSE, inpt->last_button, &keybind_msg);
 			confirmKey(action);
 		}
 		else if (inpt->last_joybutton != -1) {
 			// gamepad button
-			inpt->setBind(action, InputBind::GAMEPAD, inpt->last_joybutton);
+			inpt->setBind(action, InputBind::GAMEPAD, inpt->last_joybutton, &keybind_msg);
 			confirmKey(action);
 		}
 		else if (inpt->last_joyaxis != -1) {
 			// gamepad axis
-			inpt->setBind(action, InputBind::GAMEPAD_AXIS, inpt->last_joyaxis);
+			inpt->setBind(action, InputBind::GAMEPAD_AXIS, inpt->last_joyaxis, &keybind_msg);
 			confirmKey(action);
 		}
 	}

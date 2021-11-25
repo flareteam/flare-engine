@@ -32,6 +32,9 @@ public:
 	SDLInputState(void);
 	~SDLInputState();
 
+	void setBind(int action, int type, int bind, std::string *keybind_msg);
+	void removeBind(int action, size_t index);
+
 	void initJoystick();
 	void initBindings();
 	void handle();
@@ -55,6 +58,7 @@ public:
 
 private:
 	int getBindFromString(const std::string& bind, int type);
+	std::string getInputBindName(int type, int bind);
 
 	Timer resize_cooldown;
 	bool joystick_init;
@@ -65,6 +69,8 @@ private:
 
 	std::string xbox_buttons[SDL_CONTROLLER_BUTTON_MAX];
 	std::string xbox_axes[SDL_CONTROLLER_AXIS_MAX*2]; // doubled because we need both positive and negative axis names
+
+	std::vector<InputBind> restricted_bindings;
 };
 
 #endif
