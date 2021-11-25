@@ -42,7 +42,8 @@ SDLHardwareImage::SDLHardwareImage(RenderDevice *_device, SDL_Renderer *_rendere
 	: Image(_device)
 	, renderer(_renderer)
 	, surface(NULL)
-	, pixel_batch_surface(NULL) {
+	, pixel_batch_surface(NULL)
+	, pixel_batch_type(PIXEL_BATCH_NONE) {
 }
 
 SDLHardwareImage::~SDLHardwareImage() {
@@ -83,52 +84,71 @@ void SDLHardwareImage::drawPixel(int x, int y, const Color& color) {
 	if (x < 0 || y < 0 || x >= getWidth() || y >= getHeight())
 		return;
 
-	if (pixel_batch_surface) {
-		// Taken from SDLSoftwareImage::drawPixel()
-		Uint32 pixel = SDL_MapRGBA(pixel_batch_surface->format, color.r, color.g, color.b, color.a);
-
-		int bpp = pixel_batch_surface->format->BytesPerPixel;
-		/* Here p is the address to the pixel we want to set */
-		Uint8 *p = static_cast<Uint8*>(pixel_batch_surface->pixels) + y * pixel_batch_surface->pitch + x * bpp;
-
-		if (SDL_MUSTLOCK(pixel_batch_surface)) {
-			SDL_LockSurface(pixel_batch_surface);
-		}
-		switch(bpp) {
-			case 1:
-				*p = static_cast<Uint8>(pixel);
-				break;
-
-			case 2:
-				*(reinterpret_cast<Uint16*>(p)) = static_cast<Uint16>(pixel);
-				break;
-
-			case 3:
-#if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
-				p[0] = (pixel >> 16) & 0xff;
-				p[1] = (pixel >> 8) & 0xff;
-				p[2] = pixel & 0xff;
-#else
-				p[0] = pixel & 0xff;
-				p[1] = (pixel >> 8) & 0xff;
-				p[2] = (pixel >> 16) & 0xff;
-#endif
-				break;
-
-			case 4:
-				*(reinterpret_cast<Uint32*>(p)) = pixel;
-				break;
-		}
-		if (SDL_MUSTLOCK(pixel_batch_surface)) {
-			SDL_UnlockSurface(pixel_batch_surface);
-		}
+	switch (pixel_batch_type) {
+		case PIXEL_BATCH_NONE:
+			drawPixelSingle(x, y, color);
+			break;
+		case PIXEL_BATCH_AREA:
+			if (x < pixel_batch_area.x) return;
+			if (y < pixel_batch_area.y) return;
+			if (x > pixel_batch_area.x + pixel_batch_area.w - 1) return;
+			if (y > pixel_batch_area.y + pixel_batch_area.h - 1) return;
+			x = x - pixel_batch_area.x;
+			y = y - pixel_batch_area.y;
+			drawPixelBatch(x, y, color);
+			break;
+		case PIXEL_BATCH_ALL:
+			drawPixelBatch(x, y, color);
+			break;
 	}
-	else {
-		SDL_SetRenderTarget(renderer, surface);
-		SDL_SetTextureBlendMode(surface, SDL_BLENDMODE_BLEND);
-		SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
-		SDL_RenderDrawPoint(renderer, x, y);
-		SDL_SetRenderTarget(renderer, NULL);
+}
+
+void SDLHardwareImage::drawPixelSingle(int x, int y, const Color& color) {
+	SDL_SetRenderTarget(renderer, surface);
+	SDL_SetTextureBlendMode(surface, SDL_BLENDMODE_BLEND);
+	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+	SDL_RenderDrawPoint(renderer, x, y);
+	SDL_SetRenderTarget(renderer, NULL);
+}
+
+void SDLHardwareImage::drawPixelBatch(int x, int y, const Color& color) {
+	// Taken from SDLSoftwareImage::drawPixel()
+	Uint32 pixel = SDL_MapRGBA(pixel_batch_surface->format, color.r, color.g, color.b, color.a);
+
+	int bpp = pixel_batch_surface->format->BytesPerPixel;
+	/* Here p is the address to the pixel we want to set */
+	Uint8 *p = static_cast<Uint8*>(pixel_batch_surface->pixels) + y * pixel_batch_surface->pitch + x * bpp;
+
+	if (SDL_MUSTLOCK(pixel_batch_surface)) {
+		SDL_LockSurface(pixel_batch_surface);
+	}
+	switch(bpp) {
+		case 1:
+			*p = static_cast<Uint8>(pixel);
+			break;
+
+		case 2:
+			*(reinterpret_cast<Uint16*>(p)) = static_cast<Uint16>(pixel);
+			break;
+
+		case 3:
+#if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
+			p[0] = (pixel >> 16) & 0xff;
+			p[1] = (pixel >> 8) & 0xff;
+			p[2] = pixel & 0xff;
+#else
+			p[0] = pixel & 0xff;
+			p[1] = (pixel >> 8) & 0xff;
+			p[2] = (pixel >> 16) & 0xff;
+#endif
+			break;
+
+		case 4:
+			*(reinterpret_cast<Uint32*>(p)) = pixel;
+			break;
+	}
+	if (SDL_MUSTLOCK(pixel_batch_surface)) {
+		SDL_UnlockSurface(pixel_batch_surface);
 	}
 }
 
@@ -152,23 +172,31 @@ void SDLHardwareImage::drawLine(int x0, int y0, int x1, int y1, const Color& col
 void SDLHardwareImage::beginPixelBatch() {
 	if (!surface) return;
 
+	pixel_batch_type = PIXEL_BATCH_ALL;
+
 	Uint32 rmask, gmask, bmask, amask;
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-	rmask = 0xff000000;
-	gmask = 0x00ff0000;
-	bmask = 0x0000ff00;
-	amask = 0x000000ff;
-#else
-	rmask = 0x000000ff;
-	gmask = 0x0000ff00;
-	bmask = 0x00ff0000;
-	amask = 0xff000000;
-#endif
+	Utils::setSDL_RGBA(&rmask, &gmask, &bmask, &amask);
 
 	if (pixel_batch_surface)
 		SDL_FreeSurface(pixel_batch_surface);
 
 	pixel_batch_surface = SDL_CreateRGBSurface(0, getWidth(), getHeight(), device->BITS_PER_PIXEL, rmask, gmask, bmask, amask);
+}
+
+void SDLHardwareImage::beginPixelBatch(Rect& bounds) {
+	if (!surface) return;
+	if (bounds.w <= 0 || bounds.h <= 0) return;
+
+	pixel_batch_type = PIXEL_BATCH_AREA;
+	pixel_batch_area = bounds;
+
+	Uint32 rmask, gmask, bmask, amask;
+	Utils::setSDL_RGBA(&rmask, &gmask, &bmask, &amask);
+
+	if (pixel_batch_surface)
+		SDL_FreeSurface(pixel_batch_surface);
+
+	pixel_batch_surface = SDL_CreateRGBSurface(0, bounds.w, bounds.h, device->BITS_PER_PIXEL, rmask, gmask, bmask, amask);
 }
 
 void SDLHardwareImage::endPixelBatch() {
@@ -179,14 +207,21 @@ void SDLHardwareImage::endPixelBatch() {
 	if (pixel_batch_texture) {
 		SDL_SetRenderTarget(renderer, surface);
 		SDL_SetTextureBlendMode(surface, SDL_BLENDMODE_BLEND);
-		SDL_RenderCopy(renderer, pixel_batch_texture, NULL, NULL);
+
+		if (pixel_batch_type == PIXEL_BATCH_ALL) {
+			SDL_RenderCopy(renderer, pixel_batch_texture, NULL, NULL);
+		}
+		else if (pixel_batch_type == PIXEL_BATCH_AREA) {
+			SDL_Rect dst(pixel_batch_area);
+			SDL_RenderCopy(renderer, pixel_batch_texture, NULL, &dst);
+		}
 		SDL_SetRenderTarget(renderer, NULL);
 
 		SDL_DestroyTexture(pixel_batch_texture);
 	}
-
 	SDL_FreeSurface(pixel_batch_surface);
 	pixel_batch_surface = NULL;
+	pixel_batch_type = PIXEL_BATCH_NONE;
 }
 
 Image* SDLHardwareImage::resize(int width, int height) {

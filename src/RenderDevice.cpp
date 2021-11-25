@@ -70,8 +70,12 @@ Sprite *Image::createSprite() {
 void Image::beginPixelBatch() {
 }
 
+void Image::beginPixelBatch(Rect& bounds) {
+}
+
 void Image::endPixelBatch() {
 }
+
 
 /*
  * Sprite

@@ -91,7 +91,6 @@ protected:
 private:
 	Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 	void getWindowSize(short unsigned *screen_w, short unsigned *screen_h);
-	void setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask);
 
 	SDL_Surface* screen;
 	SDL_Window* window;

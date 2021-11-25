@@ -48,6 +48,7 @@ public:
 	void drawPixel(int x, int y, const Color& color);
 	void drawLine(int x0, int y0, int x1, int y1, const Color& color);
 	void beginPixelBatch();
+	void beginPixelBatch(Rect& bounds);
 	void endPixelBatch();
 	Image* resize(int width, int height);
 
@@ -55,6 +56,18 @@ public:
 	SDL_Texture *surface;
 
 	SDL_Surface *pixel_batch_surface;
+	int pixel_batch_type;
+	Rect pixel_batch_area;
+
+private:
+	 enum {
+		 PIXEL_BATCH_NONE = 0,
+		 PIXEL_BATCH_ALL = 1,
+		 PIXEL_BATCH_AREA = 2,
+	};
+
+	void drawPixelSingle(int x, int y, const Color& color);
+	void drawPixelBatch(int x, int y, const Color& color);
 };
 
 class SDLHardwareRenderDevice : public RenderDevice {

@@ -393,7 +393,20 @@ void MenuMiniMap::updateOrtho(MapCollision *collider, Sprite** tile_surface, int
 
 	Color draw_color;
 
-	target_img->beginPixelBatch();
+	Point clipcenter(pc->stats.pos);
+	Rect clip;
+
+	clip.x = clipcenter.x - (fow->mask_radius)*zoom;
+	clip.y = clipcenter.y - (fow->mask_radius)*zoom;
+	clip.w = clipcenter.x + (fow->mask_radius)*zoom - clip.x + 1;
+	clip.h = clipcenter.y + (fow->mask_radius)*zoom - clip.y + 1;
+
+	if (clip.x<0) clip.x=0;
+	if (clip.y<0) clip.y=0;
+	if (clip.x + clip.w > target_img->getWidth()) clip.w = target_img->getWidth() - clip.x;
+	if (clip.y + clip.h > target_img->getHeight()) clip.h = target_img->getHeight() - clip.y;
+
+	target_img->beginPixelBatch(clip);
 
 	for (int i=bounds->x; i<=bounds->w; i++) {
 		for (int j=bounds->y; j<=bounds->h; j++) {
@@ -510,76 +523,59 @@ void MenuMiniMap::updateIso(MapCollision *collider, Sprite** tile_surface, int z
 	if (!(*tile_surface))
 		return;
 
-	// a 2x1 pixel area correlates to a tile, so we can traverse tiles using pixel counting
 	Color draw_color;
 	int tile_type;
 
-	Point tile_cursor;
-	tile_cursor.x = -std::max(map_size.x, map_size.y)/2;
-	tile_cursor.y = std::max(map_size.x, map_size.y)/2;
-
-	bool odd_row = false;
-
+	Point ent_pos;
 	Image* target_img = (*tile_surface)->getGraphics();
-	const int target_w = (*tile_surface)->getGraphicsWidth();
-	const int target_h = (*tile_surface)->getGraphicsHeight();
 
-	target_img->beginPixelBatch();
+	Point hero(pc->stats.pos);
+	Point clipcenter;
+	Rect clip;
 
-	// for each pixel row
-	for (int j=0; j<target_h; j++) {
+	clipcenter.x = zoom*(hero.x - hero.y + std::max(map_size.x, map_size.y));
+	clipcenter.y = zoom*(hero.x + hero.y);
+	clip.x = static_cast<int>(std::floor(clipcenter.x)) - (fow->mask_radius)*zoom;
+	clip.y = static_cast<int>(std::floor(clipcenter.y)) - (fow->mask_radius)*zoom;
+	clip.w = static_cast<int>(std::ceil(clipcenter.x)) + (fow->mask_radius)*zoom - clip.x + 1;
+	clip.h = static_cast<int>(std::ceil(clipcenter.y)) + (fow->mask_radius)*zoom - clip.y + 1;
 
-		// for each 2-px wide column
-		for (int i=0; i<target_w; i+=2) {
+	if (clip.x<0) clip.x=0;
+	if (clip.y<0) clip.y=0;
+	if (clip.x + clip.w > target_img->getWidth()) clip.w = target_img->getWidth() - clip.x;
+	if (clip.y + clip.h > target_img->getHeight()) clip.h = target_img->getHeight() - clip.y;
 
-			// if this tile is the max map size
-			if (tile_cursor.x >= bounds->x && tile_cursor.y >= bounds->y && tile_cursor.x < bounds->w && tile_cursor.y < bounds->h) {
+	target_img->beginPixelBatch(clip);
 
-				tile_type = collider->colmap[tile_cursor.x][tile_cursor.y];
-				bool draw_tile = true;
+	for (int i=bounds->x; i<bounds->w; i++) {
+		for (int j=bounds->y; j<bounds->h; j++) {
+			tile_type = collider->colmap[i][j];
+			bool draw_tile = true;
 
-				// walls and low obstacles show as different colors
-				if (tile_type == 1 || tile_type == 5) draw_color = color_wall;
-				else if (tile_type == 2 || tile_type == 6) draw_color = color_obst;
-				else draw_tile = false;
+			if (tile_type == 1 || tile_type == 5) draw_color = color_wall;
+			else if (tile_type == 2 || tile_type == 6) draw_color = color_obst;
+			else draw_tile = false;
 
-				// fog of war
-				tile_type = mapr->layers[fow->dark_layer_id][tile_cursor.x][tile_cursor.y];
-				if (tile_type != 0) draw_tile = false;
+			// fog of war
+			tile_type = mapr->layers[fow->dark_layer_id][i][j];
+			if (tile_type != 0) draw_tile = false;
 
-				if (draw_tile) {
-					if (odd_row) {
-						for (int l = 0; l < zoom; l++) {
-							for (int k = 0; k < zoom * 2; k++) {
-								target_img->drawPixel((zoom*i)+k, (zoom*j)+l, draw_color);
-							}
+			if (draw_tile) {
+				ent_pos.x = zoom*(i - j + std::max(map_size.x, map_size.y));
+				ent_pos.y = zoom*(i + j);
+
+				for (int l = 0; l < zoom; l++) {
+					for (int k = 0; k < zoom; k++) {
+						target_img->drawPixel(ent_pos.x+k, ent_pos.y+l, draw_color);
+						if (zoom==1) {
+							target_img->drawPixel(ent_pos.x+k-1, ent_pos.y+l, draw_color);
 						}
-					}
-					else {
-						for (int l = 0; l < zoom; l++) {
-							for (int k = -((zoom * 2) - zoom); k < zoom; k++) {
-								target_img->drawPixel((zoom*i)+k, (zoom*j)+l, draw_color);
-							}
+						else {
+							target_img->drawPixel(ent_pos.x+k-2, ent_pos.y+l, draw_color);
 						}
 					}
 				}
 			}
-
-			// moving screen-right in isometric is +x -y in map coordinates
-			tile_cursor.x++;
-			tile_cursor.y--;
-		}
-
-		// return tile cursor to next row of tiles
-		if (odd_row) {
-			odd_row = false;
-			tile_cursor.x -= target_w/2;
-			tile_cursor.y += (target_w/2 +1);
-		}
-		else {
-			odd_row = true;
-			tile_cursor.x -= (target_w/2 -1);
-			tile_cursor.y += target_w/2;
 		}
 	}
 
