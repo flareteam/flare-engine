@@ -570,12 +570,7 @@ void MenuMiniMap::updateIso(MapCollision *collider, Sprite** tile_surface, int z
 				for (int l = 0; l < zoom; l++) {
 					for (int k = 0; k < zoom; k++) {
 						target_img->drawPixel(ent_pos.x+k, ent_pos.y+l, draw_color);
-						if (zoom==1) {
-							target_img->drawPixel(ent_pos.x+k-1, ent_pos.y+l, draw_color);
-						}
-						else {
-							target_img->drawPixel(ent_pos.x+k-2, ent_pos.y+l, draw_color);
-						}
+						target_img->drawPixel(ent_pos.x+k-zoom, ent_pos.y+l, draw_color);
 					}
 				}
 			}
@@ -629,12 +624,7 @@ void MenuMiniMap::renderEntitiesIso(Sprite* entity_surface, int zoom, const Poin
 		for (int l = 0; l < zoom; l++) {
 			for (int k = 0; k < zoom; k++) {
 				target_img->drawPixel(ent_pos.x+k, ent_pos.y+l, *entities[i]->color);
-				if (zoom==1) {
-					target_img->drawPixel(ent_pos.x+k-1, ent_pos.y+l, *entities[i]->color);
-				}
-				else {
-					target_img->drawPixel(ent_pos.x+k-2, ent_pos.y+l, *entities[i]->color);
-				}
+				target_img->drawPixel(ent_pos.x+k-zoom, ent_pos.y+l, *entities[i]->color);
 			}
 		}
 	}
