@@ -234,10 +234,14 @@ void FogOfWar::updateTiles() {
 	for (int x = bounds.x; x <= bounds.w; x++) {
 		for (int y = bounds.y; y <= bounds.h; y++) {
 			if (x>=0 && y>=0 && x < mapr->w && y < mapr->h) {
-				unsigned short prev_tile = mapr->layers[dark_layer_id][x][y];
+				unsigned short prev_dark_tile = mapr->layers[dark_layer_id][x][y];
+				unsigned short prev_fog_tile = mapr->layers[fog_layer_id][x][y];
 				mapr->layers[dark_layer_id][x][y] &= *mask;
 				mapr->layers[fog_layer_id][x][y] = *mask;
-				if ((prev_tile == TILE_HIDDEN) && prev_tile != mapr->layers[dark_layer_id][x][y]) {
+
+				// TODO we check for a change in the fog layer here, which means we update the minimap every time the player moves
+				// It should be that the minimap only updates when the dark layer changes, but this results in the minimap failing to update sometimes when near the map edges
+				if (prev_dark_tile != mapr->layers[dark_layer_id][x][y] || prev_fog_tile != mapr->layers[fog_layer_id][x][y]) {
 					update_minimap = true;
 				}
 			}
