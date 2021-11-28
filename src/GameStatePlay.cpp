@@ -293,7 +293,7 @@ void GameStatePlay::checkTeleport() {
 
 	// both map events and player powers can cause teleportation
 	if (mapr->teleportation || pc->stats.teleportation) {
-		
+
 		if (mapr->fogofwar)
 			if(fow->fog_layer_id != 0)
 				fow->handleIntramapTeleport();
@@ -1140,6 +1140,7 @@ GameStatePlay::~GameStatePlay() {
 	delete camp;
 	delete items;
 	delete powers;
+	delete fow;
 
 	delete enemyg;
 
@@ -1155,5 +1156,6 @@ GameStatePlay::~GameStatePlay() {
 	menu_act = NULL;
 	menu_powers = NULL;
 	powers = NULL;
+	fow = NULL;
 }
 
