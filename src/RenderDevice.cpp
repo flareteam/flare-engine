@@ -71,6 +71,7 @@ void Image::beginPixelBatch() {
 }
 
 void Image::beginPixelBatch(Rect& bounds) {
+	if (bounds.x) {} // suppress unused paramater warning
 }
 
 void Image::endPixelBatch() {
