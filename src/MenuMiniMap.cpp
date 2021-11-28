@@ -393,9 +393,12 @@ void MenuMiniMap::updateOrtho(MapCollision *collider, Sprite** tile_surface, int
 
 	Color draw_color;
 
-	Point clipcenter(pc->stats.pos);
+	Point hero(pc->stats.pos);
+	Point clipcenter;
 	Rect clip;
 
+	clipcenter.x = zoom * hero.x;
+	clipcenter.y = zoom * hero.y;
 	clip.x = clipcenter.x - (fow->mask_radius)*zoom;
 	clip.y = clipcenter.y - (fow->mask_radius)*zoom;
 	clip.w = clipcenter.x + (fow->mask_radius)*zoom - clip.x + 1;
