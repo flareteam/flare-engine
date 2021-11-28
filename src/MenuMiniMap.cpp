@@ -408,8 +408,8 @@ void MenuMiniMap::updateOrtho(MapCollision *collider, Sprite** tile_surface, int
 
 	target_img->beginPixelBatch(clip);
 
-	for (int i=bounds->x; i<=bounds->w; i++) {
-		for (int j=bounds->y; j<=bounds->h; j++) {
+	for (int i=bounds->x; i<bounds->w; i++) {
+		for (int j=bounds->y; j<bounds->h; j++) {
 			bool draw_tile = true;
 			int tile_type = collider->colmap[i][j];
 
