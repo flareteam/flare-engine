@@ -76,7 +76,9 @@ EntityBehavior::EntityBehavior(Entity *_e)
 void EntityBehavior::logic() {
 	// skip all logic if the enemy is dead and no longer animating
 	if (e->stats.corpse) {
-		e->stats.corpse_timer.tick();
+		if (eset->misc.corpse_timeout_enabled)
+			e->stats.corpse_timer.tick();
+
 		return;
 	}
 

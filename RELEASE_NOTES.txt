@@ -18,6 +18,7 @@ Engine fixes:
 * Fix bug where negative regen would overflow after reaching zero.
 * Fix bug that caused built-in effect types to be ignored by Power post_effect.
 * Fix disappearing sprites due to render priority overflow.
+* Fading of corpses is now correctly disabled when corpse_timeout=0 is used in engine/misc.txt.
 
 Game updates:
 

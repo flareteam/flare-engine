@@ -43,6 +43,7 @@ public:
 
 		bool save_hpmp;
 		int corpse_timeout;
+		bool corpse_timeout_enabled;
 		bool sell_without_vendor;
 		int aim_assist;
 		std::string window_title;

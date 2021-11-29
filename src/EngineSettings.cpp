@@ -52,6 +52,7 @@ void EngineSettings::Misc::load() {
 	// reset to defaults
 	save_hpmp = false;
 	corpse_timeout = 60 * settings->max_frames_per_sec;
+	corpse_timeout_enabled = true;
 	sell_without_vendor = true;
 	aim_assist = 0;
 	window_title = "Flare";
@@ -84,7 +85,7 @@ void EngineSettings::Misc::load() {
 			// @ATTR save_hpmp|bool|When saving the game, keep the hero's current HP and MP.
 			if (infile.key == "save_hpmp")
 				save_hpmp = Parse::toBool(infile.val);
-			// @ATTR corpse_timeout|duration|Duration that a corpse can exist on the map in 'ms' or 's'.
+			// @ATTR corpse_timeout|duration|Duration that a corpse can exist on the map in 'ms' or 's'. Use 0 to keep corpses indefinitely.
 			else if (infile.key == "corpse_timeout")
 				corpse_timeout = Parse::toDuration(infile.val);
 			// @ATTR sell_without_vendor|bool|Allows selling items when not at a vendor via CTRL-Click.
@@ -191,6 +192,11 @@ void EngineSettings::Misc::load() {
 	if (save_buyback && !keep_buyback_on_map_change) {
 		Utils::logError("EngineSettings: Warning, save_buyback=true is ignored when keep_buyback_on_map_change=false.");
 		save_buyback = false;
+	}
+
+	if (corpse_timeout <= 0) {
+		corpse_timeout_enabled = false;
+		corpse_timeout = settings->max_frames_per_sec + 1;
 	}
 }
 
