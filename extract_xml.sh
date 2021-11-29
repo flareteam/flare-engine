@@ -22,6 +22,7 @@ do
     if [ "${fields[0]}" == "ATTR" ]; then
 	IFS=':'
 	TYPE_VAL=(${fields[2]})
+	IFS=''
 	echo '		  <attribute name="'${fields[1]}'" type="'$(echo "${TYPE_VAL[0]}" | xargs)'" vars="'$(echo "${TYPE_VAL[1]}" | xargs)'">'${fields[3]}'</attribute>'
     fi
     # Handle TYPE

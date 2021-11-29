@@ -533,9 +533,9 @@ body {
 
 <p><strong>event.requires_not_currency</strong> | <code>int</code> | Event requires no more than this much currency</p>
 
-<p><strong>event.requires_item</strong> | <code>list(item_id)</code> | Event requires specific item (not equipped). Quantity can be specified by appending " Q" to the item_id, where Q is an integer.</p>
+<p><strong>event.requires_item</strong> | <code>list(item_id)</code> | Event requires specific item (not equipped). Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.</p>
 
-<p><strong>event.requires_not_item</strong> | <code>list(item_id)</code> | Event requires not having a specific item (not equipped). Quantity can be specified by appending " Q" to the item_id, where Q is an integer.</p>
+<p><strong>event.requires_not_item</strong> | <code>list(item_id)</code> | Event requires not having a specific item (not equipped). Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.</p>
 
 <p><strong>event.requires_class</strong> | <code>predefined_string</code> | Event requires this base class</p>
 
@@ -547,15 +547,15 @@ body {
 
 <p><strong>event.remove_currency</strong> | <code>int</code> | Removes specified amount of currency from hero inventory</p>
 
-<p><strong>event.remove_item</strong> | <code>list(item_id)</code> | Removes specified item from hero inventory. Quantity can be specified by appending " Q" to the item_id, where Q is an integer.</p>
+<p><strong>event.remove_item</strong> | <code>list(item_id)</code> | Removes specified item from hero inventory. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.</p>
 
 <p><strong>event.reward_xp</strong> | <code>int</code> | Reward hero with specified amount of experience points.</p>
 
 <p><strong>event.reward_currency</strong> | <code>int</code> | Reward hero with specified amount of currency.</p>
 
-<p><strong>event.reward_item</strong> | <code>(list(item_id)</code> | Reward hero with a specified item. Quantity can be specified by appending " Q" to the item_id, where Q is an integer. To maintain backwards compatibility, the quantity must be defined for at least the first item in the list in order to use this syntax.</p>
+<p><strong>event.reward_item</strong> | <code>(list(item_id)</code> | Reward hero with a specified item. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer. To maintain backwards compatibility, the quantity must be defined for at least the first item in the list in order to use this syntax.</p>
 
-<p><strong>event.reward_item</strong> | <code>item_id, int : Item, Quantity</code> | Reward hero with y number of item x. NOTE  This syntax is maintained for backwards compatibility. It is recommended to use the above syntax instead.</p>
+<p><strong>event.reward_item</strong> | <code>item_id, int : Item, Quantity</code> | Reward hero with y number of item x. NOTE: This syntax is maintained for backwards compatibility. It is recommended to use the above syntax instead.</p>
 
 <p><strong>event.reward_loot</strong> | <code>list(loot)</code> | Reward hero with random loot.</p>
 
@@ -607,7 +607,7 @@ body {
 
 <p><strong>header.radius</strong> | <code>int</code> | Fog of war mask radius, also how far the player can see.</p>
 
-<p><strong>header.bits_per_tile</strong> | <code>int</code> | How may bits(subdivisions) a tile is made of. In powers of two. Example  if it is set to 4 then the tile will be subdivided in 4, let's say North, South, East, West.</p>
+<p><strong>header.bits_per_tile</strong> | <code>int</code> | How may bits(subdivisions) a tile is made of. In powers of two. Example: if it is set to 4 then the tile will be subdivided in 4, let's say North, South, East, West.</p>
 
 <p><strong>header.color_dark</strong> | <code>color</code> | Tint color for dark tiles. Used by fog of war type 2-tint.</p>
 
@@ -617,9 +617,9 @@ body {
 
 <p><strong>header.tileset_fog</strong> | <code>filename</code> | Filename of a tileset definition to use for foggy areas. Used by fog of war type 3-overlay.</p>
 
-<p><strong>bits.bit</strong> | <code>string, int : Name, Value</code> | A fog of war bit definition can have any name. Better to keep it simple and short. There must be a bit definition that has the value 0. Example  If we have 4 bits per tile then we define  bit=BIT_0,0, bit=BIT_N,1, bit=BIT_W,2, bit=BIT_S,3, bit=BIT_E,4.</p>
+<p><strong>bits.bit</strong> | <code>string, int : Name, Value</code> | A fog of war bit definition can have any name. Better to keep it simple and short. There must be a bit definition that has the value 0. Example: If we have 4 bits per tile then we define: bit=BIT_0,0, bit=BIT_N,1, bit=BIT_W,2, bit=BIT_S,3, bit=BIT_E,4.</p>
 
-<p><strong>tiles.tile</strong> | <code>string, repeatable(predefined_string) : Name, Bit definitions</code> | A fog of war tile definition can have any name. Better to keep it simple and short. There must be a tile definition that contains no bits and a tile definition that contains all bits. Example  A tile containing North and West bits will be tile=NW,BIT_N,BIT_W.</p>
+<p><strong>tiles.tile</strong> | <code>string, repeatable(predefined_string) : Name, Bit definitions</code> | A fog of war tile definition can have any name. Better to keep it simple and short. There must be a tile definition that contains no bits and a tile definition that contains all bits. Example: A tile containing North and West bits will be tile=NW,BIT_N,BIT_W.</p>
 
 <p><strong>mask.data</strong> | <code>raw</code> | The mask definition is a matrix (2*radius+1 by 2*radius+1) that contains fog of war tile definitions. All the margins of the matrix must be the tile definition that contains all bits.</p>
 
@@ -629,35 +629,35 @@ body {
 
 <p>Description of engine/font_colors.txt</p>
 
-<p><strong>menu_normal</strong> | <code>color</code> | Basic menu text color. Recommended  white.</p>
+<p><strong>menu_normal</strong> | <code>color</code> | Basic menu text color. Recommended: white.</p>
 
-<p><strong>menu_bonus</strong> | <code>color</code> | Positive menu text color. Recommended  green.</p>
+<p><strong>menu_bonus</strong> | <code>color</code> | Positive menu text color. Recommended: green.</p>
 
-<p><strong>menu_penalty</strong> | <code>color</code> | Negative menu text color. Recommended  red.</p>
+<p><strong>menu_penalty</strong> | <code>color</code> | Negative menu text color. Recommended: red.</p>
 
-<p><strong>widget_normal</strong> | <code>color</code> | Basic widget text color. Recommended  white.</p>
+<p><strong>widget_normal</strong> | <code>color</code> | Basic widget text color. Recommended: white.</p>
 
-<p><strong>widget_disabled</strong> | <code>color</code> | Disabled widget text color. Recommended  grey.</p>
+<p><strong>widget_disabled</strong> | <code>color</code> | Disabled widget text color. Recommended: grey.</p>
 
-<p><strong>combat_givedmg</strong> | <code>color</code> | Enemy damage text color. Recommended  white.</p>
+<p><strong>combat_givedmg</strong> | <code>color</code> | Enemy damage text color. Recommended: white.</p>
 
-<p><strong>combat_takedmg</strong> | <code>color</code> | Player damage text color. Recommended  red.</p>
+<p><strong>combat_takedmg</strong> | <code>color</code> | Player damage text color. Recommended: red.</p>
 
-<p><strong>combat_crit</strong> | <code>color</code> | Enemy critical damage text color. Recommended  yellow.</p>
+<p><strong>combat_crit</strong> | <code>color</code> | Enemy critical damage text color. Recommended: yellow.</p>
 
-<p><strong>combat_buff</strong> | <code>color</code> | Healing/buff text color. Recommended  green.</p>
+<p><strong>combat_buff</strong> | <code>color</code> | Healing/buff text color. Recommended: green.</p>
 
-<p><strong>combat_miss</strong> | <code>color</code> | Missed attack text color. Recommended  grey.</p>
+<p><strong>combat_miss</strong> | <code>color</code> | Missed attack text color. Recommended: grey.</p>
 
-<p><strong>requirements_not_met</strong> | <code>color</code> | Unmet requirements text color. Recommended  red.</p>
+<p><strong>requirements_not_met</strong> | <code>color</code> | Unmet requirements text color. Recommended: red.</p>
 
-<p><strong>item_bonus</strong> | <code>color</code> | Item bonus text color. Recommended  green.</p>
+<p><strong>item_bonus</strong> | <code>color</code> | Item bonus text color. Recommended: green.</p>
 
-<p><strong>item_penalty</strong> | <code>color</code> | Item penalty text color. Recommended  red.</p>
+<p><strong>item_penalty</strong> | <code>color</code> | Item penalty text color. Recommended: red.</p>
 
-<p><strong>item_flavor</strong> | <code>color</code> | Item flavor text color. Recommended  grey.</p>
+<p><strong>item_flavor</strong> | <code>color</code> | Item flavor text color. Recommended: grey.</p>
 
-<p><strong>hardcore_color_name</strong> | <code>color</code> | Permadeath save slot player name color. Recommended  red.</p>
+<p><strong>hardcore_color_name</strong> | <code>color</code> | Permadeath save slot player name color. Recommended: red.</p>
 
 <hr />
 
@@ -677,7 +677,7 @@ body {
 
 <p><strong>scene.caption</strong> | <code>string</code> | A caption that will be shown.</p>
 
-<p><strong>scene.image</strong> | <code>filename, int : Filename, Scaling type</code> | Filename of an image that will be shown. The scaling type is a value between 0-2, corresponding to  none, fit height, fit screen.</p>
+<p><strong>scene.image</strong> | <code>filename, int : Filename, Scaling type</code> | Filename of an image that will be shown. The scaling type is a value between 0-2, corresponding to: none, fit height, fit screen.</p>
 
 <p><strong>scene.pause</strong> | <code>duration</code> | Pause before next component in 'ms' or 's'. A value of '-1' may be used to pause indefinitely.</p>
 
@@ -951,7 +951,7 @@ body {
 
 <p><strong>requires_class</strong> | <code>predefined_string</code> | The hero's base class (engine/classes.txt) must match for this item to be equipped.</p>
 
-<p><strong>bonus</strong> | <code>repeatable(predefined_string, int) : Stat name, Value</code> | Adds a bonus to the item by stat name, example  bonus=hp, 50</p>
+<p><strong>bonus</strong> | <code>repeatable(predefined_string, int) : Stat name, Value</code> | Adds a bonus to the item by stat name, example: bonus=hp, 50</p>
 
 <p><strong>bonus_power_level</strong> | <code>repeatable(power_id, int) : Base power, Bonus levels</code> | Grants bonus levels to a given base power.</p>
 
@@ -1095,9 +1095,9 @@ body {
 
 <p><strong>enemygroup.requires_not_currency</strong> | <code>int</code> | Player currency must be lesser to load enemy group</p>
 
-<p><strong>enemygroup.requires_item</strong> | <code>list(item_id)</code> | Item required to exist in player inventory to load enemy group. Quantity can be specified by appending " Q" to the item_id, where Q is an integer.</p>
+<p><strong>enemygroup.requires_item</strong> | <code>list(item_id)</code> | Item required to exist in player inventory to load enemy group. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.</p>
 
-<p><strong>enemygroup.requires_not_item</strong> | <code>list(item_id)</code> | Item required to not exist in player inventory to load enemy group. Quantity can be specified by appending " Q" to the item_id, where Q is an integer.</p>
+<p><strong>enemygroup.requires_not_item</strong> | <code>list(item_id)</code> | Item required to not exist in player inventory to load enemy group. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.</p>
 
 <p><strong>enemygroup.requires_class</strong> | <code>predefined_string</code> | Player base class required to load enemy group</p>
 
@@ -1125,9 +1125,9 @@ body {
 
 <p><strong>npc.requires_not_currency</strong> | <code>int</code> | Player currency must be lesser to load NPC</p>
 
-<p><strong>npc.requires_item</strong> | <code>list(item_id)</code> | Item required to exist in player inventory to load NPC. Quantity can be specified by appending " Q" to the item_id, where Q is an integer.</p>
+<p><strong>npc.requires_item</strong> | <code>list(item_id)</code> | Item required to exist in player inventory to load NPC. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.</p>
 
-<p><strong>npc.requires_not_item</strong> | <code>list(item_id)</code> | Item required to not exist in player inventory to load NPC. Quantity can be specified by appending " Q" to the item_id, where Q is an integer.</p>
+<p><strong>npc.requires_not_item</strong> | <code>list(item_id)</code> | Item required to not exist in player inventory to load NPC. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.</p>
 
 <p><strong>npc.requires_class</strong> | <code>predefined_string</code> | Player base class required to load NPC</p>
 
@@ -1467,7 +1467,7 @@ body {
 
 <p>Description of menus/num_picker.txt</p>
 
-<p><strong>label_title</strong> | <code>label</code> | Position of the "Enter amount " text.</p>
+<p><strong>label_title</strong> | <code>label</code> | Position of the "Enter amount:" text.</p>
 
 <p><strong>confirm</strong> | <code>point</code> | Position of the "OK" button.</p>
 
@@ -1667,7 +1667,7 @@ body {
 
 <p><strong>version</strong> | <code>version</code> | The version number of this mod.</p>
 
-<p><strong>requires</strong> | <code>list(string)</code> | A comma-separated list of the mods that are required in order to use this mod. The dependency version requirements can also be specified and separated by colons (e.g. fantasycore 0.1 2.0).</p>
+<p><strong>requires</strong> | <code>list(string)</code> | A comma-separated list of the mods that are required in order to use this mod. The dependency version requirements can also be specified and separated by colons (e.g. fantasycore:0.1:2.0).</p>
 
 <p><strong>game</strong> | <code>string</code> | The game which this mod belongs to (e.g. flare-game).</p>
 
@@ -1725,9 +1725,9 @@ body {
 
 <p><strong>vendor_requires_not_status</strong> | <code>list(string)</code> | The player must not have these statuses in order to use this NPC as a vendor.</p>
 
-<p><strong>constant_stock</strong> | <code>repeatable(list(item_id))</code> | A list of items this vendor has for sale. Quantity can be specified by appending " Q" to the item_id, where Q is an integer.</p>
+<p><strong>constant_stock</strong> | <code>repeatable(list(item_id))</code> | A list of items this vendor has for sale. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.</p>
 
-<p><strong>status_stock</strong> | <code>repeatable(string, list(item_id)) : Required status, Item(s)</code> | A list of items this vendor will have for sale if the required status is met. Quantity can be specified by appending " Q" to the item_id, where Q is an integer.</p>
+<p><strong>status_stock</strong> | <code>repeatable(string, list(item_id)) : Required status, Item(s)</code> | A list of items this vendor will have for sale if the required status is met. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.</p>
 
 <p><strong>random_stock</strong> | <code>list(loot)</code> | Use a loot table to add random items to the stock; either a filename or an inline definition.</p>
 
