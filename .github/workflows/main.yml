@@ -19,6 +19,10 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-18.04
+    strategy:
+      fail-fast: false
+      matrix:
+        cxx: [g++, clang++]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -29,10 +33,22 @@ jobs:
         run: |
           sudo apt-get clean -qq
           sudo apt-get update -qq
-          sudo apt-get install -qq g++ libegl1-mesa-dev libgles2-mesa-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev cppcheck
+          sudo apt-get install -qq g++ clang libegl1-mesa-dev libgles2-mesa-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
 
       - name: Build
-        run: cmake . && make
-        
-      - name: Post-build
+        env:
+          CXX: ${{ matrix.cxx }}
+        run: cmake . -DCMAKE_CXX_COMPILER=$CXX && make
+  cppcheck:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get clean -qq
+          sudo apt-get update -qq
+          sudo apt-get install -qq libegl1-mesa-dev libgles2-mesa-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev cppcheck
+
+      - name: Run cppcheck
         run: cppcheck --quiet --verbose --enable=all `git ls-files src/\*.cpp`

@@ -22,6 +22,7 @@ else ()
 		-fno-math-errno -fno-exceptions
 		-std=c++98
 	)
+	set(CMAKE_EXE_LINKER_FLAGS "-lm" ${CMAKE_EXE_LINKER_FLAGS})
 endif ()
 
 add_compile_options(
