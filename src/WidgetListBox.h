@@ -56,6 +56,7 @@ private:
 	int cursor;
 	bool has_scroll_bar;
 	bool any_selected;
+	bool show_tooltip_for_selected;
 	std::vector<ListBoxItem> items;
 	std::vector<WidgetLabel> vlabels;
 	std::vector<Rect> rows;
@@ -90,6 +91,7 @@ public:
 	bool getNext();
 	bool getPrev();
 	void defocus();
+	void activate();
 
 	void select(int index);
 	bool isSelected(int index);

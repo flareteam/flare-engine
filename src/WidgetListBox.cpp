@@ -41,6 +41,7 @@ WidgetListBox::WidgetListBox(int height, const std::string& _fileName)
 	, cursor(0)
 	, has_scroll_bar(false)
 	, any_selected(false)
+	, show_tooltip_for_selected(false)
 	, vlabels(std::vector<WidgetLabel>(height,WidgetLabel()))
 	, rows(std::vector<Rect>(height,Rect()))
 	, scrollbar(new WidgetScrollBar(WidgetScrollBar::DEFAULT_FILE))
@@ -89,7 +90,19 @@ bool WidgetListBox::checkClickAt(int x, int y) {
 
 	refresh();
 
-	checkTooltip(mouse);
+	if (inpt->usingMouse()) {
+		checkTooltip(mouse);
+	}
+	else if (!inpt->usingMouse() && show_tooltip_for_selected) {
+		int sel = getSelected();
+		if (sel != -1) {
+			int row = sel-cursor;
+			Point tip_pos;
+			tip_pos.x = rows[row].x + rows[row].w/2;
+			tip_pos.y = rows[row].y + rows[row].h/2;
+			checkTooltip(tip_pos);
+		}
+	}
 
 	// check scroll wheel
 	Rect scroll_area;
@@ -125,26 +138,22 @@ bool WidgetListBox::checkClickAt(int x, int y) {
 		}
 	}
 
-	// main ListBox already in use, new click not allowed
-	if (inpt->lock[Input::MAIN1]) return false;
-
-	// main click released, so the ListBox state goes back to unpressed
-	if (pressed && !inpt->lock[Input::MAIN1] && can_select) {
-		pressed = false;
-
-		for(unsigned i=0; i<rows.size(); i++) {
-			if (i<items.size()) {
-				if (Utils::isWithinRect(rows[i], mouse) && items[i+cursor].value != "") {
+	if (inpt->usingMouse()) {
+		if (can_select && inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1]) {
+			for (size_t i=0; i<rows.size(); i++) {
+				if (Utils::isWithinRect(rows[i], mouse) && i+cursor < items.size() && !items[i+cursor].value.empty()) {
+					inpt->lock[Input::MAIN1] = true;
 					// deselect other options if multi-select is disabled
 					if (!multi_select) {
 						for (unsigned j=0; j<items.size(); j++) {
-							if (j!=i+cursor)
+							if (j != i+cursor)
 								items[j].selected = false;
 						}
 					}
-					// activate upon release
+					// toggle selection
 					if (items[i+cursor].selected) {
-						if (can_deselect) items[i+cursor].selected = false;
+						if (can_deselect)
+							items[i+cursor].selected = false;
 					}
 					else {
 						items[i+cursor].selected = true;
@@ -156,34 +165,16 @@ bool WidgetListBox::checkClickAt(int x, int y) {
 		}
 	}
 
-	pressed = false;
-
-	// detect new click
-	if (inpt->pressing[Input::MAIN1]) {
-		for (unsigned i=0; i<rows.size(); i++) {
-			if (Utils::isWithinRect(rows[i], mouse)) {
-
-				inpt->lock[Input::MAIN1] = true;
-				pressed = true;
-
-			}
-		}
-	}
 	return false;
 
 }
 
 void WidgetListBox::checkTooltip(const Point& mouse) {
-	if (!inpt->usingMouse())
-		return;
-
 	TooltipData tip_data;
-	for(unsigned i=0; i<rows.size(); i++) {
-		if (i<items.size()) {
-			if (Utils::isWithinRect(rows[i], mouse) && items[i+cursor].tooltip != "") {
-				tip_data.addText(items[i+cursor].tooltip);
-				break;
-			}
+	for (size_t i=0; i<rows.size(); i++) {
+		if (Utils::isWithinRect(rows[i], mouse) && i+cursor < items.size() && !items[i+cursor].tooltip.empty()) {
+			tip_data.addText(items[i+cursor].tooltip);
+			break;
 		}
 	}
 
@@ -463,10 +454,12 @@ bool WidgetListBox::getNext() {
 			return false;
 
 		int sel = getSelected();
-		if (sel != -1)
-			items[sel].selected = false;
-		else
+		if (sel == -1)
 			sel = cursor-1;
+
+		for (size_t i = 0; i < items.size(); ++i) {
+			items[i].selected = false;
+		}
 
 		if(sel == static_cast<int>(items.size())-1) {
 			items[0].selected = true;
@@ -494,10 +487,12 @@ bool WidgetListBox::getPrev() {
 			return false;
 
 		int sel = getSelected();
-		if (sel != -1)
-			items[sel].selected = false;
-		else
+		if (sel == -1)
 			sel = cursor;
+
+		for (size_t i = 0; i < items.size(); ++i) {
+			items[i].selected = false;
+		}
 
 		if(sel == 0) {
 			items[items.size()-1].selected = true;
@@ -527,6 +522,12 @@ void WidgetListBox::defocus() {
 		items[sel].selected = false;
 	}
 
+}
+
+void WidgetListBox::activate() {
+	if (!inpt->usingMouse()) {
+		show_tooltip_for_selected = !show_tooltip_for_selected;
+	}
 }
 
 void WidgetListBox::select(int index) {
