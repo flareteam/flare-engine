@@ -88,6 +88,8 @@ private:
 	void dragAndDropWithKeyboard();
 	void pushMatchingItemsOf(const Point& hov_pos);
 
+	bool isTabListSelected();
+
 public:
 	explicit MenuManager();
 	MenuManager(const MenuManager &copy); // not implemented

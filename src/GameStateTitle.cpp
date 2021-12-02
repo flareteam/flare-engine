@@ -168,6 +168,10 @@ void GameStateTitle::logic() {
 	else {
 		tablist.logic();
 
+		if (!inpt->usingMouse() && tablist.getCurrent() == -1) {
+			tablist.getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
+		}
+
 		if (button_play->checkClick()) {
 			showLoading();
 			setRequestedGameState(new GameStateLoad());

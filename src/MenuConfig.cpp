@@ -751,6 +751,17 @@ void MenuConfig::setupTabList() {
 	tablist_mods.add(activemods_shiftup_btn);
 	tablist_mods.add(activemods_shiftdown_btn);
 	tablist_mods.lock();
+
+	tablists.clear();
+	tablists.push_back(&tablist);
+	tablists.push_back(&tablist_main);
+	tablists.push_back(&tablist_exit);
+	tablists.push_back(&tablist_video);
+	tablists.push_back(&tablist_audio);
+	tablists.push_back(&tablist_interface);
+	tablists.push_back(&tablist_input);
+	tablists.push_back(&tablist_keybinds);
+	tablists.push_back(&tablist_mods);
 }
 
 void MenuConfig::update() {
@@ -979,15 +990,13 @@ bool MenuConfig::logicMain() {
 
 	// tabs & the bottom 3 main buttons
 	tab_control->logic();
-	tablist.logic();
-	tablist_main.logic();
-	tablist_exit.logic();
-	tablist_video.logic();
-	tablist_audio.logic();
-	tablist_interface.logic();
-	tablist_input.logic();
-	tablist_keybinds.logic();
-	tablist_mods.logic();
+
+	for (size_t i = 0; i < tablists.size(); ++i) {
+		tablists[i]->logic();
+		if (!inpt->usingMouse() && !tablists[i]->isLocked() && tablists[i]->getCurrent() == -1) {
+			tablists[i]->getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
+		}
+	}
 
 	if (enable_gamestate_buttons) {
 		// Ok/Cancel Buttons
@@ -1673,15 +1682,9 @@ void MenuConfig::resetSelectedTab() {
 		cfg_tabs[i].scrollbox->scrollToTop();
 	}
 
-	tablist.defocus();
-	tablist_main.defocus();
-	tablist_exit.defocus();
-	tablist_video.defocus();
-	tablist_audio.defocus();
-	tablist_interface.defocus();
-	tablist_input.defocus();
-	tablist_keybinds.defocus();
-	tablist_mods.defocus();
+	for (size_t i = 0; i < tablists.size(); ++i) {
+		tablists[i]->defocus();
+	}
 
 	input_confirm->visible = false;
 	input_confirm_timer.reset(Timer::END);

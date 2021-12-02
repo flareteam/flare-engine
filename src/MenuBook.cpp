@@ -321,6 +321,7 @@ void MenuBook::clearBook() {
 	buttons.clear();
 
 	tablist.clear();
+	tablist.defocus();
 
 	delete event_open;
 	event_open = NULL;

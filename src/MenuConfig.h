@@ -185,6 +185,8 @@ public:
 	TabList tablist_keybinds;
 	TabList tablist_mods;
 
+	std::vector<TabList*> tablists;
+
 	std::vector<int> optiontab;
 	std::vector<Widget*> child_widget;
 

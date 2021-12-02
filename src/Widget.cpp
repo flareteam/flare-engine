@@ -406,10 +406,8 @@ void TabList::setScrollType(uint8_t _scrolltype) {
 	scrolltype = _scrolltype;
 }
 
-void TabList::setInputs(int _LEFT, int _RIGHT, int _ACTIVATE) {
-	MV_LEFT = _LEFT;
-	MV_RIGHT = _RIGHT;
-	ACTIVATE = _ACTIVATE;
+bool TabList::isLocked() {
+	return locked;
 }
 
 void TabList::logic() {

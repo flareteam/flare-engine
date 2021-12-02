@@ -337,6 +337,7 @@ void MenuDevConsole::closeWindow() {
 	input_box->edit_mode = false;
 	input_box->logic();
 	reset();
+	tablist.defocus();
 }
 
 void MenuDevConsole::execute() {

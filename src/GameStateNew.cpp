@@ -424,6 +424,13 @@ void GameStateNew::logic() {
 		}
 	}
 
+	if (!input_name->edit_mode && !inpt->usingMouse() && tablist.getCurrent() == -1) {
+		if (button_create->enabled)
+			tablist.setCurrent(button_create);
+		else
+			tablist.setCurrent(button_exit);
+	}
+
 	if ((inpt->pressing[Input::CANCEL] && !inpt->lock[Input::CANCEL]) || button_exit->checkClick()) {
 		if (inpt->pressing[Input::CANCEL])
 			inpt->lock[Input::CANCEL] = true;

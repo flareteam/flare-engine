@@ -437,6 +437,7 @@ void MenuTalker::setNPC(NPC* _npc) {
 	if (_npc == NULL) {
 		visible = false;
 		first_interaction = false;
+		tablist.defocus();
 		return;
 	}
 

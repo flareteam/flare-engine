@@ -336,6 +336,7 @@ void MenuManager::logic() {
 			if (inpt->usingMouse()) {
 				sticky_dragging = true;
 			}
+			num_picker->tablist.defocus();
 		}
 		else if (num_picker->cancel_clicked) {
 			// cancel item dragging
@@ -344,6 +345,7 @@ void MenuManager::logic() {
 			resetDrag();
 			num_picker->cancel_clicked = false;
 			num_picker->visible = false;
+			num_picker->tablist.defocus();
 		}
 		else {
 			pause = true;
@@ -445,6 +447,10 @@ void MenuManager::logic() {
 			else if (settings->dev_mode && devconsole->visible) {
 				inpt->lock[Input::CANCEL] = true;
 				devconsole->closeWindow();
+			}
+			else if (act->tablist.getCurrent() != -1) {
+				inpt->lock[Input::CANCEL] = true;
+				act->tablist.defocus();
 			}
 			else if (menus_open) {
 				inpt->lock[Input::CANCEL] = true;
@@ -954,6 +960,29 @@ void MenuManager::logic() {
 
 	if (!(mouse_dragging || keyboard_dragging)) {
 		setDragIcon(WidgetSlot::NO_ICON, WidgetSlot::NO_OVERLAY);
+	}
+
+	// auto-select tablists when using keyboard/gamepad
+	if (!inpt->usingMouse()) {
+		if (game_over->visible && !game_over->tablist.isLocked() && game_over->tablist.getCurrent() == -1) {
+			game_over->tablist.getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
+		}
+		else if (num_picker->visible && !num_picker->tablist.isLocked() && num_picker->tablist.getCurrent() == -1) {
+			num_picker->tablist.getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
+		}
+		else if (book->visible && !book->tablist.isLocked() && book->tablist.getCurrent() == -1) {
+			book->tablist.getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
+		}
+		else if (!isTabListSelected()) {
+			if (inv->visible && !inv->tablist.isLocked())
+				inv->tablist.getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
+			else if (chr->visible && !chr->tablist.isLocked())
+				chr->tablist.getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
+			else if (questlog->visible && !questlog->tablist.isLocked())
+				questlog->tablist.getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
+			else if (pow->visible && !pow->tablist.isLocked())
+				pow->tablist.getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
+		}
 	}
 }
 
@@ -1534,6 +1563,18 @@ void MenuManager::defocusLeft() {
 void MenuManager::defocusRight() {
 	inv->defocusTabLists();
 	pow->defocusTabLists();
+}
+
+bool MenuManager::isTabListSelected() {
+	for (size_t i = 0; i < menus.size(); ++i) {
+		if (menus[i]->tablist.getCurrent() != -1)
+			return true;
+	}
+
+	if (devconsole && devconsole->tablist.getCurrent() != -1)
+		return true;
+
+	return false;
 }
 
 MenuManager::~MenuManager() {

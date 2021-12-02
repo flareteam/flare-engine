@@ -470,6 +470,16 @@ void GameStateLoad::logic() {
 	}
 	else {
 		tablist.logic();
+
+		if (!inpt->usingMouse() && tablist.getCurrent() == -1) {
+			if (button_load->enabled)
+				tablist.setCurrent(button_load);
+			else if (button_new->enabled)
+				tablist.setCurrent(button_new);
+			else
+				tablist.setCurrent(button_exit);
+		}
+
 		if (button_exit->checkClick() || (inpt->pressing[Input::CANCEL] && !inpt->lock[Input::CANCEL])) {
 			inpt->lock[Input::CANCEL] = true;
 			showLoading();
