@@ -230,20 +230,26 @@ void FogOfWar::updateTiles() {
 
 	calcBoundaries();
 	const unsigned short * mask = &def_mask[0];
+	unsigned short tile_old;
+	unsigned short tile_new;
+	Rect tile_sprite_old;
+	Rect tile_sprite_new;
+	Rect tile_sprite_zero = tset_dark.tiles[0].tile->getClip();
 
 	for (int x = bounds.x; x <= bounds.w; x++) {
 		for (int y = bounds.y; y <= bounds.h; y++) {
 			if (x>=0 && y>=0 && x < mapr->w && y < mapr->h) {
-				unsigned short prev_dark_tile = mapr->layers[dark_layer_id][x][y];
-				unsigned short prev_fog_tile = mapr->layers[fog_layer_id][x][y];
+				tile_old = mapr->layers[dark_layer_id][x][y];
+				tile_sprite_old = tset_dark.tiles[tile_old].tile->getClip();
+
 				mapr->layers[dark_layer_id][x][y] &= *mask;
 				mapr->layers[fog_layer_id][x][y] = *mask;
 
-				// TODO we check for a change in the fog layer here, which means we update the minimap every time the player moves
-				// It should be that the minimap only updates when the dark layer changes, but this results in the minimap failing to update sometimes when near the map edges
-				if (prev_dark_tile != mapr->layers[dark_layer_id][x][y] || prev_fog_tile != mapr->layers[fog_layer_id][x][y]) {
+				tile_new = mapr->layers[dark_layer_id][x][y];
+				tile_sprite_new = tset_dark.tiles[tile_new].tile->getClip();
+
+				if (tile_sprite_old != tile_sprite_zero && tile_sprite_new == tile_sprite_zero)
 					update_minimap = true;
-				}
 			}
 			mask++;
 		}
