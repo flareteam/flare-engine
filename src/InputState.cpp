@@ -64,7 +64,7 @@ InputState::InputState(void)
 	, current_touch()
 	, dump_event(false)
 	, file_version(new Version())
-	, file_version_min(new Version(1, 12, 34))
+	, file_version_min(new Version(1, 12, 38))
 {
 	config_keys[Input::CANCEL] = "cancel";
 	config_keys[Input::ACCEPT] = "accept";
@@ -93,6 +93,10 @@ InputState::InputState(void)
 	config_keys[Input::MENU_PAGE_PREV] = "menu_page_prev";
 	config_keys[Input::MENU_ACTIVATE] = "menu_activate";
 	config_keys[Input::PAUSE] = "pause";
+	config_keys[Input::AIM_UP] = "aim_up";
+	config_keys[Input::AIM_DOWN] = "aim_down";
+	config_keys[Input::AIM_LEFT] = "aim_left";
+	config_keys[Input::AIM_RIGHT] = "aim_right";
 	config_keys[Input::DEVELOPER_MENU] = "developer_menu";
 }
 

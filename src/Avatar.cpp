@@ -330,18 +330,30 @@ void Avatar::set_direction() {
 		stats.direction = Utils::calcDirection(stats.pos.x, stats.pos.y, target.x, target.y);
 	}
 	else {
-		if (inpt->pressing[Input::UP] && !inpt->lock[Input::UP] && inpt->pressing[Input::LEFT] && !inpt->lock[Input::LEFT]) stats.direction = 1;
-		else if (inpt->pressing[Input::UP] && !inpt->lock[Input::UP] && inpt->pressing[Input::RIGHT] && !inpt->lock[Input::RIGHT]) stats.direction = 3;
-		else if (inpt->pressing[Input::DOWN] && !inpt->lock[Input::DOWN] && inpt->pressing[Input::RIGHT] && !inpt->lock[Input::RIGHT]) stats.direction = 5;
-		else if (inpt->pressing[Input::DOWN] && !inpt->lock[Input::DOWN] && inpt->pressing[Input::LEFT] && !inpt->lock[Input::LEFT]) stats.direction = 7;
-		else if (inpt->pressing[Input::LEFT] && !inpt->lock[Input::LEFT]) stats.direction = 0;
-		else if (inpt->pressing[Input::UP] && !inpt->lock[Input::UP]) stats.direction = 2;
-		else if (inpt->pressing[Input::RIGHT] && !inpt->lock[Input::RIGHT]) stats.direction = 4;
-		else if (inpt->pressing[Input::DOWN] && !inpt->lock[Input::DOWN]) stats.direction = 6;
+		// movement keys take top priority for setting direction
+		bool press_up = inpt->pressing[Input::UP] && !inpt->lock[Input::UP];
+		bool press_down = inpt->pressing[Input::DOWN] && !inpt->lock[Input::DOWN];
+		bool press_left = inpt->pressing[Input::LEFT] && !inpt->lock[Input::LEFT];
+		bool press_right = inpt->pressing[Input::RIGHT] && !inpt->lock[Input::RIGHT];
+
+		// aiming keys can set direction as well
+		if (!press_up && !press_down && !press_left && !press_right) {
+			press_up = inpt->pressing[Input::AIM_UP] && !inpt->lock[Input::AIM_UP];
+			press_down = inpt->pressing[Input::AIM_DOWN] && !inpt->lock[Input::AIM_DOWN];
+			press_left = inpt->pressing[Input::AIM_LEFT] && !inpt->lock[Input::AIM_LEFT];
+			press_right = inpt->pressing[Input::AIM_RIGHT] && !inpt->lock[Input::AIM_RIGHT];
+		}
+
+		if (press_up && press_left) stats.direction = 1;
+		else if (press_up && press_right) stats.direction = 3;
+		else if (press_down && press_right) stats.direction = 5;
+		else if (press_down && press_left) stats.direction = 7;
+		else if (press_left) stats.direction = 0;
+		else if (press_up) stats.direction = 2;
+		else if (press_right) stats.direction = 4;
+		else if (press_down) stats.direction = 6;
 		// Adjust for ORTHO tilesets
-		if (eset->tileset.orientation == eset->tileset.TILESET_ORTHOGONAL &&
-				((inpt->pressing[Input::UP] && !inpt->lock[Input::UP]) || (inpt->pressing[Input::DOWN] && !inpt->lock[Input::UP]) ||
-				 (inpt->pressing[Input::LEFT] && !inpt->lock[Input::LEFT]) || (inpt->pressing[Input::RIGHT] && !inpt->lock[Input::RIGHT])))
+		if (eset->tileset.orientation == eset->tileset.TILESET_ORTHOGONAL && (press_up || press_down || press_left || press_right))
 			stats.direction = static_cast<unsigned char>((stats.direction == 7) ? 0 : stats.direction + 1);
 	}
 

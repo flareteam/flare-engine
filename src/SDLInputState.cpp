@@ -265,6 +265,11 @@ void SDLInputState::initBindings() {
 
 	setBind(Input::PAUSE, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_START, NULL);
 
+	setBind(Input::AIM_RIGHT, InputBind::GAMEPAD_AXIS, (SDL_CONTROLLER_AXIS_RIGHTX*2), NULL);
+	setBind(Input::AIM_DOWN, InputBind::GAMEPAD_AXIS, (SDL_CONTROLLER_AXIS_RIGHTY*2), NULL);
+	setBind(Input::AIM_LEFT, InputBind::GAMEPAD_AXIS, (SDL_CONTROLLER_AXIS_RIGHTX*2) + 1, NULL);
+	setBind(Input::AIM_UP, InputBind::GAMEPAD_AXIS, (SDL_CONTROLLER_AXIS_RIGHTY*2) + 1, NULL);
+
 	// Not user-modifiable
 	setBind(Input::CTRL, InputBind::KEY, SDL_SCANCODE_LCTRL, NULL);
 	setBind(Input::CTRL, InputBind::KEY, SDL_SCANCODE_RCTRL, NULL);
@@ -886,6 +891,10 @@ void SDLInputState::setCommonStrings() {
 	binding_name[Input::MENU_PAGE_PREV] = msg->get("Menu: Previous Page");
 	binding_name[Input::MENU_ACTIVATE] = msg->get("Menu: Activate");
 	binding_name[Input::PAUSE] = msg->get("Pause");
+	binding_name[Input::AIM_UP] = msg->get("Aim Up");
+	binding_name[Input::AIM_DOWN] = msg->get("Aim Down");
+	binding_name[Input::AIM_LEFT] = msg->get("Aim Left");
+	binding_name[Input::AIM_RIGHT] = msg->get("Aim Right");
 	binding_name[Input::DEVELOPER_MENU] = msg->get("Developer Menu");
 	binding_name[Input::CTRL] = msg->get("Ctrl");
 	binding_name[Input::SHIFT] = msg->get("Shift");
