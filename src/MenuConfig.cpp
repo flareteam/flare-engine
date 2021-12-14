@@ -868,7 +868,7 @@ void MenuConfig::updateInput() {
 		joystick_device_lstb->select(settings->joystick_device + 1);
 	}
 
-	joystick_deadzone_sl->set(0, 32768, settings->joy_deadzone);
+	joystick_deadzone_sl->set(Settings::JOY_DEADZONE_MIN, Settings::JOY_DEADZONE_MAX, settings->joy_deadzone);
 	touch_scale_sl->set(TOUCH_SCALE_MIN, TOUCH_SCALE_MAX, static_cast<int>(settings->touch_scale * 100.0));
 
 	cfg_tabs[INPUT_TAB].scrollbox->refresh();

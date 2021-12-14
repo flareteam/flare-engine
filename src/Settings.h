@@ -56,6 +56,9 @@ public:
 		LHP_WARN_SOUND = 7
 	};
 
+	static const int JOY_DEADZONE_MIN = 8000;
+	static const int JOY_DEADZONE_MAX = 32767;
+
 	Settings();
 	void loadSettings();
 	void saveSettings();

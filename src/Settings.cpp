@@ -81,7 +81,7 @@ Settings::Settings()
 	setConfigDefault(14, "renderer",            &typeid(render_device_name),  "sdl_hardware", &render_device_name,  "Default render device. | sdl_hardware = default, Try sdl for compatibility");
 	setConfigDefault(15, "enable_joystick",     &typeid(enable_joystick),     "0",            &enable_joystick,     "Joystick settings.");
 	setConfigDefault(16, "joystick_device",     &typeid(joystick_device),     "-1",           &joystick_device,     "");
-	setConfigDefault(17, "joystick_deadzone",   &typeid(joy_deadzone),        "100",          &joy_deadzone,        "");
+	setConfigDefault(17, "joystick_deadzone",   &typeid(joy_deadzone),        "8000",          &joy_deadzone,        "");
 	setConfigDefault(18, "language",            &typeid(language),            "en",           &language,            "2-letter language code.");
 	setConfigDefault(19, "change_gamma",        &typeid(change_gamma),        "0",            &change_gamma,        "Allow changing screen gamma (experimental) | 0 = disable, 1 = enable");
 	setConfigDefault(20, "gamma",               &typeid(gamma),               "1.0",          &gamma,               "Screen gamma. Requires change_gamma=1 | 0.5 = darkest, 2.0 = lightest");
@@ -161,6 +161,12 @@ void Settings::loadSettings() {
 			}
 		}
 		infile.close();
+
+		// validate joystick deadzone value
+		// TODO validation for all setting vars?
+		if (joy_deadzone < JOY_DEADZONE_MIN || joy_deadzone > JOY_DEADZONE_MAX) {
+			joy_deadzone = JOY_DEADZONE_MIN;
+		}
 	}
 
 	loadMobileDefaults();
