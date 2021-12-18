@@ -28,6 +28,7 @@ Game updates:
 * Fixed Alchemist's Skirt so that it works with all potions.
 * Prevent the player from damaging Mez before being trapped.
 * Made Lezaith immune to slow/stun effects.
+* Goblin Thief can now steal all available kinds of potions. Its drop table has also been expanded to make it easier to replenish lost potions.
 
 
 
