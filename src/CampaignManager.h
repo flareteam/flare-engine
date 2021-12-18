@@ -59,6 +59,12 @@ public:
 	bool checkAllRequirements(const EventComponent& ec);
 	bool checkRequirementsInVector(const std::vector<EventComponent>& ec_vec);
 
+	void randomStatusAppend(const StatusID s);
+	void randomStatusClear();
+	void randomStatusRoll();
+	void randomStatusSet();
+	void randomStatusUnset();
+
 	std::queue<ItemStack> drop_stack;
 
 	float bonus_xp;		// Fractional XP points not yet awarded (e.g. killing 1 XP enemies with a +25% ring)
@@ -67,6 +73,9 @@ public:
 
 private:
 	StatusMap status;
+
+	std::vector<StatusID> random_status_pool;
+	StatusID random_status;
 };
 
 

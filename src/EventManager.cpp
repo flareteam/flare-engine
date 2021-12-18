@@ -695,6 +695,41 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 
 		e->s = val;
 	}
+	else if (key == "random_status") {
+		// @ATTR event.random_status|repeatable(["append", "clear", "roll", "set", "unset"], list(string)) : Action, Statuses (append action only)|Used to randomly pick a status from a list, and then set or unset it. Statuses are added to the list with the "append" action. The "roll" action will randomly pick from the list and set it as the current random status. The "set" and "unset" commands will function like set_status and unset_status, with the parameter being the current random status. Lastly, the "clear" action will empty the pool of random statuses. It is recommended to clear the list before you use it, as well as after you're done to prevent unintended side-effects.
+		e->type = EventComponent::RANDOM_STATUS;
+
+		std::string mode = Parse::popFirstString(val);
+		if (mode == "append") {
+			e->x = EventComponent::RANDOM_STATUS_MODE_APPEND;
+
+			e->status = camp->registerStatus(Parse::popFirstString(val));
+
+			// add repeating random_status
+			if (evnt) {
+				std::string repeat_val = Parse::popFirstString(val);
+				while (repeat_val != "") {
+					evnt->components.push_back(EventComponent());
+					e = &evnt->components.back();
+					e->type = EventComponent::RANDOM_STATUS;
+					e->x = EventComponent::RANDOM_STATUS_MODE_APPEND;
+					e->status = camp->registerStatus(repeat_val);
+
+					repeat_val = Parse::popFirstString(val);
+				}
+			}
+		}
+		else if (mode == "clear")
+			e->x = EventComponent::RANDOM_STATUS_MODE_CLEAR;
+		else if (mode == "roll")
+			e->x = EventComponent::RANDOM_STATUS_MODE_ROLL;
+		else if (mode == "set")
+			e->x = EventComponent::RANDOM_STATUS_MODE_SET;
+		else if (mode == "unset")
+			e->x = EventComponent::RANDOM_STATUS_MODE_UNSET;
+		else
+			Utils::logError("EventManager: '%s' is not a valid random_status action.", mode.c_str());
+	}
 	else {
 		return false;
 	}
@@ -1026,6 +1061,18 @@ bool EventManager::executeEventInternal(Event &ev, bool skip_delay) {
 		}
 		else if (ec->type == EventComponent::PARALLAX_LAYERS) {
 			mapr->setMapParallax(ec->s);
+		}
+		else if (ec->type == EventComponent::RANDOM_STATUS) {
+			if (ec->x == EventComponent::RANDOM_STATUS_MODE_APPEND)
+				camp->randomStatusAppend(ec->status);
+			else if (ec->x == EventComponent::RANDOM_STATUS_MODE_CLEAR)
+				camp->randomStatusClear();
+			else if (ec->x == EventComponent::RANDOM_STATUS_MODE_ROLL)
+				camp->randomStatusRoll();
+			else if (ec->x == EventComponent::RANDOM_STATUS_MODE_SET)
+				camp->randomStatusSet();
+			else if (ec->x == EventComponent::RANDOM_STATUS_MODE_UNSET)
+				camp->randomStatusUnset();
 		}
 	}
 	return !ev.keep_after_trigger;
