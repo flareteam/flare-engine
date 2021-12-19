@@ -24,7 +24,7 @@ msgstr ""
 
 #: ../../../src/Avatar.cpp:391
 msgid "Your health is low!"
-msgstr ""
+msgstr "Masz mało zdrowia!"
 
 #: ../../../src/Avatar.cpp:421
 #, c-format
@@ -41,7 +41,7 @@ msgstr "Możesz zwiększyć jedną lub kilka ze swoich zdolności w Menu Mocy."
 
 #: ../../../src/Avatar.cpp:689
 msgid "You are defeated."
-msgstr ""
+msgstr "Pokonano Cię."
 
 #: ../../../src/Avatar.cpp:935
 msgid "Transformation expired. You have been moved back to a safe place."
@@ -541,7 +541,7 @@ msgstr "Poziom"
 #: ../../../src/MenuCharacter.cpp:309
 #, c-format
 msgid "Available stat points: %d"
-msgstr ""
+msgstr "Dostępne punkty atrybutów: %d"
 
 #: ../../../src/MenuCharacter.cpp:353
 #, c-format
@@ -652,42 +652,44 @@ msgid ""
 "Controls the type of warning to be activated when the player is below the "
 "low health threshold."
 msgstr ""
+"Odpowiada za ostrzeganie gracza, gdy poziom jego zdrowia sięga wyznaczonej "
+"granicy niskiego zdrowia."
 
 #: ../../../src/MenuConfig.cpp:312
 msgid "- Display a message"
-msgstr ""
+msgstr "- Wyświetl komunikat"
 
 #: ../../../src/MenuConfig.cpp:313
 msgid "- Play a sound"
-msgstr ""
+msgstr "- Odtwórz dźwięk"
 
 #: ../../../src/MenuConfig.cpp:314
 msgid "- Change the cursor"
-msgstr ""
+msgstr "- Zmień kursor"
 
 #: ../../../src/MenuConfig.cpp:316
 msgid "Disabled"
-msgstr ""
+msgstr "Wyłączone"
 
 #: ../../../src/MenuConfig.cpp:317
 msgid "All"
-msgstr ""
+msgstr "Wszystko"
 
 #: ../../../src/MenuConfig.cpp:318
 msgid "Message & Cursor"
-msgstr ""
+msgstr "Komunikat i Kursor"
 
 #: ../../../src/MenuConfig.cpp:319
 msgid "Message & Sound"
-msgstr ""
+msgstr "Komunikat i Dźwięk"
 
 #: ../../../src/MenuConfig.cpp:320
 msgid "Sound & Cursor"
-msgstr ""
+msgstr "Dźwięk i Kursor"
 
 #: ../../../src/MenuConfig.cpp:321
 msgid "Message"
-msgstr ""
+msgstr "Komunikat"
 
 #: ../../../src/MenuConfig.cpp:322
 msgid "Cursor"
@@ -695,17 +697,20 @@ msgstr "Kursor"
 
 #: ../../../src/MenuConfig.cpp:323
 msgid "Sound"
-msgstr ""
+msgstr "Dźwięk"
 
 #: ../../../src/MenuConfig.cpp:329
 msgid ""
 "When the player's health drops below the given threshold, the low health "
 "notifications are triggered if one or more of them is enabled."
 msgstr ""
+"Gdy zdrowie gracza spadnie poniżej wyznaczonej granicy, ostrzeżenia "
+"dotyczące niskiego zdrowia są uruchamiane, jeśli włączono jedno z nich "
+"lub więcej."
 
 #: ../../../src/MenuConfig.cpp:347
 msgid "The maximum frame rate that the game will be allowed to run at."
-msgstr ""
+msgstr "Maksymalna ilość klatek, z jaką gra może działać."
 
 #: ../../../src/MenuConfig.cpp:351
 msgid ""
@@ -713,6 +718,9 @@ msgid ""
 "the game. Mods define the allowed render sizes, but this option allows "
 "overriding the maximum size."
 msgstr ""
+"Rozmiar renderowania odnosi sie do wysokości powierzchni do rysowania gry "
+"w pikselach. Mody definiują dozwolone rozmiary, ale ta opcja pozwala na "
+"przekroczenie ich limitów."
 
 #: ../../../src/MenuConfig.cpp:374 ../../../src/MenuConfig.cpp:1679
 #: ../../../src/MenuGameOver.cpp:116
@@ -789,11 +797,11 @@ msgstr "Jasność"
 
 #: ../../../src/MenuConfig.cpp:410
 msgid "Maximum Render Size"
-msgstr ""
+msgstr "Maksymalny rozmiar renderowania"
 
 #: ../../../src/MenuConfig.cpp:411
 msgid "Frame Limit"
-msgstr ""
+msgstr "Limit klatek na sekundę"
 
 #: ../../../src/MenuConfig.cpp:413
 msgid "Sound Volume"
@@ -857,15 +865,15 @@ msgstr "Wyświetl znaczniki ukrytych bytów"
 
 #: ../../../src/MenuConfig.cpp:429
 msgid "Low health notification"
-msgstr ""
+msgstr "Ostrzeżenia dotyczące niskiego zdrowia"
 
 #: ../../../src/MenuConfig.cpp:430
 msgid "Low health threshold"
-msgstr ""
+msgstr "Granica niskiego zdrowia"
 
 #: ../../../src/MenuConfig.cpp:431
 msgid "Show item comparison tooltips"
-msgstr ""
+msgstr "Pokaż porównanie przedmiotów"
 
 #: ../../../src/MenuConfig.cpp:434 ../../../src/MenuMovementType.cpp:94
 #: ../../../src/MenuMovementType.cpp:131
@@ -898,11 +906,11 @@ msgstr "Martwa strefa Joystick-a"
 
 #: ../../../src/MenuConfig.cpp:441
 msgid "Touch Controls"
-msgstr ""
+msgstr "Sterowanie dotykowe"
 
 #: ../../../src/MenuConfig.cpp:442
 msgid "Touch Gamepad Scaling"
-msgstr ""
+msgstr "Skalowanie dotykowego pada"
 
 #: ../../../src/MenuConfig.cpp:452
 #, c-format
@@ -999,6 +1007,8 @@ msgid ""
 "When enabled, tooltips for equipped items of the same type are shown next to"
 " standard item tooltips."
 msgstr ""
+"Włączenie tej opcji sprawia, że w momencie umieszczenia kursora na elemencie "
+"ekwipunku wyświetla porównanie statystyk z założonym przedmiotem tego samego typu".
 
 #: ../../../src/MenuConfig.cpp:566
 msgid ""
@@ -1044,6 +1054,8 @@ msgid ""
 "When enabled, a virtual gamepad will be added in-game. Other interactions, "
 "such as drag-and-drop behavior, are also altered to better suit touch input."
 msgstr ""
+"Po aktywowaniu tej opcji dodaje wirtualny pad do gry. Interakcje typu "
+"przeciąganie przedmiotów w ekwipunku zostaną dostosowane do ekranów dotykowych."
 
 #: ../../../src/MenuConfig.cpp:621
 msgid "Active Mods"
@@ -1100,8 +1112,7 @@ msgstr "Użyj '%s', aby zbadać kursorem myszy."
 
 #: ../../../src/MenuDevConsole.cpp:148
 msgid "Arguments with spaces should be enclosed with double quotes. Example:"
-msgstr ""
-"Argumenty zawierające spacje powinny zamknięte w cudzysłowie. Przykład:"
+msgstr "Argumenty zawierające spacje powinny być zamknięte w cudzysłowiu. Przykład:"
 
 #: ../../../src/MenuDevConsole.cpp:149
 msgid "Type 'help' to get a list of commands."
@@ -1191,7 +1202,8 @@ msgstr ""
 #: ../../../src/MenuDevConsole.cpp:385
 msgid ""
 "parses a series of event components and executes them as a single event"
-msgstr "parsuje ciąg komponentów zdarzeń i wykonuje je jako jedno zdarzenie"
+msgstr ""
+"parsuje ciąg komponentów zdarzeń i wykonuje je jako jedno zdarzenie"
 
 #: ../../../src/MenuDevConsole.cpp:386
 msgid "clears the command history"
@@ -1261,7 +1273,7 @@ msgstr "Zniszczony"
 
 #: ../../../src/MenuGameOver.cpp:69
 msgid "Game Over"
-msgstr ""
+msgstr "Koniec Gry"
 
 #: ../../../src/MenuInventory.cpp:178
 #, c-format
@@ -1357,27 +1369,27 @@ msgstr "Tego przedmiotu nie można upuścić."
 
 #: ../../../src/MenuManager.cpp:1501
 msgid "Equipped"
-msgstr ""
+msgstr "Założony"
 
 #: ../../../src/MenuMovementType.cpp:87
 msgid "Select a Movement Type"
-msgstr ""
+msgstr "Wybierz rodzaj sterowania"
 
 #: ../../../src/MenuMovementType.cpp:89
 msgid "Can be changed later in the Configuration menu."
-msgstr ""
+msgstr "Można go zmienić później w menu konfiguracji."
 
 #: ../../../src/MenuMovementType.cpp:92 ../../../src/MenuMovementType.cpp:122
 msgid "Keyboard"
-msgstr ""
+msgstr "Klawiatura"
 
 #: ../../../src/MenuMovementType.cpp:93 ../../../src/MenuMovementType.cpp:128
 msgid "Mouse"
-msgstr ""
+msgstr "Mysz"
 
 #: ../../../src/MenuMovementType.cpp:129
 msgid "Button"
-msgstr ""
+msgstr "Przycisk"
 
 #: ../../../src/MenuNumPicker.cpp:59
 msgid "Enter amount:"
@@ -1533,7 +1545,7 @@ msgstr "Wymaga 1 Punktu Umiejętności"
 #: ../../../src/MenuPowers.cpp:1466
 #, c-format
 msgid "Available skill points: %d"
-msgstr ""
+msgstr "Dostępne punkty umiejętności: %d"
 
 #: ../../../src/MenuPowers.cpp:1498
 msgid "Next Level:"
@@ -1545,11 +1557,11 @@ msgstr "Skrytka"
 
 #: ../../../src/MenuStash.cpp:174 ../../../src/MenuStash.cpp:188
 msgid "Private"
-msgstr ""
+msgstr "Prywatna"
 
 #: ../../../src/MenuStash.cpp:175
 msgid "Shared"
-msgstr ""
+msgstr "Współdzielona"
 
 #: ../../../src/MenuStash.cpp:340
 msgid "This item can not be stored in the stash."
@@ -1612,15 +1624,15 @@ msgstr "Gra zapisana."
 
 #: ../../../src/SDLInputState.cpp:645
 msgid "BkSp"
-msgstr ""
+msgstr "BkSp"
 
 #: ../../../src/SDLInputState.cpp:646
 msgid "Caps"
-msgstr ""
+msgstr "Caps"
 
 #: ../../../src/SDLInputState.cpp:647
 msgid "Del"
-msgstr ""
+msgstr "Del"
 
 #: ../../../src/SDLInputState.cpp:649 ../../../src/SDLInputState.cpp:679
 msgid "End"
@@ -1628,7 +1640,7 @@ msgstr "End"
 
 #: ../../../src/SDLInputState.cpp:650
 msgid "Esc"
-msgstr ""
+msgstr "Esc"
 
 #: ../../../src/SDLInputState.cpp:651 ../../../src/SDLInputState.cpp:681
 msgid "Home"
@@ -1636,31 +1648,31 @@ msgstr "Home"
 
 #: ../../../src/SDLInputState.cpp:652
 msgid "Ins"
-msgstr ""
+msgstr "Ins"
 
 #: ../../../src/SDLInputState.cpp:653
 msgid "LAlt"
-msgstr ""
+msgstr "LAlt"
 
 #: ../../../src/SDLInputState.cpp:654
 msgid "LCtrl"
-msgstr ""
+msgstr "LCtrl"
 
 #: ../../../src/SDLInputState.cpp:656
 msgid "LShft"
-msgstr ""
+msgstr "LShft"
 
 #: ../../../src/SDLInputState.cpp:657
 msgid "Num"
-msgstr ""
+msgstr "Num"
 
 #: ../../../src/SDLInputState.cpp:658
 msgid "PgDn"
-msgstr ""
+msgstr "PgDn"
 
 #: ../../../src/SDLInputState.cpp:659
 msgid "PgUp"
-msgstr ""
+msgstr "PgUp"
 
 #: ../../../src/SDLInputState.cpp:660 ../../../src/SDLInputState.cpp:690
 msgid "Pause"
@@ -1668,31 +1680,31 @@ msgstr "Pause"
 
 #: ../../../src/SDLInputState.cpp:661
 msgid "Print"
-msgstr ""
+msgstr "Print"
 
 #: ../../../src/SDLInputState.cpp:662
 msgid "RAlt"
-msgstr ""
+msgstr "RAlt"
 
 #: ../../../src/SDLInputState.cpp:663
 msgid "RCtrl"
-msgstr ""
+msgstr "RCtrl"
 
 #: ../../../src/SDLInputState.cpp:664
 msgid "Ret"
-msgstr ""
+msgstr "Ret"
 
 #: ../../../src/SDLInputState.cpp:666
 msgid "RShft"
-msgstr ""
+msgstr "RShft"
 
 #: ../../../src/SDLInputState.cpp:667
 msgid "SLock"
-msgstr ""
+msgstr "SLock"
 
 #: ../../../src/SDLInputState.cpp:668
 msgid "Spc"
-msgstr ""
+msgstr "Spc"
 
 #: ../../../src/SDLInputState.cpp:669 ../../../src/SDLInputState.cpp:699
 msgid "Tab"
@@ -1769,7 +1781,7 @@ msgstr "Space"
 #: ../../../src/SDLInputState.cpp:712
 #, c-format
 msgid "M%d"
-msgstr ""
+msgstr "M%d"
 
 #: ../../../src/SDLInputState.cpp:718
 #, c-format
@@ -1779,7 +1791,7 @@ msgstr "Przycisk myszy %d"
 #: ../../../src/SDLInputState.cpp:728
 #, c-format
 msgid "JX%d-"
-msgstr ""
+msgstr "JX%d-"
 
 #: ../../../src/SDLInputState.cpp:730
 #, c-format
@@ -1789,7 +1801,7 @@ msgstr "Oś %d -"
 #: ../../../src/SDLInputState.cpp:734
 #, c-format
 msgid "JX%d+"
-msgstr ""
+msgstr "JX%d+"
 
 #: ../../../src/SDLInputState.cpp:736
 #, c-format
@@ -1799,7 +1811,7 @@ msgstr "Oś %d +"
 #: ../../../src/SDLInputState.cpp:741
 #, c-format
 msgid "JB%d"
-msgstr ""
+msgstr "JB%d"
 
 #: ../../../src/SDLInputState.cpp:743
 #, c-format
