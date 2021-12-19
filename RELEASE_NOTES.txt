@@ -33,6 +33,7 @@ Game updates:
 Translation updates:
 
 * Scottish Gaelic (gd) update (GunChleoc)
+* Polish (pl) update (Pawonashi)
 
 
 
