@@ -2,11 +2,11 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 # Translators:
 # Błażej Pęksyk <b.peksyk@gmail.com>, 2020
 # Justin Jacobs <jajdorkster@gmail.com>, 2021
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
@@ -1008,7 +1008,7 @@ msgid ""
 " standard item tooltips."
 msgstr ""
 "Włączenie tej opcji sprawia, że w momencie umieszczenia kursora na elemencie "
-"ekwipunku wyświetla porównanie statystyk z założonym przedmiotem tego samego typu".
+"ekwipunku wyświetla porównanie statystyk z założonym przedmiotem tego samego typu."
 
 #: ../../../src/MenuConfig.cpp:566
 msgid ""
