@@ -126,7 +126,7 @@ msgid ""
 msgstr ""
 "Inneal-reandaraidh bathair-chruaidh SDL\n"
 "\n"
-"An t-inneal-reandaraidh tùsail a bhios nas luaithe mar as trice na an t-inneal-reandaraidh bathair-bhog SDL."
+"An t-inneal-reandaraidh bunaiteach a bhios nas luaithe mar as trice na an t-inneal-reandaraidh bathair-bhog SDL."
 
 #: ../../../src/EngineSettings.cpp:586
 msgid "Adventurer"

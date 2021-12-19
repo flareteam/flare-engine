@@ -30,6 +30,10 @@ Game updates:
 * Made Lezaith immune to slow/stun effects.
 * Goblin Thief can now steal all available kinds of potions. Its drop table has also been expanded to make it easier to replenish lost potions.
 
+Translation updates:
+
+* Scottish Gaelic (gd) update (GunChleoc)
+
 
 
 Flare v1.12 (https://flarerpg.org/2021/08/02/flare-1-12/)
