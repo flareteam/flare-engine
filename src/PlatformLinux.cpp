@@ -114,7 +114,7 @@ void Platform::setPaths() {
 
 	// if the user specified a data path, try to use it
 	if (Filesystem::pathExists(settings->custom_path_data)) {
-		if (!path_data) settings->path_data = settings->custom_path_data;
+		settings->path_data = settings->custom_path_data;
 		path_data = true;
 	}
 	else if (!settings->custom_path_data.empty()) {

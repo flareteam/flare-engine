@@ -729,7 +729,7 @@ void MenuPowers::upgradePower(MenuPowersCell* pcell, bool ignore_tab) {
 	if (!pcell || !pcell->next)
 		return;
 
-	if (!tab_control || ignore_tab || (tab_control && tab_control->getActiveTab() == power_cell[pcell->group].tab)) {
+	if (!tab_control || ignore_tab || tab_control->getActiveTab() == power_cell[pcell->group].tab) {
 		pcell->next->is_unlocked = true;
 		pc->stats.powers_list.push_back(pcell->next->id);
 		pc->stats.check_title = true;

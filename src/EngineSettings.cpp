@@ -521,70 +521,68 @@ void EngineSettings::HeroClasses::load() {
 			if (list.empty() || infile.section != "class")
 				continue;
 
-			if (!list.empty()) {
-				// @ATTR name|string|The displayed name of this class.
-				if (infile.key == "name") list.back().name = infile.val;
-				// @ATTR description|string|A description of this class.
-				else if (infile.key == "description") list.back().description = infile.val;
-				// @ATTR currency|int|The amount of currency this class will start with.
-				else if (infile.key == "currency") list.back().currency = Parse::toInt(infile.val);
-				// @ATTR equipment|list(item_id)|A list of items that are equipped when starting with this class.
-				else if (infile.key == "equipment") list.back().equipment = infile.val;
-				// @ATTR carried|list(item_id)|A list of items that are placed in the normal inventorty when starting with this class.
-				else if (infile.key == "carried") list.back().carried = infile.val;
-				// @ATTR primary|predefined_string, int : Primary stat name, Default value|Class starts with this value for the specified stat.
-				else if (infile.key == "primary") {
-					std::string prim_stat = Parse::popFirstString(infile.val);
-					size_t prim_stat_index = eset->primary_stats.getIndexByID(prim_stat);
+			// @ATTR name|string|The displayed name of this class.
+			if (infile.key == "name") list.back().name = infile.val;
+			// @ATTR description|string|A description of this class.
+			else if (infile.key == "description") list.back().description = infile.val;
+			// @ATTR currency|int|The amount of currency this class will start with.
+			else if (infile.key == "currency") list.back().currency = Parse::toInt(infile.val);
+			// @ATTR equipment|list(item_id)|A list of items that are equipped when starting with this class.
+			else if (infile.key == "equipment") list.back().equipment = infile.val;
+			// @ATTR carried|list(item_id)|A list of items that are placed in the normal inventorty when starting with this class.
+			else if (infile.key == "carried") list.back().carried = infile.val;
+			// @ATTR primary|predefined_string, int : Primary stat name, Default value|Class starts with this value for the specified stat.
+			else if (infile.key == "primary") {
+				std::string prim_stat = Parse::popFirstString(infile.val);
+				size_t prim_stat_index = eset->primary_stats.getIndexByID(prim_stat);
 
-					if (prim_stat_index != eset->primary_stats.list.size()) {
-						list.back().primary[prim_stat_index] = Parse::toInt(infile.val);
-					}
-					else {
-						infile.error("EngineSettings: '%s' is not a valid primary stat.", prim_stat.c_str());
-					}
+				if (prim_stat_index != eset->primary_stats.list.size()) {
+					list.back().primary[prim_stat_index] = Parse::toInt(infile.val);
 				}
-
-				else if (infile.key == "actionbar") {
-					// @ATTR actionbar|list(power_id)|A list of powers to place in the action bar for the class.
-					for (int i=0; i<12; i++) {
-						list.back().hotkeys[i] = Parse::toPowerID(Parse::popFirstString(infile.val));
-					}
+				else {
+					infile.error("EngineSettings: '%s' is not a valid primary stat.", prim_stat.c_str());
 				}
-				else if (infile.key == "powers") {
-					// @ATTR powers|list(power_id)|A list of powers that are unlocked when starting this class.
-					std::string power;
-					while ( (power = Parse::popFirstString(infile.val)) != "") {
-						list.back().powers.push_back(Parse::toPowerID(power));
-					}
-				}
-				else if (infile.key == "campaign") {
-					// @ATTR campaign|list(string)|A list of campaign statuses that are set when starting this class.
-					std::string status;
-					while ( (status = Parse::popFirstString(infile.val)) != "") {
-						list.back().statuses.push_back(status);
-					}
-				}
-				else if (infile.key == "power_tree") {
-					// @ATTR power_tree|string|Power tree that will be loaded by MenuPowers
-					list.back().power_tree = infile.val;
-				}
-				else if (infile.key == "hero_options") {
-					// @ATTR hero_options|list(int)|A list of indicies of the hero options this class can use.
-					std::string hero_option;
-					while ( (hero_option = Parse::popFirstString(infile.val)) != "") {
-						list.back().options.push_back(Parse::toInt(hero_option));
-					}
-
-					std::sort(list.back().options.begin(), list.back().options.end());
-				}
-				else if (infile.key == "default_power_tab") {
-					// @ATTR default_power_tab|int|Index of the tab to switch to when opening the Powers menu
-					list.back().default_power_tab = Parse::toInt(infile.val);
-				}
-
-				else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
 			}
+
+			else if (infile.key == "actionbar") {
+				// @ATTR actionbar|list(power_id)|A list of powers to place in the action bar for the class.
+				for (int i=0; i<12; i++) {
+					list.back().hotkeys[i] = Parse::toPowerID(Parse::popFirstString(infile.val));
+				}
+			}
+			else if (infile.key == "powers") {
+				// @ATTR powers|list(power_id)|A list of powers that are unlocked when starting this class.
+				std::string power;
+				while ( (power = Parse::popFirstString(infile.val)) != "") {
+					list.back().powers.push_back(Parse::toPowerID(power));
+				}
+			}
+			else if (infile.key == "campaign") {
+				// @ATTR campaign|list(string)|A list of campaign statuses that are set when starting this class.
+				std::string status;
+				while ( (status = Parse::popFirstString(infile.val)) != "") {
+					list.back().statuses.push_back(status);
+				}
+			}
+			else if (infile.key == "power_tree") {
+				// @ATTR power_tree|string|Power tree that will be loaded by MenuPowers
+				list.back().power_tree = infile.val;
+			}
+			else if (infile.key == "hero_options") {
+				// @ATTR hero_options|list(int)|A list of indicies of the hero options this class can use.
+				std::string hero_option;
+				while ( (hero_option = Parse::popFirstString(infile.val)) != "") {
+					list.back().options.push_back(Parse::toInt(hero_option));
+				}
+
+				std::sort(list.back().options.begin(), list.back().options.end());
+			}
+			else if (infile.key == "default_power_tab") {
+				// @ATTR default_power_tab|int|Index of the tab to switch to when opening the Powers menu
+				list.back().default_power_tab = Parse::toInt(infile.val);
+			}
+
+			else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
 
@@ -633,24 +631,22 @@ void EngineSettings::DamageTypes::load() {
 			if (list.empty() || infile.section != "damage_type")
 				continue;
 
-			if (!list.empty()) {
-				// @ATTR damage_type.id|string|The identifier used for Item damage_type and Power base_damage.
-				if (infile.key == "id") list.back().id = infile.val;
-				// @ATTR damage_type.name|string|The displayed name for the value of this damage type.
-				else if (infile.key == "name") list.back().name = msg->get(infile.val);
-				// @ATTR damage_type.name_min|string|The displayed name for the minimum value of this damage type.
-				else if (infile.key == "name_min") list.back().name_min = msg->get(infile.val);
-				// @ATTR damage_type.name_max|string|The displayed name for the maximum value of this damage type.
-				else if (infile.key == "name_max") list.back().name_max = msg->get(infile.val);
-				// @ATTR damage_type.description|string|The description that will be displayed in the Character menu tooltips.
-				else if (infile.key == "description") list.back().description = msg->get(infile.val);
-				// @ATTR damage_type.min|string|The identifier used as a Stat type and an Effect type, for the minimum damage of this type.
-				else if (infile.key == "min") list.back().min = infile.val;
-				// @ATTR damage_type.max|string|The identifier used as a Stat type and an Effect type, for the maximum damage of this type.
-				else if (infile.key == "max") list.back().max = infile.val;
+			// @ATTR damage_type.id|string|The identifier used for Item damage_type and Power base_damage.
+			if (infile.key == "id") list.back().id = infile.val;
+			// @ATTR damage_type.name|string|The displayed name for the value of this damage type.
+			else if (infile.key == "name") list.back().name = msg->get(infile.val);
+			// @ATTR damage_type.name_min|string|The displayed name for the minimum value of this damage type.
+			else if (infile.key == "name_min") list.back().name_min = msg->get(infile.val);
+			// @ATTR damage_type.name_max|string|The displayed name for the maximum value of this damage type.
+			else if (infile.key == "name_max") list.back().name_max = msg->get(infile.val);
+			// @ATTR damage_type.description|string|The description that will be displayed in the Character menu tooltips.
+			else if (infile.key == "description") list.back().description = msg->get(infile.val);
+			// @ATTR damage_type.min|string|The identifier used as a Stat type and an Effect type, for the minimum damage of this type.
+			else if (infile.key == "min") list.back().min = infile.val;
+			// @ATTR damage_type.max|string|The identifier used as a Stat type and an Effect type, for the maximum damage of this type.
+			else if (infile.key == "max") list.back().max = infile.val;
 
-				else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
-			}
+			else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
 	}

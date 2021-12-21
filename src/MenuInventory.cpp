@@ -186,7 +186,7 @@ MenuInventory::MenuInventory()
 
 	// create equipment swap buttons
 	std::map<unsigned, std::string>::iterator it;
-	for (it = raw_set_button.begin(); it != raw_set_button.end(); it++) {
+	for (it = raw_set_button.begin(); it != raw_set_button.end(); ++it) {
 		int px = Parse::popFirstInt(it->second);
 		int py = Parse::popFirstInt(it->second);
 		std::string icon = Parse::popFirstString(it->second);
@@ -444,7 +444,7 @@ void MenuInventory::renderTooltips(const Point& position) {
 
 			if (inv_ctrl == CTRL_STASH)
 				tip_data.addText(msg->get("Stash item stack:") + " " + inpt->getBindingString(Input::CTRL) + " / " + inpt->getBindingString(Input::CTRL, InputState::BINDING_ALT));
-			else if (inv_ctrl == CTRL_VENDOR || (eset->misc.sell_without_vendor && inv_ctrl != CTRL_STASH))
+			else if (inv_ctrl == CTRL_VENDOR || eset->misc.sell_without_vendor)
 				tip_data.addText(msg->get("Sell item stack:") + " " + inpt->getBindingString(Input::CTRL) + " / " + inpt->getBindingString(Input::CTRL, InputState::BINDING_ALT));
 		}
 		tooltipm->push(tip_data, position, TooltipData::STYLE_FLOAT);

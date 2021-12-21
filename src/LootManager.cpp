@@ -721,7 +721,7 @@ void LootManager::checkLootComponent(EventComponent* ec, FPoint *pos, std::vecto
 		addLoot(new_loot, p, !DROPPED_BY_HERO);
 }
 
-void LootManager::removeFromEnemiesDroppingLoot(StatBlock* sb) {
+void LootManager::removeFromEnemiesDroppingLoot(const StatBlock* sb) {
 	for (size_t i = enemiesDroppingLoot.size(); i > 0; i--) {
 		// enemies will actually be removed the next time checkEnemiesForLoot() runs
 		if (enemiesDroppingLoot[i-1] == sb)

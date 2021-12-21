@@ -104,13 +104,6 @@ bool WidgetSlider::checkClickAt(int x, int y) {
 
 	if (pressed) {
 		// The knob has been released
-		// create a temporary Rect slightly wider than the slider
-		Rect tmp_pos;
-		tmp_pos.x = pos.x - (pos_knob.w*2);
-		tmp_pos.y = pos.y;
-		tmp_pos.w = pos.w + (pos_knob.w*4);
-		tmp_pos.h = pos.h;
-
 		if (!inpt->lock[Input::MAIN1]) {
 			pressed = false;
 		}

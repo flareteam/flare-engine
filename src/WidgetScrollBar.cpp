@@ -99,7 +99,7 @@ int WidgetScrollBar::checkClickAt(int x, int y) {
 				pressed_knob = true;
 				dragging = true;
 			}
-			else if (in_bounds && pressed_knob) {
+			else if (pressed_knob) {
 				dragging = true;
 			}
 		}

@@ -94,7 +94,7 @@ public:
 		BEGIN = 1
 	};
 
-	Timer(unsigned _duration = 0);
+	explicit Timer(unsigned _duration = 0);
 	unsigned getCurrent();
 	unsigned getDuration();
 	void setCurrent(unsigned val);

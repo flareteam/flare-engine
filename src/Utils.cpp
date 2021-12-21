@@ -347,7 +347,7 @@ unsigned char Utils::calcDirection(float x0, float y0, float x1, float y1) {
 	float val = theta / (static_cast<float>(M_PI)/4);
 	int dir = static_cast<int>(((val < 0) ? ceilf(val-0.5f) : floorf(val+0.5f)) + 4);
 	dir = (dir + 1) % 8;
-	if (dir >= 0 && dir < 8)
+	if (dir >= 0)
 		return static_cast<unsigned char>(dir);
 	else
 		return 0;

@@ -40,7 +40,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 
 CampaignManager::CampaignManager()
-	: bonus_xp(0.0) {
+	: bonus_xp(0.0)
+	, random_status(0) {
 }
 
 StatusID CampaignManager::registerStatus(const std::string& s) {

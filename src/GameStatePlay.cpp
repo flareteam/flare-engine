@@ -729,9 +729,6 @@ void GameStatePlay::checkNPCInteraction() {
 	mapr->event_npc = "";
 	mapr->npc_id = -1;
 
-	if (npc_id == -1)
-		return;
-
 	if (npc_id != -1) {
 		bool interact_with_npc = false;
 		if (menu->talker->npc_from_map) {

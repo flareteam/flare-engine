@@ -88,7 +88,7 @@ public:
 
 	void parseLoot(std::string &val, EventComponent *e, std::vector<EventComponent> *ec_list);
 
-	void removeFromEnemiesDroppingLoot(StatBlock* sb);
+	void removeFromEnemiesDroppingLoot(const StatBlock* sb);
 };
 
 #endif

@@ -288,14 +288,10 @@ void FogOfWar::loadHeader(FileParser &infile) {
 
 void FogOfWar::loadDefBit(FileParser &infile) {
 	// @ATTR bits.bit|string, int: Name, Value|A fog of war bit definition can have any name. Better to keep it simple and short. There must be a bit definition that has the value 0. Example: If we have 4 bits per tile then we define: bit=BIT_0,0, bit=BIT_N,1, bit=BIT_W,2, bit=BIT_S,3, bit=BIT_E,4.
-
-	int val = 0;
-	int bit = 0;
-	std::string bit_name;
-
 	if (infile.key == "bit") {
-		bit_name = Parse::popFirstString(infile.val);
-		val = Parse::popFirstInt(infile.val);
+		int bit = 0;
+		std::string bit_name = Parse::popFirstString(infile.val);
+		int val = Parse::popFirstInt(infile.val);
 
 		if (val > 0) {
 			bit = 1 << (val - 1);
@@ -314,22 +310,20 @@ void FogOfWar::loadDefBit(FileParser &infile) {
 
 void FogOfWar::loadDefTile(FileParser &infile) {
 	// @ATTR tiles.tile|string, repeatable(predefined_string): Name, Bit definitions|A fog of war tile definition can have any name. Better to keep it simple and short. There must be a tile definition that contains no bits and a tile definition that contains all bits. Example: A tile containing North and West bits will be tile=NW,BIT_N,BIT_W.
-
-	std::string val;
-	std::string bit;
-	std::map<std::string, int>::iterator it;
-	std::string tile_name;
-	int tile_bits = 0;
-	unsigned long prev_comma = 0;
-	unsigned long comma = 0;
-
 	if (infile.key == "tile") {
 		if (def_bits.empty())
 			return;
 
-		tile_name = Parse::popFirstString(infile.val);
-		val = Parse::stripCarriageReturn(infile.val);
+		std::string tile_name = Parse::popFirstString(infile.val);
+		std::string val = Parse::stripCarriageReturn(infile.val);
 
+		std::string bit;
+		int tile_bits = 0;
+
+		unsigned long comma;
+		unsigned long prev_comma = 0;
+
+		std::map<std::string, int>::iterator it;
 		while (prev_comma < val.length()) {
 			comma = val.find(",", prev_comma+1);
 			if(prev_comma == 0)
