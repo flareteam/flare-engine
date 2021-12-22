@@ -310,6 +310,10 @@ void MenuManager::logic() {
 	}
 	pc->stats.abort_npc_interact = false;
 
+	if ((talker->visible || book->visible) && act->tablist.getCurrent() != -1) {
+		act->tablist.defocus();
+	}
+
 	// when selecting item quantities, don't process other menus
 	if (num_picker->visible) {
 		num_picker->logic();
