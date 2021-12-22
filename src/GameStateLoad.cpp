@@ -235,6 +235,11 @@ GameStateLoad::GameStateLoad() : GameState()
 		scrollToSelected();
 		updateButtons();
 	}
+	else if (!game_slots.empty()) {
+		setSelectedSlot(0);
+		scrollToSelected();
+		updateButtons();
+	}
 
 	render_device->setBackgroundColor(Color(0,0,0,0));
 }
@@ -452,12 +457,16 @@ void GameStateLoad::logic() {
 			game_slots.erase(game_slots.begin()+selected_slot);
 
 			visible_slots = (game_slot_max > static_cast<int>(game_slots.size()) ? static_cast<int>(game_slots.size()) : game_slot_max);
-			setSelectedSlot(-1);
+			if (!game_slots.empty())
+				setSelectedSlot(0);
+			else
+				setSelectedSlot(-1);
 
 			while (scroll_offset + visible_slots > static_cast<int>(game_slots.size())) {
 				scroll_offset--;
 			}
 
+			scrollToSelected();
 			updateButtons();
 
 			confirm->visible = false;
@@ -466,6 +475,8 @@ void GameStateLoad::logic() {
 			refreshSavePaths();
 
 			settings->prev_save_slot = -1;
+
+			tablist.defocus();
 		}
 	}
 	else {
