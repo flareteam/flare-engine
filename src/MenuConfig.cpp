@@ -705,19 +705,7 @@ void MenuConfig::setupTabList() {
 		tablist_main.add(ok_button);
 		tablist_main.add(defaults_button);
 		tablist_main.add(cancel_button);
-
-		tablist.setPrevTabList(&tablist_main);
-
-		tablist_exit.setNextTabList(&tablist_main);
-		tablist_video.setNextTabList(&tablist_main);
-		tablist_audio.setNextTabList(&tablist_main);
-		tablist_interface.setNextTabList(&tablist_main);
-		tablist_input.setNextTabList(&tablist_main);
-		tablist_keybinds.setNextTabList(&tablist_main);
-		tablist_mods.setNextTabList(&tablist_main);
 	}
-	tablist_main.setPrevTabList(&tablist);
-	tablist_main.setNextTabList(&tablist);
 	tablist_main.lock();
 
 	tablist_exit.setScrollType(Widget::SCROLL_VERTICAL);
@@ -993,7 +981,7 @@ bool MenuConfig::logicMain() {
 
 	for (size_t i = 0; i < tablists.size(); ++i) {
 		tablists[i]->logic();
-		if (!inpt->usingMouse() && !tablists[i]->isLocked() && tablists[i]->getCurrent() == -1) {
+		if (!inpt->usingMouse() && !tablists[i]->isLocked() && tablists[i]->getCurrent() == -1 && tablist_main.getCurrent() == -1) {
 			tablists[i]->getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
 		}
 	}
@@ -1010,11 +998,35 @@ bool MenuConfig::logicMain() {
 			defaults_confirm->visible = true;
 			return true;
 		}
-		else if (cancel_button->checkClick() || (inpt->pressing[Input::CANCEL] && !inpt->lock[Input::CANCEL])) {
+		else if (cancel_button->checkClick() || (inpt->usingMouse() && inpt->pressing[Input::CANCEL] && !inpt->lock[Input::CANCEL])) {
+			if (inpt->pressing[Input::CANCEL])
+				inpt->lock[Input::CANCEL] = true;
+
 			clicked_cancel = true;
 
 			// MenuConfig deconstructed, proceed with caution
 			return false;
+		}
+		else if (!inpt->usingMouse() && inpt->pressing[Input::CANCEL] && !inpt->lock[Input::CANCEL]) {
+			inpt->lock[Input::CANCEL] = true;
+
+			// toggle between GameState buttons and tab widgets
+			if (tablist_main.getCurrent() == -1) {
+				// switch to GameState buttons
+				for (size_t i = 0; i < tablists.size(); ++i) {
+					tablists[i]->defocus();
+				}
+				tablist.lock();
+				tablist_main.unlock();
+				tablist_main.getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
+			}
+			else {
+				// switch to tab widgets
+				tablist_main.defocus();
+				tablist_main.lock();
+				tablist.unlock();
+				tablist.getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
+			}
 		}
 	}
 

@@ -127,7 +127,6 @@ void GameStateConfig::logicAccept() {
 }
 
 void GameStateConfig::logicCancel() {
-	inpt->lock[Input::CANCEL] = true;
 	settings->loadSettings();
 	inpt->loadKeyBindings();
 	delete msg;
