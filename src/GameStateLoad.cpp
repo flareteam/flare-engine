@@ -43,6 +43,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
+#include "WidgetHorizontalList.h"
 #include "WidgetScrollBar.h"
 
 bool compareSaveDirs(const std::string& dir1, const std::string& dir2) {
@@ -87,7 +88,11 @@ GameStateLoad::GameStateLoad() : GameState()
 	label_loading = new WidgetLabel();
 
 	// Confirmation box to confirm deleting
-	confirm = new MenuConfirm(msg->get("Delete Save"), msg->get("Delete this save?"));
+	confirm = new MenuConfirm();
+	confirm->setTitle(msg->get("Delete this save?"));
+	confirm->action_list->append(msg->get("No"), "");
+	confirm->action_list->append(msg->get("Yes"), "");
+
 	button_exit = new WidgetButton(WidgetButton::DEFAULT_FILE);
 	button_exit->setLabel(msg->get("Exit to Title"));
 
@@ -449,34 +454,36 @@ void GameStateLoad::logic() {
 
 	if (confirm->visible) {
 		confirm->logic();
-		if (confirm->confirmClicked) {
-			Utils::removeSaveDir(game_slots[selected_slot]->id);
+		if (confirm->clicked_confirm) {
+			if (confirm->action_list->getSelected() == DELETE_CONFIRM_OPTION_YES) {
+				Utils::removeSaveDir(game_slots[selected_slot]->id);
 
-			delete game_slots[selected_slot];
-			game_slots[selected_slot] = NULL;
-			game_slots.erase(game_slots.begin()+selected_slot);
+				delete game_slots[selected_slot];
+				game_slots[selected_slot] = NULL;
+				game_slots.erase(game_slots.begin()+selected_slot);
 
-			visible_slots = (game_slot_max > static_cast<int>(game_slots.size()) ? static_cast<int>(game_slots.size()) : game_slot_max);
-			if (!game_slots.empty())
-				setSelectedSlot(0);
-			else
-				setSelectedSlot(-1);
+				visible_slots = (game_slot_max > static_cast<int>(game_slots.size()) ? static_cast<int>(game_slots.size()) : game_slot_max);
+				if (!game_slots.empty())
+					setSelectedSlot(0);
+				else
+					setSelectedSlot(-1);
 
-			while (scroll_offset + visible_slots > static_cast<int>(game_slots.size())) {
-				scroll_offset--;
+				while (scroll_offset + visible_slots > static_cast<int>(game_slots.size())) {
+					scroll_offset--;
+				}
+
+				scrollToSelected();
+				updateButtons();
+
+				refreshSavePaths();
+				settings->prev_save_slot = -1;
+
+				tablist.defocus();
 			}
 
-			scrollToSelected();
-			updateButtons();
-
+			// both yes and no close the dialog
 			confirm->visible = false;
-			confirm->confirmClicked = false;
-
-			refreshSavePaths();
-
-			settings->prev_save_slot = -1;
-
-			tablist.defocus();
+			confirm->clicked_confirm = false;
 		}
 	}
 	else {
@@ -516,8 +523,7 @@ void GameStateLoad::logic() {
 		}
 		else if (button_delete->checkClick()) {
 			// Display pop-up to make sure save should be deleted
-			confirm->visible = true;
-			confirm->render();
+			confirm->show();
 		}
 		else if (game_slots.size() > 0) {
 			Rect scroll_area = slot_pos[0];

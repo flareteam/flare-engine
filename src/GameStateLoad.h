@@ -66,6 +66,10 @@ public:
 
 class GameStateLoad : public GameState {
 private:
+	enum {
+		DELETE_CONFIRM_OPTION_NO = 0,
+		DELETE_CONFIRM_OPTION_YES = 1,
+	};
 
 	void loadGraphics();
 	void loadPortrait(int slot);

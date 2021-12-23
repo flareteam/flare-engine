@@ -25,18 +25,17 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuConfirm.h"
 #include "SharedResources.h"
 #include "WidgetButton.h"
+#include "WidgetHorizontalList.h"
 
 #include <string>
 
-MenuConfirm::MenuConfirm(const std::string& _buttonMsg, const std::string& _boxMsg)
+MenuConfirm::MenuConfirm()
 	: Menu()
-	, buttonConfirm(NULL)
-	, buttonClose(NULL)
-	, hasConfirmButton(false)
-	, confirmClicked(false)
-	, cancelClicked(false)
-	, isWithinButtons(false) {
-
+	, button_close(new WidgetButton("images/menus/buttons/button_x.png"))
+	, action_list(new WidgetHorizontalList())
+	, clicked_confirm(false)
+	, clicked_cancel(false)
+{
 	// Load config settings
 	FileParser infile;
 	if(infile.open("menus/confirm.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
@@ -47,20 +46,11 @@ MenuConfirm::MenuConfirm(const std::string& _buttonMsg, const std::string& _boxM
 		infile.close();
 	}
 
-	if (_buttonMsg != "") hasConfirmButton = true;
-	// Text to display in confirmation box
-	boxMsg = _boxMsg;
+	action_list->has_action = true;
 
 	tablist.ignore_no_mouse = true;
-
-	if (hasConfirmButton) {
-		buttonConfirm = new WidgetButton(WidgetButton::DEFAULT_FILE);
-		buttonConfirm->setLabel(_buttonMsg);
-		tablist.add(buttonConfirm);
-	}
-
-	buttonClose = new WidgetButton("images/menus/buttons/button_x.png");
-	tablist.add(buttonClose);
+	tablist.add(action_list);
+	// tablist.add(button_close);
 
 	setBackground("images/menus/confirm_bg.png");
 	align();
@@ -70,40 +60,42 @@ void MenuConfirm::align() {
 	Menu::align();
 
 	label.setJustify(FontEngine::JUSTIFY_CENTER);
-	label.setText(boxMsg);
+	label.setText(title);
 	label.setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
-	if (hasConfirmButton) {
-		buttonConfirm->pos.x = window_area.x + window_area.w/2 - buttonConfirm->pos.w/2;
-		buttonConfirm->pos.y = window_area.y + window_area.h/2;
-		buttonConfirm->refresh();
-		label.setPos(window_area.x + window_area.w/2, window_area.y + window_area.h - (buttonConfirm->pos.h * 2));
-	}
-	else {
-		label.setPos(window_area.x + window_area.w/2, window_area.y + (window_area.h / 4));
-	}
+	action_list->pos.x = window_area.x + window_area.w/2 - action_list->pos.w/2;
+	action_list->pos.y = window_area.y + window_area.h/2;
+	action_list->refresh();
+	label.setPos(window_area.x + window_area.w/2, window_area.y + window_area.h - (action_list->pos.h * 2));
 
-	buttonClose->pos.x = window_area.x + window_area.w;
-	buttonClose->pos.y = window_area.y;
+	button_close->pos.x = window_area.x + window_area.w;
+	button_close->pos.y = window_area.y;
 }
 
 void MenuConfirm::logic() {
-	if (visible) {
+	if (visible && action_list->enabled) {
 		tablist.logic();
-		confirmClicked = false;
 
-		if (hasConfirmButton && buttonConfirm->checkClick()) {
-			confirmClicked = true;
+		if (!inpt->usingMouse() && tablist.getCurrent() == -1) {
+			tablist.getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
 		}
-		if (buttonClose->checkClick()) {
+		else if (inpt->usingMouse()) {
+			tablist.defocus();
+		}
+
+		clicked_confirm = false;
+
+		if (action_list->checkClick() && action_list->checkAction()) {
+			clicked_confirm = true;
+		}
+		else if (button_close->checkClick() || (inpt->pressing[Input::CANCEL] && !inpt->lock[Input::CANCEL])) {
+			if (inpt->pressing[Input::CANCEL])
+				inpt->lock[Input::CANCEL] = true;
+
 			visible = false;
-			confirmClicked = false;
-			cancelClicked = true;
+			clicked_confirm = false;
+			clicked_cancel = true;
 		}
-
-		// check if the mouse cursor is hovering over the close button
-		// this is for the confirm dialog that shows when changing keybinds
-		isWithinButtons = (buttonClose->in_focus || Utils::isWithinRect(buttonClose->pos, inpt->mouse)) || (hasConfirmButton && (buttonConfirm->in_focus || Utils::isWithinRect(buttonConfirm->pos, inpt->mouse)));
 	}
 }
 
@@ -113,18 +105,26 @@ void MenuConfirm::render() {
 
 	label.render();
 
-	if (hasConfirmButton) buttonConfirm->render();
-	buttonClose->render();
+	action_list->render();
+	button_close->render();
 }
 
-void MenuConfirm::setConfirmEnabled(bool enabled) {
-	if (hasConfirmButton) {
-		buttonConfirm->enabled = enabled;
-	}
+void MenuConfirm::setTitle(const std::string& s) {
+	title = s;
+	align();
+}
+
+void MenuConfirm::show() {
+	visible = true;
+	clicked_confirm = false;
+	clicked_cancel = false;
+	action_list->select(0);
+	action_list->enabled = true;
+	align();
 }
 
 MenuConfirm::~MenuConfirm() {
-	if (hasConfirmButton) delete buttonConfirm;
-	delete buttonClose;
+	delete action_list;
+	delete button_close;
 }
 

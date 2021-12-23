@@ -119,8 +119,8 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	, defaults_button(new WidgetButton(WidgetButton::DEFAULT_FILE))
 	, cancel_button(new WidgetButton(WidgetButton::DEFAULT_FILE))
 	, background(NULL)
-	, input_confirm(new MenuConfirm(msg->get("Clear"),msg->get("Assign:")))
-	, defaults_confirm(new MenuConfirm(msg->get("Defaults"), msg->get("Reset ALL settings?")))
+	, input_confirm(new MenuConfirm())
+	, defaults_confirm(new MenuConfirm())
 
 	, pause_continue_lb(new WidgetLabel())
 	, pause_continue_btn(new WidgetButton(WidgetButton::DEFAULT_FILE))
@@ -240,6 +240,13 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	, clicked_pause_exit(false)
 	, clicked_pause_save(false)
 {
+	input_confirm->setTitle(msg->get("Assign:"));
+	input_confirm->action_list->append(msg->get("New"), "");
+	input_confirm->action_list->append(msg->get("Clear"), "");
+
+	defaults_confirm->setTitle(msg->get("Reset ALL settings?"));
+	defaults_confirm->action_list->append(msg->get("No"), "");
+	defaults_confirm->action_list->append(msg->get("Yes"), "");
 
 	Image *graphics;
 	graphics = render_device->loadImage("images/menus/config.png", RenderDevice::ERROR_NORMAL);
@@ -908,9 +915,13 @@ void MenuConfig::logic() {
 		// assign a keybind
 		input_confirm->logic();
 		scanKey(input_action);
-		input_confirm_timer.tick();
+
+		if (!input_confirm->action_list->enabled)
+			input_confirm_timer.tick();
+
 		if (input_confirm_timer.isEnd())
 			input_confirm->visible = false;
+
 		return;
 	}
 	else {
@@ -995,7 +1006,7 @@ bool MenuConfig::logicMain() {
 			return false;
 		}
 		else if (defaults_button->checkClick()) {
-			defaults_confirm->visible = true;
+			defaults_confirm->show();
 			return true;
 		}
 		else if (cancel_button->checkClick() || (inpt->usingMouse() && inpt->pressing[Input::CANCEL] && !inpt->lock[Input::CANCEL])) {
@@ -1035,16 +1046,19 @@ bool MenuConfig::logicMain() {
 
 void MenuConfig::logicDefaults() {
 	defaults_confirm->logic();
-	if (defaults_confirm->confirmClicked) {
-		settings->fullscreen = false;
-		render_device->setFullscreen(settings->fullscreen);
-		settings->loadDefaults();
-		eset->load();
-		inpt->initBindings();
-		update();
-		refreshWindowSize();
+	if (defaults_confirm->clicked_confirm) {
+		if (defaults_confirm->action_list->getSelected() == DEFAULTS_CONFIRM_OPTION_YES) {
+			settings->fullscreen = false;
+			render_device->setFullscreen(settings->fullscreen);
+			settings->loadDefaults();
+			eset->load();
+			inpt->initBindings();
+			update();
+			refreshWindowSize();
+		}
+		// both yes and no close the window
 		defaults_confirm->visible = false;
-		defaults_confirm->confirmClicked = false;
+		defaults_confirm->clicked_confirm = false;
 	}
 }
 
@@ -1268,13 +1282,9 @@ void MenuConfig::logicKeybinds() {
 
 		if (keybinds_lstb[i]->checkClickAt(mouse.x,mouse.y)) {
 			if (keybinds_lstb[i]->checkAction()) {
-				std::string confirm_msg;
-				confirm_msg = msg->get("Assign:") + ' ' + inpt->binding_name[i];
-				delete input_confirm;
-				input_confirm = new MenuConfirm(msg->get("Clear"),confirm_msg);
-				input_confirm->setConfirmEnabled(!(i == Input::MAIN1 && keybinds_lstb[i]->getSelected() == 0));
+				input_confirm->setTitle(msg->get("Assign:") + ' ' + inpt->binding_name[i]);
 				input_confirm_timer.reset(Timer::BEGIN);
-				input_confirm->visible = true;
+				input_confirm->show();
 				input_action = i;
 				inpt->last_button = -1;
 				inpt->last_key = -1;
@@ -1598,14 +1608,34 @@ void MenuConfig::confirmKey(int action) {
 }
 
 void MenuConfig::scanKey(int action) {
-	// clear the keybind if the user clicks "Clear" in the dialog
-	if (input_confirm->visible && input_confirm->confirmClicked) {
-		inpt->removeBind(action, keybinds_lstb[action]->getSelected());
-		confirmKey(action);
+	if (!input_confirm->visible)
 		return;
+
+	// clear the keybind if the user clicks "Clear" in the dialog
+	if (input_confirm->clicked_confirm) {
+		input_confirm->clicked_confirm = false;
+
+		if (input_confirm->action_list->getSelected() == INPUT_CONFIRM_OPTION_NEW) {
+			input_confirm->action_list->enabled = false;
+			input_confirm->align();
+
+			inpt->last_button = -1;
+			inpt->last_key = -1;
+			inpt->last_joybutton = -1;
+		}
+		else if (input_confirm->action_list->getSelected() == INPUT_CONFIRM_OPTION_CLEAR) {
+			unsigned selected_bind = keybinds_lstb[action]->getSelected();
+			if (action == Input::MAIN1 && selected_bind == 0) {
+				keybind_msg = msg->get("Can not remove this binding.");
+			}
+			else {
+				inpt->removeBind(action, keybinds_lstb[action]->getSelected());
+				confirmKey(action);
+			}
+		}
 	}
 
-	if (input_confirm->visible && !input_confirm->isWithinButtons) {
+	if (!input_confirm->action_list->enabled) {
 		if (inpt->last_key != -1) {
 			// keyboard
 			inpt->setBind(action, InputBind::KEY, inpt->last_key, &keybind_msg);

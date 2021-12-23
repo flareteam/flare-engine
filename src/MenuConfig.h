@@ -77,6 +77,16 @@ private:
 	static const int TOUCH_SCALE_MIN = 75;
 	static const int TOUCH_SCALE_MAX = 125;
 
+	enum {
+		DEFAULTS_CONFIRM_OPTION_NO = 0,
+		DEFAULTS_CONFIRM_OPTION_YES = 1,
+	};
+
+	enum {
+		INPUT_CONFIRM_OPTION_NEW = 0,
+		INPUT_CONFIRM_OPTION_CLEAR = 1,
+	};
+
 	std::vector<ConfigTab> cfg_tabs;
 
 	bool is_game_state;
