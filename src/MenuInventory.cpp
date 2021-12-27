@@ -732,11 +732,20 @@ void MenuInventory::activate(const Point& position) {
 			return;
 		}
 
-		pc->power_cooldown_timers[power_id].setDuration(powers->powers[power_id].cooldown);
-
 		// if this item requires targeting it can't be used this way
 		if (!powers->powers[power_id].requires_targeting) {
-			powers->activate(power_id, &pc->stats, nullpt);
+			ActionData action_data;
+			action_data.power = power_id;
+			action_data.activated_from_inventory = true;
+			if (powers->powers[power_id].new_state == Power::STATE_INSTANT) {
+				for (size_t j = 0; j < powers->powers[power_id].required_items.size(); ++j) {
+					if (powers->powers[power_id].required_items[j].id > 0 && !powers->powers[power_id].required_items[j].equipped) {
+						action_data.instant_item = true;
+						break;
+					}
+				}
+			}
+			pc->action_queue.push_back(action_data);
 		}
 		else {
 			// let player know this can only be used from the action bar

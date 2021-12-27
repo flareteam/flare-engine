@@ -842,6 +842,11 @@ void Avatar::logic() {
 				}
 			}
 
+			for (size_t i = action_queue.size(); i > 0; i--) {
+				if (action_queue[i-1].activated_from_inventory)
+					action_queue.erase(action_queue.begin()+(i-1));
+			}
+
 			stats.blocking = blocking;
 		}
 

@@ -665,9 +665,9 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 		else {
 			// if we're not triggering an action that is currently in the queue,
 			// remove it from the queue
-			for (size_t j=0; j<action_queue.size(); j++) {
-				if (action_queue[j].hotkey == i)
-					action_queue.erase(action_queue.begin()+j);
+			for (size_t j = action_queue.size(); j > 0; --j) {
+				if (!action_queue[j-1].activated_from_inventory && action_queue[j-1].hotkey == i)
+					action_queue.erase(action_queue.begin()+(j-1));
 			}
 		}
 	}

@@ -39,12 +39,14 @@ public:
 	PowerID power;
 	unsigned hotkey;
 	bool instant_item;
+	bool activated_from_inventory;
 	FPoint target;
 
 	ActionData()
 		: power(0)
 		, hotkey(0)
 		, instant_item(false)
+		, activated_from_inventory(false)
 		, target(FPoint()) {
 	}
 };
