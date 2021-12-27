@@ -125,7 +125,7 @@ void WidgetHorizontalList::render() {
 		label.render();
 	}
 
-	if (in_focus) {
+	if (in_focus && (!has_action || !enabled)) {
 		Point topLeft;
 		Point bottomRight;
 
@@ -147,6 +147,12 @@ void WidgetHorizontalList::render() {
 		if (draw || 1) {
 			render_device->drawRectangle(topLeft, bottomRight, eset->widgets.selection_rect_color);
 		}
+	}
+	else if (in_focus && has_action && enabled) {
+		button_action->in_focus = true;
+	}
+	else {
+		button_action->in_focus = false;
 	}
 }
 
