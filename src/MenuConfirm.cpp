@@ -100,6 +100,9 @@ void MenuConfirm::logic() {
 }
 
 void MenuConfirm::render() {
+	if (!visible)
+		return;
+
 	// background
 	Menu::render();
 
