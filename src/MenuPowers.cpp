@@ -1507,7 +1507,9 @@ void MenuPowers::renderTooltips(const Point& position) {
 /**
  * Click-to-drag a power (to the action bar)
  */
-PowerID MenuPowers::click(const Point& mouse) {
+MenuPowersClick MenuPowers::click(const Point& mouse) {
+	MenuPowersClick result;
+
 	int active_tab = (tab_control) ? tab_control->getActiveTab() : 0;
 
 	for (size_t i=0; i<power_cell.size(); i++) {
@@ -1521,23 +1523,24 @@ PowerID MenuPowers::click(const Point& mouse) {
 					else {
 						tablist.setCurrent(slots[i]);
 					}
-					return 0;
+					return result;
 				}
 			}
 
 			MenuPowersCell* pcell = power_cell[i].getCurrent();
 			if (!pcell || !isCellVisible(pcell))
-				return 0;
+				return result;
 
 			if (checkUnlock(pcell) && points_left > 0 && pcell->requires_point) {
-				// unlock power
-				pc->stats.powers_list.push_back(pcell->id);
-				pc->stats.check_title = true;
-				setUnlockedPowers();
-				menu->act->addPower(pcell->id, 0);
-				return 0;
+				// unlock base power
+				result.unlock = pcell->id;
 			}
-			else if (checkUnlocked(pcell) && !powers->powers[pcell->id].passive) {
+			else if (pcell->next && checkUpgrade(pcell)) {
+				// unlock upgrade
+				result.unlock = pcell->id;
+			}
+
+			if (checkUnlocked(pcell) && !powers->powers[pcell->id].passive) {
 				// pick up and drag power
 				if (inpt->usingMouse()) {
 					slots[i]->defocus();
@@ -1548,23 +1551,35 @@ PowerID MenuPowers::click(const Point& mouse) {
 						tablist.setCurrent(NULL);
 					}
 				}
-				return power_cell[i].getBonusCurrent(pcell)->id;
+				result.drag = power_cell[i].getBonusCurrent(pcell)->id;
 			}
-			else
-				return 0;
+
+			return result;
 		}
 	}
 
 	// nothing selected, defocus everything
 	defocusTabLists();
 
-	return 0;
+	return result;
 }
 
-void MenuPowers::upgradeBySlotIndex(int slot_index) {
-	MenuPowersCell* pcell = power_cell[slot_index].getCurrent();
-	if (checkUpgrade(pcell))
+void MenuPowers::clickUnlock(PowerID power_index) {
+	MenuPowersCell* pcell = getCellByPowerIndex(power_index);
+	if (!pcell)
+		return;
+
+	if (!checkUnlocked(pcell)) {
+		// unlock base power
+		pc->stats.powers_list.push_back(power_index);
+		pc->stats.check_title = true;
+		setUnlockedPowers();
+		menu->act->addPower(power_index, 0);
+	}
+	else {
+		// base power is already unlocked, so upgrade instead
 		upgradePower(pcell, !UPGRADE_POWER_ALL_TABS);
+	}
 }
 
 void MenuPowers::resetToBasePowers() {

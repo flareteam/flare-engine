@@ -33,6 +33,7 @@ class MenuActionBar;
 class MenuActiveEffects;
 class MenuBook;
 class MenuCharacter;
+class MenuConfirm;
 class MenuDevConsole;
 class MenuEnemy;
 class MenuExit;
@@ -63,6 +64,50 @@ private:
 		DRAG_SRC_STASH = 5
 	};
 
+	enum {
+		ACTION_SRC_NONE = 0,
+		ACTION_SRC_POWERS = 1,
+		ACTION_SRC_INVENTORY = 2,
+		ACTION_SRC_ACTIONBAR = 3,
+		ACTION_SRC_VENDOR = 4,
+		ACTION_SRC_STASH = 5,
+	};
+
+	enum {
+		ACTION_PICKER_ACTIONBAR_SELECT = 0,
+		ACTION_PICKER_ACTIONBAR_CLEAR = 1,
+	};
+
+	enum {
+		ACTION_PICKER_POWERS_SELECT = 0,
+		ACTION_PICKER_POWERS_UPGRADE = 1,
+	};
+
+	enum {
+		ACTION_PICKER_INVENTORY_SELECT = 0,
+		ACTION_PICKER_INVENTORY_ACTIVATE = 1,
+		ACTION_PICKER_INVENTORY_DROP = 2,
+		ACTION_PICKER_INVENTORY_SELL = 3,
+		ACTION_PICKER_INVENTORY_STASH = 4,
+	};
+
+	enum {
+		ACTION_PICKER_STASH_SELECT = 0,
+		ACTION_PICKER_STASH_TRANSFER = 1,
+	};
+
+	enum {
+		ACTION_PICKER_VENDOR_BUY = 0,
+	};
+
+	enum {
+		DRAG_POST_ACTION_NONE = 0,
+		DRAG_POST_ACTION_DROP = 1,
+		DRAG_POST_ACTION_BUY = 2,
+		DRAG_POST_ACTION_SELL = 3,
+		DRAG_POST_ACTION_STASH = 4,
+	};
+
 	void handleKeyboardTooltips();
 
 	bool key_lock;
@@ -80,6 +125,11 @@ private:
 	bool act_drag_hover;
 	Point keydrag_pos;
 
+	int action_src;
+	Point action_picker_target;
+	std::map<size_t, unsigned> action_picker_map;
+	int drag_post_action;
+
 	void renderIcon(int x, int y);
 	void setDragIcon(int icon_id, int overlay_id);
 	void setDragIconItem(ItemStack stack);
@@ -89,6 +139,10 @@ private:
 	void pushMatchingItemsOf(const Point& hov_pos);
 
 	bool isTabListSelected();
+
+	void showActionPicker(Menu* src_menu, const Point& target);
+
+	void actionPickerStartDrag();
 
 public:
 	explicit MenuManager();
@@ -124,6 +178,7 @@ public:
 	MenuActiveEffects *effects;
 	MenuStash *stash;
 	MenuGameOver *game_over;
+	MenuConfirm *action_picker;
 
 	MenuDevConsole *devconsole;
 	MenuTouchControls *touch_controls;

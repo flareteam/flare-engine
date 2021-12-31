@@ -135,6 +135,9 @@ public:
 
 	int getEquippedSetCount(size_t set_id);
 
+	bool canEquipItem(const Point& position);
+	bool canUseItem(const Point& position);
+
 	Rect carried_area;
 	std::vector<Rect> equipped_area;
 	std::vector<std::string> slot_type;

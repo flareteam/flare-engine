@@ -92,6 +92,17 @@ public:
 	std::vector< std::pair<size_t, int> > bonus_levels;
 };
 
+class MenuPowersClick {
+public:
+	PowerID drag;
+	PowerID unlock;
+
+	MenuPowersClick()
+		: drag(0)
+		, unlock(0)
+	{}
+};
+
 class MenuPowers : public Menu {
 private:
 	static const bool UPGRADE_POWER_ALL_TABS = true;
@@ -159,8 +170,8 @@ public:
 	void render();
 
 	void renderTooltips(const Point& position);
-	PowerID click(const Point& mouse);
-	void upgradeBySlotIndex(int slot_index);
+	MenuPowersClick click(const Point& mouse);
+	void clickUnlock(PowerID power_index);
 
 	void setUnlockedPowers();
 	void resetToBasePowers();

@@ -153,10 +153,16 @@ void MenuVendor::logic() {
 	}
 	activetab = tabControl->getActiveTab();
 
-	if (activetab == ItemManager::VENDOR_BUY)
+	if (activetab == ItemManager::VENDOR_BUY) {
+		tablist_buy.unlock();
+		tablist_sell.lock();
 		tablist.setNextTabList(&tablist_buy);
-	else if (activetab == ItemManager::VENDOR_SELL)
+	}
+	else if (activetab == ItemManager::VENDOR_SELL) {
+		tablist_buy.lock();
+		tablist_sell.unlock();
 		tablist.setNextTabList(&tablist_sell);
+	}
 
 	if (settings->touchscreen) {
 		if (activetab == ItemManager::VENDOR_BUY && tablist_buy.getCurrent() == -1)
@@ -219,7 +225,6 @@ ItemStack MenuVendor::click(const Point& position) {
  * Cancel the dragging initiated by the clic()
  */
 void MenuVendor::itemReturn(ItemStack stack) {
-	items->playSound(stack.item);
 	stock[activetab].itemReturn(stack);
 	saveInventory();
 }

@@ -322,7 +322,10 @@ void MenuActionBar::logic() {
 		inpt->lock[Input::ACTIONBAR] = true;
 		if (tablist.getCurrent() == -1) {
 			tablist.unlock();
-			tablist.setCurrent(menus[MENU_INVENTORY]);
+			if (menu->isDragging())
+				tablist.getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
+			else
+				tablist.setCurrent(menus[MENU_INVENTORY]);
 			menu->defocusLeft();
 			menu->defocusRight();
 		}

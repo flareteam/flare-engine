@@ -1527,6 +1527,45 @@ int MenuInventory::getEquippedSetCount(size_t set_id) {
 	return quantity;
 }
 
+bool MenuInventory::canEquipItem(const Point& position) {
+	// clicked a carried item
+	int slot = inventory[CARRIED].slotOver(position);
+	if (slot == -1)
+		return false;
+
+	// empty slot
+	if (inventory[CARRIED][slot].empty())
+		return false;
+
+	ItemID item_id = inventory[CARRIED][slot].item;
+
+	return (pc->stats.humanoid && !items->items[item_id].type.empty() && getEquipSlotFromItem(item_id, !ONLY_EMPTY_SLOTS) >= 0);
+}
+
+bool MenuInventory::canUseItem(const Point& position) {
+	// clicked a carried item
+	int slot = inventory[CARRIED].slotOver(position);
+	if (slot == -1)
+		return false;
+
+	// empty slot
+	if (inventory[CARRIED][slot].empty())
+		return false;
+
+	ItemID item_id = inventory[CARRIED][slot].item;
+
+	if (!items->items[item_id].script.empty())
+		return true;
+
+	if (!items->items[item_id].book.empty())
+		return true;
+
+	if (items->items[item_id].power > 0 && getEquipSlotFromItem(item_id, !ONLY_EMPTY_SLOTS) == -1)
+		return true;
+
+	return false;
+}
+
 MenuInventory::~MenuInventory() {
 	delete closeButton;
 	for (size_t i=0; i<equipmentSetButton.size(); i++) {
