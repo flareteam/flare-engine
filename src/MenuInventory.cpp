@@ -737,6 +737,9 @@ void MenuInventory::activate(const Point& position) {
 			ActionData action_data;
 			action_data.power = power_id;
 			action_data.activated_from_inventory = true;
+
+			action_data.target = Utils::calcVector(pc->stats.pos, pc->stats.direction, pc->stats.melee_range);
+
 			if (powers->powers[power_id].new_state == Power::STATE_INSTANT) {
 				for (size_t j = 0; j < powers->powers[power_id].required_items.size(); ++j) {
 					if (powers->powers[power_id].required_items[j].id > 0 && !powers->powers[power_id].required_items[j].equipped) {
@@ -745,6 +748,7 @@ void MenuInventory::activate(const Point& position) {
 					}
 				}
 			}
+
 			pc->action_queue.push_back(action_data);
 		}
 		else {
