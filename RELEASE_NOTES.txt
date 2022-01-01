@@ -21,6 +21,7 @@ Engine fixes:
 * Fix disappearing sprites due to render priority overflow.
 * Fading of corpses is now correctly disabled when corpse_timeout=0 is used in engine/misc.txt.
 * Fix cast animation not playing when using an inventory item that is not instant.
+* Fixed a bug on Android where loading the default settings would exit fullscreen mode.
 
 Game updates:
 

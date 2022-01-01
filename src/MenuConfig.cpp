@@ -1049,8 +1049,8 @@ void MenuConfig::logicDefaults() {
 	if (defaults_confirm->clicked_confirm) {
 		if (defaults_confirm->action_list->getSelected() == DEFAULTS_CONFIRM_OPTION_YES) {
 			settings->fullscreen = false;
-			render_device->setFullscreen(settings->fullscreen);
 			settings->loadDefaults();
+			render_device->setFullscreen(settings->fullscreen);
 			eset->load();
 			inpt->initBindings();
 			update();
