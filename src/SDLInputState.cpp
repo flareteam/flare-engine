@@ -302,12 +302,12 @@ void SDLInputState::handle() {
 
 		switch (event.type) {
 			case SDL_MOUSEMOTION:
-				last_is_joystick = false;
+				mode = MODE_KEYBOARD_AND_MOUSE;
 				mouse = scaleMouse(event.motion.x, event.motion.y);
 				curs->show_cursor = true;
 				break;
 			case SDL_MOUSEWHEEL:
-				last_is_joystick = false;
+				mode = MODE_KEYBOARD_AND_MOUSE;
 				if (event.wheel.y > 0) {
 					scroll_up = true;
 				} else if (event.wheel.y < 0) {
@@ -315,7 +315,7 @@ void SDLInputState::handle() {
 				}
 				break;
 			case SDL_MOUSEBUTTONDOWN:
-				last_is_joystick = false;
+				mode = MODE_KEYBOARD_AND_MOUSE;
 				mouse = scaleMouse(event.button.x, event.button.y);
 				for (int key=0; key<KEY_COUNT; key++) {
 					for (size_t i = 0; i < binding[key].size(); ++i) {
@@ -327,7 +327,7 @@ void SDLInputState::handle() {
 				}
 				break;
 			case SDL_MOUSEBUTTONUP:
-				last_is_joystick = false;
+				mode = MODE_KEYBOARD_AND_MOUSE;
 				mouse = scaleMouse(event.button.x, event.button.y);
 				for (int key=0; key<KEY_COUNT; key++) {
 					for (size_t i = 0; i < binding[key].size(); ++i) {
@@ -363,8 +363,8 @@ void SDLInputState::handle() {
 			// Mobile touch events
 			// NOTE Should these be limited to mobile only?
 			case SDL_FINGERMOTION:
-				last_is_joystick = false;
 				if (settings->touchscreen) {
+					mode = MODE_TOUCHSCREEN;
 					curs->show_cursor = false;
 					mouse.x = static_cast<int>((event.tfinger.x + event.tfinger.dx) * settings->view_w);
 					mouse.y = static_cast<int>((event.tfinger.y + event.tfinger.dy) * settings->view_h);
@@ -386,8 +386,8 @@ void SDLInputState::handle() {
 				}
 				break;
 			case SDL_FINGERDOWN:
-				last_is_joystick = false;
 				if (settings->touchscreen) {
+					mode = MODE_TOUCHSCREEN;
 					curs->show_cursor = false;
 					touch_locked = true;
 					mouse.x = static_cast<int>(event.tfinger.x * settings->view_w);
@@ -403,8 +403,8 @@ void SDLInputState::handle() {
 				}
 				break;
 			case SDL_FINGERUP:
-				last_is_joystick = false;
 				if (settings->touchscreen) {
+					mode = MODE_TOUCHSCREEN;
 					// MAIN1 might have been set to un-press from a SDL_MOUSEBUTTONUP event
 					un_press[Input::MAIN1] = false;
 
@@ -433,8 +433,7 @@ void SDLInputState::handle() {
 				}
 				break;
 			case SDL_KEYDOWN:
-				if (!settings->no_mouse)
-					last_is_joystick = false;
+				mode = MODE_KEYBOARD_AND_MOUSE;
 
 				for (int key=0; key<KEY_COUNT; key++) {
 					for (size_t i = 0; i < binding[key].size(); ++i) {
@@ -446,8 +445,7 @@ void SDLInputState::handle() {
 				}
 				break;
 			case SDL_KEYUP:
-				if (!settings->no_mouse)
-					last_is_joystick = false;
+				mode = MODE_KEYBOARD_AND_MOUSE;
 
 				for (int key=0; key<KEY_COUNT; key++) {
 					for (size_t i = 0; i < binding[key].size(); ++i) {
@@ -462,12 +460,13 @@ void SDLInputState::handle() {
 				break;
 			case SDL_CONTROLLERBUTTONDOWN:
 				if (settings->enable_joystick && gamepad) {
+					mode = MODE_JOYSTICK;
+
 					SDL_JoystickID joy_id = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(gamepad));
 					if (joy_id == event.jbutton.which) {
 						for (int key=0; key<KEY_COUNT; key++) {
 							for (size_t i = 0; i < binding[key].size(); ++i) {
 								if (binding[key][i].type == InputBind::GAMEPAD && binding[key][i].bind == event.cbutton.button) {
-									last_is_joystick = true;
 									curs->show_cursor = false;
 									hideCursor();
 									pressing[key] = true;
@@ -480,12 +479,13 @@ void SDLInputState::handle() {
 				break;
 			case SDL_CONTROLLERBUTTONUP:
 				if (settings->enable_joystick && gamepad) {
+					mode = MODE_JOYSTICK;
+
 					SDL_JoystickID joy_id = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(gamepad));
 					if (joy_id == event.jbutton.which) {
 						for (int key=0; key<KEY_COUNT; key++) {
 							for (size_t i = 0; i < binding[key].size(); ++i) {
 								if (binding[key][i].type == InputBind::GAMEPAD && binding[key][i].bind == event.cbutton.button) {
-									last_is_joystick = true;
 									un_press[key] = true;
 								}
 							}
@@ -500,31 +500,34 @@ void SDLInputState::handle() {
 
 					SDL_JoystickID joy_id = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(gamepad));
 					if (joy_id == event.jbutton.which) {
+						bool is_down = (abs(event.caxis.value) >= settings->joy_deadzone);
+						if (is_down) {
+							mode = MODE_JOYSTICK;
+						}
+
 						for (int key=0; key<KEY_COUNT; key++) {
 							for (size_t i = 0; i < binding[key].size(); ++i) {
 								if (binding[key][i].type == InputBind::GAMEPAD_AXIS && binding[key][i].bind / 2 == event.caxis.axis) {
-									bool is_down = false;
+									bool matches_bind;
 									if (binding[key][i].bind % 2 == 0) {
-										if (event.caxis.value >= settings->joy_deadzone) {
-											is_down = true;
-										}
+										matches_bind = (event.caxis.value >= 0);
 									}
 									else {
-										if (event.caxis.value <= -(settings->joy_deadzone)) {
-											is_down = true;
+										matches_bind = (event.caxis.value <= 0);
+									}
+
+									if (matches_bind) {
+										if (is_down) {
+											curs->show_cursor = false;
+											hideCursor();
+											pressing[key] = true;
+											un_press[key] = false;
 										}
-									}
-									if (is_down) {
-										last_is_joystick = true;
-										curs->show_cursor = false;
-										hideCursor();
-										pressing[key] = true;
-										un_press[key] = false;
-									}
-									else if (pressing[key]) {
-										un_press[key] = true;
-										pressing[key] = false;
-										lock[key] = false;
+										else if (pressing[key]) {
+											un_press[key] = true;
+											pressing[key] = false;
+											lock[key] = false;
+										}
 									}
 								}
 							}
@@ -811,7 +814,7 @@ int SDLInputState::getNumJoysticks() {
 }
 
 bool SDLInputState::usingMouse() {
-	return !settings->no_mouse && !last_is_joystick;
+	return !settings->no_mouse && mode != MODE_JOYSTICK;
 }
 
 void SDLInputState::startTextInput() {

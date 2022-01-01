@@ -659,7 +659,7 @@ void MenuManager::logic() {
 				inpt->lock[Input::CANCEL] = true;
 				closeAll();
 			}
-			else if (!game_over->visible && (!inpt->last_is_joystick || exit->visible)) {
+			else if (!game_over->visible && (inpt->mode != InputState::MODE_JOYSTICK || exit->visible)) {
 				// CANCEL (which is usually mapped to keyboard Escape) can open the pause menu if there are no other actions
 				// we make an exception for opening the pause menu with joysticks, which usually have CANCEL mapped to a face button with a separate mapping for PAUSE (i.e. "Start")
 				// closing the menu can always be done with either mapping

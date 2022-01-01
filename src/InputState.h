@@ -106,6 +106,12 @@ public:
 	static const int KEY_COUNT = 39;
 	static const int KEY_COUNT_USER = KEY_COUNT - 6; // exclude CTRL, SHIFT, etc from keybinding menu
 
+	enum {
+		MODE_KEYBOARD_AND_MOUSE = 0,
+		MODE_JOYSTICK = 1,
+		MODE_TOUCHSCREEN = 2,
+	};
+
 	std::vector<InputBind> binding[KEY_COUNT];
 
 	std::string binding_name[KEY_COUNT];
@@ -156,7 +162,7 @@ public:
 	int last_button;
 	int last_joybutton;
 	int last_joyaxis;
-	bool last_is_joystick;
+	unsigned mode;
 	bool scroll_up;
 	bool scroll_down;
 	bool lock_scroll;
