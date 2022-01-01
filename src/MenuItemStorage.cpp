@@ -182,7 +182,7 @@ ItemStack MenuItemStorage::click(const Point& position) {
 
 	if (drag_prev_slot > -1) {
 		item = storage[drag_prev_slot];
-		if (settings->touchscreen) {
+		if (inpt->mode == InputState::MODE_TOUCHSCREEN) {
 			if (!slots[drag_prev_slot]->in_focus && !item.empty()) {
 				slots[drag_prev_slot]->in_focus = true;
 				current_slot = slots[drag_prev_slot];
@@ -190,13 +190,13 @@ ItemStack MenuItemStorage::click(const Point& position) {
 				drag_prev_slot = -1;
 				return item;
 			}
-			else {
+			else if (item.empty()) {
 				slots[drag_prev_slot]->defocus();
 				current_slot = NULL;
 			}
 		}
 		if (!item.empty()) {
-			if (item.quantity > 1 && !inpt->pressing[Input::CTRL] && (inpt->pressing[Input::SHIFT] || !inpt->usingMouse() || inpt->touch_locked)) {
+			if (item.quantity > 1 && !inpt->pressing[Input::CTRL] && (inpt->pressing[Input::SHIFT] || !inpt->usingMouse() || inpt->mode == InputState::MODE_TOUCHSCREEN)) {
 				// we use an external menu to let the player pick the desired quantity
 				// we will subtract from this stack after they've made their decision
 				return item;

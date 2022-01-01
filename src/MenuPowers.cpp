@@ -1514,15 +1514,17 @@ MenuPowersClick MenuPowers::click(const Point& mouse) {
 
 	for (size_t i=0; i<power_cell.size(); i++) {
 		if (slots[i] && Utils::isWithinRect(slots[i]->pos, mouse) && (power_cell[i].tab == active_tab)) {
-			if (settings->touchscreen) {
-				if (!slots[i]->in_focus) {
-					slots[i]->in_focus = true;
-					if (!tabs.empty()) {
-						tablist_pow[active_tab].setCurrent(slots[i]);
-					}
-					else {
-						tablist.setCurrent(slots[i]);
-					}
+			if (inpt->mode == InputState::MODE_TOUCHSCREEN) {
+				bool slot_had_focus = slots[i]->in_focus;
+
+				if (!tabs.empty()) {
+					tablist_pow[active_tab].setCurrent(slots[i]);
+				}
+				else {
+					tablist.setCurrent(slots[i]);
+				}
+
+				if (!slot_had_focus) {
 					return result;
 				}
 			}
@@ -1542,7 +1544,7 @@ MenuPowersClick MenuPowers::click(const Point& mouse) {
 
 			if (checkUnlocked(pcell) && !powers->powers[pcell->id].passive) {
 				// pick up and drag power
-				if (inpt->usingMouse()) {
+				if (inpt->usingMouse() && inpt->mode != InputState::MODE_TOUCHSCREEN) {
 					slots[i]->defocus();
 					if (!tabs.empty()) {
 						tablist_pow[active_tab].setCurrent(NULL);

@@ -78,6 +78,8 @@ MenuManager::MenuManager()
 	, done(false)
 	, act_drag_hover(false)
 	, keydrag_pos(Point())
+	, action_src(ACTION_SRC_NONE)
+	, drag_post_action(DRAG_POST_ACTION_NONE)
 	, inv(NULL)
 	, pow(NULL)
 	, chr(NULL)
@@ -451,11 +453,13 @@ void MenuManager::logic() {
 						actionPickerStartDrag();
 						drag_src = DRAG_SRC_POWERS;
 
-						// move the cursor to the actionbar
-						act->tablist.unlock();
-						act->tablist.getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
-						menu->defocusLeft();
-						menu->defocusRight();
+						if (inpt->mode != InputState::MODE_TOUCHSCREEN) {
+							// move the cursor to the actionbar
+							act->tablist.unlock();
+							act->tablist.getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
+							menu->defocusLeft();
+							menu->defocusRight();
+						}
 					}
 				}
 				else if (action == ACTION_PICKER_POWERS_UPGRADE) {
@@ -493,6 +497,12 @@ void MenuManager::logic() {
 		// Sometimes, an action from action_picker needs to show num_picker first.
 		// num_picker will only start dragging the item stack, so we need to complete the selected action here
 
+		// when using a touchscreen, MenuItemStorage::click() will highlight the selected slot. We can clear the highlight here
+		if (drag_post_action != DRAG_POST_ACTION_NONE && inpt->mode == InputState::MODE_TOUCHSCREEN) {
+			defocusLeft();
+			defocusRight();
+		}
+
 		if (drag_post_action == DRAG_POST_ACTION_DROP) {
 			if (drag_src == DRAG_SRC_INVENTORY) {
 				// quest items cannot be dropped
@@ -505,6 +515,8 @@ void MenuManager::logic() {
 
 					inv->itemReturn(drag_stack);
 				}
+				if (inpt->mode == InputState::MODE_TOUCHSCREEN)
+					inv->defocusTabLists();
 			}
 			else if (drag_src == DRAG_SRC_STASH) {
 				drop_stack.push(drag_stack);
@@ -896,21 +908,26 @@ void MenuManager::logic() {
 					}
 				}
 				else {
-					// start dragging a vendor item
-					drag_stack = vendor->click(inpt->mouse);
-					if (!drag_stack.empty()) {
-						mouse_dragging = true;
-						drag_src = DRAG_SRC_VENDOR;
+					if (inpt->touch_locked) {
+						showActionPicker(vendor, inpt->mouse);
 					}
-					if (drag_stack.quantity > 1 && (inpt->pressing[Input::SHIFT] || !inpt->usingMouse() || inpt->touch_locked)) {
-						int max_quantity = std::min(inv->getMaxPurchasable(drag_stack, vendor->getTab()), drag_stack.quantity);
-						if (max_quantity >= 1) {
-							num_picker->setValueBounds(1, max_quantity);
-							num_picker->visible = true;
+					else {
+						// start dragging a vendor item
+						drag_stack = vendor->click(inpt->mouse);
+						if (!drag_stack.empty()) {
+							mouse_dragging = true;
+							drag_src = DRAG_SRC_VENDOR;
 						}
-						else {
-							drag_stack.clear();
-							resetDrag();
+						if (drag_stack.quantity > 1 && inpt->pressing[Input::SHIFT]) {
+							int max_quantity = std::min(inv->getMaxPurchasable(drag_stack, vendor->getTab()), drag_stack.quantity);
+							if (max_quantity >= 1) {
+								num_picker->setValueBounds(1, max_quantity);
+								num_picker->visible = true;
+							}
+							else {
+								drag_stack.clear();
+								resetDrag();
+							}
 						}
 					}
 				}
@@ -928,15 +945,20 @@ void MenuManager::logic() {
 					stash->tabs[stash->getTab()].updated = true;
 				}
 				else {
-					// start dragging a stash item
-					drag_stack = stash->click(inpt->mouse);
-					if (!drag_stack.empty()) {
-						mouse_dragging = true;
-						drag_src = DRAG_SRC_STASH;
+					if (inpt->touch_locked) {
+						showActionPicker(stash, inpt->mouse);
 					}
-					if (drag_stack.quantity > 1 && (inpt->pressing[Input::SHIFT] || !inpt->usingMouse() || inpt->touch_locked)) {
-						num_picker->setValueBounds(1, drag_stack.quantity);
-						num_picker->visible = true;
+					else {
+						// start dragging a stash item
+						drag_stack = stash->click(inpt->mouse);
+						if (!drag_stack.empty()) {
+							mouse_dragging = true;
+							drag_src = DRAG_SRC_STASH;
+						}
+						if (drag_stack.quantity > 1 && inpt->pressing[Input::SHIFT]) {
+							num_picker->setValueBounds(1, drag_stack.quantity);
+							num_picker->visible = true;
+						}
 					}
 				}
 			}
@@ -971,14 +993,20 @@ void MenuManager::logic() {
 				}
 				else {
 					inpt->lock[Input::MAIN1] = true;
-					drag_stack = inv->click(inpt->mouse);
-					if (!drag_stack.empty()) {
-						mouse_dragging = true;
-						drag_src = DRAG_SRC_INVENTORY;
+
+					if (inpt->touch_locked) {
+						showActionPicker(inv, inpt->mouse);
 					}
-					if (drag_stack.quantity > 1 && (inpt->pressing[Input::SHIFT] || !inpt->usingMouse() || inpt->touch_locked)) {
-						num_picker->setValueBounds(1, drag_stack.quantity);
-						num_picker->visible = true;
+					else {
+						drag_stack = inv->click(inpt->mouse);
+						if (!drag_stack.empty()) {
+							mouse_dragging = true;
+							drag_src = DRAG_SRC_INVENTORY;
+						}
+						if (drag_stack.quantity > 1 && inpt->pressing[Input::SHIFT]) {
+							num_picker->setValueBounds(1, drag_stack.quantity);
+							num_picker->visible = true;
+						}
 					}
 				}
 			}
@@ -986,16 +1014,21 @@ void MenuManager::logic() {
 			if (pow->visible && Utils::isWithinRect(pow->window_area,inpt->mouse)) {
 				inpt->lock[Input::MAIN1] = true;
 
-				// check for unlock/dragging
-				MenuPowersClick pow_click = pow->click(inpt->mouse);
-				drag_power = pow_click.drag;
-				if (drag_power > 0) {
-					mouse_dragging = true;
-					keyboard_dragging = false;
-					drag_src = DRAG_SRC_POWERS;
+				if (inpt->touch_locked) {
+					showActionPicker(pow, inpt->mouse);
 				}
-				else if (pow_click.unlock > 0) {
-					pow->clickUnlock(pow_click.unlock);
+				else {
+					// check for unlock/dragging
+					MenuPowersClick pow_click = pow->click(inpt->mouse);
+					drag_power = pow_click.drag;
+					if (drag_power > 0) {
+						mouse_dragging = true;
+						keyboard_dragging = false;
+						drag_src = DRAG_SRC_POWERS;
+					}
+					else if (pow_click.unlock > 0) {
+						pow->clickUnlock(pow_click.unlock);
+					}
 				}
 			}
 			// action bar
