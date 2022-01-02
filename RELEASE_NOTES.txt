@@ -7,6 +7,9 @@ Engine features:
 * Added 'fog-of-war' feature (r-a-cristian-93)
 * Added support for multiple equipment sets (r-a-cristian-93)
 * Added random_status attribute to Events
+* Reworked gamepad handling using the SDL_GameController API.
+* Several new key bindings, many of which will benefit gamepad users.
+* Added an "action picker" for interacting with items/powers when using a gamepad or a touchscreen.
 
 Engine fixes:
 
@@ -22,6 +25,11 @@ Engine fixes:
 * Fading of corpses is now correctly disabled when corpse_timeout=0 is used in engine/misc.txt.
 * Fix cast animation not playing when using an inventory item that is not instant.
 * Fixed a bug on Android where loading the default settings would exit fullscreen mode.
+* Fixed crash in NPC dialog when using gamepad.
+* Fixed several small bugs with navigating UI elements with a gamepad.
+* Fixed incorrect handling of gamepad stick/trigger deadzone.
+* Fixed fullscreen setting being turned off when loading configuration defaults on Android.
+* Fixed input hint for item tooltips when using a touchscreen.
 
 Game updates:
 
