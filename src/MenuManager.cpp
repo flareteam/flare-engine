@@ -594,7 +594,10 @@ void MenuManager::logic() {
 
 	book->logic();
 	effects->logic();
-	act->logic();
+
+	if (!exit->visible && !game_over->visible)
+		act->logic();
+
 	hudlog->logic();
 	enemy->logic();
 	chr->logic();
