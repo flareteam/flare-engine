@@ -1298,7 +1298,9 @@ void MenuManager::dragAndDropWithKeyboard() {
 				keyboard_dragging = false;
 				sticky_dragging = false;
 			}
-			// TODO WidgetSlot::ACTIVATE use item?
+			else if (slotClick == WidgetSlot::ACTIVATE && drag_stack.empty()) {
+				inv->activate(src_slot);
+			}
 		}
 	}
 

@@ -933,12 +933,18 @@ void ItemManager::getTooltipInputHint(TooltipData& tip, ItemStack stack, int con
 		tip.addColoredText('\n' + msg->get("Tap icon again for more options"), font->getColor(FontEngine::COLOR_ITEM_BONUS));
 	}
 	else if (inpt->mode == InputState::MODE_JOYSTICK) {
-		// TODO show activate message?
+		if (context == PLAYER_INV && menu->inv->canActivateItem(stack.item)) {
+			show_activate_msg = true;
+			activate_bind_str = inpt->getGamepadBindingString(Input::MENU_ACTIVATE);
+		}
 		show_more_msg = true;
 		more_bind_str = inpt->getGamepadBindingString(Input::ACCEPT);
 	}
 	else if (!inpt->usingMouse()) {
-		// TODO show activate message?
+		if (context == PLAYER_INV && menu->inv->canActivateItem(stack.item)) {
+			show_activate_msg = true;
+			activate_bind_str = inpt->getBindingString(Input::MENU_ACTIVATE);
+		}
 		show_more_msg = true;
 		more_bind_str = inpt->getBindingString(Input::ACCEPT);
 	}
