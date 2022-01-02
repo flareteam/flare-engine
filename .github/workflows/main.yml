@@ -22,7 +22,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        cxx: [g++, clang++]
+        compiler: [
+          {
+            cc: gcc,
+            cxx: g++
+          },
+          {
+            cc: clang,
+            cxx: clang++
+          }
+        ]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -37,8 +46,9 @@ jobs:
 
       - name: Build
         env:
-          CXX: ${{ matrix.cxx }}
-        run: cmake . -DCMAKE_CXX_COMPILER=$CXX && make
+          CC: ${{ matrix.compiler.cc }}
+          CXX: ${{ matrix.compiler.cxx }}
+        run: cmake . && make
   cppcheck:
     runs-on: ubuntu-18.04
     steps:
