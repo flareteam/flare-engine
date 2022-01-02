@@ -360,8 +360,8 @@ void MenuInventory::logic() {
 	}
 
 	if (max_equipment_set > 0) {
-		if (inpt->pressing[Input::SWAP] && !inpt->lock[Input::SWAP]) {
-			inpt->lock[Input::SWAP] = true;
+		if (inpt->pressing[Input::EQUIPMENT_SWAP] && !inpt->lock[Input::EQUIPMENT_SWAP]) {
+			inpt->lock[Input::EQUIPMENT_SWAP] = true;
 			applyNextEquipmentSet();
 			applyEquipment();
 			clearHighlight();

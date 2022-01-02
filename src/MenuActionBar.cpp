@@ -319,7 +319,7 @@ void MenuActionBar::loadGraphics() {
 
 void MenuActionBar::logic() {
 	tablist.logic();
-	if (inpt->pressing[Input::ACTIONBAR] && !inpt->lock[Input::ACTIONBAR]) {
+	if (!inpt->usingMouse() && inpt->pressing[Input::ACTIONBAR] && !inpt->lock[Input::ACTIONBAR]) {
 		inpt->lock[Input::ACTIONBAR] = true;
 		if (tablist.getCurrent() == -1) {
 			tablist.unlock();

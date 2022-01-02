@@ -205,7 +205,17 @@ void MenuMiniMap::createMapSurface(Sprite **target_surface, int w, int h) {
 }
 
 void MenuMiniMap::logic() {
-	if (!settings->show_hud || settings->minimap_mode == Settings::MINIMAP_HIDDEN)
+	if (!settings->show_hud)
+		return;
+
+	if (inpt->pressing[Input::MINIMAP_MODE] && !inpt->lock[Input::MINIMAP_MODE]) {
+		inpt->lock[Input::MINIMAP_MODE] = true;
+		settings->minimap_mode++;
+		if (settings->minimap_mode > Settings::MINIMAP_HIDDEN)
+			settings->minimap_mode = Settings::MINIMAP_NORMAL;
+	}
+
+	if (settings->minimap_mode == Settings::MINIMAP_HIDDEN)
 		return;
 
 	if (inpt->usingMouse()) {

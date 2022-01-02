@@ -39,6 +39,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "LootManager.h"
 #include "MapRenderer.h"
 #include "Menu.h"
+#include "MessageEngine.h"
 #include "ModManager.h"
 #include "RenderDevice.h"
 #include "Settings.h"
@@ -88,6 +89,20 @@ void LootManager::handleNewMap() {
 }
 
 void LootManager::logic() {
+	if (inpt->pressing[Input::LOOT_TOOLTIP_MODE] && !inpt->lock[Input::LOOT_TOOLTIP_MODE]) {
+		inpt->lock[Input::LOOT_TOOLTIP_MODE] = true;
+		settings->loot_tooltips++;
+		if (settings->loot_tooltips > Settings::LOOT_TIPS_HIDE_ALL)
+			settings->loot_tooltips = Settings::LOOT_TIPS_DEFAULT;
+
+		if (settings->loot_tooltips == Settings::LOOT_TIPS_HIDE_ALL)
+			pc->logMsg(msg->get("Loot tooltip visibility") + ": " + msg->get("Hidden"), Avatar::MSG_UNIQUE);
+		else if (settings->loot_tooltips == Settings::LOOT_TIPS_DEFAULT)
+			pc->logMsg(msg->get("Loot tooltip visibility") + ": " + msg->get("Default"), Avatar::MSG_UNIQUE);
+		else if (settings->loot_tooltips == Settings::LOOT_TIPS_SHOW_ALL)
+			pc->logMsg(msg->get("Loot tooltip visibility") + ": " + msg->get("Show All"), Avatar::MSG_UNIQUE);
+	}
+
 	std::vector<Loot>::iterator it;
 	for (it = loot.begin(); it != loot.end(); ++it) {
 

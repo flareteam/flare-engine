@@ -231,10 +231,14 @@ void SDLInputState::initBindings() {
 
 	setBind(Input::MENU_PAGE_NEXT, InputBind::KEY, SDL_SCANCODE_PAGEDOWN, NULL);
 	setBind(Input::MENU_PAGE_PREV, InputBind::KEY, SDL_SCANCODE_PAGEUP, NULL);
+	setBind(Input::MENU_ACTIVATE, InputBind::KEY, SDL_SCANCODE_V, NULL);
 
 	setBind(Input::DEVELOPER_MENU, InputBind::KEY, SDL_SCANCODE_F5, NULL);
 
-	setBind(Input::SWAP, InputBind::KEY, SDL_SCANCODE_TAB, NULL);
+	setBind(Input::EQUIPMENT_SWAP, InputBind::KEY, SDL_SCANCODE_TAB, NULL);
+	setBind(Input::MINIMAP_MODE, InputBind::KEY, SDL_SCANCODE_M, NULL);
+	setBind(Input::LOOT_TOOLTIP_MODE, InputBind::KEY, SDL_SCANCODE_SLASH, NULL);
+	setBind(Input::ACTIONBAR, InputBind::KEY, SDL_SCANCODE_B, NULL);
 
 	// Gamepad bindings
 	setBind(Input::CANCEL, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_B, NULL);
@@ -888,7 +892,9 @@ void SDLInputState::setCommonStrings() {
 	binding_name[Input::LOG] = msg->get("Log");
 	binding_name[Input::MAIN1] = msg->get("Main1");
 	binding_name[Input::MAIN2] = msg->get("Main2");
-	binding_name[Input::SWAP] = msg->get("Equipment swap");
+	binding_name[Input::EQUIPMENT_SWAP] = msg->get("Equipment Swap");
+	binding_name[Input::MINIMAP_MODE] = msg->get("Mini-map Mode");
+	binding_name[Input::LOOT_TOOLTIP_MODE] = msg->get("Loot Tooltip Mode");
 	binding_name[Input::ACTIONBAR] = msg->get("Action Bar");
 	binding_name[Input::MENU_PAGE_NEXT] = msg->get("Menu: Next Page");
 	binding_name[Input::MENU_PAGE_PREV] = msg->get("Menu: Previous Page");

@@ -49,25 +49,27 @@ namespace Input {
 		LOG = 19,
 		MAIN1 = 20,
 		MAIN2 = 21,
-		SWAP = 22,
-		ACTIONBAR = 23,
-		MENU_PAGE_NEXT = 24,
-		MENU_PAGE_PREV = 25,
-		MENU_ACTIVATE = 26,
-		PAUSE = 27,
-		AIM_UP = 28,
-		AIM_DOWN = 29,
-		AIM_LEFT = 30,
-		AIM_RIGHT = 31,
-		DEVELOPER_MENU = 32,
+		EQUIPMENT_SWAP = 22,
+		MINIMAP_MODE = 23,
+		LOOT_TOOLTIP_MODE = 24,
+		ACTIONBAR = 25,
+		MENU_PAGE_NEXT = 26,
+		MENU_PAGE_PREV = 27,
+		MENU_ACTIVATE = 28,
+		PAUSE = 29,
+		AIM_UP = 30,
+		AIM_DOWN = 31,
+		AIM_LEFT = 32,
+		AIM_RIGHT = 33,
+		DEVELOPER_MENU = 34,
 
 		// non-modifiable
-		CTRL = 33,
-		SHIFT = 34,
-		ALT = 35,
-		DEL = 36,
-		TEXTEDIT_UP = 37,
-		TEXTEDIT_DOWN = 38,
+		CTRL = 35,
+		SHIFT = 36,
+		ALT = 37,
+		DEL = 38,
+		TEXTEDIT_UP = 39,
+		TEXTEDIT_DOWN = 40,
 	};
 }
 
@@ -103,7 +105,7 @@ protected:
 
 public:
 	static const bool GET_SHORT_STRING = true;
-	static const int KEY_COUNT = 39;
+	static const int KEY_COUNT = 41;
 	static const int KEY_COUNT_USER = KEY_COUNT - 6; // exclude CTRL, SHIFT, etc from keybinding menu
 
 	enum {

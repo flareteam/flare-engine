@@ -64,7 +64,7 @@ InputState::InputState(void)
 	, current_touch()
 	, dump_event(false)
 	, file_version(new Version())
-	, file_version_min(new Version(1, 12, 38))
+	, file_version_min(new Version(1, 12, 54))
 {
 	config_keys[Input::CANCEL] = "cancel";
 	config_keys[Input::ACCEPT] = "accept";
@@ -88,6 +88,9 @@ InputState::InputState(void)
 	config_keys[Input::INVENTORY] = "inventory";
 	config_keys[Input::POWERS] = "powers";
 	config_keys[Input::LOG] = "log";
+	config_keys[Input::EQUIPMENT_SWAP] = "equipment_swap";
+	config_keys[Input::MINIMAP_MODE] = "minimap_mode";
+	config_keys[Input::LOOT_TOOLTIP_MODE] = "loot_tooltip_mode";
 	config_keys[Input::ACTIONBAR] = "actionbar";
 	config_keys[Input::MENU_PAGE_NEXT] = "menu_page_next";
 	config_keys[Input::MENU_PAGE_PREV] = "menu_page_prev";
