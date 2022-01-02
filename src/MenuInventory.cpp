@@ -463,7 +463,7 @@ void MenuInventory::renderTooltips(const Point& position) {
 			return;
 
 	if (inventory[area][slot].item > 0) {
-		tip_data = inventory[area].checkTooltip(position, &pc->stats, ItemManager::PLAYER_INV);
+		tip_data = inventory[area].checkTooltip(position, &pc->stats, ItemManager::PLAYER_INV, ItemManager::TOOLTIP_INPUT_HINT);
 	}
 	else if (area == EQUIPMENT && inventory[area][slot].empty()) {
 		tip_data.addText(msg->get(items->getItemType(slot_type[slot])));
@@ -1554,16 +1554,7 @@ bool MenuInventory::canUseItem(const Point& position) {
 
 	ItemID item_id = inventory[CARRIED][slot].item;
 
-	if (!items->items[item_id].script.empty())
-		return true;
-
-	if (!items->items[item_id].book.empty())
-		return true;
-
-	if (items->items[item_id].power > 0 && getEquipSlotFromItem(item_id, !ONLY_EMPTY_SLOTS) == -1)
-		return true;
-
-	return false;
+	return canActivateItem(item_id);
 }
 
 MenuInventory::~MenuInventory() {

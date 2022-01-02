@@ -210,6 +210,7 @@ private:
 	void loadAll();
 	void parseBonus(BonusData& bdata, FileParser& infile);
 	void getBonusString(std::stringstream& ss, BonusData* bdata);
+	void getTooltipInputHint(TooltipData& tip, ItemStack stack, int context);
 
 public:
 	enum {
@@ -219,11 +220,12 @@ public:
 	};
 
 	static const bool DEFAULT_SELL_PRICE = true;
+	static const bool TOOLTIP_INPUT_HINT = true;
 
 	ItemManager();
 	~ItemManager();
 	void playSound(ItemID item, const Point& pos = Point(0,0));
-	TooltipData getTooltip(ItemStack stack, StatBlock *stats, int context);
+	TooltipData getTooltip(ItemStack stack, StatBlock *stats, int context, bool input_hint);
 	TooltipData getShortTooltip(ItemStack item);
 	std::string getItemName(ItemID id);
 	std::string getItemType(const std::string& _type);

@@ -128,6 +128,7 @@ private:
 	int getPointsUsed();
 
 	void createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, PowerID power_index, bool show_unlock_prompt, int tooltip_length);
+	void createTooltipInputHint(TooltipData* tip_data);
 	void renderPowers(int tab_num);
 
 	std::vector<MenuPowersCellGroup> power_cell;

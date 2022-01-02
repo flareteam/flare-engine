@@ -247,7 +247,7 @@ void MenuVendor::renderTooltips(const Point& position) {
 		return;
 
 	int vendor_view = (activetab == ItemManager::VENDOR_BUY) ? ItemManager::VENDOR_BUY : ItemManager::VENDOR_SELL;
-	TooltipData tip_data = stock[activetab].checkTooltip(position, &pc->stats, vendor_view);
+	TooltipData tip_data = stock[activetab].checkTooltip(position, &pc->stats, vendor_view, ItemManager::TOOLTIP_INPUT_HINT);
 	tooltipm->push(tip_data, position, TooltipData::STYLE_FLOAT);
 }
 

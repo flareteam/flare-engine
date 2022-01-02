@@ -864,6 +864,10 @@ void MenuPowers::createTooltipFromActionBar(TooltipData* tip_data, unsigned slot
 	}
 
 	createTooltip(tip_data, pcell, pindex, false, tooltip_length);
+
+	// TODO use action picker for touchscreen devices?
+	if (inpt->mode != InputState::MODE_TOUCHSCREEN)
+		createTooltipInputHint(tip_data);
 }
 
 void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, PowerID power_index, bool show_unlock_prompt, int tooltip_length) {
@@ -1268,6 +1272,31 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 	}
 }
 
+void MenuPowers::createTooltipInputHint(TooltipData* tip_data) {
+	bool show_more_msg = false;
+	std::string more_bind_str;
+
+	if (inpt->mode == InputState::MODE_TOUCHSCREEN) {
+		tip_data->addColoredText('\n' + msg->get("Tap icon again for more options"), font->getColor(FontEngine::COLOR_ITEM_BONUS));
+	}
+	else if (inpt->mode == InputState::MODE_JOYSTICK) {
+		show_more_msg = true;
+		more_bind_str = inpt->getGamepadBindingString(Input::ACCEPT);
+	}
+	else if (!inpt->usingMouse()) {
+		show_more_msg = true;
+		more_bind_str = inpt->getBindingString(Input::ACCEPT);
+	}
+
+	if (show_more_msg) {
+		tip_data->addText("");
+	}
+
+	if (show_more_msg) {
+		tip_data->addColoredText(msg->get("Press [%s] for more options", more_bind_str), font->getColor(FontEngine::COLOR_ITEM_BONUS));
+	}
+}
+
 void MenuPowers::renderPowers(int tab_num) {
 
 	Rect disabled_src;
@@ -1496,6 +1525,10 @@ void MenuPowers::renderTooltips(const Point& position) {
 			if (tip_cell->next) {
 				tip_data.addText("\n" + msg->get("Next Level:"));
 				createTooltip(&tip_data, tip_cell->next, tip_cell->next->id, base_unlocked, MenuPowers::TOOLTIP_LONG_MENU);
+				createTooltipInputHint(&tip_data);
+			}
+			else {
+				createTooltipInputHint(&tip_data);
 			}
 
 			tooltipm->push(tip_data, position, TooltipData::STYLE_FLOAT);

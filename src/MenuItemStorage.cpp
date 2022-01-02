@@ -152,12 +152,12 @@ int MenuItemStorage::slotOver(const Point& position) {
 	return -1;
 }
 
-TooltipData MenuItemStorage::checkTooltip(const Point& position, StatBlock *stats, int context) {
+TooltipData MenuItemStorage::checkTooltip(const Point& position, StatBlock *stats, int context, bool input_hint) {
 	TooltipData tip;
 	int slot = slotOver(position);
 
 	if (slot > -1 && storage[slot].item > 0) {
-		return items->getTooltip(storage[slot], stats, context);
+		return items->getTooltip(storage[slot], stats, context, input_hint);
 	}
 	return tip;
 }

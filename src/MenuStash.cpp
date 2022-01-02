@@ -389,7 +389,7 @@ void MenuStash::renderTooltips(const Point& position) {
 	if (!visible || !Utils::isWithinRect(window_area, position))
 		return;
 
-	TooltipData tip_data = tabs[activetab].stock.checkTooltip(position, &pc->stats, ItemManager::PLAYER_INV);
+	TooltipData tip_data = tabs[activetab].stock.checkTooltip(position, &pc->stats, ItemManager::PLAYER_INV, ItemManager::TOOLTIP_INPUT_HINT);
 	tooltipm->push(tip_data, position, TooltipData::STYLE_FLOAT);
 }
 

@@ -711,7 +711,7 @@ TooltipData ItemManager::getShortTooltip(ItemStack stack) {
 /**
  * Create detailed tooltip showing all relevant item info
  */
-TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int context) {
+TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int context, bool input_hint) {
 	TooltipData tip;
 
 	if (stack.empty()) return tip;
@@ -732,8 +732,11 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	}
 
 	// only show the name of the currency item
-	if (stack.item == eset->misc.currency_id)
+	if (stack.item == eset->misc.currency_id) {
+		if (input_hint)
+			getTooltipInputHint(tip, stack, context);
 		return tip;
+	}
 
 	// flavor text
 	if (items[stack.item].flavor != "") {
@@ -913,18 +916,55 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 		}
 	}
 
-	// input hint for consumables/books
-	// TODO hint when not using mouse control. The action for using an item there is hard to describe
-	if (context == PLAYER_INV && !settings->no_mouse) {
-		if (!items[stack.item].book.empty() && items[stack.item].book_is_readable) {
-			tip.addColoredText('\n' + msg->get("Press [%s] to read", inpt->getBindingString(Input::MAIN2)), font->getColor(FontEngine::COLOR_ITEM_BONUS));
-		}
-		else if (menu->inv->canActivateItem(stack.item)) {
-			tip.addColoredText('\n' + msg->get("Press [%s] to use", inpt->getBindingString(Input::MAIN2)), font->getColor(FontEngine::COLOR_ITEM_BONUS));
+	if (input_hint)
+		getTooltipInputHint(tip, stack, context);
+
+	return tip;
+}
+
+void ItemManager::getTooltipInputHint(TooltipData& tip, ItemStack stack, int context) {
+	bool show_activate_msg = false;
+	std::string activate_bind_str;
+
+	bool show_more_msg = false;
+	std::string more_bind_str;
+
+	if (inpt->mode == InputState::MODE_TOUCHSCREEN) {
+		tip.addColoredText('\n' + msg->get("Tap icon again for more options"), font->getColor(FontEngine::COLOR_ITEM_BONUS));
+	}
+	else if (inpt->mode == InputState::MODE_JOYSTICK) {
+		// TODO show activate message?
+		show_more_msg = true;
+		more_bind_str = inpt->getGamepadBindingString(Input::ACCEPT);
+	}
+	else if (!inpt->usingMouse()) {
+		// TODO show activate message?
+		show_more_msg = true;
+		more_bind_str = inpt->getBindingString(Input::ACCEPT);
+	}
+	else {
+		if (context == PLAYER_INV && menu->inv->canActivateItem(stack.item)) {
+			show_activate_msg = true;
+			activate_bind_str = inpt->getBindingString(Input::MAIN2);
 		}
 	}
 
-	return tip;
+	if (show_activate_msg || show_more_msg) {
+		tip.addText("");
+	}
+
+	// input hint for consumables/books
+	if (show_activate_msg) {
+		if (!items[stack.item].book.empty() && items[stack.item].book_is_readable) {
+			tip.addColoredText(msg->get("Press [%s] to read", activate_bind_str), font->getColor(FontEngine::COLOR_ITEM_BONUS));
+		}
+		else if (menu->inv->canActivateItem(stack.item)) {
+			tip.addColoredText(msg->get("Press [%s] to use", activate_bind_str), font->getColor(FontEngine::COLOR_ITEM_BONUS));
+		}
+	}
+	if (show_more_msg) {
+		tip.addColoredText(msg->get("Press [%s] for more options", more_bind_str), font->getColor(FontEngine::COLOR_ITEM_BONUS));
+	}
 }
 
 /**

@@ -50,7 +50,7 @@ public:
 	// rendering
 	void render();
 	int slotOver(const Point& position);
-	TooltipData checkTooltip(const Point& position, StatBlock *stats, int context);
+	TooltipData checkTooltip(const Point& position, StatBlock *stats, int context, bool input_hint);
 	ItemStack click(const Point& position);
 	void itemReturn(ItemStack stack);
 	void highlightMatching(const std::string& type);

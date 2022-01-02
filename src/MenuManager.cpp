@@ -1710,7 +1710,7 @@ void MenuManager::pushMatchingItemsOf(const Point& hov_pos) {
 					if (!inv->inventory[MenuInventory::EQUIPMENT].storage[i].empty()) {
 						Point match_pos(inv->equipped_area[i].x, inv->equipped_area[i].y);
 
-						TooltipData match = inv->inventory[MenuInventory::EQUIPMENT].checkTooltip(match_pos, &pc->stats, ItemManager::PLAYER_INV);
+						TooltipData match = inv->inventory[MenuInventory::EQUIPMENT].checkTooltip(match_pos, &pc->stats, ItemManager::PLAYER_INV, !ItemManager::TOOLTIP_INPUT_HINT);
 						match.addColoredText(msg->get("Equipped"), font->getColor(FontEngine::COLOR_ITEM_FLAVOR));
 
 						tooltipm->push(match, hov_pos, TooltipData::STYLE_FLOAT, tip_index);
