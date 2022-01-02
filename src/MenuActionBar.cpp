@@ -63,7 +63,8 @@ MenuActionBar::MenuActionBar()
 	, slots_count(0)
 	, drag_prev_slot(-1)
 	, updated(false)
-	, twostep_slot(-1) {
+	, twostep_slot(-1)
+	, touch_slot(NULL) {
 
 	menu_labels.resize(MENU_COUNT);
 
@@ -575,7 +576,8 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 		}
 
 		// mouse/touch click
-		else if (inpt->usingMouse() && slots[i]->checkClick() == WidgetSlot::ACTIVATE) {
+		else if ((inpt->mode == InputState::MODE_TOUCHSCREEN && touch_slot == slots[i]) || (inpt->mode != InputState::MODE_TOUCHSCREEN && inpt->usingMouse() && slots[i]->checkClick() == WidgetSlot::ACTIVATE)) {
+			touch_slot = NULL;
 			have_aim = false;
 			slot_activated[i] = true;
 			action.power = hotkeys_mod[i];
@@ -884,6 +886,14 @@ PowerID MenuActionBar::getSlotPower(int slot) {
 		return hotkeys_mod[slot];
 	}
 	return 0;
+}
+
+WidgetSlot* MenuActionBar::getSlotFromPosition(const Point& position) {
+	for (size_t i = 0; i < slots.size(); ++i) {
+		if (slots[i] && Utils::isWithinRect(slots[i]->pos, position))
+			return slots[i];
+	}
+	return NULL;
 }
 
 MenuActionBar::~MenuActionBar() {

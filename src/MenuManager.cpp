@@ -480,6 +480,12 @@ void MenuManager::logic() {
 				else if (action == ACTION_PICKER_ACTIONBAR_CLEAR) {
 					act->remove(action_picker_target);
 				}
+				else if (action == ACTION_PICKER_ACTIONBAR_USE) {
+					WidgetSlot* act_slot = act->getSlotFromPosition(action_picker_target);
+					if (act_slot) {
+						act->touch_slot = act_slot;
+					}
+				}
 			}
 
 			action_picker->visible = false;
@@ -1035,7 +1041,7 @@ void MenuManager::logic() {
 				}
 			}
 			// action bar
-			if (!exit->visible && !inpt->touch_locked && (act->isWithinSlots(inpt->mouse) || act->isWithinMenus(inpt->mouse))) {
+			if (!exit->visible && (act->isWithinSlots(inpt->mouse) || act->isWithinMenus(inpt->mouse))) {
 				inpt->lock[Input::MAIN1] = true;
 
 				// ctrl-click action bar to clear that slot
@@ -1044,10 +1050,21 @@ void MenuManager::logic() {
 				}
 				// allow drag-to-rearrange action bar
 				else if (!act->isWithinMenus(inpt->mouse)) {
-					drag_power = act->checkDrag(inpt->mouse);
-					if (drag_power > 0) {
-						mouse_dragging = true;
-						drag_src = DRAG_SRC_ACTIONBAR;
+					if (inpt->touch_locked) {
+						WidgetSlot* act_slot = act->getSlotFromPosition(inpt->mouse);
+						if (act_slot) {
+							act->tablist.setCurrent(act_slot);
+							int slot_index = act->tablist.getCurrent();
+							keydrag_pos = act->getSlotPos(slot_index);
+						}
+						showActionPicker(act, inpt->mouse);
+					}
+					else {
+						drag_power = act->checkDrag(inpt->mouse);
+						if (drag_power > 0) {
+							mouse_dragging = true;
+							drag_src = DRAG_SRC_ACTIONBAR;
+						}
 					}
 				}
 
@@ -1761,11 +1778,16 @@ void MenuManager::showActionPicker(Menu* src_menu, const Point& target) {
 			action_src = ACTION_SRC_ACTIONBAR;
 			action_picker_target = target;
 
+			if (inpt->mode == InputState::MODE_TOUCHSCREEN) {
+				action_picker->action_list->append(msg->get("Use"), "");
+				action_picker_map[action_picker_map.size()] = ACTION_PICKER_ACTIONBAR_USE;
+			}
+
 			action_picker->action_list->append(msg->get("Move"), "");
-			action_picker_map[0] = ACTION_PICKER_ACTIONBAR_SELECT;
+			action_picker_map[action_picker_map.size()] = ACTION_PICKER_ACTIONBAR_SELECT;
 
 			action_picker->action_list->append(msg->get("Clear"), "");
-			action_picker_map[1] = ACTION_PICKER_ACTIONBAR_CLEAR;
+			action_picker_map[action_picker_map.size()] = ACTION_PICKER_ACTIONBAR_CLEAR;
 		}
 	}
 	else if (src_menu == pow) {

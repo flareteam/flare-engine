@@ -864,10 +864,7 @@ void MenuPowers::createTooltipFromActionBar(TooltipData* tip_data, unsigned slot
 	}
 
 	createTooltip(tip_data, pcell, pindex, false, tooltip_length);
-
-	// TODO use action picker for touchscreen devices?
-	if (inpt->mode != InputState::MODE_TOUCHSCREEN)
-		createTooltipInputHint(tip_data, TOOLTIP_SHOW_ACTIVATE_HINT);
+	createTooltipInputHint(tip_data, TOOLTIP_SHOW_ACTIVATE_HINT);
 }
 
 void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, PowerID power_index, bool show_unlock_prompt, int tooltip_length) {

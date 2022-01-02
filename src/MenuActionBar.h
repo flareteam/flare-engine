@@ -104,6 +104,8 @@ public:
 	bool isWithinMenus(const Point& mouse);
 	void addPower(const PowerID id, const PowerID target_id);
 
+	WidgetSlot* getSlotFromPosition(const Point& position);
+
 	unsigned slots_count;
 	std::vector<PowerID> hotkeys; // refer to power_index in PowerManager
 	std::vector<PowerID> hotkeys_temp; // temp for shapeshifting
@@ -122,6 +124,8 @@ public:
 	int drag_prev_slot;
 	bool updated;
 	int twostep_slot;
+
+	WidgetSlot* touch_slot;
 };
 
 #endif
