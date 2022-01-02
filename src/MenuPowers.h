@@ -106,6 +106,7 @@ public:
 class MenuPowers : public Menu {
 private:
 	static const bool UPGRADE_POWER_ALL_TABS = true;
+	static const bool TOOLTIP_SHOW_ACTIVATE_HINT = true;
 
 	void loadGraphics();
 	void loadTab(FileParser &infile);
@@ -128,7 +129,7 @@ private:
 	int getPointsUsed();
 
 	void createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, PowerID power_index, bool show_unlock_prompt, int tooltip_length);
-	void createTooltipInputHint(TooltipData* tip_data);
+	void createTooltipInputHint(TooltipData* tip_data, bool enable_activate_msg);
 	void renderPowers(int tab_num);
 
 	std::vector<MenuPowersCellGroup> power_cell;

@@ -867,7 +867,7 @@ void MenuPowers::createTooltipFromActionBar(TooltipData* tip_data, unsigned slot
 
 	// TODO use action picker for touchscreen devices?
 	if (inpt->mode != InputState::MODE_TOUCHSCREEN)
-		createTooltipInputHint(tip_data);
+		createTooltipInputHint(tip_data, TOOLTIP_SHOW_ACTIVATE_HINT);
 }
 
 void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, PowerID power_index, bool show_unlock_prompt, int tooltip_length) {
@@ -1272,7 +1272,10 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 	}
 }
 
-void MenuPowers::createTooltipInputHint(TooltipData* tip_data) {
+void MenuPowers::createTooltipInputHint(TooltipData* tip_data, bool enable_activate_msg) {
+	bool show_activate_msg = false;
+	std::string activate_bind_str;
+
 	bool show_more_msg = false;
 	std::string more_bind_str;
 
@@ -1280,16 +1283,34 @@ void MenuPowers::createTooltipInputHint(TooltipData* tip_data) {
 		tip_data->addColoredText('\n' + msg->get("Tap icon again for more options"), font->getColor(FontEngine::COLOR_ITEM_BONUS));
 	}
 	else if (inpt->mode == InputState::MODE_JOYSTICK) {
+		if (enable_activate_msg) {
+			show_activate_msg = true;
+			activate_bind_str = inpt->getGamepadBindingString(Input::MENU_ACTIVATE);
+		}
+
 		show_more_msg = true;
 		more_bind_str = inpt->getGamepadBindingString(Input::ACCEPT);
 	}
 	else if (!inpt->usingMouse()) {
+		if (enable_activate_msg) {
+			show_activate_msg = true;
+			activate_bind_str = inpt->getBindingString(Input::MENU_ACTIVATE);
+		}
+
 		show_more_msg = true;
 		more_bind_str = inpt->getBindingString(Input::ACCEPT);
 	}
+	else {
+		show_activate_msg = true;
+		activate_bind_str = inpt->getBindingString(Input::MAIN2);
+	}
 
-	if (show_more_msg) {
+	if (show_activate_msg || show_more_msg) {
 		tip_data->addText("");
+	}
+
+	if (show_activate_msg) {
+		tip_data->addColoredText(msg->get("Press [%s] to use", activate_bind_str), font->getColor(FontEngine::COLOR_ITEM_BONUS));
 	}
 
 	if (show_more_msg) {
@@ -1525,10 +1546,10 @@ void MenuPowers::renderTooltips(const Point& position) {
 			if (tip_cell->next) {
 				tip_data.addText("\n" + msg->get("Next Level:"));
 				createTooltip(&tip_data, tip_cell->next, tip_cell->next->id, base_unlocked, MenuPowers::TOOLTIP_LONG_MENU);
-				createTooltipInputHint(&tip_data);
+				createTooltipInputHint(&tip_data, !TOOLTIP_SHOW_ACTIVATE_HINT);
 			}
 			else {
-				createTooltipInputHint(&tip_data);
+				createTooltipInputHint(&tip_data, !TOOLTIP_SHOW_ACTIVATE_HINT);
 			}
 
 			tooltipm->push(tip_data, position, TooltipData::STYLE_FLOAT);
