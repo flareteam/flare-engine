@@ -374,6 +374,6 @@ install(FILES
 	"${CMAKE_CURRENT_BINARY_DIR}/flare.desktop"
 	DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications)
 install(FILES
-	"${CMAKE_CURRENT_SOURCE_DIR}/distribution/flare_logo.svg"
+	"${CMAKE_CURRENT_SOURCE_DIR}/distribution/flare_logo_icon.svg"
 	DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/scalable/apps
 	RENAME flare.svg)
