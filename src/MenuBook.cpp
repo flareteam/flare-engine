@@ -418,6 +418,11 @@ void MenuBook::logic() {
 		if (buttons[i].event.components.empty() || !EventManager::isActive(buttons[i].event)) {
 			buttons[i].button->enabled = false;
 			buttons[i].button->refresh();
+
+			// defocus the disabled button. MenuManager will auto-select the next enabled one
+			if (!inpt->usingMouse() && buttons[i].button == tablist.getWidgetByIndex(tablist.getCurrent())) {
+				tablist.defocus();
+			}
 		}
 		else {
 			buttons[i].button->enabled = true;
