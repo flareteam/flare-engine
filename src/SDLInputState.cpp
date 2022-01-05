@@ -504,34 +504,32 @@ void SDLInputState::handle() {
 
 					SDL_JoystickID joy_id = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(gamepad));
 					if (joy_id == event.jbutton.which) {
-						bool is_down = (abs(event.caxis.value) >= settings->joy_deadzone);
-						if (is_down) {
-							mode = MODE_JOYSTICK;
-						}
-
 						for (int key=0; key<KEY_COUNT; key++) {
 							for (size_t i = 0; i < binding[key].size(); ++i) {
-								if (binding[key][i].type == InputBind::GAMEPAD_AXIS && binding[key][i].bind / 2 == event.caxis.axis) {
-									bool matches_bind;
-									if (binding[key][i].bind % 2 == 0) {
-										matches_bind = (event.caxis.value >= 0);
+								int bind_axis = binding[key][i].bind / 2;
+								if (binding[key][i].type == InputBind::GAMEPAD_AXIS && bind_axis == event.caxis.axis) {
+									bool is_down;
+									if (bind_axis == SDL_CONTROLLER_AXIS_TRIGGERLEFT || bind_axis == SDL_CONTROLLER_AXIS_TRIGGERRIGHT) {
+										is_down = (event.caxis.value >= settings->joy_deadzone);
+									}
+									else if (binding[key][i].bind % 2 == 0) {
+										is_down = (event.caxis.value >= settings->joy_deadzone);
 									}
 									else {
-										matches_bind = (event.caxis.value <= 0);
+										is_down = (event.caxis.value <= -(settings->joy_deadzone));
 									}
 
-									if (matches_bind) {
-										if (is_down) {
-											curs->show_cursor = false;
-											hideCursor();
-											pressing[key] = true;
-											un_press[key] = false;
-										}
-										else if (pressing[key]) {
-											un_press[key] = true;
-											pressing[key] = false;
-											lock[key] = false;
-										}
+									if (is_down) {
+										mode = MODE_JOYSTICK;
+										curs->show_cursor = false;
+										hideCursor();
+										pressing[key] = true;
+										un_press[key] = false;
+									}
+									else if (pressing[key] && mode == MODE_JOYSTICK) {
+										un_press[key] = true;
+										pressing[key] = false;
+										lock[key] = false;
 									}
 								}
 							}
