@@ -113,7 +113,6 @@ GameStateLoad::GameStateLoad() : GameState()
 	// Set up tab list
 	tablist = TabList();
 	tablist.setScrollType(Widget::SCROLL_HORIZONTAL);
-	tablist.ignore_no_mouse = true;
 	tablist.add(button_exit);
 	tablist.add(button_new);
 

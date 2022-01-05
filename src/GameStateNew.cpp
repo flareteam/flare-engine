@@ -244,7 +244,6 @@ GameStateNew::GameStateNew()
 		setHeroOption(OPTION_CURRENT);
 
 	// Set up tab list
-	tablist.ignore_no_mouse = true;
 	tablist.add(button_exit);
 	tablist.add(button_create);
 	tablist.add(input_name);

@@ -125,7 +125,6 @@ GameStateTitle::GameStateTitle()
 	label_version->setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
 	// Setup tab order
-	tablist.ignore_no_mouse = true;
 	tablist.add(button_play);
 	tablist.add(button_cfg);
 	tablist.add(button_credits);

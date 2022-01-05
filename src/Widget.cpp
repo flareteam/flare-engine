@@ -74,7 +74,6 @@ TabList::TabList()
 	, ACTIVATE(Input::ACCEPT)
 	, prev_tablist(NULL)
 	, next_tablist(NULL)
-	, ignore_no_mouse(false)
 	, enable_activate(true) {
 }
 
@@ -412,7 +411,7 @@ bool TabList::isLocked() {
 
 void TabList::logic() {
 	if (locked) return;
-	if (!inpt->usingMouse() || ignore_no_mouse) {
+	if (!inpt->usingMouse()) {
 		uint8_t inner_scrolltype = Widget::SCROLL_VERTICAL;
 
 		if (current_is_valid() && widgets.at(current)->scroll_type != Widget::SCROLL_TWO_DIRECTIONS) {
@@ -471,7 +470,7 @@ void TabList::logic() {
 
 	// Also defocus if we start using the mouse
 	// we need to disable this for touchscreen devices so that item tooltips will work
-	if (!settings->touchscreen && current != -1 && inpt->usingMouse() && !ignore_no_mouse) {
+	if (!settings->touchscreen && current != -1 && inpt->usingMouse()) {
 		defocus();
 	}
 }

@@ -48,7 +48,6 @@ MenuConfirm::MenuConfirm()
 
 	action_list->has_action = true;
 
-	tablist.ignore_no_mouse = true;
 	tablist.add(action_list);
 	// tablist.add(button_close);
 

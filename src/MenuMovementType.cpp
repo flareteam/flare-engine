@@ -93,7 +93,6 @@ MenuMovementType::MenuMovementType()
 	button_mouse->setLabel(msg->get("Mouse"));
 	button_joystick->setLabel(msg->get("Joystick"));
 
-	tablist.ignore_no_mouse = true;
 	tablist.add(button_keyboard);
 	tablist.add(button_mouse);
 	tablist.add(button_joystick);
