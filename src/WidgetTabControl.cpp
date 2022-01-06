@@ -81,12 +81,6 @@ void WidgetTabControl::setActiveTab(unsigned tab) {
 	else if (tab == tabs.size())
 		tab = static_cast<unsigned>(tabs.size()-1);
 
-	for (unsigned i = 0; i < tab; ++i) {
-		if (tablists[i]) {
-			tablists[i]->defocus();
-		}
-	}
-
 	// Set the tab. If the specified tab is not enabled, get the first enabled tab.
 	bool found_tab = false;
 	for (unsigned i = tab; tab < tabs.size(); ++i) {
@@ -109,6 +103,13 @@ void WidgetTabControl::setActiveTab(unsigned tab) {
 	if (!found_tab) {
 		// no enabled tabs, just return what we started with
 		active_tab = tab;
+	}
+
+	for (unsigned i = 0; i < tabs.size(); ++i) {
+		if (tablists[i] && i != active_tab) {
+			tablists[i]->lock();
+			tablists[i]->defocus();
+		}
 	}
 
 	if (tablists[active_tab]) {
@@ -202,6 +203,7 @@ void WidgetTabControl::logic(int x, int y) {
 			for (unsigned i=0; i<tabs.size(); i++) {
 				if(Utils::isWithinRect(tabs[i], mouse) && enabled[i]) {
 					active_tab = i;
+					setActiveTab(i);
 					break;
 					// return;
 				}
