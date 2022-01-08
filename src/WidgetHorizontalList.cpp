@@ -144,7 +144,7 @@ void WidgetHorizontalList::render() {
 				(topLeft.y<local_frame.y || bottomRight.y>(local_frame.y+local_frame.h))) {
 			draw = false;
 		}
-		if (draw || 1) {
+		if (draw) {
 			render_device->drawRectangle(topLeft, bottomRight, eset->widgets.selection_rect_color);
 		}
 	}
