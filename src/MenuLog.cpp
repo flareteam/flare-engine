@@ -223,6 +223,10 @@ void MenuLog::defocusTabLists() {
 	}
 }
 
+TabList* MenuLog::getVisibleChildTabList() {
+	return &tablist_log[tabControl->getActiveTab()];
+}
+
 MenuLog::~MenuLog() {
 	for (int i = 0; i < TYPE_COUNT; ++i) {
 		delete log[i];

@@ -208,7 +208,7 @@ void MenuManager::handleKeyboardNavigation() {
 	vendor->tablist_buy.setNextTabList(NULL);
 	vendor->tablist_sell.setNextTabList(NULL);
 	chr->tablist.setNextTabList(NULL);
-	questlog->setNextTabList(&questlog->tablist);
+	questlog->setNextTabList(NULL);
 	inv->tablist.setPrevTabList(NULL);
 	pow->setNextTabList(NULL);
 
@@ -248,7 +248,7 @@ void MenuManager::handleKeyboardNavigation() {
 				inv->tablist.setPrevTabList(&chr->tablist);
 			}
 			else if (questlog->visible) {
-				inv->tablist.setPrevTabList(&questlog->tablist);
+				inv->tablist.setPrevTabList(questlog->getVisibleChildTabList());
 			}
 		}
 		else if (pow->visible) {
@@ -265,7 +265,7 @@ void MenuManager::handleKeyboardNavigation() {
 				pow->tablist.setPrevTabList(&chr->tablist);
 			}
 			else if (questlog->visible) {
-				pow->tablist.setPrevTabList(&questlog->tablist);
+				pow->tablist.setPrevTabList(questlog->getVisibleChildTabList());
 			}
 		}
 	}

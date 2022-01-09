@@ -60,6 +60,8 @@ public:
 	TabList* getCurrentTabList();
 	void defocusTabLists();
 
+	TabList* getVisibleChildTabList();
+
 private:
 	WidgetLabel label_log;
 	WidgetButton *closeButton;
