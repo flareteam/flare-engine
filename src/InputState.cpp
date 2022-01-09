@@ -190,10 +190,18 @@ void InputState::loadKeyBindings() {
 		// @ATTR default.inventory|[int, string], int : Bind, Type|Bindings for "Inventory".
 		// @ATTR default.powers|[int, string], int : Bind, Type|Bindings for "Powers".
 		// @ATTR default.log|[int, string], int : Bind, Type|Bindings for "Log".
-		// @ATTR default.actionbar|[int, string], int : Bind, Type|Bindings for "Actionbar Accept".
-		// @ATTR default.actionbar_back|[int, string], int : Bind, Type|Bindings for "Actionbar Left".
-		// @ATTR default.actionbar_forward|[int, string], int : Bind, Type|Bindings for "Actionbar Right".
-		// @ATTR default.actionbar_use|[int, string], int : Bind, Type|Bindings for "Actionbar Use".
+		// @ATTR default.equipment_swap|[int, string], int : Bind, Type|Bindings for "Equipment Swap".
+		// @ATTR default.minimap_mode|[int, string], int : Bind, Type|Bindings for "Mini-map Mode".
+		// @ATTR default.loot_tooltip_mode|[int, string], int : Bind, Type|Bindings for "Loot Tooltip Mode".
+		// @ATTR default.actionbar|[int, string], int : Bind, Type|Bindings for "Action Bar".
+		// @ATTR default.menu_page_next|[int, string], int : Bind, Type|Bindings for "Menu: Next Page".
+		// @ATTR default.menu_page_prev|[int, string], int : Bind, Type|Bindings for "Menu: Previous Page".
+		// @ATTR default.menu_activate|[int, string], int : Bind, Type|Bindings for "Menu: Activate".
+		// @ATTR default.pause|[int, string], int : Bind, Type|Bindings for "Pause".
+		// @ATTR default.aim_up|[int, string], int : Bind, Type|Bindings for "Aim Up".
+		// @ATTR default.aim_down|[int, string], int : Bind, Type|Bindings for "Aim Down".
+		// @ATTR default.aim_left|[int, string], int : Bind, Type|Bindings for "Aim Left".
+		// @ATTR default.aim_right|[int, string], int : Bind, Type|Bindings for "Aim Right".
 		// @ATTR default.developer_menu|[int, string], int : Bind, Type|Bindings for "Developer Menu".
 
 		if (infile.section == "user" || infile.section == "default") {

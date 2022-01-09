@@ -447,6 +447,8 @@ body {
 
 <p><strong>misc.selection_rect_color</strong> | <code>color, int : Color, Alpha</code> | Color of the selection rectangle when navigating widgets without a mouse.</p>
 
+<p><strong>misc.selection_rect_corner_size</strong> | <code>int</code> | Size of the corners on the selection rectangle shown when navigating widgets. Set to 0 to drawn the entire rectangle instead.</p>
+
 <p><strong>misc.colorblind_highlight_offset</strong> | <code>int, int : X offset, Y offset</code> | The pixel offset of the '*' marker on highlighted icons in colorblind mode.</p>
 
 <p><strong>tab.padding</strong> | <code>int, int : Left/right padding, Top padding</code> | The pixel padding around tabs. Controls how the left and right edges are drawn.</p>
@@ -590,6 +592,8 @@ body {
 <p><strong>event.show_on_minimap</strong> | <code>bool</code> | If true, this event will be shown on the minimap if it is the appropriate type (e.g. an intermap teleport).</p>
 
 <p><strong>event.parallax_layers</strong> | <code>filename</code> | Filename of a parallax layers definition to load.</p>
+
+<p><strong>event.random_status</strong> | <code>repeatable(["append", "clear", "roll", "set", "unset"], list(string)) : Action, Statuses (append action only)</code> | Used to randomly pick a status from a list, and then set or unset it. Statuses are added to the list with the "append" action. The "roll" action will randomly pick from the list and set it as the current random status. The "set" and "unset" commands will function like set_status and unset_status, with the parameter being the current random status. Lastly, the "clear" action will empty the pool of random statuses. It is recommended to clear the list before you use it, as well as after you're done to prevent unintended side-effects.</p>
 
 <hr />
 
@@ -849,71 +853,77 @@ body {
 
 <h4>InputState: Default Keybindings</h4>
 
-<p>Description of engine/default_keybindings.txt. Use <strong>-1</strong> for no binding. Keyboard values can be any of the key names listed in the <a href="https://wiki.libsdl.org/SDL_Keycode">SDL docs</a>. Mouse values are in the format <strong>mouse_0</strong>. Joystick buttons are in the format <strong>joy_0</strong>. Joystick axis are in the format <strong>axis_0-</strong> or <strong>axis_0+</strong>.</p>
+<p>Description of engine/default_keybindings.txt. Use a bind value of '-1' to clear all bindings for an action. Type may be any of the follwing: 0 = Keyboard, 1 = Mouse, 2 = Gamepad button, 3 = Gamepad Axis. Human-readable key and gamepad mapping names may be used by prefixing the bind with "SDL:" (e.g. "SDL:space" or "SDL:leftstick"). If using the "SDL:" prefix for a gamepad axis, add ":-" to the end of the bind to get the negative direction (e.g. "SDL:leftx:-").</p>
 
-<p><strong>default.cancel</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for "Cancel".</p>
+<p><strong>default.cancel</strong> | <code>[int, string], int : Bind, Type</code> | Bindings for "Cancel".</p>
 
-<p><strong>default.accept</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for "Accept".</p>
+<p><strong>default.accept</strong> | <code>[int, string], int : Bind, Type</code> | Bindings for "Accept".</p>
 
-<p><strong>default.up</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for "Up".</p>
+<p><strong>default.up</strong> | <code>[int, string], int : Bind, Type</code> | Bindings for "Up".</p>
 
-<p><strong>default.down</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for "Down".</p>
+<p><strong>default.down</strong> | <code>[int, string], int : Bind, Type</code> | Bindings for "Down".</p>
 
-<p><strong>default.left</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for "Left".</p>
+<p><strong>default.left</strong> | <code>[int, string], int : Bind, Type</code> | Bindings for "Left".</p>
 
-<p><strong>default.right</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for "Right".</p>
+<p><strong>default.right</strong> | <code>[int, string], int : Bind, Type</code> | Bindings for "Right".</p>
 
-<p><strong>default.bar1</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for "Bar1".</p>
+<p><strong>default.bar1</strong> | <code>[int, string], int : Bind, Type</code> | Bindings for "Bar1".</p>
 
-<p><strong>default.bar2</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for "Bar2".</p>
+<p><strong>default.bar2</strong> | <code>[int, string], int : Bind, Type</code> | Bindings for "Bar2".</p>
 
-<p><strong>default.bar3</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for "Bar3".</p>
+<p><strong>default.bar3</strong> | <code>[int, string], int : Bind, Type</code> | Bindings for "Bar3".</p>
 
-<p><strong>default.bar4</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for "Bar4".</p>
+<p><strong>default.bar4</strong> | <code>[int, string], int : Bind, Type</code> | Bindings for "Bar4".</p>
 
-<p><strong>default.bar5</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for "Bar5".</p>
+<p><strong>default.bar5</strong> | <code>[int, string], int : Bind, Type</code> | Bindings for "Bar5".</p>
 
-<p><strong>default.bar6</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for "Bar6".</p>
+<p><strong>default.bar6</strong> | <code>[int, string], int : Bind, Type</code> | Bindings for "Bar6".</p>
 
-<p><strong>default.bar7</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for "Bar7".</p>
+<p><strong>default.bar7</strong> | <code>[int, string], int : Bind, Type</code> | Bindings for "Bar7".</p>
 
-<p><strong>default.bar8</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for "Bar8".</p>
+<p><strong>default.bar8</strong> | <code>[int, string], int : Bind, Type</code> | Bindings for "Bar8".</p>
 
-<p><strong>default.bar9</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for "Bar9".</p>
+<p><strong>default.bar9</strong> | <code>[int, string], int : Bind, Type</code> | Bindings for "Bar9".</p>
 
-<p><strong>default.bar0</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for "Bar0".</p>
+<p><strong>default.bar0</strong> | <code>[int, string], int : Bind, Type</code> | Bindings for "Bar0".</p>
 
-<p><strong>default.main1</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for "Main1".</p>
+<p><strong>default.main1</strong> | <code>[int, string], int : Bind, Type</code> | Bindings for "Main1".</p>
 
-<p><strong>default.main2</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for "Main2".</p>
+<p><strong>default.main2</strong> | <code>[int, string], int : Bind, Type</code> | Bindings for "Main2".</p>
 
-<p><strong>default.swap</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for "Equipment swap".</p>
+<p><strong>default.character</strong> | <code>[int, string], int : Bind, Type</code> | Bindings for "Character".</p>
 
-<p><strong>default.character</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for "Character".</p>
+<p><strong>default.inventory</strong> | <code>[int, string], int : Bind, Type</code> | Bindings for "Inventory".</p>
 
-<p><strong>default.inventory</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for "Inventory".</p>
+<p><strong>default.powers</strong> | <code>[int, string], int : Bind, Type</code> | Bindings for "Powers".</p>
 
-<p><strong>default.powers</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for "Powers".</p>
+<p><strong>default.log</strong> | <code>[int, string], int : Bind, Type</code> | Bindings for "Log".</p>
 
-<p><strong>default.log</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for "Log".</p>
+<p><strong>default.equipment_swap</strong> | <code>[int, string], int : Bind, Type</code> | Bindings for "Equipment Swap".</p>
 
-<p><strong>default.ctrl</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for "Ctrl".</p>
+<p><strong>default.minimap_mode</strong> | <code>[int, string], int : Bind, Type</code> | Bindings for "Mini-map Mode".</p>
 
-<p><strong>default.shift</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for "Shift".</p>
+<p><strong>default.loot_tooltip_mode</strong> | <code>[int, string], int : Bind, Type</code> | Bindings for "Loot Tooltip Mode".</p>
 
-<p><strong>default.alt</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for "Alt".</p>
+<p><strong>default.actionbar</strong> | <code>[int, string], int : Bind, Type</code> | Bindings for "Action Bar".</p>
 
-<p><strong>default.delete</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for "Delete".</p>
+<p><strong>default.menu_page_next</strong> | <code>[int, string], int : Bind, Type</code> | Bindings for "Menu: Next Page".</p>
 
-<p><strong>default.actionbar</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for "Actionbar Accept".</p>
+<p><strong>default.menu_page_prev</strong> | <code>[int, string], int : Bind, Type</code> | Bindings for "Menu: Previous Page".</p>
 
-<p><strong>default.actionbar_back</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for "Actionbar Left".</p>
+<p><strong>default.menu_activate</strong> | <code>[int, string], int : Bind, Type</code> | Bindings for "Menu: Activate".</p>
 
-<p><strong>default.actionbar_forward</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for "Actionbar Right".</p>
+<p><strong>default.pause</strong> | <code>[int, string], int : Bind, Type</code> | Bindings for "Pause".</p>
 
-<p><strong>default.actionbar_use</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for "Actionbar Use".</p>
+<p><strong>default.aim_up</strong> | <code>[int, string], int : Bind, Type</code> | Bindings for "Aim Up".</p>
 
-<p><strong>default.developer_menu</strong> | <code>string, string, string : Keyboard/mouse 1, Keyboard/mouse 2, Joystick</code> | Bindings for "Developer Menu".</p>
+<p><strong>default.aim_down</strong> | <code>[int, string], int : Bind, Type</code> | Bindings for "Aim Down".</p>
+
+<p><strong>default.aim_left</strong> | <code>[int, string], int : Bind, Type</code> | Bindings for "Aim Left".</p>
+
+<p><strong>default.aim_right</strong> | <code>[int, string], int : Bind, Type</code> | Bindings for "Aim Right".</p>
+
+<p><strong>default.developer_menu</strong> | <code>[int, string], int : Bind, Type</code> | Bindings for "Developer Menu".</p>
 
 <hr />
 
