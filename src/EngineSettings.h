@@ -258,6 +258,7 @@ public:
 		void load();
 
 		Color selection_rect_color;
+		int selection_rect_corner_size;
 		Point colorblind_highlight_offset;
 		Point tab_padding;
 		LabelInfo slot_quantity_label;

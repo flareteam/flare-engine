@@ -384,6 +384,30 @@ void RenderDevice::setFullscreen(bool enable_fullscreen) {
 	Utils::logInfo("RenderDevice: Trying to set fullscreen=%d, without recreating the rendering context, but setFullscreen() is not implemented for this renderer.", enable_fullscreen);
 }
 
+void RenderDevice::drawRectangleCorners(int csize, const Point& p0, const Point& p1, const Color& color) {
+	// if corner size if "blank", draw a standard rectangle
+	if (csize <= 0) {
+		drawRectangle(p0, p1, color);
+		return;
+	}
+
+	// top left
+	drawLine(p0.x, p0.y, p0.x + csize, p0.y, color);
+	drawLine(p0.x, p0.y, p0.x, p0.y + csize, color);
+
+	// top right
+	drawLine(p1.x - csize, p0.y, p1.x, p0.y, color);
+	drawLine(p1.x, p0.y, p1.x, p0.y + csize, color);
+
+	// bottom left
+	drawLine(p0.x, p1.y, p0.x + csize, p1.y, color);
+	drawLine(p0.x, p1.y - csize, p0.x, p1.y, color);
+
+	// bottom right
+	drawLine(p1.x - csize, p1.y, p1.x+1, p1.y, color);
+	drawLine(p1.x, p1.y - csize, p1.x, p1.y, color);
+}
+
 void RenderDevice::drawEllipse(int x0, int y0, int x1, int y1, const Color& color, float step) {
 	float rx = static_cast<float>(x1 - x0) / 2.f;
 	float ry = static_cast<float>(y1 - y0) / 2.f;

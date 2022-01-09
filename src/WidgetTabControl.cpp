@@ -267,7 +267,7 @@ void WidgetTabControl::render() {
 		bottomRight.x = topLeft.x + tabs[active_tab].w;
 		bottomRight.y = topLeft.y + tabs[active_tab].h;
 
-		render_device->drawRectangle(topLeft, bottomRight, eset->widgets.selection_rect_color);
+		render_device->drawRectangleCorners(eset->widgets.selection_rect_corner_size, topLeft, bottomRight, eset->widgets.selection_rect_color);
 	}
 }
 

@@ -870,6 +870,7 @@ void EngineSettings::Tileset::load() {
 void EngineSettings::Widgets::load() {
 	// reset to defaults
 	selection_rect_color = Color(255, 248, 220, 255);
+	selection_rect_corner_size = 4;
 	colorblind_highlight_offset = Point(2, 2);
 
 	tab_padding = Point(8, 0);
@@ -896,6 +897,10 @@ void EngineSettings::Widgets::load() {
 				if (infile.key == "selection_rect_color") {
 					// @ATTR misc.selection_rect_color|color, int : Color, Alpha|Color of the selection rectangle when navigating widgets without a mouse.
 					selection_rect_color = Parse::toRGBA(infile.val);
+				}
+				else if (infile.key == "selection_rect_corner_size") {
+					// @ATTR misc.selection_rect_corner_size|int|Size of the corners on the selection rectangle shown when navigating widgets. Set to 0 to drawn the entire rectangle instead.
+					selection_rect_corner_size = Parse::toInt(infile.val);
 				}
 				else if (infile.key == "colorblind_highlight_offset") {
 					// @ATTR misc.colorblind_highlight_offset|int, int : X offset, Y offset|The pixel offset of the '*' marker on highlighted icons in colorblind mode.

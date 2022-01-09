@@ -182,7 +182,7 @@ void WidgetSlider::render () {
 			draw = false;
 		}
 		if (draw) {
-			render_device->drawRectangle(topLeft, bottomRight, eset->widgets.selection_rect_color);
+			render_device->drawRectangleCorners(eset->widgets.selection_rect_corner_size, topLeft, bottomRight, eset->widgets.selection_rect_color);
 		}
 	}
 

@@ -486,10 +486,10 @@ void SDLSoftwareRenderDevice::drawRectangle(const Point& p0, const Point& p1, co
 	if (SDL_MUSTLOCK(screen)) {
 		SDL_LockSurface(screen);
 	}
-	this->drawLine(p0.x, p0.y, p1.x, p0.y, color);
-	this->drawLine(p1.x, p0.y, p1.x, p1.y, color);
-	this->drawLine(p0.x, p0.y, p0.x, p1.y, color);
-	this->drawLine(p0.x, p1.y, p1.x, p1.y, color);
+	drawLine(p0.x, p0.y, p1.x, p0.y, color);
+	drawLine(p1.x, p0.y, p1.x, p1.y, color);
+	drawLine(p0.x, p0.y, p0.x, p1.y, color);
+	drawLine(p0.x, p1.y, p1.x+1, p1.y, color);
 	if (SDL_MUSTLOCK(screen)) {
 		SDL_UnlockSurface(screen);
 	}

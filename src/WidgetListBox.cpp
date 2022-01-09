@@ -363,10 +363,12 @@ void WidgetListBox::render() {
 		Point topLeft;
 		Point bottomRight;
 
-		topLeft.x = rows[0].x + local_frame.x - local_offset.x;
-		topLeft.y = rows[0].y + local_frame.y - local_offset.y;
-		bottomRight.x = rows[rows.size() - 1].x + rows[0].w + local_frame.x - local_offset.x;
-		bottomRight.y = rows[rows.size() - 1].y + rows[0].h + local_frame.y - local_offset.y;
+		if (!rows.empty()) {
+			topLeft.x = rows[0].x + local_frame.x - local_offset.x;
+			topLeft.y = rows[0].y + local_frame.y - local_offset.y;
+			bottomRight.x = rows[rows.size() - 1].x + pos.w + local_frame.x - local_offset.x;
+			bottomRight.y = rows[rows.size() - 1].y + pos.h + local_frame.y - local_offset.y;
+		}
 
 		// Only draw rectangle if it fits in local frame
 		bool draw = true;
@@ -379,7 +381,7 @@ void WidgetListBox::render() {
 			draw = false;
 		}
 		if (draw) {
-			render_device->drawRectangle(topLeft, bottomRight, eset->widgets.selection_rect_color);
+			render_device->drawRectangleCorners(eset->widgets.selection_rect_corner_size, topLeft, bottomRight, eset->widgets.selection_rect_color);
 		}
 	}
 
