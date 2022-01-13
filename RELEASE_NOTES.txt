@@ -2,14 +2,15 @@ Flare v1.13 (WIP)
 
 Engine features:
 
-* Added additional requirement properties to enemy and NPC map objects. The properties now match what is available for map events.
+* Added additional requirement properties (requires_status, requires_item, etc) to enemy and NPC map objects. The properties now match what is available for map events.
 * When 'mouse aim' is disabled, the Shift key can now be used with the direction keys to change the player's orientation without moving.
-* Added 'fog-of-war' feature (r-a-cristian-93)
-* Added support for multiple equipment sets (r-a-cristian-93)
-* Added random_status attribute to Events
+* Added optional 'fog-of-war' feature (r-a-cristian-93)
+* Added support for multiple sets/loadouts of equipped items (r-a-cristian-93)
+* Added random_status attribute to Events for setting/unsetting a random status from a list.
 * Reworked gamepad handling using the SDL_GameController API.
 * Several new key bindings, many of which will benefit gamepad users.
 * Added an "action picker" for interacting with items/powers when using a gamepad or a touchscreen.
+* Added misc.selection_rect_corner_size to engine/widget_settings.txt. This allows for a nicer "targeting reticle" appearance when selecting widgets without a mouse.
 
 Engine fixes:
 
@@ -30,15 +31,18 @@ Engine fixes:
 * Fixed incorrect handling of gamepad stick/trigger deadzone.
 * Fixed fullscreen setting being turned off when loading configuration defaults on Android.
 * Fixed input hint for item tooltips when using a touchscreen.
+* Improved file access handling on Android versions 10 and up. This fixes the infinite cutscene loop when starting a new game.
 
 Game updates:
 
 * New formula for the 'Shield' power. Instead of Mental Damage, it is now based off a combination of player level, Mental stat, and Defense stat. This should increase its usefulness on mixed builds.
 * Added 'Super' and 'Ultra' variants of Health and Mana potions. They can be obtained through the Alchemy system.
+* New icons for Health and Mana potions variants.
 * Fixed Alchemist's Skirt so that it works with all potions.
 * Prevent the player from damaging Mez before being trapped.
 * Made Lezaith immune to slow/stun effects.
 * Goblin Thief can now steal all available kinds of potions. Its drop table has also been expanded to make it easier to replenish lost potions.
+* Improved contrast for "highlight" state of red square buttons ("close" and "plus").
 
 Translation updates:
 
