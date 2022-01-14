@@ -51,6 +51,7 @@ public:
 	unsigned long time_played;
 
 	std::vector<int> equipped;
+	int active_equipment_set;
 	GameSlotPreview preview;
 	Timer preview_turn_timer;
 
@@ -131,6 +132,8 @@ private:
 	int text_trim_boundary;
 	int portrait_align;
 	int gameslot_align;
+
+	std::vector<int> equip_sets;
 
 public:
 	GameStateLoad();

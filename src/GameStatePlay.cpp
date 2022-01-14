@@ -596,6 +596,9 @@ void GameStatePlay::checkEquipmentChange() {
 			gfx.gfx = "";
 			gfx.type = pc->layer_reference_order[j];
 			for (int i=0; i<menu->inv->inventory[MenuInventory::EQUIPMENT].getSlotNumber(); i++) {
+				if (!menu->inv->isActive(i))
+					continue;
+
 				if (pc->layer_reference_order[j] == menu->inv->inventory[MenuInventory::EQUIPMENT].slot_type[i]) {
 					gfx.gfx = items->items[menu->inv->inventory[MenuInventory::EQUIPMENT][i].item].gfx;
 					gfx.type = menu->inv->inventory[MenuInventory::EQUIPMENT].slot_type[i];

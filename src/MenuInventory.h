@@ -123,8 +123,6 @@ public:
 
 	void clearHighlight();
 
-	void fillEquipmentSlots();
-
 	int getMaxPurchasable(ItemStack item, int vendor_tab);
 
 	PowerID getPowerMod(PowerID meta_power);

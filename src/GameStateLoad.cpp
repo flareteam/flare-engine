@@ -56,6 +56,7 @@ bool compareSaveDirs(const std::string& dir1, const std::string& dir2) {
 GameSlot::GameSlot()
 	: id(0)
 	, time_played(0)
+	, active_equipment_set(0)
 	, preview_turn_timer(settings->max_frames_per_sec/2)
 {
 	preview_turn_timer.reset(Timer::BEGIN);
@@ -209,6 +210,22 @@ GameStateLoad::GameStateLoad() : GameState()
 		infile.close();
 	}
 
+	// We need to read the inventory menu config to properly handle equipment sets
+	if (infile.open("menus/inventory.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
+		while(infile.next()) {
+			if (infile.key == "equipment_slot") {
+				// we don't need the first 3 parameters, so pop them off
+				Parse::popFirstInt(infile.val);
+				Parse::popFirstInt(infile.val);
+				Parse::popFirstString(infile.val);
+
+				int eq_set = Parse::popFirstInt(infile.val);
+				equip_sets.push_back(eq_set);
+			}
+		}
+		infile.close();
+	}
+
 	// prevent text from overflowing on the right edge of game slots
 	if (text_trim_boundary == 0 || text_trim_boundary > gameslot_pos.w)
 		text_trim_boundary = gameslot_pos.w;
@@ -350,6 +367,14 @@ void GameStateLoad::readGameSlots() {
 					repeat_val = Parse::popFirstString(infile.val);
 				}
 			}
+			else if (infile.key == "active_equipment_set") {
+				game_slots[i]->active_equipment_set = Parse::toInt(infile.val);
+
+				if (game_slots[i]->active_equipment_set > 0 && std::find(equip_sets.begin(), equip_sets.end(), game_slots[i]->active_equipment_set) == equip_sets.end()) {
+					Utils::logError("GameStateLoad: Save slot %d has an invalid active equipment set. Resetting to 0.", game_slots[i]->id);
+					game_slots[i]->active_equipment_set = 0;
+				}
+			}
 			else if (infile.key == "option") {
 				game_slots[i]->stats.gfx_base = Parse::popFirstString(infile.val);
 				game_slots[i]->stats.gfx_head = Parse::popFirstString(infile.val);
@@ -412,12 +437,20 @@ void GameStateLoad::loadPreview(GameSlot* slot) {
 	}
 
 	for (unsigned int i=0; i<slot->equipped.size(); i++) {
-		if (slot->equipped[i] != 0 && !items->items[slot->equipped[i]].has_name) {
+		if (slot->equipped[i] <= 0)
+			continue;
+
+		if (i >= equip_sets.size()) {
+			Utils::logError("GameStateLoad: Item in save slot %d with id=%d has an invalid position. Your savegame is broken or you might be using an incompatible savegame/mod", slot->id, slot->equipped[i]);
+			continue;
+		}
+
+		if (!items->items[slot->equipped[i]].has_name) {
 			Utils::logError("GameStateLoad: Item in save slot %d with id=%d is unknown. Your savegame is broken or you might be using an incompatible savegame/mod", slot->id, slot->equipped[i]);
 			continue;
 		}
 
-		if (slot->equipped[i] > 0 && !preview_layer.empty()) {
+		if ((slot->active_equipment_set == 0 || slot->active_equipment_set == equip_sets[i]) && !preview_layer.empty()) {
 			std::vector<std::string>::iterator found = find(preview_layer.begin(), preview_layer.end(), items->items[slot->equipped[i]].type);
 			if (found != preview_layer.end())
 				img_gfx[distance(preview_layer.begin(), found)] = items->items[slot->equipped[i]].gfx;

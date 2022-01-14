@@ -558,8 +558,6 @@ void SaveLoad::loadStash() {
  * Performs final calculations after loading a save or a new class
  */
 void SaveLoad::applyPlayerData() {
-	menu->inv->fillEquipmentSlots();
-
 	// remove items with zero quantity from inventory
 	menu->inv->inventory[MenuInventory::EQUIPMENT].clean();
 	menu->inv->inventory[MenuInventory::CARRIED].clean();
