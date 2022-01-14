@@ -128,29 +128,24 @@ WidgetSlot::CLICK_TYPE WidgetSlot::checkClick(int x, int y) {
 
 	if (mouse_in_rect && inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1]) {
 		inpt->lock[Input::MAIN1] = true;
-		Utils::logInfo("%p: MAIN1 drag", this);
 		return DRAG;
 	}
 	else if (mouse_in_rect && inpt->pressing[Input::MAIN2] && !inpt->lock[Input::MAIN2]) {
 		inpt->lock[Input::MAIN2] = true;
-		Utils::logInfo("%p: MAIN2 activate", this);
 		return ACTIVATE;
 	}
 	else if (in_focus && inpt->pressing[Input::ACCEPT] && !inpt->lock[Input::ACCEPT]) {
 		// TODO This probably isn't needed, since Input::ACCEPT is handled by TabList (which calls activate())
 		inpt->lock[Input::ACCEPT] = true;
-		Utils::logInfo("%p: ACCEPT drag", this);
 		return DRAG;
 	}
 	else if (in_focus && inpt->pressing[Input::MENU_ACTIVATE] && !inpt->lock[Input::MENU_ACTIVATE]) {
 		inpt->lock[Input::MENU_ACTIVATE] = true;
-		Utils::logInfo("%p: MENU_ACTIVATE activate", this);
 		return ACTIVATE;
 	}
 	else if (activated) {
 		// activate() was called
 		activated = false;
-		Utils::logInfo("%p: activate() drag", this);
 		return DRAG;
 	}
 
