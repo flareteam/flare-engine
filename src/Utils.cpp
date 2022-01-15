@@ -127,18 +127,6 @@ Rect::operator SDL_Rect() const {
 	return r;
 }
 
-bool Rect::operator == (const Rect& other) const {
-	if (x == other.x && y == other.y && w == other.w && h == other.h)
-		return true;
-	else
-		return false;
-}
-
-bool Rect::operator != (const Rect& other) const {
-	return !(*this == other);
-}
-
-
 /**
  * Color: RGBA color; defaults to 100% opaque black
  */

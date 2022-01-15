@@ -430,15 +430,8 @@ void MenuMiniMap::updateOrtho(MapCollision *collider, Sprite** tile_surface, int
 			else if (tile_type == 2 || tile_type == 6) draw_color = color_obst;
 			else draw_tile = false;
 
-			// fog of war
 			tile_type = mapr->layers[fow->dark_layer_id][i][j];
-
-			Rect tile_sprite_zero = fow->tset_dark.tiles[0].tile->getClip();
-			Rect tile_sprite_current = fow->tset_dark.tiles[tile_type].tile->getClip();
-
-			// if tile sprite is non "zero like"
-			if (tile_sprite_current != tile_sprite_zero)
-				draw_tile = false;
+			if (tile_type != 0) draw_tile = false;
 
 			if (draw_tile && draw_color.a != 0) {
 				for (int l = 0; l < zoom; l++) {
@@ -549,16 +542,16 @@ void MenuMiniMap::updateIso(MapCollision *collider, Sprite** tile_surface, int z
 	Point ent_pos;
 	Image* target_img = (*tile_surface)->getGraphics();
 
-	FPoint hero(pc->stats.pos);
-	FPoint clipcenter;
+	Point hero(pc->stats.pos);
+	Point clipcenter;
 	Rect clip;
 
-	clipcenter.x = static_cast<float>(zoom)*(hero.x - hero.y + static_cast<float>(std::max(map_size.x, map_size.y)));
-	clipcenter.y = static_cast<float>(zoom)*(hero.x + hero.y);
-	clip.x = static_cast<int>(std::floor(clipcenter.x)) - fow->mask_radius*2*zoom;
-	clip.y = static_cast<int>(std::floor(clipcenter.y)) - fow->mask_radius*2*zoom;
-	clip.w = static_cast<int>(std::ceil(clipcenter.x)) + fow->mask_radius*2*zoom - clip.x;
-	clip.h = static_cast<int>(std::ceil(clipcenter.y)) + fow->mask_radius*2*zoom - clip.y;
+	clipcenter.x = zoom*(hero.x - hero.y + std::max(map_size.x, map_size.y));
+	clipcenter.y = zoom*(hero.x + hero.y);
+	clip.x = static_cast<int>(std::floor(clipcenter.x)) - (fow->mask_radius)*zoom;
+	clip.y = static_cast<int>(std::floor(clipcenter.y)) - (fow->mask_radius)*zoom;
+	clip.w = static_cast<int>(std::ceil(clipcenter.x)) + (fow->mask_radius)*zoom - clip.x + 1;
+	clip.h = static_cast<int>(std::ceil(clipcenter.y)) + (fow->mask_radius)*zoom - clip.y + 1;
 
 	if (clip.x<0) clip.x=0;
 	if (clip.y<0) clip.y=0;
@@ -578,13 +571,7 @@ void MenuMiniMap::updateIso(MapCollision *collider, Sprite** tile_surface, int z
 
 			// fog of war
 			tile_type = mapr->layers[fow->dark_layer_id][i][j];
-
-			Rect tile_sprite_zero = fow->tset_dark.tiles[0].tile->getClip();
-			Rect tile_sprite_current = fow->tset_dark.tiles[tile_type].tile->getClip();
-
-			// if tile sprite is non "zero like"
-			if (tile_sprite_current != tile_sprite_zero)
-				draw_tile = false;
+			if (tile_type != 0) draw_tile = false;
 
 			if (draw_tile) {
 				ent_pos.x = zoom*(i - j + std::max(map_size.x, map_size.y));

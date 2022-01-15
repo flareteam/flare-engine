@@ -68,8 +68,6 @@ public:
 	Rect(int _x, int _y, int _w, int _h);
 	explicit Rect(const SDL_Rect& _r);
 	operator SDL_Rect() const;
-	bool operator == (const Rect& other) const;
-	bool operator != (const Rect& other) const;
 };
 
 class Color {
