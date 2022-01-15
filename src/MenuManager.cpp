@@ -595,6 +595,10 @@ void MenuManager::logic() {
 		inpt->pressing[Input::MAIN2] = false;
 	}
 
+	if (settings->dev_mode) {
+		devconsole->logic();
+	}
+
 	if (!exit->visible && !is_within_menus)
 		mini->logic();
 
@@ -614,10 +618,6 @@ void MenuManager::logic() {
 	talker->logic();
 	stash->logic();
 	game_over->logic();
-
-	if (settings->dev_mode) {
-		devconsole->logic();
-	}
 
 	touch_controls->logic();
 
