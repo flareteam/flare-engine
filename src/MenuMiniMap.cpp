@@ -211,7 +211,7 @@ void MenuMiniMap::logic() {
 	if (inpt->pressing[Input::MINIMAP_MODE] && !inpt->lock[Input::MINIMAP_MODE]) {
 		inpt->lock[Input::MINIMAP_MODE] = true;
 		settings->minimap_mode++;
-		if (settings->minimap_mode > Settings::MINIMAP_HIDDEN)
+		if (settings->minimap_mode > Settings::MINIMAP_2X)
 			settings->minimap_mode = Settings::MINIMAP_NORMAL;
 	}
 
