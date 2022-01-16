@@ -571,7 +571,7 @@ void MenuMiniMap::updateIso(MapCollision *collider, Sprite** tile_surface, int z
 			if (tile_type != 0) draw_tile = false;
 
 			if (draw_tile) {
-				ent_pos.x = zoom*(i - j + std::max(map_size.x, map_size.y));
+				ent_pos.x = zoom*(i - 1 - j + std::max(map_size.x, map_size.y));
 				ent_pos.y = zoom*(i + j);
 
 				for (int l = 0; l < zoom; l++) {
@@ -625,7 +625,7 @@ void MenuMiniMap::renderEntitiesIso(Sprite* entity_surface, int zoom, const Poin
 	target_img->beginPixelBatch();
 
 	for (size_t i=0; i<entities.size(); i++) {
-		ent_pos.x = zoom*(entities[i]->x - entities[i]->y + std::max(map_size.x, map_size.y)) - entity_offset.x;
+		ent_pos.x = zoom*(entities[i]->x - 1 - entities[i]->y + std::max(map_size.x, map_size.y)) - entity_offset.x;
 		ent_pos.y = zoom*(entities[i]->x + entities[i]->y) - entity_offset.y;
 
 		for (int l = 0; l < zoom; l++) {
