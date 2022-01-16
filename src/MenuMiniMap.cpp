@@ -379,7 +379,7 @@ void MenuMiniMap::prerenderOrtho(MapCollision *collider, Sprite** tile_surface, 
 
 			if (mapr->fogofwar) {
 				tile_type = mapr->layers[fow->dark_layer_id][i][j];
-				if (tile_type == FogOfWar::TILE_HIDDEN) draw_tile = false;
+				if (tile_type != 0) draw_tile = false;
 			}
 
 			if (draw_tile && draw_color.a != 0) {
@@ -404,15 +404,12 @@ void MenuMiniMap::updateOrtho(MapCollision *collider, Sprite** tile_surface, int
 	Color draw_color;
 
 	Point hero(pc->stats.pos);
-	Point clipcenter;
-	Rect clip;
 
-	clipcenter.x = zoom * hero.x;
-	clipcenter.y = zoom * hero.y;
-	clip.x = clipcenter.x - (fow->mask_radius)*zoom;
-	clip.y = clipcenter.y - (fow->mask_radius)*zoom;
-	clip.w = clipcenter.x + (fow->mask_radius)*zoom - clip.x + 1;
-	clip.h = clipcenter.y + (fow->mask_radius)*zoom - clip.y + 1;
+	Rect clip;
+	clip.x = (zoom * hero.x) - pos.w/2;
+	clip.y = (zoom * hero.y) - pos.h/2;
+	clip.w = pos.w;
+	clip.h = pos.h;
 
 	if (clip.x<0) clip.x=0;
 	if (clip.y<0) clip.y=0;
@@ -489,7 +486,7 @@ void MenuMiniMap::prerenderIso(MapCollision *collider, Sprite** tile_surface, Sp
 
 				if (mapr->fogofwar) {
 					tile_type = mapr->layers[fow->dark_layer_id][tile_cursor.x][tile_cursor.y];
-					if (tile_type == FogOfWar::TILE_HIDDEN) draw_tile = false;
+					if (tile_type != 0) draw_tile = false;
 				}
 
 				if (draw_tile && draw_color.a != 0) {
@@ -543,15 +540,15 @@ void MenuMiniMap::updateIso(MapCollision *collider, Sprite** tile_surface, int z
 	Image* target_img = (*tile_surface)->getGraphics();
 
 	Point hero(pc->stats.pos);
-	Point clipcenter;
-	Rect clip;
+	Point hero_offset;
+	hero_offset.x = hero.x - hero.y + std::max(map_size.x, map_size.y);
+	hero_offset.y = hero.x + hero.y;
 
-	clipcenter.x = zoom*(hero.x - hero.y + std::max(map_size.x, map_size.y));
-	clipcenter.y = zoom*(hero.x + hero.y);
-	clip.x = static_cast<int>(std::floor(clipcenter.x)) - (fow->mask_radius)*zoom;
-	clip.y = static_cast<int>(std::floor(clipcenter.y)) - (fow->mask_radius)*zoom;
-	clip.w = static_cast<int>(std::ceil(clipcenter.x)) + (fow->mask_radius)*zoom - clip.x + 1;
-	clip.h = static_cast<int>(std::ceil(clipcenter.y)) + (fow->mask_radius)*zoom - clip.y + 1;
+	Rect clip;
+	clip.x = (zoom * hero_offset.x) - pos.w/2;
+	clip.y = (zoom * hero_offset.y) - pos.h/2;
+	clip.w = pos.w;
+	clip.h = pos.h;
 
 	if (clip.x<0) clip.x=0;
 	if (clip.y<0) clip.y=0;
