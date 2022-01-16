@@ -55,7 +55,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Utils.h"
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
-#include "FogOfWar.h"
 
 Avatar::Avatar()
 	: Entity()
@@ -182,8 +181,6 @@ void Avatar::handleNewMap() {
 	cursor_enemy = NULL;
 	lock_enemy = NULL;
 	playing_lowhp = false;
-	if (mapr->fogofwar)
-		fow->logic();
 }
 
 /**
@@ -602,9 +599,6 @@ void Avatar::logic() {
 					stats.cur_state = StatBlock::ENTITY_STANCE;
 					lock_enemy = cursor_enemy;
 				}
-
-				if (mapr->fogofwar)
-					fow->logic();
 
 				break;
 

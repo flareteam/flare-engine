@@ -54,7 +54,8 @@ FogOfWar::FogOfWar()
 	, color_fog(128,128,128)
 	, color_dark(0,0,0)
 	, update_minimap(true)
-	, loaded(false) {
+	, loaded(false)
+	, prev_hero_pos(-1, -1) {
 }
 
 int FogOfWar::load() {
@@ -176,6 +177,11 @@ int FogOfWar::load() {
 }
 
 void FogOfWar::logic() {
+	if (prev_hero_pos.x == pc->stats.pos.x && prev_hero_pos.y == pc->stats.pos.y)
+		return;
+
+	prev_hero_pos = pc->stats.pos;
+
 	updateTiles();
 	if (update_minimap) {
 		calcMiniBoundaries();

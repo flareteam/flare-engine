@@ -396,9 +396,6 @@ void GameStatePlay::checkTeleport() {
 
 		mapr->collider.block(pc->stats.pos.x, pc->stats.pos.y, !MapCollision::IS_ALLY);
 
-		if (mapr->fogofwar)
-			fow->logic();
-
 		pc->stats.teleportation = false;
 	}
 

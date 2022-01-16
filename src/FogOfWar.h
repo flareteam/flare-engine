@@ -83,6 +83,8 @@ private:
 	void calcBoundaries();
 	void calcMiniBoundaries();
 	void updateTiles();
+
+	FPoint prev_hero_pos;
 };
 
 #endif

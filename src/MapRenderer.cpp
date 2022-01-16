@@ -286,6 +286,9 @@ void MapRenderer::loadMusic() {
 }
 
 void MapRenderer::logic(bool paused) {
+	if (fogofwar) {
+		fow->logic();
+	}
 
 	// handle tile set logic e.g. animations
 	tset.logic();
