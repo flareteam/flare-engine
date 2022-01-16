@@ -187,47 +187,24 @@ void Avatar::handleNewMap() {
  * Load avatar sprite layer definitions into vector.
  */
 void Avatar::loadLayerDefinitions() {
-	layer_def = std::vector<std::vector<unsigned> >(8, std::vector<unsigned>());
-	layer_reference_order = std::vector<std::string>();
+	if (!stats.layer_reference_order.empty())
+		return;
+
+	Utils::logError("Avatar: Loading render layers from engine/hero_layers.txt is deprecated! Render layers should be loaded in the 'render_layers' section of engine/stats.txt.");
 
 	FileParser infile;
-	// @CLASS Avatar: Hero layers|Description of engine/hero_layers.txt
 	if (infile.open("engine/hero_layers.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while(infile.next()) {
-			if (infile.key == "layer") {
-				// @ATTR layer|direction, list(string) : Direction, Layer name(s)|Defines the hero avatar sprite layer
-				unsigned dir = Parse::toDirection(Parse::popFirstString(infile.val));
-				if (dir>7) {
-					infile.error("Avatar: Hero layer direction must be in range [0,7]");
-					Utils::logErrorDialog("Avatar: Hero layer direction must be in range [0,7]");
-					mods->resetModConfig();
-					Utils::Exit(1);
-				}
-				std::string layer = Parse::popFirstString(infile.val);
-				while (layer != "") {
-					// check if already in layer_reference:
-					unsigned ref_pos;
-					for (ref_pos = 0; ref_pos < layer_reference_order.size(); ++ref_pos)
-						if (layer == layer_reference_order[ref_pos])
-							break;
-					if (ref_pos == layer_reference_order.size())
-						layer_reference_order.push_back(layer);
-					layer_def[dir].push_back(ref_pos);
+			// hero_layers.txt doesn't have sections, but we now expect the layer key to be under one called "render_layers"
+			if (infile.section.empty())
+				infile.section = "render_layers";
 
-					layer = Parse::popFirstString(infile.val);
-				}
-			}
-			else {
+			if (!stats.loadRenderLayerStat(&infile)) {
 				infile.error("Avatar: '%s' is not a valid key.", infile.key.c_str());
 			}
 		}
 		infile.close();
 	}
-
-	// There are the positions of the items relative to layer_reference_order
-	// so if layer_reference_order=main,body,head,off
-	// and we got a layer=3,off,body,head,main
-	// then the layer_def[3] looks like (3,1,2,0)
 }
 
 void Avatar::loadGraphics(std::vector<Layer_gfx> _img_gfx) {
@@ -1053,8 +1030,8 @@ void Avatar::resetActiveAnimation() {
 
 void Avatar::addRenders(std::vector<Renderable> &r) {
 	if (!stats.transformed) {
-		for (unsigned i = 0; i < layer_def[stats.direction].size(); ++i) {
-			unsigned index = layer_def[stats.direction][i];
+		for (unsigned i = 0; i < stats.layer_def[stats.direction].size(); ++i) {
+			unsigned index = stats.layer_def[stats.direction][i];
 			if (anims[index]) {
 				Renderable ren = anims[index]->getCurrentFrame(stats.direction);
 				ren.map_pos = stats.pos;
@@ -1083,8 +1060,10 @@ void Avatar::addRenders(std::vector<Renderable> &r) {
 		if (stats.effects.effect_list[i].animation && !stats.effects.effect_list[i].animation->isCompleted()) {
 			Renderable ren = stats.effects.effect_list[i].animation->getCurrentFrame(0);
 			ren.map_pos = stats.pos;
-			if (stats.effects.effect_list[i].render_above) ren.prio = layer_def[stats.direction].size()+1;
-			else ren.prio = 0;
+			if (stats.effects.effect_list[i].render_above)
+				ren.prio = stats.layer_def[stats.direction].size()+1;
+			else
+				ren.prio = 0;
 			r.push_back(ren);
 		}
 	}

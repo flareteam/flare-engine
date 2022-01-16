@@ -28,9 +28,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Avatar.h"
 #include "CampaignManager.h"
 #include "CombatText.h"
+#include "EngineSettings.h"
 #include "Entity.h"
 #include "EntityManager.h"
-#include "EngineSettings.h"
 #include "FileParser.h"
 #include "Hazard.h"
 #include "LootManager.h"
@@ -38,6 +38,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MapRenderer.h"
 #include "MenuPowers.h"
 #include "MessageEngine.h"
+#include "ModManager.h"
 #include "PowerManager.h"
 #include "Settings.h"
 #include "SharedGameResources.h"
@@ -188,6 +189,8 @@ StatBlock::StatBlock()
 	, summons()
 	, summoner(NULL)
 	, abort_npc_interact(false)
+	, layer_reference_order()
+	, layer_def(8, std::vector<unsigned>())
 {
 	primary.resize(eset->primary_stats.list.size(), 0);
 	primary_starting.resize(eset->primary_stats.list.size(), 0);
@@ -379,45 +382,101 @@ bool StatBlock::loadSfxStat(FileParser *infile) {
 				sfx_attack[found_index].second.push_back(filename);
 			}
 		}
+
+		return true;
 	}
 	else if (infile->key == "sfx_hit") {
 		// @ATTR sfx_hit|repeatable(filename)|Filename of sound effect for being hit.
 		if (std::find(sfx_hit.begin(), sfx_hit.end(), infile->val) == sfx_hit.end()) {
 			sfx_hit.push_back(infile->val);
 		}
+
+		return true;
 	}
 	else if (infile->key == "sfx_die") {
 		// @ATTR sfx_die|repeatable(filename)|Filename of sound effect for dying.
 		if (std::find(sfx_die.begin(), sfx_die.end(), infile->val) == sfx_die.end()) {
 			sfx_die.push_back(infile->val);
 		}
+
+		return true;
 	}
 	else if (infile->key == "sfx_critdie") {
 		// @ATTR sfx_critdie|repeatable(filename)|Filename of sound effect for dying to a critical hit.
 		if (std::find(sfx_critdie.begin(), sfx_critdie.end(), infile->val) == sfx_critdie.end()) {
 			sfx_critdie.push_back(infile->val);
 		}
+
+		return true;
 	}
 	else if (infile->key == "sfx_block") {
 		// @ATTR sfx_block|repeatable(filename)|Filename of sound effect for blocking an incoming hit.
 		if (std::find(sfx_block.begin(), sfx_block.end(), infile->val) == sfx_block.end()) {
 			sfx_block.push_back(infile->val);
 		}
+
+		return true;
 	}
 	else if (infile->key == "sfx_levelup") {
 		// @ATTR sfx_levelup|filename|Filename of sound effect for leveling up.
 		sfx_levelup = infile->val;
+
+		return true;
 	}
 	else if (infile->key == "sfx_lowhp") {
 		// @ATTR sfx_lowhp|filename, bool: Sound file, loop|Filename of sound effect for low health warning. Optionally, it can be looped.
 		sfx_lowhp = Parse::popFirstString(infile->val);
 		if (infile->val != "") sfx_lowhp_loop = Parse::toBool(infile->val);
-	}
-	else {
-		return false;
+
+		return true;
 	}
 
-	return true;
+	return false;
+}
+
+bool StatBlock::loadRenderLayerStat(FileParser *infile) {
+	// @CLASS StatBlock: Render layers|Description of heroes in engine/avatar/ and enemies in enemies/
+
+	if (infile->section == "render_layers") {
+		if (infile->new_section) {
+			layer_def = std::vector<std::vector<unsigned> >(8, std::vector<unsigned>());
+			layer_reference_order = std::vector<std::string>();
+		}
+
+		if (infile->key == "layer") {
+			// @ATTR layer|direction, list(string) : Direction, Layer name(s)|Defines the layer order of slots for a given direction.
+			unsigned dir = Parse::toDirection(Parse::popFirstString(infile->val));
+			if (dir>7) {
+				infile->error("StatBlock: Render layer direction must be in range [0,7]");
+				Utils::logErrorDialog("StatBlock: Render layer direction must be in range [0,7]");
+				mods->resetModConfig();
+				Utils::Exit(1);
+			}
+
+			std::string layer = Parse::popFirstString(infile->val);
+			while (layer != "") {
+				// check if already in layer_reference:
+				unsigned ref_pos;
+				for (ref_pos = 0; ref_pos < layer_reference_order.size(); ++ref_pos)
+					if (layer == layer_reference_order[ref_pos])
+						break;
+				if (ref_pos == layer_reference_order.size())
+					layer_reference_order.push_back(layer);
+				layer_def[dir].push_back(ref_pos);
+
+				layer = Parse::popFirstString(infile->val);
+			}
+
+			// There are the positions of the items relative to layer_reference_order
+			// so if layer_reference_order=main,body,head,off
+			// and we got a layer=3,off,body,head,main
+			// then the layer_def[3] looks like (3,1,2,0)
+
+			return true;
+		}
+	}
+
+	return false;
 }
 
 bool StatBlock::isNPCStat(FileParser *infile) {
@@ -464,7 +523,7 @@ void StatBlock::load(const std::string& filename) {
 
 		int num = Parse::toInt(infile.val);
 		float fnum = Parse::toFloat(infile.val);
-		bool valid = loadCoreStat(&infile) || loadSfxStat(&infile) || isNPCStat(&infile);
+		bool valid = loadCoreStat(&infile) || loadSfxStat(&infile) || loadRenderLayerStat(&infile) || isNPCStat(&infile);
 
 		// @ATTR name|string|Name
 		if (infile.key == "name") name = msg->get(infile.val);
@@ -1041,7 +1100,7 @@ void StatBlock::loadHeroStats() {
 		while (infile.next()) {
 			int value = Parse::toInt(infile.val);
 
-			bool valid = loadCoreStat(&infile);
+			bool valid = loadCoreStat(&infile) || loadRenderLayerStat(&infile);
 
 			if (infile.key == "max_points_per_stat") {
 				// @ATTR max_points_per_stat|int|Maximum points for each primary stat.

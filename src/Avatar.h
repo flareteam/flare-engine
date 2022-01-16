@@ -127,9 +127,6 @@ public:
 	bool isLowHpSoundEnabled();
 	bool isLowHpCursorEnabled();
 
-	std::vector<std::string> layer_reference_order;
-	std::vector<std::vector<unsigned> > layer_def;
-
 	std::queue<std::pair<std::string, int> > log_msg;
 
 	std::string attack_anim;

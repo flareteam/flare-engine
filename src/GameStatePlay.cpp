@@ -588,15 +588,15 @@ void GameStatePlay::checkEquipmentChange() {
 		int feet_index = -1;
 		std::vector<Avatar::Layer_gfx> img_gfx;
 		// load only displayable layers
-		for (unsigned int j=0; j<pc->layer_reference_order.size(); j++) {
+		for (unsigned int j=0; j<pc->stats.layer_reference_order.size(); j++) {
 			Avatar::Layer_gfx gfx;
 			gfx.gfx = "";
-			gfx.type = pc->layer_reference_order[j];
+			gfx.type = pc->stats.layer_reference_order[j];
 			for (int i=0; i<menu->inv->inventory[MenuInventory::EQUIPMENT].getSlotNumber(); i++) {
 				if (!menu->inv->isActive(i))
 					continue;
 
-				if (pc->layer_reference_order[j] == menu->inv->inventory[MenuInventory::EQUIPMENT].slot_type[i]) {
+				if (pc->stats.layer_reference_order[j] == menu->inv->inventory[MenuInventory::EQUIPMENT].slot_type[i]) {
 					gfx.gfx = items->items[menu->inv->inventory[MenuInventory::EQUIPMENT][i].item].gfx;
 					gfx.type = menu->inv->inventory[MenuInventory::EQUIPMENT].slot_type[i];
 				}
@@ -605,7 +605,7 @@ void GameStatePlay::checkEquipmentChange() {
 				}
 			}
 			// special case: if we don't have a head, use the portrait's head
-			if (gfx.gfx == "" && pc->layer_reference_order[j] == "head") {
+			if (gfx.gfx == "" && pc->stats.layer_reference_order[j] == "head") {
 				gfx.gfx = pc->stats.gfx_head;
 				gfx.type = "head";
 			}
@@ -616,7 +616,7 @@ void GameStatePlay::checkEquipmentChange() {
 			}
 			img_gfx.push_back(gfx);
 		}
-		assert(pc->layer_reference_order.size()==img_gfx.size());
+		assert(pc->stats.layer_reference_order.size()==img_gfx.size());
 		pc->loadGraphics(img_gfx);
 
 		if (feet_index != -1)

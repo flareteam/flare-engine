@@ -116,6 +116,8 @@ public:
 	int getPowerCooldown(PowerID power_id);
 	void setPowerCooldown(PowerID power_id, int power_cooldown);
 
+	bool loadRenderLayerStat(FileParser *infile);
+
 	bool alive;
 	bool corpse; // creature is dead and done animating
 	Timer corpse_timer;
@@ -332,6 +334,9 @@ public:
 	std::vector<EventComponent> invincible_requirements;
 
 	bool abort_npc_interact;
+
+	std::vector<std::string> layer_reference_order;
+	std::vector<std::vector<unsigned> > layer_def;
 };
 
 #endif
