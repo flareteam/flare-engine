@@ -351,40 +351,10 @@ void MenuMiniMap::prerenderOrtho(MapCollision *collider, Sprite** tile_surface, 
 	if (!(*tile_surface))
 		return;
 
-	Image* target_img = (*tile_surface)->getGraphics();
-	const int target_w = (*tile_surface)->getGraphicsWidth();
-	const int target_h = (*tile_surface)->getGraphicsHeight();
-
-	Color draw_color;
-
-	target_img->beginPixelBatch();
-
-	for (int i=0; i<std::min(target_w, map_size.x); i++) {
-		for (int j=0; j<std::min(target_h, map_size.y); j++) {
-			bool draw_tile = true;
-			int tile_type = collider->colmap[i][j];
-
-			if (tile_type == 1 || tile_type == 5) draw_color = color_wall;
-			else if (tile_type == 2 || tile_type == 6) draw_color = color_obst;
-			else draw_tile = false;
-
-			if (mapr->fogofwar) {
-				tile_type = mapr->layers[fow->dark_layer_id][i][j];
-				if (tile_type != 0) draw_tile = false;
-			}
-
-			if (draw_tile && draw_color.a != 0) {
-				for (int l = 0; l < zoom; l++) {
-					for (int k =0; k < zoom; k++) {
-						target_img->drawPixel((zoom*i)+k, (zoom*j)+l, draw_color);
-					}
-				}
-			}
-		}
-	}
-
-	target_img->endPixelBatch();
+	Rect bounds(0, 0, map_size.x, map_size.y);
+	updateOrtho(collider, tile_surface, zoom, &bounds);
 }
+
 void MenuMiniMap::updateOrtho(MapCollision *collider, Sprite** tile_surface, int zoom, Rect *bounds) {
 
 	if (!(*tile_surface))
@@ -394,20 +364,25 @@ void MenuMiniMap::updateOrtho(MapCollision *collider, Sprite** tile_surface, int
 
 	Color draw_color;
 
-	Point hero(pc->stats.pos);
+	if (bounds->x == 0 && bounds->y == 0 && bounds->w == map_size.x && bounds->h == map_size.y) {
+		target_img->beginPixelBatch();
+	}
+	else {
+		Point hero(pc->stats.pos);
 
-	Rect clip;
-	clip.x = (zoom * hero.x) - pos.w/2;
-	clip.y = (zoom * hero.y) - pos.h/2;
-	clip.w = pos.w;
-	clip.h = pos.h;
+		Rect clip;
+		clip.x = (zoom * hero.x) - pos.w/2;
+		clip.y = (zoom * hero.y) - pos.h/2;
+		clip.w = pos.w;
+		clip.h = pos.h;
 
-	if (clip.x<0) clip.x=0;
-	if (clip.y<0) clip.y=0;
-	if (clip.x + clip.w > target_img->getWidth()) clip.w = target_img->getWidth() - clip.x;
-	if (clip.y + clip.h > target_img->getHeight()) clip.h = target_img->getHeight() - clip.y;
+		if (clip.x<0) clip.x=0;
+		if (clip.y<0) clip.y=0;
+		if (clip.x + clip.w > target_img->getWidth()) clip.w = target_img->getWidth() - clip.x;
+		if (clip.y + clip.h > target_img->getHeight()) clip.h = target_img->getHeight() - clip.y;
 
-	target_img->beginPixelBatch(clip);
+		target_img->beginPixelBatch(clip);
+	}
 
 	for (int i=bounds->x; i<bounds->w; i++) {
 		for (int j=bounds->y; j<bounds->h; j++) {
@@ -418,13 +393,15 @@ void MenuMiniMap::updateOrtho(MapCollision *collider, Sprite** tile_surface, int
 			else if (tile_type == 2 || tile_type == 6) draw_color = color_obst;
 			else draw_tile = false;
 
-			tile_type = mapr->layers[fow->dark_layer_id][i][j];
-			if (tile_type != 0) draw_tile = false;
+			if (eset->misc.fogofwar > 0) {
+				tile_type = mapr->layers[fow->dark_layer_id][i][j];
+				if (tile_type != 0) draw_tile = false;
+			}
 
 			if (draw_tile && draw_color.a != 0) {
 				for (int l = 0; l < zoom; l++) {
 					for (int k =0; k < zoom; k++) {
-						target_img->drawPixel((zoom*i)+k, (zoom*j)+l, draw_color);
+						target_img->drawPixel((zoom*i)+k-1, (zoom*j)+l-1, draw_color);
 					}
 				}
 			}
@@ -442,81 +419,8 @@ void MenuMiniMap::prerenderIso(MapCollision *collider, Sprite** tile_surface, Sp
 	if (!(*tile_surface))
 		return;
 
-	// a 2x1 pixel area correlates to a tile, so we can traverse tiles using pixel counting
-	Color draw_color;
-	int tile_type;
-
-	Point tile_cursor;
-	tile_cursor.x = -std::max(map_size.x, map_size.y)/2;
-	tile_cursor.y = std::max(map_size.x, map_size.y)/2;
-
-	bool odd_row = false;
-
-	Image* target_img = (*tile_surface)->getGraphics();
-	const int target_w = (*tile_surface)->getGraphicsWidth();
-	const int target_h = (*tile_surface)->getGraphicsHeight();
-
-	target_img->beginPixelBatch();
-
-	// for each pixel row
-	for (int j=0; j<target_h; j++) {
-
-		// for each 2-px wide column
-		for (int i=0; i<target_w; i+=2) {
-
-			// if this tile is the max map size
-			if (tile_cursor.x >= 0 && tile_cursor.y >= 0 && tile_cursor.x < map_size.x && tile_cursor.y < map_size.y) {
-
-				tile_type = collider->colmap[tile_cursor.x][tile_cursor.y];
-				bool draw_tile = true;
-
-				// walls and low obstacles show as different colors
-				if (tile_type == 1 || tile_type == 5) draw_color = color_wall;
-				else if (tile_type == 2 || tile_type == 6) draw_color = color_obst;
-				else draw_tile = false;
-
-				if (mapr->fogofwar) {
-					tile_type = mapr->layers[fow->dark_layer_id][tile_cursor.x][tile_cursor.y];
-					if (tile_type != 0) draw_tile = false;
-				}
-
-				if (draw_tile && draw_color.a != 0) {
-					if (odd_row) {
-						for (int l = 0; l < zoom; l++) {
-							for (int k = 0; k < zoom * 2; k++) {
-								target_img->drawPixel((zoom*i)+k, (zoom*j)+l, draw_color);
-							}
-						}
-					}
-					else {
-						for (int l = 0; l < zoom; l++) {
-							for (int k = -((zoom * 2) - zoom); k < zoom; k++) {
-								target_img->drawPixel((zoom*i)+k, (zoom*j)+l, draw_color);
-							}
-						}
-					}
-				}
-			}
-
-			// moving screen-right in isometric is +x -y in map coordinates
-			tile_cursor.x++;
-			tile_cursor.y--;
-		}
-
-		// return tile cursor to next row of tiles
-		if (odd_row) {
-			odd_row = false;
-			tile_cursor.x -= target_w/2;
-			tile_cursor.y += (target_w/2 +1);
-		}
-		else {
-			odd_row = true;
-			tile_cursor.x -= (target_w/2 -1);
-			tile_cursor.y += target_w/2;
-		}
-	}
-
-	target_img->endPixelBatch();
+	Rect bounds(0, 0, map_size.x, map_size.y);
+	updateIso(collider, tile_surface, zoom, &bounds);
 }
 
 void MenuMiniMap::updateIso(MapCollision *collider, Sprite** tile_surface, int zoom, Rect *bounds) {
@@ -530,23 +434,28 @@ void MenuMiniMap::updateIso(MapCollision *collider, Sprite** tile_surface, int z
 	Point ent_pos;
 	Image* target_img = (*tile_surface)->getGraphics();
 
-	Point hero(pc->stats.pos);
-	Point hero_offset;
-	hero_offset.x = hero.x - hero.y + std::max(map_size.x, map_size.y);
-	hero_offset.y = hero.x + hero.y;
+	if (bounds->x == 0 && bounds->y == 0 && bounds->w == map_size.x && bounds->h == map_size.y) {
+		target_img->beginPixelBatch();
+	}
+	else {
+		Point hero(pc->stats.pos);
+		Point hero_offset;
+		hero_offset.x = hero.x - hero.y + std::max(map_size.x, map_size.y);
+		hero_offset.y = hero.x + hero.y;
 
-	Rect clip;
-	clip.x = (zoom * hero_offset.x) - pos.w/2;
-	clip.y = (zoom * hero_offset.y) - pos.h/2;
-	clip.w = pos.w;
-	clip.h = pos.h;
+		Rect clip;
+		clip.x = (zoom * hero_offset.x) - pos.w/2;
+		clip.y = (zoom * hero_offset.y) - pos.h/2;
+		clip.w = pos.w;
+		clip.h = pos.h;
 
-	if (clip.x<0) clip.x=0;
-	if (clip.y<0) clip.y=0;
-	if (clip.x + clip.w > target_img->getWidth()) clip.w = target_img->getWidth() - clip.x;
-	if (clip.y + clip.h > target_img->getHeight()) clip.h = target_img->getHeight() - clip.y;
+		if (clip.x<0) clip.x=0;
+		if (clip.y<0) clip.y=0;
+		if (clip.x + clip.w > target_img->getWidth()) clip.w = target_img->getWidth() - clip.x;
+		if (clip.y + clip.h > target_img->getHeight()) clip.h = target_img->getHeight() - clip.y;
 
-	target_img->beginPixelBatch(clip);
+		target_img->beginPixelBatch(clip);
+	}
 
 	for (int i=bounds->x; i<bounds->w; i++) {
 		for (int j=bounds->y; j<bounds->h; j++) {
@@ -558,12 +467,14 @@ void MenuMiniMap::updateIso(MapCollision *collider, Sprite** tile_surface, int z
 			else draw_tile = false;
 
 			// fog of war
-			tile_type = mapr->layers[fow->dark_layer_id][i][j];
-			if (tile_type != 0) draw_tile = false;
+			if (eset->misc.fogofwar > 0) {
+				tile_type = mapr->layers[fow->dark_layer_id][i][j];
+				if (tile_type != 0) draw_tile = false;
+			}
 
 			if (draw_tile) {
-				ent_pos.x = zoom*(i - 1 - j + std::max(map_size.x, map_size.y));
-				ent_pos.y = zoom*(i + j);
+				ent_pos.x = zoom*(i - j + std::max(map_size.x, map_size.y));
+				ent_pos.y = zoom*(i + j) - 1;
 
 				for (int l = 0; l < zoom; l++) {
 					for (int k = 0; k < zoom; k++) {
@@ -593,7 +504,7 @@ void MenuMiniMap::renderEntitiesOrtho(Sprite* entity_surface, int zoom, const Po
 	for (size_t i=0; i<entities.size(); i++) {
 		for (int l = 0; l < zoom; l++) {
 			for (int k = 0; k < zoom; k++) {
-				target_img->drawPixel(zoom*entities[i]->x-entity_offset.x+k, zoom*entities[i]->y-entity_offset.y+l, *entities[i]->color);
+				target_img->drawPixel(zoom*entities[i]->x-entity_offset.x+k-1, zoom*entities[i]->y-entity_offset.y+l-1, *entities[i]->color);
 			}
 		}
 	}
@@ -616,8 +527,8 @@ void MenuMiniMap::renderEntitiesIso(Sprite* entity_surface, int zoom, const Poin
 	target_img->beginPixelBatch();
 
 	for (size_t i=0; i<entities.size(); i++) {
-		ent_pos.x = zoom*(entities[i]->x - 1 - entities[i]->y + std::max(map_size.x, map_size.y)) - entity_offset.x;
-		ent_pos.y = zoom*(entities[i]->x + entities[i]->y) - entity_offset.y;
+		ent_pos.x = zoom*(entities[i]->x - entities[i]->y + std::max(map_size.x, map_size.y)) - entity_offset.x;
+		ent_pos.y = zoom*(entities[i]->x + entities[i]->y) - entity_offset.y - 1;
 
 		for (int l = 0; l < zoom; l++) {
 			for (int k = 0; k < zoom; k++) {
