@@ -354,7 +354,7 @@ void MenuActionBar::logic() {
 			else {
 				for (size_t j = 0; j < power.required_items.size(); ++j) {
 					if (power.required_items[j].equipped) {
-						if (!menu->inv->inventory[MenuInventory::EQUIPMENT].contain(power.required_items[j].id, 1))
+						if (!menu->inv->equipmentContain(power.required_items[j].id, 1))
 							setItemCount(i, 0, IS_EQUIPPED);
 						else
 							setItemCount(i, 1, IS_EQUIPPED);

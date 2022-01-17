@@ -143,7 +143,7 @@ bool CampaignManager::checkItem(ItemStack istack) {
 	if (menu->inv->inventory[MenuInventory::CARRIED].contain(istack.item, istack.quantity))
 		return true;
 	else
-		return menu->inv->inventory[MenuInventory::EQUIPMENT].contain(istack.item, istack.quantity);
+		return menu->inv->equipmentContain(istack.item, istack.quantity);
 }
 
 void CampaignManager::removeCurrency(int quantity) {

@@ -1580,6 +1580,22 @@ bool MenuInventory::canUseItem(const Point& position) {
 	return canActivateItem(item_id);
 }
 
+// same as ItemStorage::contain(), but accounts for active equipment set
+bool MenuInventory::equipmentContain(ItemID item, int quantity) {
+	int total_quantity = 0;
+	for (int i = 0; i < MAX_EQUIPPED; ++i) {
+		if (!isActive(i))
+			continue;
+
+		if (inventory[EQUIPMENT][i].item == item)
+			total_quantity += inventory[EQUIPMENT][i].quantity;
+
+		if (total_quantity >= quantity)
+			return true;
+	}
+	return false;
+}
+
 MenuInventory::~MenuInventory() {
 	delete closeButton;
 	for (size_t i=0; i<equipmentSetButton.size(); i++) {

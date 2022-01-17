@@ -138,6 +138,8 @@ public:
 	bool canEquipItem(const Point& position);
 	bool canUseItem(const Point& position);
 
+	bool equipmentContain(ItemID item, int quantity);
+
 	Rect carried_area;
 	std::vector<Rect> equipped_area;
 	std::vector<std::string> slot_type;
