@@ -491,6 +491,7 @@ void SaveLoad::loadClass(int index) {
 	}
 	menu->inv->addCurrency(eset->hero_classes.list[index].currency);
 	menu->inv->inventory[MenuInventory::EQUIPMENT].setItems(eset->hero_classes.list[index].equipment);
+	menu->inv->fillEquipmentSlots();
 	for (unsigned i=0; i<eset->hero_classes.list[index].powers.size(); i++) {
 		pc->stats.powers_list.push_back(eset->hero_classes.list[index].powers[i]);
 	}

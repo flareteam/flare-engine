@@ -1411,6 +1411,51 @@ void MenuInventory::clearHighlight() {
 	inventory[CARRIED].highlightClear();
 }
 
+/**
+ * Sort equipment storage array, so items order matches slots order
+ */
+void MenuInventory::fillEquipmentSlots() {
+	// create temporary arrays
+	int slot_number = MAX_EQUIPPED;
+	ItemID *equip_item = new ItemID[slot_number];
+	int *equip_quantity = new int[slot_number];;
+
+	// initialize arrays
+	for (int i=0; i<slot_number; i++) {
+		equip_item[i] = inventory[EQUIPMENT].storage[i].item;
+		equip_quantity[i] = inventory[EQUIPMENT].storage[i].quantity;
+	}
+	// clean up storage[]
+	for (int i=0; i<slot_number; i++) {
+		inventory[EQUIPMENT].storage[i].clear();
+	}
+
+	// fill slots with items
+	for (int i=0; i<slot_number; i++) {
+		bool found_slot = false;
+		for (int j=0; j<slot_number; j++) {
+			// search for empty slot with needed type. If item is not NULL, put it there
+			if (equip_item[i] > 0 && inventory[EQUIPMENT].storage[j].empty()) {
+				if (items->items[equip_item[i]].type == slot_type[j]) {
+					inventory[EQUIPMENT].storage[j].item = equip_item[i];
+					inventory[EQUIPMENT].storage[j].quantity = (equip_quantity[i] > 0) ? equip_quantity[i] : 1;
+					found_slot = true;
+					break;
+				}
+			}
+		}
+		// couldn't find a slot, adding to inventory
+		if (!found_slot && equip_item[i] > 0) {
+			ItemStack stack;
+			stack.item = equip_item[i];
+			stack.quantity = (equip_quantity[i] > 0) ? equip_quantity[i] : 1;
+			add(stack, CARRIED, ItemStorage::NO_SLOT, !ADD_PLAY_SOUND, !ADD_AUTO_EQUIP);
+		}
+	}
+	delete [] equip_item;
+	delete [] equip_quantity;
+}
+
 int MenuInventory::getMaxPurchasable(ItemStack item, int vendor_tab) {
 	if (vendor_tab == ItemManager::VENDOR_BUY)
 		return currency / items->items[item.item].getPrice();
