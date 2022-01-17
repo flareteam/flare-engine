@@ -61,8 +61,6 @@ MenuStash::MenuStash()
 	, activetab(0)
 	, tabs()
 {
-	setBackground("images/menus/stash.png");
-
 	int slots_cols = 8; // default if menus/stash.txt::stash_cols not set
 	int slots_rows = 8; // default if menus/stash.txt::slots_rows not set
 
@@ -195,6 +193,9 @@ MenuStash::MenuStash()
 			tabs[i].tablist.add(tabs[i].stock.slots[j]);
 		}
 	}
+
+	if (!background)
+		setBackground("images/menus/stash.png");
 
 	align();
 }

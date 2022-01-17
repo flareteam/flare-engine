@@ -75,7 +75,8 @@ MenuGameOver::MenuGameOver()
 	tablist.add(button_continue);
 	tablist.add(button_exit);
 
-	setBackground("images/menus/game_over.png");
+	if (!background)
+		setBackground("images/menus/game_over.png");
 
 	align();
 

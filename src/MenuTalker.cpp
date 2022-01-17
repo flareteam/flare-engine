@@ -70,10 +70,8 @@ MenuTalker::MenuTalker()
 	, npc(NULL)
 	, advanceButton(new WidgetButton("images/menus/buttons/right.png"))
 	, closeButton(new WidgetButton("images/menus/buttons/button_x.png"))
-	, npc_from_map(true) {
-
-	setBackground("images/menus/dialog_box.png");
-
+	, npc_from_map(true)
+{
 	// Load config settings
 	FileParser infile;
 	// @CLASS MenuTalker|Description of menus/talker.txt
@@ -133,6 +131,9 @@ MenuTalker::MenuTalker()
 	textbox = new WidgetScrollBox(text_pos.w, text_pos.h-(text_offset.y*2));
 	textbox->setBasePos(text_pos.x, text_pos.y + text_offset.y, Utils::ALIGN_TOPLEFT);
 	textbox->show_focus_when_scrollbar_disabled = false;
+
+	if (!background)
+		setBackground("images/menus/dialog_box.png");
 
 	align();
 }

@@ -107,7 +107,8 @@ MenuDevConsole::MenuDevConsole()
 	log_history->setBasePos(history_area.x, history_area.y, Utils::ALIGN_TOPLEFT);
 	tablist.add(log_history->getWidget());
 
-	setBackground("images/menus/dev_console.png");
+	if (!background)
+		setBackground("images/menus/dev_console.png");
 
 	align();
 	reset();

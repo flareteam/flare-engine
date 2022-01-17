@@ -221,7 +221,8 @@ void MenuPowers::loadGraphics() {
 
 	Image *graphics;
 
-	setBackground("images/menus/powers.png");
+	if (!background)
+		setBackground("images/menus/powers.png");
 
 	graphics = render_device->loadImage("images/menus/powers_unlock.png", RenderDevice::ERROR_NORMAL);
 	if (graphics) {

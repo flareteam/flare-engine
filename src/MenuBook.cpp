@@ -70,7 +70,7 @@ void MenuBook::loadBook() {
 		last_book_name = book_name;
 
 		while (infile.next()) {
-			if (parseMenuKey(infile.key, infile.val))
+			if (infile.section.empty() && parseMenuKey(infile.key, infile.val))
 				continue;
 
 			infile.val = infile.val + ',';
@@ -81,11 +81,7 @@ void MenuBook::loadBook() {
 				int y = Parse::popFirstInt(infile.val);
 				closeButton->setBasePos(x, y, Utils::ALIGN_TOPLEFT);
 			}
-			// @ATTR background|filename|Filename for the background image.
-			else if (infile.key == "background") {
-				setBackground(Parse::popFirstString(infile.val));
-			}
-			else if (infile.section == "") {
+			else if (infile.section.empty()) {
 				infile.error("MenuBook: '%s' is not a valid key.", infile.key.c_str());
 			}
 

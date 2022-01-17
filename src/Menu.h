@@ -55,8 +55,10 @@ public:
 	virtual TabList* getCurrentTabList();
 	virtual void defocusTabLists();
 
-private:
+protected:
 	Sprite *background;
+
+private:
 	Point window_area_base;
 };
 

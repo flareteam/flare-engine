@@ -51,7 +51,9 @@ MenuConfirm::MenuConfirm()
 	tablist.add(action_list);
 	// tablist.add(button_close);
 
-	setBackground("images/menus/confirm_bg.png");
+	if (!background)
+		setBackground("images/menus/confirm_bg.png");
+
 	align();
 }
 

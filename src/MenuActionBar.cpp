@@ -291,7 +291,8 @@ void MenuActionBar::clear(bool skip_items) {
 void MenuActionBar::loadGraphics() {
 	Image *graphics;
 
-	setBackground("images/menus/actionbar_trim.png");
+	if (!background)
+		setBackground("images/menus/actionbar_trim.png");
 
 	Rect icon_clip;
 	icon_clip.w = icon_clip.h = eset->resolutions.icon_size;

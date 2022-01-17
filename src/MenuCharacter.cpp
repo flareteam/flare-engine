@@ -228,7 +228,8 @@ MenuCharacter::MenuCharacter()
 	// frequently refreshing trimmed text is slow for Cyrillic characters, so disable it here
 	statList->disable_text_trim = true;
 
-	setBackground("images/menus/character.png");
+	if (!background)
+		setBackground("images/menus/character.png");
 
 	align();
 

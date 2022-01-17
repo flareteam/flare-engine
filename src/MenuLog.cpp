@@ -90,7 +90,8 @@ MenuLog::MenuLog() {
 	tabControl->setupTab(TYPE_QUESTS, msg->get("Quests"), &tablist_log[TYPE_QUESTS]);
 	tabControl->setupTab(TYPE_MESSAGES, msg->get("Notes"), &tablist_log[TYPE_MESSAGES]);
 
-	setBackground("images/menus/log.png");
+	if (!background)
+		setBackground("images/menus/log.png");
 
 	align();
 }

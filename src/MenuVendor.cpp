@@ -53,9 +53,8 @@ MenuVendor::MenuVendor()
 	, activetab(ItemManager::VENDOR_BUY)
 	, tip (new WidgetTooltip())
 	, npc(NULL)
-	, buyback_stock() {
-	setBackground("images/menus/vendor.png");
-
+	, buyback_stock()
+{
 	tabControl->setupTab(ItemManager::VENDOR_BUY, msg->get("Inventory"), &tablist_buy);
 	tabControl->setupTab(ItemManager::VENDOR_SELL, msg->get("Buyback"), &tablist_sell);
 
@@ -116,6 +115,9 @@ MenuVendor::MenuVendor()
 	for (unsigned i = 0; i < VENDOR_SLOTS; i++) {
 		tablist_sell.add(stock[ItemManager::VENDOR_SELL].slots[i]);
 	}
+
+	if (!background)
+		setBackground("images/menus/vendor.png");
 
 	align();
 }

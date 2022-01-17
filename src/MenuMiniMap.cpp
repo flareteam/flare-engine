@@ -74,8 +74,6 @@ MenuMiniMap::MenuMiniMap()
 	, clicked_config(false)
 
 {
-	std::string bg_filename;
-
 	// Load config settings
 	FileParser infile;
 	// @CLASS MenuMiniMap|Description of menus/minimap.txt
@@ -91,10 +89,6 @@ MenuMiniMap::MenuMiniMap()
 			// @ATTR text_pos|label|Position of the text label with the map name.
 			else if(infile.key == "text_pos") {
 				label->setFromLabelInfo(Parse::popLabelInfo(infile.val));
-			}
-			// @ATTR background|filename|Optional background image.
-			else if (infile.key == "background") {
-				bg_filename = infile.val;
 			}
 			// @ATTR color_wall|color, int : Color, Alpha|Color used for walls.
 			else if (infile.key == "color_wall") {
@@ -142,9 +136,6 @@ MenuMiniMap::MenuMiniMap()
 	visible_radius = static_cast<float>(std::max(pos.w, pos.h))*0.7071f;
 
 	label->setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
-
-	if (!bg_filename.empty())
-		setBackground(bg_filename);
 
 	// load compass image
 	Image *gfx = NULL;

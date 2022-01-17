@@ -101,7 +101,8 @@ MenuNumPicker::MenuNumPicker()
 		infile.close();
 	}
 
-	setBackground("images/menus/num_picker_bg.png");
+	if (!background)
+		setBackground("images/menus/num_picker_bg.png");
 
 	tablist.add(button_ok);
 	tablist.add(button_up);

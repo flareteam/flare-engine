@@ -73,8 +73,6 @@ MenuInventory::MenuInventory()
 {
 	visible = false;
 
-	setBackground("images/menus/inventory.png");
-
 	// raw data for equipment swap buttons
 	std::map<unsigned, std::string> raw_set_button;
 	std::string raw_previous;
@@ -227,6 +225,9 @@ MenuInventory::MenuInventory()
 	if (max_equipment_set > 0) {
 		applyEquipmentSet(1);
 	}
+
+	if (!background)
+		setBackground("images/menus/inventory.png");
 
 	align();
 }

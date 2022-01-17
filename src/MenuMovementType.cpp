@@ -97,7 +97,8 @@ MenuMovementType::MenuMovementType()
 	tablist.add(button_mouse);
 	tablist.add(button_joystick);
 
-	setBackground("images/menus/movement_type.png");
+	if (!background)
+		setBackground("images/menus/movement_type.png");
 
 	// load icons
 	Image *graphics;

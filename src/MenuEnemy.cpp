@@ -96,7 +96,8 @@ MenuEnemy::MenuEnemy()
 void MenuEnemy::loadGraphics() {
 	Image *graphics;
 
-	setBackground("images/menus/enemy_bar.png");
+	if (!background)
+		setBackground("images/menus/enemy_bar.png");
 
 	graphics = render_device->loadImage("images/menus/enemy_bar_hp.png", RenderDevice::ERROR_NORMAL);
 	if (graphics) {

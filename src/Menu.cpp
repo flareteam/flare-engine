@@ -119,6 +119,10 @@ bool Menu::parseMenuKey(const std::string &key, const std::string &val) {
 		// @ATTR soundfx_close|filename|Filename of a sound to play when closing this menu.
 		sfx_close = snd->load(value, "Menu close tab");
 	}
+	else if (key == "background") {
+		// @ATTR background|filename|Filename of the background image for this menu.
+		setBackground(value);
+	}
 	else {
 		//not a common key
 		return false;
