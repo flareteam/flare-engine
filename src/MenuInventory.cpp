@@ -1305,30 +1305,36 @@ void MenuInventory::applyBonus(const BonusData* bdata) {
 }
 
 void MenuInventory::applyEquipmentSet(unsigned set) {
+	unsigned prev_equipment_set = active_equipment_set;
+
 	if (set > 0 && set <= max_equipment_set) {
 		active_equipment_set = set;
 		updateEquipmentSetWidgets();
+	}
+
+	if (active_equipment_set > 0 && prev_equipment_set != active_equipment_set) {
+		if (!visible && menu && menu->hudlog) {
+			menu->hudlog->add(msg->get("Equipped set %d.", static_cast<int>(active_equipment_set)), MenuHUDLog::MSG_NORMAL);
+		}
 	}
 }
 
 void MenuInventory::applyNextEquipmentSet() {
 	if (active_equipment_set < max_equipment_set) {
-		active_equipment_set++;
+		applyEquipmentSet(active_equipment_set+1);
 	}
 	else {
-		active_equipment_set = 1;
+		applyEquipmentSet(1);
 	}
-	updateEquipmentSetWidgets();
 }
 
 void MenuInventory::applyPreviousEquipmentSet() {
 	if (active_equipment_set > 1) {
-		active_equipment_set--;
+		applyEquipmentSet(active_equipment_set-1);
 	}
 	else {
-		active_equipment_set = max_equipment_set;
+		applyEquipmentSet(max_equipment_set);
 	}
-	updateEquipmentSetWidgets();
 }
 
 void MenuInventory::updateEquipmentSetWidgets() {
@@ -1379,12 +1385,6 @@ void MenuInventory::updateEquipmentSetWidgets() {
 		label << active_equipment_set << "/" << max_equipment_set;
 		equipmentSetLabel->setText(label.str());
 		equipmentSetLabel->setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
-	}
-
-	if (active_equipment_set > 0) {
-		if (!visible && menu && menu->hudlog) {
-			menu->hudlog->add(msg->get("Equipped set %d.", static_cast<int>(active_equipment_set)), MenuHUDLog::MSG_NORMAL);
-		}
 	}
 
 	changed_equipment = true;
