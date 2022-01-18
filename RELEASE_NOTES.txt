@@ -12,6 +12,7 @@ Engine features:
 * Added an "action picker" for interacting with items/powers when using a gamepad or a touchscreen.
 * Added misc.selection_rect_corner_size to engine/widget_settings.txt. This allows for a nicer "targeting reticle" appearance when selecting widgets without a mouse.
 * Added 'background' property for all menus. Menus will fall back to the existing hard-coded filenames if this property is omitted.
+* Added 'close', 'label_title', and 'action_list' properties to MenuConfirm configuration.
 
 Engine fixes:
 

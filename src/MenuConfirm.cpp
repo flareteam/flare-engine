@@ -24,6 +24,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "InputState.h"
 #include "MenuConfirm.h"
 #include "SharedResources.h"
+#include "UtilsParsing.h"
 #include "WidgetButton.h"
 #include "WidgetHorizontalList.h"
 
@@ -36,20 +37,52 @@ MenuConfirm::MenuConfirm()
 	, clicked_confirm(false)
 	, clicked_cancel(false)
 {
+	label.setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
+
+	action_list->has_action = true;
+	action_list->refresh();
+
 	// Load config settings
 	FileParser infile;
+	// @CLASS MenuConfirm|Description of menus/confirm.txt
 	if(infile.open("menus/confirm.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while(infile.next()) {
-			if (parseMenuKey(infile.key, infile.val))
+			if (parseMenuKey(infile.key, infile.val)) {
+				// default positions based on window_area
+				if (infile.key == "pos") {
+					int border_size = 6;
+
+					button_close->setBasePos(window_area.w, 0, Utils::ALIGN_TOPLEFT);
+					action_list->setBasePos(window_area.w/2 - action_list->pos.w/2, window_area.h - action_list->pos.h - border_size, Utils::ALIGN_TOPLEFT);
+
+					LabelInfo label_info;
+					label_info.x = window_area.w/2;
+					label_info.y = border_size;
+					label_info.justify = FontEngine::JUSTIFY_CENTER;
+					label.setFromLabelInfo(label_info);
+				}
 				continue;
+			}
+
+			if (infile.key == "close") {
+				// @ATTR close|point|Position of the close button.
+				Point pos = Parse::toPoint(infile.val);
+				button_close->setBasePos(pos.x, pos.y, Utils::ALIGN_TOPLEFT);
+			}
+			else if (infile.key == "label_title") {
+				// @ATTR label_title|label|Position of the title text.
+				label.setFromLabelInfo(Parse::popLabelInfo(infile.val));
+			}
+			else if (infile.key == "action_list") {
+				// @ATTR action_list|point|Position of the action selector widget.
+				Point pos = Parse::toPoint(infile.val);
+				action_list->setBasePos(pos.x, pos.y, Utils::ALIGN_TOPLEFT);
+			}
 		}
 		infile.close();
 	}
 
-	action_list->has_action = true;
-
 	tablist.add(action_list);
-	// tablist.add(button_close);
 
 	if (!background)
 		setBackground("images/menus/confirm_bg.png");
@@ -60,17 +93,13 @@ MenuConfirm::MenuConfirm()
 void MenuConfirm::align() {
 	Menu::align();
 
-	label.setJustify(FontEngine::JUSTIFY_CENTER);
 	label.setText(title);
-	label.setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
-	action_list->pos.x = window_area.x + window_area.w/2 - action_list->pos.w/2;
-	action_list->pos.y = window_area.y + window_area.h/2;
+	action_list->setPos(window_area.x, window_area.y);
 	action_list->refresh();
-	label.setPos(window_area.x + window_area.w/2, window_area.y + window_area.h - (action_list->pos.h * 2));
+	label.setPos(window_area.x, window_area.y);
 
-	button_close->pos.x = window_area.x + window_area.w;
-	button_close->pos.y = window_area.y;
+	button_close->setPos(window_area.x, window_area.y);
 }
 
 void MenuConfirm::logic() {
