@@ -62,7 +62,7 @@ void Map::clearLayers() {
 
 void Map::clearQueues() {
 	enemies = std::queue<Map_Enemy>();
-	npcs = std::queue<Map_NPC>();
+	map_npcs = std::queue<Map_NPC>();
 }
 
 void Map::clearEvents() {
@@ -110,7 +110,7 @@ int Map::load(const std::string& fname) {
 			if (infile.section == "enemy")
 				enemy_groups.push(Map_Group());
 			else if (infile.section == "npc")
-				npcs.push(Map_NPC());
+				map_npcs.push(Map_NPC());
 			else if (infile.section == "event")
 				events.push_back(Event());
 
@@ -474,16 +474,16 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 void Map::loadNPC(FileParser &infile) {
 	if (infile.key == "type") {
 		// @ATTR npc.type|string|(IGNORED BY ENGINE) The "type" field, as used by Tiled and other mapping tools.
-		npcs.back().type = infile.val;
+		map_npcs.back().type = infile.val;
 	}
 	else if (infile.key == "filename") {
 		// @ATTR npc.filename|string|Filename of an NPC definition.
-		npcs.back().id = infile.val;
+		map_npcs.back().id = infile.val;
 	}
 	else if (infile.key == "location") {
 		// @ATTR npc.location|point|Location of NPC
-		npcs.back().pos.x = static_cast<float>(Parse::popFirstInt(infile.val)) + 0.5f;
-		npcs.back().pos.y = static_cast<float>(Parse::popFirstInt(infile.val)) + 0.5f;
+		map_npcs.back().pos.x = static_cast<float>(Parse::popFirstInt(infile.val)) + 0.5f;
+		map_npcs.back().pos.y = static_cast<float>(Parse::popFirstInt(infile.val)) + 0.5f;
 	}
 	else if (infile.key == "requires_status") {
 		// @ATTR npc.requires_status|list(string)|Statuses required to be set for NPC load
@@ -492,7 +492,7 @@ void Map::loadNPC(FileParser &infile) {
 			EventComponent ec;
 			ec.type = EventComponent::REQUIRES_STATUS;
 			ec.status = camp->registerStatus(s);
-			npcs.back().requirements.push_back(ec);
+			map_npcs.back().requirements.push_back(ec);
 		}
 	}
 	else if (infile.key == "requires_not_status") {
@@ -502,7 +502,7 @@ void Map::loadNPC(FileParser &infile) {
 			EventComponent ec;
 			ec.type = EventComponent::REQUIRES_NOT_STATUS;
 			ec.status = camp->registerStatus(s);
-			npcs.back().requirements.push_back(ec);
+			map_npcs.back().requirements.push_back(ec);
 		}
 	}
 	else if (infile.key == "requires_level") {
@@ -510,28 +510,28 @@ void Map::loadNPC(FileParser &infile) {
 		EventComponent ec;
 		ec.type = EventComponent::REQUIRES_LEVEL;
 		ec.x = Parse::popFirstInt(infile.val);
-		npcs.back().requirements.push_back(ec);
+		map_npcs.back().requirements.push_back(ec);
 	}
 	else if (infile.key == "requires_not_level") {
 		// @ATTR npc.requires_not_level|int|Player level must be lesser to load NPC
 		EventComponent ec;
 		ec.type = EventComponent::REQUIRES_NOT_LEVEL;
 		ec.x = Parse::popFirstInt(infile.val);
-		npcs.back().requirements.push_back(ec);
+		map_npcs.back().requirements.push_back(ec);
 	}
 	else if (infile.key == "requires_currency") {
 		// @ATTR npc.requires_currency|int|Player currency must be equal or greater to load NPC
 		EventComponent ec;
 		ec.type = EventComponent::REQUIRES_CURRENCY;
 		ec.x = Parse::popFirstInt(infile.val);
-		npcs.back().requirements.push_back(ec);
+		map_npcs.back().requirements.push_back(ec);
 	}
 	else if (infile.key == "requires_not_currency") {
 		// @ATTR npc.requires_not_currency|int|Player currency must be lesser to load NPC
 		EventComponent ec;
 		ec.type = EventComponent::REQUIRES_NOT_CURRENCY;
 		ec.x = Parse::popFirstInt(infile.val);
-		npcs.back().requirements.push_back(ec);
+		map_npcs.back().requirements.push_back(ec);
 	}
 	else if (infile.key == "requires_item") {
 		// @ATTR npc.requires_item|list(item_id)|Item required to exist in player inventory to load NPC. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.
@@ -542,7 +542,7 @@ void Map::loadNPC(FileParser &infile) {
 			ec.type = EventComponent::REQUIRES_ITEM;
 			ec.id = item_stack.item;
 			ec.x = item_stack.quantity;
-			npcs.back().requirements.push_back(ec);
+			map_npcs.back().requirements.push_back(ec);
 		}
 	}
 	else if (infile.key == "requires_not_item") {
@@ -554,7 +554,7 @@ void Map::loadNPC(FileParser &infile) {
 			ec.type = EventComponent::REQUIRES_NOT_ITEM;
 			ec.id = item_stack.item;
 			ec.x = item_stack.quantity;
-			npcs.back().requirements.push_back(ec);
+			map_npcs.back().requirements.push_back(ec);
 		}
 	}
 	else if (infile.key == "requires_class") {
@@ -562,14 +562,14 @@ void Map::loadNPC(FileParser &infile) {
 		EventComponent ec;
 		ec.type = EventComponent::REQUIRES_CLASS;
 		ec.s = Parse::popFirstString(infile.val);
-		npcs.back().requirements.push_back(ec);
+		map_npcs.back().requirements.push_back(ec);
 	}
 	else if (infile.key == "requires_not_class") {
 		// @ATTR npc.requires_not_class|predefined_string|Player base class not required to load NPC
 		EventComponent ec;
 		ec.type = EventComponent::REQUIRES_NOT_CLASS;
 		ec.s = Parse::popFirstString(infile.val);
-		npcs.back().requirements.push_back(ec);
+		map_npcs.back().requirements.push_back(ec);
 	}
 	else {
 		infile.error("Map: '%s' is not a valid key.", infile.key.c_str());

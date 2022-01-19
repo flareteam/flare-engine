@@ -880,6 +880,7 @@ void Avatar::transform() {
 	stats.animations = charmed_stats->animations;
 	stats.layer_reference_order = charmed_stats->layer_reference_order;
 	stats.layer_def = charmed_stats->layer_def;
+	stats.animation_slots = charmed_stats->animation_slots;
 
 	anim->decreaseCount(hero_stats->animations);
 	animationSet = NULL;
@@ -945,6 +946,7 @@ void Avatar::untransform() {
 	stats.animations = hero_stats->animations;
 	stats.layer_reference_order = hero_stats->layer_reference_order;
 	stats.layer_def = hero_stats->layer_def;
+	stats.animation_slots = hero_stats->animation_slots;
 
 	anim->decreaseCount(charmed_stats->animations);
 	animationSet = NULL;

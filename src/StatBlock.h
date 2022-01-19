@@ -117,6 +117,7 @@ public:
 	void setPowerCooldown(PowerID power_id, int power_cooldown);
 
 	bool loadRenderLayerStat(FileParser *infile);
+	bool loadAnimationSlotStat(FileParser *infile);
 
 	bool alive;
 	bool corpse; // creature is dead and done animating
@@ -337,6 +338,8 @@ public:
 
 	std::vector<std::string> layer_reference_order;
 	std::vector<std::vector<unsigned> > layer_def;
+
+	std::map<std::string, std::string> animation_slots;
 };
 
 #endif

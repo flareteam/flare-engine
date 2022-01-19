@@ -89,7 +89,7 @@ public:
 	StatBlock stats;
 
 	unsigned char faceNextBest(float mapx, float mapy);
-	Rect getRenderBounds(const FPoint& cam);
+	Rect getRenderBounds(const FPoint& cam) const;
 
 	std::string type_filename;
 

@@ -79,9 +79,9 @@ void NPCManager::handleNewMap() {
 	npcs.clear();
 
 	// read the queued NPCs in the map file
-	while (!mapr->npcs.empty()) {
-		mn = mapr->npcs.front();
-		mapr->npcs.pop();
+	while (!mapr->map_npcs.empty()) {
+		mn = mapr->map_npcs.front();
+		mapr->map_npcs.pop();
 
 		if (!camp->checkRequirementsInVector(mn.requirements))
 			continue;
@@ -157,24 +157,19 @@ void NPCManager::createMapEvent(const NPC& npc, size_t _npcs) {
 	ec.s = npc.name;
 	ev.components.push_back(ec);
 
-	// The hitbox for hovering/clicking on an npc is based on their first frame of animation
-	// This might cause some undesired behavior for npcs that have packed animations and a lot of variation
-	// However, it is sufficient for all of our current game data (fantasycore, no-name mod, polymorphable)
-	if (npc.activeAnimation) {
-		Renderable ren = npc.activeAnimation->getCurrentFrame(npc.direction);
-		ec.type = EventComponent::NPC_HOTSPOT;
-		ec.x = static_cast<int>(npc.stats.pos.x);
-		ec.y = static_cast<int>(npc.stats.pos.y);
-		ec.z = ren.offset.x;
-		ec.a = ren.offset.y;
-		ec.b = ren.src.w;
-		ec.c = ren.src.h;
-		ev.components.push_back(ec);
-		ev.type = npc.filename;
+	ec.type = EventComponent::NPC_HOTSPOT;
+	ec.x = static_cast<int>(npc.stats.pos.x);
+	ec.y = static_cast<int>(npc.stats.pos.y);
+	ec.id = npcs.size();
+	for (size_t i = 0; i < npcs.size(); ++i) {
+		if (&npc == npcs[i]) {
+			ec.id = i;
+			break;
+		}
 	}
-	else {
-		Utils::logError("NPCManager: Unable to set click hotspot for '%s' due to lack of animation.", npc.filename.c_str());
-	}
+	ev.components.push_back(ec);
+
+	ev.type = npc.filename;
 
 	mapr->events.push_back(ev);
 }

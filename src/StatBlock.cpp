@@ -441,6 +441,7 @@ bool StatBlock::loadRenderLayerStat(FileParser *infile) {
 		if (infile->new_section) {
 			layer_def = std::vector<std::vector<unsigned> >(8, std::vector<unsigned>());
 			layer_reference_order = std::vector<std::string>();
+			animation_slots.clear();
 		}
 
 		if (infile->key == "layer") {
@@ -464,6 +465,8 @@ bool StatBlock::loadRenderLayerStat(FileParser *infile) {
 					layer_reference_order.push_back(layer);
 				layer_def[dir].push_back(ref_pos);
 
+				animation_slots[layer] = "";
+
 				layer = Parse::popFirstString(infile->val);
 			}
 
@@ -471,6 +474,26 @@ bool StatBlock::loadRenderLayerStat(FileParser *infile) {
 			// so if layer_reference_order=main,body,head,off
 			// and we got a layer=3,off,body,head,main
 			// then the layer_def[3] looks like (3,1,2,0)
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool StatBlock::loadAnimationSlotStat(FileParser *infile) {
+	if (infile->section == "animation_slots") {
+		if (infile->key == "slot") {
+			std::string slot_id = Parse::popFirstString(infile->val);
+			std::string slot_filename = Parse::popFirstString(infile->val);
+
+			std::map<std::string, std::string>::iterator it;
+			it = animation_slots.find(slot_id);
+			if (it != animation_slots.end())
+				it->second = slot_filename;
+			else
+				infile->error("StatBlock: Slot %s does not having a matching render layer", slot_id.c_str());
 
 			return true;
 		}
@@ -523,7 +546,7 @@ void StatBlock::load(const std::string& filename) {
 
 		int num = Parse::toInt(infile.val);
 		float fnum = Parse::toFloat(infile.val);
-		bool valid = loadCoreStat(&infile) || loadSfxStat(&infile) || loadRenderLayerStat(&infile) || isNPCStat(&infile);
+		bool valid = loadCoreStat(&infile) || loadSfxStat(&infile) || loadRenderLayerStat(&infile) || loadAnimationSlotStat(&infile) || isNPCStat(&infile);
 
 		// @ATTR name|string|Name
 		if (infile.key == "name") name = msg->get(infile.val);

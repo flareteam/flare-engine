@@ -38,6 +38,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MapRenderer.h"
 #include "MenuDevConsole.h"
 #include "MenuManager.h"
+#include "NPC.h"
+#include "NPCManager.h"
 #include "PowerManager.h"
 #include "RenderDevice.h"
 #include "Settings.h"
@@ -1210,10 +1212,9 @@ void MapRenderer::checkHotspots() {
 					p = centerTile(p);
 
 					Rect dest;
-					dest.x = p.x - npc->z;
-					dest.y = p.y - npc->a;
-					dest.w = npc->b;
-					dest.h = npc->c;
+					if (npc->id < npcs->npcs.size()) {
+						dest = npcs->npcs[npc->id]->getRenderBounds(mapr->cam.pos);
+					}
 
 					if (Utils::isWithinRect(dest, inpt->mouse)) {
 						matched = true;

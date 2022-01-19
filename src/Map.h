@@ -147,7 +147,7 @@ public:
 	std::queue<Map_Group> enemy_groups;
 
 	// npc load handling
-	std::queue<Map_NPC> npcs;
+	std::queue<Map_NPC> map_npcs;
 
 	// map events
 	std::vector<Event> events;

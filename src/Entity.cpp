@@ -733,7 +733,7 @@ unsigned char Entity::faceNextBest(float mapx, float mapy) {
 	return 0;
 }
 
-Rect Entity::getRenderBounds(const FPoint& cam) {
+Rect Entity::getRenderBounds(const FPoint& cam) const {
 	Rect r;
 	Point p = Utils::mapToScreen(stats.pos.x, stats.pos.y, cam.x, cam.y);
 
@@ -924,8 +924,11 @@ void Entity::loadAnimations() {
 }
 
 std::string Entity::getGfxFromType(const std::string& gfx_type) {
-	Utils::logInfo("Entity: getGfxFromType(%s)", gfx_type.c_str());
-	// TODO
+	std::map<std::string, std::string>::iterator it;
+	it = stats.animation_slots.find(gfx_type);
+	if (it != stats.animation_slots.end())
+		return it->second;
+
 	return "";
 }
 
