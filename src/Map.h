@@ -71,12 +71,14 @@ public:
 	std::string id;
 	FPoint pos;
 	std::vector<EventComponent> requirements;
+	int direction;
 
 	Map_NPC()
 		: type("")
 		, id("")
 		, pos()
-		, requirements() {
+		, requirements()
+		, direction(-1) {
 	}
 };
 

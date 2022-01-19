@@ -571,6 +571,10 @@ void Map::loadNPC(FileParser &infile) {
 		ec.s = Parse::popFirstString(infile.val);
 		map_npcs.back().requirements.push_back(ec);
 	}
+	else if (infile.key == "direction") {
+		// @ATTR npc.direction|direction|Direction that NPC will initially face.
+		map_npcs.back().direction = Parse::toDirection(infile.val);
+	}
 	else {
 		infile.error("Map: '%s' is not a valid key.", infile.key.c_str());
 	}
