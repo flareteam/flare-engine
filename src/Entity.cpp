@@ -44,6 +44,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SoundManager.h"
 #include "UtilsMath.h"
 
+#include <cassert>
+
 Entity::Entity()
 	: sprites(NULL)
 	, sound_attack()
@@ -79,11 +81,12 @@ Entity& Entity::operator=(const Entity& e) {
 	sound_levelup = e.sound_levelup;
 	sound_lowhp = e.sound_lowhp;
 
-	if (e.activeAnimation)
-		activeAnimation = new Animation(*e.activeAnimation);
-	animationSet = e.animationSet;
-
 	stats = StatBlock(e.stats);
+
+	activeAnimation = NULL;
+	animationSet = NULL;
+
+	loadAnimations();
 
 	type_filename = e.type_filename;
 
@@ -660,25 +663,39 @@ bool Entity::takeHit(Hazard &h) {
 }
 
 void Entity::resetActiveAnimation() {
-	activeAnimation->reset();
+	if (activeAnimation)
+		activeAnimation->reset();
+
+	for (size_t i = 0; i < animsets.size(); ++i)
+		if (anims[i])
+			anims[i]->reset();
 }
 
 /**
  * Set the entity's current animation by name
  */
-bool Entity::setAnimation(const std::string& animationName) {
+void Entity::setAnimation(const std::string& animationName) {
 
 	// if the animation is already the requested one do nothing
 	if (activeAnimation != NULL && activeAnimation->getName() == animationName)
-		return true;
+		return;
+
+	if (!animationSet)
+		return;
 
 	delete activeAnimation;
 	activeAnimation = animationSet->getAnimation(animationName);
 
-	if (activeAnimation == NULL)
+	if (!activeAnimation)
 		Utils::logError("Entity::setAnimation(%s): not found", animationName.c_str());
 
-	return activeAnimation == NULL;
+	for (size_t i = 0; i < animsets.size(); ++i) {
+		delete anims[i];
+		if (animsets[i])
+			anims[i] = animsets[i]->getAnimation(animationName);
+		else
+			anims[i] = NULL;
+	}
 }
 
 /**
@@ -716,25 +733,213 @@ unsigned char Entity::faceNextBest(float mapx, float mapy) {
 	return 0;
 }
 
-/**
- * getRender()
- * Map objects need to be drawn in Z order, so we allow a parent object (GameEngine)
- * to collect all mobile sprites each frame.
- */
-Renderable Entity::getRender() {
-	Renderable r = activeAnimation->getCurrentFrame(stats.direction);
-	r.map_pos.x = stats.pos.x;
-	r.map_pos.y = stats.pos.y;
-	if (stats.hp > 0) {
-		if (stats.hero_ally)
-			r.type = Renderable::TYPE_ALLY;
-		else if (stats.in_combat)
-			r.type = Renderable::TYPE_ENEMY;
+Rect Entity::getRenderBounds(const FPoint& cam) {
+	Rect r;
+	Point p = Utils::mapToScreen(stats.pos.x, stats.pos.y, cam.x, cam.y);
+
+	if (!stats.layer_reference_order.empty()) {
+		Point top_left, bottom_right;
+		bool point_init = false;
+		for (unsigned i = 0; i < stats.layer_def[stats.direction].size(); ++i) {
+			unsigned index = stats.layer_def[stats.direction][i];
+			if (anims[index]) {
+				Renderable ren = anims[index]->getCurrentFrame(stats.direction);
+				if (!point_init) {
+					top_left.x = p.x - ren.offset.x;
+					top_left.y = p.y - ren.offset.y;
+					bottom_right.x = top_left.x + ren.src.w;
+					bottom_right.y = top_left.y + ren.src.h;
+					point_init = true;
+				}
+				else {
+					Point layer_top_left(p.x - ren.offset.x, p.y - ren.offset.y);
+					Point layer_bottom_right(layer_top_left.x + ren.src.w, layer_top_left.y + ren.src.h);
+
+					if (layer_top_left.x < top_left.x)
+						top_left.x = layer_top_left.x;
+					if (layer_top_left.y < top_left.y)
+						top_left.y = layer_top_left.y;
+					if (layer_bottom_right.x > bottom_right.x)
+						bottom_right.x = layer_bottom_right.x;
+					if (layer_bottom_right.y > bottom_right.y)
+						bottom_right.y = layer_bottom_right.y;
+				}
+			}
+		}
+
+		if (point_init) {
+			r.x = top_left.x;
+			r.y = top_left.y;
+			r.w = bottom_right.x - top_left.x;
+			r.h = bottom_right.y - top_left.y;
+		}
 	}
+	else {
+		if (activeAnimation) {
+			Renderable ren = activeAnimation->getCurrentFrame(stats.direction);
+			r.x = p.x - ren.offset.x;
+			r.y = p.y - ren.offset.y;
+			r.w = ren.src.w;
+			r.h = ren.src.h;
+		}
+	}
+
 	return r;
 }
 
+void Entity::addRenders(std::vector<Renderable> &r) {
+	if (!stats.layer_reference_order.empty()) {
+		for (unsigned i = 0; i < stats.layer_def[stats.direction].size(); ++i) {
+			unsigned index = stats.layer_def[stats.direction][i];
+			if (anims[index]) {
+				Renderable ren = anims[index]->getCurrentFrame(stats.direction);
+				ren.map_pos = stats.pos;
+				ren.prio = i+1;
+
+				stats.effects.getCurrentColor(ren.color_mod);
+				stats.effects.getCurrentAlpha(ren.alpha_mod);
+
+				// fade out corpses
+				if (!stats.hero && stats.corpse) {
+					unsigned fade_time = (eset->misc.corpse_timeout > settings->max_frames_per_sec) ? settings->max_frames_per_sec : eset->misc.corpse_timeout;
+					if (fade_time != 0 && stats.corpse_timer.getCurrent() <= fade_time) {
+						ren.alpha_mod = static_cast<uint8_t>(static_cast<float>(stats.corpse_timer.getCurrent()) * (ren.alpha_mod / static_cast<float>(fade_time)));
+					}
+				}
+
+				ren.type = getRenderableType();
+
+				r.push_back(ren);
+			}
+		}
+	}
+	else {
+		Renderable ren;
+		if (activeAnimation)
+			ren = activeAnimation->getCurrentFrame(stats.direction);
+		ren.map_pos = stats.pos;
+		ren.prio = 1;
+
+		stats.effects.getCurrentColor(ren.color_mod);
+		stats.effects.getCurrentAlpha(ren.alpha_mod);
+
+		// fade out corpses
+		if (!stats.hero && stats.corpse) {
+			unsigned fade_time = (eset->misc.corpse_timeout > settings->max_frames_per_sec) ? settings->max_frames_per_sec : eset->misc.corpse_timeout;
+			if (fade_time != 0 && stats.corpse_timer.getCurrent() <= fade_time) {
+				ren.alpha_mod = static_cast<uint8_t>(static_cast<float>(stats.corpse_timer.getCurrent()) * (ren.alpha_mod / static_cast<float>(fade_time)));
+			}
+		}
+
+		ren.type = getRenderableType();
+
+		r.push_back(ren);
+	}
+
+	// add effects
+	for (unsigned i = 0; i < stats.effects.effect_list.size(); ++i) {
+		if (stats.effects.effect_list[i].animation && !stats.effects.effect_list[i].animation->isCompleted()) {
+			Renderable ren = stats.effects.effect_list[i].animation->getCurrentFrame(0);
+			ren.map_pos = stats.pos;
+			if (stats.effects.effect_list[i].render_above) {
+				if (!stats.layer_reference_order.empty())
+					ren.prio = stats.layer_def[stats.direction].size()+1;
+				else
+					ren.prio = 2;
+			}
+			else {
+				ren.prio = 0;
+			}
+			r.push_back(ren);
+		}
+	}
+}
+
+uint8_t Entity::getRenderableType() {
+	if (stats.hp > 0) {
+		if (stats.hero)
+			return Renderable::TYPE_HERO;
+		else if (stats.hero_ally)
+			return Renderable::TYPE_ALLY;
+		else if (stats.in_combat)
+			return Renderable::TYPE_ENEMY;
+	}
+
+	return Renderable::TYPE_NORMAL;
+}
+
+void Entity::loadAnimations() {
+	// load the base animation
+	if (!animationSet) {
+		if (!stats.animations.empty()) {
+			anim->increaseCount(stats.animations);
+			animationSet = anim->getAnimationSet(stats.animations);
+			if (activeAnimation)
+				delete activeAnimation;
+			activeAnimation = animationSet->getAnimation("");
+		}
+	}
+
+	for (size_t i = 0; i < animsets.size(); ++i) {
+		if (animsets[i])
+			anim->decreaseCount(animsets[i]->getName());
+		delete anims[i];
+	}
+	animsets.clear();
+	anims.clear();
+
+	std::vector<Entity::Layer_gfx> img_gfx;
+
+	for (size_t i = 0; i < stats.layer_reference_order.size(); ++i) {
+		Entity::Layer_gfx gfx;
+		gfx.type = stats.layer_reference_order[i];
+		gfx.gfx = getGfxFromType(gfx.type);
+		img_gfx.push_back(gfx);
+	}
+	assert(stats.layer_reference_order.size() == img_gfx.size());
+
+	for (size_t i = 0; i < img_gfx.size(); ++i) {
+		if (img_gfx[i].gfx != "") {
+			std::string name;
+			if (stats.hero && !stats.transformed)
+				name = "animations/avatar/" + stats.gfx_base + "/" + img_gfx[i].gfx + ".txt";
+			else
+				name = img_gfx[i].gfx;
+
+			anim->increaseCount(name);
+			animsets.push_back(anim->getAnimationSet(name));
+			animsets.back()->setParent(animationSet);
+			anims.push_back(animsets.back()->getAnimation(activeAnimation->getName()));
+			setAnimation("stance");
+			if(!anims.back()->syncTo(activeAnimation)) {
+				Utils::logError("Entity: Error syncing animation in '%s' to parent animation.", animsets.back()->getName().c_str());
+			}
+		}
+		else {
+			animsets.push_back(NULL);
+			anims.push_back(NULL);
+		}
+	}
+	anim->cleanUp();
+}
+
+std::string Entity::getGfxFromType(const std::string& gfx_type) {
+	Utils::logInfo("Entity: getGfxFromType(%s)", gfx_type.c_str());
+	// TODO
+	return "";
+}
+
 Entity::~Entity () {
+	if (!stats.animations.empty())
+		anim->decreaseCount(stats.animations);
+
+	for (size_t i = 0; i < animsets.size(); ++i) {
+		if (animsets[i])
+			anim->decreaseCount(animsets[i]->getName());
+		delete anims[i];
+	}
+	anim->cleanUp();
+
 	delete activeAnimation;
 	delete behavior;
 }

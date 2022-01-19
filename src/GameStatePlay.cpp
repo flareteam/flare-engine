@@ -73,7 +73,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "SoundManager.h"
-#include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
 #include "WidgetLabel.h"
 
@@ -585,42 +584,10 @@ void GameStatePlay::checkEquipmentChange() {
 		// force the actionbar to update when we change gear
 		menu->act->updated = true;
 
-		int feet_index = -1;
-		std::vector<Avatar::Layer_gfx> img_gfx;
-		// load only displayable layers
-		for (unsigned int j=0; j<pc->stats.layer_reference_order.size(); j++) {
-			Avatar::Layer_gfx gfx;
-			gfx.gfx = "";
-			gfx.type = pc->stats.layer_reference_order[j];
-			for (int i=0; i<menu->inv->inventory[MenuInventory::EQUIPMENT].getSlotNumber(); i++) {
-				if (!menu->inv->isActive(i))
-					continue;
+		pc->loadAnimations();
 
-				if (pc->stats.layer_reference_order[j] == menu->inv->inventory[MenuInventory::EQUIPMENT].slot_type[i]) {
-					gfx.gfx = items->items[menu->inv->inventory[MenuInventory::EQUIPMENT][i].item].gfx;
-					gfx.type = menu->inv->inventory[MenuInventory::EQUIPMENT].slot_type[i];
-				}
-				if (menu->inv->inventory[MenuInventory::EQUIPMENT].slot_type[i] == "feet") {
-					feet_index = i;
-				}
-			}
-			// special case: if we don't have a head, use the portrait's head
-			if (gfx.gfx == "" && pc->stats.layer_reference_order[j] == "head") {
-				gfx.gfx = pc->stats.gfx_head;
-				gfx.type = "head";
-			}
-			// fall back to default if it exists
-			if (gfx.gfx == "") {
-				bool exists = Filesystem::fileExists(mods->locate("animations/avatar/" + pc->stats.gfx_base + "/default_" + gfx.type + ".txt"));
-				if (exists) gfx.gfx = "default_" + gfx.type;
-			}
-			img_gfx.push_back(gfx);
-		}
-		assert(pc->stats.layer_reference_order.size()==img_gfx.size());
-		pc->loadGraphics(img_gfx);
-
-		if (feet_index != -1)
-			pc->loadStepFX(items->items[menu->inv->inventory[MenuInventory::EQUIPMENT][feet_index].item].stepfx);
+		if (pc->feet_index != -1)
+			pc->loadStepFX(items->items[menu->inv->inventory[MenuInventory::EQUIPMENT][pc->feet_index].item].stepfx);
 	}
 
 	menu->inv->changed_equipment = false;

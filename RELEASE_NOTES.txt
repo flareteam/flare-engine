@@ -34,6 +34,7 @@ Engine fixes:
 * Fixed fullscreen setting being turned off when loading configuration defaults on Android.
 * Fixed input hint for item tooltips when using a touchscreen.
 * Improved file access handling on Android versions 10 and up. This fixes the infinite cutscene loop when starting a new game.
+* Fixed memory leak when loading NPCs
 
 Game updates:
 

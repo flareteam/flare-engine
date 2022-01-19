@@ -662,7 +662,13 @@ void EntityBehavior::updateState() {
 	int power_state;
 
 	// continue current animations
-	e->activeAnimation->advanceFrame();
+	if (e->activeAnimation)
+		e->activeAnimation->advanceFrame();
+
+	for (size_t i = 0; i < e->anims.size(); ++i) {
+		if (e->anims[i])
+			e->anims[i]->advanceFrame();
+	}
 
 	switch (e->stats.cur_state) {
 

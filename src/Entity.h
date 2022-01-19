@@ -40,9 +40,16 @@ protected:
 	Image *sprites;
 
 	void move_from_offending_tile();
-	virtual void resetActiveAnimation();
+	void resetActiveAnimation();
+	uint8_t getRenderableType();
 
 public:
+	class Layer_gfx {
+	public:
+		std::string gfx;
+		std::string type;
+	};
+
 	enum {
 		SOUND_HIT = 0,
 		SOUND_DIE = 1,
@@ -73,18 +80,24 @@ public:
 	SoundID sound_levelup;
 	SoundID sound_lowhp;
 
-	bool setAnimation(const std::string& animation);
+	void setAnimation(const std::string& animation);
 	Animation *activeAnimation;
 	AnimationSet *animationSet;
+	std::vector<AnimationSet*> animsets; // hold the animations for all equipped items in the right order of drawing.
+	std::vector<Animation*> anims; // hold the animations for all equipped items in the right order of drawing.
 
 	StatBlock stats;
 
 	unsigned char faceNextBest(float mapx, float mapy);
-	Renderable getRender();
+	Rect getRenderBounds(const FPoint& cam);
 
 	std::string type_filename;
 
 	EntityBehavior *behavior;
+
+	void loadAnimations();
+	virtual std::string getGfxFromType(const std::string& gfx_type);
+	void addRenders(std::vector<Renderable> &r);
 };
 
 extern const int directionDeltaX[];

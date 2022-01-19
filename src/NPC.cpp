@@ -22,9 +22,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class NPC
  */
 
-#include "Animation.h"
-#include "AnimationManager.h"
-#include "AnimationSet.h"
 #include "CampaignManager.h"
 #include "EntityBehavior.h"
 #include "EntityManager.h"
@@ -269,7 +266,8 @@ void NPC::load(const std::string& npc_id) {
 		infile.close();
 	}
 
-	loadGraphics();
+	loadAnimations();
+	loadGraphics(); // TODO rename?
 
 	// fill inventory with items from random stock table
 	unsigned rand_count = Math::randBetween(random_table_count.x, random_table_count.y);
@@ -294,13 +292,6 @@ void NPC::load(const std::string& npc_id) {
 }
 
 void NPC::loadGraphics() {
-
-	if (stats.animations != "") {
-		anim->increaseCount(stats.animations);
-		animationSet = anim->getAnimationSet(stats.animations);
-		activeAnimation = animationSet->getAnimation("");
-	}
-
 	portraits.resize(portrait_filenames.size(), NULL);
 
 	for (size_t i = 0; i < portrait_filenames.size(); ++i) {
@@ -679,13 +670,8 @@ bool NPC::isDialogType(const int &event_type) {
 }
 
 NPC::~NPC() {
-
 	for (size_t i = 0; i < portraits.size(); ++i) {
 		delete portraits[i];
-	}
-
-	if (stats.animations != "") {
-		anim->decreaseCount(stats.animations);
 	}
 
 	while (!vox_intro.empty()) {

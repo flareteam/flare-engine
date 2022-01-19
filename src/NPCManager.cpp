@@ -55,7 +55,7 @@ void NPCManager::addRenders(std::vector<Renderable> &r) {
 				continue;
 			}
 		}
-		r.push_back(npcs[i]->getRender());
+		npcs[i]->addRenders(r);
 	}
 }
 
@@ -91,7 +91,15 @@ void NPCManager::handleNewMap() {
 			continue;
 		}
 
-		NPC *npc = new NPC(*entitym->getEntityPrototype(mn.id));
+		NPC *npc;
+		Entity *entity = entitym->getEntityPrototype(mn.id);
+		if (entity) {
+			npc = new NPC(*entity);
+			delete entity;
+		}
+		else {
+			npc = new NPC(Entity());
+		}
 
 		npc->load(mn.id);
 
@@ -183,10 +191,19 @@ int NPCManager::getID(const std::string& npcName) {
 	}
 
 	// could not find NPC, try loading it here
-	NPC *n = new NPC(*entitym->getEntityPrototype(npcName));
-	if (n) {
-		n->load(npcName);
-		npcs.push_back(n);
+	NPC *npc;
+	Entity *entity = entitym->getEntityPrototype(npcName);
+	if (entity) {
+		npc = new NPC(*entity);
+		delete entity;
+	}
+	else {
+		npc = new NPC(Entity());
+	}
+
+	if (npc) {
+		npc->load(npcName);
+		npcs.push_back(npc);
 		return static_cast<int>(npcs.size()-1);
 	}
 
@@ -204,15 +221,7 @@ Entity* NPCManager::npcFocus(const Point& mouse, const FPoint& cam, bool alive_o
 			continue;
 		}
 
-		p = Utils::mapToScreen(npcs[i]->stats.pos.x, npcs[i]->stats.pos.y, cam.x, cam.y);
-
-		Renderable ren = npcs[i]->getRender();
-		r.w = ren.src.w;
-		r.h = ren.src.h;
-		r.x = p.x - ren.offset.x;
-		r.y = p.y - ren.offset.y;
-
-		if (Utils::isWithinRect(r, mouse)) {
+		if (Utils::isWithinRect(npcs[i]->getRenderBounds(cam), mouse)) {
 			return npcs[i];
 		}
 	}

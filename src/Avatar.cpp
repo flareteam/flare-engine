@@ -41,6 +41,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuActionBar.h"
 #include "MenuExit.h"
 #include "MenuGameOver.h"
+#include "MenuInventory.h"
 #include "MenuManager.h"
 #include "MessageEngine.h"
 #include "MenuMiniMap.h"
@@ -53,6 +54,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "SoundManager.h"
 #include "Utils.h"
+#include "UtilsFileSystem.h"
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
 
@@ -75,15 +77,12 @@ Avatar::Avatar()
 	, using_main2(false)
 	, prev_hp(0)
 	, playing_lowhp(false)
-	, teleport_camera_lock(false) {
-
+	, teleport_camera_lock(false)
+	, feet_index(-1)
+{
 	init();
 
-	// load the hero's animations from hero definition file
-	anim->increaseCount("animations/hero.txt");
-	animationSet = anim->getAnimationSet("animations/hero.txt");
-	activeAnimation = animationSet->getAnimation("");
-
+	// TODO
 	// set cooldown_hit to duration of hit animation if undefined
 	if (!stats.cooldown_hit_enabled) {
 		Animation *hit_anim = animationSet->getAnimation("hit");
@@ -175,6 +174,9 @@ void Avatar::init() {
 		power_cooldown_timers[power_it->first] = Timer();
 		power_cast_timers[power_it->first] = Timer();
 	}
+
+	stats.animations = "animations/hero.txt";
+	loadAnimations();
 }
 
 void Avatar::handleNewMap() {
@@ -205,36 +207,6 @@ void Avatar::loadLayerDefinitions() {
 		}
 		infile.close();
 	}
-}
-
-void Avatar::loadGraphics(std::vector<Layer_gfx> _img_gfx) {
-
-	for (unsigned int i=0; i<animsets.size(); i++) {
-		if (animsets[i])
-			anim->decreaseCount(animsets[i]->getName());
-		delete anims[i];
-	}
-	animsets.clear();
-	anims.clear();
-
-	for (unsigned int i=0; i<_img_gfx.size(); i++) {
-		if (_img_gfx[i].gfx != "") {
-			std::string name = "animations/avatar/"+stats.gfx_base+"/"+_img_gfx[i].gfx+".txt";
-			anim->increaseCount(name);
-			animsets.push_back(anim->getAnimationSet(name));
-			animsets.back()->setParent(animationSet);
-			anims.push_back(animsets.back()->getAnimation(activeAnimation->getName()));
-			setAnimation("stance");
-			if(!anims.back()->syncTo(activeAnimation)) {
-				Utils::logError("Avatar: Error syncing animation in '%s' to 'animations/hero.txt'.", animsets.back()->getName().c_str());
-			}
-		}
-		else {
-			animsets.push_back(NULL);
-			anims.push_back(NULL);
-		}
-	}
-	anim->cleanUp();
 }
 
 /**
@@ -437,9 +409,11 @@ void Avatar::logic() {
 
 	// handle animation
 	if (!stats.effects.stun) {
-		activeAnimation->advanceFrame();
-		for (unsigned i=0; i < anims.size(); i++) {
-			if (anims[i] != NULL)
+		if (activeAnimation)
+			activeAnimation->advanceFrame();
+
+		for (size_t i = 0; i < anims.size(); ++i) {
+			if (anims[i])
 				anims[i]->advanceFrame();
 		}
 	}
@@ -903,12 +877,13 @@ void Avatar::transform() {
 	stats.powers_list = charmed_stats->powers_list;
 	stats.powers_passive = charmed_stats->powers_passive;
 	stats.effects.clearEffects();
+	stats.animations = charmed_stats->animations;
+	stats.layer_reference_order = charmed_stats->layer_reference_order;
+	stats.layer_def = charmed_stats->layer_def;
 
-	anim->decreaseCount("animations/hero.txt");
-	anim->increaseCount(charmed_stats->animations);
-	animationSet = anim->getAnimationSet(charmed_stats->animations);
-	delete activeAnimation;
-	activeAnimation = animationSet->getAnimation("");
+	anim->decreaseCount(hero_stats->animations);
+	animationSet = NULL;
+	loadAnimations();
 	stats.cur_state = StatBlock::ENTITY_STANCE;
 
 	// base stats
@@ -967,12 +942,13 @@ void Avatar::untransform() {
 	stats.effects = hero_stats->effects;
 	stats.powers_list = hero_stats->powers_list;
 	stats.powers_passive = hero_stats->powers_passive;
+	stats.animations = hero_stats->animations;
+	stats.layer_reference_order = hero_stats->layer_reference_order;
+	stats.layer_def = hero_stats->layer_def;
 
-	anim->increaseCount("animations/hero.txt");
 	anim->decreaseCount(charmed_stats->animations);
-	animationSet = anim->getAnimationSet("animations/hero.txt");
-	delete activeAnimation;
-	activeAnimation = animationSet->getAnimation("");
+	animationSet = NULL;
+	loadAnimations();
 	stats.cur_state = StatBlock::ENTITY_STANCE;
 
 	// This is a bit of a hack.
@@ -1005,68 +981,6 @@ void Avatar::checkTransform() {
 		transform();
 	if (stats.transform_type != "" && stats.transform_duration == 0)
 		untransform();
-}
-
-void Avatar::setAnimation(std::string name) {
-	if (name == activeAnimation->getName())
-		return;
-
-	Entity::setAnimation(name);
-	for (unsigned i=0; i < animsets.size(); i++) {
-		delete anims[i];
-		if (animsets[i])
-			anims[i] = animsets[i]->getAnimation(name);
-		else
-			anims[i] = 0;
-	}
-}
-
-void Avatar::resetActiveAnimation() {
-	activeAnimation->reset(); // shield stutter
-	for (unsigned i=0; i < animsets.size(); i++)
-		if (anims[i])
-			anims[i]->reset();
-}
-
-void Avatar::addRenders(std::vector<Renderable> &r) {
-	if (!stats.transformed) {
-		for (unsigned i = 0; i < stats.layer_def[stats.direction].size(); ++i) {
-			unsigned index = stats.layer_def[stats.direction][i];
-			if (anims[index]) {
-				Renderable ren = anims[index]->getCurrentFrame(stats.direction);
-				ren.map_pos = stats.pos;
-				ren.prio = i+1;
-				stats.effects.getCurrentColor(ren.color_mod);
-				stats.effects.getCurrentAlpha(ren.alpha_mod);
-				if (stats.hp > 0) {
-					ren.type = Renderable::TYPE_HERO;
-				}
-				r.push_back(ren);
-			}
-		}
-	}
-	else {
-		Renderable ren = activeAnimation->getCurrentFrame(stats.direction);
-		ren.map_pos = stats.pos;
-		stats.effects.getCurrentColor(ren.color_mod);
-		stats.effects.getCurrentAlpha(ren.alpha_mod);
-		if (stats.hp > 0) {
-			ren.type = Renderable::TYPE_HERO;
-		}
-		r.push_back(ren);
-	}
-	// add effects
-	for (unsigned i = 0; i < stats.effects.effect_list.size(); ++i) {
-		if (stats.effects.effect_list[i].animation && !stats.effects.effect_list[i].animation->isCompleted()) {
-			Renderable ren = stats.effects.effect_list[i].animation->getCurrentFrame(0);
-			ren.map_pos = stats.pos;
-			if (stats.effects.effect_list[i].render_above)
-				ren.prio = stats.layer_def[stats.direction].size()+1;
-			else
-				ren.prio = 0;
-			r.push_back(ren);
-		}
-	}
 }
 
 void Avatar::logMsg(const std::string& str, int type) {
@@ -1109,21 +1023,36 @@ bool Avatar::isLowHpCursorEnabled() {
 		settings->low_hp_warning_type == settings->LHP_WARN_ALL;
 }
 
+std::string Avatar::getGfxFromType(const std::string& gfx_type) {
+	feet_index = -1;
+
+	std::string gfx;
+
+	for (int i=0; i<menu->inv->inventory[MenuInventory::EQUIPMENT].getSlotNumber(); i++) {
+		if (!menu->inv->isActive(i))
+			continue;
+
+		if (gfx_type == menu->inv->inventory[MenuInventory::EQUIPMENT].slot_type[i]) {
+			gfx = items->items[menu->inv->inventory[MenuInventory::EQUIPMENT][i].item].gfx;
+		}
+		if (menu->inv->inventory[MenuInventory::EQUIPMENT].slot_type[i] == "feet") {
+			feet_index = i;
+		}
+	}
+	// special case: if we don't have a head, use the portrait's head
+	if (gfx.empty() && gfx_type == "head") {
+		gfx = pc->stats.gfx_head;
+	}
+	// fall back to default if it exists
+	if (gfx.empty()) {
+		if (Filesystem::fileExists(mods->locate("animations/avatar/" + stats.gfx_base + "/default_" + gfx_type + ".txt")))
+			gfx = "default_" + gfx_type;
+	}
+
+	return gfx;
+}
+
 Avatar::~Avatar() {
-	if (stats.transformed && charmed_stats && charmed_stats->animations != "") {
-		anim->decreaseCount(charmed_stats->animations);
-	}
-	else {
-		anim->decreaseCount("animations/hero.txt");
-	}
-
-	for (unsigned int i=0; i<animsets.size(); i++) {
-		if (animsets[i])
-			anim->decreaseCount(animsets[i]->getName());
-		delete anims[i];
-	}
-	anim->cleanUp();
-
 	delete charmed_stats;
 	delete hero_stats;
 

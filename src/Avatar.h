@@ -64,15 +64,11 @@ private:
 	void set_direction();
 	void transform();
 	void untransform();
-	void setAnimation(std::string name);
 
 
 	std::vector<Step_sfx> step_def;
 
 	std::vector<SoundID> sound_steps;
-
-	std::vector<AnimationSet*> animsets; // hold the animations for all equipped items in the right order of drawing.
-	std::vector<Animation*> anims; // hold the animations for all equipped items in the right order of drawing.
 
 	short body;
 
@@ -87,16 +83,7 @@ private:
 
 	bool isDroppedToLowHp();
 
-protected:
-	virtual void resetActiveAnimation();
-
 public:
-	class Layer_gfx {
-	public:
-		std::string gfx;
-		std::string type;
-	};
-
 	enum {
 		MSG_NORMAL = 0,
 		MSG_UNIQUE = 1
@@ -107,7 +94,7 @@ public:
 
 	void init();
 	void handleNewMap();
-	void loadGraphics(std::vector<Layer_gfx> _img_gfx);
+	void loadGraphics(std::vector<Entity::Layer_gfx> _img_gfx);
 	void loadStepFX(const std::string& stepname);
 
 	void logic();
@@ -118,14 +105,14 @@ public:
 	}
 	void checkTransform();
 
-	void addRenders(std::vector<Renderable> &r);
-
 	void logMsg(const std::string& str, int type);
 
 	bool isLowHp();
 	bool isLowHpMessageEnabled();
 	bool isLowHpSoundEnabled();
 	bool isLowHpCursorEnabled();
+
+	std::string getGfxFromType(const std::string& gfx_type);
 
 	std::queue<std::pair<std::string, int> > log_msg;
 
@@ -157,6 +144,7 @@ public:
 	int prev_hp;
 	bool playing_lowhp;
 	bool teleport_camera_lock;
+	int feet_index;
 
 	std::vector<ActionData> action_queue;
 };

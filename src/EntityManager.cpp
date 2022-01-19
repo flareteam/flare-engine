@@ -50,12 +50,6 @@ EntityManager::EntityManager()
 	handleNewMap();
 }
 
-void EntityManager::loadAnimations(Entity *e) {
-	anim->increaseCount(e->stats.animations);
-	e->animationSet = anim->getAnimationSet(e->stats.animations);
-	e->activeAnimation = e->animationSet->getAnimation("");
-}
-
 Entity *EntityManager::getEntityPrototype(const std::string& type_id) {
 	Entity* e = new Entity(prototypes.at(loadEntityPrototype(type_id)));
 	return e;
@@ -76,11 +70,11 @@ size_t EntityManager::loadEntityPrototype(const std::string& type_id) {
 	if (e.stats.animations == "")
 		Utils::logError("EntityManager: No animation file specified for entity: %s", type_id.c_str());
 
-	loadAnimations(&e);
+	e.loadAnimations();
 	e.loadSounds();
 
 	// set cooldown_hit to duration of hit animation if undefined
-	if (!e.stats.cooldown_hit_enabled) {
+	if (!e.stats.cooldown_hit_enabled && e.animationSet) {
 		Animation *hit_anim = e.animationSet->getAnimation("hit");
 		if (hit_anim) {
 			e.stats.cooldown_hit.setDuration(hit_anim->getDuration());
@@ -122,7 +116,6 @@ void EntityManager::handleNewMap () {
 		if (entities[i]->stats.npc)
 			continue;
 
-		anim->decreaseCount(entities[i]->animationSet->getName());
 		if(entities[i]->stats.hero_ally && !entities[i]->stats.corpse && entities[i]->stats.cur_state != StatBlock::ENTITY_DEAD && entities[i]->stats.cur_state != StatBlock::ENTITY_CRITDEAD && entities[i]->stats.speed > 0.0f)
 			allies.push(entities[i]);
 		else {
@@ -134,7 +127,6 @@ void EntityManager::handleNewMap () {
 
 
 	for (unsigned int i=0; i < prototypes.size(); i++) {
-		anim->decreaseCount(prototypes[i].animationSet->getName());
 		prototypes[i].unloadSounds();
 	}
 	prototypes.clear();
@@ -153,7 +145,6 @@ void EntityManager::handleNewMap () {
 			continue;
 
 		Entity *e = getEntityPrototype(me.type);
-		anim->increaseCount(e->stats.animations);
 
 		e->stats.waypoints = me.waypoints;
 		e->stats.pos.x = me.pos.x;
@@ -176,7 +167,6 @@ void EntityManager::handleNewMap () {
 
 		//dont need the result of this. its only called to handle animation and sound
 		Entity* temp = getEntityPrototype(e->type_filename);
-		anim->increaseCount(temp->stats.animations);
 		delete temp;
 
 		e->stats.pos = spawn_pos;
@@ -268,18 +258,10 @@ void EntityManager::handleSpawn() {
 			return;
 		}
 
-		if (e->stats.animations != "") {
-			// load the animation file if specified
-			anim->increaseCount(e->stats.animations);
-			e->animationSet = anim->getAnimationSet(e->stats.animations);
-			if (e->animationSet)
-				e->activeAnimation = e->animationSet->getAnimation("");
-			else
-				Utils::logError("EntityManager: Animations file could not be loaded for %s", espawn.type.c_str());
-		}
-		else {
+		if (e->stats.animations == "") {
 			Utils::logError("EntityManager: No animation file specified for entity: %s", espawn.type.c_str());
 		}
+		e->loadAnimations();
 		e->loadSounds();
 
 		//Set level
@@ -395,15 +377,8 @@ Entity* EntityManager::entityFocus(const Point& mouse, const FPoint& cam, bool a
 		if(alive_only && (entities[i]->stats.cur_state == StatBlock::ENTITY_DEAD || entities[i]->stats.cur_state == StatBlock::ENTITY_CRITDEAD)) {
 			continue;
 		}
-		p = Utils::mapToScreen(entities[i]->stats.pos.x, entities[i]->stats.pos.y, cam.x, cam.y);
 
-		Renderable ren = entities[i]->getRender();
-		r.w = ren.src.w;
-		r.h = ren.src.h;
-		r.x = p.x - ren.offset.x;
-		r.y = p.y - ren.offset.y;
-
-		if (Utils::isWithinRect(r, mouse)) {
+		if (Utils::isWithinRect(entities[i]->getRenderBounds(cam), mouse)) {
 			Entity *entity = entities[i];
 			return entity;
 		}
@@ -488,33 +463,10 @@ void EntityManager::addRenders(std::vector<Renderable> &r, std::vector<Renderabl
 
 		bool dead = (*it)->stats.corpse;
 		if (!dead || !(*it)->stats.corpse_timer.isEnd()) {
-			Renderable re = (*it)->getRender();
-			re.prio = 1;
-			(*it)->stats.effects.getCurrentColor(re.color_mod);
-			(*it)->stats.effects.getCurrentAlpha(re.alpha_mod);
-
-			// fade out corpses
-			unsigned fade_time = (eset->misc.corpse_timeout > settings->max_frames_per_sec) ? settings->max_frames_per_sec : eset->misc.corpse_timeout;
-			if (dead && fade_time != 0 && (*it)->stats.corpse_timer.getCurrent() <= fade_time) {
-				re.alpha_mod = static_cast<uint8_t>(static_cast<float>((*it)->stats.corpse_timer.getCurrent()) * (re.alpha_mod / static_cast<float>(fade_time)));
-			}
-
-			// draw corpses below objects so that floor loot is more visible
-			(dead ? r_dead : r).push_back(re);
-
-			// add effects
-			for (size_t i = 0; i < (*it)->stats.effects.effect_list.size(); ++i) {
-				Effect& ei = (*it)->stats.effects.effect_list[i];
-				if (ei.animation) {
-					Renderable ren = ei.animation->getCurrentFrame(0);
-					ren.map_pos = (*it)->stats.pos;
-					if (ei.render_above)
-						ren.prio = 2;
-					else
-						ren.prio = 0;
-					r.push_back(ren);
-				}
-			}
+			if (dead)
+				(*it)->addRenders(r_dead);
+			else
+				(*it)->addRenders(r);
 		}
 	}
 }
@@ -524,12 +476,10 @@ EntityManager::~EntityManager() {
 		if (entities[i]->stats.npc)
 			continue;
 
-		anim->decreaseCount(entities[i]->animationSet->getName());
 		entities[i]->unloadSounds();
 		delete entities[i];
 	}
 	for (unsigned int i=0; i < prototypes.size(); i++) {
-		anim->decreaseCount(prototypes[i].animationSet->getName());
 		prototypes[i].unloadSounds();
 	}
 }
