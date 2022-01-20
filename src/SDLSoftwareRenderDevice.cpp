@@ -228,6 +228,9 @@ int SDLSoftwareRenderDevice::createContextInternal() {
 		settings->screen_h = eset->resolutions.min_screen_h;
 	}
 
+	// We perform our own scaling, so we want to disable DPI scaling done by the OS
+	SDL_SetHint(SDL_HINT_VIDEO_HIGHDPI_DISABLED, "1");
+
 	bool settings_changed = ((fullscreen != settings->fullscreen && destructive_fullscreen) ||
 			                 hwsurface != settings->hwsurface ||
 							 vsync != settings->vsync ||
