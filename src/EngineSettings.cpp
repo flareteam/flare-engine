@@ -739,12 +739,13 @@ void EngineSettings::Loot::load() {
 	autopickup_currency = false;
 	autopickup_range = eset->misc.interact_range;
 	currency = "Gold";
-	vendor_ratio = 0.25f;
-	vendor_ratio_buyback = 0;
+	vendor_ratio_buy = 1.0f;
+	vendor_ratio_sell = 0.25f;
+	vendor_ratio_sell_old = 0;
 	sfx_loot = "";
 	drop_max = 1;
 	drop_radius = 1;
-	hide_radius = 3.f;
+	hide_radius = 3.0f;
 
 	FileParser infile;
 	// @CLASS EngineSettings: Loot|Description of engine/loot.txt
@@ -766,13 +767,17 @@ void EngineSettings::Loot::load() {
 				// @ATTR currency_name|string|Define the name of currency in game
 				currency = msg->get(infile.val);
 			}
-			else if (infile.key == "vendor_ratio") {
-				// @ATTR vendor_ratio|int|Percentage of item buying price to use as selling price. Also used as the buyback price until the player leaves the map.
-				vendor_ratio = static_cast<float>(Parse::toInt(infile.val)) / 100.0f;
+			else if (infile.key == "vendor_ratio_buy") {
+				// @ATTR vendor_ratio_buy|float|Global multiplier for item prices on the "Buy" tab of vendors. Defaults to 1.0.
+				vendor_ratio_buy = Parse::toFloat(infile.val);
 			}
-			else if (infile.key == "vendor_ratio_buyback") {
-				// @ATTR vendor_ratio_buyback|int|Percentage of item buying price to use as the buying price for previously sold items.
-				vendor_ratio_buyback = static_cast<float>(Parse::toInt(infile.val)) / 100.0f;
+			else if (infile.key == "vendor_ratio_sell") {
+				// @ATTR vendor_ratio_sell|float|Global multiplier for the currency gained when selling an item and the price of items on the "Sell" tab of vendors. Defaults to 0.25.
+				vendor_ratio_sell = Parse::toFloat(infile.val);
+			}
+			else if (infile.key == "vendor_ratio_sell_old") {
+				// @ATTR vendor_ratio_sell_old|float|Global multiplier for item prices on the "Sell" tab of vendors after the player has left the map or quit the game. Falls back to the value of vendor_ratio_sell by default.
+				vendor_ratio_sell_old = Parse::toFloat(infile.val);
 			}
 			else if (infile.key == "sfx_loot") {
 				// @ATTR sfx_loot|filename|Filename of a sound effect to play for dropping loot.
@@ -789,6 +794,16 @@ void EngineSettings::Loot::load() {
 			else if (infile.key == "hide_radius") {
 				// @ATTR hide_radius|float|If an entity is within this radius relative to a piece of loot, the label will be hidden unless highlighted with the cursor.
 				hide_radius = Parse::toFloat(infile.val);
+			}
+			else if (infile.key == "vendor_ratio") {
+				// @ATTR vendor_ratio|int|(Deprecated in v1.12.85; use 'vendor_ratio_sell' instead) Percentage of item buying price to use as selling price. Also used as the buyback price until the player leaves the map.
+				vendor_ratio_sell = static_cast<float>(Parse::toInt(infile.val)) / 100.0f;
+				infile.error("EngineSettings: vendor_ratio is deprecated. Use 'vendor_ratio_sell=%.2f' instead.", vendor_ratio_sell);
+			}
+			else if (infile.key == "vendor_ratio_buyback") {
+				// @ATTR vendor_ratio_buyback|int|(Deprecated in v1.12.85; use 'vendor_ratio_sell_old' instead) Percentage of item buying price to use as the buying price for previously sold items.
+				vendor_ratio_sell_old = static_cast<float>(Parse::toInt(infile.val)) / 100.0f;
+				infile.error("EngineSettings: vendor_ratio_buyback is deprecated. Use 'vendor_ratio_sell_old=%.2f' instead.", vendor_ratio_sell_old);
 			}
 			else {
 				infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());

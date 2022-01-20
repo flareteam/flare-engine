@@ -227,8 +227,9 @@ public:
 		bool autopickup_currency;
 		float autopickup_range;
 		std::string currency;
-		float vendor_ratio;
-		float vendor_ratio_buyback;
+		float vendor_ratio_buy;
+		float vendor_ratio_sell;
+		float vendor_ratio_sell_old;
 		std::string sfx_loot;
 		int drop_max;
 		int drop_radius;

@@ -1044,25 +1044,30 @@ void ItemStack::clear() {
 }
 
 int Item::getPrice() {
-	return price + (price_per_level * (pc->stats.level - 1));
+	int new_price = price + (price_per_level * (pc->stats.level - 1));
+	if (new_price == 0)
+		return new_price;
+
+	new_price = static_cast<int>(static_cast<float>(new_price) * eset->loot.vendor_ratio_buy);
+
+	return std::max(new_price, 1);
 }
 
 int Item::getSellPrice(bool is_new_buyback) {
 	int new_price = 0;
-	if (is_new_buyback || eset->loot.vendor_ratio_buyback == 0) {
+	if (is_new_buyback || eset->loot.vendor_ratio_sell_old == 0) {
 		// default sell price
 		if (price_sell != 0)
 			new_price = price_sell;
 		else
-			new_price = static_cast<int>(static_cast<float>(getPrice()) * eset->loot.vendor_ratio);
+			new_price = static_cast<int>(static_cast<float>(getPrice()) * eset->loot.vendor_ratio_sell);
 	}
 	else {
 		// sell price adjusted because the player can no longer buyback the item at the original sell price
-		new_price = static_cast<int>(static_cast<float>(getPrice()) * eset->loot.vendor_ratio_buyback);
+		new_price = static_cast<int>(static_cast<float>(getPrice()) * eset->loot.vendor_ratio_sell_old);
 	}
-	if (new_price == 0) new_price = 1;
 
-	return new_price;
+	return std::max(new_price, 1);
 }
 
 // Bonus documentation

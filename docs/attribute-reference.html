@@ -409,9 +409,11 @@ body {
 
 <p><strong>currency_name</strong> | <code>string</code> | Define the name of currency in game</p>
 
-<p><strong>vendor_ratio</strong> | <code>int</code> | Percentage of item buying price to use as selling price. Also used as the buyback price until the player leaves the map.</p>
+<p><strong>vendor_ratio_buy</strong> | <code>float</code> | Global multiplier for item prices on the "Buy" tab of vendors. Defaults to 1.0.</p>
 
-<p><strong>vendor_ratio_buyback</strong> | <code>int</code> | Percentage of item buying price to use as the buying price for previously sold items.</p>
+<p><strong>vendor_ratio_sell</strong> | <code>float</code> | Global multiplier for the currency gained when selling an item and the price of items on the "Sell" tab of vendors. Defaults to 0.25.</p>
+
+<p><strong>vendor_ratio_sell_old</strong> | <code>float</code> | Global multiplier for item prices on the "Sell" tab of vendors after the player has left the map or quit the game. Falls back to the value of vendor_ratio_sell by default.</p>
 
 <p><strong>sfx_loot</strong> | <code>filename</code> | Filename of a sound effect to play for dropping loot.</p>
 
@@ -420,6 +422,10 @@ body {
 <p><strong>drop_radius</strong> | <code>int</code> | The distance (in tiles) away from the origin that loot can drop</p>
 
 <p><strong>hide_radius</strong> | <code>float</code> | If an entity is within this radius relative to a piece of loot, the label will be hidden unless highlighted with the cursor.</p>
+
+<p><strong>vendor_ratio</strong> | <code>int</code> | (Deprecated in v1.12.85; use 'vendor_ratio_sell' instead) Percentage of item buying price to use as selling price. Also used as the buyback price until the player leaves the map.</p>
+
+<p><strong>vendor_ratio_buyback</strong> | <code>int</code> | (Deprecated in v1.12.85; use 'vendor_ratio_sell_old' instead) Percentage of item buying price to use as the buying price for previously sold items.</p>
 
 <hr />
 
