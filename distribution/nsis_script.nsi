@@ -102,6 +102,8 @@ Function UninstallPrevious
 FunctionEnd
 
 ; The stuff to install
+SectionGroup "!Flare (64-bit)"
+
 Section "Flare engine" SecEngine
 
   SectionIn RO
@@ -166,16 +168,45 @@ Section "Start Menu Shortcuts"
   CreateShortcut "$SMPROGRAMS\Flare\Flare Mods.lnk" "$APPDATA\flare\userdata\mods" "" "$APPDATA\flare\userdata\mods" 0
 SectionEnd
 
+SectionGroupEnd
+
+SectionGroup "Flare (32-bit)"
+
+; Optional section (can be disabled by the user)
+Section /o "Flare engine" SecEngine32
+  SetOutPath $INSTDIR
+
+  CreateDirectory "$INSTDIR\x86"
+  File /r "x86"
+SectionEnd
+
+; Optional section (can be disabled by the user)
+Section /o "Desktop Shortcut"
+  SetOutPath $INSTDIR
+  CreateShortcut "$DESKTOP\Flare (32-bit).lnk" "$INSTDIR\x86\flare.exe" "--data-path=$\"$INSTDIR$\"" "$INSTDIR\x86\flare.exe" 0
+SectionEnd
+
+; Optional section (can be disabled by the user)
+Section /o "Start Menu Shortcuts"
+  SetOutPath $INSTDIR
+  CreateDirectory "$SMPROGRAMS\Flare"
+  CreateShortcut "$SMPROGRAMS\Flare\Flare (32-bit).lnk" "$INSTDIR\x86\flare.exe" "--data-path=$\"$INSTDIR$\"" "$INSTDIR\x86\flare.exe" 0
+SectionEnd
+
+SectionGroupEnd
+
 ;--------------------------------
 ;Descriptions
 
   ;Language strings
   LangString DESC_SecEngine ${LANG_ENGLISH} "The Flare engine without any game or mods."
+  LangString DESC_SecEngine32 ${LANG_ENGLISH} "The Flare engine (32-bit version)."
   LangString DESC_SecGame ${LANG_ENGLISH} "The Empyrean Campaign game developed by the Flare team."
 
   ;Assign language strings to sections
   !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
     !insertmacro MUI_DESCRIPTION_TEXT ${SecEngine} $(DESC_SecEngine)
+    !insertmacro MUI_DESCRIPTION_TEXT ${SecEngine32} $(DESC_SecEngine32)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecGame} $(DESC_SecGame)
   !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
@@ -201,10 +232,12 @@ Section "Uninstall"
   Delete "$INSTDIR\*.dll"
   Delete "$INSTDIR\uninstall.exe"
   RMDir /r "$INSTDIR\mods\"
+  RMDir /r "$INSTDIR\x86\"
 
   ; Remove shortcuts, if any
   Delete "$SMPROGRAMS\Flare\*.*"
   Delete "$DESKTOP\Flare.lnk"
+  Delete "$DESKTOP\Flare (32-bit).lnk"
 
   ; Remove directories used
   RMDir "$SMPROGRAMS\Flare"
