@@ -13,6 +13,9 @@ Engine features:
 * Added misc.selection_rect_corner_size to engine/widget_settings.txt. This allows for a nicer "targeting reticle" appearance when selecting widgets without a mouse.
 * Added 'background' property for all menus. Menus will fall back to the existing hard-coded filenames if this property is omitted.
 * Added 'close', 'label_title', and 'action_list' properties to MenuConfirm configuration.
+* Added 'render_layers' section to StatBlock definitions. It has the same syntax and functionality as engine/hero_layers.txt, so that file is now considered deprecated.
+* Added 'animation_slots' section to StatBlock definitions. This allows for multiple animation layers on non-player entities that don't have an inventory like the player.
+* Added a 'direction' property to map NPCs, indentical to the property of the same name for map enemies.
 
 Engine fixes:
 
@@ -34,7 +37,8 @@ Engine fixes:
 * Fixed fullscreen setting being turned off when loading configuration defaults on Android.
 * Fixed input hint for item tooltips when using a touchscreen.
 * Improved file access handling on Android versions 10 and up. This fixes the infinite cutscene loop when starting a new game.
-* Fixed memory leak when loading NPCs
+* Fixed memory leak when loading NPCs.
+* Entity animations will now fall back to the 'die' animation when 'critdie' isn't defined.
 
 Game updates:
 
