@@ -447,7 +447,7 @@ bool StatBlock::loadRenderLayerStat(FileParser *infile) {
 		}
 
 		if (infile->key == "layer") {
-			// @ATTR layer|direction, list(string) : Direction, Layer name(s)|Defines the layer order of slots for a given direction.
+			// @ATTR render_layers.layer|direction, list(string) : Direction, Layer name(s)|Defines the layer order of slots for a given direction.
 			unsigned dir = Parse::toDirection(Parse::popFirstString(infile->val));
 			if (dir>7) {
 				infile->error("StatBlock: Render layer direction must be in range [0,7]");
@@ -488,7 +488,7 @@ bool StatBlock::loadAnimationSlotStat(FileParser *infile) {
 	// @CLASS StatBlock: Animation slots|Description of 'animation_slots' section in enemies/... and npcs/...
 	if (infile->section == "animation_slots") {
 		if (infile->key == "slot") {
-			// @ATTR slot|string, filename : Slot name, Animation filename|Assigns an animation to one of the slots defined in the render_layers section.
+			// @ATTR animation_slots.slot|string, filename : Slot name, Animation filename|Assigns an animation to one of the slots defined in the render_layers section.
 			std::string slot_id = Parse::popFirstString(infile->val);
 			std::string slot_filename = Parse::popFirstString(infile->val);
 
