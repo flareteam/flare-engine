@@ -288,11 +288,11 @@ int SDLHardwareRenderDevice::createContextInternal() {
 	// We make heavy use of SDL_TEXTUREACCESS_TARGET for things such as text and the minimap
 	// If we use the 'direct3d' backend on Windows, these textures get lost on window resizing events
 	// So to bypass this, we force 'opengl' on Windows
-	SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
+	SDL_SetHintWithPriority(SDL_HINT_RENDER_DRIVER, "opengl", SDL_HINT_OVERRIDE);
 #endif
 
 	// We perform our own scaling, so we want to disable DPI scaling done by the OS
-	SDL_SetHint(SDL_HINT_VIDEO_HIGHDPI_DISABLED, "1");
+	SDL_SetHintWithPriority(SDL_HINT_VIDEO_HIGHDPI_DISABLED, "1", SDL_HINT_OVERRIDE);
 
 	bool settings_changed = ((fullscreen != settings->fullscreen && destructive_fullscreen) ||
 			                 hwsurface != settings->hwsurface ||
@@ -344,9 +344,9 @@ int SDLHardwareRenderDevice::createContextInternal() {
 			renderer = SDL_CreateRenderer(window, -1, r_flags);
 			if (renderer) {
 				if (settings->texture_filter && !eset->resolutions.ignore_texture_filter)
-					SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
+					SDL_SetHintWithPriority(SDL_HINT_RENDER_SCALE_QUALITY, "1", SDL_HINT_OVERRIDE);
 				else
-					SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0");
+					SDL_SetHintWithPriority(SDL_HINT_RENDER_SCALE_QUALITY, "0", SDL_HINT_OVERRIDE);
 
 				windowResize();
 			}
@@ -371,6 +371,10 @@ int SDLHardwareRenderDevice::createContextInternal() {
 			is_initialized = true;
 
 			Utils::logInfo("RenderDevice: Fullscreen=%d, Hardware surfaces=%d, Vsync=%d, Texture Filter=%d", fullscreen, hwsurface, vsync, texture_filter);
+
+			SDL_RendererInfo renderer_info;
+			SDL_GetRendererInfo(renderer, &renderer_info);
+			Utils::logInfo("RenderDevice: Renderer driver is '%s'.", renderer_info.name);
 
 #if SDL_VERSION_ATLEAST(2, 0, 4)
 			SDL_GetDisplayDPI(0, &ddpi, 0, 0);
