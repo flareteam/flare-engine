@@ -921,6 +921,15 @@ void Entity::loadAnimations() {
 		}
 	}
 	anim->cleanUp();
+
+	stats.critdie_enabled = false;
+	if (animationSet) {
+		Animation* critdie_anim = animationSet->getAnimation("critdie");
+		if (critdie_anim) {
+			stats.critdie_enabled = (critdie_anim->getName() == "critdie");
+			delete critdie_anim;
+		}
+	}
 }
 
 std::string Entity::getGfxFromType(const std::string& gfx_type) {

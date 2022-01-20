@@ -191,6 +191,8 @@ StatBlock::StatBlock()
 	, abort_npc_interact(false)
 	, layer_reference_order()
 	, layer_def(8, std::vector<unsigned>())
+	, animation_slots()
+	, critdie_enabled(false)
 {
 	primary.resize(eset->primary_stats.list.size(), 0);
 	primary_starting.resize(eset->primary_stats.list.size(), 0);
@@ -772,7 +774,7 @@ void StatBlock::takeDamage(int dmg, bool crit, int source_type) {
 				loot->addEnemyLoot(this);
 			}
 
-			if (crit)
+			if (crit && critdie_enabled)
 				cur_state = StatBlock::ENTITY_CRITDEAD;
 			else
 				cur_state = StatBlock::ENTITY_DEAD;

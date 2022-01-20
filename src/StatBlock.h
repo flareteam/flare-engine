@@ -340,6 +340,8 @@ public:
 	std::vector<std::vector<unsigned> > layer_def;
 
 	std::map<std::string, std::string> animation_slots;
+
+	bool critdie_enabled;
 };
 
 #endif
