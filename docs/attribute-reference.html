@@ -2027,7 +2027,7 @@ body {
 
 <h4>StatBlock: Core stats</h4>
 
-<p>Description of engine/stats.txt and enemies in enemies/</p>
+<p>Description of engine/stats.txt, enemies/..., and npcs/...</p>
 
 <p><strong>speed</strong> | <code>float</code> | Movement speed</p>
 
@@ -2053,7 +2053,7 @@ body {
 
 <h4>StatBlock: Sound effects</h4>
 
-<p>Description of heroes in engine/avatar/ and enemies in enemies/</p>
+<p>Description of sound effect properties in engine/stats.txt, enemies/..., and npcs/...</p>
 
 <p><strong>sfx_attack</strong> | <code>repeatable(predefined_string, filename) : Animation name, Sound file</code> | Filename of sound effect for the specified attack animation.</p>
 
@@ -2073,9 +2073,17 @@ body {
 
 <h4>StatBlock: Render layers</h4>
 
-<p>Description of heroes in engine/avatar/ and enemies in enemies/</p>
+<p>Description of 'render_layers' section in engine/stats.txt, enemies/..., and npcs/...</p>
 
 <p><strong>layer</strong> | <code>direction, list(string) : Direction, Layer name(s)</code> | Defines the layer order of slots for a given direction.</p>
+
+<hr />
+
+<h4>StatBlock: Animation slots</h4>
+
+<p>Description of 'animation_slots' section in enemies/... and npcs/...</p>
+
+<p><strong>slot</strong> | <code>string, filename : Slot name, Animation filename</code> | Assigns an animation to one of the slots defined in the render_layers section.</p>
 
 <hr />
 

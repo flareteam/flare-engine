@@ -213,7 +213,7 @@ StatBlock::~StatBlock() {
 }
 
 bool StatBlock::loadCoreStat(FileParser *infile) {
-	// @CLASS StatBlock: Core stats|Description of engine/stats.txt and enemies in enemies/
+	// @CLASS StatBlock: Core stats|Description of engine/stats.txt, enemies/..., and npcs/...
 
 	if (infile->key == "speed") {
 		// @ATTR speed|float|Movement speed
@@ -351,7 +351,7 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
  * Set paths for sound effects
  */
 bool StatBlock::loadSfxStat(FileParser *infile) {
-	// @CLASS StatBlock: Sound effects|Description of heroes in engine/avatar/ and enemies in enemies/
+	// @CLASS StatBlock: Sound effects|Description of sound effect properties in engine/stats.txt, enemies/..., and npcs/...
 
 	if (infile->new_section && (infile->section.empty() || infile->section == "stats")) {
 		sfx_attack.clear();
@@ -437,7 +437,7 @@ bool StatBlock::loadSfxStat(FileParser *infile) {
 }
 
 bool StatBlock::loadRenderLayerStat(FileParser *infile) {
-	// @CLASS StatBlock: Render layers|Description of heroes in engine/avatar/ and enemies in enemies/
+	// @CLASS StatBlock: Render layers|Description of 'render_layers' section in engine/stats.txt, enemies/..., and npcs/...
 
 	if (infile->section == "render_layers") {
 		if (infile->new_section) {
@@ -485,8 +485,10 @@ bool StatBlock::loadRenderLayerStat(FileParser *infile) {
 }
 
 bool StatBlock::loadAnimationSlotStat(FileParser *infile) {
+	// @CLASS StatBlock: Animation slots|Description of 'animation_slots' section in enemies/... and npcs/...
 	if (infile->section == "animation_slots") {
 		if (infile->key == "slot") {
+			// @ATTR slot|string, filename : Slot name, Animation filename|Assigns an animation to one of the slots defined in the render_layers section.
 			std::string slot_id = Parse::popFirstString(infile->val);
 			std::string slot_filename = Parse::popFirstString(infile->val);
 
