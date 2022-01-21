@@ -86,7 +86,8 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - name: IRC notifications
-        if: github.repository_owner == 'flareteam' && steps.build.outcome != 'success'
+        if: github.repository_owner == 'flareteam'
+        continue-on-error: true
         uses: rectalogic/notify-irc@v1
         with:
           server: 'irc.freegamedev.net'
