@@ -59,7 +59,7 @@ jobs:
           port: 6697
           channel: '##flarerpg'
           nickname: 'flareteam-github'
-          message: ${{ github.repository }} (${{ github.sha }}): Build passed
+          message: "${{ github.repository }} (${{ github.sha }}): Build passed"
   cppcheck:
     runs-on: ubuntu-18.04
     steps:
