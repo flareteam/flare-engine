@@ -34,7 +34,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuInventory.h"
 #include "MenuManager.h"
 #include "MenuPowers.h"
+#include "MenuVendor.h"
 #include "MessageEngine.h"
+#include "NPC.h"
 #include "PowerManager.h"
 #include "Settings.h"
 #include "SharedGameResources.h"
@@ -851,12 +853,12 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	}
 
 	// buy or sell price
-	if (items[stack.item].getPrice() > 0 && stack.item != eset->misc.currency_id) {
+	if (items[stack.item].getPrice(USE_VENDOR_RATIO) > 0 && stack.item != eset->misc.currency_id) {
 		Color currency_color = getItemColor(eset->misc.currency_id);
 
 		int price_per_unit;
 		if (context == VENDOR_BUY) {
-			price_per_unit = items[stack.item].getPrice();
+			price_per_unit = items[stack.item].getPrice(USE_VENDOR_RATIO);
 			if (stats->currency < price_per_unit)
 				color = font->getColor(FontEngine::COLOR_REQUIREMENTS_NOT_MET);
 			else
@@ -1043,28 +1045,43 @@ void ItemStack::clear() {
 	can_buyback = false;
 }
 
-int Item::getPrice() {
+int Item::getPrice(bool use_vendor_ratio) {
 	int new_price = price + (price_per_level * (pc->stats.level - 1));
 	if (new_price == 0)
 		return new_price;
 
 	new_price = static_cast<int>(static_cast<float>(new_price) * eset->loot.vendor_ratio_buy);
 
+	NPC* vendor_npc = ((menu && menu->vendor && menu->vendor->visible) ? menu->vendor->npc : NULL);
+
+	if (use_vendor_ratio) {
+		// get vendor ratio from NPC (or fall back to global value)
+		float vendor_ratio_buy = (vendor_npc && vendor_npc->vendor_ratio_buy > 0) ? vendor_npc->vendor_ratio_buy : eset->loot.vendor_ratio_buy;
+
+		new_price = static_cast<int>(static_cast<float>(new_price) * vendor_ratio_buy);
+	}
+
 	return std::max(new_price, 1);
 }
 
 int Item::getSellPrice(bool is_new_buyback) {
 	int new_price = 0;
-	if (is_new_buyback || eset->loot.vendor_ratio_sell_old == 0) {
+	NPC* vendor_npc = ((menu && menu->vendor && menu->vendor->visible) ? menu->vendor->npc : NULL);
+
+	// get vendor ratio from NPC (or fall back to global value)
+	float vendor_ratio_sell = (vendor_npc && vendor_npc->vendor_ratio_sell > 0) ? vendor_npc->vendor_ratio_sell : eset->loot.vendor_ratio_sell;
+	float vendor_ratio_sell_old = (vendor_npc && vendor_npc->vendor_ratio_sell_old > 0) ? vendor_npc->vendor_ratio_sell_old : eset->loot.vendor_ratio_sell_old;
+
+	if (is_new_buyback || vendor_ratio_sell_old == 0) {
 		// default sell price
 		if (price_sell != 0)
 			new_price = price_sell;
 		else
-			new_price = static_cast<int>(static_cast<float>(getPrice()) * eset->loot.vendor_ratio_sell);
+			new_price = static_cast<int>(static_cast<float>(getPrice(!ItemManager::USE_VENDOR_RATIO)) * vendor_ratio_sell);
 	}
 	else {
 		// sell price adjusted because the player can no longer buyback the item at the original sell price
-		new_price = static_cast<int>(static_cast<float>(getPrice()) * eset->loot.vendor_ratio_sell_old);
+		new_price = static_cast<int>(static_cast<float>(getPrice(!ItemManager::USE_VENDOR_RATIO)) * vendor_ratio_sell_old);
 	}
 
 	return std::max(new_price, 1);

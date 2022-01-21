@@ -978,7 +978,7 @@ bool MenuInventory::buy(ItemStack stack, int tab, bool dragging) {
 	}
 
 	int value_each;
-	if (tab == ItemManager::VENDOR_BUY) value_each = items->items[stack.item].getPrice();
+	if (tab == ItemManager::VENDOR_BUY) value_each = items->items[stack.item].getPrice(ItemManager::USE_VENDOR_RATIO);
 	else value_each = items->items[stack.item].getSellPrice(stack.can_buyback);
 
 	int count = value_each * stack.quantity;
@@ -1015,7 +1015,7 @@ bool MenuInventory::sell(ItemStack stack) {
 	if (stack.item == eset->misc.currency_id) return false;
 
 	// items that have no price cannot be sold
-	if (items->items[stack.item].getPrice() == 0) {
+	if (items->items[stack.item].getPrice(ItemManager::USE_VENDOR_RATIO) == 0) {
 		items->playSound(stack.item);
 		pc->logMsg(msg->get("This item can not be sold."), Avatar::MSG_NORMAL);
 		return false;
@@ -1467,7 +1467,7 @@ void MenuInventory::fillEquipmentSlots() {
 
 int MenuInventory::getMaxPurchasable(ItemStack item, int vendor_tab) {
 	if (vendor_tab == ItemManager::VENDOR_BUY)
-		return currency / items->items[item.item].getPrice();
+		return currency / items->items[item.item].getPrice(ItemManager::USE_VENDOR_RATIO);
 	else if (vendor_tab == ItemManager::VENDOR_SELL)
 		return currency / items->items[item.item].getSellPrice(item.can_buyback);
 	else

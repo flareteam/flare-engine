@@ -1729,31 +1729,37 @@ body {
 
 <p><strong>dialog.response_only</strong> | <code>bool</code> | If true, this dialog topic will only appear when explicitly referenced with the "response" key.</p>
 
-<p><strong>name</strong> | <code>string</code> | NPC's name.</p>
+<p><strong>npc.name</strong> | <code>string</code> | NPC's name.</p>
 
-<p><strong>direction</strong> | <code>direction</code> | The direction to use for this NPC's stance animation.</p>
+<p><strong>npc.direction</strong> | <code>direction</code> | The direction to use for this NPC's stance animation.</p>
 
-<p><strong>show_on_minimap</strong> | <code>bool</code> | If true, this NPC will be shown on the minimap. The default is true.</p>
+<p><strong>npc.show_on_minimap</strong> | <code>bool</code> | If true, this NPC will be shown on the minimap. The default is true.</p>
 
-<p><strong>talker</strong> | <code>bool</code> | Allows this NPC to be talked to.</p>
+<p><strong>npc.talker</strong> | <code>bool</code> | Allows this NPC to be talked to.</p>
 
-<p><strong>portrait</strong> | <code>filename</code> | Filename of the default portrait image.</p>
+<p><strong>npc.portrait</strong> | <code>filename</code> | Filename of the default portrait image.</p>
 
-<p><strong>vendor</strong> | <code>bool</code> | Allows this NPC to buy/sell items.</p>
+<p><strong>npc.vendor</strong> | <code>bool</code> | Allows this NPC to buy/sell items.</p>
 
-<p><strong>vendor_requires_status</strong> | <code>list(string)</code> | The player must have these statuses in order to use this NPC as a vendor.</p>
+<p><strong>npc.vendor_requires_status</strong> | <code>list(string)</code> | The player must have these statuses in order to use this NPC as a vendor.</p>
 
-<p><strong>vendor_requires_not_status</strong> | <code>list(string)</code> | The player must not have these statuses in order to use this NPC as a vendor.</p>
+<p><strong>npc.vendor_requires_not_status</strong> | <code>list(string)</code> | The player must not have these statuses in order to use this NPC as a vendor.</p>
 
-<p><strong>constant_stock</strong> | <code>repeatable(list(item_id))</code> | A list of items this vendor has for sale. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.</p>
+<p><strong>npc.constant_stock</strong> | <code>repeatable(list(item_id))</code> | A list of items this vendor has for sale. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.</p>
 
-<p><strong>status_stock</strong> | <code>repeatable(string, list(item_id)) : Required status, Item(s)</code> | A list of items this vendor will have for sale if the required status is met. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.</p>
+<p><strong>npc.status_stock</strong> | <code>repeatable(string, list(item_id)) : Required status, Item(s)</code> | A list of items this vendor will have for sale if the required status is met. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.</p>
 
-<p><strong>random_stock</strong> | <code>list(loot)</code> | Use a loot table to add random items to the stock; either a filename or an inline definition.</p>
+<p><strong>npc.random_stock</strong> | <code>list(loot)</code> | Use a loot table to add random items to the stock; either a filename or an inline definition.</p>
 
-<p><strong>random_stock_count</strong> | <code>int, int : Min, Max</code> | Sets the minimum (and optionally, the maximum) amount of random items this npc can have.</p>
+<p><strong>npc.random_stock_count</strong> | <code>int, int : Min, Max</code> | Sets the minimum (and optionally, the maximum) amount of random items this npc can have.</p>
 
-<p><strong>vox_intro</strong> | <code>repeatable(filename)</code> | Filename of a sound file to play when initially interacting with the NPC.</p>
+<p><strong>npc.vendor_ratio_buy</strong> | <code>float</code> | NPC-specific version of vendor_ratio_buy from engine/loot.txt. Uses the global setting when set to 0.</p>
+
+<p><strong>npc.vendor_ratio_sell</strong> | <code>float</code> | NPC-specific version of vendor_ratio_sell from engine/loot.txt. Uses the global setting when set to 0.</p>
+
+<p><strong>npc.vendor_ratio_sell_old</strong> | <code>float</code> | NPC-specific version of vendor_ratio_sell_old from engine/loot.txt. Uses the global setting when set to 0.</p>
+
+<p><strong>npc.vox_intro</strong> | <code>repeatable(filename)</code> | Filename of a sound file to play when initially interacting with the NPC.</p>
 
 <hr />
 

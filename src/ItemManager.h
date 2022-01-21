@@ -143,7 +143,7 @@ public:
 	int no_stash;
 	std::string script;
 
-	int getPrice();
+	int getPrice(bool use_vendor_ratio);
 	int getSellPrice(bool is_new_buyback);
 
 	Item();
@@ -219,6 +219,7 @@ public:
 		PLAYER_INV = 2
 	};
 
+	static const bool USE_VENDOR_RATIO = true;
 	static const bool DEFAULT_SELL_PRICE = true;
 	static const bool TOOLTIP_INPUT_HINT = true;
 

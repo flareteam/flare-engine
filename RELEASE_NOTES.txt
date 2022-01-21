@@ -17,6 +17,7 @@ Engine features:
 * Added 'animation_slots' section to StatBlock definitions. This allows for multiple animation layers on non-player entities that don't have an inventory like the player.
 * Added a 'direction' property to map NPCs, indentical to the property of the same name for map enemies.
 * Added 'vendor_ratio_buy', 'vendor_ratio_sell', and 'vendor_ratio_sell_old' properties to engine/loot.txt. These deprecate 'vendor_ratio' and 'vendor_ratio_buyback'.
+* Added 'vendor_ratio_buy', 'vendor_ratio_sell', and 'vendor_ratio_sell_old' properties to NPCs. These can be used to override the global settings in engine/loot.txt.
 
 Engine fixes:
 

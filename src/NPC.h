@@ -90,6 +90,9 @@ public:
 	bool vendor;
 	bool reset_buyback;
 	ItemStorage stock;
+	float vendor_ratio_buy;
+	float vendor_ratio_sell;
+	float vendor_ratio_sell_old;
 
 	// story and dialog options
 	// outer vector is addressing the dialog and the inner vector is
