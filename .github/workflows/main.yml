@@ -45,21 +45,28 @@ jobs:
           sudo apt-get install -qq g++ clang libegl1-mesa-dev libgles2-mesa-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
 
       - name: Build
-        id: build_all
+        id: build
+        continue-on-error: true
         env:
           CC: ${{ matrix.compiler.cc }}
           CXX: ${{ matrix.compiler.cxx }}
         run: cmake . && make
 
-      - name: IRC notification
-        if: job.steps.build_all.status == success()
-        uses: Gottox/irc-message-action@v2
+      - name: IRC notifications
+        if: github.repository_owner == 'flareteam' && steps.build.outcome != 'success'
+        continue-on-error: true
+        uses: rectalogic/notify-irc@v1
         with:
           server: 'irc.freegamedev.net'
           port: 6697
-          channel: '##flarerpg'
+          channel: '#flarerpg'
           nickname: 'flareteam-github'
-          message: "${{ github.repository }} (${{ github.sha }}): Build passed"
+          message: "${{ github.repository }} (${{ github.sha }}): ${{ matrix.compiler.cxx }} build failed. ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+      - name: Check Status
+        if: steps.build.outcome != 'success'
+        run: exit 1
+
   cppcheck:
     runs-on: ubuntu-18.04
     steps:
@@ -73,3 +80,17 @@ jobs:
 
       - name: Run cppcheck
         run: cppcheck --quiet --verbose --enable=all `git ls-files src/\*.cpp`
+
+  irc_notification:
+    needs: build
+    runs-on: ubuntu-18.04
+    steps:
+      - name: IRC notifications
+        if: github.repository_owner == 'flareteam' && steps.build.outcome != 'success'
+        uses: rectalogic/notify-irc@v1
+        with:
+          server: 'irc.freegamedev.net'
+          port: 6697
+          channel: '#flarerpg'
+          nickname: 'flareteam-github'
+          message: "${{ github.repository }} (${{ github.sha }}): Build passed. ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
