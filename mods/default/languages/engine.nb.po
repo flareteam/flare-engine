@@ -5,7 +5,7 @@
 # 
 # Translators:
 # Justin Jacobs <jajdorkster@gmail.com>, 2018
-# Elias Nykrem <bloodaxeNOR@protonmail.com>, 2019
+# Elias Nykrem <bloodaxeNOR@protonmail.com>, 2022
 # 
 #, fuzzy
 msgid ""
@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-09 13:41-0500\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: Elias Nykrem <bloodaxeNOR@protonmail.com>, 2019\n"
+"Last-Translator: Elias Nykrem <bloodaxeNOR@protonmail.com>, 2022\n"
 "Language-Team: Norwegian Bokmål (https://www.transifex.com/flareorg/teams/84925/nb/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -41,7 +41,7 @@ msgstr "Du kan øke en eller flere ferdigheter gjennom Evnemenyen."
 
 #: ../../../src/Avatar.cpp:718
 msgid "You are defeated."
-msgstr ""
+msgstr "Du er beseiret."
 
 #: ../../../src/Avatar.cpp:969
 msgid "Transformation expired. You have been moved back to a safe place."
@@ -55,7 +55,7 @@ msgstr "%d %s fjernet."
 #: ../../../src/CampaignManager.cpp:173
 #, c-format
 msgid "%s x%d removed."
-msgstr ""
+msgstr "%s x%d fjernet."
 
 #: ../../../src/CampaignManager.cpp:175
 #, c-format
@@ -156,11 +156,11 @@ msgstr "Slett dette spillet?"
 
 #: ../../../src/GameStateLoad.cpp:93 ../../../src/MenuConfig.cpp:248
 msgid "No"
-msgstr ""
+msgstr "Nei"
 
 #: ../../../src/GameStateLoad.cpp:94 ../../../src/MenuConfig.cpp:249
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: ../../../src/GameStateLoad.cpp:97
 msgid "Exit to Title"
@@ -346,7 +346,7 @@ msgstr "%d gjenstander:"
 
 #: ../../../src/ItemManager.cpp:933 ../../../src/MenuPowers.cpp:1280
 msgid "Tap icon again for more options"
-msgstr ""
+msgstr "Trykk på ikonet igjen for flere innstillinger"
 
 #: ../../../src/ItemManager.cpp:965
 #, c-format
@@ -361,7 +361,7 @@ msgstr "Trykk [%s] for å bruke"
 #: ../../../src/ItemManager.cpp:972 ../../../src/MenuPowers.cpp:1314
 #, c-format
 msgid "Press [%s] for more options"
-msgstr ""
+msgstr "Trykk [%s] for flere innstillinger"
 
 #: ../../../src/LootManager.cpp:99 ../../../src/LootManager.cpp:101
 #: ../../../src/LootManager.cpp:103 ../../../src/MenuConfig.cpp:427
@@ -380,7 +380,7 @@ msgstr "Standard"
 
 #: ../../../src/LootManager.cpp:103
 msgid "Show All"
-msgstr ""
+msgstr "Vis alt"
 
 #: ../../../src/MenuActionBar.cpp:86 ../../../src/MenuCharacter.cpp:54
 #: ../../../src/SDLInputState.cpp:887
@@ -437,7 +437,7 @@ msgstr "Nivå"
 #: ../../../src/MenuCharacter.cpp:309
 #, c-format
 msgid "Available stat points: %d"
-msgstr ""
+msgstr "Tilgjengelige ferdighetspoeng: %d"
 
 #: ../../../src/MenuCharacter.cpp:353
 #, c-format
@@ -479,7 +479,7 @@ msgstr "Tildel:"
 
 #: ../../../src/MenuConfig.cpp:244
 msgid "New"
-msgstr ""
+msgstr "Ny"
 
 #: ../../../src/MenuConfig.cpp:245 ../../../src/MenuManager.cpp:1791
 msgid "Clear"
@@ -503,7 +503,7 @@ msgstr "Fortsett"
 
 #: ../../../src/MenuConfig.cpp:264
 msgid "Save Game"
-msgstr ""
+msgstr "Lagre spill"
 
 #: ../../../src/MenuConfig.cpp:303
 msgid ""
@@ -603,7 +603,7 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:349
 msgid "The maximum frame rate that the game will be allowed to run at."
-msgstr ""
+msgstr "Den høyesete oppdateringsfrekvensen spillet får kjøre på."
 
 #: ../../../src/MenuConfig.cpp:353
 msgid ""
@@ -687,11 +687,11 @@ msgstr "Lysstyrke"
 
 #: ../../../src/MenuConfig.cpp:415
 msgid "Maximum Render Size"
-msgstr ""
+msgstr "Maksimal renderingsstørrelse"
 
 #: ../../../src/MenuConfig.cpp:416
 msgid "Frame Limit"
-msgstr ""
+msgstr "Bildefrekvensgrense"
 
 #: ../../../src/MenuConfig.cpp:418
 msgid "Sound Volume"
@@ -759,7 +759,7 @@ msgstr "Minimum helseterskel"
 
 #: ../../../src/MenuConfig.cpp:436
 msgid "Show item comparison tooltips"
-msgstr ""
+msgstr "Vis sammenligning mellom verktøytips for gods."
 
 #: ../../../src/MenuConfig.cpp:439 ../../../src/MenuMovementType.cpp:94
 #: ../../../src/MenuMovementType.cpp:130
@@ -792,7 +792,7 @@ msgstr "Joystick dødsone"
 
 #: ../../../src/MenuConfig.cpp:446
 msgid "Touch Controls"
-msgstr ""
+msgstr "Berøringskontroller"
 
 #: ../../../src/MenuConfig.cpp:447
 msgid "Touch Gamepad Scaling"
@@ -860,8 +860,8 @@ msgid ""
 "When enabled, empty equipment slots will be filled with applicable items "
 "when they are obtained."
 msgstr ""
-"Når aktivert, vil tomme verktøyrom fylles med aktuelle gjenstander når de "
-"anskaffes."
+"Når aktivert, vil tomme utrustningsrom fylles med aktuelle gjenstander når "
+"de anskaffes."
 
 #: ../../../src/MenuConfig.cpp:560
 msgid ""
@@ -876,6 +876,8 @@ msgid ""
 "When enabled, tooltips for equipped items of the same type are shown next to"
 " standard item tooltips."
 msgstr ""
+"Når aktivert, vil verktøytips for utrustede gjenstander av tilsvarende type "
+"vise ved siden av standard verktøytips."
 
 #: ../../../src/MenuConfig.cpp:562
 msgid ""
@@ -940,7 +942,7 @@ msgstr "Aktiver >>"
 
 #: ../../../src/MenuConfig.cpp:883
 msgid "Bindings for:"
-msgstr ""
+msgstr "Bindinger for:"
 
 #: ../../../src/MenuConfig.cpp:1562
 msgid "Version:"
@@ -960,7 +962,7 @@ msgstr "Krever følgende tilleggspakker:"
 
 #: ../../../src/MenuConfig.cpp:1629
 msgid "Can not remove this binding."
-msgstr ""
+msgstr "Kan ikke fjerne denne bindingen."
 
 #: ../../../src/MenuConfig.cpp:1694 ../../../src/SDLInputState.cpp:733
 #: ../../../src/SDLInputState.cpp:758
@@ -1140,7 +1142,7 @@ msgstr "Tilintetgjort"
 
 #: ../../../src/MenuGameOver.cpp:69
 msgid "Game Over"
-msgstr ""
+msgstr "Du tapte"
 
 #: ../../../src/MenuInventory.cpp:274
 #, c-format
@@ -1173,7 +1175,7 @@ msgstr "Plukk opp gjenstand(er):"
 
 #: ../../../src/MenuInventory.cpp:441
 msgid "Use or equip item:"
-msgstr "Benytt eller bruk gjenstand:"
+msgstr "Benytt eller utruste gjenstand:"
 
 #: ../../../src/MenuInventory.cpp:442
 #, c-format
@@ -1220,7 +1222,7 @@ msgstr "Du kan ikke selge denne gjenstanden."
 #: ../../../src/MenuInventory.cpp:1375
 #, c-format
 msgid "Equipped set %d."
-msgstr ""
+msgstr "Utrustet sett %d."
 
 #: ../../../src/MenuLog.cpp:90
 msgid "Quests"
@@ -1232,7 +1234,7 @@ msgstr "Notater"
 
 #: ../../../src/MenuManager.cpp:165
 msgid "Choose an action:"
-msgstr ""
+msgstr "Velg en handling:"
 
 #: ../../../src/MenuManager.cpp:311
 #, c-format
@@ -1245,56 +1247,56 @@ msgstr "Denne gjenstanden kan ikke slippes."
 
 #: ../../../src/MenuManager.cpp:1736
 msgid "Equipped"
-msgstr ""
+msgstr "Utrustet"
 
 #: ../../../src/MenuManager.cpp:1784 ../../../src/MenuManager.cpp:1835
 msgid "Use"
-msgstr ""
+msgstr "Bruk"
 
 #: ../../../src/MenuManager.cpp:1788 ../../../src/MenuManager.cpp:1831
 #: ../../../src/MenuManager.cpp:1862
 msgid "Move"
-msgstr ""
+msgstr "Flytt"
 
 #: ../../../src/MenuManager.cpp:1804 ../../../src/MenuManager.cpp:1839
 msgid "Equip"
-msgstr ""
+msgstr "Utruste"
 
 #: ../../../src/MenuManager.cpp:1808
 msgid "Upgrade"
-msgstr ""
+msgstr "Oppgrader"
 
 #: ../../../src/MenuManager.cpp:1823 ../../../src/MenuManager.cpp:1847
 msgid "Sell"
-msgstr ""
+msgstr "Selg"
 
 #: ../../../src/MenuManager.cpp:1827 ../../../src/MenuManager.cpp:1865
 msgid "Transfer"
-msgstr ""
+msgstr "Overfør"
 
 #: ../../../src/MenuManager.cpp:1843
 msgid "Drop"
-msgstr ""
+msgstr "Slipp"
 
 #: ../../../src/MenuManager.cpp:1879
 msgid "Buy"
-msgstr ""
+msgstr "Kjøp"
 
 #: ../../../src/MenuMovementType.cpp:87
 msgid "Select a Movement Type"
-msgstr ""
+msgstr "Velg en type bevegelse"
 
 #: ../../../src/MenuMovementType.cpp:89
 msgid "Can be changed later in the Configuration menu."
-msgstr ""
+msgstr "Kan endres senere i konfigurasjons menyen."
 
 #: ../../../src/MenuMovementType.cpp:92 ../../../src/MenuMovementType.cpp:121
 msgid "Keyboard"
-msgstr ""
+msgstr "Tastatur"
 
 #: ../../../src/MenuMovementType.cpp:93 ../../../src/MenuMovementType.cpp:127
 msgid "Mouse"
-msgstr ""
+msgstr "Mus"
 
 #: ../../../src/MenuMovementType.cpp:122 ../../../src/MenuMovementType.cpp:131
 #: ../../../src/SDLInputState.cpp:658 ../../../src/SDLInputState.cpp:688
@@ -1322,7 +1324,7 @@ msgstr "Høyre"
 
 #: ../../../src/MenuMovementType.cpp:128
 msgid "Button"
-msgstr ""
+msgstr "Knapp"
 
 #: ../../../src/MenuNumPicker.cpp:59
 msgid "Enter amount:"
@@ -1478,7 +1480,7 @@ msgstr "Krever 1 evnepoeng"
 #: ../../../src/MenuPowers.cpp:1512
 #, c-format
 msgid "Available skill points: %d"
-msgstr ""
+msgstr "Tilgjengelige evnepoeng: %d"
 
 #: ../../../src/MenuPowers.cpp:1544
 msgid "Next Level:"
@@ -1567,15 +1569,15 @@ msgstr "'%s' er ikke lenger bundet til:"
 
 #: ../../../src/SDLInputState.cpp:633
 msgid "BkSp"
-msgstr ""
+msgstr "BkSp"
 
 #: ../../../src/SDLInputState.cpp:634
 msgid "Caps"
-msgstr ""
+msgstr "Caps"
 
 #: ../../../src/SDLInputState.cpp:635
 msgid "Del"
-msgstr ""
+msgstr "Del"
 
 #: ../../../src/SDLInputState.cpp:637 ../../../src/SDLInputState.cpp:667
 msgid "End"
@@ -1583,7 +1585,7 @@ msgstr "End"
 
 #: ../../../src/SDLInputState.cpp:638
 msgid "Esc"
-msgstr ""
+msgstr "Esc"
 
 #: ../../../src/SDLInputState.cpp:639 ../../../src/SDLInputState.cpp:669
 msgid "Home"
@@ -1591,31 +1593,31 @@ msgstr "Hjem"
 
 #: ../../../src/SDLInputState.cpp:640
 msgid "Ins"
-msgstr ""
+msgstr "Ins"
 
 #: ../../../src/SDLInputState.cpp:641
 msgid "LAlt"
-msgstr ""
+msgstr "VAlt"
 
 #: ../../../src/SDLInputState.cpp:642
 msgid "LCtrl"
-msgstr ""
+msgstr "VCtrl"
 
 #: ../../../src/SDLInputState.cpp:644
 msgid "LShft"
-msgstr ""
+msgstr "VShft"
 
 #: ../../../src/SDLInputState.cpp:645
 msgid "Num"
-msgstr ""
+msgstr "Num"
 
 #: ../../../src/SDLInputState.cpp:646
 msgid "PgDn"
-msgstr ""
+msgstr "PgDn"
 
 #: ../../../src/SDLInputState.cpp:647
 msgid "PgUp"
-msgstr ""
+msgstr "PgUp"
 
 #: ../../../src/SDLInputState.cpp:648 ../../../src/SDLInputState.cpp:678
 #: ../../../src/SDLInputState.cpp:900
@@ -1624,23 +1626,23 @@ msgstr "Pause"
 
 #: ../../../src/SDLInputState.cpp:649
 msgid "Print"
-msgstr ""
+msgstr "Print"
 
 #: ../../../src/SDLInputState.cpp:650
 msgid "RAlt"
-msgstr ""
+msgstr "HAlt"
 
 #: ../../../src/SDLInputState.cpp:651
 msgid "RCtrl"
-msgstr ""
+msgstr "HCtrl"
 
 #: ../../../src/SDLInputState.cpp:652
 msgid "Ret"
-msgstr ""
+msgstr "Ent"
 
 #: ../../../src/SDLInputState.cpp:654
 msgid "RShft"
-msgstr ""
+msgstr "HShft"
 
 #: ../../../src/SDLInputState.cpp:655
 msgid "SLock"
@@ -1648,7 +1650,7 @@ msgstr ""
 
 #: ../../../src/SDLInputState.cpp:656
 msgid "Spc"
-msgstr ""
+msgstr "MelRm"
 
 #: ../../../src/SDLInputState.cpp:657 ../../../src/SDLInputState.cpp:687
 msgid "Tab"
@@ -1729,7 +1731,7 @@ msgstr "Mellomrom"
 #: ../../../src/SDLInputState.cpp:698
 #, c-format
 msgid "M%d"
-msgstr ""
+msgstr "M%d"
 
 #: ../../../src/SDLInputState.cpp:704
 #, c-format
@@ -1738,7 +1740,7 @@ msgstr "Mus %d"
 
 #: ../../../src/SDLInputState.cpp:713 ../../../src/SDLInputState.cpp:722
 msgid "(unknown)"
-msgstr ""
+msgstr "(ukjent)"
 
 #: ../../../src/SDLInputState.cpp:784
 msgid "Touch control D-Pad"
@@ -1802,47 +1804,47 @@ msgstr "Hoved2"
 
 #: ../../../src/SDLInputState.cpp:893
 msgid "Equipment Swap"
-msgstr ""
+msgstr "Bytt utrustning"
 
 #: ../../../src/SDLInputState.cpp:894
 msgid "Mini-map Mode"
-msgstr ""
+msgstr "Mini-kart modus"
 
 #: ../../../src/SDLInputState.cpp:895
 msgid "Loot Tooltip Mode"
-msgstr ""
+msgstr "Gods Verktøytipsmodus"
 
 #: ../../../src/SDLInputState.cpp:896
 msgid "Action Bar"
-msgstr ""
+msgstr "Handlings bar"
 
 #: ../../../src/SDLInputState.cpp:897
 msgid "Menu: Next Page"
-msgstr ""
+msgstr "Meny: Neste Side"
 
 #: ../../../src/SDLInputState.cpp:898
 msgid "Menu: Previous Page"
-msgstr ""
+msgstr "Meny: Forrige Side"
 
 #: ../../../src/SDLInputState.cpp:899
 msgid "Menu: Activate"
-msgstr ""
+msgstr "Meny: Aktiver"
 
 #: ../../../src/SDLInputState.cpp:901
 msgid "Aim Up"
-msgstr ""
+msgstr "Sikt opp"
 
 #: ../../../src/SDLInputState.cpp:902
 msgid "Aim Down"
-msgstr ""
+msgstr "Sikt ned"
 
 #: ../../../src/SDLInputState.cpp:903
 msgid "Aim Left"
-msgstr ""
+msgstr "Sikt venstre"
 
 #: ../../../src/SDLInputState.cpp:904
 msgid "Aim Right"
-msgstr ""
+msgstr "Sikt høyre"
 
 #: ../../../src/SDLInputState.cpp:905
 msgid "Developer Menu"
@@ -1890,103 +1892,103 @@ msgstr "Mus X2"
 
 #: ../../../src/SDLInputState.cpp:919
 msgid "X360: A"
-msgstr ""
+msgstr "X360: A"
 
 #: ../../../src/SDLInputState.cpp:920
 msgid "X360: B"
-msgstr ""
+msgstr "X360: B"
 
 #: ../../../src/SDLInputState.cpp:921
 msgid "X360: X"
-msgstr ""
+msgstr "X360: X"
 
 #: ../../../src/SDLInputState.cpp:922
 msgid "X360: Y"
-msgstr ""
+msgstr "X360: Y"
 
 #: ../../../src/SDLInputState.cpp:923
 msgid "X360: Back"
-msgstr ""
+msgstr "X360: Tilbake"
 
 #: ../../../src/SDLInputState.cpp:924
 msgid "X360: Guide"
-msgstr ""
+msgstr "X360: Guide"
 
 #: ../../../src/SDLInputState.cpp:925
 msgid "X360: Start"
-msgstr ""
+msgstr "X360: Start"
 
 #: ../../../src/SDLInputState.cpp:926
 msgid "X360: L3"
-msgstr ""
+msgstr "X360: L3"
 
 #: ../../../src/SDLInputState.cpp:927
 msgid "X360: R3"
-msgstr ""
+msgstr "X360: R3"
 
 #: ../../../src/SDLInputState.cpp:928
 msgid "X360: L1"
-msgstr ""
+msgstr "X360: L1"
 
 #: ../../../src/SDLInputState.cpp:929
 msgid "X360: R1"
-msgstr ""
+msgstr "X360: R1"
 
 #: ../../../src/SDLInputState.cpp:930
 msgid "X360: D-Up"
-msgstr ""
+msgstr "X360: D-Opp"
 
 #: ../../../src/SDLInputState.cpp:931
 msgid "X360: D-Down"
-msgstr ""
+msgstr "X360: D-Ned"
 
 #: ../../../src/SDLInputState.cpp:932
 msgid "X360: D-Left"
-msgstr ""
+msgstr "X360: D-Venstre"
 
 #: ../../../src/SDLInputState.cpp:933
 msgid "X360: D-Right"
-msgstr ""
+msgstr "X360: D-Høyre"
 
 #: ../../../src/SDLInputState.cpp:935
 msgid "X360: Left X+"
-msgstr ""
+msgstr "X360: Venstre X+"
 
 #: ../../../src/SDLInputState.cpp:936
 msgid "X360: Left X-"
-msgstr ""
+msgstr "X360: Venstre X-"
 
 #: ../../../src/SDLInputState.cpp:937
 msgid "X360: Left Y+"
-msgstr ""
+msgstr "X360: Venstre Y+"
 
 #: ../../../src/SDLInputState.cpp:938
 msgid "X360: Left Y-"
-msgstr ""
+msgstr "X360: Venstre Y-"
 
 #: ../../../src/SDLInputState.cpp:939
 msgid "X360: Right X+"
-msgstr ""
+msgstr "X360: Høyre X+"
 
 #: ../../../src/SDLInputState.cpp:940
 msgid "X360: Right X-"
-msgstr ""
+msgstr "X360: Høyre X-"
 
 #: ../../../src/SDLInputState.cpp:941
 msgid "X360: Right Y+"
-msgstr ""
+msgstr "X360: Høyre Y+"
 
 #: ../../../src/SDLInputState.cpp:942
 msgid "X360: Right Y-"
-msgstr ""
+msgstr "X360: Høyre Y-"
 
 #: ../../../src/SDLInputState.cpp:943
 msgid "X360: L2"
-msgstr ""
+msgstr "X360: L2"
 
 #: ../../../src/SDLInputState.cpp:944
 msgid "X360: R2"
-msgstr ""
+msgstr "X360: R2"
 
 #: ../../../src/Stats.cpp:38
 msgid "Max HP"

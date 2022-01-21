@@ -56,7 +56,9 @@ Game updates:
 
 Translation updates:
 
+* Basque (eu) update (aitzkora)
 * Scottish Gaelic (gd) update (GunChleoc)
+* Norwegian Bokmal (nb) update (Elias Nykrem)
 * Polish (pl) update (Pawonashi)
 
 
