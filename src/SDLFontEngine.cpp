@@ -233,6 +233,7 @@ void SDLFontEngine::renderInternal(const std::string& text, int x, int y, int ju
 	Rect dest_rect = position(text, x, y, justify);
 
 	// Render text into target
+	// We render the same thing twice because blending with itself produces visually clearer text, especially on noisy backgrounds
 	graphics = render_device->renderTextToImage(active_font, text, color, active_font->blend);
 	if (graphics) {
 		if (target) {
@@ -240,11 +241,14 @@ void SDLFontEngine::renderInternal(const std::string& text, int x, int y, int ju
 			clip.w = graphics->getWidth();
 			clip.h = graphics->getHeight();
 			render_device->renderToImage(graphics, clip, target, dest_rect);
+			render_device->renderToImage(graphics, clip, target, dest_rect);
 		}
 		else {
+			// no target, so just render to the screen
 			Sprite* temp_sprite = graphics->createSprite();
 			if (temp_sprite) {
 				temp_sprite->setDestFromRect(dest_rect);
+				render_device->render(temp_sprite);
 				render_device->render(temp_sprite);
 				delete temp_sprite;
 			}

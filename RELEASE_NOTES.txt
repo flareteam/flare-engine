@@ -41,6 +41,7 @@ Engine fixes:
 * Improved file access handling on Android versions 10 and up. This fixes the infinite cutscene loop when starting a new game.
 * Fixed memory leak when loading NPCs.
 * Entity animations will now fall back to the 'die' animation when 'critdie' isn't defined.
+* Improved text rendering by blending text with a copy of itself.
 
 Game updates:
 
