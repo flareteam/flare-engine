@@ -745,14 +745,16 @@ void MenuPowers::setUnlockedPowers() {
 
 	for (size_t i = 0; i<power_cell.size(); ++i) {
 		for (size_t j = 0; j < power_cell[i].cells.size(); ++j) {
-			if (std::find(pc->stats.powers_list.begin(), pc->stats.powers_list.end(), power_cell[i].cells[j].id) != pc->stats.powers_list.end()) {
-				power_cell[i].cells[j].is_unlocked = true;
-			}
-			else {
-				if (checkUnlocked(&power_cell[i].cells[j])) {
-					// power is unlocked, but not in the player's powers_list
-					pc->stats.powers_list.push_back(power_cell[i].cells[j].id);
+			if (std::find(recently_locked_cells.begin(), recently_locked_cells.end(), &power_cell[i].cells[j]) == recently_locked_cells.end()) {
+				if (std::find(pc->stats.powers_list.begin(), pc->stats.powers_list.end(), power_cell[i].cells[j].id) != pc->stats.powers_list.end()) {
 					power_cell[i].cells[j].is_unlocked = true;
+				}
+				else {
+					if (checkUnlocked(&power_cell[i].cells[j])) {
+						// power is unlocked, but not in the player's powers_list
+						pc->stats.powers_list.push_back(power_cell[i].cells[j].id);
+						power_cell[i].cells[j].is_unlocked = true;
+					}
 				}
 			}
 
@@ -760,6 +762,11 @@ void MenuPowers::setUnlockedPowers() {
 				if (!checkRequirements(&power_cell[i].cells[j])) {
 					lockCell(&power_cell[i].cells[j]);
 					did_cell_lock = true;
+
+					// We're going to recursively call setUnlockedPowers() at this point.
+					// We save a list of powers locked here so that we don't unlock them again in this cycle,
+					// which would result in an infinite loop.
+					recently_locked_cells.push_back(&power_cell[i].cells[j]);
 				}
 				else {
 					// if power was present in ActionBar, update it there
@@ -779,6 +786,8 @@ void MenuPowers::setUnlockedPowers() {
 		setUnlockedPowers();
 		return;
 	}
+
+	recently_locked_cells.clear();
 
 	for (size_t i = 0; i < power_cell.size(); ++i) {
 		// handle passive powers

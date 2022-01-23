@@ -155,6 +155,8 @@ private:
 
 	int default_power_tab;
 
+	std::vector<MenuPowersCell*> recently_locked_cells;
+
 public:
 	enum {
 		TOOLTIP_SHORT = 0,
