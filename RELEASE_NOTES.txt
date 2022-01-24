@@ -62,6 +62,7 @@ Translation updates:
 * Scottish Gaelic (gd) update (GunChleoc)
 * Norwegian Bokmal (nb) update (Elias Nykrem)
 * Polish (pl) update (Pawonashi)
+* Russian (ru) update (Igor Polyakov)
 
 
 
