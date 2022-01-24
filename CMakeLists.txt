@@ -17,6 +17,10 @@ if (MSVC)
 	add_definitions(-D_CRT_SECURE_NO_DEPRECATE)
 	add_definitions(-D_CRT_NONSTDC_NO_DEPRECATE)
 else ()
+	if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+		add_compile_options(-Wno-psabi)
+	endif()
+
 	add_compile_options(
 		-Wall -Wextra -Wunused -Wshadow -Woverloaded-virtual -Wunreachable-code -Wconversion -Wno-sign-conversion -Wformat-security
 		-fno-math-errno -fno-exceptions
