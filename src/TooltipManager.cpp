@@ -19,13 +19,20 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class TooltipManager
  */
 
+#include "EngineSettings.h"
+#include "SharedResources.h"
 #include "TooltipManager.h"
 #include "WidgetTooltip.h"
 
 TooltipManager::TooltipManager()
 	: context(CONTEXT_NONE)
 {
-	for (size_t i = 0; i < TOOLTIP_COUNT; ++i) {
+	tip.resize(eset->tooltips.visible_max);
+	tip_data.resize(eset->tooltips.visible_max);
+	pos.resize(eset->tooltips.visible_max);
+	style.resize(eset->tooltips.visible_max);
+
+	for (size_t i = 0; i < eset->tooltips.visible_max; ++i) {
 		tip[i] = new WidgetTooltip();
 		if (i > 0) {
 			tip[i]->parent = tip[i-1];
@@ -38,19 +45,19 @@ TooltipManager::TooltipManager()
 }
 
 TooltipManager::~TooltipManager() {
-	for (size_t i = 0; i < TOOLTIP_COUNT; ++i) {
+	for (size_t i = 0; i < tip.size(); ++i) {
 		delete tip[i];
 	}
 }
 
 void TooltipManager::clear() {
-	for (size_t i = 0; i < TOOLTIP_COUNT; ++i) {
+	for (size_t i = 0; i < eset->tooltips.visible_max; ++i) {
 		tip_data[i].clear();
 	}
 }
 
 bool TooltipManager::isEmpty() {
-	for (size_t i = 0; i < TOOLTIP_COUNT; ++i) {
+	for (size_t i = 0; i < eset->tooltips.visible_max; ++i) {
 		if (!tip_data[i].isEmpty())
 			return false;
 	}
@@ -58,7 +65,7 @@ bool TooltipManager::isEmpty() {
 }
 
 void TooltipManager::push(const TooltipData& _tip_data, const Point& _pos, uint8_t _style, size_t tip_index) {
-	if (_tip_data.isEmpty() || tip_index >= TOOLTIP_COUNT)
+	if (_tip_data.isEmpty() || tip_index >= eset->tooltips.visible_max)
 		return;
 
 	tip_data[tip_index] = _tip_data;
@@ -74,7 +81,7 @@ void TooltipManager::render() {
 		context = CONTEXT_NONE;
 	}
 
-	for (size_t i = 0; i < TOOLTIP_COUNT; ++i) {
+	for (size_t i = 0; i < eset->tooltips.visible_max; ++i) {
 		tip[i]->render(tip_data[i], pos[i], style[i]);
 	}
 }

@@ -1724,7 +1724,7 @@ void MenuManager::pushMatchingItemsOf(const Point& hov_pos) {
 
 		//get equipped items of the same type
 		for (size_t i = 0; i < inv->equipped_area.size(); i++) {
-			if (tip_index >= TooltipManager::TOOLTIP_COUNT)
+			if (tip_index >= eset->tooltips.visible_max)
 				break; // can't show any more tooltips
 
 			if (inv->isActive(i)){

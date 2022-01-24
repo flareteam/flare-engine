@@ -18,6 +18,7 @@ Engine features:
 * Added a 'direction' property to map NPCs, indentical to the property of the same name for map enemies.
 * Added 'vendor_ratio_buy', 'vendor_ratio_sell', and 'vendor_ratio_sell_old' properties to engine/loot.txt. These deprecate 'vendor_ratio' and 'vendor_ratio_buyback'.
 * Added 'vendor_ratio_buy', 'vendor_ratio_sell', and 'vendor_ratio_sell_old' properties to NPCs. These can be used to override the global settings in engine/loot.txt.
+* Added 'tooltip_visible_max' to engine/tootlips.txt to control the maximum number of visible floating tooltips.
 
 Engine fixes:
 

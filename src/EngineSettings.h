@@ -217,6 +217,7 @@ public:
 		int margin;
 		int margin_npc;
 		int background_border;
+		size_t visible_max;
 	};
 
 	class Loot {

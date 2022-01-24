@@ -706,6 +706,7 @@ void EngineSettings::Tooltips::load() {
 	margin = 0;
 	margin_npc = 0;
 	background_border = 0;
+	visible_max = 3;
 
 	FileParser infile;
 	// @CLASS EngineSettings: Tooltips|Description of engine/tooltips.txt
@@ -726,6 +727,15 @@ void EngineSettings::Tooltips::load() {
 			// @ATTR tooltip_background_border|int|The pixel size of the border in "images/menus/tooltips.png".
 			else if (infile.key == "tooltip_background_border")
 				background_border = Parse::toInt(infile.val);
+			// @ATTR tooltip_visible_max|int|The maximum number of floating tooltips on screen at once. Defaults to 3.
+			else if (infile.key == "tooltip_visible_max") {
+				visible_max = static_cast<size_t>(Parse::toInt(infile.val));
+
+				if (visible_max < 1) {
+					visible_max = 1;
+					infile.error("EngineSettings: tooltip_visible_max must be greater than or equal to 1.");
+				}
+			}
 
 			else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
 		}

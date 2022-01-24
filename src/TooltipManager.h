@@ -29,7 +29,6 @@ class WidgetTooltip;
 
 class TooltipManager {
 public:
-	static const size_t TOOLTIP_COUNT = 3;
 	enum {
 		CONTEXT_NONE = 0,
 		CONTEXT_MENU = 1,
@@ -48,10 +47,10 @@ public:
 	uint8_t context;
 
 private:
-	WidgetTooltip* tip[TOOLTIP_COUNT];
-	TooltipData tip_data[TOOLTIP_COUNT];
-	Point pos[TOOLTIP_COUNT];
-	uint8_t style[TOOLTIP_COUNT];
+	std::vector<WidgetTooltip*> tip;
+	std::vector<TooltipData> tip_data;
+	std::vector<Point> pos;
+	std::vector<uint8_t> style;
 
 };
 
