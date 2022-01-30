@@ -56,6 +56,7 @@ Game updates:
 * Goblin Thief can now steal all available kinds of potions. Its drop table has also been expanded to make it easier to replenish lost potions.
 * Improved contrast for "highlight" state of red square buttons ("close" and "plus").
 * The minimap is now gradually revealed as the player explores.
+* Added icon artwork to the equipment slots on the Inventory menu.
 
 Translation updates:
 
