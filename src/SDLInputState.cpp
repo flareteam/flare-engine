@@ -254,6 +254,11 @@ void SDLInputState::initBindings() {
 	setBind(Input::UP, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_DPAD_UP, NULL);
 	setBind(Input::DOWN, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_DPAD_DOWN, NULL);
 
+	setBind(Input::BAR_1, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_LEFTSTICK, NULL);
+	setBind(Input::BAR_2, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_RIGHTSTICK, NULL);
+
+	setBind(Input::INVENTORY, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_Y, NULL);
+
 	// TODO implement input contexts so that MAIN1 doesn't interfere with MENU_PAGE_NEXT
 	// setBind(Input::MAIN1, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER, NULL);
 	// setBind(Input::MAIN2, InputBind::GAMEPAD_AXIS, (SDL_CONTROLLER_AXIS_TRIGGERRIGHT*2), NULL);
