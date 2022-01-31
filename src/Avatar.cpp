@@ -1018,24 +1018,27 @@ bool Avatar::isLowHpCursorEnabled() {
 
 std::string Avatar::getGfxFromType(const std::string& gfx_type) {
 	feet_index = -1;
-
 	std::string gfx;
 
-	for (int i=0; i<menu->inv->inventory[MenuInventory::EQUIPMENT].getSlotNumber(); i++) {
-		if (!menu->inv->isActive(i))
-			continue;
+	if (menu && menu->inv) {
+		for (int i=0; i<menu->inv->inventory[MenuInventory::EQUIPMENT].getSlotNumber(); i++) {
+			if (!menu->inv->isActive(i))
+				continue;
 
-		if (gfx_type == menu->inv->inventory[MenuInventory::EQUIPMENT].slot_type[i]) {
-			gfx = items->items[menu->inv->inventory[MenuInventory::EQUIPMENT][i].item].gfx;
-		}
-		if (menu->inv->inventory[MenuInventory::EQUIPMENT].slot_type[i] == "feet") {
-			feet_index = i;
+			if (gfx_type == menu->inv->inventory[MenuInventory::EQUIPMENT].slot_type[i]) {
+				gfx = items->items[menu->inv->inventory[MenuInventory::EQUIPMENT][i].item].gfx;
+			}
+			if (menu->inv->inventory[MenuInventory::EQUIPMENT].slot_type[i] == "feet") {
+				feet_index = i;
+			}
 		}
 	}
+
 	// special case: if we don't have a head, use the portrait's head
 	if (gfx.empty() && gfx_type == "head") {
-		gfx = pc->stats.gfx_head;
+		gfx = stats.gfx_head;
 	}
+
 	// fall back to default if it exists
 	if (gfx.empty()) {
 		if (Filesystem::fileExists(mods->locate("animations/avatar/" + stats.gfx_base + "/default_" + gfx_type + ".txt")))
