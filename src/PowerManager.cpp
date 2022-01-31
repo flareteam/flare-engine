@@ -967,7 +967,7 @@ bool PowerManager::isValidEffect(const std::string& type) {
 	}
 
 	for (unsigned i=0; i<eset->elements.list.size(); ++i) {
-		if (type == eset->elements.list[i].id + "_resist")
+		if (type == eset->elements.list[i].resist_id)
 			return true;
 	}
 

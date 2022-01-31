@@ -388,8 +388,11 @@ void EngineSettings::Elements::load() {
 			if (list.empty() || infile.section != "element")
 				continue;
 
-			// @ATTR element.id|string|An identifier for this element.
-			if (infile.key == "id") list.back().id = infile.val;
+			// @ATTR element.id|string|An identifier for this element. When used as a resistance, "_resist" is appended to the id. For example, if the id is "fire", the resist id is "fire_resist".
+			if (infile.key == "id") {
+				list.back().id = infile.val;
+				list.back().resist_id = list.back().id + "_resist";
+			}
 			// @ATTR element.name|string|The displayed name of this element.
 			else if (infile.key == "name") list.back().name = msg->get(infile.val);
 

@@ -627,7 +627,7 @@ void ItemManager::parseBonus(BonusData& bdata, FileParser& infile) {
 	}
 
 	for (unsigned i=0; i<eset->elements.list.size(); ++i) {
-		if (bonus_str == eset->elements.list[i].id + "_resist") {
+		if (bonus_str == eset->elements.list[i].resist_id) {
 			bdata.resist_index = i;
 			return;
 		}

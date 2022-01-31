@@ -169,7 +169,7 @@ int Effect::getTypeFromString(const std::string& type_str) {
 		}
 
 		for (size_t i=0; i<eset->elements.list.size(); ++i) {
-			if (type_str == eset->elements.list[i].id + "_resist") {
+			if (type_str == eset->elements.list[i].resist_id) {
 				return Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count + i);
 			}
 		}

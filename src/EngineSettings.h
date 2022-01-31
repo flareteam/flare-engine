@@ -116,6 +116,7 @@ public:
 		class Element {
 		public:
 			std::string id;
+			std::string resist_id;
 			std::string name;
 		};
 
