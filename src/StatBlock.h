@@ -95,6 +95,8 @@ public:
 	static const float DIRECTION_DELTA_Y[8];
 	static const float SPEED_MULTIPLIER[8];
 
+	static size_t getFullStatCount();
+
 	StatBlock();
 	~StatBlock();
 
@@ -178,6 +180,7 @@ public:
 	int getDamageMax(size_t dmg_type) const {
 		return current[Stats::COUNT + (dmg_type * 2) + 1];
 	}
+	int getResist(size_t resist_type) const;
 
 	// additional values to base stats, given by items
 	std::vector<int> primary_additional;
@@ -212,8 +215,6 @@ public:
 	float charge_speed;
 
 	std::set<std::string> equip_flags;
-	std::vector<int> vulnerable;
-	std::vector<int> vulnerable_base;
 
 	// buff and debuff stats
 	int transform_duration;

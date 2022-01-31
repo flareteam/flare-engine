@@ -892,11 +892,6 @@ void Avatar::transform() {
 		stats.starting[i] = std::max(stats.starting[i], charmed_stats->starting[i]);
 	}
 
-	// resistances
-	for (unsigned int i=0; i<stats.vulnerable.size(); i++) {
-		stats.vulnerable[i] = std::min(stats.vulnerable[i], charmed_stats->vulnerable[i]);
-	}
-
 	loadSoundsFromStatBlock(charmed_stats);
 	loadStepFX("NULL");
 
@@ -959,10 +954,6 @@ void Avatar::untransform() {
 
 	for (int i=0; i<Stats::COUNT; ++i) {
 		stats.starting[i] = hero_stats->starting[i];
-	}
-
-	for (unsigned int i=0; i<stats.vulnerable.size(); i++) {
-		stats.vulnerable[i] = hero_stats->vulnerable[i];
 	}
 
 	loadSounds();

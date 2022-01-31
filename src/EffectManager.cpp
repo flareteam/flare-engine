@@ -222,8 +222,7 @@ size_t Effect::getPrimaryFromType(int t) {
 }
 
 EffectManager::EffectManager()
-	: bonus(std::vector<int>(Stats::COUNT + eset->damage_types.count, 0))
-	, bonus_resist(std::vector<int>(eset->elements.list.size(), 0))
+	: bonus(std::vector<int>(Stats::COUNT + eset->damage_types.count + eset->elements.list.size(), 0))
 	, bonus_primary(std::vector<int>(eset->primary_stats.list.size(), 0))
 	, triggered_others(false)
 	, triggered_block(false)
@@ -261,12 +260,8 @@ void EffectManager::clearStatus() {
 	fear = false;
 	knockback_speed = 0;
 
-	for (unsigned i=0; i<Stats::COUNT + eset->damage_types.count; i++) {
+	for (unsigned i=0; i<Stats::COUNT + eset->damage_types.count + eset->elements.list.size(); i++) {
 		bonus[i] = 0;
-	}
-
-	for (unsigned i=0; i<bonus_resist.size(); i++) {
-		bonus_resist[i] = 0;
 	}
 
 	for (unsigned i=0; i<bonus_primary.size(); i++) {
@@ -353,12 +348,9 @@ void EffectManager::logic() {
 
 		// @TYPE ${STATNAME}|Increases ${STATNAME}, where ${STATNAME} is any of the base stats. Examples: hp, avoidance, xp_gain
 		// @TYPE ${DAMAGE_TYPE}|Increases a damage min or max, where ${DAMAGE_TYPE} is any 'min' or 'max' value found in engine/damage_types.txt. Example: dmg_melee_min
-		else if (ei.type >= Effect::TYPE_COUNT && ei.type < Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count)) {
-			bonus[ei.type - Effect::TYPE_COUNT] += ei.magnitude;
-		}
 		// @TYPE ${ELEMENT}_resist|Increase Resistance % to ${ELEMENT}, where ${ELEMENT} is any found in engine/elements.txt. Example: fire_resist
-		else if (ei.type >= Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count) && ei.type < Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count) + static_cast<int>(eset->elements.list.size())) {
-			bonus_resist[ei.type - Effect::TYPE_COUNT - Stats::COUNT - eset->damage_types.count] += ei.magnitude;
+		else if (ei.type >= Effect::TYPE_COUNT && ei.type < Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count) + static_cast<int>(eset->elements.list.size())) {
+			bonus[ei.type - Effect::TYPE_COUNT] += ei.magnitude;
 		}
 		// @TYPE ${PRIMARYSTAT}|Increases ${PRIMARYSTAT}, where ${PRIMARYSTAT} is any of the primary stats defined in engine/primary_stats.txt. Example: physical
 		else if (ei.type >= Effect::TYPE_COUNT) {

@@ -418,19 +418,19 @@ bool Entity::takeHit(Hazard &h) {
 		dmg = Math::randBetween(powers->powers[h.power_index].mod_damage_value_min, powers->powers[h.power_index].mod_damage_value_max);
 
 	// apply elemental resistance
-	if (h.power->trait_elemental >= 0 && static_cast<size_t>(h.power->trait_elemental) < stats.vulnerable.size()) {
+	if (h.power->trait_elemental >= 0 && static_cast<size_t>(h.power->trait_elemental) < eset->elements.list.size()) {
 		size_t i = h.power->trait_elemental;
 
-		int vulnerable = stats.vulnerable[i];
-		// vulnerable values >100 are weakness, and are unaffected by min/max resist setting
-		if (vulnerable <= 100) {
-			if (100 - vulnerable < eset->combat.min_resist)
-				vulnerable = 100 - eset->combat.min_resist;
-			if (100 - vulnerable > eset->combat.max_resist)
-				vulnerable = 100 - eset->combat.max_resist;
+		int resist = stats.getResist(i);
+		// resist values < 0 are weakness, and are unaffected by min/max resist setting
+		if (resist >= 0) {
+			if (resist < eset->combat.min_resist)
+				resist = eset->combat.min_resist;
+			if (resist > eset->combat.max_resist)
+				resist = eset->combat.max_resist;
 		}
 
-		dmg = (dmg * vulnerable) / 100;
+		dmg = (dmg * (100-resist)) / 100;
 	}
 
 	if (!h.power->trait_armor_penetration) { // armor penetration ignores all absorption

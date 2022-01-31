@@ -58,6 +58,10 @@ const float StatBlock::DIRECTION_DELTA_X[8] =   {-1, -1, -1,  0,  1,  1,  1,  0}
 const float StatBlock::DIRECTION_DELTA_Y[8] =   { 1,  0, -1, -1, -1,  0,  1,  1};
 const float StatBlock::SPEED_MULTIPLIER[8] = { static_cast<float>(1.0/M_SQRT2), 1.0f, static_cast<float>(1.0/M_SQRT2), 1.0f, static_cast<float>(1.0/M_SQRT2), 1.0f, static_cast<float>(1.0/M_SQRT2), 1.0f};
 
+size_t StatBlock::getFullStatCount() {
+	return Stats::COUNT + eset->damage_types.count + eset->elements.list.size();
+}
+
 StatBlock::StatBlock()
 	: statsLoaded(false)
 	, alive(true)
@@ -93,10 +97,10 @@ StatBlock::StatBlock()
 	, check_title(false)
 	, stat_points_per_level(1)
 	, power_points_per_level(1)
-	, starting(Stats::COUNT + eset->damage_types.count, 0)
-	, base(Stats::COUNT + eset->damage_types.count, 0)
-	, current(Stats::COUNT + eset->damage_types.count, 0)
-	, per_level(Stats::COUNT + eset->damage_types.count, 0)
+	, starting(getFullStatCount(), 0)
+	, base(getFullStatCount(), 0)
+	, current(getFullStatCount(), 0)
+	, per_level(getFullStatCount(), 0)
 	, character_class("")
 	, character_subclass("")
 	, hp(0)
@@ -110,8 +114,6 @@ StatBlock::StatBlock()
 	, absorb_max_add(0)
 	, speed(0.1f)
 	, charge_speed(0.0f)
-	, vulnerable(eset->elements.list.size(), 100)
-	, vulnerable_base(eset->elements.list.size(), 100)
 	, transform_duration(0)
 	, transform_duration_total(0)
 	, manual_untransform(false)
@@ -200,7 +202,7 @@ StatBlock::StatBlock()
 	per_primary.resize(eset->primary_stats.list.size());
 
 	for (size_t i = 0; i < per_primary.size(); ++i) {
-		per_primary[i].resize(Stats::COUNT + eset->damage_types.count, 0);
+		per_primary[i].resize(getFullStatCount(), 0);
 	}
 
 	cooldown.reset(Timer::END);
@@ -254,6 +256,13 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 				return true;
 			}
 		}
+
+		for (size_t i = 0; i < eset->elements.list.size(); ++i) {
+			if (eset->elements.list[i].id + "_resist" == stat) {
+				starting[Stats::COUNT + eset->damage_types.count] = value;
+				return true;
+			}
+		}
 	}
 	else if (infile->key == "stat_per_level") {
 		// @ATTR stat_per_level|predefined_string, int : Stat name, Value|The value for this stat added per level.
@@ -274,6 +283,13 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 			}
 			else if (eset->damage_types.list[i].max == stat) {
 				per_level[Stats::COUNT + (i*2) + 1] = value;
+				return true;
+			}
+		}
+
+		for (size_t i = 0; i < eset->elements.list.size(); ++i) {
+			if (eset->elements.list[i].id + "_resist" == stat) {
+				per_level[Stats::COUNT + eset->damage_types.count] = value;
 				return true;
 			}
 		}
@@ -307,15 +323,24 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 				return true;
 			}
 		}
+
+		for (size_t i = 0; i < eset->elements.list.size(); ++i) {
+			if (eset->elements.list[i].id + "_resist" == stat) {
+				per_primary[prim_stat_index][Stats::COUNT + eset->damage_types.count] = value;
+				return true;
+			}
+		}
 	}
 	else if (infile->key == "vulnerable") {
-		// @ATTR vulnerable|predefined_string, int : Element, Value|Percentage weakness to this element.
+		// @ATTR vulnerable|predefined_string, int : Element, Value|(Deprecated in v1.12.91; use a '..._resist' value with 'stat' instead) Percentage weakness to this element.
 		std::string element = Parse::popFirstString(infile->val);
-		int value = Parse::popFirstInt(infile->val);
+		int value = (Parse::popFirstInt(infile->val) * -1) + 100;
+
+		infile->error("StatBlock: 'vulnerable' is deprecated. Use 'stat=%s_resist,%d' instead.", element.c_str(), value);
 
 		for (unsigned int i=0; i<eset->elements.list.size(); i++) {
 			if (element == eset->elements.list[i].id) {
-				vulnerable[i] = vulnerable_base[i] = value;
+				starting[Stats::COUNT + eset->damage_types.count + i] = value;
 				return true;
 			}
 		}
@@ -825,7 +850,7 @@ void StatBlock::calcBase() {
 	const int lev0 = std::max(level - 1, 0);
 
 	if (per_primary.empty()) {
-		for (size_t i = 0; i < Stats::COUNT + eset->damage_types.count; ++i) {
+		for (size_t i = 0; i < getFullStatCount(); ++i) {
 			base[i] = starting[i] + (lev0 * per_level[i]);
 		}
 	}
@@ -833,7 +858,7 @@ void StatBlock::calcBase() {
 		for (size_t j = 0; j < per_primary.size(); ++j) {
 			const int current_primary = std::max(get_primary(j) - 1, 0);
 			const std::vector<int>& per_primary_vec = per_primary[j];
-			for (size_t i = 0; i < Stats::COUNT + eset->damage_types.count; ++i) {
+			for (size_t i = 0; i < getFullStatCount(); ++i) {
 				if (j==0)
 					base[i] = starting[i] + (lev0 * per_level[i]);
 				base[i] += (current_primary * per_primary_vec[i]);
@@ -878,12 +903,8 @@ void StatBlock::applyEffects() {
 
 	calcBase();
 
-	for (size_t i = 0; i < Stats::COUNT + eset->damage_types.count; ++i) {
+	for (size_t i = 0; i < getFullStatCount(); ++i) {
 		current[i] = base[i] + effects.bonus[i];
-	}
-
-	for (size_t i = 0; i < effects.bonus_resist.size(); ++i) {
-		vulnerable[i] = vulnerable_base[i] - effects.bonus_resist[i];
 	}
 
 	current[Stats::HP_MAX] += (current[Stats::HP_MAX] * current[Stats::HP_PERCENT]) / 100;
@@ -1349,4 +1370,8 @@ void StatBlock::setPowerCooldown(PowerID power_id, int power_cooldown) {
 			}
 		}
 	}
+}
+
+int StatBlock::getResist(size_t resist_type) const {
+	return current[Stats::COUNT + eset->damage_types.count + resist_type];
 }
