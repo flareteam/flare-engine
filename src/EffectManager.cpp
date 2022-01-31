@@ -346,9 +346,7 @@ void EffectManager::logic() {
 		// @TYPE knockback|Pushes the target away from the source caster. Speed is the given value divided by the framerate cap.
 		else if (ei.type == Effect::KNOCKBACK) knockback_speed = static_cast<float>(ei.magnitude)/static_cast<float>(settings->max_frames_per_sec);
 
-		// @TYPE ${STATNAME}|Increases ${STATNAME}, where ${STATNAME} is any of the base stats. Examples: hp, avoidance, xp_gain
-		// @TYPE ${DAMAGE_TYPE}|Increases a damage min or max, where ${DAMAGE_TYPE} is any 'min' or 'max' value found in engine/damage_types.txt. Example: dmg_melee_min
-		// @TYPE ${ELEMENT}_resist|Increase Resistance % to ${ELEMENT}, where ${ELEMENT} is any found in engine/elements.txt. Example: fire_resist
+		// @TYPE ${STAT}|Increases ${STAT}, where ${STAT} is any valid stat_id.
 		else if (ei.type >= Effect::TYPE_COUNT && ei.type < Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count) + static_cast<int>(eset->elements.list.size())) {
 			bonus[ei.type - Effect::TYPE_COUNT] += ei.magnitude;
 		}

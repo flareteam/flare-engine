@@ -235,7 +235,7 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 		return true;
 	}
 	else if (infile->key == "stat") {
-		// @ATTR stat|string, int : Stat name, Value|The starting value for this stat.
+		// @ATTR stat|stat_id, int : Stat ID, Value|The starting value for this stat.
 		std::string stat = Parse::popFirstString(infile->val);
 		int value = Parse::popFirstInt(infile->val);
 
@@ -265,7 +265,7 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 		}
 	}
 	else if (infile->key == "stat_per_level") {
-		// @ATTR stat_per_level|predefined_string, int : Stat name, Value|The value for this stat added per level.
+		// @ATTR stat_per_level|stat_id, int : Stat ID, Value|The value for this stat added per level.
 		std::string stat = Parse::popFirstString(infile->val);
 		int value = Parse::popFirstInt(infile->val);
 
@@ -295,7 +295,7 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 		}
 	}
 	else if (infile->key == "stat_per_primary") {
-		// @ATTR stat_per_primary|predefined_string, predefined_string, int : Primary Stat, Stat name, Value|The value for this stat added for every point allocated to this primary stat.
+		// @ATTR stat_per_primary|predefined_string, stat_id, int : Primary Stat, Stat ID, Value|The value for this stat added for every point allocated to this primary stat.
 		std::string prim_stat = Parse::popFirstString(infile->val);
 		size_t prim_stat_index = eset->primary_stats.getIndexByID(prim_stat);
 		if (prim_stat_index == eset->primary_stats.list.size()) {

@@ -31,7 +31,7 @@ namespace Stats {
 	// DESC values are the translated descriptions of stats visible in Character menu tooltips
 	// PERCENT is used to determine if we should treat the value as a percentage when displaying it (i.e. use %)
 	void init() {
-		// @CLASS Stats|Description of the base stats, aka "stat name" or ${STATNAME}
+		// @CLASS Stats|Description of the base stats which may be used wherever a stat_id is required.
 
 		// @TYPE hp|Hit points
 		KEY[HP_MAX] = "hp";

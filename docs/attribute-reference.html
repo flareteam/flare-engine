@@ -17,6 +17,9 @@ body {
 	background: #000;
 	color: #fff;
 }
+code {
+	background: #e5e5e5;
+}
 </style>
 </head>
 
@@ -85,6 +88,8 @@ body {
 <p><code>version</code>, defined as: a string of three numbers, separated by dots (e.g. "1.2.03")</p>
 
 <p><code>raw</code>, This is plain text, including line breaks. It is used only for map layer data.</p>
+
+<p><code>stat_id</code>, a string that can be any of the following: A base stat (e.g. <code>hp</code> or <code>avoidance</code>); A min or max damage type from <code>engine/damage_types.txt</code> (e.g. <code>dmg_melee_min</code> or <code>dmg_ment_max</code>); An elemental resistance from <code>engine/elements.txt</code>. To use an element as a resistance, <code>_resist</code> is appened to the element id (e.g. <code>fire_resist</code>)</p>
 <hr />
 
 <h4>AnimationSet</h4>
@@ -961,7 +966,7 @@ body {
 
 <p><strong>requires_class</strong> | <code>predefined_string</code> | The hero's base class (engine/classes.txt) must match for this item to be equipped.</p>
 
-<p><strong>bonus</strong> | <code>repeatable(predefined_string, int) : Stat name, Value</code> | Adds a bonus to the item by stat name, example: bonus=hp, 50</p>
+<p><strong>bonus</strong> | <code>repeatable(stat_id, int) : Stat ID, Value</code> | Adds a bonus to the item by stat ID, example: bonus=hp, 50</p>
 
 <p><strong>bonus_power_level</strong> | <code>repeatable(power_id, int) : Base power, Bonus levels</code> | Grants bonus levels to a given base power.</p>
 
@@ -1035,7 +1040,7 @@ body {
 
 <p><strong>color</strong> | <code>color</code> | A specific of color for the set.</p>
 
-<p><strong>bonus</strong> | <code>repeatable(int, string, int) : Required set item count, Stat name, Value</code> | Bonus to append to items in the set.</p>
+<p><strong>bonus</strong> | <code>repeatable(int, stat_id, int) : Required set item count, Stat ID, Value</code> | Bonus to append to items in the set.</p>
 
 <p><strong>bonus_power_level</strong> | <code>repeatable(int, power_id, int) : Required set item count, Base power, Bonus levels</code> | Grants bonus levels to a given base power.</p>
 
@@ -1265,7 +1270,7 @@ body {
 
 <p><strong>show_resists</strong> | <code>bool</code> | Hide the elemental "Resistance" stats in the statlist if set to false.</p>
 
-<p><strong>show_stat</strong> | <code>predefined_string, bool : Stat name / Damage type, Visible</code> | Hide the matching stat or damage type min/max in the statlist if set to false.</p>
+<p><strong>show_stat</strong> | <code>stat_id, bool : Stat ID, Visible</code> | Hide the matching stat ID in the statlist if set to false.</p>
 
 <p><strong>name_max_width</strong> | <code>int</code> | The maxiumum width, in pixels, that the character name can occupy until it is abbreviated.</p>
 
@@ -2049,11 +2054,11 @@ body {
 
 <p><strong>cooldown_hit</strong> | <code>duration</code> | Duration of cooldown after being hit in 'ms' or 's'.</p>
 
-<p><strong>stat</strong> | <code>string, int : Stat name, Value</code> | The starting value for this stat.</p>
+<p><strong>stat</strong> | <code>stat_id, int : Stat ID, Value</code> | The starting value for this stat.</p>
 
-<p><strong>stat_per_level</strong> | <code>predefined_string, int : Stat name, Value</code> | The value for this stat added per level.</p>
+<p><strong>stat_per_level</strong> | <code>stat_id, int : Stat ID, Value</code> | The value for this stat added per level.</p>
 
-<p><strong>stat_per_primary</strong> | <code>predefined_string, predefined_string, int : Primary Stat, Stat name, Value</code> | The value for this stat added for every point allocated to this primary stat.</p>
+<p><strong>stat_per_primary</strong> | <code>predefined_string, stat_id, int : Primary Stat, Stat ID, Value</code> | The value for this stat added for every point allocated to this primary stat.</p>
 
 <p><strong>vulnerable</strong> | <code>predefined_string, int : Element, Value</code> | (Deprecated in v1.12.91; use a '..._resist' value with 'stat' instead) Percentage weakness to this element.</p>
 
@@ -2261,11 +2266,7 @@ body {
 
 <p><strong>knockback</strong> | Pushes the target away from the source caster. Speed is the given value divided by the framerate cap.</p>
 
-<p><strong>${STATNAME}</strong> | Increases ${STATNAME}, where ${STATNAME} is any of the base stats. Examples: hp, avoidance, xp_gain</p>
-
-<p><strong>${DAMAGE_TYPE}</strong> | Increases a damage min or max, where ${DAMAGE_TYPE} is any 'min' or 'max' value found in engine/damage_types.txt. Example: dmg_melee_min</p>
-
-<p><strong>${ELEMENT}_resist</strong> | Increase Resistance % to ${ELEMENT}, where ${ELEMENT} is any found in engine/elements.txt. Example: fire_resist</p>
+<p><strong>${STAT}</strong> | Increases ${STAT}, where ${STAT} is any valid stat_id.</p>
 
 <p><strong>${PRIMARYSTAT}</strong> | Increases ${PRIMARYSTAT}, where ${PRIMARYSTAT} is any of the primary stats defined in engine/primary_stats.txt. Example: physical</p>
 
@@ -2283,11 +2284,7 @@ body {
 
 <p><strong>attack_speed</strong> | Attack animation speed. A value of 100 is 100% speed (aka normal speed).</p>
 
-<p><strong>${STATNAME}</strong> | Increases ${STATNAME}, where ${STATNAME} is any of the base stats. Examples: hp, avoidance, xp_gain</p>
-
-<p><strong>${DAMAGE_TYPE}</strong> | Increases a damage min or max, where ${DAMAGE_TYPE} is any 'min' or 'max' value found in engine/damage_types.txt. Example: dmg_melee_min</p>
-
-<p><strong>${ELEMENT}_resist</strong> | Increase Resistance % to ${ELEMENT}, where ${ELEMENT} is any found in engine/elements.txt. Example: fire_resist</p>
+<p><strong>${STAT}</strong> | Increases ${STAT}, where ${STAT} is any valid stat_id.</p>
 
 <p><strong>${PRIMARYSTAT}</strong> | Increases ${PRIMARYSTAT}, where ${PRIMARYSTAT} is any of the primary stats defined in engine/primary_stats.txt. Example: physical</p>
 
@@ -2295,7 +2292,7 @@ body {
 
 <h4>Stats</h4>
 
-<p>Description of the base stats, aka "stat name" or ${STATNAME}</p>
+<p>Description of the base stats which may be used wherever a stat_id is required.</p>
 
 <p><strong>hp</strong> | Hit points</p>
 

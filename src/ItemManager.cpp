@@ -255,7 +255,7 @@ void ItemManager::loadItems(const std::string& filename) {
 			items[id].requires_class = infile.val;
 		}
 		else if (infile.key == "bonus") {
-			// @ATTR bonus|repeatable(predefined_string, int) : Stat name, Value|Adds a bonus to the item by stat name, example: bonus=hp, 50
+			// @ATTR bonus|repeatable(stat_id, int) : Stat ID, Value|Adds a bonus to the item by stat ID, example: bonus=hp, 50
 			if (clear_bonus) {
 				items[id].bonus.clear();
 				clear_bonus = false;
@@ -570,7 +570,7 @@ void ItemManager::loadSets(const std::string& filename) {
 			item_sets[id].color = Parse::toRGB(infile.val);
 		}
 		else if (infile.key == "bonus") {
-			// @ATTR bonus|repeatable(int, string, int) : Required set item count, Stat name, Value|Bonus to append to items in the set.
+			// @ATTR bonus|repeatable(int, stat_id, int) : Required set item count, Stat ID, Value|Bonus to append to items in the set.
 			if (clear_bonus) {
 				item_sets[id].bonus.clear();
 				clear_bonus = false;
@@ -1092,7 +1092,5 @@ int Item::getSellPrice(bool is_new_buyback) {
 // @CLASS ItemManager|Description of "bonus" attribute in items/items.txt
 // @TYPE speed|Movement speed. A value of 100 is 100% speed (aka normal speed).
 // @TYPE attack_speed|Attack animation speed. A value of 100 is 100% speed (aka normal speed).
-// @TYPE ${STATNAME}|Increases ${STATNAME}, where ${STATNAME} is any of the base stats. Examples: hp, avoidance, xp_gain
-// @TYPE ${DAMAGE_TYPE}|Increases a damage min or max, where ${DAMAGE_TYPE} is any 'min' or 'max' value found in engine/damage_types.txt. Example: dmg_melee_min
-// @TYPE ${ELEMENT}_resist|Increase Resistance % to ${ELEMENT}, where ${ELEMENT} is any found in engine/elements.txt. Example: fire_resist
+// @TYPE ${STAT}|Increases ${STAT}, where ${STAT} is any valid stat_id.
 // @TYPE ${PRIMARYSTAT}|Increases ${PRIMARYSTAT}, where ${PRIMARYSTAT} is any of the primary stats defined in engine/primary_stats.txt. Example: physical

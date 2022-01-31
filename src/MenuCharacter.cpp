@@ -187,7 +187,7 @@ MenuCharacter::MenuCharacter()
 			// @ATTR show_resists|bool|Hide the elemental "Resistance" stats in the statlist if set to false.
 			else if (infile.key == "show_resists") show_resists = Parse::toBool(infile.val);
 
-			// @ATTR show_stat|predefined_string, bool : Stat name / Damage type, Visible|Hide the matching stat or damage type min/max in the statlist if set to false.
+			// @ATTR show_stat|stat_id, bool : Stat ID, Visible|Hide the matching stat ID in the statlist if set to false.
 			else if (infile.key == "show_stat") {
 				std::string stat_name = Parse::popFirstString(infile.val);
 

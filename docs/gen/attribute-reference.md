@@ -53,3 +53,5 @@ Attribute descriptions are in the following format: section.attributename, `valu
 
 `raw`, This is plain text, including line breaks. It is used only for map layer data.
 
+`stat_id`, a string that can be any of the following: A base stat (e.g. `hp` or `avoidance`); A min or max damage type from `engine/damage_types.txt` (e.g. `dmg_melee_min` or `dmg_ment_max`); An elemental resistance from `engine/elements.txt`. To use an element as a resistance, `_resist` is appened to the element id (e.g. `fire_resist`)
+
