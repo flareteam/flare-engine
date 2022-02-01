@@ -43,6 +43,7 @@ MenuEnemy::MenuEnemy()
 	, custom_text_pos(false)
 	, bar_fill_offset()
 	, bar_fill_size(-1, -1)
+	, bar_gfx("images/menus/enemy_bar_hp.png")
 	, enemy(NULL)
 {
 	// disappear after 10 seconds
@@ -55,8 +56,6 @@ MenuEnemy::MenuEnemy()
 		while(infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
-
-			infile.val = infile.val + ',';
 
 			// @ATTR bar_pos|rectangle|Position and dimensions of the health bar.
 			if(infile.key == "bar_pos") {
@@ -74,6 +73,10 @@ MenuEnemy::MenuEnemy()
 			// @ATTR bar_fill_size|int, int : Width, Height|Size of the bar's fill graphics. If not defined, the width/height of bar_pos is used.
 			else if (infile.key == "bar_fill_size") {
 				bar_fill_size = Parse::toPoint(infile.val);
+			}
+			// @ATTR bar_gfx|filename|Filename of the image to use for the "fill" of the bar.
+			else if (infile.key == "bar_gfx") {
+				bar_gfx = infile.val;
 			}
 			else {
 				infile.error("MenuEnemy: '%s' is not a valid key.", infile.key.c_str());
@@ -99,7 +102,7 @@ void MenuEnemy::loadGraphics() {
 	if (!background)
 		setBackground("images/menus/enemy_bar.png");
 
-	graphics = render_device->loadImage("images/menus/enemy_bar_hp.png", RenderDevice::ERROR_NORMAL);
+	graphics = render_device->loadImage(bar_gfx, RenderDevice::ERROR_NORMAL);
 	if (graphics) {
 		bar_hp = graphics->createSprite();
 		graphics->unref();

@@ -40,6 +40,7 @@ private:
 	bool custom_text_pos;
 	Point bar_fill_offset;
 	Point bar_fill_size;
+	std::string bar_gfx;
 
 	WidgetLabel label_text;
 	WidgetLabel label_stats;

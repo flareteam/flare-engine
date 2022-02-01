@@ -1,3 +1,11 @@
+Flare v1.14 (WIP)
+
+Engine features:
+
+* Added 'bar_gfx' property to menus/enemy.txt for setting the "fill" image
+
+
+
 Flare v1.13 (https://flarerpg.org/2022/01/31/flare-1-13/)
 
 Engine features:
