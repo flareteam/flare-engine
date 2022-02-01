@@ -1,4 +1,4 @@
-Flare v1.13 (WIP)
+Flare v1.13 (https://flarerpg.org/2022/01/31/flare-1-13/)
 
 Engine features:
 
@@ -44,7 +44,7 @@ Engine fixes:
 * Entity animations will now fall back to the 'die' animation when 'critdie' isn't defined.
 * Improved text rendering by blending text with a copy of itself.
 * Fix infinite loop that could occur when setting unlocked powers.
-* Elemental resistances can now be used with `stat`, `stat_per_level`, and `stat_per_primary` in StatBlock definitions.
+* Elemental resistances can now be used with 'stat', 'stat_per_level', and 'stat_per_primary' in StatBlock definitions.
 
 Game updates:
 
