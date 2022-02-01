@@ -259,7 +259,7 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 
 		for (size_t i = 0; i < eset->elements.list.size(); ++i) {
 			if (eset->elements.list[i].resist_id == stat) {
-				starting[Stats::COUNT + eset->damage_types.count] = value;
+				starting[Stats::COUNT + eset->damage_types.count + i] = value;
 				return true;
 			}
 		}
@@ -289,7 +289,7 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 
 		for (size_t i = 0; i < eset->elements.list.size(); ++i) {
 			if (eset->elements.list[i].resist_id == stat) {
-				per_level[Stats::COUNT + eset->damage_types.count] = value;
+				per_level[Stats::COUNT + eset->damage_types.count + i] = value;
 				return true;
 			}
 		}
@@ -326,7 +326,7 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 
 		for (size_t i = 0; i < eset->elements.list.size(); ++i) {
 			if (eset->elements.list[i].resist_id == stat) {
-				per_primary[prim_stat_index][Stats::COUNT + eset->damage_types.count] = value;
+				per_primary[prim_stat_index][Stats::COUNT + eset->damage_types.count + i] = value;
 				return true;
 			}
 		}
