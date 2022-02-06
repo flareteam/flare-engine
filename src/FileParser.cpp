@@ -180,8 +180,10 @@ bool FileParser::next() {
 						include_fp = NULL;
 					}
 
-					// INCLUDE file will inherit the current section
-					include_fp->section = section;
+					if (include_fp) {
+						// INCLUDE file will inherit the current section
+						include_fp->section = section;
+					}
 
 					continue;
 				}

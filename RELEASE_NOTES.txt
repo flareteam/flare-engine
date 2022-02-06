@@ -4,6 +4,10 @@ Engine features:
 
 * Added 'bar_gfx' property to menus/enemy.txt for setting the "fill" image
 
+Engine fixes:
+
+* Fix crash when trying to read a non-existent file with INCLUDE
+
 
 
 Flare v1.13 (https://flarerpg.org/2022/01/31/flare-1-13/)
