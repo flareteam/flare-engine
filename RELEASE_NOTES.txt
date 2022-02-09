@@ -7,6 +7,7 @@ Engine features:
 Engine fixes:
 
 * Fix crash when trying to read a non-existent file with INCLUDE
+* Fix passive powers not being correctly re-applied after death
 
 
 

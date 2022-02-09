@@ -969,6 +969,8 @@ void GameStatePlay::logic() {
 		pc->stats.hp = pc->stats.get(Stats::HP_MAX);
 		pc->stats.logic();
 		pc->stats.recalc();
+		menu->pow->resetToBasePowers();
+		menu->pow->setUnlockedPowers();
 		powers->activatePassives(&pc->stats);
 		pc->respawn = false;
 	}
