@@ -8,6 +8,7 @@ Engine fixes:
 
 * Fix crash when trying to read a non-existent file with INCLUDE
 * Fix passive powers not being correctly re-applied after death
+* Improve performance of WidgetListBox by caching all items instead of just the visible ones
 
 
 

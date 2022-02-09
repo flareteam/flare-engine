@@ -44,6 +44,7 @@ private:
 		}
 		std::string value;
 		std::string tooltip;
+		WidgetLabel label;
 		bool selected;
 	};
 
@@ -58,7 +59,6 @@ private:
 	bool any_selected;
 	bool show_tooltip_for_selected;
 	std::vector<ListBoxItem> items;
-	std::vector<WidgetLabel> vlabels;
 	std::vector<Rect> rows;
 	WidgetScrollBar *scrollbar;
 

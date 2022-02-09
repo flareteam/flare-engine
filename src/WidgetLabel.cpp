@@ -59,6 +59,40 @@ WidgetLabel::WidgetLabel()
 	enable_tablist_nav = false;
 }
 
+WidgetLabel::WidgetLabel(const WidgetLabel &other)
+	: label(NULL)
+{
+	*this = other;
+}
+
+WidgetLabel& WidgetLabel::operator=(const WidgetLabel &other) {
+	if (this == &other)
+		return *this;
+
+	Widget::operator=(other);
+
+	justify = other.justify;
+	valign = other.valign;
+	max_width = other.max_width;
+	update_flag = UPDATE_RECACHE;
+	hidden = other.hidden;
+	window_resize_flag = other.window_resize_flag;
+	alpha = other.alpha;
+	text = other.text;
+	font_style = other.font_style;
+	color = other.color;
+	bounds = other.bounds;
+
+	if (label) {
+		delete label;
+	}
+
+	label = NULL;
+	update();
+
+	return *this;
+}
+
 void WidgetLabel::setMaxWidth(int width) {
 	if (width != max_width) {
 		max_width = width;

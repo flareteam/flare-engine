@@ -42,7 +42,6 @@ WidgetListBox::WidgetListBox(int height, const std::string& _fileName)
 	, has_scroll_bar(false)
 	, any_selected(false)
 	, show_tooltip_for_selected(false)
-	, vlabels(std::vector<WidgetLabel>(height,WidgetLabel()))
 	, rows(std::vector<Rect>(height,Rect()))
 	, scrollbar(new WidgetScrollBar(WidgetScrollBar::DEFAULT_FILE))
 	, pos_scroll()
@@ -352,10 +351,10 @@ void WidgetListBox::render() {
 			render_device->render(listboxs);
 		}
 
-		if (i<items.size()) {
-			vlabels[i].local_frame = local_frame;
-			vlabels[i].local_offset = local_offset;
-			vlabels[i].render();
+		if (i+cursor < items.size()) {
+			items[i+cursor].label.local_frame = local_frame;
+			items[i+cursor].label.local_offset = local_offset;
+			items[i+cursor].label.render();
 		}
 	}
 
@@ -397,8 +396,8 @@ void WidgetListBox::render() {
  * Also, toggle the scrollbar based on the size of the list
  */
 void WidgetListBox::refresh() {
-	std::string temp;
 	int right_margin = 0;
+	int padding = font->getFontHeight();
 
 	// Update the scrollbar
 	if (items.size() > rows.size()) {
@@ -415,6 +414,17 @@ void WidgetListBox::refresh() {
 		right_margin = eset->widgets.listbox_text_margin.y;
 	}
 
+	// cache all item text
+	for (size_t i = 0; i < items.size(); ++i) {
+		items[i].label.setVAlign(LabelInfo::VALIGN_CENTER);
+		if (disable_text_trim)
+			items[i].label.setText(items[i].value);
+		else
+			items[i].label.setText(font->trimTextToWidth(items[i].value, pos.w-right_margin-padding, FontEngine::USE_ELLIPSIS, 0));
+
+		items[i].label.setHidden(i < static_cast<size_t>(cursor) || i >= static_cast<size_t>(cursor) + rows.size());
+	}
+
 	// Update each row's hitbox and label
 	for(unsigned i=0; i<rows.size(); i++) {
 		rows[i].x = pos.x;
@@ -427,24 +437,15 @@ void WidgetListBox::refresh() {
 		}
 		rows[i].h = pos.h;
 
-		int padding = font->getFontHeight();
 
 		if (i+cursor < items.size()) {
-			if (disable_text_trim)
-				temp = items[i+cursor].value;
-			else
-				temp = font->trimTextToWidth(items[i+cursor].value, pos.w-right_margin-padding, FontEngine::USE_ELLIPSIS, 0);
-		}
-
-		vlabels[i].setPos(rows[i].x + eset->widgets.listbox_text_margin.x, rows[i].y + (rows[i].h/2));
-		vlabels[i].setVAlign(LabelInfo::VALIGN_CENTER);
-		vlabels[i].setText(temp);
-
-		if(i+cursor < items.size() && items[i+cursor].selected) {
-			vlabels[i].setColor(font->getColor(FontEngine::COLOR_WIDGET_NORMAL));
-		}
-		else if (i < items.size()) {
-			vlabels[i].setColor(font->getColor(FontEngine::COLOR_WIDGET_DISABLED));
+			items[i+cursor].label.setPos(rows[i].x + eset->widgets.listbox_text_margin.x, rows[i].y + (rows[i].h/2));
+			if (items[i+cursor].selected) {
+				items[i+cursor].label.setColor(font->getColor(FontEngine::COLOR_WIDGET_NORMAL));
+			}
+			else {
+				items[i+cursor].label.setColor(font->getColor(FontEngine::COLOR_WIDGET_DISABLED));
+			}
 		}
 	}
 
@@ -557,10 +558,8 @@ void WidgetListBox::setHeight(int new_size) {
 	if (new_size < 2)
 		new_size = 2;
 
-	vlabels.clear();
 	rows.clear();
 
-	vlabels.resize(static_cast<size_t>(new_size));
 	rows.resize(static_cast<size_t>(new_size));
 
 	refresh();

@@ -80,6 +80,8 @@ public:
 	static const std::string DEFAULT_FONT;
 
 	WidgetLabel();
+	WidgetLabel(const WidgetLabel& other);
+	WidgetLabel& operator= (const WidgetLabel &other);
 	~WidgetLabel();
 	void render();
 	void setMaxWidth(int width);
