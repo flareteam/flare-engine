@@ -1,5 +1,9 @@
 Flare v1.14 (WIP)
 
+Engine fixes:
+
+* Fixed set item tooltips showing incorrect number of equipped items if a set item was on an inactive loadout.
+
 Flare v1.13.04
 
 Engine features:
