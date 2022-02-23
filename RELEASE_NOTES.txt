@@ -1,8 +1,14 @@
 Flare v1.14 (WIP)
 
+Engine features:
+
+* Added 'loot.requires_status' and 'status_loot' properties to loot table definitions.
+
 Engine fixes:
 
 * Fixed set item tooltips showing incorrect number of equipped items if a set item was on an inactive loadout.
+
+
 
 Flare v1.13.04
 

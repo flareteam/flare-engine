@@ -28,6 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "AnimationManager.h"
 #include "AnimationSet.h"
 #include "Avatar.h"
+#include "CampaignManager.h"
 #include "CommonIncludes.h"
 #include "CursorManager.h"
 #include "Entity.h"
@@ -319,7 +320,9 @@ void LootManager::checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos
 	for (size_t i = loot_table.size(); i > 0; i--) {
 		ec = &loot_table[i-1];
 		if (ec->f == 0) {
-			checkLootComponent(ec, pos, itemstack_vec);
+			if (ec->status == 0 || (ec->status > 0 && camp->checkStatus(ec->status))) {
+				checkLootComponent(ec, pos, itemstack_vec);
+			}
 			loot_table.erase(loot_table.begin()+i-1);
 		}
 	}
@@ -335,7 +338,7 @@ void LootManager::checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos
 			real_chance = ec->f * static_cast<float>(pc->stats.get(Stats::ITEM_FIND) + 100) / 100.f;
 		}
 
-		if (real_chance >= chance) {
+		if (real_chance >= chance && (ec->status == 0 || (ec->status > 0 && camp->checkStatus(ec->status)))) {
 			if (real_chance <= threshold) {
 				if (real_chance != threshold) {
 					possible_ids.clear();
@@ -628,10 +631,17 @@ void LootManager::loadLootTables() {
 
 		while (infile.next()) {
 			if (infile.section == "") {
-				// @ATTR loot|loot|Compact form of defining a loot table entry
+				// @ATTR loot|loot|Compact form of defining a loot table entry.
 				if (infile.key == "loot") {
 					ec_list->push_back(EventComponent());
 					ec = &ec_list->at(ec_list->size()-1);
+					parseLoot(infile.val, ec, ec_list);
+				}
+				// @ATTR status_loot|string, loot : Required status, Loot definition|Compact form of defining a loot table entry with a required campaign status.
+				else if (infile.key == "status_loot") {
+					ec_list->push_back(EventComponent());
+					ec = &ec_list->at(ec_list->size()-1);
+					ec->status = camp->registerStatus(Parse::popFirstString(infile.val));
 					parseLoot(infile.val, ec, ec_list);
 				}
 			}
@@ -670,6 +680,10 @@ void LootManager::loadLootTables() {
 				else if (infile.key == "quantity") {
 					ec->a = std::max(Parse::popFirstInt(infile.val), 1);
 					ec->b = std::max(Parse::popFirstInt(infile.val), ec->a);
+				}
+				// @ATTR loot.requires_status|string|A single campaign status that is required for the item to be able to drop.
+				else if (infile.key == "requires_status") {
+					ec->status = camp->registerStatus(Parse::popFirstString(infile.val));
 				}
 			}
 		}

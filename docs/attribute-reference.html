@@ -1050,13 +1050,17 @@ code {
 
 <p>Description of loot tables in loot/</p>
 
-<p><strong>loot</strong> | <code>loot</code> | Compact form of defining a loot table entry</p>
+<p><strong>loot</strong> | <code>loot</code> | Compact form of defining a loot table entry.</p>
+
+<p><strong>status_loot</strong> | <code>string, loot : Required status, Loot definition</code> | Compact form of defining a loot table entry with a required campaign status.</p>
 
 <p><strong>loot.id</strong> | <code>[item_id, "currency"]</code> | The ID of the loot item. "currency" will use the item ID defined as currency_id in engine/misc.txt.</p>
 
 <p><strong>loot.chance</strong> | <code>[float, "fixed"]</code> | The chance that the item will drop. "fixed" will drop the item no matter what before the random items are picked. This is different than setting a chance of 100, in which the item could be replaced with another random item.</p>
 
 <p><strong>loot.quantity</strong> | <code>int, int : Min quantity, Max quantity (optional)</code> | The quantity of item in the dropped loot stack.</p>
+
+<p><strong>loot.requires_status</strong> | <code>string</code> | A single campaign status that is required for the item to be able to drop.</p>
 
 <hr />
 
