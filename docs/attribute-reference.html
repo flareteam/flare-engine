@@ -1968,9 +1968,9 @@ code {
 
 <p><strong>power.target_neighbor</strong> | <code>int</code> | Target is changed to an adjacent tile within a radius.</p>
 
-<p><strong>power.spawn_limit</strong> | <code>["fixed", "stat", "unlimited"], [int, predefined_string] : Mode, Value</code> | The maximum number of creatures that can be spawned and alive from this power. "fixed" takes an integer. "stat" takes a primary stat as a string (e.g. "physical").</p>
+<p><strong>power.spawn_limit</strong> | <code>["unlimited", "fixed", "stat"], int, int, predefined_string : Mode, Enemy Level, Player ratio, Player primary stat</code> | The maximum number of creatures that can be spawned and alive from this power. The need for the last three parameters depends on the mode being used. The "unlimited" mode requires no parameters and will remove any spawn limit requirements. The "fixed" mode takes one parameter as the spawn limit. The "stat" mode also requires the player ratio and player primary stat ID as parameters. The player ratio adjusts the scaling of the spawn limit. For example, spawn_limit=stat,1,2,physical will set the spawn limit to 1/2 the player's Physical stat.</p>
 
-<p><strong>power.spawn_level</strong> | <code>["default", "fixed", "stat", "level"], [int, predefined_string] : Mode, Value</code> | The level of spawned creatures. "fixed" and "level" take an integer. "stat" takes a primary stat as a string (e.g. "physical").</p>
+<p><strong>power.spawn_level</strong> | <code>["default", "fixed", "level", "stat"], int, int, predefined_string : Mode, Enemy Level, Player ratio, Player primary stat</code> | The level of spawned creatures. The need for the last three parameters depends on the mode being used. The "default" mode will just use the entity's normal level and doesn't require any additional parameters. The "fixed" mode only requires the enemy level as a parameter. The "stat" and "level" modes also require the player ratio as a parameter. The player ratio adjusts the scaling of the enemy level. For example, spawn_level=stat,1,2,physical will set the spawned entity level to 1/2 the player's Physical stat. Only the "stat" mode requires the last parameter, which is simply the ID of the primary stat that should be used for scaling.</p>
 
 <p><strong>power.target_party</strong> | <code>bool</code> | Hazard will only affect party members.</p>
 
