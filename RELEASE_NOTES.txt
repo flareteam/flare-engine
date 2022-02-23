@@ -3,10 +3,12 @@ Flare v1.14 (WIP)
 Engine features:
 
 * Added 'loot.requires_status' and 'status_loot' properties to loot table definitions.
+* Support '/' as shorthand for 'exec' in the dev console. A space is not required after the slash.
 
 Engine fixes:
 
 * Fixed set item tooltips showing incorrect number of equipped items if a set item was on an inactive loadout.
+* Fixed dev console commands not working if they were preceded by whitespace.
 
 
 

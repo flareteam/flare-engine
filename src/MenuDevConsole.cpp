@@ -353,6 +353,12 @@ void MenuDevConsole::execute() {
 	log_history->setNextColor(font->getColor(FontEngine::COLOR_WIDGET_DISABLED));
 	log_history->add(command, WidgetLog::MSG_UNIQUE);
 
+	bool starts_with_slash = (command.at(0) == '/');
+	if (starts_with_slash) {
+		command = "exec " + Parse::trim(command.substr(1)); // remove the slash
+	}
+	command = Parse::trim(command);
+
 	std::vector<std::string> args;
 	command += ' ';
 
@@ -385,6 +391,7 @@ void MenuDevConsole::execute() {
 		log_history->add("list_status - " + msg->get("Prints out the active campaign statuses that match a search term. No search term will list all active statuses"), WidgetLog::MSG_UNIQUE);
 		log_history->add("list_items - " + msg->get("Prints a list of items that match a search term. No search term will list all items"), WidgetLog::MSG_UNIQUE);
 		log_history->add("exec - " + msg->get("parses a series of event components and executes them as a single event"), WidgetLog::MSG_UNIQUE);
+		log_history->add("/ - " + msg->get("parses a series of event components and executes them as a single event"), WidgetLog::MSG_UNIQUE);
 		log_history->add("clear - " + msg->get("clears the command history"), WidgetLog::MSG_UNIQUE);
 		log_history->add("help - " + msg->get("displays this text"), WidgetLog::MSG_UNIQUE);
 	}
@@ -559,7 +566,7 @@ void MenuDevConsole::execute() {
 			menu->act->addPower(Parse::toInt(args[1]), MenuActionBar::USE_EMPTY_SLOT);
 		}
 	}
-	else if (args[0] == "exec") {
+	else if (starts_with_slash || args[0] == "exec") {
 		if (args.size() > 1) {
 			Event evnt;
 
