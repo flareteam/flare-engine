@@ -616,6 +616,7 @@ void LootManager::parseLoot(std::string &val, EventComponent *e, std::vector<Eve
 void LootManager::loadLootTables() {
 	std::vector<std::string> filenames = mods->list("loot", !ModManager::LIST_FULL_PATHS);
 
+	// @CLASS LootManger|Description of loot tables in loot/
 	for (unsigned i=0; i<filenames.size(); i++) {
 		FileParser infile;
 		if (!infile.open(filenames[i], FileParser::MOD_FILE, FileParser::ERROR_NORMAL))
@@ -627,6 +628,7 @@ void LootManager::loadLootTables() {
 
 		while (infile.next()) {
 			if (infile.section == "") {
+				// @ATTR loot|loot|Compact form of defining a loot table entry
 				if (infile.key == "loot") {
 					ec_list->push_back(EventComponent());
 					ec = &ec_list->at(ec_list->size()-1);
@@ -644,6 +646,7 @@ void LootManager::loadLootTables() {
 				if (skip_to_next || ec == NULL)
 					continue;
 
+				// @ATTR loot.id|[item_id, "currency"]|The ID of the loot item. "currency" will use the item ID defined as currency_id in engine/misc.txt.
 				if (infile.key == "id") {
 					ec->s = infile.val;
 
@@ -656,12 +659,14 @@ void LootManager::loadLootTables() {
 						infile.error("LootManager: Invalid item id for loot.");
 					}
 				}
+				// @ATTR loot.chance|[float, "fixed"]|The chance that the item will drop. "fixed" will drop the item no matter what before the random items are picked. This is different than setting a chance of 100, in which the item could be replaced with another random item.
 				else if (infile.key == "chance") {
 					if (infile.val == "fixed")
 						ec->f = 0;
 					else
 						ec->f = Parse::toFloat(infile.val);
 				}
+				// @ATTR loot.quantity|int, int : Min quantity, Max quantity (optional)|The quantity of item in the dropped loot stack.
 				else if (infile.key == "quantity") {
 					ec->a = std::max(Parse::popFirstInt(infile.val), 1);
 					ec->b = std::max(Parse::popFirstInt(infile.val), ec->a);
