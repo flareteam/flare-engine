@@ -30,8 +30,32 @@ class Event;
 class FileParser;
 class StatBlock;
 
+class SpawnLevel {
+public:
+	enum {
+		MODE_DEFAULT = 0,
+		MODE_FIXED = 1,
+		MODE_STAT = 2,
+		MODE_LEVEL = 3
+	};
+
+	uint8_t mode;
+	float count;
+	float ratio;
+	size_t stat;
+
+	SpawnLevel()
+		: mode(MODE_DEFAULT)
+		, count(0)
+		, ratio(0)
+		, stat(0)
+	{}
+	~SpawnLevel() {}
+};
+
 class Map_Group {
 public:
+
 	std::string type;
 	std::string category;
 	Point pos;
@@ -46,6 +70,7 @@ public:
 	int wander_radius;
 	std::vector<EventComponent> requirements;
 	std::vector<EventComponent> invincible_requirements;
+	SpawnLevel spawn_level;
 
 	Map_Group()
 		: type("")
@@ -61,7 +86,8 @@ public:
 		, waypoints(std::queue<FPoint>())
 		, wander_radius(4)
 		, requirements()
-		, invincible_requirements() {
+		, invincible_requirements()
+		, spawn_level() {
 	}
 };
 
@@ -95,6 +121,7 @@ public:
 	StatBlock* summoner;
 	std::vector<EventComponent> requirements;
 	std::vector<EventComponent> invincible_requirements;
+	SpawnLevel spawn_level;
 
 	Map_Enemy(const std::string& _type="", FPoint _pos=FPoint())
 		: type(_type)
@@ -107,7 +134,8 @@ public:
 		, summon_power_index(0)
 		, summoner(NULL)
 		, requirements()
-		, invincible_requirements() {
+		, invincible_requirements()
+		, spawn_level() {
 	}
 };
 

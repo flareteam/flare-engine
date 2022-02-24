@@ -466,6 +466,35 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 			group->invincible_requirements.push_back(ec);
 		}
 	}
+	else if (infile.key == "spawn_level") {
+		// @ATTR enemygroup.spawn_level|["default", "fixed", "level", "stat"], int, int, predefined_string : Mode, Enemy Level, Ratio, Primary stat|The level of spawned creatures. The need for the last three parameters depends on the mode being used. The "default" mode will just use the entity's normal level and doesn't require any additional parameters. The "fixed" mode only requires the enemy level as a parameter. The "stat" and "level" modes also require the ratio as a parameter. The ratio adjusts the scaling of the entity level. For example, spawn_level=stat,1,2,physical will set the spawned entity level to 1/2 the player's Physical stat. Only the "stat" mode requires the last parameter, which is simply the ID of the primary stat that should be used for scaling.
+		std::string mode = Parse::popFirstString(infile.val);
+		if (mode == "default") group->spawn_level.mode = SpawnLevel::MODE_DEFAULT;
+		else if (mode == "fixed") group->spawn_level.mode = SpawnLevel::MODE_FIXED;
+		else if (mode == "stat") group->spawn_level.mode = SpawnLevel::MODE_STAT;
+		else if (mode == "level") group->spawn_level.mode = SpawnLevel::MODE_LEVEL;
+		else infile.error("Map: Unknown spawn level mode '%s'", mode.c_str());
+
+		if (group->spawn_level.mode != SpawnLevel::MODE_DEFAULT) {
+			group->spawn_level.count = static_cast<float>(Parse::popFirstInt(infile.val));
+
+			if(group->spawn_level.mode != SpawnLevel::MODE_FIXED) {
+				group->spawn_level.ratio = Parse::toFloat(Parse::popFirstString(infile.val));
+
+				if(group->spawn_level.mode == SpawnLevel::MODE_STAT) {
+					std::string stat = Parse::popFirstString(infile.val);
+					size_t prim_stat_index = eset->primary_stats.getIndexByID(stat);
+
+					if (prim_stat_index != eset->primary_stats.list.size()) {
+						group->spawn_level.stat = prim_stat_index;
+					}
+					else {
+						infile.error("Map: '%s' is not a valid primary stat.", stat.c_str());
+					}
+				}
+			}
+		}
+	}
 	else {
 		infile.error("Map: '%s' is not a valid key.", infile.key.c_str());
 	}

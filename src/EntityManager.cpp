@@ -154,6 +154,34 @@ void EntityManager::handleNewMap () {
 		e->stats.setWanderArea(me.wander_radius);
 		e->stats.invincible_requirements = me.invincible_requirements;
 
+		// Set level
+		if (me.spawn_level.mode != SpawnLevel::MODE_DEFAULT) {
+			if (me.spawn_level.mode == SpawnLevel::MODE_FIXED) {
+				e->stats.level = static_cast<int>(me.spawn_level.count);
+			}
+			else if (pc != NULL && me.spawn_level.ratio != 0) {
+				StatBlock* ratio_stats = &(pc->stats);
+
+				if (me.spawn_level.mode == SpawnLevel::MODE_LEVEL) {
+					e->stats.level = static_cast<int>(me.spawn_level.count * (static_cast<float>(ratio_stats->level) / me.spawn_level.ratio));
+				}
+				else if (me.spawn_level.mode == SpawnLevel::MODE_STAT) {
+					int stat_val = 0;
+					for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
+						if (me.spawn_level.stat == i) {
+							stat_val = ratio_stats->get_primary(i);
+							break;
+						}
+					}
+
+					e->stats.level = static_cast<int>(me.spawn_level.count * (static_cast<float>(stat_val) / me.spawn_level.ratio));
+				}
+			}
+
+			// apply Effects and set HP to max HP
+			e->stats.recalc();
+		}
+
 		entities.push_back(e);
 
 		mapr->collider.block(me.pos.x, me.pos.y, !MapCollision::IS_ALLY);
@@ -265,29 +293,28 @@ void EntityManager::handleSpawn() {
 		e->loadSounds();
 
 		//Set level
-		if(e->stats.summoned_power_index != 0) {
-			if(powers->powers[e->stats.summoned_power_index].spawn_level_mode == Power::SPAWN_LEVEL_MODE_FIXED)
-				e->stats.level = powers->powers[e->stats.summoned_power_index].spawn_level_qty;
+		if (e->stats.summoned_power_index != 0) {
+			SpawnLevel* spawn_level = &(powers->powers[e->stats.summoned_power_index].spawn_level);
 
-			if(powers->powers[e->stats.summoned_power_index].spawn_level_mode == Power::SPAWN_LEVEL_MODE_LEVEL) {
-				if(e->stats.summoner != NULL && powers->powers[e->stats.summoned_power_index].spawn_level_every != 0) {
-					e->stats.level = powers->powers[e->stats.summoned_power_index].spawn_level_qty
-									 * (e->stats.summoner->level / powers->powers[e->stats.summoned_power_index].spawn_level_every);
-				}
+			if (spawn_level->mode == SpawnLevel::MODE_FIXED) {
+				e->stats.level = static_cast<int>(spawn_level->count);
 			}
+			else if (e->stats.summoner != NULL && spawn_level->ratio != 0) {
+				StatBlock* ratio_stats = e->stats.summoner;
 
-			if(powers->powers[e->stats.summoned_power_index].spawn_level_mode == Power::SPAWN_LEVEL_MODE_STAT) {
-				if(e->stats.summoner != NULL && powers->powers[e->stats.summoned_power_index].spawn_level_every != 0) {
+				if (spawn_level->mode == SpawnLevel::MODE_LEVEL) {
+					e->stats.level = static_cast<int>(spawn_level->count * (static_cast<float>(ratio_stats->level) / spawn_level->ratio));
+				}
+				else if (spawn_level->mode == SpawnLevel::MODE_STAT) {
 					int stat_val = 0;
 					for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
-						if (powers->powers[e->stats.summoned_power_index].spawn_level_stat == i) {
-							stat_val = e->stats.summoner->get_primary(i);
+						if (spawn_level->stat == i) {
+							stat_val = ratio_stats->get_primary(i);
 							break;
 						}
 					}
 
-					e->stats.level = powers->powers[e->stats.summoned_power_index].spawn_level_qty
-									 * (stat_val / powers->powers[e->stats.summoned_power_index].spawn_level_every);
+					e->stats.level = static_cast<int>(spawn_level->count * (static_cast<float>(stat_val) / spawn_level->ratio));
 				}
 			}
 

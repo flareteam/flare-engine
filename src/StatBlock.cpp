@@ -1224,9 +1224,10 @@ bool StatBlock::summonLimitReached(PowerID power_id) const {
 
 	int max_summons = 0;
 
-	if(spawn_power->spawn_limit_mode == Power::SPAWN_LIMIT_MODE_FIXED)
-		max_summons = spawn_power->spawn_limit_qty;
-	else if(spawn_power->spawn_limit_mode == Power::SPAWN_LIMIT_MODE_STAT) {
+	if (spawn_power->spawn_limit_mode == Power::SPAWN_LIMIT_MODE_FIXED) {
+		max_summons = static_cast<int>(spawn_power->spawn_limit_count);
+	}
+	else if (spawn_power->spawn_limit_mode == Power::SPAWN_LIMIT_MODE_STAT) {
 		int stat_val = 1;
 		for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 			if (spawn_power->spawn_limit_stat == i) {
@@ -1234,23 +1235,22 @@ bool StatBlock::summonLimitReached(PowerID power_id) const {
 				break;
 			}
 		}
-		max_summons = (stat_val / (spawn_power->spawn_limit_every == 0 ? 1 : spawn_power->spawn_limit_every)) * spawn_power->spawn_limit_qty;
+		max_summons = static_cast<int>(spawn_power->spawn_limit_count * (static_cast<float>(stat_val) / spawn_power->spawn_limit_ratio));
 	}
-	else
-		return false;//unlimited or unknown mode
+	else {
+		// unlimited or unknown mode
+		return false;
+	}
 
 	//if the power is available, there should be at least 1 allowed summon
-	if(max_summons < 1) max_summons = 1;
+	max_summons = std::max(max_summons, 1);
 
 
 	//find out how many there are currently
 	int qty_summons = 0;
 
 	for (unsigned int i=0; i < summons.size(); i++) {
-		if(!summons[i]->corpse && summons[i]->summoned_power_index == power_id
-				&& summons[i]->cur_state != ENTITY_SPAWN
-				&& summons[i]->cur_state != ENTITY_DEAD
-				&& summons[i]->cur_state != ENTITY_CRITDEAD) {
+		if (summons[i]->summoned_power_index == power_id && summons[i]->cur_state != ENTITY_DEAD && summons[i]->cur_state != ENTITY_CRITDEAD) {
 			qty_summons++;
 		}
 	}

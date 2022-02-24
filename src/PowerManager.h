@@ -138,13 +138,6 @@ public:
 	};
 
 	enum {
-		SPAWN_LEVEL_MODE_DEFAULT = 0,
-		SPAWN_LEVEL_MODE_FIXED = 1,
-		SPAWN_LEVEL_MODE_STAT = 2,
-		SPAWN_LEVEL_MODE_LEVEL = 3
-	};
-
-	enum {
 		STAT_MODIFIER_MODE_MULTIPLY = 0,
 		STAT_MODIFIER_MODE_ADD = 1,
 		STAT_MODIFIER_MODE_ABSOLUTE = 2
@@ -283,15 +276,11 @@ public:
 	// spawn info
 	std::string spawn_type;
 	int target_neighbor;
-	int spawn_limit_mode;
-	int spawn_limit_qty;
-	int spawn_limit_every;
+	uint8_t spawn_limit_mode;
+	float spawn_limit_count;
+	float spawn_limit_ratio;
 	size_t spawn_limit_stat;
-
-	int spawn_level_mode;
-	int spawn_level_qty;
-	int spawn_level_every;
-	size_t spawn_level_stat;
+	SpawnLevel spawn_level;
 
 	// targeting by movement type
 	bool target_movement_normal;

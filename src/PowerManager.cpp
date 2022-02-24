@@ -150,13 +150,10 @@ Power::Power()
 	, spawn_type("")
 	, target_neighbor(0)
 	, spawn_limit_mode(SPAWN_LIMIT_MODE_UNLIMITED)
-	, spawn_limit_qty(1)
-	, spawn_limit_every(1)
+	, spawn_limit_count(1)
+	, spawn_limit_ratio(1)
 	, spawn_limit_stat(0)
-	, spawn_level_mode(SPAWN_LEVEL_MODE_DEFAULT)
-	, spawn_level_qty(0)
-	, spawn_level_every(0)
-	, spawn_level_stat(0)
+	, spawn_level()
 	, target_movement_normal(true)
 	, target_movement_flying(true)
 	, target_movement_intangible(true)
@@ -744,7 +741,7 @@ void PowerManager::loadPowers() {
 			// @ATTR power.target_neighbor|int|Target is changed to an adjacent tile within a radius.
 			powers[input_id].target_neighbor = Parse::toInt(infile.val);
 		else if (infile.key == "spawn_limit") {
-			// @ATTR power.spawn_limit|["unlimited", "fixed", "stat"], int, int, predefined_string : Mode, Enemy Level, Player ratio, Player primary stat|The maximum number of creatures that can be spawned and alive from this power. The need for the last three parameters depends on the mode being used. The "unlimited" mode requires no parameters and will remove any spawn limit requirements. The "fixed" mode takes one parameter as the spawn limit. The "stat" mode also requires the player ratio and player primary stat ID as parameters. The player ratio adjusts the scaling of the spawn limit. For example, spawn_limit=stat,1,2,physical will set the spawn limit to 1/2 the player's Physical stat.
+			// @ATTR power.spawn_limit|["unlimited", "fixed", "stat"], int, float, predefined_string : Mode, Entity Level, Ratio, Primary stat|The maximum number of creatures that can be spawned and alive from this power. The need for the last three parameters depends on the mode being used. The "unlimited" mode requires no parameters and will remove any spawn limit requirements. The "fixed" mode takes one parameter as the spawn limit. The "stat" mode also requires the ratio and primary stat ID as parameters. The ratio adjusts the scaling of the spawn limit. For example, spawn_limit=stat,1,2,physical will set the spawn limit to 1/2 the summoner's Physical stat.
 			std::string mode = Parse::popFirstString(infile.val);
 			if (mode == "fixed") powers[input_id].spawn_limit_mode = Power::SPAWN_LIMIT_MODE_FIXED;
 			else if (mode == "stat") powers[input_id].spawn_limit_mode = Power::SPAWN_LIMIT_MODE_STAT;
@@ -752,10 +749,10 @@ void PowerManager::loadPowers() {
 			else infile.error("PowerManager: Unknown spawn_limit_mode '%s'", mode.c_str());
 
 			if(powers[input_id].spawn_limit_mode != Power::SPAWN_LIMIT_MODE_UNLIMITED) {
-				powers[input_id].spawn_limit_qty = Parse::popFirstInt(infile.val);
+				powers[input_id].spawn_limit_count = static_cast<float>(Parse::popFirstInt(infile.val));
 
 				if(powers[input_id].spawn_limit_mode == Power::SPAWN_LIMIT_MODE_STAT) {
-					powers[input_id].spawn_limit_every = Parse::popFirstInt(infile.val);
+					powers[input_id].spawn_limit_ratio = Parse::toFloat(Parse::popFirstString(infile.val));
 
 					std::string stat = Parse::popFirstString(infile.val);
 					size_t prim_stat_index = eset->primary_stats.getIndexByID(stat);
@@ -770,26 +767,26 @@ void PowerManager::loadPowers() {
 			}
 		}
 		else if (infile.key == "spawn_level") {
-			// @ATTR power.spawn_level|["default", "fixed", "level", "stat"], int, int, predefined_string : Mode, Enemy Level, Player ratio, Player primary stat|The level of spawned creatures. The need for the last three parameters depends on the mode being used. The "default" mode will just use the entity's normal level and doesn't require any additional parameters. The "fixed" mode only requires the enemy level as a parameter. The "stat" and "level" modes also require the player ratio as a parameter. The player ratio adjusts the scaling of the enemy level. For example, spawn_level=stat,1,2,physical will set the spawned entity level to 1/2 the player's Physical stat. Only the "stat" mode requires the last parameter, which is simply the ID of the primary stat that should be used for scaling.
+			// @ATTR power.spawn_level|["default", "fixed", "level", "stat"], int, float, predefined_string : Mode, Entity Level, Ratio, Primary stat|The level of spawned creatures. The need for the last three parameters depends on the mode being used. The "default" mode will just use the entity's normal level and doesn't require any additional parameters. The "fixed" mode only requires the entity level as a parameter. The "stat" and "level" modes also require the ratio as a parameter. The ratio adjusts the scaling of the entity level. For example, spawn_level=stat,1,2,physical will set the spawned entity level to 1/2 the summoner's Physical stat. Only the "stat" mode requires the last parameter, which is simply the ID of the primary stat that should be used for scaling.
 			std::string mode = Parse::popFirstString(infile.val);
-			if (mode == "default") powers[input_id].spawn_level_mode = Power::SPAWN_LEVEL_MODE_DEFAULT;
-			else if (mode == "fixed") powers[input_id].spawn_level_mode = Power::SPAWN_LEVEL_MODE_FIXED;
-			else if (mode == "stat") powers[input_id].spawn_level_mode = Power::SPAWN_LEVEL_MODE_STAT;
-			else if (mode == "level") powers[input_id].spawn_level_mode = Power::SPAWN_LEVEL_MODE_LEVEL;
-			else infile.error("PowerManager: Unknown spawn_level_mode '%s'", mode.c_str());
+			if (mode == "default") powers[input_id].spawn_level.mode = SpawnLevel::MODE_DEFAULT;
+			else if (mode == "fixed") powers[input_id].spawn_level.mode = SpawnLevel::MODE_FIXED;
+			else if (mode == "stat") powers[input_id].spawn_level.mode = SpawnLevel::MODE_STAT;
+			else if (mode == "level") powers[input_id].spawn_level.mode = SpawnLevel::MODE_LEVEL;
+			else infile.error("PowerManager: Unknown spawn level mode '%s'", mode.c_str());
 
-			if(powers[input_id].spawn_level_mode != Power::SPAWN_LEVEL_MODE_DEFAULT) {
-				powers[input_id].spawn_level_qty = Parse::popFirstInt(infile.val);
+			if(powers[input_id].spawn_level.mode != SpawnLevel::MODE_DEFAULT) {
+				powers[input_id].spawn_level.count = static_cast<float>(Parse::popFirstInt(infile.val));
 
-				if(powers[input_id].spawn_level_mode != Power::SPAWN_LEVEL_MODE_FIXED) {
-					powers[input_id].spawn_level_every = Parse::popFirstInt(infile.val);
+				if(powers[input_id].spawn_level.mode != SpawnLevel::MODE_FIXED) {
+					powers[input_id].spawn_level.ratio = Parse::toFloat(Parse::popFirstString(infile.val));
 
-					if(powers[input_id].spawn_level_mode == Power::SPAWN_LEVEL_MODE_STAT) {
+					if(powers[input_id].spawn_level.mode == SpawnLevel::MODE_STAT) {
 						std::string stat = Parse::popFirstString(infile.val);
 						size_t prim_stat_index = eset->primary_stats.getIndexByID(stat);
 
 						if (prim_stat_index != eset->primary_stats.list.size()) {
-							powers[input_id].spawn_level_stat = prim_stat_index;
+							powers[input_id].spawn_level.stat = prim_stat_index;
 						}
 						else {
 							infile.error("PowerManager: '%s' is not a valid primary stat.", stat.c_str());

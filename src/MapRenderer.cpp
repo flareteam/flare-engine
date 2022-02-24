@@ -116,6 +116,8 @@ bool MapRenderer::enemyGroupPlaceEnemy(float x, float y, const Map_Group &g) {
 				group_member.waypoints = g.waypoints;
 			}
 
+			group_member.spawn_level = g.spawn_level;
+
 			enemies.push(group_member);
 		}
 		return true;
