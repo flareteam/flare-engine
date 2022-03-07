@@ -12,6 +12,10 @@ Engine fixes:
 * Fixed dev console commands not working if they were preceded by whitespace.
 * Fixed spawning entities not counting towards summoned entity count.
 
+Translation updates:
+
+* Chinese (zh) update (Issac Zhang)
+
 
 
 Flare v1.13.04

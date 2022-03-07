@@ -6,6 +6,7 @@
 # Translators:
 # Justin Jacobs <jajdorkster@gmail.com>, 2019
 # CodingJellyfish <dumaosen_main01@outlook.com>, 2021
+# Isaac Zhang, 2022
 # 
 #, fuzzy
 msgid ""
@@ -14,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-09 13:41-0500\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: CodingJellyfish <dumaosen_main01@outlook.com>, 2021\n"
+"Last-Translator: Isaac Zhang, 2022\n"
 "Language-Team: Chinese (https://www.transifex.com/flareorg/teams/84925/zh/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -156,11 +157,11 @@ msgstr "确定删除存档？"
 
 #: ../../../src/GameStateLoad.cpp:93 ../../../src/MenuConfig.cpp:248
 msgid "No"
-msgstr ""
+msgstr "否"
 
 #: ../../../src/GameStateLoad.cpp:94 ../../../src/MenuConfig.cpp:249
 msgid "Yes"
-msgstr ""
+msgstr "是"
 
 #: ../../../src/GameStateLoad.cpp:97
 msgid "Exit to Title"
@@ -361,7 +362,7 @@ msgstr "按[%s]使用"
 #: ../../../src/ItemManager.cpp:972 ../../../src/MenuPowers.cpp:1314
 #, c-format
 msgid "Press [%s] for more options"
-msgstr ""
+msgstr "按下[%s]键以查看更多选项"
 
 #: ../../../src/LootManager.cpp:99 ../../../src/LootManager.cpp:101
 #: ../../../src/LootManager.cpp:103 ../../../src/MenuConfig.cpp:427
@@ -380,7 +381,7 @@ msgstr "默认"
 
 #: ../../../src/LootManager.cpp:103
 msgid "Show All"
-msgstr ""
+msgstr "显示所有"
 
 #: ../../../src/MenuActionBar.cpp:86 ../../../src/MenuCharacter.cpp:54
 #: ../../../src/SDLInputState.cpp:887
@@ -1208,36 +1209,36 @@ msgstr "已装备"
 
 #: ../../../src/MenuManager.cpp:1784 ../../../src/MenuManager.cpp:1835
 msgid "Use"
-msgstr ""
+msgstr "使用"
 
 #: ../../../src/MenuManager.cpp:1788 ../../../src/MenuManager.cpp:1831
 #: ../../../src/MenuManager.cpp:1862
 msgid "Move"
-msgstr ""
+msgstr "移动"
 
 #: ../../../src/MenuManager.cpp:1804 ../../../src/MenuManager.cpp:1839
 msgid "Equip"
-msgstr ""
+msgstr "装备"
 
 #: ../../../src/MenuManager.cpp:1808
 msgid "Upgrade"
-msgstr ""
+msgstr "升级"
 
 #: ../../../src/MenuManager.cpp:1823 ../../../src/MenuManager.cpp:1847
 msgid "Sell"
-msgstr ""
+msgstr "卖出"
 
 #: ../../../src/MenuManager.cpp:1827 ../../../src/MenuManager.cpp:1865
 msgid "Transfer"
-msgstr ""
+msgstr "交换"
 
 #: ../../../src/MenuManager.cpp:1843
 msgid "Drop"
-msgstr ""
+msgstr "丢弃"
 
 #: ../../../src/MenuManager.cpp:1879
 msgid "Buy"
-msgstr ""
+msgstr "买入"
 
 #: ../../../src/MenuMovementType.cpp:87
 msgid "Select a Movement Type"
@@ -1603,7 +1604,7 @@ msgstr "右Shift"
 
 #: ../../../src/SDLInputState.cpp:655
 msgid "SLock"
-msgstr "SLock"
+msgstr "ScrLock"
 
 #: ../../../src/SDLInputState.cpp:656
 msgid "Spc"
@@ -1627,7 +1628,7 @@ msgstr "Delete"
 
 #: ../../../src/SDLInputState.cpp:668
 msgid "Escape"
-msgstr "Escape"
+msgstr "ESC"
 
 #: ../../../src/SDLInputState.cpp:670
 msgid "Insert"
