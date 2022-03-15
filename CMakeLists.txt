@@ -227,6 +227,7 @@ Set (FLARE_SOURCES
 	./src/WidgetSlot.cpp
 	./src/WidgetTabControl.cpp
 	./src/WidgetTooltip.cpp
+	./src/XPScaling.cpp
 	./src/main.cpp
 )
 
@@ -343,6 +344,7 @@ Set (FLARE_HEADERS
 	./src/WidgetSlot.h
 	./src/WidgetTabControl.h
 	./src/WidgetTooltip.h
+	./src/XPScaling.h
 )
 
 # Add icon and file info to executable for Windows systems

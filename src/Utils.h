@@ -35,6 +35,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 typedef unsigned long SoundID;
 typedef unsigned long StatusID;
+typedef unsigned long XPScalingTableID;
 
 typedef size_t ItemID;
 typedef size_t ItemSetID;

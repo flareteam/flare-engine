@@ -46,6 +46,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "StatBlock.h"
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
+#include "XPScaling.h"
 
 #include <limits>
 
@@ -93,6 +94,7 @@ StatBlock::StatBlock()
 	, name("")
 	, level(0)
 	, xp(0)
+	, xp_scaling_table(0)
 	, level_up(false)
 	, check_title(false)
 	, stat_points_per_level(1)
@@ -590,6 +592,14 @@ void StatBlock::load(const std::string& filename) {
 		// enemy death rewards and events
 		// @ATTR xp|int|XP awarded upon death.
 		else if (infile.key == "xp") xp = num;
+
+		else if (infile.key == "xp_scaling") {
+			// @ATTR xp_scaling|filename|XP multiplier table file. See: "XPScaling".
+			if (xp_scaling) {
+				xp_scaling_table = xp_scaling->load(infile.val);
+			}
+		}
+
 		else if (infile.key == "loot") {
 			// @ATTR loot|repeatable(loot)|Possible loot that can be dropped on death.
 
@@ -795,7 +805,9 @@ void StatBlock::takeDamage(int dmg, bool crit, int source_type) {
 				if (source_type == Power::SOURCE_TYPE_ALLY)
 					xp_multiplier = static_cast<float>(eset->misc.party_exp_percentage) / 100.0f;
 
-				camp->rewardXP(static_cast<int>((static_cast<float>(xp) * xp_multiplier)), !CampaignManager::XP_SHOW_MSG);
+				xp_multiplier *= xp_scaling->getMultiplier(this, &(pc->stats));
+
+				camp->rewardXP(static_cast<float>(xp) * xp_multiplier, !CampaignManager::XP_SHOW_MSG);
 
 				// drop loot
 				loot->addEnemyLoot(this);

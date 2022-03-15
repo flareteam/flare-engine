@@ -204,12 +204,17 @@ void CampaignManager::rewardCurrency(int amount) {
 	rewardItem(stack);
 }
 
-void CampaignManager::rewardXP(int amount, bool show_message) {
-	bonus_xp += (static_cast<float>(amount) * (100.0f + static_cast<float>(pc->stats.get(Stats::XP_GAIN)))) / 100.0f;
-	pc->stats.addXP(static_cast<int>(bonus_xp));
-	bonus_xp -= static_cast<float>(static_cast<int>(bonus_xp));
+void CampaignManager::rewardXP(float amount, bool show_message) {
+	bonus_xp += (amount * (100.0f + static_cast<float>(pc->stats.get(Stats::XP_GAIN)))) / 100.0f;
+
+	int whole_xp = static_cast<int>(bonus_xp);
+	pc->stats.addXP(whole_xp);
+	bonus_xp -= static_cast<float>(whole_xp); // remainder
+
 	pc->stats.refresh_stats = true;
-	if (show_message) pc->logMsg(msg->get("You receive %d XP.", amount), Avatar::MSG_UNIQUE);
+
+	if (show_message)
+		pc->logMsg(msg->get("You receive %d XP.", static_cast<int>(amount)), Avatar::MSG_UNIQUE);
 }
 
 void CampaignManager::restoreHPMP(const std::string& s) {

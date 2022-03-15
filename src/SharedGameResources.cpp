@@ -26,6 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuPowers.h"
 #include "NPCManager.h"
 #include "PowerManager.h"
+#include "XPScaling.h"
 #include "SharedGameResources.h"
 
 Avatar *pc = NULL;
@@ -42,3 +43,4 @@ MenuPowers *menu_powers = NULL;
 NPCManager *npcs = NULL;
 PowerManager *powers = NULL;
 FogOfWar *fow = NULL;
+XPScaling *xp_scaling = NULL;

@@ -155,6 +155,7 @@ public:
 
 	int level;
 	unsigned long xp;
+	XPScalingTableID xp_scaling_table;
 	bool level_up;
 	bool check_title;
 	int stat_points_per_level;

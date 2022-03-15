@@ -5,6 +5,7 @@ Engine features:
 * Added 'loot.requires_status' and 'status_loot' properties to loot table definitions.
 * Support '/' as shorthand for 'exec' in the dev console. A space is not required after the slash.
 * Added 'spawn_level' property to map enemies. This follows the same syntax as the Power property of the same name.
+* Add XP scaling tables for scaling enemy reward XP based on enemy level.
 
 Engine fixes:
 

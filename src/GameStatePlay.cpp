@@ -75,6 +75,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SoundManager.h"
 #include "UtilsParsing.h"
 #include "WidgetLabel.h"
+#include "XPScaling.h"
 
 #include <cassert>
 
@@ -106,6 +107,7 @@ GameStatePlay::GameStatePlay()
 	menu = new MenuManager();
 	npcs = new NPCManager();
 	quests = new QuestLog(menu->questlog);
+	xp_scaling = new XPScaling();
 
 	// load the config file for character titles
 	loadTitles();
@@ -1107,6 +1109,7 @@ GameStatePlay::~GameStatePlay() {
 	delete items;
 	delete powers;
 	delete fow;
+	delete xp_scaling;
 
 	delete enemyg;
 
@@ -1123,5 +1126,6 @@ GameStatePlay::~GameStatePlay() {
 	menu_powers = NULL;
 	powers = NULL;
 	fow = NULL;
+	xp_scaling = NULL;
 }
 

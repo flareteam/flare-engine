@@ -54,7 +54,7 @@ public:
 	void removeItem(ItemStack istack);
 	void rewardItem(ItemStack istack);
 	void rewardCurrency(int amount);
-	void rewardXP(int amount, bool show_message);
+	void rewardXP(float amount, bool show_message);
 	void restoreHPMP(const std::string& s);
 	bool checkAllRequirements(const EventComponent& ec);
 	bool checkRequirementsInVector(const std::vector<EventComponent>& ec_vec);

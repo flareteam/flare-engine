@@ -2142,6 +2142,8 @@ code {
 
 <p><strong>xp</strong> | <code>int</code> | XP awarded upon death.</p>
 
+<p><strong>xp_scaling</strong> | <code>filename</code> | XP multiplier table file. See: "XPScaling".</p>
+
 <p><strong>loot</strong> | <code>repeatable(loot)</code> | Possible loot that can be dropped on death.</p>
 
 <p><strong>loot_count</strong> | <code>int, int : Min, Max</code> | Sets the minimum (and optionally, the maximum) amount of loot this creature can drop. Overrides the global drop_max setting.</p>
@@ -2229,6 +2231,16 @@ code {
 <p><strong>tileset.tile</strong> | <code>int, int, int, int, int, int, int : Index, X, Y, Width, Height, X offset, Y offset</code> | A single tile definition.</p>
 
 <p><strong>tileset.animation</strong> | <code>list(int, int, int, duration) : Tile index, X, Y, duration</code> | An animation for a tile. Durations are in 'ms' or 's'.</p>
+
+<hr />
+
+<h4>XPScaling</h4>
+
+<p>Description of enemies/xp_scaling/</p>
+
+<p><strong>absolute.level</strong> | <code>int, float : Level, Multiplier</code> | The multiplier that will be applied to the rewarded XP when an enemy is at a specific level. If the enemy's level is outside the defined scaling levels, the min or max level is used (whichever is closer).</p>
+
+<p><strong>relative.level</strong> | <code>int, float : Level, Multiplier</code> | The multiplier that will be applied to the rewarded XP when an enemy's level is X levels apart from the player's level. If the enemy's level is outside the defined scaling levels, the min or max level is used (whichever is closer).</p>
 
 <hr />
 

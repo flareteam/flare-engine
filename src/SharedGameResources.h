@@ -33,6 +33,7 @@ class MenuPowers;
 class NPCManager;
 class PowerManager;
 class FogOfWar;
+class XPScaling;
 
 /* These objects are created in the GameStatePlay constructor and deleted in the GameStatePlay destructor
 *  so can be accessed safely anywhere in between. The objects must not be changed by any other class.
@@ -51,5 +52,6 @@ extern MenuPowers *menu_powers;
 extern NPCManager *npcs;
 extern PowerManager *powers;
 extern FogOfWar *fow;
+extern XPScaling *xp_scaling;
 
 #endif // SHAREDGAMEOBJECTS_H

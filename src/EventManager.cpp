@@ -906,7 +906,7 @@ bool EventManager::executeEventInternal(Event &ev, bool skip_delay) {
 			camp->removeItem(ItemStack(ec->id, ec->x));
 		}
 		else if (ec->type == EventComponent::REWARD_XP) {
-			camp->rewardXP(ec->x, CampaignManager::XP_SHOW_MSG);
+			camp->rewardXP(static_cast<float>(ec->x), CampaignManager::XP_SHOW_MSG);
 		}
 		else if (ec->type == EventComponent::REWARD_CURRENCY) {
 			camp->rewardCurrency(ec->x);
