@@ -119,6 +119,7 @@ void TabList::remove(Widget* widget) {
 
 void TabList::clear() {
 	widgets.clear();
+	current = -1;
 }
 
 void TabList::setCurrent(Widget* widget) {
