@@ -122,13 +122,13 @@ bool WidgetListBox::checkClickAt(int x, int y) {
 	// check ScrollBar clicks
 	if (has_scroll_bar) {
 		switch (scrollbar->checkClickAt(mouse.x,mouse.y)) {
-			case 1:
+			case WidgetScrollBar::CLICK_UP:
 				scrollUp();
 				break;
-			case 2:
+			case WidgetScrollBar::CLICK_DOWN:
 				scrollDown();
 				break;
-			case 3:
+			case WidgetScrollBar::CLICK_KNOB:
 				cursor = scrollbar->getValue();
 				refresh();
 				break;
@@ -402,12 +402,16 @@ void WidgetListBox::refresh() {
 	// Update the scrollbar
 	if (items.size() > rows.size()) {
 		has_scroll_bar = true;
-		pos_scroll.x = pos.x+pos.w-scrollbar->pos_up.w-scrollbar_offset;
-		pos_scroll.y = pos.y+scrollbar_offset;
-		pos_scroll.w = scrollbar->pos_up.w;
-		pos_scroll.h = (pos.h*static_cast<int>(rows.size()))-scrollbar->pos_down.h-(scrollbar_offset*2);
+
+		pos_scroll.w = scrollbar->getBounds().w;
+		pos_scroll.h = (pos.h * static_cast<int>(rows.size())) - (scrollbar_offset*2);
+
+		pos_scroll.x = pos.x + pos.w - pos_scroll.w - scrollbar_offset;
+		pos_scroll.y = pos.y + scrollbar_offset;
+
 		scrollbar->refresh(pos_scroll.x, pos_scroll.y, pos_scroll.h, cursor, static_cast<int>(items.size()-rows.size()));
-		right_margin = scrollbar->pos_knob.w + eset->widgets.listbox_text_margin.y;
+
+		right_margin = pos_scroll.w + eset->widgets.listbox_text_margin.y;
 	}
 	else {
 		has_scroll_bar = false;

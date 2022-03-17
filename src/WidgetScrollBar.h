@@ -33,6 +33,17 @@ class Sprite;
 class WidgetScrollBar : public Widget {
 private:
 
+	enum {
+		GFX_PREV = 0,
+		GFX_PREV_PRESS = 1,
+		GFX_NEXT = 2,
+		GFX_NEXT_PRESS = 3,
+		GFX_KNOB = 4,
+		GFX_TOTAL,
+	};
+
+	void setKnobPos();
+
 	std::string fileName; // the path to the ScrollBar's atlas
 
 	Sprite *scrollbars;
@@ -48,27 +59,32 @@ private:
 	Rect up_to_knob;
 	Rect knob_to_down;
 
-public:
-	static const std::string DEFAULT_FILE;
-
-	explicit WidgetScrollBar(const std::string& _fileName);
-	~WidgetScrollBar();
-
-	void loadArt();
-	int checkClick();
-	int checkClickAt(int x, int y);
-	void set();
-	int getValue();
-	Rect getBounds();
-	void render();
-	void refresh(int x, int y, int h, int val, int max);
-
 	Rect pos_up;
 	Rect pos_down;
 	Rect pos_knob;
 	bool pressed_up;
 	bool pressed_down;
 	bool pressed_knob;
+
+public:
+	enum {
+		CLICK_NONE = 0,
+		CLICK_UP = 1,
+		CLICK_DOWN = 2,
+		CLICK_KNOB = 3,
+	};
+
+	static const std::string DEFAULT_FILE;
+
+	explicit WidgetScrollBar(const std::string& _fileName);
+	~WidgetScrollBar();
+
+	int checkClick();
+	int checkClickAt(int x, int y);
+	int getValue();
+	Rect getBounds();
+	void render();
+	void refresh(int x, int y, int h, int val, int max);
 };
 
 #endif

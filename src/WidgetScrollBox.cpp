@@ -57,7 +57,7 @@ void WidgetScrollBox::setPos(int offset_x, int offset_y) {
 	Widget::setPos(offset_x, offset_y);
 
 	if (contents && scrollbar) {
-		scrollbar->refresh(pos.x+pos.w, pos.y, pos.h-scrollbar->pos_down.h, static_cast<int>(cursor), contents->getGraphicsHeight()-pos.h);
+		scrollbar->refresh(pos.x + pos.w, pos.y, pos.h, static_cast<int>(cursor), contents_size.y - pos.h);
 	}
 }
 
@@ -87,8 +87,8 @@ void WidgetScrollBox::scroll(int amount) {
 	if (cursor_target < 0) {
 		cursor_target = 0;
 	}
-	else if (contents && cursor_target > static_cast<float>(contents->getGraphicsHeight() - pos.h)) {
-		cursor_target = static_cast<float>(contents->getGraphicsHeight() - pos.h);
+	else if (contents && cursor_target > static_cast<float>(contents_size.y - pos.h)) {
+		cursor_target = static_cast<float>(contents_size.y - pos.h);
 	}
 	refresh();
 }
@@ -98,8 +98,8 @@ void WidgetScrollBox::scrollTo(int amount) {
 	if (cursor < 0) {
 		cursor = 0;
 	}
-	else if (contents && cursor > static_cast<float>(contents->getGraphicsHeight() - pos.h)) {
-		cursor = static_cast<float>(contents->getGraphicsHeight() - pos.h);
+	else if (contents && cursor > static_cast<float>(contents_size.y - pos.h)) {
+		cursor = static_cast<float>(contents_size.y - pos.h);
 	}
 	cursor_target = cursor;
 	refresh();
@@ -110,8 +110,8 @@ void WidgetScrollBox::scrollToSmooth(int amount) {
 	if (cursor_target < 0) {
 		cursor_target = 0;
 	}
-	else if (contents && cursor_target > static_cast<float>(contents->getGraphicsHeight() - pos.h)) {
-		cursor_target = static_cast<float>(contents->getGraphicsHeight() - pos.h);
+	else if (contents && cursor_target > static_cast<float>(contents_size.y - pos.h)) {
+		cursor_target = static_cast<float>(contents_size.y - pos.h);
 	}
 	refresh();
 }
@@ -151,8 +151,7 @@ void WidgetScrollBox::logic() {
 			getNext();
 		tablist.logic();
 	}
-	else {
-		// TODO don't run every frame
+	else if (currentChild != -1 || tablist.getCurrent() != -1) {
 		tablist.defocus();
 		currentChild = -1;
 	}
@@ -171,15 +170,15 @@ void WidgetScrollBox::logic(int x, int y) {
 	}
 
 	// check ScrollBar clicks
-	if (contents && contents->getGraphicsHeight() > pos.h && scrollbar) {
+	if (contents && contents_size.y > pos.h && scrollbar) {
 		switch (scrollbar->checkClickAt(mouse.x,mouse.y)) {
-			case 1:
+			case WidgetScrollBar::CLICK_UP:
 				scrollUp();
 				break;
-			case 2:
+			case WidgetScrollBar::CLICK_DOWN:
 				scrollDown();
 				break;
-			case 3:
+			case WidgetScrollBar::CLICK_KNOB:
 				cursor = cursor_target = static_cast<float>(scrollbar->getValue());
 				break;
 			default:
@@ -212,42 +211,27 @@ void WidgetScrollBox::resize(int w, int h) {
 
 	pos.w = w;
 
-	if (pos.h > h) h = pos.h;
+	if (pos.h > h)
+		h = pos.h;
 
-	if (contents) {
-		delete contents;
-		contents = NULL;
-	}
-
-	Image *graphics;
-	graphics = render_device->createImage(pos.w,h);
-	if (graphics) {
-		contents = graphics->createSprite();
-		graphics->unref();
-	}
-
-	if (contents) {
-		contents->getGraphics()->fillWithColor(bg);
-	}
+	contents_size.x = w;
+	contents_size.y = h;
 
 	cursor = cursor_target = 0;
+
+	update = true;
 	refresh();
 }
 
 void WidgetScrollBox::refresh() {
 	if (update) {
-		int h = pos.h;
-		if (contents) {
-			h = contents->getGraphicsHeight();
-		}
-
 		if (contents) {
 			delete contents;
 			contents = NULL;
 		}
 
 		Image *graphics;
-		graphics = render_device->createImage(pos.w,h);
+		graphics = render_device->createImage(contents_size.x, contents_size.y);
 		if (graphics) {
 			contents = graphics->createSprite();
 			graphics->unref();
@@ -259,8 +243,7 @@ void WidgetScrollBox::refresh() {
 	}
 
 	if (contents && scrollbar) {
-		scrollbar->refresh(pos.x+pos.w, pos.y, pos.h-scrollbar->pos_down.h, static_cast<int>(cursor_target),
-						   contents->getGraphicsHeight()-pos.h);
+		scrollbar->refresh(pos.x + pos.w, pos.y, pos.h, static_cast<int>(cursor_target), contents_size.y - pos.h);
 	}
 }
 
@@ -278,7 +261,7 @@ void WidgetScrollBox::render() {
 
 	// draw content buffer, minus child widgets
 	if (contents) {
-		content_height = contents->getGraphicsHeight();
+		content_height = contents_size.y;
 		contents->local_frame = local_frame;
 		contents->setOffset(local_offset);
 		contents->setClipFromRect(src);
@@ -330,7 +313,7 @@ void WidgetScrollBox::render() {
 bool WidgetScrollBox::getNext() {
 	if (children.empty()) {
 		int prev_cursor = static_cast<int>(cursor);
-		int bottom = contents ? contents->getGraphicsHeight() - pos.h : 0;
+		int bottom = contents ? contents_size.y - pos.h : 0;
 
 		scrollDown();
 

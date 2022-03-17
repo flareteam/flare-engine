@@ -581,13 +581,13 @@ void GameStateLoad::logic() {
 			}
 			else if (has_scroll_bar) {
 				switch (scrollbar->checkClick()) {
-					case 1:
+					case WidgetScrollBar::CLICK_UP:
 						scrollUp();
 						break;
-					case 2:
+					case WidgetScrollBar::CLICK_DOWN:
 						scrollDown();
 						break;
-					case 3:
+					case WidgetScrollBar::CLICK_KNOB:
 						scroll_offset = scrollbar->getValue();
 						if (scroll_offset >= static_cast<int>(game_slots.size()) - visible_slots) {
 							scroll_offset = static_cast<int>(game_slots.size()) - visible_slots;
@@ -736,7 +736,7 @@ void GameStateLoad::refreshScrollBar() {
 		Rect scroll_pos;
 		scroll_pos.x = slot_pos[0].x + slot_pos[0].w;
 		scroll_pos.y = slot_pos[0].y;
-		scroll_pos.h = (slot_pos[0].h * game_slot_max) - scrollbar->pos_down.h;
+		scroll_pos.h = (slot_pos[0].h * game_slot_max);
 		scrollbar->refresh(scroll_pos.x, scroll_pos.y, scroll_pos.h, scroll_offset, static_cast<int>(game_slots.size()) - visible_slots);
 	}
 }

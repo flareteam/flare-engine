@@ -71,6 +71,8 @@ private:
 	float cursor;
 	float cursor_target;
 	WidgetScrollBar * scrollbar;
+
+	Point contents_size;
 };
 
 #endif

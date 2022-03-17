@@ -44,15 +44,6 @@ WidgetScrollBar::WidgetScrollBar(const std::string& _fileName)
 	, pressed_down(false)
 	, pressed_knob(false) {
 
-	loadArt();
-
-	if (scrollbars) {
-		pos_up.w = pos_down.w  = pos_knob.w = scrollbars->getGraphicsWidth();
-		pos_up.h = pos_down.h = pos_knob.h = (scrollbars->getGraphicsHeight() / 5); //height of one button
-	}
-}
-
-void WidgetScrollBar::loadArt() {
 	Image *graphics = NULL;
 	if (fileName != DEFAULT_FILE) {
 		graphics = render_device->loadImage(fileName, RenderDevice::ERROR_NORMAL);
@@ -64,6 +55,11 @@ void WidgetScrollBar::loadArt() {
 		scrollbars = graphics->createSprite();
 		graphics->unref();
 	}
+
+	if (scrollbars) {
+		pos_up.w = pos_down.w  = pos_knob.w = scrollbars->getGraphicsWidth();
+		pos_up.h = pos_down.h = pos_knob.h = (scrollbars->getGraphicsHeight() / GFX_TOTAL); // height of one button; all buttons are the same size
+	}
 }
 
 int WidgetScrollBar::checkClick() {
@@ -72,7 +68,7 @@ int WidgetScrollBar::checkClick() {
 
 /**
  * Sets and releases the "pressed" visual state of the ScrollBar
- * If press and release, activate (return 1 for up, 2 for down)
+ * If press and release, activate and return click state
  */
 int WidgetScrollBar::checkClickAt(int x, int y) {
 	Point mouse = Point(x,y);
@@ -108,20 +104,20 @@ int WidgetScrollBar::checkClickAt(int x, int y) {
 		lock_main1 = inpt->pressing[Input::MAIN1];
 	}
 
-	int ret = 0;
+	int ret = CLICK_NONE;
 	// main click released, so the ScrollBar state goes back to unpressed
 	if (pressed_up && !inpt->pressing[Input::MAIN1]) {
 		pressed_up = false;
 		if (in_up) {
 			// activate upon release
-			ret = 1;
+			ret = CLICK_UP;
 		}
 	}
 	else if (pressed_down && !inpt->pressing[Input::MAIN1]) {
 		pressed_down = false;
 		if (in_down) {
 			// activate upon release
-			ret = 2;
+			ret = CLICK_DOWN;
 		}
 	}
 	else if (pressed_knob && dragging) {
@@ -129,9 +125,9 @@ int WidgetScrollBar::checkClickAt(int x, int y) {
 
 		if (bar_height < 1) bar_height = 1;
 		value = (tmp * maximum)/bar_height;
-		set();
+		setKnobPos();
 
-		ret = 3;
+		ret = CLICK_KNOB;
 	}
 
 	if (!inpt->pressing[Input::MAIN1]) {
@@ -145,7 +141,7 @@ int WidgetScrollBar::checkClickAt(int x, int y) {
 
 }
 
-void WidgetScrollBar::set() {
+void WidgetScrollBar::setKnobPos() {
 	if (maximum < 1) maximum = 1;
 	value = std::max(0, std::min(maximum, value));
 	pos_knob.y = pos_up.y + pos_up.h + (value * (bar_height - pos_up.h) / maximum);
@@ -175,18 +171,20 @@ Rect WidgetScrollBar::getBounds() {
 void WidgetScrollBar::render() {
 	Rect src_up, src_down, src_knob;
 
+	int gfx_size = pos_up.h; // all buttons are the same height
+
 	src_up.x = 0;
-	src_up.y = (pressed_up ? pos_up.h : 0);
+	src_up.y = (pressed_up ? gfx_size * GFX_PREV_PRESS : gfx_size * GFX_PREV);
 	src_up.w = pos_up.w;
 	src_up.h = pos_up.h;
 
 	src_down.x = 0;
-	src_down.y = (pressed_down ? pos_down.h*3 : pos_down.h*2);
+	src_down.y = (pressed_down ? gfx_size * GFX_NEXT_PRESS : gfx_size * GFX_NEXT);
 	src_down.w = pos_down.w;
 	src_down.h = pos_down.h;
 
 	src_knob.x = 0;
-	src_knob.y = pos_knob.h * 4;
+	src_knob.y = gfx_size * GFX_KNOB;
 	src_knob.w = pos_knob.w;
 	src_knob.h = pos_knob.h;
 
@@ -223,9 +221,9 @@ void WidgetScrollBar::refresh(int x, int y, int h, int val, int max) {
 	value = val;
 	pos_up.x = pos_down.x = pos_knob.x = x;
 	pos_up.y = y;
-	pos_down.y = y+h;
+	pos_down.y = y + h - pos_down.h;
 	bar_height = pos_down.y-(pos_up.y+pos_up.h);
-	set();
+	setKnobPos();
 
 	Rect after = getBounds();
 	if (before.h != after.h) {
