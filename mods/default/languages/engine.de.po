@@ -6,7 +6,8 @@
 # Translators:
 # Justin Jacobs <jajdorkster@gmail.com>, 2019
 # a287ca4390ac1060252ff7344e07cfb3_ddf63c0 <12d9bb92f00a9c2841133eeaac7a25bb_727560>, 2019
-# Wuzzy <almikes@aol.com>, 2020
+# Wuzzy <Wuzzy@disroot.org>, 2020
+# qubodup, 2022
 # 
 #, fuzzy
 msgid ""
@@ -15,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-09 13:41-0500\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: Wuzzy <almikes@aol.com>, 2020\n"
+"Last-Translator: qubodup, 2022\n"
 "Language-Team: German (https://www.transifex.com/flareorg/teams/84925/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -43,7 +44,7 @@ msgstr ""
 
 #: ../../../src/Avatar.cpp:718
 msgid "You are defeated."
-msgstr ""
+msgstr "Du wurdest bezwungen."
 
 #: ../../../src/Avatar.cpp:969
 msgid "Transformation expired. You have been moved back to a safe place."
@@ -160,11 +161,11 @@ msgstr "Diesen Spielstand löschen?"
 
 #: ../../../src/GameStateLoad.cpp:93 ../../../src/MenuConfig.cpp:248
 msgid "No"
-msgstr ""
+msgstr "Nein"
 
 #: ../../../src/GameStateLoad.cpp:94 ../../../src/MenuConfig.cpp:249
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: ../../../src/GameStateLoad.cpp:97
 msgid "Exit to Title"
@@ -350,7 +351,7 @@ msgstr "%d Gegenstände:"
 
 #: ../../../src/ItemManager.cpp:933 ../../../src/MenuPowers.cpp:1280
 msgid "Tap icon again for more options"
-msgstr ""
+msgstr "Berühre das Icon erneut für weitere Optionen"
 
 #: ../../../src/ItemManager.cpp:965
 #, c-format
@@ -365,7 +366,7 @@ msgstr "Drücke [%s] zum Verwenden"
 #: ../../../src/ItemManager.cpp:972 ../../../src/MenuPowers.cpp:1314
 #, c-format
 msgid "Press [%s] for more options"
-msgstr ""
+msgstr "Drücke [%s] für weitere Optionen"
 
 #: ../../../src/LootManager.cpp:99 ../../../src/LootManager.cpp:101
 #: ../../../src/LootManager.cpp:103 ../../../src/MenuConfig.cpp:427
@@ -384,7 +385,7 @@ msgstr "Standard"
 
 #: ../../../src/LootManager.cpp:103
 msgid "Show All"
-msgstr ""
+msgstr "Alles anzeigen"
 
 #: ../../../src/MenuActionBar.cpp:86 ../../../src/MenuCharacter.cpp:54
 #: ../../../src/SDLInputState.cpp:887
@@ -441,7 +442,7 @@ msgstr "Stufe"
 #: ../../../src/MenuCharacter.cpp:309
 #, c-format
 msgid "Available stat points: %d"
-msgstr ""
+msgstr "Verfügbare Wertepunkte: %d"
 
 #: ../../../src/MenuCharacter.cpp:353
 #, c-format
@@ -483,7 +484,7 @@ msgstr "Zuweisen:"
 
 #: ../../../src/MenuConfig.cpp:244
 msgid "New"
-msgstr ""
+msgstr "Neu"
 
 #: ../../../src/MenuConfig.cpp:245 ../../../src/MenuManager.cpp:1791
 msgid "Clear"
@@ -605,7 +606,7 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:349
 msgid "The maximum frame rate that the game will be allowed to run at."
-msgstr ""
+msgstr "Die maximal zugelassene Bildfrequenz des Spiels."
 
 #: ../../../src/MenuConfig.cpp:353
 msgid ""
@@ -613,6 +614,9 @@ msgid ""
 "the game. Mods define the allowed render sizes, but this option allows "
 "overriding the maximum size."
 msgstr ""
+"Mit Rendergröße ist gemeint: Die Höhe (in Pixel) der Oberfläche, auf der das"
+" Spiel gezeichnet wird. Mods definieren die zulässigen Rendergrößen, aber "
+"mit dieser Option kann man ein Limit setzen."
 
 #: ../../../src/MenuConfig.cpp:379 ../../../src/MenuConfig.cpp:1711
 #: ../../../src/MenuGameOver.cpp:116
@@ -689,11 +693,11 @@ msgstr "Gamma-Wert"
 
 #: ../../../src/MenuConfig.cpp:415
 msgid "Maximum Render Size"
-msgstr ""
+msgstr "Maximale Rendergröße"
 
 #: ../../../src/MenuConfig.cpp:416
 msgid "Frame Limit"
-msgstr ""
+msgstr "Bildfrequenz-Limit"
 
 #: ../../../src/MenuConfig.cpp:418
 msgid "Sound Volume"
@@ -761,7 +765,7 @@ msgstr "Niedrige-Gesundheit-Schwellwert"
 
 #: ../../../src/MenuConfig.cpp:436
 msgid "Show item comparison tooltips"
-msgstr ""
+msgstr "Gegenstandsvergleich-Hinweise anzeigen"
 
 #: ../../../src/MenuConfig.cpp:439 ../../../src/MenuMovementType.cpp:94
 #: ../../../src/MenuMovementType.cpp:130
@@ -794,11 +798,11 @@ msgstr "Joystick-Todeszone"
 
 #: ../../../src/MenuConfig.cpp:446
 msgid "Touch Controls"
-msgstr ""
+msgstr "Touch-Steuerung"
 
 #: ../../../src/MenuConfig.cpp:447
 msgid "Touch Gamepad Scaling"
-msgstr ""
+msgstr "Touch-Controller Skalierung"
 
 #: ../../../src/MenuConfig.cpp:552
 msgid ""
@@ -879,6 +883,8 @@ msgid ""
 "When enabled, tooltips for equipped items of the same type are shown next to"
 " standard item tooltips."
 msgstr ""
+"Wenn aktiviert, werden Hinweise für ausgerüstete Gegenstände der gleichen "
+"Art neben den Standard-Hinweisen für Gegenstände angezeigt."
 
 #: ../../../src/MenuConfig.cpp:562
 msgid ""
@@ -921,6 +927,9 @@ msgid ""
 "When enabled, a virtual gamepad will be added in-game. Other interactions, "
 "such as drag-and-drop behavior, are also altered to better suit touch input."
 msgstr ""
+"Wenn aktiviert, erscheint ein virtueller Controller im Spiel. Weitere "
+"Interaktionen (z.B. Drag-and-Drop) werden geändert, um sie besser an Touch-"
+"Eingabe anzupassen."
 
 #: ../../../src/MenuConfig.cpp:617
 msgid "Active Mods"
@@ -940,7 +949,7 @@ msgstr "Aktivieren >>"
 
 #: ../../../src/MenuConfig.cpp:883
 msgid "Bindings for:"
-msgstr ""
+msgstr "Belegungen für:"
 
 #: ../../../src/MenuConfig.cpp:1562
 msgid "Version:"
@@ -960,7 +969,7 @@ msgstr "Benötigte Mods:"
 
 #: ../../../src/MenuConfig.cpp:1629
 msgid "Can not remove this binding."
-msgstr ""
+msgstr "Diese Belegung kann nicht entfernt werden."
 
 #: ../../../src/MenuConfig.cpp:1694 ../../../src/SDLInputState.cpp:733
 #: ../../../src/SDLInputState.cpp:758
@@ -1150,7 +1159,7 @@ msgstr "Zerstört"
 
 #: ../../../src/MenuGameOver.cpp:69
 msgid "Game Over"
-msgstr ""
+msgstr "Game Over"
 
 #: ../../../src/MenuInventory.cpp:274
 #, c-format
@@ -1230,7 +1239,7 @@ msgstr "Dieser Gegenstand kann nicht verkauft werden."
 #: ../../../src/MenuInventory.cpp:1375
 #, c-format
 msgid "Equipped set %d."
-msgstr ""
+msgstr "Set %d ausgerüstet."
 
 #: ../../../src/MenuLog.cpp:90
 msgid "Quests"
@@ -1242,7 +1251,7 @@ msgstr "Aufzeichnungen"
 
 #: ../../../src/MenuManager.cpp:165
 msgid "Choose an action:"
-msgstr ""
+msgstr "Wähle eine Aktion:"
 
 #: ../../../src/MenuManager.cpp:311
 #, c-format
@@ -1255,56 +1264,56 @@ msgstr "Dieser Gegenstand kann nicht abgelegt werden."
 
 #: ../../../src/MenuManager.cpp:1736
 msgid "Equipped"
-msgstr ""
+msgstr "Ausgerüstet"
 
 #: ../../../src/MenuManager.cpp:1784 ../../../src/MenuManager.cpp:1835
 msgid "Use"
-msgstr ""
+msgstr "Verwenden"
 
 #: ../../../src/MenuManager.cpp:1788 ../../../src/MenuManager.cpp:1831
 #: ../../../src/MenuManager.cpp:1862
 msgid "Move"
-msgstr ""
+msgstr "Bewegen"
 
 #: ../../../src/MenuManager.cpp:1804 ../../../src/MenuManager.cpp:1839
 msgid "Equip"
-msgstr ""
+msgstr "Ausrüsten"
 
 #: ../../../src/MenuManager.cpp:1808
 msgid "Upgrade"
-msgstr ""
+msgstr "Upgraden"
 
 #: ../../../src/MenuManager.cpp:1823 ../../../src/MenuManager.cpp:1847
 msgid "Sell"
-msgstr ""
+msgstr "Verkaufen"
 
 #: ../../../src/MenuManager.cpp:1827 ../../../src/MenuManager.cpp:1865
 msgid "Transfer"
-msgstr ""
+msgstr "Übertragen"
 
 #: ../../../src/MenuManager.cpp:1843
 msgid "Drop"
-msgstr ""
+msgstr "Fallenlassen"
 
 #: ../../../src/MenuManager.cpp:1879
 msgid "Buy"
-msgstr ""
+msgstr "Kaufen"
 
 #: ../../../src/MenuMovementType.cpp:87
 msgid "Select a Movement Type"
-msgstr ""
+msgstr "Wähle eine Bewegungsart"
 
 #: ../../../src/MenuMovementType.cpp:89
 msgid "Can be changed later in the Configuration menu."
-msgstr ""
+msgstr "Kann später im Konfigurationsmenü geändert werden."
 
 #: ../../../src/MenuMovementType.cpp:92 ../../../src/MenuMovementType.cpp:121
 msgid "Keyboard"
-msgstr ""
+msgstr "Tastatur"
 
 #: ../../../src/MenuMovementType.cpp:93 ../../../src/MenuMovementType.cpp:127
 msgid "Mouse"
-msgstr ""
+msgstr "Maus"
 
 #: ../../../src/MenuMovementType.cpp:122 ../../../src/MenuMovementType.cpp:131
 #: ../../../src/SDLInputState.cpp:658 ../../../src/SDLInputState.cpp:688
@@ -1332,7 +1341,7 @@ msgstr "Rechts"
 
 #: ../../../src/MenuMovementType.cpp:128
 msgid "Button"
-msgstr ""
+msgstr "Knopf"
 
 #: ../../../src/MenuNumPicker.cpp:59
 msgid "Enter amount:"
@@ -1488,7 +1497,7 @@ msgstr "Benötigt 1 Fertigkeitspunkt"
 #: ../../../src/MenuPowers.cpp:1512
 #, c-format
 msgid "Available skill points: %d"
-msgstr ""
+msgstr "Verfügbare Fertigkeitspunkte: %d"
 
 #: ../../../src/MenuPowers.cpp:1544
 msgid "Next Level:"
@@ -1749,7 +1758,7 @@ msgstr "Maus %d"
 
 #: ../../../src/SDLInputState.cpp:713 ../../../src/SDLInputState.cpp:722
 msgid "(unknown)"
-msgstr ""
+msgstr "(unbekannt)"
 
 #: ../../../src/SDLInputState.cpp:784
 msgid "Touch control D-Pad"
@@ -1813,47 +1822,47 @@ msgstr "Aktionstaste 2"
 
 #: ../../../src/SDLInputState.cpp:893
 msgid "Equipment Swap"
-msgstr ""
+msgstr "Ausrüstung austauschen"
 
 #: ../../../src/SDLInputState.cpp:894
 msgid "Mini-map Mode"
-msgstr ""
+msgstr "Minikarten-Modus"
 
 #: ../../../src/SDLInputState.cpp:895
 msgid "Loot Tooltip Mode"
-msgstr ""
+msgstr "Beute-Hinweismodus"
 
 #: ../../../src/SDLInputState.cpp:896
 msgid "Action Bar"
-msgstr ""
+msgstr "Aktionsleiste"
 
 #: ../../../src/SDLInputState.cpp:897
 msgid "Menu: Next Page"
-msgstr ""
+msgstr "Menü: Nächste Seite"
 
 #: ../../../src/SDLInputState.cpp:898
 msgid "Menu: Previous Page"
-msgstr ""
+msgstr "Menü: Vorherige Seite"
 
 #: ../../../src/SDLInputState.cpp:899
 msgid "Menu: Activate"
-msgstr ""
+msgstr "Menü: Aktivieren"
 
 #: ../../../src/SDLInputState.cpp:901
 msgid "Aim Up"
-msgstr ""
+msgstr "Hoch zielen"
 
 #: ../../../src/SDLInputState.cpp:902
 msgid "Aim Down"
-msgstr ""
+msgstr "Runter zielen"
 
 #: ../../../src/SDLInputState.cpp:903
 msgid "Aim Left"
-msgstr ""
+msgstr "Links zielen"
 
 #: ../../../src/SDLInputState.cpp:904
 msgid "Aim Right"
-msgstr ""
+msgstr "Rechts zielen"
 
 #: ../../../src/SDLInputState.cpp:905
 msgid "Developer Menu"
@@ -1901,103 +1910,103 @@ msgstr "Maus X2"
 
 #: ../../../src/SDLInputState.cpp:919
 msgid "X360: A"
-msgstr ""
+msgstr "X360: A"
 
 #: ../../../src/SDLInputState.cpp:920
 msgid "X360: B"
-msgstr ""
+msgstr "X360: B"
 
 #: ../../../src/SDLInputState.cpp:921
 msgid "X360: X"
-msgstr ""
+msgstr "X360: X"
 
 #: ../../../src/SDLInputState.cpp:922
 msgid "X360: Y"
-msgstr ""
+msgstr "X360: Y"
 
 #: ../../../src/SDLInputState.cpp:923
 msgid "X360: Back"
-msgstr ""
+msgstr "X360: Zurück"
 
 #: ../../../src/SDLInputState.cpp:924
 msgid "X360: Guide"
-msgstr ""
+msgstr "X360: Guide"
 
 #: ../../../src/SDLInputState.cpp:925
 msgid "X360: Start"
-msgstr ""
+msgstr "X360: Start"
 
 #: ../../../src/SDLInputState.cpp:926
 msgid "X360: L3"
-msgstr ""
+msgstr "X360: Linker Stick"
 
 #: ../../../src/SDLInputState.cpp:927
 msgid "X360: R3"
-msgstr ""
+msgstr "X360: Rechter Stick"
 
 #: ../../../src/SDLInputState.cpp:928
 msgid "X360: L1"
-msgstr ""
+msgstr "X360: Linker Bumper"
 
 #: ../../../src/SDLInputState.cpp:929
 msgid "X360: R1"
-msgstr ""
+msgstr "X360: Rechter Bumper"
 
 #: ../../../src/SDLInputState.cpp:930
 msgid "X360: D-Up"
-msgstr ""
+msgstr "X360: Steuerkreuz hoch"
 
 #: ../../../src/SDLInputState.cpp:931
 msgid "X360: D-Down"
-msgstr ""
+msgstr "X360: Steuerkreuz runter"
 
 #: ../../../src/SDLInputState.cpp:932
 msgid "X360: D-Left"
-msgstr ""
+msgstr "X360: Steuerkreuz links"
 
 #: ../../../src/SDLInputState.cpp:933
 msgid "X360: D-Right"
-msgstr ""
+msgstr "X360: Steuerkreuz rechts"
 
 #: ../../../src/SDLInputState.cpp:935
 msgid "X360: Left X+"
-msgstr ""
+msgstr "X360: Links X+"
 
 #: ../../../src/SDLInputState.cpp:936
 msgid "X360: Left X-"
-msgstr ""
+msgstr "X360: Links X-"
 
 #: ../../../src/SDLInputState.cpp:937
 msgid "X360: Left Y+"
-msgstr ""
+msgstr "X360: Links Y+"
 
 #: ../../../src/SDLInputState.cpp:938
 msgid "X360: Left Y-"
-msgstr ""
+msgstr "X360: Links Y-"
 
 #: ../../../src/SDLInputState.cpp:939
 msgid "X360: Right X+"
-msgstr ""
+msgstr "X360: Rechts X+"
 
 #: ../../../src/SDLInputState.cpp:940
 msgid "X360: Right X-"
-msgstr ""
+msgstr "X360: Rechts X-"
 
 #: ../../../src/SDLInputState.cpp:941
 msgid "X360: Right Y+"
-msgstr ""
+msgstr "X360: Rechts Y+"
 
 #: ../../../src/SDLInputState.cpp:942
 msgid "X360: Right Y-"
-msgstr ""
+msgstr "X360: Rechts Y-"
 
 #: ../../../src/SDLInputState.cpp:943
 msgid "X360: L2"
-msgstr ""
+msgstr "X360: Linker Trigger"
 
 #: ../../../src/SDLInputState.cpp:944
 msgid "X360: R2"
-msgstr ""
+msgstr "X360: Rechter Trigger"
 
 #: ../../../src/Stats.cpp:38
 msgid "Max HP"
