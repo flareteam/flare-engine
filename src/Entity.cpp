@@ -544,37 +544,52 @@ bool Entity::takeHit(Hazard &h) {
 		// HP/MP steal is cumulative between stat bonus and power bonus
 		if (h.src_stats->hp > 0) {
 			int hp_steal = h.power->hp_steal + h.src_stats->get(Stats::HP_STEAL);
-			if (!stats.effects.immunity_hp_steal && hp_steal != 0) {
-				int steal_amt = (std::min(dmg, prev_hp) * hp_steal) / 100;
-				if (steal_amt == 0) steal_amt = 1;
-				combat_text->addString(msg->get("+%d HP",steal_amt), h.src_stats->pos, CombatText::MSG_BUFF);
-				h.src_stats->hp = std::min(h.src_stats->hp + steal_amt, h.src_stats->get(Stats::HP_MAX));
+			if (hp_steal != 0) {
+				if (Math::percentChance(stats.get(Stats::RESIST_HP_STEAL))) {
+				comb->addString(msg->get("Resist"), stats.pos, CombatText::MSG_MISS);
+				}
+				else {
+					int steal_amt = (std::min(dmg, prev_hp) * hp_steal) / 100;
+					if (steal_amt == 0) steal_amt = 1;
+					combat_text->addString(msg->get("+%d HP",steal_amt), h.src_stats->pos, CombatText::MSG_BUFF);
+					h.src_stats->hp = std::min(h.src_stats->hp + steal_amt, h.src_stats->get(Stats::HP_MAX));
+				}
 			}
 			int mp_steal = h.power->mp_steal + h.src_stats->get(Stats::MP_STEAL);
-			if (!stats.effects.immunity_mp_steal && mp_steal != 0) {
-				int steal_amt = (std::min(dmg, prev_hp) * mp_steal) / 100;
-				if (steal_amt == 0) steal_amt = 1;
-				combat_text->addString(msg->get("+%d MP",steal_amt), h.src_stats->pos, CombatText::MSG_BUFF);
-				h.src_stats->mp = std::min(h.src_stats->mp + steal_amt, h.src_stats->get(Stats::MP_MAX));
+			if (mp_steal != 0) {
+				if (Math::percentChance(stats.get(Stats::RESIST_MP_STEAL))) {
+				comb->addString(msg->get("Resist"), stats.pos, CombatText::MSG_MISS);
+				}
+				else {
+					int steal_amt = (std::min(dmg, prev_hp) * mp_steal) / 100;
+					if (steal_amt == 0) steal_amt = 1;
+					combat_text->addString(msg->get("+%d MP",steal_amt), h.src_stats->pos, CombatText::MSG_BUFF);
+					h.src_stats->mp = std::min(h.src_stats->mp + steal_amt, h.src_stats->get(Stats::MP_MAX));
+				}
 			}
 		}
 
 		// deal return damage
-		if (!h.src_stats->effects.immunity_damage_reflect && stats.get(Stats::RETURN_DAMAGE) > 0) {
-			int dmg_return = static_cast<int>(static_cast<float>(dmg * stats.get(Stats::RETURN_DAMAGE)) / 100.f);
+		if (stats.get(Stats::RETURN_DAMAGE) > 0) {
+			if (Math::percentChance(h.src_stats->get(Stats::RESIST_DAMAGE_REFLECT))) {
+				comb->addString(msg->get("Resist"), stats.pos, CombatText::MSG_MISS);
+			}
+			else {
+				int dmg_return = static_cast<int>(static_cast<float>(dmg * stats.get(Stats::RETURN_DAMAGE)) / 100.f);
 
-			if (dmg_return == 0)
-				dmg_return = 1;
+				if (dmg_return == 0)
+					dmg_return = 1;
 
-			// swap the source type when dealing return damage
-			int return_source_type = Power::SOURCE_TYPE_NEUTRAL;
-			if (h.source_type == Power::SOURCE_TYPE_HERO || h.source_type == Power::SOURCE_TYPE_ALLY)
-				return_source_type = Power::SOURCE_TYPE_ENEMY;
-			else if (h.source_type == Power::SOURCE_TYPE_ENEMY)
-				return_source_type = stats.hero ? Power::SOURCE_TYPE_HERO : Power::SOURCE_TYPE_ALLY;
+				// swap the source type when dealing return damage
+				int return_source_type = Power::SOURCE_TYPE_NEUTRAL;
+				if (h.source_type == Power::SOURCE_TYPE_HERO || h.source_type == Power::SOURCE_TYPE_ALLY)
+					return_source_type = Power::SOURCE_TYPE_ENEMY;
+				else if (h.source_type == Power::SOURCE_TYPE_ENEMY)
+					return_source_type = stats.hero ? Power::SOURCE_TYPE_HERO : Power::SOURCE_TYPE_ALLY;
 
-			h.src_stats->takeDamage(dmg_return, !StatBlock::TAKE_DMG_CRIT, return_source_type);
-			comb->addInt(dmg_return, h.src_stats->pos, CombatText::MSG_GIVEDMG);
+				h.src_stats->takeDamage(dmg_return, !StatBlock::TAKE_DMG_CRIT, return_source_type);
+				comb->addInt(dmg_return, h.src_stats->pos, CombatText::MSG_GIVEDMG);
+			}
 		}
 	}
 

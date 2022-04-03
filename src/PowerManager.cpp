@@ -207,6 +207,10 @@ void PowerManager::loadEffects() {
 		else if (infile.key == "type") {
 			// @ATTR effect.type|string|Defines the type of effect
 			effects.back().type = Effect::getTypeFromString(infile.val);
+			effects.back().is_immunity_type = Effect::isImmunityTypeString(infile.val);
+			if (effects.back().is_immunity_type) {
+				infile.error("PowerManager: '%s' is deprecated. Replace with a corresponding 'resist' effect.", infile.val.c_str());
+			}
 		}
 		else if (infile.key == "name") {
 			// @ATTR effect.name|string|A displayed name that is shown when hovering the mouse over the effect icon.
@@ -701,6 +705,24 @@ void PowerManager::loadPowers() {
 				if (!chance.empty()) {
 					pe.chance = Parse::toInt(chance);
 				}
+
+				int pe_type;
+				bool is_immunity_type = false;
+				EffectDef* effect_def = getEffectDef(pe.id);
+				if (effect_def) {
+					pe_type = effect_def->type;
+					is_immunity_type = effect_def->is_immunity_type;
+				}
+				else {
+					pe_type = Effect::getTypeFromString(pe.id);
+					is_immunity_type = Effect::isImmunityTypeString(pe.id);
+				}
+
+				if (is_immunity_type && (pe_type == Effect::RESIST_ALL || Effect::typeIsEffectResist(pe_type))) {
+					infile.error("PowerManager: Post effect '%s' matches a deprecated type. Converting to a resistance with 100 magnitude.", pe.id.c_str());
+					pe.magnitude = 100;
+				}
+
 				powers[input_id].post_effects.push_back(pe);
 			}
 		}
@@ -1236,7 +1258,7 @@ bool PowerManager::effect(StatBlock *target_stats, StatBlock *caster_stats, Powe
 			effect_data.type = Effect::getTypeFromString(pe.id);
 		}
 
-		dest_stats->effects.addEffect(effect_data, duration, magnitude, source_type, power_index);
+		dest_stats->effects.addEffect(dest_stats, effect_data, duration, magnitude, source_type, power_index);
 	}
 
 	return true;

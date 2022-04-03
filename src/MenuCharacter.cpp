@@ -86,9 +86,10 @@ MenuCharacter::MenuCharacter()
 		show_stat[i] = true;
 	}
 
-	// these two are hidden by default, as they are currently unused
-	show_stat[Stats::HP_PERCENT] = false;
-	show_stat[Stats::MP_PERCENT] = false;
+	// some stats are hidden by default
+	for (int i = Stats::RESIST_DAMAGE_OVER_TIME; i < Stats::COUNT; ++i) {
+		show_stat[i] = false;
+	}
 
 	// Upgrade buttons
 	primary_up.resize(eset->primary_stats.list.size());

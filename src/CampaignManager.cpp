@@ -232,13 +232,13 @@ void CampaignManager::restoreHPMP(const std::string& s) {
 		pc->logMsg(msg->get("HP and MP restored."), Avatar::MSG_UNIQUE);
 	}
 	else if (s == "status") {
-		pc->stats.effects.clearNegativeEffects();
+		pc->stats.effects.clearNegativeEffects(Effect::RESIST_ALL);
 		pc->logMsg(msg->get("Negative effects removed."), Avatar::MSG_UNIQUE);
 	}
 	else if (s == "all") {
 		pc->stats.hp = pc->stats.get(Stats::HP_MAX);
 		pc->stats.mp = pc->stats.get(Stats::MP_MAX);
-		pc->stats.effects.clearNegativeEffects();
+		pc->stats.effects.clearNegativeEffects(Effect::RESIST_ALL);
 		pc->logMsg(msg->get("HP and MP restored, negative effects removed"), Avatar::MSG_UNIQUE);
 	}
 }

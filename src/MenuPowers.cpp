@@ -993,32 +993,9 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 		else if (effect_type == Effect::ATTACK_SPEED) {
 			ss << msg->get("%d%% Attack Speed", pwr.post_effects[i].magnitude);
 		}
-		else if (effect_type == Effect::IMMUNITY) {
-			ss << msg->get("Immunity");
+		else if (effect_type == Effect::RESIST_ALL) {
+			ss << "+" << pwr.post_effects[i].magnitude << "% " << msg->get("Resistance to all negative effects");
 		}
-		else if (effect_type == Effect::IMMUNITY_DAMAGE) {
-			ss << msg->get("Immunity to damage over time");
-		}
-		else if (effect_type == Effect::IMMUNITY_SLOW) {
-			ss << msg->get("Immunity to slow");
-		}
-		else if (effect_type == Effect::IMMUNITY_STUN) {
-			ss << msg->get("Immunity to stun");
-		}
-		else if (effect_type == Effect::IMMUNITY_HP_STEAL) {
-			ss << msg->get("Immunity to HP steal");
-		}
-		else if (effect_type == Effect::IMMUNITY_MP_STEAL) {
-			ss << msg->get("Immunity to MP steal");
-		}
-		else if (effect_type == Effect::IMMUNITY_KNOCKBACK) {
-			ss << msg->get("Immunity to knockback");
-		}
-		else if (effect_type == Effect::IMMUNITY_DAMAGE_REFLECT) {
-			ss << msg->get("Immunity to damage reflection");
-		}
-
-		// TODO Effect::IMMUNITY_STAT_DEBUFF?
 
 		else if (effect_type == Effect::STUN) {
 			ss << msg->get("Stun");

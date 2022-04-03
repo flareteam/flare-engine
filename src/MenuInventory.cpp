@@ -1301,7 +1301,7 @@ void MenuInventory::applyBonus(const BonusData* bdata) {
 
 	ed.type = Effect::getTypeFromString(ed.id);
 
-	pc->stats.effects.addItemEffect(ed, 0, bdata->value);
+	pc->stats.effects.addItemEffect(&pc->stats, ed, 0, bdata->value);
 }
 
 void MenuInventory::applyEquipmentSet(unsigned set) {

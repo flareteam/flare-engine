@@ -29,37 +29,30 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class Animation;
 class Hazard;
+class StatBlock;
 
 class Effect {
 public:
-	static const int TYPE_COUNT = 26;
 	enum {
 		NONE = 0,
-		DAMAGE = 1,
-		DAMAGE_PERCENT = 2,
-		HPOT = 3,
-		HPOT_PERCENT = 4,
-		MPOT = 5,
-		MPOT_PERCENT = 6,
-		SPEED = 7,
-		ATTACK_SPEED = 8,
-		IMMUNITY = 9,
-		IMMUNITY_DAMAGE = 10,
-		IMMUNITY_SLOW = 11,
-		IMMUNITY_STUN = 12,
-		IMMUNITY_HP_STEAL = 13,
-		IMMUNITY_MP_STEAL = 14,
-		IMMUNITY_KNOCKBACK = 15,
-		IMMUNITY_DAMAGE_REFLECT = 16,
-		IMMUNITY_STAT_DEBUFF = 17,
-		STUN = 18,
-		REVIVE = 19,
-		CONVERT = 20,
-		FEAR = 21,
-		DEATH_SENTENCE = 22,
-		SHIELD = 23,
-		HEAL = 24,
-		KNOCKBACK = 25
+		DAMAGE,
+		DAMAGE_PERCENT,
+		HPOT,
+		HPOT_PERCENT,
+		MPOT,
+		MPOT_PERCENT,
+		SPEED,
+		ATTACK_SPEED,
+		RESIST_ALL,
+		STUN,
+		REVIVE,
+		CONVERT,
+		FEAR,
+		DEATH_SENTENCE,
+		SHIELD,
+		HEAL,
+		KNOCKBACK,
+		TYPE_COUNT
 	};
 
 	Effect();
@@ -76,10 +69,13 @@ public:
 	static bool typeIsDmgMax(int t);
 	static bool typeIsResist(int t);
 	static bool typeIsPrimary(int t);
+	static bool typeIsEffectResist(int t);
 	static int getStatFromType(int t);
 	static size_t getDmgFromType(int t);
 	static size_t getResistFromType(int t);
 	static size_t getPrimaryFromType(int t);
+
+	static bool isImmunityTypeString(const std::string& type_str); // handling of deprecated types
 
 	std::string id;
 	std::string name;
@@ -117,25 +113,27 @@ public:
 	Color color_mod;
 	uint8_t alpha_mod;
 	std::string attack_speed_anim;
+
+	bool is_immunity_type; // handling of deprecated types
 };
 
 class EffectManager {
 private:
 	void removeEffect(size_t id);
 	void clearStatus();
-	void addEffectInternal(EffectDef &effect, int duration, int magnitude, int source_type, bool item, PowerID power_id);
+	void addEffectInternal(StatBlock* stats, EffectDef &effect, int duration, int magnitude, int source_type, bool item, PowerID power_id);
 
 public:
 	EffectManager();
 	~EffectManager();
 	void logic();
-	void addEffect(EffectDef &effect, int duration, int magnitude, int source_type, PowerID power_id);
-	void addItemEffect(EffectDef &effect, int duration, int magnitude);
+	void addEffect(StatBlock* stats, EffectDef &effect, int duration, int magnitude, int source_type, PowerID power_id);
+	void addItemEffect(StatBlock* stats, EffectDef &effect, int duration, int magnitude);
 	void removeEffectType(const int type);
 	void removeEffectPassive(size_t id);
 	void removeEffectID(const std::vector< std::pair<std::string, int> >& remove_effects);
 	void clearEffects();
-	void clearNegativeEffects(int type = -1);
+	void clearNegativeEffects(int type);
 	void clearItemEffects();
 	void clearTriggerEffects(int trigger);
 	int damageShields(int dmg);
@@ -155,14 +153,6 @@ public:
 	int mpot;
 	int mpot_percent;
 	float speed;
-	bool immunity_damage;
-	bool immunity_slow;
-	bool immunity_stun;
-	bool immunity_hp_steal;
-	bool immunity_mp_steal;
-	bool immunity_knockback;
-	bool immunity_damage_reflect;
-	bool immunity_stat_debuff;
 	bool stun;
 	bool revive;
 	bool convert;
