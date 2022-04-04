@@ -17,6 +17,7 @@ Engine fixes:
 Translation updates:
 
 * German (de) update (Wuzzy2)
+* Japanese (ja) update (Sato Hayato)
 * Chinese (zh) update (Issac Zhang)
 
 
