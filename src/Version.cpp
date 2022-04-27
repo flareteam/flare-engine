@@ -30,7 +30,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <SDL.h>
 
-Version VersionInfo::ENGINE(1, 13, 12);
+Version VersionInfo::ENGINE(1, 13, 13);
 Version VersionInfo::MIN(0, 0, 0);
 Version VersionInfo::MAX(USHRT_MAX, USHRT_MAX, USHRT_MAX);
 

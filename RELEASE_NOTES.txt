@@ -7,6 +7,7 @@ Engine features:
 * Added 'spawn_level' property to map enemies. This follows the same syntax as the Power property of the same name.
 * Add XP scaling tables for scaling enemy reward XP based on enemy level.
 * Replace 'immunity' effects with percentage-based resistances.
+* Added 'mouse_move_deadzone' property to engine/misc.txt to help alleviate erratic mouse-move behavior when the cursor is near the player.
 
 Engine fixes:
 

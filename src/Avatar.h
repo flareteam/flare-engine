@@ -78,6 +78,7 @@ private:
 	bool attack_cursor;
 
 	int mm_key; // mouse movement key
+	bool mm_is_distant;
 
 	Timer set_dir_timer;
 

@@ -62,6 +62,7 @@ Avatar::Avatar()
 	: Entity()
 	, attack_cursor(false)
 	, mm_key(settings->mouse_move_swap ? Input::MAIN2 : Input::MAIN1)
+	, mm_is_distant(false)
 	, hero_stats(NULL)
 	, charmed_stats(NULL)
 	, act_target()
@@ -254,7 +255,7 @@ bool Avatar::pressing_move() {
 		return false;
 	}
 	else if (settings->mouse_move) {
-		return inpt->pressing[mm_key] && !inpt->pressing[Input::SHIFT];
+		return inpt->pressing[mm_key] && !inpt->pressing[Input::SHIFT] && mm_is_distant;
 	}
 	else {
 		return (inpt->pressing[Input::UP] && !inpt->lock[Input::UP]) ||
@@ -272,8 +273,10 @@ void Avatar::set_direction() {
 
 	// handle direction changes
 	if (settings->mouse_move) {
-		FPoint target = Utils::screenToMap(inpt->mouse.x, inpt->mouse.y, mapr->cam.pos.x, mapr->cam.pos.y);
-		stats.direction = Utils::calcDirection(stats.pos.x, stats.pos.y, target.x, target.y);
+		if (mm_is_distant) {
+			FPoint target = Utils::screenToMap(inpt->mouse.x, inpt->mouse.y, mapr->cam.pos.x, mapr->cam.pos.y);
+			stats.direction = Utils::calcDirection(stats.pos.x, stats.pos.y, target.x, target.y);
+		}
 	}
 	else {
 		// movement keys take top priority for setting direction
@@ -431,9 +434,21 @@ void Avatar::logic() {
 		if (!inpt->pressing[mm_key]) {
 			lock_enemy = NULL;
 		}
+		else {
+			// prevents erratic behavior when mouse move is too close to player
+			FPoint target = Utils::screenToMap(inpt->mouse.x, inpt->mouse.y, mapr->cam.pos.x, mapr->cam.pos.y);
+			if (stats.cur_state == StatBlock::ENTITY_MOVE) {
+				mm_is_distant = Utils::calcDist(stats.pos, target) >= eset->misc.mouse_move_deadzone_moving;
+			}
+			else {
+				mm_is_distant = Utils::calcDist(stats.pos, target) >= eset->misc.mouse_move_deadzone_not_moving;
+			}
+		}
+
 		if (lock_enemy && lock_enemy->stats.hp <= 0) {
 			lock_enemy = NULL;
 		}
+
 		if (mm_attack_id > 0) {
 			if (!stats.canUsePower(mm_attack_id, !StatBlock::CAN_USE_PASSIVE)) {
 				lock_enemy = NULL;

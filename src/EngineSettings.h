@@ -68,6 +68,8 @@ public:
 		bool combat_aborts_npc_interact;
 		unsigned short fogofwar;
 		bool save_fogofwar;
+		float mouse_move_deadzone_moving;
+		float mouse_move_deadzone_not_moving;
 	};
 
 	class Resolutions {
