@@ -2,10 +2,10 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 # Translators:
-# Justin Jacobs <jajdorkster@gmail.com>, 2018
-#
+# Justin Jacobs <jajdorkster@gmail.com>, 2022
+# 
 #, fuzzy
 msgid ""
 msgstr ""
@@ -13,13 +13,12 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-10 12:26-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
-"Language-Team: Vietnamese (https://www.transifex.com/flareorg/teams/84925/"
-"vi/)\n"
-"Language: vi\n"
+"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2022\n"
+"Language-Team: Vietnamese (https://www.transifex.com/flareorg/teams/84925/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: vi\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../../../src/Avatar.cpp:356
@@ -800,22 +799,22 @@ msgid ""
 "Will try to store surfaces in video memory versus system memory. The effect "
 "this has on performance depends on the renderer."
 msgstr ""
-"Lưu dữ liệu bề mặt vào bộ nhớ đồ hoạ thay cho RAM. Hiệu quả của tuỳ chọn này "
-"phụ thuộc vào thiết bị kết xuất."
+"Lưu dữ liệu bề mặt vào bộ nhớ đồ hoạ thay cho RAM. Hiệu quả của tuỳ chọn này"
+" phụ thuộc vào thiết bị kết xuất."
 
 #: ../../../src/MenuConfig.cpp:553
 msgid ""
 "Prevents screen tearing. Disable if you experience \"stuttering\" in "
 "windowed mode or input lag."
 msgstr ""
-"Giúp tránh rách hình. Tắt nếu bạn thấy lag khi điều khiển hoặc chế độ cửa sổ "
-"bị \"lắp\"."
+"Giúp tránh rách hình. Tắt nếu bạn thấy lag khi điều khiển hoặc chế độ cửa sổ"
+" bị \"lắp\"."
 
 #: ../../../src/MenuConfig.cpp:554
 msgid ""
 "When enabled, this uses the screen DPI in addition to the window dimensions "
-"to scale the rendering resolution. Otherwise, only the window dimensions are "
-"used."
+"to scale the rendering resolution. Otherwise, only the window dimensions are"
+" used."
 msgstr ""
 "Khi bật, sử dụng thêm DPI màn hình cùng kích thước cửa sổ để phóng đồ hoạ. "
 "Nếu không, chỉ sử dụng kích thước cửa sổ."
@@ -828,8 +827,8 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:556
 msgid ""
-"Enables the below setting that controls the screen gamma level. The behavior "
-"of the gamma setting can vary between platforms."
+"Enables the below setting that controls the screen gamma level. The behavior"
+" of the gamma setting can vary between platforms."
 msgstr ""
 
 #: ../../../src/MenuConfig.cpp:557
@@ -858,8 +857,8 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:561
 msgid ""
-"When enabled, tooltips for equipped items of the same type are shown next to "
-"standard item tooltips."
+"When enabled, tooltips for equipped items of the same type are shown next to"
+" standard item tooltips."
 msgstr ""
 
 #: ../../../src/MenuConfig.cpp:562
@@ -870,8 +869,8 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:563
 msgid ""
-"When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or "
-"'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
+"When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or"
+" 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
 "instead of 'Main1'."
 msgstr ""
 
@@ -885,8 +884,8 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:565
 msgid ""
-"The player's attacks will be aimed in the direction of the mouse cursor when "
-"this is enabled."
+"The player's attacks will be aimed in the direction of the mouse cursor when"
+" this is enabled."
 msgstr ""
 
 #: ../../../src/MenuConfig.cpp:566
@@ -1043,11 +1042,12 @@ msgid ""
 "Prints a list of items that match a search term. No search term will list "
 "all items"
 msgstr ""
-"In các đồ vật khớp với từ khoá tìm kiếm. Nếu không cung cấp từ khoá, liệt kê "
-"tất cả."
+"In các đồ vật khớp với từ khoá tìm kiếm. Nếu không cung cấp từ khoá, liệt kê"
+" tất cả."
 
 #: ../../../src/MenuDevConsole.cpp:393 ../../../src/MenuDevConsole.cpp:394
-msgid "parses a series of event components and executes them as a single event"
+msgid ""
+"parses a series of event components and executes them as a single event"
 msgstr ""
 "nhận một chuỗi các bộ phận sự kiện và thực hiện chúng như một sự kiện duy "
 "nhất"
@@ -2181,39 +2181,3 @@ msgstr "hoặc mới hơn"
 #: ../../../src/Version.cpp:142
 msgid "or older"
 msgstr "hoặc cũ hơn"
-
-#, c-format
-#~ msgid "XP: %d"
-#~ msgstr "Điểm kinh nghiệm: %d"
-
-#, c-format
-#~ msgid "Next: %d"
-#~ msgstr "Tiếp: %d"
-
-#, c-format
-#~ msgid "XP: %d/%d"
-#~ msgstr "Điểm kinh nghiệm: %d/%d"
-
-#~ msgid "Immunity"
-#~ msgstr "Đề kháng"
-
-#~ msgid "Immunity to damage over time"
-#~ msgstr "Kháng sát thương theo thời gian"
-
-#~ msgid "Immunity to slow"
-#~ msgstr "Chống bị làm chậm"
-
-#~ msgid "Immunity to stun"
-#~ msgstr "Chống bất động"
-
-#~ msgid "Immunity to HP steal"
-#~ msgstr "Chống trộm điểm thể chất"
-
-#~ msgid "Immunity to MP steal"
-#~ msgstr "Chống trộm điểm ma pháp"
-
-#~ msgid "Immunity to knockback"
-#~ msgstr "Chống bị đẩy lại"
-
-#~ msgid "Immunity to damage reflection"
-#~ msgstr "Chống phản sát thương"

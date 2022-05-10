@@ -2,12 +2,12 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 # Translators:
-# Justin Jacobs <jajdorkster@gmail.com>, 2019
 # CodingJellyfish <dumaosen_main01@outlook.com>, 2021
 # Isaac Zhang, 2022
-#
+# Justin Jacobs <jajdorkster@gmail.com>, 2022
+# 
 #, fuzzy
 msgid ""
 msgstr ""
@@ -15,12 +15,12 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-10 12:26-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: Isaac Zhang, 2022\n"
+"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2022\n"
 "Language-Team: Chinese (https://www.transifex.com/flareorg/teams/84925/zh/)\n"
-"Language: zh\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: zh\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../../../src/Avatar.cpp:356
@@ -520,9 +520,7 @@ msgstr "保存游戏"
 msgid ""
 "Show all loot tooltips, except for those that would be obscured by the "
 "player or an enemy. Temporarily show all loot tooltips with 'Alt'."
-msgstr ""
-"显示全部的战利品提示，除了那些被玩家或敌人遮盖的。按‘Alt’临时显示全部的战利品"
-"提示。"
+msgstr "显示全部的战利品提示，除了那些被玩家或敌人遮盖的。按‘Alt’临时显示全部的战利品提示。"
 
 #: ../../../src/MenuConfig.cpp:304
 msgid "Show all"
@@ -601,9 +599,7 @@ msgstr "音效"
 msgid ""
 "When the player's health drops below the given threshold, the low health "
 "notifications are triggered if one or more of them is enabled."
-msgstr ""
-"当玩家的HP低于一个特定的阈值时，如果您已启用一种或更多低生命通知，它将被触"
-"发。"
+msgstr "当玩家的HP低于一个特定的阈值时，如果您已启用一种或更多低生命通知，它将被触发。"
 
 #: ../../../src/MenuConfig.cpp:349
 msgid "The maximum frame rate that the game will be allowed to run at."
@@ -817,11 +813,9 @@ msgstr "防止画面撕裂。如果在窗口模式或输入时“卡顿”则禁
 #: ../../../src/MenuConfig.cpp:554
 msgid ""
 "When enabled, this uses the screen DPI in addition to the window dimensions "
-"to scale the rendering resolution. Otherwise, only the window dimensions are "
-"used."
-msgstr ""
-"启用后，除了窗口尺寸外，还会使用屏幕DPI来调整渲染分辨率。否则，只使用窗口尺"
-"寸。"
+"to scale the rendering resolution. Otherwise, only the window dimensions are"
+" used."
+msgstr "启用后，除了窗口尺寸外，还会使用屏幕DPI来调整渲染分辨率。否则，只使用窗口尺寸。"
 
 #: ../../../src/MenuConfig.cpp:555
 msgid ""
@@ -831,8 +825,8 @@ msgstr "启用视差（非瓦片）层。 禁用此设置在一些情况下能�
 
 #: ../../../src/MenuConfig.cpp:556
 msgid ""
-"Enables the below setting that controls the screen gamma level. The behavior "
-"of the gamma setting can vary between platforms."
+"Enables the below setting that controls the screen gamma level. The behavior"
+" of the gamma setting can vary between platforms."
 msgstr "启用以下设置来控制屏幕伽马级别。这个伽马设置的行为依平台而异。"
 
 #: ../../../src/MenuConfig.cpp:557
@@ -861,8 +855,8 @@ msgstr "敌人、友军和玩家被高的物体遮蔽时在上面显示标记。
 
 #: ../../../src/MenuConfig.cpp:561
 msgid ""
-"When enabled, tooltips for equipped items of the same type are shown next to "
-"standard item tooltips."
+"When enabled, tooltips for equipped items of the same type are shown next to"
+" standard item tooltips."
 msgstr "开启后，同种装备的工具栏将在起始工具栏旁显示。"
 
 #: ../../../src/MenuConfig.cpp:562
@@ -873,12 +867,10 @@ msgstr "允许游戏完全被键盘（或摇杆）控制。"
 
 #: ../../../src/MenuConfig.cpp:563
 msgid ""
-"When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or "
-"'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
+"When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or"
+" 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
 "instead of 'Main1'."
-msgstr ""
-"当开启‘使用鼠标移动英雄’时，这设置使用‘主按键1’还是‘主按键2’来移动英雄。开启"
-"时，使用‘主按键2’来移动英雄而不是‘主按键1’。"
+msgstr "当开启‘使用鼠标移动英雄’时，这设置使用‘主按键1’还是‘主按键2’来移动英雄。开启时，使用‘主按键2’来移动英雄而不是‘主按键1’。"
 
 #: ../../../src/MenuConfig.cpp:564
 msgid ""
@@ -886,22 +878,19 @@ msgid ""
 "assigned to the movement button can be used by targeting an enemy. If this "
 "setting is disabled, it is required to use 'Shift' to access the Power "
 "assigned to the movement button."
-msgstr ""
-"当开启‘使用鼠标移动英雄’时，这设置分配到移动键的技能是否能向敌人使用。如果这"
-"个设置被禁用，需要使用‘Shift’访问分配到移动键的技能。"
+msgstr "当开启‘使用鼠标移动英雄’时，这设置分配到移动键的技能是否能向敌人使用。如果这个设置被禁用，需要使用‘Shift’访问分配到移动键的技能。"
 
 #: ../../../src/MenuConfig.cpp:565
 msgid ""
-"The player's attacks will be aimed in the direction of the mouse cursor when "
-"this is enabled."
+"The player's attacks will be aimed in the direction of the mouse cursor when"
+" this is enabled."
 msgstr "开启后玩家的攻击将指向光标。"
 
 #: ../../../src/MenuConfig.cpp:566
 msgid ""
 "When enabled, a virtual gamepad will be added in-game. Other interactions, "
 "such as drag-and-drop behavior, are also altered to better suit touch input."
-msgstr ""
-"开启后，游戏中将会增加触摸按钮。其他如拖拽的操作，也将改变以适配触摸控制。"
+msgstr "开启后，游戏中将会增加触摸按钮。其他如拖拽的操作，也将改变以适配触摸控制。"
 
 #: ../../../src/MenuConfig.cpp:617
 msgid "Active Mods"
@@ -1049,7 +1038,8 @@ msgid ""
 msgstr "输出匹配搜索词的物品。没有搜索词将会列出所有物品"
 
 #: ../../../src/MenuDevConsole.cpp:393 ../../../src/MenuDevConsole.cpp:394
-msgid "parses a series of event components and executes them as a single event"
+msgid ""
+"parses a series of event components and executes them as a single event"
 msgstr "解析一串事件元素并且像一个事件一样执行它们"
 
 #: ../../../src/MenuDevConsole.cpp:395
@@ -2179,39 +2169,3 @@ msgstr "或更新的"
 #: ../../../src/Version.cpp:142
 msgid "or older"
 msgstr "或更旧的"
-
-#, c-format
-#~ msgid "XP: %d"
-#~ msgstr "经验值XP：%d"
-
-#, c-format
-#~ msgid "Next: %d"
-#~ msgstr "下一级：%d"
-
-#, c-format
-#~ msgid "XP: %d/%d"
-#~ msgstr "经验值：%d/%d"
-
-#~ msgid "Immunity"
-#~ msgstr "豁免"
-
-#~ msgid "Immunity to damage over time"
-#~ msgstr "慢性伤害豁免"
-
-#~ msgid "Immunity to slow"
-#~ msgstr "减速豁免"
-
-#~ msgid "Immunity to stun"
-#~ msgstr "击晕豁免"
-
-#~ msgid "Immunity to HP steal"
-#~ msgstr "HP偷取豁免"
-
-#~ msgid "Immunity to MP steal"
-#~ msgstr "MP偷取豁免"
-
-#~ msgid "Immunity to knockback"
-#~ msgstr "击退豁免"
-
-#~ msgid "Immunity to damage reflection"
-#~ msgstr "伤害反射豁免"

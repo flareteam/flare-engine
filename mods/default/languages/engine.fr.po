@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 # Translators:
-# Justin Jacobs <jajdorkster@gmail.com>, 2018
 # syl_, 2019
 # Christophe Nemo <djlittlenemo@gmail.com>, 2020
 # Bafy78 <remi.millerat@gmail.com>, 2021
-#
+# Justin Jacobs <jajdorkster@gmail.com>, 2022
+# 
 #, fuzzy
 msgid ""
 msgstr ""
@@ -16,12 +16,12 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-10 12:26-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: Bafy78 <remi.millerat@gmail.com>, 2021\n"
+"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2022\n"
 "Language-Team: French (https://www.transifex.com/flareorg/teams/84925/fr/)\n"
-"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: ../../../src/Avatar.cpp:356
@@ -524,8 +524,8 @@ msgid ""
 "player or an enemy. Temporarily show all loot tooltips with 'Alt'."
 msgstr ""
 "Montrer toutes les infobulles de butin, sauf celles qui pourraient être "
-"masquées par le joueur ou un ennemi. Afficher toutes les infobulles de butin "
-"temporairement avec la touche 'Alt'."
+"masquées par le joueur ou un ennemi. Afficher toutes les infobulles de butin"
+" temporairement avec la touche 'Alt'."
 
 #: ../../../src/MenuConfig.cpp:304
 msgid "Show all"
@@ -543,8 +543,8 @@ msgid ""
 "Always hide loot tooltips, except for when a piece of loot is hovered with "
 "the mouse cursor. Temporarily show all loot tooltips with 'Alt'."
 msgstr ""
-"Toujours masquer les infobulles de butin, sauf lorsqu'une pièce du butin est "
-"survolée par la souris. Montrer temporairement toutes les infobulles de "
+"Toujours masquer les infobulles de butin, sauf lorsqu'une pièce du butin est"
+" survolée par la souris. Montrer temporairement toutes les infobulles de "
 "butin avec la touche 'Alt'."
 
 #: ../../../src/MenuConfig.cpp:308
@@ -619,7 +619,8 @@ msgstr ""
 #: ../../../src/MenuConfig.cpp:349
 msgid "The maximum frame rate that the game will be allowed to run at."
 msgstr ""
-"La fréquence d'images maximale à laquelle le jeu sera autorisé à fonctionner."
+"La fréquence d'images maximale à laquelle le jeu sera autorisé à "
+"fonctionner."
 
 #: ../../../src/MenuConfig.cpp:353
 msgid ""
@@ -830,14 +831,14 @@ msgid ""
 "Prevents screen tearing. Disable if you experience \"stuttering\" in "
 "windowed mode or input lag."
 msgstr ""
-"Evite l'apparition de déchirement d'écran. A désactiver si vous subissez des "
-"'bégaiements' en mode fenêtré ou des retards de saisie.  "
+"Evite l'apparition de déchirement d'écran. A désactiver si vous subissez des"
+" 'bégaiements' en mode fenêtré ou des retards de saisie.  "
 
 #: ../../../src/MenuConfig.cpp:554
 msgid ""
 "When enabled, this uses the screen DPI in addition to the window dimensions "
-"to scale the rendering resolution. Otherwise, only the window dimensions are "
-"used."
+"to scale the rendering resolution. Otherwise, only the window dimensions are"
+" used."
 msgstr ""
 "Si activé, utilise le DPI de votre écran en plus de la taille de la fenêtre "
 "pour échelonner la résolution de rendu. Autrement, seule les dimensions de "
@@ -848,13 +849,13 @@ msgid ""
 "This enables parallax (non-tile) layers. Disabling this setting can improve "
 "performance in some cases."
 msgstr ""
-"Active les couches parallax. La désactivation de cette option peut améliorer "
-"les performances dans certains cas."
+"Active les couches parallax. La désactivation de cette option peut améliorer"
+" les performances dans certains cas."
 
 #: ../../../src/MenuConfig.cpp:556
 msgid ""
-"Enables the below setting that controls the screen gamma level. The behavior "
-"of the gamma setting can vary between platforms."
+"Enables the below setting that controls the screen gamma level. The behavior"
+" of the gamma setting can vary between platforms."
 msgstr ""
 "Active le réglage ci-dessous qui contrôle le niveau gamma de l'écran. Le "
 "comportement du paramètre gamma peut varier selon les plateformes."
@@ -880,8 +881,8 @@ msgid ""
 "When enabled, empty equipment slots will be filled with applicable items "
 "when they are obtained."
 msgstr ""
-"En activant cette option, les emplacements d'équipement vides seront remplis "
-"des objets adéquats obtenus."
+"En activant cette option, les emplacements d'équipement vides seront remplis"
+" des objets adéquats obtenus."
 
 #: ../../../src/MenuConfig.cpp:560
 msgid ""
@@ -893,11 +894,11 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:561
 msgid ""
-"When enabled, tooltips for equipped items of the same type are shown next to "
-"standard item tooltips."
+"When enabled, tooltips for equipped items of the same type are shown next to"
+" standard item tooltips."
 msgstr ""
-"Lorsqu'elle est activée, les infobulles des objets équipés du même type sont "
-"affichées à côté des infobulles des objets standard."
+"Lorsqu'elle est activée, les infobulles des objets équipés du même type sont"
+" affichées à côté des infobulles des objets standard."
 
 #: ../../../src/MenuConfig.cpp:562
 msgid ""
@@ -909,12 +910,12 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:563
 msgid ""
-"When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or "
-"'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
+"When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or"
+" 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
 "instead of 'Main1'."
 msgstr ""
-"Lorsque 'Déplacer le héros à la souris' est activé, ce paramètre contrôle si "
-"'Principal1' ou 'Principal2' est utilisé pour déplacer le héros. S'il est "
+"Lorsque 'Déplacer le héros à la souris' est activé, ce paramètre contrôle si"
+" 'Principal1' ou 'Principal2' est utilisé pour déplacer le héros. S'il est "
 "activé, 'Principal2' déplacera le héros à la place de 'Principal1'."
 
 #: ../../../src/MenuConfig.cpp:564
@@ -931,8 +932,8 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:565
 msgid ""
-"The player's attacks will be aimed in the direction of the mouse cursor when "
-"this is enabled."
+"The player's attacks will be aimed in the direction of the mouse cursor when"
+" this is enabled."
 msgstr ""
 "L'attaque du joueur sera dirigée dans la direction du curseur de la souris "
 "si ce paramètre est activé."
@@ -1097,11 +1098,12 @@ msgid ""
 "Prints a list of items that match a search term. No search term will list "
 "all items"
 msgstr ""
-"Affiche une liste des objets qui correspondent au terme recherché. L'absence "
-"de terme de recherche affichera tous les objets"
+"Affiche une liste des objets qui correspondent au terme recherché. L'absence"
+" de terme de recherche affichera tous les objets"
 
 #: ../../../src/MenuDevConsole.cpp:393 ../../../src/MenuDevConsole.cpp:394
-msgid "parses a series of event components and executes them as a single event"
+msgid ""
+"parses a series of event components and executes them as a single event"
 msgstr ""
 "parcourt une série de composants d'événements et les exécutent en tant "
 "qu'événement unique"
@@ -2237,39 +2239,3 @@ msgstr "ou plus récent"
 #: ../../../src/Version.cpp:142
 msgid "or older"
 msgstr "ou plus ancien"
-
-#, c-format
-#~ msgid "XP: %d"
-#~ msgstr "XP : %d"
-
-#, c-format
-#~ msgid "Next: %d"
-#~ msgstr "Prochain : %d"
-
-#, c-format
-#~ msgid "XP: %d/%d"
-#~ msgstr "XP : %d/%d"
-
-#~ msgid "Immunity"
-#~ msgstr "Immunité"
-
-#~ msgid "Immunity to damage over time"
-#~ msgstr "Immunité aux dommages progressifs"
-
-#~ msgid "Immunity to slow"
-#~ msgstr "Immunité à la lenteur"
-
-#~ msgid "Immunity to stun"
-#~ msgstr "Immunité à l'étourdissement"
-
-#~ msgid "Immunity to HP steal"
-#~ msgstr "Immunité au vol de PV"
-
-#~ msgid "Immunity to MP steal"
-#~ msgstr "Immunité au vol de PM"
-
-#~ msgid "Immunity to knockback"
-#~ msgstr "Immunité au recul"
-
-#~ msgid "Immunity to damage reflection"
-#~ msgstr "Immunité au renvoi de dommage"

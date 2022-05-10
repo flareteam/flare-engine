@@ -2,12 +2,12 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 # Translators:
-# Justin Jacobs <jajdorkster@gmail.com>, 2018
 # igorko <mansonigor@gmail.com>, 2019
 # Sergiy Borodych, 2020
-#
+# Justin Jacobs <jajdorkster@gmail.com>, 2022
+# 
 #, fuzzy
 msgid ""
 msgstr ""
@@ -15,17 +15,13 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-10 12:26-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: Sergiy Borodych, 2020\n"
-"Language-Team: Ukrainian (https://www.transifex.com/flareorg/teams/84925/"
-"uk/)\n"
-"Language: uk\n"
+"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2022\n"
+"Language-Team: Ukrainian (https://www.transifex.com/flareorg/teams/84925/uk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != "
-"11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
-"100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
-"(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"Language: uk\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 
 #: ../../../src/Avatar.cpp:356
 msgid "Your health is low!"
@@ -525,8 +521,8 @@ msgid ""
 "Show all loot tooltips, except for those that would be obscured by the "
 "player or an enemy. Temporarily show all loot tooltips with 'Alt'."
 msgstr ""
-"Завжди показувати підказки предметів. крім тих, що будуть заступлені гравцем "
-"або ворогом. Тимчасово показати всі підказки за допомогою 'Alt'."
+"Завжди показувати підказки предметів. крім тих, що будуть заступлені гравцем"
+" або ворогом. Тимчасово показати всі підказки за допомогою 'Alt'."
 
 #: ../../../src/MenuConfig.cpp:304
 msgid "Show all"
@@ -612,8 +608,8 @@ msgid ""
 "When the player's health drops below the given threshold, the low health "
 "notifications are triggered if one or more of them is enabled."
 msgstr ""
-"Коли Здоров'я героя знижується нижче заданого порогу, активуються сповіщення "
-"про низький рівень Здоров'я, якщо одне або більше з них увімкнено."
+"Коли Здоров'я героя знижується нижче заданого порогу, активуються сповіщення"
+" про низький рівень Здоров'я, якщо одне або більше з них увімкнено."
 
 #: ../../../src/MenuConfig.cpp:349
 msgid "The maximum frame rate that the game will be allowed to run at."
@@ -831,8 +827,8 @@ msgstr ""
 #: ../../../src/MenuConfig.cpp:554
 msgid ""
 "When enabled, this uses the screen DPI in addition to the window dimensions "
-"to scale the rendering resolution. Otherwise, only the window dimensions are "
-"used."
+"to scale the rendering resolution. Otherwise, only the window dimensions are"
+" used."
 msgstr ""
 "Якщо увімкнено, при масштабуванні разом з розмірами вікна буде також "
 "використовуватись роздільна здатність екрану. Інакше використовуються лише "
@@ -843,13 +839,13 @@ msgid ""
 "This enables parallax (non-tile) layers. Disabling this setting can improve "
 "performance in some cases."
 msgstr ""
-"Вмикає шари оточення (сніг, дощ, туман...). Вимкнення цієї опції може інколи "
-"підвищити продуктивність."
+"Вмикає шари оточення (сніг, дощ, туман...). Вимкнення цієї опції може інколи"
+" підвищити продуктивність."
 
 #: ../../../src/MenuConfig.cpp:556
 msgid ""
-"Enables the below setting that controls the screen gamma level. The behavior "
-"of the gamma setting can vary between platforms."
+"Enables the below setting that controls the screen gamma level. The behavior"
+" of the gamma setting can vary between platforms."
 msgstr ""
 "Вмикає нижченаведену опцію, яка контролюює рівень гами екрану. Поведінка "
 "налаштування гами може відрізнятися для різних платформ."
@@ -887,8 +883,8 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:561
 msgid ""
-"When enabled, tooltips for equipped items of the same type are shown next to "
-"standard item tooltips."
+"When enabled, tooltips for equipped items of the same type are shown next to"
+" standard item tooltips."
 msgstr ""
 
 #: ../../../src/MenuConfig.cpp:562
@@ -900,13 +896,13 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:563
 msgid ""
-"When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or "
-"'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
+"When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or"
+" 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
 "instead of 'Main1'."
 msgstr ""
 "Якщо ввімкнено функцію \"Керувати рухом героя використовуючи мишку\", ця "
-"опція визначає, яка кнопка використовуються для переміщення героя: 'Дія1' чи "
-"'Дія2'. Якщо увімкнено, 'Дія2' переміщуватиме героя замість 'Дія1'."
+"опція визначає, яка кнопка використовуються для переміщення героя: 'Дія1' чи"
+" 'Дія2'. Якщо увімкнено, 'Дія2' переміщуватиме героя замість 'Дія1'."
 
 #: ../../../src/MenuConfig.cpp:564
 msgid ""
@@ -923,9 +919,10 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:565
 msgid ""
-"The player's attacks will be aimed in the direction of the mouse cursor when "
-"this is enabled."
-msgstr "Якщо увімкнено, атаки героя будуть спрямовані у напрямку курсору миші."
+"The player's attacks will be aimed in the direction of the mouse cursor when"
+" this is enabled."
+msgstr ""
+"Якщо увімкнено, атаки героя будуть спрямовані у напрямку курсору миші."
 
 #: ../../../src/MenuConfig.cpp:566
 msgid ""
@@ -997,7 +994,8 @@ msgstr "Для аналізу корсором використовуйте '%s'
 
 #: ../../../src/MenuDevConsole.cpp:149
 msgid "Arguments with spaces should be enclosed with double quotes. Example:"
-msgstr "Аргументи з пропусками мають бути оточені подвійними лапками. Приклад:"
+msgstr ""
+"Аргументи з пропусками мають бути оточені подвійними лапками. Приклад:"
 
 #: ../../../src/MenuDevConsole.cpp:150
 msgid "Type 'help' to get a list of commands."
@@ -1085,7 +1083,8 @@ msgstr ""
 "пошуковий запит не покаже всіх елементів"
 
 #: ../../../src/MenuDevConsole.cpp:393 ../../../src/MenuDevConsole.cpp:394
-msgid "parses a series of event components and executes them as a single event"
+msgid ""
+"parses a series of event components and executes them as a single event"
 msgstr "аналізує серію компонентів подій та виконує їх як окрему подію"
 
 #: ../../../src/MenuDevConsole.cpp:395
@@ -2220,39 +2219,3 @@ msgstr "або новіша"
 #: ../../../src/Version.cpp:142
 msgid "or older"
 msgstr "або старіша"
-
-#, c-format
-#~ msgid "XP: %d"
-#~ msgstr "Досвід: %d"
-
-#, c-format
-#~ msgid "Next: %d"
-#~ msgstr "Наступний: %d"
-
-#, c-format
-#~ msgid "XP: %d/%d"
-#~ msgstr "Досвід: %d/%d"
-
-#~ msgid "Immunity"
-#~ msgstr "Імунітет"
-
-#~ msgid "Immunity to damage over time"
-#~ msgstr "Імунітет до шкоди протягом часу"
-
-#~ msgid "Immunity to slow"
-#~ msgstr "Імунітет до уповільнення"
-
-#~ msgid "Immunity to stun"
-#~ msgstr "Імунітет до оглушення"
-
-#~ msgid "Immunity to HP steal"
-#~ msgstr "Імунітет до крадіжки Здоров'я"
-
-#~ msgid "Immunity to MP steal"
-#~ msgstr "Імунітет до крадіжки Мани"
-
-#~ msgid "Immunity to knockback"
-#~ msgstr "Імунітет до відкидання"
-
-#~ msgid "Immunity to damage reflection"
-#~ msgstr "Імунітет до відбиття шкоди."

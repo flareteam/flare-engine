@@ -2,11 +2,11 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 # Translators:
 # Kirim Saja <kirim.aja1111@gmail.com>, 2021
-# Justin Jacobs <jajdorkster@gmail.com>, 2021
-#
+# Justin Jacobs <jajdorkster@gmail.com>, 2022
+# 
 #, fuzzy
 msgid ""
 msgstr ""
@@ -14,13 +14,12 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-10 12:26-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2021\n"
-"Language-Team: Indonesian (https://www.transifex.com/flareorg/teams/84925/"
-"id/)\n"
-"Language: id\n"
+"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2022\n"
+"Language-Team: Indonesian (https://www.transifex.com/flareorg/teams/84925/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: id\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../../../src/Avatar.cpp:356
@@ -34,7 +33,8 @@ msgstr "Selamat, Anda telah mencapai level %d!"
 
 #: ../../../src/Avatar.cpp:388
 msgid "You may increase one or more attributes through the Character Menu."
-msgstr "Anda dapat meningkatkan satu atau lebih atribut melalui Menu Karakter."
+msgstr ""
+"Anda dapat meningkatkan satu atau lebih atribut melalui Menu Karakter."
 
 #: ../../../src/Avatar.cpp:392
 msgid "You may unlock one or more abilities through the Powers Menu."
@@ -47,7 +47,8 @@ msgstr "Anda dikalahkan."
 #: ../../../src/Avatar.cpp:926
 msgid "Transformation expired. You have been moved back to a safe place."
 msgstr ""
-"Transformasi kedaluwarsa. Anda telah dipindahkan kembali ke tempat yang aman."
+"Transformasi kedaluwarsa. Anda telah dipindahkan kembali ke tempat yang "
+"aman."
 
 #: ../../../src/CampaignManager.cpp:154
 #, c-format
@@ -542,7 +543,8 @@ msgid ""
 "the mouse cursor. Temporarily show all loot tooltips with 'Alt'."
 msgstr ""
 "Selalu sembunyikan tooltips jarahan, kecuali ketika satu jarahan melayang "
-"dengan kursor mouse. Tampilkan sementara semua tooltips jarahan dengan 'Alt'."
+"dengan kursor mouse. Tampilkan sementara semua tooltips jarahan dengan "
+"'Alt'."
 
 #: ../../../src/MenuConfig.cpp:308
 msgid "Visible"
@@ -557,8 +559,8 @@ msgid ""
 "Controls the type of warning to be activated when the player is below the "
 "low health threshold."
 msgstr ""
-"Mengontrol jenis peringatan yang akan diaktifkan saat pemain berada di bawah "
-"ambang batas kesehatan yang rendah."
+"Mengontrol jenis peringatan yang akan diaktifkan saat pemain berada di bawah"
+" ambang batas kesehatan yang rendah."
 
 #: ../../../src/MenuConfig.cpp:314
 msgid "- Display a message"
@@ -831,11 +833,12 @@ msgstr ""
 #: ../../../src/MenuConfig.cpp:554
 msgid ""
 "When enabled, this uses the screen DPI in addition to the window dimensions "
-"to scale the rendering resolution. Otherwise, only the window dimensions are "
-"used."
+"to scale the rendering resolution. Otherwise, only the window dimensions are"
+" used."
 msgstr ""
 "Saat diaktifkan, ini menggunakan DPI layar selain dimensi window untuk "
-"menskalakan resolusi sajian. Jika tidak, hanya dimensi window yang digunakan."
+"menskalakan resolusi sajian. Jika tidak, hanya dimensi window yang "
+"digunakan."
 
 #: ../../../src/MenuConfig.cpp:555
 msgid ""
@@ -847,8 +850,8 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:556
 msgid ""
-"Enables the below setting that controls the screen gamma level. The behavior "
-"of the gamma setting can vary between platforms."
+"Enables the below setting that controls the screen gamma level. The behavior"
+" of the gamma setting can vary between platforms."
 msgstr ""
 "Mengaktifkan pengaturan di bawah ini yang mengontrol tingkat gamma layar. "
 "Perilaku pengaturan gamma dapat bervariasi antar platform."
@@ -887,8 +890,8 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:561
 msgid ""
-"When enabled, tooltips for equipped items of the same type are shown next to "
-"standard item tooltips."
+"When enabled, tooltips for equipped items of the same type are shown next to"
+" standard item tooltips."
 msgstr ""
 "Saat diaktifkan, tooltips untuk item yang dilengkapi dengan jenis yang sama "
 "akan ditampilkan di sebelah tooltips item standar."
@@ -903,8 +906,8 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:563
 msgid ""
-"When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or "
-"'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
+"When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or"
+" 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
 "instead of 'Main1'."
 msgstr ""
 "Saat 'Pindahkan hero menggunakan mouse' diaktifkan, pengaturan ini "
@@ -919,15 +922,15 @@ msgid ""
 "assigned to the movement button."
 msgstr ""
 "Saat 'Pindahkan hero menggunakan mouse' diaktifkan, pengaturan ini "
-"mengontrol apakah Kekuatan yang ditetapkan ke tombol gerakan dapat digunakan "
-"dengan menargetkan musuh. Jika pengaturan ini dinonaktifkan, diperlukan "
+"mengontrol apakah Kekuatan yang ditetapkan ke tombol gerakan dapat digunakan"
+" dengan menargetkan musuh. Jika pengaturan ini dinonaktifkan, diperlukan "
 "untuk menggunakan 'Shift' untuk mengakses Kekuatan yang ditetapkan untuk "
 "tombol gerakan."
 
 #: ../../../src/MenuConfig.cpp:565
 msgid ""
-"The player's attacks will be aimed in the direction of the mouse cursor when "
-"this is enabled."
+"The player's attacks will be aimed in the direction of the mouse cursor when"
+" this is enabled."
 msgstr ""
 "Serangan pemain akan diarahkan ke arah kursor mouse saat ini diaktifkan."
 
@@ -1092,7 +1095,8 @@ msgstr ""
 "pencarian yang akan mencantumkan semua item"
 
 #: ../../../src/MenuDevConsole.cpp:393 ../../../src/MenuDevConsole.cpp:394
-msgid "parses a series of event components and executes them as a single event"
+msgid ""
+"parses a series of event components and executes them as a single event"
 msgstr ""
 "mengurai serangkaian komponen acara dan mengeksekusinya sebagai satu acara"
 
@@ -2227,39 +2231,3 @@ msgstr "atau lebih baru"
 #: ../../../src/Version.cpp:142
 msgid "or older"
 msgstr "atau lebih lama"
-
-#, c-format
-#~ msgid "XP: %d"
-#~ msgstr "XP: %d"
-
-#, c-format
-#~ msgid "Next: %d"
-#~ msgstr "Selanjutnya: %d"
-
-#, c-format
-#~ msgid "XP: %d/%d"
-#~ msgstr "XP: %d/%d"
-
-#~ msgid "Immunity"
-#~ msgstr "Kekebalan"
-
-#~ msgid "Immunity to damage over time"
-#~ msgstr "Kekebalan dari damage dari waktu ke waktu"
-
-#~ msgid "Immunity to slow"
-#~ msgstr "Kekebalan dari melambat"
-
-#~ msgid "Immunity to stun"
-#~ msgstr "Kekebalan dari pingsan"
-
-#~ msgid "Immunity to HP steal"
-#~ msgstr "Kekebalan dari pencurian HP"
-
-#~ msgid "Immunity to MP steal"
-#~ msgstr "Kekebalan dari pencurian MP"
-
-#~ msgid "Immunity to knockback"
-#~ msgstr "Kekebalan dari dorongan ke belakang"
-
-#~ msgid "Immunity to damage reflection"
-#~ msgstr "Kekebalan dari refleksi damage"

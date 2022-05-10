@@ -2,11 +2,11 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 # Translators:
-# Justin Jacobs <jajdorkster@gmail.com>, 2018
 # Rui <xymarior@yandex.com>, 2019
-#
+# Justin Jacobs <jajdorkster@gmail.com>, 2022
+# 
 #, fuzzy
 msgid ""
 msgstr ""
@@ -14,13 +14,12 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-10 12:26-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: Rui <xymarior@yandex.com>, 2019\n"
-"Language-Team: Portuguese (https://www.transifex.com/flareorg/teams/84925/"
-"pt/)\n"
-"Language: pt\n"
+"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2022\n"
+"Language-Team: Portuguese (https://www.transifex.com/flareorg/teams/84925/pt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: pt\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../../../src/Avatar.cpp:356
@@ -121,8 +120,7 @@ msgid ""
 msgstr ""
 "Renderizador por hardware SDL\n"
 "\n"
-"O renderizador padrão que é geralmente mais rápido que o rederizador por "
-"software SDL."
+"O renderizador padrão que é geralmente mais rápido que o rederizador por software SDL."
 
 #: ../../../src/EffectManager.cpp:404 ../../../src/EffectManager.cpp:408
 #: ../../../src/EffectManager.cpp:412 ../../../src/EffectManager.cpp:416
@@ -543,8 +541,8 @@ msgid ""
 "the mouse cursor. Temporarily show all loot tooltips with 'Alt'."
 msgstr ""
 "Mostrar sempre as legendas das pilhagens, exceto quando o cursor passar por "
-"cima delas. Pode-se ver todas as legendas de pilhagens temporariamente com a "
-"tecla 'Alt'."
+"cima delas. Pode-se ver todas as legendas de pilhagens temporariamente com a"
+" tecla 'Alt'."
 
 #: ../../../src/MenuConfig.cpp:308
 msgid "Visible"
@@ -559,8 +557,8 @@ msgid ""
 "Controls the type of warning to be activated when the player is below the "
 "low health threshold."
 msgstr ""
-"Controla o tipo de aviso a ser ativado quando o jogador tem a vida abaixo do "
-"limiar."
+"Controla o tipo de aviso a ser ativado quando o jogador tem a vida abaixo do"
+" limiar."
 
 #: ../../../src/MenuConfig.cpp:314
 msgid "- Display a message"
@@ -830,8 +828,8 @@ msgstr ""
 #: ../../../src/MenuConfig.cpp:554
 msgid ""
 "When enabled, this uses the screen DPI in addition to the window dimensions "
-"to scale the rendering resolution. Otherwise, only the window dimensions are "
-"used."
+"to scale the rendering resolution. Otherwise, only the window dimensions are"
+" used."
 msgstr ""
 "Usar o DPI do ecrã para além das dimensões da janela para dimensionar a "
 "resolução de renderização. Caso contrário, serão utilizadas apenas as "
@@ -847,8 +845,8 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:556
 msgid ""
-"Enables the below setting that controls the screen gamma level. The behavior "
-"of the gamma setting can vary between platforms."
+"Enables the below setting that controls the screen gamma level. The behavior"
+" of the gamma setting can vary between platforms."
 msgstr ""
 "Permite a configuração abaixo que controla o gama do ecrã. O comportamento "
 "da configuração do gama pode variar em plataformas diferentes."
@@ -874,8 +872,8 @@ msgid ""
 "When enabled, empty equipment slots will be filled with applicable items "
 "when they are obtained."
 msgstr ""
-"Quando ativado, os compartimentos vagos do equipamento serão preenchidos com "
-"itens aplicáveis quando estes são obtidos."
+"Quando ativado, os compartimentos vagos do equipamento serão preenchidos com"
+" itens aplicáveis quando estes são obtidos."
 
 #: ../../../src/MenuConfig.cpp:560
 msgid ""
@@ -887,8 +885,8 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:561
 msgid ""
-"When enabled, tooltips for equipped items of the same type are shown next to "
-"standard item tooltips."
+"When enabled, tooltips for equipped items of the same type are shown next to"
+" standard item tooltips."
 msgstr ""
 
 #: ../../../src/MenuConfig.cpp:562
@@ -901,12 +899,12 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:563
 msgid ""
-"When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or "
-"'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
+"When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or"
+" 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
 "instead of 'Main1'."
 msgstr ""
-"Quando a opção 'Mover herói utilizando o rato' está ativa, esta configuração "
-"controla se o 'Principal1' ou 'Principal2' é utilizado para mover o herói. "
+"Quando a opção 'Mover herói utilizando o rato' está ativa, esta configuração"
+" controla se o 'Principal1' ou 'Principal2' é utilizado para mover o herói. "
 "Se ativado, o 'Principal2' irá mover o herói em vez do 'Principal1'."
 
 #: ../../../src/MenuConfig.cpp:564
@@ -917,18 +915,18 @@ msgid ""
 "assigned to the movement button."
 msgstr ""
 "Quando a opção 'Mover herói utilizando o rato' está ativada, esta "
-"configuração controla se a potência atribuída ao botão de movimento pode ser "
-"utilizada ao colocar em mira um inimigo. Se esta opção estiver desativada, é "
-"necessário usar a tecla 'Shift' para aceder à potência atribuída ao botão de "
-"movimento."
+"configuração controla se a potência atribuída ao botão de movimento pode ser"
+" utilizada ao colocar em mira um inimigo. Se esta opção estiver desativada, "
+"é necessário usar a tecla 'Shift' para aceder à potência atribuída ao botão "
+"de movimento."
 
 #: ../../../src/MenuConfig.cpp:565
 msgid ""
-"The player's attacks will be aimed in the direction of the mouse cursor when "
-"this is enabled."
+"The player's attacks will be aimed in the direction of the mouse cursor when"
+" this is enabled."
 msgstr ""
-"Os ataques do jogador serão direcionados na direção do cursor do rato quando "
-"isto está ativo."
+"Os ataques do jogador serão direcionados na direção do cursor do rato quando"
+" isto está ativo."
 
 #: ../../../src/MenuConfig.cpp:566
 msgid ""
@@ -1089,9 +1087,11 @@ msgstr ""
 "Se não for encontrado nada na pesquisa, mostra todos os itens"
 
 #: ../../../src/MenuDevConsole.cpp:393 ../../../src/MenuDevConsole.cpp:394
-msgid "parses a series of event components and executes them as a single event"
+msgid ""
+"parses a series of event components and executes them as a single event"
 msgstr ""
-"analisa uma série de componentes de eventos e executa-os como um único evento"
+"analisa uma série de componentes de eventos e executa-os como um único "
+"evento"
 
 #: ../../../src/MenuDevConsole.cpp:395
 msgid "clears the command history"
@@ -2022,8 +2022,8 @@ msgid ""
 "Accuracy rating. The enemy's Avoidance rating is subtracted from this value "
 "to calculate your likeliness to land a direct hit."
 msgstr ""
-"Rácio de precisão. Este valor é subtraído do rácio de Desvio do inimigo para "
-"calcular a hipótese de acertar um golpe direto."
+"Rácio de precisão. Este valor é subtraído do rácio de Desvio do inimigo para"
+" calcular a hipótese de acertar um golpe direto."
 
 #: ../../../src/Stats.cpp:68
 msgid "Avoidance"
@@ -2034,8 +2034,8 @@ msgid ""
 "Avoidance rating. This value is subtracted from the enemy's Accuracy rating "
 "to calculate their likeliness to land a direct hit."
 msgstr ""
-"Rácio de desvio. Este valor é subtraído do rácio de Precisão do inimigo para "
-"calcular a hipótese de acertar um golpe direto."
+"Rácio de desvio. Este valor é subtraído do rácio de Precisão do inimigo para"
+" calcular a hipótese de acertar um golpe direto."
 
 #: ../../../src/Stats.cpp:74
 msgid "Absorb Min"
@@ -2224,39 +2224,3 @@ msgstr "ou mais recente"
 #: ../../../src/Version.cpp:142
 msgid "or older"
 msgstr "ou mais antigo"
-
-#, c-format
-#~ msgid "XP: %d"
-#~ msgstr "EXP: %d"
-
-#, c-format
-#~ msgid "Next: %d"
-#~ msgstr "Próximo: %d"
-
-#, c-format
-#~ msgid "XP: %d/%d"
-#~ msgstr "EXP: %d/%d"
-
-#~ msgid "Immunity"
-#~ msgstr "Imunidade"
-
-#~ msgid "Immunity to damage over time"
-#~ msgstr "Imunidade a danos a longo prazo"
-
-#~ msgid "Immunity to slow"
-#~ msgstr "Imunidade à lentidão"
-
-#~ msgid "Immunity to stun"
-#~ msgstr "Imunidade ao atordoamento"
-
-#~ msgid "Immunity to HP steal"
-#~ msgstr "Imunidade ao roubo de PV"
-
-#~ msgid "Immunity to MP steal"
-#~ msgstr "Imunidade a roubo de Mana"
-
-#~ msgid "Immunity to knockback"
-#~ msgstr "Imunidade aos coices"
-
-#~ msgid "Immunity to damage reflection"
-#~ msgstr "Imunidade a reflexão de danos"

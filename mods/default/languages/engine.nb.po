@@ -2,11 +2,11 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 # Translators:
-# Justin Jacobs <jajdorkster@gmail.com>, 2018
 # Elias Nykrem <bloodaxeNOR@protonmail.com>, 2022
-#
+# Justin Jacobs <jajdorkster@gmail.com>, 2022
+# 
 #, fuzzy
 msgid ""
 msgstr ""
@@ -14,13 +14,12 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-10 12:26-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: Elias Nykrem <bloodaxeNOR@protonmail.com>, 2022\n"
-"Language-Team: Norwegian Bokmål (https://www.transifex.com/flareorg/"
-"teams/84925/nb/)\n"
-"Language: nb\n"
+"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2022\n"
+"Language-Team: Norwegian Bokmål (https://www.transifex.com/flareorg/teams/84925/nb/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: nb\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../../../src/Avatar.cpp:356
@@ -533,8 +532,8 @@ msgstr "Vis alt"
 msgid ""
 "Always show loot tooltips. Temporarily hide all loot tooltips with 'Alt'."
 msgstr ""
-"Alltid vis verktøytips for gods. Midlertidig skjul alle verktøytips for gods "
-"med 'Alt'."
+"Alltid vis verktøytips for gods. Midlertidig skjul alle verktøytips for gods"
+" med 'Alt'."
 
 #: ../../../src/MenuConfig.cpp:305
 msgid ""
@@ -557,8 +556,8 @@ msgid ""
 "Controls the type of warning to be activated when the player is below the "
 "low health threshold."
 msgstr ""
-"Kontrollerer typen advarsler som aktiveres når spillerens helse havner under "
-"minimumsterskelen for helse."
+"Kontrollerer typen advarsler som aktiveres når spillerens helse havner under"
+" minimumsterskelen for helse."
 
 #: ../../../src/MenuConfig.cpp:314
 msgid "- Display a message"
@@ -828,8 +827,8 @@ msgstr ""
 #: ../../../src/MenuConfig.cpp:554
 msgid ""
 "When enabled, this uses the screen DPI in addition to the window dimensions "
-"to scale the rendering resolution. Otherwise, only the window dimensions are "
-"used."
+"to scale the rendering resolution. Otherwise, only the window dimensions are"
+" used."
 msgstr ""
 "Når aktivert, brukes skjerm DPI-en i tillegg til vindusdimensjonene for å "
 "skalere renderings oppløsningen. Ellers, blir bare vindusdimensjonene brukt."
@@ -839,13 +838,13 @@ msgid ""
 "This enables parallax (non-tile) layers. Disabling this setting can improve "
 "performance in some cases."
 msgstr ""
-"Dette aktiverer parallakse (ikke-flis) lag. Å deaktivere denne innstillingen "
-"kan forbedre ytelsen i enkelte tilfeller."
+"Dette aktiverer parallakse (ikke-flis) lag. Å deaktivere denne innstillingen"
+" kan forbedre ytelsen i enkelte tilfeller."
 
 #: ../../../src/MenuConfig.cpp:556
 msgid ""
-"Enables the below setting that controls the screen gamma level. The behavior "
-"of the gamma setting can vary between platforms."
+"Enables the below setting that controls the screen gamma level. The behavior"
+" of the gamma setting can vary between platforms."
 msgstr ""
 "Aktiverer innstillingen under som justerer skjermens gamma nivå. "
 "Innstillingens oppførsel kan variere mellom ulike plattformer."
@@ -863,8 +862,7 @@ msgid ""
 "Some mods will automatically hide the stat bars when they are inactive. "
 "Disabling this option will keep them displayed at all times."
 msgstr ""
-"Noen tilleggspakker vil automatisk skjule ferdighetsfelt når de er "
-"inaktive. \n"
+"Noen tilleggspakker vil automatisk skjule ferdighetsfelt når de er inaktive. \n"
 "Deaktivering av dette valget vil alltid holde dem synlige"
 
 #: ../../../src/MenuConfig.cpp:559
@@ -880,13 +878,13 @@ msgid ""
 "Shows a marker above enemies, allies, and the player when they are obscured "
 "by tall objects."
 msgstr ""
-"Vis en markør over fiender, allierte og spilleren når de er tildekt bak høye "
-"objekter."
+"Vis en markør over fiender, allierte og spilleren når de er tildekt bak høye"
+" objekter."
 
 #: ../../../src/MenuConfig.cpp:561
 msgid ""
-"When enabled, tooltips for equipped items of the same type are shown next to "
-"standard item tooltips."
+"When enabled, tooltips for equipped items of the same type are shown next to"
+" standard item tooltips."
 msgstr ""
 "Når aktivert, vil verktøytips for utrustede gjenstander av tilsvarende type "
 "vise ved siden av standard verktøytips."
@@ -901,8 +899,8 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:563
 msgid ""
-"When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or "
-"'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
+"When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or"
+" 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
 "instead of 'Main1'."
 msgstr ""
 "Når 'Flytt helten med musepeker' er aktivert, vil denne instillingen "
@@ -918,14 +916,14 @@ msgid ""
 msgstr ""
 "Når 'Flytt helten med musepeker' er aktivert, vil denne innstillingen "
 "kontrollere om Evnen som er bundet til bevegelsesknappen kan brukes ved å "
-"sikte seg inn på en fiende. Dersom denne innstillingen er deaktivert, kreves "
-"det at man bruker 'Shift' for å benytte Evner som er bundet til "
+"sikte seg inn på en fiende. Dersom denne innstillingen er deaktivert, kreves"
+" det at man bruker 'Shift' for å benytte Evner som er bundet til "
 "bevegelsesknappen."
 
 #: ../../../src/MenuConfig.cpp:565
 msgid ""
-"The player's attacks will be aimed in the direction of the mouse cursor when "
-"this is enabled."
+"The player's attacks will be aimed in the direction of the mouse cursor when"
+" this is enabled."
 msgstr ""
 "Spillerens angrep vil siktes i retning av musepekeren dersom dette er "
 "aktivert."
@@ -1082,7 +1080,8 @@ msgid ""
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:393 ../../../src/MenuDevConsole.cpp:394
-msgid "parses a series of event components and executes them as a single event"
+msgid ""
+"parses a series of event components and executes them as a single event"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:395
@@ -2216,39 +2215,3 @@ msgstr "eller nyere"
 #: ../../../src/Version.cpp:142
 msgid "or older"
 msgstr "eller eldre"
-
-#, c-format
-#~ msgid "XP: %d"
-#~ msgstr "EP: %d"
-
-#, c-format
-#~ msgid "Next: %d"
-#~ msgstr "Neste: %d"
-
-#, c-format
-#~ msgid "XP: %d/%d"
-#~ msgstr "EP: %d/%d"
-
-#~ msgid "Immunity"
-#~ msgstr "Immunitet"
-
-#~ msgid "Immunity to damage over time"
-#~ msgstr "Immun mot skade over tid"
-
-#~ msgid "Immunity to slow"
-#~ msgstr "Immunitet mot hastighetsredusering"
-
-#~ msgid "Immunity to stun"
-#~ msgstr "Immunitet mot lamslåing"
-
-#~ msgid "Immunity to HP steal"
-#~ msgstr "Immunitet mot HP-stjeling"
-
-#~ msgid "Immunity to MP steal"
-#~ msgstr "Immunitet mot MP-stjeling"
-
-#~ msgid "Immunity to knockback"
-#~ msgstr "Immunitet mot tilbakeslag"
-
-#~ msgid "Immunity to damage reflection"
-#~ msgstr "Immunitet mot skaderefleksjon"

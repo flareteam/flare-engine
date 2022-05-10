@@ -2,11 +2,11 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 # Translators:
-# Justin Jacobs <jajdorkster@gmail.com>, 2018
 # Źmicier Turok <nashtlumach@gmail.com>, 2021
-#
+# Justin Jacobs <jajdorkster@gmail.com>, 2022
+# 
 #, fuzzy
 msgid ""
 msgstr ""
@@ -14,16 +14,13 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-10 12:26-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: Źmicier Turok <nashtlumach@gmail.com>, 2021\n"
-"Language-Team: Belarusian (https://www.transifex.com/flareorg/teams/84925/"
-"be/)\n"
-"Language: be\n"
+"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2022\n"
+"Language-Team: Belarusian (https://www.transifex.com/flareorg/teams/84925/be/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
-"%100>=11 && n%100<=14)? 2 : 3);\n"
+"Language: be\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #: ../../../src/Avatar.cpp:356
 msgid "Your health is low!"
@@ -522,8 +519,8 @@ msgid ""
 "player or an enemy. Temporarily show all loot tooltips with 'Alt'."
 msgstr ""
 "Паказваць усе выплыўныя падказкі пра здабычу, за выключэннем схаваных "
-"гульцом альбо ворагам. Часова паказваць усе выплыўныя падказкі клавішай \"Alt"
-"\"."
+"гульцом альбо ворагам. Часова паказваць усе выплыўныя падказкі клавішай "
+"\"Alt\"."
 
 #: ../../../src/MenuConfig.cpp:304
 msgid "Show all"
@@ -826,17 +823,17 @@ msgid ""
 "Prevents screen tearing. Disable if you experience \"stuttering\" in "
 "windowed mode or input lag."
 msgstr ""
-"Прадухіляе разрывы экрана. Адключыце, калі ўзнікаюць праблемы з ўводам альбо "
-"ў аконным рэжыме."
+"Прадухіляе разрывы экрана. Адключыце, калі ўзнікаюць праблемы з ўводам альбо"
+" ў аконным рэжыме."
 
 #: ../../../src/MenuConfig.cpp:554
 msgid ""
 "When enabled, this uses the screen DPI in addition to the window dimensions "
-"to scale the rendering resolution. Otherwise, only the window dimensions are "
-"used."
+"to scale the rendering resolution. Otherwise, only the window dimensions are"
+" used."
 msgstr ""
-"Калі ўключана, дадаткова да маштабавання па памерах акна для адмалёўвання па "
-"раздзяляльнай здольнасці выкарыстоўваецца экран DPI."
+"Калі ўключана, дадаткова да маштабавання па памерах акна для адмалёўвання па"
+" раздзяляльнай здольнасці выкарыстоўваецца экран DPI."
 
 #: ../../../src/MenuConfig.cpp:555
 msgid ""
@@ -848,11 +845,11 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:556
 msgid ""
-"Enables the below setting that controls the screen gamma level. The behavior "
-"of the gamma setting can vary between platforms."
+"Enables the below setting that controls the screen gamma level. The behavior"
+" of the gamma setting can vary between platforms."
 msgstr ""
-"Уключае параметр, што кіруе ўзроўнем гамы экрана. Паводзіны параметра могуць "
-"змяняцца ў залежнасці ад платформы."
+"Уключае параметр, што кіруе ўзроўнем гамы экрана. Паводзіны параметра могуць"
+" змяняцца ў залежнасці ад платформы."
 
 #: ../../../src/MenuConfig.cpp:557
 msgid ""
@@ -887,8 +884,8 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:561
 msgid ""
-"When enabled, tooltips for equipped items of the same type are shown next to "
-"standard item tooltips."
+"When enabled, tooltips for equipped items of the same type are shown next to"
+" standard item tooltips."
 msgstr ""
 "Калі ўключана, побач з выплыўнымі падказкамі для рэчаў будуць паказвацца "
 "падказкі па надзетых рэчах."
@@ -902,13 +899,13 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:563
 msgid ""
-"When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or "
-"'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
+"When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or"
+" 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
 "instead of 'Main1'."
 msgstr ""
 "Калі параметр \"Перамяшчаць героя пры дапамозе мышы\" уключаны, то параметр "
-"вызначае ці выкарыстоўваецца \"Галоўнае1\" ці \"Галоўнае2\" для перамяшчэння "
-"героя. Калі ўключана \"Галоўнае2\" перамясціць героя замест \"Галоўнае1\"."
+"вызначае ці выкарыстоўваецца \"Галоўнае1\" ці \"Галоўнае2\" для перамяшчэння"
+" героя. Калі ўключана \"Галоўнае2\" перамясціць героя замест \"Галоўнае1\"."
 
 #: ../../../src/MenuConfig.cpp:564
 msgid ""
@@ -924,8 +921,8 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:565
 msgid ""
-"The player's attacks will be aimed in the direction of the mouse cursor when "
-"this is enabled."
+"The player's attacks will be aimed in the direction of the mouse cursor when"
+" this is enabled."
 msgstr ""
 "Калі ўключана, атакі гульца будуць накіроўваца адпаведна накірунка курсора "
 "мышы."
@@ -1087,7 +1084,8 @@ msgstr ""
 "рэчаў"
 
 #: ../../../src/MenuDevConsole.cpp:393 ../../../src/MenuDevConsole.cpp:394
-msgid "parses a series of event components and executes them as a single event"
+msgid ""
+"parses a series of event components and executes them as a single event"
 msgstr "разбірае набор кампанентаў падзеі і выконвае іх як адну падзею"
 
 #: ../../../src/MenuDevConsole.cpp:395
@@ -2221,39 +2219,3 @@ msgstr "альбо навейшая"
 #: ../../../src/Version.cpp:142
 msgid "or older"
 msgstr "альбо пазнейшая"
-
-#, c-format
-#~ msgid "XP: %d"
-#~ msgstr "Досвед: %d"
-
-#, c-format
-#~ msgid "Next: %d"
-#~ msgstr "Наступны: %d"
-
-#, c-format
-#~ msgid "XP: %d/%d"
-#~ msgstr "Досвед: %d/%d"
-
-#~ msgid "Immunity"
-#~ msgstr "Устойлівасць"
-
-#~ msgid "Immunity to damage over time"
-#~ msgstr "Устойлівасць да перыядычнага ўрону"
-
-#~ msgid "Immunity to slow"
-#~ msgstr "Устойлівасць да запавольвання"
-
-#~ msgid "Immunity to stun"
-#~ msgstr "Устойлівасць да аглушэння"
-
-#~ msgid "Immunity to HP steal"
-#~ msgstr "Устойлівасць да выцягвання жыцця"
-
-#~ msgid "Immunity to MP steal"
-#~ msgstr "Устойлівасць да выцягвання маны"
-
-#~ msgid "Immunity to knockback"
-#~ msgstr "Устойлівасць да скульвання"
-
-#~ msgid "Immunity to damage reflection"
-#~ msgstr "Устойлівасць да адбіцця ўрону"

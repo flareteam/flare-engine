@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 # Translators:
-# Justin Jacobs <jajdorkster@gmail.com>, 2018
 # Eric R, 2018
 # Agustin Ferrario <agustin.ferrario@hotmail.com.ar>, 2020
 # Diego J. Romero López <diegojromerolopez@gmail.com>, 2020
-#
+# Justin Jacobs <jajdorkster@gmail.com>, 2022
+# 
 #, fuzzy
 msgid ""
 msgstr ""
@@ -16,12 +16,12 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-10 12:26-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: Diego J. Romero López <diegojromerolopez@gmail.com>, 2020\n"
+"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2022\n"
 "Language-Team: Spanish (https://www.transifex.com/flareorg/teams/84925/es/)\n"
-"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../../../src/Avatar.cpp:356
@@ -122,8 +122,7 @@ msgid ""
 msgstr ""
 "Renderizador SDL por hardware\n"
 "\n"
-"El renderizador predeterminado que suele ser más rápido que el renderizador "
-"SDL por software."
+"El renderizador predeterminado que suele ser más rápido que el renderizador SDL por software."
 
 #: ../../../src/EffectManager.cpp:404 ../../../src/EffectManager.cpp:408
 #: ../../../src/EffectManager.cpp:412 ../../../src/EffectManager.cpp:416
@@ -523,8 +522,8 @@ msgid ""
 "Show all loot tooltips, except for those that would be obscured by the "
 "player or an enemy. Temporarily show all loot tooltips with 'Alt'."
 msgstr ""
-"Mostrar los consejos referidos al botín, exceptuando aquellos ocultos por el "
-"jugador o un enemigo. Para mostrar todos los consejos pulsa \"Alt\"."
+"Mostrar los consejos referidos al botín, exceptuando aquellos ocultos por el"
+" jugador o un enemigo. Para mostrar todos los consejos pulsa \"Alt\"."
 
 #: ../../../src/MenuConfig.cpp:304
 msgid "Show all"
@@ -534,8 +533,8 @@ msgstr "Mostrar todos"
 msgid ""
 "Always show loot tooltips. Temporarily hide all loot tooltips with 'Alt'."
 msgstr ""
-"Siempre mostrar las ayudas del botín. Ocultar temporalmente todas las ayudas "
-"del botín con \"Alt\"."
+"Siempre mostrar las ayudas del botín. Ocultar temporalmente todas las ayudas"
+" del botín con \"Alt\"."
 
 #: ../../../src/MenuConfig.cpp:305
 msgid ""
@@ -612,8 +611,8 @@ msgid ""
 "notifications are triggered if one or more of them is enabled."
 msgstr ""
 "Cuando la salud del jugador esté por debajo de un umbral determinado, las "
-"notificaciones de baja saludo se activarán si al menos una de de ellas están "
-"activadas."
+"notificaciones de baja saludo se activarán si al menos una de de ellas están"
+" activadas."
 
 #: ../../../src/MenuConfig.cpp:349
 msgid "The maximum frame rate that the game will be allowed to run at."
@@ -831,8 +830,8 @@ msgstr ""
 #: ../../../src/MenuConfig.cpp:554
 msgid ""
 "When enabled, this uses the screen DPI in addition to the window dimensions "
-"to scale the rendering resolution. Otherwise, only the window dimensions are "
-"used."
+"to scale the rendering resolution. Otherwise, only the window dimensions are"
+" used."
 msgstr ""
 "Cuando está activo, usa los PPP de la pantalla, junto con las las "
 "dimensiones de la ventana para escalar la resolución. De lo contrario, sólo "
@@ -848,8 +847,8 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:556
 msgid ""
-"Enables the below setting that controls the screen gamma level. The behavior "
-"of the gamma setting can vary between platforms."
+"Enables the below setting that controls the screen gamma level. The behavior"
+" of the gamma setting can vary between platforms."
 msgstr ""
 "Activa la opción inferior que controla el nivel de transparencia de la "
 "pantalla. El comportamiento de transparencia puede variar entre plataformas."
@@ -859,8 +858,8 @@ msgid ""
 "Provides additional text for information that is primarily conveyed through "
 "color."
 msgstr ""
-"Proporciona text adicional para la información que se muestra principalmente "
-"mediante colores."
+"Proporciona text adicional para la información que se muestra principalmente"
+" mediante colores."
 
 #: ../../../src/MenuConfig.cpp:558
 msgid ""
@@ -888,8 +887,8 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:561
 msgid ""
-"When enabled, tooltips for equipped items of the same type are shown next to "
-"standard item tooltips."
+"When enabled, tooltips for equipped items of the same type are shown next to"
+" standard item tooltips."
 msgstr ""
 
 #: ../../../src/MenuConfig.cpp:562
@@ -902,8 +901,8 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:563
 msgid ""
-"When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or "
-"'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
+"When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or"
+" 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
 "instead of 'Main1'."
 msgstr ""
 "Cuando \"Mover héroe usando el ratón\" está activado, esta opción controla "
@@ -917,15 +916,15 @@ msgid ""
 "setting is disabled, it is required to use 'Shift' to access the Power "
 "assigned to the movement button."
 msgstr ""
-"Cuando la opción de \"Mover héroe usando el ratón\" está activa, esta opción "
-"controla si el Poder asignado al botón de movimiento puede usarse en cuanto "
-"se apunta a un enemigo. Si esta opción está desactivada, se necesita usar el "
-"botón \"Mayús\" para acceder al Poder asignado al botón de movimiento."
+"Cuando la opción de \"Mover héroe usando el ratón\" está activa, esta opción"
+" controla si el Poder asignado al botón de movimiento puede usarse en cuanto"
+" se apunta a un enemigo. Si esta opción está desactivada, se necesita usar "
+"el botón \"Mayús\" para acceder al Poder asignado al botón de movimiento."
 
 #: ../../../src/MenuConfig.cpp:565
 msgid ""
-"The player's attacks will be aimed in the direction of the mouse cursor when "
-"this is enabled."
+"The player's attacks will be aimed in the direction of the mouse cursor when"
+" this is enabled."
 msgstr ""
 "Los ataques del jugador se dirigirán a la dirección del cursor del ratón "
 "cuando esta opción esté activada."
@@ -1058,15 +1057,16 @@ msgstr "Activa/Desactiva todos los elementos con información en pantalla"
 
 #: ../../../src/MenuDevConsole.cpp:388
 msgid "turns on/off the developer hud"
-msgstr "Activa/Desactiva todos la información en pantalla para desarrolladores"
+msgstr ""
+"Activa/Desactiva todos la información en pantalla para desarrolladores"
 
 #: ../../../src/MenuDevConsole.cpp:389
 msgid ""
 "Prints a list of powers that match a search term. No search term will list "
 "all items"
 msgstr ""
-"Muestra una lista de poderes que se emparejan con un término de búsqueda. Si "
-"no hay ningún término, se listarán todos los elementos"
+"Muestra una lista de poderes que se emparejan con un término de búsqueda. Si"
+" no hay ningún término, se listarán todos los elementos"
 
 #: ../../../src/MenuDevConsole.cpp:390
 msgid "Prints out all the map filenames located in the \"maps/\" directory."
@@ -1089,9 +1089,11 @@ msgstr ""
 "búsqueda. Si no hay ningún término de búsqueda, listará todos los objetos"
 
 #: ../../../src/MenuDevConsole.cpp:393 ../../../src/MenuDevConsole.cpp:394
-msgid "parses a series of event components and executes them as a single event"
+msgid ""
+"parses a series of event components and executes them as a single event"
 msgstr ""
-"analiza una serie de componentes de eventos y los ejecuta como un solo evento"
+"analiza una serie de componentes de eventos y los ejecuta como un solo "
+"evento"
 
 #: ../../../src/MenuDevConsole.cpp:395
 msgid "clears the command history"
@@ -2023,8 +2025,8 @@ msgid ""
 "to calculate your likeliness to land a direct hit."
 msgstr ""
 "Puntuación de certeza en ataque. La puntuación de esquivar del enemigo se "
-"resta a este valor para calcular tus posibilidades de acertarle con un golpe "
-"directo."
+"resta a este valor para calcular tus posibilidades de acertarle con un golpe"
+" directo."
 
 #: ../../../src/Stats.cpp:68
 msgid "Avoidance"
@@ -2225,39 +2227,3 @@ msgstr "o más nuevo"
 #: ../../../src/Version.cpp:142
 msgid "or older"
 msgstr "o más viejo"
-
-#, c-format
-#~ msgid "XP: %d"
-#~ msgstr "Experiencia: %d"
-
-#, c-format
-#~ msgid "Next: %d"
-#~ msgstr "Siguiente: %d"
-
-#, c-format
-#~ msgid "XP: %d/%d"
-#~ msgstr "Experiencia: %d/%d"
-
-#~ msgid "Immunity"
-#~ msgstr "Inmunidad"
-
-#~ msgid "Immunity to damage over time"
-#~ msgstr "Inmunidad al daño durante un tiempo"
-
-#~ msgid "Immunity to slow"
-#~ msgstr "Inmunidad a la lentidud"
-
-#~ msgid "Immunity to stun"
-#~ msgstr "Inmunidad al aturdimiento"
-
-#~ msgid "Immunity to HP steal"
-#~ msgstr "Inmunidad al robo de PV"
-
-#~ msgid "Immunity to MP steal"
-#~ msgstr "Inmunidad al robo de PM"
-
-#~ msgid "Immunity to knockback"
-#~ msgstr "Inmunidad al contragolpe"
-
-#~ msgid "Immunity to damage reflection"
-#~ msgstr "Inmunidad a la reflexión de daño"

@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 # Translators:
 # Ademaro <ademaro@ya.ru>, 2018
-# Justin Jacobs <jajdorkster@gmail.com>, 2019
-# Igor Polyakov <igorpolyakov@protonmail.com>, 2021
+# hotorcelexo <igorpolyakov@protonmail.com>, 2021
 # David Bell <ooliterplus@gmail.com>, 2021
-#
+# Justin Jacobs <jajdorkster@gmail.com>, 2022
+# 
 #, fuzzy
 msgid ""
 msgstr ""
@@ -16,15 +16,13 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-10 12:26-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: David Bell <ooliterplus@gmail.com>, 2021\n"
+"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2022\n"
 "Language-Team: Russian (https://www.transifex.com/flareorg/teams/84925/ru/)\n"
-"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
-"%100>=11 && n%100<=14)? 2 : 3);\n"
+"Language: ru\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #: ../../../src/Avatar.cpp:356
 msgid "Your health is low!"
@@ -812,8 +810,8 @@ msgid ""
 "Will try to store surfaces in video memory versus system memory. The effect "
 "this has on performance depends on the renderer."
 msgstr ""
-"Будет нагружать память видеокарты вместо системной памяти. Эффект зависит от "
-"рендерера."
+"Будет нагружать память видеокарты вместо системной памяти. Эффект зависит от"
+" рендерера."
 
 #: ../../../src/MenuConfig.cpp:553
 msgid ""
@@ -824,8 +822,8 @@ msgstr ""
 #: ../../../src/MenuConfig.cpp:554
 msgid ""
 "When enabled, this uses the screen DPI in addition to the window dimensions "
-"to scale the rendering resolution. Otherwise, only the window dimensions are "
-"used."
+"to scale the rendering resolution. Otherwise, only the window dimensions are"
+" used."
 msgstr ""
 
 #: ../../../src/MenuConfig.cpp:555
@@ -836,8 +834,8 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:556
 msgid ""
-"Enables the below setting that controls the screen gamma level. The behavior "
-"of the gamma setting can vary between platforms."
+"Enables the below setting that controls the screen gamma level. The behavior"
+" of the gamma setting can vary between platforms."
 msgstr ""
 
 #: ../../../src/MenuConfig.cpp:557
@@ -859,8 +857,8 @@ msgid ""
 "When enabled, empty equipment slots will be filled with applicable items "
 "when they are obtained."
 msgstr ""
-"Если включено, то пустые слоты предметов сразу будут заполняться подходящими "
-"предметами."
+"Если включено, то пустые слоты предметов сразу будут заполняться подходящими"
+" предметами."
 
 #: ../../../src/MenuConfig.cpp:560
 msgid ""
@@ -871,8 +869,8 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:561
 msgid ""
-"When enabled, tooltips for equipped items of the same type are shown next to "
-"standard item tooltips."
+"When enabled, tooltips for equipped items of the same type are shown next to"
+" standard item tooltips."
 msgstr ""
 
 #: ../../../src/MenuConfig.cpp:562
@@ -883,8 +881,8 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:563
 msgid ""
-"When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or "
-"'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
+"When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or"
+" 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
 "instead of 'Main1'."
 msgstr ""
 
@@ -898,8 +896,8 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:565
 msgid ""
-"The player's attacks will be aimed in the direction of the mouse cursor when "
-"this is enabled."
+"The player's attacks will be aimed in the direction of the mouse cursor when"
+" this is enabled."
 msgstr ""
 
 #: ../../../src/MenuConfig.cpp:566
@@ -972,7 +970,8 @@ msgstr "Используй '%s' чтобы исследовать с помощ�
 
 #: ../../../src/MenuDevConsole.cpp:149
 msgid "Arguments with spaces should be enclosed with double quotes. Example:"
-msgstr "Аргументы с пробелами должны быть заключены в двойные кавычки. Пример:"
+msgstr ""
+"Аргументы с пробелами должны быть заключены в двойные кавычки. Пример:"
 
 #: ../../../src/MenuDevConsole.cpp:150
 msgid "Type 'help' to get a list of commands."
@@ -1036,7 +1035,8 @@ msgid ""
 "Prints a list of powers that match a search term. No search term will list "
 "all items"
 msgstr ""
-"Выводит найденные силы. Если ничего не указать, показывает все доступные силы"
+"Выводит найденные силы. Если ничего не указать, показывает все доступные "
+"силы"
 
 #: ../../../src/MenuDevConsole.cpp:390
 msgid "Prints out all the map filenames located in the \"maps/\" directory."
@@ -1059,7 +1059,8 @@ msgstr ""
 "предметы"
 
 #: ../../../src/MenuDevConsole.cpp:393 ../../../src/MenuDevConsole.cpp:394
-msgid "parses a series of event components and executes them as a single event"
+msgid ""
+"parses a series of event components and executes them as a single event"
 msgstr "анализирует набор компонентов событий и выполняет их как одно событие"
 
 #: ../../../src/MenuDevConsole.cpp:395
@@ -2193,39 +2194,3 @@ msgstr "или выше"
 #: ../../../src/Version.cpp:142
 msgid "or older"
 msgstr "или ниже"
-
-#, c-format
-#~ msgid "XP: %d"
-#~ msgstr "Опыт: %d"
-
-#, c-format
-#~ msgid "Next: %d"
-#~ msgstr "Следующий: %d"
-
-#, c-format
-#~ msgid "XP: %d/%d"
-#~ msgstr "Опыт: %d/%d"
-
-#~ msgid "Immunity"
-#~ msgstr "Устойчивость"
-
-#~ msgid "Immunity to damage over time"
-#~ msgstr "Устойчивость к урону в течение долгого времени"
-
-#~ msgid "Immunity to slow"
-#~ msgstr "Устойчивость к снегу"
-
-#~ msgid "Immunity to stun"
-#~ msgstr "Устойчивость к оглушению"
-
-#~ msgid "Immunity to HP steal"
-#~ msgstr "Устойчивость к краже жизни"
-
-#~ msgid "Immunity to MP steal"
-#~ msgstr "Устойчивость к краже маны"
-
-#~ msgid "Immunity to knockback"
-#~ msgstr "Устойчивость к сбиванию с ног"
-
-#~ msgid "Immunity to damage reflection"
-#~ msgstr "Устойчивость к отражению урона"

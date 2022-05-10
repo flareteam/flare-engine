@@ -2,11 +2,12 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 # Translators:
 # Marc Tormo i Bochaca <mtbochaca@gmail.com>, 2019
 # Maria Cano <mariacdavila98@gmail.com>, 2020
-#
+# Justin Jacobs <jajdorkster@gmail.com>, 2022
+# 
 #, fuzzy
 msgid ""
 msgstr ""
@@ -14,12 +15,12 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-10 12:26-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: Maria Cano <mariacdavila98@gmail.com>, 2020\n"
+"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2022\n"
 "Language-Team: Catalan (https://www.transifex.com/flareorg/teams/84925/ca/)\n"
-"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: ca\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../../../src/Avatar.cpp:356
@@ -120,8 +121,7 @@ msgid ""
 msgstr ""
 "Renderitzat SDL per maquinari\n"
 "\n"
-"El renderitzador per defecte és sovint més ràpid que el renderitzat SDL per "
-"programari."
+"El renderitzador per defecte és sovint més ràpid que el renderitzat SDL per programari."
 
 #: ../../../src/EffectManager.cpp:404 ../../../src/EffectManager.cpp:408
 #: ../../../src/EffectManager.cpp:412 ../../../src/EffectManager.cpp:416
@@ -610,8 +610,8 @@ msgid ""
 "When the player's health drops below the given threshold, the low health "
 "notifications are triggered if one or more of them is enabled."
 msgstr ""
-"Quan la salut del jugador cau sota el llindar, es disparen les notificacions "
-"si una o més d'elles estan activades."
+"Quan la salut del jugador cau sota el llindar, es disparen les notificacions"
+" si una o més d'elles estan activades."
 
 #: ../../../src/MenuConfig.cpp:349
 msgid "The maximum frame rate that the game will be allowed to run at."
@@ -816,22 +816,22 @@ msgid ""
 "this has on performance depends on the renderer."
 msgstr ""
 "Intentarà emmagatzemar les superfícies a la memòria de vídeo en comptes de "
-"la memòria del sistema. L'efecte que això tindrà sobre el rendiment, variarà "
-"segons el renderitzador. "
+"la memòria del sistema. L'efecte que això tindrà sobre el rendiment, variarà"
+" segons el renderitzador. "
 
 #: ../../../src/MenuConfig.cpp:553
 msgid ""
 "Prevents screen tearing. Disable if you experience \"stuttering\" in "
 "windowed mode or input lag."
 msgstr ""
-"Evita l'esquinçament de la pantalla. Desactiveu si experimenteu \"tartamudesa"
-"\" en mode finestra o retràs en les entrades. "
+"Evita l'esquinçament de la pantalla. Desactiveu si experimenteu "
+"\"tartamudesa\" en mode finestra o retràs en les entrades. "
 
 #: ../../../src/MenuConfig.cpp:554
 msgid ""
 "When enabled, this uses the screen DPI in addition to the window dimensions "
-"to scale the rendering resolution. Otherwise, only the window dimensions are "
-"used."
+"to scale the rendering resolution. Otherwise, only the window dimensions are"
+" used."
 msgstr ""
 "Quan està activat, utilitza els PPP de la pantalla juntament amb les mides "
 "de la finestra per escalar la resolució. Contràriament, només s'usaran les "
@@ -842,13 +842,13 @@ msgid ""
 "This enables parallax (non-tile) layers. Disabling this setting can improve "
 "performance in some cases."
 msgstr ""
-"Això activa les capes parallax (sense rajoles). Desactivar aquesta opció pot "
-"millorar el rendiment en alguns casos."
+"Això activa les capes parallax (sense rajoles). Desactivar aquesta opció pot"
+" millorar el rendiment en alguns casos."
 
 #: ../../../src/MenuConfig.cpp:556
 msgid ""
-"Enables the below setting that controls the screen gamma level. The behavior "
-"of the gamma setting can vary between platforms."
+"Enables the below setting that controls the screen gamma level. The behavior"
+" of the gamma setting can vary between platforms."
 msgstr ""
 "Activa l'opció de sota que controla el nivel gamma de la pantalla. El "
 "comportament de l'opció gamma pot variar entre plataformes."
@@ -883,8 +883,8 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:561
 msgid ""
-"When enabled, tooltips for equipped items of the same type are shown next to "
-"standard item tooltips."
+"When enabled, tooltips for equipped items of the same type are shown next to"
+" standard item tooltips."
 msgstr ""
 
 #: ../../../src/MenuConfig.cpp:562
@@ -895,8 +895,8 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:563
 msgid ""
-"When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or "
-"'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
+"When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or"
+" 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
 "instead of 'Main1'."
 msgstr ""
 
@@ -910,8 +910,8 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:565
 msgid ""
-"The player's attacks will be aimed in the direction of the mouse cursor when "
-"this is enabled."
+"The player's attacks will be aimed in the direction of the mouse cursor when"
+" this is enabled."
 msgstr ""
 
 #: ../../../src/MenuConfig.cpp:566
@@ -1067,7 +1067,8 @@ msgid ""
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:393 ../../../src/MenuDevConsole.cpp:394
-msgid "parses a series of event components and executes them as a single event"
+msgid ""
+"parses a series of event components and executes them as a single event"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:395
@@ -2197,21 +2198,3 @@ msgstr "o més nou"
 #: ../../../src/Version.cpp:142
 msgid "or older"
 msgstr "o més vell"
-
-#, c-format
-#~ msgid "XP: %d"
-#~ msgstr "Experiència: %d"
-
-#, c-format
-#~ msgid "Next: %d"
-#~ msgstr "Següent: %d"
-
-#, c-format
-#~ msgid "XP: %d/%d"
-#~ msgstr "PX: %d/%d"
-
-#~ msgid "Immunity"
-#~ msgstr "Immunitat"
-
-#~ msgid "Immunity to HP steal"
-#~ msgstr "Immunitat al robatori de PV"

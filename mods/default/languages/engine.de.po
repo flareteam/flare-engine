@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 # Translators:
-# Justin Jacobs <jajdorkster@gmail.com>, 2019
 # a287ca4390ac1060252ff7344e07cfb3_ddf63c0 <12d9bb92f00a9c2841133eeaac7a25bb_727560>, 2019
 # Wuzzy <Wuzzy@disroot.org>, 2020
 # qubodup, 2022
-#
+# Justin Jacobs <jajdorkster@gmail.com>, 2022
+# 
 #, fuzzy
 msgid ""
 msgstr ""
@@ -16,12 +16,12 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-10 12:26-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: qubodup, 2022\n"
+"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2022\n"
 "Language-Team: German (https://www.transifex.com/flareorg/teams/84925/de/)\n"
-"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../../../src/Avatar.cpp:356
@@ -49,7 +49,8 @@ msgstr "Du wurdest bezwungen."
 #: ../../../src/Avatar.cpp:926
 msgid "Transformation expired. You have been moved back to a safe place."
 msgstr ""
-"Die Transformation ist aufgehoben. Du wurdest an einen sicheren Ort gebracht."
+"Die Transformation ist aufgehoben. Du wurdest an einen sicheren Ort "
+"gebracht."
 
 #: ../../../src/CampaignManager.cpp:154
 #, c-format
@@ -534,7 +535,8 @@ msgstr "Alles anzeigen"
 #: ../../../src/MenuConfig.cpp:304
 msgid ""
 "Always show loot tooltips. Temporarily hide all loot tooltips with 'Alt'."
-msgstr "Zeige alle Beute-Hinweise. Verstecke temporär alle Hinweise mit „Alt“."
+msgstr ""
+"Zeige alle Beute-Hinweise. Verstecke temporär alle Hinweise mit „Alt“."
 
 #: ../../../src/MenuConfig.cpp:305
 msgid ""
@@ -622,9 +624,9 @@ msgid ""
 "the game. Mods define the allowed render sizes, but this option allows "
 "overriding the maximum size."
 msgstr ""
-"Mit Rendergröße ist gemeint: Die Höhe (in Pixel) der Oberfläche, auf der das "
-"Spiel gezeichnet wird. Mods definieren die zulässigen Rendergrößen, aber mit "
-"dieser Option kann man ein Limit setzen."
+"Mit Rendergröße ist gemeint: Die Höhe (in Pixel) der Oberfläche, auf der das"
+" Spiel gezeichnet wird. Mods definieren die zulässigen Rendergrößen, aber "
+"mit dieser Option kann man ein Limit setzen."
 
 #: ../../../src/MenuConfig.cpp:379 ../../../src/MenuConfig.cpp:1711
 #: ../../../src/MenuGameOver.cpp:117
@@ -831,11 +833,11 @@ msgstr ""
 #: ../../../src/MenuConfig.cpp:554
 msgid ""
 "When enabled, this uses the screen DPI in addition to the window dimensions "
-"to scale the rendering resolution. Otherwise, only the window dimensions are "
-"used."
+"to scale the rendering resolution. Otherwise, only the window dimensions are"
+" used."
 msgstr ""
-"Falls aktiviert, wird dies die Bildschirm-DPI zusätzlich zu der Fenstergröße "
-"anwenden, um die zum Zeichnen benutzte Auflösung zu skalieren. Ansonsten "
+"Falls aktiviert, wird dies die Bildschirm-DPI zusätzlich zu der Fenstergröße"
+" anwenden, um die zum Zeichnen benutzte Auflösung zu skalieren. Ansonsten "
 "wird nur die Fenstergröße verwendet."
 
 #: ../../../src/MenuConfig.cpp:555
@@ -848,11 +850,11 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:556
 msgid ""
-"Enables the below setting that controls the screen gamma level. The behavior "
-"of the gamma setting can vary between platforms."
+"Enables the below setting that controls the screen gamma level. The behavior"
+" of the gamma setting can vary between platforms."
 msgstr ""
-"Aktiviert die Möglichkeit, den Gammawert des Spiels zu ändern. Das Verhalten "
-"dieser Einstellung schwankt stark zwischen Plattformen."
+"Aktiviert die Möglichkeit, den Gammawert des Spiels zu ändern. Das Verhalten"
+" dieser Einstellung schwankt stark zwischen Plattformen."
 
 #: ../../../src/MenuConfig.cpp:557
 msgid ""
@@ -888,8 +890,8 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:561
 msgid ""
-"When enabled, tooltips for equipped items of the same type are shown next to "
-"standard item tooltips."
+"When enabled, tooltips for equipped items of the same type are shown next to"
+" standard item tooltips."
 msgstr ""
 "Wenn aktiviert, werden Hinweise für ausgerüstete Gegenstände der gleichen "
 "Art neben den Standard-Hinweisen für Gegenstände angezeigt."
@@ -902,8 +904,8 @@ msgstr "Erlaubt Steuerung des gesamten Spiels mit Tastatur (oder Joystick)."
 
 #: ../../../src/MenuConfig.cpp:563
 msgid ""
-"When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or "
-"'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
+"When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or"
+" 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
 "instead of 'Main1'."
 msgstr ""
 "Wenn „Maus steuert Bewegung“ aktiviert ist, legt diese Einstellung fest, ob "
@@ -925,9 +927,10 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:565
 msgid ""
-"The player's attacks will be aimed in the direction of the mouse cursor when "
-"this is enabled."
-msgstr "Wenn aktiviert, greift der Spieler in die Richtung des Mauszeigers an."
+"The player's attacks will be aimed in the direction of the mouse cursor when"
+" this is enabled."
+msgstr ""
+"Wenn aktiviert, greift der Spieler in die Richtung des Mauszeigers an."
 
 #: ../../../src/MenuConfig.cpp:566
 msgid ""
@@ -1088,11 +1091,12 @@ msgid ""
 "Prints a list of items that match a search term. No search term will list "
 "all items"
 msgstr ""
-"Gibt eine Liste an Gegenständen, die auf einen Suchbegriff passen, aus. Ohne "
-"Suchbegriff werden alle Gegenstände aufgelistet"
+"Gibt eine Liste an Gegenständen, die auf einen Suchbegriff passen, aus. Ohne"
+" Suchbegriff werden alle Gegenstände aufgelistet"
 
 #: ../../../src/MenuDevConsole.cpp:393 ../../../src/MenuDevConsole.cpp:394
-msgid "parses a series of event components and executes them as a single event"
+msgid ""
+"parses a series of event components and executes them as a single event"
 msgstr ""
 "parst eine Reihe an Ereigniskomponenten und führt sie als ein einzelnes "
 "Ereignis aus"
@@ -1503,7 +1507,8 @@ msgstr "Dieser Gegenstand kann nicht im privaten Lager eingelagert werden."
 
 #: ../../../src/MenuStash.cpp:349
 msgid "This item can not be stored in the shared stash."
-msgstr "Dieser Gegenstand kann nicht im Gemeinschaftslager eingelagert werden."
+msgstr ""
+"Dieser Gegenstand kann nicht im Gemeinschaftslager eingelagert werden."
 
 #: ../../../src/MenuStash.cpp:359
 msgid "Stash is full."
@@ -2231,39 +2236,3 @@ msgstr "oder neuer"
 #: ../../../src/Version.cpp:142
 msgid "or older"
 msgstr "oder älter"
-
-#, c-format
-#~ msgid "XP: %d"
-#~ msgstr "EP: %d"
-
-#, c-format
-#~ msgid "Next: %d"
-#~ msgstr "Nächste: %d"
-
-#, c-format
-#~ msgid "XP: %d/%d"
-#~ msgstr "EP: %d/%d"
-
-#~ msgid "Immunity"
-#~ msgstr "Immunität"
-
-#~ msgid "Immunity to damage over time"
-#~ msgstr "Immunität gegen Zeitschaden"
-
-#~ msgid "Immunity to slow"
-#~ msgstr "Immunität gegen Verzögerung"
-
-#~ msgid "Immunity to stun"
-#~ msgstr "Immunität gegen Schock"
-
-#~ msgid "Immunity to HP steal"
-#~ msgstr "Immunität gegen TP-Stehlen"
-
-#~ msgid "Immunity to MP steal"
-#~ msgstr "Immunität gegen MP-Stehlen"
-
-#~ msgid "Immunity to knockback"
-#~ msgstr "Immunität gegen Rückschlag"
-
-#~ msgid "Immunity to damage reflection"
-#~ msgstr "Immunität gegen Reflektionsschaden"

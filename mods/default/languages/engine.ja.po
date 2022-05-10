@@ -2,11 +2,11 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 # Translators:
-# Justin Jacobs <jajdorkster@gmail.com>, 2018
 # Ooyama Yosiyuki <qqke6wd9k@apricot.ocn.ne.jp>, 2019
-#
+# Justin Jacobs <jajdorkster@gmail.com>, 2022
+# 
 #, fuzzy
 msgid ""
 msgstr ""
@@ -14,13 +14,12 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-10 12:26-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: Ooyama Yosiyuki <qqke6wd9k@apricot.ocn.ne.jp>, 2019\n"
-"Language-Team: Japanese (https://www.transifex.com/flareorg/teams/84925/"
-"ja/)\n"
-"Language: ja\n"
+"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2022\n"
+"Language-Team: Japanese (https://www.transifex.com/flareorg/teams/84925/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../../../src/Avatar.cpp:356
@@ -108,18 +107,14 @@ msgid ""
 "SDL software renderer\n"
 "\n"
 "Often slower, but less likely to have issues."
-msgstr ""
-"SDL ソフトウェアレンダラーはおそいですが、いくつかのトラブルを無くせるかもし"
-"れません。"
+msgstr "SDL ソフトウェアレンダラーはおそいですが、いくつかのトラブルを無くせるかもしれません。"
 
 #: ../../../src/DeviceList.cpp:59
 msgid ""
 "SDL hardware renderer\n"
 "\n"
 "The default renderer that is often faster than the SDL software renderer."
-msgstr ""
-"SDL ハードウェアレンダラーは標準設定であり、SDLソフトウェアレンダラーよりも速"
-"いでしょう。"
+msgstr "SDL ハードウェアレンダラーは標準設定であり、SDLソフトウェアレンダラーよりも速いでしょう。"
 
 #: ../../../src/EffectManager.cpp:404 ../../../src/EffectManager.cpp:408
 #: ../../../src/EffectManager.cpp:412 ../../../src/EffectManager.cpp:416
@@ -811,8 +806,8 @@ msgstr ""
 #: ../../../src/MenuConfig.cpp:554
 msgid ""
 "When enabled, this uses the screen DPI in addition to the window dimensions "
-"to scale the rendering resolution. Otherwise, only the window dimensions are "
-"used."
+"to scale the rendering resolution. Otherwise, only the window dimensions are"
+" used."
 msgstr ""
 
 #: ../../../src/MenuConfig.cpp:555
@@ -823,8 +818,8 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:556
 msgid ""
-"Enables the below setting that controls the screen gamma level. The behavior "
-"of the gamma setting can vary between platforms."
+"Enables the below setting that controls the screen gamma level. The behavior"
+" of the gamma setting can vary between platforms."
 msgstr ""
 
 #: ../../../src/MenuConfig.cpp:557
@@ -853,8 +848,8 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:561
 msgid ""
-"When enabled, tooltips for equipped items of the same type are shown next to "
-"standard item tooltips."
+"When enabled, tooltips for equipped items of the same type are shown next to"
+" standard item tooltips."
 msgstr ""
 
 #: ../../../src/MenuConfig.cpp:562
@@ -865,8 +860,8 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:563
 msgid ""
-"When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or "
-"'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
+"When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or"
+" 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
 "instead of 'Main1'."
 msgstr ""
 
@@ -880,8 +875,8 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:565
 msgid ""
-"The player's attacks will be aimed in the direction of the mouse cursor when "
-"this is enabled."
+"The player's attacks will be aimed in the direction of the mouse cursor when"
+" this is enabled."
 msgstr ""
 
 #: ../../../src/MenuConfig.cpp:566
@@ -1036,7 +1031,8 @@ msgid ""
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:393 ../../../src/MenuDevConsole.cpp:394
-msgid "parses a series of event components and executes them as a single event"
+msgid ""
+"parses a series of event components and executes them as a single event"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:395
@@ -2166,18 +2162,3 @@ msgstr ""
 #: ../../../src/Version.cpp:142
 msgid "or older"
 msgstr ""
-
-#, c-format
-#~ msgid "XP: %d"
-#~ msgstr "XP: %d"
-
-#, c-format
-#~ msgid "Next: %d"
-#~ msgstr "次: %d"
-
-#, c-format
-#~ msgid "XP: %d/%d"
-#~ msgstr "XP: %d/%d"
-
-#~ msgid "Immunity"
-#~ msgstr "まぬがれ"

@@ -2,11 +2,11 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 # Translators:
-# Justin Jacobs <jajdorkster@gmail.com>, 2018
 # MiroslavR <miroslavr256@gmail.com>, 2019
-#
+# Justin Jacobs <jajdorkster@gmail.com>, 2022
+# 
 #, fuzzy
 msgid ""
 msgstr ""
@@ -14,14 +14,13 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-10 12:26-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: MiroslavR <miroslavr256@gmail.com>, 2019\n"
+"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2022\n"
 "Language-Team: Slovak (https://www.transifex.com/flareorg/teams/84925/sk/)\n"
-"Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n "
-">= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);\n"
+"Language: sk\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);\n"
 
 #: ../../../src/Avatar.cpp:356
 msgid "Your health is low!"
@@ -121,8 +120,7 @@ msgid ""
 msgstr ""
 "Hardvérové vykresľovanie pomocou SDL\n"
 "\n"
-"Predvolené vykresľovanie, ktoré je často rýchlejšie ako softvérové "
-"vykresľovanie pomocou SDL."
+"Predvolené vykresľovanie, ktoré je často rýchlejšie ako softvérové vykresľovanie pomocou SDL."
 
 #: ../../../src/EffectManager.cpp:404 ../../../src/EffectManager.cpp:408
 #: ../../../src/EffectManager.cpp:412 ../../../src/EffectManager.cpp:416
@@ -523,7 +521,8 @@ msgid ""
 "player or an enemy. Temporarily show all loot tooltips with 'Alt'."
 msgstr ""
 "Zobrazovať všetky popisy predmetov na zemi okrem tých, ktoré zakrýva hráč "
-"alebo nepriateľ. Stlačením klávesu Alt môžete dočasne zobraziť všetky popisy."
+"alebo nepriateľ. Stlačením klávesu Alt môžete dočasne zobraziť všetky "
+"popisy."
 
 #: ../../../src/MenuConfig.cpp:304
 msgid "Show all"
@@ -557,8 +556,8 @@ msgid ""
 "Controls the type of warning to be activated when the player is below the "
 "low health threshold."
 msgstr ""
-"Ovláda typ upozornenia, ktoré sa aktivuje, keď zdravie hráča klesne pod prah "
-"nízkeho zdravia."
+"Ovláda typ upozornenia, ktoré sa aktivuje, keď zdravie hráča klesne pod prah"
+" nízkeho zdravia."
 
 #: ../../../src/MenuConfig.cpp:314
 msgid "- Display a message"
@@ -828,8 +827,8 @@ msgstr ""
 #: ../../../src/MenuConfig.cpp:554
 msgid ""
 "When enabled, this uses the screen DPI in addition to the window dimensions "
-"to scale the rendering resolution. Otherwise, only the window dimensions are "
-"used."
+"to scale the rendering resolution. Otherwise, only the window dimensions are"
+" used."
 msgstr ""
 
 #: ../../../src/MenuConfig.cpp:555
@@ -842,8 +841,8 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:556
 msgid ""
-"Enables the below setting that controls the screen gamma level. The behavior "
-"of the gamma setting can vary between platforms."
+"Enables the below setting that controls the screen gamma level. The behavior"
+" of the gamma setting can vary between platforms."
 msgstr ""
 "Povolí nižšie uvedené nastavenie, ktoré ovláda hodnotu gama obrazovky. "
 "Správanie nastavenia gama sa môže líšiť v závislosti od platformy."
@@ -879,8 +878,8 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:561
 msgid ""
-"When enabled, tooltips for equipped items of the same type are shown next to "
-"standard item tooltips."
+"When enabled, tooltips for equipped items of the same type are shown next to"
+" standard item tooltips."
 msgstr ""
 
 #: ../../../src/MenuConfig.cpp:562
@@ -891,8 +890,8 @@ msgstr "Umožní ovládať hru výlučne pomocou klávesnice (alebo joysticku)."
 
 #: ../../../src/MenuConfig.cpp:563
 msgid ""
-"When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or "
-"'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
+"When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or"
+" 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
 "instead of 'Main1'."
 msgstr ""
 
@@ -906,8 +905,8 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:565
 msgid ""
-"The player's attacks will be aimed in the direction of the mouse cursor when "
-"this is enabled."
+"The player's attacks will be aimed in the direction of the mouse cursor when"
+" this is enabled."
 msgstr ""
 "Ak je toto nastavenie povolené, útoky hráča budú mierené smerom ku kurzoru "
 "myši."
@@ -1070,7 +1069,8 @@ msgstr ""
 "hľadaný výraz, ktorý by vymenoval všetky predmety"
 
 #: ../../../src/MenuDevConsole.cpp:393 ../../../src/MenuDevConsole.cpp:394
-msgid "parses a series of event components and executes them as a single event"
+msgid ""
+"parses a series of event components and executes them as a single event"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:395
@@ -2204,39 +2204,3 @@ msgstr "alebo novšia"
 #: ../../../src/Version.cpp:142
 msgid "or older"
 msgstr "alebo staršia"
-
-#, c-format
-#~ msgid "XP: %d"
-#~ msgstr "XP: %d"
-
-#, c-format
-#~ msgid "Next: %d"
-#~ msgstr "Nasl.: %d"
-
-#, c-format
-#~ msgid "XP: %d/%d"
-#~ msgstr "XP: %d/%d"
-
-#~ msgid "Immunity"
-#~ msgstr "Imunita"
-
-#~ msgid "Immunity to damage over time"
-#~ msgstr "Imunita voči zraneniu postupom času"
-
-#~ msgid "Immunity to slow"
-#~ msgstr "Imunita voči spomaleniu"
-
-#~ msgid "Immunity to stun"
-#~ msgstr "Imunita voči omráčeniu"
-
-#~ msgid "Immunity to HP steal"
-#~ msgstr "Imunita voči krádeži HP"
-
-#~ msgid "Immunity to MP steal"
-#~ msgstr "Imunita voči krádeži MP"
-
-#~ msgid "Immunity to knockback"
-#~ msgstr "Imunita voči odhodeniu"
-
-#~ msgid "Immunity to damage reflection"
-#~ msgstr "Imunita voči odrazu zranenia"

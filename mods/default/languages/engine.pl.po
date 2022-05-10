@@ -2,11 +2,11 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 # Translators:
 # Błażej Pęksyk <b.peksyk@gmail.com>, 2020
-# Justin Jacobs <jajdorkster@gmail.com>, 2021
-#
+# Justin Jacobs <jajdorkster@gmail.com>, 2022
+# 
 #, fuzzy
 msgid ""
 msgstr ""
@@ -14,15 +14,13 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-10 12:26-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2021\n"
+"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2022\n"
 "Language-Team: Polish (https://www.transifex.com/flareorg/teams/84925/pl/)\n"
-"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n"
-"%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n"
-"%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
+"Language: pl\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
 
 #: ../../../src/Avatar.cpp:356
 msgid "Your health is low!"
@@ -825,18 +823,18 @@ msgid ""
 "Prevents screen tearing. Disable if you experience \"stuttering\" in "
 "windowed mode or input lag."
 msgstr ""
-"Zapobiega rozchodzeniu się obrazu. Wyłącz, jeśli doświadczasz \"przycinania"
-"\\ w trybie okienkowym bądź opóźnienia w wykonywaniu akcji."
+"Zapobiega rozchodzeniu się obrazu. Wyłącz, jeśli doświadczasz "
+"\"przycinania\\ w trybie okienkowym bądź opóźnienia w wykonywaniu akcji."
 
 #: ../../../src/MenuConfig.cpp:554
 msgid ""
 "When enabled, this uses the screen DPI in addition to the window dimensions "
-"to scale the rendering resolution. Otherwise, only the window dimensions are "
-"used."
+"to scale the rendering resolution. Otherwise, only the window dimensions are"
+" used."
 msgstr ""
 "Po włączeniu, ta funkcja bierze pod uwagę rozdzielczość ekranu podczas "
-"skalowania renderowanego obrazu do rozmiaru okna. W przeciwnym wypadku brany "
-"pod uwagę jest wyłącznie rozmiar okna."
+"skalowania renderowanego obrazu do rozmiaru okna. W przeciwnym wypadku brany"
+" pod uwagę jest wyłącznie rozmiar okna."
 
 #: ../../../src/MenuConfig.cpp:555
 msgid ""
@@ -848,11 +846,11 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:556
 msgid ""
-"Enables the below setting that controls the screen gamma level. The behavior "
-"of the gamma setting can vary between platforms."
+"Enables the below setting that controls the screen gamma level. The behavior"
+" of the gamma setting can vary between platforms."
 msgstr ""
-"Odblokowuje poniższą opcję ręcznego ustawienia poziomu gammy. Zachowanie tej "
-"funkcji może się różnić w zależności od platformy."
+"Odblokowuje poniższą opcję ręcznego ustawienia poziomu gammy. Zachowanie tej"
+" funkcji może się różnić w zależności od platformy."
 
 #: ../../../src/MenuConfig.cpp:557
 msgid ""
@@ -889,12 +887,12 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:561
 msgid ""
-"When enabled, tooltips for equipped items of the same type are shown next to "
-"standard item tooltips."
+"When enabled, tooltips for equipped items of the same type are shown next to"
+" standard item tooltips."
 msgstr ""
-"Włączenie tej opcji sprawia, że w momencie umieszczenia kursora na elemencie "
-"ekwipunku wyświetla porównanie statystyk z założonym przedmiotem tego samego "
-"typu."
+"Włączenie tej opcji sprawia, że w momencie umieszczenia kursora na elemencie"
+" ekwipunku wyświetla porównanie statystyk z założonym przedmiotem tego "
+"samego typu."
 
 #: ../../../src/MenuConfig.cpp:562
 msgid ""
@@ -906,8 +904,8 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:563
 msgid ""
-"When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or "
-"'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
+"When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or"
+" 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
 "instead of 'Main1'."
 msgstr ""
 "Jeśli opcja 'Poruszaj się używając myszki' jest aktywna, to ustawienie "
@@ -929,10 +927,11 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:565
 msgid ""
-"The player's attacks will be aimed in the direction of the mouse cursor when "
-"this is enabled."
+"The player's attacks will be aimed in the direction of the mouse cursor when"
+" this is enabled."
 msgstr ""
-"Po aktywowaniu tej opcji, Ataki gracza będą kierowane w stronę kursora myszy."
+"Po aktywowaniu tej opcji, Ataki gracza będą kierowane w stronę kursora "
+"myszy."
 
 #: ../../../src/MenuConfig.cpp:566
 msgid ""
@@ -1092,11 +1091,12 @@ msgid ""
 "Prints a list of items that match a search term. No search term will list "
 "all items"
 msgstr ""
-"Wyświetla listę przedmiotów pasujących do podanego wyrażenia. Brak wyrażenia "
-"spowoduje wyświelenie wszystkich przedmiotów."
+"Wyświetla listę przedmiotów pasujących do podanego wyrażenia. Brak wyrażenia"
+" spowoduje wyświelenie wszystkich przedmiotów."
 
 #: ../../../src/MenuDevConsole.cpp:393 ../../../src/MenuDevConsole.cpp:394
-msgid "parses a series of event components and executes them as a single event"
+msgid ""
+"parses a series of event components and executes them as a single event"
 msgstr "parsuje ciąg komponentów zdarzeń i wykonuje je jako jedno zdarzenie"
 
 #: ../../../src/MenuDevConsole.cpp:395
@@ -2230,39 +2230,3 @@ msgstr "lub nowsza"
 #: ../../../src/Version.cpp:142
 msgid "or older"
 msgstr "lub starsza"
-
-#, c-format
-#~ msgid "XP: %d"
-#~ msgstr "Obecne PD: %d"
-
-#, c-format
-#~ msgid "Next: %d"
-#~ msgstr "Do następnego poziomu: %d PD"
-
-#, c-format
-#~ msgid "XP: %d/%d"
-#~ msgstr "PD: %d/%d"
-
-#~ msgid "Immunity"
-#~ msgstr "Niewrażliwość"
-
-#~ msgid "Immunity to damage over time"
-#~ msgstr "Niewrażliwość na krwawienie"
-
-#~ msgid "Immunity to slow"
-#~ msgstr "Niewrażliwość na spowolnienie"
-
-#~ msgid "Immunity to stun"
-#~ msgstr "Niewrażliwość na ogłuszenie"
-
-#~ msgid "Immunity to HP steal"
-#~ msgstr "Niewrażliwość na kradzież PŻ"
-
-#~ msgid "Immunity to MP steal"
-#~ msgstr "Niewrażliwość na kradzież PM"
-
-#~ msgid "Immunity to knockback"
-#~ msgstr "Niewrażliwość na odrzucenie"
-
-#~ msgid "Immunity to damage reflection"
-#~ msgstr "Niewrażliwość na odbicie obrażeń"
