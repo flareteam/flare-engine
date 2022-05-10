@@ -458,7 +458,6 @@ msgstr "Puingean staide ri fhaighinn: %d"
 #, c-format
 msgid "XP: %lu"
 msgstr "Puingean-eòlais: %lu"
-msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:376
 #, c-format
