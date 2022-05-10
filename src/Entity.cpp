@@ -551,7 +551,7 @@ bool Entity::takeHit(Hazard &h) {
 				else {
 					int steal_amt = (std::min(dmg, prev_hp) * hp_steal) / 100;
 					if (steal_amt == 0) steal_amt = 1;
-					combat_text->addString(msg->get("+%d HP",steal_amt), h.src_stats->pos, CombatText::MSG_BUFF);
+					combat_text->addString(msg->getv("+%d HP",steal_amt), h.src_stats->pos, CombatText::MSG_BUFF);
 					h.src_stats->hp = std::min(h.src_stats->hp + steal_amt, h.src_stats->get(Stats::HP_MAX));
 				}
 			}
@@ -563,7 +563,7 @@ bool Entity::takeHit(Hazard &h) {
 				else {
 					int steal_amt = (std::min(dmg, prev_hp) * mp_steal) / 100;
 					if (steal_amt == 0) steal_amt = 1;
-					combat_text->addString(msg->get("+%d MP",steal_amt), h.src_stats->pos, CombatText::MSG_BUFF);
+					combat_text->addString(msg->getv("+%d MP",steal_amt), h.src_stats->pos, CombatText::MSG_BUFF);
 					h.src_stats->mp = std::min(h.src_stats->mp + steal_amt, h.src_stats->get(Stats::MP_MAX));
 				}
 			}

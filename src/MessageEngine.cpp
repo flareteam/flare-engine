@@ -34,6 +34,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "Settings.h"
 
+#include <stdarg.h>
+
 MessageEngine::MessageEngine() {
 	Utils::logInfo("MessageEngine: Using language '%s'", settings->language.c_str());
 
@@ -68,9 +70,10 @@ MessageEngine::MessageEngine() {
 	}
 }
 
-/*
- * Each of the get() functions returns the mapped value
- * They differ only on which variables they replace in the string - strings replace %s, integers replace %d
+/**
+ * This get() function is maintained for the purpose of strings that don't expect C/printf-style formatting.
+ * We have allowed strings in mod data to not require the escaping of '%', so we can't pass such strings to getv() without issues.
+ * We also use this where possible for engine strings, since it should be more efficient than rebuilding the string as getv() does.
  */
 std::string MessageEngine::get(const std::string& key) {
 	std::string message = messages[key];
@@ -78,76 +81,20 @@ std::string MessageEngine::get(const std::string& key) {
 	return unescape(message);
 }
 
-std::string MessageEngine::get(const std::string& key, int i) {
+std::string MessageEngine::getv(const std::string& key, ...) {
 	std::string message = messages[key];
 	if (message == "") message = key;
-	size_t index = message.find("%d");
-	if (index != std::string::npos) message = message.replace(index, 2, str(i));
-	return unescape(message);
-}
 
-std::string MessageEngine::get(const std::string& key, const std::string& s) {
-	std::string message = messages[key];
-	if (message == "") message = key;
-	size_t index = message.find("%s");
-	if (index != std::string::npos) message = message.replace(index, 2, s);
-	return unescape(message);
-}
+	va_list args;
+	const char* format = message.c_str();
+	size_t buffer_size = 8192;
+	char buffer[buffer_size];
 
-std::string MessageEngine::get(const std::string& key, int i, const std::string& s) {
-	std::string message = messages[key];
-	if (message == "") message = key;
-	size_t index = message.find("%d");
-	if (index != std::string::npos) message = message.replace(index, 2, str(i));
-	index = message.find("%s");
-	if (index != std::string::npos) message = message.replace(index, 2, s);
-	return unescape(message);
-}
+	va_start(args, key);
+	vsnprintf(buffer, buffer_size, format, args);
+	va_end(args);
 
-std::string MessageEngine::get(const std::string& key, const std::string& s, int i) {
-	return get(key, i, s);
-}
-
-std::string MessageEngine::get(const std::string& key, int i, int j) {
-	std::string message = messages[key];
-	if (message == "") message = key;
-	size_t index = message.find("%d");
-	if (index != std::string::npos) message = message.replace(index, 2, str(i));
-	index = message.find("%d");
-	if (index != std::string::npos) message = message.replace(index, 2, str(j));
-	return unescape(message);
-}
-
-std::string MessageEngine::get(const std::string& key, unsigned long i) {
-	std::string message = messages[key];
-	if (message == "") message = key;
-	size_t index = message.find("%d");
-	if (index != std::string::npos) message = message.replace(index, 2, str(i));
-	return unescape(message);
-}
-
-std::string MessageEngine::get(const std::string& key, unsigned long i, unsigned long j) {
-	std::string message = messages[key];
-	if (message == "") message = key;
-	size_t index = message.find("%d");
-	if (index != std::string::npos) message = message.replace(index, 2, str(i));
-	index = message.find("%d");
-	if (index != std::string::npos) message = message.replace(index, 2, str(j));
-	return unescape(message);
-}
-
-// Changes an int into a string
-std::string MessageEngine::str(int i) {
-	std::stringstream ss;
-	ss << i;
-	return ss.str();
-}
-
-// Changes an unsigned long into a string
-std::string MessageEngine::str(unsigned long i) {
-	std::stringstream ss;
-	ss << i;
-	return ss.str();
+	return std::string(buffer);
 }
 
 // unescape c formatted string

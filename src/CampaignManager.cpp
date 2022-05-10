@@ -151,7 +151,7 @@ void CampaignManager::removeCurrency(int quantity) {
 
 	if (max_amount > 0) {
 		menu->inv->removeCurrency(max_amount);
-		pc->logMsg(msg->get("%d %s removed.", max_amount, eset->loot.currency), Avatar::MSG_UNIQUE);
+		pc->logMsg(msg->getv("%d %s removed.", max_amount, eset->loot.currency.c_str()), Avatar::MSG_UNIQUE);
 		items->playSound(eset->misc.currency_id);
 	}
 }
@@ -170,9 +170,9 @@ void CampaignManager::removeItem(ItemStack istack) {
 
 	if (menu->inv->remove(istack.item, max_amount)) {
 		if (max_amount > 1)
-			pc->logMsg(msg->get("%s x%d removed.", items->getItemName(istack.item), max_amount), Avatar::MSG_UNIQUE);
+			pc->logMsg(msg->getv("%s x%d removed.", items->getItemName(istack.item).c_str(), max_amount), Avatar::MSG_UNIQUE);
 		else if (max_amount == 1)
-			pc->logMsg(msg->get("%s removed.", items->getItemName(istack.item)), Avatar::MSG_UNIQUE);
+			pc->logMsg(msg->getv("%s removed.", items->getItemName(istack.item).c_str()), Avatar::MSG_UNIQUE);
 
 		if (max_amount > 0)
 			items->playSound(istack.item);
@@ -186,13 +186,13 @@ void CampaignManager::rewardItem(ItemStack istack) {
 	menu->inv->add(istack, MenuInventory::CARRIED, ItemStorage::NO_SLOT, MenuInventory::ADD_PLAY_SOUND, MenuInventory::ADD_AUTO_EQUIP);
 
 	if (istack.item == eset->misc.currency_id) {
-		pc->logMsg(msg->get("You receive %d %s.", istack.quantity, eset->loot.currency), Avatar::MSG_UNIQUE);
+		pc->logMsg(msg->getv("You receive %d %s.", istack.quantity, eset->loot.currency.c_str()), Avatar::MSG_UNIQUE);
 	}
 	else {
 		if (istack.quantity > 1)
-			pc->logMsg(msg->get("You receive %s x%d.", items->getItemName(istack.item), istack.quantity), Avatar::MSG_UNIQUE);
+			pc->logMsg(msg->getv("You receive %s x%d.", items->getItemName(istack.item).c_str(), istack.quantity), Avatar::MSG_UNIQUE);
 		else if (istack.quantity == 1)
-			pc->logMsg(msg->get("You receive %s.", items->getItemName(istack.item)), Avatar::MSG_UNIQUE);
+			pc->logMsg(msg->getv("You receive %s.", items->getItemName(istack.item).c_str()), Avatar::MSG_UNIQUE);
 	}
 }
 
@@ -214,7 +214,7 @@ void CampaignManager::rewardXP(float amount, bool show_message) {
 	pc->stats.refresh_stats = true;
 
 	if (show_message)
-		pc->logMsg(msg->get("You receive %d XP.", static_cast<int>(amount)), Avatar::MSG_UNIQUE);
+		pc->logMsg(msg->getv("You receive %d XP.", static_cast<int>(amount)), Avatar::MSG_UNIQUE);
 }
 
 void CampaignManager::restoreHPMP(const std::string& s) {

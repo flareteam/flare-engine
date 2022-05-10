@@ -1,22 +1,23 @@
 # Copyright (C) 2011 Clint Bellanger
 # This file is distributed under the same license as the FLARE package.
-# 
+#
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # Translators:
 # Rui <xymarior@yandex.com>, 2018
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-29 09:34+\n"
+"POT-Creation-Date: 2022-05-10 12:26+\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
 "Last-Translator: Rui <xymarior@yandex.com>, 2018\n"
-"Language-Team: Portuguese (https://www.transifex.com/flareorg/teams/84925/pt/)\n"
+"Language-Team: Portuguese (https://www.transifex.com/flareorg/teams/84925/"
+"pt/)\n"
+"Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: pt\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../engine/primary_stats.txt:3
@@ -41,8 +42,7 @@ msgstr "Dano corpo-a-corpo"
 
 #: ../engine/damage_types.txt:4
 msgid "Increases the damage done with swords and other melee weapons."
-msgstr ""
-"Aumenta o dano feito com espadas e outras armas de luta corpo-a-corpo."
+msgstr "Aumenta o dano feito com espadas e outras armas de luta corpo-a-corpo."
 
 #: ../engine/damage_types.txt:5
 msgid "Melee Damage Min"
@@ -96,30 +96,30 @@ msgstr "Programadores Principais"
 msgid "Programmers"
 msgstr "Programadores"
 
-#: ../cutscenes/credits.txt:44
+#: ../cutscenes/credits.txt:50
 msgid "Default Art"
 msgstr "Arte Padrão"
 
-#: ../cutscenes/credits.txt:49
+#: ../cutscenes/credits.txt:55
 msgid "Translators"
 msgstr "Tradutores"
 
-#: ../cutscenes/credits.txt:108
+#: ../cutscenes/credits.txt:124
 msgid "Distributors"
 msgstr "Distribuidores"
 
-#: ../cutscenes/credits.txt:117
+#: ../cutscenes/credits.txt:133
 msgid "Special Thanks"
 msgstr "Agradecimento Especial"
 
-#: ../cutscenes/credits.txt:121
+#: ../cutscenes/credits.txt:137
 msgid "For giving constant feedback and testing:"
 msgstr "Por fornecer opiniões constantes e testes:"
 
-#: ../cutscenes/credits.txt:123
+#: ../cutscenes/credits.txt:139
 msgid "The community at OpenGameArt"
 msgstr "A comunidade do OpenGameArt"
 
-#: ../cutscenes/credits.txt:127
+#: ../cutscenes/credits.txt:143
 msgid "For Tiled and the Flare map exporter:"
 msgstr "Pelo Tiled e o exportador de mapas do Flare:"

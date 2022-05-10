@@ -272,7 +272,7 @@ void MenuStash::render() {
 	// text overlay
 	label_title.render();
 	if (!label_currency.isHidden()) {
-		label_currency.setText(msg->get("%d %s", tabs[activetab].stock.count(eset->misc.currency_id), eset->loot.currency));
+		label_currency.setText(msg->getv("%d %s", tabs[activetab].stock.count(eset->misc.currency_id), eset->loot.currency.c_str()));
 		label_currency.render();
 	}
 
@@ -410,7 +410,7 @@ void MenuStash::validate(std::queue<ItemStack>& global_drop_stack) {
 			ItemStack stack = tabs[tab].stock[i];
 			int no_stash = items->items[stack.item].no_stash;
 			if (no_stash == Item::NO_STASH_ALL || (tabs[tab].is_private && no_stash == Item::NO_STASH_PRIVATE) || (!tabs[tab].is_private && no_stash == Item::NO_STASH_SHARED)) {
-				pc->logMsg(msg->get("Can not store item in stash: %s", items->getItemName(stack.item).c_str()), Avatar::MSG_NORMAL);
+				pc->logMsg(msg->getv("Can not store item in stash: %s", items->getItemName(stack.item).c_str()), Avatar::MSG_NORMAL);
 				global_drop_stack.push(stack);
 				tabs[tab].stock[i].clear();
 				tabs[tab].updated = true;

@@ -163,7 +163,7 @@ void MenuEnemy::render() {
 
 	if (!text_pos.hidden) {
 		// enemy name display
-		label_text.setText(msg->get("%s level %d", enemy->stats.name, enemy->stats.level));
+		label_text.setText(msg->getv("%s level %d", enemy->stats.name.c_str(), enemy->stats.level));
 		label_text.setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
 		if (custom_text_pos) {

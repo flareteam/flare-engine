@@ -1043,24 +1043,24 @@ void StatBlock::logic() {
 
 	// apply healing over time
 	if (effects.hpot > 0) {
-		comb->addString(msg->get("+%d HP",effects.hpot), pos, CombatText::MSG_BUFF);
+		comb->addString(msg->getv("+%d HP",effects.hpot), pos, CombatText::MSG_BUFF);
 		hp += effects.hpot;
 		if (hp > get(Stats::HP_MAX)) hp = get(Stats::HP_MAX);
 	}
 	if (effects.hpot_percent > 0) {
 		int hpot = (get(Stats::HP_MAX)*effects.hpot_percent)/100;
-		comb->addString(msg->get("+%d HP",hpot), pos, CombatText::MSG_BUFF);
+		comb->addString(msg->getv("+%d HP",hpot), pos, CombatText::MSG_BUFF);
 		hp += hpot;
 		if (hp > get(Stats::HP_MAX)) hp = get(Stats::HP_MAX);
 	}
 	if (effects.mpot > 0) {
-		comb->addString(msg->get("+%d MP",effects.mpot), pos, CombatText::MSG_BUFF);
+		comb->addString(msg->getv("+%d MP",effects.mpot), pos, CombatText::MSG_BUFF);
 		mp += effects.mpot;
 		if (mp > get(Stats::MP_MAX)) mp = get(Stats::MP_MAX);
 	}
 	if (effects.mpot_percent > 0) {
 		int mpot = (get(Stats::MP_MAX)*effects.mpot_percent)/100;
-		comb->addString(msg->get("+%d MP",mpot), pos, CombatText::MSG_BUFF);
+		comb->addString(msg->getv("+%d MP",mpot), pos, CombatText::MSG_BUFF);
 		mp += mpot;
 		if (mp > get(Stats::MP_MAX)) mp = get(Stats::MP_MAX);
 	}

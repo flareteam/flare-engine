@@ -1,23 +1,26 @@
 # Copyright (C) 2011 Clint Bellanger
 # This file is distributed under the same license as the FLARE package.
-# 
+#
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # Translators:
 # Źmicier Turok <nashtlumach@gmail.com>, 2021
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-02 13:26+\n"
+"POT-Creation-Date: 2022-05-10 12:26+\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
 "Last-Translator: Źmicier Turok <nashtlumach@gmail.com>, 2021\n"
-"Language-Team: Belarusian (https://www.transifex.com/flareorg/teams/84925/be/)\n"
+"Language-Team: Belarusian (https://www.transifex.com/flareorg/teams/84925/"
+"be/)\n"
+"Language: be\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: be\n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
+"%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #: ../engine/primary_stats.txt:3
 msgid "Physical"
@@ -95,30 +98,30 @@ msgstr "Вядучыя праграмісты"
 msgid "Programmers"
 msgstr "Праграмісты"
 
-#: ../cutscenes/credits.txt:49
+#: ../cutscenes/credits.txt:50
 msgid "Default Art"
 msgstr "Графіка"
 
-#: ../cutscenes/credits.txt:54
+#: ../cutscenes/credits.txt:55
 msgid "Translators"
 msgstr "Перакладчыкі"
 
-#: ../cutscenes/credits.txt:119
+#: ../cutscenes/credits.txt:124
 msgid "Distributors"
 msgstr "Распаўсюджвальнікі"
 
-#: ../cutscenes/credits.txt:128
+#: ../cutscenes/credits.txt:133
 msgid "Special Thanks"
 msgstr "Шчырыя падзякі"
 
-#: ../cutscenes/credits.txt:132
+#: ../cutscenes/credits.txt:137
 msgid "For giving constant feedback and testing:"
 msgstr "За шматлікія водгукі і тэставанне:"
 
-#: ../cutscenes/credits.txt:134
+#: ../cutscenes/credits.txt:139
 msgid "The community at OpenGameArt"
 msgstr "Суполка OpenGameArt"
 
-#: ../cutscenes/credits.txt:138
+#: ../cutscenes/credits.txt:143
 msgid "For Tiled and the Flare map exporter:"
 msgstr "За кампанаванне і экспарт мапаў Flare:"

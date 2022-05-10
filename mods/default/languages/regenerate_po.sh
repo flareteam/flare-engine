@@ -13,7 +13,7 @@ done
 if [ -e engine.pot ] ; then
 	echo "Generating engine.pot"
 
-	xgettext --keyword=get -o engine.pot ../../../src/*.cpp
+	xgettext --keyword=get --keyword=getv -o engine.pot ../../../src/*.cpp
 
 	# xgettext doesn't allow defining a charset, but we want UTF-8 across the board
 	sed -i "s/charset=CHARSET/charset=UTF-8/" engine.pot

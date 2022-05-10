@@ -820,7 +820,7 @@ void GameStateLoad::render() {
 
 		// level
 		ss.str("");
-		ss << msg->get("Level %d", game_slots[off_slot]->stats.level);
+		ss << msg->getv("Level %d", game_slots[off_slot]->stats.level);
 		ss << " / " << Utils::getTimeString(game_slots[off_slot]->time_played);
 		if (game_slots[off_slot]->stats.permadeath)
 			ss << " / +";

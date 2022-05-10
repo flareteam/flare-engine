@@ -313,7 +313,7 @@ void MenuCharacter::refreshStats() {
 	}
 
 	if (skill_points >= 1) {
-		labelUnspent->setText(msg->get("Available stat points: %d", skill_points));
+		labelUnspent->setText(msg->getv("Available stat points: %d", skill_points));
 	}
 	else {
 		labelUnspent->setText("");
@@ -359,7 +359,7 @@ void MenuCharacter::refreshStats() {
 				continue;
 
 			ss.str("");
-			ss << msg->get("Resistance (%s)", eset->elements.list[i].name) << ": " << (pc->stats.getResist(i)) << "%";
+			ss << msg->getv("Resistance (%s)", eset->elements.list[i].name.c_str()) << ": " << (pc->stats.getResist(i)) << "%";
 			statList->set(stat_index, ss.str(), resistTooltip(i));
 			stat_index++;
 		}
@@ -371,15 +371,15 @@ void MenuCharacter::refreshStats() {
 	cstat[CSTAT_NAME].tip.addText(pc->stats.getLongClass());
 
 	cstat[CSTAT_LEVEL].tip.clear();
-	cstat[CSTAT_LEVEL].tip.addText(msg->get("XP: %d", pc->stats.xp));
+	cstat[CSTAT_LEVEL].tip.addText(msg->getv("XP: %lu", pc->stats.xp));
 	if (pc->stats.level < eset->xp.getMaxLevel()) {
-		cstat[CSTAT_LEVEL].tip.addText(msg->get("Next: %d", eset->xp.getLevelXP(pc->stats.level + 1)));
+		cstat[CSTAT_LEVEL].tip.addText(msg->getv("Next: %lu", eset->xp.getLevelXP(pc->stats.level + 1)));
 	}
 
 	for (size_t j = 2; j < cstat.size(); ++j) {
 		cstat[j].tip.clear();
 		cstat[j].tip.addText(cstat[j].label->getText());
-		cstat[j].tip.addText(msg->get("base (%d), bonus (%d)", *(base_stats[j-2]), *(base_stats_add[j-2])));
+		cstat[j].tip.addText(msg->getv("base (%d), bonus (%d)", *(base_stats[j-2]), *(base_stats_add[j-2])));
 		bool have_bonus = false;
 		for (int i = 0; i < Stats::COUNT; ++i) {
 			// damage types are displayed before absorb
@@ -422,7 +422,7 @@ void MenuCharacter::refreshStats() {
 					cstat[j].tip.addText("\n" + msg->get("Related stats:"));
 					have_bonus = true;
 				}
-				cstat[j].tip.addText(msg->get("Resistance (%s)", eset->elements.list[i].name));
+				cstat[j].tip.addText(msg->getv("Resistance (%s)", eset->elements.list[i].name.c_str()));
 			}
 		}
 	}
@@ -445,11 +445,11 @@ std::string MenuCharacter::statTooltip(int stat) {
 	std::string tooltip_text;
 
 	if (pc->stats.per_level[stat] > 0)
-		tooltip_text += msg->get("Each level grants %d.", pc->stats.per_level[stat]) + ' ';
+		tooltip_text += msg->getv("Each level grants %d.", pc->stats.per_level[stat]) + ' ';
 
 	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 		if (pc->stats.per_primary[i][stat] > 0)
-			tooltip_text += msg->get("Each point of %s grants %d.", eset->primary_stats.list[i].name, pc->stats.per_primary[i][stat]) + ' ';
+			tooltip_text += msg->getv("Each point of %s grants %d.", eset->primary_stats.list[i].name.c_str(), pc->stats.per_primary[i][stat]) + ' ';
 	}
 
 	std::string full_tooltip = "";
@@ -469,11 +469,11 @@ std::string MenuCharacter::damageTooltip(size_t dmg_type) {
 	std::string tooltip_text;
 
 	if (pc->stats.per_level[Stats::COUNT + dmg_type] > 0)
-		tooltip_text += msg->get("Each level grants %d.", pc->stats.per_level[Stats::COUNT + dmg_type]) + ' ';
+		tooltip_text += msg->getv("Each level grants %d.", pc->stats.per_level[Stats::COUNT + dmg_type]) + ' ';
 
 	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 		if (pc->stats.per_primary[i][Stats::COUNT + dmg_type] > 0)
-			tooltip_text += msg->get("Each point of %s grants %d.", eset->primary_stats.list[i].name, pc->stats.per_primary[i][Stats::COUNT + dmg_type]) + ' ';
+			tooltip_text += msg->getv("Each point of %s grants %d.", eset->primary_stats.list[i].name.c_str(), pc->stats.per_primary[i][Stats::COUNT + dmg_type]) + ' ';
 	}
 
 	size_t real_dmg_type = dmg_type / 2;
@@ -496,14 +496,14 @@ std::string MenuCharacter::resistTooltip(size_t resist_type) {
 	size_t resist_index = Stats::COUNT + eset->damage_types.count + resist_type;
 
 	if (pc->stats.per_level[resist_index] > 0)
-		tooltip_text += msg->get("Each level grants %d.", pc->stats.per_level[resist_index]) + ' ';
+		tooltip_text += msg->getv("Each level grants %d.", pc->stats.per_level[resist_index]) + ' ';
 
 	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 		if (pc->stats.per_primary[i][resist_index] > 0)
-			tooltip_text += msg->get("Each point of %s grants %d.", eset->primary_stats.list[i].name, pc->stats.per_primary[i][resist_index]) + ' ';
+			tooltip_text += msg->getv("Each point of %s grants %d.", eset->primary_stats.list[i].name.c_str(), pc->stats.per_primary[i][resist_index]) + ' ';
 	}
 
-	std::string full_tooltip = msg->get("Reduces the damage taken from \"%s\" elemental attacks.", eset->elements.list[resist_type].name);
+	std::string full_tooltip = msg->getv("Reduces the damage taken from \"%s\" elemental attacks.", eset->elements.list[resist_type].name.c_str());
 	if (tooltip_text != "") {
 		full_tooltip += "\n" + tooltip_text;
 	}

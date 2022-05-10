@@ -1,24 +1,24 @@
 # Copyright (C) 2011 Clint Bellanger
 # This file is distributed under the same license as the FLARE package.
-# 
+#
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # Translators:
 # Justin Jacobs <jajdorkster@gmail.com>, 2018
 # syl_, 2019
 # leø <leoboudet@orne-libre.fr>, 2020
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-20 16:39+\n"
+"POT-Creation-Date: 2022-05-10 12:26+\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
 "Last-Translator: leø <leoboudet@orne-libre.fr>, 2020\n"
 "Language-Team: French (https://www.transifex.com/flareorg/teams/84925/fr/)\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: ../engine/primary_stats.txt:3
@@ -59,8 +59,7 @@ msgstr "Dégâts à distance"
 
 #: ../engine/damage_types.txt:13
 msgid "Increases the damage done with bows and other ranged weapons."
-msgstr ""
-"Augmente les dégâts infligés avec des arcs et autres armes à distance."
+msgstr "Augmente les dégâts infligés avec des arcs et autres armes à distance."
 
 #: ../engine/damage_types.txt:14
 msgid "Ranged Damage Min"
@@ -98,30 +97,30 @@ msgstr "Programmeurs principaux"
 msgid "Programmers"
 msgstr "Programmeurs"
 
-#: ../cutscenes/credits.txt:48
+#: ../cutscenes/credits.txt:50
 msgid "Default Art"
 msgstr "Illustrateurs"
 
-#: ../cutscenes/credits.txt:53
+#: ../cutscenes/credits.txt:55
 msgid "Translators"
 msgstr "Traducteurs"
 
-#: ../cutscenes/credits.txt:112
+#: ../cutscenes/credits.txt:124
 msgid "Distributors"
 msgstr "Distributeurs"
 
-#: ../cutscenes/credits.txt:121
+#: ../cutscenes/credits.txt:133
 msgid "Special Thanks"
 msgstr "Remerciements spéciaux"
 
-#: ../cutscenes/credits.txt:125
+#: ../cutscenes/credits.txt:137
 msgid "For giving constant feedback and testing:"
 msgstr "Pour constamment donner leur avis et tester :"
 
-#: ../cutscenes/credits.txt:127
+#: ../cutscenes/credits.txt:139
 msgid "The community at OpenGameArt"
 msgstr "La communauté OpenGameArt"
 
-#: ../cutscenes/credits.txt:131
+#: ../cutscenes/credits.txt:143
 msgid "For Tiled and the Flare map exporter:"
 msgstr "Pour Tiled et l'exportateur de carte de Flare :"

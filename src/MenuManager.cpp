@@ -304,11 +304,11 @@ void MenuManager::logic() {
 	mp->update(0, pc->stats.mp, pc->stats.get(Stats::MP_MAX));
 
 	if (pc->stats.level == eset->xp.getMaxLevel()) {
-		xp->setCustomString(msg->get("XP: %d", pc->stats.xp));
+		xp->setCustomString(msg->getv("XP: %lu", pc->stats.xp));
 	}
 	else {
 		// displays xp relative to current pc level
-		xp->setCustomString(msg->get("XP: %d/%d", pc->stats.xp - eset->xp.getLevelXP(pc->stats.level), eset->xp.getLevelXP(pc->stats.level + 1) - eset->xp.getLevelXP(pc->stats.level)));
+		xp->setCustomString(msg->getv("XP: %lu/%lu", pc->stats.xp - eset->xp.getLevelXP(pc->stats.level), eset->xp.getLevelXP(pc->stats.level + 1) - eset->xp.getLevelXP(pc->stats.level)));
 	}
 	// xp relative to current level (from 0 to ammount need for next level)
 	xp->update(0, pc->stats.xp - eset->xp.getLevelXP(pc->stats.level), eset->xp.getLevelXP(pc->stats.level + 1) - eset->xp.getLevelXP(pc->stats.level));

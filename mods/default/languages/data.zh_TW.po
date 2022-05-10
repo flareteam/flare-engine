@@ -1,18 +1,19 @@
 # Copyright (C) 2011 Clint Bellanger
 # This file is distributed under the same license as the FLARE package.
-# 
+#
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-23 20:34+\n"
+"POT-Creation-Date: 2022-05-10 12:26+\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Language-Team: Chinese (Taiwan) (https://www.transifex.com/flareorg/teams/84925/zh_TW/)\n"
+"Language-Team: Chinese (Taiwan) (https://www.transifex.com/flareorg/"
+"teams/84925/zh_TW/)\n"
+"Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: zh_TW\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../engine/primary_stats.txt:3
@@ -91,30 +92,30 @@ msgstr ""
 msgid "Programmers"
 msgstr ""
 
-#: ../cutscenes/credits.txt:49
+#: ../cutscenes/credits.txt:50
 msgid "Default Art"
 msgstr ""
 
-#: ../cutscenes/credits.txt:54
+#: ../cutscenes/credits.txt:55
 msgid "Translators"
 msgstr ""
 
-#: ../cutscenes/credits.txt:118
+#: ../cutscenes/credits.txt:124
 msgid "Distributors"
 msgstr ""
 
-#: ../cutscenes/credits.txt:127
+#: ../cutscenes/credits.txt:133
 msgid "Special Thanks"
 msgstr ""
 
-#: ../cutscenes/credits.txt:131
+#: ../cutscenes/credits.txt:137
 msgid "For giving constant feedback and testing:"
 msgstr ""
 
-#: ../cutscenes/credits.txt:133
+#: ../cutscenes/credits.txt:139
 msgid "The community at OpenGameArt"
 msgstr ""
 
-#: ../cutscenes/credits.txt:137
+#: ../cutscenes/credits.txt:143
 msgid "For Tiled and the Flare map exporter:"
 msgstr ""

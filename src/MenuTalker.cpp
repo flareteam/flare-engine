@@ -465,7 +465,7 @@ void MenuTalker::createActionButtons(int node_id) {
 	for (size_t i = nodes.size(); i > 0; i--) {
 		std::string topic = npc->getDialogTopic(nodes[i-1]);
 		if (topic.empty()) {
-			topic = msg->get("<dialog node %d>", nodes[i-1]);
+			topic = msg->getv("<dialog node %d>", nodes[i-1]);
 		}
 
 		addAction(topic, nodes[i-1], !Action::IS_VENDOR);

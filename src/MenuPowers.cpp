@@ -889,7 +889,7 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 		std::stringstream ss;
 		ss << pwr.name;
 		if (pcell && pcell->upgrade_level > 0) {
-			ss << " (" << msg->get("Level %d", pcell->upgrade_level);
+			ss << " (" << msg->getv("Level %d", pcell->upgrade_level);
 			int bonus_levels = power_cell[pcell->group].getBonusLevels();
 			if (bonus_levels > 0)
 				ss << ", +" << bonus_levels;
@@ -908,11 +908,11 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 
 	// add mana cost
 	if (pwr.requires_mp > 0) {
-		tip_data->addText(msg->get("Costs %d MP", pwr.requires_mp));
+		tip_data->addText(msg->getv("Costs %d MP", pwr.requires_mp));
 	}
 	// add health cost
 	if (pwr.requires_hp > 0) {
-		tip_data->addText(msg->get("Costs %d HP", pwr.requires_hp));
+		tip_data->addText(msg->getv("Costs %d HP", pwr.requires_hp));
 	}
 	// add cooldown time
 	if (pwr.cooldown > 0) {
@@ -960,7 +960,7 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 		}
 		else if (Effect::typeIsResist(effect_type)) {
 			size_t index = Effect::getResistFromType(effect_type);
-			ss << "% " << msg->get("Resistance (%s)", eset->elements.list[index].name);
+			ss << "% " << msg->getv("Resistance (%s)", eset->elements.list[index].name.c_str());
 		}
 		else if (Effect::typeIsPrimary(effect_type)) {
 			size_t index = Effect::getPrimaryFromType(effect_type);
@@ -988,10 +988,10 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 			if (pwr.post_effects[i].magnitude == 0)
 				ss << msg->get("Immobilize");
 			else
-				ss << msg->get("%d%% Speed", pwr.post_effects[i].magnitude);
+				ss << msg->getv("%d%% Speed", pwr.post_effects[i].magnitude);
 		}
 		else if (effect_type == Effect::ATTACK_SPEED) {
-			ss << msg->get("%d%% Attack Speed", pwr.post_effects[i].magnitude);
+			ss << msg->getv("%d%% Attack Speed", pwr.post_effects[i].magnitude);
 		}
 		else if (effect_type == Effect::RESIST_ALL) {
 			ss << "+" << pwr.post_effects[i].magnitude << "% " << msg->get("Resistance to all negative effects");
@@ -1090,7 +1090,7 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 					ss << " ";
 			}
 			if (pwr.post_effects[i].chance != 100) {
-				ss << "(" << msg->get("%d%% chance", pwr.post_effects[i].chance) << ")";
+				ss << "(" << msg->getv("%d%% chance", pwr.post_effects[i].chance) << ")";
 			}
 
 			tip_data->addColoredText(ss.str(), font->getColor(FontEngine::COLOR_MENU_BONUS));
@@ -1180,12 +1180,12 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 		}
 		if (pwr.trait_crits_impaired > 0) {
 			ss.str("");
-			ss << msg->get("%d%% Chance to crit slowed targets", pwr.trait_crits_impaired);
+			ss << msg->getv("%d%% Chance to crit slowed targets", pwr.trait_crits_impaired);
 			tip_data->addColoredText(ss.str(), font->getColor(FontEngine::COLOR_MENU_BONUS));
 		}
 		if (pwr.trait_elemental > -1) {
 			ss.str("");
-			ss << msg->get("Elemental Damage (%s)", eset->elements.list[pwr.trait_elemental].name);
+			ss << msg->getv("Elemental Damage (%s)", eset->elements.list[pwr.trait_elemental].name.c_str());
 			tip_data->addColoredText(ss.str(), font->getColor(FontEngine::COLOR_MENU_BONUS));
 		}
 	}
@@ -1194,7 +1194,7 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 	for (it = pwr.requires_flags.begin(); it != pwr.requires_flags.end(); ++it) {
 		for (size_t i = 0; i < eset->equip_flags.list.size(); ++i) {
 			if ((*it) == eset->equip_flags.list[i].id) {
-				tip_data->addText(msg->get("Requires a %s", msg->get(eset->equip_flags.list[i].name)));
+				tip_data->addText(msg->getv("Requires a %s", msg->get(eset->equip_flags.list[i].name).c_str()));
 			}
 		}
 	}
@@ -1204,18 +1204,18 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 		for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 			if (pcell->requires_primary[i] > 0) {
 				if (pc->stats.get_primary(i) < pcell->requires_primary[i])
-					tip_data->addColoredText(msg->get("Requires %s %d", eset->primary_stats.list[i].name, pcell->requires_primary[i]), font->getColor(FontEngine::COLOR_MENU_PENALTY));
+					tip_data->addColoredText(msg->getv("Requires %s %d", eset->primary_stats.list[i].name.c_str(), pcell->requires_primary[i]), font->getColor(FontEngine::COLOR_MENU_PENALTY));
 				else
-					tip_data->addText(msg->get("Requires %s %d", eset->primary_stats.list[i].name, pcell->requires_primary[i]));
+					tip_data->addText(msg->getv("Requires %s %d", eset->primary_stats.list[i].name.c_str(), pcell->requires_primary[i]));
 			}
 		}
 
 		// Draw required Level Tooltip
 		if ((pcell->requires_level > 0) && pc->stats.level < pcell->requires_level) {
-			tip_data->addColoredText(msg->get("Requires Level %d", pcell->requires_level), font->getColor(FontEngine::COLOR_MENU_PENALTY));
+			tip_data->addColoredText(msg->getv("Requires Level %d", pcell->requires_level), font->getColor(FontEngine::COLOR_MENU_PENALTY));
 		}
 		else if ((pcell->requires_level > 0) && pc->stats.level >= pcell->requires_level) {
-			tip_data->addText(msg->get("Requires Level %d", pcell->requires_level));
+			tip_data->addText(msg->getv("Requires Level %d", pcell->requires_level));
 		}
 
 		for (size_t j=0; j < pcell->requires_power.size(); ++j) {
@@ -1225,17 +1225,17 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 
 			std::string req_power_name;
 			if (req_cell->upgrade_level > 0)
-				req_power_name = powers->powers[req_cell->id].name + " (" + msg->get("Level %d", req_cell->upgrade_level) + ")";
+				req_power_name = powers->powers[req_cell->id].name + " (" + msg->getv("Level %d", req_cell->upgrade_level) + ")";
 			else
 				req_power_name = powers->powers[req_cell->id].name;
 
 
 			// Required Power Tooltip
 			if (!checkUnlocked(req_cell)) {
-				tip_data->addColoredText(msg->get("Requires Power: %s", req_power_name), font->getColor(FontEngine::COLOR_MENU_PENALTY));
+				tip_data->addColoredText(msg->getv("Requires Power: %s", req_power_name.c_str()), font->getColor(FontEngine::COLOR_MENU_PENALTY));
 			}
 			else {
-				tip_data->addText(msg->get("Requires Power: %s", req_power_name));
+				tip_data->addText(msg->getv("Requires Power: %s", req_power_name.c_str()));
 			}
 
 		}
@@ -1294,11 +1294,11 @@ void MenuPowers::createTooltipInputHint(TooltipData* tip_data, bool enable_activ
 	}
 
 	if (show_activate_msg) {
-		tip_data->addColoredText(msg->get("Press [%s] to use", activate_bind_str), font->getColor(FontEngine::COLOR_ITEM_BONUS));
+		tip_data->addColoredText(msg->getv("Press [%s] to use", activate_bind_str.c_str()), font->getColor(FontEngine::COLOR_ITEM_BONUS));
 	}
 
 	if (show_more_msg) {
-		tip_data->addColoredText(msg->get("Press [%s] for more options", more_bind_str), font->getColor(FontEngine::COLOR_ITEM_BONUS));
+		tip_data->addColoredText(msg->getv("Press [%s] for more options", more_bind_str.c_str()), font->getColor(FontEngine::COLOR_ITEM_BONUS));
 	}
 }
 
@@ -1496,7 +1496,7 @@ void MenuPowers::render() {
 	// stats
 	if (!label_unspent->isHidden()) {
 		if (points_left >= 1) {
-			label_unspent->setText(msg->get("Available skill points: %d", points_left));
+			label_unspent->setText(msg->getv("Available skill points: %d", points_left));
 		}
 		else {
 			label_unspent->setText("");
@@ -1704,7 +1704,7 @@ std::string MenuPowers::getItemBonusPowerReqString(PowerID power_index) {
 
 	std::string output = powers->powers[power_index].name;
 	if (pcell->upgrade_level > 0) {
-		output += " (" + msg->get("Level %d", pcell->upgrade_level) + ")";
+		output += " (" + msg->getv("Level %d", pcell->upgrade_level) + ")";
 	}
 
 	return output;

@@ -1223,7 +1223,7 @@ bool PowerManager::effect(StatBlock *target_stats, StatBlock *caster_stats, Powe
 				else
 					magnitude = caster_stats->getDamageMax(pwr.base_damage);
 
-				comb->addString(msg->get("+%d Shield",magnitude), dest_stats->pos, CombatText::MSG_BUFF);
+				comb->addString(msg->getv("+%d Shield",magnitude), dest_stats->pos, CombatText::MSG_BUFF);
 			}
 			else if (effect_data.type == Effect::HEAL) {
 				if (pwr.base_damage == eset->damage_types.list.size())
@@ -1239,7 +1239,7 @@ bool PowerManager::effect(StatBlock *target_stats, StatBlock *caster_stats, Powe
 				else if(pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_ABSOLUTE)
 					magnitude = Math::randBetween(pwr.mod_damage_value_min, pwr.mod_damage_value_max);
 
-				comb->addString(msg->get("+%d HP",magnitude), dest_stats->pos, CombatText::MSG_BUFF);
+				comb->addString(msg->getv("+%d HP",magnitude), dest_stats->pos, CombatText::MSG_BUFF);
 				dest_stats->hp += magnitude;
 				if (dest_stats->hp > dest_stats->get(Stats::HP_MAX)) dest_stats->hp = dest_stats->get(Stats::HP_MAX);
 			}

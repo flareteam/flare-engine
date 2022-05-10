@@ -640,10 +640,10 @@ std::string Utils::getDurationString(const int duration, size_t precision) {
 	std::string temp = floatToString(real_duration, precision);
 
 	if (real_duration == 1.f) {
-		return msg->get("%s second", temp);
+		return msg->getv("%s second", temp.c_str());
 	}
 	else {
-		return msg->get("%s seconds", temp);
+		return msg->getv("%s seconds", temp.c_str());
 	}
 }
 

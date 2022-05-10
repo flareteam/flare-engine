@@ -121,7 +121,7 @@ void MenuActiveEffects::logic() {
 					effect_icons[most_recent_id].stacksLabel->setMaxWidth(eset->resolutions.icon_size);
 				}
 
-				effect_icons[most_recent_id].stacksLabel->setText(msg->get("x%d", effect_icons[most_recent_id].stacks));
+				effect_icons[most_recent_id].stacksLabel->setText(msg->getv("x%d", effect_icons[most_recent_id].stacks));
 
 				continue;
 			}
@@ -222,7 +222,7 @@ void MenuActiveEffects::renderTooltips(const Point& position) {
 
 			if(effect_icons[i].type != Effect::SHIELD){
 				if(effect_icons[i].stacks > 1){
-					tip_data.addText(msg->get("x%d stacks", effect_icons[i].stacks));
+					tip_data.addText(msg->getv("x%d stacks", effect_icons[i].stacks));
 				}
 			}
 

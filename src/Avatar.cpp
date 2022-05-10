@@ -383,7 +383,7 @@ void Avatar::logic() {
 	if (stats.level < eset->xp.getMaxLevel() && stats.xp >= eset->xp.getLevelXP(stats.level + 1)) {
 		stats.level_up = true;
 		stats.level = eset->xp.getLevelFromXP(stats.xp);
-		logMsg(msg->get("Congratulations, you have reached level %d!", stats.level), MSG_NORMAL);
+		logMsg(msg->getv("Congratulations, you have reached level %d!", stats.level), MSG_NORMAL);
 		if (pc->stats.stat_points_per_level > 0) {
 			logMsg(msg->get("You may increase one or more attributes through the Character Menu."), MSG_NORMAL);
 			newLevelNotification = true;

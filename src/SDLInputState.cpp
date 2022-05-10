@@ -95,7 +95,7 @@ void SDLInputState::setBind(int action, int type, int bind, std::string *keybind
 		// prevent binding reserved keys
 		for (size_t i = 0; i < restricted_bindings.size(); ++i) {
 			if (type == restricted_bindings[i].type && bind == restricted_bindings[i].bind) {
-				*keybind_msg = msg->get("Can not bind: %s", getInputBindName(type, bind));
+				*keybind_msg = msg->getv("Can not bind: %s", getInputBindName(type, bind).c_str());
 				return;
 			}
 		}
@@ -104,7 +104,7 @@ void SDLInputState::setBind(int action, int type, int bind, std::string *keybind
 		for (int i = 0; i < KEY_COUNT_USER; ++i) {
 			for (size_t j = binding[i].size(); j > 0; --j) {
 				if (type == binding[i][j-1].type && bind == binding[i][j-1].bind) {
-					*keybind_msg = msg->get("'%s' is no longer bound to:", getInputBindName(type, bind)) + " '" + binding_name[i] + "'";
+					*keybind_msg = msg->getv("'%s' is no longer bound to:", getInputBindName(type, bind).c_str()) + " '" + binding_name[i] + "'";
 					removeBind(i, j-1);
 				}
 			}
@@ -700,13 +700,13 @@ std::string SDLInputState::getKeyName(int key, bool get_short_string) {
 
 std::string SDLInputState::getMouseButtonName(int button, bool get_short_string) {
 	if (get_short_string) {
-		return msg->get("M%d", button);
+		return msg->getv("M%d", button);
 	}
 	else {
 		if (button > 0 && button <= MOUSE_BUTTON_NAME_COUNT)
 			return mouse_button[button - 1];
 		else
-			return msg->get("Mouse %d", button);
+			return msg->getv("Mouse %d", button);
 	}
 }
 

@@ -238,23 +238,23 @@ void MenuActionBar::align() {
 	// set keybinding labels
 	for (unsigned i = 0; i < static_cast<unsigned>(SLOT_MAIN1); i++) {
 		if (i < slots.size() && slots[i]) {
-			labels[i] = msg->get("Hotkey: %s", inpt->getBindingString(i + Input::BAR_1));
+			labels[i] = msg->getv("Hotkey: %s", inpt->getBindingString(i + Input::BAR_1).c_str());
 		}
 	}
 
 	for (unsigned i = SLOT_MAIN1; i < static_cast<unsigned>(SLOT_MAX); i++) {
 		if (i < slots.size() && slots[i]) {
 			if (settings->mouse_move && ((i == SLOT_MAIN2 && settings->mouse_move_swap) || (i == SLOT_MAIN1 && !settings->mouse_move_swap))) {
-				labels[i] = msg->get("Hotkey: %s", inpt->getBindingString(Input::SHIFT) + " + " + inpt->getBindingString(i - SLOT_MAIN1 + Input::MAIN1));
+				labels[i] = msg->getv("Hotkey: %s", std::string(inpt->getBindingString(Input::SHIFT) + " + " + inpt->getBindingString(i - SLOT_MAIN1 + Input::MAIN1)).c_str());
 			}
 			else {
-				labels[i] = msg->get("Hotkey: %s", inpt->getBindingString(i - SLOT_MAIN1 + Input::MAIN1));
+				labels[i] = msg->getv("Hotkey: %s", inpt->getBindingString(i - SLOT_MAIN1 + Input::MAIN1).c_str());
 			}
 		}
 	}
 	for (unsigned i=0; i<menu_labels.size(); i++) {
 		menus[i]->setPos(window_area.x, window_area.y);
-		menu_labels[i] = msg->get("Hotkey: %s", inpt->getBindingString(i + Input::CHARACTER));
+		menu_labels[i] = msg->getv("Hotkey: %s", inpt->getBindingString(i + Input::CHARACTER).c_str());
 	}
 }
 

@@ -645,11 +645,11 @@ void ItemManager::parseBonus(BonusData& bdata, FileParser& infile) {
 
 void ItemManager::getBonusString(std::stringstream& ss, BonusData* bdata) {
 	if (bdata->is_speed) {
-		ss << msg->get("%d%% Speed", bdata->value);
+		ss << msg->getv("%d%% Speed", bdata->value);
 		return;
 	}
 	else if (bdata->is_attack_speed) {
-		ss << msg->get("%d%% Attack Speed", bdata->value);
+		ss << msg->getv("%d%% Attack Speed", bdata->value);
 		return;
 	}
 
@@ -671,7 +671,7 @@ void ItemManager::getBonusString(std::stringstream& ss, BonusData* bdata) {
 		ss << " " << eset->damage_types.list[bdata->damage_index_max].name_max;
 	}
 	else if (bdata->resist_index != -1) {
-		ss << "% " << msg->get("Resistance (%s)", eset->elements.list[bdata->resist_index].name);
+		ss << "% " << msg->getv("Resistance (%s)", eset->elements.list[bdata->resist_index].name.c_str());
 	}
 	else if (bdata->base_index > -1 && static_cast<size_t>(bdata->base_index) < eset->primary_stats.list.size()) {
 		ss << " " << eset->primary_stats.list[bdata->base_index].name;
@@ -681,7 +681,7 @@ void ItemManager::getBonusString(std::stringstream& ss, BonusData* bdata) {
 		if (menu && menu->pow) {
 			std::string req_str = menu->pow->getItemBonusPowerReqString(bdata->power_id);
 			if (!req_str.empty())
-				ss << " (" << msg->get("Requires %s", req_str) << ")";
+				ss << " (" << msg->getv("Requires %s", req_str.c_str()) << ")";
 		}
 	}
 }
@@ -747,7 +747,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 
 	// level
 	if (items[stack.item].level != 0) {
-		tip.addText(msg->get("Level %d", items[stack.item].level));
+		tip.addText(msg->getv("Level %d", items[stack.item].level));
 	}
 
 	// type
@@ -760,7 +760,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 		color = font->getColor(FontEngine::COLOR_WIDGET_NORMAL);
 		for (size_t i=0; i<item_qualities.size(); ++i) {
 			if (item_qualities[i].id == items[stack.item].quality) {
-				tip.addColoredText(msg->get("Quality: %s", msg->get(item_qualities[i].name)), color);
+				tip.addColoredText(msg->getv("Quality: %s", msg->get(item_qualities[i].name).c_str()), color);
 				break;
 			}
 		}
@@ -785,9 +785,9 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	// absorb
 	if (items[stack.item].abs_max > 0) {
 		if (items[stack.item].abs_min < items[stack.item].abs_max)
-			tip.addText(msg->get("Absorb: %d-%d", items[stack.item].abs_min, items[stack.item].abs_max));
+			tip.addText(msg->getv("Absorb: %d-%d", items[stack.item].abs_min, items[stack.item].abs_max));
 		else
-			tip.addText(msg->get("Absorb: %d", items[stack.item].abs_max));
+			tip.addText(msg->getv("Absorb: %d", items[stack.item].abs_max));
 	}
 
 	// bonuses
@@ -827,7 +827,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 		else
 			color = font->getColor(FontEngine::COLOR_WIDGET_NORMAL);
 
-		tip.addColoredText(msg->get("Requires Level %d", items[stack.item].requires_level), color);
+		tip.addColoredText(msg->getv("Requires Level %d", items[stack.item].requires_level), color);
 	}
 
 	// base stat requirement
@@ -838,7 +838,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 			else
 				color = font->getColor(FontEngine::COLOR_WIDGET_NORMAL);
 
-			tip.addColoredText(msg->get("Requires %s %d", eset->primary_stats.list[items[stack.item].req_stat[i]].name, items[stack.item].req_val[i]), color);
+			tip.addColoredText(msg->getv("Requires %s %d", eset->primary_stats.list[items[stack.item].req_stat[i]].name.c_str(), items[stack.item].req_val[i]), color);
 		}
 	}
 
@@ -849,7 +849,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 		else
 			color = font->getColor(FontEngine::COLOR_WIDGET_NORMAL);
 
-		tip.addColoredText(msg->get("Requires Class: %s", msg->get(items[stack.item].requires_class)), color);
+		tip.addColoredText(msg->getv("Requires Class: %s", msg->get(items[stack.item].requires_class).c_str()), color);
 	}
 
 	// buy or sell price
@@ -865,9 +865,9 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 				color = currency_color;
 
 			if (items[stack.item].max_quantity <= 1)
-				tip.addColoredText(msg->get("Buy Price: %d %s", price_per_unit, eset->loot.currency), color);
+				tip.addColoredText(msg->getv("Buy Price: %d %s", price_per_unit, eset->loot.currency.c_str()), color);
 			else
-				tip.addColoredText(msg->get("Buy Price: %d %s each", price_per_unit, eset->loot.currency), color);
+				tip.addColoredText(msg->getv("Buy Price: %d %s each", price_per_unit, eset->loot.currency.c_str()), color);
 		}
 		else if (context == VENDOR_SELL) {
 			price_per_unit = items[stack.item].getSellPrice(stack.can_buyback);
@@ -877,9 +877,9 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 				color = currency_color;
 
 			if (items[stack.item].max_quantity <= 1)
-				tip.addColoredText(msg->get("Buy Price: %d %s", price_per_unit, eset->loot.currency), color);
+				tip.addColoredText(msg->getv("Buy Price: %d %s", price_per_unit, eset->loot.currency.c_str()), color);
 			else
-				tip.addColoredText(msg->get("Buy Price: %d %s each", price_per_unit, eset->loot.currency), color);
+				tip.addColoredText(msg->getv("Buy Price: %d %s each", price_per_unit, eset->loot.currency.c_str()), color);
 		}
 		else if (context == PLAYER_INV) {
 			price_per_unit = items[stack.item].getSellPrice(DEFAULT_SELL_PRICE);
@@ -887,9 +887,9 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 				price_per_unit = 1;
 
 			if (items[stack.item].max_quantity <= 1)
-				tip.addColoredText(msg->get("Sell Price: %d %s", price_per_unit, eset->loot.currency), currency_color);
+				tip.addColoredText(msg->getv("Sell Price: %d %s", price_per_unit, eset->loot.currency.c_str()), currency_color);
 			else
-				tip.addColoredText(msg->get("Sell Price: %d %s each", price_per_unit, eset->loot.currency), currency_color);
+				tip.addColoredText(msg->getv("Sell Price: %d %s each", price_per_unit, eset->loot.currency.c_str()), currency_color);
 		}
 	}
 
@@ -907,7 +907,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 
 			SetBonusData* bdata = &set.bonus[bonus_counter];
 
-			ss << msg->get("%d items:", bdata->requirement) << ' ';
+			ss << msg->getv("%d items:", bdata->requirement) << ' ';
 
 			getBonusString(ss, bdata);
 			if (bdata->requirement <= set_count)
@@ -964,14 +964,14 @@ void ItemManager::getTooltipInputHint(TooltipData& tip, ItemStack stack, int con
 	// input hint for consumables/books
 	if (show_activate_msg) {
 		if (!items[stack.item].book.empty() && items[stack.item].book_is_readable) {
-			tip.addColoredText(msg->get("Press [%s] to read", activate_bind_str), font->getColor(FontEngine::COLOR_ITEM_BONUS));
+			tip.addColoredText(msg->getv("Press [%s] to read", activate_bind_str.c_str()), font->getColor(FontEngine::COLOR_ITEM_BONUS));
 		}
 		else if (menu->inv->canActivateItem(stack.item)) {
-			tip.addColoredText(msg->get("Press [%s] to use", activate_bind_str), font->getColor(FontEngine::COLOR_ITEM_BONUS));
+			tip.addColoredText(msg->getv("Press [%s] to use", activate_bind_str.c_str()), font->getColor(FontEngine::COLOR_ITEM_BONUS));
 		}
 	}
 	if (show_more_msg) {
-		tip.addColoredText(msg->get("Press [%s] for more options", more_bind_str), font->getColor(FontEngine::COLOR_ITEM_BONUS));
+		tip.addColoredText(msg->getv("Press [%s] for more options", more_bind_str.c_str()), font->getColor(FontEngine::COLOR_ITEM_BONUS));
 	}
 }
 
