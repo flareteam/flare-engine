@@ -277,8 +277,6 @@ int SDLSoftwareRenderDevice::createContextInternal() {
 					SDL_SetHintWithPriority(SDL_HINT_RENDER_SCALE_QUALITY, "1", SDL_HINT_OVERRIDE);
 				else
 					SDL_SetHintWithPriority(SDL_HINT_RENDER_SCALE_QUALITY, "0", SDL_HINT_OVERRIDE);
-
-				windowResize();
 			}
 
 			SDL_SetWindowMinimumSize(window, eset->resolutions.min_screen_w, eset->resolutions.min_screen_h);
@@ -286,7 +284,7 @@ int SDLSoftwareRenderDevice::createContextInternal() {
 			SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 		}
 
-		if (window && renderer && screen && texture) {
+		if (window && renderer) {
 			if (!is_initialized) {
 				// save the system gamma levels if we just created the window
 				SDL_GetWindowGammaRamp(window, gamma_r, gamma_g, gamma_b);
@@ -325,7 +323,10 @@ int SDLSoftwareRenderDevice::createContextInternal() {
 		}
 
 		windowResize();
+		is_initialized = (screen != NULL && texture != NULL);
+	}
 
+	if (is_initialized) {
 		// update title bar text and icon
 		updateTitleBar();
 
