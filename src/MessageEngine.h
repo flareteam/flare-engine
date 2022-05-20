@@ -40,7 +40,7 @@ private:
 public:
 	MessageEngine();
 	std::string get(const std::string& key);
-	std::string getv(const std::string& key, ...);
+	std::string getv(const std::string key, ...);
 };
 
 #endif

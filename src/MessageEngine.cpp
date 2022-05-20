@@ -81,7 +81,8 @@ std::string MessageEngine::get(const std::string& key) {
 	return unescape(message);
 }
 
-std::string MessageEngine::getv(const std::string& key, ...) {
+// NOTE: key is not passed by reference because doing so would result in undefined behavior when using va_start()
+std::string MessageEngine::getv(const std::string key, ...) {
 	std::string message = messages[key];
 	if (message == "") message = key;
 
