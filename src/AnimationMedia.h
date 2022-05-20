@@ -29,8 +29,8 @@ private:
 public:
     AnimationMedia();
     ~AnimationMedia();
-    void loadImage(std::string path, std::string key);
-    Image* getImageFromKey(std::string key);
+    void loadImage(const std::string& path, const std::string& key);
+    Image* getImageFromKey(const std::string& key);
     void unref();
 };
 

@@ -27,7 +27,7 @@ AnimationMedia::AnimationMedia()
 AnimationMedia::~AnimationMedia() {
 }
 
-void AnimationMedia::loadImage(std::string path, std::string key) {
+void AnimationMedia::loadImage(const std::string& path, const std::string& key) {
     Image* loaded_img = render_device->loadImage(path, RenderDevice::ERROR_NORMAL);
 	if (!loaded_img)
 		return;
@@ -45,7 +45,7 @@ void AnimationMedia::loadImage(std::string path, std::string key) {
 	}
 }
 
-Image* AnimationMedia::getImageFromKey(std::string key) {
+Image* AnimationMedia::getImageFromKey(const std::string& key) {
 	std::map<std::string, Image*>::iterator it = sprites.find(key);
 	if (it != sprites.end()) {
 		return it->second;

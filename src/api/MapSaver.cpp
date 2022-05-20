@@ -78,7 +78,7 @@ MapSaver::~MapSaver()
  * loaded by game, so when saving map from game tileset_definitions
  * should be empty string
  */
-bool MapSaver::saveMap(std::string tileset_definitions)
+bool MapSaver::saveMap(const std::string& tileset_definitions)
 {
 	std::ofstream outfile;
 
@@ -112,7 +112,7 @@ bool MapSaver::saveMap(std::string tileset_definitions)
 	return false;
 }
 
-bool MapSaver::saveMap(std::string file, std::string tileset_definitions)
+bool MapSaver::saveMap(const std::string& file, const std::string& tileset_definitions)
 {
 	dest_file = file;
 
@@ -136,7 +136,7 @@ void MapSaver::writeHeader(std::ofstream& map_file)
 	map_file << std::endl;
 }
 
-void MapSaver::writeTilesets(std::ofstream& map_file, std::string tileset_definitions)
+void MapSaver::writeTilesets(std::ofstream& map_file, const std::string& tileset_definitions)
 {
 	map_file << "[tilesets]" << std::endl;
 
@@ -623,6 +623,7 @@ void MapSaver::writeEventComponents(std::ofstream &map_file, int eventID)
 				map_file << "powers";
 
 			map_file << "," << e.y << endl;
+		}
 	}
 }
 

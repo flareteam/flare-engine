@@ -31,12 +31,12 @@ public:
 	MapSaver(Map* _map);
 	~MapSaver();
 
-	bool saveMap(std::string tileset_definitions);
-	bool saveMap(std::string file, std::string tileset_definitions);
+	bool saveMap(const std::string& tileset_definitions);
+	bool saveMap(const std::string& file, const std::string& tileset_definitions);
 
 private:
 	void writeHeader(std::ofstream& map_file);
-	void writeTilesets(std::ofstream& map_file, std::string tileset_definitions);
+	void writeTilesets(std::ofstream& map_file, const std::string& tileset_definitions);
 	void writeLayers(std::ofstream& map_file);
 	void writeEnemies(std::ofstream& map_file);
 	void writeNPCs(std::ofstream& map_file);

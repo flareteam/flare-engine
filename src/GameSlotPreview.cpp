@@ -140,12 +140,13 @@ void GameSlotPreview::logic() {
 	}
 }
 
-void GameSlotPreview::setAnimation(std::string name) {
-	if (name == activeAnimation->getName())
-		return;
+void GameSlotPreview::setAnimation(const std::string& name) {
+	if (activeAnimation) {
+		if (name == activeAnimation->getName())
+			return;
 
-	if (activeAnimation)
 		delete activeAnimation;
+	}
 
 	activeAnimation = animationSet->getAnimation(name);
 
