@@ -15,6 +15,11 @@ Engine fixes:
 * Fixed dev console commands not working if they were preceded by whitespace.
 * Fixed spawning entities not counting towards summoned entity count.
 
+Game updates:
+
+* Fireball and Ice Bolt scrolls now give the player a 10 second period in which their basic attacks (Swing, Shoot, Channel) are replaced with the scroll power.
+* Fixed the naming of scroll damage as it appears in power description tooltips.
+
 Translation updates:
 
 * German (de) update (Wuzzy2)
