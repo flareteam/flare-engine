@@ -1362,6 +1362,7 @@ void MenuPowers::renderPowers(int tab_num) {
 void MenuPowers::logic() {
 	if (!visible && tab_control && default_power_tab > -1) {
 		tab_control->setActiveTab(static_cast<unsigned>(default_power_tab));
+		tablist.setNextTabList(&tablist_pow[default_power_tab]);
 	}
 
 	setUnlockedPowers();
