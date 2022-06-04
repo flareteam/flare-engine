@@ -202,7 +202,7 @@ void MenuPowers::align() {
 	closeButton->pos.y = window_area.y+close_pos.y;
 
 	if (tab_control) {
-		tab_control->setMainArea(window_area.x + tab_area.x, window_area.y + tab_area.y);
+		tab_control->setMainArea(window_area.x + tab_area.x, window_area.y + tab_area.y, tab_area.w);
 	}
 
 	for (size_t i = 0; i < slots.size(); i++) {
@@ -338,7 +338,7 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 			}
 
 			// Initialize the tab control.
-			tab_control->setMainArea(window_area.x + tab_area.x, window_area.y + tab_area.y);
+			tab_control->setMainArea(window_area.x + tab_area.x, window_area.y + tab_area.y, tab_area.w);
 		}
 	}
 

@@ -131,7 +131,7 @@ void MenuVendor::align() {
 	tabs_area.x += window_area.x;
 	tabs_area.y += window_area.y;
 
-	tabControl->setMainArea(tabs_area.x, tabs_area.y - tabControl->getTabHeight());
+	tabControl->setMainArea(tabs_area.x, tabs_area.y - tabControl->getTabHeight(), tabs_area.w);
 
 	closeButton->setPos(window_area.x, window_area.y);
 

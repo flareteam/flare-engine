@@ -1431,7 +1431,7 @@ void MenuConfig::placeLabeledWidgetAuto(int tab, int cfg_index) {
 }
 
 void MenuConfig::refreshWidgets() {
-	tab_control->setMainArea(((settings->view_w - eset->resolutions.frame_w)/2) + tab_offset.x, ((settings->view_h - eset->resolutions.frame_h)/2) + tab_offset.y);
+	tab_control->setMainArea(((settings->view_w - eset->resolutions.frame_w)/2) + tab_offset.x, ((settings->view_h - eset->resolutions.frame_h)/2) + tab_offset.y, eset->resolutions.frame_w);
 
 	frame.x = ((settings->view_w - eset->resolutions.frame_w)/2) + frame_offset.x;
 	frame.y = ((settings->view_h - eset->resolutions.frame_h)/2) + tab_control->getTabHeight() + frame_offset.y;

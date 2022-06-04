@@ -207,7 +207,7 @@ void MenuStash::align() {
 	tabs_area.x += window_area.x;
 	tabs_area.y += window_area.y;
 
-	tab_control->setMainArea(tabs_area.x, tabs_area.y - tab_control->getTabHeight());
+	tab_control->setMainArea(tabs_area.x, tabs_area.y - tab_control->getTabHeight(), tabs_area.w);
 
 	closeButton->setPos(window_area.x, window_area.y);
 
