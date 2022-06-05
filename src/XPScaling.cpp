@@ -68,7 +68,7 @@ XPScalingTableID XPScaling::load(const std::string& filename) {
 				// @ATTR absolute.level|int, float : Level, Multiplier|The multiplier that will be applied to the rewarded XP when an enemy is at a specific level. If the enemy's level is outside the defined scaling levels, the min or max level is used (whichever is closer).
 				if (infile.key == "level") {
 					int level = Parse::popFirstInt(infile.val);
-					float multiplier = Parse::toFloat(Parse::popFirstString(infile.val));
+					float multiplier = Parse::popFirstFloat(infile.val);
 
 					if (table.absolute.empty()) {
 						table.absolute_level_min = table.absolute_level_max = level;
@@ -93,7 +93,7 @@ XPScalingTableID XPScaling::load(const std::string& filename) {
 				// @ATTR relative.level|int, float : Level, Multiplier|The multiplier that will be applied to the rewarded XP when an enemy's level is X levels apart from the player's level. If the enemy's level is outside the defined scaling levels, the min or max level is used (whichever is closer).
 				if (infile.key == "level") {
 					int level = Parse::popFirstInt(infile.val);
-					float multiplier = Parse::toFloat(Parse::popFirstString(infile.val));
+					float multiplier = Parse::popFirstFloat(infile.val);
 
 					if (table.relative.empty()) {
 						table.relative_level_min = table.relative_level_max = level;

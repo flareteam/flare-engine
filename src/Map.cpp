@@ -479,7 +479,7 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 			group->spawn_level.count = static_cast<float>(Parse::popFirstInt(infile.val));
 
 			if(group->spawn_level.mode != SpawnLevel::MODE_FIXED) {
-				group->spawn_level.ratio = Parse::toFloat(Parse::popFirstString(infile.val));
+				group->spawn_level.ratio = Parse::popFirstFloat(infile.val);
 
 				if(group->spawn_level.mode == SpawnLevel::MODE_STAT) {
 					std::string stat = Parse::popFirstString(infile.val);

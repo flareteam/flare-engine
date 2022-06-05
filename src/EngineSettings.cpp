@@ -183,8 +183,8 @@ void EngineSettings::Misc::load() {
 
 			// @ATTR mouse_move_deadzone|float, float : Deadzone while moving, Deadzone while not moving|Adds a deadzone circle around the player to prevent erratic behavior when using mouse movement. Ideally, the deadzone when moving should be less than the deadzone when not moving. Defaults are 0.25 and 0.75 respectively.
 			else if (infile.key == "mouse_move_deadzone") {
-				mouse_move_deadzone_moving = Parse::toFloat(Parse::popFirstString(infile.val));
-				mouse_move_deadzone_not_moving = Parse::toFloat(Parse::popFirstString(infile.val));
+				mouse_move_deadzone_moving = Parse::popFirstFloat(infile.val);
+				mouse_move_deadzone_not_moving = Parse::popFirstFloat(infile.val);
 			}
 
 			else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());

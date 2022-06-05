@@ -336,16 +336,6 @@ int Parse::toAlignment(const std::string &s, int default_value) {
 	return align;
 }
 
-/**
- * Given a string that starts with a decimal number then a comma
- * Return that int, and modify the string to remove the num and comma
- *
- * This is basically a really lazy "split" replacement
- */
-int Parse::popFirstInt(std::string &s, char separator) {
-	return Parse::toInt(popFirstString(s, separator));
-}
-
 std::string Parse::popFirstString(std::string &s, char separator) {
 	std::string outs = "";
 	size_t seppos;
@@ -371,6 +361,20 @@ std::string Parse::popFirstString(std::string &s, char separator) {
 		s = s.substr(seppos+1, s.length());
 	}
 	return outs;
+}
+
+/**
+ * Given a string that starts with a decimal number then a comma
+ * Return that int, and modify the string to remove the num and comma
+ *
+ * This is basically a really lazy "split" replacement
+ */
+int Parse::popFirstInt(std::string &s, char separator) {
+	return Parse::toInt(popFirstString(s, separator));
+}
+
+float Parse::popFirstFloat(std::string &s, char separator) {
+	return Parse::toFloat(popFirstString(s, separator));
 }
 
 LabelInfo Parse::popLabelInfo(std::string val) {

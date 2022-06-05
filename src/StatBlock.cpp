@@ -709,7 +709,7 @@ void StatBlock::load(const std::string& filename) {
 
 		// @ATTR threat_range|float, float: Engage distance, Stop distance|The first value is the radius of the area this creature will be able to start chasing the hero. The second, optional, value is the radius at which this creature will stop pursuing their target and defaults to double the first value.
 		else if (infile.key == "threat_range") {
-			threat_range = Parse::toFloat(Parse::popFirstString(infile.val));
+			threat_range = Parse::popFirstFloat(infile.val);
 
 			std::string tr_far = Parse::popFirstString(infile.val);
 			if (!tr_far.empty())

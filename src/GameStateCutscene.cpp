@@ -606,8 +606,8 @@ bool GameStateCutscene::load(const std::string& filename) {
 		if (infile.section.empty()) {
 			if (infile.key == "caption_margins") {
 				// @ATTR caption_margins|float, float : X margin, Y margin|Percentage-based margins for the caption text based on screen size
-				cutscene_settings.caption_margins.x = Parse::toFloat(Parse::popFirstString(infile.val))/100.0f;
-				cutscene_settings.caption_margins.y = Parse::toFloat(Parse::popFirstString(infile.val))/100.0f;
+				cutscene_settings.caption_margins.x = Parse::popFirstFloat(infile.val)/100.0f;
+				cutscene_settings.caption_margins.y = Parse::popFirstFloat(infile.val)/100.0f;
 			}
 			else if (infile.key == "caption_background") {
 				// @ATTR caption_background|color, int : Color, Alpha|Color (RGBA) of the caption area background.

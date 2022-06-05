@@ -55,8 +55,9 @@ namespace Parse {
 	int toDirection(const std::string& s);
 	int toAlignment(const std::string& s, int default_value = Utils::ALIGN_TOPLEFT);
 
-	int popFirstInt(std::string& s, char separator = 0);
 	std::string popFirstString(std::string& s, char separator = 0);
+	int popFirstInt(std::string& s, char separator = 0);
+	float popFirstFloat(std::string& s, char separator = 0);
 	LabelInfo popLabelInfo(std::string val);
 
 	ItemStack toItemQuantityPair(std::string value, bool* check_pair = NULL);

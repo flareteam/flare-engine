@@ -635,7 +635,7 @@ void PowerManager::loadPowers() {
 		}
 		else if (infile.key == "target_range")
 			// @ATTR power.target_range|float|The distance from the caster that the power can be activated
-			powers[input_id].target_range = Parse::toFloat(Parse::popFirstString(infile.val));
+			powers[input_id].target_range = Parse::popFirstFloat(infile.val);
 		//steal effects
 		else if (infile.key == "hp_steal")
 			// @ATTR power.hp_steal|int|Percentage of damage to steal into HP
@@ -774,7 +774,7 @@ void PowerManager::loadPowers() {
 				powers[input_id].spawn_limit_count = static_cast<float>(Parse::popFirstInt(infile.val));
 
 				if(powers[input_id].spawn_limit_mode == Power::SPAWN_LIMIT_MODE_STAT) {
-					powers[input_id].spawn_limit_ratio = Parse::toFloat(Parse::popFirstString(infile.val));
+					powers[input_id].spawn_limit_ratio = Parse::popFirstFloat(infile.val);
 
 					std::string stat = Parse::popFirstString(infile.val);
 					size_t prim_stat_index = eset->primary_stats.getIndexByID(stat);
@@ -801,7 +801,7 @@ void PowerManager::loadPowers() {
 				powers[input_id].spawn_level.count = static_cast<float>(Parse::popFirstInt(infile.val));
 
 				if(powers[input_id].spawn_level.mode != SpawnLevel::MODE_FIXED) {
-					powers[input_id].spawn_level.ratio = Parse::toFloat(Parse::popFirstString(infile.val));
+					powers[input_id].spawn_level.ratio = Parse::popFirstFloat(infile.val);
 
 					if(powers[input_id].spawn_level.mode == SpawnLevel::MODE_STAT) {
 						std::string stat = Parse::popFirstString(infile.val);
