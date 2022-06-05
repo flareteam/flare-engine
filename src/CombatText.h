@@ -44,8 +44,8 @@ public:
 	float floating_offset;
 	std::string text;
 	int displaytype;
-	bool is_int;
-	int int_value;
+	bool is_number;
+	float number_value;
 };
 
 class CombatText {
@@ -56,7 +56,7 @@ public:
 	void logic(const FPoint& _cam);
 	void render();
 	void addString(const std::string& message, const FPoint& location, int displaytype);
-	void addInt(int num, const FPoint& location, int displaytype);
+	void addFloat(float num, const FPoint& location, int displaytype);
 	void clear();
 
 	enum {

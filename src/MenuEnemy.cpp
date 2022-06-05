@@ -137,7 +137,7 @@ void MenuEnemy::render() {
 	if (enemy->stats.get(Stats::HP_MAX) == 0)
 		hp_bar_length = 0;
 	else if (bar_hp) {
-		hp_bar_length = (enemy->stats.hp * bar_fill_size.x) / enemy->stats.get(Stats::HP_MAX);
+		hp_bar_length = static_cast<int>((enemy->stats.hp * static_cast<float>(bar_fill_size.x)) / enemy->stats.get(Stats::HP_MAX));
 		if (hp_bar_length == 0 && enemy->stats.hp > 0)
 			hp_bar_length = 1;
 	}
@@ -183,7 +183,7 @@ void MenuEnemy::render() {
 		std::stringstream ss;
 		ss.str("");
 		if (enemy->stats.hp > 0) {
-			ss << enemy->stats.hp << "/" << enemy->stats.get(Stats::HP_MAX);
+			ss << static_cast<unsigned long>(enemy->stats.hp) << "/" << static_cast<unsigned long>(enemy->stats.get(Stats::HP_MAX));
 		}
 		else {
 			if (enemy->stats.lifeform)

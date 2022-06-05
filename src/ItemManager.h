@@ -54,7 +54,7 @@ public:
 	int base_index;
 	bool is_speed;
 	bool is_attack_speed;
-	int value;
+	float value;
 	PowerID power_id; // for bonus_power_level
 	BonusData()
 		: stat_index(-1)
@@ -116,10 +116,10 @@ public:
 	int icon;             // icon index on small pixel sheet
 	std::string book;     // book file location
 	bool book_is_readable; // whether to display "use" or "read" in the tooltip
-	std::vector<int> dmg_min; // minimum damage amount
-	std::vector<int> dmg_max; // maximum damage amount
-	int abs_min;          // minimum absorb amount
-	int abs_max;          // maximum absorb amount
+	std::vector<float> dmg_min; // minimum damage amount
+	std::vector<float> dmg_max; // maximum damage amount
+	float abs_min;          // minimum absorb amount
+	float abs_max;          // maximum absorb amount
 	int requires_level;   // Player level must match or exceed this value to use item
 	std::vector<size_t> req_stat;         // physical, mental, offense, defense
 	std::vector<int> req_val;          // 1-5 (used with req_stat)

@@ -60,7 +60,7 @@ public:
 
 	// vars
 	std::vector<Entity*> entities;
-	int hero_stealth;
+	float hero_stealth;
 
 	bool player_blocked;
 	Timer player_blocked_timer;

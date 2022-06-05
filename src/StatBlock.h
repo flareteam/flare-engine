@@ -101,7 +101,7 @@ public:
 	~StatBlock();
 
 	void load(const std::string& filename);
-	void takeDamage(int dmg, bool crit, int source_type);
+	void takeDamage(float dmg, bool crit, int source_type);
 	void recalc();
 	void applyEffects();
 	void calcBase();
@@ -113,7 +113,7 @@ public:
 	void loadHeroSFX();
 	std::string getShortClass();
 	std::string getLongClass();
-	void addXP(int amount);
+	void addXP(int amount); // TODO this should be unsigned long?
 	AIPower* getAIPower(int ai_type);
 	int getPowerCooldown(PowerID power_id);
 	void setPowerCooldown(PowerID power_id, int power_cooldown);
@@ -166,22 +166,22 @@ public:
 	std::vector<int> primary_starting;
 
 	// combat stats
-	std::vector<int> starting; // default level 1 values per stat. Read from file and never changes at runtime.
-	std::vector<int> base; // values before any active effects are applied
-	std::vector<int> current; // values after all active effects are applied
-	std::vector<int> per_level; // value increases each level after level 1
-	std::vector< std::vector<int> > per_primary;
+	std::vector<float> starting; // default level 1 values per stat. Read from file and never changes at runtime.
+	std::vector<float> base; // values before any active effects are applied
+	std::vector<float> current; // values after all active effects are applied
+	std::vector<float> per_level; // value increases each level after level 1
+	std::vector< std::vector<float> > per_primary;
 
-	int get(Stats::STAT stat) const {
+	float get(Stats::STAT stat) const {
 		return current[stat];
 	}
-	int getDamageMin(size_t dmg_type) const {
+	float getDamageMin(size_t dmg_type) const {
 		return current[Stats::COUNT + (dmg_type * 2)];
 	}
-	int getDamageMax(size_t dmg_type) const {
+	float getDamageMax(size_t dmg_type) const {
 		return current[Stats::COUNT + (dmg_type * 2) + 1];
 	}
-	int getResist(size_t resist_type) const;
+	float getResist(size_t resist_type) const;
 
 	// additional values to base stats, given by items
 	std::vector<int> primary_additional;
@@ -197,20 +197,18 @@ public:
 	std::string character_subclass;
 
 	// physical stats
-	int hp;
-	float hp_f;
+	float hp;
 
 	// mental stats
-	int mp;
-	float mp_f;
+	float mp;
 
 	float speed_default;
 
 	// addition damage and absorb granted from items
-	std::vector<int> dmg_min_add;
-	std::vector<int> dmg_max_add;
-	int absorb_min_add;
-	int absorb_max_add;
+	std::vector<float> dmg_min_add;
+	std::vector<float> dmg_max_add;
+	float absorb_min_add;
+	float absorb_max_add;
 
 	float speed;
 	float charge_speed;
@@ -250,6 +248,7 @@ public:
 	Rect wander_area;
 
 	// enemy behavioral stats
+	// TODO change to floats
 	int chance_pursue;
 	int chance_flee;
 
@@ -265,7 +264,7 @@ public:
 	float threat_range_far;
 	float flee_range;
 	int combat_style; // determines how the creature enters combat
-	int hero_stealth;
+	float hero_stealth;
 	int turn_delay;
 	bool in_combat;
 	bool join_combat;
@@ -322,10 +321,10 @@ public:
 	int max_points_per_stat;
 
 	// preserve state before calcs
-	int prev_maxhp;
-	int prev_maxmp;
-	int prev_hp;
-	int prev_mp;
+	float prev_maxhp;
+	float prev_maxmp;
+	float prev_hp;
+	float prev_mp;
 
 	// links to summoned creatures and the entity which summoned this
 	std::vector<StatBlock*> summons;

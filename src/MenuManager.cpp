@@ -300,8 +300,8 @@ void MenuManager::logic() {
 	subtitles->logic(snd->getLastPlayedSID());
 
 	// refresh statbar values from player statblock
-	hp->update(0, pc->stats.hp, pc->stats.get(Stats::HP_MAX));
-	mp->update(0, pc->stats.mp, pc->stats.get(Stats::MP_MAX));
+	hp->update(0, static_cast<unsigned long>(pc->stats.hp), static_cast<unsigned long>(pc->stats.get(Stats::HP_MAX)));
+	mp->update(0, static_cast<unsigned long>(pc->stats.mp), static_cast<unsigned long>(pc->stats.get(Stats::MP_MAX)));
 
 	if (pc->stats.level == eset->xp.getMaxLevel()) {
 		xp->setCustomString(msg->getv("XP: %lu", pc->stats.xp));

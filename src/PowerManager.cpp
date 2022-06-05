@@ -383,11 +383,11 @@ void PowerManager::loadPowers() {
 			}
 		}
 		else if (infile.key == "requires_mp")
-			// @ATTR power.requires_mp|int|Restrict power usage to a specified MP level.
-			powers[input_id].requires_mp = Parse::toInt(infile.val);
+			// @ATTR power.requires_mp|float|Restrict power usage to a specified MP level.
+			powers[input_id].requires_mp = Parse::toFloat(infile.val);
 		else if (infile.key == "requires_hp")
-			// @ATTR power.requires_hp|int|Restrict power usage to a specified HP level.
-			powers[input_id].requires_hp = Parse::toInt(infile.val);
+			// @ATTR power.requires_hp|float|Restrict power usage to a specified HP level.
+			powers[input_id].requires_hp = Parse::toFloat(infile.val);
 		else if (infile.key == "sacrifice")
 			// @ATTR power.sacrifice|bool|If the power has requires_hp, allow it to kill the caster.
 			powers[input_id].sacrifice = Parse::toBool(infile.val);
@@ -440,8 +440,8 @@ void PowerManager::loadPowers() {
 			std::string state_mp = Parse::popFirstString(infile.val);
 			std::string state_mp_val = Parse::popFirstString(infile.val);
 
-			powers[input_id].requires_max_hpmp.hp = state_hp_val.empty() ? -1 : Parse::toInt(state_hp_val);
-			powers[input_id].requires_max_hpmp.mp = state_mp_val.empty() ? -1 : Parse::toInt(state_mp_val);
+			powers[input_id].requires_max_hpmp.hp = state_hp_val.empty() ? -1 : Parse::toFloat(state_hp_val);
+			powers[input_id].requires_max_hpmp.mp = state_mp_val.empty() ? -1 : Parse::toFloat(state_mp_val);
 
 			if (state_hp == "percent") {
 				powers[input_id].requires_max_hpmp.hp_state = Power::HPMPSTATE_PERCENT;
@@ -626,7 +626,7 @@ void PowerManager::loadPowers() {
 			powers[input_id].trait_avoidance_ignore = Parse::toBool(infile.val);
 		else if (infile.key == "trait_crits_impaired")
 			// @ATTR power.trait_crits_impaired|int|Increases critical hit percentage for slowed/immobile targets
-			powers[input_id].trait_crits_impaired = Parse::toInt(infile.val);
+			powers[input_id].trait_crits_impaired = Parse::toFloat(infile.val);
 		else if (infile.key == "trait_elemental") {
 			// @ATTR power.trait_elemental|predefined_string|Damage done is elemental. See engine/elements.txt
 			for (unsigned int i=0; i<eset->elements.list.size(); i++) {
@@ -639,10 +639,10 @@ void PowerManager::loadPowers() {
 		//steal effects
 		else if (infile.key == "hp_steal")
 			// @ATTR power.hp_steal|int|Percentage of damage to steal into HP
-			powers[input_id].hp_steal = Parse::toInt(infile.val);
+			powers[input_id].hp_steal = Parse::toFloat(infile.val);
 		else if (infile.key == "mp_steal")
 			// @ATTR power.mp_steal|int|Percentage of damage to steal into MP
-			powers[input_id].mp_steal = Parse::toInt(infile.val);
+			powers[input_id].mp_steal = Parse::toFloat(infile.val);
 		//missile modifiers
 		else if (infile.key == "missile_angle")
 			// @ATTR power.missile_angle|int|Angle of missile
@@ -699,7 +699,7 @@ void PowerManager::loadPowers() {
 				if (infile.key == "post_effect_src")
 					pe.target_src = true;
 
-				pe.magnitude = Parse::popFirstInt(infile.val);
+				pe.magnitude = Parse::popFirstFloat(infile.val);
 				pe.duration = Parse::toDuration(Parse::popFirstString(infile.val));
 				std::string chance = Parse::popFirstString(infile.val);
 				if (!chance.empty()) {
@@ -836,7 +836,7 @@ void PowerManager::loadPowers() {
 			else if(mode == "absolute") powers[input_id].mod_accuracy_mode = Power::STAT_MODIFIER_MODE_ABSOLUTE;
 			else infile.error("PowerManager: Unknown stat_modifier_mode '%s'", mode.c_str());
 
-			powers[input_id].mod_accuracy_value = Parse::popFirstInt(infile.val);
+			powers[input_id].mod_accuracy_value = Parse::popFirstFloat(infile.val);
 		}
 		else if (infile.key == "modifier_damage") {
 			// @ATTR power.modifier_damage|["multiply", "add", "absolute"], int, int : Mode, Min, Max|Changes this power's damage. The "Max" value is ignored, except in the case of "absolute" modifiers.
@@ -846,8 +846,8 @@ void PowerManager::loadPowers() {
 			else if(mode == "absolute") powers[input_id].mod_damage_mode = Power::STAT_MODIFIER_MODE_ABSOLUTE;
 			else infile.error("PowerManager: Unknown stat_modifier_mode '%s'", mode.c_str());
 
-			powers[input_id].mod_damage_value_min = Parse::popFirstInt(infile.val);
-			powers[input_id].mod_damage_value_max = Parse::popFirstInt(infile.val);
+			powers[input_id].mod_damage_value_min = Parse::popFirstFloat(infile.val);
+			powers[input_id].mod_damage_value_max = Parse::popFirstFloat(infile.val);
 		}
 		else if (infile.key == "modifier_critical") {
 			// @ATTR power.modifier_critical|["multiply", "add", "absolute"], int : Mode, Value|Changes the chance that this power will land a critical hit.
@@ -857,7 +857,7 @@ void PowerManager::loadPowers() {
 			else if(mode == "absolute") powers[input_id].mod_crit_mode = Power::STAT_MODIFIER_MODE_ABSOLUTE;
 			else infile.error("PowerManager: Unknown stat_modifier_mode '%s'", mode.c_str());
 
-			powers[input_id].mod_crit_value = Parse::popFirstInt(infile.val);
+			powers[input_id].mod_crit_value = Parse::popFirstFloat(infile.val);
 		}
 		else if (infile.key == "target_movement_normal") {
 			// @ATTR power.target_movement_normal|bool|Power can affect entities with normal movement (aka walking on ground)
@@ -1198,7 +1198,7 @@ bool PowerManager::effect(StatBlock *target_stats, StatBlock *caster_stats, Powe
 		EffectDef effect_data;
 		EffectDef* effect_ptr = getEffectDef(pe.id);
 
-		int magnitude = pe.magnitude;
+		float magnitude = pe.magnitude;
 		int duration = pe.duration;
 
 		StatBlock *dest_stats = pe.target_src ? caster_stats : target_stats;
@@ -1219,27 +1219,27 @@ bool PowerManager::effect(StatBlock *target_stats, StatBlock *caster_stats, Powe
 				else if(pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_ADD)
 					magnitude = caster_stats->getDamageMax(pwr.base_damage) + pwr.mod_damage_value_min;
 				else if(pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_ABSOLUTE)
-					magnitude = Math::randBetween(pwr.mod_damage_value_min, pwr.mod_damage_value_max);
+					magnitude = Math::randBetweenF(pwr.mod_damage_value_min, pwr.mod_damage_value_max);
 				else
 					magnitude = caster_stats->getDamageMax(pwr.base_damage);
 
-				comb->addString(msg->getv("+%d Shield",magnitude), dest_stats->pos, CombatText::MSG_BUFF);
+				comb->addString(msg->getv("+%s Shield", Utils::floatToString(magnitude, eset->number_format.combat_text).c_str()), dest_stats->pos, CombatText::MSG_BUFF);
 			}
 			else if (effect_data.type == Effect::HEAL) {
 				if (pwr.base_damage == eset->damage_types.list.size())
 					continue;
 
 				// heal for ment weapon damage * damage multiplier
-				magnitude = Math::randBetween(caster_stats->getDamageMin(pwr.base_damage), caster_stats->getDamageMax(pwr.base_damage));
+				magnitude = Math::randBetweenF(caster_stats->getDamageMin(pwr.base_damage), caster_stats->getDamageMax(pwr.base_damage));
 
 				if(pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_MULTIPLY)
 					magnitude = magnitude * pwr.mod_damage_value_min / 100;
 				else if(pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_ADD)
 					magnitude += pwr.mod_damage_value_min;
 				else if(pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_ABSOLUTE)
-					magnitude = Math::randBetween(pwr.mod_damage_value_min, pwr.mod_damage_value_max);
+					magnitude = Math::randBetweenF(pwr.mod_damage_value_min, pwr.mod_damage_value_max);
 
-				comb->addString(msg->getv("+%d HP",magnitude), dest_stats->pos, CombatText::MSG_BUFF);
+				comb->addString(msg->getv("+%s HP", Utils::floatToString(magnitude, eset->number_format.combat_text).c_str()), dest_stats->pos, CombatText::MSG_BUFF);
 				dest_stats->hp += magnitude;
 				if (dest_stats->hp > dest_stats->get(Stats::HP_MAX)) dest_stats->hp = dest_stats->get(Stats::HP_MAX);
 			}

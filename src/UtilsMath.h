@@ -60,5 +60,9 @@ namespace Math {
 	inline bool percentChance(int percent) {
 		return rand() % 100 < percent;
 	}
+
+	inline bool percentChanceF(float percent) {
+		return randBetweenF(0, 100) < percent;
+	}
 }
 #endif // UTILS_MATH_H

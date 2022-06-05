@@ -97,20 +97,20 @@ public:
 	public:
 		void load();
 
-		int min_absorb;
-		int max_absorb;
-		int min_resist;
-		int max_resist;
-		int min_block;
-		int max_block;
-		int min_avoidance;
-		int max_avoidance;
-		int min_miss_damage;
-		int max_miss_damage;
-		int min_crit_damage;
-		int max_crit_damage;
-		int min_overhit_damage;
-		int max_overhit_damage;
+		float min_absorb;
+		float max_absorb;
+		float min_resist;
+		float max_resist;
+		float min_block;
+		float max_block;
+		float min_avoidance;
+		float max_avoidance;
+		float min_miss_damage;
+		float max_miss_damage;
+		float min_crit_damage;
+		float max_crit_damage;
+		float min_overhit_damage;
+		float max_overhit_damage;
 	};
 
 	class Elements {

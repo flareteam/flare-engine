@@ -296,8 +296,8 @@ void SaveLoad::saveGame() {
 void SaveLoad::loadGame() {
 	if (game_slot <= 0) return;
 
-	int saved_hp = 0;
-	int saved_mp = 0;
+	float saved_hp = 0;
+	float saved_mp = 0;
 	int currency = 0;
 	size_t stash_tab = 0;
 	Version save_version(VersionInfo::MIN);
@@ -327,8 +327,8 @@ void SaveLoad::loadGame() {
 				pc->stats.xp = Parse::toUnsignedLong(infile.val);
 			}
 			else if (infile.key == "hpmp") {
-				saved_hp = Parse::popFirstInt(infile.val);
-				saved_mp = Parse::popFirstInt(infile.val);
+				saved_hp = Parse::popFirstFloat(infile.val);
+				saved_mp = Parse::popFirstFloat(infile.val);
 			}
 			else if (infile.key == "build") {
 				for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {

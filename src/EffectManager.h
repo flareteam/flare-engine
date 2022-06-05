@@ -82,8 +82,8 @@ public:
 	int icon;
 	Timer timer;
 	int type;
-	int magnitude;
-	int magnitude_max;
+	float magnitude;
+	float magnitude_max;
 	std::string animation_name;
 	Animation* animation;
 	bool item;
@@ -121,14 +121,14 @@ class EffectManager {
 private:
 	void removeEffect(size_t id);
 	void clearStatus();
-	void addEffectInternal(StatBlock* stats, EffectDef &effect, int duration, int magnitude, int source_type, bool item, PowerID power_id);
+	void addEffectInternal(StatBlock* stats, EffectDef &effect, int duration, float magnitude, int source_type, bool item, PowerID power_id);
 
 public:
 	EffectManager();
 	~EffectManager();
 	void logic();
-	void addEffect(StatBlock* stats, EffectDef &effect, int duration, int magnitude, int source_type, PowerID power_id);
-	void addItemEffect(StatBlock* stats, EffectDef &effect, int duration, int magnitude);
+	void addEffect(StatBlock* stats, EffectDef &effect, int duration, float magnitude, int source_type, PowerID power_id);
+	void addItemEffect(StatBlock* stats, EffectDef &effect, int duration, float magnitude);
 	void removeEffectType(const int type);
 	void removeEffectPassive(size_t id);
 	void removeEffectID(const std::vector< std::pair<std::string, int> >& remove_effects);
@@ -136,7 +136,7 @@ public:
 	void clearNegativeEffects(int type);
 	void clearItemEffects();
 	void clearTriggerEffects(int trigger);
-	int damageShields(int dmg);
+	float damageShields(float dmg);
 	bool isDebuffed();
 	void getCurrentColor(Color& color_mod);
 	void getCurrentAlpha(uint8_t& alpha_mod);
@@ -146,12 +146,14 @@ public:
 
 	std::vector<Effect> effect_list;
 
-	int damage;
-	int damage_percent;
-	int hpot;
-	int hpot_percent;
-	int mpot;
-	int mpot_percent;
+	// TODO rename these to *_per_second; maybe make into array?
+	float damage;
+	float damage_percent;
+	float hpot;
+	float hpot_percent;
+	float mpot;
+	float mpot_percent;
+
 	float speed;
 	bool stun;
 	bool revive;
@@ -160,10 +162,11 @@ public:
 	bool fear;
 	float knockback_speed;
 
-	std::vector<int> bonus;
-	std::vector<int> bonus_resist;
+	std::vector<float> bonus;
+	std::vector<float> bonus_resist;
 	std::vector<int> bonus_primary;
 
+	// TODO convert to array
 	bool triggered_others;
 	bool triggered_block;
 	bool triggered_hit;

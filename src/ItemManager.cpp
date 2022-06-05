@@ -201,7 +201,7 @@ void ItemManager::loadItems(const std::string& filename) {
 			}
 		}
 		else if (infile.key == "dmg") {
-			// @ATTR dmg|predefined_string, int, int : Damage type, Min, Max|Defines the item's base damage type and range. Max may be ommitted and will default to Min.
+			// @ATTR dmg|predefined_string, float, float : Damage type, Min, Max|Defines the item's base damage type and range. Max may be ommitted and will default to Min.
 			std::string dmg_type_str = Parse::popFirstString(infile.val);
 
 			size_t dmg_type = eset->damage_types.list.size();
@@ -216,18 +216,18 @@ void ItemManager::loadItems(const std::string& filename) {
 				infile.error("ItemManager: '%s' is not a known damage type id.", dmg_type_str.c_str());
 			}
 			else {
-				items[id].dmg_min[dmg_type] = Parse::popFirstInt(infile.val);
+				items[id].dmg_min[dmg_type] = Parse::popFirstFloat(infile.val);
 				if (infile.val.length() > 0)
-					items[id].dmg_max[dmg_type] = Parse::popFirstInt(infile.val);
+					items[id].dmg_max[dmg_type] = Parse::popFirstFloat(infile.val);
 				else
 					items[id].dmg_max[dmg_type] = items[id].dmg_min[dmg_type];
 			}
 		}
 		else if (infile.key == "abs") {
-			// @ATTR abs|int, int : Min, Max|Defines the item absorb value, if only min is specified the absorb value is fixed.
-			items[id].abs_min = Parse::popFirstInt(infile.val);
+			// @ATTR abs|float, float : Min, Max|Defines the item absorb value, if only min is specified the absorb value is fixed.
+			items[id].abs_min = Parse::popFirstFloat(infile.val);
 			if (infile.val.length() > 0)
-				items[id].abs_max = Parse::popFirstInt(infile.val);
+				items[id].abs_max = Parse::popFirstFloat(infile.val);
 			else
 				items[id].abs_max = items[id].abs_min;
 		}
@@ -268,7 +268,7 @@ void ItemManager::loadItems(const std::string& filename) {
 			// @ATTR bonus_power_level|repeatable(power_id, int) : Base power, Bonus levels|Grants bonus levels to a given base power.
 			BonusData bdata;
 			bdata.power_id = Parse::toPowerID(Parse::popFirstString(infile.val));
-			bdata.value = Parse::popFirstInt(infile.val);
+			bdata.value = Parse::popFirstFloat(infile.val);
 			items[id].bonus.push_back(bdata);
 		}
 		else if (infile.key == "soundfx") {
@@ -585,7 +585,7 @@ void ItemManager::loadSets(const std::string& filename) {
 			SetBonusData bonus;
 			bonus.requirement = Parse::popFirstInt(infile.val);
 			bonus.power_id = Parse::toPowerID(Parse::popFirstString(infile.val));
-			bonus.value = Parse::popFirstInt(infile.val);
+			bonus.value = Parse::popFirstFloat(infile.val);
 			item_sets[id].bonus.push_back(bonus);
 		}
 		else {
@@ -597,7 +597,7 @@ void ItemManager::loadSets(const std::string& filename) {
 
 void ItemManager::parseBonus(BonusData& bdata, FileParser& infile) {
 	std::string bonus_str = Parse::popFirstString(infile.val);
-	bdata.value = Parse::popFirstInt(infile.val);
+	bdata.value = Parse::popFirstFloat(infile.val);
 
 	if (bonus_str == "speed") {
 		bdata.is_speed = true;
@@ -645,18 +645,18 @@ void ItemManager::parseBonus(BonusData& bdata, FileParser& infile) {
 
 void ItemManager::getBonusString(std::stringstream& ss, BonusData* bdata) {
 	if (bdata->is_speed) {
-		ss << msg->getv("%d%% Speed", bdata->value);
+		ss << msg->getv("%s%% Speed", Utils::floatToString(bdata->value, 2).c_str());
 		return;
 	}
 	else if (bdata->is_attack_speed) {
-		ss << msg->getv("%d%% Attack Speed", bdata->value);
+		ss << msg->getv("%s%% Attack Speed", Utils::floatToString(bdata->value, 2).c_str());
 		return;
 	}
 
 	if (bdata->value > 0)
-		ss << "+" << bdata->value;
+		ss << "+" << Utils::floatToString(bdata->value, 2);
 	else
-		ss << bdata->value;
+		ss << Utils::floatToString(bdata->value, 2);
 
 	if (bdata->stat_index != -1) {
 		if (Stats::PERCENT[bdata->stat_index])
@@ -772,11 +772,11 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 			std::stringstream dmg_str;
 			dmg_str << eset->damage_types.list[i].name;
 			if (items[stack.item].dmg_min[i] < items[stack.item].dmg_max[i]) {
-				dmg_str << ": " << items[stack.item].dmg_min[i] << "-" << items[stack.item].dmg_max[i];
+				dmg_str << ": " << Utils::floatToString(items[stack.item].dmg_min[i], 2) << "-" << Utils::floatToString(items[stack.item].dmg_max[i], 2);
 				tip.addText(dmg_str.str());
 			}
 			else {
-				dmg_str << ": " << items[stack.item].dmg_max[i];
+				dmg_str << ": " << Utils::floatToString(items[stack.item].dmg_max[i], 2);
 				tip.addText(dmg_str.str());
 			}
 		}
@@ -785,9 +785,9 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	// absorb
 	if (items[stack.item].abs_max > 0) {
 		if (items[stack.item].abs_min < items[stack.item].abs_max)
-			tip.addText(msg->getv("Absorb: %d-%d", items[stack.item].abs_min, items[stack.item].abs_max));
+			tip.addText(msg->getv("Absorb: %s-%s", Utils::floatToString(items[stack.item].abs_min, 2).c_str(), Utils::floatToString(items[stack.item].abs_max, 2).c_str()));
 		else
-			tip.addText(msg->getv("Absorb: %d", items[stack.item].abs_max));
+			tip.addText(msg->getv("Absorb: %s", Utils::floatToString(items[stack.item].abs_max, 2).c_str()));
 	}
 
 	// bonuses

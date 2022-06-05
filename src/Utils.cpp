@@ -623,13 +623,32 @@ size_t Utils::stringFindCaseInsensitive(const std::string &_a, const std::string
 }
 
 std::string Utils::floatToString(const float value, size_t precision) {
-	std::stringstream ss;
-	ss << value;
-	std::string temp = ss.str();
+	size_t format_buffer_size = 16;
+	char format_buffer[format_buffer_size];
+	snprintf(format_buffer, format_buffer_size, "%%.%df", static_cast<int>(precision));
 
-	size_t decimal = temp.find(".");
-	if (decimal != std::string::npos && temp.length() > decimal + precision + 1) {
-		temp = temp.substr(0, decimal + precision + 1);
+	size_t buffer_size = 1024;
+	char buffer[buffer_size];
+	snprintf(buffer, buffer_size, format_buffer, value);
+	std::string temp(buffer);
+
+	// remove trailing zeros (and the separator if it is not needed)
+	if (temp.find(".") != std::string::npos || temp.find(",") != std::string::npos) {
+		size_t i = temp.length();
+		size_t new_length = i;
+		while (i > 0) {
+			i--;
+			if (temp[i] == '0')
+				new_length = i;
+			else if (temp[i] != '.' && temp[i] != ',') {
+				break;
+			}
+			else {
+				new_length = i;
+				break;
+			}
+		}
+		temp = temp.substr(0, new_length);
 	}
 
 	return temp;

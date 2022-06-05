@@ -106,9 +106,7 @@ StatBlock::StatBlock()
 	, character_class("")
 	, character_subclass("")
 	, hp(0)
-	, hp_f(0)
 	, mp(0)
-	, mp_f(0)
 	, speed_default(0.1f)
 	, dmg_min_add(eset->damage_types.list.size(), 0)
 	, dmg_max_add(eset->damage_types.list.size(), 0)
@@ -239,7 +237,7 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 	else if (infile->key == "stat") {
 		// @ATTR stat|stat_id, int : Stat ID, Value|The starting value for this stat.
 		std::string stat = Parse::popFirstString(infile->val);
-		int value = Parse::popFirstInt(infile->val);
+		float value = Parse::popFirstFloat(infile->val);
 
 		for (int i=0; i<Stats::COUNT; ++i) {
 			if (Stats::KEY[i] == stat) {
@@ -269,7 +267,7 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 	else if (infile->key == "stat_per_level") {
 		// @ATTR stat_per_level|stat_id, int : Stat ID, Value|The value for this stat added per level.
 		std::string stat = Parse::popFirstString(infile->val);
-		int value = Parse::popFirstInt(infile->val);
+		float value = Parse::popFirstFloat(infile->val);
 
 		for (int i=0; i<Stats::COUNT; i++) {
 			if (Stats::KEY[i] == stat) {
@@ -306,7 +304,7 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 		}
 
 		std::string stat = Parse::popFirstString(infile->val);
-		int value = Parse::popFirstInt(infile->val);
+		float value = Parse::popFirstFloat(infile->val);
 
 		for (int i=0; i<Stats::COUNT; i++) {
 			if (Stats::KEY[i] == stat) {
@@ -336,7 +334,7 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 	else if (infile->key == "vulnerable") {
 		// @ATTR vulnerable|predefined_string, int : Element, Value|(Deprecated in v1.12.91; use a '..._resist' value with 'stat' instead) Percentage weakness to this element.
 		std::string element = Parse::popFirstString(infile->val);
-		int value = (Parse::popFirstInt(infile->val) * -1) + 100;
+		float value = (Parse::popFirstFloat(infile->val) * -1) + 100;
 
 		infile->error("StatBlock: 'vulnerable' is deprecated. Use 'stat=%s_resist,%d' instead.", element.c_str(), value);
 
@@ -763,7 +761,7 @@ void StatBlock::load(const std::string& filename) {
 /**
  * Reduce temphp first, then hp
  */
-void StatBlock::takeDamage(int dmg, bool crit, int source_type) {
+void StatBlock::takeDamage(float dmg, bool crit, int source_type) {
 	hp -= effects.damageShields(dmg);
 	if (hp <= 0) {
 		hp = 0;
@@ -859,7 +857,7 @@ void StatBlock::recalc() {
  */
 void StatBlock::calcBase() {
 	// bonuses are skipped for the default level 1 of a stat
-	const int lev0 = std::max(level - 1, 0);
+	const float lev0 = static_cast<float>(std::max(level - 1, 0));
 
 	if (per_primary.empty()) {
 		for (size_t i = 0; i < getFullStatCount(); ++i) {
@@ -868,8 +866,8 @@ void StatBlock::calcBase() {
 	}
 	else {
 		for (size_t j = 0; j < per_primary.size(); ++j) {
-			const int current_primary = std::max(get_primary(j) - 1, 0);
-			const std::vector<int>& per_primary_vec = per_primary[j];
+			const float current_primary = static_cast<float>(std::max(get_primary(j) - 1, 0));
+			const std::vector<float>& per_primary_vec = per_primary[j];
 			for (size_t i = 0; i < getFullStatCount(); ++i) {
 				if (j==0)
 					base[i] = starting[i] + (lev0 * per_level[i]);
@@ -882,14 +880,14 @@ void StatBlock::calcBase() {
 	for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
 		base[Stats::COUNT + (i*2)] += dmg_min_add[i];
 		base[Stats::COUNT + (i*2) + 1] += dmg_max_add[i];
-		base[Stats::COUNT + (i*2)] = std::max(base[Stats::COUNT + (i*2)], 0);
+		base[Stats::COUNT + (i*2)] = std::max(base[Stats::COUNT + (i*2)], 0.0f);
 		base[Stats::COUNT + (i*2) + 1] = std::max(base[Stats::COUNT + (i*2) + 1], base[Stats::COUNT + (i*2)]);
 	}
 
 	// add absorb from equipment and increase to minimum amounts
 	base[Stats::ABS_MIN] += absorb_min_add;
 	base[Stats::ABS_MAX] += absorb_max_add;
-	base[Stats::ABS_MIN] = std::max(base[Stats::ABS_MIN], 0);
+	base[Stats::ABS_MIN] = std::max(base[Stats::ABS_MIN], 0.0f);
 	base[Stats::ABS_MAX] = std::max(base[Stats::ABS_MAX], base[Stats::ABS_MIN]);
 }
 
@@ -899,8 +897,8 @@ void StatBlock::calcBase() {
 void StatBlock::applyEffects() {
 	// preserve hp/mp states
 	// max HP and MP can't drop below 1
-	prev_maxhp = std::max(get(Stats::HP_MAX), 1);
-	prev_maxmp = std::max(get(Stats::MP_MAX), 1);
+	prev_maxhp = std::max(get(Stats::HP_MAX), 1.0f);
+	prev_maxmp = std::max(get(Stats::MP_MAX), 1.0f);
 	prev_hp = hp;
 	prev_mp = mp;
 
@@ -923,8 +921,8 @@ void StatBlock::applyEffects() {
 	current[Stats::MP_MAX] += (current[Stats::MP_MAX] * current[Stats::MP_PERCENT]) / 100;
 
 	// max HP and MP can't drop below 1
-	current[Stats::HP_MAX] = std::max(get(Stats::HP_MAX), 1);
-	current[Stats::MP_MAX] = std::max(get(Stats::MP_MAX), 1);
+	current[Stats::HP_MAX] = std::max(get(Stats::HP_MAX), 1.0f);
+	current[Stats::MP_MAX] = std::max(get(Stats::MP_MAX), 1.0f);
 
 	if (hp > get(Stats::HP_MAX)) hp = get(Stats::HP_MAX);
 	if (mp > get(Stats::MP_MAX)) mp = get(Stats::MP_MAX);
@@ -969,14 +967,11 @@ void StatBlock::logic() {
 	}
 
 	// preserve ratio on maxmp and maxhp changes
-	float ratio;
 	if (prev_maxhp != get(Stats::HP_MAX)) {
-		ratio = static_cast<float>(prev_hp) / static_cast<float>(prev_maxhp);
-		hp = static_cast<int>(ratio * static_cast<float>(get(Stats::HP_MAX)));
+		hp = (prev_hp / prev_maxhp) * get(Stats::HP_MAX);
 	}
 	if (prev_maxmp != get(Stats::MP_MAX)) {
-		ratio = static_cast<float>(prev_mp) / static_cast<float>(prev_maxmp);
-		mp = static_cast<int>(ratio * static_cast<float>(get(Stats::MP_MAX)));
+		mp = (prev_mp / prev_maxmp) * get(Stats::MP_MAX);
 	}
 
 	// handle cooldowns
@@ -986,31 +981,25 @@ void StatBlock::logic() {
 		powers_ai[i].cooldown.tick();
 	}
 
-	// sync hp/mp with their floating point counterparts
-	if (static_cast<int>(hp_f) != hp)
-		hp_f = static_cast<float>(hp);
-	if (static_cast<int>(mp_f) != mp)
-		mp_f = static_cast<float>(mp);
-
 	// HP regen
 	if (hp <= get(Stats::HP_MAX) && hp > 0) {
 		float hp_regen_per_frame;
 		if (!in_combat && !hero_ally && !hero && pc->stats.alive) {
 			// enemies heal rapidly (full heal in 5 seconds) while not in combat
-			hp_regen_per_frame = static_cast<float>(get(Stats::HP_MAX)) / 5.f / settings->max_frames_per_sec;
+			hp_regen_per_frame = get(Stats::HP_MAX) / 5.f / settings->max_frames_per_sec;
 		}
 		else {
-			hp_regen_per_frame = static_cast<float>(get(Stats::HP_REGEN)) / 60.f / settings->max_frames_per_sec;
+			hp_regen_per_frame = get(Stats::HP_REGEN) / 60.f / settings->max_frames_per_sec;
 		}
-		hp_f += hp_regen_per_frame;
-		hp = std::max(0, std::min(static_cast<int>(hp_f), get(Stats::HP_MAX)));
+		hp += hp_regen_per_frame;
+		hp = std::max(0.0f, std::min(hp, get(Stats::HP_MAX)));
 	}
 
 	// MP regen
 	if (mp <= get(Stats::MP_MAX) && hp > 0) {
-		float mp_regen_per_frame = static_cast<float>(get(Stats::MP_REGEN)) / 60.f / settings->max_frames_per_sec;
-		mp_f += mp_regen_per_frame;
-		mp = std::max(0, std::min(static_cast<int>(mp_f), get(Stats::MP_MAX)));
+		float mp_regen_per_frame = get(Stats::MP_REGEN) / 60.f / settings->max_frames_per_sec;
+		mp += mp_regen_per_frame;
+		mp = std::max(0.0f, std::min(mp, get(Stats::MP_MAX)));
 	}
 
 	// handle buff/debuff durations
@@ -1020,12 +1009,12 @@ void StatBlock::logic() {
 	// apply bleed
 	if (effects.damage > 0 && hp > 0) {
 		takeDamage(effects.damage, !StatBlock::TAKE_DMG_CRIT, effects.getDamageSourceType(Effect::DAMAGE));
-		comb->addInt(effects.damage, pos, CombatText::MSG_TAKEDMG);
+		comb->addFloat(effects.damage, pos, CombatText::MSG_TAKEDMG);
 	}
 	if (effects.damage_percent > 0 && hp > 0) {
-		int damage = (get(Stats::HP_MAX)*effects.damage_percent)/100;
+		float damage = (get(Stats::HP_MAX) * effects.damage_percent) / 100;
 		takeDamage(damage, !StatBlock::TAKE_DMG_CRIT, effects.getDamageSourceType(Effect::DAMAGE_PERCENT));
-		comb->addInt(damage, pos, CombatText::MSG_TAKEDMG);
+		comb->addFloat(damage, pos, CombatText::MSG_TAKEDMG);
 	}
 
 	if(effects.death_sentence)
@@ -1043,24 +1032,24 @@ void StatBlock::logic() {
 
 	// apply healing over time
 	if (effects.hpot > 0) {
-		comb->addString(msg->getv("+%d HP",effects.hpot), pos, CombatText::MSG_BUFF);
+		comb->addString(msg->getv("+%s HP", Utils::floatToString(effects.hpot, 2).c_str()), pos, CombatText::MSG_BUFF);
 		hp += effects.hpot;
 		if (hp > get(Stats::HP_MAX)) hp = get(Stats::HP_MAX);
 	}
 	if (effects.hpot_percent > 0) {
-		int hpot = (get(Stats::HP_MAX)*effects.hpot_percent)/100;
-		comb->addString(msg->getv("+%d HP",hpot), pos, CombatText::MSG_BUFF);
+		float hpot = (get(Stats::HP_MAX) * effects.hpot_percent) / 100;
+		comb->addString(msg->getv("+%s HP", Utils::floatToString(hpot, 2).c_str()), pos, CombatText::MSG_BUFF);
 		hp += hpot;
 		if (hp > get(Stats::HP_MAX)) hp = get(Stats::HP_MAX);
 	}
 	if (effects.mpot > 0) {
-		comb->addString(msg->getv("+%d MP",effects.mpot), pos, CombatText::MSG_BUFF);
+		comb->addString(msg->getv("+%s MP", Utils::floatToString(effects.mpot, 2).c_str()), pos, CombatText::MSG_BUFF);
 		mp += effects.mpot;
 		if (mp > get(Stats::MP_MAX)) mp = get(Stats::MP_MAX);
 	}
 	if (effects.mpot_percent > 0) {
-		int mpot = (get(Stats::MP_MAX)*effects.mpot_percent)/100;
-		comb->addString(msg->getv("+%d MP",mpot), pos, CombatText::MSG_BUFF);
+		float mpot = (get(Stats::MP_MAX) * effects.mpot_percent) / 100;
+		comb->addString(msg->getv("+%s MP", Utils::floatToString(mpot, 2).c_str()), pos, CombatText::MSG_BUFF);
 		mp += mpot;
 		if (mp > get(Stats::MP_MAX)) mp = get(Stats::MP_MAX);
 	}
@@ -1384,6 +1373,6 @@ void StatBlock::setPowerCooldown(PowerID power_id, int power_cooldown) {
 	}
 }
 
-int StatBlock::getResist(size_t resist_type) const {
+float StatBlock::getResist(size_t resist_type) const {
 	return current[Stats::COUNT + eset->damage_types.count + resist_type];
 }

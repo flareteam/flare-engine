@@ -327,45 +327,45 @@ void EngineSettings::Combat::load() {
 	if (infile.open("engine/combat.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			if (infile.key == "absorb_percent") {
-				// @ATTR absorb_percent|int, int : Minimum, Maximum|Limits the percentage of damage that can be absorbed. A max value less than 100 will ensure that the target always takes at least 1 damage from non-elemental attacks.
-				min_absorb = Parse::popFirstInt(infile.val);
-				max_absorb = Parse::popFirstInt(infile.val);
+				// @ATTR absorb_percent|float, float : Minimum, Maximum|Limits the percentage of damage that can be absorbed. A max value less than 100 will ensure that the target always takes at least 1 damage from non-elemental attacks.
+				min_absorb = Parse::popFirstFloat(infile.val);
+				max_absorb = Parse::popFirstFloat(infile.val);
 				max_absorb = std::max(max_absorb, min_absorb);
 			}
 			else if (infile.key == "resist_percent") {
-				// @ATTR resist_percent|int, int : Minimum, Maximum|Limits the percentage of damage that can be resisted. A max value less than 100 will ensure that the target always takes at least 1 damage from elemental attacks.
-				min_resist = Parse::popFirstInt(infile.val);
-				max_resist = Parse::popFirstInt(infile.val);
+				// @ATTR resist_percent|float, float : Minimum, Maximum|Limits the percentage of damage that can be resisted. A max value less than 100 will ensure that the target always takes at least 1 damage from elemental attacks.
+				min_resist = Parse::popFirstFloat(infile.val);
+				max_resist = Parse::popFirstFloat(infile.val);
 				max_resist = std::max(max_resist, min_resist);
 			}
 			else if (infile.key == "block_percent") {
-				// @ATTR block_percent|int, int : Minimum, Maximum|Limits the percentage of damage that can be absorbed when the target is in the 'block' animation state. A max value less than 100 will ensure that the target always takes at least 1 damage from non-elemental attacks.
-				min_block = Parse::popFirstInt(infile.val);
-				max_block = Parse::popFirstInt(infile.val);
+				// @ATTR block_percent|float, float : Minimum, Maximum|Limits the percentage of damage that can be absorbed when the target is in the 'block' animation state. A max value less than 100 will ensure that the target always takes at least 1 damage from non-elemental attacks.
+				min_block = Parse::popFirstFloat(infile.val);
+				max_block = Parse::popFirstFloat(infile.val);
 				max_block = std::max(max_block, min_block);
 			}
 			else if (infile.key == "avoidance_percent") {
-				// @ATTR avoidance_percent|int, int : Minimum, Maximum|Limits the percentage chance that damage will be avoided.
-				min_avoidance = Parse::popFirstInt(infile.val);
-				max_avoidance = Parse::popFirstInt(infile.val);
+				// @ATTR avoidance_percent|float, float : Minimum, Maximum|Limits the percentage chance that damage will be avoided.
+				min_avoidance = Parse::popFirstFloat(infile.val);
+				max_avoidance = Parse::popFirstFloat(infile.val);
 				max_avoidance = std::max(max_avoidance, min_avoidance);
 			}
-			// @ATTR miss_damage_percent|int, int : Minimum, Maximum|The percentage of damage dealt when a miss occurs.
+			// @ATTR miss_damage_percent|float, float : Minimum, Maximum|The percentage of damage dealt when a miss occurs.
 			else if (infile.key == "miss_damage_percent") {
-				min_miss_damage = Parse::popFirstInt(infile.val);
-				max_miss_damage = Parse::popFirstInt(infile.val);
+				min_miss_damage = Parse::popFirstFloat(infile.val);
+				max_miss_damage = Parse::popFirstFloat(infile.val);
 				max_miss_damage = std::max(max_miss_damage, min_miss_damage);
 			}
-			// @ATTR crit_damage_percent|int, int : Minimum, Maximum|The percentage of damage dealt when a critical hit occurs.
+			// @ATTR crit_damage_percent|float, float : Minimum, Maximum|The percentage of damage dealt when a critical hit occurs.
 			else if (infile.key == "crit_damage_percent") {
-				min_crit_damage = Parse::popFirstInt(infile.val);
-				max_crit_damage = Parse::popFirstInt(infile.val);
+				min_crit_damage = Parse::popFirstFloat(infile.val);
+				max_crit_damage = Parse::popFirstFloat(infile.val);
 				max_crit_damage = std::max(max_crit_damage, min_crit_damage);
 			}
-			// @ATTR overhit_damage_percent|int, int : Minimum, Maximum|The percentage of damage dealt when an overhit occurs.
+			// @ATTR overhit_damage_percent|float, float : Minimum, Maximum|The percentage of damage dealt when an overhit occurs.
 			else if (infile.key == "overhit_damage_percent") {
-				min_overhit_damage = Parse::popFirstInt(infile.val);
-				max_overhit_damage = Parse::popFirstInt(infile.val);
+				min_overhit_damage = Parse::popFirstFloat(infile.val);
+				max_overhit_damage = Parse::popFirstFloat(infile.val);
 				max_overhit_damage = std::max(max_overhit_damage, min_overhit_damage);
 			}
 

@@ -248,7 +248,7 @@ bool Effect::isImmunityTypeString(const std::string& type_str) {
 }
 
 EffectManager::EffectManager()
-	: bonus(std::vector<int>(Stats::COUNT + eset->damage_types.count + eset->elements.list.size(), 0))
+	: bonus(std::vector<float>(Stats::COUNT + eset->damage_types.count + eset->elements.list.size(), 0))
 	, bonus_primary(std::vector<int>(eset->primary_stats.list.size(), 0))
 	, triggered_others(false)
 	, triggered_block(false)
@@ -354,7 +354,7 @@ void EffectManager::logic() {
 		}
 		// @TYPE ${PRIMARYSTAT}|Increases ${PRIMARYSTAT}, where ${PRIMARYSTAT} is any of the primary stats defined in engine/primary_stats.txt. Example: physical
 		else if (ei.type >= Effect::TYPE_COUNT) {
-			bonus_primary[ei.type - Effect::TYPE_COUNT - Stats::COUNT - eset->damage_types.count - eset->elements.list.size()] += ei.magnitude;
+			bonus_primary[ei.type - Effect::TYPE_COUNT - Stats::COUNT - eset->damage_types.count - eset->elements.list.size()] += static_cast<int>(ei.magnitude);
 		}
 
 		ei.timer.tick();
@@ -386,37 +386,37 @@ void EffectManager::logic() {
 	}
 }
 
-void EffectManager::addEffect(StatBlock* stats, EffectDef &effect, int duration, int magnitude, int source_type, PowerID power_id) {
+void EffectManager::addEffect(StatBlock* stats, EffectDef &effect, int duration, float magnitude, int source_type, PowerID power_id) {
 	addEffectInternal(stats, effect, duration, magnitude, source_type, false, power_id);
 }
 
-void EffectManager::addItemEffect(StatBlock* stats, EffectDef &effect, int duration, int magnitude) {
+void EffectManager::addItemEffect(StatBlock* stats, EffectDef &effect, int duration, float magnitude) {
 	// only the hero can wear items, so use Power::SOURCE_TYPE_HERO
 	addEffectInternal(stats, effect, duration, magnitude, Power::SOURCE_TYPE_HERO, true, NO_POWER);
 }
 
-void EffectManager::addEffectInternal(StatBlock* stats, EffectDef &effect, int duration, int magnitude, int source_type, bool item, PowerID power_id) {
+void EffectManager::addEffectInternal(StatBlock* stats, EffectDef &effect, int duration, float magnitude, int source_type, bool item, PowerID power_id) {
 	refresh_stats = true;
 
 	// if we're already immune, don't add negative effects
 	if (stats) {
-		if ((effect.type == Effect::DAMAGE || effect.type == Effect::DAMAGE_PERCENT) && Math::percentChance(stats->get(Stats::RESIST_DAMAGE_OVER_TIME))) {
+		if ((effect.type == Effect::DAMAGE || effect.type == Effect::DAMAGE_PERCENT) && Math::percentChanceF(stats->get(Stats::RESIST_DAMAGE_OVER_TIME))) {
 			comb->addString(msg->get("Resist"), stats->pos, CombatText::MSG_MISS);
 			return;
 		}
-		else if (effect.type == Effect::SPEED && magnitude < 100 && Math::percentChance(stats->get(Stats::RESIST_SLOW))) {
+		else if (effect.type == Effect::SPEED && magnitude < 100 && Math::percentChanceF(stats->get(Stats::RESIST_SLOW))) {
 			comb->addString(msg->get("Resist"), stats->pos, CombatText::MSG_MISS);
 			return;
 		}
-		else if (effect.type == Effect::STUN && Math::percentChance(stats->get(Stats::RESIST_STUN))) {
+		else if (effect.type == Effect::STUN && Math::percentChanceF(stats->get(Stats::RESIST_STUN))) {
 			comb->addString(msg->get("Resist"), stats->pos, CombatText::MSG_MISS);
 			return;
 		}
-		else if (effect.type == Effect::KNOCKBACK && Math::percentChance(stats->get(Stats::RESIST_KNOCKBACK))) {
+		else if (effect.type == Effect::KNOCKBACK && Math::percentChanceF(stats->get(Stats::RESIST_KNOCKBACK))) {
 			comb->addString(msg->get("Resist"), stats->pos, CombatText::MSG_MISS);
 			return;
 		}
-		else if (effect.type > Effect::TYPE_COUNT && magnitude < 0 && Math::percentChance(stats->get(Stats::RESIST_STAT_DEBUFF))) {
+		else if (effect.type > Effect::TYPE_COUNT && magnitude < 0 && Math::percentChanceF(stats->get(Stats::RESIST_STAT_DEBUFF))) {
 			comb->addString(msg->get("Resist"), stats->pos, CombatText::MSG_MISS);
 			return;
 		}
@@ -452,7 +452,7 @@ void EffectManager::addEffectInternal(StatBlock* stats, EffectDef &effect, int d
 					ei.magnitude += magnitude;
 
 					if (effect.max_stacks == -1
-						|| (magnitude != 0 && ei.magnitude_max/magnitude < effect.max_stacks)){
+						|| (magnitude != 0 && static_cast<int>(ei.magnitude_max/magnitude) < effect.max_stacks)){
 						ei.magnitude_max += magnitude;
 					}
 
@@ -477,9 +477,9 @@ void EffectManager::addEffectInternal(StatBlock* stats, EffectDef &effect, int d
 
 	// if we're adding a debuff resistance effect, remove applicable negative effects
 	for (int i = Stats::RESIST_DAMAGE_OVER_TIME; i <= Stats::RESIST_STAT_DEBUFF; ++i) {
-		int resist_chance = (stats ? stats->get(static_cast<Stats::STAT>(i)) + magnitude : magnitude);
+		float resist_chance = (stats ? stats->get(static_cast<Stats::STAT>(i)) + magnitude : magnitude);
 
-		if ((effect.type == Effect::RESIST_ALL || effect.type == Effect::TYPE_COUNT + i) && Math::percentChance(resist_chance)) {
+		if ((effect.type == Effect::RESIST_ALL || effect.type == Effect::TYPE_COUNT + i) && Math::percentChanceF(resist_chance)) {
 			clearNegativeEffects(Effect::TYPE_COUNT + i);
 		}
 	}
@@ -604,8 +604,8 @@ void EffectManager::clearTriggerEffects(int trigger) {
 	}
 }
 
-int EffectManager::damageShields(int dmg) {
-	int over_dmg = dmg;
+float EffectManager::damageShields(float dmg) {
+	float over_dmg = dmg;
 
 	for (unsigned i=0; i<effect_list.size(); i++) {
 		if (effect_list[i].magnitude_max > 0 && effect_list[i].type == Effect::SHIELD) {

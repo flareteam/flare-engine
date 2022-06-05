@@ -1079,7 +1079,7 @@ void MenuInventory::applyEquipment() {
 				while (bonus_counter < item.bonus.size()) {
 					for (size_t j = 0; j < eset->primary_stats.list.size(); ++j) {
 						if (item.bonus[bonus_counter].base_index == static_cast<int>(j))
-							pc->stats.primary_additional[j] += item.bonus[bonus_counter].value;
+							pc->stats.primary_additional[j] += static_cast<int>(item.bonus[bonus_counter].value);
 					}
 
 					bonus_counter++;
@@ -1114,7 +1114,7 @@ void MenuInventory::applyEquipment() {
 
 				for (size_t j = 0; j < eset->primary_stats.list.size(); ++j) {
 					if (temp_set.bonus[bonus_counter].base_index == static_cast<int>(j))
-						pc->stats.primary_additional[j] += temp_set.bonus[bonus_counter].value;
+						pc->stats.primary_additional[j] += static_cast<int>(temp_set.bonus[bonus_counter].value);
 				}
 			}
 		}
@@ -1301,7 +1301,7 @@ void MenuInventory::applyBonus(const BonusData* bdata) {
 		ed.id = eset->primary_stats.list[bdata->base_index].id;
 	}
 	else if (bdata->power_id > 0) {
-		menu->pow->addBonusLevels(bdata->power_id, bdata->value);
+		menu->pow->addBonusLevels(bdata->power_id, static_cast<int>(bdata->value));
 		return; // don't add item effect
 	}
 

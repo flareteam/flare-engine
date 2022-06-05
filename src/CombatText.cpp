@@ -35,6 +35,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "WidgetLabel.h"
 
+#include <stdio.h>
+
 Combat_Text_Item::Combat_Text_Item()
 	: label(NULL)
 	, lifespan(0)
@@ -42,8 +44,8 @@ Combat_Text_Item::Combat_Text_Item()
 	, floating_offset(0)
 	, text("")
 	, displaytype(0)
-	, is_int(false)
-	, int_value(0)
+	, is_number(false)
+	, number_value(0)
 {}
 
 Combat_Text_Item::~Combat_Text_Item() {
@@ -123,28 +125,24 @@ void CombatText::addString(const std::string& message, const FPoint& location, i
 	combat_text.push_back(c);
 }
 
-void CombatText::addInt(int num, const FPoint& location, int displaytype) {
+void CombatText::addFloat(float num, const FPoint& location, int displaytype) {
 	if (!settings->combat_text)
 		return;
 
-	std::stringstream ss;
-
 	// when adding multiple combat text of the same type and position on the same frame, add the num to the existing text
 	for (std::vector<Combat_Text_Item>::iterator it = combat_text.begin(); it != combat_text.end(); ++it) {
-		if (it->is_int && it->displaytype == displaytype && it->lifespan == duration && it->pos.x == location.x && it->pos.y == location.y) {
-			it->int_value += num;
-			ss << it->int_value;
-			it->text = ss.str();
-			it->label->setText(ss.str());
+		if (it->is_number && it->displaytype == displaytype && it->lifespan == duration && it->pos.x == location.x && it->pos.y == location.y) {
+			it->number_value += num;
+			it->text = Utils::floatToString(it->number_value, 2);
+			it->label->setText(it->text);
 			return;
 		}
 	}
 
-	ss << num;
-	addString(ss.str(), location, displaytype);
+	addString(Utils::floatToString(num, 2), location, displaytype);
 
-	combat_text.back().is_int = true;
-	combat_text.back().int_value = num;
+	combat_text.back().is_number = true;
+	combat_text.back().number_value = num;
 }
 
 void CombatText::logic(const FPoint& _cam) {

@@ -363,7 +363,7 @@ bool Entity::takeHit(Hazard &h) {
 	// prepare the combat text
 	CombatText *combat_text = comb;
 
-	if (h.power->type == Power::TYPE_MISSILE && Math::percentChance(stats.get(Stats::REFLECT))) {
+	if (h.power->type == Power::TYPE_MISSILE && Math::percentChanceF(stats.get(Stats::REFLECT))) {
 		// reflect the missile 180 degrees
 		h.setAngle(h.angle+static_cast<float>(M_PI));
 
@@ -385,7 +385,7 @@ bool Entity::takeHit(Hazard &h) {
 	}
 
 	// if it's a miss, do nothing
-	int accuracy = h.accuracy;
+	float accuracy = h.accuracy;
 	if(powers->powers[h.power_index].mod_accuracy_mode == Power::STAT_MODIFIER_MODE_MULTIPLY)
 		accuracy = (accuracy * powers->powers[h.power_index].mod_accuracy_value) / 100;
 	else if(powers->powers[h.power_index].mod_accuracy_mode == Power::STAT_MODIFIER_MODE_ADD)
@@ -393,35 +393,35 @@ bool Entity::takeHit(Hazard &h) {
 	else if(powers->powers[h.power_index].mod_accuracy_mode == Power::STAT_MODIFIER_MODE_ABSOLUTE)
 		accuracy = powers->powers[h.power_index].mod_accuracy_value;
 
-	int avoidance = 0;
+	float avoidance = 0;
 	if(!powers->powers[h.power_index].trait_avoidance_ignore) {
 		avoidance = stats.get(Stats::AVOIDANCE);
 	}
 
-	int true_avoidance = 100 - (accuracy - avoidance);
-	bool is_overhit = (true_avoidance < 0 && !h.src_stats->perfect_accuracy) ? Math::percentChance(abs(true_avoidance)) : false;
+	float true_avoidance = 100 - (accuracy - avoidance);
+	bool is_overhit = (true_avoidance < 0 && !h.src_stats->perfect_accuracy) ? Math::percentChanceF(fabsf(true_avoidance)) : false;
 	true_avoidance = std::min(std::max(true_avoidance, eset->combat.min_avoidance), eset->combat.max_avoidance);
 
 	bool missed = false;
-	if (!h.src_stats->perfect_accuracy && Math::percentChance(true_avoidance)) {
+	if (!h.src_stats->perfect_accuracy && Math::percentChanceF(true_avoidance)) {
 		missed = true;
 	}
 
 	// calculate base damage
-	int dmg = Math::randBetween(h.dmg_min, h.dmg_max);
+	float dmg = Math::randBetweenF(h.dmg_min, h.dmg_max);
 
 	if(powers->powers[h.power_index].mod_damage_mode == Power::STAT_MODIFIER_MODE_MULTIPLY)
 		dmg = dmg * powers->powers[h.power_index].mod_damage_value_min / 100;
 	else if(powers->powers[h.power_index].mod_damage_mode == Power::STAT_MODIFIER_MODE_ADD)
 		dmg += powers->powers[h.power_index].mod_damage_value_min;
 	else if(powers->powers[h.power_index].mod_damage_mode == Power::STAT_MODIFIER_MODE_ABSOLUTE)
-		dmg = Math::randBetween(powers->powers[h.power_index].mod_damage_value_min, powers->powers[h.power_index].mod_damage_value_max);
+		dmg = Math::randBetweenF(powers->powers[h.power_index].mod_damage_value_min, powers->powers[h.power_index].mod_damage_value_max);
 
 	// apply elemental resistance
 	if (h.power->trait_elemental >= 0 && static_cast<size_t>(h.power->trait_elemental) < eset->elements.list.size()) {
 		size_t i = h.power->trait_elemental;
 
-		int resist = stats.getResist(i);
+		float resist = stats.getResist(i);
 		// resist values < 0 are weakness, and are unaffected by min/max resist setting
 		if (resist >= 0) {
 			if (resist < eset->combat.min_resist)
@@ -435,20 +435,20 @@ bool Entity::takeHit(Hazard &h) {
 
 	if (!h.power->trait_armor_penetration) { // armor penetration ignores all absorption
 		// subtract absorption from armor
-		int absorption = Math::randBetween(stats.get(Stats::ABS_MIN), stats.get(Stats::ABS_MAX));
+		float absorption = Math::randBetweenF(stats.get(Stats::ABS_MIN), stats.get(Stats::ABS_MAX));
 
 		if (absorption > 0 && dmg > 0) {
-			int abs = absorption;
+			float base_absorb = absorption;
 			if (stats.effects.triggered_block) {
-				if ((abs*100)/dmg < eset->combat.min_block)
+				if ((base_absorb*100)/dmg < eset->combat.min_block)
 					absorption = (dmg * eset->combat.min_block) /100;
-				if ((abs*100)/dmg > eset->combat.max_block)
+				if ((base_absorb*100)/dmg > eset->combat.max_block)
 					absorption = (dmg * eset->combat.max_block) /100;
 				}
 			else {
-				if ((abs*100)/dmg < eset->combat.min_absorb)
+				if ((base_absorb*100)/dmg < eset->combat.min_absorb)
 					absorption = (dmg * eset->combat.min_absorb) /100;
-				if ((abs*100)/dmg > eset->combat.max_absorb)
+				if ((base_absorb*100)/dmg > eset->combat.max_absorb)
 					absorption = (dmg * eset->combat.max_absorb) /100;
 			}
 
@@ -478,7 +478,7 @@ bool Entity::takeHit(Hazard &h) {
 	}
 
 	// check for crits
-	int true_crit_chance = h.crit_chance;
+	float true_crit_chance = h.crit_chance;
 
 	if(powers->powers[h.power_index].mod_crit_mode == Power::STAT_MODIFIER_MODE_MULTIPLY)
 		true_crit_chance = true_crit_chance * powers->powers[h.power_index].mod_crit_value / 100;
@@ -490,21 +490,21 @@ bool Entity::takeHit(Hazard &h) {
 	if (stats.effects.stun || stats.effects.speed < 100)
 		true_crit_chance += h.power->trait_crits_impaired;
 
-	bool crit = Math::percentChance(true_crit_chance);
+	bool crit = Math::percentChanceF(true_crit_chance);
 	if (crit) {
 		// default is dmg * 2
-		dmg = (dmg * Math::randBetween(eset->combat.min_crit_damage, eset->combat.max_crit_damage)) / 100;
+		dmg = (dmg * Math::randBetweenF(eset->combat.min_crit_damage, eset->combat.max_crit_damage)) / 100;
 		if(!stats.hero)
 			mapr->cam.shake_timer.setDuration(settings->max_frames_per_sec/2);
 	}
 	else if (is_overhit) {
-		dmg = (dmg * Math::randBetween(eset->combat.min_overhit_damage, eset->combat.max_overhit_damage)) / 100;
+		dmg = (dmg * Math::randBetweenF(eset->combat.min_overhit_damage, eset->combat.max_overhit_damage)) / 100;
 		// Should we use shakycam for overhits?
 	}
 
 	// misses cause reduced damage
 	if (missed) {
-		dmg = (dmg * Math::randBetween(eset->combat.min_miss_damage, eset->combat.max_miss_damage)) / 100;
+		dmg = (dmg * Math::randBetweenF(eset->combat.min_miss_damage, eset->combat.max_miss_damage)) / 100;
 	}
 
 	if (!powers->powers[h.power_index].ignore_zero_damage) {
@@ -513,19 +513,19 @@ bool Entity::takeHit(Hazard &h) {
 			return false;
 		}
 		else if(stats.hero)
-			combat_text->addInt(dmg, stats.pos, CombatText::MSG_TAKEDMG);
+			combat_text->addFloat(dmg, stats.pos, CombatText::MSG_TAKEDMG);
 		else {
 			if(crit || is_overhit)
-				combat_text->addInt(dmg, stats.pos, CombatText::MSG_CRIT);
+				combat_text->addFloat(dmg, stats.pos, CombatText::MSG_CRIT);
 			else if (missed)
-				combat_text->addInt(dmg, stats.pos, CombatText::MSG_MISS);
+				combat_text->addFloat(dmg, stats.pos, CombatText::MSG_MISS);
 			else
-				combat_text->addInt(dmg, stats.pos, CombatText::MSG_GIVEDMG);
+				combat_text->addFloat(dmg, stats.pos, CombatText::MSG_GIVEDMG);
 		}
 	}
 
 	// temporarily save the current HP for calculating HP/MP steal on final blow
-	int prev_hp = stats.hp;
+	float prev_hp = stats.hp;
 
 	// save debuff status to check for on_debuff powers later
 	bool was_debuffed = stats.effects.isDebuffed();
@@ -543,27 +543,27 @@ bool Entity::takeHit(Hazard &h) {
 
 		// HP/MP steal is cumulative between stat bonus and power bonus
 		if (h.src_stats->hp > 0) {
-			int hp_steal = h.power->hp_steal + h.src_stats->get(Stats::HP_STEAL);
+			float hp_steal = h.power->hp_steal + h.src_stats->get(Stats::HP_STEAL);
 			if (hp_steal != 0) {
-				if (Math::percentChance(stats.get(Stats::RESIST_HP_STEAL))) {
-				comb->addString(msg->get("Resist"), stats.pos, CombatText::MSG_MISS);
+				if (Math::percentChanceF(stats.get(Stats::RESIST_HP_STEAL))) {
+					comb->addString(msg->get("Resist"), stats.pos, CombatText::MSG_MISS);
 				}
 				else {
-					int steal_amt = (std::min(dmg, prev_hp) * hp_steal) / 100;
-					if (steal_amt == 0) steal_amt = 1;
-					combat_text->addString(msg->getv("+%d HP",steal_amt), h.src_stats->pos, CombatText::MSG_BUFF);
+					float steal_amt = (std::min(dmg, prev_hp) * hp_steal) / 100;
+					if (steal_amt == 0) steal_amt = 1; // TODO remove this?
+					combat_text->addString(msg->getv("+%s HP", Utils::floatToString(steal_amt, 2).c_str()), h.src_stats->pos, CombatText::MSG_BUFF);
 					h.src_stats->hp = std::min(h.src_stats->hp + steal_amt, h.src_stats->get(Stats::HP_MAX));
 				}
 			}
-			int mp_steal = h.power->mp_steal + h.src_stats->get(Stats::MP_STEAL);
+			float mp_steal = h.power->mp_steal + h.src_stats->get(Stats::MP_STEAL);
 			if (mp_steal != 0) {
-				if (Math::percentChance(stats.get(Stats::RESIST_MP_STEAL))) {
-				comb->addString(msg->get("Resist"), stats.pos, CombatText::MSG_MISS);
+				if (Math::percentChanceF(stats.get(Stats::RESIST_MP_STEAL))) {
+					comb->addString(msg->get("Resist"), stats.pos, CombatText::MSG_MISS);
 				}
 				else {
-					int steal_amt = (std::min(dmg, prev_hp) * mp_steal) / 100;
-					if (steal_amt == 0) steal_amt = 1;
-					combat_text->addString(msg->getv("+%d MP",steal_amt), h.src_stats->pos, CombatText::MSG_BUFF);
+					float steal_amt = (std::min(dmg, prev_hp) * mp_steal) / 100;
+					if (steal_amt == 0) steal_amt = 1; // TODO remove this?
+					combat_text->addString(msg->getv("+%s MP", Utils::floatToString(steal_amt, 2).c_str()), h.src_stats->pos, CombatText::MSG_BUFF);
 					h.src_stats->mp = std::min(h.src_stats->mp + steal_amt, h.src_stats->get(Stats::MP_MAX));
 				}
 			}
@@ -571,14 +571,14 @@ bool Entity::takeHit(Hazard &h) {
 
 		// deal return damage
 		if (stats.get(Stats::RETURN_DAMAGE) > 0) {
-			if (Math::percentChance(h.src_stats->get(Stats::RESIST_DAMAGE_REFLECT))) {
+			if (Math::percentChanceF(h.src_stats->get(Stats::RESIST_DAMAGE_REFLECT))) {
 				comb->addString(msg->get("Resist"), stats.pos, CombatText::MSG_MISS);
 			}
 			else {
-				int dmg_return = static_cast<int>(static_cast<float>(dmg * stats.get(Stats::RETURN_DAMAGE)) / 100.f);
+				float dmg_return = (dmg * stats.get(Stats::RETURN_DAMAGE)) / 100.f;
 
 				if (dmg_return == 0)
-					dmg_return = 1;
+					dmg_return = 1; // TODO remove this?
 
 				// swap the source type when dealing return damage
 				int return_source_type = Power::SOURCE_TYPE_NEUTRAL;
@@ -588,7 +588,7 @@ bool Entity::takeHit(Hazard &h) {
 					return_source_type = stats.hero ? Power::SOURCE_TYPE_HERO : Power::SOURCE_TYPE_ALLY;
 
 				h.src_stats->takeDamage(dmg_return, !StatBlock::TAKE_DMG_CRIT, return_source_type);
-				comb->addInt(dmg_return, h.src_stats->pos, CombatText::MSG_GIVEDMG);
+				comb->addFloat(dmg_return, h.src_stats->pos, CombatText::MSG_GIVEDMG);
 			}
 		}
 	}
@@ -639,7 +639,7 @@ bool Entity::takeHit(Hazard &h) {
 
 		// don't go through a hit animation if stunned or successfully poised
 		// however, critical hits ignore poise
-		bool chance_poise = Math::percentChance(stats.get(Stats::POISE));
+		bool chance_poise = Math::percentChanceF(stats.get(Stats::POISE));
 
 		if(stats.cooldown_hit.isEnd()) {
 			stats.cooldown_hit.reset(Timer::BEGIN);

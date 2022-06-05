@@ -999,15 +999,14 @@ void Avatar::logMsg(const std::string& str, int type) {
 bool Avatar::isLowHp() {
 	if (stats.hp == 0)
 		return false;
-	float hp_one_perc = static_cast<float>(std::max(stats.get(Stats::HP_MAX), 1)) / 100.0f;
-	return static_cast<float>(stats.hp)/hp_one_perc < static_cast<float>(settings->low_hp_threshold);
+	float hp_one_perc = std::max(stats.get(Stats::HP_MAX), 1.f) / 100.0f;
+	return stats.hp/hp_one_perc < static_cast<float>(settings->low_hp_threshold);
 }
 
 // isDroppedToLowHp returns true only if player hp just dropped below threshold
 bool Avatar::isDroppedToLowHp() {
-	float hp_one_perc = static_cast<float>(std::max(stats.get(Stats::HP_MAX), 1)) / 100.0f;
-	return static_cast<float>(stats.hp)/hp_one_perc < static_cast<float>(settings->low_hp_threshold) &&
-		static_cast<float>(prev_hp)/hp_one_perc >= static_cast<float>(settings->low_hp_threshold);
+	float hp_one_perc = std::max(stats.get(Stats::HP_MAX), 1.f) / 100.0f;
+	return (stats.hp/hp_one_perc < static_cast<float>(settings->low_hp_threshold)) && (prev_hp/hp_one_perc >= static_cast<float>(settings->low_hp_threshold));
 }
 
 bool Avatar::isLowHpMessageEnabled() {

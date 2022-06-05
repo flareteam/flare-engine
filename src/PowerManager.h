@@ -40,9 +40,9 @@ class Hazard;
 class PostEffect {
 public:
 	std::string id;
-	int magnitude;
+	float magnitude;
 	int duration;
-	int chance;
+	int chance; // TODO make this a float?
 	bool target_src;
 
 	PostEffect()
@@ -90,8 +90,8 @@ public:
 		int mode;
 		int hp_state;
 		int mp_state;
-		int hp;
-		int mp;
+		float hp;
+		float mp;
 		HPMPState()
 			: mode(HPMPSTATE_ANY)
 			, hp_state(HPMPSTATE_IGNORE)
@@ -177,8 +177,8 @@ public:
 
 	// power requirements
 	std::set<std::string> requires_flags; // checked against equip_flags granted from items
-	int requires_mp;
-	int requires_hp;
+	float requires_mp;
+	float requires_hp;
 	bool sacrifice;
 	bool requires_los; // line of sight
 	bool requires_los_default;
@@ -226,22 +226,22 @@ public:
 	float combat_range;
 
 	int mod_accuracy_mode;
-	int mod_accuracy_value;
+	float mod_accuracy_value;
 
 	int mod_crit_mode;
-	int mod_crit_value;
+	float mod_crit_value;
 
 	int mod_damage_mode;
-	int mod_damage_value_min;
-	int mod_damage_value_max;//only used if mode is absolute
+	float mod_damage_value_min;
+	float mod_damage_value_max;//only used if mode is absolute
 
 	//steal effects (in %, eg. hp_steal=50 turns 50% damage done into HP regain.)
-	int hp_steal;
-	int mp_steal;
+	float hp_steal;
+	float mp_steal;
 
 	//missile traits
-	int missile_angle;
-	int angle_variance;
+	int missile_angle; // TODO convert to float
+	int angle_variance; // TODO convert to float
 	float speed_variance;
 
 	//repeater traits
@@ -249,7 +249,7 @@ public:
 
 	int trait_elemental; // enum. of elements
 	bool trait_armor_penetration;
-	int trait_crits_impaired; // crit bonus vs. movement impaired enemies (slowed, immobilized, stunned)
+	float trait_crits_impaired; // crit bonus vs. movement impaired enemies (slowed, immobilized, stunned)
 	bool trait_avoidance_ignore;
 
 	int transform_duration;

@@ -149,9 +149,9 @@ void MenuActiveEffects::logic() {
 		ei.overlay.w = eset->resolutions.icon_size;
 
 		if (ed.type == Effect::SHIELD) {
-			ei.overlay.y = (eset->resolutions.icon_size * ed.magnitude) / ed.magnitude_max;
-			ei.current = ed.magnitude;
-			ei.max = ed.magnitude_max;
+			ei.overlay.y = static_cast<int>((eset->resolutions.icon_size * ed.magnitude) / ed.magnitude_max);
+			ei.current = static_cast<int>(ed.magnitude);
+			ei.max = static_cast<int>(ed.magnitude_max);
 		}
 		else if (ed.type == Effect::HEAL) {
 			ei.overlay.y = eset->resolutions.icon_size;
