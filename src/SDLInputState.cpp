@@ -236,6 +236,8 @@ void SDLInputState::initBindings() {
 	setBind(Input::DEVELOPER_MENU, InputBind::KEY, SDL_SCANCODE_F5, NULL);
 
 	setBind(Input::EQUIPMENT_SWAP, InputBind::KEY, SDL_SCANCODE_TAB, NULL);
+	setBind(Input::EQUIPMENT_SWAP, InputBind::KEY, SDL_SCANCODE_K, NULL);
+	setBind(Input::EQUIPMENT_SWAP_PREV, InputBind::KEY, SDL_SCANCODE_J, NULL);
 	setBind(Input::MINIMAP_MODE, InputBind::KEY, SDL_SCANCODE_M, NULL);
 	setBind(Input::LOOT_TOOLTIP_MODE, InputBind::KEY, SDL_SCANCODE_SLASH, NULL);
 	setBind(Input::ACTIONBAR, InputBind::KEY, SDL_SCANCODE_B, NULL);
@@ -895,7 +897,8 @@ void SDLInputState::setCommonStrings() {
 	binding_name[Input::LOG] = msg->get("Log");
 	binding_name[Input::MAIN1] = msg->get("Main1");
 	binding_name[Input::MAIN2] = msg->get("Main2");
-	binding_name[Input::EQUIPMENT_SWAP] = msg->get("Equipment Swap");
+	binding_name[Input::EQUIPMENT_SWAP] = msg->get("Next Equip Set");
+	binding_name[Input::EQUIPMENT_SWAP_PREV] = msg->get("Previous Equip Set");
 	binding_name[Input::MINIMAP_MODE] = msg->get("Mini-map Mode");
 	binding_name[Input::LOOT_TOOLTIP_MODE] = msg->get("Loot Tooltip Mode");
 	binding_name[Input::ACTIONBAR] = msg->get("Action Bar");

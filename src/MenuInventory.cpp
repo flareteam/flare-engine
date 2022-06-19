@@ -367,6 +367,12 @@ void MenuInventory::logic() {
 			applyEquipment();
 			clearHighlight();
 		}
+		else if (inpt->pressing[Input::EQUIPMENT_SWAP_PREV] && !inpt->lock[Input::EQUIPMENT_SWAP_PREV]) {
+			inpt->lock[Input::EQUIPMENT_SWAP_PREV] = true;
+			applyPreviousEquipmentSet();
+			applyEquipment();
+			clearHighlight();
+		}
 	}
 
 	tap_to_activate_timer.tick();

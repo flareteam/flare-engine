@@ -9,6 +9,7 @@ Engine features:
 * Replace 'immunity' effects with percentage-based resistances.
 * Added 'mouse_move_deadzone' property to engine/misc.txt to help alleviate erratic mouse-move behavior when the cursor is near the player.
 * Alternative tab UI for when tabs exceed the available space.
+* Added keybind for cycling equipment sets in reverse.
 
 Engine fixes:
 

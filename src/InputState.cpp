@@ -89,6 +89,7 @@ InputState::InputState(void)
 	config_keys[Input::POWERS] = "powers";
 	config_keys[Input::LOG] = "log";
 	config_keys[Input::EQUIPMENT_SWAP] = "equipment_swap";
+	config_keys[Input::EQUIPMENT_SWAP_PREV] = "equipment_swap_prev";
 	config_keys[Input::MINIMAP_MODE] = "minimap_mode";
 	config_keys[Input::LOOT_TOOLTIP_MODE] = "loot_tooltip_mode";
 	config_keys[Input::ACTIONBAR] = "actionbar";
@@ -190,7 +191,8 @@ void InputState::loadKeyBindings() {
 		// @ATTR default.inventory|[int, string], int : Bind, Type|Bindings for "Inventory".
 		// @ATTR default.powers|[int, string], int : Bind, Type|Bindings for "Powers".
 		// @ATTR default.log|[int, string], int : Bind, Type|Bindings for "Log".
-		// @ATTR default.equipment_swap|[int, string], int : Bind, Type|Bindings for "Equipment Swap".
+		// @ATTR default.equipment_swap|[int, string], int : Bind, Type|Bindings for "Next Equip Set".
+		// @ATTR default.equipment_swap_prev|[int, string], int : Bind, Type|Bindings for "Previous Equip Set".
 		// @ATTR default.minimap_mode|[int, string], int : Bind, Type|Bindings for "Mini-map Mode".
 		// @ATTR default.loot_tooltip_mode|[int, string], int : Bind, Type|Bindings for "Loot Tooltip Mode".
 		// @ATTR default.actionbar|[int, string], int : Bind, Type|Bindings for "Action Bar".
