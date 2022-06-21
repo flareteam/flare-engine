@@ -27,6 +27,7 @@ Translation updates:
 
 * German (de) update (Wuzzy2)
 * Japanese (ja) update (Sato Hayato)
+* Polish (pl) update (Pawonashi)
 * Chinese (zh) update (Issac Zhang)
 
 
