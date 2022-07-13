@@ -784,10 +784,16 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 
 	// absorb
 	if (items[stack.item].abs_max > 0) {
-		if (items[stack.item].abs_min < items[stack.item].abs_max)
-			tip.addText(msg->getv("Absorb: %s-%s", Utils::floatToString(items[stack.item].abs_min, 2).c_str(), Utils::floatToString(items[stack.item].abs_max, 2).c_str()));
-		else
-			tip.addText(msg->getv("Absorb: %s", Utils::floatToString(items[stack.item].abs_max, 2).c_str()));
+		std::stringstream abs_str;
+		abs_str << msg->get("Absorb");
+		if (items[stack.item].abs_min < items[stack.item].abs_max) {
+			abs_str << ": " << Utils::floatToString(items[stack.item].abs_min, 2) << "-" << Utils::floatToString(items[stack.item].abs_max, 2);
+			tip.addText(abs_str.str());
+		}
+		else {
+			abs_str << ": " << Utils::floatToString(items[stack.item].abs_max, 2);
+			tip.addText(abs_str.str());
+		}
 	}
 
 	// bonuses
