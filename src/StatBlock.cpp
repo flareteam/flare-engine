@@ -224,7 +224,7 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 		return true;
 	}
 	else if (infile->key == "cooldown") {
-		// @ATTR cooldown|int|Cooldown between attacks in 'ms' or 's'.
+		// @ATTR cooldown|duration|Cooldown between attacks in 'ms' or 's'.
 		cooldown.setDuration(Parse::toDuration(infile->val));
 		return true;
 	}
@@ -235,7 +235,7 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 		return true;
 	}
 	else if (infile->key == "stat") {
-		// @ATTR stat|stat_id, int : Stat ID, Value|The starting value for this stat.
+		// @ATTR stat|stat_id, float : Stat ID, Value|The starting value for this stat.
 		std::string stat = Parse::popFirstString(infile->val);
 		float value = Parse::popFirstFloat(infile->val);
 
@@ -265,7 +265,7 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 		}
 	}
 	else if (infile->key == "stat_per_level") {
-		// @ATTR stat_per_level|stat_id, int : Stat ID, Value|The value for this stat added per level.
+		// @ATTR stat_per_level|stat_id, float : Stat ID, Value|The value for this stat added per level.
 		std::string stat = Parse::popFirstString(infile->val);
 		float value = Parse::popFirstFloat(infile->val);
 
@@ -295,7 +295,7 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 		}
 	}
 	else if (infile->key == "stat_per_primary") {
-		// @ATTR stat_per_primary|predefined_string, stat_id, int : Primary Stat, Stat ID, Value|The value for this stat added for every point allocated to this primary stat.
+		// @ATTR stat_per_primary|predefined_string, stat_id, float : Primary Stat, Stat ID, Value|The value for this stat added for every point allocated to this primary stat.
 		std::string prim_stat = Parse::popFirstString(infile->val);
 		size_t prim_stat_index = eset->primary_stats.getIndexByID(prim_stat);
 		if (prim_stat_index == eset->primary_stats.list.size()) {
@@ -332,7 +332,7 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 		}
 	}
 	else if (infile->key == "vulnerable") {
-		// @ATTR vulnerable|predefined_string, int : Element, Value|(Deprecated in v1.12.91; use a '..._resist' value with 'stat' instead) Percentage weakness to this element.
+		// @ATTR vulnerable|predefined_string, float : Element, Value|(Deprecated in v1.12.91; use a '..._resist' value with 'stat' instead) Percentage weakness to this element.
 		std::string element = Parse::popFirstString(infile->val);
 		float value = (Parse::popFirstFloat(infile->val) * -1) + 100;
 

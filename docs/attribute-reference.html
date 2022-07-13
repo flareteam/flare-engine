@@ -274,19 +274,19 @@ code {
 
 <p>Description of engine/combat.txt</p>
 
-<p><strong>absorb_percent</strong> | <code>int, int : Minimum, Maximum</code> | Limits the percentage of damage that can be absorbed. A max value less than 100 will ensure that the target always takes at least 1 damage from non-elemental attacks.</p>
+<p><strong>absorb_percent</strong> | <code>float, float : Minimum, Maximum</code> | Limits the percentage of damage that can be absorbed. A max value less than 100 will ensure that the target always takes at least 1 damage from non-elemental attacks.</p>
 
-<p><strong>resist_percent</strong> | <code>int, int : Minimum, Maximum</code> | Limits the percentage of damage that can be resisted. A max value less than 100 will ensure that the target always takes at least 1 damage from elemental attacks.</p>
+<p><strong>resist_percent</strong> | <code>float, float : Minimum, Maximum</code> | Limits the percentage of damage that can be resisted. A max value less than 100 will ensure that the target always takes at least 1 damage from elemental attacks.</p>
 
-<p><strong>block_percent</strong> | <code>int, int : Minimum, Maximum</code> | Limits the percentage of damage that can be absorbed when the target is in the 'block' animation state. A max value less than 100 will ensure that the target always takes at least 1 damage from non-elemental attacks.</p>
+<p><strong>block_percent</strong> | <code>float, float : Minimum, Maximum</code> | Limits the percentage of damage that can be absorbed when the target is in the 'block' animation state. A max value less than 100 will ensure that the target always takes at least 1 damage from non-elemental attacks.</p>
 
-<p><strong>avoidance_percent</strong> | <code>int, int : Minimum, Maximum</code> | Limits the percentage chance that damage will be avoided.</p>
+<p><strong>avoidance_percent</strong> | <code>float, float : Minimum, Maximum</code> | Limits the percentage chance that damage will be avoided.</p>
 
-<p><strong>miss_damage_percent</strong> | <code>int, int : Minimum, Maximum</code> | The percentage of damage dealt when a miss occurs.</p>
+<p><strong>miss_damage_percent</strong> | <code>float, float : Minimum, Maximum</code> | The percentage of damage dealt when a miss occurs.</p>
 
-<p><strong>crit_damage_percent</strong> | <code>int, int : Minimum, Maximum</code> | The percentage of damage dealt when a critical hit occurs.</p>
+<p><strong>crit_damage_percent</strong> | <code>float, float : Minimum, Maximum</code> | The percentage of damage dealt when a critical hit occurs.</p>
 
-<p><strong>overhit_damage_percent</strong> | <code>int, int : Minimum, Maximum</code> | The percentage of damage dealt when an overhit occurs.</p>
+<p><strong>overhit_damage_percent</strong> | <code>float, float : Minimum, Maximum</code> | The percentage of damage dealt when an overhit occurs.</p>
 
 <hr />
 
@@ -960,9 +960,9 @@ code {
 
 <p><strong>equip_flags</strong> | <code>list(predefined_string)</code> | A comma separated list of flags to set when this item is equipped. See engine/equip_flags.txt.</p>
 
-<p><strong>dmg</strong> | <code>predefined_string, int, int : Damage type, Min, Max</code> | Defines the item's base damage type and range. Max may be ommitted and will default to Min.</p>
+<p><strong>dmg</strong> | <code>predefined_string, float, float : Damage type, Min, Max</code> | Defines the item's base damage type and range. Max may be ommitted and will default to Min.</p>
 
-<p><strong>abs</strong> | <code>int, int : Min, Max</code> | Defines the item absorb value, if only min is specified the absorb value is fixed.</p>
+<p><strong>abs</strong> | <code>float, float : Min, Max</code> | Defines the item absorb value, if only min is specified the absorb value is fixed.</p>
 
 <p><strong>requires_level</strong> | <code>int</code> | The hero's level must match or exceed this value in order to equip this item.</p>
 
@@ -970,7 +970,7 @@ code {
 
 <p><strong>requires_class</strong> | <code>predefined_string</code> | The hero's base class (engine/classes.txt) must match for this item to be equipped.</p>
 
-<p><strong>bonus</strong> | <code>repeatable(stat_id, int) : Stat ID, Value</code> | Adds a bonus to the item by stat ID, example: bonus=hp, 50</p>
+<p><strong>bonus</strong> | <code>repeatable(stat_id, float) : Stat ID, Value</code> | Adds a bonus to the item by stat ID, example: bonus=hp,50</p>
 
 <p><strong>bonus_power_level</strong> | <code>repeatable(power_id, int) : Base power, Bonus levels</code> | Grants bonus levels to a given base power.</p>
 
@@ -1004,7 +1004,7 @@ code {
 
 <p><strong>no_stash</strong> | <code>["ignore", "private", "shared", "all"]</code> | If not set to 'ignore', this item will not be able to be put in the corresponding stash.</p>
 
-<p><strong>item.script</strong> | <code>filename</code> | Loads and executes a script file when the item is activated from the player's inventory.</p>
+<p><strong>script</strong> | <code>filename</code> | Loads and executes a script file when the item is activated from the player's inventory.</p>
 
 <hr />
 
@@ -1044,7 +1044,7 @@ code {
 
 <p><strong>color</strong> | <code>color</code> | A specific of color for the set.</p>
 
-<p><strong>bonus</strong> | <code>repeatable(int, stat_id, int) : Required set item count, Stat ID, Value</code> | Bonus to append to items in the set.</p>
+<p><strong>bonus</strong> | <code>repeatable(int, stat_id, float) : Required set item count, Stat ID, Value</code> | Bonus to append to items in the set.</p>
 
 <p><strong>bonus_power_level</strong> | <code>repeatable(int, power_id, int) : Required set item count, Base power, Bonus levels</code> | Grants bonus levels to a given base power.</p>
 
@@ -1864,9 +1864,9 @@ code {
 
 <p><strong>power.requires_flags</strong> | <code>list(predefined_string)</code> | A comma separated list of equip flags that are required to use this power. See engine/equip_flags.txt</p>
 
-<p><strong>power.requires_mp</strong> | <code>int</code> | Restrict power usage to a specified MP level.</p>
+<p><strong>power.requires_mp</strong> | <code>float</code> | Restrict power usage to a specified MP level.</p>
 
-<p><strong>power.requires_hp</strong> | <code>int</code> | Restrict power usage to a specified HP level.</p>
+<p><strong>power.requires_hp</strong> | <code>float</code> | Restrict power usage to a specified HP level.</p>
 
 <p><strong>power.sacrifice</strong> | <code>bool</code> | If the power has requires_hp, allow it to kill the caster.</p>
 
@@ -1884,7 +1884,7 @@ code {
 
 <p><strong>power.cooldown</strong> | <code>duration</code> | Specify the duration for cooldown of the power in 'ms' or 's'.</p>
 
-<p><strong>power.requires_hpmp_state</strong> | <code>["all", "any"], ["percent", "not_percent", "ignore"], int , ["percent", "not_percent", "ignore"], int : Mode, HP state, HP Percentage value, MP state, MP Percentage value</code> | Power can only be used when HP/MP matches the specified state. In 'all' mode, both HP and MP must meet the requirements, where as only one must in 'any' mode. To check a single stat, use 'all' mode and set the 'ignore' state for the other stat.</p>
+<p><strong>power.requires_hpmp_state</strong> | <code>["all", "any"], ["percent", "not_percent", "ignore"], float , ["percent", "not_percent", "ignore"], float : Mode, HP state, HP Percentage value, MP state, MP Percentage value</code> | Power can only be used when HP/MP matches the specified state. In 'all' mode, both HP and MP must meet the requirements, where as only one must in 'any' mode. To check a single stat, use 'all' mode and set the 'ignore' state for the other stat.</p>
 
 <p><strong>power.animation</strong> | <code>filename</code> | The filename of the power animation.</p>
 
@@ -1948,9 +1948,9 @@ code {
 
 <p><strong>power.target_range</strong> | <code>float</code> | The distance from the caster that the power can be activated</p>
 
-<p><strong>power.hp_steal</strong> | <code>int</code> | Percentage of damage to steal into HP</p>
+<p><strong>power.hp_steal</strong> | <code>float</code> | Percentage of damage to steal into HP</p>
 
-<p><strong>power.mp_steal</strong> | <code>int</code> | Percentage of damage to steal into MP</p>
+<p><strong>power.mp_steal</strong> | <code>float</code> | Percentage of damage to steal into MP</p>
 
 <p><strong>power.missile_angle</strong> | <code>int</code> | Angle of missile</p>
 
@@ -1976,9 +1976,9 @@ code {
 
 <p><strong>power.buff_party_power_id</strong> | <code>power_id</code> | Only party members that were spawned with this power ID are affected by "buff_party=true". Setting this to 0 will affect all party members.</p>
 
-<p><strong>power.post_effect</strong> | <code>predefined_string, int, duration , int : Effect ID, Magnitude, Duration, Chance to apply</code> | Post effect to apply to target. Duration is in 'ms' or 's'.</p>
+<p><strong>power.post_effect</strong> | <code>predefined_string, float, duration , int : Effect ID, Magnitude, Duration, Chance to apply</code> | Post effect to apply to target. Duration is in 'ms' or 's'.</p>
 
-<p><strong>power.post_effect_src</strong> | <code>predefined_string, int, duration , int : Effect ID, Magnitude, Duration, Chance to apply</code> | Post effect to apply to caster. Duration is in 'ms' or 's'.</p>
+<p><strong>power.post_effect_src</strong> | <code>predefined_string, float, duration , int : Effect ID, Magnitude, Duration, Chance to apply</code> | Post effect to apply to caster. Duration is in 'ms' or 's'.</p>
 
 <p><strong>power.pre_power</strong> | <code>power_id, int : Power, Chance to cast</code> | Trigger a power immediately when casting this one.</p>
 
@@ -2000,11 +2000,11 @@ code {
 
 <p><strong>power.target_categories</strong> | <code>list(predefined_string)</code> | Hazard will only affect enemies in these categories.</p>
 
-<p><strong>power.modifier_accuracy</strong> | <code>["multiply", "add", "absolute"], int : Mode, Value</code> | Changes this power's accuracy.</p>
+<p><strong>power.modifier_accuracy</strong> | <code>["multiply", "add", "absolute"], float : Mode, Value</code> | Changes this power's accuracy.</p>
 
-<p><strong>power.modifier_damage</strong> | <code>["multiply", "add", "absolute"], int, int : Mode, Min, Max</code> | Changes this power's damage. The "Max" value is ignored, except in the case of "absolute" modifiers.</p>
+<p><strong>power.modifier_damage</strong> | <code>["multiply", "add", "absolute"], float, float : Mode, Min, Max</code> | Changes this power's damage. The "Max" value is ignored, except in the case of "absolute" modifiers.</p>
 
-<p><strong>power.modifier_critical</strong> | <code>["multiply", "add", "absolute"], int : Mode, Value</code> | Changes the chance that this power will land a critical hit.</p>
+<p><strong>power.modifier_critical</strong> | <code>["multiply", "add", "absolute"], float : Mode, Value</code> | Changes the chance that this power will land a critical hit.</p>
 
 <p><strong>power.target_movement_normal</strong> | <code>bool</code> | Power can affect entities with normal movement (aka walking on ground)</p>
 
@@ -2076,17 +2076,17 @@ code {
 
 <p><strong>speed</strong> | <code>float</code> | Movement speed</p>
 
-<p><strong>cooldown</strong> | <code>int</code> | Cooldown between attacks in 'ms' or 's'.</p>
+<p><strong>cooldown</strong> | <code>duration</code> | Cooldown between attacks in 'ms' or 's'.</p>
 
 <p><strong>cooldown_hit</strong> | <code>duration</code> | Duration of cooldown after being hit in 'ms' or 's'.</p>
 
-<p><strong>stat</strong> | <code>stat_id, int : Stat ID, Value</code> | The starting value for this stat.</p>
+<p><strong>stat</strong> | <code>stat_id, float : Stat ID, Value</code> | The starting value for this stat.</p>
 
-<p><strong>stat_per_level</strong> | <code>stat_id, int : Stat ID, Value</code> | The value for this stat added per level.</p>
+<p><strong>stat_per_level</strong> | <code>stat_id, float : Stat ID, Value</code> | The value for this stat added per level.</p>
 
-<p><strong>stat_per_primary</strong> | <code>predefined_string, stat_id, int : Primary Stat, Stat ID, Value</code> | The value for this stat added for every point allocated to this primary stat.</p>
+<p><strong>stat_per_primary</strong> | <code>predefined_string, stat_id, float : Primary Stat, Stat ID, Value</code> | The value for this stat added for every point allocated to this primary stat.</p>
 
-<p><strong>vulnerable</strong> | <code>predefined_string, int : Element, Value</code> | (Deprecated in v1.12.91; use a '..._resist' value with 'stat' instead) Percentage weakness to this element.</p>
+<p><strong>vulnerable</strong> | <code>predefined_string, float : Element, Value</code> | (Deprecated in v1.12.91; use a '..._resist' value with 'stat' instead) Percentage weakness to this element.</p>
 
 <p><strong>power_filter</strong> | <code>list(power_id)</code> | Only these powers are allowed to hit this entity.</p>
 

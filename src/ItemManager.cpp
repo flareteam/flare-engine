@@ -255,7 +255,7 @@ void ItemManager::loadItems(const std::string& filename) {
 			items[id].requires_class = infile.val;
 		}
 		else if (infile.key == "bonus") {
-			// @ATTR bonus|repeatable(stat_id, int) : Stat ID, Value|Adds a bonus to the item by stat ID, example: bonus=hp, 50
+			// @ATTR bonus|repeatable(stat_id, float) : Stat ID, Value|Adds a bonus to the item by stat ID, example: bonus=hp,50
 			if (clear_bonus) {
 				items[id].bonus.clear();
 				clear_bonus = false;
@@ -363,7 +363,7 @@ void ItemManager::loadItems(const std::string& filename) {
 				infile.error("ItemManager: '%s' is not a valid value for 'no_stash'. Use 'ignore', 'private', 'shared', or 'all'.", temp.c_str());
 		}
 		else if (infile.key == "script") {
-			// @ATTR item.script|filename|Loads and executes a script file when the item is activated from the player's inventory.
+			// @ATTR script|filename|Loads and executes a script file when the item is activated from the player's inventory.
 			items[id].script = Parse::popFirstString(infile.val);
 		}
 		else {
@@ -570,7 +570,7 @@ void ItemManager::loadSets(const std::string& filename) {
 			item_sets[id].color = Parse::toRGB(infile.val);
 		}
 		else if (infile.key == "bonus") {
-			// @ATTR bonus|repeatable(int, stat_id, int) : Required set item count, Stat ID, Value|Bonus to append to items in the set.
+			// @ATTR bonus|repeatable(int, stat_id, float) : Required set item count, Stat ID, Value|Bonus to append to items in the set.
 			if (clear_bonus) {
 				item_sets[id].bonus.clear();
 				clear_bonus = false;

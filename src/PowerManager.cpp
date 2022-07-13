@@ -432,7 +432,7 @@ void PowerManager::loadPowers() {
 			// @ATTR power.cooldown|duration|Specify the duration for cooldown of the power in 'ms' or 's'.
 			powers[input_id].cooldown = Parse::toDuration(infile.val);
 		else if (infile.key == "requires_hpmp_state") {
-			// @ATTR power.requires_hpmp_state|["all", "any"], ["percent", "not_percent", "ignore"], int , ["percent", "not_percent", "ignore"], int: Mode, HP state, HP Percentage value, MP state, MP Percentage value|Power can only be used when HP/MP matches the specified state. In 'all' mode, both HP and MP must meet the requirements, where as only one must in 'any' mode. To check a single stat, use 'all' mode and set the 'ignore' state for the other stat.
+			// @ATTR power.requires_hpmp_state|["all", "any"], ["percent", "not_percent", "ignore"], float , ["percent", "not_percent", "ignore"], float: Mode, HP state, HP Percentage value, MP state, MP Percentage value|Power can only be used when HP/MP matches the specified state. In 'all' mode, both HP and MP must meet the requirements, where as only one must in 'any' mode. To check a single stat, use 'all' mode and set the 'ignore' state for the other stat.
 
 			std::string mode = Parse::popFirstString(infile.val);
 			std::string state_hp = Parse::popFirstString(infile.val);
@@ -638,10 +638,10 @@ void PowerManager::loadPowers() {
 			powers[input_id].target_range = Parse::popFirstFloat(infile.val);
 		//steal effects
 		else if (infile.key == "hp_steal")
-			// @ATTR power.hp_steal|int|Percentage of damage to steal into HP
+			// @ATTR power.hp_steal|float|Percentage of damage to steal into HP
 			powers[input_id].hp_steal = Parse::toFloat(infile.val);
 		else if (infile.key == "mp_steal")
-			// @ATTR power.mp_steal|int|Percentage of damage to steal into MP
+			// @ATTR power.mp_steal|float|Percentage of damage to steal into MP
 			powers[input_id].mp_steal = Parse::toFloat(infile.val);
 		//missile modifiers
 		else if (infile.key == "missile_angle")
@@ -684,8 +684,8 @@ void PowerManager::loadPowers() {
 			// @ATTR power.buff_party_power_id|power_id|Only party members that were spawned with this power ID are affected by "buff_party=true". Setting this to 0 will affect all party members.
 			powers[input_id].buff_party_power_id = Parse::toInt(infile.val);
 		else if (infile.key == "post_effect" || infile.key == "post_effect_src") {
-			// @ATTR power.post_effect|predefined_string, int, duration , int: Effect ID, Magnitude, Duration, Chance to apply|Post effect to apply to target. Duration is in 'ms' or 's'.
-			// @ATTR power.post_effect_src|predefined_string, int, duration , int: Effect ID, Magnitude, Duration, Chance to apply|Post effect to apply to caster. Duration is in 'ms' or 's'.
+			// @ATTR power.post_effect|predefined_string, float, duration , int: Effect ID, Magnitude, Duration, Chance to apply|Post effect to apply to target. Duration is in 'ms' or 's'.
+			// @ATTR power.post_effect_src|predefined_string, float, duration , int: Effect ID, Magnitude, Duration, Chance to apply|Post effect to apply to caster. Duration is in 'ms' or 's'.
 			if (clear_post_effects) {
 				powers[input_id].post_effects.clear();
 				clear_post_effects = false;
@@ -829,7 +829,7 @@ void PowerManager::loadPowers() {
 			}
 		}
 		else if (infile.key == "modifier_accuracy") {
-			// @ATTR power.modifier_accuracy|["multiply", "add", "absolute"], int : Mode, Value|Changes this power's accuracy.
+			// @ATTR power.modifier_accuracy|["multiply", "add", "absolute"], float : Mode, Value|Changes this power's accuracy.
 			std::string mode = Parse::popFirstString(infile.val);
 			if(mode == "multiply") powers[input_id].mod_accuracy_mode = Power::STAT_MODIFIER_MODE_MULTIPLY;
 			else if(mode == "add") powers[input_id].mod_accuracy_mode = Power::STAT_MODIFIER_MODE_ADD;
@@ -839,7 +839,7 @@ void PowerManager::loadPowers() {
 			powers[input_id].mod_accuracy_value = Parse::popFirstFloat(infile.val);
 		}
 		else if (infile.key == "modifier_damage") {
-			// @ATTR power.modifier_damage|["multiply", "add", "absolute"], int, int : Mode, Min, Max|Changes this power's damage. The "Max" value is ignored, except in the case of "absolute" modifiers.
+			// @ATTR power.modifier_damage|["multiply", "add", "absolute"], float, float : Mode, Min, Max|Changes this power's damage. The "Max" value is ignored, except in the case of "absolute" modifiers.
 			std::string mode = Parse::popFirstString(infile.val);
 			if(mode == "multiply") powers[input_id].mod_damage_mode = Power::STAT_MODIFIER_MODE_MULTIPLY;
 			else if(mode == "add") powers[input_id].mod_damage_mode = Power::STAT_MODIFIER_MODE_ADD;
@@ -850,7 +850,7 @@ void PowerManager::loadPowers() {
 			powers[input_id].mod_damage_value_max = Parse::popFirstFloat(infile.val);
 		}
 		else if (infile.key == "modifier_critical") {
-			// @ATTR power.modifier_critical|["multiply", "add", "absolute"], int : Mode, Value|Changes the chance that this power will land a critical hit.
+			// @ATTR power.modifier_critical|["multiply", "add", "absolute"], float : Mode, Value|Changes the chance that this power will land a critical hit.
 			std::string mode = Parse::popFirstString(infile.val);
 			if(mode == "multiply") powers[input_id].mod_crit_mode = Power::STAT_MODIFIER_MODE_MULTIPLY;
 			else if(mode == "add") powers[input_id].mod_crit_mode = Power::STAT_MODIFIER_MODE_ADD;
