@@ -49,7 +49,7 @@ public:
 		std::string window_title;
 		std::string save_prefix;
 		int sound_falloff;
-		int party_exp_percentage;
+		float party_exp_percentage;
 		bool enable_ally_collision;
 		bool enable_ally_collision_ai;
 		ItemID currency_id;
@@ -205,9 +205,9 @@ public:
 
 		bool enabled;
 		bool permadeath;
-		int currency;
-		int xp;
-		int xp_current;
+		float currency;
+		float xp;
+		float xp_current;
 		bool item;
 	};
 

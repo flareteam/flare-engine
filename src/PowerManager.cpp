@@ -552,10 +552,10 @@ void PowerManager::loadPowers() {
 			// @ATTR power.charge_speed|float|Moves the caster at this speed in the direction they are facing until the state animation is finished.
 			powers[input_id].charge_speed = Parse::toFloat(infile.val) / settings->max_frames_per_sec;
 		else if (infile.key == "attack_speed") {
-			// @ATTR power.attack_speed|int|Changes attack animation speed for this Power. A value of 100 is 100% speed (aka normal speed).
-			powers[input_id].attack_speed = static_cast<float>(Parse::toInt(infile.val));
+			// @ATTR power.attack_speed|float|Changes attack animation speed for this Power. A value of 100 is 100% speed (aka normal speed).
+			powers[input_id].attack_speed = Parse::toFloat(infile.val);
 			if (powers[input_id].attack_speed < 100) {
-				Utils::logInfo("PowerManager: Attack speeds less than 100 are unsupported.");
+				Utils::logInfo("PowerManager: Attack speeds less than 100 are unsupported."); // TODO is this still true?
 				powers[input_id].attack_speed = 100;
 			}
 		}
@@ -570,7 +570,7 @@ void PowerManager::loadPowers() {
 			// @ATTR power.no_aggro|bool|If true, the Hazard won't put its target in a combat state.
 			powers[input_id].no_aggro = Parse::toBool(infile.val);
 		else if (infile.key == "radius")
-			// @ATTR power.radius|float|Radius in pixels
+			// @ATTR power.radius|float|Radius in map units
 			powers[input_id].radius = Parse::toFloat(infile.val);
 		else if (infile.key == "base_damage") {
 			// @ATTR power.base_damage|predefined_string : Damage type ID|Determines which damage stat will be used to calculate damage.
@@ -645,11 +645,11 @@ void PowerManager::loadPowers() {
 			powers[input_id].mp_steal = Parse::toFloat(infile.val);
 		//missile modifiers
 		else if (infile.key == "missile_angle")
-			// @ATTR power.missile_angle|int|Angle of missile
-			powers[input_id].missile_angle = Parse::toInt(infile.val);
+			// @ATTR power.missile_angle|float|Angle of missile
+			powers[input_id].missile_angle = Parse::toFloat(infile.val);
 		else if (infile.key == "angle_variance")
-			// @ATTR power.angle_variance|int|Percentage of variance added to missile angle
-			powers[input_id].angle_variance = Parse::toInt(infile.val);
+			// @ATTR power.angle_variance|float|Percentage of variance added to missile angle
+			powers[input_id].angle_variance = Parse::toFloat(infile.val);
 		else if (infile.key == "speed_variance")
 			// @ATTR power.speed_variance|float|Percentage of variance added to missile speed
 			powers[input_id].speed_variance = Parse::toFloat(infile.val);
@@ -684,8 +684,8 @@ void PowerManager::loadPowers() {
 			// @ATTR power.buff_party_power_id|power_id|Only party members that were spawned with this power ID are affected by "buff_party=true". Setting this to 0 will affect all party members.
 			powers[input_id].buff_party_power_id = Parse::toInt(infile.val);
 		else if (infile.key == "post_effect" || infile.key == "post_effect_src") {
-			// @ATTR power.post_effect|predefined_string, float, duration , int: Effect ID, Magnitude, Duration, Chance to apply|Post effect to apply to target. Duration is in 'ms' or 's'.
-			// @ATTR power.post_effect_src|predefined_string, float, duration , int: Effect ID, Magnitude, Duration, Chance to apply|Post effect to apply to caster. Duration is in 'ms' or 's'.
+			// @ATTR power.post_effect|predefined_string, float, duration , float: Effect ID, Magnitude, Duration, Chance to apply|Post effect to apply to target. Duration is in 'ms' or 's'.
+			// @ATTR power.post_effect_src|predefined_string, float, duration , float: Effect ID, Magnitude, Duration, Chance to apply|Post effect to apply to caster. Duration is in 'ms' or 's'.
 			if (clear_post_effects) {
 				powers[input_id].post_effects.clear();
 				clear_post_effects = false;
@@ -703,7 +703,7 @@ void PowerManager::loadPowers() {
 				pe.duration = Parse::toDuration(Parse::popFirstString(infile.val));
 				std::string chance = Parse::popFirstString(infile.val);
 				if (!chance.empty()) {
-					pe.chance = Parse::toInt(chance);
+					pe.chance = Parse::toFloat(chance);
 				}
 
 				int pe_type;
@@ -728,11 +728,11 @@ void PowerManager::loadPowers() {
 		}
 		// pre and post power effects
 		else if (infile.key == "pre_power") {
-			// @ATTR power.pre_power|power_id, int : Power, Chance to cast|Trigger a power immediately when casting this one.
+			// @ATTR power.pre_power|power_id, float : Power, Chance to cast|Trigger a power immediately when casting this one.
 			powers[input_id].pre_power = Parse::popFirstInt(infile.val);
 			std::string chance = Parse::popFirstString(infile.val);
 			if (!chance.empty()) {
-				powers[input_id].pre_power_chance = Parse::toInt(chance);
+				powers[input_id].pre_power_chance = Parse::toFloat(chance);
 			}
 		}
 		else if (infile.key == "post_power") {
@@ -740,7 +740,7 @@ void PowerManager::loadPowers() {
 			powers[input_id].post_power = Parse::popFirstInt(infile.val);
 			std::string chance = Parse::popFirstString(infile.val);
 			if (!chance.empty()) {
-				powers[input_id].post_power_chance = Parse::toInt(chance);
+				powers[input_id].post_power_chance = Parse::toFloat(chance);
 			}
 		}
 		else if (infile.key == "wall_power") {
@@ -748,7 +748,7 @@ void PowerManager::loadPowers() {
 			powers[input_id].wall_power = Parse::popFirstInt(infile.val);
 			std::string chance = Parse::popFirstString(infile.val);
 			if (!chance.empty()) {
-				powers[input_id].wall_power_chance = Parse::toInt(chance);
+				powers[input_id].wall_power_chance = Parse::toFloat(chance);
 			}
 		}
 		else if (infile.key == "wall_reflect")
@@ -1171,7 +1171,7 @@ void PowerManager::buff(PowerID power_index, StatBlock *src_stats, const FPoint&
 		src_stats->effects.removeEffectID(powers[power_index].remove_effects);
 
 		if (!powers[power_index].passive) {
-			if (Math::percentChance(powers[power_index].post_power_chance)) {
+			if (Math::percentChanceF(powers[power_index].post_power_chance)) {
 				activate(powers[power_index].post_power, src_stats, src_stats->pos);
 			}
 		}
@@ -1192,7 +1192,7 @@ bool PowerManager::effect(StatBlock *target_stats, StatBlock *caster_stats, Powe
 	for (unsigned i=0; i<powers[power_index].post_effects.size(); i++) {
 		const PostEffect& pe = pwr.post_effects[i];
 
-		if (!Math::percentChance(pe.chance))
+		if (!Math::percentChanceF(pe.chance))
 			continue;
 
 		EffectDef effect_data;
@@ -1328,11 +1328,11 @@ bool PowerManager::missile(PowerID power_index, StatBlock *src_stats, const FPoi
 		initHazard(power_index, src_stats, target, haz);
 
 		//calculate individual missile angle
-		float offset_angle = ((1.0f - static_cast<float>(powers[power_index].count))/2 + static_cast<float>(i)) * (static_cast<float>(powers[power_index].missile_angle) * static_cast<float>(M_PI) / 180.0f);
+		float offset_angle = ((1.0f - static_cast<float>(powers[power_index].count))/2 + static_cast<float>(i)) * (powers[power_index].missile_angle * static_cast<float>(M_PI) / 180.0f);
 		float variance = 0;
 		if (powers[power_index].angle_variance != 0) {
-			//random between 0 and angle_variance away
-			variance = static_cast<float>(pow(-1.0f, (rand() % 2) - 1) * static_cast<float>(rand() % powers[power_index].angle_variance) * M_PI / 180.0f);
+			//random arc between negative angle_variance and positive angle_variance
+			variance = Math::randBetweenF(powers[power_index].angle_variance * -1.f, powers[power_index].angle_variance) * static_cast<float>(M_PI) / 180.0f;
 		}
 		float alpha = theta + offset_angle + variance;
 
@@ -1768,7 +1768,7 @@ void PowerManager::activatePassivePostPowers(StatBlock *src_stats) {
 			continue;
 
 		if (src_stats->getPowerCooldown(post_power) == 0 && src_stats->canUsePower(post_power, !StatBlock::CAN_USE_PASSIVE)) {
-			if (Math::percentChance(powers[src_stats->powers_passive[i]].post_power_chance)) {
+			if (Math::percentChanceF(powers[src_stats->powers_passive[i]].post_power_chance)) {
 				activate(post_power, src_stats, src_stats->pos);
 				src_stats->setPowerCooldown(post_power, powers[post_power].cooldown);
 			}

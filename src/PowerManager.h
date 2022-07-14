@@ -42,7 +42,7 @@ public:
 	std::string id;
 	float magnitude;
 	int duration;
-	int chance; // TODO make this a float?
+	float chance;
 	bool target_src;
 
 	PostEffect()
@@ -240,8 +240,8 @@ public:
 	float mp_steal;
 
 	//missile traits
-	int missile_angle; // TODO convert to float
-	int angle_variance; // TODO convert to float
+	float missile_angle;
+	float angle_variance;
 	float speed_variance;
 
 	//repeater traits
@@ -266,11 +266,11 @@ public:
 	std::vector<PostEffect> post_effects;
 
 	PowerID pre_power;
-	int pre_power_chance;
+	float pre_power_chance;
 	PowerID post_power;
-	int post_power_chance;
+	float post_power_chance;
 	PowerID wall_power;
-	int wall_power_chance;
+	float wall_power_chance;
 	bool wall_reflect;
 
 	// spawn info

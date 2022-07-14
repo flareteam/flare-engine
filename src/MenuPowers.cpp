@@ -1090,7 +1090,7 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 					ss << " ";
 			}
 			if (pwr.post_effects[i].chance != 100) {
-				ss << "(" << msg->getv("%d%% chance", pwr.post_effects[i].chance) << ")";
+				ss << "(" << msg->getv("%s%% chance", Utils::floatToString(pwr.post_effects[i].chance, eset->number_format.power_tooltips).c_str()) << ")";
 			}
 
 			tip_data->addColoredText(ss.str(), font->getColor(FontEngine::COLOR_MENU_BONUS));

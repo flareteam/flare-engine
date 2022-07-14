@@ -105,9 +105,9 @@ void EngineSettings::Misc::load() {
 			// @ATTR sound_falloff|int|The maximum radius in tiles that any single sound is audible.
 			else if (infile.key == "sound_falloff")
 				sound_falloff = Parse::toInt(infile.val);
-			// @ATTR party_exp_percentage|int|The percentage of XP given to allies.
+			// @ATTR party_exp_percentage|float|The percentage of XP given to allies.
 			else if (infile.key == "party_exp_percentage")
-				party_exp_percentage = Parse::toInt(infile.val);
+				party_exp_percentage = Parse::toFloat(infile.val);
 			// @ATTR enable_ally_collision|bool|Allows allies to block the player's path.
 			else if (infile.key == "enable_ally_collision")
 				enable_ally_collision = Parse::toBool(infile.val);
@@ -694,12 +694,12 @@ void EngineSettings::DeathPenalty::load() {
 			if (infile.key == "enable") enabled = Parse::toBool(infile.val);
 			// @ATTR permadeath|bool|Force permadeath for all new saves.
 			else if (infile.key == "permadeath") permadeath = Parse::toBool(infile.val);
-			// @ATTR currency|int|Remove this percentage of currency.
-			else if (infile.key == "currency") currency = Parse::toInt(infile.val);
-			// @ATTR xp_total|int|Remove this percentage of total XP.
-			else if (infile.key == "xp_total") xp = Parse::toInt(infile.val);
-			// @ATTR xp_current_level|int|Remove this percentage of the XP gained since the last level.
-			else if (infile.key == "xp_current_level") xp_current = Parse::toInt(infile.val);
+			// @ATTR currency|float|Remove this percentage of currency.
+			else if (infile.key == "currency") currency = Parse::toFloat(infile.val);
+			// @ATTR xp_total|float|Remove this percentage of total XP.
+			else if (infile.key == "xp_total") xp = Parse::toFloat(infile.val);
+			// @ATTR xp_current_level|float|Remove this percentage of the XP gained since the last level.
+			else if (infile.key == "xp_current_level") xp_current = Parse::toFloat(infile.val);
 			// @ATTR random_item|bool|Removes a random item from the player's inventory.
 			else if (infile.key == "random_item") item = Parse::toBool(infile.val);
 

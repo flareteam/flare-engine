@@ -649,10 +649,10 @@ void StatBlock::load(const std::string& filename) {
 
 		// @ATTR turn_delay|duration|Duration it takes for this creature to turn and face their target in 'ms' or 's'.
 		else if (infile.key == "turn_delay") turn_delay = Parse::toDuration(infile.val);
-		// @ATTR chance_pursue|int|Percentage change that the creature will chase their target.
-		else if (infile.key == "chance_pursue") chance_pursue = num;
-		// @ATTR chance_flee|int|Percentage chance that the creature will run away from their target.
-		else if (infile.key == "chance_flee") chance_flee = num;
+		// @ATTR chance_pursue|float|Percentage change that the creature will chase their target.
+		else if (infile.key == "chance_pursue") chance_pursue = fnum;
+		// @ATTR chance_flee|float|Percentage chance that the creature will run away from their target.
+		else if (infile.key == "chance_flee") chance_flee = fnum;
 
 		else if (infile.key == "power") {
 			// @ATTR power|["melee", "ranged", "beacon", "on_hit", "on_death", "on_half_dead", "on_join_combat", "on_debuff"], power_id, int : State, Power, Chance|A power that has a chance of being triggered in a certain state.
@@ -801,7 +801,7 @@ void StatBlock::takeDamage(float dmg, bool crit, int source_type) {
 				// reward XP; adjust for party exp if necessary
 				float xp_multiplier = 1;
 				if (source_type == Power::SOURCE_TYPE_ALLY)
-					xp_multiplier = static_cast<float>(eset->misc.party_exp_percentage) / 100.0f;
+					xp_multiplier = eset->misc.party_exp_percentage / 100.0f;
 
 				xp_multiplier *= xp_scaling->getMultiplier(this, &(pc->stats));
 

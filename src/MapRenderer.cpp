@@ -127,8 +127,7 @@ bool MapRenderer::enemyGroupPlaceEnemy(float x, float y, const Map_Group &g) {
 
 void MapRenderer::pushEnemyGroup(Map_Group &g) {
 	// activate at all?
-	float activate_chance = static_cast<float>(rand() % 100) / 100.0f;
-	if (activate_chance > g.chance) {
+	if (!Math::percentChanceF(g.chance)) {
 		return;
 	}
 

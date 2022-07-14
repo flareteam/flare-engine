@@ -138,7 +138,7 @@ code {
 
 <p><strong>duration</strong> | <code>duration</code> | Duration of the combat text in 'ms' or 's'.</p>
 
-<p><strong>speed</strong> | <code>int</code> | Motion speed of the combat text.</p>
+<p><strong>speed</strong> | <code>float</code> | Motion speed of the combat text.</p>
 
 <p><strong>offset</strong> | <code>int</code> | The vertical offset for the combat text's starting position.</p>
 
@@ -198,7 +198,7 @@ code {
 
 <p><strong>sound_falloff</strong> | <code>int</code> | The maximum radius in tiles that any single sound is audible.</p>
 
-<p><strong>party_exp_percentage</strong> | <code>int</code> | The percentage of XP given to allies.</p>
+<p><strong>party_exp_percentage</strong> | <code>float</code> | The percentage of XP given to allies.</p>
 
 <p><strong>enable_ally_collision</strong> | <code>bool</code> | Allows allies to block the player's path.</p>
 
@@ -378,11 +378,11 @@ code {
 
 <p><strong>permadeath</strong> | <code>bool</code> | Force permadeath for all new saves.</p>
 
-<p><strong>currency</strong> | <code>int</code> | Remove this percentage of currency.</p>
+<p><strong>currency</strong> | <code>float</code> | Remove this percentage of currency.</p>
 
-<p><strong>xp_total</strong> | <code>int</code> | Remove this percentage of total XP.</p>
+<p><strong>xp_total</strong> | <code>float</code> | Remove this percentage of total XP.</p>
 
-<p><strong>xp_current_level</strong> | <code>int</code> | Remove this percentage of the XP gained since the last level.</p>
+<p><strong>xp_current_level</strong> | <code>float</code> | Remove this percentage of the XP gained since the last level.</p>
 
 <p><strong>random_item</strong> | <code>bool</code> | Removes a random item from the player's inventory.</p>
 
@@ -1112,7 +1112,7 @@ code {
 
 <p><strong>enemygroup.number</strong> | <code>int, int : Min, Max</code> | Defines the range of enemies in group. If only one number is given, it's the exact amount.</p>
 
-<p><strong>enemygroup.chance</strong> | <code>int</code> | Percentage of chance</p>
+<p><strong>enemygroup.chance</strong> | <code>float</code> | Initial percentage chance that this enemy group will be able to spawn enemies.</p>
 
 <p><strong>enemygroup.direction</strong> | <code>direction</code> | Direction that enemies will initially face.</p>
 
@@ -1910,7 +1910,7 @@ code {
 
 <p><strong>power.charge_speed</strong> | <code>float</code> | Moves the caster at this speed in the direction they are facing until the state animation is finished.</p>
 
-<p><strong>power.attack_speed</strong> | <code>int</code> | Changes attack animation speed for this Power. A value of 100 is 100% speed (aka normal speed).</p>
+<p><strong>power.attack_speed</strong> | <code>float</code> | Changes attack animation speed for this Power. A value of 100 is 100% speed (aka normal speed).</p>
 
 <p><strong>power.use_hazard</strong> | <code>bool</code> | Power uses hazard.</p>
 
@@ -1918,7 +1918,7 @@ code {
 
 <p><strong>power.no_aggro</strong> | <code>bool</code> | If true, the Hazard won't put its target in a combat state.</p>
 
-<p><strong>power.radius</strong> | <code>float</code> | Radius in pixels</p>
+<p><strong>power.radius</strong> | <code>float</code> | Radius in map units</p>
 
 <p><strong>power.base_damage</strong> | <code>predefined_string : Damage type ID</code> | Determines which damage stat will be used to calculate damage.</p>
 
@@ -1952,9 +1952,9 @@ code {
 
 <p><strong>power.mp_steal</strong> | <code>float</code> | Percentage of damage to steal into MP</p>
 
-<p><strong>power.missile_angle</strong> | <code>int</code> | Angle of missile</p>
+<p><strong>power.missile_angle</strong> | <code>float</code> | Angle of missile</p>
 
-<p><strong>power.angle_variance</strong> | <code>int</code> | Percentage of variance added to missile angle</p>
+<p><strong>power.angle_variance</strong> | <code>float</code> | Percentage of variance added to missile angle</p>
 
 <p><strong>power.speed_variance</strong> | <code>float</code> | Percentage of variance added to missile speed</p>
 
@@ -1976,11 +1976,11 @@ code {
 
 <p><strong>power.buff_party_power_id</strong> | <code>power_id</code> | Only party members that were spawned with this power ID are affected by "buff_party=true". Setting this to 0 will affect all party members.</p>
 
-<p><strong>power.post_effect</strong> | <code>predefined_string, float, duration , int : Effect ID, Magnitude, Duration, Chance to apply</code> | Post effect to apply to target. Duration is in 'ms' or 's'.</p>
+<p><strong>power.post_effect</strong> | <code>predefined_string, float, duration , float : Effect ID, Magnitude, Duration, Chance to apply</code> | Post effect to apply to target. Duration is in 'ms' or 's'.</p>
 
-<p><strong>power.post_effect_src</strong> | <code>predefined_string, float, duration , int : Effect ID, Magnitude, Duration, Chance to apply</code> | Post effect to apply to caster. Duration is in 'ms' or 's'.</p>
+<p><strong>power.post_effect_src</strong> | <code>predefined_string, float, duration , float : Effect ID, Magnitude, Duration, Chance to apply</code> | Post effect to apply to caster. Duration is in 'ms' or 's'.</p>
 
-<p><strong>power.pre_power</strong> | <code>power_id, int : Power, Chance to cast</code> | Trigger a power immediately when casting this one.</p>
+<p><strong>power.pre_power</strong> | <code>power_id, float : Power, Chance to cast</code> | Trigger a power immediately when casting this one.</p>
 
 <p><strong>power.post_power</strong> | <code>power_id, int : Power, Chance to cast</code> | Trigger a power if the hazard did damage. For 'block' type powers, this power will be triggered when the blocker takes damage.</p>
 
@@ -2170,9 +2170,9 @@ code {
 
 <p><strong>turn_delay</strong> | <code>duration</code> | Duration it takes for this creature to turn and face their target in 'ms' or 's'.</p>
 
-<p><strong>chance_pursue</strong> | <code>int</code> | Percentage change that the creature will chase their target.</p>
+<p><strong>chance_pursue</strong> | <code>float</code> | Percentage change that the creature will chase their target.</p>
 
-<p><strong>chance_flee</strong> | <code>int</code> | Percentage chance that the creature will run away from their target.</p>
+<p><strong>chance_flee</strong> | <code>float</code> | Percentage chance that the creature will run away from their target.</p>
 
 <p><strong>power</strong> | <code>["melee", "ranged", "beacon", "on_hit", "on_death", "on_half_dead", "on_join_combat", "on_debuff"], power_id, int : State, Power, Chance</code> | A power that has a chance of being triggered in a certain state.</p>
 

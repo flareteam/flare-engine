@@ -284,7 +284,7 @@ void EntityBehavior::findTarget() {
 			e->stats.cur_state == StatBlock::ENTITY_STANCE &&
 			!move_to_safe_dist && target_dist < e->stats.flee_range &&
 			target_dist >= e->stats.melee_range &&
-			Math::percentChance(e->stats.chance_flee) &&
+			Math::percentChanceF(e->stats.chance_flee) &&
 			e->stats.flee_cooldown_timer.isEnd()
 		)
 	{
@@ -566,7 +566,7 @@ void EntityBehavior::checkMoveStateStance() {
 	// 1. too far away and chance_pursue roll succeeds
 	// 2. within range, but lack line-of-sight (required to attack)
 	bool ally_targeting_hero = e->stats.hero_ally && !e->stats.in_combat && hero_dist > ALLY_FOLLOW_DISTANCE_WALK;
-	bool should_move_to_target = (e->stats.in_combat || !e->stats.waypoints.empty()) && ((target_dist > e->stats.melee_range && Math::percentChance(e->stats.chance_pursue)) || (target_dist <= e->stats.melee_range && !los));
+	bool should_move_to_target = (e->stats.in_combat || !e->stats.waypoints.empty()) && ((target_dist > e->stats.melee_range && Math::percentChanceF(e->stats.chance_pursue)) || (target_dist <= e->stats.melee_range && !los));
 
 	if (should_move_to_target || fleeing || ally_targeting_hero) {
 
@@ -604,7 +604,7 @@ void EntityBehavior::checkMoveStateMove() {
 		}
 	}
 	// in order to prevent infinite fleeing, we re-roll our chance to flee after a certain duration
-	bool stop_fleeing = can_attack && fleeing && e->stats.flee_timer.isEnd() && !Math::percentChance(e->stats.chance_flee);
+	bool stop_fleeing = can_attack && fleeing && e->stats.flee_timer.isEnd() && !Math::percentChanceF(e->stats.chance_flee);
 
 	if (!stop_fleeing && e->stats.flee_timer.isEnd()) {
 		// if the roll to continue fleeing succeeds, but the flee duration has expired, we don't want to reset the duration to the full amount
@@ -701,7 +701,7 @@ void EntityBehavior::updateState() {
 
 			// sound effect based on power type
 			if (e->activeAnimation->isFirstFrame()) {
-				if (powers->powers[power_id].pre_power > 0 && Math::percentChance(powers->powers[power_id].pre_power_chance)) {
+				if (powers->powers[power_id].pre_power > 0 && Math::percentChanceF(powers->powers[power_id].pre_power_chance)) {
 					powers->activate(powers->powers[power_id].pre_power, &e->stats, pursue_pos);
 				}
 

@@ -248,9 +248,8 @@ public:
 	Rect wander_area;
 
 	// enemy behavioral stats
-	// TODO change to floats
-	int chance_pursue;
-	int chance_flee;
+	float chance_pursue;
+	float chance_flee;
 
 	std::vector<PowerID> powers_list;
 	std::vector<PowerID> powers_list_items;

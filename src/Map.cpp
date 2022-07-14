@@ -325,9 +325,8 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 		group->numbermax = std::max(std::max(0, Parse::toInt(Parse::popFirstString(infile.val))), group->numbermin);
 	}
 	else if (infile.key == "chance") {
-		// @ATTR enemygroup.chance|int|Percentage of chance
-		float n = static_cast<float>(std::max(0, Parse::popFirstInt(infile.val))) / 100.0f;
-		group->chance = std::min(1.0f, std::max(0.0f, n));
+		// @ATTR enemygroup.chance|float|Initial percentage chance that this enemy group will be able to spawn enemies.
+		group->chance = std::min(100.0f, std::max(0.0f, Parse::popFirstFloat(infile.val)));
 	}
 	else if (infile.key == "direction") {
 		// @ATTR enemygroup.direction|direction|Direction that enemies will initially face.

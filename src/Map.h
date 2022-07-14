@@ -81,7 +81,7 @@ public:
 		, levelmax(0)
 		, numbermin(1)
 		, numbermax(1)
-		, chance(1.0f)
+		, chance(100.0f)
 		, direction(-1)
 		, waypoints(std::queue<FPoint>())
 		, wander_radius(4)

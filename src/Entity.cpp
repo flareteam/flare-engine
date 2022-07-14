@@ -593,7 +593,7 @@ bool Entity::takeHit(Hazard &h) {
 		stats.effects.removeEffectID(powers->powers[h.power_index].remove_effects);
 
 		// post power
-		if (h.power->post_power > 0 && Math::percentChance(h.power->post_power_chance)) {
+		if (h.power->post_power > 0 && Math::percentChanceF(h.power->post_power_chance)) {
 			powers->activate(h.power->post_power, h.src_stats, stats.pos);
 		}
 	}
@@ -661,7 +661,7 @@ bool Entity::takeHit(Hazard &h) {
 			PowerID block_post_power = powers->powers[stats.block_power].post_power;
 
 			if (block_post_power != 0 && stats.getPowerCooldown(block_post_power) == 0) {
-				if (Math::percentChance(powers->powers[stats.block_power].post_power_chance)) {
+				if (Math::percentChanceF(powers->powers[stats.block_power].post_power_chance)) {
 					powers->activate(powers->powers[stats.block_power].post_power, &stats, stats.pos);
 					stats.setPowerCooldown(block_post_power, powers->powers[block_post_power].cooldown);
 				}

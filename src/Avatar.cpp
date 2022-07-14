@@ -779,7 +779,7 @@ void Avatar::logic() {
 
 					stats.prevent_interrupt = power.prevent_interrupt;
 
-					if (power.pre_power > 0 && Math::percentChance(power.pre_power_chance)) {
+					if (power.pre_power > 0 && Math::percentChanceF(power.pre_power_chance)) {
 						powers->activate(power.pre_power, &stats, target);
 					}
 
