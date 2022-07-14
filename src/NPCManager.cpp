@@ -152,7 +152,7 @@ void NPCManager::createMapEvent(const NPC& npc, size_t _npcs) {
 	ev.center.y = static_cast<float>(ev.hotspot.y) + static_cast<float>(ev.hotspot.h)/2;
 
 	ec.type = EventComponent::NPC_ID;
-	ec.x = static_cast<int>(_npcs)-1;
+	ec.data[0].Int = static_cast<int>(_npcs)-1;
 	ev.components.push_back(ec);
 
 	ec.type = EventComponent::TOOLTIP;
@@ -160,8 +160,8 @@ void NPCManager::createMapEvent(const NPC& npc, size_t _npcs) {
 	ev.components.push_back(ec);
 
 	ec.type = EventComponent::NPC_HOTSPOT;
-	ec.x = static_cast<int>(npc.stats.pos.x);
-	ec.y = static_cast<int>(npc.stats.pos.y);
+	ec.data[0].Int = static_cast<int>(npc.stats.pos.x);
+	ec.data[1].Int = static_cast<int>(npc.stats.pos.y);
 	ec.id = npcs.size();
 	for (size_t i = 0; i < npcs.size(); ++i) {
 		if (&npc == npcs[i]) {

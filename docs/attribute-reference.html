@@ -510,7 +510,7 @@ code {
 
 <p><strong>event.power_path</strong> | <code>int, int, ["hero", point] : Source X, Source Y, Destination</code> | Path that an event power will take.</p>
 
-<p><strong>event.power_damage</strong> | <code>int, int : Min, Max</code> | Range of power damage</p>
+<p><strong>event.power_damage</strong> | <code>float, float : Min, Max</code> | Range of power damage</p>
 
 <p><strong>event.intermap</strong> | <code>filename, int, int : Map file, X, Y</code> | Jump to specific map at location specified.</p>
 
@@ -592,7 +592,7 @@ code {
 
 <p><strong>event.script</strong> | <code>filename</code> | Loads and executes an Event from a file.</p>
 
-<p><strong>event.chance_exec</strong> | <code>int</code> | Percentage chance that this event will execute when triggered.</p>
+<p><strong>event.chance_exec</strong> | <code>float</code> | Percentage chance that this event will execute when triggered.</p>
 
 <p><strong>event.respec</strong> | <code>["xp", "stats", "powers"], bool : Respec mode, Ignore class defaults</code> | Resets various aspects of the character's progression. Resetting "xp" also resets "stats". Resetting "stats" also resets "powers".</p>
 

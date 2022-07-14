@@ -1209,7 +1209,7 @@ void MapRenderer::checkHotspots() {
 				if (npc) {
 					is_npc = true;
 
-					Point p = Utils::mapToScreen(float(npc->x), float(npc->y), cam.shake.x, cam.shake.y);
+					Point p = Utils::mapToScreen(float(npc->data[0].Int), float(npc->data[1].Int), cam.shake.x, cam.shake.y);
 					p = centerTile(p);
 
 					Rect dest;

@@ -108,7 +108,7 @@ void NPC::load(const std::string& npc_id) {
 				else if (infile.key == "voice") {
 					// @ATTR dialog.voice|repeatable(string)|Filename of a voice sound file to play.
 					e.type = EventComponent::NPC_VOICE;
-					e.x = loadSound(infile.val, VOX_QUEST);
+					e.data[0].Int = loadSound(infile.val, VOX_QUEST);
 				}
 				else if (infile.key == "topic") {
 					// @ATTR dialog.topic|string|The name of this dialog topic. Displayed when picking a dialog tree.
@@ -141,7 +141,7 @@ void NPC::load(const std::string& npc_id) {
 				else if (infile.key == "take_a_party") {
 					// @ATTR dialog.take_a_party|bool|Start/stop taking a party with player.
 					e.type = EventComponent::NPC_TAKE_A_PARTY;
-					e.x = Parse::toBool(infile.val);
+					e.data[0].Bool = Parse::toBool(infile.val);
 				}
 				else if (infile.key == "response") {
 					// @ATTR dialog.response|repeatable(string)|A dialog ID to present as a selectable response. This key must precede the dialog text line.
@@ -151,7 +151,7 @@ void NPC::load(const std::string& npc_id) {
 				else if (infile.key == "response_only") {
 					// @ATTR dialog.response_only|bool|If true, this dialog topic will only appear when explicitly referenced with the "response" key.
 					e.type = EventComponent::NPC_DIALOG_RESPONSE_ONLY;
-					e.x = Parse::toBool(infile.val);
+					e.data[0].Bool = Parse::toBool(infile.val);
 				}
 				else {
 					Event ev;
@@ -395,7 +395,7 @@ void NPC::getDialogNodes(std::vector<int> &result, bool allow_responses) {
 				group = dialog[i-1][j].s;
 			}
 			else if (dialog[i-1][j].type == EventComponent::NPC_DIALOG_RESPONSE_ONLY) {
-				if (dialog[i-1][j].x && !allow_responses) {
+				if (dialog[i-1][j].data[0].Bool && !allow_responses) {
 					is_available = false;
 					break;
 				}
@@ -531,8 +531,8 @@ void NPC::moveMapEvents() {
 			{
 				if (mapr->events[i].components[ci].type == EventComponent::NPC_HOTSPOT)
 				{
-					mapr->events[i].components[ci].x = static_cast<int>(stats.pos.x);
-					mapr->events[i].components[ci].y = static_cast<int>(stats.pos.y);
+					mapr->events[i].components[ci].data[0].Int = static_cast<int>(stats.pos.x);
+					mapr->events[i].components[ci].data[1].Int = static_cast<int>(stats.pos.y);
 				}
 			}
 		}
@@ -617,7 +617,7 @@ bool NPC::processDialog(unsigned int dialog_node, unsigned int &event_cursor) {
 			return true;
 		}
 		else if (dialog[dialog_node][event_cursor].type == EventComponent::NPC_VOICE) {
-			playSoundQuest(dialog[dialog_node][event_cursor].x);
+			playSoundQuest(dialog[dialog_node][event_cursor].data[0].Int);
 		}
 		else if (dialog[dialog_node][event_cursor].type == EventComponent::NPC_PORTRAIT_THEM) {
 			npc_portrait = portraits[0];
@@ -638,7 +638,7 @@ bool NPC::processDialog(unsigned int dialog_node, unsigned int &event_cursor) {
 			}
 		}
 		else if (dialog[dialog_node][event_cursor].type == EventComponent::NPC_TAKE_A_PARTY) {
-			bool new_hero_ally = dialog[dialog_node][event_cursor].x == 0 ? false : true;
+			bool new_hero_ally = dialog[dialog_node][event_cursor].data[0].Bool;
 			if (stats.hero_ally != new_hero_ally) {
 				stats.hero_ally = new_hero_ally;
 				if (stats.hero_ally) {

@@ -39,6 +39,14 @@ class StatBlock;
 
 class LootManager {
 private:
+	enum {
+		LOOT_EC_POSX = 0,
+		LOOT_EC_POSY = 1,
+		LOOT_EC_CHANCE = 2,
+		LOOT_EC_QUANTITY_MIN = 3,
+		LOOT_EC_QUANTITY_MAX = 4,
+	};
+
 	// functions
 	void loadGraphics();
 	void checkEnemiesForLoot();

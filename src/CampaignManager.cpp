@@ -253,27 +253,27 @@ bool CampaignManager::checkAllRequirements(const EventComponent& ec) {
 			return true;
 	}
 	else if (ec.type == EventComponent::REQUIRES_CURRENCY) {
-		if (checkCurrency(ec.x))
+		if (checkCurrency(ec.data[0].Int))
 			return true;
 	}
 	else if (ec.type == EventComponent::REQUIRES_NOT_CURRENCY) {
-		if (!checkCurrency(ec.x))
+		if (!checkCurrency(ec.data[0].Int))
 			return true;
 	}
 	else if (ec.type == EventComponent::REQUIRES_ITEM) {
-		if (checkItem(ItemStack(ec.id, ec.x)))
+		if (checkItem(ItemStack(ec.id, ec.data[0].Int)))
 			return true;
 	}
 	else if (ec.type == EventComponent::REQUIRES_NOT_ITEM) {
-		if (!checkItem(ItemStack(ec.id, ec.x)))
+		if (!checkItem(ItemStack(ec.id, ec.data[0].Int)))
 			return true;
 	}
 	else if (ec.type == EventComponent::REQUIRES_LEVEL) {
-		if (pc->stats.level >= ec.x)
+		if (pc->stats.level >= ec.data[0].Int)
 			return true;
 	}
 	else if (ec.type == EventComponent::REQUIRES_NOT_LEVEL) {
-		if (pc->stats.level < ec.x)
+		if (pc->stats.level < ec.data[0].Int)
 			return true;
 	}
 	else if (ec.type == EventComponent::REQUIRES_CLASS) {

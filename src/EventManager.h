@@ -104,31 +104,21 @@ public:
 		RANDOM_STATUS_MODE_UNSET = 5,
 	};
 
+	static const size_t DATA_COUNT = 5;
+
+	union ECData {
+		int Int;
+		float Float;
+		bool Bool;
+	};
+
 	int type;
 	std::string s;
 	StatusID status;
-	int x;
-	int y;
-	int z;
-	int a;
-	int b;
-	int c;
-	float f;
 	size_t id;
+	ECData data[DATA_COUNT];
 
-	EventComponent()
-		: type(NONE)
-		, s("")
-		, status(0)
-		, x(0)
-		, y(0)
-		, z(0)
-		, a(0)
-		, b(0)
-		, c(0)
-		, f(0)
-		, id(0) {
-	}
+	EventComponent();
 };
 
 class Event {

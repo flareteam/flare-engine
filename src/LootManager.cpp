@@ -255,8 +255,9 @@ void LootManager::checkEnemiesForLoot() {
 			EventComponent ec;
 			ec.type = EventComponent::LOOT;
 			ec.id = e->quest_loot_id;
-			ec.a = ec.b = 1;
-			ec.z = 0;
+			ec.data[LOOT_EC_QUANTITY_MIN].Int = 1;
+			ec.data[LOOT_EC_QUANTITY_MAX].Int = 1;
+			ec.data[LOOT_EC_CHANCE].Float = 0; // "fixed" chance
 
 			quest_loot_table.push_back(ec);
 			checkLoot(quest_loot_table, &e->pos, NULL);
@@ -319,7 +320,7 @@ void LootManager::checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos
 	// first drop any 'fixed' (0% chance) items
 	for (size_t i = loot_table.size(); i > 0; i--) {
 		ec = &loot_table[i-1];
-		if (ec->f == 0) {
+		if (ec->data[LOOT_EC_CHANCE].Float == 0) {
 			if (ec->status == 0 || (ec->status > 0 && camp->checkStatus(ec->status))) {
 				checkLootComponent(ec, pos, itemstack_vec);
 			}
@@ -332,10 +333,10 @@ void LootManager::checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos
 	for (unsigned i = 0; i < loot_table.size(); i++) {
 		ec = &loot_table[i];
 
-		float real_chance = ec->f;
+		float real_chance = ec->data[LOOT_EC_CHANCE].Float;
 
 		if (ec->id != 0) {
-			real_chance = ec->f * static_cast<float>(pc->stats.get(Stats::ITEM_FIND) + 100) / 100.f;
+			real_chance = real_chance * (pc->stats.get(Stats::ITEM_FIND) + 100.f) / 100.f;
 		}
 
 		if (real_chance >= chance && (ec->status == 0 || (ec->status > 0 && camp->checkStatus(ec->status)))) {
@@ -573,12 +574,14 @@ void LootManager::parseLoot(std::string &val, EventComponent *e, std::vector<Eve
 
 		// drop chance
 		chance = Parse::popFirstString(val);
-		if (chance == "fixed") e->f = 0;
-		else e->f = Parse::toFloat(chance);
+		if (chance == "fixed")
+			e->data[LOOT_EC_CHANCE].Float = 0;
+		else
+			e->data[LOOT_EC_CHANCE].Float = Parse::toFloat(chance);
 
 		// quantity min/max
-		e->a = std::max(Parse::popFirstInt(val), 1);
-		e->b = std::max(Parse::popFirstInt(val), e->a);
+		e->data[LOOT_EC_QUANTITY_MIN].Int = std::max(Parse::popFirstInt(val), 1);
+		e->data[LOOT_EC_QUANTITY_MAX].Int = std::max(Parse::popFirstInt(val), e->data[LOOT_EC_QUANTITY_MIN].Int);
 	}
 
 	// add repeating loot
@@ -605,11 +608,13 @@ void LootManager::parseLoot(std::string &val, EventComponent *e, std::vector<Eve
 			}
 
 			chance = Parse::popFirstString(val);
-			if (chance == "fixed") ec->f = 0;
-			else ec->f = Parse::toFloat(chance);
+			if (chance == "fixed")
+				ec->data[LOOT_EC_CHANCE].Float = 0;
+			else
+				ec->data[LOOT_EC_CHANCE].Float = Parse::toFloat(chance);
 
-			ec->a = std::max(Parse::popFirstInt(val), 1);
-			ec->b = std::max(Parse::popFirstInt(val), ec->a);
+			ec->data[LOOT_EC_QUANTITY_MIN].Int = std::max(Parse::popFirstInt(val), 1);
+			ec->data[LOOT_EC_QUANTITY_MAX].Int = std::max(Parse::popFirstInt(val), ec->data[LOOT_EC_QUANTITY_MIN].Int);
 
 			repeat_val = Parse::popFirstString(val);
 		}
@@ -672,14 +677,14 @@ void LootManager::loadLootTables() {
 				// @ATTR loot.chance|[float, "fixed"]|The chance that the item will drop. "fixed" will drop the item no matter what before the random items are picked. This is different than setting a chance of 100, in which the item could be replaced with another random item.
 				else if (infile.key == "chance") {
 					if (infile.val == "fixed")
-						ec->f = 0;
+						ec->data[LOOT_EC_CHANCE].Float = 0;
 					else
-						ec->f = Parse::toFloat(infile.val);
+						ec->data[LOOT_EC_CHANCE].Float = Parse::toFloat(infile.val);
 				}
 				// @ATTR loot.quantity|int, int : Min quantity, Max quantity (optional)|The quantity of item in the dropped loot stack.
 				else if (infile.key == "quantity") {
-					ec->a = std::max(Parse::popFirstInt(infile.val), 1);
-					ec->b = std::max(Parse::popFirstInt(infile.val), ec->a);
+					ec->data[LOOT_EC_QUANTITY_MIN].Int = std::max(Parse::popFirstInt(infile.val), 1);
+					ec->data[LOOT_EC_QUANTITY_MAX].Int = std::max(Parse::popFirstInt(infile.val), ec->data[LOOT_EC_QUANTITY_MIN].Int);
 				}
 				// @ATTR loot.requires_status|string|A single campaign status that is required for the item to be able to drop.
 				else if (infile.key == "requires_status") {
@@ -717,8 +722,8 @@ void LootManager::checkLootComponent(EventComponent* ec, FPoint *pos, std::vecto
 		src = Point(*pos);
 	}
 	else {
-		src.x = ec->x;
-		src.y = ec->y;
+		src.x = ec->data[LOOT_EC_POSX].Int;
+		src.y = ec->data[LOOT_EC_POSY].Int;
 	}
 	p.x = static_cast<float>(src.x) + 0.5f;
 	p.y = static_cast<float>(src.y) + 0.5f;
@@ -738,7 +743,7 @@ void LootManager::checkLootComponent(EventComponent* ec, FPoint *pos, std::vecto
 		}
 	}
 
-	new_loot.quantity = Math::randBetween(ec->a,ec->b);
+	new_loot.quantity = Math::randBetween(ec->data[LOOT_EC_QUANTITY_MIN].Int, ec->data[LOOT_EC_QUANTITY_MAX].Int);
 
 	// an item id of 0 means we should drop currency instead
 	if (ec->id == 0 || ec->id == eset->misc.currency_id) {

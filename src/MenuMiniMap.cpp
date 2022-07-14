@@ -559,7 +559,7 @@ void MenuMiniMap::fillEntities() {
 
 	for (size_t i=0; i<mapr->events.size(); ++i) {
 		EventComponent* ec_minimap = mapr->events[i].getComponent(EventComponent::SHOW_ON_MINIMAP);
-		if (ec_minimap && !ec_minimap->x)
+		if (ec_minimap && !ec_minimap->data[0].Int)
 			continue;
 
 		if (mapr->events[i].getComponent(EventComponent::NPC_HOTSPOT) && EventManager::isActive(mapr->events[i])) {

@@ -136,7 +136,7 @@ int Map::load(const std::string& fname) {
 		EventComponent *ec_power = events[i].getComponent(EventComponent::POWER);
 		if (ec_power) {
 			// store the index of this StatBlock so that we can find it when the event is activated
-			ec_power->x = addEventStatBlock(events[i]);
+			ec_power->data[0].Int = addEventStatBlock(events[i]);
 		}
 	}
 
@@ -383,28 +383,28 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 		// @ATTR enemygroup.requires_level|int|Player level must be equal or greater to load enemy group
 		EventComponent ec;
 		ec.type = EventComponent::REQUIRES_LEVEL;
-		ec.x = Parse::popFirstInt(infile.val);
+		ec.data[0].Int = Parse::popFirstInt(infile.val);
 		group->requirements.push_back(ec);
 	}
 	else if (infile.key == "requires_not_level") {
 		// @ATTR enemygroup.requires_not_level|int|Player level must be lesser to load enemy group
 		EventComponent ec;
 		ec.type = EventComponent::REQUIRES_NOT_LEVEL;
-		ec.x = Parse::popFirstInt(infile.val);
+		ec.data[0].Int = Parse::popFirstInt(infile.val);
 		group->requirements.push_back(ec);
 	}
 	else if (infile.key == "requires_currency") {
 		// @ATTR enemygroup.requires_currency|int|Player currency must be equal or greater to load enemy group
 		EventComponent ec;
 		ec.type = EventComponent::REQUIRES_CURRENCY;
-		ec.x = Parse::popFirstInt(infile.val);
+		ec.data[0].Int = Parse::popFirstInt(infile.val);
 		group->requirements.push_back(ec);
 	}
 	else if (infile.key == "requires_not_currency") {
 		// @ATTR enemygroup.requires_not_currency|int|Player currency must be lesser to load enemy group
 		EventComponent ec;
 		ec.type = EventComponent::REQUIRES_NOT_CURRENCY;
-		ec.x = Parse::popFirstInt(infile.val);
+		ec.data[0].Int = Parse::popFirstInt(infile.val);
 		group->requirements.push_back(ec);
 	}
 	else if (infile.key == "requires_item") {
@@ -415,7 +415,7 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 			EventComponent ec;
 			ec.type = EventComponent::REQUIRES_ITEM;
 			ec.id = item_stack.item;
-			ec.x = item_stack.quantity;
+			ec.data[0].Int = item_stack.quantity;
 			group->requirements.push_back(ec);
 		}
 	}
@@ -427,7 +427,7 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 			EventComponent ec;
 			ec.type = EventComponent::REQUIRES_NOT_ITEM;
 			ec.id = item_stack.item;
-			ec.x = item_stack.quantity;
+			ec.data[0].Int = item_stack.quantity;
 			group->requirements.push_back(ec);
 		}
 	}
@@ -537,28 +537,28 @@ void Map::loadNPC(FileParser &infile) {
 		// @ATTR npc.requires_level|int|Player level must be equal or greater to load NPC
 		EventComponent ec;
 		ec.type = EventComponent::REQUIRES_LEVEL;
-		ec.x = Parse::popFirstInt(infile.val);
+		ec.data[0].Int = Parse::popFirstInt(infile.val);
 		map_npcs.back().requirements.push_back(ec);
 	}
 	else if (infile.key == "requires_not_level") {
 		// @ATTR npc.requires_not_level|int|Player level must be lesser to load NPC
 		EventComponent ec;
 		ec.type = EventComponent::REQUIRES_NOT_LEVEL;
-		ec.x = Parse::popFirstInt(infile.val);
+		ec.data[0].Int = Parse::popFirstInt(infile.val);
 		map_npcs.back().requirements.push_back(ec);
 	}
 	else if (infile.key == "requires_currency") {
 		// @ATTR npc.requires_currency|int|Player currency must be equal or greater to load NPC
 		EventComponent ec;
 		ec.type = EventComponent::REQUIRES_CURRENCY;
-		ec.x = Parse::popFirstInt(infile.val);
+		ec.data[0].Int = Parse::popFirstInt(infile.val);
 		map_npcs.back().requirements.push_back(ec);
 	}
 	else if (infile.key == "requires_not_currency") {
 		// @ATTR npc.requires_not_currency|int|Player currency must be lesser to load NPC
 		EventComponent ec;
 		ec.type = EventComponent::REQUIRES_NOT_CURRENCY;
-		ec.x = Parse::popFirstInt(infile.val);
+		ec.data[0].Int = Parse::popFirstInt(infile.val);
 		map_npcs.back().requirements.push_back(ec);
 	}
 	else if (infile.key == "requires_item") {
@@ -569,7 +569,7 @@ void Map::loadNPC(FileParser &infile) {
 			EventComponent ec;
 			ec.type = EventComponent::REQUIRES_ITEM;
 			ec.id = item_stack.item;
-			ec.x = item_stack.quantity;
+			ec.data[0].Int = item_stack.quantity;
 			map_npcs.back().requirements.push_back(ec);
 		}
 	}
@@ -581,7 +581,7 @@ void Map::loadNPC(FileParser &infile) {
 			EventComponent ec;
 			ec.type = EventComponent::REQUIRES_NOT_ITEM;
 			ec.id = item_stack.item;
-			ec.x = item_stack.quantity;
+			ec.data[0].Int = item_stack.quantity;
 			map_npcs.back().requirements.push_back(ec);
 		}
 	}
@@ -617,8 +617,8 @@ int Map::addEventStatBlock(Event &evnt) {
 	EventComponent *ec_path = evnt.getComponent(EventComponent::POWER_PATH);
 	if (ec_path) {
 		// source is power path start
-		statb->pos.x = static_cast<float>(ec_path->x) + 0.5f;
-		statb->pos.y = static_cast<float>(ec_path->y) + 0.5f;
+		statb->pos.x = static_cast<float>(ec_path->data[0].Int) + 0.5f;
+		statb->pos.y = static_cast<float>(ec_path->data[1].Int) + 0.5f;
 	}
 	else {
 		// source is event location
@@ -630,10 +630,10 @@ int Map::addEventStatBlock(Event &evnt) {
 	if (ec_damage) {
 		for (size_t i = 0; i < eset->damage_types.count; ++i) {
 			if (i % 2 == 0) {
-				statb->starting[Stats::COUNT + i] = static_cast<float>(ec_damage->x); // min
+				statb->starting[Stats::COUNT + i] = ec_damage->data[0].Float; // min
 			}
 			else {
-				statb->starting[Stats::COUNT + i] = static_cast<float>(ec_damage->y); // max
+				statb->starting[Stats::COUNT + i] = ec_damage->data[1].Float; // max
 			}
 		}
 	}
