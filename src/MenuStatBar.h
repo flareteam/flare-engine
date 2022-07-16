@@ -41,12 +41,17 @@ private:
 		VERTICAL = 1
 	};
 
+	union MenuStatBarValue {
+		float Float;
+		unsigned long Unsigned;
+	};
+
 	Sprite *bar;
 	WidgetLabel *label;
-	unsigned long stat_min;
-	unsigned long stat_cur;
-	unsigned long stat_cur_prev;
-	unsigned long stat_max;
+	MenuStatBarValue stat_min;
+	MenuStatBarValue stat_cur;
+	MenuStatBarValue stat_cur_prev;
+	MenuStatBarValue stat_max;
 	Rect bar_pos;
 	LabelInfo text_pos;
 	bool orientation;
@@ -70,8 +75,7 @@ public:
 	explicit MenuStatBar(short _type);
 	~MenuStatBar();
 	void loadGraphics();
-	void update(unsigned long _stat_min, unsigned long _stat_cur, unsigned long _stat_max);
-	void setCustomString(const std::string& _custom_string);
+	void update();
 	void render();
 };
 

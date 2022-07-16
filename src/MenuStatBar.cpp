@@ -25,13 +25,16 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Handles the display of a status bar
  */
 
+#include "Avatar.h"
 #include "CommonIncludes.h"
+#include "EngineSettings.h"
 #include "FontEngine.h"
 #include "InputState.h"
 #include "Menu.h"
 #include "MenuExit.h"
 #include "MenuManager.h"
 #include "MenuStatBar.h"
+#include "MessageEngine.h"
 #include "ModManager.h"
 #include "RenderDevice.h"
 #include "Settings.h"
@@ -46,10 +49,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 MenuStatBar::MenuStatBar(short _type)
 	: bar(NULL)
 	, label(new WidgetLabel())
-	, stat_min(0)
-	, stat_cur(0)
-	, stat_cur_prev(0)
-	, stat_max(0)
 	, orientation(HORIZONTAL)
 	, custom_text_pos(false) // label will be placed in the middle of the bar
 	, custom_string("")
@@ -66,6 +65,19 @@ MenuStatBar::MenuStatBar(short _type)
 		type_filename = "mp";
 	else if (type == TYPE_XP)
 		type_filename = "xp";
+
+	if (type == TYPE_XP) {
+		stat_min.Unsigned = 0;
+		stat_cur.Unsigned = 0;
+		stat_cur_prev.Unsigned = 0;
+		stat_max.Unsigned = 0;
+	}
+	else {
+		stat_min.Float = 0;
+		stat_cur.Float = 0;
+		stat_cur_prev.Float = 0;
+		stat_max.Float = 0;
+	}
 
 	// Load config settings
 	FileParser infile;
@@ -142,27 +154,44 @@ void MenuStatBar::loadGraphics() {
 	}
 }
 
-void MenuStatBar::update(unsigned long _stat_min, unsigned long _stat_cur, unsigned long _stat_max) {
-	stat_cur_prev = stat_cur; // save previous value
-	stat_min = _stat_min;
-	stat_cur = _stat_cur;
-	stat_max = _stat_max;
-}
+void MenuStatBar::update() {
+	if (type == TYPE_XP) {
+		stat_cur_prev.Unsigned = stat_cur.Unsigned; // save previous value
+		stat_min.Unsigned = 0;
+		stat_cur.Unsigned = pc->stats.xp - eset->xp.getLevelXP(pc->stats.level);
+		stat_max.Unsigned = eset->xp.getLevelXP(pc->stats.level + 1) - eset->xp.getLevelXP(pc->stats.level);
 
-void MenuStatBar::setCustomString(const std::string& _custom_string) {
-	custom_string = _custom_string;
+		if (pc->stats.level == eset->xp.getMaxLevel()) {
+			custom_string = msg->getv("XP: %lu", pc->stats.xp);
+		}
+		else {
+			custom_string = msg->getv("XP: %lu/%lu", stat_cur.Unsigned, stat_max.Unsigned);
+		}
+	}
+	else if (type == TYPE_HP) {
+		stat_cur_prev.Float = stat_cur.Float; // save previous value
+		stat_min.Float = 0;
+		stat_cur.Float = pc->stats.hp;
+		stat_max.Float = pc->stats.get(Stats::HP_MAX);
+	}
+	else if (type == TYPE_MP) {
+		stat_cur_prev.Float = stat_cur.Float; // save previous value
+		stat_min.Float = 0;
+		stat_cur.Float = pc->stats.mp;
+		stat_max.Float = pc->stats.get(Stats::MP_MAX);
+	}
 }
 
 bool MenuStatBar::disappear() {
 	if (timeout.getDuration() > 0 && settings->statbar_autohide) {
 		if (type == TYPE_HP || type == TYPE_MP) {
 			// HP and MP bars disappear when full
-			if (stat_cur != stat_max) {
+			if (stat_cur.Float != stat_max.Float) {
 				timeout.reset(Timer::BEGIN);
 			}
 		} else if (type == TYPE_XP) {
 			// XP bar disappears when value is not changing
-			if (stat_cur_prev != stat_cur) {
+			if (stat_cur_prev.Unsigned != stat_cur.Unsigned) {
 				timeout.reset(Timer::BEGIN);
 			}
 		}
@@ -197,30 +226,53 @@ void MenuStatBar::render() {
 	setBackgroundDest(dest);
 	Menu::render();
 
-	unsigned long stat_cur_clamped = std::min(stat_cur, stat_max);
-	unsigned long normalized_cur = stat_cur_clamped - std::min(stat_cur_clamped, stat_min);
-	unsigned long normalized_max = stat_max - std::min(stat_max, stat_min);
+	int bar_length = 0;
+
+	if (type == TYPE_XP) {
+		unsigned long stat_cur_clamped = std::min(stat_cur.Unsigned, stat_max.Unsigned);
+		unsigned long normalized_cur = stat_cur_clamped - std::min(stat_cur_clamped, stat_min.Unsigned);
+		unsigned long normalized_max = stat_max.Unsigned - std::min(stat_max.Unsigned, stat_min.Unsigned);
+
+		unsigned long bar_fill_size_oriented = 0;
+		if (orientation == HORIZONTAL)
+			bar_fill_size_oriented = static_cast<unsigned long>(bar_fill_size.x);
+		else if (orientation == VERTICAL)
+			bar_fill_size_oriented = static_cast<unsigned long>(bar_fill_size.y);
+
+		bar_length = static_cast<int>((normalized_max == 0) ? 0 : (normalized_cur * bar_fill_size_oriented) / normalized_max);
+		if (bar_length == 0 && normalized_cur > 0)
+			bar_length = 1;
+	}
+	else {
+		float stat_cur_clamped = std::min(stat_cur.Float, stat_max.Float);
+		float normalized_cur = stat_cur_clamped - std::min(stat_cur_clamped, stat_min.Float);
+		float normalized_max = stat_max.Float - std::min(stat_max.Float, stat_min.Float);
+
+		float bar_fill_size_oriented = 0;
+		if (orientation == HORIZONTAL)
+			bar_fill_size_oriented = static_cast<float>(bar_fill_size.x);
+		else if (orientation == VERTICAL)
+			bar_fill_size_oriented = static_cast<float>(bar_fill_size.y);
+
+		bar_length = static_cast<int>((normalized_max == 0) ? 0 : (normalized_cur * bar_fill_size_oriented) / normalized_max);
+		if (bar_length == 0 && normalized_cur > 0)
+			bar_length = 1;
+	}
 
 	// draw bar progress based on orientation
 	if (orientation == HORIZONTAL) {
-		unsigned long bar_length = (normalized_max == 0) ? 0 : (normalized_cur * static_cast<unsigned long>(bar_fill_size.x)) / normalized_max;
-		if (bar_length == 0 && normalized_cur > 0)
-			bar_length = 1;
 		src.x = 0;
 		src.y = 0;
-		src.w = static_cast<int>(bar_length);
+		src.w = bar_length;
 		src.h = bar_fill_size.y;
 		dest.x = bar_dest.x + bar_fill_offset.x;
 		dest.y = bar_dest.y + bar_fill_offset.y;
 	}
 	else if (orientation == VERTICAL) {
-		unsigned long bar_length = (normalized_max == 0) ? 0 : (normalized_cur * static_cast<unsigned long>(bar_fill_size.y)) / normalized_max;
-		if (bar_length == 0 && normalized_cur > 0)
-			bar_length = 1;
 		src.x = 0;
-		src.y = bar_fill_size.y-static_cast<int>(bar_length);
+		src.y = bar_fill_size.y - bar_length;
 		src.w = bar_fill_size.x;
-		src.h = static_cast<int>(bar_length);
+		src.h = bar_length;
 		dest.x = bar_dest.x + bar_fill_offset.x;
 		dest.y = bar_dest.y + bar_fill_offset.y + src.y;
 	}
@@ -238,8 +290,11 @@ void MenuStatBar::render() {
 			std::stringstream ss;
 			if (!custom_string.empty())
 				ss << custom_string;
+			else if (type == TYPE_XP)
+				// TYPE_XP uses a custom string, so this won't apply in normal circumstances
+				ss << stat_cur.Unsigned << "/" << stat_max.Unsigned;
 			else
-				ss << stat_cur << "/" << stat_max;
+				ss << Utils::floatToString(stat_cur.Float, 0) << "/" << Utils::floatToString(stat_max.Float, 0);
 
 			label->setText(ss.str());
 			label->setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));

@@ -183,7 +183,7 @@ void MenuEnemy::render() {
 		std::stringstream ss;
 		ss.str("");
 		if (enemy->stats.hp > 0) {
-			ss << static_cast<unsigned long>(enemy->stats.hp) << "/" << static_cast<unsigned long>(enemy->stats.get(Stats::HP_MAX));
+			ss << Utils::floatToString(enemy->stats.hp, 0) << "/" << Utils::floatToString(enemy->stats.get(Stats::HP_MAX), 0);
 		}
 		else {
 			if (enemy->stats.lifeform)

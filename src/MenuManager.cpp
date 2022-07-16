@@ -300,18 +300,9 @@ void MenuManager::logic() {
 	subtitles->logic(snd->getLastPlayedSID());
 
 	// refresh statbar values from player statblock
-	hp->update(0, static_cast<unsigned long>(pc->stats.hp), static_cast<unsigned long>(pc->stats.get(Stats::HP_MAX)));
-	mp->update(0, static_cast<unsigned long>(pc->stats.mp), static_cast<unsigned long>(pc->stats.get(Stats::MP_MAX)));
-
-	if (pc->stats.level == eset->xp.getMaxLevel()) {
-		xp->setCustomString(msg->getv("XP: %lu", pc->stats.xp));
-	}
-	else {
-		// displays xp relative to current pc level
-		xp->setCustomString(msg->getv("XP: %lu/%lu", pc->stats.xp - eset->xp.getLevelXP(pc->stats.level), eset->xp.getLevelXP(pc->stats.level + 1) - eset->xp.getLevelXP(pc->stats.level)));
-	}
-	// xp relative to current level (from 0 to ammount need for next level)
-	xp->update(0, pc->stats.xp - eset->xp.getLevelXP(pc->stats.level), eset->xp.getLevelXP(pc->stats.level + 1) - eset->xp.getLevelXP(pc->stats.level));
+	hp->update();
+	mp->update();
+	xp->update();
 
 	// close talker/vendor menu if player is attacked
 	if (pc->stats.abort_npc_interact && eset->misc.combat_aborts_npc_interact) {
