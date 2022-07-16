@@ -28,6 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CombatText.h"
 #include "CommonIncludes.h"
+#include "EngineSettings.h"
 #include "FileParser.h"
 #include "FontEngine.h"
 #include "Settings.h"
@@ -133,13 +134,13 @@ void CombatText::addFloat(float num, const FPoint& location, int displaytype) {
 	for (std::vector<Combat_Text_Item>::iterator it = combat_text.begin(); it != combat_text.end(); ++it) {
 		if (it->is_number && it->displaytype == displaytype && it->lifespan == duration && it->pos.x == location.x && it->pos.y == location.y) {
 			it->number_value += num;
-			it->text = Utils::floatToString(it->number_value, 2);
+			it->text = Utils::floatToString(it->number_value, eset->number_format.combat_text);
 			it->label->setText(it->text);
 			return;
 		}
 	}
 
-	addString(Utils::floatToString(num, 2), location, displaytype);
+	addString(Utils::floatToString(num, eset->number_format.combat_text), location, displaytype);
 
 	combat_text.back().is_number = true;
 	combat_text.back().number_value = num;

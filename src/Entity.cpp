@@ -550,7 +550,7 @@ bool Entity::takeHit(Hazard &h) {
 				}
 				else {
 					float steal_amt = (std::min(dmg, prev_hp) * hp_steal) / 100;
-					combat_text->addString(msg->getv("+%s HP", Utils::floatToString(steal_amt, 2).c_str()), h.src_stats->pos, CombatText::MSG_BUFF);
+					combat_text->addString(msg->getv("+%s HP", Utils::floatToString(steal_amt, eset->number_format.combat_text).c_str()), h.src_stats->pos, CombatText::MSG_BUFF);
 					h.src_stats->hp = std::min(h.src_stats->hp + steal_amt, h.src_stats->get(Stats::HP_MAX));
 				}
 			}
@@ -561,7 +561,7 @@ bool Entity::takeHit(Hazard &h) {
 				}
 				else {
 					float steal_amt = (std::min(dmg, prev_hp) * mp_steal) / 100;
-					combat_text->addString(msg->getv("+%s MP", Utils::floatToString(steal_amt, 2).c_str()), h.src_stats->pos, CombatText::MSG_BUFF);
+					combat_text->addString(msg->getv("+%s MP", Utils::floatToString(steal_amt, eset->number_format.combat_text).c_str()), h.src_stats->pos, CombatText::MSG_BUFF);
 					h.src_stats->mp = std::min(h.src_stats->mp + steal_amt, h.src_stats->get(Stats::MP_MAX));
 				}
 			}

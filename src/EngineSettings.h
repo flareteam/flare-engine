@@ -289,6 +289,20 @@ public:
 		std::vector<unsigned long> xp_table;
 	};
 
+	class NumberFormat {
+	public:
+		void load();
+
+		int player_statbar;
+		int enemy_statbar;
+		int combat_text;
+		int character_menu;
+		int item_tooltips;
+		int power_tooltips;
+		int durations;
+		int death_penalty;
+	};
+
 	Misc misc;
 	Resolutions resolutions;
 	Gameplay gameplay;
@@ -304,6 +318,7 @@ public:
 	Tileset tileset;
 	Widgets widgets;
 	XPTable xp;
+	NumberFormat number_format;
 };
 
 #endif // ENGINESETTINGS_H

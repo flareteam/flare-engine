@@ -46,6 +46,7 @@ void EngineSettings::load() {
 	tileset.load();
 	widgets.load();
 	xp.load();
+	number_format.load();
 }
 
 void EngineSettings::Misc::load() {
@@ -1047,3 +1048,52 @@ int EngineSettings::XPTable::getLevelFromXP(unsigned long level_xp) {
 
 	return level;
 }
+
+void EngineSettings::NumberFormat::load() {
+	// reset to defaults
+	player_statbar = 0;
+	enemy_statbar = 0;
+	combat_text = 1;
+	character_menu = 2;
+	item_tooltips = 2;
+	power_tooltips = 2;
+	durations = 1;
+	death_penalty = 2;
+
+	FileParser infile;
+	// @CLASS EngineSettings: Number Format|Description of engine/number_format.txt
+	if (infile.open("engine/number_format.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
+		while (infile.next()) {
+			// @ATTR player_statbar|int|Number of digits after the decimal place to display for values in the player's statbars (HP/MP).
+			if (infile.key == "player_statbar")
+				player_statbar = std::max(0, Parse::toInt(infile.val));
+			// @ATTR enemy_statbar|int|Number of digits after the decimal place to display for values in the enemy HP statbar.
+			else if (infile.key == "enemy_statbar")
+				enemy_statbar = std::max(0, Parse::toInt(infile.val));
+			// @ATTR combat_text|int|Number of digits after the decimal place to display for values in combat text.
+			else if (infile.key == "combat_text")
+				combat_text = std::max(0, Parse::toInt(infile.val));
+			// @ATTR character_menu|int|Number of digits after the decimal place to display for values in the 'Character' menu.
+			else if (infile.key == "character_menu")
+				character_menu = std::max(0, Parse::toInt(infile.val));
+			// @ATTR item_tooltips|int|Number of digits after the decimal place to display for values in item tooltips.
+			else if (infile.key == "item_tooltips")
+				item_tooltips = std::max(0, Parse::toInt(infile.val));
+			// @ATTR power_tooltips|int|Number of digits after the decimal place to display for values in power tooltips (except durations).
+			else if (infile.key == "power_tooltips")
+				power_tooltips = std::max(0, Parse::toInt(infile.val));
+			// @ATTR durations|int|Number of digits after the decimal place to display for durations.
+			else if (infile.key == "durations")
+				durations = std::max(0, Parse::toInt(infile.val));
+			// @ATTR death_penalty|int|Number of digits after the decimal place to display for death penalty messages.
+			else if (infile.key == "death_penalty")
+				death_penalty = std::max(0, Parse::toInt(infile.val));
+
+			else
+				infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
+		}
+		infile.close();
+	}
+
+}
+

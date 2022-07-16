@@ -908,15 +908,15 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 
 	// add mana cost
 	if (pwr.requires_mp > 0) {
-		tip_data->addText(msg->getv("Costs %s MP", Utils::floatToString(pwr.requires_mp, 2).c_str()));
+		tip_data->addText(msg->getv("Costs %s MP", Utils::floatToString(pwr.requires_mp, eset->number_format.power_tooltips).c_str()));
 	}
 	// add health cost
 	if (pwr.requires_hp > 0) {
-		tip_data->addText(msg->getv("Costs %s HP", Utils::floatToString(pwr.requires_hp, 2).c_str()));
+		tip_data->addText(msg->getv("Costs %s HP", Utils::floatToString(pwr.requires_hp, eset->number_format.power_tooltips).c_str()));
 	}
 	// add cooldown time
 	if (pwr.cooldown > 0) {
-		tip_data->addText(msg->get("Cooldown:") + " " + Utils::getDurationString(pwr.cooldown, 2));
+		tip_data->addText(msg->get("Cooldown:") + " " + Utils::getDurationString(pwr.cooldown, eset->number_format.durations));
 	}
 
 	for (size_t i=0; i<pwr.post_effects.size(); ++i) {
@@ -940,7 +940,7 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 			if (pwr.post_effects[i].magnitude > 0) {
 				ss << "+";
 			}
-			ss << Utils::floatToString(pwr.post_effects[i].magnitude, 2);
+			ss << Utils::floatToString(pwr.post_effects[i].magnitude, eset->number_format.power_tooltips);
 		}
 
 		if (Effect::typeIsStat(effect_type)) {
@@ -967,31 +967,31 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 			ss << " " << eset->primary_stats.list[index].name;
 		}
 		else if (effect_type == Effect::DAMAGE) {
-			ss << Utils::floatToString(pwr.post_effects[i].magnitude, 2) << " " << msg->get("Damage per second");
+			ss << Utils::floatToString(pwr.post_effects[i].magnitude, eset->number_format.power_tooltips) << " " << msg->get("Damage per second");
 		}
 		else if (effect_type == Effect::DAMAGE_PERCENT) {
-			ss << Utils::floatToString(pwr.post_effects[i].magnitude, 2) << "% " << msg->get("Damage per second");
+			ss << Utils::floatToString(pwr.post_effects[i].magnitude, eset->number_format.power_tooltips) << "% " << msg->get("Damage per second");
 		}
 		else if (effect_type == Effect::HPOT) {
-			ss << Utils::floatToString(pwr.post_effects[i].magnitude, 2) << " " << msg->get("HP per second");
+			ss << Utils::floatToString(pwr.post_effects[i].magnitude, eset->number_format.power_tooltips) << " " << msg->get("HP per second");
 		}
 		else if (effect_type == Effect::HPOT_PERCENT) {
-			ss << Utils::floatToString(pwr.post_effects[i].magnitude, 2) << "% " << msg->get("HP per second");
+			ss << Utils::floatToString(pwr.post_effects[i].magnitude, eset->number_format.power_tooltips) << "% " << msg->get("HP per second");
 		}
 		else if (effect_type == Effect::MPOT) {
-			ss << Utils::floatToString(pwr.post_effects[i].magnitude, 2) << " " << msg->get("MP per second");
+			ss << Utils::floatToString(pwr.post_effects[i].magnitude, eset->number_format.power_tooltips) << " " << msg->get("MP per second");
 		}
 		else if (effect_type == Effect::MPOT_PERCENT) {
-			ss << Utils::floatToString(pwr.post_effects[i].magnitude, 2) << "% " << msg->get("MP per second");
+			ss << Utils::floatToString(pwr.post_effects[i].magnitude, eset->number_format.power_tooltips) << "% " << msg->get("MP per second");
 		}
 		else if (effect_type == Effect::SPEED) {
 			if (pwr.post_effects[i].magnitude == 0)
 				ss << msg->get("Immobilize");
 			else
-				ss << msg->getv("%s%% Speed", Utils::floatToString(pwr.post_effects[i].magnitude, 2).c_str());
+				ss << msg->getv("%s%% Speed", Utils::floatToString(pwr.post_effects[i].magnitude, eset->number_format.power_tooltips).c_str());
 		}
 		else if (effect_type == Effect::ATTACK_SPEED) {
-			ss << msg->getv("%s%% Attack Speed", Utils::floatToString(pwr.post_effects[i].magnitude, 2).c_str());
+			ss << msg->getv("%s%% Attack Speed", Utils::floatToString(pwr.post_effects[i].magnitude, eset->number_format.power_tooltips).c_str());
 		}
 		else if (effect_type == Effect::RESIST_ALL) {
 			ss << "+" << pwr.post_effects[i].magnitude << "% " << msg->get("Resistance to all negative effects");
@@ -1018,20 +1018,20 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 
 			if (pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_MULTIPLY) {
 				float magnitude = pc->stats.getDamageMax(pwr.base_damage) * pwr.mod_damage_value_min / 100;
-				ss << Utils::floatToString(magnitude, 2);
+				ss << Utils::floatToString(magnitude, eset->number_format.power_tooltips);
 			}
 			else if (pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_ADD) {
 				float magnitude = pc->stats.getDamageMax(pwr.base_damage) + pwr.mod_damage_value_min;
-				ss << Utils::floatToString(magnitude, 2);
+				ss << Utils::floatToString(magnitude, eset->number_format.power_tooltips);
 			}
 			else if (pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_ABSOLUTE) {
 				if (pwr.mod_damage_value_max == 0 || pwr.mod_damage_value_min == pwr.mod_damage_value_max)
-					ss << Utils::floatToString(pwr.mod_damage_value_min, 2);
+					ss << Utils::floatToString(pwr.mod_damage_value_min, eset->number_format.power_tooltips);
 				else
-					ss << Utils::floatToString(pwr.mod_damage_value_min, 2) << "-" << Utils::floatToString(pwr.mod_damage_value_max, 2);
+					ss << Utils::floatToString(pwr.mod_damage_value_min, eset->number_format.power_tooltips) << "-" << Utils::floatToString(pwr.mod_damage_value_max, eset->number_format.power_tooltips);
 			}
 			else {
-				ss << Utils::floatToString(pc->stats.getDamageMax(pwr.base_damage), 2);
+				ss << Utils::floatToString(pc->stats.getDamageMax(pwr.base_damage), eset->number_format.power_tooltips);
 			}
 
 			ss << " " << msg->get("Magical Shield");
@@ -1046,32 +1046,32 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 			if (pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_MULTIPLY) {
 				mag_min = mag_min * pwr.mod_damage_value_min / 100;
 				mag_max = mag_max * pwr.mod_damage_value_min / 100;
-				ss << Utils::floatToString(mag_min, 2) << "-" << Utils::floatToString(mag_max, 2);
+				ss << Utils::floatToString(mag_min, eset->number_format.power_tooltips) << "-" << Utils::floatToString(mag_max, eset->number_format.power_tooltips);
 			}
 			else if (pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_ADD) {
 				mag_min = mag_min + pwr.mod_damage_value_min;
 				mag_max = mag_max + pwr.mod_damage_value_min;
-				ss << Utils::floatToString(mag_min, 2) << "-" << Utils::floatToString(mag_max, 2);
+				ss << Utils::floatToString(mag_min, eset->number_format.power_tooltips) << "-" << Utils::floatToString(mag_max, eset->number_format.power_tooltips);
 			}
 			else if (pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_ABSOLUTE) {
 				if (pwr.mod_damage_value_max == 0 || pwr.mod_damage_value_min == pwr.mod_damage_value_max)
-					ss << Utils::floatToString(pwr.mod_damage_value_min, 2);
+					ss << Utils::floatToString(pwr.mod_damage_value_min, eset->number_format.power_tooltips);
 				else
-					ss << Utils::floatToString(pwr.mod_damage_value_min, 2) << "-" << Utils::floatToString(pwr.mod_damage_value_max, 2);
+					ss << Utils::floatToString(pwr.mod_damage_value_min, eset->number_format.power_tooltips) << "-" << Utils::floatToString(pwr.mod_damage_value_max, eset->number_format.power_tooltips);
 			}
 			else {
-				ss << Utils::floatToString(mag_min, 2) << "-" << Utils::floatToString(mag_max, 2);
+				ss << Utils::floatToString(mag_min, eset->number_format.power_tooltips) << "-" << Utils::floatToString(mag_max, eset->number_format.power_tooltips);
 			}
 
 			ss << " " << msg->get("Healing");
 		}
 		else if (effect_type == Effect::KNOCKBACK) {
-			ss << Utils::floatToString(pwr.post_effects[i].magnitude, 2) << " " << msg->get("Knockback");
+			ss << Utils::floatToString(pwr.post_effects[i].magnitude, eset->number_format.power_tooltips) << " " << msg->get("Knockback");
 		}
 		else if (effect_ptr && !effect_ptr->name.empty() && pwr.post_effects[i].magnitude > 0) {
 			if (effect_ptr->can_stack)
 				ss << "+";
-			ss << Utils::floatToString(pwr.post_effects[i].magnitude, 2) << " " << msg->get(effect_ptr->name);
+			ss << Utils::floatToString(pwr.post_effects[i].magnitude, eset->number_format.power_tooltips) << " " << msg->get(effect_ptr->name);
 		}
 		else if (pwr.post_effects[i].magnitude == 0) {
 			// nothing
@@ -1080,10 +1080,10 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 		if (!ss.str().empty()) {
 			if (pwr.post_effects[i].duration > 0) {
 				if (effect_type == Effect::DEATH_SENTENCE) {
-					ss << ": " << Utils::getDurationString(pwr.post_effects[i].duration, 2);
+					ss << ": " << Utils::getDurationString(pwr.post_effects[i].duration, eset->number_format.durations);
 				}
 				else {
-					ss << " (" << Utils::getDurationString(pwr.post_effects[i].duration, 2) << ")";
+					ss << " (" << Utils::getDurationString(pwr.post_effects[i].duration, eset->number_format.durations) << ")";
 				}
 
 				if (pwr.post_effects[i].chance != 100)
@@ -1106,10 +1106,10 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 				ss << "+";
 
 			if (pwr.mod_damage_value_max == 0 || pwr.mod_damage_value_min == pwr.mod_damage_value_max) {
-				ss << Utils::floatToString(pwr.mod_damage_value_min, 2);
+				ss << Utils::floatToString(pwr.mod_damage_value_min, eset->number_format.power_tooltips);
 			}
 			else {
-				ss << Utils::floatToString(pwr.mod_damage_value_min, 2) << "-" << Utils::floatToString(pwr.mod_damage_value_max, 2);
+				ss << Utils::floatToString(pwr.mod_damage_value_min, eset->number_format.power_tooltips) << "-" << Utils::floatToString(pwr.mod_damage_value_max, eset->number_format.power_tooltips);
 			}
 
 			if (pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_MULTIPLY) {
@@ -1135,7 +1135,7 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 			if (pwr.mod_accuracy_mode == Power::STAT_MODIFIER_MODE_ADD && pwr.mod_accuracy_value > 0)
 				ss << "+";
 
-			ss << Utils::floatToString(pwr.mod_accuracy_value, 2);
+			ss << Utils::floatToString(pwr.mod_accuracy_value, eset->number_format.power_tooltips);
 
 			if (pwr.mod_accuracy_mode == Power::STAT_MODIFIER_MODE_MULTIPLY) {
 				ss << "%";
@@ -1155,7 +1155,7 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 			if (pwr.mod_crit_mode == Power::STAT_MODIFIER_MODE_ADD && pwr.mod_crit_value > 0)
 				ss << "+";
 
-			ss << Utils::floatToString(pwr.mod_crit_value, 2);
+			ss << Utils::floatToString(pwr.mod_crit_value, eset->number_format.power_tooltips);
 
 			if (pwr.mod_crit_mode == Power::STAT_MODIFIER_MODE_MULTIPLY) {
 				ss << "%";
@@ -1180,7 +1180,7 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 		}
 		if (pwr.trait_crits_impaired > 0) {
 			ss.str("");
-			ss << msg->getv("%s%% Chance to crit slowed targets", Utils::floatToString(pwr.trait_crits_impaired, 2).c_str());
+			ss << msg->getv("%s%% Chance to crit slowed targets", Utils::floatToString(pwr.trait_crits_impaired, eset->number_format.power_tooltips).c_str());
 			tip_data->addColoredText(ss.str(), font->getColor(FontEngine::COLOR_MENU_BONUS));
 		}
 		if (pwr.trait_elemental > -1) {

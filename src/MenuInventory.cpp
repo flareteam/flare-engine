@@ -272,19 +272,19 @@ void MenuInventory::logic() {
 		if (eset->death_penalty.currency > 0) {
 			if (currency > 0)
 				removeCurrency(static_cast<int>((static_cast<float>(currency) * eset->death_penalty.currency) / 100.f));
-			death_message += msg->getv("Lost %s%% of %s.", Utils::floatToString(eset->death_penalty.currency, 2).c_str(), eset->loot.currency.c_str()) + ' ';
+			death_message += msg->getv("Lost %s%% of %s.", Utils::floatToString(eset->death_penalty.currency, eset->number_format.death_penalty).c_str(), eset->loot.currency.c_str()) + ' ';
 		}
 
 		// remove a % of either total xp or xp since the last level
 		if (eset->death_penalty.xp > 0) {
 			if (pc->stats.xp > 0)
 				pc->stats.xp -= static_cast<int>((static_cast<float>(pc->stats.xp) * eset->death_penalty.xp) / 100.f);
-			death_message += msg->getv("Lost %s%% of total XP.", Utils::floatToString(eset->death_penalty.xp, 2).c_str()) + ' ';
+			death_message += msg->getv("Lost %s%% of total XP.", Utils::floatToString(eset->death_penalty.xp, eset->number_format.death_penalty).c_str()) + ' ';
 		}
 		else if (eset->death_penalty.xp_current > 0) {
 			if (pc->stats.xp - eset->xp.getLevelXP(pc->stats.level) > 0)
 				pc->stats.xp -= static_cast<int>((static_cast<float>(pc->stats.xp - eset->xp.getLevelXP(pc->stats.level)) * eset->death_penalty.xp_current) / 100.f);
-			death_message += msg->getv("Lost %s%% of current level XP.", Utils::floatToString(eset->death_penalty.xp_current, 2).c_str()) + ' ';
+			death_message += msg->getv("Lost %s%% of current level XP.", Utils::floatToString(eset->death_penalty.xp_current, eset->number_format.death_penalty).c_str()) + ' ';
 		}
 
 		// prevent down-leveling from removing too much xp

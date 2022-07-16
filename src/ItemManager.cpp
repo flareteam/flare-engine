@@ -645,18 +645,18 @@ void ItemManager::parseBonus(BonusData& bdata, FileParser& infile) {
 
 void ItemManager::getBonusString(std::stringstream& ss, BonusData* bdata) {
 	if (bdata->is_speed) {
-		ss << msg->getv("%s%% Speed", Utils::floatToString(bdata->value, 2).c_str());
+		ss << msg->getv("%s%% Speed", Utils::floatToString(bdata->value, eset->number_format.item_tooltips).c_str());
 		return;
 	}
 	else if (bdata->is_attack_speed) {
-		ss << msg->getv("%s%% Attack Speed", Utils::floatToString(bdata->value, 2).c_str());
+		ss << msg->getv("%s%% Attack Speed", Utils::floatToString(bdata->value, eset->number_format.item_tooltips).c_str());
 		return;
 	}
 
 	if (bdata->value > 0)
-		ss << "+" << Utils::floatToString(bdata->value, 2);
+		ss << "+" << Utils::floatToString(bdata->value, eset->number_format.item_tooltips);
 	else
-		ss << Utils::floatToString(bdata->value, 2);
+		ss << Utils::floatToString(bdata->value, eset->number_format.item_tooltips);
 
 	if (bdata->stat_index != -1) {
 		if (Stats::PERCENT[bdata->stat_index])
@@ -772,11 +772,11 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 			std::stringstream dmg_str;
 			dmg_str << eset->damage_types.list[i].name;
 			if (items[stack.item].dmg_min[i] < items[stack.item].dmg_max[i]) {
-				dmg_str << ": " << Utils::floatToString(items[stack.item].dmg_min[i], 2) << "-" << Utils::floatToString(items[stack.item].dmg_max[i], 2);
+				dmg_str << ": " << Utils::floatToString(items[stack.item].dmg_min[i], eset->number_format.item_tooltips) << "-" << Utils::floatToString(items[stack.item].dmg_max[i], eset->number_format.item_tooltips);
 				tip.addText(dmg_str.str());
 			}
 			else {
-				dmg_str << ": " << Utils::floatToString(items[stack.item].dmg_max[i], 2);
+				dmg_str << ": " << Utils::floatToString(items[stack.item].dmg_max[i], eset->number_format.item_tooltips);
 				tip.addText(dmg_str.str());
 			}
 		}
@@ -787,11 +787,11 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 		std::stringstream abs_str;
 		abs_str << msg->get("Absorb");
 		if (items[stack.item].abs_min < items[stack.item].abs_max) {
-			abs_str << ": " << Utils::floatToString(items[stack.item].abs_min, 2) << "-" << Utils::floatToString(items[stack.item].abs_max, 2);
+			abs_str << ": " << Utils::floatToString(items[stack.item].abs_min, eset->number_format.item_tooltips) << "-" << Utils::floatToString(items[stack.item].abs_max, eset->number_format.item_tooltips);
 			tip.addText(abs_str.str());
 		}
 		else {
-			abs_str << ": " << Utils::floatToString(items[stack.item].abs_max, 2);
+			abs_str << ": " << Utils::floatToString(items[stack.item].abs_max, eset->number_format.item_tooltips);
 			tip.addText(abs_str.str());
 		}
 	}

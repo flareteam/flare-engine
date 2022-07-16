@@ -294,7 +294,7 @@ void MenuStatBar::render() {
 				// TYPE_XP uses a custom string, so this won't apply in normal circumstances
 				ss << stat_cur.Unsigned << "/" << stat_max.Unsigned;
 			else
-				ss << Utils::floatToString(stat_cur.Float, 0) << "/" << Utils::floatToString(stat_max.Float, 0);
+				ss << Utils::floatToString(stat_cur.Float, eset->number_format.player_statbar) << "/" << Utils::floatToString(stat_max.Float, eset->number_format.player_statbar);
 
 			label->setText(ss.str());
 			label->setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));

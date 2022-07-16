@@ -25,6 +25,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "CommonIncludes.h"
+#include "EngineSettings.h"
 #include "Entity.h"
 #include "FileParser.h"
 #include "FontEngine.h"
@@ -183,7 +184,7 @@ void MenuEnemy::render() {
 		std::stringstream ss;
 		ss.str("");
 		if (enemy->stats.hp > 0) {
-			ss << Utils::floatToString(enemy->stats.hp, 0) << "/" << Utils::floatToString(enemy->stats.get(Stats::HP_MAX), 0);
+			ss << Utils::floatToString(enemy->stats.hp, eset->number_format.enemy_statbar) << "/" << Utils::floatToString(enemy->stats.get(Stats::HP_MAX), eset->number_format.enemy_statbar);
 		}
 		else {
 			if (enemy->stats.lifeform)

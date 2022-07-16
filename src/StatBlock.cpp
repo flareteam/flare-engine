@@ -1032,24 +1032,24 @@ void StatBlock::logic() {
 
 	// apply healing over time
 	if (effects.hpot > 0) {
-		comb->addString(msg->getv("+%s HP", Utils::floatToString(effects.hpot, 2).c_str()), pos, CombatText::MSG_BUFF);
+		comb->addString(msg->getv("+%s HP", Utils::floatToString(effects.hpot, eset->number_format.combat_text).c_str()), pos, CombatText::MSG_BUFF);
 		hp += effects.hpot;
 		if (hp > get(Stats::HP_MAX)) hp = get(Stats::HP_MAX);
 	}
 	if (effects.hpot_percent > 0) {
 		float hpot = (get(Stats::HP_MAX) * effects.hpot_percent) / 100;
-		comb->addString(msg->getv("+%s HP", Utils::floatToString(hpot, 2).c_str()), pos, CombatText::MSG_BUFF);
+		comb->addString(msg->getv("+%s HP", Utils::floatToString(hpot, eset->number_format.combat_text).c_str()), pos, CombatText::MSG_BUFF);
 		hp += hpot;
 		if (hp > get(Stats::HP_MAX)) hp = get(Stats::HP_MAX);
 	}
 	if (effects.mpot > 0) {
-		comb->addString(msg->getv("+%s MP", Utils::floatToString(effects.mpot, 2).c_str()), pos, CombatText::MSG_BUFF);
+		comb->addString(msg->getv("+%s MP", Utils::floatToString(effects.mpot, eset->number_format.combat_text).c_str()), pos, CombatText::MSG_BUFF);
 		mp += effects.mpot;
 		if (mp > get(Stats::MP_MAX)) mp = get(Stats::MP_MAX);
 	}
 	if (effects.mpot_percent > 0) {
 		float mpot = (get(Stats::MP_MAX) * effects.mpot_percent) / 100;
-		comb->addString(msg->getv("+%s MP", Utils::floatToString(mpot, 2).c_str()), pos, CombatText::MSG_BUFF);
+		comb->addString(msg->getv("+%s MP", Utils::floatToString(mpot, eset->number_format.combat_text).c_str()), pos, CombatText::MSG_BUFF);
 		mp += mpot;
 		if (mp > get(Stats::MP_MAX)) mp = get(Stats::MP_MAX);
 	}

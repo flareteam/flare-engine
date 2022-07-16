@@ -216,7 +216,7 @@ void MenuActiveEffects::renderTooltips(const Point& position) {
 				tip_data.addText(ss.str());
 			}
 			else if (effect_icons[i].max > 0) {
-				ss << msg->get("Remaining:") << " " << Utils::getDurationString(effect_icons[i].current, 1);
+				ss << msg->get("Remaining:") << " " << Utils::getDurationString(effect_icons[i].current, eset->number_format.durations);
 				tip_data.addText(ss.str());
 			}
 
