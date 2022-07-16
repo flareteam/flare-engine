@@ -1285,7 +1285,7 @@ void MenuPowers::createTooltipInputHint(TooltipData* tip_data, bool enable_activ
 		more_bind_str = inpt->getBindingString(Input::ACCEPT);
 	}
 	else {
-		show_activate_msg = true;
+		show_activate_msg = enable_activate_msg;
 		activate_bind_str = inpt->getBindingString(Input::MAIN2);
 	}
 
