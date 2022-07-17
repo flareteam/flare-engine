@@ -1849,14 +1849,14 @@ bool PowerManager::checkRequiredMaxHPMP(const Power &pow, const StatBlock *src_s
 	bool hp_ok = true;
 	bool mp_ok = true;
 
-	if (pow.requires_max_hpmp.hp_state == Power::HPMPSTATE_PERCENT && src_stats->hp < (src_stats->get(Stats::HP_MAX) * pow.requires_max_hpmp.hp) / 100)
+	if (pow.requires_max_hpmp.hp_state == Power::HPMPSTATE_PERCENT && src_stats->hp * 100 < (src_stats->get(Stats::HP_MAX) * pow.requires_max_hpmp.hp))
 		hp_ok = false;
-	else if (pow.requires_max_hpmp.hp_state == Power::HPMPSTATE_NOT_PERCENT && src_stats->hp >= (src_stats->get(Stats::HP_MAX) * pow.requires_max_hpmp.hp) / 100)
+	else if (pow.requires_max_hpmp.hp_state == Power::HPMPSTATE_NOT_PERCENT && src_stats->hp * 100 >= (src_stats->get(Stats::HP_MAX) * pow.requires_max_hpmp.hp))
 		hp_ok = false;
 
-	if (pow.requires_max_hpmp.mp_state == Power::HPMPSTATE_PERCENT && src_stats->mp < (src_stats->get(Stats::MP_MAX) * pow.requires_max_hpmp.mp) / 100)
+	if (pow.requires_max_hpmp.mp_state == Power::HPMPSTATE_PERCENT && src_stats->mp * 100 < (src_stats->get(Stats::MP_MAX) * pow.requires_max_hpmp.mp))
 		mp_ok = false;
-	else if (pow.requires_max_hpmp.mp_state == Power::HPMPSTATE_NOT_PERCENT && src_stats->mp >= (src_stats->get(Stats::MP_MAX) * pow.requires_max_hpmp.mp) / 100)
+	else if (pow.requires_max_hpmp.mp_state == Power::HPMPSTATE_NOT_PERCENT && src_stats->mp * 100 >= (src_stats->get(Stats::MP_MAX) * pow.requires_max_hpmp.mp))
 		mp_ok = false;
 
 	if (pow.requires_max_hpmp.mode == Power::HPMPSTATE_ALL)
