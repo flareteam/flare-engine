@@ -10,6 +10,19 @@ Engine features:
 * Added 'mouse_move_deadzone' property to engine/misc.txt to help alleviate erratic mouse-move behavior when the cursor is near the player.
 * Alternative tab UI for when tabs exceed the available space.
 * Added keybind for cycling equipment sets in reverse.
+* Refactored stats and stat bonuses to use floats for fractional values.
+* Support fractional values in the following:
+  * Combat text: 'speed'
+  * Engine (combat): 'absorb_percent', 'resist_percent', 'block_percent', 'avoidance_percent', 'miss_damage_percent', 'crit_damage_percent', 'overhit_damage_percent'
+  * Engine (misc): 'party_exp_percentage'
+  * Events: 'power_damage', 'chance_exec'
+  * Death penalty: 'currency', 'xp_total', 'xp_current_level'
+  * Item: 'dmg', 'abs', 'bonus'
+  * Map: 'enemygroup.chance'
+  * Power: 'requires_mp', 'requires_hp', 'requires_hpmp_state', 'attack_speed', 'hp_steal', 'mp_steal', 'missile_angle', 'angle_variance', 'post_effect', 'post_effect_src', 'pre_power', 'modifier_accuracy', 'modifier_damage', 'modifier_critical'
+  * StatBlock: 'stat', 'stat_per_level', 'stat_per_primary', 'vulnerable', 'chance_pursue', 'chance_flee'
+* Added engine/number_format.txt. This file defines the number of digits to print after the decimal point for fractional values under different contexts.
+* Add support for multiplicative stat bonuses. For example, an item bonus of 1.5x Max HP, which would be defined as 'bonus=hp,150%'.
 
 Engine fixes:
 
@@ -17,6 +30,9 @@ Engine fixes:
 * Fixed dev console commands not working if they were preceded by whitespace.
 * Fixed spawning entities not counting towards summoned entity count.
 * Fix broken gamepad navigation after closing Powers menu while on a non-default tab.
+* Removed hard-coded minimum values for HP/MP steal and damage return.
+* Fixed "activate" message incorrectly showing in MenuPowers tooltips.
+* Fix some cases where 'min' damage/absorb could be greater than the cooresponding 'max' value.
 
 Game updates:
 
