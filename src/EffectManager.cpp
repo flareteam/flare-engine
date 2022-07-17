@@ -53,6 +53,7 @@ EffectDef::EffectDef()
 
 EffectParams::EffectParams()
 	: is_from_item(false)
+	, is_multiplier(false)
 	, duration(0)
 	, source_type(Power::SOURCE_TYPE_NEUTRAL)
 	, magnitude(0)
@@ -77,7 +78,8 @@ Effect::Effect()
 	, group_stack(false)
 	, color_mod(Color(255,255,255).encodeRGBA())
 	, alpha_mod(255)
-	, attack_speed_anim("") {
+	, attack_speed_anim("")
+	, is_multiplier(false) {
 }
 
 Effect::Effect(const Effect& other) {
@@ -111,6 +113,7 @@ Effect& Effect::operator=(const Effect& other) {
 	color_mod = other.color_mod;
 	alpha_mod = other.alpha_mod;
 	attack_speed_anim = other.attack_speed_anim;
+	is_multiplier = other.is_multiplier;
 
 	return *this;
 }
@@ -257,6 +260,7 @@ bool Effect::isImmunityTypeString(const std::string& type_str) {
 
 EffectManager::EffectManager()
 	: bonus(std::vector<float>(Stats::COUNT + eset->damage_types.count + eset->elements.list.size(), 0))
+	, bonus_multiplier(std::vector<float>(bonus.size(), 1))
 	, bonus_primary(std::vector<int>(eset->primary_stats.list.size(), 0))
 	, triggered_others(false)
 	, triggered_block(false)
@@ -288,6 +292,7 @@ void EffectManager::clearStatus() {
 
 	for (unsigned i=0; i<Stats::COUNT + eset->damage_types.count + eset->elements.list.size(); i++) {
 		bonus[i] = 0;
+		bonus_multiplier[i] = 1;
 	}
 
 	for (unsigned i=0; i<bonus_primary.size(); i++) {
@@ -358,7 +363,10 @@ void EffectManager::logic() {
 
 		// @TYPE ${STAT}|Increases ${STAT}, where ${STAT} is any valid stat_id.
 		else if (ei.type >= Effect::TYPE_COUNT && ei.type < Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count) + static_cast<int>(eset->elements.list.size())) {
-			bonus[ei.type - Effect::TYPE_COUNT] += ei.magnitude;
+			if (ei.is_multiplier)
+				bonus_multiplier[ei.type - Effect::TYPE_COUNT] *= ei.magnitude;
+			else
+				bonus[ei.type - Effect::TYPE_COUNT] += ei.magnitude;
 		}
 		// @TYPE ${PRIMARYSTAT}|Increases ${PRIMARYSTAT}, where ${PRIMARYSTAT} is any of the primary stats defined in engine/primary_stats.txt. Example: physical
 		else if (ei.type >= Effect::TYPE_COUNT) {
@@ -502,6 +510,7 @@ void EffectManager::addEffect(StatBlock* stats, EffectDef &effect, EffectParams 
 	e.timer.setDuration(params.duration);
 	e.magnitude = e.magnitude_max = params.magnitude;
 	e.is_from_item = params.is_from_item;
+	e.is_multiplier = params.is_multiplier;
 	e.trigger = trigger;
 	e.passive_id = passive_id;
 	e.source_type = params.source_type;

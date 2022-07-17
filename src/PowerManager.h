@@ -44,13 +44,15 @@ public:
 	int duration;
 	float chance;
 	bool target_src;
+	bool is_multiplier;
 
 	PostEffect()
 		: id("")
 		, magnitude(0)
 		, duration(0)
 		, chance(100)
-		, target_src(false) {
+		, target_src(false)
+		, is_multiplier(false) {
 	}
 };
 

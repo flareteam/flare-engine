@@ -597,7 +597,18 @@ void ItemManager::loadSets(const std::string& filename) {
 
 void ItemManager::parseBonus(BonusData& bdata, FileParser& infile) {
 	std::string bonus_str = Parse::popFirstString(infile.val);
-	bdata.value = Parse::popFirstFloat(infile.val);
+	std::string bonus_value_str = Parse::popFirstString(infile.val);
+
+	if (!bonus_value_str.empty()) {
+		if (bonus_value_str[bonus_value_str.size() - 1] == '%') {
+			bdata.is_multiplier = true;
+			bonus_value_str.resize(bonus_value_str.size() - 1);
+			bdata.value = Parse::toFloat(bonus_value_str) / 100;
+		}
+		else {
+			bdata.value = Parse::toFloat(bonus_value_str);
+		}
+	}
 
 	if (bonus_str == "speed") {
 		bdata.is_speed = true;
@@ -636,6 +647,12 @@ void ItemManager::parseBonus(BonusData& bdata, FileParser& infile) {
 	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 		if (bonus_str == eset->primary_stats.list[i].id) {
 			bdata.base_index = static_cast<int>(i);
+			if (bdata.is_multiplier) {
+				// primary stat bonus can't be multipliers. Re-parse as standard bonus
+				bdata.is_multiplier = false;
+				bdata.value = Parse::toFloat(bonus_value_str);
+				infile.error("ItemManager: Primary stat bonus can't be percentage.");
+			}
 			return;
 		}
 	}
@@ -653,13 +670,15 @@ void ItemManager::getBonusString(std::stringstream& ss, BonusData* bdata) {
 		return;
 	}
 
-	if (bdata->value > 0)
+	if (bdata->is_multiplier)
+		ss << Utils::floatToString(bdata->value, eset->number_format.item_tooltips + 2) << "×";
+	else if (bdata->value > 0)
 		ss << "+" << Utils::floatToString(bdata->value, eset->number_format.item_tooltips);
 	else
 		ss << Utils::floatToString(bdata->value, eset->number_format.item_tooltips);
 
 	if (bdata->stat_index != -1) {
-		if (Stats::PERCENT[bdata->stat_index])
+		if (!bdata->is_multiplier && Stats::PERCENT[bdata->stat_index])
 			ss << "%";
 
 		ss << " " << Stats::NAME[bdata->stat_index];
@@ -671,7 +690,10 @@ void ItemManager::getBonusString(std::stringstream& ss, BonusData* bdata) {
 		ss << " " << eset->damage_types.list[bdata->damage_index_max].name_max;
 	}
 	else if (bdata->resist_index != -1) {
-		ss << "% " << msg->getv("Resistance (%s)", eset->elements.list[bdata->resist_index].name.c_str());
+		if (!bdata->is_multiplier)
+			ss << "%";
+
+		ss << " " << msg->getv("Resistance (%s)", eset->elements.list[bdata->resist_index].name.c_str());
 	}
 	else if (bdata->base_index > -1 && static_cast<size_t>(bdata->base_index) < eset->primary_stats.list.size()) {
 		ss << " " << eset->primary_stats.list[bdata->base_index].name;
@@ -805,6 +827,12 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 
 		if (bdata->is_speed || bdata->is_attack_speed) {
 			if (bdata->value >= 100)
+				color = font->getColor(FontEngine::COLOR_ITEM_BONUS);
+			else
+				color = font->getColor(FontEngine::COLOR_ITEM_PENALTY);
+		}
+		else if (bdata->is_multiplier) {
+			if (bdata->value >= 1)
 				color = font->getColor(FontEngine::COLOR_ITEM_BONUS);
 			else
 				color = font->getColor(FontEngine::COLOR_ITEM_PENALTY);

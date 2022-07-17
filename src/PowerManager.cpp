@@ -699,7 +699,17 @@ void PowerManager::loadPowers() {
 				if (infile.key == "post_effect_src")
 					pe.target_src = true;
 
-				pe.magnitude = Parse::popFirstFloat(infile.val);
+				std::string magnitude_str = Parse::popFirstString(infile.val);
+				if (!magnitude_str.empty()) {
+					if (magnitude_str[magnitude_str.size() - 1] == '%') {
+						pe.is_multiplier = true;
+						magnitude_str.resize(magnitude_str.size() - 1);
+						pe.magnitude = Parse::toFloat(magnitude_str) / 100;
+					}
+					else {
+						pe.magnitude = Parse::toFloat(magnitude_str);
+					}
+				}
 				pe.duration = Parse::toDuration(Parse::popFirstString(infile.val));
 				std::string chance = Parse::popFirstString(infile.val);
 				if (!chance.empty()) {
@@ -1263,6 +1273,7 @@ bool PowerManager::effect(StatBlock *target_stats, StatBlock *caster_stats, Powe
 		effect_params.magnitude = magnitude;
 		effect_params.source_type = source_type;
 		effect_params.power_id = power_index;
+		effect_params.is_multiplier = pe.is_multiplier;
 
 		dest_stats->effects.addEffect(dest_stats, effect_data, effect_params);
 	}

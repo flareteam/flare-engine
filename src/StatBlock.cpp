@@ -914,7 +914,7 @@ void StatBlock::applyEffects() {
 	calcBase();
 
 	for (size_t i = 0; i < getFullStatCount(); ++i) {
-		current[i] = base[i] + effects.bonus[i];
+		current[i] = (base[i] + effects.bonus[i]) * effects.bonus_multiplier[i];
 	}
 
 	current[Stats::HP_MAX] += (current[Stats::HP_MAX] * current[Stats::HP_PERCENT]) / 100;

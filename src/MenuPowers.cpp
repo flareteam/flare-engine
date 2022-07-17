@@ -937,15 +937,17 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 		    Effect::typeIsResist(effect_type) ||
 		    Effect::typeIsPrimary(effect_type))
 		{
-			if (pwr.post_effects[i].magnitude > 0) {
-				ss << "+";
-			}
-			ss << Utils::floatToString(pwr.post_effects[i].magnitude, eset->number_format.power_tooltips);
+			if (pwr.post_effects[i].is_multiplier)
+				ss << Utils::floatToString(pwr.post_effects[i].magnitude, eset->number_format.power_tooltips + 2) << "×";
+			else if (pwr.post_effects[i].magnitude > 0)
+				ss << "+" << Utils::floatToString(pwr.post_effects[i].magnitude, eset->number_format.power_tooltips);
+			else
+				ss << Utils::floatToString(pwr.post_effects[i].magnitude, eset->number_format.power_tooltips);
 		}
 
 		if (Effect::typeIsStat(effect_type)) {
 			int index = Effect::getStatFromType(effect_type);
-			if (Stats::PERCENT[index]) {
+			if (Stats::PERCENT[index] && !pwr.post_effects[i].is_multiplier) {
 				ss << "%";
 			}
 			ss << " " << Stats::NAME[index];
@@ -960,7 +962,10 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 		}
 		else if (Effect::typeIsResist(effect_type)) {
 			size_t index = Effect::getResistFromType(effect_type);
-			ss << "% " << msg->getv("Resistance (%s)", eset->elements.list[index].name.c_str());
+			if (!pwr.post_effects[i].is_multiplier) {
+				ss << "%";
+			}
+			ss << " " << msg->getv("Resistance (%s)", eset->elements.list[index].name.c_str());
 		}
 		else if (Effect::typeIsPrimary(effect_type)) {
 			size_t index = Effect::getPrimaryFromType(effect_type);

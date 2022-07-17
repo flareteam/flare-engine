@@ -95,6 +95,7 @@ public:
 	uint32_t color_mod;
 	uint8_t alpha_mod;
 	std::string attack_speed_anim;
+	bool is_multiplier;
 };
 
 class EffectDef {
@@ -122,6 +123,7 @@ public:
 	EffectParams();
 
 	bool is_from_item;
+	bool is_multiplier;
 	int duration;
 	int source_type;
 	float magnitude;
@@ -172,6 +174,7 @@ public:
 	float knockback_speed;
 
 	std::vector<float> bonus;
+	std::vector<float> bonus_multiplier;
 	std::vector<int> bonus_primary;
 
 	// TODO convert to array

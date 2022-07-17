@@ -1309,6 +1309,7 @@ void MenuInventory::applyBonus(const BonusData* bdata) {
 
 	EffectParams ep;
 	ep.magnitude = bdata->value;
+	ep.is_multiplier = bdata->is_multiplier;
 	ep.source_type = Power::SOURCE_TYPE_HERO;
 	ep.is_from_item = true;
 
