@@ -648,7 +648,12 @@ int Map::addEventStatBlock(Event &evnt) {
 	EffectDef immunity_effect;
 	immunity_effect.id = "MAP_EVENT_IMMUNITY";
 	immunity_effect.type = Effect::RESIST_ALL;
-	statb->effects.addEffect(statb, immunity_effect, 0, 100, Power::SOURCE_TYPE_ENEMY, EffectManager::NO_POWER);
+
+	EffectParams immunity_params;
+	immunity_params.magnitude = 100;
+	immunity_params.source_type = Power::SOURCE_TYPE_ENEMY;
+
+	statb->effects.addEffect(statb, immunity_effect, immunity_params);
 
 	// ensure the statblock will be alive
 	statb->hp = statb->starting[Stats::HP_MAX] = statb->current[Stats::HP_MAX] = 1;

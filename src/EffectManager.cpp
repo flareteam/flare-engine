@@ -51,6 +51,14 @@ EffectDef::EffectDef()
 	, is_immunity_type(false) {
 }
 
+EffectParams::EffectParams()
+	: is_from_item(false)
+	, duration(0)
+	, source_type(Power::SOURCE_TYPE_NEUTRAL)
+	, magnitude(0)
+	, power_id(EffectManager::NO_POWER) {
+}
+
 Effect::Effect()
 	: id("")
 	, name("")
@@ -61,7 +69,7 @@ Effect::Effect()
 	, magnitude_max(0)
 	, animation_name("")
 	, animation(NULL)
-	, item(false)
+	, is_from_item(false)
 	, trigger(-1)
 	, render_above(false)
 	, passive_id(0)
@@ -94,7 +102,7 @@ Effect& Effect::operator=(const Effect& other) {
 	type = other.type;
 	magnitude = other.magnitude;
 	magnitude_max = other.magnitude_max;
-	item = other.item;
+	is_from_item = other.is_from_item;
 	trigger = other.trigger;
 	render_above = other.render_above;
 	passive_id = other.passive_id;
@@ -386,16 +394,7 @@ void EffectManager::logic() {
 	}
 }
 
-void EffectManager::addEffect(StatBlock* stats, EffectDef &effect, int duration, float magnitude, int source_type, PowerID power_id) {
-	addEffectInternal(stats, effect, duration, magnitude, source_type, false, power_id);
-}
-
-void EffectManager::addItemEffect(StatBlock* stats, EffectDef &effect, int duration, float magnitude) {
-	// only the hero can wear items, so use Power::SOURCE_TYPE_HERO
-	addEffectInternal(stats, effect, duration, magnitude, Power::SOURCE_TYPE_HERO, true, NO_POWER);
-}
-
-void EffectManager::addEffectInternal(StatBlock* stats, EffectDef &effect, int duration, float magnitude, int source_type, bool item, PowerID power_id) {
+void EffectManager::addEffect(StatBlock* stats, EffectDef &effect, EffectParams &params) {
 	refresh_stats = true;
 
 	// if we're already immune, don't add negative effects
@@ -404,7 +403,7 @@ void EffectManager::addEffectInternal(StatBlock* stats, EffectDef &effect, int d
 			comb->addString(msg->get("Resist"), stats->pos, CombatText::MSG_MISS);
 			return;
 		}
-		else if (effect.type == Effect::SPEED && magnitude < 100 && Math::percentChanceF(stats->get(Stats::RESIST_SLOW))) {
+		else if (effect.type == Effect::SPEED && params.magnitude < 100 && Math::percentChanceF(stats->get(Stats::RESIST_SLOW))) {
 			comb->addString(msg->get("Resist"), stats->pos, CombatText::MSG_MISS);
 			return;
 		}
@@ -416,7 +415,7 @@ void EffectManager::addEffectInternal(StatBlock* stats, EffectDef &effect, int d
 			comb->addString(msg->get("Resist"), stats->pos, CombatText::MSG_MISS);
 			return;
 		}
-		else if (effect.type > Effect::TYPE_COUNT && magnitude < 0 && Math::percentChanceF(stats->get(Stats::RESIST_STAT_DEBUFF))) {
+		else if (effect.type > Effect::TYPE_COUNT && params.magnitude < 0 && Math::percentChanceF(stats->get(Stats::RESIST_STAT_DEBUFF))) {
 			comb->addString(msg->get("Resist"), stats->pos, CombatText::MSG_MISS);
 			return;
 		}
@@ -432,8 +431,8 @@ void EffectManager::addEffectInternal(StatBlock* stats, EffectDef &effect, int d
 	bool insert_effect = false;
 	size_t insert_pos;
 	int stacks_applied = 0;
-	int trigger = power_id > 0 ? powers->powers[power_id].passive_trigger : -1;
-	size_t passive_id = (power_id > 0 && powers->powers[power_id].passive) ? power_id : 0;
+	int trigger = params.power_id > 0 ? powers->powers[params.power_id].passive_trigger : -1;
+	size_t passive_id = (params.power_id > 0 && powers->powers[params.power_id].passive) ? params.power_id : 0;
 
 	for (size_t i=effect_list.size(); i>0; i--) {
 		Effect& ei = effect_list[i-1];
@@ -449,11 +448,11 @@ void EffectManager::addEffectInternal(StatBlock* stats, EffectDef &effect, int d
 			}
 			else{
 				if (effect.type == Effect::SHIELD && effect.group_stack){
-					ei.magnitude += magnitude;
+					ei.magnitude += params.magnitude;
 
 					if (effect.max_stacks == -1
-						|| (magnitude != 0 && static_cast<int>(ei.magnitude_max/magnitude) < effect.max_stacks)){
-						ei.magnitude_max += magnitude;
+						|| (params.magnitude != 0 && static_cast<int>(ei.magnitude_max/params.magnitude) < effect.max_stacks)){
+						ei.magnitude_max += params.magnitude;
 					}
 
 					if (ei.magnitude > ei.magnitude_max){
@@ -477,7 +476,7 @@ void EffectManager::addEffectInternal(StatBlock* stats, EffectDef &effect, int d
 
 	// if we're adding a debuff resistance effect, remove applicable negative effects
 	for (int i = Stats::RESIST_DAMAGE_OVER_TIME; i <= Stats::RESIST_STAT_DEBUFF; ++i) {
-		float resist_chance = (stats ? stats->get(static_cast<Stats::STAT>(i)) + magnitude : magnitude);
+		float resist_chance = (stats ? stats->get(static_cast<Stats::STAT>(i)) + params.magnitude : params.magnitude);
 
 		if ((effect.type == Effect::RESIST_ALL || effect.type == Effect::TYPE_COUNT + i) && Math::percentChanceF(resist_chance)) {
 			clearNegativeEffects(Effect::TYPE_COUNT + i);
@@ -500,12 +499,12 @@ void EffectManager::addEffectInternal(StatBlock* stats, EffectDef &effect, int d
 		e.loadAnimation(effect.animation);
 	}
 
-	e.timer.setDuration(duration);
-	e.magnitude = e.magnitude_max = magnitude;
-	e.item = item;
+	e.timer.setDuration(params.duration);
+	e.magnitude = e.magnitude_max = params.magnitude;
+	e.is_from_item = params.is_from_item;
 	e.trigger = trigger;
 	e.passive_id = passive_id;
-	e.source_type = source_type;
+	e.source_type = params.source_type;
 
 	if (insert_effect) {
 		if (effect.max_stacks != -1 && stacks_applied >= effect.max_stacks){
@@ -594,7 +593,7 @@ void EffectManager::clearNegativeEffects(int type) {
 
 void EffectManager::clearItemEffects() {
 	for (size_t i=effect_list.size(); i > 0; i--) {
-		if (effect_list[i-1].item) removeEffect(i-1);
+		if (effect_list[i-1].is_from_item) removeEffect(i-1);
 	}
 }
 

@@ -86,7 +86,7 @@ public:
 	float magnitude_max;
 	std::string animation_name;
 	Animation* animation;
-	bool item;
+	bool is_from_item;
 	int trigger;
 	bool render_above;
 	size_t passive_id;
@@ -117,18 +117,27 @@ public:
 	bool is_immunity_type; // handling of deprecated types
 };
 
+class EffectParams {
+public:
+	EffectParams();
+
+	bool is_from_item;
+	int duration;
+	int source_type;
+	float magnitude;
+	PowerID power_id;
+};
+
 class EffectManager {
 private:
 	void removeEffect(size_t id);
 	void clearStatus();
-	void addEffectInternal(StatBlock* stats, EffectDef &effect, int duration, float magnitude, int source_type, bool item, PowerID power_id);
 
 public:
 	EffectManager();
 	~EffectManager();
 	void logic();
-	void addEffect(StatBlock* stats, EffectDef &effect, int duration, float magnitude, int source_type, PowerID power_id);
-	void addItemEffect(StatBlock* stats, EffectDef &effect, int duration, float magnitude);
+	void addEffect(StatBlock* stats, EffectDef &effect, EffectParams &params);
 	void removeEffectType(const int type);
 	void removeEffectPassive(size_t id);
 	void removeEffectID(const std::vector< std::pair<std::string, int> >& remove_effects);
@@ -163,7 +172,6 @@ public:
 	float knockback_speed;
 
 	std::vector<float> bonus;
-	std::vector<float> bonus_resist;
 	std::vector<int> bonus_primary;
 
 	// TODO convert to array

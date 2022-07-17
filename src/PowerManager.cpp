@@ -1258,7 +1258,13 @@ bool PowerManager::effect(StatBlock *target_stats, StatBlock *caster_stats, Powe
 			effect_data.type = Effect::getTypeFromString(pe.id);
 		}
 
-		dest_stats->effects.addEffect(dest_stats, effect_data, duration, magnitude, source_type, power_index);
+		EffectParams effect_params;
+		effect_params.duration = duration;
+		effect_params.magnitude = magnitude;
+		effect_params.source_type = source_type;
+		effect_params.power_id = power_index;
+
+		dest_stats->effects.addEffect(dest_stats, effect_data, effect_params);
 	}
 
 	return true;
