@@ -2,11 +2,11 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 # Translators:
 # Kirim Saja <kirim.aja1111@gmail.com>, 2021
 # Justin Jacobs <jajdorkster@gmail.com>, 2022
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
@@ -143,14 +143,14 @@ msgstr "hilang"
 #: ../../../src/Entity.cpp:554 ../../../src/PowerManager.cpp:1242
 #: ../../../src/StatBlock.cpp:1046 ../../../src/StatBlock.cpp:1052
 #, c-format
-msgid "+%d HP"
-msgstr "+%d HP"
+msgid "+%s HP"
+msgstr "+%s HP"
 
 #: ../../../src/Entity.cpp:566 ../../../src/StatBlock.cpp:1057
 #: ../../../src/StatBlock.cpp:1063
 #, c-format
-msgid "+%d MP"
-msgstr "+%d MP"
+msgid "+%s MP"
+msgstr "+%s MP"
 
 #: ../../../src/EventManager.cpp:827
 msgid "Unknown destination"
@@ -270,13 +270,13 @@ msgstr "Item tidak diketahui"
 
 #: ../../../src/ItemManager.cpp:648 ../../../src/MenuPowers.cpp:991
 #, c-format
-msgid "%d%% Speed"
-msgstr "%d%% Kecepatan"
+msgid "%s%% Speed"
+msgstr "%s%% Kecepatan"
 
 #: ../../../src/ItemManager.cpp:652 ../../../src/MenuPowers.cpp:994
 #, c-format
-msgid "%d%% Attack Speed"
-msgstr "%d%% Kecepatan Serangan"
+msgid "%s%% Attack Speed"
+msgstr "%s%% Kecepatan Serangan"
 
 #: ../../../src/ItemManager.cpp:674 ../../../src/MenuCharacter.cpp:362
 #: ../../../src/MenuCharacter.cpp:425 ../../../src/MenuPowers.cpp:963
@@ -300,13 +300,8 @@ msgstr "Kualitas: %s"
 
 #: ../../../src/ItemManager.cpp:788
 #, c-format
-msgid "Absorb: %d-%d"
-msgstr "Menyerap: %d-%d"
-
-#: ../../../src/ItemManager.cpp:790
-#, c-format
-msgid "Absorb: %d"
-msgstr "Menyerap: %d"
+msgid "Absorb"
+msgstr "Menyerap"
 
 #: ../../../src/ItemManager.cpp:830 ../../../src/MenuPowers.cpp:1215
 #: ../../../src/MenuPowers.cpp:1218
@@ -472,14 +467,14 @@ msgstr "Statistik terkait:"
 #: ../../../src/MenuCharacter.cpp:448 ../../../src/MenuCharacter.cpp:472
 #: ../../../src/MenuCharacter.cpp:499
 #, c-format
-msgid "Each level grants %d."
-msgstr "Setiap level memberikan %d."
+msgid "Each level grants %s."
+msgstr "Setiap level memberikan %s."
 
 #: ../../../src/MenuCharacter.cpp:452 ../../../src/MenuCharacter.cpp:476
 #: ../../../src/MenuCharacter.cpp:503
 #, c-format
-msgid "Each point of %s grants %d."
-msgstr "Tiap poin %s memberikan %d."
+msgid "Each point of %s grants %s."
+msgstr "Tiap poin %s memberikan %s."
 
 #: ../../../src/MenuCharacter.cpp:506
 #, c-format
@@ -1172,18 +1167,18 @@ msgstr "Game Selesai"
 
 #: ../../../src/MenuInventory.cpp:275
 #, c-format
-msgid "Lost %d%% of %s."
-msgstr "Hilang %d%% dari %s."
+msgid "Lost %s%% of %s."
+msgstr "Hilang %s%% dari %s."
 
 #: ../../../src/MenuInventory.cpp:282
 #, c-format
-msgid "Lost %d%% of total XP."
-msgstr "Hilang %d%% dari total XP."
+msgid "Lost %s%% of total XP."
+msgstr "Hilang %s%% dari total XP."
 
 #: ../../../src/MenuInventory.cpp:287
 #, c-format
-msgid "Lost %d%% of current level XP."
-msgstr "Hilang %d%% dari level XP saat ini."
+msgid "Lost %s%% of current level XP."
+msgstr "Hilang %s%% dari level XP saat ini."
 
 #: ../../../src/MenuInventory.cpp:313
 #, c-format
@@ -1362,13 +1357,13 @@ msgstr "Pasif"
 
 #: ../../../src/MenuPowers.cpp:911
 #, c-format
-msgid "Costs %d MP"
-msgstr "Biaya %d MP"
+msgid "Costs %s MP"
+msgstr "Biaya %s MP"
 
 #: ../../../src/MenuPowers.cpp:915
 #, c-format
-msgid "Costs %d HP"
-msgstr "Biaya %d HP"
+msgid "Costs %s HP"
+msgstr "Biaya %s HP"
 
 #: ../../../src/MenuPowers.cpp:919
 msgid "Cooldown:"
@@ -1428,8 +1423,8 @@ msgstr "Didorong ke belakang"
 
 #: ../../../src/MenuPowers.cpp:1093
 #, c-format
-msgid "%d%% chance"
-msgstr "%d%% peluang"
+msgid "%s%% chance"
+msgstr "%s%% peluang"
 
 #: ../../../src/MenuPowers.cpp:1145
 msgid "Base Accuracy"
@@ -1449,8 +1444,8 @@ msgstr "Mengabaikan Penghindaran"
 
 #: ../../../src/MenuPowers.cpp:1183
 #, c-format
-msgid "%d%% Chance to crit slowed targets"
-msgstr "%d%% Peluang untuk mengkritisi target yang diperlambat"
+msgid "%s%% Chance to crit slowed targets"
+msgstr "%s%% Peluang untuk mengkritisi target yang diperlambat"
 
 #: ../../../src/MenuPowers.cpp:1188
 #, c-format
@@ -1536,8 +1531,8 @@ msgstr "Penjual"
 
 #: ../../../src/PowerManager.cpp:1226
 #, c-format
-msgid "+%d Shield"
-msgstr "+%d Perisai"
+msgid "+%s Shield"
+msgstr "+%s Perisai"
 
 #: ../../../src/PowerManager.cpp:1483
 msgid "You are already transformed, untransform first."

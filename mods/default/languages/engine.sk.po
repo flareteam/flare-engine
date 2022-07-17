@@ -2,11 +2,11 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 # Translators:
 # MiroslavR <miroslavr256@gmail.com>, 2019
 # Justin Jacobs <jajdorkster@gmail.com>, 2022
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
@@ -140,14 +140,14 @@ msgstr "minutie"
 #: ../../../src/Entity.cpp:554 ../../../src/PowerManager.cpp:1242
 #: ../../../src/StatBlock.cpp:1046 ../../../src/StatBlock.cpp:1052
 #, c-format
-msgid "+%d HP"
-msgstr "+%d HP"
+msgid "+%s HP"
+msgstr "+%s HP"
 
 #: ../../../src/Entity.cpp:566 ../../../src/StatBlock.cpp:1057
 #: ../../../src/StatBlock.cpp:1063
 #, c-format
-msgid "+%d MP"
-msgstr "+%d MP"
+msgid "+%s MP"
+msgstr "+%s MP"
 
 #: ../../../src/EventManager.cpp:827
 msgid "Unknown destination"
@@ -267,12 +267,12 @@ msgstr "Neznámy predmet"
 
 #: ../../../src/ItemManager.cpp:648 ../../../src/MenuPowers.cpp:991
 #, c-format
-msgid "%d%% Speed"
+msgid "%s%% Speed"
 msgstr ""
 
 #: ../../../src/ItemManager.cpp:652 ../../../src/MenuPowers.cpp:994
 #, c-format
-msgid "%d%% Attack Speed"
+msgid "%s%% Attack Speed"
 msgstr ""
 
 #: ../../../src/ItemManager.cpp:674 ../../../src/MenuCharacter.cpp:362
@@ -297,13 +297,8 @@ msgstr "Kvalita: %s"
 
 #: ../../../src/ItemManager.cpp:788
 #, c-format
-msgid "Absorb: %d-%d"
-msgstr "Pohltenie: %d-%d"
-
-#: ../../../src/ItemManager.cpp:790
-#, c-format
-msgid "Absorb: %d"
-msgstr "Pohltenie: %d"
+msgid "Absorb"
+msgstr "Pohltenie"
 
 #: ../../../src/ItemManager.cpp:830 ../../../src/MenuPowers.cpp:1215
 #: ../../../src/MenuPowers.cpp:1218
@@ -469,13 +464,13 @@ msgstr "Súvisiace charakteristiky:"
 #: ../../../src/MenuCharacter.cpp:448 ../../../src/MenuCharacter.cpp:472
 #: ../../../src/MenuCharacter.cpp:499
 #, c-format
-msgid "Each level grants %d."
-msgstr "Každá úroveň pridá %d."
+msgid "Each level grants %s."
+msgstr "Každá úroveň pridá %s."
 
 #: ../../../src/MenuCharacter.cpp:452 ../../../src/MenuCharacter.cpp:476
 #: ../../../src/MenuCharacter.cpp:503
 #, c-format
-msgid "Each point of %s grants %d."
+msgid "Each point of %s grants %s."
 msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:506
@@ -1145,18 +1140,18 @@ msgstr ""
 
 #: ../../../src/MenuInventory.cpp:275
 #, c-format
-msgid "Lost %d%% of %s."
-msgstr "Stratili ste %d %% z %s."
+msgid "Lost %s%% of %s."
+msgstr "Stratili ste %s %% z %s."
 
 #: ../../../src/MenuInventory.cpp:282
 #, c-format
-msgid "Lost %d%% of total XP."
-msgstr "Stratili ste %d %% z celkového XP."
+msgid "Lost %s%% of total XP."
+msgstr "Stratili ste %s %% z celkového XP."
 
 #: ../../../src/MenuInventory.cpp:287
 #, c-format
-msgid "Lost %d%% of current level XP."
-msgstr "Stratili ste %d %% z XP aktuálnej úrovne."
+msgid "Lost %s%% of current level XP."
+msgstr "Stratili ste %s %% z XP aktuálnej úrovne."
 
 #: ../../../src/MenuInventory.cpp:313
 #, c-format
@@ -1335,13 +1330,13 @@ msgstr "Pasívna"
 
 #: ../../../src/MenuPowers.cpp:911
 #, c-format
-msgid "Costs %d MP"
+msgid "Costs %s MP"
 msgstr "Spotrebuje %d MP"
 
 #: ../../../src/MenuPowers.cpp:915
 #, c-format
-msgid "Costs %d HP"
-msgstr "Spotrebuje %d HP"
+msgid "Costs %s HP"
+msgstr "Spotrebuje %s HP"
 
 #: ../../../src/MenuPowers.cpp:919
 msgid "Cooldown:"
@@ -1401,8 +1396,8 @@ msgstr "Odhodenie"
 
 #: ../../../src/MenuPowers.cpp:1093
 #, c-format
-msgid "%d%% chance"
-msgstr "%d %% šanca"
+msgid "%s%% chance"
+msgstr "%s %% šanca"
 
 #: ../../../src/MenuPowers.cpp:1145
 msgid "Base Accuracy"
@@ -1422,8 +1417,8 @@ msgstr "Ignoruje vyhýbanie"
 
 #: ../../../src/MenuPowers.cpp:1183
 #, c-format
-msgid "%d%% Chance to crit slowed targets"
-msgstr "%d %% šanca kriticky zasiahnuť spomalené ciele"
+msgid "%s%% Chance to crit slowed targets"
+msgstr "%s%% šanca kriticky zasiahnuť spomalené ciele"
 
 #: ../../../src/MenuPowers.cpp:1188
 #, c-format
@@ -1509,7 +1504,7 @@ msgstr "Predavač"
 
 #: ../../../src/PowerManager.cpp:1226
 #, c-format
-msgid "+%d Shield"
+msgid "+%s Shield"
 msgstr ""
 
 #: ../../../src/PowerManager.cpp:1483

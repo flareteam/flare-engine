@@ -2,11 +2,11 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 # Translators:
 # 48719d321e4b4a9c2ca8c6a1f8b9cba8, 2018
 # Justin Jacobs <jajdorkster@gmail.com>, 2022
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
@@ -141,14 +141,14 @@ msgstr "пропуск"
 #: ../../../src/Entity.cpp:554 ../../../src/PowerManager.cpp:1242
 #: ../../../src/StatBlock.cpp:1046 ../../../src/StatBlock.cpp:1052
 #, c-format
-msgid "+%d HP"
-msgstr "+%d здраве"
+msgid "+%s HP"
+msgstr "+%s здраве"
 
 #: ../../../src/Entity.cpp:566 ../../../src/StatBlock.cpp:1057
 #: ../../../src/StatBlock.cpp:1063
 #, c-format
-msgid "+%d MP"
-msgstr "+%d мана"
+msgid "+%s MP"
+msgstr "+%s мана"
 
 #: ../../../src/EventManager.cpp:827
 msgid "Unknown destination"
@@ -268,13 +268,13 @@ msgstr "Непознат предмет"
 
 #: ../../../src/ItemManager.cpp:648 ../../../src/MenuPowers.cpp:991
 #, c-format
-msgid "%d%% Speed"
-msgstr "%d%% Бързина"
+msgid "%s%% Speed"
+msgstr "%s%% Бързина"
 
 #: ../../../src/ItemManager.cpp:652 ../../../src/MenuPowers.cpp:994
 #, c-format
-msgid "%d%% Attack Speed"
-msgstr "%d%% Бързина на атака"
+msgid "%s%% Attack Speed"
+msgstr "%s%% Бързина на атака"
 
 #: ../../../src/ItemManager.cpp:674 ../../../src/MenuCharacter.cpp:362
 #: ../../../src/MenuCharacter.cpp:425 ../../../src/MenuPowers.cpp:963
@@ -298,13 +298,8 @@ msgstr "Качество: %s"
 
 #: ../../../src/ItemManager.cpp:788
 #, c-format
-msgid "Absorb: %d-%d"
-msgstr "Абсорбиране: %d – %d"
-
-#: ../../../src/ItemManager.cpp:790
-#, c-format
-msgid "Absorb: %d"
-msgstr "Абсорбиране: %d"
+msgid "Absorb"
+msgstr "Абсорбиране"
 
 #: ../../../src/ItemManager.cpp:830 ../../../src/MenuPowers.cpp:1215
 #: ../../../src/MenuPowers.cpp:1218
@@ -470,14 +465,14 @@ msgstr "Свързани характеристики:"
 #: ../../../src/MenuCharacter.cpp:448 ../../../src/MenuCharacter.cpp:472
 #: ../../../src/MenuCharacter.cpp:499
 #, c-format
-msgid "Each level grants %d."
-msgstr "Всяко ниво дава %d."
+msgid "Each level grants %s."
+msgstr "Всяко ниво дава %s."
 
 #: ../../../src/MenuCharacter.cpp:452 ../../../src/MenuCharacter.cpp:476
 #: ../../../src/MenuCharacter.cpp:503
 #, c-format
-msgid "Each point of %s grants %d."
-msgstr "Всяка точка от %s дава %d."
+msgid "Each point of %s grants %s."
+msgstr "Всяка точка от %s дава %s."
 
 #: ../../../src/MenuCharacter.cpp:506
 #, c-format
@@ -1131,18 +1126,18 @@ msgstr ""
 
 #: ../../../src/MenuInventory.cpp:275
 #, c-format
-msgid "Lost %d%% of %s."
-msgstr "Загубихте %d%% от %s."
+msgid "Lost %s%% of %s."
+msgstr "Загубихте %s%% от %s."
 
 #: ../../../src/MenuInventory.cpp:282
 #, c-format
-msgid "Lost %d%% of total XP."
-msgstr "Загубихте %d%% от общия опит."
+msgid "Lost %s%% of total XP."
+msgstr "Загубихте %s%% от общия опит."
 
 #: ../../../src/MenuInventory.cpp:287
 #, c-format
-msgid "Lost %d%% of current level XP."
-msgstr "Загубихте %d%% опит от текущото ниво."
+msgid "Lost %s%% of current level XP."
+msgstr "Загубихте %s%% опит от текущото ниво."
 
 #: ../../../src/MenuInventory.cpp:313
 #, c-format
@@ -1321,13 +1316,13 @@ msgstr "Пасивно"
 
 #: ../../../src/MenuPowers.cpp:911
 #, c-format
-msgid "Costs %d MP"
-msgstr "Изразходва %d мана"
+msgid "Costs %s MP"
+msgstr "Изразходва %s мана"
 
 #: ../../../src/MenuPowers.cpp:915
 #, c-format
-msgid "Costs %d HP"
-msgstr "Изразходва %d здраве"
+msgid "Costs %s HP"
+msgstr "Изразходва %s здраве"
 
 #: ../../../src/MenuPowers.cpp:919
 msgid "Cooldown:"
@@ -1387,8 +1382,8 @@ msgstr "Бутащ удар"
 
 #: ../../../src/MenuPowers.cpp:1093
 #, c-format
-msgid "%d%% chance"
-msgstr "%d%% шанс"
+msgid "%s%% chance"
+msgstr "%s%% шанс"
 
 #: ../../../src/MenuPowers.cpp:1145
 msgid "Base Accuracy"
@@ -1408,8 +1403,8 @@ msgstr "Игнорира избягване"
 
 #: ../../../src/MenuPowers.cpp:1183
 #, c-format
-msgid "%d%% Chance to crit slowed targets"
-msgstr "%d%% Шанс за критичен удар на забавени мишени"
+msgid "%s%% Chance to crit slowed targets"
+msgstr "%s%% Шанс за критичен удар на забавени мишени"
 
 #: ../../../src/MenuPowers.cpp:1188
 #, c-format
@@ -1495,8 +1490,8 @@ msgstr "Продавач"
 
 #: ../../../src/PowerManager.cpp:1226
 #, c-format
-msgid "+%d Shield"
-msgstr "+%d Щит"
+msgid "+%s Shield"
+msgstr "+%s Щит"
 
 #: ../../../src/PowerManager.cpp:1483
 msgid "You are already transformed, untransform first."

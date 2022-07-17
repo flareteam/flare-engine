@@ -2,10 +2,10 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 # Translators:
 # Justin Jacobs <jajdorkster@gmail.com>, 2022
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
@@ -137,13 +137,13 @@ msgstr "elvétve"
 #: ../../../src/Entity.cpp:554 ../../../src/PowerManager.cpp:1242
 #: ../../../src/StatBlock.cpp:1046 ../../../src/StatBlock.cpp:1052
 #, c-format
-msgid "+%d HP"
-msgstr "+%d ÉP"
+msgid "+%s HP"
+msgstr "+%s ÉP"
 
 #: ../../../src/Entity.cpp:566 ../../../src/StatBlock.cpp:1057
 #: ../../../src/StatBlock.cpp:1063
 #, c-format
-msgid "+%d MP"
+msgid "+%s MP"
 msgstr ""
 
 #: ../../../src/EventManager.cpp:827
@@ -264,13 +264,13 @@ msgstr "Ismeretlen tárgy"
 
 #: ../../../src/ItemManager.cpp:648 ../../../src/MenuPowers.cpp:991
 #, c-format
-msgid "%d%% Speed"
-msgstr "%d%% sebesség"
+msgid "%s%% Speed"
+msgstr "%s%% sebesség"
 
 #: ../../../src/ItemManager.cpp:652 ../../../src/MenuPowers.cpp:994
 #, c-format
-msgid "%d%% Attack Speed"
-msgstr "%d%% támadás sebesség"
+msgid "%s%% Attack Speed"
+msgstr "%s%% támadás sebesség"
 
 #: ../../../src/ItemManager.cpp:674 ../../../src/MenuCharacter.cpp:362
 #: ../../../src/MenuCharacter.cpp:425 ../../../src/MenuPowers.cpp:963
@@ -294,13 +294,8 @@ msgstr "Gyakoriság: %s"
 
 #: ../../../src/ItemManager.cpp:788
 #, c-format
-msgid "Absorb: %d-%d"
-msgstr "Felfog: %d-%d"
-
-#: ../../../src/ItemManager.cpp:790
-#, c-format
-msgid "Absorb: %d"
-msgstr "Felfog: %d"
+msgid "Absorb"
+msgstr "Felfog"
 
 #: ../../../src/ItemManager.cpp:830 ../../../src/MenuPowers.cpp:1215
 #: ../../../src/MenuPowers.cpp:1218
@@ -466,14 +461,14 @@ msgstr "Kapcsolódó statisztika:"
 #: ../../../src/MenuCharacter.cpp:448 ../../../src/MenuCharacter.cpp:472
 #: ../../../src/MenuCharacter.cpp:499
 #, c-format
-msgid "Each level grants %d."
-msgstr "Minden szint %d-t ad."
+msgid "Each level grants %s."
+msgstr "Minden szint %s-t ad."
 
 #: ../../../src/MenuCharacter.cpp:452 ../../../src/MenuCharacter.cpp:476
 #: ../../../src/MenuCharacter.cpp:503
 #, c-format
-msgid "Each point of %s grants %d."
-msgstr "Minden %s pont ad %d-t."
+msgid "Each point of %s grants %s."
+msgstr "Minden %s pont ad %s-t."
 
 #: ../../../src/MenuCharacter.cpp:506
 #, c-format
@@ -1118,18 +1113,18 @@ msgstr ""
 
 #: ../../../src/MenuInventory.cpp:275
 #, c-format
-msgid "Lost %d%% of %s."
-msgstr "Elveszett %d%% a %s-ból."
+msgid "Lost %s%% of %s."
+msgstr "Elveszett %s%% a %s-ból."
 
 #: ../../../src/MenuInventory.cpp:282
 #, c-format
-msgid "Lost %d%% of total XP."
-msgstr "Elveszett %d%% a teljes TP-ból."
+msgid "Lost %s%% of total XP."
+msgstr "Elveszett %s%% a teljes TP-ból."
 
 #: ../../../src/MenuInventory.cpp:287
 #, c-format
-msgid "Lost %d%% of current level XP."
-msgstr "Elveszett %d%% a szinten gyűjtött TP-ból."
+msgid "Lost %s%% of current level XP."
+msgstr "Elveszett %s%% a szinten gyűjtött TP-ból."
 
 #: ../../../src/MenuInventory.cpp:313
 #, c-format
@@ -1308,13 +1303,13 @@ msgstr "Passzív"
 
 #: ../../../src/MenuPowers.cpp:911
 #, c-format
-msgid "Costs %d MP"
-msgstr "%d MP-be kerül"
+msgid "Costs %s MP"
+msgstr "%s MP-be kerül"
 
 #: ../../../src/MenuPowers.cpp:915
 #, c-format
-msgid "Costs %d HP"
-msgstr "%d ÉP-be kerül"
+msgid "Costs %s HP"
+msgstr "%s ÉP-be kerül"
 
 #: ../../../src/MenuPowers.cpp:919
 msgid "Cooldown:"
@@ -1374,8 +1369,8 @@ msgstr "Leütés"
 
 #: ../../../src/MenuPowers.cpp:1093
 #, c-format
-msgid "%d%% chance"
-msgstr "%d%% esély"
+msgid "%s%% chance"
+msgstr "%s%% esély"
 
 #: ../../../src/MenuPowers.cpp:1145
 msgid "Base Accuracy"
@@ -1395,8 +1390,8 @@ msgstr "Kitérést kivédi"
 
 #: ../../../src/MenuPowers.cpp:1183
 #, c-format
-msgid "%d%% Chance to crit slowed targets"
-msgstr "%d%% esély a kritikusra lassítottnál"
+msgid "%s%% Chance to crit slowed targets"
+msgstr "%s%% esély a kritikusra lassítottnál"
 
 #: ../../../src/MenuPowers.cpp:1188
 #, c-format
@@ -1482,8 +1477,8 @@ msgstr "Eladó"
 
 #: ../../../src/PowerManager.cpp:1226
 #, c-format
-msgid "+%d Shield"
-msgstr "+%d pajzs"
+msgid "+%s Shield"
+msgstr "+%s pajzs"
 
 #: ../../../src/PowerManager.cpp:1483
 msgid "You are already transformed, untransform first."

@@ -2,11 +2,11 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 # Translators:
 # GunChleoc, 2022
 # Justin Jacobs <jajdorkster@gmail.com>, 2022
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
@@ -146,14 +146,14 @@ msgstr "mì-amais"
 #: ../../../src/Entity.cpp:554 ../../../src/PowerManager.cpp:1242
 #: ../../../src/StatBlock.cpp:1046 ../../../src/StatBlock.cpp:1052
 #, c-format
-msgid "+%d HP"
-msgstr "+%d puingean-beatha"
+msgid "+%s HP"
+msgstr "+%s puingean-beatha"
 
 #: ../../../src/Entity.cpp:566 ../../../src/StatBlock.cpp:1057
 #: ../../../src/StatBlock.cpp:1063
 #, c-format
-msgid "+%d MP"
-msgstr "+%d puingean-gluasaid"
+msgid "+%s MP"
+msgstr "+%s puingean-gluasaid"
 
 #: ../../../src/EventManager.cpp:827
 msgid "Unknown destination"
@@ -273,13 +273,13 @@ msgstr "Nì nach aithne dhuinn"
 
 #: ../../../src/ItemManager.cpp:648 ../../../src/MenuPowers.cpp:991
 #, c-format
-msgid "%d%% Speed"
-msgstr "Luaths de %d%%"
+msgid "%s%% Speed"
+msgstr "Luaths de %s%%"
 
 #: ../../../src/ItemManager.cpp:652 ../../../src/MenuPowers.cpp:994
 #, c-format
-msgid "%d%% Attack Speed"
-msgstr "Luaths ionnsaighe de %d%%"
+msgid "%s%% Attack Speed"
+msgstr "Luaths ionnsaighe de %s%%"
 
 #: ../../../src/ItemManager.cpp:674 ../../../src/MenuCharacter.cpp:362
 #: ../../../src/MenuCharacter.cpp:425 ../../../src/MenuPowers.cpp:963
@@ -303,13 +303,8 @@ msgstr "Càileachd: %s"
 
 #: ../../../src/ItemManager.cpp:788
 #, c-format
-msgid "Absorb: %d-%d"
-msgstr "Ceapadh: %d–%d"
-
-#: ../../../src/ItemManager.cpp:790
-#, c-format
-msgid "Absorb: %d"
-msgstr "Ceapadh: %d"
+msgid "Absorb"
+msgstr "Ceapadh"
 
 #: ../../../src/ItemManager.cpp:830 ../../../src/MenuPowers.cpp:1215
 #: ../../../src/MenuPowers.cpp:1218
@@ -475,14 +470,14 @@ msgstr "Staid cho-cheangailte:"
 #: ../../../src/MenuCharacter.cpp:448 ../../../src/MenuCharacter.cpp:472
 #: ../../../src/MenuCharacter.cpp:499
 #, c-format
-msgid "Each level grants %d."
-msgstr "Bheir gach rang %d dhut."
+msgid "Each level grants %s."
+msgstr "Bheir gach rang %s dhut."
 
 #: ../../../src/MenuCharacter.cpp:452 ../../../src/MenuCharacter.cpp:476
 #: ../../../src/MenuCharacter.cpp:503
 #, c-format
-msgid "Each point of %s grants %d."
-msgstr "Bheir gach puing dhe %s %d dhut."
+msgid "Each point of %s grants %s."
+msgstr "Bheir gach puing dhe %s %s dhut."
 
 #: ../../../src/MenuCharacter.cpp:506
 #, c-format
@@ -1187,18 +1182,18 @@ msgstr "Crìoch a’ gheama"
 
 #: ../../../src/MenuInventory.cpp:275
 #, c-format
-msgid "Lost %d%% of %s."
-msgstr "Chaill thu %d%% dhe %s."
+msgid "Lost %s%% of %s."
+msgstr "Chaill thu %s%% dhe %s."
 
 #: ../../../src/MenuInventory.cpp:282
 #, c-format
-msgid "Lost %d%% of total XP."
-msgstr "Chaill thu %d%% dhe na puingean-eòlais iomlan."
+msgid "Lost %s%% of total XP."
+msgstr "Chaill thu %s%% dhe na puingean-eòlais iomlan."
 
 #: ../../../src/MenuInventory.cpp:287
 #, c-format
-msgid "Lost %d%% of current level XP."
-msgstr "Chaill thu %d%% dhe na puingean-eòlais airson an rang seo."
+msgid "Lost %s%% of current level XP."
+msgstr "Chaill thu %s%% dhe na puingean-eòlais airson an rang seo."
 
 #: ../../../src/MenuInventory.cpp:313
 #, c-format
@@ -1378,13 +1373,13 @@ msgstr "Fulangach"
 
 #: ../../../src/MenuPowers.cpp:911
 #, c-format
-msgid "Costs %d MP"
-msgstr "Cosgaidh e %d puingean-gluasaid"
+msgid "Costs %s MP"
+msgstr "Cosgaidh e %s puingean-gluasaid"
 
 #: ../../../src/MenuPowers.cpp:915
 #, c-format
-msgid "Costs %d HP"
-msgstr "Cosgaidh e %d puingean-beatha"
+msgid "Costs %s HP"
+msgstr "Cosgaidh e %s puingean-beatha"
 
 #: ../../../src/MenuPowers.cpp:919
 msgid "Cooldown:"
@@ -1444,8 +1439,8 @@ msgstr "Bualadh air ais"
 
 #: ../../../src/MenuPowers.cpp:1093
 #, c-format
-msgid "%d%% chance"
-msgstr "teans de %d%%"
+msgid "%s%% chance"
+msgstr "teans de %s%%"
 
 #: ../../../src/MenuPowers.cpp:1145
 msgid "Base Accuracy"
@@ -1465,8 +1460,8 @@ msgstr "Leigidh seo seachad an seachnadh"
 
 #: ../../../src/MenuPowers.cpp:1183
 #, c-format
-msgid "%d%% Chance to crit slowed targets"
-msgstr "Teans dhe %d%% gun dèan thu bualadh èiginneach air amas le maille air"
+msgid "%s%% Chance to crit slowed targets"
+msgstr "Teans dhe %s%% gun dèan thu bualadh èiginneach air amas le maille air"
 
 #: ../../../src/MenuPowers.cpp:1188
 #, c-format
@@ -1552,8 +1547,8 @@ msgstr "Reiceadair"
 
 #: ../../../src/PowerManager.cpp:1226
 #, c-format
-msgid "+%d Shield"
-msgstr "Sgiath +%d"
+msgid "+%s Shield"
+msgstr "Sgiath +%s"
 
 #: ../../../src/PowerManager.cpp:1483
 msgid "You are already transformed, untransform first."

@@ -2,11 +2,11 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 # Translators:
 # Ooyama Yosiyuki <qqke6wd9k@apricot.ocn.ne.jp>, 2019
 # Justin Jacobs <jajdorkster@gmail.com>, 2022
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
@@ -134,14 +134,14 @@ msgstr "ミス"
 #: ../../../src/Entity.cpp:554 ../../../src/PowerManager.cpp:1242
 #: ../../../src/StatBlock.cpp:1046 ../../../src/StatBlock.cpp:1052
 #, c-format
-msgid "+%d HP"
-msgstr "+%d HP"
+msgid "+%s HP"
+msgstr "+%s HP"
 
 #: ../../../src/Entity.cpp:566 ../../../src/StatBlock.cpp:1057
 #: ../../../src/StatBlock.cpp:1063
 #, c-format
-msgid "+%d MP"
-msgstr "+%d MP"
+msgid "+%s MP"
+msgstr "+%s MP"
 
 #: ../../../src/EventManager.cpp:827
 msgid "Unknown destination"
@@ -261,13 +261,13 @@ msgstr "不明なアイテム"
 
 #: ../../../src/ItemManager.cpp:648 ../../../src/MenuPowers.cpp:991
 #, c-format
-msgid "%d%% Speed"
-msgstr "%d%% スピード"
+msgid "%s%% Speed"
+msgstr "%s%% スピード"
 
 #: ../../../src/ItemManager.cpp:652 ../../../src/MenuPowers.cpp:994
 #, c-format
-msgid "%d%% Attack Speed"
-msgstr "%d%% スピード"
+msgid "%s%% Attack Speed"
+msgstr "%s%% スピード"
 
 #: ../../../src/ItemManager.cpp:674 ../../../src/MenuCharacter.cpp:362
 #: ../../../src/MenuCharacter.cpp:425 ../../../src/MenuPowers.cpp:963
@@ -291,13 +291,8 @@ msgstr "品質: %s"
 
 #: ../../../src/ItemManager.cpp:788
 #, c-format
-msgid "Absorb: %d-%d"
-msgstr "吸収: %d-%d"
-
-#: ../../../src/ItemManager.cpp:790
-#, c-format
-msgid "Absorb: %d"
-msgstr "吸収: %d"
+msgid "Absorb"
+msgstr "吸収"
 
 #: ../../../src/ItemManager.cpp:830 ../../../src/MenuPowers.cpp:1215
 #: ../../../src/MenuPowers.cpp:1218
@@ -463,14 +458,14 @@ msgstr "関連する統計:"
 #: ../../../src/MenuCharacter.cpp:448 ../../../src/MenuCharacter.cpp:472
 #: ../../../src/MenuCharacter.cpp:499
 #, c-format
-msgid "Each level grants %d."
-msgstr "レベルごとに %d が付与されます。"
+msgid "Each level grants %s."
+msgstr "レベルごとに %s が付与されます。"
 
 #: ../../../src/MenuCharacter.cpp:452 ../../../src/MenuCharacter.cpp:476
 #: ../../../src/MenuCharacter.cpp:503
 #, c-format
-msgid "Each point of %s grants %d."
-msgstr "%s の各点ごとに %d が付与されます。"
+msgid "Each point of %s grants %s."
+msgstr "%s の各点ごとに %s が付与されます。"
 
 #: ../../../src/MenuCharacter.cpp:506
 #, c-format
@@ -1107,18 +1102,18 @@ msgstr ""
 
 #: ../../../src/MenuInventory.cpp:275
 #, c-format
-msgid "Lost %d%% of %s."
-msgstr "%s を %d%% 失った。"
+msgid "Lost %s%% of %s."
+msgstr "%2$s を %1$s%% 失った。"
 
 #: ../../../src/MenuInventory.cpp:282
 #, c-format
-msgid "Lost %d%% of total XP."
-msgstr "合計XPを %d%% 失った。"
+msgid "Lost %s%% of total XP."
+msgstr "合計XPを %s%% 失った。"
 
 #: ../../../src/MenuInventory.cpp:287
 #, c-format
-msgid "Lost %d%% of current level XP."
-msgstr "現在レベルXPを %d%% 失った。"
+msgid "Lost %s%% of current level XP."
+msgstr "現在レベルXPを %s%% 失った。"
 
 #: ../../../src/MenuInventory.cpp:313
 #, c-format
@@ -1297,13 +1292,13 @@ msgstr "パッシブ スキル"
 
 #: ../../../src/MenuPowers.cpp:911
 #, c-format
-msgid "Costs %d MP"
-msgstr "費用は %d MP"
+msgid "Costs %s MP"
+msgstr "費用は %s MP"
 
 #: ../../../src/MenuPowers.cpp:915
 #, c-format
-msgid "Costs %d HP"
-msgstr "費用は %d HP"
+msgid "Costs %s HP"
+msgstr "費用は %s HP"
 
 #: ../../../src/MenuPowers.cpp:919
 msgid "Cooldown:"
@@ -1363,7 +1358,7 @@ msgstr "はね返し"
 
 #: ../../../src/MenuPowers.cpp:1093
 #, c-format
-msgid "%d%% chance"
+msgid "%s%% chance"
 msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1145
@@ -1384,7 +1379,7 @@ msgstr "回避を無視"
 
 #: ../../../src/MenuPowers.cpp:1183
 #, c-format
-msgid "%d%% Chance to crit slowed targets"
+msgid "%s%% Chance to crit slowed targets"
 msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1188
@@ -1471,8 +1466,8 @@ msgstr "売り手"
 
 #: ../../../src/PowerManager.cpp:1226
 #, c-format
-msgid "+%d Shield"
-msgstr "+%d シールド"
+msgid "+%s Shield"
+msgstr "+%s シールド"
 
 #: ../../../src/PowerManager.cpp:1483
 msgid "You are already transformed, untransform first."

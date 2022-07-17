@@ -2,12 +2,12 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 # Translators:
 # MOB2 <thewattyk@gmail.com>, 2018
 # Fabio Loli, 2018
 # Justin Jacobs <jajdorkster@gmail.com>, 2022
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
@@ -141,14 +141,14 @@ msgstr "mancato"
 #: ../../../src/Entity.cpp:554 ../../../src/PowerManager.cpp:1242
 #: ../../../src/StatBlock.cpp:1046 ../../../src/StatBlock.cpp:1052
 #, c-format
-msgid "+%d HP"
-msgstr "+%d Salute"
+msgid "+%s HP"
+msgstr "+%s Salute"
 
 #: ../../../src/Entity.cpp:566 ../../../src/StatBlock.cpp:1057
 #: ../../../src/StatBlock.cpp:1063
 #, c-format
-msgid "+%d MP"
-msgstr "+%d Mana"
+msgid "+%s MP"
+msgstr "+%s Mana"
 
 #: ../../../src/EventManager.cpp:827
 msgid "Unknown destination"
@@ -268,13 +268,13 @@ msgstr "Oggetto sconosciuto"
 
 #: ../../../src/ItemManager.cpp:648 ../../../src/MenuPowers.cpp:991
 #, c-format
-msgid "%d%% Speed"
-msgstr "%d%% Velocità"
+msgid "%s%% Speed"
+msgstr "%s%% Velocità"
 
 #: ../../../src/ItemManager.cpp:652 ../../../src/MenuPowers.cpp:994
 #, c-format
-msgid "%d%% Attack Speed"
-msgstr "%d%% Velocità di Attacco"
+msgid "%s%% Attack Speed"
+msgstr "%s%% Velocità di Attacco"
 
 #: ../../../src/ItemManager.cpp:674 ../../../src/MenuCharacter.cpp:362
 #: ../../../src/MenuCharacter.cpp:425 ../../../src/MenuPowers.cpp:963
@@ -298,13 +298,8 @@ msgstr "Qualità: %s"
 
 #: ../../../src/ItemManager.cpp:788
 #, c-format
-msgid "Absorb: %d-%d"
-msgstr "Assorbimento: %d-%d"
-
-#: ../../../src/ItemManager.cpp:790
-#, c-format
-msgid "Absorb: %d"
-msgstr "Assorbimento: %d"
+msgid "Absorb"
+msgstr "Assorbimento"
 
 #: ../../../src/ItemManager.cpp:830 ../../../src/MenuPowers.cpp:1215
 #: ../../../src/MenuPowers.cpp:1218
@@ -470,14 +465,14 @@ msgstr "Statistiche associate:"
 #: ../../../src/MenuCharacter.cpp:448 ../../../src/MenuCharacter.cpp:472
 #: ../../../src/MenuCharacter.cpp:499
 #, c-format
-msgid "Each level grants %d."
-msgstr "Ad ogni livello ottieni %d."
+msgid "Each level grants %s."
+msgstr "Ad ogni livello ottieni %s."
 
 #: ../../../src/MenuCharacter.cpp:452 ../../../src/MenuCharacter.cpp:476
 #: ../../../src/MenuCharacter.cpp:503
 #, c-format
-msgid "Each point of %s grants %d."
-msgstr "Per ogni punto di %s ottieni %d."
+msgid "Each point of %s grants %s."
+msgstr "Per ogni punto di %s ottieni %s."
 
 #: ../../../src/MenuCharacter.cpp:506
 #, c-format
@@ -1133,18 +1128,18 @@ msgstr ""
 
 #: ../../../src/MenuInventory.cpp:275
 #, c-format
-msgid "Lost %d%% of %s."
-msgstr "Hai perso il %d%% di %s."
+msgid "Lost %s%% of %s."
+msgstr "Hai perso il %s%% di %s."
 
 #: ../../../src/MenuInventory.cpp:282
 #, c-format
-msgid "Lost %d%% of total XP."
-msgstr "Hai perso il %d%% di ESP totale."
+msgid "Lost %s%% of total XP."
+msgstr "Hai perso il %s%% di ESP totale."
 
 #: ../../../src/MenuInventory.cpp:287
 #, c-format
-msgid "Lost %d%% of current level XP."
-msgstr "Hai perso il %d%% del livello ESP attuale."
+msgid "Lost %s%% of current level XP."
+msgstr "Hai perso il %s%% del livello ESP attuale."
 
 #: ../../../src/MenuInventory.cpp:313
 #, c-format
@@ -1323,13 +1318,13 @@ msgstr "Passivo"
 
 #: ../../../src/MenuPowers.cpp:911
 #, c-format
-msgid "Costs %d MP"
-msgstr "Costa %d Mana"
+msgid "Costs %s MP"
+msgstr "Costa %s Mana"
 
 #: ../../../src/MenuPowers.cpp:915
 #, c-format
-msgid "Costs %d HP"
-msgstr "Costa %d Salute"
+msgid "Costs %s HP"
+msgstr "Costa %s Salute"
 
 #: ../../../src/MenuPowers.cpp:919
 msgid "Cooldown:"
@@ -1389,8 +1384,8 @@ msgstr "Contraccolpo"
 
 #: ../../../src/MenuPowers.cpp:1093
 #, c-format
-msgid "%d%% chance"
-msgstr "possibilità %d%%"
+msgid "%s%% chance"
+msgstr "possibilità %s%%"
 
 #: ../../../src/MenuPowers.cpp:1145
 msgid "Base Accuracy"
@@ -1410,8 +1405,8 @@ msgstr "Ignora Schivata"
 
 #: ../../../src/MenuPowers.cpp:1183
 #, c-format
-msgid "%d%% Chance to crit slowed targets"
-msgstr "%d%% Possibilità di colpo critico sui bersagli rallentati"
+msgid "%s%% Chance to crit slowed targets"
+msgstr "%s%% Possibilità di colpo critico sui bersagli rallentati"
 
 #: ../../../src/MenuPowers.cpp:1188
 #, c-format
@@ -1497,8 +1492,8 @@ msgstr "Venditore"
 
 #: ../../../src/PowerManager.cpp:1226
 #, c-format
-msgid "+%d Shield"
-msgstr "+%d Scudo"
+msgid "+%s Shield"
+msgstr "+%s Scudo"
 
 #: ../../../src/PowerManager.cpp:1483
 msgid "You are already transformed, untransform first."

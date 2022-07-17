@@ -2,12 +2,12 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 # Translators:
 # CodingJellyfish <dumaosen_main01@outlook.com>, 2021
 # Isaac Zhang, 2022
 # Justin Jacobs <jajdorkster@gmail.com>, 2022
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
@@ -141,14 +141,14 @@ msgstr "未击中"
 #: ../../../src/Entity.cpp:554 ../../../src/PowerManager.cpp:1242
 #: ../../../src/StatBlock.cpp:1046 ../../../src/StatBlock.cpp:1052
 #, c-format
-msgid "+%d HP"
-msgstr "+%dHP"
+msgid "+%s HP"
+msgstr "+%sHP"
 
 #: ../../../src/Entity.cpp:566 ../../../src/StatBlock.cpp:1057
 #: ../../../src/StatBlock.cpp:1063
 #, c-format
-msgid "+%d MP"
-msgstr "+%dMP"
+msgid "+%s MP"
+msgstr "+%sMP"
 
 #: ../../../src/EventManager.cpp:827
 msgid "Unknown destination"
@@ -268,13 +268,13 @@ msgstr "未知物品"
 
 #: ../../../src/ItemManager.cpp:648 ../../../src/MenuPowers.cpp:991
 #, c-format
-msgid "%d%% Speed"
-msgstr "%d%%速度"
+msgid "%s%% Speed"
+msgstr "%s%%速度"
 
 #: ../../../src/ItemManager.cpp:652 ../../../src/MenuPowers.cpp:994
 #, c-format
-msgid "%d%% Attack Speed"
-msgstr "%d%%攻击速度"
+msgid "%s%% Attack Speed"
+msgstr "%s%%攻击速度"
 
 #: ../../../src/ItemManager.cpp:674 ../../../src/MenuCharacter.cpp:362
 #: ../../../src/MenuCharacter.cpp:425 ../../../src/MenuPowers.cpp:963
@@ -298,13 +298,8 @@ msgstr "质量：%s"
 
 #: ../../../src/ItemManager.cpp:788
 #, c-format
-msgid "Absorb: %d-%d"
-msgstr "伤害吸收：%d-%d"
-
-#: ../../../src/ItemManager.cpp:790
-#, c-format
-msgid "Absorb: %d"
-msgstr "伤害吸收：%d"
+msgid "Absorb"
+msgstr "伤害吸收"
 
 #: ../../../src/ItemManager.cpp:830 ../../../src/MenuPowers.cpp:1215
 #: ../../../src/MenuPowers.cpp:1218
@@ -470,14 +465,14 @@ msgstr "相关的属性："
 #: ../../../src/MenuCharacter.cpp:448 ../../../src/MenuCharacter.cpp:472
 #: ../../../src/MenuCharacter.cpp:499
 #, c-format
-msgid "Each level grants %d."
-msgstr "每一级增长%d。"
+msgid "Each level grants %s."
+msgstr "每一级增长%s。"
 
 #: ../../../src/MenuCharacter.cpp:452 ../../../src/MenuCharacter.cpp:476
 #: ../../../src/MenuCharacter.cpp:503
 #, c-format
-msgid "Each point of %s grants %d."
-msgstr "每点%s增长%d。"
+msgid "Each point of %s grants %s."
+msgstr "每点%s增长%s。"
 
 #: ../../../src/MenuCharacter.cpp:506
 #, c-format
@@ -1114,18 +1109,18 @@ msgstr "游戏结束"
 
 #: ../../../src/MenuInventory.cpp:275
 #, c-format
-msgid "Lost %d%% of %s."
-msgstr "失去%d%%的%s。"
+msgid "Lost %s%% of %s."
+msgstr "失去%s%%的%s。"
 
 #: ../../../src/MenuInventory.cpp:282
 #, c-format
-msgid "Lost %d%% of total XP."
-msgstr "失去%d%%总XP。"
+msgid "Lost %s%% of total XP."
+msgstr "失去%s%%总XP。"
 
 #: ../../../src/MenuInventory.cpp:287
 #, c-format
-msgid "Lost %d%% of current level XP."
-msgstr "失去%d%%当前等级的XP。"
+msgid "Lost %s%% of current level XP."
+msgstr "失去%s%%当前等级的XP。"
 
 #: ../../../src/MenuInventory.cpp:313
 #, c-format
@@ -1304,13 +1299,13 @@ msgstr "被动"
 
 #: ../../../src/MenuPowers.cpp:911
 #, c-format
-msgid "Costs %d MP"
-msgstr "消耗%dMP"
+msgid "Costs %s MP"
+msgstr "消耗%sMP"
 
 #: ../../../src/MenuPowers.cpp:915
 #, c-format
-msgid "Costs %d HP"
-msgstr "消耗%dHP"
+msgid "Costs %s HP"
+msgstr "消耗%sHP"
 
 #: ../../../src/MenuPowers.cpp:919
 msgid "Cooldown:"
@@ -1370,8 +1365,8 @@ msgstr "击退"
 
 #: ../../../src/MenuPowers.cpp:1093
 #, c-format
-msgid "%d%% chance"
-msgstr "%d%%几率"
+msgid "%s%% chance"
+msgstr "%s%%几率"
 
 #: ../../../src/MenuPowers.cpp:1145
 msgid "Base Accuracy"
@@ -1391,8 +1386,8 @@ msgstr "无视闪避"
 
 #: ../../../src/MenuPowers.cpp:1183
 #, c-format
-msgid "%d%% Chance to crit slowed targets"
-msgstr "%d%%几率重击减慢的敌人"
+msgid "%s%% Chance to crit slowed targets"
+msgstr "%s%%几率重击减慢的敌人"
 
 #: ../../../src/MenuPowers.cpp:1188
 #, c-format
@@ -1478,8 +1473,8 @@ msgstr "商人"
 
 #: ../../../src/PowerManager.cpp:1226
 #, c-format
-msgid "+%d Shield"
-msgstr "+%d护盾"
+msgid "+%s Shield"
+msgstr "+%s护盾"
 
 #: ../../../src/PowerManager.cpp:1483
 msgid "You are already transformed, untransform first."
