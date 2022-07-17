@@ -173,13 +173,16 @@ public:
 	std::vector< std::vector<float> > per_primary;
 
 	float get(Stats::STAT stat) const {
-		return current[stat];
+		if (stat == Stats::ABS_MAX)
+			return std::max(current[stat], current[Stats::ABS_MIN]);
+		else
+			return current[stat];
 	}
 	float getDamageMin(size_t dmg_type) const {
 		return current[Stats::COUNT + (dmg_type * 2)];
 	}
 	float getDamageMax(size_t dmg_type) const {
-		return current[Stats::COUNT + (dmg_type * 2) + 1];
+		return std::max(current[Stats::COUNT + (dmg_type * 2)], current[Stats::COUNT + (dmg_type * 2) + 1]);
 	}
 	float getResist(size_t resist_type) const;
 
