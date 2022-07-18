@@ -917,9 +917,6 @@ void StatBlock::applyEffects() {
 		current[i] = (base[i] + effects.bonus[i]) * effects.bonus_multiplier[i];
 	}
 
-	current[Stats::HP_MAX] += (current[Stats::HP_MAX] * current[Stats::HP_PERCENT]) / 100;
-	current[Stats::MP_MAX] += (current[Stats::MP_MAX] * current[Stats::MP_PERCENT]) / 100;
-
 	// max HP and MP can't drop below 1
 	current[Stats::HP_MAX] = std::max(get(Stats::HP_MAX), 1.0f);
 	current[Stats::MP_MAX] = std::max(get(Stats::MP_MAX), 1.0f);

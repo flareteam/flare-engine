@@ -188,17 +188,5 @@ namespace Stats {
 		NAME[RESIST_MP_STEAL] = msg->get("Resistance to MP steal");
 		DESC[RESIST_MP_STEAL] = msg->get("Percentage chance that MP steal will be negated.");
 		PERCENT[RESIST_MP_STEAL] = true;
-
-		// @TYPE hp_percent|Base HP altered by percentage
-		KEY[HP_PERCENT] = "hp_percent";
-		NAME[HP_PERCENT] = msg->get("Base HP");
-		DESC[HP_PERCENT] = "";
-		PERCENT[HP_PERCENT] = true;
-
-		// @TYPE mp_percent|Base MP altered by percentage
-		KEY[MP_PERCENT] = "mp_percent";
-		NAME[MP_PERCENT] = msg->get("Base MP");
-		DESC[MP_PERCENT] = "";
-		PERCENT[MP_PERCENT] = true;
 	}
 }

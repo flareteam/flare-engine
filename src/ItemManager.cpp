@@ -619,6 +619,22 @@ void ItemManager::parseBonus(BonusData& bdata, FileParser& infile) {
 		return;
 	}
 
+	// TODO deprecated
+	if (bonus_str == "hp_percent") {
+		infile.error("ItemManager: 'hp_percent' is deprecated. Converting to 'hp'.");
+		bdata.stat_index = Stats::HP_MAX;
+		bdata.is_multiplier = true;
+		bdata.value = (bdata.value + 100) / 100;
+		return;
+	}
+	else if (bonus_str == "mp_percent") {
+		infile.error("ItemManager: 'mp_percent' is deprecated. Converting to 'mp'.");
+		bdata.stat_index = Stats::MP_MAX;
+		bdata.is_multiplier = true;
+		bdata.value = (bdata.value + 100) / 100;
+		return;
+	}
+
 	for (int i=0; i<Stats::COUNT; ++i) {
 		if (bonus_str == Stats::KEY[i]) {
 			bdata.stat_index = static_cast<Stats::STAT>(i);

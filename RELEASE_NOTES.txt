@@ -23,6 +23,7 @@ Engine features:
   * StatBlock: 'stat', 'stat_per_level', 'stat_per_primary', 'vulnerable', 'chance_pursue', 'chance_flee'
 * Added engine/number_format.txt. This file defines the number of digits to print after the decimal point for fractional values under different contexts.
 * Add support for multiplicative stat bonuses. For example, an item bonus of 1.5x Max HP, which would be defined as 'bonus=hp,150%'.
+  * As such, the 'hp_percent' and 'mp_percent' stat bonuses are considered deprecated.
 
 Engine fixes:
 

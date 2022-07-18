@@ -710,6 +710,21 @@ void PowerManager::loadPowers() {
 						pe.magnitude = Parse::toFloat(magnitude_str);
 					}
 				}
+
+				// TODO deprecated
+				if (pe.id == "hp_percent") {
+					infile.error("PowerManager: 'hp_percent' is deprecated. Converting to hp.");
+					pe.id = "hp";
+					pe.is_multiplier = true;
+					pe.magnitude = (pe.magnitude + 100) / 100;
+				}
+				else if (pe.id == "mp_percent") {
+					infile.error("PowerManager: 'mp_percent' is deprecated. Converting to mp.");
+					pe.id = "mp";
+					pe.is_multiplier = true;
+					pe.magnitude = (pe.magnitude + 100) / 100;
+				}
+
 				pe.duration = Parse::toDuration(Parse::popFirstString(infile.val));
 				std::string chance = Parse::popFirstString(infile.val);
 				if (!chance.empty()) {
@@ -976,6 +991,12 @@ bool PowerManager::isValidEffect(const std::string& type) {
 	if (type == "speed")
 		return true;
 	if (type == "attack_speed")
+		return true;
+
+	// TODO deprecated
+	if (type == "hp_percent")
+		return true;
+	if (type == "mp_percent")
 		return true;
 
 	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
