@@ -238,17 +238,16 @@ void ItemManager::loadItems(const std::string& filename) {
 		else if (infile.key == "requires_stat") {
 			// @ATTR requires_stat|repeatable(predefined_string, int) : Primary stat name, Value|Make item require specific stat level ex. requires_stat=physical,6 will require hero to have level 6 in physical stats
 			if (clear_req_stat) {
-				items[id].req_stat.clear();
-				items[id].req_val.clear();
+				items[id].requires_stat.clear();
 				clear_req_stat = false;
 			}
+
 			std::string s = Parse::popFirstString(infile.val);
 			size_t req_stat_index = eset->primary_stats.getIndexByID(s);
 			if (req_stat_index != eset->primary_stats.list.size())
-				items[id].req_stat.push_back(req_stat_index);
+				items[id].requires_stat[req_stat_index] = Parse::popFirstInt(infile.val);
 			else
 				infile.error("ItemManager: '%s' is not a valid primary stat.", s.c_str());
-			items[id].req_val.push_back(Parse::popFirstInt(infile.val));
 		}
 		else if (infile.key == "requires_class") {
 			// @ATTR requires_class|predefined_string|The hero's base class (engine/classes.txt) must match for this item to be equipped.
@@ -881,14 +880,15 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	}
 
 	// base stat requirement
-	for (unsigned i=0; i<items[stack.item].req_stat.size(); ++i) {
-		if (items[stack.item].req_val[i] > 0) {
-			if (stats->get_primary(items[stack.item].req_stat[i]) < items[stack.item].req_val[i])
+	std::map<size_t, int>::iterator it;
+	for (it = items[stack.item].requires_stat.begin(); it != items[stack.item].requires_stat.end(); ++it) {
+		if (it->second > 0) {
+			if (stats->get_primary(it->first) < it->second)
 				color = font->getColor(FontEngine::COLOR_REQUIREMENTS_NOT_MET);
 			else
 				color = font->getColor(FontEngine::COLOR_WIDGET_NORMAL);
 
-			tip.addColoredText(msg->getv("Requires %s %d", eset->primary_stats.list[items[stack.item].req_stat[i]].name.c_str(), items[stack.item].req_val[i]), color);
+			tip.addColoredText(msg->getv("Requires %s %d", eset->primary_stats.list[it->first].name.c_str(), it->second), color);
 		}
 	}
 
@@ -1037,8 +1037,9 @@ bool ItemManager::requirementsMet(const StatBlock *stats, ItemID item) {
 	}
 
 	// base stats
-	for (unsigned i=0; i < items[item].req_stat.size(); ++i) {
-		if (stats->get_primary(items[item].req_stat[i]) < items[item].req_val[i])
+	std::map<size_t, int>::iterator it;
+	for (it = items[item].requires_stat.begin(); it != items[item].requires_stat.end(); ++it) {
+		if (stats->get_primary(it->first) < it->second)
 			return false;
 	}
 

@@ -123,8 +123,7 @@ public:
 	float abs_min;          // minimum absorb amount
 	float abs_max;          // maximum absorb amount
 	int requires_level;   // Player level must match or exceed this value to use item
-	std::vector<size_t> req_stat;         // physical, mental, offense, defense
-	std::vector<int> req_val;          // 1-5 (used with req_stat)
+	std::map<size_t, int> requires_stat;
 	std::string requires_class;
 	std::vector<BonusData> bonus;   // stat to increase/decrease e.g. hp, accuracy, speed
 	std::string sfx;           // the item sound when it hits the floor or inventory, etc
