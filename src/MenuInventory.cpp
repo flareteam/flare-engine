@@ -1204,9 +1204,9 @@ void MenuInventory::applyItemStats() {
 
 	// reset additional values
 	for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
-		pc->stats.dmg_min_add[i] = pc->stats.dmg_max_add[i] = 0;
+		pc->stats.item_base_dmg[i].min = pc->stats.item_base_dmg[i].max = 0;
 	}
-	pc->stats.absorb_min_add = pc->stats.absorb_max_add = 0;
+	pc->stats.item_base_abs.min = pc->stats.item_base_abs.max = 0;
 
 	// apply stats from all items
 	for (int i=0; i<MAX_EQUIPPED; i++) {
@@ -1216,8 +1216,8 @@ void MenuInventory::applyItemStats() {
 
 			// apply base stats
 			for (size_t j = 0; j < eset->damage_types.list.size(); ++j) {
-				pc->stats.dmg_min_add[j] += item.dmg_min[j];
-				pc->stats.dmg_max_add[j] += item.dmg_max[j];
+				pc->stats.item_base_dmg[j].min += item.base_dmg[j].min;
+				pc->stats.item_base_dmg[j].max += item.base_dmg[j].max;
 			}
 
 			// set equip flags
@@ -1226,8 +1226,8 @@ void MenuInventory::applyItemStats() {
 			}
 
 			// apply absorb bonus
-			pc->stats.absorb_min_add += item.abs_min;
-			pc->stats.absorb_max_add += item.abs_max;
+			pc->stats.item_base_abs.min += item.base_abs.min;
+			pc->stats.item_base_abs.max += item.base_abs.max;
 
 			// apply various bonuses
 			unsigned bonus_counter = 0;

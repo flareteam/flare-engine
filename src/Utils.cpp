@@ -225,6 +225,11 @@ void Timer::reset(int type) {
 		current = duration;
 }
 
+FMinMax::FMinMax()
+	: min(0)
+	, max(0)
+{}
+
 bool Timer::isWholeSecond() {
 	return current % settings->max_frames_per_sec == 0;
 }

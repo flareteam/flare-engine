@@ -105,6 +105,13 @@ public:
 	bool isWholeSecond();
 };
 
+class FMinMax {
+public:
+	float min;
+	float max;
+	FMinMax();
+};
+
 namespace Utils {
 	// Alignment: For aligning objects. 0-8 are screen-relative, 9-17 are menu frame relative.
 	enum {

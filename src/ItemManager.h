@@ -118,10 +118,8 @@ public:
 	int icon;             // icon index on small pixel sheet
 	std::string book;     // book file location
 	bool book_is_readable; // whether to display "use" or "read" in the tooltip
-	std::vector<float> dmg_min; // minimum damage amount
-	std::vector<float> dmg_max; // maximum damage amount
-	float abs_min;          // minimum absorb amount
-	float abs_max;          // maximum absorb amount
+	std::vector<FMinMax> base_dmg; // minimum/maximum damage amount
+	FMinMax base_abs;          // minimum/maximum absorb amount
 	int requires_level;   // Player level must match or exceed this value to use item
 	std::map<size_t, int> requires_stat;
 	std::string requires_class;

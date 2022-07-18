@@ -108,10 +108,8 @@ StatBlock::StatBlock()
 	, hp(0)
 	, mp(0)
 	, speed_default(0.1f)
-	, dmg_min_add(eset->damage_types.list.size(), 0)
-	, dmg_max_add(eset->damage_types.list.size(), 0)
-	, absorb_min_add(0)
-	, absorb_max_add(0)
+	, item_base_dmg(eset->damage_types.list.size())
+	, item_base_abs()
 	, speed(0.1f)
 	, charge_speed(0.0f)
 	, transform_duration(0)
@@ -878,15 +876,15 @@ void StatBlock::calcBase() {
 
 	// add damage from equipment and increase to minimum amounts
 	for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
-		base[Stats::COUNT + (i*2)] += dmg_min_add[i];
-		base[Stats::COUNT + (i*2) + 1] += dmg_max_add[i];
+		base[Stats::COUNT + (i*2)] += item_base_dmg[i].min;
+		base[Stats::COUNT + (i*2) + 1] += item_base_dmg[i].max;
 		base[Stats::COUNT + (i*2)] = std::max(base[Stats::COUNT + (i*2)], 0.0f);
 		base[Stats::COUNT + (i*2) + 1] = std::max(base[Stats::COUNT + (i*2) + 1], base[Stats::COUNT + (i*2)]);
 	}
 
 	// add absorb from equipment and increase to minimum amounts
-	base[Stats::ABS_MIN] += absorb_min_add;
-	base[Stats::ABS_MAX] += absorb_max_add;
+	base[Stats::ABS_MIN] += item_base_abs.min;
+	base[Stats::ABS_MAX] += item_base_abs.max;
 	base[Stats::ABS_MIN] = std::max(base[Stats::ABS_MIN], 0.0f);
 	base[Stats::ABS_MAX] = std::max(base[Stats::ABS_MAX], base[Stats::ABS_MIN]);
 }

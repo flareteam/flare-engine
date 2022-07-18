@@ -207,11 +207,9 @@ public:
 
 	float speed_default;
 
-	// addition damage and absorb granted from items
-	std::vector<float> dmg_min_add;
-	std::vector<float> dmg_max_add;
-	float absorb_min_add;
-	float absorb_max_add;
+	// additional damage and absorb granted from items
+	std::vector<FMinMax> item_base_dmg;
+	FMinMax item_base_abs;
 
 	float speed;
 	float charge_speed;

@@ -73,10 +73,8 @@ Item::Item()
 	, type("")
 	, icon(0)
 	, book_is_readable(true)
-	, dmg_min((eset ? eset->damage_types.list.size() : 0), 0)
-	, dmg_max((eset ? eset->damage_types.list.size() : 0), 0)
-	, abs_min(0)
-	, abs_max(0)
+	, base_dmg((eset ? eset->damage_types.list.size() : 0))
+	, base_abs()
 	, requires_level(0)
 	, requires_class("")
 	, sfx("")
@@ -216,20 +214,20 @@ void ItemManager::loadItems(const std::string& filename) {
 				infile.error("ItemManager: '%s' is not a known damage type id.", dmg_type_str.c_str());
 			}
 			else {
-				items[id].dmg_min[dmg_type] = Parse::popFirstFloat(infile.val);
+				items[id].base_dmg[dmg_type].min = Parse::popFirstFloat(infile.val);
 				if (infile.val.length() > 0)
-					items[id].dmg_max[dmg_type] = Parse::popFirstFloat(infile.val);
+					items[id].base_dmg[dmg_type].max = Parse::popFirstFloat(infile.val);
 				else
-					items[id].dmg_max[dmg_type] = items[id].dmg_min[dmg_type];
+					items[id].base_dmg[dmg_type].max = items[id].base_dmg[dmg_type].min;
 			}
 		}
 		else if (infile.key == "abs") {
 			// @ATTR abs|float, float : Min, Max|Defines the item absorb value, if only min is specified the absorb value is fixed.
-			items[id].abs_min = Parse::popFirstFloat(infile.val);
+			items[id].base_abs.min = Parse::popFirstFloat(infile.val);
 			if (infile.val.length() > 0)
-				items[id].abs_max = Parse::popFirstFloat(infile.val);
+				items[id].base_abs.max = Parse::popFirstFloat(infile.val);
 			else
-				items[id].abs_max = items[id].abs_min;
+				items[id].base_abs.max = items[id].base_abs.min;
 		}
 		else if (infile.key == "requires_level") {
 			// @ATTR requires_level|int|The hero's level must match or exceed this value in order to equip this item.
@@ -805,30 +803,30 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 
 	// damage
 	for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
-		if (items[stack.item].dmg_max[i] > 0) {
+		if (items[stack.item].base_dmg[i].max > 0) {
 			std::stringstream dmg_str;
 			dmg_str << eset->damage_types.list[i].name;
-			if (items[stack.item].dmg_min[i] < items[stack.item].dmg_max[i]) {
-				dmg_str << ": " << Utils::floatToString(items[stack.item].dmg_min[i], eset->number_format.item_tooltips) << "-" << Utils::floatToString(items[stack.item].dmg_max[i], eset->number_format.item_tooltips);
+			if (items[stack.item].base_dmg[i].min < items[stack.item].base_dmg[i].max) {
+				dmg_str << ": " << Utils::floatToString(items[stack.item].base_dmg[i].min, eset->number_format.item_tooltips) << "-" << Utils::floatToString(items[stack.item].base_dmg[i].max, eset->number_format.item_tooltips);
 				tip.addText(dmg_str.str());
 			}
 			else {
-				dmg_str << ": " << Utils::floatToString(items[stack.item].dmg_max[i], eset->number_format.item_tooltips);
+				dmg_str << ": " << Utils::floatToString(items[stack.item].base_dmg[i].max, eset->number_format.item_tooltips);
 				tip.addText(dmg_str.str());
 			}
 		}
 	}
 
 	// absorb
-	if (items[stack.item].abs_max > 0) {
+	if (items[stack.item].base_abs.max > 0) {
 		std::stringstream abs_str;
 		abs_str << msg->get("Absorb");
-		if (items[stack.item].abs_min < items[stack.item].abs_max) {
-			abs_str << ": " << Utils::floatToString(items[stack.item].abs_min, eset->number_format.item_tooltips) << "-" << Utils::floatToString(items[stack.item].abs_max, eset->number_format.item_tooltips);
+		if (items[stack.item].base_abs.min < items[stack.item].base_abs.max) {
+			abs_str << ": " << Utils::floatToString(items[stack.item].base_abs.min, eset->number_format.item_tooltips) << "-" << Utils::floatToString(items[stack.item].base_abs.max, eset->number_format.item_tooltips);
 			tip.addText(abs_str.str());
 		}
 		else {
-			abs_str << ": " << Utils::floatToString(items[stack.item].abs_max, eset->number_format.item_tooltips);
+			abs_str << ": " << Utils::floatToString(items[stack.item].base_abs.max, eset->number_format.item_tooltips);
 			tip.addText(abs_str.str());
 		}
 	}
