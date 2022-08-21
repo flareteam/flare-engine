@@ -55,7 +55,7 @@ Translations
 (gl) Galacian by Adrian Chaves Fernandez (Gallaecio)
 (hu) Hungarian by bzt
 (id) Indonesian by Kirim Saja
-(it) Italian by Giovanni Dalla Torre, Gianfranco Del Borrello, Stefano Peris, Andrea Ranaldi, MOB2, and Fabio Loli
+(it) Italian by Giovanni Dalla Torre, Gianfranco Del Borrello, Stefano Peris, Andrea Ranaldi, MOB2, Fabio Loli, and Riccardi Unix
 (ko) Korean by bnk159hair
 (ja) Japanese by Paul Wortmann, sujiniku
 (nb) Norwegian Bokmal by Hans Joachim Desserud, Elias Nykrem

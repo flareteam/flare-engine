@@ -106,6 +106,7 @@ text=Paul Wortmann
 text=Pawel Puszczynski
 text=Quentin Stievenart
 text=Rafael Fontenelle
+text=Riccardi Unix
 text=Rui
 text=Sergey Basalaev
 text=Sergiy Borodych
