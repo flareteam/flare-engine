@@ -563,6 +563,7 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 	for (unsigned i = 0; i < slots_count; i++) {
 		ActionData action;
 		action.hotkey = i;
+		bool have_analog_aim = inpt->mode == InputState::MODE_JOYSTICK || inpt->usingMouse();
 		bool have_aim = false;
 		slot_activated[i] = false;
 
@@ -605,7 +606,7 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 		}
 
 		// joystick/keyboard action button
-		else if (!inpt->usingMouse() && slots[i]->checkClick() == WidgetSlot::ACTIVATE) {
+		else if (!have_analog_aim && slots[i]->checkClick() == WidgetSlot::ACTIVATE) {
 			have_aim = false;
 			slot_activated[i] = true;
 			action.power = hotkeys_mod[i];
@@ -614,17 +615,17 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 
 		// pressing hotkey
 		else if (i<10 && inpt->pressing[i + Input::BAR_1]) {
-			have_aim = inpt->usingMouse();
+			have_aim = have_analog_aim;
 			action.power = hotkeys_mod[i];
 			twostep_slot = -1;
 		}
 		else if (i==10 && inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1] && !Utils::isWithinRect(window_area, inpt->mouse) && enable_main1) {
-			have_aim = inpt->usingMouse();
+			have_aim = have_analog_aim;
 			action.power = hotkeys_mod[10];
 			twostep_slot = -1;
 		}
 		else if (i==11 && inpt->pressing[Input::MAIN2] && !inpt->lock[Input::MAIN2] && !Utils::isWithinRect(window_area, inpt->mouse) && enable_main2) {
-			have_aim = inpt->usingMouse();
+			have_aim = have_analog_aim;
 			action.power = hotkeys_mod[11];
 			twostep_slot = -1;
 		}
