@@ -53,7 +53,7 @@ gmon.out
 *.autosave
 
 # emscripten output
-emscripten/
+/emscripten/
 a.out.js
 a.out.wasm
 

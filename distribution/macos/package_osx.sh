@@ -1,5 +1,8 @@
 #!/usr/bin/env bash -e
 
+cd "`dirname "$0"`"
+cd ../../
+
 FLARE_EXE=$1
 FLARE_DEPS_SRC="http"
 FLARE_GAME=""

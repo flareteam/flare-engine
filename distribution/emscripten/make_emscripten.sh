@@ -1,12 +1,32 @@
 #!/bin/bash
 
+cd "`dirname "$0"`"
+cd ../../
+
 rm -rf emscripten/*
 mkdir -p emscripten
 
-cp -r ../flare-game/mods/fantasycore mods/fantasycore
-cp -r ../flare-game/mods/empyrean_campaign mods/empyrean_campaign
+FLARE_GAME_PATH="../flare-game"
 
-cmake .
+if [ ! -d "$FLARE_GAME_PATH" ]; then
+    FLARE_GAME_PATH=""
+fi
+
+if [ "$1" ]; then
+    FLARE_GAME_PATH="$1"
+else
+    FLARE_GAME_PATH=""
+fi
+
+if [ -z "$FLARE_GAME_PATH" ]; then
+    echo "Usage: $0 <path to flare-game>"
+    exit 1
+fi
+
+cp -r "$FLARE_GAME_PATH"/mods/fantasycore mods/fantasycore
+cp -r "$FLARE_GAME_PATH"/mods/empyrean_campaign mods/empyrean_campaign
+
+#cmake .
 
 emcc \
 	-v \
