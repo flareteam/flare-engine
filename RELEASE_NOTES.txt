@@ -44,6 +44,7 @@ Translation updates:
 
 * German (de) update (Wuzzy2)
 * Scottish Gaelic (gd) update (GunChleoc)
+* Indonesian (id) update (Kirim Saja)
 * Italian (it) update (Riccardi Unix)
 * Japanese (ja) update (Sato Hayato)
 * Polish (pl) update (Pawonashi)

@@ -4,8 +4,8 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Kirim Saja <kirim.aja1111@gmail.com>, 2021
 # Justin Jacobs <jajdorkster@gmail.com>, 2022
+# Kirim Saja <kirim.aja1111@gmail.com>, 2022
 # 
 #, fuzzy
 msgid ""
@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-17 20:15-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2022\n"
+"Last-Translator: Kirim Saja <kirim.aja1111@gmail.com>, 2022\n"
 "Language-Team: Indonesian (https://www.transifex.com/flareorg/teams/84925/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -130,7 +130,7 @@ msgstr ""
 #: ../../../src/EffectManager.cpp:427 ../../../src/Entity.cpp:549
 #: ../../../src/Entity.cpp:560 ../../../src/Entity.cpp:573
 msgid "Resist"
-msgstr ""
+msgstr "Melawan"
 
 #: ../../../src/EngineSettings.cpp:610
 msgid "Adventurer"
@@ -166,11 +166,11 @@ msgstr "Hapus penyimpanan ini?"
 
 #: ../../../src/GameStateLoad.cpp:94 ../../../src/MenuConfig.cpp:248
 msgid "No"
-msgstr ""
+msgstr "Tidak"
 
 #: ../../../src/GameStateLoad.cpp:95 ../../../src/MenuConfig.cpp:249
 msgid "Yes"
-msgstr ""
+msgstr "Ya"
 
 #: ../../../src/GameStateLoad.cpp:98
 msgid "Exit to Title"
@@ -350,7 +350,7 @@ msgstr "%d items:"
 
 #: ../../../src/ItemManager.cpp:985 ../../../src/MenuPowers.cpp:1272
 msgid "Tap icon again for more options"
-msgstr ""
+msgstr "Ketuk ikon lagi untuk opsi lainnya"
 
 #: ../../../src/ItemManager.cpp:1017
 #, c-format
@@ -365,7 +365,7 @@ msgstr "Tekan [%s] untuk menggunakan"
 #: ../../../src/ItemManager.cpp:1024 ../../../src/MenuPowers.cpp:1306
 #, c-format
 msgid "Press [%s] for more options"
-msgstr ""
+msgstr "Tekan [%s] untuk opsi lainnya"
 
 #: ../../../src/LootManager.cpp:100 ../../../src/LootManager.cpp:102
 #: ../../../src/LootManager.cpp:104 ../../../src/MenuConfig.cpp:427
@@ -384,7 +384,7 @@ msgstr "Default"
 
 #: ../../../src/LootManager.cpp:104
 msgid "Show All"
-msgstr ""
+msgstr "Tampilkan Semua"
 
 #: ../../../src/MenuActionBar.cpp:86 ../../../src/MenuCharacter.cpp:54
 #: ../../../src/SDLInputState.cpp:894
@@ -486,7 +486,7 @@ msgstr "Menetapkan:"
 
 #: ../../../src/MenuConfig.cpp:244
 msgid "New"
-msgstr ""
+msgstr "Baru"
 
 #: ../../../src/MenuConfig.cpp:245 ../../../src/MenuManager.cpp:1782
 msgid "Clear"
@@ -955,7 +955,7 @@ msgstr "Aktifkan >>"
 
 #: ../../../src/MenuConfig.cpp:883
 msgid "Bindings for:"
-msgstr ""
+msgstr "Mengkat untuk :"
 
 #: ../../../src/MenuConfig.cpp:1562
 msgid "Version:"
@@ -975,7 +975,7 @@ msgstr "Mod membutuhkan:"
 
 #: ../../../src/MenuConfig.cpp:1629
 msgid "Can not remove this binding."
-msgstr ""
+msgstr "Tidak dapat menghapus ikatan ini."
 
 #: ../../../src/MenuConfig.cpp:1694 ../../../src/SDLInputState.cpp:740
 #: ../../../src/SDLInputState.cpp:765
@@ -1242,7 +1242,7 @@ msgstr "Item ini tidak bisa dijual."
 #: ../../../src/MenuInventory.cpp:1329
 #, c-format
 msgid "Equipped set %d."
-msgstr ""
+msgstr "Dilengkapi set %d."
 
 #: ../../../src/MenuLog.cpp:90
 msgid "Quests"
@@ -1254,7 +1254,7 @@ msgstr "Catatan."
 
 #: ../../../src/MenuManager.cpp:165
 msgid "Choose an action:"
-msgstr ""
+msgstr "Pilih tindakan:"
 
 #: ../../../src/MenuManager.cpp:510 ../../../src/MenuManager.cpp:1142
 msgid "This item can not be dropped."
@@ -1266,36 +1266,36 @@ msgstr "Diperlengkapi"
 
 #: ../../../src/MenuManager.cpp:1775 ../../../src/MenuManager.cpp:1826
 msgid "Use"
-msgstr ""
+msgstr "Gunakan"
 
 #: ../../../src/MenuManager.cpp:1779 ../../../src/MenuManager.cpp:1822
 #: ../../../src/MenuManager.cpp:1853
 msgid "Move"
-msgstr ""
+msgstr "Pindahkan"
 
 #: ../../../src/MenuManager.cpp:1795 ../../../src/MenuManager.cpp:1830
 msgid "Equip"
-msgstr ""
+msgstr "Lengkapi"
 
 #: ../../../src/MenuManager.cpp:1799
 msgid "Upgrade"
-msgstr ""
+msgstr "Meningkatkan"
 
 #: ../../../src/MenuManager.cpp:1814 ../../../src/MenuManager.cpp:1838
 msgid "Sell"
-msgstr ""
+msgstr "Jual"
 
 #: ../../../src/MenuManager.cpp:1818 ../../../src/MenuManager.cpp:1856
 msgid "Transfer"
-msgstr ""
+msgstr "Transfer"
 
 #: ../../../src/MenuManager.cpp:1834
 msgid "Drop"
-msgstr ""
+msgstr "Jatuhkan"
 
 #: ../../../src/MenuManager.cpp:1870
 msgid "Buy"
-msgstr ""
+msgstr "Beli"
 
 #: ../../../src/MenuMovementType.cpp:87
 msgid "Select a Movement Type"
@@ -1381,7 +1381,7 @@ msgstr "Melumpuhkan"
 
 #: ../../../src/MenuPowers.cpp:1002
 msgid "Resistance to all negative effects"
-msgstr ""
+msgstr "Ketahanan terhadap semua efek negatif"
 
 #: ../../../src/MenuPowers.cpp:1006
 msgid "Stun"
@@ -1732,7 +1732,7 @@ msgstr "Mouse %d"
 
 #: ../../../src/SDLInputState.cpp:720 ../../../src/SDLInputState.cpp:729
 msgid "(unknown)"
-msgstr ""
+msgstr "(tidak tahu)"
 
 #: ../../../src/SDLInputState.cpp:791
 msgid "Touch control D-Pad"
@@ -1796,51 +1796,51 @@ msgstr "Main2"
 
 #: ../../../src/SDLInputState.cpp:900
 msgid "Next Equip Set"
-msgstr ""
+msgstr "Set Peralatan Berikutnya"
 
 #: ../../../src/SDLInputState.cpp:901
 msgid "Previous Equip Set"
-msgstr ""
+msgstr "Set Peralatan Sebelumnya"
 
 #: ../../../src/SDLInputState.cpp:902
 msgid "Mini-map Mode"
-msgstr ""
+msgstr "Mode Mini-map"
 
 #: ../../../src/SDLInputState.cpp:903
 msgid "Loot Tooltip Mode"
-msgstr ""
+msgstr "Mode Tip Alat Loot"
 
 #: ../../../src/SDLInputState.cpp:904
 msgid "Action Bar"
-msgstr ""
+msgstr "Bilah Aksi"
 
 #: ../../../src/SDLInputState.cpp:905
 msgid "Menu: Next Page"
-msgstr ""
+msgstr "Menu: Halaman Berikutnya"
 
 #: ../../../src/SDLInputState.cpp:906
 msgid "Menu: Previous Page"
-msgstr ""
+msgstr "Menu: Halaman Sebelumnya"
 
 #: ../../../src/SDLInputState.cpp:907
 msgid "Menu: Activate"
-msgstr ""
+msgstr "Menu: Aktifkan"
 
 #: ../../../src/SDLInputState.cpp:909
 msgid "Aim Up"
-msgstr ""
+msgstr "Aim Atas"
 
 #: ../../../src/SDLInputState.cpp:910
 msgid "Aim Down"
-msgstr ""
+msgstr "Aim Bawah"
 
 #: ../../../src/SDLInputState.cpp:911
 msgid "Aim Left"
-msgstr ""
+msgstr "Aim Kiri"
 
 #: ../../../src/SDLInputState.cpp:912
 msgid "Aim Right"
-msgstr ""
+msgstr "Aim Kanan"
 
 #: ../../../src/SDLInputState.cpp:913
 msgid "Developer Menu"
@@ -1888,103 +1888,103 @@ msgstr "Mouse X2"
 
 #: ../../../src/SDLInputState.cpp:927
 msgid "X360: A"
-msgstr ""
+msgstr "X360: A"
 
 #: ../../../src/SDLInputState.cpp:928
 msgid "X360: B"
-msgstr ""
+msgstr "X360: B"
 
 #: ../../../src/SDLInputState.cpp:929
 msgid "X360: X"
-msgstr ""
+msgstr "X360: X"
 
 #: ../../../src/SDLInputState.cpp:930
 msgid "X360: Y"
-msgstr ""
+msgstr "X360: Y"
 
 #: ../../../src/SDLInputState.cpp:931
 msgid "X360: Back"
-msgstr ""
+msgstr "X360: kembali"
 
 #: ../../../src/SDLInputState.cpp:932
 msgid "X360: Guide"
-msgstr ""
+msgstr "X360: Panduan"
 
 #: ../../../src/SDLInputState.cpp:933
 msgid "X360: Start"
-msgstr ""
+msgstr "X360: Mulai"
 
 #: ../../../src/SDLInputState.cpp:934
 msgid "X360: L3"
-msgstr ""
+msgstr "X360: L3"
 
 #: ../../../src/SDLInputState.cpp:935
 msgid "X360: R3"
-msgstr ""
+msgstr "X360: R3"
 
 #: ../../../src/SDLInputState.cpp:936
 msgid "X360: L1"
-msgstr ""
+msgstr "X360: L1"
 
 #: ../../../src/SDLInputState.cpp:937
 msgid "X360: R1"
-msgstr ""
+msgstr "X360: R1"
 
 #: ../../../src/SDLInputState.cpp:938
 msgid "X360: D-Up"
-msgstr ""
+msgstr "X360: D-Atas"
 
 #: ../../../src/SDLInputState.cpp:939
 msgid "X360: D-Down"
-msgstr ""
+msgstr "X360: D-Bawah"
 
 #: ../../../src/SDLInputState.cpp:940
 msgid "X360: D-Left"
-msgstr ""
+msgstr "X360: D-Kiri"
 
 #: ../../../src/SDLInputState.cpp:941
 msgid "X360: D-Right"
-msgstr ""
+msgstr "X360: D-Kanan"
 
 #: ../../../src/SDLInputState.cpp:943
 msgid "X360: Left X+"
-msgstr ""
+msgstr "X360: Kiri X+"
 
 #: ../../../src/SDLInputState.cpp:944
 msgid "X360: Left X-"
-msgstr ""
+msgstr "X360: Kiri X-"
 
 #: ../../../src/SDLInputState.cpp:945
 msgid "X360: Left Y+"
-msgstr ""
+msgstr "X360: Kiri Y+"
 
 #: ../../../src/SDLInputState.cpp:946
 msgid "X360: Left Y-"
-msgstr ""
+msgstr "X360: Kiri Y-"
 
 #: ../../../src/SDLInputState.cpp:947
 msgid "X360: Right X+"
-msgstr ""
+msgstr "X360: Kanan X+"
 
 #: ../../../src/SDLInputState.cpp:948
 msgid "X360: Right X-"
-msgstr ""
+msgstr "X360: Kanan X-"
 
 #: ../../../src/SDLInputState.cpp:949
 msgid "X360: Right Y+"
-msgstr ""
+msgstr "X360: Kanan Y+"
 
 #: ../../../src/SDLInputState.cpp:950
 msgid "X360: Right Y-"
-msgstr ""
+msgstr "X360: Kanan Y-"
 
 #: ../../../src/SDLInputState.cpp:951
 msgid "X360: L2"
-msgstr ""
+msgstr "X360: L2"
 
 #: ../../../src/SDLInputState.cpp:952
 msgid "X360: R2"
-msgstr ""
+msgstr "X360: R2"
 
 #: ../../../src/Stats.cpp:38
 msgid "Max HP"
@@ -2138,67 +2138,68 @@ msgstr "Persentase MP yang dicuri per pukulan."
 
 #: ../../../src/Stats.cpp:146
 msgid "Resistance to damage-over-time"
-msgstr ""
+msgstr "Ketahanan terhadap kerusakan dari waktu ke waktu"
 
 #: ../../../src/Stats.cpp:147
 msgid "Percentage chance that damage-over-time effects will be negated."
 msgstr ""
+"Persentase peluang bahwa efek kerusakan seiring waktu akan dinegasikan."
 
 #: ../../../src/Stats.cpp:152
 msgid "Resistance to slow"
-msgstr ""
+msgstr "Ketahanan terhadap lambat"
 
 #: ../../../src/Stats.cpp:153
 msgid "Percentage chance that slow effects will be negated."
-msgstr ""
+msgstr "Persentase peluang bahwa efek lambat akan dinegasikan."
 
 #: ../../../src/Stats.cpp:158
 msgid "Resistance to stun"
-msgstr ""
+msgstr "Ketahanan terhadap stun"
 
 #: ../../../src/Stats.cpp:159
 msgid "Percentage chance that stun effects will be negated."
-msgstr ""
+msgstr "Persentase peluang efek stun akan dinegasikan."
 
 #: ../../../src/Stats.cpp:164
 msgid "Resistance to knockback"
-msgstr ""
+msgstr "Ketahanan terhadap knockback"
 
 #: ../../../src/Stats.cpp:165
 msgid "Percentage chance that knockback effects will be negated."
-msgstr ""
+msgstr "Persentase peluang efek knockback akan dinegasikan."
 
 #: ../../../src/Stats.cpp:170
 msgid "Resistance to stat debuffs"
-msgstr ""
+msgstr "Ketahanan terhadap debuff stat"
 
 #: ../../../src/Stats.cpp:171
 msgid "Percentage chance that stat debuff effects will be negated."
-msgstr ""
+msgstr "Persentase peluang bahwa efek debuff stat akan dinegasikan."
 
 #: ../../../src/Stats.cpp:176
 msgid "Resistance to damage reflection"
-msgstr ""
+msgstr "Ketahanan terhadap refleksi kerusakan"
 
 #: ../../../src/Stats.cpp:177
 msgid "Percentage chance that damage reflection will be negated."
-msgstr ""
+msgstr "Persentase kemungkinan refleksi kerusakan akan dinegasikan."
 
 #: ../../../src/Stats.cpp:182
 msgid "Resistance to HP steal"
-msgstr ""
+msgstr "Ketahanan terhadap pencurian HP"
 
 #: ../../../src/Stats.cpp:183
 msgid "Percentage chance that HP steal will be negated."
-msgstr ""
+msgstr "Persentase peluang mencuri HP akan dinegasikan."
 
 #: ../../../src/Stats.cpp:188
 msgid "Resistance to MP steal"
-msgstr ""
+msgstr "Ketahanan terhadap pencurian MP"
 
 #: ../../../src/Stats.cpp:189
 msgid "Percentage chance that MP steal will be negated."
-msgstr ""
+msgstr "Persentase peluang mencuri MP akan dinegasikan."
 
 #: ../../../src/Utils.cpp:370
 msgid "k"
