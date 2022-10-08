@@ -165,6 +165,8 @@ public:
 	void setPauseExitText(bool enable_save);
 	void setPauseSaveEnabled(bool enable_save);
 	void resetSelectedTab();
+	int getActiveTab();
+	void setActiveTab(unsigned tab);
 
 	void confirmKey(int action);
 	void scanKey(int action);

@@ -1733,6 +1733,14 @@ void MenuConfig::resetSelectedTab() {
 	keybind_tip_timer.reset(Timer::END);
 }
 
+int MenuConfig::getActiveTab() {
+	return tab_control->getActiveTab();
+}
+
+void MenuConfig::setActiveTab(unsigned tab) {
+	tab_control->setActiveTab(tab);
+}
+
 void MenuConfig::cleanup() {
 	if (background) {
 		delete background;
