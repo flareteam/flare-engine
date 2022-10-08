@@ -33,6 +33,7 @@ text=Gallaecio
 text=Joseph Bleu
 text=Juan PabloTamayo
 text=Kitano
+text=kr4ft3r
 text=Kyle Belanger
 text=Leszek Cimała
 text=LongerDev

@@ -19,6 +19,7 @@ Joseph Bleu
 Juan Pablo Tamayo "morris989"
 Justin Jacobs | https://github.com/dorkster
 Kitano
+kr4ft3r
 Kyle Belanger
 LongerDev
 Manuel A. Fernandez Montecelo
