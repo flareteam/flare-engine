@@ -160,3 +160,6 @@ void GameStateConfig::refreshFont() {
 	comb = new CombatText();
 }
 
+void GameStateConfig::setActiveTab(unsigned tab) {
+	menu_config->setActiveTab(tab);
+}

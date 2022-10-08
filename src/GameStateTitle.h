@@ -26,9 +26,15 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class MenuMovementType;
 class WidgetButton;
 class WidgetLabel;
+class MenuConfirm;
 
 class GameStateTitle : public GameState {
 private:
+	enum {
+		PROMPT_SELECT_MODS_OK = 0,
+		PROMPT_SELECT_MODS_CANCEL = 1,
+	};
+
 	void refreshWidgets();
 
 	Sprite *logo;
@@ -38,6 +44,7 @@ private:
 	WidgetButton *button_credits;
 	WidgetLabel *label_version;
 	MenuMovementType *menu_movement_type;
+	MenuConfirm *prompt_select_mods; // Nag dialogue when core mod is not selected
 
 	TabList tablist;
 

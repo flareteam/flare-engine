@@ -45,6 +45,7 @@ public:
 	void logicAccept();
 	void logicCancel();
 	void refreshFont();
+	void setActiveTab(unsigned tab);
 
 	void render();
 };
