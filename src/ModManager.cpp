@@ -410,15 +410,8 @@ Mod ModManager::loadMod(const std::string& name) {
 				Utils::logError("ModManager: Mod '%s' contains invalid key: '%s'", name.c_str(), key.c_str());
 			}
 		}
-		if (infile.good()) {
-			infile.close();
-			infile.clear();
-			break;
-		}
-		else {
-			infile.close();
-			infile.clear();
-		}
+		infile.close();
+		infile.clear();
 	}
 
 	// ensure that engine min version <= engine max version
