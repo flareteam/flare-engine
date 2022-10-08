@@ -131,7 +131,8 @@ GameStateTitle::GameStateTitle()
 	// Core mod not selected dialogue
 	prompt_select_mods = new MenuConfirm();
 	prompt_select_mods->setTitle(msg->get("Enable a core mod to continue"));
-	prompt_select_mods->action_list->append(msg->get("Mods"), msg->get("You will be taken to the mod configuration"));
+	prompt_select_mods->action_list->append(msg->get("Edit Mods"), "");
+	prompt_select_mods->action_list->append(msg->get("Cancel"), "");
 
 	refreshWidgets();
 	force_refresh_background = true;
@@ -169,11 +170,16 @@ void GameStateTitle::logic() {
 	else if (prompt_select_mods && prompt_select_mods->visible) {
 		prompt_select_mods->logic();
 		if (prompt_select_mods->clicked_confirm) {
-			showLoading();
-			setRequestedGameState(new GameStateConfig());
+			if (prompt_select_mods->action_list->getSelected() == PROMPT_SELECT_MODS_OK) {
+				showLoading();
+				setRequestedGameState(new GameStateConfig());
 
-			prompt_select_mods->visible = false;
-			prompt_select_mods->clicked_confirm = false;
+				prompt_select_mods->visible = false;
+				prompt_select_mods->clicked_confirm = false;
+			} else if (prompt_select_mods->action_list->getSelected() == PROMPT_SELECT_MODS_CANCEL) {
+				prompt_select_mods->visible = false;
+			}
+
 		}
 	}
 	else {

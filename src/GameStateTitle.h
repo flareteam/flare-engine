@@ -30,6 +30,11 @@ class MenuConfirm;
 
 class GameStateTitle : public GameState {
 private:
+	enum {
+		PROMPT_SELECT_MODS_OK = 0,
+		PROMPT_SELECT_MODS_CANCEL = 1,
+	};
+
 	void refreshWidgets();
 
 	Sprite *logo;
