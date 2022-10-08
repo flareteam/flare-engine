@@ -132,7 +132,7 @@ GameStateTitle::GameStateTitle()
 	// Core mod not selected dialogue
 	prompt_select_mods = new MenuConfirm();
 	prompt_select_mods->setTitle(msg->get("Enable a core mod to continue"));
-	prompt_select_mods->action_list->append(msg->get("Edit Mods"), "");
+	prompt_select_mods->action_list->append(msg->get("Mods"), "");
 	prompt_select_mods->action_list->append(msg->get("Cancel"), "");
 
 	refreshWidgets();
