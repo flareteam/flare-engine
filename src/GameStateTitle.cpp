@@ -27,6 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "GameStateTitle.h"
 #include "InputState.h"
 #include "MenuMovementType.h"
+#include "MenuConfirm.h"
 #include "MessageEngine.h"
 #include "Platform.h"
 #include "RenderDevice.h"
@@ -34,6 +35,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "SoundManager.h"
 #include "WidgetButton.h"
+#include "WidgetHorizontalList.h"
 #include "WidgetLabel.h"
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
@@ -104,10 +106,6 @@ GameStateTitle::GameStateTitle()
 	}
 
 	button_play->setLabel(msg->get("Play Game"));
-	if (!eset->gameplay.enable_playgame) {
-		button_play->enabled = false;
-		button_play->tooltip = msg->get("Enable a core mod to continue");
-	}
 	button_play->refresh();
 
 	button_cfg->setLabel(msg->get("Configuration"));
@@ -130,6 +128,11 @@ GameStateTitle::GameStateTitle()
 	tablist.add(button_credits);
 	tablist.add(button_exit);
 
+	// Core mod not selected dialogue
+	prompt_select_mods = new MenuConfirm();
+	prompt_select_mods->setTitle(msg->get("Enable a core mod to continue"));
+	prompt_select_mods->action_list->append(msg->get("Mods"), msg->get("You will be taken to the mod configuration"));
+
 	refreshWidgets();
 	force_refresh_background = true;
 
@@ -146,13 +149,12 @@ GameStateTitle::GameStateTitle()
 		menu_movement_type = new MenuMovementType();
 		menu_movement_type->visible = true;
 	}
+
 }
 
 void GameStateTitle::logic() {
 	if (inpt->window_resized)
 		refreshWidgets();
-
-	button_play->enabled = eset->gameplay.enable_playgame;
 
 	snd->logic(FPoint(0,0));
 
@@ -164,6 +166,16 @@ void GameStateTitle::logic() {
 	if (menu_movement_type && menu_movement_type->visible) {
 		menu_movement_type->logic();
 	}
+	else if (prompt_select_mods && prompt_select_mods->visible) {
+		prompt_select_mods->logic();
+		if (prompt_select_mods->clicked_confirm) {
+			showLoading();
+			setRequestedGameState(new GameStateConfig());
+
+			prompt_select_mods->visible = false;
+			prompt_select_mods->clicked_confirm = false;
+		}
+	}
 	else {
 		tablist.logic();
 
@@ -171,7 +183,10 @@ void GameStateTitle::logic() {
 			tablist.getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
 		}
 
-		if (button_play->checkClick()) {
+		if (button_play->checkClick() && !eset->gameplay.enable_playgame) {
+			prompt_select_mods->show();
+		}
+		else if (button_play->checkClick()) {
 			showLoading();
 			setRequestedGameState(new GameStateLoad());
 		}
@@ -196,6 +211,7 @@ void GameStateTitle::logic() {
 			exitRequested = true;
 		}
 	}
+
 }
 
 void GameStateTitle::refreshWidgets() {
@@ -218,6 +234,8 @@ void GameStateTitle::refreshWidgets() {
 
 	if (menu_movement_type)
 		menu_movement_type->align();
+	if (prompt_select_mods)
+		prompt_select_mods->align();
 }
 
 void GameStateTitle::render() {
@@ -229,6 +247,9 @@ void GameStateTitle::render() {
 		button_play->render();
 		button_cfg->render();
 		button_credits->render();
+
+		if (prompt_select_mods && prompt_select_mods->visible)
+			prompt_select_mods->render();
 
 		if (platform.has_exit_button)
 			button_exit->render();
@@ -249,4 +270,5 @@ GameStateTitle::~GameStateTitle() {
 	delete button_exit;
 	delete label_version;
 	delete menu_movement_type;
+	if (prompt_select_mods) delete prompt_select_mods;
 }

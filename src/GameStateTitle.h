@@ -26,6 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class MenuMovementType;
 class WidgetButton;
 class WidgetLabel;
+class MenuConfirm;
 
 class GameStateTitle : public GameState {
 private:
@@ -38,6 +39,7 @@ private:
 	WidgetButton *button_credits;
 	WidgetLabel *label_version;
 	MenuMovementType *menu_movement_type;
+	MenuConfirm *prompt_select_mods; // Nag dialogue when core mod is not selected
 
 	TabList tablist;
 
