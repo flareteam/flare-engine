@@ -27,6 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "GameStateTitle.h"
 #include "InputState.h"
 #include "MenuMovementType.h"
+#include "MenuConfig.h"
 #include "MenuConfirm.h"
 #include "MessageEngine.h"
 #include "Platform.h"
@@ -172,7 +173,9 @@ void GameStateTitle::logic() {
 		if (prompt_select_mods->clicked_confirm) {
 			if (prompt_select_mods->action_list->getSelected() == PROMPT_SELECT_MODS_OK) {
 				showLoading();
-				setRequestedGameState(new GameStateConfig());
+				GameStateConfig* config = new GameStateConfig();
+				config->setActiveTab(MenuConfig::MODS_TAB);
+				setRequestedGameState(config);
 
 				prompt_select_mods->visible = false;
 				prompt_select_mods->clicked_confirm = false;
