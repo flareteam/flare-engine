@@ -72,9 +72,10 @@ bool FileParser::open(const std::string& _filename, bool _is_mod_file, int _erro
 				// get the first non-comment, non blank line
 				while (infile.good()) {
 					test_line = Parse::trim(Parse::getLine(infile));
-					if (test_line.length() == 0) continue;
-					else if (test_line.at(0) == '#') continue;
-					else break;
+					if (Parse::skipLine(test_line))
+						continue;
+					else
+						break;
 				}
 
 				if (test_line != "APPEND") {
@@ -145,13 +146,10 @@ bool FileParser::next() {
 			line = Parse::trim(Parse::getLine(infile));
 			line_number++;
 
-			// skip ahead if this line is empty
-			if (line.length() == 0) continue;
+			if (Parse::skipLine(line))
+				continue;
 
 			starts_with = line.at(0);
-
-			// skip ahead if this line is a comment
-			if (starts_with == "#") continue;
 
 			// set new section if this line is a section declaration
 			if (starts_with == "[") {

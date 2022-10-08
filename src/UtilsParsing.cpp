@@ -424,3 +424,13 @@ ItemStack Parse::toItemQuantityPair(std::string value, bool* check_pair) {
 
 	return r;
 }
+
+bool Parse::skipLine(const std::string& line) {
+	if (line.length() == 0)
+		return true;
+
+	if (line.at(0) == '#')
+		return true;
+
+	return false;
+}

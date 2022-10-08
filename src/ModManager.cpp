@@ -188,12 +188,8 @@ void ModManager::loadModList() {
 		while (infile.good()) {
 			line = Parse::getLine(infile);
 
-			// skip ahead if this line is empty
-			if (line.length() == 0) continue;
-
-			// skip comments
-			starts_with = line.at(0);
-			if (starts_with == "#") continue;
+			if (Parse::skipLine(line))
+				continue;
 
 			// add the mod if it exists in the mods folder
 			if (line != FALLBACK_MOD) {
@@ -340,15 +336,12 @@ Mod ModManager::loadMod(const std::string& name) {
 
 		while (infile.good()) {
 			line = Parse::getLine(infile);
+
+			if (Parse::skipLine(line))
+				continue;
+
 			key = "";
 			val = "";
-
-			// skip ahead if this line is empty
-			if (line.length() == 0) continue;
-
-			// skip comments
-			starts_with = line.at(0);
-			if (starts_with == "#") continue;
 
 			Parse::getKeyPair(line, key, val);
 

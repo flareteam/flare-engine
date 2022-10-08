@@ -61,6 +61,8 @@ namespace Parse {
 	LabelInfo popLabelInfo(std::string val);
 
 	ItemStack toItemQuantityPair(std::string value, bool* check_pair = NULL);
+
+	bool skipLine(const std::string& line);
 }
 
 #endif
