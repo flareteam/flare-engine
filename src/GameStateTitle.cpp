@@ -179,14 +179,16 @@ void GameStateTitle::logic() {
 	else {
 		tablist.logic();
 
+		bool play_clicked = button_play->checkClick();
+
 		if (!inpt->usingMouse() && tablist.getCurrent() == -1) {
 			tablist.getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
 		}
 
-		if (button_play->checkClick() && !eset->gameplay.enable_playgame) {
+		if (play_clicked && !eset->gameplay.enable_playgame) {
 			prompt_select_mods->show();
 		}
-		else if (button_play->checkClick()) {
+		else if (play_clicked) {
 			showLoading();
 			setRequestedGameState(new GameStateLoad());
 		}
