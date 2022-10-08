@@ -24,6 +24,7 @@ Engine features:
 * Added engine/number_format.txt. This file defines the number of digits to print after the decimal point for fractional values under different contexts.
 * Add support for multiplicative stat bonuses. For example, an item bonus of 1.5x Max HP, which would be defined as 'bonus=hp,150%'.
   * As such, the 'hp_percent' and 'mp_percent' stat bonuses are considered deprecated.
+* Players are directed to the Mods configuration menu via a dialog box when no core mod is enabled. (kr4ft3r)
 
 Engine fixes:
 
