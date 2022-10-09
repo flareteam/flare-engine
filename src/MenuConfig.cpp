@@ -1549,6 +1549,10 @@ std::string MenuConfig::createModTooltip(Mod *mod) {
 
 		ret = mod->name + '\n';
 
+		if (mod->is_game_mod) {
+			ret += msg->get("Core mod") + '\n';
+		}
+
 		std::string mod_description = mod->getLocaleDescription(settings->language);
 		if (!mod_description.empty()) {
 			ret += '\n';

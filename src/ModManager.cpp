@@ -28,7 +28,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <cassert>
 
 Mod::Mod()
-	: name("")
+	: is_game_mod(false)
+	, name("")
 	, description("")
 	, description_locale()
 	, game("")
@@ -63,6 +64,7 @@ Mod& Mod::operator=(const Mod &mod) {
 	if (this == &mod)
 		return *this;
 
+	is_game_mod = mod.is_game_mod;
 	name = mod.name;
 	description = mod.description;
 	description_locale = mod.description_locale;
@@ -401,6 +403,27 @@ Mod ModManager::loadMod(const std::string& name) {
 			}
 			else {
 				Utils::logError("ModManager: Mod '%s' contains invalid key: '%s'", name.c_str(), key.c_str());
+			}
+		}
+		infile.close();
+		infile.clear();
+
+		path = Filesystem::convertSlashes(mod_paths[i] + "mods/" + name + "/engine/gameplay.txt");
+		infile.open(path.c_str(), std::ios::in);
+
+		while (infile.good()) {
+			line = Parse::getLine(infile);
+
+			if (Parse::skipLine(line))
+				continue;
+
+			key = "";
+			val = "";
+
+			Parse::getKeyPair(line, key, val);
+
+			if (key == "enable_playgame") {
+				mod.is_game_mod = Parse::toBool(val);
 			}
 		}
 		infile.close();

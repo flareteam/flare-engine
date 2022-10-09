@@ -41,6 +41,7 @@ public:
 
 	std::string getLocaleDescription(const std::string& lang);
 
+	bool is_game_mod;
 	std::string name;
 	std::string description;
 	std::map<std::string, std::string> description_locale;
