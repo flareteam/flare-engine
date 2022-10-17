@@ -58,7 +58,7 @@ Translations
 (id) Indonesian by Kirim Saja
 (it) Italian by Giovanni Dalla Torre, Gianfranco Del Borrello, Stefano Peris, Andrea Ranaldi, MOB2, Fabio Loli, and Riccardi Unix
 (ko) Korean by bnk159hair
-(ja) Japanese by Paul Wortmann, sujiniku
+(ja) Japanese by Paul Wortmann, sujiniku, Sato Hayato
 (nb) Norwegian Bokmal by Hans Joachim Desserud, Elias Nykrem
 (nl) Dutch by Bas Doodeman
 (pl) Polish by Paweł Puszczyński, Błażej Pęksyk, and Grzegorz Szymaszek

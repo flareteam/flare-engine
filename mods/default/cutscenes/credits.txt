@@ -109,6 +109,7 @@ text=Quentin Stievenart
 text=Rafael Fontenelle
 text=Riccardi Unix
 text=Rui
+text=Sato Hayato
 text=Sergey Basalaev
 text=Sergiy Borodych
 text=Stefan Beller
