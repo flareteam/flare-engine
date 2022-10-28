@@ -90,6 +90,7 @@ text=Juan Pablo Tamayo
 text=Kirim Saja
 text=Kor_OfenTHource
 text=(bnk159hair, kangdonghun1230, HunSeongPark, paparad0x)
+text=ks k
 text=losine
 text=Marc Tormo i Bochaca
 text=Maria Cano
@@ -121,6 +122,7 @@ text=Timo Sievänen
 text=Vicente Monteiro
 text=Wuzzy2
 text=Yannis Anthymidis
+text=YooJin919
 text=Źmicier Turok
 separator=32
 

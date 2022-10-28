@@ -6,6 +6,7 @@
 # Translators:
 # bnk159hair <bnk159hair@naver.com>, 2020
 # YooJin919, 2022
+# ks k, 2022
 # 
 #, fuzzy
 msgid ""
@@ -14,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-17 20:15-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: YooJin919, 2022\n"
+"Last-Translator: ks k, 2022\n"
 "Language-Team: Korean (https://www.transifex.com/flareorg/teams/84925/ko/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -141,13 +142,13 @@ msgstr "실패"
 #: ../../../src/StatBlock.cpp:1032 ../../../src/StatBlock.cpp:1038
 #, c-format
 msgid "+%s HP"
-msgstr ""
+msgstr "체력 +%s"
 
 #: ../../../src/Entity.cpp:564 ../../../src/StatBlock.cpp:1043
 #: ../../../src/StatBlock.cpp:1049
 #, c-format
 msgid "+%s MP"
-msgstr ""
+msgstr "마나 +%s"
 
 #: ../../../src/EventManager.cpp:845
 msgid "Unknown destination"
@@ -167,7 +168,7 @@ msgstr "아니오"
 
 #: ../../../src/GameStateLoad.cpp:95 ../../../src/MenuConfig.cpp:249
 msgid "Yes"
-msgstr "네"
+msgstr "예"
 
 #: ../../../src/GameStateLoad.cpp:98
 msgid "Exit to Title"
@@ -268,12 +269,12 @@ msgstr "알 수 없는 아이템"
 #: ../../../src/ItemManager.cpp:681 ../../../src/MenuPowers.cpp:996
 #, c-format
 msgid "%s%% Speed"
-msgstr ""
+msgstr "%s%% 속도"
 
 #: ../../../src/ItemManager.cpp:685 ../../../src/MenuPowers.cpp:999
 #, c-format
 msgid "%s%% Attack Speed"
-msgstr ""
+msgstr "공격속도 %s%%"
 
 #: ../../../src/ItemManager.cpp:712 ../../../src/MenuCharacter.cpp:362
 #: ../../../src/MenuCharacter.cpp:425 ../../../src/MenuPowers.cpp:968
@@ -297,7 +298,7 @@ msgstr "퀄리티: %s"
 
 #: ../../../src/ItemManager.cpp:826
 msgid "Absorb"
-msgstr ""
+msgstr "흡수"
 
 #: ../../../src/ItemManager.cpp:880 ../../../src/MenuPowers.cpp:1220
 #: ../../../src/MenuPowers.cpp:1223
@@ -377,7 +378,7 @@ msgstr "숨겨진"
 #: ../../../src/LootManager.cpp:102 ../../../src/MenuConfig.cpp:303
 #: ../../../src/MenuConfig.cpp:354
 msgid "Default"
-msgstr "디폴트"
+msgstr "기본값"
 
 #: ../../../src/LootManager.cpp:104
 msgid "Show All"
@@ -448,7 +449,7 @@ msgstr "XP: %lu"
 #: ../../../src/MenuCharacter.cpp:376
 #, c-format
 msgid "Next: %lu"
-msgstr ""
+msgstr "다음: %lu"
 
 #: ../../../src/MenuCharacter.cpp:382
 #, c-format
@@ -495,11 +496,11 @@ msgstr "모든 설정을 초기화하겠습니까?"
 
 #: ../../../src/MenuConfig.cpp:258 ../../../src/MenuNumPicker.cpp:49
 msgid "OK"
-msgstr "네"
+msgstr "확인"
 
 #: ../../../src/MenuConfig.cpp:259
 msgid "Defaults"
-msgstr "디폴트"
+msgstr "기본값"
 
 #: ../../../src/MenuConfig.cpp:262 ../../../src/MenuGameOver.cpp:72
 msgid "Continue"
@@ -633,7 +634,7 @@ msgstr "입력"
 
 #: ../../../src/MenuConfig.cpp:384
 msgid "Keybindings"
-msgstr ""
+msgstr "키 설정"
 
 #: ../../../src/MenuConfig.cpp:385
 msgid "Mods"
@@ -820,6 +821,7 @@ msgid ""
 "This enables parallax (non-tile) layers. Disabling this setting can improve "
 "performance in some cases."
 msgstr ""
+"이렇게 하면 시차(타일 아님) 레이어가 사용설정됩니다. 이 설정을 사용설정 안함으로 하면 경우에 따라 성능이 향상될 수 있습니다."
 
 #: ../../../src/MenuConfig.cpp:556
 msgid ""
@@ -1329,7 +1331,7 @@ msgstr "초당 MP"
 
 #: ../../../src/MenuPowers.cpp:994
 msgid "Immobilize"
-msgstr ""
+msgstr "고정"
 
 #: ../../../src/MenuPowers.cpp:1002
 msgid "Resistance to all negative effects"
@@ -1427,15 +1429,15 @@ msgstr "다음 레벨:"
 
 #: ../../../src/MenuStash.cpp:78 ../../../src/MenuStash.cpp:159
 msgid "Stash"
-msgstr "저장소"
+msgstr "숨기는 장소"
 
 #: ../../../src/MenuStash.cpp:170 ../../../src/MenuStash.cpp:184
 msgid "Private"
-msgstr "개인 소유의"
+msgstr "개인 소유"
 
 #: ../../../src/MenuStash.cpp:171
 msgid "Shared"
-msgstr "공유된"
+msgstr "공유"
 
 #: ../../../src/MenuStash.cpp:339
 msgid "This item can not be stored in the stash."
@@ -1513,19 +1515,19 @@ msgstr "'%s'는 더 이상 다음 항목에 바인딩되지 않습니다."
 
 #: ../../../src/SDLInputState.cpp:640
 msgid "BkSp"
-msgstr "Backspace"
+msgstr "백스페이스"
 
 #: ../../../src/SDLInputState.cpp:641
 msgid "Caps"
-msgstr "Caps Lock"
+msgstr "캡스락"
 
 #: ../../../src/SDLInputState.cpp:642
 msgid "Del"
-msgstr "Delete"
+msgstr "딜리트"
 
 #: ../../../src/SDLInputState.cpp:644 ../../../src/SDLInputState.cpp:674
 msgid "End"
-msgstr "End"
+msgstr "엔드"
 
 #: ../../../src/SDLInputState.cpp:645
 msgid "Esc"
@@ -1537,7 +1539,7 @@ msgstr "Home"
 
 #: ../../../src/SDLInputState.cpp:647
 msgid "Ins"
-msgstr "Insert"
+msgstr "인서트"
 
 #: ../../../src/SDLInputState.cpp:648
 msgid "LAlt"
@@ -1553,32 +1555,32 @@ msgstr "Left Shift"
 
 #: ../../../src/SDLInputState.cpp:652
 msgid "Num"
-msgstr "NumLock"
+msgstr "넘락"
 
 #: ../../../src/SDLInputState.cpp:653
 msgid "PgDn"
-msgstr "PageDown"
+msgstr "페이지다운"
 
 #: ../../../src/SDLInputState.cpp:654
 msgid "PgUp"
-msgstr "PageUp"
+msgstr "페이지업"
 
 #: ../../../src/SDLInputState.cpp:655 ../../../src/SDLInputState.cpp:685
 #: ../../../src/SDLInputState.cpp:908
 msgid "Pause"
-msgstr "Pause"
+msgstr "푸쉬"
 
 #: ../../../src/SDLInputState.cpp:656
 msgid "Print"
-msgstr "출력"
+msgstr "프린트스크린"
 
 #: ../../../src/SDLInputState.cpp:657
 msgid "RAlt"
-msgstr "Right Alt"
+msgstr "오른쪽 알트"
 
 #: ../../../src/SDLInputState.cpp:658
 msgid "RCtrl"
-msgstr "Right Ctrl"
+msgstr "오른쪽 컨트롤"
 
 #: ../../../src/SDLInputState.cpp:659
 msgid "Ret"
@@ -1586,11 +1588,11 @@ msgstr ""
 
 #: ../../../src/SDLInputState.cpp:661
 msgid "RShft"
-msgstr "Right Shift"
+msgstr "오른쪽 쉬프트"
 
 #: ../../../src/SDLInputState.cpp:662
 msgid "SLock"
-msgstr "SLock"
+msgstr "스크롤락"
 
 #: ../../../src/SDLInputState.cpp:663
 msgid "Spc"
@@ -1598,43 +1600,43 @@ msgstr ""
 
 #: ../../../src/SDLInputState.cpp:664 ../../../src/SDLInputState.cpp:694
 msgid "Tab"
-msgstr "Tab"
+msgstr "탭"
 
 #: ../../../src/SDLInputState.cpp:670
 msgid "Backspace"
-msgstr "Backspace"
+msgstr "백스페이스"
 
 #: ../../../src/SDLInputState.cpp:671
 msgid "CapsLock"
-msgstr "CapsLock"
+msgstr "캡스락"
 
 #: ../../../src/SDLInputState.cpp:672 ../../../src/SDLInputState.cpp:917
 msgid "Delete"
-msgstr "Delete"
+msgstr "딜리트"
 
 #: ../../../src/SDLInputState.cpp:675
 msgid "Escape"
-msgstr "탈출하다"
+msgstr "Esc"
 
 #: ../../../src/SDLInputState.cpp:677
 msgid "Insert"
-msgstr "Insert"
+msgstr "인서트"
 
 #: ../../../src/SDLInputState.cpp:678
 msgid "Left Alt"
-msgstr "Left Alt"
+msgstr "왼쪽 알트"
 
 #: ../../../src/SDLInputState.cpp:679
 msgid "Left Ctrl"
-msgstr "Left Ctrl"
+msgstr "왼쪽 컨트롤"
 
 #: ../../../src/SDLInputState.cpp:681
 msgid "Left Shift"
-msgstr "Left Shift"
+msgstr "왼쪽 쉬프트"
 
 #: ../../../src/SDLInputState.cpp:682
 msgid "NumLock"
-msgstr "NumLock"
+msgstr "넘락"
 
 #: ../../../src/SDLInputState.cpp:683
 msgid "PageDown"

@@ -49,6 +49,7 @@ Translation updates:
 * Indonesian (id) update (Kirim Saja)
 * Italian (it) update (Riccardi Unix)
 * Japanese (ja) update (Sato Hayato)
+* Korean (ko) update (ks k, YooJin919)
 * Polish (pl) update (Pawonashi)
 * Chinese (zh) update (Issac Zhang)
 

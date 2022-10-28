@@ -2,12 +2,16 @@
 # This file is distributed under the same license as the FLARE package.
 # 
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Translators:
+# ks k, 2022
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-17 20:15+\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
+"Last-Translator: ks k, 2022\n"
 "Language-Team: Korean (https://www.transifex.com/flareorg/teams/84925/ko/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,104 +21,104 @@ msgstr ""
 
 #: ../engine/primary_stats.txt:3
 msgid "Physical"
-msgstr ""
+msgstr "물리력"
 
 #: ../engine/primary_stats.txt:7
 msgid "Mental"
-msgstr ""
+msgstr "정신력"
 
 #: ../engine/primary_stats.txt:11
 msgid "Offense"
-msgstr ""
+msgstr "공격력"
 
 #: ../engine/primary_stats.txt:15
 msgid "Defense"
-msgstr ""
+msgstr "방어력"
 
 #: ../engine/damage_types.txt:3
 msgid "Melee Damage"
-msgstr ""
+msgstr "근거리 피해"
 
 #: ../engine/damage_types.txt:4
 msgid "Increases the damage done with swords and other melee weapons."
-msgstr ""
+msgstr "칼과 기타 근거리 무기로 입히는 피해가 높아진다."
 
 #: ../engine/damage_types.txt:5
 msgid "Melee Damage Min"
-msgstr ""
+msgstr "근거리 최소 피해"
 
 #: ../engine/damage_types.txt:6
 msgid "Melee Damage Max"
-msgstr ""
+msgstr "근거리 최대 피해"
 
 #: ../engine/damage_types.txt:12
 msgid "Ranged Damage"
-msgstr ""
+msgstr "원거리 피해"
 
 #: ../engine/damage_types.txt:13
 msgid "Increases the damage done with bows and other ranged weapons."
-msgstr ""
+msgstr "활 및 기타 원거리 무기로 입히는 피해가 높아진다."
 
 #: ../engine/damage_types.txt:14
 msgid "Ranged Damage Min"
-msgstr ""
+msgstr "원거리 최소 피해"
 
 #: ../engine/damage_types.txt:15
 msgid "Ranged Damage Max"
-msgstr ""
+msgstr "원거리 최대 피해"
 
 #: ../engine/damage_types.txt:21
 msgid "Mental Damage"
-msgstr ""
+msgstr "정신적 피해"
 
 #: ../engine/damage_types.txt:22
 msgid "Increases the damage done with staves and other mental weapons."
-msgstr ""
+msgstr "지팡이 및 기타 정신 무기로 입히는 피해가 높아진다."
 
 #: ../engine/damage_types.txt:23
 msgid "Mental Damage Min"
-msgstr ""
+msgstr "정신적 최소 피해"
 
 #: ../engine/damage_types.txt:24
 msgid "Mental Damage Max"
-msgstr ""
+msgstr "정신적 최대 피해"
 
 #: ../cutscenes/credits.txt:7
 msgid "Flare Engine Credits"
-msgstr ""
+msgstr "플레어 엔진 크레딧"
 
 #: ../cutscenes/credits.txt:10
 msgid "Lead Programmers"
-msgstr ""
+msgstr "선임 프로그래머들"
 
 #: ../cutscenes/credits.txt:20
 msgid "Programmers"
-msgstr ""
+msgstr "프로그래머들"
 
 #: ../cutscenes/credits.txt:50
 msgid "Default Art"
-msgstr ""
+msgstr "기본 그림"
 
 #: ../cutscenes/credits.txt:55
 msgid "Translators"
-msgstr ""
+msgstr "번역가들"
 
 #: ../cutscenes/credits.txt:124
 msgid "Distributors"
-msgstr ""
+msgstr "배포하는 분들"
 
 #: ../cutscenes/credits.txt:133
 msgid "Special Thanks"
-msgstr ""
+msgstr "특별히 고마운 분들"
 
 #: ../cutscenes/credits.txt:137
 msgid "For giving constant feedback and testing:"
-msgstr ""
+msgstr "지속적인 피드백 및 테스트를 제공:"
 
 #: ../cutscenes/credits.txt:139
 msgid "The community at OpenGameArt"
-msgstr ""
+msgstr "오픈게임아트의 커뮤니티"
 
 #: ../cutscenes/credits.txt:143
 msgid "For Tiled and the Flare map exporter:"
-msgstr ""
+msgstr "타일 및 플레어의 지도 내보내는 분:"
