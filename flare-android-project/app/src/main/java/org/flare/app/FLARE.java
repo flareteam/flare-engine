@@ -42,7 +42,6 @@ public class FLARE extends SDLActivity {
 
     protected String[] getLibraries() {
         return new String[] {
-                "hidapi",
                 "SDL2",
                 "SDL2_image",
                 "mpg123",
