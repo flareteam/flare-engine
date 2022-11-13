@@ -129,6 +129,12 @@ bool WidgetInput::logicAt(int x, int y) {
 
 	if (checkClick(mouse)) {
 		edit_mode = true;
+		if (platform.is_mobile_device) {
+			// Not sure if this is SDL's fault or Android's fault...
+			// But the on screen keyboard only triggers the backspace input on text that was entered with the on screen keyboard
+			// So we have to delete the existing text here.
+			setText("");
+		}
 	}
 
 	// if clicking elsewhere unfocus the text box

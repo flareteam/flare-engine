@@ -36,6 +36,7 @@ Engine fixes:
 * Removed hard-coded minimum values for HP/MP steal and damage return.
 * Fixed "activate" message incorrectly showing in MenuPowers tooltips.
 * Fix some cases where 'min' damage/absorb could be greater than the cooresponding 'max' value.
+* Fixed text input issues with deleting text on Android.
 
 Game updates:
 
