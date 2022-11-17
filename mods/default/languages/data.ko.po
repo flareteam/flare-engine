@@ -73,7 +73,7 @@ msgstr "정신적 피해"
 
 #: ../engine/damage_types.txt:22
 msgid "Increases the damage done with staves and other mental weapons."
-msgstr "지팡이 및 기타 정신 무기로 입히는 피해가 높아진다."
+msgstr "지팡이 및 기타 정신력 무기로 입히는 피해가 높아진다."
 
 #: ../engine/damage_types.txt:23
 msgid "Mental Damage Min"
