@@ -42,6 +42,8 @@ Game updates:
 
 * Fireball and Ice Bolt scrolls now give the player a 10 second period in which their basic attacks (Swing, Shoot, Channel) are replaced with the scroll power.
 * Fixed the naming of scroll damage as it appears in power description tooltips.
+* Lowered Lezaith's slow resistance to 50%, down from 100%
+* Lowered Lezaith's stun resistance to 90%, down from 100%
 
 Translation updates:
 
