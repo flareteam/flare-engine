@@ -1053,7 +1053,7 @@ void EngineSettings::NumberFormat::load() {
 	// reset to defaults
 	player_statbar = 0;
 	enemy_statbar = 0;
-	combat_text = 1;
+	combat_text = 0;
 	character_menu = 2;
 	item_tooltips = 2;
 	power_tooltips = 2;
