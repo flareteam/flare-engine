@@ -56,7 +56,7 @@ public:
 	static const int NO_ICON = -1;
 	static const int NO_OVERLAY = -1;
 
-	WidgetSlot(int _icon_id);
+	explicit WidgetSlot(int _icon_id);
 	~WidgetSlot();
 
 	void setPos(int offset_x, int offset_y);
