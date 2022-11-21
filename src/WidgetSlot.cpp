@@ -64,7 +64,6 @@ WidgetSlot::WidgetSlot(int _icon_id)
 	src.x = src.y = 0;
 
 	std::string selected_filename;
-	std::string checked_filename;
 
 	pos.w = eset->resolutions.icon_size;
 	pos.h = eset->resolutions.icon_size;

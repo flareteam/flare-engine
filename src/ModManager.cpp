@@ -171,7 +171,6 @@ void ModManager::loadModList() {
 	if (!cmd_line_mods || cmd_line_mods->empty()) {
 		std::ifstream infile;
 		std::string line;
-		std::string starts_with;
 
 		std::string place1 = Filesystem::convertSlashes(settings->path_conf + "mods.txt");
 		std::string place2 = Filesystem::convertSlashes(settings->path_data + "mods/mods.txt");
@@ -327,7 +326,7 @@ void ModManager::setPaths() {
 Mod ModManager::loadMod(const std::string& name) {
 	Mod mod;
 	std::ifstream infile;
-	std::string starts_with, line, key, val;
+	std::string line, key, val;
 
 	mod.name = name;
 
