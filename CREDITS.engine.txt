@@ -64,7 +64,7 @@ Translations
 (pl) Polish by Paweł Puszczyński, Błażej Pęksyk, and Grzegorz Szymaszek
 (pt) Portuguese by Rui
 (pt_BR) Brazilian Portuguese by Vicente Monteiro and Rafael Fontenelle
-(ru) Russian by Sergey Basalaev, Evgen Pavlov, Ademaro, Andrey Kapitonov, and David Bell
+(ru) Russian by Sergey Basalaev, Evgen Pavlov, Ademaro, Andrey Kapitonov, David Bell, and berry
 (sk) Slovak by Miro Jánošík, MiroslavR
 (sv) Swedish by Andreas Berheim Brudin
 (uk) Ukrainian by Igor Paliychuk, Denis Lysenko, Микола Франчук, Sergiy Borodych

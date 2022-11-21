@@ -62,6 +62,7 @@ text=Andreas Berheim Brudin
 text=Andrey Kapitonov
 text=Bafy
 text=Bas Doodeman
+text=berry
 text=Błażej Pęksyk
 text=Bonbadil
 text=bzt

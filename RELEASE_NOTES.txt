@@ -55,6 +55,7 @@ Translation updates:
 * Japanese (ja) update (Sato Hayato)
 * Korean (ko) update (ks k, YooJin919)
 * Polish (pl) update (Pawonashi)
+* Russian (ru) update (berry)
 * Chinese (zh) update (Issac Zhang)
 
 
