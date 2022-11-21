@@ -28,6 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 #include "SharedResources.h"
 #include "Utils.h"
+#include "UtilsMath.h"
 #include "UtilsParsing.h"
 
 void EngineSettings::load() {
@@ -322,6 +323,7 @@ void EngineSettings::Combat::load() {
 	max_crit_damage = 200;
 	min_overhit_damage = 100;
 	max_overhit_damage = 100;
+	resource_round_method = EngineSettings::Combat::RESOURCE_ROUND_METHOD_ROUND;
 
 	FileParser infile;
 	// @CLASS EngineSettings: Combat|Description of engine/combat.txt
@@ -369,10 +371,39 @@ void EngineSettings::Combat::load() {
 				max_overhit_damage = Parse::popFirstFloat(infile.val);
 				max_overhit_damage = std::max(max_overhit_damage, min_overhit_damage);
 			}
+			// @ATTR resource_round_method|['none', 'round', 'floor', 'ceil']|Rounds the numbers for most combat events that affect HP/MP. For example: damage taken, HP healed, MP consumed. Defaults to 'round'.
+			else if (infile.key == "resource_round_method") {
+				if (infile.val == "none")
+					resource_round_method = EngineSettings::Combat::RESOURCE_ROUND_METHOD_NONE;
+				else if (infile.val == "round")
+					resource_round_method = EngineSettings::Combat::RESOURCE_ROUND_METHOD_ROUND;
+				else if (infile.val == "floor")
+					resource_round_method = EngineSettings::Combat::RESOURCE_ROUND_METHOD_FLOOR;
+				else if (infile.val == "ceil")
+					resource_round_method = EngineSettings::Combat::RESOURCE_ROUND_METHOD_CEIL;
+				else
+					infile.error("EngineSettings: '%s' is not a valid resource rounding method.", infile.val.c_str());
+			}
 
 			else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
+	}
+}
+
+float EngineSettings::Combat::resourceRound(const float resource_val) {
+	if (resource_round_method == EngineSettings::Combat::RESOURCE_ROUND_METHOD_ROUND) {
+		return roundf(resource_val);
+	}
+	else if (resource_round_method == EngineSettings::Combat::RESOURCE_ROUND_METHOD_FLOOR) {
+		return floorf(resource_val);
+	}
+	else if (resource_round_method == EngineSettings::Combat::RESOURCE_ROUND_METHOD_CEIL) {
+		return ceilf(resource_val);
+	}
+	else {
+		// EngineSettings::Combat::RESOURCE_ROUND_METHOD_NONE
+		return resource_val;
 	}
 }
 

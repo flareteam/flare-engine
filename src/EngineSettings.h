@@ -96,6 +96,14 @@ public:
 	class Combat {
 	public:
 		void load();
+		float resourceRound(const float resource_val);
+
+		enum {
+			RESOURCE_ROUND_METHOD_NONE = 0,
+			RESOURCE_ROUND_METHOD_ROUND,
+			RESOURCE_ROUND_METHOD_FLOOR,
+			RESOURCE_ROUND_METHOD_CEIL
+		};
 
 		float min_absorb;
 		float max_absorb;
@@ -111,6 +119,7 @@ public:
 		float max_crit_damage;
 		float min_overhit_damage;
 		float max_overhit_damage;
+		unsigned short resource_round_method;
 	};
 
 	class Elements {

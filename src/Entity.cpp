@@ -360,9 +360,6 @@ bool Entity::takeHit(Hazard &h) {
 	// exit if it was a beacon (to prevent stats.targeted from being set)
 	if (powers->powers[h.power_index].beacon) return false;
 
-	// prepare the combat text
-	CombatText *combat_text = comb;
-
 	if (h.power->type == Power::TYPE_MISSILE && Math::percentChanceF(stats.get(Stats::REFLECT))) {
 		// reflect the missile 180 degrees
 		h.setAngle(h.angle+static_cast<float>(M_PI));
@@ -507,20 +504,22 @@ bool Entity::takeHit(Hazard &h) {
 		dmg = (dmg * Math::randBetweenF(eset->combat.min_miss_damage, eset->combat.max_miss_damage)) / 100;
 	}
 
+	dmg = eset->combat.resourceRound(dmg);
+
 	if (!powers->powers[h.power_index].ignore_zero_damage) {
 		if (dmg == 0) {
-			combat_text->addString(msg->get("miss"), stats.pos, CombatText::MSG_MISS);
+			comb->addString(msg->get("miss"), stats.pos, CombatText::MSG_MISS);
 			return false;
 		}
 		else if(stats.hero)
-			combat_text->addFloat(dmg, stats.pos, CombatText::MSG_TAKEDMG);
+			comb->addFloat(dmg, stats.pos, CombatText::MSG_TAKEDMG);
 		else {
 			if(crit || is_overhit)
-				combat_text->addFloat(dmg, stats.pos, CombatText::MSG_CRIT);
+				comb->addFloat(dmg, stats.pos, CombatText::MSG_CRIT);
 			else if (missed)
-				combat_text->addFloat(dmg, stats.pos, CombatText::MSG_MISS);
+				comb->addFloat(dmg, stats.pos, CombatText::MSG_MISS);
 			else
-				combat_text->addFloat(dmg, stats.pos, CombatText::MSG_GIVEDMG);
+				comb->addFloat(dmg, stats.pos, CombatText::MSG_GIVEDMG);
 		}
 	}
 
@@ -550,7 +549,8 @@ bool Entity::takeHit(Hazard &h) {
 				}
 				else {
 					float steal_amt = (std::min(dmg, prev_hp) * hp_steal) / 100;
-					combat_text->addString(msg->getv("+%s HP", Utils::floatToString(steal_amt, eset->number_format.combat_text).c_str()), h.src_stats->pos, CombatText::MSG_BUFF);
+					steal_amt = eset->combat.resourceRound(steal_amt);
+					comb->addString(msg->getv("+%s HP", Utils::floatToString(steal_amt, eset->number_format.combat_text).c_str()), h.src_stats->pos, CombatText::MSG_BUFF);
 					h.src_stats->hp = std::min(h.src_stats->hp + steal_amt, h.src_stats->get(Stats::HP_MAX));
 				}
 			}
@@ -561,7 +561,8 @@ bool Entity::takeHit(Hazard &h) {
 				}
 				else {
 					float steal_amt = (std::min(dmg, prev_hp) * mp_steal) / 100;
-					combat_text->addString(msg->getv("+%s MP", Utils::floatToString(steal_amt, eset->number_format.combat_text).c_str()), h.src_stats->pos, CombatText::MSG_BUFF);
+					steal_amt = eset->combat.resourceRound(steal_amt);
+					comb->addString(msg->getv("+%s MP", Utils::floatToString(steal_amt, eset->number_format.combat_text).c_str()), h.src_stats->pos, CombatText::MSG_BUFF);
 					h.src_stats->mp = std::min(h.src_stats->mp + steal_amt, h.src_stats->get(Stats::MP_MAX));
 				}
 			}
@@ -574,6 +575,7 @@ bool Entity::takeHit(Hazard &h) {
 			}
 			else {
 				float dmg_return = (dmg * stats.get(Stats::RETURN_DAMAGE)) / 100.f;
+				dmg_return = eset->combat.resourceRound(dmg_return);
 
 				// swap the source type when dealing return damage
 				int return_source_type = Power::SOURCE_TYPE_NEUTRAL;

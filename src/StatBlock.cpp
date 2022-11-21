@@ -1003,11 +1003,14 @@ void StatBlock::logic() {
 
 	// apply bleed
 	if (effects.damage > 0 && hp > 0) {
-		takeDamage(effects.damage, !StatBlock::TAKE_DMG_CRIT, effects.getDamageSourceType(Effect::DAMAGE));
-		comb->addFloat(effects.damage, pos, CombatText::MSG_TAKEDMG);
+		float damage = effects.damage;
+		damage = eset->combat.resourceRound(damage);
+		takeDamage(damage, !StatBlock::TAKE_DMG_CRIT, effects.getDamageSourceType(Effect::DAMAGE));
+		comb->addFloat(damage, pos, CombatText::MSG_TAKEDMG);
 	}
 	if (effects.damage_percent > 0 && hp > 0) {
 		float damage = (get(Stats::HP_MAX) * effects.damage_percent) / 100;
+		damage = eset->combat.resourceRound(damage);
 		takeDamage(damage, !StatBlock::TAKE_DMG_CRIT, effects.getDamageSourceType(Effect::DAMAGE_PERCENT));
 		comb->addFloat(damage, pos, CombatText::MSG_TAKEDMG);
 	}
@@ -1027,23 +1030,29 @@ void StatBlock::logic() {
 
 	// apply healing over time
 	if (effects.hpot > 0) {
-		comb->addString(msg->getv("+%s HP", Utils::floatToString(effects.hpot, eset->number_format.combat_text).c_str()), pos, CombatText::MSG_BUFF);
-		hp += effects.hpot;
+		float hpot = effects.hpot;
+		hpot = eset->combat.resourceRound(hpot);
+		comb->addString(msg->getv("+%s HP", Utils::floatToString(hpot, eset->number_format.combat_text).c_str()), pos, CombatText::MSG_BUFF);
+		hp += hpot;
 		if (hp > get(Stats::HP_MAX)) hp = get(Stats::HP_MAX);
 	}
 	if (effects.hpot_percent > 0) {
 		float hpot = (get(Stats::HP_MAX) * effects.hpot_percent) / 100;
+		hpot = eset->combat.resourceRound(hpot);
 		comb->addString(msg->getv("+%s HP", Utils::floatToString(hpot, eset->number_format.combat_text).c_str()), pos, CombatText::MSG_BUFF);
 		hp += hpot;
 		if (hp > get(Stats::HP_MAX)) hp = get(Stats::HP_MAX);
 	}
 	if (effects.mpot > 0) {
-		comb->addString(msg->getv("+%s MP", Utils::floatToString(effects.mpot, eset->number_format.combat_text).c_str()), pos, CombatText::MSG_BUFF);
-		mp += effects.mpot;
+		float mpot = effects.mpot;
+		mpot = eset->combat.resourceRound(mpot);
+		comb->addString(msg->getv("+%s MP", Utils::floatToString(mpot, eset->number_format.combat_text).c_str()), pos, CombatText::MSG_BUFF);
+		mp += mpot;
 		if (mp > get(Stats::MP_MAX)) mp = get(Stats::MP_MAX);
 	}
 	if (effects.mpot_percent > 0) {
 		float mpot = (get(Stats::MP_MAX) * effects.mpot_percent) / 100;
+		mpot = eset->combat.resourceRound(mpot);
 		comb->addString(msg->getv("+%s MP", Utils::floatToString(mpot, eset->number_format.combat_text).c_str()), pos, CombatText::MSG_BUFF);
 		mp += mpot;
 		if (mp > get(Stats::MP_MAX)) mp = get(Stats::MP_MAX);

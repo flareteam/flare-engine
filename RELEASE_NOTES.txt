@@ -26,6 +26,7 @@ Engine features:
   * As such, the 'hp_percent' and 'mp_percent' stat bonuses are considered deprecated.
 * Players are directed to the Mods configuration menu via a dialog box when no core mod is enabled. (kr4ft3r)
   * Core mods are now labeled as such in their tooltips on the Mods configuration menu.
+* Added 'resource_round_method' property to engine/combat.txt.
 
 Engine fixes:
 
