@@ -139,7 +139,7 @@ int FogOfWar::load() {
 		}
 		else {
 			for (unsigned short i=0; i<bits_per_tile; i++) {
-				TILE_HIDDEN |= static_cast<unsigned short>(1<<i);
+				TILE_HIDDEN = static_cast<unsigned short>(TILE_HIDDEN | static_cast<unsigned short>(1<<i));
 			}
 		}
 

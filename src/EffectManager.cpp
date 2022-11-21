@@ -437,7 +437,7 @@ void EffectManager::addEffect(StatBlock* stats, EffectDef &effect, EffectParams 
 		return;
 
 	bool insert_effect = false;
-	size_t insert_pos;
+	size_t insert_pos = 0;
 	int stacks_applied = 0;
 	int trigger = params.power_id > 0 ? powers->powers[params.power_id].passive_trigger : -1;
 	size_t passive_id = (params.power_id > 0 && powers->powers[params.power_id].passive) ? params.power_id : 0;
@@ -619,7 +619,7 @@ float EffectManager::damageShields(float dmg) {
 		if (effect_list[i].magnitude_max > 0 && effect_list[i].type == Effect::SHIELD) {
 			effect_list[i].magnitude -= over_dmg;
 			if (effect_list[i].magnitude < 0) {
-				over_dmg = abs(effect_list[i].magnitude);
+				over_dmg = fabsf(effect_list[i].magnitude);
 				effect_list[i].magnitude = 0;
 			}
 			else {
