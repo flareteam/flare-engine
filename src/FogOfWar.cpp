@@ -318,12 +318,11 @@ void FogOfWar::loadDefTile(FileParser &infile) {
 		std::string bit;
 		int tile_bits = 0;
 
-		unsigned long comma;
 		unsigned long prev_comma = 0;
 
 		std::map<std::string, int>::iterator it;
 		while (prev_comma < val.length()) {
-			comma = val.find(",", prev_comma+1);
+			unsigned long comma = val.find(",", prev_comma+1);
 			if(prev_comma == 0)
 				bit = val.substr(0, comma-prev_comma);
 			else
