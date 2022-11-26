@@ -66,7 +66,10 @@ private:
 	std::string statTooltip(int stat);
 	std::string damageTooltip(size_t dmg_type);
 	std::string resistTooltip(size_t resist_type);
+	std::string resourceStatTooltip(size_t resource_index, size_t stat_index);
 	bool checkSkillPoints();
+	void parseShowStat(FileParser &infile);
+
 	int skill_points;
 	std::vector<bool> primary_up;
 

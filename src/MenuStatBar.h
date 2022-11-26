@@ -54,12 +54,14 @@ private:
 	MenuStatBarValue stat_max;
 	Rect bar_pos;
 	LabelInfo text_pos;
+	bool enabled;
 	bool orientation;
 	bool custom_text_pos;
 	std::string custom_string;
 	std::string bar_gfx;
 	std::string bar_gfx_background;
 	short type;
+	size_t resource_stat_index;
 	Timer timeout;
 	Point bar_fill_offset;
 	Point bar_fill_size;
@@ -69,10 +71,11 @@ public:
 	enum {
 		TYPE_HP = 0,
 		TYPE_MP = 1,
-		TYPE_XP = 2
+		TYPE_XP = 2,
+		TYPE_RESOURCE_STAT = 3
 	};
 
-	explicit MenuStatBar(short _type);
+	explicit MenuStatBar(short _type, size_t _resource_stat_index);
 	~MenuStatBar();
 	void loadGraphics();
 	void update();

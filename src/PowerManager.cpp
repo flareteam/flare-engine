@@ -76,6 +76,7 @@ Power::Power()
 	, no_actionbar(false)
 	, requires_mp(0)
 	, requires_hp(0)
+	, requires_resource_stat(eset->resource_stats.list.size(), 0)
 	, sacrifice(false)
 	, requires_los(false)
 	, requires_los_default(true)
@@ -84,7 +85,11 @@ Power::Power()
 	, requires_targeting(false)
 	, requires_spawns(0)
 	, cooldown(0)
-	, requires_max_hpmp()
+	, requires_hp_state()
+	, requires_mp_state()
+	, requires_resource_stat_state(eset->resource_stats.list.size())
+	, requires_hpmp_state_mode(RESOURCESTATE_ANY)
+	, requires_resource_stat_state_mode(RESOURCESTATE_ALL)
 	, animation_name("")
 	, sfx_index(-1)
 	, sfx_hit(0)
@@ -124,6 +129,7 @@ Power::Power()
 	, mod_damage_value_max(0)
 	, hp_steal(0)
 	, mp_steal(0)
+	, resource_steal(eset->resource_stats.list.size(), 0)
 	, missile_angle(0)
 	, angle_variance(0)
 	, speed_variance(0)
@@ -383,11 +389,29 @@ void PowerManager::loadPowers() {
 			}
 		}
 		else if (infile.key == "requires_mp")
-			// @ATTR power.requires_mp|float|Restrict power usage to a specified MP level.
+			// @ATTR power.requires_mp|float|Require an amount of MP to use the power. The amount will be consumed on usage.
 			powers[input_id].requires_mp = Parse::toFloat(infile.val);
 		else if (infile.key == "requires_hp")
-			// @ATTR power.requires_hp|float|Restrict power usage to a specified HP level.
+			// @ATTR power.requires_hp|float|Require an amount of HP to use the power. The amount will be consumed on usage.
 			powers[input_id].requires_hp = Parse::toFloat(infile.val);
+		else if (infile.key == "requires_resource_stat") {
+			// @ATTR power.requires_resource_stat|repeatable(predefined_string, float) : Resource stat ID, Required amount|Requires an amount of a given resource to use the power. The amount will be consumed on usage.
+			std::string stat_id = Parse::popFirstString(infile.val);
+			float stat_val = Parse::popFirstFloat(infile.val);
+
+			bool found_stat_id = false;
+			for (size_t i = 0; i < powers[input_id].requires_resource_stat.size(); ++i) {
+				if (stat_id == eset->resource_stats.list[i].ids[EngineSettings::ResourceStats::STAT_BASE]) {
+					powers[input_id].requires_resource_stat[i] = stat_val;
+					found_stat_id = true;
+					break;
+				}
+			}
+
+			if (!found_stat_id) {
+				infile.error("PowerManager: '%s' is not a valid resource stat.", stat_id.c_str());
+			}
+		}
 		else if (infile.key == "sacrifice")
 			// @ATTR power.sacrifice|bool|If the power has requires_hp, allow it to kill the caster.
 			powers[input_id].sacrifice = Parse::toBool(infile.val);
@@ -440,64 +464,104 @@ void PowerManager::loadPowers() {
 			std::string state_mp = Parse::popFirstString(infile.val);
 			std::string state_mp_val = Parse::popFirstString(infile.val);
 
-			powers[input_id].requires_max_hpmp.hp = state_hp_val.empty() ? -1 : Parse::toFloat(state_hp_val);
-			powers[input_id].requires_max_hpmp.mp = state_mp_val.empty() ? -1 : Parse::toFloat(state_mp_val);
+			powers[input_id].requires_hp_state.value = Parse::toFloat(state_hp_val);
+			powers[input_id].requires_mp_state.value = Parse::toFloat(state_mp_val);
 
 			if (state_hp == "percent") {
-				powers[input_id].requires_max_hpmp.hp_state = Power::HPMPSTATE_PERCENT;
+				powers[input_id].requires_hp_state.state = Power::RESOURCESTATE_PERCENT;
 			}
 			else if (state_hp == "not_percent") {
-				powers[input_id].requires_max_hpmp.hp_state = Power::HPMPSTATE_NOT_PERCENT;
+				powers[input_id].requires_hp_state.state = Power::RESOURCESTATE_NOT_PERCENT;
 			}
 			else if (state_hp == "ignore" || state_hp.empty()) {
-				powers[input_id].requires_max_hpmp.hp_state = Power::HPMPSTATE_IGNORE;
-				powers[input_id].requires_max_hpmp.hp = -1;
+				powers[input_id].requires_hp_state.state = Power::RESOURCESTATE_IGNORE;
 			}
 			else {
 				infile.error("PowerManager: '%s' is not a valid hp/mp state. Use 'percent', 'not_percent', or 'ignore'.", state_hp.c_str());
 			}
 
 			if (state_mp == "percent") {
-				powers[input_id].requires_max_hpmp.mp_state = Power::HPMPSTATE_PERCENT;
+				powers[input_id].requires_mp_state.state = Power::RESOURCESTATE_PERCENT;
 			}
 			else if (state_mp == "not_percent") {
-				powers[input_id].requires_max_hpmp.mp_state = Power::HPMPSTATE_NOT_PERCENT;
+				powers[input_id].requires_mp_state.state = Power::RESOURCESTATE_NOT_PERCENT;
 			}
 			else if (state_mp == "ignore" || state_mp.empty()) {
-				powers[input_id].requires_max_hpmp.mp_state = Power::HPMPSTATE_IGNORE;
-				powers[input_id].requires_max_hpmp.mp = -1;
+				powers[input_id].requires_mp_state.state = Power::RESOURCESTATE_IGNORE;
 			}
 			else {
 				infile.error("PowerManager: '%s' is not a valid hp/mp state. Use 'percent', 'not_percent', or 'ignore'.", state_mp.c_str());
 			}
 
 			if (mode == "any") {
-				powers[input_id].requires_max_hpmp.mode = Power::HPMPSTATE_ANY;
+				powers[input_id].requires_hpmp_state_mode = Power::RESOURCESTATE_ANY;
 			}
 			else if (mode == "all") {
-				powers[input_id].requires_max_hpmp.mode = Power::HPMPSTATE_ALL;
+				powers[input_id].requires_hpmp_state_mode = Power::RESOURCESTATE_ALL;
 			}
 			else if (mode == "hp") {
 				// TODO deprecated
 				infile.error("PowerManager: 'hp' has been deprecated. Use 'all' or 'any'.");
 
-				powers[input_id].requires_max_hpmp.mode = Power::HPMPSTATE_ALL;
-				powers[input_id].requires_max_hpmp.mp_state = Power::HPMPSTATE_IGNORE;
-				powers[input_id].requires_max_hpmp.mp = -1;
+				powers[input_id].requires_hpmp_state_mode = Power::RESOURCESTATE_ALL;
+				powers[input_id].requires_mp_state.state = Power::RESOURCESTATE_IGNORE;
 			}
 			else if (mode == "mp") {
 				// TODO deprecated
 				infile.error("PowerManager: 'mp' has been deprecated. Use 'any' or 'all'.");
 
 				// use the HP values for MP, then ignore the HP stat
-				powers[input_id].requires_max_hpmp.mode = Power::HPMPSTATE_ALL;
-				powers[input_id].requires_max_hpmp.mp_state = powers[input_id].requires_max_hpmp.hp_state;
-				powers[input_id].requires_max_hpmp.mp = powers[input_id].requires_max_hpmp.hp;
-				powers[input_id].requires_max_hpmp.hp_state = Power::HPMPSTATE_IGNORE;
-				powers[input_id].requires_max_hpmp.hp = -1;
+				powers[input_id].requires_hpmp_state_mode = Power::RESOURCESTATE_ALL;
+				powers[input_id].requires_mp_state.state = powers[input_id].requires_hp_state.state;
+				powers[input_id].requires_mp_state.value = powers[input_id].requires_hp_state.value;
+				powers[input_id].requires_hp_state.state = Power::RESOURCESTATE_IGNORE;
 			}
 			else {
 				infile.error("PowerManager: Please specify 'any' or 'all'.");
+			}
+		}
+		else if (infile.key == "requires_resource_stat_state") {
+			// @ATTR power.requires_resource_stat_state|predefined_string, ["percent", "not_percent", "ignore"], float : Resource stat ID, State, Percentage value|Power can only be used when the resource stat matches the specified state. See 'requires_resource_stat_state_mode' for combining multiple resource states and, optionally, HP/MP state.
+			std::string stat_id = Parse::popFirstString(infile.val);
+			std::string state = Parse::popFirstString(infile.val);
+			float value = Parse::popFirstFloat(infile.val);
+
+			for (size_t i = 0; i < powers[input_id].requires_resource_stat_state.size(); ++i) {
+				if (stat_id == eset->resource_stats.list[i].ids[EngineSettings::ResourceStats::STAT_BASE]) {
+					powers[input_id].requires_resource_stat_state[i].value = value;
+
+					if (state == "percent") {
+						powers[input_id].requires_resource_stat_state[i].state = Power::RESOURCESTATE_PERCENT;
+					}
+					else if (state == "not_percent") {
+						powers[input_id].requires_resource_stat_state[i].state = Power::RESOURCESTATE_NOT_PERCENT;
+					}
+					else if (state.empty() || state == "ignore") {
+						powers[input_id].requires_resource_stat_state[i].state = Power::RESOURCESTATE_IGNORE;
+					}
+					else {
+						infile.error("PowerManager: '%s' is not a valid resource stat state. Use 'percent', 'not_percent', or 'ignore'.", state.c_str());
+					}
+
+					break;
+				}
+			}
+		}
+		else if (infile.key == "requires_resource_stat_state_mode") {
+			// @ATTR|power.requires_resource_stat_state_mode|["all", "any", "any_hpmp"]|Determines how required resource state is handled for multiple resources. "all" means that HP/MP state AND all resource stat states must pass. "any" means that HP/MP state must pass AND at least one resource stat state must pass. "any_hpmp" means that HP/MP state OR at least one resource stat state is required to pass.
+			std::string mode = Parse::popFirstString(infile.val);
+
+			if (mode == "all") {
+				powers[input_id].requires_resource_stat_state_mode = Power::RESOURCESTATE_ALL;
+			}
+			else if (mode == "any") {
+				powers[input_id].requires_resource_stat_state_mode = Power::RESOURCESTATE_ANY;
+			}
+			else if (mode == "any_hpmp") {
+				powers[input_id].requires_resource_stat_state_mode = Power::RESOURCESTATE_ANY_HPMP;
+			}
+			else {
+				infile.error("PowerManager: '%s' is not a valid mode. Possible modes include: 'all', 'any', or 'any_hpmp'.", mode.c_str());
 			}
 		}
 		// animation info
@@ -643,6 +707,18 @@ void PowerManager::loadPowers() {
 		else if (infile.key == "mp_steal")
 			// @ATTR power.mp_steal|float|Percentage of damage to steal into MP
 			powers[input_id].mp_steal = Parse::toFloat(infile.val);
+		else if (infile.key == "resource_steal") {
+			// @ATTR power.resource_steal|repeatable(predefined_string, float) : Resource stat ID, Steal amount|Percentage of damage to steal into the specified resource
+			std::string stat_id = Parse::popFirstString(infile.val);
+			float stat_value = Parse::popFirstFloat(infile.val);
+
+			for (size_t i = 0; i < powers[input_id].resource_steal.size(); ++i) {
+				if (stat_id == eset->resource_stats.list[i].ids[EngineSettings::ResourceStats::STAT_BASE]) {
+					powers[input_id].resource_steal[i] = stat_value;
+					break;
+				}
+			}
+		}
 		//missile modifiers
 		else if (infile.key == "missile_angle")
 			// @ATTR power.missile_angle|float|Angle of missile
@@ -1611,6 +1687,11 @@ bool PowerManager::activate(PowerID power_index, StatBlock *src_stats, const FPo
 		if (powers[power_index].requires_mp > src_stats->mp)
 			return false;
 
+		for (size_t i = 0; i < powers[power_index].requires_resource_stat.size(); ++i) {
+			if (powers[power_index].requires_resource_stat[i] > src_stats->resource_stats[i])
+				return false;
+		}
+
 		if (!src_stats->target_corpse && src_stats->target_nearest_corpse && checkNearestTargeting(powers[power_index], src_stats, true))
 			src_stats->target_corpse = src_stats->target_nearest_corpse;
 
@@ -1661,6 +1742,10 @@ void PowerManager::payPowerCost(PowerID power_index, StatBlock *src_stats) {
 	if (src_stats) {
 		if (src_stats->hero) {
 			src_stats->mp -= powers[power_index].requires_mp;
+
+			for (size_t i = 0; i < powers[power_index].requires_resource_stat.size(); ++i) {
+				src_stats->resource_stats[i] -= powers[power_index].requires_resource_stat[i];
+			}
 
 			for (size_t i = 0; i < powers[power_index].required_items.size(); ++i) {
 				const PowerRequiredItem pri = powers[power_index].required_items[i];
@@ -1877,26 +1962,56 @@ bool PowerManager::checkRequiredItems(const Power &pow, const StatBlock *src_sta
 	return true;
 }
 
-bool PowerManager::checkRequiredMaxHPMP(const Power &pow, const StatBlock *src_stats) {
+bool PowerManager::checkRequiredResourceState(const Power &pow, const StatBlock *src_stats) {
 	bool hp_ok = true;
 	bool mp_ok = true;
 
-	if (pow.requires_max_hpmp.hp_state == Power::HPMPSTATE_PERCENT && src_stats->hp * 100 < (src_stats->get(Stats::HP_MAX) * pow.requires_max_hpmp.hp))
+	if (pow.requires_hp_state.state == Power::RESOURCESTATE_PERCENT && src_stats->hp * 100 < (src_stats->get(Stats::HP_MAX) * pow.requires_hp_state.value))
 		hp_ok = false;
-	else if (pow.requires_max_hpmp.hp_state == Power::HPMPSTATE_NOT_PERCENT && src_stats->hp * 100 >= (src_stats->get(Stats::HP_MAX) * pow.requires_max_hpmp.hp))
+	else if (pow.requires_hp_state.state == Power::RESOURCESTATE_NOT_PERCENT && src_stats->hp * 100 >= (src_stats->get(Stats::HP_MAX) * pow.requires_hp_state.value))
 		hp_ok = false;
 
-	if (pow.requires_max_hpmp.mp_state == Power::HPMPSTATE_PERCENT && src_stats->mp * 100 < (src_stats->get(Stats::MP_MAX) * pow.requires_max_hpmp.mp))
+	if (pow.requires_mp_state.state == Power::RESOURCESTATE_PERCENT && src_stats->mp * 100 < (src_stats->get(Stats::MP_MAX) * pow.requires_mp_state.value))
 		mp_ok = false;
-	else if (pow.requires_max_hpmp.mp_state == Power::HPMPSTATE_NOT_PERCENT && src_stats->mp * 100 >= (src_stats->get(Stats::MP_MAX) * pow.requires_max_hpmp.mp))
+	else if (pow.requires_mp_state.state == Power::RESOURCESTATE_NOT_PERCENT && src_stats->mp * 100 >= (src_stats->get(Stats::MP_MAX) * pow.requires_mp_state.value))
 		mp_ok = false;
 
-	if (pow.requires_max_hpmp.mode == Power::HPMPSTATE_ALL)
-		return hp_ok && mp_ok;
-	else if (pow.requires_max_hpmp.mode == Power::HPMPSTATE_ANY)
-		return hp_ok || mp_ok;
+	bool hpmp_ok = true;
+	if (pow.requires_hpmp_state_mode == Power::RESOURCESTATE_ALL)
+		hpmp_ok = hp_ok && mp_ok;
+	else if (pow.requires_hpmp_state_mode == Power::RESOURCESTATE_ANY)
+		hpmp_ok = hp_ok || mp_ok;
+
+	bool resource_stat_ok = true;
+	size_t resource_stat_enabled_count = 0;
+	size_t resource_stat_fail_count = 0;
+
+	for (size_t i = 0; i < pow.requires_resource_stat_state.size(); ++i) {
+		if (pow.requires_resource_stat_state[i].state != Power::RESOURCESTATE_IGNORE)
+			resource_stat_enabled_count++;
+		else
+			continue;
+
+		float resource_max = src_stats->getResourceStat(i, EngineSettings::ResourceStats::STAT_BASE);
+		if (pow.requires_resource_stat_state[i].state == Power::RESOURCESTATE_PERCENT && src_stats->resource_stats[i] * 100 < resource_max * pow.requires_resource_stat_state[i].value)
+			resource_stat_fail_count++;
+		else if (pow.requires_resource_stat_state[i].state == Power::RESOURCESTATE_NOT_PERCENT && src_stats->resource_stats[i] * 100 >= resource_max * pow.requires_resource_stat_state[i].value)
+			resource_stat_fail_count++;
+	}
+
+	if (resource_stat_enabled_count > 0) {
+		if (pow.requires_resource_stat_state_mode == Power::RESOURCESTATE_ANY_HPMP && !hpmp_ok && resource_stat_fail_count == resource_stat_enabled_count)
+			resource_stat_ok = false;
+		else if (pow.requires_resource_stat_state_mode == Power::RESOURCESTATE_ANY && resource_stat_fail_count == resource_stat_enabled_count)
+			resource_stat_ok = false;
+		else if (pow.requires_resource_stat_state_mode == Power::RESOURCESTATE_ALL && resource_stat_fail_count > 0)
+			resource_stat_ok = false;
+	}
+
+	if (pow.requires_resource_stat_state_mode == Power::RESOURCESTATE_ANY_HPMP)
+		return hpmp_ok || resource_stat_ok;
 	else
-		return true;
+		return hpmp_ok && resource_stat_ok;
 }
 
 bool PowerManager::checkCombatRange(PowerID power_index, StatBlock* src_stats, FPoint target) {
@@ -1917,6 +2032,21 @@ bool PowerManager::checkCombatRange(PowerID power_index, StatBlock* src_stats, F
 	}
 
 	return Utils::calcDist(src_stats->pos, target) <= combat_range;
+}
+
+bool PowerManager::checkPowerCost(const Power& pow, const StatBlock *src_stats) {
+	if (src_stats->mp < pow.requires_mp)
+		return false;
+
+	if (!pow.sacrifice && src_stats->hp < pow.requires_hp)
+		return false;
+
+	for (size_t i = 0; i < pow.requires_resource_stat.size(); ++i) {
+		if (src_stats->resource_stats[i] < pow.requires_resource_stat[i])
+			return false;
+	}
+
+	return true;
 }
 
 PowerManager::~PowerManager() {

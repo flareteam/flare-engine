@@ -1,0 +1,37 @@
+### Below is an example of defining an arbitrary "MP-like" resource
+#[resource_stat]
+## engine keys
+## - base
+#stat_base=stamina
+#stat_regen=stamina_regen
+#
+## - steal/leech
+#stat_steal=stamina_steal
+#stat_resist_steal=resist_stamina_steal
+#
+## - effect heal-over-time
+#stat_heal=stamina_heal
+#stat_heal_percent=stamina_heal_percent
+#
+## menu
+#menu_filename=menus/resource_stamina.txt
+#
+## text that can be translated
+#text_base=Max Stamina
+#text_base_desc=Total amount of Stamina.
+#
+#text_regen=Stamina Regen
+#text_regen_desc=Ticks of Stamina regen per minute.
+#
+#text_steal=Stamina Steal
+#text_steal_desc=Percentage of Stamina stolen per hit.
+#
+#text_resist_steal=Resistance to Stamina steal
+#text_resist_steal_desc=Percentage chance that Stamina steal will be negated.
+#
+#text_combat_heal=ST
+#text_log_restore=Stamina restored.
+#text_log_low=Not enough Stamina.
+#text_tooltip_heal=Stamina per second
+#text_tooltip_cost=Stamina cost
+#

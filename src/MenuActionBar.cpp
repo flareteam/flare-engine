@@ -633,13 +633,25 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 		if (action.power > 0) {
 			const Power& power = powers->powers[action.power];
 
+			bool not_enough_resources = false;
 			if (pc->stats.mp < power.requires_mp && slot_fail_cooldown[i] == 0) {
-				slot_fail_cooldown[i] = settings->max_frames_per_sec;
 				pc->logMsg(msg->get("Not enough MP."), Avatar::MSG_NORMAL);
+				not_enough_resources = true;
+			}
+			for (size_t j = 0; j < eset->resource_stats.list.size(); ++j) {
+				if (pc->stats.resource_stats[j] < power.requires_resource_stat[j] && slot_fail_cooldown[i] == 0) {
+					pc->logMsg(eset->resource_stats.list[j].text_log_low, Avatar::MSG_NORMAL);
+					not_enough_resources = true;
+				}
+			}
+
+			if (not_enough_resources) {
+				slot_fail_cooldown[i] = settings->max_frames_per_sec;
 				snd->play(sfx_unable_to_cast, "ACT_NO_MP", snd->NO_POS, !snd->LOOP);
 				continue;
 			}
-			else if (!slot_enabled[i]) {
+
+			if (!slot_enabled[i]) {
 				continue;
 			}
 

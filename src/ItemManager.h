@@ -47,27 +47,34 @@ public:
 
 class BonusData {
 public:
-	bool is_speed;
-	bool is_attack_speed;
-	bool is_multiplier;
-	int stat_index; // Stats.h
-	int damage_index_min; // engine/damage_types.txt
-	int damage_index_max; // engine/damage_types.txt
-	int resist_index; // engine/elements.txt
-	int base_index;
+	enum {
+		UNKNOWN = 0,
+		SPEED,
+		ATTACK_SPEED,
+		STAT,
+		DAMAGE_MIN,
+		DAMAGE_MAX,
+		RESIST_ELEMENT,
+		PRIMARY_STAT,
+		RESOURCE_STAT,
+		POWER_LEVEL,
+	};
+
+	unsigned type;
+	size_t index;
+	size_t sub_index; // used for resource stats
 	float value;
 	PowerID power_id; // for bonus_power_level
+	bool is_multiplier;
+
 	BonusData()
-		: is_speed(false)
-		, is_attack_speed(false)
-		, is_multiplier(false)
-		, stat_index(-1)
-		, damage_index_min(-1)
-		, damage_index_max(-1)
-		, resist_index(-1)
-		, base_index(-1)
+		: type(UNKNOWN)
+		, index(0)
+		, sub_index(0)
 		, value(0)
-		, power_id(0) {
+		, power_id(0)
+		, is_multiplier(false)
+	{
 	}
 };
 

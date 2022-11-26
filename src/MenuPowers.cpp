@@ -914,6 +914,12 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 	if (pwr.requires_hp > 0) {
 		tip_data->addText(msg->getv("Costs %s HP", Utils::floatToString(pwr.requires_hp, eset->number_format.power_tooltips).c_str()));
 	}
+	// add resource stat cost
+	for (size_t i = 0; i < pwr.requires_resource_stat.size(); ++i) {
+		if (pwr.requires_resource_stat[i] > 0) {
+			tip_data->addText(eset->resource_stats.list[i].text_tooltip_cost + ": " + Utils::floatToString(pwr.requires_resource_stat[i], eset->number_format.power_tooltips));
+		}
+	}
 	// add cooldown time
 	if (pwr.cooldown > 0) {
 		tip_data->addText(msg->get("Cooldown:") + " " + Utils::getDurationString(pwr.cooldown, eset->number_format.durations));
@@ -935,7 +941,8 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 		    Effect::typeIsDmgMin(effect_type) ||
 		    Effect::typeIsDmgMax(effect_type) ||
 		    Effect::typeIsResist(effect_type) ||
-		    Effect::typeIsPrimary(effect_type))
+		    Effect::typeIsPrimary(effect_type) ||
+		    Effect::typeIsResourceStat(effect_type))
 		{
 			if (pwr.post_effects[i].is_multiplier)
 				ss << Utils::floatToString(pwr.post_effects[i].magnitude, eset->number_format.power_tooltips + 2) << "×";
@@ -970,6 +977,26 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 		else if (Effect::typeIsPrimary(effect_type)) {
 			size_t index = Effect::getPrimaryFromType(effect_type);
 			ss << " " << eset->primary_stats.list[index].name;
+		}
+		else if (Effect::typeIsResourceStat(effect_type)) {
+			size_t index = Effect::getResourceStatFromType(effect_type);
+			size_t sub_index = Effect::getResourceStatSubIndexFromType(effect_type);
+
+			if (!pwr.post_effects[i].is_multiplier && (sub_index == EngineSettings::ResourceStats::STAT_STEAL || sub_index == EngineSettings::ResourceStats::STAT_RESIST_STEAL)) {
+				ss << "%";
+			}
+			ss << " " << eset->resource_stats.list[index].text[sub_index];
+		}
+		else if (Effect::typeIsResourceEffect(effect_type)) {
+			size_t index = Effect::getResourceStatFromType(effect_type);
+			size_t sub_index = Effect::getResourceStatSubIndexFromType(effect_type);
+
+			if (sub_index == EngineSettings::ResourceStats::STAT_HEAL) {
+				ss << Utils::floatToString(pwr.post_effects[i].magnitude, eset->number_format.power_tooltips) << " " << eset->resource_stats.list[index].text_tooltip_heal;
+			}
+			else if (sub_index == EngineSettings::ResourceStats::STAT_HEAL_PERCENT) {
+				ss << Utils::floatToString(pwr.post_effects[i].magnitude, eset->number_format.power_tooltips) << "% " << eset->resource_stats.list[index].text_tooltip_heal;
+			}
 		}
 		else if (effect_type == Effect::DAMAGE) {
 			ss << Utils::floatToString(pwr.post_effects[i].magnitude, eset->number_format.power_tooltips) << " " << msg->get("Damage per second");

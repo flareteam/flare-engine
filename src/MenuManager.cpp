@@ -90,6 +90,7 @@ MenuManager::MenuManager()
 	, hp(NULL)
 	, mp(NULL)
 	, xp(NULL)
+	, resource_statbars()
 	, mini(NULL)
 	, num_picker(NULL)
 	, enemy(NULL)
@@ -106,9 +107,9 @@ MenuManager::MenuManager()
 	, pause(false)
 	, menus_open(false) {
 
-	hp = new MenuStatBar(MenuStatBar::TYPE_HP);
-	mp = new MenuStatBar(MenuStatBar::TYPE_MP);
-	xp = new MenuStatBar(MenuStatBar::TYPE_XP);
+	hp = new MenuStatBar(MenuStatBar::TYPE_HP, 0);
+	mp = new MenuStatBar(MenuStatBar::TYPE_MP, 0);
+	xp = new MenuStatBar(MenuStatBar::TYPE_XP, 0);
 	effects = new MenuActiveEffects();
 	hudlog = new MenuHUDLog();
 	act = new MenuActionBar();
@@ -127,26 +128,34 @@ MenuManager::MenuManager()
 	game_over = new MenuGameOver();
 	action_picker = new MenuConfirm();
 
-	menus.push_back(hp); // menus[0]
-	menus.push_back(mp); // menus[1]
-	menus.push_back(xp); // menus[2]
-	menus.push_back(effects); // menus[3]
-	menus.push_back(hudlog); // menus[4]
-	menus.push_back(act); // menus[5]
-	menus.push_back(enemy); // menus[6]
-	menus.push_back(vendor); // menus[7]
-	menus.push_back(talker); // menus[8]
-	menus.push_back(exit); // menus[9]
-	menus.push_back(mini); // menus[10]
-	menus.push_back(chr); // menus[11]
-	menus.push_back(inv); // menus[12]
-	menus.push_back(pow); // menus[13]
-	menus.push_back(questlog); // menus[14]
-	menus.push_back(stash); // menus[15]
-	menus.push_back(book); // menus[16]
-	menus.push_back(num_picker); // menus[17]
-	menus.push_back(game_over); // menus[18]
-	menus.push_back(action_picker); // menus[19]
+	resource_statbars.resize(eset->resource_stats.list.size());
+	for (size_t i = 0; i < resource_statbars.size(); ++i) {
+		resource_statbars[i] = new MenuStatBar(MenuStatBar::TYPE_RESOURCE_STAT, i);
+	}
+
+	menus.push_back(hp);
+	menus.push_back(mp);
+	menus.push_back(xp);
+	for (size_t i = 0; i < resource_statbars.size(); ++i) {
+		menus.push_back(resource_statbars[i]);
+	}
+	menus.push_back(effects);
+	menus.push_back(hudlog);
+	menus.push_back(act);
+	menus.push_back(enemy);
+	menus.push_back(vendor);
+	menus.push_back(talker);
+	menus.push_back(exit);
+	menus.push_back(mini);
+	menus.push_back(chr);
+	menus.push_back(inv);
+	menus.push_back(pow);
+	menus.push_back(questlog);
+	menus.push_back(stash);
+	menus.push_back(book);
+	menus.push_back(num_picker);
+	menus.push_back(game_over);
+	menus.push_back(action_picker);
 
 	if (settings->dev_mode) {
 		devconsole = new MenuDevConsole();
@@ -303,6 +312,9 @@ void MenuManager::logic() {
 	hp->update();
 	mp->update();
 	xp->update();
+	for (size_t i = 0; i < resource_statbars.size(); ++i) {
+		resource_statbars[i]->update();
+	}
 
 	// close talker/vendor menu if player is attacked
 	if (pc->stats.abort_npc_interact && eset->misc.combat_aborts_npc_interact) {
@@ -1429,7 +1441,7 @@ void MenuManager::render() {
 		// if the hud is disabled, only show a few necessary menus
 
 		// exit menu
-		menus[9]->render();
+		exit->render();
 
 		// dev console
 		if (settings->dev_mode)
@@ -1887,6 +1899,9 @@ void MenuManager::actionPickerStartDrag() {
 }
 
 MenuManager::~MenuManager() {
+	for (size_t i = 0; i < resource_statbars.size(); ++i) {
+		delete resource_statbars[i];
+	}
 
 	delete hp;
 	delete mp;

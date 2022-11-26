@@ -312,6 +312,47 @@ public:
 		int death_penalty;
 	};
 
+	class ResourceStats {
+	public:
+		enum {
+			// statblock & effect
+			STAT_BASE = 0,
+			STAT_REGEN,
+			STAT_STEAL,
+			STAT_RESIST_STEAL,
+
+			// effect only
+			STAT_HEAL,
+			STAT_HEAL_PERCENT,
+
+			STAT_EFFECT_COUNT
+		};
+		static const size_t STAT_COUNT = STAT_HEAL;
+		static const size_t EFFECT_COUNT = STAT_EFFECT_COUNT - STAT_COUNT;
+
+		class ResourceStat {
+		public:
+			std::vector<std::string> ids;
+			std::vector<std::string> text;
+			std::vector<std::string> text_desc;
+
+			std::string menu_filename;
+
+			std::string text_combat_heal;
+			std::string text_log_restore;
+			std::string text_log_low;
+			std::string text_tooltip_heal;
+			std::string text_tooltip_cost;
+		};
+
+		void load();
+
+		std::vector<ResourceStat> list;
+		size_t stat_count;
+		size_t effect_count;
+		size_t stat_effect_count;
+	};
+
 	Misc misc;
 	Resolutions resolutions;
 	Gameplay gameplay;
@@ -328,6 +369,7 @@ public:
 	Widgets widgets;
 	XPTable xp;
 	NumberFormat number_format;
+	ResourceStats resource_stats;
 };
 
 #endif // ENGINESETTINGS_H

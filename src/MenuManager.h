@@ -170,6 +170,7 @@ public:
 	MenuStatBar *hp;
 	MenuStatBar *mp;
 	MenuStatBar *xp;
+	std::vector<MenuStatBar*> resource_statbars;
 	MenuMiniMap *mini;
 	MenuNumPicker *num_picker;
 	MenuEnemy *enemy;

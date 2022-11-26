@@ -60,7 +60,7 @@ const float StatBlock::DIRECTION_DELTA_Y[8] =   { 1,  0, -1, -1, -1,  0,  1,  1}
 const float StatBlock::SPEED_MULTIPLIER[8] = { static_cast<float>(1.0/M_SQRT2), 1.0f, static_cast<float>(1.0/M_SQRT2), 1.0f, static_cast<float>(1.0/M_SQRT2), 1.0f, static_cast<float>(1.0/M_SQRT2), 1.0f};
 
 size_t StatBlock::getFullStatCount() {
-	return Stats::COUNT + eset->damage_types.count + eset->elements.list.size();
+	return Stats::COUNT + eset->damage_types.count + eset->elements.list.size() + eset->resource_stats.stat_count;
 }
 
 StatBlock::StatBlock()
@@ -204,6 +204,10 @@ StatBlock::StatBlock()
 	}
 
 	cooldown.reset(Timer::END);
+
+	resource_stats.resize(eset->resource_stats.list.size());
+	prev_max_resource_stats.resize(eset->resource_stats.list.size());
+	prev_resource_stats.resize(eset->resource_stats.list.size());
 }
 
 StatBlock::~StatBlock() {
@@ -236,6 +240,7 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 		// @ATTR stat|stat_id, float : Stat ID, Value|The starting value for this stat.
 		std::string stat = Parse::popFirstString(infile->val);
 		float value = Parse::popFirstFloat(infile->val);
+		size_t offset_index = 0;
 
 		for (int i=0; i<Stats::COUNT; ++i) {
 			if (Stats::KEY[i] == stat) {
@@ -243,22 +248,34 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 				return true;
 			}
 		}
+		offset_index += Stats::COUNT;
 
 		for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
 			if (eset->damage_types.list[i].min == stat) {
-				starting[Stats::COUNT + (i*2)] = value;
+				starting[offset_index + (i*2)] = value;
 				return true;
 			}
 			else if (eset->damage_types.list[i].max == stat) {
-				starting[Stats::COUNT + (i*2) + 1] = value;
+				starting[offset_index + (i*2) + 1] = value;
 				return true;
 			}
 		}
+		offset_index += eset->damage_types.count;
 
 		for (size_t i = 0; i < eset->elements.list.size(); ++i) {
 			if (eset->elements.list[i].resist_id == stat) {
-				starting[Stats::COUNT + eset->damage_types.count + i] = value;
+				starting[offset_index + i] = value;
 				return true;
+			}
+		}
+		offset_index += eset->elements.list.size();
+
+		for (size_t i = 0; i < eset->resource_stats.list.size(); ++i) {
+			for (size_t j = 0; j < EngineSettings::ResourceStats::STAT_COUNT; ++j) {
+				if (eset->resource_stats.list[i].ids[j] == stat) {
+					starting[offset_index + (i * EngineSettings::ResourceStats::STAT_COUNT) + j] = value;
+					return true;
+				}
 			}
 		}
 	}
@@ -266,6 +283,7 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 		// @ATTR stat_per_level|stat_id, float : Stat ID, Value|The value for this stat added per level.
 		std::string stat = Parse::popFirstString(infile->val);
 		float value = Parse::popFirstFloat(infile->val);
+		size_t offset_index = 0;
 
 		for (int i=0; i<Stats::COUNT; i++) {
 			if (Stats::KEY[i] == stat) {
@@ -273,22 +291,34 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 				return true;
 			}
 		}
+		offset_index += Stats::COUNT;
 
 		for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
 			if (eset->damage_types.list[i].min == stat) {
-				per_level[Stats::COUNT + (i*2)] = value;
+				per_level[offset_index + (i*2)] = value;
 				return true;
 			}
 			else if (eset->damage_types.list[i].max == stat) {
-				per_level[Stats::COUNT + (i*2) + 1] = value;
+				per_level[offset_index + (i*2) + 1] = value;
 				return true;
 			}
 		}
+		offset_index += eset->damage_types.count;
 
 		for (size_t i = 0; i < eset->elements.list.size(); ++i) {
 			if (eset->elements.list[i].resist_id == stat) {
-				per_level[Stats::COUNT + eset->damage_types.count + i] = value;
+				per_level[offset_index + i] = value;
 				return true;
+			}
+		}
+		offset_index += eset->elements.list.size();
+
+		for (size_t i = 0; i < eset->resource_stats.list.size(); ++i) {
+			for (size_t j = 0; j < EngineSettings::ResourceStats::STAT_COUNT; ++j) {
+				if (eset->resource_stats.list[i].ids[j] == stat) {
+					per_level[offset_index + (i * EngineSettings::ResourceStats::STAT_COUNT) + j] = value;
+					return true;
+				}
 			}
 		}
 	}
@@ -303,6 +333,7 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 
 		std::string stat = Parse::popFirstString(infile->val);
 		float value = Parse::popFirstFloat(infile->val);
+		size_t offset_index = 0;
 
 		for (int i=0; i<Stats::COUNT; i++) {
 			if (Stats::KEY[i] == stat) {
@@ -310,22 +341,34 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 				return true;
 			}
 		}
+		offset_index += Stats::COUNT;
 
 		for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
 			if (eset->damage_types.list[i].min == stat) {
-				per_primary[prim_stat_index][Stats::COUNT + (i*2)] = value;
+				per_primary[prim_stat_index][offset_index + (i*2)] = value;
 				return true;
 			}
 			else if (eset->damage_types.list[i].max == stat) {
-				per_primary[prim_stat_index][Stats::COUNT + (i*2) + 1] = value;
+				per_primary[prim_stat_index][offset_index + (i*2) + 1] = value;
 				return true;
 			}
 		}
+		offset_index += eset->damage_types.count;
 
 		for (size_t i = 0; i < eset->elements.list.size(); ++i) {
 			if (eset->elements.list[i].resist_id == stat) {
-				per_primary[prim_stat_index][Stats::COUNT + eset->damage_types.count + i] = value;
+				per_primary[prim_stat_index][offset_index + i] = value;
 				return true;
+			}
+		}
+		offset_index += eset->elements.list.size();
+
+		for (size_t i = 0; i < eset->resource_stats.list.size(); ++i) {
+			for (size_t j = 0; j < EngineSettings::ResourceStats::STAT_COUNT; ++j) {
+				if (eset->resource_stats.list[i].ids[j] == stat) {
+					per_primary[prim_stat_index][offset_index + (i * EngineSettings::ResourceStats::STAT_COUNT) + j] = value;
+					return true;
+				}
 			}
 		}
 	}
@@ -750,6 +793,11 @@ void StatBlock::load(const std::string& filename) {
 	hp = starting[Stats::HP_MAX];
 	mp = starting[Stats::MP_MAX];
 
+	size_t resource_offset_index = Stats::COUNT + eset->damage_types.count + eset->elements.list.size();
+	for (size_t i = 0; i < resource_stats.size(); ++i) {
+		resource_stats[i] = starting[resource_offset_index + (i * EngineSettings::ResourceStats::STAT_COUNT) + EngineSettings::ResourceStats::STAT_BASE];
+	}
+
 	if (!flee_range_defined)
 		flee_range = threat_range / 2;
 
@@ -847,6 +895,11 @@ void StatBlock::recalc() {
 
 	hp = get(Stats::HP_MAX);
 	mp = get(Stats::MP_MAX);
+
+	for (size_t i = 0; i < resource_stats.size(); ++i) {
+		resource_stats[i] = getResourceStat(i, EngineSettings::ResourceStats::STAT_BASE);
+	}
+
 }
 
 /**
@@ -900,6 +953,11 @@ void StatBlock::applyEffects() {
 	prev_hp = hp;
 	prev_mp = mp;
 
+	for (size_t i = 0; i < resource_stats.size(); ++i) {
+		prev_max_resource_stats[i] = std::max(getResourceStat(i, EngineSettings::ResourceStats::STAT_BASE), 1.0f);
+		prev_resource_stats[i] = resource_stats[i];
+	}
+
 	// calculate primary stats
 	// refresh the character menu if there has been a change
 	for (size_t i = 0; i < primary.size(); ++i) {
@@ -921,6 +979,15 @@ void StatBlock::applyEffects() {
 
 	if (hp > get(Stats::HP_MAX)) hp = get(Stats::HP_MAX);
 	if (mp > get(Stats::MP_MAX)) mp = get(Stats::MP_MAX);
+
+	size_t resource_offset_index = Stats::COUNT + eset->damage_types.count + eset->elements.list.size();
+	for (size_t i = 0; i < resource_stats.size(); ++i) {
+		size_t current_index = resource_offset_index + (i * EngineSettings::ResourceStats::STAT_COUNT) + EngineSettings::ResourceStats::STAT_BASE;
+		current[current_index] = std::max(getResourceStat(i, EngineSettings::ResourceStats::STAT_BASE), 1.0f);
+		if (resource_stats[i] > current[current_index]) {
+			resource_stats[i] = current[current_index];
+		}
+	}
 
 	speed = speed_default;
 }
@@ -969,6 +1036,13 @@ void StatBlock::logic() {
 		mp = (prev_mp / prev_maxmp) * get(Stats::MP_MAX);
 	}
 
+	for (size_t i = 0; i < resource_stats.size(); ++i) {
+		float resource_stat_max = getResourceStat(i, EngineSettings::ResourceStats::STAT_BASE);
+		if (prev_max_resource_stats[i] != resource_stat_max) {
+			resource_stats[i] = (prev_resource_stats[i] / prev_max_resource_stats[i]) * resource_stat_max;
+		}
+	}
+
 	// handle cooldowns
 	cooldown.tick(); // global cooldown
 
@@ -995,6 +1069,18 @@ void StatBlock::logic() {
 		float mp_regen_per_frame = get(Stats::MP_REGEN) / 60.f / settings->max_frames_per_sec;
 		mp += mp_regen_per_frame;
 		mp = std::max(0.0f, std::min(mp, get(Stats::MP_MAX)));
+	}
+
+	// resource stat regen
+	for (size_t i = 0; i < resource_stats.size(); ++i) {
+		float resource_stat_max = getResourceStat(i, EngineSettings::ResourceStats::STAT_BASE);
+		float resource_stat_regen = getResourceStat(i, EngineSettings::ResourceStats::STAT_REGEN);
+
+		if (resource_stats[i] <= resource_stat_max && hp > 0) {
+			float regen_per_frame = resource_stat_regen / 60.f / settings->max_frames_per_sec;
+			resource_stats[i] += regen_per_frame;
+			resource_stats[i] = std::max(0.0f, std::min(resource_stats[i], resource_stat_max));
+		}
 	}
 
 	// handle buff/debuff durations
@@ -1056,6 +1142,28 @@ void StatBlock::logic() {
 		comb->addString(msg->getv("+%s MP", Utils::floatToString(mpot, eset->number_format.combat_text).c_str()), pos, CombatText::MSG_BUFF);
 		mp += mpot;
 		if (mp > get(Stats::MP_MAX)) mp = get(Stats::MP_MAX);
+	}
+	for (size_t i = 0; i < resource_stats.size(); ++i) {
+		if (effects.resource_ot[i] > 0) {
+			float resource_max = getResourceStat(i, EngineSettings::ResourceStats::STAT_BASE);
+			float resource_ot = effects.resource_ot[i];
+			resource_ot = eset->combat.resourceRound(resource_ot);
+			comb->addString("+" + Utils::floatToString(resource_ot, eset->number_format.combat_text) + " " + eset->resource_stats.list[i].text_combat_heal, pos, CombatText::MSG_BUFF);
+			resource_stats[i] += resource_ot;
+
+			if (resource_stats[i] > resource_max)
+				resource_stats[i] = resource_max;
+		}
+		if (effects.resource_ot_percent[i] > 0) {
+			float resource_max = getResourceStat(i, EngineSettings::ResourceStats::STAT_BASE);
+			float resource_ot = (resource_max * effects.resource_ot_percent[i]) / 100;
+			resource_ot = eset->combat.resourceRound(resource_ot);
+			comb->addString("+" + Utils::floatToString(resource_ot, eset->number_format.combat_text) + " " + eset->resource_stats.list[i].text_combat_heal, pos, CombatText::MSG_BUFF);
+			resource_stats[i] += resource_ot;
+
+			if (resource_stats[i] > resource_max)
+				resource_stats[i] = resource_max;
+		}
 	}
 
 	// set movement type
@@ -1123,12 +1231,11 @@ bool StatBlock::canUsePower(PowerID powerid, bool allow_passive) const {
 	}
 	else {
 		return (
-			mp >= power.requires_mp
+			powers->checkPowerCost(power, this)
 			&& (!power.passive || allow_passive)
 			&& !power.meta_power
 			&& (!effects.stun || (allow_passive && power.passive))
-			&& (power.sacrifice || hp > power.requires_hp)
-			&& powers->checkRequiredMaxHPMP(power, this)
+			&& powers->checkRequiredResourceState(power, this)
 			&& (!power.requires_corpse || (target_corpse && !target_corpse->corpse_timer.isEnd()) || (target_nearest_corpse && powers->checkNearestTargeting(power, this, true) && !target_nearest_corpse->corpse_timer.isEnd()))
 			&& (checkRequiredSpawns(power.requires_spawns))
 			&& (menu_powers && menu_powers->meetsUsageStats(powerid))
@@ -1380,3 +1487,9 @@ void StatBlock::setPowerCooldown(PowerID power_id, int power_cooldown) {
 float StatBlock::getResist(size_t resist_type) const {
 	return current[Stats::COUNT + eset->damage_types.count + resist_type];
 }
+
+float StatBlock::getResourceStat(size_t resource_index, size_t field_offset) const {
+	size_t offset_index = Stats::COUNT + eset->damage_types.count + eset->elements.list.size();
+	return current[offset_index + (resource_index*4) + field_offset];
+}
+

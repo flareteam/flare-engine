@@ -46,25 +46,29 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "UtilsFileSystem.h"
 
-MenuStatBar::MenuStatBar(short _type)
+MenuStatBar::MenuStatBar(short _type, size_t _resource_stat_index)
 	: bar(NULL)
 	, label(new WidgetLabel())
+	, enabled(true)
 	, orientation(HORIZONTAL)
 	, custom_text_pos(false) // label will be placed in the middle of the bar
 	, custom_string("")
 	, bar_gfx("")
 	, bar_gfx_background("")
 	, type(_type)
+	, resource_stat_index(_resource_stat_index)
 	, bar_fill_offset()
 	, bar_fill_size(-1, -1)
 {
 	std::string type_filename;
 	if (type == TYPE_HP)
-		type_filename = "hp";
+		type_filename = "menus/hp.txt";
 	else if (type == TYPE_MP)
-		type_filename = "mp";
+		type_filename = "menus/mp.txt";
 	else if (type == TYPE_XP)
-		type_filename = "xp";
+		type_filename = "menus/xp.txt";
+	else if (type == TYPE_RESOURCE_STAT)
+		type_filename = eset->resource_stats.list[resource_stat_index].menu_filename;
 
 	if (type == TYPE_XP) {
 		stat_min.Unsigned = 0;
@@ -82,7 +86,7 @@ MenuStatBar::MenuStatBar(short _type)
 	// Load config settings
 	FileParser infile;
 	// @CLASS MenuStatBar|Description of menus/hp.txt, menus/mp.txt, menus/xp.txt
-	if(!type_filename.empty() && infile.open("menus/" + type_filename + ".txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
+	if(!type_filename.empty() && infile.open(type_filename, FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while(infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
@@ -120,6 +124,10 @@ MenuStatBar::MenuStatBar(short _type)
 			else if (infile.key == "bar_fill_size") {
 				bar_fill_size = Parse::toPoint(infile.val);
 			}
+			// @ATTR enabled|bool|Determines if the bar will be rendered. Disable the bar completely by setting this to false.
+			else if (infile.key == "enabled") {
+				enabled = Parse::toBool(infile.val);
+			}
 			else {
 				infile.error("MenuStatBar: '%s' is not a valid key.", infile.key.c_str());
 			}
@@ -139,6 +147,9 @@ MenuStatBar::MenuStatBar(short _type)
 }
 
 void MenuStatBar::loadGraphics() {
+	if (!enabled)
+		return;
+
 	Image *graphics;
 
 	if (bar_gfx_background != "") {
@@ -155,6 +166,9 @@ void MenuStatBar::loadGraphics() {
 }
 
 void MenuStatBar::update() {
+	if (!enabled)
+		return;
+
 	if (type == TYPE_XP) {
 		stat_cur_prev.Unsigned = stat_cur.Unsigned; // save previous value
 		stat_min.Unsigned = 0;
@@ -180,18 +194,28 @@ void MenuStatBar::update() {
 		stat_cur.Float = pc->stats.mp;
 		stat_max.Float = pc->stats.get(Stats::MP_MAX);
 	}
+	else if (type == TYPE_RESOURCE_STAT) {
+		stat_cur_prev.Float = stat_cur.Float; // save previous value
+		stat_min.Float = 0;
+		stat_cur.Float = pc->stats.resource_stats[resource_stat_index];
+		stat_max.Float = pc->stats.getResourceStat(resource_stat_index, EngineSettings::ResourceStats::STAT_BASE);
+	}
 }
 
 bool MenuStatBar::disappear() {
+	if (!enabled)
+		return true;
+
 	if (timeout.getDuration() > 0 && settings->statbar_autohide) {
-		if (type == TYPE_HP || type == TYPE_MP) {
-			// HP and MP bars disappear when full
-			if (stat_cur.Float != stat_max.Float) {
-				timeout.reset(Timer::BEGIN);
-			}
-		} else if (type == TYPE_XP) {
+		if (type == TYPE_XP) {
 			// XP bar disappears when value is not changing
 			if (stat_cur_prev.Unsigned != stat_cur.Unsigned) {
+				timeout.reset(Timer::BEGIN);
+			}
+		}
+		else {
+			// HP and MP bars disappear when full
+			if (stat_cur.Float != stat_max.Float) {
 				timeout.reset(Timer::BEGIN);
 			}
 		}

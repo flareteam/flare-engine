@@ -264,6 +264,7 @@ void ItemManager::loadItems(const std::string& filename) {
 		else if (infile.key == "bonus_power_level") {
 			// @ATTR bonus_power_level|repeatable(power_id, int) : Base power, Bonus levels|Grants bonus levels to a given base power.
 			BonusData bdata;
+			bdata.type = BonusData::POWER_LEVEL;
 			bdata.power_id = Parse::toPowerID(Parse::popFirstString(infile.val));
 			bdata.value = Parse::popFirstFloat(infile.val);
 			items[id].bonus.push_back(bdata);
@@ -580,6 +581,7 @@ void ItemManager::loadSets(const std::string& filename) {
 		else if (infile.key == "bonus_power_level") {
 			// @ATTR bonus_power_level|repeatable(int, power_id, int) : Required set item count, Base power, Bonus levels|Grants bonus levels to a given base power.
 			SetBonusData bonus;
+			bonus.type = BonusData::POWER_LEVEL;
 			bonus.requirement = Parse::popFirstInt(infile.val);
 			bonus.power_id = Parse::toPowerID(Parse::popFirstString(infile.val));
 			bonus.value = Parse::popFirstFloat(infile.val);
@@ -608,58 +610,65 @@ void ItemManager::parseBonus(BonusData& bdata, FileParser& infile) {
 	}
 
 	if (bonus_str == "speed") {
-		bdata.is_speed = true;
+		bdata.type = BonusData::SPEED;
 		return;
 	}
 	else if (bonus_str == "attack_speed") {
-		bdata.is_attack_speed = true;
+		bdata.type = BonusData::ATTACK_SPEED;
 		return;
 	}
 
 	// TODO deprecated
 	if (bonus_str == "hp_percent") {
 		infile.error("ItemManager: 'hp_percent' is deprecated. Converting to 'hp'.");
-		bdata.stat_index = Stats::HP_MAX;
+		bdata.type = BonusData::STAT;
+		bdata.index = Stats::HP_MAX;
 		bdata.is_multiplier = true;
 		bdata.value = (bdata.value + 100) / 100;
 		return;
 	}
 	else if (bonus_str == "mp_percent") {
 		infile.error("ItemManager: 'mp_percent' is deprecated. Converting to 'mp'.");
-		bdata.stat_index = Stats::MP_MAX;
+		bdata.type = BonusData::STAT;
+		bdata.index = Stats::MP_MAX;
 		bdata.is_multiplier = true;
 		bdata.value = (bdata.value + 100) / 100;
 		return;
 	}
 
-	for (int i=0; i<Stats::COUNT; ++i) {
+	for (size_t i = 0; i < Stats::COUNT; ++i) {
 		if (bonus_str == Stats::KEY[i]) {
-			bdata.stat_index = static_cast<Stats::STAT>(i);
+			bdata.type = BonusData::STAT;
+			bdata.index = i;
 			return;
 		}
 	}
 
 	for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
 		if (bonus_str == eset->damage_types.list[i].min) {
-			bdata.damage_index_min = static_cast<int>(i);
+			bdata.type = BonusData::DAMAGE_MIN;
+			bdata.index = i;
 			return;
 		}
 		else if (bonus_str == eset->damage_types.list[i].max) {
-			bdata.damage_index_max = static_cast<int>(i);
+			bdata.type = BonusData::DAMAGE_MAX;
+			bdata.index = i;
 			return;
 		}
 	}
 
-	for (unsigned i=0; i<eset->elements.list.size(); ++i) {
+	for (size_t i = 0; i < eset->elements.list.size(); ++i) {
 		if (bonus_str == eset->elements.list[i].resist_id) {
-			bdata.resist_index = i;
+			bdata.type = BonusData::RESIST_ELEMENT;
+			bdata.index = i;
 			return;
 		}
 	}
 
 	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 		if (bonus_str == eset->primary_stats.list[i].id) {
-			bdata.base_index = static_cast<int>(i);
+			bdata.type = BonusData::PRIMARY_STAT;
+			bdata.index = i;
 			if (bdata.is_multiplier) {
 				// primary stat bonus can't be multipliers. Re-parse as standard bonus
 				bdata.is_multiplier = false;
@@ -670,15 +679,26 @@ void ItemManager::parseBonus(BonusData& bdata, FileParser& infile) {
 		}
 	}
 
+	for (size_t i = 0; i < eset->resource_stats.list.size(); ++i) {
+		for (size_t j = 0; j < EngineSettings::ResourceStats::STAT_COUNT; ++j) {
+			if (bonus_str == eset->resource_stats.list[i].ids[j]) {
+				bdata.type = BonusData::RESOURCE_STAT;
+				bdata.index = i;
+				bdata.sub_index = j;
+				return;
+			}
+		}
+	}
+
 	infile.error("ItemManager: Unknown bonus type '%s'.", bonus_str.c_str());
 }
 
 void ItemManager::getBonusString(std::stringstream& ss, BonusData* bdata) {
-	if (bdata->is_speed) {
+	if (bdata->type == BonusData::SPEED) {
 		ss << msg->getv("%s%% Speed", Utils::floatToString(bdata->value, eset->number_format.item_tooltips).c_str());
 		return;
 	}
-	else if (bdata->is_attack_speed) {
+	else if (bdata->type == BonusData::ATTACK_SPEED) {
 		ss << msg->getv("%s%% Attack Speed", Utils::floatToString(bdata->value, eset->number_format.item_tooltips).c_str());
 		return;
 	}
@@ -690,26 +710,26 @@ void ItemManager::getBonusString(std::stringstream& ss, BonusData* bdata) {
 	else
 		ss << Utils::floatToString(bdata->value, eset->number_format.item_tooltips);
 
-	if (bdata->stat_index != -1) {
-		if (!bdata->is_multiplier && Stats::PERCENT[bdata->stat_index])
+	if (bdata->type == BonusData::STAT) {
+		if (!bdata->is_multiplier && Stats::PERCENT[bdata->index])
 			ss << "%";
 
-		ss << " " << Stats::NAME[bdata->stat_index];
+		ss << " " << Stats::NAME[bdata->index];
 	}
-	else if (bdata->damage_index_min != -1) {
-		ss << " " << eset->damage_types.list[bdata->damage_index_min].name_min;
+	else if (bdata->type == BonusData::DAMAGE_MIN) {
+		ss << " " << eset->damage_types.list[bdata->index].name_min;
 	}
-	else if (bdata->damage_index_max != -1) {
-		ss << " " << eset->damage_types.list[bdata->damage_index_max].name_max;
+	else if (bdata->type == BonusData::DAMAGE_MAX) {
+		ss << " " << eset->damage_types.list[bdata->index].name_max;
 	}
-	else if (bdata->resist_index != -1) {
+	else if (bdata->type == BonusData::RESIST_ELEMENT) {
 		if (!bdata->is_multiplier)
 			ss << "%";
 
-		ss << " " << msg->getv("Resistance (%s)", eset->elements.list[bdata->resist_index].name.c_str());
+		ss << " " << msg->getv("Resistance (%s)", eset->elements.list[bdata->index].name.c_str());
 	}
-	else if (bdata->base_index > -1 && static_cast<size_t>(bdata->base_index) < eset->primary_stats.list.size()) {
-		ss << " " << eset->primary_stats.list[bdata->base_index].name;
+	else if (bdata->type == BonusData::PRIMARY_STAT) {
+		ss << " " << eset->primary_stats.list[bdata->index].name;
 	}
 	else if (powers && bdata->power_id > 0) {
 		ss << " " << powers->powers[bdata->power_id].name;
@@ -718,6 +738,9 @@ void ItemManager::getBonusString(std::stringstream& ss, BonusData* bdata) {
 			if (!req_str.empty())
 				ss << " (" << msg->getv("Requires %s", req_str.c_str()) << ")";
 		}
+	}
+	else if (bdata->type == BonusData::RESOURCE_STAT) {
+		ss << " " << eset->resource_stats.list[bdata->index].text[bdata->sub_index];
 	}
 }
 
@@ -838,7 +861,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 
 		BonusData* bdata = &items[stack.item].bonus[bonus_counter];
 
-		if (bdata->is_speed || bdata->is_attack_speed) {
+		if (bdata->type == BonusData::SPEED || bdata->type == BonusData::ATTACK_SPEED) {
 			if (bdata->value >= 100)
 				color = font->getColor(FontEngine::COLOR_ITEM_BONUS);
 			else

@@ -566,6 +566,20 @@ bool Entity::takeHit(Hazard &h) {
 					h.src_stats->mp = std::min(h.src_stats->mp + steal_amt, h.src_stats->get(Stats::MP_MAX));
 				}
 			}
+			for (size_t i = 0; i < h.src_stats->resource_stats.size(); ++i) {
+				float resource_steal = h.power->resource_steal[i] + h.src_stats->getResourceStat(i, EngineSettings::ResourceStats::STAT_STEAL);
+				if (resource_steal != 0) {
+					if (Math::percentChanceF(stats.getResourceStat(i, EngineSettings::ResourceStats::STAT_RESIST_STEAL))) {
+						comb->addString(msg->get("Resist"), stats.pos, CombatText::MSG_MISS);
+					}
+					else {
+						float steal_amt = (std::min(dmg, prev_hp) * resource_steal) / 100;
+						steal_amt = eset->combat.resourceRound(steal_amt);
+						comb->addString("+" + Utils::floatToString(steal_amt, eset->number_format.combat_text) + " " + eset->resource_stats.list[i].text_combat_heal, h.src_stats->pos, CombatText::MSG_BUFF);
+						h.src_stats->resource_stats[i] = std::min(h.src_stats->resource_stats[i] + steal_amt, h.src_stats->getResourceStat(i, EngineSettings::ResourceStats::STAT_BASE));
+					}
+				}
+			}
 		}
 
 		// deal return damage

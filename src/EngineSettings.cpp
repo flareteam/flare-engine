@@ -48,6 +48,7 @@ void EngineSettings::load() {
 	widgets.load();
 	xp.load();
 	number_format.load();
+	resource_stats.load();
 }
 
 void EngineSettings::Misc::load() {
@@ -1126,5 +1127,86 @@ void EngineSettings::NumberFormat::load() {
 		infile.close();
 	}
 
+}
+
+void EngineSettings::ResourceStats::load() {
+	// reset to defaults
+	list.clear();
+	stat_count = 0;
+	effect_count = 0;
+	stat_effect_count = 0;
+
+	FileParser infile;
+	// @CLASS EngineSettings: Resource Stats|Description of engine/resource_stats.txt
+	if (infile.open("engine/resource_stats.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
+		while (infile.next()) {
+			if (infile.new_section) {
+				if (infile.section == "resource_stat") {
+					list.resize(list.size()+1);
+
+					list.back().ids.resize(EngineSettings::ResourceStats::STAT_EFFECT_COUNT);
+					list.back().text.resize(EngineSettings::ResourceStats::STAT_COUNT);
+					list.back().text_desc.resize(EngineSettings::ResourceStats::STAT_COUNT);
+				}
+			}
+
+			if (list.empty() || infile.section != "resource_stat")
+				continue;
+
+			// @ATTR resource_stat.stat_base|string|The identifier used for the base ("Max") stat.
+			if (infile.key == "stat_base") list.back().ids[EngineSettings::ResourceStats::STAT_BASE] = infile.val;
+			// @ATTR resource_stat.stat_regen|string|The identifier used for the regeneration stat.
+			else if (infile.key == "stat_regen") list.back().ids[EngineSettings::ResourceStats::STAT_REGEN] = infile.val;
+			// @ATTR resource_stat.stat_steal|string|The identifier used for steal stat.
+			else if (infile.key == "stat_steal") list.back().ids[EngineSettings::ResourceStats::STAT_STEAL] = infile.val;
+			// @ATTR resource_stat.stat_resist_steal|string|The identifier used for the resistance to steal stat.
+			else if (infile.key == "stat_resist_steal") list.back().ids[EngineSettings::ResourceStats::STAT_RESIST_STEAL] = infile.val;
+			// @ATTR resource_stat.stat_heal|string|The identifier used for heal-over-time effects.
+			else if (infile.key == "stat_heal") list.back().ids[EngineSettings::ResourceStats::STAT_HEAL] = infile.val;
+			// @ATTR resource_stat.stat_heal_percent|string|The identifier used for percentage-based heal-over-time effects.
+			else if (infile.key == "stat_heal_percent") list.back().ids[EngineSettings::ResourceStats::STAT_HEAL_PERCENT] = infile.val;
+
+			// @ATTR resource_stat.menu_filename|filename|The MenuStatBar definition file to use for displaying this stat.
+			else if (infile.key == "menu_filename") list.back().menu_filename = infile.val;
+
+			// @ATTR resource_stat.text_base|string|The printed name of the base ("Max") stat as seen in-game.
+			else if (infile.key == "text_base") list.back().text[EngineSettings::ResourceStats::STAT_BASE] = msg->get(infile.val);
+			// @ATTR resource_stat.text_base_desc|string|The printed description of the base ("Max") stat as seen in-game.
+			else if (infile.key == "text_base_desc") list.back().text_desc[EngineSettings::ResourceStats::STAT_BASE] = msg->get(infile.val);
+
+			// @ATTR resource_stat.text_regen|string|The name of the regeneration stat as seen in-game.
+			else if (infile.key == "text_regen") list.back().text[EngineSettings::ResourceStats::STAT_REGEN] = msg->get(infile.val);
+			// @ATTR resource_stat.text_regen_desc|string|The description of the regeneration stat as seen in-game.
+			else if (infile.key == "text_regen_desc") list.back().text_desc[EngineSettings::ResourceStats::STAT_REGEN] = msg->get(infile.val);
+
+			// @ATTR resource_stat.text_steal|string|The name of the steal stat as seen in-game.
+			else if (infile.key == "text_steal") list.back().text[EngineSettings::ResourceStats::STAT_STEAL] = msg->get(infile.val);
+			// @ATTR resource_stat.text_steal_desc|string|The description of the steal stat as seen in-game.
+			else if (infile.key == "text_steal_desc") list.back().text_desc[EngineSettings::ResourceStats::STAT_STEAL] = msg->get(infile.val);
+
+			// @ATTR resource_stat.text_resist_steal|string|The name of the resistance to steal stat as seen in-game.
+			else if (infile.key == "text_resist_steal") list.back().text[EngineSettings::ResourceStats::STAT_RESIST_STEAL] = msg->get(infile.val);
+			// @ATTR resource_stat.text_resist_steal_desc|string|The description of the resistance to steal stat as seen in-game.
+			else if (infile.key == "text_resist_steal_desc") list.back().text_desc[EngineSettings::ResourceStats::STAT_RESIST_STEAL] = msg->get(infile.val);
+
+			// @ATTR resource_stat.text_combat_heal|string|The name of the stat in combat text as seen during heal-over-time.
+			else if (infile.key == "text_combat_heal") list.back().text_combat_heal = msg->get(infile.val);
+			// @ATTR resource_stat.text_log_restore|string|The text in the player's log when this stat is restored via EventManager's 'restore' property.
+			else if (infile.key == "text_log_restore") list.back().text_log_restore = msg->get(infile.val);
+			// @ATTR resource_stat.text_log_low|string|The text in the player's log when trying to use a Power that requires more than the available amount of this resource.
+			else if (infile.key == "text_log_low") list.back().text_log_low = msg->get(infile.val);
+			// @ATTR resource_stat.text_tooltip_heal|string|The text in Power tooltips used for heal-over-time Effects.
+			else if (infile.key == "text_tooltip_heal") list.back().text_tooltip_heal = msg->get(infile.val);
+			// @ATTR resource_stat.text_tooltip_cost|string|The text in Power tooltips that describes the casting cost of this resource.
+			else if (infile.key == "text_tooltip_cost") list.back().text_tooltip_cost = msg->get(infile.val);
+
+			else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
+		}
+		infile.close();
+	}
+
+	stat_count = list.size() * EngineSettings::ResourceStats::STAT_COUNT; // base, regen, steal, resist_steal
+	effect_count = list.size() * (EngineSettings::ResourceStats::STAT_EFFECT_COUNT - EngineSettings::ResourceStats::STAT_COUNT); // heal, heal_percent
+	stat_effect_count = stat_count + effect_count;
 }
 

@@ -1078,7 +1078,7 @@ void MenuInventory::applyEquipment() {
 				unsigned bonus_counter = 0;
 				while (bonus_counter < item.bonus.size()) {
 					for (size_t j = 0; j < eset->primary_stats.list.size(); ++j) {
-						if (item.bonus[bonus_counter].base_index == static_cast<int>(j))
+						if (item.bonus[bonus_counter].type == BonusData::PRIMARY_STAT && item.bonus[bonus_counter].index == j)
 							pc->stats.primary_additional[j] += static_cast<int>(item.bonus[bonus_counter].value);
 					}
 
@@ -1113,7 +1113,7 @@ void MenuInventory::applyEquipment() {
 				if (temp_set.bonus[bonus_counter].requirement != quantity[k]) continue;
 
 				for (size_t j = 0; j < eset->primary_stats.list.size(); ++j) {
-					if (temp_set.bonus[bonus_counter].base_index == static_cast<int>(j))
+					if (temp_set.bonus[bonus_counter].type == BonusData::PRIMARY_STAT && temp_set.bonus[bonus_counter].index == j)
 						pc->stats.primary_additional[j] += static_cast<int>(temp_set.bonus[bonus_counter].value);
 				}
 			}
@@ -1279,30 +1279,33 @@ void MenuInventory::applyItemSetBonuses() {
 void MenuInventory::applyBonus(const BonusData* bdata) {
 	EffectDef ed;
 
-	if (bdata->is_speed) {
+	if (bdata->type == BonusData::SPEED) {
 		ed.id = "speed";
 	}
-	else if (bdata->is_attack_speed) {
+	else if (bdata->type == BonusData::ATTACK_SPEED) {
 		ed.id = "attack_speed";
 	}
-	else if (bdata->stat_index != -1) {
-		ed.id = Stats::KEY[bdata->stat_index];
+	else if (bdata->type == BonusData::STAT) {
+		ed.id = Stats::KEY[bdata->index];
 	}
-	else if (bdata->damage_index_min != -1) {
-		ed.id = eset->damage_types.list[bdata->damage_index_min].min;
+	else if (bdata->type == BonusData::DAMAGE_MIN) {
+		ed.id = eset->damage_types.list[bdata->index].min;
 	}
-	else if (bdata->damage_index_max != -1) {
-		ed.id = eset->damage_types.list[bdata->damage_index_max].max;
+	else if (bdata->type == BonusData::DAMAGE_MAX) {
+		ed.id = eset->damage_types.list[bdata->index].max;
 	}
-	else if (bdata->resist_index != -1) {
-		ed.id = eset->elements.list[bdata->resist_index].resist_id;
+	else if (bdata->type == BonusData::RESIST_ELEMENT) {
+		ed.id = eset->elements.list[bdata->index].resist_id;
 	}
-	else if (bdata->base_index > -1 && static_cast<size_t>(bdata->base_index) < eset->primary_stats.list.size()) {
-		ed.id = eset->primary_stats.list[bdata->base_index].id;
+	else if (bdata->type == BonusData::PRIMARY_STAT) {
+		ed.id = eset->primary_stats.list[bdata->index].id;
 	}
 	else if (bdata->power_id > 0) {
 		menu->pow->addBonusLevels(bdata->power_id, static_cast<int>(bdata->value));
 		return; // don't add item effect
+	}
+	else if (bdata->type == BonusData::RESOURCE_STAT) {
+		ed.id = eset->resource_stats.list[bdata->index].ids[bdata->sub_index];
 	}
 
 	ed.type = Effect::getTypeFromString(ed.id);

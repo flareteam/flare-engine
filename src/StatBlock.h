@@ -185,6 +185,7 @@ public:
 		return std::max(current[Stats::COUNT + (dmg_type * 2)], current[Stats::COUNT + (dmg_type * 2) + 1]);
 	}
 	float getResist(size_t resist_type) const;
+	float getResourceStat(size_t resource_index, size_t field_offset) const;
 
 	// additional values to base stats, given by items
 	std::vector<int> primary_additional;
@@ -204,6 +205,8 @@ public:
 
 	// mental stats
 	float mp;
+
+	std::vector<float> resource_stats;
 
 	float speed_default;
 
@@ -325,6 +328,9 @@ public:
 	float prev_maxmp;
 	float prev_hp;
 	float prev_mp;
+
+	std::vector<float> prev_max_resource_stats;
+	std::vector<float> prev_resource_stats;
 
 	// links to summoned creatures and the entity which summoned this
 	std::vector<StatBlock*> summons;

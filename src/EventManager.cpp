@@ -592,7 +592,7 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		e->data[1].Int = std::max(Parse::popFirstInt(val), e->data[0].Int);
 	}
 	else if (key == "restore") {
-		// @ATTR event.restore|["hp", "mp", "hpmp", "status", "all"]|Restore the hero's HP, MP, and/or status.
+		// @ATTR event.restore|list(["hp", "mp", "hpmp", "status", "all", predefined_string])|Restore the hero's HP, MP, and/or status. Resource stat base IDs are also valid.
 		e->type = EventComponent::RESTORE;
 
 		e->s = val;

@@ -79,29 +79,24 @@ public:
 class Power {
 public:
 	enum {
-		HPMPSTATE_ANY = 0,
-		HPMPSTATE_ALL = 1
+		RESOURCESTATE_ANY = 0,
+		RESOURCESTATE_ALL = 1,
+		RESOURCESTATE_ANY_HPMP = 2,
 	};
 	enum {
-		HPMPSTATE_IGNORE = 0,
-		HPMPSTATE_PERCENT = 1,
-		HPMPSTATE_NOT_PERCENT = 2
+		RESOURCESTATE_IGNORE = 0,
+		RESOURCESTATE_PERCENT = 1,
+		RESOURCESTATE_NOT_PERCENT = 2
 	};
-	class HPMPState {
+	class ResourceState {
 	public:
-		int mode;
-		int hp_state;
-		int mp_state;
-		float hp;
-		float mp;
-		HPMPState()
-			: mode(HPMPSTATE_ANY)
-			, hp_state(HPMPSTATE_IGNORE)
-			, mp_state(HPMPSTATE_IGNORE)
-			, hp(-1)
-			, mp(-1)
+		int state;
+		float value;
+		ResourceState()
+			: state(RESOURCESTATE_IGNORE)
+			, value(0)
 		{}
-		~HPMPState() {}
+		~ResourceState() {}
 	};
 
 	enum {
@@ -181,6 +176,7 @@ public:
 	std::set<std::string> requires_flags; // checked against equip_flags granted from items
 	float requires_mp;
 	float requires_hp;
+	std::vector<float> requires_resource_stat;
 	bool sacrifice;
 	bool requires_los; // line of sight
 	bool requires_los_default;
@@ -190,7 +186,11 @@ public:
 	bool requires_targeting; // power only makes sense when using click-to-target
 	int requires_spawns;
 	int cooldown; // milliseconds before you can use the power again
-	HPMPState requires_max_hpmp;
+	ResourceState requires_hp_state;
+	ResourceState requires_mp_state;
+	std::vector<ResourceState> requires_resource_stat_state;
+	int requires_hpmp_state_mode;
+	int requires_resource_stat_state_mode;
 
 	// animation info
 	std::string animation_name;
@@ -240,6 +240,7 @@ public:
 	//steal effects (in %, eg. hp_steal=50 turns 50% damage done into HP regain.)
 	float hp_steal;
 	float mp_steal;
+	std::vector<float> resource_steal;
 
 	//missile traits
 	float missile_angle;
@@ -356,8 +357,9 @@ public:
 	PowerID verifyID(PowerID power_id, FileParser* infile, bool allow_zero);
 	bool checkNearestTargeting(const Power &pow, const StatBlock *src_stats, bool check_corpses);
 	bool checkRequiredItems(const Power &pow, const StatBlock *src_stats);
-	bool checkRequiredMaxHPMP(const Power &pow, const StatBlock *src_stats);
+	bool checkRequiredResourceState(const Power &pow, const StatBlock *src_stats);
 	bool checkCombatRange(PowerID power_index, StatBlock *src_stats, FPoint target);
+	bool checkPowerCost(const Power &pow, const StatBlock *src_stats);
 	PowerID checkReplaceByEffect(PowerID power_index, StatBlock *src_stats);
 
 	EffectDef* getEffectDef(const std::string& id);

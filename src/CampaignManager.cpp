@@ -218,28 +218,48 @@ void CampaignManager::rewardXP(float amount, bool show_message) {
 }
 
 void CampaignManager::restoreHPMP(const std::string& s) {
-	if (s == "hp") {
-		pc->stats.hp = pc->stats.get(Stats::HP_MAX);
-		pc->logMsg(msg->get("HP restored."), Avatar::MSG_UNIQUE);
-	}
-	else if (s == "mp") {
-		pc->stats.mp = pc->stats.get(Stats::MP_MAX);
-		pc->logMsg(msg->get("MP restored."), Avatar::MSG_UNIQUE);
-	}
-	else if (s == "hpmp") {
-		pc->stats.hp = pc->stats.get(Stats::HP_MAX);
-		pc->stats.mp = pc->stats.get(Stats::MP_MAX);
-		pc->logMsg(msg->get("HP and MP restored."), Avatar::MSG_UNIQUE);
-	}
-	else if (s == "status") {
-		pc->stats.effects.clearNegativeEffects(Effect::RESIST_ALL);
-		pc->logMsg(msg->get("Negative effects removed."), Avatar::MSG_UNIQUE);
-	}
-	else if (s == "all") {
-		pc->stats.hp = pc->stats.get(Stats::HP_MAX);
-		pc->stats.mp = pc->stats.get(Stats::MP_MAX);
-		pc->stats.effects.clearNegativeEffects(Effect::RESIST_ALL);
-		pc->logMsg(msg->get("HP and MP restored, negative effects removed"), Avatar::MSG_UNIQUE);
+	std::string restore_str = s;
+	std::string restore_mode = Parse::popFirstString(restore_str);
+
+	while (!restore_mode.empty()) {
+		if (restore_mode == "hp") {
+			pc->stats.hp = pc->stats.get(Stats::HP_MAX);
+			pc->logMsg(msg->get("HP restored."), Avatar::MSG_UNIQUE);
+		}
+		else if (restore_mode == "mp") {
+			pc->stats.mp = pc->stats.get(Stats::MP_MAX);
+			pc->logMsg(msg->get("MP restored."), Avatar::MSG_UNIQUE);
+		}
+		else if (restore_mode == "hpmp") {
+			pc->stats.hp = pc->stats.get(Stats::HP_MAX);
+			pc->stats.mp = pc->stats.get(Stats::MP_MAX);
+			pc->logMsg(msg->get("HP and MP restored."), Avatar::MSG_UNIQUE);
+		}
+		else if (restore_mode == "status") {
+			pc->stats.effects.clearNegativeEffects(Effect::RESIST_ALL);
+			pc->logMsg(msg->get("Negative effects removed."), Avatar::MSG_UNIQUE);
+		}
+		else if (restore_mode == "all") {
+			pc->stats.hp = pc->stats.get(Stats::HP_MAX);
+			pc->stats.mp = pc->stats.get(Stats::MP_MAX);
+			pc->stats.effects.clearNegativeEffects(Effect::RESIST_ALL);
+			pc->logMsg(msg->get("HP and MP restored, negative effects removed"), Avatar::MSG_UNIQUE);
+
+			for (size_t i = 0; i < eset->resource_stats.list.size(); ++i) {
+				pc->stats.resource_stats[i] = pc->stats.getResourceStat(i, EngineSettings::ResourceStats::STAT_BASE);
+				pc->logMsg(eset->resource_stats.list[i].text_log_restore, Avatar::MSG_UNIQUE);
+			}
+		}
+		else {
+			for (size_t i = 0; i < eset->resource_stats.list.size(); ++i) {
+				if (restore_mode == eset->resource_stats.list[i].ids[EngineSettings::ResourceStats::STAT_BASE]) {
+					pc->stats.resource_stats[i] = pc->stats.getResourceStat(i, EngineSettings::ResourceStats::STAT_BASE);
+					pc->logMsg(eset->resource_stats.list[i].text_log_restore, Avatar::MSG_UNIQUE);
+				}
+			}
+		}
+
+		restore_mode = Parse::popFirstString(restore_str);
 	}
 }
 

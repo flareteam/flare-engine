@@ -27,6 +27,11 @@ Engine features:
 * Players are directed to the Mods configuration menu via a dialog box when no core mod is enabled. (kr4ft3r)
   * Core mods are now labeled as such in their tooltips on the Mods configuration menu.
 * Added 'resource_round_method' property to engine/combat.txt.
+* Support arbitrary "MP-like" resources:
+  * Configuration file: engine/resource_stats.txt
+  * Added 'requires_resource_stat' and 'resource_steal' properties to Powers.
+  * Added 'requires_resource_stat_state' and 'requires_resource_stat_state_mode' properties to Powers.
+* Added 'enabled' property to MenuStatBar definitions.
 
 Engine fixes:
 

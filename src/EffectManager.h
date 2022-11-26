@@ -68,11 +68,15 @@ public:
 	static bool typeIsDmgMin(int t);
 	static bool typeIsDmgMax(int t);
 	static bool typeIsResist(int t);
+	static bool typeIsResourceStat(int t);
+	static bool typeIsResourceEffect(int t);
 	static bool typeIsPrimary(int t);
 	static bool typeIsEffectResist(int t);
 	static int getStatFromType(int t);
 	static size_t getDmgFromType(int t);
 	static size_t getResistFromType(int t);
+	static size_t getResourceStatFromType(int t);
+	static size_t getResourceStatSubIndexFromType(int t);
 	static size_t getPrimaryFromType(int t);
 
 	static bool isImmunityTypeString(const std::string& type_str); // handling of deprecated types
@@ -164,6 +168,8 @@ public:
 	float hpot_percent;
 	float mpot;
 	float mpot_percent;
+	std::vector<float> resource_ot;
+	std::vector<float> resource_ot_percent;
 
 	float speed;
 	bool stun;
