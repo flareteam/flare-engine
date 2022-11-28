@@ -59,7 +59,7 @@ msgstr "Предмет удалён: %d — %s."
 #: ../../../src/CampaignManager.cpp:173
 #, c-format
 msgid "%s x%d removed."
-msgstr "Предмет удалён: %d x%s."
+msgstr "Предмет удалён: %s x%d."
 
 #: ../../../src/CampaignManager.cpp:175
 #, c-format
@@ -100,11 +100,11 @@ msgstr "Жизнь и мана восстановлены."
 
 #: ../../../src/CampaignManager.cpp:236
 msgid "Negative effects removed."
-msgstr "Отрицательные эффекты убраны."
+msgstr "Негативные эффекты сняты."
 
 #: ../../../src/CampaignManager.cpp:242
 msgid "HP and MP restored, negative effects removed"
-msgstr "Жизнь и мана восстановлены, негативные эффекты убраны"
+msgstr "Жизнь и мана восстановлены, негативные эффекты сняты"
 
 #: ../../../src/DeviceList.cpp:56
 msgid ""
@@ -214,7 +214,7 @@ msgstr "Недопустимая игра"
 #: ../../../src/MenuPowers.cpp:1713
 #, c-format
 msgid "Level %d"
-msgstr "%d-го уровня"
+msgstr "%d-й уровень"
 
 #: ../../../src/GameStateNew.cpp:66 ../../../src/MenuConfig.cpp:260
 #: ../../../src/SDLInputState.cpp:878
@@ -251,7 +251,7 @@ msgstr "Играть"
 
 #: ../../../src/GameStateTitle.cpp:109
 msgid "Enable a core mod to continue"
-msgstr "Включите основной мод для продолжения"
+msgstr "Включите мод empyrean_campaign для продолжения"
 
 #: ../../../src/GameStateTitle.cpp:113 ../../../src/MenuMiniMap.cpp:154
 msgid "Configuration"
@@ -272,12 +272,12 @@ msgstr "Неизвестный предмет"
 #: ../../../src/ItemManager.cpp:681 ../../../src/MenuPowers.cpp:996
 #, c-format
 msgid "%s%% Speed"
-msgstr "%s%% скорость"
+msgstr "Скорость передвижения: %s%%"
 
 #: ../../../src/ItemManager.cpp:685 ../../../src/MenuPowers.cpp:999
 #, c-format
 msgid "%s%% Attack Speed"
-msgstr "%s%% скорость атаки"
+msgstr "Скорость атаки: %s%%"
 
 #: ../../../src/ItemManager.cpp:712 ../../../src/MenuCharacter.cpp:362
 #: ../../../src/MenuCharacter.cpp:425 ../../../src/MenuPowers.cpp:968
@@ -307,7 +307,7 @@ msgstr "Поглощение"
 #: ../../../src/MenuPowers.cpp:1223
 #, c-format
 msgid "Requires Level %d"
-msgstr "Требуется %d-й уровень"
+msgstr "Требуемый уровень: %d-й"
 
 #: ../../../src/ItemManager.cpp:891 ../../../src/MenuPowers.cpp:1212
 #: ../../../src/MenuPowers.cpp:1214
@@ -318,7 +318,7 @@ msgstr "Требуется: %s %d"
 #: ../../../src/ItemManager.cpp:902
 #, c-format
 msgid "Requires Class: %s"
-msgstr "Требуется класс: %s"
+msgstr "Требуемый класс: %s"
 
 #: ../../../src/ItemManager.cpp:918 ../../../src/ItemManager.cpp:930
 #, c-format
@@ -328,7 +328,7 @@ msgstr "Цена покупки: %d — %s"
 #: ../../../src/ItemManager.cpp:920 ../../../src/ItemManager.cpp:932
 #, c-format
 msgid "Buy Price: %d %s each"
-msgstr "Цена покупки: %d — %s за каждый"
+msgstr "Цена покупки: %d — %s (за каждый)"
 
 #: ../../../src/ItemManager.cpp:940
 #, c-format
@@ -338,7 +338,7 @@ msgstr "Цена продажи: %d — %s"
 #: ../../../src/ItemManager.cpp:942
 #, c-format
 msgid "Sell Price: %d %s each"
-msgstr "Цена продажи: %d — %s за каждый"
+msgstr "Цена продажи: %d — %s (за каждый)"
 
 #: ../../../src/ItemManager.cpp:953
 msgid "Set:"
@@ -347,7 +347,7 @@ msgstr "Набор:"
 #: ../../../src/ItemManager.cpp:960
 #, c-format
 msgid "%d items:"
-msgstr "%d предметов:"
+msgstr "%d предмета(-ов):"
 
 #: ../../../src/ItemManager.cpp:985 ../../../src/MenuPowers.cpp:1272
 msgid "Tap icon again for more options"
@@ -429,7 +429,7 @@ msgstr "Осталось:"
 #: ../../../src/MenuActiveEffects.cpp:225
 #, c-format
 msgid "x%d stacks"
-msgstr "x%d стопки"
+msgstr "Суммирование эффекта: x%d"
 
 #: ../../../src/MenuCharacter.cpp:73 ../../../src/MenuCharacter.cpp:78
 msgid "Name"
@@ -1196,7 +1196,7 @@ msgstr "Использовать или надеть предмет:"
 #: ../../../src/MenuInventory.cpp:449
 #, c-format
 msgid "%s modifiers"
-msgstr "%s - перетаскивание"
+msgstr "Переместить предмет - %s "
 
 #: ../../../src/MenuInventory.cpp:450
 msgid "Select a quantity of item:"
@@ -1343,7 +1343,7 @@ msgstr "Введите количество:"
 
 #: ../../../src/MenuPowers.cpp:904
 msgid "Passive"
-msgstr "Пасивные"
+msgstr "Пассивное"
 
 #: ../../../src/MenuPowers.cpp:911
 #, c-format
@@ -1357,7 +1357,7 @@ msgstr "Тратит %s жизни"
 
 #: ../../../src/MenuPowers.cpp:919
 msgid "Cooldown:"
-msgstr "Задержка ипользования:"
+msgstr "Задержка использования:"
 
 #: ../../../src/MenuPowers.cpp:975 ../../../src/MenuPowers.cpp:978
 msgid "Damage per second"
@@ -1414,7 +1414,7 @@ msgstr "силы отдачи"
 #: ../../../src/MenuPowers.cpp:1098
 #, c-format
 msgid "%s%% chance"
-msgstr "%s%% шанс"
+msgstr "Шанс: %s%%"
 
 #: ../../../src/MenuPowers.cpp:1150
 msgid "Base Accuracy"
@@ -1435,7 +1435,7 @@ msgstr "Игнорирует уклонение"
 #: ../../../src/MenuPowers.cpp:1188
 #, c-format
 msgid "%s%% Chance to crit slowed targets"
-msgstr "%s%% шанс критического урона по замедленным целям"
+msgstr "Шанс критического урона по замедленным целям: %s%%"
 
 #: ../../../src/MenuPowers.cpp:1193
 #, c-format
@@ -1450,7 +1450,7 @@ msgstr "Требуется %s"
 #: ../../../src/MenuPowers.cpp:1240 ../../../src/MenuPowers.cpp:1243
 #, c-format
 msgid "Requires Power: %s"
-msgstr "Требуется сила: %s"
+msgstr "Требуемая сила: %s"
 
 #: ../../../src/MenuPowers.cpp:1252
 msgid "Click to Unlock (uses 1 Skill Point)"
@@ -1510,7 +1510,7 @@ msgstr "Опыт: %lu/%lu"
 #: ../../../src/MenuTalker.cpp:468
 #, c-format
 msgid "<dialog node %d>"
-msgstr "<диалоговый узел %d>"
+msgstr "<диалоговый выбор %d>"
 
 #: ../../../src/MenuTalker.cpp:476
 msgid "Trade"
@@ -1860,7 +1860,7 @@ msgstr "ЛКМ"
 
 #: ../../../src/SDLInputState.cpp:920
 msgid "Middle Mouse"
-msgstr "Средняя кнопка мыши"
+msgstr "СКМ"
 
 #: ../../../src/SDLInputState.cpp:921
 msgid "Right Mouse"
@@ -1868,11 +1868,11 @@ msgstr "ПКМ"
 
 #: ../../../src/SDLInputState.cpp:922
 msgid "Wheel Up"
-msgstr "Колёсико мыши вверх"
+msgstr "Колёсико вверх"
 
 #: ../../../src/SDLInputState.cpp:923
 msgid "Wheel Down"
-msgstr "Колёсико мыши вниз"
+msgstr "Колёсико вниз"
 
 #: ../../../src/SDLInputState.cpp:924
 msgid "Mouse X1"
@@ -2069,7 +2069,7 @@ msgstr "Увеличивает количество опыта, получаем
 #: ../../../src/Stats.cpp:98
 #, c-format
 msgid "Bonus %s"
-msgstr "Бонус выпадения (%s)"
+msgstr "Бонус предмета (%s)"
 
 #: ../../../src/Stats.cpp:99
 #, c-format
