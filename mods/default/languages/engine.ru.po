@@ -124,7 +124,7 @@ msgid ""
 msgstr ""
 "Аппаратное отображение SDL\n"
 "\n"
-"Отображение по-умолчанию. Быстрее, чем программное."
+"Отображение по умолчанию. Быстрее, чем программное."
 
 #: ../../../src/EffectManager.cpp:411 ../../../src/EffectManager.cpp:415
 #: ../../../src/EffectManager.cpp:419 ../../../src/EffectManager.cpp:423
@@ -503,7 +503,7 @@ msgstr "ОК"
 
 #: ../../../src/MenuConfig.cpp:259
 msgid "Defaults"
-msgstr "По-умолчанию"
+msgstr "По умолчанию"
 
 #: ../../../src/MenuConfig.cpp:262 ../../../src/MenuGameOver.cpp:72
 msgid "Continue"
