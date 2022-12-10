@@ -288,6 +288,8 @@ code {
 
 <p><strong>overhit_damage_percent</strong> | <code>float, float : Minimum, Maximum</code> | The percentage of damage dealt when an overhit occurs.</p>
 
+<p><strong>resource_round_method</strong> | <code>[none, round, floor, ceil]</code> | Rounds the numbers for most combat events that affect HP/MP. For example: damage taken, HP healed, MP consumed. Defaults to 'round'.</p>
+
 <hr />
 
 <h4>EngineSettings: Elements</h4>
@@ -510,6 +512,52 @@ code {
 
 <hr />
 
+<h4>EngineSettings: Resource Stats</h4>
+
+<p>Description of engine/resource_stats.txt</p>
+
+<p><strong>resource_stat.stat_base</strong> | <code>string</code> | The identifier used for the base ("Max") stat.</p>
+
+<p><strong>resource_stat.stat_regen</strong> | <code>string</code> | The identifier used for the regeneration stat.</p>
+
+<p><strong>resource_stat.stat_steal</strong> | <code>string</code> | The identifier used for steal stat.</p>
+
+<p><strong>resource_stat.stat_resist_steal</strong> | <code>string</code> | The identifier used for the resistance to steal stat.</p>
+
+<p><strong>resource_stat.stat_heal</strong> | <code>string</code> | The identifier used for heal-over-time effects.</p>
+
+<p><strong>resource_stat.stat_heal_percent</strong> | <code>string</code> | The identifier used for percentage-based heal-over-time effects.</p>
+
+<p><strong>resource_stat.menu_filename</strong> | <code>filename</code> | The MenuStatBar definition file to use for displaying this stat.</p>
+
+<p><strong>resource_stat.text_base</strong> | <code>string</code> | The printed name of the base ("Max") stat as seen in-game.</p>
+
+<p><strong>resource_stat.text_base_desc</strong> | <code>string</code> | The printed description of the base ("Max") stat as seen in-game.</p>
+
+<p><strong>resource_stat.text_regen</strong> | <code>string</code> | The name of the regeneration stat as seen in-game.</p>
+
+<p><strong>resource_stat.text_regen_desc</strong> | <code>string</code> | The description of the regeneration stat as seen in-game.</p>
+
+<p><strong>resource_stat.text_steal</strong> | <code>string</code> | The name of the steal stat as seen in-game.</p>
+
+<p><strong>resource_stat.text_steal_desc</strong> | <code>string</code> | The description of the steal stat as seen in-game.</p>
+
+<p><strong>resource_stat.text_resist_steal</strong> | <code>string</code> | The name of the resistance to steal stat as seen in-game.</p>
+
+<p><strong>resource_stat.text_resist_steal_desc</strong> | <code>string</code> | The description of the resistance to steal stat as seen in-game.</p>
+
+<p><strong>resource_stat.text_combat_heal</strong> | <code>string</code> | The name of the stat in combat text as seen during heal-over-time.</p>
+
+<p><strong>resource_stat.text_log_restore</strong> | <code>string</code> | The text in the player's log when this stat is restored via EventManager's 'restore' property.</p>
+
+<p><strong>resource_stat.text_log_low</strong> | <code>string</code> | The text in the player's log when trying to use a Power that requires more than the available amount of this resource.</p>
+
+<p><strong>resource_stat.text_tooltip_heal</strong> | <code>string</code> | The text in Power tooltips used for heal-over-time Effects.</p>
+
+<p><strong>resource_stat.text_tooltip_cost</strong> | <code>string</code> | The text in Power tooltips that describes the casting cost of this resource.</p>
+
+<hr />
+
 <h4>EventManager</h4>
 
 <p>Description of events in maps/ and npcs/</p>
@@ -592,7 +640,7 @@ code {
 
 <p><strong>event.reward_loot_count</strong> | <code>int, int : Min, Max</code> | Sets the minimum (and optionally, the maximum) amount of loot that reward_loot can give the hero. Defaults to 1.</p>
 
-<p><strong>event.restore</strong> | <code>["hp", "mp", "hpmp", "status", "all"]</code> | Restore the hero's HP, MP, and/or status.</p>
+<p><strong>event.restore</strong> | <code>list(["hp", "mp", "hpmp", "status", "all", predefined_string])</code> | Restore the hero's HP, MP, and/or status. Resource stat base IDs are also valid.</p>
 
 <p><strong>event.power</strong> | <code>power_id</code> | Specify power coupled with event.</p>
 
@@ -1678,6 +1726,8 @@ code {
 
 <p><strong>bar_fill_size</strong> | <code>int, int : Width, Height</code> | Size of the bar's fill graphics. If not defined, the width/height of bar_pos is used.</p>
 
+<p><strong>enabled</strong> | <code>bool</code> | Determines if the bar will be rendered. Disable the bar completely by setting this to false.</p>
+
 <hr />
 
 <h4>MenuTalker</h4>
@@ -1886,9 +1936,11 @@ code {
 
 <p><strong>power.requires_flags</strong> | <code>list(predefined_string)</code> | A comma separated list of equip flags that are required to use this power. See engine/equip_flags.txt</p>
 
-<p><strong>power.requires_mp</strong> | <code>float</code> | Restrict power usage to a specified MP level.</p>
+<p><strong>power.requires_mp</strong> | <code>float</code> | Require an amount of MP to use the power. The amount will be consumed on usage.</p>
 
-<p><strong>power.requires_hp</strong> | <code>float</code> | Restrict power usage to a specified HP level.</p>
+<p><strong>power.requires_hp</strong> | <code>float</code> | Require an amount of HP to use the power. The amount will be consumed on usage.</p>
+
+<p><strong>power.requires_resource_stat</strong> | <code>repeatable(predefined_string, float) : Resource stat ID, Required amount</code> | Requires an amount of a given resource to use the power. The amount will be consumed on usage.</p>
 
 <p><strong>power.sacrifice</strong> | <code>bool</code> | If the power has requires_hp, allow it to kill the caster.</p>
 
@@ -1907,6 +1959,10 @@ code {
 <p><strong>power.cooldown</strong> | <code>duration</code> | Specify the duration for cooldown of the power in 'ms' or 's'.</p>
 
 <p><strong>power.requires_hpmp_state</strong> | <code>["all", "any"], ["percent", "not_percent", "ignore"], float , ["percent", "not_percent", "ignore"], float : Mode, HP state, HP Percentage value, MP state, MP Percentage value</code> | Power can only be used when HP/MP matches the specified state. In 'all' mode, both HP and MP must meet the requirements, where as only one must in 'any' mode. To check a single stat, use 'all' mode and set the 'ignore' state for the other stat.</p>
+
+<p><strong>power.requires_resource_stat_state</strong> | <code>predefined_string, ["percent", "not_percent", "ignore"], float : Resource stat ID, State, Percentage value</code> | Power can only be used when the resource stat matches the specified state. See 'requires_resource_stat_state_mode' for combining multiple resource states and, optionally, HP/MP state.</p>
+
+<p><strong>power.requires_resource_stat_state_mode</strong> | <code>["all", "any", "any_hpmp"]</code> | Determines how required resource state is handled for multiple resources. "all" means that HP/MP state AND all resource stat states must pass. "any" means that HP/MP state must pass AND at least one resource stat state must pass. "any_hpmp" means that HP/MP state OR at least one resource stat state is required to pass.</p>
 
 <p><strong>power.animation</strong> | <code>filename</code> | The filename of the power animation.</p>
 
@@ -1973,6 +2029,8 @@ code {
 <p><strong>power.hp_steal</strong> | <code>float</code> | Percentage of damage to steal into HP</p>
 
 <p><strong>power.mp_steal</strong> | <code>float</code> | Percentage of damage to steal into MP</p>
+
+<p><strong>power.resource_steal</strong> | <code>repeatable(predefined_string, float) : Resource stat ID, Steal amount</code> | Percentage of damage to steal into the specified resource</p>
 
 <p><strong>power.missile_angle</strong> | <code>float</code> | Angle of missile</p>
 
