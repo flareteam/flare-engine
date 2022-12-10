@@ -1,4 +1,4 @@
-Flare v1.14 (WIP)
+Flare v1.14
 
 Engine features:
 

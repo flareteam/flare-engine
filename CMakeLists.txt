@@ -2,7 +2,7 @@ Project (Flare)
 cmake_minimum_required (VERSION 2.8.12)
 
 Set (PACKAGE "FLARE")
-Set (VERSION "1.13.04")
+Set (VERSION "1.14")
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
