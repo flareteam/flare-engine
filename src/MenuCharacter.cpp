@@ -390,9 +390,27 @@ void MenuCharacter::refreshStats() {
 		cstat[j].tip.addText(msg->getv("base (%d), bonus (%d)", *(base_stats[j-2]), *(base_stats_add[j-2])));
 
 		bool have_bonus = false;
-		size_t offset_index = 0;
+		size_t elements_offset = Stats::COUNT + eset->damage_types.count;
+		size_t resource_stat_offset = elements_offset + eset->elements.list.size();
 
 		for (int i = 0; i < Stats::COUNT; ++i) {
+			// insert resource stats (execpt stealing) before accuracy
+			if (i == Stats::ACCURACY) {
+				for (size_t k = 0; k < eset->resource_stats.list.size(); ++k) {
+					for (size_t l = 0; l < EngineSettings::ResourceStats::STAT_STEAL; ++l) {
+						size_t resource_index = resource_stat_offset + (k * EngineSettings::ResourceStats::STAT_COUNT) + l;
+
+						if (base_bonus[j-2]->at(resource_index) > 0 && show_stat[resource_index]) {
+							if (!have_bonus) {
+								cstat[j].tip.addText("\n" + msg->get("Related stats:"));
+								have_bonus = true;
+							}
+							cstat[j].tip.addText(eset->resource_stats.list[k].text[l]);
+						}
+					}
+				}
+			}
+
 			// damage types are displayed before absorb
 			if (i == Stats::ABS_MIN) {
 				for (size_t k = 0; k < eset->damage_types.list.size(); ++k) {
@@ -424,23 +442,11 @@ void MenuCharacter::refreshStats() {
 				cstat[j].tip.addText(Stats::NAME[i]);
 			}
 		}
-		offset_index += Stats::COUNT + eset->damage_types.count;
 
-		for (size_t i = 0; i < eset->elements.list.size(); ++i) {
-			if (base_bonus[j-2]->at(offset_index + i) > 0 && show_stat[offset_index + i]) {
-				if (!have_bonus) {
-					cstat[j].tip.addText("\n" + msg->get("Related stats:"));
-					have_bonus = true;
-				}
-				cstat[j].tip.addText(msg->getv("Resistance (%s)", eset->elements.list[i].name.c_str()));
-			}
-		}
-		offset_index += eset->elements.list.size();
-
-		// TODO match the sorting of the stat list
+		// insert resource stealing stats after MP steal
 		for (size_t i = 0; i < eset->resource_stats.list.size(); ++i) {
-			for (size_t k = 0; k < EngineSettings::ResourceStats::STAT_COUNT; ++k) {
-				size_t resource_index = offset_index + (i * EngineSettings::ResourceStats::STAT_COUNT) + k;
+			for (size_t k = EngineSettings::ResourceStats::STAT_STEAL; k < EngineSettings::ResourceStats::STAT_COUNT; ++k) {
+				size_t resource_index = resource_stat_offset + (i * EngineSettings::ResourceStats::STAT_COUNT) + k;
 
 				if (base_bonus[j-2]->at(resource_index) > 0 && show_stat[resource_index]) {
 					if (!have_bonus) {
@@ -449,6 +455,16 @@ void MenuCharacter::refreshStats() {
 					}
 					cstat[j].tip.addText(eset->resource_stats.list[i].text[k]);
 				}
+			}
+		}
+
+		for (size_t i = 0; i < eset->elements.list.size(); ++i) {
+			if (base_bonus[j-2]->at(elements_offset + i) > 0 && show_stat[elements_offset + i]) {
+				if (!have_bonus) {
+					cstat[j].tip.addText("\n" + msg->get("Related stats:"));
+					have_bonus = true;
+				}
+				cstat[j].tip.addText(msg->getv("Resistance (%s)", eset->elements.list[i].name.c_str()));
 			}
 		}
 	}
