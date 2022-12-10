@@ -100,10 +100,6 @@ public:
 
 	void logic();
 
-	// transformation handling
-	bool isTransforming() {
-		return transform_triggered;
-	}
 	void checkTransform();
 
 	void logMsg(const std::string& str, int type);

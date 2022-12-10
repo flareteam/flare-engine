@@ -95,7 +95,6 @@ public:
 	void remove(const Point& mouse);
 	void set(std::vector<PowerID> power_id, bool skip_empty);
 	void clear(bool skip_items);
-	void resetSlots();
 	Point getSlotPos(int slot);
 	PowerID getSlotPower(int slot);
 

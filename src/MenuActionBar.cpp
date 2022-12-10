@@ -766,10 +766,6 @@ void MenuActionBar::set(std::vector<PowerID> power_id, bool skip_empty) {
 	updated = true;
 }
 
-void MenuActionBar::resetSlots() {
-	// TODO remove
-}
-
 /**
  * Set a target depending on how a power was triggered
  */
