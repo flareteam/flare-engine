@@ -1,4 +1,12 @@
-Flare v1.14
+Flare v1.15
+
+Engine fixes:
+
+* Fixed equipment not being visible on the load game menu in cases where an item is shared across multiple equipment sets.
+
+
+
+Flare v1.14 (https://flarerpg.org/2022/12/10/flare-1-14/)
 
 Engine features:
 
