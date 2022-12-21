@@ -862,7 +862,7 @@ void GameStateLoad::render() {
 
 		// slot number
 		ss.str("");
-		ss << "#" << off_slot + 1;
+		ss << msg->get("#") << off_slot + 1;
 
 		game_slots[off_slot]->label_slot_number.setPos(slot_pos[slot].x, slot_pos[slot].y);
 		game_slots[off_slot]->label_slot_number.setText(ss.str());
