@@ -90,7 +90,7 @@ void WidgetTabControl::setActiveTab(unsigned tab) {
 
 	// Set the tab. If the specified tab is not enabled, get the first enabled tab.
 	bool found_tab = false;
-	for (unsigned i = tab; tab < tabs.size(); ++i) {
+	for (unsigned i = tab; i < tabs.size(); ++i) {
 		if (enabled[i]) {
 			active_tab = i;
 			found_tab = true;

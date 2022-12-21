@@ -3,6 +3,7 @@ Flare v1.15
 Engine fixes:
 
 * Fixed equipment not being visible on the load game menu in cases where an item is shared across multiple equipment sets.
+* Fix potential crash in WidgetTabControl when trying to set an active tab when there is no tab already active.
 
 
 
