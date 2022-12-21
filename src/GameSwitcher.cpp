@@ -39,6 +39,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "GameStateTitle.h"
 #include "GameSwitcher.h"
 #include "InputState.h"
+#include "MessageEngine.h"
 #include "RenderDevice.h"
 #include "Settings.h"
 #include "SharedResources.h"
@@ -220,12 +221,14 @@ void GameSwitcher::showFPS(float fps) {
 
 			float avg_fps = (fps + last_fps) / 2.f;
 			last_fps = fps;
-			std::string sfps = Utils::floatToString(avg_fps, 2) + std::string (" fps");
+			std::string sfps = msg->getv("%s FPS", Utils::floatToString(avg_fps, 2).c_str());
 			Rect pos = fps_position;
-			Utils::alignToScreenEdge(fps_corner, &pos);
 			label_fps->setPos(pos.x, pos.y);
 			label_fps->setText(sfps);
 			label_fps->setColor(fps_color);
+			pos = *(label_fps->getBounds());
+			Utils::alignToScreenEdge(fps_corner, &pos);
+			label_fps->setPos(pos.x, pos.y);
 		}
 		label_fps->render();
 		fps_update.tick();
@@ -254,11 +257,6 @@ void GameSwitcher::loadFPS() {
 		}
 		infile.close();
 	}
-
-	// this is a dummy string used to approximate the fps position when aligned to the right
-	font->setFont("font_regular");
-	fps_position.w = font->calc_width("00 fps");
-	fps_position.h = font->getLineHeight();
 
 	// Delete the label object if it exists (we'll recreate this with showFPS())
 	if (label_fps) {
