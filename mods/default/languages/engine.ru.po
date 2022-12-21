@@ -468,13 +468,13 @@ msgstr "Связанные атрибуты:"
 #: ../../../src/MenuCharacter.cpp:499
 #, c-format
 msgid "Each level grants %s."
-msgstr "Каждый уровень даёт %s."
+msgstr "Каждый уровень прибавляет %s."
 
 #: ../../../src/MenuCharacter.cpp:452 ../../../src/MenuCharacter.cpp:476
 #: ../../../src/MenuCharacter.cpp:503
 #, c-format
 msgid "Each point of %s grants %s."
-msgstr "%s получает %s за каждое увеличение атрибута."
+msgstr "%s прибавляет %s при увеличении атрибута."
 
 #: ../../../src/MenuCharacter.cpp:506
 #, c-format
@@ -741,7 +741,7 @@ msgstr "Режим мини-карты"
 
 #: ../../../src/MenuConfig.cpp:429
 msgid "Always show stat bar labels"
-msgstr "Всегда показывать метки в строке состояния"
+msgstr "Всегда показывать текст в строке состояния"
 
 #: ../../../src/MenuConfig.cpp:430
 msgid "Allow stat bar auto-hiding"

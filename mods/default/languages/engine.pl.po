@@ -6,6 +6,7 @@
 # Translators:
 # Błażej Pęksyk <b.peksyk@gmail.com>, 2020
 # Justin Jacobs <jajdorkster@gmail.com>, 2022
+# Marcin Serwin, 2022
 # 
 #, fuzzy
 msgid ""
@@ -14,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-17 20:15-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2022\n"
+"Last-Translator: Marcin Serwin, 2022\n"
 "Language-Team: Polish (https://www.transifex.com/flareorg/teams/84925/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -163,11 +164,11 @@ msgstr "Usunąć ten zapis?"
 
 #: ../../../src/GameStateLoad.cpp:94 ../../../src/MenuConfig.cpp:248
 msgid "No"
-msgstr ""
+msgstr "Nie"
 
 #: ../../../src/GameStateLoad.cpp:95 ../../../src/MenuConfig.cpp:249
 msgid "Yes"
-msgstr ""
+msgstr "Tak"
 
 #: ../../../src/GameStateLoad.cpp:98
 msgid "Exit to Title"
@@ -347,7 +348,7 @@ msgstr "%d przedmioty:"
 
 #: ../../../src/ItemManager.cpp:985 ../../../src/MenuPowers.cpp:1272
 msgid "Tap icon again for more options"
-msgstr ""
+msgstr "Kliknij ikonę jeszcze raz by zobaczyć więcej opcji"
 
 #: ../../../src/ItemManager.cpp:1017
 #, c-format
@@ -381,7 +382,7 @@ msgstr "Domyślne"
 
 #: ../../../src/LootManager.cpp:104
 msgid "Show All"
-msgstr ""
+msgstr "Pokaż wszystko"
 
 #: ../../../src/MenuActionBar.cpp:86 ../../../src/MenuCharacter.cpp:54
 #: ../../../src/SDLInputState.cpp:894
@@ -483,7 +484,7 @@ msgstr "Przypisz:"
 
 #: ../../../src/MenuConfig.cpp:244
 msgid "New"
-msgstr ""
+msgstr "Nowe"
 
 #: ../../../src/MenuConfig.cpp:245 ../../../src/MenuManager.cpp:1782
 msgid "Clear"
@@ -1265,36 +1266,36 @@ msgstr "Założony"
 
 #: ../../../src/MenuManager.cpp:1775 ../../../src/MenuManager.cpp:1826
 msgid "Use"
-msgstr ""
+msgstr "Użyj"
 
 #: ../../../src/MenuManager.cpp:1779 ../../../src/MenuManager.cpp:1822
 #: ../../../src/MenuManager.cpp:1853
 msgid "Move"
-msgstr ""
+msgstr "Przesuń"
 
 #: ../../../src/MenuManager.cpp:1795 ../../../src/MenuManager.cpp:1830
 msgid "Equip"
-msgstr ""
+msgstr "Załóż"
 
 #: ../../../src/MenuManager.cpp:1799
 msgid "Upgrade"
-msgstr ""
+msgstr "Ulepsz"
 
 #: ../../../src/MenuManager.cpp:1814 ../../../src/MenuManager.cpp:1838
 msgid "Sell"
-msgstr ""
+msgstr "Sprzedaj"
 
 #: ../../../src/MenuManager.cpp:1818 ../../../src/MenuManager.cpp:1856
 msgid "Transfer"
-msgstr ""
+msgstr "Przenieś"
 
 #: ../../../src/MenuManager.cpp:1834
 msgid "Drop"
-msgstr ""
+msgstr "Upuść"
 
 #: ../../../src/MenuManager.cpp:1870
 msgid "Buy"
-msgstr ""
+msgstr "Kup"
 
 #: ../../../src/MenuMovementType.cpp:87
 msgid "Select a Movement Type"
@@ -1380,7 +1381,7 @@ msgstr "Unieruchomienie"
 
 #: ../../../src/MenuPowers.cpp:1002
 msgid "Resistance to all negative effects"
-msgstr ""
+msgstr "Odporność na wszystkie efekty negatywne"
 
 #: ../../../src/MenuPowers.cpp:1006
 msgid "Stun"
@@ -1731,7 +1732,7 @@ msgstr "Przycisk myszy %d"
 
 #: ../../../src/SDLInputState.cpp:720 ../../../src/SDLInputState.cpp:729
 msgid "(unknown)"
-msgstr ""
+msgstr "(nieznany)"
 
 #: ../../../src/SDLInputState.cpp:791
 msgid "Touch control D-Pad"
@@ -1795,11 +1796,11 @@ msgstr "Główny2"
 
 #: ../../../src/SDLInputState.cpp:900
 msgid "Next Equip Set"
-msgstr ""
+msgstr "Następny zestaw ekwipunku"
 
 #: ../../../src/SDLInputState.cpp:901
 msgid "Previous Equip Set"
-msgstr ""
+msgstr "Poprzedni"
 
 #: ../../../src/SDLInputState.cpp:902
 msgid "Mini-map Mode"
