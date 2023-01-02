@@ -329,104 +329,123 @@ Mod ModManager::loadMod(const std::string& name) {
 	std::string line, key, val;
 
 	mod.name = name;
+	bool settingsLoaded = false, gameplayLoaded = false;
 
 	// @CLASS ModManager|Description of mod settings.txt
-	for (unsigned i=0; i<mod_paths.size(); ++i) {
-		std::string path = Filesystem::convertSlashes(mod_paths[i] + "mods/" + name + "/settings.txt");
-		infile.open(path.c_str(), std::ios::in);
+	for (size_t i = mod_paths.size(); i > 0; --i) {
+		if (!settingsLoaded)
+		{
+			std::string path = Filesystem::convertSlashes(mod_paths[i - 1] + "mods/" + name + "/settings.txt");
+			infile.open(path.c_str(), std::ios::in);
 
-		while (infile.good()) {
-			line = Parse::getLine(infile);
+			while (infile.good())
+			{
+				line = Parse::getLine(infile);
 
-			if (Parse::skipLine(line))
-				continue;
+				if (Parse::skipLine(line))
+					continue;
 
-			key = "";
-			val = "";
+				key = "";
+				val = "";
 
-			Parse::getKeyPair(line, key, val);
+				Parse::getKeyPair(line, key, val);
 
-			if (key == "description") {
-				// @ATTR description|string|Some text describing the mod.
-				mod.description = val;
-			}
-			else if (key == "description_locale") {
-				// @ATTR description_locale|string, string : Language, Translated description|A translated description for a language (specified by 2-letter code).
-				std::string locale_str = Parse::popFirstString(val);
-				if (!locale_str.empty())
-					mod.description_locale[locale_str] = Parse::popFirstString(val);
-			}
-			else if (key == "version") {
-				// @ATTR version|version|The version number of this mod.
-				mod.version->setFromString(val);
-			}
-			else if (key == "requires") {
-				// @ATTR requires|list(string)|A comma-separated list of the mods that are required in order to use this mod. The dependency version requirements can also be specified and separated by colons (e.g. fantasycore:0.1:2.0).
-				std::string dep;
-				val = val + ',';
-				while ((dep = Parse::popFirstString(val)) != "") {
-					std::string dep_full = dep + "::";
+				if (key == "description")
+				{
+					// @ATTR description|string|Some text describing the mod.
+					mod.description = val;
+				} else if (key == "description_locale")
+				{
+					// @ATTR description_locale|string, string : Language, Translated description|A translated description for a language (specified by 2-letter code).
+					std::string locale_str = Parse::popFirstString(val);
+					if (!locale_str.empty())
+						mod.description_locale[locale_str] = Parse::popFirstString(val);
+				} else if (key == "version")
+				{
+					// @ATTR version|version|The version number of this mod.
+					mod.version->setFromString(val);
+				} else if (key == "requires")
+				{
+					// @ATTR requires|list(string)|A comma-separated list of the mods that are required in order to use this mod. The dependency version requirements can also be specified and separated by colons (e.g. fantasycore:0.1:2.0).
+					std::string dep;
+					val = val + ',';
+					while ((dep = Parse::popFirstString(val)) != "")
+					{
+						std::string dep_full = dep + "::";
 
-					mod.depends.push_back(Parse::popFirstString(dep_full, ':'));
+						mod.depends.push_back(Parse::popFirstString(dep_full, ':'));
 
-					Version dep_min, dep_max;
-					dep_min.setFromString(Parse::popFirstString(dep_full, ':'));
-					dep_max.setFromString(Parse::popFirstString(dep_full, ':'));
+						Version dep_min, dep_max;
+						dep_min.setFromString(Parse::popFirstString(dep_full, ':'));
+						dep_max.setFromString(Parse::popFirstString(dep_full, ':'));
 
-					if (dep_min != VersionInfo::MIN && dep_max != VersionInfo::MIN && dep_min > dep_max)
-						dep_max = dep_min;
+						if (dep_min != VersionInfo::MIN && dep_max != VersionInfo::MIN && dep_min > dep_max)
+							dep_max = dep_min;
 
-					// empty min version also happens to be the default for min
-					mod.depends_min.push_back(new Version(dep_min));
+						// empty min version also happens to be the default for min
+						mod.depends_min.push_back(new Version(dep_min));
 
-					if (dep_max == VersionInfo::MIN)
-						mod.depends_max.push_back(new Version(VersionInfo::MAX));
-					else
-						mod.depends_max.push_back(new Version(dep_max));
+						if (dep_max == VersionInfo::MIN)
+							mod.depends_max.push_back(new Version(VersionInfo::MAX));
+						else
+							mod.depends_max.push_back(new Version(dep_max));
 
-					assert(mod.depends.size() == mod.depends_min.size());
-					assert(mod.depends.size() == mod.depends_max.size());
+						assert(mod.depends.size() == mod.depends_min.size());
+						assert(mod.depends.size() == mod.depends_max.size());
+					}
+				} else if (key == "game")
+				{
+					// @ATTR game|string|The game which this mod belongs to (e.g. flare-game).
+					mod.game = val;
+				} else if (key == "engine_version_min")
+				{
+					// @ATTR engine_version_min|version|The minimum engine version required to use this mod.
+					mod.engine_min_version->setFromString(val);
+				} else if (key == "engine_version_max")
+				{
+					// @ATTR engine_version_max|version|The maximum engine version required to use this mod.
+					mod.engine_max_version->setFromString(val);
+				} else
+				{
+					Utils::logError("ModManager: Mod '%s' contains invalid key: '%s'", name.c_str(), key.c_str());
 				}
 			}
-			else if (key == "game") {
-				// @ATTR game|string|The game which this mod belongs to (e.g. flare-game).
-				mod.game = val;
-			}
-			else if (key == "engine_version_min") {
-				// @ATTR engine_version_min|version|The minimum engine version required to use this mod.
-				mod.engine_min_version->setFromString(val);
-			}
-			else if (key == "engine_version_max") {
-				// @ATTR engine_version_max|version|The maximum engine version required to use this mod.
-				mod.engine_max_version->setFromString(val);
-			}
-			else {
-				Utils::logError("ModManager: Mod '%s' contains invalid key: '%s'", name.c_str(), key.c_str());
-			}
+			infile.close();
+			infile.clear();
+
+			settingsLoaded = true;
 		}
-		infile.close();
-		infile.clear();
 
-		path = Filesystem::convertSlashes(mod_paths[i] + "mods/" + name + "/engine/gameplay.txt");
-		infile.open(path.c_str(), std::ios::in);
+		if (!gameplayLoaded)
+		{
+			std::string path = Filesystem::convertSlashes(mod_paths[i - 1] + "mods/" + name + "/engine/gameplay.txt");
+			infile.open(path.c_str(), std::ios::in);
 
-		while (infile.good()) {
-			line = Parse::getLine(infile);
+			while (infile.good())
+			{
+				line = Parse::getLine(infile);
 
-			if (Parse::skipLine(line))
-				continue;
+				if (Parse::skipLine(line))
+					continue;
 
-			key = "";
-			val = "";
+				key = "";
+				val = "";
 
-			Parse::getKeyPair(line, key, val);
+				Parse::getKeyPair(line, key, val);
 
-			if (key == "enable_playgame") {
-				mod.is_game_mod = Parse::toBool(val);
+				if (key == "enable_playgame")
+				{
+					mod.is_game_mod = Parse::toBool(val);
+				}
 			}
+			infile.close();
+			infile.clear();
+			gameplayLoaded = true;
 		}
-		infile.close();
-		infile.clear();
+
+		if (settingsLoaded && gameplayLoaded){
+			break;
+		}
 	}
 
 	// ensure that engine min version <= engine max version
