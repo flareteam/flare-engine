@@ -329,11 +329,17 @@ Mod ModManager::loadMod(const std::string& name) {
 	std::string line, key, val;
 
 	mod.name = name;
+	bool settings_loaded = false;
+	bool gameplay_loaded = false;
 
 	// @CLASS ModManager|Description of mod settings.txt
-	for (unsigned i=0; i<mod_paths.size(); ++i) {
+	for (size_t i = 0; i < mod_paths.size(); ++i) {
 		std::string path = Filesystem::convertSlashes(mod_paths[i] + "mods/" + name + "/settings.txt");
 		infile.open(path.c_str(), std::ios::in);
+
+		if (infile.is_open()) {
+			settings_loaded = true;
+		}
 
 		while (infile.good()) {
 			line = Parse::getLine(infile);
@@ -410,6 +416,10 @@ Mod ModManager::loadMod(const std::string& name) {
 		path = Filesystem::convertSlashes(mod_paths[i] + "mods/" + name + "/engine/gameplay.txt");
 		infile.open(path.c_str(), std::ios::in);
 
+		if (infile.is_open()) {
+			gameplay_loaded = true;
+		}
+
 		while (infile.good()) {
 			line = Parse::getLine(infile);
 
@@ -427,6 +437,9 @@ Mod ModManager::loadMod(const std::string& name) {
 		}
 		infile.close();
 		infile.clear();
+
+		if (settings_loaded && gameplay_loaded)
+			break;
 	}
 
 	// ensure that engine min version <= engine max version
