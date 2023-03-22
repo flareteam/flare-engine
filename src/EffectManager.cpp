@@ -376,7 +376,7 @@ void EffectManager::logic() {
 	clearStatus();
 
 	int offset_resource_effects = Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count) + static_cast<int>(eset->elements.list.size()) + static_cast<int>(eset->resource_stats.stat_count);
-	int offset_primary_stats = offset_resource_effects + static_cast<int>(eset->resource_stats.stat_count);
+	int offset_primary_stats = offset_resource_effects + static_cast<int>(eset->resource_stats.effect_count);
 
 	for (size_t i=0; i<effect_list.size(); ++i) {
 		Effect& ei = effect_list[i];

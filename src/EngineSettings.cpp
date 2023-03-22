@@ -1206,7 +1206,7 @@ void EngineSettings::ResourceStats::load() {
 	}
 
 	stat_count = list.size() * EngineSettings::ResourceStats::STAT_COUNT; // base, regen, steal, resist_steal
-	effect_count = list.size() * (EngineSettings::ResourceStats::STAT_EFFECT_COUNT - EngineSettings::ResourceStats::STAT_COUNT); // heal, heal_percent
+	effect_count = list.size() * EngineSettings::ResourceStats::EFFECT_COUNT; // heal, heal_percent
 	stat_effect_count = stat_count + effect_count;
 }
 

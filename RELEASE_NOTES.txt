@@ -6,6 +6,7 @@ Engine fixes:
 * Fix potential crash in WidgetTabControl when trying to set an active tab when there is no tab already active.
 * Fix unintended file appending when loading mod metadata
 * Fix potential crash when tileset image can't be loaded.
+* Fix bonuses to primary stats being incorrectly assigned when arbitrary resource stats are used.
 
 Translation updates:
 
