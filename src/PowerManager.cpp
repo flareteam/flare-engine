@@ -229,8 +229,6 @@ void PowerManager::loadEffects() {
 		else if (infile.key == "animation") {
 			// @ATTR effect.animation|filename|The filename of effect animation.
 			effects.back().animation = infile.val;
-			anim->increaseCount(effects.back().animation);
-			effect_animations.back() = anim->getAnimationSet(effects.back().animation)->getAnimation("");
 		}
 		else if (infile.key == "can_stack") {
 			// @ATTR effect.can_stack|bool|Allows multiple instances of this effect
@@ -269,6 +267,14 @@ void PowerManager::loadEffects() {
 	// check if the last effect and remove it if there is no identifier
 	if (!effects.empty() && effects.back().id == "") {
 		effects.pop_back();
+	}
+
+	// load animations
+	for (size_t i = 0; i < effects.size(); ++i) {
+		if (!effects[i].animation.empty()) {
+			anim->increaseCount(effects[i].animation);
+			effect_animations[i] = anim->getAnimationSet(effects[i].animation)->getAnimation("");
+		}
 	}
 }
 
