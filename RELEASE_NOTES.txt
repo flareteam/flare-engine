@@ -11,6 +11,8 @@ Engine fixes:
 
 Translation updates:
 
+* Scottish Gaelic (gd) update (GunChleoc)
+* Korean (ko) update (ks k)
 * Polish (pl) update (Marcin Serwin)
 * Russian (ru) update (berry)
 

@@ -13,10 +13,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-17 20:15-0400\n"
+"POT-Creation-Date: 2022-12-21 12:22-0500\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
 "Last-Translator: ks k, 2022\n"
-"Language-Team: Korean (https://www.transifex.com/flareorg/teams/84925/ko/)\n"
+"Language-Team: Korean (https://app.transifex.com/flareorg/teams/84925/ko/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -83,23 +83,23 @@ msgstr "%s을(를) 얻었습니다."
 msgid "You receive %d XP."
 msgstr "%d 경험치를 얻었습니다."
 
-#: ../../../src/CampaignManager.cpp:223
+#: ../../../src/CampaignManager.cpp:227
 msgid "HP restored."
 msgstr "체력이 회복되었습니다."
 
-#: ../../../src/CampaignManager.cpp:227
+#: ../../../src/CampaignManager.cpp:231
 msgid "MP restored."
 msgstr "마력이 회복되었습니다."
 
-#: ../../../src/CampaignManager.cpp:232
+#: ../../../src/CampaignManager.cpp:236
 msgid "HP and MP restored."
 msgstr "체력과 마력이 회복되었습니다."
 
-#: ../../../src/CampaignManager.cpp:236
+#: ../../../src/CampaignManager.cpp:240
 msgid "Negative effects removed."
 msgstr "디버프 효과가 해제되었습니다."
 
-#: ../../../src/CampaignManager.cpp:242
+#: ../../../src/CampaignManager.cpp:246
 msgid "HP and MP restored, negative effects removed"
 msgstr "체력과 마력이 회복되고, 디버프 효과가 해제되었습니다."
 
@@ -123,29 +123,30 @@ msgstr ""
 "\n"
 "SDL 소프트웨어 렌더러보다 빠른 경우가 많은 기본 렌더러입니다."
 
-#: ../../../src/EffectManager.cpp:411 ../../../src/EffectManager.cpp:415
-#: ../../../src/EffectManager.cpp:419 ../../../src/EffectManager.cpp:423
-#: ../../../src/EffectManager.cpp:427 ../../../src/Entity.cpp:549
+#: ../../../src/EffectManager.cpp:503 ../../../src/EffectManager.cpp:507
+#: ../../../src/EffectManager.cpp:511 ../../../src/EffectManager.cpp:515
+#: ../../../src/EffectManager.cpp:519 ../../../src/Entity.cpp:548
 #: ../../../src/Entity.cpp:560 ../../../src/Entity.cpp:573
+#: ../../../src/Entity.cpp:588
 msgid "Resist"
 msgstr "저항하다"
 
-#: ../../../src/EngineSettings.cpp:610
+#: ../../../src/EngineSettings.cpp:642
 msgid "Adventurer"
 msgstr "모험가"
 
-#: ../../../src/Entity.cpp:512
+#: ../../../src/Entity.cpp:511
 msgid "miss"
 msgstr "실패"
 
-#: ../../../src/Entity.cpp:553 ../../../src/PowerManager.cpp:1273
-#: ../../../src/StatBlock.cpp:1032 ../../../src/StatBlock.cpp:1038
+#: ../../../src/Entity.cpp:553 ../../../src/PowerManager.cpp:1349
+#: ../../../src/StatBlock.cpp:1121 ../../../src/StatBlock.cpp:1128
 #, c-format
 msgid "+%s HP"
 msgstr "체력 +%s"
 
-#: ../../../src/Entity.cpp:564 ../../../src/StatBlock.cpp:1043
-#: ../../../src/StatBlock.cpp:1049
+#: ../../../src/Entity.cpp:565 ../../../src/StatBlock.cpp:1135
+#: ../../../src/StatBlock.cpp:1142
 #, c-format
 msgid "+%s MP"
 msgstr "마나 +%s"
@@ -206,15 +207,19 @@ msgstr "저장된 게임 불러오는 중..."
 msgid "Invalid save"
 msgstr "손상된 세이브"
 
-#: ../../../src/GameStateLoad.cpp:823 ../../../src/ItemManager.cpp:788
-#: ../../../src/MenuPowers.cpp:892 ../../../src/MenuPowers.cpp:1233
-#: ../../../src/MenuPowers.cpp:1713
+#: ../../../src/GameStateLoad.cpp:823 ../../../src/ItemManager.cpp:808
+#: ../../../src/MenuPowers.cpp:892 ../../../src/MenuPowers.cpp:1260
+#: ../../../src/MenuPowers.cpp:1740
 #, c-format
 msgid "Level %d"
 msgstr "레벨 %d"
 
-#: ../../../src/GameStateNew.cpp:66 ../../../src/MenuConfig.cpp:260
-#: ../../../src/SDLInputState.cpp:878
+#: ../../../src/GameStateLoad.cpp:865
+msgid "#"
+msgstr "#"
+
+#: ../../../src/GameStateNew.cpp:66 ../../../src/GameStateTitle.cpp:136
+#: ../../../src/MenuConfig.cpp:260 ../../../src/SDLInputState.cpp:878
 msgid "Cancel"
 msgstr "취소"
 
@@ -242,125 +247,134 @@ msgstr "부활할 수 없는 죽음?"
 msgid "Choose a Class"
 msgstr "직업을 선택하세요"
 
-#: ../../../src/GameStateTitle.cpp:106
+#: ../../../src/GameStateTitle.cpp:109
 msgid "Play Game"
 msgstr "게임 플레이"
 
-#: ../../../src/GameStateTitle.cpp:109
-msgid "Enable a core mod to continue"
-msgstr "계속하기 위해 코어 모드 활성화"
-
-#: ../../../src/GameStateTitle.cpp:113 ../../../src/MenuMiniMap.cpp:154
+#: ../../../src/GameStateTitle.cpp:112 ../../../src/MenuMiniMap.cpp:154
 msgid "Configuration"
 msgstr "설정"
 
-#: ../../../src/GameStateTitle.cpp:116
+#: ../../../src/GameStateTitle.cpp:115
 msgid "Credits"
 msgstr "개발진"
 
-#: ../../../src/GameStateTitle.cpp:119
+#: ../../../src/GameStateTitle.cpp:118
 msgid "Exit Game"
 msgstr "게임 나가기"
 
-#: ../../../src/ItemManager.cpp:477
+#: ../../../src/GameStateTitle.cpp:134
+msgid "Enable a core mod to continue"
+msgstr "계속하기 위해 코어 모드 활성화"
+
+#: ../../../src/GameStateTitle.cpp:135 ../../../src/MenuConfig.cpp:385
+msgid "Mods"
+msgstr "수정"
+
+#: ../../../src/GameSwitcher.cpp:224
+#, c-format
+msgid "%s FPS"
+msgstr "%s FPS"
+
+#: ../../../src/ItemManager.cpp:475
 msgid "Unknown Item"
 msgstr "알 수 없는 아이템"
 
-#: ../../../src/ItemManager.cpp:681 ../../../src/MenuPowers.cpp:996
+#: ../../../src/ItemManager.cpp:698 ../../../src/MenuPowers.cpp:1023
 #, c-format
 msgid "%s%% Speed"
 msgstr "%s%% 속도"
 
-#: ../../../src/ItemManager.cpp:685 ../../../src/MenuPowers.cpp:999
+#: ../../../src/ItemManager.cpp:702 ../../../src/MenuPowers.cpp:1026
 #, c-format
 msgid "%s%% Attack Speed"
 msgstr "공격속도 %s%%"
 
-#: ../../../src/ItemManager.cpp:712 ../../../src/MenuCharacter.cpp:362
-#: ../../../src/MenuCharacter.cpp:425 ../../../src/MenuPowers.cpp:968
+#: ../../../src/ItemManager.cpp:729 ../../../src/MenuCharacter.cpp:370
+#: ../../../src/MenuCharacter.cpp:467 ../../../src/MenuPowers.cpp:975
 #, c-format
 msgid "Resistance (%s)"
 msgstr "저항 (%s)"
 
-#: ../../../src/ItemManager.cpp:722
+#: ../../../src/ItemManager.cpp:739
 #, c-format
 msgid "Requires %s"
 msgstr "%s 필요"
 
-#: ../../../src/ItemManager.cpp:771
+#: ../../../src/ItemManager.cpp:791
 msgid "Quest Item"
 msgstr "퀘스트 아이템"
 
-#: ../../../src/ItemManager.cpp:801
+#: ../../../src/ItemManager.cpp:821
 #, c-format
 msgid "Quality: %s"
 msgstr "퀄리티: %s"
 
-#: ../../../src/ItemManager.cpp:826
+#: ../../../src/ItemManager.cpp:846
 msgid "Absorb"
 msgstr "흡수"
 
-#: ../../../src/ItemManager.cpp:880 ../../../src/MenuPowers.cpp:1220
-#: ../../../src/MenuPowers.cpp:1223
+#: ../../../src/ItemManager.cpp:900 ../../../src/MenuPowers.cpp:1247
+#: ../../../src/MenuPowers.cpp:1250
 #, c-format
 msgid "Requires Level %d"
 msgstr "필요 레벨: %d"
 
-#: ../../../src/ItemManager.cpp:891 ../../../src/MenuPowers.cpp:1212
-#: ../../../src/MenuPowers.cpp:1214
+#: ../../../src/ItemManager.cpp:912 ../../../src/MenuPowers.cpp:1239
+#: ../../../src/MenuPowers.cpp:1241
 #, c-format
 msgid "Requires %s %d"
 msgstr ""
 
-#: ../../../src/ItemManager.cpp:902
+#: ../../../src/ItemManager.cpp:923
 #, c-format
 msgid "Requires Class: %s"
 msgstr "필요 직업: %s"
 
-#: ../../../src/ItemManager.cpp:918 ../../../src/ItemManager.cpp:930
+#: ../../../src/ItemManager.cpp:939 ../../../src/ItemManager.cpp:951
 #, c-format
 msgid "Buy Price: %d %s"
 msgstr "구매 가격: %d %s"
 
-#: ../../../src/ItemManager.cpp:920 ../../../src/ItemManager.cpp:932
+#: ../../../src/ItemManager.cpp:941 ../../../src/ItemManager.cpp:953
 #, c-format
 msgid "Buy Price: %d %s each"
 msgstr "구매 가격: 각각 %d %s"
 
-#: ../../../src/ItemManager.cpp:940
+#: ../../../src/ItemManager.cpp:961
 #, c-format
 msgid "Sell Price: %d %s"
 msgstr "판매 가격: %d %s"
 
-#: ../../../src/ItemManager.cpp:942
+#: ../../../src/ItemManager.cpp:963
 #, c-format
 msgid "Sell Price: %d %s each"
 msgstr "판매 가격: 각각 %d %s"
 
-#: ../../../src/ItemManager.cpp:953
+#: ../../../src/ItemManager.cpp:974
 msgid "Set:"
 msgstr "세트 장비:"
 
-#: ../../../src/ItemManager.cpp:960
+#: ../../../src/ItemManager.cpp:981
 #, c-format
 msgid "%d items:"
 msgstr "%d 개 효과:"
 
-#: ../../../src/ItemManager.cpp:985 ../../../src/MenuPowers.cpp:1272
+#: ../../../src/ItemManager.cpp:1006 ../../../src/MenuPowers.cpp:1299
 msgid "Tap icon again for more options"
 msgstr "더 많은 옵션을 위해 아이콘을 다시 선택하세요"
 
-#: ../../../src/ItemManager.cpp:1017
+#: ../../../src/ItemManager.cpp:1038
 #, c-format
 msgid "Press [%s] to read"
 msgstr "읽으려면 [%s] 키를 누르세요"
 
-#: ../../../src/ItemManager.cpp:1020 ../../../src/MenuPowers.cpp:1302
+#: ../../../src/ItemManager.cpp:1041 ../../../src/MenuPowers.cpp:1329
 #, c-format
 msgid "Press [%s] to use"
 msgstr "사용하려면 [%s] 키를 누르세요"
 
-#: ../../../src/ItemManager.cpp:1024 ../../../src/MenuPowers.cpp:1306
+#: ../../../src/ItemManager.cpp:1045 ../../../src/MenuPowers.cpp:1333
 #, c-format
 msgid "Press [%s] for more options"
 msgstr "더 많은 옵션을 위해 [%s]을/를 선택하세요"
@@ -436,44 +450,45 @@ msgstr "이름"
 msgid "Level"
 msgstr "레벨"
 
-#: ../../../src/MenuCharacter.cpp:316
+#: ../../../src/MenuCharacter.cpp:296
 #, c-format
 msgid "Available stat points: %d"
 msgstr "필요한 스텟 포인트: %d"
 
-#: ../../../src/MenuCharacter.cpp:374 ../../../src/MenuStatBar.cpp:165
+#: ../../../src/MenuCharacter.cpp:382 ../../../src/MenuStatBar.cpp:179
 #, c-format
 msgid "XP: %lu"
 msgstr "XP: %lu"
 
-#: ../../../src/MenuCharacter.cpp:376
+#: ../../../src/MenuCharacter.cpp:384
 #, c-format
 msgid "Next: %lu"
 msgstr "다음: %lu"
 
-#: ../../../src/MenuCharacter.cpp:382
+#: ../../../src/MenuCharacter.cpp:390
 #, c-format
 msgid "base (%d), bonus (%d)"
 msgstr "기본 (%d), 보너스 (%d)"
 
-#: ../../../src/MenuCharacter.cpp:391 ../../../src/MenuCharacter.cpp:399
-#: ../../../src/MenuCharacter.cpp:410 ../../../src/MenuCharacter.cpp:422
+#: ../../../src/MenuCharacter.cpp:405 ../../../src/MenuCharacter.cpp:420
+#: ../../../src/MenuCharacter.cpp:428 ../../../src/MenuCharacter.cpp:439
+#: ../../../src/MenuCharacter.cpp:453 ../../../src/MenuCharacter.cpp:464
 msgid "Related stats:"
 msgstr "관련 능력치:"
 
-#: ../../../src/MenuCharacter.cpp:448 ../../../src/MenuCharacter.cpp:472
-#: ../../../src/MenuCharacter.cpp:499
+#: ../../../src/MenuCharacter.cpp:490 ../../../src/MenuCharacter.cpp:514
+#: ../../../src/MenuCharacter.cpp:541 ../../../src/MenuCharacter.cpp:562
 #, c-format
 msgid "Each level grants %s."
 msgstr "각 레벨은 %s을(를) 부여합니다."
 
-#: ../../../src/MenuCharacter.cpp:452 ../../../src/MenuCharacter.cpp:476
-#: ../../../src/MenuCharacter.cpp:503
+#: ../../../src/MenuCharacter.cpp:494 ../../../src/MenuCharacter.cpp:518
+#: ../../../src/MenuCharacter.cpp:545 ../../../src/MenuCharacter.cpp:566
 #, c-format
 msgid "Each point of %s grants %s."
 msgstr "%s의 각 점에 대해 %s이(가) 부여됩니다."
 
-#: ../../../src/MenuCharacter.cpp:506
+#: ../../../src/MenuCharacter.cpp:548
 #, c-format
 msgid "Reduces the damage taken from \"%s\" elemental attacks."
 msgstr "\"%s\" 기본 공격의 피해를 줄입니다."
@@ -486,7 +501,7 @@ msgstr "할당:"
 msgid "New"
 msgstr "새로운"
 
-#: ../../../src/MenuConfig.cpp:245 ../../../src/MenuManager.cpp:1782
+#: ../../../src/MenuConfig.cpp:245 ../../../src/MenuManager.cpp:1794
 msgid "Clear"
 msgstr "통과"
 
@@ -612,7 +627,7 @@ msgstr ""
 "렌더 크기는 게임을 표현하는 데 사용되는 표면의 픽셀 단위 높이를 나타냅니다. 모드는 허용되는 렌더 크기를 정의한다. 하지만 이 옵션을 "
 "사용하면 최대 크기를 재정의할 수 있습니다."
 
-#: ../../../src/MenuConfig.cpp:379 ../../../src/MenuConfig.cpp:1711
+#: ../../../src/MenuConfig.cpp:379 ../../../src/MenuConfig.cpp:1715
 #: ../../../src/MenuGameOver.cpp:117
 msgid "Exit"
 msgstr "나가기"
@@ -636,10 +651,6 @@ msgstr "입력"
 #: ../../../src/MenuConfig.cpp:384
 msgid "Keybindings"
 msgstr "키 설정"
-
-#: ../../../src/MenuConfig.cpp:385
-msgid "Mods"
-msgstr "수정"
 
 #: ../../../src/MenuConfig.cpp:397
 msgid "Paused"
@@ -919,32 +930,36 @@ msgstr "활성화 >>"
 msgid "Bindings for:"
 msgstr "바인딩;"
 
-#: ../../../src/MenuConfig.cpp:1562
+#: ../../../src/MenuConfig.cpp:1553
+msgid "Core mod"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:1566
 msgid "Version:"
 msgstr "버전:"
 
-#: ../../../src/MenuConfig.cpp:1567
+#: ../../../src/MenuConfig.cpp:1571
 msgid "Game:"
 msgstr "게임:"
 
-#: ../../../src/MenuConfig.cpp:1572
+#: ../../../src/MenuConfig.cpp:1576
 msgid "Engine version:"
 msgstr "엔진 버전:"
 
-#: ../../../src/MenuConfig.cpp:1580
+#: ../../../src/MenuConfig.cpp:1584
 msgid "Requires mods:"
 msgstr "필요 모드:"
 
-#: ../../../src/MenuConfig.cpp:1629
+#: ../../../src/MenuConfig.cpp:1633
 msgid "Can not remove this binding."
 msgstr "이 바인딩을 제거할 수 없습니다."
 
-#: ../../../src/MenuConfig.cpp:1694 ../../../src/SDLInputState.cpp:740
+#: ../../../src/MenuConfig.cpp:1698 ../../../src/SDLInputState.cpp:740
 #: ../../../src/SDLInputState.cpp:765
 msgid "(none)"
 msgstr "(없음)"
 
-#: ../../../src/MenuConfig.cpp:1711 ../../../src/MenuGameOver.cpp:73
+#: ../../../src/MenuConfig.cpp:1715 ../../../src/MenuGameOver.cpp:73
 msgid "Save & Exit"
 msgstr "저장후 나가기"
 
@@ -1194,7 +1209,7 @@ msgstr "%s가 부족합니다."
 msgid "This item can not be sold."
 msgstr "이 아이템은 판매될 수 없습니다."
 
-#: ../../../src/MenuInventory.cpp:1329
+#: ../../../src/MenuInventory.cpp:1332
 #, c-format
 msgid "Equipped set %d."
 msgstr "%d 번 장비 모음으로 착용하였습니다."
@@ -1207,48 +1222,48 @@ msgstr "퀘스트"
 msgid "Notes"
 msgstr "메모"
 
-#: ../../../src/MenuManager.cpp:165
+#: ../../../src/MenuManager.cpp:174
 msgid "Choose an action:"
 msgstr "행동을 선택하세요:"
 
-#: ../../../src/MenuManager.cpp:510 ../../../src/MenuManager.cpp:1142
+#: ../../../src/MenuManager.cpp:522 ../../../src/MenuManager.cpp:1154
 msgid "This item can not be dropped."
 msgstr "이 아이템을 떨어지지 않습니다."
 
-#: ../../../src/MenuManager.cpp:1727
+#: ../../../src/MenuManager.cpp:1739
 msgid "Equipped"
 msgstr "장비를 착용했음"
 
-#: ../../../src/MenuManager.cpp:1775 ../../../src/MenuManager.cpp:1826
+#: ../../../src/MenuManager.cpp:1787 ../../../src/MenuManager.cpp:1838
 msgid "Use"
 msgstr "사용하기"
 
-#: ../../../src/MenuManager.cpp:1779 ../../../src/MenuManager.cpp:1822
-#: ../../../src/MenuManager.cpp:1853
+#: ../../../src/MenuManager.cpp:1791 ../../../src/MenuManager.cpp:1834
+#: ../../../src/MenuManager.cpp:1865
 msgid "Move"
 msgstr "움직이기"
 
-#: ../../../src/MenuManager.cpp:1795 ../../../src/MenuManager.cpp:1830
+#: ../../../src/MenuManager.cpp:1807 ../../../src/MenuManager.cpp:1842
 msgid "Equip"
 msgstr "장비를 갖추다"
 
-#: ../../../src/MenuManager.cpp:1799
+#: ../../../src/MenuManager.cpp:1811
 msgid "Upgrade"
 msgstr "개선하다"
 
-#: ../../../src/MenuManager.cpp:1814 ../../../src/MenuManager.cpp:1838
+#: ../../../src/MenuManager.cpp:1826 ../../../src/MenuManager.cpp:1850
 msgid "Sell"
 msgstr "판매하기"
 
-#: ../../../src/MenuManager.cpp:1818 ../../../src/MenuManager.cpp:1856
+#: ../../../src/MenuManager.cpp:1830 ../../../src/MenuManager.cpp:1868
 msgid "Transfer"
 msgstr "이동하기"
 
-#: ../../../src/MenuManager.cpp:1834
+#: ../../../src/MenuManager.cpp:1846
 msgid "Drop"
 msgstr "떨어트리다"
 
-#: ../../../src/MenuManager.cpp:1870
+#: ../../../src/MenuManager.cpp:1882
 msgid "Buy"
 msgstr "구매하기"
 
@@ -1314,117 +1329,117 @@ msgstr "마력 %s 소비함"
 msgid "Costs %s HP"
 msgstr "체력 %s 소비함"
 
-#: ../../../src/MenuPowers.cpp:919
+#: ../../../src/MenuPowers.cpp:925
 msgid "Cooldown:"
 msgstr "냉각:"
 
-#: ../../../src/MenuPowers.cpp:975 ../../../src/MenuPowers.cpp:978
+#: ../../../src/MenuPowers.cpp:1002 ../../../src/MenuPowers.cpp:1005
 msgid "Damage per second"
 msgstr "초당 피해량"
 
-#: ../../../src/MenuPowers.cpp:981 ../../../src/MenuPowers.cpp:984
+#: ../../../src/MenuPowers.cpp:1008 ../../../src/MenuPowers.cpp:1011
 msgid "HP per second"
 msgstr "초당 채력"
 
-#: ../../../src/MenuPowers.cpp:987 ../../../src/MenuPowers.cpp:990
+#: ../../../src/MenuPowers.cpp:1014 ../../../src/MenuPowers.cpp:1017
 msgid "MP per second"
 msgstr "초당 체력"
 
-#: ../../../src/MenuPowers.cpp:994
+#: ../../../src/MenuPowers.cpp:1021
 msgid "Immobilize"
 msgstr "고정"
 
-#: ../../../src/MenuPowers.cpp:1002
+#: ../../../src/MenuPowers.cpp:1029
 msgid "Resistance to all negative effects"
 msgstr "모든 부정적 영향에 대한 저항성"
 
-#: ../../../src/MenuPowers.cpp:1006
+#: ../../../src/MenuPowers.cpp:1033
 msgid "Stun"
 msgstr "기절"
 
-#: ../../../src/MenuPowers.cpp:1009
+#: ../../../src/MenuPowers.cpp:1036
 msgid "Automatic revive on death"
 msgstr "사망시 자동 부활"
 
-#: ../../../src/MenuPowers.cpp:1012
+#: ../../../src/MenuPowers.cpp:1039
 msgid "Convert"
 msgstr "전환하다"
 
-#: ../../../src/MenuPowers.cpp:1015
+#: ../../../src/MenuPowers.cpp:1042
 msgid "Fear"
 msgstr "공포"
 
-#: ../../../src/MenuPowers.cpp:1018
+#: ../../../src/MenuPowers.cpp:1045
 msgid "Lifespan"
 msgstr "수명"
 
-#: ../../../src/MenuPowers.cpp:1042
+#: ../../../src/MenuPowers.cpp:1069
 msgid "Magical Shield"
 msgstr "마법의 방패"
 
-#: ../../../src/MenuPowers.cpp:1071
+#: ../../../src/MenuPowers.cpp:1098
 msgid "Healing"
 msgstr "치유"
 
-#: ../../../src/MenuPowers.cpp:1074
+#: ../../../src/MenuPowers.cpp:1101
 msgid "Knockback"
 msgstr "뒤로밀어내기"
 
-#: ../../../src/MenuPowers.cpp:1098
+#: ../../../src/MenuPowers.cpp:1125
 #, c-format
 msgid "%s%% chance"
 msgstr "%s%% 기회"
 
-#: ../../../src/MenuPowers.cpp:1150
+#: ../../../src/MenuPowers.cpp:1177
 msgid "Base Accuracy"
 msgstr "기본 정확도"
 
-#: ../../../src/MenuPowers.cpp:1170
+#: ../../../src/MenuPowers.cpp:1197
 msgid "Base Critical Chance"
 msgstr "기본 치명타 확률"
 
-#: ../../../src/MenuPowers.cpp:1178
+#: ../../../src/MenuPowers.cpp:1205
 msgid "Ignores Absorbtion"
 msgstr "흡수 무시"
 
-#: ../../../src/MenuPowers.cpp:1183
+#: ../../../src/MenuPowers.cpp:1210
 msgid "Ignores Avoidance"
 msgstr "회피 무시"
 
-#: ../../../src/MenuPowers.cpp:1188
+#: ../../../src/MenuPowers.cpp:1215
 #, c-format
 msgid "%s%% Chance to crit slowed targets"
 msgstr "%s%% 확률로 느려진 목표물에 치명타를 가할 수 있는 기회"
 
-#: ../../../src/MenuPowers.cpp:1193
+#: ../../../src/MenuPowers.cpp:1220
 #, c-format
 msgid "Elemental Damage (%s)"
 msgstr "기본 데미지 (%s)"
 
-#: ../../../src/MenuPowers.cpp:1202
+#: ../../../src/MenuPowers.cpp:1229
 #, c-format
 msgid "Requires a %s"
 msgstr "%s가 필요합니다."
 
-#: ../../../src/MenuPowers.cpp:1240 ../../../src/MenuPowers.cpp:1243
+#: ../../../src/MenuPowers.cpp:1267 ../../../src/MenuPowers.cpp:1270
 #, c-format
 msgid "Requires Power: %s"
 msgstr "필요한 스킬: %s"
 
-#: ../../../src/MenuPowers.cpp:1252
+#: ../../../src/MenuPowers.cpp:1279
 msgid "Click to Unlock (uses 1 Skill Point)"
 msgstr "클릭하여 잠금 해제(1 스킬 포인트 사용)"
 
-#: ../../../src/MenuPowers.cpp:1256 ../../../src/MenuPowers.cpp:1258
+#: ../../../src/MenuPowers.cpp:1283 ../../../src/MenuPowers.cpp:1285
 msgid "Requires 1 Skill Point"
 msgstr "스킬 포인트 1 이 필요"
 
-#: ../../../src/MenuPowers.cpp:1505
+#: ../../../src/MenuPowers.cpp:1532
 #, c-format
 msgid "Available skill points: %d"
 msgstr "필요한 스킬 포인트: %d"
 
-#: ../../../src/MenuPowers.cpp:1537
+#: ../../../src/MenuPowers.cpp:1564
 msgid "Next Level:"
 msgstr "다음 레벨:"
 
@@ -1461,7 +1476,7 @@ msgstr "저장소가 가득찼습니다."
 msgid "Can not store item in stash: %s"
 msgstr "저장소에 저장할 수 없습니다: %s"
 
-#: ../../../src/MenuStatBar.cpp:168
+#: ../../../src/MenuStatBar.cpp:182
 #, c-format
 msgid "XP: %lu/%lu"
 msgstr "XP: %lu/%lu"
@@ -1483,16 +1498,16 @@ msgstr "재판매"
 msgid "Vendor"
 msgstr "노점상"
 
-#: ../../../src/PowerManager.cpp:1257
+#: ../../../src/PowerManager.cpp:1333
 #, c-format
 msgid "+%s Shield"
 msgstr "+%s 보호막"
 
-#: ../../../src/PowerManager.cpp:1521
+#: ../../../src/PowerManager.cpp:1597
 msgid "You are already transformed, untransform first."
 msgstr "이미 변환되었습니다. 변환을 먼저 취소하세요."
 
-#: ../../../src/PowerManager.cpp:1533
+#: ../../../src/PowerManager.cpp:1609
 msgid "Could not untransform at this position."
 msgstr "이 위치에서 변환을 취소할 수 없습니다."
 
@@ -2151,16 +2166,16 @@ msgstr "마력 훔치기에 대한 저항"
 msgid "Percentage chance that MP steal will be negated."
 msgstr "마력 훔치기가 무효화될 확률입니다."
 
-#: ../../../src/Utils.cpp:370
+#: ../../../src/Utils.cpp:375
 msgid "k"
 msgstr "k"
 
-#: ../../../src/Utils.cpp:662
+#: ../../../src/Utils.cpp:667
 #, c-format
 msgid "%s second"
 msgstr "%s 초"
 
-#: ../../../src/Utils.cpp:665
+#: ../../../src/Utils.cpp:670
 #, c-format
 msgid "%s seconds"
 msgstr "%s 초"
