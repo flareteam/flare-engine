@@ -8,6 +8,7 @@ Engine fixes:
 * Fix potential crash when tileset image can't be loaded.
 * Fix bonuses to primary stats being incorrectly assigned when arbitrary resource stats are used.
 * Fix leaked effect animations when an effect's animation property was redefined.
+* Fix invalid memory access when consuming a corpse after a map change
 
 Translation updates:
 

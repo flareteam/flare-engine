@@ -184,6 +184,8 @@ void Avatar::handleNewMap() {
 	cursor_enemy = NULL;
 	lock_enemy = NULL;
 	playing_lowhp = false;
+
+	stats.target_corpse = NULL;
 }
 
 /**
