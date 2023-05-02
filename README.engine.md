@@ -42,7 +42,7 @@ The following links are specific to the engine
 
 * [Homepage](http://flarerpg.org)
 * [Source](https://github.com/flareteam/flare-engine)
-* [Forums](http://opengameart.org/forums/flare)
+* [Forums](https://github.com/flareteam/flare-game/discussions)
 * Email     clintbellanger@gmail.com
 
 ## Games made with flare
