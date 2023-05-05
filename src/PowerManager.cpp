@@ -578,6 +578,9 @@ void PowerManager::loadPowers() {
 				powers[input_id].animation_name.clear();
 			}
 			if (!infile.val.empty()) {
+				if (power_animations[input_id]) {
+					delete power_animations[input_id];
+				}
 				powers[input_id].animation_name = infile.val;
 				anim->increaseCount(powers[input_id].animation_name);
 				power_animations[input_id] = anim->getAnimationSet(powers[input_id].animation_name)->getAnimation("");

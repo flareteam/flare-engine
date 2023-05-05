@@ -11,6 +11,7 @@ Engine fixes:
 * Fix invalid memory access when consuming a corpse after a map change
 * Fix crash when a book has a blank text item
 * Fix memory leak from dropped loot
+* Fix memory leak when a power's animation property was redefined.
 
 Translation updates:
 
