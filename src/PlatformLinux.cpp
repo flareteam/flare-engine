@@ -32,6 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <errno.h>
 #include <unistd.h>
 #include <sys/stat.h>
+#include <string.h>
 
 Platform platform;
 
@@ -166,6 +167,7 @@ void Platform::setPaths() {
 	// finally assume the local folder
 	if (!path_data)	{
 		char abs_path[1024];
+		memset(abs_path, 0, 1024);
 		ssize_t len = readlink("/proc/self/exe", abs_path, 1024);
 		if (len >= 0 && len < 1024) {
 			// remove executable name from abs_path
