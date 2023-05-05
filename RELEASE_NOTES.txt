@@ -10,6 +10,7 @@ Engine fixes:
 * Fix leaked effect animations when an effect's animation property was redefined.
 * Fix invalid memory access when consuming a corpse after a map change
 * Fix crash when a book has a blank text item
+* Fix memory leak from dropped loot
 
 Translation updates:
 
