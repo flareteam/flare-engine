@@ -186,6 +186,8 @@ void Avatar::handleNewMap() {
 	playing_lowhp = false;
 
 	stats.target_corpse = NULL;
+	stats.target_nearest = NULL;
+	stats.target_nearest_corpse = NULL;
 }
 
 /**
