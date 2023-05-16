@@ -19,6 +19,7 @@ Translation updates:
 * Korean (ko) update (ks k)
 * Polish (pl) update (Marcin Serwin)
 * Russian (ru) update (berry)
+* Swedish (sv) update (Kevin Setterborn)
 
 
 

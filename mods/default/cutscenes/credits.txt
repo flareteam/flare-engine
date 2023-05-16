@@ -89,6 +89,7 @@ text=Issac Zhang
 text=Janet Hunt
 text=Juan Pablo Tamayo
 text=Kirim Saja
+text=Kevin Setterborn
 text=Kor_OfenTHource
 text=(bnk159hair, kangdonghun1230, HunSeongPark, paparad0x)
 text=ks k
