@@ -15,7 +15,7 @@ Engine fixes:
 
 Translation updates:
 
-* Spanish (es) update (Julvenzor)
+* Spanish (es) update (Jacobo Feijóo, Julvenzor)
 * Scottish Gaelic (gd) update (GunChleoc)
 * Korean (ko) update (ks k)
 * Polish (pl) update (Marcin Serwin)
