@@ -63,7 +63,7 @@ Settings::Settings()
 	, soft_reset(false)
 	, safe_video(false)
 {
-	config.resize(44);
+	config.resize(46);
 	setConfigDefault(0,  "move_type_dimissed",  &typeid(move_type_dimissed),  "0",            &move_type_dimissed,  "One time flag for initial movement type dialog | 0 = show dialog, 1 = no dialog");
 	setConfigDefault(1,  "fullscreen",          &typeid(fullscreen),          "0",            &fullscreen,          "Fullscreen mode | 0 = disable, 1 = enable");
 	setConfigDefault(2,  "resolution_w",        &typeid(screen_w),            "640",          &screen_w,            "Window size");
@@ -108,6 +108,8 @@ Settings::Settings()
 	setConfigDefault(41, "max_render_size",     &typeid(max_render_size),     "0",            &max_render_size,     "Overrides the maximum height (in pixels) of the internal render surface | 0 = ignore this setting");
 	setConfigDefault(42, "touch_controls",      &typeid(touchscreen),         "0",            &touchscreen,         "Enables touch screen controls | 0 = disable, 1 = enable");
 	setConfigDefault(43, "touch_scale",         &typeid(touch_scale),         "1.0",          &touch_scale,         "Factor used to scale the touch controls | 1.0 = 100 percent scale");
+	setConfigDefault(44, "mute_on_focus_loss",  &typeid(mute_on_focus_loss),  "1",            &mute_on_focus_loss,  "Mute game audio when the game window loses focus | 0 = disable, 1 = enable");
+	setConfigDefault(45, "pause_on_focus_loss", &typeid(pause_on_focus_loss), "1",            &pause_on_focus_loss, "Pause game when the game window loses focus | 0 = disable, 1 = enable");
 }
 
 void Settings::setConfigDefault(size_t index, const std::string& name, const std::type_info *type, const std::string& default_val, void *storage, const std::string& comment) {

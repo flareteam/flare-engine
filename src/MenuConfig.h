@@ -246,6 +246,8 @@ public:
 	WidgetLabel                * music_volume_lb;
 	WidgetSlider               * sound_volume_sl;
 	WidgetLabel                * sound_volume_lb;
+	WidgetCheckBox             * mute_on_focus_loss_cb;
+	WidgetLabel                * mute_on_focus_loss_lb;
 
 	WidgetCheckBox             * show_fps_cb;
 	WidgetLabel                * show_fps_lb;
@@ -277,6 +279,8 @@ public:
 	WidgetLabel                * low_hp_threshold_lb;
 	WidgetCheckBox             * item_compare_tips_cb;
 	WidgetLabel                * item_compare_tips_lb;
+	WidgetCheckBox             * pause_on_focus_loss_cb;
+	WidgetLabel                * pause_on_focus_loss_lb;
 
 
 	WidgetHorizontalList       * joystick_device_lstb;

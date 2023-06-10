@@ -158,6 +158,8 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	, music_volume_lb(new WidgetLabel())
 	, sound_volume_sl(new WidgetSlider(WidgetSlider::DEFAULT_FILE))
 	, sound_volume_lb(new WidgetLabel())
+	, mute_on_focus_loss_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
+	, mute_on_focus_loss_lb(new WidgetLabel())
 
 	, show_fps_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
 	, show_fps_lb(new WidgetLabel())
@@ -189,6 +191,8 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	, low_hp_threshold_lb(new WidgetLabel())
 	, item_compare_tips_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
 	, item_compare_tips_lb(new WidgetLabel())
+	, pause_on_focus_loss_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
+	, pause_on_focus_loss_lb(new WidgetLabel())
 
 	, joystick_device_lstb(new WidgetHorizontalList())
 	, joystick_device_lb(new WidgetLabel())
@@ -417,6 +421,7 @@ void MenuConfig::init() {
 
 	cfg_tabs[AUDIO_TAB].setOptionWidgets(Platform::Audio::SFX, sound_volume_lb, sound_volume_sl, msg->get("Sound Volume"));
 	cfg_tabs[AUDIO_TAB].setOptionWidgets(Platform::Audio::MUSIC, music_volume_lb, music_volume_sl, msg->get("Music Volume"));
+	cfg_tabs[AUDIO_TAB].setOptionWidgets(Platform::Audio::MUTE_ON_FOCUS_LOSS, mute_on_focus_loss_lb, mute_on_focus_loss_cb, msg->get("Mute audio when window loses focus"));
 
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::LANGUAGE, language_lb, language_lstb, msg->get("Language"));
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::SHOW_FPS, show_fps_lb, show_fps_cb, msg->get("Show FPS"));
@@ -434,6 +439,7 @@ void MenuConfig::init() {
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::LOW_HP_WARNING_TYPE, low_hp_warning_lb, low_hp_warning_lstb, msg->get("Low health notification"));
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::LOW_HP_THRESHOLD, low_hp_threshold_lb, low_hp_threshold_lstb, msg->get("Low health threshold"));
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::ITEM_COMPARE_TIPS, item_compare_tips_lb, item_compare_tips_cb, msg->get("Show item comparison tooltips"));
+	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::PAUSE_ON_FOCUS_LOSS, pause_on_focus_loss_lb, pause_on_focus_loss_cb, msg->get("Pause game when window loses focus"));
 
 
 	cfg_tabs[INPUT_TAB].setOptionWidgets(Platform::Input::JOYSTICK, joystick_device_lb, joystick_device_lstb, msg->get("Joystick"));
@@ -823,6 +829,7 @@ void MenuConfig::updateAudio() {
 		music_volume_sl->set(0,128,0);
 		sound_volume_sl->set(0,128,0);
 	}
+	mute_on_focus_loss_cb->setChecked(settings->mute_on_focus_loss);
 
 	cfg_tabs[AUDIO_TAB].scrollbox->refresh();
 }
@@ -841,6 +848,7 @@ void MenuConfig::updateInterface() {
 	low_hp_warning_lstb->select(settings->low_hp_warning_type);
 	low_hp_threshold_lstb->select((settings->low_hp_threshold/5)-1);
 	item_compare_tips_cb->setChecked(settings->item_compare_tips);
+	pause_on_focus_loss_cb->setChecked(settings->pause_on_focus_loss);
 
 	loot_tooltip_lstb->select(settings->loot_tooltips);
 	minimap_lstb->select(settings->minimap_mode);
@@ -1140,7 +1148,10 @@ void MenuConfig::logicAudio() {
 	cfg_tabs[AUDIO_TAB].scrollbox->logic();
 	Point mouse = cfg_tabs[AUDIO_TAB].scrollbox->input_assist(inpt->mouse);
 
-	if (settings->audio) {
+	if (cfg_tabs[AUDIO_TAB].options[Platform::Audio::MUTE_ON_FOCUS_LOSS].enabled && mute_on_focus_loss_cb->checkClickAt(mouse.x, mouse.y)) {
+		settings->mute_on_focus_loss = mute_on_focus_loss_cb->isChecked();
+	}
+	else if (settings->audio) {
 		if (cfg_tabs[AUDIO_TAB].options[Platform::Audio::MUSIC].enabled && music_volume_sl->checkClickAt(mouse.x, mouse.y)) {
 			if (settings->music_volume == 0)
 				reload_music = true;
@@ -1207,6 +1218,9 @@ void MenuConfig::logicInterface() {
 	}
 	else if (cfg_tabs[INTERFACE_TAB].options[Platform::Interface::ITEM_COMPARE_TIPS].enabled && item_compare_tips_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->item_compare_tips = item_compare_tips_cb->isChecked();
+	}
+	else if (cfg_tabs[INTERFACE_TAB].options[Platform::Interface::PAUSE_ON_FOCUS_LOSS].enabled && pause_on_focus_loss_cb->checkClickAt(mouse.x, mouse.y)) {
+		settings->pause_on_focus_loss = pause_on_focus_loss_cb->isChecked();
 	}
 }
 

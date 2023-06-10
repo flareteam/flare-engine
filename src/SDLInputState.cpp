@@ -369,6 +369,21 @@ void SDLInputState::handle() {
 					window_restored = true;
 					snd->resumeAll();
 				}
+				else if (event.window.event == SDL_WINDOWEVENT_FOCUS_LOST) {
+					if (settings->pause_on_focus_loss && menu) {
+						menu->showExitMenu();
+					}
+					if (settings->mute_on_focus_loss) {
+						snd->setVolumeSFX(0);
+						snd->setVolumeMusic(0);
+					}
+				}
+				else if (event.window.event == SDL_WINDOWEVENT_FOCUS_GAINED) {
+					if (settings->mute_on_focus_loss) {
+						snd->setVolumeSFX(settings->sound_volume);
+						snd->setVolumeMusic(settings->music_volume);
+					}
+				}
 				break;
 
 			// Mobile touch events

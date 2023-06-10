@@ -48,16 +48,17 @@ public:
 
 	class Audio {
 	public:
-		static const int COUNT = 2;
+		static const int COUNT = 3;
 		enum {
 			SFX,
-			MUSIC
+			MUSIC,
+			MUTE_ON_FOCUS_LOSS,
 		};
 	};
 
 	class Interface {
 	public:
-		static const int COUNT = 16;
+		static const int COUNT = 17;
 		enum {
 			LANGUAGE,
 			SUBTITLES,
@@ -73,6 +74,7 @@ public:
 			STATBAR_AUTOHIDE,
 			HARDWARE_CURSOR,
 			ENTITY_MARKERS,
+			PAUSE_ON_FOCUS_LOSS,
 			SHOW_FPS,
 			DEV_MODE
 		};

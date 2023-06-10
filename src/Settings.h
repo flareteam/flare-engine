@@ -84,6 +84,7 @@ public:
 	// Audio Settings
 	unsigned short music_volume;
 	unsigned short sound_volume;
+	bool mute_on_focus_loss;
 
 	// Input Settings
 	bool mouse_move;
@@ -113,6 +114,7 @@ public:
 	int low_hp_warning_type;
 	int low_hp_threshold;
 	bool item_compare_tips;
+	bool pause_on_focus_loss;
 
 	// Language Settings
 	std::string language;
