@@ -334,11 +334,10 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 	}
 	else if (infile.key == "waypoints") {
 		// @ATTR enemygroup.waypoints|list(point)|Enemy waypoints; single enemy only; negates wander_radius
-		std::string none = "";
 		std::string a = Parse::popFirstString(infile.val);
 		std::string b = Parse::popFirstString(infile.val);
 
-		while (a != none) {
+		while (!a.empty()) {
 			FPoint p;
 			p.x = static_cast<float>(Parse::toInt(a)) + 0.5f;
 			p.y = static_cast<float>(Parse::toInt(b)) + 0.5f;
@@ -602,6 +601,32 @@ void Map::loadNPC(FileParser &infile) {
 	else if (infile.key == "direction") {
 		// @ATTR npc.direction|direction|Direction that NPC will initially face.
 		map_npcs.back().direction = Parse::toDirection(infile.val);
+	}
+	else if (infile.key == "waypoints") {
+		// @ATTR npc.waypoints|list(point)|NPC waypoints; negates wander_radius
+		std::string a = Parse::popFirstString(infile.val);
+		std::string b = Parse::popFirstString(infile.val);
+
+		while (!a.empty()) {
+			FPoint p;
+			p.x = static_cast<float>(Parse::toInt(a)) + 0.5f;
+			p.y = static_cast<float>(Parse::toInt(b)) + 0.5f;
+			map_npcs.back().waypoints.push(p);
+			a = Parse::popFirstString(infile.val);
+			b = Parse::popFirstString(infile.val);
+		}
+
+		// disable wander radius, since we can't have waypoints and wandering at the same time
+		map_npcs.back().wander_radius = 0;
+	}
+	else if (infile.key == "wander_radius") {
+		// @ATTR npc.wander_radius|int|The radius (in tiles) that an NPC will wander around randomly; negates waypoints
+		map_npcs.back().wander_radius = std::max(0, Parse::popFirstInt(infile.val));
+
+		// clear waypoints, since wandering will use the waypoint queue
+		while (!map_npcs.back().waypoints.empty()) {
+			map_npcs.back().waypoints.pop();
+		}
 	}
 	else {
 		infile.error("Map: '%s' is not a valid key.", infile.key.c_str());

@@ -110,6 +110,10 @@ void NPCManager::handleNewMap() {
 		if (mn.direction != -1)
 			npc->stats.direction = static_cast<unsigned char>(mn.direction);
 
+		npc->stats.waypoints = mn.waypoints;
+		npc->stats.wander = mn.wander_radius > 0;
+		npc->stats.setWanderArea(mn.wander_radius);
+
 		// npc->stock.sort();
 		npcs.push_back(npc);
 		createMapEvent(*npc, npcs.size());

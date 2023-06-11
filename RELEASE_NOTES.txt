@@ -1,5 +1,9 @@
 Flare v1.15
 
+Engine features:
+
+* Add wander_radius and waypoints support for map NPCs
+
 Engine fixes:
 
 * Fixed equipment not being visible on the load game menu in cases where an item is shared across multiple equipment sets.

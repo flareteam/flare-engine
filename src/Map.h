@@ -98,13 +98,17 @@ public:
 	FPoint pos;
 	std::vector<EventComponent> requirements;
 	int direction;
+	std::queue<FPoint> waypoints;
+	int wander_radius;
 
 	Map_NPC()
 		: type("")
 		, id("")
 		, pos()
 		, requirements()
-		, direction(-1) {
+		, direction(-1)
+		, waypoints(std::queue<FPoint>())
+		, wander_radius(0) {
 	}
 };
 

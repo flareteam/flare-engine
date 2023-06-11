@@ -132,7 +132,7 @@ void EntityBehavior::findTarget() {
 	if (e->stats.cur_state == StatBlock::ENTITY_DEAD || e->stats.cur_state == StatBlock::ENTITY_CRITDEAD) return;
 
 	// standard NPCs don't target anything
-	if (e->stats.npc && !e->stats.hero_ally) return;
+	if (e->stats.npc && !e->stats.hero_ally && !e->stats.wander && e->stats.waypoints.empty()) return;
 
 	// stunned enemies can't act
 	if (e->stats.effects.stun) return;
