@@ -49,7 +49,7 @@ Translations
 (cs) Czech by Nikita Vanku (Zaraka), hark34
 (de) German by Thomas 'CruzR' Glamsch, Chris Oelmueller, Janet Hunt, Stefan Beller, and Wuzzy2
 (el) Greek by Yannis Anthymidis, Michael Papageorgiou, and Nea Retrogamer
-(es) Spanish by Juan Pablo 'morris989' Tamayo, Carlos Sanchez, Diego J. Romero López, Eric R, and Jacobo Feijóo
+(es) Spanish by Juan Pablo 'morris989' Tamayo, Carlos Sanchez, Diego J. Romero López, Eric R, Jacobo Feijóo, and Eugenio Martínez Seguín
 (fi) Finnish by Timo Sievänen
 (fr) French by Quentin 'acieroid' Stievenart, Bonbadil, Morgan Strauss, Christoph J. Thompson, syl_, Christophe Nemo, and Bafy
 (gd) Scottish Gaelic by GunChleoc

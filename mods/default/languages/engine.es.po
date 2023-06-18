@@ -9,6 +9,7 @@
 # Diego J. Romero López <diegojromerolopez@gmail.com>, 2020
 # Jacobo Feijóo, 2023
 # Justin Jacobs <jajdorkster@gmail.com>, 2023
+# Eugenio Martínez Seguín <eumase-04@hotmail.com>, 2023
 # 
 #, fuzzy
 msgid ""
@@ -17,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-21 12:22-0500\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2023\n"
+"Last-Translator: Eugenio Martínez Seguín <eumase-04@hotmail.com>, 2023\n"
 "Language-Team: Spanish (https://app.transifex.com/flareorg/teams/84925/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,7 +28,7 @@ msgstr ""
 
 #: ../../../src/Avatar.cpp:356
 msgid "Your health is low!"
-msgstr "Tu salud es baja"
+msgstr "¡Tienes poca salud!"
 
 #: ../../../src/Avatar.cpp:386
 #, c-format
@@ -44,7 +45,7 @@ msgstr "Puedes desbloquear una o más habilidades a través del Menú de Poderes
 
 #: ../../../src/Avatar.cpp:678
 msgid "You are defeated."
-msgstr ""
+msgstr "Te han derrotado."
 
 #: ../../../src/Avatar.cpp:926
 msgid "Transformation expired. You have been moved back to a safe place."
@@ -123,7 +124,7 @@ msgid ""
 msgstr ""
 "Renderizador SDL por hardware\n"
 "\n"
-"El renderizador predeterminado que suele ser más rápido que el renderizador SDL por software."
+"El renderizador por defecto suele ser más rápido que el renderizador SDL por software."
 
 #: ../../../src/EffectManager.cpp:503 ../../../src/EffectManager.cpp:507
 #: ../../../src/EffectManager.cpp:511 ../../../src/EffectManager.cpp:515
@@ -131,7 +132,7 @@ msgstr ""
 #: ../../../src/Entity.cpp:560 ../../../src/Entity.cpp:573
 #: ../../../src/Entity.cpp:588
 msgid "Resist"
-msgstr ""
+msgstr "Resistir"
 
 #: ../../../src/EngineSettings.cpp:642
 msgid "Adventurer"
@@ -267,7 +268,7 @@ msgstr "Salir del juego"
 
 #: ../../../src/GameStateTitle.cpp:134
 msgid "Enable a core mod to continue"
-msgstr "Habilitar un mod de núcleo para continuar"
+msgstr "Activa un mod de núcleo para continuar"
 
 #: ../../../src/GameStateTitle.cpp:135 ../../../src/MenuConfig.cpp:385
 msgid "Mods"
@@ -276,7 +277,7 @@ msgstr "Mods"
 #: ../../../src/GameSwitcher.cpp:224
 #, c-format
 msgid "%s FPS"
-msgstr ""
+msgstr "%s FPS"
 
 #: ../../../src/ItemManager.cpp:475
 msgid "Unknown Item"
@@ -379,7 +380,7 @@ msgstr "Pulsa [%s] para usar"
 #: ../../../src/ItemManager.cpp:1045 ../../../src/MenuPowers.cpp:1333
 #, c-format
 msgid "Press [%s] for more options"
-msgstr ""
+msgstr "Pulsa [%s] para más opciones"
 
 #: ../../../src/LootManager.cpp:100 ../../../src/LootManager.cpp:102
 #: ../../../src/LootManager.cpp:104 ../../../src/MenuConfig.cpp:427
@@ -455,7 +456,7 @@ msgstr "Nivel"
 #: ../../../src/MenuCharacter.cpp:296
 #, c-format
 msgid "Available stat points: %d"
-msgstr ""
+msgstr "Puntos de estadística: %d"
 
 #: ../../../src/MenuCharacter.cpp:382 ../../../src/MenuStatBar.cpp:179
 #, c-format
@@ -501,7 +502,7 @@ msgstr "Asignar:"
 
 #: ../../../src/MenuConfig.cpp:244
 msgid "New"
-msgstr ""
+msgstr "Nuevo"
 
 #: ../../../src/MenuConfig.cpp:245 ../../../src/MenuManager.cpp:1794
 msgid "Clear"
@@ -532,8 +533,8 @@ msgid ""
 "Show all loot tooltips, except for those that would be obscured by the "
 "player or an enemy. Temporarily show all loot tooltips with 'Alt'."
 msgstr ""
-"Mostrar los consejos referidos al botín, exceptuando aquellos ocultos por el"
-" jugador o un enemigo. Para mostrar todos los consejos pulsa \"Alt\"."
+"Mostrar información sobre el botín, exceptuando lo que esté oculto por el "
+"jugador o un enemigo. Para mostrar todo pulsa «Alt»."
 
 #: ../../../src/MenuConfig.cpp:304
 msgid "Show all"
@@ -543,17 +544,17 @@ msgstr "Mostrar todos"
 msgid ""
 "Always show loot tooltips. Temporarily hide all loot tooltips with 'Alt'."
 msgstr ""
-"Siempre mostrar las ayudas del botín. Ocultar temporalmente todas las ayudas"
-" del botín con \"Alt\"."
+"Mostrar siempre la información del botín. Oculta temporalmente toda la "
+"información del botín con «Alt»."
 
 #: ../../../src/MenuConfig.cpp:305
 msgid ""
 "Always hide loot tooltips, except for when a piece of loot is hovered with "
 "the mouse cursor. Temporarily show all loot tooltips with 'Alt'."
 msgstr ""
-"Ocultar siempre los consejos referidos al botín, exceptuando cuando uno de "
-"los objetos tenga el cursor del ratón encima. Para mostrar todos los "
-"consejos pulsa \"Alt\"."
+"Ocultar siempre la información del botín, excepto si uno de los objetos "
+"tiene el cursor del ratón encima. Muestra temporalmente toda la información "
+"con «Alt»."
 
 #: ../../../src/MenuConfig.cpp:308
 msgid "Visible"
@@ -627,6 +628,8 @@ msgstr ""
 #: ../../../src/MenuConfig.cpp:349
 msgid "The maximum frame rate that the game will be allowed to run at."
 msgstr ""
+"La máxima velocidad de fotogramas por segundo a la que el juego se puede "
+"ejecutar."
 
 #: ../../../src/MenuConfig.cpp:353
 msgid ""
@@ -634,6 +637,9 @@ msgid ""
 "the game. Mods define the allowed render sizes, but this option allows "
 "overriding the maximum size."
 msgstr ""
+"El tamaño de renderizado depende de la altura en píxeles de la superficie "
+"utilizada en el juego. Las modificaciones definen los tamaños de renderizado"
+" permitidos, pero esta opción permite superar el tamaño máximo."
 
 #: ../../../src/MenuConfig.cpp:379 ../../../src/MenuConfig.cpp:1715
 #: ../../../src/MenuGameOver.cpp:117
@@ -706,11 +712,11 @@ msgstr "Gama"
 
 #: ../../../src/MenuConfig.cpp:415
 msgid "Maximum Render Size"
-msgstr ""
+msgstr "Tamaño máximo de renderizado"
 
 #: ../../../src/MenuConfig.cpp:416
 msgid "Frame Limit"
-msgstr ""
+msgstr "Límite de FPS"
 
 #: ../../../src/MenuConfig.cpp:418
 msgid "Sound Volume"
@@ -778,7 +784,7 @@ msgstr "Notificación de salud baja"
 
 #: ../../../src/MenuConfig.cpp:436
 msgid "Show item comparison tooltips"
-msgstr ""
+msgstr "Mostrar información comparativos de objetos"
 
 #: ../../../src/MenuConfig.cpp:439 ../../../src/MenuMovementType.cpp:94
 #: ../../../src/MenuMovementType.cpp:131
@@ -811,11 +817,11 @@ msgstr "Zona sin joystick"
 
 #: ../../../src/MenuConfig.cpp:446
 msgid "Touch Controls"
-msgstr ""
+msgstr "Controles táctiles"
 
 #: ../../../src/MenuConfig.cpp:447
 msgid "Touch Gamepad Scaling"
-msgstr ""
+msgstr "Tamaño del mando táctil"
 
 #: ../../../src/MenuConfig.cpp:552
 msgid ""
@@ -839,9 +845,9 @@ msgid ""
 "to scale the rendering resolution. Otherwise, only the window dimensions are"
 " used."
 msgstr ""
-"Cuando está activo, usa los PPP de la pantalla, junto con las las "
-"dimensiones de la ventana para escalar la resolución. De lo contrario, sólo "
-"se usarán las dimensiones de la ventana."
+"Al activarse, usa los PPP de la pantalla, junto con las dimensiones de la "
+"ventana para escalar la resolución. De lo contrario, solo se usarán las "
+"dimensiones de la ventana."
 
 #: ../../../src/MenuConfig.cpp:555
 msgid ""
@@ -896,6 +902,8 @@ msgid ""
 "When enabled, tooltips for equipped items of the same type are shown next to"
 " standard item tooltips."
 msgstr ""
+"Al activarse, se muestra información sobre los objetos equipados del mismo "
+"tipo junto a la información de objetos estándar."
 
 #: ../../../src/MenuConfig.cpp:562
 msgid ""
@@ -940,6 +948,9 @@ msgid ""
 "When enabled, a virtual gamepad will be added in-game. Other interactions, "
 "such as drag-and-drop behavior, are also altered to better suit touch input."
 msgstr ""
+"Al activarse, se añade un mando virtual al juego. Otras interacciones, como "
+"la de arrastrar y soltar, también se alteran para adecuarse a la entrada "
+"táctil."
 
 #: ../../../src/MenuConfig.cpp:617
 msgid "Active Mods"
@@ -959,11 +970,11 @@ msgstr "Habilitar >>"
 
 #: ../../../src/MenuConfig.cpp:883
 msgid "Bindings for:"
-msgstr ""
+msgstr "Asignaciones para:"
 
 #: ../../../src/MenuConfig.cpp:1553
 msgid "Core mod"
-msgstr ""
+msgstr "Mod de núcleo"
 
 #: ../../../src/MenuConfig.cpp:1566
 msgid "Version:"
@@ -983,7 +994,7 @@ msgstr "Mods requeridos:"
 
 #: ../../../src/MenuConfig.cpp:1633
 msgid "Can not remove this binding."
-msgstr ""
+msgstr "No puedes eliminar esta asignación."
 
 #: ../../../src/MenuConfig.cpp:1698 ../../../src/SDLInputState.cpp:740
 #: ../../../src/SDLInputState.cpp:765
@@ -1173,7 +1184,7 @@ msgstr "Destruido"
 
 #: ../../../src/MenuGameOver.cpp:69
 msgid "Game Over"
-msgstr ""
+msgstr "Fin de la partida"
 
 #: ../../../src/MenuInventory.cpp:275
 #, c-format
@@ -1253,7 +1264,7 @@ msgstr "Este objeto no se puede vender."
 #: ../../../src/MenuInventory.cpp:1332
 #, c-format
 msgid "Equipped set %d."
-msgstr ""
+msgstr "Set %d equipado."
 
 #: ../../../src/MenuLog.cpp:90
 msgid "Quests"
@@ -1265,7 +1276,7 @@ msgstr "Notas"
 
 #: ../../../src/MenuManager.cpp:174
 msgid "Choose an action:"
-msgstr ""
+msgstr "Elige una acción:"
 
 #: ../../../src/MenuManager.cpp:522 ../../../src/MenuManager.cpp:1154
 msgid "This item can not be dropped."
@@ -1273,36 +1284,36 @@ msgstr "Este objeto no se puede soltar."
 
 #: ../../../src/MenuManager.cpp:1739
 msgid "Equipped"
-msgstr ""
+msgstr "Equipado"
 
 #: ../../../src/MenuManager.cpp:1787 ../../../src/MenuManager.cpp:1838
 msgid "Use"
-msgstr ""
+msgstr "Usar"
 
 #: ../../../src/MenuManager.cpp:1791 ../../../src/MenuManager.cpp:1834
 #: ../../../src/MenuManager.cpp:1865
 msgid "Move"
-msgstr ""
+msgstr "Mover"
 
 #: ../../../src/MenuManager.cpp:1807 ../../../src/MenuManager.cpp:1842
 msgid "Equip"
-msgstr ""
+msgstr "Equipar"
 
 #: ../../../src/MenuManager.cpp:1811
 msgid "Upgrade"
-msgstr ""
+msgstr "Mejorar"
 
 #: ../../../src/MenuManager.cpp:1826 ../../../src/MenuManager.cpp:1850
 msgid "Sell"
-msgstr ""
+msgstr "Vender"
 
 #: ../../../src/MenuManager.cpp:1830 ../../../src/MenuManager.cpp:1868
 msgid "Transfer"
-msgstr ""
+msgstr "Transferir"
 
 #: ../../../src/MenuManager.cpp:1846
 msgid "Drop"
-msgstr ""
+msgstr "Soltar"
 
 #: ../../../src/MenuManager.cpp:1882
 msgid "Buy"
@@ -1310,19 +1321,19 @@ msgstr "Comprar"
 
 #: ../../../src/MenuMovementType.cpp:87
 msgid "Select a Movement Type"
-msgstr ""
+msgstr "Selecciona un tipo de movimiento"
 
 #: ../../../src/MenuMovementType.cpp:89
 msgid "Can be changed later in the Configuration menu."
-msgstr ""
+msgstr "Se puede cambiar más tarde en el menú de Configuración."
 
 #: ../../../src/MenuMovementType.cpp:92 ../../../src/MenuMovementType.cpp:122
 msgid "Keyboard"
-msgstr ""
+msgstr "Teclado"
 
 #: ../../../src/MenuMovementType.cpp:93 ../../../src/MenuMovementType.cpp:128
 msgid "Mouse"
-msgstr ""
+msgstr "Ratón"
 
 #: ../../../src/MenuMovementType.cpp:123 ../../../src/MenuMovementType.cpp:132
 #: ../../../src/SDLInputState.cpp:665 ../../../src/SDLInputState.cpp:695
@@ -1350,7 +1361,7 @@ msgstr "Derecha"
 
 #: ../../../src/MenuMovementType.cpp:129
 msgid "Button"
-msgstr ""
+msgstr "Botón"
 
 #: ../../../src/MenuNumPicker.cpp:59
 msgid "Enter amount:"
@@ -1807,51 +1818,51 @@ msgstr "Principal2"
 
 #: ../../../src/SDLInputState.cpp:900
 msgid "Next Equip Set"
-msgstr ""
+msgstr "Sig. set de equipo"
 
 #: ../../../src/SDLInputState.cpp:901
 msgid "Previous Equip Set"
-msgstr ""
+msgstr "Ant. set de equipo"
 
 #: ../../../src/SDLInputState.cpp:902
 msgid "Mini-map Mode"
-msgstr ""
+msgstr "Modo minimapa"
 
 #: ../../../src/SDLInputState.cpp:903
 msgid "Loot Tooltip Mode"
-msgstr ""
+msgstr "Modo de información de botín"
 
 #: ../../../src/SDLInputState.cpp:904
 msgid "Action Bar"
-msgstr ""
+msgstr "Barra de acción"
 
 #: ../../../src/SDLInputState.cpp:905
 msgid "Menu: Next Page"
-msgstr ""
+msgstr "Menú: Siguiente página"
 
 #: ../../../src/SDLInputState.cpp:906
 msgid "Menu: Previous Page"
-msgstr ""
+msgstr "Menú: Página anterior"
 
 #: ../../../src/SDLInputState.cpp:907
 msgid "Menu: Activate"
-msgstr ""
+msgstr "Menú: Activar"
 
 #: ../../../src/SDLInputState.cpp:909
 msgid "Aim Up"
-msgstr ""
+msgstr "Apuntar arriba"
 
 #: ../../../src/SDLInputState.cpp:910
 msgid "Aim Down"
-msgstr ""
+msgstr "Apuntar abajo"
 
 #: ../../../src/SDLInputState.cpp:911
 msgid "Aim Left"
-msgstr ""
+msgstr "Apuntar a izquierda"
 
 #: ../../../src/SDLInputState.cpp:912
 msgid "Aim Right"
-msgstr ""
+msgstr "Apuntar a derecha"
 
 #: ../../../src/SDLInputState.cpp:913
 msgid "Developer Menu"
@@ -1899,103 +1910,103 @@ msgstr "Ratón X2"
 
 #: ../../../src/SDLInputState.cpp:927
 msgid "X360: A"
-msgstr ""
+msgstr "X360: A"
 
 #: ../../../src/SDLInputState.cpp:928
 msgid "X360: B"
-msgstr ""
+msgstr "X360: B"
 
 #: ../../../src/SDLInputState.cpp:929
 msgid "X360: X"
-msgstr ""
+msgstr "X360: X"
 
 #: ../../../src/SDLInputState.cpp:930
 msgid "X360: Y"
-msgstr ""
+msgstr "X360: Y"
 
 #: ../../../src/SDLInputState.cpp:931
 msgid "X360: Back"
-msgstr ""
+msgstr "X360: Atrás"
 
 #: ../../../src/SDLInputState.cpp:932
 msgid "X360: Guide"
-msgstr ""
+msgstr "X360: Guía"
 
 #: ../../../src/SDLInputState.cpp:933
 msgid "X360: Start"
-msgstr ""
+msgstr "X360: Start"
 
 #: ../../../src/SDLInputState.cpp:934
 msgid "X360: L3"
-msgstr ""
+msgstr "X360: L3"
 
 #: ../../../src/SDLInputState.cpp:935
 msgid "X360: R3"
-msgstr ""
+msgstr "X360: R3"
 
 #: ../../../src/SDLInputState.cpp:936
 msgid "X360: L1"
-msgstr ""
+msgstr "X360: L1"
 
 #: ../../../src/SDLInputState.cpp:937
 msgid "X360: R1"
-msgstr ""
+msgstr "X360: R1"
 
 #: ../../../src/SDLInputState.cpp:938
 msgid "X360: D-Up"
-msgstr ""
+msgstr "X360: Cruceta arriba"
 
 #: ../../../src/SDLInputState.cpp:939
 msgid "X360: D-Down"
-msgstr ""
+msgstr "X360: Cruceta abajo"
 
 #: ../../../src/SDLInputState.cpp:940
 msgid "X360: D-Left"
-msgstr ""
+msgstr "X360: Cruceta izquierda"
 
 #: ../../../src/SDLInputState.cpp:941
 msgid "X360: D-Right"
-msgstr ""
+msgstr "X360: Cruceta derecha"
 
 #: ../../../src/SDLInputState.cpp:943
 msgid "X360: Left X+"
-msgstr ""
+msgstr "X360: Eje X+ izq."
 
 #: ../../../src/SDLInputState.cpp:944
 msgid "X360: Left X-"
-msgstr ""
+msgstr "X360: Eje X- izq."
 
 #: ../../../src/SDLInputState.cpp:945
 msgid "X360: Left Y+"
-msgstr ""
+msgstr "X360: Eje Y+ izq."
 
 #: ../../../src/SDLInputState.cpp:946
 msgid "X360: Left Y-"
-msgstr ""
+msgstr "X360: Eje Y- izq."
 
 #: ../../../src/SDLInputState.cpp:947
 msgid "X360: Right X+"
-msgstr ""
+msgstr "X360: Eje X+ der."
 
 #: ../../../src/SDLInputState.cpp:948
 msgid "X360: Right X-"
-msgstr ""
+msgstr "X360: Eje X- der."
 
 #: ../../../src/SDLInputState.cpp:949
 msgid "X360: Right Y+"
-msgstr ""
+msgstr "X360: Eje Y+ der."
 
 #: ../../../src/SDLInputState.cpp:950
 msgid "X360: Right Y-"
-msgstr ""
+msgstr "X360: Eje Y- der."
 
 #: ../../../src/SDLInputState.cpp:951
 msgid "X360: L2"
-msgstr ""
+msgstr "X360: L2"
 
 #: ../../../src/SDLInputState.cpp:952
 msgid "X360: R2"
-msgstr ""
+msgstr "X360: R2"
 
 #: ../../../src/Stats.cpp:38
 msgid "Max HP"
@@ -2126,7 +2137,7 @@ msgstr "Incrementa tu probabilidad de devolver los misiles a tus enemigos."
 
 #: ../../../src/Stats.cpp:128
 msgid "Damage Reflection"
-msgstr "Reflexión de daño"
+msgstr "Daño autoinfligido"
 
 #: ../../../src/Stats.cpp:129
 msgid "Deals a percentage of damage taken back to the attacker."
@@ -2150,67 +2161,68 @@ msgstr "Porcentaje de PM robados por golpe."
 
 #: ../../../src/Stats.cpp:146
 msgid "Resistance to damage-over-time"
-msgstr ""
+msgstr "Resistencia al daño prolongado"
 
 #: ../../../src/Stats.cpp:147
 msgid "Percentage chance that damage-over-time effects will be negated."
-msgstr ""
+msgstr "Porcentaje de probabilidad de anular el daño prolongado."
 
 #: ../../../src/Stats.cpp:152
 msgid "Resistance to slow"
-msgstr ""
+msgstr "Resistencia a la ralentización"
 
 #: ../../../src/Stats.cpp:153
 msgid "Percentage chance that slow effects will be negated."
-msgstr ""
+msgstr "Porcentaje de probabilidad de anular los efectos de ralentización."
 
 #: ../../../src/Stats.cpp:158
 msgid "Resistance to stun"
-msgstr ""
+msgstr "Resistencia al aturdimiento"
 
 #: ../../../src/Stats.cpp:159
 msgid "Percentage chance that stun effects will be negated."
-msgstr ""
+msgstr "Porcentaje de probabilidad de anular los efectos de aturdimiento."
 
 #: ../../../src/Stats.cpp:164
 msgid "Resistance to knockback"
-msgstr ""
+msgstr "Resistencia al retroceso"
 
 #: ../../../src/Stats.cpp:165
 msgid "Percentage chance that knockback effects will be negated."
-msgstr ""
+msgstr "Porcentaje de probabilidad de anular los efectos del retroceso."
 
 #: ../../../src/Stats.cpp:170
 msgid "Resistance to stat debuffs"
-msgstr ""
+msgstr "Resistencia a los efectos negativos"
 
 #: ../../../src/Stats.cpp:171
 msgid "Percentage chance that stat debuff effects will be negated."
 msgstr ""
+"Porcentaje de probabilidad de anular los efectos negativos de estadísticas."
 
 #: ../../../src/Stats.cpp:176
 msgid "Resistance to damage reflection"
-msgstr ""
+msgstr "Resistencia al daño autoinfligido"
 
 #: ../../../src/Stats.cpp:177
 msgid "Percentage chance that damage reflection will be negated."
-msgstr ""
+msgstr "Porcentaje de probabilidad de anular el daño autoinfligido."
 
 #: ../../../src/Stats.cpp:182
 msgid "Resistance to HP steal"
-msgstr ""
+msgstr "Resistencia al robo de PS"
 
 #: ../../../src/Stats.cpp:183
 msgid "Percentage chance that HP steal will be negated."
-msgstr ""
+msgstr "Porcentaje de probabilidad de anular el robo de PS."
 
 #: ../../../src/Stats.cpp:188
 msgid "Resistance to MP steal"
-msgstr ""
+msgstr "Resistencia al robo de maná"
 
 #: ../../../src/Stats.cpp:189
 msgid "Percentage chance that MP steal will be negated."
-msgstr ""
+msgstr "Porcentaje de probabilidad de anular el robo de maná."
 
 #: ../../../src/Utils.cpp:375
 msgid "k"

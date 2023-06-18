@@ -19,7 +19,7 @@ Engine fixes:
 
 Translation updates:
 
-* Spanish (es) update (Jacobo Feijóo, Julvenzor)
+* Spanish (es) update (Jacobo Feijóo, Julvenzor, Eugenio Martínez Seguín)
 * Scottish Gaelic (gd) update (GunChleoc)
 * Korean (ko) update (ks k)
 * Polish (pl) update (Marcin Serwin)
