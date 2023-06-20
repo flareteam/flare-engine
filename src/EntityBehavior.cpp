@@ -35,6 +35,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Entity.h"
 #include "EntityBehavior.h"
 #include "MapRenderer.h"
+#include "Menu.h"
+#include "MenuManager.h"
+#include "MenuTalker.h"
+#include "NPC.h"
 #include "PowerManager.h"
 #include "Settings.h"
 #include "SharedGameResources.h"
@@ -129,13 +133,20 @@ void EntityBehavior::doUpkeep() {
  */
 void EntityBehavior::findTarget() {
 	// dying enemies can't target anything
-	if (e->stats.cur_state == StatBlock::ENTITY_DEAD || e->stats.cur_state == StatBlock::ENTITY_CRITDEAD) return;
+	if (e->stats.cur_state == StatBlock::ENTITY_DEAD || e->stats.cur_state == StatBlock::ENTITY_CRITDEAD)
+		return;
 
 	// standard NPCs don't target anything
-	if (e->stats.npc && !e->stats.hero_ally && !e->stats.wander && e->stats.waypoints.empty()) return;
+	if (e->stats.npc && !e->stats.hero_ally && !e->stats.wander && e->stats.waypoints.empty())
+		return;
 
 	// stunned enemies can't act
-	if (e->stats.effects.stun) return;
+	if (e->stats.effects.stun)
+		return;
+
+	// NPCs engaged in dialog can't act
+	if (e->stats.npc && menu && menu->talker && menu->talker->visible && menu->talker->npc == static_cast<NPC*>(e))
+		return;
 
 	StatBlock *target_stats = NULL;
 	float stealth_threat_range = (e->stats.threat_range * (100 - static_cast<float>(e->stats.hero_stealth))) / 100;
@@ -347,6 +358,10 @@ void EntityBehavior::checkPower() {
 	// if the enemy is on global cooldown it cannot act
 	if (!e->stats.cooldown.isEnd()) return;
 
+	// NPCs engaged in dialog can't act
+	if (e->stats.npc && menu && menu->talker && menu->talker->visible && menu->talker->npc == static_cast<NPC*>(e))
+		return;
+
 	// Note there are two stages to activating a power.
 	// First is the enemy choosing to use a power based on behavioral chance
 	// Second is the power actually firing off once the related animation reaches the active frame.
@@ -396,6 +411,14 @@ void EntityBehavior::checkMove() {
 
 	// stunned enemies can't act
 	if (e->stats.effects.stun) return;
+
+	// NPCs engaged in dialog can't act
+	if (e->stats.npc && menu && menu->talker && menu->talker->visible && menu->talker->npc == static_cast<NPC*>(e)) {
+		if (e->stats.cur_state == StatBlock::ENTITY_MOVE) {
+			e->stats.cur_state = StatBlock::ENTITY_STANCE;
+		}
+		return;
+	}
 
 	// handle not being in combat and (not patrolling waypoints or waiting at waypoint)
 	if (!e->stats.hero_ally && !e->stats.in_combat && (e->stats.waypoints.empty() || !e->stats.waypoint_timer.isEnd())) {
