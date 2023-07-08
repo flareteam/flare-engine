@@ -1079,7 +1079,7 @@ void MenuInventory::applyEquipment() {
 				while (bonus_counter < item.bonus.size()) {
 					for (size_t j = 0; j < eset->primary_stats.list.size(); ++j) {
 						if (item.bonus[bonus_counter].type == BonusData::PRIMARY_STAT && item.bonus[bonus_counter].index == j)
-							pc->stats.primary_additional[j] += static_cast<int>(item.bonus[bonus_counter].value);
+							pc->stats.primary_additional[j] += static_cast<int>(item.bonus[bonus_counter].value.get());
 					}
 
 					bonus_counter++;
@@ -1114,7 +1114,7 @@ void MenuInventory::applyEquipment() {
 
 				for (size_t j = 0; j < eset->primary_stats.list.size(); ++j) {
 					if (temp_set.bonus[bonus_counter].type == BonusData::PRIMARY_STAT && temp_set.bonus[bonus_counter].index == j)
-						pc->stats.primary_additional[j] += static_cast<int>(temp_set.bonus[bonus_counter].value);
+						pc->stats.primary_additional[j] += static_cast<int>(temp_set.bonus[bonus_counter].value.get());
 				}
 			}
 		}
@@ -1301,7 +1301,7 @@ void MenuInventory::applyBonus(const BonusData* bdata) {
 		ed.id = eset->primary_stats.list[bdata->index].id;
 	}
 	else if (bdata->power_id > 0) {
-		menu->pow->addBonusLevels(bdata->power_id, static_cast<int>(bdata->value));
+		menu->pow->addBonusLevels(bdata->power_id, static_cast<int>(bdata->value.get()));
 		return; // don't add item effect
 	}
 	else if (bdata->type == BonusData::RESOURCE_STAT) {
@@ -1311,7 +1311,7 @@ void MenuInventory::applyBonus(const BonusData* bdata) {
 	ed.type = Effect::getTypeFromString(ed.id);
 
 	EffectParams ep;
-	ep.magnitude = bdata->value;
+	ep.magnitude = bdata->value.get();
 	ep.is_multiplier = bdata->is_multiplier;
 	ep.source_type = Power::SOURCE_TYPE_HERO;
 	ep.is_from_item = true;

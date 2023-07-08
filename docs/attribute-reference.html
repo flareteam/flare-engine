@@ -90,6 +90,8 @@ code {
 <p><code>raw</code>, This is plain text, including line breaks. It is used only for map layer data.</p>
 
 <p><code>stat_id</code>, a string that can be any of the following: A base stat (e.g. <code>hp</code> or <code>avoidance</code>); A min or max damage type from <code>engine/damage_types.txt</code> (e.g. <code>dmg_melee_min</code> or <code>dmg_ment_max</code>); An elemental resistance from <code>engine/elements.txt</code>. To use an element as a resistance, <code>_resist</code> is appened to the element id (e.g. <code>fire_resist</code>)</p>
+
+<p><code>level_scaled_value</code>, a string representing a key/value pair that is delimited by a colon (':'). The first half represents the scaling method, and can be one of the following values: <code>base</code>, <code>player_level</code>, <code>item_level</code>, or a primary stat ID. The second half is the value, which is a float. For convenience, it is possible to specify only the value part to define the 'base' value (e.g. <code>price=10</code> is the same as <code>price=base:10</code>). Level scaling assumes level 1 is included in the base. So a level 5 item with <code>price=item_level:1</code> would equate to 4, not 5.</p>
 <hr />
 
 <h4>AnimationSet</h4>
@@ -1016,7 +1018,7 @@ code {
 
 <p><strong>flavor</strong> | <code>string</code> | A description of the item.</p>
 
-<p><strong>level</strong> | <code>int</code> | The item's level. Has no gameplay impact. (Deprecated?)</p>
+<p><strong>level</strong> | <code>int</code> | The item's level.</p>
 
 <p><strong>icon</strong> | <code>icon_id</code> | An id for the icon to display for this item.</p>
 
@@ -1034,15 +1036,15 @@ code {
 
 <p><strong>abs</strong> | <code>float, float : Min, Max</code> | Defines the item absorb value, if only min is specified the absorb value is fixed.</p>
 
-<p><strong>requires_level</strong> | <code>int</code> | The hero's level must match or exceed this value in order to equip this item.</p>
+<p><strong>requires_level</strong> | <code>list(level_scaled_value)</code> | The hero's level must match or exceed this value in order to equip this item.</p>
 
-<p><strong>requires_stat</strong> | <code>repeatable(predefined_string, int) : Primary stat name, Value</code> | Make item require specific stat level ex. requires_stat=physical,6 will require hero to have level 6 in physical stats</p>
+<p><strong>requires_stat</strong> | <code>repeatable(predefined_string, list(level_scaled_value)) : Primary stat name, Value</code> | Make item require specific stat level ex. requires_stat=physical,6 will require hero to have level 6 in physical stats</p>
 
 <p><strong>requires_class</strong> | <code>predefined_string</code> | The hero's base class (engine/classes.txt) must match for this item to be equipped.</p>
 
-<p><strong>bonus</strong> | <code>repeatable(stat_id, float) : Stat ID, Value</code> | Adds a bonus to the item by stat ID, example: bonus=hp,50</p>
+<p><strong>bonus</strong> | <code>repeatable(stat_id, list(level_scaled_value)) : Stat ID, Value</code> | Adds a bonus to the item by stat ID, example: bonus=hp,50</p>
 
-<p><strong>bonus_power_level</strong> | <code>repeatable(power_id, int) : Base power, Bonus levels</code> | Grants bonus levels to a given base power.</p>
+<p><strong>bonus_power_level</strong> | <code>repeatable(power_id, list(level_scaled_value)) : Base power, Bonus levels</code> | Grants bonus levels to a given base power.</p>
 
 <p><strong>soundfx</strong> | <code>filename</code> | Sound effect filename to play for the specific item.</p>
 
@@ -1056,11 +1058,11 @@ code {
 
 <p><strong>power_desc</strong> | <code>string</code> | A string describing the additional power.</p>
 
-<p><strong>price</strong> | <code>int</code> | The amount of currency the item costs, if set to 0 the item cannot be sold.</p>
+<p><strong>price</strong> | <code>list(level_scaled_value)</code> | The amount of currency the item costs, if set to 0 the item cannot be sold.</p>
 
-<p><strong>price_per_level</strong> | <code>int</code> | Additional price for each player level above 1</p>
+<p><strong>price_per_level</strong> | <code>int</code> | (Deprecated in v1.14.17; Use 'price=player_level:{value}' instead). Additional price for each player level above 1</p>
 
-<p><strong>price_sell</strong> | <code>int</code> | The amount of currency the item is sold for, if set to 0 the sell prices is prices*vendor_ratio.</p>
+<p><strong>price_sell</strong> | <code>list(level_scaled_value)</code> | The amount of currency the item is sold for, if set to 0 the sell prices is prices*vendor_ratio.</p>
 
 <p><strong>max_quantity</strong> | <code>int</code> | Max item count per stack.</p>
 
@@ -1114,9 +1116,9 @@ code {
 
 <p><strong>color</strong> | <code>color</code> | A specific of color for the set.</p>
 
-<p><strong>bonus</strong> | <code>repeatable(int, stat_id, float) : Required set item count, Stat ID, Value</code> | Bonus to append to items in the set.</p>
+<p><strong>bonus</strong> | <code>repeatable(int, stat_id, list(level_scaled_value)) : Required set item count, Stat ID, Value</code> | Bonus to append to items in the set.</p>
 
-<p><strong>bonus_power_level</strong> | <code>repeatable(int, power_id, int) : Required set item count, Base power, Bonus levels</code> | Grants bonus levels to a given base power.</p>
+<p><strong>bonus_power_level</strong> | <code>repeatable(int, power_id, list(level_scaled_value)) : Required set item count, Base power, Bonus levels</code> | Grants bonus levels to a given base power.</p>
 
 <hr />
 

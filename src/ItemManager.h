@@ -33,6 +33,20 @@ class FileParser;
 class StatBlock;
 class TooltipData;
 
+class LevelScaledValue {
+public:
+	int item_level;
+	float base;
+	float per_item_level;
+	float per_player_level;
+	std::vector<float> per_player_primary;
+
+	LevelScaledValue();
+	~LevelScaledValue() {}
+	float get() const;
+	void parse(std::string& s);
+};
+
 class LootAnimation {
 public:
 	std::string name;
@@ -63,7 +77,7 @@ public:
 	unsigned type;
 	size_t index;
 	size_t sub_index; // used for resource stats
-	float value;
+	LevelScaledValue value;
 	PowerID power_id; // for bonus_power_level
 	bool is_multiplier;
 
@@ -71,7 +85,7 @@ public:
 		: type(UNKNOWN)
 		, index(0)
 		, sub_index(0)
-		, value(0)
+		, value()
 		, power_id(0)
 		, is_multiplier(false)
 	{
@@ -127,8 +141,8 @@ public:
 	bool book_is_readable; // whether to display "use" or "read" in the tooltip
 	std::vector<FMinMax> base_dmg; // minimum/maximum damage amount
 	FMinMax base_abs;          // minimum/maximum absorb amount
-	int requires_level;   // Player level must match or exceed this value to use item
-	std::map<size_t, int> requires_stat;
+	LevelScaledValue requires_level;   // Player level must match or exceed this value to use item
+	std::map<size_t, LevelScaledValue> requires_stat;
 	std::string requires_class;
 	std::vector<BonusData> bonus;   // stat to increase/decrease e.g. hp, accuracy, speed
 	std::string sfx;           // the item sound when it hits the floor or inventory, etc
@@ -138,9 +152,8 @@ public:
 	PowerID power;            // this item can be dragged to the action bar and used as a power
 	std::vector< std::pair<PowerID, PowerID> > replace_power;        // alter powers when this item is equipped. The first PowerID is replaced with the second.
 	std::string power_desc;    // shows up in green text on the tooltip
-	int price;            // if price = 0 the item cannot be sold
-	int price_per_level;  // additional price for each character level above 1
-	int price_sell;       // if price_sell = 0, the sell price is price*vendor_ratio
+	LevelScaledValue price;            // if price = 0 the item cannot be sold
+	LevelScaledValue price_sell;       // if price_sell = 0, the sell price is price*vendor_ratio
 	int max_quantity;     // max count per stack
 	std::string pickup_status; // when this item is picked up, set a campaign state (usually for quest items)
 	std::string stepfx;        // sound effect played when walking (armors only)
