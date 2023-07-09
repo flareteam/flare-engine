@@ -19,6 +19,9 @@ Engine fixes:
 * Fix memory leak from dropped loot
 * Fix memory leak when a power's animation property was redefined.
 
+Game updates:
+* Limited the number of "unique" items that can drop from a boss to 1 per kill.
+
 Translation updates:
 
 * Spanish (es) update (Jacobo Feijóo, Julvenzor, Eugenio Martínez Seguín)
