@@ -3,6 +3,7 @@ Flare v1.15
 Engine features:
 
 * Add wander_radius and waypoints support for map NPCs
+* Add scaling based on item level/player level/primary stats to several Item attributes, such as 'bonus' and 'price'.
 
 Engine fixes:
 
