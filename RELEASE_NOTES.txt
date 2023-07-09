@@ -4,6 +4,7 @@ Engine features:
 
 * Add wander_radius and waypoints support for map NPCs
 * Add scaling based on item level/player level/primary stats to several Item attributes, such as 'bonus' and 'price'.
+* Add 'loot_drops_max' property to Items for limiting the number of drops in a single loot event.
 
 Engine fixes:
 

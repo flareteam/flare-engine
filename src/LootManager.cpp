@@ -348,7 +348,7 @@ void LootManager::checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos
 				threshold = real_chance;
 			}
 
-			if (chance <= threshold) {
+			if (chance <= threshold && ec->data[LOOT_EC_MAX_DROPS].Int != 0) {
 				possible_ids.push_back(ec);
 			}
 		}
@@ -359,6 +359,10 @@ void LootManager::checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos
 		size_t chosen_loot = static_cast<size_t>(rand()) % possible_ids.size();
 		ec = possible_ids[chosen_loot];
 		checkLootComponent(ec, pos, itemstack_vec);
+
+		if (ec->data[LOOT_EC_MAX_DROPS].Int > 0) {
+			ec->data[LOOT_EC_MAX_DROPS].Int--;
+		}
 	}
 }
 
@@ -582,6 +586,8 @@ void LootManager::parseLoot(std::string &val, EventComponent *e, std::vector<Eve
 		// quantity min/max
 		e->data[LOOT_EC_QUANTITY_MIN].Int = std::max(Parse::popFirstInt(val), 1);
 		e->data[LOOT_EC_QUANTITY_MAX].Int = std::max(Parse::popFirstInt(val), e->data[LOOT_EC_QUANTITY_MIN].Int);
+
+		e->data[LOOT_EC_MAX_DROPS].Int = items->items[e->id].loot_drops_max;
 	}
 
 	// add repeating loot
@@ -615,6 +621,8 @@ void LootManager::parseLoot(std::string &val, EventComponent *e, std::vector<Eve
 
 			ec->data[LOOT_EC_QUANTITY_MIN].Int = std::max(Parse::popFirstInt(val), 1);
 			ec->data[LOOT_EC_QUANTITY_MAX].Int = std::max(Parse::popFirstInt(val), ec->data[LOOT_EC_QUANTITY_MIN].Int);
+
+			ec->data[LOOT_EC_MAX_DROPS].Int = items->items[ec->id].loot_drops_max;
 
 			repeat_val = Parse::popFirstString(val);
 		}
@@ -672,6 +680,10 @@ void LootManager::loadLootTables() {
 					else {
 						skip_to_next = true;
 						infile.error("LootManager: Invalid item id for loot.");
+					}
+
+					if (!skip_to_next) {
+						ec->data[LOOT_EC_MAX_DROPS].Int = items->items[ec->id].loot_drops_max;
 					}
 				}
 				// @ATTR loot.chance|[float, "fixed"]|The chance that the item will drop. "fixed" will drop the item no matter what before the random items are picked. This is different than setting a chance of 100, in which the item could be replaced with another random item.

@@ -136,7 +136,8 @@ Item::Item()
 	, stepfx("")
 	, quest_item(false)
 	, no_stash(NO_STASH_NULL)
-	, script("") {
+	, script("")
+	, loot_drops_max(-1) {
 }
 
 ItemManager::ItemManager()
@@ -411,6 +412,10 @@ void ItemManager::loadItems(const std::string& filename) {
 		else if (infile.key == "script") {
 			// @ATTR script|filename|Loads and executes a script file when the item is activated from the player's inventory.
 			items[id].script = Parse::popFirstString(infile.val);
+		}
+		else if (infile.key == "loot_drops_max") {
+			// @ATTR loot_drops_max|int|The number of instances of this item that can drop during a single loot event.
+			items[id].loot_drops_max = Parse::toInt(infile.val);
 		}
 		else {
 			infile.error("ItemManager: '%s' is not a valid key.", infile.key.c_str());

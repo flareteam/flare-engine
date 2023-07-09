@@ -161,6 +161,7 @@ public:
 	bool quest_item;
 	int no_stash;
 	std::string script;
+	int loot_drops_max;
 
 	int getPrice(bool use_vendor_ratio);
 	int getSellPrice(bool is_new_buyback);

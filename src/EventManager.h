@@ -104,7 +104,7 @@ public:
 		RANDOM_STATUS_MODE_UNSET = 5,
 	};
 
-	static const size_t DATA_COUNT = 5;
+	static const size_t DATA_COUNT = 6;
 
 	union ECData {
 		int Int;

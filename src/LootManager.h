@@ -45,6 +45,7 @@ private:
 		LOOT_EC_CHANCE = 2,
 		LOOT_EC_QUANTITY_MIN = 3,
 		LOOT_EC_QUANTITY_MAX = 4,
+		LOOT_EC_MAX_DROPS = 5,
 	};
 
 	// functions
