@@ -60,6 +60,7 @@ text=Adrian Chaves Fernandez
 text=Andrea Ranaldi
 text=Andreas Berheim Brudin
 text=Andrey Kapitonov
+text=Ansh Mishra
 text=Bafy
 text=Bas Doodeman
 text=berry

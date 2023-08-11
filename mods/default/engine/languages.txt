@@ -19,6 +19,7 @@ fi=Suomi
 fr=Français
 gd=Gàidhlig
 gl=Galego
+hi_IN=Hindi
 hu=Magyar
 id=Indonesian
 it=Italiano

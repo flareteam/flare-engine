@@ -26,6 +26,7 @@ Translation updates:
 
 * Spanish (es) update (Jacobo Feijóo, Julvenzor, Eugenio Martínez Seguín)
 * Scottish Gaelic (gd) update (GunChleoc)
+* Hindi (India) (hi_IN) by Ansh Mishra
 * Korean (ko) update (ks k)
 * Polish (pl) update (Marcin Serwin)
 * Russian (ru) update (berry)
