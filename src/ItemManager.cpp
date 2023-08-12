@@ -916,14 +916,8 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 		if (items[stack.item].base_dmg[i].max > 0) {
 			std::stringstream dmg_str;
 			dmg_str << eset->damage_types.list[i].name;
-			if (items[stack.item].base_dmg[i].min < items[stack.item].base_dmg[i].max) {
-				dmg_str << ": " << Utils::floatToString(items[stack.item].base_dmg[i].min, eset->number_format.item_tooltips) << "-" << Utils::floatToString(items[stack.item].base_dmg[i].max, eset->number_format.item_tooltips);
-				tip.addText(dmg_str.str());
-			}
-			else {
-				dmg_str << ": " << Utils::floatToString(items[stack.item].base_dmg[i].max, eset->number_format.item_tooltips);
-				tip.addText(dmg_str.str());
-			}
+			dmg_str << ": " << Utils::createMinMaxString(items[stack.item].base_dmg[i].min, items[stack.item].base_dmg[i].max, eset->number_format.item_tooltips);
+			tip.addText(dmg_str.str());
 		}
 	}
 
@@ -931,14 +925,8 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	if (items[stack.item].base_abs.max > 0) {
 		std::stringstream abs_str;
 		abs_str << msg->get("Absorb");
-		if (items[stack.item].base_abs.min < items[stack.item].base_abs.max) {
-			abs_str << ": " << Utils::floatToString(items[stack.item].base_abs.min, eset->number_format.item_tooltips) << "-" << Utils::floatToString(items[stack.item].base_abs.max, eset->number_format.item_tooltips);
-			tip.addText(abs_str.str());
-		}
-		else {
-			abs_str << ": " << Utils::floatToString(items[stack.item].base_abs.max, eset->number_format.item_tooltips);
-			tip.addText(abs_str.str());
-		}
+		abs_str << ": " << Utils::createMinMaxString(items[stack.item].base_abs.min, items[stack.item].base_abs.max, eset->number_format.item_tooltips);
+		tip.addText(abs_str.str());
 	}
 
 	// bonuses

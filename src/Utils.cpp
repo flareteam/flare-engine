@@ -898,3 +898,11 @@ void Utils::setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *ama
 #endif
 }
 
+std::string Utils::createMinMaxString(float min, float max, size_t precision) {
+	std::string r;
+	if (min != max)
+		r = floatToString(min, precision) + '-';
+	r += floatToString(max, precision);
+	return r;
+}
+

@@ -63,6 +63,7 @@ private:
 
 	void loadGraphics();
 	Color bonusColor(int stat);
+	void tooltipCreateBonusText(size_t min_index, size_t max_index, std::string* min_text, std::string* max_text);
 	std::string statTooltip(int stat);
 	std::string damageTooltip(size_t dmg_type);
 	std::string resistTooltip(size_t resist_type);

@@ -306,6 +306,9 @@ void MenuCharacter::refreshStats() {
 	for (int i=0; i<Stats::COUNT; ++i) {
 		if (!show_stat[i]) continue;
 
+		// Stats::ABS_MIN handles both min and max
+		if (i == Stats::ABS_MAX) continue;
+
 		// insert resource stats (execpt stealing) before accuracy
 		if (i == Stats::ACCURACY) {
 			for (size_t j = 0; j < eset->resource_stats.list.size(); ++j) {
@@ -323,27 +326,25 @@ void MenuCharacter::refreshStats() {
 		// insert damage stats before absorb min
 		if (i == Stats::ABS_MIN) {
 			for (size_t j = 0; j < eset->damage_types.list.size(); ++j) {
-				if (show_stat[Stats::COUNT + (j*2)]) {
-					// min
-					ss.str("");
-					ss << eset->damage_types.list[j].name_min << ": " << Utils::floatToString(pc->stats.getDamageMin(j), eset->number_format.character_menu);
-					statList->set(stat_index, ss.str(), damageTooltip(j*2));
-					stat_index++;
-				}
+				if (show_stat[Stats::COUNT + (j*2)] || show_stat[Stats::COUNT + (j*2) + 1]) {
+					float min_dmg = pc->stats.getDamageMin(j);
+					float max_dmg = pc->stats.getDamageMax(j);
 
-				if (show_stat[Stats::COUNT + (j*2) + 1]) {
-					// max
 					ss.str("");
-					ss << eset->damage_types.list[j].name_max << ": " << Utils::floatToString(pc->stats.getDamageMax(j), eset->number_format.character_menu);
-					statList->set(stat_index, ss.str(), damageTooltip((j*2) + 1));
+					ss << eset->damage_types.list[j].name << ": " << Utils::createMinMaxString(min_dmg, max_dmg, eset->number_format.character_menu);
+					statList->set(stat_index, ss.str(), damageTooltip(j));
 					stat_index++;
 				}
 			}
-		}
 
-		ss.str("");
-		ss << Stats::NAME[i] << ": " << Utils::floatToString(pc->stats.get(static_cast<Stats::STAT>(i)), 2);
-		if (Stats::PERCENT[i]) ss << "%";
+			ss.str("");
+			ss << msg->get("Absorb") << ": " << Utils::createMinMaxString(pc->stats.get(Stats::ABS_MIN), pc->stats.get(Stats::ABS_MAX), eset->number_format.character_menu);
+		}
+		else {
+			ss.str("");
+			ss << Stats::NAME[i] << ": " << Utils::floatToString(pc->stats.get(static_cast<Stats::STAT>(i)), 2);
+			if (Stats::PERCENT[i]) ss << "%";
+		}
 
 		statList->set(stat_index, ss.str(), statTooltip(i));
 		stat_index++;
@@ -480,102 +481,156 @@ Color MenuCharacter::bonusColor(int stat) {
 	return font->getColor(FontEngine::COLOR_MENU_NORMAL);
 }
 
+void MenuCharacter::tooltipCreateBonusText(size_t min_index, size_t max_index, std::string* min_text, std::string* max_text) {
+	// per-level bonus
+	float min_per_level = pc->stats.per_level[min_index];
+	float max_per_level = pc->stats.per_level[max_index];
+
+	if (min_per_level > 0) {
+		*min_text += msg->getv("Each level grants %s.", Utils::floatToString(min_per_level, eset->number_format.character_menu).c_str());
+	}
+
+	if (max_text && max_per_level > 0) {
+		*max_text += msg->getv("Each level grants %s.", Utils::floatToString(max_per_level, eset->number_format.character_menu).c_str());
+	}
+
+	// per-primary bonuses
+	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
+		float min_per_primary = pc->stats.per_primary[i][min_index];
+		float max_per_primary = pc->stats.per_primary[i][max_index];
+
+		if (min_per_primary > 0) {
+			if (!min_text->empty())
+				*min_text += "\n";
+
+			*min_text += msg->getv("Each point of %s grants %s.", eset->primary_stats.list[i].name.c_str(), Utils::floatToString(min_per_primary, eset->number_format.character_menu).c_str());
+		}
+
+		if (max_text && max_per_primary > 0) {
+			if (!max_text->empty())
+				*max_text += "\n";
+
+			*max_text += msg->getv("Each point of %s grants %s.", eset->primary_stats.list[i].name.c_str(), Utils::floatToString(max_per_primary, eset->number_format.character_menu).c_str());
+		}
+	}
+}
+
 /**
  * Create tooltip text showing the per_* values of a stat
  */
 std::string MenuCharacter::statTooltip(int stat) {
-	std::string tooltip_text;
+	std::string text, min_text;
 
-	if (pc->stats.per_level[stat] > 0)
-		tooltip_text += msg->getv("Each level grants %s.", Utils::floatToString(pc->stats.per_level[stat], eset->number_format.character_menu).c_str()) + ' ';
+	std::string& description = Stats::DESC[stat];
+	if (!description.empty())
+		text += description;
 
-	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
-		if (pc->stats.per_primary[i][stat] > 0)
-			tooltip_text += msg->getv("Each point of %s grants %s.", eset->primary_stats.list[i].name.c_str(), Utils::floatToString(pc->stats.per_primary[i][stat], eset->number_format.character_menu).c_str()) + ' ';
+	size_t min_index = stat;
+
+	if (stat == Stats::ABS_MIN) {
+		std::string max_text;
+
+		size_t max_index = Stats::ABS_MAX;
+
+		tooltipCreateBonusText(min_index, max_index, &min_text, &max_text);
+
+		if (!min_text.empty()) {
+			if (!text.empty())
+				text += "\n\n";
+			text += Stats::NAME[min_index] + ":\n" + min_text;
+		}
+
+		if (!max_text.empty()) {
+			if (!text.empty())
+				text += "\n\n";
+			text += Stats::NAME[max_index] + ":\n" + max_text;
+		}
+	}
+	else {
+		tooltipCreateBonusText(min_index, min_index, &min_text, NULL);
+
+		if (!min_text.empty()) {
+			if (!text.empty())
+				text += "\n\n";
+			text += min_text;
+		}
 	}
 
-	std::string full_tooltip = "";
-	if (Stats::DESC[stat] != "")
-		full_tooltip += Stats::DESC[stat];
-	if (full_tooltip != "" && tooltip_text != "")
-		full_tooltip += "\n";
-	full_tooltip += tooltip_text;
-
-	return full_tooltip;
+	return text;
 }
 
 /**
  * Create tooltip text showing the per_* values of a damage stat
  */
 std::string MenuCharacter::damageTooltip(size_t dmg_type) {
-	std::string tooltip_text;
+	std::string text, min_text, max_text;
 
-	if (pc->stats.per_level[Stats::COUNT + dmg_type] > 0)
-		tooltip_text += msg->getv("Each level grants %s.", Utils::floatToString(pc->stats.per_level[Stats::COUNT + dmg_type], eset->number_format.character_menu).c_str()) + ' ';
+	std::string& description = eset->damage_types.list[dmg_type].description;
+	if (!description.empty())
+		text += description;
 
-	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
-		if (pc->stats.per_primary[i][Stats::COUNT + dmg_type] > 0)
-			tooltip_text += msg->getv("Each point of %s grants %s.", eset->primary_stats.list[i].name.c_str(), Utils::floatToString(pc->stats.per_primary[i][Stats::COUNT + dmg_type], eset->number_format.character_menu).c_str()) + ' ';
+	size_t min_index = Stats::COUNT + (dmg_type * 2);
+	size_t max_index = Stats::COUNT + (dmg_type * 2) + 1;
+
+	tooltipCreateBonusText(min_index, max_index, &min_text, &max_text);
+
+	if (!min_text.empty()) {
+		if (!text.empty())
+			text += "\n\n";
+		text += eset->damage_types.list[dmg_type].name_min + ":\n" + min_text;
 	}
 
-	size_t real_dmg_type = dmg_type / 2;
+	if (!max_text.empty()) {
+		if (!text.empty())
+			text += "\n\n";
+		text += eset->damage_types.list[dmg_type].name_max + ":\n" + max_text;
+	}
 
-	std::string full_tooltip = "";
-	if (eset->damage_types.list[real_dmg_type].description != "")
-		full_tooltip += eset->damage_types.list[real_dmg_type].description;
-	if (full_tooltip != "" && tooltip_text != "")
-		full_tooltip += "\n";
-	full_tooltip += tooltip_text;
-
-	return full_tooltip;
+	return text;
 }
 
 /**
  * Create tooltip text showing the per_* values of a resistance stat
  */
 std::string MenuCharacter::resistTooltip(size_t resist_type) {
-	std::string tooltip_text;
+	std::string text, bonus_text;
+
+	std::string& description = eset->elements.list[resist_type].name;
+	if (!description.empty())
+		text += msg->getv("Reduces the damage taken from \"%s\" elemental attacks.", description.c_str());
+
 	size_t resist_index = Stats::COUNT + eset->damage_types.count + resist_type;
 
-	if (pc->stats.per_level[resist_index] > 0)
-		tooltip_text += msg->getv("Each level grants %s.", Utils::floatToString(pc->stats.per_level[resist_index], eset->number_format.character_menu).c_str()) + ' ';
+	tooltipCreateBonusText(resist_index, resist_index, &bonus_text, NULL);
 
-	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
-		if (pc->stats.per_primary[i][resist_index] > 0)
-			tooltip_text += msg->getv("Each point of %s grants %s.", eset->primary_stats.list[i].name.c_str(), Utils::floatToString(pc->stats.per_primary[i][resist_index], eset->number_format.character_menu).c_str()) + ' ';
+	if (!bonus_text.empty()) {
+		if (!text.empty())
+			text += "\n\n";
+		text += bonus_text;
 	}
 
-	std::string full_tooltip = msg->getv("Reduces the damage taken from \"%s\" elemental attacks.", eset->elements.list[resist_type].name.c_str());
-	if (tooltip_text != "") {
-		full_tooltip += "\n" + tooltip_text;
-	}
-
-	return full_tooltip;
+	return text;
 }
 
 std::string MenuCharacter::resourceStatTooltip(size_t resource_index, size_t stat_index) {
-	std::string tooltip_text;
+	std::string text, bonus_text;
+
+	std::string& description = eset->resource_stats.list[resource_index].text_desc[stat_index];
+	if (!description.empty())
+		text += description;
+
 	size_t offset_index = Stats::COUNT + eset->damage_types.count + eset->elements.list.size();
 	size_t resource_stat_index = offset_index + (resource_index * EngineSettings::ResourceStats::STAT_COUNT) + stat_index;
 
-	if (pc->stats.per_level[resource_stat_index] > 0)
-		tooltip_text += msg->getv("Each level grants %s.", Utils::floatToString(pc->stats.per_level[resource_stat_index], eset->number_format.character_menu).c_str()) + ' ';
+	tooltipCreateBonusText(resource_stat_index, resource_stat_index, &bonus_text, NULL);
 
-	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
-		if (pc->stats.per_primary[i][resource_stat_index] > 0)
-			tooltip_text += msg->getv("Each point of %s grants %s.", eset->primary_stats.list[i].name.c_str(), Utils::floatToString(pc->stats.per_primary[i][resource_stat_index], eset->number_format.character_menu).c_str()) + ' ';
+	if (!bonus_text.empty()) {
+		if (!text.empty())
+			text += "\n\n";
+		text += bonus_text;
 	}
 
-	std::string full_tooltip = "";
-	std::string text_desc = eset->resource_stats.list[resource_index].text_desc[stat_index];
-
-	if (!text_desc.empty())
-		full_tooltip += text_desc;
-	if (!full_tooltip.empty() && !tooltip_text.empty())
-		full_tooltip += "\n";
-	full_tooltip += tooltip_text;
-
-	return full_tooltip;
+	return text;
 }
 
 void MenuCharacter::logic() {

@@ -18,6 +18,7 @@ Engine fixes:
 * Fix crash when a book has a blank text item
 * Fix memory leak from dropped loot
 * Fix memory leak when a power's animation property was redefined.
+* Display min/max damage and absorb stats on single lines in the Character menu
 
 Game updates:
 * Limited the number of "unique" items that can drop from a boss to 1 per kill.

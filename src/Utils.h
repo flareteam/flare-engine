@@ -188,6 +188,8 @@ namespace Utils {
 	void lockFileCheck();
 
 	void setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask);
+
+	std::string createMinMaxString(float min, float max, size_t precision);
 }
 
 #endif
