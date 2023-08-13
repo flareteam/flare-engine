@@ -925,6 +925,41 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 		tip_data->addText(msg->get("Cooldown:") + " " + Utils::getDurationString(pwr.cooldown, eset->number_format.durations));
 	}
 
+	if (pwr.use_hazard || pwr.type == Power::TYPE_REPEATER) {
+		std::stringstream ss;
+
+		// modifier_damage
+		if (pwr.mod_damage_mode > -1) {
+			if (pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_ADD && pwr.mod_damage_value_min > 0)
+				ss << "+";
+
+			if (pwr.mod_damage_value_max == 0 || pwr.mod_damage_value_min == pwr.mod_damage_value_max) {
+				ss << Utils::floatToString(pwr.mod_damage_value_min, eset->number_format.power_tooltips);
+			}
+			else {
+				ss << Utils::floatToString(pwr.mod_damage_value_min, eset->number_format.power_tooltips) << "-" << Utils::floatToString(pwr.mod_damage_value_max, eset->number_format.power_tooltips);
+			}
+
+			if (pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_MULTIPLY) {
+				ss << "%";
+			}
+			ss << " ";
+
+			if (pwr.base_damage != eset->damage_types.list.size()) {
+				ss << eset->damage_types.list[pwr.base_damage].name;
+			}
+
+			if (pwr.count > 1 && pwr.type != Power::TYPE_REPEATER)
+				ss << " (x" << pwr.count << ")";
+
+			if (!ss.str().empty())
+				tip_data->addColoredText(ss.str(), font->getColor(FontEngine::COLOR_MENU_BONUS));
+		}
+		else {
+			tip_data->addText(eset->damage_types.list[pwr.base_damage].name);
+		}
+	}
+
 	for (size_t i=0; i<pwr.post_effects.size(); ++i) {
 		std::stringstream ss;
 		EffectDef* effect_ptr = powers->getEffectDef(pwr.post_effects[i].id);
@@ -1131,34 +1166,6 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 
 	if (pwr.use_hazard || pwr.type == Power::TYPE_REPEATER) {
 		std::stringstream ss;
-
-		// modifier_damage
-		if (pwr.mod_damage_mode > -1) {
-			if (pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_ADD && pwr.mod_damage_value_min > 0)
-				ss << "+";
-
-			if (pwr.mod_damage_value_max == 0 || pwr.mod_damage_value_min == pwr.mod_damage_value_max) {
-				ss << Utils::floatToString(pwr.mod_damage_value_min, eset->number_format.power_tooltips);
-			}
-			else {
-				ss << Utils::floatToString(pwr.mod_damage_value_min, eset->number_format.power_tooltips) << "-" << Utils::floatToString(pwr.mod_damage_value_max, eset->number_format.power_tooltips);
-			}
-
-			if (pwr.mod_damage_mode == Power::STAT_MODIFIER_MODE_MULTIPLY) {
-				ss << "%";
-			}
-			ss << " ";
-
-			if (pwr.base_damage != eset->damage_types.list.size()) {
-				ss << eset->damage_types.list[pwr.base_damage].name;
-			}
-
-			if (pwr.count > 1 && pwr.type != Power::TYPE_REPEATER)
-				ss << " (x" << pwr.count << ")";
-
-			if (!ss.str().empty())
-				tip_data->addColoredText(ss.str(), font->getColor(FontEngine::COLOR_MENU_BONUS));
-		}
 
 		// modifier_accuracy
 		if (pwr.mod_accuracy_mode > -1) {
