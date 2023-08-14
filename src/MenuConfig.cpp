@@ -301,6 +301,7 @@ MenuConfig::MenuConfig (bool _is_game_state)
 		keybinds_lb.push_back(new WidgetLabel());
 		keybinds_lstb.push_back(new WidgetHorizontalList());
 		keybinds_lstb.back()->has_action = true;
+		keybinds_lstb.back()->max_visible_actions = 1;
 	}
 
 	// set up loot tooltip setting
