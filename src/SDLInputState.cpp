@@ -476,7 +476,6 @@ void SDLInputState::handle() {
 				for (int key=0; key<KEY_COUNT; key++) {
 					for (size_t i = 0; i < binding[key].size(); ++i) {
 						if (binding[key][i].type == InputBind::KEY && binding[key][i].bind == event.key.keysym.scancode) {
-							pressing[key] = true;
 							un_press[key] = true;
 						}
 					}
@@ -550,8 +549,6 @@ void SDLInputState::handle() {
 									}
 									else if (pressing[key] && mode == MODE_JOYSTICK) {
 										un_press[key] = true;
-										pressing[key] = false;
-										lock[key] = false;
 									}
 								}
 							}

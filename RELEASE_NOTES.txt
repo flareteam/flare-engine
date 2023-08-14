@@ -20,6 +20,7 @@ Engine fixes:
 * Fix memory leak when a power's animation property was redefined.
 * Display min/max damage and absorb stats on single lines in the Character menu
 * Show power base damage type in tooltips if no damage modifier is set
+* Fix input state not being correctly reset after using a gamepad analog control
 
 Game updates:
 * Limited the number of "unique" items that can drop from a boss to 1 per kill.
