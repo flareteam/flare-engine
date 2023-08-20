@@ -22,6 +22,7 @@ Engine fixes:
 * Display min/max damage and absorb stats on single lines in the Character menu
 * Show power base damage type in tooltips if no damage modifier is set
 * Fix input state not being correctly reset after using a gamepad analog control
+* Increase default audio playback samplerate to 44100Hz from 22050Hz. This can now be adjusted in the user's settings.txt file.
 
 Game updates:
 * Limited the number of "unique" items that can drop from a boss to 1 per kill.

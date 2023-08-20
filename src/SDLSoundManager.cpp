@@ -48,7 +48,7 @@ SDLSoundManager::SDLSoundManager()
 	, music_filename("")
 	, last_played_sid(-1)
 {
-	if (settings->audio && Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 1024)) {
+	if (settings->audio && Mix_OpenAudio(settings->audio_freq, AUDIO_S16SYS, 2, 1024)) {
 		Utils::logError("SDLSoundManager: Error during Mix_OpenAudio: %s", SDL_GetError());
 		settings->audio = false;
 	}

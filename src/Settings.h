@@ -85,6 +85,7 @@ public:
 	unsigned short music_volume;
 	unsigned short sound_volume;
 	bool mute_on_focus_loss;
+	unsigned int audio_freq;
 
 	// Input Settings
 	bool mouse_move;
