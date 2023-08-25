@@ -1228,7 +1228,7 @@ void PowerManager::initHazard(PowerID power_index, StatBlock *src_stats, const F
 	}
 
 	if (powers[power_index].target_neighbor > 0) {
-		haz->pos = collider->getRandomNeighbor(Point(src_stats->pos), powers[power_index].target_neighbor, MapCollision::IGNORE_BLOCKED);
+		haz->pos = collider->getRandomNeighbor(Point(haz->pos), powers[power_index].target_neighbor, MapCollision::IGNORE_BLOCKED);
 	}
 
 	if (powers[power_index].relative_pos) {
