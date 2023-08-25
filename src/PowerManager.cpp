@@ -573,18 +573,7 @@ void PowerManager::loadPowers() {
 		// animation info
 		else if (infile.key == "animation") {
 			// @ATTR power.animation|filename|The filename of the power animation.
-			if (!powers[input_id].animation_name.empty()) {
-				anim->decreaseCount(powers[input_id].animation_name);
-				powers[input_id].animation_name.clear();
-			}
-			if (!infile.val.empty()) {
-				if (power_animations[input_id]) {
-					delete power_animations[input_id];
-				}
-				powers[input_id].animation_name = infile.val;
-				anim->increaseCount(powers[input_id].animation_name);
-				power_animations[input_id] = anim->getAnimationSet(powers[input_id].animation_name)->getAnimation("");
-			}
+			powers[input_id].animation_name = infile.val;
 		}
 		else if (infile.key == "soundfx")
 			// @ATTR power.soundfx|filename|Filename of a sound effect to play when the power is used.
@@ -1042,6 +1031,12 @@ void PowerManager::loadPowers() {
 	std::map<PowerID, Power>::iterator power_it;
 	for (power_it = powers.begin(); power_it != powers.end(); ++power_it) {
 		Power& power = power_it->second;
+
+		// load animations
+		if (!power.animation_name.empty()) {
+			anim->increaseCount(power.animation_name);
+			power_animations[power_it->first] = anim->getAnimationSet(power.animation_name)->getAnimation("");
+		}
 
 		// verify wall/post power ids
 		power.wall_power = verifyID(power.wall_power, NULL, ALLOW_ZERO_ID);
