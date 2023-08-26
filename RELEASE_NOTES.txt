@@ -6,6 +6,7 @@ Engine features:
 * Add scaling based on item level/player level/primary stats to several Item attributes, such as 'bonus' and 'price'.
 * Add 'loot_drops_max' property to Items for limiting the number of drops in a single loot event.
 * Horizontal list widgets can now display 2 or fewer options at once
+* Added support for more than one of each chain power (pre_power/post_power/wall_power) to be attached to a single power.
 
 Engine fixes:
 

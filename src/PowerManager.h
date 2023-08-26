@@ -76,6 +76,25 @@ public:
 	{}
 };
 
+class ChainPower {
+public:
+	enum {
+		TYPE_PRE = 0,
+		TYPE_POST,
+		TYPE_WALL,
+	};
+
+	PowerID id;
+	uint8_t type;
+	float chance;
+
+	ChainPower()
+		: id(0)
+		, type(0)
+		, chance(100)
+	{}
+};
+
 class Power {
 public:
 	enum {
@@ -268,12 +287,8 @@ public:
 
 	std::vector<PostEffect> post_effects;
 
-	PowerID pre_power;
-	float pre_power_chance;
-	PowerID post_power;
-	float post_power_chance;
-	PowerID wall_power;
-	float wall_power_chance;
+	std::vector<ChainPower> chain_powers;
+
 	bool wall_reflect;
 
 	// spawn info

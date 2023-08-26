@@ -609,8 +609,11 @@ bool Entity::takeHit(Hazard &h) {
 		stats.effects.removeEffectID(powers->powers[h.power_index].remove_effects);
 
 		// post power
-		if (h.power->post_power > 0 && Math::percentChanceF(h.power->post_power_chance)) {
-			powers->activate(h.power->post_power, h.src_stats, stats.pos);
+		for (size_t i = 0; i < h.power->chain_powers.size(); ++i) {
+			ChainPower& chain_power = h.power->chain_powers[i];
+			if (chain_power.type == ChainPower::TYPE_POST && Math::percentChanceF(chain_power.chance)) {
+				powers->activate(chain_power.id, h.src_stats, stats.pos);
+			}
 		}
 	}
 
@@ -674,12 +677,12 @@ bool Entity::takeHit(Hazard &h) {
 
 		// handle block post-power
 		if (stats.block_power != 0) {
-			PowerID block_post_power = powers->powers[stats.block_power].post_power;
-
-			if (block_post_power != 0 && stats.getPowerCooldown(block_post_power) == 0) {
-				if (Math::percentChanceF(powers->powers[stats.block_power].post_power_chance)) {
-					powers->activate(powers->powers[stats.block_power].post_power, &stats, stats.pos);
-					stats.setPowerCooldown(block_post_power, powers->powers[block_post_power].cooldown);
+			Power& block_power = powers->powers[stats.block_power];
+			for (size_t i = 0; i < block_power.chain_powers.size(); ++i) {
+				ChainPower& chain_power = block_power.chain_powers[i];
+				if (chain_power.type == ChainPower::TYPE_POST && stats.getPowerCooldown(chain_power.id) == 0 && Math::percentChanceF(chain_power.chance)) {
+					powers->activate(chain_power.id, &stats, stats.pos);
+					stats.setPowerCooldown(chain_power.id, powers->powers[chain_power.id].cooldown);
 				}
 			}
 		}

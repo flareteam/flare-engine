@@ -724,8 +724,12 @@ void EntityBehavior::updateState() {
 
 			// sound effect based on power type
 			if (e->activeAnimation->isFirstFrame()) {
-				if (powers->powers[power_id].pre_power > 0 && Math::percentChanceF(powers->powers[power_id].pre_power_chance)) {
-					powers->activate(powers->powers[power_id].pre_power, &e->stats, pursue_pos);
+				// pre power
+				for (size_t i = 0; i < powers->powers[power_id].chain_powers.size(); ++i) {
+					ChainPower& chain_power = powers->powers[power_id].chain_powers[i];
+					if (chain_power.type == ChainPower::TYPE_PRE && Math::percentChanceF(chain_power.chance)) {
+						powers->activate(chain_power.id, &e->stats, pursue_pos);
+					}
 				}
 
 				float attack_speed = (e->stats.effects.getAttackSpeed(powers->powers[power_id].attack_anim) * powers->powers[power_id].attack_speed) / 100.0f;

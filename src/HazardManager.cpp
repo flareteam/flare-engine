@@ -72,11 +72,14 @@ void HazardManager::logic() {
 				EventManager::executeScript(h[i-1]->power->script, h[i-1]->pos.x, h[i-1]->pos.y);
 			}
 
-			if (h[i-1]->power->wall_power > 0 && Math::percentChanceF(h[i-1]->power->wall_power_chance)) {
-				powers->activate(h[i-1]->power->wall_power, h[i-1]->src_stats, h[i-1]->pos);
+			for (size_t j = 0; j < h[i-1]->power->chain_powers.size(); ++j) {
+				ChainPower& chain_power = h[i-1]->power->chain_powers[j];
+				if (chain_power.type == ChainPower::TYPE_WALL && Math::percentChanceF(chain_power.chance)) {
+					powers->activate(chain_power.id, h[i-1]->src_stats, h[i-1]->pos);
 
-				if (powers->powers[h[i-1]->power->wall_power].directional) {
-					powers->hazards.back()->animationKind = h[i-1]->animationKind;
+					if (powers->powers[chain_power.id].directional) {
+						powers->hazards.back()->animationKind = h[i-1]->animationKind;
+					}
 				}
 			}
 

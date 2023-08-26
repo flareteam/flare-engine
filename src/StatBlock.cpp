@@ -731,18 +731,23 @@ void StatBlock::load(const std::string& filename) {
 			powers_passive.clear();
 			std::string p = Parse::popFirstString(infile.val);
 			while (p != "") {
+				PowerID passive_id = Parse::toPowerID(p);
 				powers_passive.push_back(Parse::toPowerID(p));
-				p = Parse::popFirstString(infile.val);
 
 				// if a passive power has a post power, add it to the AI power list so we can track its cooldown
-				PowerID post_power = powers->powers[powers_passive.back()].post_power;
-				if (post_power > 0) {
-					AIPower passive_post_power;
-					passive_post_power.type = AI_POWER_PASSIVE_POST;
-					passive_post_power.id = post_power;
-					passive_post_power.chance = 0; // post_power chance is used instead
-					powers_ai.push_back(passive_post_power);
+				Power& passive_power = powers->powers[passive_id];
+				for (size_t i = 0; i < passive_power.chain_powers.size(); ++i) {
+					ChainPower& chain_power = passive_power.chain_powers[i];
+					if (chain_power.type == ChainPower::TYPE_POST) {
+						AIPower passive_post_power;
+						passive_post_power.type = AI_POWER_PASSIVE_POST;
+						passive_post_power.id = chain_power.id;
+						passive_post_power.chance = 0; // post_power chance is used instead
+						powers_ai.push_back(passive_post_power);
+					}
 				}
+
+				p = Parse::popFirstString(infile.val);
 			}
 		}
 

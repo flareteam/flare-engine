@@ -783,8 +783,11 @@ void Avatar::logic() {
 
 					stats.prevent_interrupt = power.prevent_interrupt;
 
-					if (power.pre_power > 0 && Math::percentChanceF(power.pre_power_chance)) {
-						powers->activate(power.pre_power, &stats, target);
+					for (size_t j = 0; j < power.chain_powers.size(); ++j) {
+						const ChainPower& chain_power = power.chain_powers[j];
+						if (chain_power.type == ChainPower::TYPE_PRE && Math::percentChanceF(chain_power.chance)) {
+							powers->activate(chain_power.id, &stats, target);
+						}
 					}
 
 					switch (power.new_state) {

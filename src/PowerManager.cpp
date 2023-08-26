@@ -146,12 +146,6 @@ Power::Power()
 	, buff_teleport(false)
 	, buff_party(false)
 	, buff_party_power_id(0)
-	, pre_power(0)
-	, pre_power_chance(100)
-	, post_power(0)
-	, post_power_chance(100)
-	, wall_power(0)
-	, wall_power_chance(100)
 	, wall_reflect(false)
 	, spawn_type("")
 	, target_neighbor(0)
@@ -827,27 +821,42 @@ void PowerManager::loadPowers() {
 		}
 		// pre and post power effects
 		else if (infile.key == "pre_power") {
-			// @ATTR power.pre_power|power_id, float : Power, Chance to cast|Trigger a power immediately when casting this one.
-			powers[input_id].pre_power = Parse::popFirstInt(infile.val);
+			// @ATTR power.pre_power|repeatable(power_id, float) : Power, Chance to cast|Trigger a power immediately when casting this one.
+			ChainPower chain_power;
+			chain_power.type = ChainPower::TYPE_PRE;
+			chain_power.id = Parse::popFirstInt(infile.val);
 			std::string chance = Parse::popFirstString(infile.val);
 			if (!chance.empty()) {
-				powers[input_id].pre_power_chance = Parse::toFloat(chance);
+				chain_power.chance = Parse::toFloat(chance);
+			}
+			if (chain_power.id > 0) {
+				powers[input_id].chain_powers.push_back(chain_power);
 			}
 		}
 		else if (infile.key == "post_power") {
-			// @ATTR power.post_power|power_id, int : Power, Chance to cast|Trigger a power if the hazard did damage. For 'block' type powers, this power will be triggered when the blocker takes damage.
-			powers[input_id].post_power = Parse::popFirstInt(infile.val);
+			// @ATTR power.post_power|repeatable(power_id, int) : Power, Chance to cast|Trigger a power if the hazard did damage. For 'block' type powers, this power will be triggered when the blocker takes damage.
+			ChainPower chain_power;
+			chain_power.type = ChainPower::TYPE_POST;
+			chain_power.id = Parse::popFirstInt(infile.val);
 			std::string chance = Parse::popFirstString(infile.val);
 			if (!chance.empty()) {
-				powers[input_id].post_power_chance = Parse::toFloat(chance);
+				chain_power.chance = Parse::toFloat(chance);
+			}
+			if (chain_power.id > 0) {
+				powers[input_id].chain_powers.push_back(chain_power);
 			}
 		}
 		else if (infile.key == "wall_power") {
-			// @ATTR power.wall_power|power_id, int : Power, Chance to cast|Trigger a power if the hazard hit a wall.
-			powers[input_id].wall_power = Parse::popFirstInt(infile.val);
+			// @ATTR power.wall_power|repeatable(power_id, int) : Power, Chance to cast|Trigger a power if the hazard hit a wall.
+			ChainPower chain_power;
+			chain_power.type = ChainPower::TYPE_WALL;
+			chain_power.id = Parse::popFirstInt(infile.val);
 			std::string chance = Parse::popFirstString(infile.val);
 			if (!chance.empty()) {
-				powers[input_id].wall_power_chance = Parse::toFloat(chance);
+				chain_power.chance = Parse::toFloat(chance);
+			}
+			if (chain_power.id > 0) {
+				powers[input_id].chain_powers.push_back(chain_power);
 			}
 		}
 		else if (infile.key == "wall_reflect")
@@ -1038,9 +1047,12 @@ void PowerManager::loadPowers() {
 			power_animations[power_it->first] = anim->getAnimationSet(power.animation_name)->getAnimation("");
 		}
 
-		// verify wall/post power ids
-		power.wall_power = verifyID(power.wall_power, NULL, ALLOW_ZERO_ID);
-		power.post_power = verifyID(power.post_power, NULL, ALLOW_ZERO_ID);
+		// verify chain power ids
+		for (size_t i = power.chain_powers.size(); i > 0; --i) {
+			power.chain_powers[i-1].id = verifyID(power.chain_powers[i-1].id, NULL, ALLOW_ZERO_ID);
+			if (power.chain_powers[i-1].id == 0)
+				power.chain_powers.erase(power.chain_powers.begin() + i-1);
+		}
 
 		// calculate effective combat range
 		{
@@ -1282,8 +1294,11 @@ void PowerManager::buff(PowerID power_index, StatBlock *src_stats, const FPoint&
 		src_stats->effects.removeEffectID(powers[power_index].remove_effects);
 
 		if (!powers[power_index].passive) {
-			if (Math::percentChanceF(powers[power_index].post_power_chance)) {
-				activate(powers[power_index].post_power, src_stats, src_stats->pos);
+			for (size_t i = 0; i < powers[power_index].chain_powers.size(); ++i) {
+				ChainPower& chain_power = powers[power_index].chain_powers[i];
+				if (chain_power.type == ChainPower::TYPE_POST && Math::percentChanceF(chain_power.chance)) {
+					activate(chain_power.id, src_stats, src_stats->pos);
+				}
 			}
 		}
 	}
@@ -1849,9 +1864,11 @@ bool PowerManager::activatePassiveByTrigger(PowerID power_id, StatBlock *src_sta
 		activate(power_id, src_stats, src_stats->pos);
 		src_stats->refresh_stats = true;
 
-		PowerID post_power = powers[power_id].post_power;
-		if (post_power > 0) {
-			src_stats->setPowerCooldown(post_power, powers[post_power].cooldown);
+		for (size_t i = 0; i < powers[power_id].chain_powers.size(); ++i) {
+			ChainPower& chain_power = powers[power_id].chain_powers[i];
+			if (chain_power.type == ChainPower::TYPE_POST) {
+				src_stats->setPowerCooldown(chain_power.id, powers[chain_power.id].cooldown);
+			}
 		}
 
 		return true;
@@ -1871,9 +1888,11 @@ void PowerManager::activateSinglePassive(StatBlock *src_stats, PowerID id) {
 		src_stats->refresh_stats = true;
 		src_stats->effects.triggered_others = true;
 
-		PowerID post_power = powers[id].post_power;
-		if (post_power > 0) {
-			src_stats->setPowerCooldown(post_power, powers[post_power].cooldown);
+		for (size_t i = 0; i < powers[id].chain_powers.size(); ++i) {
+			ChainPower& chain_power = powers[id].chain_powers[i];
+			if (chain_power.type == ChainPower::TYPE_POST) {
+				src_stats->setPowerCooldown(chain_power.id, powers[chain_power.id].cooldown);
+			}
 		}
 	}
 }
@@ -1883,21 +1902,22 @@ void PowerManager::activateSinglePassive(StatBlock *src_stats, PowerID id) {
  */
 void PowerManager::activatePassivePostPowers(StatBlock *src_stats) {
 	for (size_t i = 0; i < src_stats->powers_passive.size(); ++i) {
-		const PowerID post_power = powers[src_stats->powers_passive[i]].post_power;
-		if (post_power == 0)
-			continue;
+		Power& passive_power = powers[src_stats->powers_passive[i]];
 
-		if (powers[post_power].new_state != Power::STATE_INSTANT)
-			continue;
+		for (size_t j = 0; j < passive_power.chain_powers.size(); ++j) {
+			ChainPower& chain_power = passive_power.chain_powers[j];
+			if (powers[chain_power.id].new_state != Power::STATE_INSTANT)
+				continue;
 
-		// blocking powers use a passive trigger, but we only want to activate their post_power when the blocker takes a hit
-		if (powers[src_stats->powers_passive[i]].type == Power::TYPE_BLOCK)
-			continue;
+			// blocking powers use a passive trigger, but we only want to activate their post_power when the blocker takes a hit
+			if (passive_power.type == Power::TYPE_BLOCK)
+				continue;
 
-		if (src_stats->getPowerCooldown(post_power) == 0 && src_stats->canUsePower(post_power, !StatBlock::CAN_USE_PASSIVE)) {
-			if (Math::percentChanceF(powers[src_stats->powers_passive[i]].post_power_chance)) {
-				activate(post_power, src_stats, src_stats->pos);
-				src_stats->setPowerCooldown(post_power, powers[post_power].cooldown);
+			if (src_stats->getPowerCooldown(chain_power.id) == 0 && src_stats->canUsePower(chain_power.id, !StatBlock::CAN_USE_PASSIVE)) {
+				if (Math::percentChanceF(chain_power.chance)) {
+					activate(chain_power.id, src_stats, src_stats->pos);
+					src_stats->setPowerCooldown(chain_power.id, powers[chain_power.id].cooldown);
+				}
 			}
 		}
 	}
@@ -1913,7 +1933,7 @@ EffectDef* PowerManager::getEffectDef(const std::string& id) {
 }
 
 PowerID PowerManager::verifyID(PowerID power_id, FileParser* infile, bool allow_zero) {
-	if (!allow_zero && power_id == 0) {
+	if ((!allow_zero && power_id == 0) || power_id >= powers.size()) {
 		if (infile != NULL)
 			infile->error("PowerManager: %d is not a valid power id.", power_id);
 		else
