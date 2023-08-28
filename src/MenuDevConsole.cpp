@@ -530,15 +530,14 @@ void MenuDevConsole::execute() {
 
 		std::vector<size_t> matching_ids;
 
-		std::map<size_t, Power>::iterator power_it;
-		for (power_it = powers->powers.begin(); power_it != powers->powers.end(); ++power_it) {
-			if (power_it->second.is_empty)
+		for (size_t i = 1; i < powers->powers.size(); ++i) {
+			if (!powers->powers[i])
 				continue;
 
-			if (!search_terms.empty() && Utils::stringFindCaseInsensitive(power_it->second.name, search_terms) == std::string::npos)
+			if (!search_terms.empty() && Utils::stringFindCaseInsensitive(powers->powers[i]->name, search_terms) == std::string::npos)
 				continue;
 
-			matching_ids.push_back(power_it->first);
+			matching_ids.push_back(i);
 		}
 
 		if (!matching_ids.empty()) {
@@ -548,7 +547,7 @@ void MenuDevConsole::execute() {
 				size_t id = matching_ids[i-1];
 
 				ss.str("");
-				ss << powers->powers[id].name << " (" << id <<")";
+				ss << powers->powers[id]->name << " (" << id <<")";
 				log_history->add(ss.str(), WidgetLog::MSG_UNIQUE);
 			}
 

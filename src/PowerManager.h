@@ -58,9 +58,15 @@ public:
 
 class PowerReplaceByEffect {
 public:
-	int power_id;
+	PowerID power_id;
 	int count;
 	std::string effect_id;
+
+	PowerReplaceByEffect()
+		: power_id(0)
+		, count(0)
+		, effect_id()
+	{}
 };
 
 class PowerRequiredItem {
@@ -97,16 +103,6 @@ public:
 
 class Power {
 public:
-	enum {
-		RESOURCESTATE_ANY = 0,
-		RESOURCESTATE_ALL = 1,
-		RESOURCESTATE_ANY_HPMP = 2,
-	};
-	enum {
-		RESOURCESTATE_IGNORE = 0,
-		RESOURCESTATE_PERCENT = 1,
-		RESOURCESTATE_NOT_PERCENT = 2
-	};
 	class ResourceState {
 	public:
 		int state;
@@ -116,6 +112,18 @@ public:
 			, value(0)
 		{}
 		~ResourceState() {}
+	};
+
+	enum {
+		RESOURCESTATE_ANY = 0,
+		RESOURCESTATE_ALL = 1,
+		RESOURCESTATE_ANY_HPMP = 2,
+	};
+
+	enum {
+		RESOURCESTATE_IGNORE = 0,
+		RESOURCESTATE_PERCENT = 1,
+		RESOURCESTATE_NOT_PERCENT = 2
 	};
 
 	enum {
@@ -172,154 +180,128 @@ public:
 		SCRIPT_TRIGGER_WALL = 2
 	};
 
-	// base info
-	bool is_empty;
-	int type; // what kind of activate() this is
-	std::string name;
-	std::string description;
-	int icon; // just the number.  The caller menu will have access to the surface.
-	int new_state; // when using this power the user (avatar/enemy) starts a new state
-	int state_duration; // can be used to extend the length of a state animation by pausing on the last frame
 	bool prevent_interrupt; // prevents hits from interrupting the casting state
-	std::string attack_anim; // name of the animation to play when using this power, if it is not block
 	bool face; // does the user turn to face the mouse cursor when using this power?
-	int source_type; //hero, neutral, or enemy
 	bool beacon; //true if it's just an ememy calling its allies
-	int count; // number of hazards/effects or spawns created
 	bool passive; // if unlocked when the user spawns, automatically cast it
-	int passive_trigger; // only activate passive powers under certain conditions (block, hit, death, etc)
 	bool meta_power; // this power can't be used on its own and must be replaced via equipment
 	bool no_actionbar; // prevents this power from being placed on the actionbar
-
-	// power requirements
-	std::set<std::string> requires_flags; // checked against equip_flags granted from items
-	float requires_mp;
-	float requires_hp;
-	std::vector<float> requires_resource_stat;
 	bool sacrifice;
 	bool requires_los; // line of sight
 	bool requires_los_default;
 	bool requires_empty_target; // target square must be empty
-	std::vector<PowerRequiredItem> required_items;
 	bool consumable;
 	bool requires_targeting; // power only makes sense when using click-to-target
-	int requires_spawns;
-	int cooldown; // milliseconds before you can use the power again
-	ResourceState requires_hp_state;
-	ResourceState requires_mp_state;
-	std::vector<ResourceState> requires_resource_stat_state;
-	int requires_hpmp_state_mode;
-	int requires_resource_stat_state_mode;
-
-	// animation info
-	std::string animation_name;
-	int sfx_index;
-	SoundID sfx_hit;
 	bool sfx_hit_enable;
 	bool directional; // sprite sheet contains options for 8 directions, one per row
-	int visual_random; // sprite sheet contains rows of random options
-	int visual_option; // sprite sheet contains rows of similar effects.  use a specific option
 	bool aim_assist;
-	float speed; // for missile hazards, tiles per frame
-	int lifespan; // how long the hazard/animation lasts
 	bool on_floor; // the hazard is drawn between the background and object layers
 	bool complete_animation;
-	float charge_speed;
-	float attack_speed;
-
-	// hazard traits
 	bool use_hazard;
 	bool no_attack;
 	bool no_aggro;
-	float radius;
-	size_t base_damage;
-	int starting_pos; // enum. (source, target, or melee)
 	bool relative_pos;
 	bool multitarget;
 	bool multihit;
 	bool expire_with_caster;
 	bool ignore_zero_damage;
 	bool lock_target_to_direction;
-	int movement_type;
-	float target_range;
 	bool target_party;
-	std::vector<std::string> target_categories;
-	float combat_range;
-
-	int mod_accuracy_mode;
-	float mod_accuracy_value;
-
-	int mod_crit_mode;
-	float mod_crit_value;
-
-	int mod_damage_mode;
-	float mod_damage_value_min;
-	float mod_damage_value_max;//only used if mode is absolute
-
-	//steal effects (in %, eg. hp_steal=50 turns 50% damage done into HP regain.)
-	float hp_steal;
-	float mp_steal;
-	std::vector<float> resource_steal;
-
-	//missile traits
-	float missile_angle;
-	float angle_variance;
-	float speed_variance;
-
-	//repeater traits
-	int delay;
-
-	int trait_elemental; // enum. of elements
 	bool trait_armor_penetration;
-	float trait_crits_impaired; // crit bonus vs. movement impaired enemies (slowed, immobilized, stunned)
 	bool trait_avoidance_ignore;
-
-	int transform_duration;
 	bool manual_untransform; // true binds to the power another recurrence power
 	bool keep_equipment;
 	bool untransform_on_hit;
-
-	// special effects
 	bool buff;
 	bool buff_teleport;
 	bool buff_party;
-	PowerID buff_party_power_id;
-
-	std::vector<PostEffect> post_effects;
-
-	std::vector<ChainPower> chain_powers;
-
 	bool wall_reflect;
-
-	// spawn info
-	std::string spawn_type;
-	int target_neighbor;
-	uint8_t spawn_limit_mode;
-	float spawn_limit_count;
-	float spawn_limit_ratio;
-	size_t spawn_limit_stat;
-	SpawnLevel spawn_level;
-
-	// targeting by movement type
 	bool target_movement_normal;
 	bool target_movement_flying;
 	bool target_movement_intangible;
-
 	bool walls_block_aoe;
-
-	int script_trigger;
-	std::string script;
-
-	std::vector< std::pair<std::string, int> > remove_effects;
-
-	std::vector<PowerReplaceByEffect> replace_by_effect;
-
 	bool requires_corpse;
 	bool remove_corpse;
 
+	uint8_t spawn_limit_mode;
+
+	int type; // what kind of activate() this is
+	int icon; // just the number.  The caller menu will have access to the surface.
+	int new_state; // when using this power the user (avatar/enemy) starts a new state
+	int state_duration; // can be used to extend the length of a state animation by pausing on the last frame
+	int source_type; //hero, neutral, or enemy
+	int count; // number of hazards/effects or spawns created
+	int passive_trigger; // only activate passive powers under certain conditions (block, hit, death, etc)
+	int requires_spawns;
+	int cooldown; // milliseconds before you can use the power again
+	int requires_hpmp_state_mode;
+	int requires_resource_stat_state_mode;
+	int sfx_index;
+	int visual_random; // sprite sheet contains rows of random options
+	int visual_option; // sprite sheet contains rows of similar effects.  use a specific option
+	int lifespan; // how long the hazard/animation lasts
+	int starting_pos; // enum. (source, target, or melee)
+	int movement_type;
+	int mod_accuracy_mode;
+	int mod_crit_mode;
+	int mod_damage_mode;
+	int delay;
+	int trait_elemental; // enum. of elements
+	int transform_duration;
+	int target_neighbor;
+	int script_trigger;
+
+	float requires_mp;
+	float requires_hp;
+	float speed; // for missile hazards, tiles per frame
+	float charge_speed;
+	float attack_speed;
+	float radius;
+	float target_range;
+	float combat_range;
+	float mod_accuracy_value;
+	float mod_crit_value;
+	float mod_damage_value_min;
+	float mod_damage_value_max; //only used if mode is absolute
+	float hp_steal;
+	float mp_steal;
+	float missile_angle;
+	float angle_variance;
+	float speed_variance;
+	float spawn_limit_count;
+	float spawn_limit_ratio;
+	float trait_crits_impaired; // crit bonus vs. movement impaired enemies (slowed, immobilized, stunned)
 	float target_nearest;
 
+	size_t base_damage;
+	size_t spawn_limit_stat;
+
+	SoundID sfx_hit;
+	PowerID buff_party_power_id;
+
+	ResourceState requires_hp_state;
+	ResourceState requires_mp_state;
+
+	SpawnLevel spawn_level;
+
+	std::string name;
+	std::string description;
+	std::string attack_anim; // name of the animation to play when using this power, if it is not block
+	std::string animation_name;
+	std::string spawn_type;
+	std::string script;
+
+	std::vector<float> requires_resource_stat;
+	std::vector<PowerRequiredItem> required_items;
+	std::vector<ResourceState> requires_resource_stat_state;
+	std::vector<std::string> target_categories;
+	std::vector<float> resource_steal;
+	std::vector<PostEffect> post_effects;
+	std::vector<ChainPower> chain_powers;
+	std::vector< std::pair<std::string, int> > remove_effects;
+	std::vector<PowerReplaceByEffect> replace_by_effect;
 	std::vector<std::string> disable_equip_slots;
+	std::set<std::string> requires_flags; // checked against equip_flags granted from items
 
 	Power();
 	~Power() {
@@ -353,7 +335,7 @@ private:
 	bool activatePassiveByTrigger(PowerID power_id, StatBlock *src_stats, bool& triggered_others);
 	void activatePassivePostPowers(StatBlock *src_stats);
 
-	std::map<PowerID, Animation*> power_animations;
+	std::vector<Animation*> power_animations;
 	std::vector<Animation*> effect_animations;
 
 public:
@@ -361,6 +343,7 @@ public:
 
 	explicit PowerManager();
 	~PowerManager();
+	bool isValid(PowerID power_id);
 
 	void handleNewMap(MapCollision *_collider);
 	bool activate(PowerID power_index, StatBlock *src_stats, const FPoint& target);
@@ -370,17 +353,18 @@ public:
 	void activatePassives(StatBlock *src_stats);
 	void activateSinglePassive(StatBlock *src_stats, PowerID id);
 	PowerID verifyID(PowerID power_id, FileParser* infile, bool allow_zero);
-	bool checkNearestTargeting(const Power &pow, const StatBlock *src_stats, bool check_corpses);
-	bool checkRequiredItems(const Power &pow, const StatBlock *src_stats);
-	bool checkRequiredResourceState(const Power &pow, const StatBlock *src_stats);
+	bool checkNearestTargeting(const Power* pow, const StatBlock *src_stats, bool check_corpses);
+	bool checkRequiredItems(const Power* pow, const StatBlock *src_stats);
+	bool checkRequiredResourceState(const Power* pow, const StatBlock *src_stats);
 	bool checkCombatRange(PowerID power_index, StatBlock *src_stats, FPoint target);
-	bool checkPowerCost(const Power &pow, const StatBlock *src_stats);
+	bool checkPowerCost(const Power* pow, const StatBlock *src_stats);
 	PowerID checkReplaceByEffect(PowerID power_index, StatBlock *src_stats);
 
 	EffectDef* getEffectDef(const std::string& id);
 
 	std::vector<EffectDef> effects;
-	std::map<PowerID, Power> powers;
+	std::vector<Power*> powers;
+
 	std::queue<Hazard *> hazards; // output; read by HazardManager
 	std::queue<Map_Enemy> map_enemies; // output; read by PowerManager
 

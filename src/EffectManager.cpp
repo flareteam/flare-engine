@@ -531,8 +531,14 @@ void EffectManager::addEffect(StatBlock* stats, EffectDef &effect, EffectParams 
 	bool insert_effect = false;
 	size_t insert_pos = 0;
 	int stacks_applied = 0;
-	int trigger = params.power_id > 0 ? powers->powers[params.power_id].passive_trigger : -1;
-	size_t passive_id = (params.power_id > 0 && powers->powers[params.power_id].passive) ? params.power_id : 0;
+	int trigger = -1;
+	size_t passive_id = 0;
+
+	if (powers->isValid(params.power_id)) {
+		Power* effect_power = powers->powers[params.power_id];
+		trigger = effect_power->passive_trigger;
+		passive_id = effect_power->passive ? params.power_id : 0;
+	}
 
 	for (size_t i=effect_list.size(); i>0; i--) {
 		Effect& ei = effect_list[i-1];

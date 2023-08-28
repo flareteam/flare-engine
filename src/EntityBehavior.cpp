@@ -384,9 +384,9 @@ void EntityBehavior::checkPower() {
 			ai_power = e->stats.getAIPower(StatBlock::AI_POWER_MELEE);
 		}
 
-		if (ai_power != NULL) {
-			const Power& pwr = powers->powers[ai_power->id];
-			if (!los && (pwr.requires_los || pwr.requires_los_default)) {
+		if (ai_power != NULL && powers->isValid(ai_power->id)) {
+			Power* pwr = powers->powers[ai_power->id];
+			if (!los && (pwr->requires_los || pwr->requires_los_default)) {
 				ai_power = NULL;
 			}
 			if (ai_power != NULL) {
@@ -682,6 +682,7 @@ void EntityBehavior::updateState() {
 	if (e->stats.effects.stun) return;
 
 	PowerID power_id;
+	Power* epower;
 	int power_state;
 
 	// continue current animations
@@ -713,34 +714,41 @@ void EntityBehavior::updateState() {
 			}
 
 			power_id = powers->checkReplaceByEffect(e->stats.activated_power->id, &e->stats);
-			power_state = powers->powers[power_id].new_state;
-			e->stats.prevent_interrupt = powers->powers[power_id].prevent_interrupt;
+
+			if (!powers->isValid(power_id)) {
+				e->stats.cur_state = StatBlock::ENTITY_STANCE;
+				break;
+			}
+
+			epower = powers->powers[power_id];
+			power_state = epower->new_state;
+			e->stats.prevent_interrupt = epower->prevent_interrupt;
 
 			// animation based on power type
 			if (power_state == Power::STATE_INSTANT)
 				instant_power = true;
 			else if (power_state == Power::STATE_ATTACK)
-				e->setAnimation(powers->powers[power_id].attack_anim);
+				e->setAnimation(epower->attack_anim);
 
 			// sound effect based on power type
 			if (e->activeAnimation->isFirstFrame()) {
 				// pre power
-				for (size_t i = 0; i < powers->powers[power_id].chain_powers.size(); ++i) {
-					ChainPower& chain_power = powers->powers[power_id].chain_powers[i];
+				for (size_t i = 0; i < epower->chain_powers.size(); ++i) {
+					ChainPower& chain_power = epower->chain_powers[i];
 					if (chain_power.type == ChainPower::TYPE_PRE && Math::percentChanceF(chain_power.chance)) {
 						powers->activate(chain_power.id, &e->stats, pursue_pos);
 					}
 				}
 
-				float attack_speed = (e->stats.effects.getAttackSpeed(powers->powers[power_id].attack_anim) * powers->powers[power_id].attack_speed) / 100.0f;
+				float attack_speed = (e->stats.effects.getAttackSpeed(epower->attack_anim) * epower->attack_speed) / 100.0f;
 				e->activeAnimation->setSpeed(attack_speed);
-				e->playAttackSound(powers->powers[power_id].attack_anim);
+				e->playAttackSound(epower->attack_anim);
 
-				if (powers->powers[power_id].state_duration > 0)
-					e->stats.state_timer.setDuration(powers->powers[power_id].state_duration);
+				if (epower->state_duration > 0)
+					e->stats.state_timer.setDuration(epower->state_duration);
 
-				if (powers->powers[power_id].charge_speed != 0.0f)
-					e->stats.charge_speed = powers->powers[power_id].charge_speed;
+				if (epower->charge_speed != 0.0f)
+					e->stats.charge_speed = epower->charge_speed;
 			}
 
 			// Activate Power:
@@ -752,7 +760,7 @@ void EntityBehavior::updateState() {
 				// set cooldown for all ai powers with the same power id
 				for (size_t i = 0; i < e->stats.powers_ai.size(); ++i) {
 					if (e->stats.activated_power->id == e->stats.powers_ai[i].id) {
-						e->stats.powers_ai[i].cooldown.setDuration(powers->powers[power_id].cooldown);
+						e->stats.powers_ai[i].cooldown.setDuration(epower->cooldown);
 					}
 				}
 
@@ -765,7 +773,7 @@ void EntityBehavior::updateState() {
 			}
 
 			// animation is finished
-			if ((e->activeAnimation->isLastFrame() && e->stats.state_timer.isEnd()) || (power_state == Power::STATE_ATTACK && e->activeAnimation->getName() != powers->powers[power_id].attack_anim) || instant_power) {
+			if ((e->activeAnimation->isLastFrame() && e->stats.state_timer.isEnd()) || (power_state == Power::STATE_ATTACK && e->activeAnimation->getName() != epower->attack_anim) || instant_power) {
 				if (!instant_power)
 					e->stats.cooldown.reset(Timer::BEGIN);
 				else

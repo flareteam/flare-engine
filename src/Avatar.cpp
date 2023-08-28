@@ -81,6 +81,16 @@ Avatar::Avatar()
 	, teleport_camera_lock(false)
 	, feet_index(-1)
 {
+	power_cooldown_timers.resize(powers->powers.size(), NULL);
+	power_cast_timers.resize(powers->powers.size(), NULL);
+
+	for (size_t i = 0; i < powers->powers.size(); ++i) {
+		if (powers->isValid(i)) {
+			power_cooldown_timers[i] = new Timer();
+			power_cast_timers[i] = new Timer();
+		}
+	}
+
 	init();
 
 	// TODO
@@ -161,19 +171,20 @@ void Avatar::init() {
 	revertPowers = false;
 	last_transform = "";
 
-	power_cooldown_timers.clear();
-	power_cast_timers.clear();
-
 	// Find untransform power index to use for manual untransfrom ability
 	untransform_power = 0;
-	std::map<PowerID, Power>::iterator power_it;
-	for (power_it = powers->powers.begin(); power_it != powers->powers.end(); ++power_it) {
-		if (untransform_power == 0 && power_it->second.required_items.empty() && power_it->second.spawn_type == "untransform") {
-			untransform_power = power_it->first;
+	for (size_t i = 0; i < powers->powers.size(); ++i) {
+		if (!powers->isValid(i))
+			continue;
+
+		if (untransform_power == 0 && powers->powers[i]->required_items.empty() && powers->powers[i]->spawn_type == "untransform") {
+			untransform_power = i;
 		}
 
-		power_cooldown_timers[power_it->first] = Timer();
-		power_cast_timers[power_it->first] = Timer();
+		if (power_cooldown_timers[i])
+			*(power_cooldown_timers[i]) = Timer();
+		if (power_cast_timers[i])
+			*(power_cast_timers[i]) = Timer();
 	}
 
 	stats.animations = "animations/hero.txt";
@@ -453,16 +464,16 @@ void Avatar::logic() {
 			lock_enemy = NULL;
 		}
 
-		if (mm_attack_id > 0) {
+		if (powers->isValid(mm_attack_id)) {
 			if (!stats.canUsePower(mm_attack_id, !StatBlock::CAN_USE_PASSIVE)) {
 				lock_enemy = NULL;
 				mm_can_use_power = false;
 			}
-			else if (!power_cooldown_timers[mm_attack_id].isEnd()) {
+			else if (!power_cooldown_timers[mm_attack_id]->isEnd()) {
 				lock_enemy = NULL;
 				mm_can_use_power = false;
 			}
-			else if (lock_enemy && powers->powers[mm_attack_id].requires_los && !mapr->collider.lineOfSight(stats.pos.x, stats.pos.y, lock_enemy->stats.pos.x, lock_enemy->stats.pos.y)) {
+			else if (lock_enemy && powers->powers[mm_attack_id]->requires_los && !mapr->collider.lineOfSight(stats.pos.x, stats.pos.y, lock_enemy->stats.pos.x, lock_enemy->stats.pos.y)) {
 				lock_enemy = NULL;
 				mm_can_use_power = false;
 			}
@@ -580,28 +591,30 @@ void Avatar::logic() {
 					curs->setCursor(CursorManager::CURSOR_ATTACK);
 				}
 
-				if (activeAnimation->isFirstFrame()) {
-					float attack_speed = (stats.effects.getAttackSpeed(attack_anim) * powers->powers[current_power].attack_speed) / 100.0f;
-					activeAnimation->setSpeed(attack_speed);
-					for (size_t i=0; i<anims.size(); ++i) {
-						if (anims[i])
-							anims[i]->setSpeed(attack_speed);
+				if (powers->isValid(current_power)) {
+					if (activeAnimation->isFirstFrame()) {
+						float attack_speed = (stats.effects.getAttackSpeed(attack_anim) * powers->powers[current_power]->attack_speed) / 100.0f;
+						activeAnimation->setSpeed(attack_speed);
+						for (size_t i=0; i<anims.size(); ++i) {
+							if (anims[i])
+								anims[i]->setSpeed(attack_speed);
+						}
+						playAttackSound(attack_anim);
+						power_cast_timers[current_power]->setDuration(activeAnimation->getDuration());
 					}
-					playAttackSound(attack_anim);
-					power_cast_timers[current_power].setDuration(activeAnimation->getDuration());
-				}
 
-				// do power
-				if (activeAnimation->isActiveFrame() && !stats.hold_state) {
-					// some powers check if the caster is blocking a tile
-					// so we block the player tile prematurely here
-					mapr->collider.block(stats.pos.x, stats.pos.y, !MapCollision::IS_ALLY);
+					// do power
+					if (activeAnimation->isActiveFrame() && !stats.hold_state) {
+						// some powers check if the caster is blocking a tile
+						// so we block the player tile prematurely here
+						mapr->collider.block(stats.pos.x, stats.pos.y, !MapCollision::IS_ALLY);
 
-					powers->activate(current_power, &stats, act_target);
-					power_cooldown_timers[current_power].setDuration(powers->powers[current_power].cooldown);
+						powers->activate(current_power, &stats, act_target);
+						power_cooldown_timers[current_power]->setDuration(powers->powers[current_power]->cooldown);
 
-					if (!stats.state_timer.isEnd())
-						stats.hold_state = true;
+						if (!stats.state_timer.isEnd())
+							stats.hold_state = true;
+					}
 				}
 
 				// animation is done, switch back to normal stance
@@ -636,8 +649,8 @@ void Avatar::logic() {
 				if (activeAnimation->isFirstFrame()) {
 					stats.effects.triggered_hit = true;
 
-					if (stats.block_power != 0) {
-						power_cooldown_timers[stats.block_power].setDuration(powers->powers[stats.block_power].cooldown);
+					if (powers->isValid(stats.block_power)) {
+						power_cooldown_timers[stats.block_power]->setDuration(powers->powers[stats.block_power]->cooldown);
 						stats.block_power = 0;
 					}
 				}
@@ -669,9 +682,11 @@ void Avatar::logic() {
 
 					// reset power cooldowns
 					std::map<size_t, Timer>::iterator pct_it;
-					for (pct_it = power_cooldown_timers.begin(); pct_it != power_cooldown_timers.end(); ++pct_it) {
-						pct_it->second.reset(Timer::END);
-						power_cast_timers[pct_it->first].reset(Timer::END);
+					for (size_t i = 0; i < power_cooldown_timers.size(); ++i) {
+						if (power_cooldown_timers[i])
+							power_cooldown_timers[i]->reset(Timer::END);
+						if (power_cast_timers[i])
+							power_cast_timers[i]->reset(Timer::END);
 					}
 
 					// close menus in GameStatePlay
@@ -737,9 +752,12 @@ void Avatar::logic() {
 			for (unsigned i=0; i<action_queue.size(); i++) {
 				ActionData &action = action_queue[i];
 				PowerID power_id = powers->checkReplaceByEffect(action.power, &stats);
-				const Power &power = powers->powers[power_id];
+				if (power_id == 0)
+					continue;
 
-				if (power.type == Power::TYPE_BLOCK)
+				const Power* power = powers->powers[power_id];
+
+				if (power->type == Power::TYPE_BLOCK)
 					blocking = true;
 
 				if (power_id != 0 && (stats.cooldown.isEnd() || action.instant_item)) {
@@ -750,58 +768,58 @@ void Avatar::logic() {
 						continue;
 					if (!stats.canUsePower(power_id, !StatBlock::CAN_USE_PASSIVE))
 						continue;
-					if (power.requires_los && !mapr->collider.lineOfSight(stats.pos.x, stats.pos.y, target.x, target.y))
+					if (power->requires_los && !mapr->collider.lineOfSight(stats.pos.x, stats.pos.y, target.x, target.y))
 						continue;
-					if (power.requires_empty_target && !mapr->collider.isEmpty(target.x, target.y))
+					if (power->requires_empty_target && !mapr->collider.isEmpty(target.x, target.y))
 						continue;
-					if (!power_cooldown_timers[power_id].isEnd())
+					if (!power_cooldown_timers[power_id]->isEnd())
 						continue;
 					if (!powers->hasValidTarget(power_id, &stats, target))
 						continue;
 
 					// automatically target the selected enemy with melee attacks
-					if (inpt->usingMouse() && power.type == Power::TYPE_FIXED && power.starting_pos == Power::STARTING_POS_MELEE && cursor_enemy) {
+					if (inpt->usingMouse() && power->type == Power::TYPE_FIXED && power->starting_pos == Power::STARTING_POS_MELEE && cursor_enemy) {
 						target = cursor_enemy->stats.pos;
 					}
 
 					// is this a power that requires changing direction?
-					if (power.face) {
+					if (power->face) {
 						stats.direction = Utils::calcDirection(stats.pos.x, stats.pos.y, target.x, target.y);
 					}
 
-					if (power.new_state != Power::STATE_INSTANT) {
+					if (power->new_state != Power::STATE_INSTANT) {
 						current_power = power_id;
 						act_target = target;
-						attack_anim = power.attack_anim;
+						attack_anim = power->attack_anim;
 					}
 
-					if (power.state_duration > 0)
-						stats.state_timer.setDuration(power.state_duration);
+					if (power->state_duration > 0)
+						stats.state_timer.setDuration(power->state_duration);
 
-					if (power.charge_speed != 0.0f)
-						stats.charge_speed = power.charge_speed;
+					if (power->charge_speed != 0.0f)
+						stats.charge_speed = power->charge_speed;
 
-					stats.prevent_interrupt = power.prevent_interrupt;
+					stats.prevent_interrupt = power->prevent_interrupt;
 
-					for (size_t j = 0; j < power.chain_powers.size(); ++j) {
-						const ChainPower& chain_power = power.chain_powers[j];
+					for (size_t j = 0; j < power->chain_powers.size(); ++j) {
+						const ChainPower& chain_power = power->chain_powers[j];
 						if (chain_power.type == ChainPower::TYPE_PRE && Math::percentChanceF(chain_power.chance)) {
 							powers->activate(chain_power.id, &stats, target);
 						}
 					}
 
-					switch (power.new_state) {
+					switch (power->new_state) {
 						case Power::STATE_ATTACK:	// handle attack powers
 							stats.cur_state = StatBlock::ENTITY_POWER;
 							break;
 
 						case Power::STATE_INSTANT:	// handle instant powers
 							powers->activate(power_id, &stats, target);
-							power_cooldown_timers[power_id].setDuration(power.cooldown);
+							power_cooldown_timers[power_id]->setDuration(power->cooldown);
 							break;
 
 						default:
-							if (power.type == Power::TYPE_BLOCK) {
+							if (power->type == Power::TYPE_BLOCK) {
 								stats.cur_state = StatBlock::ENTITY_BLOCK;
 								powers->activate(power_id, &stats, target);
 								stats.refresh_stats = true;
@@ -812,10 +830,10 @@ void Avatar::logic() {
 					// if the player is attacking, show the attack cursor
 					attack_cursor = (
 						stats.cur_state == StatBlock::ENTITY_POWER &&
-						!power.buff && !power.buff_teleport &&
-						power.type != Power::TYPE_TRANSFORM &&
-						power.type != Power::TYPE_BLOCK &&
-						!(power.starting_pos == Power::STARTING_POS_SOURCE && power.speed == 0)
+						!power->buff && !power->buff_teleport &&
+						power->type != Power::TYPE_TRANSFORM &&
+						power->type != Power::TYPE_BLOCK &&
+						!(power->starting_pos == Power::STARTING_POS_SOURCE && power->speed == 0)
 					);
 
 				}
@@ -838,10 +856,11 @@ void Avatar::logic() {
 	mapr->checkEvents(stats.pos);
 
 	// decrement all cooldowns
-	std::map<size_t, Timer>::iterator pct_it;
-	for (pct_it = power_cooldown_timers.begin(); pct_it != power_cooldown_timers.end(); ++pct_it) {
-		pct_it->second.tick();
-		power_cast_timers[pct_it->first].tick();
+	for (size_t i = 0; i < powers->powers.size(); ++i) {
+		if (powers->isValid(i)) {
+			power_cooldown_timers[i]->tick();
+			power_cast_timers[i]->tick();
+		}
 	}
 
 	// make the current square solid
@@ -1075,6 +1094,12 @@ Avatar::~Avatar() {
 
 	unloadSounds();
 
-	for (unsigned i=0; i<sound_steps.size(); i++)
+	for (size_t i = 0; i < power_cooldown_timers.size(); ++i) {
+		delete power_cooldown_timers[i];
+		delete power_cast_timers[i];
+	}
+
+	for (unsigned i=0; i<sound_steps.size(); i++) {
 		snd->unload(sound_steps[i]);
+	}
 }

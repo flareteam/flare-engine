@@ -498,38 +498,40 @@ void GameStatePlay::loadTitles() {
 
 			if (titles.empty()) continue;
 
+			Title& title = titles.back();
+
 			if (infile.key == "title") {
 				// @ATTR title.title|string|The displayed title.
-				titles.back().title = infile.val;
+				title.title = infile.val;
 			}
 			else if (infile.key == "level") {
 				// @ATTR title.level|int|Requires level.
-				titles.back().level = Parse::toInt(infile.val);
+				title.level = Parse::toInt(infile.val);
 			}
 			else if (infile.key == "power") {
 				// @ATTR title.power|power_id|Requires power.
-				titles.back().power = Parse::toPowerID(infile.val);
+				title.power = powers->verifyID(Parse::toPowerID(infile.val), &infile, !PowerManager::ALLOW_ZERO_ID);
 			}
 			else if (infile.key == "requires_status") {
 				// @ATTR title.requires_status|list(string)|Requires status.
 				std::string repeat_val = Parse::popFirstString(infile.val);
-				while (repeat_val != "") {
-					titles.back().requires_status.push_back(camp->registerStatus(repeat_val));
+				while (!repeat_val.empty()) {
+					title.requires_status.push_back(camp->registerStatus(repeat_val));
 					repeat_val = Parse::popFirstString(infile.val);
 				}
 			}
 			else if (infile.key == "requires_not_status") {
 				// @ATTR title.requires_not_status|list(string)|Requires not status.
 				std::string repeat_val = Parse::popFirstString(infile.val);
-				while (repeat_val != "") {
-					titles.back().requires_not_status.push_back(camp->registerStatus(repeat_val));
+				while (!repeat_val.empty()) {
+					title.requires_not_status.push_back(camp->registerStatus(repeat_val));
 					repeat_val = Parse::popFirstString(infile.val);
 				}
 			}
 			else if (infile.key == "primary_stat") {
 				// @ATTR title.primary_stat|predefined_string, predefined_string : Primary stat, Lesser primary stat|Required primary stat(s). The lesser stat is optional.
-				titles.back().primary_stat_1 = Parse::popFirstString(infile.val);
-				titles.back().primary_stat_2 = Parse::popFirstString(infile.val);
+				title.primary_stat_1 = Parse::popFirstString(infile.val);
+				title.primary_stat_2 = Parse::popFirstString(infile.val);
 			}
 			else infile.error("GameStatePlay: '%s' is not a valid key.", infile.key.c_str());
 		}
@@ -913,7 +915,7 @@ void GameStatePlay::logic() {
 		int count = MenuActionBar::SLOT_MAIN1;
 		// put creature powers on action bar
 		for (size_t i=0; i<pc->charmed_stats->powers_ai.size(); i++) {
-			if (pc->charmed_stats->powers_ai[i].id != 0 && powers->powers[pc->charmed_stats->powers_ai[i].id].beacon != true) {
+			if (powers->isValid(pc->charmed_stats->powers_ai[i].id) && powers->powers[pc->charmed_stats->powers_ai[i].id]->beacon != true) {
 				menu->act->hotkeys[count] = pc->charmed_stats->powers_ai[i].id;
 				menu->act->locked[count] = true;
 				count++;
@@ -924,7 +926,7 @@ void GameStatePlay::logic() {
 					break;
 			}
 		}
-		if (pc->stats.manual_untransform && pc->untransform_power > 0) {
+		if (pc->stats.manual_untransform && powers->isValid(pc->untransform_power)) {
 			menu->act->hotkeys[count] = pc->untransform_power;
 			menu->act->locked[count] = true;
 		}

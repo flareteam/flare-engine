@@ -90,11 +90,13 @@ size_t EntityManager::loadEntityPrototype(const std::string& type_id) {
 
 	for (size_t i = 0; i < e.stats.powers_ai.size(); i++) {
 		PowerID power_index = e.stats.powers_ai[i].id;
-		const std::string& spawn_type = powers->powers[power_index].spawn_type;
-		if (power_index != 0 && spawn_type != "" && spawn_type != "untransform") {
-			std::vector<Enemy_Level> spawn_enemies = enemyg->getEnemiesInCategory(spawn_type);
-			for (size_t j = 0; j < spawn_enemies.size(); j++) {
-				loadEntityPrototype(spawn_enemies[j].type);
+		if (powers->isValid(power_index)) {
+			const std::string& spawn_type = powers->powers[power_index]->spawn_type;
+			if (!spawn_type.empty() && spawn_type != "untransform") {
+				std::vector<Enemy_Level> spawn_enemies = enemyg->getEnemiesInCategory(spawn_type);
+				for (size_t j = 0; j < spawn_enemies.size(); j++) {
+					loadEntityPrototype(spawn_enemies[j].type);
+				}
 			}
 		}
 	}
@@ -208,11 +210,13 @@ void EntityManager::handleNewMap () {
 	// load entities that can be spawn by avatar's powers
 	for (size_t i = 0; i < pc->stats.powers_list.size(); i++) {
 		PowerID power_index = pc->stats.powers_list[i];
-		const std::string& spawn_type = powers->powers[power_index].spawn_type;
-		if (spawn_type != "" && spawn_type != "untransform") {
-			std::vector<Enemy_Level> spawn_enemies = enemyg->getEnemiesInCategory(spawn_type);
-			for (size_t j = 0; j < spawn_enemies.size(); j++) {
-				loadEntityPrototype(spawn_enemies[j].type);
+		if (powers->isValid(power_index)) {
+			const std::string& spawn_type = powers->powers[power_index]->spawn_type;
+			if (!spawn_type.empty() && spawn_type != "untransform") {
+				std::vector<Enemy_Level> spawn_enemies = enemyg->getEnemiesInCategory(spawn_type);
+				for (size_t j = 0; j < spawn_enemies.size(); j++) {
+					loadEntityPrototype(spawn_enemies[j].type);
+				}
 			}
 		}
 	}
@@ -221,11 +225,13 @@ void EntityManager::handleNewMap () {
 	if (menu_act != NULL) {
 		for (size_t i = 0; i < menu_act->hotkeys.size(); i++) {
 			PowerID power_index = menu_act->hotkeys[i];
-			const std::string& spawn_type = powers->powers[power_index].spawn_type;
-			if (power_index != 0 && spawn_type != "" && spawn_type != "untransform") {
-				std::vector<Enemy_Level> spawn_enemies = enemyg->getEnemiesInCategory(spawn_type);
-				for (size_t j = 0; j < spawn_enemies.size(); j++) {
-					loadEntityPrototype(spawn_enemies[j].type);
+			if (power_index != 0) {
+				const std::string& spawn_type = powers->powers[power_index]->spawn_type;
+				if (!spawn_type.empty() && spawn_type != "untransform") {
+					std::vector<Enemy_Level> spawn_enemies = enemyg->getEnemiesInCategory(spawn_type);
+					for (size_t j = 0; j < spawn_enemies.size(); j++) {
+						loadEntityPrototype(spawn_enemies[j].type);
+					}
 				}
 			}
 		}
@@ -293,8 +299,8 @@ void EntityManager::handleSpawn() {
 		e->loadSounds();
 
 		//Set level
-		if (e->stats.summoned_power_index != 0) {
-			SpawnLevel* spawn_level = &(powers->powers[e->stats.summoned_power_index].spawn_level);
+		if (powers->isValid(e->stats.summoned_power_index)) {
+			SpawnLevel* spawn_level = &(powers->powers[e->stats.summoned_power_index]->spawn_level);
 
 			if (spawn_level->mode == SpawnLevel::MODE_FIXED) {
 				e->stats.level = static_cast<int>(spawn_level->count);
@@ -335,16 +341,15 @@ void EntityManager::handleSpawn() {
 		e->stats.cur_state = StatBlock::ENTITY_SPAWN;
 
 		//now apply post effects to the spawned entity
-		if(e->stats.summoned_power_index > 0)
-			powers->effect(&e->stats, (espawn.summoner != NULL ? espawn.summoner : &e->stats), e->stats.summoned_power_index, e->stats.hero_ally ? Power::SOURCE_TYPE_HERO : Power::SOURCE_TYPE_ENEMY);
+		powers->effect(&e->stats, (espawn.summoner != NULL ? espawn.summoner : &e->stats), e->stats.summoned_power_index, e->stats.hero_ally ? Power::SOURCE_TYPE_HERO : Power::SOURCE_TYPE_ENEMY);
 
 		//apply party passives
 		//synchronise tha party passives in the pc stat block with the passives in the allies stat blocks
 		//at the time the summon is spawned, it takes the passives available at that time. if the passives change later, the changes wont affect summons retrospectively. could be exploited with equipment switching
 		for (unsigned i=0; i< pc->stats.powers_passive.size(); i++) {
 			PowerID pwr = pc->stats.powers_passive[i];
-			if (powers->powers[pwr].passive && powers->powers[pwr].buff_party && (e->stats.hero_ally || e->stats.enemy_ally)
-					&& (powers->powers[pwr].buff_party_power_id == 0 || powers->powers[pwr].buff_party_power_id == e->stats.summoned_power_index)) {
+			if (powers->isValid(pwr) && powers->powers[pwr]->passive && powers->powers[pwr]->buff_party && (e->stats.hero_ally || e->stats.enemy_ally)
+					&& (powers->powers[pwr]->buff_party_power_id == 0 || powers->powers[pwr]->buff_party_power_id == e->stats.summoned_power_index)) {
 
 				e->stats.powers_passive.push_back(pwr);
 			}
@@ -352,8 +357,8 @@ void EntityManager::handleSpawn() {
 
 		for (unsigned i=0; i<pc->stats.powers_list_items.size(); i++) {
 			PowerID pwr = pc->stats.powers_list_items[i];
-			if (powers->powers[pwr].passive && powers->powers[pwr].buff_party && (e->stats.hero_ally || e->stats.enemy_ally)
-					&& (powers->powers[pwr].buff_party_power_id == 0 || powers->powers[pwr].buff_party_power_id == e->stats.summoned_power_index)) {
+			if (powers->isValid(pwr) && powers->powers[pwr]->passive && powers->powers[pwr]->buff_party && (e->stats.hero_ally || e->stats.enemy_ally)
+					&& (powers->powers[pwr]->buff_party_power_id == 0 || powers->powers[pwr]->buff_party_power_id == e->stats.summoned_power_index)) {
 
 				e->stats.powers_passive.push_back(pwr);
 			}

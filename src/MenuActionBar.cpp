@@ -261,12 +261,9 @@ void MenuActionBar::align() {
 void MenuActionBar::clear(bool skip_items) {
 	// clear action bar
 	for (unsigned i = 0; i < slots_count; i++) {
-		if (skip_items && powers) {
-			if (hotkeys[i] > 0) {
-				const Power &power = powers->powers[hotkeys_mod[i]];
-				if (!power.required_items.empty()) {
-					continue;
-				}
+		if (skip_items && powers && powers->isValid(hotkeys_mod[i])) {
+			if (!powers->powers[hotkeys_mod[i]]->required_items.empty()) {
+				continue;
 			}
 		}
 
@@ -346,56 +343,54 @@ void MenuActionBar::logic() {
 	for (unsigned i = 0; i < slots_count; i++) {
 		if (!slots[i]) continue;
 
-		if (hotkeys[i] > 0) {
-			const Power &power = powers->powers[hotkeys_mod[i]];
+		if (powers->isValid(hotkeys_mod[i])) {
+			const Power* power = powers->powers[hotkeys_mod[i]];
 
-			if (power.required_items.empty()) {
+			if (power->required_items.empty()) {
 				setItemCount(i, -1, !IS_EQUIPPED);
 			}
 			else {
-				for (size_t j = 0; j < power.required_items.size(); ++j) {
-					if (power.required_items[j].equipped) {
-						if (!menu->inv->equipmentContain(power.required_items[j].id, 1))
+				for (size_t j = 0; j < power->required_items.size(); ++j) {
+					if (power->required_items[j].equipped) {
+						if (!menu->inv->equipmentContain(power->required_items[j].id, 1))
 							setItemCount(i, 0, IS_EQUIPPED);
 						else
 							setItemCount(i, 1, IS_EQUIPPED);
 					}
 					else {
-						if (power.required_items[j].quantity == 0) {
-							if (!menu->inv->inventory[MenuInventory::CARRIED].contain(power.required_items[j].id, 1))
+						if (power->required_items[j].quantity == 0) {
+							if (!menu->inv->inventory[MenuInventory::CARRIED].contain(power->required_items[j].id, 1))
 								setItemCount(i, 0, IS_EQUIPPED);
 							else
 								setItemCount(i, 1, IS_EQUIPPED);
 						}
 						else {
-							setItemCount(i, menu->inv->inventory[MenuInventory::CARRIED].count(power.required_items[j].id), !IS_EQUIPPED);
+							setItemCount(i, menu->inv->inventory[MenuInventory::CARRIED].count(power->required_items[j].id), !IS_EQUIPPED);
 						}
 					}
 
-					if (power.required_items[j].quantity > 0)
+					if (power->required_items[j].quantity > 0)
 						break;
 				}
 			}
 
 			//see if the slot should be greyed out
-			slot_enabled[i] = pc->power_cooldown_timers[hotkeys_mod[i]].isEnd()
-							  && pc->power_cast_timers[hotkeys_mod[i]].isEnd()
+			slot_enabled[i] = pc->power_cooldown_timers[hotkeys_mod[i]]->isEnd()
+							  && pc->power_cast_timers[hotkeys_mod[i]]->isEnd()
 							  && pc->stats.canUsePower(hotkeys_mod[i], !StatBlock::CAN_USE_PASSIVE)
 							  && (twostep_slot == -1 || static_cast<unsigned>(twostep_slot) == i);
 
-			slots[i]->setIcon(power.icon, WidgetSlot::NO_OVERLAY);
+			slots[i]->setIcon(power->icon, WidgetSlot::NO_OVERLAY);
+
+			if (!pc->power_cast_timers[hotkeys_mod[i]]->isEnd() && pc->power_cast_timers[hotkeys_mod[i]]->getDuration() > 0) {
+				slot_cooldown_size[i] = (eset->resolutions.icon_size * pc->power_cast_timers[hotkeys_mod[i]]->getCurrent()) / pc->power_cast_timers[hotkeys_mod[i]]->getDuration();
+			}
+			else if (!pc->power_cooldown_timers[hotkeys_mod[i]]->isEnd() && pc->power_cooldown_timers[hotkeys_mod[i]]->getDuration() > 0) {
+				slot_cooldown_size[i] = (eset->resolutions.icon_size * pc->power_cooldown_timers[hotkeys_mod[i]]->getCurrent()) / pc->power_cooldown_timers[hotkeys_mod[i]]->getDuration();
+			}
 		}
 		else {
 			slot_enabled[i] = true;
-		}
-
-		if (!pc->power_cast_timers[hotkeys_mod[i]].isEnd() && pc->power_cast_timers[hotkeys_mod[i]].getDuration() > 0) {
-			slot_cooldown_size[i] = (eset->resolutions.icon_size * pc->power_cast_timers[hotkeys_mod[i]].getCurrent()) / pc->power_cast_timers[hotkeys_mod[i]].getDuration();
-		}
-		else if (!pc->power_cooldown_timers[hotkeys_mod[i]].isEnd() && pc->power_cooldown_timers[hotkeys_mod[i]].getDuration() > 0) {
-			slot_cooldown_size[i] = (eset->resolutions.icon_size * pc->power_cooldown_timers[hotkeys_mod[i]].getCurrent()) / pc->power_cooldown_timers[hotkeys_mod[i]].getDuration();
-		}
-		else {
 			slot_cooldown_size[i] = (slot_enabled[i] ? 0 : eset->resolutions.icon_size);;
 		}
 
@@ -508,8 +503,11 @@ void MenuActionBar::renderTooltips(const Point& position) {
  * After dragging a power or item onto the action bar, set as new hotkey
  */
 void MenuActionBar::drop(const Point& mouse, PowerID power_index, bool rearranging) {
+	if (!powers->isValid(power_index) || powers->powers[power_index]->no_actionbar)
+		return;
+
 	for (unsigned i = 0; i < slots_count; i++) {
-		if (slots[i] && !powers->powers[power_index].no_actionbar && Utils::isWithinRect(slots[i]->pos, mouse)) {
+		if (slots[i] && Utils::isWithinRect(slots[i]->pos, mouse)) {
 			if (rearranging) {
 				if (prevent_changing[i]) {
 					actionReturn(power_index);
@@ -586,9 +584,9 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 			// if a power requires a fixed target (like teleportation), break up activation into two parts
 			// the first step is to mark the slot that was clicked on
 			// NOTE only works for enabled slots
-			if (action.power > 0) {
-				const Power &power = powers->powers[action.power];
-				if (power.starting_pos == Power::STARTING_POS_TARGET || power.buff_teleport) {
+			if (powers->isValid(action.power)) {
+				const Power* power = powers->powers[action.power];
+				if (power->starting_pos == Power::STARTING_POS_TARGET || power->buff_teleport) {
 					if (slot_enabled[i]) {
 						twostep_slot = i;
 						action.power = 0;
@@ -630,16 +628,16 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 		}
 
 		// a power slot was activated
-		if (action.power > 0) {
-			const Power& power = powers->powers[action.power];
+		if (powers->isValid(action.power)) {
+			const Power* power = powers->powers[action.power];
 
 			bool not_enough_resources = false;
-			if (pc->stats.mp < power.requires_mp && slot_fail_cooldown[i] == 0) {
+			if (pc->stats.mp < power->requires_mp && slot_fail_cooldown[i] == 0) {
 				pc->logMsg(msg->get("Not enough MP."), Avatar::MSG_NORMAL);
 				not_enough_resources = true;
 			}
 			for (size_t j = 0; j < eset->resource_stats.list.size(); ++j) {
-				if (pc->stats.resource_stats[j] < power.requires_resource_stat[j] && slot_fail_cooldown[i] == 0) {
+				if (pc->stats.resource_stats[j] < power->requires_resource_stat[j] && slot_fail_cooldown[i] == 0) {
 					pc->logMsg(eset->resource_stats.list[j].text_log_low, Avatar::MSG_NORMAL);
 					not_enough_resources = true;
 				}
@@ -655,12 +653,12 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 				continue;
 			}
 
-			slot_fail_cooldown[i] = pc->power_cast_timers[action.power].getDuration();
+			slot_fail_cooldown[i] = pc->power_cast_timers[action.power]->getDuration();
 
 			action.instant_item = false;
-			if (power.new_state == Power::STATE_INSTANT) {
-				for (size_t j = 0; j < power.required_items.size(); ++j) {
-					if (power.required_items[j].id > 0 && !power.required_items[j].equipped) {
+			if (power->new_state == Power::STATE_INSTANT) {
+				for (size_t j = 0; j < power->required_items.size(); ++j) {
+					if (power->required_items[j].id > 0 && !power->required_items[j].equipped) {
 						action.instant_item = true;
 						break;
 					}
@@ -757,7 +755,10 @@ void MenuActionBar::checkMenu(bool &menu_c, bool &menu_i, bool &menu_p, bool &me
  */
 void MenuActionBar::set(std::vector<PowerID> power_id, bool skip_empty) {
 	for (unsigned i = 0; i < slots_count; i++) {
-		if (powers->powers[power_id[i]].no_actionbar)
+		if (!powers->isValid(power_id[i]))
+			continue;
+
+		if (!powers->powers[power_id[i]] || powers->powers[power_id[i]]->no_actionbar)
 			continue;
 
 		if (!skip_empty || hotkeys[i] == 0)
@@ -769,19 +770,19 @@ void MenuActionBar::set(std::vector<PowerID> power_id, bool skip_empty) {
 /**
  * Set a target depending on how a power was triggered
  */
-FPoint MenuActionBar::setTarget(bool have_aim, const Power& pow) {
+FPoint MenuActionBar::setTarget(bool have_aim, const Power* pow) {
 	if (have_aim && settings->mouse_aim && !settings->touchscreen) {
 		FPoint map_pos;
-		if (pow.aim_assist)
+		if (pow->aim_assist)
 			map_pos = Utils::screenToMap(inpt->mouse.x,  inpt->mouse.y + eset->misc.aim_assist, mapr->cam.pos.x, mapr->cam.pos.y);
 		else
 			map_pos = Utils::screenToMap(inpt->mouse.x,  inpt->mouse.y, mapr->cam.pos.x, mapr->cam.pos.y);
 
-		if (pow.target_nearest > 0) {
-			if (!pow.requires_corpse && powers->checkNearestTargeting(pow, &pc->stats, false)) {
+		if (pow->target_nearest > 0) {
+			if (!pow->requires_corpse && powers->checkNearestTargeting(pow, &pc->stats, false)) {
 				map_pos = pc->stats.target_nearest->pos;
 			}
-			else if (pow.requires_corpse && powers->checkNearestTargeting(pow, &pc->stats, true)) {
+			else if (pow->requires_corpse && powers->checkNearestTargeting(pow, &pc->stats, true)) {
 				map_pos = pc->stats.target_nearest_corpse->pos;
 			}
 		}
@@ -836,12 +837,15 @@ bool MenuActionBar::isWithinMenus(const Point& mouse) {
  * So a target_id of 0 will place the power in an empty slot, if available
  */
 void MenuActionBar::addPower(const PowerID id, const PowerID target_id) {
+	if (!powers->isValid(id))
+		return;
+
 	// some powers are explicitly prevented from being placed on the actionbar
-	if (powers->powers[id].no_actionbar)
+	if (powers->powers[id]->no_actionbar)
 		return;
 
 	// can't put passive powers on the action bar
-	if (powers->powers[id].passive)
+	if (powers->powers[id]->passive)
 		return;
 
 	// if we're not replacing an existing power, avoid placing duplicate powers

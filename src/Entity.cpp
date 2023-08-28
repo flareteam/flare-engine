@@ -311,13 +311,12 @@ bool Entity::move() {
  * Returns false on miss
  */
 bool Entity::takeHit(Hazard &h) {
-
 	//check if this enemy should be affected by this hazard based on the category
-	if(!powers->powers[h.power_index].target_categories.empty()) {
+	if(!h.power->target_categories.empty()) {
 		//the power has a target category requirement, so if it doesnt match, dont continue
 		bool match_found = false;
 		for (unsigned int i=0; i<stats.categories.size(); i++) {
-			if(std::find(powers->powers[h.power_index].target_categories.begin(), powers->powers[h.power_index].target_categories.end(), stats.categories[i]) != powers->powers[h.power_index].target_categories.end()) {
+			if(std::find(h.power->target_categories.begin(), h.power->target_categories.end(), stats.categories[i]) != h.power->target_categories.end()) {
 				match_found = true;
 			}
 		}
@@ -353,12 +352,12 @@ bool Entity::takeHit(Hazard &h) {
 	}
 
 	//if the target is an enemy and they are not already in combat, activate a beacon to draw other enemies into battle
-	if (!stats.in_combat && !stats.hero && !stats.hero_ally && !powers->powers[h.power_index].no_aggro) {
+	if (!stats.in_combat && !stats.hero && !stats.hero_ally && !h.power->no_aggro) {
 		stats.join_combat = true;
 	}
 
 	// exit if it was a beacon (to prevent stats.targeted from being set)
-	if (powers->powers[h.power_index].beacon) return false;
+	if (h.power->beacon) return false;
 
 	if (h.power->type == Power::TYPE_MISSILE && Math::percentChanceF(stats.get(Stats::REFLECT))) {
 		// reflect the missile 180 degrees
@@ -383,15 +382,15 @@ bool Entity::takeHit(Hazard &h) {
 
 	// if it's a miss, do nothing
 	float accuracy = h.accuracy;
-	if(powers->powers[h.power_index].mod_accuracy_mode == Power::STAT_MODIFIER_MODE_MULTIPLY)
-		accuracy = (accuracy * powers->powers[h.power_index].mod_accuracy_value) / 100;
-	else if(powers->powers[h.power_index].mod_accuracy_mode == Power::STAT_MODIFIER_MODE_ADD)
-		accuracy += powers->powers[h.power_index].mod_accuracy_value;
-	else if(powers->powers[h.power_index].mod_accuracy_mode == Power::STAT_MODIFIER_MODE_ABSOLUTE)
-		accuracy = powers->powers[h.power_index].mod_accuracy_value;
+	if (h.power->mod_accuracy_mode == Power::STAT_MODIFIER_MODE_MULTIPLY)
+		accuracy = (accuracy * h.power->mod_accuracy_value) / 100;
+	else if (h.power->mod_accuracy_mode == Power::STAT_MODIFIER_MODE_ADD)
+		accuracy += h.power->mod_accuracy_value;
+	else if (h.power->mod_accuracy_mode == Power::STAT_MODIFIER_MODE_ABSOLUTE)
+		accuracy = h.power->mod_accuracy_value;
 
 	float avoidance = 0;
-	if(!powers->powers[h.power_index].trait_avoidance_ignore) {
+	if (!h.power->trait_avoidance_ignore) {
 		avoidance = stats.get(Stats::AVOIDANCE);
 	}
 
@@ -407,12 +406,12 @@ bool Entity::takeHit(Hazard &h) {
 	// calculate base damage
 	float dmg = Math::randBetweenF(h.dmg_min, h.dmg_max);
 
-	if(powers->powers[h.power_index].mod_damage_mode == Power::STAT_MODIFIER_MODE_MULTIPLY)
-		dmg = dmg * powers->powers[h.power_index].mod_damage_value_min / 100;
-	else if(powers->powers[h.power_index].mod_damage_mode == Power::STAT_MODIFIER_MODE_ADD)
-		dmg += powers->powers[h.power_index].mod_damage_value_min;
-	else if(powers->powers[h.power_index].mod_damage_mode == Power::STAT_MODIFIER_MODE_ABSOLUTE)
-		dmg = Math::randBetweenF(powers->powers[h.power_index].mod_damage_value_min, powers->powers[h.power_index].mod_damage_value_max);
+	if (h.power->mod_damage_mode == Power::STAT_MODIFIER_MODE_MULTIPLY)
+		dmg = dmg * h.power->mod_damage_value_min / 100;
+	else if (h.power->mod_damage_mode == Power::STAT_MODIFIER_MODE_ADD)
+		dmg += h.power->mod_damage_value_min;
+	else if (h.power->mod_damage_mode == Power::STAT_MODIFIER_MODE_ABSOLUTE)
+		dmg = Math::randBetweenF(h.power->mod_damage_value_min, h.power->mod_damage_value_max);
 
 	// apply elemental resistance
 	if (h.power->trait_elemental >= 0 && static_cast<size_t>(h.power->trait_elemental) < eset->elements.list.size()) {
@@ -458,7 +457,7 @@ bool Entity::takeHit(Hazard &h) {
 		dmg = dmg - absorption;
 		if (dmg <= 0) {
 			dmg = 0;
-			if (!powers->powers[h.power_index].ignore_zero_damage) {
+			if (!h.power->ignore_zero_damage) {
 				if (h.power->trait_elemental < 0) {
 					if (stats.effects.triggered_block && eset->combat.max_block < 100) dmg = 1;
 					else if (!stats.effects.triggered_block && eset->combat.max_absorb < 100) dmg = 1;
@@ -477,12 +476,12 @@ bool Entity::takeHit(Hazard &h) {
 	// check for crits
 	float true_crit_chance = h.crit_chance;
 
-	if(powers->powers[h.power_index].mod_crit_mode == Power::STAT_MODIFIER_MODE_MULTIPLY)
-		true_crit_chance = true_crit_chance * powers->powers[h.power_index].mod_crit_value / 100;
-	else if(powers->powers[h.power_index].mod_crit_mode == Power::STAT_MODIFIER_MODE_ADD)
-		true_crit_chance += powers->powers[h.power_index].mod_crit_value;
-	else if(powers->powers[h.power_index].mod_crit_mode == Power::STAT_MODIFIER_MODE_ABSOLUTE)
-		true_crit_chance = powers->powers[h.power_index].mod_crit_value;
+	if (h.power->mod_crit_mode == Power::STAT_MODIFIER_MODE_MULTIPLY)
+		true_crit_chance = true_crit_chance * h.power->mod_crit_value / 100;
+	else if (h.power->mod_crit_mode == Power::STAT_MODIFIER_MODE_ADD)
+		true_crit_chance += h.power->mod_crit_value;
+	else if (h.power->mod_crit_mode == Power::STAT_MODIFIER_MODE_ABSOLUTE)
+		true_crit_chance = h.power->mod_crit_value;
 
 	if (stats.effects.stun || stats.effects.speed < 100)
 		true_crit_chance += h.power->trait_crits_impaired;
@@ -506,7 +505,7 @@ bool Entity::takeHit(Hazard &h) {
 
 	dmg = eset->combat.resourceRound(dmg);
 
-	if (!powers->powers[h.power_index].ignore_zero_damage) {
+	if (!h.power->ignore_zero_damage) {
 		if (dmg == 0) {
 			comb->addString(msg->get("miss"), stats.pos, CombatText::MSG_MISS);
 			return false;
@@ -533,12 +532,12 @@ bool Entity::takeHit(Hazard &h) {
 	stats.takeDamage(dmg, crit, h.source_type);
 
 	// after effects
-	if (dmg > 0 || powers->powers[h.power_index].ignore_zero_damage) {
+	if (dmg > 0 || h.power->ignore_zero_damage) {
 
 		// damage always breaks stun
 		stats.effects.removeEffectType(Effect::STUN);
 
-		powers->effect(&stats, h.src_stats, static_cast<int>(h.power_index), h.source_type);
+		powers->effect(&stats, h.src_stats, h.power_index, h.source_type);
 
 		// HP/MP steal is cumulative between stat bonus and power bonus
 		if (h.src_stats->hp > 0) {
@@ -604,9 +603,9 @@ bool Entity::takeHit(Hazard &h) {
 		}
 	}
 
-	if (dmg > 0 || powers->powers[h.power_index].ignore_zero_damage) {
+	if (dmg > 0 || h.power->ignore_zero_damage) {
 		// remove effect by ID
-		stats.effects.removeEffectID(powers->powers[h.power_index].remove_effects);
+		stats.effects.removeEffectID(h.power->remove_effects);
 
 		// post power
 		for (size_t i = 0; i < h.power->chain_powers.size(); ++i) {
@@ -676,13 +675,13 @@ bool Entity::takeHit(Hazard &h) {
 		}
 
 		// handle block post-power
-		if (stats.block_power != 0) {
-			Power& block_power = powers->powers[stats.block_power];
-			for (size_t i = 0; i < block_power.chain_powers.size(); ++i) {
-				ChainPower& chain_power = block_power.chain_powers[i];
+		if (powers->isValid(stats.block_power)) {
+			Power* block_power = powers->powers[stats.block_power];
+			for (size_t i = 0; i < block_power->chain_powers.size(); ++i) {
+				ChainPower& chain_power = block_power->chain_powers[i];
 				if (chain_power.type == ChainPower::TYPE_POST && stats.getPowerCooldown(chain_power.id) == 0 && Math::percentChanceF(chain_power.chance)) {
 					powers->activate(chain_power.id, &stats, stats.pos);
-					stats.setPowerCooldown(chain_power.id, powers->powers[chain_power.id].cooldown);
+					stats.setPowerCooldown(chain_power.id, powers->powers[chain_power.id]->cooldown);
 				}
 			}
 		}

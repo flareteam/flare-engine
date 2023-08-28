@@ -41,7 +41,7 @@ class MenuActionBar : public Menu {
 private:
 	static const bool IS_EQUIPPED = true;
 
-	FPoint setTarget(bool have_aim, const Power& pow);
+	FPoint setTarget(bool have_aim, const Power* pow);
 	void addSlot(unsigned index, int x, int y, bool is_locked);
 	void setItemCount(unsigned index, int count, bool is_equipped);
 

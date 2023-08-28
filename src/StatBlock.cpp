@@ -388,10 +388,15 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 	}
 	else if (infile->key == "power_filter") {
 		// @ATTR power_filter|list(power_id)|Only these powers are allowed to hit this entity.
-		std::string power_id = Parse::popFirstString(infile->val);
-		while (!power_id.empty()) {
-			power_filter.push_back(Parse::toPowerID(power_id));
-			power_id = Parse::popFirstString(infile->val);
+		if (powers) {
+			std::string power_id = Parse::popFirstString(infile->val);
+			while (!power_id.empty()) {
+				PowerID test_id = powers->verifyID(Parse::toPowerID(power_id), infile, !PowerManager::ALLOW_ZERO_ID);
+				if (test_id > 0) {
+					power_filter.push_back(Parse::toPowerID(power_id));
+				}
+				power_id = Parse::popFirstString(infile->val);
+			}
 		}
 		return true;
 	}
@@ -701,7 +706,9 @@ void StatBlock::load(const std::string& filename) {
 
 			std::string ai_type = Parse::popFirstString(infile.val);
 
-			ai_power.id = powers->verifyID(Parse::toPowerID(Parse::popFirstString(infile.val)), &infile, !PowerManager::ALLOW_ZERO_ID);
+			if (powers)
+				ai_power.id = powers->verifyID(Parse::toPowerID(Parse::popFirstString(infile.val)), &infile, !PowerManager::ALLOW_ZERO_ID);
+
 			if (ai_power.id == 0)
 				continue; // verifyID() will print our error message
 
@@ -728,26 +735,31 @@ void StatBlock::load(const std::string& filename) {
 
 		else if (infile.key == "passive_powers") {
 			// @ATTR passive_powers|list(power_id)|A list of passive powers this creature has.
-			powers_passive.clear();
-			std::string p = Parse::popFirstString(infile.val);
-			while (p != "") {
-				PowerID passive_id = Parse::toPowerID(p);
-				powers_passive.push_back(Parse::toPowerID(p));
+			if (powers) {
+				powers_passive.clear();
+				std::string p = Parse::popFirstString(infile.val);
+				while (!p.empty()) {
+					PowerID passive_id = powers->verifyID(Parse::toPowerID(p), &infile, !PowerManager::ALLOW_ZERO_ID);
 
-				// if a passive power has a post power, add it to the AI power list so we can track its cooldown
-				Power& passive_power = powers->powers[passive_id];
-				for (size_t i = 0; i < passive_power.chain_powers.size(); ++i) {
-					ChainPower& chain_power = passive_power.chain_powers[i];
-					if (chain_power.type == ChainPower::TYPE_POST) {
-						AIPower passive_post_power;
-						passive_post_power.type = AI_POWER_PASSIVE_POST;
-						passive_post_power.id = chain_power.id;
-						passive_post_power.chance = 0; // post_power chance is used instead
-						powers_ai.push_back(passive_post_power);
+					if (powers->isValid(passive_id)) {
+						powers_passive.push_back(passive_id);
+
+						// if a passive power has a post power, add it to the AI power list so we can track its cooldown
+						Power* passive_power = powers->powers[passive_id];
+						for (size_t i = 0; i < passive_power->chain_powers.size(); ++i) {
+							ChainPower& chain_power = passive_power->chain_powers[i];
+							if (chain_power.type == ChainPower::TYPE_POST) {
+								AIPower passive_post_power;
+								passive_post_power.type = AI_POWER_PASSIVE_POST;
+								passive_post_power.id = chain_power.id;
+								passive_post_power.chance = 0; // post_power chance is used instead
+								powers_ai.push_back(passive_post_power);
+							}
+						}
 					}
-				}
 
-				p = Parse::popFirstString(infile.val);
+					p = Parse::popFirstString(infile.val);
+				}
 			}
 		}
 
@@ -1008,7 +1020,7 @@ void StatBlock::logic() {
 		while (!party_buffs.empty()) {
 			PowerID power_index = party_buffs.front();
 			party_buffs.pop();
-			Power *buff_power = &powers->powers[power_index];
+			Power *buff_power = powers->powers[power_index];
 
 			for (size_t i=0; i < entitym->entities.size(); ++i) {
 				Entity* party_member = entitym->entities[i];
@@ -1220,7 +1232,10 @@ void StatBlock::logic() {
 }
 
 bool StatBlock::canUsePower(PowerID powerid, bool allow_passive) const {
-	const Power& power = powers->powers[powerid];
+	if (!powers->isValid(powerid))
+		return false;
+
+	const Power* power = powers->powers[powerid];
 
 	if (!alive) {
 		// can't use powers when dead
@@ -1232,22 +1247,22 @@ bool StatBlock::canUsePower(PowerID powerid, bool allow_passive) const {
 	}
 	else if (transformed) {
 		// needed to unlock shapeshifter powers
-		return mp >= power.requires_mp;
+		return mp >= power->requires_mp;
 	}
 	else {
 		return (
 			powers->checkPowerCost(power, this)
-			&& (!power.passive || allow_passive)
-			&& !power.meta_power
-			&& (!effects.stun || (allow_passive && power.passive))
+			&& (!power->passive || allow_passive)
+			&& !power->meta_power
+			&& (!effects.stun || (allow_passive && power->passive))
 			&& powers->checkRequiredResourceState(power, this)
-			&& (!power.requires_corpse || (target_corpse && !target_corpse->corpse_timer.isEnd()) || (target_nearest_corpse && powers->checkNearestTargeting(power, this, true) && !target_nearest_corpse->corpse_timer.isEnd()))
-			&& (checkRequiredSpawns(power.requires_spawns))
+			&& (!power->requires_corpse || (target_corpse && !target_corpse->corpse_timer.isEnd()) || (target_nearest_corpse && powers->checkNearestTargeting(power, this, true) && !target_nearest_corpse->corpse_timer.isEnd()))
+			&& (checkRequiredSpawns(power->requires_spawns))
 			&& (menu_powers && menu_powers->meetsUsageStats(powerid))
-			&& (power.type == Power::TYPE_SPAWN ? !summonLimitReached(powerid) : true)
-			&& !(power.spawn_type == "untransform" && !transformed)
-			&& std::includes(equip_flags.begin(), equip_flags.end(), power.requires_flags.begin(), power.requires_flags.end())
-			&& (!power.buff_party || (power.buff_party && entitym && entitym->checkPartyMembers()))
+			&& (power->type == Power::TYPE_SPAWN ? !summonLimitReached(powerid) : true)
+			&& !(power->spawn_type == "untransform" && !transformed)
+			&& std::includes(equip_flags.begin(), equip_flags.end(), power->requires_flags.begin(), power->requires_flags.end())
+			&& (!power->buff_party || (power->buff_party && entitym && entitym->checkPartyMembers()))
 			&& powers->checkRequiredItems(power, this)
 		);
 	}
@@ -1335,9 +1350,11 @@ void StatBlock::removeFromSummons() {
 }
 
 bool StatBlock::summonLimitReached(PowerID power_id) const {
+	if (!powers->isValid(power_id))
+		return true;
 
 	//find the limit
-	Power *spawn_power = &powers->powers[power_id];
+	Power *spawn_power = powers->powers[power_id];
 
 	int max_summons = 0;
 
@@ -1425,12 +1442,12 @@ StatBlock::AIPower* StatBlock::getAIPower(int ai_type) {
 		if (!powers_ai[i].cooldown.isEnd())
 			continue;
 
-		if (powers->powers[powers_ai[i].id].type == Power::TYPE_SPAWN) {
+		if (powers->powers[powers_ai[i].id]->type == Power::TYPE_SPAWN) {
 			if (summonLimitReached(powers_ai[i].id))
 				continue;
 		}
 
-		if (!checkRequiredSpawns(powers->powers[powers_ai[i].id].requires_spawns))
+		if (!checkRequiredSpawns(powers->powers[powers_ai[i].id]->requires_spawns))
 			continue;
 
 		possible_ids.push_back(i);
@@ -1463,7 +1480,7 @@ bool StatBlock::checkRequiredSpawns(int req_amount) const {
 
 int StatBlock::getPowerCooldown(PowerID power_id) {
 	if (hero) {
-		return pc->power_cooldown_timers[power_id].getDuration();
+		return pc->power_cooldown_timers[power_id]->getDuration();
 	}
 	else {
 		for (size_t i = 0; i < powers_ai.size(); ++i) {
@@ -1477,7 +1494,7 @@ int StatBlock::getPowerCooldown(PowerID power_id) {
 
 void StatBlock::setPowerCooldown(PowerID power_id, int power_cooldown) {
 	if (hero) {
-		pc->power_cooldown_timers[power_id].setDuration(power_cooldown);
+		pc->power_cooldown_timers[power_id]->setDuration(power_cooldown);
 	}
 	else {
 		for (size_t i = 0; i < powers_ai.size(); ++i) {

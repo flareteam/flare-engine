@@ -77,7 +77,7 @@ void HazardManager::logic() {
 				if (chain_power.type == ChainPower::TYPE_WALL && Math::percentChanceF(chain_power.chance)) {
 					powers->activate(chain_power.id, h[i-1]->src_stats, h[i-1]->pos);
 
-					if (powers->powers[chain_power.id].directional) {
+					if (powers->powers[chain_power.id]->directional) {
 						powers->hazards.back()->animationKind = h[i-1]->animationKind;
 					}
 				}

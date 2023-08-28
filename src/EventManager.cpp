@@ -31,6 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuManager.h"
 #include "MessageEngine.h"
 #include "ModManager.h"
+#include "PowerManager.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "SoundManager.h"
@@ -602,6 +603,11 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		e->type = EventComponent::POWER;
 
 		e->id = Parse::toPowerID(val);
+
+		if (powers)
+			e->id = powers->verifyID(e->id, NULL, !PowerManager::ALLOW_ZERO_ID);
+		else
+			Utils::logError("EventManager: Unable to verify Power ID '%d'. PowerManager hasn't been initialized.", e->id);
 	}
 	else if (key == "spawn") {
 		// @ATTR event.spawn|list(predefined_string, int, int) : Enemy category, X, Y|Spawn an enemy from this category at location

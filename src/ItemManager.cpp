@@ -344,7 +344,7 @@ void ItemManager::loadItems(const std::string& filename) {
 				infile.error("ItemManager: Power index out of bounds 1-%d, skipping power.", INT_MAX);
 		}
 		else if (infile.key == "replace_power") {
-			// @ATTR replace_power|repeatable(int, int) : Old power, New power|Replaces the old power id with the new power id in the action bar when equipped.
+			// @ATTR replace_power|repeatable(power_id, power_id) : Old power, New power|Replaces the old power id with the new power id in the action bar when equipped.
 			if (clear_replace_power) {
 				items[id].replace_power.clear();
 				clear_replace_power = false;
@@ -818,8 +818,8 @@ void ItemManager::getBonusString(std::stringstream& ss, BonusData* bdata) {
 	else if (bdata->type == BonusData::PRIMARY_STAT) {
 		ss << " " << eset->primary_stats.list[bdata->index].name;
 	}
-	else if (powers && bdata->power_id > 0) {
-		ss << " " << powers->powers[bdata->power_id].name;
+	else if (powers && powers->isValid(bdata->power_id)) {
+		ss << " " << powers->powers[bdata->power_id]->name;
 		if (menu && menu->pow) {
 			std::string req_str = menu->pow->getItemBonusPowerReqString(bdata->power_id);
 			if (!req_str.empty())

@@ -703,8 +703,9 @@ void MenuInventory::activate(const Point& position) {
 		show_book = items->items[inventory[CARRIED][slot].item].book;
 	}
 	// use a power attached to a non-equipment item
-	else if (items->items[inventory[CARRIED][slot].item].power > 0 && getEquipSlotFromItem(inventory[CARRIED][slot].item, !ONLY_EMPTY_SLOTS) == -1) {
+	else if (powers->isValid(items->items[inventory[CARRIED][slot].item].power) && getEquipSlotFromItem(inventory[CARRIED][slot].item, !ONLY_EMPTY_SLOTS) == -1) {
 		PowerID power_id = items->items[inventory[CARRIED][slot].item].power;
+		Power* item_power = powers->powers[power_id];
 
 		// equipment might want to replace powers, so do it here
 		for (int i = 0; i < inventory[EQUIPMENT].getSlotNumber(); ++i) {
@@ -719,37 +720,37 @@ void MenuInventory::activate(const Point& position) {
 		}
 
 		// if the power consumes items, make sure we have enough
-		for (size_t i = 0; i < powers->powers[power_id].required_items.size(); ++i) {
-			if (powers->powers[power_id].required_items[i].id > 0 &&
-			    powers->powers[power_id].required_items[i].quantity > inventory[CARRIED].count(powers->powers[power_id].required_items[i].id))
+		for (size_t i = 0; i < item_power->required_items.size(); ++i) {
+			if (item_power->required_items[i].id > 0 &&
+			    item_power->required_items[i].quantity > inventory[CARRIED].count(item_power->required_items[i].id))
 			{
 				pc->logMsg(msg->get("You don't have enough of the required item."), Avatar::MSG_NORMAL);
 				return;
 			}
 
-			if (powers->powers[power_id].required_items[i].id == inventory[CARRIED][slot].item) {
+			if (item_power->required_items[i].id == inventory[CARRIED][slot].item) {
 				activated_slot = slot;
 				activated_item = inventory[CARRIED][slot].item;
 			}
 		}
 
 		// check power & item requirements
-		if (!pc->stats.canUsePower(power_id, !StatBlock::CAN_USE_PASSIVE) || !pc->power_cooldown_timers[power_id].isEnd()) {
+		if (!pc->stats.canUsePower(power_id, !StatBlock::CAN_USE_PASSIVE) || !pc->power_cooldown_timers[power_id]->isEnd()) {
 			pc->logMsg(msg->get("You can't use this item right now."), Avatar::MSG_NORMAL);
 			return;
 		}
 
 		// if this item requires targeting it can't be used this way
-		if (!powers->powers[power_id].requires_targeting) {
+		if (!item_power->requires_targeting) {
 			ActionData action_data;
 			action_data.power = power_id;
 			action_data.activated_from_inventory = true;
 
 			action_data.target = Utils::calcVector(pc->stats.pos, pc->stats.direction, pc->stats.melee_range);
 
-			if (powers->powers[power_id].new_state == Power::STATE_INSTANT) {
-				for (size_t j = 0; j < powers->powers[power_id].required_items.size(); ++j) {
-					if (powers->powers[power_id].required_items[j].id > 0 && !powers->powers[power_id].required_items[j].equipped) {
+			if (item_power->new_state == Power::STATE_INSTANT) {
+				for (size_t j = 0; j < item_power->required_items.size(); ++j) {
+					if (item_power->required_items[j].id > 0 && !item_power->required_items[j].equipped) {
 						action_data.instant_item = true;
 						break;
 					}
@@ -1141,7 +1142,7 @@ void MenuInventory::applyEquipment() {
 	for (unsigned i=0; i<pc->stats.powers_list_items.size(); ++i) {
 		PowerID id = pc->stats.powers_list_items[i];
 		// pc->stats.hp > 0 is hack to keep on_death revive passives working
-		if (powers->powers[id].passive && pc->stats.hp > 0)
+		if (powers->powers[id]->passive && pc->stats.hp > 0)
 			pc->stats.effects.removeEffectPassive(id);
 	}
 	pc->stats.powers_list_items.clear();
@@ -1160,37 +1161,37 @@ void MenuInventory::applyEquipment() {
 
 
 	// enable all slots by default
-	for (int i=0; i<MAX_EQUIPPED; ++i) {
+	for (int i = 0; i < MAX_EQUIPPED; ++i) {
 		inventory[EQUIPMENT].slots[i]->enabled = true;
 	}
 	// disable any incompatible slots, unequipping items if neccessary
-	for (int i=0; i<MAX_EQUIPPED; ++i) {
+	for (int i = 0; i < MAX_EQUIPPED; ++i) {
 		if (!isActive(i))
 			continue;
 
 		ItemID id = inventory[EQUIPMENT][i].item;
-		for (unsigned j=0; j<items->items[id].disable_slots.size(); ++j) {
+		for (unsigned j = 0; j < items->items[id].disable_slots.size(); ++j) {
 			disableEquipmentSlot(items->items[id].disable_slots[j]);
 		}
 	}
 
 	// disable equipment slots via passive powers
-	for (size_t i=0; i<pc->stats.powers_passive.size(); ++i) {
+	for (size_t i = 0; i < pc->stats.powers_passive.size(); ++i) {
 		PowerID id = pc->stats.powers_passive[i];
-		if (!powers->powers[id].passive)
+		if (!powers->powers[id]->passive)
 			continue;
 
-		for (size_t j=0; j<powers->powers[id].disable_equip_slots.size(); ++j) {
-			disableEquipmentSlot(powers->powers[id].disable_equip_slots[j]);
+		for (size_t j = 0; j < powers->powers[id]->disable_equip_slots.size(); ++j) {
+			disableEquipmentSlot(powers->powers[id]->disable_equip_slots[j]);
 		}
 	}
-	for (size_t i=0; i<pc->stats.powers_list_items.size(); ++i) {
+	for (size_t i = 0; i < pc->stats.powers_list_items.size(); ++i) {
 		PowerID id = pc->stats.powers_list_items[i];
-		if (!powers->powers[id].passive)
+		if (!powers->powers[id]->passive)
 			continue;
 
-		for (size_t j=0; j<powers->powers[id].disable_equip_slots.size(); ++j) {
-			disableEquipmentSlot(powers->powers[id].disable_equip_slots[j]);
+		for (size_t j = 0; j < powers->powers[id]->disable_equip_slots.size(); ++j) {
+			disableEquipmentSlot(powers->powers[id]->disable_equip_slots[j]);
 		}
 	}
 

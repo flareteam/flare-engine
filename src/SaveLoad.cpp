@@ -376,11 +376,7 @@ void SaveLoad::loadGame() {
 			}
 			else if (infile.key == "actionbar") {
 				for (int i = 0; i < MenuActionBar::SLOT_MAX; i++) {
-					hotkeys[i] = Parse::popFirstInt(infile.val);
-					if (hotkeys[i] != 0 && powers->powers[hotkeys[i]].is_empty) {
-						Utils::logError("SaveLoad: Hotkey power with id=%d, found on position %d does not exist, skipping", hotkeys[i], i);
-						hotkeys[i] = 0;
-					}
+					hotkeys[i] = powers->verifyID(Parse::popFirstInt(infile.val), &infile, PowerManager::ALLOW_ZERO_ID);
 				}
 				menu->act->set(hotkeys, !MenuActionBar::SET_SKIP_EMPTY);
 			}
@@ -394,8 +390,9 @@ void SaveLoad::loadGame() {
 			else if (infile.key == "powers") {
 				std::string power;
 				while ( (power = Parse::popFirstString(infile.val)) != "") {
-					if (Parse::toInt(power) > 0)
-						pc->stats.powers_list.push_back(Parse::toInt(power));
+					PowerID power_id = powers->verifyID(Parse::toInt(power), &infile, !PowerManager::ALLOW_ZERO_ID);
+					if (power_id > 0)
+						pc->stats.powers_list.push_back(power_id);
 				}
 			}
 			else if (infile.key == "campaign") camp->setAll(infile.val);
@@ -483,30 +480,47 @@ void SaveLoad::loadClass(int index) {
 		return;
 	}
 
-	pc->stats.character_class = eset->hero_classes.list[index].name;
+	EngineSettings::HeroClasses::HeroClass& hero_class = eset->hero_classes.list[index];
+
+	// name
+	pc->stats.character_class = hero_class.name;
+
+	// stat points
 	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 		// Avatar::init() sets primary stats to 1, so we add to that here
-		pc->stats.primary[i] += eset->hero_classes.list[index].primary[i];
+		pc->stats.primary[i] += hero_class.primary[i];
 		pc->stats.primary_starting[i] = pc->stats.primary[i];
 	}
-	menu->inv->addCurrency(eset->hero_classes.list[index].currency);
-	menu->inv->inventory[MenuInventory::EQUIPMENT].setItems(eset->hero_classes.list[index].equipment);
-	for (unsigned i=0; i<eset->hero_classes.list[index].powers.size(); i++) {
-		pc->stats.powers_list.push_back(eset->hero_classes.list[index].powers[i]);
-	}
-	for (unsigned i=0; i<eset->hero_classes.list[index].statuses.size(); i++) {
-		StatusID class_status = camp->registerStatus(eset->hero_classes.list[index].statuses[i]);
-		camp->setStatus(class_status);
-	}
-	menu->act->set(eset->hero_classes.list[index].hotkeys, !MenuActionBar::SET_SKIP_EMPTY);
 
-	// Add carried items
-	std::string carried = eset->hero_classes.list[index].carried;
+	// inventory
+	menu->inv->addCurrency(hero_class.currency);
+	menu->inv->inventory[MenuInventory::EQUIPMENT].setItems(hero_class.equipment);
+
+	std::string carried = hero_class.carried;
 	ItemStack stack;
 	stack.quantity = 1;
-	while (carried != "") {
+	while (!carried.empty()) {
 		stack.item = Parse::popFirstInt(carried);
 		menu->inv->add(stack, MenuInventory::CARRIED, ItemStorage::NO_SLOT, !MenuInventory::ADD_PLAY_SOUND, !MenuInventory::ADD_AUTO_EQUIP);
+	}
+
+	// powers & action bar
+	for (size_t i = 0; i < hero_class.powers.size(); ++i) {
+		PowerID power_id = powers->verifyID(hero_class.powers[i], NULL, !PowerManager::ALLOW_ZERO_ID);
+		hero_class.powers[i] = power_id;
+		if (power_id > 0)
+			pc->stats.powers_list.push_back(power_id);
+	}
+	for (size_t i = 0; i < hero_class.hotkeys.size(); ++i) {
+		hero_class.hotkeys[i] = powers->verifyID(hero_class.hotkeys[i], NULL, PowerManager::ALLOW_ZERO_ID);
+	}
+
+	menu->act->set(hero_class.hotkeys, !MenuActionBar::SET_SKIP_EMPTY);
+
+	// campaign statuses
+	for (size_t i = 0; i < hero_class.statuses.size(); ++i) {
+		StatusID class_status = camp->registerStatus(hero_class.statuses[i]);
+		camp->setStatus(class_status);
 	}
 
 	// apply stats, inventory, and powers
