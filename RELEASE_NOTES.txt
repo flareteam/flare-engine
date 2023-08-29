@@ -32,6 +32,7 @@ Game updates:
 
 Translation updates:
 
+* German (de) update (Iwan Gabovitch)
 * Spanish (es) update (Jacobo Feijóo, Julvenzor, Eugenio Martínez Seguín)
 * Scottish Gaelic (gd) update (GunChleoc)
 * Hindi (India) (hi_IN) by Ansh Mishra

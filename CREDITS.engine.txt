@@ -47,7 +47,7 @@ Translations
 (bg) Bulgarian by Emil
 (ca) Catalan by Marc Tormo i Bochaca and Maria Cano
 (cs) Czech by Nikita Vanku (Zaraka), hark34
-(de) German by Thomas 'CruzR' Glamsch, Chris Oelmueller, Janet Hunt, Stefan Beller, and Wuzzy2
+(de) German by Thomas 'CruzR' Glamsch, Chris Oelmueller, Janet Hunt, Stefan Beller, Wuzzy2, and Iwan Gabovitch
 (el) Greek by Yannis Anthymidis, Michael Papageorgiou, and Nea Retrogamer
 (es) Spanish by Juan Pablo 'morris989' Tamayo, Carlos Sanchez, Diego J. Romero López, Eric R, Jacobo Feijóo, and Eugenio Martínez Seguín
 (fi) Finnish by Timo Sievänen
