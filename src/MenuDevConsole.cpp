@@ -452,16 +452,17 @@ void MenuDevConsole::execute() {
 
 		std::vector<size_t> matching_ids;
 
-		std::map<size_t, Item>::iterator item_it;
-		for (item_it = items->items.begin(); item_it != items->items.end(); ++item_it) {
-			if (!item_it->second.has_name)
+		for (size_t i = 1; i < items->items.size(); ++i) {
+			Item* item = items->items[i];
+
+			if (!item || !item->has_name)
 				continue;
 
-			std::string item_name = items->getItemName(static_cast<int>(item_it->first));
+			std::string item_name = items->getItemName(i);
 			if (!search_terms.empty() && Utils::stringFindCaseInsensitive(item_name, search_terms) == std::string::npos)
 				continue;
 
-			matching_ids.push_back(item_it->first);
+			matching_ids.push_back(i);
 		}
 
 		if (!matching_ids.empty()) {
@@ -471,8 +472,8 @@ void MenuDevConsole::execute() {
 				size_t id = matching_ids[i-1];
 
 				ss.str("");
-				ss << items->getItemName(static_cast<int>(id)) << " (" << id <<")";
-				log_history->setNextColor(items->getItemColor(static_cast<int>(id)));
+				ss << items->getItemName(id) << " (" << id <<")";
+				log_history->setNextColor(items->getItemColor(id));
 				log_history->add(ss.str(), WidgetLog::MSG_UNIQUE);
 			}
 

@@ -69,17 +69,25 @@ LootManager::LootManager()
  * Here we load all the animations used by the item database.
  */
 void LootManager::loadGraphics() {
+	if (!animations.empty()) {
+		Utils::logError("LootManger: loadGraphics() detected existing animations, aborting.");
+		return;
+	}
+
+	animations.resize(items->items.size(), NULL);
+
 	// check all items in the item database
-	std::map<ItemID, Item>::iterator item_it;
-	for (item_it = items->items.begin(); item_it != items->items.end(); ++item_it) {
-		if (item_it->second.loot_animation.empty())
+	for (size_t i = 1; i < items->items.size(); ++i) {
+		Item* item = items->items[i];
+
+		if (!item || item->loot_animation.empty())
 			continue;
 
-		animations[item_it->first].resize(item_it->second.loot_animation.size());
+		animations[i] = new std::vector<Animation*>(item->loot_animation.size(), NULL);
 
-		for (size_t i = 0; i < item_it->second.loot_animation.size(); ++i) {
-			anim->increaseCount(item_it->second.loot_animation[i].name);
-			animations[item_it->first][i] = anim->getAnimationSet(item_it->second.loot_animation[i].name)->getAnimation("");
+		for (size_t j = 0; j < item->loot_animation.size(); ++j) {
+			anim->increaseCount(item->loot_animation[j].name);
+			(*animations[i])[j] = anim->getAnimationSet(item->loot_animation[j].name)->getAnimation("");
 		}
 	}
 }
@@ -367,6 +375,9 @@ void LootManager::checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos
 }
 
 void LootManager::addLoot(ItemStack stack, const FPoint& pos, bool dropped_by_hero) {
+	if (stack.empty() || !items->isValid(stack.item))
+		return;
+
 	Loot ld;
 	ld.stack = stack;
 	ld.pos.x = pos.x;
@@ -386,18 +397,18 @@ void LootManager::addLoot(ItemStack stack, const FPoint& pos, bool dropped_by_he
 		}
 	}
 
-	if (!items->items[stack.item].loot_animation.empty()) {
-		size_t index = items->items[stack.item].loot_animation.size()-1;
+	if (!items->items[stack.item]->loot_animation.empty()) {
+		size_t index = items->items[stack.item]->loot_animation.size()-1;
 
-		for (unsigned int i=0; i<items->items[stack.item].loot_animation.size(); i++) {
-			int low = items->items[stack.item].loot_animation[i].low;
-			int high = items->items[stack.item].loot_animation[i].high;
+		for (size_t i = 0; i < items->items[stack.item]->loot_animation.size(); ++i) {
+			int low = items->items[stack.item]->loot_animation[i].low;
+			int high = items->items[stack.item]->loot_animation[i].high;
 			if (stack.quantity >= low && (stack.quantity <= high || high == 0)) {
 				index = i;
 				break;
 			}
 		}
-		ld.loadAnimation(items->items[stack.item].loot_animation[index].name);
+		ld.loadAnimation(items->items[stack.item]->loot_animation[index].name);
 	}
 	else {
 		// immediately place the loot on the ground if there's no animation
@@ -559,7 +570,7 @@ void LootManager::parseLoot(std::string &val, EventComponent *e, std::vector<Eve
 	if (e->s == "currency")
 		e->id = eset->misc.currency_id;
 	else if (Parse::toInt(e->s, -1) != -1)
-		e->id = Parse::toItemID(e->s);
+		e->id = items->verifyID(Parse::toItemID(e->s), NULL, !ItemManager::VERIFY_ALLOW_ZERO, !ItemManager::VERIFY_ALLOCATE);
 	else if (ec_list) {
 		// load entire loot table
 		std::string filename = e->s;
@@ -587,7 +598,8 @@ void LootManager::parseLoot(std::string &val, EventComponent *e, std::vector<Eve
 		e->data[LOOT_EC_QUANTITY_MIN].Int = std::max(Parse::popFirstInt(val), 1);
 		e->data[LOOT_EC_QUANTITY_MAX].Int = std::max(Parse::popFirstInt(val), e->data[LOOT_EC_QUANTITY_MIN].Int);
 
-		e->data[LOOT_EC_MAX_DROPS].Int = items->items[e->id].loot_drops_max;
+		if (items->isValid(e->id))
+			e->data[LOOT_EC_MAX_DROPS].Int = items->items[e->id]->loot_drops_max;
 	}
 
 	// add repeating loot
@@ -602,7 +614,7 @@ void LootManager::parseLoot(std::string &val, EventComponent *e, std::vector<Eve
 			if (ec->s == "currency")
 				ec->id = eset->misc.currency_id;
 			else if (Parse::toInt(ec->s, -1) != -1)
-				ec->id = Parse::toItemID(ec->s);
+				ec->id = items->verifyID(Parse::toItemID(ec->s), NULL, !ItemManager::VERIFY_ALLOW_ZERO, !ItemManager::VERIFY_ALLOCATE);
 			else {
 				// remove the last event component, since getLootTable() will create a new one
 				ec_list->pop_back();
@@ -622,7 +634,8 @@ void LootManager::parseLoot(std::string &val, EventComponent *e, std::vector<Eve
 			ec->data[LOOT_EC_QUANTITY_MIN].Int = std::max(Parse::popFirstInt(val), 1);
 			ec->data[LOOT_EC_QUANTITY_MAX].Int = std::max(Parse::popFirstInt(val), ec->data[LOOT_EC_QUANTITY_MIN].Int);
 
-			ec->data[LOOT_EC_MAX_DROPS].Int = items->items[ec->id].loot_drops_max;
+			if (items->isValid(ec->id))
+				ec->data[LOOT_EC_MAX_DROPS].Int = items->items[ec->id]->loot_drops_max;
 
 			repeat_val = Parse::popFirstString(val);
 		}
@@ -683,7 +696,7 @@ void LootManager::loadLootTables() {
 					}
 
 					if (!skip_to_next) {
-						ec->data[LOOT_EC_MAX_DROPS].Int = items->items[ec->id].loot_drops_max;
+						ec->data[LOOT_EC_MAX_DROPS].Int = items->items[ec->id]->loot_drops_max;
 					}
 				}
 				// @ATTR loot.chance|[float, "fixed"]|The chance that the item will drop. "fixed" will drop the item no matter what before the random items are picked. This is different than setting a chance of 100, in which the item could be replaced with another random item.
@@ -782,15 +795,17 @@ void LootManager::removeFromEnemiesDroppingLoot(const StatBlock* sb) {
 
 LootManager::~LootManager() {
 	// remove all items in the item database
-	std::map<ItemID, Item>::iterator item_it;
-	for (item_it = items->items.begin(); item_it != items->items.end(); ++item_it) {
-		if (item_it->second.loot_animation.empty())
+	for (size_t i = 0; i < animations.size(); ++i) {
+		if (!animations[i])
 			continue;
 
-		for (size_t i = 0; i < item_it->second.loot_animation.size(); ++i) {
-			anim->decreaseCount(item_it->second.loot_animation[i].name);
-			delete animations[item_it->first][i];
+		if (items->isValid(i)) {
+			for (size_t j = 0; j < items->items[i]->loot_animation.size(); ++j) {
+				anim->decreaseCount(items->items[i]->loot_animation[j].name);
+				delete (*animations[i])[j];
+			}
 		}
+		delete animations[i];
 	}
 
 	// remove items, so Loots get destroyed!

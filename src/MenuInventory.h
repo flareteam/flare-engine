@@ -111,7 +111,7 @@ public:
 
 	void applyEquipment();
 	void applyItemStats();
-	void applyItemSetBonuses();
+	void applyItemSetBonuses(std::vector<ItemSetID> &active_sets, std::vector<int> &active_set_quantities);
 	void applyBonus(const BonusData* bdata);
 	void applyEquipmentSet(unsigned set);
 	void applyNextEquipmentSet();

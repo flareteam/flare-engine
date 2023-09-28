@@ -115,9 +115,9 @@ void MenuItemStorage::render() {
 	disabled_src.w = disabled_src.h = eset->resolutions.icon_size;
 
 	for (int i=0; i<slot_number; i++) {
-		if (storage[i].item > 0) {
-			slots[i]->setIcon(items->items[storage[i].item].icon, items->getItemIconOverlay(storage[i].item));
-			slots[i]->setAmount(storage[i].quantity, items->items[storage[i].item].max_quantity);
+		if (items->isValid(storage[i].item)) {
+			slots[i]->setIcon(items->items[storage[i].item]->icon, items->getItemIconOverlay(storage[i].item));
+			slots[i]->setAmount(storage[i].quantity, items->items[storage[i].item]->max_quantity);
 		}
 		else {
 			slots[i]->setIcon(WidgetSlot::NO_ICON, WidgetSlot::NO_OVERLAY);
@@ -218,10 +218,10 @@ void MenuItemStorage::itemReturn(ItemStack stack) {
 	drag_prev_slot = -1;
 }
 
-void MenuItemStorage::highlightMatching(const std::string& type) {
+void MenuItemStorage::highlightMatching(ItemID item_id) {
 	for (int i=0; i<slot_number; i++) {
-		if (slots[i]->visible)
-			if (slot_type[i] == type) highlight[i] = true;
+		if (slots[i]->visible && items->isValid(item_id) && slot_type[i] == items->items[item_id]->type)
+			highlight[i] = true;
 	}
 }
 

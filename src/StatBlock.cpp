@@ -673,13 +673,23 @@ void StatBlock::load(const std::string& filename) {
 		else if (infile.key == "defeat_status") defeat_status = camp->registerStatus(infile.val);
 		// @ATTR convert_status|string|Campaign status to set upon being converted to a player ally.
 		else if (infile.key == "convert_status") convert_status = camp->registerStatus(infile.val);
-		// @ATTR first_defeat_loot|item_id|Drops this item upon first death.
-		else if (infile.key == "first_defeat_loot") first_defeat_loot = Parse::toItemID(infile.val);
-		// @ATTR quest_loot|string, string, item_id : Required status, Required not status, Item|Drops this item when campaign status is met.
+		// @ATTR first_defeat_loot|item_id|Drops this item upon first death (requires defeat_status to be set).
+		else if (infile.key == "first_defeat_loot") {
+			if (items)
+				first_defeat_loot = items->verifyID(Parse::toItemID(infile.val), &infile, ItemManager::VERIFY_ALLOW_ZERO, !ItemManager::VERIFY_ALLOCATE);
+		}
+		// @ATTR quest_loot|string, string, item_id : Required status, Required not status, Item|Drops this item when campaign status is met. Can't drop at the same time as first_defeat_loot.
 		else if (infile.key == "quest_loot") {
-			quest_loot_requires_status = camp->registerStatus(Parse::popFirstString(infile.val));
-			quest_loot_requires_not_status = camp->registerStatus(Parse::popFirstString(infile.val));
-			quest_loot_id = Parse::toItemID(Parse::popFirstString(infile.val));
+			if (items) {
+				std::string req_status = Parse::popFirstString(infile.val);
+				std::string req_not_status = Parse::popFirstString(infile.val);
+
+				quest_loot_id = items->verifyID(Parse::toItemID(Parse::popFirstString(infile.val)), &infile, ItemManager::VERIFY_ALLOW_ZERO, !ItemManager::VERIFY_ALLOCATE);
+				if (quest_loot_id > 0) {
+					quest_loot_requires_status = camp->registerStatus(req_status);
+					quest_loot_requires_not_status = camp->registerStatus(req_not_status);
+				}
+			}
 		}
 
 		// behavior stats
@@ -848,16 +858,17 @@ void StatBlock::takeDamage(float dmg, bool crit, int source_type) {
 					}
 				}
 
-				// some creatures drop special loot the first time they are defeated
-				// this must be done in conjunction with defeat status
-				if (first_defeat_loot > 0) {
-					if (!camp->checkStatus(defeat_status)) {
-						quest_loot_id = first_defeat_loot;
-					}
-				}
-
 				// defeating some creatures (e.g. bosses) affects the story
 				if (defeat_status != 0) {
+					// some creatures drop special loot the first time they are defeated
+					// this must be done in conjunction with defeat status
+					// TODO this replaces quest loot! Maybe support dropping both?
+					if (first_defeat_loot > 0) {
+						if (!camp->checkStatus(defeat_status)) {
+							quest_loot_id = first_defeat_loot;
+						}
+					}
+
 					camp->setStatus(defeat_status);
 				}
 

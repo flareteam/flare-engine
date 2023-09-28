@@ -50,7 +50,7 @@ public:
 	std::string current_map;
 	unsigned long time_played;
 
-	std::vector<int> equipped;
+	std::vector<ItemID> equipped;
 	int active_equipment_set;
 	GameSlotPreview preview;
 	Timer preview_turn_timer;

@@ -455,25 +455,29 @@ void PowerManager::loadPowers() {
 		else if (infile.key == "requires_item") {
 			// @ATTR power.requires_item|repeatable(item_id, int) : Item, Quantity|Requires a specific item of a specific quantity in inventory. If quantity > 0, then the item will be removed.
 			PowerRequiredItem pri;
-			pri.id = Parse::toItemID(Parse::popFirstString(infile.val));
-			pri.quantity = Parse::toInt(Parse::popFirstString(infile.val), 1);
-			pri.equipped = false;
-			power->required_items.push_back(pri);
+			pri.id = items->verifyID(Parse::toItemID(Parse::popFirstString(infile.val)), &infile, !ItemManager::VERIFY_ALLOW_ZERO, !ItemManager::VERIFY_ALLOCATE);
+			if (pri.id > 0) {
+				pri.quantity = Parse::toInt(Parse::popFirstString(infile.val), 1);
+				pri.equipped = false;
+				power->required_items.push_back(pri);
+			}
 		}
 		else if (infile.key == "requires_equipped_item") {
 			// @ATTR power.requires_equipped_item|repeatable(item_id, int) : Item, Quantity|Requires a specific item of a specific quantity to be equipped on hero. If quantity > 0, then the item will be removed.
 			PowerRequiredItem pri;
-			pri.id = Parse::toItemID(Parse::popFirstString(infile.val));
-			pri.quantity = Parse::popFirstInt(infile.val);
-			pri.equipped = true;
+			pri.id = items->verifyID(Parse::toItemID(Parse::popFirstString(infile.val)), &infile, !ItemManager::VERIFY_ALLOW_ZERO, !ItemManager::VERIFY_ALLOCATE);
+			if (pri.id > 0) {
+				pri.quantity = Parse::popFirstInt(infile.val);
+				pri.equipped = true;
 
-			// a maximum of 1 equipped item can be consumed at a time
-			if (pri.quantity > 1) {
-				infile.error("PowerManager: Only 1 equipped item can be consumed at a time.");
-				pri.quantity = std::min(pri.quantity, 1);
+				// a maximum of 1 equipped item can be consumed at a time
+				if (pri.quantity > 1) {
+					infile.error("PowerManager: Only 1 equipped item can be consumed at a time.");
+					pri.quantity = std::min(pri.quantity, 1);
+				}
+
+				power->required_items.push_back(pri);
 			}
-
-			power->required_items.push_back(pri);
 		}
 		else if (infile.key == "requires_targeting") {
 			// @ATTR power.requires_targeting|bool|Power is only used when targeting using click-to-target.
@@ -1178,29 +1182,31 @@ void PowerManager::loadPowers() {
 	Utils::logInfo("PowerManager: Power IDs = %zu reserved / %zu allocated / %zu empty / %zu bytes used", powers.size()-1, count_allocated, powers.size()-1-count_allocated, (sizeof(Power*) * powers.size()) + (sizeof(Power) * count_allocated));
 
 	// verify power ids in items
-	std::map<ItemID, Item>::iterator item_it;
-	for (item_it = items->items.begin(); item_it != items->items.end(); ++item_it) {
-		Item& item = item_it->second;
+	for (size_t i = 1; i < items->items.size(); ++i) {
+		Item* item = items->items[i];
 
-		item.power = verifyID(item.power, NULL, ALLOW_ZERO_ID);
+		if (!item)
+			continue;
 
-		for (size_t j = item.bonus.size(); j > 0; --j) {
+		item->power = verifyID(item->power, NULL, ALLOW_ZERO_ID);
+
+		for (size_t j = item->bonus.size(); j > 0; --j) {
 			size_t index = j-1;
-			if (item.bonus[index].type == BonusData::POWER_LEVEL) {
-				item.bonus[index].power_id = verifyID(item.bonus[index].power_id, NULL, !ALLOW_ZERO_ID);
+			if (item->bonus[index].type == BonusData::POWER_LEVEL) {
+				item->bonus[index].power_id = verifyID(item->bonus[index].power_id, NULL, !ALLOW_ZERO_ID);
 
-				if (item.bonus[index].power_id == 0)
-					item.bonus.erase(item.bonus.begin() + index);
+				if (item->bonus[index].power_id == 0)
+					item->bonus.erase(item->bonus.begin() + index);
 			}
 		}
 
-		for (size_t j = item.replace_power.size(); j > 0; --j) {
+		for (size_t j = item->replace_power.size(); j > 0; --j) {
 			size_t index = j-1;
-			item.replace_power[index].first = verifyID(item.replace_power[index].first, NULL, !ALLOW_ZERO_ID);
-			item.replace_power[index].second = verifyID(item.replace_power[index].second, NULL, !ALLOW_ZERO_ID);
+			item->replace_power[index].first = verifyID(item->replace_power[index].first, NULL, !ALLOW_ZERO_ID);
+			item->replace_power[index].second = verifyID(item->replace_power[index].second, NULL, !ALLOW_ZERO_ID);
 
-			if (item.replace_power[index].first == 0 || item.replace_power[index].second == 0)
-				item.replace_power.erase(item.replace_power.begin() + index);
+			if (item->replace_power[index].first == 0 || item->replace_power[index].second == 0)
+				item->replace_power.erase(item->replace_power.begin() + index);
 		}
 	}
 }

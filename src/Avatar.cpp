@@ -1061,14 +1061,16 @@ std::string Avatar::getGfxFromType(const std::string& gfx_type) {
 	std::string gfx;
 
 	if (menu && menu->inv) {
-		for (int i=0; i<menu->inv->inventory[MenuInventory::EQUIPMENT].getSlotNumber(); i++) {
+		MenuItemStorage& equipment = menu->inv->inventory[MenuInventory::EQUIPMENT];
+
+		for (int i = 0; i < equipment.getSlotNumber(); i++) {
 			if (!menu->inv->isActive(i))
 				continue;
 
-			if (gfx_type == menu->inv->inventory[MenuInventory::EQUIPMENT].slot_type[i]) {
-				gfx = items->items[menu->inv->inventory[MenuInventory::EQUIPMENT][i].item].gfx;
+			if (items->isValid(equipment[i].item) && gfx_type == equipment.slot_type[i]) {
+				gfx = items->items[equipment[i].item]->gfx;
 			}
-			if (menu->inv->inventory[MenuInventory::EQUIPMENT].slot_type[i] == "feet") {
+			if (equipment.slot_type[i] == "feet") {
 				feet_index = i;
 			}
 		}

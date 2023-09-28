@@ -363,7 +363,8 @@ void GameStateLoad::readGameSlots() {
 			else if (infile.key == "equipped") {
 				std::string repeat_val = Parse::popFirstString(infile.val);
 				while (repeat_val != "") {
-					game_slots[i]->equipped.push_back(Parse::toInt(repeat_val));
+					ItemID item_id = items->verifyID(Parse::toItemID(repeat_val), &infile, ItemManager::VERIFY_ALLOW_ZERO, ItemManager::VERIFY_ALLOCATE);
+					game_slots[i]->equipped.push_back(item_id);
 					repeat_val = Parse::popFirstString(infile.val);
 				}
 			}
@@ -442,18 +443,18 @@ void GameStateLoad::loadPreview(GameSlot* slot) {
 
 		if (i >= equip_sets.size()) {
 			Utils::logError("GameStateLoad: Item in save slot %d with id=%d has an invalid position. Your savegame is broken or you might be using an incompatible savegame/mod", slot->id, slot->equipped[i]);
-			continue;
+			break;
 		}
 
-		if (!items->items[slot->equipped[i]].has_name) {
+		if (!items->isValid(slot->equipped[i]) || !items->items[slot->equipped[i]]->has_name) {
 			Utils::logError("GameStateLoad: Item in save slot %d with id=%d is unknown. Your savegame is broken or you might be using an incompatible savegame/mod", slot->id, slot->equipped[i]);
 			continue;
 		}
 
 		if ((slot->active_equipment_set == 0 || equip_sets[i] == 0 || slot->active_equipment_set == equip_sets[i]) && !preview_layer.empty()) {
-			std::vector<std::string>::iterator found = find(preview_layer.begin(), preview_layer.end(), items->items[slot->equipped[i]].type);
+			std::vector<std::string>::iterator found = find(preview_layer.begin(), preview_layer.end(), items->items[slot->equipped[i]]->type);
 			if (found != preview_layer.end())
-				img_gfx[distance(preview_layer.begin(), found)] = items->items[slot->equipped[i]].gfx;
+				img_gfx[distance(preview_layer.begin(), found)] = items->items[slot->equipped[i]]->gfx;
 		}
 	}
 

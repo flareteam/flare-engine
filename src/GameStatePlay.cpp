@@ -282,8 +282,10 @@ void GameStatePlay::checkLoot() {
 
 	if (!pickup.empty()) {
 		menu->inv->add(pickup, MenuInventory::CARRIED, ItemStorage::NO_SLOT, MenuInventory::ADD_PLAY_SOUND, MenuInventory::ADD_AUTO_EQUIP);
-		StatusID pickup_status = camp->registerStatus(items->items[pickup.item].pickup_status);
-		camp->setStatus(pickup_status);
+		if (items->isValid(pickup.item)) {
+			StatusID pickup_status = camp->registerStatus(items->items[pickup.item]->pickup_status);
+			camp->setStatus(pickup_status);
+		}
 		pickup.clear();
 	}
 
@@ -590,8 +592,11 @@ void GameStatePlay::checkEquipmentChange() {
 
 		pc->loadAnimations();
 
-		if (pc->feet_index != -1)
-			pc->loadStepFX(items->items[menu->inv->inventory[MenuInventory::EQUIPMENT][pc->feet_index].item].stepfx);
+		if (pc->feet_index != -1) {
+			ItemID feet_id = menu->inv->inventory[MenuInventory::EQUIPMENT][pc->feet_index].item;
+			if (items->isValid(feet_id))
+				pc->loadStepFX(items->items[feet_id]->stepfx);
+		}
 	}
 
 	menu->inv->changed_equipment = false;

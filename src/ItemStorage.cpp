@@ -59,10 +59,7 @@ ItemStack & ItemStorage::operator [] (int slot) {
 void ItemStorage::setItems(const std::string& s) {
 	std::string item_list = s + ',';
 	for (int i=0; i<slot_number; i++) {
-		storage[i].item = Parse::toItemID(Parse::popFirstString(item_list));
-		if (storage[i].item > 0 && !items->items[storage[i].item].has_name) {
-			Utils::logError("ItemStorage: Item id (%d) has no name, marking as unknown", storage[i].item);
-		}
+		storage[i].item = items->verifyID(Parse::toItemID(Parse::popFirstString(item_list)), NULL, ItemManager::VERIFY_ALLOW_ZERO, ItemManager::VERIFY_ALLOCATE);
 	}
 }
 
@@ -124,8 +121,8 @@ void ItemStorage::clear() {
  * @param slot Slot number where it will try to store the item
  */
 ItemStack ItemStorage::add( ItemStack stack, int slot) {
-	if (!stack.empty()) {
-		int max_quantity = items->items[stack.item].max_quantity;
+	if (!stack.empty() && items->isValid(stack.item)) {
+		int max_quantity = items->items[stack.item]->max_quantity;
 		if (slot > -1) {
 			// a slot is specified
 			if (storage[slot].item != 0 && storage[slot].item != stack.item) {
@@ -236,12 +233,12 @@ void ItemStorage::sort() {
 }
 
 bool ItemStorage::full(ItemStack stack) {
-	if (stack.empty())
+	if (stack.empty() || !items->isValid(stack.item))
 		return false;
 
 	for (int i=0; i<slot_number; i++) {
-		if (storage[i].item == stack.item && storage[i].quantity < items->items[stack.item].max_quantity) {
-			if (stack.quantity + storage[i].quantity >= items->items[stack.item].max_quantity) {
+		if (storage[i].item == stack.item && items->isValid(stack.item) && storage[i].quantity < items->items[stack.item]->max_quantity) {
+			if (stack.quantity + storage[i].quantity >= items->items[stack.item]->max_quantity) {
 				stack.quantity -= storage[i].quantity;
 				continue;
 			}

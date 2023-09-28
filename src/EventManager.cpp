@@ -22,6 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EngineSettings.h"
 #include "EventManager.h"
 #include "FileParser.h"
+#include "ItemManager.h"
 #include "LootManager.h"
 #include "MapRenderer.h"
 #include "Menu.h"
@@ -556,7 +557,7 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 
 		if (!check_pair) {
 			// item:quantity syntax not detected, falling back to the old syntax
-			e->id = item_stack.item;
+			e->id = items->verifyID(item_stack.item, NULL, !ItemManager::VERIFY_ALLOW_ZERO, ItemManager::VERIFY_ALLOCATE);
 			e->data[0].Int = std::max(Parse::popFirstInt(val), 1);
 		}
 		else {

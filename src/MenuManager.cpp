@@ -199,13 +199,13 @@ void MenuManager::setDragIcon(int icon_id, int overlay_id) {
 }
 
 void MenuManager::setDragIconItem(ItemStack stack) {
-	if (stack.empty()) {
+	if (stack.empty() || !items->isValid(stack.item)) {
 		drag_icon->setIcon(WidgetSlot::NO_ICON, WidgetSlot::NO_OVERLAY);
 		drag_icon->setAmount(0, 0);
 	}
 	else {
-		drag_icon->setIcon(items->items[stack.item].icon, items->getItemIconOverlay(stack.item));
-		drag_icon->setAmount(stack.quantity, items->items[stack.item].max_quantity);
+		drag_icon->setIcon(items->items[stack.item]->icon, items->getItemIconOverlay(stack.item));
+		drag_icon->setAmount(stack.quantity, items->items[stack.item]->max_quantity);
 	}
 }
 
@@ -515,7 +515,8 @@ void MenuManager::logic() {
 		if (drag_post_action == DRAG_POST_ACTION_DROP) {
 			if (drag_src == DRAG_SRC_INVENTORY) {
 				// quest items cannot be dropped
-				if (!items->items[drag_stack.item].quest_item) {
+				bool item_is_valid = items->isValid(drag_stack.item);
+				if (!item_is_valid || (item_is_valid && !items->items[drag_stack.item]->quest_item)) {
 					drop_stack.push(drag_stack);
 				}
 				else {
@@ -1080,7 +1081,7 @@ void MenuManager::logic() {
 
 		// highlight matching inventory slots based on what we're dragging
 		if (inv->visible && (mouse_dragging || keyboard_dragging)) {
-			inv->inventory[MenuInventory::EQUIPMENT].highlightMatching(items->items[drag_stack.item].type);
+			inv->inventory[MenuInventory::EQUIPMENT].highlightMatching(drag_stack.item);
 		}
 
 		// handle dropping
@@ -1121,8 +1122,8 @@ void MenuManager::logic() {
 					inv->applyEquipment();
 
 					// put an item with a power on the action bar
-					if (items->items[drag_stack.item].power != 0) {
-						act->drop(inpt->mouse, items->items[drag_stack.item].power, !MenuActionBar::REORDER);
+					if (items->isValid(drag_stack.item) && items->items[drag_stack.item]->power != 0) {
+						act->drop(inpt->mouse, items->items[drag_stack.item]->power, !MenuActionBar::REORDER);
 					}
 				}
 				else if (vendor->visible && Utils::isWithinRect(vendor->window_area, inpt->mouse)) {
@@ -1147,7 +1148,8 @@ void MenuManager::logic() {
 					// if dragging and the source was inventory, drop item to the floor
 
 					// quest items cannot be dropped
-					if (!items->items[drag_stack.item].quest_item) {
+					bool item_is_valid = items->isValid(drag_stack.item);
+					if (!item_is_valid || (item_is_valid && !items->items[drag_stack.item]->quest_item)) {
 						drop_stack.push(drag_stack);
 					}
 					else {
@@ -1381,8 +1383,8 @@ void MenuManager::dragAndDropWithKeyboard() {
 				act->drop(dest_slot, drag_power, !MenuActionBar::REORDER);
 			}
 			else if (drag_src == DRAG_SRC_INVENTORY) {
-				if (items->items[drag_stack.item].power != 0) {
-					act->drop(dest_slot, items->items[drag_stack.item].power, !MenuActionBar::REORDER);
+				if (items->isValid(drag_stack.item) && items->items[drag_stack.item]->power != 0) {
+					act->drop(dest_slot, items->items[drag_stack.item]->power, !MenuActionBar::REORDER);
 				}
 			}
 			resetDrag();
@@ -1722,7 +1724,7 @@ void MenuManager::pushMatchingItemsOf(const Point& hov_pos) {
 	}
 
 	// we assume that a non-empty item type means that there is a primary tooltip
-	if (hov_stack.item > 0 && !items->items[hov_stack.item].type.empty()) {
+	if (items->isValid(hov_stack.item) && !items->items[hov_stack.item]->type.empty()) {
 		size_t tip_index = 1;
 
 		//get equipped items of the same type
@@ -1731,7 +1733,7 @@ void MenuManager::pushMatchingItemsOf(const Point& hov_pos) {
 				break; // can't show any more tooltips
 
 			if (inv->isActive(i)){
-				if (inv->slot_type[i] == items->items[hov_stack.item].type) {
+				if (inv->slot_type[i] == items->items[hov_stack.item]->type) {
 					if (!inv->inventory[MenuInventory::EQUIPMENT].storage[i].empty()) {
 						Point match_pos(inv->equipped_area[i].x, inv->equipped_area[i].y);
 

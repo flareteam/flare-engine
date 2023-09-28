@@ -53,7 +53,7 @@ public:
 	TooltipData checkTooltip(const Point& position, StatBlock *stats, int context, bool input_hint);
 	ItemStack click(const Point& position);
 	void itemReturn(ItemStack stack);
-	void highlightMatching(const std::string& type);
+	void highlightMatching(ItemID item_id);
 	void highlightClear();
 	void setPos(int x, int y);
 	ItemStack getItemStackAtPos(const Point& position);
