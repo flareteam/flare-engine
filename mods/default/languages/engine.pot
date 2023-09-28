@@ -1556,7 +1556,6 @@ msgid "PgUp"
 msgstr ""
 
 #: ../../../src/SDLInputState.cpp:655 ../../../src/SDLInputState.cpp:685
-#: ../../../src/SDLInputState.cpp:908
 msgid "Pause"
 msgstr ""
 
@@ -1684,6 +1683,10 @@ msgstr ""
 
 #: ../../../src/SDLInputState.cpp:811
 msgid "Touch control buttons"
+msgstr ""
+
+#: ../../../src/SDLInputState.cpp:908
+msgid "Pause"
 msgstr ""
 
 #: ../../../src/SDLInputState.cpp:879
