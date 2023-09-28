@@ -199,7 +199,7 @@ void InputState::loadKeyBindings() {
 		// @ATTR default.menu_page_next|[int, string], int : Bind, Type|Bindings for "Menu: Next Page".
 		// @ATTR default.menu_page_prev|[int, string], int : Bind, Type|Bindings for "Menu: Previous Page".
 		// @ATTR default.menu_activate|[int, string], int : Bind, Type|Bindings for "Menu: Activate".
-		// @ATTR default.pause|[int, string], int : Bind, Type|Bindings for "Pause".
+		// @ATTR default.pause|[int, string], int : Bind, Type|Bindings for "Pause Game".
 		// @ATTR default.aim_up|[int, string], int : Bind, Type|Bindings for "Aim Up".
 		// @ATTR default.aim_down|[int, string], int : Bind, Type|Bindings for "Aim Down".
 		// @ATTR default.aim_left|[int, string], int : Bind, Type|Bindings for "Aim Left".
