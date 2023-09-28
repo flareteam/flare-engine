@@ -68,6 +68,7 @@ Translations
 (ru) Russian by Sergey Basalaev, Evgen Pavlov, Ademaro, Andrey Kapitonov, David Bell, and berry
 (sk) Slovak by Miro Jánošík, MiroslavR
 (sv) Swedish by Andreas Berheim Brudin, Kevin Setterborn
+(th_TH) Thai (Thailand) by Pattaraporn Tripiyaratana
 (uk) Ukrainian by Igor Paliychuk, Denis Lysenko, Микола Франчук, Sergiy Borodych
 (vi) Vietnamese by Nguyễn Gia Phong
 (zh) Chinese by lonsine, dumaosen, Issac Zhang

@@ -1,0 +1,124 @@
+# Copyright (C) 2011 Clint Bellanger
+# This file is distributed under the same license as the FLARE package.
+# 
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Translators:
+# Pattaraporn Tripiyaratana, 2023
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-21 12:22+\n"
+"PO-Revision-Date: 2018-03-28 19:16+0000\n"
+"Last-Translator: Pattaraporn Tripiyaratana, 2023\n"
+"Language-Team: Thai (Thailand) (https://app.transifex.com/flareorg/teams/84925/th_TH/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: th_TH\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: ../engine/primary_stats.txt:3
+msgid "Physical"
+msgstr "กายภาพ"
+
+#: ../engine/primary_stats.txt:7
+msgid "Mental"
+msgstr "จิตใจ"
+
+#: ../engine/primary_stats.txt:11
+msgid "Offense"
+msgstr "รุก"
+
+#: ../engine/primary_stats.txt:15
+msgid "Defense"
+msgstr "รับ"
+
+#: ../engine/damage_types.txt:3
+msgid "Melee Damage"
+msgstr "โจมตีระยะประชิด"
+
+#: ../engine/damage_types.txt:4
+msgid "Increases the damage done with swords and other melee weapons."
+msgstr "เพิ่มค่าการโจมตีด้วยดาบ และอาวุธระยะประชิดอื่นๆ"
+
+#: ../engine/damage_types.txt:5
+msgid "Melee Damage Min"
+msgstr "โจมตีระยะประชิดขั้นต่ำ"
+
+#: ../engine/damage_types.txt:6
+msgid "Melee Damage Max"
+msgstr "โจมตีระยะประชิดสูงสุด"
+
+#: ../engine/damage_types.txt:12
+msgid "Ranged Damage"
+msgstr "โจมตีระยะไกล"
+
+#: ../engine/damage_types.txt:13
+msgid "Increases the damage done with bows and other ranged weapons."
+msgstr "เพิ่มค่าการโจมตีด้วยธนู และอาวุธระยะไกลอื่นๆ"
+
+#: ../engine/damage_types.txt:14
+msgid "Ranged Damage Min"
+msgstr "โจมตีระยะไกลขั้นต่ำ"
+
+#: ../engine/damage_types.txt:15
+msgid "Ranged Damage Max"
+msgstr "โจมตีระยะไกลสูงสุด"
+
+#: ../engine/damage_types.txt:21
+msgid "Mental Damage"
+msgstr "โจมตีพลังจิต"
+
+#: ../engine/damage_types.txt:22
+msgid "Increases the damage done with staves and other mental weapons."
+msgstr "เพิ่มค่าการโจมตีด้วยไม้เท้า และอาวุธโจมตีพลังจิตอื่นๆ"
+
+#: ../engine/damage_types.txt:23
+msgid "Mental Damage Min"
+msgstr "โจมตีพลังจิตขั้นต่ำ"
+
+#: ../engine/damage_types.txt:24
+msgid "Mental Damage Max"
+msgstr "โจมตีพลังจิตสูงสุด"
+
+#: ../cutscenes/credits.txt:7
+msgid "Flare Engine Credits"
+msgstr "เครดิต Flare Engine"
+
+#: ../cutscenes/credits.txt:10
+msgid "Lead Programmers"
+msgstr "ลีดโปรแกรมเมอร์"
+
+#: ../cutscenes/credits.txt:20
+msgid "Programmers"
+msgstr "โปรแกรมเมอร์"
+
+#: ../cutscenes/credits.txt:51
+msgid "Default Art"
+msgstr ""
+
+#: ../cutscenes/credits.txt:56
+msgid "Translators"
+msgstr "นักแปล"
+
+#: ../cutscenes/credits.txt:131
+msgid "Distributors"
+msgstr ""
+
+#: ../cutscenes/credits.txt:140
+msgid "Special Thanks"
+msgstr ""
+
+#: ../cutscenes/credits.txt:144
+msgid "For giving constant feedback and testing:"
+msgstr ""
+
+#: ../cutscenes/credits.txt:146
+msgid "The community at OpenGameArt"
+msgstr "คอมมูนิตี้ OpenGameArt"
+
+#: ../cutscenes/credits.txt:150
+msgid "For Tiled and the Flare map exporter:"
+msgstr ""

@@ -33,6 +33,7 @@ pt_BR=Português (BR)
 ru=Русский
 sk=Slovenčina
 sv=Svenska
+th_TH=Thai
 uk=Українська
 vi=Tiếng Việt
 zh=Chinese
