@@ -440,6 +440,8 @@ code {
 
 <p><strong>vendor_ratio_buyback</strong> | <code>int</code> | (Deprecated in v1.12.85; use 'vendor_ratio_sell_old' instead) Percentage of item buying price to use as the buying price for previously sold items.</p>
 
+<p><strong>extended_items_offset</strong> | <code>item_id</code> | Sets the starting item ID that extended items will be stored at. The default value, 0, will place extended items at the directly after the last item ID defined in items/items.txt.</p>
+
 <hr />
 
 <h4>EngineSettings: Tileset config</h4>
@@ -1010,7 +1012,7 @@ code {
 
 <h4>ItemManager: Items</h4>
 
-<p>Description about the class and it usage, items/items.txt...</p>
+<p>Description of Items in items/items.txt.</p>
 
 <p><strong>id</strong> | <code>item_id</code> | An uniq id of the item used as reference from other classes.</p>
 
@@ -1054,7 +1056,7 @@ code {
 
 <p><strong>power</strong> | <code>power_id</code> | Adds a specific power to the item which makes it usable as a power and can be placed in action bar.</p>
 
-<p><strong>replace_power</strong> | <code>repeatable(int, int) : Old power, New power</code> | Replaces the old power id with the new power id in the action bar when equipped.</p>
+<p><strong>replace_power</strong> | <code>repeatable(power_id, power_id) : Old power, New power</code> | Replaces the old power id with the new power id in the action bar when equipped.</p>
 
 <p><strong>power_desc</strong> | <code>string</code> | A string describing the additional power.</p>
 
@@ -1079,6 +1081,8 @@ code {
 <p><strong>script</strong> | <code>filename</code> | Loads and executes a script file when the item is activated from the player's inventory.</p>
 
 <p><strong>loot_drops_max</strong> | <code>int</code> | The number of instances of this item that can drop during a single loot event.</p>
+
+<p><strong>randomizer_def</strong> | <code>filename</code> | Randomizer definition file for this item. See "ItemManager: Randomizer Definition".</p>
 
 <hr />
 
@@ -1121,6 +1125,26 @@ code {
 <p><strong>bonus</strong> | <code>repeatable(int, stat_id, list(level_scaled_value)) : Required set item count, Stat ID, Value</code> | Bonus to append to items in the set.</p>
 
 <p><strong>bonus_power_level</strong> | <code>repeatable(int, power_id, list(level_scaled_value)) : Required set item count, Base power, Bonus levels</code> | Grants bonus levels to a given base power.</p>
+
+<hr />
+
+<h4>ItemManager: Randomizer Definition</h4>
+
+<p>Description of item randomizer configuration in items/random/...</p>
+
+<p><strong>option.chance</strong> | <code>float</code> | Percent chance that this option will be picked when generating an item.</p>
+
+<p><strong>option.quality</strong> | <code>predefined_string</code> | The quality ID that will be assigned to the item.</p>
+
+<p><strong>option.bonus_count</strong> | <code>int, int : Minimum count, Maximum count</code> | The range used to determine the number of bonuses for the item.</p>
+
+<p><strong>option.level_src</strong> | <code>["base", "hero"]</code> | Determines how option.level_range will be applied. If "base", the source item's level will be used. If "hero", the player's current level will be used.</p>
+
+<p><strong>option.level_range</strong> | <code>int, int : Minimum level, Maximum level</code> | The range used to determine the item level. The resulting item level is relative, depending on the value of option.level_src.</p>
+
+<p><strong>bonuses.bonus</strong> | <code>repeatable(stat_id, list(level_scaled_value)) : Stat ID, Value</code> | Adds a bonus to the item by stat ID. The level_scaled_value here is extended for randomization to also support the maximum value and the step. These additional values are delimited by colons. Example: bonus=hp,base:50:100:1</p>
+
+<p><strong>bonuses.bonus_power_level</strong> | <code>repeatable(power_id, list(level_scaled_value)) : Base power, Bonus levels</code> | Grants bonus levels to a given base power. The level_scaled_value here is extended for randomization to also support the maximum value and the step. These additional values are delimited by colons. Example: bonus=1,base:1:5:1</p>
 
 <hr />
 
@@ -1636,7 +1660,7 @@ code {
 
 <p><strong>tab.background</strong> | <code>filename</code> | Filename of the background image for this tab's power tree</p>
 
-<p><strong>power.id</strong> | <code>int</code> | A power id from powers/powers.txt for this slot.</p>
+<p><strong>power.id</strong> | <code>power_id</code> | A power id from powers/powers.txt for this slot.</p>
 
 <p><strong>power.tab</strong> | <code>int</code> | Tab index to place this power on, starting from 0.</p>
 
@@ -1666,7 +1690,7 @@ code {
 
 <p><strong>power.visible_check_status</strong> | <code>bool</code> | When set to true, the power will be hidden if its status requirements are not met. Defaults to false.</p>
 
-<p><strong>upgrade.id</strong> | <code>int</code> | A power id from powers/powers.txt for this upgrade.</p>
+<p><strong>upgrade.id</strong> | <code>power_id</code> | A power id from powers/powers.txt for this upgrade.</p>
 
 <p><strong>upgrade.requires_primary</strong> | <code>predefined_string, int : Primary stat name, Required value</code> | Upgrade requires this primary stat to be at least the specificed value.</p>
 
@@ -2106,7 +2130,7 @@ code {
 
 <p><strong>power.remove_effect</strong> | <code>repeatable(predefined_string, int) : Effect ID, Number of Effect instances</code> | Removes a number of instances of a specific Effect ID. Omitting the number of instances, or setting it to zero, will remove all instances/stacks.</p>
 
-<p><strong>power.replace_by_effect</strong> | <code>repeatable(int, predefined_string, int) : Power ID, Effect ID, Number of Effect instances</code> | If the caster has at least the number of instances of the Effect ID, the defined Power ID will be cast instead.</p>
+<p><strong>power.replace_by_effect</strong> | <code>repeatable(power_id, predefined_string, int) : Power ID, Effect ID, Number of Effect instances</code> | If the caster has at least the number of instances of the Effect ID, the defined Power ID will be cast instead.</p>
 
 <p><strong>power.requires_corpse</strong> | <code>["consume", bool]</code> | If true, a corpse must be targeted for this power to be used. If "consume", then the corpse is also consumed on Power use.</p>
 
@@ -2244,9 +2268,9 @@ code {
 
 <p><strong>convert_status</strong> | <code>string</code> | Campaign status to set upon being converted to a player ally.</p>
 
-<p><strong>first_defeat_loot</strong> | <code>item_id</code> | Drops this item upon first death.</p>
+<p><strong>first_defeat_loot</strong> | <code>item_id</code> | Drops this item upon first death (requires defeat_status to be set).</p>
 
-<p><strong>quest_loot</strong> | <code>string, string, item_id : Required status, Required not status, Item</code> | Drops this item when campaign status is met.</p>
+<p><strong>quest_loot</strong> | <code>string, string, item_id : Required status, Required not status, Item</code> | Drops this item when campaign status is met. Can't drop at the same time as first_defeat_loot.</p>
 
 <p><strong>flying</strong> | <code>bool</code> | Creature can move over gaps/water.</p>
 

@@ -776,7 +776,7 @@ void LootManager::checkLootComponent(EventComponent* ec, FPoint *pos, std::vecto
 		new_loot.quantity = static_cast<int>(static_cast<float>(new_loot.quantity) * (100 + pc->stats.get(Stats::CURRENCY_FIND)) / 100);
 	}
 	else {
-		new_loot.item = ec->id;
+		new_loot.item = items->getExtendedItem(ec->id);
 	}
 
 	if (itemstack_vec)

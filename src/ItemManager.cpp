@@ -46,6 +46,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Stats.h"
 #include "TooltipData.h"
 #include "UtilsFileSystem.h"
+#include "UtilsMath.h"
 #include "UtilsParsing.h"
 #include "WidgetLabel.h"
 
@@ -66,9 +67,17 @@ ItemStack::ItemStack(const Point& _p)
 LevelScaledValue::LevelScaledValue()
 	: item_level(1)
 	, base(0)
+	, base_max(0)
+	, base_step(1)
 	, per_item_level(0)
+	, per_item_level_max(0)
+	, per_item_level_step(1)
 	, per_player_level(0)
+	, per_player_level_max(0)
+	, per_player_level_step(1)
 	, per_player_primary(eset->primary_stats.list.size(), 0)
+	, per_player_primary_max(eset->primary_stats.list.size(), 0)
+	, per_player_primary_step(eset->primary_stats.list.size(), 1)
 {}
 
 float LevelScaledValue::get() const {
@@ -79,32 +88,87 @@ float LevelScaledValue::get() const {
 	return result;
 }
 
+float LevelScaledValue::getMax() const {
+	float result = base_max + (per_item_level_max * static_cast<float>(item_level-1)) + (per_player_level_max * static_cast<float>(pc->stats.level-1));
+	for (size_t i = 0; i < per_player_primary_max.size(); ++i) {
+		result += per_player_primary_max[i] * static_cast<float>(pc->stats.get_primary(i)-1);
+	}
+	return result;
+}
+
+float LevelScaledValue::getStep() const {
+	float result = base_step + (per_item_level_step * static_cast<float>(item_level-1)) + (per_player_level_step * static_cast<float>(pc->stats.level-1));
+	for (size_t i = 0; i < per_player_primary_step.size(); ++i) {
+		result += per_player_primary_step[i] * static_cast<float>(pc->stats.get_primary(i)-1);
+	}
+	return result;
+}
+
+void LevelScaledValue::randomize() {
+	// TODO add a source param?
+	int step_count;
+
+	step_count = static_cast<int>((base_max - base) / base_step);
+	base += static_cast<float>(Math::randBetween(0, step_count)) * base_step;
+	base_max = base;
+
+	step_count = static_cast<int>((per_item_level_max - per_item_level) / per_item_level_step);
+	per_item_level += static_cast<float>(Math::randBetween(0, step_count)) * per_item_level_step;
+	per_item_level_max = per_item_level;
+
+	step_count = static_cast<int>((per_player_level_max - per_player_level) / per_player_level_step);
+	per_player_level += static_cast<float>(Math::randBetween(0, step_count)) * per_player_level_step;
+	per_player_level_max = per_player_level;
+
+	for (size_t i = 0; i < per_player_primary.size(); ++i) {
+		step_count = static_cast<int>((per_player_primary_max[i] - per_player_primary[i]) / per_player_primary_step[i]);
+		per_player_primary[i] += static_cast<float>(Math::randBetween(0, step_count)) * per_player_primary_step[i];
+		per_player_primary_max[i] = per_player_primary[i];
+	}
+}
+
 void LevelScaledValue::parse(std::string& s) {
 	std::string section = Parse::popFirstString(s);
 
 	while (!section.empty()) {
 		if (section.find_first_of(':') != std::string::npos) {
+			section += ':'; // ensure there's a trailing colon when we pop the value following the scale type
+
 			std::string scale_type = Parse::popFirstString(section, ':');
+
 			if (scale_type == "base") {
-				base = Parse::popFirstFloat(section);
+				base = Parse::popFirstFloat(section, ':');
+				base_max = std::max(base, Parse::popFirstFloat(section, ':'));
+				std::string step_str = Parse::popFirstString(section, ':');
+				base_step = Parse::toFloat(step_str, 1);
 			}
 			else if (scale_type == "item_level") {
-				per_item_level = Parse::popFirstFloat(section);
+				per_item_level = Parse::popFirstFloat(section, ':');
+				per_item_level_max = std::max(per_item_level, Parse::popFirstFloat(section, ':'));
+				std::string step_str = Parse::popFirstString(section, ':');
+				per_item_level_step = Parse::toFloat(step_str, 1);
 			}
 			else if (scale_type == "player_level") {
-				per_player_level = Parse::popFirstFloat(section);
+				per_player_level = Parse::popFirstFloat(section, ':');
+				per_player_level_max = std::max(per_player_level, Parse::popFirstFloat(section, ':'));
+				std::string step_str = Parse::popFirstString(section, ':');
+				per_player_level_step = Parse::toFloat(step_str, 1);
 			}
 			else {
 				// player primary stats
 				size_t primary_index = eset->primary_stats.getIndexByID(scale_type);
 				if (primary_index < eset->primary_stats.list.size()) {
-					per_player_primary[primary_index] = Parse::popFirstFloat(section);
+					per_player_primary[primary_index] = Parse::popFirstFloat(section, ':');
+					per_player_primary_max[primary_index] = std::max(per_player_primary[primary_index], Parse::popFirstFloat(section, ':'));
+					std::string step_str = Parse::popFirstString(section, ':');
+					per_player_primary_step[primary_index] = Parse::toFloat(step_str, 1);
 				}
 			}
 		}
 		else {
 			// no scale type defined, assume base value
 			base = Parse::popFirstFloat(section);
+			base_max = base;
 		}
 		section = Parse::popFirstString(s);
 	}
@@ -120,9 +184,11 @@ Item::Item()
 	, max_quantity(INT_MAX)
 	, no_stash(NO_STASH_NULL)
 	, loot_drops_max(-1)
+	, parent(0)
 	, set(0)
 	, sfx_id(0)
 	, power(0)
+	, randomizer_def(NULL)
 	, base_abs()
 	, flavor("")
 	, quality("")
@@ -155,6 +221,9 @@ ItemManager::~ItemManager() {
 	for (size_t i = 0; i < item_sets.size(); ++i) {
 		delete item_sets[i];
 	}
+	for (size_t i = 0; i < randomizer_defs.size(); ++i) {
+		delete randomizer_defs[i];
+	}
 }
 
 bool ItemManager::isValid(ItemID item_id) {
@@ -172,6 +241,7 @@ void ItemManager::loadAll() {
 
 	// load each items.txt file. Individual item IDs can be overwritten with mods.
 	this->loadItems("items/items.txt");
+	this->loadExtendedItems(settings->path_user + "saves/" + eset->misc.save_prefix + "/extended_items.txt");
 	this->loadTypes("items/types.txt");
 	this->loadSets("items/sets.txt");
 	this->loadQualities("items/qualities.txt");
@@ -188,7 +258,7 @@ void ItemManager::loadAll() {
 void ItemManager::loadItems(const std::string& filename) {
 	FileParser infile;
 
-	// @CLASS ItemManager: Items|Description about the class and it usage, items/items.txt...
+	// @CLASS ItemManager: Items|Description of Items in items/items.txt.
 	if (!infile.open(filename, FileParser::MOD_FILE, FileParser::ERROR_NORMAL))
 		return;
 
@@ -447,6 +517,10 @@ void ItemManager::loadItems(const std::string& filename) {
 			// @ATTR loot_drops_max|int|The number of instances of this item that can drop during a single loot event.
 			item->loot_drops_max = Parse::toInt(infile.val);
 		}
+		else if (infile.key == "randomizer_def") {
+			// @ATTR randomizer_def|filename|Randomizer definition file for this item. See "ItemManager: Randomizer Definition".
+			item->randomizer_def = loadRandomizerDef(infile.val);
+		}
 		else {
 			infile.error("ItemManager: '%s' is not a valid key.", infile.key.c_str());
 		}
@@ -470,22 +544,14 @@ void ItemManager::loadItems(const std::string& filename) {
 			item->no_stash = Item::NO_STASH_IGNORE;
 		}
 
-		// set item_level for level-scaled values
-		if (item->level > 1) {
-			item->requires_level.item_level = item->level;
-			item->price.item_level = item->level;
-			item->price_sell.item_level = item->level;
-
-			for (size_t j = 0; j < eset->primary_stats.list.size(); ++j) {
-				item->requires_stat[j].item_level = item->level;
-			}
-
-			for (size_t j = 0; j < item->bonus.size(); ++j) {
-				item->bonus[j].value.item_level = item->level;
-			}
-		}
+		item->updateLevelScaling();
 	}
 	Utils::logInfo("ItemManager: Item IDs = %zu reserved / %zu allocated / %zu empty / %zu bytes used", items.size()-1, count_allocated, items.size()-1-count_allocated, (sizeof(Item*) * items.size()) + (sizeof(Item) * count_allocated));
+
+	if (eset->loot.extended_items_offset < items.size()) {
+		eset->loot.extended_items_offset = items.size();
+	}
+	Utils::logInfo("ItemManager: Extended item offset set to %zu.", eset->loot.extended_items_offset);
 }
 
 /**
@@ -739,10 +805,18 @@ void ItemManager::parseBonus(BonusData& bdata, FileParser& infile) {
 
 	if (bdata.is_multiplier) {
 		bdata.value.base /= 100;
+		bdata.value.base_max /= 100;
+		bdata.value.base_step /= 100;
 		bdata.value.per_item_level /= 100;
+		bdata.value.per_item_level_max /= 100;
+		bdata.value.per_item_level_step /= 100;
 		bdata.value.per_player_level /= 100;
+		bdata.value.per_player_level_max /= 100;
+		bdata.value.per_player_level_step /= 100;
 		for (size_t i = 0; i < bdata.value.per_player_primary.size(); ++i) {
 			bdata.value.per_player_primary[i] /= 100;
+			bdata.value.per_player_primary_max[i] /= 100;
+			bdata.value.per_player_primary_step[i] /= 100;
 		}
 	}
 
@@ -761,7 +835,7 @@ void ItemManager::parseBonus(BonusData& bdata, FileParser& infile) {
 		bdata.type = BonusData::STAT;
 		bdata.index = Stats::HP_MAX;
 		bdata.is_multiplier = true;
-		bdata.value.base = (bdata.value.base + 100) / 100; // assuming only base value here
+		bdata.value.base = bdata.value.base_max = (bdata.value.base + 100) / 100; // assuming only base value here
 		return;
 	}
 	else if (bonus_str == "mp_percent") {
@@ -769,7 +843,7 @@ void ItemManager::parseBonus(BonusData& bdata, FileParser& infile) {
 		bdata.type = BonusData::STAT;
 		bdata.index = Stats::MP_MAX;
 		bdata.is_multiplier = true;
-		bdata.value.base = (bdata.value.base + 100) / 100; // assuming only base value here
+		bdata.value.base = bdata.value.base_max = (bdata.value.base + 100) / 100; // assuming only base value here
 		return;
 	}
 
@@ -1319,6 +1393,286 @@ ItemID ItemManager::verifyID(ItemID item_id, FileParser* infile, bool allow_zero
 		return 0;
 	}
 	return item_id;
+}
+
+ItemRandomizerDef* ItemManager::loadRandomizerDef(const std::string& filename) {
+	for (size_t i = 0; i < randomizer_defs.size(); ++i) {
+		if (randomizer_defs[i]->filename == filename)
+			return randomizer_defs[i];
+	}
+
+	FileParser infile;
+
+	// @CLASS ItemManager: Randomizer Definition|Description of item randomizer configuration in items/random/...
+	if (!infile.open(filename, FileParser::MOD_FILE, FileParser::ERROR_NORMAL))
+		return NULL;
+
+	randomizer_defs.resize(randomizer_defs.size()+1, new ItemRandomizerDef());
+	ItemRandomizerDef* ird = randomizer_defs.back();
+	ird->filename = filename;
+
+	ItemRandomizerDef::Option* option = NULL;
+
+	while (infile.next()) {
+		if (infile.section == "option") {
+			if (infile.new_section) {
+				ird->option.resize(ird->option.size()+1);
+				option = &(ird->option.back());
+			}
+			if (option) {
+				if (infile.key == "chance") {
+					// @ATTR option.chance|float|Percent chance that this option will be picked when generating an item.
+					option->chance = Parse::toFloat(infile.val);
+				}
+				else if (infile.key == "quality") {
+					// @ATTR option.quality|predefined_string|The quality ID that will be assigned to the item.
+					option->quality = infile.val;
+				}
+				else if (infile.key == "bonus_count") {
+					// @ATTR option.bonus_count|int, int : Minimum count, Maximum count|The range used to determine the number of bonuses for the item.
+					option->bonus_min = Parse::popFirstInt(infile.val);
+					option->bonus_max = Parse::popFirstInt(infile.val);
+					option->bonus_max = std::max(option->bonus_min, option->bonus_max);
+				}
+				else if (infile.key == "level_src") {
+					// @ATTR option.level_src|["base", "hero"]|Determines how option.level_range will be applied. If "base", the source item's level will be used. If "hero", the player's current level will be used.
+					if (infile.val == "base")
+						option->level_src = ItemRandomizerDef::Option::LEVEL_SRC_BASE;
+					else if (infile.val == "hero")
+						option->level_src = ItemRandomizerDef::Option::LEVEL_SRC_HERO;
+				}
+				else if (infile.key == "level_range") {
+					// @ATTR option.level_range|int, int : Minimum level, Maximum level|The range used to determine the item level. The resulting item level is relative, depending on the value of option.level_src.
+					option->level_range_min = Parse::popFirstInt(infile.val);
+					option->level_range_max = Parse::popFirstInt(infile.val);
+				}
+			}
+		}
+		else if (infile.section == "bonuses") {
+			if (infile.key == "bonus") {
+				// @ATTR bonuses.bonus|repeatable(stat_id, list(level_scaled_value)) : Stat ID, Value|Adds a bonus to the item by stat ID. The level_scaled_value here is extended for randomization to also support the maximum value and the step. These additional values are delimited by colons. Example: bonus=hp,base:50:100:1
+				BonusData bdata;
+				parseBonus(bdata, infile);
+				ird->bonus.push_back(bdata);
+			}
+			else if (infile.key == "bonus_power_level") {
+				// @ATTR bonuses.bonus_power_level|repeatable(power_id, list(level_scaled_value)) : Base power, Bonus levels|Grants bonus levels to a given base power. The level_scaled_value here is extended for randomization to also support the maximum value and the step. These additional values are delimited by colons. Example: bonus=1,base:1:5:1
+				BonusData bdata;
+				bdata.type = BonusData::POWER_LEVEL;
+				bdata.power_id = Parse::toPowerID(Parse::popFirstString(infile.val));
+				bdata.value.parse(infile.val);
+				ird->bonus.push_back(bdata);
+			}
+		}
+	}
+	infile.close();
+
+	return ird;
+}
+
+ItemID ItemManager::allocateExtendedItem(ItemID item_id, ItemID parent_id) {
+	size_t start_id = eset->loot.extended_items_offset;
+	if (item_id != 0)
+		start_id = std::max(start_id, item_id);
+
+	if (items.size() <= start_id) {
+		items.resize(start_id + 1, NULL);
+	}
+
+	ItemID extended_item = 0;
+	if (item_id == 0) {
+		for (size_t i = start_id; i < items.size(); ++i) {
+			if (!items[i]) {
+				extended_item = i;
+				break;
+			}
+		}
+		if (extended_item == 0) {
+			// didn't find an empty slot, resize items
+			extended_item = items.size();
+			items.resize(extended_item + 1);
+		}
+	}
+	else {
+		extended_item = item_id;
+	}
+
+	items[extended_item] = new Item();
+	*(items[extended_item]) = *(items[parent_id]); // TODO explicit copy constructor for Item?
+	items[extended_item]->parent = parent_id;
+
+	return extended_item;
+}
+
+ItemID ItemManager::getExtendedItem(ItemID item_id) {
+	if (item_id >= items.size() || items[item_id] == NULL) {
+		return item_id;
+	}
+
+	if (items[item_id]->randomizer_def) {
+		ItemID extended_item = allocateExtendedItem(0, item_id);
+
+		ItemRandomizerDef* ird = items[item_id]->randomizer_def;
+
+		// pick an option
+		std::vector<size_t> option_ids;
+		float option_chance = Math::randBetweenF(0, 100);
+		float option_threshold = 100;
+		size_t bonus_count = 0;
+
+		for (size_t i = 0; i < ird->option.size(); ++i) {
+			if (ird->option[i].chance >= option_chance) {
+				if (option_chance <= option_threshold) {
+					if (option_chance != option_threshold) {
+						option_ids.clear();
+					}
+
+					option_threshold = option_chance;
+				}
+			}
+
+			if (option_chance <= option_threshold) {
+				option_ids.push_back(i);
+			}
+		}
+		if (!option_ids.empty()) {
+			size_t option_roll = static_cast<size_t>(rand()) % option_ids.size();
+			ItemRandomizerDef::Option* option = &(ird->option[option_roll]);
+			bonus_count = static_cast<size_t>(Math::randBetween(option->bonus_min, option->bonus_max));
+			if (!option->quality.empty())
+				items[extended_item]->quality = option->quality;
+
+			// set the item level
+			if (option->level_src == ItemRandomizerDef::Option::LEVEL_SRC_BASE) {
+				int min = items[item_id]->level + option->level_range_min;
+				int max = items[item_id]->level + option->level_range_max;
+
+				items[extended_item]->level = Math::randBetween(min, max);
+			}
+			else if (option->level_src == ItemRandomizerDef::Option::LEVEL_SRC_HERO) {
+				int min = pc->stats.level + option->level_range_min;
+				int max = pc->stats.level + option->level_range_max;
+
+				items[extended_item]->level = Math::randBetween(min, max);
+			}
+
+		}
+
+		// we set the item level when adding bonuses,
+		// so we can run updateLevelScaling() before that to avoid iterating over the bonuses twice
+		items[extended_item]->updateLevelScaling();
+
+		bonus_count = std::min(bonus_count, ird->bonus.size());
+
+		std::vector<size_t> bonus_ids(ird->bonus.size(), 0);
+		for (size_t i = 0; i < bonus_ids.size(); ++i) {
+			bonus_ids[i] = i;
+		}
+
+		for (size_t i = 0; i < bonus_count; ++i) {
+			size_t roll = static_cast<size_t>(Math::randBetween(0, static_cast<int>(bonus_ids.size()-1)));
+			size_t bonus_id = bonus_ids[roll];
+
+			BonusData bdata = ird->bonus[bonus_id];
+			bdata.is_extended = true;
+			bdata.value.item_level = items[extended_item]->level;
+			bdata.value.randomize();
+
+			items[extended_item]->bonus.push_back(bdata);
+
+			bonus_ids.erase(bonus_ids.begin()+roll);
+		}
+
+		items[extended_item]->randomizer_def = NULL;
+
+		return extended_item;
+	}
+	else {
+		return item_id;
+	}
+}
+
+void ItemManager::loadExtendedItems(const std::string& filename) {
+	FileParser infile;
+
+	if (!infile.open(filename, !FileParser::MOD_FILE, FileParser::ERROR_NONE))
+		return;
+
+	ItemID id = 0;
+	Item* item;
+	bool id_line;
+	while (infile.next()) {
+		if (infile.key == "id") {
+			id_line = true;
+
+			ItemID item_id = Parse::toItemID(Parse::popFirstString(infile.val));
+
+			if (item_id < items.size() && items[item_id]) {
+				infile.error("ItemManager: Existing item with ID %zu found when loading extended items. Skipping.", item_id);
+				continue;
+			}
+
+			ItemID parent_id = verifyID(Parse::toItemID(Parse::popFirstString(infile.val)), &infile, !VERIFY_ALLOW_ZERO, !VERIFY_ALLOCATE);
+
+			if (parent_id == 0)
+				continue;
+
+			id = allocateExtendedItem(item_id, parent_id);
+			item = items[item_id];
+		}
+		else {
+			id_line = false;
+		}
+		if (id < 1) {
+			if (id_line) infile.error("ItemManager: Item index out of bounds 1-%d, skipping set.", INT_MAX);
+			continue;
+		}
+		if (id_line) continue;
+
+		if (infile.key == "level") {
+			item->level = Parse::toInt(infile.val);
+		}
+		else if (infile.key == "quality") {
+			item->quality = infile.val;
+		}
+		else if (infile.key == "bonus") {
+			BonusData bdata;
+			bdata.is_extended = true;
+			parseBonus(bdata, infile);
+			item->bonus.push_back(bdata);
+		}
+	}
+	infile.close();
+
+	size_t count_allocated = 0;
+
+	for (size_t i = eset->loot.extended_items_offset; i < items.size(); ++i) {
+		item = items[i];
+
+		if (!item)
+			continue;
+		else
+			count_allocated++;
+
+		item->updateLevelScaling();
+	}
+	size_t extended_item_count = items.size() - eset->loot.extended_items_offset;
+	Utils::logInfo("ItemManager: Extended Item IDs = %zu reserved / %zu allocated / %zu empty / %zu bytes used", extended_item_count, count_allocated, extended_item_count-count_allocated, (sizeof(Item*) * extended_item_count) + (sizeof(Item) * count_allocated));
+}
+
+void Item::updateLevelScaling() {
+	// set item_level for level-scaled values
+	requires_level.item_level = level;
+	price.item_level = level;
+	price_sell.item_level = level;
+
+	for (size_t i = 0; i < requires_stat.size(); ++i) {
+		requires_stat[i].item_level = level;
+	}
+
+	for (size_t i = 0; i < bonus.size(); ++i) {
+		bonus[i].value.item_level = level;
+	}
 }
 
 // Bonus documentation

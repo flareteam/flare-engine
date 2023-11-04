@@ -800,6 +800,7 @@ void EngineSettings::Loot::load() {
 	drop_max = 1;
 	drop_radius = 1;
 	hide_radius = 3.0f;
+	extended_items_offset = 0;
 
 	FileParser infile;
 	// @CLASS EngineSettings: Loot|Description of engine/loot.txt
@@ -858,6 +859,10 @@ void EngineSettings::Loot::load() {
 				// @ATTR vendor_ratio_buyback|int|(Deprecated in v1.12.85; use 'vendor_ratio_sell_old' instead) Percentage of item buying price to use as the buying price for previously sold items.
 				vendor_ratio_sell_old = static_cast<float>(Parse::toInt(infile.val)) / 100.0f;
 				infile.error("EngineSettings: vendor_ratio_buyback is deprecated. Use 'vendor_ratio_sell_old=%.2f' instead.", vendor_ratio_sell_old);
+			}
+			else if (infile.key == "extended_items_offset") {
+				// @ATTR extended_items_offset|item_id|Sets the starting item ID that extended items will be stored at. The default value, 0, will place extended items at the directly after the last item ID defined in items/items.txt.
+				extended_items_offset = Parse::toItemID(infile.val);
 			}
 			else {
 				infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());

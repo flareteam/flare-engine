@@ -283,6 +283,110 @@ void SaveLoad::saveGame() {
 		}
 	}
 
+	// Save extended Items
+	ss.str("");
+	ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/extended_items.txt";
+
+	outfile.open(Filesystem::convertSlashes(ss.str()).c_str(), std::ios::out);
+
+	if (outfile.is_open()) {
+		for (size_t i = eset->loot.extended_items_offset; i < items->items.size(); ++i) {
+			Item* item = items->items[i];
+
+			if (!item || item->parent == 0)
+				continue;
+
+			bool item_in_storage = false;
+			if (menu->inv->inventory[MenuInventory::EQUIPMENT].contain(i, 1)) {
+				item_in_storage = true;
+			}
+			else if (menu->inv->inventory[MenuInventory::CARRIED].contain(i, 1)) {
+				item_in_storage = true;
+			}
+			else {
+				for (size_t j = 0; j < menu->stash->tabs.size(); ++j) {
+					if (menu->stash->tabs[j].stock.contain(i, 1)) {
+						item_in_storage = true;
+						break;
+					}
+				}
+			}
+
+			if (!item_in_storage)
+				continue;
+
+			outfile << "[item]" << std::endl;
+			outfile << "id=" << i << "," << item->parent << std::endl;
+			outfile << "level=" << item->level << std::endl;
+			outfile << "quality=" << item->quality << std::endl;
+			for (size_t j = 0; j < item->bonus.size(); ++j) {
+				BonusData* bonus = &(item->bonus[j]);
+
+				if (!bonus->is_extended)
+					continue;
+
+				if (bonus->power_id > 0)
+					outfile << "bonus_power_level=";
+				else
+					outfile << "bonus=";
+
+				if (bonus->type == BonusData::SPEED)
+					outfile << "speed";
+				else if (bonus->type == BonusData::ATTACK_SPEED)
+					outfile << "attack_speed";
+				else if (bonus->type == BonusData::STAT)
+					outfile << Stats::KEY[bonus->index];
+				else if (bonus->type == BonusData::DAMAGE_MIN)
+					outfile << eset->damage_types.list[bonus->index].min;
+				else if (bonus->type == BonusData::DAMAGE_MAX)
+					outfile << eset->damage_types.list[bonus->index].max;
+				else if (bonus->type == BonusData::RESIST_ELEMENT)
+					outfile << eset->elements.list[bonus->index].resist_id;
+				else if (bonus->type == BonusData::PRIMARY_STAT)
+					outfile << eset->primary_stats.list[bonus->index].id;
+				else if (bonus->type == BonusData::RESOURCE_STAT)
+					outfile << eset->resource_stats.list[bonus->index].ids[bonus->sub_index];
+				else if (bonus->type == BonusData::POWER_LEVEL)
+					outfile << bonus->power_id;
+				else
+					continue;
+
+				if (bonus->value.base > 0) {
+					outfile << ",base:";
+					if (bonus->is_multiplier)
+						outfile << bonus->value.base * 100 << "%";
+					else
+						outfile << bonus->value.base;
+				}
+				if (bonus->value.per_item_level > 0) {
+					outfile << ",item_level:";
+					if (bonus->is_multiplier)
+						outfile << bonus->value.per_item_level * 100 << "%";
+					else
+						outfile << bonus->value.per_item_level;
+				}
+				if (bonus->value.per_player_level > 0) {
+					outfile << ",player_level:";
+					if (bonus->is_multiplier)
+						outfile << bonus->value.per_player_level * 100 << "%";
+					else
+						outfile << bonus->value.per_player_level;
+				}
+				for (size_t k = 0; k < bonus->value.per_player_primary.size(); ++k) {
+					if (bonus->value.per_player_primary[k] > 0) {
+						outfile << "," << eset->primary_stats.list[k].id << ":";
+						if (bonus->is_multiplier)
+							outfile << bonus->value.per_player_primary[k] * 100 << "%";
+						else
+							outfile << bonus->value.per_player_primary[k];
+					}
+				}
+				outfile << std::endl;
+			}
+			outfile << std::endl;
+		}
+	}
+
 	settings->prev_save_slot = game_slot-1;
 
 	// display a log message saying that we saved the game

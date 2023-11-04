@@ -247,6 +247,7 @@ public:
 		int drop_max;
 		int drop_radius;
 		float hide_radius;
+		ItemID extended_items_offset;
 	};
 
 	class Tileset {
