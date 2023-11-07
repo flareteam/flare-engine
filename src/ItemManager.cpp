@@ -1641,6 +1641,14 @@ void ItemManager::loadExtendedItems(const std::string& filename) {
 			parseBonus(bdata, infile);
 			item->bonus.push_back(bdata);
 		}
+		else if (infile.key == "bonus_power_level") {
+			BonusData bdata;
+			bdata.is_extended = true;
+			bdata.type = BonusData::POWER_LEVEL;
+			bdata.power_id = Parse::toPowerID(Parse::popFirstString(infile.val));
+			bdata.value.parse(infile.val);
+			item->bonus.push_back(bdata);
+		}
 	}
 	infile.close();
 
