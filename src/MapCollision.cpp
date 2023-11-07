@@ -211,20 +211,6 @@ bool MapCollision::isOutsideMap(const float& tile_x, const float& tile_y) const 
 }
 
 /**
- * A map space is empty if it contains no blocking type
- * A position outside the map boundary is not empty
- */
-bool MapCollision::isEmpty(const float& x, const float& y) const {
-	// map bounds check
-	const int tile_x = static_cast<int>(x);
-	const int tile_y = static_cast<int>(y);
-	if (isTileOutsideMap(tile_x, tile_y)) return false;
-
-	// collision type check
-	return (colmap[tile_x][tile_y] == BLOCKS_NONE || colmap[tile_x][tile_y] == MAP_ONLY || colmap[tile_x][tile_y] == MAP_ONLY_ALT);
-}
-
-/**
  * A map space is a wall if it contains a wall blocking type (normal or hidden)
  * A position outside the map boundary is a wall
  */
@@ -245,13 +231,13 @@ bool MapCollision::isValidTile(const int& tile_x, const int& tile_y, int movemen
 	// outside the map isn't valid
 	if (isTileOutsideMap(tile_x,tile_y)) return false;
 
-	if (collide_type == COLLIDE_NORMAL) {
+	if (collide_type == ENTITY_COLLIDE_ALL) {
 		if (colmap[tile_x][tile_y] == BLOCKS_ENEMIES)
 			return false;
 		if (colmap[tile_x][tile_y] == BLOCKS_ENTITIES)
 			return false;
 	}
-	else if (collide_type == COLLIDE_HERO) {
+	else if (collide_type == ENTITY_COLLIDE_HERO) {
 		if (colmap[tile_x][tile_y] == BLOCKS_ENEMIES && !eset->misc.enable_ally_collision)
 			return true;
 	}
@@ -320,7 +306,7 @@ bool MapCollision::lineCheck(const float& x1, const float& y1, const float& x2, 
 		for (int i=0; i<steps; i++) {
 			x += step_x;
 			y += step_y;
-			if (!isValidPosition(x, y, movement_type, COLLIDE_NORMAL))
+			if (!isValidPosition(x, y, movement_type, ENTITY_COLLIDE_ALL))
 				return false;
 		}
 	}
@@ -448,7 +434,7 @@ bool MapCollision::computePath(const FPoint& start_pos, const FPoint& end_pos, s
 			}
 
 			// if neighbour is not free of any collision, skip it
-			if (!isValidTile(neighbour.x,neighbour.y,movement_type, MapCollision::COLLIDE_NORMAL))
+			if (!isValidTile(neighbour.x,neighbour.y,movement_type, MapCollision::ENTITY_COLLIDE_ALL))
 				continue;
 			// if nabour is already in close, skip it
 			if(close.exists(neighbour))
@@ -533,7 +519,7 @@ void MapCollision::unblock(const float& map_x, const float& map_y) {
  * Given a target, trys to return one of the 8+ adjacent tiles
  * Returns the retargeted position on success, returns the original position on failure
  */
-FPoint MapCollision::getRandomNeighbor(const Point& target, int range, bool ignore_blocked) {
+FPoint MapCollision::getRandomNeighbor(const Point& target, int range, int movement_type, int collide_type) {
 	FPoint new_target(target);
 	std::vector<FPoint> valid_tiles;
 
@@ -542,7 +528,7 @@ FPoint MapCollision::getRandomNeighbor(const Point& target, int range, bool igno
 			if (i == 0 && j == 0) continue; // skip the middle tile
 			new_target.x = static_cast<float>(target.x + i) + 0.5f;
 			new_target.y = static_cast<float>(target.y + j) + 0.5f;
-			if (isValidPosition(new_target.x, new_target.y, MOVE_NORMAL, COLLIDE_NORMAL) || ignore_blocked)
+			if (isValidPosition(new_target.x, new_target.y, movement_type, collide_type))
 				valid_tiles.push_back(new_target);
 		}
 	}

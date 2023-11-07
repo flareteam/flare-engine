@@ -88,8 +88,6 @@ StatBlock::StatBlock()
 	, target_nearest_corpse_dist(0) // hero only
 	, block_power(0)
 	, movement_type(MapCollision::MOVE_NORMAL)
-	, flying(false)
-	, intangible(false)
 	, facing(true)
 	, name("")
 	, level(0)
@@ -694,9 +692,21 @@ void StatBlock::load(const std::string& filename) {
 
 		// behavior stats
 		// @ATTR flying|bool|Creature can move over gaps/water.
-		else if (infile.key == "flying") flying = Parse::toBool(infile.val);
+		else if (infile.key == "flying") {
+			bool flying = Parse::toBool(infile.val);
+			if (flying)
+				movement_type = MapCollision::MOVE_FLYING;
+			else
+				movement_type = MapCollision::MOVE_NORMAL;
+		}
 		// @ATTR intangible|bool|Creature can move through walls.
-		else if (infile.key == "intangible") intangible = Parse::toBool(infile.val);
+		else if (infile.key == "intangible") {
+			bool intangible = Parse::toBool(infile.val);
+			if (intangible)
+				movement_type = MapCollision::MOVE_INTANGIBLE;
+			else
+				movement_type = MapCollision::MOVE_NORMAL;
+		}
 		// @ATTR facing|bool|Creature can turn to face their target.
 		else if (infile.key == "facing") facing = Parse::toBool(infile.val);
 
@@ -1193,12 +1203,6 @@ void StatBlock::logic() {
 				resource_stats[i] = resource_max;
 		}
 	}
-
-	// set movement type
-	// some creatures may shift between movement types
-	if (intangible) movement_type = MapCollision::MOVE_INTANGIBLE;
-	else if (flying) movement_type = MapCollision::MOVE_FLYING;
-	else movement_type = MapCollision::MOVE_NORMAL;
 
 	if (hp == 0)
 		removeSummons();

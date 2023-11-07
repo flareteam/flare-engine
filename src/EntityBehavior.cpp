@@ -314,7 +314,7 @@ void EntityBehavior::findTarget() {
 			int test_dir = Utils::rotateDirection(middle_dir, i);
 
 			FPoint test_pos = Utils::calcVector(e->stats.pos, test_dir, 1);
-			if (mapr->collider.isValidPosition(test_pos.x, test_pos.y, e->stats.movement_type, MapCollision::COLLIDE_NORMAL)) {
+			if (mapr->collider.isValidPosition(test_pos.x, test_pos.y, e->stats.movement_type, MapCollision::ENTITY_COLLIDE_ALL)) {
 				if (test_dir == e->stats.direction) {
 					// if we're already moving in a good direction, favor it over other directions
 					flee_dirs.clear();
@@ -834,7 +834,7 @@ void EntityBehavior::updateState() {
 				mapr->collider.unblock(e->stats.pos.x, e->stats.pos.y);
 
 				// remove corpses that land on blocked tiles, such as water or pits
-				if (!mapr->collider.isValidPosition(e->stats.pos.x, e->stats.pos.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_NORMAL)) {
+				if (!mapr->collider.isValidPosition(e->stats.pos.x, e->stats.pos.y, MapCollision::MOVE_NORMAL, MapCollision::ENTITY_COLLIDE_ALL)) {
 					e->stats.corpse_timer.reset(Timer::END);
 				}
 

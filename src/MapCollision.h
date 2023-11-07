@@ -58,15 +58,14 @@ private:
 
 public:
 	// const flags
-	static const bool IGNORE_BLOCKED = true;
 	static const bool IS_ALLY = true;
 	static const int DEFAULT_PATH_LIMIT = 0;
 
 	// entity collision type
 	enum {
-		COLLIDE_NORMAL = 0,
-		COLLIDE_HERO = 1,
-		COLLIDE_NO_ENTITY = 2
+		ENTITY_COLLIDE_ALL = 0,
+		ENTITY_COLLIDE_HERO = 1,
+		ENTITY_COLLIDE_NONE = 2
 	};
 
 	// movement options
@@ -98,7 +97,6 @@ public:
 	bool move(float &x, float &y, float step_x, float step_y, int movement_type, int collide_type);
 
 	bool isOutsideMap(const float& tile_x, const float& tile_y) const;
-	bool isEmpty(const float& x, const float& y) const;
 	bool isWall(const float& x, const float& y) const;
 
 	bool isValidPosition(const float& x, const float& y, int movement_type, int collide_type) const;
@@ -113,10 +111,10 @@ public:
 	void block(const float& map_x, const float& map_y, bool is_ally);
 	void unblock(const float& map_x, const float& map_y);
 
-	FPoint getRandomNeighbor(const Point& target, int range, bool ignore_blocked);
+	FPoint getRandomNeighbor(const Point& target, int range, int movement_type, int collide_type);
 
 	int getCollideType(bool hero) {
-		return hero ? COLLIDE_HERO : COLLIDE_NORMAL;
+		return hero ? ENTITY_COLLIDE_HERO : ENTITY_COLLIDE_ALL;
 	}
 
 	Map_Layer colmap;

@@ -437,7 +437,7 @@ void Avatar::logic() {
 	}
 
 	// save a valid tile position in the event that we untransform on an invalid tile
-	if (stats.transformed && mapr->collider.isValidPosition(stats.pos.x, stats.pos.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_HERO)) {
+	if (stats.transformed && mapr->collider.isValidPosition(stats.pos.x, stats.pos.y, MapCollision::MOVE_NORMAL, MapCollision::ENTITY_COLLIDE_HERO)) {
 		transform_pos = stats.pos;
 		transform_map = mapr->getFilename();
 	}
@@ -768,10 +768,6 @@ void Avatar::logic() {
 						continue;
 					if (!stats.canUsePower(power_id, !StatBlock::CAN_USE_PASSIVE))
 						continue;
-					if (power->requires_los && !mapr->collider.lineOfSight(stats.pos.x, stats.pos.y, target.x, target.y))
-						continue;
-					if (power->requires_empty_target && !mapr->collider.isEmpty(target.x, target.y))
-						continue;
 					if (!power_cooldown_timers[power_id]->isEnd())
 						continue;
 					if (!powers->hasValidTarget(power_id, &stats, target))
@@ -911,8 +907,7 @@ void Avatar::transform() {
 
 	// replace some hero stats
 	stats.speed = charmed_stats->speed;
-	stats.flying = charmed_stats->flying;
-	stats.intangible = charmed_stats->intangible;
+	stats.movement_type = charmed_stats->movement_type;
 	stats.humanoid = charmed_stats->humanoid;
 	stats.animations = charmed_stats->animations;
 	stats.powers_list = charmed_stats->powers_list;
@@ -948,7 +943,7 @@ void Avatar::untransform() {
 
 	// For timed transformations, move the player to the last valid tile when untransforming
 	mapr->collider.unblock(stats.pos.x, stats.pos.y);
-	if (!mapr->collider.isValidPosition(stats.pos.x, stats.pos.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_HERO)) {
+	if (!mapr->collider.isValidPosition(stats.pos.x, stats.pos.y, MapCollision::MOVE_NORMAL, MapCollision::ENTITY_COLLIDE_HERO)) {
 		logMsg(msg->get("Transformation expired. You have been moved back to a safe place."), MSG_NORMAL);
 		if (transform_map != mapr->getFilename()) {
 			mapr->teleportation = true;
@@ -972,8 +967,7 @@ void Avatar::untransform() {
 
 	// revert some hero stats to last saved
 	stats.speed = hero_stats->speed;
-	stats.flying = hero_stats->flying;
-	stats.intangible = hero_stats->intangible;
+	stats.movement_type = hero_stats->movement_type;
 	stats.humanoid = hero_stats->humanoid;
 	stats.animations = hero_stats->animations;
 	stats.effects = hero_stats->effects;

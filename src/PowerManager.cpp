@@ -1281,19 +1281,24 @@ void PowerManager::handleNewMap(MapCollision *_collider) {
 }
 
 /**
- * Check if the target is valid (not an empty area or a wall)
+ * Check if the target is valid (not an empty area or a wall). Only used by the hero
  */
 bool PowerManager::hasValidTarget(PowerID power_index, StatBlock *src_stats, const FPoint& target) {
 
 	if (!collider) return false;
 
-	FPoint limit_target = Utils::clampDistance(powers[power_index]->target_range,src_stats->pos,target);
+	Power* power = powers[power_index];
 
-	if (!collider->isEmpty(limit_target.x, limit_target.y) || collider->isWall(limit_target.x,limit_target.y)) {
-		if (powers[power_index]->buff_teleport) {
-			return false;
-		}
-	}
+	FPoint limit_target = Utils::clampDistance(power->target_range, src_stats->pos, target);
+
+	if (power->requires_los && !collider->lineOfSight(src_stats->pos.x, src_stats->pos.y, limit_target.x, limit_target.y))
+		return false;
+
+	if (power->requires_empty_target && !collider->isValidPosition(limit_target.x, limit_target.y, power->movement_type, MapCollision::ENTITY_COLLIDE_ALL))
+		return false;
+
+	if (power->buff_teleport && power->target_neighbor < 1 && !collider->isValidPosition(limit_target.x, limit_target.y, src_stats->movement_type, MapCollision::ENTITY_COLLIDE_ALL))
+		return false;
 
 	return true;
 }
@@ -1372,7 +1377,7 @@ void PowerManager::initHazard(PowerID power_index, StatBlock *src_stats, const F
 	}
 
 	if (haz->power->target_neighbor > 0) {
-		haz->pos = collider->getRandomNeighbor(Point(haz->pos), haz->power->target_neighbor, MapCollision::IGNORE_BLOCKED);
+		haz->pos = collider->getRandomNeighbor(Point(haz->pos), haz->power->target_neighbor, haz->power->movement_type, MapCollision::ENTITY_COLLIDE_NONE);
 	}
 
 	if (haz->power->relative_pos) {
@@ -1393,7 +1398,7 @@ void PowerManager::buff(PowerID power_index, StatBlock *src_stats, const FPoint&
 	if (power->buff_teleport) {
 		FPoint limit_target = Utils::clampDistance(power->target_range,src_stats->pos,target);
 		if (power->target_neighbor > 0) {
-			FPoint new_target = collider->getRandomNeighbor(Point(limit_target), power->target_neighbor, !MapCollision::IGNORE_BLOCKED);
+			FPoint new_target = collider->getRandomNeighbor(Point(limit_target), power->target_neighbor, power->movement_type, MapCollision::ENTITY_COLLIDE_ALL);
 			if (floorf(new_target.x) == floorf(limit_target.x) && floorf(new_target.y) == floorf(limit_target.y)) {
 				src_stats->teleportation = false;
 			}
@@ -1658,7 +1663,7 @@ bool PowerManager::repeater(PowerID power_index, StatBlock *src_stats, const FPo
 		location_iterator.y += speed.y;
 
 		// only travels until it hits a wall
-		if (!collider->isValidPosition(location_iterator.x, location_iterator.y, power->movement_type, MapCollision::COLLIDE_NO_ENTITY)) {
+		if (!collider->isValidPosition(location_iterator.x, location_iterator.y, power->movement_type, MapCollision::ENTITY_COLLIDE_NONE)) {
 			break; // no more hazards
 		}
 
@@ -1710,14 +1715,18 @@ bool PowerManager::spawn(PowerID power_index, StatBlock *src_stats, const FPoint
 		espawn.pos = Utils::calcVector(src_stats->pos, src_stats->direction, src_stats->melee_range);
 	}
 
-	// force target_neighbor if our initial target is blocked
-	int target_neighbor = power->target_neighbor;
-	if (!collider->isEmpty(espawn.pos.x, espawn.pos.y) && target_neighbor < 1) {
-		target_neighbor = 1;
+	if (power->target_neighbor > 0) {
+		espawn.pos = collider->getRandomNeighbor(Point(espawn.pos), power->target_neighbor, power->movement_type, MapCollision::ENTITY_COLLIDE_ALL);
 	}
 
-	if (target_neighbor > 0) {
-		espawn.pos = collider->getRandomNeighbor(Point(src_stats->pos), target_neighbor, !MapCollision::IGNORE_BLOCKED);
+	if (!collider->isValidPosition(espawn.pos.x, espawn.pos.y, power->movement_type, MapCollision::ENTITY_COLLIDE_ALL)) {
+		// desired spawn point is blocked; try spawning next to the caster
+		espawn.pos = collider->getRandomNeighbor(Point(src_stats->pos), 1, power->movement_type, MapCollision::ENTITY_COLLIDE_ALL);
+	}
+
+	if (!collider->isValidPosition(espawn.pos.x, espawn.pos.y, power->movement_type, MapCollision::ENTITY_COLLIDE_ALL)) {
+		// couldn't find an open spawn point next to the caster; abort spawning process
+		return false;
 	}
 
 	espawn.direction = Utils::calcDirection(src_stats->pos.x, src_stats->pos.y, target.x, target.y);
@@ -1725,17 +1734,12 @@ bool PowerManager::spawn(PowerID power_index, StatBlock *src_stats, const FPoint
 	espawn.hero_ally = src_stats->hero || src_stats->hero_ally;
 	espawn.enemy_ally = !src_stats->hero;
 
-	// can't spawn on a blocked tile
-	if (!collider->isEmpty(espawn.pos.x, espawn.pos.y)) {
-		return false;
-	}
-	else {
-		collider->block(espawn.pos.x, espawn.pos.y, espawn.hero_ally);
-	}
+	collider->block(espawn.pos.x, espawn.pos.y, espawn.hero_ally);
 
 	for (int i=0; i < power->count; i++) {
 		map_enemies.push(espawn);
 	}
+
 	// apply any buffs
 	buff(power_index, src_stats, target);
 
@@ -1764,7 +1768,7 @@ bool PowerManager::transform(PowerID power_index, StatBlock *src_stats, const FP
 	// execute untransform powers
 	if (power->spawn_type == "untransform" && src_stats->transformed) {
 		collider->unblock(src_stats->pos.x, src_stats->pos.y);
-		if (collider->isValidPosition(src_stats->pos.x, src_stats->pos.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_HERO)) {
+		if (collider->isValidPosition(src_stats->pos.x, src_stats->pos.y, MapCollision::MOVE_NORMAL, MapCollision::ENTITY_COLLIDE_HERO)) {
 			src_stats->transform_duration = 0;
 			src_stats->transform_type = "untransform"; // untransform() is called only if type !=""
 		}

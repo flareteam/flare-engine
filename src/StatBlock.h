@@ -145,8 +145,6 @@ public:
 	PowerID block_power;
 
 	int movement_type;
-	bool flying;
-	bool intangible;
 	bool facing; // does this creature turn to face the hero
 
 	std::vector<std::string> categories;

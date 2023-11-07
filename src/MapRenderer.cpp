@@ -101,7 +101,7 @@ void MapRenderer::clearQueues() {
 }
 
 bool MapRenderer::enemyGroupPlaceEnemy(float x, float y, const Map_Group &g) {
-	if (collider.isEmpty(x, y)) {
+	if (collider.isValidPosition(x, y, MapCollision::MOVE_NORMAL, MapCollision::ENTITY_COLLIDE_NONE)) {
 		Enemy_Level enemy_lev = enemyg->getRandomEnemy(g.category, g.levelmin, g.levelmax);
 		if (!enemy_lev.type.empty()) {
 			Map_Enemy group_member = Map_Enemy(enemy_lev.type, FPoint(x, y));

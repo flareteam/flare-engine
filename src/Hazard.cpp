@@ -186,7 +186,7 @@ void Hazard::logic() {
 	if (check_collide) {
 		// very simplified collider, could skim around corners
 		// or even pass through thin walls if speed > tilesize
-		if (!collider->isValidPosition(pos.x, pos.y, power->movement_type, MapCollision::COLLIDE_NO_ENTITY)) {
+		if (!collider->isValidPosition(pos.x, pos.y, power->movement_type, MapCollision::ENTITY_COLLIDE_NONE)) {
 
 			hit_wall = true;
 
