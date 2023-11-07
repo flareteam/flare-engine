@@ -7,6 +7,7 @@ Engine features:
 * Add 'loot_drops_max' property to Items for limiting the number of drops in a single loot event.
 * Horizontal list widgets can now display 2 or fewer options at once
 * Added support for more than one of each chain power (pre_power/post_power/wall_power) to be attached to a single power.
+* Added randomized items. Items can now be spawned with random level, quality, and bonus attributes.
 
 Engine fixes:
 
