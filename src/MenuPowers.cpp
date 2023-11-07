@@ -922,7 +922,13 @@ void MenuPowers::createTooltipFromActionBar(TooltipData* tip_data, unsigned slot
 		// else, neither is found in the menu, so default to the modded power
 	}
 
-	createTooltip(tip_data, pcell, pindex, false, tooltip_length);
+	// if the power is upgraded, we need to get the base power
+	MenuPowersCell* pcell_base = NULL;
+	if (pcell) {
+		pcell_base = power_cell[pcell->group].getCurrent();
+	}
+
+	createTooltip(tip_data, pcell_base, pindex, false, tooltip_length);
 	createTooltipInputHint(tip_data, TOOLTIP_SHOW_ACTIVATE_HINT);
 }
 
