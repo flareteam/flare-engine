@@ -21,6 +21,10 @@ extra repository and is now called [flare-game]. (happened around sept. 2012)
 
 [flare-game]: https://github.com/flareteam/flare-game
 
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/org.flare.app/)
+
 ## Copyright and License
 
 Most of Flare is Copyright © 2010-2013 Clint Bellanger.
