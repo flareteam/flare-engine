@@ -39,6 +39,7 @@ Platform platform;
 namespace PlatformAndroid {
 	std::string getPackageName();
 	int isExitEvent(void *userdata, SDL_Event* event);
+	void dialogInstallHint();
 };
 
 std::string PlatformAndroid::getPackageName()
@@ -70,6 +71,30 @@ int PlatformAndroid::isExitEvent(void* userdata, SDL_Event* event) {
 		return 0;
 	}
 	return 1;
+}
+
+void PlatformAndroid::dialogInstallHint() {
+	const SDL_MessageBoxButtonData buttons[] = {
+		{ SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT|SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "No" },
+		{ 0, 1, "Yes" },
+	};
+	const SDL_MessageBoxData messageboxdata = {
+		SDL_MESSAGEBOX_INFORMATION,
+		NULL,
+		"Flare",
+		"Flare game data needs to be installed. Visit the wiki page for download & instructions?",
+		static_cast<int>(SDL_arraysize(buttons)),
+		buttons,
+		NULL
+	};
+	int buttonid = 0;
+	SDL_ShowMessageBox(&messageboxdata, &buttonid);
+	if (buttonid == 0) {
+		// do nothing
+	}
+	else if (buttonid == 1) {
+		SDL_OpenURL("https://github.com/flareteam/flare-engine/wiki/Android-port");
+	}
 }
 
 Platform::Platform()
@@ -172,14 +197,18 @@ void Platform::setPaths() {
 		}
 	}
 
-	// unable to create /Flare directory, use app directory instead
-	if (!Filesystem::pathExists(settings->path_user)) {
+	Filesystem::createDir(settings->path_user);
+
+	if (Filesystem::pathExists(settings->path_user)) {
+		// path_user created outside app directory; create path_conf inside it
+		Filesystem::createDir(settings->path_conf);
+	}
+	else {
+		// unable to create /Flare directory, use app directory instead
 		settings->path_user = settings->path_data + "/userdata";
 		settings->path_conf = settings->path_data + "/config";
 	}
 
-	Filesystem::createDir(settings->path_user);
-	Filesystem::createDir(settings->path_conf);
 	Filesystem::createDir(settings->path_user + "/mods");
 	Filesystem::createDir(settings->path_user + "/saves");
 

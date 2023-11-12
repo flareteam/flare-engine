@@ -29,6 +29,8 @@ Engine fixes:
 * Fix power.target_neighbor not using the starting_pos as the origin point.
 * Fixed crash in Power tooltips when base_damage was not defined.
 * Fix incorrect power level being shown in the action bar tooltips for upgraded powers.
+* Android: Fix 'Flare' directory not being automatically created.
+* Android: Added a dialog to direct the player to the wiki page for installing if no game data is found.
 
 Game updates:
 * Limited the number of "unique" items that can drop from a boss to 1 per kill.
