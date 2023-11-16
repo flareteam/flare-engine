@@ -2,13 +2,17 @@
 # This file is distributed under the same license as the FLARE package.
 # 
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Translators:
+# Jaakko Muilu, 2023
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-17 20:15+\n"
+"POT-Creation-Date: 2023-09-28 08:33+\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Language-Team: Finnish (https://www.transifex.com/flareorg/teams/84925/fi/)\n"
+"Last-Translator: Jaakko Muilu, 2023\n"
+"Language-Team: Finnish (https://app.transifex.com/flareorg/teams/84925/fi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -17,104 +21,104 @@ msgstr ""
 
 #: ../engine/primary_stats.txt:3
 msgid "Physical"
-msgstr ""
+msgstr "Fyysinen"
 
 #: ../engine/primary_stats.txt:7
 msgid "Mental"
-msgstr ""
+msgstr "Mentaalinen"
 
 #: ../engine/primary_stats.txt:11
 msgid "Offense"
-msgstr ""
+msgstr "Hyökkäys"
 
 #: ../engine/primary_stats.txt:15
 msgid "Defense"
-msgstr ""
+msgstr "Puolustus"
 
 #: ../engine/damage_types.txt:3
 msgid "Melee Damage"
-msgstr ""
+msgstr "Lähitaisteluvahinko"
 
 #: ../engine/damage_types.txt:4
 msgid "Increases the damage done with swords and other melee weapons."
-msgstr ""
+msgstr "Kasvattaa miekoilla ja muilla lyömäaseilla tehtyä vahinkoa."
 
 #: ../engine/damage_types.txt:5
 msgid "Melee Damage Min"
-msgstr ""
+msgstr "Lähitaisteluvahinko min."
 
 #: ../engine/damage_types.txt:6
 msgid "Melee Damage Max"
-msgstr ""
+msgstr "Lähitaisteluvahinko maks."
 
 #: ../engine/damage_types.txt:12
 msgid "Ranged Damage"
-msgstr ""
+msgstr "Kaukotaisteluvahinko"
 
 #: ../engine/damage_types.txt:13
 msgid "Increases the damage done with bows and other ranged weapons."
-msgstr ""
+msgstr "Kasvattaa jousilla ja muilla kantama-aseilla tehtyä vahinkoa."
 
 #: ../engine/damage_types.txt:14
 msgid "Ranged Damage Min"
-msgstr ""
+msgstr "Kaukotaisteluvahinko min."
 
 #: ../engine/damage_types.txt:15
 msgid "Ranged Damage Max"
-msgstr ""
+msgstr "Kaukotaisteluvahinko maks."
 
 #: ../engine/damage_types.txt:21
 msgid "Mental Damage"
-msgstr ""
+msgstr "Mentaalivahinko"
 
 #: ../engine/damage_types.txt:22
 msgid "Increases the damage done with staves and other mental weapons."
-msgstr ""
+msgstr "Kasvattaa sauvoilla ja muilla mentaaliaseilla tehtyä vahinkoa."
 
 #: ../engine/damage_types.txt:23
 msgid "Mental Damage Min"
-msgstr ""
+msgstr "Mentaalivahinko min."
 
 #: ../engine/damage_types.txt:24
 msgid "Mental Damage Max"
-msgstr ""
+msgstr "Mentaalivahinko maks."
 
 #: ../cutscenes/credits.txt:7
 msgid "Flare Engine Credits"
-msgstr ""
+msgstr "Flare Engine -tekijät"
 
 #: ../cutscenes/credits.txt:10
 msgid "Lead Programmers"
-msgstr ""
+msgstr "Pääohjelmoijat"
 
 #: ../cutscenes/credits.txt:20
 msgid "Programmers"
-msgstr ""
+msgstr "Ohjelmoijat"
 
-#: ../cutscenes/credits.txt:50
+#: ../cutscenes/credits.txt:51
 msgid "Default Art"
-msgstr ""
+msgstr "Oletustaide"
 
-#: ../cutscenes/credits.txt:55
+#: ../cutscenes/credits.txt:56
 msgid "Translators"
-msgstr ""
-
-#: ../cutscenes/credits.txt:124
-msgid "Distributors"
-msgstr ""
-
-#: ../cutscenes/credits.txt:133
-msgid "Special Thanks"
-msgstr ""
+msgstr "Kääntäjät"
 
 #: ../cutscenes/credits.txt:137
+msgid "Distributors"
+msgstr "Jakelijat"
+
+#: ../cutscenes/credits.txt:146
+msgid "Special Thanks"
+msgstr "Erikoiskiitokset"
+
+#: ../cutscenes/credits.txt:150
 msgid "For giving constant feedback and testing:"
-msgstr ""
+msgstr "Jatkuvan palautteen ja testaamisen antamisesta:"
 
-#: ../cutscenes/credits.txt:139
+#: ../cutscenes/credits.txt:152
 msgid "The community at OpenGameArt"
-msgstr ""
+msgstr "OpenGameArt-yhteisö"
 
-#: ../cutscenes/credits.txt:143
+#: ../cutscenes/credits.txt:156
 msgid "For Tiled and the Flare map exporter:"
-msgstr ""
+msgstr "Tiled- ja Flare-kartan viejälle:"

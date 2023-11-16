@@ -50,7 +50,7 @@ Translations
 (de) German by Thomas 'CruzR' Glamsch, Chris Oelmueller, Janet Hunt, Stefan Beller, Wuzzy2, and Iwan Gabovitch
 (el) Greek by Yannis Anthymidis, Michael Papageorgiou, and Nea Retrogamer
 (es) Spanish by Juan Pablo 'morris989' Tamayo, Carlos Sanchez, Diego J. Romero López, Eric R, Jacobo Feijóo, and Eugenio Martínez Seguín
-(fi) Finnish by Timo Sievänen
+(fi) Finnish by Timo Sievänen and Jaakko Muilu
 (fr) French by Quentin 'acieroid' Stievenart, Bonbadil, Morgan Strauss, Christoph J. Thompson, syl_, Christophe Nemo, and Bafy
 (gd) Scottish Gaelic by GunChleoc
 (gl) Galacian by Adrian Chaves Fernandez (Gallaecio)

@@ -39,6 +39,7 @@ Translation updates:
 
 * German (de) update (Iwan Gabovitch)
 * Spanish (es) update (Jacobo Feijóo, Julvenzor, Eugenio Martínez Seguín)
+* Finnish (fi) update (Jaakko Muilu)
 * Scottish Gaelic (gd) update (GunChleoc)
 * Hindi (India) (hi_IN) by Ansh Mishra
 * Korean (ko) update (ks k)
