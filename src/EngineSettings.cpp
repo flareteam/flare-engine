@@ -1099,7 +1099,7 @@ void EngineSettings::NumberFormat::load() {
 
 	FileParser infile;
 	// @CLASS EngineSettings: Number Format|Description of engine/number_format.txt
-	if (infile.open("engine/number_format.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
+	if (infile.open("engine/number_format.txt", FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
 		while (infile.next()) {
 			// @ATTR player_statbar|int|Number of digits after the decimal place to display for values in the player's statbars (HP/MP).
 			if (infile.key == "player_statbar")
