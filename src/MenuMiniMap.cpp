@@ -70,6 +70,7 @@ MenuMiniMap::MenuMiniMap()
 	, button_config(NULL)
 	, visible_radius(0)
 	, current_zoom(1)
+	, base_zoom(1)
 	, lock_zoom_change(false)
 	, clicked_config(false)
 
@@ -125,6 +126,10 @@ MenuMiniMap::MenuMiniMap()
 				}
 				Point p = Parse::toPoint(infile.val);
 				button_config->setBasePos(p.x, p.y, Utils::ALIGN_TOPLEFT);
+			}
+			// @ATTR default_zoom_level|int|Zoom level of the map when viewed at "1x". By default, this is 1, which equates to each tile being 1 pixel tall.
+			else if (infile.key == "default_zoom_level") {
+				base_zoom = Parse::toInt(infile.val);
 			}
 			else {
 				infile.error("MenuMiniMap: '%s' is not a valid key.", infile.key.c_str());
@@ -246,9 +251,9 @@ void MenuMiniMap::render(const FPoint& hero_pos) {
 	label->render();
 
 	if (settings->minimap_mode == Settings::MINIMAP_NORMAL)
-		current_zoom = 1;
+		current_zoom = 1 * base_zoom;
 	else if (settings->minimap_mode == Settings::MINIMAP_2X)
-		current_zoom = 2;
+		current_zoom = 2 * base_zoom;
 
 	renderMapSurface(hero_pos);
 
@@ -265,24 +270,24 @@ void MenuMiniMap::prerender(MapCollision *collider, int map_w, int map_h) {
 	map_size.y = map_h;
 
 	if (eset->tileset.orientation == eset->tileset.TILESET_ISOMETRIC) {
-		prerenderIso(collider, &map_surface, &map_surface_entities, 1);
-		prerenderIso(collider, &map_surface_2x, &map_surface_entities_2x, 2);
+		prerenderIso(collider, &map_surface, &map_surface_entities, base_zoom);
+		prerenderIso(collider, &map_surface_2x, &map_surface_entities_2x, base_zoom*2);
 	}
 	else {
 		// eset->tileset.TILESET_ORTHOGONAL
-		prerenderOrtho(collider, &map_surface, &map_surface_entities, 1);
-		prerenderOrtho(collider, &map_surface_2x, &map_surface_entities_2x, 2);
+		prerenderOrtho(collider, &map_surface, &map_surface_entities, base_zoom);
+		prerenderOrtho(collider, &map_surface_2x, &map_surface_entities_2x, base_zoom*2);
 	}
 }
 void MenuMiniMap::update(MapCollision *collider, Rect *bounds) {
 	if (eset->tileset.orientation == eset->tileset.TILESET_ISOMETRIC) {
-		updateIso(collider, &map_surface, 1, bounds);
-		updateIso(collider, &map_surface_2x, 2, bounds);
+		updateIso(collider, &map_surface, base_zoom, bounds);
+		updateIso(collider, &map_surface_2x, base_zoom*2, bounds);
 	}
 	else {
 		// eset->tileset.TILESET_ORTHOGONAL
-		updateOrtho(collider, &map_surface, 1, bounds);
-		updateOrtho(collider, &map_surface_2x, 2, bounds);
+		updateOrtho(collider, &map_surface, base_zoom, bounds);
+		updateOrtho(collider, &map_surface_2x, base_zoom*2, bounds);
 	}
 }
 

@@ -72,6 +72,7 @@ private:
 
 	float visible_radius;
 	int current_zoom;
+	int base_zoom;
 	bool lock_zoom_change;
 
 	std::vector<PixelEntity*> entities;
