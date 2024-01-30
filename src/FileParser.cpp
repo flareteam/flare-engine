@@ -28,6 +28,7 @@ FileParser::FileParser()
 	: current_index(0)
 	, is_mod_file(false)
 	, error_mode(ERROR_NORMAL)
+	, requested_filename("")
 	, line("")
 	, line_number(0)
 	, include_fp(NULL)
@@ -40,6 +41,7 @@ FileParser::FileParser()
 bool FileParser::open(const std::string& _filename, bool _is_mod_file, int _error_mode) {
 	is_mod_file = _is_mod_file;
 	error_mode = _error_mode;
+	requested_filename = _filename;
 
 	filenames.clear();
 	if (is_mod_file) {
@@ -172,15 +174,20 @@ bool FileParser::next() {
 				if (directive == "INCLUDE") {
 					std::string tmp = line.substr(first_space+1);
 
-					include_fp = new FileParser();
-					if (!include_fp || !include_fp->open(tmp, is_mod_file, error_mode)) {
-						delete include_fp;
-						include_fp = NULL;
-					}
+					if (requested_filename != tmp) {
+						include_fp = new FileParser();
+						if (!include_fp || !include_fp->open(tmp, is_mod_file, error_mode)) {
+							delete include_fp;
+							include_fp = NULL;
+						}
 
-					if (include_fp) {
-						// INCLUDE file will inherit the current section
-						include_fp->section = section;
+						if (include_fp) {
+							// INCLUDE file will inherit the current section
+							include_fp->section = section;
+						}
+					}
+					else {
+						error("FileParser: Recursive INCLUDE detected. Did you mean to use APPEND?");
 					}
 
 					continue;

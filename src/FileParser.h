@@ -35,6 +35,7 @@ private:
 	unsigned current_index;
 	bool is_mod_file;
 	int error_mode;
+	std::string requested_filename;
 
 	std::ifstream infile;
 	std::string line;
