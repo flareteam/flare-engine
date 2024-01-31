@@ -52,6 +52,7 @@ MenuDevConsole::MenuDevConsole()
 	: Menu()
 	, first_open(false)
 	, input_scrollback_pos(0)
+	, set_shortcut_slot(0)
 {
 	distance_timer.setDuration(settings->max_frames_per_sec);
 
@@ -136,6 +137,30 @@ void MenuDevConsole::align() {
 void MenuDevConsole::logic() {
 	if (!visible && first_open && log_history->isEmpty()) {
 		first_open = false;
+	}
+
+	// handle shortcut keys
+	// these are supposed to work even if the console is hidden
+	if (inpt->pressing[Input::DEVELOPER_CMD_1] && ! inpt->lock[Input::DEVELOPER_CMD_1]) {
+		inpt->lock[Input::DEVELOPER_CMD_1] = true;
+
+		input_box->setText(settings->dev_cmd_1);
+		execute();
+		return;
+	}
+	else if (inpt->pressing[Input::DEVELOPER_CMD_2] && ! inpt->lock[Input::DEVELOPER_CMD_2]) {
+		inpt->lock[Input::DEVELOPER_CMD_2] = true;
+
+		input_box->setText(settings->dev_cmd_2);
+		execute();
+		return;
+	}
+	else if (inpt->pressing[Input::DEVELOPER_CMD_3] && ! inpt->lock[Input::DEVELOPER_CMD_3]) {
+		inpt->lock[Input::DEVELOPER_CMD_3] = true;
+
+		input_box->setText(settings->dev_cmd_3);
+		execute();
+		return;
 	}
 
 	if (visible) {
@@ -330,6 +355,7 @@ bool MenuDevConsole::inputFocus() {
 void MenuDevConsole::reset() {
 	input_box->setText("");
 	input_box->edit_mode = true;
+	set_shortcut_slot = 0;
 	// log_history->clear();
 }
 
@@ -358,6 +384,24 @@ void MenuDevConsole::execute() {
 		command = "exec " + Parse::trim(command.substr(1)); // remove the slash
 	}
 	command = Parse::trim(command);
+
+	// setting a dev shortcut command; no need to process the command
+	if (set_shortcut_slot > 0) {
+		if (set_shortcut_slot == 1) {
+			settings->dev_cmd_1 = command;
+		}
+		else if (set_shortcut_slot == 2) {
+			settings->dev_cmd_2 = command;
+		}
+		else if (set_shortcut_slot == 3) {
+			settings->dev_cmd_3 = command;
+		}
+		set_shortcut_slot = 0;
+		settings->saveSettings();
+		log_history->setNextColor(font->getColor(FontEngine::COLOR_MENU_BONUS));
+		log_history->add(msg->get("Shortcut saved."), WidgetLog::MSG_UNIQUE);
+		return;
+	}
 
 	std::vector<std::string> args;
 	command += ' ';
@@ -390,6 +434,7 @@ void MenuDevConsole::execute() {
 		log_history->add("list_maps - " + msg->get("Prints out all the map filenames located in the \"maps/\" directory."), WidgetLog::MSG_UNIQUE);
 		log_history->add("list_status - " + msg->get("Prints out the active campaign statuses that match a search term. No search term will list all active statuses"), WidgetLog::MSG_UNIQUE);
 		log_history->add("list_items - " + msg->get("Prints a list of items that match a search term. No search term will list all items"), WidgetLog::MSG_UNIQUE);
+		log_history->add("set_shortcut - " + msg->get("Assign a console command to a shortcut key."), WidgetLog::MSG_UNIQUE);
 		log_history->add("exec - " + msg->get("parses a series of event components and executes them as a single event"), WidgetLog::MSG_UNIQUE);
 		log_history->add("/ - " + msg->get("parses a series of event components and executes them as a single event"), WidgetLog::MSG_UNIQUE);
 		log_history->add("clear - " + msg->get("clears the command history"), WidgetLog::MSG_UNIQUE);
@@ -564,6 +609,26 @@ void MenuDevConsole::execute() {
 		}
 		else {
 			menu->act->addPower(Parse::toInt(args[1]), MenuActionBar::USE_EMPTY_SLOT);
+		}
+	}
+	else if (args[0] == "set_shortcut") {
+		if (args.size() != 2) {
+			log_history->setNextColor(font->getColor(FontEngine::COLOR_MENU_PENALTY));
+			log_history->add(msg->get("ERROR: Incorrect number of arguments"), WidgetLog::MSG_UNIQUE);
+			log_history->setNextColor(font->getColor(FontEngine::COLOR_MENU_BONUS));
+			log_history->add(msg->get("HINT:") + ' ' + args[0] + " [1-3]", WidgetLog::MSG_UNIQUE);
+		}
+		else {
+			int custom_cmd_index = Parse::toInt(args[1]);
+			if (custom_cmd_index >= 0 && custom_cmd_index < 4) {
+				set_shortcut_slot = custom_cmd_index;
+				log_history->setNextColor(font->getColor(FontEngine::COLOR_MENU_BONUS));
+				log_history->add(msg->getv("Enter the command you wish to save to slot %d.", set_shortcut_slot), WidgetLog::MSG_UNIQUE);
+			}
+			else {
+				log_history->setNextColor(font->getColor(FontEngine::COLOR_MENU_PENALTY));
+				log_history->add(msg->get("ERROR: Not a valid shortcut slot."), WidgetLog::MSG_UNIQUE);
+			}
 		}
 	}
 	else if (starts_with_slash || args[0] == "exec") {

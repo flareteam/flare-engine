@@ -63,6 +63,9 @@ namespace Input {
 		AIM_LEFT,
 		AIM_RIGHT,
 		DEVELOPER_MENU,
+		DEVELOPER_CMD_1,
+		DEVELOPER_CMD_2,
+		DEVELOPER_CMD_3,
 
 		// non-modifiable
 		CTRL,

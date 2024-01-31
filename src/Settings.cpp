@@ -63,7 +63,7 @@ Settings::Settings()
 	, soft_reset(false)
 	, safe_video(false)
 {
-	config.resize(47);
+	config.resize(50);
 	setConfigDefault(0,  "move_type_dimissed",  &typeid(move_type_dimissed),  "0",            &move_type_dimissed,  "One time flag for initial movement type dialog | 0 = show dialog, 1 = no dialog");
 	setConfigDefault(1,  "fullscreen",          &typeid(fullscreen),          "0",            &fullscreen,          "Fullscreen mode | 0 = disable, 1 = enable");
 	setConfigDefault(2,  "resolution_w",        &typeid(screen_w),            "640",          &screen_w,            "Window size");
@@ -111,6 +111,9 @@ Settings::Settings()
 	setConfigDefault(44, "mute_on_focus_loss",  &typeid(mute_on_focus_loss),  "1",            &mute_on_focus_loss,  "Mute game audio when the game window loses focus | 0 = disable, 1 = enable");
 	setConfigDefault(45, "pause_on_focus_loss", &typeid(pause_on_focus_loss), "1",            &pause_on_focus_loss, "Pause game when the game window loses focus | 0 = disable, 1 = enable");
 	setConfigDefault(46, "audio_freq",          &typeid(audio_freq),          "44100",        &audio_freq,          "Audio playback frequency in Hz. Default is 44100");
+	setConfigDefault(47, "dev_cmd_1",           &typeid(dev_cmd_1),           "toggle_fps",    &dev_cmd_1,           "Custom developer console shortcut command");
+	setConfigDefault(48, "dev_cmd_2",           &typeid(dev_cmd_2),           "toggle_devhud", &dev_cmd_2,           "Custom developer console shortcut command");
+	setConfigDefault(49, "dev_cmd_3",           &typeid(dev_cmd_3),           "toggle_hud",    &dev_cmd_3,           "Custom developer console shortcut command");
 }
 
 void Settings::setConfigDefault(size_t index, const std::string& name, const std::type_info *type, const std::string& default_val, void *storage, const std::string& comment) {

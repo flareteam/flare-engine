@@ -9,6 +9,7 @@ Engine features:
 * Added support for more than one of each chain power (pre_power/post_power/wall_power) to be attached to a single power.
 * Added randomized items. Items can now be spawned with random level, quality, and bonus attributes.
 * Added 'default_zoom_level' property to menu/minimap.txt config.
+* Added support for developer mode command shortcuts.
 
 Engine fixes:
 

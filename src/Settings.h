@@ -124,6 +124,11 @@ public:
 	int prev_save_slot;
 	bool move_type_dimissed;
 
+	// Dev console: shortcut commands
+	std::string dev_cmd_1;
+	std::string dev_cmd_2;
+	std::string dev_cmd_3;
+
 	/**
 	 * NOTE Everything below is not part of the user's settings.txt, but somehow ended up here
 	 * TODO Move these to more appropriate locations?

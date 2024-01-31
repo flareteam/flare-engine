@@ -102,6 +102,9 @@ InputState::InputState(void)
 	config_keys[Input::AIM_LEFT] = "aim_left";
 	config_keys[Input::AIM_RIGHT] = "aim_right";
 	config_keys[Input::DEVELOPER_MENU] = "developer_menu";
+	config_keys[Input::DEVELOPER_CMD_1] = "developer_cmd_1";
+	config_keys[Input::DEVELOPER_CMD_2] = "developer_cmd_2";
+	config_keys[Input::DEVELOPER_CMD_3] = "developer_cmd_3";
 }
 
 InputState::~InputState() {
@@ -205,6 +208,9 @@ void InputState::loadKeyBindings() {
 		// @ATTR default.aim_left|[int, string], int : Bind, Type|Bindings for "Aim Left".
 		// @ATTR default.aim_right|[int, string], int : Bind, Type|Bindings for "Aim Right".
 		// @ATTR default.developer_menu|[int, string], int : Bind, Type|Bindings for "Developer Menu".
+		// @ATTR default.developer_cmd_1|[int, string], int : Bind, Type|Bindings for "Developer Command 1".
+		// @ATTR default.developer_cmd_2|[int, string], int : Bind, Type|Bindings for "Developer Command 2".
+		// @ATTR default.developer_cmd_3|[int, string], int : Bind, Type|Bindings for "Developer Command 3".
 
 		if (infile.section == "user" || infile.section == "default") {
 			for (int key = 0; key < KEY_COUNT_USER; ++key) {

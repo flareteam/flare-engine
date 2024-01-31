@@ -234,6 +234,9 @@ void SDLInputState::initBindings() {
 	setBind(Input::MENU_ACTIVATE, InputBind::KEY, SDL_SCANCODE_V, NULL);
 
 	setBind(Input::DEVELOPER_MENU, InputBind::KEY, SDL_SCANCODE_F5, NULL);
+	setBind(Input::DEVELOPER_CMD_1, InputBind::KEY, SDL_SCANCODE_F6, NULL);
+	setBind(Input::DEVELOPER_CMD_2, InputBind::KEY, SDL_SCANCODE_F7, NULL);
+	setBind(Input::DEVELOPER_CMD_3, InputBind::KEY, SDL_SCANCODE_F8, NULL);
 
 	setBind(Input::EQUIPMENT_SWAP, InputBind::KEY, SDL_SCANCODE_TAB, NULL);
 	setBind(Input::EQUIPMENT_SWAP, InputBind::KEY, SDL_SCANCODE_K, NULL);
@@ -923,6 +926,9 @@ void SDLInputState::setCommonStrings() {
 	binding_name[Input::AIM_LEFT] = msg->get("Aim Left");
 	binding_name[Input::AIM_RIGHT] = msg->get("Aim Right");
 	binding_name[Input::DEVELOPER_MENU] = msg->get("Developer Menu");
+	binding_name[Input::DEVELOPER_CMD_1] = msg->get("Developer Command 1");
+	binding_name[Input::DEVELOPER_CMD_2] = msg->get("Developer Command 2");
+	binding_name[Input::DEVELOPER_CMD_3] = msg->get("Developer Command 3");
 	binding_name[Input::CTRL] = msg->get("Ctrl");
 	binding_name[Input::SHIFT] = msg->get("Shift");
 	binding_name[Input::ALT] = msg->get("Alt");

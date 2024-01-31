@@ -54,6 +54,8 @@ protected:
 	size_t input_scrollback_pos;
 	std::vector<std::string> input_scrollback;
 
+	int set_shortcut_slot;
+
 public:
 	MenuDevConsole();
 	~MenuDevConsole();
