@@ -74,7 +74,7 @@ MenuManager::MenuManager()
 	, drag_stack()
 	, drag_power(0)
 	, drag_src(DRAG_SRC_NONE)
-	, drag_icon(new WidgetSlot(WidgetSlot::NO_ICON))
+	, drag_icon(new WidgetSlot(WidgetSlot::NO_ICON, WidgetSlot::HIGHLIGHT_NORMAL))
 	, done(false)
 	, act_drag_hover(false)
 	, keydrag_pos(Point())
@@ -170,6 +170,7 @@ MenuManager::MenuManager()
 	settings->show_hud = true;
 
 	drag_icon->enabled = false;
+	drag_icon->show_disabled_overlay = false;
 
 	action_picker->setTitle(msg->get("Choose an action:"));
 }

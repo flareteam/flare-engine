@@ -33,11 +33,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class WidgetSlot : public Widget {
 private:
 	Sprite *slot_selected;
+	Sprite *slot_highlight;
+	Sprite *slot_disabled;
 	Sprite *label_amount_bg;
 	Sprite *label_hotkey_bg;
 
 	WidgetLabel label_amount;
 	WidgetLabel label_hotkey;
+	WidgetLabel label_colorblind_highlight;
 	int icon_id;		// current slot id
 	int overlay_id;     // icon id for the overlay image
 	int amount;			// entries amount in slot
@@ -53,10 +56,15 @@ public:
 		ACTIVATE = 2
 	};
 
+	enum HIGHLIGHT_TYPE {
+		HIGHLIGHT_NORMAL = 0,
+		HIGHLIGHT_POWER_MENU,
+	};
+
 	static const int NO_ICON = -1;
 	static const int NO_OVERLAY = -1;
 
-	explicit WidgetSlot(int _icon_id);
+	explicit WidgetSlot(int _icon_id, int highlight_type);
 	~WidgetSlot();
 
 	void setPos(int offset_x, int offset_y);
@@ -73,12 +81,17 @@ public:
 	void setAmount(int _amount, int _max_amount);
 	void setHotkey(int key);
 	void render();
-	void renderSelection();
 
 	bool enabled;
 	bool continuous;	// allow holding key to keep slot activated
 
 	bool visible;
+
+	float cooldown; // normalized
+	bool highlight;
+
+	bool show_disabled_overlay;
+	bool show_colorblind_highlight;
 };
 
 #endif

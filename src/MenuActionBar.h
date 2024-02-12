@@ -46,8 +46,6 @@ private:
 	void setItemCount(unsigned index, int count, bool is_equipped);
 
 	Sprite *sprite_emptyslot;
-	Sprite *sprite_disabled;
-	Sprite *sprite_attention;
 
 	Rect src;
 
@@ -115,10 +113,8 @@ public:
 	WidgetSlot *menus[MENU_COUNT]; // menu buttons
 	std::string menu_titles[MENU_COUNT];
 	std::vector<int> slot_item_count; // -1 means this power isn't item based.  0 means out of items.  1+ means sufficient items.
-	std::vector<bool> slot_enabled;
 	bool requires_attention[MENU_COUNT];
 	std::vector<bool> slot_activated;
-	std::vector<int> slot_cooldown_size;
 
 	int drag_prev_slot;
 	bool updated;

@@ -116,8 +116,6 @@ int MenuPowersCellGroup::getBonusLevels() {
 
 MenuPowers::MenuPowers()
 	: skip_section(false)
-	, powers_unlock(NULL)
-	, overlay_disabled(NULL)
 	, points_left(0)
 	, default_background("")
 	, label_powers(new WidgetLabel)
@@ -169,9 +167,6 @@ MenuPowers::MenuPowers()
 }
 
 MenuPowers::~MenuPowers() {
-	if (powers_unlock) delete powers_unlock;
-	if (overlay_disabled) delete overlay_disabled;
-
 	for (size_t i=0; i<tree_surf.size(); i++) {
 		if (tree_surf[i]) delete tree_surf[i];
 	}
@@ -218,23 +213,8 @@ void MenuPowers::align() {
 }
 
 void MenuPowers::loadGraphics() {
-
-	Image *graphics;
-
 	if (!background)
 		setBackground("images/menus/powers.png");
-
-	graphics = render_device->loadImage("images/menus/powers_unlock.png", RenderDevice::ERROR_NORMAL);
-	if (graphics) {
-		powers_unlock = graphics->createSprite();
-		graphics->unref();
-	}
-
-	graphics = render_device->loadImage("images/menus/disabled.png", RenderDevice::ERROR_NORMAL);
-	if (graphics) {
-		overlay_disabled = graphics->createSprite();
-		graphics->unref();
-	}
 }
 
 /**
@@ -350,7 +330,7 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 	// create power slots
 	for (size_t i=0; i<slots.size(); i++) {
 		if (!power_cell[i].cells.empty() && powers->isValid(power_cell[i].cells[0].id)) {
-			slots[i] = new WidgetSlot(powers->powers[power_cell[i].cells[0].id]->icon);
+			slots[i] = new WidgetSlot(powers->powers[power_cell[i].cells[0].id]->icon, WidgetSlot::HIGHLIGHT_POWER_MENU);
 			slots[i]->setBasePos(power_cell[i].pos.x, power_cell[i].pos.y, Utils::ALIGN_TOPLEFT);
 
 			if (!tablist_pow.empty()) {
@@ -1412,46 +1392,32 @@ void MenuPowers::renderPowers(int tab_num) {
 		if (!slot_cell || !isCellVisible(slot_cell))
 			continue;
 
-		if (slots[i])
+		if (slots[i]) {
+			slots[i]->enabled = true;
+
+			// highlighting
+			if (checkUnlocked(slot_cell)) {
+				int selected_slot = -1;
+				if (isTabListSelected()) {
+					selected_slot = getSelectedCellIndex();
+				}
+
+				if (selected_slot == static_cast<int>(i))
+					continue;
+
+				slots[i]->highlight = true;
+			}
+			else {
+				slots[i]->highlight = false;
+				slots[i]->enabled = false;
+			}
+
 			slots[i]->render();
+		}
 
 		// upgrade buttons
 		if (power_cell[i].upgrade_button)
 			power_cell[i].upgrade_button->render();
-
-		// highlighting
-		if (checkUnlocked(slot_cell)) {
-			Rect src_unlock;
-
-			src_unlock.x = 0;
-			src_unlock.y = 0;
-			src_unlock.w = eset->resolutions.icon_size;
-			src_unlock.h = eset->resolutions.icon_size;
-
-			int selected_slot = -1;
-			if (isTabListSelected()) {
-				selected_slot = getSelectedCellIndex();
-			}
-
-			if (selected_slot == static_cast<int>(i))
-				continue;
-
-			if (powers_unlock && slots[i]) {
-				powers_unlock->setClipFromRect(src_unlock);
-				powers_unlock->setDestFromRect(slots[i]->pos);
-				render_device->render(powers_unlock);
-			}
-		}
-		else {
-			if (overlay_disabled && slots[i]) {
-				overlay_disabled->setClipFromRect(disabled_src);
-				overlay_disabled->setDestFromRect(slots[i]->pos);
-				render_device->render(overlay_disabled);
-			}
-		}
-
-		if (slots[i])
-			slots[i]->renderSelection();
 	}
 }
 

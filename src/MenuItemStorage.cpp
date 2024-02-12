@@ -40,9 +40,7 @@ MenuItemStorage::MenuItemStorage()
 	, drag_prev_slot(-1)
 	, slots()
 	, current_slot(NULL)
-	, highlight()
-	, highlight_image(NULL)
-	, overlay_disabled(NULL) {
+{
 }
 
 void MenuItemStorage::initGrid(int _slot_number, const Rect& _area, int _nb_cols) {
@@ -51,36 +49,28 @@ void MenuItemStorage::initGrid(int _slot_number, const Rect& _area, int _nb_cols
 	grid_pos.x = _area.x;
 	grid_pos.y = _area.y;
 	for (int i = 0; i < _slot_number; i++) {
-		WidgetSlot *slot = new WidgetSlot(WidgetSlot::NO_ICON);
+		WidgetSlot *slot = new WidgetSlot(WidgetSlot::NO_ICON, WidgetSlot::HIGHLIGHT_NORMAL);
 		slots.push_back(slot);
 	}
 	nb_cols = _nb_cols;
-	highlight.resize(_slot_number);
 	for (int i=0; i<_slot_number; i++) {
-		highlight[i] = false;
 		slots[i]->pos.x = grid_area.x + (i % nb_cols * eset->resolutions.icon_size);
 		slots[i]->pos.y = grid_area.y + (i / nb_cols * eset->resolutions.icon_size);
 		slots[i]->pos.h = slots[i]->pos.w = eset->resolutions.icon_size;
 		slots[i]->setBasePos(slots[i]->pos.x, slots[i]->pos.y, Utils::ALIGN_TOPLEFT);
 	}
-	loadGraphics();
 }
 
 void MenuItemStorage::initFromList(int _slot_number, const std::vector<Rect>& _area, const std::vector<std::string>& _slot_type) {
 	ItemStorage::init( _slot_number);
 	for (int i = 0; i < _slot_number; i++) {
-		WidgetSlot *slot = new WidgetSlot(WidgetSlot::NO_ICON);
+		WidgetSlot *slot = new WidgetSlot(WidgetSlot::NO_ICON, WidgetSlot::HIGHLIGHT_NORMAL);
 		slot->pos = _area[i];
 		slot->setBasePos(slot->pos.x, slot->pos.y, Utils::ALIGN_TOPLEFT);
 		slots.push_back(slot);
 	}
 	nb_cols = 0;
 	slot_type = _slot_type;
-	highlight.resize(_slot_number);
-	for (int i=0; i<_slot_number; i++) {
-		highlight[i] = false;
-	}
-	loadGraphics();
 }
 
 void MenuItemStorage::setPos(int x, int y) {
@@ -93,27 +83,7 @@ void MenuItemStorage::setPos(int x, int y) {
 	}
 }
 
-void MenuItemStorage::loadGraphics() {
-	Image *graphics;
-	graphics = render_device->loadImage("images/menus/attention_glow.png", RenderDevice::ERROR_NORMAL);
-	if (graphics) {
-		highlight_image = graphics->createSprite();
-		graphics->unref();
-	}
-
-	graphics = render_device->loadImage("images/menus/disabled.png", RenderDevice::ERROR_NORMAL);
-	if (graphics) {
-		overlay_disabled = graphics->createSprite();
-		graphics->unref();
-	}
-
-}
-
 void MenuItemStorage::render() {
-	Rect disabled_src;
-	disabled_src.x = disabled_src.y = 0;
-	disabled_src.w = disabled_src.h = eset->resolutions.icon_size;
-
 	for (int i=0; i<slot_number; i++) {
 		if (items->isValid(storage[i].item)) {
 			slots[i]->setIcon(items->items[storage[i].item]->icon, items->getItemIconOverlay(storage[i].item));
@@ -123,19 +93,6 @@ void MenuItemStorage::render() {
 			slots[i]->setIcon(WidgetSlot::NO_ICON, WidgetSlot::NO_OVERLAY);
 		}
 		slots[i]->render();
-		if (!slots[i]->enabled) {
-			if (overlay_disabled) {
-				overlay_disabled->setClipFromRect(disabled_src);
-				overlay_disabled->setDestFromRect(slots[i]->pos);
-				render_device->render(overlay_disabled);
-			}
-		}
-		if (highlight[i] && !slots[i]->in_focus) {
-			if (highlight_image) {
-				highlight_image->setDestFromRect(slots[i]->pos);
-				render_device->render(highlight_image);
-			}
-		}
 	}
 }
 
@@ -221,13 +178,13 @@ void MenuItemStorage::itemReturn(ItemStack stack) {
 void MenuItemStorage::highlightMatching(ItemID item_id) {
 	for (int i=0; i<slot_number; i++) {
 		if (slots[i]->visible && items->isValid(item_id) && slot_type[i] == items->items[item_id]->type)
-			highlight[i] = true;
+			slots[i]->highlight = true;
 	}
 }
 
 void MenuItemStorage::highlightClear() {
 	for (int i=0; i<slot_number; i++) {
-		highlight[i] = false;
+		slots[i]->highlight = false;
 	}
 }
 
@@ -240,12 +197,7 @@ ItemStack MenuItemStorage::getItemStackAtPos(const Point& position) {
 }
 
 MenuItemStorage::~MenuItemStorage() {
-	if (highlight_image)
-		delete highlight_image;
-
-	if (overlay_disabled)
-		delete overlay_disabled;
-
-	for (unsigned i=0; i<slots.size(); i++)
+	for (size_t i = 0; i < slots.size(); ++i) {
 		delete slots[i];
+	}
 }

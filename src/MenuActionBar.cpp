@@ -56,8 +56,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 MenuActionBar::MenuActionBar()
 	: sprite_emptyslot(NULL)
-	, sprite_disabled(NULL)
-	, sprite_attention(NULL)
 	, sfx_unable_to_cast(0)
 	, tooltip_length(MenuPowers::TOOLTIP_LONG_MENU)
 	, slots_count(0)
@@ -73,8 +71,9 @@ MenuActionBar::MenuActionBar()
 	tablist.lock();
 
 	for (unsigned i=0; i<MENU_COUNT; i++) {
-		menus[i] = new WidgetSlot(WidgetSlot::NO_ICON);
+		menus[i] = new WidgetSlot(WidgetSlot::NO_ICON, WidgetSlot::HIGHLIGHT_NORMAL);
 		menus[i]->setHotkey(Input::CHARACTER + i);
+		menus[i]->show_colorblind_highlight = true;
 
 		// NOTE: This prevents these buttons from being clickable unless they get defined in the config file.
 		// However, it doesn't prevent them from being added to the tablist, so they can still be activated there despite being invisible
@@ -184,9 +183,7 @@ MenuActionBar::MenuActionBar()
 	hotkeys_mod.resize(slots_count);
 	locked.resize(slots_count);
 	slot_item_count.resize(slots_count);
-	slot_enabled.resize(slots_count);
 	slot_activated.resize(slots_count);
-	slot_cooldown_size.resize(slots_count);
 	slot_fail_cooldown.resize(slots_count);
 
 	clear(!MenuActionBar::CLEAR_SKIP_ITEMS);
@@ -207,7 +204,7 @@ void MenuActionBar::addSlot(unsigned index, int x, int y, bool is_locked) {
 		slots.resize(index+1, NULL);
 	}
 
-	slots[index] = new WidgetSlot(WidgetSlot::NO_ICON);
+	slots[index] = new WidgetSlot(WidgetSlot::NO_ICON, WidgetSlot::HIGHLIGHT_NORMAL);
 	slots[index]->setBasePos(x, y, Utils::ALIGN_TOPLEFT);
 	slots[index]->pos.w = slots[index]->pos.h = eset->resolutions.icon_size;
 	slots[index]->continuous = true;
@@ -271,11 +268,11 @@ void MenuActionBar::clear(bool skip_items) {
 		hotkeys_temp[i] = 0;
 		hotkeys_mod[i] = 0;
 		slot_item_count[i] = -1;
-		slot_enabled[i] = true;
 		locked[i] = false;
 		slot_activated[i] = false;
-		slot_cooldown_size[i] = 0;
 		slot_fail_cooldown[i] = 0;
+
+		slots[i]->enabled = true;
 	}
 
 	// clear menu notifications
@@ -298,19 +295,6 @@ void MenuActionBar::loadGraphics() {
 	if (graphics) {
 		sprite_emptyslot = graphics->createSprite();
 		sprite_emptyslot->setClipFromRect(icon_clip);
-		graphics->unref();
-	}
-
-	graphics = render_device->loadImage("images/menus/disabled.png", RenderDevice::ERROR_NORMAL);
-	if (graphics) {
-		sprite_disabled = graphics->createSprite();
-		sprite_disabled->setClipFromRect(icon_clip);
-		graphics->unref();
-	}
-
-	graphics = render_device->loadImage("images/menus/attention_glow.png", RenderDevice::ERROR_NORMAL);
-	if (graphics) {
-		sprite_attention = graphics->createSprite();
 		graphics->unref();
 	}
 }
@@ -375,7 +359,7 @@ void MenuActionBar::logic() {
 			}
 
 			//see if the slot should be greyed out
-			slot_enabled[i] = pc->power_cooldown_timers[hotkeys_mod[i]]->isEnd()
+			slots[i]->enabled = pc->power_cooldown_timers[hotkeys_mod[i]]->isEnd()
 							  && pc->power_cast_timers[hotkeys_mod[i]]->isEnd()
 							  && pc->stats.canUsePower(hotkeys_mod[i], !StatBlock::CAN_USE_PASSIVE)
 							  && (twostep_slot == -1 || static_cast<unsigned>(twostep_slot) == i);
@@ -383,15 +367,19 @@ void MenuActionBar::logic() {
 			slots[i]->setIcon(power->icon, WidgetSlot::NO_OVERLAY);
 
 			if (!pc->power_cast_timers[hotkeys_mod[i]]->isEnd() && pc->power_cast_timers[hotkeys_mod[i]]->getDuration() > 0) {
-				slot_cooldown_size[i] = (eset->resolutions.icon_size * pc->power_cast_timers[hotkeys_mod[i]]->getCurrent()) / pc->power_cast_timers[hotkeys_mod[i]]->getDuration();
+				slots[i]->cooldown = static_cast<float>(pc->power_cast_timers[hotkeys_mod[i]]->getCurrent()) / static_cast<float>(pc->power_cast_timers[hotkeys_mod[i]]->getDuration());
 			}
 			else if (!pc->power_cooldown_timers[hotkeys_mod[i]]->isEnd() && pc->power_cooldown_timers[hotkeys_mod[i]]->getDuration() > 0) {
-				slot_cooldown_size[i] = (eset->resolutions.icon_size * pc->power_cooldown_timers[hotkeys_mod[i]]->getCurrent()) / pc->power_cooldown_timers[hotkeys_mod[i]]->getDuration();
+				slots[i]->cooldown = static_cast<float>(pc->power_cooldown_timers[hotkeys_mod[i]]->getCurrent()) / static_cast<float>(pc->power_cooldown_timers[hotkeys_mod[i]]->getDuration());
+			}
+			else {
+				slots[i]->cooldown = 1;
 			}
 		}
 		else {
-			slot_enabled[i] = true;
-			slot_cooldown_size[i] = (slot_enabled[i] ? 0 : eset->resolutions.icon_size);;
+			// no valid power, so treat the slot as empty
+			slots[i]->enabled = true;
+			slots[i]->cooldown = 0;
 		}
 
 		if (slot_fail_cooldown[i] > 0)
@@ -412,54 +400,18 @@ void MenuActionBar::render() {
 			slots[i]->render();
 		}
 		else {
+			// TODO move this to WidgetSlot?
 			if (sprite_emptyslot) {
 				sprite_emptyslot->setDestFromRect(slots[i]->pos);
 				render_device->render(sprite_emptyslot);
 			}
 		}
-
-		// render cooldown/disabled overlay
-		if (!slot_enabled[i]) {
-			Rect clip;
-			clip.x = clip.y = 0;
-			clip.w = clip.h = eset->resolutions.icon_size;
-
-			// Wipe from bottom to top
-			if (twostep_slot == -1 || static_cast<unsigned>(twostep_slot) == i) {
-				clip.h = slot_cooldown_size[i];
-			}
-
-			if (sprite_disabled && clip.h > 0) {
-				sprite_disabled->setClipFromRect(clip);
-				sprite_disabled->setDestFromRect(slots[i]->pos);
-				render_device->render(sprite_disabled);
-			}
-		}
-
-		slots[i]->renderSelection();
 	}
 
 	// render primary menu buttons
 	for (unsigned i=0; i<MENU_COUNT; i++) {
+		menus[i]->highlight = (requires_attention[i] && !menus[i]->in_focus);
 		menus[i]->render();
-
-		if (requires_attention[i] && !menus[i]->in_focus) {
-			Rect dest;
-
-			if (sprite_attention) {
-				sprite_attention->setDestFromRect(menus[i]->pos);
-				render_device->render(sprite_attention);
-			}
-
-			// put an asterisk on this icon if in colorblind mode
-			if (settings->colorblind) {
-				WidgetLabel label;
-				label.setPos(menus[i]->pos.x + eset->widgets.colorblind_highlight_offset.x, menus[i]->pos.y + eset->widgets.colorblind_highlight_offset.y);
-				label.setText("*");
-				label.setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
-				label.render();
-			}
-		}
 	}
 }
 
@@ -587,7 +539,7 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 			if (powers->isValid(action.power)) {
 				const Power* power = powers->powers[action.power];
 				if (power->starting_pos == Power::STARTING_POS_TARGET || power->buff_teleport) {
-					if (slot_enabled[i]) {
+					if (slots[i]->enabled) {
 						twostep_slot = i;
 						action.power = 0;
 					}
@@ -649,7 +601,7 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 				continue;
 			}
 
-			if (!slot_enabled[i]) {
+			if (!slots[i]->enabled) {
 				continue;
 			}
 
@@ -802,7 +754,7 @@ void MenuActionBar::setItemCount(unsigned index, int count, bool is_equipped) {
 		if (slot_activated[index])
 			slots[index]->deactivate();
 
-		slot_enabled[index] = false;
+		slots[index]->enabled = false;
 	}
 
 	if (is_equipped)
@@ -912,12 +864,7 @@ WidgetSlot* MenuActionBar::getSlotFromPosition(const Point& position) {
 MenuActionBar::~MenuActionBar() {
 
 	menu_act = NULL;
-	if (sprite_emptyslot)
-		delete sprite_emptyslot;
-	if (sprite_disabled)
-		delete sprite_disabled;
-	if (sprite_attention)
-		delete sprite_attention;
+	delete sprite_emptyslot;
 
 	labels.clear();
 	menu_labels.clear();

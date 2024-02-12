@@ -29,13 +29,16 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "IconManager.h"
 #include "InputState.h"
 #include "RenderDevice.h"
+#include "Settings.h"
 #include "SharedResources.h"
 #include "Utils.h"
 #include "WidgetSlot.h"
 
-WidgetSlot::WidgetSlot(int _icon_id)
+WidgetSlot::WidgetSlot(int _icon_id, int highlight_type)
 	: Widget()
 	, slot_selected(NULL)
+	, slot_highlight(NULL)
+	, slot_disabled(NULL)
 	, label_amount_bg(NULL)
 	, label_hotkey_bg(NULL)
 	, icon_id(_icon_id)
@@ -48,11 +51,18 @@ WidgetSlot::WidgetSlot(int _icon_id)
 	, enabled(true)
 	, continuous(false)
 	, visible(true)
+	, cooldown(1)
+	, highlight(false)
+	, show_disabled_overlay(true)
+	, show_colorblind_highlight(false)
 {
 	label_amount.setFromLabelInfo(eset->widgets.slot_quantity_label);
 	label_amount.setColor(eset->widgets.slot_quantity_color);
 	label_hotkey.setFromLabelInfo(eset->widgets.slot_hotkey_label);
 	label_hotkey.setColor(eset->widgets.slot_hotkey_color);
+
+	label_colorblind_highlight.setText("*");
+	label_colorblind_highlight.setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
 	// in case the hotkey string is long (we only have a fixed set of short keynames), keep the label width to the icon size
 	// TODO should this be done for the quantity as well?
@@ -63,19 +73,31 @@ WidgetSlot::WidgetSlot(int _icon_id)
 	Rect src;
 	src.x = src.y = 0;
 
-	std::string selected_filename;
-
 	pos.w = eset->resolutions.icon_size;
 	pos.h = eset->resolutions.icon_size;
 	src.w = src.h = eset->resolutions.icon_size;
 
-	selected_filename = "images/menus/slot_selected.png";
-
 	Image *graphics;
-	graphics = render_device->loadImage(selected_filename, RenderDevice::ERROR_NORMAL);
+	graphics = render_device->loadImage("images/menus/slot_selected.png", RenderDevice::ERROR_NORMAL);
 	if (graphics) {
 		slot_selected = graphics->createSprite();
 		slot_selected->setClipFromRect(src);
+		graphics->unref();
+	}
+
+	if (highlight_type == HIGHLIGHT_POWER_MENU)
+		graphics = render_device->loadImage("images/menus/powers_unlock.png", RenderDevice::ERROR_NORMAL);
+	else // HIGHLIGHT_NORMAL
+		graphics = render_device->loadImage("images/menus/attention_glow.png", RenderDevice::ERROR_NORMAL);
+
+	if (graphics) {
+		slot_highlight = graphics->createSprite();
+		graphics->unref();
+	}
+
+	graphics = render_device->loadImage("images/menus/disabled.png", RenderDevice::ERROR_NORMAL);
+	if (graphics) {
+		slot_disabled = graphics->createSprite();
 		graphics->unref();
 	}
 }
@@ -241,6 +263,7 @@ void WidgetSlot::render() {
 
 	Rect src;
 
+	// icon/overlay/quantity
 	if (icon_id != -1 && icons) {
 		icons->setIcon(icon_id, Point(pos.x, pos.y));
 		icons->render();
@@ -256,6 +279,8 @@ void WidgetSlot::render() {
 			label_amount.render();
 		}
 	}
+
+	// hotkey hint
 	if (hotkey != -1) {
 		// reload the hotkey label if keybindings have changed
 		if (inpt->refresh_hotkeys)
@@ -265,18 +290,41 @@ void WidgetSlot::render() {
 			render_device->render(label_hotkey_bg);
 		label_hotkey.render();
 	}
-	renderSelection();
-}
 
-/**
- * We can use this function if slot is grayed out to refresh selection frame
- */
-void WidgetSlot::renderSelection() {
-	if (!visible) return;
+	// disabled/cooldown tint
+	if (show_disabled_overlay && (!enabled || cooldown < 1)) {
+		Rect clip;
+		clip.x = clip.y = 0;
+		clip.w = clip.h = eset->resolutions.icon_size;
 
+		// Wipe from bottom to top
+		if (cooldown > 0) {
+			clip.h = static_cast<int>(static_cast<float>(eset->resolutions.icon_size) * cooldown);
+		}
+
+		if (slot_disabled && clip.h > 0) {
+			slot_disabled->setClipFromRect(clip);
+			slot_disabled->setDestFromRect(pos);
+			render_device->render(slot_disabled);
+		}
+	}
+
+	// matching/attention highlight
+	if (highlight) {
+		if (slot_highlight) {
+			slot_highlight->setDestFromRect(pos);
+			render_device->render(slot_highlight);
+		}
+
+		// put an asterisk on this icon if in colorblind mode
+		if (show_colorblind_highlight && settings->colorblind) {
+			label_colorblind_highlight.setPos(pos.x + eset->widgets.colorblind_highlight_offset.x, pos.y + eset->widgets.colorblind_highlight_offset.y);
+			label_colorblind_highlight.render();
+		}
+	}
+
+	// no-mouse navigation highlight
 	if (in_focus && slot_selected) {
-		slot_selected->local_frame = local_frame;
-		slot_selected->setOffset(local_offset);
 		slot_selected->setDestFromRect(pos);
 		render_device->render(slot_selected);
 	}
@@ -284,6 +332,8 @@ void WidgetSlot::renderSelection() {
 
 WidgetSlot::~WidgetSlot() {
 	delete slot_selected;
+	delete slot_highlight;
+	delete slot_disabled;
 	delete label_amount_bg;
 	delete label_hotkey_bg;
 }

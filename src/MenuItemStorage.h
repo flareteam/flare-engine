@@ -36,7 +36,6 @@ class WidgetSlot;
 
 class MenuItemStorage : public ItemStorage {
 protected:
-	void loadGraphics();
 	Rect grid_area;
 	Point grid_pos;
 	int nb_cols;
@@ -62,10 +61,6 @@ public:
 	int drag_prev_slot;
 	std::vector<WidgetSlot*> slots;
 	WidgetSlot *current_slot;
-
-	std::vector<bool> highlight;
-	Sprite *highlight_image;
-	Sprite *overlay_disabled;
 };
 
 #endif

@@ -135,8 +135,6 @@ private:
 	std::vector<MenuPowersCellGroup> power_cell;
 	bool skip_section;
 
-	Sprite *powers_unlock;
-	Sprite *overlay_disabled;
 	std::vector<Sprite *> tree_surf;
 	WidgetButton *closeButton;
 
