@@ -546,7 +546,12 @@ void ItemManager::loadItems(const std::string& filename) {
 
 		item->updateLevelScaling();
 	}
-	Utils::logInfo("ItemManager: Item IDs = %zu reserved / %zu allocated / %zu empty / %zu bytes used", items.size()-1, count_allocated, items.size()-1-count_allocated, (sizeof(Item*) * items.size()) + (sizeof(Item) * count_allocated));
+
+	size_t item_count = items.size() - 1;
+	if (items.empty())
+		item_count = 0;
+
+	Utils::logInfo("ItemManager: Item IDs = %zu reserved / %zu allocated / %zu empty / %zu bytes used", item_count, count_allocated, item_count-count_allocated, (sizeof(Item*) * items.size()) + (sizeof(Item) * count_allocated));
 
 	if (eset->loot.extended_items_offset < items.size()) {
 		eset->loot.extended_items_offset = items.size();
@@ -784,7 +789,12 @@ void ItemManager::loadSets(const std::string& filename) {
 		else
 			count_allocated++;
 	}
-	Utils::logInfo("ItemManager: Item Set IDs = %zu reserved / %zu allocated / %zu empty / %zu bytes used", item_sets.size()-1, count_allocated, item_sets.size()-1-count_allocated, (sizeof(ItemSet*) * item_sets.size()) + (sizeof(ItemSet) * count_allocated));
+
+	size_t item_set_count = item_sets.size() - 1;
+	if (item_sets.empty())
+		item_set_count = 0;
+
+	Utils::logInfo("ItemManager: Item Set IDs = %zu reserved / %zu allocated / %zu empty / %zu bytes used", item_set_count, count_allocated, item_set_count-count_allocated, (sizeof(ItemSet*) * item_sets.size()) + (sizeof(ItemSet) * count_allocated));
 }
 
 void ItemManager::parseBonus(BonusData& bdata, FileParser& infile) {
@@ -1665,6 +1675,9 @@ void ItemManager::loadExtendedItems(const std::string& filename) {
 		item->updateLevelScaling();
 	}
 	size_t extended_item_count = items.size() - eset->loot.extended_items_offset;
+	if (items.size() > eset->loot.extended_items_offset)
+		extended_item_count = 0;
+
 	Utils::logInfo("ItemManager: Extended Item IDs = %zu reserved / %zu allocated / %zu empty / %zu bytes used", extended_item_count, count_allocated, extended_item_count-count_allocated, (sizeof(Item*) * extended_item_count) + (sizeof(Item) * count_allocated));
 }
 
