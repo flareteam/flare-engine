@@ -156,7 +156,7 @@ void EngineSettings::Misc::load() {
 						save_onstash = SAVE_ONSTASH_NONE;
 				}
 			}
-			// @ATTR save_anywhere|bool|Saves the game when using a button.
+			// @ATTR save_anywhere|bool|Enables saving the game with a button in the pause menu.
 			else if (infile.key == "save_anywhere")
 				save_anywhere = Parse::toBool(infile.val);
 			// @ATTR camera_speed|float|Modifies how fast the camera moves to recenter on the player. Larger values mean a slower camera. Default value is 10.
