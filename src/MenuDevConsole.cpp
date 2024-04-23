@@ -613,8 +613,10 @@ void MenuDevConsole::execute() {
 	}
 	else if (args[0] == "set_shortcut") {
 		if (args.size() != 2) {
-			log_history->setNextColor(font->getColor(FontEngine::COLOR_MENU_PENALTY));
-			log_history->add(msg->get("ERROR: Incorrect number of arguments"), WidgetLog::MSG_UNIQUE);
+			log_history->add(msg->getv("3 | <%s> | %s", inpt->getBindingString(Input::DEVELOPER_CMD_3).c_str(), settings->dev_cmd_3.c_str()), WidgetLog::MSG_UNIQUE);
+			log_history->add(msg->getv("2 | <%s> | %s", inpt->getBindingString(Input::DEVELOPER_CMD_2).c_str(), settings->dev_cmd_2.c_str()), WidgetLog::MSG_UNIQUE);
+			log_history->add(msg->getv("1 | <%s> | %s", inpt->getBindingString(Input::DEVELOPER_CMD_1).c_str(), settings->dev_cmd_1.c_str()), WidgetLog::MSG_UNIQUE);
+			log_history->add(msg->get("Current shortcuts:"), WidgetLog::MSG_UNIQUE);
 			log_history->setNextColor(font->getColor(FontEngine::COLOR_MENU_BONUS));
 			log_history->add(msg->get("HINT:") + ' ' + args[0] + " [1-3]", WidgetLog::MSG_UNIQUE);
 		}
