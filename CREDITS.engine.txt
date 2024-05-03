@@ -72,6 +72,7 @@ Translations
 (uk) Ukrainian by Igor Paliychuk, Denis Lysenko, Микола Франчук, Sergiy Borodych
 (vi) Vietnamese by Nguyễn Gia Phong
 (zh) Chinese by lonsine, dumaosen, Issac Zhang
+(zh_TW) Chinese (Taiwan) by Benson
 
 Full Credits
 

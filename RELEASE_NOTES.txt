@@ -52,6 +52,7 @@ Translation updates:
 * Russian (ru) update (berry)
 * Swedish (sv) update (Kevin Setterborn)
 * Thai (Thailand) (th_TH) by Pattaraporn Tripiyaratana
+* Chinese (Taiwan) (zh_TW) by Benson
 
 
 
