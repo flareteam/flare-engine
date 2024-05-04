@@ -172,7 +172,7 @@ bool WidgetTooltip::createBuffer(TooltipData &tip) {
 	font->setFont("font_regular");
 
 	// calculate the full size to display a multi-line tooltip
-	Point size = font->calc_size(fulltext, eset->tooltips.width);
+	Point size = font->calc_size(fulltext, eset->tooltips.width - (eset->tooltips.margin*2));
 
 	// WARNING: dynamic memory allocation. Be careful of memory leaks.
 	if (sprite_buf) {
