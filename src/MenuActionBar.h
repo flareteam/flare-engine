@@ -59,6 +59,7 @@ private:
 	SoundID sfx_unable_to_cast;
 
 	int tooltip_length;
+	bool powers_overlap_slots;
 
 public:
 	enum {

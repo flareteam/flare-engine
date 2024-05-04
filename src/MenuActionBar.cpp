@@ -58,6 +58,7 @@ MenuActionBar::MenuActionBar()
 	: sprite_emptyslot(NULL)
 	, sfx_unable_to_cast(0)
 	, tooltip_length(MenuPowers::TOOLTIP_LONG_MENU)
+	, powers_overlap_slots(false)
 	, slots_count(0)
 	, drag_prev_slot(-1)
 	, updated(false)
@@ -165,6 +166,10 @@ MenuActionBar::MenuActionBar()
 					tooltip_length = MenuPowers::TOOLTIP_LONG_ALL;
 				else
 					infile.error("MenuActionBar: '%s' is not a valid tooltip_length setting.", infile.val.c_str());
+			}
+			// @ATTR powers_overlap_slots|bool|When true, the power icon is drawn on top of the empty slot graphic for any given slot. If false, the empty slot graphic will only be drawn if there's not a power in the slot. The default value is false.
+			else if (infile.key == "powers_overlap_slots") {
+				powers_overlap_slots = Parse::toBool(infile.val);
 			}
 
 			else infile.error("MenuActionBar: '%s' is not a valid key.", infile.key.c_str());
@@ -396,15 +401,15 @@ void MenuActionBar::render() {
 	for (unsigned i = 0; i < slots_count; i++) {
 		if (!slots[i]) continue;
 
-		if (hotkeys[i] != 0) {
-			slots[i]->render();
-		}
-		else {
+		if (hotkeys[i] == 0 || (powers_overlap_slots && slots[i]->enabled)) {
 			// TODO move this to WidgetSlot?
 			if (sprite_emptyslot) {
 				sprite_emptyslot->setDestFromRect(slots[i]->pos);
 				render_device->render(sprite_emptyslot);
 			}
+		}
+		if (hotkeys[i] != 0) {
+			slots[i]->render();
 		}
 	}
 

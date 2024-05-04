@@ -10,6 +10,7 @@ Engine features:
 * Added randomized items. Items can now be spawned with random level, quality, and bonus attributes.
 * Added 'default_zoom_level' property to menu/minimap.txt config.
 * Added support for developer mode command shortcuts.
+* Added 'powers_overlap_slots' to menu/actionbar.txt config.
 
 Engine fixes:
 
