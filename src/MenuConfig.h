@@ -318,6 +318,7 @@ public:
 	Point frame;
 	Point frame_offset;
 	Point tab_offset;
+	Point background_offset;
 	Rect scrollpane;
 	Color scrollpane_color;
 	Point scrollpane_padding;

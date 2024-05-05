@@ -228,6 +228,7 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	, frame(0,0)
 	, frame_offset(11,8)
 	, tab_offset(3,0)
+	, background_offset(0, tab_control->getTabHeight() - (tab_control->getTabHeight() / 16))
 	, scrollpane_color(0,0,0,0)
 	, scrollpane_padding(8, 40) // appropriate defaults for fantasycore widget sizes
 	, scrollpane_separator_color(font->getColor(FontEngine::COLOR_WIDGET_DISABLED))
@@ -618,6 +619,11 @@ bool MenuConfig::parseKey(FileParser &infile, int &x1, int &y1, int &x2, int &y2
 		// @ATTR tab_offset|point|Offset for the row of tabs.
 		tab_offset.x = x1;
 		tab_offset.y = y1;
+	}
+	else if (infile.key == "background_offset") {
+		// @ATTR background_offset|point|Offset of the background image. Defaults to a calculated value based on the tab height.
+		background_offset.x = x1;
+		background_offset.y = y1;
 	}
 	else if (infile.key == "activemods") {
 		// @ATTR activemods|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Active Mods" list box relative to the frame.
@@ -1331,10 +1337,9 @@ void MenuConfig::logicMods() {
 }
 
 void MenuConfig::render() {
-	int tabheight = tab_control->getTabHeight();
 	Rect pos;
-	pos.x = (settings->view_w - eset->resolutions.frame_w)/2;
-	pos.y = (settings->view_h - eset->resolutions.frame_h)/2 + tabheight - tabheight/16;
+	pos.x = (settings->view_w - eset->resolutions.frame_w)/2 + background_offset.x;
+	pos.y = (settings->view_h - eset->resolutions.frame_h)/2 + background_offset.y;
 
 	if (background) {
 		background->setDestFromRect(pos);
