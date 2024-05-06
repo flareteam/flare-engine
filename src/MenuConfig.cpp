@@ -1494,12 +1494,11 @@ void MenuConfig::refreshLanguages() {
 	if (infile.open("engine/languages.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		int i = 0;
 		while (infile.next()) {
-			std::string key = infile.key;
-			if (key != "") {
-				language_ISO.push_back(key);
+			if (!infile.key.empty()) {
+				language_ISO.push_back(infile.key);
 				language_lstb->append(infile.val, infile.val + " [" + infile.key + "]");
 
-				if (language_ISO.back() == settings->language) {
+				if (infile.key == settings->language) {
 					language_lstb->select(i);
 				}
 
@@ -1507,6 +1506,13 @@ void MenuConfig::refreshLanguages() {
 			}
 		}
 		infile.close();
+	}
+
+	// no languages found; include English by default
+	if (language_lstb->getSize() == 0) {
+		language_ISO.push_back("en");
+		language_lstb->append("English", "English [en]");
+		language_lstb->select(0);
 	}
 }
 

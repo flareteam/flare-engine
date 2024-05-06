@@ -27,17 +27,45 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "CommonIncludes.h"
+#include "FileParser.h"
 #include "GetText.h"
 #include "MessageEngine.h"
 #include "ModManager.h"
 #include "RenderDevice.h"
 #include "SharedResources.h"
 #include "Settings.h"
+#include "Utils.h"
 
 #include <stdarg.h>
 
 MessageEngine::MessageEngine() {
 	Utils::logInfo("MessageEngine: Using language '%s'", settings->language.c_str());
+
+	// check to see if the language setting is available in engine/languages.txt
+	FileParser config_file;
+	bool found_language = false;
+	std::string fallback_language = "";
+
+	if (config_file.open("engine/languages.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
+		while (config_file.next()) {
+			if (config_file.key == settings->language) {
+				found_language = true;
+				break;
+			}
+			if (fallback_language.empty() || config_file.key == "en")
+				fallback_language = config_file.key;
+		}
+		config_file.close();
+	}
+
+	if (fallback_language.empty())
+		fallback_language = "en";
+
+	if (!found_language && settings->language != fallback_language) {
+		Utils::logError("MessageEngine: Unable to find '%s' in engine/languages.txt. Falling back to '%s'.", settings->language.c_str(), fallback_language.c_str());
+		settings->language = fallback_language;
+	}
+
 
 	GetText infile;
 

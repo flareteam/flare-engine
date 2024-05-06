@@ -36,6 +36,7 @@ Engine fixes:
 * Fixed behavior of target_neighbor when a Power wasn't using 'starting_pos=source'.
 * Fixed Power target validity not respecting the 'movement_type' property.
 * Fixed a case where tooltip graphics showed an incorrect right border when the text area was too wide.
+* A fallback language is now selected when the desired language is not available in engine/languages.txt.
 * Fixed infinite INCLUDE recursion in FileParser.
 * Android: Fix 'Flare' directory not being automatically created.
 * Android: Added a dialog to direct the player to the wiki page for installing if no game data is found.
