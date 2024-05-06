@@ -70,7 +70,7 @@ Translations
 (sv) Swedish by Andreas Berheim Brudin, Kevin Setterborn
 (th_TH) Thai (Thailand) by Pattaraporn Tripiyaratana
 (uk) Ukrainian by Igor Paliychuk, Denis Lysenko, Микола Франчук, Sergiy Borodych
-(vi) Vietnamese by Nguyễn Gia Phong
+(vi) Vietnamese by Nguyễn Gia Phong, Đoàn Mỹ
 (zh) Chinese by lonsine, dumaosen, Issac Zhang
 (zh_TW) Chinese (Taiwan) by Benson
 

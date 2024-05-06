@@ -74,6 +74,7 @@ text=Christoph J. Thompson
 text=Christophe Nemo
 text=Denis Lysenko
 text=Diego J. Romero López
+text=Đoàn Mỹ
 text=dumaosen
 text=Elias Nykrem
 text=Emil
