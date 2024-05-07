@@ -609,7 +609,7 @@ void Avatar::logic() {
 						// so we block the player tile prematurely here
 						mapr->collider.block(stats.pos.x, stats.pos.y, !MapCollision::IS_ALLY);
 
-						powers->activate(current_power, &stats, act_target);
+						powers->activate(current_power, &stats, stats.pos, act_target);
 						power_cooldown_timers[current_power]->setDuration(powers->powers[current_power]->cooldown);
 
 						if (!stats.state_timer.isEnd())
@@ -800,7 +800,7 @@ void Avatar::logic() {
 					for (size_t j = 0; j < power->chain_powers.size(); ++j) {
 						const ChainPower& chain_power = power->chain_powers[j];
 						if (chain_power.type == ChainPower::TYPE_PRE && Math::percentChanceF(chain_power.chance)) {
-							powers->activate(chain_power.id, &stats, target);
+							powers->activate(chain_power.id, &stats, stats.pos, target);
 						}
 					}
 
@@ -810,14 +810,14 @@ void Avatar::logic() {
 							break;
 
 						case Power::STATE_INSTANT:	// handle instant powers
-							powers->activate(power_id, &stats, target);
+							powers->activate(power_id, &stats, stats.pos, target);
 							power_cooldown_timers[power_id]->setDuration(power->cooldown);
 							break;
 
 						default:
 							if (power->type == Power::TYPE_BLOCK) {
 								stats.cur_state = StatBlock::ENTITY_BLOCK;
-								powers->activate(power_id, &stats, target);
+								powers->activate(power_id, &stats, stats.pos, target);
 								stats.refresh_stats = true;
 							}
 							break;

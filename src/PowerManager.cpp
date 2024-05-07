@@ -100,6 +100,7 @@ Power::Power()
 	, walls_block_aoe(false)
 	, requires_corpse(false)
 	, remove_corpse(false)
+	, post_hazards_skip_target(false)
 
 	, spawn_limit_mode(SPAWN_LIMIT_MODE_UNLIMITED)
 
@@ -1109,6 +1110,10 @@ void PowerManager::loadPowers() {
 				slot_type = Parse::popFirstString(infile.val);
 			}
 		}
+		else if (infile.key == "post_hazards_skip_target") {
+			// @ATTR power.post_hazards_skip_target|bool|When this power's hazard hits a target, this property determines if hazards spawned by post_power can hit the same target.
+			power->post_hazards_skip_target = Parse::toBool(infile.val);
+		}
 
 		else infile.error("PowerManager: '%s' is not a valid key", infile.key.c_str());
 	}
@@ -1315,7 +1320,7 @@ bool PowerManager::hasValidTarget(PowerID power_index, StatBlock *src_stats, con
  * @param target Aim position in map coordinates
  * @param haz A newly-initialized hazard
  */
-void PowerManager::initHazard(PowerID power_index, StatBlock *src_stats, const FPoint& target, Hazard *haz) {
+void PowerManager::initHazard(PowerID power_index, StatBlock *src_stats, const FPoint& origin, const FPoint& target, Hazard *haz) {
 
 	//the hazard holds the statblock of its source
 	haz->src_stats = src_stats;
@@ -1350,7 +1355,7 @@ void PowerManager::initHazard(PowerID power_index, StatBlock *src_stats, const F
 	}
 
 	if (haz->power->directional) {
-		haz->animationKind = Utils::calcDirection(src_stats->pos.x, src_stats->pos.y, target.x, target.y);
+		haz->animationKind = Utils::calcDirection(origin.x, origin.y, target.x, target.y);
 	}
 	else if (haz->power->visual_random) {
 		haz->animationKind = rand() % haz->power->visual_random;
@@ -1367,13 +1372,13 @@ void PowerManager::initHazard(PowerID power_index, StatBlock *src_stats, const F
 
 	// hazard starting position
 	if (haz->power->starting_pos == Power::STARTING_POS_SOURCE) {
-		haz->pos = src_stats->pos;
+		haz->pos = origin;
 	}
 	else if (haz->power->starting_pos == Power::STARTING_POS_TARGET) {
-		haz->pos = Utils::clampDistance(haz->power->target_range,src_stats->pos,target);
+		haz->pos = Utils::clampDistance(haz->power->target_range, origin, target);
 	}
 	else if (haz->power->starting_pos == Power::STARTING_POS_MELEE) {
-		haz->pos = Utils::calcVector(src_stats->pos, src_stats->direction, src_stats->melee_range);
+		haz->pos = Utils::calcVector(origin, src_stats->direction, src_stats->melee_range);
 	}
 
 	if (haz->power->target_neighbor > 0) {
@@ -1382,6 +1387,7 @@ void PowerManager::initHazard(PowerID power_index, StatBlock *src_stats, const F
 
 	if (haz->power->relative_pos) {
 		haz->relative_pos = true;
+		// TODO use origin here?
 		haz->pos_offset.x = src_stats->pos.x - haz->pos.x;
 		haz->pos_offset.y = src_stats->pos.y - haz->pos.y;
 	}
@@ -1391,7 +1397,7 @@ void PowerManager::initHazard(PowerID power_index, StatBlock *src_stats, const F
  * Any attack-based effects are handled by hazards.
  * Self-enhancements (buffs) are handled by this function.
  */
-void PowerManager::buff(PowerID power_index, StatBlock *src_stats, const FPoint& target) {
+void PowerManager::buff(PowerID power_index, StatBlock *src_stats, const FPoint& origin, const FPoint& target) {
 	Power* power = powers[power_index];
 
 	// teleport to the target location
@@ -1435,7 +1441,7 @@ void PowerManager::buff(PowerID power_index, StatBlock *src_stats, const FPoint&
 			for (size_t i = 0; i < power->chain_powers.size(); ++i) {
 				ChainPower& chain_power = power->chain_powers[i];
 				if (chain_power.type == ChainPower::TYPE_POST && Math::percentChanceF(chain_power.chance)) {
-					activate(chain_power.id, src_stats, src_stats->pos);
+					activate(chain_power.id, src_stats, origin, src_stats->pos);
 				}
 			}
 		}
@@ -1546,14 +1552,14 @@ bool PowerManager::effect(StatBlock *target_stats, StatBlock *caster_stats, Powe
  * @param target The mouse cursor position in map coordinates
  * return boolean true if successful
  */
-bool PowerManager::fixed(PowerID power_index, StatBlock *src_stats, const FPoint& target) {
+bool PowerManager::fixed(PowerID power_index, StatBlock *src_stats, const FPoint& origin, const FPoint& target) {
 	Power* power = powers[power_index];
 
 	if (power->use_hazard) {
 		int delay_iterator = 0;
 		for (int i = 0; i < power->count; i++) {
 			Hazard *haz = new Hazard(collider);
-			initHazard(power_index, src_stats, target, haz);
+			initHazard(power_index, src_stats, origin, target, haz);
 
 			// add optional delay
 			haz->delay_frames = delay_iterator;
@@ -1564,7 +1570,7 @@ bool PowerManager::fixed(PowerID power_index, StatBlock *src_stats, const FPoint
 		}
 	}
 
-	buff(power_index, src_stats, target);
+	buff(power_index, src_stats, origin, target);
 
 	// If there's a sound effect, play it here
 	playSound(power_index);
@@ -1583,7 +1589,7 @@ bool PowerManager::fixed(PowerID power_index, StatBlock *src_stats, const FPoint
  * @param target The mouse cursor position in map coordinates
  * return boolean true if successful
  */
-bool PowerManager::missile(PowerID power_index, StatBlock *src_stats, const FPoint& target) {
+bool PowerManager::missile(PowerID power_index, StatBlock *src_stats, const FPoint& origin, const FPoint& target) {
 	Power* power = powers[power_index];
 
 	FPoint src;
@@ -1591,7 +1597,7 @@ bool PowerManager::missile(PowerID power_index, StatBlock *src_stats, const FPoi
 		src = target;
 	}
 	else {
-		src = src_stats->pos;
+		src = origin;
 	}
 
 	// calculate polar coordinates angle
@@ -1602,7 +1608,7 @@ bool PowerManager::missile(PowerID power_index, StatBlock *src_stats, const FPoi
 	//generate hazards
 	for (int i = 0; i < power->count; i++) {
 		Hazard *haz = new Hazard(collider);
-		initHazard(power_index, src_stats, target, haz);
+		initHazard(power_index, src_stats, origin, target, haz);
 
 		//calculate individual missile angle
 		float offset_angle = ((1.0f - static_cast<float>(power->count))/2 + static_cast<float>(i)) * (power->missile_angle * static_cast<float>(M_PI) / 180.0f);
@@ -1640,7 +1646,7 @@ bool PowerManager::missile(PowerID power_index, StatBlock *src_stats, const FPoi
 /**
  * Repeaters are multiple hazards that spawn in a straight line
  */
-bool PowerManager::repeater(PowerID power_index, StatBlock *src_stats, const FPoint& target) {
+bool PowerManager::repeater(PowerID power_index, StatBlock *src_stats, const FPoint& origin, const FPoint& target) {
 	Power* power = powers[power_index];
 
 	//initialize variables
@@ -1649,12 +1655,12 @@ bool PowerManager::repeater(PowerID power_index, StatBlock *src_stats, const FPo
 	int delay_iterator = 0;
 
 	// calculate polar coordinates angle
-	float theta = Utils::calcTheta(src_stats->pos.x, src_stats->pos.y, target.x, target.y);
+	float theta = Utils::calcTheta(origin.x, origin.y, target.x, target.y);
 
 	speed.x = power->speed * cosf(theta);
 	speed.y = power->speed * sinf(theta);
 
-	location_iterator = src_stats->pos;
+	location_iterator = origin;
 
 	Hazard* parent_haz = NULL;
 	for (int i = 0; i < power->count; i++) {
@@ -1668,7 +1674,7 @@ bool PowerManager::repeater(PowerID power_index, StatBlock *src_stats, const FPo
 		}
 
 		Hazard *haz = new Hazard(collider);
-		initHazard(power_index, src_stats, target, haz);
+		initHazard(power_index, src_stats, origin, target, haz);
 
 		haz->pos = location_iterator;
 		haz->delay_frames = delay_iterator;
@@ -1697,7 +1703,7 @@ bool PowerManager::repeater(PowerID power_index, StatBlock *src_stats, const FPo
 /**
  * Spawn a creature. Does not create a hazard
  */
-bool PowerManager::spawn(PowerID power_index, StatBlock *src_stats, const FPoint& target) {
+bool PowerManager::spawn(PowerID power_index, StatBlock *src_stats, const FPoint& origin, const FPoint& target) {
 	Power* power = powers[power_index];
 
 	Map_Enemy espawn;
@@ -1706,13 +1712,13 @@ bool PowerManager::spawn(PowerID power_index, StatBlock *src_stats, const FPoint
 
 	// enemy spawning position
 	if (power->starting_pos == Power::STARTING_POS_SOURCE) {
-		espawn.pos = src_stats->pos;
+		espawn.pos = origin;
 	}
 	else if (power->starting_pos == Power::STARTING_POS_TARGET) {
 		espawn.pos = target;
 	}
 	else if (power->starting_pos == Power::STARTING_POS_MELEE) {
-		espawn.pos = Utils::calcVector(src_stats->pos, src_stats->direction, src_stats->melee_range);
+		espawn.pos = Utils::calcVector(origin, src_stats->direction, src_stats->melee_range);
 	}
 
 	if (power->target_neighbor > 0) {
@@ -1721,7 +1727,7 @@ bool PowerManager::spawn(PowerID power_index, StatBlock *src_stats, const FPoint
 
 	if (!collider->isValidPosition(espawn.pos.x, espawn.pos.y, power->movement_type, MapCollision::ENTITY_COLLIDE_ALL)) {
 		// desired spawn point is blocked; try spawning next to the caster
-		espawn.pos = collider->getRandomNeighbor(Point(src_stats->pos), 1, power->movement_type, MapCollision::ENTITY_COLLIDE_ALL);
+		espawn.pos = collider->getRandomNeighbor(Point(origin), 1, power->movement_type, MapCollision::ENTITY_COLLIDE_ALL);
 	}
 
 	if (!collider->isValidPosition(espawn.pos.x, espawn.pos.y, power->movement_type, MapCollision::ENTITY_COLLIDE_ALL)) {
@@ -1729,7 +1735,7 @@ bool PowerManager::spawn(PowerID power_index, StatBlock *src_stats, const FPoint
 		return false;
 	}
 
-	espawn.direction = Utils::calcDirection(src_stats->pos.x, src_stats->pos.y, target.x, target.y);
+	espawn.direction = Utils::calcDirection(origin.x, origin.y, target.x, target.y);
 	espawn.summon_power_index = power_index;
 	espawn.hero_ally = src_stats->hero || src_stats->hero_ally;
 	espawn.enemy_ally = !src_stats->hero;
@@ -1741,7 +1747,7 @@ bool PowerManager::spawn(PowerID power_index, StatBlock *src_stats, const FPoint
 	}
 
 	// apply any buffs
-	buff(power_index, src_stats, target);
+	buff(power_index, src_stats, origin, target);
 
 	payPowerCost(power_index, src_stats);
 
@@ -1794,7 +1800,7 @@ bool PowerManager::transform(PowerID power_index, StatBlock *src_stats, const FP
 	}
 
 	// apply any buffs
-	buff(power_index, src_stats, target);
+	buff(power_index, src_stats, src_stats->pos, target);
 
 	src_stats->manual_untransform = power->manual_untransform;
 	src_stats->transform_with_equipment = power->keep_equipment;
@@ -1853,7 +1859,7 @@ PowerID PowerManager::checkReplaceByEffect(PowerID power_index, StatBlock *src_s
 /**
  * Activate is basically a switch/redirect to the appropriate function
  */
-bool PowerManager::activate(PowerID power_index, StatBlock *src_stats, const FPoint& target) {
+bool PowerManager::activate(PowerID power_index, StatBlock *src_stats, const FPoint& origin, const FPoint& target) {
 	if (!isValid(power_index))
 		return false;
 
@@ -1882,28 +1888,42 @@ bool PowerManager::activate(PowerID power_index, StatBlock *src_stats, const FPo
 		return block(power_index, src_stats);
 
 	if (power->script_trigger == Power::SCRIPT_TRIGGER_CAST) {
-		EventManager::executeScript(power->script, src_stats->pos.x, src_stats->pos.y);
+		EventManager::executeScript(power->script, origin.x, origin.y);
 	}
 
 	// check if we need to snap the target to one of the 8 directions
 	FPoint new_target = target;
 	if (power->lock_target_to_direction) {
-		float dist = Utils::calcDist(src_stats->pos, new_target);
-		int dir = Utils::calcDirection(src_stats->pos.x, src_stats->pos.y, new_target.x, new_target.y);
-		new_target = Utils::calcVector(src_stats->pos, dir, dist);
+		float dist = Utils::calcDist(origin, new_target);
+		int dir = Utils::calcDirection(origin.x, origin.y, new_target.x, new_target.y);
+		new_target = Utils::calcVector(origin, dir, dist);
+	}
+	else if (power->speed != 0) {
+		// power wants to move, but we have no direction
+		if (origin.x == target.x && origin.y == target.y) {
+			float dist = std::max(0.1f, src_stats->melee_range);
+			if (src_stats->pos.x == origin.x && src_stats->pos.y == origin.y) {
+				// starting from the caster's position, we can use the caster's direction
+				new_target = Utils::calcVector(origin, src_stats->direction, dist);
+			}
+			else {
+				// we have nothing to determine direction, so just pick a random one
+				new_target = Utils::calcVector(origin, rand() % 8, dist);
+			}
+		}
 	}
 
 	// logic for different types of powers are very different.  We allow these
 	// separate functions to handle the details.
 	switch (power->type) {
 		case Power::TYPE_FIXED:
-			return fixed(power_index, src_stats, new_target);
+			return fixed(power_index, src_stats, origin, new_target);
 		case Power::TYPE_MISSILE:
-			return missile(power_index, src_stats, new_target);
+			return missile(power_index, src_stats, origin, new_target);
 		case Power::TYPE_REPEATER:
-			return repeater(power_index, src_stats, new_target);
+			return repeater(power_index, src_stats, origin, new_target);
 		case Power::TYPE_SPAWN:
-			return spawn(power_index, src_stats, new_target);
+			return spawn(power_index, src_stats, origin, new_target);
 		case Power::TYPE_TRANSFORM:
 			return transform(power_index, src_stats, new_target);
 	}
@@ -2022,7 +2042,7 @@ bool PowerManager::activatePassiveByTrigger(PowerID power_id, StatBlock *src_sta
 			return false;
 		}
 
-		activate(power_id, src_stats, src_stats->pos);
+		activate(power_id, src_stats, src_stats->pos, src_stats->pos);
 		src_stats->refresh_stats = true;
 
 		for (size_t i = 0; i < power->chain_powers.size(); ++i) {
@@ -2050,7 +2070,7 @@ void PowerManager::activateSinglePassive(StatBlock *src_stats, PowerID id) {
 	if (!power->passive) return;
 
 	if (power->passive_trigger == -1) {
-		activate(id, src_stats, src_stats->pos);
+		activate(id, src_stats, src_stats->pos, src_stats->pos);
 		src_stats->refresh_stats = true;
 		src_stats->effects.triggered_others = true;
 
@@ -2081,7 +2101,7 @@ void PowerManager::activatePassivePostPowers(StatBlock *src_stats) {
 
 			if (src_stats->getPowerCooldown(chain_power.id) == 0 && src_stats->canUsePower(chain_power.id, !StatBlock::CAN_USE_PASSIVE)) {
 				if (Math::percentChanceF(chain_power.chance)) {
-					activate(chain_power.id, src_stats, src_stats->pos);
+					activate(chain_power.id, src_stats, src_stats->pos, src_stats->pos);
 					src_stats->setPowerCooldown(chain_power.id, powers[chain_power.id]->cooldown);
 				}
 			}

@@ -1374,7 +1374,7 @@ void MapRenderer::activatePower(PowerID power_index, unsigned statblock_index, c
 		// check power cooldown before activating
 		if (statblocks[statblock_index].powers_ai[0].cooldown.isEnd()) {
 			statblocks[statblock_index].powers_ai[0].cooldown.setDuration(powers->powers[power_index]->cooldown);
-			powers->activate(power_index, &statblocks[statblock_index], target);
+			powers->activate(power_index, &statblocks[statblock_index], statblocks[statblock_index].pos, target);
 		}
 	}
 	else {

@@ -12,6 +12,7 @@ Engine features:
 * Added support for developer mode command shortcuts.
 * Added 'powers_overlap_slots' to menu/actionbar.txt config.
 * Added 'background_offset' to menu/config.txt config.
+* Added 'post_hazards_skip_target' to Powers.
 
 Engine fixes:
 
@@ -37,6 +38,8 @@ Engine fixes:
 * Fixed Power target validity not respecting the 'movement_type' property.
 * Fixed a case where tooltip graphics showed an incorrect right border when the text area was too wide.
 * A fallback language is now selected when the desired language is not available in engine/languages.txt.
+* Fixed the origin point of post powers in some cases that would have them incorrectly use the caster's position otherwise.
+* Fixed the direction of moving powers when the origin and target are the same point.
 * Fixed infinite INCLUDE recursion in FileParser.
 * Android: Fix 'Flare' directory not being automatically created.
 * Android: Added a dialog to direct the player to the wiki page for installing if no game data is found.

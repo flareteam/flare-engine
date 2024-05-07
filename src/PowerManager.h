@@ -222,6 +222,7 @@ public:
 	bool walls_block_aoe;
 	bool requires_corpse;
 	bool remove_corpse;
+	bool post_hazards_skip_target;
 
 	uint8_t spawn_limit_mode;
 
@@ -319,14 +320,14 @@ private:
 	bool isValidEffect(const std::string& type);
 	int loadSFX(const std::string& filename);
 
-	void initHazard(PowerID power_index, StatBlock *src_stats, const FPoint& target, Hazard *haz);
-	void buff(PowerID power_index, StatBlock *src_stats, const FPoint& target);
+	void initHazard(PowerID power_index, StatBlock *src_stats, const FPoint& origin, const FPoint& target, Hazard *haz);
+	void buff(PowerID power_index, StatBlock *src_stats, const FPoint& origin, const FPoint& target);
 	void playSound(PowerID power_index);
 
-	bool fixed(PowerID power_index, StatBlock *src_stats, const FPoint& target);
-	bool missile(PowerID power_index, StatBlock *src_stats, const FPoint& target);
-	bool repeater(PowerID power_index, StatBlock *src_stats, const FPoint& target);
-	bool spawn(PowerID power_index, StatBlock *src_stats, const FPoint& target);
+	bool fixed(PowerID power_index, StatBlock *src_stats, const FPoint& origin, const FPoint& target);
+	bool missile(PowerID power_index, StatBlock *src_stats, const FPoint& origin, const FPoint& target);
+	bool repeater(PowerID power_index, StatBlock *src_stats, const FPoint& origin, const FPoint& target);
+	bool spawn(PowerID power_index, StatBlock *src_stats, const FPoint& origin, const FPoint& target);
 	bool transform(PowerID power_index, StatBlock *src_stats, const FPoint& target);
 	bool block(PowerID power_index, StatBlock *src_stats);
 
@@ -346,7 +347,7 @@ public:
 	bool isValid(PowerID power_id);
 
 	void handleNewMap(MapCollision *_collider);
-	bool activate(PowerID power_index, StatBlock *src_stats, const FPoint& target);
+	bool activate(PowerID power_index, StatBlock *src_stats, const FPoint& origin, const FPoint& target);
 	bool canUsePower(PowerID id) const;
 	bool hasValidTarget(PowerID power_index, StatBlock *src_stats, const FPoint& target);
 	bool effect(StatBlock *target_stats, StatBlock *caster_stats, PowerID power_index, int source_type);

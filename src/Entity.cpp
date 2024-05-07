@@ -34,6 +34,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Entity.h"
 #include "EntityBehavior.h"
 #include "Hazard.h"
+#include "HazardManager.h"
 #include "MapRenderer.h"
 #include "MessageEngine.h"
 #include "PowerManager.h"
@@ -611,7 +612,25 @@ bool Entity::takeHit(Hazard &h) {
 		for (size_t i = 0; i < h.power->chain_powers.size(); ++i) {
 			ChainPower& chain_power = h.power->chain_powers[i];
 			if (chain_power.type == ChainPower::TYPE_POST && Math::percentChanceF(chain_power.chance)) {
-				powers->activate(chain_power.id, h.src_stats, stats.pos);
+				size_t hazard_count = hazards->h.size();
+				if (h.power->post_hazards_skip_target) {
+					// calling this here clears the powers->hazards queue
+					// it's important that we clear the queue first
+					// we'll be using it to determine which hazards are added by the post power
+					hazards->checkNewHazards();
+				}
+
+				powers->activate(chain_power.id, h.src_stats, stats.pos, stats.pos);
+
+				if (h.power->post_hazards_skip_target) {
+					// populate powers->hazards with any new hazards created by the post power
+					hazards->checkNewHazards();
+					if (hazards->h.size() > hazard_count) {
+						for (size_t j = hazard_count-1; j < hazards->h.size(); ++j) {
+							hazards->h[j]->addEntity(this);
+						}
+					}
+				}
 			}
 		}
 	}
@@ -680,7 +699,7 @@ bool Entity::takeHit(Hazard &h) {
 			for (size_t i = 0; i < block_power->chain_powers.size(); ++i) {
 				ChainPower& chain_power = block_power->chain_powers[i];
 				if (chain_power.type == ChainPower::TYPE_POST && stats.getPowerCooldown(chain_power.id) == 0 && Math::percentChanceF(chain_power.chance)) {
-					powers->activate(chain_power.id, &stats, stats.pos);
+					powers->activate(chain_power.id, &stats, stats.pos, stats.pos);
 					stats.setPowerCooldown(chain_power.id, powers->powers[chain_power.id]->cooldown);
 				}
 			}

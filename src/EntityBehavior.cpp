@@ -224,7 +224,7 @@ void EntityBehavior::findTarget() {
 		if (!e->stats.hero_ally) {
 			ai_power = e->stats.getAIPower(StatBlock::AI_POWER_BEACON);
 			if (ai_power != NULL) {
-				powers->activate(ai_power->id, &e->stats, e->stats.pos); //emit beacon
+				powers->activate(ai_power->id, &e->stats, e->stats.pos, e->stats.pos); //emit beacon
 			}
 		}
 
@@ -736,7 +736,7 @@ void EntityBehavior::updateState() {
 				for (size_t i = 0; i < epower->chain_powers.size(); ++i) {
 					ChainPower& chain_power = epower->chain_powers[i];
 					if (chain_power.type == ChainPower::TYPE_PRE && Math::percentChanceF(chain_power.chance)) {
-						powers->activate(chain_power.id, &e->stats, pursue_pos);
+						powers->activate(chain_power.id, &e->stats, e->stats.pos, pursue_pos);
 					}
 				}
 
@@ -755,7 +755,7 @@ void EntityBehavior::updateState() {
 			// if we're at the active frame of a power animation,
 			// activate the power and set the local and global cooldowns
 			if ((e->activeAnimation->isActiveFrame() || instant_power) && !e->stats.hold_state) {
-				powers->activate(power_id, &e->stats, pursue_pos);
+				powers->activate(power_id, &e->stats, e->stats.pos, pursue_pos);
 
 				// set cooldown for all ai powers with the same power id
 				for (size_t i = 0; i < e->stats.powers_ai.size(); ++i) {
@@ -822,7 +822,7 @@ void EntityBehavior::updateState() {
 			if (e->activeAnimation->isSecondLastFrame()) {
 				StatBlock::AIPower* ai_power = e->stats.getAIPower(StatBlock::AI_POWER_DEATH);
 				if (ai_power != NULL)
-					powers->activate(ai_power->id, &e->stats, e->stats.pos);
+					powers->activate(ai_power->id, &e->stats, e->stats.pos, e->stats.pos);
 
 				e->stats.effects.clearEffects();
 			}
@@ -854,7 +854,7 @@ void EntityBehavior::updateState() {
 			if (e->activeAnimation->isSecondLastFrame()) {
 				StatBlock::AIPower* ai_power = e->stats.getAIPower(StatBlock::AI_POWER_DEATH);
 				if (ai_power != NULL)
-					powers->activate(ai_power->id, &e->stats, e->stats.pos);
+					powers->activate(ai_power->id, &e->stats, e->stats.pos, e->stats.pos);
 
 				e->stats.effects.clearEffects();
 			}
