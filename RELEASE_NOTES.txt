@@ -16,6 +16,7 @@ Engine features:
 * Added a game filter for the inactive mods list in the Configuration menu.
 * Added 'inactivemods_filter' to menu/config.txt config.
 * Added 'preview_enabled' and 'preview_pos' to menus/inventory.txt config.
+* New mouse movment behavior. Click once to move the player to a target and, if applicable, interact with it.
 * Android: Enabled use of external input devices (gamepads, keyboards, mice)
 
 Engine fixes:

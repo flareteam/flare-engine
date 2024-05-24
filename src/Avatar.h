@@ -59,13 +59,15 @@ private:
 		std::vector<std::string> steps;
 	};
 
+	static const int PATH_FOUND_FAIL_THRESHOLD = 1;
+	static const int PATH_FOUND_FAIL_WAIT_SECONDS = 2;
+
 	void loadLayerDefinitions();
 	bool pressing_move();
 	void set_direction();
 	void transform();
 	void untransform();
 	void beginPower(PowerID power_id, FPoint* target);
-	bool checkMouseMoveEnabled();
 
 
 	std::vector<Step_sfx> step_def;
@@ -83,6 +85,18 @@ private:
 
 	Timer set_dir_timer;
 
+	//variables for patfinding
+	std::vector<FPoint> path;
+	FPoint prev_target;
+	bool collided;
+	bool path_found;
+	int chance_calc_path;
+	int path_found_fails;
+	Timer path_found_fail_timer;
+
+	FPoint mm_target;
+	FPoint mm_target_desired;
+
 	bool isDroppedToLowHp();
 
 	std::vector<PowerID> power_cooldown_ids;
@@ -91,6 +105,13 @@ public:
 	enum {
 		MSG_NORMAL = 0,
 		MSG_UNIQUE = 1
+	};
+
+	enum {
+		MM_TARGET_NONE = 0,
+		MM_TARGET_EVENT,
+		MM_TARGET_LOOT,
+		MM_TARGET_ENTITY,
 	};
 
 	Avatar();
@@ -113,6 +134,11 @@ public:
 	bool isLowHpCursorEnabled();
 
 	std::string getGfxFromType(const std::string& gfx_type);
+
+	std::vector<FPoint>& getPath() { return path; }
+	FPoint& getMMTarget() { return mm_target; };
+	bool isNearMMtarget();
+	void setDesiredMMTarget(FPoint& target);
 
 	std::queue<std::pair<std::string, int> > log_msg;
 
@@ -146,6 +172,8 @@ public:
 	bool playing_lowhp;
 	bool teleport_camera_lock;
 	int feet_index;
+	int mm_target_object;
+	FPoint mm_target_object_pos;
 
 	std::vector<ActionData> action_queue;
 };

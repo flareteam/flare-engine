@@ -400,6 +400,11 @@ void GameStatePlay::checkTeleport() {
 		mapr->collider.block(pc->stats.pos.x, pc->stats.pos.y, !MapCollision::IS_ALLY);
 
 		pc->stats.teleportation = false;
+
+		if (settings->mouse_move) {
+			pc->mm_target_object = Avatar::MM_TARGET_NONE;
+			pc->setDesiredMMTarget(pc->stats.pos);
+		}
 	}
 
 	if (!on_load_teleport && mapr->teleport_mapname.empty())

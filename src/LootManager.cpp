@@ -54,7 +54,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetTooltip.h"
 
 #include <limits>
-#include <math.h>
 
 LootManager::LootManager()
 	: sfx_loot(snd->load(eset->loot.sfx_loot, "LootManager dropping loot"))
@@ -428,16 +427,28 @@ ItemStack LootManager::checkPickup(const Point& mouse, const FPoint& cam, const 
 
 	// check left mouse click
 	if (inpt->usingMouse()) {
+		Point mouse_pos = mouse;
+
+		// we may have targeted a once distant piece of loot while using mouse-move
+		// if so, we want to automatically interact with it without requiring any mouse clicks
+		bool mouse_move_target = pc->mm_target_object == Avatar::MM_TARGET_LOOT && pc->isNearMMtarget();
+		if (mouse_move_target && (pc->stats.cur_state == StatBlock::ENTITY_STANCE || pc->stats.cur_state == StatBlock::ENTITY_MOVE)) {
+			pc->stats.cur_state = StatBlock::ENTITY_STANCE;
+			mouse_pos = Utils::mapToScreen(pc->mm_target_object_pos.x, pc->mm_target_object_pos.y, cam.x, cam.y);
+		}
+		else if (pc->mm_target_object == Avatar::MM_TARGET_LOOT && pc->stats.cur_state == StatBlock::ENTITY_STANCE) {
+			pc->stats.cur_state = StatBlock::ENTITY_MOVE;
+		}
+
 		// I'm starting at the end of the loot list so that more recently-dropped
 		// loot is picked up first.  If a player drops several loot in the same
 		// location, picking it back up will work like a stack.
-		std::vector<Loot>::iterator it, it_tip, it_hotspot;
-		it_tip = it_hotspot = loot.end();
+		std::vector<Loot>::iterator it, it_match = loot.end();
 		for (it = loot.end(); it != loot.begin(); ) {
 			--it;
 
-			// loot close enough to pickup?
-			if (fabs(hero_pos.x - it->pos.x) < eset->misc.interact_range && fabs(hero_pos.y - it->pos.y) < eset->misc.interact_range && !it->isFlying()) {
+			// only loot on the ground can be picked up
+			if (!it->isFlying()) {
 				Point p = Utils::mapToScreen(it->pos.x, it->pos.y, cam.x, cam.y);
 
 				Rect r;
@@ -446,38 +457,50 @@ ItemStack LootManager::checkPickup(const Point& mouse, const FPoint& cam, const 
 				r.w = eset->tileset.tile_w;
 				r.h = eset->tileset.tile_h;
 
-				if (it_tip == loot.end() && it->tip_visible && Utils::isWithinRect(it->wtip->bounds, mouse)) {
-					// clicked on a tooltip
-					curs->setCursor(CursorManager::CURSOR_INTERACT);
-					if (inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1] && !it->stack.empty()) {
-						it_tip = it;
-					}
-				}
-				else if (it_hotspot == loot.end() && Utils::isWithinRect(r, mouse)) {
-					// clicked on a hotspot
-					curs->setCursor(CursorManager::CURSOR_INTERACT);
-					if (inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1] && !it->stack.empty()) {
-						it_hotspot = it;
-					}
-				}
+				if (it->tip_visible && Utils::isWithinRect(it->wtip->bounds, mouse_pos)) {
+					it_match = it;
 
-				// tooltips take priority over hotspots, so we can jump out here if we clicked on a tooltip
-				if (it_tip != loot.end())
+					// tooltips take priority over hotspots, so we can jump out here if we clicked on a tooltip
 					break;
+				}
+				else if (it_match == loot.end() && Utils::isWithinRect(r, mouse_pos)) {
+					it_match = it;
+				}
 			}
 		}
 
-		if (it_tip != loot.end()) {
-			inpt->lock[Input::MAIN1] = true;
-			loot_stack = it_tip->stack;
-			loot.erase(it_tip);
-			return loot_stack;
-		}
-		else if (it_hotspot != loot.end()) {
-			inpt->lock[Input::MAIN1] = true;
-			loot_stack = it_hotspot->stack;
-			loot.erase(it_hotspot);
-			return loot_stack;
+		int interact_key = (settings->mouse_move && settings->mouse_move_swap) ? Input::MAIN2 : Input::MAIN1;
+
+		if (it_match != loot.end() && !it_match->stack.empty()) {
+			if (Utils::calcDist(hero_pos, it_match->pos) < eset->misc.interact_range) {
+				curs->setCursor(CursorManager::CURSOR_INTERACT);
+
+				if (!mouse_move_target && inpt->pressing[interact_key] && !inpt->lock[interact_key]) {
+					inpt->lock[interact_key] = true;
+					loot_stack = it_match->stack;
+					loot.erase(it_match);
+					return loot_stack;
+				}
+				else if (mouse_move_target) {
+					pc->mm_target_object = Avatar::MM_TARGET_NONE;
+					loot_stack = it_match->stack;
+					loot.erase(it_match);
+					return loot_stack;
+				}
+			}
+			else if (settings->mouse_move) {
+				curs->setCursor(CursorManager::CURSOR_INTERACT);
+
+				if (inpt->pressing[interact_key] && !inpt->lock[interact_key]) {
+					// loot is out of range, but we're clicking on it. For mouse-move, we'll set this as the desired target
+					inpt->lock[interact_key] = true;
+
+					pc->setDesiredMMTarget(it_match->pos);
+
+					pc->mm_target_object = Avatar::MM_TARGET_LOOT;
+					pc->mm_target_object_pos = it_match->pos;
+				}
+			}
 		}
 	}
 
@@ -502,7 +525,7 @@ ItemStack LootManager::checkAutoPickup(const FPoint& hero_pos) {
 	std::vector<Loot>::iterator it;
 	for (it = loot.end(); it != loot.begin(); ) {
 		--it;
-		if (!it->dropped_by_hero && fabs(hero_pos.x - it->pos.x) < eset->loot.autopickup_range && fabs(hero_pos.y - it->pos.y) < eset->loot.autopickup_range && !it->isFlying()) {
+		if (!it->dropped_by_hero && Utils::calcDist(hero_pos, it->pos) < eset->loot.autopickup_range && !it->isFlying()) {
 			if (it->stack.item == eset->misc.currency_id && eset->loot.autopickup_currency) {
 				loot_stack = it->stack;
 				it = loot.erase(it);

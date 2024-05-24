@@ -511,9 +511,24 @@ void MenuActionBar::remove(const Point& mouse) {
  * add that power to the action queue
  */
 void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
-	bool enable_mm_attack = (!settings->mouse_move || inpt->pressing[Input::SHIFT] || pc->lock_enemy || inpt->usingTouchscreen());
+	bool enable_mm_attack = (!settings->mouse_move || inpt->pressing[Input::SHIFT] || inpt->usingTouchscreen());
 	bool enable_main1 = (!inpt->usingTouchscreen() || (!menu->menus_open && menu->touch_controls->checkAllowMain1())) && (settings->mouse_move_swap || enable_mm_attack);
 	bool enable_main2 = !settings->mouse_move_swap || enable_mm_attack;
+
+	unsigned mm_slot = settings->mouse_move_swap ? 11 : 10;
+	bool mouse_move_target = false;
+	if (settings->mouse_move) {
+		mouse_move_target = pc->mm_target_object == Avatar::MM_TARGET_ENTITY &&
+		                    powers->checkCombatRange(powers->checkReplaceByEffect(hotkeys_mod[mm_slot], &pc->stats), &pc->stats, pc->mm_target_object_pos) &&
+		                    mapr->collider.lineOfSight(pc->stats.pos.x, pc->stats.pos.y, pc->mm_target_object_pos.x, pc->mm_target_object_pos.y);
+
+		if (mouse_move_target && pc->stats.cur_state == StatBlock::ENTITY_MOVE) {
+			pc->stats.cur_state = StatBlock::ENTITY_STANCE;
+		}
+		else if (!mouse_move_target && pc->mm_target_object == Avatar::MM_TARGET_ENTITY && pc->stats.cur_state == StatBlock::ENTITY_STANCE) {
+			pc->stats.cur_state = StatBlock::ENTITY_MOVE;
+		}
+	}
 
 	// check click and hotkey actions
 	for (unsigned i = 0; i < slots_count; i++) {
@@ -524,8 +539,12 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 
 		if (!slots[i]) continue;
 
+		if (i == mm_slot && mouse_move_target) {
+			action.power = hotkeys_mod[i];
+			have_aim = true;
+		}
 		// part two of two step activation
-		if (static_cast<unsigned>(twostep_slot) == i && inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1]) {
+		else if (static_cast<unsigned>(twostep_slot) == i && inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1]) {
 			have_aim = true;
 			action.power = hotkeys_mod[i];
 			twostep_slot = -1;
@@ -620,17 +639,43 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 			}
 
 			// set the target depending on how the power was triggered
-			action.target = setTarget(have_aim, power);
+			if (have_aim && settings->mouse_aim && !inpt->usingTouchscreen()) {
+				action.target = pc->stats.pos;
+
+				if (power->target_nearest > 0) {
+					if (!power->requires_corpse && powers->checkNearestTargeting(power, &pc->stats, false)) {
+						action.target = pc->stats.target_nearest->pos;
+					}
+					else if (power->requires_corpse && powers->checkNearestTargeting(power, &pc->stats, true)) {
+						action.target = pc->stats.target_nearest_corpse->pos;
+					}
+				}
+				else if (mouse_move_target) {
+					action.target = pc->mm_target_object_pos;
+				}
+				else {
+					if (power->aim_assist)
+						action.target = Utils::screenToMap(inpt->mouse.x,  inpt->mouse.y + eset->misc.aim_assist, mapr->cam.pos.x, mapr->cam.pos.y);
+					else
+						action.target = Utils::screenToMap(inpt->mouse.x,  inpt->mouse.y, mapr->cam.pos.x, mapr->cam.pos.y);
+				}
+			}
+			else {
+				action.target = Utils::calcVector(pc->stats.pos, pc->stats.direction, pc->stats.melee_range);
+			}
 
 			bool can_use_power = slots[i]->enabled &&
 				(power->new_state == Power::STATE_INSTANT || (pc->stats.cooldown.isEnd() && pc->stats.cur_state != StatBlock::ENTITY_POWER && pc->stats.cur_state != StatBlock::ENTITY_HIT)) &&
 				powers->hasValidTarget(action.power, &pc->stats, action.target);
 
-			if (!can_use_power)
-				continue;
-
 			// add it to the queue
-			action_queue.push_back(action);
+			if (can_use_power) {
+				if (i != mm_slot && !action.instant_item) {
+					pc->mm_target_object = Avatar::MM_TARGET_NONE;
+				}
+
+				action_queue.push_back(action);
+			}
 		}
 		else {
 			// if we're not triggering an action that is currently in the queue,
@@ -708,33 +753,6 @@ void MenuActionBar::set(std::vector<PowerID> power_id, bool skip_empty) {
 			hotkeys[i] = power_id[i];
 	}
 	updated = true;
-}
-
-/**
- * Set a target depending on how a power was triggered
- */
-FPoint MenuActionBar::setTarget(bool have_aim, const Power* pow) {
-	if (have_aim && settings->mouse_aim && !inpt->usingTouchscreen()) {
-		FPoint map_pos;
-		if (pow->aim_assist)
-			map_pos = Utils::screenToMap(inpt->mouse.x,  inpt->mouse.y + eset->misc.aim_assist, mapr->cam.pos.x, mapr->cam.pos.y);
-		else
-			map_pos = Utils::screenToMap(inpt->mouse.x,  inpt->mouse.y, mapr->cam.pos.x, mapr->cam.pos.y);
-
-		if (pow->target_nearest > 0) {
-			if (!pow->requires_corpse && powers->checkNearestTargeting(pow, &pc->stats, false)) {
-				map_pos = pc->stats.target_nearest->pos;
-			}
-			else if (pow->requires_corpse && powers->checkNearestTargeting(pow, &pc->stats, true)) {
-				map_pos = pc->stats.target_nearest_corpse->pos;
-			}
-		}
-
-		return map_pos;
-	}
-	else {
-		return Utils::calcVector(pc->stats.pos, pc->stats.direction, pc->stats.melee_range);
-	}
 }
 
 void MenuActionBar::setItemCount(unsigned index, int count, bool is_equipped) {
@@ -835,13 +853,6 @@ Point MenuActionBar::getSlotPos(int slot) {
 		return Point(menus[slot - slot_size]->pos.x, menus[slot - slot_size]->pos.y);
 	}
 	return Point();
-}
-
-PowerID MenuActionBar::getSlotPower(int slot) {
-	if (static_cast<unsigned>(slot) < hotkeys.size()) {
-		return hotkeys_mod[slot];
-	}
-	return 0;
 }
 
 WidgetSlot* MenuActionBar::getSlotFromPosition(const Point& position) {

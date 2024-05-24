@@ -41,7 +41,6 @@ class MenuActionBar : public Menu {
 private:
 	static const bool IS_EQUIPPED = true;
 
-	FPoint setTarget(bool have_aim, const Power* pow);
 	void addSlot(unsigned index, int x, int y, bool is_locked);
 	void setItemCount(unsigned index, int count, bool is_equipped);
 
@@ -87,6 +86,7 @@ public:
 	void logic();
 	void render();
 	void checkAction(std::vector<ActionData> &action_queue);
+	void pushAction(ActionData& action, std::vector<ActionData>& action_queue, const FPoint* target, bool have_aim);
 	PowerID checkDrag(const Point& mouse);
 	void checkMenu(bool &menu_c, bool &menu_i, bool &menu_p, bool &menu_l);
 	void drop(const Point& mouse, PowerID power_index, bool rearranging);
@@ -95,7 +95,6 @@ public:
 	void set(std::vector<PowerID> power_id, bool skip_empty);
 	void clear(bool skip_items);
 	Point getSlotPos(int slot);
-	PowerID getSlotPower(int slot);
 
 	void renderTooltips(const Point& position);
 	bool isWithinSlots(const Point& mouse);

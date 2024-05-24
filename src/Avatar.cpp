@@ -62,6 +62,15 @@ Avatar::Avatar()
 	: Entity()
 	, mm_key(settings->mouse_move_swap ? Input::MAIN2 : Input::MAIN1)
 	, mm_is_distant(false)
+	, path()
+	, prev_target()
+	, collided(false)
+	, path_found(false)
+	, chance_calc_path(0)
+	, path_found_fails(0)
+	, path_found_fail_timer()
+	, mm_target(-1, -1)
+	, mm_target_desired(-1, -1)
 	, hero_stats(NULL)
 	, charmed_stats(NULL)
 	, act_target()
@@ -79,6 +88,8 @@ Avatar::Avatar()
 	, playing_lowhp(false)
 	, teleport_camera_lock(false)
 	, feet_index(-1)
+	, mm_target_object(MM_TARGET_NONE)
+	, mm_target_object_pos()
 {
 	power_cooldown_timers.resize(powers->powers.size(), NULL);
 	power_cast_timers.resize(powers->powers.size(), NULL);
@@ -186,6 +197,12 @@ void Avatar::handleNewMap() {
 	stats.target_corpse = NULL;
 	stats.target_nearest = NULL;
 	stats.target_nearest_corpse = NULL;
+
+	path.clear();
+	mm_target_desired = stats.pos;
+	mm_target_object_pos = stats.pos;
+
+	mm_target_object = MM_TARGET_NONE;
 }
 
 /**
@@ -256,8 +273,8 @@ bool Avatar::pressing_move() {
 	else if (stats.effects.knockback_speed != 0) {
 		return false;
 	}
-	else if (checkMouseMoveEnabled()) {
-		return inpt->pressing[mm_key] && !inpt->pressing[Input::SHIFT] && mm_is_distant;
+	else if (settings->mouse_move) {
+		return mm_is_distant && !isNearMMtarget();
 	}
 	else {
 		return (inpt->pressing[Input::UP] && !inpt->lock[Input::UP]) ||
@@ -274,10 +291,93 @@ void Avatar::set_direction() {
 	int old_dir = stats.direction;
 
 	// handle direction changes
-	if (checkMouseMoveEnabled()) {
+	if (settings->mouse_move) {
 		if (mm_is_distant) {
-			FPoint target = Utils::screenToMap(inpt->mouse.x, inpt->mouse.y, mapr->cam.pos.x, mapr->cam.pos.y);
-			stats.direction = Utils::calcDirection(stats.pos.x, stats.pos.y, target.x, target.y);
+			if (inpt->pressing[mm_key] && (!inpt->lock[mm_key] || drag_walking)) {
+				FPoint mm_target_test = Utils::screenToMap(inpt->mouse.x, inpt->mouse.y, mapr->cam.pos.x, mapr->cam.pos.y);
+				if (mapr->collider.isValidPosition(mm_target_test.x, mm_target_test.y, stats.movement_type, MapCollision::ENTITY_COLLIDE_HERO)) {
+					inpt->lock[mm_key] = true;
+					mm_target_desired = mm_target_test;
+				}
+			}
+
+			mm_target = mm_target_desired;
+
+			// if blocked, face in pathfinder direction instead
+			if (collided || !mapr->collider.lineOfMovement(stats.pos.x, stats.pos.y, mm_target.x, mm_target.y, stats.movement_type)) {
+
+				// if a path is returned, target first waypoint
+
+				bool recalculate_path = false;
+
+				// add a 5% chance to recalculate on every frame. This prevents reclaulating lots of entities in the same frame
+				chance_calc_path += 5;
+
+				bool calc_path_success = Math::percentChance(chance_calc_path);
+				if (calc_path_success)
+					recalculate_path = true;
+
+				// if a collision ocurred then recalculate
+				if (collided)
+					recalculate_path = true;
+
+				// if theres no path, it needs to be calculated
+				if (!recalculate_path && path.empty())
+					recalculate_path = true;
+
+				// if the target moved more than 1 tile away, recalculate
+				if (!recalculate_path && Utils::calcDist(FPoint(Point(prev_target)), FPoint(Point(mm_target))) > 1.f)
+					recalculate_path = true;
+
+				// dont recalculate if we were blocked and no path was found last time
+				// this makes sure that pathfinding calculation is not spammed when the target is unreachable and the entity is as close as its going to get
+				if (!path_found && collided && !calc_path_success) {
+					recalculate_path = false;
+				}
+				else {
+					// reset the collision flag only if we dont want the cooldown in place
+					collided = false;
+				}
+
+				if (!path_found_fail_timer.isEnd()) {
+					recalculate_path = false;
+					chance_calc_path = -100;
+				}
+
+				prev_target = mm_target;
+
+				// target first waypoint
+				if (recalculate_path) {
+					chance_calc_path = -100;
+					path.clear();
+					path_found = mapr->collider.computePath(stats.pos, mm_target, path, stats.movement_type, MapCollision::DEFAULT_PATH_LIMIT);
+
+					if (!path_found) {
+						path_found_fails++;
+						if (path_found_fails >= PATH_FOUND_FAIL_THRESHOLD) {
+							// could not find a path after several tries, so wait a little before the next attempt
+							path_found_fail_timer.reset(Timer::BEGIN);
+						}
+					}
+					else {
+						path_found_fails = 0;
+						path_found_fail_timer.reset(Timer::END);
+					}
+				}
+
+				if (!path.empty()) {
+					mm_target = path.back();
+
+					// if distance to node is lower than a tile size, the node is going to be passed and can be removed
+					if (Utils::calcDist(stats.pos, mm_target) <= 1.f)
+						path.pop_back();
+				}
+			}
+			else {
+				path.clear();
+			}
+
+			stats.direction = Utils::calcDirection(stats.pos.x, stats.pos.y, mm_target.x, mm_target.y);
 		}
 	}
 	else {
@@ -324,7 +424,7 @@ void Avatar::set_direction() {
  */
 void Avatar::logic() {
 	bool restrict_power_use = false;
-	if (checkMouseMoveEnabled()) {
+	if (settings->mouse_move) {
 		if(inpt->pressing[mm_key] && !inpt->pressing[Input::SHIFT] && !menu->act->isWithinSlots(inpt->mouse) && !menu->act->isWithinMenus(inpt->mouse)) {
 			restrict_power_use = true;
 		}
@@ -429,14 +529,8 @@ void Avatar::logic() {
 		transform_map = mapr->getFilename();
 	}
 
-	PowerID mm_attack_id = (settings->mouse_move_swap ? menu->act->getSlotPower(MenuActionBar::SLOT_MAIN2) : menu->act->getSlotPower(MenuActionBar::SLOT_MAIN1));
-	bool mm_can_use_power = true;
-
-	if (checkMouseMoveEnabled()) {
-		if (!inpt->pressing[mm_key]) {
-			lock_enemy = NULL;
-		}
-		else {
+	if (settings->mouse_move) {
+		if (inpt->pressing[mm_key]) {
 			// prevents erratic behavior when mouse move is too close to player
 			FPoint target = Utils::screenToMap(inpt->mouse.x, inpt->mouse.y, mapr->cam.pos.x, mapr->cam.pos.y);
 			if (stats.cur_state == StatBlock::ENTITY_MOVE) {
@@ -445,24 +539,30 @@ void Avatar::logic() {
 			else {
 				mm_is_distant = Utils::calcDist(stats.pos, target) >= eset->misc.mouse_move_deadzone_not_moving;
 			}
+
+			if (!inpt->lock[mm_key]) {
+				if (settings->mouse_move_attack && cursor_enemy && !cursor_enemy->stats.hero_ally) {
+					inpt->lock[mm_key] = true;
+					lock_enemy = cursor_enemy;
+					mm_target_object = MM_TARGET_ENTITY;
+				}
+
+				if (!cursor_enemy) {
+					lock_enemy = NULL;
+					if (mm_target_object == MM_TARGET_ENTITY)
+						mm_target_object = MM_TARGET_NONE;
+				}
+			}
 		}
 
-		if (lock_enemy && lock_enemy->stats.hp <= 0) {
-			lock_enemy = NULL;
-		}
-
-		if (powers->isValid(mm_attack_id)) {
-			if (!stats.canUsePower(mm_attack_id, !StatBlock::CAN_USE_PASSIVE)) {
+		if (lock_enemy) {
+			if (lock_enemy->stats.hp <= 0) {
 				lock_enemy = NULL;
-				mm_can_use_power = false;
+				mm_target_object = MM_TARGET_NONE;
 			}
-			else if (!power_cooldown_timers[mm_attack_id]->isEnd()) {
-				lock_enemy = NULL;
-				mm_can_use_power = false;
-			}
-			else if (lock_enemy && powers->powers[mm_attack_id]->requires_los && !mapr->collider.lineOfSight(stats.pos.x, stats.pos.y, lock_enemy->stats.pos.x, lock_enemy->stats.pos.y)) {
-				lock_enemy = NULL;
-				mm_can_use_power = false;
+			else {
+				mm_target_object_pos = lock_enemy->stats.pos;
+				setDesiredMMTarget(mm_target_object_pos);
 			}
 		}
 	}
@@ -540,11 +640,11 @@ void Avatar::logic() {
 				setAnimation("stance");
 
 				// allowed to move or use powers?
-				if (checkMouseMoveEnabled()) {
-					allowed_to_move = restrict_power_use && (!inpt->lock[mm_key] || drag_walking) && !lock_enemy;
+				if (settings->mouse_move) {
+					allowed_to_move = restrict_power_use && (!inpt->lock[mm_key] || drag_walking);
 					allowed_to_turn = allowed_to_move;
 
-					if ((inpt->pressing[mm_key] && inpt->pressing[Input::SHIFT]) || lock_enemy) {
+					if ((inpt->pressing[mm_key] && inpt->pressing[Input::SHIFT])) {
 						inpt->lock[mm_key] = false;
 					}
 				}
@@ -563,18 +663,14 @@ void Avatar::logic() {
 
 				if (pressing_move() && allowed_to_move) {
 					if (move()) { // no collision
-						if (checkMouseMoveEnabled() && inpt->pressing[mm_key]) {
-							inpt->lock[mm_key] = true;
+						if (settings->mouse_move && inpt->pressing[mm_key]) {
 							drag_walking = true;
 						}
 
 						stats.cur_state = StatBlock::ENTITY_MOVE;
-					}
-				}
 
-				if (checkMouseMoveEnabled() &&  settings->mouse_move_attack && cursor_enemy && !cursor_enemy->stats.hero_ally && mm_can_use_power && powers->checkCombatRange(mm_attack_id, &stats, cursor_enemy->stats.pos)) {
-					stats.cur_state = StatBlock::ENTITY_STANCE;
-					lock_enemy = cursor_enemy;
+						mm_target_object = MM_TARGET_NONE;
+					}
 				}
 
 				break;
@@ -599,10 +695,15 @@ void Avatar::logic() {
 					break;
 				}
 				else if (!move()) { // collide with wall
-					stats.cur_state = StatBlock::ENTITY_STANCE;
+					if (settings->mouse_move && !isNearMMtarget()) {
+						collided = true;
+					}
+					else {
+						stats.cur_state = StatBlock::ENTITY_STANCE;
+					}
 					break;
 				}
-				else if ((checkMouseMoveEnabled() || !settings->mouse_aim) && inpt->pressing[Input::SHIFT]) {
+				else if ((settings->mouse_move || !settings->mouse_aim) && inpt->pressing[Input::SHIFT]) {
 					// Shift should stop movement in some cases.
 					// With mouse_move, it allows the player to stop moving and begin attacking.
 					// With mouse_aim disabled, it allows the player to aim their attacks without having to move.
@@ -610,13 +711,12 @@ void Avatar::logic() {
 					break;
 				}
 
+				if (settings->mouse_move && inpt->pressing[mm_key]) {
+					drag_walking = true;
+				}
+
 				if (activeAnimation->getName() != "run")
 					stats.cur_state = StatBlock::ENTITY_STANCE;
-
-				if (checkMouseMoveEnabled() && settings->mouse_move_attack && cursor_enemy && !cursor_enemy->stats.hero_ally && mm_can_use_power && powers->checkCombatRange(mm_attack_id, &stats, cursor_enemy->stats.pos)) {
-					stats.cur_state = StatBlock::ENTITY_STANCE;
-					lock_enemy = cursor_enemy;
-				}
 
 				break;
 
@@ -669,13 +769,6 @@ void Avatar::logic() {
 					stats.cur_state = StatBlock::ENTITY_STANCE;
 					stats.cooldown.reset(Timer::BEGIN);
 					stats.prevent_interrupt = false;
-					if (checkMouseMoveEnabled()) {
-						drag_walking = true;
-					}
-				}
-
-				if (checkMouseMoveEnabled() && lock_enemy && !powers->checkCombatRange(mm_attack_id, &stats, lock_enemy->stats.pos)) {
-					lock_enemy = NULL;
 				}
 
 				break;
@@ -701,9 +794,6 @@ void Avatar::logic() {
 
 				if (activeAnimation->getTimesPlayed() >= 1 || activeAnimation->getName() != "hit") {
 					stats.cur_state = StatBlock::ENTITY_STANCE;
-					if (checkMouseMoveEnabled()) {
-						drag_walking = true;
-					}
 				}
 
 				break;
@@ -1061,8 +1151,12 @@ std::string Avatar::getGfxFromType(const std::string& gfx_type) {
 	return gfx;
 }
 
-bool Avatar::checkMouseMoveEnabled() {
-	return settings->mouse_move && !inpt->usingTouchscreen();
+bool Avatar::isNearMMtarget() {
+	return path.empty() && Utils::calcDist(stats.pos, mm_target_desired) <= stats.speed * 2;
+}
+
+void Avatar::setDesiredMMTarget(FPoint& target) {
+	mm_target = mm_target_desired = target;
 }
 
 Avatar::~Avatar() {

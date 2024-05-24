@@ -90,7 +90,6 @@ void Event::deleteAllComponents(const int _type) {
 			it = components.erase(it);
 }
 
-
 /**
  * Class: EventManager
  */

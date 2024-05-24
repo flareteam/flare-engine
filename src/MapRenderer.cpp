@@ -1197,10 +1197,23 @@ void MapRenderer::checkHotspots() {
 
 	show_tooltip = false;
 
-	std::vector<Event>::iterator it;
+	Point mouse_pos = inpt->mouse;
+	// we may have targeted a once distant event while using mouse-move
+	// if so, we want to automatically interact with it without requiring any mouse clicks
+	bool mouse_move_target = pc->mm_target_object == Avatar::MM_TARGET_EVENT && pc->isNearMMtarget();
+	if (mouse_move_target && (pc->stats.cur_state == StatBlock::ENTITY_STANCE || pc->stats.cur_state == StatBlock::ENTITY_MOVE)) {
+		pc->stats.cur_state = StatBlock::ENTITY_STANCE;
+		mouse_pos = Utils::mapToScreen(pc->mm_target_object_pos.x, pc->mm_target_object_pos.y, cam.shake.x, cam.shake.y);
+	}
+	else if (pc->mm_target_object == Avatar::MM_TARGET_EVENT && pc->stats.cur_state == StatBlock::ENTITY_STANCE) {
+		pc->stats.cur_state = StatBlock::ENTITY_MOVE;
+	}
+
+	int interact_key = (settings->mouse_move && settings->mouse_move_swap) ? Input::MAIN2 : Input::MAIN1;
 
 	// work backwards through events because events can be erased in the loop.
 	// this prevents the iterator from becoming invalid.
+	std::vector<Event>::iterator it;
 	for (it = events.end(); it != events.begin(); ) {
 		--it;
 
@@ -1231,7 +1244,7 @@ void MapRenderer::checkHotspots() {
 						dest = npcs->npcs[npc->id]->getRenderBounds(mapr->cam.pos);
 					}
 
-					if (Utils::isWithinRect(dest, inpt->mouse)) {
+					if (Utils::isWithinRect(dest, mouse_pos)) {
 						matched = true;
 						tip_pos.x = dest.x + dest.w/2;
 						tip_pos.y = p.y - eset->tooltips.margin_npc;
@@ -1252,7 +1265,7 @@ void MapRenderer::checkHotspots() {
 								dest.w = tile.tile->getClip().w;
 								dest.h = tile.tile->getClip().h;
 
-								if (Utils::isWithinRect(dest, inpt->mouse)) {
+								if (Utils::isWithinRect(dest, mouse_pos)) {
 									matched = true;
 									tip_pos = Utils::mapToScreen(it->center.x, it->center.y, cam.shake.x, cam.shake.y);
 									tip_pos.y -= eset->tileset.tile_h;
@@ -1268,22 +1281,52 @@ void MapRenderer::checkHotspots() {
 
 					if (((it->reachable_from.w == 0 && it->reachable_from.h == 0) || Utils::isWithinRect(it->reachable_from, Point(cam.pos)))
 							&& Utils::calcDist(pc->stats.pos, it->center) < eset->misc.interact_range) {
+						if (!mouse_move_target) {
+							// only check events if the player is clicking
+							// and allowed to click
+							if (is_npc) {
+								curs->setCursor(CursorManager::CURSOR_TALK);
+							}
+							else {
+								curs->setCursor(CursorManager::CURSOR_INTERACT);
+							}
+							if (!inpt->pressing[interact_key]) return;
+							else if (inpt->lock[interact_key]) return;
+							else if (interact_key == Input::MAIN1 && pc->using_main1) return;
+							else if (interact_key == Input::MAIN2 && pc->using_main2) return;
 
-						// only check events if the player is clicking
-						// and allowed to click
+							inpt->lock[interact_key] = true;
+						}
+						else {
+							pc->mm_target_object = Avatar::MM_TARGET_NONE;
+						}
+
+						if (EventManager::executeEvent(*it))
+							it = events.erase(it);
+					}
+					else if (settings->mouse_move) {
 						if (is_npc) {
 							curs->setCursor(CursorManager::CURSOR_TALK);
 						}
 						else {
 							curs->setCursor(CursorManager::CURSOR_INTERACT);
 						}
-						if (!inpt->pressing[Input::MAIN1]) return;
-						else if (inpt->lock[Input::MAIN1]) return;
-						else if (pc->using_main1) return;
 
-						inpt->lock[Input::MAIN1] = true;
-						if (EventManager::executeEvent(*it))
-							it = events.erase(it);
+						if (inpt->pressing[interact_key] && !inpt->lock[interact_key]) {
+							// event is out of range, but we're clicking on it. For mouse-move, we'll set this as the desired target
+							inpt->lock[interact_key] = true;
+
+							if (!mapr->collider.isValidPosition(it->center.x, it->center.y, pc->stats.movement_type, MapCollision::ENTITY_COLLIDE_HERO)) {
+								FPoint nearby_target = mapr->collider.getRandomNeighbor(Point(it->center), 1, pc->stats.movement_type, MapCollision::ENTITY_COLLIDE_HERO);
+								pc->setDesiredMMTarget(nearby_target);
+							}
+							else {
+								pc->setDesiredMMTarget(it->center);
+							}
+
+							pc->mm_target_object = Avatar::MM_TARGET_EVENT;
+							pc->mm_target_object_pos = it->center;
+						}
 					}
 					return;
 				}
@@ -1483,6 +1526,26 @@ void MapRenderer::drawDevHUD() {
 		Point p0 = Utils::mapToScreen(pc->stats.pos.x, pc->stats.pos.y, cam.shake.x, cam.shake.y);
 		render_device->drawLine(p0.x - cross_size, p0.y, p0.x + cross_size, p0.y, color_entity);
 		render_device->drawLine(p0.x, p0.y - cross_size, p0.x, p0.y + cross_size, color_entity);
+
+		std::vector<FPoint>& path = pc->getPath();
+
+		if (path.empty()) {
+			FPoint& mm_target = pc->getMMTarget();
+			if (!(mm_target.x == -1 && mm_target.y == -1)) {
+				Point p1 = Utils::mapToScreen(mm_target.x, mm_target.y, cam.shake.x, cam.shake.y);
+				render_device->drawLine(p0.x, p0.y, p1.x, p1.y, color_path_pursue);
+			}
+		}
+		else {
+			Point p1, p2;
+			for (size_t j = 0; j < path.size()-1; ++j) {
+				p1 = Utils::mapToScreen(path[j].x, path[j].y, cam.shake.x, cam.shake.y);
+				p2 = Utils::mapToScreen(path[j+1].x, path[j+1].y, cam.shake.x, cam.shake.y);
+				render_device->drawLine(p1.x, p1.y, p2.x, p2.y, color_path);
+			}
+			p1 = Utils::mapToScreen(path.back().x, path.back().y, cam.shake.x, cam.shake.y);
+			render_device->drawLine(p0.x, p0.y, p1.x, p1.y, color_path);
+		}
 	}
 
 	// enemies
@@ -1490,6 +1553,9 @@ void MapRenderer::drawDevHUD() {
 		Point p0 = Utils::mapToScreen(entitym->entities[i]->stats.pos.x, entitym->entities[i]->stats.pos.y, cam.shake.x, cam.shake.y);
 		render_device->drawLine(p0.x - cross_size, p0.y, p0.x + cross_size, p0.y, color_entity);
 		render_device->drawLine(p0.x, p0.y - cross_size, p0.x, p0.y + cross_size, color_entity);
+
+		if (entitym->entities[i]->stats.corpse)
+			continue;
 
 		std::vector<FPoint>& path = entitym->entities[i]->behavior->getPath();
 

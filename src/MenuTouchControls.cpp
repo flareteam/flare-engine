@@ -69,7 +69,7 @@ void MenuTouchControls::align() {
 }
 
 void MenuTouchControls::logic() {
-	if (!visible || !settings->touchscreen)
+	if (!visible || !settings->touchscreen || settings->mouse_move)
 		return;
 
 	// update scaling from settings
@@ -105,8 +105,8 @@ void MenuTouchControls::logic() {
 }
 
 bool MenuTouchControls::checkAllowMain1() {
-	if (!visible || !settings->touchscreen)
-		return true;
+	if (!visible || !settings->touchscreen || settings->mouse_move)
+		return false;
 
 	FPoint m1_center(static_cast<float>(main1_center.x), static_cast<float>(main1_center.y));
 	FPoint mouse(static_cast<float>(inpt->mouse.x), static_cast<float>(inpt->mouse.y));
@@ -119,7 +119,7 @@ void MenuTouchControls::renderInput(const Point& center, const int radius, const
 }
 
 void MenuTouchControls::render() {
-	if (!visible || !settings->touchscreen)
+	if (!visible || !settings->touchscreen || settings->mouse_move)
 		return;
 
 	Color color_normal(255,255,255,255);
