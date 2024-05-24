@@ -27,6 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CursorManager.h"
 #include "EnemyGroupManager.h"
 #include "Entity.h"
+#include "EntityBehavior.h"
 #include "EntityManager.h"
 #include "EngineSettings.h"
 #include "EventManager.h"
@@ -48,6 +49,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SoundManager.h"
 #include "StatBlock.h"
 #include "TooltipManager.h"
+#include "Utils.h"
 #include "UtilsFileSystem.h"
 #include "UtilsMath.h"
 #include "WidgetTooltip.h"
@@ -1462,6 +1464,8 @@ void MapRenderer::drawDevHUD() {
 	Color color_hazard(255,0,0,255);
 	Color color_entity(0,255,0,255);
 	Color color_cam(255,255,0,255);
+	Color color_path(0,255,255,255);
+	Color color_path_pursue(0,127,127,255);
 	int cross_size = eset->tileset.tile_h_half / 4;
 
 	// ellipses are distorted for isometric tilesets
@@ -1486,6 +1490,26 @@ void MapRenderer::drawDevHUD() {
 		Point p0 = Utils::mapToScreen(entitym->entities[i]->stats.pos.x, entitym->entities[i]->stats.pos.y, cam.shake.x, cam.shake.y);
 		render_device->drawLine(p0.x - cross_size, p0.y, p0.x + cross_size, p0.y, color_entity);
 		render_device->drawLine(p0.x, p0.y - cross_size, p0.x, p0.y + cross_size, color_entity);
+
+		std::vector<FPoint>& path = entitym->entities[i]->behavior->getPath();
+
+		if (path.empty()) {
+			FPoint& pursue_pos = entitym->entities[i]->behavior->getPursuePos();
+			if (!(pursue_pos.x == -1 && pursue_pos.y == -1)) {
+				Point p1 = Utils::mapToScreen(pursue_pos.x, pursue_pos.y, cam.shake.x, cam.shake.y);
+				render_device->drawLine(p0.x, p0.y, p1.x, p1.y, color_path_pursue);
+			}
+		}
+		else {
+			Point p1, p2;
+			for (size_t j = 0; j < path.size()-1; ++j) {
+				p1 = Utils::mapToScreen(path[j].x, path[j].y, cam.shake.x, cam.shake.y);
+				p2 = Utils::mapToScreen(path[j+1].x, path[j+1].y, cam.shake.x, cam.shake.y);
+				render_device->drawLine(p1.x, p1.y, p2.x, p2.y, color_path);
+			}
+			p1 = Utils::mapToScreen(path.back().x, path.back().y, cam.shake.x, cam.shake.y);
+			render_device->drawLine(p0.x, p0.y, p1.x, p1.y, color_path);
+		}
 	}
 
 	// hazards

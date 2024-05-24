@@ -80,6 +80,9 @@ public:
 	explicit EntityBehavior(Entity *_e);
 	~EntityBehavior();
 	void logic();
+
+	std::vector<FPoint>& getPath() { return path; }
+	FPoint& getPursuePos() { return pursue_pos; };
 };
 
 #endif
