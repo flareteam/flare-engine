@@ -109,6 +109,11 @@ private:
 	SDL_Surface* titlebar_icon;
 	char* title;
 
+	/* Stores the system gamma levels so they can be restored later */
+	uint16_t gamma_r[256];
+	uint16_t gamma_g[256];
+	uint16_t gamma_b[256];
+
 	GLuint m_vertex_buffer, m_element_buffer;
 	GLuint m_vertex_shader, m_fragment_shader, m_program, m_frameBuffer;
 
