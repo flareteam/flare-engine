@@ -50,7 +50,6 @@ public:
 	void setAngle(const float& _angle);
 	bool isDangerousNow();
 	void addRenderable(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
-	void setPower(size_t power_index);
 
 	bool active;
 	bool remove_now;
@@ -58,10 +57,10 @@ public:
 	bool relative_pos;
 	bool sfx_hit_played;
 
-	int dmg_min;
-	int dmg_max;
-	int crit_chance;
-	int accuracy;
+	float dmg_min;
+	float dmg_max;
+	float crit_chance;
+	float accuracy;
 	int source_type;
 	float base_speed;
 	int lifespan; // ticks down to zero
@@ -71,7 +70,7 @@ public:
 
 	StatBlock *src_stats;
 	Power *power;
-	size_t power_index;
+	PowerID power_index;
 
 	FPoint pos;
 	FPoint speed;
@@ -80,6 +79,8 @@ public:
 	// for linking hazards together, e.g. repeaters
 	Hazard* parent;
 	std::vector<Hazard*> children;
+
+	FPoint prev_pos;
 
 private:
     void reflect();

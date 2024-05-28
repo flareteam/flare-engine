@@ -22,10 +22,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "AnimationSet.h"
 #include "Loot.h"
 #include "SharedResources.h"
+#include "WidgetTooltip.h"
 
 Loot::Loot()
 	: gfx("")
 	, animation(NULL)
+	, wtip(new WidgetTooltip())
 	, tip_visible(false)
 	, dropped_by_hero(false)
 	, on_ground(false)
@@ -36,7 +38,9 @@ Loot::Loot()
 Loot::Loot(const Loot &other)
 	: gfx("")
 	, animation(NULL)
+	, wtip(NULL)
 {
+	// operator= creates a new animation and tooltip
 	*this = other;
 }
 
@@ -46,13 +50,13 @@ Loot& Loot::operator= (const Loot &other) {
 	if (this == &other)
 		return *this;
 
-	if (gfx != "")
+	if (!gfx.empty())
 		anim->decreaseCount(gfx);
 	delete animation;
 	animation = NULL;
 
 	loadAnimation(other.gfx);
-	if (animation)
+	if (animation && other.animation)
 		animation->syncTo(other.animation);
 
 	stack.item = other.stack.item;
@@ -60,7 +64,10 @@ Loot& Loot::operator= (const Loot &other) {
 	pos.x = other.pos.x;
 	pos.y = other.pos.y;
 	tip = other.tip;
-	tip_bounds = other.tip_bounds;
+	if (wtip) {
+		delete wtip;
+	}
+	wtip = new WidgetTooltip();
 	tip_visible = other.tip_visible;
 	dropped_by_hero = other.dropped_by_hero;
 	on_ground = other.on_ground;
@@ -71,7 +78,7 @@ Loot& Loot::operator= (const Loot &other) {
 
 void Loot::loadAnimation(const std::string& _gfx) {
 	gfx = _gfx;
-	if (gfx != "") {
+	if (!gfx.empty()) {
 		anim->increaseCount(gfx);
 		AnimationSet *as = anim->getAnimationSet(gfx);
 		animation = as->getAnimation("");
@@ -86,8 +93,9 @@ bool Loot::isFlying() {
 }
 
 Loot::~Loot() {
-	if (gfx != "")
+	if (!gfx.empty())
 		anim->decreaseCount(gfx);
 	delete animation;
+	delete wtip;
 }
 

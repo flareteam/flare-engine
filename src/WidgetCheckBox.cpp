@@ -42,8 +42,6 @@ WidgetCheckBox::WidgetCheckBox (const std::string &fname)
 	, pressed(false)
 	, activated(false)
 {
-	focusable = true;
-
 	Image *graphics = NULL;
 	if (fname != DEFAULT_FILE) {
 		graphics = render_device->loadImage(fname, RenderDevice::ERROR_NORMAL);
@@ -144,7 +142,7 @@ void WidgetCheckBox::render() {
 			draw = false;
 		}
 		if (draw) {
-			render_device->drawRectangle(topLeft, bottomRight, eset->widgets.selection_rect_color);
+			render_device->drawRectangleCorners(eset->widgets.selection_rect_corner_size, topLeft, bottomRight, eset->widgets.selection_rect_color);
 		}
 	}
 }

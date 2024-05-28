@@ -115,6 +115,7 @@ public:
 	virtual void drawPixel(int x, int y, const Color& color) = 0;
 	virtual void drawLine(int x0, int y0, int x1, int y1, const Color& color) = 0;
 	virtual void beginPixelBatch();
+	virtual void beginPixelBatch(Rect& bounds);
 	virtual void endPixelBatch();
 	virtual Image* resize(int width, int height) = 0;
 
@@ -227,10 +228,12 @@ public:
 	virtual void drawPixel(int x, int y, const Color& color) = 0;
 	virtual void drawLine(int x0, int y0, int x1, int y1, const Color& color) = 0;
 	virtual void drawRectangle(const Point& p0, const Point& p1, const Color& color) = 0;
+	void drawRectangleCorners(int csize, const Point& p0, const Point& p1, const Color& color);
 	void drawEllipse(int x0, int y0, int x1, int y1, const Color& color, float step);
 	virtual void windowResize() = 0;
 	virtual void setBackgroundColor(Color color);
 	virtual void setFullscreen(bool enable_fullscreen);
+	virtual unsigned short getRefreshRate();
 
 	bool reloadGraphics();
 
@@ -264,11 +267,6 @@ protected:
 
 	Rect m_clip;
 	Rect m_dest;
-
-	/* Stores the system gamma levels so they can be restored later */
-	uint16_t gamma_r[256];
-	uint16_t gamma_g[256];
-	uint16_t gamma_b[256];
 
 private:
 	typedef std::map<std::string, Image *> IMAGE_CACHE_CONTAINER;

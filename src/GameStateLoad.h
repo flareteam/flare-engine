@@ -50,7 +50,8 @@ public:
 	std::string current_map;
 	unsigned long time_played;
 
-	std::vector<int> equipped;
+	std::vector<ItemID> equipped;
+	int active_equipment_set;
 	GameSlotPreview preview;
 	Timer preview_turn_timer;
 
@@ -66,6 +67,10 @@ public:
 
 class GameStateLoad : public GameState {
 private:
+	enum {
+		DELETE_CONFIRM_OPTION_NO = 0,
+		DELETE_CONFIRM_OPTION_YES = 1,
+	};
 
 	void loadGraphics();
 	void loadPortrait(int slot);
@@ -125,6 +130,10 @@ private:
 	bool has_scroll_bar;
 	int game_slot_max;
 	int text_trim_boundary;
+	int portrait_align;
+	int gameslot_align;
+
+	std::vector<int> equip_sets;
 
 public:
 	GameStateLoad();

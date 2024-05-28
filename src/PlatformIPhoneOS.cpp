@@ -54,6 +54,8 @@ Platform::Platform()
 	, is_mobile_device(true)
 	, force_hardware_cursor(true)
 	, has_lock_file(false)
+	, needs_alt_escape_key(false)
+	, fullscreen_bypass(false)
 	, config_menu_type(CONFIG_MENU_TYPE_BASE)
 	, default_renderer("sdl_hardware")
 	, config_video(Platform::Video::COUNT, true)
@@ -152,7 +154,7 @@ void Platform::setPaths() {
 		path_data = true;
 	}
 	else if (!settings->custom_path_data.empty()) {
-		Utils::logError("Settings: Could not find specified game data directory.");
+		Utils::logError("Platform: Could not find specified game data directory.");
 		settings->custom_path_data = "";
 	}
 
@@ -228,6 +230,7 @@ void Platform::FSInit() {}
 bool Platform::FSCheckReady() { return true; }
 void Platform::FSCommit() {}
 void Platform::setScreenSize() {}
+void Platform::setFullscreen(bool) {}
 
 #endif // PLATFORM_CPP
 #endif // PLATFORM_CPP_INCLUDE

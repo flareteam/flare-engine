@@ -28,38 +28,75 @@ namespace Input {
 	// Input action enum
 	enum {
 		CANCEL = 0,
-		ACCEPT = 1,
-		UP = 2,
-		DOWN = 3,
-		LEFT = 4,
-		RIGHT = 5,
-		BAR_1 = 6,
-		BAR_2 = 7,
-		BAR_3 = 8,
-		BAR_4 = 9,
-		BAR_5 = 10,
-		BAR_6 = 11,
-		BAR_7 = 12,
-		BAR_8 = 13,
-		BAR_9 = 14,
-		BAR_0 = 15,
-		CHARACTER = 16,
-		INVENTORY = 17,
-		POWERS = 18,
-		LOG = 19,
-		MAIN1 = 20,
-		MAIN2 = 21,
-		ACTIONBAR = 22,
-		ACTIONBAR_BACK = 23,
-		ACTIONBAR_FORWARD = 24,
-		ACTIONBAR_USE = 25,
-		DEVELOPER_MENU = 26,
-		CTRL = 27,
-		SHIFT = 28,
-		ALT = 29,
-		DEL = 30
+		ACCEPT,
+		UP,
+		DOWN,
+		LEFT,
+		RIGHT,
+		BAR_1,
+		BAR_2,
+		BAR_3,
+		BAR_4,
+		BAR_5,
+		BAR_6,
+		BAR_7,
+		BAR_8,
+		BAR_9,
+		BAR_0,
+		CHARACTER,
+		INVENTORY,
+		POWERS,
+		LOG,
+		MAIN1,
+		MAIN2,
+		EQUIPMENT_SWAP,
+		EQUIPMENT_SWAP_PREV,
+		MINIMAP_MODE,
+		LOOT_TOOLTIP_MODE,
+		ACTIONBAR,
+		MENU_PAGE_NEXT,
+		MENU_PAGE_PREV,
+		MENU_ACTIVATE,
+		PAUSE,
+		AIM_UP,
+		AIM_DOWN,
+		AIM_LEFT,
+		AIM_RIGHT,
+		DEVELOPER_MENU,
+		DEVELOPER_CMD_1,
+		DEVELOPER_CMD_2,
+		DEVELOPER_CMD_3,
+
+		// non-modifiable
+		CTRL,
+		SHIFT,
+		ALT,
+		DEL,
+		TEXTEDIT_UP,
+		TEXTEDIT_DOWN,
+
+		KEY_COUNT,
 	};
 }
+
+class InputBind {
+public:
+	enum {
+		KEY = 0,
+		MOUSE = 1,
+		GAMEPAD = 2,
+		GAMEPAD_AXIS = 3,
+	};
+
+	int type;
+	int bind;
+
+	InputBind(int _type = -1, int _bind = -1)
+		: type(_type)
+		, bind(_bind)
+	{}
+	~InputBind() {}
+};
 
 /**
  * class InputState
@@ -69,62 +106,53 @@ namespace Input {
 
 class InputState {
 protected:
-	// we store mouse bindings and keyboard bindings together
-	// keyboard keycodes are all positive integers, so we use negative integers for mouse buttons
-	// -1 is reserved for unbound keys, so we start mouse bindings at -2
-	// adding MOUSE_BIND_OFFSET to a mouse bind gives us the appropriate mouse button (mouse buttons start at 1)
-	static const int MOUSE_BIND_OFFSET = 2;
-	static const int JOY_AXIS_OFFSET = 2;
-
 	// some mouse buttons are named (e.g. "Left Mouse")
 	static const int MOUSE_BUTTON_NAME_COUNT = 7;
 
 public:
+	static const bool GET_SHORT_STRING = true;
+	static const int KEY_COUNT = Input::KEY_COUNT;
+	static const int KEY_COUNT_USER = KEY_COUNT - 6; // exclude CTRL, SHIFT, etc from keybinding menu
+
 	enum {
-		BINDING_DEFAULT = 0,
-		BINDING_ALT = 1,
-		BINDING_JOYSTICK = 2
+		MODE_KEYBOARD_AND_MOUSE = 0,
+		MODE_JOYSTICK = 1,
+		MODE_TOUCHSCREEN = 2,
 	};
 
-	static const int KEY_COUNT = 31;
-	static const int KEY_COUNT_USER = KEY_COUNT - 4; // exclude CTRL, SHIFT, etc from keybinding menu
-	int binding[KEY_COUNT];
-	int binding_alt[KEY_COUNT];
-	int binding_joy[KEY_COUNT];
+	std::vector<InputBind> binding[KEY_COUNT];
 
-	std::string binding_name[31];
+	std::string binding_name[KEY_COUNT];
 	std::string mouse_button[MOUSE_BUTTON_NAME_COUNT];
 
 	InputState(void);
 	virtual ~InputState();
 
+	virtual void setBind(int action, int type, int bind, std::string *keybind_msg) = 0;
+	virtual void removeBind(int action, size_t index) = 0;
+
 	virtual void initJoystick() = 0;
-	void defaultJoystickBindings();
 	void loadKeyBindings();
 	void saveKeyBindings();
 	void resetScroll();
 	void lockActionBar();
 	void unlockActionBar();
-	void setKeybindNames();
+	virtual void setCommonStrings() = 0;
 
 	virtual void handle();
-	virtual void defaultQwertyKeyBindings() = 0;
-	virtual void setFixedKeyBindings() = 0;
+	virtual void initBindings() = 0;
 	virtual void hideCursor() = 0;
 	virtual void showCursor() = 0;
 	virtual std::string getJoystickName(int index) = 0;
-	virtual std::string getKeyName(int key) = 0;
-	virtual std::string getMouseButtonName(int button) = 0;
-	virtual std::string getJoystickButtonName(int button) = 0;
-	virtual std::string getBindingString(int key, int bindings_list = BINDING_DEFAULT) = 0;
+	virtual std::string getBindingString(int key, bool get_short_string = !GET_SHORT_STRING) = 0;
+	virtual std::string getBindingStringByIndex(int key, int binding_index, bool get_short_string = !GET_SHORT_STRING) = 0;
+	virtual std::string getGamepadBindingString(int key, bool get_short_string = !GET_SHORT_STRING) = 0;
 	virtual std::string getMovementString() = 0;
 	virtual std::string getAttackString() = 0;
-	virtual std::string getContinueString() = 0;
 	virtual int getNumJoysticks() = 0;
 	virtual bool usingMouse() = 0;
 	virtual void startTextInput() = 0;
 	virtual void stopTextInput() = 0;
-	virtual void setKeybind(int key, int binding_button, int bindings_list, std::string& keybind_msg) = 0;
 
 	void enableEventLog();
 
@@ -142,7 +170,7 @@ public:
 	int last_button;
 	int last_joybutton;
 	int last_joyaxis;
-	bool last_is_joystick;
+	unsigned mode;
 	bool scroll_up;
 	bool scroll_down;
 	bool lock_scroll;
@@ -151,13 +179,12 @@ public:
 	bool window_minimized;
 	bool window_restored;
 	bool window_resized;
-	bool pressing_up;
-	bool pressing_down;
 	bool joysticks_changed;
+	bool refresh_hotkeys;
 
 protected:
 	Point scaleMouse(unsigned int x, unsigned int y);
-	virtual int getKeyFromName(const std::string& key_name) = 0;
+	virtual int getBindFromString(const std::string& bind, int type) = 0;
 
 	bool un_press[KEY_COUNT];
 	Point current_touch;
@@ -172,6 +199,8 @@ protected:
 
 	Version* file_version;
 	Version* file_version_min;
+
+	std::string config_keys[KEY_COUNT_USER];
 };
 
 #endif

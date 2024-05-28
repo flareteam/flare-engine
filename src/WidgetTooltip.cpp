@@ -31,9 +31,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Utils.h"
 #include "WidgetTooltip.h"
 
-WidgetTooltip::WidgetTooltip() {
-	background = render_device->loadImage("images/menus/tooltips.png", RenderDevice::ERROR_NONE);
-	sprite_buf = NULL;
+WidgetTooltip::WidgetTooltip()
+	: parent(NULL)
+	, background(render_device->loadImage("images/menus/tooltips.png", RenderDevice::ERROR_NONE))
+	, sprite_buf(NULL)
+{
 }
 
 WidgetTooltip::~WidgetTooltip() {
@@ -48,7 +50,6 @@ WidgetTooltip::~WidgetTooltip() {
  * calculate the starting position of the background and text
  */
 Point WidgetTooltip::calcPosition(uint8_t style, const Point& pos, const Point& size) {
-
 	Point tip_pos;
 
 	// TopLabel style is fixed and centered over the origin
@@ -62,32 +63,56 @@ Point WidgetTooltip::calcPosition(uint8_t style, const Point& pos, const Point& 
 	else if (style == TooltipData::STYLE_FLOAT) {
 		// upper left
 		if (pos.x < settings->view_w_half && pos.y < settings->view_h_half) {
-			tip_pos.x = pos.x + eset->tooltips.offset;
+			if (parent)
+				tip_pos.x = parent->bounds.x + parent->bounds.w;
+			else
+				tip_pos.x = pos.x + eset->tooltips.offset;
+
 			tip_pos.y = pos.y + eset->tooltips.offset;
 		}
 		// upper right
 		else if (pos.x >= settings->view_w_half && pos.y < settings->view_h_half) {
-			tip_pos.x = pos.x - eset->tooltips.offset - size.x;
+			if (parent)
+				tip_pos.x = parent->bounds.x - size.x;
+			else
+				tip_pos.x = pos.x - eset->tooltips.offset - size.x;
+
 			tip_pos.y = pos.y + eset->tooltips.offset;
 		}
 		// lower left
 		else if (pos.x < settings->view_w_half && pos.y >= settings->view_h_half) {
-			tip_pos.x = pos.x + eset->tooltips.offset;
+			if (parent)
+				tip_pos.x = parent->bounds.x + parent->bounds.w;
+			else
+				tip_pos.x = pos.x + eset->tooltips.offset;
+
 			tip_pos.y = pos.y - eset->tooltips.offset - size.y;
 		}
 		// lower right
 		else if (pos.x >= settings->view_w_half && pos.y >= settings->view_h_half) {
-			tip_pos.x = pos.x - eset->tooltips.offset - size.x;
+			if (parent)
+				tip_pos.x = parent->bounds.x - size.x;
+			else
+				tip_pos.x = pos.x - eset->tooltips.offset - size.x;
+
 			tip_pos.y = pos.y - eset->tooltips.offset - size.y;
 		}
 
 		// very large tooltips might still be off screen at this point
 		// so we try to constrain them to the screen bounds
 		// we give priority to being able to read the top-left of the tooltip over the bottom-right
-		if (tip_pos.x + size.x > settings->view_w) tip_pos.x = settings->view_w - size.x;
-		if (tip_pos.y + size.y > settings->view_h) tip_pos.y = settings->view_h - size.y;
-		if (tip_pos.x < 0) tip_pos.x = 0;
-		if (tip_pos.y < 0) tip_pos.y = 0;
+		// EXCEPTION: If the tooltip is a child of another, we don't constrain the x-axis
+		if (tip_pos.x + size.x > settings->view_w && !parent)
+			tip_pos.x = settings->view_w - size.x;
+
+		if (tip_pos.y + size.y > settings->view_h)
+			tip_pos.y = settings->view_h - size.y;
+
+		if (tip_pos.x < 0 && !parent)
+			tip_pos.x = 0;
+
+		if (tip_pos.y < 0)
+			tip_pos.y = 0;
 	}
 
 	return tip_pos;
@@ -147,7 +172,7 @@ bool WidgetTooltip::createBuffer(TooltipData &tip) {
 	font->setFont("font_regular");
 
 	// calculate the full size to display a multi-line tooltip
-	Point size = font->calc_size(fulltext, eset->tooltips.width);
+	Point size = font->calc_size(fulltext, eset->tooltips.width - (eset->tooltips.margin*2));
 
 	// WARNING: dynamic memory allocation. Be careful of memory leaks.
 	if (sprite_buf) {

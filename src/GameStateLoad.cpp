@@ -43,6 +43,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
+#include "WidgetHorizontalList.h"
 #include "WidgetScrollBar.h"
 
 bool compareSaveDirs(const std::string& dir1, const std::string& dir2) {
@@ -55,6 +56,7 @@ bool compareSaveDirs(const std::string& dir1, const std::string& dir2) {
 GameSlot::GameSlot()
 	: id(0)
 	, time_played(0)
+	, active_equipment_set(0)
 	, preview_turn_timer(settings->max_frames_per_sec/2)
 {
 	preview_turn_timer.reset(Timer::BEGIN);
@@ -77,7 +79,9 @@ GameStateLoad::GameStateLoad() : GameState()
 	, scroll_offset(0)
 	, has_scroll_bar(false)
 	, game_slot_max(4)
-	, text_trim_boundary(0) {
+	, text_trim_boundary(0)
+	, portrait_align(Utils::ALIGN_FRAME_TOPLEFT)
+	, gameslot_align(Utils::ALIGN_FRAME_TOPLEFT) {
 
 	if (items == NULL)
 		items = new ItemManager();
@@ -85,7 +89,11 @@ GameStateLoad::GameStateLoad() : GameState()
 	label_loading = new WidgetLabel();
 
 	// Confirmation box to confirm deleting
-	confirm = new MenuConfirm(msg->get("Delete Save"), msg->get("Delete this save?"));
+	confirm = new MenuConfirm();
+	confirm->setTitle(msg->get("Delete this save?"));
+	confirm->action_list->append(msg->get("No"), "");
+	confirm->action_list->append(msg->get("Yes"), "");
+
 	button_exit = new WidgetButton(WidgetButton::DEFAULT_FILE);
 	button_exit->setLabel(msg->get("Exit to Title"));
 
@@ -106,9 +114,13 @@ GameStateLoad::GameStateLoad() : GameState()
 	// Set up tab list
 	tablist = TabList();
 	tablist.setScrollType(Widget::SCROLL_HORIZONTAL);
-	tablist.ignore_no_mouse = true;
 	tablist.add(button_exit);
 	tablist.add(button_new);
+
+	// Some widgets default to being aligned to the menu frame
+	button_new->alignment = Utils::ALIGN_FRAME_TOPLEFT;
+	button_load->alignment = Utils::ALIGN_FRAME_TOPLEFT;
+	button_delete->alignment = Utils::ALIGN_FRAME_TOPLEFT;
 
 	// Read positions from config file
 	FileParser infile;
@@ -120,21 +132,21 @@ GameStateLoad::GameStateLoad() : GameState()
 			if (infile.key == "button_new") {
 				int x = Parse::popFirstInt(infile.val);
 				int y = Parse::popFirstInt(infile.val);
-				int a = Parse::toAlignment(Parse::popFirstString(infile.val));
+				int a = Parse::toAlignment(Parse::popFirstString(infile.val), Utils::ALIGN_FRAME_TOPLEFT);
 				button_new->setBasePos(x, y, a);
 			}
 			// @ATTR button_load|int, int, alignment : X, Y, Alignment|Position of the "Load Game" button.
 			else if (infile.key == "button_load") {
 				int x = Parse::popFirstInt(infile.val);
 				int y = Parse::popFirstInt(infile.val);
-				int a = Parse::toAlignment(Parse::popFirstString(infile.val));
+				int a = Parse::toAlignment(Parse::popFirstString(infile.val), Utils::ALIGN_FRAME_TOPLEFT);
 				button_load->setBasePos(x, y, a);
 			}
 			// @ATTR button_delete|int, int, alignment : X, Y, Alignment|Position of the "Delete Save" button.
 			else if (infile.key == "button_delete") {
 				int x = Parse::popFirstInt(infile.val);
 				int y = Parse::popFirstInt(infile.val);
-				int a = Parse::toAlignment(Parse::popFirstString(infile.val));
+				int a = Parse::toAlignment(Parse::popFirstString(infile.val), Utils::ALIGN_FRAME_TOPLEFT);
 				button_delete->setBasePos(x, y, a);
 			}
 			// @ATTR button_exit|int, int, alignment : X, Y, Alignment|Position of the "Exit to Title" button.
@@ -198,6 +210,22 @@ GameStateLoad::GameStateLoad() : GameState()
 		infile.close();
 	}
 
+	// We need to read the inventory menu config to properly handle equipment sets
+	if (infile.open("menus/inventory.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
+		while(infile.next()) {
+			if (infile.key == "equipment_slot") {
+				// we don't need the first 3 parameters, so pop them off
+				Parse::popFirstInt(infile.val);
+				Parse::popFirstInt(infile.val);
+				Parse::popFirstString(infile.val);
+
+				int eq_set = Parse::popFirstInt(infile.val);
+				equip_sets.push_back(eq_set);
+			}
+		}
+		infile.close();
+	}
+
 	// prevent text from overflowing on the right edge of game slots
 	if (text_trim_boundary == 0 || text_trim_boundary > gameslot_pos.w)
 		text_trim_boundary = gameslot_pos.w;
@@ -228,6 +256,11 @@ GameStateLoad::GameStateLoad() : GameState()
 		scrollToSelected();
 		updateButtons();
 	}
+	else if (!game_slots.empty()) {
+		setSelectedSlot(0);
+		scrollToSelected();
+		updateButtons();
+	}
 
 	render_device->setBackgroundColor(Color(0,0,0,0));
 }
@@ -250,6 +283,7 @@ void GameStateLoad::loadGraphics() {
 	graphics = render_device->loadImage("images/menus/portrait_border.png", RenderDevice::ERROR_NORMAL);
 	if (graphics) {
 		portrait_border = graphics->createSprite();
+		portrait_border->setClip(0, 0, portrait_dest.w, portrait_dest.h);
 		graphics->unref();
 	}
 }
@@ -279,7 +313,7 @@ void GameStateLoad::loadPortrait(int slot) {
 
 void GameStateLoad::readGameSlots() {
 	FileParser infile;
-	std::stringstream filename;
+	std::string save_root = settings->path_user + "saves/" + eset->misc.save_prefix + "/";
 	std::vector<std::string> save_dirs;
 
 	Filesystem::getDirList(settings->path_user + "saves/" + eset->misc.save_prefix, save_dirs);
@@ -297,10 +331,9 @@ void GameStateLoad::readGameSlots() {
 
 	for (size_t i=0; i<save_dirs.size(); ++i){
 		// save data is stored in slot#/avatar.txt
-		filename.str("");
-		filename << settings->path_user << "saves/" << eset->misc.save_prefix << "/" << save_dirs[i] << "/avatar.txt";
+		std::string filename = save_root + save_dirs[i] + "/avatar.txt";
 
-		if (!infile.open(filename.str(), !FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) continue;
+		if (!infile.open(filename, !FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) continue;
 
 		game_slots[i] = new GameSlot();
 		game_slots[i]->id = Parse::toInt(save_dirs[i]);
@@ -330,8 +363,17 @@ void GameStateLoad::readGameSlots() {
 			else if (infile.key == "equipped") {
 				std::string repeat_val = Parse::popFirstString(infile.val);
 				while (repeat_val != "") {
-					game_slots[i]->equipped.push_back(Parse::toInt(repeat_val));
+					ItemID item_id = items->verifyID(Parse::toItemID(repeat_val), &infile, ItemManager::VERIFY_ALLOW_ZERO, ItemManager::VERIFY_ALLOCATE);
+					game_slots[i]->equipped.push_back(item_id);
 					repeat_val = Parse::popFirstString(infile.val);
+				}
+			}
+			else if (infile.key == "active_equipment_set") {
+				game_slots[i]->active_equipment_set = Parse::toInt(infile.val);
+
+				if (game_slots[i]->active_equipment_set > 0 && std::find(equip_sets.begin(), equip_sets.end(), game_slots[i]->active_equipment_set) == equip_sets.end()) {
+					Utils::logError("GameStateLoad: Save slot %d has an invalid active equipment set. Resetting to 0.", game_slots[i]->id);
+					game_slots[i]->active_equipment_set = 0;
 				}
 			}
 			else if (infile.key == "option") {
@@ -396,15 +438,23 @@ void GameStateLoad::loadPreview(GameSlot* slot) {
 	}
 
 	for (unsigned int i=0; i<slot->equipped.size(); i++) {
-		if (static_cast<unsigned>(slot->equipped[i]) > items->items.size()-1) {
-			Utils::logError("GameStateLoad: Item in save slot %d with id=%d is out of bounds 1-%d. Your savegame is broken or you might be using an incompatible savegame/mod", slot->id, slot->equipped[i], static_cast<int>(items->items.size())-1);
+		if (slot->equipped[i] <= 0)
+			continue;
+
+		if (i >= equip_sets.size()) {
+			Utils::logError("GameStateLoad: Item in save slot %d with id=%d has an invalid position. Your savegame is broken or you might be using an incompatible savegame/mod", slot->id, slot->equipped[i]);
+			break;
+		}
+
+		if (!items->isValid(slot->equipped[i]) || !items->items[slot->equipped[i]]->has_name) {
+			Utils::logError("GameStateLoad: Item in save slot %d with id=%d is unknown. Your savegame is broken or you might be using an incompatible savegame/mod", slot->id, slot->equipped[i]);
 			continue;
 		}
 
-		if (slot->equipped[i] > 0 && !preview_layer.empty() && static_cast<unsigned>(slot->equipped[i]) < items->items.size()) {
-			std::vector<std::string>::iterator found = find(preview_layer.begin(), preview_layer.end(), items->items[slot->equipped[i]].type);
+		if ((slot->active_equipment_set == 0 || equip_sets[i] == 0 || slot->active_equipment_set == equip_sets[i]) && !preview_layer.empty()) {
+			std::vector<std::string>::iterator found = find(preview_layer.begin(), preview_layer.end(), items->items[slot->equipped[i]]->type);
 			if (found != preview_layer.end())
-				img_gfx[distance(preview_layer.begin(), found)] = items->items[slot->equipped[i]].gfx;
+				img_gfx[distance(preview_layer.begin(), found)] = items->items[slot->equipped[i]]->gfx;
 		}
 	}
 
@@ -435,8 +485,52 @@ void GameStateLoad::logic() {
 		game_slots[i]->preview.logic();
 	}
 
-	if (!confirm->visible) {
+	if (confirm->visible) {
+		confirm->logic();
+		if (confirm->clicked_confirm) {
+			if (confirm->action_list->getSelected() == DELETE_CONFIRM_OPTION_YES) {
+				Utils::removeSaveDir(game_slots[selected_slot]->id);
+
+				delete game_slots[selected_slot];
+				game_slots[selected_slot] = NULL;
+				game_slots.erase(game_slots.begin()+selected_slot);
+
+				visible_slots = (game_slot_max > static_cast<int>(game_slots.size()) ? static_cast<int>(game_slots.size()) : game_slot_max);
+				if (!game_slots.empty())
+					setSelectedSlot(0);
+				else
+					setSelectedSlot(-1);
+
+				while (scroll_offset + visible_slots > static_cast<int>(game_slots.size())) {
+					scroll_offset--;
+				}
+
+				scrollToSelected();
+				updateButtons();
+
+				refreshSavePaths();
+				settings->prev_save_slot = -1;
+
+				tablist.defocus();
+			}
+
+			// both yes and no close the dialog
+			confirm->visible = false;
+			confirm->clicked_confirm = false;
+		}
+	}
+	else {
 		tablist.logic();
+
+		if (!inpt->usingMouse() && tablist.getCurrent() == -1) {
+			if (button_load->enabled)
+				tablist.setCurrent(button_load);
+			else if (button_new->enabled)
+				tablist.setCurrent(button_new);
+			else
+				tablist.setCurrent(button_exit);
+		}
+
 		if (button_exit->checkClick() || (inpt->pressing[Input::CANCEL] && !inpt->lock[Input::CANCEL])) {
 			inpt->lock[Input::CANCEL] = true;
 			showLoading();
@@ -462,8 +556,7 @@ void GameStateLoad::logic() {
 		}
 		else if (button_delete->checkClick()) {
 			// Display pop-up to make sure save should be deleted
-			confirm->visible = true;
-			confirm->render();
+			confirm->show();
 		}
 		else if (game_slots.size() > 0) {
 			Rect scroll_area = slot_pos[0];
@@ -489,13 +582,13 @@ void GameStateLoad::logic() {
 			}
 			else if (has_scroll_bar) {
 				switch (scrollbar->checkClick()) {
-					case 1:
+					case WidgetScrollBar::CLICK_UP:
 						scrollUp();
 						break;
-					case 2:
+					case WidgetScrollBar::CLICK_DOWN:
 						scrollDown();
 						break;
-					case 3:
+					case WidgetScrollBar::CLICK_KNOB:
 						scroll_offset = scrollbar->getValue();
 						if (scroll_offset >= static_cast<int>(game_slots.size()) - visible_slots) {
 							scroll_offset = static_cast<int>(game_slots.size()) - visible_slots;
@@ -519,32 +612,6 @@ void GameStateLoad::logic() {
 				scrollToSelected();
 				updateButtons();
 			}
-		}
-	}
-	else if (confirm->visible) {
-		confirm->logic();
-		if (confirm->confirmClicked) {
-			Utils::removeSaveDir(game_slots[selected_slot]->id);
-
-			delete game_slots[selected_slot];
-			game_slots[selected_slot] = NULL;
-			game_slots.erase(game_slots.begin()+selected_slot);
-
-			visible_slots = (game_slot_max > static_cast<int>(game_slots.size()) ? static_cast<int>(game_slots.size()) : game_slot_max);
-			setSelectedSlot(-1);
-
-			while (scroll_offset + visible_slots > static_cast<int>(game_slots.size())) {
-				scroll_offset--;
-			}
-
-			updateButtons();
-
-			confirm->visible = false;
-			confirm->confirmClicked = false;
-
-			refreshSavePaths();
-
-			settings->prev_save_slot = -1;
 		}
 	}
 }
@@ -614,20 +681,23 @@ void GameStateLoad::updateButtons() {
 
 void GameStateLoad::refreshWidgets() {
 	button_exit->setPos(0, 0);
-	button_new->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);
-	button_load->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);
-	button_delete->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);
+	button_new->setPos(0, 0);
+	button_load->setPos(0, 0);
+	button_delete->setPos(0, 0);
 
 	if (portrait) {
-		portrait->setDest(portrait_dest.x + ((settings->view_w - eset->resolutions.frame_w)/2), portrait_dest.y + ((settings->view_h - eset->resolutions.frame_h)/2));
+		Rect portrait_rect = portrait_dest;
+		Utils::alignToScreenEdge(portrait_align, &portrait_rect);
+		portrait->setDest(portrait_rect.x, portrait_rect.y);
 	}
 
 	slot_pos.resize(visible_slots);
 	for (size_t i=0; i<slot_pos.size(); i++) {
-		slot_pos[i].x = gameslot_pos.x + (settings->view_w - eset->resolutions.frame_w)/2;
+		slot_pos[i].x = gameslot_pos.x;
 		slot_pos[i].h = gameslot_pos.h;
-		slot_pos[i].y = gameslot_pos.y + (settings->view_h - eset->resolutions.frame_h)/2 + (static_cast<int>(i) * gameslot_pos.h);
+		slot_pos[i].y = gameslot_pos.y + (static_cast<int>(i) * gameslot_pos.h);
 		slot_pos[i].w = gameslot_pos.w;
+		Utils::alignToScreenEdge(gameslot_align, &slot_pos[i]);
 	}
 
 	refreshScrollBar();
@@ -667,8 +737,7 @@ void GameStateLoad::refreshScrollBar() {
 		Rect scroll_pos;
 		scroll_pos.x = slot_pos[0].x + slot_pos[0].w;
 		scroll_pos.y = slot_pos[0].y;
-		scroll_pos.w = scrollbar->pos_up.w;
-		scroll_pos.h = (slot_pos[0].h * game_slot_max) - scrollbar->pos_down.h;
+		scroll_pos.h = (slot_pos[0].h * game_slot_max);
 		scrollbar->refresh(scroll_pos.x, scroll_pos.y, scroll_pos.h, scroll_offset, static_cast<int>(game_slots.size()) - visible_slots);
 	}
 }
@@ -752,7 +821,7 @@ void GameStateLoad::render() {
 
 		// level
 		ss.str("");
-		ss << msg->get("Level %d", game_slots[off_slot]->stats.level);
+		ss << msg->getv("Level %d", game_slots[off_slot]->stats.level);
 		ss << " / " << Utils::getTimeString(game_slots[off_slot]->time_played);
 		if (game_slots[off_slot]->stats.permadeath)
 			ss << " / +";
@@ -794,7 +863,7 @@ void GameStateLoad::render() {
 
 		// slot number
 		ss.str("");
-		ss << "#" << off_slot + 1;
+		ss << msg->get("#") << off_slot + 1;
 
 		game_slots[off_slot]->label_slot_number.setPos(slot_pos[slot].x, slot_pos[slot].y);
 		game_slots[off_slot]->label_slot_number.setText(ss.str());

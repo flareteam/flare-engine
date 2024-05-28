@@ -21,8 +21,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Avatar.h"
 #include "CampaignManager.h"
-#include "Enemy.h"
-#include "EnemyManager.h"
+#include "Entity.h"
+#include "EntityManager.h"
 #include "EventManager.h"
 #include "FileParser.h"
 #include "FontEngine.h"
@@ -33,6 +33,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuManager.h"
 #include "MessageEngine.h"
 #include "ModManager.h"
+#include "NPC.h"
+#include "NPCManager.h"
 #include "PowerManager.h"
 #include "Settings.h"
 #include "SharedGameResources.h"
@@ -50,6 +52,7 @@ MenuDevConsole::MenuDevConsole()
 	: Menu()
 	, first_open(false)
 	, input_scrollback_pos(0)
+	, set_shortcut_slot(0)
 {
 	distance_timer.setDuration(settings->max_frames_per_sec);
 
@@ -105,7 +108,8 @@ MenuDevConsole::MenuDevConsole()
 	log_history->setBasePos(history_area.x, history_area.y, Utils::ALIGN_TOPLEFT);
 	tablist.add(log_history->getWidget());
 
-	setBackground("images/menus/dev_console.png");
+	if (!background)
+		setBackground("images/menus/dev_console.png");
 
 	align();
 	reset();
@@ -135,10 +139,34 @@ void MenuDevConsole::logic() {
 		first_open = false;
 	}
 
+	// handle shortcut keys
+	// these are supposed to work even if the console is hidden
+	if (inpt->pressing[Input::DEVELOPER_CMD_1] && ! inpt->lock[Input::DEVELOPER_CMD_1]) {
+		inpt->lock[Input::DEVELOPER_CMD_1] = true;
+
+		input_box->setText(settings->dev_cmd_1);
+		execute();
+		return;
+	}
+	else if (inpt->pressing[Input::DEVELOPER_CMD_2] && ! inpt->lock[Input::DEVELOPER_CMD_2]) {
+		inpt->lock[Input::DEVELOPER_CMD_2] = true;
+
+		input_box->setText(settings->dev_cmd_2);
+		execute();
+		return;
+	}
+	else if (inpt->pressing[Input::DEVELOPER_CMD_3] && ! inpt->lock[Input::DEVELOPER_CMD_3]) {
+		inpt->lock[Input::DEVELOPER_CMD_3] = true;
+
+		input_box->setText(settings->dev_cmd_3);
+		execute();
+		return;
+	}
+
 	if (visible) {
 		if (!first_open) {
 			first_open = true;
-			log_history->add(msg->get("Use '%s' to inspect with the cursor.", inpt->getBindingString(Input::MAIN2)), WidgetLog::MSG_NORMAL);
+			log_history->add(msg->getv("Use '%s' to inspect with the cursor.", inpt->getBindingString(Input::MAIN2).c_str()), WidgetLog::MSG_NORMAL);
 
 			log_history->setNextColor(font->getColor(FontEngine::COLOR_MENU_BONUS));
 			log_history->add("exec \"msg=Hello World\"", WidgetLog::MSG_NORMAL);
@@ -170,16 +198,16 @@ void MenuDevConsole::logic() {
 			inpt->lock[Input::ACCEPT] = true;
 			execute();
 		}
-		else if (input_box->edit_mode && inpt->pressing_up) {
-			inpt->pressing_up = false;
+		else if (input_box->edit_mode && inpt->pressing[Input::TEXTEDIT_UP] && !inpt->lock[Input::TEXTEDIT_UP]) {
+			inpt->lock[Input::TEXTEDIT_UP] = true;
 			if (!input_scrollback.empty()) {
 				if (input_scrollback_pos != 0)
 					input_scrollback_pos--;
 				input_box->setText(input_scrollback[input_scrollback_pos]);
 			}
 		}
-		else if (input_box->edit_mode && inpt->pressing_down) {
-			inpt->pressing_down = false;
+		else if (input_box->edit_mode && inpt->pressing[Input::TEXTEDIT_DOWN] && !inpt->lock[Input::TEXTEDIT_DOWN]) {
+			inpt->lock[Input::TEXTEDIT_DOWN] = true;
 			if (!input_scrollback.empty()) {
 				input_scrollback_pos++;
 				if (input_scrollback_pos < input_scrollback.size()) {
@@ -194,7 +222,7 @@ void MenuDevConsole::logic() {
 
 		if (inpt->pressing[Input::MAIN2] && !inpt->lock[Input::MAIN2]) {
 			inpt->lock[Input::MAIN2] = true;
-			target = Utils::screenToMap(inpt->mouse.x,  inpt->mouse.y, mapr->cam.x, mapr->cam.y);
+			target = Utils::screenToMap(inpt->mouse.x,  inpt->mouse.y, mapr->cam.pos.x, mapr->cam.pos.y);
 
 			log_history->addSeparator();
 
@@ -202,7 +230,7 @@ void MenuDevConsole::logic() {
 			std::stringstream ss;
 			if (!mapr->collider.isOutsideMap(floorf(target.x), floorf(target.y))) {
 				getTileInfo();
-				getEnemyInfo();
+				getEntityInfo();
 				getPlayerInfo();
 
 				ss << "X=" << target.x << ", Y=" << target.y;
@@ -275,10 +303,11 @@ void MenuDevConsole::getTileInfo() {
 	log_history->add(ss.str(), WidgetLog::MSG_NORMAL);
 }
 
-void MenuDevConsole::getEnemyInfo() {
+void MenuDevConsole::getEntityInfo() {
 	std::stringstream ss;
-	for (size_t i = 0; i < enemym->enemies.size(); ++i) {
-		const Enemy* e = enemym->enemies[i];
+	// enemies & ally creatures
+	for (size_t i = 0; i < entitym->entities.size(); ++i) {
+		const Entity* e = entitym->entities[i];
 		if (!(static_cast<int>(target.x) == static_cast<int>(e->stats.pos.x) && static_cast<int>(target.y) == static_cast<int>(e->stats.pos.y)))
 			continue;
 
@@ -287,7 +316,21 @@ void MenuDevConsole::getEnemyInfo() {
 		log_history->setNextColor(font->getColor(FontEngine::COLOR_MENU_BONUS));
 		log_history->add(ss.str(), WidgetLog::MSG_NORMAL);
 
-		// TODO print more enemy data
+		// TODO print more entity data
+	}
+
+	// non-ally NPCs
+	for (size_t i = 0; i < npcs->npcs.size(); ++i) {
+		const Entity* e = npcs->npcs[i];
+		if (!(static_cast<int>(target.x) == static_cast<int>(e->stats.pos.x) && static_cast<int>(target.y) == static_cast<int>(e->stats.pos.y)))
+			continue;
+
+		ss.str("");
+		ss << msg->get("Entity") << ": " << e->stats.name << "  |  X=" << e->stats.pos.x << ", Y=" << e->stats.pos.y;
+		log_history->setNextColor(font->getColor(FontEngine::COLOR_MENU_BONUS));
+		log_history->add(ss.str(), WidgetLog::MSG_NORMAL);
+
+		// TODO print more entity data
 	}
 }
 
@@ -312,6 +355,7 @@ bool MenuDevConsole::inputFocus() {
 void MenuDevConsole::reset() {
 	input_box->setText("");
 	input_box->edit_mode = true;
+	set_shortcut_slot = 0;
 	// log_history->clear();
 }
 
@@ -320,6 +364,7 @@ void MenuDevConsole::closeWindow() {
 	input_box->edit_mode = false;
 	input_box->logic();
 	reset();
+	tablist.defocus();
 }
 
 void MenuDevConsole::execute() {
@@ -333,6 +378,30 @@ void MenuDevConsole::execute() {
 	log_history->addSeparator();
 	log_history->setNextColor(font->getColor(FontEngine::COLOR_WIDGET_DISABLED));
 	log_history->add(command, WidgetLog::MSG_UNIQUE);
+
+	bool starts_with_slash = (command.at(0) == '/');
+	if (starts_with_slash) {
+		command = "exec " + Parse::trim(command.substr(1)); // remove the slash
+	}
+	command = Parse::trim(command);
+
+	// setting a dev shortcut command; no need to process the command
+	if (set_shortcut_slot > 0) {
+		if (set_shortcut_slot == 1) {
+			settings->dev_cmd_1 = command;
+		}
+		else if (set_shortcut_slot == 2) {
+			settings->dev_cmd_2 = command;
+		}
+		else if (set_shortcut_slot == 3) {
+			settings->dev_cmd_3 = command;
+		}
+		set_shortcut_slot = 0;
+		settings->saveSettings();
+		log_history->setNextColor(font->getColor(FontEngine::COLOR_MENU_BONUS));
+		log_history->add(msg->get("Shortcut saved."), WidgetLog::MSG_UNIQUE);
+		return;
+	}
 
 	std::vector<std::string> args;
 	command += ' ';
@@ -365,7 +434,9 @@ void MenuDevConsole::execute() {
 		log_history->add("list_maps - " + msg->get("Prints out all the map filenames located in the \"maps/\" directory."), WidgetLog::MSG_UNIQUE);
 		log_history->add("list_status - " + msg->get("Prints out the active campaign statuses that match a search term. No search term will list all active statuses"), WidgetLog::MSG_UNIQUE);
 		log_history->add("list_items - " + msg->get("Prints a list of items that match a search term. No search term will list all items"), WidgetLog::MSG_UNIQUE);
+		log_history->add("set_shortcut - " + msg->get("Assign a console command to a shortcut key."), WidgetLog::MSG_UNIQUE);
 		log_history->add("exec - " + msg->get("parses a series of event components and executes them as a single event"), WidgetLog::MSG_UNIQUE);
+		log_history->add("/ - " + msg->get("parses a series of event components and executes them as a single event"), WidgetLog::MSG_UNIQUE);
 		log_history->add("clear - " + msg->get("clears the command history"), WidgetLog::MSG_UNIQUE);
 		log_history->add("help - " + msg->get("displays this text"), WidgetLog::MSG_UNIQUE);
 	}
@@ -426,11 +497,13 @@ void MenuDevConsole::execute() {
 
 		std::vector<size_t> matching_ids;
 
-		for (size_t i=1; i<items->items.size(); ++i) {
-			if (!items->items[i].has_name)
+		for (size_t i = 1; i < items->items.size(); ++i) {
+			Item* item = items->items[i];
+
+			if (!item || !item->has_name)
 				continue;
 
-			std::string item_name = items->getItemName(static_cast<int>(i));
+			std::string item_name = items->getItemName(i);
 			if (!search_terms.empty() && Utils::stringFindCaseInsensitive(item_name, search_terms) == std::string::npos)
 				continue;
 
@@ -444,8 +517,8 @@ void MenuDevConsole::execute() {
 				size_t id = matching_ids[i-1];
 
 				ss.str("");
-				ss << items->getItemName(static_cast<int>(id)) << " (" << id <<")";
-				log_history->setNextColor(items->getItemColor(static_cast<int>(id)));
+				ss << items->getItemName(id) << " (" << id <<")";
+				log_history->setNextColor(items->getItemColor(id));
 				log_history->add(ss.str(), WidgetLog::MSG_UNIQUE);
 			}
 
@@ -503,12 +576,11 @@ void MenuDevConsole::execute() {
 
 		std::vector<size_t> matching_ids;
 
-		for (size_t i=1; i<powers->powers.size(); ++i) {
-			if (powers->powers[i].is_empty)
+		for (size_t i = 1; i < powers->powers.size(); ++i) {
+			if (!powers->powers[i])
 				continue;
 
-			std::string item_name = powers->powers[i].name;
-			if (!search_terms.empty() && Utils::stringFindCaseInsensitive(item_name, search_terms) == std::string::npos)
+			if (!search_terms.empty() && Utils::stringFindCaseInsensitive(powers->powers[i]->name, search_terms) == std::string::npos)
 				continue;
 
 			matching_ids.push_back(i);
@@ -521,7 +593,7 @@ void MenuDevConsole::execute() {
 				size_t id = matching_ids[i-1];
 
 				ss.str("");
-				ss << powers->powers[id].name << " (" << id <<")";
+				ss << powers->powers[id]->name << " (" << id <<")";
 				log_history->add(ss.str(), WidgetLog::MSG_UNIQUE);
 			}
 
@@ -539,7 +611,29 @@ void MenuDevConsole::execute() {
 			menu->act->addPower(Parse::toInt(args[1]), MenuActionBar::USE_EMPTY_SLOT);
 		}
 	}
-	else if (args[0] == "exec") {
+	else if (args[0] == "set_shortcut") {
+		if (args.size() != 2) {
+			log_history->add(msg->getv("3 | <%s> | %s", inpt->getBindingString(Input::DEVELOPER_CMD_3).c_str(), settings->dev_cmd_3.c_str()), WidgetLog::MSG_UNIQUE);
+			log_history->add(msg->getv("2 | <%s> | %s", inpt->getBindingString(Input::DEVELOPER_CMD_2).c_str(), settings->dev_cmd_2.c_str()), WidgetLog::MSG_UNIQUE);
+			log_history->add(msg->getv("1 | <%s> | %s", inpt->getBindingString(Input::DEVELOPER_CMD_1).c_str(), settings->dev_cmd_1.c_str()), WidgetLog::MSG_UNIQUE);
+			log_history->add(msg->get("Current shortcuts:"), WidgetLog::MSG_UNIQUE);
+			log_history->setNextColor(font->getColor(FontEngine::COLOR_MENU_BONUS));
+			log_history->add(msg->get("HINT:") + ' ' + args[0] + " [1-3]", WidgetLog::MSG_UNIQUE);
+		}
+		else {
+			int custom_cmd_index = Parse::toInt(args[1]);
+			if (custom_cmd_index >= 0 && custom_cmd_index < 4) {
+				set_shortcut_slot = custom_cmd_index;
+				log_history->setNextColor(font->getColor(FontEngine::COLOR_MENU_BONUS));
+				log_history->add(msg->getv("Enter the command you wish to save to slot %d.", set_shortcut_slot), WidgetLog::MSG_UNIQUE);
+			}
+			else {
+				log_history->setNextColor(font->getColor(FontEngine::COLOR_MENU_PENALTY));
+				log_history->add(msg->get("ERROR: Not a valid shortcut slot."), WidgetLog::MSG_UNIQUE);
+			}
+		}
+	}
+	else if (starts_with_slash || args[0] == "exec") {
 		if (args.size() > 1) {
 			Event evnt;
 
@@ -549,7 +643,7 @@ void MenuDevConsole::execute() {
 
 				if (!EventManager::loadEventComponentString(key, val, &evnt, NULL)) {
 					log_history->setNextColor(font->getColor(FontEngine::COLOR_MENU_PENALTY));
-					log_history->add(msg->get("ERROR: '%s' is not a valid event key", key), WidgetLog::MSG_UNIQUE);
+					log_history->add(msg->getv("ERROR: '%s' is not a valid event key", key.c_str()), WidgetLog::MSG_UNIQUE);
 				}
 			}
 

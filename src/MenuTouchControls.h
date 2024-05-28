@@ -44,6 +44,8 @@ private:
 	int main2_align;
 
 	int radius_padding;
+
+	float prev_touch_scale;
 public:
 	MenuTouchControls();
 	~MenuTouchControls();

@@ -24,6 +24,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "Avatar.h"
+#include "Entity.h"
 #include "FileParser.h"
 #include "FontEngine.h"
 #include "InputState.h"
@@ -69,10 +70,8 @@ MenuTalker::MenuTalker()
 	, npc(NULL)
 	, advanceButton(new WidgetButton("images/menus/buttons/right.png"))
 	, closeButton(new WidgetButton("images/menus/buttons/button_x.png"))
-	, npc_from_map(true) {
-
-	setBackground("images/menus/dialog_box.png");
-
+	, npc_from_map(true)
+{
 	// Load config settings
 	FileParser infile;
 	// @CLASS MenuTalker|Description of menus/talker.txt
@@ -131,6 +130,10 @@ MenuTalker::MenuTalker()
 
 	textbox = new WidgetScrollBox(text_pos.w, text_pos.h-(text_offset.y*2));
 	textbox->setBasePos(text_pos.x, text_pos.y + text_offset.y, Utils::ALIGN_TOPLEFT);
+	textbox->show_focus_when_scrollbar_disabled = false;
+
+	if (!background)
+		setBackground("images/menus/dialog_box.png");
 
 	align();
 }
@@ -159,7 +162,7 @@ void MenuTalker::chooseDialogNode(int request_dialog_node) {
 		if (!npc->portraits.empty())
 			npc->npc_portrait = npc->portraits[0];
 
-		if (actions.size() == 1 && (!actions[0].is_vendor || first_interaction)) {
+		if (actions.size() == 1 && first_interaction) {
 			executeAction(0);
 		}
 		else if (actions.empty()) {
@@ -186,16 +189,33 @@ void MenuTalker::logic() {
 	if (!visible || !npc)
 		return;
 
+	if (!inpt->usingMouse() && tablist.getCurrent() == -1) {
+		tablist.setCurrent(textbox);
+	}
+	tablist.enable_activate = !actions.empty();
+
 	tablist.logic();
 
 	if (advanceButton->checkClick() || closeButton->checkClick()) {
 		// button was clicked
-		nextDialog();
+		if (closeButton->enabled) {
+			nextDialog();
+			setNPC(NULL);
+		}
+		else {
+			nextDialog();
+		}
 	}
 	else if	((advanceButton->enabled || closeButton->enabled) && inpt->pressing[Input::ACCEPT] && !inpt->lock[Input::ACCEPT]) {
 		// pressed next/more
 		inpt->lock[Input::ACCEPT] = true;
-		nextDialog();
+		if (closeButton->enabled) {
+			nextDialog();
+			setNPC(NULL);
+		}
+		else {
+			nextDialog();
+		}
 	}
 	else {
 		textbox->logic();
@@ -418,6 +438,7 @@ void MenuTalker::setNPC(NPC* _npc) {
 	if (_npc == NULL) {
 		visible = false;
 		first_interaction = false;
+		tablist.defocus();
 		return;
 	}
 
@@ -444,7 +465,7 @@ void MenuTalker::createActionButtons(int node_id) {
 	for (size_t i = nodes.size(); i > 0; i--) {
 		std::string topic = npc->getDialogTopic(nodes[i-1]);
 		if (topic.empty()) {
-			topic = msg->get("<dialog node %d>", nodes[i-1]);
+			topic = msg->getv("<dialog node %d>", nodes[i-1]);
 		}
 
 		addAction(topic, nodes[i-1], !Action::IS_VENDOR);
@@ -456,6 +477,7 @@ void MenuTalker::createActionButtons(int node_id) {
 	}
 
 	for (size_t i = 0; i< actions.size(); ++i) {
+		actions[i].btn->tablist_nav_align = TabList::NAV_ALIGN_LEFT;
 		textbox->addChildWidget(actions[i].btn);
 	}
 }
@@ -475,6 +497,9 @@ void MenuTalker::executeAction(size_t index) {
 	int node_id = actions[index].node_id;
 
 	if (actions[index].is_vendor) {
+		// defocus the talker menu tablist. Otherwise, CANCEL needs to be pressed twice to exit the vendor screen
+		defocusTabLists();
+
 		// begin trading
 		NPC *temp_npc = npc;
 		menu->closeAll();
@@ -524,15 +549,6 @@ void MenuTalker::setupTabList() {
 	tablist.clear();
 
 	tablist.add(textbox);
-
-	if (advanceButton->enabled) {
-		tablist.add(advanceButton);
-		tablist.setCurrent(advanceButton);
-	}
-	else if (closeButton->enabled) {
-		tablist.add(closeButton);
-		tablist.setCurrent(closeButton);
-	}
 }
 
 void MenuTalker::addAction(const std::string& label, int node_id, bool is_vendor) {

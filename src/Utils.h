@@ -35,6 +35,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 typedef unsigned long SoundID;
 typedef unsigned long StatusID;
+typedef unsigned long XPScalingTableID;
+
+typedef size_t ItemID;
+typedef size_t ItemSetID;
+typedef size_t PowerID;
 
 class Avatar;
 class FPoint; // needed for Point -> FPoint constructor
@@ -53,6 +58,7 @@ public:
 	FPoint();
 	FPoint(float _x, float _y);
 	explicit FPoint(Point _p);
+	FPoint(int _x, int _y);
 	void align();
 };
 
@@ -73,6 +79,8 @@ public:
 	operator SDL_Color() const;
 	bool operator ==(const Color &other);
 	bool operator !=(const Color &other);
+	uint32_t encodeRGBA();
+	void decodeRGBA(const uint32_t encoded);
 };
 
 class Timer {
@@ -85,7 +93,7 @@ public:
 		BEGIN = 1
 	};
 
-	Timer(unsigned _duration = 0);
+	explicit Timer(unsigned _duration = 0);
 	unsigned getCurrent();
 	unsigned getDuration();
 	void setCurrent(unsigned val);
@@ -94,10 +102,18 @@ public:
 	bool isEnd();
 	bool isBegin();
 	void reset(int type);
+	bool isWholeSecond();
+};
+
+class FMinMax {
+public:
+	float min;
+	float max;
+	FMinMax();
 };
 
 namespace Utils {
-	// Alignment: For aligning objects relative to the screen
+	// Alignment: For aligning objects. 0-8 are screen-relative, 9-17 are menu frame relative.
 	enum {
 		ALIGN_TOPLEFT = 0,
 		ALIGN_TOP = 1,
@@ -107,7 +123,16 @@ namespace Utils {
 		ALIGN_RIGHT = 5,
 		ALIGN_BOTTOMLEFT = 6,
 		ALIGN_BOTTOM = 7,
-		ALIGN_BOTTOMRIGHT = 8
+		ALIGN_BOTTOMRIGHT = 8,
+		ALIGN_FRAME_TOPLEFT = 9,
+		ALIGN_FRAME_TOP = 10,
+		ALIGN_FRAME_TOPRIGHT = 11,
+		ALIGN_FRAME_LEFT = 12,
+		ALIGN_FRAME_CENTER = 13,
+		ALIGN_FRAME_RIGHT = 14,
+		ALIGN_FRAME_BOTTOMLEFT = 15,
+		ALIGN_FRAME_BOTTOM = 16,
+		ALIGN_FRAME_BOTTOMRIGHT = 17
 	};
 
 	extern int LOCK_INDEX;
@@ -161,6 +186,10 @@ namespace Utils {
 	void lockFileRead();
 	void lockFileWrite(int increment);
 	void lockFileCheck();
+
+	void setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask);
+
+	std::string createMinMaxString(float min, float max, size_t precision);
 }
 
 #endif

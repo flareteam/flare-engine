@@ -24,101 +24,140 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "InputState.h"
 #include "MenuConfirm.h"
 #include "SharedResources.h"
+#include "UtilsParsing.h"
 #include "WidgetButton.h"
+#include "WidgetHorizontalList.h"
 
 #include <string>
 
-MenuConfirm::MenuConfirm(const std::string& _buttonMsg, const std::string& _boxMsg)
+MenuConfirm::MenuConfirm()
 	: Menu()
-	, buttonConfirm(NULL)
-	, buttonClose(NULL)
-	, hasConfirmButton(false)
-	, confirmClicked(false)
-	, cancelClicked(false)
-	, isWithinButtons(false) {
+	, button_close(new WidgetButton("images/menus/buttons/button_x.png"))
+	, action_list(new WidgetHorizontalList())
+	, clicked_confirm(false)
+	, clicked_cancel(false)
+{
+	label.setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
+
+	action_list->has_action = true;
+	action_list->refresh();
 
 	// Load config settings
 	FileParser infile;
+	// @CLASS MenuConfirm|Description of menus/confirm.txt
 	if(infile.open("menus/confirm.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while(infile.next()) {
-			if (parseMenuKey(infile.key, infile.val))
+			if (parseMenuKey(infile.key, infile.val)) {
+				// default positions based on window_area
+				if (infile.key == "pos") {
+					int border_size = 6;
+
+					button_close->setBasePos(window_area.w, 0, Utils::ALIGN_TOPLEFT);
+					action_list->setBasePos(window_area.w/2 - action_list->pos.w/2, window_area.h - action_list->pos.h - border_size, Utils::ALIGN_TOPLEFT);
+
+					LabelInfo label_info;
+					label_info.x = window_area.w/2;
+					label_info.y = border_size;
+					label_info.justify = FontEngine::JUSTIFY_CENTER;
+					label.setFromLabelInfo(label_info);
+				}
 				continue;
+			}
+
+			if (infile.key == "close") {
+				// @ATTR close|point|Position of the close button.
+				Point pos = Parse::toPoint(infile.val);
+				button_close->setBasePos(pos.x, pos.y, Utils::ALIGN_TOPLEFT);
+			}
+			else if (infile.key == "label_title") {
+				// @ATTR label_title|label|Position of the title text.
+				label.setFromLabelInfo(Parse::popLabelInfo(infile.val));
+			}
+			else if (infile.key == "action_list") {
+				// @ATTR action_list|point|Position of the action selector widget.
+				Point pos = Parse::toPoint(infile.val);
+				action_list->setBasePos(pos.x, pos.y, Utils::ALIGN_TOPLEFT);
+			}
 		}
 		infile.close();
 	}
 
-	if (_buttonMsg != "") hasConfirmButton = true;
-	// Text to display in confirmation box
-	boxMsg = _boxMsg;
+	tablist.add(action_list);
 
-	tablist.ignore_no_mouse = true;
+	if (!background)
+		setBackground("images/menus/confirm_bg.png");
 
-	if (hasConfirmButton) {
-		buttonConfirm = new WidgetButton(WidgetButton::DEFAULT_FILE);
-		buttonConfirm->setLabel(_buttonMsg);
-		tablist.add(buttonConfirm);
-	}
-
-	buttonClose = new WidgetButton("images/menus/buttons/button_x.png");
-	tablist.add(buttonClose);
-
-	setBackground("images/menus/confirm_bg.png");
 	align();
 }
 
 void MenuConfirm::align() {
 	Menu::align();
 
-	label.setJustify(FontEngine::JUSTIFY_CENTER);
-	label.setText(boxMsg);
-	label.setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
+	label.setText(title);
 
-	if (hasConfirmButton) {
-		buttonConfirm->pos.x = window_area.x + window_area.w/2 - buttonConfirm->pos.w/2;
-		buttonConfirm->pos.y = window_area.y + window_area.h/2;
-		buttonConfirm->refresh();
-		label.setPos(window_area.x + window_area.w/2, window_area.y + window_area.h - (buttonConfirm->pos.h * 2));
-	}
-	else {
-		label.setPos(window_area.x + window_area.w/2, window_area.y + (window_area.h / 4));
-	}
+	action_list->setPos(window_area.x, window_area.y);
+	action_list->refresh();
+	label.setPos(window_area.x, window_area.y);
 
-	buttonClose->pos.x = window_area.x + window_area.w;
-	buttonClose->pos.y = window_area.y;
+	button_close->setPos(window_area.x, window_area.y);
 }
 
 void MenuConfirm::logic() {
-	if (visible) {
+	if (visible && action_list->enabled) {
 		tablist.logic();
-		confirmClicked = false;
 
-		if (hasConfirmButton && buttonConfirm->checkClick()) {
-			confirmClicked = true;
+		if (!inpt->usingMouse() && tablist.getCurrent() == -1) {
+			tablist.getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
 		}
-		if (buttonClose->checkClick()) {
+		else if (inpt->usingMouse()) {
+			tablist.defocus();
+		}
+
+		clicked_confirm = false;
+
+		if (action_list->checkClick() && action_list->checkAction()) {
+			clicked_confirm = true;
+		}
+		else if (button_close->checkClick() || (inpt->pressing[Input::CANCEL] && !inpt->lock[Input::CANCEL])) {
+			if (inpt->pressing[Input::CANCEL])
+				inpt->lock[Input::CANCEL] = true;
+
 			visible = false;
-			confirmClicked = false;
-			cancelClicked = true;
+			clicked_confirm = false;
+			clicked_cancel = true;
 		}
-
-		// check if the mouse cursor is hovering over the close button
-		// this is for the confirm dialog that shows when changing keybinds
-		isWithinButtons = Utils::isWithinRect(buttonClose->pos, inpt->mouse) || (hasConfirmButton && Utils::isWithinRect(buttonConfirm->pos, inpt->mouse));
 	}
 }
 
 void MenuConfirm::render() {
+	if (!visible)
+		return;
+
 	// background
 	Menu::render();
 
 	label.render();
 
-	if (hasConfirmButton) buttonConfirm->render();
-	buttonClose->render();
+	action_list->render();
+	button_close->render();
+}
+
+void MenuConfirm::setTitle(const std::string& s) {
+	title = s;
+	align();
+}
+
+void MenuConfirm::show() {
+	visible = true;
+	clicked_confirm = false;
+	clicked_cancel = false;
+	action_list->select(0);
+	action_list->enabled = true;
+	align();
 }
 
 MenuConfirm::~MenuConfirm() {
-	if (hasConfirmButton) delete buttonConfirm;
-	delete buttonClose;
+	delete action_list;
+	delete button_close;
 }
 

@@ -25,8 +25,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Avatar.h"
 #include "Animation.h"
-#include "Enemy.h"
-#include "EnemyManager.h"
+#include "Entity.h"
+#include "EntityManager.h"
 #include "EventManager.h"
 #include "Hazard.h"
 #include "HazardManager.h"
@@ -72,11 +72,14 @@ void HazardManager::logic() {
 				EventManager::executeScript(h[i-1]->power->script, h[i-1]->pos.x, h[i-1]->pos.y);
 			}
 
-			if (h[i-1]->power->wall_power > 0 && Math::percentChance(h[i-1]->power->wall_power_chance)) {
-				powers->activate(h[i-1]->power->wall_power, h[i-1]->src_stats, h[i-1]->pos);
+			for (size_t j = 0; j < h[i-1]->power->chain_powers.size(); ++j) {
+				ChainPower& chain_power = h[i-1]->power->chain_powers[j];
+				if (chain_power.type == ChainPower::TYPE_WALL && Math::percentChanceF(chain_power.chance)) {
+					powers->activate(chain_power.id, h[i-1]->src_stats, h[i-1]->pos, h[i-1]->pos);
 
-				if (powers->powers[h[i-1]->power->wall_power].directional) {
-					powers->hazards.back()->animationKind = h[i-1]->animationKind;
+					if (powers->powers[chain_power.id]->directional) {
+						powers->hazards.back()->animationKind = h[i-1]->animationKind;
+					}
 				}
 			}
 
@@ -92,17 +95,17 @@ void HazardManager::logic() {
 
 			// process hazards that can hurt enemies
 			if (h[i]->source_type != Power::SOURCE_TYPE_ENEMY) { //hero or neutral sources
-				for (unsigned int eindex = 0; eindex < enemym->enemies.size(); eindex++) {
+				for (unsigned int eindex = 0; eindex < entitym->entities.size(); eindex++) {
 
 					// only check living enemies
-					if (enemym->enemies[eindex]->stats.hp > 0 && h[i]->active && (enemym->enemies[eindex]->stats.hero_ally == h[i]->power->target_party)) {
-						if (Utils::isWithinRadius(h[i]->pos, h[i]->power->radius, enemym->enemies[eindex]->stats.pos)) {
-							if (!h[i]->hasEntity(enemym->enemies[eindex])) {
+					if (entitym->entities[eindex]->stats.hp > 0 && h[i]->active && (entitym->entities[eindex]->stats.hero_ally == h[i]->power->target_party)) {
+						if (Utils::isWithinRadius(h[i]->pos, h[i]->power->radius, entitym->entities[eindex]->stats.pos)) {
+							if (!h[i]->hasEntity(entitym->entities[eindex])) {
 								// hit!
-								h[i]->addEntity(enemym->enemies[eindex]);
-								hitEntity(i, enemym->enemies[eindex]->takeHit(*h[i]));
+								h[i]->addEntity(entitym->entities[eindex]);
+								hitEntity(i, entitym->entities[eindex]->takeHit(*h[i]));
 								if (!h[i]->power->beacon) {
-									last_enemy = enemym->enemies[eindex];
+									last_enemy = entitym->entities[eindex];
 								}
 							}
 						}
@@ -124,14 +127,14 @@ void HazardManager::logic() {
 				}
 
 				//now process allies
-				for (unsigned int eindex = 0; eindex < enemym->enemies.size(); eindex++) {
+				for (unsigned int eindex = 0; eindex < entitym->entities.size(); eindex++) {
 					// only check living allies
-					if (enemym->enemies[eindex]->stats.hp > 0 && h[i]->active && enemym->enemies[eindex]->stats.hero_ally) {
-						if (Utils::isWithinRadius(h[i]->pos, h[i]->power->radius, enemym->enemies[eindex]->stats.pos)) {
-							if (!h[i]->hasEntity(enemym->enemies[eindex])) {
+					if (entitym->entities[eindex]->stats.hp > 0 && h[i]->active && entitym->entities[eindex]->stats.hero_ally) {
+						if (Utils::isWithinRadius(h[i]->pos, h[i]->power->radius, entitym->entities[eindex]->stats.pos)) {
+							if (!h[i]->hasEntity(entitym->entities[eindex])) {
 								// hit!
-								h[i]->addEntity(enemym->enemies[eindex]);
-								hitEntity(i, enemym->enemies[eindex]->takeHit(*h[i]));
+								h[i]->addEntity(entitym->entities[eindex]);
+								hitEntity(i, entitym->entities[eindex]->takeHit(*h[i]));
 							}
 						}
 					}

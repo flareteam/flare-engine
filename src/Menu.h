@@ -36,8 +36,8 @@ public:
 	virtual ~Menu();
 
 	void setBackground(const std::string& background_image);
-	void setBackgroundDest(Rect &dest);
-	void setBackgroundClip(Rect &clip);
+	void setBackgroundDest(const Rect &dest);
+	void setBackgroundClip(const Rect &clip);
 	virtual void align();
 	virtual void render();
 	virtual void setWindowPos(int x, int y);
@@ -55,8 +55,10 @@ public:
 	virtual TabList* getCurrentTabList();
 	virtual void defocusTabLists();
 
-private:
+protected:
 	Sprite *background;
+
+private:
 	Point window_area_base;
 };
 

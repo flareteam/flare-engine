@@ -80,6 +80,7 @@ public:
 	void setGamma(float g);
 	void resetGamma();
 	void updateTitleBar();
+	unsigned short getRefreshRate();
 
 	Image* loadImage(const std::string& filename, int error_type);
 
@@ -90,7 +91,6 @@ protected:
 private:
 	Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 	void getWindowSize(short unsigned *screen_w, short unsigned *screen_h);
-	void setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask);
 
 	SDL_Surface* screen;
 	SDL_Window* window;
@@ -99,6 +99,11 @@ private:
 	SDL_Surface* titlebar_icon;
 	char* title;
 	uint32_t background_color;
+
+	/* Stores the system gamma levels so they can be restored later */
+	uint16_t gamma_r[256];
+	uint16_t gamma_g[256];
+	uint16_t gamma_b[256];
 };
 
 #endif // SDLSOFTWARERENDERDEVICE_H

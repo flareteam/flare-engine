@@ -48,7 +48,7 @@ SDLSoundManager::SDLSoundManager()
 	, music_filename("")
 	, last_played_sid(-1)
 {
-	if (settings->audio && Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 1024)) {
+	if (settings->audio && Mix_OpenAudio(settings->audio_freq, AUDIO_S16SYS, 2, 1024)) {
 		Utils::logError("SDLSoundManager: Error during Mix_OpenAudio: %s", SDL_GetError());
 		settings->audio = false;
 	}
@@ -270,9 +270,7 @@ void SDLSoundManager::play(SoundID sid, const std::string& channel, const FPoint
 }
 
 void SDLSoundManager::pauseChannel(const std::string& channel) {
-	VirtualChannelMapIterator vcit = channels.end();
-
-	vcit = channels.find(channel);
+	VirtualChannelMapIterator vcit = channels.find(channel);
 	if (vcit != channels.end()) {
 		Mix_Pause(vcit->second);
 	}
@@ -362,12 +360,7 @@ bool SDLSoundManager::isPlayingMusic() {
 }
 
 int SDLSoundManager::SetChannelPosition(int channel, Sint16 angle, Uint8 distance) {
-#ifdef __EMSCRIPTEN__
-	// TODO fix for Emscripten
-	return 0;
-#else
 	return Mix_SetPosition(channel, angle, distance);
-#endif
 }
 
 SoundID SDLSoundManager::getLastPlayedSID() {

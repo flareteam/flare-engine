@@ -23,6 +23,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "Avatar.h"
+#include "Entity.h"
 #include "EngineSettings.h"
 #include "FileParser.h"
 #include "FontEngine.h"
@@ -36,6 +37,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "SoundManager.h"
+#include "TooltipManager.h"
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
 #include "WidgetSlot.h"
@@ -51,11 +53,10 @@ MenuVendor::MenuVendor()
 	, activetab(ItemManager::VENDOR_BUY)
 	, tip (new WidgetTooltip())
 	, npc(NULL)
-	, buyback_stock() {
-	setBackground("images/menus/vendor.png");
-
-	tabControl->setTabTitle(ItemManager::VENDOR_BUY, msg->get("Inventory"));
-	tabControl->setTabTitle(ItemManager::VENDOR_SELL, msg->get("Buyback"));
+	, buyback_stock()
+{
+	tabControl->setupTab(ItemManager::VENDOR_BUY, msg->get("Inventory"), &tablist_buy);
+	tabControl->setupTab(ItemManager::VENDOR_SELL, msg->get("Buyback"), &tablist_sell);
 
 	// Load config settings
 	FileParser infile;
@@ -103,9 +104,7 @@ MenuVendor::MenuVendor()
 	stock[ItemManager::VENDOR_BUY].initGrid(VENDOR_SLOTS, slots_area, slots_cols);
 	stock[ItemManager::VENDOR_SELL].initGrid(VENDOR_SLOTS, slots_area, slots_cols);
 
-	tablist.add(tabControl);
-	tablist_buy.setPrevTabList(&tablist);
-	tablist_sell.setPrevTabList(&tablist);
+	tablist.setNextTabList(&tablist_buy);
 
 	tablist_buy.lock();
 	tablist_sell.lock();
@@ -116,6 +115,9 @@ MenuVendor::MenuVendor()
 	for (unsigned i = 0; i < VENDOR_SLOTS; i++) {
 		tablist_sell.add(stock[ItemManager::VENDOR_SELL].slots[i]);
 	}
+
+	if (!background)
+		setBackground("images/menus/vendor.png");
 
 	align();
 }
@@ -129,7 +131,7 @@ void MenuVendor::align() {
 	tabs_area.x += window_area.x;
 	tabs_area.y += window_area.y;
 
-	tabControl->setMainArea(tabs_area.x, tabs_area.y - tabControl->getTabHeight());
+	tabControl->setMainArea(tabs_area.x, tabs_area.y - tabControl->getTabHeight(), tabs_area.w);
 
 	closeButton->setPos(window_area.x, window_area.y);
 
@@ -144,17 +146,25 @@ void MenuVendor::logic() {
 	tablist_buy.logic();
 	tablist_sell.logic();
 
-	tabControl->logic();
+	if (stock[ItemManager::VENDOR_BUY].drag_prev_slot == -1 && stock[ItemManager::VENDOR_SELL].drag_prev_slot == -1)
+		tabControl->logic();
+
 	if (settings->touchscreen && activetab != tabControl->getActiveTab()) {
 		tablist_buy.defocus();
 		tablist_sell.defocus();
 	}
 	activetab = tabControl->getActiveTab();
 
-	if (activetab == ItemManager::VENDOR_BUY)
+	if (activetab == ItemManager::VENDOR_BUY) {
+		tablist_buy.unlock();
+		tablist_sell.lock();
 		tablist.setNextTabList(&tablist_buy);
-	else if (activetab == ItemManager::VENDOR_SELL)
+	}
+	else if (activetab == ItemManager::VENDOR_SELL) {
+		tablist_buy.lock();
+		tablist_sell.unlock();
 		tablist.setNextTabList(&tablist_sell);
+	}
 
 	if (settings->touchscreen) {
 		if (activetab == ItemManager::VENDOR_BUY && tablist_buy.getCurrent() == -1)
@@ -217,7 +227,6 @@ ItemStack MenuVendor::click(const Point& position) {
  * Cancel the dragging initiated by the clic()
  */
 void MenuVendor::itemReturn(ItemStack stack) {
-	items->playSound(stack.item);
 	stock[activetab].itemReturn(stack);
 	saveInventory();
 }
@@ -240,8 +249,8 @@ void MenuVendor::renderTooltips(const Point& position) {
 		return;
 
 	int vendor_view = (activetab == ItemManager::VENDOR_BUY) ? ItemManager::VENDOR_BUY : ItemManager::VENDOR_SELL;
-	TooltipData tip_data = stock[activetab].checkTooltip(position, &pc->stats, vendor_view);
-	tip->render(tip_data, position, TooltipData::STYLE_FLOAT);
+	TooltipData tip_data = stock[activetab].checkTooltip(position, &pc->stats, vendor_view, ItemManager::TOOLTIP_INPUT_HINT);
+	tooltipm->push(tip_data, position, TooltipData::STYLE_FLOAT);
 }
 
 /**
@@ -340,6 +349,11 @@ void MenuVendor::defocusTabLists() {
 	tablist.defocus();
 	tablist_buy.defocus();
 	tablist_sell.defocus();
+}
+
+void MenuVendor::resetDrag() {
+	stock[ItemManager::VENDOR_BUY].drag_prev_slot = -1;
+	stock[ItemManager::VENDOR_SELL].drag_prev_slot = -1;
 }
 
 MenuVendor::~MenuVendor() {

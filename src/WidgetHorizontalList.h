@@ -35,14 +35,19 @@ private:
 
 	class HListItem {
 	public:
-		HListItem() {}
+		HListItem()
+			: button(NULL)
+		{}
 		~HListItem() {}
 
 		std::string value;
 		std::string tooltip;
+		WidgetButton *button;
 	};
 
 	void checkTooltip(const Point& mouse);
+	void getVisibleButtonRange(size_t& start, size_t& end);
+	bool multipleActionsVisible();
 
 	WidgetLabel label;
 	WidgetButton *button_left;
@@ -50,8 +55,11 @@ private:
 
 	unsigned cursor;
 	bool changed_without_mouse;
+	bool action_triggered;
+	bool activated;
 	std::vector<HListItem> list_items;
 	Rect tooltip_area;
+	Point action_button_size;
 
 public:
 	explicit WidgetHorizontalList();
@@ -61,12 +69,15 @@ public:
 
 	bool checkClick();
 	bool checkClickAt(int x, int y);
+	bool checkAction();
+	void activate();
 	void render();
 	void refresh();
 
 	void append(const std::string& value, const std::string& tooltip);
 	void clear();
 	std::string getValue();
+	void setValue(unsigned index, const std::string& value);
 	unsigned getSelected();
 	unsigned getSize();
 	bool isEmpty();
@@ -79,6 +90,8 @@ public:
 	bool getNext();
 
 	bool enabled;
+	bool has_action;
+	size_t max_visible_actions;
 };
 
 #endif

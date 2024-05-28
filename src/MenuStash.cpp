@@ -39,16 +39,28 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
 #include "WidgetSlot.h"
+#include "WidgetTabControl.h"
+
+MenuStashTab::MenuStashTab(const std::string& _id, const std::string& _name, const std::string& _filename, bool _is_private)
+	: id(_id)
+	, name(_name)
+	, filename(_filename)
+	, is_private(_is_private)
+	, is_legacy(false)
+	, updated(false)
+	, stock()
+{}
+
+MenuStashTab::~MenuStashTab() {
+}
 
 MenuStash::MenuStash()
 	: Menu()
 	, closeButton(new WidgetButton("images/menus/buttons/button_x.png"))
-	, stock()
-	, updated(false)
+	, tab_control(new WidgetTabControl())
+	, activetab(0)
+	, tabs()
 {
-
-	setBackground("images/menus/stash.png");
-
 	int slots_cols = 8; // default if menus/stash.txt::stash_cols not set
 	int slots_rows = 8; // default if menus/stash.txt::slots_rows not set
 
@@ -57,43 +69,94 @@ MenuStash::MenuStash()
 	// @CLASS MenuStash|Description of menus/stash.txt
 	if (infile.open("menus/stash.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while(infile.next()) {
-			if (parseMenuKey(infile.key, infile.val))
-				continue;
+			if (infile.new_section) {
+				if (infile.section == "tab") {
+					std::stringstream id_str, name_str, filename_str;
 
-			// @ATTR close|point|Position of the close button.
-			if (infile.key == "close") {
-				Point pos = Parse::toPoint(infile.val);
-				closeButton->setBasePos(pos.x, pos.y, Utils::ALIGN_TOPLEFT);
+					// default tab settings
+					id_str << "Stash " << tabs.size();
+					name_str << msg->get("Stash") << " " << tabs.size();
+					filename_str << "stash_tab_" << tabs.size() << ".txt";
+
+					tabs.push_back(MenuStashTab(id_str.str(), name_str.str(), filename_str.str(), MenuStashTab::IS_PRIVATE));
+				}
 			}
-			// @ATTR slots_area|point|Position of the top-left slot.
-			else if (infile.key == "slots_area") {
-				slots_area.x = Parse::popFirstInt(infile.val);
-				slots_area.y = Parse::popFirstInt(infile.val);
+
+			if (infile.section == "") {
+				if (parseMenuKey(infile.key, infile.val))
+					continue;
+
+				// @ATTR close|point|Position of the close button.
+				if (infile.key == "close") {
+					Point pos = Parse::toPoint(infile.val);
+					closeButton->setBasePos(pos.x, pos.y, Utils::ALIGN_TOPLEFT);
+				}
+				// @ATTR slots_area|point|Position of the top-left slot.
+				else if (infile.key == "slots_area") {
+					slots_area.x = Parse::popFirstInt(infile.val);
+					slots_area.y = Parse::popFirstInt(infile.val);
+				}
+				// @ATTR stash_cols|int|The number of columns for the grid of slots.
+				else if (infile.key == "stash_cols") {
+					slots_cols = std::max(1, Parse::toInt(infile.val));
+				}
+				// @ATTR stash_rows|int|The number of rows for the grid of slots.
+				else if (infile.key == "stash_rows") {
+					slots_rows = std::max(1, Parse::toInt(infile.val));
+				}
+				// @ATTR label_title|label|Position of the "Stash" label.
+				else if (infile.key == "label_title") {
+					label_title.setFromLabelInfo(Parse::popLabelInfo(infile.val));
+				}
+				// @ATTR currency|label|Position of the label displaying the amount of currency stored in the stash.
+				else if (infile.key == "currency") {
+					label_currency.setFromLabelInfo(Parse::popLabelInfo(infile.val));
+				}
+				else {
+					infile.error("MenuStash: '%s' is not a valid key.", infile.key.c_str());
+				}
 			}
-			// @ATTR stash_cols|int|The number of columns for the grid of slots.
-			else if (infile.key == "stash_cols") {
-				slots_cols = std::max(1, Parse::toInt(infile.val));
-			}
-			// @ATTR stash_rows|int|The number of rows for the grid of slots.
-			else if (infile.key == "stash_rows") {
-				slots_rows = std::max(1, Parse::toInt(infile.val));
-			}
-			// @ATTR label_title|label|Position of the "Stash" label.
-			else if (infile.key == "label_title") {
-				label_title.setFromLabelInfo(Parse::popLabelInfo(infile.val));
-			}
-			// @ATTR currency|label|Position of the label displaying the amount of currency stored in the stash.
-			else if (infile.key == "currency") {
-				label_currency.setFromLabelInfo(Parse::popLabelInfo(infile.val));
-			}
-			else {
-				infile.error("MenuStash: '%s' is not a valid key.", infile.key.c_str());
+			else if (infile.section == "tab") {
+				// don't load any settings for the "Private" and "Shared" tabs
+				if (tabs.back().is_legacy)
+					continue;
+
+				if (infile.key == "name") {
+					// @ATTR tab.name|["Private", "Shared", string]|The displayed name of this tab. It is also used to determine the filename of the stash file that the engine will create. 'Private' and 'Shared' will use their legacy filenames for compatibility.
+					std::string name_str = infile.val;
+					tabs.back().id = name_str;
+					tabs.back().name = msg->get(name_str);
+
+					if (name_str == "Private") {
+						tabs.back().filename = "stash_HC.txt";
+						tabs.back().is_private = true;
+						tabs.back().is_legacy = true;
+					}
+					else if (name_str == "Shared") {
+						tabs.back().filename = "stash.txt";
+						tabs.back().is_private = false;
+						tabs.back().is_legacy = true;
+					}
+					else {
+						// generate a filename
+						std::stringstream ss;
+						ss << std::hex << "stash_" << Utils::hashString(name_str) << ".txt";
+						tabs.back().filename = ss.str();
+					}
+				}
+				else if (infile.key == "is_private") {
+					// @ATTR tab.is_private|bool|If true, this stash will not be shared across other saves.
+					tabs.back().is_private = Parse::toBool(infile.val);
+				}
+				else {
+					infile.error("MenuStash: '%s' is not a valid key.", infile.key.c_str());
+				}
 			}
 		}
 		infile.close();
 	}
 
-	label_title.setText(msg->get("Shared Stash"));
+	label_title.setText(msg->get("Stash"));
 	label_title.setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
 	label_currency.setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
@@ -102,10 +165,37 @@ MenuStash::MenuStash()
 	slots_area.w = slots_cols * eset->resolutions.icon_size;
 	slots_area.h = slots_rows * eset->resolutions.icon_size;
 
-	stock.initGrid(stash_slots, slots_area, slots_cols);
-	for (int i = 0; i < stash_slots; i++) {
-		tablist.add(stock.slots[i]);
+	// default tabs if none are defined in the config file
+	if (tabs.empty()) {
+		tabs.push_back(MenuStashTab("Private", msg->get("Private"), "stash_HC.txt", MenuStashTab::IS_PRIVATE));
+		tabs.push_back(MenuStashTab("Shared", msg->get("Shared"), "stash.txt", !MenuStashTab::IS_PRIVATE));
 	}
+
+	// ensure that characters have access to at least one private stash
+	// this needs to be done because permadeath characters ONLY have access to private stashes
+	bool private_exists = false;
+	for (size_t i = 0; i < tabs.size(); ++i) {
+		if (tabs[i].is_private) {
+			private_exists = true;
+			break;
+		}
+	}
+	if (!private_exists) {
+		tabs.push_back(MenuStashTab("Private", msg->get("Private"), "stash_HC.txt", MenuStashTab::IS_PRIVATE));
+	}
+
+	for (size_t i = 0; i < tabs.size(); ++i) {
+		tabs[i].stock.initGrid(stash_slots, slots_area, slots_cols);
+		tab_control->setupTab(static_cast<unsigned>(i), tabs[i].name, &(tabs[i].tablist));
+
+		tabs[i].tablist.lock();
+		for (int j = 0; j < stash_slots; ++j) {
+			tabs[i].tablist.add(tabs[i].stock.slots[j]);
+		}
+	}
+
+	if (!background)
+		setBackground("images/menus/stash.png");
 
 	align();
 }
@@ -113,8 +203,17 @@ MenuStash::MenuStash()
 void MenuStash::align() {
 	Menu::align();
 
+	Rect tabs_area = slots_area;
+	tabs_area.x += window_area.x;
+	tabs_area.y += window_area.y;
+
+	tab_control->setMainArea(tabs_area.x, tabs_area.y - tab_control->getTabHeight(), tabs_area.w);
+
 	closeButton->setPos(window_area.x, window_area.y);
-	stock.setPos(window_area.x, window_area.y);
+
+	for (size_t i = 0; i < tabs.size(); ++i) {
+		tabs[i].stock.setPos(window_area.x, window_area.y);
+	}
 
 	label_title.setPos(window_area.x, window_area.y);
 	label_currency.setPos(window_area.x, window_area.y);
@@ -124,6 +223,36 @@ void MenuStash::logic() {
 	if (!visible) return;
 
 	tablist.logic();
+	for (size_t i = 0; i < tabs.size(); ++i) {
+		tabs[i].tablist.logic();
+	}
+
+	// disable tab control if we're dragging something from one of the stash stocks
+	bool dragging = false;
+	if (inpt->usingMouse()) {
+		for (size_t i = 0; i < tabs.size(); ++i) {
+			if (tabs[i].stock.drag_prev_slot != -1) {
+				dragging = true;
+				break;
+			}
+		}
+	}
+	if (!dragging)
+		tab_control->logic();
+
+	if (settings->touchscreen && activetab != static_cast<size_t>(tab_control->getActiveTab())) {
+		for (size_t i = 0; i < tabs.size(); ++i) {
+			tabs[i].tablist.defocus();
+		}
+	}
+	activetab = tab_control->getActiveTab();
+
+	tablist.setNextTabList(&(tabs[activetab].tablist));
+
+	if (settings->touchscreen) {
+		if (tabs[activetab].tablist.getCurrent() == -1)
+			tabs[activetab].stock.current_slot = NULL;
+	}
 
 	if (closeButton->checkClick()) {
 		visible = false;
@@ -143,13 +272,14 @@ void MenuStash::render() {
 	// text overlay
 	label_title.render();
 	if (!label_currency.isHidden()) {
-		label_currency.setText(msg->get("%d %s", stock.count(eset->misc.currency_id), eset->loot.currency));
+		label_currency.setText(msg->getv("%d %s", tabs[activetab].stock.count(eset->misc.currency_id), eset->loot.currency.c_str()));
 		label_currency.render();
 	}
 
+	tab_control->render();
 
 	// show stock
-	stock.render();
+	tabs[activetab].stock.render();
 }
 
 /**
@@ -166,27 +296,27 @@ bool MenuStash::drop(const Point& position, ItemStack stack) {
 
 	items->playSound(stack.item);
 
-	slot = stock.slotOver(position);
-	drag_prev_slot = stock.drag_prev_slot;
+	slot = tabs[activetab].stock.slotOver(position);
+	drag_prev_slot = tabs[activetab].stock.drag_prev_slot;
 
 	if (slot == -1) {
 		success = add(stack, slot, !ADD_PLAY_SOUND);
 	}
 	else if (drag_prev_slot != -1) {
-		if (stock[slot].item == stack.item || stock[slot].empty()) {
+		if (tabs[activetab].stock[slot].item == stack.item || tabs[activetab].stock[slot].empty()) {
 			// Drop the stack, merging if needed
 			success = add(stack, slot, !ADD_PLAY_SOUND);
 		}
-		else if (drag_prev_slot != -1 && stock[drag_prev_slot].empty()) {
+		else if (tabs[activetab].stock[drag_prev_slot].empty()) {
 			// Check if the previous slot is free (could still be used if SHIFT was used).
 			// Swap the two stacks
-			itemReturn(stock[slot]);
-			stock[slot] = stack;
-			updated = true;
+			itemReturn(tabs[activetab].stock[slot]);
+			tabs[activetab].stock[slot] = stack;
+			tabs[activetab].updated = true;
 		}
 		else {
 			itemReturn(stack);
-			updated = true;
+			tabs[activetab].updated = true;
 		}
 	}
 	else {
@@ -201,32 +331,41 @@ bool MenuStash::add(ItemStack stack, int slot, bool play_sound) {
 		return true;
 	}
 
+	if (!items->isValid(stack.item)) {
+		return false;
+	}
+
 	if (play_sound) {
 		items->playSound(stack.item);
 	}
 
-	if (items->items[stack.item].quest_item) {
-		pc->logMsg(msg->get("Can not store quest items in the stash."), Avatar::MSG_NORMAL);
-		drop_stack.push(stack);
-		return false;
-	}
-	else if (items->items[stack.item].no_stash) {
+	if (items->items[stack.item]->no_stash == Item::NO_STASH_ALL) {
 		pc->logMsg(msg->get("This item can not be stored in the stash."), Avatar::MSG_NORMAL);
 		drop_stack.push(stack);
 		return false;
 	}
+	else if (tabs[activetab].is_private && items->items[stack.item]->no_stash == Item::NO_STASH_PRIVATE) {
+		pc->logMsg(msg->get("This item can not be stored in the private stash."), Avatar::MSG_NORMAL);
+		drop_stack.push(stack);
+		return false;
+	}
+	else if (!tabs[activetab].is_private && items->items[stack.item]->no_stash == Item::NO_STASH_SHARED) {
+		pc->logMsg(msg->get("This item can not be stored in the shared stash."), Avatar::MSG_NORMAL);
+		drop_stack.push(stack);
+		return false;
+	}
 
-	ItemStack leftover = stock.add(stack, slot);
+	ItemStack leftover = tabs[activetab].stock.add(stack, slot);
 	if (!leftover.empty()) {
 		if (leftover.quantity != stack.quantity) {
-			updated = true;
+			tabs[activetab].updated = true;
 		}
 		pc->logMsg(msg->get("Stash is full."), Avatar::MSG_NORMAL);
 		drop_stack.push(leftover);
 		return false;
 	}
 	else {
-		updated = true;
+		tabs[activetab].updated = true;
 	}
 
 	return true;
@@ -237,9 +376,9 @@ bool MenuStash::add(ItemStack stack, int slot, bool play_sound) {
  * Players can drag an item to their inventory.
  */
 ItemStack MenuStash::click(const Point& position) {
-	ItemStack stack = stock.click(position);
+	ItemStack stack = tabs[activetab].stock.click(position);
 	if (settings->touchscreen) {
-		tablist.setCurrent(stock.current_slot);
+		tabs[activetab].tablist.setCurrent(tabs[activetab].stock.current_slot);
 	}
 	return stack;
 }
@@ -248,41 +387,126 @@ ItemStack MenuStash::click(const Point& position) {
  * Cancel the dragging initiated by the click()
  */
 void MenuStash::itemReturn(ItemStack stack) {
-	stock.itemReturn(stack);
+	tabs[activetab].stock.itemReturn(stack);
 }
 
 void MenuStash::renderTooltips(const Point& position) {
 	if (!visible || !Utils::isWithinRect(window_area, position))
 		return;
 
-	TooltipData tip_data = stock.checkTooltip(position, &pc->stats, ItemManager::PLAYER_INV);
+	TooltipData tip_data = tabs[activetab].stock.checkTooltip(position, &pc->stats, ItemManager::PLAYER_INV, ItemManager::TOOLTIP_INPUT_HINT);
 	tooltipm->push(tip_data, position, TooltipData::STYLE_FLOAT);
 }
 
 void MenuStash::removeFromPrevSlot(int quantity) {
-	int drag_prev_slot = stock.drag_prev_slot;
+	int drag_prev_slot = tabs[activetab].stock.drag_prev_slot;
 	if (drag_prev_slot > -1) {
-		stock.subtract(drag_prev_slot, quantity);
+		tabs[activetab].stock.subtract(drag_prev_slot, quantity);
 	}
 }
 
 void MenuStash::validate(std::queue<ItemStack>& global_drop_stack) {
-	for (int i = 0; i < stock.getSlotNumber(); ++i) {
-		if (stock[i].empty())
-			continue;
+	for (size_t tab = 0; tab < tabs.size(); ++tab) {
+		for (int i = 0; i < tabs[activetab].stock.getSlotNumber(); ++i) {
+			if (tabs[tab].stock[i].empty())
+				continue;
 
-		ItemStack stack = stock[i];
-		if (items->items[stack.item].quest_item || items->items[stack.item].no_stash) {
-			pc->logMsg(msg->get("Can not store item in stash: %s", items->getItemName(stack.item).c_str()), Avatar::MSG_NORMAL);
-			global_drop_stack.push(stack);
-			stock[i].clear();
-			updated = true;
+			ItemStack stack = tabs[tab].stock[i];
+
+			int no_stash = false;
+			if (items->isValid(stack.item))
+				no_stash = items->items[stack.item]->no_stash;
+
+			if (no_stash == Item::NO_STASH_ALL || (tabs[tab].is_private && no_stash == Item::NO_STASH_PRIVATE) || (!tabs[tab].is_private && no_stash == Item::NO_STASH_SHARED)) {
+				pc->logMsg(msg->getv("Can not store item in stash: %s", items->getItemName(stack.item).c_str()), Avatar::MSG_NORMAL);
+				global_drop_stack.push(stack);
+				tabs[tab].stock[i].clear();
+				tabs[tab].updated = true;
+			}
+		}
+	}
+}
+
+bool MenuStash::checkUpdates() {
+	bool updated = false;
+
+	for (size_t i = 0; i < tabs.size(); ++i) {
+		if (tabs[i].updated) {
+			tabs[i].updated = false;
+
+			if (eset->misc.save_onstash == EngineSettings::Misc::SAVE_ONSTASH_ALL)
+				updated = true;
+			else if (tabs[i].is_private && eset->misc.save_onstash == EngineSettings::Misc::SAVE_ONSTASH_PRIVATE)
+				updated = true;
+			else if (!tabs[i].is_private && eset->misc.save_onstash == EngineSettings::Misc::SAVE_ONSTASH_SHARED)
+				updated = true;
 		}
 	}
 
+	return updated;
+}
+
+void MenuStash::enableSharedTab(bool permadeath) {
+	for (size_t i = 0; i < tabs.size(); ++i) {
+		tab_control->setEnabled(static_cast<unsigned>(i), (!permadeath || tabs[i].is_private));
+	}
+}
+
+void MenuStash::setTab(size_t tab) {
+	if (settings->touchscreen && activetab != tab) {
+		for (size_t i = 0; i < tabs.size(); ++i) {
+			tabs[i].tablist.defocus();
+		}
+	}
+	if (tab >= tabs.size()) {
+		tab_control->setActiveTab(0);
+		activetab = 0;
+	}
+	else {
+		tab_control->setActiveTab(static_cast<unsigned>(tab));
+		activetab = tab;
+	}
+}
+
+size_t MenuStash::getTab() {
+	return activetab;
+}
+
+void MenuStash::lockTabControl() {
+	for (size_t i = 0; i < tabs.size(); ++i) {
+		tabs[i].tablist.setPrevTabList(NULL);
+	}
+}
+
+void MenuStash::unlockTabControl() {
+	for (size_t i = 0; i < tabs.size(); ++i) {
+		tabs[i].tablist.setPrevTabList(&tablist);
+	}
+}
+
+TabList* MenuStash::getCurrentTabList() {
+	if (tablist.getCurrent() != -1) {
+		return (&tablist);
+	}
+	else {
+		for (size_t i = 0; i < tabs.size(); ++i) {
+			if (tabs[i].tablist.getCurrent() != -1)
+				return (&(tabs[i].tablist));
+		}
+	}
+
+	return NULL;
+}
+
+void MenuStash::defocusTabLists() {
+	tablist.defocus();
+	for (size_t i = 0; i < tabs.size(); ++i) {
+		tabs[i].tablist.defocus();
+	}
 }
 
 MenuStash::~MenuStash() {
 	delete closeButton;
+	delete tab_control;
 }
 

@@ -49,14 +49,21 @@ public:
 	void resetAllStatuses();
 	void getSetStatusStrings(std::vector<std::string>& status_strings);
 	bool checkCurrency(int quantity);
-	bool checkItem(int item_id);
+	bool checkItem(ItemStack istack);
 	void removeCurrency(int quantity);
-	void removeItem(int item_id);
+	void removeItem(ItemStack istack);
 	void rewardItem(ItemStack istack);
 	void rewardCurrency(int amount);
-	void rewardXP(int amount, bool show_message);
+	void rewardXP(float amount, bool show_message);
 	void restoreHPMP(const std::string& s);
 	bool checkAllRequirements(const EventComponent& ec);
+	bool checkRequirementsInVector(const std::vector<EventComponent>& ec_vec);
+
+	void randomStatusAppend(const StatusID s);
+	void randomStatusClear();
+	void randomStatusRoll();
+	void randomStatusSet();
+	void randomStatusUnset();
 
 	std::queue<ItemStack> drop_stack;
 
@@ -66,6 +73,9 @@ public:
 
 private:
 	StatusMap status;
+
+	std::vector<StatusID> random_status_pool;
+	StatusID random_status;
 };
 
 

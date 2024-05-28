@@ -24,20 +24,20 @@ IDI_FLARE_APP_ICON        ICON                    "..\\distribution\\Flare.ico"
 
 VS_VERSION_INFO VERSIONINFO
   FILEVERSION    1,0,0,0
-  PRODUCTVERSION 1,0,0,0
+  PRODUCTVERSION 1,14,0,0
 BEGIN
     BLOCK "StringFileInfo"
     BEGIN
         BLOCK "040904E4"
         BEGIN
-            VALUE "Comments", "Flare Alpha\0"
+            VALUE "Comments", "Flare\0"
             VALUE "FileDescription", "Free Libre Action Roleplaying Engine\0"
             VALUE "FileVersion", "1, 0, 0\0"
             VALUE "InternalName", "Flare\0"
             VALUE "LegalCopyright", "Clint Bellanger and Contributors - 2011\0"
             VALUE "OriginalFilename", "flare.exe\0"
             VALUE "ProductName", "Flare\0"
-            VALUE "ProductVersion", "1, 0, 0\0"
+            VALUE "ProductVersion", "1, 14, 0\0"
         END
     END
     BLOCK "VarFileInfo"

@@ -1,0 +1,124 @@
+# Copyright (C) 2011 Clint Bellanger
+# This file is distributed under the same license as the FLARE package.
+# 
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Translators:
+# Benson <Benson.Dr@Gmail.com>, 2024
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-09-28 08:33+\n"
+"PO-Revision-Date: 2018-03-28 19:16+0000\n"
+"Last-Translator: Benson <Benson.Dr@Gmail.com>, 2024\n"
+"Language-Team: Chinese (Taiwan) (https://app.transifex.com/flareorg/teams/84925/zh_TW/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_TW\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: ../engine/primary_stats.txt:3
+msgid "Physical"
+msgstr "力量"
+
+#: ../engine/primary_stats.txt:7
+msgid "Mental"
+msgstr "精神"
+
+#: ../engine/primary_stats.txt:11
+msgid "Offense"
+msgstr "敏捷"
+
+#: ../engine/primary_stats.txt:15
+msgid "Defense"
+msgstr "防御"
+
+#: ../engine/damage_types.txt:3
+msgid "Melee Damage"
+msgstr "近身傷害"
+
+#: ../engine/damage_types.txt:4
+msgid "Increases the damage done with swords and other melee weapons."
+msgstr "增加劍和其他近身類武器的傷害。"
+
+#: ../engine/damage_types.txt:5
+msgid "Melee Damage Min"
+msgstr "近身傷害最小值"
+
+#: ../engine/damage_types.txt:6
+msgid "Melee Damage Max"
+msgstr "近身傷害最大值"
+
+#: ../engine/damage_types.txt:12
+msgid "Ranged Damage"
+msgstr "遠射傷害"
+
+#: ../engine/damage_types.txt:13
+msgid "Increases the damage done with bows and other ranged weapons."
+msgstr "增加弓和其他遠射類武器的傷害。"
+
+#: ../engine/damage_types.txt:14
+msgid "Ranged Damage Min"
+msgstr "遠射傷害最小值"
+
+#: ../engine/damage_types.txt:15
+msgid "Ranged Damage Max"
+msgstr "遠射傷害最大值"
+
+#: ../engine/damage_types.txt:21
+msgid "Mental Damage"
+msgstr "魔法傷害"
+
+#: ../engine/damage_types.txt:22
+msgid "Increases the damage done with staves and other mental weapons."
+msgstr "增加杖和其他魔法類武器的傷害。"
+
+#: ../engine/damage_types.txt:23
+msgid "Mental Damage Min"
+msgstr "魔法傷害最小值"
+
+#: ../engine/damage_types.txt:24
+msgid "Mental Damage Max"
+msgstr "魔法傷害最大值"
+
+#: ../cutscenes/credits.txt:7
+msgid "Flare Engine Credits"
+msgstr "榮耀火炬(Flare) 遊戲引擎歸功於"
+
+#: ../cutscenes/credits.txt:10
+msgid "Lead Programmers"
+msgstr "首席程式設計師"
+
+#: ../cutscenes/credits.txt:20
+msgid "Programmers"
+msgstr "程式設計師"
+
+#: ../cutscenes/credits.txt:51
+msgid "Default Art"
+msgstr "預設素材"
+
+#: ../cutscenes/credits.txt:56
+msgid "Translators"
+msgstr "翻譯"
+
+#: ../cutscenes/credits.txt:137
+msgid "Distributors"
+msgstr "發行"
+
+#: ../cutscenes/credits.txt:146
+msgid "Special Thanks"
+msgstr "特別感謝"
+
+#: ../cutscenes/credits.txt:150
+msgid "For giving constant feedback and testing:"
+msgstr "給予不斷回饋和測試的:"
+
+#: ../cutscenes/credits.txt:152
+msgid "The community at OpenGameArt"
+msgstr "OpenGameArt 社群網站"
+
+#: ../cutscenes/credits.txt:156
+msgid "For Tiled and the Flare map exporter:"
+msgstr "關於平面輸出和榮耀火炬地圖導出:"

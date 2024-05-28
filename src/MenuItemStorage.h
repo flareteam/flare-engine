@@ -36,7 +36,6 @@ class WidgetSlot;
 
 class MenuItemStorage : public ItemStorage {
 protected:
-	void loadGraphics();
 	Rect grid_area;
 	Point grid_pos;
 	int nb_cols;
@@ -50,21 +49,18 @@ public:
 	// rendering
 	void render();
 	int slotOver(const Point& position);
-	TooltipData checkTooltip(const Point& position, StatBlock *stats, int context);
+	TooltipData checkTooltip(const Point& position, StatBlock *stats, int context, bool input_hint);
 	ItemStack click(const Point& position);
 	void itemReturn(ItemStack stack);
-	void highlightMatching(const std::string& type);
+	void highlightMatching(ItemID item_id);
 	void highlightClear();
 	void setPos(int x, int y);
+	ItemStack getItemStackAtPos(const Point& position);
 	std::vector<std::string> slot_type;
 
 	int drag_prev_slot;
 	std::vector<WidgetSlot*> slots;
 	WidgetSlot *current_slot;
-
-	bool * highlight;
-	Sprite *highlight_image;
-	Sprite *overlay_disabled;
 };
 
 #endif

@@ -31,6 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "InputState.h"
 #include "MessageEngine.h"
 #include "ModManager.h"
+#include "Platform.h"
 #include "SharedResources.h"
 #include "Settings.h"
 
@@ -41,7 +42,8 @@ SDLHardwareImage::SDLHardwareImage(RenderDevice *_device, SDL_Renderer *_rendere
 	: Image(_device)
 	, renderer(_renderer)
 	, surface(NULL)
-	, pixel_batch_surface(NULL) {
+	, pixel_batch_surface(NULL)
+	, pixel_batch_type(PIXEL_BATCH_NONE) {
 }
 
 SDLHardwareImage::~SDLHardwareImage() {
@@ -79,52 +81,74 @@ void SDLHardwareImage::fillWithColor(const Color& color) {
 void SDLHardwareImage::drawPixel(int x, int y, const Color& color) {
 	if (!surface) return;
 
-	if (pixel_batch_surface) {
-		// Taken from SDLSoftwareImage::drawPixel()
-		Uint32 pixel = SDL_MapRGBA(pixel_batch_surface->format, color.r, color.g, color.b, color.a);
+	if (x < 0 || y < 0 || x >= getWidth() || y >= getHeight())
+		return;
 
-		int bpp = pixel_batch_surface->format->BytesPerPixel;
-		/* Here p is the address to the pixel we want to set */
-		Uint8 *p = static_cast<Uint8*>(pixel_batch_surface->pixels) + y * pixel_batch_surface->pitch + x * bpp;
-
-		if (SDL_MUSTLOCK(pixel_batch_surface)) {
-			SDL_LockSurface(pixel_batch_surface);
-		}
-		switch(bpp) {
-			case 1:
-				*p = static_cast<Uint8>(pixel);
-				break;
-
-			case 2:
-				*(reinterpret_cast<Uint16*>(p)) = static_cast<Uint16>(pixel);
-				break;
-
-			case 3:
-#if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
-				p[0] = (pixel >> 16) & 0xff;
-				p[1] = (pixel >> 8) & 0xff;
-				p[2] = pixel & 0xff;
-#else
-				p[0] = pixel & 0xff;
-				p[1] = (pixel >> 8) & 0xff;
-				p[2] = (pixel >> 16) & 0xff;
-#endif
-				break;
-
-			case 4:
-				*(reinterpret_cast<Uint32*>(p)) = pixel;
-				break;
-		}
-		if (SDL_MUSTLOCK(pixel_batch_surface)) {
-			SDL_UnlockSurface(pixel_batch_surface);
-		}
+	switch (pixel_batch_type) {
+		case PIXEL_BATCH_NONE:
+			drawPixelSingle(x, y, color);
+			break;
+		case PIXEL_BATCH_AREA:
+			if (x < pixel_batch_area.x) return;
+			if (y < pixel_batch_area.y) return;
+			if (x > pixel_batch_area.x + pixel_batch_area.w - 1) return;
+			if (y > pixel_batch_area.y + pixel_batch_area.h - 1) return;
+			x = x - pixel_batch_area.x;
+			y = y - pixel_batch_area.y;
+			drawPixelBatch(x, y, color);
+			break;
+		case PIXEL_BATCH_ALL:
+			drawPixelBatch(x, y, color);
+			break;
 	}
-	else {
-		SDL_SetRenderTarget(renderer, surface);
-		SDL_SetTextureBlendMode(surface, SDL_BLENDMODE_BLEND);
-		SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
-		SDL_RenderDrawPoint(renderer, x, y);
-		SDL_SetRenderTarget(renderer, NULL);
+}
+
+void SDLHardwareImage::drawPixelSingle(int x, int y, const Color& color) {
+	SDL_SetRenderTarget(renderer, surface);
+	SDL_SetTextureBlendMode(surface, SDL_BLENDMODE_BLEND);
+	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+	SDL_RenderDrawPoint(renderer, x, y);
+	SDL_SetRenderTarget(renderer, NULL);
+}
+
+void SDLHardwareImage::drawPixelBatch(int x, int y, const Color& color) {
+	// Taken from SDLSoftwareImage::drawPixel()
+	Uint32 pixel = SDL_MapRGBA(pixel_batch_surface->format, color.r, color.g, color.b, color.a);
+
+	int bpp = pixel_batch_surface->format->BytesPerPixel;
+	/* Here p is the address to the pixel we want to set */
+	Uint8 *p = static_cast<Uint8*>(pixel_batch_surface->pixels) + y * pixel_batch_surface->pitch + x * bpp;
+
+	if (SDL_MUSTLOCK(pixel_batch_surface)) {
+		SDL_LockSurface(pixel_batch_surface);
+	}
+	switch(bpp) {
+		case 1:
+			*p = static_cast<Uint8>(pixel);
+			break;
+
+		case 2:
+			*(reinterpret_cast<Uint16*>(p)) = static_cast<Uint16>(pixel);
+			break;
+
+		case 3:
+#if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
+			p[0] = (pixel >> 16) & 0xff;
+			p[1] = (pixel >> 8) & 0xff;
+			p[2] = pixel & 0xff;
+#else
+			p[0] = pixel & 0xff;
+			p[1] = (pixel >> 8) & 0xff;
+			p[2] = (pixel >> 16) & 0xff;
+#endif
+			break;
+
+		case 4:
+			*(reinterpret_cast<Uint32*>(p)) = pixel;
+			break;
+	}
+	if (SDL_MUSTLOCK(pixel_batch_surface)) {
+		SDL_UnlockSurface(pixel_batch_surface);
 	}
 }
 
@@ -148,23 +172,31 @@ void SDLHardwareImage::drawLine(int x0, int y0, int x1, int y1, const Color& col
 void SDLHardwareImage::beginPixelBatch() {
 	if (!surface) return;
 
+	pixel_batch_type = PIXEL_BATCH_ALL;
+
 	Uint32 rmask, gmask, bmask, amask;
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-	rmask = 0xff000000;
-	gmask = 0x00ff0000;
-	bmask = 0x0000ff00;
-	amask = 0x000000ff;
-#else
-	rmask = 0x000000ff;
-	gmask = 0x0000ff00;
-	bmask = 0x00ff0000;
-	amask = 0xff000000;
-#endif
+	Utils::setSDL_RGBA(&rmask, &gmask, &bmask, &amask);
 
 	if (pixel_batch_surface)
 		SDL_FreeSurface(pixel_batch_surface);
 
 	pixel_batch_surface = SDL_CreateRGBSurface(0, getWidth(), getHeight(), device->BITS_PER_PIXEL, rmask, gmask, bmask, amask);
+}
+
+void SDLHardwareImage::beginPixelBatch(Rect& bounds) {
+	if (!surface) return;
+	if (bounds.w <= 0 || bounds.h <= 0) return;
+
+	pixel_batch_type = PIXEL_BATCH_AREA;
+	pixel_batch_area = bounds;
+
+	Uint32 rmask, gmask, bmask, amask;
+	Utils::setSDL_RGBA(&rmask, &gmask, &bmask, &amask);
+
+	if (pixel_batch_surface)
+		SDL_FreeSurface(pixel_batch_surface);
+
+	pixel_batch_surface = SDL_CreateRGBSurface(0, bounds.w, bounds.h, device->BITS_PER_PIXEL, rmask, gmask, bmask, amask);
 }
 
 void SDLHardwareImage::endPixelBatch() {
@@ -175,14 +207,21 @@ void SDLHardwareImage::endPixelBatch() {
 	if (pixel_batch_texture) {
 		SDL_SetRenderTarget(renderer, surface);
 		SDL_SetTextureBlendMode(surface, SDL_BLENDMODE_BLEND);
-		SDL_RenderCopy(renderer, pixel_batch_texture, NULL, NULL);
+
+		if (pixel_batch_type == PIXEL_BATCH_ALL) {
+			SDL_RenderCopy(renderer, pixel_batch_texture, NULL, NULL);
+		}
+		else if (pixel_batch_type == PIXEL_BATCH_AREA) {
+			SDL_Rect dst(pixel_batch_area);
+			SDL_RenderCopy(renderer, pixel_batch_texture, NULL, &dst);
+		}
 		SDL_SetRenderTarget(renderer, NULL);
 
 		SDL_DestroyTexture(pixel_batch_texture);
 	}
-
 	SDL_FreeSurface(pixel_batch_surface);
 	pixel_batch_surface = NULL;
+	pixel_batch_type = PIXEL_BATCH_NONE;
 }
 
 Image* SDLHardwareImage::resize(int width, int height) {
@@ -217,7 +256,7 @@ SDLHardwareRenderDevice::SDLHardwareRenderDevice()
 	, texture(NULL)
 	, titlebar_icon(NULL)
 	, title(NULL)
-	, background_color(0,0,0,0)
+	, background_color(0,0,0,255)
 {
 	Utils::logInfo("Using Render Device: SDLHardwareRenderDevice (hardware, SDL 2, %s)", SDL_GetCurrentVideoDriver());
 
@@ -234,9 +273,24 @@ SDLHardwareRenderDevice::SDLHardwareRenderDevice()
 		// we only support display #0
 		Utils::logInfo("RenderDevice: %d display(s), using display 0 (%dx%d @ %dhz)", SDL_GetNumVideoDisplays(), desktop.w, desktop.h, desktop.refresh_rate);
 	}
+
+	// we store the gamma when launching the game in case we need to reset it
+	// these are initilized to 0 since we set them properly with SDL_GetWindowGammaRamp() later
+	for (int i = 0; i < 256; ++i) {
+		gamma_r[i] = 0;
+		gamma_g[i] = 0;
+		gamma_b[i] = 0;
+	}
 }
 
 int SDLHardwareRenderDevice::createContextInternal() {
+#ifdef _WIN32
+	// We make heavy use of SDL_TEXTUREACCESS_TARGET for things such as text and the minimap
+	// If we use the 'direct3d' backend on Windows, these textures get lost on window resizing events
+	// So to bypass this, we force 'opengl' on Windows
+	SDL_SetHintWithPriority(SDL_HINT_RENDER_DRIVER, "opengl", SDL_HINT_OVERRIDE);
+#endif
+
 	bool settings_changed = ((fullscreen != settings->fullscreen && destructive_fullscreen) ||
 			                 hwsurface != settings->hwsurface ||
 							 vsync != settings->vsync ||
@@ -287,11 +341,9 @@ int SDLHardwareRenderDevice::createContextInternal() {
 			renderer = SDL_CreateRenderer(window, -1, r_flags);
 			if (renderer) {
 				if (settings->texture_filter && !eset->resolutions.ignore_texture_filter)
-					SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
+					SDL_SetHintWithPriority(SDL_HINT_RENDER_SCALE_QUALITY, "1", SDL_HINT_OVERRIDE);
 				else
-					SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0");
-
-				windowResize();
+					SDL_SetHintWithPriority(SDL_HINT_RENDER_SCALE_QUALITY, "0", SDL_HINT_OVERRIDE);
 			}
 
 			SDL_SetWindowMinimumSize(window, eset->resolutions.min_screen_w, eset->resolutions.min_screen_h);
@@ -315,6 +367,10 @@ int SDLHardwareRenderDevice::createContextInternal() {
 
 			Utils::logInfo("RenderDevice: Fullscreen=%d, Hardware surfaces=%d, Vsync=%d, Texture Filter=%d", fullscreen, hwsurface, vsync, texture_filter);
 
+			SDL_RendererInfo renderer_info;
+			SDL_GetRendererInfo(renderer, &renderer_info);
+			Utils::logInfo("RenderDevice: Renderer driver is '%s'.", renderer_info.name);
+
 #if SDL_VERSION_ATLEAST(2, 0, 4)
 			SDL_GetDisplayDPI(0, &ddpi, 0, 0);
 			Utils::logInfo("RenderDevice: Display DPI is %f", ddpi);
@@ -334,7 +390,10 @@ int SDLHardwareRenderDevice::createContextInternal() {
 		}
 
 		windowResize();
+		is_initialized = (texture != NULL);
+	}
 
+	if (is_initialized) {
 		// update title bar text and icon
 		updateTitleBar();
 
@@ -469,19 +528,17 @@ void SDLHardwareRenderDevice::drawLine(int x0, int y0, int x1, int y1, const Col
 }
 
 void SDLHardwareRenderDevice::drawRectangle(const Point& p0, const Point& p1, const Color& color) {
-	SDL_Rect r;
-	r.x = p0.x;
-	r.y = p0.y;
-	r.w = p1.x - p0.x;
-	r.h = p1.y - p0.y;
-	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
-	SDL_RenderDrawRect(renderer, &r);
+	drawLine(p0.x, p0.y, p1.x, p0.y, color);
+	drawLine(p1.x, p0.y, p1.x, p1.y, color);
+	drawLine(p0.x, p0.y, p0.x, p1.y, color);
+	drawLine(p0.x, p1.y, p1.x+1, p1.y, color);
 }
 
 void SDLHardwareRenderDevice::blankScreen() {
-	SDL_SetRenderDrawColor(renderer, background_color.r, background_color.g, background_color.b, background_color.a);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_SetRenderTarget(renderer, NULL);
 	SDL_RenderClear(renderer);
+	SDL_SetRenderDrawColor(renderer, background_color.r, background_color.g, background_color.b, background_color.a);
 	SDL_SetRenderTarget(renderer, texture);
 	SDL_RenderClear(renderer);
 	return;
@@ -626,23 +683,50 @@ void SDLHardwareRenderDevice::windowResize() {
 
 	if (texture) SDL_DestroyTexture(texture);
 	texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, settings->view_w, settings->view_h);
-	SDL_SetRenderTarget(renderer, texture);
+	if (texture) SDL_SetRenderTarget(renderer, texture);
 
 	settings->updateScreenVars();
 }
 
 void SDLHardwareRenderDevice::setBackgroundColor(Color color) {
 	background_color = color;
+	background_color.a = 255; // always 100% alpha
 }
 
 void SDLHardwareRenderDevice::setFullscreen(bool enable_fullscreen) {
 	if (!destructive_fullscreen) {
 		if (enable_fullscreen) {
-			SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+			if (platform.fullscreen_bypass) {
+				platform.setFullscreen(true);
+			}
+			else {
+				SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+			}
+			fullscreen = true;
 		}
-		else {
-			SDL_SetWindowFullscreen(window, 0);
+		else if (fullscreen) {
+			if (platform.fullscreen_bypass) {
+				platform.setFullscreen(false);
+			}
+			else {
+				SDL_SetWindowFullscreen(window, 0);
+
+				// restore window to the default size
+				SDL_SetWindowMinimumSize(window, eset->resolutions.min_screen_w, eset->resolutions.min_screen_h);
+				SDL_SetWindowSize(window, eset->resolutions.min_screen_w, eset->resolutions.min_screen_h);
+				windowResize();
+				// setting minimum size might move the window, so set position again
+				SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+			}
+			fullscreen = false;
 		}
 		windowResize();
 	}
 }
+
+unsigned short SDLHardwareRenderDevice::getRefreshRate() {
+	SDL_DisplayMode mode;
+	SDL_GetCurrentDisplayMode(0, &mode);
+	return static_cast<unsigned short>(mode.refresh_rate);
+}
+

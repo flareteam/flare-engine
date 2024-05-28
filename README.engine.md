@@ -21,6 +21,10 @@ extra repository and is now called [flare-game]. (happened around sept. 2012)
 
 [flare-game]: https://github.com/flareteam/flare-game
 
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/org.flare.app/)
+
 ## Copyright and License
 
 Most of Flare is Copyright © 2010-2013 Clint Bellanger.
@@ -42,18 +46,13 @@ The following links are specific to the engine
 
 * [Homepage](http://flarerpg.org)
 * [Source](https://github.com/flareteam/flare-engine)
-* [Forums](http://opengameart.org/forums/flare)
+* [Forums](https://github.com/flareteam/flare-game/discussions)
 * Email     clintbellanger@gmail.com
 
 ## Games made with flare
 
-* [flare-game]    A medival fantasy game. In the first days of the engine this game influenced most design decisions a lot. The art is 3d rendered 64x32 px isometric perspective.
-* [polymorphable] A game made for "The Liberated Pixel cup", which was a competition about game art and making a game thereof. The pixel art is 32x32 orthogonal perspective featuring a medival setting. The development has finished.
-* [concordia]     Another game using the art created during "The liberated pixel cup". While this started without stress regarding the timeline for the pixel cup, this story is more thought through and the content is more organized.
-
-[flare-game]: https://github.com/flareteam/flare-game
-[polymorphable]: https://github.com/makrohn/polymorphable
-[concordia]: https://github.com/makrohn/concordia
+The official game from the Flare team, the Empyrean Campaign can be found on the [flare-game](https://github.com/flareteam/flare-game) repository.
+A collection of other mods produced by the community can be found on the the [Mods](https://flarerpg.org/mods/) page on the offical website.
 
 ## Building from Source
 
@@ -70,6 +69,10 @@ Settings are stored in one of these places:
 ### Windows
 	%APPDATA%\flare\config
 	config\
+### Linux (Snap)
+    $HOME/snap/flare-rpg/current/.config/flare/
+### Linux (Flatpak)
+    $HOME/.var/app/org.flarerpg.Flare/config/flare/
 
 Here you can enable fullscreen, change the game resolution, enable mouse-move, and change keybindings.
 The settings files are created the first time you run Flare.
@@ -85,6 +88,11 @@ Save files are stored in one of these places:
 ### Windows
 	%APPDATA%\flare\userdata
 	userdata\
+### Linux (Snap)
+    $HOME/snap/flare-rpg/current/.local/share/flare/
+### Linux (Flatpak)
+    $HOME/.var/app/org.flarerpg.Flare/data/flare/
+
 
 If permissions are correct, the game is automatically saved when you exit.
 In addition, there is a `mods` directory in this location, which can be used to override system-wide mods.
@@ -102,3 +110,4 @@ In addition, there is a `mods` directory in this location, which can be used to 
 | `--mods`          | Starts the game with only these mods enabled.
 | `--load-slot`     | Loads a save slot by numerical index.
 | `--load-script`   | Execute's a script upon loading a saved game. The script path is mod-relative.
+| `--safe-video`    | Launches with the minimum video settings.

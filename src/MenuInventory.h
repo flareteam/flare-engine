@@ -27,6 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define MENU_INVENTORY_H
 
 #include "CommonIncludes.h"
+#include "Menu.h"
 #include "MenuItemStorage.h"
 #include "Utils.h"
 #include "WidgetLabel.h"
@@ -41,11 +42,18 @@ private:
 
 	void loadGraphics();
 	void updateEquipment(int slot);
-	int getEquipSlotFromItem(int item, bool only_empty_slots);
+	void updateEquipmentSetWidgets();
+	int getEquipSlotFromItem(ItemID item, bool only_empty_slots);
 
 	WidgetLabel label_inventory;
 	WidgetLabel label_currency;
 	WidgetButton *closeButton;
+
+	// equipment swap buttons
+	std::vector<WidgetButton*> equipmentSetButton;
+	WidgetButton* equipmentSetPrevious;
+	WidgetButton* equipmentSetNext;
+	WidgetLabel* equipmentSetLabel;
 
 	int MAX_EQUIPPED;
 	int MAX_CARRIED;
@@ -60,7 +68,7 @@ private:
 	Timer tap_to_activate_timer;
 
 	int activated_slot;
-	int activated_item;
+	ItemID activated_item;
 
 public:
 	enum {
@@ -92,19 +100,23 @@ public:
 	void activate(const Point& position);
 
 	bool add(ItemStack stack, int area, int slot, bool play_sound, bool auto_equip);
-	bool remove(int item);
+	bool remove(ItemID item, int quantity);
 	void removeFromPrevSlot(int quantity);
 	void addCurrency(int count);
 	void removeCurrency(int count);
 	bool buy(ItemStack stack, int tab, bool dragging);
 	bool sell(ItemStack stack);
 
-	bool requirementsMet(int item);
+	bool requirementsMet(ItemID item);
 
 	void applyEquipment();
 	void applyItemStats();
-	void applyItemSetBonuses();
+	void applyItemSetBonuses(std::vector<ItemSetID> &active_sets, std::vector<int> &active_set_quantities);
 	void applyBonus(const BonusData* bdata);
+	void applyEquipmentSet(unsigned set);
+	void applyNextEquipmentSet();
+	void applyPreviousEquipmentSet();
+	bool isActive(size_t equipped);
 
 	int getEquippedCount();
 	int getTotalSlotCount();
@@ -115,13 +127,27 @@ public:
 
 	int getMaxPurchasable(ItemStack item, int vendor_tab);
 
-	int getPowerMod(int meta_power);
+	PowerID getPowerMod(PowerID meta_power);
+
+	void disableEquipmentSlot(const std::string& slot_type);
+
+	bool canActivateItem(ItemID item);
+
+	int getEquippedSetCount(size_t set_id);
+
+	bool canEquipItem(const Point& position);
+	bool canUseItem(const Point& position);
+
+	bool equipmentContain(ItemID item, int quantity);
 
 	Rect carried_area;
 	std::vector<Rect> equipped_area;
 	std::vector<std::string> slot_type;
+	std::vector<unsigned int> equipment_set;
 
 	MenuItemStorage inventory[2];
+	unsigned active_equipment_set;
+	unsigned max_equipment_set;
 	int currency;
 	int drag_prev_src;
 

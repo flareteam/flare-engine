@@ -16,7 +16,6 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
-#pragma once
 #ifndef SDLHARDWARERENDERDEVICE_H
 #define SDLHARDWARERENDERDEVICE_H
 
@@ -48,6 +47,7 @@ public:
 	void drawPixel(int x, int y, const Color& color);
 	void drawLine(int x0, int y0, int x1, int y1, const Color& color);
 	void beginPixelBatch();
+	void beginPixelBatch(Rect& bounds);
 	void endPixelBatch();
 	Image* resize(int width, int height);
 
@@ -55,6 +55,18 @@ public:
 	SDL_Texture *surface;
 
 	SDL_Surface *pixel_batch_surface;
+	int pixel_batch_type;
+	Rect pixel_batch_area;
+
+private:
+	 enum {
+		 PIXEL_BATCH_NONE = 0,
+		 PIXEL_BATCH_ALL = 1,
+		 PIXEL_BATCH_AREA = 2,
+	};
+
+	void drawPixelSingle(int x, int y, const Color& color);
+	void drawPixelBatch(int x, int y, const Color& color);
 };
 
 class SDLHardwareRenderDevice : public RenderDevice {
@@ -80,6 +92,7 @@ public:
 	void setGamma(float g);
 	void resetGamma();
 	void updateTitleBar();
+	unsigned short getRefreshRate();
 
 	Image* loadImage(const std::string& filename, int error_type);
 
@@ -96,6 +109,11 @@ private:
 	SDL_Surface* titlebar_icon;
 	char* title;
 	Color background_color;
+
+	/* Stores the system gamma levels so they can be restored later */
+	uint16_t gamma_r[256];
+	uint16_t gamma_g[256];
+	uint16_t gamma_b[256];
 };
 
 #endif

@@ -28,6 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef MAP_RENDERER_H
 #define MAP_RENDERER_H
 
+#include "Camera.h"
 #include "CommonIncludes.h"
 #include "Map.h"
 #include "MapCollision.h"
@@ -48,14 +49,14 @@ private:
 	Point tip_pos;
 	bool show_tooltip;
 
-	bool enemyGroupPlaceEnemy(float x, float y, Map_Group &g);
+	bool enemyGroupPlaceEnemy(float x, float y, const Map_Group &g);
 	void pushEnemyGroup(Map_Group &g);
 
 	void clearQueues();
 
 	void drawRenderable(std::vector<Renderable>::iterator r_cursor);
 
-	void renderIsoLayer(const Map_Layer& layerdata);
+	void renderIsoLayer(const Map_Layer& layerdata, const TileSet& tile_set);
 
 	// renders only objects
 	void renderIsoBackObjects(std::vector<Renderable> &r);
@@ -64,7 +65,7 @@ private:
 	void renderIsoFrontObjects(std::vector<Renderable> &r);
 	void renderIso(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
 
-	void renderOrthoLayer(const Map_Layer& layerdata);
+	void renderOrthoLayer(const Map_Layer& layerdata, const TileSet& tile_set);
 	void renderOrthoBackObjects(std::vector<Renderable> &r);
 	void renderOrthoFrontObjects(std::vector<Renderable> &r);
 	void renderOrtho(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
@@ -82,7 +83,6 @@ private:
 
 	void checkHiddenEntities(const int_fast16_t x, const int_fast16_t y, const Map_Layer& layerdata, std::vector<Renderable> &r);
 
-	FPoint shakycam;
 	TileSet tset;
 
 	MapParallax map_parallax;
@@ -115,13 +115,15 @@ public:
 	void executeOnMapExitEvents();
 
 	// some events can trigger powers
-	void activatePower(int power_index, unsigned statblock_index, FPoint &target);
+	void activatePower(PowerID power_index, unsigned statblock_index, const FPoint &target);
 
 	bool isValidTile(const unsigned &tile);
 	Point centerTile(const Point& p);
 
-	// cam(x,y) is where on the map the camera is pointing
-	FPoint cam;
+	void setMapParallax(const std::string& mp_filename);
+
+	// cam is where on the map the camera is pointing
+	Camera cam;
 
 	// indicates that the map was changed by an event, so the GameStatePlay
 	// will tell the mini map to update.
@@ -143,9 +145,6 @@ public:
 	// cutscene handling
 	bool cutscene;
 	std::string cutscene_file;
-
-	// shaky cam
-	Timer shaky_cam_timer;
 
 	// stash handling
 	bool stash;
@@ -176,6 +175,9 @@ public:
 	 * before that are painted below objects; Layers after are painted on top.
 	 */
 	unsigned index_objectlayer;
+
+	// flag used to prevent rendering when in maps/spawn.txt
+	bool is_spawn_map;
 };
 
 

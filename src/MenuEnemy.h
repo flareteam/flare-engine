@@ -30,7 +30,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Utils.h"
 #include "WidgetLabel.h"
 
-class Enemy;
+class Entity;
 
 class MenuEnemy : public Menu {
 private:
@@ -38,12 +38,16 @@ private:
 	Rect bar_pos;
 	LabelInfo text_pos;
 	bool custom_text_pos;
+	Point bar_fill_offset;
+	Point bar_fill_size;
+	std::string bar_gfx;
+
 	WidgetLabel label_text;
 	WidgetLabel label_stats;
 public:
 	MenuEnemy();
 	~MenuEnemy();
-	Enemy *enemy;
+	Entity *enemy;
 	void loadGraphics();
 	void handleNewMap();
 	void logic();

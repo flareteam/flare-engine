@@ -25,7 +25,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "CommonIncludes.h"
-#include "Enemy.h"
+#include "EngineSettings.h"
+#include "Entity.h"
 #include "FileParser.h"
 #include "FontEngine.h"
 #include "Menu.h"
@@ -41,6 +42,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 MenuEnemy::MenuEnemy()
 	: bar_hp(NULL)
 	, custom_text_pos(false)
+	, bar_fill_offset()
+	, bar_fill_size(-1, -1)
+	, bar_gfx("images/menus/enemy_bar_hp.png")
 	, enemy(NULL)
 {
 	// disappear after 10 seconds
@@ -54,8 +58,6 @@ MenuEnemy::MenuEnemy()
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
 
-			infile.val = infile.val + ',';
-
 			// @ATTR bar_pos|rectangle|Position and dimensions of the health bar.
 			if(infile.key == "bar_pos") {
 				bar_pos = Parse::toRect(infile.val);
@@ -65,11 +67,29 @@ MenuEnemy::MenuEnemy()
 				custom_text_pos = true;
 				text_pos = Parse::popLabelInfo(infile.val);
 			}
+			// @ATTR bar_fill_offset|point|Offset of the bar's fill graphics relative to the bar_pos X/Y.
+			else if (infile.key == "bar_fill_offset") {
+				bar_fill_offset = Parse::toPoint(infile.val);
+			}
+			// @ATTR bar_fill_size|int, int : Width, Height|Size of the bar's fill graphics. If not defined, the width/height of bar_pos is used.
+			else if (infile.key == "bar_fill_size") {
+				bar_fill_size = Parse::toPoint(infile.val);
+			}
+			// @ATTR bar_gfx|filename|Filename of the image to use for the "fill" of the bar.
+			else if (infile.key == "bar_gfx") {
+				bar_gfx = infile.val;
+			}
 			else {
 				infile.error("MenuEnemy: '%s' is not a valid key.", infile.key.c_str());
 			}
 		}
 		infile.close();
+	}
+
+	// default to bar_pos size if bar_fill_size is undefined
+	if (bar_fill_size.x == -1 || bar_fill_size.y == -1) {
+		bar_fill_size.x = bar_pos.w;
+		bar_fill_size.y = bar_pos.h;
 	}
 
 	loadGraphics();
@@ -80,9 +100,10 @@ MenuEnemy::MenuEnemy()
 void MenuEnemy::loadGraphics() {
 	Image *graphics;
 
-	setBackground("images/menus/enemy_bar.png");
+	if (!background)
+		setBackground("images/menus/enemy_bar.png");
 
-	graphics = render_device->loadImage("images/menus/enemy_bar_hp.png", RenderDevice::ERROR_NORMAL);
+	graphics = render_device->loadImage(bar_gfx, RenderDevice::ERROR_NORMAL);
 	if (graphics) {
 		bar_hp = graphics->createSprite();
 		graphics->unref();
@@ -116,8 +137,11 @@ void MenuEnemy::render() {
 	int hp_bar_length = 0;
 	if (enemy->stats.get(Stats::HP_MAX) == 0)
 		hp_bar_length = 0;
-	else if (bar_hp)
-		hp_bar_length = (enemy->stats.hp * bar_hp->getGraphics()->getWidth()) / enemy->stats.get(Stats::HP_MAX);
+	else if (bar_hp) {
+		hp_bar_length = static_cast<int>((enemy->stats.hp * static_cast<float>(bar_fill_size.x)) / enemy->stats.get(Stats::HP_MAX));
+		if (hp_bar_length == 0 && enemy->stats.hp > 0)
+			hp_bar_length = 1;
+	}
 
 	// draw hp bar background
 	setBackgroundClip(src);
@@ -127,15 +151,20 @@ void MenuEnemy::render() {
 	// draw hp bar fill
 	if (bar_hp) {
 		src.w = hp_bar_length;
-		src.h = bar_pos.h;
+		src.h = bar_fill_size.y;
+
+		dest.x += bar_fill_offset.x;
+		dest.y += bar_fill_offset.y;
+
 		bar_hp->setClipFromRect(src);
 		bar_hp->setDestFromRect(dest);
+
 		render_device->render(bar_hp);
 	}
 
 	if (!text_pos.hidden) {
 		// enemy name display
-		label_text.setText(msg->get("%s level %d", enemy->stats.name, enemy->stats.level));
+		label_text.setText(msg->getv("%s level %d", enemy->stats.name.c_str(), enemy->stats.level));
 		label_text.setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
 		if (custom_text_pos) {
@@ -155,7 +184,7 @@ void MenuEnemy::render() {
 		std::stringstream ss;
 		ss.str("");
 		if (enemy->stats.hp > 0) {
-			ss << enemy->stats.hp << "/" << enemy->stats.get(Stats::HP_MAX);
+			ss << Utils::floatToString(enemy->stats.hp, eset->number_format.enemy_statbar) << "/" << Utils::floatToString(enemy->stats.get(Stats::HP_MAX), eset->number_format.enemy_statbar);
 		}
 		else {
 			if (enemy->stats.lifeform)

@@ -46,6 +46,7 @@ WidgetInput::WidgetInput(const std::string& filename)
 void WidgetInput::setPos(int offset_x, int offset_y) {
 	pos.x = pos_base.x + offset_x + local_frame.x - local_offset.x;
 	pos.y = pos_base.y + offset_y + local_frame.y - local_offset.y;
+	Utils::alignToScreenEdge(alignment, &pos);
 
 	font->setFont("font_regular");
 	font_pos.x = pos.x + (font->getFontHeight()/2);
@@ -128,6 +129,12 @@ bool WidgetInput::logicAt(int x, int y) {
 
 	if (checkClick(mouse)) {
 		edit_mode = true;
+		if (platform.is_mobile_device) {
+			// Not sure if this is SDL's fault or Android's fault...
+			// But the on screen keyboard only triggers the backspace input on text that was entered with the on screen keyboard
+			// So we have to delete the existing text here.
+			setText("");
+		}
 	}
 
 	// if clicking elsewhere unfocus the text box
@@ -251,7 +258,7 @@ void WidgetInput::render() {
 			draw = false;
 		}
 		if (draw) {
-			render_device->drawRectangle(topLeft, bottomRight, eset->widgets.selection_rect_color);
+			render_device->drawRectangleCorners(eset->widgets.selection_rect_corner_size, topLeft, bottomRight, eset->widgets.selection_rect_color);
 		}
 	}
 

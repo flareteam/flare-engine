@@ -59,16 +59,7 @@ ItemStack & ItemStorage::operator [] (int slot) {
 void ItemStorage::setItems(const std::string& s) {
 	std::string item_list = s + ',';
 	for (int i=0; i<slot_number; i++) {
-		storage[i].item = Parse::popFirstInt(item_list);
-		// check if such item exists to avoid crash if savegame was modified manually
-		if (storage[i].item < 0) {
-			Utils::logError("ItemStorage: Item on position %d has negative id, skipping", i);
-			storage[i].clear();
-		}
-		else if ((items->items.empty() && storage[i].item > 0) || static_cast<unsigned>(storage[i].item) > items->items.size()-1) {
-			Utils::logError("ItemStorage: Item id (%d) out of bounds 1-%d, marking as unknown", storage[i].item, static_cast<int>(items->items.size()));
-			items->addUnknownItem(storage[i].item);
-		}
+		storage[i].item = items->verifyID(Parse::toItemID(Parse::popFirstString(item_list)), NULL, ItemManager::VERIFY_ALLOW_ZERO, ItemManager::VERIFY_ALLOCATE);
 	}
 }
 
@@ -130,12 +121,8 @@ void ItemStorage::clear() {
  * @param slot Slot number where it will try to store the item
  */
 ItemStack ItemStorage::add( ItemStack stack, int slot) {
-	if (!stack.empty()) {
-		if (items->items.empty() || stack.item <= 0 || static_cast<unsigned>(stack.item) > items->items.size()-1) {
-			items->addUnknownItem(stack.item);
-		}
-
-		int max_quantity = items->items[stack.item].max_quantity;
+	if (!stack.empty() && items->isValid(stack.item)) {
+		int max_quantity = items->items[stack.item]->max_quantity;
 		if (slot > -1) {
 			// a slot is specified
 			if (storage[slot].item != 0 && storage[slot].item != stack.item) {
@@ -199,7 +186,7 @@ void ItemStorage::subtract(int slot, int quantity) {
 /**
  * Remove a quantity of a given item by its ID
  */
-bool ItemStorage::remove(int item, int quantity) {
+bool ItemStorage::remove(ItemID item, int quantity) {
 	if (item == 0)
 		return false;
 
@@ -246,12 +233,12 @@ void ItemStorage::sort() {
 }
 
 bool ItemStorage::full(ItemStack stack) {
-	if (stack.empty())
+	if (stack.empty() || !items->isValid(stack.item))
 		return false;
 
 	for (int i=0; i<slot_number; i++) {
-		if (storage[i].item == stack.item && storage[i].quantity < items->items[stack.item].max_quantity) {
-			if (stack.quantity + storage[i].quantity >= items->items[stack.item].max_quantity) {
+		if (storage[i].item == stack.item && items->isValid(stack.item) && storage[i].quantity < items->items[stack.item]->max_quantity) {
+			if (stack.quantity + storage[i].quantity >= items->items[stack.item]->max_quantity) {
 				stack.quantity -= storage[i].quantity;
 				continue;
 			}
@@ -267,7 +254,7 @@ bool ItemStorage::full(ItemStack stack) {
 /**
  * Get the number of the specified item carried (not equipped)
  */
-int ItemStorage::count(int item) {
+int ItemStorage::count(ItemID item) {
 	int item_count=0;
 	for (int i=0; i<slot_number; i++) {
 		if (storage[i].item == item) {
@@ -280,7 +267,7 @@ int ItemStorage::count(int item) {
 /**
  * Check to see if the given item is equipped
  */
-bool ItemStorage::contain(int item, int quantity) {
+bool ItemStorage::contain(ItemID item, int quantity) {
 	int total_quantity = 0;
 	for (int i=0; i<slot_number; i++) {
 		if (storage[i].item == item)

@@ -1,0 +1,2189 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# Translators:
+# bnk159hair <bnk159hair@naver.com>, 2020
+# YooJin919, 2022
+# ks k, 2022
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-21 12:22-0500\n"
+"PO-Revision-Date: 2018-03-28 19:16+0000\n"
+"Last-Translator: ks k, 2022\n"
+"Language-Team: Korean (https://app.transifex.com/flareorg/teams/84925/ko/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ko\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: ../../../src/Avatar.cpp:356
+msgid "Your health is low!"
+msgstr "체력이 낮습니다!"
+
+#: ../../../src/Avatar.cpp:386
+#, c-format
+msgid "Congratulations, you have reached level %d!"
+msgstr "축하합니다. 레벨이 %d로 올랐습니다!"
+
+#: ../../../src/Avatar.cpp:388
+msgid "You may increase one or more attributes through the Character Menu."
+msgstr "캐릭터 메뉴를 통해 하나 이상의 속성을 증가시킬 수 있습니다."
+
+#: ../../../src/Avatar.cpp:392
+msgid "You may unlock one or more abilities through the Powers Menu."
+msgstr "능력창을 통해서 하나 이상의 능력을 얻을 수 있습니다."
+
+#: ../../../src/Avatar.cpp:678
+msgid "You are defeated."
+msgstr "패배했습니다."
+
+#: ../../../src/Avatar.cpp:926
+msgid "Transformation expired. You have been moved back to a safe place."
+msgstr "변신이 끝났습니다. 안전한 장소로 이동되었습니다."
+
+#: ../../../src/CampaignManager.cpp:154
+#, c-format
+msgid "%d %s removed."
+msgstr "%d %s 이(가) 제거되었습니다."
+
+#: ../../../src/CampaignManager.cpp:173
+#, c-format
+msgid "%s x%d removed."
+msgstr "%s x%d 이(가) 제거되었습니다."
+
+#: ../../../src/CampaignManager.cpp:175
+#, c-format
+msgid "%s removed."
+msgstr "%s이(가) 제거되었습니다. "
+
+#: ../../../src/CampaignManager.cpp:189
+#, c-format
+msgid "You receive %d %s."
+msgstr "%d%s을(를) 얻었습니다."
+
+#: ../../../src/CampaignManager.cpp:193
+#, c-format
+msgid "You receive %s x%d."
+msgstr "%s x%d을(를) 얻었습니다."
+
+#: ../../../src/CampaignManager.cpp:195
+#, c-format
+msgid "You receive %s."
+msgstr "%s을(를) 얻었습니다."
+
+#: ../../../src/CampaignManager.cpp:217
+#, c-format
+msgid "You receive %d XP."
+msgstr "%d 경험치를 얻었습니다."
+
+#: ../../../src/CampaignManager.cpp:227
+msgid "HP restored."
+msgstr "체력이 회복되었습니다."
+
+#: ../../../src/CampaignManager.cpp:231
+msgid "MP restored."
+msgstr "마력이 회복되었습니다."
+
+#: ../../../src/CampaignManager.cpp:236
+msgid "HP and MP restored."
+msgstr "체력과 마력이 회복되었습니다."
+
+#: ../../../src/CampaignManager.cpp:240
+msgid "Negative effects removed."
+msgstr "디버프 효과가 해제되었습니다."
+
+#: ../../../src/CampaignManager.cpp:246
+msgid "HP and MP restored, negative effects removed"
+msgstr "체력과 마력이 회복되고, 디버프 효과가 해제되었습니다."
+
+#: ../../../src/DeviceList.cpp:56
+msgid ""
+"SDL software renderer\n"
+"\n"
+"Often slower, but less likely to have issues."
+msgstr ""
+"SDL 소프트웨어 렌더러\n"
+"\n"
+"속도는 느리지만 문제 발생할 가능성은 낮습니다."
+
+#: ../../../src/DeviceList.cpp:59
+msgid ""
+"SDL hardware renderer\n"
+"\n"
+"The default renderer that is often faster than the SDL software renderer."
+msgstr ""
+"SDL 하드웨어 렌더러\n"
+"\n"
+"SDL 소프트웨어 렌더러보다 빠른 경우가 많은 기본 렌더러입니다."
+
+#: ../../../src/EffectManager.cpp:503 ../../../src/EffectManager.cpp:507
+#: ../../../src/EffectManager.cpp:511 ../../../src/EffectManager.cpp:515
+#: ../../../src/EffectManager.cpp:519 ../../../src/Entity.cpp:548
+#: ../../../src/Entity.cpp:560 ../../../src/Entity.cpp:573
+#: ../../../src/Entity.cpp:588
+msgid "Resist"
+msgstr "저항하다"
+
+#: ../../../src/EngineSettings.cpp:642
+msgid "Adventurer"
+msgstr "모험가"
+
+#: ../../../src/Entity.cpp:511
+msgid "miss"
+msgstr "실패"
+
+#: ../../../src/Entity.cpp:553 ../../../src/PowerManager.cpp:1349
+#: ../../../src/StatBlock.cpp:1121 ../../../src/StatBlock.cpp:1128
+#, c-format
+msgid "+%s HP"
+msgstr "체력 +%s"
+
+#: ../../../src/Entity.cpp:565 ../../../src/StatBlock.cpp:1135
+#: ../../../src/StatBlock.cpp:1142
+#, c-format
+msgid "+%s MP"
+msgstr "마나 +%s"
+
+#: ../../../src/EventManager.cpp:845
+msgid "Unknown destination"
+msgstr "알려지지 않은 장소"
+
+#: ../../../src/GameState.cpp:37 ../../../src/GameState.cpp:58
+msgid "Loading..."
+msgstr "로딩중..."
+
+#: ../../../src/GameStateLoad.cpp:93
+msgid "Delete this save?"
+msgstr "현재 세이브가 삭제되었습니다."
+
+#: ../../../src/GameStateLoad.cpp:94 ../../../src/MenuConfig.cpp:248
+msgid "No"
+msgstr "아니오"
+
+#: ../../../src/GameStateLoad.cpp:95 ../../../src/MenuConfig.cpp:249
+msgid "Yes"
+msgstr "예"
+
+#: ../../../src/GameStateLoad.cpp:98
+msgid "Exit to Title"
+msgstr "타이틀로 나가기"
+
+#: ../../../src/GameStateLoad.cpp:101
+msgid "New Game"
+msgstr "게임 새로 시작하기"
+
+#: ../../../src/GameStateLoad.cpp:105 ../../../src/GameStateLoad.cpp:666
+msgid "Choose a Slot"
+msgstr "슬롯 선택하기"
+
+#: ../../../src/GameStateLoad.cpp:109
+msgid "Delete Save"
+msgstr "세이브파일을 삭제"
+
+#: ../../../src/GameStateLoad.cpp:639 ../../../src/GameStateLoad.cpp:660
+msgid "Enable a story mod to continue"
+msgstr "계속하기 위해 스토리 모드 선택"
+
+#: ../../../src/GameStateLoad.cpp:655
+msgid "Load Game"
+msgstr "게임 불러오기"
+
+#: ../../../src/GameStateLoad.cpp:763
+msgid "Entering game world..."
+msgstr "게임 월드로 들어가는 중..."
+
+#: ../../../src/GameStateLoad.cpp:766
+msgid "Loading saved game..."
+msgstr "저장된 게임 불러오는 중..."
+
+#: ../../../src/GameStateLoad.cpp:799
+msgid "Invalid save"
+msgstr "손상된 세이브"
+
+#: ../../../src/GameStateLoad.cpp:823 ../../../src/ItemManager.cpp:808
+#: ../../../src/MenuPowers.cpp:892 ../../../src/MenuPowers.cpp:1260
+#: ../../../src/MenuPowers.cpp:1740
+#, c-format
+msgid "Level %d"
+msgstr "레벨 %d"
+
+#: ../../../src/GameStateLoad.cpp:865
+msgid "#"
+msgstr "#"
+
+#: ../../../src/GameStateNew.cpp:66 ../../../src/GameStateTitle.cpp:136
+#: ../../../src/MenuConfig.cpp:260 ../../../src/SDLInputState.cpp:878
+msgid "Cancel"
+msgstr "취소"
+
+#: ../../../src/GameStateNew.cpp:69
+msgid "Create"
+msgstr "생성"
+
+#: ../../../src/GameStateNew.cpp:77
+msgid "Randomize"
+msgstr "랜덤"
+
+#: ../../../src/GameStateNew.cpp:93
+msgid "Choose a Portrait"
+msgstr "프로필 이미지 선택"
+
+#: ../../../src/GameStateNew.cpp:97
+msgid "Choose a Name"
+msgstr "이름 선택"
+
+#: ../../../src/GameStateNew.cpp:101
+msgid "Permadeath?"
+msgstr "부활할 수 없는 죽음?"
+
+#: ../../../src/GameStateNew.cpp:105
+msgid "Choose a Class"
+msgstr "직업을 선택하세요"
+
+#: ../../../src/GameStateTitle.cpp:109
+msgid "Play Game"
+msgstr "게임 플레이"
+
+#: ../../../src/GameStateTitle.cpp:112 ../../../src/MenuMiniMap.cpp:154
+msgid "Configuration"
+msgstr "설정"
+
+#: ../../../src/GameStateTitle.cpp:115
+msgid "Credits"
+msgstr "개발진"
+
+#: ../../../src/GameStateTitle.cpp:118
+msgid "Exit Game"
+msgstr "게임 나가기"
+
+#: ../../../src/GameStateTitle.cpp:134
+msgid "Enable a core mod to continue"
+msgstr "계속하기 위해 코어 모드 활성화"
+
+#: ../../../src/GameStateTitle.cpp:135 ../../../src/MenuConfig.cpp:385
+msgid "Mods"
+msgstr "수정"
+
+#: ../../../src/GameSwitcher.cpp:224
+#, c-format
+msgid "%s FPS"
+msgstr "%s FPS"
+
+#: ../../../src/ItemManager.cpp:475
+msgid "Unknown Item"
+msgstr "알 수 없는 아이템"
+
+#: ../../../src/ItemManager.cpp:698 ../../../src/MenuPowers.cpp:1023
+#, c-format
+msgid "%s%% Speed"
+msgstr "%s%% 속도"
+
+#: ../../../src/ItemManager.cpp:702 ../../../src/MenuPowers.cpp:1026
+#, c-format
+msgid "%s%% Attack Speed"
+msgstr "공격속도 %s%%"
+
+#: ../../../src/ItemManager.cpp:729 ../../../src/MenuCharacter.cpp:370
+#: ../../../src/MenuCharacter.cpp:467 ../../../src/MenuPowers.cpp:975
+#, c-format
+msgid "Resistance (%s)"
+msgstr "저항 (%s)"
+
+#: ../../../src/ItemManager.cpp:739
+#, c-format
+msgid "Requires %s"
+msgstr "%s 필요"
+
+#: ../../../src/ItemManager.cpp:791
+msgid "Quest Item"
+msgstr "퀘스트 아이템"
+
+#: ../../../src/ItemManager.cpp:821
+#, c-format
+msgid "Quality: %s"
+msgstr "퀄리티: %s"
+
+#: ../../../src/ItemManager.cpp:846
+msgid "Absorb"
+msgstr "흡수"
+
+#: ../../../src/ItemManager.cpp:900 ../../../src/MenuPowers.cpp:1247
+#: ../../../src/MenuPowers.cpp:1250
+#, c-format
+msgid "Requires Level %d"
+msgstr "필요 레벨: %d"
+
+#: ../../../src/ItemManager.cpp:912 ../../../src/MenuPowers.cpp:1239
+#: ../../../src/MenuPowers.cpp:1241
+#, c-format
+msgid "Requires %s %d"
+msgstr ""
+
+#: ../../../src/ItemManager.cpp:923
+#, c-format
+msgid "Requires Class: %s"
+msgstr "필요 직업: %s"
+
+#: ../../../src/ItemManager.cpp:939 ../../../src/ItemManager.cpp:951
+#, c-format
+msgid "Buy Price: %d %s"
+msgstr "구매 가격: %d %s"
+
+#: ../../../src/ItemManager.cpp:941 ../../../src/ItemManager.cpp:953
+#, c-format
+msgid "Buy Price: %d %s each"
+msgstr "구매 가격: 각각 %d %s"
+
+#: ../../../src/ItemManager.cpp:961
+#, c-format
+msgid "Sell Price: %d %s"
+msgstr "판매 가격: %d %s"
+
+#: ../../../src/ItemManager.cpp:963
+#, c-format
+msgid "Sell Price: %d %s each"
+msgstr "판매 가격: 각각 %d %s"
+
+#: ../../../src/ItemManager.cpp:974
+msgid "Set:"
+msgstr "세트 장비:"
+
+#: ../../../src/ItemManager.cpp:981
+#, c-format
+msgid "%d items:"
+msgstr "%d 개 효과:"
+
+#: ../../../src/ItemManager.cpp:1006 ../../../src/MenuPowers.cpp:1299
+msgid "Tap icon again for more options"
+msgstr "더 많은 옵션을 위해 아이콘을 다시 선택하세요"
+
+#: ../../../src/ItemManager.cpp:1038
+#, c-format
+msgid "Press [%s] to read"
+msgstr "읽으려면 [%s] 키를 누르세요"
+
+#: ../../../src/ItemManager.cpp:1041 ../../../src/MenuPowers.cpp:1329
+#, c-format
+msgid "Press [%s] to use"
+msgstr "사용하려면 [%s] 키를 누르세요"
+
+#: ../../../src/ItemManager.cpp:1045 ../../../src/MenuPowers.cpp:1333
+#, c-format
+msgid "Press [%s] for more options"
+msgstr "더 많은 옵션을 위해 [%s]을/를 선택하세요"
+
+#: ../../../src/LootManager.cpp:100 ../../../src/LootManager.cpp:102
+#: ../../../src/LootManager.cpp:104 ../../../src/MenuConfig.cpp:427
+msgid "Loot tooltip visibility"
+msgstr "전리품 풍선도움말을 표시"
+
+#: ../../../src/LootManager.cpp:100 ../../../src/MenuConfig.cpp:305
+#: ../../../src/MenuConfig.cpp:310
+msgid "Hidden"
+msgstr "숨겨진"
+
+#: ../../../src/LootManager.cpp:102 ../../../src/MenuConfig.cpp:303
+#: ../../../src/MenuConfig.cpp:354
+msgid "Default"
+msgstr "기본값"
+
+#: ../../../src/LootManager.cpp:104
+msgid "Show All"
+msgstr "전체 보기"
+
+#: ../../../src/MenuActionBar.cpp:86 ../../../src/MenuCharacter.cpp:54
+#: ../../../src/SDLInputState.cpp:894
+msgid "Character"
+msgstr "캐릭터"
+
+#: ../../../src/MenuActionBar.cpp:87 ../../../src/MenuInventory.cpp:164
+#: ../../../src/MenuVendor.cpp:58 ../../../src/SDLInputState.cpp:895
+msgid "Inventory"
+msgstr "인벤토리"
+
+#: ../../../src/MenuActionBar.cpp:88 ../../../src/MenuPowers.cpp:159
+#: ../../../src/SDLInputState.cpp:896
+msgid "Powers"
+msgstr "능력"
+
+#: ../../../src/MenuActionBar.cpp:89 ../../../src/MenuLog.cpp:72
+#: ../../../src/SDLInputState.cpp:897
+msgid "Log"
+msgstr "수행기록"
+
+#: ../../../src/MenuActionBar.cpp:241 ../../../src/MenuActionBar.cpp:248
+#: ../../../src/MenuActionBar.cpp:251 ../../../src/MenuActionBar.cpp:257
+#, c-format
+msgid "Hotkey: %s"
+msgstr "단축키: %s"
+
+#: ../../../src/MenuActionBar.cpp:638
+msgid "Not enough MP."
+msgstr "마력이 부족합니다."
+
+#: ../../../src/MenuActiveEffects.cpp:124
+#, c-format
+msgid "x%d"
+msgstr "x%d"
+
+#: ../../../src/MenuActiveEffects.cpp:219
+msgid "Remaining:"
+msgstr "남음:"
+
+#: ../../../src/MenuActiveEffects.cpp:225
+#, c-format
+msgid "x%d stacks"
+msgstr ""
+
+#: ../../../src/MenuCharacter.cpp:73 ../../../src/MenuCharacter.cpp:78
+msgid "Name"
+msgstr "이름"
+
+#: ../../../src/MenuCharacter.cpp:74 ../../../src/MenuCharacter.cpp:79
+msgid "Level"
+msgstr "레벨"
+
+#: ../../../src/MenuCharacter.cpp:296
+#, c-format
+msgid "Available stat points: %d"
+msgstr "필요한 스텟 포인트: %d"
+
+#: ../../../src/MenuCharacter.cpp:382 ../../../src/MenuStatBar.cpp:179
+#, c-format
+msgid "XP: %lu"
+msgstr "XP: %lu"
+
+#: ../../../src/MenuCharacter.cpp:384
+#, c-format
+msgid "Next: %lu"
+msgstr "다음: %lu"
+
+#: ../../../src/MenuCharacter.cpp:390
+#, c-format
+msgid "base (%d), bonus (%d)"
+msgstr "기본 (%d), 보너스 (%d)"
+
+#: ../../../src/MenuCharacter.cpp:405 ../../../src/MenuCharacter.cpp:420
+#: ../../../src/MenuCharacter.cpp:428 ../../../src/MenuCharacter.cpp:439
+#: ../../../src/MenuCharacter.cpp:453 ../../../src/MenuCharacter.cpp:464
+msgid "Related stats:"
+msgstr "관련 능력치:"
+
+#: ../../../src/MenuCharacter.cpp:490 ../../../src/MenuCharacter.cpp:514
+#: ../../../src/MenuCharacter.cpp:541 ../../../src/MenuCharacter.cpp:562
+#, c-format
+msgid "Each level grants %s."
+msgstr "각 레벨은 %s을(를) 부여합니다."
+
+#: ../../../src/MenuCharacter.cpp:494 ../../../src/MenuCharacter.cpp:518
+#: ../../../src/MenuCharacter.cpp:545 ../../../src/MenuCharacter.cpp:566
+#, c-format
+msgid "Each point of %s grants %s."
+msgstr "%s의 각 점에 대해 %s이(가) 부여됩니다."
+
+#: ../../../src/MenuCharacter.cpp:548
+#, c-format
+msgid "Reduces the damage taken from \"%s\" elemental attacks."
+msgstr "\"%s\" 기본 공격의 피해를 줄입니다."
+
+#: ../../../src/MenuConfig.cpp:243 ../../../src/MenuConfig.cpp:1285
+msgid "Assign:"
+msgstr "할당:"
+
+#: ../../../src/MenuConfig.cpp:244
+msgid "New"
+msgstr "새로운"
+
+#: ../../../src/MenuConfig.cpp:245 ../../../src/MenuManager.cpp:1794
+msgid "Clear"
+msgstr "통과"
+
+#: ../../../src/MenuConfig.cpp:247
+msgid "Reset ALL settings?"
+msgstr "모든 설정을 초기화하겠습니까?"
+
+#: ../../../src/MenuConfig.cpp:258 ../../../src/MenuNumPicker.cpp:49
+msgid "OK"
+msgstr "확인"
+
+#: ../../../src/MenuConfig.cpp:259
+msgid "Defaults"
+msgstr "기본값"
+
+#: ../../../src/MenuConfig.cpp:262 ../../../src/MenuGameOver.cpp:72
+msgid "Continue"
+msgstr "계속하기"
+
+#: ../../../src/MenuConfig.cpp:264
+msgid "Save Game"
+msgstr "게임을 저장"
+
+#: ../../../src/MenuConfig.cpp:303
+msgid ""
+"Show all loot tooltips, except for those that would be obscured by the "
+"player or an enemy. Temporarily show all loot tooltips with 'Alt'."
+msgstr ""
+"플레이어 또는 적에 의해 가려질 수 있는 정보를 제외한 모든 약탈 풍선 도움말을 표시합니다. 'Alt'를 사용하여 일시적으로 모든 약탈 "
+"풍선 도움말을 표시합니다."
+
+#: ../../../src/MenuConfig.cpp:304
+msgid "Show all"
+msgstr "전체 보기"
+
+#: ../../../src/MenuConfig.cpp:304
+msgid ""
+"Always show loot tooltips. Temporarily hide all loot tooltips with 'Alt'."
+msgstr "항상 약탈 풍선 도움말을 표시합니다. 'Alt'를 사용하여 일시적으로 모든 약탈 풍선 도움말을 숨깁니다."
+
+#: ../../../src/MenuConfig.cpp:305
+msgid ""
+"Always hide loot tooltips, except for when a piece of loot is hovered with "
+"the mouse cursor. Temporarily show all loot tooltips with 'Alt'."
+msgstr ""
+"전리품에 마우스 커서를 올리는 경우를 제외하고 약탈 풍선 도움말을 항상 숨깁니다. 'Alt'를 사용하여 일시적으로 모든 약탈 풍선 "
+"도움말을 표시합니다."
+
+#: ../../../src/MenuConfig.cpp:308
+msgid "Visible"
+msgstr "보여짐"
+
+#: ../../../src/MenuConfig.cpp:309
+msgid "Visible (2x zoom)"
+msgstr "보여짐 (2배 확대)"
+
+#: ../../../src/MenuConfig.cpp:313
+msgid ""
+"Controls the type of warning to be activated when the player is below the "
+"low health threshold."
+msgstr "플레이어가 낮은 체력 임계값보다 낮을 때 활성화되는 경고 유형 제어하기"
+
+#: ../../../src/MenuConfig.cpp:314
+msgid "- Display a message"
+msgstr "- 메시지 표시"
+
+#: ../../../src/MenuConfig.cpp:315
+msgid "- Play a sound"
+msgstr "- 소리 재생"
+
+#: ../../../src/MenuConfig.cpp:316
+msgid "- Change the cursor"
+msgstr "- 커서 변경"
+
+#: ../../../src/MenuConfig.cpp:318
+msgid "Disabled"
+msgstr "사용설정안함"
+
+#: ../../../src/MenuConfig.cpp:319
+msgid "All"
+msgstr "전체"
+
+#: ../../../src/MenuConfig.cpp:320
+msgid "Message & Cursor"
+msgstr "메시지 & 커서"
+
+#: ../../../src/MenuConfig.cpp:321
+msgid "Message & Sound"
+msgstr "메시지 & 소리"
+
+#: ../../../src/MenuConfig.cpp:322
+msgid "Sound & Cursor"
+msgstr "소리 & 커서"
+
+#: ../../../src/MenuConfig.cpp:323
+msgid "Message"
+msgstr "메시지"
+
+#: ../../../src/MenuConfig.cpp:324
+msgid "Cursor"
+msgstr "커서"
+
+#: ../../../src/MenuConfig.cpp:325
+msgid "Sound"
+msgstr "소리"
+
+#: ../../../src/MenuConfig.cpp:331
+msgid ""
+"When the player's health drops below the given threshold, the low health "
+"notifications are triggered if one or more of them is enabled."
+msgstr "플레이어의 체력이 주어진 임계값보다 낮을 때, 하나 이상의 상태가 활성화되면 낮은 상태 알림이 트리거된다."
+
+#: ../../../src/MenuConfig.cpp:349
+msgid "The maximum frame rate that the game will be allowed to run at."
+msgstr "게임을 실행할 수 있는 최대 프레임 비율입니다."
+
+#: ../../../src/MenuConfig.cpp:353
+msgid ""
+"The render size refers to the height in pixels of the surface used to draw "
+"the game. Mods define the allowed render sizes, but this option allows "
+"overriding the maximum size."
+msgstr ""
+"렌더 크기는 게임을 표현하는 데 사용되는 표면의 픽셀 단위 높이를 나타냅니다. 모드는 허용되는 렌더 크기를 정의한다. 하지만 이 옵션을 "
+"사용하면 최대 크기를 재정의할 수 있습니다."
+
+#: ../../../src/MenuConfig.cpp:379 ../../../src/MenuConfig.cpp:1715
+#: ../../../src/MenuGameOver.cpp:117
+msgid "Exit"
+msgstr "나가기"
+
+#: ../../../src/MenuConfig.cpp:380
+msgid "Video"
+msgstr "영상"
+
+#: ../../../src/MenuConfig.cpp:381
+msgid "Audio"
+msgstr "음성"
+
+#: ../../../src/MenuConfig.cpp:382
+msgid "Interface"
+msgstr "인터페이스"
+
+#: ../../../src/MenuConfig.cpp:383
+msgid "Input"
+msgstr "입력"
+
+#: ../../../src/MenuConfig.cpp:384
+msgid "Keybindings"
+msgstr "키 설정"
+
+#: ../../../src/MenuConfig.cpp:397
+msgid "Paused"
+msgstr "일시 정지"
+
+#: ../../../src/MenuConfig.cpp:400
+msgid "Time Played"
+msgstr "플레이 시간"
+
+#: ../../../src/MenuConfig.cpp:406
+msgid "Renderer"
+msgstr "렌더러"
+
+#: ../../../src/MenuConfig.cpp:407
+msgid "Full Screen Mode"
+msgstr "전체 화면 모드"
+
+#: ../../../src/MenuConfig.cpp:408
+msgid "Hardware surfaces"
+msgstr "하드웨어 표면"
+
+#: ../../../src/MenuConfig.cpp:409
+msgid "V-Sync"
+msgstr "수직동기화"
+
+#: ../../../src/MenuConfig.cpp:410
+msgid "Texture Filtering"
+msgstr "텍스처 필터링"
+
+#: ../../../src/MenuConfig.cpp:411
+msgid "DPI scaling"
+msgstr "DPI 스케일링"
+
+#: ../../../src/MenuConfig.cpp:412
+msgid "Parallax Layers"
+msgstr "시차 층"
+
+#: ../../../src/MenuConfig.cpp:413
+msgid "Allow changing gamma"
+msgstr "감마 변경 허용"
+
+#: ../../../src/MenuConfig.cpp:414
+msgid "Gamma"
+msgstr "감마"
+
+#: ../../../src/MenuConfig.cpp:415
+msgid "Maximum Render Size"
+msgstr "최대 렌더 크기"
+
+#: ../../../src/MenuConfig.cpp:416
+msgid "Frame Limit"
+msgstr "프레임 제한"
+
+#: ../../../src/MenuConfig.cpp:418
+msgid "Sound Volume"
+msgstr "소리 볼륨"
+
+#: ../../../src/MenuConfig.cpp:419
+msgid "Music Volume"
+msgstr "음악 볼륨"
+
+#: ../../../src/MenuConfig.cpp:421
+msgid "Language"
+msgstr "언어"
+
+#: ../../../src/MenuConfig.cpp:422
+msgid "Show FPS"
+msgstr "FPS 표시"
+
+#: ../../../src/MenuConfig.cpp:423
+msgid "Hardware mouse cursor"
+msgstr "하드웨어 마우스 커서"
+
+#: ../../../src/MenuConfig.cpp:424
+msgid "Colorblind Mode"
+msgstr "색맹 모드"
+
+#: ../../../src/MenuConfig.cpp:425
+msgid "Developer Mode"
+msgstr "개발자 모드"
+
+#: ../../../src/MenuConfig.cpp:426
+msgid "Subtitles"
+msgstr "자막"
+
+#: ../../../src/MenuConfig.cpp:428
+msgid "Mini-map mode"
+msgstr "미니맵 모드"
+
+#: ../../../src/MenuConfig.cpp:429
+msgid "Always show stat bar labels"
+msgstr "항상 상태 표시줄 레이블 표시"
+
+#: ../../../src/MenuConfig.cpp:430
+msgid "Allow stat bar auto-hiding"
+msgstr "상태 표시줄 자동 숨기기 허용"
+
+#: ../../../src/MenuConfig.cpp:431
+msgid "Show combat text"
+msgstr "싸움 글자를 표시"
+
+#: ../../../src/MenuConfig.cpp:432
+msgid "Automatically equip items"
+msgstr "아이템 자동 장착"
+
+#: ../../../src/MenuConfig.cpp:433
+msgid "Show hidden entity markers"
+msgstr "숨겨진 개체 마커 표시"
+
+#: ../../../src/MenuConfig.cpp:434
+msgid "Low health notification"
+msgstr "낮은 체력 경고"
+
+#: ../../../src/MenuConfig.cpp:435
+msgid "Low health threshold"
+msgstr "낮은 체력 임계값"
+
+#: ../../../src/MenuConfig.cpp:436
+msgid "Show item comparison tooltips"
+msgstr "아이템 비교 풍선 도움말을 표시"
+
+#: ../../../src/MenuConfig.cpp:439 ../../../src/MenuMovementType.cpp:94
+#: ../../../src/MenuMovementType.cpp:131
+msgid "Joystick"
+msgstr "조이스틱"
+
+#: ../../../src/MenuConfig.cpp:440
+msgid "Move hero using mouse"
+msgstr "마우스를 사용하여 영웅을 움직이세요"
+
+#: ../../../src/MenuConfig.cpp:441
+msgid "Mouse aim"
+msgstr "마우스 조준"
+
+#: ../../../src/MenuConfig.cpp:442
+msgid "Do not use mouse"
+msgstr "마우스를 사용하지 마세요"
+
+#: ../../../src/MenuConfig.cpp:443
+msgid "Swap mouse movement button"
+msgstr "마우스 이동 버튼 교체"
+
+#: ../../../src/MenuConfig.cpp:444
+msgid "Attack with mouse movement"
+msgstr "마우스 움직임으로 공격"
+
+#: ../../../src/MenuConfig.cpp:445
+msgid "Joystick Deadzone"
+msgstr "조이스틱 데드존"
+
+#: ../../../src/MenuConfig.cpp:446
+msgid "Touch Controls"
+msgstr "터치 컨트롤"
+
+#: ../../../src/MenuConfig.cpp:447
+msgid "Touch Gamepad Scaling"
+msgstr "터치 게임패드 스케일링"
+
+#: ../../../src/MenuConfig.cpp:552
+msgid ""
+"Will try to store surfaces in video memory versus system memory. The effect "
+"this has on performance depends on the renderer."
+msgstr "비디오 메모리 대 시스템 메모리에 표면을 저장하려고 한다. 이것이 성능에 미치는 영향은 렌더러에 따라 다르다."
+
+#: ../../../src/MenuConfig.cpp:553
+msgid ""
+"Prevents screen tearing. Disable if you experience \"stuttering\" in "
+"windowed mode or input lag."
+msgstr "스크린 티어링을 금지합니다. 창 모드에서 \"터치\"가 발생하거나 입력 지연이 발생할 경우 비활성화합니다."
+
+#: ../../../src/MenuConfig.cpp:554
+msgid ""
+"When enabled, this uses the screen DPI in addition to the window dimensions "
+"to scale the rendering resolution. Otherwise, only the window dimensions are"
+" used."
+msgstr "이 옵션을 활성화하면, 화면 DPI가 창 크기와 함께 렌더링 해상도 스케일링에 사용된다. 그렇지 않으면 창 치수만 사용된다."
+
+#: ../../../src/MenuConfig.cpp:555
+msgid ""
+"This enables parallax (non-tile) layers. Disabling this setting can improve "
+"performance in some cases."
+msgstr ""
+"이렇게 하면 시차(타일 아님) 레이어가 사용설정됩니다. 이 설정을 사용설정 안함으로 하면 경우에 따라 성능이 향상될 수 있습니다."
+
+#: ../../../src/MenuConfig.cpp:556
+msgid ""
+"Enables the below setting that controls the screen gamma level. The behavior"
+" of the gamma setting can vary between platforms."
+msgstr "화면 감마 레벨을 제어하는 아래 설정을 활성화합니다. 감마 설정의 동작은 플랫폼마다 다를 수 있다."
+
+#: ../../../src/MenuConfig.cpp:557
+msgid ""
+"Provides additional text for information that is primarily conveyed through "
+"color."
+msgstr "주로 색을 통해 전달되는 정보에 대한 추가 텍스트를 제공합니다."
+
+#: ../../../src/MenuConfig.cpp:558
+msgid ""
+"Some mods will automatically hide the stat bars when they are inactive. "
+"Disabling this option will keep them displayed at all times."
+msgstr "일부 모드는 비활성 상태일 때 자동으로 상태 표시줄을 숨깁니다. 이 옵션을 비활성화하면 해당 항목이 항상 표시됩니다."
+
+#: ../../../src/MenuConfig.cpp:559
+msgid ""
+"When enabled, empty equipment slots will be filled with applicable items "
+"when they are obtained."
+msgstr "이 옵션을 활성화하면, 빈 장비 슬롯이 해당 항목을 획득할 때 해당 항목으로 채워집니다."
+
+#: ../../../src/MenuConfig.cpp:560
+msgid ""
+"Shows a marker above enemies, allies, and the player when they are obscured "
+"by tall objects."
+msgstr "적, 아군, 플레이어가 큰 물체에 가려질 때, 위에 마커를 표시합니다."
+
+#: ../../../src/MenuConfig.cpp:561
+msgid ""
+"When enabled, tooltips for equipped items of the same type are shown next to"
+" standard item tooltips."
+msgstr "활성화되면, 표준 아이템 풍선 도움말 옆에 같은 유형의 장착된 아이템에 대한 풍선 도움말이 표시됩니다."
+
+#: ../../../src/MenuConfig.cpp:562
+msgid ""
+"This allows the game to be controlled entirely with the keyboard (or "
+"joystick)."
+msgstr "이를 통해 키보드(또는 조이스틱)로 게임을 완전히 제어할 수 있다."
+
+#: ../../../src/MenuConfig.cpp:563
+msgid ""
+"When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or"
+" 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
+"instead of 'Main1'."
+msgstr ""
+"'마우스를 사용하여 영웅 이동'이 활성화되면, 영웅 이동에 'Main1' 또는 'Main2'가 사용되는지 여부를 제어한다. 활성화하면 "
+"'Main1' 대신 'Main2'가 영웅을 이동한다."
+
+#: ../../../src/MenuConfig.cpp:564
+msgid ""
+"When 'Move hero using mouse' is enabled, this setting controls if the Power "
+"assigned to the movement button can be used by targeting an enemy. If this "
+"setting is disabled, it is required to use 'Shift' to access the Power "
+"assigned to the movement button."
+msgstr ""
+"'마우스를 사용하여 영웅 이동'이 활성화되면, 이 설정은 이동 버튼에 할당된 파워를 적에게 조준하여 사용할 수 있는지 여부를 설정합니다."
+" 이 설정이 비활성화되면, 'Shift'를 사용하여 이동 버튼에 할당된 파워에 액세스해야 합니다."
+
+#: ../../../src/MenuConfig.cpp:565
+msgid ""
+"The player's attacks will be aimed in the direction of the mouse cursor when"
+" this is enabled."
+msgstr "이 옵션이 활성화될 때, 플레이어의 공격이 마우스 커서의 방향을 겨냥합니다."
+
+#: ../../../src/MenuConfig.cpp:566
+msgid ""
+"When enabled, a virtual gamepad will be added in-game. Other interactions, "
+"such as drag-and-drop behavior, are also altered to better suit touch input."
+msgstr ""
+"이 옵션을 선택하면 가상 게임 패드가 게임 내에 추가됩니다. 드래그-앤-드롭 동작과 같은 다른 상호 작용도 터치 입력에 더 적합하도록 "
+"변경된다."
+
+#: ../../../src/MenuConfig.cpp:617
+msgid "Active Mods"
+msgstr "모드를 활성화"
+
+#: ../../../src/MenuConfig.cpp:626
+msgid "Available Mods"
+msgstr "이용 가능한 모드들"
+
+#: ../../../src/MenuConfig.cpp:645
+msgid "<< Disable"
+msgstr "<< 비활성화"
+
+#: ../../../src/MenuConfig.cpp:651
+msgid "Enable >>"
+msgstr "활성화 >>"
+
+#: ../../../src/MenuConfig.cpp:883
+msgid "Bindings for:"
+msgstr "바인딩;"
+
+#: ../../../src/MenuConfig.cpp:1553
+msgid "Core mod"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:1566
+msgid "Version:"
+msgstr "버전:"
+
+#: ../../../src/MenuConfig.cpp:1571
+msgid "Game:"
+msgstr "게임:"
+
+#: ../../../src/MenuConfig.cpp:1576
+msgid "Engine version:"
+msgstr "엔진 버전:"
+
+#: ../../../src/MenuConfig.cpp:1584
+msgid "Requires mods:"
+msgstr "필요 모드:"
+
+#: ../../../src/MenuConfig.cpp:1633
+msgid "Can not remove this binding."
+msgstr "이 바인딩을 제거할 수 없습니다."
+
+#: ../../../src/MenuConfig.cpp:1698 ../../../src/SDLInputState.cpp:740
+#: ../../../src/SDLInputState.cpp:765
+msgid "(none)"
+msgstr "(없음)"
+
+#: ../../../src/MenuConfig.cpp:1715 ../../../src/MenuGameOver.cpp:73
+msgid "Save & Exit"
+msgstr "저장후 나가기"
+
+#: ../../../src/MenuDevConsole.cpp:65
+msgid "Execute"
+msgstr "실행하기"
+
+#: ../../../src/MenuDevConsole.cpp:103 ../../../src/MenuDevConsole.cpp:154
+msgid "Developer Console"
+msgstr "개발자 콘솔"
+
+#: ../../../src/MenuDevConsole.cpp:144
+#, c-format
+msgid "Use '%s' to inspect with the cursor."
+msgstr "커서로 검사하기 위해 '%s'를 사용하세요."
+
+#: ../../../src/MenuDevConsole.cpp:149
+msgid "Arguments with spaces should be enclosed with double quotes. Example:"
+msgstr "공백이 있는 인수는 큰 따옴표로 묶어야 합니다. 예:"
+
+#: ../../../src/MenuDevConsole.cpp:150
+msgid "Type 'help' to get a list of commands."
+msgstr "명령어 목록을 얻기 위해 'help'를 입력하세요"
+
+#: ../../../src/MenuDevConsole.cpp:212 ../../../src/MenuDevConsole.cpp:216
+msgid "px"
+msgstr "px"
+
+#: ../../../src/MenuDevConsole.cpp:227
+msgid "Distance"
+msgstr "거리"
+
+#: ../../../src/MenuDevConsole.cpp:242 ../../../src/MenuDevConsole.cpp:290
+#: ../../../src/MenuDevConsole.cpp:304
+msgid "Entity"
+msgstr "개체"
+
+#: ../../../src/MenuDevConsole.cpp:264 ../../../src/MenuDevConsole.cpp:271
+msgid "none"
+msgstr "없음"
+
+#: ../../../src/MenuDevConsole.cpp:265 ../../../src/MenuDevConsole.cpp:267
+msgid "wall"
+msgstr "벽"
+
+#: ../../../src/MenuDevConsole.cpp:266 ../../../src/MenuDevConsole.cpp:268
+msgid "short wall / pit"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:269
+msgid "entity"
+msgstr "개체"
+
+#: ../../../src/MenuDevConsole.cpp:270
+msgid "entity, ally"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:277
+msgid "Tile"
+msgstr "타일"
+
+#: ../../../src/MenuDevConsole.cpp:385
+msgid "adds a power to the action bar"
+msgstr "행동 표시줄에 파워를 추가"
+
+#: ../../../src/MenuDevConsole.cpp:386
+msgid "turns on/off the display of the FPS counter"
+msgstr "FPC 카운터 디스플레이 설정/해제"
+
+#: ../../../src/MenuDevConsole.cpp:387
+msgid "turns on/off all of the HUD elements"
+msgstr "모든 HUD 요소 설정/해제"
+
+#: ../../../src/MenuDevConsole.cpp:388
+msgid "turns on/off the developer hud"
+msgstr "개발자 hub 설정/해제"
+
+#: ../../../src/MenuDevConsole.cpp:389
+msgid ""
+"Prints a list of powers that match a search term. No search term will list "
+"all items"
+msgstr "검색어와 일치하는 파워 목록을 출력합니다. 검색어에 모든 항목이 나열되지 않습니다."
+
+#: ../../../src/MenuDevConsole.cpp:390
+msgid "Prints out all the map filenames located in the \"maps/\" directory."
+msgstr "\"maps/\" 폴더에 있는 모든 지도 파일 이름을 출력합니다."
+
+#: ../../../src/MenuDevConsole.cpp:391
+msgid ""
+"Prints out the active campaign statuses that match a search term. No search "
+"term will list all active statuses"
+msgstr "검색어와 일치하는 활성 캠페인 상태를 출력합니다. 모든 활성 상태를 나열하는 검색어가 없습니다."
+
+#: ../../../src/MenuDevConsole.cpp:392
+msgid ""
+"Prints a list of items that match a search term. No search term will list "
+"all items"
+msgstr "검색어와 일치하는 아이템 목록을 출력합니다. 검색어에 모든 아이템이 나열되지 않습니다."
+
+#: ../../../src/MenuDevConsole.cpp:393 ../../../src/MenuDevConsole.cpp:394
+msgid ""
+"parses a series of event components and executes them as a single event"
+msgstr "일련의 이벤트 구성 요소를 구문 분석하고 단일 이벤트로 실행"
+
+#: ../../../src/MenuDevConsole.cpp:395
+msgid "clears the command history"
+msgstr "명령어 기록 삭제하기"
+
+#: ../../../src/MenuDevConsole.cpp:396
+msgid "displays this text"
+msgstr "이 글자를 표시"
+
+#: ../../../src/MenuDevConsole.cpp:403
+msgid "Toggled the developer hud"
+msgstr "개발자 hub을 전환했습니다."
+
+#: ../../../src/MenuDevConsole.cpp:407
+msgid "Toggled the hud"
+msgstr "hub를 전환했습니다."
+
+#: ../../../src/MenuDevConsole.cpp:411
+msgid "Toggled the FPS counter"
+msgstr "FPS 카운터를 전환했습니다."
+
+#: ../../../src/MenuDevConsole.cpp:561
+msgid "ERROR: Incorrect number of arguments"
+msgstr "오류: 잘못된 인수 수"
+
+#: ../../../src/MenuDevConsole.cpp:563 ../../../src/MenuDevConsole.cpp:591
+msgid "HINT:"
+msgstr "힌트:"
+
+#: ../../../src/MenuDevConsole.cpp:563
+msgid "<id>"
+msgstr "<id>"
+
+#: ../../../src/MenuDevConsole.cpp:579
+#, c-format
+msgid "ERROR: '%s' is not a valid event key"
+msgstr "오류: '%s'은 올바른 이벤트 키가 아닙니다."
+
+#: ../../../src/MenuDevConsole.cpp:589
+msgid "ERROR: Too few arguments"
+msgstr "오류: 인수가 너무 적습니다."
+
+#: ../../../src/MenuDevConsole.cpp:591
+msgid "<key>=<val> <key>=<val> ..."
+msgstr "<key>=<val> <key>=<val> ..."
+
+#: ../../../src/MenuDevConsole.cpp:596
+msgid "ERROR: Unknown command"
+msgstr "오류: 알 수 없는 명령어"
+
+#: ../../../src/MenuDevConsole.cpp:598
+msgid "HINT: Type help"
+msgstr "힌트: help를 입력하세요"
+
+#: ../../../src/MenuEnemy.cpp:167
+#, c-format
+msgid "%s level %d"
+msgstr "%s 레벨 %d"
+
+#: ../../../src/MenuEnemy.cpp:191
+msgid "Dead"
+msgstr "죽음"
+
+#: ../../../src/MenuEnemy.cpp:193
+msgid "Destroyed"
+msgstr "파괴됨"
+
+#: ../../../src/MenuGameOver.cpp:69
+msgid "Game Over"
+msgstr "게임 종료"
+
+#: ../../../src/MenuInventory.cpp:275
+#, c-format
+msgid "Lost %s%% of %s."
+msgstr "%s의 %s%%를 잃었습니다."
+
+#: ../../../src/MenuInventory.cpp:282
+#, c-format
+msgid "Lost %s%% of total XP."
+msgstr "전체 경험치의 %s%%를 잃었습니다."
+
+#: ../../../src/MenuInventory.cpp:287
+#, c-format
+msgid "Lost %s%% of current level XP."
+msgstr "현재 레벨 경험치의 %s%%를 잃었습니다."
+
+#: ../../../src/MenuInventory.cpp:313
+#, c-format
+msgid "Lost %s."
+msgstr "%s 를 잃었습니다."
+
+#: ../../../src/MenuInventory.cpp:404 ../../../src/MenuStash.cpp:275
+#, c-format
+msgid "%d %s"
+msgstr "%d %s"
+
+#: ../../../src/MenuInventory.cpp:447
+msgid "Pick up item(s):"
+msgstr "아이템(들) 줍기"
+
+#: ../../../src/MenuInventory.cpp:448
+msgid "Use or equip item:"
+msgstr "아이템 사용/장착"
+
+#: ../../../src/MenuInventory.cpp:449
+#, c-format
+msgid "%s modifiers"
+msgstr "%s 수정한 사람"
+
+#: ../../../src/MenuInventory.cpp:450
+msgid "Select a quantity of item:"
+msgstr "아이템 수량 선택:"
+
+#: ../../../src/MenuInventory.cpp:453
+msgid "Stash item stack:"
+msgstr "아이템 더미 저장"
+
+#: ../../../src/MenuInventory.cpp:455
+msgid "Sell item stack:"
+msgstr "아이템 더미 판매"
+
+#: ../../../src/MenuInventory.cpp:726
+msgid "You don't have enough of the required item."
+msgstr "필요한 아이템이 부족합니다."
+
+#: ../../../src/MenuInventory.cpp:738
+msgid "You can't use this item right now."
+msgstr "지금 당장 아이템을 사용할 수 없습니다."
+
+#: ../../../src/MenuInventory.cpp:763
+msgid "This item can only be used from the action bar."
+msgstr "이 항목은 행동 표시줄에서만 사용할 수 있습니다."
+
+#: ../../../src/MenuInventory.cpp:881
+msgid "Inventory is full."
+msgstr "인벤토리가 가득찼습니다."
+
+#: ../../../src/MenuInventory.cpp:1006
+#, c-format
+msgid "Not enough %s."
+msgstr "%s가 부족합니다."
+
+#: ../../../src/MenuInventory.cpp:1026 ../../../src/MenuInventory.cpp:1033
+msgid "This item can not be sold."
+msgstr "이 아이템은 판매될 수 없습니다."
+
+#: ../../../src/MenuInventory.cpp:1332
+#, c-format
+msgid "Equipped set %d."
+msgstr "%d 번 장비 모음으로 착용하였습니다."
+
+#: ../../../src/MenuLog.cpp:90
+msgid "Quests"
+msgstr "퀘스트"
+
+#: ../../../src/MenuLog.cpp:91
+msgid "Notes"
+msgstr "메모"
+
+#: ../../../src/MenuManager.cpp:174
+msgid "Choose an action:"
+msgstr "행동을 선택하세요:"
+
+#: ../../../src/MenuManager.cpp:522 ../../../src/MenuManager.cpp:1154
+msgid "This item can not be dropped."
+msgstr "이 아이템을 떨어지지 않습니다."
+
+#: ../../../src/MenuManager.cpp:1739
+msgid "Equipped"
+msgstr "장비를 착용했음"
+
+#: ../../../src/MenuManager.cpp:1787 ../../../src/MenuManager.cpp:1838
+msgid "Use"
+msgstr "사용하기"
+
+#: ../../../src/MenuManager.cpp:1791 ../../../src/MenuManager.cpp:1834
+#: ../../../src/MenuManager.cpp:1865
+msgid "Move"
+msgstr "움직이기"
+
+#: ../../../src/MenuManager.cpp:1807 ../../../src/MenuManager.cpp:1842
+msgid "Equip"
+msgstr "장비를 갖추다"
+
+#: ../../../src/MenuManager.cpp:1811
+msgid "Upgrade"
+msgstr "개선하다"
+
+#: ../../../src/MenuManager.cpp:1826 ../../../src/MenuManager.cpp:1850
+msgid "Sell"
+msgstr "판매하기"
+
+#: ../../../src/MenuManager.cpp:1830 ../../../src/MenuManager.cpp:1868
+msgid "Transfer"
+msgstr "이동하기"
+
+#: ../../../src/MenuManager.cpp:1846
+msgid "Drop"
+msgstr "떨어트리다"
+
+#: ../../../src/MenuManager.cpp:1882
+msgid "Buy"
+msgstr "구매하기"
+
+#: ../../../src/MenuMovementType.cpp:87
+msgid "Select a Movement Type"
+msgstr "이동 유형을 선택하세요"
+
+#: ../../../src/MenuMovementType.cpp:89
+msgid "Can be changed later in the Configuration menu."
+msgstr "나중에 환경 설정 메뉴에서 변경할 수 있습니다."
+
+#: ../../../src/MenuMovementType.cpp:92 ../../../src/MenuMovementType.cpp:122
+msgid "Keyboard"
+msgstr "키보드"
+
+#: ../../../src/MenuMovementType.cpp:93 ../../../src/MenuMovementType.cpp:128
+msgid "Mouse"
+msgstr "마우스"
+
+#: ../../../src/MenuMovementType.cpp:123 ../../../src/MenuMovementType.cpp:132
+#: ../../../src/SDLInputState.cpp:665 ../../../src/SDLInputState.cpp:695
+#: ../../../src/SDLInputState.cpp:880
+msgid "Up"
+msgstr "위"
+
+#: ../../../src/MenuMovementType.cpp:124 ../../../src/MenuMovementType.cpp:133
+#: ../../../src/SDLInputState.cpp:650 ../../../src/SDLInputState.cpp:680
+#: ../../../src/SDLInputState.cpp:882
+msgid "Left"
+msgstr "왼쪽"
+
+#: ../../../src/MenuMovementType.cpp:125 ../../../src/MenuMovementType.cpp:134
+#: ../../../src/SDLInputState.cpp:643 ../../../src/SDLInputState.cpp:673
+#: ../../../src/SDLInputState.cpp:881
+msgid "Down"
+msgstr "아래"
+
+#: ../../../src/MenuMovementType.cpp:126 ../../../src/MenuMovementType.cpp:135
+#: ../../../src/SDLInputState.cpp:660 ../../../src/SDLInputState.cpp:690
+#: ../../../src/SDLInputState.cpp:883
+msgid "Right"
+msgstr "오른쪽"
+
+#: ../../../src/MenuMovementType.cpp:129
+msgid "Button"
+msgstr "버튼"
+
+#: ../../../src/MenuNumPicker.cpp:59
+msgid "Enter amount:"
+msgstr "양을 입력하세요:"
+
+#: ../../../src/MenuPowers.cpp:904
+msgid "Passive"
+msgstr "패시브"
+
+#: ../../../src/MenuPowers.cpp:911
+#, c-format
+msgid "Costs %s MP"
+msgstr "마력 %s 소비함"
+
+#: ../../../src/MenuPowers.cpp:915
+#, c-format
+msgid "Costs %s HP"
+msgstr "체력 %s 소비함"
+
+#: ../../../src/MenuPowers.cpp:925
+msgid "Cooldown:"
+msgstr "냉각:"
+
+#: ../../../src/MenuPowers.cpp:1002 ../../../src/MenuPowers.cpp:1005
+msgid "Damage per second"
+msgstr "초당 피해량"
+
+#: ../../../src/MenuPowers.cpp:1008 ../../../src/MenuPowers.cpp:1011
+msgid "HP per second"
+msgstr "초당 채력"
+
+#: ../../../src/MenuPowers.cpp:1014 ../../../src/MenuPowers.cpp:1017
+msgid "MP per second"
+msgstr "초당 체력"
+
+#: ../../../src/MenuPowers.cpp:1021
+msgid "Immobilize"
+msgstr "고정"
+
+#: ../../../src/MenuPowers.cpp:1029
+msgid "Resistance to all negative effects"
+msgstr "모든 부정적 영향에 대한 저항성"
+
+#: ../../../src/MenuPowers.cpp:1033
+msgid "Stun"
+msgstr "기절"
+
+#: ../../../src/MenuPowers.cpp:1036
+msgid "Automatic revive on death"
+msgstr "사망시 자동 부활"
+
+#: ../../../src/MenuPowers.cpp:1039
+msgid "Convert"
+msgstr "전환하다"
+
+#: ../../../src/MenuPowers.cpp:1042
+msgid "Fear"
+msgstr "공포"
+
+#: ../../../src/MenuPowers.cpp:1045
+msgid "Lifespan"
+msgstr "수명"
+
+#: ../../../src/MenuPowers.cpp:1069
+msgid "Magical Shield"
+msgstr "마법의 방패"
+
+#: ../../../src/MenuPowers.cpp:1098
+msgid "Healing"
+msgstr "치유"
+
+#: ../../../src/MenuPowers.cpp:1101
+msgid "Knockback"
+msgstr "뒤로밀어내기"
+
+#: ../../../src/MenuPowers.cpp:1125
+#, c-format
+msgid "%s%% chance"
+msgstr "%s%% 기회"
+
+#: ../../../src/MenuPowers.cpp:1177
+msgid "Base Accuracy"
+msgstr "기본 정확도"
+
+#: ../../../src/MenuPowers.cpp:1197
+msgid "Base Critical Chance"
+msgstr "기본 치명타 확률"
+
+#: ../../../src/MenuPowers.cpp:1205
+msgid "Ignores Absorbtion"
+msgstr "흡수 무시"
+
+#: ../../../src/MenuPowers.cpp:1210
+msgid "Ignores Avoidance"
+msgstr "회피 무시"
+
+#: ../../../src/MenuPowers.cpp:1215
+#, c-format
+msgid "%s%% Chance to crit slowed targets"
+msgstr "%s%% 확률로 느려진 목표물에 치명타를 가할 수 있는 기회"
+
+#: ../../../src/MenuPowers.cpp:1220
+#, c-format
+msgid "Elemental Damage (%s)"
+msgstr "기본 데미지 (%s)"
+
+#: ../../../src/MenuPowers.cpp:1229
+#, c-format
+msgid "Requires a %s"
+msgstr "%s가 필요합니다."
+
+#: ../../../src/MenuPowers.cpp:1267 ../../../src/MenuPowers.cpp:1270
+#, c-format
+msgid "Requires Power: %s"
+msgstr "필요한 스킬: %s"
+
+#: ../../../src/MenuPowers.cpp:1279
+msgid "Click to Unlock (uses 1 Skill Point)"
+msgstr "클릭하여 잠금 해제(1 스킬 포인트 사용)"
+
+#: ../../../src/MenuPowers.cpp:1283 ../../../src/MenuPowers.cpp:1285
+msgid "Requires 1 Skill Point"
+msgstr "스킬 포인트 1 이 필요"
+
+#: ../../../src/MenuPowers.cpp:1532
+#, c-format
+msgid "Available skill points: %d"
+msgstr "필요한 스킬 포인트: %d"
+
+#: ../../../src/MenuPowers.cpp:1564
+msgid "Next Level:"
+msgstr "다음 레벨:"
+
+#: ../../../src/MenuStash.cpp:78 ../../../src/MenuStash.cpp:159
+msgid "Stash"
+msgstr "숨기는 장소"
+
+#: ../../../src/MenuStash.cpp:170 ../../../src/MenuStash.cpp:184
+msgid "Private"
+msgstr "개인 소유"
+
+#: ../../../src/MenuStash.cpp:171
+msgid "Shared"
+msgstr "공유"
+
+#: ../../../src/MenuStash.cpp:339
+msgid "This item can not be stored in the stash."
+msgstr "이 아이템은 저장소에 저장되지 않습니다."
+
+#: ../../../src/MenuStash.cpp:344
+msgid "This item can not be stored in the private stash."
+msgstr "이 아이템은 개인 저장소에 저장되지 않습니다."
+
+#: ../../../src/MenuStash.cpp:349
+msgid "This item can not be stored in the shared stash."
+msgstr "이 아이템은 공유 저장소에 저장되지 않습니다."
+
+#: ../../../src/MenuStash.cpp:359
+msgid "Stash is full."
+msgstr "저장소가 가득찼습니다."
+
+#: ../../../src/MenuStash.cpp:413
+#, c-format
+msgid "Can not store item in stash: %s"
+msgstr "저장소에 저장할 수 없습니다: %s"
+
+#: ../../../src/MenuStatBar.cpp:182
+#, c-format
+msgid "XP: %lu/%lu"
+msgstr "XP: %lu/%lu"
+
+#: ../../../src/MenuTalker.cpp:468
+#, c-format
+msgid "<dialog node %d>"
+msgstr "<dialog node %d>"
+
+#: ../../../src/MenuTalker.cpp:476
+msgid "Trade"
+msgstr "거래"
+
+#: ../../../src/MenuVendor.cpp:59
+msgid "Buyback"
+msgstr "재판매"
+
+#: ../../../src/MenuVendor.cpp:288
+msgid "Vendor"
+msgstr "노점상"
+
+#: ../../../src/PowerManager.cpp:1333
+#, c-format
+msgid "+%s Shield"
+msgstr "+%s 보호막"
+
+#: ../../../src/PowerManager.cpp:1597
+msgid "You are already transformed, untransform first."
+msgstr "이미 변환되었습니다. 변환을 먼저 취소하세요."
+
+#: ../../../src/PowerManager.cpp:1609
+msgid "Could not untransform at this position."
+msgstr "이 위치에서 변환을 취소할 수 없습니다."
+
+#: ../../../src/QuestLog.cpp:215
+msgid "Completed Quests"
+msgstr "완료된 퀘스트"
+
+#: ../../../src/SaveLoad.cpp:289 ../../../src/SaveLoad.cpp:290
+msgid "Game saved."
+msgstr "게임 저장됨"
+
+#: ../../../src/SDLInputState.cpp:98
+#, c-format
+msgid "Can not bind: %s"
+msgstr "바인딩할 수 없음: %s"
+
+#: ../../../src/SDLInputState.cpp:107
+#, c-format
+msgid "'%s' is no longer bound to:"
+msgstr "'%s'는 더 이상 다음 항목에 바인딩되지 않습니다."
+
+#: ../../../src/SDLInputState.cpp:640
+msgid "BkSp"
+msgstr "백스페이스"
+
+#: ../../../src/SDLInputState.cpp:641
+msgid "Caps"
+msgstr "캡스락"
+
+#: ../../../src/SDLInputState.cpp:642
+msgid "Del"
+msgstr "딜리트"
+
+#: ../../../src/SDLInputState.cpp:644 ../../../src/SDLInputState.cpp:674
+msgid "End"
+msgstr "엔드"
+
+#: ../../../src/SDLInputState.cpp:645
+msgid "Esc"
+msgstr "Esc"
+
+#: ../../../src/SDLInputState.cpp:646 ../../../src/SDLInputState.cpp:676
+msgid "Home"
+msgstr "홈"
+
+#: ../../../src/SDLInputState.cpp:647
+msgid "Ins"
+msgstr "인서트"
+
+#: ../../../src/SDLInputState.cpp:648
+msgid "LAlt"
+msgstr "왼쪽 알트"
+
+#: ../../../src/SDLInputState.cpp:649
+msgid "LCtrl"
+msgstr "왼쪽 컨트롤"
+
+#: ../../../src/SDLInputState.cpp:651
+msgid "LShft"
+msgstr "Left Shift"
+
+#: ../../../src/SDLInputState.cpp:652
+msgid "Num"
+msgstr "넘락"
+
+#: ../../../src/SDLInputState.cpp:653
+msgid "PgDn"
+msgstr "페이지다운"
+
+#: ../../../src/SDLInputState.cpp:654
+msgid "PgUp"
+msgstr "페이지업"
+
+#: ../../../src/SDLInputState.cpp:655 ../../../src/SDLInputState.cpp:685
+#: ../../../src/SDLInputState.cpp:908
+msgid "Pause"
+msgstr "푸쉬"
+
+#: ../../../src/SDLInputState.cpp:656
+msgid "Print"
+msgstr "프린트스크린"
+
+#: ../../../src/SDLInputState.cpp:657
+msgid "RAlt"
+msgstr "오른쪽 알트"
+
+#: ../../../src/SDLInputState.cpp:658
+msgid "RCtrl"
+msgstr "오른쪽 컨트롤"
+
+#: ../../../src/SDLInputState.cpp:659
+msgid "Ret"
+msgstr ""
+
+#: ../../../src/SDLInputState.cpp:661
+msgid "RShft"
+msgstr "오른쪽 쉬프트"
+
+#: ../../../src/SDLInputState.cpp:662
+msgid "SLock"
+msgstr "스크롤락"
+
+#: ../../../src/SDLInputState.cpp:663
+msgid "Spc"
+msgstr ""
+
+#: ../../../src/SDLInputState.cpp:664 ../../../src/SDLInputState.cpp:694
+msgid "Tab"
+msgstr "탭"
+
+#: ../../../src/SDLInputState.cpp:670
+msgid "Backspace"
+msgstr "백스페이스"
+
+#: ../../../src/SDLInputState.cpp:671
+msgid "CapsLock"
+msgstr "캡스락"
+
+#: ../../../src/SDLInputState.cpp:672 ../../../src/SDLInputState.cpp:917
+msgid "Delete"
+msgstr "딜리트"
+
+#: ../../../src/SDLInputState.cpp:675
+msgid "Escape"
+msgstr "Esc"
+
+#: ../../../src/SDLInputState.cpp:677
+msgid "Insert"
+msgstr "인서트"
+
+#: ../../../src/SDLInputState.cpp:678
+msgid "Left Alt"
+msgstr "왼쪽 알트"
+
+#: ../../../src/SDLInputState.cpp:679
+msgid "Left Ctrl"
+msgstr "왼쪽 컨트롤"
+
+#: ../../../src/SDLInputState.cpp:681
+msgid "Left Shift"
+msgstr "왼쪽 쉬프트"
+
+#: ../../../src/SDLInputState.cpp:682
+msgid "NumLock"
+msgstr "넘락"
+
+#: ../../../src/SDLInputState.cpp:683
+msgid "PageDown"
+msgstr "페이지다운"
+
+#: ../../../src/SDLInputState.cpp:684
+msgid "PageUp"
+msgstr "페이지업"
+
+#: ../../../src/SDLInputState.cpp:686
+msgid "PrintScreen"
+msgstr "프린트스크린"
+
+#: ../../../src/SDLInputState.cpp:687
+msgid "Right Alt"
+msgstr "오른쪽 알트"
+
+#: ../../../src/SDLInputState.cpp:688
+msgid "Right Ctrl"
+msgstr "오른쪽 컨트롤"
+
+#: ../../../src/SDLInputState.cpp:689
+msgid "Return"
+msgstr "돌려주다"
+
+#: ../../../src/SDLInputState.cpp:691
+msgid "Right Shift"
+msgstr "오른쪽 쉬프트"
+
+#: ../../../src/SDLInputState.cpp:692
+msgid "ScrollLock"
+msgstr "스크롤락"
+
+#: ../../../src/SDLInputState.cpp:693
+msgid "Space"
+msgstr "스페이스"
+
+#: ../../../src/SDLInputState.cpp:705
+#, c-format
+msgid "M%d"
+msgstr "M%d"
+
+#: ../../../src/SDLInputState.cpp:711
+#, c-format
+msgid "Mouse %d"
+msgstr "마우스 %d"
+
+#: ../../../src/SDLInputState.cpp:720 ../../../src/SDLInputState.cpp:729
+msgid "(unknown)"
+msgstr "(알 수 없음)"
+
+#: ../../../src/SDLInputState.cpp:791
+msgid "Touch control D-Pad"
+msgstr "터치 컨트롤 D 패드"
+
+#: ../../../src/SDLInputState.cpp:811
+msgid "Touch control buttons"
+msgstr "터치 제어 버튼"
+
+#: ../../../src/SDLInputState.cpp:879
+msgid "Accept"
+msgstr "수락하다"
+
+#: ../../../src/SDLInputState.cpp:884
+msgid "Bar1"
+msgstr "Bar1"
+
+#: ../../../src/SDLInputState.cpp:885
+msgid "Bar2"
+msgstr "Bar2"
+
+#: ../../../src/SDLInputState.cpp:886
+msgid "Bar3"
+msgstr "Bar3"
+
+#: ../../../src/SDLInputState.cpp:887
+msgid "Bar4"
+msgstr "Bar4"
+
+#: ../../../src/SDLInputState.cpp:888
+msgid "Bar5"
+msgstr "Bar5"
+
+#: ../../../src/SDLInputState.cpp:889
+msgid "Bar6"
+msgstr "Bar6"
+
+#: ../../../src/SDLInputState.cpp:890
+msgid "Bar7"
+msgstr "Bar7"
+
+#: ../../../src/SDLInputState.cpp:891
+msgid "Bar8"
+msgstr "Bar8"
+
+#: ../../../src/SDLInputState.cpp:892
+msgid "Bar9"
+msgstr "Bar9"
+
+#: ../../../src/SDLInputState.cpp:893
+msgid "Bar0"
+msgstr "Bar0"
+
+#: ../../../src/SDLInputState.cpp:898
+msgid "Main1"
+msgstr "Main1"
+
+#: ../../../src/SDLInputState.cpp:899
+msgid "Main2"
+msgstr "Main2"
+
+#: ../../../src/SDLInputState.cpp:900
+msgid "Next Equip Set"
+msgstr "다음 장착 세트 장비"
+
+#: ../../../src/SDLInputState.cpp:901
+msgid "Previous Equip Set"
+msgstr "이전 장착 세트 장비"
+
+#: ../../../src/SDLInputState.cpp:902
+msgid "Mini-map Mode"
+msgstr "미니맵 모드"
+
+#: ../../../src/SDLInputState.cpp:903
+msgid "Loot Tooltip Mode"
+msgstr "전리품 풍선 도움말 모드"
+
+#: ../../../src/SDLInputState.cpp:904
+msgid "Action Bar"
+msgstr "행동 표시줄"
+
+#: ../../../src/SDLInputState.cpp:905
+msgid "Menu: Next Page"
+msgstr "메뉴: 다음 페이지"
+
+#: ../../../src/SDLInputState.cpp:906
+msgid "Menu: Previous Page"
+msgstr "메뉴: 이전 페이지"
+
+#: ../../../src/SDLInputState.cpp:907
+msgid "Menu: Activate"
+msgstr "메뉴: 활성화"
+
+#: ../../../src/SDLInputState.cpp:909
+msgid "Aim Up"
+msgstr "조준 위"
+
+#: ../../../src/SDLInputState.cpp:910
+msgid "Aim Down"
+msgstr "조준 아래"
+
+#: ../../../src/SDLInputState.cpp:911
+msgid "Aim Left"
+msgstr "조준 왼쪽"
+
+#: ../../../src/SDLInputState.cpp:912
+msgid "Aim Right"
+msgstr "조준 오른쪽"
+
+#: ../../../src/SDLInputState.cpp:913
+msgid "Developer Menu"
+msgstr "개발자 메뉴"
+
+#: ../../../src/SDLInputState.cpp:914
+msgid "Ctrl"
+msgstr "컨트롤"
+
+#: ../../../src/SDLInputState.cpp:915
+msgid "Shift"
+msgstr "Shift"
+
+#: ../../../src/SDLInputState.cpp:916
+msgid "Alt"
+msgstr "알트"
+
+#: ../../../src/SDLInputState.cpp:919
+msgid "Left Mouse"
+msgstr "왼쪽 마우스"
+
+#: ../../../src/SDLInputState.cpp:920
+msgid "Middle Mouse"
+msgstr "중간 마우스"
+
+#: ../../../src/SDLInputState.cpp:921
+msgid "Right Mouse"
+msgstr "오른쪽 마우스"
+
+#: ../../../src/SDLInputState.cpp:922
+msgid "Wheel Up"
+msgstr "휠 업"
+
+#: ../../../src/SDLInputState.cpp:923
+msgid "Wheel Down"
+msgstr "휠 다운"
+
+#: ../../../src/SDLInputState.cpp:924
+msgid "Mouse X1"
+msgstr "마우스 X1"
+
+#: ../../../src/SDLInputState.cpp:925
+msgid "Mouse X2"
+msgstr "마우스 X2"
+
+#: ../../../src/SDLInputState.cpp:927
+msgid "X360: A"
+msgstr "X360: A"
+
+#: ../../../src/SDLInputState.cpp:928
+msgid "X360: B"
+msgstr "X360: B"
+
+#: ../../../src/SDLInputState.cpp:929
+msgid "X360: X"
+msgstr "X360: X"
+
+#: ../../../src/SDLInputState.cpp:930
+msgid "X360: Y"
+msgstr "X360: Y"
+
+#: ../../../src/SDLInputState.cpp:931
+msgid "X360: Back"
+msgstr "X360: 뒤로"
+
+#: ../../../src/SDLInputState.cpp:932
+msgid "X360: Guide"
+msgstr "X360: 가이드"
+
+#: ../../../src/SDLInputState.cpp:933
+msgid "X360: Start"
+msgstr "X360: 시작"
+
+#: ../../../src/SDLInputState.cpp:934
+msgid "X360: L3"
+msgstr "X360: L3"
+
+#: ../../../src/SDLInputState.cpp:935
+msgid "X360: R3"
+msgstr "X360: R3"
+
+#: ../../../src/SDLInputState.cpp:936
+msgid "X360: L1"
+msgstr "X360: L1"
+
+#: ../../../src/SDLInputState.cpp:937
+msgid "X360: R1"
+msgstr "X360: R1"
+
+#: ../../../src/SDLInputState.cpp:938
+msgid "X360: D-Up"
+msgstr "X360: D-위"
+
+#: ../../../src/SDLInputState.cpp:939
+msgid "X360: D-Down"
+msgstr "X360: D-아래"
+
+#: ../../../src/SDLInputState.cpp:940
+msgid "X360: D-Left"
+msgstr "X360: D-왼쪽"
+
+#: ../../../src/SDLInputState.cpp:941
+msgid "X360: D-Right"
+msgstr "X360: D-오른쪽"
+
+#: ../../../src/SDLInputState.cpp:943
+msgid "X360: Left X+"
+msgstr "X360: 왼쪽 X+"
+
+#: ../../../src/SDLInputState.cpp:944
+msgid "X360: Left X-"
+msgstr "X360: 왼쪽 X-"
+
+#: ../../../src/SDLInputState.cpp:945
+msgid "X360: Left Y+"
+msgstr "X360: 왼쪽 Y+"
+
+#: ../../../src/SDLInputState.cpp:946
+msgid "X360: Left Y-"
+msgstr "X360: 왼쪽 Y-"
+
+#: ../../../src/SDLInputState.cpp:947
+msgid "X360: Right X+"
+msgstr "X360: 오른쪽 X+"
+
+#: ../../../src/SDLInputState.cpp:948
+msgid "X360: Right X-"
+msgstr "X360: 오른쪽 X-"
+
+#: ../../../src/SDLInputState.cpp:949
+msgid "X360: Right Y+"
+msgstr "X360: 오른쪽 Y+"
+
+#: ../../../src/SDLInputState.cpp:950
+msgid "X360: Right Y-"
+msgstr "X360: 오른쪽 Y-"
+
+#: ../../../src/SDLInputState.cpp:951
+msgid "X360: L2"
+msgstr "X360: L2"
+
+#: ../../../src/SDLInputState.cpp:952
+msgid "X360: R2"
+msgstr "X360: R2"
+
+#: ../../../src/Stats.cpp:38
+msgid "Max HP"
+msgstr "최대 체력"
+
+#: ../../../src/Stats.cpp:39
+msgid "Total amount of HP."
+msgstr "체력의 총량입니다."
+
+#: ../../../src/Stats.cpp:44
+msgid "HP Regen"
+msgstr "체력 자동 회복"
+
+#: ../../../src/Stats.cpp:45
+msgid "Ticks of HP regen per minute."
+msgstr "분당 체력 자동 회복 틱 수입니다."
+
+#: ../../../src/Stats.cpp:50
+msgid "Max MP"
+msgstr "최대 마력"
+
+#: ../../../src/Stats.cpp:51
+msgid "Total amount of MP."
+msgstr "마력의 총량입니다."
+
+#: ../../../src/Stats.cpp:56
+msgid "MP Regen"
+msgstr "체력 자동 회복"
+
+#: ../../../src/Stats.cpp:57
+msgid "Ticks of MP regen per minute."
+msgstr "분당 체력 자동 회복 틱 수입니다."
+
+#: ../../../src/Stats.cpp:62
+msgid "Accuracy"
+msgstr "정확도"
+
+#: ../../../src/Stats.cpp:63
+msgid ""
+"Accuracy rating. The enemy's Avoidance rating is subtracted from this value "
+"to calculate your likeliness to land a direct hit."
+msgstr "정확도 등급. 적의 회피율이 이 값에서 차감돼서 직격탄을 맞을 확률을 계산합니다."
+
+#: ../../../src/Stats.cpp:68
+msgid "Avoidance"
+msgstr "회피"
+
+#: ../../../src/Stats.cpp:69
+msgid ""
+"Avoidance rating. This value is subtracted from the enemy's Accuracy rating "
+"to calculate their likeliness to land a direct hit."
+msgstr "회피 등급. 이 값은 적의 정확도 등급에서 차감하여 적에게 직접 명중할 확률을 계산합니다."
+
+#: ../../../src/Stats.cpp:74
+msgid "Absorb Min"
+msgstr "최소 흡수"
+
+#: ../../../src/Stats.cpp:75 ../../../src/Stats.cpp:81
+msgid "Reduces the amount of damage taken."
+msgstr "받은 피해량을 줄입니다."
+
+#: ../../../src/Stats.cpp:80
+msgid "Absorb Max"
+msgstr "최대 흡수"
+
+#: ../../../src/Stats.cpp:86
+msgid "Critical Hit Chance"
+msgstr "치명타 확률"
+
+#: ../../../src/Stats.cpp:87
+msgid "Chance for an attack to do extra damage."
+msgstr "공격에 추가 피해를 줄 확률"
+
+#: ../../../src/Stats.cpp:92
+msgid "Bonus XP"
+msgstr "보너스 경험치"
+
+#: ../../../src/Stats.cpp:93
+msgid "Increases the XP gained per kill."
+msgstr "킬당 획득하는 XP가 증가한다."
+
+#: ../../../src/Stats.cpp:98
+#, c-format
+msgid "Bonus %s"
+msgstr "보너스 %s"
+
+#: ../../../src/Stats.cpp:99
+#, c-format
+msgid "Increases the %s found per drop."
+msgstr "아이템 드롭당%s 의 발견량을 늘린다."
+
+#: ../../../src/Stats.cpp:104
+msgid "Item Find Chance"
+msgstr "아이템 발견 확률"
+
+#: ../../../src/Stats.cpp:105
+msgid "Increases the chance that an enemy will drop an item."
+msgstr "적이 아이템을 떨어트릴 확률이 증가합니다."
+
+#: ../../../src/Stats.cpp:110
+msgid "Stealth"
+msgstr "스텔스--번역확인"
+
+#: ../../../src/Stats.cpp:111
+msgid "Increases your ability to move undetected."
+msgstr "발견되지 않고 움직이는 능력이 증가합니다."
+
+#: ../../../src/Stats.cpp:116
+msgid "Poise"
+msgstr "침착"
+
+#: ../../../src/Stats.cpp:117
+msgid "Reduces your chance of stumbling when hit."
+msgstr "부딪힐 때 비틀거릴 확률이 감소합니다."
+
+#: ../../../src/Stats.cpp:122
+msgid "Missile Reflect Chance"
+msgstr "미사일 반사 확률"
+
+#: ../../../src/Stats.cpp:123
+msgid "Increases your chance of reflecting missiles back at enemies."
+msgstr "적에게 미사일을 반사할 확률이 증가합니다."
+
+#: ../../../src/Stats.cpp:128
+msgid "Damage Reflection"
+msgstr "피해 반사"
+
+#: ../../../src/Stats.cpp:129
+msgid "Deals a percentage of damage taken back to the attacker."
+msgstr "받은 피해의 일정 비율을 공격자에게 되돌려 줍니다."
+
+#: ../../../src/Stats.cpp:134
+msgid "HP Steal"
+msgstr "체력 훔치기"
+
+#: ../../../src/Stats.cpp:135
+msgid "Percentage of HP stolen per hit."
+msgstr "적중당 훔칠 체력의 확률입니다."
+
+#: ../../../src/Stats.cpp:140
+msgid "MP Steal"
+msgstr "마력 훔치기"
+
+#: ../../../src/Stats.cpp:141
+msgid "Percentage of MP stolen per hit."
+msgstr "적중당 훔칠 마력의 확률입니다."
+
+#: ../../../src/Stats.cpp:146
+msgid "Resistance to damage-over-time"
+msgstr "장기간에 걸친 피해에 대한 저항성"
+
+#: ../../../src/Stats.cpp:147
+msgid "Percentage chance that damage-over-time effects will be negated."
+msgstr "시간 경과에 따른 피해가 사라질 확률입니다."
+
+#: ../../../src/Stats.cpp:152
+msgid "Resistance to slow"
+msgstr "속도 저하에 대한 저항"
+
+#: ../../../src/Stats.cpp:153
+msgid "Percentage chance that slow effects will be negated."
+msgstr "속도 저하가 사라질 확률입니다."
+
+#: ../../../src/Stats.cpp:158
+msgid "Resistance to stun"
+msgstr "기절에 대한 저항"
+
+#: ../../../src/Stats.cpp:159
+msgid "Percentage chance that stun effects will be negated."
+msgstr "기절이 사라질 확률입니다."
+
+#: ../../../src/Stats.cpp:164
+msgid "Resistance to knockback"
+msgstr "뒤로밀어내기 저항"
+
+#: ../../../src/Stats.cpp:165
+msgid "Percentage chance that knockback effects will be negated."
+msgstr "뒤로밀어내기 효과가 무효화될 확률입니다."
+
+#: ../../../src/Stats.cpp:170
+msgid "Resistance to stat debuffs"
+msgstr "상태 디버프에 대한 저항"
+
+#: ../../../src/Stats.cpp:171
+msgid "Percentage chance that stat debuff effects will be negated."
+msgstr "상태 디버프 효과가 사라질 확률입니다."
+
+#: ../../../src/Stats.cpp:176
+msgid "Resistance to damage reflection"
+msgstr "피해량 반사에 대한 저항"
+
+#: ../../../src/Stats.cpp:177
+msgid "Percentage chance that damage reflection will be negated."
+msgstr "피해량 반사가 사라질 확률입니다."
+
+#: ../../../src/Stats.cpp:182
+msgid "Resistance to HP steal"
+msgstr "체력 훔치기에 대한 저항"
+
+#: ../../../src/Stats.cpp:183
+msgid "Percentage chance that HP steal will be negated."
+msgstr "체력 훔치기가 무효화될 확률입니다."
+
+#: ../../../src/Stats.cpp:188
+msgid "Resistance to MP steal"
+msgstr "마력 훔치기에 대한 저항"
+
+#: ../../../src/Stats.cpp:189
+msgid "Percentage chance that MP steal will be negated."
+msgstr "마력 훔치기가 무효화될 확률입니다."
+
+#: ../../../src/Utils.cpp:375
+msgid "k"
+msgstr "k"
+
+#: ../../../src/Utils.cpp:667
+#, c-format
+msgid "%s second"
+msgstr "%s 초"
+
+#: ../../../src/Utils.cpp:670
+#, c-format
+msgid "%s seconds"
+msgstr "%s 초"
+
+#: ../../../src/Version.cpp:139
+msgid "or newer"
+msgstr "또는 더 새것"
+
+#: ../../../src/Version.cpp:142
+msgid "or older"
+msgstr "또는 더오래됨"

@@ -26,6 +26,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "GameStateLoad.h"
 #include "GameStateTitle.h"
 #include "InputState.h"
+#include "MenuMovementType.h"
+#include "MenuConfig.h"
+#include "MenuConfirm.h"
 #include "MessageEngine.h"
 #include "Platform.h"
 #include "RenderDevice.h"
@@ -33,8 +36,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "SoundManager.h"
 #include "WidgetButton.h"
+#include "WidgetHorizontalList.h"
 #include "WidgetLabel.h"
-#include "WidgetScrollBox.h"
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
 #include "Version.h"
@@ -42,17 +45,16 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 GameStateTitle::GameStateTitle()
 	: GameState()
 	, logo(NULL)
+	, button_play(new WidgetButton(WidgetButton::DEFAULT_FILE))
+	, button_exit(new WidgetButton(WidgetButton::DEFAULT_FILE))
+	, button_cfg(new WidgetButton(WidgetButton::DEFAULT_FILE))
+	, button_credits(new WidgetButton(WidgetButton::DEFAULT_FILE))
+	, label_version(new WidgetLabel())
+	, menu_movement_type(NULL)
 	, align_logo(Utils::ALIGN_CENTER)
 	, exit_game(false)
 	, load_game(false)
 {
-
-	// set up buttons
-	button_play = new WidgetButton(WidgetButton::DEFAULT_FILE);
-	button_exit = new WidgetButton(WidgetButton::DEFAULT_FILE);
-	button_cfg = new WidgetButton(WidgetButton::DEFAULT_FILE);
-	button_credits = new WidgetButton(WidgetButton::DEFAULT_FILE);
-
 	FileParser infile;
 	// @CLASS GameStateTitle|Description of menus/gametitle.txt
 	if (infile.open("menus/gametitle.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
@@ -105,10 +107,6 @@ GameStateTitle::GameStateTitle()
 	}
 
 	button_play->setLabel(msg->get("Play Game"));
-	if (!eset->gameplay.enable_playgame) {
-		button_play->enabled = false;
-		button_play->tooltip = msg->get("Enable a core mod to continue");
-	}
 	button_play->refresh();
 
 	button_cfg->setLabel(msg->get("Configuration"));
@@ -121,19 +119,24 @@ GameStateTitle::GameStateTitle()
 	button_exit->refresh();
 
 	// set up labels
-	label_version = new WidgetLabel();
 	label_version->setJustify(FontEngine::JUSTIFY_RIGHT);
 	label_version->setText(VersionInfo::createVersionStringFull());
 	label_version->setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
 	// Setup tab order
-	tablist.ignore_no_mouse = true;
 	tablist.add(button_play);
 	tablist.add(button_cfg);
 	tablist.add(button_credits);
 	tablist.add(button_exit);
 
+	// Core mod not selected dialogue
+	prompt_select_mods = new MenuConfirm();
+	prompt_select_mods->setTitle(msg->get("Enable a core mod to continue"));
+	prompt_select_mods->action_list->append(msg->get("Mods"), "");
+	prompt_select_mods->action_list->append(msg->get("Cancel"), "");
+
 	refreshWidgets();
+	force_refresh_background = true;
 
 	if (eset->gameplay.enable_playgame && !settings->load_slot.empty()) {
 		showLoading();
@@ -141,13 +144,19 @@ GameStateTitle::GameStateTitle()
 	}
 
 	render_device->setBackgroundColor(Color(0,0,0,0));
+
+	// NOTE The presence of the mouse move setting is used to determine if the
+	// movement type dialog is displayed. Is this adequate?
+	if (!settings->move_type_dimissed && platform.config_input[Platform::Input::MOUSE_MOVE]) {
+		menu_movement_type = new MenuMovementType();
+		menu_movement_type->visible = true;
+	}
+
 }
 
 void GameStateTitle::logic() {
 	if (inpt->window_resized)
 		refreshWidgets();
-
-	button_play->enabled = eset->gameplay.enable_playgame;
 
 	snd->logic(FPoint(0,0));
 
@@ -156,39 +165,64 @@ void GameStateTitle::logic() {
 		exitRequested = true;
 	}
 
-	tablist.logic();
-
-	if (button_play->checkClick()) {
-		showLoading();
-		setRequestedGameState(new GameStateLoad());
+	if (menu_movement_type && menu_movement_type->visible) {
+		menu_movement_type->logic();
 	}
-	else if (button_cfg->checkClick()) {
-		showLoading();
-		setRequestedGameState(new GameStateConfig());
-		// TODO platform-specific options
-		// if (platform.config_menu_type == Platform::CONFIG_MENU_TYPE_DESKTOP_NO_VIDEO)
-		// 	setRequestedGameState(new GameStateConfigDesktop(!GameStateConfigDesktop::ENABLE_VIDEO_TAB));
-		// else if (platform.config_menu_type == Platform::CONFIG_MENU_TYPE_DESKTOP)
-		// 	setRequestedGameState(new GameStateConfigDesktop(GameStateConfigDesktop::ENABLE_VIDEO_TAB));
-		// else
-		// 	setRequestedGameState(new GameStateConfigBase(GameStateConfigBase::DO_INIT));
-	}
-	else if (button_credits->checkClick()) {
-		showLoading();
-		GameStateTitle *title = new GameStateTitle();
-		GameStateCutscene *credits = new GameStateCutscene(title);
+	else if (prompt_select_mods && prompt_select_mods->visible) {
+		prompt_select_mods->logic();
+		if (prompt_select_mods->clicked_confirm) {
+			if (prompt_select_mods->action_list->getSelected() == PROMPT_SELECT_MODS_OK) {
+				showLoading();
+				GameStateConfig* config = new GameStateConfig();
+				config->setActiveTab(MenuConfig::MODS_TAB);
+				setRequestedGameState(config);
 
-		if (!credits->load("cutscenes/credits.txt")) {
-			delete credits;
-			delete title;
-		}
-		else {
-			setRequestedGameState(credits);
+				prompt_select_mods->visible = false;
+				prompt_select_mods->clicked_confirm = false;
+			} else if (prompt_select_mods->action_list->getSelected() == PROMPT_SELECT_MODS_CANCEL) {
+				prompt_select_mods->visible = false;
+			}
+
 		}
 	}
-	else if (platform.has_exit_button && button_exit->checkClick()) {
-		exitRequested = true;
+	else {
+		tablist.logic();
+
+		bool play_clicked = button_play->checkClick();
+
+		if (!inpt->usingMouse() && tablist.getCurrent() == -1) {
+			tablist.getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
+		}
+
+		if (play_clicked && !eset->gameplay.enable_playgame) {
+			prompt_select_mods->show();
+		}
+		else if (play_clicked) {
+			showLoading();
+			setRequestedGameState(new GameStateLoad());
+		}
+		else if (button_cfg->checkClick()) {
+			showLoading();
+			setRequestedGameState(new GameStateConfig());
+		}
+		else if (button_credits->checkClick()) {
+			showLoading();
+			GameStateTitle *title = new GameStateTitle();
+			GameStateCutscene *credits = new GameStateCutscene(title);
+
+			if (!credits->load("cutscenes/credits.txt")) {
+				delete credits;
+				delete title;
+			}
+			else {
+				setRequestedGameState(credits);
+			}
+		}
+		else if (platform.has_exit_button && button_exit->checkClick()) {
+			exitRequested = true;
+		}
 	}
+
 }
 
 void GameStateTitle::refreshWidgets() {
@@ -208,19 +242,32 @@ void GameStateTitle::refreshWidgets() {
 	button_exit->setPos(0, 0);
 
 	label_version->setPos(settings->view_w, 0);
+
+	if (menu_movement_type)
+		menu_movement_type->align();
+	if (prompt_select_mods)
+		prompt_select_mods->align();
 }
 
 void GameStateTitle::render() {
-	// display logo
-	render_device->render(logo);
+	if (!menu_movement_type || !menu_movement_type->visible) {
+		// display logo
+		render_device->render(logo);
 
-	// display buttons
-	button_play->render();
-	button_cfg->render();
-	button_credits->render();
+		// display buttons
+		button_play->render();
+		button_cfg->render();
+		button_credits->render();
 
-	if (platform.has_exit_button)
-		button_exit->render();
+		if (prompt_select_mods && prompt_select_mods->visible)
+			prompt_select_mods->render();
+
+		if (platform.has_exit_button)
+			button_exit->render();
+		}
+	else {
+		menu_movement_type->render();
+	}
 
 	// version number
 	label_version->render();
@@ -233,4 +280,6 @@ GameStateTitle::~GameStateTitle() {
 	delete button_credits;
 	delete button_exit;
 	delete label_version;
+	delete menu_movement_type;
+	if (prompt_select_mods) delete prompt_select_mods;
 }

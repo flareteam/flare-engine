@@ -47,9 +47,8 @@ public:
 	virtual void setBasePos(int x, int y, int a);
 	virtual void setPos(int offset_x, int offset_y);
 	bool in_focus;
-	bool focusable;
 	bool enable_tablist_nav; // when disabled, this widget will be skipped during tablist navigation
-	bool tablist_nav_right; // uses the center-right point for tablist nav instead of the center. Primarily for MenuConfig widgets
+	uint8_t tablist_nav_align; // used to determine the "center" point used when calculating relative distance between tablist widgets
 	uint8_t scroll_type;
 	Rect pos; // This is the position of the button within the screen
 	Rect local_frame; // Local reference frame is this is a daughter widget
@@ -81,6 +80,12 @@ public:
 		WIDGET_SELECT_DOWN = 4
 	};
 
+	enum {
+		NAV_ALIGN_CENTER = 0,
+		NAV_ALIGN_LEFT = 1,
+		NAV_ALIGN_RIGHT = 2
+	};
+
 	static const bool GET_INNER = true;
 
 	TabList();
@@ -97,6 +102,8 @@ public:
 	unsigned size();
 	Widget* getNext(bool inner, uint8_t dir);	// Increment current selected, return widget
 	Widget* getPrev(bool inner, uint8_t dir);	// Decrement current selected, return widget
+	int getNextIndex();
+	int getPrevIndex();
 	int getNextRelativeIndex(uint8_t dir);
 	void deactivatePrevious();
 	void activate();					// Fire off what happens when the user presses 'accept'
@@ -104,11 +111,11 @@ public:
 	void setPrevTabList(TabList *tl);
 	void setNextTabList(TabList *tl);
 	void setScrollType(uint8_t _scrolltype);
-	void setInputs(int _LEFT, int _RIGHT, int _ACTIVATE);
+	bool isLocked();
 
 	void logic();
 
-	bool ignore_no_mouse;
+	bool enable_activate; // when disabled, Input::ACCEPT won't trigger activate()
 };
 
 #endif

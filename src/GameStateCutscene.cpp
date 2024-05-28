@@ -35,6 +35,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetLabel.h"
 #include "WidgetScrollBox.h"
 
+CutsceneSettings::CutsceneSettings()
+	: caption_background(0,0,0,200)
+	, vscroll_speed(0.5f * Settings::LOGIC_FPS / settings->max_frames_per_sec)
+	, vscroll_speed_fast(vscroll_speed * 16)
+{}
+
 Scene::Scene(const CutsceneSettings& _settings, short _cutscene_type)
 	: cutscene_settings(_settings)
 	, frame_counter(0)
@@ -191,12 +197,10 @@ int Scene::logic() {
 			return DONE;
 		}
 		else if (cutscene_type == CUTSCENE_VSCROLL && inpt->pressing[Input::UP]) {
-			vscroll_y -= VSCROLL_SPEED;
-			if (vscroll_y < 0)
-				vscroll_y = 0;
+			skip = SKIP_VSCROLL_BACK;
 		}
 		else if (cutscene_type == CUTSCENE_VSCROLL && inpt->pressing[Input::DOWN]) {
-			vscroll_y += VSCROLL_SPEED;
+			skip = SKIP_SUBSCENE;
 		}
 	}
 
@@ -342,13 +346,21 @@ int Scene::logic() {
 			}
 		}
 
-		vscroll_offset = static_cast<int>(static_cast<float>(vscroll_y) * (cutscene_settings.vscroll_speed * settings->max_frames_per_sec) / settings->view_h);
-		if (skip == SKIP_NEXT)
+		vscroll_offset = static_cast<int>(vscroll_y);
+		if (skip == SKIP_NEXT) {
 			return NEXT;
-		else if (skip == SKIP_SUBSCENE)
-			vscroll_y += VSCROLL_SPEED;
-		else
-			vscroll_y++;
+		}
+		else if (skip == SKIP_SUBSCENE) {
+			vscroll_y += cutscene_settings.vscroll_speed_fast;
+		}
+		else if (skip == SKIP_VSCROLL_BACK) {
+			vscroll_y -= cutscene_settings.vscroll_speed_fast;
+			if (vscroll_y < 0)
+				vscroll_y = 0;
+		}
+		else {
+			vscroll_y += cutscene_settings.vscroll_speed;
+		}
 
 		refreshWidgets();
 
@@ -486,7 +498,7 @@ void Scene::render() {
 
 	// only display the back button if there's more than one scene or subscene
 	bool only_scene = is_first_scene && is_last_scene;
-	if (!only_scene || (only_scene && cutscene_type == CUTSCENE_STATIC && subscenes.size() > 1))
+	if (!only_scene || (cutscene_type == CUTSCENE_STATIC && subscenes.size() > 1))
 		button_prev->render();
 
 	button_advance->render();
@@ -594,16 +606,17 @@ bool GameStateCutscene::load(const std::string& filename) {
 		if (infile.section.empty()) {
 			if (infile.key == "caption_margins") {
 				// @ATTR caption_margins|float, float : X margin, Y margin|Percentage-based margins for the caption text based on screen size
-				cutscene_settings.caption_margins.x = Parse::toFloat(Parse::popFirstString(infile.val))/100.0f;
-				cutscene_settings.caption_margins.y = Parse::toFloat(Parse::popFirstString(infile.val))/100.0f;
+				cutscene_settings.caption_margins.x = Parse::popFirstFloat(infile.val)/100.0f;
+				cutscene_settings.caption_margins.y = Parse::popFirstFloat(infile.val)/100.0f;
 			}
 			else if (infile.key == "caption_background") {
 				// @ATTR caption_background|color, int : Color, Alpha|Color (RGBA) of the caption area background.
 				cutscene_settings.caption_background = Parse::toRGBA(infile.val);
 			}
 			else if (infile.key == "vscroll_speed") {
-				// @ATTR vscroll_speed|float|The speed at which elements will scroll in 'vscroll' scenes.
-				cutscene_settings.vscroll_speed = Parse::toFloat(infile.val);
+				// @ATTR vscroll_speed|float|The speed at which elements will scroll in 'vscroll' scenes. Defaults to 0.5.
+				cutscene_settings.vscroll_speed = Parse::toFloat(infile.val) * Settings::LOGIC_FPS / settings->max_frames_per_sec;
+				cutscene_settings.vscroll_speed_fast = cutscene_settings.vscroll_speed * 2;
 			}
 			else if (infile.key == "menu_backgrounds") {
 				// @ATTR menu_backgrounds|bool|This cutscene will use a random fullscreen background image, like the title screen does

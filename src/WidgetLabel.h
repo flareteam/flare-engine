@@ -67,6 +67,7 @@ private:
 	int update_flag;
 	bool hidden;
 	bool window_resize_flag;
+	uint8_t alpha;
 	Sprite *label;
 
 	std::string text;
@@ -79,6 +80,8 @@ public:
 	static const std::string DEFAULT_FONT;
 
 	WidgetLabel();
+	WidgetLabel(const WidgetLabel& other);
+	WidgetLabel& operator= (const WidgetLabel &other);
 	~WidgetLabel();
 	void render();
 	void setMaxWidth(int width);
@@ -89,6 +92,7 @@ public:
 	void setText(const std::string& _text);
 	void setColor(const Color& _color);
 	void setFont(const std::string& _font);
+	void setAlpha(uint8_t _alpha);
 	void setFromLabelInfo(const LabelInfo& label_info);
 
 	std::string getText();

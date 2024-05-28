@@ -24,25 +24,31 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EngineSettings.h"
 #include "EventManager.h"
 #include "FileParser.h"
+#include "FogOfWar.h"
 #include "Map.h"
+#include "MapRenderer.h"
 #include "MessageEngine.h"
 #include "ModManager.h"
 #include "PowerManager.h"
+#include "SaveLoad.h"
+#include "Settings.h"
 #include "SharedResources.h"
 #include "SharedGameResources.h"
 #include "StatBlock.h"
+#include "Utils.h"
 #include "UtilsParsing.h"
 
 Map::Map()
 	: filename("")
-	, collision_layer(-1)
 	, layers()
 	, events()
 	, w(1)
 	, h(1)
 	, hero_pos_enabled(false)
 	, hero_pos()
-	, background_color(0,0,0,0) {
+	, background_color(0,0,0,0)
+	, fogofwar(eset->misc.fogofwar)
+	, save_fogofwar(eset->misc.save_fogofwar) {
 }
 
 Map::~Map() {
@@ -56,7 +62,7 @@ void Map::clearLayers() {
 
 void Map::clearQueues() {
 	enemies = std::queue<Map_Enemy>();
-	npcs = std::queue<Map_NPC>();
+	map_npcs = std::queue<Map_NPC>();
 }
 
 void Map::clearEvents() {
@@ -78,8 +84,11 @@ int Map::load(const std::string& fname) {
 	clearQueues();
 
 	music_filename = "";
+	parallax_filename = "";
+	background_color = Color(0,0,0,0);
+	fogofwar = eset->misc.fogofwar;
+	save_fogofwar = eset->misc.save_fogofwar;
 
-	collision_layer = -1;
 	w = 1;
 	h = 1;
 	hero_pos_enabled = false;
@@ -101,7 +110,7 @@ int Map::load(const std::string& fname) {
 			if (infile.section == "enemy")
 				enemy_groups.push(Map_Group());
 			else if (infile.section == "npc")
-				npcs.push(Map_NPC());
+				map_npcs.push(Map_NPC());
 			else if (infile.section == "event")
 				events.push_back(Event());
 
@@ -120,12 +129,14 @@ int Map::load(const std::string& fname) {
 
 	infile.close();
 
+	if (fogofwar) fow->load();
+
 	// create StatBlocks for events that need powers
 	for (unsigned i=0; i<events.size(); ++i) {
 		EventComponent *ec_power = events[i].getComponent(EventComponent::POWER);
 		if (ec_power) {
 			// store the index of this StatBlock so that we can find it when the event is activated
-			ec_power->y = addEventStatBlock(events[i]);
+			ec_power->data[0].Int = addEventStatBlock(events[i]);
 		}
 	}
 
@@ -137,7 +148,40 @@ int Map::load(const std::string& fname) {
 		for (size_t i=0; i<layers.back().size(); ++i) {
 			layers.back()[i].resize(h, 0);
 		}
-		collision_layer = static_cast<int>(layers.size())-1;
+	}
+
+	// ensure that our map contains a fog of war layer
+	if (fogofwar) {
+		if (save_fogofwar) {
+			std::stringstream ss;
+			ss.str("");
+			ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/" << save_load->getGameSlot() << "/fow/" << Utils::hashString(mapr->getFilename()) << ".txt";
+			if (infile.open(ss.str(), !FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
+				while (infile.next()) {
+					if (infile.section == "layer") {
+						loadLayer(infile);
+					}
+				}
+				infile.close();
+			}
+		}
+		if (std::find(layernames.begin(), layernames.end(), "fow_fog") == layernames.end()) {
+			layernames.push_back("fow_fog");
+			layers.resize(layers.size()+1);
+			layers.back().resize(w);
+			for (size_t i=0; i<layers.back().size(); ++i) {
+				layers.back()[i].resize(h, FogOfWar::TILE_HIDDEN);
+			}
+		}
+
+		if (std::find(layernames.begin(), layernames.end(), "fow_dark") == layernames.end()) {
+			layernames.push_back("fow_dark");
+			layers.resize(layers.size()+1);
+			layers.back().resize(w);
+			for (size_t i=0; i<layers.back().size(); ++i) {
+				layers.back()[i].resize(h, FogOfWar::TILE_HIDDEN);
+			}
+		}
 	}
 
 	if (!hero_pos_enabled) {
@@ -182,6 +226,14 @@ void Map::loadHeader(FileParser &infile) {
 		// @ATTR background_color|color, int : Color, alpha|Background color for the map.
 		background_color = Parse::toRGBA(infile.val);
 	}
+	else if (infile.key == "fogofwar") {
+		// @ATTR fogofwar|int|Set the fog of war type. 0-disabled, 1-minimap, 2-tint, 3-overlay. Overrides engine settings.
+		fogofwar = static_cast<unsigned short>(Parse::toInt(infile.val));
+	}
+	else if (infile.key == "save_fogofwar") {
+		// @ATTR save_fogofwar|bool|If true, the fog of war layer keeps track of the progress. Overrides engine settings.
+		save_fogofwar = Parse::toBool(infile.val);
+	}
 	else if (infile.key == "tilewidth") {
 		// @ATTR tilewidth|int|Inherited from Tiled map file. Unused by engine.
 	}
@@ -205,8 +257,6 @@ void Map::loadLayer(FileParser &infile) {
 			layers.back()[i].resize(h);
 		}
 		layernames.push_back(infile.val);
-		if (infile.val == "collision")
-			collision_layer = static_cast<int>(layernames.size())-1;
 	}
 	else if (infile.key == "format") {
 		// @ATTR layer.format|string|Format for map layer, must be 'dec'
@@ -275,9 +325,8 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 		group->numbermax = std::max(std::max(0, Parse::toInt(Parse::popFirstString(infile.val))), group->numbermin);
 	}
 	else if (infile.key == "chance") {
-		// @ATTR enemygroup.chance|int|Percentage of chance
-		float n = static_cast<float>(std::max(0, Parse::popFirstInt(infile.val))) / 100.0f;
-		group->chance = std::min(1.0f, std::max(0.0f, n));
+		// @ATTR enemygroup.chance|float|Initial percentage chance that this enemy group will be able to spawn enemies.
+		group->chance = std::min(100.0f, std::max(0.0f, Parse::popFirstFloat(infile.val)));
 	}
 	else if (infile.key == "direction") {
 		// @ATTR enemygroup.direction|direction|Direction that enemies will initially face.
@@ -285,11 +334,10 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 	}
 	else if (infile.key == "waypoints") {
 		// @ATTR enemygroup.waypoints|list(point)|Enemy waypoints; single enemy only; negates wander_radius
-		std::string none = "";
 		std::string a = Parse::popFirstString(infile.val);
 		std::string b = Parse::popFirstString(infile.val);
 
-		while (a != none) {
+		while (!a.empty()) {
 			FPoint p;
 			p.x = static_cast<float>(Parse::toInt(a)) + 0.5f;
 			p.y = static_cast<float>(Parse::toInt(b)) + 0.5f;
@@ -311,31 +359,138 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 		}
 	}
 	else if (infile.key == "requires_status") {
-		// @ATTR enemygroup.requires_status|list(string)|Status required for loading enemies
+		// @ATTR enemygroup.requires_status|list(string)|Statuses required to be set for enemy group to load
 		std::string s;
-		while ((s = Parse::popFirstString(infile.val)) != "") {
-			group->requires_status.push_back(camp->registerStatus(s));
+		while ( (s = Parse::popFirstString(infile.val)) != "") {
+			EventComponent ec;
+			ec.type = EventComponent::REQUIRES_STATUS;
+			ec.status = camp->registerStatus(s);
+			group->requirements.push_back(ec);
 		}
 	}
 	else if (infile.key == "requires_not_status") {
-		// @ATTR enemygroup.requires_not_status|list(string)|Status required to be missing for loading enemies
+		// @ATTR enemygroup.requires_not_status|list(string)|Statuses required to be unset for enemy group to load
 		std::string s;
-		while ((s = Parse::popFirstString(infile.val)) != "") {
-			group->requires_not_status.push_back(camp->registerStatus(s));
+		while ( (s = Parse::popFirstString(infile.val)) != "") {
+			EventComponent ec;
+			ec.type = EventComponent::REQUIRES_NOT_STATUS;
+			ec.status = camp->registerStatus(s);
+			group->requirements.push_back(ec);
 		}
+	}
+	else if (infile.key == "requires_level") {
+		// @ATTR enemygroup.requires_level|int|Player level must be equal or greater to load enemy group
+		EventComponent ec;
+		ec.type = EventComponent::REQUIRES_LEVEL;
+		ec.data[0].Int = Parse::popFirstInt(infile.val);
+		group->requirements.push_back(ec);
+	}
+	else if (infile.key == "requires_not_level") {
+		// @ATTR enemygroup.requires_not_level|int|Player level must be lesser to load enemy group
+		EventComponent ec;
+		ec.type = EventComponent::REQUIRES_NOT_LEVEL;
+		ec.data[0].Int = Parse::popFirstInt(infile.val);
+		group->requirements.push_back(ec);
+	}
+	else if (infile.key == "requires_currency") {
+		// @ATTR enemygroup.requires_currency|int|Player currency must be equal or greater to load enemy group
+		EventComponent ec;
+		ec.type = EventComponent::REQUIRES_CURRENCY;
+		ec.data[0].Int = Parse::popFirstInt(infile.val);
+		group->requirements.push_back(ec);
+	}
+	else if (infile.key == "requires_not_currency") {
+		// @ATTR enemygroup.requires_not_currency|int|Player currency must be lesser to load enemy group
+		EventComponent ec;
+		ec.type = EventComponent::REQUIRES_NOT_CURRENCY;
+		ec.data[0].Int = Parse::popFirstInt(infile.val);
+		group->requirements.push_back(ec);
+	}
+	else if (infile.key == "requires_item") {
+		// @ATTR enemygroup.requires_item|list(item_id)|Item required to exist in player inventory to load enemy group. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.
+		std::string s;
+		while ( (s = Parse::popFirstString(infile.val)) != "") {
+			ItemStack item_stack = Parse::toItemQuantityPair(s);
+			EventComponent ec;
+			ec.type = EventComponent::REQUIRES_ITEM;
+			ec.id = item_stack.item;
+			ec.data[0].Int = item_stack.quantity;
+			group->requirements.push_back(ec);
+		}
+	}
+	else if (infile.key == "requires_not_item") {
+		// @ATTR enemygroup.requires_not_item|list(item_id)|Item required to not exist in player inventory to load enemy group. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.
+		std::string s;
+		while ( (s = Parse::popFirstString(infile.val)) != "") {
+			ItemStack item_stack = Parse::toItemQuantityPair(s);
+			EventComponent ec;
+			ec.type = EventComponent::REQUIRES_NOT_ITEM;
+			ec.id = item_stack.item;
+			ec.data[0].Int = item_stack.quantity;
+			group->requirements.push_back(ec);
+		}
+	}
+	else if (infile.key == "requires_class") {
+		// @ATTR enemygroup.requires_class|predefined_string|Player base class required to load enemy group
+		EventComponent ec;
+		ec.type = EventComponent::REQUIRES_CLASS;
+		ec.s = Parse::popFirstString(infile.val);
+		group->requirements.push_back(ec);
+	}
+	else if (infile.key == "requires_not_class") {
+		// @ATTR enemygroup.requires_not_class|predefined_string|Player base class not required to load enemy group
+		EventComponent ec;
+		ec.type = EventComponent::REQUIRES_NOT_CLASS;
+		ec.s = Parse::popFirstString(infile.val);
+		group->requirements.push_back(ec);
 	}
 	else if (infile.key == "invincible_requires_status") {
 		// @ATTR enemygroup.invincible_requires_status|list(string)|Enemies in this group are invincible to hero attacks when these statuses are set.
 		std::string s;
 		while ((s = Parse::popFirstString(infile.val)) != "") {
-			group->invincible_requires_status.push_back(camp->registerStatus(s));
+			EventComponent ec;
+			ec.type = EventComponent::REQUIRES_STATUS;
+			ec.status = camp->registerStatus(s);
+			group->invincible_requirements.push_back(ec);
 		}
 	}
 	else if (infile.key == "invincible_requires_not_status") {
 		// @ATTR enemygroup.invincible_requires_not_status|list(string)|Enemies in this group are invincible to hero attacks when these statuses are not set.
 		std::string s;
 		while ((s = Parse::popFirstString(infile.val)) != "") {
-			group->invincible_requires_not_status.push_back(camp->registerStatus(s));
+			EventComponent ec;
+			ec.type = EventComponent::REQUIRES_NOT_STATUS;
+			ec.status = camp->registerStatus(s);
+			group->invincible_requirements.push_back(ec);
+		}
+	}
+	else if (infile.key == "spawn_level") {
+		// @ATTR enemygroup.spawn_level|["default", "fixed", "level", "stat"], int, int, predefined_string : Mode, Enemy Level, Ratio, Primary stat|The level of spawned creatures. The need for the last three parameters depends on the mode being used. The "default" mode will just use the entity's normal level and doesn't require any additional parameters. The "fixed" mode only requires the enemy level as a parameter. The "stat" and "level" modes also require the ratio as a parameter. The ratio adjusts the scaling of the entity level. For example, spawn_level=stat,1,2,physical will set the spawned entity level to 1/2 the player's Physical stat. Only the "stat" mode requires the last parameter, which is simply the ID of the primary stat that should be used for scaling.
+		std::string mode = Parse::popFirstString(infile.val);
+		if (mode == "default") group->spawn_level.mode = SpawnLevel::MODE_DEFAULT;
+		else if (mode == "fixed") group->spawn_level.mode = SpawnLevel::MODE_FIXED;
+		else if (mode == "stat") group->spawn_level.mode = SpawnLevel::MODE_STAT;
+		else if (mode == "level") group->spawn_level.mode = SpawnLevel::MODE_LEVEL;
+		else infile.error("Map: Unknown spawn level mode '%s'", mode.c_str());
+
+		if (group->spawn_level.mode != SpawnLevel::MODE_DEFAULT) {
+			group->spawn_level.count = static_cast<float>(Parse::popFirstInt(infile.val));
+
+			if(group->spawn_level.mode != SpawnLevel::MODE_FIXED) {
+				group->spawn_level.ratio = Parse::popFirstFloat(infile.val);
+
+				if(group->spawn_level.mode == SpawnLevel::MODE_STAT) {
+					std::string stat = Parse::popFirstString(infile.val);
+					size_t prim_stat_index = eset->primary_stats.getIndexByID(stat);
+
+					if (prim_stat_index != eset->primary_stats.list.size()) {
+						group->spawn_level.stat = prim_stat_index;
+					}
+					else {
+						infile.error("Map: '%s' is not a valid primary stat.", stat.c_str());
+					}
+				}
+			}
 		}
 	}
 	else {
@@ -344,29 +499,134 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 }
 
 void Map::loadNPC(FileParser &infile) {
-	std::string s;
 	if (infile.key == "type") {
 		// @ATTR npc.type|string|(IGNORED BY ENGINE) The "type" field, as used by Tiled and other mapping tools.
-		npcs.back().type = infile.val;
+		map_npcs.back().type = infile.val;
 	}
 	else if (infile.key == "filename") {
 		// @ATTR npc.filename|string|Filename of an NPC definition.
-		npcs.back().id = infile.val;
-	}
-	else if (infile.key == "requires_status") {
-		// @ATTR npc.requires_status|list(string)|Status required for NPC load. There can be multiple states, separated by comma
-		while ( (s = Parse::popFirstString(infile.val)) != "")
-			npcs.back().requires_status.push_back(camp->registerStatus(s));
-	}
-	else if (infile.key == "requires_not_status") {
-		// @ATTR npc.requires_not_status|list(string)|Status required to be missing for NPC load. There can be multiple states, separated by comma
-		while ( (s = Parse::popFirstString(infile.val)) != "")
-			npcs.back().requires_not_status.push_back(camp->registerStatus(s));
+		map_npcs.back().id = infile.val;
 	}
 	else if (infile.key == "location") {
 		// @ATTR npc.location|point|Location of NPC
-		npcs.back().pos.x = static_cast<float>(Parse::popFirstInt(infile.val)) + 0.5f;
-		npcs.back().pos.y = static_cast<float>(Parse::popFirstInt(infile.val)) + 0.5f;
+		map_npcs.back().pos.x = static_cast<float>(Parse::popFirstInt(infile.val)) + 0.5f;
+		map_npcs.back().pos.y = static_cast<float>(Parse::popFirstInt(infile.val)) + 0.5f;
+	}
+	else if (infile.key == "requires_status") {
+		// @ATTR npc.requires_status|list(string)|Statuses required to be set for NPC load
+		std::string s;
+		while ( (s = Parse::popFirstString(infile.val)) != "") {
+			EventComponent ec;
+			ec.type = EventComponent::REQUIRES_STATUS;
+			ec.status = camp->registerStatus(s);
+			map_npcs.back().requirements.push_back(ec);
+		}
+	}
+	else if (infile.key == "requires_not_status") {
+		// @ATTR npc.requires_not_status|list(string)|Statuses required to be unset for NPC load
+		std::string s;
+		while ( (s = Parse::popFirstString(infile.val)) != "") {
+			EventComponent ec;
+			ec.type = EventComponent::REQUIRES_NOT_STATUS;
+			ec.status = camp->registerStatus(s);
+			map_npcs.back().requirements.push_back(ec);
+		}
+	}
+	else if (infile.key == "requires_level") {
+		// @ATTR npc.requires_level|int|Player level must be equal or greater to load NPC
+		EventComponent ec;
+		ec.type = EventComponent::REQUIRES_LEVEL;
+		ec.data[0].Int = Parse::popFirstInt(infile.val);
+		map_npcs.back().requirements.push_back(ec);
+	}
+	else if (infile.key == "requires_not_level") {
+		// @ATTR npc.requires_not_level|int|Player level must be lesser to load NPC
+		EventComponent ec;
+		ec.type = EventComponent::REQUIRES_NOT_LEVEL;
+		ec.data[0].Int = Parse::popFirstInt(infile.val);
+		map_npcs.back().requirements.push_back(ec);
+	}
+	else if (infile.key == "requires_currency") {
+		// @ATTR npc.requires_currency|int|Player currency must be equal or greater to load NPC
+		EventComponent ec;
+		ec.type = EventComponent::REQUIRES_CURRENCY;
+		ec.data[0].Int = Parse::popFirstInt(infile.val);
+		map_npcs.back().requirements.push_back(ec);
+	}
+	else if (infile.key == "requires_not_currency") {
+		// @ATTR npc.requires_not_currency|int|Player currency must be lesser to load NPC
+		EventComponent ec;
+		ec.type = EventComponent::REQUIRES_NOT_CURRENCY;
+		ec.data[0].Int = Parse::popFirstInt(infile.val);
+		map_npcs.back().requirements.push_back(ec);
+	}
+	else if (infile.key == "requires_item") {
+		// @ATTR npc.requires_item|list(item_id)|Item required to exist in player inventory to load NPC. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.
+		std::string s;
+		while ( (s = Parse::popFirstString(infile.val)) != "") {
+			ItemStack item_stack = Parse::toItemQuantityPair(s);
+			EventComponent ec;
+			ec.type = EventComponent::REQUIRES_ITEM;
+			ec.id = item_stack.item;
+			ec.data[0].Int = item_stack.quantity;
+			map_npcs.back().requirements.push_back(ec);
+		}
+	}
+	else if (infile.key == "requires_not_item") {
+		// @ATTR npc.requires_not_item|list(item_id)|Item required to not exist in player inventory to load NPC. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.
+		std::string s;
+		while ( (s = Parse::popFirstString(infile.val)) != "") {
+			ItemStack item_stack = Parse::toItemQuantityPair(s);
+			EventComponent ec;
+			ec.type = EventComponent::REQUIRES_NOT_ITEM;
+			ec.id = item_stack.item;
+			ec.data[0].Int = item_stack.quantity;
+			map_npcs.back().requirements.push_back(ec);
+		}
+	}
+	else if (infile.key == "requires_class") {
+		// @ATTR npc.requires_class|predefined_string|Player base class required to load NPC
+		EventComponent ec;
+		ec.type = EventComponent::REQUIRES_CLASS;
+		ec.s = Parse::popFirstString(infile.val);
+		map_npcs.back().requirements.push_back(ec);
+	}
+	else if (infile.key == "requires_not_class") {
+		// @ATTR npc.requires_not_class|predefined_string|Player base class not required to load NPC
+		EventComponent ec;
+		ec.type = EventComponent::REQUIRES_NOT_CLASS;
+		ec.s = Parse::popFirstString(infile.val);
+		map_npcs.back().requirements.push_back(ec);
+	}
+	else if (infile.key == "direction") {
+		// @ATTR npc.direction|direction|Direction that NPC will initially face.
+		map_npcs.back().direction = Parse::toDirection(infile.val);
+	}
+	else if (infile.key == "waypoints") {
+		// @ATTR npc.waypoints|list(point)|NPC waypoints; negates wander_radius
+		std::string a = Parse::popFirstString(infile.val);
+		std::string b = Parse::popFirstString(infile.val);
+
+		while (!a.empty()) {
+			FPoint p;
+			p.x = static_cast<float>(Parse::toInt(a)) + 0.5f;
+			p.y = static_cast<float>(Parse::toInt(b)) + 0.5f;
+			map_npcs.back().waypoints.push(p);
+			a = Parse::popFirstString(infile.val);
+			b = Parse::popFirstString(infile.val);
+		}
+
+		// disable wander radius, since we can't have waypoints and wandering at the same time
+		map_npcs.back().wander_radius = 0;
+	}
+	else if (infile.key == "wander_radius") {
+		// @ATTR npc.wander_radius|int|The radius (in tiles) that an NPC will wander around randomly; negates waypoints
+		map_npcs.back().wander_radius = std::max(0, Parse::popFirstInt(infile.val));
+
+		// clear waypoints, since wandering will use the waypoint queue
+		while (!map_npcs.back().waypoints.empty()) {
+			map_npcs.back().waypoints.pop();
+		}
 	}
 	else {
 		infile.error("Map: '%s' is not a valid key.", infile.key.c_str());
@@ -382,8 +642,8 @@ int Map::addEventStatBlock(Event &evnt) {
 	EventComponent *ec_path = evnt.getComponent(EventComponent::POWER_PATH);
 	if (ec_path) {
 		// source is power path start
-		statb->pos.x = static_cast<float>(ec_path->x) + 0.5f;
-		statb->pos.y = static_cast<float>(ec_path->y) + 0.5f;
+		statb->pos.x = static_cast<float>(ec_path->data[0].Int) + 0.5f;
+		statb->pos.y = static_cast<float>(ec_path->data[1].Int) + 0.5f;
 	}
 	else {
 		// source is event location
@@ -395,10 +655,10 @@ int Map::addEventStatBlock(Event &evnt) {
 	if (ec_damage) {
 		for (size_t i = 0; i < eset->damage_types.count; ++i) {
 			if (i % 2 == 0) {
-				statb->starting[Stats::COUNT + i] = ec_damage->a; // min
+				statb->starting[Stats::COUNT + i] = ec_damage->data[0].Float; // min
 			}
 			else {
-				statb->starting[Stats::COUNT + i] = ec_damage->b; // max
+				statb->starting[Stats::COUNT + i] = ec_damage->data[1].Float; // max
 			}
 		}
 	}
@@ -412,8 +672,13 @@ int Map::addEventStatBlock(Event &evnt) {
 	// create a temporary EffectDef for immunity; will be used for map StatBlocks
 	EffectDef immunity_effect;
 	immunity_effect.id = "MAP_EVENT_IMMUNITY";
-	immunity_effect.type = "immunity";
-	statb->effects.addEffect(immunity_effect, 0, 0, Power::SOURCE_TYPE_ENEMY, EffectManager::NO_POWER);
+	immunity_effect.type = Effect::RESIST_ALL;
+
+	EffectParams immunity_params;
+	immunity_params.magnitude = 100;
+	immunity_params.source_type = Power::SOURCE_TYPE_ENEMY;
+
+	statb->effects.addEffect(statb, immunity_effect, immunity_params);
 
 	// ensure the statblock will be alive
 	statb->hp = statb->starting[Stats::HP_MAX] = statb->current[Stats::HP_MAX] = 1;

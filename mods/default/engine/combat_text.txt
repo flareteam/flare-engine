@@ -1,5 +1,3 @@
-# duration, in frames
 duration=1s
-
-# speed, in pixels per frame
+fade_duration=400ms
 speed=1

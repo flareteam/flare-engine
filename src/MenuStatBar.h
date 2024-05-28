@@ -41,35 +41,44 @@ private:
 		VERTICAL = 1
 	};
 
+	union MenuStatBarValue {
+		float Float;
+		unsigned long Unsigned;
+	};
+
 	Sprite *bar;
 	WidgetLabel *label;
-	unsigned long stat_min;
-	unsigned long stat_cur;
-	unsigned long stat_cur_prev;
-	unsigned long stat_max;
+	MenuStatBarValue stat_min;
+	MenuStatBarValue stat_cur;
+	MenuStatBarValue stat_cur_prev;
+	MenuStatBarValue stat_max;
 	Rect bar_pos;
 	LabelInfo text_pos;
+	bool enabled;
 	bool orientation;
 	bool custom_text_pos;
 	std::string custom_string;
 	std::string bar_gfx;
 	std::string bar_gfx_background;
 	short type;
+	size_t resource_stat_index;
 	Timer timeout;
+	Point bar_fill_offset;
+	Point bar_fill_size;
 
 
 public:
 	enum {
 		TYPE_HP = 0,
 		TYPE_MP = 1,
-		TYPE_XP = 2
+		TYPE_XP = 2,
+		TYPE_RESOURCE_STAT = 3
 	};
 
-	explicit MenuStatBar(short _type);
+	explicit MenuStatBar(short _type, size_t _resource_stat_index);
 	~MenuStatBar();
 	void loadGraphics();
-	void update(unsigned long _stat_min, unsigned long _stat_cur, unsigned long _stat_max);
-	void setCustomString(const std::string& _custom_string);
+	void update();
 	void render();
 };
 

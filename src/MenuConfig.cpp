@@ -83,7 +83,7 @@ void MenuConfig::ConfigTab::setOptionWidgets(int index, WidgetLabel* lb, Widget*
 	options[index].label = lb;
 	options[index].label->setText(lb_text);
 	options[index].widget = w;
-	options[index].widget->tablist_nav_right = true;
+	options[index].widget->tablist_nav_align = TabList::NAV_ALIGN_RIGHT;
 }
 
 void MenuConfig::ConfigTab::setOptionEnabled(int index, bool enable) {
@@ -119,13 +119,15 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	, defaults_button(new WidgetButton(WidgetButton::DEFAULT_FILE))
 	, cancel_button(new WidgetButton(WidgetButton::DEFAULT_FILE))
 	, background(NULL)
-	, input_confirm(new MenuConfirm(msg->get("Clear"),msg->get("Assign:")))
-	, defaults_confirm(new MenuConfirm(msg->get("Defaults"), msg->get("Reset ALL settings?")))
+	, input_confirm(new MenuConfirm())
+	, defaults_confirm(new MenuConfirm())
 
 	, pause_continue_lb(new WidgetLabel())
 	, pause_continue_btn(new WidgetButton(WidgetButton::DEFAULT_FILE))
 	, pause_exit_lb(new WidgetLabel())
 	, pause_exit_btn(new WidgetButton(WidgetButton::DEFAULT_FILE))
+	, pause_save_lb(new WidgetLabel())
+	, pause_save_btn(new WidgetButton(WidgetButton::DEFAULT_FILE))
 	, pause_time_lb(new WidgetLabel())
 	, pause_time_text(new WidgetLabel())
 
@@ -147,11 +149,17 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	, change_gamma_lb(new WidgetLabel())
 	, gamma_sl(new WidgetSlider(WidgetSlider::DEFAULT_FILE))
 	, gamma_lb(new WidgetLabel())
+	, frame_limit_lstb(new WidgetHorizontalList())
+	, frame_limit_lb(new WidgetLabel())
+	, max_render_size_lstb(new WidgetHorizontalList())
+	, max_render_size_lb(new WidgetLabel())
 
 	, music_volume_sl(new WidgetSlider(WidgetSlider::DEFAULT_FILE))
 	, music_volume_lb(new WidgetLabel())
 	, sound_volume_sl(new WidgetSlider(WidgetSlider::DEFAULT_FILE))
 	, sound_volume_lb(new WidgetLabel())
+	, mute_on_focus_loss_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
+	, mute_on_focus_loss_lb(new WidgetLabel())
 
 	, show_fps_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
 	, show_fps_lb(new WidgetLabel())
@@ -181,6 +189,10 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	, low_hp_warning_lb(new WidgetLabel())
 	, low_hp_threshold_lstb(new WidgetHorizontalList())
 	, low_hp_threshold_lb(new WidgetLabel())
+	, item_compare_tips_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
+	, item_compare_tips_lb(new WidgetLabel())
+	, pause_on_focus_loss_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
+	, pause_on_focus_loss_lb(new WidgetLabel())
 
 	, joystick_device_lstb(new WidgetHorizontalList())
 	, joystick_device_lb(new WidgetLabel())
@@ -196,6 +208,10 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	, mouse_move_attack_lb(new WidgetLabel())
 	, joystick_deadzone_sl(new WidgetSlider(WidgetSlider::DEFAULT_FILE))
 	, joystick_deadzone_lb(new WidgetLabel())
+	, touch_controls_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
+	, touch_controls_lb(new WidgetLabel())
+	, touch_scale_sl(new WidgetSlider(WidgetSlider::DEFAULT_FILE))
+	, touch_scale_lb(new WidgetLabel())
 
 	, activemods_lstb(new WidgetListBox(10, WidgetListBox::DEFAULT_FILE))
 	, activemods_lb(new WidgetLabel())
@@ -212,13 +228,13 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	, frame(0,0)
 	, frame_offset(11,8)
 	, tab_offset(3,0)
+	, background_offset(0, tab_control->getTabHeight() - (tab_control->getTabHeight() / 16))
 	, scrollpane_color(0,0,0,0)
 	, scrollpane_padding(8, 40) // appropriate defaults for fantasycore widget sizes
 	, scrollpane_separator_color(font->getColor(FontEngine::COLOR_WIDGET_DISABLED))
 	, new_render_device(settings->render_device_name)
 	, input_confirm_timer(settings->max_frames_per_sec * 10) // 10 seconds
-	, input_key(0)
-	, key_count(0)
+	, input_action(0)
 	, keybind_tip_timer(settings->max_frames_per_sec * 5) // 5 seconds
 	, keybind_tip(new WidgetTooltip())
 	, clicked_accept(false)
@@ -227,7 +243,15 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	, reload_music(false)
 	, clicked_pause_continue(false)
 	, clicked_pause_exit(false)
+	, clicked_pause_save(false)
 {
+	input_confirm->setTitle(msg->get("Assign:"));
+	input_confirm->action_list->append(msg->get("New"), "");
+	input_confirm->action_list->append(msg->get("Clear"), "");
+
+	defaults_confirm->setTitle(msg->get("Reset ALL settings?"));
+	defaults_confirm->action_list->append(msg->get("No"), "");
+	defaults_confirm->action_list->append(msg->get("Yes"), "");
 
 	Image *graphics;
 	graphics = render_device->loadImage("images/menus/config.png", RenderDevice::ERROR_NORMAL);
@@ -242,6 +266,8 @@ MenuConfig::MenuConfig (bool _is_game_state)
 
 	pause_continue_btn->setLabel(msg->get("Continue"));
 	setPauseExitText(MenuConfig::ENABLE_SAVE_GAME);
+	pause_save_btn->setLabel(msg->get("Save Game"));
+	setPauseSaveEnabled(MenuConfig::ENABLE_SAVE_GAME);
 	pause_time_text->setText(Utils::getTimeString(0));
 	pause_time_text->setJustify(FontEngine::JUSTIFY_RIGHT);
 	pause_time_text->setVAlign(LabelInfo::VALIGN_CENTER);
@@ -272,15 +298,12 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	refreshJoysticks();
 
 	// Allocate KeyBindings
-	for (int i = 0; i < inpt->KEY_COUNT_USER * 3; i++) {
+	for (int i = 0; i < inpt->KEY_COUNT_USER; i++) {
 		keybinds_lb.push_back(new WidgetLabel());
-		keybinds_btn.push_back(new WidgetButton(WidgetButton::DEFAULT_FILE));
+		keybinds_lstb.push_back(new WidgetHorizontalList());
+		keybinds_lstb.back()->has_action = true;
+		keybinds_lstb.back()->max_visible_actions = 1;
 	}
-
-	key_count = static_cast<unsigned>(keybinds_btn.size()/3);
-
-	// don't allow remapping the primary Main1 binding
-	keybinds_btn[Input::MAIN1 * 3]->enabled = false;
 
 	// set up loot tooltip setting
 	loot_tooltip_lstb->append(msg->get("Default"), msg->get("Show all loot tooltips, except for those that would be obscured by the player or an enemy. Temporarily show all loot tooltips with 'Alt'."));
@@ -314,6 +337,41 @@ MenuConfig::MenuConfig (bool _is_game_state)
 		low_hp_threshold_lstb->append(ss.str() + "%", msg->get("When the player's health drops below the given threshold, the low health notifications are triggered if one or more of them is enabled."));
 	}
 
+	// set up the frame limits
+	frame_limits.push_back(30);
+	frame_limits.push_back(60);
+	frame_limits.push_back(120);
+	frame_limits.push_back(240);
+	if (std::find(frame_limits.begin(), frame_limits.end(), settings->max_frames_per_sec) == frame_limits.end())
+		frame_limits.push_back(settings->max_frames_per_sec);
+	unsigned short refresh_rate = render_device->getRefreshRate();
+	if (refresh_rate > 0 && std::find(frame_limits.begin(), frame_limits.end(), refresh_rate) == frame_limits.end())
+		frame_limits.push_back(refresh_rate);
+
+	std::sort(frame_limits.begin(), frame_limits.end());
+	for (size_t i = 0; i < frame_limits.size(); ++i) {
+		std::stringstream ss;
+		ss << frame_limits[i];
+		frame_limit_lstb->append(ss.str(), msg->get("The maximum frame rate that the game will be allowed to run at."));
+	}
+
+	// set up render resolutions
+	std::string max_render_size_tooltip = msg->get("The render size refers to the height in pixels of the surface used to draw the game. Mods define the allowed render sizes, but this option allows overriding the maximum size.");
+	max_render_size_lstb->append(msg->get("Default"), max_render_size_tooltip);
+	virtual_heights = eset->resolutions.virtual_heights;
+	if (settings->max_render_size > 0 && std::find(virtual_heights.begin(), virtual_heights.end(), settings->max_render_size) == virtual_heights.end())
+		virtual_heights.push_back(settings->max_render_size);
+
+	std::sort(virtual_heights.begin(), virtual_heights.end());
+	for (size_t i = 0; i < virtual_heights.size(); ++i) {
+		std::stringstream ss;
+		ss << virtual_heights[i];
+		max_render_size_lstb->append(ss.str(), max_render_size_tooltip);
+	}
+
+	// reset this flag, as it may have been set when plugging in gamepads outside the config menu
+	inpt->joysticks_changed = false;
+
 	init();
 
 	render_device->setBackgroundColor(Color(0,0,0,0));
@@ -324,27 +382,32 @@ MenuConfig::~MenuConfig() {
 }
 
 void MenuConfig::init() {
-	tab_control->setTabTitle(EXIT_TAB, msg->get("Exit"));
-	tab_control->setTabTitle(VIDEO_TAB, msg->get("Video"));
-	tab_control->setTabTitle(AUDIO_TAB, msg->get("Audio"));
-	tab_control->setTabTitle(INTERFACE_TAB, msg->get("Interface"));
-	tab_control->setTabTitle(INPUT_TAB, msg->get("Input"));
-	tab_control->setTabTitle(KEYBINDS_TAB, msg->get("Keybindings"));
-	tab_control->setTabTitle(MODS_TAB, msg->get("Mods"));
+	tab_control->setupTab(EXIT_TAB, msg->get("Exit"), &tablist_exit);
+	tab_control->setupTab(VIDEO_TAB, msg->get("Video"), &tablist_video);
+	tab_control->setupTab(AUDIO_TAB, msg->get("Audio"), &tablist_audio);
+	tab_control->setupTab(INTERFACE_TAB, msg->get("Interface"), &tablist_interface);
+	tab_control->setupTab(INPUT_TAB, msg->get("Input"), &tablist_input);
+	tab_control->setupTab(KEYBINDS_TAB, msg->get("Keybindings"), &tablist_keybinds);
+	tab_control->setupTab(MODS_TAB, msg->get("Mods"), &tablist_mods);
 
 	readConfig();
 
 	cfg_tabs.resize(6);
-	cfg_tabs[EXIT_TAB].options.resize(3);
+	cfg_tabs[EXIT_TAB].options.resize(4);
 	cfg_tabs[VIDEO_TAB].options.resize(Platform::Video::COUNT);
 	cfg_tabs[AUDIO_TAB].options.resize(Platform::Audio::COUNT);
 	cfg_tabs[INTERFACE_TAB].options.resize(Platform::Interface::COUNT);
 	cfg_tabs[INPUT_TAB].options.resize(Platform::Input::COUNT);
-	cfg_tabs[KEYBINDS_TAB].options.resize(inpt->KEY_COUNT_USER * 3);
+	cfg_tabs[KEYBINDS_TAB].options.resize(inpt->KEY_COUNT_USER);
 
-	cfg_tabs[EXIT_TAB].setOptionWidgets(0, pause_continue_lb, pause_continue_btn, msg->get("Paused"));
-	cfg_tabs[EXIT_TAB].setOptionWidgets(1, pause_exit_lb, pause_exit_btn, "");
-	cfg_tabs[EXIT_TAB].setOptionWidgets(2, pause_time_lb, pause_time_text, msg->get("Time Played"));
+	cfg_tabs[EXIT_TAB].setOptionWidgets(EXIT_OPTION_CONTINUE, pause_continue_lb, pause_continue_btn, msg->get("Paused"));
+	cfg_tabs[EXIT_TAB].setOptionWidgets(EXIT_OPTION_SAVE, pause_save_lb, pause_save_btn, "");
+	cfg_tabs[EXIT_TAB].setOptionWidgets(EXIT_OPTION_EXIT, pause_exit_lb, pause_exit_btn, "");
+	cfg_tabs[EXIT_TAB].setOptionWidgets(EXIT_OPTION_TIME_PLAYED, pause_time_lb, pause_time_text, msg->get("Time Played"));
+
+	if (!(MenuConfig::ENABLE_SAVE_GAME && eset->misc.save_anywhere)) {
+		cfg_tabs[EXIT_TAB].setOptionEnabled(EXIT_OPTION_SAVE, false);
+	}
 
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::RENDERER, renderer_lb, renderer_lstb, msg->get("Renderer"));
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::FULLSCREEN, fullscreen_lb, fullscreen_cb, msg->get("Full Screen Mode"));
@@ -355,9 +418,12 @@ void MenuConfig::init() {
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::PARALLAX_LAYERS, parallax_layers_lb, parallax_layers_cb, msg->get("Parallax Layers"));
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::ENABLE_GAMMA, change_gamma_lb, change_gamma_cb, msg->get("Allow changing gamma"));
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::GAMMA, gamma_lb, gamma_sl, msg->get("Gamma"));
+	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::MAX_RENDER_SIZE, max_render_size_lb, max_render_size_lstb, msg->get("Maximum Render Size"));
+	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::FRAME_LIMIT, frame_limit_lb, frame_limit_lstb, msg->get("Frame Limit"));
 
 	cfg_tabs[AUDIO_TAB].setOptionWidgets(Platform::Audio::SFX, sound_volume_lb, sound_volume_sl, msg->get("Sound Volume"));
 	cfg_tabs[AUDIO_TAB].setOptionWidgets(Platform::Audio::MUSIC, music_volume_lb, music_volume_sl, msg->get("Music Volume"));
+	cfg_tabs[AUDIO_TAB].setOptionWidgets(Platform::Audio::MUTE_ON_FOCUS_LOSS, mute_on_focus_loss_lb, mute_on_focus_loss_cb, msg->get("Mute audio when window loses focus"));
 
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::LANGUAGE, language_lb, language_lstb, msg->get("Language"));
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::SHOW_FPS, show_fps_lb, show_fps_cb, msg->get("Show FPS"));
@@ -374,6 +440,8 @@ void MenuConfig::init() {
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::ENTITY_MARKERS, entity_markers_lb, entity_markers_cb, msg->get("Show hidden entity markers"));
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::LOW_HP_WARNING_TYPE, low_hp_warning_lb, low_hp_warning_lstb, msg->get("Low health notification"));
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::LOW_HP_THRESHOLD, low_hp_threshold_lb, low_hp_threshold_lstb, msg->get("Low health threshold"));
+	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::ITEM_COMPARE_TIPS, item_compare_tips_lb, item_compare_tips_cb, msg->get("Show item comparison tooltips"));
+	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::PAUSE_ON_FOCUS_LOSS, pause_on_focus_loss_lb, pause_on_focus_loss_cb, msg->get("Pause game when window loses focus"));
 
 
 	cfg_tabs[INPUT_TAB].setOptionWidgets(Platform::Input::JOYSTICK, joystick_device_lb, joystick_device_lstb, msg->get("Joystick"));
@@ -383,19 +451,12 @@ void MenuConfig::init() {
 	cfg_tabs[INPUT_TAB].setOptionWidgets(Platform::Input::MOUSE_MOVE_SWAP, mouse_move_swap_lb, mouse_move_swap_cb, msg->get("Swap mouse movement button"));
 	cfg_tabs[INPUT_TAB].setOptionWidgets(Platform::Input::MOUSE_MOVE_ATTACK, mouse_move_attack_lb, mouse_move_attack_cb, msg->get("Attack with mouse movement"));
 	cfg_tabs[INPUT_TAB].setOptionWidgets(Platform::Input::JOYSTICK_DEADZONE, joystick_deadzone_lb, joystick_deadzone_sl, msg->get("Joystick Deadzone"));
+	cfg_tabs[INPUT_TAB].setOptionWidgets(Platform::Input::TOUCH_CONTROLS, touch_controls_lb, touch_controls_cb, msg->get("Touch Controls"));
+	cfg_tabs[INPUT_TAB].setOptionWidgets(Platform::Input::TOUCH_SCALE, touch_scale_lb, touch_scale_sl, msg->get("Touch Gamepad Scaling"));
 
 
-	for (size_t i = 0; i < keybinds_btn.size(); ++i) {
-		if (i % 3 == 0) {
-			cfg_tabs[KEYBINDS_TAB].setOptionWidgets(static_cast<int>(i), keybinds_lb[i], keybinds_btn[i], inpt->binding_name[i/3]);
-			// TODO since these are blank, don't allocate?
-			cfg_tabs[KEYBINDS_TAB].setOptionWidgets(static_cast<int>(i+1), keybinds_lb[i+1], keybinds_btn[i+1], "");
-			cfg_tabs[KEYBINDS_TAB].setOptionWidgets(static_cast<int>(i+2), keybinds_lb[i+2], keybinds_btn[i+2], "");
-
-			keybinds_btn[i]->tooltip = msg->get("Primary binding: %s", inpt->binding_name[i/3].c_str());
-			keybinds_btn[i+1]->tooltip = msg->get("Alternate binding: %s", inpt->binding_name[i/3].c_str());
-			keybinds_btn[i+2]->tooltip = msg->get("Joystick binding: %s", inpt->binding_name[i/3].c_str());
-		}
+	for (size_t i = 0; i < keybinds_lstb.size(); ++i) {
+		cfg_tabs[KEYBINDS_TAB].setOptionWidgets(static_cast<int>(i), keybinds_lb[i], keybinds_lstb[i], inpt->binding_name[i]);
 	}
 
 	// disable some options
@@ -404,6 +465,7 @@ void MenuConfig::init() {
 		cfg_tabs[VIDEO_TAB].setOptionEnabled(Platform::Video::HWSURFACE, false);
 		cfg_tabs[VIDEO_TAB].setOptionEnabled(Platform::Video::VSYNC, false);
 		cfg_tabs[VIDEO_TAB].setOptionEnabled(Platform::Video::TEXTURE_FILTER, false);
+		cfg_tabs[VIDEO_TAB].setOptionEnabled(Platform::Video::FRAME_LIMIT, false);
 
 		cfg_tabs[INTERFACE_TAB].setOptionEnabled(Platform::Interface::LANGUAGE, false);
 		cfg_tabs[INTERFACE_TAB].setOptionEnabled(Platform::Interface::DEV_MODE, false);
@@ -413,8 +475,10 @@ void MenuConfig::init() {
 		enable_gamestate_buttons = false;
 	}
 	else {
-		cfg_tabs[EXIT_TAB].setOptionEnabled(0, false);
-		cfg_tabs[EXIT_TAB].setOptionEnabled(1, false);
+		cfg_tabs[EXIT_TAB].setOptionEnabled(EXIT_OPTION_CONTINUE, false);
+		cfg_tabs[EXIT_TAB].setOptionEnabled(EXIT_OPTION_SAVE, false);
+		cfg_tabs[EXIT_TAB].setOptionEnabled(EXIT_OPTION_EXIT, false);
+		cfg_tabs[EXIT_TAB].setOptionEnabled(EXIT_OPTION_TIME_PLAYED, false);
 		tab_control->setEnabled(static_cast<unsigned>(EXIT_TAB), false);
 		enable_gamestate_buttons = true;
 	}
@@ -437,7 +501,7 @@ void MenuConfig::init() {
 			cfg_tabs[INPUT_TAB].setOptionEnabled(i, false);
 	}
 	if (!platform.config_misc[Platform::Misc::KEYBINDS]) {
-		for (size_t i = 0; i < keybinds_btn.size(); ++i) {
+		for (size_t i = 0; i < keybinds_lstb.size(); ++i) {
 			cfg_tabs[KEYBINDS_TAB].setOptionEnabled(static_cast<int>(i), false);
 		}
 	}
@@ -502,10 +566,12 @@ void MenuConfig::readConfig() {
 	statbar_autohide_cb->tooltip = msg->get("Some mods will automatically hide the stat bars when they are inactive. Disabling this option will keep them displayed at all times.");
 	auto_equip_cb->tooltip = msg->get("When enabled, empty equipment slots will be filled with applicable items when they are obtained.");
 	entity_markers_cb->tooltip = msg->get("Shows a marker above enemies, allies, and the player when they are obscured by tall objects.");
+	item_compare_tips_cb->tooltip = msg->get("When enabled, tooltips for equipped items of the same type are shown next to standard item tooltips.");
 	no_mouse_cb->tooltip = msg->get("This allows the game to be controlled entirely with the keyboard (or joystick).");
 	mouse_move_swap_cb->tooltip = msg->get("When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero instead of 'Main1'.");
 	mouse_move_attack_cb->tooltip = msg->get("When 'Move hero using mouse' is enabled, this setting controls if the Power assigned to the movement button can be used by targeting an enemy. If this setting is disabled, it is required to use 'Shift' to access the Power assigned to the movement button.");
 	mouse_aim_cb->tooltip = msg->get("The player's attacks will be aimed in the direction of the mouse cursor when this is enabled.");
+	touch_controls_cb->tooltip = msg->get("When enabled, a virtual gamepad will be added in-game. Other interactions, such as drag-and-drop behavior, are also altered to better suit touch input.");
 }
 
 bool MenuConfig::parseKeyButtons(FileParser &infile) {
@@ -553,6 +619,11 @@ bool MenuConfig::parseKey(FileParser &infile, int &x1, int &y1, int &x2, int &y2
 		// @ATTR tab_offset|point|Offset for the row of tabs.
 		tab_offset.x = x1;
 		tab_offset.y = y1;
+	}
+	else if (infile.key == "background_offset") {
+		// @ATTR background_offset|point|Offset of the background image. Defaults to a calculated value based on the tab height.
+		background_offset.x = x1;
+		background_offset.y = y1;
 	}
 	else if (infile.key == "activemods") {
 		// @ATTR activemods|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Active Mods" list box relative to the frame.
@@ -650,52 +721,35 @@ void MenuConfig::addChildWidgets() {
 }
 
 void MenuConfig::setupTabList() {
-	tablist.add(tab_control);
-	tablist.setPrevTabList(&tablist_main);
-
 	if (enable_gamestate_buttons) {
 		tablist_main.add(ok_button);
 		tablist_main.add(defaults_button);
 		tablist_main.add(cancel_button);
 	}
-	tablist_main.setPrevTabList(&tablist);
-	tablist_main.setNextTabList(&tablist);
 	tablist_main.lock();
 
 	tablist_exit.setScrollType(Widget::SCROLL_VERTICAL);
 	tablist_exit.add(cfg_tabs[EXIT_TAB].scrollbox);
-	tablist_exit.setPrevTabList(&tablist);
-	tablist_exit.setNextTabList(&tablist_main);
 	tablist_exit.lock();
 
 	tablist_video.setScrollType(Widget::SCROLL_VERTICAL);
 	tablist_video.add(cfg_tabs[VIDEO_TAB].scrollbox);
-	tablist_video.setPrevTabList(&tablist);
-	tablist_video.setNextTabList(&tablist_main);
 	tablist_video.lock();
 
 	tablist_audio.setScrollType(Widget::SCROLL_VERTICAL);
 	tablist_audio.add(cfg_tabs[AUDIO_TAB].scrollbox);
-	tablist_audio.setPrevTabList(&tablist);
-	tablist_audio.setNextTabList(&tablist_main);
 	tablist_audio.lock();
 
 	tablist_interface.setScrollType(Widget::SCROLL_VERTICAL);
 	tablist_interface.add(cfg_tabs[INTERFACE_TAB].scrollbox);
-	tablist_interface.setPrevTabList(&tablist);
-	tablist_interface.setNextTabList(&tablist_main);
 	tablist_interface.lock();
 
 	tablist_input.setScrollType(Widget::SCROLL_VERTICAL);
 	tablist_input.add(cfg_tabs[INPUT_TAB].scrollbox);
-	tablist_input.setPrevTabList(&tablist);
-	tablist_input.setNextTabList(&tablist_main);
 	tablist_input.lock();
 
 	tablist_keybinds.setScrollType(Widget::SCROLL_VERTICAL);
 	tablist_keybinds.add(cfg_tabs[KEYBINDS_TAB].scrollbox);
-	tablist_keybinds.setPrevTabList(&tablist);
-	tablist_keybinds.setNextTabList(&tablist_main);
 	tablist_keybinds.lock();
 
 	tablist_mods.add(inactivemods_lstb);
@@ -704,9 +758,18 @@ void MenuConfig::setupTabList() {
 	tablist_mods.add(activemods_deactivate_btn);
 	tablist_mods.add(activemods_shiftup_btn);
 	tablist_mods.add(activemods_shiftdown_btn);
-	tablist_mods.setPrevTabList(&tablist);
-	tablist_mods.setNextTabList(&tablist_main);
 	tablist_mods.lock();
+
+	tablists.clear();
+	tablists.push_back(&tablist);
+	tablists.push_back(&tablist_main);
+	tablists.push_back(&tablist_exit);
+	tablists.push_back(&tablist_video);
+	tablists.push_back(&tablist_audio);
+	tablists.push_back(&tablist_interface);
+	tablists.push_back(&tablist_input);
+	tablists.push_back(&tablist_keybinds);
+	tablists.push_back(&tablist_mods);
 }
 
 void MenuConfig::update() {
@@ -739,6 +802,26 @@ void MenuConfig::updateVideo() {
 
 	refreshRenderers();
 
+	for (size_t i = 0; i < frame_limits.size(); ++i) {
+		if (frame_limits[i] == settings->max_frames_per_sec) {
+			frame_limit_lstb->select(static_cast<int>(i));
+			break;
+		}
+	}
+
+	if (settings->max_render_size == 0) {
+		max_render_size_lstb->select(0);
+	}
+	else {
+		for (size_t i = 0; i < virtual_heights.size(); ++i) {
+			if (virtual_heights[i] == settings->max_render_size) {
+				max_render_size_lstb->select(static_cast<int>(i+1));
+				break;
+			}
+		}
+	}
+	refreshWindowSize();
+
 	cfg_tabs[VIDEO_TAB].scrollbox->refresh();
 }
 
@@ -753,6 +836,7 @@ void MenuConfig::updateAudio() {
 		music_volume_sl->set(0,128,0);
 		sound_volume_sl->set(0,128,0);
 	}
+	mute_on_focus_loss_cb->setChecked(settings->mute_on_focus_loss);
 
 	cfg_tabs[AUDIO_TAB].scrollbox->refresh();
 }
@@ -770,6 +854,8 @@ void MenuConfig::updateInterface() {
 	entity_markers_cb->setChecked(settings->entity_markers);
 	low_hp_warning_lstb->select(settings->low_hp_warning_type);
 	low_hp_threshold_lstb->select((settings->low_hp_threshold/5)-1);
+	item_compare_tips_cb->setChecked(settings->item_compare_tips);
+	pause_on_focus_loss_cb->setChecked(settings->pause_on_focus_loss);
 
 	loot_tooltip_lstb->select(settings->loot_tooltips);
 	minimap_lstb->select(settings->minimap_mode);
@@ -785,29 +871,43 @@ void MenuConfig::updateInput() {
 	mouse_move_cb->setChecked(settings->mouse_move);
 	mouse_move_swap_cb->setChecked(settings->mouse_move_swap);
 	mouse_move_attack_cb->setChecked(settings->mouse_move_attack);
+	touch_controls_cb->setChecked(settings->touchscreen);
 
 	if (settings->enable_joystick && inpt->getNumJoysticks() > 0) {
 		inpt->initJoystick();
 		joystick_device_lstb->select(settings->joystick_device + 1);
 	}
 
-	joystick_deadzone_sl->set(0, 32768, settings->joy_deadzone);
+	joystick_deadzone_sl->set(Settings::JOY_DEADZONE_MIN, Settings::JOY_DEADZONE_MAX, settings->joy_deadzone);
+	touch_scale_sl->set(TOUCH_SCALE_MIN, TOUCH_SCALE_MAX, static_cast<int>(settings->touch_scale * 100.0));
 
 	cfg_tabs[INPUT_TAB].scrollbox->refresh();
 }
 
 void MenuConfig::updateKeybinds() {
-	// now do labels for keybinds that are set
-	for (unsigned int i = 0; i < keybinds_btn.size(); i++) {
-		if (i % 3 == 0) {
-			keybinds_btn[i]->setLabel(inpt->getBindingString(i/3));
-			keybinds_btn[i+1]->setLabel(inpt->getBindingString(i/3, InputState::BINDING_ALT));
-			keybinds_btn[i+2]->setLabel(inpt->getBindingString(i/3, InputState::BINDING_JOYSTICK));
+	std::stringstream ss;
 
-			keybinds_btn[i]->refresh();
-			keybinds_btn[i+1]->refresh();
-			keybinds_btn[i+2]->refresh();
+	// now do labels for keybinds that are set
+	for (unsigned int i = 0; i < keybinds_lstb.size(); i++) {
+		keybinds_lstb[i]->clear();
+		if (inpt->binding[i].empty()) {
+			keybinds_lstb[i]->append(inpt->getBindingStringByIndex(static_cast<int>(i), -1), "");
 		}
+		else {
+			ss.str("");
+			ss << msg->get("Bindings for:") << " " << inpt->binding_name[i] << "\n";
+
+			for (size_t j = 0; j < inpt->binding[i].size(); ++j) {
+				ss << inpt->getBindingStringByIndex(static_cast<int>(i), static_cast<int>(j));
+				if (j+1 != inpt->binding[i].size()) {
+					ss << "\n";
+				}
+			}
+			for (size_t j = 0; j < inpt->binding[i].size(); ++j) {
+				keybinds_lstb[i]->append(inpt->getBindingStringByIndex(static_cast<int>(i), static_cast<int>(j)), ss.str());
+			}
+		}
+		keybinds_lstb[i]->refresh();
 	}
 	cfg_tabs[KEYBINDS_TAB].scrollbox->refresh();
 }
@@ -829,10 +929,14 @@ void MenuConfig::logic() {
 	else if (input_confirm->visible) {
 		// assign a keybind
 		input_confirm->logic();
-		scanKey(input_key);
-		input_confirm_timer.tick();
+		scanKey(input_action);
+
+		if (!input_confirm->action_list->enabled)
+			input_confirm_timer.tick();
+
 		if (input_confirm_timer.isEnd())
 			input_confirm->visible = false;
+
 		return;
 	}
 	else {
@@ -848,18 +952,22 @@ void MenuConfig::logic() {
 			pause_time_text->setText(Utils::getTimeString(hero->time_played));
 		}
 		tablist.setNextTabList(&tablist_exit);
+		tablist_main.setPrevTabList(&tablist_exit);
 		logicExit();
 	}
 	if (active_tab == VIDEO_TAB) {
 		tablist.setNextTabList(&tablist_video);
+		tablist_main.setPrevTabList(&tablist_video);
 		logicVideo();
 	}
 	else if (active_tab == AUDIO_TAB) {
 		tablist.setNextTabList(&tablist_audio);
+		tablist_main.setPrevTabList(&tablist_audio);
 		logicAudio();
 	}
 	else if (active_tab == INTERFACE_TAB) {
 		tablist.setNextTabList(&tablist_interface);
+		tablist_main.setPrevTabList(&tablist_interface);
 		logicInterface();
 
 		// TODO remove this?
@@ -871,14 +979,17 @@ void MenuConfig::logic() {
 	}
 	else if (active_tab == INPUT_TAB) {
 		tablist.setNextTabList(&tablist_input);
+		tablist_main.setPrevTabList(&tablist_input);
 		logicInput();
 	}
 	else if (active_tab == KEYBINDS_TAB) {
 		tablist.setNextTabList(&tablist_keybinds);
+		tablist_main.setPrevTabList(&tablist_keybinds);
 		logicKeybinds();
 	}
 	else if (active_tab == MODS_TAB) {
 		tablist.setNextTabList(&tablist_mods);
+		tablist_main.setPrevTabList(&tablist_mods);
 		logicMods();
 	}
 }
@@ -893,15 +1004,13 @@ bool MenuConfig::logicMain() {
 
 	// tabs & the bottom 3 main buttons
 	tab_control->logic();
-	tablist.logic();
-	tablist_main.logic();
-	tablist_exit.logic();
-	tablist_video.logic();
-	tablist_audio.logic();
-	tablist_interface.logic();
-	tablist_input.logic();
-	tablist_keybinds.logic();
-	tablist_mods.logic();
+
+	for (size_t i = 0; i < tablists.size(); ++i) {
+		tablists[i]->logic();
+		if (!inpt->usingMouse() && !tablists[i]->isLocked() && tablists[i]->getCurrent() == -1 && tablist_main.getCurrent() == -1) {
+			tablists[i]->getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
+		}
+	}
 
 	if (enable_gamestate_buttons) {
 		// Ok/Cancel Buttons
@@ -912,14 +1021,38 @@ bool MenuConfig::logicMain() {
 			return false;
 		}
 		else if (defaults_button->checkClick()) {
-			defaults_confirm->visible = true;
+			defaults_confirm->show();
 			return true;
 		}
-		else if (cancel_button->checkClick() || (inpt->pressing[Input::CANCEL] && !inpt->lock[Input::CANCEL])) {
+		else if (cancel_button->checkClick() || (inpt->usingMouse() && inpt->pressing[Input::CANCEL] && !inpt->lock[Input::CANCEL])) {
+			if (inpt->pressing[Input::CANCEL])
+				inpt->lock[Input::CANCEL] = true;
+
 			clicked_cancel = true;
 
 			// MenuConfig deconstructed, proceed with caution
 			return false;
+		}
+		else if (!inpt->usingMouse() && inpt->pressing[Input::CANCEL] && !inpt->lock[Input::CANCEL]) {
+			inpt->lock[Input::CANCEL] = true;
+
+			// toggle between GameState buttons and tab widgets
+			if (tablist_main.getCurrent() == -1) {
+				// switch to GameState buttons
+				for (size_t i = 0; i < tablists.size(); ++i) {
+					tablists[i]->defocus();
+				}
+				tablist.lock();
+				tablist_main.unlock();
+				tablist_main.getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
+			}
+			else {
+				// switch to tab widgets
+				tablist_main.defocus();
+				tablist_main.lock();
+				tablist.unlock();
+				tablist.getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
+			}
 		}
 	}
 
@@ -928,16 +1061,19 @@ bool MenuConfig::logicMain() {
 
 void MenuConfig::logicDefaults() {
 	defaults_confirm->logic();
-	if (defaults_confirm->confirmClicked) {
-		settings->fullscreen = false;
-		settings->loadDefaults();
-		eset->load();
-		inpt->defaultQwertyKeyBindings();
-		inpt->defaultJoystickBindings();
-		update();
-		render_device->windowResize();
+	if (defaults_confirm->clicked_confirm) {
+		if (defaults_confirm->action_list->getSelected() == DEFAULTS_CONFIRM_OPTION_YES) {
+			settings->fullscreen = false;
+			settings->loadDefaults();
+			render_device->setFullscreen(settings->fullscreen);
+			eset->load();
+			inpt->initBindings();
+			update();
+			refreshWindowSize();
+		}
+		// both yes and no close the window
 		defaults_confirm->visible = false;
-		defaults_confirm->confirmClicked = false;
+		defaults_confirm->clicked_confirm = false;
 	}
 }
 
@@ -945,10 +1081,13 @@ void MenuConfig::logicExit() {
 	cfg_tabs[EXIT_TAB].scrollbox->logic();
 	Point mouse = cfg_tabs[EXIT_TAB].scrollbox->input_assist(inpt->mouse);
 
-	if (cfg_tabs[EXIT_TAB].options[0].enabled && pause_continue_btn->checkClickAt(mouse.x, mouse.y)) {
+	if (cfg_tabs[EXIT_TAB].options[EXIT_OPTION_CONTINUE].enabled && pause_continue_btn->checkClickAt(mouse.x, mouse.y)) {
 		clicked_pause_continue = true;
 	}
-	else if (cfg_tabs[EXIT_TAB].options[1].enabled && pause_exit_btn->checkClickAt(mouse.x, mouse.y)) {
+	else if (cfg_tabs[EXIT_TAB].options[EXIT_OPTION_SAVE].enabled && pause_save_btn->checkClickAt(mouse.x, mouse.y)) {
+		clicked_pause_save = true;
+	}
+	else if (cfg_tabs[EXIT_TAB].options[EXIT_OPTION_EXIT].enabled && pause_exit_btn->checkClickAt(mouse.x, mouse.y)) {
 		clicked_pause_exit = true;
 	}
 }
@@ -960,8 +1099,7 @@ void MenuConfig::logicVideo() {
 	if (cfg_tabs[VIDEO_TAB].options[Platform::Video::FULLSCREEN].enabled && fullscreen_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->fullscreen = fullscreen_cb->isChecked();
 		render_device->setFullscreen(settings->fullscreen);
-		inpt->window_resized = true;
-		refreshWidgets();
+		refreshWindowSize();
 	}
 	else if (cfg_tabs[VIDEO_TAB].options[Platform::Video::HWSURFACE].enabled && hwsurface_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->hwsurface = hwsurface_cb->isChecked();
@@ -974,10 +1112,7 @@ void MenuConfig::logicVideo() {
 	}
 	else if (cfg_tabs[VIDEO_TAB].options[Platform::Video::DPI_SCALING].enabled && dpi_scaling_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->dpi_scaling = dpi_scaling_cb->isChecked();
-		render_device->windowResize();
-		inpt->window_resized = true;
-		refreshWidgets();
-		force_refresh_background = true;
+		refreshWindowSize();
 	}
 	else if (cfg_tabs[VIDEO_TAB].options[Platform::Video::PARALLAX_LAYERS].enabled && parallax_layers_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->parallax_layers = parallax_layers_cb->isChecked();
@@ -1001,13 +1136,29 @@ void MenuConfig::logicVideo() {
 	else if (cfg_tabs[VIDEO_TAB].options[Platform::Video::RENDERER].enabled && renderer_lstb->checkClickAt(mouse.x, mouse.y)) {
 		new_render_device = renderer_lstb->getValue();
 	}
+	else if (cfg_tabs[VIDEO_TAB].options[Platform::Video::FRAME_LIMIT].enabled && frame_limit_lstb->checkClickAt(mouse.x, mouse.y)) {
+		// handled in setFrameLimit(), which GameStateConfig::logicAccept() calls
+	}
+	else if (cfg_tabs[VIDEO_TAB].options[Platform::Video::MAX_RENDER_SIZE].enabled && max_render_size_lstb->checkClickAt(mouse.x, mouse.y)) {
+		int index = max_render_size_lstb->getSelected();
+		if (index == 0) {
+			settings->max_render_size = 0;
+		}
+		else {
+			settings->max_render_size = virtual_heights[index-1];
+		}
+		refreshWindowSize();
+	}
 }
 
 void MenuConfig::logicAudio() {
 	cfg_tabs[AUDIO_TAB].scrollbox->logic();
 	Point mouse = cfg_tabs[AUDIO_TAB].scrollbox->input_assist(inpt->mouse);
 
-	if (settings->audio) {
+	if (cfg_tabs[AUDIO_TAB].options[Platform::Audio::MUTE_ON_FOCUS_LOSS].enabled && mute_on_focus_loss_cb->checkClickAt(mouse.x, mouse.y)) {
+		settings->mute_on_focus_loss = mute_on_focus_loss_cb->isChecked();
+	}
+	else if (settings->audio) {
 		if (cfg_tabs[AUDIO_TAB].options[Platform::Audio::MUSIC].enabled && music_volume_sl->checkClickAt(mouse.x, mouse.y)) {
 			if (settings->music_volume == 0)
 				reload_music = true;
@@ -1072,6 +1223,12 @@ void MenuConfig::logicInterface() {
 	else if (cfg_tabs[INTERFACE_TAB].options[Platform::Interface::LOW_HP_THRESHOLD].enabled && low_hp_threshold_lstb->checkClickAt(mouse.x, mouse.y)) {
 		settings->low_hp_threshold = (static_cast<int>(low_hp_threshold_lstb->getSelected())+1)*5;
 	}
+	else if (cfg_tabs[INTERFACE_TAB].options[Platform::Interface::ITEM_COMPARE_TIPS].enabled && item_compare_tips_cb->checkClickAt(mouse.x, mouse.y)) {
+		settings->item_compare_tips = item_compare_tips_cb->isChecked();
+	}
+	else if (cfg_tabs[INTERFACE_TAB].options[Platform::Interface::PAUSE_ON_FOCUS_LOSS].enabled && pause_on_focus_loss_cb->checkClickAt(mouse.x, mouse.y)) {
+		settings->pause_on_focus_loss = pause_on_focus_loss_cb->isChecked();
+	}
 }
 
 void MenuConfig::logicInput() {
@@ -1079,8 +1236,15 @@ void MenuConfig::logicInput() {
 	Point mouse = cfg_tabs[INPUT_TAB].scrollbox->input_assist(inpt->mouse);
 
 	if (inpt->joysticks_changed) {
-		disableJoystickOptions();
 		refreshJoysticks();
+		if (settings->enable_joystick && inpt->getNumJoysticks() > 0) {
+			inpt->initJoystick();
+			joystick_device_lstb->select(settings->joystick_device + 1);
+		}
+		else {
+			joystick_device_lstb->select(0);
+		}
+
 		inpt->joysticks_changed = false;
 	}
 
@@ -1116,15 +1280,16 @@ void MenuConfig::logicInput() {
 	}
 	else if (cfg_tabs[INPUT_TAB].options[Platform::Input::JOYSTICK].enabled && joystick_device_lstb->checkClickAt(mouse.x, mouse.y)) {
 		settings->joystick_device = static_cast<int>(joystick_device_lstb->getSelected()) - 1;
-		if (settings->joystick_device != -1) {
-			settings->enable_joystick = true;
-			if (inpt->getNumJoysticks() > 0) {
-				inpt->initJoystick();
-			}
-		}
-		else {
-			settings->enable_joystick = false;
-		}
+		settings->enable_joystick = (settings->joystick_device != -1);
+		inpt->joysticks_changed = true;
+		inpt->initJoystick();
+		inpt->joysticks_changed = false;
+	}
+	else if (cfg_tabs[INPUT_TAB].options[Platform::Input::TOUCH_CONTROLS].enabled && touch_controls_cb->checkClickAt(mouse.x, mouse.y)) {
+		settings->touchscreen = touch_controls_cb->isChecked();
+	}
+	else if (cfg_tabs[INPUT_TAB].options[Platform::Input::TOUCH_SCALE].enabled && touch_scale_sl->checkClickAt(mouse.x, mouse.y)) {
+		settings->touch_scale = static_cast<float>(touch_scale_sl->getValue()) * 0.01f;
 	}
 }
 
@@ -1132,26 +1297,20 @@ void MenuConfig::logicKeybinds() {
 	cfg_tabs[KEYBINDS_TAB].scrollbox->logic();
 	Point mouse = cfg_tabs[KEYBINDS_TAB].scrollbox->input_assist(inpt->mouse);
 
-	for (unsigned int i = 0; i < keybinds_btn.size(); i++) {
-		if ((i+1) % 3 == 0) {
-			keybinds_btn[i]->enabled = settings->enable_joystick;
-			keybinds_btn[i]->refresh();
-		}
-
+	for (unsigned int i = 0; i < keybinds_lstb.size(); i++) {
 		if (!cfg_tabs[KEYBINDS_TAB].options[i].enabled)
 			continue;
 
-		if (keybinds_btn[i]->checkClickAt(mouse.x,mouse.y)) {
-			std::string confirm_msg;
-			confirm_msg = msg->get("Assign:") + ' ' + inpt->binding_name[i/3];
-			delete input_confirm;
-			input_confirm = new MenuConfirm(msg->get("Clear"),confirm_msg);
-			input_confirm_timer.reset(Timer::BEGIN);
-			input_confirm->visible = true;
-			input_key = i;
-			inpt->last_button = -1;
-			inpt->last_key = -1;
-			inpt->last_joybutton = -1;
+		if (keybinds_lstb[i]->checkClickAt(mouse.x,mouse.y)) {
+			if (keybinds_lstb[i]->checkAction()) {
+				input_confirm->setTitle(msg->get("Assign:") + ' ' + inpt->binding_name[i]);
+				input_confirm_timer.reset(Timer::BEGIN);
+				input_confirm->show();
+				input_action = i;
+				inpt->last_button = -1;
+				inpt->last_key = -1;
+				inpt->last_joybutton = -1;
+			}
 		}
 	}
 }
@@ -1178,10 +1337,9 @@ void MenuConfig::logicMods() {
 }
 
 void MenuConfig::render() {
-	int tabheight = tab_control->getTabHeight();
 	Rect pos;
-	pos.x = (settings->view_w - eset->resolutions.frame_w)/2;
-	pos.y = (settings->view_h - eset->resolutions.frame_h)/2 + tabheight - tabheight/16;
+	pos.x = (settings->view_w - eset->resolutions.frame_w)/2 + background_offset.x;
+	pos.y = (settings->view_h - eset->resolutions.frame_h)/2 + background_offset.y;
 
 	if (background) {
 		background->setDestFromRect(pos);
@@ -1208,7 +1366,8 @@ void MenuConfig::renderTabContents() {
 
 			// only draw a separator between the buttons and the time played text
 			Image* render_target = cfg_tabs[active_tab].scrollbox->contents->getGraphics();
-			render_target->drawLine(scrollpane_padding.x, 2 * scrollpane_padding.y, scrollpane.w - scrollpane_padding.x - 1, 2 * scrollpane_padding.y, scrollpane_separator_color);
+			int offset = (MenuConfig::ENABLE_SAVE_GAME && eset->misc.save_anywhere) ? 3 : 2;
+			render_target->drawLine(scrollpane_padding.x, offset * scrollpane_padding.y, scrollpane.w - scrollpane_padding.x - 1, offset * scrollpane_padding.y, scrollpane_separator_color);
 		}
 		cfg_tabs[active_tab].scrollbox->render();
 	}
@@ -1219,10 +1378,6 @@ void MenuConfig::renderTabContents() {
 			Image* render_target = cfg_tabs[active_tab].scrollbox->contents->getGraphics();
 
 			for (int i = 1; i < cfg_tabs[active_tab].enabled_count; ++i) {
-				if (active_tab == KEYBINDS_TAB) {
-					if (i % 3 != 0)
-						continue;
-				}
 				render_target->drawLine(scrollpane_padding.x, i * scrollpane_padding.y, scrollpane.w - scrollpane_padding.x - 1, i * scrollpane_padding.y, scrollpane_separator_color);
 			}
 		}
@@ -1296,7 +1451,7 @@ void MenuConfig::placeLabeledWidgetAuto(int tab, int cfg_index) {
 }
 
 void MenuConfig::refreshWidgets() {
-	tab_control->setMainArea(((settings->view_w - eset->resolutions.frame_w)/2) + tab_offset.x, ((settings->view_h - eset->resolutions.frame_h)/2) + tab_offset.y);
+	tab_control->setMainArea(((settings->view_w - eset->resolutions.frame_w)/2) + tab_offset.x, ((settings->view_h - eset->resolutions.frame_h)/2) + tab_offset.y, eset->resolutions.frame_w);
 
 	frame.x = ((settings->view_w - eset->resolutions.frame_w)/2) + frame_offset.x;
 	frame.y = ((settings->view_h - eset->resolutions.frame_h)/2) + tab_control->getTabHeight() + frame_offset.y;
@@ -1319,6 +1474,13 @@ void MenuConfig::refreshWidgets() {
 	input_confirm->align();
 }
 
+void MenuConfig::refreshWindowSize() {
+	render_device->windowResize();
+	inpt->window_resized = true;
+	refreshWidgets();
+	force_refresh_background = true;
+}
+
 void MenuConfig::addChildWidget(Widget *w, int tab) {
 	child_widget.push_back(w);
 	optiontab.push_back(tab);
@@ -1332,12 +1494,11 @@ void MenuConfig::refreshLanguages() {
 	if (infile.open("engine/languages.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		int i = 0;
 		while (infile.next()) {
-			std::string key = infile.key;
-			if (key != "") {
-				language_ISO.push_back(key);
+			if (!infile.key.empty()) {
+				language_ISO.push_back(infile.key);
 				language_lstb->append(infile.val, infile.val + " [" + infile.key + "]");
 
-				if (language_ISO.back() == settings->language) {
+				if (infile.key == settings->language) {
 					language_lstb->select(i);
 				}
 
@@ -1345,6 +1506,13 @@ void MenuConfig::refreshLanguages() {
 			}
 		}
 		infile.close();
+	}
+
+	// no languages found; include English by default
+	if (language_lstb->getSize() == 0) {
+		language_ISO.push_back("en");
+		language_lstb->append("English", "English [en]");
+		language_lstb->select(0);
 	}
 }
 
@@ -1407,6 +1575,10 @@ std::string MenuConfig::createModTooltip(Mod *mod) {
 
 		ret = mod->name + '\n';
 
+		if (mod->is_game_mod) {
+			ret += msg->get("Core mod") + '\n';
+		}
+
 		std::string mod_description = mod->getLocaleDescription(settings->language);
 		if (!mod_description.empty()) {
 			ret += '\n';
@@ -1452,50 +1624,67 @@ std::string MenuConfig::createModTooltip(Mod *mod) {
 	return ret;
 }
 
-void MenuConfig::confirmKey(int button) {
-	inpt->pressing[button] = false;
-	inpt->lock[button] = false;
+void MenuConfig::confirmKey(int action) {
+	inpt->pressing[action] = false;
+	inpt->lock[action] = false;
 
 	input_confirm->visible = false;
 	input_confirm_timer.reset(Timer::END);
 	keybind_tip_timer.reset(Timer::END);
 
+	inpt->refresh_hotkeys = true;
+
 	updateKeybinds();
 }
 
-void MenuConfig::scanKey(int button) {
-	int column = button % 3;
-	int real_button = button / 3;
+void MenuConfig::scanKey(int action) {
+	if (!input_confirm->visible)
+		return;
 
 	// clear the keybind if the user clicks "Clear" in the dialog
-	if (input_confirm->visible && input_confirm->confirmClicked) {
-		inpt->setKeybind(-1, real_button, column, keybind_msg);
-		confirmKey(real_button);
-		return;
+	if (input_confirm->clicked_confirm) {
+		input_confirm->clicked_confirm = false;
+
+		if (input_confirm->action_list->getSelected() == INPUT_CONFIRM_OPTION_NEW) {
+			input_confirm->action_list->enabled = false;
+			input_confirm->align();
+
+			inpt->last_button = -1;
+			inpt->last_key = -1;
+			inpt->last_joybutton = -1;
+		}
+		else if (input_confirm->action_list->getSelected() == INPUT_CONFIRM_OPTION_CLEAR) {
+			unsigned selected_bind = keybinds_lstb[action]->getSelected();
+			if (action == Input::MAIN1 && selected_bind == 0) {
+				keybind_msg = msg->get("Can not remove this binding.");
+			}
+			else {
+				inpt->removeBind(action, keybinds_lstb[action]->getSelected());
+				confirmKey(action);
+			}
+		}
 	}
 
-	if (input_confirm->visible && !input_confirm->isWithinButtons) {
-		// keyboard & mouse
-		if (column == InputState::BINDING_DEFAULT || column == InputState::BINDING_ALT) {
-			if (inpt->last_button != -1) {
-				// mouse
-				inpt->setKeybind(inpt->last_button, real_button, column, keybind_msg);
-				confirmKey(real_button);
-			}
-			else if (inpt->last_key != -1) {
-				// keyboard
-				inpt->setKeybind(inpt->last_key, real_button, column, keybind_msg);
-				confirmKey(real_button);
-			}
+	if (!input_confirm->action_list->enabled) {
+		if (inpt->last_key != -1) {
+			// keyboard
+			inpt->setBind(action, InputBind::KEY, inpt->last_key, &keybind_msg);
+			confirmKey(action);
 		}
-		// joystick
-		else if (column == InputState::BINDING_JOYSTICK && inpt->last_joybutton != -1) {
-			inpt->setKeybind(inpt->last_joybutton, real_button, column, keybind_msg);
-			confirmKey(real_button);
+		else if (inpt->last_button != -1) {
+			// mouse
+			inpt->setBind(action, InputBind::MOUSE, inpt->last_button, &keybind_msg);
+			confirmKey(action);
 		}
-		else if (column == InputState::BINDING_JOYSTICK && inpt->last_joyaxis != -1) {
-			inpt->setKeybind(inpt->last_joyaxis, real_button, column, keybind_msg);
-			confirmKey(real_button);
+		else if (inpt->last_joybutton != -1) {
+			// gamepad button
+			inpt->setBind(action, InputBind::GAMEPAD, inpt->last_joybutton, &keybind_msg);
+			confirmKey(action);
+		}
+		else if (inpt->last_joyaxis != -1) {
+			// gamepad axis
+			inpt->setBind(action, InputBind::GAMEPAD_AXIS, inpt->last_joyaxis, &keybind_msg);
+			confirmKey(action);
 		}
 	}
 }
@@ -1514,15 +1703,6 @@ void MenuConfig::disableMouseOptions() {
 
 	settings->no_mouse = true;
 	no_mouse_cb->setChecked(settings->no_mouse);
-}
-
-void MenuConfig::disableJoystickOptions() {
-	settings->enable_joystick = false;
-
-	joystick_device_lstb->select(0);
-
-	if (inpt->getNumJoysticks() > 0)
-		joystick_device_lstb->refresh();
 }
 
 void MenuConfig::refreshRenderers() {
@@ -1561,6 +1741,10 @@ void MenuConfig::setPauseExitText(bool enable_save) {
 	pause_exit_btn->setLabel((eset->misc.save_onexit && enable_save) ? msg->get("Save & Exit") : msg->get("Exit"));
 }
 
+void MenuConfig::setPauseSaveEnabled(bool enable_save) {
+	pause_save_btn->enabled = enable_save && eset->misc.save_anywhere;
+}
+
 void MenuConfig::resetSelectedTab() {
 	update();
 
@@ -1570,15 +1754,21 @@ void MenuConfig::resetSelectedTab() {
 		cfg_tabs[i].scrollbox->scrollToTop();
 	}
 
-	tablist.defocus();
-	tablist_main.defocus();
-	tablist_exit.defocus();
-	tablist_video.defocus();
-	tablist_audio.defocus();
-	tablist_interface.defocus();
-	tablist_input.defocus();
-	tablist_keybinds.defocus();
-	tablist_mods.defocus();
+	for (size_t i = 0; i < tablists.size(); ++i) {
+		tablists[i]->defocus();
+	}
+
+	input_confirm->visible = false;
+	input_confirm_timer.reset(Timer::END);
+	keybind_tip_timer.reset(Timer::END);
+}
+
+int MenuConfig::getActiveTab() {
+	return tab_control->getActiveTab();
+}
+
+void MenuConfig::setActiveTab(unsigned tab) {
+	tab_control->setActiveTab(tab);
 }
 
 void MenuConfig::cleanup() {
@@ -1646,3 +1836,16 @@ void MenuConfig::cleanupDialogs() {
 void MenuConfig::setHero(Avatar* _hero) {
 	hero = _hero;
 }
+
+bool MenuConfig::setFrameLimit() {
+	size_t frame_limit_index = frame_limit_lstb->getSelected();
+	if (frame_limit_index < frame_limits.size()) {
+		if (settings->max_frames_per_sec != frame_limits[frame_limit_index]) {
+			Utils::logInfo("MenuConfig: Changing frame limit from %d to %d.", settings->max_frames_per_sec, frame_limits[frame_limit_index]);
+			settings->max_frames_per_sec = frame_limits[frame_limit_index];
+			return true;
+		}
+	}
+	return false;
+}
+

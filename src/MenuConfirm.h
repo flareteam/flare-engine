@@ -26,27 +26,30 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetLabel.h"
 
 class WidgetButton;
+class WidgetHorizontalList;
 
 class MenuConfirm : public Menu {
 protected:
-	WidgetButton *buttonConfirm;
-	WidgetButton *buttonClose;
+	WidgetButton *button_close;
 	WidgetLabel label;
 
-	std::string boxMsg;
-	bool hasConfirmButton;
+	std::string title;
 
 public:
-	MenuConfirm(const std::string&, const std::string&);
+	MenuConfirm();
 	~MenuConfirm();
 
 	void logic();
 	void align();
 	virtual void render();
 
-	bool confirmClicked;
-	bool cancelClicked;
-	bool isWithinButtons;
+	void setTitle(const std::string& s);
+	void show();
+
+	WidgetHorizontalList *action_list;
+
+	bool clicked_confirm;
+	bool clicked_cancel;
 };
 
 #endif

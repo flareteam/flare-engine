@@ -28,12 +28,15 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CombatText.h"
 #include "CommonIncludes.h"
+#include "EngineSettings.h"
 #include "FileParser.h"
 #include "FontEngine.h"
 #include "Settings.h"
 #include "SharedResources.h"
 #include "UtilsParsing.h"
 #include "WidgetLabel.h"
+
+#include <stdio.h>
 
 Combat_Text_Item::Combat_Text_Item()
 	: label(NULL)
@@ -42,9 +45,12 @@ Combat_Text_Item::Combat_Text_Item()
 	, floating_offset(0)
 	, text("")
 	, displaytype(0)
+	, is_number(false)
+	, number_value(0)
 {}
 
 Combat_Text_Item::~Combat_Text_Item() {
+	// label deletion is handled by CombatText class
 }
 
 CombatText::CombatText() {
@@ -55,7 +61,8 @@ CombatText::CombatText() {
 	msg_color[MSG_MISS] = font->getColor(FontEngine::COLOR_COMBAT_MISS);
 
 	duration = settings->max_frames_per_sec; // 1 second
-	speed = 60.f / settings->max_frames_per_sec;
+	fade_duration = 0;
+	speed = Settings::LOGIC_FPS / settings->max_frames_per_sec;
 	offset = 48; // average height of flare-game enemies, so a sensible default
 
 	// Load config settings
@@ -68,12 +75,16 @@ CombatText::CombatText() {
 				duration = Parse::toDuration(infile.val);
 			}
 			else if(infile.key == "speed") {
-				// @ATTR speed|int|Motion speed of the combat text.
-				speed = static_cast<float>(Parse::toInt(infile.val) * 60) / settings->max_frames_per_sec;
+				// @ATTR speed|float|Motion speed of the combat text.
+				speed = (Parse::toFloat(infile.val) * Settings::LOGIC_FPS) / settings->max_frames_per_sec;
 			}
 			else if (infile.key == "offset") {
 				// @ATTR offset|int|The vertical offset for the combat text's starting position.
 				offset = Parse::toInt(infile.val);
+			}
+			else if (infile.key == "fade_duration") {
+				// @ATTR fade_duration|duration|How long the combat text will spend fading out in 'ms' or 's'.
+				fade_duration = Parse::toDuration(infile.val);
 			}
 			else {
 				infile.error("CombatText: '%s' is not a valid key.",infile.key.c_str());
@@ -81,6 +92,9 @@ CombatText::CombatText() {
 		}
 		infile.close();
 	}
+
+	if (fade_duration > duration)
+		fade_duration = duration;
 }
 
 CombatText::~CombatText() {
@@ -92,39 +106,52 @@ CombatText::~CombatText() {
 }
 
 void CombatText::addString(const std::string& message, const FPoint& location, int displaytype) {
-	if (settings->combat_text) {
-		Combat_Text_Item *c = new Combat_Text_Item();
-		WidgetLabel *label = new WidgetLabel();
-		c->pos.x = location.x;
-		c->pos.y = location.y;
-		c->floating_offset = static_cast<float>(offset);
-		c->label = label;
-		c->text = message;
-		c->lifespan = duration;
-		c->displaytype = displaytype;
+	if (!settings->combat_text)
+		return;
 
-		c->label->setPos(static_cast<int>(c->pos.x), static_cast<int>(c->pos.y));
-		c->label->setJustify(FontEngine::JUSTIFY_CENTER);
-		c->label->setVAlign(LabelInfo::VALIGN_BOTTOM);
-		c->label->setText(c->text);
-		c->label->setColor(msg_color[c->displaytype]);
-		combat_text.push_back(*c);
-		delete c;
-	}
+	Combat_Text_Item c;
+	c.pos.x = location.x;
+	c.pos.y = location.y;
+	c.floating_offset = static_cast<float>(offset);
+	c.text = message;
+	c.lifespan = duration;
+	c.displaytype = displaytype;
+
+	c.label = new WidgetLabel();
+	c.label->setPos(static_cast<int>(c.pos.x), static_cast<int>(c.pos.y));
+	c.label->setJustify(FontEngine::JUSTIFY_CENTER);
+	c.label->setVAlign(LabelInfo::VALIGN_BOTTOM);
+	c.label->setText(c.text);
+	c.label->setColor(msg_color[c.displaytype]);
+	combat_text.push_back(c);
 }
 
-void CombatText::addInt(int num, const FPoint& location, int displaytype) {
-	if (settings->combat_text) {
-		std::stringstream ss;
-		ss << num;
-		addString(ss.str(), location, displaytype);
+void CombatText::addFloat(float num, const FPoint& location, int displaytype) {
+	if (!settings->combat_text)
+		return;
+
+	// when adding multiple combat text of the same type and position on the same frame, add the num to the existing text
+	for (std::vector<Combat_Text_Item>::iterator it = combat_text.begin(); it != combat_text.end(); ++it) {
+		if (it->is_number && it->displaytype == displaytype && it->lifespan == duration && it->pos.x == location.x && it->pos.y == location.y) {
+			it->number_value += num;
+			it->text = Utils::floatToString(it->number_value, eset->number_format.combat_text);
+			it->label->setText(it->text);
+			return;
+		}
 	}
+
+	addString(Utils::floatToString(num, eset->number_format.combat_text), location, displaytype);
+
+	combat_text.back().is_number = true;
+	combat_text.back().number_value = num;
 }
 
 void CombatText::logic(const FPoint& _cam) {
 	cam = _cam;
 
-	for(std::vector<Combat_Text_Item>::iterator it = combat_text.begin(); it != combat_text.end(); ++it) {
+	for(std::vector<Combat_Text_Item>::iterator it = combat_text.end(); it != combat_text.begin();) {
+		--it;
+
 		it->lifespan--;
 		it->floating_offset += speed;
 
@@ -133,6 +160,21 @@ void CombatText::logic(const FPoint& _cam) {
 		scr_pos.y -= static_cast<int>(it->floating_offset);
 
 		it->label->setPos(scr_pos.x, scr_pos.y);
+
+		// try to prevent messages from overlapping
+		for (std::vector<Combat_Text_Item>::iterator overlap_it = it; overlap_it != combat_text.begin();) {
+			--overlap_it;
+			Rect bounds = *(it->label->getBounds());
+			Rect overlap_bounds = *(overlap_it->label->getBounds());
+			if (Utils::rectsOverlap(bounds, overlap_bounds)) {
+				overlap_it->floating_offset += static_cast<float>(overlap_bounds.h + (overlap_bounds.y - bounds.y));
+
+				scr_pos = Utils::mapToScreen(overlap_it->pos.x, overlap_it->pos.y, cam.x, cam.y);
+				scr_pos.y -= static_cast<int>(overlap_it->floating_offset);
+
+				overlap_it->label->setPos(scr_pos.x, scr_pos.y);
+			}
+		}
 	}
 
 	// delete expired messages
@@ -146,11 +188,19 @@ void CombatText::render() {
 	if (!settings->show_hud) return;
 
 	for(std::vector<Combat_Text_Item>::iterator it = combat_text.begin(); it != combat_text.end(); ++it) {
-		if (it->lifespan > 0)
+		if (it->lifespan > 0) {
+			// fade out
+			if (it->lifespan < fade_duration)
+				it->label->setAlpha(static_cast<uint8_t>((static_cast<float>(it->lifespan) / static_cast<float>(fade_duration)) * 255.f));
+
 			it->label->render();
+		}
 	}
 }
 
 void CombatText::clear() {
-	combat_text.clear();
+	while (combat_text.size()) {
+		delete combat_text.begin()->label;
+		combat_text.erase(combat_text.begin());
+	}
 }

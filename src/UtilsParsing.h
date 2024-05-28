@@ -25,6 +25,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <string>
 #include <typeinfo>
 
+class ItemStack;
 class LabelInfo;
 
 namespace Parse {
@@ -40,6 +41,9 @@ namespace Parse {
 	int toInt(const std::string& s, int default_value = 0);
 	float toFloat(const std::string &s, float default_value = 0.0);
 	unsigned long toUnsignedLong(const std::string& s, unsigned long default_value = 0);
+	size_t toSizeT(const std::string& s, size_t default_value = 0);
+	ItemID toItemID(const std::string& s, ItemID default_value = 0);
+	PowerID toPowerID(const std::string& s, PowerID default_value = 0);
 	bool toBool(std::string value);
 
 	Point toPoint(std::string value);
@@ -49,11 +53,16 @@ namespace Parse {
 
 	int toDuration(const std::string& s);
 	int toDirection(const std::string& s);
-	int toAlignment(const std::string& s);
+	int toAlignment(const std::string& s, int default_value = Utils::ALIGN_TOPLEFT);
 
-	int popFirstInt(std::string& s, char separator = 0);
 	std::string popFirstString(std::string& s, char separator = 0);
+	int popFirstInt(std::string& s, char separator = 0);
+	float popFirstFloat(std::string& s, char separator = 0);
 	LabelInfo popLabelInfo(std::string val);
+
+	ItemStack toItemQuantityPair(std::string value, bool* check_pair = NULL);
+
+	bool skipLine(const std::string& line);
 }
 
 #endif

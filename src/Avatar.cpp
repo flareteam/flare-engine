@@ -32,16 +32,19 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "CursorManager.h"
 #include "EnemyGroupManager.h"
-#include "Enemy.h"
-#include "EnemyManager.h"
+#include "Entity.h"
+#include "EntityManager.h"
 #include "EngineSettings.h"
 #include "FileParser.h"
 #include "InputState.h"
 #include "MapRenderer.h"
 #include "MenuActionBar.h"
 #include "MenuExit.h"
+#include "MenuGameOver.h"
+#include "MenuInventory.h"
 #include "MenuManager.h"
 #include "MessageEngine.h"
+#include "MenuMiniMap.h"
 #include "ModManager.h"
 #include "PowerManager.h"
 #include "RenderDevice.h"
@@ -51,6 +54,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "SoundManager.h"
 #include "Utils.h"
+#include "UtilsFileSystem.h"
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
 
@@ -58,6 +62,7 @@ Avatar::Avatar()
 	: Entity()
 	, attack_cursor(false)
 	, mm_key(settings->mouse_move_swap ? Input::MAIN2 : Input::MAIN1)
+	, mm_is_distant(false)
 	, hero_stats(NULL)
 	, charmed_stats(NULL)
 	, act_target()
@@ -73,15 +78,22 @@ Avatar::Avatar()
 	, using_main2(false)
 	, prev_hp(0)
 	, playing_lowhp(false)
-	, teleport_camera_lock(false) {
+	, teleport_camera_lock(false)
+	, feet_index(-1)
+{
+	power_cooldown_timers.resize(powers->powers.size(), NULL);
+	power_cast_timers.resize(powers->powers.size(), NULL);
+
+	for (size_t i = 0; i < powers->powers.size(); ++i) {
+		if (powers->isValid(i)) {
+			power_cooldown_timers[i] = new Timer();
+			power_cast_timers[i] = new Timer();
+		}
+	}
 
 	init();
 
-	// load the hero's animations from hero definition file
-	anim->increaseCount("animations/hero.txt");
-	animationSet = anim->getAnimationSet("animations/hero.txt");
-	activeAnimation = animationSet->getAnimation("");
-
+	// TODO
 	// set cooldown_hit to duration of hit animation if undefined
 	if (!stats.cooldown_hit_enabled) {
 		Animation *hit_anim = animationSet->getAnimation("hit");
@@ -126,7 +138,7 @@ void Avatar::init() {
 
 	// other init
 	sprites = 0;
-	stats.cur_state = StatBlock::AVATAR_STANCE;
+	stats.cur_state = StatBlock::ENTITY_STANCE;
 	if (mapr->hero_pos_enabled) {
 		stats.pos.x = mapr->hero_pos.x;
 		stats.pos.y = mapr->hero_pos.y;
@@ -161,101 +173,56 @@ void Avatar::init() {
 
 	// Find untransform power index to use for manual untransfrom ability
 	untransform_power = 0;
-	for (unsigned id=0; id<powers->powers.size(); id++) {
-		if (powers->powers[id].spawn_type == "untransform" && powers->powers[id].required_items.empty()) {
-			untransform_power = id;
-			break;
+	for (size_t i = 0; i < powers->powers.size(); ++i) {
+		if (!powers->isValid(i))
+			continue;
+
+		if (untransform_power == 0 && powers->powers[i]->required_items.empty() && powers->powers[i]->spawn_type == "untransform") {
+			untransform_power = i;
 		}
+
+		if (power_cooldown_timers[i])
+			*(power_cooldown_timers[i]) = Timer();
+		if (power_cast_timers[i])
+			*(power_cast_timers[i]) = Timer();
 	}
 
-	power_cooldown_timers.clear();
-	power_cooldown_timers.resize(powers->powers.size());
-	power_cast_timers.clear();
-	power_cast_timers.resize(powers->powers.size());
-
+	stats.animations = "animations/hero.txt";
+	loadAnimations();
 }
 
 void Avatar::handleNewMap() {
 	cursor_enemy = NULL;
 	lock_enemy = NULL;
 	playing_lowhp = false;
+
+	stats.target_corpse = NULL;
+	stats.target_nearest = NULL;
+	stats.target_nearest_corpse = NULL;
 }
 
 /**
  * Load avatar sprite layer definitions into vector.
  */
 void Avatar::loadLayerDefinitions() {
-	layer_def = std::vector<std::vector<unsigned> >(8, std::vector<unsigned>());
-	layer_reference_order = std::vector<std::string>();
+	if (!stats.layer_reference_order.empty())
+		return;
+
+	Utils::logError("Avatar: Loading render layers from engine/hero_layers.txt is deprecated! Render layers should be loaded in the 'render_layers' section of engine/stats.txt.");
 
 	FileParser infile;
-	// @CLASS Avatar: Hero layers|Description of engine/hero_layers.txt
 	if (infile.open("engine/hero_layers.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while(infile.next()) {
-			if (infile.key == "layer") {
-				// @ATTR layer|direction, list(string) : Direction, Layer name(s)|Defines the hero avatar sprite layer
-				unsigned dir = Parse::toDirection(Parse::popFirstString(infile.val));
-				if (dir>7) {
-					infile.error("Avatar: Hero layer direction must be in range [0,7]");
-					Utils::logErrorDialog("Avatar: Hero layer direction must be in range [0,7]");
-					mods->resetModConfig();
-					Utils::Exit(1);
-				}
-				std::string layer = Parse::popFirstString(infile.val);
-				while (layer != "") {
-					// check if already in layer_reference:
-					unsigned ref_pos;
-					for (ref_pos = 0; ref_pos < layer_reference_order.size(); ++ref_pos)
-						if (layer == layer_reference_order[ref_pos])
-							break;
-					if (ref_pos == layer_reference_order.size())
-						layer_reference_order.push_back(layer);
-					layer_def[dir].push_back(ref_pos);
+			// hero_layers.txt doesn't have sections, but we now expect the layer key to be under one called "render_layers"
+			if (infile.section.empty())
+				infile.section = "render_layers";
 
-					layer = Parse::popFirstString(infile.val);
-				}
-			}
-			else {
+			if (!stats.loadRenderLayerStat(&infile)) {
 				infile.error("Avatar: '%s' is not a valid key.", infile.key.c_str());
 			}
 		}
 		infile.close();
 	}
-
-	// There are the positions of the items relative to layer_reference_order
-	// so if layer_reference_order=main,body,head,off
-	// and we got a layer=3,off,body,head,main
-	// then the layer_def[3] looks like (3,1,2,0)
-}
-
-void Avatar::loadGraphics(std::vector<Layer_gfx> _img_gfx) {
-
-	for (unsigned int i=0; i<animsets.size(); i++) {
-		if (animsets[i])
-			anim->decreaseCount(animsets[i]->getName());
-		delete anims[i];
-	}
-	animsets.clear();
-	anims.clear();
-
-	for (unsigned int i=0; i<_img_gfx.size(); i++) {
-		if (_img_gfx[i].gfx != "") {
-			std::string name = "animations/avatar/"+stats.gfx_base+"/"+_img_gfx[i].gfx+".txt";
-			anim->increaseCount(name);
-			animsets.push_back(anim->getAnimationSet(name));
-			animsets.back()->setParent(animationSet);
-			anims.push_back(animsets.back()->getAnimation(activeAnimation->getName()));
-			setAnimation("stance");
-			if(!anims.back()->syncTo(activeAnimation)) {
-				Utils::logError("Avatar: Error syncing animation in '%s' to 'animations/hero.txt'.", animsets.back()->getName().c_str());
-			}
-		}
-		else {
-			animsets.push_back(NULL);
-			anims.push_back(NULL);
-		}
-	}
-	anim->cleanUp();
 }
 
 /**
@@ -303,7 +270,7 @@ bool Avatar::pressing_move() {
 		return false;
 	}
 	else if (settings->mouse_move) {
-		return inpt->pressing[mm_key] && !inpt->pressing[Input::SHIFT];
+		return inpt->pressing[mm_key] && !inpt->pressing[Input::SHIFT] && mm_is_distant;
 	}
 	else {
 		return (inpt->pressing[Input::UP] && !inpt->lock[Input::UP]) ||
@@ -321,22 +288,36 @@ void Avatar::set_direction() {
 
 	// handle direction changes
 	if (settings->mouse_move) {
-		FPoint target = Utils::screenToMap(inpt->mouse.x, inpt->mouse.y, mapr->cam.x, mapr->cam.y);
-		stats.direction = Utils::calcDirection(stats.pos.x, stats.pos.y, target.x, target.y);
+		if (mm_is_distant) {
+			FPoint target = Utils::screenToMap(inpt->mouse.x, inpt->mouse.y, mapr->cam.pos.x, mapr->cam.pos.y);
+			stats.direction = Utils::calcDirection(stats.pos.x, stats.pos.y, target.x, target.y);
+		}
 	}
 	else {
-		if (inpt->pressing[Input::UP] && !inpt->lock[Input::UP] && inpt->pressing[Input::LEFT] && !inpt->lock[Input::LEFT]) stats.direction = 1;
-		else if (inpt->pressing[Input::UP] && !inpt->lock[Input::UP] && inpt->pressing[Input::RIGHT] && !inpt->lock[Input::RIGHT]) stats.direction = 3;
-		else if (inpt->pressing[Input::DOWN] && !inpt->lock[Input::DOWN] && inpt->pressing[Input::RIGHT] && !inpt->lock[Input::RIGHT]) stats.direction = 5;
-		else if (inpt->pressing[Input::DOWN] && !inpt->lock[Input::DOWN] && inpt->pressing[Input::LEFT] && !inpt->lock[Input::LEFT]) stats.direction = 7;
-		else if (inpt->pressing[Input::LEFT] && !inpt->lock[Input::LEFT]) stats.direction = 0;
-		else if (inpt->pressing[Input::UP] && !inpt->lock[Input::UP]) stats.direction = 2;
-		else if (inpt->pressing[Input::RIGHT] && !inpt->lock[Input::RIGHT]) stats.direction = 4;
-		else if (inpt->pressing[Input::DOWN] && !inpt->lock[Input::DOWN]) stats.direction = 6;
+		// movement keys take top priority for setting direction
+		bool press_up = inpt->pressing[Input::UP] && !inpt->lock[Input::UP];
+		bool press_down = inpt->pressing[Input::DOWN] && !inpt->lock[Input::DOWN];
+		bool press_left = inpt->pressing[Input::LEFT] && !inpt->lock[Input::LEFT];
+		bool press_right = inpt->pressing[Input::RIGHT] && !inpt->lock[Input::RIGHT];
+
+		// aiming keys can set direction as well
+		if (!press_up && !press_down && !press_left && !press_right) {
+			press_up = inpt->pressing[Input::AIM_UP] && !inpt->lock[Input::AIM_UP];
+			press_down = inpt->pressing[Input::AIM_DOWN] && !inpt->lock[Input::AIM_DOWN];
+			press_left = inpt->pressing[Input::AIM_LEFT] && !inpt->lock[Input::AIM_LEFT];
+			press_right = inpt->pressing[Input::AIM_RIGHT] && !inpt->lock[Input::AIM_RIGHT];
+		}
+
+		if (press_up && press_left) stats.direction = 1;
+		else if (press_up && press_right) stats.direction = 3;
+		else if (press_down && press_right) stats.direction = 5;
+		else if (press_down && press_left) stats.direction = 7;
+		else if (press_left) stats.direction = 0;
+		else if (press_up) stats.direction = 2;
+		else if (press_right) stats.direction = 4;
+		else if (press_down) stats.direction = 6;
 		// Adjust for ORTHO tilesets
-		if (eset->tileset.orientation == eset->tileset.TILESET_ORTHOGONAL &&
-				((inpt->pressing[Input::UP] && !inpt->lock[Input::UP]) || (inpt->pressing[Input::DOWN] && !inpt->lock[Input::UP]) ||
-				 (inpt->pressing[Input::LEFT] && !inpt->lock[Input::LEFT]) || (inpt->pressing[Input::RIGHT] && !inpt->lock[Input::RIGHT])))
+		if (eset->tileset.orientation == eset->tileset.TILESET_ORTHOGONAL && (press_up || press_down || press_left || press_right))
 			stats.direction = static_cast<unsigned char>((stats.direction == 7) ? 0 : stats.direction + 1);
 	}
 
@@ -353,12 +334,15 @@ void Avatar::set_direction() {
  * - move the avatar based on buttons pressed
  * - calculate the next frame of animation
  * - calculate camera position based on avatar position
- *
- * @param action The actionbar power activated and the target.  action.power == 0 means no power.
- * @param restrict_power_use Whether or not to allow power usage on mouse1
- * @param npc True if the player is talking to an NPC. Can limit ability to move/attack in certain conditions
  */
-void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_use) {
+void Avatar::logic() {
+	bool restrict_power_use = false;
+	if (settings->mouse_move) {
+		if(inpt->pressing[mm_key] && !inpt->pressing[Input::SHIFT] && !menu->act->isWithinSlots(inpt->mouse) && !menu->act->isWithinMenus(inpt->mouse)) {
+			restrict_power_use = true;
+		}
+	}
+
 	// clear current space to allow correct movement
 	mapr->collider.unblock(stats.pos.x, stats.pos.y);
 
@@ -371,10 +355,11 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 	// handle when the player stops blocking
 	if (stats.effects.triggered_block && !stats.blocking) {
-		stats.cur_state = StatBlock::AVATAR_STANCE;
+		stats.cur_state = StatBlock::ENTITY_STANCE;
 		stats.effects.triggered_block = false;
 		stats.effects.clearTriggerEffects(Power::TRIGGER_BLOCK);
 		stats.refresh_stats = true;
+		stats.block_power = 0;
 	}
 
 	stats.logic();
@@ -383,9 +368,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 	if (isDroppedToLowHp()) {
 		// show message if set
 		if (isLowHpMessageEnabled()) {
-			std::stringstream ss;
-			ss << msg->get("Your health is low!");
-			logMsg(ss.str(), MSG_NORMAL);
+			logMsg(msg->get("Your health is low!"), MSG_NORMAL);
 		}
 		// play a sound if set in settings
 		if (isLowHpSoundEnabled() && !playing_lowhp) {
@@ -407,30 +390,28 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 		snd->pauseChannel("lowhp");
 		playing_lowhp = false;
 	}
-	if (isLowHpCursorEnabled() && isLowHp()) {
-		// change attack cursor to lowhp variant
-		curs->setCursor(CursorManager::CURSOR_LHP_NORMAL);
-	}
+
 	// we can not use stats.prev_hp here
 	prev_hp = stats.hp;
 
 	// check level up
 	if (stats.level < eset->xp.getMaxLevel() && stats.xp >= eset->xp.getLevelXP(stats.level + 1)) {
 		stats.level_up = true;
-		stats.level++;
-		std::stringstream ss;
-		ss << msg->get("Congratulations, you have reached level %d!", stats.level);
-		if (stats.level < stats.max_spendable_stat_points) {
-			ss << " " << msg->get("You may increase one attribute through the Character Menu.");
+		stats.level = eset->xp.getLevelFromXP(stats.xp);
+		logMsg(msg->getv("Congratulations, you have reached level %d!", stats.level), MSG_NORMAL);
+		if (pc->stats.stat_points_per_level > 0) {
+			logMsg(msg->get("You may increase one or more attributes through the Character Menu."), MSG_NORMAL);
 			newLevelNotification = true;
 		}
-		logMsg(ss.str(), MSG_NORMAL);
+		if (pc->stats.power_points_per_level > 0) {
+			logMsg(msg->get("You may unlock one or more abilities through the Powers Menu."), MSG_NORMAL);
+		}
 		stats.recalc();
 		snd->play(sound_levelup, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
 
 		// if the player managed to level up while dead (e.g. via a bleeding creature), restore to life
-		if (stats.cur_state == StatBlock::AVATAR_DEAD) {
-			stats.cur_state = StatBlock::AVATAR_STANCE;
+		if (stats.cur_state == StatBlock::ENTITY_DEAD) {
+			stats.cur_state = StatBlock::ENTITY_STANCE;
 		}
 	}
 
@@ -446,46 +427,60 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 	// handle animation
 	if (!stats.effects.stun) {
-		activeAnimation->advanceFrame();
-		for (unsigned i=0; i < anims.size(); i++) {
-			if (anims[i] != NULL)
+		if (activeAnimation)
+			activeAnimation->advanceFrame();
+
+		for (size_t i = 0; i < anims.size(); ++i) {
+			if (anims[i])
 				anims[i]->advanceFrame();
 		}
 	}
 
 	// save a valid tile position in the event that we untransform on an invalid tile
-	if (stats.transformed && mapr->collider.isValidPosition(stats.pos.x, stats.pos.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_HERO)) {
+	if (stats.transformed && mapr->collider.isValidPosition(stats.pos.x, stats.pos.y, MapCollision::MOVE_NORMAL, MapCollision::ENTITY_COLLIDE_HERO)) {
 		transform_pos = stats.pos;
 		transform_map = mapr->getFilename();
 	}
 
-	int mm_attack_id = (settings->mouse_move_swap ? menu->act->getSlotPower(MenuActionBar::SLOT_MAIN2) : menu->act->getSlotPower(MenuActionBar::SLOT_MAIN1));
+	PowerID mm_attack_id = (settings->mouse_move_swap ? menu->act->getSlotPower(MenuActionBar::SLOT_MAIN2) : menu->act->getSlotPower(MenuActionBar::SLOT_MAIN1));
 	bool mm_can_use_power = true;
 
 	if (settings->mouse_move) {
 		if (!inpt->pressing[mm_key]) {
 			lock_enemy = NULL;
 		}
+		else {
+			// prevents erratic behavior when mouse move is too close to player
+			FPoint target = Utils::screenToMap(inpt->mouse.x, inpt->mouse.y, mapr->cam.pos.x, mapr->cam.pos.y);
+			if (stats.cur_state == StatBlock::ENTITY_MOVE) {
+				mm_is_distant = Utils::calcDist(stats.pos, target) >= eset->misc.mouse_move_deadzone_moving;
+			}
+			else {
+				mm_is_distant = Utils::calcDist(stats.pos, target) >= eset->misc.mouse_move_deadzone_not_moving;
+			}
+		}
+
 		if (lock_enemy && lock_enemy->stats.hp <= 0) {
 			lock_enemy = NULL;
 		}
-		if (mm_attack_id > 0) {
+
+		if (powers->isValid(mm_attack_id)) {
 			if (!stats.canUsePower(mm_attack_id, !StatBlock::CAN_USE_PASSIVE)) {
 				lock_enemy = NULL;
 				mm_can_use_power = false;
 			}
-			else if (!power_cooldown_timers[mm_attack_id].isEnd()) {
+			else if (!power_cooldown_timers[mm_attack_id]->isEnd()) {
 				lock_enemy = NULL;
 				mm_can_use_power = false;
 			}
-			else if (lock_enemy && powers->powers[mm_attack_id].requires_los && !mapr->collider.lineOfSight(stats.pos.x, stats.pos.y, lock_enemy->stats.pos.x, lock_enemy->stats.pos.y)) {
+			else if (lock_enemy && powers->powers[mm_attack_id]->requires_los && !mapr->collider.lineOfSight(stats.pos.x, stats.pos.y, lock_enemy->stats.pos.x, lock_enemy->stats.pos.y)) {
 				lock_enemy = NULL;
 				mm_can_use_power = false;
 			}
 		}
 	}
 
-	if (teleport_camera_lock && Utils::calcDist(stats.pos, mapr->cam) < 0.5f) {
+	if (teleport_camera_lock && Utils::calcDist(stats.pos, mapr->cam.pos) < 0.5f) {
 		teleport_camera_lock = false;
 	}
 
@@ -496,29 +491,37 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 	if (!stats.effects.stun) {
 		bool allowed_to_move;
+		bool allowed_to_turn;
 		bool allowed_to_use_power = true;
 
 		switch(stats.cur_state) {
-			case StatBlock::AVATAR_STANCE:
+			case StatBlock::ENTITY_STANCE:
 
 				setAnimation("stance");
 
 				// allowed to move or use powers?
 				if (settings->mouse_move) {
 					allowed_to_move = restrict_power_use && (!inpt->lock[mm_key] || drag_walking) && !lock_enemy;
+					allowed_to_turn = allowed_to_move;
 					allowed_to_use_power = true;
 
 					if ((inpt->pressing[mm_key] && inpt->pressing[Input::SHIFT]) || lock_enemy) {
 						inpt->lock[mm_key] = false;
 					}
 				}
+				else if (!settings->mouse_aim) {
+					allowed_to_move = !inpt->pressing[Input::SHIFT];
+					allowed_to_turn = true;
+					allowed_to_use_power = true;
+				}
 				else {
 					allowed_to_move = true;
+					allowed_to_turn = true;
 					allowed_to_use_power = true;
 				}
 
 				// handle transitions to RUN
-				if (allowed_to_move)
+				if (allowed_to_turn)
 					set_direction();
 
 				if (pressing_move() && allowed_to_move) {
@@ -528,18 +531,18 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 							drag_walking = true;
 						}
 
-						stats.cur_state = StatBlock::AVATAR_RUN;
+						stats.cur_state = StatBlock::ENTITY_MOVE;
 					}
 				}
 
-				if (settings->mouse_move &&  settings->mouse_move_attack && cursor_enemy && mm_can_use_power && powers->checkCombatRange(mm_attack_id, &stats, cursor_enemy->stats.pos)) {
-					stats.cur_state = StatBlock::AVATAR_STANCE;
+				if (settings->mouse_move &&  settings->mouse_move_attack && cursor_enemy && !cursor_enemy->stats.hero_ally && mm_can_use_power && powers->checkCombatRange(mm_attack_id, &stats, cursor_enemy->stats.pos)) {
+					stats.cur_state = StatBlock::ENTITY_STANCE;
 					lock_enemy = cursor_enemy;
 				}
 
 				break;
 
-			case StatBlock::AVATAR_RUN:
+			case StatBlock::ENTITY_MOVE:
 
 				setAnimation("run");
 
@@ -555,65 +558,68 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 				// handle transition to STANCE
 				if (!pressing_move()) {
-					stats.cur_state = StatBlock::AVATAR_STANCE;
+					stats.cur_state = StatBlock::ENTITY_STANCE;
 					break;
 				}
 				else if (!move()) { // collide with wall
-					stats.cur_state = StatBlock::AVATAR_STANCE;
+					stats.cur_state = StatBlock::ENTITY_STANCE;
 					break;
 				}
-				else if (settings->mouse_move && inpt->pressing[Input::SHIFT]) {
-					// when moving with the mouse, pressing Shift should stop movement and begin attacking
-					stats.cur_state = StatBlock::AVATAR_STANCE;
+				else if ((settings->mouse_move || !settings->mouse_aim) && inpt->pressing[Input::SHIFT]) {
+					// Shift should stop movement in some cases.
+					// With mouse_move, it allows the player to stop moving and begin attacking.
+					// With mouse_aim disabled, it allows the player to aim their attacks without having to move.
+					stats.cur_state = StatBlock::ENTITY_STANCE;
 					break;
 				}
 
 				if (activeAnimation->getName() != "run")
-					stats.cur_state = StatBlock::AVATAR_STANCE;
+					stats.cur_state = StatBlock::ENTITY_STANCE;
 
-				if (settings->mouse_move && settings->mouse_move_attack && cursor_enemy && mm_can_use_power && powers->checkCombatRange(mm_attack_id, &stats, cursor_enemy->stats.pos)) {
-					stats.cur_state = StatBlock::AVATAR_STANCE;
+				if (settings->mouse_move && settings->mouse_move_attack && cursor_enemy && !cursor_enemy->stats.hero_ally && mm_can_use_power && powers->checkCombatRange(mm_attack_id, &stats, cursor_enemy->stats.pos)) {
+					stats.cur_state = StatBlock::ENTITY_STANCE;
 					lock_enemy = cursor_enemy;
 				}
 
 				break;
 
-			case StatBlock::AVATAR_ATTACK:
+			case StatBlock::ENTITY_POWER:
 
 				setAnimation(attack_anim);
 
 				if (attack_cursor) {
-					// show low hp cursor if below threshold
-					if (isLowHpCursorEnabled() && isLowHp()) {
-						curs->setCursor(CursorManager::CURSOR_LHP_ATTACK);
-					} else {
-						curs->setCursor(CursorManager::CURSOR_ATTACK);
+					curs->setCursor(CursorManager::CURSOR_ATTACK);
+				}
+
+				if (powers->isValid(current_power)) {
+					if (activeAnimation->isFirstFrame()) {
+						float attack_speed = (stats.effects.getAttackSpeed(attack_anim) * powers->powers[current_power]->attack_speed) / 100.0f;
+						activeAnimation->setSpeed(attack_speed);
+						for (size_t i=0; i<anims.size(); ++i) {
+							if (anims[i])
+								anims[i]->setSpeed(attack_speed);
+						}
+						playAttackSound(attack_anim);
+						power_cast_timers[current_power]->setDuration(activeAnimation->getDuration());
 					}
-				}
 
-				if (activeAnimation->isFirstFrame()) {
-					float attack_speed = (stats.effects.getAttackSpeed(attack_anim) * powers->powers[current_power].attack_speed) / 100.0f;
-					activeAnimation->setSpeed(attack_speed);
-					playAttackSound(attack_anim);
-					power_cast_timers[current_power].setDuration(activeAnimation->getDuration());
-				}
+					// do power
+					if (activeAnimation->isActiveFrame() && !stats.hold_state) {
+						// some powers check if the caster is blocking a tile
+						// so we block the player tile prematurely here
+						mapr->collider.block(stats.pos.x, stats.pos.y, !MapCollision::IS_ALLY);
 
-				// do power
-				if (activeAnimation->isActiveFrame() && !stats.hold_state) {
-					// some powers check if the caster is blocking a tile
-					// so we block the player tile prematurely here
-					mapr->collider.block(stats.pos.x, stats.pos.y, !MapCollision::IS_ALLY);
+						powers->activate(current_power, &stats, stats.pos, act_target);
+						power_cooldown_timers[current_power]->setDuration(powers->powers[current_power]->cooldown);
 
-					powers->activate(current_power, &stats, act_target);
-					power_cooldown_timers[current_power].setDuration(powers->powers[current_power].cooldown);
-
-					if (!stats.state_timer.isEnd())
-						stats.hold_state = true;
+						if (!stats.state_timer.isEnd())
+							stats.hold_state = true;
+					}
 				}
 
 				// animation is done, switch back to normal stance
 				if ((activeAnimation->isLastFrame() && stats.state_timer.isEnd()) || activeAnimation->getName() != attack_anim) {
-					stats.cur_state = StatBlock::AVATAR_STANCE;
+					stats.cur_state = StatBlock::ENTITY_STANCE;
 					stats.cooldown.reset(Timer::BEGIN);
 					allowed_to_use_power = false;
 					stats.prevent_interrupt = false;
@@ -628,7 +634,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 				break;
 
-			case StatBlock::AVATAR_BLOCK:
+			case StatBlock::ENTITY_BLOCK:
 
 				setAnimation("block");
 
@@ -636,21 +642,21 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 				break;
 
-			case StatBlock::AVATAR_HIT:
+			case StatBlock::ENTITY_HIT:
 
 				setAnimation("hit");
 
 				if (activeAnimation->isFirstFrame()) {
 					stats.effects.triggered_hit = true;
 
-					if (stats.block_power != 0) {
-						power_cooldown_timers[stats.block_power].setDuration(powers->powers[stats.block_power].cooldown);
+					if (powers->isValid(stats.block_power)) {
+						power_cooldown_timers[stats.block_power]->setDuration(powers->powers[stats.block_power]->cooldown);
 						stats.block_power = 0;
 					}
 				}
 
 				if (activeAnimation->getTimesPlayed() >= 1 || activeAnimation->getName() != "hit") {
-					stats.cur_state = StatBlock::AVATAR_STANCE;
+					stats.cur_state = StatBlock::ENTITY_STANCE;
 					if (settings->mouse_move) {
 						drag_walking = true;
 					}
@@ -658,7 +664,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 				break;
 
-			case StatBlock::AVATAR_DEAD:
+			case StatBlock::ENTITY_DEAD:
 				allowed_to_use_power = false;
 
 				if (stats.effects.triggered_death) break;
@@ -672,11 +678,15 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 				if (!stats.corpse && activeAnimation->isFirstFrame() && activeAnimation->getTimesPlayed() < 1) {
 					stats.effects.clearEffects();
+					stats.powers_passive.clear();
 
 					// reset power cooldowns
-					for (size_t i = 0; i < power_cooldown_timers.size(); i++) {
-						power_cooldown_timers[i].reset(Timer::END);
-						power_cast_timers[i].reset(Timer::END);
+					std::map<size_t, Timer>::iterator pct_it;
+					for (size_t i = 0; i < power_cooldown_timers.size(); ++i) {
+						if (power_cooldown_timers[i])
+							power_cooldown_timers[i]->reset(Timer::END);
+						if (power_cast_timers[i])
+							power_cast_timers[i]->reset(Timer::END);
 					}
 
 					// close menus in GameStatePlay
@@ -684,19 +694,18 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 					playSound(Entity::SOUND_DIE);
 
+					logMsg(msg->get("You are defeated."), MSG_NORMAL);
+
 					if (stats.permadeath) {
 						// ignore death penalty on permadeath and instead delete the player's saved game
 						stats.death_penalty = false;
 						Utils::removeSaveDir(save_load->getGameSlot());
 						menu->exit->disableSave();
-
-						logMsg(Utils::substituteVarsInString(msg->get("You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."), this), MSG_NORMAL);
+						menu->game_over->disableSave();
 					}
 					else {
 						// raise the death penalty flag.  This is handled in MenuInventory
 						stats.death_penalty = true;
-
-						logMsg(Utils::substituteVarsInString(msg->get("You are defeated. ${INPUT_CONTINUE} to continue."), this), MSG_NORMAL);
 					}
 
 					// if the player is attacking, we need to block further input
@@ -704,16 +713,18 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 						inpt->lock[Input::MAIN1] = true;
 				}
 
-				if (activeAnimation->getTimesPlayed() >= 1 || activeAnimation->getName() != "die") {
+				if (!stats.corpse && (activeAnimation->getTimesPlayed() >= 1 || activeAnimation->getName() != "die")) {
 					stats.corpse = true;
+					menu->game_over->visible = true;
 				}
 
 				// allow respawn with Accept if not permadeath
-				if ((inpt->pressing[Input::ACCEPT] || (settings->touchscreen && inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1])) && stats.corpse) {
-					if (inpt->pressing[Input::ACCEPT]) inpt->lock[Input::ACCEPT] = true;
-					if (settings->touchscreen && inpt->pressing[Input::MAIN1]) inpt->lock[Input::MAIN1] = true;
+				if (menu->game_over->visible && menu->game_over->continue_clicked) {
+					menu->game_over->close();
+
 					mapr->teleportation = true;
 					mapr->teleport_mapname = mapr->respawn_map;
+
 					if (stats.permadeath) {
 						// set these positions so it doesn't flash before jumping to Title
 						mapr->teleport_destination.x = stats.pos.x;
@@ -740,70 +751,73 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 			for (unsigned i=0; i<action_queue.size(); i++) {
 				ActionData &action = action_queue[i];
-				const Power &power = powers->powers[action.power];
+				PowerID power_id = powers->checkReplaceByEffect(action.power, &stats);
+				if (power_id == 0)
+					continue;
 
-				if (power.type == Power::TYPE_BLOCK)
+				const Power* power = powers->powers[power_id];
+
+				if (power->type == Power::TYPE_BLOCK)
 					blocking = true;
 
-				if (action.power != 0 && (stats.cooldown.isEnd() || action.instant_item)) {
+				if (power_id != 0 && (stats.cooldown.isEnd() || action.instant_item)) {
 					FPoint target = action.target;
 
 					// check requirements
-					if ((stats.cur_state == StatBlock::AVATAR_ATTACK || stats.cur_state == StatBlock::AVATAR_HIT) && !action.instant_item)
+					if ((stats.cur_state == StatBlock::ENTITY_POWER || stats.cur_state == StatBlock::ENTITY_HIT) && !action.instant_item)
 						continue;
-					if (!stats.canUsePower(action.power, !StatBlock::CAN_USE_PASSIVE))
+					if (!stats.canUsePower(power_id, !StatBlock::CAN_USE_PASSIVE))
 						continue;
-					if (power.requires_los && !mapr->collider.lineOfSight(stats.pos.x, stats.pos.y, target.x, target.y))
+					if (!power_cooldown_timers[power_id]->isEnd())
 						continue;
-					if (power.requires_empty_target && !mapr->collider.isEmpty(target.x, target.y))
-						continue;
-					if (!power_cooldown_timers[action.power].isEnd())
-						continue;
-					if (!powers->hasValidTarget(action.power, &stats, target))
+					if (!powers->hasValidTarget(power_id, &stats, target))
 						continue;
 
 					// automatically target the selected enemy with melee attacks
-					if (inpt->usingMouse() && power.type == Power::TYPE_FIXED && power.starting_pos == Power::STARTING_POS_MELEE && cursor_enemy) {
+					if (inpt->usingMouse() && power->type == Power::TYPE_FIXED && power->starting_pos == Power::STARTING_POS_MELEE && cursor_enemy) {
 						target = cursor_enemy->stats.pos;
 					}
 
 					// is this a power that requires changing direction?
-					if (power.face) {
+					if (power->face) {
 						stats.direction = Utils::calcDirection(stats.pos.x, stats.pos.y, target.x, target.y);
 					}
 
-					if (power.new_state != Power::STATE_INSTANT) {
-						current_power = action.power;
+					if (power->new_state != Power::STATE_INSTANT) {
+						current_power = power_id;
 						act_target = target;
-						attack_anim = power.attack_anim;
+						attack_anim = power->attack_anim;
 					}
 
-					if (power.state_duration > 0)
-						stats.state_timer.setDuration(power.state_duration);
+					if (power->state_duration > 0)
+						stats.state_timer.setDuration(power->state_duration);
 
-					if (power.charge_speed != 0.0f)
-						stats.charge_speed = power.charge_speed;
+					if (power->charge_speed != 0.0f)
+						stats.charge_speed = power->charge_speed;
 
-					stats.prevent_interrupt = power.prevent_interrupt;
+					stats.prevent_interrupt = power->prevent_interrupt;
 
-					if (power.pre_power > 0 && Math::percentChance(power.pre_power_chance)) {
-						powers->activate(power.pre_power, &stats, target);
+					for (size_t j = 0; j < power->chain_powers.size(); ++j) {
+						const ChainPower& chain_power = power->chain_powers[j];
+						if (chain_power.type == ChainPower::TYPE_PRE && Math::percentChanceF(chain_power.chance)) {
+							powers->activate(chain_power.id, &stats, stats.pos, target);
+						}
 					}
 
-					switch (power.new_state) {
+					switch (power->new_state) {
 						case Power::STATE_ATTACK:	// handle attack powers
-							stats.cur_state = StatBlock::AVATAR_ATTACK;
+							stats.cur_state = StatBlock::ENTITY_POWER;
 							break;
 
 						case Power::STATE_INSTANT:	// handle instant powers
-							powers->activate(action.power, &stats, target);
-							power_cooldown_timers[action.power].setDuration(power.cooldown);
+							powers->activate(power_id, &stats, stats.pos, target);
+							power_cooldown_timers[power_id]->setDuration(power->cooldown);
 							break;
 
 						default:
-							if (power.type == Power::TYPE_BLOCK) {
-								stats.cur_state = StatBlock::AVATAR_BLOCK;
-								powers->activate(action.power, &stats, target);
+							if (power->type == Power::TYPE_BLOCK) {
+								stats.cur_state = StatBlock::ENTITY_BLOCK;
+								powers->activate(power_id, &stats, stats.pos, target);
 								stats.refresh_stats = true;
 							}
 							break;
@@ -811,14 +825,19 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 					// if the player is attacking, show the attack cursor
 					attack_cursor = (
-						stats.cur_state == StatBlock::AVATAR_ATTACK &&
-						!power.buff && !power.buff_teleport &&
-						power.type != Power::TYPE_TRANSFORM &&
-						power.type != Power::TYPE_BLOCK &&
-						!(power.starting_pos == Power::STARTING_POS_SOURCE && power.speed == 0)
+						stats.cur_state == StatBlock::ENTITY_POWER &&
+						!power->buff && !power->buff_teleport &&
+						power->type != Power::TYPE_TRANSFORM &&
+						power->type != Power::TYPE_BLOCK &&
+						!(power->starting_pos == Power::STARTING_POS_SOURCE && power->speed == 0)
 					);
 
 				}
+			}
+
+			for (size_t i = action_queue.size(); i > 0; i--) {
+				if (action_queue[i-1].activated_from_inventory)
+					action_queue.erase(action_queue.begin()+(i-1));
 			}
 
 			stats.blocking = blocking;
@@ -826,39 +845,18 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 	}
 
-	// calc new cam position from player position
-	// cam is focused at player position
-	float cam_dx = (Utils::calcDist(FPoint(mapr->cam.x, stats.pos.y), stats.pos)) / eset->misc.camera_speed;
-	float cam_dy = (Utils::calcDist(FPoint(stats.pos.x, mapr->cam.y), stats.pos)) / eset->misc.camera_speed;
-
-	if (mapr->cam.x < stats.pos.x) {
-		mapr->cam.x += cam_dx;
-		if (mapr->cam.x > stats.pos.x)
-			mapr->cam.x = stats.pos.x;
-	}
-	else if (mapr->cam.x > stats.pos.x) {
-		mapr->cam.x -= cam_dx;
-		if (mapr->cam.x < stats.pos.x)
-			mapr->cam.x = stats.pos.x;
-	}
-	if (mapr->cam.y < stats.pos.y) {
-		mapr->cam.y += cam_dy;
-		if (mapr->cam.y > stats.pos.y)
-			mapr->cam.y = stats.pos.y;
-	}
-	else if (mapr->cam.y > stats.pos.y) {
-		mapr->cam.y -= cam_dy;
-		if (mapr->cam.y < stats.pos.y)
-			mapr->cam.y = stats.pos.y;
-	}
+	// update camera
+	mapr->cam.setTarget(stats.pos);
 
 	// check for map events
 	mapr->checkEvents(stats.pos);
 
 	// decrement all cooldowns
-	for (unsigned i = 0; i < power_cooldown_timers.size(); i++) {
-		power_cooldown_timers[i].tick();
-		power_cast_timers[i].tick();
+	for (size_t i = 0; i < powers->powers.size(); ++i) {
+		if (powers->isValid(i)) {
+			power_cooldown_timers[i]->tick();
+			power_cast_timers[i]->tick();
+		}
 	}
 
 	// make the current square solid
@@ -867,11 +865,15 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 	if (stats.state_timer.isEnd() && stats.hold_state)
 		stats.hold_state = false;
 
-	if (stats.cur_state != StatBlock::AVATAR_ATTACK && stats.charge_speed != 0.0f)
+	if (stats.cur_state != StatBlock::ENTITY_POWER && stats.charge_speed != 0.0f)
 		stats.charge_speed = 0.0f;
 }
 
 void Avatar::transform() {
+	// dead players can't transform
+	if (stats.hp <= 0)
+		return;
+
 	// calling a transform power locks the actionbar, so we unlock it here
 	inpt->unlockActionBar();
 
@@ -905,29 +907,25 @@ void Avatar::transform() {
 
 	// replace some hero stats
 	stats.speed = charmed_stats->speed;
-	stats.flying = charmed_stats->flying;
-	stats.intangible = charmed_stats->intangible;
+	stats.movement_type = charmed_stats->movement_type;
 	stats.humanoid = charmed_stats->humanoid;
 	stats.animations = charmed_stats->animations;
 	stats.powers_list = charmed_stats->powers_list;
 	stats.powers_passive = charmed_stats->powers_passive;
 	stats.effects.clearEffects();
+	stats.animations = charmed_stats->animations;
+	stats.layer_reference_order = charmed_stats->layer_reference_order;
+	stats.layer_def = charmed_stats->layer_def;
+	stats.animation_slots = charmed_stats->animation_slots;
 
-	anim->decreaseCount("animations/hero.txt");
-	anim->increaseCount(charmed_stats->animations);
-	animationSet = anim->getAnimationSet(charmed_stats->animations);
-	delete activeAnimation;
-	activeAnimation = animationSet->getAnimation("");
-	stats.cur_state = StatBlock::AVATAR_STANCE;
+	anim->decreaseCount(hero_stats->animations);
+	animationSet = NULL;
+	loadAnimations();
+	stats.cur_state = StatBlock::ENTITY_STANCE;
 
 	// base stats
 	for (int i=0; i<Stats::COUNT; ++i) {
 		stats.starting[i] = std::max(stats.starting[i], charmed_stats->starting[i]);
-	}
-
-	// resistances
-	for (unsigned int i=0; i<stats.vulnerable.size(); i++) {
-		stats.vulnerable[i] = std::min(stats.vulnerable[i], charmed_stats->vulnerable[i]);
 	}
 
 	loadSoundsFromStatBlock(charmed_stats);
@@ -945,7 +943,7 @@ void Avatar::untransform() {
 
 	// For timed transformations, move the player to the last valid tile when untransforming
 	mapr->collider.unblock(stats.pos.x, stats.pos.y);
-	if (!mapr->collider.isValidPosition(stats.pos.x, stats.pos.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_HERO)) {
+	if (!mapr->collider.isValidPosition(stats.pos.x, stats.pos.y, MapCollision::MOVE_NORMAL, MapCollision::ENTITY_COLLIDE_HERO)) {
 		logMsg(msg->get("Transformation expired. You have been moved back to a safe place."), MSG_NORMAL);
 		if (transform_map != mapr->getFilename()) {
 			mapr->teleportation = true;
@@ -969,20 +967,21 @@ void Avatar::untransform() {
 
 	// revert some hero stats to last saved
 	stats.speed = hero_stats->speed;
-	stats.flying = hero_stats->flying;
-	stats.intangible = hero_stats->intangible;
+	stats.movement_type = hero_stats->movement_type;
 	stats.humanoid = hero_stats->humanoid;
 	stats.animations = hero_stats->animations;
 	stats.effects = hero_stats->effects;
 	stats.powers_list = hero_stats->powers_list;
 	stats.powers_passive = hero_stats->powers_passive;
+	stats.animations = hero_stats->animations;
+	stats.layer_reference_order = hero_stats->layer_reference_order;
+	stats.layer_def = hero_stats->layer_def;
+	stats.animation_slots = hero_stats->animation_slots;
 
-	anim->increaseCount("animations/hero.txt");
 	anim->decreaseCount(charmed_stats->animations);
-	animationSet = anim->getAnimationSet("animations/hero.txt");
-	delete activeAnimation;
-	activeAnimation = animationSet->getAnimation("");
-	stats.cur_state = StatBlock::AVATAR_STANCE;
+	animationSet = NULL;
+	loadAnimations();
+	stats.cur_state = StatBlock::ENTITY_STANCE;
 
 	// This is a bit of a hack.
 	// In order to switch to the stance animation, we can't already be in a stance animation
@@ -990,10 +989,6 @@ void Avatar::untransform() {
 
 	for (int i=0; i<Stats::COUNT; ++i) {
 		stats.starting[i] = hero_stats->starting[i];
-	}
-
-	for (unsigned int i=0; i<stats.vulnerable.size(); i++) {
-		stats.vulnerable[i] = hero_stats->vulnerable[i];
 	}
 
 	loadSounds();
@@ -1016,83 +1011,22 @@ void Avatar::checkTransform() {
 		untransform();
 }
 
-void Avatar::setAnimation(std::string name) {
-	if (name == activeAnimation->getName())
-		return;
-
-	Entity::setAnimation(name);
-	for (unsigned i=0; i < animsets.size(); i++) {
-		delete anims[i];
-		if (animsets[i])
-			anims[i] = animsets[i]->getAnimation(name);
-		else
-			anims[i] = 0;
-	}
-}
-
-void Avatar::resetActiveAnimation() {
-	activeAnimation->reset(); // shield stutter
-	for (unsigned i=0; i < animsets.size(); i++)
-		if (anims[i])
-			anims[i]->reset();
-}
-
-void Avatar::addRenders(std::vector<Renderable> &r) {
-	if (!stats.transformed) {
-		for (unsigned i = 0; i < layer_def[stats.direction].size(); ++i) {
-			unsigned index = layer_def[stats.direction][i];
-			if (anims[index]) {
-				Renderable ren = anims[index]->getCurrentFrame(stats.direction);
-				ren.map_pos = stats.pos;
-				ren.prio = i+1;
-				stats.effects.getCurrentColor(ren.color_mod);
-				stats.effects.getCurrentAlpha(ren.alpha_mod);
-				if (stats.hp > 0) {
-					ren.type = Renderable::TYPE_HERO;
-				}
-				r.push_back(ren);
-			}
-		}
-	}
-	else {
-		Renderable ren = activeAnimation->getCurrentFrame(stats.direction);
-		ren.map_pos = stats.pos;
-		stats.effects.getCurrentColor(ren.color_mod);
-		stats.effects.getCurrentAlpha(ren.alpha_mod);
-		if (stats.hp > 0) {
-			ren.type = Renderable::TYPE_HERO;
-		}
-		r.push_back(ren);
-	}
-	// add effects
-	for (unsigned i = 0; i < stats.effects.effect_list.size(); ++i) {
-		if (stats.effects.effect_list[i].animation && !stats.effects.effect_list[i].animation->isCompleted()) {
-			Renderable ren = stats.effects.effect_list[i].animation->getCurrentFrame(0);
-			ren.map_pos = stats.pos;
-			if (stats.effects.effect_list[i].render_above) ren.prio = layer_def[stats.direction].size()+1;
-			else ren.prio = 0;
-			r.push_back(ren);
-		}
-	}
-}
-
 void Avatar::logMsg(const std::string& str, int type) {
 	log_msg.push(std::pair<std::string, int>(str, type));
 }
 
-// isLowHp returns true if healht is below set threshold
+// isLowHp returns true if health is below set threshold
 bool Avatar::isLowHp() {
 	if (stats.hp == 0)
 		return false;
-	float hp_one_perc = static_cast<float>(std::max(stats.get(Stats::HP_MAX), 1)) / 100.0f;
-	return static_cast<float>(stats.hp)/hp_one_perc < static_cast<float>(settings->low_hp_threshold);
+	float hp_one_perc = std::max(stats.get(Stats::HP_MAX), 1.f) / 100.0f;
+	return stats.hp/hp_one_perc < static_cast<float>(settings->low_hp_threshold);
 }
 
 // isDroppedToLowHp returns true only if player hp just dropped below threshold
 bool Avatar::isDroppedToLowHp() {
-	float hp_one_perc = static_cast<float>(std::max(stats.get(Stats::HP_MAX), 1)) / 100.0f;
-	return static_cast<float>(stats.hp)/hp_one_perc < static_cast<float>(settings->low_hp_threshold) &&
-		static_cast<float>(prev_hp)/hp_one_perc >= static_cast<float>(settings->low_hp_threshold);
+	float hp_one_perc = std::max(stats.get(Stats::HP_MAX), 1.f) / 100.0f;
+	return (stats.hp/hp_one_perc < static_cast<float>(settings->low_hp_threshold)) && (prev_hp/hp_one_perc >= static_cast<float>(settings->low_hp_threshold));
 }
 
 bool Avatar::isLowHpMessageEnabled() {
@@ -1116,26 +1050,52 @@ bool Avatar::isLowHpCursorEnabled() {
 		settings->low_hp_warning_type == settings->LHP_WARN_ALL;
 }
 
+std::string Avatar::getGfxFromType(const std::string& gfx_type) {
+	feet_index = -1;
+	std::string gfx;
+
+	if (menu && menu->inv) {
+		MenuItemStorage& equipment = menu->inv->inventory[MenuInventory::EQUIPMENT];
+
+		for (int i = 0; i < equipment.getSlotNumber(); i++) {
+			if (!menu->inv->isActive(i))
+				continue;
+
+			if (items->isValid(equipment[i].item) && gfx_type == equipment.slot_type[i]) {
+				gfx = items->items[equipment[i].item]->gfx;
+			}
+			if (equipment.slot_type[i] == "feet") {
+				feet_index = i;
+			}
+		}
+	}
+
+	// special case: if we don't have a head, use the portrait's head
+	if (gfx.empty() && gfx_type == "head") {
+		gfx = stats.gfx_head;
+	}
+
+	// fall back to default if it exists
+	if (gfx.empty()) {
+		if (Filesystem::fileExists(mods->locate("animations/avatar/" + stats.gfx_base + "/default_" + gfx_type + ".txt")))
+			gfx = "default_" + gfx_type;
+	}
+
+	return gfx;
+}
+
 Avatar::~Avatar() {
-	if (stats.transformed && charmed_stats && charmed_stats->animations != "") {
-		anim->decreaseCount(charmed_stats->animations);
-	}
-	else {
-		anim->decreaseCount("animations/hero.txt");
-	}
-
-	for (unsigned int i=0; i<animsets.size(); i++) {
-		if (animsets[i])
-			anim->decreaseCount(animsets[i]->getName());
-		delete anims[i];
-	}
-	anim->cleanUp();
-
 	delete charmed_stats;
 	delete hero_stats;
 
 	unloadSounds();
 
-	for (unsigned i=0; i<sound_steps.size(); i++)
+	for (size_t i = 0; i < power_cooldown_timers.size(); ++i) {
+		delete power_cooldown_timers[i];
+		delete power_cast_timers[i];
+	}
+
+	for (unsigned i=0; i<sound_steps.size(); i++) {
 		snd->unload(sound_steps[i]);
+	}
 }

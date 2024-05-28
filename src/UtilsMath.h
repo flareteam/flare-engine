@@ -16,13 +16,16 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
-#pragma once
 #ifndef UTILS_MATH_H
 #define UTILS_MATH_H 1
 
 #include <cstdlib>
 #include <algorithm> // for std::min()/std::max()
-#include "math.h"
+#include <math.h>
+
+#ifdef _MSC_VER
+#define _USE_MATH_DEFINES
+#endif
 
 #ifndef M_PI
 #define M_PI 3.1415926535898f
@@ -55,6 +58,10 @@ namespace Math {
 	 */
 	inline bool percentChance(int percent) {
 		return rand() % 100 < percent;
+	}
+
+	inline bool percentChanceF(float percent) {
+		return randBetweenF(0, 100) < percent;
 	}
 }
 #endif // UTILS_MATH_H

@@ -29,7 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Utils.h"
 
 class Avatar;
-class Enemy;
+class Entity;
 class Hazard;
 
 class HazardManager {
@@ -45,7 +45,7 @@ public:
 	void addRenders(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
 
 	std::vector<Hazard*> h;
-	Enemy* last_enemy;
+	Entity* last_enemy;
 };
 
 #endif

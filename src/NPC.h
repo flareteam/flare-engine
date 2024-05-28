@@ -24,10 +24,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef NPC_H
 #define NPC_H
 
-#include "CommonIncludes.h"
 #include "Entity.h"
 #include "ItemStorage.h"
-#include "Utils.h"
 
 class EventComponent;
 
@@ -61,7 +59,7 @@ public:
 	static const int VENDOR_MAX_STOCK = 80;
 	static const bool GET_RESPONSE_NODES = true;
 
-	NPC();
+	explicit NPC(const Entity& e);
 	~NPC();
 	void load(const std::string& npc_id);
 	void logic();
@@ -70,17 +68,17 @@ public:
 	void getDialogResponses(std::vector<int>& result, size_t node_id, size_t event_cursor);
 	std::string getDialogTopic(unsigned int dialog_node);
 	bool checkMovement(unsigned int dialog_node);
+	void moveMapEvents();
 	bool checkVendor();
 	bool processDialog(unsigned int dialog_node, unsigned int& event_cursor);
 	void processEvent(unsigned int dialog_node, unsigned int cursor);
-	virtual Renderable getRender();
 
 	// general info
 	std::string name;
 	std::string filename;
-	FPoint pos; // map position
 
 	int direction;
+	bool show_on_minimap;
 
 	// talker info
 	Sprite* npc_portrait;
@@ -92,6 +90,9 @@ public:
 	bool vendor;
 	bool reset_buyback;
 	ItemStorage stock;
+	float vendor_ratio_buy;
+	float vendor_ratio_sell;
+	float vendor_ratio_sell_old;
 
 	// story and dialog options
 	// outer vector is addressing the dialog and the inner vector is

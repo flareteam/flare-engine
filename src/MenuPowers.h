@@ -52,15 +52,19 @@ public:
 class MenuPowersCell {
 public:
 	MenuPowersCell();
-	bool isVisible();
 
-	int id;
-	int requires_level;
+	PowerID id;
 	bool requires_point;
+
+	int requires_level;
 	std::vector<int> requires_primary;
-	std::vector<int> requires_power;
-	std::vector<StatusID> visible_requires_status;
-	std::vector<StatusID> visible_requires_not;
+	std::vector<PowerID> requires_power;
+	std::vector<StatusID> requires_status;
+	std::vector<StatusID> requires_not_status;
+
+	bool visible;
+	bool visible_check_locked;
+	bool visible_check_status;
 
 	int upgrade_level;
 	bool passive_on;
@@ -88,9 +92,21 @@ public:
 	std::vector< std::pair<size_t, int> > bonus_levels;
 };
 
+class MenuPowersClick {
+public:
+	PowerID drag;
+	PowerID unlock;
+
+	MenuPowersClick()
+		: drag(0)
+		, unlock(0)
+	{}
+};
+
 class MenuPowers : public Menu {
 private:
 	static const bool UPGRADE_POWER_ALL_TABS = true;
+	static const bool TOOLTIP_SHOW_ACTIVATE_HINT = true;
 
 	void loadGraphics();
 	void loadTab(FileParser &infile);
@@ -98,26 +114,27 @@ private:
 	void loadUpgrade(FileParser &infile, std::vector<MenuPowersCell>& power_cell_upgrade);
 
 	bool checkRequirements(MenuPowersCell* pcell);
+	bool checkRequirementStatus(MenuPowersCell* pcell);
 	bool checkUnlocked(MenuPowersCell* pcell);
 	bool checkUnlock(MenuPowersCell* pcell);
 	bool checkUpgrade(MenuPowersCell* pcell);
 	void lockCell(MenuPowersCell* pcell);
 	bool isBonusCell(MenuPowersCell* pcell);
+	bool isCellVisible(MenuPowersCell* pcell);
 
-	MenuPowersCell* getCellByPowerIndex(int power_index);
+	MenuPowersCell* getCellByPowerIndex(PowerID power_index);
 
 	void upgradePower(MenuPowersCell* pcell, bool ignore_tab);
 
 	int getPointsUsed();
 
-	void createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, bool show_unlock_prompt);
+	void createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, PowerID power_index, bool show_unlock_prompt, int tooltip_length);
+	void createTooltipInputHint(TooltipData* tip_data, bool enable_activate_msg);
 	void renderPowers(int tab_num);
 
 	std::vector<MenuPowersCellGroup> power_cell;
 	bool skip_section;
 
-	Sprite *powers_unlock;
-	Sprite *overlay_disabled;
 	std::vector<Sprite *> tree_surf;
 	WidgetButton *closeButton;
 
@@ -134,11 +151,17 @@ private:
 
 	bool tree_loaded;
 
-	size_t prev_powers_list_size;
-
 	int default_power_tab;
 
+	std::vector<MenuPowersCell*> recently_locked_cells;
+
 public:
+	enum {
+		TOOLTIP_SHORT = 0,
+		TOOLTIP_LONG_MENU = 1,
+		TOOLTIP_LONG_ALL = 2
+	};
+
 	MenuPowers();
 	~MenuPowers();
 	void align();
@@ -149,18 +172,20 @@ public:
 	void render();
 
 	void renderTooltips(const Point& position);
-	int click(const Point& mouse);
-	void upgradeBySlotIndex(int slot_index);
+	MenuPowersClick click(const Point& mouse);
+	void clickUnlock(PowerID power_index);
 
 	void setUnlockedPowers();
 	void resetToBasePowers();
 
-	bool meetsUsageStats(int power_index);
+	bool meetsUsageStats(PowerID power_index);
 
 	void clearActionBarBonusLevels();
 	void clearBonusLevels();
-	void addBonusLevels(int power_index, int bonus_levels);
-	std::string getItemBonusPowerReqString(int power_index);
+	void addBonusLevels(PowerID power_index, int bonus_levels);
+	std::string getItemBonusPowerReqString(PowerID power_index);
+
+	void createTooltipFromActionBar(TooltipData* tip_data, unsigned slot, int tooltip_length);
 
 	std::vector<WidgetSlot*> slots; // power slot Widgets
 

@@ -29,24 +29,26 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "ItemManager.h"
 
 class Menu;
-class MenuInventory;
-class MenuPowers;
-class MenuCharacter;
-class MenuLog;
-class MenuHUDLog;
 class MenuActionBar;
+class MenuActiveEffects;
 class MenuBook;
-class MenuStatBar;
+class MenuCharacter;
+class MenuConfirm;
+class MenuDevConsole;
+class MenuEnemy;
+class MenuExit;
+class MenuGameOver;
+class MenuHUDLog;
+class MenuInventory;
+class MenuLog;
 class MenuMiniMap;
 class MenuNumPicker;
-class MenuEnemy;
-class MenuVendor;
-class MenuTalker;
-class MenuExit;
-class MenuActiveEffects;
+class MenuPowers;
 class MenuStash;
-class MenuDevConsole;
+class MenuStatBar;
+class MenuTalker;
 class MenuTouchControls;
+class MenuVendor;
 class StatBlock;
 class Subtitles;
 class WidgetSlot;
@@ -62,6 +64,51 @@ private:
 		DRAG_SRC_STASH = 5
 	};
 
+	enum {
+		ACTION_SRC_NONE = 0,
+		ACTION_SRC_POWERS = 1,
+		ACTION_SRC_INVENTORY = 2,
+		ACTION_SRC_ACTIONBAR = 3,
+		ACTION_SRC_VENDOR = 4,
+		ACTION_SRC_STASH = 5,
+	};
+
+	enum {
+		ACTION_PICKER_ACTIONBAR_SELECT = 0,
+		ACTION_PICKER_ACTIONBAR_CLEAR = 1,
+		ACTION_PICKER_ACTIONBAR_USE = 2,
+	};
+
+	enum {
+		ACTION_PICKER_POWERS_SELECT = 0,
+		ACTION_PICKER_POWERS_UPGRADE = 1,
+	};
+
+	enum {
+		ACTION_PICKER_INVENTORY_SELECT = 0,
+		ACTION_PICKER_INVENTORY_ACTIVATE = 1,
+		ACTION_PICKER_INVENTORY_DROP = 2,
+		ACTION_PICKER_INVENTORY_SELL = 3,
+		ACTION_PICKER_INVENTORY_STASH = 4,
+	};
+
+	enum {
+		ACTION_PICKER_STASH_SELECT = 0,
+		ACTION_PICKER_STASH_TRANSFER = 1,
+	};
+
+	enum {
+		ACTION_PICKER_VENDOR_BUY = 0,
+	};
+
+	enum {
+		DRAG_POST_ACTION_NONE = 0,
+		DRAG_POST_ACTION_DROP = 1,
+		DRAG_POST_ACTION_BUY = 2,
+		DRAG_POST_ACTION_SELL = 3,
+		DRAG_POST_ACTION_STASH = 4,
+	};
+
 	void handleKeyboardTooltips();
 
 	bool key_lock;
@@ -70,7 +117,7 @@ private:
 	bool keyboard_dragging;
 	bool sticky_dragging;
 	ItemStack drag_stack;
-	int drag_power;
+	PowerID drag_power;
 	int drag_src;
 	WidgetSlot *drag_icon;
 
@@ -79,12 +126,24 @@ private:
 	bool act_drag_hover;
 	Point keydrag_pos;
 
+	int action_src;
+	Point action_picker_target;
+	std::map<size_t, unsigned> action_picker_map;
+	int drag_post_action;
+
 	void renderIcon(int x, int y);
 	void setDragIcon(int icon_id, int overlay_id);
 	void setDragIconItem(ItemStack stack);
 
 	void handleKeyboardNavigation();
 	void dragAndDropWithKeyboard();
+	void pushMatchingItemsOf(const Point& hov_pos);
+
+	bool isTabListSelected();
+
+	void showActionPicker(Menu* src_menu, const Point& target);
+
+	void actionPickerStartDrag();
 
 public:
 	explicit MenuManager();
@@ -97,6 +156,8 @@ public:
 	void closeLeft();
 	void closeRight();
 	void resetDrag();
+	void defocusLeft();
+	void defocusRight();
 
 	std::vector<Menu*> menus;
 	MenuInventory *inv;
@@ -109,6 +170,7 @@ public:
 	MenuStatBar *hp;
 	MenuStatBar *mp;
 	MenuStatBar *xp;
+	std::vector<MenuStatBar*> resource_statbars;
 	MenuMiniMap *mini;
 	MenuNumPicker *num_picker;
 	MenuEnemy *enemy;
@@ -117,6 +179,8 @@ public:
 	MenuExit *exit;
 	MenuActiveEffects *effects;
 	MenuStash *stash;
+	MenuGameOver *game_over;
+	MenuConfirm *action_picker;
 
 	MenuDevConsole *devconsole;
 	MenuTouchControls *touch_controls;

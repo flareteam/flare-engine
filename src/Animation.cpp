@@ -31,7 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Animation.h"
 #include "RenderDevice.h"
 
-Animation::Animation(const std::string &_name, const std::string &_type, Image *_sprite, uint8_t _blend_mode, uint8_t _alpha_mod, Color _color_mod)
+Animation::Animation(const std::string &_name, const std::string &_type, AnimationMedia *_sprite, uint8_t _blend_mode, uint8_t _alpha_mod, Color _color_mod)
 	: name(_name)
 	, type(	_type == "play_once" ? ANIMTYPE_PLAY_ONCE :
 			_type == "back_forth" ? ANIMTYPE_BACK_FORTH :
@@ -67,10 +67,12 @@ void Animation::setupUncompressed(const Point& _render_size, const Point& _rende
 	for (unsigned short i = 0 ; i < _frames; i++) {
 		int base_index = max_kinds*i;
 		for (unsigned short kind = 0 ; kind < max_kinds; kind++) {
-			gfx[base_index + kind].x = _render_size.x * (_position + i);
-			gfx[base_index + kind].y = _render_size.y * kind;
-			gfx[base_index + kind].w = _render_size.x;
-			gfx[base_index + kind].h = _render_size.y;
+			// TODO handle multiple images for uncompressed animation defintions
+			gfx[base_index + kind].first = sprite->getImageFromKey("");
+			gfx[base_index + kind].second.x = _render_size.x * (_position + i);
+			gfx[base_index + kind].second.y = _render_size.y * kind;
+			gfx[base_index + kind].second.w = _render_size.x;
+			gfx[base_index + kind].second.h = _render_size.y;
 			render_offset[base_index + kind].x = _render_offset.x;
 			render_offset[base_index + kind].y = _render_offset.y;
 		}
@@ -148,22 +150,17 @@ void Animation::setup(unsigned short _frames, unsigned short _duration, unsigned
 	render_offset.resize(i);
 }
 
-void Animation::addFrame(unsigned short index, unsigned short kind, const Rect& rect, const Point& _render_offset) {
-
-	if (index >= gfx.size()/max_kinds) {
-		Utils::logError("Animation: Animation(%s) adding rect(%d, %d, %d, %d) to frame index(%u) out of bounds. must be in [0, %d]",
-				name.c_str(), rect.x, rect.y, rect.w, rect.h, index, static_cast<int>(gfx.size())/max_kinds);
-		return;
-	}
-	if (kind > max_kinds-1) {
-		Utils::logError("Animation: Animation(%s) adding rect(%d, %d, %d, %d) to frame(%u) kind(%u) out of bounds. must be in [0, %d]",
-				name.c_str(), rect.x, rect.y, rect.w, rect.h, index, kind, max_kinds-1);
-		return;
+bool Animation::addFrame(unsigned short index, unsigned short kind, const Rect& rect, const Point& _render_offset, const std::string& key) {
+	if (index >= gfx.size()/max_kinds || kind > max_kinds-1) {
+		return false;
 	}
 
 	unsigned i = max_kinds*index+kind;
-	gfx[i] = rect;
+	gfx[i].first = sprite->getImageFromKey(key);
+	gfx[i].second = rect;
 	render_offset[i] = _render_offset;
+
+	return true;
 }
 
 void Animation::advanceFrame() {
@@ -234,13 +231,13 @@ Renderable Animation::getCurrentFrame(int kind) {
 	Renderable r;
 	if (!frames.empty()) {
 		const int index = (max_kinds*frames[cur_frame_index]) + kind;
-		r.src.x = gfx[index].x;
-		r.src.y = gfx[index].y;
-		r.src.w = gfx[index].w;
-		r.src.h = gfx[index].h;
+		r.src.x = gfx[index].second.x;
+		r.src.y = gfx[index].second.y;
+		r.src.w = gfx[index].second.w;
+		r.src.h = gfx[index].second.h;
 		r.offset.x = render_offset[index].x;
 		r.offset.y = render_offset[index].y;
-		r.image = sprite;
+		r.image = gfx[index].first;
 		r.blend_mode = blend_mode;
 		r.color_mod = color_mod;
 		r.alpha_mod = alpha_mod;
@@ -311,7 +308,7 @@ void Animation::setActiveFrames(const std::vector<short> &_active_frames) {
 }
 
 bool Animation::isFirstFrame() {
-	return cur_frame_index == 0;
+	return cur_frame_index == 0 && static_cast<float>(cur_frame_index) == cur_frame_index_f;
 }
 
 bool Animation::isLastFrame() {
@@ -325,11 +322,11 @@ bool Animation::isSecondLastFrame() {
 bool Animation::isActiveFrame() {
 	if (type == ANIMTYPE_BACK_FORTH) {
 		if (std::find(active_frames.begin(), active_frames.end(), elapsed_frames) != active_frames.end())
-			return cur_frame_index == getLastFrameIndex(cur_frame);
+			return cur_frame_index == getLastFrameIndex(cur_frame) && static_cast<float>(cur_frame_index) == cur_frame_index_f;
 	}
 	else {
 		if (std::find(active_frames.begin(), active_frames.end(), cur_frame) != active_frames.end()) {
-			if (cur_frame_index == getLastFrameIndex(cur_frame)) {
+			if (cur_frame_index == getLastFrameIndex(cur_frame) && static_cast<float>(cur_frame_index) == cur_frame_index_f) {
 				if (type == ANIMTYPE_PLAY_ONCE)
 					active_frame_triggered = true;
 

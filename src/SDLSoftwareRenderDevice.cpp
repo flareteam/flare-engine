@@ -32,6 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "InputState.h"
 #include "MessageEngine.h"
 #include "ModManager.h"
+#include "Platform.h"
 #include "SharedResources.h"
 #include "Settings.h"
 
@@ -71,6 +72,9 @@ void SDLSoftwareImage::fillWithColor(const Color& color) {
  */
 void SDLSoftwareImage::drawPixel(int x, int y, const Color& color) {
 	if (!surface) return;
+
+	if (x < 0 || y < 0 || x >= getWidth() || y >= getHeight())
+		return;
 
 	Uint32 pixel = MapRGBA(color.r, color.g, color.b, color.a);
 
@@ -202,9 +206,28 @@ SDLSoftwareRenderDevice::SDLSoftwareRenderDevice()
 		// we only support display #0
 		Utils::logInfo("RenderDevice: %d display(s), using display 0 (%dx%d @ %dhz)", SDL_GetNumVideoDisplays(), desktop.w, desktop.h, desktop.refresh_rate);
 	}
+
+	// we store the gamma when launching the game in case we need to reset it
+	// these are initilized to 0 since we set them properly with SDL_GetWindowGammaRamp() later
+	for (int i = 0; i < 256; ++i) {
+		gamma_r[i] = 0;
+		gamma_g[i] = 0;
+		gamma_b[i] = 0;
+	}
 }
 
 int SDLSoftwareRenderDevice::createContextInternal() {
+	if (settings->safe_video) {
+		settings->safe_video = false;
+		Utils::logInfo("RenderDevice: Safe mode is enabled. Using minimum video settings.");
+		settings->fullscreen = false;
+		settings->hwsurface = false;
+		settings->vsync = false;
+		settings->texture_filter = false;
+		settings->screen_w = eset->resolutions.min_screen_w;
+		settings->screen_h = eset->resolutions.min_screen_h;
+	}
+
 	bool settings_changed = ((fullscreen != settings->fullscreen && destructive_fullscreen) ||
 			                 hwsurface != settings->hwsurface ||
 							 vsync != settings->vsync ||
@@ -251,11 +274,9 @@ int SDLSoftwareRenderDevice::createContextInternal() {
 			renderer = SDL_CreateRenderer(window, -1, r_flags);
 			if (renderer) {
 				if (settings->texture_filter && !eset->resolutions.ignore_texture_filter)
-					SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
+					SDL_SetHintWithPriority(SDL_HINT_RENDER_SCALE_QUALITY, "1", SDL_HINT_OVERRIDE);
 				else
-					SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0");
-
-				windowResize();
+					SDL_SetHintWithPriority(SDL_HINT_RENDER_SCALE_QUALITY, "0", SDL_HINT_OVERRIDE);
 			}
 
 			SDL_SetWindowMinimumSize(window, eset->resolutions.min_screen_w, eset->resolutions.min_screen_h);
@@ -263,7 +284,7 @@ int SDLSoftwareRenderDevice::createContextInternal() {
 			SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 		}
 
-		if (window && renderer && screen && texture) {
+		if (window && renderer) {
 			if (!is_initialized) {
 				// save the system gamma levels if we just created the window
 				SDL_GetWindowGammaRamp(window, gamma_r, gamma_g, gamma_b);
@@ -278,6 +299,10 @@ int SDLSoftwareRenderDevice::createContextInternal() {
 			is_initialized = true;
 
 			Utils::logInfo("RenderDevice: Fullscreen=%d, Hardware surfaces=%d, Vsync=%d, Texture Filter=%d", fullscreen, hwsurface, vsync, texture_filter);
+
+			SDL_RendererInfo renderer_info;
+			SDL_GetRendererInfo(renderer, &renderer_info);
+			Utils::logInfo("RenderDevice: Renderer driver is '%s'.", renderer_info.name);
 
 #if SDL_VERSION_ATLEAST(2, 0, 4)
 			SDL_GetDisplayDPI(0, &ddpi, 0, 0);
@@ -298,7 +323,10 @@ int SDLSoftwareRenderDevice::createContextInternal() {
 		}
 
 		windowResize();
+		is_initialized = (screen != NULL && texture != NULL);
+	}
 
+	if (is_initialized) {
 		// update title bar text and icon
 		updateTitleBar();
 
@@ -463,10 +491,10 @@ void SDLSoftwareRenderDevice::drawRectangle(const Point& p0, const Point& p1, co
 	if (SDL_MUSTLOCK(screen)) {
 		SDL_LockSurface(screen);
 	}
-	this->drawLine(p0.x, p0.y, p1.x, p0.y, color);
-	this->drawLine(p1.x, p0.y, p1.x, p1.y, color);
-	this->drawLine(p0.x, p0.y, p0.x, p1.y, color);
-	this->drawLine(p0.x, p1.y, p1.x, p1.y, color);
+	drawLine(p0.x, p0.y, p1.x, p0.y, color);
+	drawLine(p1.x, p0.y, p1.x, p1.y, color);
+	drawLine(p0.x, p0.y, p0.x, p1.y, color);
+	drawLine(p0.x, p1.y, p1.x+1, p1.y, color);
 	if (SDL_MUSTLOCK(screen)) {
 		SDL_UnlockSurface(screen);
 	}
@@ -546,7 +574,7 @@ Image *SDLSoftwareRenderDevice::createImage(int width, int height) {
 		return NULL;
 
 	Uint32 rmask, gmask, bmask, amask;
-	setSDL_RGBA(&rmask, &gmask, &bmask, &amask);
+	Utils::setSDL_RGBA(&rmask, &gmask, &bmask, &amask);
 
 	image->surface = SDL_CreateRGBSurface(0, width, height, BITS_PER_PIXEL, rmask, gmask, bmask, amask);
 
@@ -620,20 +648,6 @@ Image *SDLSoftwareRenderDevice::loadImage(const std::string& filename, int error
 	return image;
 }
 
-void SDLSoftwareRenderDevice::setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask) {
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-	*rmask = 0xff000000;
-	*gmask = 0x00ff0000;
-	*bmask = 0x0000ff00;
-	*amask = 0x000000ff;
-#else
-	*rmask = 0x000000ff;
-	*gmask = 0x0000ff00;
-	*bmask = 0x00ff0000;
-	*amask = 0xff000000;
-#endif
-}
-
 void SDLSoftwareRenderDevice::getWindowSize(short unsigned *screen_w, short unsigned *screen_h) {
 	int w,h;
 	SDL_GetWindowSize(window, &w, &h);
@@ -659,17 +673,43 @@ void SDLSoftwareRenderDevice::windowResize() {
 }
 
 void SDLSoftwareRenderDevice::setBackgroundColor(Color color) {
-	background_color = SDL_MapRGBA(screen->format, color.r, color.g, color.b, color.a);
+	background_color = SDL_MapRGBA(screen->format, color.r, color.g, color.b, 255);
 }
 
 void SDLSoftwareRenderDevice::setFullscreen(bool enable_fullscreen) {
 	if (!destructive_fullscreen) {
 		if (enable_fullscreen) {
-			SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+			if (platform.fullscreen_bypass) {
+				platform.setFullscreen(true);
+			}
+			else {
+				SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+			}
+			fullscreen = true;
 		}
-		else {
-			SDL_SetWindowFullscreen(window, 0);
+		else if (fullscreen) {
+			if (platform.fullscreen_bypass) {
+				platform.setFullscreen(false);
+			}
+			else {
+				SDL_SetWindowFullscreen(window, 0);
+
+				// restore window to the default size
+				SDL_SetWindowMinimumSize(window, eset->resolutions.min_screen_w, eset->resolutions.min_screen_h);
+				SDL_SetWindowSize(window, eset->resolutions.min_screen_w, eset->resolutions.min_screen_h);
+				windowResize();
+				// setting minimum size might move the window, so set position again
+				SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+			}
+			fullscreen = false;
 		}
 		windowResize();
 	}
 }
+
+unsigned short SDLSoftwareRenderDevice::getRefreshRate() {
+	SDL_DisplayMode mode;
+	SDL_GetCurrentDisplayMode(0, &mode);
+	return static_cast<unsigned short>(mode.refresh_rate);
+}
+

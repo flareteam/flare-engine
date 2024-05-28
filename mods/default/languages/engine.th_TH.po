@@ -1,0 +1,2168 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# Translators:
+# Pattaraporn Tripiyaratana, 2023
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-21 12:22-0500\n"
+"PO-Revision-Date: 2018-03-28 19:16+0000\n"
+"Last-Translator: Pattaraporn Tripiyaratana, 2023\n"
+"Language-Team: Thai (Thailand) (https://app.transifex.com/flareorg/teams/84925/th_TH/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: th_TH\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: ../../../src/Avatar.cpp:356
+msgid "Your health is low!"
+msgstr "ค่าพลังชีวิตเหลือน้อยแล้ว!"
+
+#: ../../../src/Avatar.cpp:386
+#, c-format
+msgid "Congratulations, you have reached level %d!"
+msgstr ""
+
+#: ../../../src/Avatar.cpp:388
+msgid "You may increase one or more attributes through the Character Menu."
+msgstr ""
+
+#: ../../../src/Avatar.cpp:392
+msgid "You may unlock one or more abilities through the Powers Menu."
+msgstr ""
+
+#: ../../../src/Avatar.cpp:678
+msgid "You are defeated."
+msgstr "คุณแพ้แล้ว"
+
+#: ../../../src/Avatar.cpp:926
+msgid "Transformation expired. You have been moved back to a safe place."
+msgstr ""
+
+#: ../../../src/CampaignManager.cpp:154
+#, c-format
+msgid "%d %s removed."
+msgstr ""
+
+#: ../../../src/CampaignManager.cpp:173
+#, c-format
+msgid "%s x%d removed."
+msgstr ""
+
+#: ../../../src/CampaignManager.cpp:175
+#, c-format
+msgid "%s removed."
+msgstr "ลบ%sแล้ว"
+
+#: ../../../src/CampaignManager.cpp:189
+#, c-format
+msgid "You receive %d %s."
+msgstr "คุณได้รับ%d %s"
+
+#: ../../../src/CampaignManager.cpp:193
+#, c-format
+msgid "You receive %s x%d."
+msgstr "คุณได้รับ%s x%d"
+
+#: ../../../src/CampaignManager.cpp:195
+#, c-format
+msgid "You receive %s."
+msgstr "คุณได้รับ %s"
+
+#: ../../../src/CampaignManager.cpp:217
+#, c-format
+msgid "You receive %d XP."
+msgstr ""
+
+#: ../../../src/CampaignManager.cpp:227
+msgid "HP restored."
+msgstr "ฟื้นฟู HP แล้ว"
+
+#: ../../../src/CampaignManager.cpp:231
+msgid "MP restored."
+msgstr "ฟื้นฟู MP แล้ว"
+
+#: ../../../src/CampaignManager.cpp:236
+msgid "HP and MP restored."
+msgstr "ฟื้นฟู HP และ MP แล้ว"
+
+#: ../../../src/CampaignManager.cpp:240
+msgid "Negative effects removed."
+msgstr ""
+
+#: ../../../src/CampaignManager.cpp:246
+msgid "HP and MP restored, negative effects removed"
+msgstr ""
+
+#: ../../../src/DeviceList.cpp:56
+msgid ""
+"SDL software renderer\n"
+"\n"
+"Often slower, but less likely to have issues."
+msgstr ""
+
+#: ../../../src/DeviceList.cpp:59
+msgid ""
+"SDL hardware renderer\n"
+"\n"
+"The default renderer that is often faster than the SDL software renderer."
+msgstr ""
+
+#: ../../../src/EffectManager.cpp:503 ../../../src/EffectManager.cpp:507
+#: ../../../src/EffectManager.cpp:511 ../../../src/EffectManager.cpp:515
+#: ../../../src/EffectManager.cpp:519 ../../../src/Entity.cpp:548
+#: ../../../src/Entity.cpp:560 ../../../src/Entity.cpp:573
+#: ../../../src/Entity.cpp:588
+msgid "Resist"
+msgstr ""
+
+#: ../../../src/EngineSettings.cpp:642
+msgid "Adventurer"
+msgstr "นักผจญภัย"
+
+#: ../../../src/Entity.cpp:511
+msgid "miss"
+msgstr ""
+
+#: ../../../src/Entity.cpp:553 ../../../src/PowerManager.cpp:1349
+#: ../../../src/StatBlock.cpp:1121 ../../../src/StatBlock.cpp:1128
+#, c-format
+msgid "+%s HP"
+msgstr "+%s HP"
+
+#: ../../../src/Entity.cpp:565 ../../../src/StatBlock.cpp:1135
+#: ../../../src/StatBlock.cpp:1142
+#, c-format
+msgid "+%s MP"
+msgstr "+%s MP"
+
+#: ../../../src/EventManager.cpp:845
+msgid "Unknown destination"
+msgstr ""
+
+#: ../../../src/GameState.cpp:37 ../../../src/GameState.cpp:58
+msgid "Loading..."
+msgstr "กำลังโหลด…"
+
+#: ../../../src/GameStateLoad.cpp:93
+msgid "Delete this save?"
+msgstr "ลบรายการที่บันทึกนี้?"
+
+#: ../../../src/GameStateLoad.cpp:94 ../../../src/MenuConfig.cpp:248
+msgid "No"
+msgstr "ไม่"
+
+#: ../../../src/GameStateLoad.cpp:95 ../../../src/MenuConfig.cpp:249
+msgid "Yes"
+msgstr "ใช่"
+
+#: ../../../src/GameStateLoad.cpp:98
+msgid "Exit to Title"
+msgstr ""
+
+#: ../../../src/GameStateLoad.cpp:101
+msgid "New Game"
+msgstr "เริ่มเกมใหม่"
+
+#: ../../../src/GameStateLoad.cpp:105 ../../../src/GameStateLoad.cpp:666
+msgid "Choose a Slot"
+msgstr ""
+
+#: ../../../src/GameStateLoad.cpp:109
+msgid "Delete Save"
+msgstr "ลบรายการที่บันทึก"
+
+#: ../../../src/GameStateLoad.cpp:639 ../../../src/GameStateLoad.cpp:660
+msgid "Enable a story mod to continue"
+msgstr ""
+
+#: ../../../src/GameStateLoad.cpp:655
+msgid "Load Game"
+msgstr "โหลดเกม"
+
+#: ../../../src/GameStateLoad.cpp:763
+msgid "Entering game world..."
+msgstr "กำลังเข้าสู่โลกเกม…"
+
+#: ../../../src/GameStateLoad.cpp:766
+msgid "Loading saved game..."
+msgstr "กำลังโหลดเกมที่บันทึก…"
+
+#: ../../../src/GameStateLoad.cpp:799
+msgid "Invalid save"
+msgstr ""
+
+#: ../../../src/GameStateLoad.cpp:823 ../../../src/ItemManager.cpp:808
+#: ../../../src/MenuPowers.cpp:892 ../../../src/MenuPowers.cpp:1260
+#: ../../../src/MenuPowers.cpp:1740
+#, c-format
+msgid "Level %d"
+msgstr "เลเวล %d"
+
+#: ../../../src/GameStateLoad.cpp:865
+msgid "#"
+msgstr "#"
+
+#: ../../../src/GameStateNew.cpp:66 ../../../src/GameStateTitle.cpp:136
+#: ../../../src/MenuConfig.cpp:260 ../../../src/SDLInputState.cpp:878
+msgid "Cancel"
+msgstr "ยกเลิก"
+
+#: ../../../src/GameStateNew.cpp:69
+msgid "Create"
+msgstr "สร้าง"
+
+#: ../../../src/GameStateNew.cpp:77
+msgid "Randomize"
+msgstr "สุ่ม"
+
+#: ../../../src/GameStateNew.cpp:93
+msgid "Choose a Portrait"
+msgstr ""
+
+#: ../../../src/GameStateNew.cpp:97
+msgid "Choose a Name"
+msgstr "เลือกชื่อ"
+
+#: ../../../src/GameStateNew.cpp:101
+msgid "Permadeath?"
+msgstr ""
+
+#: ../../../src/GameStateNew.cpp:105
+msgid "Choose a Class"
+msgstr ""
+
+#: ../../../src/GameStateTitle.cpp:109
+msgid "Play Game"
+msgstr "เล่นเกม"
+
+#: ../../../src/GameStateTitle.cpp:112 ../../../src/MenuMiniMap.cpp:154
+msgid "Configuration"
+msgstr "การตั้งค่า"
+
+#: ../../../src/GameStateTitle.cpp:115
+msgid "Credits"
+msgstr "เครดิต"
+
+#: ../../../src/GameStateTitle.cpp:118
+msgid "Exit Game"
+msgstr "ออกเกม"
+
+#: ../../../src/GameStateTitle.cpp:134
+msgid "Enable a core mod to continue"
+msgstr ""
+
+#: ../../../src/GameStateTitle.cpp:135 ../../../src/MenuConfig.cpp:385
+msgid "Mods"
+msgstr ""
+
+#: ../../../src/GameSwitcher.cpp:224
+#, c-format
+msgid "%s FPS"
+msgstr ""
+
+#: ../../../src/ItemManager.cpp:475
+msgid "Unknown Item"
+msgstr "ไอเทมที่ไม่สามารถระบุได้"
+
+#: ../../../src/ItemManager.cpp:698 ../../../src/MenuPowers.cpp:1023
+#, c-format
+msgid "%s%% Speed"
+msgstr ""
+
+#: ../../../src/ItemManager.cpp:702 ../../../src/MenuPowers.cpp:1026
+#, c-format
+msgid "%s%% Attack Speed"
+msgstr ""
+
+#: ../../../src/ItemManager.cpp:729 ../../../src/MenuCharacter.cpp:370
+#: ../../../src/MenuCharacter.cpp:467 ../../../src/MenuPowers.cpp:975
+#, c-format
+msgid "Resistance (%s)"
+msgstr ""
+
+#: ../../../src/ItemManager.cpp:739
+#, c-format
+msgid "Requires %s"
+msgstr ""
+
+#: ../../../src/ItemManager.cpp:791
+msgid "Quest Item"
+msgstr ""
+
+#: ../../../src/ItemManager.cpp:821
+#, c-format
+msgid "Quality: %s"
+msgstr "จำนวน: %s"
+
+#: ../../../src/ItemManager.cpp:846
+msgid "Absorb"
+msgstr ""
+
+#: ../../../src/ItemManager.cpp:900 ../../../src/MenuPowers.cpp:1247
+#: ../../../src/MenuPowers.cpp:1250
+#, c-format
+msgid "Requires Level %d"
+msgstr ""
+
+#: ../../../src/ItemManager.cpp:912 ../../../src/MenuPowers.cpp:1239
+#: ../../../src/MenuPowers.cpp:1241
+#, c-format
+msgid "Requires %s %d"
+msgstr ""
+
+#: ../../../src/ItemManager.cpp:923
+#, c-format
+msgid "Requires Class: %s"
+msgstr ""
+
+#: ../../../src/ItemManager.cpp:939 ../../../src/ItemManager.cpp:951
+#, c-format
+msgid "Buy Price: %d %s"
+msgstr "ราคาซื้อ: %d %s"
+
+#: ../../../src/ItemManager.cpp:941 ../../../src/ItemManager.cpp:953
+#, c-format
+msgid "Buy Price: %d %s each"
+msgstr ""
+
+#: ../../../src/ItemManager.cpp:961
+#, c-format
+msgid "Sell Price: %d %s"
+msgstr "ราคาขาย: %d %s"
+
+#: ../../../src/ItemManager.cpp:963
+#, c-format
+msgid "Sell Price: %d %s each"
+msgstr ""
+
+#: ../../../src/ItemManager.cpp:974
+msgid "Set:"
+msgstr ""
+
+#: ../../../src/ItemManager.cpp:981
+#, c-format
+msgid "%d items:"
+msgstr "%d ไอเทม:"
+
+#: ../../../src/ItemManager.cpp:1006 ../../../src/MenuPowers.cpp:1299
+msgid "Tap icon again for more options"
+msgstr "กดที่ไอคอนอีกครั้งเพื่อดูตัวเลือกอื่น"
+
+#: ../../../src/ItemManager.cpp:1038
+#, c-format
+msgid "Press [%s] to read"
+msgstr ""
+
+#: ../../../src/ItemManager.cpp:1041 ../../../src/MenuPowers.cpp:1329
+#, c-format
+msgid "Press [%s] to use"
+msgstr ""
+
+#: ../../../src/ItemManager.cpp:1045 ../../../src/MenuPowers.cpp:1333
+#, c-format
+msgid "Press [%s] for more options"
+msgstr ""
+
+#: ../../../src/LootManager.cpp:100 ../../../src/LootManager.cpp:102
+#: ../../../src/LootManager.cpp:104 ../../../src/MenuConfig.cpp:427
+msgid "Loot tooltip visibility"
+msgstr ""
+
+#: ../../../src/LootManager.cpp:100 ../../../src/MenuConfig.cpp:305
+#: ../../../src/MenuConfig.cpp:310
+msgid "Hidden"
+msgstr ""
+
+#: ../../../src/LootManager.cpp:102 ../../../src/MenuConfig.cpp:303
+#: ../../../src/MenuConfig.cpp:354
+msgid "Default"
+msgstr "ค่าตั้งต้น"
+
+#: ../../../src/LootManager.cpp:104
+msgid "Show All"
+msgstr "ดูทั้งหมด"
+
+#: ../../../src/MenuActionBar.cpp:86 ../../../src/MenuCharacter.cpp:54
+#: ../../../src/SDLInputState.cpp:894
+msgid "Character"
+msgstr "ตัวละคร"
+
+#: ../../../src/MenuActionBar.cpp:87 ../../../src/MenuInventory.cpp:164
+#: ../../../src/MenuVendor.cpp:58 ../../../src/SDLInputState.cpp:895
+msgid "Inventory"
+msgstr "คลังไอเทม"
+
+#: ../../../src/MenuActionBar.cpp:88 ../../../src/MenuPowers.cpp:159
+#: ../../../src/SDLInputState.cpp:896
+msgid "Powers"
+msgstr "พลัง"
+
+#: ../../../src/MenuActionBar.cpp:89 ../../../src/MenuLog.cpp:72
+#: ../../../src/SDLInputState.cpp:897
+msgid "Log"
+msgstr "ล็อก"
+
+#: ../../../src/MenuActionBar.cpp:241 ../../../src/MenuActionBar.cpp:248
+#: ../../../src/MenuActionBar.cpp:251 ../../../src/MenuActionBar.cpp:257
+#, c-format
+msgid "Hotkey: %s"
+msgstr ""
+
+#: ../../../src/MenuActionBar.cpp:638
+msgid "Not enough MP."
+msgstr ""
+
+#: ../../../src/MenuActiveEffects.cpp:124
+#, c-format
+msgid "x%d"
+msgstr "x%d"
+
+#: ../../../src/MenuActiveEffects.cpp:219
+msgid "Remaining:"
+msgstr ""
+
+#: ../../../src/MenuActiveEffects.cpp:225
+#, c-format
+msgid "x%d stacks"
+msgstr ""
+
+#: ../../../src/MenuCharacter.cpp:73 ../../../src/MenuCharacter.cpp:78
+msgid "Name"
+msgstr ""
+
+#: ../../../src/MenuCharacter.cpp:74 ../../../src/MenuCharacter.cpp:79
+msgid "Level"
+msgstr ""
+
+#: ../../../src/MenuCharacter.cpp:296
+#, c-format
+msgid "Available stat points: %d"
+msgstr ""
+
+#: ../../../src/MenuCharacter.cpp:382 ../../../src/MenuStatBar.cpp:179
+#, c-format
+msgid "XP: %lu"
+msgstr "XP: %lu"
+
+#: ../../../src/MenuCharacter.cpp:384
+#, c-format
+msgid "Next: %lu"
+msgstr ""
+
+#: ../../../src/MenuCharacter.cpp:390
+#, c-format
+msgid "base (%d), bonus (%d)"
+msgstr ""
+
+#: ../../../src/MenuCharacter.cpp:405 ../../../src/MenuCharacter.cpp:420
+#: ../../../src/MenuCharacter.cpp:428 ../../../src/MenuCharacter.cpp:439
+#: ../../../src/MenuCharacter.cpp:453 ../../../src/MenuCharacter.cpp:464
+msgid "Related stats:"
+msgstr ""
+
+#: ../../../src/MenuCharacter.cpp:490 ../../../src/MenuCharacter.cpp:514
+#: ../../../src/MenuCharacter.cpp:541 ../../../src/MenuCharacter.cpp:562
+#, c-format
+msgid "Each level grants %s."
+msgstr ""
+
+#: ../../../src/MenuCharacter.cpp:494 ../../../src/MenuCharacter.cpp:518
+#: ../../../src/MenuCharacter.cpp:545 ../../../src/MenuCharacter.cpp:566
+#, c-format
+msgid "Each point of %s grants %s."
+msgstr ""
+
+#: ../../../src/MenuCharacter.cpp:548
+#, c-format
+msgid "Reduces the damage taken from \"%s\" elemental attacks."
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:243 ../../../src/MenuConfig.cpp:1285
+msgid "Assign:"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:244
+msgid "New"
+msgstr "ใหม่"
+
+#: ../../../src/MenuConfig.cpp:245 ../../../src/MenuManager.cpp:1794
+msgid "Clear"
+msgstr "เคลียร์"
+
+#: ../../../src/MenuConfig.cpp:247
+msgid "Reset ALL settings?"
+msgstr "รีเซ็ตการตั้งค่าทั้งหมด"
+
+#: ../../../src/MenuConfig.cpp:258 ../../../src/MenuNumPicker.cpp:49
+msgid "OK"
+msgstr "ตกลง"
+
+#: ../../../src/MenuConfig.cpp:259
+msgid "Defaults"
+msgstr "ค่าตั้งต้น"
+
+#: ../../../src/MenuConfig.cpp:262 ../../../src/MenuGameOver.cpp:72
+msgid "Continue"
+msgstr "ถัดไป"
+
+#: ../../../src/MenuConfig.cpp:264
+msgid "Save Game"
+msgstr "บันทึกเกม"
+
+#: ../../../src/MenuConfig.cpp:303
+msgid ""
+"Show all loot tooltips, except for those that would be obscured by the "
+"player or an enemy. Temporarily show all loot tooltips with 'Alt'."
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:304
+msgid "Show all"
+msgstr "ดูทั้งหมด"
+
+#: ../../../src/MenuConfig.cpp:304
+msgid ""
+"Always show loot tooltips. Temporarily hide all loot tooltips with 'Alt'."
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:305
+msgid ""
+"Always hide loot tooltips, except for when a piece of loot is hovered with "
+"the mouse cursor. Temporarily show all loot tooltips with 'Alt'."
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:308
+msgid "Visible"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:309
+msgid "Visible (2x zoom)"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:313
+msgid ""
+"Controls the type of warning to be activated when the player is below the "
+"low health threshold."
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:314
+msgid "- Display a message"
+msgstr "- แสดงข้อความ"
+
+#: ../../../src/MenuConfig.cpp:315
+msgid "- Play a sound"
+msgstr "- เล่นเสียง"
+
+#: ../../../src/MenuConfig.cpp:316
+msgid "- Change the cursor"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:318
+msgid "Disabled"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:319
+msgid "All"
+msgstr "ทั้งหมด"
+
+#: ../../../src/MenuConfig.cpp:320
+msgid "Message & Cursor"
+msgstr "ข้อความและลูกศร"
+
+#: ../../../src/MenuConfig.cpp:321
+msgid "Message & Sound"
+msgstr "ข้อความและเสียง"
+
+#: ../../../src/MenuConfig.cpp:322
+msgid "Sound & Cursor"
+msgstr "เสียงและลูกศร"
+
+#: ../../../src/MenuConfig.cpp:323
+msgid "Message"
+msgstr "ข้อความ"
+
+#: ../../../src/MenuConfig.cpp:324
+msgid "Cursor"
+msgstr "ลูกศร"
+
+#: ../../../src/MenuConfig.cpp:325
+msgid "Sound"
+msgstr "เสียง"
+
+#: ../../../src/MenuConfig.cpp:331
+msgid ""
+"When the player's health drops below the given threshold, the low health "
+"notifications are triggered if one or more of them is enabled."
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:349
+msgid "The maximum frame rate that the game will be allowed to run at."
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:353
+msgid ""
+"The render size refers to the height in pixels of the surface used to draw "
+"the game. Mods define the allowed render sizes, but this option allows "
+"overriding the maximum size."
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:379 ../../../src/MenuConfig.cpp:1715
+#: ../../../src/MenuGameOver.cpp:117
+msgid "Exit"
+msgstr "ออก"
+
+#: ../../../src/MenuConfig.cpp:380
+msgid "Video"
+msgstr "วิดีโอ"
+
+#: ../../../src/MenuConfig.cpp:381
+msgid "Audio"
+msgstr "ออดิโอ"
+
+#: ../../../src/MenuConfig.cpp:382
+msgid "Interface"
+msgstr "อินเตอร์เฟซ"
+
+#: ../../../src/MenuConfig.cpp:383
+msgid "Input"
+msgstr "อินพุต"
+
+#: ../../../src/MenuConfig.cpp:384
+msgid "Keybindings"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:397
+msgid "Paused"
+msgstr "หยุดชั่วคราว"
+
+#: ../../../src/MenuConfig.cpp:400
+msgid "Time Played"
+msgstr "เวลาที่เล่น"
+
+#: ../../../src/MenuConfig.cpp:406
+msgid "Renderer"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:407
+msgid "Full Screen Mode"
+msgstr "โหมดเต็มจอ"
+
+#: ../../../src/MenuConfig.cpp:408
+msgid "Hardware surfaces"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:409
+msgid "V-Sync"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:410
+msgid "Texture Filtering"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:411
+msgid "DPI scaling"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:412
+msgid "Parallax Layers"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:413
+msgid "Allow changing gamma"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:414
+msgid "Gamma"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:415
+msgid "Maximum Render Size"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:416
+msgid "Frame Limit"
+msgstr "ลิมิตเฟรม"
+
+#: ../../../src/MenuConfig.cpp:418
+msgid "Sound Volume"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:419
+msgid "Music Volume"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:421
+msgid "Language"
+msgstr "ภาษา"
+
+#: ../../../src/MenuConfig.cpp:422
+msgid "Show FPS"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:423
+msgid "Hardware mouse cursor"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:424
+msgid "Colorblind Mode"
+msgstr "โหมดตาบอดสี"
+
+#: ../../../src/MenuConfig.cpp:425
+msgid "Developer Mode"
+msgstr "โหมดนักพัฒนา"
+
+#: ../../../src/MenuConfig.cpp:426
+msgid "Subtitles"
+msgstr "ซับไตเติ้ล"
+
+#: ../../../src/MenuConfig.cpp:428
+msgid "Mini-map mode"
+msgstr "โหมดมินิแมพ"
+
+#: ../../../src/MenuConfig.cpp:429
+msgid "Always show stat bar labels"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:430
+msgid "Allow stat bar auto-hiding"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:431
+msgid "Show combat text"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:432
+msgid "Automatically equip items"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:433
+msgid "Show hidden entity markers"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:434
+msgid "Low health notification"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:435
+msgid "Low health threshold"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:436
+msgid "Show item comparison tooltips"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:439 ../../../src/MenuMovementType.cpp:94
+#: ../../../src/MenuMovementType.cpp:131
+msgid "Joystick"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:440
+msgid "Move hero using mouse"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:441
+msgid "Mouse aim"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:442
+msgid "Do not use mouse"
+msgstr "ไม่ใช้เมาส์"
+
+#: ../../../src/MenuConfig.cpp:443
+msgid "Swap mouse movement button"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:444
+msgid "Attack with mouse movement"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:445
+msgid "Joystick Deadzone"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:446
+msgid "Touch Controls"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:447
+msgid "Touch Gamepad Scaling"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:552
+msgid ""
+"Will try to store surfaces in video memory versus system memory. The effect "
+"this has on performance depends on the renderer."
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:553
+msgid ""
+"Prevents screen tearing. Disable if you experience \"stuttering\" in "
+"windowed mode or input lag."
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:554
+msgid ""
+"When enabled, this uses the screen DPI in addition to the window dimensions "
+"to scale the rendering resolution. Otherwise, only the window dimensions are"
+" used."
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:555
+msgid ""
+"This enables parallax (non-tile) layers. Disabling this setting can improve "
+"performance in some cases."
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:556
+msgid ""
+"Enables the below setting that controls the screen gamma level. The behavior"
+" of the gamma setting can vary between platforms."
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:557
+msgid ""
+"Provides additional text for information that is primarily conveyed through "
+"color."
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:558
+msgid ""
+"Some mods will automatically hide the stat bars when they are inactive. "
+"Disabling this option will keep them displayed at all times."
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:559
+msgid ""
+"When enabled, empty equipment slots will be filled with applicable items "
+"when they are obtained."
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:560
+msgid ""
+"Shows a marker above enemies, allies, and the player when they are obscured "
+"by tall objects."
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:561
+msgid ""
+"When enabled, tooltips for equipped items of the same type are shown next to"
+" standard item tooltips."
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:562
+msgid ""
+"This allows the game to be controlled entirely with the keyboard (or "
+"joystick)."
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:563
+msgid ""
+"When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or"
+" 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
+"instead of 'Main1'."
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:564
+msgid ""
+"When 'Move hero using mouse' is enabled, this setting controls if the Power "
+"assigned to the movement button can be used by targeting an enemy. If this "
+"setting is disabled, it is required to use 'Shift' to access the Power "
+"assigned to the movement button."
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:565
+msgid ""
+"The player's attacks will be aimed in the direction of the mouse cursor when"
+" this is enabled."
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:566
+msgid ""
+"When enabled, a virtual gamepad will be added in-game. Other interactions, "
+"such as drag-and-drop behavior, are also altered to better suit touch input."
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:617
+msgid "Active Mods"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:626
+msgid "Available Mods"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:645
+msgid "<< Disable"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:651
+msgid "Enable >>"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:883
+msgid "Bindings for:"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:1553
+msgid "Core mod"
+msgstr "ม็อดหลัก"
+
+#: ../../../src/MenuConfig.cpp:1566
+msgid "Version:"
+msgstr "เวอร์ชัน:"
+
+#: ../../../src/MenuConfig.cpp:1571
+msgid "Game:"
+msgstr "เกม:"
+
+#: ../../../src/MenuConfig.cpp:1576
+msgid "Engine version:"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:1584
+msgid "Requires mods:"
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:1633
+msgid "Can not remove this binding."
+msgstr ""
+
+#: ../../../src/MenuConfig.cpp:1698 ../../../src/SDLInputState.cpp:740
+#: ../../../src/SDLInputState.cpp:765
+msgid "(none)"
+msgstr "(none)"
+
+#: ../../../src/MenuConfig.cpp:1715 ../../../src/MenuGameOver.cpp:73
+msgid "Save & Exit"
+msgstr "บันทึกและออก"
+
+#: ../../../src/MenuDevConsole.cpp:65
+msgid "Execute"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:103 ../../../src/MenuDevConsole.cpp:154
+msgid "Developer Console"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:144
+#, c-format
+msgid "Use '%s' to inspect with the cursor."
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:149
+msgid "Arguments with spaces should be enclosed with double quotes. Example:"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:150
+msgid "Type 'help' to get a list of commands."
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:212 ../../../src/MenuDevConsole.cpp:216
+msgid "px"
+msgstr "พิกเซล"
+
+#: ../../../src/MenuDevConsole.cpp:227
+msgid "Distance"
+msgstr "ระยะห่าง"
+
+#: ../../../src/MenuDevConsole.cpp:242 ../../../src/MenuDevConsole.cpp:290
+#: ../../../src/MenuDevConsole.cpp:304
+msgid "Entity"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:264 ../../../src/MenuDevConsole.cpp:271
+msgid "none"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:265 ../../../src/MenuDevConsole.cpp:267
+msgid "wall"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:266 ../../../src/MenuDevConsole.cpp:268
+msgid "short wall / pit"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:269
+msgid "entity"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:270
+msgid "entity, ally"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:277
+msgid "Tile"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:385
+msgid "adds a power to the action bar"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:386
+msgid "turns on/off the display of the FPS counter"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:387
+msgid "turns on/off all of the HUD elements"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:388
+msgid "turns on/off the developer hud"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:389
+msgid ""
+"Prints a list of powers that match a search term. No search term will list "
+"all items"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:390
+msgid "Prints out all the map filenames located in the \"maps/\" directory."
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:391
+msgid ""
+"Prints out the active campaign statuses that match a search term. No search "
+"term will list all active statuses"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:392
+msgid ""
+"Prints a list of items that match a search term. No search term will list "
+"all items"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:393 ../../../src/MenuDevConsole.cpp:394
+msgid ""
+"parses a series of event components and executes them as a single event"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:395
+msgid "clears the command history"
+msgstr "เคลียร์ประวัติคำสั่ง"
+
+#: ../../../src/MenuDevConsole.cpp:396
+msgid "displays this text"
+msgstr "แสดงข้อความนี้"
+
+#: ../../../src/MenuDevConsole.cpp:403
+msgid "Toggled the developer hud"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:407
+msgid "Toggled the hud"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:411
+msgid "Toggled the FPS counter"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:561
+msgid "ERROR: Incorrect number of arguments"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:563 ../../../src/MenuDevConsole.cpp:591
+msgid "HINT:"
+msgstr "คำใบ้:"
+
+#: ../../../src/MenuDevConsole.cpp:563
+msgid "<id>"
+msgstr "<id>"
+
+#: ../../../src/MenuDevConsole.cpp:579
+#, c-format
+msgid "ERROR: '%s' is not a valid event key"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:589
+msgid "ERROR: Too few arguments"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:591
+msgid "<key>=<val> <key>=<val> ..."
+msgstr "<key>=<val> <key>=<val> …"
+
+#: ../../../src/MenuDevConsole.cpp:596
+msgid "ERROR: Unknown command"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:598
+msgid "HINT: Type help"
+msgstr ""
+
+#: ../../../src/MenuEnemy.cpp:167
+#, c-format
+msgid "%s level %d"
+msgstr ""
+
+#: ../../../src/MenuEnemy.cpp:191
+msgid "Dead"
+msgstr ""
+
+#: ../../../src/MenuEnemy.cpp:193
+msgid "Destroyed"
+msgstr ""
+
+#: ../../../src/MenuGameOver.cpp:69
+msgid "Game Over"
+msgstr "เกมโอเวอร์"
+
+#: ../../../src/MenuInventory.cpp:275
+#, c-format
+msgid "Lost %s%% of %s."
+msgstr ""
+
+#: ../../../src/MenuInventory.cpp:282
+#, c-format
+msgid "Lost %s%% of total XP."
+msgstr ""
+
+#: ../../../src/MenuInventory.cpp:287
+#, c-format
+msgid "Lost %s%% of current level XP."
+msgstr ""
+
+#: ../../../src/MenuInventory.cpp:313
+#, c-format
+msgid "Lost %s."
+msgstr ""
+
+#: ../../../src/MenuInventory.cpp:404 ../../../src/MenuStash.cpp:275
+#, c-format
+msgid "%d %s"
+msgstr ""
+
+#: ../../../src/MenuInventory.cpp:447
+msgid "Pick up item(s):"
+msgstr "เก็บไอเทม:"
+
+#: ../../../src/MenuInventory.cpp:448
+msgid "Use or equip item:"
+msgstr "ใช้หรือใส่ไอเทม:"
+
+#: ../../../src/MenuInventory.cpp:449
+#, c-format
+msgid "%s modifiers"
+msgstr ""
+
+#: ../../../src/MenuInventory.cpp:450
+msgid "Select a quantity of item:"
+msgstr ""
+
+#: ../../../src/MenuInventory.cpp:453
+msgid "Stash item stack:"
+msgstr ""
+
+#: ../../../src/MenuInventory.cpp:455
+msgid "Sell item stack:"
+msgstr ""
+
+#: ../../../src/MenuInventory.cpp:726
+msgid "You don't have enough of the required item."
+msgstr "คุณมีไอเทมที่จำเป็นต้องใช้ไม่พอ"
+
+#: ../../../src/MenuInventory.cpp:738
+msgid "You can't use this item right now."
+msgstr "คุณไม่สามารถใช้ไอเทมนี้ได้ในขณะนี้"
+
+#: ../../../src/MenuInventory.cpp:763
+msgid "This item can only be used from the action bar."
+msgstr "ไอเทมนี้สามารถใช้ได้จากแถบแอคชั่นเท่านั้น"
+
+#: ../../../src/MenuInventory.cpp:881
+msgid "Inventory is full."
+msgstr "คลังไอเทมเต็ม"
+
+#: ../../../src/MenuInventory.cpp:1006
+#, c-format
+msgid "Not enough %s."
+msgstr ""
+
+#: ../../../src/MenuInventory.cpp:1026 ../../../src/MenuInventory.cpp:1033
+msgid "This item can not be sold."
+msgstr "ไอเทมนี้ไม่สามารถขายได้"
+
+#: ../../../src/MenuInventory.cpp:1332
+#, c-format
+msgid "Equipped set %d."
+msgstr ""
+
+#: ../../../src/MenuLog.cpp:90
+msgid "Quests"
+msgstr "ภารกิจ"
+
+#: ../../../src/MenuLog.cpp:91
+msgid "Notes"
+msgstr "โน้ต"
+
+#: ../../../src/MenuManager.cpp:174
+msgid "Choose an action:"
+msgstr "เลือกแอคชั่น:"
+
+#: ../../../src/MenuManager.cpp:522 ../../../src/MenuManager.cpp:1154
+msgid "This item can not be dropped."
+msgstr "ไอเทมนี้ไม่สามารถดรอปได้"
+
+#: ../../../src/MenuManager.cpp:1739
+msgid "Equipped"
+msgstr "ใส่แล้ว"
+
+#: ../../../src/MenuManager.cpp:1787 ../../../src/MenuManager.cpp:1838
+msgid "Use"
+msgstr "ใช้"
+
+#: ../../../src/MenuManager.cpp:1791 ../../../src/MenuManager.cpp:1834
+#: ../../../src/MenuManager.cpp:1865
+msgid "Move"
+msgstr "ขยับ"
+
+#: ../../../src/MenuManager.cpp:1807 ../../../src/MenuManager.cpp:1842
+msgid "Equip"
+msgstr "ใส่"
+
+#: ../../../src/MenuManager.cpp:1811
+msgid "Upgrade"
+msgstr "อัปเกรด"
+
+#: ../../../src/MenuManager.cpp:1826 ../../../src/MenuManager.cpp:1850
+msgid "Sell"
+msgstr "ขาย"
+
+#: ../../../src/MenuManager.cpp:1830 ../../../src/MenuManager.cpp:1868
+msgid "Transfer"
+msgstr "ถ่ายโอน"
+
+#: ../../../src/MenuManager.cpp:1846
+msgid "Drop"
+msgstr "ดรอป"
+
+#: ../../../src/MenuManager.cpp:1882
+msgid "Buy"
+msgstr "ซื้อ"
+
+#: ../../../src/MenuMovementType.cpp:87
+msgid "Select a Movement Type"
+msgstr "เลือกประเภทการเคลื่อนไหว"
+
+#: ../../../src/MenuMovementType.cpp:89
+msgid "Can be changed later in the Configuration menu."
+msgstr "สามารถแก้ไขภายหลังได้ที่หน้าการตั้งค่า"
+
+#: ../../../src/MenuMovementType.cpp:92 ../../../src/MenuMovementType.cpp:122
+msgid "Keyboard"
+msgstr "คีย์บอร์ด"
+
+#: ../../../src/MenuMovementType.cpp:93 ../../../src/MenuMovementType.cpp:128
+msgid "Mouse"
+msgstr "เมาส์"
+
+#: ../../../src/MenuMovementType.cpp:123 ../../../src/MenuMovementType.cpp:132
+#: ../../../src/SDLInputState.cpp:665 ../../../src/SDLInputState.cpp:695
+#: ../../../src/SDLInputState.cpp:880
+msgid "Up"
+msgstr "ขึ้น"
+
+#: ../../../src/MenuMovementType.cpp:124 ../../../src/MenuMovementType.cpp:133
+#: ../../../src/SDLInputState.cpp:650 ../../../src/SDLInputState.cpp:680
+#: ../../../src/SDLInputState.cpp:882
+msgid "Left"
+msgstr "ซ้าย"
+
+#: ../../../src/MenuMovementType.cpp:125 ../../../src/MenuMovementType.cpp:134
+#: ../../../src/SDLInputState.cpp:643 ../../../src/SDLInputState.cpp:673
+#: ../../../src/SDLInputState.cpp:881
+msgid "Down"
+msgstr "ลง"
+
+#: ../../../src/MenuMovementType.cpp:126 ../../../src/MenuMovementType.cpp:135
+#: ../../../src/SDLInputState.cpp:660 ../../../src/SDLInputState.cpp:690
+#: ../../../src/SDLInputState.cpp:883
+msgid "Right"
+msgstr "ขวา"
+
+#: ../../../src/MenuMovementType.cpp:129
+msgid "Button"
+msgstr "ปุ่ม"
+
+#: ../../../src/MenuNumPicker.cpp:59
+msgid "Enter amount:"
+msgstr "ระบุจำนวน:"
+
+#: ../../../src/MenuPowers.cpp:904
+msgid "Passive"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:911
+#, c-format
+msgid "Costs %s MP"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:915
+#, c-format
+msgid "Costs %s HP"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:925
+msgid "Cooldown:"
+msgstr "คูลดาวน์:"
+
+#: ../../../src/MenuPowers.cpp:1002 ../../../src/MenuPowers.cpp:1005
+msgid "Damage per second"
+msgstr "ค่าโจมตีต่อวินาที"
+
+#: ../../../src/MenuPowers.cpp:1008 ../../../src/MenuPowers.cpp:1011
+msgid "HP per second"
+msgstr "HP ต่อวินาที"
+
+#: ../../../src/MenuPowers.cpp:1014 ../../../src/MenuPowers.cpp:1017
+msgid "MP per second"
+msgstr "MP ต่อวินาที"
+
+#: ../../../src/MenuPowers.cpp:1021
+msgid "Immobilize"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:1029
+msgid "Resistance to all negative effects"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:1033
+msgid "Stun"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:1036
+msgid "Automatic revive on death"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:1039
+msgid "Convert"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:1042
+msgid "Fear"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:1045
+msgid "Lifespan"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:1069
+msgid "Magical Shield"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:1098
+msgid "Healing"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:1101
+msgid "Knockback"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:1125
+#, c-format
+msgid "%s%% chance"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:1177
+msgid "Base Accuracy"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:1197
+msgid "Base Critical Chance"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:1205
+msgid "Ignores Absorbtion"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:1210
+msgid "Ignores Avoidance"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:1215
+#, c-format
+msgid "%s%% Chance to crit slowed targets"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:1220
+#, c-format
+msgid "Elemental Damage (%s)"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:1229
+#, c-format
+msgid "Requires a %s"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:1267 ../../../src/MenuPowers.cpp:1270
+#, c-format
+msgid "Requires Power: %s"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:1279
+msgid "Click to Unlock (uses 1 Skill Point)"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:1283 ../../../src/MenuPowers.cpp:1285
+msgid "Requires 1 Skill Point"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:1532
+#, c-format
+msgid "Available skill points: %d"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:1564
+msgid "Next Level:"
+msgstr "เลเวลถัดไป:"
+
+#: ../../../src/MenuStash.cpp:78 ../../../src/MenuStash.cpp:159
+msgid "Stash"
+msgstr ""
+
+#: ../../../src/MenuStash.cpp:170 ../../../src/MenuStash.cpp:184
+msgid "Private"
+msgstr "ส่วนตัว"
+
+#: ../../../src/MenuStash.cpp:171
+msgid "Shared"
+msgstr ""
+
+#: ../../../src/MenuStash.cpp:339
+msgid "This item can not be stored in the stash."
+msgstr ""
+
+#: ../../../src/MenuStash.cpp:344
+msgid "This item can not be stored in the private stash."
+msgstr ""
+
+#: ../../../src/MenuStash.cpp:349
+msgid "This item can not be stored in the shared stash."
+msgstr ""
+
+#: ../../../src/MenuStash.cpp:359
+msgid "Stash is full."
+msgstr ""
+
+#: ../../../src/MenuStash.cpp:413
+#, c-format
+msgid "Can not store item in stash: %s"
+msgstr ""
+
+#: ../../../src/MenuStatBar.cpp:182
+#, c-format
+msgid "XP: %lu/%lu"
+msgstr ""
+
+#: ../../../src/MenuTalker.cpp:468
+#, c-format
+msgid "<dialog node %d>"
+msgstr ""
+
+#: ../../../src/MenuTalker.cpp:476
+msgid "Trade"
+msgstr "แลกเปลี่ยน"
+
+#: ../../../src/MenuVendor.cpp:59
+msgid "Buyback"
+msgstr ""
+
+#: ../../../src/MenuVendor.cpp:288
+msgid "Vendor"
+msgstr "ผู้ขาย"
+
+#: ../../../src/PowerManager.cpp:1333
+#, c-format
+msgid "+%s Shield"
+msgstr ""
+
+#: ../../../src/PowerManager.cpp:1597
+msgid "You are already transformed, untransform first."
+msgstr ""
+
+#: ../../../src/PowerManager.cpp:1609
+msgid "Could not untransform at this position."
+msgstr ""
+
+#: ../../../src/QuestLog.cpp:215
+msgid "Completed Quests"
+msgstr "ภารกิจที่สำเร็จแล้ว"
+
+#: ../../../src/SaveLoad.cpp:289 ../../../src/SaveLoad.cpp:290
+msgid "Game saved."
+msgstr "บันทึกเกมแล้ว"
+
+#: ../../../src/SDLInputState.cpp:98
+#, c-format
+msgid "Can not bind: %s"
+msgstr ""
+
+#: ../../../src/SDLInputState.cpp:107
+#, c-format
+msgid "'%s' is no longer bound to:"
+msgstr ""
+
+#: ../../../src/SDLInputState.cpp:640
+msgid "BkSp"
+msgstr "BkSp"
+
+#: ../../../src/SDLInputState.cpp:641
+msgid "Caps"
+msgstr "Caps"
+
+#: ../../../src/SDLInputState.cpp:642
+msgid "Del"
+msgstr "Del"
+
+#: ../../../src/SDLInputState.cpp:644 ../../../src/SDLInputState.cpp:674
+msgid "End"
+msgstr "End"
+
+#: ../../../src/SDLInputState.cpp:645
+msgid "Esc"
+msgstr "Esc"
+
+#: ../../../src/SDLInputState.cpp:646 ../../../src/SDLInputState.cpp:676
+msgid "Home"
+msgstr "Home"
+
+#: ../../../src/SDLInputState.cpp:647
+msgid "Ins"
+msgstr "Ins"
+
+#: ../../../src/SDLInputState.cpp:648
+msgid "LAlt"
+msgstr "LAlt"
+
+#: ../../../src/SDLInputState.cpp:649
+msgid "LCtrl"
+msgstr "LCtrl"
+
+#: ../../../src/SDLInputState.cpp:651
+msgid "LShft"
+msgstr "LShft"
+
+#: ../../../src/SDLInputState.cpp:652
+msgid "Num"
+msgstr "Num"
+
+#: ../../../src/SDLInputState.cpp:653
+msgid "PgDn"
+msgstr "PgDn"
+
+#: ../../../src/SDLInputState.cpp:654
+msgid "PgUp"
+msgstr "PgUp"
+
+#: ../../../src/SDLInputState.cpp:655 ../../../src/SDLInputState.cpp:685
+#: ../../../src/SDLInputState.cpp:908
+msgid "Pause"
+msgstr "Pause"
+
+#: ../../../src/SDLInputState.cpp:656
+msgid "Print"
+msgstr "Print"
+
+#: ../../../src/SDLInputState.cpp:657
+msgid "RAlt"
+msgstr "RAlt"
+
+#: ../../../src/SDLInputState.cpp:658
+msgid "RCtrl"
+msgstr "RCtrl"
+
+#: ../../../src/SDLInputState.cpp:659
+msgid "Ret"
+msgstr "Ret"
+
+#: ../../../src/SDLInputState.cpp:661
+msgid "RShft"
+msgstr "RShft"
+
+#: ../../../src/SDLInputState.cpp:662
+msgid "SLock"
+msgstr "SLock"
+
+#: ../../../src/SDLInputState.cpp:663
+msgid "Spc"
+msgstr "Spc"
+
+#: ../../../src/SDLInputState.cpp:664 ../../../src/SDLInputState.cpp:694
+msgid "Tab"
+msgstr "Tab"
+
+#: ../../../src/SDLInputState.cpp:670
+msgid "Backspace"
+msgstr "Backspace"
+
+#: ../../../src/SDLInputState.cpp:671
+msgid "CapsLock"
+msgstr "CapsLock"
+
+#: ../../../src/SDLInputState.cpp:672 ../../../src/SDLInputState.cpp:917
+msgid "Delete"
+msgstr "Delete"
+
+#: ../../../src/SDLInputState.cpp:675
+msgid "Escape"
+msgstr "Escape"
+
+#: ../../../src/SDLInputState.cpp:677
+msgid "Insert"
+msgstr "Insert"
+
+#: ../../../src/SDLInputState.cpp:678
+msgid "Left Alt"
+msgstr "Left Alt"
+
+#: ../../../src/SDLInputState.cpp:679
+msgid "Left Ctrl"
+msgstr "Left Ctrl"
+
+#: ../../../src/SDLInputState.cpp:681
+msgid "Left Shift"
+msgstr "Left Shift"
+
+#: ../../../src/SDLInputState.cpp:682
+msgid "NumLock"
+msgstr "NumLock"
+
+#: ../../../src/SDLInputState.cpp:683
+msgid "PageDown"
+msgstr "PageDown"
+
+#: ../../../src/SDLInputState.cpp:684
+msgid "PageUp"
+msgstr "PageUp"
+
+#: ../../../src/SDLInputState.cpp:686
+msgid "PrintScreen"
+msgstr "PrintScreen"
+
+#: ../../../src/SDLInputState.cpp:687
+msgid "Right Alt"
+msgstr "Right Alt"
+
+#: ../../../src/SDLInputState.cpp:688
+msgid "Right Ctrl"
+msgstr "Right Ctrl"
+
+#: ../../../src/SDLInputState.cpp:689
+msgid "Return"
+msgstr "Return"
+
+#: ../../../src/SDLInputState.cpp:691
+msgid "Right Shift"
+msgstr "Right Shift"
+
+#: ../../../src/SDLInputState.cpp:692
+msgid "ScrollLock"
+msgstr "ScrollLock"
+
+#: ../../../src/SDLInputState.cpp:693
+msgid "Space"
+msgstr "Space"
+
+#: ../../../src/SDLInputState.cpp:705
+#, c-format
+msgid "M%d"
+msgstr ""
+
+#: ../../../src/SDLInputState.cpp:711
+#, c-format
+msgid "Mouse %d"
+msgstr ""
+
+#: ../../../src/SDLInputState.cpp:720 ../../../src/SDLInputState.cpp:729
+msgid "(unknown)"
+msgstr ""
+
+#: ../../../src/SDLInputState.cpp:791
+msgid "Touch control D-Pad"
+msgstr ""
+
+#: ../../../src/SDLInputState.cpp:811
+msgid "Touch control buttons"
+msgstr ""
+
+#: ../../../src/SDLInputState.cpp:879
+msgid "Accept"
+msgstr ""
+
+#: ../../../src/SDLInputState.cpp:884
+msgid "Bar1"
+msgstr "Bar1"
+
+#: ../../../src/SDLInputState.cpp:885
+msgid "Bar2"
+msgstr "Bar2"
+
+#: ../../../src/SDLInputState.cpp:886
+msgid "Bar3"
+msgstr "Bar3"
+
+#: ../../../src/SDLInputState.cpp:887
+msgid "Bar4"
+msgstr "Bar4"
+
+#: ../../../src/SDLInputState.cpp:888
+msgid "Bar5"
+msgstr "Bar5"
+
+#: ../../../src/SDLInputState.cpp:889
+msgid "Bar6"
+msgstr "Bar6"
+
+#: ../../../src/SDLInputState.cpp:890
+msgid "Bar7"
+msgstr "Bar7"
+
+#: ../../../src/SDLInputState.cpp:891
+msgid "Bar8"
+msgstr "Bar8"
+
+#: ../../../src/SDLInputState.cpp:892
+msgid "Bar9"
+msgstr "Bar9"
+
+#: ../../../src/SDLInputState.cpp:893
+msgid "Bar0"
+msgstr "Bar0"
+
+#: ../../../src/SDLInputState.cpp:898
+msgid "Main1"
+msgstr ""
+
+#: ../../../src/SDLInputState.cpp:899
+msgid "Main2"
+msgstr ""
+
+#: ../../../src/SDLInputState.cpp:900
+msgid "Next Equip Set"
+msgstr ""
+
+#: ../../../src/SDLInputState.cpp:901
+msgid "Previous Equip Set"
+msgstr ""
+
+#: ../../../src/SDLInputState.cpp:902
+msgid "Mini-map Mode"
+msgstr "โหมดมินิแมพ"
+
+#: ../../../src/SDLInputState.cpp:903
+msgid "Loot Tooltip Mode"
+msgstr ""
+
+#: ../../../src/SDLInputState.cpp:904
+msgid "Action Bar"
+msgstr "แถบแอคชั่น"
+
+#: ../../../src/SDLInputState.cpp:905
+msgid "Menu: Next Page"
+msgstr "เมนู: หน้าต่อไป"
+
+#: ../../../src/SDLInputState.cpp:906
+msgid "Menu: Previous Page"
+msgstr "เมนู: หน้าก่อนนี้"
+
+#: ../../../src/SDLInputState.cpp:907
+msgid "Menu: Activate"
+msgstr "เมนู: เปิดใช้งาน"
+
+#: ../../../src/SDLInputState.cpp:909
+msgid "Aim Up"
+msgstr "เล็งขึ้น"
+
+#: ../../../src/SDLInputState.cpp:910
+msgid "Aim Down"
+msgstr "เล็งลง"
+
+#: ../../../src/SDLInputState.cpp:911
+msgid "Aim Left"
+msgstr "เล็งซ้าย"
+
+#: ../../../src/SDLInputState.cpp:912
+msgid "Aim Right"
+msgstr "เล็งขวา"
+
+#: ../../../src/SDLInputState.cpp:913
+msgid "Developer Menu"
+msgstr "เมนูนักพัฒนา"
+
+#: ../../../src/SDLInputState.cpp:914
+msgid "Ctrl"
+msgstr "Ctrl"
+
+#: ../../../src/SDLInputState.cpp:915
+msgid "Shift"
+msgstr "Shift"
+
+#: ../../../src/SDLInputState.cpp:916
+msgid "Alt"
+msgstr "Alt"
+
+#: ../../../src/SDLInputState.cpp:919
+msgid "Left Mouse"
+msgstr ""
+
+#: ../../../src/SDLInputState.cpp:920
+msgid "Middle Mouse"
+msgstr ""
+
+#: ../../../src/SDLInputState.cpp:921
+msgid "Right Mouse"
+msgstr ""
+
+#: ../../../src/SDLInputState.cpp:922
+msgid "Wheel Up"
+msgstr ""
+
+#: ../../../src/SDLInputState.cpp:923
+msgid "Wheel Down"
+msgstr ""
+
+#: ../../../src/SDLInputState.cpp:924
+msgid "Mouse X1"
+msgstr "Mouse X1"
+
+#: ../../../src/SDLInputState.cpp:925
+msgid "Mouse X2"
+msgstr "Mouse X2"
+
+#: ../../../src/SDLInputState.cpp:927
+msgid "X360: A"
+msgstr "X360: A"
+
+#: ../../../src/SDLInputState.cpp:928
+msgid "X360: B"
+msgstr "X360: B"
+
+#: ../../../src/SDLInputState.cpp:929
+msgid "X360: X"
+msgstr "X360: X"
+
+#: ../../../src/SDLInputState.cpp:930
+msgid "X360: Y"
+msgstr "X360: Y"
+
+#: ../../../src/SDLInputState.cpp:931
+msgid "X360: Back"
+msgstr "X360: Back"
+
+#: ../../../src/SDLInputState.cpp:932
+msgid "X360: Guide"
+msgstr "X360: Guide"
+
+#: ../../../src/SDLInputState.cpp:933
+msgid "X360: Start"
+msgstr "X360: Start"
+
+#: ../../../src/SDLInputState.cpp:934
+msgid "X360: L3"
+msgstr "X360: L3"
+
+#: ../../../src/SDLInputState.cpp:935
+msgid "X360: R3"
+msgstr "X360: R3"
+
+#: ../../../src/SDLInputState.cpp:936
+msgid "X360: L1"
+msgstr "X360: L1"
+
+#: ../../../src/SDLInputState.cpp:937
+msgid "X360: R1"
+msgstr "X360: R1"
+
+#: ../../../src/SDLInputState.cpp:938
+msgid "X360: D-Up"
+msgstr "X360: D-Up"
+
+#: ../../../src/SDLInputState.cpp:939
+msgid "X360: D-Down"
+msgstr "X360: D-Down"
+
+#: ../../../src/SDLInputState.cpp:940
+msgid "X360: D-Left"
+msgstr "X360: D-Left"
+
+#: ../../../src/SDLInputState.cpp:941
+msgid "X360: D-Right"
+msgstr "X360: D-Right"
+
+#: ../../../src/SDLInputState.cpp:943
+msgid "X360: Left X+"
+msgstr "X360: Left X+"
+
+#: ../../../src/SDLInputState.cpp:944
+msgid "X360: Left X-"
+msgstr "X360: Left X-"
+
+#: ../../../src/SDLInputState.cpp:945
+msgid "X360: Left Y+"
+msgstr "X360: Left Y+"
+
+#: ../../../src/SDLInputState.cpp:946
+msgid "X360: Left Y-"
+msgstr "X360: Left Y-"
+
+#: ../../../src/SDLInputState.cpp:947
+msgid "X360: Right X+"
+msgstr "X360: Right X+"
+
+#: ../../../src/SDLInputState.cpp:948
+msgid "X360: Right X-"
+msgstr "X360: Right X-"
+
+#: ../../../src/SDLInputState.cpp:949
+msgid "X360: Right Y+"
+msgstr "X360: Right Y+"
+
+#: ../../../src/SDLInputState.cpp:950
+msgid "X360: Right Y-"
+msgstr "X360: Right Y-"
+
+#: ../../../src/SDLInputState.cpp:951
+msgid "X360: L2"
+msgstr "X360: L2"
+
+#: ../../../src/SDLInputState.cpp:952
+msgid "X360: R2"
+msgstr "X360: R2"
+
+#: ../../../src/Stats.cpp:38
+msgid "Max HP"
+msgstr "HP สูงสุด"
+
+#: ../../../src/Stats.cpp:39
+msgid "Total amount of HP."
+msgstr "ค่าพลังชีวิตหรือ HP ทั้งหมด"
+
+#: ../../../src/Stats.cpp:44
+msgid "HP Regen"
+msgstr "ฟื้นฟู HP"
+
+#: ../../../src/Stats.cpp:45
+msgid "Ticks of HP regen per minute."
+msgstr ""
+
+#: ../../../src/Stats.cpp:50
+msgid "Max MP"
+msgstr "MP สูงสุด"
+
+#: ../../../src/Stats.cpp:51
+msgid "Total amount of MP."
+msgstr "ค่าพลังเวทหรือ MP ทั้งหมด"
+
+#: ../../../src/Stats.cpp:56
+msgid "MP Regen"
+msgstr "ฟื้นฟู MP"
+
+#: ../../../src/Stats.cpp:57
+msgid "Ticks of MP regen per minute."
+msgstr ""
+
+#: ../../../src/Stats.cpp:62
+msgid "Accuracy"
+msgstr "ความแม่นยำ"
+
+#: ../../../src/Stats.cpp:63
+msgid ""
+"Accuracy rating. The enemy's Avoidance rating is subtracted from this value "
+"to calculate your likeliness to land a direct hit."
+msgstr "อัตราความแม่นยำ ลดอัตราการหลบหลีกของคู่ต่อสู้ เพิ่มโอกาสโจมตีโดยตรง"
+
+#: ../../../src/Stats.cpp:68
+msgid "Avoidance"
+msgstr "การหลบหลีก"
+
+#: ../../../src/Stats.cpp:69
+msgid ""
+"Avoidance rating. This value is subtracted from the enemy's Accuracy rating "
+"to calculate their likeliness to land a direct hit."
+msgstr "อัตราการหลบหลีก ลดอัตราความแม่นยำของคู่ต่อสู้ เพิ่มโอกาสโจมตีโดยตรง"
+
+#: ../../../src/Stats.cpp:74
+msgid "Absorb Min"
+msgstr "ซึมซับการโจมตีต่ำสุด"
+
+#: ../../../src/Stats.cpp:75 ../../../src/Stats.cpp:81
+msgid "Reduces the amount of damage taken."
+msgstr "ลดค่าความเสียหายที่ได้รับ"
+
+#: ../../../src/Stats.cpp:80
+msgid "Absorb Max"
+msgstr "ซึมซับการโจมตีสูงสุด"
+
+#: ../../../src/Stats.cpp:86
+msgid "Critical Hit Chance"
+msgstr "โอกาสโจมตีคริติคอล"
+
+#: ../../../src/Stats.cpp:87
+msgid "Chance for an attack to do extra damage."
+msgstr "โอกาสที่การโจมตีสร้างความเสียหายเพิ่มขึ้น"
+
+#: ../../../src/Stats.cpp:92
+msgid "Bonus XP"
+msgstr "โบนัส XP"
+
+#: ../../../src/Stats.cpp:93
+msgid "Increases the XP gained per kill."
+msgstr "เพิ่มค่า XP ในแต่ละการฆ่า"
+
+#: ../../../src/Stats.cpp:98
+#, c-format
+msgid "Bonus %s"
+msgstr "โบนัส %s"
+
+#: ../../../src/Stats.cpp:99
+#, c-format
+msgid "Increases the %s found per drop."
+msgstr ""
+
+#: ../../../src/Stats.cpp:104
+msgid "Item Find Chance"
+msgstr "โอกาสพบไอเทม"
+
+#: ../../../src/Stats.cpp:105
+msgid "Increases the chance that an enemy will drop an item."
+msgstr "เพิ่มโอกาสที่คู่ต่อสู้จะดรอปไอเทม"
+
+#: ../../../src/Stats.cpp:110
+msgid "Stealth"
+msgstr "ลอบเร้น"
+
+#: ../../../src/Stats.cpp:111
+msgid "Increases your ability to move undetected."
+msgstr "เพิ่มทักษะในการอำพรางตัวขณะเคลื่อนไหว"
+
+#: ../../../src/Stats.cpp:116
+msgid "Poise"
+msgstr "ต้านทานการชะงัก"
+
+#: ../../../src/Stats.cpp:117
+msgid "Reduces your chance of stumbling when hit."
+msgstr "ลดโอกาสในการหยุดชะงักเมื่อถูกตี"
+
+#: ../../../src/Stats.cpp:122
+msgid "Missile Reflect Chance"
+msgstr "โอกาสสะท้อนมิสไซล์กลับ"
+
+#: ../../../src/Stats.cpp:123
+msgid "Increases your chance of reflecting missiles back at enemies."
+msgstr "เพิ่มโอกาสที่จะสะท้อนมิสไซล์กลับไปยังคู่ต่อสู้"
+
+#: ../../../src/Stats.cpp:128
+msgid "Damage Reflection"
+msgstr "สะท้อนการโจมตี"
+
+#: ../../../src/Stats.cpp:129
+msgid "Deals a percentage of damage taken back to the attacker."
+msgstr "สร้างเปอร์เซ็นต์ความเสียหายย้อนกลับไปที่ผู้โจมตี"
+
+#: ../../../src/Stats.cpp:134
+msgid "HP Steal"
+msgstr "ขโมย HP"
+
+#: ../../../src/Stats.cpp:135
+msgid "Percentage of HP stolen per hit."
+msgstr "เปอร์เซ็นต์ของ HP ที่ขโมยต่อการตี 1 ครั้ง"
+
+#: ../../../src/Stats.cpp:140
+msgid "MP Steal"
+msgstr "ขโมย MP"
+
+#: ../../../src/Stats.cpp:141
+msgid "Percentage of MP stolen per hit."
+msgstr "เปอร์เซ็นต์ของ MP ที่ขโมยต่อการตี 1 ครั้ง"
+
+#: ../../../src/Stats.cpp:146
+msgid "Resistance to damage-over-time"
+msgstr "ต้านทานความเสียหายต่อเนื่อง"
+
+#: ../../../src/Stats.cpp:147
+msgid "Percentage chance that damage-over-time effects will be negated."
+msgstr "เปอร์เซ็นต์การป้องกันไม่ให้เกิดความเสียหายต่อเนื่อง"
+
+#: ../../../src/Stats.cpp:152
+msgid "Resistance to slow"
+msgstr "ต้านทานความช้า"
+
+#: ../../../src/Stats.cpp:153
+msgid "Percentage chance that slow effects will be negated."
+msgstr "เปอร์เซ็นต์การป้องกันไม่ให้เคลื่อนไหวช้าลง"
+
+#: ../../../src/Stats.cpp:158
+msgid "Resistance to stun"
+msgstr "ต้านทานการติดมึนงง"
+
+#: ../../../src/Stats.cpp:159
+msgid "Percentage chance that stun effects will be negated."
+msgstr "เปอร์เซ็นต์การป้องกันไม่ให้ติดมึนงง"
+
+#: ../../../src/Stats.cpp:164
+msgid "Resistance to knockback"
+msgstr "ต้านทานการกระดอน"
+
+#: ../../../src/Stats.cpp:165
+msgid "Percentage chance that knockback effects will be negated."
+msgstr "เปอร์เซ็นต์การป้องกันไม่ให้ถูกกระดอน"
+
+#: ../../../src/Stats.cpp:170
+msgid "Resistance to stat debuffs"
+msgstr "ต้านทานการดีบัฟสถานะ"
+
+#: ../../../src/Stats.cpp:171
+msgid "Percentage chance that stat debuff effects will be negated."
+msgstr "เปอร์เซ็นต์การป้องกันไม่ให้ถูกดีบัฟสถานะ"
+
+#: ../../../src/Stats.cpp:176
+msgid "Resistance to damage reflection"
+msgstr "ต้านทานการสะท้อนการโจมตี"
+
+#: ../../../src/Stats.cpp:177
+msgid "Percentage chance that damage reflection will be negated."
+msgstr "เปอร์เซ็นต์การป้องกันไม่ให้ถูกสะท้อนการโจมตี"
+
+#: ../../../src/Stats.cpp:182
+msgid "Resistance to HP steal"
+msgstr "ต้านทานการขโมย HP"
+
+#: ../../../src/Stats.cpp:183
+msgid "Percentage chance that HP steal will be negated."
+msgstr "เปอร์เซ็นต์การป้องกันไม่ให้ HP ถูกขโมย"
+
+#: ../../../src/Stats.cpp:188
+msgid "Resistance to MP steal"
+msgstr "ต้านทานการขโมย MP"
+
+#: ../../../src/Stats.cpp:189
+msgid "Percentage chance that MP steal will be negated."
+msgstr "เปอร์เซ็นต์การป้องกันไม่ให้ MP ถูกขโมย"
+
+#: ../../../src/Utils.cpp:375
+msgid "k"
+msgstr "k"
+
+#: ../../../src/Utils.cpp:667
+#, c-format
+msgid "%s second"
+msgstr "%s วินาที"
+
+#: ../../../src/Utils.cpp:670
+#, c-format
+msgid "%s seconds"
+msgstr "%s วินาที"
+
+#: ../../../src/Version.cpp:139
+msgid "or newer"
+msgstr "หรือใหม่กว่า"
+
+#: ../../../src/Version.cpp:142
+msgid "or older"
+msgstr "หรือเก่ากว่า"

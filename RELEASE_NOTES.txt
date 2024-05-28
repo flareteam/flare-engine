@@ -1,4 +1,396 @@
-Flare v1.10 (WIP)
+Flare v1.15
+
+Engine features:
+
+* Add wander_radius and waypoints support for map NPCs
+* Add scaling based on item level/player level/primary stats to several Item attributes, such as 'bonus' and 'price'.
+* Add 'loot_drops_max' property to Items for limiting the number of drops in a single loot event.
+* Horizontal list widgets can now display 2 or fewer options at once
+* Added support for more than one of each chain power (pre_power/post_power/wall_power) to be attached to a single power.
+* Added randomized items. Items can now be spawned with random level, quality, and bonus attributes.
+* Added 'default_zoom_level' property to menu/minimap.txt config.
+* Added support for developer mode command shortcuts.
+* Added 'powers_overlap_slots' to menu/actionbar.txt config.
+* Added 'background_offset' to menu/config.txt config.
+* Added 'post_hazards_skip_target' to Powers.
+
+Engine fixes:
+
+* Fixed equipment not being visible on the load game menu in cases where an item is shared across multiple equipment sets.
+* Fix potential crash in WidgetTabControl when trying to set an active tab when there is no tab already active.
+* Fix unintended file appending when loading mod metadata
+* Fix potential crash when tileset image can't be loaded.
+* Fix bonuses to primary stats being incorrectly assigned when arbitrary resource stats are used.
+* Fix leaked effect animations when an effect's animation property was redefined.
+* Fix invalid memory access when consuming a corpse after a map change
+* Fix crash when a book has a blank text item
+* Fix memory leak from dropped loot
+* Fix memory leak when a power's animation property was redefined.
+* Display min/max damage and absorb stats on single lines in the Character menu
+* Show power base damage type in tooltips if no damage modifier is set
+* Fix input state not being correctly reset after using a gamepad analog control
+* Increase default audio playback samplerate to 44100Hz from 22050Hz. This can now be adjusted in the user's settings.txt file.
+* Fix leaked animation when Power entire power was redefined.
+* Fix power.target_neighbor not using the starting_pos as the origin point.
+* Fixed crash in Power tooltips when base_damage was not defined.
+* Fix incorrect power level being shown in the action bar tooltips for upgraded powers.
+* Fixed behavior of target_neighbor when a Power wasn't using 'starting_pos=source'.
+* Fixed Power target validity not respecting the 'movement_type' property.
+* Fixed a case where tooltip graphics showed an incorrect right border when the text area was too wide.
+* A fallback language is now selected when the desired language is not available in engine/languages.txt.
+* Fixed the origin point of post powers in some cases that would have them incorrectly use the caster's position otherwise.
+* Fixed the direction of moving powers when the origin and target are the same point.
+* Fixed cases where parts of WidgetSlider were being drawn outside the visible area.
+* Fixed infinite INCLUDE recursion in FileParser.
+* Android: Fix 'Flare' directory not being automatically created.
+* Android: Added a dialog to direct the player to the wiki page for installing if no game data is found.
+
+Game updates:
+* Limited the number of "unique" items that can drop from a boss to 1 per kill.
+
+Translation updates:
+
+* German (de) update (Iwan Gabovitch)
+* Spanish (es) update (Jacobo Feijóo, Julvenzor, Eugenio Martínez Seguín)
+* Finnish (fi) update (Jaakko Muilu)
+* Scottish Gaelic (gd) update (GunChleoc)
+* Hindi (India) (hi_IN) by Ansh Mishra
+* Korean (ko) update (ks k)
+* Polish (pl) update (Marcin Serwin)
+* Russian (ru) update (berry)
+* Swedish (sv) update (Kevin Setterborn)
+* Thai (Thailand) (th_TH) by Pattaraporn Tripiyaratana
+* Vietnamese (vi) update (Đoàn Mỹ)
+* Chinese (Taiwan) (zh_TW) by Benson
+
+
+
+Flare v1.14 (https://flarerpg.org/2022/12/10/flare-1-14/)
+
+Engine features:
+
+* Added 'loot.requires_status' and 'status_loot' properties to loot table definitions.
+* Support '/' as shorthand for 'exec' in the dev console. A space is not required after the slash.
+* Added 'spawn_level' property to map enemies. This follows the same syntax as the Power property of the same name.
+* Add XP scaling tables for scaling enemy reward XP based on enemy level.
+* Replace 'immunity' effects with percentage-based resistances.
+* Added 'mouse_move_deadzone' property to engine/misc.txt to help alleviate erratic mouse-move behavior when the cursor is near the player.
+* Alternative tab UI for when tabs exceed the available space.
+* Added keybind for cycling equipment sets in reverse.
+* Refactored stats and stat bonuses to use floats for fractional values.
+* Support fractional values in the following:
+  * Combat text: 'speed'
+  * Engine (combat): 'absorb_percent', 'resist_percent', 'block_percent', 'avoidance_percent', 'miss_damage_percent', 'crit_damage_percent', 'overhit_damage_percent'
+  * Engine (misc): 'party_exp_percentage'
+  * Events: 'power_damage', 'chance_exec'
+  * Death penalty: 'currency', 'xp_total', 'xp_current_level'
+  * Item: 'dmg', 'abs', 'bonus'
+  * Map: 'enemygroup.chance'
+  * Power: 'requires_mp', 'requires_hp', 'requires_hpmp_state', 'attack_speed', 'hp_steal', 'mp_steal', 'missile_angle', 'angle_variance', 'post_effect', 'post_effect_src', 'pre_power', 'modifier_accuracy', 'modifier_damage', 'modifier_critical'
+  * StatBlock: 'stat', 'stat_per_level', 'stat_per_primary', 'vulnerable', 'chance_pursue', 'chance_flee'
+* Added engine/number_format.txt. This file defines the number of digits to print after the decimal point for fractional values under different contexts.
+* Add support for multiplicative stat bonuses. For example, an item bonus of 1.5x Max HP, which would be defined as 'bonus=hp,150%'.
+  * As such, the 'hp_percent' and 'mp_percent' stat bonuses are considered deprecated.
+* Players are directed to the Mods configuration menu via a dialog box when no core mod is enabled. (kr4ft3r)
+  * Core mods are now labeled as such in their tooltips on the Mods configuration menu.
+* Added 'resource_round_method' property to engine/combat.txt.
+* Support arbitrary "MP-like" resources:
+  * Configuration file: engine/resource_stats.txt
+  * Added 'requires_resource_stat' and 'resource_steal' properties to Powers.
+  * Added 'requires_resource_stat_state' and 'requires_resource_stat_state_mode' properties to Powers.
+* Added 'enabled' property to MenuStatBar definitions.
+
+Engine fixes:
+
+* Fixed set item tooltips showing incorrect number of equipped items if a set item was on an inactive loadout.
+* Fixed dev console commands not working if they were preceded by whitespace.
+* Fixed spawning entities not counting towards summoned entity count.
+* Fix broken gamepad navigation after closing Powers menu while on a non-default tab.
+* Removed hard-coded minimum values for HP/MP steal and damage return.
+* Fixed "activate" message incorrectly showing in MenuPowers tooltips.
+* Fix some cases where 'min' damage/absorb could be greater than the cooresponding 'max' value.
+* Fixed text input issues with deleting text on Android.
+
+Game updates:
+
+* Fireball and Ice Bolt scrolls now give the player a 10 second period in which their basic attacks (Swing, Shoot, Channel) are replaced with the scroll power.
+* Fixed the naming of scroll damage as it appears in power description tooltips.
+* Lowered Lezaith's slow resistance to 50%, down from 100%
+* Lowered Lezaith's stun resistance to 90%, down from 100%
+
+Translation updates:
+
+* German (de) update (Wuzzy2)
+* Scottish Gaelic (gd) update (GunChleoc)
+* Indonesian (id) update (Kirim Saja)
+* Italian (it) update (Riccardi Unix)
+* Japanese (ja) update (Sato Hayato)
+* Korean (ko) update (ks k, YooJin919)
+* Polish (pl) update (Pawonashi)
+* Russian (ru) update (berry)
+* Chinese (zh) update (Issac Zhang)
+
+
+
+Flare v1.13.04
+
+Engine features:
+
+* Added 'bar_gfx' property to menus/enemy.txt for setting the "fill" image
+
+Engine fixes:
+
+* Fix crash when trying to read a non-existent file with INCLUDE
+* Fix passive powers not being correctly re-applied after death
+* Improve performance of WidgetListBox by caching all items instead of just the visible ones
+
+
+
+Flare v1.13 (https://flarerpg.org/2022/01/31/flare-1-13/)
+
+Engine features:
+
+* Added additional requirement properties (requires_status, requires_item, etc) to enemy and NPC map objects. The properties now match what is available for map events.
+* When 'mouse aim' is disabled, the Shift key can now be used with the direction keys to change the player's orientation without moving.
+* Added optional 'fog-of-war' feature (r-a-cristian-93)
+* Added support for multiple sets/loadouts of equipped items (r-a-cristian-93)
+* Added random_status attribute to Events for setting/unsetting a random status from a list.
+* Reworked gamepad handling using the SDL_GameController API.
+* Several new key bindings, many of which will benefit gamepad users.
+* Added an "action picker" for interacting with items/powers when using a gamepad or a touchscreen.
+* Added misc.selection_rect_corner_size to engine/widget_settings.txt. This allows for a nicer "targeting reticle" appearance when selecting widgets without a mouse.
+* Added 'background' property for all menus. Menus will fall back to the existing hard-coded filenames if this property is omitted.
+* Added 'close', 'label_title', and 'action_list' properties to MenuConfirm configuration.
+* Added 'render_layers' section to StatBlock definitions. It has the same syntax and functionality as engine/hero_layers.txt, so that file is now considered deprecated.
+* Added 'animation_slots' section to StatBlock definitions. This allows for multiple animation layers on non-player entities that don't have an inventory like the player.
+* Added a 'direction' property to map NPCs, indentical to the property of the same name for map enemies.
+* Added 'vendor_ratio_buy', 'vendor_ratio_sell', and 'vendor_ratio_sell_old' properties to engine/loot.txt. These deprecate 'vendor_ratio' and 'vendor_ratio_buyback'.
+* Added 'vendor_ratio_buy', 'vendor_ratio_sell', and 'vendor_ratio_sell_old' properties to NPCs. These can be used to override the global settings in engine/loot.txt.
+* Added 'tooltip_visible_max' to engine/tootlips.txt to control the maximum number of visible floating tooltips.
+
+Engine fixes:
+
+* Fix enemies not being able to target NPC followers
+* Fix loot and sound effects being cleared in StatBlock files with multiple sections
+* Fix potential crash when removing summons that would be out-of-bounds on the next map.
+* Fix bug where a damage type with no name could be removed if another damage type was defined after it.
+* Don't show hidden stats under 'Related Stats' section of tooltips of Character menu.
+* Fix bug where negative regen wouldn't work if the resource was 100% full.
+* Fix bug where negative regen would overflow after reaching zero.
+* Fix bug that caused built-in effect types to be ignored by Power post_effect.
+* Fix disappearing sprites due to render priority overflow.
+* Fading of corpses is now correctly disabled when corpse_timeout=0 is used in engine/misc.txt.
+* Fix cast animation not playing when using an inventory item that is not instant.
+* Fixed a bug on Android where loading the default settings would exit fullscreen mode.
+* Fixed crash in NPC dialog when using gamepad.
+* Fixed several small bugs with navigating UI elements with a gamepad.
+* Fixed incorrect handling of gamepad stick/trigger deadzone.
+* Fixed fullscreen setting being turned off when loading configuration defaults on Android.
+* Fixed input hint for item tooltips when using a touchscreen.
+* Improved file access handling on Android versions 10 and up. This fixes the infinite cutscene loop when starting a new game.
+* Fixed memory leak when loading NPCs.
+* Entity animations will now fall back to the 'die' animation when 'critdie' isn't defined.
+* Improved text rendering by blending text with a copy of itself.
+* Fix infinite loop that could occur when setting unlocked powers.
+* Elemental resistances can now be used with 'stat', 'stat_per_level', and 'stat_per_primary' in StatBlock definitions.
+
+Game updates:
+
+* New formula for the 'Shield' power. Instead of Mental Damage, it is now based off a combination of player level, Mental stat, and Defense stat. This should increase its usefulness on mixed builds.
+* Added 'Super' and 'Ultra' variants of Health and Mana potions. They can be obtained through the Alchemy system.
+* New icons for Health and Mana potions variants.
+* Fixed Alchemist's Skirt so that it works with all potions.
+* Prevent the player from damaging Mez before being trapped.
+* Made Lezaith immune to slow/stun effects.
+* Goblin Thief can now steal all available kinds of potions. Its drop table has also been expanded to make it easier to replenish lost potions.
+* Improved contrast for "highlight" state of red square buttons ("close" and "plus").
+* The minimap is now gradually revealed as the player explores.
+* Added icon artwork to the equipment slots on the Inventory menu.
+
+Translation updates:
+
+* Basque (eu) update (aitzkora)
+* Scottish Gaelic (gd) update (GunChleoc)
+* Norwegian Bokmal (nb) update (Elias Nykrem)
+* Polish (pl) update (Pawonashi)
+* Russian (ru) update (Igor Polyakov)
+
+
+
+Flare v1.12 (https://flarerpg.org/2021/08/02/flare-1-12/)
+
+Engine features:
+
+* NPC interactions are now canceled when the player is attacked. 'combat_aborts_npc_interact' has been added to engine/misc.txt to control this setting.
+* Added 'bar_fill_offset' and 'bar_fill_size' to MenuStatBar and MenuEnemy properties.
+* Added support for fading out combat text. See the 'fade_duration' property in engine/combat.txt.
+* Added 'save_oncutscene' property to engine/misc.txt. Saving before a cutscene was previously controlled with 'save_onload', which caused issues with cutscenes when set to false.
+* Added 'save_anywhere' property to engine/misc.txt. This allows for saving via the pause menu. (m7600)
+* Added display of enemies, allies, NPCs, and intermap teleport events to the minimap.
+* Added support for defining the colors of tiles and entities on the minimap.
+* Added 'show_on_minimap' event component. Currently, this only applies to intermap teleport events.
+* Added 'show_on_minimap' property to NPCs.
+* Properties that take an alignment can now be aligned to the menu frame.
+* Support multiple images in animation definitions. (bloodhero)
+* Expanded slot widget configuration in engine/widget_settings.txt. Quantity text color can be changed, as well as label settings for displaying hotkeys.
+* Re-implemented displaying hotkeys on action bar slots.
+* Support for 'item:quantity' syntax for Event properties: 'requires_item', 'requires_not_item', 'remove_item', and 'reward_item'.
+* Added 'show_randomize' property to new game menu configuration.
+* Added 'disable_equip_slots' property for passive powers.
+* 'Block' powers can now use post_power to trigger a power when taking damage.
+* Power descriptions are now displayed in action bar tooltips. This can be controlled with the 'tooltip_length' property in menus/actionbar.txt.
+* A dialog box is now displayed instead of a log message when the player dies, giving the options to exit or respawn (if applicable).
+* Added movement input type dialog box. It is displayed for new players to easily select between keyboard, mouse, and joystick movement.
+* Added '--safe-video' command line option. For troubleshooting purposes, this feature is displayed as an option when starting after a potential crash.
+* The 'categories' property has been extended to the player character. The Power property 'target_categories' can now be used for the player as a result.
+* The ability to stash quest items can now be controlled with the 'no_stash' property.
+* Added a button for opening the pause/configuration menu as part of the minimap.
+* Added 'script' property to items. This removes the need to create a power in order to execute a script via activating an item.
+* Player 'melee_range' is now configurable in engine/stats.txt.
+* Added comparison tooltips for items. These can be disabled in the Interface settings. (r-a-cristian-93, Justin Jacobs)
+* Added 'parallax_layers' property to Events. This functions exactly like the Map property of the same name.
+* Added 'visible', 'visible_check_locked', and 'visible_check_status' to powers and upgrades in power trees.
+* Added 'requires_status' and 'requires_not_status' to powers and upgrades in power trees. 'visible_requires_status' and 'visible_requires_not_status' have been marked as deprecated.
+* Added 'on_interact' as a possible value for Event types. Essentially the same as 'on_trigger', except the event can ONLY be activated through the hotspot.
+* Support an arbitrary number of Stash tabs. Each tab has a display name and an 'is_private' flag.
+* Added 'save_onstash' property to engine/misc.txt, so it is now possible to disable the automatic save when modifying stash contents.
+* The player's last used Stash tab is now remembered across sessions.
+* Added the ability for NPCs to join the player's party. (Igor Paliychuk)
+* Added support for the 'delay' property used by Events contained in script files.
+* Added 'Frame Limit' option to Video settings.
+* Added 'Maximum Render Size' option to Video settings.
+* Improved visual indication of which item set bonuses are active.
+* Support enabling touch screen controls on non-Android systems.
+* Added 'Touch Gamepad Scale' option to Input settings.
+* Support fullscreen mode in the Emscripten port.
+* Added scrollbar.bg_color to engine/widget_settings.txt.
+* Updates to package_osx.sh, including usage of Homebrew for dependencies (ludoza)
+
+Engine fixes:
+
+* Fix memory leak of tab control in stash menu (MiroslavR)
+* Fixed stat bars not having any fill when the value they were representing was non-zero. Now they will always show at least 1 pixel of the bar's fill graphics.
+* Fixed a bug where the game window could be resized below the minimum size after exiting fullscreen mode.
+* Removed the default resolution scaling when virtual_heights is undefined.
+* Improved performance when checking map event hotspots.
+* Fix Windows-style paths with backslashes not working on non-Windows systems.
+* Prevent allies counting as attack targets when using mouse movement.
+* Fix needing to press the 'Cancel' key twice to exit the vendor menu.
+* Fix unintended key presses being registered when quitting the game via an OS keyboard shortcut.
+* Fix divide-by-zero crash when using the dev HUD with a game that uses orthogonal rendering.
+* Fixed a memory leak in Loot copy constructor.
+* Fixed 'resist_percent' property of engine/combat.txt not working when targets had 100% resistance.
+* Support attack_speed effects with a magnitude less than 100%.
+* Fixed bug where dead entities could steal HP/MP.
+* Fix broken parsing of engine/default_keybindings.txt.
+* Fix Effect animations not being synced properly in some cases.
+* Removed hard-coded restrictions on using items from the inventory. Now any item that has a power and is not equipment can be used.
+* Fix crash when fonts are missing. The engine will try to fall back to the next available font for the current language.
+* Background color when using sdl_hardware renderer no longer fills entire window, instead only filling the drawing surface as it should.
+* Fix crash when loading a cutscene from a book event.
+* Fix infinite transformation loop when dying in a transformed state that was activated by a passive power.
+* Fix bug where the player wasn't returned to their normal state after dying in a transformed state.
+* Prevent combat text from overlapping.
+* Improved performance when handling many status effects.
+* Improved performance when an entity is repeatedly unable to find a path to thier target.
+* Fix bug where killing an enemy with return damage would not set defeat status or reward XP/loot.
+* Fix check of item requirements when a power requires an item but doesn't consume it.
+* Fix 'respec' events to no longer remove item-based powers from the action bar.
+* Fix log message when gaining more than one level at once.
+* Fixed excessive memory usage when using Items, ItemSets, and Powers with high-value IDs.
+* Fix bug where power upgrades that didn't require power points would not automatically upgrade if other requirements were met.
+* Fix infinite loop bug when a power's list of upgrades contains the base power ID.
+* Fix infinite loop bug when locking power upgrades.
+* The executable directory is now used when trying to find PATH_DATA on Linux. (r-a-cristian-93)
+* Fix 'corpse_timeout' in engine/misc.txt being parsed incorrectly (r-a-cristian-93)
+* Reworked camera speed curve to prevent graphical "wiggle" during slow movement.
+* Fix missing effect description text in power tooltips when using built-in types.
+* Fix static events not executing on the same frame as on_load events.
+* Fix parsing bug in power trees that would save base power properties to an upgrade power.
+* Fix on_load events with requires_class not working in maps/spawn.txt
+* Fix timing of Effects so that the first "tick" happens immediately.
+* Fix "Press button to use" prompt no showing up for some items.
+* Fix loud loot drop sound effect when there are a large number of drops at once.
+* Fix incorrect HP/MP regen for high regen values and high frame limits.
+* Fix camera, parallax layer, and cutscene speeds when using alternative frame limits.
+* Fix not restoring fullscreen option when pressing Cancel or Defaults in config menu.
+* Smoother scrolling in WidgetScrollBox.
+* Fix click-and-drag behavior on WidgetTabControl, WidgetSlider, and WidgetScrollBar.
+* Fix dialog topics being auto-selected when they shouldn't for non-vendor NPCs.
+
+Game updates:
+
+* New graphics for HP and MP status bars
+* Reworked art for the Cleave power
+* Cleave power radius reduced to closer match its artwork
+* Reduced the strength and radius of Rakk's freeze attack
+* Fixed the Goblin Thief being able to steal potions from a Summoned Zombie
+* Reduced the hitbox for spike traps
+* Greatly reduced the damage for spike traps. In exchange, the traps now inflict bleeding.
+* New alchemy ingredient: Mushrooms
+* Added 4 new potion recipes
+* Overall reduced drop rates for alchemy items
+* Added Alchemy quest
+* Added animations for immunity and ice-based slow status effects
+* Redesigned the Family Crypt map and quest
+* Redesigned the Nazia Mines maps and quest
+* Redesigned the Torture Chambers map and quest (again)
+* Mortar & Pestle can now be placed on the action bar
+* All quest items can be stored in the player's private stash.
+
+Translation updates:
+
+* Belarusian (be) update (Źmicier Turok)
+* Catalan (ca) update (Maria Cano)
+* German (de) update (Wuzzy2)
+* Spanish (es) update (Agustin Ferrario)
+* Basque (eu) by aitzkora
+* French (fr) update (leø, Christophe Nemo, Bafy)
+* Scottish Gaelic (gd) update (GunChleoc)
+* Hungarian (hu) update (litoll)
+* Indonesian (id) by Kirim Saja
+* Korean (ko) by Kor_OfenTHource (team members: bnk159hair, kangdonghun1230, HunSeongPark and paparad0x)
+* Norwegian (nb) update (Elias Nykrem)
+* Polish (pl) update (Błażej Pęksyk, Grzegorz Szymaszek)
+* Portuguese (pt) update (Rui)
+* Portuguese (Brazilian) (pt_BR) update (Vicente Monteiro)
+* Russian (ru) update (Igor Polyakov)
+* Slovak (sk) update (MiroslavR)
+* Ukranian (uk) update (Sergiy Borodych)
+* Vietnamese (vi) update (Nguyễn Gia Phong)
+* Chinese (zh) update (dumaosen, sakura09123)
+* Chinese (Taiwan) (zh_TW) by RedBug312
+
+
+
+Flare v1.11 (http://flarerpg.org/index.php/2019/07/27/flare-1-11/)
+
+Engine features:
+
+* Players now have their own private stash in addition to the shared stash.
+* Expanded the 'no_stash' Item variable to account for having multiple stashes.
+
+Engine fixes:
+
+* Fix bug where items could be dragged from the vendor window and dropped in the opposite vendor tab.
+* Fix bug that caused item max_quantity to be reset when attempting to append an item definition.
+* Fix bug where Powers with 'replace_by_effect' would still use properties from the parent power, such as animation state.
+
+Game updates:
+
+* Items that couldn't be stashed in the last update can now be put in the private stash.
+* Salted Field: moved chest to the south end of the map to prevent easy farming.
+
+Translation updates:
+
+* Belarusian (be) update (Zmicer Turok)
+* German (de) update (Wuzzy2)
+* Hungarian (hu) by bzt
+* Ukranian (uk) update (Igor Paliychuk)
+
+
+
+Flare v1.10 (http://flarerpg.org/index.php/2019/05/17/flare-1-10/)
 
 Engine features:
 
@@ -31,11 +423,18 @@ Engine fixes:
 * Fix inventory tooltips covering books when using no mouse.
 * Fix navigation of dialog menu when using no mouse.
 * Fix upgrading powers when using no mouse.
+* When using the sdl_hardware renderer on Windows, OpenGL will now be used instead of Direct3D. This fixes the loss of some textures when resizing the window.
+* Fixed the "level up" string to represent the ability to allocate multiple stat points. Also note if Power points can be allocated.
+* Refactored 'requires_hpmp_state' for Powers to check against both stats at once. See the attribute reference for syntax changes.
+* Greatly improved performance of loot tooltips.
+* Fix bug where high item find chance prevented the player from finding currency.
 
 Game updates:
 
 * Fixed an oversight that allowed easy farming of the Torture Chambers boss and loot chests.
 * Made it so that potions and scrolls can not be stashed. This fixes an exploit where players could utilize a low level character to get these items for cheap.
+* Added new attack and interact cursors.
+* Added sound effect and cursors for indicating low health.
 
 Translation updates:
 
@@ -43,9 +442,13 @@ Translation updates:
 * Brazilian Portuguese (pt_BR) update (Vinicius Rech)
 * Catalan (ca) update (Marc Tormo i Bochaca)
 * German (de) update (Fyrenic)
+* Spanish (es) update (Agustin Ferrario)
 * French (fr) update (syl_)
+* Scottish Gaelic (gd) update (GunChleoc)
+* Japanese (ja) update (sujiniku)
 * Portuguese (pt) update (Rui)
 * Russian (ru) update (Andrey Kapitonov, Igor Paliychuk, nwtour)
+* Ukranian (uk) update (Igor Paliychuk)
 * Chinese (zh) update (dumaosen, neverwin)
 
 

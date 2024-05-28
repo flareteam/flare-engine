@@ -6,6 +6,7 @@ Andrew Engelbrecht | https://n0r.co
 Anton Golov | http://jesyspa.blogspot.com/
 Artur "Zear" Rojek
 blazindragon
+bloodhero
 Bonbadil
 Chris Oelmueller
 Clint Bellanger | http://clintbellanger.net
@@ -18,12 +19,14 @@ Joseph Bleu
 Juan Pablo Tamayo "morris989"
 Justin Jacobs | https://github.com/dorkster
 Kitano
+kr4ft3r
 Kyle Belanger
 LongerDev
 Manuel A. Fernandez Montecelo
 Matthew Krohn | https://github.com/makrohn
 Nojan
 Pavel Kirpichyov "Cheshire"
+r-a-cristian-93
 runtime-x86
 Ryan Dansie | https://github.com/RyanDansie
 Stefan Beller | https://github.com/stefanbeller
@@ -40,30 +43,36 @@ miffe
 
 Translations
 
-(be) Belarussian by Mikhail Karalevich
+(be) Belarussian by Mikhail Karalevich and Źmicier Turok
 (bg) Bulgarian by Emil
-(ca) Catalan by Marc Tormo i Bochaca
+(ca) Catalan by Marc Tormo i Bochaca and Maria Cano
 (cs) Czech by Nikita Vanku (Zaraka), hark34
-(de) German by Thomas 'CruzR' Glamsch, Chris Oelmueller, Janet Hunt, Stefan Beller, and Wuzzy2
+(de) German by Thomas 'CruzR' Glamsch, Chris Oelmueller, Janet Hunt, Stefan Beller, Wuzzy2, and Iwan Gabovitch
 (el) Greek by Yannis Anthymidis, Michael Papageorgiou, and Nea Retrogamer
-(es) Spanish by Juan Pablo 'morris989' Tamayo, Carlos Sanchez, Diego J. Romero López, and Eric R
-(fi) Finnish by Timo Sievänen
-(fr) French by Quentin 'acieroid' Stievenart, Bonbadil, Morgan Strauss, Christoph J. Thompson, and syl_
+(es) Spanish by Juan Pablo 'morris989' Tamayo, Carlos Sanchez, Diego J. Romero López, Eric R, Jacobo Feijóo, and Eugenio Martínez Seguín
+(fi) Finnish by Timo Sievänen and Jaakko Muilu
+(fr) French by Quentin 'acieroid' Stievenart, Bonbadil, Morgan Strauss, Christoph J. Thompson, syl_, Christophe Nemo, and Bafy
 (gd) Scottish Gaelic by GunChleoc
 (gl) Galacian by Adrian Chaves Fernandez (Gallaecio)
-(it) Italian by Giovanni Dalla Torre, Gianfranco Del Borrello, Stefano Peris, Andrea Ranaldi, MOB2, and Fabio Loli
-(ja) Japanese by Paul Wortmann, sujiniku
-(nb) Norwegian Bokmal by Hans Joachim Desserud
+(hi_IN) Hindi (India) by Ansh Mishra
+(hu) Hungarian by bzt
+(id) Indonesian by Kirim Saja
+(it) Italian by Giovanni Dalla Torre, Gianfranco Del Borrello, Stefano Peris, Andrea Ranaldi, MOB2, Fabio Loli, and Riccardi Unix
+(ko) Korean by bnk159hair, YooJin919, ks k
+(ja) Japanese by Paul Wortmann, sujiniku, Sato Hayato
+(nb) Norwegian Bokmal by Hans Joachim Desserud, Elias Nykrem
 (nl) Dutch by Bas Doodeman
-(pl) Polish by Paweł Puszczyński
+(pl) Polish by Paweł Puszczyński, Błażej Pęksyk, Grzegorz Szymaszek, and Marcin Serwin
 (pt) Portuguese by Rui
-(pt_BR) Brazilian Portuguese by Vicente Monteiro
-(ru) Russian by Sergey Basalaev, Evgen Pavlov, Ademaro, and Andrey Kapitonov
-(sk) Slovak by Miro Jánošík
-(sv) Swedish by Andreas Berheim Brudin
+(pt_BR) Brazilian Portuguese by Vicente Monteiro and Rafael Fontenelle
+(ru) Russian by Sergey Basalaev, Evgen Pavlov, Ademaro, Andrey Kapitonov, David Bell, and berry
+(sk) Slovak by Miro Jánošík, MiroslavR
+(sv) Swedish by Andreas Berheim Brudin, Kevin Setterborn
+(th_TH) Thai (Thailand) by Pattaraporn Tripiyaratana
 (uk) Ukrainian by Igor Paliychuk, Denis Lysenko, Микола Франчук, Sergiy Borodych
-(vi) Vietnamese by Nguyễn Gia Phong
-(zh) Chinese by lonsine, dumaosen
+(vi) Vietnamese by Nguyễn Gia Phong, Đoàn Mỹ
+(zh) Chinese by lonsine, dumaosen, Issac Zhang
+(zh_TW) Chinese (Taiwan) by Benson
 
 Full Credits
 

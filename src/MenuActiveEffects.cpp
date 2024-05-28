@@ -90,7 +90,7 @@ void MenuActiveEffects::logic() {
 		if (pc->stats.effects.effect_list[i].icon == -1)
 			continue;
 
-		const Effect &ed = pc->stats.effects.effect_list[i];
+		Effect &ed = pc->stats.effects.effect_list[i];
 
 		size_t most_recent_id = effect_icons.size()-1;
 		if(ed.group_stack){
@@ -105,13 +105,13 @@ void MenuActiveEffects::logic() {
 				}else if (ed.type == Effect::HEAL){
 					//No special behavior
 				}else{
-					if(ed.ticks < effect_icons[most_recent_id].current){
-						if (ed.duration > 0)
-							effect_icons[most_recent_id].overlay.y = (eset->resolutions.icon_size * ed.ticks) / ed.duration;
+					if (ed.timer.getCurrent() < static_cast<unsigned>(effect_icons[most_recent_id].current)){
+						if (ed.timer.getDuration() > 0)
+							effect_icons[most_recent_id].overlay.y = (eset->resolutions.icon_size * ed.timer.getCurrent()) / ed.timer.getDuration();
 						else
 							effect_icons[most_recent_id].overlay.y = eset->resolutions.icon_size;
-						effect_icons[most_recent_id].current = ed.ticks;
-						effect_icons[most_recent_id].max = ed.duration;
+						effect_icons[most_recent_id].current = ed.timer.getCurrent();
+						effect_icons[most_recent_id].max = ed.timer.getDuration();
 					}
 				}
 
@@ -121,7 +121,7 @@ void MenuActiveEffects::logic() {
 					effect_icons[most_recent_id].stacksLabel->setMaxWidth(eset->resolutions.icon_size);
 				}
 
-				effect_icons[most_recent_id].stacksLabel->setText(msg->get("x%d", effect_icons[most_recent_id].stacks));
+				effect_icons[most_recent_id].stacksLabel->setText(msg->getv("x%d", effect_icons[most_recent_id].stacks));
 
 				continue;
 			}
@@ -149,21 +149,21 @@ void MenuActiveEffects::logic() {
 		ei.overlay.w = eset->resolutions.icon_size;
 
 		if (ed.type == Effect::SHIELD) {
-			ei.overlay.y = (eset->resolutions.icon_size * ed.magnitude) / ed.magnitude_max;
-			ei.current = ed.magnitude;
-			ei.max = ed.magnitude_max;
+			ei.overlay.y = static_cast<int>((eset->resolutions.icon_size * ed.magnitude) / ed.magnitude_max);
+			ei.current = static_cast<int>(ed.magnitude);
+			ei.max = static_cast<int>(ed.magnitude_max);
 		}
 		else if (ed.type == Effect::HEAL) {
 			ei.overlay.y = eset->resolutions.icon_size;
 			// current and max are ignored
 		}
 		else {
-			if (ed.duration > 0)
-				ei.overlay.y = (eset->resolutions.icon_size * ed.ticks) / ed.duration;
+			if (ed.timer.getDuration() > 0)
+				ei.overlay.y = (eset->resolutions.icon_size * ed.timer.getCurrent()) / ed.timer.getDuration();
 			else
 				ei.overlay.y = eset->resolutions.icon_size;
-			ei.current = ed.ticks;
-			ei.max = ed.duration;
+			ei.current = ed.timer.getCurrent();
+			ei.max = ed.timer.getDuration();
 		}
 		ei.overlay.h = eset->resolutions.icon_size - ei.overlay.y;
 
@@ -216,13 +216,13 @@ void MenuActiveEffects::renderTooltips(const Point& position) {
 				tip_data.addText(ss.str());
 			}
 			else if (effect_icons[i].max > 0) {
-				ss << msg->get("Remaining:") << " " << Utils::getDurationString(effect_icons[i].current, 1);
+				ss << msg->get("Remaining:") << " " << Utils::getDurationString(effect_icons[i].current, eset->number_format.durations);
 				tip_data.addText(ss.str());
 			}
 
 			if(effect_icons[i].type != Effect::SHIELD){
 				if(effect_icons[i].stacks > 1){
-					tip_data.addText(msg->get("x%d stacks", effect_icons[i].stacks));
+					tip_data.addText(msg->getv("x%d stacks", effect_icons[i].stacks));
 				}
 			}
 

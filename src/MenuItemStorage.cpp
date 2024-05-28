@@ -40,9 +40,7 @@ MenuItemStorage::MenuItemStorage()
 	, drag_prev_slot(-1)
 	, slots()
 	, current_slot(NULL)
-	, highlight(NULL)
-	, highlight_image(NULL)
-	, overlay_disabled(NULL) {
+{
 }
 
 void MenuItemStorage::initGrid(int _slot_number, const Rect& _area, int _nb_cols) {
@@ -51,36 +49,28 @@ void MenuItemStorage::initGrid(int _slot_number, const Rect& _area, int _nb_cols
 	grid_pos.x = _area.x;
 	grid_pos.y = _area.y;
 	for (int i = 0; i < _slot_number; i++) {
-		WidgetSlot *slot = new WidgetSlot(WidgetSlot::NO_ICON, Input::ACCEPT);
+		WidgetSlot *slot = new WidgetSlot(WidgetSlot::NO_ICON, WidgetSlot::HIGHLIGHT_NORMAL);
 		slots.push_back(slot);
 	}
 	nb_cols = _nb_cols;
-	highlight = new bool[_slot_number];
 	for (int i=0; i<_slot_number; i++) {
-		highlight[i] = false;
 		slots[i]->pos.x = grid_area.x + (i % nb_cols * eset->resolutions.icon_size);
 		slots[i]->pos.y = grid_area.y + (i / nb_cols * eset->resolutions.icon_size);
 		slots[i]->pos.h = slots[i]->pos.w = eset->resolutions.icon_size;
 		slots[i]->setBasePos(slots[i]->pos.x, slots[i]->pos.y, Utils::ALIGN_TOPLEFT);
 	}
-	loadGraphics();
 }
 
 void MenuItemStorage::initFromList(int _slot_number, const std::vector<Rect>& _area, const std::vector<std::string>& _slot_type) {
 	ItemStorage::init( _slot_number);
 	for (int i = 0; i < _slot_number; i++) {
-		WidgetSlot *slot = new WidgetSlot(WidgetSlot::NO_ICON, Input::ACCEPT);
+		WidgetSlot *slot = new WidgetSlot(WidgetSlot::NO_ICON, WidgetSlot::HIGHLIGHT_NORMAL);
 		slot->pos = _area[i];
 		slot->setBasePos(slot->pos.x, slot->pos.y, Utils::ALIGN_TOPLEFT);
 		slots.push_back(slot);
 	}
 	nb_cols = 0;
 	slot_type = _slot_type;
-	highlight = new bool[_slot_number];
-	for (int i=0; i<_slot_number; i++) {
-		highlight[i] = false;
-	}
-	loadGraphics();
 }
 
 void MenuItemStorage::setPos(int x, int y) {
@@ -93,49 +83,16 @@ void MenuItemStorage::setPos(int x, int y) {
 	}
 }
 
-void MenuItemStorage::loadGraphics() {
-	Image *graphics;
-	graphics = render_device->loadImage("images/menus/attention_glow.png", RenderDevice::ERROR_NORMAL);
-	if (graphics) {
-		highlight_image = graphics->createSprite();
-		graphics->unref();
-	}
-
-	graphics = render_device->loadImage("images/menus/disabled.png", RenderDevice::ERROR_NORMAL);
-	if (graphics) {
-		overlay_disabled = graphics->createSprite();
-		graphics->unref();
-	}
-
-}
-
 void MenuItemStorage::render() {
-	Rect disabled_src;
-	disabled_src.x = disabled_src.y = 0;
-	disabled_src.w = disabled_src.h = eset->resolutions.icon_size;
-
 	for (int i=0; i<slot_number; i++) {
-		if (storage[i].item > 0) {
-			slots[i]->setIcon(items->items[storage[i].item].icon, items->getItemIconOverlay(storage[i].item));
-			slots[i]->setAmount(storage[i].quantity, items->items[storage[i].item].max_quantity);
+		if (items->isValid(storage[i].item)) {
+			slots[i]->setIcon(items->items[storage[i].item]->icon, items->getItemIconOverlay(storage[i].item));
+			slots[i]->setAmount(storage[i].quantity, items->items[storage[i].item]->max_quantity);
 		}
 		else {
 			slots[i]->setIcon(WidgetSlot::NO_ICON, WidgetSlot::NO_OVERLAY);
 		}
 		slots[i]->render();
-		if (!slots[i]->enabled) {
-			if (overlay_disabled) {
-				overlay_disabled->setClipFromRect(disabled_src);
-				overlay_disabled->setDestFromRect(slots[i]->pos);
-				render_device->render(overlay_disabled);
-			}
-		}
-		if (highlight[i] && !slots[i]->in_focus) {
-			if (highlight_image) {
-				highlight_image->setDestFromRect(slots[i]->pos);
-				render_device->render(highlight_image);
-			}
-		}
 	}
 }
 
@@ -145,18 +102,19 @@ int MenuItemStorage::slotOver(const Point& position) {
 	}
 	else if (nb_cols == 0) {
 		for (unsigned int i=0; i<slots.size(); i++) {
-			if (Utils::isWithinRect(slots[i]->pos, position)) return i;
+			if (slots[i]->visible)
+				if (Utils::isWithinRect(slots[i]->pos, position)) return i;
 		}
 	}
 	return -1;
 }
 
-TooltipData MenuItemStorage::checkTooltip(const Point& position, StatBlock *stats, int context) {
+TooltipData MenuItemStorage::checkTooltip(const Point& position, StatBlock *stats, int context, bool input_hint) {
 	TooltipData tip;
 	int slot = slotOver(position);
 
 	if (slot > -1 && storage[slot].item > 0) {
-		return items->getTooltip(storage[slot], stats, context);
+		return items->getTooltip(storage[slot], stats, context, input_hint);
 	}
 	return tip;
 }
@@ -181,7 +139,7 @@ ItemStack MenuItemStorage::click(const Point& position) {
 
 	if (drag_prev_slot > -1) {
 		item = storage[drag_prev_slot];
-		if (settings->touchscreen) {
+		if (inpt->mode == InputState::MODE_TOUCHSCREEN) {
 			if (!slots[drag_prev_slot]->in_focus && !item.empty()) {
 				slots[drag_prev_slot]->in_focus = true;
 				current_slot = slots[drag_prev_slot];
@@ -189,13 +147,13 @@ ItemStack MenuItemStorage::click(const Point& position) {
 				drag_prev_slot = -1;
 				return item;
 			}
-			else {
+			else if (item.empty()) {
 				slots[drag_prev_slot]->defocus();
 				current_slot = NULL;
 			}
 		}
 		if (!item.empty()) {
-			if (item.quantity > 1 && !inpt->pressing[Input::CTRL] && (inpt->pressing[Input::SHIFT] || !inpt->usingMouse() || inpt->touch_locked)) {
+			if (item.quantity > 1 && !inpt->pressing[Input::CTRL] && (inpt->pressing[Input::SHIFT] || !inpt->usingMouse() || inpt->mode == InputState::MODE_TOUCHSCREEN)) {
 				// we use an external menu to let the player pick the desired quantity
 				// we will subtract from this stack after they've made their decision
 				return item;
@@ -214,33 +172,32 @@ ItemStack MenuItemStorage::click(const Point& position) {
 
 void MenuItemStorage::itemReturn(ItemStack stack) {
 	add( stack, drag_prev_slot);
-	if (drag_prev_slot != -1) {
-		slots[drag_prev_slot]->checked = false;
-	}
 	drag_prev_slot = -1;
 }
 
-void MenuItemStorage::highlightMatching(const std::string& type) {
+void MenuItemStorage::highlightMatching(ItemID item_id) {
 	for (int i=0; i<slot_number; i++) {
-		if (slot_type[i] == type) highlight[i] = true;
+		if (slots[i]->visible && items->isValid(item_id) && slot_type[i] == items->items[item_id]->type)
+			slots[i]->highlight = true;
 	}
 }
 
 void MenuItemStorage::highlightClear() {
 	for (int i=0; i<slot_number; i++) {
-		highlight[i] = false;
+		slots[i]->highlight = false;
 	}
 }
 
+ItemStack MenuItemStorage::getItemStackAtPos(const Point& position) {
+	int slot_over = slotOver(position);
+	if (slot_over > -1) {
+		return storage[slot_over];
+	}
+	return ItemStack();
+}
+
 MenuItemStorage::~MenuItemStorage() {
-	if (highlight_image)
-		delete highlight_image;
-
-	delete[] highlight;
-
-	if (overlay_disabled)
-		delete overlay_disabled;
-
-	for (unsigned i=0; i<slots.size(); i++)
+	for (size_t i = 0; i < slots.size(); ++i) {
 		delete slots[i];
+	}
 }

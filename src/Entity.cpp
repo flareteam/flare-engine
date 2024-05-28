@@ -32,25 +32,20 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "EngineSettings.h"
 #include "Entity.h"
+#include "EntityBehavior.h"
 #include "Hazard.h"
+#include "HazardManager.h"
 #include "MapRenderer.h"
 #include "MessageEngine.h"
 #include "PowerManager.h"
+#include "RenderDevice.h"
 #include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "SoundManager.h"
 #include "UtilsMath.h"
 
-#include <math.h>
-
-#ifndef M_SQRT2
-#define M_SQRT2 sqrt(2.0)
-#endif
-
-const int directionDeltaX[8] =   {-1, -1, -1,  0,  1,  1,  1,  0};
-const int directionDeltaY[8] =   { 1,  0, -1, -1, -1,  0,  1,  1};
-const float speedMultiplyer[8] = { static_cast<float>(1.0/M_SQRT2), 1.0f, static_cast<float>(1.0/M_SQRT2), 1.0f, static_cast<float>(1.0/M_SQRT2), 1.0f, static_cast<float>(1.0/M_SQRT2), 1.0f};
+#include <cassert>
 
 Entity::Entity()
 	: sprites(NULL)
@@ -62,7 +57,12 @@ Entity::Entity()
 	, sound_levelup(0)
 	, sound_lowhp(0)
 	, activeAnimation(NULL)
-	, animationSet(NULL) {
+	, animationSet(NULL)
+	, stats()
+	, type_filename("")
+{
+	// MSVC complains if you use 'this' in the init list
+	behavior = new EntityBehavior(this);
 }
 
 Entity::Entity(const Entity& e) {
@@ -81,11 +81,23 @@ Entity& Entity::operator=(const Entity& e) {
 	sound_block = e.sound_block;
 	sound_levelup = e.sound_levelup;
 	sound_lowhp = e.sound_lowhp;
-	activeAnimation = new Animation(*e.activeAnimation);
-	animationSet = e.animationSet;
+
 	stats = StatBlock(e.stats);
 
+	activeAnimation = NULL;
+	animationSet = NULL;
+
+	loadAnimations();
+
+	type_filename = e.type_filename;
+
+	behavior = new EntityBehavior(this);
+
 	return *this;
+}
+
+void Entity::logic() {
+	behavior->logic();
 }
 
 void Entity::loadSounds() {
@@ -284,9 +296,9 @@ bool Entity::move() {
 	if (stats.charge_speed != 0.0f)
 		return false;
 
-	float speed = stats.speed * speedMultiplyer[stats.direction] * stats.effects.speed / 100;
-	float dx = speed * static_cast<float>(directionDeltaX[stats.direction]);
-	float dy = speed * static_cast<float>(directionDeltaY[stats.direction]);
+	float speed = stats.speed * StatBlock::SPEED_MULTIPLIER[stats.direction] * stats.effects.speed / 100;
+	float dx = speed * StatBlock::DIRECTION_DELTA_X[stats.direction];
+	float dy = speed * StatBlock::DIRECTION_DELTA_Y[stats.direction];
 
 	bool full_move = mapr->collider.move(stats.pos.x, stats.pos.y, dx, dy, stats.movement_type, mapr->collider.getCollideType(stats.hero));
 
@@ -300,13 +312,12 @@ bool Entity::move() {
  * Returns false on miss
  */
 bool Entity::takeHit(Hazard &h) {
-
 	//check if this enemy should be affected by this hazard based on the category
-	if(!powers->powers[h.power_index].target_categories.empty() && !stats.hero) {
+	if(!h.power->target_categories.empty()) {
 		//the power has a target category requirement, so if it doesnt match, dont continue
 		bool match_found = false;
 		for (unsigned int i=0; i<stats.categories.size(); i++) {
-			if(std::find(powers->powers[h.power_index].target_categories.begin(), powers->powers[h.power_index].target_categories.end(), stats.categories[i]) != powers->powers[h.power_index].target_categories.end()) {
+			if(std::find(h.power->target_categories.begin(), h.power->target_categories.end(), stats.categories[i]) != h.power->target_categories.end()) {
 				match_found = true;
 			}
 		}
@@ -320,10 +331,7 @@ bool Entity::takeHit(Hazard &h) {
 	}
 
 	//if the target is already dead, they cannot be hit
-	if ((stats.cur_state == StatBlock::ENEMY_DEAD || stats.cur_state == StatBlock::ENEMY_CRITDEAD) && !stats.hero)
-		return false;
-
-	if(stats.cur_state == StatBlock::AVATAR_DEAD && stats.hero)
+	if (stats.cur_state == StatBlock::ENTITY_DEAD || stats.cur_state == StatBlock::ENTITY_CRITDEAD)
 		return false;
 
 	// some attacks will always miss enemies of a certain movement type
@@ -340,40 +348,19 @@ bool Entity::takeHit(Hazard &h) {
 
 	// some enemies can be invicible based on campaign status
 	if (!stats.hero && !stats.hero_ally && h.source_type != Power::SOURCE_TYPE_ENEMY) {
-		bool invincible = false;
-		for (size_t i = 0; i < stats.invincible_requires_status.size(); ++i) {
-			if (!camp->checkStatus(stats.invincible_requires_status[i])) {
-				invincible = false;
-				break;
-			}
-			invincible = true;
-		}
-		if (invincible)
-			return false;
-
-		for (size_t i = 0; i < stats.invincible_requires_not_status.size(); ++i) {
-			if (camp->checkStatus(stats.invincible_requires_not_status[i])) {
-				invincible = false;
-				break;
-			}
-			invincible = true;
-		}
-		if (invincible)
+		if (!stats.invincible_requirements.empty() && camp->checkRequirementsInVector(stats.invincible_requirements))
 			return false;
 	}
 
 	//if the target is an enemy and they are not already in combat, activate a beacon to draw other enemies into battle
-	if (!stats.in_combat && !stats.hero && !stats.hero_ally && !powers->powers[h.power_index].no_aggro) {
+	if (!stats.in_combat && !stats.hero && !stats.hero_ally && !h.power->no_aggro) {
 		stats.join_combat = true;
 	}
 
 	// exit if it was a beacon (to prevent stats.targeted from being set)
-	if (powers->powers[h.power_index].beacon) return false;
+	if (h.power->beacon) return false;
 
-	// prepare the combat text
-	CombatText *combat_text = comb;
-
-	if (h.power->type == Power::TYPE_MISSILE && Math::percentChance(stats.get(Stats::REFLECT))) {
+	if (h.power->type == Power::TYPE_MISSILE && Math::percentChanceF(stats.get(Stats::REFLECT))) {
 		// reflect the missile 180 degrees
 		h.setAngle(h.angle+static_cast<float>(M_PI));
 
@@ -395,65 +382,70 @@ bool Entity::takeHit(Hazard &h) {
 	}
 
 	// if it's a miss, do nothing
-	int accuracy = h.accuracy;
-	if(powers->powers[h.power_index].mod_accuracy_mode == Power::STAT_MODIFIER_MODE_MULTIPLY)
-		accuracy = (accuracy * powers->powers[h.power_index].mod_accuracy_value) / 100;
-	else if(powers->powers[h.power_index].mod_accuracy_mode == Power::STAT_MODIFIER_MODE_ADD)
-		accuracy += powers->powers[h.power_index].mod_accuracy_value;
-	else if(powers->powers[h.power_index].mod_accuracy_mode == Power::STAT_MODIFIER_MODE_ABSOLUTE)
-		accuracy = powers->powers[h.power_index].mod_accuracy_value;
+	float accuracy = h.accuracy;
+	if (h.power->mod_accuracy_mode == Power::STAT_MODIFIER_MODE_MULTIPLY)
+		accuracy = (accuracy * h.power->mod_accuracy_value) / 100;
+	else if (h.power->mod_accuracy_mode == Power::STAT_MODIFIER_MODE_ADD)
+		accuracy += h.power->mod_accuracy_value;
+	else if (h.power->mod_accuracy_mode == Power::STAT_MODIFIER_MODE_ABSOLUTE)
+		accuracy = h.power->mod_accuracy_value;
 
-	int avoidance = 0;
-	if(!powers->powers[h.power_index].trait_avoidance_ignore) {
+	float avoidance = 0;
+	if (!h.power->trait_avoidance_ignore) {
 		avoidance = stats.get(Stats::AVOIDANCE);
 	}
 
-	int true_avoidance = 100 - (accuracy - avoidance);
-	bool is_overhit = (true_avoidance < 0 && !h.src_stats->perfect_accuracy) ? Math::percentChance(abs(true_avoidance)) : false;
+	float true_avoidance = 100 - (accuracy - avoidance);
+	bool is_overhit = (true_avoidance < 0 && !h.src_stats->perfect_accuracy) ? Math::percentChanceF(fabsf(true_avoidance)) : false;
 	true_avoidance = std::min(std::max(true_avoidance, eset->combat.min_avoidance), eset->combat.max_avoidance);
 
 	bool missed = false;
-	if (!h.src_stats->perfect_accuracy && Math::percentChance(true_avoidance)) {
+	if (!h.src_stats->perfect_accuracy && Math::percentChanceF(true_avoidance)) {
 		missed = true;
 	}
 
 	// calculate base damage
-	int dmg = Math::randBetween(h.dmg_min, h.dmg_max);
+	float dmg = Math::randBetweenF(h.dmg_min, h.dmg_max);
 
-	if(powers->powers[h.power_index].mod_damage_mode == Power::STAT_MODIFIER_MODE_MULTIPLY)
-		dmg = dmg * powers->powers[h.power_index].mod_damage_value_min / 100;
-	else if(powers->powers[h.power_index].mod_damage_mode == Power::STAT_MODIFIER_MODE_ADD)
-		dmg += powers->powers[h.power_index].mod_damage_value_min;
-	else if(powers->powers[h.power_index].mod_damage_mode == Power::STAT_MODIFIER_MODE_ABSOLUTE)
-		dmg = Math::randBetween(powers->powers[h.power_index].mod_damage_value_min, powers->powers[h.power_index].mod_damage_value_max);
+	if (h.power->mod_damage_mode == Power::STAT_MODIFIER_MODE_MULTIPLY)
+		dmg = dmg * h.power->mod_damage_value_min / 100;
+	else if (h.power->mod_damage_mode == Power::STAT_MODIFIER_MODE_ADD)
+		dmg += h.power->mod_damage_value_min;
+	else if (h.power->mod_damage_mode == Power::STAT_MODIFIER_MODE_ABSOLUTE)
+		dmg = Math::randBetweenF(h.power->mod_damage_value_min, h.power->mod_damage_value_max);
 
 	// apply elemental resistance
-	if (h.power->trait_elemental >= 0 && static_cast<size_t>(h.power->trait_elemental) < stats.vulnerable.size()) {
+	if (h.power->trait_elemental >= 0 && static_cast<size_t>(h.power->trait_elemental) < eset->elements.list.size()) {
 		size_t i = h.power->trait_elemental;
 
-		int vulnerable = std::max(stats.vulnerable[i], eset->combat.min_resist);
-		if (stats.vulnerable[i] < 100)
-			vulnerable = std::min(vulnerable, eset->combat.max_resist);
+		float resist = stats.getResist(i);
+		// resist values < 0 are weakness, and are unaffected by min/max resist setting
+		if (resist >= 0) {
+			if (resist < eset->combat.min_resist)
+				resist = eset->combat.min_resist;
+			if (resist > eset->combat.max_resist)
+				resist = eset->combat.max_resist;
+		}
 
-		dmg = (dmg * vulnerable) / 100;
+		dmg = (dmg * (100-resist)) / 100;
 	}
 
 	if (!h.power->trait_armor_penetration) { // armor penetration ignores all absorption
 		// subtract absorption from armor
-		int absorption = Math::randBetween(stats.get(Stats::ABS_MIN), stats.get(Stats::ABS_MAX));
+		float absorption = Math::randBetweenF(stats.get(Stats::ABS_MIN), stats.get(Stats::ABS_MAX));
 
 		if (absorption > 0 && dmg > 0) {
-			int abs = absorption;
+			float base_absorb = absorption;
 			if (stats.effects.triggered_block) {
-				if ((abs*100)/dmg < eset->combat.min_block)
+				if ((base_absorb*100)/dmg < eset->combat.min_block)
 					absorption = (dmg * eset->combat.min_block) /100;
-				if ((abs*100)/dmg > eset->combat.max_block)
+				if ((base_absorb*100)/dmg > eset->combat.max_block)
 					absorption = (dmg * eset->combat.max_block) /100;
 				}
 			else {
-				if ((abs*100)/dmg < eset->combat.min_absorb)
+				if ((base_absorb*100)/dmg < eset->combat.min_absorb)
 					absorption = (dmg * eset->combat.min_absorb) /100;
-				if ((abs*100)/dmg > eset->combat.max_absorb)
+				if ((base_absorb*100)/dmg > eset->combat.max_absorb)
 					absorption = (dmg * eset->combat.max_absorb) /100;
 			}
 
@@ -466,7 +458,7 @@ bool Entity::takeHit(Hazard &h) {
 		dmg = dmg - absorption;
 		if (dmg <= 0) {
 			dmg = 0;
-			if (!powers->powers[h.power_index].ignore_zero_damage) {
+			if (!h.power->ignore_zero_damage) {
 				if (h.power->trait_elemental < 0) {
 					if (stats.effects.triggered_block && eset->combat.max_block < 100) dmg = 1;
 					else if (!stats.effects.triggered_block && eset->combat.max_absorb < 100) dmg = 1;
@@ -483,126 +475,175 @@ bool Entity::takeHit(Hazard &h) {
 	}
 
 	// check for crits
-	int true_crit_chance = h.crit_chance;
+	float true_crit_chance = h.crit_chance;
 
-	if(powers->powers[h.power_index].mod_crit_mode == Power::STAT_MODIFIER_MODE_MULTIPLY)
-		true_crit_chance = true_crit_chance * powers->powers[h.power_index].mod_crit_value / 100;
-	else if(powers->powers[h.power_index].mod_crit_mode == Power::STAT_MODIFIER_MODE_ADD)
-		true_crit_chance += powers->powers[h.power_index].mod_crit_value;
-	else if(powers->powers[h.power_index].mod_crit_mode == Power::STAT_MODIFIER_MODE_ABSOLUTE)
-		true_crit_chance = powers->powers[h.power_index].mod_crit_value;
+	if (h.power->mod_crit_mode == Power::STAT_MODIFIER_MODE_MULTIPLY)
+		true_crit_chance = true_crit_chance * h.power->mod_crit_value / 100;
+	else if (h.power->mod_crit_mode == Power::STAT_MODIFIER_MODE_ADD)
+		true_crit_chance += h.power->mod_crit_value;
+	else if (h.power->mod_crit_mode == Power::STAT_MODIFIER_MODE_ABSOLUTE)
+		true_crit_chance = h.power->mod_crit_value;
 
 	if (stats.effects.stun || stats.effects.speed < 100)
 		true_crit_chance += h.power->trait_crits_impaired;
 
-	bool crit = Math::percentChance(true_crit_chance);
+	bool crit = Math::percentChanceF(true_crit_chance);
 	if (crit) {
 		// default is dmg * 2
-		dmg = (dmg * Math::randBetween(eset->combat.min_crit_damage, eset->combat.max_crit_damage)) / 100;
+		dmg = (dmg * Math::randBetweenF(eset->combat.min_crit_damage, eset->combat.max_crit_damage)) / 100;
 		if(!stats.hero)
-			mapr->shaky_cam_timer.setDuration(settings->max_frames_per_sec/2);
+			mapr->cam.shake_timer.setDuration(settings->max_frames_per_sec/2);
 	}
 	else if (is_overhit) {
-		dmg = (dmg * Math::randBetween(eset->combat.min_overhit_damage, eset->combat.max_overhit_damage)) / 100;
+		dmg = (dmg * Math::randBetweenF(eset->combat.min_overhit_damage, eset->combat.max_overhit_damage)) / 100;
 		// Should we use shakycam for overhits?
 	}
 
 	// misses cause reduced damage
 	if (missed) {
-		dmg = (dmg * Math::randBetween(eset->combat.min_miss_damage, eset->combat.max_miss_damage)) / 100;
+		dmg = (dmg * Math::randBetweenF(eset->combat.min_miss_damage, eset->combat.max_miss_damage)) / 100;
 	}
 
-	if (!powers->powers[h.power_index].ignore_zero_damage) {
+	dmg = eset->combat.resourceRound(dmg);
+
+	if (!h.power->ignore_zero_damage) {
 		if (dmg == 0) {
-			combat_text->addString(msg->get("miss"), stats.pos, CombatText::MSG_MISS);
+			comb->addString(msg->get("miss"), stats.pos, CombatText::MSG_MISS);
 			return false;
 		}
 		else if(stats.hero)
-			combat_text->addInt(dmg, stats.pos, CombatText::MSG_TAKEDMG);
+			comb->addFloat(dmg, stats.pos, CombatText::MSG_TAKEDMG);
 		else {
 			if(crit || is_overhit)
-				combat_text->addInt(dmg, stats.pos, CombatText::MSG_CRIT);
+				comb->addFloat(dmg, stats.pos, CombatText::MSG_CRIT);
 			else if (missed)
-				combat_text->addInt(dmg, stats.pos, CombatText::MSG_MISS);
+				comb->addFloat(dmg, stats.pos, CombatText::MSG_MISS);
 			else
-				combat_text->addInt(dmg, stats.pos, CombatText::MSG_GIVEDMG);
+				comb->addFloat(dmg, stats.pos, CombatText::MSG_GIVEDMG);
 		}
 	}
 
 	// temporarily save the current HP for calculating HP/MP steal on final blow
-	int prev_hp = stats.hp;
+	float prev_hp = stats.hp;
 
 	// save debuff status to check for on_debuff powers later
 	bool was_debuffed = stats.effects.isDebuffed();
 
 	// apply damage
-	stats.takeDamage(dmg);
+	stats.takeDamage(dmg, crit, h.source_type);
 
 	// after effects
-	if (dmg > 0 || powers->powers[h.power_index].ignore_zero_damage) {
+	if (dmg > 0 || h.power->ignore_zero_damage) {
 
 		// damage always breaks stun
 		stats.effects.removeEffectType(Effect::STUN);
 
-		powers->effect(&stats, h.src_stats, static_cast<int>(h.power_index), h.source_type);
+		powers->effect(&stats, h.src_stats, h.power_index, h.source_type);
 
 		// HP/MP steal is cumulative between stat bonus and power bonus
-		int hp_steal = h.power->hp_steal + h.src_stats->get(Stats::HP_STEAL);
-		if (!stats.effects.immunity_hp_steal && hp_steal != 0) {
-			int steal_amt = (std::min(dmg, prev_hp) * hp_steal) / 100;
-			if (steal_amt == 0) steal_amt = 1;
-			combat_text->addString(msg->get("+%d HP",steal_amt), h.src_stats->pos, CombatText::MSG_BUFF);
-			h.src_stats->hp = std::min(h.src_stats->hp + steal_amt, h.src_stats->get(Stats::HP_MAX));
-		}
-		int mp_steal = h.power->mp_steal + h.src_stats->get(Stats::MP_STEAL);
-		if (!stats.effects.immunity_mp_steal && mp_steal != 0) {
-			int steal_amt = (std::min(dmg, prev_hp) * mp_steal) / 100;
-			if (steal_amt == 0) steal_amt = 1;
-			combat_text->addString(msg->get("+%d MP",steal_amt), h.src_stats->pos, CombatText::MSG_BUFF);
-			h.src_stats->mp = std::min(h.src_stats->mp + steal_amt, h.src_stats->get(Stats::MP_MAX));
+		if (h.src_stats->hp > 0) {
+			float hp_steal = h.power->hp_steal + h.src_stats->get(Stats::HP_STEAL);
+			if (hp_steal != 0) {
+				if (Math::percentChanceF(stats.get(Stats::RESIST_HP_STEAL))) {
+					comb->addString(msg->get("Resist"), stats.pos, CombatText::MSG_MISS);
+				}
+				else {
+					float steal_amt = (std::min(dmg, prev_hp) * hp_steal) / 100;
+					steal_amt = eset->combat.resourceRound(steal_amt);
+					comb->addString(msg->getv("+%s HP", Utils::floatToString(steal_amt, eset->number_format.combat_text).c_str()), h.src_stats->pos, CombatText::MSG_BUFF);
+					h.src_stats->hp = std::min(h.src_stats->hp + steal_amt, h.src_stats->get(Stats::HP_MAX));
+				}
+			}
+			float mp_steal = h.power->mp_steal + h.src_stats->get(Stats::MP_STEAL);
+			if (mp_steal != 0) {
+				if (Math::percentChanceF(stats.get(Stats::RESIST_MP_STEAL))) {
+					comb->addString(msg->get("Resist"), stats.pos, CombatText::MSG_MISS);
+				}
+				else {
+					float steal_amt = (std::min(dmg, prev_hp) * mp_steal) / 100;
+					steal_amt = eset->combat.resourceRound(steal_amt);
+					comb->addString(msg->getv("+%s MP", Utils::floatToString(steal_amt, eset->number_format.combat_text).c_str()), h.src_stats->pos, CombatText::MSG_BUFF);
+					h.src_stats->mp = std::min(h.src_stats->mp + steal_amt, h.src_stats->get(Stats::MP_MAX));
+				}
+			}
+			for (size_t i = 0; i < h.src_stats->resource_stats.size(); ++i) {
+				float resource_steal = h.power->resource_steal[i] + h.src_stats->getResourceStat(i, EngineSettings::ResourceStats::STAT_STEAL);
+				if (resource_steal != 0) {
+					if (Math::percentChanceF(stats.getResourceStat(i, EngineSettings::ResourceStats::STAT_RESIST_STEAL))) {
+						comb->addString(msg->get("Resist"), stats.pos, CombatText::MSG_MISS);
+					}
+					else {
+						float steal_amt = (std::min(dmg, prev_hp) * resource_steal) / 100;
+						steal_amt = eset->combat.resourceRound(steal_amt);
+						comb->addString("+" + Utils::floatToString(steal_amt, eset->number_format.combat_text) + " " + eset->resource_stats.list[i].text_combat_heal, h.src_stats->pos, CombatText::MSG_BUFF);
+						h.src_stats->resource_stats[i] = std::min(h.src_stats->resource_stats[i] + steal_amt, h.src_stats->getResourceStat(i, EngineSettings::ResourceStats::STAT_BASE));
+					}
+				}
+			}
 		}
 
 		// deal return damage
-		if (!h.src_stats->effects.immunity_damage_reflect && stats.get(Stats::RETURN_DAMAGE) > 0) {
-			int dmg_return = static_cast<int>(static_cast<float>(dmg * stats.get(Stats::RETURN_DAMAGE)) / 100.f);
+		if (stats.get(Stats::RETURN_DAMAGE) > 0) {
+			if (Math::percentChanceF(h.src_stats->get(Stats::RESIST_DAMAGE_REFLECT))) {
+				comb->addString(msg->get("Resist"), stats.pos, CombatText::MSG_MISS);
+			}
+			else {
+				float dmg_return = (dmg * stats.get(Stats::RETURN_DAMAGE)) / 100.f;
+				dmg_return = eset->combat.resourceRound(dmg_return);
 
-			if (dmg_return == 0)
-				dmg_return = 1;
+				// swap the source type when dealing return damage
+				int return_source_type = Power::SOURCE_TYPE_NEUTRAL;
+				if (h.source_type == Power::SOURCE_TYPE_HERO || h.source_type == Power::SOURCE_TYPE_ALLY)
+					return_source_type = Power::SOURCE_TYPE_ENEMY;
+				else if (h.source_type == Power::SOURCE_TYPE_ENEMY)
+					return_source_type = stats.hero ? Power::SOURCE_TYPE_HERO : Power::SOURCE_TYPE_ALLY;
 
-			h.src_stats->takeDamage(dmg_return);
-			comb->addInt(dmg_return, h.src_stats->pos, CombatText::MSG_GIVEDMG);
+				h.src_stats->takeDamage(dmg_return, !StatBlock::TAKE_DMG_CRIT, return_source_type);
+				comb->addFloat(dmg_return, h.src_stats->pos, CombatText::MSG_GIVEDMG);
+			}
 		}
 	}
 
-	if (dmg > 0 || powers->powers[h.power_index].ignore_zero_damage) {
+	if (dmg > 0 || h.power->ignore_zero_damage) {
 		// remove effect by ID
-		stats.effects.removeEffectID(powers->powers[h.power_index].remove_effects);
+		stats.effects.removeEffectID(h.power->remove_effects);
 
 		// post power
-		if (h.power->post_power > 0 && Math::percentChance(h.power->post_power_chance)) {
-			powers->activate(h.power->post_power, h.src_stats, stats.pos);
+		for (size_t i = 0; i < h.power->chain_powers.size(); ++i) {
+			ChainPower& chain_power = h.power->chain_powers[i];
+			if (chain_power.type == ChainPower::TYPE_POST && Math::percentChanceF(chain_power.chance)) {
+				size_t hazard_count = hazards->h.size();
+				if (h.power->post_hazards_skip_target) {
+					// calling this here clears the powers->hazards queue
+					// it's important that we clear the queue first
+					// we'll be using it to determine which hazards are added by the post power
+					hazards->checkNewHazards();
+				}
+
+				powers->activate(chain_power.id, h.src_stats, stats.pos, stats.pos);
+
+				if (h.power->post_hazards_skip_target) {
+					// populate powers->hazards with any new hazards created by the post power
+					hazards->checkNewHazards();
+					if (hazards->h.size() > hazard_count) {
+						for (size_t j = hazard_count-1; j < hazards->h.size(); ++j) {
+							hazards->h[j]->addEntity(this);
+						}
+					}
+				}
+			}
 		}
 	}
 
 	// interrupted to new state
 	if (dmg > 0) {
-		bool chance_poise = Math::percentChance(stats.get(Stats::POISE));
-
-		if(stats.hp <= 0) {
-			stats.effects.triggered_death = true;
-			if(stats.hero)
-				stats.cur_state = StatBlock::AVATAR_DEAD;
-			else {
-				doRewards(h.source_type);
-				if (crit)
-					stats.cur_state = StatBlock::ENEMY_CRITDEAD;
-				else
-					stats.cur_state = StatBlock::ENEMY_DEAD;
-				mapr->collider.unblock(stats.pos.x,stats.pos.y);
-			}
-
-			return true;
+		if (stats.hero) {
+			stats.abort_npc_interact = true;
 		}
+
+		// entity is dead, no need to contine
+		if (stats.hp <= 0)
+			return true;
 
 		// play hit sound effect, but only if the hit cooldown is done
 		if (stats.cooldown_hit.isEnd())
@@ -612,7 +653,7 @@ bool Entity::takeHit(Hazard &h) {
 		if (!was_debuffed && stats.effects.isDebuffed()) {
 			StatBlock::AIPower* ai_power = stats.getAIPower(StatBlock::AI_POWER_DEBUFF);
 			if (ai_power != NULL) {
-				stats.cur_state = StatBlock::ENEMY_POWER;
+				stats.cur_state = StatBlock::ENTITY_POWER;
 				stats.activated_power = ai_power;
 				stats.cooldown.reset(Timer::END); // ignore global cooldown
 				return true;
@@ -622,7 +663,7 @@ bool Entity::takeHit(Hazard &h) {
 		// roll to see if the enemy's ON_HIT power is casted
 		StatBlock::AIPower* ai_power = stats.getAIPower(StatBlock::AI_POWER_HIT);
 		if (ai_power != NULL) {
-			stats.cur_state = StatBlock::ENEMY_POWER;
+			stats.cur_state = StatBlock::ENTITY_POWER;
 			stats.activated_power = ai_power;
 			stats.cooldown.reset(Timer::END); // ignore global cooldown
 			return true;
@@ -630,23 +671,37 @@ bool Entity::takeHit(Hazard &h) {
 
 		// don't go through a hit animation if stunned or successfully poised
 		// however, critical hits ignore poise
+		bool chance_poise = Math::percentChanceF(stats.get(Stats::POISE));
+
 		if(stats.cooldown_hit.isEnd()) {
 			stats.cooldown_hit.reset(Timer::BEGIN);
 
 			if (!stats.effects.stun && (!chance_poise || crit) && !stats.prevent_interrupt) {
 				if(stats.hero) {
-					stats.cur_state = StatBlock::AVATAR_HIT;
+					stats.cur_state = StatBlock::ENTITY_HIT;
 				}
 				else {
-					if (stats.cur_state == StatBlock::ENEMY_POWER) {
+					if (stats.cur_state == StatBlock::ENTITY_POWER) {
 						stats.cooldown.reset(Timer::BEGIN);
 						stats.activated_power = NULL;
 					}
-					stats.cur_state = StatBlock::ENEMY_HIT;
+					stats.cur_state = StatBlock::ENTITY_HIT;
 				}
 
 				if (stats.untransform_on_hit)
 					stats.transform_duration = 0;
+			}
+		}
+
+		// handle block post-power
+		if (powers->isValid(stats.block_power)) {
+			Power* block_power = powers->powers[stats.block_power];
+			for (size_t i = 0; i < block_power->chain_powers.size(); ++i) {
+				ChainPower& chain_power = block_power->chain_powers[i];
+				if (chain_power.type == ChainPower::TYPE_POST && stats.getPowerCooldown(chain_power.id) == 0 && Math::percentChanceF(chain_power.chance)) {
+					powers->activate(chain_power.id, &stats, stats.pos, stats.pos);
+					stats.setPowerCooldown(chain_power.id, powers->powers[chain_power.id]->cooldown);
+				}
 			}
 		}
 	}
@@ -655,28 +710,296 @@ bool Entity::takeHit(Hazard &h) {
 }
 
 void Entity::resetActiveAnimation() {
-	activeAnimation->reset();
+	if (activeAnimation)
+		activeAnimation->reset();
+
+	for (size_t i = 0; i < animsets.size(); ++i)
+		if (anims[i])
+			anims[i]->reset();
 }
 
 /**
  * Set the entity's current animation by name
  */
-bool Entity::setAnimation(const std::string& animationName) {
+void Entity::setAnimation(const std::string& animationName) {
 
 	// if the animation is already the requested one do nothing
 	if (activeAnimation != NULL && activeAnimation->getName() == animationName)
-		return true;
+		return;
+
+	if (!animationSet)
+		return;
 
 	delete activeAnimation;
 	activeAnimation = animationSet->getAnimation(animationName);
 
-	if (activeAnimation == NULL)
+	if (!activeAnimation)
 		Utils::logError("Entity::setAnimation(%s): not found", animationName.c_str());
 
-	return activeAnimation == NULL;
+	for (size_t i = 0; i < animsets.size(); ++i) {
+		delete anims[i];
+		if (animsets[i])
+			anims[i] = animsets[i]->getAnimation(animationName);
+		else
+			anims[i] = NULL;
+	}
+}
+
+/**
+ * The current direction leads to a wall.  Try the next best direction, if one is available.
+ */
+unsigned char Entity::faceNextBest(float mapx, float mapy) {
+	float dx = static_cast<float>(fabs(mapx - stats.pos.x));
+	float dy = static_cast<float>(fabs(mapy - stats.pos.y));
+	switch (stats.direction) {
+		case 0:
+			if (dy > dx) return 7;
+			else return 1;
+		case 1:
+			if (mapy > stats.pos.y) return 0;
+			else return 2;
+		case 2:
+			if (dx > dy) return 1;
+			else return 3;
+		case 3:
+			if (mapx < stats.pos.x) return 2;
+			else return 4;
+		case 4:
+			if (dy > dx) return 3;
+			else return 5;
+		case 5:
+			if (mapy < stats.pos.y) return 4;
+			else return 6;
+		case 6:
+			if (dx > dy) return 5;
+			else return 7;
+		case 7:
+			if (mapx > stats.pos.x) return 6;
+			else return 0;
+	}
+	return 0;
+}
+
+Rect Entity::getRenderBounds(const FPoint& cam) const {
+	Rect r;
+	Point p = Utils::mapToScreen(stats.pos.x, stats.pos.y, cam.x, cam.y);
+
+	if (!stats.layer_reference_order.empty()) {
+		Point top_left, bottom_right;
+		bool point_init = false;
+		for (unsigned i = 0; i < stats.layer_def[stats.direction].size(); ++i) {
+			unsigned index = stats.layer_def[stats.direction][i];
+			if (anims[index]) {
+				Renderable ren = anims[index]->getCurrentFrame(stats.direction);
+				if (!point_init) {
+					top_left.x = p.x - ren.offset.x;
+					top_left.y = p.y - ren.offset.y;
+					bottom_right.x = top_left.x + ren.src.w;
+					bottom_right.y = top_left.y + ren.src.h;
+					point_init = true;
+				}
+				else {
+					Point layer_top_left(p.x - ren.offset.x, p.y - ren.offset.y);
+					Point layer_bottom_right(layer_top_left.x + ren.src.w, layer_top_left.y + ren.src.h);
+
+					if (layer_top_left.x < top_left.x)
+						top_left.x = layer_top_left.x;
+					if (layer_top_left.y < top_left.y)
+						top_left.y = layer_top_left.y;
+					if (layer_bottom_right.x > bottom_right.x)
+						bottom_right.x = layer_bottom_right.x;
+					if (layer_bottom_right.y > bottom_right.y)
+						bottom_right.y = layer_bottom_right.y;
+				}
+			}
+		}
+
+		if (point_init) {
+			r.x = top_left.x;
+			r.y = top_left.y;
+			r.w = bottom_right.x - top_left.x;
+			r.h = bottom_right.y - top_left.y;
+		}
+	}
+	else {
+		if (activeAnimation) {
+			Renderable ren = activeAnimation->getCurrentFrame(stats.direction);
+			r.x = p.x - ren.offset.x;
+			r.y = p.y - ren.offset.y;
+			r.w = ren.src.w;
+			r.h = ren.src.h;
+		}
+	}
+
+	return r;
+}
+
+void Entity::addRenders(std::vector<Renderable> &r) {
+	if (!stats.layer_reference_order.empty()) {
+		for (unsigned i = 0; i < stats.layer_def[stats.direction].size(); ++i) {
+			unsigned index = stats.layer_def[stats.direction][i];
+			if (anims[index]) {
+				Renderable ren = anims[index]->getCurrentFrame(stats.direction);
+				ren.map_pos = stats.pos;
+				ren.prio = i+1;
+
+				stats.effects.getCurrentColor(ren.color_mod);
+				stats.effects.getCurrentAlpha(ren.alpha_mod);
+
+				// fade out corpses
+				if (!stats.hero && stats.corpse) {
+					unsigned fade_time = (eset->misc.corpse_timeout > settings->max_frames_per_sec) ? settings->max_frames_per_sec : eset->misc.corpse_timeout;
+					if (fade_time != 0 && stats.corpse_timer.getCurrent() <= fade_time) {
+						ren.alpha_mod = static_cast<uint8_t>(static_cast<float>(stats.corpse_timer.getCurrent()) * (ren.alpha_mod / static_cast<float>(fade_time)));
+					}
+				}
+
+				ren.type = getRenderableType();
+
+				r.push_back(ren);
+			}
+		}
+	}
+	else {
+		Renderable ren;
+		if (activeAnimation)
+			ren = activeAnimation->getCurrentFrame(stats.direction);
+		ren.map_pos = stats.pos;
+		ren.prio = 1;
+
+		stats.effects.getCurrentColor(ren.color_mod);
+		stats.effects.getCurrentAlpha(ren.alpha_mod);
+
+		// fade out corpses
+		if (!stats.hero && stats.corpse) {
+			unsigned fade_time = (eset->misc.corpse_timeout > settings->max_frames_per_sec) ? settings->max_frames_per_sec : eset->misc.corpse_timeout;
+			if (fade_time != 0 && stats.corpse_timer.getCurrent() <= fade_time) {
+				ren.alpha_mod = static_cast<uint8_t>(static_cast<float>(stats.corpse_timer.getCurrent()) * (ren.alpha_mod / static_cast<float>(fade_time)));
+			}
+		}
+
+		ren.type = getRenderableType();
+
+		r.push_back(ren);
+	}
+
+	// add effects
+	for (unsigned i = 0; i < stats.effects.effect_list.size(); ++i) {
+		if (stats.effects.effect_list[i].animation && !stats.effects.effect_list[i].animation->isCompleted()) {
+			Renderable ren = stats.effects.effect_list[i].animation->getCurrentFrame(0);
+			ren.map_pos = stats.pos;
+			if (stats.effects.effect_list[i].render_above) {
+				if (!stats.layer_reference_order.empty())
+					ren.prio = stats.layer_def[stats.direction].size()+1;
+				else
+					ren.prio = 2;
+			}
+			else {
+				ren.prio = 0;
+			}
+			r.push_back(ren);
+		}
+	}
+}
+
+uint8_t Entity::getRenderableType() {
+	if (stats.hp > 0) {
+		if (stats.hero)
+			return Renderable::TYPE_HERO;
+		else if (stats.hero_ally)
+			return Renderable::TYPE_ALLY;
+		else if (stats.in_combat)
+			return Renderable::TYPE_ENEMY;
+	}
+
+	return Renderable::TYPE_NORMAL;
+}
+
+void Entity::loadAnimations() {
+	// load the base animation
+	if (!animationSet) {
+		if (!stats.animations.empty()) {
+			anim->increaseCount(stats.animations);
+			animationSet = anim->getAnimationSet(stats.animations);
+			if (activeAnimation)
+				delete activeAnimation;
+			activeAnimation = animationSet->getAnimation("");
+		}
+	}
+
+	for (size_t i = 0; i < animsets.size(); ++i) {
+		if (animsets[i])
+			anim->decreaseCount(animsets[i]->getName());
+		delete anims[i];
+	}
+	animsets.clear();
+	anims.clear();
+
+	std::vector<Entity::Layer_gfx> img_gfx;
+
+	for (size_t i = 0; i < stats.layer_reference_order.size(); ++i) {
+		Entity::Layer_gfx gfx;
+		gfx.type = stats.layer_reference_order[i];
+		gfx.gfx = getGfxFromType(gfx.type);
+		img_gfx.push_back(gfx);
+	}
+	assert(stats.layer_reference_order.size() == img_gfx.size());
+
+	for (size_t i = 0; i < img_gfx.size(); ++i) {
+		if (img_gfx[i].gfx != "") {
+			std::string name;
+			if (stats.hero && !stats.transformed)
+				name = "animations/avatar/" + stats.gfx_base + "/" + img_gfx[i].gfx + ".txt";
+			else
+				name = img_gfx[i].gfx;
+
+			anim->increaseCount(name);
+			animsets.push_back(anim->getAnimationSet(name));
+			animsets.back()->setParent(animationSet);
+			anims.push_back(animsets.back()->getAnimation(activeAnimation->getName()));
+			setAnimation("stance");
+			if(!anims.back()->syncTo(activeAnimation)) {
+				Utils::logError("Entity: Error syncing animation in '%s' to parent animation.", animsets.back()->getName().c_str());
+			}
+		}
+		else {
+			animsets.push_back(NULL);
+			anims.push_back(NULL);
+		}
+	}
+	anim->cleanUp();
+
+	stats.critdie_enabled = false;
+	if (animationSet) {
+		Animation* critdie_anim = animationSet->getAnimation("critdie");
+		if (critdie_anim) {
+			stats.critdie_enabled = (critdie_anim->getName() == "critdie");
+			delete critdie_anim;
+		}
+	}
+}
+
+std::string Entity::getGfxFromType(const std::string& gfx_type) {
+	std::map<std::string, std::string>::iterator it;
+	it = stats.animation_slots.find(gfx_type);
+	if (it != stats.animation_slots.end())
+		return it->second;
+
+	return "";
 }
 
 Entity::~Entity () {
+	if (!stats.animations.empty())
+		anim->decreaseCount(stats.animations);
+
+	for (size_t i = 0; i < animsets.size(); ++i) {
+		if (animsets[i])
+			anim->decreaseCount(animsets[i]->getName());
+		delete anims[i];
+	}
+	anim->cleanUp();
+
 	delete activeAnimation;
+	delete behavior;
 }
 

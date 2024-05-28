@@ -32,9 +32,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Utils.h"
 
 class Avatar;
-class Enemy;
+class Entity;
 class MenuManager;
-class NPCManager;
 class QuestLog;
 class WidgetLabel;
 
@@ -44,7 +43,7 @@ class Title {
 public:
 	std::string title;
 	int level;
-	int power;
+	PowerID power;
 	std::vector<StatusID> requires_status;
 	std::vector<StatusID> requires_not_status;
 	std::string primary_stat_1;
@@ -63,13 +62,12 @@ public:
 
 class GameStatePlay : public GameState {
 private:
-	Enemy *enemy;
+	Entity *enemy;
 
-	NPCManager *npcs;
 	QuestLog *quests;
 
-	bool restrictPowerUse();
 	void checkEnemyFocus();
+	void checkNPCFocus();
 	void checkLoot();
 	void checkLootDrop();
 	void checkTeleport();
@@ -92,8 +90,6 @@ private:
 	int npc_id;
 
 	std::vector<Title> titles;
-
-	std::vector<ActionData> action_queue;
 
 	Timer second_timer;
 

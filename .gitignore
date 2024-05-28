@@ -41,10 +41,6 @@ gmon.out
 /flare-android-project/local.properties
 /flare-android-project/app/src/main/libs
 /flare-android-project/app/src/main/obj
-/flare-android-project/app/src/main/jni/SDL2
-/flare-android-project/app/src/main/jni/SDL2_image
-/flare-android-project/app/src/main/jni/SDL2_mixer
-/flare-android-project/app/src/main/jni/SDL2_ttf
 
 # os x
 .DS_Store
@@ -53,4 +49,10 @@ gmon.out
 *.autosave
 
 # emscripten output
-emscripten/
+/emscripten/
+a.out.js
+a.out.wasm
+
+# visual studio and its cmake
+.vs/
+CMakeSettings.json

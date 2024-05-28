@@ -24,9 +24,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 Widget::Widget()
 	: in_focus(false)
-	, focusable(false)
 	, enable_tablist_nav(true)
-	, tablist_nav_right(false)
+	, tablist_nav_align(TabList::NAV_ALIGN_CENTER)
 	, scroll_type(SCROLL_TWO_DIRECTIONS)
 	, alignment(Utils::ALIGN_TOPLEFT) {
 }
@@ -75,7 +74,7 @@ TabList::TabList()
 	, ACTIVATE(Input::ACCEPT)
 	, prev_tablist(NULL)
 	, next_tablist(NULL)
-	, ignore_no_mouse(false) {
+	, enable_activate(true) {
 }
 
 TabList::~TabList() {
@@ -120,6 +119,7 @@ void TabList::remove(Widget* widget) {
 
 void TabList::clear() {
 	widgets.clear();
+	current = -1;
 }
 
 void TabList::setCurrent(Widget* widget) {
@@ -131,6 +131,7 @@ void TabList::setCurrent(Widget* widget) {
 	for (unsigned i=0; i<widgets.size(); ++i) {
 		if (widgets[i] == widget) {
 			current = i;
+			widgets[i]->in_focus = true;
 		}
 		else {
 			widgets[i]->defocus();
@@ -165,12 +166,17 @@ bool TabList::previous_is_valid() {
 
 Widget* TabList::getNext(bool inner, uint8_t dir) {
 	if (widgets.empty()) {
-		if (next_tablist) {
-			// WARNING: Could result in infinite loop if all tablists are empty
+		if (next_tablist && next_tablist->size() > 0) {
 			defocus();
 			locked = true;
 			next_tablist->unlock();
 			return next_tablist->getNext(!GET_INNER, WIDGET_SELECT_AUTO);
+		}
+		else if (prev_tablist && prev_tablist->size() > 0) {
+			defocus();
+			locked = true;
+			prev_tablist->unlock();
+			return prev_tablist->getPrev(!GET_INNER, WIDGET_SELECT_AUTO);
 		}
 		return NULL;
 	}
@@ -182,24 +188,21 @@ Widget* TabList::getNext(bool inner, uint8_t dir) {
 		widgets.at(current)->defocus();
 	}
 
+	int next = -1;
 	if (dir == WIDGET_SELECT_AUTO) {
-		++current;
-
-		if (current >= static_cast<int>(widgets.size()))
-			current = 0;
-
-		// TODO handle enable_tablist_nav here?
+		next = getNextIndex();
+		if (next != -1)
+			current = next;
 	}
 	else {
-		int next = getNextRelativeIndex(dir);
+		next = getNextRelativeIndex(dir);
 		if (next != -1)
 			current = next;
 		else {
 			if (!next_tablist) {
-				++current;
-
-				if (current >= static_cast<int>(widgets.size()))
-					current = 0;
+				next = getNextIndex();
+				if (next != -1)
+					current = next;
 			}
 			else {
 				defocus();
@@ -216,12 +219,17 @@ Widget* TabList::getNext(bool inner, uint8_t dir) {
 
 Widget* TabList::getPrev(bool inner, uint8_t dir) {
 	if (widgets.empty()) {
-		if (prev_tablist) {
-			// WARNING: Could result in infinite loop if all tablists are empty
+		if (prev_tablist && prev_tablist->size() > 0) {
 			defocus();
 			locked = true;
 			prev_tablist->unlock();
 			return prev_tablist->getPrev(!GET_INNER, WIDGET_SELECT_AUTO);
+		}
+		else if (next_tablist && next_tablist->size() > 0) {
+			defocus();
+			locked = true;
+			next_tablist->unlock();
+			return next_tablist->getNext(!GET_INNER, WIDGET_SELECT_AUTO);
 		}
 		return NULL;
 	}
@@ -233,28 +241,26 @@ Widget* TabList::getPrev(bool inner, uint8_t dir) {
 		widgets.at(current)->defocus();
 	}
 
+	int next = -1;
 	if (current == -1) {
-		current = 0;
+		next = getNextIndex();
+		if (next != -1)
+			current = next;
 	}
 	else if (dir == WIDGET_SELECT_AUTO) {
-		--current;
-
-		if (current <= -1)
-			current = static_cast<unsigned>(widgets.size()-1);
-
-		// TODO handle enable_tablist_nav here?
+		next = getPrevIndex();
+		if (next != -1)
+			current = next;
 	}
 	else {
-		int next = getNextRelativeIndex(dir);
+		next = getNextRelativeIndex(dir);
 		if (next != -1)
 			current = next;
 		else {
-
 			if (!prev_tablist) {
-				--current;
-
-				if (current <= -1)
-					current = static_cast<unsigned>(widgets.size()-1);
+				next = getPrevIndex();
+				if (next != -1)
+					current = next;
 			}
 			else {
 				defocus();
@@ -269,8 +275,55 @@ Widget* TabList::getPrev(bool inner, uint8_t dir) {
 	return widgets.at(current);
 }
 
-int TabList::getNextRelativeIndex(uint8_t dir) {
+int TabList::getNextIndex() {
+	int next_widget = -1;
+
+	for (size_t i = current + 1; i < widgets.size(); ++i) {
+		if (widgets.at(i)->enable_tablist_nav) {
+			next_widget = static_cast<int>(i);
+			break;
+		}
+	}
+
+	if (next_widget == -1 && current >= 0) {
+		for (size_t i = 0; i < static_cast<size_t>(current); ++i) {
+			if (widgets.at(i)->enable_tablist_nav) {
+				next_widget = static_cast<int>(i);
+				break;
+			}
+		}
+	}
+
+	return next_widget;
+}
+
+int TabList::getPrevIndex() {
 	if (current == -1)
+		return getNextIndex();
+
+	int prev_widget = -1;
+
+	for (size_t i = current; i > 0 ; --i) {
+		if (widgets.at(i-1)->enable_tablist_nav) {
+			prev_widget = static_cast<int>(i-1);
+			break;
+		}
+	}
+
+	if (prev_widget == -1) {
+		for (size_t i = widgets.size() - 1; i > static_cast<size_t>(current); --i) {
+			if (widgets.at(i)->enable_tablist_nav) {
+				prev_widget = static_cast<int>(i);
+				break;
+			}
+		}
+	}
+
+	return prev_widget;
+}
+
+int TabList::getNextRelativeIndex(uint8_t dir) {
+	if (current == -1 || static_cast<size_t>(current) >= widgets.size())
 		return -1;
 
 	int next = current;
@@ -286,10 +339,16 @@ int TabList::getNextRelativeIndex(uint8_t dir) {
 		Rect& c_pos = widgets.at(current)->pos;
 		Rect& i_pos = widgets.at(i)->pos;
 
-		int w_div = widgets.at(i)->tablist_nav_right ? 1 : 2;
-
-		FPoint p1(static_cast<float>(c_pos.x + c_pos.w / w_div), static_cast<float>(c_pos.y + c_pos.h / 2));
-		FPoint p2(static_cast<float>(i_pos.x + i_pos.w / w_div), static_cast<float>(i_pos.y + i_pos.h / 2));
+		FPoint p1(static_cast<float>(c_pos.x), static_cast<float>(c_pos.y + c_pos.h / 2));
+		FPoint p2(static_cast<float>(i_pos.x), static_cast<float>(i_pos.y + i_pos.h / 2));
+		if (widgets.at(i)->tablist_nav_align == TabList::NAV_ALIGN_CENTER) {
+			p1.x += static_cast<float>(c_pos.w / 2);
+			p2.x += static_cast<float>(i_pos.w / 2);
+		}
+		else if (widgets.at(i)->tablist_nav_align == TabList::NAV_ALIGN_RIGHT) {
+			p1.x += static_cast<float>(c_pos.w);
+			p2.x += static_cast<float>(i_pos.w);
+		}
 
 		if (dir == WIDGET_SELECT_LEFT && p1.x <= p2.x)
 			continue;
@@ -347,15 +406,13 @@ void TabList::setScrollType(uint8_t _scrolltype) {
 	scrolltype = _scrolltype;
 }
 
-void TabList::setInputs(int _LEFT, int _RIGHT, int _ACTIVATE) {
-	MV_LEFT = _LEFT;
-	MV_RIGHT = _RIGHT;
-	ACTIVATE = _ACTIVATE;
+bool TabList::isLocked() {
+	return locked;
 }
 
 void TabList::logic() {
 	if (locked) return;
-	if (!inpt->usingMouse() || ignore_no_mouse) {
+	if (!inpt->usingMouse()) {
 		uint8_t inner_scrolltype = Widget::SCROLL_VERTICAL;
 
 		if (current_is_valid() && widgets.at(current)->scroll_type != Widget::SCROLL_TWO_DIRECTIONS) {
@@ -400,7 +457,7 @@ void TabList::logic() {
 			}
 		}
 
-		if (inpt->pressing[ACTIVATE] && !inpt->lock[ACTIVATE]) {
+		if (inpt->pressing[ACTIVATE] && !inpt->lock[ACTIVATE] && enable_activate) {
 			inpt->lock[ACTIVATE] = true;
 			deactivatePrevious(); //Deactivate previously activated item
 			activate();	// Activate the currently infocus item

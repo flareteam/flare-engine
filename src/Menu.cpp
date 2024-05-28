@@ -60,11 +60,11 @@ void Menu::setBackground(const std::string& background_image) {
 	}
 }
 
-void Menu::setBackgroundDest(Rect &dest) {
+void Menu::setBackgroundDest(const Rect &dest) {
 	if (background) background->setDestFromRect(dest);
 }
 
-void Menu::setBackgroundClip(Rect &clip) {
+void Menu::setBackgroundClip(const Rect &clip) {
 	if (background) background->setClipFromRect(clip);
 }
 
@@ -118,6 +118,10 @@ bool Menu::parseMenuKey(const std::string &key, const std::string &val) {
 	else if (key == "soundfx_close") {
 		// @ATTR soundfx_close|filename|Filename of a sound to play when closing this menu.
 		sfx_close = snd->load(value, "Menu close tab");
+	}
+	else if (key == "background") {
+		// @ATTR background|filename|Filename of the background image for this menu.
+		setBackground(value);
 	}
 	else {
 		//not a common key

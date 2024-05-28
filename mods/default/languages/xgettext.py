@@ -41,11 +41,29 @@ def extract(filename):
         'msg', 'him', 'her', 'you', 'name', 'title', 'tooltip',
         'power_desc', 'quest_text', 'description',
         'tab_title', 'currency_name', 'flavor', 'topic', 'option',
-        'caption', 'text', 'name_min', 'name_max'
+        'caption', 'text', 'name_min', 'name_max',
+
+        # engine/resource_stats.txt
+        'text_base', 'text_base_desc',
+        'text_regen', 'text_regen_desc',
+        'text_steal', 'text_steal_desc',
+        'text_resist_steal', 'text_resist_steal_desc',
+        'text_combat_heal', 'text_log_restore', 'text_log_low',
+        'text_tooltip_heal', 'text_tooltip_cost',
     ]
     plain_text = [
         'msg', 'him', 'her', 'you', 'name', 'title', 'tooltip',
         'quest_text', 'description', 'topic', 'flavor', 'caption', 'text'
+        ]
+    # The credits cutscenes mostly contain names of people that we don't want to translate.
+    # However, there are a few strings that we DO want translated, which we define here:
+    allowed_credits_strings = [
+        'Flare Engine Credits', 'Lead Programmers', 'Programmers', 'Default Art',
+        'Translators', 'Distributors', 'Special Thanks', 'For giving constant feedback and testing:',
+        'The community at OpenGameArt', 'For Tiled and the Flare map exporter:',
+        'Flare Game Credits - fantasycore', 'Lead Visual Artists', 'Visual Artists', 'Composers',
+        'Foley Artists', 'Voice Actors', 'Flare Game Credits - empyrean_campaign',
+        'Lead Content Designers', 'Flare Game Credits - alpha_demo', 'Content Designers'
         ]
     for i, line in enumerate(infile, start=1):
         for trigger in triggers:
@@ -68,9 +86,16 @@ def extract(filename):
                 elif len(values) == 5:
                    # option=base,head,portrait,name
                    stat = values[-1]
+
+                test_key = stat.rstrip()
+                if test_key == "":
+                    continue
+                if filename.endswith('cutscenes/credits.txt') and test_key not in allowed_credits_strings:
+                    continue
+
                 comment = filename + ':' + str(i)
                 comments.append(comment)
-                keys.append(stat.rstrip())
+                keys.append(test_key)
 
 # this removes duplicates from keys in a clean way (without screwing up the order)
 def remove_duplicates():
@@ -109,6 +134,7 @@ extract('../engine/titles.txt')
 extract('../engine/equip_flags.txt')
 extract('../engine/primary_stats.txt')
 extract('../engine/damage_types.txt')
+extract('../engine/resource_stats.txt')
 extract('../soundfx/subtitles.txt')
 
 for folder in ['enemies', 'maps', 'quests', 'npcs', 'cutscenes', 'books', 'items', 'powers', 'scripts']:

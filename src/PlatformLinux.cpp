@@ -32,6 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <errno.h>
 #include <unistd.h>
 #include <sys/stat.h>
+#include <string.h>
 
 Platform platform;
 
@@ -40,6 +41,8 @@ Platform::Platform()
 	, is_mobile_device(false)
 	, force_hardware_cursor(false)
 	, has_lock_file(true)
+	, needs_alt_escape_key(false)
+	, fullscreen_bypass(false)
 	, config_menu_type(CONFIG_MENU_TYPE_DESKTOP)
 	, default_renderer("")
 	, config_video(Platform::Video::COUNT, true)
@@ -112,11 +115,11 @@ void Platform::setPaths() {
 
 	// if the user specified a data path, try to use it
 	if (Filesystem::pathExists(settings->custom_path_data)) {
-		if (!path_data) settings->path_data = settings->custom_path_data;
+		settings->path_data = settings->custom_path_data;
 		path_data = true;
 	}
 	else if (!settings->custom_path_data.empty()) {
-		Utils::logError("Settings: Could not find specified game data directory.");
+		Utils::logError("Platform: Could not find specified game data directory.");
 		settings->custom_path_data = "";
 	}
 
@@ -162,7 +165,27 @@ void Platform::setPaths() {
 	if (!path_data && Filesystem::pathExists(settings->path_data)) path_data = true;
 
 	// finally assume the local folder
-	if (!path_data)	settings->path_data = "./";
+	if (!path_data)	{
+		char abs_path[1024];
+		memset(abs_path, 0, 1024);
+		ssize_t len = readlink("/proc/self/exe", abs_path, 1024);
+		if (len >= 0 && len < 1024) {
+			// remove executable name from abs_path
+			const char BREAK_POINT = '/';
+			const char BREAK_STRING = '\0';
+			for(ssize_t i = len; i >= 0; --i) {
+				if(abs_path[i] == BREAK_POINT) {
+					abs_path[i + 1] = BREAK_STRING;
+					break;
+				}
+			}
+			settings->path_data = std::string(abs_path);
+		}
+		else {
+			// unable to get executable path, so just use the working directory
+			settings->path_data =  "./";
+		}
+	}
 }
 
 bool Platform::dirCreate(const std::string& path) {
@@ -188,6 +211,7 @@ void Platform::FSInit() {}
 bool Platform::FSCheckReady() { return true; }
 void Platform::FSCommit() {}
 void Platform::setScreenSize() {}
+void Platform::setFullscreen(bool) {}
 void Platform::setExitEventFilter() {}
 
 #endif // PLATFORM_CPP

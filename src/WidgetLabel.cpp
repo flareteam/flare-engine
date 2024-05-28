@@ -48,6 +48,7 @@ WidgetLabel::WidgetLabel()
 	, update_flag(UPDATE_NONE)
 	, hidden(false)
 	, window_resize_flag(false)
+	, alpha(255)
 	, label(NULL)
 	, text("")
 	, font_style(DEFAULT_FONT)
@@ -56,6 +57,40 @@ WidgetLabel::WidgetLabel()
 	bounds.x = bounds.y = 0;
 	bounds.w = bounds.h = 0;
 	enable_tablist_nav = false;
+}
+
+WidgetLabel::WidgetLabel(const WidgetLabel &other)
+	: label(NULL)
+{
+	*this = other;
+}
+
+WidgetLabel& WidgetLabel::operator=(const WidgetLabel &other) {
+	if (this == &other)
+		return *this;
+
+	Widget::operator=(other);
+
+	justify = other.justify;
+	valign = other.valign;
+	max_width = other.max_width;
+	update_flag = UPDATE_RECACHE;
+	hidden = other.hidden;
+	window_resize_flag = other.window_resize_flag;
+	alpha = other.alpha;
+	text = other.text;
+	font_style = other.font_style;
+	color = other.color;
+	bounds = other.bounds;
+
+	if (label) {
+		delete label;
+	}
+
+	label = NULL;
+	update();
+
+	return *this;
 }
 
 void WidgetLabel::setMaxWidth(int width) {
@@ -113,6 +148,13 @@ void WidgetLabel::setFont(const std::string& _font) {
 	}
 }
 
+void WidgetLabel::setAlpha(uint8_t _alpha) {
+	if (_alpha != alpha) {
+		alpha = _alpha;
+		setUpdateFlag(UPDATE_POS);
+	}
+}
+
 void WidgetLabel::setFromLabelInfo(const LabelInfo& label_info) {
 	if (pos_base.x != label_info.x || pos_base.y != label_info.y)
 		setUpdateFlag(UPDATE_POS);
@@ -166,6 +208,7 @@ void WidgetLabel::applyOffsets() {
 
 	if (label) {
 		label->setDestFromRect(bounds);
+		label->alpha_mod = alpha;
 	}
 }
 
@@ -181,8 +224,11 @@ void WidgetLabel::recacheTextSprite() {
 		label = NULL;
 	}
 
-	if (text.empty())
+	if (text.empty()) {
+		bounds.w = 0;
+		bounds.h = 0;
 		return;
+	}
 
 	std::string temp_text = text;
 

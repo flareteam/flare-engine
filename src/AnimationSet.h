@@ -21,6 +21,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define ANIMATION_SET_H
 
 #include "CommonIncludes.h"
+#include "AnimationMedia.h"
 
 class Animation;
 
@@ -45,7 +46,7 @@ public:
 
 	std::vector<Animation*> animations;
 
-	Image *sprite;
+	AnimationMedia *sprite;
 
 	explicit AnimationSet(const std::string &animationname);
 	AnimationSet(const AnimationSet &a); // copy constructor not implemented.

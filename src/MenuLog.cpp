@@ -74,7 +74,6 @@ MenuLog::MenuLog() {
 
 	// Initialize the tab control.
 	tabControl = new WidgetTabControl();
-	tablist.add(tabControl);
 
 	// Store the amount of displayed log messages on each log, and the maximum.
 	tablist_log.resize(TYPE_COUNT);
@@ -88,10 +87,11 @@ MenuLog::MenuLog() {
 	}
 
 	// Define the header.
-	tabControl->setTabTitle(TYPE_MESSAGES, msg->get("Notes"));
-	tabControl->setTabTitle(TYPE_QUESTS, msg->get("Quests"));
+	tabControl->setupTab(TYPE_QUESTS, msg->get("Quests"), &tablist_log[TYPE_QUESTS]);
+	tabControl->setupTab(TYPE_MESSAGES, msg->get("Notes"), &tablist_log[TYPE_MESSAGES]);
 
-	setBackground("images/menus/log.png");
+	if (!background)
+		setBackground("images/menus/log.png");
 
 	align();
 }
@@ -99,7 +99,7 @@ MenuLog::MenuLog() {
 void MenuLog::align() {
 	Menu::align();
 
-	tabControl->setMainArea(window_area.x + tab_area.x, window_area.y + tab_area.y);
+	tabControl->setMainArea(window_area.x + tab_area.x, window_area.y + tab_area.y, tab_area.w);
 
 	closeButton->setPos(window_area.x, window_area.y);
 
@@ -222,6 +222,10 @@ void MenuLog::defocusTabLists() {
 	for (int i = 0; i < TYPE_COUNT; ++i) {
 		tablist_log[i].defocus();
 	}
+}
+
+TabList* MenuLog::getVisibleChildTabList() {
+	return &tablist_log[tabControl->getActiveTab()];
 }
 
 MenuLog::~MenuLog() {

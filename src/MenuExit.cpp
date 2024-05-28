@@ -22,10 +22,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuExit
  */
 
+#include "Avatar.h"
+#include "MapRenderer.h"
 #include "MenuConfig.h"
 #include "MenuConfirm.h"
 #include "MenuExit.h"
+#include "SaveLoad.h"
 #include "SharedGameResources.h"
+#include "SharedResources.h"
 
 MenuExit::MenuExit()
 	: Menu()
@@ -60,6 +64,14 @@ void MenuExit::logic() {
 		exitClicked = true;
 		menu_config->clicked_pause_exit = false;
 	}
+
+	else if (menu_config->clicked_pause_save) {
+		visible = false;
+		menu_config->clicked_pause_save = false;
+
+		mapr->respawn_point = pc->stats.pos;
+		save_load->saveGame();
+	}
 }
 
 void MenuExit::render() {
@@ -73,6 +85,7 @@ void MenuExit::render() {
 
 void MenuExit::disableSave() {
 	menu_config->setPauseExitText(!MenuConfig::ENABLE_SAVE_GAME);
+	menu_config->setPauseSaveEnabled(!MenuConfig::ENABLE_SAVE_GAME);
 }
 
 void MenuExit::handleCancel() {

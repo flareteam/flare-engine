@@ -76,12 +76,12 @@ void MapParallax::load(const std::string& filename) {
 			}
 			else if (infile.key == "speed") {
 				// @ATTR layer.speed|float|Speed at which the background will move relative to the camera.
-				layers.back().speed = Parse::toFloat(infile.val);
+				layers.back().speed = (Settings::LOGIC_FPS * Parse::toFloat(infile.val)) / settings->max_frames_per_sec;
 			}
 			else if (infile.key == "fixed_speed") {
 				// @ATTR layer.fixed_speed|float, float : X speed, Y speed|Speed at which the background will move independent of the camera movement.
-				layers.back().fixed_speed.x = Parse::toFloat(Parse::popFirstString(infile.val));
-				layers.back().fixed_speed.y = Parse::toFloat(Parse::popFirstString(infile.val));
+				layers.back().fixed_speed.x = (Settings::LOGIC_FPS * Parse::popFirstFloat(infile.val)) / settings->max_frames_per_sec;
+				layers.back().fixed_speed.y = (Settings::LOGIC_FPS * Parse::popFirstFloat(infile.val)) / settings->max_frames_per_sec;
 			}
 			else if (infile.key == "map_layer") {
 				// @ATTR layer.map_layer|string|The tile map layer that this parallax layer will be rendered on top of.

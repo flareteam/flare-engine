@@ -82,6 +82,11 @@ FPoint::FPoint(Point _p)
 	, y(static_cast<float>(_p.y))
 {}
 
+FPoint::FPoint(int _x, int _y)
+	: x(static_cast<float>(_x))
+	, y(static_cast<float>(_y))
+{}
+
 void FPoint::align() {
 	// this rounds the float values to the nearest multiple of 1/(2^4)
 	// 1/(2^4) was chosen because it's a "nice" floating point number, removing 99% of rounding errors
@@ -156,6 +161,21 @@ bool Color::operator !=(const Color &other) {
 	return !((*this) == other);
 }
 
+uint32_t Color::encodeRGBA() {
+	uint32_t result = static_cast<uint32_t>(a);
+	result |= static_cast<uint32_t>(r) << 24;
+	result |= static_cast<uint32_t>(g) << 16;
+	result |= static_cast<uint32_t>(b) << 8;
+	return result;
+}
+
+void Color::decodeRGBA(const uint32_t encoded) {
+	a = static_cast<uint8_t>(encoded);
+	r = static_cast<uint8_t>(encoded >> 24);
+	g = static_cast<uint8_t>(encoded >> 16);
+	b = static_cast<uint8_t>(encoded >> 8);
+}
+
 Timer::Timer(unsigned _duration)
 	: current(0)
 	, duration(_duration)
@@ -203,6 +223,15 @@ void Timer::reset(int type) {
 		current = 0;
 	else if (type == Timer::BEGIN)
 		current = duration;
+}
+
+FMinMax::FMinMax()
+	: min(0)
+	, max(0)
+{}
+
+bool Timer::isWholeSecond() {
+	return current % settings->max_frames_per_sec == 0;
 }
 
 FPoint Utils::screenToMap(int x, int y, float camx, float camy) {
@@ -311,7 +340,7 @@ unsigned char Utils::calcDirection(float x0, float y0, float x1, float y1) {
 	float val = theta / (static_cast<float>(M_PI)/4);
 	int dir = static_cast<int>(((val < 0) ? ceilf(val-0.5f) : floorf(val+0.5f)) + 4);
 	dir = (dir + 1) % 8;
-	if (dir >= 0 && dir < 8)
+	if (dir >= 0)
 		return static_cast<unsigned char>(dir);
 	else
 		return 0;
@@ -381,6 +410,42 @@ void Utils::alignToScreenEdge(int alignment, Rect *r) {
 	else if (alignment == ALIGN_BOTTOMRIGHT) {
 		r->x = (settings->view_w - r->w) + r->x;
 		r->y = (settings->view_h - r->h) + r->y;
+	}
+	else if (alignment == ALIGN_FRAME_TOPLEFT) {
+		r->x = ((settings->view_w - eset->resolutions.frame_w)/2) + r->x;
+		r->y = ((settings->view_h - eset->resolutions.frame_h)/2) + r->y;
+	}
+	else if (alignment == ALIGN_FRAME_TOP) {
+		r->x = ((settings->view_w - eset->resolutions.frame_w)/2) + (eset->resolutions.frame_w/2 - r->w/2) + r->x;
+		r->y = ((settings->view_h - eset->resolutions.frame_h)/2) + r->y;
+	}
+	else if (alignment == ALIGN_FRAME_TOPRIGHT) {
+		r->x = ((settings->view_w - eset->resolutions.frame_w)/2) + (eset->resolutions.frame_w - r->w) + r->x;
+		r->y = ((settings->view_h - eset->resolutions.frame_h)/2) + r->y;
+	}
+	else if (alignment == ALIGN_FRAME_LEFT) {
+		r->x = ((settings->view_w - eset->resolutions.frame_w)/2) + r->x;
+		r->y = ((settings->view_h - eset->resolutions.frame_h)/2) + (eset->resolutions.frame_h/2 - r->h/2) + r->y;
+	}
+	else if (alignment == ALIGN_FRAME_CENTER) {
+		r->x = ((settings->view_w - eset->resolutions.frame_w)/2) + (eset->resolutions.frame_w/2 - r->w/2) + r->x;
+		r->y = ((settings->view_h - eset->resolutions.frame_h)/2) + (eset->resolutions.frame_h/2 - r->h/2) + r->y;
+	}
+	else if (alignment == ALIGN_FRAME_RIGHT) {
+		r->x = ((settings->view_w - eset->resolutions.frame_w)/2) + (eset->resolutions.frame_w - r->w) + r->x;
+		r->y = ((settings->view_h - eset->resolutions.frame_h)/2) + (eset->resolutions.frame_h/2 - r->h/2) + r->y;
+	}
+	else if (alignment == ALIGN_FRAME_BOTTOMLEFT) {
+		r->x = ((settings->view_w - eset->resolutions.frame_w)/2) + r->x;
+		r->y = ((settings->view_h - eset->resolutions.frame_h)/2) + (eset->resolutions.frame_h - r->h) + r->y;
+	}
+	else if (alignment == ALIGN_FRAME_BOTTOM) {
+		r->x = ((settings->view_w - eset->resolutions.frame_w)/2) + (eset->resolutions.frame_w/2 - r->w/2) + r->x;
+		r->y = ((settings->view_h - eset->resolutions.frame_h)/2) + (eset->resolutions.frame_h - r->h) + r->y;
+	}
+	else if (alignment == ALIGN_FRAME_BOTTOMRIGHT) {
+		r->x = ((settings->view_w - eset->resolutions.frame_w)/2) + (eset->resolutions.frame_w - r->w) + r->x;
+		r->y = ((settings->view_h - eset->resolutions.frame_h)/2) + (eset->resolutions.frame_h - r->h) + r->y;
 	}
 	else {
 		// do nothing
@@ -504,10 +569,13 @@ void Utils::createSaveDir(int slot) {
 	std::stringstream ss;
 	ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/";
 
-	Filesystem::createDir(Filesystem::convertSlashes(&ss));
+	Filesystem::createDir(ss.str());
 
 	ss << slot;
-	Filesystem::createDir(Filesystem::convertSlashes(&ss));
+	Filesystem::createDir(ss.str());
+
+	ss << "/fow/";
+	Filesystem::createDir(ss.str());
 }
 
 void Utils::removeSaveDir(int slot) {
@@ -517,8 +585,8 @@ void Utils::removeSaveDir(int slot) {
 	std::stringstream ss;
 	ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/" << slot;
 
-	if (Filesystem::isDirectory(Filesystem::convertSlashes(&ss))) {
-		Filesystem::removeDirRecursive(Filesystem::convertSlashes(&ss));
+	if (Filesystem::isDirectory(ss.str())) {
+		Filesystem::removeDirRecursive(ss.str());
 	}
 }
 
@@ -560,13 +628,32 @@ size_t Utils::stringFindCaseInsensitive(const std::string &_a, const std::string
 }
 
 std::string Utils::floatToString(const float value, size_t precision) {
-	std::stringstream ss;
-	ss << value;
-	std::string temp = ss.str();
+	size_t format_buffer_size = 16;
+	char format_buffer[format_buffer_size];
+	snprintf(format_buffer, format_buffer_size, "%%.%df", static_cast<int>(precision));
 
-	size_t decimal = temp.find(".");
-	if (decimal != std::string::npos && temp.length() > decimal + precision + 1) {
-		temp = temp.substr(0, decimal + precision + 1);
+	size_t buffer_size = 1024;
+	char buffer[buffer_size];
+	snprintf(buffer, buffer_size, format_buffer, value);
+	std::string temp(buffer);
+
+	// remove trailing zeros (and the separator if it is not needed)
+	if (temp.find(".") != std::string::npos || temp.find(",") != std::string::npos) {
+		size_t i = temp.length();
+		size_t new_length = i;
+		while (i > 0) {
+			i--;
+			if (temp[i] == '0')
+				new_length = i;
+			else if (temp[i] != '.' && temp[i] != ',') {
+				break;
+			}
+			else {
+				new_length = i;
+				break;
+			}
+		}
+		temp = temp.substr(0, new_length);
 	}
 
 	return temp;
@@ -577,10 +664,10 @@ std::string Utils::getDurationString(const int duration, size_t precision) {
 	std::string temp = floatToString(real_duration, precision);
 
 	if (real_duration == 1.f) {
-		return msg->get("%s second", temp);
+		return msg->getv("%s second", temp.c_str());
 	}
 	else {
-		return msg->get("%s seconds", temp);
+		return msg->getv("%s seconds", temp.c_str());
 	}
 }
 
@@ -608,9 +695,6 @@ std::string Utils::substituteVarsInString(const std::string &_s, Avatar* avatar)
 		}
 		else if (var == "${INPUT_ATTACK}") {
 			s.replace(begin, var_len, inpt->getAttackString());
-		}
-		else if (var == "${INPUT_CONTINUE}") {
-			s.replace(begin, var_len, inpt->getContinueString());
 		}
 		else {
 			logError("'%s' is not a valid string variable name.", var.c_str());
@@ -712,7 +796,7 @@ void Utils::lockFileRead() {
 	if (!platform.has_lock_file)
 		return;
 
-	std::string lock_file_path = settings->path_conf + "flare_lock";
+	std::string lock_file_path = Filesystem::convertSlashes(settings->path_conf + "flare_lock");
 
 	std::ifstream infile;
 	infile.open(lock_file_path.c_str(), std::ios::in);
@@ -771,12 +855,13 @@ void Utils::lockFileCheck() {
 			{ SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT|SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Quit" },
 			{ 0, 1, "Continue" },
 			{ 0, 2, "Reset" },
+			{ 0, 3, "Safe Video" },
 		};
 		const SDL_MessageBoxData messageboxdata = {
 			SDL_MESSAGEBOX_INFORMATION,
 			NULL,
 			"Flare",
-			"Flare appears to already be running.\n\nYou may either:\n- 'Quit' Flare (safe, recommended)\n- 'Continue' to launch another copy of Flare.\n- 'Reset' the counter which tracks the number of copies of Flare that are currently running.\n  If this dialog is shown every time you launch Flare, this option should fix it.",
+			"Flare is unable to launch properly. This may be because it did not exit properly, or because there is another instance running.\n\nIf Flare crashed, it is recommended to try 'Safe Video' mode. This will try launching Flare with the minimum video settings.\n\nIf Flare is already running, you may:\n- 'Quit' Flare (safe, recommended)\n- 'Continue' to launch another copy of Flare.\n- 'Reset' the counter which tracks the number of copies of Flare that are currently running.\n  If this dialog is shown every time you launch Flare, this option should fix it.",
 			static_cast<int>(SDL_arraysize(buttons)),
 			buttons,
 			NULL
@@ -790,8 +875,34 @@ void Utils::lockFileCheck() {
 		else if (buttonid == 2) {
 			LOCK_INDEX = 0;
 		}
+		else if (buttonid == 3) {
+			LOCK_INDEX = 0;
+			settings->safe_video = true;
+		}
 	}
 
 	lockFileWrite(1);
+}
+
+void Utils::setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask) {
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+	*rmask = 0xff000000;
+	*gmask = 0x00ff0000;
+	*bmask = 0x0000ff00;
+	*amask = 0x000000ff;
+#else
+	*rmask = 0x000000ff;
+	*gmask = 0x0000ff00;
+	*bmask = 0x00ff0000;
+	*amask = 0xff000000;
+#endif
+}
+
+std::string Utils::createMinMaxString(float min, float max, size_t precision) {
+	std::string r;
+	if (min != max)
+		r = floatToString(min, precision) + '-';
+	r += floatToString(max, precision);
+	return r;
 }
 

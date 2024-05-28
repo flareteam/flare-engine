@@ -81,14 +81,15 @@ MenuCharacter::MenuCharacter()
 		cstat[i+2].label->setText(eset->primary_stats.list[i].name);
 	}
 
-	show_stat.resize(Stats::COUNT + eset->damage_types.count);
-	for (size_t i = 0; i < Stats::COUNT + eset->damage_types.count; i++) {
+	show_stat.resize(Stats::COUNT + eset->damage_types.count + eset->elements.list.size() + eset->resource_stats.stat_count);
+	for (size_t i = 0; i < Stats::COUNT + eset->damage_types.count + eset->elements.list.size(); i++) {
 		show_stat[i] = true;
 	}
 
-	// these two are hidden by default, as they are currently unused
-	show_stat[Stats::HP_PERCENT] = false;
-	show_stat[Stats::MP_PERCENT] = false;
+	// some stats are hidden by default
+	for (int i = Stats::RESIST_DAMAGE_OVER_TIME; i < Stats::COUNT; ++i) {
+		show_stat[i] = false;
+	}
 
 	// Upgrade buttons
 	primary_up.resize(eset->primary_stats.list.size());
@@ -187,24 +188,9 @@ MenuCharacter::MenuCharacter()
 			// @ATTR show_resists|bool|Hide the elemental "Resistance" stats in the statlist if set to false.
 			else if (infile.key == "show_resists") show_resists = Parse::toBool(infile.val);
 
-			// @ATTR show_stat|predefined_string, bool : Stat name / Damage type, Visible|Hide the matching stat or damage type min/max in the statlist if set to false.
+			// @ATTR show_stat|stat_id, bool : Stat ID, Visible|Hide the matching stat ID in the statlist if set to false.
 			else if (infile.key == "show_stat") {
-				std::string stat_name = Parse::popFirstString(infile.val);
-
-				for (int i=0; i<Stats::COUNT; ++i) {
-					if (stat_name == Stats::KEY[i]) {
-						show_stat[i] = Parse::toBool(Parse::popFirstString(infile.val));
-						break;
-					}
-				}
-				for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
-					if (stat_name == eset->damage_types.list[i].min) {
-						show_stat[Stats::COUNT + (i*2)] = Parse::toBool(Parse::popFirstString(infile.val));
-					}
-					else if (stat_name == eset->damage_types.list[i].max) {
-						show_stat[Stats::COUNT + (i*2) + 1] = Parse::toBool(Parse::popFirstString(infile.val));
-					}
-				}
+				parseShowStat(infile);
 			}
 
 			// @ATTR name_max_width|int|The maxiumum width, in pixels, that the character name can occupy until it is abbreviated.
@@ -228,7 +214,8 @@ MenuCharacter::MenuCharacter()
 	// frequently refreshing trimmed text is slow for Cyrillic characters, so disable it here
 	statList->disable_text_trim = true;
 
-	setBackground("images/menus/character.png");
+	if (!background)
+		setBackground("images/menus/character.png");
 
 	align();
 
@@ -305,54 +292,85 @@ void MenuCharacter::refreshStats() {
 		cstat[i+2].value->setColor(bonusColor(pc->stats.primary_additional[i]));
 	}
 
-	ss.str("");
-	if (skill_points == 1) {
-		ss << msg->get("%d unspent stat point", skill_points);
+	if (skill_points >= 1) {
+		labelUnspent->setText(msg->getv("Available stat points: %d", skill_points));
 	}
-	else if (skill_points > 1) {
-		ss << msg->get("%d unspent stat points", skill_points);
+	else {
+		labelUnspent->setText("");
 	}
-	labelUnspent->setText(ss.str());
 
 	// scrolling stat list
 	unsigned stat_index = 0;
+	size_t resource_offset_index = Stats::COUNT + eset->damage_types.count + eset->elements.list.size();
+
 	for (int i=0; i<Stats::COUNT; ++i) {
 		if (!show_stat[i]) continue;
 
-		// insert damage stats before absorb min
-		if (i == Stats::ABS_MIN) {
-			for (size_t j = 0; j < eset->damage_types.list.size(); ++j) {
-				if (show_stat[Stats::COUNT + (j*2)]) {
-					// min
-					ss.str("");
-					ss << eset->damage_types.list[j].name_min << ": " << pc->stats.getDamageMin(j);
-					statList->set(stat_index, ss.str(), damageTooltip(j*2));
-					stat_index++;
-				}
+		// Stats::ABS_MIN handles both min and max
+		if (i == Stats::ABS_MAX) continue;
 
-				if (show_stat[Stats::COUNT + (j*2) + 1]) {
-					// max
-					ss.str("");
-					ss << eset->damage_types.list[j].name_max << ": " << pc->stats.getDamageMax(j);
-					statList->set(stat_index, ss.str(), damageTooltip((j*2) + 1));
-					stat_index++;
+		// insert resource stats (execpt stealing) before accuracy
+		if (i == Stats::ACCURACY) {
+			for (size_t j = 0; j < eset->resource_stats.list.size(); ++j) {
+				for (size_t k = 0; k < EngineSettings::ResourceStats::STAT_STEAL; ++k) {
+					if (show_stat[resource_offset_index + (j * EngineSettings::ResourceStats::STAT_COUNT) + k]) {
+						ss.str("");
+						ss << eset->resource_stats.list[j].text[k] << ": " << Utils::floatToString(pc->stats.getResourceStat(j, k), eset->number_format.character_menu);
+						statList->set(stat_index, ss.str(), resourceStatTooltip(j, k));
+						stat_index++;
+					}
 				}
 			}
 		}
 
-		ss.str("");
-		ss << Stats::NAME[i] << ": " << pc->stats.get(static_cast<Stats::STAT>(i));
-		if (Stats::PERCENT[i]) ss << "%";
+		// insert damage stats before absorb min
+		if (i == Stats::ABS_MIN) {
+			for (size_t j = 0; j < eset->damage_types.list.size(); ++j) {
+				if (show_stat[Stats::COUNT + (j*2)] || show_stat[Stats::COUNT + (j*2) + 1]) {
+					float min_dmg = pc->stats.getDamageMin(j);
+					float max_dmg = pc->stats.getDamageMax(j);
+
+					ss.str("");
+					ss << eset->damage_types.list[j].name << ": " << Utils::createMinMaxString(min_dmg, max_dmg, eset->number_format.character_menu);
+					statList->set(stat_index, ss.str(), damageTooltip(j));
+					stat_index++;
+				}
+			}
+
+			ss.str("");
+			ss << msg->get("Absorb") << ": " << Utils::createMinMaxString(pc->stats.get(Stats::ABS_MIN), pc->stats.get(Stats::ABS_MAX), eset->number_format.character_menu);
+		}
+		else {
+			ss.str("");
+			ss << Stats::NAME[i] << ": " << Utils::floatToString(pc->stats.get(static_cast<Stats::STAT>(i)), 2);
+			if (Stats::PERCENT[i]) ss << "%";
+		}
 
 		statList->set(stat_index, ss.str(), statTooltip(i));
 		stat_index++;
 	}
 
+	// insert resource stealing stats after HP/MP steal
+	for (size_t j = 0; j < eset->resource_stats.list.size(); ++j) {
+		for (size_t k = EngineSettings::ResourceStats::STAT_STEAL; k < EngineSettings::ResourceStats::STAT_COUNT; ++k) {
+			if (show_stat[resource_offset_index + (j * EngineSettings::ResourceStats::STAT_COUNT) + k]) {
+				ss.str("");
+				ss << eset->resource_stats.list[j].text[k] << ": " << Utils::floatToString(pc->stats.getResourceStat(j, k), eset->number_format.character_menu) << "%";
+				statList->set(stat_index, ss.str(), resourceStatTooltip(j, k));
+				stat_index++;
+			}
+		}
+	}
+
 	if (show_resists) {
-		for (unsigned int j=0; j<pc->stats.vulnerable.size(); ++j) {
+		for (size_t i=0; i<eset->elements.list.size(); ++i) {
+			if (!show_stat[Stats::COUNT + eset->damage_types.count + i])
+				continue;
+
 			ss.str("");
-			ss << msg->get("Resistance (%s)", eset->elements.list[j].name) << ": " << (100 - pc->stats.vulnerable[j]) << "%";
-			statList->set(j+stat_index, ss.str(), msg->get("Reduces the damage taken from \"%s\" elemental attacks.", eset->elements.list[j].name));
+			ss << msg->getv("Resistance (%s)", eset->elements.list[i].name.c_str()) << ": " << Utils::floatToString(pc->stats.getResist(i), eset->number_format.character_menu) << "%";
+			statList->set(stat_index, ss.str(), resistTooltip(i));
+			stat_index++;
 		}
 	}
 
@@ -362,40 +380,92 @@ void MenuCharacter::refreshStats() {
 	cstat[CSTAT_NAME].tip.addText(pc->stats.getLongClass());
 
 	cstat[CSTAT_LEVEL].tip.clear();
-	cstat[CSTAT_LEVEL].tip.addText(msg->get("XP: %d", pc->stats.xp));
+	cstat[CSTAT_LEVEL].tip.addText(msg->getv("XP: %lu", pc->stats.xp));
 	if (pc->stats.level < eset->xp.getMaxLevel()) {
-		cstat[CSTAT_LEVEL].tip.addText(msg->get("Next: %d", eset->xp.getLevelXP(pc->stats.level + 1)));
+		cstat[CSTAT_LEVEL].tip.addText(msg->getv("Next: %lu", eset->xp.getLevelXP(pc->stats.level + 1)));
 	}
 
 	for (size_t j = 2; j < cstat.size(); ++j) {
 		cstat[j].tip.clear();
 		cstat[j].tip.addText(cstat[j].label->getText());
-		cstat[j].tip.addText(msg->get("base (%d), bonus (%d)", *(base_stats[j-2]), *(base_stats_add[j-2])));
+		cstat[j].tip.addText(msg->getv("base (%d), bonus (%d)", *(base_stats[j-2]), *(base_stats_add[j-2])));
+
 		bool have_bonus = false;
+		size_t elements_offset = Stats::COUNT + eset->damage_types.count;
+		size_t resource_stat_offset = elements_offset + eset->elements.list.size();
+
 		for (int i = 0; i < Stats::COUNT; ++i) {
+			// insert resource stats (execpt stealing) before accuracy
+			if (i == Stats::ACCURACY) {
+				for (size_t k = 0; k < eset->resource_stats.list.size(); ++k) {
+					for (size_t l = 0; l < EngineSettings::ResourceStats::STAT_STEAL; ++l) {
+						size_t resource_index = resource_stat_offset + (k * EngineSettings::ResourceStats::STAT_COUNT) + l;
+
+						if (base_bonus[j-2]->at(resource_index) > 0 && show_stat[resource_index]) {
+							if (!have_bonus) {
+								cstat[j].tip.addText("\n" + msg->get("Related stats:"));
+								have_bonus = true;
+							}
+							cstat[j].tip.addText(eset->resource_stats.list[k].text[l]);
+						}
+					}
+				}
+			}
+
 			// damage types are displayed before absorb
 			if (i == Stats::ABS_MIN) {
-				for (size_t k = 0; k < eset->damage_types.count; ++k) {
-					if (base_bonus[j-2]->at(Stats::COUNT + k) > 0) {
+				for (size_t k = 0; k < eset->damage_types.list.size(); ++k) {
+					// damage min
+					if (base_bonus[j-2]->at(Stats::COUNT + (k*2)) > 0 && show_stat[Stats::COUNT + (k*2)]) {
 						if (!have_bonus) {
 							cstat[j].tip.addText("\n" + msg->get("Related stats:"));
 							have_bonus = true;
 						}
-						if (k % 2 == 0)
-							cstat[j].tip.addText(eset->damage_types.list[k / 2].name_min);
-						else
-							cstat[j].tip.addText(eset->damage_types.list[k / 2].name_max);
+						cstat[j].tip.addText(eset->damage_types.list[k].name_min);
+					}
+					// damage max
+					if (base_bonus[j-2]->at(Stats::COUNT + (k*2) + 1) > 0 && show_stat[Stats::COUNT + (k*2) + 1]) {
+						if (!have_bonus) {
+							cstat[j].tip.addText("\n" + msg->get("Related stats:"));
+							have_bonus = true;
+						}
+						cstat[j].tip.addText(eset->damage_types.list[k].name_max);
 					}
 				}
 			}
 
 			// non-damage bonuses
-			if (base_bonus[j-2]->at(i) > 0) {
+			if (base_bonus[j-2]->at(i) > 0 && show_stat[i]) {
 				if (!have_bonus) {
 					cstat[j].tip.addText("\n" + msg->get("Related stats:"));
 					have_bonus = true;
 				}
 				cstat[j].tip.addText(Stats::NAME[i]);
+			}
+		}
+
+		// insert resource stealing stats after MP steal
+		for (size_t i = 0; i < eset->resource_stats.list.size(); ++i) {
+			for (size_t k = EngineSettings::ResourceStats::STAT_STEAL; k < EngineSettings::ResourceStats::STAT_COUNT; ++k) {
+				size_t resource_index = resource_stat_offset + (i * EngineSettings::ResourceStats::STAT_COUNT) + k;
+
+				if (base_bonus[j-2]->at(resource_index) > 0 && show_stat[resource_index]) {
+					if (!have_bonus) {
+						cstat[j].tip.addText("\n" + msg->get("Related stats:"));
+						have_bonus = true;
+					}
+					cstat[j].tip.addText(eset->resource_stats.list[i].text[k]);
+				}
+			}
+		}
+
+		for (size_t i = 0; i < eset->elements.list.size(); ++i) {
+			if (base_bonus[j-2]->at(elements_offset + i) > 0 && show_stat[elements_offset + i]) {
+				if (!have_bonus) {
+					cstat[j].tip.addText("\n" + msg->get("Related stats:"));
+					have_bonus = true;
+				}
+				cstat[j].tip.addText(msg->getv("Resistance (%s)", eset->elements.list[i].name.c_str()));
 			}
 		}
 	}
@@ -411,54 +481,156 @@ Color MenuCharacter::bonusColor(int stat) {
 	return font->getColor(FontEngine::COLOR_MENU_NORMAL);
 }
 
+void MenuCharacter::tooltipCreateBonusText(size_t min_index, size_t max_index, std::string* min_text, std::string* max_text) {
+	// per-level bonus
+	float min_per_level = pc->stats.per_level[min_index];
+	float max_per_level = pc->stats.per_level[max_index];
+
+	if (min_per_level > 0) {
+		*min_text += msg->getv("Each level grants %s.", Utils::floatToString(min_per_level, eset->number_format.character_menu).c_str());
+	}
+
+	if (max_text && max_per_level > 0) {
+		*max_text += msg->getv("Each level grants %s.", Utils::floatToString(max_per_level, eset->number_format.character_menu).c_str());
+	}
+
+	// per-primary bonuses
+	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
+		float min_per_primary = pc->stats.per_primary[i][min_index];
+		float max_per_primary = pc->stats.per_primary[i][max_index];
+
+		if (min_per_primary > 0) {
+			if (!min_text->empty())
+				*min_text += "\n";
+
+			*min_text += msg->getv("Each point of %s grants %s.", eset->primary_stats.list[i].name.c_str(), Utils::floatToString(min_per_primary, eset->number_format.character_menu).c_str());
+		}
+
+		if (max_text && max_per_primary > 0) {
+			if (!max_text->empty())
+				*max_text += "\n";
+
+			*max_text += msg->getv("Each point of %s grants %s.", eset->primary_stats.list[i].name.c_str(), Utils::floatToString(max_per_primary, eset->number_format.character_menu).c_str());
+		}
+	}
+}
+
 /**
  * Create tooltip text showing the per_* values of a stat
  */
 std::string MenuCharacter::statTooltip(int stat) {
-	std::string tooltip_text;
+	std::string text, min_text;
 
-	if (pc->stats.per_level[stat] > 0)
-		tooltip_text += msg->get("Each level grants %d.", pc->stats.per_level[stat]) + ' ';
+	std::string& description = Stats::DESC[stat];
+	if (!description.empty())
+		text += description;
 
-	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
-		if (pc->stats.per_primary[i][stat] > 0)
-			tooltip_text += msg->get("Each point of %s grants %d.", eset->primary_stats.list[i].name, pc->stats.per_primary[i][stat]) + ' ';
+	size_t min_index = stat;
+
+	if (stat == Stats::ABS_MIN) {
+		std::string max_text;
+
+		size_t max_index = Stats::ABS_MAX;
+
+		tooltipCreateBonusText(min_index, max_index, &min_text, &max_text);
+
+		if (!min_text.empty()) {
+			if (!text.empty())
+				text += "\n\n";
+			text += Stats::NAME[min_index] + ":\n" + min_text;
+		}
+
+		if (!max_text.empty()) {
+			if (!text.empty())
+				text += "\n\n";
+			text += Stats::NAME[max_index] + ":\n" + max_text;
+		}
+	}
+	else {
+		tooltipCreateBonusText(min_index, min_index, &min_text, NULL);
+
+		if (!min_text.empty()) {
+			if (!text.empty())
+				text += "\n\n";
+			text += min_text;
+		}
 	}
 
-	std::string full_tooltip = "";
-	if (Stats::DESC[stat] != "")
-		full_tooltip += Stats::DESC[stat];
-	if (full_tooltip != "" && tooltip_text != "")
-		full_tooltip += "\n";
-	full_tooltip += tooltip_text;
-
-	return full_tooltip;
+	return text;
 }
 
 /**
  * Create tooltip text showing the per_* values of a damage stat
  */
 std::string MenuCharacter::damageTooltip(size_t dmg_type) {
-	std::string tooltip_text;
+	std::string text, min_text, max_text;
 
-	if (pc->stats.per_level[Stats::COUNT + dmg_type] > 0)
-		tooltip_text += msg->get("Each level grants %d.", pc->stats.per_level[Stats::COUNT + dmg_type]) + ' ';
+	std::string& description = eset->damage_types.list[dmg_type].description;
+	if (!description.empty())
+		text += description;
 
-	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
-		if (pc->stats.per_primary[i][Stats::COUNT + dmg_type] > 0)
-			tooltip_text += msg->get("Each point of %s grants %d.", eset->primary_stats.list[i].name, pc->stats.per_primary[i][Stats::COUNT + dmg_type]) + ' ';
+	size_t min_index = Stats::COUNT + (dmg_type * 2);
+	size_t max_index = Stats::COUNT + (dmg_type * 2) + 1;
+
+	tooltipCreateBonusText(min_index, max_index, &min_text, &max_text);
+
+	if (!min_text.empty()) {
+		if (!text.empty())
+			text += "\n\n";
+		text += eset->damage_types.list[dmg_type].name_min + ":\n" + min_text;
 	}
 
-	size_t real_dmg_type = dmg_type / 2;
+	if (!max_text.empty()) {
+		if (!text.empty())
+			text += "\n\n";
+		text += eset->damage_types.list[dmg_type].name_max + ":\n" + max_text;
+	}
 
-	std::string full_tooltip = "";
-	if (eset->damage_types.list[real_dmg_type].description != "")
-		full_tooltip += eset->damage_types.list[real_dmg_type].description;
-	if (full_tooltip != "" && tooltip_text != "")
-		full_tooltip += "\n";
-	full_tooltip += tooltip_text;
+	return text;
+}
 
-	return full_tooltip;
+/**
+ * Create tooltip text showing the per_* values of a resistance stat
+ */
+std::string MenuCharacter::resistTooltip(size_t resist_type) {
+	std::string text, bonus_text;
+
+	std::string& description = eset->elements.list[resist_type].name;
+	if (!description.empty())
+		text += msg->getv("Reduces the damage taken from \"%s\" elemental attacks.", description.c_str());
+
+	size_t resist_index = Stats::COUNT + eset->damage_types.count + resist_type;
+
+	tooltipCreateBonusText(resist_index, resist_index, &bonus_text, NULL);
+
+	if (!bonus_text.empty()) {
+		if (!text.empty())
+			text += "\n\n";
+		text += bonus_text;
+	}
+
+	return text;
+}
+
+std::string MenuCharacter::resourceStatTooltip(size_t resource_index, size_t stat_index) {
+	std::string text, bonus_text;
+
+	std::string& description = eset->resource_stats.list[resource_index].text_desc[stat_index];
+	if (!description.empty())
+		text += description;
+
+	size_t offset_index = Stats::COUNT + eset->damage_types.count + eset->elements.list.size();
+	size_t resource_stat_index = offset_index + (resource_index * EngineSettings::ResourceStats::STAT_COUNT) + stat_index;
+
+	tooltipCreateBonusText(resource_stat_index, resource_stat_index, &bonus_text, NULL);
+
+	if (!bonus_text.empty()) {
+		if (!text.empty())
+			text += "\n\n";
+		text += bonus_text;
+	}
+
+	return text;
 }
 
 void MenuCharacter::logic() {
@@ -586,6 +758,49 @@ bool MenuCharacter::checkSkillPoints() {
 	skill_points = ((pc->stats.level - 1) * pc->stats.stat_points_per_level) - spent;
 
 	return (spent < ((pc->stats.level - 1) * pc->stats.stat_points_per_level) && spent < pc->stats.max_spendable_stat_points);
+}
+
+void MenuCharacter::parseShowStat(FileParser& infile) {
+	std::string stat_name = Parse::popFirstString(infile.val);
+	bool value = Parse::toBool(Parse::popFirstString(infile.val));
+	size_t offset_index = 0;
+
+	for (int i=0; i<Stats::COUNT; ++i) {
+		if (stat_name == Stats::KEY[i]) {
+			show_stat[i] = value;
+			return;
+		}
+	}
+	offset_index += Stats::COUNT;
+
+	for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
+		if (stat_name == eset->damage_types.list[i].min) {
+			show_stat[offset_index + (i*2)] = value;
+			return;
+		}
+		else if (stat_name == eset->damage_types.list[i].max) {
+			show_stat[offset_index + (i*2) + 1] = value;
+			return;
+		}
+	}
+	offset_index += eset->damage_types.count;
+
+	for (size_t i = 0; i < eset->elements.list.size(); ++i) {
+		if (stat_name == eset->elements.list[i].resist_id) {
+			show_stat[offset_index + i] = value;
+			return;
+		}
+	}
+	offset_index += eset->elements.list.size();
+
+	for (size_t i = 0; i < eset->resource_stats.list.size(); ++i) {
+		for (size_t j = 0; j < EngineSettings::ResourceStats::STAT_COUNT; ++j) {
+			if (stat_name == eset->resource_stats.list[i].ids[j]) {
+				show_stat[offset_index + (i * EngineSettings::ResourceStats::STAT_COUNT) + j] = value;
+				return;
+			}
+		}
+	}
 }
 
 MenuCharacter::~MenuCharacter() {

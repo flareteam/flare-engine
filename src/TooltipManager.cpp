@@ -19,34 +19,58 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class TooltipManager
  */
 
+#include "EngineSettings.h"
+#include "SharedResources.h"
 #include "TooltipManager.h"
 #include "WidgetTooltip.h"
 
 TooltipManager::TooltipManager()
-	: tip(new WidgetTooltip())
-	, style(TooltipData::STYLE_FLOAT)
-	, context(CONTEXT_NONE)
-{}
+	: context(CONTEXT_NONE)
+{
+	tip.resize(eset->tooltips.visible_max);
+	tip_data.resize(eset->tooltips.visible_max);
+	pos.resize(eset->tooltips.visible_max);
+	style.resize(eset->tooltips.visible_max);
+
+	for (size_t i = 0; i < eset->tooltips.visible_max; ++i) {
+		tip[i] = new WidgetTooltip();
+		if (i > 0) {
+			tip[i]->parent = tip[i-1];
+		}
+
+		tip_data[i] = TooltipData();
+		pos[i] = Point();
+		style[i] = 0;
+	}
+}
 
 TooltipManager::~TooltipManager() {
-	delete tip;
+	for (size_t i = 0; i < tip.size(); ++i) {
+		delete tip[i];
+	}
 }
 
 void TooltipManager::clear() {
-	tip_data.clear();
+	for (size_t i = 0; i < eset->tooltips.visible_max; ++i) {
+		tip_data[i].clear();
+	}
 }
 
 bool TooltipManager::isEmpty() {
-	return tip_data.isEmpty();
+	for (size_t i = 0; i < eset->tooltips.visible_max; ++i) {
+		if (!tip_data[i].isEmpty())
+			return false;
+	}
+	return true;
 }
 
-void TooltipManager::push(const TooltipData& _tip_data, const Point& _pos, uint8_t _style) {
-	if (_tip_data.isEmpty())
+void TooltipManager::push(const TooltipData& _tip_data, const Point& _pos, uint8_t _style, size_t tip_index) {
+	if (_tip_data.isEmpty() || tip_index >= eset->tooltips.visible_max)
 		return;
 
-	tip_data = _tip_data;
-	pos = _pos;
-	style = _style;
+	tip_data[tip_index] = _tip_data;
+	pos[tip_index] = _pos;
+	style[tip_index] = _style;
 }
 
 void TooltipManager::render() {
@@ -57,5 +81,7 @@ void TooltipManager::render() {
 		context = CONTEXT_NONE;
 	}
 
-	tip->render(tip_data, pos, style);
+	for (size_t i = 0; i < eset->tooltips.visible_max; ++i) {
+		tip[i]->render(tip_data[i], pos[i], style[i]);
+	}
 }

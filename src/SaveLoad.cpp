@@ -33,6 +33,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "EngineSettings.h"
 #include "FileParser.h"
+#include "FogOfWar.h"
 #include "GameStatePlay.h"
 #include "MapRenderer.h"
 #include "Menu.h"
@@ -86,7 +87,7 @@ void SaveLoad::saveGame() {
 	std::stringstream ss;
 	ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/" << game_slot << "/avatar.txt";
 
-	outfile.open(Filesystem::convertSlashes(&ss).c_str(), std::ios::out);
+	outfile.open(Filesystem::convertSlashes(ss.str()).c_str(), std::ios::out);
 
 	if (outfile.is_open()) {
 
@@ -123,6 +124,9 @@ void SaveLoad::saveGame() {
 		// equipped gear
 		outfile << "equipped_quantity=" << menu->inv->inventory[MenuInventory::EQUIPMENT].getQuantities() << "\n";
 		outfile << "equipped=" << menu->inv->inventory[MenuInventory::EQUIPMENT].getItems() << "\n";
+
+		// active equipped set
+		outfile << "active_equipment_set=" << menu->inv->active_equipment_set << "\n";
 
 		// carried items
 		outfile << "carried_quantity=" << menu->inv->inventory[MenuInventory::CARRIED].getQuantities() << "\n";
@@ -200,7 +204,9 @@ void SaveLoad::saveGame() {
 			}
 		}
 
-		outfile << "questlog_dismissed=" << !menu->act->requires_attention[MenuActionBar::MENU_LOG];
+		outfile << "questlog_dismissed=" << !menu->act->requires_attention[MenuActionBar::MENU_LOG] << "\n";
+
+		outfile << "stash_tab=" << menu->stash->getTab();
 
 		outfile << std::endl;
 
@@ -211,30 +217,174 @@ void SaveLoad::saveGame() {
 		platform.FSCommit();
 	}
 
-	// Save stash
-	ss.str("");
-	if (pc->stats.permadeath)
-		ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/" << game_slot << "/stash_HC.txt";
-	else
-		ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/stash.txt";
+	// Save stashes
+	for (size_t i = 0; i < menu->stash->tabs.size(); ++i) {
+		// shared stashes are not saved for permadeath characters
+		if (pc->stats.permadeath && !menu->stash->tabs[i].is_private)
+			continue;
 
-	outfile.open(Filesystem::convertSlashes(&ss).c_str(), std::ios::out);
+		ss.str("");
+		ss << settings->path_user << "saves/" << eset->misc.save_prefix;
+		if (menu->stash->tabs[i].is_private)
+			ss << "/" << game_slot;
+		ss << "/" << menu->stash->tabs[i].filename;
+		outfile.open(Filesystem::convertSlashes(ss.str()).c_str(), std::ios::out);
+
+		if (outfile.is_open()) {
+
+			// comment
+			outfile << "# flare-engine stash file: \"" << menu->stash->tabs[i].id << "\"\n";
+
+			outfile << "quantity=" << menu->stash->tabs[i].stock.getQuantities() << "\n";
+			outfile << "item=" << menu->stash->tabs[i].stock.getItems() << "\n";
+
+			outfile << std::endl;
+
+			if (outfile.bad()) Utils::logError("SaveLoad: Unable to save stash. No write access or disk is full!");
+			outfile.close();
+			outfile.clear();
+
+			platform.FSCommit();
+		}
+	}
+
+	// Save fow dark layer
+	if (mapr->fogofwar && mapr->save_fogofwar && !mapr->getFilename().empty() && fow->dark_layer_id < mapr->layernames.size()) {
+		ss.str("");
+		ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/" << game_slot << "/fow/" << Utils::hashString(mapr->getFilename()) << ".txt";
+
+		outfile.open(Filesystem::convertSlashes(ss.str()).c_str(), std::ios::out);
+
+		if (outfile.is_open()) {
+			outfile << "# " << mapr->getFilename() << std::endl;
+			outfile << "[layer]" << std::endl;
+			outfile << "type=" << mapr->layernames[fow->dark_layer_id] << std::endl;
+			outfile << "data=" << std::endl;
+
+			std::string layer = "";
+			for (int line = 0; line < mapr->h; line++) {
+				std::stringstream map_row;
+				for (int tile = 0; tile < mapr->w; tile++) {
+					unsigned short val = mapr->layers[fow->dark_layer_id][tile][line];
+					map_row << val << ",";
+				}
+				layer += map_row.str();
+				layer += '\n';
+			}
+			layer.erase(layer.end()-2, layer.end());
+			layer += '\n';
+			outfile << layer << std::endl;
+
+			if (outfile.bad()) Utils::logError("SaveLoad: Unable to save map data. No write access or disk is full!");
+			outfile.close();
+			outfile.clear();
+
+			platform.FSCommit();
+		}
+	}
+
+	// Save extended Items
+	ss.str("");
+	ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/extended_items.txt";
+
+	outfile.open(Filesystem::convertSlashes(ss.str()).c_str(), std::ios::out);
 
 	if (outfile.is_open()) {
+		for (size_t i = eset->loot.extended_items_offset; i < items->items.size(); ++i) {
+			Item* item = items->items[i];
 
-		// comment
-		outfile << "## flare-engine stash file ##" << "\n";
+			if (!item || item->parent == 0)
+				continue;
 
-		outfile << "quantity=" << menu->stash->stock.getQuantities() << "\n";
-		outfile << "item=" << menu->stash->stock.getItems() << "\n";
+			bool item_in_storage = false;
+			if (menu->inv->inventory[MenuInventory::EQUIPMENT].contain(i, 1)) {
+				item_in_storage = true;
+			}
+			else if (menu->inv->inventory[MenuInventory::CARRIED].contain(i, 1)) {
+				item_in_storage = true;
+			}
+			else {
+				for (size_t j = 0; j < menu->stash->tabs.size(); ++j) {
+					if (menu->stash->tabs[j].stock.contain(i, 1)) {
+						item_in_storage = true;
+						break;
+					}
+				}
+			}
 
-		outfile << std::endl;
+			if (!item_in_storage)
+				continue;
 
-		if (outfile.bad()) Utils::logError("SaveLoad: Unable to save stash. No write access or disk is full!");
-		outfile.close();
-		outfile.clear();
+			outfile << "[item]" << std::endl;
+			outfile << "id=" << i << "," << item->parent << std::endl;
+			outfile << "level=" << item->level << std::endl;
+			outfile << "quality=" << item->quality << std::endl;
+			for (size_t j = 0; j < item->bonus.size(); ++j) {
+				BonusData* bonus = &(item->bonus[j]);
 
-		platform.FSCommit();
+				if (!bonus->is_extended)
+					continue;
+
+				if (bonus->power_id > 0)
+					outfile << "bonus_power_level=";
+				else
+					outfile << "bonus=";
+
+				if (bonus->type == BonusData::SPEED)
+					outfile << "speed";
+				else if (bonus->type == BonusData::ATTACK_SPEED)
+					outfile << "attack_speed";
+				else if (bonus->type == BonusData::STAT)
+					outfile << Stats::KEY[bonus->index];
+				else if (bonus->type == BonusData::DAMAGE_MIN)
+					outfile << eset->damage_types.list[bonus->index].min;
+				else if (bonus->type == BonusData::DAMAGE_MAX)
+					outfile << eset->damage_types.list[bonus->index].max;
+				else if (bonus->type == BonusData::RESIST_ELEMENT)
+					outfile << eset->elements.list[bonus->index].resist_id;
+				else if (bonus->type == BonusData::PRIMARY_STAT)
+					outfile << eset->primary_stats.list[bonus->index].id;
+				else if (bonus->type == BonusData::RESOURCE_STAT)
+					outfile << eset->resource_stats.list[bonus->index].ids[bonus->sub_index];
+				else if (bonus->type == BonusData::POWER_LEVEL)
+					outfile << bonus->power_id;
+				else
+					continue;
+
+				if (bonus->value.base > 0) {
+					outfile << ",base:";
+					if (bonus->is_multiplier)
+						outfile << bonus->value.base * 100 << "%";
+					else
+						outfile << bonus->value.base;
+				}
+				if (bonus->value.per_item_level > 0) {
+					outfile << ",item_level:";
+					if (bonus->is_multiplier)
+						outfile << bonus->value.per_item_level * 100 << "%";
+					else
+						outfile << bonus->value.per_item_level;
+				}
+				if (bonus->value.per_player_level > 0) {
+					outfile << ",player_level:";
+					if (bonus->is_multiplier)
+						outfile << bonus->value.per_player_level * 100 << "%";
+					else
+						outfile << bonus->value.per_player_level;
+				}
+				for (size_t k = 0; k < bonus->value.per_player_primary.size(); ++k) {
+					if (bonus->value.per_player_primary[k] > 0) {
+						outfile << "," << eset->primary_stats.list[k].id << ":";
+						if (bonus->is_multiplier)
+							outfile << bonus->value.per_player_primary[k] * 100 << "%";
+						else
+							outfile << bonus->value.per_player_primary[k];
+					}
+				}
+				outfile << std::endl;
+			}
+			outfile << std::endl;
+		}
 	}
 
 	settings->prev_save_slot = game_slot-1;
@@ -250,18 +400,19 @@ void SaveLoad::saveGame() {
 void SaveLoad::loadGame() {
 	if (game_slot <= 0) return;
 
-	int saved_hp = 0;
-	int saved_mp = 0;
+	float saved_hp = 0;
+	float saved_mp = 0;
 	int currency = 0;
+	size_t stash_tab = 0;
 	Version save_version(VersionInfo::MIN);
 
 	FileParser infile;
-	std::vector<int> hotkeys(MenuActionBar::SLOT_MAX, -1);
+	std::vector<PowerID> hotkeys(MenuActionBar::SLOT_MAX, -1);
 
 	std::stringstream ss;
 	ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/" << game_slot << "/avatar.txt";
 
-	if (infile.open(Filesystem::convertSlashes(&ss), !FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
+	if (infile.open(ss.str(), !FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			if (infile.key == "name") pc->stats.name = infile.val;
 			else if (infile.key == "permadeath") {
@@ -280,8 +431,8 @@ void SaveLoad::loadGame() {
 				pc->stats.xp = Parse::toUnsignedLong(infile.val);
 			}
 			else if (infile.key == "hpmp") {
-				saved_hp = Parse::popFirstInt(infile.val);
-				saved_mp = Parse::popFirstInt(infile.val);
+				saved_hp = Parse::popFirstFloat(infile.val);
+				saved_mp = Parse::popFirstFloat(infile.val);
 			}
 			else if (infile.key == "build") {
 				for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
@@ -300,6 +451,9 @@ void SaveLoad::loadGame() {
 			}
 			else if (infile.key == "equipped_quantity") {
 				menu->inv->inventory[MenuInventory::EQUIPMENT].setQuantities(infile.val);
+			}
+			else if (infile.key == "active_equipment_set") {
+				menu->inv->applyEquipmentSet(Parse::toInt(infile.val));
 			}
 			else if (infile.key == "carried") {
 				menu->inv->inventory[MenuInventory::CARRIED].setItems(infile.val);
@@ -326,21 +480,9 @@ void SaveLoad::loadGame() {
 			}
 			else if (infile.key == "actionbar") {
 				for (int i = 0; i < MenuActionBar::SLOT_MAX; i++) {
-					hotkeys[i] = Parse::popFirstInt(infile.val);
-					if (hotkeys[i] < 0) {
-						Utils::logError("SaveLoad: Hotkey power on position %d has negative id, skipping", i);
-						hotkeys[i] = 0;
-					}
-					else if (static_cast<unsigned>(hotkeys[i]) > powers->powers.size()-1) {
-						Utils::logError("SaveLoad: Hotkey power id (%d) out of bounds 1-%d, skipping", hotkeys[i], static_cast<int>(powers->powers.size()));
-						hotkeys[i] = 0;
-					}
-					else if (hotkeys[i] != 0 && static_cast<unsigned>(hotkeys[i]) < powers->powers.size() && powers->powers[hotkeys[i]].name == "") {
-						Utils::logError("SaveLoad: Hotkey power with id=%d, found on position %d does not exist, skipping", hotkeys[i], i);
-						hotkeys[i] = 0;
-					}
+					hotkeys[i] = powers->verifyID(Parse::popFirstInt(infile.val), &infile, PowerManager::ALLOW_ZERO_ID);
 				}
-				menu->act->set(hotkeys);
+				menu->act->set(hotkeys, !MenuActionBar::SET_SKIP_EMPTY);
 			}
 			else if (infile.key == "transformed") {
 				pc->stats.transform_type = Parse::popFirstString(infile.val);
@@ -352,8 +494,9 @@ void SaveLoad::loadGame() {
 			else if (infile.key == "powers") {
 				std::string power;
 				while ( (power = Parse::popFirstString(infile.val)) != "") {
-					if (Parse::toInt(power) > 0)
-						pc->stats.powers_list.push_back(Parse::toInt(power));
+					PowerID power_id = powers->verifyID(Parse::toInt(power), &infile, !PowerManager::ALLOW_ZERO_ID);
+					if (power_id > 0)
+						pc->stats.powers_list.push_back(power_id);
 				}
 			}
 			else if (infile.key == "campaign") camp->setAll(infile.val);
@@ -374,6 +517,7 @@ void SaveLoad::loadGame() {
 				}
 			}
 			else if (infile.key == "questlog_dismissed") pc->questlog_dismissed = Parse::toBool(infile.val);
+			else if (infile.key == "stash_tab") stash_tab = Parse::toInt(infile.val);
 		}
 
 		infile.close();
@@ -422,6 +566,11 @@ void SaveLoad::loadGame() {
 	menu->chr->refreshStats();
 
 	loadPowerTree();
+
+	// disable the shared stash for permadeath characters
+	menu->stash->enableSharedTab(pc->stats.permadeath);
+
+	menu->stash->setTab(stash_tab);
 }
 
 /**
@@ -435,30 +584,47 @@ void SaveLoad::loadClass(int index) {
 		return;
 	}
 
-	pc->stats.character_class = eset->hero_classes.list[index].name;
+	EngineSettings::HeroClasses::HeroClass& hero_class = eset->hero_classes.list[index];
+
+	// name
+	pc->stats.character_class = hero_class.name;
+
+	// stat points
 	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 		// Avatar::init() sets primary stats to 1, so we add to that here
-		pc->stats.primary[i] += eset->hero_classes.list[index].primary[i];
+		pc->stats.primary[i] += hero_class.primary[i];
 		pc->stats.primary_starting[i] = pc->stats.primary[i];
 	}
-	menu->inv->addCurrency(eset->hero_classes.list[index].currency);
-	menu->inv->inventory[MenuInventory::EQUIPMENT].setItems(eset->hero_classes.list[index].equipment);
-	for (unsigned i=0; i<eset->hero_classes.list[index].powers.size(); i++) {
-		pc->stats.powers_list.push_back(eset->hero_classes.list[index].powers[i]);
-	}
-	for (unsigned i=0; i<eset->hero_classes.list[index].statuses.size(); i++) {
-		StatusID class_status = camp->registerStatus(eset->hero_classes.list[index].statuses[i]);
-		camp->setStatus(class_status);
-	}
-	menu->act->set(eset->hero_classes.list[index].hotkeys);
 
-	// Add carried items
-	std::string carried = eset->hero_classes.list[index].carried;
+	// inventory
+	menu->inv->addCurrency(hero_class.currency);
+	menu->inv->inventory[MenuInventory::EQUIPMENT].setItems(hero_class.equipment);
+
+	std::string carried = hero_class.carried;
 	ItemStack stack;
 	stack.quantity = 1;
-	while (carried != "") {
+	while (!carried.empty()) {
 		stack.item = Parse::popFirstInt(carried);
 		menu->inv->add(stack, MenuInventory::CARRIED, ItemStorage::NO_SLOT, !MenuInventory::ADD_PLAY_SOUND, !MenuInventory::ADD_AUTO_EQUIP);
+	}
+
+	// powers & action bar
+	for (size_t i = 0; i < hero_class.powers.size(); ++i) {
+		PowerID power_id = powers->verifyID(hero_class.powers[i], NULL, !PowerManager::ALLOW_ZERO_ID);
+		hero_class.powers[i] = power_id;
+		if (power_id > 0)
+			pc->stats.powers_list.push_back(power_id);
+	}
+	for (size_t i = 0; i < hero_class.hotkeys.size(); ++i) {
+		hero_class.hotkeys[i] = powers->verifyID(hero_class.hotkeys[i], NULL, PowerManager::ALLOW_ZERO_ID);
+	}
+
+	menu->act->set(hero_class.hotkeys, !MenuActionBar::SET_SKIP_EMPTY);
+
+	// campaign statuses
+	for (size_t i = 0; i < hero_class.statuses.size(); ++i) {
+		StatusID class_status = camp->registerStatus(hero_class.statuses[i]);
+		camp->setStatus(class_status);
 	}
 
 	// apply stats, inventory, and powers
@@ -477,25 +643,33 @@ void SaveLoad::loadStash() {
 	// Load stash
 	FileParser infile;
 	std::stringstream ss;
-	if (pc->stats.permadeath)
-		ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/" << game_slot << "/stash_HC.txt";
-	else
-		ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/stash.txt";
 
-	if (infile.open(Filesystem::convertSlashes(&ss), !FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
-		while (infile.next()) {
-			if (infile.key == "item") {
-				menu->stash->stock.setItems(infile.val);
+	for (size_t i = 0; i < menu->stash->tabs.size(); ++i) {
+		// shared stashes are not loaded for permadeath characters
+		if (pc->stats.permadeath && !menu->stash->tabs[i].is_private)
+			continue;
+
+		ss.str("");
+		ss << settings->path_user << "saves/" << eset->misc.save_prefix;
+		if (menu->stash->tabs[i].is_private)
+			ss << "/" << game_slot;
+		ss << "/" << menu->stash->tabs[i].filename;
+
+		if (infile.open(ss.str(), !FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
+			while (infile.next()) {
+				if (infile.key == "item") {
+					menu->stash->tabs[i].stock.setItems(infile.val);
+				}
+				else if (infile.key == "quantity") {
+					menu->stash->tabs[i].stock.setQuantities(infile.val);
+				}
 			}
-			else if (infile.key == "quantity") {
-				menu->stash->stock.setQuantities(infile.val);
-			}
+			infile.close();
 		}
-		infile.close();
-	}
-	else Utils::logInfo("SaveLoad: Could not open stash file '%s'. This may be because it hasn't been created yet.", ss.str().c_str());
+		else Utils::logInfo("SaveLoad: Could not open stash file '%s'. This may be because it hasn't been created yet.", ss.str().c_str());
 
-	menu->stash->stock.clean();
+		menu->stash->tabs[i].stock.clean();
+	}
 }
 
 /**
@@ -541,4 +715,3 @@ void SaveLoad::loadPowerTree() {
 	// fall back to the default power tree
 	menu->pow->loadPowerTree("powers/trees/default.txt");
 }
-

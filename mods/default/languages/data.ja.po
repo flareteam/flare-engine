@@ -4,14 +4,15 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # Translators:
 # Justin Jacobs <jajdorkster@gmail.com>, 2018
+# Sato Hayato <garvash@gmail.com>, 2022
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-13 09:09+\n"
+"POT-Creation-Date: 2022-07-17 20:15+\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2018\n"
+"Last-Translator: Sato Hayato <garvash@gmail.com>, 2022\n"
 "Language-Team: Japanese (https://www.transifex.com/flareorg/teams/84925/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -41,7 +42,7 @@ msgstr "近接ダメージ"
 
 #: ../engine/damage_types.txt:4
 msgid "Increases the damage done with swords and other melee weapons."
-msgstr ""
+msgstr "剣などの近接武器によるダメージを増加する"
 
 #: ../engine/damage_types.txt:5
 msgid "Melee Damage Min"
@@ -57,7 +58,7 @@ msgstr "遠距離ダメージ"
 
 #: ../engine/damage_types.txt:13
 msgid "Increases the damage done with bows and other ranged weapons."
-msgstr ""
+msgstr "弓矢などの遠距離武器によるダメージを増加する"
 
 #: ../engine/damage_types.txt:14
 msgid "Ranged Damage Min"
@@ -73,7 +74,7 @@ msgstr "精神ダメージ"
 
 #: ../engine/damage_types.txt:22
 msgid "Increases the damage done with staves and other mental weapons."
-msgstr ""
+msgstr "杖などの精神武器によるダメージを増加する"
 
 #: ../engine/damage_types.txt:23
 msgid "Mental Damage Min"
@@ -85,364 +86,40 @@ msgstr "精神ダメージの最大"
 
 #: ../cutscenes/credits.txt:7
 msgid "Flare Engine Credits"
-msgstr ""
+msgstr "Flare Engine クレジット"
 
 #: ../cutscenes/credits.txt:10
 msgid "Lead Programmers"
-msgstr ""
-
-#: ../cutscenes/credits.txt:12
-msgid "Clint Bellanger"
-msgstr ""
-
-#: ../cutscenes/credits.txt:13
-msgid "Henrik Andersson"
-msgstr ""
-
-#: ../cutscenes/credits.txt:14
-msgid "Igor Paliychuk"
-msgstr ""
-
-#: ../cutscenes/credits.txt:15
-msgid "Justin Jacobs"
-msgstr ""
-
-#: ../cutscenes/credits.txt:16
-msgid "Stefan Beller"
-msgstr ""
-
-#: ../cutscenes/credits.txt:17
-msgid "Thane Brimhall"
-msgstr ""
+msgstr "リードプログラマ"
 
 #: ../cutscenes/credits.txt:20
 msgid "Programmers"
-msgstr ""
+msgstr "プログラマ"
 
-#: ../cutscenes/credits.txt:22
-msgid "Andrew Engelbrecht"
-msgstr ""
-
-#: ../cutscenes/credits.txt:23
-msgid "Anton Golov"
-msgstr ""
-
-#: ../cutscenes/credits.txt:24
-msgid "Artur Rojek"
-msgstr ""
-
-#: ../cutscenes/credits.txt:25
-msgid "blazindragon"
-msgstr ""
-
-#: ../cutscenes/credits.txt:26
-msgid "Bonbadil"
-msgstr ""
-
-#: ../cutscenes/credits.txt:27
-msgid "Chris Oelmueller"
-msgstr ""
-
-#: ../cutscenes/credits.txt:28
-msgid "David Bariod"
-msgstr ""
-
-#: ../cutscenes/credits.txt:29
-msgid "Daniel Santos"
-msgstr ""
-
-#: ../cutscenes/credits.txt:30
-msgid "Gallaecio"
-msgstr ""
-
-#: ../cutscenes/credits.txt:31
-msgid "Joseph Bleu"
-msgstr ""
-
-#: ../cutscenes/credits.txt:32
-msgid "Juan PabloTamayo"
-msgstr ""
-
-#: ../cutscenes/credits.txt:33
-msgid "Kitano"
-msgstr ""
-
-#: ../cutscenes/credits.txt:34
-msgid "Kyle Belanger"
-msgstr ""
-
-#: ../cutscenes/credits.txt:35
-msgid "LongerDev"
-msgstr ""
-
-#: ../cutscenes/credits.txt:36
-msgid "Manuel A. Fernandez Montecelo"
-msgstr ""
-
-#: ../cutscenes/credits.txt:37
-msgid "Matthew Krohn"
-msgstr ""
-
-#: ../cutscenes/credits.txt:38
-msgid "Nojan"
-msgstr ""
-
-#: ../cutscenes/credits.txt:39
-msgid "Pavel Kirpichyov"
-msgstr ""
-
-#: ../cutscenes/credits.txt:40
-msgid "runtime-x86"
-msgstr ""
-
-#: ../cutscenes/credits.txt:41
-msgid "Ryan Dansie"
-msgstr ""
-
-#: ../cutscenes/credits.txt:44
+#: ../cutscenes/credits.txt:50
 msgid "Default Art"
-msgstr ""
-
-#: ../cutscenes/credits.txt:49
-msgid "Translators"
-msgstr ""
-
-#: ../cutscenes/credits.txt:51
-msgid "Ademaro"
-msgstr ""
-
-#: ../cutscenes/credits.txt:52
-msgid "Adrian Chaves Fernandez"
-msgstr ""
-
-#: ../cutscenes/credits.txt:53
-msgid "Andrea Ranaldi"
-msgstr ""
-
-#: ../cutscenes/credits.txt:54
-msgid "Andreas Berheim Brudin"
-msgstr ""
+msgstr "デフォルトアート"
 
 #: ../cutscenes/credits.txt:55
-msgid "Andrey Kapitonov"
-msgstr ""
-
-#: ../cutscenes/credits.txt:56
-msgid "Bas Doodeman"
-msgstr ""
-
-#: ../cutscenes/credits.txt:58
-msgid "Carlos Sanchez"
-msgstr ""
-
-#: ../cutscenes/credits.txt:60
-msgid "Christoph J. Thompson"
-msgstr ""
-
-#: ../cutscenes/credits.txt:61
-msgid "Denis Lysenko"
-msgstr ""
-
-#: ../cutscenes/credits.txt:62
-msgid "Diego J. Romero López"
-msgstr ""
-
-#: ../cutscenes/credits.txt:63
-msgid "dumaosen"
-msgstr ""
-
-#: ../cutscenes/credits.txt:64
-msgid "Emil"
-msgstr ""
-
-#: ../cutscenes/credits.txt:65
-msgid "Eric R"
-msgstr ""
-
-#: ../cutscenes/credits.txt:66
-msgid "Evgen Pavlov"
-msgstr ""
-
-#: ../cutscenes/credits.txt:67
-msgid "Fabio Loli"
-msgstr ""
-
-#: ../cutscenes/credits.txt:68
-msgid "Gianfranco Del Borrello"
-msgstr ""
-
-#: ../cutscenes/credits.txt:69
-msgid "Giovanni Dalla Torre"
-msgstr ""
-
-#: ../cutscenes/credits.txt:70
-msgid "GunChleoc"
-msgstr ""
-
-#: ../cutscenes/credits.txt:71
-msgid "Hans Joachim Desserud"
-msgstr ""
-
-#: ../cutscenes/credits.txt:72
-msgid "hark34"
-msgstr ""
-
-#: ../cutscenes/credits.txt:74
-msgid "Janet Hunt"
-msgstr ""
-
-#: ../cutscenes/credits.txt:75
-msgid "Juan Pablo Tamayo"
-msgstr ""
-
-#: ../cutscenes/credits.txt:76
-msgid "losine"
-msgstr ""
-
-#: ../cutscenes/credits.txt:77
-msgid "Marc Tormo i Bochaca"
-msgstr ""
-
-#: ../cutscenes/credits.txt:78
-msgid "Michael Papageorgiou"
-msgstr ""
-
-#: ../cutscenes/credits.txt:79
-msgid "Mikhail Karalevich"
-msgstr ""
-
-#: ../cutscenes/credits.txt:80
-msgid "Miro Jánošík"
-msgstr ""
-
-#: ../cutscenes/credits.txt:81
-msgid "Mykola Franchuk"
-msgstr ""
-
-#: ../cutscenes/credits.txt:82
-msgid "MOB2"
-msgstr ""
-
-#: ../cutscenes/credits.txt:83
-msgid "Morgan Strauss"
-msgstr ""
-
-#: ../cutscenes/credits.txt:84
-msgid "Nea Retrogamer"
-msgstr ""
-
-#: ../cutscenes/credits.txt:85
-msgid "Nguyễn Gia Phong"
-msgstr ""
-
-#: ../cutscenes/credits.txt:86
-msgid "Nikita Vanku"
-msgstr ""
-
-#: ../cutscenes/credits.txt:87
-msgid "Paul Wortmann"
-msgstr ""
-
-#: ../cutscenes/credits.txt:88
-msgid "Pawel Puszczynski"
-msgstr ""
-
-#: ../cutscenes/credits.txt:89
-msgid "Quentin Stievenart"
-msgstr ""
-
-#: ../cutscenes/credits.txt:90
-msgid "Rui"
-msgstr ""
-
-#: ../cutscenes/credits.txt:91
-msgid "Sergey Basalaev"
-msgstr ""
-
-#: ../cutscenes/credits.txt:92
-msgid "Sergiy Borodych"
-msgstr ""
-
-#: ../cutscenes/credits.txt:94
-msgid "Stefano Peris"
-msgstr ""
-
-#: ../cutscenes/credits.txt:95
-msgid "sujiniku"
-msgstr ""
-
-#: ../cutscenes/credits.txt:96
-msgid "syl_"
-msgstr ""
-
-#: ../cutscenes/credits.txt:97
-msgid "Thomas Glamsch"
-msgstr ""
-
-#: ../cutscenes/credits.txt:98
-msgid "Timo Sievänen"
-msgstr ""
-
-#: ../cutscenes/credits.txt:99
-msgid "Vicente Monteiro"
-msgstr ""
-
-#: ../cutscenes/credits.txt:100
-msgid "Wuzzy2"
-msgstr ""
-
-#: ../cutscenes/credits.txt:101
-msgid "Yannis Anthymidis"
-msgstr ""
-
-#: ../cutscenes/credits.txt:102
-msgid "Zmicer Turok"
-msgstr ""
-
-#: ../cutscenes/credits.txt:105
-msgid "Distributors"
-msgstr ""
-
-#: ../cutscenes/credits.txt:107
-msgid "Ablu"
-msgstr ""
-
-#: ../cutscenes/credits.txt:108
-msgid "Feillyne"
-msgstr ""
-
-#: ../cutscenes/credits.txt:109
-msgid "Jan-Hendrik Peters"
-msgstr ""
-
-#: ../cutscenes/credits.txt:111
-msgid "miffe"
-msgstr ""
-
-#: ../cutscenes/credits.txt:114
-msgid "Special Thanks"
-msgstr ""
-
-#: ../cutscenes/credits.txt:118
-msgid "For giving constant feedback and testing:"
-msgstr ""
-
-#: ../cutscenes/credits.txt:119
-msgid "Bart Kelsey"
-msgstr ""
-
-#: ../cutscenes/credits.txt:120
-msgid "The community at OpenGameArt"
-msgstr ""
+msgid "Translators"
+msgstr "翻訳者"
 
 #: ../cutscenes/credits.txt:124
+msgid "Distributors"
+msgstr "ディストリビューター"
+
+#: ../cutscenes/credits.txt:133
+msgid "Special Thanks"
+msgstr "スペシャルサンクス"
+
+#: ../cutscenes/credits.txt:137
+msgid "For giving constant feedback and testing:"
+msgstr "継続的なテスト協力とフィードパック"
+
+#: ../cutscenes/credits.txt:139
+msgid "The community at OpenGameArt"
+msgstr "OpenGameArtのコミュニティ"
+
+#: ../cutscenes/credits.txt:143
 msgid "For Tiled and the Flare map exporter:"
-msgstr ""
-
-#: ../cutscenes/credits.txt:125
-msgid "Thorbjørn Lindeijer"
-msgstr ""
-
-#: ../cutscenes/credits.txt:127
-msgid "Ranie Jade Ramiso"
-msgstr ""
+msgstr "TiledやFlareマップエクスポーター"

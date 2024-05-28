@@ -33,15 +33,23 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class Animation;
 class AnimationSet;
+class EntityBehavior;
 
 class Entity {
 protected:
 	Image *sprites;
 
 	void move_from_offending_tile();
-	virtual void resetActiveAnimation();
+	void resetActiveAnimation();
+	uint8_t getRenderableType();
 
 public:
+	class Layer_gfx {
+	public:
+		std::string gfx;
+		std::string type;
+	};
+
 	enum {
 		SOUND_HIT = 0,
 		SOUND_DIE = 1,
@@ -54,6 +62,7 @@ public:
 	Entity& operator=(const Entity& e);
 	virtual ~Entity();
 
+	void logic();
 	void loadSounds();
 	void loadSoundsFromStatBlock(StatBlock *src_stats);
 	void unloadSounds();
@@ -61,7 +70,6 @@ public:
 	void playSound(int sound_type);
 	bool move();
 	bool takeHit(Hazard &h);
-	virtual void doRewards(int) {}
 
 	// sound effects
 	std::vector<std::pair<std::string, std::vector<SoundID> > > sound_attack;
@@ -72,11 +80,24 @@ public:
 	SoundID sound_levelup;
 	SoundID sound_lowhp;
 
-	bool setAnimation(const std::string& animation);
+	void setAnimation(const std::string& animation);
 	Animation *activeAnimation;
 	AnimationSet *animationSet;
+	std::vector<AnimationSet*> animsets; // hold the animations for all equipped items in the right order of drawing.
+	std::vector<Animation*> anims; // hold the animations for all equipped items in the right order of drawing.
 
 	StatBlock stats;
+
+	unsigned char faceNextBest(float mapx, float mapy);
+	Rect getRenderBounds(const FPoint& cam) const;
+
+	std::string type_filename;
+
+	EntityBehavior *behavior;
+
+	void loadAnimations();
+	virtual std::string getGfxFromType(const std::string& gfx_type);
+	void addRenders(std::vector<Renderable> &r);
 };
 
 extern const int directionDeltaX[];

@@ -34,14 +34,19 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Utils.h"
 
 class Animation;
-
 class EnemyManager;
-class WidgetTooltip;
+class StatBlock;
 
 class LootManager {
 private:
-
-	WidgetTooltip *tip;
+	enum {
+		LOOT_EC_POSX = 0,
+		LOOT_EC_POSY = 1,
+		LOOT_EC_CHANCE = 2,
+		LOOT_EC_QUANTITY_MIN = 3,
+		LOOT_EC_QUANTITY_MAX = 4,
+		LOOT_EC_MAX_DROPS = 5,
+	};
 
 	// functions
 	void loadGraphics();
@@ -52,12 +57,13 @@ private:
 	void checkLootComponent(EventComponent* ec, FPoint *pos, std::vector<ItemStack> *itemstack_vec);
 
 	SoundID sfx_loot;
+	std::string sfx_loot_channel;
 
 	// loot refers to ItemManager indices
 	std::vector<Loot> loot;
 
 	// enemies which should drop loot, but didnt yet.
-	std::vector<class Enemy*> enemiesDroppingLoot;
+	std::vector<class StatBlock*> enemiesDroppingLoot;
 
 	// loot tables defined in files under "loot/"
 	std::map<std::string, std::vector<EventComponent> > loot_tables;
@@ -66,7 +72,7 @@ private:
 	// we block tiles that have loot dropped on them
 	std::vector<Point> tiles_to_unblock;
 
-	std::vector< std::vector<Animation*> > animations;
+	std::vector< std::vector<Animation*>* > animations;
 
 public:
 	static const bool DROPPED_BY_HERO = true;
@@ -80,7 +86,7 @@ public:
 	void renderTooltips(const FPoint& cam);
 
 	// called by enemy, who definitly wants to drop loot.
-	void addEnemyLoot(Enemy *e);
+	void addEnemyLoot(StatBlock *e);
 	void addLoot(ItemStack stack, const FPoint& pos, bool dropped_by_hero);
 	void checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos, std::vector<ItemStack> *itemstack_vec);
 	ItemStack checkPickup(const Point& mouse, const FPoint& cam, const FPoint& hero_pos);
@@ -90,6 +96,8 @@ public:
 	void addRenders(std::vector<Renderable> &ren, std::vector<Renderable> &ren_dead);
 
 	void parseLoot(std::string &val, EventComponent *e, std::vector<EventComponent> *ec_list);
+
+	void removeFromEnemiesDroppingLoot(const StatBlock* sb);
 };
 
 #endif

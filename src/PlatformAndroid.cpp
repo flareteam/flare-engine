@@ -39,6 +39,7 @@ Platform platform;
 namespace PlatformAndroid {
 	std::string getPackageName();
 	int isExitEvent(void *userdata, SDL_Event* event);
+	void dialogInstallHint();
 };
 
 std::string PlatformAndroid::getPackageName()
@@ -72,20 +73,46 @@ int PlatformAndroid::isExitEvent(void* userdata, SDL_Event* event) {
 	return 1;
 }
 
+void PlatformAndroid::dialogInstallHint() {
+	const SDL_MessageBoxButtonData buttons[] = {
+		{ SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT|SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "No" },
+		{ 0, 1, "Yes" },
+	};
+	const SDL_MessageBoxData messageboxdata = {
+		SDL_MESSAGEBOX_INFORMATION,
+		NULL,
+		"Flare",
+		"Flare game data needs to be installed. Visit the wiki page for download & instructions?",
+		static_cast<int>(SDL_arraysize(buttons)),
+		buttons,
+		NULL
+	};
+	int buttonid = 0;
+	SDL_ShowMessageBox(&messageboxdata, &buttonid);
+	if (buttonid == 0) {
+		// do nothing
+	}
+	else if (buttonid == 1) {
+		SDL_OpenURL("https://github.com/flareteam/flare-engine/wiki/Android-port");
+	}
+}
+
 Platform::Platform()
 	: has_exit_button(true)
 	, is_mobile_device(true)
 	, force_hardware_cursor(true)
 	, has_lock_file(false)
+	, needs_alt_escape_key(false)
+	, fullscreen_bypass(false)
 	, config_menu_type(CONFIG_MENU_TYPE_BASE)
-	, default_renderer("sdl_hardware")
+	, default_renderer("")
 	, config_video(Platform::Video::COUNT, true)
 	, config_audio(Platform::Audio::COUNT, true)
 	, config_interface(Platform::Interface::COUNT, true)
 	, config_input(Platform::Input::COUNT, true)
 	, config_misc(Platform::Misc::COUNT, true)
 {
-	config_video[Platform::Video::RENDERER] = false;
+	config_video[Platform::Video::RENDERER] = true;
 	config_video[Platform::Video::FULLSCREEN] = false;
 	config_video[Platform::Video::HWSURFACE] = false;
 	config_video[Platform::Video::VSYNC] = false;
@@ -102,6 +129,7 @@ Platform::Platform()
 	config_input[Platform::Input::MOUSE_MOVE_SWAP] = false;
 	config_input[Platform::Input::MOUSE_MOVE_ATTACK] = false;
 	config_input[Platform::Input::JOYSTICK_DEADZONE] = false;
+	config_input[Platform::Input::TOUCH_CONTROLS] = false;
 
 	config_misc[Platform::Misc::KEYBINDS] = false;
 }
@@ -137,13 +165,11 @@ void Platform::setPaths() {
 	externalSDList.push_back("/storage/extSdCard");
 	externalSDList.push_back("/mnt/m_external_sd");
 
-	settings->path_conf = std::string(SDL_AndroidGetInternalStoragePath()) + "/config";
-
-	const std::string package_name = PlatformAndroid::getPackageName();
-	const std::string user_folder = "Android/data/" + package_name + "/files";
-
 	if (SDL_AndroidGetExternalStorageState() != 0) {
 		settings->path_data = std::string(SDL_AndroidGetExternalStoragePath());
+	}
+	else {
+		Utils::logError("Platform: Android external storage unavailable: %s", SDL_GetError());
 	}
 
 	for (int i = 0; i < internalSDList.size(); i++) {
@@ -151,15 +177,13 @@ void Platform::setPaths() {
 			settings->path_user = internalSDList[i] + "/Flare";
 			settings->path_conf = settings->path_user + "/config";
 
-			if (settings->path_data.empty())
-				settings->path_data = internalSDList[i] + "/" + user_folder;
+			if (settings->path_data.empty()) {
+				// This basically gives the same results as SDL_AndroidGetExternalStoragePath(). Should we even bother?
+				settings->path_data = internalSDList[i] + "/Android/data/" + PlatformAndroid::getPackageName() + "/files";
+			}
 
 			break;
 		}
-	}
-
-	if (settings->path_data.empty()) {
-		Utils::logError("Settings: Android external storage unavailable: %s", SDL_GetError());
 	}
 
 	if (settings->path_user.empty() || !Filesystem::pathExists(settings->path_user)) {
@@ -174,13 +198,32 @@ void Platform::setPaths() {
 	}
 
 	Filesystem::createDir(settings->path_user);
-	Filesystem::createDir(settings->path_conf);
+
+	if (Filesystem::pathExists(settings->path_user)) {
+		// path_user created outside app directory; create path_conf inside it
+		Filesystem::createDir(settings->path_conf);
+	}
+	else {
+		// unable to create /Flare directory, use app directory instead
+		settings->path_user = settings->path_data + "/userdata";
+		settings->path_conf = settings->path_data + "/config";
+	}
+
 	Filesystem::createDir(settings->path_user + "/mods");
 	Filesystem::createDir(settings->path_user + "/saves");
 
 	settings->path_conf += "/";
 	settings->path_user += "/";
 	settings->path_data += "/";
+
+	// create a .nomedia file to prevent game data being added to the Android media library
+	std::ofstream nomedia;
+	nomedia.open(settings->path_user + ".nomedia", std::ios::out);
+	if (nomedia.bad()) {
+		Utils::logError("Platform: Unable to create Android .nomedia file.");
+	}
+	nomedia.close();
+	nomedia.clear();
 }
 
 void Platform::setExitEventFilter() {
@@ -210,6 +253,7 @@ void Platform::FSInit() {}
 bool Platform::FSCheckReady() { return true; }
 void Platform::FSCommit() {}
 void Platform::setScreenSize() {}
+void Platform::setFullscreen(bool) {}
 
 #endif // PLATFORM_CPP
 #endif // PLATFORM_CPP_INCLUDE

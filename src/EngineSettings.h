@@ -34,26 +34,42 @@ public:
 	public:
 		void load();
 
+		enum {
+			SAVE_ONSTASH_NONE = 0,
+			SAVE_ONSTASH_PRIVATE = 1,
+			SAVE_ONSTASH_SHARED = 2,
+			SAVE_ONSTASH_ALL = 3,
+		};
+
 		bool save_hpmp;
 		int corpse_timeout;
+		bool corpse_timeout_enabled;
 		bool sell_without_vendor;
 		int aim_assist;
 		std::string window_title;
 		std::string save_prefix;
 		int sound_falloff;
-		int party_exp_percentage;
+		float party_exp_percentage;
 		bool enable_ally_collision;
 		bool enable_ally_collision_ai;
-		int currency_id;
+		ItemID currency_id;
 		float interact_range;
 		bool menus_pause;
 		bool save_onload;
 		bool save_onexit;
 		bool save_pos_onexit;
+		bool save_oncutscene;
+		int save_onstash;
+		bool save_anywhere;
 		float camera_speed;
 		bool save_buyback;
 		bool keep_buyback_on_map_change;
 		std::string sfx_unable_to_cast;
+		bool combat_aborts_npc_interact;
+		unsigned short fogofwar;
+		bool save_fogofwar;
+		float mouse_move_deadzone_moving;
+		float mouse_move_deadzone_not_moving;
 	};
 
 	class Resolutions {
@@ -80,21 +96,30 @@ public:
 	class Combat {
 	public:
 		void load();
+		float resourceRound(const float resource_val);
 
-		int min_absorb;
-		int max_absorb;
-		int min_resist;
-		int max_resist;
-		int min_block;
-		int max_block;
-		int min_avoidance;
-		int max_avoidance;
-		int min_miss_damage;
-		int max_miss_damage;
-		int min_crit_damage;
-		int max_crit_damage;
-		int min_overhit_damage;
-		int max_overhit_damage;
+		enum {
+			RESOURCE_ROUND_METHOD_NONE = 0,
+			RESOURCE_ROUND_METHOD_ROUND,
+			RESOURCE_ROUND_METHOD_FLOOR,
+			RESOURCE_ROUND_METHOD_CEIL
+		};
+
+		float min_absorb;
+		float max_absorb;
+		float min_resist;
+		float max_resist;
+		float min_block;
+		float max_block;
+		float min_avoidance;
+		float max_avoidance;
+		float min_miss_damage;
+		float max_miss_damage;
+		float min_crit_damage;
+		float max_crit_damage;
+		float min_overhit_damage;
+		float max_overhit_damage;
+		unsigned short resource_round_method;
 	};
 
 	class Elements {
@@ -102,6 +127,7 @@ public:
 		class Element {
 		public:
 			std::string id;
+			std::string resist_id;
 			std::string name;
 		};
 
@@ -149,8 +175,8 @@ public:
 			std::string equipment;
 			std::string carried;
 			std::vector<int> primary;
-			std::vector<int> hotkeys;
-			std::vector<int> powers;
+			std::vector<PowerID> hotkeys;
+			std::vector<PowerID> powers;
 			std::vector<std::string> statuses;
 			std::string power_tree;
 			int default_power_tab;
@@ -188,9 +214,9 @@ public:
 
 		bool enabled;
 		bool permadeath;
-		int currency;
-		int xp;
-		int xp_current;
+		float currency;
+		float xp;
+		float xp_current;
 		bool item;
 	};
 
@@ -203,6 +229,7 @@ public:
 		int margin;
 		int margin_npc;
 		int background_border;
+		size_t visible_max;
 	};
 
 	class Loot {
@@ -213,12 +240,14 @@ public:
 		bool autopickup_currency;
 		float autopickup_range;
 		std::string currency;
-		float vendor_ratio;
-		float vendor_ratio_buyback;
+		float vendor_ratio_buy;
+		float vendor_ratio_sell;
+		float vendor_ratio_sell_old;
 		std::string sfx_loot;
 		int drop_max;
 		int drop_radius;
 		float hide_radius;
+		ItemID extended_items_offset;
 	};
 
 	class Tileset {
@@ -244,12 +273,18 @@ public:
 		void load();
 
 		Color selection_rect_color;
+		int selection_rect_corner_size;
 		Point colorblind_highlight_offset;
 		Point tab_padding;
 		LabelInfo slot_quantity_label;
+		Color slot_quantity_color;
 		Color slot_quantity_bg_color;
+		LabelInfo slot_hotkey_label;
+		Color slot_hotkey_color;
+		Color slot_hotkey_bg_color;
 		Point listbox_text_margin;
 		int horizontal_list_text_width;
+		Color scrollbar_bg_color;
 	};
 
 	class XPTable {
@@ -262,6 +297,61 @@ public:
 
 	private:
 		std::vector<unsigned long> xp_table;
+	};
+
+	class NumberFormat {
+	public:
+		void load();
+
+		int player_statbar;
+		int enemy_statbar;
+		int combat_text;
+		int character_menu;
+		int item_tooltips;
+		int power_tooltips;
+		int durations;
+		int death_penalty;
+	};
+
+	class ResourceStats {
+	public:
+		enum {
+			// statblock & effect
+			STAT_BASE = 0,
+			STAT_REGEN,
+			STAT_STEAL,
+			STAT_RESIST_STEAL,
+
+			// effect only
+			STAT_HEAL,
+			STAT_HEAL_PERCENT,
+
+			STAT_EFFECT_COUNT
+		};
+		static const size_t STAT_COUNT = STAT_HEAL;
+		static const size_t EFFECT_COUNT = STAT_EFFECT_COUNT - STAT_COUNT;
+
+		class ResourceStat {
+		public:
+			std::vector<std::string> ids;
+			std::vector<std::string> text;
+			std::vector<std::string> text_desc;
+
+			std::string menu_filename;
+
+			std::string text_combat_heal;
+			std::string text_log_restore;
+			std::string text_log_low;
+			std::string text_tooltip_heal;
+			std::string text_tooltip_cost;
+		};
+
+		void load();
+
+		std::vector<ResourceStat> list;
+		size_t stat_count;
+		size_t effect_count;
+		size_t stat_effect_count;
 	};
 
 	Misc misc;
@@ -279,6 +369,8 @@ public:
 	Tileset tileset;
 	Widgets widgets;
 	XPTable xp;
+	NumberFormat number_format;
+	ResourceStats resource_stats;
 };
 
 #endif // ENGINESETTINGS_H

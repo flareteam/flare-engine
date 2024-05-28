@@ -21,6 +21,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 
+class WidgetButton;
 class WidgetLabel;
 
 class WidgetTabControl : public Widget {
@@ -40,18 +41,25 @@ private:
 	std::vector<WidgetLabel> active_labels;
 	std::vector<WidgetLabel> inactive_labels;
 	std::vector<bool> enabled;
-
+	std::vector<TabList*> tablists;
 
 	unsigned active_tab;    // Index of the currently active tab.
 	Rect tabs_area;    // Area the tab titles are displayed.
+	bool lock_main1;
+	bool dragging;
+
+	WidgetButton *button_prev;
+	WidgetButton *button_next;
+
+	bool show_buttons;
 
 public:
 
 	WidgetTabControl();
 	~WidgetTabControl();
 
-	void setTabTitle(unsigned index, const std::string& title);
-	void setMainArea(int x, int y);
+	void setupTab(unsigned index, const std::string& title, TabList* tl);
+	void setMainArea(int x, int y, int w);
 
 	int getActiveTab();
 	void setActiveTab(unsigned tab);

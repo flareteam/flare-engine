@@ -9,13 +9,3 @@ before_install:
   - sudo apt-get install -qq libegl1-mesa-dev libgles2-mesa-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev cppcheck
 script: cmake . && make
 after_script: cppcheck --quiet --verbose --enable=all `git ls-files src/\*.cpp`
-notifications:
-  irc:
-    channels:
-      - "irc.freenode.org#flarerpg"
-    on_success: always
-    on_failure: always
-    use_notice: true
-    skip_join: true
-    template:
-      - "%{repository} (%{commit}) : %{message} %{build_url}"

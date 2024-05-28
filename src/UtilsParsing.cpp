@@ -20,6 +20,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "FontEngine.h"
+#include "ItemManager.h"
 #include "Settings.h"
 #include "SharedResources.h"
 #include "UtilsParsing.h"
@@ -172,6 +173,21 @@ unsigned long Parse::toUnsignedLong(const std::string& s, unsigned long  default
 	return result;
 }
 
+size_t Parse::toSizeT(const std::string& s, size_t default_value) {
+	size_t result;
+	if (!(std::stringstream(s) >> result))
+		result = default_value;
+	return result;
+}
+
+ItemID Parse::toItemID(const std::string& s, ItemID default_value) {
+	return Parse::toSizeT(s, default_value);
+}
+
+PowerID Parse::toPowerID(const std::string& s, PowerID default_value) {
+	return Parse::toSizeT(s, default_value);
+}
+
 bool Parse::toBool(std::string value) {
 	trim(value);
 
@@ -277,8 +293,8 @@ int Parse::toDirection(const std::string& s) {
 	return dir;
 }
 
-int Parse::toAlignment(const std::string &s) {
-	int align = Utils::ALIGN_TOPLEFT;
+int Parse::toAlignment(const std::string &s, int default_value) {
+	int align = default_value;
 
 	if (s == "topleft")
 		align = Utils::ALIGN_TOPLEFT;
@@ -298,18 +314,26 @@ int Parse::toAlignment(const std::string &s) {
 		align = Utils::ALIGN_BOTTOM;
 	else if (s == "bottomright")
 		align = Utils::ALIGN_BOTTOMRIGHT;
+	else if (s == "frame_topleft")
+		align = Utils::ALIGN_FRAME_TOPLEFT;
+	else if (s == "frame_top")
+		align = Utils::ALIGN_FRAME_TOP;
+	else if (s == "frame_topright")
+		align = Utils::ALIGN_FRAME_TOPRIGHT;
+	else if (s == "frame_left")
+		align = Utils::ALIGN_FRAME_LEFT;
+	else if (s == "frame_center")
+		align = Utils::ALIGN_FRAME_CENTER;
+	else if (s == "frame_right")
+		align = Utils::ALIGN_FRAME_RIGHT;
+	else if (s == "frame_bottomleft")
+		align = Utils::ALIGN_FRAME_BOTTOMLEFT;
+	else if (s == "frame_bottom")
+		align = Utils::ALIGN_FRAME_BOTTOM;
+	else if (s == "frame_bottomright")
+		align = Utils::ALIGN_FRAME_BOTTOMRIGHT;
 
 	return align;
-}
-
-/**
- * Given a string that starts with a decimal number then a comma
- * Return that int, and modify the string to remove the num and comma
- *
- * This is basically a really lazy "split" replacement
- */
-int Parse::popFirstInt(std::string &s, char separator) {
-	return Parse::toInt(popFirstString(s, separator));
 }
 
 std::string Parse::popFirstString(std::string &s, char separator) {
@@ -337,6 +361,20 @@ std::string Parse::popFirstString(std::string &s, char separator) {
 		s = s.substr(seppos+1, s.length());
 	}
 	return outs;
+}
+
+/**
+ * Given a string that starts with a decimal number then a comma
+ * Return that int, and modify the string to remove the num and comma
+ *
+ * This is basically a really lazy "split" replacement
+ */
+int Parse::popFirstInt(std::string &s, char separator) {
+	return Parse::toInt(popFirstString(s, separator));
+}
+
+float Parse::popFirstFloat(std::string &s, char separator) {
+	return Parse::toFloat(popFirstString(s, separator));
 }
 
 LabelInfo Parse::popLabelInfo(std::string val) {
@@ -369,3 +407,30 @@ LabelInfo Parse::popLabelInfo(std::string val) {
 	return info;
 }
 
+ItemStack Parse::toItemQuantityPair(std::string value, bool* check_pair) {
+	ItemStack r;
+
+	if (check_pair) {
+		*check_pair = (value.find_first_of(':') != std::string::npos);
+	}
+
+	value += ':';
+	r.item = toItemID(popFirstString(value, ':'));
+	r.quantity = popFirstInt(value, ':');
+
+	// quantity is always >= 1
+	if (r.quantity == 0)
+		r.quantity = 1;
+
+	return r;
+}
+
+bool Parse::skipLine(const std::string& line) {
+	if (line.length() == 0)
+		return true;
+
+	if (line.at(0) == '#')
+		return true;
+
+	return false;
+}

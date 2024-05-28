@@ -42,6 +42,8 @@ Platform::Platform()
 	, is_mobile_device(false)
 	, force_hardware_cursor(false)
 	, has_lock_file(false)
+	, needs_alt_escape_key(true)
+	, fullscreen_bypass(true)
 	, config_menu_type(CONFIG_MENU_TYPE_DESKTOP_NO_VIDEO)
 	, default_renderer("sdl_hardware")
 	, config_video(Platform::Video::COUNT, true)
@@ -51,13 +53,14 @@ Platform::Platform()
 	, config_misc(Platform::Misc::COUNT, true)
 {
 	config_video[Platform::Video::RENDERER] = false;
-	config_video[Platform::Video::FULLSCREEN] = false;
 	config_video[Platform::Video::HWSURFACE] = false;
 	config_video[Platform::Video::VSYNC] = false;
 	config_video[Platform::Video::TEXTURE_FILTER] = false;
 	config_video[Platform::Video::DPI_SCALING] = false;
 	config_video[Platform::Video::ENABLE_GAMMA] = false;
 	config_video[Platform::Video::GAMMA] = false;
+	config_video[Platform::Video::MAX_RENDER_SIZE] = false;
+	config_video[Platform::Video::FRAME_LIMIT] = false;
 
 	config_input[Platform::Input::JOYSTICK] = false;
 	config_input[Platform::Input::JOYSTICK_DEADZONE] = false;
@@ -167,6 +170,14 @@ void Platform::setScreenSize() {
 	// can't change window size dynamically with Emscripten, so default to 16:9 aspect ratio
 	settings->screen_w = 854;
 	settings->screen_h = 480;
+	settings->fullscreen = false;
+}
+
+void Platform::setFullscreen(bool enable) {
+	if (enable)
+		emscripten_async_run_script("Module.canvas.requestFullscreen();", 0);
+	else
+		emscripten_async_run_script("parentDocument.exitFullscreen();", 0);
 }
 
 #endif // PLATFORM_CPP

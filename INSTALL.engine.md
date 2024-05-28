@@ -105,6 +105,36 @@ brew install cmake libvorbis sdl2 sdl2_image sdl2_mixer sdl2_ttf
 
 ### Windows
 
+#### MSYS2 / MinGW
+
+We use [MSYS2](https://www.msys2.org/) as our official development environment on Windows.
+
+```
+# install the build environment with SDL2 libraries
+# 32-bit
+pacman -S git mingw-w64-i686-SDL2 mingw-w64-i686-SDL2_image mingw-w64-i686-SDL2_mixer mingw-w64-i686-SDL2_ttf mingw-w64-i686-cmake mingw-w64-i686-gcc mingw-w64-i686-make
+# 64-bit
+pacman -S git mingw-w64-x86_64-SDL2 mingw-w64-x86_64-SDL2_image mingw-w64-x86_64-SDL2_mixer mingw-w64-x86_64-SDL2_ttf mingw-w64-x86_64-cmake mingw-w64-x86_64-gcc mingw-w64-x86_64-make
+
+git clone https://github.com/flareteam/flare-engine.git
+cd flare-engine
+cmake . -DCMAKE_BUILD_TYPE=Release -G "MinGW Makefiles"
+mingw32-make
+```
+
+If you want a debug build, simply replace `Release` with `Debug` as the CMake build type.
+
+It is highly recommended that you add `C:\msys64\mingw32\bin` (or `C:\msys64\mingw64\bin` for 64-bit) to your Windows PATH variable for running flare.exe outside of the MSYS environment.
+
+To obtain and use the game files, continue from the previous set of commands:
+
+```
+cd ../
+git clone https://github.com/flareteam/flare-game.git
+cd flare-game
+cp -r mods/* ../flare-engine/mods/
+```
+
 #### Microsoft Visual C++
 
 If you want to build flare under Microsoft Visual C++,
@@ -112,6 +142,22 @@ you should get [dirent.h header file][dirent.h]
 and copy it to `$MICROSOFT_VISUAL_CPP_FOLDER\VC\include\`.
 
 [dirent.h]: https://github.com/tronkko/dirent
+
+To get SDL2 [vcpkg](https://github.com/Microsoft/vcpkg) can be used. Its an elegant solution to manage C/C++ dependencies
+in a central place.
+
+Use Windows PowerShell or Git Bash and change to a directory where you want to store the dependencies:
+```bash
+#get the vcpkg code
+git clone https://github.com/Microsoft/vcpkg.git
+cd vcpkg
+#bootstrap vcpkg
+./bootstrap-vcpkg.bat
+#install the dependencies (for 64bit builds, you can use x86-windows triplet instead if you want 32bit)
+./vcpkg install sdl2:x64-windows sdl2-image:x64-windows sdl2-mixer:x64-windows sdl2-ttf:x64-windows
+```
+After that the dependencies have been downloaded and build. You can use them in your cmake projects by adding the path of the
+ toolchain file to your cmake configuration command line options: `-DCMAKE_TOOLCHAIN_FILE=[vcpkg root]\scripts\buildsystems\vcpkg.cmake`
 
 <a name="install_system_wide"></a>
 ## Install Flare system-wide
@@ -143,6 +189,8 @@ g++ -I /usr/include/SDL src/*.cpp -o flare -lSDL2 -lSDL2_image -lSDL2_mixer -lSD
 ```
 
 **Windows** plus [MinGW]:
+
+(Note: Due to an [issue](https://github.com/flareteam/flare-engine/issues/1723#issuecomment-511621267) with compilers that aren't VC++, it is recommended to use SDL\_image 2.0.4)
 
 ```
 g++ -I C:\MinGW\include\SDL src\*.cpp -o flare.exe -lmingw32 -lSDLmain -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf

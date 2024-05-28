@@ -100,6 +100,9 @@ protected:
 	std::string getNextToken(const std::string& s, size_t& cursor, char separator);
 
 	std::vector<Color> font_colors;
+
+private:
+	static const size_t BUILDER_RESERVE = 128;
 };
 
 #endif

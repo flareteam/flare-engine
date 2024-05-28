@@ -1,0 +1,97 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [
+          {
+            cc: gcc,
+            cxx: g++
+          },
+          {
+            cc: clang,
+            cxx: clang++
+          }
+        ]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3.5.2
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get clean -qq
+          sudo apt-get update -qq
+          sudo apt-get install -qq g++ clang libegl1-mesa-dev libgles2-mesa-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
+
+      - name: Build
+        id: build
+        continue-on-error: true
+        env:
+          CC: ${{ matrix.compiler.cc }}
+          CXX: ${{ matrix.compiler.cxx }}
+        run: cmake . && make
+
+      - name: IRC notifications
+        if: github.repository_owner == 'flareteam' && steps.build.outcome != 'success'
+        continue-on-error: true
+        uses: rectalogic/notify-irc@v1
+        with:
+          server: 'irc.freegamedev.net'
+          port: 6697
+          channel: '#flarerpg'
+          nickname: 'flareteam-github'
+          message: "${{ github.repository }} (${{ github.sha }}): ${{ matrix.compiler.cxx }} build failed. ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+      - name: Check Status
+        if: steps.build.outcome != 'success'
+        run: exit 1
+
+  cppcheck:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3.5.2
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get clean -qq
+          sudo apt-get update -qq
+          sudo apt-get install -qq libegl1-mesa-dev libgles2-mesa-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev cppcheck
+
+      - name: Run cppcheck
+        run: cppcheck --quiet --verbose --enable=all `git ls-files src/\*.cpp`
+
+  irc_notification:
+    needs: build
+    runs-on: ubuntu-20.04
+    steps:
+      - name: IRC notifications
+        if: github.repository_owner == 'flareteam'
+        continue-on-error: true
+        uses: rectalogic/notify-irc@v1
+        with:
+          server: 'irc.freegamedev.net'
+          port: 6697
+          channel: '#flarerpg'
+          nickname: 'flareteam-github'
+          message: "${{ github.repository }} (${{ github.sha }}): Build passed. ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"

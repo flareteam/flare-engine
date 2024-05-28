@@ -63,9 +63,14 @@ private:
 
 	void loadGraphics();
 	Color bonusColor(int stat);
+	void tooltipCreateBonusText(size_t min_index, size_t max_index, std::string* min_text, std::string* max_text);
 	std::string statTooltip(int stat);
 	std::string damageTooltip(size_t dmg_type);
+	std::string resistTooltip(size_t resist_type);
+	std::string resourceStatTooltip(size_t resource_index, size_t stat_index);
 	bool checkSkillPoints();
+	void parseShowStat(FileParser &infile);
+
 	int skill_points;
 	std::vector<bool> primary_up;
 
@@ -80,7 +85,7 @@ private:
 
 	std::vector<int*> base_stats;
 	std::vector<int*> base_stats_add;
-	std::vector< std::vector<int>* > base_bonus;
+	std::vector< std::vector<float>* > base_bonus;
 
 	int name_max_width;
 

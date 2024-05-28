@@ -33,10 +33,8 @@ public:
 	FPoint caption_margins;
 	Color caption_background;
 	float vscroll_speed;
-	CutsceneSettings()
-		: caption_background(0,0,0,200)
-		, vscroll_speed(4.0)
-	{}
+	float vscroll_speed_fast;
+	CutsceneSettings();
 };
 
 class SceneComponent {
@@ -75,10 +73,9 @@ private:
 		SKIP_NONE = 0,
 		SKIP_SUBSCENE = 1,
 		SKIP_PREV = 2,
-		SKIP_NEXT = 3
+		SKIP_NEXT = 3,
+		SKIP_VSCROLL_BACK = 4
 	};
-
-	static const int VSCROLL_SPEED = 8;
 
 	void clearArt();
 	void clearSound();
@@ -98,7 +95,7 @@ private:
 	WidgetButton *button_close;
 	WidgetButton *button_advance;
 	int vscroll_offset;
-	int vscroll_y;
+	float vscroll_y;
 	size_t sub_index;
 	size_t prev_sub_index;
 

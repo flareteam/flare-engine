@@ -20,9 +20,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "RenderDevice.h"
 #include "Settings.h"
 #include "SharedResources.h"
+#include "UtilsMath.h"
 
 #include <assert.h>
-#include <math.h>
 #include <stdio.h>
 
 /*
@@ -70,8 +70,13 @@ Sprite *Image::createSprite() {
 void Image::beginPixelBatch() {
 }
 
+void Image::beginPixelBatch(Rect& bounds) {
+	if (bounds.x) {} // suppress unused paramater warning
+}
+
 void Image::endPixelBatch() {
 }
+
 
 /*
  * Sprite
@@ -101,13 +106,18 @@ const Point& Sprite::getOffset() {
 
 void Sprite::setClipFromRect(const Rect& clip) {
 	src = clip;
+
+	// don't exceed the dimensions of the image
+	const int target_w = getGraphicsWidth();
+	const int target_h = getGraphicsHeight();
+	if (src.x + src.w > target_w)
+		src.w = target_w - src.x;
+	if (src.y + src.h > target_h)
+		src.h = target_h - src.y;
 }
 
 void Sprite::setClip(const int x, const int y, const int w, const int h) {
-	src.x = x;
-	src.y = y;
-	src.w = w;
-	src.h = h;
+	setClipFromRect(Rect(x, y, w, h));
 }
 
 const Rect& Sprite::getClip() {
@@ -163,9 +173,6 @@ RenderDevice::RenderDevice()
 	, reload_graphics(false)
 	, ddpi(0)
 {
-	// don't bother initializing gamma_r, gamma_g, gamma_b
-	// it is up to the implemented render device to initialize them
-	// for example, SDL_GetWindowGammaRamp() can fill them in
 }
 
 RenderDevice::~RenderDevice() {
@@ -175,6 +182,7 @@ int RenderDevice::createContext() {
 	int status = createContextInternal();
 
 	if (status == -1) {
+		Utils::logError("RenderDevice: createContext() failed, trying previous settings.");
 		// try previous setting first
 		settings->fullscreen = fullscreen;
 		settings->hwsurface = hwsurface;
@@ -185,6 +193,7 @@ int RenderDevice::createContext() {
 	}
 
 	if (status == -1) {
+		Utils::logError("RenderDevice: createContext() failed, disabling all options.");
 		// last resort, try turning everything off
 		settings->fullscreen = false;
 		settings->hwsurface = false;
@@ -331,11 +340,17 @@ void RenderDevice::windowResizeInternal() {
 	settings->view_h = temp_screen_h;
 
 	// scale virtual height when outside of VIRTUAL_HEIGHTS range
+	unsigned short max_render_size;
+	if (settings->max_render_size == 0)
+		max_render_size = eset->resolutions.virtual_heights.back();
+	else
+		max_render_size = settings->max_render_size;
+
 	if (!eset->resolutions.virtual_heights.empty()) {
 		if (temp_screen_h < eset->resolutions.virtual_heights.front())
 			settings->view_h = eset->resolutions.virtual_heights.front();
-		else if (temp_screen_h >= eset->resolutions.virtual_heights.back())
-			settings->view_h = eset->resolutions.virtual_heights.back();
+		else if (temp_screen_h >= max_render_size)
+			settings->view_h = max_render_size;
 	}
 
 	settings->view_h_half = settings->view_h / 2;
@@ -369,6 +384,30 @@ void RenderDevice::setFullscreen(bool enable_fullscreen) {
 	Utils::logInfo("RenderDevice: Trying to set fullscreen=%d, without recreating the rendering context, but setFullscreen() is not implemented for this renderer.", enable_fullscreen);
 }
 
+void RenderDevice::drawRectangleCorners(int csize, const Point& p0, const Point& p1, const Color& color) {
+	// if corner size if "blank", draw a standard rectangle
+	if (csize <= 0) {
+		drawRectangle(p0, p1, color);
+		return;
+	}
+
+	// top left
+	drawLine(p0.x, p0.y, p0.x + csize, p0.y, color);
+	drawLine(p0.x, p0.y, p0.x, p0.y + csize, color);
+
+	// top right
+	drawLine(p1.x - csize, p0.y, p1.x, p0.y, color);
+	drawLine(p1.x, p0.y, p1.x, p0.y + csize, color);
+
+	// bottom left
+	drawLine(p0.x, p1.y, p0.x + csize, p1.y, color);
+	drawLine(p0.x, p1.y - csize, p0.x, p1.y, color);
+
+	// bottom right
+	drawLine(p1.x - csize, p1.y, p1.x+1, p1.y, color);
+	drawLine(p1.x, p1.y - csize, p1.x, p1.y, color);
+}
+
 void RenderDevice::drawEllipse(int x0, int y0, int x1, int y1, const Color& color, float step) {
 	float rx = static_cast<float>(x1 - x0) / 2.f;
 	float ry = static_cast<float>(y1 - y0) / 2.f;
@@ -390,4 +429,9 @@ void RenderDevice::drawEllipse(int x0, int y0, int x1, int y1, const Color& colo
 		lastx = curx;
 		lasty = cury;
 	}
+}
+
+unsigned short RenderDevice::getRefreshRate() {
+	Utils::logInfo("RenderDevice: getRefreshRate() not implemented");
+	return 0;
 }

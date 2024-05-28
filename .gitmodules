@@ -1,0 +1,12 @@
+[submodule "flare-android-project/app/src/main/jni/SDL2"]
+	path = flare-android-project/app/src/main/jni/SDL2
+	url = https://github.com/libsdl-org/SDL
+[submodule "flare-android-project/app/src/main/jni/SDL2_image"]
+	path = flare-android-project/app/src/main/jni/SDL2_image
+	url = https://github.com/libsdl-org/SDL_image
+[submodule "flare-android-project/app/src/main/jni/SDL2_mixer"]
+	path = flare-android-project/app/src/main/jni/SDL2_mixer
+	url = https://github.com/libsdl-org/SDL_mixer
+[submodule "flare-android-project/app/src/main/jni/SDL2_ttf"]
+	path = flare-android-project/app/src/main/jni/SDL2_ttf
+	url = https://github.com/libsdl-org/SDL_ttf

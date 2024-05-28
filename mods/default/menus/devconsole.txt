@@ -1,0 +1,8 @@
+pos=0,0,640,176
+align=top
+
+close=613,3
+label_title=hidden
+confirm=463,3
+input=7,7
+history=8,32,613,140

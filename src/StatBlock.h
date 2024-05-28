@@ -38,6 +38,7 @@ class StatBlock {
 private:
 	bool loadCoreStat(FileParser *infile);
 	bool loadSfxStat(FileParser *infile);
+	bool isNPCStat(FileParser *infile);
 	void loadHeroStats();
 	bool checkRequiredSpawns(int req_amount) const;
 	bool statsLoaded;
@@ -55,24 +56,15 @@ public:
 		AI_POWER_PASSIVE_POST = 8
 	};
 
-	enum AvatarState {
-		AVATAR_STANCE = 0,
-		AVATAR_RUN = 1,
-		AVATAR_BLOCK = 2,
-		AVATAR_HIT = 3,
-		AVATAR_DEAD = 4,
-		AVATAR_ATTACK = 5
-	};
-
-	enum EnemyState {
-		ENEMY_STANCE = 0,
-		ENEMY_MOVE = 1,
-		ENEMY_POWER = 2,
-		ENEMY_SPAWN = 3,
-		ENEMY_BLOCK = 4,
-		ENEMY_HIT = 5,
-		ENEMY_DEAD = 6,
-		ENEMY_CRITDEAD = 7
+	enum EntityState {
+		ENTITY_STANCE = 0,
+		ENTITY_MOVE = 1,
+		ENTITY_POWER = 2,
+		ENTITY_SPAWN = 3,
+		ENTITY_BLOCK = 4,
+		ENTITY_HIT = 5,
+		ENTITY_DEAD = 6,
+		ENTITY_CRITDEAD = 7
 	};
 
 	enum CombatStyle {
@@ -84,7 +76,7 @@ public:
 	class AIPower {
 	public:
 		int type;
-		int id;
+		PowerID id;
 		int chance;
 		Timer cooldown;
 
@@ -97,27 +89,37 @@ public:
 	};
 
 	static const bool CAN_USE_PASSIVE = true;
+	static const bool TAKE_DMG_CRIT = true;
+
+	static const float DIRECTION_DELTA_X[8];
+	static const float DIRECTION_DELTA_Y[8];
+	static const float SPEED_MULTIPLIER[8];
+
+	static size_t getFullStatCount();
 
 	StatBlock();
 	~StatBlock();
 
 	void load(const std::string& filename);
-	void takeDamage(int dmg);
+	void takeDamage(float dmg, bool crit, int source_type);
 	void recalc();
 	void applyEffects();
 	void calcBase();
 	void logic();
 	void removeSummons();
 	void removeFromSummons();
-	bool summonLimitReached(int power_id) const;
+	bool summonLimitReached(PowerID power_id) const;
 	void setWanderArea(int r);
 	void loadHeroSFX();
 	std::string getShortClass();
 	std::string getLongClass();
-	void addXP(int amount);
+	void addXP(int amount); // TODO this should be unsigned long?
 	AIPower* getAIPower(int ai_type);
-	int getPowerCooldown(int power_id);
-	void setPowerCooldown(int power_id, int power_cooldown);
+	int getPowerCooldown(PowerID power_id);
+	void setPowerCooldown(PowerID power_id, int power_cooldown);
+
+	bool loadRenderLayerStat(FileParser *infile);
+	bool loadAnimationSlotStat(FileParser *infile);
 
 	bool alive;
 	bool corpse; // creature is dead and done animating
@@ -125,6 +127,7 @@ public:
 	bool hero; // else, enemy or other
 	bool hero_ally;
 	bool enemy_ally;
+	bool npc;
 	bool humanoid; // true for human, sceleton...; false for wyvern, snake...
 	bool lifeform;
 	bool permadeath;
@@ -132,18 +135,16 @@ public:
 	bool refresh_stats;
 	bool converted;
 	bool summoned;
-	int summoned_power_index;
+	PowerID summoned_power_index;
 	bool encountered; // enemy only
 	StatBlock* target_corpse;
 	StatBlock* target_nearest;
 	StatBlock* target_nearest_corpse;
 	float target_nearest_dist;
 	float target_nearest_corpse_dist;
-	int block_power;
+	PowerID block_power;
 
 	int movement_type;
-	bool flying;
-	bool intangible;
 	bool facing; // does this creature turn to face the hero
 
 	std::vector<std::string> categories;
@@ -152,6 +153,7 @@ public:
 
 	int level;
 	unsigned long xp;
+	XPScalingTableID xp_scaling_table;
 	bool level_up;
 	bool check_title;
 	int stat_points_per_level;
@@ -162,21 +164,26 @@ public:
 	std::vector<int> primary_starting;
 
 	// combat stats
-	std::vector<int> starting; // default level 1 values per stat. Read from file and never changes at runtime.
-	std::vector<int> base; // values before any active effects are applied
-	std::vector<int> current; // values after all active effects are applied
-	std::vector<int> per_level; // value increases each level after level 1
-	std::vector< std::vector<int> > per_primary;
+	std::vector<float> starting; // default level 1 values per stat. Read from file and never changes at runtime.
+	std::vector<float> base; // values before any active effects are applied
+	std::vector<float> current; // values after all active effects are applied
+	std::vector<float> per_level; // value increases each level after level 1
+	std::vector< std::vector<float> > per_primary;
 
-	int get(Stats::STAT stat) {
-		return current[stat];
+	float get(Stats::STAT stat) const {
+		if (stat == Stats::ABS_MAX)
+			return std::max(current[stat], current[Stats::ABS_MIN]);
+		else
+			return current[stat];
 	}
-	int getDamageMin(size_t dmg_type) {
+	float getDamageMin(size_t dmg_type) const {
 		return current[Stats::COUNT + (dmg_type * 2)];
 	}
-	int getDamageMax(size_t dmg_type) {
-		return current[Stats::COUNT + (dmg_type * 2) + 1];
+	float getDamageMax(size_t dmg_type) const {
+		return std::max(current[Stats::COUNT + (dmg_type * 2)], current[Stats::COUNT + (dmg_type * 2) + 1]);
 	}
+	float getResist(size_t resist_type) const;
+	float getResourceStat(size_t resource_index, size_t field_offset) const;
 
 	// additional values to base stats, given by items
 	std::vector<int> primary_additional;
@@ -192,27 +199,23 @@ public:
 	std::string character_subclass;
 
 	// physical stats
-	int hp;
-	int hp_ticker;
+	float hp;
 
 	// mental stats
-	int mp;
-	int mp_ticker;
+	float mp;
+
+	std::vector<float> resource_stats;
 
 	float speed_default;
 
-	// addition damage and absorb granted from items
-	std::vector<int> dmg_min_add;
-	std::vector<int> dmg_max_add;
-	int absorb_min_add;
-	int absorb_max_add;
+	// additional damage and absorb granted from items
+	std::vector<FMinMax> item_base_dmg;
+	FMinMax item_base_abs;
 
 	float speed;
 	float charge_speed;
 
 	std::set<std::string> equip_flags;
-	std::vector<int> vulnerable;
-	std::vector<int> vulnerable_base;
 
 	// buff and debuff stats
 	int transform_duration;
@@ -247,22 +250,22 @@ public:
 	Rect wander_area;
 
 	// enemy behavioral stats
-	int chance_pursue;
-	int chance_flee;
+	float chance_pursue;
+	float chance_flee;
 
-	std::vector<int> powers_list;
-	std::vector<int> powers_list_items;
-	std::vector<int> powers_passive;
+	std::vector<PowerID> powers_list;
+	std::vector<PowerID> powers_list_items;
+	std::vector<PowerID> powers_passive;
 	std::vector<AIPower> powers_ai;
 
-	bool canUsePower(int powerid, bool allow_passive) const;
+	bool canUsePower(PowerID powerid, bool allow_passive) const;
 
 	float melee_range;
 	float threat_range;
 	float threat_range_far;
 	float flee_range;
 	int combat_style; // determines how the creature enters combat
-	int hero_stealth;
+	float hero_stealth;
 	int turn_delay;
 	bool in_combat;
 	bool join_combat;
@@ -292,8 +295,8 @@ public:
 	StatusID convert_status;
 	StatusID quest_loot_requires_status;
 	StatusID quest_loot_requires_not_status;
-	int quest_loot_id;
-	int first_defeat_loot;
+	ItemID quest_loot_id;
+	ItemID first_defeat_loot;
 
 	// player look options
 	std::string gfx_base; // folder in /images/avatar
@@ -319,22 +322,31 @@ public:
 	int max_points_per_stat;
 
 	// preserve state before calcs
-	int prev_maxhp;
-	int prev_maxmp;
-	int prev_hp;
-	int prev_mp;
+	float prev_maxhp;
+	float prev_maxmp;
+	float prev_hp;
+	float prev_mp;
+
+	std::vector<float> prev_max_resource_stats;
+	std::vector<float> prev_resource_stats;
 
 	// links to summoned creatures and the entity which summoned this
 	std::vector<StatBlock*> summons;
 	StatBlock* summoner;
-	std::queue<int> party_buffs;
+	std::queue<PowerID> party_buffs;
 
-	std::vector<int> power_filter;
+	std::vector<PowerID> power_filter;
 
-	int bleed_source_type;
+	std::vector<EventComponent> invincible_requirements;
 
-	std::vector<StatusID> invincible_requires_status;
-	std::vector<StatusID> invincible_requires_not_status;
+	bool abort_npc_interact;
+
+	std::vector<std::string> layer_reference_order;
+	std::vector<std::vector<unsigned> > layer_def;
+
+	std::map<std::string, std::string> animation_slots;
+
+	bool critdie_enabled;
 };
 
 #endif

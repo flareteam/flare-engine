@@ -57,9 +57,9 @@ AnimationSet::AnimationSet(const std::string &animationname)
 	: name(animationname)
 	, loaded(false)
 	, parent(NULL)
-	, animations()
-	, sprite(NULL) {
-	defaultAnimation = new Animation("default", "play_once", NULL, Renderable::BLEND_NORMAL, 255, Color(255,255,255));
+	, animations() {
+	sprite = new AnimationMedia();
+	defaultAnimation = new Animation("default", "play_once", sprite, Renderable::BLEND_NORMAL, 255, Color(255,255,255));
 	defaultAnimation->setupUncompressed(Point(), Point(), 0, 1, 0);
 }
 
@@ -69,7 +69,7 @@ void AnimationSet::load() {
 
 	FileParser parser;
 	// @CLASS AnimationSet|Description of animations in animations/
-	if (!parser.open(name, FileParser::MOD_FILE, FileParser::ERROR_NORMAL))
+	if (name.empty() || !parser.open(name, FileParser::MOD_FILE, FileParser::ERROR_NORMAL))
 		return;
 
 	std::string _name = "";
@@ -111,15 +111,10 @@ void AnimationSet::load() {
 		}
 		if (parser.section.empty()) {
 			if (parser.key == "image") {
-				// @ATTR image|filename|Filename of sprite-sheet image.
-				if (sprite != NULL) {
-					parser.error("AnimationSet: Multiple images specified. Dragons be here!");
-					Utils::logErrorDialog("AnimationSet: Multiple images specified. Dragons be here!");
-					mods->resetModConfig();
-					Utils::Exit(128);
-				}
-
-				sprite = render_device->loadImage(parser.val, RenderDevice::ERROR_NORMAL);
+				// @ATTR image|filename, string : Filename, ID|Filename of sprite-sheet image along with an identifier string. The identifier string may be omitted if there is only a single image.
+				std::string img_filename = Parse::popFirstString(parser.val);
+				std::string img_id = Parse::popFirstString(parser.val);
+				sprite->loadImage(img_filename, img_id);
 			}
 			else if (parser.key == "render_size") {
 				// @ATTR render_size|int, int : Width, Height|Width and height of animation.
@@ -192,7 +187,7 @@ void AnimationSet::load() {
 				}
 			}
 			else if (parser.key == "frame") {
-				// @ATTR animation.frame|int, int, int, int, int, int, int, int : Index, Direction, X, Y, Width, Height, X offset, Y offset|A single frame of a compressed animation.
+				// @ATTR animation.frame|int, int, int, int, int, int, int, int, string: Index, Direction, X, Y, Width, Height, X offset, Y offset, Image ID|A single frame of a compressed animation. The image ID may be omitted, in which case the first available image will be used.
 				if (compressed_loading == false) { // first frame statement in section
 					newanim = new Animation(_name, type, sprite, blend_mode, alpha_mod, color_mod);
 					newanim->setup(frames, duration);
@@ -202,7 +197,7 @@ void AnimationSet::load() {
 					animations.push_back(newanim);
 					compressed_loading = true;
 				}
-				// frame = index, direction, x, y, w, h, offsetx, offsety
+				// frame = index, direction, x, y, w, h, offsetx, offsety, image
 				Rect r;
 				Point offset;
 				const unsigned short index = static_cast<unsigned short>(Parse::popFirstInt(parser.val));
@@ -213,7 +208,10 @@ void AnimationSet::load() {
 				r.h = Parse::popFirstInt(parser.val);
 				offset.x = Parse::popFirstInt(parser.val);
 				offset.y = Parse::popFirstInt(parser.val);
-				newanim->addFrame(index, direction, r, offset);
+				std::string key = parser.val;
+				if (!newanim->addFrame(index, direction, r, offset, key)) {
+					parser.error("AnimationSet: Frame index (%u) is out of bounds [0, %hu].", index, frames);
+				}
 			}
 			else {
 				parser.error("AnimationSet: '%s' is not a valid key.", parser.key.c_str());
@@ -250,5 +248,6 @@ AnimationSet::~AnimationSet() {
 	for (unsigned i = 0; i < animations.size(); ++i)
 		delete animations[i];
 	delete defaultAnimation;
+	delete sprite;
 }
 

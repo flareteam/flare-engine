@@ -28,9 +28,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Avatar.h"
 #include "CampaignManager.h"
 #include "CombatText.h"
-#include "Enemy.h"
-#include "EnemyManager.h"
 #include "EngineSettings.h"
+#include "Entity.h"
+#include "EntityManager.h"
 #include "FileParser.h"
 #include "Hazard.h"
 #include "LootManager.h"
@@ -38,6 +38,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MapRenderer.h"
 #include "MenuPowers.h"
 #include "MessageEngine.h"
+#include "ModManager.h"
 #include "PowerManager.h"
 #include "Settings.h"
 #include "SharedGameResources.h"
@@ -45,8 +46,22 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "StatBlock.h"
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
+#include "XPScaling.h"
 
 #include <limits>
+
+#include <math.h>
+#ifndef M_SQRT2
+#define M_SQRT2 sqrt(2.0)
+#endif
+
+const float StatBlock::DIRECTION_DELTA_X[8] =   {-1, -1, -1,  0,  1,  1,  1,  0};
+const float StatBlock::DIRECTION_DELTA_Y[8] =   { 1,  0, -1, -1, -1,  0,  1,  1};
+const float StatBlock::SPEED_MULTIPLIER[8] = { static_cast<float>(1.0/M_SQRT2), 1.0f, static_cast<float>(1.0/M_SQRT2), 1.0f, static_cast<float>(1.0/M_SQRT2), 1.0f, static_cast<float>(1.0/M_SQRT2), 1.0f};
+
+size_t StatBlock::getFullStatCount() {
+	return Stats::COUNT + eset->damage_types.count + eset->elements.list.size() + eset->resource_stats.stat_count;
+}
 
 StatBlock::StatBlock()
 	: statsLoaded(false)
@@ -56,6 +71,7 @@ StatBlock::StatBlock()
 	, hero(false)
 	, hero_ally(false)
 	, enemy_ally(false)
+	, npc(false)
 	, humanoid(false)
 	, lifeform(true)
 	, permadeath(false)
@@ -72,35 +88,28 @@ StatBlock::StatBlock()
 	, target_nearest_corpse_dist(0) // hero only
 	, block_power(0)
 	, movement_type(MapCollision::MOVE_NORMAL)
-	, flying(false)
-	, intangible(false)
 	, facing(true)
 	, name("")
 	, level(0)
 	, xp(0)
+	, xp_scaling_table(0)
 	, level_up(false)
 	, check_title(false)
 	, stat_points_per_level(1)
 	, power_points_per_level(1)
-	, starting(Stats::COUNT + eset->damage_types.count, 0)
-	, base(Stats::COUNT + eset->damage_types.count, 0)
-	, current(Stats::COUNT + eset->damage_types.count, 0)
-	, per_level(Stats::COUNT + eset->damage_types.count, 0)
+	, starting(getFullStatCount(), 0)
+	, base(getFullStatCount(), 0)
+	, current(getFullStatCount(), 0)
+	, per_level(getFullStatCount(), 0)
 	, character_class("")
 	, character_subclass("")
 	, hp(0)
-	, hp_ticker(0)
 	, mp(0)
-	, mp_ticker(0)
 	, speed_default(0.1f)
-	, dmg_min_add(eset->damage_types.list.size(), 0)
-	, dmg_max_add(eset->damage_types.list.size(), 0)
-	, absorb_min_add(0)
-	, absorb_max_add(0)
+	, item_base_dmg(eset->damage_types.list.size())
+	, item_base_abs()
 	, speed(0.1f)
 	, charge_speed(0.0f)
-	, vulnerable(eset->elements.list.size(), 100)
-	, vulnerable_base(eset->elements.list.size(), 100)
 	, transform_duration(0)
 	, transform_duration_total(0)
 	, manual_untransform(false)
@@ -115,7 +124,7 @@ StatBlock::StatBlock()
 	, direction(0)
 	, cooldown_hit()
 	, cooldown_hit_enabled(false)
-	, cur_state(0)
+	, cur_state(ENTITY_STANCE)
 	, state_timer()
 	, hold_state(false)
 	, prevent_interrupt(false)
@@ -177,7 +186,11 @@ StatBlock::StatBlock()
 	, prev_mp(0)
 	, summons()
 	, summoner(NULL)
-	, bleed_source_type(-1)
+	, abort_npc_interact(false)
+	, layer_reference_order()
+	, layer_def(8, std::vector<unsigned>())
+	, animation_slots()
+	, critdie_enabled(false)
 {
 	primary.resize(eset->primary_stats.list.size(), 0);
 	primary_starting.resize(eset->primary_stats.list.size(), 0);
@@ -185,12 +198,24 @@ StatBlock::StatBlock()
 	per_primary.resize(eset->primary_stats.list.size());
 
 	for (size_t i = 0; i < per_primary.size(); ++i) {
-		per_primary[i].resize(Stats::COUNT + eset->damage_types.count, 0);
+		per_primary[i].resize(getFullStatCount(), 0);
 	}
+
+	cooldown.reset(Timer::END);
+
+	resource_stats.resize(eset->resource_stats.list.size());
+	prev_max_resource_stats.resize(eset->resource_stats.list.size());
+	prev_resource_stats.resize(eset->resource_stats.list.size());
+}
+
+StatBlock::~StatBlock() {
+	removeFromSummons();
+	if (loot)
+		loot->removeFromEnemiesDroppingLoot(this);
 }
 
 bool StatBlock::loadCoreStat(FileParser *infile) {
-	// @CLASS StatBlock: Core stats|Description of engine/stats.txt and enemies in enemies/
+	// @CLASS StatBlock: Core stats|Description of engine/stats.txt, enemies/..., and npcs/...
 
 	if (infile->key == "speed") {
 		// @ATTR speed|float|Movement speed
@@ -199,7 +224,7 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 		return true;
 	}
 	else if (infile->key == "cooldown") {
-		// @ATTR cooldown|int|Cooldown between attacks in 'ms' or 's'.
+		// @ATTR cooldown|duration|Cooldown between attacks in 'ms' or 's'.
 		cooldown.setDuration(Parse::toDuration(infile->val));
 		return true;
 	}
@@ -210,9 +235,10 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 		return true;
 	}
 	else if (infile->key == "stat") {
-		// @ATTR stat|string, int : Stat name, Value|The starting value for this stat.
+		// @ATTR stat|stat_id, float : Stat ID, Value|The starting value for this stat.
 		std::string stat = Parse::popFirstString(infile->val);
-		int value = Parse::popFirstInt(infile->val);
+		float value = Parse::popFirstFloat(infile->val);
+		size_t offset_index = 0;
 
 		for (int i=0; i<Stats::COUNT; ++i) {
 			if (Stats::KEY[i] == stat) {
@@ -220,22 +246,42 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 				return true;
 			}
 		}
+		offset_index += Stats::COUNT;
 
 		for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
 			if (eset->damage_types.list[i].min == stat) {
-				starting[Stats::COUNT + (i*2)] = value;
+				starting[offset_index + (i*2)] = value;
 				return true;
 			}
 			else if (eset->damage_types.list[i].max == stat) {
-				starting[Stats::COUNT + (i*2) + 1] = value;
+				starting[offset_index + (i*2) + 1] = value;
 				return true;
+			}
+		}
+		offset_index += eset->damage_types.count;
+
+		for (size_t i = 0; i < eset->elements.list.size(); ++i) {
+			if (eset->elements.list[i].resist_id == stat) {
+				starting[offset_index + i] = value;
+				return true;
+			}
+		}
+		offset_index += eset->elements.list.size();
+
+		for (size_t i = 0; i < eset->resource_stats.list.size(); ++i) {
+			for (size_t j = 0; j < EngineSettings::ResourceStats::STAT_COUNT; ++j) {
+				if (eset->resource_stats.list[i].ids[j] == stat) {
+					starting[offset_index + (i * EngineSettings::ResourceStats::STAT_COUNT) + j] = value;
+					return true;
+				}
 			}
 		}
 	}
 	else if (infile->key == "stat_per_level") {
-		// @ATTR stat_per_level|predefined_string, int : Stat name, Value|The value for this stat added per level.
+		// @ATTR stat_per_level|stat_id, float : Stat ID, Value|The value for this stat added per level.
 		std::string stat = Parse::popFirstString(infile->val);
-		int value = Parse::popFirstInt(infile->val);
+		float value = Parse::popFirstFloat(infile->val);
+		size_t offset_index = 0;
 
 		for (int i=0; i<Stats::COUNT; i++) {
 			if (Stats::KEY[i] == stat) {
@@ -243,20 +289,39 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 				return true;
 			}
 		}
+		offset_index += Stats::COUNT;
 
 		for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
 			if (eset->damage_types.list[i].min == stat) {
-				per_level[Stats::COUNT + (i*2)] = value;
+				per_level[offset_index + (i*2)] = value;
 				return true;
 			}
 			else if (eset->damage_types.list[i].max == stat) {
-				per_level[Stats::COUNT + (i*2) + 1] = value;
+				per_level[offset_index + (i*2) + 1] = value;
 				return true;
+			}
+		}
+		offset_index += eset->damage_types.count;
+
+		for (size_t i = 0; i < eset->elements.list.size(); ++i) {
+			if (eset->elements.list[i].resist_id == stat) {
+				per_level[offset_index + i] = value;
+				return true;
+			}
+		}
+		offset_index += eset->elements.list.size();
+
+		for (size_t i = 0; i < eset->resource_stats.list.size(); ++i) {
+			for (size_t j = 0; j < EngineSettings::ResourceStats::STAT_COUNT; ++j) {
+				if (eset->resource_stats.list[i].ids[j] == stat) {
+					per_level[offset_index + (i * EngineSettings::ResourceStats::STAT_COUNT) + j] = value;
+					return true;
+				}
 			}
 		}
 	}
 	else if (infile->key == "stat_per_primary") {
-		// @ATTR stat_per_primary|predefined_string, predefined_string, int : Primary Stat, Stat name, Value|The value for this stat added for every point allocated to this primary stat.
+		// @ATTR stat_per_primary|predefined_string, stat_id, float : Primary Stat, Stat ID, Value|The value for this stat added for every point allocated to this primary stat.
 		std::string prim_stat = Parse::popFirstString(infile->val);
 		size_t prim_stat_index = eset->primary_stats.getIndexByID(prim_stat);
 		if (prim_stat_index == eset->primary_stats.list.size()) {
@@ -265,7 +330,8 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 		}
 
 		std::string stat = Parse::popFirstString(infile->val);
-		int value = Parse::popFirstInt(infile->val);
+		float value = Parse::popFirstFloat(infile->val);
+		size_t offset_index = 0;
 
 		for (int i=0; i<Stats::COUNT; i++) {
 			if (Stats::KEY[i] == stat) {
@@ -273,37 +339,77 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 				return true;
 			}
 		}
+		offset_index += Stats::COUNT;
 
 		for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
 			if (eset->damage_types.list[i].min == stat) {
-				per_primary[prim_stat_index][Stats::COUNT + (i*2)] = value;
+				per_primary[prim_stat_index][offset_index + (i*2)] = value;
 				return true;
 			}
 			else if (eset->damage_types.list[i].max == stat) {
-				per_primary[prim_stat_index][Stats::COUNT + (i*2) + 1] = value;
+				per_primary[prim_stat_index][offset_index + (i*2) + 1] = value;
 				return true;
+			}
+		}
+		offset_index += eset->damage_types.count;
+
+		for (size_t i = 0; i < eset->elements.list.size(); ++i) {
+			if (eset->elements.list[i].resist_id == stat) {
+				per_primary[prim_stat_index][offset_index + i] = value;
+				return true;
+			}
+		}
+		offset_index += eset->elements.list.size();
+
+		for (size_t i = 0; i < eset->resource_stats.list.size(); ++i) {
+			for (size_t j = 0; j < EngineSettings::ResourceStats::STAT_COUNT; ++j) {
+				if (eset->resource_stats.list[i].ids[j] == stat) {
+					per_primary[prim_stat_index][offset_index + (i * EngineSettings::ResourceStats::STAT_COUNT) + j] = value;
+					return true;
+				}
 			}
 		}
 	}
 	else if (infile->key == "vulnerable") {
-		// @ATTR vulnerable|predefined_string, int : Element, Value|Percentage weakness to this element.
+		// @ATTR vulnerable|predefined_string, float : Element, Value|(Deprecated in v1.12.91; use a '..._resist' value with 'stat' instead) Percentage weakness to this element.
 		std::string element = Parse::popFirstString(infile->val);
-		int value = Parse::popFirstInt(infile->val);
+		float value = (Parse::popFirstFloat(infile->val) * -1) + 100;
+
+		infile->error("StatBlock: 'vulnerable' is deprecated. Use 'stat=%s_resist,%d' instead.", element.c_str(), value);
 
 		for (unsigned int i=0; i<eset->elements.list.size(); i++) {
 			if (element == eset->elements.list[i].id) {
-				vulnerable[i] = vulnerable_base[i] = value;
+				starting[Stats::COUNT + eset->damage_types.count + i] = value;
 				return true;
 			}
 		}
 	}
 	else if (infile->key == "power_filter") {
 		// @ATTR power_filter|list(power_id)|Only these powers are allowed to hit this entity.
-		std::string power_id = Parse::popFirstString(infile->val);
-		while (!power_id.empty()) {
-			power_filter.push_back(Parse::toInt(power_id));
-			power_id = Parse::popFirstString(infile->val);
+		if (powers) {
+			std::string power_id = Parse::popFirstString(infile->val);
+			while (!power_id.empty()) {
+				PowerID test_id = powers->verifyID(Parse::toPowerID(power_id), infile, !PowerManager::ALLOW_ZERO_ID);
+				if (test_id > 0) {
+					power_filter.push_back(Parse::toPowerID(power_id));
+				}
+				power_id = Parse::popFirstString(infile->val);
+			}
 		}
+		return true;
+	}
+	else if (infile->key == "categories") {
+		// @ATTR categories|list(string)|Categories that this entity belongs to.
+		categories.clear();
+		std::string cat;
+		while ((cat = Parse::popFirstString(infile->val)) != "") {
+			categories.push_back(cat);
+		}
+		return true;
+	}
+	else if (infile->key == "melee_range") {
+		// @ATTR melee_range|float|Determines the distance from the caster that some powers will be placed. For AI entities, it also means the minimum distance from target required to use melee powers.
+		melee_range = Parse::toFloat(infile->val);
 		return true;
 	}
 
@@ -314,9 +420,9 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
  * Set paths for sound effects
  */
 bool StatBlock::loadSfxStat(FileParser *infile) {
-	// @CLASS StatBlock: Sound effects|Description of heroes in engine/avatar/ and enemies in enemies/
+	// @CLASS StatBlock: Sound effects|Description of sound effect properties in engine/stats.txt, enemies/..., and npcs/...
 
-	if (infile->new_section) {
+	if (infile->new_section && (infile->section.empty() || infile->section == "stats")) {
 		sfx_attack.clear();
 		sfx_hit.clear();
 		sfx_die.clear();
@@ -347,45 +453,150 @@ bool StatBlock::loadSfxStat(FileParser *infile) {
 				sfx_attack[found_index].second.push_back(filename);
 			}
 		}
+
+		return true;
 	}
 	else if (infile->key == "sfx_hit") {
 		// @ATTR sfx_hit|repeatable(filename)|Filename of sound effect for being hit.
 		if (std::find(sfx_hit.begin(), sfx_hit.end(), infile->val) == sfx_hit.end()) {
 			sfx_hit.push_back(infile->val);
 		}
+
+		return true;
 	}
 	else if (infile->key == "sfx_die") {
 		// @ATTR sfx_die|repeatable(filename)|Filename of sound effect for dying.
 		if (std::find(sfx_die.begin(), sfx_die.end(), infile->val) == sfx_die.end()) {
 			sfx_die.push_back(infile->val);
 		}
+
+		return true;
 	}
 	else if (infile->key == "sfx_critdie") {
 		// @ATTR sfx_critdie|repeatable(filename)|Filename of sound effect for dying to a critical hit.
 		if (std::find(sfx_critdie.begin(), sfx_critdie.end(), infile->val) == sfx_critdie.end()) {
 			sfx_critdie.push_back(infile->val);
 		}
+
+		return true;
 	}
 	else if (infile->key == "sfx_block") {
 		// @ATTR sfx_block|repeatable(filename)|Filename of sound effect for blocking an incoming hit.
 		if (std::find(sfx_block.begin(), sfx_block.end(), infile->val) == sfx_block.end()) {
 			sfx_block.push_back(infile->val);
 		}
+
+		return true;
 	}
 	else if (infile->key == "sfx_levelup") {
 		// @ATTR sfx_levelup|filename|Filename of sound effect for leveling up.
 		sfx_levelup = infile->val;
+
+		return true;
 	}
 	else if (infile->key == "sfx_lowhp") {
 		// @ATTR sfx_lowhp|filename, bool: Sound file, loop|Filename of sound effect for low health warning. Optionally, it can be looped.
 		sfx_lowhp = Parse::popFirstString(infile->val);
 		if (infile->val != "") sfx_lowhp_loop = Parse::toBool(infile->val);
-	}
-	else {
-		return false;
+
+		return true;
 	}
 
-	return true;
+	return false;
+}
+
+bool StatBlock::loadRenderLayerStat(FileParser *infile) {
+	// @CLASS StatBlock: Render layers|Description of 'render_layers' section in engine/stats.txt, enemies/..., and npcs/...
+
+	if (infile->section == "render_layers") {
+		if (infile->new_section) {
+			layer_def = std::vector<std::vector<unsigned> >(8, std::vector<unsigned>());
+			layer_reference_order = std::vector<std::string>();
+			animation_slots.clear();
+		}
+
+		if (infile->key == "layer") {
+			// @ATTR render_layers.layer|direction, list(string) : Direction, Layer name(s)|Defines the layer order of slots for a given direction.
+			unsigned dir = Parse::toDirection(Parse::popFirstString(infile->val));
+			if (dir>7) {
+				infile->error("StatBlock: Render layer direction must be in range [0,7]");
+				Utils::logErrorDialog("StatBlock: Render layer direction must be in range [0,7]");
+				mods->resetModConfig();
+				Utils::Exit(1);
+			}
+
+			std::string layer = Parse::popFirstString(infile->val);
+			while (layer != "") {
+				// check if already in layer_reference:
+				unsigned ref_pos;
+				for (ref_pos = 0; ref_pos < layer_reference_order.size(); ++ref_pos)
+					if (layer == layer_reference_order[ref_pos])
+						break;
+				if (ref_pos == layer_reference_order.size())
+					layer_reference_order.push_back(layer);
+				layer_def[dir].push_back(ref_pos);
+
+				animation_slots[layer] = "";
+
+				layer = Parse::popFirstString(infile->val);
+			}
+
+			// There are the positions of the items relative to layer_reference_order
+			// so if layer_reference_order=main,body,head,off
+			// and we got a layer=3,off,body,head,main
+			// then the layer_def[3] looks like (3,1,2,0)
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool StatBlock::loadAnimationSlotStat(FileParser *infile) {
+	// @CLASS StatBlock: Animation slots|Description of 'animation_slots' section in enemies/... and npcs/...
+	if (infile->section == "animation_slots") {
+		if (infile->key == "slot") {
+			// @ATTR animation_slots.slot|string, filename : Slot name, Animation filename|Assigns an animation to one of the slots defined in the render_layers section.
+			std::string slot_id = Parse::popFirstString(infile->val);
+			std::string slot_filename = Parse::popFirstString(infile->val);
+
+			std::map<std::string, std::string>::iterator it;
+			it = animation_slots.find(slot_id);
+			if (it != animation_slots.end())
+				it->second = slot_filename;
+			else
+				infile->error("StatBlock: Slot %s does not having a matching render layer", slot_id.c_str());
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool StatBlock::isNPCStat(FileParser *infile) {
+	if (infile->section == "npc") return true;
+	else if (infile->section == "dialog") return true;
+
+	if (infile->key == "gfx") {
+		infile->error("StatBlock: Warning! 'gfx' is deprecated. Use 'animations' instead.");
+		animations = infile->val;
+		return true;
+	}
+	else if (infile->key == "direction") return true;
+	else if (infile->key == "talker") return true;
+	else if (infile->key == "portrait") return true;
+	else if (infile->key == "vendor") return true;
+	else if (infile->key == "vendor_requires_status") return true;
+	else if (infile->key == "vendor_requires_not_status") return true;
+	else if (infile->key == "constant_stock") return true;
+	else if (infile->key == "status_stock") return true;
+	else if (infile->key == "random_stock") return true;
+	else if (infile->key == "random_stock_count") return true;
+	else if (infile->key == "vox_intro") return true;
+
+	return false;
 }
 
 /**
@@ -401,14 +612,14 @@ void StatBlock::load(const std::string& filename) {
 	bool flee_range_defined = false;
 
 	while (infile.next()) {
-		if (infile.new_section) {
+		if (infile.new_section && (infile.section.empty() || infile.section == "stats")) {
 			// APPENDed file
 			clear_loot = true;
 		}
 
 		int num = Parse::toInt(infile.val);
 		float fnum = Parse::toFloat(infile.val);
-		bool valid = loadCoreStat(&infile) || loadSfxStat(&infile);
+		bool valid = loadCoreStat(&infile) || loadSfxStat(&infile) || loadRenderLayerStat(&infile) || loadAnimationSlotStat(&infile) || isNPCStat(&infile);
 
 		// @ATTR name|string|Name
 		if (infile.key == "name") name = msg->get(infile.val);
@@ -423,6 +634,14 @@ void StatBlock::load(const std::string& filename) {
 		// enemy death rewards and events
 		// @ATTR xp|int|XP awarded upon death.
 		else if (infile.key == "xp") xp = num;
+
+		else if (infile.key == "xp_scaling") {
+			// @ATTR xp_scaling|filename|XP multiplier table file. See: "XPScaling".
+			if (xp_scaling) {
+				xp_scaling_table = xp_scaling->load(infile.val);
+			}
+		}
+
 		else if (infile.key == "loot") {
 			// @ATTR loot|repeatable(loot)|Possible loot that can be dropped on death.
 
@@ -452,20 +671,42 @@ void StatBlock::load(const std::string& filename) {
 		else if (infile.key == "defeat_status") defeat_status = camp->registerStatus(infile.val);
 		// @ATTR convert_status|string|Campaign status to set upon being converted to a player ally.
 		else if (infile.key == "convert_status") convert_status = camp->registerStatus(infile.val);
-		// @ATTR first_defeat_loot|item_id|Drops this item upon first death.
-		else if (infile.key == "first_defeat_loot") first_defeat_loot = num;
-		// @ATTR quest_loot|string, string, item_id : Required status, Required not status, Item|Drops this item when campaign status is met.
+		// @ATTR first_defeat_loot|item_id|Drops this item upon first death (requires defeat_status to be set).
+		else if (infile.key == "first_defeat_loot") {
+			if (items)
+				first_defeat_loot = items->verifyID(Parse::toItemID(infile.val), &infile, ItemManager::VERIFY_ALLOW_ZERO, !ItemManager::VERIFY_ALLOCATE);
+		}
+		// @ATTR quest_loot|string, string, item_id : Required status, Required not status, Item|Drops this item when campaign status is met. Can't drop at the same time as first_defeat_loot.
 		else if (infile.key == "quest_loot") {
-			quest_loot_requires_status = camp->registerStatus(Parse::popFirstString(infile.val));
-			quest_loot_requires_not_status = camp->registerStatus(Parse::popFirstString(infile.val));
-			quest_loot_id = Parse::popFirstInt(infile.val);
+			if (items) {
+				std::string req_status = Parse::popFirstString(infile.val);
+				std::string req_not_status = Parse::popFirstString(infile.val);
+
+				quest_loot_id = items->verifyID(Parse::toItemID(Parse::popFirstString(infile.val)), &infile, ItemManager::VERIFY_ALLOW_ZERO, !ItemManager::VERIFY_ALLOCATE);
+				if (quest_loot_id > 0) {
+					quest_loot_requires_status = camp->registerStatus(req_status);
+					quest_loot_requires_not_status = camp->registerStatus(req_not_status);
+				}
+			}
 		}
 
 		// behavior stats
 		// @ATTR flying|bool|Creature can move over gaps/water.
-		else if (infile.key == "flying") flying = Parse::toBool(infile.val);
+		else if (infile.key == "flying") {
+			bool flying = Parse::toBool(infile.val);
+			if (flying)
+				movement_type = MapCollision::MOVE_FLYING;
+			else
+				movement_type = MapCollision::MOVE_NORMAL;
+		}
 		// @ATTR intangible|bool|Creature can move through walls.
-		else if (infile.key == "intangible") intangible = Parse::toBool(infile.val);
+		else if (infile.key == "intangible") {
+			bool intangible = Parse::toBool(infile.val);
+			if (intangible)
+				movement_type = MapCollision::MOVE_INTANGIBLE;
+			else
+				movement_type = MapCollision::MOVE_NORMAL;
+		}
 		// @ATTR facing|bool|Creature can turn to face their target.
 		else if (infile.key == "facing") facing = Parse::toBool(infile.val);
 
@@ -474,10 +715,10 @@ void StatBlock::load(const std::string& filename) {
 
 		// @ATTR turn_delay|duration|Duration it takes for this creature to turn and face their target in 'ms' or 's'.
 		else if (infile.key == "turn_delay") turn_delay = Parse::toDuration(infile.val);
-		// @ATTR chance_pursue|int|Percentage change that the creature will chase their target.
-		else if (infile.key == "chance_pursue") chance_pursue = num;
-		// @ATTR chance_flee|int|Percentage chance that the creature will run away from their target.
-		else if (infile.key == "chance_flee") chance_flee = num;
+		// @ATTR chance_pursue|float|Percentage change that the creature will chase their target.
+		else if (infile.key == "chance_pursue") chance_pursue = fnum;
+		// @ATTR chance_flee|float|Percentage chance that the creature will run away from their target.
+		else if (infile.key == "chance_flee") chance_flee = fnum;
 
 		else if (infile.key == "power") {
 			// @ATTR power|["melee", "ranged", "beacon", "on_hit", "on_death", "on_half_dead", "on_join_combat", "on_debuff"], power_id, int : State, Power, Chance|A power that has a chance of being triggered in a certain state.
@@ -485,7 +726,9 @@ void StatBlock::load(const std::string& filename) {
 
 			std::string ai_type = Parse::popFirstString(infile.val);
 
-			ai_power.id = powers->verifyID(Parse::popFirstInt(infile.val), &infile, !PowerManager::ALLOW_ZERO_ID);
+			if (powers)
+				ai_power.id = powers->verifyID(Parse::toPowerID(Parse::popFirstString(infile.val)), &infile, !PowerManager::ALLOW_ZERO_ID);
+
 			if (ai_power.id == 0)
 				continue; // verifyID() will print our error message
 
@@ -512,29 +755,37 @@ void StatBlock::load(const std::string& filename) {
 
 		else if (infile.key == "passive_powers") {
 			// @ATTR passive_powers|list(power_id)|A list of passive powers this creature has.
-			powers_passive.clear();
-			std::string p = Parse::popFirstString(infile.val);
-			while (p != "") {
-				powers_passive.push_back(Parse::toInt(p));
-				p = Parse::popFirstString(infile.val);
+			if (powers) {
+				powers_passive.clear();
+				std::string p = Parse::popFirstString(infile.val);
+				while (!p.empty()) {
+					PowerID passive_id = powers->verifyID(Parse::toPowerID(p), &infile, !PowerManager::ALLOW_ZERO_ID);
 
-				// if a passive power has a post power, add it to the AI power list so we can track its cooldown
-				int post_power = powers->powers[powers_passive.back()].post_power;
-				if (post_power > 0) {
-					AIPower passive_post_power;
-					passive_post_power.type = AI_POWER_PASSIVE_POST;
-					passive_post_power.id = post_power;
-					passive_post_power.chance = 0; // post_power chance is used instead
-					powers_ai.push_back(passive_post_power);
+					if (powers->isValid(passive_id)) {
+						powers_passive.push_back(passive_id);
+
+						// if a passive power has a post power, add it to the AI power list so we can track its cooldown
+						Power* passive_power = powers->powers[passive_id];
+						for (size_t i = 0; i < passive_power->chain_powers.size(); ++i) {
+							ChainPower& chain_power = passive_power->chain_powers[i];
+							if (chain_power.type == ChainPower::TYPE_POST) {
+								AIPower passive_post_power;
+								passive_post_power.type = AI_POWER_PASSIVE_POST;
+								passive_post_power.id = chain_power.id;
+								passive_post_power.chance = 0; // post_power chance is used instead
+								powers_ai.push_back(passive_post_power);
+							}
+						}
+					}
+
+					p = Parse::popFirstString(infile.val);
 				}
 			}
 		}
 
-		// @ATTR melee_range|float|Minimum distance from target required to use melee powers.
-		else if (infile.key == "melee_range") melee_range = fnum;
 		// @ATTR threat_range|float, float: Engage distance, Stop distance|The first value is the radius of the area this creature will be able to start chasing the hero. The second, optional, value is the radius at which this creature will stop pursuing their target and defaults to double the first value.
 		else if (infile.key == "threat_range") {
-			threat_range = Parse::toFloat(Parse::popFirstString(infile.val));
+			threat_range = Parse::popFirstFloat(infile.val);
 
 			std::string tr_far = Parse::popFirstString(infile.val);
 			if (!tr_far.empty())
@@ -561,15 +812,6 @@ void StatBlock::load(const std::string& filename) {
 		// @ATTR suppress_hp|bool|Hides the enemy HP bar for this creature.
 		else if (infile.key == "suppress_hp") suppress_hp = Parse::toBool(infile.val);
 
-		else if (infile.key == "categories") {
-			// @ATTR categories|list(string)|Categories that this enemy belongs to.
-			categories.clear();
-			std::string cat;
-			while ((cat = Parse::popFirstString(infile.val)) != "") {
-				categories.push_back(cat);
-			}
-		}
-
 		// @ATTR flee_duration|duration|The minimum amount of time that this creature will flee. They may flee longer than the specified time.
 		else if (infile.key == "flee_duration") flee_timer.setDuration(Parse::toDuration(infile.val));
 		// @ATTR flee_cooldown|duration|The amount of time this creature must wait before they can start fleeing again.
@@ -588,6 +830,11 @@ void StatBlock::load(const std::string& filename) {
 	hp = starting[Stats::HP_MAX];
 	mp = starting[Stats::MP_MAX];
 
+	size_t resource_offset_index = Stats::COUNT + eset->damage_types.count + eset->elements.list.size();
+	for (size_t i = 0; i < resource_stats.size(); ++i) {
+		resource_stats[i] = starting[resource_offset_index + (i * EngineSettings::ResourceStats::STAT_COUNT) + EngineSettings::ResourceStats::STAT_BASE];
+	}
+
 	if (!flee_range_defined)
 		flee_range = threat_range / 2;
 
@@ -597,10 +844,65 @@ void StatBlock::load(const std::string& filename) {
 /**
  * Reduce temphp first, then hp
  */
-void StatBlock::takeDamage(int dmg) {
+void StatBlock::takeDamage(float dmg, bool crit, int source_type) {
 	hp -= effects.damageShields(dmg);
 	if (hp <= 0) {
 		hp = 0;
+
+		effects.triggered_death = true;
+		// TODO should effects.clearEffects() be here as well?
+		// what about other things that happen in the "dead" entity states?
+
+		if (hero) {
+			cur_state = StatBlock::ENTITY_DEAD;
+		}
+		else {
+			// enemy died; do rewards
+			if (!hero_ally || converted) {
+				// some creatures create special loot if we're on a quest
+				if (quest_loot_requires_status != 0) {
+					// the loot manager will check quest_loot_id
+					// if set (not zero), the loot manager will 100% generate that loot.
+					if (!(camp->checkStatus(quest_loot_requires_status) && !camp->checkStatus(quest_loot_requires_not_status))) {
+						quest_loot_id = 0;
+					}
+				}
+
+				// defeating some creatures (e.g. bosses) affects the story
+				if (defeat_status != 0) {
+					// some creatures drop special loot the first time they are defeated
+					// this must be done in conjunction with defeat status
+					// TODO this replaces quest loot! Maybe support dropping both?
+					if (first_defeat_loot > 0) {
+						if (!camp->checkStatus(defeat_status)) {
+							quest_loot_id = first_defeat_loot;
+						}
+					}
+
+					camp->setStatus(defeat_status);
+				}
+
+				// reward XP; adjust for party exp if necessary
+				float xp_multiplier = 1;
+				if (source_type == Power::SOURCE_TYPE_ALLY)
+					xp_multiplier = eset->misc.party_exp_percentage / 100.0f;
+
+				xp_multiplier *= xp_scaling->getMultiplier(this, &(pc->stats));
+
+				camp->rewardXP(static_cast<float>(xp) * xp_multiplier, !CampaignManager::XP_SHOW_MSG);
+
+				// drop loot
+				loot->addEnemyLoot(this);
+			}
+
+			if (crit && critdie_enabled)
+				cur_state = StatBlock::ENTITY_CRITDEAD;
+			else
+				cur_state = StatBlock::ENTITY_DEAD;
+
+			mapr->collider.unblock(pos.x, pos.y);
+		}
+
 	}
 }
 
@@ -631,6 +933,11 @@ void StatBlock::recalc() {
 
 	hp = get(Stats::HP_MAX);
 	mp = get(Stats::MP_MAX);
+
+	for (size_t i = 0; i < resource_stats.size(); ++i) {
+		resource_stats[i] = getResourceStat(i, EngineSettings::ResourceStats::STAT_BASE);
+	}
+
 }
 
 /**
@@ -639,28 +946,37 @@ void StatBlock::recalc() {
  */
 void StatBlock::calcBase() {
 	// bonuses are skipped for the default level 1 of a stat
-	int lev0 = std::max(level - 1, 0);
+	const float lev0 = static_cast<float>(std::max(level - 1, 0));
 
-	for (size_t i = 0; i < Stats::COUNT + eset->damage_types.count; ++i) {
-		base[i] = starting[i];
-		base[i] += lev0 * per_level[i];
+	if (per_primary.empty()) {
+		for (size_t i = 0; i < getFullStatCount(); ++i) {
+			base[i] = starting[i] + (lev0 * per_level[i]);
+		}
+	}
+	else {
 		for (size_t j = 0; j < per_primary.size(); ++j) {
-			base[i] += std::max(get_primary(j) - 1, 0) * per_primary[j][i];
+			const float current_primary = static_cast<float>(std::max(get_primary(j) - 1, 0));
+			const std::vector<float>& per_primary_vec = per_primary[j];
+			for (size_t i = 0; i < getFullStatCount(); ++i) {
+				if (j==0)
+					base[i] = starting[i] + (lev0 * per_level[i]);
+				base[i] += (current_primary * per_primary_vec[i]);
+			}
 		}
 	}
 
 	// add damage from equipment and increase to minimum amounts
 	for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
-		base[Stats::COUNT + (i*2)] += dmg_min_add[i];
-		base[Stats::COUNT + (i*2) + 1] += dmg_max_add[i];
-		base[Stats::COUNT + (i*2)] = std::max(base[Stats::COUNT + (i*2)], 0);
+		base[Stats::COUNT + (i*2)] += item_base_dmg[i].min;
+		base[Stats::COUNT + (i*2) + 1] += item_base_dmg[i].max;
+		base[Stats::COUNT + (i*2)] = std::max(base[Stats::COUNT + (i*2)], 0.0f);
 		base[Stats::COUNT + (i*2) + 1] = std::max(base[Stats::COUNT + (i*2) + 1], base[Stats::COUNT + (i*2)]);
 	}
 
 	// add absorb from equipment and increase to minimum amounts
-	base[Stats::ABS_MIN] += absorb_min_add;
-	base[Stats::ABS_MAX] += absorb_max_add;
-	base[Stats::ABS_MIN] = std::max(base[Stats::ABS_MIN], 0);
+	base[Stats::ABS_MIN] += item_base_abs.min;
+	base[Stats::ABS_MAX] += item_base_abs.max;
+	base[Stats::ABS_MIN] = std::max(base[Stats::ABS_MIN], 0.0f);
 	base[Stats::ABS_MAX] = std::max(base[Stats::ABS_MAX], base[Stats::ABS_MIN]);
 }
 
@@ -668,13 +984,17 @@ void StatBlock::calcBase() {
  * Recalc derived stats from base stats + effect bonuses
  */
 void StatBlock::applyEffects() {
-
 	// preserve hp/mp states
 	// max HP and MP can't drop below 1
-	prev_maxhp = std::max(get(Stats::HP_MAX), 1);
-	prev_maxmp = std::max(get(Stats::MP_MAX), 1);
+	prev_maxhp = std::max(get(Stats::HP_MAX), 1.0f);
+	prev_maxmp = std::max(get(Stats::MP_MAX), 1.0f);
 	prev_hp = hp;
 	prev_mp = mp;
+
+	for (size_t i = 0; i < resource_stats.size(); ++i) {
+		prev_max_resource_stats[i] = std::max(getResourceStat(i, EngineSettings::ResourceStats::STAT_BASE), 1.0f);
+		prev_resource_stats[i] = resource_stats[i];
+	}
 
 	// calculate primary stats
 	// refresh the character menu if there has been a change
@@ -687,23 +1007,25 @@ void StatBlock::applyEffects() {
 
 	calcBase();
 
-	for (size_t i=0; i<Stats::COUNT + eset->damage_types.count; i++) {
-		current[i] = base[i] + effects.bonus[i];
+	for (size_t i = 0; i < getFullStatCount(); ++i) {
+		current[i] = (base[i] + effects.bonus[i]) * effects.bonus_multiplier[i];
 	}
-
-	for (unsigned i=0; i<effects.bonus_resist.size(); i++) {
-		vulnerable[i] = vulnerable_base[i] - effects.bonus_resist[i];
-	}
-
-	current[Stats::HP_MAX] += (current[Stats::HP_MAX] * current[Stats::HP_PERCENT]) / 100;
-	current[Stats::MP_MAX] += (current[Stats::MP_MAX] * current[Stats::MP_PERCENT]) / 100;
 
 	// max HP and MP can't drop below 1
-	current[Stats::HP_MAX] = std::max(get(Stats::HP_MAX), 1);
-	current[Stats::MP_MAX] = std::max(get(Stats::MP_MAX), 1);
+	current[Stats::HP_MAX] = std::max(get(Stats::HP_MAX), 1.0f);
+	current[Stats::MP_MAX] = std::max(get(Stats::MP_MAX), 1.0f);
 
 	if (hp > get(Stats::HP_MAX)) hp = get(Stats::HP_MAX);
 	if (mp > get(Stats::MP_MAX)) mp = get(Stats::MP_MAX);
+
+	size_t resource_offset_index = Stats::COUNT + eset->damage_types.count + eset->elements.list.size();
+	for (size_t i = 0; i < resource_stats.size(); ++i) {
+		size_t current_index = resource_offset_index + (i * EngineSettings::ResourceStats::STAT_COUNT) + EngineSettings::ResourceStats::STAT_BASE;
+		current[current_index] = std::max(getResourceStat(i, EngineSettings::ResourceStats::STAT_BASE), 1.0f);
+		if (resource_stats[i] > current[current_index]) {
+			resource_stats[i] = current[current_index];
+		}
+	}
 
 	speed = speed_default;
 }
@@ -715,18 +1037,19 @@ void StatBlock::logic() {
 	alive = !(hp <= 0 && !effects.triggered_death && !effects.revive);
 
 	// handle party buffs
-	if (enemym && powers) {
+	if (entitym && powers) {
 		while (!party_buffs.empty()) {
-			int power_index = party_buffs.front();
+			PowerID power_index = party_buffs.front();
 			party_buffs.pop();
-			Power *buff_power = &powers->powers[power_index];
+			Power *buff_power = powers->powers[power_index];
 
-			for (size_t i=0; i < enemym->enemies.size(); ++i) {
-				if(enemym->enemies[i]->stats.hp > 0 &&
-				   ((enemym->enemies[i]->stats.hero_ally && hero) || (enemym->enemies[i]->stats.enemy_ally && enemym->enemies[i]->stats.summoner == this)) &&
-				   (buff_power->buff_party_power_id == 0 || buff_power->buff_party_power_id == enemym->enemies[i]->stats.summoned_power_index)
+			for (size_t i=0; i < entitym->entities.size(); ++i) {
+				Entity* party_member = entitym->entities[i];
+				if(party_member->stats.hp > 0 &&
+				   ((party_member->stats.hero_ally && hero) || (party_member->stats.enemy_ally && party_member->stats.summoner == this)) &&
+				   (buff_power->buff_party_power_id == 0 || buff_power->buff_party_power_id == party_member->stats.summoned_power_index)
 				) {
-					powers->effect(&enemym->enemies[i]->stats, this, power_index, (hero ? Power::SOURCE_TYPE_HERO : Power::SOURCE_TYPE_ENEMY));
+					powers->effect(&(party_member->stats), this, power_index, (hero ? Power::SOURCE_TYPE_HERO : Power::SOURCE_TYPE_ENEMY));
 				}
 			}
 		}
@@ -744,14 +1067,18 @@ void StatBlock::logic() {
 	}
 
 	// preserve ratio on maxmp and maxhp changes
-	float ratio;
 	if (prev_maxhp != get(Stats::HP_MAX)) {
-		ratio = static_cast<float>(prev_hp) / static_cast<float>(prev_maxhp);
-		hp = static_cast<int>(ratio * static_cast<float>(get(Stats::HP_MAX)));
+		hp = (prev_hp / prev_maxhp) * get(Stats::HP_MAX);
 	}
 	if (prev_maxmp != get(Stats::MP_MAX)) {
-		ratio = static_cast<float>(prev_mp) / static_cast<float>(prev_maxmp);
-		mp = static_cast<int>(ratio * static_cast<float>(get(Stats::MP_MAX)));
+		mp = (prev_mp / prev_maxmp) * get(Stats::MP_MAX);
+	}
+
+	for (size_t i = 0; i < resource_stats.size(); ++i) {
+		float resource_stat_max = getResourceStat(i, EngineSettings::ResourceStats::STAT_BASE);
+		if (prev_max_resource_stats[i] != resource_stat_max) {
+			resource_stats[i] = (prev_resource_stats[i] / prev_max_resource_stats[i]) * resource_stat_max;
+		}
 	}
 
 	// handle cooldowns
@@ -762,20 +1089,35 @@ void StatBlock::logic() {
 	}
 
 	// HP regen
-	if (get(Stats::HP_REGEN) > 0 && hp < get(Stats::HP_MAX) && hp > 0) {
-		hp_ticker++;
-		if (hp_ticker >= (60 * settings->max_frames_per_sec) / get(Stats::HP_REGEN)) {
-			hp++;
-			hp_ticker = 0;
+	if (hp <= get(Stats::HP_MAX) && hp > 0) {
+		float hp_regen_per_frame;
+		if (!in_combat && !hero_ally && !hero && pc->stats.alive) {
+			// enemies heal rapidly (full heal in 5 seconds) while not in combat
+			hp_regen_per_frame = get(Stats::HP_MAX) / 5.f / settings->max_frames_per_sec;
 		}
+		else {
+			hp_regen_per_frame = get(Stats::HP_REGEN) / 60.f / settings->max_frames_per_sec;
+		}
+		hp += hp_regen_per_frame;
+		hp = std::max(0.0f, std::min(hp, get(Stats::HP_MAX)));
 	}
 
 	// MP regen
-	if (get(Stats::MP_REGEN) > 0 && mp < get(Stats::MP_MAX) && hp > 0) {
-		mp_ticker++;
-		if (mp_ticker >= (60 * settings->max_frames_per_sec) / get(Stats::MP_REGEN)) {
-			mp++;
-			mp_ticker = 0;
+	if (mp <= get(Stats::MP_MAX) && hp > 0) {
+		float mp_regen_per_frame = get(Stats::MP_REGEN) / 60.f / settings->max_frames_per_sec;
+		mp += mp_regen_per_frame;
+		mp = std::max(0.0f, std::min(mp, get(Stats::MP_MAX)));
+	}
+
+	// resource stat regen
+	for (size_t i = 0; i < resource_stats.size(); ++i) {
+		float resource_stat_max = getResourceStat(i, EngineSettings::ResourceStats::STAT_BASE);
+		float resource_stat_regen = getResourceStat(i, EngineSettings::ResourceStats::STAT_REGEN);
+
+		if (resource_stats[i] <= resource_stat_max && hp > 0) {
+			float regen_per_frame = resource_stat_regen / 60.f / settings->max_frames_per_sec;
+			resource_stats[i] += regen_per_frame;
+			resource_stats[i] = std::max(0.0f, std::min(resource_stats[i], resource_stat_max));
 		}
 	}
 
@@ -785,17 +1127,20 @@ void StatBlock::logic() {
 
 	// apply bleed
 	if (effects.damage > 0 && hp > 0) {
-		takeDamage(effects.damage);
-		comb->addInt(effects.damage, pos, CombatText::MSG_TAKEDMG);
+		float damage = effects.damage;
+		damage = eset->combat.resourceRound(damage);
+		takeDamage(damage, !StatBlock::TAKE_DMG_CRIT, effects.getDamageSourceType(Effect::DAMAGE));
+		comb->addFloat(damage, pos, CombatText::MSG_TAKEDMG);
 	}
 	if (effects.damage_percent > 0 && hp > 0) {
-		int damage = (get(Stats::HP_MAX)*effects.damage_percent)/100;
-		takeDamage(damage);
-		comb->addInt(damage, pos, CombatText::MSG_TAKEDMG);
+		float damage = (get(Stats::HP_MAX) * effects.damage_percent) / 100;
+		damage = eset->combat.resourceRound(damage);
+		takeDamage(damage, !StatBlock::TAKE_DMG_CRIT, effects.getDamageSourceType(Effect::DAMAGE_PERCENT));
+		comb->addFloat(damage, pos, CombatText::MSG_TAKEDMG);
 	}
 
 	if(effects.death_sentence)
-		hp = 0;
+		takeDamage(get(Stats::HP_MAX), !StatBlock::TAKE_DMG_CRIT, Power::SOURCE_TYPE_NEUTRAL);
 
 	cooldown_hit.tick();
 
@@ -809,33 +1154,55 @@ void StatBlock::logic() {
 
 	// apply healing over time
 	if (effects.hpot > 0) {
-		comb->addString(msg->get("+%d HP",effects.hpot), pos, CombatText::MSG_BUFF);
-		hp += effects.hpot;
+		float hpot = effects.hpot;
+		hpot = eset->combat.resourceRound(hpot);
+		comb->addString(msg->getv("+%s HP", Utils::floatToString(hpot, eset->number_format.combat_text).c_str()), pos, CombatText::MSG_BUFF);
+		hp += hpot;
 		if (hp > get(Stats::HP_MAX)) hp = get(Stats::HP_MAX);
 	}
 	if (effects.hpot_percent > 0) {
-		int hpot = (get(Stats::HP_MAX)*effects.hpot_percent)/100;
-		comb->addString(msg->get("+%d HP",hpot), pos, CombatText::MSG_BUFF);
+		float hpot = (get(Stats::HP_MAX) * effects.hpot_percent) / 100;
+		hpot = eset->combat.resourceRound(hpot);
+		comb->addString(msg->getv("+%s HP", Utils::floatToString(hpot, eset->number_format.combat_text).c_str()), pos, CombatText::MSG_BUFF);
 		hp += hpot;
 		if (hp > get(Stats::HP_MAX)) hp = get(Stats::HP_MAX);
 	}
 	if (effects.mpot > 0) {
-		comb->addString(msg->get("+%d MP",effects.mpot), pos, CombatText::MSG_BUFF);
-		mp += effects.mpot;
-		if (mp > get(Stats::MP_MAX)) mp = get(Stats::MP_MAX);
-	}
-	if (effects.mpot_percent > 0) {
-		int mpot = (get(Stats::MP_MAX)*effects.mpot_percent)/100;
-		comb->addString(msg->get("+%d MP",mpot), pos, CombatText::MSG_BUFF);
+		float mpot = effects.mpot;
+		mpot = eset->combat.resourceRound(mpot);
+		comb->addString(msg->getv("+%s MP", Utils::floatToString(mpot, eset->number_format.combat_text).c_str()), pos, CombatText::MSG_BUFF);
 		mp += mpot;
 		if (mp > get(Stats::MP_MAX)) mp = get(Stats::MP_MAX);
 	}
+	if (effects.mpot_percent > 0) {
+		float mpot = (get(Stats::MP_MAX) * effects.mpot_percent) / 100;
+		mpot = eset->combat.resourceRound(mpot);
+		comb->addString(msg->getv("+%s MP", Utils::floatToString(mpot, eset->number_format.combat_text).c_str()), pos, CombatText::MSG_BUFF);
+		mp += mpot;
+		if (mp > get(Stats::MP_MAX)) mp = get(Stats::MP_MAX);
+	}
+	for (size_t i = 0; i < resource_stats.size(); ++i) {
+		if (effects.resource_ot[i] > 0) {
+			float resource_max = getResourceStat(i, EngineSettings::ResourceStats::STAT_BASE);
+			float resource_ot = effects.resource_ot[i];
+			resource_ot = eset->combat.resourceRound(resource_ot);
+			comb->addString("+" + Utils::floatToString(resource_ot, eset->number_format.combat_text) + " " + eset->resource_stats.list[i].text_combat_heal, pos, CombatText::MSG_BUFF);
+			resource_stats[i] += resource_ot;
 
-	// set movement type
-	// some creatures may shift between movement types
-	if (intangible) movement_type = MapCollision::MOVE_INTANGIBLE;
-	else if (flying) movement_type = MapCollision::MOVE_FLYING;
-	else movement_type = MapCollision::MOVE_NORMAL;
+			if (resource_stats[i] > resource_max)
+				resource_stats[i] = resource_max;
+		}
+		if (effects.resource_ot_percent[i] > 0) {
+			float resource_max = getResourceStat(i, EngineSettings::ResourceStats::STAT_BASE);
+			float resource_ot = (resource_max * effects.resource_ot_percent[i]) / 100;
+			resource_ot = eset->combat.resourceRound(resource_ot);
+			comb->addString("+" + Utils::floatToString(resource_ot, eset->number_format.combat_text) + " " + eset->resource_stats.list[i].text_combat_heal, pos, CombatText::MSG_BUFF);
+			resource_stats[i] += resource_ot;
+
+			if (resource_stats[i] > resource_max)
+				resource_stats[i] = resource_max;
+		}
+	}
 
 	if (hp == 0)
 		removeSummons();
@@ -850,23 +1217,13 @@ void StatBlock::logic() {
 		mapr->collider.block(pos.x, pos.y, hero_ally);
 	}
 	else if (charge_speed != 0.0f) {
-		float tmp_speed = charge_speed * speedMultiplyer[direction];
-		float dx = tmp_speed * static_cast<float>(directionDeltaX[direction]);
-		float dy = tmp_speed * static_cast<float>(directionDeltaY[direction]);
+		float tmp_speed = charge_speed * SPEED_MULTIPLIER[direction];
+		float dx = tmp_speed * DIRECTION_DELTA_X[direction];
+		float dy = tmp_speed * DIRECTION_DELTA_Y[direction];
 
 		mapr->collider.unblock(pos.x, pos.y);
 		mapr->collider.move(pos.x, pos.y, dx, dy, movement_type, mapr->collider.getCollideType(hero));
 		mapr->collider.block(pos.x, pos.y, hero_ally);
-	}
-
-
-	// enemies heal rapidly while not in combat
-	if (!in_combat && !hero_ally && !hero) {
-		if (alive && pc->stats.alive) {
-			hp++;
-			if (hp > get(Stats::HP_MAX))
-				hp = get(Stats::HP_MAX);
-		}
 	}
 
 	waypoint_timer.tick();
@@ -876,35 +1233,24 @@ void StatBlock::logic() {
 		hp = get(Stats::HP_MAX);
 		alive = true;
 		corpse = false;
-		if (hero)
-			cur_state = AVATAR_STANCE;
-		else
-			cur_state = ENEMY_STANCE;
+		cur_state = ENTITY_STANCE;
 	}
 
-	// check for bleeding to death
-	if (hp <= 0 && !hero && cur_state != ENEMY_DEAD && cur_state != ENEMY_CRITDEAD) {
-		for (size_t i = 0; i < effects.effect_list.size(); ++i) {
-			if (effects.effect_list[i].type == Effect::DAMAGE || effects.effect_list[i].type == Effect::DAMAGE_PERCENT) {
-				bleed_source_type = effects.effect_list[i].source_type;
-				break;
-			}
+	// non-hero entities can have their disposition reversed
+	if (!hero && effects.convert != converted) {
+		converted = !converted;
+		hero_ally = !hero_ally;
+		if (convert_status != 0) {
+			camp->setStatus(convert_status);
 		}
-		effects.triggered_death = true;
-		cur_state = ENEMY_DEAD;
-	}
-	else if (hp <= 0 && hero && cur_state != AVATAR_DEAD) {
-		effects.triggered_death = true;
-		cur_state = AVATAR_DEAD;
 	}
 }
 
-StatBlock::~StatBlock() {
-	removeFromSummons();
-}
+bool StatBlock::canUsePower(PowerID powerid, bool allow_passive) const {
+	if (!powers->isValid(powerid))
+		return false;
 
-bool StatBlock::canUsePower(int powerid, bool allow_passive) const {
-	const Power& power = powers->powers[powerid];
+	const Power* power = powers->powers[powerid];
 
 	if (!alive) {
 		// can't use powers when dead
@@ -916,26 +1262,22 @@ bool StatBlock::canUsePower(int powerid, bool allow_passive) const {
 	}
 	else if (transformed) {
 		// needed to unlock shapeshifter powers
-		return mp >= power.requires_mp;
+		return mp >= power->requires_mp;
 	}
 	else {
 		return (
-			mp >= power.requires_mp
-			&& (!power.passive || allow_passive)
-			&& !power.meta_power
-			&& (!effects.stun || (allow_passive && power.passive))
-			&& (power.sacrifice || hp > power.requires_hp)
-			&& (power.requires_max_hp == -1 || (power.requires_max_hp >= 0 && hp >= (current[Stats::HP_MAX] * power.requires_max_hp) / 100))
-			&& (power.requires_not_max_hp == -1 || (power.requires_not_max_hp >= 0 && hp < (current[Stats::HP_MAX] * power.requires_not_max_hp) / 100))
-			&& (power.requires_max_mp  == -1 || (power.requires_max_mp >= 0 && mp >= (current[Stats::MP_MAX] * power.requires_max_mp) / 100))
-			&& (power.requires_not_max_mp == -1 || (power.requires_not_max_mp >= 0 && mp < (current[Stats::MP_MAX]) * power.requires_not_max_mp / 100))
-			&& (!power.requires_corpse || (target_corpse && !target_corpse->corpse_timer.isEnd()) || (target_nearest_corpse && powers->checkNearestTargeting(power, this, true) && !target_nearest_corpse->corpse_timer.isEnd()))
-			&& (checkRequiredSpawns(power.requires_spawns))
+			powers->checkPowerCost(power, this)
+			&& (!power->passive || allow_passive)
+			&& !power->meta_power
+			&& (!effects.stun || (allow_passive && power->passive))
+			&& powers->checkRequiredResourceState(power, this)
+			&& (!power->requires_corpse || (target_corpse && !target_corpse->corpse_timer.isEnd()) || (target_nearest_corpse && powers->checkNearestTargeting(power, this, true) && !target_nearest_corpse->corpse_timer.isEnd()))
+			&& (checkRequiredSpawns(power->requires_spawns))
 			&& (menu_powers && menu_powers->meetsUsageStats(powerid))
-			&& (power.type == Power::TYPE_SPAWN ? !summonLimitReached(powerid) : true)
-			&& !(power.spawn_type == "untransform" && !transformed)
-			&& std::includes(equip_flags.begin(), equip_flags.end(), power.requires_flags.begin(), power.requires_flags.end())
-			&& (!power.buff_party || (power.buff_party && enemym && enemym->checkPartyMembers()))
+			&& (power->type == Power::TYPE_SPAWN ? !summonLimitReached(powerid) : true)
+			&& !(power->spawn_type == "untransform" && !transformed)
+			&& std::includes(equip_flags.begin(), equip_flags.end(), power->requires_flags.begin(), power->requires_flags.end())
+			&& (!power->buff_party || (power->buff_party && entitym && entitym->checkPartyMembers()))
 			&& powers->checkRequiredItems(power, this)
 		);
 	}
@@ -953,7 +1295,7 @@ void StatBlock::loadHeroStats() {
 		while (infile.next()) {
 			int value = Parse::toInt(infile.val);
 
-			bool valid = loadCoreStat(&infile);
+			bool valid = loadCoreStat(&infile) || loadRenderLayerStat(&infile);
 
 			if (infile.key == "max_points_per_stat") {
 				// @ATTR max_points_per_stat|int|Maximum points for each primary stat.
@@ -1000,13 +1342,7 @@ void StatBlock::loadHeroSFX() {
  */
 void StatBlock::removeSummons() {
 	for (std::vector<StatBlock*>::iterator it = summons.begin(); it != summons.end(); ++it) {
-		(*it)->hp = 0;
-		(*it)->effects.triggered_death = true;
-		(*it)->effects.clearEffects();
-		if (!(*it)->hero && !(*it)->corpse) {
-			(*it)->cur_state = ENEMY_DEAD;
-			(*it)->corpse_timer.reset(Timer::BEGIN);
-		}
+		(*it)->takeDamage((*it)->get(Stats::HP_MAX), !StatBlock::TAKE_DMG_CRIT, Power::SOURCE_TYPE_NEUTRAL);
 		(*it)->removeSummons();
 		(*it)->summoner = NULL;
 	}
@@ -1028,16 +1364,19 @@ void StatBlock::removeFromSummons() {
 	removeSummons();
 }
 
-bool StatBlock::summonLimitReached(int power_id) const {
+bool StatBlock::summonLimitReached(PowerID power_id) const {
+	if (!powers->isValid(power_id))
+		return true;
 
 	//find the limit
-	Power *spawn_power = &powers->powers[power_id];
+	Power *spawn_power = powers->powers[power_id];
 
 	int max_summons = 0;
 
-	if(spawn_power->spawn_limit_mode == Power::SPAWN_LIMIT_MODE_FIXED)
-		max_summons = spawn_power->spawn_limit_qty;
-	else if(spawn_power->spawn_limit_mode == Power::SPAWN_LIMIT_MODE_STAT) {
+	if (spawn_power->spawn_limit_mode == Power::SPAWN_LIMIT_MODE_FIXED) {
+		max_summons = static_cast<int>(spawn_power->spawn_limit_count);
+	}
+	else if (spawn_power->spawn_limit_mode == Power::SPAWN_LIMIT_MODE_STAT) {
 		int stat_val = 1;
 		for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 			if (spawn_power->spawn_limit_stat == i) {
@@ -1045,23 +1384,22 @@ bool StatBlock::summonLimitReached(int power_id) const {
 				break;
 			}
 		}
-		max_summons = (stat_val / (spawn_power->spawn_limit_every == 0 ? 1 : spawn_power->spawn_limit_every)) * spawn_power->spawn_limit_qty;
+		max_summons = static_cast<int>(spawn_power->spawn_limit_count * (static_cast<float>(stat_val) / spawn_power->spawn_limit_ratio));
 	}
-	else
-		return false;//unlimited or unknown mode
+	else {
+		// unlimited or unknown mode
+		return false;
+	}
 
 	//if the power is available, there should be at least 1 allowed summon
-	if(max_summons < 1) max_summons = 1;
+	max_summons = std::max(max_summons, 1);
 
 
 	//find out how many there are currently
 	int qty_summons = 0;
 
 	for (unsigned int i=0; i < summons.size(); i++) {
-		if(!summons[i]->corpse && summons[i]->summoned_power_index == power_id
-				&& summons[i]->cur_state != ENEMY_SPAWN
-				&& summons[i]->cur_state != ENEMY_DEAD
-				&& summons[i]->cur_state != ENEMY_CRITDEAD) {
+		if (summons[i]->summoned_power_index == power_id && summons[i]->cur_state != ENTITY_DEAD && summons[i]->cur_state != ENTITY_CRITDEAD) {
 			qty_summons++;
 		}
 	}
@@ -1119,12 +1457,12 @@ StatBlock::AIPower* StatBlock::getAIPower(int ai_type) {
 		if (!powers_ai[i].cooldown.isEnd())
 			continue;
 
-		if (powers->powers[powers_ai[i].id].type == Power::TYPE_SPAWN) {
+		if (powers->powers[powers_ai[i].id]->type == Power::TYPE_SPAWN) {
 			if (summonLimitReached(powers_ai[i].id))
 				continue;
 		}
 
-		if (!checkRequiredSpawns(powers->powers[powers_ai[i].id].requires_spawns))
+		if (!checkRequiredSpawns(powers->powers[powers_ai[i].id]->requires_spawns))
 			continue;
 
 		possible_ids.push_back(i);
@@ -1155,9 +1493,9 @@ bool StatBlock::checkRequiredSpawns(int req_amount) const {
 	return true;
 }
 
-int StatBlock::getPowerCooldown(int power_id) {
+int StatBlock::getPowerCooldown(PowerID power_id) {
 	if (hero) {
-		return pc->power_cooldown_timers[power_id].getDuration();
+		return pc->power_cooldown_timers[power_id]->getDuration();
 	}
 	else {
 		for (size_t i = 0; i < powers_ai.size(); ++i) {
@@ -1169,9 +1507,9 @@ int StatBlock::getPowerCooldown(int power_id) {
 	return 0;
 }
 
-void StatBlock::setPowerCooldown(int power_id, int power_cooldown) {
+void StatBlock::setPowerCooldown(PowerID power_id, int power_cooldown) {
 	if (hero) {
-		pc->power_cooldown_timers[power_id].setDuration(power_cooldown);
+		pc->power_cooldown_timers[power_id]->setDuration(power_cooldown);
 	}
 	else {
 		for (size_t i = 0; i < powers_ai.size(); ++i) {
@@ -1182,3 +1520,13 @@ void StatBlock::setPowerCooldown(int power_id, int power_cooldown) {
 		}
 	}
 }
+
+float StatBlock::getResist(size_t resist_type) const {
+	return current[Stats::COUNT + eset->damage_types.count + resist_type];
+}
+
+float StatBlock::getResourceStat(size_t resource_index, size_t field_offset) const {
+	size_t offset_index = Stats::COUNT + eset->damage_types.count + eset->elements.list.size();
+	return current[offset_index + (resource_index*4) + field_offset];
+}
+

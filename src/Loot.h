@@ -24,6 +24,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "ItemManager.h"
 #include "TooltipData.h"
 
+class WidgetTooltip;
+
 class Loot {
 private:
 	std::string gfx;
@@ -33,7 +35,7 @@ public:
 	FPoint pos;
 	Animation *animation;
 	TooltipData tip;
-	Rect tip_bounds;
+	WidgetTooltip *wtip;
 	bool tip_visible;
 	bool dropped_by_hero;
 	bool on_ground;

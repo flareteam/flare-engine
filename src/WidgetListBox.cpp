@@ -41,7 +41,7 @@ WidgetListBox::WidgetListBox(int height, const std::string& _fileName)
 	, cursor(0)
 	, has_scroll_bar(false)
 	, any_selected(false)
-	, vlabels(std::vector<WidgetLabel>(height,WidgetLabel()))
+	, show_tooltip_for_selected(false)
 	, rows(std::vector<Rect>(height,Rect()))
 	, scrollbar(new WidgetScrollBar(WidgetScrollBar::DEFAULT_FILE))
 	, pos_scroll()
@@ -89,7 +89,19 @@ bool WidgetListBox::checkClickAt(int x, int y) {
 
 	refresh();
 
-	checkTooltip(mouse);
+	if (inpt->usingMouse()) {
+		checkTooltip(mouse);
+	}
+	else if (!inpt->usingMouse() && show_tooltip_for_selected) {
+		int sel = getSelected();
+		if (sel != -1) {
+			int row = sel-cursor;
+			Point tip_pos;
+			tip_pos.x = rows[row].x + rows[row].w/2;
+			tip_pos.y = rows[row].y + rows[row].h/2;
+			checkTooltip(tip_pos);
+		}
+	}
 
 	// check scroll wheel
 	Rect scroll_area;
@@ -110,13 +122,13 @@ bool WidgetListBox::checkClickAt(int x, int y) {
 	// check ScrollBar clicks
 	if (has_scroll_bar) {
 		switch (scrollbar->checkClickAt(mouse.x,mouse.y)) {
-			case 1:
+			case WidgetScrollBar::CLICK_UP:
 				scrollUp();
 				break;
-			case 2:
+			case WidgetScrollBar::CLICK_DOWN:
 				scrollDown();
 				break;
-			case 3:
+			case WidgetScrollBar::CLICK_KNOB:
 				cursor = scrollbar->getValue();
 				refresh();
 				break;
@@ -125,26 +137,22 @@ bool WidgetListBox::checkClickAt(int x, int y) {
 		}
 	}
 
-	// main ListBox already in use, new click not allowed
-	if (inpt->lock[Input::MAIN1]) return false;
-
-	// main click released, so the ListBox state goes back to unpressed
-	if (pressed && !inpt->lock[Input::MAIN1] && can_select) {
-		pressed = false;
-
-		for(unsigned i=0; i<rows.size(); i++) {
-			if (i<items.size()) {
-				if (Utils::isWithinRect(rows[i], mouse) && items[i+cursor].value != "") {
+	if (inpt->usingMouse()) {
+		if (can_select && inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1]) {
+			for (size_t i=0; i<rows.size(); i++) {
+				if (Utils::isWithinRect(rows[i], mouse) && i+cursor < items.size() && !items[i+cursor].value.empty()) {
+					inpt->lock[Input::MAIN1] = true;
 					// deselect other options if multi-select is disabled
 					if (!multi_select) {
 						for (unsigned j=0; j<items.size(); j++) {
-							if (j!=i+cursor)
+							if (j != i+cursor)
 								items[j].selected = false;
 						}
 					}
-					// activate upon release
+					// toggle selection
 					if (items[i+cursor].selected) {
-						if (can_deselect) items[i+cursor].selected = false;
+						if (can_deselect)
+							items[i+cursor].selected = false;
 					}
 					else {
 						items[i+cursor].selected = true;
@@ -156,34 +164,16 @@ bool WidgetListBox::checkClickAt(int x, int y) {
 		}
 	}
 
-	pressed = false;
-
-	// detect new click
-	if (inpt->pressing[Input::MAIN1]) {
-		for (unsigned i=0; i<rows.size(); i++) {
-			if (Utils::isWithinRect(rows[i], mouse)) {
-
-				inpt->lock[Input::MAIN1] = true;
-				pressed = true;
-
-			}
-		}
-	}
 	return false;
 
 }
 
 void WidgetListBox::checkTooltip(const Point& mouse) {
-	if (!inpt->usingMouse())
-		return;
-
 	TooltipData tip_data;
-	for(unsigned i=0; i<rows.size(); i++) {
-		if (i<items.size()) {
-			if (Utils::isWithinRect(rows[i], mouse) && items[i+cursor].tooltip != "") {
-				tip_data.addText(items[i+cursor].tooltip);
-				break;
-			}
+	for (size_t i=0; i<rows.size(); i++) {
+		if (Utils::isWithinRect(rows[i], mouse) && i+cursor < items.size() && !items[i+cursor].tooltip.empty()) {
+			tip_data.addText(items[i+cursor].tooltip);
+			break;
 		}
 	}
 
@@ -361,10 +351,10 @@ void WidgetListBox::render() {
 			render_device->render(listboxs);
 		}
 
-		if (i<items.size()) {
-			vlabels[i].local_frame = local_frame;
-			vlabels[i].local_offset = local_offset;
-			vlabels[i].render();
+		if (i+cursor < items.size()) {
+			items[i+cursor].label.local_frame = local_frame;
+			items[i+cursor].label.local_offset = local_offset;
+			items[i+cursor].label.render();
 		}
 	}
 
@@ -372,10 +362,12 @@ void WidgetListBox::render() {
 		Point topLeft;
 		Point bottomRight;
 
-		topLeft.x = rows[0].x + local_frame.x - local_offset.x;
-		topLeft.y = rows[0].y + local_frame.y - local_offset.y;
-		bottomRight.x = rows[rows.size() - 1].x + rows[0].w + local_frame.x - local_offset.x;
-		bottomRight.y = rows[rows.size() - 1].y + rows[0].h + local_frame.y - local_offset.y;
+		if (!rows.empty()) {
+			topLeft.x = rows[0].x + local_frame.x - local_offset.x;
+			topLeft.y = rows[0].y + local_frame.y - local_offset.y;
+			bottomRight.x = rows[rows.size() - 1].x + pos.w + local_frame.x - local_offset.x;
+			bottomRight.y = rows[rows.size() - 1].y + pos.h + local_frame.y - local_offset.y;
+		}
 
 		// Only draw rectangle if it fits in local frame
 		bool draw = true;
@@ -388,7 +380,7 @@ void WidgetListBox::render() {
 			draw = false;
 		}
 		if (draw) {
-			render_device->drawRectangle(topLeft, bottomRight, eset->widgets.selection_rect_color);
+			render_device->drawRectangleCorners(eset->widgets.selection_rect_corner_size, topLeft, bottomRight, eset->widgets.selection_rect_color);
 		}
 	}
 
@@ -399,37 +391,42 @@ void WidgetListBox::render() {
 	}
 }
 
-void WidgetListBox::jumpToSelected() {
-	int index = getSelected();
-	int index_offset = static_cast<int>(rows.size() / 2) - 1;
-	int max_index = static_cast<int>(items.size() - rows.size());
-
-	cursor = std::max(0, max_index - std::max(0, max_index + index_offset - index));
-
-	refresh();
-}
-
 /**
  * Create the text buffer
  * Also, toggle the scrollbar based on the size of the list
  */
 void WidgetListBox::refresh() {
-	std::string temp;
 	int right_margin = 0;
+	int padding = font->getFontHeight();
 
 	// Update the scrollbar
 	if (items.size() > rows.size()) {
 		has_scroll_bar = true;
-		pos_scroll.x = pos.x+pos.w-scrollbar->pos_up.w-scrollbar_offset;
-		pos_scroll.y = pos.y+scrollbar_offset;
-		pos_scroll.w = scrollbar->pos_up.w;
-		pos_scroll.h = (pos.h*static_cast<int>(rows.size()))-scrollbar->pos_down.h-(scrollbar_offset*2);
+
+		pos_scroll.w = scrollbar->getBounds().w;
+		pos_scroll.h = (pos.h * static_cast<int>(rows.size())) - (scrollbar_offset*2);
+
+		pos_scroll.x = pos.x + pos.w - pos_scroll.w - scrollbar_offset;
+		pos_scroll.y = pos.y + scrollbar_offset;
+
 		scrollbar->refresh(pos_scroll.x, pos_scroll.y, pos_scroll.h, cursor, static_cast<int>(items.size()-rows.size()));
-		right_margin = scrollbar->pos_knob.w + eset->widgets.listbox_text_margin.y;
+
+		right_margin = pos_scroll.w + eset->widgets.listbox_text_margin.y;
 	}
 	else {
 		has_scroll_bar = false;
 		right_margin = eset->widgets.listbox_text_margin.y;
+	}
+
+	// cache all item text
+	for (size_t i = 0; i < items.size(); ++i) {
+		items[i].label.setVAlign(LabelInfo::VALIGN_CENTER);
+		if (disable_text_trim)
+			items[i].label.setText(items[i].value);
+		else
+			items[i].label.setText(font->trimTextToWidth(items[i].value, pos.w-right_margin-padding, FontEngine::USE_ELLIPSIS, 0));
+
+		items[i].label.setHidden(i < static_cast<size_t>(cursor) || i >= static_cast<size_t>(cursor) + rows.size());
 	}
 
 	// Update each row's hitbox and label
@@ -444,66 +441,81 @@ void WidgetListBox::refresh() {
 		}
 		rows[i].h = pos.h;
 
-		int padding = font->getFontHeight();
 
 		if (i+cursor < items.size()) {
-			if (disable_text_trim)
-				temp = items[i+cursor].value;
-			else
-				temp = font->trimTextToWidth(items[i+cursor].value, pos.w-right_margin-padding, FontEngine::USE_ELLIPSIS, 0);
-		}
-
-		vlabels[i].setPos(rows[i].x + eset->widgets.listbox_text_margin.x, rows[i].y + (rows[i].h/2));
-		vlabels[i].setVAlign(LabelInfo::VALIGN_CENTER);
-		vlabels[i].setText(temp);
-
-		if(i+cursor < items.size() && items[i+cursor].selected) {
-			vlabels[i].setColor(font->getColor(FontEngine::COLOR_WIDGET_NORMAL));
-		}
-		else if (i < items.size()) {
-			vlabels[i].setColor(font->getColor(FontEngine::COLOR_WIDGET_DISABLED));
+			items[i+cursor].label.setPos(rows[i].x + eset->widgets.listbox_text_margin.x, rows[i].y + (rows[i].h/2));
+			if (items[i+cursor].selected) {
+				items[i+cursor].label.setColor(font->getColor(FontEngine::COLOR_WIDGET_NORMAL));
+			}
+			else {
+				items[i+cursor].label.setColor(font->getColor(FontEngine::COLOR_WIDGET_DISABLED));
+			}
 		}
 	}
 
 }
 
 bool WidgetListBox::getNext() {
-	if (items.size() < 1) return false;
+	if (can_select) {
+		if (items.size() < 1)
+			return false;
 
-	int sel = getSelected();
-	if (sel != -1)
-		items[sel].selected = false;
-	else
-		sel = cursor-1;
+		int sel = getSelected();
+		if (sel == -1)
+			sel = cursor-1;
 
-	if(sel == static_cast<int>(items.size())-1) {
-		items[0].selected = true;
-		while (getSelected() < cursor) scrollUp();
+		for (size_t i = 0; i < items.size(); ++i) {
+			items[i].selected = false;
+		}
+
+		if(sel == static_cast<int>(items.size())-1) {
+			items[0].selected = true;
+			while (getSelected() < cursor) {
+				scrollUp();
+			}
+		}
+		else {
+			items[sel+1].selected = true;
+			while (getSelected() > cursor + static_cast<int>(rows.size()) - 1) {
+				scrollDown();
+			}
+		}
 	}
 	else {
-		items[sel+1].selected = true;
-		while (getSelected() > cursor + static_cast<int>(rows.size()) - 1) scrollDown();
+		scrollDown();
 	}
 
 	return true;
 }
 
 bool WidgetListBox::getPrev() {
-	if (items.size() < 1) return false;
+	if (can_select) {
+		if (items.size() < 1)
+			return false;
 
-	int sel = getSelected();
-	if (sel != -1)
-		items[sel].selected = false;
-	else
-		sel = cursor;
+		int sel = getSelected();
+		if (sel == -1)
+			sel = cursor;
 
-	if(sel == 0) {
-		items[items.size()-1].selected = true;
-		while (getSelected() > cursor + static_cast<int>(rows.size()) - 1) scrollDown();
+		for (size_t i = 0; i < items.size(); ++i) {
+			items[i].selected = false;
+		}
+
+		if(sel == 0) {
+			items[items.size()-1].selected = true;
+			while (getSelected() > cursor + static_cast<int>(rows.size()) - 1) {
+				scrollDown();
+			}
+		}
+		else {
+			items[sel-1].selected = true;
+			while (getSelected() < cursor) {
+				scrollUp();
+			}
+		}
 	}
 	else {
-		items[sel-1].selected = true;
-		while (getSelected() < cursor) scrollUp();
+		scrollUp();
 	}
 
 	return true;
@@ -519,6 +531,12 @@ void WidgetListBox::defocus() {
 
 }
 
+void WidgetListBox::activate() {
+	if (!inpt->usingMouse()) {
+		show_tooltip_for_selected = !show_tooltip_for_selected;
+	}
+}
+
 void WidgetListBox::select(int index) {
 	if (items.empty())
 		return;
@@ -528,13 +546,6 @@ void WidgetListBox::select(int index) {
 		items[sel].selected = false;
 	}
 	items[index].selected = true;
-}
-
-void WidgetListBox::deselect(int index) {
-	if (items.empty())
-		return;
-
-	items[index].selected = false;
 }
 
 bool WidgetListBox::isSelected(int index) {
@@ -551,10 +562,8 @@ void WidgetListBox::setHeight(int new_size) {
 	if (new_size < 2)
 		new_size = 2;
 
-	vlabels.clear();
 	rows.clear();
 
-	vlabels.resize(static_cast<size_t>(new_size));
 	rows.resize(static_cast<size_t>(new_size));
 
 	refresh();

@@ -28,6 +28,7 @@ FileParser::FileParser()
 	: current_index(0)
 	, is_mod_file(false)
 	, error_mode(ERROR_NORMAL)
+	, requested_filename("")
 	, line("")
 	, line_number(0)
 	, include_fp(NULL)
@@ -40,13 +41,14 @@ FileParser::FileParser()
 bool FileParser::open(const std::string& _filename, bool _is_mod_file, int _error_mode) {
 	is_mod_file = _is_mod_file;
 	error_mode = _error_mode;
+	requested_filename = _filename;
 
 	filenames.clear();
 	if (is_mod_file) {
-		filenames = mods->list(_filename, ModManager::LIST_FULL_PATHS);
+		filenames = mods->list(Filesystem::convertSlashes(_filename), ModManager::LIST_FULL_PATHS);
 	}
 	else {
-		filenames.push_back(_filename);
+		filenames.push_back(Filesystem::convertSlashes(_filename));
 	}
 	current_index = 0;
 	line_number = 0;
@@ -72,9 +74,10 @@ bool FileParser::open(const std::string& _filename, bool _is_mod_file, int _erro
 				// get the first non-comment, non blank line
 				while (infile.good()) {
 					test_line = Parse::trim(Parse::getLine(infile));
-					if (test_line.length() == 0) continue;
-					else if (test_line.at(0) == '#') continue;
-					else break;
+					if (Parse::skipLine(test_line))
+						continue;
+					else
+						break;
 				}
 
 				if (test_line != "APPEND") {
@@ -145,13 +148,10 @@ bool FileParser::next() {
 			line = Parse::trim(Parse::getLine(infile));
 			line_number++;
 
-			// skip ahead if this line is empty
-			if (line.length() == 0) continue;
+			if (Parse::skipLine(line))
+				continue;
 
 			starts_with = line.at(0);
-
-			// skip ahead if this line is a comment
-			if (starts_with == "#") continue;
 
 			// set new section if this line is a section declaration
 			if (starts_with == "[") {
@@ -174,14 +174,21 @@ bool FileParser::next() {
 				if (directive == "INCLUDE") {
 					std::string tmp = line.substr(first_space+1);
 
-					include_fp = new FileParser();
-					if (!include_fp || !include_fp->open(tmp, is_mod_file, error_mode)) {
-						delete include_fp;
-						include_fp = NULL;
-					}
+					if (requested_filename != tmp) {
+						include_fp = new FileParser();
+						if (!include_fp || !include_fp->open(tmp, is_mod_file, error_mode)) {
+							delete include_fp;
+							include_fp = NULL;
+						}
 
-					// INCLUDE file will inherit the current section
-					include_fp->section = section;
+						if (include_fp) {
+							// INCLUDE file will inherit the current section
+							include_fp->section = section;
+						}
+					}
+					else {
+						error("FileParser: Recursive INCLUDE detected. Did you mean to use APPEND?");
+					}
 
 					continue;
 				}
@@ -232,7 +239,7 @@ void FileParser::error(const char* format, ...) {
 	va_list args;
 
 	va_start(args, format);
-	vsprintf(buffer, format, args);
+	vsnprintf(buffer, 4096, format, args);
 	va_end(args);
 
 	errorBuf(buffer);

@@ -20,21 +20,27 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 #include "Avatar.h"
+#include "Camera.h"
 #include "CampaignManager.h"
 #include "CombatText.h"
 #include "CommonIncludes.h"
 #include "CursorManager.h"
-#include "Enemy.h"
 #include "EnemyGroupManager.h"
-#include "EnemyManager.h"
+#include "Entity.h"
+#include "EntityBehavior.h"
+#include "EntityManager.h"
 #include "EngineSettings.h"
 #include "EventManager.h"
+#include "FogOfWar.h"
+#include "FontEngine.h"
 #include "Hazard.h"
 #include "HazardManager.h"
 #include "InputState.h"
 #include "MapRenderer.h"
 #include "MenuDevConsole.h"
 #include "MenuManager.h"
+#include "NPC.h"
+#include "NPCManager.h"
 #include "PowerManager.h"
 #include "RenderDevice.h"
 #include "Settings.h"
@@ -43,6 +49,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SoundManager.h"
 #include "StatBlock.h"
 #include "TooltipManager.h"
+#include "Utils.h"
 #include "UtilsFileSystem.h"
 #include "UtilsMath.h"
 #include "WidgetTooltip.h"
@@ -56,7 +63,6 @@ MapRenderer::MapRenderer()
 	, tip(new WidgetTooltip())
 	, tip_pos()
 	, show_tooltip(false)
-	, shakycam()
 	, entity_hidden_normal(NULL)
 	, entity_hidden_enemy(NULL)
 	, cam()
@@ -66,7 +72,6 @@ MapRenderer::MapRenderer()
 	, respawn_point()
 	, cutscene(false)
 	, cutscene_file("")
-	, shaky_cam_timer()
 	, stash(false)
 	, stash_pos()
 	, enemies_cleared(false)
@@ -74,6 +79,7 @@ MapRenderer::MapRenderer()
 	, npc_id(-1)
 	, show_book("")
 	, index_objectlayer(0)
+	, is_spawn_map(false)
 {
 	// Load entity markers
 	Image *gfx = render_device->loadImage("images/menus/entity_hidden.png", RenderDevice::ERROR_NORMAL);
@@ -96,23 +102,23 @@ void MapRenderer::clearQueues() {
 	loot.clear();
 }
 
-bool MapRenderer::enemyGroupPlaceEnemy(float x, float y, Map_Group &g) {
-	if (collider.isEmpty(x, y)) {
+bool MapRenderer::enemyGroupPlaceEnemy(float x, float y, const Map_Group &g) {
+	if (collider.isValidPosition(x, y, MapCollision::MOVE_NORMAL, MapCollision::ENTITY_COLLIDE_NONE)) {
 		Enemy_Level enemy_lev = enemyg->getRandomEnemy(g.category, g.levelmin, g.levelmax);
 		if (!enemy_lev.type.empty()) {
 			Map_Enemy group_member = Map_Enemy(enemy_lev.type, FPoint(x, y));
 
 			group_member.direction = (g.direction == -1 ? rand()%8 : g.direction);
 			group_member.wander_radius = g.wander_radius;
-			group_member.requires_status = g.requires_status;
-			group_member.requires_not_status = g.requires_not_status;
-			group_member.invincible_requires_status = g.invincible_requires_status;
-			group_member.invincible_requires_not_status = g.invincible_requires_not_status;
+			group_member.requirements = g.requirements;
+			group_member.invincible_requirements = g.invincible_requirements;
 
 			if (g.area.x == 1 && g.area.y == 1) {
 				// this is a single enemy
 				group_member.waypoints = g.waypoints;
 			}
+
+			group_member.spawn_level = g.spawn_level;
 
 			enemies.push(group_member);
 		}
@@ -123,8 +129,7 @@ bool MapRenderer::enemyGroupPlaceEnemy(float x, float y, Map_Group &g) {
 
 void MapRenderer::pushEnemyGroup(Map_Group &g) {
 	// activate at all?
-	float activate_chance = static_cast<float>(rand() % 100) / 100.0f;
-	if (activate_chance > g.chance) {
+	if (!Math::percentChanceF(g.chance)) {
 		return;
 	}
 
@@ -196,10 +201,7 @@ int MapRenderer::load(const std::string& fname) {
 	comb->clear();
 
 	show_tooltip = false;
-
-	parallax_filename = "";
-
-	background_color = Color(0,0,0,0);
+	is_spawn_map = (fname == "maps/spawn.txt");
 
 	Map::load(fname);
 
@@ -220,6 +222,14 @@ int MapRenderer::load(const std::string& fname) {
 	for (unsigned i = 0; i < layers.size(); ++i)
 		if (layernames[i] == "object")
 			index_objectlayer = i;
+	if (fogofwar) {
+		for (unsigned short i = 0; i < layers.size(); ++i) {
+			if (layernames[i] == "fow_dark")
+				fow->dark_layer_id = i;
+			if (layernames[i] == "fow_fog")
+				fow->fog_layer_id = i;
+		}
+	}
 
 	while (!enemy_groups.empty()) {
 		pushEnemyGroup(enemy_groups.front());
@@ -233,7 +243,17 @@ int MapRenderer::load(const std::string& fname) {
 		for (unsigned x = 0; x < layers[i].size(); ++x) {
 			for (unsigned y = 0; y < layers[i][x].size(); ++y) {
 				const unsigned tile_id = layers[i][x][y];
-				if (tile_id > 0 && (tile_id >= tset.tiles.size() || tset.tiles[tile_id].tile == NULL)) {
+				TileSet* tile_set = &tset;
+
+				if (fogofwar == FogOfWar::TYPE_OVERLAY) {
+					if (i == fow->dark_layer_id) tile_set = &fow->tset_dark;
+					if (i == fow->fog_layer_id) tile_set = &fow->tset_fog;
+			    }
+			    if (fogofwar)
+					if (i == fow->dark_layer_id || i == fow->fog_layer_id)
+						continue;
+
+				if (tile_id > 0 && (tile_id >= tile_set->tiles.size() || tile_set->tiles[tile_id].tile == NULL)) {
 					if (std::find(corrupted.begin(), corrupted.end(), tile_id) == corrupted.end()) {
 						corrupted.push_back(tile_id);
 					}
@@ -251,8 +271,7 @@ int MapRenderer::load(const std::string& fname) {
 		}
 	}
 
-	map_parallax.load(parallax_filename);
-	map_parallax.setMapCenter(w/2, h/2);
+	setMapParallax(parallax_filename);
 
 	render_device->setBackgroundColor(background_color);
 
@@ -272,31 +291,27 @@ void MapRenderer::loadMusic() {
 }
 
 void MapRenderer::logic(bool paused) {
+	if (fogofwar) {
+		fow->logic();
+	}
 
 	// handle tile set logic e.g. animations
 	tset.logic();
+	if (fogofwar == FogOfWar::TYPE_OVERLAY) {
+		fow->tset_dark.logic();
+		fow->tset_fog.logic();
+	}
 
 	// TODO there's a bit too much "logic" here for a class that's supposed to be dedicated to rendering
 	// some of these timers should be moved out at some point
 	if (paused)
 		return;
 
-	// handle camera shaking timer
-	shaky_cam_timer.tick();
-
-	if (shaky_cam_timer.isEnd()) {
-		shakycam.x = cam.x;
-		shakycam.y = cam.y;
-	}
-	else {
-		shakycam.x = cam.x + static_cast<float>((rand() % 16 - 8)) * 0.0078125f;
-		shakycam.y = cam.y + static_cast<float>((rand() % 16 - 8)) * 0.0078125f;
-	}
-
-
 	// handle statblock logic for map powers
 	for (unsigned i=0; i<statblocks.size(); ++i) {
-		statblocks[i].logic();
+		for (size_t j=0; j<statblocks[i].powers_ai.size(); ++j) {
+			statblocks[i].powers_ai[j].cooldown.tick();
+		}
 	}
 
 	// handle event cooldowns
@@ -319,6 +334,8 @@ void MapRenderer::logic(bool paused) {
 			it = delayed_events.erase(it);
 		}
 	}
+
+	cam.logic();
 }
 
 bool priocompare(const Renderable &r1, const Renderable &r2) {
@@ -333,9 +350,9 @@ void calculatePriosIso(std::vector<Renderable> &r) {
 	for (std::vector<Renderable>::iterator it = r.begin(); it != r.end(); ++it) {
 		const unsigned tilex = static_cast<unsigned>(floorf(it->map_pos.x));
 		const unsigned tiley = static_cast<unsigned>(floorf(it->map_pos.y));
-		const int commax = static_cast<int>((it->map_pos.x - static_cast<float>(tilex)) * (2<<16));
-		const int commay = static_cast<int>((it->map_pos.y - static_cast<float>(tiley)) * (2<<16));
-		it->prio += (static_cast<uint64_t>(tilex + tiley) << 54) + (static_cast<uint64_t>(tilex) << 42) + (static_cast<uint64_t>(commax + commay) << 16);
+		const int commax = static_cast<int>((it->map_pos.x - static_cast<float>(tilex)) * (1<<10));
+		const int commay = static_cast<int>((it->map_pos.y - static_cast<float>(tiley)) * (1<<10));
+		it->prio += (static_cast<uint64_t>(tilex + tiley) << 37) + (static_cast<uint64_t>(tilex) << 20) + (static_cast<uint64_t>(commax + commay) << 8);
 	}
 }
 
@@ -343,14 +360,14 @@ void calculatePriosOrtho(std::vector<Renderable> &r) {
 	for (std::vector<Renderable>::iterator it = r.begin(); it != r.end(); ++it) {
 		const unsigned tilex = static_cast<unsigned>(floorf(it->map_pos.x));
 		const unsigned tiley = static_cast<unsigned>(floorf(it->map_pos.y));
-		const int commay = static_cast<int>(1024 * it->map_pos.y);
-		it->prio += (static_cast<uint64_t>(tiley) << 48) + (static_cast<uint64_t>(tilex) << 32) + (static_cast<uint64_t>(commay) << 16);
+		const int commay = static_cast<int>(it->map_pos.y * (1<<10));
+		it->prio += (static_cast<uint64_t>(tiley) << 37) + (static_cast<uint64_t>(tilex) << 20) + (static_cast<uint64_t>(commay) << 8);
 	}
 }
 
 void MapRenderer::render(std::vector<Renderable> &r, std::vector<Renderable> &r_dead) {
 
-	map_parallax.render(shakycam, "");
+	map_parallax.render(cam.shake, "");
 
 	if (eset->tileset.orientation == eset->tileset.TILESET_ORTHOGONAL) {
 		calculatePriosOrtho(r);
@@ -373,18 +390,18 @@ void MapRenderer::render(std::vector<Renderable> &r, std::vector<Renderable> &r_
 void MapRenderer::drawRenderable(std::vector<Renderable>::iterator r_cursor) {
 	if (r_cursor->image != NULL) {
 		Rect dest;
-		Point p = Utils::mapToScreen(r_cursor->map_pos.x, r_cursor->map_pos.y, shakycam.x, shakycam.y);
+		Point p = Utils::mapToScreen(r_cursor->map_pos.x, r_cursor->map_pos.y, cam.shake.x, cam.shake.y);
 		dest.x = p.x - r_cursor->offset.x;
 		dest.y = p.y - r_cursor->offset.y;
 		render_device->render(*r_cursor, dest);
 	}
 }
 
-void MapRenderer::renderIsoLayer(const Map_Layer& layerdata) {
+void MapRenderer::renderIsoLayer(const Map_Layer& layerdata, const TileSet& tile_set) {
 	int_fast16_t i; // first index of the map array
 	int_fast16_t j; // second index of the map array
 	Point dest;
-	const Point upperleft(Utils::screenToMap(0, 0, shakycam.x, shakycam.y));
+	const Point upperleft(Utils::screenToMap(0, 0, cam.shake.x, cam.shake.y));
 	const int_fast16_t max_tiles_width =   static_cast<int_fast16_t>((settings->view_w / eset->tileset.tile_w) + 2*tset.max_size_x);
 	const int_fast16_t max_tiles_height = static_cast<int_fast16_t>((2 * settings->view_h / eset->tileset.tile_h) + 2*(tset.max_size_y+1));
 
@@ -413,7 +430,7 @@ void MapRenderer::renderIsoLayer(const Map_Layer& layerdata) {
 		// lower left (south west) corner is caught by having 0 in there, so j>0
 		const int_fast16_t j_end = std::max(static_cast<int_fast16_t>(j+i-w+1),	std::max(static_cast<int_fast16_t>(j - max_tiles_width), static_cast<int_fast16_t>(0)));
 
-		Point p = Utils::mapToScreen(float(i), float(j), shakycam.x, shakycam.y);
+		Point p = Utils::mapToScreen(float(i), float(j), cam.shake.x, cam.shake.y);
 		p = centerTile(p);
 
 		// draw one horizontal line
@@ -424,13 +441,64 @@ void MapRenderer::renderIsoLayer(const Map_Layer& layerdata) {
 			p.x += eset->tileset.tile_w;
 
 			if (const uint_fast16_t current_tile = layerdata[i][j]) {
-				const Tile_Def &tile = tset.tiles[current_tile];
-				dest.x = p.x - tile.offset.x;
-				dest.y = p.y - tile.offset.y;
-				// no need to set w and h in dest, as it is ignored
-				// by SDL_BlitSurface
-				tile.tile->setDestFromPoint(dest);
-				render_device->render(tile.tile);
+				const Tile_Def &tile = tile_set.tiles[current_tile];
+				if (tile.tile) {
+					dest.x = p.x - tile.offset.x;
+					dest.y = p.y - tile.offset.y;
+
+					//skip rendering tiles that are underneath fow hidden tiles
+					if (fogofwar == FogOfWar::TYPE_OVERLAY) {
+						if (&layerdata != &layers[fow->dark_layer_id]) {
+							if (layers[fow->dark_layer_id][i][j] == FogOfWar::TILE_HIDDEN) {
+
+								//check tile's corners
+								Point t_l(Utils::screenToMap(dest.x, dest.y, cam.shake.x, cam.shake.y));
+								Point t_r(Utils::screenToMap(dest.x + tile.tile->getClip().w, dest.y, cam.shake.x, cam.shake.y));
+								Point b_l(Utils::screenToMap(dest.x, dest.y + tile.tile->getClip().h, cam.shake.x, cam.shake.y));
+								Point b_r(Utils::screenToMap(dest.x + tile.tile->getClip().w, dest.y + tile.tile->getClip().h, cam.shake.x, cam.shake.y));
+
+								//limit to map bounds
+								if (t_l.x < 0) t_l.x = 0;
+								if (t_l.x >= w) t_l.x = w-1;
+								if (t_l.y < 0) t_l.y = 0;
+								if (t_l.y >= h) t_l.y = h-1;
+
+								if (t_r.x < 0) t_r.x = 0;
+								if (t_r.x >= w) t_r.x = w-1;
+								if (t_r.y < 0) t_r.y = 0;
+								if (t_r.y >= h) t_r.y = h-1;
+
+								if (b_l.x < 0) b_l.x = 0;
+								if (b_l.x >= w) b_l.x = w-1;
+								if (b_l.y < 0) b_l.y = 0;
+								if (b_l.y >= h) b_l.y = h-1;
+
+								if (b_r.x < 0) b_r.x = 0;
+								if (b_r.x >= w) b_r.x = w-1;
+								if (b_r.y < 0) b_r.y = 0;
+								if (b_r.y >= h) b_r.y = h-1;
+
+								if (layers[fow->dark_layer_id][t_l.x][t_l.y] == FogOfWar::TILE_HIDDEN) {
+									if (layers[fow->dark_layer_id][t_r.x][t_r.y] == FogOfWar::TILE_HIDDEN) {
+										if (layers[fow->dark_layer_id][b_l.x][b_l.y] == FogOfWar::TILE_HIDDEN) {
+											if (layers[fow->dark_layer_id][b_r.x][b_r.y] == FogOfWar::TILE_HIDDEN) {
+												continue;
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+
+					// no need to set w and h in dest, as it is ignored
+					// by SDL_BlitSurface
+					tile.tile->setDestFromPoint(dest);
+					if (fogofwar == FogOfWar::TYPE_TINT) {
+						tile.tile->color_mod = fow->getTileColorMod(i, j);
+					}
+					render_device->render(tile.tile);
+				}
 			}
 		}
 		j = static_cast<int_fast16_t>(j + tiles_width);
@@ -452,7 +520,7 @@ void MapRenderer::renderIsoBackObjects(std::vector<Renderable> &r) {
 void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 	Point dest;
 
-	const Point upperleft(Utils::screenToMap(0, 0, shakycam.x, shakycam.y));
+	const Point upperleft(Utils::screenToMap(0, 0, cam.shake.x, cam.shake.y));
 	const int_fast16_t max_tiles_width = static_cast<int_fast16_t>((settings->view_w / eset->tileset.tile_w) + 2 * tset.max_size_x);
 	const int_fast16_t max_tiles_height = static_cast<int_fast16_t>(((settings->view_h / eset->tileset.tile_h) + 2 * tset.max_size_y)*2);
 
@@ -493,7 +561,7 @@ void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 		const int_fast16_t j_end = std::max(static_cast<int_fast16_t>(j+i-w+1), std::max(static_cast<int_fast16_t>(j - max_tiles_width), static_cast<int_fast16_t>(0)));
 
 		// draw one horizontal line
-		Point p = Utils::mapToScreen(float(i), float(j), shakycam.x, shakycam.y);
+		Point p = Utils::mapToScreen(float(i), float(j), cam.shake.x, cam.shake.y);
 		p = centerTile(p);
 		const Map_Layer &current_layer = layers[index_objectlayer];
 		bool is_last_NE_tile = false;
@@ -523,12 +591,63 @@ void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 			if (draw_tile && !drawn_tiles[i][j]) {
 				if (const uint_fast16_t current_tile = current_layer[i][j]) {
 					const Tile_Def &tile = tset.tiles[current_tile];
-					dest.x = p.x - tile.offset.x;
-					dest.y = p.y - tile.offset.y;
-					tile.tile->setDestFromPoint(dest);
-					checkHiddenEntities(i, j, current_layer, r);
-					render_device->render(tile.tile);
-					drawn_tiles[i][j] = 1;
+					if (tile.tile) {
+						dest.x = p.x - tile.offset.x;
+						dest.y = p.y - tile.offset.y;
+						tile.tile->setDestFromPoint(dest);
+
+						//skip rendering tiles that are underneath fow hidden tiles
+						if (fogofwar == FogOfWar::TYPE_OVERLAY) {
+							if (&current_layer != &layers[fow->dark_layer_id]) {
+								if (layers[fow->dark_layer_id][i][j] == FogOfWar::TILE_HIDDEN) {
+
+									//check tile's corners
+									Point t_l(Utils::screenToMap(dest.x, dest.y, cam.shake.x, cam.shake.y));
+									Point t_r(Utils::screenToMap(dest.x + tile.tile->getClip().w, dest.y, cam.shake.x, cam.shake.y));
+									Point b_l(Utils::screenToMap(dest.x, dest.y + tile.tile->getClip().h, cam.shake.x, cam.shake.y));
+									Point b_r(Utils::screenToMap(dest.x + tile.tile->getClip().w, dest.y + tile.tile->getClip().h, cam.shake.x, cam.shake.y));
+
+									//limit to map bounds
+									if (t_l.x < 0) t_l.x = 0;
+									if (t_l.x >= w) t_l.x = w-1;
+									if (t_l.y < 0) t_l.y = 0;
+									if (t_l.y >= h) t_l.y = h-1;
+
+									if (t_r.x < 0) t_r.x = 0;
+									if (t_r.x >= w) t_r.x = w-1;
+									if (t_r.y < 0) t_r.y = 0;
+									if (t_r.y >= h) t_r.y = h-1;
+
+									if (b_l.x < 0) b_l.x = 0;
+									if (b_l.x >= w) b_l.x = w-1;
+									if (b_l.y < 0) b_l.y = 0;
+									if (b_l.y >= h) b_l.y = h-1;
+
+									if (b_r.x < 0) b_r.x = 0;
+									if (b_r.x >= w) b_r.x = w-1;
+									if (b_r.y < 0) b_r.y = 0;
+									if (b_r.y >= h) b_r.y = h-1;
+
+									if (layers[fow->dark_layer_id][t_l.x][t_l.y] == FogOfWar::TILE_HIDDEN) {
+										if (layers[fow->dark_layer_id][t_r.x][t_r.y] == FogOfWar::TILE_HIDDEN) {
+											if (layers[fow->dark_layer_id][b_l.x][b_l.y] == FogOfWar::TILE_HIDDEN) {
+												if (layers[fow->dark_layer_id][b_r.x][b_r.y] == FogOfWar::TILE_HIDDEN) {
+													continue;
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+
+						checkHiddenEntities(i, j, current_layer, r);
+						if (fogofwar == FogOfWar::TYPE_TINT) {
+							tile.tile->color_mod = fow->getTileColorMod(i, j);
+						}
+						render_device->render(tile.tile);
+						drawn_tiles[i][j] = 1;
+					}
 				}
 			}
 
@@ -563,7 +682,7 @@ do_last_NE_tile:
 					draw_NE_tile = !is_last_NE_tile;
 
 					// r_cursor left/right side
-					Point r_cursor_left = Utils::mapToScreen(r_cursor->map_pos.x, r_cursor->map_pos.y, shakycam.x, shakycam.y);
+					Point r_cursor_left = Utils::mapToScreen(r_cursor->map_pos.x, r_cursor->map_pos.y, cam.shake.x, cam.shake.y);
 					r_cursor_left.y -= r_cursor->offset.y;
 					Point r_cursor_right = r_cursor_left;
 					r_cursor_left.x -= r_cursor->offset.x;
@@ -584,7 +703,7 @@ do_last_NE_tile:
 
 					if (is_behind_SW)
 						render_behind_SW.push(r_cursor);
-					else if (!is_behind_SW && is_behind_NE)
+					else if (is_behind_NE)
 						render_behind_NE.push(r_cursor);
 					else
 						render_behind_none.push(r_cursor);
@@ -605,12 +724,17 @@ do_last_NE_tile:
 			if (draw_SW_tile && i-2 >= 0 && j+2 < h && !drawn_tiles[i-2][j+2]) {
 				if (const uint_fast16_t current_tile = current_layer[i-2][j+2]) {
 					const Tile_Def &tile = tset.tiles[current_tile];
-					dest.x = tile_SW_center.x - tile.offset.x;
-					dest.y = tile_SW_center.y - tile.offset.y;
-					tile.tile->setDestFromPoint(dest);
-					checkHiddenEntities(i, j, current_layer, r);
-					render_device->render(tile.tile);
-					drawn_tiles[i-2][j+2] = 1;
+					if (tile.tile) {
+						dest.x = tile_SW_center.x - tile.offset.x;
+						dest.y = tile_SW_center.y - tile.offset.y;
+						tile.tile->setDestFromPoint(dest);
+						checkHiddenEntities(i, j, current_layer, r);
+						if (fogofwar == FogOfWar::TYPE_TINT) {
+							tile.tile->color_mod = fow->getTileColorMod(i, j);
+						}
+						render_device->render(tile.tile);
+						drawn_tiles[i-2][j+2] = 1;
+					}
 				}
 			}
 
@@ -623,12 +747,17 @@ do_last_NE_tile:
 			if (draw_NE_tile && !draw_tile && !drawn_tiles[i][j]) {
 				if (const uint_fast16_t current_tile = current_layer[i][j]) {
 					const Tile_Def &tile = tset.tiles[current_tile];
-					dest.x = tile_NE_center.x - tile.offset.x;
-					dest.y = tile_NE_center.y - tile.offset.y;
-					tile.tile->setDestFromPoint(dest);
-					checkHiddenEntities(i, j, current_layer, r);
-					render_device->render(tile.tile);
-					drawn_tiles[i][j] = 1;
+					if (tile.tile) {
+						dest.x = tile_NE_center.x - tile.offset.x;
+						dest.y = tile_NE_center.y - tile.offset.y;
+						tile.tile->setDestFromPoint(dest);
+						checkHiddenEntities(i, j, current_layer, r);
+						if (fogofwar == FogOfWar::TYPE_TINT) {
+							tile.tile->color_mod = fow->getTileColorMod(i, j);
+						}
+						render_device->render(tile.tile);
+						drawn_tiles[i][j] = 1;
+					}
 				}
 			}
 
@@ -666,20 +795,34 @@ do_last_NE_tile:
 
 void MapRenderer::renderIso(std::vector<Renderable> &r, std::vector<Renderable> &r_dead) {
 	size_t index = 0;
+
 	while (index < index_objectlayer) {
-		renderIsoLayer(layers[index]);
-		map_parallax.render(shakycam, layernames[index]);
+		renderIsoLayer(layers[index], tset);
+		map_parallax.render(cam.shake, layernames[index]);
 		index++;
 	}
 
 	renderIsoBackObjects(r_dead);
 	renderIsoFrontObjects(r);
-	map_parallax.render(shakycam, layernames[index]);
+	map_parallax.render(cam.shake, layernames[index]);
 
 	index++;
 	while (index < layers.size()) {
-		renderIsoLayer(layers[index]);
-		map_parallax.render(shakycam, layernames[index]);
+		if (fogofwar == FogOfWar::TYPE_OVERLAY) {
+			if (layernames[index] == "fow_dark") {
+				renderIsoLayer(layers[index],fow->tset_dark);
+			}
+			else if (layernames[index] == "fow_fog") {
+				renderIsoLayer(layers[index],fow->tset_fog);
+			}
+			else {
+				renderIsoLayer(layers[index], tset);
+			}
+		}
+		else if (layernames[index] != "fow_dark" && layernames[index] != "fow_fog") {
+			renderIsoLayer(layers[index], tset);
+		}
+		map_parallax.render(cam.shake, layernames[index]);
 		index++;
 	}
 
@@ -689,10 +832,10 @@ void MapRenderer::renderIso(std::vector<Renderable> &r, std::vector<Renderable> 
 	drawDevCursor();
 }
 
-void MapRenderer::renderOrthoLayer(const Map_Layer& layerdata) {
+void MapRenderer::renderOrthoLayer(const Map_Layer& layerdata, const TileSet& tile_set) {
 
 	Point dest;
-	const Point upperleft(Utils::screenToMap(0, 0, shakycam.x, shakycam.y));
+	const Point upperleft(Utils::screenToMap(0, 0, cam.shake.x, cam.shake.y));
 
 	short int startj = static_cast<short int>(std::max(0, upperleft.y));
 	short int starti = static_cast<short int>(std::max(0, upperleft.x));
@@ -703,16 +846,71 @@ void MapRenderer::renderOrthoLayer(const Map_Layer& layerdata) {
 	short int j;
 
 	for (j = startj; j < max_tiles_height; j++) {
-		Point p = Utils::mapToScreen(starti, j, shakycam.x, shakycam.y);
+		Point p = Utils::mapToScreen(starti, j, cam.shake.x, cam.shake.y);
 		p = centerTile(p);
 		for (i = starti; i < max_tiles_width; i++) {
 
 			if (const unsigned short current_tile = layerdata[i][j]) {
-				const Tile_Def &tile = tset.tiles[current_tile];
-				dest.x = p.x - tile.offset.x;
-				dest.y = p.y - tile.offset.y;
-				tile.tile->setDestFromPoint(dest);
-				render_device->render(tile.tile);
+				const Tile_Def &tile = tile_set.tiles[current_tile];
+				if (tile.tile) {
+					dest.x = p.x - tile.offset.x;
+					dest.y = p.y - tile.offset.y;
+
+					bool skip_tile_render = false;
+
+					//skip rendering tiles that are underneath fow hidden tiles
+					if (fogofwar == FogOfWar::TYPE_OVERLAY) {
+						if (&layerdata != &layers[fow->dark_layer_id]) {
+							if (layers[fow->dark_layer_id][i][j] == FogOfWar::TILE_HIDDEN) {
+
+								//check tile's corners
+								Point t_l(Utils::screenToMap(dest.x, dest.y, cam.shake.x, cam.shake.y));
+								Point t_r(Utils::screenToMap(dest.x + tile.tile->getClip().w, dest.y, cam.shake.x, cam.shake.y));
+								Point b_l(Utils::screenToMap(dest.x, dest.y + tile.tile->getClip().h, cam.shake.x, cam.shake.y));
+								Point b_r(Utils::screenToMap(dest.x + tile.tile->getClip().w, dest.y + tile.tile->getClip().h, cam.shake.x, cam.shake.y));
+
+								//limit to map bounds
+								if (t_l.x < 0) t_l.x = 0;
+								if (t_l.x >= w) t_l.x = w-1;
+								if (t_l.y < 0) t_l.y = 0;
+								if (t_l.y >= h) t_l.y = h-1;
+
+								if (t_r.x < 0) t_r.x = 0;
+								if (t_r.x >= w) t_r.x = w-1;
+								if (t_r.y < 0) t_r.y = 0;
+								if (t_r.y >= h) t_r.y = h-1;
+
+								if (b_l.x < 0) b_l.x = 0;
+								if (b_l.x >= w) b_l.x = w-1;
+								if (b_l.y < 0) b_l.y = 0;
+								if (b_l.y >= h) b_l.y = h-1;
+
+								if (b_r.x < 0) b_r.x = 0;
+								if (b_r.x >= w) b_r.x = w-1;
+								if (b_r.y < 0) b_r.y = 0;
+								if (b_r.y >= h) b_r.y = h-1;
+
+								if (layers[fow->dark_layer_id][t_l.x][t_l.y] == FogOfWar::TILE_HIDDEN) {
+									if (layers[fow->dark_layer_id][t_r.x][t_r.y] == FogOfWar::TILE_HIDDEN) {
+										if (layers[fow->dark_layer_id][b_l.x][b_l.y] == FogOfWar::TILE_HIDDEN) {
+											if (layers[fow->dark_layer_id][b_r.x][b_r.y] == FogOfWar::TILE_HIDDEN) {
+												skip_tile_render = true;
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+
+					tile.tile->setDestFromPoint(dest);
+					if (!skip_tile_render) {
+						if (fogofwar == FogOfWar::TYPE_TINT) {
+							tile.tile->color_mod = fow->getTileColorMod(i, j);
+						}
+						render_device->render(tile.tile);
+					}
+				}
 			}
 			p.x += eset->tileset.tile_w;
 		}
@@ -734,7 +932,7 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 	std::vector<Renderable>::iterator r_cursor = r.begin();
 	std::vector<Renderable>::iterator r_end = r.end();
 
-	const Point upperleft(Utils::screenToMap(0, 0, shakycam.x, shakycam.y));
+	const Point upperleft(Utils::screenToMap(0, 0, cam.shake.x, cam.shake.y));
 
 	short int startj = static_cast<short int>(std::max(0, upperleft.y));
 	short int starti = static_cast<short int>(std::max(0, upperleft.x));
@@ -748,17 +946,72 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 		return;
 
 	for (j = startj; j < max_tiles_height; j++) {
-		Point p = Utils::mapToScreen(starti, j, shakycam.x, shakycam.y);
+		Point p = Utils::mapToScreen(starti, j, cam.shake.x, cam.shake.y);
 		p = centerTile(p);
 		for (i = starti; i<max_tiles_width; i++) {
 
 			if (const unsigned short current_tile = layers[index_objectlayer][i][j]) {
 				const Tile_Def &tile = tset.tiles[current_tile];
-				dest.x = p.x - tile.offset.x;
-				dest.y = p.y - tile.offset.y;
-				tile.tile->setDestFromPoint(dest);
-				checkHiddenEntities(i, j, layers[index_objectlayer], r);
-				render_device->render(tile.tile);
+				if (tile.tile) {
+					dest.x = p.x - tile.offset.x;
+					dest.y = p.y - tile.offset.y;
+					tile.tile->setDestFromPoint(dest);
+
+					bool skip_tile_render = false;
+
+					//skip rendering tiles that are underneath fow hidden tiles
+					if (fogofwar == FogOfWar::TYPE_OVERLAY) {
+						if (&layers[index_objectlayer] != &layers[fow->dark_layer_id]) {
+							if (layers[fow->dark_layer_id][i][j] == FogOfWar::TILE_HIDDEN) {
+
+								//check tile's corners
+								Point t_l(Utils::screenToMap(dest.x, dest.y, cam.shake.x, cam.shake.y));
+								Point t_r(Utils::screenToMap(dest.x + tile.tile->getClip().w, dest.y, cam.shake.x, cam.shake.y));
+								Point b_l(Utils::screenToMap(dest.x, dest.y + tile.tile->getClip().h, cam.shake.x, cam.shake.y));
+								Point b_r(Utils::screenToMap(dest.x + tile.tile->getClip().w, dest.y + tile.tile->getClip().h, cam.shake.x, cam.shake.y));
+
+								//limit to map bounds
+								if (t_l.x < 0) t_l.x = 0;
+								if (t_l.x >= w) t_l.x = w-1;
+								if (t_l.y < 0) t_l.y = 0;
+								if (t_l.y >= h) t_l.y = h-1;
+
+								if (t_r.x < 0) t_r.x = 0;
+								if (t_r.x >= w) t_r.x = w-1;
+								if (t_r.y < 0) t_r.y = 0;
+								if (t_r.y >= h) t_r.y = h-1;
+
+								if (b_l.x < 0) b_l.x = 0;
+								if (b_l.x >= w) b_l.x = w-1;
+								if (b_l.y < 0) b_l.y = 0;
+								if (b_l.y >= h) b_l.y = h-1;
+
+								if (b_r.x < 0) b_r.x = 0;
+								if (b_r.x >= w) b_r.x = w-1;
+								if (b_r.y < 0) b_r.y = 0;
+								if (b_r.y >= h) b_r.y = h-1;
+
+								if (layers[fow->dark_layer_id][t_l.x][t_l.y] == FogOfWar::TILE_HIDDEN) {
+									if (layers[fow->dark_layer_id][t_r.x][t_r.y] == FogOfWar::TILE_HIDDEN) {
+										if (layers[fow->dark_layer_id][b_l.x][b_l.y] == FogOfWar::TILE_HIDDEN) {
+											if (layers[fow->dark_layer_id][b_r.x][b_r.y] == FogOfWar::TILE_HIDDEN) {
+												skip_tile_render = true;
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+
+					checkHiddenEntities(i, j, layers[index_objectlayer], r);
+					if (!skip_tile_render) {
+						if (fogofwar == FogOfWar::TYPE_TINT) {
+							tile.tile->color_mod = fow->getTileColorMod(i, j);
+						}
+						render_device->render(tile.tile);
+					}
+				}
 			}
 			p.x += eset->tileset.tile_w;
 
@@ -777,19 +1030,32 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 void MapRenderer::renderOrtho(std::vector<Renderable> &r, std::vector<Renderable> &r_dead) {
 	unsigned index = 0;
 	while (index < index_objectlayer) {
-		renderOrthoLayer(layers[index]);
-		map_parallax.render(shakycam, layernames[index]);
+		renderOrthoLayer(layers[index], tset);
+		map_parallax.render(cam.shake, layernames[index]);
 		index++;
 	}
 
 	renderOrthoBackObjects(r_dead);
 	renderOrthoFrontObjects(r);
-	map_parallax.render(shakycam, layernames[index]);
+	map_parallax.render(cam.shake, layernames[index]);
 
 	index++;
 	while (index < layers.size()) {
-		renderOrthoLayer(layers[index]);
-		map_parallax.render(shakycam, layernames[index]);
+		if (fogofwar == FogOfWar::TYPE_OVERLAY) {
+			if (layernames[index] == "fow_dark") {
+				renderOrthoLayer(layers[index],fow->tset_dark);
+			}
+			else if (layernames[index] == "fow_fog") {
+				renderOrthoLayer(layers[index],fow->tset_fog);
+			}
+			else {
+				renderOrthoLayer(layers[index], tset);
+			}
+		}
+		else if (layernames[index] != "fow_dark" && layernames[index] != "fow_fog") {
+			renderOrthoLayer(layers[index], tset);
+		}
+		map_parallax.render(cam.shake, layernames[index]);
 		index++;
 	}
 
@@ -825,6 +1091,21 @@ void MapRenderer::executeOnLoadEvents() {
 		if (!EventManager::isActive(*it)) continue;
 
 		if ((*it).activate_type == Event::ACTIVATE_ON_LOAD) {
+			if (EventManager::executeEvent(*it))
+				it = events.erase(it);
+		}
+	}
+
+	// Also check static events, as they should execute alongside on_load events
+	// Yet, this should be done *after* the on_load events to not break old behavior.
+	// That's why we don't just check static events in the above loop
+	for (it = events.end(); it != events.begin(); ) {
+		--it;
+
+		// skip inactive events
+		if (!EventManager::isActive(*it)) continue;
+
+		if ((*it).activate_type == Event::ACTIVATE_STATIC) {
 			if (EventManager::executeEvent(*it))
 				it = events.erase(it);
 		}
@@ -894,7 +1175,7 @@ void MapRenderer::checkEvents(const FPoint& loc) {
 				}
 			}
 		}
-		else if ((*it).activate_type == -1 || (*it).activate_type == Event::ACTIVATE_ON_TRIGGER) {
+		else if ((*it).activate_type == Event::ACTIVATE_ON_TRIGGER) {
 			if (inside)
 				if (EventManager::executeEvent(*it))
 					it = events.erase(it);
@@ -923,23 +1204,32 @@ void MapRenderer::checkHotspots() {
 	for (it = events.end(); it != events.begin(); ) {
 		--it;
 
+		// skip inactive events
+		if (!EventManager::isActive(*it)) continue;
+
+		// skip events without hotspots
+		if (it->hotspot.h == 0) continue;
+
+		// skip events on cooldown
+		if (!it->cooldown.isEnd() || !it->delay.isEnd()) continue;
+
+		EventComponent* npc = (*it).getComponent(EventComponent::NPC_HOTSPOT);
+
 		for (int x=it->hotspot.x; x < it->hotspot.x + it->hotspot.w; ++x) {
 			for (int y=it->hotspot.y; y < it->hotspot.y + it->hotspot.h; ++y) {
 				bool matched = false;
 				bool is_npc = false;
 
-				EventComponent* npc = (*it).getComponent(EventComponent::NPC_HOTSPOT);
 				if (npc) {
 					is_npc = true;
 
-					Point p = Utils::mapToScreen(float(npc->x), float(npc->y), shakycam.x, shakycam.y);
+					Point p = Utils::mapToScreen(float(npc->data[0].Int), float(npc->data[1].Int), cam.shake.x, cam.shake.y);
 					p = centerTile(p);
 
 					Rect dest;
-					dest.x = p.x - npc->z;
-					dest.y = p.y - npc->a;
-					dest.w = npc->b;
-					dest.h = npc->c;
+					if (npc->id < npcs->npcs.size()) {
+						dest = npcs->npcs[npc->id]->getRenderBounds(mapr->cam.pos);
+					}
 
 					if (Utils::isWithinRect(dest, inpt->mouse)) {
 						matched = true;
@@ -949,59 +1239,43 @@ void MapRenderer::checkHotspots() {
 				}
 				else {
 					for (unsigned index = 0; index <= index_objectlayer; ++index) {
-						Point p = Utils::mapToScreen(float(x), float(y), shakycam.x, shakycam.y);
+						Point p = Utils::mapToScreen(float(x), float(y), cam.shake.x, cam.shake.y);
 						p = centerTile(p);
 
 						if (const short current_tile = layers[index][x][y]) {
 							// first check if mouse pointer is in rectangle of that tile:
 							const Tile_Def &tile = tset.tiles[current_tile];
-							Rect dest;
-							dest.x = p.x - tile.offset.x;
-							dest.y = p.y - tile.offset.y;
-							dest.w = tile.tile->getClip().w;
-							dest.h = tile.tile->getClip().h;
+							if (tile.tile) {
+								Rect dest;
+								dest.x = p.x - tile.offset.x;
+								dest.y = p.y - tile.offset.y;
+								dest.w = tile.tile->getClip().w;
+								dest.h = tile.tile->getClip().h;
 
-							if (Utils::isWithinRect(dest, inpt->mouse)) {
-								matched = true;
-								tip_pos = Utils::mapToScreen(it->center.x, it->center.y, shakycam.x, shakycam.y);
-								tip_pos.y -= eset->tileset.tile_h;
+								if (Utils::isWithinRect(dest, inpt->mouse)) {
+									matched = true;
+									tip_pos = Utils::mapToScreen(it->center.x, it->center.y, cam.shake.x, cam.shake.y);
+									tip_pos.y -= eset->tileset.tile_h;
+								}
 							}
 						}
 					}
 				}
 
 				if (matched) {
-					// skip inactive events
-					if (!EventManager::isActive(*it)) continue;
-
-					// skip events without hotspots
-					if (it->hotspot.h == 0) continue;
-
-					// skip events on cooldown
-					if (!it->cooldown.isEnd() || !it->delay.isEnd()) continue;
-
 					// new tooltip?
 					createTooltip(it->getComponent(EventComponent::TOOLTIP));
 
-					if (((it->reachable_from.w == 0 && it->reachable_from.h == 0) || Utils::isWithinRect(it->reachable_from, Point(cam)))
+					if (((it->reachable_from.w == 0 && it->reachable_from.h == 0) || Utils::isWithinRect(it->reachable_from, Point(cam.pos)))
 							&& Utils::calcDist(pc->stats.pos, it->center) < eset->misc.interact_range) {
 
 						// only check events if the player is clicking
 						// and allowed to click
 						if (is_npc) {
-							// show low hp cursor if below threshold
-							if (pc->isLowHpCursorEnabled() && pc->isLowHp()) {
-								curs->setCursor(CursorManager::CURSOR_LHP_TALK);
-							} else {
-								curs->setCursor(CursorManager::CURSOR_TALK);
-							}
+							curs->setCursor(CursorManager::CURSOR_TALK);
 						}
 						else {
-							if (pc->isLowHpCursorEnabled() && pc->isLowHp()) {
-								curs->setCursor(CursorManager::CURSOR_LHP_INTERACT);
-							} else {
-								curs->setCursor(CursorManager::CURSOR_INTERACT);
-							}
+							curs->setCursor(CursorManager::CURSOR_INTERACT);
 						}
 						if (!inpt->pressing[Input::MAIN1]) return;
 						else if (inpt->lock[Input::MAIN1]) return;
@@ -1040,7 +1314,7 @@ void MapRenderer::checkNearestEvent() {
 		if (!it->cooldown.isEnd() || !it->delay.isEnd()) continue;
 
 		float distance = Utils::calcDist(pc->stats.pos, it->center);
-		if (((it->reachable_from.w == 0 && it->reachable_from.h == 0) || Utils::isWithinRect(it->reachable_from, Point(cam)))
+		if (((it->reachable_from.w == 0 && it->reachable_from.h == 0) || Utils::isWithinRect(it->reachable_from, Point(cam.pos)))
 				&& distance < eset->misc.interact_range && distance < best_distance) {
 			best_distance = distance;
 			nearest = it;
@@ -1052,7 +1326,7 @@ void MapRenderer::checkNearestEvent() {
 		if (!inpt->usingMouse() || settings->touchscreen) {
 			// new tooltip?
 			createTooltip(nearest->getComponent(EventComponent::TOOLTIP));
-			tip_pos = Utils::mapToScreen(nearest->center.x, nearest->center.y, shakycam.x, shakycam.y);
+			tip_pos = Utils::mapToScreen(nearest->center.x, nearest->center.y, cam.shake.x, cam.shake.y);
 			if (nearest->getComponent(EventComponent::NPC_HOTSPOT)) {
 				tip_pos.y -= eset->tooltips.margin_npc;
 			}
@@ -1092,17 +1366,17 @@ void MapRenderer::createTooltip(EventComponent *ec) {
 /**
  * Activate a power that is attached to an event
  */
-void MapRenderer::activatePower(int power_index, unsigned statblock_index, FPoint &target) {
-	if (power_index < 0 || static_cast<unsigned>(power_index) >= powers->powers.size()) {
-		Utils::logError("MapRenderer: Power index is out of bounds.");
+void MapRenderer::activatePower(PowerID power_index, unsigned statblock_index, const FPoint &target) {
+	if (!powers->isValid(power_index)) {
+		Utils::logError("MapRenderer: Power index %d is not valid.", power_index);
 		return;
 	}
 
 	if (statblock_index < statblocks.size()) {
 		// check power cooldown before activating
 		if (statblocks[statblock_index].powers_ai[0].cooldown.isEnd()) {
-			statblocks[statblock_index].powers_ai[0].cooldown.setDuration(powers->powers[power_index].cooldown);
-			powers->activate(power_index, &statblocks[statblock_index], target);
+			statblocks[statblock_index].powers_ai[0].cooldown.setDuration(powers->powers[power_index]->cooldown);
+			powers->activate(power_index, &statblocks[statblock_index], statblocks[statblock_index].pos, target);
 		}
 	}
 	else {
@@ -1138,7 +1412,7 @@ void MapRenderer::getTileBounds(const int_fast16_t x, const int_fast16_t y, cons
 			const Tile_Def &tile = tset.tiles[tile_index];
 			if (!tile.tile)
 				return;
-			center = centerTile(Utils::mapToScreen(float(x), float(y), shakycam.x, shakycam.y));
+			center = centerTile(Utils::mapToScreen(float(x), float(y), cam.shake.x, cam.shake.y));
 			bounds.x = center.x - tile.offset.x;
 			bounds.y = center.y - tile.offset.y;
 			bounds.w = tile.tile->getClip().w;
@@ -1153,17 +1427,17 @@ void MapRenderer::drawDevCursor() {
 		return;
 
 	Color dev_cursor_color = Color(255,255,0,255);
-	FPoint target = Utils::screenToMap(inpt->mouse.x,  inpt->mouse.y, shakycam.x, shakycam.y);
+	FPoint target = Utils::screenToMap(inpt->mouse.x,  inpt->mouse.y, cam.shake.x, cam.shake.y);
 
 	if (!collider.isOutsideMap(floorf(target.x), floorf(target.y))) {
 		if (eset->tileset.orientation == eset->tileset.TILESET_ORTHOGONAL) {
-			Point p_topleft = Utils::mapToScreen(floorf(target.x), floorf(target.y), shakycam.x, shakycam.y);
+			Point p_topleft = Utils::mapToScreen(floorf(target.x), floorf(target.y), cam.shake.x, cam.shake.y);
 			Point p_bottomright(p_topleft.x + eset->tileset.tile_w, p_topleft.y + eset->tileset.tile_h);
 
 			render_device->drawRectangle(p_topleft, p_bottomright, dev_cursor_color);
 		}
 		else {
-			Point p_left = Utils::mapToScreen(floorf(target.x), floorf(target.y+1), shakycam.x, shakycam.y);
+			Point p_left = Utils::mapToScreen(floorf(target.x), floorf(target.y+1), cam.shake.x, cam.shake.y);
 			Point p_top(p_left.x + eset->tileset.tile_w_half, p_left.y - eset->tileset.tile_h_half);
 			Point p_right(p_left.x + eset->tileset.tile_w, p_left.y);
 			Point p_bottom(p_left.x + eset->tileset.tile_w_half, p_left.y + eset->tileset.tile_h_half);
@@ -1176,8 +1450,8 @@ void MapRenderer::drawDevCursor() {
 
 		// draw distance line
 		if (menu->devconsole->distance_timer.isEnd()) {
-			Point p0 = Utils::mapToScreen(menu->devconsole->target.x, menu->devconsole->target.y, shakycam.x, shakycam.y);
-			Point p1 = Utils::mapToScreen(pc->stats.pos.x, pc->stats.pos.y, shakycam.x, shakycam.y);
+			Point p0 = Utils::mapToScreen(menu->devconsole->target.x, menu->devconsole->target.y, cam.shake.x, cam.shake.y);
+			Point p1 = Utils::mapToScreen(pc->stats.pos.x, pc->stats.pos.y, cam.shake.x, cam.shake.y);
 			render_device->drawLine(p0.x, p0.y, p1.x, p1.y, dev_cursor_color);
 		}
 	}
@@ -1189,23 +1463,53 @@ void MapRenderer::drawDevHUD() {
 
 	Color color_hazard(255,0,0,255);
 	Color color_entity(0,255,0,255);
+	Color color_cam(255,255,0,255);
+	Color color_path(0,255,255,255);
+	Color color_path_pursue(0,127,127,255);
 	int cross_size = eset->tileset.tile_h_half / 4;
 
 	// ellipses are distorted for isometric tilesets
-	int distort = eset->tileset.orientation == eset->tileset.TILESET_ORTHOGONAL ? 0 : 2;
+	int distort = eset->tileset.orientation == eset->tileset.TILESET_ORTHOGONAL ? 1 : 2;
+
+	// camera
+	{
+		Point p0 = Utils::mapToScreen(cam.pos.x, cam.pos.y, cam.shake.x, cam.shake.y);
+		render_device->drawLine(p0.x - cross_size, p0.y, p0.x + cross_size, p0.y, color_cam);
+		render_device->drawLine(p0.x, p0.y - cross_size, p0.x, p0.y + cross_size, color_cam);
+	}
 
 	// player
 	{
-		Point p0 = Utils::mapToScreen(pc->stats.pos.x, pc->stats.pos.y, shakycam.x, shakycam.y);
+		Point p0 = Utils::mapToScreen(pc->stats.pos.x, pc->stats.pos.y, cam.shake.x, cam.shake.y);
 		render_device->drawLine(p0.x - cross_size, p0.y, p0.x + cross_size, p0.y, color_entity);
 		render_device->drawLine(p0.x, p0.y - cross_size, p0.x, p0.y + cross_size, color_entity);
 	}
 
 	// enemies
-	for (size_t i = 0; i < enemym->enemies.size(); ++i) {
-		Point p0 = Utils::mapToScreen(enemym->enemies[i]->stats.pos.x, enemym->enemies[i]->stats.pos.y, shakycam.x, shakycam.y);
+	for (size_t i = 0; i < entitym->entities.size(); ++i) {
+		Point p0 = Utils::mapToScreen(entitym->entities[i]->stats.pos.x, entitym->entities[i]->stats.pos.y, cam.shake.x, cam.shake.y);
 		render_device->drawLine(p0.x - cross_size, p0.y, p0.x + cross_size, p0.y, color_entity);
 		render_device->drawLine(p0.x, p0.y - cross_size, p0.x, p0.y + cross_size, color_entity);
+
+		std::vector<FPoint>& path = entitym->entities[i]->behavior->getPath();
+
+		if (path.empty()) {
+			FPoint& pursue_pos = entitym->entities[i]->behavior->getPursuePos();
+			if (!(pursue_pos.x == -1 && pursue_pos.y == -1)) {
+				Point p1 = Utils::mapToScreen(pursue_pos.x, pursue_pos.y, cam.shake.x, cam.shake.y);
+				render_device->drawLine(p0.x, p0.y, p1.x, p1.y, color_path_pursue);
+			}
+		}
+		else {
+			Point p1, p2;
+			for (size_t j = 0; j < path.size()-1; ++j) {
+				p1 = Utils::mapToScreen(path[j].x, path[j].y, cam.shake.x, cam.shake.y);
+				p2 = Utils::mapToScreen(path[j+1].x, path[j+1].y, cam.shake.x, cam.shake.y);
+				render_device->drawLine(p1.x, p1.y, p2.x, p2.y, color_path);
+			}
+			p1 = Utils::mapToScreen(path.back().x, path.back().y, cam.shake.x, cam.shake.y);
+			render_device->drawLine(p0.x, p0.y, p1.x, p1.y, color_path);
+		}
 	}
 
 	// hazards
@@ -1213,9 +1517,8 @@ void MapRenderer::drawDevHUD() {
 		if (hazards->h[i]->delay_frames != 0)
 			continue;
 
-		float radius_c = sqrtf(powf(hazards->h[i]->power->radius, 2) + powf(hazards->h[i]->power->radius, 2));
-		Point p0 = Utils::mapToScreen(hazards->h[i]->pos.x, hazards->h[i]->pos.y, shakycam.x, shakycam.y);
-		Point p1 = Utils::mapToScreen(hazards->h[i]->pos.x + radius_c, hazards->h[i]->pos.y, shakycam.x, shakycam.y);
+		Point p0 = Utils::mapToScreen(hazards->h[i]->pos.x, hazards->h[i]->pos.y, cam.shake.x, cam.shake.y);
+		Point p1 = Utils::mapToScreen(hazards->h[i]->pos.x + hazards->h[i]->power->radius, hazards->h[i]->pos.y, cam.shake.x, cam.shake.y);
 		int radius = p1.x - p0.x;
 		render_device->drawLine(p0.x - cross_size, p0.y, p0.x + cross_size, p0.y, color_hazard);
 		render_device->drawLine(p0.x, p0.y - cross_size, p0.x, p0.y + cross_size, color_hazard);
@@ -1242,7 +1545,7 @@ void MapRenderer::drawHiddenEntityMarkers() {
 			continue;
 
 		Point dest;
-		Point p = Utils::mapToScreen(hidden_entities[i]->map_pos.x, hidden_entities[i]->map_pos.y, shakycam.x, shakycam.y);
+		Point p = Utils::mapToScreen(hidden_entities[i]->map_pos.x, hidden_entities[i]->map_pos.y, cam.shake.x, cam.shake.y);
 		dest.x = p.x - marker_w / 2;
 		dest.y = p.y - hidden_entities[i]->offset.y - marker_h;
 
@@ -1312,7 +1615,7 @@ void MapRenderer::checkHiddenEntities(const int_fast16_t x, const int_fast16_t y
 			is_hidden = true;
 		}
 		else if (it->type != Renderable::TYPE_NORMAL) {
-			Point p = Utils::mapToScreen(it->map_pos.x, it->map_pos.y, shakycam.x, shakycam.y);
+			Point p = Utils::mapToScreen(it->map_pos.x, it->map_pos.y, cam.shake.x, cam.shake.y);
 			p.x -= it->offset.x;
 			if (Utils::isWithinRect(tile_bounds, p)) {
 				is_hidden = true;
@@ -1345,6 +1648,12 @@ void MapRenderer::checkHiddenEntities(const int_fast16_t x, const int_fast16_t y
 		++it;
 	}
 }
+
+void MapRenderer::setMapParallax(const std::string& mp_filename) {
+	map_parallax.load(mp_filename);
+	map_parallax.setMapCenter(w/2, h/2);
+}
+
 MapRenderer::~MapRenderer() {
 	tip_buf.clear();
 	clearLayers();

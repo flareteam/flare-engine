@@ -28,7 +28,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <cassert>
 
 Mod::Mod()
-	: name("")
+	: is_game_mod(false)
+	, name("")
 	, description("")
 	, description_locale()
 	, game("")
@@ -63,6 +64,7 @@ Mod& Mod::operator=(const Mod &mod) {
 	if (this == &mod)
 		return *this;
 
+	is_game_mod = mod.is_game_mod;
 	name = mod.name;
 	description = mod.description;
 	description_locale = mod.description_locale;
@@ -134,16 +136,15 @@ ModManager::ModManager(const std::vector<std::string> *_cmd_line_mods)
 	loadModList();
 	applyDepends();
 
-	std::stringstream ss;
-	ss << "Active mods: ";
+	std::string active_mods_str = "Active mods: ";
 	for (size_t i = 0; i < mod_list.size(); ++i) {
-		ss << mod_list[i].name;
+		active_mods_str += mod_list[i].name;
 		if (*mod_list[i].version != VersionInfo::MIN)
-			ss << " (" << mod_list[i].version->getString() << ")";
+			active_mods_str += " (" + mod_list[i].version->getString() + ")";
 		if (i < mod_list.size()-1)
-			ss << ", ";
+			active_mods_str += ", ";
 	}
-	Utils::logInfo(ss.str().c_str());
+	Utils::logInfo(active_mods_str.c_str());
 }
 
 /**
@@ -170,10 +171,9 @@ void ModManager::loadModList() {
 	if (!cmd_line_mods || cmd_line_mods->empty()) {
 		std::ifstream infile;
 		std::string line;
-		std::string starts_with;
 
-		std::string place1 = settings->path_conf + "mods.txt";
-		std::string place2 = settings->path_data + "mods/mods.txt";
+		std::string place1 = Filesystem::convertSlashes(settings->path_conf + "mods.txt");
+		std::string place2 = Filesystem::convertSlashes(settings->path_data + "mods/mods.txt");
 
 		infile.open(place1.c_str(), std::ios::in);
 
@@ -189,12 +189,8 @@ void ModManager::loadModList() {
 		while (infile.good()) {
 			line = Parse::getLine(infile);
 
-			// skip ahead if this line is empty
-			if (line.length() == 0) continue;
-
-			// skip comments
-			starts_with = line.at(0);
-			if (starts_with == "#") continue;
+			if (Parse::skipLine(line))
+				continue;
 
 			// add the mod if it exists in the mods folder
 			if (line != FALLBACK_MOD) {
@@ -239,7 +235,9 @@ void ModManager::loadModList() {
  * Find the location (mod file name) for this data file.
  * Use private loc_cache to prevent excessive disk I/O
  */
-std::string ModManager::locate(const std::string& filename) {
+std::string ModManager::locate(const std::string& _filename) {
+	std::string filename = Filesystem::convertSlashes(_filename);
+
 	// if we have this location already cached, return it
 	if (loc_cache.find(filename) != loc_cache.end()) {
 		return loc_cache[filename];
@@ -250,7 +248,7 @@ std::string ModManager::locate(const std::string& filename) {
 
 	for (size_t i = mod_list.size(); i > 0; i--) {
 		for (size_t j = 0; j < mod_paths.size(); j++) {
-			test_path = mod_paths[j] + "mods/" + mod_list[i-1].name + "/" + filename;
+			test_path = Filesystem::convertSlashes(mod_paths[j] + "mods/" + mod_list[i-1].name + "/" + filename);
 			if (Filesystem::fileExists(test_path)) {
 				loc_cache[filename] = test_path;
 				return test_path;
@@ -259,7 +257,7 @@ std::string ModManager::locate(const std::string& filename) {
 	}
 
 	// all else failing, simply return the filename if it exists
-	test_path = settings->path_data + filename;
+	test_path = Filesystem::convertSlashes(settings->path_data + filename);
 	if (!Filesystem::fileExists(test_path))
 		test_path = "";
 
@@ -283,7 +281,7 @@ std::vector<std::string> ModManager::list(const std::string &path, bool full_pat
 
 	for (size_t i = 0; i < mod_list.size(); ++i) {
 		for (size_t j = mod_paths.size(); j > 0; j--) {
-			test_path = mod_paths[j-1] + "mods/" + mod_list[i].name + "/" + path;
+			test_path = Filesystem::convertSlashes(mod_paths[j-1] + "mods/" + mod_list[i].name + "/" + path);
 			amendPathToVector(test_path, ret);
 		}
 	}
@@ -328,26 +326,29 @@ void ModManager::setPaths() {
 Mod ModManager::loadMod(const std::string& name) {
 	Mod mod;
 	std::ifstream infile;
-	std::string starts_with, line, key, val;
+	std::string line, key, val;
 
 	mod.name = name;
+	bool settings_loaded = false;
+	bool gameplay_loaded = false;
 
 	// @CLASS ModManager|Description of mod settings.txt
-	for (unsigned i=0; i<mod_paths.size(); ++i) {
-		std::string path = mod_paths[i] + "mods/" + name + "/settings.txt";
+	for (size_t i = 0; i < mod_paths.size(); ++i) {
+		std::string path = Filesystem::convertSlashes(mod_paths[i] + "mods/" + name + "/settings.txt");
 		infile.open(path.c_str(), std::ios::in);
+
+		if (infile.is_open()) {
+			settings_loaded = true;
+		}
 
 		while (infile.good()) {
 			line = Parse::getLine(infile);
+
+			if (Parse::skipLine(line))
+				continue;
+
 			key = "";
 			val = "";
-
-			// skip ahead if this line is empty
-			if (line.length() == 0) continue;
-
-			// skip comments
-			starts_with = line.at(0);
-			if (starts_with == "#") continue;
 
 			Parse::getKeyPair(line, key, val);
 
@@ -409,15 +410,36 @@ Mod ModManager::loadMod(const std::string& name) {
 				Utils::logError("ModManager: Mod '%s' contains invalid key: '%s'", name.c_str(), key.c_str());
 			}
 		}
-		if (infile.good()) {
-			infile.close();
-			infile.clear();
+		infile.close();
+		infile.clear();
+
+		path = Filesystem::convertSlashes(mod_paths[i] + "mods/" + name + "/engine/gameplay.txt");
+		infile.open(path.c_str(), std::ios::in);
+
+		if (infile.is_open()) {
+			gameplay_loaded = true;
+		}
+
+		while (infile.good()) {
+			line = Parse::getLine(infile);
+
+			if (Parse::skipLine(line))
+				continue;
+
+			key = "";
+			val = "";
+
+			Parse::getKeyPair(line, key, val);
+
+			if (key == "enable_playgame") {
+				mod.is_game_mod = Parse::toBool(val);
+			}
+		}
+		infile.close();
+		infile.clear();
+
+		if (settings_loaded && gameplay_loaded)
 			break;
-		}
-		else {
-			infile.close();
-			infile.clear();
-		}
 	}
 
 	// ensure that engine min version <= engine max version
@@ -527,7 +549,7 @@ bool ModManager::haveFallbackMod() {
 
 void ModManager::saveMods() {
 	std::ofstream outfile;
-	outfile.open((settings->path_conf + "mods.txt").c_str(), std::ios::out);
+	outfile.open((Filesystem::convertSlashes(settings->path_conf + "mods.txt")).c_str(), std::ios::out);
 
 	if (outfile.is_open()) {
 		// comment

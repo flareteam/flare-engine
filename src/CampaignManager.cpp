@@ -36,10 +36,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "StatBlock.h"
+#include "UtilsMath.h"
 #include "UtilsParsing.h"
 
 CampaignManager::CampaignManager()
-	: bonus_xp(0.0) {
+	: bonus_xp(0.0)
+	, random_status(0) {
 }
 
 StatusID CampaignManager::registerStatus(const std::string& s) {
@@ -77,21 +79,20 @@ void CampaignManager::setAll(const std::string& s) {
  * Convert status array to savefile campaign= (status csv)
  */
 std::string CampaignManager::getAll() {
-	std::stringstream ss;
-	ss.str("");
+	std::string output("");
 
 	StatusMap::iterator it;
 	for (it = status.begin(); it != status.end(); ++it) {
 		if (it->second.first)
-			ss << it->second.second;
+			output += it->second.second;
 
 		StatusMap::iterator temp = it;
-		temp++;
+		++temp;
 		if (temp != status.end() && temp->second.first) {
-			ss << ',';
+			output += ',';
 		}
 	}
-	return ss.str();
+	return output;
 }
 
 bool CampaignManager::checkStatus(const StatusID s) {
@@ -138,11 +139,11 @@ bool CampaignManager::checkCurrency(int quantity) {
 	return menu->inv->inventory[MenuInventory::CARRIED].contain(eset->misc.currency_id, quantity);
 }
 
-bool CampaignManager::checkItem(int item_id) {
-	if (menu->inv->inventory[MenuInventory::CARRIED].contain(item_id, 1))
+bool CampaignManager::checkItem(ItemStack istack) {
+	if (menu->inv->inventory[MenuInventory::CARRIED].contain(istack.item, istack.quantity))
 		return true;
 	else
-		return menu->inv->inventory[MenuInventory::EQUIPMENT].contain(item_id, 1);
+		return menu->inv->equipmentContain(istack.item, istack.quantity);
 }
 
 void CampaignManager::removeCurrency(int quantity) {
@@ -150,17 +151,31 @@ void CampaignManager::removeCurrency(int quantity) {
 
 	if (max_amount > 0) {
 		menu->inv->removeCurrency(max_amount);
-		pc->logMsg(msg->get("%d %s removed.", max_amount, eset->loot.currency), Avatar::MSG_UNIQUE);
+		pc->logMsg(msg->getv("%d %s removed.", max_amount, eset->loot.currency.c_str()), Avatar::MSG_UNIQUE);
 		items->playSound(eset->misc.currency_id);
 	}
 }
 
-void CampaignManager::removeItem(int item_id) {
-	if (item_id < 0 || static_cast<unsigned>(item_id) >= items->items.size()) return;
+void CampaignManager::removeItem(ItemStack istack) {
+	if (istack.empty())
+		return;
 
-	if (menu->inv->remove(item_id)) {
-		pc->logMsg(msg->get("%s removed.", items->getItemName(item_id)), Avatar::MSG_UNIQUE);
-		items->playSound(item_id);
+	if (istack.item == eset->misc.currency_id) {
+		removeCurrency(istack.quantity);
+		return;
+	}
+
+	int item_count = menu->inv->inventory[MenuInventory::CARRIED].count(istack.item) + menu->inv->inventory[MenuInventory::EQUIPMENT].count(istack.item);
+	int max_amount = std::min(item_count, istack.quantity);
+
+	if (menu->inv->remove(istack.item, max_amount)) {
+		if (max_amount > 1)
+			pc->logMsg(msg->getv("%s x%d removed.", items->getItemName(istack.item).c_str(), max_amount), Avatar::MSG_UNIQUE);
+		else if (max_amount == 1)
+			pc->logMsg(msg->getv("%s removed.", items->getItemName(istack.item).c_str()), Avatar::MSG_UNIQUE);
+
+		if (max_amount > 0)
+			items->playSound(istack.item);
 	}
 }
 
@@ -170,11 +185,14 @@ void CampaignManager::rewardItem(ItemStack istack) {
 
 	menu->inv->add(istack, MenuInventory::CARRIED, ItemStorage::NO_SLOT, MenuInventory::ADD_PLAY_SOUND, MenuInventory::ADD_AUTO_EQUIP);
 
-	if (istack.item != eset->misc.currency_id) {
-		if (istack.quantity <= 1)
-			pc->logMsg(msg->get("You receive %s.", items->getItemName(istack.item)), Avatar::MSG_UNIQUE);
+	if (istack.item == eset->misc.currency_id) {
+		pc->logMsg(msg->getv("You receive %d %s.", istack.quantity, eset->loot.currency.c_str()), Avatar::MSG_UNIQUE);
+	}
+	else {
 		if (istack.quantity > 1)
-			pc->logMsg(msg->get("You receive %s x%d.", items->getItemName(istack.item), istack.quantity), Avatar::MSG_UNIQUE);
+			pc->logMsg(msg->getv("You receive %s x%d.", items->getItemName(istack.item).c_str(), istack.quantity), Avatar::MSG_UNIQUE);
+		else if (istack.quantity == 1)
+			pc->logMsg(msg->getv("You receive %s.", items->getItemName(istack.item).c_str()), Avatar::MSG_UNIQUE);
 	}
 }
 
@@ -183,41 +201,65 @@ void CampaignManager::rewardCurrency(int amount) {
 	stack.item = eset->misc.currency_id;
 	stack.quantity = amount;
 
-	pc->logMsg(msg->get("You receive %d %s.", amount, eset->loot.currency), Avatar::MSG_UNIQUE);
 	rewardItem(stack);
 }
 
-void CampaignManager::rewardXP(int amount, bool show_message) {
-	bonus_xp += (static_cast<float>(amount) * (100.0f + static_cast<float>(pc->stats.get(Stats::XP_GAIN)))) / 100.0f;
-	pc->stats.addXP(static_cast<int>(bonus_xp));
-	bonus_xp -= static_cast<float>(static_cast<int>(bonus_xp));
+void CampaignManager::rewardXP(float amount, bool show_message) {
+	bonus_xp += (amount * (100.0f + static_cast<float>(pc->stats.get(Stats::XP_GAIN)))) / 100.0f;
+
+	int whole_xp = static_cast<int>(bonus_xp);
+	pc->stats.addXP(whole_xp);
+	bonus_xp -= static_cast<float>(whole_xp); // remainder
+
 	pc->stats.refresh_stats = true;
-	if (show_message) pc->logMsg(msg->get("You receive %d XP.", amount), Avatar::MSG_UNIQUE);
+
+	if (show_message)
+		pc->logMsg(msg->getv("You receive %d XP.", static_cast<int>(amount)), Avatar::MSG_UNIQUE);
 }
 
 void CampaignManager::restoreHPMP(const std::string& s) {
-	if (s == "hp") {
-		pc->stats.hp = pc->stats.get(Stats::HP_MAX);
-		pc->logMsg(msg->get("HP restored."), Avatar::MSG_UNIQUE);
-	}
-	else if (s == "mp") {
-		pc->stats.mp = pc->stats.get(Stats::MP_MAX);
-		pc->logMsg(msg->get("MP restored."), Avatar::MSG_UNIQUE);
-	}
-	else if (s == "hpmp") {
-		pc->stats.hp = pc->stats.get(Stats::HP_MAX);
-		pc->stats.mp = pc->stats.get(Stats::MP_MAX);
-		pc->logMsg(msg->get("HP and MP restored."), Avatar::MSG_UNIQUE);
-	}
-	else if (s == "status") {
-		pc->stats.effects.clearNegativeEffects();
-		pc->logMsg(msg->get("Negative effects removed."), Avatar::MSG_UNIQUE);
-	}
-	else if (s == "all") {
-		pc->stats.hp = pc->stats.get(Stats::HP_MAX);
-		pc->stats.mp = pc->stats.get(Stats::MP_MAX);
-		pc->stats.effects.clearNegativeEffects();
-		pc->logMsg(msg->get("HP and MP restored, negative effects removed"), Avatar::MSG_UNIQUE);
+	std::string restore_str = s;
+	std::string restore_mode = Parse::popFirstString(restore_str);
+
+	while (!restore_mode.empty()) {
+		if (restore_mode == "hp") {
+			pc->stats.hp = pc->stats.get(Stats::HP_MAX);
+			pc->logMsg(msg->get("HP restored."), Avatar::MSG_UNIQUE);
+		}
+		else if (restore_mode == "mp") {
+			pc->stats.mp = pc->stats.get(Stats::MP_MAX);
+			pc->logMsg(msg->get("MP restored."), Avatar::MSG_UNIQUE);
+		}
+		else if (restore_mode == "hpmp") {
+			pc->stats.hp = pc->stats.get(Stats::HP_MAX);
+			pc->stats.mp = pc->stats.get(Stats::MP_MAX);
+			pc->logMsg(msg->get("HP and MP restored."), Avatar::MSG_UNIQUE);
+		}
+		else if (restore_mode == "status") {
+			pc->stats.effects.clearNegativeEffects(Effect::RESIST_ALL);
+			pc->logMsg(msg->get("Negative effects removed."), Avatar::MSG_UNIQUE);
+		}
+		else if (restore_mode == "all") {
+			pc->stats.hp = pc->stats.get(Stats::HP_MAX);
+			pc->stats.mp = pc->stats.get(Stats::MP_MAX);
+			pc->stats.effects.clearNegativeEffects(Effect::RESIST_ALL);
+			pc->logMsg(msg->get("HP and MP restored, negative effects removed"), Avatar::MSG_UNIQUE);
+
+			for (size_t i = 0; i < eset->resource_stats.list.size(); ++i) {
+				pc->stats.resource_stats[i] = pc->stats.getResourceStat(i, EngineSettings::ResourceStats::STAT_BASE);
+				pc->logMsg(eset->resource_stats.list[i].text_log_restore, Avatar::MSG_UNIQUE);
+			}
+		}
+		else {
+			for (size_t i = 0; i < eset->resource_stats.list.size(); ++i) {
+				if (restore_mode == eset->resource_stats.list[i].ids[EngineSettings::ResourceStats::STAT_BASE]) {
+					pc->stats.resource_stats[i] = pc->stats.getResourceStat(i, EngineSettings::ResourceStats::STAT_BASE);
+					pc->logMsg(eset->resource_stats.list[i].text_log_restore, Avatar::MSG_UNIQUE);
+				}
+			}
+		}
+
+		restore_mode = Parse::popFirstString(restore_str);
 	}
 }
 
@@ -231,27 +273,27 @@ bool CampaignManager::checkAllRequirements(const EventComponent& ec) {
 			return true;
 	}
 	else if (ec.type == EventComponent::REQUIRES_CURRENCY) {
-		if (checkCurrency(ec.x))
+		if (checkCurrency(ec.data[0].Int))
 			return true;
 	}
 	else if (ec.type == EventComponent::REQUIRES_NOT_CURRENCY) {
-		if (!checkCurrency(ec.x))
+		if (!checkCurrency(ec.data[0].Int))
 			return true;
 	}
 	else if (ec.type == EventComponent::REQUIRES_ITEM) {
-		if (checkItem(ec.x))
+		if (checkItem(ItemStack(ec.id, ec.data[0].Int)))
 			return true;
 	}
 	else if (ec.type == EventComponent::REQUIRES_NOT_ITEM) {
-		if (!checkItem(ec.x))
+		if (!checkItem(ItemStack(ec.id, ec.data[0].Int)))
 			return true;
 	}
 	else if (ec.type == EventComponent::REQUIRES_LEVEL) {
-		if (pc->stats.level >= ec.x)
+		if (pc->stats.level >= ec.data[0].Int)
 			return true;
 	}
 	else if (ec.type == EventComponent::REQUIRES_NOT_LEVEL) {
-		if (pc->stats.level < ec.x)
+		if (pc->stats.level < ec.data[0].Int)
 			return true;
 	}
 	else if (ec.type == EventComponent::REQUIRES_CLASS) {
@@ -270,6 +312,50 @@ bool CampaignManager::checkAllRequirements(const EventComponent& ec) {
 
 	// requirement check failed
 	return false;
+}
+
+bool CampaignManager::checkRequirementsInVector(const std::vector<EventComponent>& ec_vec) {
+	for (size_t i = 0; i < ec_vec.size(); ++i) {
+		if (!checkAllRequirements(ec_vec[i]))
+			return false;
+	}
+
+	return true;
+}
+
+void CampaignManager::randomStatusAppend(const StatusID s) {
+	if (std::find(random_status_pool.begin(), random_status_pool.end(), s) == random_status_pool.end()) {
+		if (random_status_pool.empty())
+			random_status = s;
+
+		random_status_pool.push_back(s);
+	}
+}
+
+void CampaignManager::randomStatusClear() {
+	random_status_pool.clear();
+	random_status = 0;
+}
+
+void CampaignManager::randomStatusRoll() {
+	if (random_status_pool.empty())
+		return;
+
+	random_status = random_status_pool[Math::randBetween(0, static_cast<int>(random_status_pool.size()) - 1)];
+}
+
+void CampaignManager::randomStatusSet() {
+	if (random_status_pool.empty())
+		return;
+
+	setStatus(random_status);
+}
+
+void CampaignManager::randomStatusUnset() {
+	if (random_status_pool.empty())
+		return;
+
+	unsetStatus(random_status);
 }
 
 CampaignManager::~CampaignManager() {

@@ -14,27 +14,27 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/$(SDL_PATH)/include \
 # Add your application source files here...
 LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c \
 	../../../../../../src/main.cpp \
-	../../../../../../src/BehaviorAlly.cpp \
-	../../../../../../src/Entity.cpp \
 	../../../../../../src/Animation.cpp \
 	../../../../../../src/AnimationManager.cpp \
+	../../../../../../src/AnimationMedia.cpp \
 	../../../../../../src/AnimationSet.cpp \
 	../../../../../../src/AStarContainer.cpp \
 	../../../../../../src/AStarNode.cpp \
 	../../../../../../src/Avatar.cpp \
-	../../../../../../src/BehaviorStandard.cpp \
+	../../../../../../src/Camera.cpp \
 	../../../../../../src/CampaignManager.cpp \
 	../../../../../../src/CombatText.cpp \
 	../../../../../../src/CursorManager.cpp \
 	../../../../../../src/DeviceList.cpp \
 	../../../../../../src/EffectManager.cpp \
-	../../../../../../src/Enemy.cpp \
-	../../../../../../src/EnemyBehavior.cpp \
 	../../../../../../src/EnemyGroupManager.cpp \
-	../../../../../../src/EnemyManager.cpp \
+	../../../../../../src/Entity.cpp \
+	../../../../../../src/EntityBehavior.cpp \
+	../../../../../../src/EntityManager.cpp \
 	../../../../../../src/EngineSettings.cpp \
 	../../../../../../src/EventManager.cpp \
 	../../../../../../src/FileParser.cpp \
+	../../../../../../src/FogOfWar.cpp \
 	../../../../../../src/FontEngine.cpp \
 	../../../../../../src/GameSlotPreview.cpp \
 	../../../../../../src/GameState.cpp \
@@ -68,12 +68,14 @@ LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c \
 	../../../../../../src/MenuDevConsole.cpp \
 	../../../../../../src/MenuEnemy.cpp \
 	../../../../../../src/MenuExit.cpp \
+	../../../../../../src/MenuGameOver.cpp \
 	../../../../../../src/MenuHUDLog.cpp \
 	../../../../../../src/MenuInventory.cpp \
 	../../../../../../src/MenuItemStorage.cpp \
 	../../../../../../src/MenuLog.cpp \
 	../../../../../../src/MenuManager.cpp \
 	../../../../../../src/MenuMiniMap.cpp \
+	../../../../../../src/MenuMovementType.cpp \
 	../../../../../../src/MenuNumPicker.cpp \
 	../../../../../../src/MenuPowers.cpp \
 	../../../../../../src/MenuStash.cpp \
@@ -123,6 +125,7 @@ LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c \
 	../../../../../../src/WidgetSlot.cpp \
  	../../../../../../src/WidgetTabControl.cpp \
 	../../../../../../src/WidgetTooltip.cpp \
+	../../../../../../src/XPScaling.cpp
 	../../../../../../src/OpenGLRenderDevice.cpp \
 	../../../../../../src/OpenGL_EXT.cpp
 

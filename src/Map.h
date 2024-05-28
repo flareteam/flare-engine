@@ -30,8 +30,32 @@ class Event;
 class FileParser;
 class StatBlock;
 
+class SpawnLevel {
+public:
+	enum {
+		MODE_DEFAULT = 0,
+		MODE_FIXED = 1,
+		MODE_STAT = 2,
+		MODE_LEVEL = 3
+	};
+
+	uint8_t mode;
+	float count;
+	float ratio;
+	size_t stat;
+
+	SpawnLevel()
+		: mode(MODE_DEFAULT)
+		, count(0)
+		, ratio(0)
+		, stat(0)
+	{}
+	~SpawnLevel() {}
+};
+
 class Map_Group {
 public:
+
 	std::string type;
 	std::string category;
 	Point pos;
@@ -44,10 +68,9 @@ public:
 	int direction;
 	std::queue<FPoint> waypoints;
 	int wander_radius;
-	std::vector<StatusID> requires_status;
-	std::vector<StatusID> requires_not_status;
-	std::vector<StatusID> invincible_requires_status;
-	std::vector<StatusID> invincible_requires_not_status;
+	std::vector<EventComponent> requirements;
+	std::vector<EventComponent> invincible_requirements;
+	SpawnLevel spawn_level;
 
 	Map_Group()
 		: type("")
@@ -58,14 +81,13 @@ public:
 		, levelmax(0)
 		, numbermin(1)
 		, numbermax(1)
-		, chance(1.0f)
+		, chance(100.0f)
 		, direction(-1)
 		, waypoints(std::queue<FPoint>())
 		, wander_radius(4)
-		, requires_status()
-		, requires_not_status()
-		, invincible_requires_status()
-		, invincible_requires_not_status() {
+		, requirements()
+		, invincible_requirements()
+		, spawn_level() {
 	}
 };
 
@@ -74,15 +96,19 @@ public:
 	std::string type;
 	std::string id;
 	FPoint pos;
-	std::vector<StatusID> requires_status;
-	std::vector<StatusID> requires_not_status;
+	std::vector<EventComponent> requirements;
+	int direction;
+	std::queue<FPoint> waypoints;
+	int wander_radius;
 
 	Map_NPC()
 		: type("")
 		, id("")
 		, pos()
-		, requires_status()
-		, requires_not_status() {
+		, requirements()
+		, direction(-1)
+		, waypoints(std::queue<FPoint>())
+		, wander_radius(0) {
 	}
 };
 
@@ -95,12 +121,11 @@ public:
 	int wander_radius;
 	bool hero_ally;
 	bool enemy_ally;
-	int summon_power_index;
+	PowerID summon_power_index;
 	StatBlock* summoner;
-	std::vector<StatusID> requires_status;
-	std::vector<StatusID> requires_not_status;
-	std::vector<StatusID> invincible_requires_status;
-	std::vector<StatusID> invincible_requires_not_status;
+	std::vector<EventComponent> requirements;
+	std::vector<EventComponent> invincible_requirements;
+	SpawnLevel spawn_level;
 
 	Map_Enemy(const std::string& _type="", FPoint _pos=FPoint())
 		: type(_type)
@@ -112,10 +137,9 @@ public:
 		, enemy_ally(false)
 		, summon_power_index(0)
 		, summoner(NULL)
-		, requires_status()
-		, requires_not_status()
-		, invincible_requires_status()
-		, invincible_requires_not_status() {
+		, requirements()
+		, invincible_requirements()
+		, spawn_level() {
 	}
 };
 
@@ -133,8 +157,6 @@ protected:
 
 	std::string filename;
 	std::string tileset;
-
-	int collision_layer;
 public:
 	Map();
 	~Map();
@@ -159,7 +181,7 @@ public:
 	std::queue<Map_Group> enemy_groups;
 
 	// npc load handling
-	std::queue<Map_NPC> npcs;
+	std::queue<Map_NPC> map_npcs;
 
 	// map events
 	std::vector<Event> events;
@@ -177,6 +199,8 @@ public:
 	FPoint hero_pos;
 	std::string parallax_filename;
 	Color background_color;
+	unsigned short fogofwar;
+	bool save_fogofwar;
 
 };
 

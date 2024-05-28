@@ -30,12 +30,34 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class NPC;
 class StatBlock;
 class WidgetButton;
+class WidgetTabControl;
+
+class MenuStashTab {
+public:
+	static const bool IS_PRIVATE = true;
+
+	MenuStashTab(const std::string& id, const std::string& _name, const std::string& _filename, bool _is_private);
+	~MenuStashTab();
+
+	std::string id;
+	std::string name;
+	std::string filename;
+	bool is_private;
+	bool is_legacy;
+	bool updated;
+
+	MenuItemStorage stock;
+	TabList tablist;
+};
 
 class MenuStash : public Menu {
 private:
 	WidgetButton *closeButton;
+	WidgetTabControl *tab_control;
 	WidgetLabel label_title;
 	WidgetLabel label_currency;
+
+	size_t activetab;
 
 public:
 	static const int NO_SLOT = -1;
@@ -53,12 +75,21 @@ public:
 	void renderTooltips(const Point& position);
 	bool drop(const Point& position, ItemStack stack);
 	void validate(std::queue<ItemStack>& global_drop_stack);
+	bool checkUpdates();
 
 	void removeFromPrevSlot(int quantity);
+	void enableSharedTab(bool permadeath);
+
+	void setTab(size_t tab);
+	size_t getTab();
+
+	void lockTabControl();
+	void unlockTabControl();
+	TabList* getCurrentTabList();
+	void defocusTabLists();
 
 	Rect slots_area;
-	MenuItemStorage stock;
-	bool updated;
+	std::vector<MenuStashTab> tabs;
 
 	std::queue<ItemStack> drop_stack;
 };

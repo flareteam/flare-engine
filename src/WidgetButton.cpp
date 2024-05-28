@@ -45,7 +45,6 @@ WidgetButton::WidgetButton(const std::string& _fileName)
 	, pressed(false)
 	, hover(false)
 {
-	focusable = true;
 	loadArt();
 
 	text_color_normal = font->getColor(FontEngine::COLOR_WIDGET_NORMAL);

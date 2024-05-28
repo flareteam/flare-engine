@@ -41,6 +41,7 @@ public:
 
 	std::string getLocaleDescription(const std::string& lang);
 
+	bool is_game_mod;
 	std::string name;
 	std::string description;
 	std::map<std::string, std::string> description_locale;
@@ -79,7 +80,7 @@ public:
 
 	// Returns the filename within the latest mod, in which the provided generic
 	// filename was found.
-	std::string locate(const std::string& filename);
+	std::string locate(const std::string& _filename);
 
 	// Returns a list of filenames, going through all mods, in which the provided
 	// generic filename is found.

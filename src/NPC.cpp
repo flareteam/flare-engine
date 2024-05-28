@@ -22,14 +22,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class NPC
  */
 
-#include "Animation.h"
-#include "AnimationManager.h"
-#include "AnimationSet.h"
 #include "CampaignManager.h"
+#include "EntityBehavior.h"
+#include "EntityManager.h"
 #include "EventManager.h"
 #include "FileParser.h"
 #include "ItemManager.h"
 #include "LootManager.h"
+#include "MapRenderer.h"
 #include "MessageEngine.h"
 #include "ModManager.h"
 #include "NPC.h"
@@ -40,16 +40,25 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
 
-NPC::NPC()
-	: Entity()
+NPC::NPC(const Entity& e)
+	: Entity(e)
 	, gfx("")
+	, vox_intro()
+	, vox_quests()
 	, name("")
 	, direction(0)
+	, show_on_minimap(true)
 	, npc_portrait(NULL)
 	, hero_portrait(NULL)
 	, talker(false)
 	, vendor(false)
-	, reset_buyback(true) {
+	, reset_buyback(true)
+	, stock()
+	, vendor_ratio_buy(0)
+	, vendor_ratio_sell(0)
+	, vendor_ratio_sell_old(0)
+	, dialog()
+{
 	stock.init(VENDOR_MAX_STOCK);
 }
 
@@ -70,7 +79,11 @@ void NPC::load(const std::string& npc_id) {
 		bool clear_random_table = true;
 
 		while (infile.next()) {
-			if (infile.section == "dialog") {
+			if (infile.section == "stats") {
+				// handled by StatBlock::load()
+				continue;
+			}
+			else if (infile.section == "dialog") {
 				if (infile.new_section) {
 					dialog.push_back(std::vector<EventComponent>());
 				}
@@ -95,7 +108,7 @@ void NPC::load(const std::string& npc_id) {
 				else if (infile.key == "voice") {
 					// @ATTR dialog.voice|repeatable(string)|Filename of a voice sound file to play.
 					e.type = EventComponent::NPC_VOICE;
-					e.x = loadSound(infile.val, VOX_QUEST);
+					e.data[0].Int = loadSound(infile.val, VOX_QUEST);
 				}
 				else if (infile.key == "topic") {
 					// @ATTR dialog.topic|string|The name of this dialog topic. Displayed when picking a dialog tree.
@@ -125,6 +138,11 @@ void NPC::load(const std::string& npc_id) {
 					e.s = infile.val;
 					portrait_filenames.push_back(e.s);
 				}
+				else if (infile.key == "take_a_party") {
+					// @ATTR dialog.take_a_party|bool|Start/stop taking a party with player.
+					e.type = EventComponent::NPC_TAKE_A_PARTY;
+					e.data[0].Bool = Parse::toBool(infile.val);
+				}
 				else if (infile.key == "response") {
 					// @ATTR dialog.response|repeatable(string)|A dialog ID to present as a selectable response. This key must precede the dialog text line.
 					e.type = EventComponent::NPC_DIALOG_RESPONSE;
@@ -133,7 +151,7 @@ void NPC::load(const std::string& npc_id) {
 				else if (infile.key == "response_only") {
 					// @ATTR dialog.response_only|bool|If true, this dialog topic will only appear when explicitly referenced with the "response" key.
 					e.type = EventComponent::NPC_DIALOG_RESPONSE_ONLY;
-					e.x = Parse::toBool(infile.val);
+					e.data[0].Bool = Parse::toBool(infile.val);
 				}
 				else {
 					Event ev;
@@ -150,7 +168,7 @@ void NPC::load(const std::string& npc_id) {
 					dialog.back().push_back(e);
 				}
 			}
-			else {
+			else if (infile.section.empty() || infile.section == "npc") {
 				filename = npc_id;
 
 				if (infile.new_section) {
@@ -159,73 +177,68 @@ void NPC::load(const std::string& npc_id) {
 				}
 
 				if (infile.key == "name") {
-					// @ATTR name|string|NPC's name.
+					// @ATTR npc.name|string|NPC's name.
 					name = msg->get(infile.val);
 				}
-				else if (infile.key == "gfx") {
-					// @ATTR gfx|filename|Filename of an animation definition.
-					gfx = infile.val;
+				else if (infile.key == "animations" || infile.key == "gfx") {
+					// TODO "gfx" is deprecated
 				}
 				else if (infile.key == "direction") {
-					// @ATTR direction|direction|The direction to use for this NPC's stance animation.
+					// @ATTR npc.direction|direction|The direction to use for this NPC's stance animation.
 					direction = Parse::toDirection(infile.val);
+				}
+				else if (infile.key == "show_on_minimap") {
+					// @ATTR npc.show_on_minimap|bool|If true, this NPC will be shown on the minimap. The default is true.
+					show_on_minimap = Parse::toBool(infile.val);
 				}
 
 				// handle talkers
 				else if (infile.key == "talker") {
-					// @ATTR talker|bool|Allows this NPC to be talked to.
+					// @ATTR npc.talker|bool|Allows this NPC to be talked to.
 					talker = Parse::toBool(infile.val);
 				}
 				else if (infile.key == "portrait") {
-					// @ATTR portrait|filename|Filename of the default portrait image.
+					// @ATTR npc.portrait|filename|Filename of the default portrait image.
 					portrait_filenames[0] = infile.val;
 				}
 
 				// handle vendors
 				else if (infile.key == "vendor") {
-					// @ATTR vendor|bool|Allows this NPC to buy/sell items.
+					// @ATTR npc.vendor|bool|Allows this NPC to buy/sell items.
 					vendor = Parse::toBool(infile.val);
 				}
 				else if (infile.key == "vendor_requires_status") {
-					// @ATTR vendor_requires_status|list(string)|The player must have these statuses in order to use this NPC as a vendor.
+					// @ATTR npc.vendor_requires_status|list(string)|The player must have these statuses in order to use this NPC as a vendor.
 					while (infile.val != "") {
 						vendor_requires_status.push_back(camp->registerStatus(Parse::popFirstString(infile.val)));
 					}
 				}
 				else if (infile.key == "vendor_requires_not_status") {
-					// @ATTR vendor_requires_not_status|list(string)|The player must not have these statuses in order to use this NPC as a vendor.
+					// @ATTR npc.vendor_requires_not_status|list(string)|The player must not have these statuses in order to use this NPC as a vendor.
 					while (infile.val != "") {
 						vendor_requires_not_status.push_back(camp->registerStatus(Parse::popFirstString(infile.val)));
 					}
 				}
 				else if (infile.key == "constant_stock") {
-					// @ATTR constant_stock|repeatable(list(item_id))|A list of items this vendor has for sale. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.
+					// @ATTR npc.constant_stock|repeatable(list(item_id))|A list of items this vendor has for sale. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.
 					while (infile.val != "") {
-						std::string temp = Parse::popFirstString(infile.val);
-						temp += ':';
-						stack.item = Parse::popFirstInt(temp, ':');
-						stack.quantity = Parse::popFirstInt(temp, ':');
-						if (stack.quantity == 0)
-							stack.quantity = 1;
+						stack = Parse::toItemQuantityPair(Parse::popFirstString(infile.val));
+						stack.item = items->verifyID(stack.item, &infile, !ItemManager::VERIFY_ALLOW_ZERO, !ItemManager::VERIFY_ALLOCATE);
 						stock.add(stack, ItemStorage::NO_SLOT);
 					}
 				}
 				else if (infile.key == "status_stock") {
-					// @ATTR status_stock|repeatable(string, list(item_id)) : Required status, Item(s)|A list of items this vendor will have for sale if the required status is met. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.
+					// @ATTR npc.status_stock|repeatable(string, list(item_id)) : Required status, Item(s)|A list of items this vendor will have for sale if the required status is met. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.
 					if (camp->checkStatus(camp->registerStatus(Parse::popFirstString(infile.val)))) {
 						while (infile.val != "") {
-							std::string temp = Parse::popFirstString(infile.val);
-							temp += ':';
-							stack.item = Parse::popFirstInt(temp, ':');
-							stack.quantity = Parse::popFirstInt(temp, ':');
-							if (stack.quantity == 0)
-								stack.quantity = 1;
+							stack = Parse::toItemQuantityPair(Parse::popFirstString(infile.val));
+							stack.item = items->verifyID(stack.item, &infile, !ItemManager::VERIFY_ALLOW_ZERO, !ItemManager::VERIFY_ALLOCATE);
 							stock.add(stack, ItemStorage::NO_SLOT);
 						}
 					}
 				}
 				else if (infile.key == "random_stock") {
-					// @ATTR random_stock|list(loot)|Use a loot table to add random items to the stock; either a filename or an inline definition.
+					// @ATTR npc.random_stock|list(loot)|Use a loot table to add random items to the stock; either a filename or an inline definition.
 					if (clear_random_table) {
 						random_table.clear();
 						clear_random_table = false;
@@ -235,7 +248,7 @@ void NPC::load(const std::string& npc_id) {
 					loot->parseLoot(infile.val, &random_table.back(), &random_table);
 				}
 				else if (infile.key == "random_stock_count") {
-					// @ATTR random_stock_count|int, int : Min, Max|Sets the minimum (and optionally, the maximum) amount of random items this npc can have.
+					// @ATTR npc.random_stock_count|int, int : Min, Max|Sets the minimum (and optionally, the maximum) amount of random items this npc can have.
 					random_table_count.x = Parse::popFirstInt(infile.val);
 					random_table_count.y = Parse::popFirstInt(infile.val);
 					if (random_table_count.x != 0 || random_table_count.y != 0) {
@@ -243,10 +256,22 @@ void NPC::load(const std::string& npc_id) {
 						random_table_count.y = std::max(random_table_count.y, random_table_count.x);
 					}
 				}
+				else if (infile.key == "vendor_ratio_buy") {
+					// @ATTR npc.vendor_ratio_buy|float|NPC-specific version of vendor_ratio_buy from engine/loot.txt. Uses the global setting when set to 0.
+					vendor_ratio_buy = Parse::toFloat(infile.val);
+				}
+				else if (infile.key == "vendor_ratio_sell") {
+					// @ATTR npc.vendor_ratio_sell|float|NPC-specific version of vendor_ratio_sell from engine/loot.txt. Uses the global setting when set to 0.
+					vendor_ratio_sell = Parse::toFloat(infile.val);
+				}
+				else if (infile.key == "vendor_ratio_sell_old") {
+					// @ATTR npc.vendor_ratio_sell_old|float|NPC-specific version of vendor_ratio_sell_old from engine/loot.txt. Uses the global setting when set to 0.
+					vendor_ratio_sell_old = Parse::toFloat(infile.val);
+				}
 
 				// handle vocals
 				else if (infile.key == "vox_intro") {
-					// @ATTR vox_intro|repeatable(filename)|Filename of a sound file to play when initially interacting with the NPC.
+					// @ATTR npc.vox_intro|repeatable(filename)|Filename of a sound file to play when initially interacting with the NPC.
 					loadSound(infile.val, VOX_INTRO);
 				}
 
@@ -257,7 +282,9 @@ void NPC::load(const std::string& npc_id) {
 		}
 		infile.close();
 	}
-	loadGraphics();
+
+	loadAnimations();
+	loadGraphics(); // TODO rename?
 
 	// fill inventory with items from random stock table
 	unsigned rand_count = Math::randBetween(random_table_count.x, random_table_count.y);
@@ -282,13 +309,6 @@ void NPC::load(const std::string& npc_id) {
 }
 
 void NPC::loadGraphics() {
-
-	if (gfx != "") {
-		anim->increaseCount(gfx);
-		animationSet = anim->getAnimationSet(gfx);
-		activeAnimation = animationSet->getAnimation("");
-	}
-
 	portraits.resize(portrait_filenames.size(), NULL);
 
 	for (size_t i = 0; i < portrait_filenames.size(); ++i) {
@@ -329,8 +349,13 @@ int NPC::loadSound(const std::string& fname, int vox_type) {
 }
 
 void NPC::logic() {
-	if (activeAnimation)
-		activeAnimation->advanceFrame();
+	mapr->collider.unblock(stats.pos.x, stats.pos.y);
+
+	Entity::logic();
+	moveMapEvents();
+
+	if (!stats.hero_ally)
+		mapr->collider.block(stats.pos.x, stats.pos.y, true);
 }
 
 bool NPC::playSoundIntro() {
@@ -372,7 +397,7 @@ void NPC::getDialogNodes(std::vector<int> &result, bool allow_responses) {
 				group = dialog[i-1][j].s;
 			}
 			else if (dialog[i-1][j].type == EventComponent::NPC_DIALOG_RESPONSE_ONLY) {
-				if (dialog[i-1][j].x && !allow_responses) {
+				if (dialog[i-1][j].data[0].Bool && !allow_responses) {
 					is_available = false;
 					break;
 				}
@@ -486,6 +511,36 @@ bool NPC::checkMovement(unsigned int dialog_node) {
 	return true;
 }
 
+void NPC::moveMapEvents() {
+
+	// Update event position after NPC has moved
+	for (size_t i = 0; i < mapr->events.size(); i++)
+	{
+		if (mapr->events[i].type == filename)
+		{
+			mapr->events[i].location.x = static_cast<int>(stats.pos.x);
+			mapr->events[i].location.y = static_cast<int>(stats.pos.y);
+
+			mapr->events[i].hotspot.x = static_cast<int>(stats.pos.x);
+			mapr->events[i].hotspot.y = static_cast<int>(stats.pos.y);
+
+			mapr->events[i].center.x =
+				static_cast<float>(stats.pos.x) + static_cast<float>(mapr->events[i].hotspot.w)/2;
+			mapr->events[i].center.y =
+				static_cast<float>(stats.pos.y) + static_cast<float>(mapr->events[i].hotspot.h)/2;
+
+			for (size_t ci = 0; ci < mapr->events[i].components.size(); ci++)
+			{
+				if (mapr->events[i].components[ci].type == EventComponent::NPC_HOTSPOT)
+				{
+					mapr->events[i].components[ci].data[0].Int = static_cast<int>(stats.pos.x);
+					mapr->events[i].components[ci].data[1].Int = static_cast<int>(stats.pos.y);
+				}
+			}
+		}
+	}
+}
+
 bool NPC::checkVendor() {
 	if (!vendor)
 		return false;
@@ -564,7 +619,7 @@ bool NPC::processDialog(unsigned int dialog_node, unsigned int &event_cursor) {
 			return true;
 		}
 		else if (dialog[dialog_node][event_cursor].type == EventComponent::NPC_VOICE) {
-			playSoundQuest(dialog[dialog_node][event_cursor].x);
+			playSoundQuest(dialog[dialog_node][event_cursor].data[0].Int);
 		}
 		else if (dialog[dialog_node][event_cursor].type == EventComponent::NPC_PORTRAIT_THEM) {
 			npc_portrait = portraits[0];
@@ -581,6 +636,21 @@ bool NPC::processDialog(unsigned int dialog_node, unsigned int &event_cursor) {
 				if (dialog[dialog_node][event_cursor].s == portrait_filenames[i]) {
 					hero_portrait = portraits[i];
 					break;
+				}
+			}
+		}
+		else if (dialog[dialog_node][event_cursor].type == EventComponent::NPC_TAKE_A_PARTY) {
+			bool new_hero_ally = dialog[dialog_node][event_cursor].data[0].Bool;
+			if (stats.hero_ally != new_hero_ally) {
+				stats.hero_ally = new_hero_ally;
+				if (stats.hero_ally) {
+					entitym->entities.push_back(this);
+				}
+				else {
+					for (size_t i = entitym->entities.size(); i > 0; --i) {
+						if (entitym->entities[i-1] == this)
+							entitym->entities.erase(entitym->entities.begin() + i - 1);
+					}
 				}
 			}
 		}
@@ -612,29 +682,13 @@ void NPC::processEvent(unsigned int dialog_node, unsigned int cursor) {
 	EventManager::executeEvent(ev);
 }
 
-Renderable NPC::getRender() {
-	Renderable r;
-	if (activeAnimation) {
-		r = activeAnimation->getCurrentFrame(direction);
-	}
-	r.map_pos.x = pos.x;
-	r.map_pos.y = pos.y;
-
-	return r;
-}
-
 bool NPC::isDialogType(const int &event_type) {
 	return event_type == EventComponent::NPC_DIALOG_THEM || event_type == EventComponent::NPC_DIALOG_YOU;
 }
 
 NPC::~NPC() {
-
 	for (size_t i = 0; i < portraits.size(); ++i) {
 		delete portraits[i];
-	}
-
-	if (gfx != "") {
-		anim->decreaseCount(gfx);
 	}
 
 	while (!vox_intro.empty()) {

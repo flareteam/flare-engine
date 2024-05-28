@@ -144,7 +144,7 @@ void QuestLog::load(const std::string& filename) {
 			ec.s = msg->get(infile.val);
 
 			// quest group id
-			ec.x = static_cast<int>(quests.size()-1);
+			ec.data[0].Int = static_cast<int>(quests.size()-1);
 
 			ev.components.push_back(ec);
 		}
@@ -173,26 +173,7 @@ void QuestLog::createQuestList() {
 
 	// check quest requirements
 	for (size_t i=0; i<quest_sections.size(); i++) {
-		bool requirements_met = false;
-
-		for (size_t j=0; j<quest_sections[i].size(); j++) {
-			if (quest_sections[i][j].type == EventComponent::QUEST_TEXT) {
-				continue;
-			}
-			else {
-				// check requirements
-				// break (skip to next dialog node) if any requirement fails
-				// if we reach an event that is not a requirement, succeed
-				if (!camp->checkAllRequirements(quest_sections[i][j])) {
-					requirements_met = false;
-					break;
-				}
-			}
-
-			requirements_met = true;
-		}
-
-		if (requirements_met) {
+		if (camp->checkRequirementsInVector(quest_sections[i])) {
 			// passed requirement checks, add ID to active quest list
 			temp_quest_ids.push_back(i);
 		}
@@ -249,7 +230,7 @@ void QuestLog::createQuestList() {
 			int next_quest_id = 0;
 			for (size_t j=0; j<quest_sections[k_next].size(); j++) {
 				if (quest_sections[k_next][j].type == EventComponent::QUEST_TEXT) {
-					next_quest_id = quest_sections[k_next][j].x;
+					next_quest_id = quest_sections[k_next][j].data[0].Int;
 					break;
 				}
 			}
@@ -258,7 +239,7 @@ void QuestLog::createQuestList() {
 				if (quest_sections[k][j].type == EventComponent::QUEST_TEXT) {
 					log->add(quest_sections[k][j].s, MenuLog::TYPE_QUESTS, WidgetLog::MSG_UNIQUE);
 
-					int quest_id = quest_sections[k][j].x;
+					int quest_id = quest_sections[k][j].data[0].Int;
 					if (next_quest_id != quest_id) {
 						if (!quests[quest_id].name.empty()) {
 							log->setNextStyle(WidgetLog::FONT_BOLD, MenuLog::TYPE_QUESTS);

@@ -21,12 +21,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "EngineSettings.h"
 #include "FileParser.h"
+#include "FontEngine.h"
 #include "MenuActionBar.h"
 #include "MessageEngine.h"
 #include "ModManager.h"
 #include "Settings.h"
 #include "SharedResources.h"
 #include "Utils.h"
+#include "UtilsMath.h"
 #include "UtilsParsing.h"
 
 void EngineSettings::load() {
@@ -45,12 +47,15 @@ void EngineSettings::load() {
 	tileset.load();
 	widgets.load();
 	xp.load();
+	number_format.load();
+	resource_stats.load();
 }
 
 void EngineSettings::Misc::load() {
 	// reset to defaults
 	save_hpmp = false;
 	corpse_timeout = 60 * settings->max_frames_per_sec;
+	corpse_timeout_enabled = true;
 	sell_without_vendor = true;
 	aim_assist = 0;
 	window_title = "Flare";
@@ -65,10 +70,18 @@ void EngineSettings::Misc::load() {
 	save_onload = true;
 	save_onexit = true;
 	save_pos_onexit = false;
-	camera_speed = 10.f;
+	save_oncutscene = true;
+	save_onstash = SAVE_ONSTASH_ALL;
+	save_anywhere = false;
+	camera_speed = 10.f * (static_cast<float>(settings->max_frames_per_sec) / Settings::LOGIC_FPS);
 	save_buyback = true;
 	keep_buyback_on_map_change = true;
 	sfx_unable_to_cast = "";
+	combat_aborts_npc_interact = true;
+	fogofwar = 0;
+	save_fogofwar = false;
+	mouse_move_deadzone_moving = 0.25f;
+	mouse_move_deadzone_not_moving = 0.75f;
 
 	FileParser infile;
 	// @CLASS EngineSettings: Misc|Description of engine/misc.txt
@@ -77,9 +90,9 @@ void EngineSettings::Misc::load() {
 			// @ATTR save_hpmp|bool|When saving the game, keep the hero's current HP and MP.
 			if (infile.key == "save_hpmp")
 				save_hpmp = Parse::toBool(infile.val);
-			// @ATTR corpse_timeout|duration|Duration that a corpse can exist on the map in 'ms' or 's'.
+			// @ATTR corpse_timeout|duration|Duration that a corpse can exist on the map in 'ms' or 's'. Use 0 to keep corpses indefinitely.
 			else if (infile.key == "corpse_timeout")
-				corpse_timeout = Parse::toDirection(infile.val);
+				corpse_timeout = Parse::toDuration(infile.val);
 			// @ATTR sell_without_vendor|bool|Allows selling items when not at a vendor via CTRL-Click.
 			else if (infile.key == "sell_without_vendor")
 				sell_without_vendor = Parse::toBool(infile.val);
@@ -95,9 +108,9 @@ void EngineSettings::Misc::load() {
 			// @ATTR sound_falloff|int|The maximum radius in tiles that any single sound is audible.
 			else if (infile.key == "sound_falloff")
 				sound_falloff = Parse::toInt(infile.val);
-			// @ATTR party_exp_percentage|int|The percentage of XP given to allies.
+			// @ATTR party_exp_percentage|float|The percentage of XP given to allies.
 			else if (infile.key == "party_exp_percentage")
-				party_exp_percentage = Parse::toInt(infile.val);
+				party_exp_percentage = Parse::toFloat(infile.val);
 			// @ATTR enable_ally_collision|bool|Allows allies to block the player's path.
 			else if (infile.key == "enable_ally_collision")
 				enable_ally_collision = Parse::toBool(infile.val);
@@ -106,7 +119,7 @@ void EngineSettings::Misc::load() {
 				enable_ally_collision_ai = Parse::toBool(infile.val);
 			else if (infile.key == "currency_id") {
 				// @ATTR currency_id|item_id|An item id that will be used as currency.
-				currency_id = Parse::toInt(infile.val);
+				currency_id = Parse::toItemID(infile.val);
 				if (currency_id < 1) {
 					currency_id = 1;
 					Utils::logError("EngineSettings: Currency ID below the minimum allowed value. Resetting it to %d", currency_id);
@@ -127,6 +140,25 @@ void EngineSettings::Misc::load() {
 			// @ATTR save_pos_onexit|bool|If the game gets saved on exiting, store the player's current position instead of the map spawn position.
 			else if (infile.key == "save_pos_onexit")
 				save_pos_onexit = Parse::toBool(infile.val);
+			// @ATTR save_oncutscene|bool|Saves the game when triggering any cutscene via an Event.
+			else if (infile.key == "save_oncutscene")
+				save_oncutscene = Parse::toBool(infile.val);
+			// @ATTR save_onstash|[bool, "private", "shared"]|Saves the game when changing the contents of a stash. The default is true (i.e. save when using both stash types). Use caution with the values "private" and false, since not saving shared stashes exposes an item duplication exploit.
+			else if (infile.key == "save_onstash") {
+				if (infile.val == "private")
+					save_onstash = SAVE_ONSTASH_PRIVATE;
+				else if (infile.val == "shared")
+					save_onstash = SAVE_ONSTASH_SHARED;
+				else {
+					if (Parse::toBool(infile.val))
+						save_onstash = SAVE_ONSTASH_ALL;
+					else
+						save_onstash = SAVE_ONSTASH_NONE;
+				}
+			}
+			// @ATTR save_anywhere|bool|Enables saving the game with a button in the pause menu.
+			else if (infile.key == "save_anywhere")
+				save_anywhere = Parse::toBool(infile.val);
 			// @ATTR camera_speed|float|Modifies how fast the camera moves to recenter on the player. Larger values mean a slower camera. Default value is 10.
 			else if (infile.key == "camera_speed") {
 				camera_speed = Parse::toFloat(infile.val);
@@ -142,6 +174,21 @@ void EngineSettings::Misc::load() {
 			// @ATTR sfx_unable_to_cast|filename|Sound to play when the player lacks the MP to cast a power.
 			else if (infile.key == "sfx_unable_to_cast")
 				sfx_unable_to_cast = infile.val;
+			// @ATTR combat_aborts_npc_interact|bool|If true, the NPC dialog and vendor menus will be closed if the player is attacked.
+			else if (infile.key == "combat_aborts_npc_interact")
+				combat_aborts_npc_interact = Parse::toBool(infile.val);
+			// @ATTR fogofwar|int|Set the fog of war type. 0-disabled, 1-minimap, 2-tint, 3-overlay.
+			else if (infile.key == "fogofwar")
+				fogofwar = static_cast<unsigned short>(Parse::toInt(infile.val));
+			// @ATTR save_fogofwar|bool|If true, the fog of war layer keeps track of the progress.
+			else if (infile.key == "save_fogofwar")
+				save_fogofwar = Parse::toBool(infile.val);
+
+			// @ATTR mouse_move_deadzone|float, float : Deadzone while moving, Deadzone while not moving|Adds a deadzone circle around the player to prevent erratic behavior when using mouse movement. Ideally, the deadzone when moving should be less than the deadzone when not moving. Defaults are 0.25 and 0.75 respectively.
+			else if (infile.key == "mouse_move_deadzone") {
+				mouse_move_deadzone_moving = Parse::popFirstFloat(infile.val);
+				mouse_move_deadzone_not_moving = Parse::popFirstFloat(infile.val);
+			}
 
 			else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
 		}
@@ -156,6 +203,11 @@ void EngineSettings::Misc::load() {
 	if (save_buyback && !keep_buyback_on_map_change) {
 		Utils::logError("EngineSettings: Warning, save_buyback=true is ignored when keep_buyback_on_map_change=false.");
 		save_buyback = false;
+	}
+
+	if (corpse_timeout <= 0) {
+		corpse_timeout_enabled = false;
+		corpse_timeout = settings->max_frames_per_sec + 1;
 	}
 }
 
@@ -196,7 +248,13 @@ void EngineSettings::Resolutions::load() {
 				virtual_heights.clear();
 				std::string v_height = Parse::popFirstString(infile.val);
 				while (!v_height.empty()) {
-					virtual_heights.push_back(static_cast<unsigned short>(Parse::toInt(v_height)));
+					int test_v_height = Parse::toInt(v_height);
+					if (test_v_height <= 0) {
+						Utils::logError("EngineSettings: virtual_height must be greater than zero.");
+					}
+					else {
+						virtual_heights.push_back(static_cast<unsigned short>(test_v_height));
+					}
 					v_height = Parse::popFirstString(infile.val);
 				}
 
@@ -224,14 +282,6 @@ void EngineSettings::Resolutions::load() {
 	// prevent the window from being too small
 	if (settings->screen_w < min_screen_w) settings->screen_w = min_screen_w;
 	if (settings->screen_h < min_screen_h) settings->screen_h = min_screen_h;
-
-	// set the default virtual height if it's not defined
-	if (settings->view_h == 0) {
-		Utils::logError("EngineSettings: virtual_height is undefined. Setting it to %d.", min_screen_h);
-		virtual_heights.push_back(min_screen_h);
-		settings->view_h = min_screen_h;
-		settings->view_h_half = settings->view_h / 2;
-	}
 
 	// icon size can not be zero, so we set a default of 32x32, which is fantasycore's icon size
 	if (icon_size == 0) {
@@ -274,57 +324,87 @@ void EngineSettings::Combat::load() {
 	max_crit_damage = 200;
 	min_overhit_damage = 100;
 	max_overhit_damage = 100;
+	resource_round_method = EngineSettings::Combat::RESOURCE_ROUND_METHOD_ROUND;
 
 	FileParser infile;
 	// @CLASS EngineSettings: Combat|Description of engine/combat.txt
 	if (infile.open("engine/combat.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			if (infile.key == "absorb_percent") {
-				// @ATTR absorb_percent|int, int : Minimum, Maximum|Limits the percentage of damage that can be absorbed.
-				min_absorb = Parse::popFirstInt(infile.val);
-				max_absorb = Parse::popFirstInt(infile.val);
+				// @ATTR absorb_percent|float, float : Minimum, Maximum|Limits the percentage of damage that can be absorbed. A max value less than 100 will ensure that the target always takes at least 1 damage from non-elemental attacks.
+				min_absorb = Parse::popFirstFloat(infile.val);
+				max_absorb = Parse::popFirstFloat(infile.val);
 				max_absorb = std::max(max_absorb, min_absorb);
 			}
 			else if (infile.key == "resist_percent") {
-				// @ATTR resist_percent|int, int : Minimum, Maximum|Limits the percentage of damage that can be resisted.
-				min_resist = Parse::popFirstInt(infile.val);
-				max_resist = Parse::popFirstInt(infile.val);
+				// @ATTR resist_percent|float, float : Minimum, Maximum|Limits the percentage of damage that can be resisted. A max value less than 100 will ensure that the target always takes at least 1 damage from elemental attacks.
+				min_resist = Parse::popFirstFloat(infile.val);
+				max_resist = Parse::popFirstFloat(infile.val);
 				max_resist = std::max(max_resist, min_resist);
 			}
 			else if (infile.key == "block_percent") {
-				// @ATTR block_percent|int, int : Minimum, Maximum|Limits the percentage of damage that can be blocked.
-				min_block = Parse::popFirstInt(infile.val);
-				max_block = Parse::popFirstInt(infile.val);
+				// @ATTR block_percent|float, float : Minimum, Maximum|Limits the percentage of damage that can be absorbed when the target is in the 'block' animation state. A max value less than 100 will ensure that the target always takes at least 1 damage from non-elemental attacks.
+				min_block = Parse::popFirstFloat(infile.val);
+				max_block = Parse::popFirstFloat(infile.val);
 				max_block = std::max(max_block, min_block);
 			}
 			else if (infile.key == "avoidance_percent") {
-				// @ATTR avoidance_percent|int, int : Minimum, Maximum|Limits the percentage chance that damage will be avoided.
-				min_avoidance = Parse::popFirstInt(infile.val);
-				max_avoidance = Parse::popFirstInt(infile.val);
+				// @ATTR avoidance_percent|float, float : Minimum, Maximum|Limits the percentage chance that damage will be avoided.
+				min_avoidance = Parse::popFirstFloat(infile.val);
+				max_avoidance = Parse::popFirstFloat(infile.val);
 				max_avoidance = std::max(max_avoidance, min_avoidance);
 			}
-			// @ATTR miss_damage_percent|int, int : Minimum, Maximum|The percentage of damage dealt when a miss occurs.
+			// @ATTR miss_damage_percent|float, float : Minimum, Maximum|The percentage of damage dealt when a miss occurs.
 			else if (infile.key == "miss_damage_percent") {
-				min_miss_damage = Parse::popFirstInt(infile.val);
-				max_miss_damage = Parse::popFirstInt(infile.val);
+				min_miss_damage = Parse::popFirstFloat(infile.val);
+				max_miss_damage = Parse::popFirstFloat(infile.val);
 				max_miss_damage = std::max(max_miss_damage, min_miss_damage);
 			}
-			// @ATTR crit_damage_percent|int, int : Minimum, Maximum|The percentage of damage dealt when a critical hit occurs.
+			// @ATTR crit_damage_percent|float, float : Minimum, Maximum|The percentage of damage dealt when a critical hit occurs.
 			else if (infile.key == "crit_damage_percent") {
-				min_crit_damage = Parse::popFirstInt(infile.val);
-				max_crit_damage = Parse::popFirstInt(infile.val);
+				min_crit_damage = Parse::popFirstFloat(infile.val);
+				max_crit_damage = Parse::popFirstFloat(infile.val);
 				max_crit_damage = std::max(max_crit_damage, min_crit_damage);
 			}
-			// @ATTR overhit_damage_percent|int, int : Minimum, Maximum|The percentage of damage dealt when an overhit occurs.
+			// @ATTR overhit_damage_percent|float, float : Minimum, Maximum|The percentage of damage dealt when an overhit occurs.
 			else if (infile.key == "overhit_damage_percent") {
-				min_overhit_damage = Parse::popFirstInt(infile.val);
-				max_overhit_damage = Parse::popFirstInt(infile.val);
+				min_overhit_damage = Parse::popFirstFloat(infile.val);
+				max_overhit_damage = Parse::popFirstFloat(infile.val);
 				max_overhit_damage = std::max(max_overhit_damage, min_overhit_damage);
+			}
+			// @ATTR resource_round_method|['none', 'round', 'floor', 'ceil']|Rounds the numbers for most combat events that affect HP/MP. For example: damage taken, HP healed, MP consumed. Defaults to 'round'.
+			else if (infile.key == "resource_round_method") {
+				if (infile.val == "none")
+					resource_round_method = EngineSettings::Combat::RESOURCE_ROUND_METHOD_NONE;
+				else if (infile.val == "round")
+					resource_round_method = EngineSettings::Combat::RESOURCE_ROUND_METHOD_ROUND;
+				else if (infile.val == "floor")
+					resource_round_method = EngineSettings::Combat::RESOURCE_ROUND_METHOD_FLOOR;
+				else if (infile.val == "ceil")
+					resource_round_method = EngineSettings::Combat::RESOURCE_ROUND_METHOD_CEIL;
+				else
+					infile.error("EngineSettings: '%s' is not a valid resource rounding method.", infile.val.c_str());
 			}
 
 			else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
+	}
+}
+
+float EngineSettings::Combat::resourceRound(const float resource_val) {
+	if (resource_round_method == EngineSettings::Combat::RESOURCE_ROUND_METHOD_ROUND) {
+		return roundf(resource_val);
+	}
+	else if (resource_round_method == EngineSettings::Combat::RESOURCE_ROUND_METHOD_FLOOR) {
+		return floorf(resource_val);
+	}
+	else if (resource_round_method == EngineSettings::Combat::RESOURCE_ROUND_METHOD_CEIL) {
+		return ceilf(resource_val);
+	}
+	else {
+		// EngineSettings::Combat::RESOURCE_ROUND_METHOD_NONE
+		return resource_val;
 	}
 }
 
@@ -349,8 +429,11 @@ void EngineSettings::Elements::load() {
 			if (list.empty() || infile.section != "element")
 				continue;
 
-			// @ATTR element.id|string|An identifier for this element.
-			if (infile.key == "id") list.back().id = infile.val;
+			// @ATTR element.id|string|An identifier for this element. When used as a resistance, "_resist" is appended to the id. For example, if the id is "fire", the resist id is "fire_resist".
+			if (infile.key == "id") {
+				list.back().id = infile.val;
+				list.back().resist_id = list.back().id + "_resist";
+			}
 			// @ATTR element.name|string|The displayed name of this element.
 			else if (infile.key == "name") list.back().name = msg->get(infile.val);
 
@@ -455,7 +538,7 @@ EngineSettings::HeroClasses::HeroClass::HeroClass()
 	, equipment("")
 	, carried("")
 	, primary((eset ? eset->primary_stats.list.size() : 0), 0)
-	, hotkeys(std::vector<int>(MenuActionBar::SLOT_MAX, 0))
+	, hotkeys(std::vector<PowerID>(MenuActionBar::SLOT_MAX, 0))
 	, power_tree("")
 	, default_power_tab(-1)
 {
@@ -482,70 +565,68 @@ void EngineSettings::HeroClasses::load() {
 			if (list.empty() || infile.section != "class")
 				continue;
 
-			if (!list.empty()) {
-				// @ATTR name|string|The displayed name of this class.
-				if (infile.key == "name") list.back().name = infile.val;
-				// @ATTR description|string|A description of this class.
-				else if (infile.key == "description") list.back().description = infile.val;
-				// @ATTR currency|int|The amount of currency this class will start with.
-				else if (infile.key == "currency") list.back().currency = Parse::toInt(infile.val);
-				// @ATTR equipment|list(item_id)|A list of items that are equipped when starting with this class.
-				else if (infile.key == "equipment") list.back().equipment = infile.val;
-				// @ATTR carried|list(item_id)|A list of items that are placed in the normal inventorty when starting with this class.
-				else if (infile.key == "carried") list.back().carried = infile.val;
-				// @ATTR primary|predefined_string, int : Primary stat name, Default value|Class starts with this value for the specified stat.
-				else if (infile.key == "primary") {
-					std::string prim_stat = Parse::popFirstString(infile.val);
-					size_t prim_stat_index = eset->primary_stats.getIndexByID(prim_stat);
+			// @ATTR name|string|The displayed name of this class.
+			if (infile.key == "name") list.back().name = infile.val;
+			// @ATTR description|string|A description of this class.
+			else if (infile.key == "description") list.back().description = infile.val;
+			// @ATTR currency|int|The amount of currency this class will start with.
+			else if (infile.key == "currency") list.back().currency = Parse::toInt(infile.val);
+			// @ATTR equipment|list(item_id)|A list of items that are equipped when starting with this class.
+			else if (infile.key == "equipment") list.back().equipment = infile.val;
+			// @ATTR carried|list(item_id)|A list of items that are placed in the normal inventorty when starting with this class.
+			else if (infile.key == "carried") list.back().carried = infile.val;
+			// @ATTR primary|predefined_string, int : Primary stat name, Default value|Class starts with this value for the specified stat.
+			else if (infile.key == "primary") {
+				std::string prim_stat = Parse::popFirstString(infile.val);
+				size_t prim_stat_index = eset->primary_stats.getIndexByID(prim_stat);
 
-					if (prim_stat_index != eset->primary_stats.list.size()) {
-						list.back().primary[prim_stat_index] = Parse::toInt(infile.val);
-					}
-					else {
-						infile.error("EngineSettings: '%s' is not a valid primary stat.", prim_stat.c_str());
-					}
+				if (prim_stat_index != eset->primary_stats.list.size()) {
+					list.back().primary[prim_stat_index] = Parse::toInt(infile.val);
 				}
-
-				else if (infile.key == "actionbar") {
-					// @ATTR actionbar|list(power_id)|A list of powers to place in the action bar for the class.
-					for (int i=0; i<12; i++) {
-						list.back().hotkeys[i] = Parse::popFirstInt(infile.val);
-					}
+				else {
+					infile.error("EngineSettings: '%s' is not a valid primary stat.", prim_stat.c_str());
 				}
-				else if (infile.key == "powers") {
-					// @ATTR powers|list(power_id)|A list of powers that are unlocked when starting this class.
-					std::string power;
-					while ( (power = Parse::popFirstString(infile.val)) != "") {
-						list.back().powers.push_back(Parse::toInt(power));
-					}
-				}
-				else if (infile.key == "campaign") {
-					// @ATTR campaign|list(string)|A list of campaign statuses that are set when starting this class.
-					std::string status;
-					while ( (status = Parse::popFirstString(infile.val)) != "") {
-						list.back().statuses.push_back(status);
-					}
-				}
-				else if (infile.key == "power_tree") {
-					// @ATTR power_tree|string|Power tree that will be loaded by MenuPowers
-					list.back().power_tree = infile.val;
-				}
-				else if (infile.key == "hero_options") {
-					// @ATTR hero_options|list(int)|A list of indicies of the hero options this class can use.
-					std::string hero_option;
-					while ( (hero_option = Parse::popFirstString(infile.val)) != "") {
-						list.back().options.push_back(Parse::toInt(hero_option));
-					}
-
-					std::sort(list.back().options.begin(), list.back().options.end());
-				}
-				else if (infile.key == "default_power_tab") {
-					// @ATTR default_power_tab|int|Index of the tab to switch to when opening the Powers menu
-					list.back().default_power_tab = Parse::toInt(infile.val);
-				}
-
-				else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
 			}
+
+			else if (infile.key == "actionbar") {
+				// @ATTR actionbar|list(power_id)|A list of powers to place in the action bar for the class.
+				for (int i=0; i<12; i++) {
+					list.back().hotkeys[i] = Parse::toPowerID(Parse::popFirstString(infile.val));
+				}
+			}
+			else if (infile.key == "powers") {
+				// @ATTR powers|list(power_id)|A list of powers that are unlocked when starting this class.
+				std::string power;
+				while ( (power = Parse::popFirstString(infile.val)) != "") {
+					list.back().powers.push_back(Parse::toPowerID(power));
+				}
+			}
+			else if (infile.key == "campaign") {
+				// @ATTR campaign|list(string)|A list of campaign statuses that are set when starting this class.
+				std::string status;
+				while ( (status = Parse::popFirstString(infile.val)) != "") {
+					list.back().statuses.push_back(status);
+				}
+			}
+			else if (infile.key == "power_tree") {
+				// @ATTR power_tree|string|Power tree that will be loaded by MenuPowers
+				list.back().power_tree = infile.val;
+			}
+			else if (infile.key == "hero_options") {
+				// @ATTR hero_options|list(int)|A list of indicies of the hero options this class can use.
+				std::string hero_option;
+				while ( (hero_option = Parse::popFirstString(infile.val)) != "") {
+					list.back().options.push_back(Parse::toInt(hero_option));
+				}
+
+				std::sort(list.back().options.begin(), list.back().options.end());
+			}
+			else if (infile.key == "default_power_tab") {
+				// @ATTR default_power_tab|int|Index of the tab to switch to when opening the Powers menu
+				list.back().default_power_tab = Parse::toInt(infile.val);
+			}
+
+			else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
 
@@ -587,10 +668,6 @@ void EngineSettings::DamageTypes::load() {
 		while (infile.next()) {
 			if (infile.new_section) {
 				if (infile.section == "damage_type") {
-					// damage types must have a printable name
-					if (!list.empty() && list.back().name == "") {
-						list.pop_back();
-					}
 					list.resize(list.size()+1);
 				}
 			}
@@ -598,28 +675,39 @@ void EngineSettings::DamageTypes::load() {
 			if (list.empty() || infile.section != "damage_type")
 				continue;
 
-			if (!list.empty()) {
-				// @ATTR damage_type.id|string|The identifier used for Item damage_type and Power base_damage.
-				if (infile.key == "id") list.back().id = infile.val;
-				// @ATTR damage_type.name|string|The displayed name for the value of this damage type.
-				else if (infile.key == "name") list.back().name = msg->get(infile.val);
-				// @ATTR damage_type.name_min|string|The displayed name for the minimum value of this damage type.
-				else if (infile.key == "name_min") list.back().name_min = msg->get(infile.val);
-				// @ATTR damage_type.name_max|string|The displayed name for the maximum value of this damage type.
-				else if (infile.key == "name_max") list.back().name_max = msg->get(infile.val);
-				// @ATTR damage_type.description|string|The description that will be displayed in the Character menu tooltips.
-				else if (infile.key == "description") list.back().description = msg->get(infile.val);
-				// @ATTR damage_type.min|string|The identifier used as a Stat type and an Effect type, for the minimum damage of this type.
-				else if (infile.key == "min") list.back().min = infile.val;
-				// @ATTR damage_type.max|string|The identifier used as a Stat type and an Effect type, for the maximum damage of this type.
-				else if (infile.key == "max") list.back().max = infile.val;
+			// @ATTR damage_type.id|string|The identifier used for Item damage_type and Power base_damage.
+			if (infile.key == "id") list.back().id = infile.val;
+			// @ATTR damage_type.name|string|The displayed name for the value of this damage type.
+			else if (infile.key == "name") list.back().name = msg->get(infile.val);
+			// @ATTR damage_type.name_min|string|The displayed name for the minimum value of this damage type.
+			else if (infile.key == "name_min") list.back().name_min = msg->get(infile.val);
+			// @ATTR damage_type.name_max|string|The displayed name for the maximum value of this damage type.
+			else if (infile.key == "name_max") list.back().name_max = msg->get(infile.val);
+			// @ATTR damage_type.description|string|The description that will be displayed in the Character menu tooltips.
+			else if (infile.key == "description") list.back().description = msg->get(infile.val);
+			// @ATTR damage_type.min|string|The identifier used as a Stat type and an Effect type, for the minimum damage of this type.
+			else if (infile.key == "min") list.back().min = infile.val;
+			// @ATTR damage_type.max|string|The identifier used as a Stat type and an Effect type, for the maximum damage of this type.
+			else if (infile.key == "max") list.back().max = infile.val;
 
-				else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
-			}
+			else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
 	}
 	count = list.size() * 2;
+
+	// use the IDs if the damage type doesn't have printable names
+	for (size_t i = 0; i < list.size(); ++i) {
+		if (list[i].name.empty()) {
+			list[i].name = list[i].id;
+		}
+		if (list[i].name_min.empty()) {
+			list[i].name_min = list[i].min;
+		}
+		if (list[i].name_max.empty()) {
+			list[i].name_max = list[i].max;
+		}
+	}
 }
 
 void EngineSettings::DeathPenalty::load() {
@@ -639,12 +727,12 @@ void EngineSettings::DeathPenalty::load() {
 			if (infile.key == "enable") enabled = Parse::toBool(infile.val);
 			// @ATTR permadeath|bool|Force permadeath for all new saves.
 			else if (infile.key == "permadeath") permadeath = Parse::toBool(infile.val);
-			// @ATTR currency|int|Remove this percentage of currency.
-			else if (infile.key == "currency") currency = Parse::toInt(infile.val);
-			// @ATTR xp_total|int|Remove this percentage of total XP.
-			else if (infile.key == "xp_total") xp = Parse::toInt(infile.val);
-			// @ATTR xp_current_level|int|Remove this percentage of the XP gained since the last level.
-			else if (infile.key == "xp_current_level") xp_current = Parse::toInt(infile.val);
+			// @ATTR currency|float|Remove this percentage of currency.
+			else if (infile.key == "currency") currency = Parse::toFloat(infile.val);
+			// @ATTR xp_total|float|Remove this percentage of total XP.
+			else if (infile.key == "xp_total") xp = Parse::toFloat(infile.val);
+			// @ATTR xp_current_level|float|Remove this percentage of the XP gained since the last level.
+			else if (infile.key == "xp_current_level") xp_current = Parse::toFloat(infile.val);
 			// @ATTR random_item|bool|Removes a random item from the player's inventory.
 			else if (infile.key == "random_item") item = Parse::toBool(infile.val);
 
@@ -662,6 +750,7 @@ void EngineSettings::Tooltips::load() {
 	margin = 0;
 	margin_npc = 0;
 	background_border = 0;
+	visible_max = 3;
 
 	FileParser infile;
 	// @CLASS EngineSettings: Tooltips|Description of engine/tooltips.txt
@@ -682,6 +771,15 @@ void EngineSettings::Tooltips::load() {
 			// @ATTR tooltip_background_border|int|The pixel size of the border in "images/menus/tooltips.png".
 			else if (infile.key == "tooltip_background_border")
 				background_border = Parse::toInt(infile.val);
+			// @ATTR tooltip_visible_max|int|The maximum number of floating tooltips on screen at once. Defaults to 3.
+			else if (infile.key == "tooltip_visible_max") {
+				visible_max = static_cast<size_t>(Parse::toInt(infile.val));
+
+				if (visible_max < 1) {
+					visible_max = 1;
+					infile.error("EngineSettings: tooltip_visible_max must be greater than or equal to 1.");
+				}
+			}
 
 			else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
 		}
@@ -695,12 +793,14 @@ void EngineSettings::Loot::load() {
 	autopickup_currency = false;
 	autopickup_range = eset->misc.interact_range;
 	currency = "Gold";
-	vendor_ratio = 0.25f;
-	vendor_ratio_buyback = 0;
+	vendor_ratio_buy = 1.0f;
+	vendor_ratio_sell = 0.25f;
+	vendor_ratio_sell_old = 0;
 	sfx_loot = "";
 	drop_max = 1;
 	drop_radius = 1;
-	hide_radius = 3.f;
+	hide_radius = 3.0f;
+	extended_items_offset = 0;
 
 	FileParser infile;
 	// @CLASS EngineSettings: Loot|Description of engine/loot.txt
@@ -722,13 +822,17 @@ void EngineSettings::Loot::load() {
 				// @ATTR currency_name|string|Define the name of currency in game
 				currency = msg->get(infile.val);
 			}
-			else if (infile.key == "vendor_ratio") {
-				// @ATTR vendor_ratio|int|Percentage of item buying price to use as selling price. Also used as the buyback price until the player leaves the map.
-				vendor_ratio = static_cast<float>(Parse::toInt(infile.val)) / 100.0f;
+			else if (infile.key == "vendor_ratio_buy") {
+				// @ATTR vendor_ratio_buy|float|Global multiplier for item prices on the "Buy" tab of vendors. Defaults to 1.0.
+				vendor_ratio_buy = Parse::toFloat(infile.val);
 			}
-			else if (infile.key == "vendor_ratio_buyback") {
-				// @ATTR vendor_ratio_buyback|int|Percentage of item buying price to use as the buying price for previously sold items.
-				vendor_ratio_buyback = static_cast<float>(Parse::toInt(infile.val)) / 100.0f;
+			else if (infile.key == "vendor_ratio_sell") {
+				// @ATTR vendor_ratio_sell|float|Global multiplier for the currency gained when selling an item and the price of items on the "Sell" tab of vendors. Defaults to 0.25.
+				vendor_ratio_sell = Parse::toFloat(infile.val);
+			}
+			else if (infile.key == "vendor_ratio_sell_old") {
+				// @ATTR vendor_ratio_sell_old|float|Global multiplier for item prices on the "Sell" tab of vendors after the player has left the map or quit the game. Falls back to the value of vendor_ratio_sell by default.
+				vendor_ratio_sell_old = Parse::toFloat(infile.val);
 			}
 			else if (infile.key == "sfx_loot") {
 				// @ATTR sfx_loot|filename|Filename of a sound effect to play for dropping loot.
@@ -745,6 +849,20 @@ void EngineSettings::Loot::load() {
 			else if (infile.key == "hide_radius") {
 				// @ATTR hide_radius|float|If an entity is within this radius relative to a piece of loot, the label will be hidden unless highlighted with the cursor.
 				hide_radius = Parse::toFloat(infile.val);
+			}
+			else if (infile.key == "vendor_ratio") {
+				// @ATTR vendor_ratio|int|(Deprecated in v1.12.85; use 'vendor_ratio_sell' instead) Percentage of item buying price to use as selling price. Also used as the buyback price until the player leaves the map.
+				vendor_ratio_sell = static_cast<float>(Parse::toInt(infile.val)) / 100.0f;
+				infile.error("EngineSettings: vendor_ratio is deprecated. Use 'vendor_ratio_sell=%.2f' instead.", vendor_ratio_sell);
+			}
+			else if (infile.key == "vendor_ratio_buyback") {
+				// @ATTR vendor_ratio_buyback|int|(Deprecated in v1.12.85; use 'vendor_ratio_sell_old' instead) Percentage of item buying price to use as the buying price for previously sold items.
+				vendor_ratio_sell_old = static_cast<float>(Parse::toInt(infile.val)) / 100.0f;
+				infile.error("EngineSettings: vendor_ratio_buyback is deprecated. Use 'vendor_ratio_sell_old=%.2f' instead.", vendor_ratio_sell_old);
+			}
+			else if (infile.key == "extended_items_offset") {
+				// @ATTR extended_items_offset|item_id|Sets the starting item ID that extended items will be stored at. The default value, 0, will place extended items at the directly after the last item ID defined in items/items.txt.
+				extended_items_offset = Parse::toItemID(infile.val);
 			}
 			else {
 				infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
@@ -826,12 +944,24 @@ void EngineSettings::Tileset::load() {
 void EngineSettings::Widgets::load() {
 	// reset to defaults
 	selection_rect_color = Color(255, 248, 220, 255);
+	selection_rect_corner_size = 4;
 	colorblind_highlight_offset = Point(2, 2);
+
 	tab_padding = Point(8, 0);
+
 	slot_quantity_label = LabelInfo();
+	slot_quantity_color = font->getColor(FontEngine::COLOR_WIDGET_NORMAL);
 	slot_quantity_bg_color = Color(0, 0, 0, 0);
+	slot_hotkey_label = LabelInfo();
+	slot_hotkey_color = font->getColor(FontEngine::COLOR_WIDGET_NORMAL);
+	slot_hotkey_label.hidden = true;
+	slot_hotkey_bg_color = Color(0, 0, 0, 0);
+
 	listbox_text_margin = Point(8, 8);
+
 	horizontal_list_text_width = 150;
+
+	scrollbar_bg_color = Color(0,0,0,64);
 
 	FileParser infile;
 	// @CLASS EngineSettings: Widgets|Description of engine/widget_settings.txt
@@ -841,6 +971,10 @@ void EngineSettings::Widgets::load() {
 				if (infile.key == "selection_rect_color") {
 					// @ATTR misc.selection_rect_color|color, int : Color, Alpha|Color of the selection rectangle when navigating widgets without a mouse.
 					selection_rect_color = Parse::toRGBA(infile.val);
+				}
+				else if (infile.key == "selection_rect_corner_size") {
+					// @ATTR misc.selection_rect_corner_size|int|Size of the corners on the selection rectangle shown when navigating widgets. Set to 0 to drawn the entire rectangle instead.
+					selection_rect_corner_size = Parse::toInt(infile.val);
 				}
 				else if (infile.key == "colorblind_highlight_offset") {
 					// @ATTR misc.colorblind_highlight_offset|int, int : X offset, Y offset|The pixel offset of the '*' marker on highlighted icons in colorblind mode.
@@ -858,9 +992,25 @@ void EngineSettings::Widgets::load() {
 					// @ATTR slot.quantity_label|label|Setting for the slot quantity text.
 					slot_quantity_label = Parse::popLabelInfo(infile.val);
 				}
+				else if (infile.key == "quantity_color") {
+					// @ATTR slot.quantity_color|color|Text color for the slot quantity text.
+					slot_quantity_color = Parse::toRGB(infile.val);
+				}
 				else if (infile.key == "quantity_bg_color") {
 					// @ATTR slot.quantity_bg_color|color, int : Color, Alpha|If a slot has a quantity, a rectangle filled with this color will be placed beneath the text.
 					slot_quantity_bg_color = Parse::toRGBA(infile.val);
+				}
+				else if (infile.key == "hotkey_label") {
+					// @ATTR slot.hotkey_label|label|Setting for the slot hotkey text.
+					slot_hotkey_label = Parse::popLabelInfo(infile.val);
+				}
+				else if (infile.key == "hotkey_color") {
+					// @ATTR slot.hotkey_color|color|Text color for the slot hotkey text.
+					slot_hotkey_color = Parse::toRGB(infile.val);
+				}
+				else if (infile.key == "hotkey_bg_color") {
+					// @ATTR slot.hotkey_bg_color|color, int : Color, Alpha|If a slot has a hotkey, a rectangle filled with this color will be placed beneath the text.
+					slot_hotkey_bg_color = Parse::toRGBA(infile.val);
 				}
 			}
 			else if (infile.section == "listbox") {
@@ -873,6 +1023,12 @@ void EngineSettings::Widgets::load() {
 				if (infile.key == "text_width") {
 					// @ATTR horizontal_list.text_width|int|The pixel width of the text area that displays the currently selected item. Default is 150 pixels;
 					horizontal_list_text_width = Parse::toInt(infile.val);
+				}
+			}
+			else if (infile.section == "scrollbar") {
+				if (infile.key == "bg_color") {
+					// @ATTR scrollbar.bg_color|color, int : Color, Alpha|The background color for the entire scrollbar.
+					scrollbar_bg_color = Parse::toRGBA(infile.val);
 				}
 			}
 		}
@@ -907,7 +1063,7 @@ void EngineSettings::XPTable::load() {
 }
 
 unsigned long EngineSettings::XPTable::getLevelXP(int level) {
-	if (level <= 1)
+	if (level <= 1 || xp_table.empty())
 		return 0;
 	else if (level > static_cast<int>(xp_table.size()))
 		return xp_table.back();
@@ -929,3 +1085,133 @@ int EngineSettings::XPTable::getLevelFromXP(unsigned long level_xp) {
 
 	return level;
 }
+
+void EngineSettings::NumberFormat::load() {
+	// reset to defaults
+	player_statbar = 0;
+	enemy_statbar = 0;
+	combat_text = 0;
+	character_menu = 2;
+	item_tooltips = 2;
+	power_tooltips = 2;
+	durations = 1;
+	death_penalty = 2;
+
+	FileParser infile;
+	// @CLASS EngineSettings: Number Format|Description of engine/number_format.txt
+	if (infile.open("engine/number_format.txt", FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
+		while (infile.next()) {
+			// @ATTR player_statbar|int|Number of digits after the decimal place to display for values in the player's statbars (HP/MP).
+			if (infile.key == "player_statbar")
+				player_statbar = std::max(0, Parse::toInt(infile.val));
+			// @ATTR enemy_statbar|int|Number of digits after the decimal place to display for values in the enemy HP statbar.
+			else if (infile.key == "enemy_statbar")
+				enemy_statbar = std::max(0, Parse::toInt(infile.val));
+			// @ATTR combat_text|int|Number of digits after the decimal place to display for values in combat text.
+			else if (infile.key == "combat_text")
+				combat_text = std::max(0, Parse::toInt(infile.val));
+			// @ATTR character_menu|int|Number of digits after the decimal place to display for values in the 'Character' menu.
+			else if (infile.key == "character_menu")
+				character_menu = std::max(0, Parse::toInt(infile.val));
+			// @ATTR item_tooltips|int|Number of digits after the decimal place to display for values in item tooltips.
+			else if (infile.key == "item_tooltips")
+				item_tooltips = std::max(0, Parse::toInt(infile.val));
+			// @ATTR power_tooltips|int|Number of digits after the decimal place to display for values in power tooltips (except durations).
+			else if (infile.key == "power_tooltips")
+				power_tooltips = std::max(0, Parse::toInt(infile.val));
+			// @ATTR durations|int|Number of digits after the decimal place to display for durations.
+			else if (infile.key == "durations")
+				durations = std::max(0, Parse::toInt(infile.val));
+			// @ATTR death_penalty|int|Number of digits after the decimal place to display for death penalty messages.
+			else if (infile.key == "death_penalty")
+				death_penalty = std::max(0, Parse::toInt(infile.val));
+
+			else
+				infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
+		}
+		infile.close();
+	}
+
+}
+
+void EngineSettings::ResourceStats::load() {
+	// reset to defaults
+	list.clear();
+	stat_count = 0;
+	effect_count = 0;
+	stat_effect_count = 0;
+
+	FileParser infile;
+	// @CLASS EngineSettings: Resource Stats|Description of engine/resource_stats.txt
+	if (infile.open("engine/resource_stats.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
+		while (infile.next()) {
+			if (infile.new_section) {
+				if (infile.section == "resource_stat") {
+					list.resize(list.size()+1);
+
+					list.back().ids.resize(EngineSettings::ResourceStats::STAT_EFFECT_COUNT);
+					list.back().text.resize(EngineSettings::ResourceStats::STAT_COUNT);
+					list.back().text_desc.resize(EngineSettings::ResourceStats::STAT_COUNT);
+				}
+			}
+
+			if (list.empty() || infile.section != "resource_stat")
+				continue;
+
+			// @ATTR resource_stat.stat_base|string|The identifier used for the base ("Max") stat.
+			if (infile.key == "stat_base") list.back().ids[EngineSettings::ResourceStats::STAT_BASE] = infile.val;
+			// @ATTR resource_stat.stat_regen|string|The identifier used for the regeneration stat.
+			else if (infile.key == "stat_regen") list.back().ids[EngineSettings::ResourceStats::STAT_REGEN] = infile.val;
+			// @ATTR resource_stat.stat_steal|string|The identifier used for steal stat.
+			else if (infile.key == "stat_steal") list.back().ids[EngineSettings::ResourceStats::STAT_STEAL] = infile.val;
+			// @ATTR resource_stat.stat_resist_steal|string|The identifier used for the resistance to steal stat.
+			else if (infile.key == "stat_resist_steal") list.back().ids[EngineSettings::ResourceStats::STAT_RESIST_STEAL] = infile.val;
+			// @ATTR resource_stat.stat_heal|string|The identifier used for heal-over-time effects.
+			else if (infile.key == "stat_heal") list.back().ids[EngineSettings::ResourceStats::STAT_HEAL] = infile.val;
+			// @ATTR resource_stat.stat_heal_percent|string|The identifier used for percentage-based heal-over-time effects.
+			else if (infile.key == "stat_heal_percent") list.back().ids[EngineSettings::ResourceStats::STAT_HEAL_PERCENT] = infile.val;
+
+			// @ATTR resource_stat.menu_filename|filename|The MenuStatBar definition file to use for displaying this stat.
+			else if (infile.key == "menu_filename") list.back().menu_filename = infile.val;
+
+			// @ATTR resource_stat.text_base|string|The printed name of the base ("Max") stat as seen in-game.
+			else if (infile.key == "text_base") list.back().text[EngineSettings::ResourceStats::STAT_BASE] = msg->get(infile.val);
+			// @ATTR resource_stat.text_base_desc|string|The printed description of the base ("Max") stat as seen in-game.
+			else if (infile.key == "text_base_desc") list.back().text_desc[EngineSettings::ResourceStats::STAT_BASE] = msg->get(infile.val);
+
+			// @ATTR resource_stat.text_regen|string|The name of the regeneration stat as seen in-game.
+			else if (infile.key == "text_regen") list.back().text[EngineSettings::ResourceStats::STAT_REGEN] = msg->get(infile.val);
+			// @ATTR resource_stat.text_regen_desc|string|The description of the regeneration stat as seen in-game.
+			else if (infile.key == "text_regen_desc") list.back().text_desc[EngineSettings::ResourceStats::STAT_REGEN] = msg->get(infile.val);
+
+			// @ATTR resource_stat.text_steal|string|The name of the steal stat as seen in-game.
+			else if (infile.key == "text_steal") list.back().text[EngineSettings::ResourceStats::STAT_STEAL] = msg->get(infile.val);
+			// @ATTR resource_stat.text_steal_desc|string|The description of the steal stat as seen in-game.
+			else if (infile.key == "text_steal_desc") list.back().text_desc[EngineSettings::ResourceStats::STAT_STEAL] = msg->get(infile.val);
+
+			// @ATTR resource_stat.text_resist_steal|string|The name of the resistance to steal stat as seen in-game.
+			else if (infile.key == "text_resist_steal") list.back().text[EngineSettings::ResourceStats::STAT_RESIST_STEAL] = msg->get(infile.val);
+			// @ATTR resource_stat.text_resist_steal_desc|string|The description of the resistance to steal stat as seen in-game.
+			else if (infile.key == "text_resist_steal_desc") list.back().text_desc[EngineSettings::ResourceStats::STAT_RESIST_STEAL] = msg->get(infile.val);
+
+			// @ATTR resource_stat.text_combat_heal|string|The name of the stat in combat text as seen during heal-over-time.
+			else if (infile.key == "text_combat_heal") list.back().text_combat_heal = msg->get(infile.val);
+			// @ATTR resource_stat.text_log_restore|string|The text in the player's log when this stat is restored via EventManager's 'restore' property.
+			else if (infile.key == "text_log_restore") list.back().text_log_restore = msg->get(infile.val);
+			// @ATTR resource_stat.text_log_low|string|The text in the player's log when trying to use a Power that requires more than the available amount of this resource.
+			else if (infile.key == "text_log_low") list.back().text_log_low = msg->get(infile.val);
+			// @ATTR resource_stat.text_tooltip_heal|string|The text in Power tooltips used for heal-over-time Effects.
+			else if (infile.key == "text_tooltip_heal") list.back().text_tooltip_heal = msg->get(infile.val);
+			// @ATTR resource_stat.text_tooltip_cost|string|The text in Power tooltips that describes the casting cost of this resource.
+			else if (infile.key == "text_tooltip_cost") list.back().text_tooltip_cost = msg->get(infile.val);
+
+			else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
+		}
+		infile.close();
+	}
+
+	stat_count = list.size() * EngineSettings::ResourceStats::STAT_COUNT; // base, regen, steal, resist_steal
+	effect_count = list.size() * EngineSettings::ResourceStats::EFFECT_COUNT; // heal, heal_percent
+	stat_effect_count = stat_count + effect_count;
+}
+

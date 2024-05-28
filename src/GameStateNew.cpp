@@ -54,6 +54,7 @@ GameStateNew::GameStateNew()
 	, portrait_image(NULL)
 	, portrait_border(NULL)
 	, show_classlist(true)
+	, show_randomize(true)
 	, modified_name(false)
 	, delete_items(true)
 	, random_option(false)
@@ -104,6 +105,14 @@ GameStateNew::GameStateNew()
 	label_classlist->setText(msg->get("Choose a Class"));
 	label_classlist->setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
+	// Some widgets default to being aligned to the menu frame
+	button_prev->alignment = Utils::ALIGN_FRAME_TOPLEFT;
+	button_next->alignment = Utils::ALIGN_FRAME_TOPLEFT;
+	button_permadeath->alignment = Utils::ALIGN_FRAME_TOPLEFT;
+	button_randomize->alignment = Utils::ALIGN_FRAME_TOPLEFT;
+	input_name->alignment = Utils::ALIGN_FRAME_TOPLEFT;
+	class_list->alignment = Utils::ALIGN_FRAME_TOPLEFT;
+
 	// Read positions from config file
 	FileParser infile;
 
@@ -114,14 +123,14 @@ GameStateNew::GameStateNew()
 			if (infile.key == "button_prev") {
 				int x = Parse::popFirstInt(infile.val);
 				int y = Parse::popFirstInt(infile.val);
-				int a = Parse::toAlignment(Parse::popFirstString(infile.val));
+				int a = Parse::toAlignment(Parse::popFirstString(infile.val), Utils::ALIGN_FRAME_TOPLEFT);
 				button_prev->setBasePos(x, y, a);
 			}
 			// @ATTR button_next|int, int, alignment : X, Y, Alignment|Position of button to choose the next preset hero.
 			else if (infile.key == "button_next") {
 				int x = Parse::popFirstInt(infile.val);
 				int y = Parse::popFirstInt(infile.val);
-				int a = Parse::toAlignment(Parse::popFirstString(infile.val));
+				int a = Parse::toAlignment(Parse::popFirstString(infile.val), Utils::ALIGN_FRAME_TOPLEFT);
 				button_next->setBasePos(x, y, a);
 			}
 			// @ATTR button_exit|int, int, alignment : X, Y, Alignment|Position of "Cancel" button.
@@ -142,21 +151,21 @@ GameStateNew::GameStateNew()
 			else if (infile.key == "button_permadeath") {
 				int x = Parse::popFirstInt(infile.val);
 				int y = Parse::popFirstInt(infile.val);
-				int a = Parse::toAlignment(Parse::popFirstString(infile.val));
+				int a = Parse::toAlignment(Parse::popFirstString(infile.val), Utils::ALIGN_FRAME_TOPLEFT);
 				button_permadeath->setBasePos(x, y, a);
 			}
-			// @ATTR bytton_randomize|int, int, alignment : X, Y, Alignment|Position of the "Randomize" button.
+			// @ATTR button_randomize|int, int, alignment : X, Y, Alignment|Position of the "Randomize" button.
 			else if (infile.key == "button_randomize") {
 				int x = Parse::popFirstInt(infile.val);
 				int y = Parse::popFirstInt(infile.val);
-				int a = Parse::toAlignment(Parse::popFirstString(infile.val));
+				int a = Parse::toAlignment(Parse::popFirstString(infile.val), Utils::ALIGN_FRAME_TOPLEFT);
 				button_randomize->setBasePos(x, y, a);
 			}
 			// @ATTR name_input|int, int, alignment : X, Y, Alignment|Position of the hero name textbox.
 			else if (infile.key == "name_input") {
 				int x = Parse::popFirstInt(infile.val);
 				int y = Parse::popFirstInt(infile.val);
-				int a = Parse::toAlignment(Parse::popFirstString(infile.val));
+				int a = Parse::toAlignment(Parse::popFirstString(infile.val), Utils::ALIGN_FRAME_TOPLEFT);
 				input_name->setBasePos(x, y, a);
 			}
 			// @ATTR portrait_label|label|Label for the "Choose a Portrait" text.
@@ -187,12 +196,16 @@ GameStateNew::GameStateNew()
 			else if (infile.key == "class_list") {
 				int x = Parse::popFirstInt(infile.val);
 				int y = Parse::popFirstInt(infile.val);
-				int a = Parse::toAlignment(Parse::popFirstString(infile.val));
+				int a = Parse::toAlignment(Parse::popFirstString(infile.val), Utils::ALIGN_FRAME_TOPLEFT);
 				class_list->setBasePos(x, y, a);
 			}
 			// @ATTR show_classlist|bool|Allows hiding the class list.
 			else if (infile.key == "show_classlist") {
 				show_classlist = Parse::toBool(infile.val);
+			}
+			// @ATTR show_randomize|bool|Toggles the visibility of the "Randomize" button.
+			else if (infile.key == "show_randomize") {
+				show_randomize = Parse::toBool(infile.val);
 			}
 			// @ATTR random_option|bool|Initially picks a random character option (aka portrait/name).
 			else if (infile.key == "random_option") {
@@ -231,15 +244,18 @@ GameStateNew::GameStateNew()
 		setHeroOption(OPTION_CURRENT);
 
 	// Set up tab list
-	tablist.ignore_no_mouse = true;
 	tablist.add(button_exit);
 	tablist.add(button_create);
 	tablist.add(input_name);
 	tablist.add(button_permadeath);
-	tablist.add(button_randomize);
+	if (show_randomize) {
+		tablist.add(button_randomize);
+	}
 	tablist.add(button_prev);
 	tablist.add(button_next);
-	tablist.add(class_list);
+	if (show_classlist) {
+		tablist.add(class_list);
+	}
 
 	refreshWidgets();
 
@@ -282,7 +298,7 @@ void GameStateNew::loadOptions(const std::string& filename) {
 	// @CLASS GameStateNew: Hero options|Description of engine/hero_options.txt
 	if (!fin.open("engine/" + filename, FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) return;
 
-	int cur_index = -1;
+	int cur_index;
 	while (fin.next()) {
 		// @ATTR option|int, string, string, filename, string : Index, Base, Head, Portrait, Name|A default body, head, portrait, and name for a hero.
 		if (fin.key == "option") {
@@ -407,6 +423,13 @@ void GameStateNew::logic() {
 		}
 	}
 
+	if (!input_name->edit_mode && !inpt->usingMouse() && tablist.getCurrent() == -1) {
+		if (button_create->enabled)
+			tablist.setCurrent(button_create);
+		else
+			tablist.setCurrent(button_exit);
+	}
+
 	if ((inpt->pressing[Input::CANCEL] && !inpt->lock[Input::CANCEL]) || button_exit->checkClick()) {
 		if (inpt->pressing[Input::CANCEL])
 			inpt->lock[Input::CANCEL] = true;
@@ -441,7 +464,7 @@ void GameStateNew::logic() {
 		setHeroOption(OPTION_PREV);
 	}
 
-	if (button_randomize->checkClick()) {
+	if (show_randomize && button_randomize->checkClick()) {
 		if (!eset->hero_classes.list.empty()) {
 			int class_index = static_cast<int>(rand() % eset->hero_classes.list.size());
 			class_list->select(class_index);
@@ -457,18 +480,18 @@ void GameStateNew::refreshWidgets() {
 	button_exit->setPos(0, 0);
 	button_create->setPos(0, 0);
 
-	button_prev->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);
-	button_next->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);
-	button_permadeath->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);
-	button_randomize->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);
-	class_list->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);
+	button_prev->setPos(0, 0);
+	button_next->setPos(0, 0);
+	button_permadeath->setPos(0, 0);
+	button_randomize->setPos(0, 0);
+	class_list->setPos(0, 0);
 
 	label_portrait->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);
 	label_name->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);
 	label_permadeath->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);
 	label_classlist->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);
 
-	input_name->setPos((settings->view_w - eset->resolutions.frame_w)/2, (settings->view_h - eset->resolutions.frame_h)/2);
+	input_name->setPos(0, 0);
 }
 
 void GameStateNew::render() {
@@ -480,7 +503,10 @@ void GameStateNew::render() {
 	button_next->render();
 	input_name->render();
 	button_permadeath->render();
-	button_randomize->render();
+
+	if (show_randomize) {
+		button_randomize->render();
+	}
 
 	// display portrait option
 	Rect src;

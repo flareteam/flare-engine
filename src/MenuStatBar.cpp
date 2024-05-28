@@ -25,13 +25,16 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Handles the display of a status bar
  */
 
+#include "Avatar.h"
 #include "CommonIncludes.h"
+#include "EngineSettings.h"
 #include "FontEngine.h"
 #include "InputState.h"
 #include "Menu.h"
 #include "MenuExit.h"
 #include "MenuManager.h"
 #include "MenuStatBar.h"
+#include "MessageEngine.h"
 #include "ModManager.h"
 #include "RenderDevice.h"
 #include "Settings.h"
@@ -43,32 +46,47 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "UtilsFileSystem.h"
 
-MenuStatBar::MenuStatBar(short _type)
+MenuStatBar::MenuStatBar(short _type, size_t _resource_stat_index)
 	: bar(NULL)
 	, label(new WidgetLabel())
-	, stat_min(0)
-	, stat_cur(0)
-	, stat_cur_prev(0)
-	, stat_max(0)
+	, enabled(true)
 	, orientation(HORIZONTAL)
 	, custom_text_pos(false) // label will be placed in the middle of the bar
 	, custom_string("")
 	, bar_gfx("")
 	, bar_gfx_background("")
 	, type(_type)
+	, resource_stat_index(_resource_stat_index)
+	, bar_fill_offset()
+	, bar_fill_size(-1, -1)
 {
 	std::string type_filename;
 	if (type == TYPE_HP)
-		type_filename = "hp";
+		type_filename = "menus/hp.txt";
 	else if (type == TYPE_MP)
-		type_filename = "mp";
+		type_filename = "menus/mp.txt";
 	else if (type == TYPE_XP)
-		type_filename = "xp";
+		type_filename = "menus/xp.txt";
+	else if (type == TYPE_RESOURCE_STAT)
+		type_filename = eset->resource_stats.list[resource_stat_index].menu_filename;
+
+	if (type == TYPE_XP) {
+		stat_min.Unsigned = 0;
+		stat_cur.Unsigned = 0;
+		stat_cur_prev.Unsigned = 0;
+		stat_max.Unsigned = 0;
+	}
+	else {
+		stat_min.Float = 0;
+		stat_cur.Float = 0;
+		stat_cur_prev.Float = 0;
+		stat_max.Float = 0;
+	}
 
 	// Load config settings
 	FileParser infile;
 	// @CLASS MenuStatBar|Description of menus/hp.txt, menus/mp.txt, menus/xp.txt
-	if(!type_filename.empty() && infile.open("menus/" + type_filename + ".txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
+	if(!type_filename.empty() && infile.open(type_filename, FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while(infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
@@ -98,11 +116,29 @@ MenuStatBar::MenuStatBar(short _type)
 			else if (infile.key == "hide_timeout") {
 				timeout.setDuration(Parse::toDuration(infile.val));
 			}
+			// @ATTR bar_fill_offset|point|Offset of the bar's fill graphics relative to the bar_pos X/Y.
+			else if (infile.key == "bar_fill_offset") {
+				bar_fill_offset = Parse::toPoint(infile.val);
+			}
+			// @ATTR bar_fill_size|int, int : Width, Height|Size of the bar's fill graphics. If not defined, the width/height of bar_pos is used.
+			else if (infile.key == "bar_fill_size") {
+				bar_fill_size = Parse::toPoint(infile.val);
+			}
+			// @ATTR enabled|bool|Determines if the bar will be rendered. Disable the bar completely by setting this to false.
+			else if (infile.key == "enabled") {
+				enabled = Parse::toBool(infile.val);
+			}
 			else {
 				infile.error("MenuStatBar: '%s' is not a valid key.", infile.key.c_str());
 			}
 		}
 		infile.close();
+	}
+
+	// default to bar_pos size if bar_fill_size is undefined
+	if (bar_fill_size.x == -1 || bar_fill_size.y == -1) {
+		bar_fill_size.x = bar_pos.w;
+		bar_fill_size.y = bar_pos.h;
 	}
 
 	loadGraphics();
@@ -111,6 +147,9 @@ MenuStatBar::MenuStatBar(short _type)
 }
 
 void MenuStatBar::loadGraphics() {
+	if (!enabled)
+		return;
+
 	Image *graphics;
 
 	if (bar_gfx_background != "") {
@@ -126,27 +165,57 @@ void MenuStatBar::loadGraphics() {
 	}
 }
 
-void MenuStatBar::update(unsigned long _stat_min, unsigned long _stat_cur, unsigned long _stat_max) {
-	stat_cur_prev = stat_cur; // save previous value
-	stat_min = _stat_min;
-	stat_cur = _stat_cur;
-	stat_max = _stat_max;
-}
+void MenuStatBar::update() {
+	if (!enabled)
+		return;
 
-void MenuStatBar::setCustomString(const std::string& _custom_string) {
-	custom_string = _custom_string;
+	if (type == TYPE_XP) {
+		stat_cur_prev.Unsigned = stat_cur.Unsigned; // save previous value
+		stat_min.Unsigned = 0;
+		stat_cur.Unsigned = pc->stats.xp - eset->xp.getLevelXP(pc->stats.level);
+		stat_max.Unsigned = eset->xp.getLevelXP(pc->stats.level + 1) - eset->xp.getLevelXP(pc->stats.level);
+
+		if (pc->stats.level == eset->xp.getMaxLevel()) {
+			custom_string = msg->getv("XP: %lu", pc->stats.xp);
+		}
+		else {
+			custom_string = msg->getv("XP: %lu/%lu", stat_cur.Unsigned, stat_max.Unsigned);
+		}
+	}
+	else if (type == TYPE_HP) {
+		stat_cur_prev.Float = stat_cur.Float; // save previous value
+		stat_min.Float = 0;
+		stat_cur.Float = pc->stats.hp;
+		stat_max.Float = pc->stats.get(Stats::HP_MAX);
+	}
+	else if (type == TYPE_MP) {
+		stat_cur_prev.Float = stat_cur.Float; // save previous value
+		stat_min.Float = 0;
+		stat_cur.Float = pc->stats.mp;
+		stat_max.Float = pc->stats.get(Stats::MP_MAX);
+	}
+	else if (type == TYPE_RESOURCE_STAT) {
+		stat_cur_prev.Float = stat_cur.Float; // save previous value
+		stat_min.Float = 0;
+		stat_cur.Float = pc->stats.resource_stats[resource_stat_index];
+		stat_max.Float = pc->stats.getResourceStat(resource_stat_index, EngineSettings::ResourceStats::STAT_BASE);
+	}
 }
 
 bool MenuStatBar::disappear() {
+	if (!enabled)
+		return true;
+
 	if (timeout.getDuration() > 0 && settings->statbar_autohide) {
-		if (type == TYPE_HP || type == TYPE_MP) {
-			// HP and MP bars disappear when full
-			if (stat_cur != stat_max) {
+		if (type == TYPE_XP) {
+			// XP bar disappears when value is not changing
+			if (stat_cur_prev.Unsigned != stat_cur.Unsigned) {
 				timeout.reset(Timer::BEGIN);
 			}
-		} else if (type == TYPE_XP) {
-			// XP bar disappears when value is not changing
-			if (stat_cur_prev != stat_cur) {
+		}
+		else {
+			// HP and MP bars disappear when full
+			if (stat_cur.Float != stat_max.Float) {
 				timeout.reset(Timer::BEGIN);
 			}
 		}
@@ -181,28 +250,55 @@ void MenuStatBar::render() {
 	setBackgroundDest(dest);
 	Menu::render();
 
-	unsigned long stat_cur_clamped = std::min(stat_cur, stat_max);
-	unsigned long normalized_cur = stat_cur_clamped - std::min(stat_cur_clamped, stat_min);
-	unsigned long normalized_max = stat_max - std::min(stat_max, stat_min);
+	int bar_length = 0;
+
+	if (type == TYPE_XP) {
+		unsigned long stat_cur_clamped = std::min(stat_cur.Unsigned, stat_max.Unsigned);
+		unsigned long normalized_cur = stat_cur_clamped - std::min(stat_cur_clamped, stat_min.Unsigned);
+		unsigned long normalized_max = stat_max.Unsigned - std::min(stat_max.Unsigned, stat_min.Unsigned);
+
+		unsigned long bar_fill_size_oriented = 0;
+		if (orientation == HORIZONTAL)
+			bar_fill_size_oriented = static_cast<unsigned long>(bar_fill_size.x);
+		else if (orientation == VERTICAL)
+			bar_fill_size_oriented = static_cast<unsigned long>(bar_fill_size.y);
+
+		bar_length = static_cast<int>((normalized_max == 0) ? 0 : (normalized_cur * bar_fill_size_oriented) / normalized_max);
+		if (bar_length == 0 && normalized_cur > 0)
+			bar_length = 1;
+	}
+	else {
+		float stat_cur_clamped = std::min(stat_cur.Float, stat_max.Float);
+		float normalized_cur = stat_cur_clamped - std::min(stat_cur_clamped, stat_min.Float);
+		float normalized_max = stat_max.Float - std::min(stat_max.Float, stat_min.Float);
+
+		float bar_fill_size_oriented = 0;
+		if (orientation == HORIZONTAL)
+			bar_fill_size_oriented = static_cast<float>(bar_fill_size.x);
+		else if (orientation == VERTICAL)
+			bar_fill_size_oriented = static_cast<float>(bar_fill_size.y);
+
+		bar_length = static_cast<int>((normalized_max == 0) ? 0 : (normalized_cur * bar_fill_size_oriented) / normalized_max);
+		if (bar_length == 0 && normalized_cur > 0)
+			bar_length = 1;
+	}
 
 	// draw bar progress based on orientation
 	if (orientation == HORIZONTAL) {
-		unsigned long bar_length = (normalized_max == 0) ? 0 : (normalized_cur * static_cast<unsigned long>(bar_pos.w)) / normalized_max;
 		src.x = 0;
 		src.y = 0;
-		src.w = static_cast<int>(bar_length);
-		src.h = bar_pos.h;
-		dest.x = bar_dest.x;
-		dest.y = bar_dest.y;
+		src.w = bar_length;
+		src.h = bar_fill_size.y;
+		dest.x = bar_dest.x + bar_fill_offset.x;
+		dest.y = bar_dest.y + bar_fill_offset.y;
 	}
 	else if (orientation == VERTICAL) {
-		unsigned long bar_length = (normalized_max == 0) ? 0 : (normalized_cur * static_cast<unsigned long>(bar_pos.h)) / normalized_max;
 		src.x = 0;
-		src.y = bar_pos.h-static_cast<int>(bar_length);
-		src.w = bar_pos.w;
-		src.h = static_cast<int>(bar_length);
-		dest.x = bar_dest.x;
-		dest.y = bar_dest.y+src.y;
+		src.y = bar_fill_size.y - bar_length;
+		src.w = bar_fill_size.x;
+		src.h = bar_length;
+		dest.x = bar_dest.x + bar_fill_offset.x;
+		dest.y = bar_dest.y + bar_fill_offset.y + src.y;
 	}
 
 	if (bar) {
@@ -218,8 +314,11 @@ void MenuStatBar::render() {
 			std::stringstream ss;
 			if (!custom_string.empty())
 				ss << custom_string;
+			else if (type == TYPE_XP)
+				// TYPE_XP uses a custom string, so this won't apply in normal circumstances
+				ss << stat_cur.Unsigned << "/" << stat_max.Unsigned;
 			else
-				ss << stat_cur << "/" << stat_max;
+				ss << Utils::floatToString(stat_cur.Float, eset->number_format.player_statbar) << "/" << Utils::floatToString(stat_max.Float, eset->number_format.player_statbar);
 
 			label->setText(ss.str());
 			label->setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));

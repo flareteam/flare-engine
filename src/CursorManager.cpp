@@ -35,7 +35,8 @@ CursorManager::CursorManager()
 	, cursor_lhp_talk(NULL)
 	, cursor_lhp_attack(NULL)
 	, cursor_current(NULL)
-	, offset_current(NULL) {
+	, offset_current(NULL)
+	, low_hp(false) {
 	Image *graphics;
 	FileParser infile;
 	// @CLASS CursorManager|Description of engine/mouse_cursor.txt
@@ -135,8 +136,10 @@ CursorManager::~CursorManager() {
 }
 
 void CursorManager::logic() {
-	if (!show_cursor)
+	if (!show_cursor) {
+		inpt->hideCursor();
 		return;
+	}
 
 	if (settings->hardware_cursor) {
 		inpt->showCursor();
@@ -146,15 +149,7 @@ void CursorManager::logic() {
 	cursor_current = NULL;
 	offset_current = NULL;
 
-	if (cursor_normal) {
-		inpt->hideCursor();
-		cursor_current = cursor_normal;
-		offset_current = &offset_normal;
-	}
-	else {
-		// system cursor
-		inpt->showCursor();
-	}
+	setCursor(CURSOR_NORMAL);
 }
 
 void CursorManager::render() {
@@ -172,49 +167,56 @@ void CursorManager::render() {
 	}
 }
 
+void CursorManager::setLowHP(bool val) {
+	low_hp = val;
+}
+
 void CursorManager::setCursor(int type) {
 	if (settings->hardware_cursor) return;
 
-	if (type == CURSOR_INTERACT && cursor_interact) {
+	if (type == CURSOR_INTERACT && (cursor_interact || (cursor_lhp_interact && low_hp))) {
 		inpt->hideCursor();
-		cursor_current = cursor_interact;
-		offset_current = &offset_interact;
+		if (low_hp && cursor_lhp_interact) {
+			cursor_current = cursor_lhp_interact;
+			offset_current = &offset_lhp_interact;
+		}
+		else if (cursor_interact) {
+			cursor_current = cursor_interact;
+			offset_current = &offset_interact;
+		}
 	}
-	else if (type == CURSOR_TALK && cursor_talk) {
+	else if (type == CURSOR_TALK && (cursor_talk || (cursor_lhp_talk && low_hp))) {
 		inpt->hideCursor();
-		cursor_current = cursor_talk;
-		offset_current = &offset_talk;
+		if (low_hp && cursor_lhp_talk) {
+			cursor_current = cursor_lhp_talk;
+			offset_current = &offset_lhp_talk;
+		}
+		else if (cursor_talk) {
+			cursor_current = cursor_talk;
+			offset_current = &offset_talk;
+		}
 	}
-	else if (type == CURSOR_ATTACK && cursor_attack) {
+	else if (type == CURSOR_ATTACK && (cursor_attack || (cursor_lhp_attack && low_hp))) {
 		inpt->hideCursor();
-		cursor_current = cursor_attack;
-		offset_current = &offset_attack;
+		if (low_hp && cursor_lhp_attack) {
+			cursor_current = cursor_lhp_attack;
+			offset_current = &offset_lhp_attack;
+		}
+		else if (cursor_attack) {
+			cursor_current = cursor_attack;
+			offset_current = &offset_attack;
+		}
 	}
-
-	else if (type == CURSOR_LHP_INTERACT && cursor_lhp_interact) {
+	else if (cursor_normal || (cursor_lhp_normal && low_hp)) {
 		inpt->hideCursor();
-		cursor_current = cursor_lhp_interact;
-		offset_current = &offset_lhp_interact;
-	}
-	else if (type == CURSOR_LHP_TALK && cursor_lhp_talk) {
-		inpt->hideCursor();
-		cursor_current = cursor_lhp_talk;
-		offset_current = &offset_lhp_talk;
-	}
-	else if (type == CURSOR_LHP_ATTACK && cursor_lhp_attack) {
-		inpt->hideCursor();
-		cursor_current = cursor_lhp_attack;
-		offset_current = &offset_lhp_attack;
-	}
-	else if (type == CURSOR_LHP_NORMAL && cursor_lhp_normal) {
-		inpt->hideCursor();
-		cursor_current = cursor_lhp_normal;
-		offset_current = &offset_lhp_normal;
-	}
-	else if (cursor_normal) {
-		inpt->hideCursor();
-		cursor_current = cursor_normal;
-		offset_current = &offset_normal;
+		if (low_hp && cursor_lhp_normal) {
+			cursor_current = cursor_lhp_normal;
+			offset_current = &offset_lhp_normal;
+		}
+		else if (cursor_normal) {
+			cursor_current = cursor_normal;
+			offset_current = &offset_normal;
+		}
 	}
 	else {
 		// system cursor

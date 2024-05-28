@@ -1,38 +1,60 @@
 Project (Flare)
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 2.8.12)
 
 Set (PACKAGE "FLARE")
-Set (VERSION "1.09.01")
+Set (VERSION "1.14")
 
 option(USE_OPENGL "USE_OPENGL" Off)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
-# Default definitions
-if (NOT MSVC)
-  set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wunused -Wshadow -Woverloaded-virtual -Wunreachable-code -Wconversion -Wno-sign-conversion -Wformat-security ${CMAKE_CXX_FLAGS}")
-  set(CMAKE_CXX_FLAGS "-fno-math-errno -fno-exceptions ${CMAKE_CXX_FLAGS}")
-  set(CMAKE_CXX_FLAGS "-std=c++98 ${CMAKE_CXX_FLAGS}")
-else (NOT MSVC)
-  add_definitions(-D_CRT_SECURE_NO_WARNINGS)
-  add_definitions(-D_CRT_SECURE_NO_DEPRECATE)
-  add_definitions(-D_CRT_NONSTDC_NO_DEPRECATE)
-endif (NOT MSVC)
-
-if(CMAKE_BUILD_TYPE STREQUAL "Release")
-  set(CMAKE_CXX_FLAGS_RELEASE "-O2 -g0")
-  if(MINGW)
+# can't use add_compile_options here. Seems to have something to do with add_compile_options appending it after the "-O3 -DNDEBUG" flags
+if (MINGW AND CMAKE_BUILD_TYPE STREQUAL "Release")
 	set(CMAKE_CXX_FLAGS_RELEASE "-Wl,-subsystem,windows ${CMAKE_CXX_FLAGS_RELEASE}")
-  endif()
-elseif(CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
-  set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
-elseif(CMAKE_BUILD_TYPE STREQUAL "MinSizeRel")
-  set(CMAKE_CXX_FLAGS_MINSIZEREL "-Os -g0")
-elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
-  set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g3 -pg")
-  set(CMAKE_EXE_LINKER_FLAGS_DEBUG "-pg")
-  set(CMAKE_SHARED_LINKER_FLAGS_DEBUG "-pg")
-  set(CMAKE_MODULE_LINKER_FLAGS_DEBUG "-pg")
+endif()
+
+# Default definitions
+if (MSVC)
+	add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+	add_definitions(-D_CRT_SECURE_NO_DEPRECATE)
+	add_definitions(-D_CRT_NONSTDC_NO_DEPRECATE)
+else ()
+	if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+		add_compile_options(-Wno-psabi)
+	endif()
+
+	add_compile_options(
+		-Wall -Wextra -Wunused -Wshadow -Woverloaded-virtual -Wunreachable-code -Wconversion -Wno-sign-conversion -Wformat-security
+		-fno-math-errno -fno-exceptions
+		-std=c++98
+	)
+endif ()
+
+add_compile_options(
+	"$<$<CONFIG:RELEASE>:-O2>"
+	"$<$<CONFIG:RELEASE>:-g0>"
+
+	"$<$<CONFIG:RELWITHDEBINFO>:-O2>"
+	"$<$<CONFIG:RELWITHDEBINFO>:-g>"
+
+	"$<$<CONFIG:MINSIZEREL>:-Os>"
+	"$<$<CONFIG:MINSIZEREL>:-g0>"
+
+	"$<$<CONFIG:DEBUG>:-O0>"
+	"$<$<CONFIG:DEBUG>:-g3>"
+	"$<$<CONFIG:DEBUG>:-pg>"
+)
+
+# Not supported by CMake 3.12!
+# Travis uses this version so we have to stick to modifying the strings...
+# add_link_options(
+# 	"$<$<CONFIG:DEBUG>:-pg>"
+# )
+
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+	set(CMAKE_EXE_LINKER_FLAGS_DEBUG "-pg ${CMAKE_EXE_LINKER_FLAGS_DEBUG}")
+	set(CMAKE_SHARED_LINKER_FLAGS_DEBUG "-pg ${CMAKE_SHARED_LINKER_FLAGS_DEBUG}")
+	set(CMAKE_MODULE_LINKER_FLAGS_DEBUG "-pg ${CMAKE_MODULE_LINKER_FLAGS_DEBUG}")
 endif()
 
 set(BINDIR  "games"             CACHE STRING "Directory from CMAKE_INSTALL_PREFIX where game executable will be installed.")
@@ -96,27 +118,27 @@ EndIf (NOT SDL2TTF_FOUND)
 # Sources
 
 Set (FLARE_SOURCES
-	./src/BehaviorAlly.cpp
-	./src/Entity.cpp
 	./src/Animation.cpp
+	./src/AnimationMedia.cpp
 	./src/AnimationManager.cpp
 	./src/AnimationSet.cpp
 	./src/AStarContainer.cpp
 	./src/AStarNode.cpp
 	./src/Avatar.cpp
-	./src/BehaviorStandard.cpp
+	./src/Camera.cpp
 	./src/CampaignManager.cpp
 	./src/CombatText.cpp
 	./src/CursorManager.cpp
 	./src/DeviceList.cpp
 	./src/EffectManager.cpp
-	./src/Enemy.cpp
-	./src/EnemyBehavior.cpp
 	./src/EnemyGroupManager.cpp
-	./src/EnemyManager.cpp
 	./src/EngineSettings.cpp
+	./src/Entity.cpp
+	./src/EntityBehavior.cpp
+	./src/EntityManager.cpp
 	./src/EventManager.cpp
 	./src/FileParser.cpp
+	./src/FogOfWar.cpp
 	./src/FontEngine.cpp
 	./src/GameSlotPreview.cpp
 	./src/GameState.cpp
@@ -150,12 +172,14 @@ Set (FLARE_SOURCES
 	./src/MenuDevConsole.cpp
 	./src/MenuEnemy.cpp
 	./src/MenuExit.cpp
+	./src/MenuGameOver.cpp
 	./src/MenuHUDLog.cpp
 	./src/MenuInventory.cpp
 	./src/MenuItemStorage.cpp
 	./src/MenuLog.cpp
 	./src/MenuManager.cpp
 	./src/MenuMiniMap.cpp
+	./src/MenuMovementType.cpp
 	./src/MenuNumPicker.cpp
 	./src/MenuPowers.cpp
 	./src/MenuStash.cpp
@@ -175,7 +199,7 @@ Set (FLARE_SOURCES
 	./src/SDLSoftwareRenderDevice.cpp
 	./src/SDLSoundManager.cpp
 	./src/SDLHardwareRenderDevice.cpp
- 	./src/SDLFontEngine.cpp
+	./src/SDLFontEngine.cpp
 	./src/Settings.cpp
 	./src/SharedGameResources.cpp
 	./src/SharedResources.cpp
@@ -196,41 +220,42 @@ Set (FLARE_SOURCES
 	./src/WidgetButton.cpp
 	./src/WidgetHorizontalList.cpp
 	./src/WidgetInput.cpp
- 	./src/WidgetLabel.cpp
- 	./src/WidgetListBox.cpp
+	./src/WidgetLabel.cpp
+	./src/WidgetListBox.cpp
 	./src/WidgetLog.cpp
 	./src/WidgetScrollBar.cpp
 	./src/WidgetScrollBox.cpp
 	./src/WidgetSlider.cpp
 	./src/WidgetSlot.cpp
- 	./src/WidgetTabControl.cpp
+	./src/WidgetTabControl.cpp
 	./src/WidgetTooltip.cpp
+	./src/XPScaling.cpp
 	./src/main.cpp
 )
 
 Set (FLARE_HEADERS
-	./src/BehaviorAlly.h
-	./src/Entity.h
 	./src/Animation.h
+	./src/AnimationMedia.h
 	./src/AnimationManager.h
 	./src/AnimationSet.h
 	./src/AStarContainer.h
 	./src/AStarNode.h
 	./src/Avatar.h
-	./src/BehaviorStandard.h
+	./src/Camera.h
 	./src/CampaignManager.h
 	./src/CombatText.h
 	./src/CommonIncludes.h
 	./src/CursorManager.h
 	./src/DeviceList.h
 	./src/EffectManager.h
-	./src/Enemy.h
-	./src/EnemyBehavior.h
 	./src/EnemyGroupManager.h
-	./src/EnemyManager.h
 	./src/EngineSettings.h
+	./src/Entity.h
+	./src/EntityBehavior.h
+	./src/EntityManager.h
 	./src/EventManager.h
 	./src/FileParser.h
+	./src/FogOfWar.h
 	./src/FontEngine.h
 	./src/GameSlotPreview.h
 	./src/GameState.h
@@ -264,12 +289,14 @@ Set (FLARE_HEADERS
 	./src/MenuDevConsole.h
 	./src/MenuEnemy.h
 	./src/MenuExit.h
+	./src/MenuGameOver.h
 	./src/MenuHUDLog.h
 	./src/MenuInventory.h
 	./src/MenuItemStorage.h
 	./src/MenuLog.h
 	./src/MenuManager.h
 	./src/MenuMiniMap.h
+	./src/MenuMovementType.h
 	./src/MenuNumPicker.h
 	./src/MenuPowers.h
 	./src/MenuStash.h
@@ -310,15 +337,16 @@ Set (FLARE_HEADERS
 	./src/WidgetButton.h
 	./src/WidgetHorizontalList.h
 	./src/WidgetInput.h
- 	./src/WidgetLabel.h
- 	./src/WidgetListBox.h
+	./src/WidgetLabel.h
+	./src/WidgetListBox.h
 	./src/WidgetLog.h
 	./src/WidgetScrollBar.h
 	./src/WidgetScrollBox.h
 	./src/WidgetSlider.h
 	./src/WidgetSlot.h
- 	./src/WidgetTabControl.h
+	./src/WidgetTabControl.h
 	./src/WidgetTooltip.h
+	./src/XPScaling.h
 )
 
 If (USE_OPENGL)
@@ -344,17 +372,17 @@ EndIf (USE_OPENGL)
 
 # Add icon and file info to executable for Windows systems
 IF (WIN32)
-  SET(FLARE_SOURCES
-    ${FLARE_SOURCES}
-    ./src/Flare.rc
-    )
+	SET(FLARE_SOURCES
+	${FLARE_SOURCES}
+	./src/Flare.rc
+	)
 ENDIF (WIN32)
 
 Add_Executable (flare ${FLARE_SOURCES} ${FLARE_HEADERS})
 
 # libSDLMain comes with libSDL if needed on certain platforms
 If (NOT SDL2MAIN_LIBRARY)
-  Set (SDL2MAIN_LIBRARY "")
+	Set (SDL2MAIN_LIBRARY "")
 EndIf (NOT SDL2MAIN_LIBRARY)
 
 If (USE_OPENGL)
@@ -366,19 +394,19 @@ EndIF (USE_OPENGL)
 
 # installing to the proper places
 install(PROGRAMS
-  ${CMAKE_CURRENT_BINARY_DIR}/flare
-  DESTINATION ${BINDIR})
+	${CMAKE_CURRENT_BINARY_DIR}/flare
+	DESTINATION ${BINDIR})
 install(DIRECTORY
-  "${CMAKE_CURRENT_SOURCE_DIR}/mods"
-  DESTINATION ${DATADIR})
+	"${CMAKE_CURRENT_SOURCE_DIR}/mods"
+	DESTINATION ${DATADIR})
 install(FILES
-  "${CMAKE_CURRENT_SOURCE_DIR}/distribution/flare.man"
-  DESTINATION ${MANDIR}/man6
-  RENAME flare.6)
+	"${CMAKE_CURRENT_SOURCE_DIR}/distribution/flare.man"
+	DESTINATION ${MANDIR}/man6
+	RENAME flare.6)
 install(FILES
-  "${CMAKE_CURRENT_BINARY_DIR}/flare.desktop"
-  DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications)
+	"${CMAKE_CURRENT_BINARY_DIR}/flare.desktop"
+	DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications)
 install(FILES
-  "${CMAKE_CURRENT_SOURCE_DIR}/distribution/flare_logo.svg"
-  DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/scalable/apps
-  RENAME flare.svg)
+	"${CMAKE_CURRENT_SOURCE_DIR}/distribution/flare_logo_icon.svg"
+	DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/scalable/apps
+	RENAME flare.svg)

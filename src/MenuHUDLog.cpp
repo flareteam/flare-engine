@@ -46,6 +46,7 @@ MenuHUDLog::MenuHUDLog()
 
 	// Load config settings
 	FileParser infile;
+	// @CLASS MenuHUDLog|Description of menus/hudlog.txt
 	if(infile.open("menus/hudlog.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while(infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
@@ -142,7 +143,10 @@ void MenuHUDLog::render() {
 
 		// go through new messages
 		for (size_t i = msg_age.size(); i > 0; i--) {
-			int msg_height = msg_buffer[i-1]->getGraphicsHeight() + paragraph_spacing;
+			int msg_height = paragraph_spacing;
+			if (msg_buffer[i-1])
+				msg_height += msg_buffer[i-1]->getGraphicsHeight();
+
 			if (msg_age[i-1] > 0 && dest.y + msg_height < window_area.y + window_area.h && msg_buffer[i-1]) {
 				// dest.y -= msg_buffer[i-1]->getGraphicsHeight() + paragraph_spacing;
 				msg_buffer[i-1]->setDestFromRect(dest);

@@ -18,10 +18,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Avatar.h"
 #include "CampaignManager.h"
-#include "EnemyManager.h"
+#include "EntityManager.h"
 #include "EngineSettings.h"
 #include "EventManager.h"
 #include "FileParser.h"
+#include "ItemManager.h"
 #include "LootManager.h"
 #include "MapRenderer.h"
 #include "Menu.h"
@@ -31,6 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuManager.h"
 #include "MessageEngine.h"
 #include "ModManager.h"
+#include "PowerManager.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "SoundManager.h"
@@ -38,12 +40,23 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
 
+EventComponent::EventComponent()
+	: type(NONE)
+	, s("")
+	, status(0)
+	, id(0)
+{
+	for (size_t x = 0; x < EventComponent::DATA_COUNT; ++x) {
+		data[x].Int = 0;
+	}
+}
+
 /**
  * Class: Event
  */
 Event::Event()
 	: type("")
-	, activate_type(-1)
+	, activate_type(ACTIVATE_ON_TRIGGER)
 	, components(std::vector<EventComponent>())
 	, location(Rect())
 	, hotspot(Rect())
@@ -96,9 +109,12 @@ void EventManager::loadEvent(FileParser &infile, Event* evnt) {
 		evnt->type = infile.val;
 	}
 	else if (infile.key == "activate") {
-		// @ATTR event.activate|["on_trigger", "on_load", "on_leave", "on_mapexit", "on_clear", "static"]|Set the state in which the event will be activated (map events only).
+		// @ATTR event.activate|["on_trigger", "on_interact", "on_load", "on_leave", "on_mapexit", "on_clear", "static"]|Set the state in which the event will be activated (map events only). on_trigger = the player is standing in the event area or the player interacts with the hotspot. on_interact = the player ineracts with the hotspot. on_mapexit = as the player leaves the map. on_leave = as the player steps outside of an event area they were previously inside of. on_load = as the player enters a map. on_clear = all of the enemies on a map have been defeated. static = constantly, every frame.
 		if (infile.val == "on_trigger") {
 			evnt->activate_type = Event::ACTIVATE_ON_TRIGGER;
+		}
+		else if (infile.val == "on_interact") {
+			evnt->activate_type = Event::ACTIVATE_ON_INTERACT;
 		}
 		else if (infile.val == "on_mapexit") {
 			// no need to set keep_after_trigger to false correctly, it's ignored anyway
@@ -119,7 +135,8 @@ void EventManager::loadEvent(FileParser &infile, Event* evnt) {
 			evnt->activate_type = Event::ACTIVATE_STATIC;
 		}
 		else {
-			infile.error("EventManager: Event activation type '%s' unknown, change to \"on_trigger\" to suppress this warning.", infile.val.c_str());
+			infile.error("EventManager: Event activation type '%s' unknown. Defaulting to 'on_trigger'.", infile.val.c_str());
+			evnt->activate_type = Event::ACTIVATE_ON_TRIGGER;
 		}
 	}
 	else if (infile.key == "location") {
@@ -201,66 +218,69 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		e->s = msg->get(val);
 	}
 	else if (key == "power_path") {
-		// @ATTR event.power_path|["hero", point]|Event power path
+		// @ATTR event.power_path|int, int, ["hero", point] : Source X, Source Y, Destination|Path that an event power will take.
 		e->type = EventComponent::POWER_PATH;
 
 		// x,y are src, if s=="hero" we target the hero,
 		// else we'll use values in a,b as coordinates
-		e->x = Parse::popFirstInt(val);
-		e->y = Parse::popFirstInt(val);
+		e->data[0].Int = Parse::popFirstInt(val);
+		e->data[1].Int = Parse::popFirstInt(val);
 
+		e->data[4].Bool = false;
 		std::string dest = Parse::popFirstString(val);
 		if (dest == "hero") {
-			e->s = "hero";
+			e->data[4].Bool = true;
 		}
 		else {
-			e->a = Parse::toInt(dest);
-			e->b = Parse::popFirstInt(val);
+			e->data[2].Int = Parse::toInt(dest);
+			e->data[3].Int = Parse::popFirstInt(val);
 		}
 	}
 	else if (key == "power_damage") {
-		// @ATTR event.power_damage|int, int : Min, Max|Range of power damage
+		// @ATTR event.power_damage|float, float : Min, Max|Range of power damage
 		e->type = EventComponent::POWER_DAMAGE;
 
-		e->a = Parse::popFirstInt(val);
-		e->b = Parse::popFirstInt(val);
+		e->data[0].Float = Parse::popFirstFloat(val);
+		e->data[1].Float = Parse::popFirstFloat(val);
 	}
 	else if (key == "intermap") {
 		// @ATTR event.intermap|filename, int, int : Map file, X, Y|Jump to specific map at location specified.
 		e->type = EventComponent::INTERMAP;
 
 		e->s = Parse::popFirstString(val);
-		e->x = -1;
-		e->y = -1;
+		e->data[0].Int = -1;
+		e->data[1].Int = -1;
 
 		std::string test_x = Parse::popFirstString(val);
 		if (!test_x.empty()) {
-			e->x = Parse::toInt(test_x);
-			e->y = Parse::popFirstInt(val);
+			e->data[0].Int = Parse::toInt(test_x);
+			e->data[1].Int = Parse::popFirstInt(val);
 		}
+
+		e->data[2].Bool = false; // not a map list
 	}
 	else if (key == "intermap_random") {
 		// @ATTR event.intermap_random|filename|Pick a random map from a map list file and teleport to it.
 		e->type = EventComponent::INTERMAP;
 
 		e->s = Parse::popFirstString(val);
-		e->z = 1; // flag that tells an intermap event that it contains a map list
+		e->data[2].Bool = true; // flag that tells an intermap event that it contains a map list
 	}
 	else if (key == "intramap") {
 		// @ATTR event.intramap|int, int : X, Y|Jump to specific position within current map.
 		e->type = EventComponent::INTRAMAP;
 
-		e->x = Parse::popFirstInt(val);
-		e->y = Parse::popFirstInt(val);
+		e->data[0].Int = Parse::popFirstInt(val);
+		e->data[1].Int = Parse::popFirstInt(val);
 	}
 	else if (key == "mapmod") {
 		// @ATTR event.mapmod|list(predefined_string, int, int, int) : Layer, X, Y, Tile ID|Modify map tiles
 		e->type = EventComponent::MAPMOD;
 
 		e->s = Parse::popFirstString(val);
-		e->x = Parse::popFirstInt(val);
-		e->y = Parse::popFirstInt(val);
-		e->z = Parse::popFirstInt(val);
+		e->data[0].Int = Parse::popFirstInt(val);
+		e->data[1].Int = Parse::popFirstInt(val);
+		e->data[2].Int = Parse::popFirstInt(val);
 
 		// add repeating mapmods
 		if (evnt) {
@@ -270,9 +290,9 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 				e = &evnt->components.back();
 				e->type = EventComponent::MAPMOD;
 				e->s = repeat_val;
-				e->x = Parse::popFirstInt(val);
-				e->y = Parse::popFirstInt(val);
-				e->z = Parse::popFirstInt(val);
+				e->data[0].Int = Parse::popFirstInt(val);
+				e->data[1].Int = Parse::popFirstInt(val);
+				e->data[2].Int = Parse::popFirstInt(val);
 
 				repeat_val = Parse::popFirstString(val);
 			}
@@ -283,17 +303,21 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		e->type = EventComponent::SOUNDFX;
 
 		e->s = Parse::popFirstString(val);
-		e->x = e->y = -1;
-		e->z = static_cast<int>(false);
+		e->data[0].Int = -1;
+		e->data[1].Int = -1;
+		e->data[2].Bool = false;
 
 		std::string s = Parse::popFirstString(val);
-		if (s != "") e->x = Parse::toInt(s);
+		if (!s.empty())
+			e->data[0].Int = Parse::toInt(s);
 
 		s = Parse::popFirstString(val);
-		if (s != "") e->y = Parse::toInt(s);
+		if (!s.empty())
+			e->data[1].Int = Parse::toInt(s);
 
 		s = Parse::popFirstString(val);
-		if (s != "") e->z = static_cast<int>(Parse::toBool(s));
+		if (!s.empty())
+			e->data[2].Bool = Parse::toBool(s);
 	}
 	else if (key == "loot") {
 		// @ATTR event.loot|list(loot)|Add loot to the event.
@@ -305,11 +329,11 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		// @ATTR event.loot_count|int, int : Min, Max|Sets the minimum (and optionally, the maximum) amount of loot this event can drop. Overrides the global drop_max setting.
 		e->type = EventComponent::LOOT_COUNT;
 
-		e->x = Parse::popFirstInt(val);
-		e->y = Parse::popFirstInt(val);
-		if (e->x != 0 || e->y != 0) {
-			e->x = std::max(e->x, 1);
-			e->y = std::max(e->y, e->x);
+		e->data[0].Int = Parse::popFirstInt(val);
+		e->data[1].Int = Parse::popFirstInt(val);
+		if (e->data[0].Int != 0 || e->data[1].Int != 0) {
+			e->data[0].Int = std::max(e->data[0].Int, 1);
+			e->data[1].Int = std::max(e->data[1].Int, e->data[0].Int);
 		}
 	}
 	else if (key == "msg") {
@@ -322,7 +346,7 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		// @ATTR event.shakycam|duration|Makes the camera shake for this duration in 'ms' or 's'.
 		e->type = EventComponent::SHAKYCAM;
 
-		e->x = Parse::toDuration(val);
+		e->data[0].Int = Parse::toDuration(val);
 	}
 	else if (key == "requires_status") {
 		// @ATTR event.requires_status|list(string)|Event requires list of statuses
@@ -366,31 +390,33 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		// @ATTR event.requires_level|int|Event requires hero level
 		e->type = EventComponent::REQUIRES_LEVEL;
 
-		e->x = Parse::popFirstInt(val);
+		e->data[0].Int = Parse::popFirstInt(val);
 	}
 	else if (key == "requires_not_level") {
 		// @ATTR event.requires_not_level|int|Event requires not hero level
 		e->type = EventComponent::REQUIRES_NOT_LEVEL;
 
-		e->x = Parse::popFirstInt(val);
+		e->data[0].Int = Parse::popFirstInt(val);
 	}
 	else if (key == "requires_currency") {
 		// @ATTR event.requires_currency|int|Event requires atleast this much currency
 		e->type = EventComponent::REQUIRES_CURRENCY;
 
-		e->x = Parse::popFirstInt(val);
+		e->data[0].Int = Parse::popFirstInt(val);
 	}
 	else if (key == "requires_not_currency") {
 		// @ATTR event.requires_not_currency|int|Event requires no more than this much currency
 		e->type = EventComponent::REQUIRES_NOT_CURRENCY;
 
-		e->x = Parse::popFirstInt(val);
+		e->data[0].Int = Parse::popFirstInt(val);
 	}
 	else if (key == "requires_item") {
-		// @ATTR event.requires_item|list(item_id)|Event requires specific item (not equipped)
+		// @ATTR event.requires_item|list(item_id)|Event requires specific item (not equipped). Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.
 		e->type = EventComponent::REQUIRES_ITEM;
 
-		e->x = Parse::popFirstInt(val);
+		ItemStack item_stack = Parse::toItemQuantityPair(Parse::popFirstString(val));
+		e->id = item_stack.item;
+		e->data[0].Int = item_stack.quantity;
 
 		// add repeating requires_item
 		if (evnt) {
@@ -399,17 +425,21 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 				evnt->components.push_back(EventComponent());
 				e = &evnt->components.back();
 				e->type = EventComponent::REQUIRES_ITEM;
-				e->x = Parse::toInt(repeat_val);
+				item_stack = Parse::toItemQuantityPair(repeat_val);
+				e->id = item_stack.item;
+				e->data[0].Int = item_stack.quantity;
 
 				repeat_val = Parse::popFirstString(val);
 			}
 		}
 	}
 	else if (key == "requires_not_item") {
-		// @ATTR event.requires_not_item|list(item_id)|Event requires not having a specific item (not equipped)
+		// @ATTR event.requires_not_item|list(item_id)|Event requires not having a specific item (not equipped). Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.
 		e->type = EventComponent::REQUIRES_NOT_ITEM;
 
-		e->x = Parse::popFirstInt(val);
+		ItemStack item_stack = Parse::toItemQuantityPair(Parse::popFirstString(val));
+		e->id = item_stack.item;
+		e->data[0].Int = item_stack.quantity;
 
 		// add repeating requires_not_item
 		if (evnt) {
@@ -418,7 +448,9 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 				evnt->components.push_back(EventComponent());
 				e = &evnt->components.back();
 				e->type = EventComponent::REQUIRES_NOT_ITEM;
-				e->x = Parse::toInt(repeat_val);
+				item_stack = Parse::toItemQuantityPair(repeat_val);
+				e->id = item_stack.item;
+				e->data[0].Int = item_stack.quantity;
 
 				repeat_val = Parse::popFirstString(val);
 			}
@@ -478,13 +510,15 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		// @ATTR event.remove_currency|int|Removes specified amount of currency from hero inventory
 		e->type = EventComponent::REMOVE_CURRENCY;
 
-		e->x = std::max(Parse::toInt(val), 0);
+		e->data[0].Int = std::max(Parse::toInt(val), 0);
 	}
 	else if (key == "remove_item") {
-		// @ATTR event.remove_item|list(item_id)|Removes specified item from hero inventory
+		// @ATTR event.remove_item|list(item_id)|Removes specified item from hero inventory. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.
 		e->type = EventComponent::REMOVE_ITEM;
 
-		e->x = Parse::popFirstInt(val);
+		ItemStack item_stack = Parse::toItemQuantityPair(Parse::popFirstString(val));
+		e->id = item_stack.item;
+		e->data[0].Int = item_stack.quantity;
 
 		// add repeating remove_item
 		if (evnt) {
@@ -493,7 +527,9 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 				evnt->components.push_back(EventComponent());
 				e = &evnt->components.back();
 				e->type = EventComponent::REMOVE_ITEM;
-				e->x = Parse::toInt(repeat_val);
+				item_stack = Parse::toItemQuantityPair(repeat_val);
+				e->id = item_stack.item;
+				e->data[0].Int = item_stack.quantity;
 
 				repeat_val = Parse::popFirstString(val);
 			}
@@ -503,20 +539,46 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		// @ATTR event.reward_xp|int|Reward hero with specified amount of experience points.
 		e->type = EventComponent::REWARD_XP;
 
-		e->x = std::max(Parse::toInt(val), 0);
+		e->data[0].Int = std::max(Parse::toInt(val), 0);
 	}
 	else if (key == "reward_currency") {
 		// @ATTR event.reward_currency|int|Reward hero with specified amount of currency.
 		e->type = EventComponent::REWARD_CURRENCY;
 
-		e->x = std::max(Parse::toInt(val), 0);
+		e->data[0].Int = std::max(Parse::toInt(val), 0);
 	}
 	else if (key == "reward_item") {
-		// @ATTR event.reward_item|item_id, int : Item, Quantity|Reward hero with y number of item x.
+		// @ATTR event.reward_item|(list(item_id)|Reward hero with a specified item. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer. To maintain backwards compatibility, the quantity must be defined for at least the first item in the list in order to use this syntax.
+		// @ATTR event.reward_item|item_id, int : Item, Quantity|Reward hero with y number of item x. NOTE: This syntax is maintained for backwards compatibility. It is recommended to use the above syntax instead.
 		e->type = EventComponent::REWARD_ITEM;
 
-		e->x = Parse::popFirstInt(val);
-		e->y = std::max(Parse::popFirstInt(val), 1);
+		bool check_pair = false;
+		ItemStack item_stack = Parse::toItemQuantityPair(Parse::popFirstString(val), &check_pair);
+
+		if (!check_pair) {
+			// item:quantity syntax not detected, falling back to the old syntax
+			e->id = items->verifyID(item_stack.item, NULL, !ItemManager::VERIFY_ALLOW_ZERO, ItemManager::VERIFY_ALLOCATE);
+			e->data[0].Int = std::max(Parse::popFirstInt(val), 1);
+		}
+		else {
+			e->id = item_stack.item;
+			e->data[0].Int = item_stack.quantity;
+
+			// add repeating reward_item
+			if (evnt) {
+				std::string repeat_val = Parse::popFirstString(val);
+				while (repeat_val != "") {
+					evnt->components.push_back(EventComponent());
+					e = &evnt->components.back();
+					e->type = EventComponent::REWARD_ITEM;
+					item_stack = Parse::toItemQuantityPair(repeat_val);
+					e->id = item_stack.item;
+					e->data[0].Int = item_stack.quantity;
+
+					repeat_val = Parse::popFirstString(val);
+				}
+			}
+		}
 	}
 	else if (key == "reward_loot") {
 		// @ATTR event.reward_loot|list(loot)|Reward hero with random loot.
@@ -528,11 +590,11 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		// @ATTR event.reward_loot_count|int, int : Min, Max|Sets the minimum (and optionally, the maximum) amount of loot that reward_loot can give the hero. Defaults to 1.
 		e->type = EventComponent::REWARD_LOOT_COUNT;
 
-		e->x = std::max(Parse::popFirstInt(val), 1);
-		e->y = std::max(Parse::popFirstInt(val), e->x);
+		e->data[0].Int = std::max(Parse::popFirstInt(val), 1);
+		e->data[1].Int = std::max(Parse::popFirstInt(val), e->data[0].Int);
 	}
 	else if (key == "restore") {
-		// @ATTR event.restore|["hp", "mp", "hpmp", "status", "all"]|Restore the hero's HP, MP, and/or status.
+		// @ATTR event.restore|list(["hp", "mp", "hpmp", "status", "all", predefined_string])|Restore the hero's HP, MP, and/or status. Resource stat base IDs are also valid.
 		e->type = EventComponent::RESTORE;
 
 		e->s = val;
@@ -541,15 +603,20 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		// @ATTR event.power|power_id|Specify power coupled with event.
 		e->type = EventComponent::POWER;
 
-		e->x = Parse::toInt(val);
+		e->id = Parse::toPowerID(val);
+
+		if (powers)
+			e->id = powers->verifyID(e->id, NULL, !PowerManager::ALLOW_ZERO_ID);
+		else
+			Utils::logError("EventManager: Unable to verify Power ID '%d'. PowerManager hasn't been initialized.", e->id);
 	}
 	else if (key == "spawn") {
 		// @ATTR event.spawn|list(predefined_string, int, int) : Enemy category, X, Y|Spawn an enemy from this category at location
 		e->type = EventComponent::SPAWN;
 
 		e->s = Parse::popFirstString(val);
-		e->x = Parse::popFirstInt(val);
-		e->y = Parse::popFirstInt(val);
+		e->data[0].Int = Parse::popFirstInt(val);
+		e->data[1].Int = Parse::popFirstInt(val);
 
 		// add repeating spawn
 		if (evnt) {
@@ -560,8 +627,8 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 				e->type = EventComponent::SPAWN;
 
 				e->s = repeat_val;
-				e->x = Parse::popFirstInt(val);
-				e->y = Parse::popFirstInt(val);
+				e->data[0].Int = Parse::popFirstInt(val);
+				e->data[1].Int = Parse::popFirstInt(val);
 
 				repeat_val = Parse::popFirstString(val);
 			}
@@ -571,7 +638,7 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		// @ATTR event.stash|bool|If true, the Stash menu if opened.
 		e->type = EventComponent::STASH;
 
-		e->x = static_cast<int>(Parse::toBool(val));
+		e->data[0].Bool = Parse::toBool(val);
 	}
 	else if (key == "npc") {
 		// @ATTR event.npc|filename|Filename of an NPC to start dialog with.
@@ -595,13 +662,13 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		// @ATTR event.repeat|bool|If true, the event to be triggered again.
 		e->type = EventComponent::REPEAT;
 
-		e->x = static_cast<int>(Parse::toBool(val));
+		e->data[0].Bool = Parse::toBool(val);
 	}
 	else if (key == "save_game") {
 		// @ATTR event.save_game|bool|If true, the game is saved when the event is triggered. The respawn position is set to where the player is standing.
 		e->type = EventComponent::SAVE_GAME;
 
-		e->x = static_cast<int>(Parse::toBool(val));
+		e->data[0].Bool = Parse::toBool(val);
 	}
 	else if (key == "book") {
 		// @ATTR event.book|filename|Opens a book by filename.
@@ -616,10 +683,10 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		e->s = val;
 	}
 	else if (key == "chance_exec") {
-		// @ATTR event.chance_exec|int|Percentage chance that this event will execute when triggered.
+		// @ATTR event.chance_exec|float|Percentage chance that this event will execute when triggered.
 		e->type = EventComponent::CHANCE_EXEC;
 
-		e->x = Parse::popFirstInt(val);
+		e->data[0].Float = Parse::popFirstFloat(val);
 	}
 	else if (key == "respec") {
 		// @ATTR event.respec|["xp", "stats", "powers"], bool : Respec mode, Ignore class defaults|Resets various aspects of the character's progression. Resetting "xp" also resets "stats". Resetting "stats" also resets "powers".
@@ -629,17 +696,64 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		std::string use_engine_defaults = Parse::popFirstString(val);
 
 		if (mode == "xp") {
-			e->x = 3;
+			e->data[0].Int = 3;
 		}
 		else if (mode == "stats") {
-			e->x = 2;
+			e->data[0].Int = 2;
 		}
 		else if (mode == "powers") {
-			e->x = 1;
+			e->data[0].Int = 1;
 		}
 
 		if (!use_engine_defaults.empty())
-			e->y = static_cast<int>(Parse::toBool(use_engine_defaults));
+			e->data[1].Bool = Parse::toBool(use_engine_defaults);
+	}
+	else if (key == "show_on_minimap") {
+		// @ATTR event.show_on_minimap|bool|If true, this event will be shown on the minimap if it is the appropriate type (e.g. an intermap teleport).
+		e->type = EventComponent::SHOW_ON_MINIMAP;
+
+		e->data[0].Bool = Parse::toBool(val);
+	}
+	else if (key == "parallax_layers") {
+		// @ATTR event.parallax_layers|filename|Filename of a parallax layers definition to load.
+		e->type = EventComponent::PARALLAX_LAYERS;
+
+		e->s = val;
+	}
+	else if (key == "random_status") {
+		// @ATTR event.random_status|repeatable(["append", "clear", "roll", "set", "unset"], list(string)) : Action, Statuses (append action only)|Used to randomly pick a status from a list, and then set or unset it. Statuses are added to the list with the "append" action. The "roll" action will randomly pick from the list and set it as the current random status. The "set" and "unset" commands will function like set_status and unset_status, with the parameter being the current random status. Lastly, the "clear" action will empty the pool of random statuses. It is recommended to clear the list before you use it, as well as after you're done to prevent unintended side-effects.
+		e->type = EventComponent::RANDOM_STATUS;
+
+		std::string mode = Parse::popFirstString(val);
+		if (mode == "append") {
+			e->data[0].Int = EventComponent::RANDOM_STATUS_MODE_APPEND;
+
+			e->status = camp->registerStatus(Parse::popFirstString(val));
+
+			// add repeating random_status
+			if (evnt) {
+				std::string repeat_val = Parse::popFirstString(val);
+				while (repeat_val != "") {
+					evnt->components.push_back(EventComponent());
+					e = &evnt->components.back();
+					e->type = EventComponent::RANDOM_STATUS;
+					e->data[0].Int = EventComponent::RANDOM_STATUS_MODE_APPEND;
+					e->status = camp->registerStatus(repeat_val);
+
+					repeat_val = Parse::popFirstString(val);
+				}
+			}
+		}
+		else if (mode == "clear")
+			e->data[0].Int = EventComponent::RANDOM_STATUS_MODE_CLEAR;
+		else if (mode == "roll")
+			e->data[0].Int = EventComponent::RANDOM_STATUS_MODE_ROLL;
+		else if (mode == "set")
+			e->data[0].Int = EventComponent::RANDOM_STATUS_MODE_SET;
+		else if (mode == "unset")
+			e->data[0].Int = EventComponent::RANDOM_STATUS_MODE_UNSET;
+		else
+			Utils::logError("EventManager: '%s' is not a valid random_status action.", mode.c_str());
 	}
 	else {
 		return false;
@@ -671,7 +785,7 @@ bool EventManager::executeEventInternal(Event &ev, bool skip_delay) {
 	// need to know this for early returns
 	EventComponent *ec_repeat = ev.getComponent(EventComponent::REPEAT);
 	if (ec_repeat) {
-		ev.keep_after_trigger = ec_repeat->x == 0 ? false : true;
+		ev.keep_after_trigger = ec_repeat->data[0].Bool;
 	}
 
 	// Delay event execution
@@ -693,7 +807,7 @@ bool EventManager::executeEventInternal(Event &ev, bool skip_delay) {
 	// if chance_exec roll fails, don't execute the event
 	// we respect the value of "repeat", even if the event doesn't execute
 	EventComponent *ec_chance_exec = ev.getComponent(EventComponent::CHANCE_EXEC);
-	if (ec_chance_exec && !Math::percentChance(ec_chance_exec->x)) {
+	if (ec_chance_exec && !Math::percentChanceF(ec_chance_exec->data[0].Float)) {
 		return !ev.keep_after_trigger;
 	}
 
@@ -709,70 +823,71 @@ bool EventManager::executeEventInternal(Event &ev, bool skip_delay) {
 			camp->unsetStatus(ec->status);
 		}
 		else if (ec->type == EventComponent::INTERMAP) {
-			if (ec->z == 1) {
+			if (ec->data[2].Bool) {
 				// this is intermap_random
 				std::string map_list = ec->s;
 				EventComponent random_ec = getRandomMapFromFile(map_list);
 
 				ec->s = random_ec.s;
-				ec->x = random_ec.x;
-				ec->y = random_ec.y;
+				ec->data[0].Int = random_ec.data[0].Int;
+				ec->data[1].Int = random_ec.data[1].Int;
 			}
 
 			if (Filesystem::fileExists(mods->locate(ec->s))) {
 				mapr->teleportation = true;
 				mapr->teleport_mapname = ec->s;
 
-				if (ec->x == -1 && ec->y == -1) {
+				if (ec->data[0].Int == -1 && ec->data[1].Int == -1) {
 					// the teleport destination will be set to the map's hero_pos once the map is loaded
 					mapr->teleport_destination.x = -1;
 					mapr->teleport_destination.y = -1;
 				}
 				else {
-					mapr->teleport_destination.x = static_cast<float>(ec->x) + 0.5f;
-					mapr->teleport_destination.y = static_cast<float>(ec->y) + 0.5f;
+					mapr->teleport_destination.x = static_cast<float>(ec->data[0].Int) + 0.5f;
+					mapr->teleport_destination.y = static_cast<float>(ec->data[1].Int) + 0.5f;
 				}
 			}
 			else {
 				ev.keep_after_trigger = false;
 				pc->logMsg(msg->get("Unknown destination"), Avatar::MSG_UNIQUE);
+				Utils::logInfo("EventManager: Unknown intermap destination (%s)", ec->s.c_str());
 			}
 		}
 		else if (ec->type == EventComponent::INTRAMAP) {
 			mapr->teleportation = true;
 			mapr->teleport_mapname = "";
-			mapr->teleport_destination.x = static_cast<float>(ec->x) + 0.5f;
-			mapr->teleport_destination.y = static_cast<float>(ec->y) + 0.5f;
+			mapr->teleport_destination.x = static_cast<float>(ec->data[0].Int) + 0.5f;
+			mapr->teleport_destination.y = static_cast<float>(ec->data[1].Int) + 0.5f;
 		}
 		else if (ec->type == EventComponent::MAPMOD) {
 			if (ec->s == "collision") {
-				if (ec->x >= 0 && ec->x < mapr->w && ec->y >= 0 && ec->y < mapr->h) {
-					mapr->collider.colmap[ec->x][ec->y] = static_cast<unsigned short>(ec->z);
+				if (ec->data[0].Int >= 0 && ec->data[0].Int < mapr->w && ec->data[1].Int >= 0 && ec->data[1].Int < mapr->h) {
+					mapr->collider.colmap[ec->data[0].Int][ec->data[1].Int] = static_cast<unsigned short>(ec->data[2].Int);
 					mapr->map_change = true;
 				}
 				else
-					Utils::logError("EventManager: Mapmod at position (%d, %d) is out of bounds 0-255.", ec->x, ec->y);
+					Utils::logError("EventManager: Mapmod at position (%d, %d) is out of bounds 0-255.", ec->data[0].Int, ec->data[1].Int);
 			}
 			else {
 				size_t index = static_cast<size_t>(distance(mapr->layernames.begin(), find(mapr->layernames.begin(), mapr->layernames.end(), ec->s)));
-				if (!mapr->isValidTile(ec->z))
-					Utils::logError("EventManager: Mapmod at position (%d, %d) contains invalid tile id (%d).", ec->x, ec->y, ec->z);
+				if (!mapr->isValidTile(ec->data[2].Int))
+					Utils::logError("EventManager: Mapmod at position (%d, %d) contains invalid tile id (%d).", ec->data[0].Int, ec->data[1].Int, ec->data[2].Int);
 				else if (index >= mapr->layers.size())
-					Utils::logError("EventManager: Mapmod at position (%d, %d) is on an invalid layer.", ec->x, ec->y);
-				else if (ec->x >= 0 && ec->x < mapr->w && ec->y >= 0 && ec->y < mapr->h)
-					mapr->layers[index][ec->x][ec->y] = static_cast<unsigned short>(ec->z);
+					Utils::logError("EventManager: Mapmod at position (%d, %d) is on an invalid layer.", ec->data[0].Int, ec->data[1].Int);
+				else if (ec->data[0].Int >= 0 && ec->data[0].Int < mapr->w && ec->data[1].Int >= 0 && ec->data[1].Int < mapr->h)
+					mapr->layers[index][ec->data[0].Int][ec->data[1].Int] = static_cast<unsigned short>(ec->data[2].Int);
 				else
-					Utils::logError("EventManager: Mapmod at position (%d, %d) is out of bounds 0-255.", ec->x, ec->y);
+					Utils::logError("EventManager: Mapmod at position (%d, %d) is out of bounds 0-255.", ec->data[0].Int, ec->data[1].Int);
 			}
 		}
 		else if (ec->type == EventComponent::SOUNDFX) {
 			FPoint pos(0,0);
 			bool loop = false;
 
-			if (ec->x != -1 && ec->y != -1) {
-				if (ec->x != 0 && ec->y != 0) {
-					pos.x = static_cast<float>(ec->x) + 0.5f;
-					pos.y = static_cast<float>(ec->y) + 0.5f;
+			if (ec->data[0].Int != -1 && ec->data[1].Int != -1) {
+				if (ec->data[0].Int != 0 && ec->data[1].Int != 0) {
+					pos.x = static_cast<float>(ec->data[0].Int) + 0.5f;
+					pos.y = static_cast<float>(ec->data[1].Int) + 0.5f;
 				}
 			}
 			else if (ev.location.x != 0 && ev.location.y != 0) {
@@ -780,7 +895,7 @@ bool EventManager::executeEventInternal(Event &ev, bool skip_delay) {
 				pos.y = static_cast<float>(ev.location.y) + 0.5f;
 			}
 
-			if (ev.activate_type == Event::ACTIVATE_ON_LOAD || ec->z != 0)
+			if (ev.activate_type == Event::ACTIVATE_ON_LOAD || ec->data[2].Bool)
 				loop = true;
 
 			SoundID sid = snd->load(ec->s, "MapRenderer background soundfx");
@@ -791,41 +906,38 @@ bool EventManager::executeEventInternal(Event &ev, bool skip_delay) {
 		else if (ec->type == EventComponent::LOOT) {
 			EventComponent *ec_lootcount = ev.getComponent(EventComponent::LOOT_COUNT);
 			if (ec_lootcount) {
-				mapr->loot_count.x = ec_lootcount->x;
-				mapr->loot_count.y = ec_lootcount->y;
+				mapr->loot_count.x = ec_lootcount->data[0].Int;
+				mapr->loot_count.y = ec_lootcount->data[1].Int;
 			}
 			else {
 				mapr->loot_count.x = 0;
 				mapr->loot_count.y = 0;
 			}
 
-			ec->x = ev.hotspot.x;
-			ec->y = ev.hotspot.y;
+			ec->data[0].Int = ev.hotspot.x; // LOOT_EC_POSX
+			ec->data[1].Int = ev.hotspot.y; // LOOT_EC_POSY
 			mapr->loot.push_back(*ec);
 		}
 		else if (ec->type == EventComponent::MSG) {
 			pc->logMsg(ec->s, Avatar::MSG_UNIQUE);
 		}
 		else if (ec->type == EventComponent::SHAKYCAM) {
-			mapr->shaky_cam_timer.setDuration(ec->x);
+			mapr->cam.shake_timer.setDuration(ec->data[0].Int);
 		}
 		else if (ec->type == EventComponent::REMOVE_CURRENCY) {
-			camp->removeCurrency(ec->x);
+			camp->removeCurrency(ec->data[0].Int);
 		}
 		else if (ec->type == EventComponent::REMOVE_ITEM) {
-			camp->removeItem(ec->x);
+			camp->removeItem(ItemStack(ec->id, ec->data[0].Int));
 		}
 		else if (ec->type == EventComponent::REWARD_XP) {
-			camp->rewardXP(ec->x, CampaignManager::XP_SHOW_MSG);
+			camp->rewardXP(static_cast<float>(ec->data[0].Int), CampaignManager::XP_SHOW_MSG);
 		}
 		else if (ec->type == EventComponent::REWARD_CURRENCY) {
-			camp->rewardCurrency(ec->x);
+			camp->rewardCurrency(ec->data[0].Int);
 		}
 		else if (ec->type == EventComponent::REWARD_ITEM) {
-			ItemStack istack;
-			istack.item = ec->x;
-			istack.quantity = ec->y;
-			camp->rewardItem(istack);
+			camp->rewardItem(ItemStack(ec->id, ec->data[0].Int));
 		}
 		else if (ec->type == EventComponent::REWARD_LOOT) {
 			std::vector<EventComponent> random_table;
@@ -833,8 +945,8 @@ bool EventManager::executeEventInternal(Event &ev, bool skip_delay) {
 
 			EventComponent *ec_lootcount = ev.getComponent(EventComponent::REWARD_LOOT_COUNT);
 			if (ec_lootcount) {
-				random_table_count.x = ec_lootcount->x;
-				random_table_count.y = ec_lootcount->y;
+				random_table_count.x = ec_lootcount->data[0].Int;
+				random_table_count.y = ec_lootcount->data[1].Int;
 			}
 
 			random_table.push_back(EventComponent());
@@ -857,9 +969,9 @@ bool EventManager::executeEventInternal(Event &ev, bool skip_delay) {
 		}
 		else if (ec->type == EventComponent::SPAWN) {
 			Point spawn_pos;
-			spawn_pos.x = ec->x;
-			spawn_pos.y = ec->y;
-			enemym->spawn(ec->s, spawn_pos);
+			spawn_pos.x = ec->data[0].Int;
+			spawn_pos.y = ec->data[1].Int;
+			entitym->spawn(ec->s, spawn_pos);
 		}
 		else if (ec->type == EventComponent::POWER) {
 			EventComponent *ec_path = ev.getComponent(EventComponent::POWER_PATH);
@@ -867,14 +979,14 @@ bool EventManager::executeEventInternal(Event &ev, bool skip_delay) {
 
 			if (ec_path) {
 				// targets hero option
-				if (ec_path->s == "hero") {
+				if (ec_path->data[4].Bool) {
 					target.x = pc->stats.pos.x;
 					target.y = pc->stats.pos.y;
 				}
 				// targets fixed path option
 				else {
-					target.x = static_cast<float>(ec_path->a) + 0.5f;
-					target.y = static_cast<float>(ec_path->b) + 0.5f;
+					target.x = static_cast<float>(ec_path->data[2].Int) + 0.5f;
+					target.y = static_cast<float>(ec_path->data[3].Int) + 0.5f;
 				}
 			}
 			// no path specified, targets self location
@@ -883,12 +995,12 @@ bool EventManager::executeEventInternal(Event &ev, bool skip_delay) {
 				target.y = static_cast<float>(ev.location.y) + 0.5f;
 			}
 
-			// ec->x is power id
-			// ec->y is statblock index
-			mapr->activatePower(ec->x, ec->y, target);
+			// ec->id is power id
+			// ec->data[0] is statblock index
+			mapr->activatePower(ec->id, ec->data[0].Int, target);
 		}
 		else if (ec->type == EventComponent::STASH) {
-			mapr->stash = ec->x == 0 ? false : true;
+			mapr->stash = ec->data[0].Bool;
 			if (mapr->stash) {
 				mapr->stash_pos.x = static_cast<float>(ev.location.x) + 0.5f;
 				mapr->stash_pos.y = static_cast<float>(ev.location.y) + 0.5f;
@@ -906,13 +1018,13 @@ bool EventManager::executeEventInternal(Event &ev, bool skip_delay) {
 			mapr->cutscene_file = ec->s;
 		}
 		else if (ec->type == EventComponent::REPEAT) {
-			ev.keep_after_trigger = ec->x == 0 ? false : true;
+			ev.keep_after_trigger = ec->data[0].Bool;
 		}
 		else if (ec->type == EventComponent::SAVE_GAME) {
-			mapr->save_game = ec->x == 0 ? false : true;
+			mapr->save_game = ec->data[0].Bool;
 		}
 		else if (ec->type == EventComponent::NPC_ID) {
-			mapr->npc_id = ec->x;
+			mapr->npc_id = ec->data[0].Int;
 		}
 		else if (ec->type == EventComponent::BOOK) {
 			mapr->show_book = ec->s;
@@ -924,16 +1036,16 @@ bool EventManager::executeEventInternal(Event &ev, bool skip_delay) {
 				executeScript(ec->s, pc->stats.pos.x, pc->stats.pos.y);
 		}
 		else if (ec->type == EventComponent::RESPEC) {
-			bool use_engine_defaults = static_cast<bool>(ec->y);
+			bool use_engine_defaults = ec->data[1].Bool;
 			EngineSettings::HeroClasses::HeroClass* pc_class;
 			pc_class = eset->hero_classes.getByName(pc->stats.character_class);
 
-			if (ec->x == 3) {
+			if (ec->data[0].Int == 3) {
 				// xp
 				pc->stats.level = 1;
 				pc->stats.xp = 0;
 			}
-			if (ec->x >= 2) {
+			if (ec->data[0].Int >= 2) {
 				// stats
 				for (size_t j = 0; j < eset->primary_stats.list.size(); ++j) {
 					pc->stats.primary[j] = 1;
@@ -949,7 +1061,7 @@ bool EventManager::executeEventInternal(Event &ev, bool skip_delay) {
 				menu->inv->applyEquipment();
 				pc->stats.logic();
 			}
-			if (ec->x >= 1) {
+			if (ec->data[0].Int >= 1) {
 				// powers
 				pc->stats.powers_list.clear();
 				pc->stats.powers_passive.clear();
@@ -962,9 +1074,9 @@ bool EventManager::executeEventInternal(Event &ev, bool skip_delay) {
 				}
 				menu_powers->setUnlockedPowers();
 
-				menu_act->clear();
+				menu_act->clear(MenuActionBar::CLEAR_SKIP_ITEMS);
 				if (pc_class && !use_engine_defaults) {
-					menu->act->set(pc_class->hotkeys);
+					menu->act->set(pc_class->hotkeys, MenuActionBar::SET_SKIP_EMPTY);
 				}
 				menu->pow->newPowerNotification = false;
 
@@ -972,17 +1084,28 @@ bool EventManager::executeEventInternal(Event &ev, bool skip_delay) {
 				pc->stats.refresh_stats = true;
 			}
 		}
+		else if (ec->type == EventComponent::PARALLAX_LAYERS) {
+			mapr->setMapParallax(ec->s);
+		}
+		else if (ec->type == EventComponent::RANDOM_STATUS) {
+			if (ec->data[0].Int == EventComponent::RANDOM_STATUS_MODE_APPEND)
+				camp->randomStatusAppend(ec->status);
+			else if (ec->data[0].Int == EventComponent::RANDOM_STATUS_MODE_CLEAR)
+				camp->randomStatusClear();
+			else if (ec->data[0].Int == EventComponent::RANDOM_STATUS_MODE_ROLL)
+				camp->randomStatusRoll();
+			else if (ec->data[0].Int == EventComponent::RANDOM_STATUS_MODE_SET)
+				camp->randomStatusSet();
+			else if (ec->data[0].Int == EventComponent::RANDOM_STATUS_MODE_UNSET)
+				camp->randomStatusUnset();
+		}
 	}
 	return !ev.keep_after_trigger;
 }
 
 
 bool EventManager::isActive(const Event &e) {
-	for (size_t i=0; i < e.components.size(); i++) {
-		if (!camp->checkAllRequirements(e.components[i]))
-			return false;
-	}
-	return true;
+	return camp->checkRequirementsInVector(e.components);
 }
 
 void EventManager::executeScript(const std::string& filename, float x, float y) {
@@ -1006,12 +1129,19 @@ void EventManager::executeScript(const std::string& filename, float x, float y) 
 			if (script_evnt.empty())
 				continue;
 
-			if (script_file.key == "script" && script_file.val == filename) {
+			if (script_file.key == "script" && Filesystem::convertSlashes(script_file.val) == Filesystem::convertSlashes(filename)) {
 				script_file.error("EventManager: Calling a script from within itself is not allowed.");
 				continue;
 			}
 
-			loadEventComponent(script_file, &script_evnt.back(), NULL);
+			if (script_file.key == "delay") {
+				// 'delay' is not an EventComponent, but we allow it in scripts
+				script_evnt.back().delay.setDuration(Parse::toDuration(script_file.val));
+				script_evnt.back().delay.reset(Timer::BEGIN);
+			}
+			else {
+				loadEventComponent(script_file, &script_evnt.back(), NULL);
+			}
 		}
 		script_file.close();
 
@@ -1019,10 +1149,14 @@ void EventManager::executeScript(const std::string& filename, float x, float y) 
 			// create StatBlocks if we need them
 			EventComponent *ec_power = script_evnt.front().getComponent(EventComponent::POWER);
 			if (ec_power) {
-				ec_power->y = mapr->addEventStatBlock(script_evnt.front());
+				ec_power->data[0].Int = mapr->addEventStatBlock(script_evnt.front());
 			}
 
-			if (isActive(script_evnt.front())) {
+			if (script_evnt.front().delay.getDuration() > 0) {
+				// handle delayed events
+				mapr->delayed_events.push_back(script_evnt.front());
+			}
+			else if (isActive(script_evnt.front())) {
 				executeEvent(script_evnt.front());
 			}
 			script_evnt.pop();
@@ -1054,13 +1188,13 @@ EventComponent EventManager::getRandomMapFromFile(const std::string& fname) {
 				EventComponent ec;
 				ec.s = Parse::popFirstString(infile.val);
 				if (ec_list.empty() || ec.s != mapr->getFilename()) {
-					ec.x = -1;
-					ec.y = -1;
+					ec.data[0].Int = -1;
+					ec.data[1].Int = -1;
 
 					std::string test_x = Parse::popFirstString(infile.val);
 					if (!test_x.empty()) {
-						ec.x = Parse::toInt(test_x);
-						ec.y = Parse::popFirstInt(infile.val);
+						ec.data[0].Int = Parse::toInt(test_x);
+						ec.data[1].Int = Parse::popFirstInt(infile.val);
 					}
 
 					ec_list.push_back(ec);

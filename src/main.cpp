@@ -89,8 +89,13 @@ static void init(const CmdLineArgs& cmd_line_args) {
 	Utils::createLogFile();
 	Utils::logInfo(VersionInfo::createVersionStringFull().c_str());
 
+	// log common paths
+	Utils::logInfo("main: PATH_CONF = '%s'", settings->path_conf.c_str());
+	Utils::logInfo("main: PATH_USER = '%s'", settings->path_user.c_str());
+	Utils::logInfo("main: PATH_DATA = '%s'", settings->path_data.c_str());
+
 	// SDL Inits
-	if ( SDL_Init (SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK) < 0 ) {
+	if ( SDL_Init (SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMECONTROLLER) < 0 ) {
 		Utils::logError("main: Could not initialize SDL: %s", SDL_GetError());
 		Utils::logErrorDialog("main: Could not initialize SDL: %s", SDL_GetError());
 		Utils::Exit(1);
@@ -107,22 +112,26 @@ static void init(const CmdLineArgs& cmd_line_args) {
 		Utils::logError("A copy of the default mod is in the \"mods\" directory of the flare-engine repo.");
 		Utils::logError("The repo is located at: https://github.com/flareteam/flare-engine");
 		Utils::logError("Try again after copying the default mod to one of the above directories. Exiting.");
-		Utils::logErrorDialog("main: Could not find the 'default' mod in the following locations:\n\n%smods/\n%smods/", settings->path_user.c_str(), settings->path_data.c_str());
+		Utils::logErrorDialog("main: Could not find the 'default' mod in the following locations:\n\n%smods/\n\n%smods/", settings->path_user.c_str(), settings->path_data.c_str());
+#if __ANDROID__
+		PlatformAndroid::dialogInstallHint();
+#endif
 		Utils::Exit(1);
 	}
 
 	settings->loadSettings();
+	settings->logSettings();
 
 	save_load = new SaveLoad();
 	msg = new MessageEngine();
 	font = getFontEngine();
 	anim = new AnimationManager();
 	comb = new CombatText();
-	
+
 	// Load miscellaneous settings
 	eset = new EngineSettings();
 	eset->load();
-	
+
 	inpt = getInputManager();
 	icons = NULL;
 
@@ -132,7 +141,9 @@ static void init(const CmdLineArgs& cmd_line_args) {
 	platform.setScreenSize();
 
 	// Create render Device and Rendering Context.
-	if (platform.default_renderer != "")
+	if (settings->safe_video)
+		render_device = getRenderDevice(settings->render_device_name);
+	else if (platform.default_renderer != "")
 		render_device = getRenderDevice(platform.default_renderer);
 	else if (cmd_line_args.render_device_name != "")
 		render_device = getRenderDevice(cmd_line_args.render_device_name);
@@ -151,8 +162,6 @@ static void init(const CmdLineArgs& cmd_line_args) {
 	render_device->reloadGraphics();
 
 	snd = getSoundManager();
-
-	inpt->initJoystick();
 
 	tooltipm = new TooltipManager();
 
@@ -395,6 +404,9 @@ int main(int argc, char *argv[]) {
 		else if (arg == "load-script") {
 			settings->load_script = parseArgValue(arg_full);
 		}
+		else if (arg == "safe-video") {
+			settings->safe_video = true;
+		}
 		else if (arg == "help") {
 			Utils::logInfo("Command line options:\n\
 --help                   Prints this message.\n\
@@ -407,7 +419,8 @@ int main(int argc, char *argv[]) {
 --mods=<MOD>,...         Starts the game with only these mods enabled.\n\
 --load-slot=<SLOT>       Loads a save slot by numerical index.\n\
 --load-script=<SCRIPT>   Execute's a script upon loading a saved game.\n\
-                         The script path is mod-relative.\n");
+                         The script path is mod-relative.\n\
+--safe-video             Launches with the minimum video settings.");
 			done = true;
 		}
 		else {
@@ -420,7 +433,7 @@ soft_reset:
 		srand(static_cast<unsigned int>(time(NULL)));
 #ifdef __EMSCRIPTEN__
 		platform.FSInit();
-		emscripten_set_main_loop(EmscriptenMainLoop, 0, 1);
+		emscripten_set_main_loop(EmscriptenMainLoop, settings->max_frames_per_sec, 1);
 #else
 		init(cmd_line_args);
 

@@ -83,6 +83,7 @@ public:
 
 	TabList* getCurrentTabList();
 	void defocusTabLists();
+	void resetDrag();
 };
 
 

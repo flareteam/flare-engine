@@ -70,7 +70,7 @@ void MenuBook::loadBook() {
 		last_book_name = book_name;
 
 		while (infile.next()) {
-			if (parseMenuKey(infile.key, infile.val))
+			if (infile.section.empty() && parseMenuKey(infile.key, infile.val))
 				continue;
 
 			infile.val = infile.val + ',';
@@ -81,11 +81,7 @@ void MenuBook::loadBook() {
 				int y = Parse::popFirstInt(infile.val);
 				closeButton->setBasePos(x, y, Utils::ALIGN_TOPLEFT);
 			}
-			// @ATTR background|filename|Filename for the background image.
-			else if (infile.key == "background") {
-				setBackground(Parse::popFirstString(infile.val));
-			}
-			else if (infile.section == "") {
+			else if (infile.section.empty()) {
 				infile.error("MenuBook: '%s' is not a valid key.", infile.key.c_str());
 			}
 
@@ -177,7 +173,7 @@ void MenuBook::loadImage(FileParser &infile, BookImage& bimage) {
 		  graphics->unref();
 		}
 	}
-	// @ATTR image_icon|icon_id|Use an icon as the image instead of a file.
+	// @ATTR image.image_icon|icon_id|Use an icon as the image instead of a file.
 	else if (infile.key == "image_icon") {
 		if (bimage.image) {
 			delete bimage.image;
@@ -226,7 +222,7 @@ void MenuBook::loadText(FileParser &infile, BookText& btext) {
 		btext.color.b = static_cast<Uint8>(Parse::popFirstInt(infile.val));
 		btext.font= Parse::popFirstString(infile.val);
 	}
-	// @ATTR text.shadow|bool|If true, the text will have a black shadow like the text labels in various menus.
+	// @ATTR text.text_shadow|bool|If true, the text will have a black shadow like the text labels in various menus.
 	else if (infile.key == "text_shadow") {
 		btext.shadow = Parse::toBool(Parse::popFirstString(infile.val));
 	}
@@ -271,7 +267,7 @@ void MenuBook::loadButton(FileParser &infile, BookButton& bbutton) {
 		bbutton.label = Parse::popFirstString(infile.val);
 	}
 	else {
-		// @ATTR book.${EVENT_COMPONENT}|Event components to execute when the button is clicked. See the definitions in EventManager for possible attributes.
+		// @ATTR button.${EVENT_COMPONENT}|Event components to execute when the button is clicked. See the definitions in EventManager for possible attributes.
 		loadBookEvent(infile, bbutton.event);
 	}
 }
@@ -293,7 +289,8 @@ void MenuBook::align() {
 	closeButton->setPos(window_area.x, window_area.y);
 
 	for (unsigned i=0; i<text.size(); i++) {
-		text[i].sprite->setDest(text[i].size.x + window_area.x, text[i].size.y + window_area.y);
+		if (text[i].sprite)
+			text[i].sprite->setDest(text[i].size.x + window_area.x, text[i].size.y + window_area.y);
 	}
 	for (size_t i = 0; i < images.size(); ++i) {
 		if (images[i].image)
@@ -321,6 +318,7 @@ void MenuBook::clearBook() {
 	buttons.clear();
 
 	tablist.clear();
+	tablist.defocus();
 
 	delete event_open;
 	event_open = NULL;
@@ -417,6 +415,11 @@ void MenuBook::logic() {
 		if (buttons[i].event.components.empty() || !EventManager::isActive(buttons[i].event)) {
 			buttons[i].button->enabled = false;
 			buttons[i].button->refresh();
+
+			// defocus the disabled button. MenuManager will auto-select the next enabled one
+			if (!inpt->usingMouse() && buttons[i].button == tablist.getWidgetByIndex(tablist.getCurrent())) {
+				tablist.defocus();
+			}
 		}
 		else {
 			buttons[i].button->enabled = true;

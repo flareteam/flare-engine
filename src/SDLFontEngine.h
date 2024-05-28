@@ -40,6 +40,8 @@ public:
 
 class SDLFontEngine : public FontEngine {
 private:
+	bool isActiveFontValid();
+
 	std::vector<SDLFontStyle> font_styles;
 	SDLFontStyle *active_font;
 

@@ -74,12 +74,27 @@ private:
 
 	static const int GAMMA_MIN = 5;
 	static const int GAMMA_MAX = 15;
+	static const int TOUCH_SCALE_MIN = 75;
+	static const int TOUCH_SCALE_MAX = 125;
+
+	enum {
+		DEFAULTS_CONFIRM_OPTION_NO = 0,
+		DEFAULTS_CONFIRM_OPTION_YES = 1,
+	};
+
+	enum {
+		INPUT_CONFIRM_OPTION_NEW = 0,
+		INPUT_CONFIRM_OPTION_CLEAR = 1,
+	};
 
 	std::vector<ConfigTab> cfg_tabs;
 
 	bool is_game_state;
 	bool enable_gamestate_buttons;
 	Avatar *hero;
+
+	std::vector<unsigned short> frame_limits;
+	std::vector<unsigned short> virtual_heights;
 
 public:
 	static const bool IS_GAME_STATE = true;
@@ -96,6 +111,13 @@ public:
 		MODS_TAB = 6
 	};
 	static const short NO_TAB = -1;
+
+	enum {
+		EXIT_OPTION_CONTINUE = 0,
+		EXIT_OPTION_SAVE = 1,
+		EXIT_OPTION_EXIT = 2,
+		EXIT_OPTION_TIME_PLAYED = 3,
+	};
 
 	explicit MenuConfig(bool _is_game_state);
 	~MenuConfig();
@@ -133,6 +155,7 @@ public:
 	void placeLabeledWidget(WidgetLabel* lb, Widget* w, int x1, int y1, int x2, int y2, std::string const& str, int justify = 0);
 	void placeLabeledWidgetAuto(int tab, int cfg_index);
 	void refreshWidgets();
+	void refreshWindowSize();
 	void addChildWidget(Widget *w, int tab);
 	void refreshRenderers();
 	void refreshJoysticks();
@@ -140,14 +163,16 @@ public:
 	void refreshFont();
 	std::string getRenderDevice();
 	void setPauseExitText(bool enable_save);
+	void setPauseSaveEnabled(bool enable_save);
 	void resetSelectedTab();
+	int getActiveTab();
+	void setActiveTab(unsigned tab);
 
-	void confirmKey(int button);
-	void scanKey(int button);
+	void confirmKey(int action);
+	void scanKey(int action);
 
 	void enableMouseOptions();
 	void disableMouseOptions();
-	void disableJoystickOptions();
 
 	void enableMods();
 	void disableMods();
@@ -160,6 +185,8 @@ public:
 
 	void setHero(Avatar* _hero);
 
+	bool setFrameLimit();
+
 	TabList tablist;
 	TabList tablist_main;
 	TabList tablist_exit;
@@ -169,6 +196,8 @@ public:
 	TabList tablist_input;
 	TabList tablist_keybinds;
 	TabList tablist_mods;
+
+	std::vector<TabList*> tablists;
 
 	std::vector<int> optiontab;
 	std::vector<Widget*> child_widget;
@@ -185,6 +214,8 @@ public:
 	WidgetButton               * pause_continue_btn;
 	WidgetLabel                * pause_exit_lb;
 	WidgetButton               * pause_exit_btn;
+	WidgetLabel                * pause_save_lb;
+	WidgetButton               * pause_save_btn;
 	WidgetLabel                * pause_time_lb;
 	WidgetLabel                * pause_time_text;
 
@@ -206,11 +237,17 @@ public:
 	WidgetLabel                * change_gamma_lb;
 	WidgetSlider               * gamma_sl;
 	WidgetLabel                * gamma_lb;
+	WidgetHorizontalList       * frame_limit_lstb;
+	WidgetLabel                * frame_limit_lb;
+	WidgetHorizontalList       * max_render_size_lstb;
+	WidgetLabel                * max_render_size_lb;
 
 	WidgetSlider               * music_volume_sl;
 	WidgetLabel                * music_volume_lb;
 	WidgetSlider               * sound_volume_sl;
 	WidgetLabel                * sound_volume_lb;
+	WidgetCheckBox             * mute_on_focus_loss_cb;
+	WidgetLabel                * mute_on_focus_loss_lb;
 
 	WidgetCheckBox             * show_fps_cb;
 	WidgetLabel                * show_fps_lb;
@@ -240,6 +277,10 @@ public:
 	WidgetLabel                * low_hp_warning_lb;
 	WidgetHorizontalList       * low_hp_threshold_lstb;
 	WidgetLabel                * low_hp_threshold_lb;
+	WidgetCheckBox             * item_compare_tips_cb;
+	WidgetLabel                * item_compare_tips_lb;
+	WidgetCheckBox             * pause_on_focus_loss_cb;
+	WidgetLabel                * pause_on_focus_loss_lb;
 
 
 	WidgetHorizontalList       * joystick_device_lstb;
@@ -256,6 +297,10 @@ public:
 	WidgetLabel                * mouse_move_attack_lb;
 	WidgetSlider               * joystick_deadzone_sl;
 	WidgetLabel                * joystick_deadzone_lb;
+	WidgetCheckBox             * touch_controls_cb;
+	WidgetLabel                * touch_controls_lb;
+	WidgetSlider               * touch_scale_sl;
+	WidgetLabel                * touch_scale_lb;
 
 	WidgetListBox              * activemods_lstb;
 	WidgetLabel                * activemods_lb;
@@ -273,6 +318,7 @@ public:
 	Point frame;
 	Point frame_offset;
 	Point tab_offset;
+	Point background_offset;
 	Rect scrollpane;
 	Color scrollpane_color;
 	Point scrollpane_padding;
@@ -285,11 +331,10 @@ public:
 	std::vector<Rect> video_modes;
 
 	std::vector<WidgetLabel *> keybinds_lb;
-	std::vector<WidgetButton *> keybinds_btn;
+	std::vector<WidgetHorizontalList *> keybinds_lstb;
 
 	Timer input_confirm_timer;
-	int input_key;
-	unsigned key_count;
+	int input_action;
 
 	std::string keybind_msg;
 	Timer keybind_tip_timer;
@@ -302,6 +347,7 @@ public:
 	bool reload_music;
 	bool clicked_pause_continue;
 	bool clicked_pause_exit;
+	bool clicked_pause_save;
 };
 
 #endif

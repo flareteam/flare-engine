@@ -75,57 +75,62 @@ public:
 		SCRIPT = 41,
 		CHANCE_EXEC = 42,
 		RESPEC = 43,
-		NPC_ID = 44,
-		NPC_HOTSPOT = 45,
-		NPC_DIALOG_THEM = 46,
-		NPC_DIALOG_YOU = 47,
-		NPC_VOICE = 48,
-		NPC_DIALOG_TOPIC = 49,
-		NPC_DIALOG_GROUP = 50,
-		NPC_DIALOG_ID = 51,
-		NPC_DIALOG_RESPONSE = 52,
-		NPC_DIALOG_RESPONSE_ONLY = 53,
-		NPC_ALLOW_MOVEMENT = 54,
-		NPC_PORTRAIT_THEM = 55,
-		NPC_PORTRAIT_YOU = 56,
-		QUEST_TEXT = 57,
-		WAS_INSIDE_EVENT_AREA = 58
+		SHOW_ON_MINIMAP = 44,
+		PARALLAX_LAYERS = 45,
+		RANDOM_STATUS = 46,
+		NPC_ID = 47,
+		NPC_HOTSPOT = 48,
+		NPC_DIALOG_THEM = 49,
+		NPC_DIALOG_YOU = 50,
+		NPC_VOICE = 51,
+		NPC_DIALOG_TOPIC = 52,
+		NPC_DIALOG_GROUP = 53,
+		NPC_DIALOG_ID = 54,
+		NPC_DIALOG_RESPONSE = 55,
+		NPC_DIALOG_RESPONSE_ONLY = 56,
+		NPC_ALLOW_MOVEMENT = 57,
+		NPC_PORTRAIT_THEM = 58,
+		NPC_PORTRAIT_YOU = 59,
+		QUEST_TEXT = 60,
+		WAS_INSIDE_EVENT_AREA = 61,
+		NPC_TAKE_A_PARTY = 62
+	};
+
+	enum {
+		RANDOM_STATUS_MODE_APPEND = 1,
+		RANDOM_STATUS_MODE_CLEAR = 2,
+		RANDOM_STATUS_MODE_ROLL = 3,
+		RANDOM_STATUS_MODE_SET = 4,
+		RANDOM_STATUS_MODE_UNSET = 5,
+	};
+
+	static const size_t DATA_COUNT = 6;
+
+	union ECData {
+		int Int;
+		float Float;
+		bool Bool;
 	};
 
 	int type;
 	std::string s;
 	StatusID status;
-	int x;
-	int y;
-	int z;
-	int a;
-	int b;
-	int c;
-	float f;
+	size_t id;
+	ECData data[DATA_COUNT];
 
-	EventComponent()
-		: type(NONE)
-		, s("")
-		, status(0)
-		, x(0)
-		, y(0)
-		, z(0)
-		, a(0)
-		, b(0)
-		, c(0)
-		, f(0) {
-	}
+	EventComponent();
 };
 
 class Event {
 public:
 	enum {
 		ACTIVATE_ON_TRIGGER = 0,
-		ACTIVATE_ON_MAPEXIT = 1,
-		ACTIVATE_ON_LEAVE = 2,
-		ACTIVATE_ON_LOAD = 3,
-		ACTIVATE_ON_CLEAR = 4,
-		ACTIVATE_STATIC = 5
+		ACTIVATE_ON_INTERACT = 1,
+		ACTIVATE_ON_MAPEXIT = 2,
+		ACTIVATE_ON_LEAVE = 3,
+		ACTIVATE_ON_LOAD = 4,
+		ACTIVATE_ON_CLEAR = 5,
+		ACTIVATE_STATIC = 6
 	};
 
 	std::string type;

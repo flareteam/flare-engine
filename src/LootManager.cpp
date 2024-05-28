@@ -28,16 +28,19 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "AnimationManager.h"
 #include "AnimationSet.h"
 #include "Avatar.h"
+#include "CampaignManager.h"
 #include "CommonIncludes.h"
 #include "CursorManager.h"
-#include "Enemy.h"
-#include "EnemyManager.h"
+#include "Entity.h"
+#include "EntityManager.h"
 #include "EngineSettings.h"
 #include "FileParser.h"
+#include "FogOfWar.h"
 #include "InputState.h"
 #include "LootManager.h"
 #include "MapRenderer.h"
 #include "Menu.h"
+#include "MessageEngine.h"
 #include "ModManager.h"
 #include "RenderDevice.h"
 #include "Settings.h"
@@ -45,6 +48,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "SoundManager.h"
 #include "Utils.h"
+#include "UtilsFileSystem.h"
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
 #include "WidgetTooltip.h"
@@ -53,8 +57,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <math.h>
 
 LootManager::LootManager()
-	: tip(new WidgetTooltip())
-	, sfx_loot(snd->load(eset->loot.sfx_loot, "LootManager dropping loot"))
+	: sfx_loot(snd->load(eset->loot.sfx_loot, "LootManager dropping loot"))
+	, sfx_loot_channel("loot")
 {
 	loadGraphics();
 	loadLootTables();
@@ -65,33 +69,56 @@ LootManager::LootManager()
  * Here we load all the animations used by the item database.
  */
 void LootManager::loadGraphics() {
-	animations.resize(items->items.size());
+	if (!animations.empty()) {
+		Utils::logError("LootManger: loadGraphics() detected existing animations, aborting.");
+		return;
+	}
+
+	animations.resize(items->items.size(), NULL);
 
 	// check all items in the item database
-	for (unsigned int i=0; i < items->items.size(); i++) {
-		if (items->items[i].loot_animation.empty()) continue;
+	for (size_t i = 1; i < items->items.size(); ++i) {
+		Item* item = items->items[i];
 
-		animations[i].resize(items->items[i].loot_animation.size());
+		if (!item || item->loot_animation.empty())
+			continue;
 
-		for (unsigned int j=0; j<items->items[i].loot_animation.size(); j++) {
-			anim->increaseCount(items->items[i].loot_animation[j].name);
-			animations[i][j] = anim->getAnimationSet(items->items[i].loot_animation[j].name)->getAnimation("");
+		animations[i] = new std::vector<Animation*>(item->loot_animation.size(), NULL);
+
+		for (size_t j = 0; j < item->loot_animation.size(); ++j) {
+			anim->increaseCount(item->loot_animation[j].name);
+			(*animations[i])[j] = anim->getAnimationSet(item->loot_animation[j].name)->getAnimation("");
 		}
 	}
 }
 
 void LootManager::handleNewMap() {
 	loot.clear();
+	enemiesDroppingLoot.clear();
 }
 
 void LootManager::logic() {
+	if (inpt->pressing[Input::LOOT_TOOLTIP_MODE] && !inpt->lock[Input::LOOT_TOOLTIP_MODE]) {
+		inpt->lock[Input::LOOT_TOOLTIP_MODE] = true;
+		settings->loot_tooltips++;
+		if (settings->loot_tooltips > Settings::LOOT_TIPS_HIDE_ALL)
+			settings->loot_tooltips = Settings::LOOT_TIPS_DEFAULT;
+
+		if (settings->loot_tooltips == Settings::LOOT_TIPS_HIDE_ALL)
+			pc->logMsg(msg->get("Loot tooltip visibility") + ": " + msg->get("Hidden"), Avatar::MSG_UNIQUE);
+		else if (settings->loot_tooltips == Settings::LOOT_TIPS_DEFAULT)
+			pc->logMsg(msg->get("Loot tooltip visibility") + ": " + msg->get("Default"), Avatar::MSG_UNIQUE);
+		else if (settings->loot_tooltips == Settings::LOOT_TIPS_SHOW_ALL)
+			pc->logMsg(msg->get("Loot tooltip visibility") + ": " + msg->get("Show All"), Avatar::MSG_UNIQUE);
+	}
+
 	std::vector<Loot>::iterator it;
 	for (it = loot.begin(); it != loot.end(); ++it) {
 
 		// animate flying loot
 		if (it->animation) {
 			it->animation->advanceFrame();
-			if (it->animation->isSecondLastFrame()) {
+			if (!it->on_ground && it->animation->isSecondLastFrame()) {
 				it->on_ground = true;
 			}
 		}
@@ -123,13 +150,26 @@ void LootManager::renderTooltips(const FPoint& cam) {
 
 	Point dest;
 	bool tooltip_below = true;
+	Rect screen_rect(0, 0, settings->view_w, settings->view_h);
 
 	std::vector<Loot>::iterator it;
 	for (it = loot.begin(); it != loot.end(); ) {
 		it->tip_visible = false;
 
 		if (it->on_ground) {
+			if (mapr->fogofwar > FogOfWar::TYPE_MINIMAP) {
+				float delta = Utils::calcDist(pc->stats.pos, it->pos);
+				if (delta > fow->mask_radius-1.0) {
+					break;
+				}
+			}
+
 			Point p = Utils::mapToScreen(it->pos.x, it->pos.y, cam.x, cam.y);
+			if (!Utils::isWithinRect(screen_rect, p)) {
+				++it;
+				continue;
+			}
+
 			dest.x = p.x;
 			dest.y = p.y + eset->tileset.tile_h_half;
 
@@ -151,7 +191,7 @@ void LootManager::renderTooltips(const FPoint& cam) {
 					default_visibility = false;
 				}
 				else {
-					Enemy* test_enemy = enemym->getNearestEnemy(it->pos, !EnemyManager::GET_CORPSE, NULL, eset->loot.hide_radius);
+					Entity* test_enemy = entitym->getNearestEntity(it->pos, !EntityManager::GET_CORPSE, NULL, eset->loot.hide_radius);
 					if (test_enemy) {
 						default_visibility = false;
 					}
@@ -178,23 +218,22 @@ void LootManager::renderTooltips(const FPoint& cam) {
 				}
 
 				// try to prevent tooltips from overlapping
-				tip->prerender(it->tip, dest, TooltipData::STYLE_TOPLABEL);
+				it->wtip->prerender(it->tip, dest, TooltipData::STYLE_TOPLABEL);
 				std::vector<Loot>::iterator test_it;
 				for (test_it = loot.begin(); test_it != it; ) {
-					if (test_it->tip_visible && Utils::rectsOverlap(test_it->tip_bounds, tip->bounds)) {
+					if (test_it->tip_visible && Utils::rectsOverlap(test_it->wtip->bounds, it->wtip->bounds)) {
 						if (tooltip_below)
-							dest.y = test_it->tip_bounds.y + test_it->tip_bounds.h + eset->tooltips.offset;
+							dest.y = test_it->wtip->bounds.y + test_it->wtip->bounds.h + eset->tooltips.offset;
 						else
-							dest.y = test_it->tip_bounds.y - test_it->tip_bounds.h + eset->tooltips.offset;
+							dest.y = test_it->wtip->bounds.y - test_it->wtip->bounds.h + eset->tooltips.offset;
 
-						tip->bounds.y = dest.y;
+						it->wtip->bounds.y = dest.y;
 					}
 
 					++test_it;
 				}
 
-				tip->render(it->tip, dest, TooltipData::STYLE_TOPLABEL);
-				it->tip_bounds = tip->bounds;
+				it->wtip->render(it->tip, dest, TooltipData::STYLE_TOPLABEL);
 
 				if (settings->loot_tooltips == Settings::LOOT_TIPS_HIDE_ALL && !inpt->pressing[Input::ALT])
 					break;
@@ -213,35 +252,39 @@ void LootManager::renderTooltips(const FPoint& cam) {
  */
 void LootManager::checkEnemiesForLoot() {
 	for (unsigned i=0; i < enemiesDroppingLoot.size(); ++i) {
-		Enemy *e = enemiesDroppingLoot[i];
+		StatBlock *e = enemiesDroppingLoot[i];
 
-		if (e->stats.quest_loot_id != 0) {
+		if (!e)
+			continue;
+
+		if (e->quest_loot_id != 0) {
 			// quest loot
 			std::vector<EventComponent> quest_loot_table;
 			EventComponent ec;
 			ec.type = EventComponent::LOOT;
-			ec.c = e->stats.quest_loot_id;
-			ec.a = ec.b = 1;
-			ec.z = 0;
+			ec.id = e->quest_loot_id;
+			ec.data[LOOT_EC_QUANTITY_MIN].Int = 1;
+			ec.data[LOOT_EC_QUANTITY_MAX].Int = 1;
+			ec.data[LOOT_EC_CHANCE].Float = 0; // "fixed" chance
 
 			quest_loot_table.push_back(ec);
-			checkLoot(quest_loot_table, &e->stats.pos, NULL);
+			checkLoot(quest_loot_table, &e->pos, NULL);
 		}
 
-		if (!e->stats.loot_table.empty()) {
+		if (!e->loot_table.empty()) {
 			unsigned drops;
-			if (e->stats.loot_count.y != 0) {
-				drops = Math::randBetween(e->stats.loot_count.x, e->stats.loot_count.y);
+			if (e->loot_count.y != 0) {
+				drops = Math::randBetween(e->loot_count.x, e->loot_count.y);
 			}
 			else {
 				drops = Math::randBetween(1, eset->loot.drop_max);
 			}
 
 			for (unsigned j=0; j<drops; ++j) {
-				checkLoot(e->stats.loot_table, &e->stats.pos, NULL);
+				checkLoot(e->loot_table, &e->pos, NULL);
 			}
 
-			e->stats.loot_table.clear();
+			e->loot_table.clear();
 		}
 	}
 	enemiesDroppingLoot.clear();
@@ -270,7 +313,7 @@ void LootManager::checkMapForLoot() {
 	}
 }
 
-void LootManager::addEnemyLoot(Enemy *e) {
+void LootManager::addEnemyLoot(StatBlock *e) {
 	enemiesDroppingLoot.push_back(e);
 }
 
@@ -285,8 +328,10 @@ void LootManager::checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos
 	// first drop any 'fixed' (0% chance) items
 	for (size_t i = loot_table.size(); i > 0; i--) {
 		ec = &loot_table[i-1];
-		if (ec->f == 0) {
-			checkLootComponent(ec, pos, itemstack_vec);
+		if (ec->data[LOOT_EC_CHANCE].Float == 0) {
+			if (ec->status == 0 || (ec->status > 0 && camp->checkStatus(ec->status))) {
+				checkLootComponent(ec, pos, itemstack_vec);
+			}
 			loot_table.erase(loot_table.begin()+i-1);
 		}
 	}
@@ -296,13 +341,13 @@ void LootManager::checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos
 	for (unsigned i = 0; i < loot_table.size(); i++) {
 		ec = &loot_table[i];
 
-		float real_chance = ec->f;
+		float real_chance = ec->data[LOOT_EC_CHANCE].Float;
 
-		if (ec->c != 0 && ec->c != eset->misc.currency_id) {
-			real_chance = ec->f * static_cast<float>(pc->stats.get(Stats::ITEM_FIND) + 100) / 100.f;
+		if (ec->id != 0) {
+			real_chance = real_chance * (pc->stats.get(Stats::ITEM_FIND) + 100.f) / 100.f;
 		}
 
-		if (real_chance >= chance) {
+		if (real_chance >= chance && (ec->status == 0 || (ec->status > 0 && camp->checkStatus(ec->status)))) {
 			if (real_chance <= threshold) {
 				if (real_chance != threshold) {
 					possible_ids.clear();
@@ -311,7 +356,7 @@ void LootManager::checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos
 				threshold = real_chance;
 			}
 
-			if (chance <= threshold) {
+			if (chance <= threshold && ec->data[LOOT_EC_MAX_DROPS].Int != 0) {
 				possible_ids.push_back(ec);
 			}
 		}
@@ -322,14 +367,16 @@ void LootManager::checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos
 		size_t chosen_loot = static_cast<size_t>(rand()) % possible_ids.size();
 		ec = possible_ids[chosen_loot];
 		checkLootComponent(ec, pos, itemstack_vec);
+
+		if (ec->data[LOOT_EC_MAX_DROPS].Int > 0) {
+			ec->data[LOOT_EC_MAX_DROPS].Int--;
+		}
 	}
 }
 
 void LootManager::addLoot(ItemStack stack, const FPoint& pos, bool dropped_by_hero) {
-	if (static_cast<size_t>(stack.item) >= items->items.size()) {
-		Utils::logError("LootManager: Loot item with id %d is not valid.", stack.item);
+	if (stack.empty() || !items->isValid(stack.item))
 		return;
-	}
 
 	Loot ld;
 	ld.stack = stack;
@@ -338,18 +385,30 @@ void LootManager::addLoot(ItemStack stack, const FPoint& pos, bool dropped_by_he
 	ld.pos.align(); // prevent "rounding jitter"
 	ld.dropped_by_hero = dropped_by_hero;
 
-	if (!items->items[stack.item].loot_animation.empty()) {
-		size_t index = items->items[stack.item].loot_animation.size()-1;
+	// merge stacks that have the same item id and position
+	std::vector<Loot>::iterator it;
+	for (it = loot.end(); it != loot.begin(); ) {
+		--it;
+		if (it->stack.item == ld.stack.item && it->pos.x == ld.pos.x && it->pos.y == ld.pos.y) {
+			it->stack.quantity += ld.stack.quantity;
+			it->tip.clear();
+			snd->play(sfx_loot, sfx_loot_channel, pos, false);
+			return;
+		}
+	}
 
-		for (unsigned int i=0; i<items->items[stack.item].loot_animation.size(); i++) {
-			int low = items->items[stack.item].loot_animation[i].low;
-			int high = items->items[stack.item].loot_animation[i].high;
+	if (!items->items[stack.item]->loot_animation.empty()) {
+		size_t index = items->items[stack.item]->loot_animation.size()-1;
+
+		for (size_t i = 0; i < items->items[stack.item]->loot_animation.size(); ++i) {
+			int low = items->items[stack.item]->loot_animation[i].low;
+			int high = items->items[stack.item]->loot_animation[i].high;
 			if (stack.quantity >= low && (stack.quantity <= high || high == 0)) {
 				index = i;
 				break;
 			}
 		}
-		ld.loadAnimation(items->items[stack.item].loot_animation[index].name);
+		ld.loadAnimation(items->items[stack.item]->loot_animation[index].name);
 	}
 	else {
 		// immediately place the loot on the ground if there's no animation
@@ -357,7 +416,7 @@ void LootManager::addLoot(ItemStack stack, const FPoint& pos, bool dropped_by_he
 	}
 
 	loot.push_back(ld);
-	snd->play(sfx_loot, snd->DEFAULT_CHANNEL, pos, false);
+	snd->play(sfx_loot, sfx_loot_channel, pos, false);
 }
 
 /**
@@ -387,7 +446,7 @@ ItemStack LootManager::checkPickup(const Point& mouse, const FPoint& cam, const 
 				r.w = eset->tileset.tile_w;
 				r.h = eset->tileset.tile_h;
 
-				if (it_tip == loot.end() && it->tip_visible && Utils::isWithinRect(it->tip_bounds, mouse)) {
+				if (it_tip == loot.end() && it->tip_visible && Utils::isWithinRect(it->wtip->bounds, mouse)) {
 					// clicked on a tooltip
 					curs->setCursor(CursorManager::CURSOR_INTERACT);
 					if (inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1] && !it->stack.empty()) {
@@ -484,6 +543,13 @@ ItemStack LootManager::checkNearestPickup(const FPoint& hero_pos) {
 void LootManager::addRenders(std::vector<Renderable> &ren, std::vector<Renderable> &ren_dead) {
 	std::vector<Loot>::iterator it;
 	for (it = loot.begin(); it != loot.end(); ++it) {
+		if (mapr->fogofwar > FogOfWar::TYPE_MINIMAP) {
+			float delta = Utils::calcDist(pc->stats.pos, it->pos);
+			if (delta > fow->mask_radius-1.0) {
+				continue;
+			}
+		}
+
 		if (it->animation) {
 			Renderable r = it->animation->getCurrentFrame(0);
 			r.map_pos.x = it->pos.x;
@@ -502,9 +568,9 @@ void LootManager::parseLoot(std::string &val, EventComponent *e, std::vector<Eve
 	e->s = Parse::popFirstString(val);
 
 	if (e->s == "currency")
-		e->c = eset->misc.currency_id;
+		e->id = eset->misc.currency_id;
 	else if (Parse::toInt(e->s, -1) != -1)
-		e->c = Parse::toInt(e->s);
+		e->id = items->verifyID(Parse::toItemID(e->s), NULL, !ItemManager::VERIFY_ALLOW_ZERO, !ItemManager::VERIFY_ALLOCATE);
 	else if (ec_list) {
 		// load entire loot table
 		std::string filename = e->s;
@@ -523,12 +589,17 @@ void LootManager::parseLoot(std::string &val, EventComponent *e, std::vector<Eve
 
 		// drop chance
 		chance = Parse::popFirstString(val);
-		if (chance == "fixed") e->f = 0;
-		else e->f = Parse::toFloat(chance);
+		if (chance == "fixed")
+			e->data[LOOT_EC_CHANCE].Float = 0;
+		else
+			e->data[LOOT_EC_CHANCE].Float = Parse::toFloat(chance);
 
 		// quantity min/max
-		e->a = std::max(Parse::popFirstInt(val), 1);
-		e->b = std::max(Parse::popFirstInt(val), e->a);
+		e->data[LOOT_EC_QUANTITY_MIN].Int = std::max(Parse::popFirstInt(val), 1);
+		e->data[LOOT_EC_QUANTITY_MAX].Int = std::max(Parse::popFirstInt(val), e->data[LOOT_EC_QUANTITY_MIN].Int);
+
+		if (items->isValid(e->id))
+			e->data[LOOT_EC_MAX_DROPS].Int = items->items[e->id]->loot_drops_max;
 	}
 
 	// add repeating loot
@@ -536,14 +607,14 @@ void LootManager::parseLoot(std::string &val, EventComponent *e, std::vector<Eve
 		std::string repeat_val = Parse::popFirstString(val);
 		while (repeat_val != "") {
 			ec_list->push_back(EventComponent());
-			EventComponent *ec = &ec_list->back();
+			EventComponent *ec = &ec_list->at(ec_list->size()-1);
 			ec->type = EventComponent::LOOT;
 
 			ec->s = repeat_val;
 			if (ec->s == "currency")
-				ec->c = eset->misc.currency_id;
+				ec->id = eset->misc.currency_id;
 			else if (Parse::toInt(ec->s, -1) != -1)
-				ec->c = Parse::toInt(ec->s);
+				ec->id = items->verifyID(Parse::toItemID(ec->s), NULL, !ItemManager::VERIFY_ALLOW_ZERO, !ItemManager::VERIFY_ALLOCATE);
 			else {
 				// remove the last event component, since getLootTable() will create a new one
 				ec_list->pop_back();
@@ -555,11 +626,16 @@ void LootManager::parseLoot(std::string &val, EventComponent *e, std::vector<Eve
 			}
 
 			chance = Parse::popFirstString(val);
-			if (chance == "fixed") ec->f = 0;
-			else ec->f = Parse::toFloat(chance);
+			if (chance == "fixed")
+				ec->data[LOOT_EC_CHANCE].Float = 0;
+			else
+				ec->data[LOOT_EC_CHANCE].Float = Parse::toFloat(chance);
 
-			ec->a = std::max(Parse::popFirstInt(val), 1);
-			ec->b = std::max(Parse::popFirstInt(val), ec->a);
+			ec->data[LOOT_EC_QUANTITY_MIN].Int = std::max(Parse::popFirstInt(val), 1);
+			ec->data[LOOT_EC_QUANTITY_MAX].Int = std::max(Parse::popFirstInt(val), ec->data[LOOT_EC_QUANTITY_MIN].Int);
+
+			if (items->isValid(ec->id))
+				ec->data[LOOT_EC_MAX_DROPS].Int = items->items[ec->id]->loot_drops_max;
 
 			repeat_val = Parse::popFirstString(val);
 		}
@@ -569,6 +645,7 @@ void LootManager::parseLoot(std::string &val, EventComponent *e, std::vector<Eve
 void LootManager::loadLootTables() {
 	std::vector<std::string> filenames = mods->list("loot", !ModManager::LIST_FULL_PATHS);
 
+	// @CLASS LootManger|Description of loot tables in loot/
 	for (unsigned i=0; i<filenames.size(); i++) {
 		FileParser infile;
 		if (!infile.open(filenames[i], FileParser::MOD_FILE, FileParser::ERROR_NORMAL))
@@ -580,16 +657,24 @@ void LootManager::loadLootTables() {
 
 		while (infile.next()) {
 			if (infile.section == "") {
+				// @ATTR loot|loot|Compact form of defining a loot table entry.
 				if (infile.key == "loot") {
 					ec_list->push_back(EventComponent());
-					ec = &ec_list->back();
+					ec = &ec_list->at(ec_list->size()-1);
+					parseLoot(infile.val, ec, ec_list);
+				}
+				// @ATTR status_loot|string, loot : Required status, Loot definition|Compact form of defining a loot table entry with a required campaign status.
+				else if (infile.key == "status_loot") {
+					ec_list->push_back(EventComponent());
+					ec = &ec_list->at(ec_list->size()-1);
+					ec->status = camp->registerStatus(Parse::popFirstString(infile.val));
 					parseLoot(infile.val, ec, ec_list);
 				}
 			}
 			else if (infile.section == "loot") {
 				if (infile.new_section) {
 					ec_list->push_back(EventComponent());
-					ec = &ec_list->back();
+					ec = &ec_list->at(ec_list->size()-1);
 					ec->type = EventComponent::LOOT;
 					skip_to_next = false;
 				}
@@ -597,27 +682,38 @@ void LootManager::loadLootTables() {
 				if (skip_to_next || ec == NULL)
 					continue;
 
+				// @ATTR loot.id|[item_id, "currency"]|The ID of the loot item. "currency" will use the item ID defined as currency_id in engine/misc.txt.
 				if (infile.key == "id") {
 					ec->s = infile.val;
 
 					if (ec->s == "currency")
-						ec->c = eset->misc.currency_id;
+						ec->id = eset->misc.currency_id;
 					else if (Parse::toInt(ec->s, -1) != -1)
-						ec->c = Parse::toInt(ec->s);
+						ec->id = Parse::toItemID(ec->s);
 					else {
 						skip_to_next = true;
 						infile.error("LootManager: Invalid item id for loot.");
 					}
+
+					if (!skip_to_next) {
+						ec->data[LOOT_EC_MAX_DROPS].Int = items->items[ec->id]->loot_drops_max;
+					}
 				}
+				// @ATTR loot.chance|[float, "fixed"]|The chance that the item will drop. "fixed" will drop the item no matter what before the random items are picked. This is different than setting a chance of 100, in which the item could be replaced with another random item.
 				else if (infile.key == "chance") {
 					if (infile.val == "fixed")
-						ec->f = 0;
+						ec->data[LOOT_EC_CHANCE].Float = 0;
 					else
-						ec->f = Parse::toFloat(infile.val);
+						ec->data[LOOT_EC_CHANCE].Float = Parse::toFloat(infile.val);
 				}
+				// @ATTR loot.quantity|int, int : Min quantity, Max quantity (optional)|The quantity of item in the dropped loot stack.
 				else if (infile.key == "quantity") {
-					ec->a = std::max(Parse::popFirstInt(infile.val), 1);
-					ec->b = std::max(Parse::popFirstInt(infile.val), ec->a);
+					ec->data[LOOT_EC_QUANTITY_MIN].Int = std::max(Parse::popFirstInt(infile.val), 1);
+					ec->data[LOOT_EC_QUANTITY_MAX].Int = std::max(Parse::popFirstInt(infile.val), ec->data[LOOT_EC_QUANTITY_MIN].Int);
+				}
+				// @ATTR loot.requires_status|string|A single campaign status that is required for the item to be able to drop.
+				else if (infile.key == "requires_status") {
+					ec->status = camp->registerStatus(Parse::popFirstString(infile.val));
 				}
 			}
 		}
@@ -632,7 +728,7 @@ void LootManager::getLootTable(const std::string &filename, std::vector<EventCom
 
 	std::map<std::string, std::vector<EventComponent> >::iterator it;
 	for (it = loot_tables.begin(); it != loot_tables.end(); ++it) {
-		if (it->first == filename) {
+		if (it->first == Filesystem::convertSlashes(filename)) {
 			std::vector<EventComponent> *loot_defs = &it->second;
 			for (unsigned i=0; i<loot_defs->size(); ++i) {
 				ec_list->push_back((*loot_defs)[i]);
@@ -651,16 +747,16 @@ void LootManager::checkLootComponent(EventComponent* ec, FPoint *pos, std::vecto
 		src = Point(*pos);
 	}
 	else {
-		src.x = ec->x;
-		src.y = ec->y;
+		src.x = ec->data[LOOT_EC_POSX].Int;
+		src.y = ec->data[LOOT_EC_POSY].Int;
 	}
 	p.x = static_cast<float>(src.x) + 0.5f;
 	p.y = static_cast<float>(src.y) + 0.5f;
 
-	if (!mapr->collider.isValidPosition(p.x, p.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_NORMAL)) {
-		p = mapr->collider.getRandomNeighbor(src, eset->loot.drop_radius, !MapCollision::IGNORE_BLOCKED);
+	if (!mapr->collider.isValidPosition(p.x, p.y, MapCollision::MOVE_NORMAL, MapCollision::ENTITY_COLLIDE_ALL)) {
+		p = mapr->collider.getRandomNeighbor(src, eset->loot.drop_radius, MapCollision::MOVE_NORMAL, MapCollision::ENTITY_COLLIDE_ALL);
 
-		if (!mapr->collider.isValidPosition(p.x, p.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_NORMAL)) {
+		if (!mapr->collider.isValidPosition(p.x, p.y, MapCollision::MOVE_NORMAL, MapCollision::ENTITY_COLLIDE_ALL)) {
 			p = pc->stats.pos;
 		}
 		else {
@@ -672,15 +768,15 @@ void LootManager::checkLootComponent(EventComponent* ec, FPoint *pos, std::vecto
 		}
 	}
 
-	new_loot.quantity = Math::randBetween(ec->a,ec->b);
+	new_loot.quantity = Math::randBetween(ec->data[LOOT_EC_QUANTITY_MIN].Int, ec->data[LOOT_EC_QUANTITY_MAX].Int);
 
 	// an item id of 0 means we should drop currency instead
-	if (ec->c == 0 || ec->c == eset->misc.currency_id) {
+	if (ec->id == 0 || ec->id == eset->misc.currency_id) {
 		new_loot.item = eset->misc.currency_id;
-		new_loot.quantity = new_loot.quantity * (100 + pc->stats.get(Stats::CURRENCY_FIND)) / 100;
+		new_loot.quantity = static_cast<int>(static_cast<float>(new_loot.quantity) * (100 + pc->stats.get(Stats::CURRENCY_FIND)) / 100);
 	}
 	else {
-		new_loot.item = ec->c;
+		new_loot.item = items->getExtendedItem(ec->id);
 	}
 
 	if (itemstack_vec)
@@ -689,15 +785,27 @@ void LootManager::checkLootComponent(EventComponent* ec, FPoint *pos, std::vecto
 		addLoot(new_loot, p, !DROPPED_BY_HERO);
 }
 
+void LootManager::removeFromEnemiesDroppingLoot(const StatBlock* sb) {
+	for (size_t i = enemiesDroppingLoot.size(); i > 0; i--) {
+		// enemies will actually be removed the next time checkEnemiesForLoot() runs
+		if (enemiesDroppingLoot[i-1] == sb)
+			enemiesDroppingLoot[i-1] = NULL;
+	}
+}
+
 LootManager::~LootManager() {
 	// remove all items in the item database
-	for (unsigned int i=0; i < items->items.size(); i++) {
-		if (items->items[i].loot_animation.empty()) continue;
+	for (size_t i = 0; i < animations.size(); ++i) {
+		if (!animations[i])
+			continue;
 
-		for (unsigned int j=0; j<items->items[i].loot_animation.size(); j++) {
-			anim->decreaseCount(items->items[i].loot_animation[j].name);
-			delete animations[i][j];
+		if (items->isValid(i)) {
+			for (size_t j = 0; j < items->items[i]->loot_animation.size(); ++j) {
+				anim->decreaseCount(items->items[i]->loot_animation[j].name);
+				delete (*animations[i])[j];
+			}
 		}
+		delete animations[i];
 	}
 
 	// remove items, so Loots get destroyed!
@@ -706,6 +814,4 @@ LootManager::~LootManager() {
 	anim->cleanUp();
 
 	snd->unload(sfx_loot);
-
-	delete tip;
 }

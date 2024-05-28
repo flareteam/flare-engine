@@ -48,7 +48,7 @@ public:
 	GameSlotPreview();
 	~GameSlotPreview();
 
-	void setAnimation(std::string name);
+	void setAnimation(const std::string& name);
 	void setStatBlock(StatBlock *_stats);
 	void setPos(Point _pos);
 	void loadGraphics(std::vector<std::string> _img_gfx);

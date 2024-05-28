@@ -69,6 +69,7 @@ WidgetSlider::~WidgetSlider () {
 
 void WidgetSlider::setPos(int offset_x, int offset_y) {
 	Widget::setPos(offset_x, offset_y);
+	// Widget::setPos(offset_x - (pos_knob.w/2), offset_y);
 	set(minimum, maximum, value);
 }
 
@@ -82,9 +83,7 @@ bool WidgetSlider::checkClickAt(int x, int y) {
 
 	if (!enabled) return false;
 	Point mouse(x, y);
-	//
 	//	We are just grabbing the knob
-	//
 	if (!pressed && inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1]) {
 		if (Utils::isWithinRect(pos_knob, mouse)) {
 			pressed = true;
@@ -105,30 +104,22 @@ bool WidgetSlider::checkClickAt(int x, int y) {
 	if (inpt->lock[Input::DOWN]) return false;
 
 	if (pressed) {
-		//
 		// The knob has been released
-		//
-		// create a temporary Rect slightly wider than the slider
-		Rect tmp_pos;
-		tmp_pos.x = pos.x - (pos_knob.w*2);
-		tmp_pos.y = pos.y;
-		tmp_pos.w = pos.w + (pos_knob.w*4);
-		tmp_pos.h = pos.h;
-
-		if (!Utils::isWithinRect(tmp_pos, mouse)) {
-			pressed = false;
-			return false;
-		}
 		if (!inpt->lock[Input::MAIN1]) {
 			pressed = false;
 		}
 
 		// set the value of the slider
-		int tmp = std::max(0, std::min(mouse.x - pos.x, pos.w));
+		int base_width = pos.w - pos_knob.w;
+		int knob_offset = pos_knob.w/2;
+		int tmp = std::max(knob_offset, std::min(mouse.x - pos.x, base_width+knob_offset));
 
-		pos_knob.x = pos.x + tmp - (pos_knob.w/2);
-		assert(pos.w);
-		value = minimum + (tmp*(maximum-minimum))/pos.w;
+		pos_knob.x = pos.x + tmp - knob_offset;
+		assert(base_width);
+		value = minimum + ((tmp-knob_offset)*(maximum-minimum))/base_width;
+
+		// "snap" to a whole value
+		set(minimum, maximum, value);
 
 		return true;
 	}
@@ -142,7 +133,7 @@ void WidgetSlider::set (int min, int max, int val) {
 	value = val;
 
 	if (max-min != 0) {
-		pos_knob.x = pos.x + ((val-min)* pos.w)/(max-min) - (pos_knob.w/2);
+		pos_knob.x = pos.x + ((val-min)* (pos.w-pos_knob.w))/(max-min);
 		pos_knob.y = pos.y;
 	}
 }
@@ -197,7 +188,7 @@ void WidgetSlider::render () {
 			draw = false;
 		}
 		if (draw) {
-			render_device->drawRectangle(topLeft, bottomRight, eset->widgets.selection_rect_color);
+			render_device->drawRectangleCorners(eset->widgets.selection_rect_corner_size, topLeft, bottomRight, eset->widgets.selection_rect_color);
 		}
 	}
 
@@ -210,7 +201,7 @@ void WidgetSlider::render () {
 		Point new_mouse;
 		new_mouse.x = pos_knob.x + (pos_knob.w * 2) + local_frame.x - local_offset.x;
 		new_mouse.y = pos_knob.y + (pos_knob.h / 2) + local_frame.y - local_offset.y;
-		tooltipm->push(tip_data, new_mouse, TooltipData::STYLE_TOPLABEL);
+		tooltipm->push(tip_data, new_mouse, TooltipData::STYLE_FLOAT);
 	}
 }
 

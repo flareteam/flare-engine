@@ -80,8 +80,8 @@ void GameStateConfig::logic() {
 }
 
 void GameStateConfig::logicAccept() {
-	// new_render_device = renderer_lstb->getValue();
 	std::string new_render_device = menu_config->getRenderDevice();
+	bool frame_limit_changed = menu_config->setFrameLimit();
 
 	if (menu_config->setMods()) {
 		snd->unloadMusic();
@@ -94,7 +94,7 @@ void GameStateConfig::logicAccept() {
 	delete msg;
 	msg = new MessageEngine();
 	inpt->saveKeyBindings();
-	inpt->setKeybindNames();
+	inpt->setCommonStrings();
 	eset->load();
 	Stats::init();
 	refreshFont();
@@ -113,7 +113,8 @@ void GameStateConfig::logicAccept() {
 	delete tooltipm;
 
 	// we can't replace the render device in-place, so soft-reset the game
-	if (new_render_device != settings->render_device_name) {
+	// same goes for changing the frame limit
+	if (new_render_device != settings->render_device_name || frame_limit_changed) {
 		settings->render_device_name = new_render_device;
 		inpt->done = true;
 		settings->soft_reset = true;
@@ -126,17 +127,17 @@ void GameStateConfig::logicAccept() {
 }
 
 void GameStateConfig::logicCancel() {
-	inpt->lock[Input::CANCEL] = true;
 	settings->loadSettings();
 	inpt->loadKeyBindings();
 	delete msg;
 	msg = new MessageEngine();
-	inpt->setKeybindNames();
+	inpt->setCommonStrings();
 	eset->load();
 	Stats::init();
 	refreshFont();
 	menu_config->update();
 	menu_config->cleanup();
+	render_device->setFullscreen(settings->fullscreen);
 	render_device->windowResize();
 	render_device->updateTitleBar();
 	showLoading();
@@ -159,3 +160,6 @@ void GameStateConfig::refreshFont() {
 	comb = new CombatText();
 }
 
+void GameStateConfig::setActiveTab(unsigned tab) {
+	menu_config->setActiveTab(tab);
+}

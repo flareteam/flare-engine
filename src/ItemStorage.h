@@ -47,15 +47,15 @@ public:
 	std::string getQuantities();
 	ItemStack add(ItemStack stack, int slot);
 	void subtract(int slot, int quantity);
-	bool remove(int item, int quantity);
+	bool remove(ItemID item, int quantity);
 	void sort();
 	void clear();
 	void clean();
 	bool empty();
 
 	bool full(ItemStack stack);
-	int count(int item);
-	bool contain(int item, int quantity);
+	int count(ItemID item);
+	bool contain(ItemID item, int quantity);
 
 	ItemStack * storage;
 };

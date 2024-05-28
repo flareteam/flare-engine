@@ -30,7 +30,7 @@ public:
 
 	class Video {
 	public:
-		static const int COUNT = 9;
+		static const int COUNT = 11;
 		enum {
 			RENDERER,
 			FULLSCREEN,
@@ -40,36 +40,41 @@ public:
 			DPI_SCALING,
 			PARALLAX_LAYERS,
 			ENABLE_GAMMA,
-			GAMMA
+			GAMMA,
+			MAX_RENDER_SIZE,
+			FRAME_LIMIT,
 		};
 	};
 
 	class Audio {
 	public:
-		static const int COUNT = 2;
+		static const int COUNT = 3;
 		enum {
 			SFX,
-			MUSIC
+			MUSIC,
+			MUTE_ON_FOCUS_LOSS,
 		};
 	};
 
 	class Interface {
 	public:
-		static const int COUNT = 15;
+		static const int COUNT = 17;
 		enum {
 			LANGUAGE,
-			MINIMAP_MODE,
-			LOOT_TOOLTIPS,
 			SUBTITLES,
 			COLORBLIND,
-			STATBAR_LABELS,
-			STATBAR_AUTOHIDE,
-			COMBAT_TEXT,
+			MINIMAP_MODE,
+			LOOT_TOOLTIPS,
 			AUTO_EQUIP,
-			HARDWARE_CURSOR,
-			ENTITY_MARKERS,
+			ITEM_COMPARE_TIPS,
 			LOW_HP_WARNING_TYPE,
 			LOW_HP_THRESHOLD,
+			COMBAT_TEXT,
+			STATBAR_LABELS,
+			STATBAR_AUTOHIDE,
+			HARDWARE_CURSOR,
+			ENTITY_MARKERS,
+			PAUSE_ON_FOCUS_LOSS,
 			SHOW_FPS,
 			DEV_MODE
 		};
@@ -77,7 +82,7 @@ public:
 
 	class Input {
 	public:
-		static const int COUNT = 7;
+		static const int COUNT = 9;
 		enum {
 			MOUSE_MOVE,
 			MOUSE_MOVE_SWAP,
@@ -85,7 +90,9 @@ public:
 			MOUSE_AIM,
 			NO_MOUSE,
 			JOYSTICK,
-			JOYSTICK_DEADZONE
+			JOYSTICK_DEADZONE,
+			TOUCH_CONTROLS,
+			TOUCH_SCALE
 		};
 	};
 
@@ -111,11 +118,14 @@ public:
 	void FSCommit();
 
 	void setScreenSize();
+	void setFullscreen(bool enable);
 
 	bool has_exit_button;
 	bool is_mobile_device;
 	bool force_hardware_cursor;
 	bool has_lock_file;
+	bool needs_alt_escape_key;
+	bool fullscreen_bypass;
 	unsigned char config_menu_type;
 	std::string default_renderer;
 

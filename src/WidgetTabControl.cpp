@@ -21,6 +21,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "InputState.h"
 #include "RenderDevice.h"
 #include "SharedResources.h"
+#include "WidgetButton.h"
 #include "WidgetLabel.h"
 #include "WidgetTabControl.h"
 
@@ -29,6 +30,11 @@ WidgetTabControl::WidgetTabControl()
 	: active_tab_surface(NULL)
 	, inactive_tab_surface(NULL)
 	, active_tab(0)
+	, lock_main1(false)
+	, dragging(false)
+	, button_prev(new WidgetButton("images/menus/buttons/left.png"))
+	, button_next(new WidgetButton("images/menus/buttons/right.png"))
+	, show_buttons(false)
 {
 
 	loadGraphics();
@@ -41,26 +47,27 @@ WidgetTabControl::~WidgetTabControl() {
 		delete active_tab_surface;
 	if (inactive_tab_surface)
 		delete inactive_tab_surface;
+
+	delete button_prev;
+	delete button_next;
 }
 
 /**
- * Sets the title of a tab
- * Adds a new tab if the index is greater than the amount of tabs
- *
- * @param index         Integer index that relates to this tab
- * @param title         Tab title.
+ * Initialize a tab at a given index. A new tab will be allocated if it does not exist.
  */
-void WidgetTabControl::setTabTitle(unsigned index, const std::string& title) {
+void WidgetTabControl::setupTab(unsigned index, const std::string& title, TabList* tl) {
 	if (index+1 >titles.size()) {
 		titles.resize(index+1);
 		tabs.resize(index+1);
 		active_labels.resize(index+1);
 		inactive_labels.resize(index+1);
 		enabled.resize(index+1);
+		tablists.resize(index+1, NULL);
 	}
 
 	titles[index] = title;
 	enabled[index] = true;
+	tablists[index] = tl;
 }
 
 /**
@@ -77,11 +84,44 @@ int WidgetTabControl::getActiveTab() {
  */
 void WidgetTabControl::setActiveTab(unsigned tab) {
 	if (tab > tabs.size())
-		active_tab = 0;
+		tab = 0;
 	else if (tab == tabs.size())
-		active_tab = static_cast<unsigned>(tabs.size())-1;
-	else
+		tab = static_cast<unsigned>(tabs.size()-1);
+
+	// Set the tab. If the specified tab is not enabled, get the first enabled tab.
+	bool found_tab = false;
+	for (unsigned i = tab; i < tabs.size(); ++i) {
+		if (enabled[i]) {
+			active_tab = i;
+			found_tab = true;
+			break;
+		}
+	}
+	if (!found_tab) {
+		for (unsigned i = 0; i < tab; ++i) {
+			if (enabled[i]) {
+				active_tab = i;
+				found_tab = true;
+				break;
+			}
+		}
+	}
+
+	if (!found_tab) {
+		// no enabled tabs, just return what we started with
 		active_tab = tab;
+	}
+
+	for (unsigned i = 0; i < tabs.size(); ++i) {
+		if (tablists[i] && i != active_tab) {
+			tablists[i]->lock();
+			tablists[i]->defocus();
+		}
+	}
+
+	if (tablists[active_tab]) {
+		tablists[active_tab]->unlock();
+	}
 }
 
 /**
@@ -90,18 +130,21 @@ void WidgetTabControl::setActiveTab(unsigned tab) {
  *
  * @param x       X coordinate of the top-left corner of the widget.
  * @param y       Y coordinate of the top-left corner of the widget.
+ * @param w       The maximum width of the area allowed for tabs. If this is exceeded, a single tab is show with navigation buttons instead.
  */
-void WidgetTabControl::setMainArea(int x, int y) {
+void WidgetTabControl::setMainArea(int x, int y, int w) {
 	// Set tabs area.
 	tabs_area.x = x;
 	tabs_area.y = y;
 	tabs_area.w = 0;
 	tabs_area.h = getTabHeight();
 
+	show_buttons = false;
+
 	int x_offset = tabs_area.x;
 
 	// update individual tabs
-	for (unsigned i=0; i<tabs.size(); i++) {
+	for (size_t i = 0; i < tabs.size(); ++i) {
 		tabs[i].y = tabs_area.y;
 		tabs[i].h = tabs_area.h;
 
@@ -124,8 +167,25 @@ void WidgetTabControl::setMainArea(int x, int y) {
 		}
 	}
 
+	if (tabs_area.w > w || show_buttons) {
+		show_buttons = true;
+
+		int between_buttons = w - button_prev->pos.w - button_next->pos.w;
+
+		// only one tab will be shown at a time, so center all the tabs between the buttons
+		for (size_t i = 0; i < tabs.size(); ++i) {
+			tabs[i].x = tabs_area.x + button_prev->pos.w + ((between_buttons - tabs[i].w) / 2);
+			active_labels[i].setPos(tabs[i].x + eset->widgets.tab_padding.x, tabs[i].y + tabs[i].h/2 + eset->widgets.tab_padding.y);
+			inactive_labels[i].setPos(tabs[i].x + eset->widgets.tab_padding.x, tabs[i].y + tabs[i].h/2 + eset->widgets.tab_padding.y);
+		}
+	}
+
 	if (!enabled[active_tab])
 		getNext();
+
+	int button_y_offset = tabs_area.y + ((tabs_area.h - button_prev->pos.h) / 2);
+	button_prev->setPos(tabs_area.x, button_y_offset);
+	button_next->setPos(tabs_area.x + w - button_next->pos.w, button_y_offset);
 }
 
 /**
@@ -157,13 +217,83 @@ void WidgetTabControl::logic() {
  */
 void WidgetTabControl::logic(int x, int y) {
 	Point mouse(x, y);
-	// If the click was in the tabs area;
-	if(Utils::isWithinRect(tabs_area, mouse) && inpt->pressing[Input::MAIN1]) {
-		// Mark the clicked tab as active_tab.
-		for (unsigned i=0; i<tabs.size(); i++) {
-			if(Utils::isWithinRect(tabs[i], mouse) && enabled[i]) {
-				active_tab = i;
-				return;
+	if (show_buttons) {
+		if (enabled[0]) {
+			button_prev->enabled = (active_tab > 0);
+		}
+		else {
+			button_prev->enabled = (active_tab > getNextEnabledTab(0));
+		}
+
+		unsigned end_tab = static_cast<unsigned>(tabs.size() - 1);
+		if (enabled[end_tab]) {
+			button_next->enabled = (active_tab < end_tab);
+		}
+		else {
+			button_next->enabled = (active_tab < getPrevEnabledTab(end_tab));
+		}
+
+		if (button_prev->checkClickAt(mouse.x, mouse.y)) {
+			getPrev();
+		}
+		else if (button_next->checkClickAt(mouse.x, mouse.y)) {
+			getNext();
+		}
+	}
+	else {
+		// If the click was in the tabs area;
+		if (Utils::isWithinRect(tabs_area, mouse) && (!lock_main1 || dragging)) {
+			lock_main1 = false;
+			dragging = false;
+
+			if (inpt->pressing[Input::MAIN1]) {
+				inpt->lock[Input::MAIN1] = true;
+				dragging = true;
+
+				// Mark the clicked tab as active_tab.
+				for (unsigned i=0; i<tabs.size(); i++) {
+					if(Utils::isWithinRect(tabs[i], mouse) && enabled[i]) {
+						active_tab = i;
+						setActiveTab(i);
+						break;
+						// return;
+					}
+				}
+			}
+		}
+		else {
+			lock_main1 = inpt->pressing[Input::MAIN1];
+		}
+		if (!inpt->pressing[Input::MAIN1]) {
+			dragging = false;
+		}
+	}
+
+	if (tablists[active_tab] && tablists[active_tab]->getCurrent() != -1) {
+		if (inpt->pressing[Input::MENU_PAGE_NEXT] && !inpt->lock[Input::MENU_PAGE_NEXT] && active_tab < tabs.size()) {
+			for (unsigned i = active_tab + 1; i < tabs.size(); ++i) {
+				if (enabled[i] && tablists[i]) {
+					inpt->lock[Input::MENU_PAGE_NEXT] = true;
+					tablists[active_tab]->defocus();
+					tablists[active_tab]->lock();
+					tablists[i]->unlock();
+					tablists[i]->getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
+					active_tab = i;
+					break;
+				}
+			}
+		}
+		else if (inpt->pressing[Input::MENU_PAGE_PREV] && !inpt->lock[Input::MENU_PAGE_PREV] && active_tab > 0) {
+			for (unsigned i = active_tab; i > 0; --i) {
+				if (enabled[i-1] && tablists[i-1]) {
+					inpt->lock[Input::MENU_PAGE_PREV] = true;
+					tablists[active_tab]->defocus();
+					tablists[active_tab]->lock();
+					tablists[i-1]->unlock();
+					tablists[i-1]->getPrev(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
+					active_tab = i-1;
+					break;
+				}
 			}
 		}
 	}
@@ -179,6 +309,11 @@ void WidgetTabControl::render() {
 		renderTab(i);
 	}
 
+	if (show_buttons) {
+		button_prev->render();
+		button_next->render();
+	}
+
 	// draw selection rectangle
 	if (in_focus) {
 		Point topLeft;
@@ -189,7 +324,7 @@ void WidgetTabControl::render() {
 		bottomRight.x = topLeft.x + tabs[active_tab].w;
 		bottomRight.y = topLeft.y + tabs[active_tab].h;
 
-		render_device->drawRectangle(topLeft, bottomRight, eset->widgets.selection_rect_color);
+		render_device->drawRectangleCorners(eset->widgets.selection_rect_corner_size, topLeft, bottomRight, eset->widgets.selection_rect_color);
 	}
 }
 
@@ -197,7 +332,7 @@ void WidgetTabControl::render() {
  * Renders the given tab on the widget header.
  */
 void WidgetTabControl::renderTab(unsigned number) {
-	if (!enabled[number])
+	if (!enabled[number] || (show_buttons && number != active_tab))
 		return;
 
 	unsigned i = number;
@@ -209,12 +344,12 @@ void WidgetTabControl::renderTab(unsigned number) {
 	int width_to_render = tabs[i].w - eset->widgets.tab_padding.x; // don't draw the right edge yet
 	int render_cursor = 0;
 
-	src.x = src.y = 0;
+	src.y = 0;
 	src.h = tabs[i].h;
-	dest.x = tabs[i].x;
 	dest.y = tabs[i].y;
 
 	// repeat the middle part of the image for long tabs
+	// src.x and dest.x are assigned here
 	while (render_cursor < width_to_render) {
 		dest.x = tabs[i].x + render_cursor;
 		if (render_cursor == 0) {

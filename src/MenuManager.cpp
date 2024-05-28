@@ -32,9 +32,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuActiveEffects.h"
 #include "MenuBook.h"
 #include "MenuCharacter.h"
+#include "MenuConfirm.h"
 #include "MenuDevConsole.h"
 #include "MenuEnemy.h"
 #include "MenuExit.h"
+#include "MenuGameOver.h"
 #include "MenuHUDLog.h"
 #include "MenuInventory.h"
 #include "MenuLog.h"
@@ -57,9 +59,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "SoundManager.h"
 #include "Subtitles.h"
+#include "TooltipManager.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
+#include "WidgetHorizontalList.h"
 #include "WidgetSlot.h"
+#include "WidgetTooltip.h"
 
 MenuManager::MenuManager()
 	: key_lock(false)
@@ -69,11 +74,12 @@ MenuManager::MenuManager()
 	, drag_stack()
 	, drag_power(0)
 	, drag_src(DRAG_SRC_NONE)
-	, drag_icon(new WidgetSlot(WidgetSlot::NO_ICON, Input::ACCEPT))
+	, drag_icon(new WidgetSlot(WidgetSlot::NO_ICON, WidgetSlot::HIGHLIGHT_NORMAL))
 	, done(false)
 	, act_drag_hover(false)
 	, keydrag_pos(Point())
-/*std::vector<Menu*> menus;*/
+	, action_src(ACTION_SRC_NONE)
+	, drag_post_action(DRAG_POST_ACTION_NONE)
 	, inv(NULL)
 	, pow(NULL)
 	, chr(NULL)
@@ -84,6 +90,7 @@ MenuManager::MenuManager()
 	, hp(NULL)
 	, mp(NULL)
 	, xp(NULL)
+	, resource_statbars()
 	, mini(NULL)
 	, num_picker(NULL)
 	, enemy(NULL)
@@ -92,15 +99,17 @@ MenuManager::MenuManager()
 	, exit(NULL)
 	, effects(NULL)
 	, stash(NULL)
+	, game_over(NULL)
+	, action_picker(NULL)
 	, devconsole(NULL)
 	, touch_controls(NULL)
 	, subtitles(NULL)
 	, pause(false)
 	, menus_open(false) {
 
-	hp = new MenuStatBar(MenuStatBar::TYPE_HP);
-	mp = new MenuStatBar(MenuStatBar::TYPE_MP);
-	xp = new MenuStatBar(MenuStatBar::TYPE_XP);
+	hp = new MenuStatBar(MenuStatBar::TYPE_HP, 0);
+	mp = new MenuStatBar(MenuStatBar::TYPE_MP, 0);
+	xp = new MenuStatBar(MenuStatBar::TYPE_XP, 0);
 	effects = new MenuActiveEffects();
 	hudlog = new MenuHUDLog();
 	act = new MenuActionBar();
@@ -116,25 +125,37 @@ MenuManager::MenuManager()
 	stash = new MenuStash();
 	book = new MenuBook();
 	num_picker = new MenuNumPicker();
+	game_over = new MenuGameOver();
+	action_picker = new MenuConfirm();
 
-	menus.push_back(hp); // menus[0]
-	menus.push_back(mp); // menus[1]
-	menus.push_back(xp); // menus[2]
-	menus.push_back(effects); // menus[3]
-	menus.push_back(hudlog); // menus[4]
-	menus.push_back(act); // menus[5]
-	menus.push_back(enemy); // menus[6]
-	menus.push_back(vendor); // menus[7]
-	menus.push_back(talker); // menus[8]
-	menus.push_back(exit); // menus[9]
-	menus.push_back(mini); // menus[10]
-	menus.push_back(chr); // menus[11]
-	menus.push_back(inv); // menus[12]
-	menus.push_back(pow); // menus[13]
-	menus.push_back(questlog); // menus[14]
-	menus.push_back(stash); // menus[15]
-	menus.push_back(book); // menus[16]
-	menus.push_back(num_picker); // menus[17]
+	resource_statbars.resize(eset->resource_stats.list.size());
+	for (size_t i = 0; i < resource_statbars.size(); ++i) {
+		resource_statbars[i] = new MenuStatBar(MenuStatBar::TYPE_RESOURCE_STAT, i);
+	}
+
+	menus.push_back(hp);
+	menus.push_back(mp);
+	menus.push_back(xp);
+	for (size_t i = 0; i < resource_statbars.size(); ++i) {
+		menus.push_back(resource_statbars[i]);
+	}
+	menus.push_back(effects);
+	menus.push_back(hudlog);
+	menus.push_back(act);
+	menus.push_back(enemy);
+	menus.push_back(vendor);
+	menus.push_back(talker);
+	menus.push_back(exit);
+	menus.push_back(mini);
+	menus.push_back(chr);
+	menus.push_back(inv);
+	menus.push_back(pow);
+	menus.push_back(questlog);
+	menus.push_back(stash);
+	menus.push_back(book);
+	menus.push_back(num_picker);
+	menus.push_back(game_over);
+	menus.push_back(action_picker);
 
 	if (settings->dev_mode) {
 		devconsole = new MenuDevConsole();
@@ -149,6 +170,9 @@ MenuManager::MenuManager()
 	settings->show_hud = true;
 
 	drag_icon->enabled = false;
+	drag_icon->show_disabled_overlay = false;
+
+	action_picker->setTitle(msg->get("Choose an action:"));
 }
 
 void MenuManager::alignAll() {
@@ -176,23 +200,25 @@ void MenuManager::setDragIcon(int icon_id, int overlay_id) {
 }
 
 void MenuManager::setDragIconItem(ItemStack stack) {
-	if (stack.empty()) {
+	if (stack.empty() || !items->isValid(stack.item)) {
 		drag_icon->setIcon(WidgetSlot::NO_ICON, WidgetSlot::NO_OVERLAY);
 		drag_icon->setAmount(0, 0);
 	}
 	else {
-		drag_icon->setIcon(items->items[stack.item].icon, items->getItemIconOverlay(stack.item));
-		drag_icon->setAmount(stack.quantity, items->items[stack.item].max_quantity);
+		drag_icon->setIcon(items->items[stack.item]->icon, items->getItemIconOverlay(stack.item));
+		drag_icon->setAmount(stack.quantity, items->items[stack.item]->max_quantity);
 	}
 }
 
 void MenuManager::handleKeyboardNavigation() {
 
-	stash->tablist.setNextTabList(NULL);
+	for (size_t i = 0; i < stash->tabs.size(); ++i) {
+		stash->tabs[i].tablist.setNextTabList(NULL);
+	}
 	vendor->tablist_buy.setNextTabList(NULL);
 	vendor->tablist_sell.setNextTabList(NULL);
 	chr->tablist.setNextTabList(NULL);
-	questlog->setNextTabList(&questlog->tablist);
+	questlog->setNextTabList(NULL);
 	inv->tablist.setPrevTabList(NULL);
 	pow->setNextTabList(NULL);
 
@@ -206,14 +232,17 @@ void MenuManager::handleKeyboardNavigation() {
 
 	}
 	else if (!vendor->visible && !stash->visible && !chr->visible && !questlog->visible) {
-		inv->tablist.unlock();
-		if (!pow->getCurrentTabList())
+		if (inv->visible)
+			inv->tablist.unlock();
+		else if (pow->visible && !pow->getCurrentTabList())
 			pow->tablist.unlock();
 	}
 
 	if (drag_src == DRAG_SRC_NONE) {
 		if (inv->visible) {
-			stash->tablist.setNextTabList(&inv->tablist);
+			for (size_t i = 0; i < stash->tabs.size(); ++i) {
+				stash->tabs[i].tablist.setNextTabList(&inv->tablist);
+			}
 			vendor->tablist_buy.setNextTabList(&inv->tablist);
 			vendor->tablist_sell.setNextTabList(&inv->tablist);
 			chr->tablist.setNextTabList(&inv->tablist);
@@ -229,11 +258,13 @@ void MenuManager::handleKeyboardNavigation() {
 				inv->tablist.setPrevTabList(&chr->tablist);
 			}
 			else if (questlog->visible) {
-				inv->tablist.setPrevTabList(&questlog->tablist);
+				inv->tablist.setPrevTabList(questlog->getVisibleChildTabList());
 			}
 		}
 		else if (pow->visible) {
-			stash->tablist.setNextTabList(&pow->tablist);
+			for (size_t i = 0; i < stash->tabs.size(); ++i) {
+				stash->tabs[i].tablist.setNextTabList(&pow->tablist);
+			}
 			vendor->tablist_buy.setNextTabList(&pow->tablist);
 			vendor->tablist_sell.setNextTabList(&pow->tablist);
 			chr->tablist.setNextTabList(&pow->tablist);
@@ -244,13 +275,18 @@ void MenuManager::handleKeyboardNavigation() {
 				pow->tablist.setPrevTabList(&chr->tablist);
 			}
 			else if (questlog->visible) {
-				pow->tablist.setPrevTabList(&questlog->tablist);
+				pow->tablist.setPrevTabList(questlog->getVisibleChildTabList());
 			}
 		}
 	}
 
 	// stash and vendor always start locked
-	if (!stash->visible) stash->tablist.lock();
+	if (!stash->visible) {
+		stash->tablist.lock();
+		for (size_t i = 0; i < stash->tabs.size(); ++i) {
+			stash->tabs[i].tablist.lock();
+		}
+	}
 	if (!vendor->visible) {
 		vendor->tablist.lock();
 		vendor->tablist_buy.lock();
@@ -260,15 +296,11 @@ void MenuManager::handleKeyboardNavigation() {
 	// inventory always starts unlocked
 	if (!inv->visible) inv->tablist.unlock();
 
-	// position the drag hover icon depending on the last key press
-	if (!act_drag_hover && (inpt->pressing[Input::ACTIONBAR_BACK] || inpt->pressing[Input::ACTIONBAR_FORWARD] || inpt->pressing[Input::ACTIONBAR]))
-		act_drag_hover = true;
-	else if (act_drag_hover && (inpt->pressing[Input::LEFT] || inpt->pressing[Input::RIGHT] || inpt->pressing[Input::UP] || inpt->pressing[Input::DOWN]) && !(inpt->pressing[Input::ACTIONBAR_BACK] || inpt->pressing[Input::ACTIONBAR_FORWARD]))
-		act_drag_hover = false;
-
-	// don't allow dropping actionbar items in other menus
-	if (keyboard_dragging && drag_src == DRAG_SRC_ACTIONBAR) {
-		inpt->lock[Input::ACCEPT] = true;
+	if (act->getCurrentTabList()) {
+		inv->tablist.lock();
+	}
+	else {
+		act->tablist.lock();
 	}
 }
 
@@ -277,18 +309,33 @@ void MenuManager::logic() {
 
 	subtitles->logic(snd->getLastPlayedSID());
 
-	hp->update(0, pc->stats.hp, pc->stats.get(Stats::HP_MAX));
-	mp->update(0, pc->stats.mp, pc->stats.get(Stats::MP_MAX));
+	// refresh statbar values from player statblock
+	hp->update();
+	mp->update();
+	xp->update();
+	for (size_t i = 0; i < resource_statbars.size(); ++i) {
+		resource_statbars[i]->update();
+	}
 
-	if (pc->stats.level == eset->xp.getMaxLevel()) {
-		xp->setCustomString(msg->get("XP: %d", pc->stats.xp));
+	// close talker/vendor menu if player is attacked
+	if (pc->stats.abort_npc_interact && eset->misc.combat_aborts_npc_interact) {
+		talker->setNPC(NULL);
+		vendor->setNPC(NULL);
 	}
-	else {
-		// displays xp relative to current pc level
-		xp->setCustomString(msg->get("XP: %d/%d", pc->stats.xp - eset->xp.getLevelXP(pc->stats.level), eset->xp.getLevelXP(pc->stats.level + 1) - eset->xp.getLevelXP(pc->stats.level)));
+	pc->stats.abort_npc_interact = false;
+
+	if (act->tablist.getCurrent() != -1) {
+		// books/npcs can be activated by powers in the actionbar, so we need to defocus the bar if one of those is opened
+		if (talker->visible || book->visible) {
+			act->tablist.defocus();
+		}
+
+		// vendor/stash items can't be placed on the action bar.
+		// This restriction is actually handled during the drop, but clearing the drag contents is a quicker indication to the player
+		if (drag_src == DRAG_SRC_VENDOR || drag_src == DRAG_SRC_STASH) {
+			resetDrag();
+		}
 	}
-	// xp relative to current level (from 0 to ammount need for next level)
-	xp->update(0, pc->stats.xp - eset->xp.getLevelXP(pc->stats.level), eset->xp.getLevelXP(pc->stats.level + 1) - eset->xp.getLevelXP(pc->stats.level));
 
 	// when selecting item quantities, don't process other menus
 	if (num_picker->visible) {
@@ -316,6 +363,7 @@ void MenuManager::logic() {
 			if (inpt->usingMouse()) {
 				sticky_dragging = true;
 			}
+			num_picker->tablist.defocus();
 		}
 		else if (num_picker->cancel_clicked) {
 			// cancel item dragging
@@ -324,11 +372,211 @@ void MenuManager::logic() {
 			resetDrag();
 			num_picker->cancel_clicked = false;
 			num_picker->visible = false;
+			num_picker->tablist.defocus();
 		}
 		else {
 			pause = true;
 			return;
 		}
+	}
+	else if (action_picker->visible) {
+		action_picker->logic();
+		if (action_picker->clicked_confirm) {
+			unsigned action = action_picker_map.at(action_picker->action_list->getSelected());
+
+			if (action_src == ACTION_SRC_INVENTORY) {
+				if (action == ACTION_PICKER_INVENTORY_SELECT || action == ACTION_PICKER_INVENTORY_DROP || action == ACTION_PICKER_INVENTORY_SELL || action == ACTION_PICKER_INVENTORY_STASH) {
+					drag_stack = inv->click(action_picker_target);
+					if (!drag_stack.empty()) {
+						actionPickerStartDrag();
+						drag_src = DRAG_SRC_INVENTORY;
+					}
+					if (drag_stack.quantity > 1) {
+						num_picker->setValueBounds(1, drag_stack.quantity);
+						num_picker->visible = true;
+					}
+
+					if (action == ACTION_PICKER_INVENTORY_DROP)
+						drag_post_action = DRAG_POST_ACTION_DROP;
+					else if (action == ACTION_PICKER_INVENTORY_SELL)
+						drag_post_action = DRAG_POST_ACTION_SELL;
+					else if (action == ACTION_PICKER_INVENTORY_STASH)
+						drag_post_action = DRAG_POST_ACTION_STASH;
+				}
+				else if (action == ACTION_PICKER_INVENTORY_ACTIVATE) {
+					inv->activate(action_picker_target);
+				}
+			}
+			else if (action_src == ACTION_SRC_STASH) {
+				if (action == ACTION_PICKER_STASH_SELECT || action == ACTION_PICKER_STASH_TRANSFER) {
+					drag_stack = stash->click(action_picker_target);
+					if (!drag_stack.empty()) {
+						actionPickerStartDrag();
+						drag_src = DRAG_SRC_STASH;
+					}
+					if (drag_stack.quantity > 1) {
+						num_picker->setValueBounds(1, drag_stack.quantity);
+						num_picker->visible = true;
+					}
+
+					if (action == ACTION_PICKER_STASH_TRANSFER)
+						drag_post_action = DRAG_POST_ACTION_STASH;
+				}
+			}
+			else if (action_src == ACTION_SRC_VENDOR) {
+				if (action == ACTION_PICKER_VENDOR_BUY) {
+					drag_stack = vendor->click(action_picker_target);
+					if (!drag_stack.empty()) {
+						actionPickerStartDrag();
+						drag_src = DRAG_SRC_VENDOR;
+						vendor->lockTabControl();
+					}
+					if (drag_stack.quantity > 1) {
+						int max_quantity = std::min(inv->getMaxPurchasable(drag_stack, vendor->getTab()), drag_stack.quantity);
+						if (max_quantity >= 1) {
+							num_picker->setValueBounds(1, max_quantity);
+							num_picker->visible = true;
+						}
+						else {
+							vendor->removeFromPrevSlot(drag_stack.quantity);
+							// drag_stack.clear();
+							// resetDrag();
+						}
+					}
+
+					if (!drag_stack.empty()) {
+						drag_post_action = DRAG_POST_ACTION_BUY;
+					}
+				}
+			}
+			else if (action_src == ACTION_SRC_POWERS) {
+				if (action == ACTION_PICKER_POWERS_SELECT) {
+					MenuPowersClick pow_click = pow->click(action_picker_target);
+					drag_power = pow_click.drag;
+					if (drag_power > 0) {
+						actionPickerStartDrag();
+						drag_src = DRAG_SRC_POWERS;
+
+						if (inpt->mode != InputState::MODE_TOUCHSCREEN) {
+							// move the cursor to the actionbar
+							act->tablist.unlock();
+							act->tablist.getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
+							menu->defocusLeft();
+							menu->defocusRight();
+						}
+					}
+				}
+				else if (action == ACTION_PICKER_POWERS_UPGRADE) {
+					MenuPowersClick pow_click = pow->click(action_picker_target);
+					if (pow_click.unlock > 0) {
+						pow->clickUnlock(pow_click.unlock);
+					}
+				}
+			}
+			else if (action_src == ACTION_SRC_ACTIONBAR) {
+				if (action == ACTION_PICKER_ACTIONBAR_SELECT) {
+					drag_power = act->checkDrag(action_picker_target);
+					if (drag_power > 0) {
+						actionPickerStartDrag();
+						drag_src = DRAG_SRC_ACTIONBAR;
+					}
+				}
+				else if (action == ACTION_PICKER_ACTIONBAR_CLEAR) {
+					act->remove(action_picker_target);
+				}
+				else if (action == ACTION_PICKER_ACTIONBAR_USE) {
+					WidgetSlot* act_slot = act->getSlotFromPosition(action_picker_target);
+					if (act_slot) {
+						act->touch_slot = act_slot;
+					}
+				}
+			}
+
+			action_picker->visible = false;
+			action_picker->tablist.defocus();
+		}
+		else if (action_picker->clicked_cancel) {
+			action_picker->tablist.defocus();
+		}
+		else {
+			pause = true;
+			return;
+		}
+	}
+	else {
+		// Sometimes, an action from action_picker needs to show num_picker first.
+		// num_picker will only start dragging the item stack, so we need to complete the selected action here
+
+		// when using a touchscreen, MenuItemStorage::click() will highlight the selected slot. We can clear the highlight here
+		if (drag_post_action != DRAG_POST_ACTION_NONE && inpt->mode == InputState::MODE_TOUCHSCREEN) {
+			defocusLeft();
+			defocusRight();
+		}
+
+		if (drag_post_action == DRAG_POST_ACTION_DROP) {
+			if (drag_src == DRAG_SRC_INVENTORY) {
+				// quest items cannot be dropped
+				bool item_is_valid = items->isValid(drag_stack.item);
+				if (!item_is_valid || (item_is_valid && !items->items[drag_stack.item]->quest_item)) {
+					drop_stack.push(drag_stack);
+				}
+				else {
+					pc->logMsg(msg->get("This item can not be dropped."), Avatar::MSG_NORMAL);
+					items->playSound(drag_stack.item);
+
+					inv->itemReturn(drag_stack);
+				}
+				if (inpt->mode == InputState::MODE_TOUCHSCREEN)
+					inv->defocusTabLists();
+			}
+			else if (drag_src == DRAG_SRC_STASH) {
+				drop_stack.push(drag_stack);
+				stash->tabs[stash->getTab()].updated = true;
+			}
+			drag_src = DRAG_SRC_NONE;
+			resetDrag();
+		}
+		else if (drag_post_action == DRAG_POST_ACTION_BUY) {
+			if (!inv->buy(drag_stack, vendor->getTab(), !MenuInventory::IS_DRAGGING)) {
+				vendor->itemReturn(inv->drop_stack.front());
+				inv->drop_stack.pop();
+			}
+			drag_src = DRAG_SRC_NONE;
+			resetDrag();
+			vendor->resetDrag();
+		}
+		else if (drag_post_action == DRAG_POST_ACTION_SELL) {
+			if (inv->sell(drag_stack)) {
+				if (vendor->visible) {
+					vendor->setTab(ItemManager::VENDOR_SELL);
+					vendor->add(drag_stack);
+				}
+			}
+			else {
+				inv->itemReturn(drag_stack);
+			}
+			drag_src = DRAG_SRC_NONE;
+			resetDrag();
+		}
+		else if (drag_post_action == DRAG_POST_ACTION_STASH) {
+			if (drag_src == DRAG_SRC_INVENTORY) {
+				if (!stash->add(drag_stack, MenuStash::NO_SLOT, MenuStash::ADD_PLAY_SOUND)) {
+					inv->itemReturn(stash->drop_stack.front());
+					stash->drop_stack.pop();
+				}
+			}
+			else if (drag_src == DRAG_SRC_STASH) {
+				if (!inv->add(drag_stack, MenuInventory::CARRIED, ItemStorage::NO_SLOT, MenuInventory::ADD_PLAY_SOUND, MenuInventory::ADD_AUTO_EQUIP)) {
+					stash->itemReturn(inv->drop_stack.front());
+					inv->drop_stack.pop();
+				}
+				stash->tabs[stash->getTab()].updated = true;
+			}
+			drag_src = DRAG_SRC_NONE;
+			resetDrag();
+		}
+
+		drag_post_action = DRAG_POST_ACTION_NONE;
 	}
 
 	if (!inpt->usingMouse())
@@ -352,12 +600,19 @@ void MenuManager::logic() {
 		inpt->pressing[Input::MAIN2] = false;
 	}
 
+	if (settings->dev_mode) {
+		devconsole->logic();
+	}
+
 	if (!exit->visible && !is_within_menus)
 		mini->logic();
 
 	book->logic();
 	effects->logic();
-	act->logic();
+
+	if (!exit->visible && !game_over->visible)
+		act->logic();
+
 	hudlog->logic();
 	enemy->logic();
 	chr->logic();
@@ -367,10 +622,7 @@ void MenuManager::logic() {
 	questlog->logic();
 	talker->logic();
 	stash->logic();
-
-	if (settings->dev_mode) {
-		devconsole->logic();
-	}
+	game_over->logic();
 
 	touch_controls->logic();
 
@@ -405,46 +657,64 @@ void MenuManager::logic() {
 	if (settings->dev_mode && devconsole->inputFocus())
 		key_lock = true;
 
-	// cancel dragging and defocus menu tablists
+	// stop dragging with cancel key
 	if (!key_lock && inpt->pressing[Input::CANCEL] && !inpt->lock[Input::CANCEL] && !pc->stats.corpse) {
 		if (keyboard_dragging || mouse_dragging) {
 			inpt->lock[Input::CANCEL] = true;
 			resetDrag();
-		}
-		for (size_t i=0; i<menus.size(); i++) {
-			TabList *tablist = menus[i]->getCurrentTabList();
-			if (tablist) {
-				inpt->lock[Input::CANCEL] = true;
-				menus[i]->defocusTabLists();
-			}
-			if (settings->dev_mode) {
-				tablist = devconsole->getCurrentTabList();
-				if (tablist) {
-					inpt->lock[Input::CANCEL] = true;
-					devconsole->defocusTabLists();
-				}
-			}
 		}
 	}
 
 	// exit menu toggle
 	if (!key_lock && !mouse_dragging && !keyboard_dragging) {
 		if (inpt->pressing[Input::CANCEL] && !inpt->lock[Input::CANCEL]) {
-			inpt->lock[Input::CANCEL] = true;
 			key_lock = true;
 			if (act->twostep_slot != -1) {
+				inpt->lock[Input::CANCEL] = true;
 				act->twostep_slot = -1;
 			}
 			else if (settings->dev_mode && devconsole->visible) {
+				inpt->lock[Input::CANCEL] = true;
 				devconsole->closeWindow();
 			}
+			else if (act->tablist.getCurrent() != -1) {
+				inpt->lock[Input::CANCEL] = true;
+				act->tablist.defocus();
+			}
 			else if (menus_open) {
+				inpt->lock[Input::CANCEL] = true;
 				closeAll();
 			}
-			else {
+			else if (!game_over->visible && (inpt->mode != InputState::MODE_JOYSTICK || exit->visible)) {
+				// CANCEL (which is usually mapped to keyboard Escape) can open the pause menu if there are no other actions
+				// we make an exception for opening the pause menu with joysticks, which usually have CANCEL mapped to a face button with a separate mapping for PAUSE (i.e. "Start")
+				// closing the menu can always be done with either mapping
+				inpt->lock[Input::CANCEL] = true;
+				act->defocusTabLists();
 				exit->handleCancel();
 			}
 		}
+
+		// handle opening the pause menu with the dedicated binding
+		if (inpt->pressing[Input::PAUSE] && !inpt->lock[Input::PAUSE] && !inpt->lock[Input::CANCEL]) {
+			inpt->lock[Input::PAUSE] = true;
+
+			// perform all "cancel" actions
+			resetDrag();
+			act->twostep_slot = -1;
+			if (menus_open) {
+				closeAll();
+			}
+
+			if (!game_over->visible) {
+				act->defocusTabLists();
+				exit->handleCancel();
+			}
+		}
+	}
+	if (mini->clicked_config) {
+		mini->clicked_config = false;
+		showExitMenu();
 	}
 
 	if (exit->visible) {
@@ -455,6 +725,12 @@ void MenuManager::logic() {
 		// if dpi scaling is changed, we need to realign the menus
 		if (inpt->window_resized) {
 			alignAll();
+		}
+	}
+	else if (game_over->visible) {
+		if (game_over->exit_clicked) {
+			game_over->close();
+			done = true;
 		}
 	}
 	else {
@@ -475,6 +751,7 @@ void MenuManager::logic() {
 			}
 			else {
 				closeRight();
+				defocusLeft();
 				act->requires_attention[MenuActionBar::MENU_INVENTORY] = false;
 				inv->visible = true;
 				snd->play(inv->sfx_open, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
@@ -491,6 +768,7 @@ void MenuManager::logic() {
 			}
 			else {
 				closeRight();
+				defocusLeft();
 				act->requires_attention[MenuActionBar::MENU_POWERS] = false;
 				pow->visible = true;
 				snd->play(pow->sfx_open, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
@@ -506,6 +784,7 @@ void MenuManager::logic() {
 			}
 			else {
 				closeLeft();
+				defocusRight();
 				act->requires_attention[MenuActionBar::MENU_CHARACTER] = false;
 				chr->visible = true;
 				snd->play(chr->sfx_open, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
@@ -523,6 +802,7 @@ void MenuManager::logic() {
 			}
 			else {
 				closeLeft();
+				defocusRight();
 				act->requires_attention[MenuActionBar::MENU_LOG] = false;
 				questlog->visible = true;
 				snd->play(questlog->sfx_open, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
@@ -642,21 +922,26 @@ void MenuManager::logic() {
 					}
 				}
 				else {
-					// start dragging a vendor item
-					drag_stack = vendor->click(inpt->mouse);
-					if (!drag_stack.empty()) {
-						mouse_dragging = true;
-						drag_src = DRAG_SRC_VENDOR;
+					if (inpt->touch_locked) {
+						showActionPicker(vendor, inpt->mouse);
 					}
-					if (drag_stack.quantity > 1 && (inpt->pressing[Input::SHIFT] || !inpt->usingMouse() || inpt->touch_locked)) {
-						int max_quantity = std::min(inv->getMaxPurchasable(drag_stack, vendor->getTab()), drag_stack.quantity);
-						if (max_quantity >= 1) {
-							num_picker->setValueBounds(1, max_quantity);
-							num_picker->visible = true;
+					else {
+						// start dragging a vendor item
+						drag_stack = vendor->click(inpt->mouse);
+						if (!drag_stack.empty()) {
+							mouse_dragging = true;
+							drag_src = DRAG_SRC_VENDOR;
 						}
-						else {
-							drag_stack.clear();
-							resetDrag();
+						if (drag_stack.quantity > 1 && inpt->pressing[Input::SHIFT]) {
+							int max_quantity = std::min(inv->getMaxPurchasable(drag_stack, vendor->getTab()), drag_stack.quantity);
+							if (max_quantity >= 1) {
+								num_picker->setValueBounds(1, max_quantity);
+								num_picker->visible = true;
+							}
+							else {
+								drag_stack.clear();
+								resetDrag();
+							}
 						}
 					}
 				}
@@ -671,18 +956,23 @@ void MenuManager::logic() {
 						stash->itemReturn(inv->drop_stack.front());
 						inv->drop_stack.pop();
 					}
-					stash->updated = true;
+					stash->tabs[stash->getTab()].updated = true;
 				}
 				else {
-					// start dragging a stash item
-					drag_stack = stash->click(inpt->mouse);
-					if (!drag_stack.empty()) {
-						mouse_dragging = true;
-						drag_src = DRAG_SRC_STASH;
+					if (inpt->touch_locked) {
+						showActionPicker(stash, inpt->mouse);
 					}
-					if (drag_stack.quantity > 1 && (inpt->pressing[Input::SHIFT] || !inpt->usingMouse() || inpt->touch_locked)) {
-						num_picker->setValueBounds(1, drag_stack.quantity);
-						num_picker->visible = true;
+					else {
+						// start dragging a stash item
+						drag_stack = stash->click(inpt->mouse);
+						if (!drag_stack.empty()) {
+							mouse_dragging = true;
+							drag_src = DRAG_SRC_STASH;
+						}
+						if (drag_stack.quantity > 1 && inpt->pressing[Input::SHIFT]) {
+							num_picker->setValueBounds(1, drag_stack.quantity);
+							num_picker->visible = true;
+						}
 					}
 				}
 			}
@@ -717,14 +1007,20 @@ void MenuManager::logic() {
 				}
 				else {
 					inpt->lock[Input::MAIN1] = true;
-					drag_stack = inv->click(inpt->mouse);
-					if (!drag_stack.empty()) {
-						mouse_dragging = true;
-						drag_src = DRAG_SRC_INVENTORY;
+
+					if (inpt->touch_locked) {
+						showActionPicker(inv, inpt->mouse);
 					}
-					if (drag_stack.quantity > 1 && (inpt->pressing[Input::SHIFT] || !inpt->usingMouse() || inpt->touch_locked)) {
-						num_picker->setValueBounds(1, drag_stack.quantity);
-						num_picker->visible = true;
+					else {
+						drag_stack = inv->click(inpt->mouse);
+						if (!drag_stack.empty()) {
+							mouse_dragging = true;
+							drag_src = DRAG_SRC_INVENTORY;
+						}
+						if (drag_stack.quantity > 1 && inpt->pressing[Input::SHIFT]) {
+							num_picker->setValueBounds(1, drag_stack.quantity);
+							num_picker->visible = true;
+						}
 					}
 				}
 			}
@@ -732,16 +1028,25 @@ void MenuManager::logic() {
 			if (pow->visible && Utils::isWithinRect(pow->window_area,inpt->mouse)) {
 				inpt->lock[Input::MAIN1] = true;
 
-				// check for unlock/dragging
-				drag_power = pow->click(inpt->mouse);
-				if (drag_power > 0) {
-					mouse_dragging = true;
-					keyboard_dragging = false;
-					drag_src = DRAG_SRC_POWERS;
+				if (inpt->touch_locked) {
+					showActionPicker(pow, inpt->mouse);
+				}
+				else {
+					// check for unlock/dragging
+					MenuPowersClick pow_click = pow->click(inpt->mouse);
+					drag_power = pow_click.drag;
+					if (drag_power > 0) {
+						mouse_dragging = true;
+						keyboard_dragging = false;
+						drag_src = DRAG_SRC_POWERS;
+					}
+					else if (pow_click.unlock > 0) {
+						pow->clickUnlock(pow_click.unlock);
+					}
 				}
 			}
 			// action bar
-			if (!exit->visible && !inpt->touch_locked && (act->isWithinSlots(inpt->mouse) || act->isWithinMenus(inpt->mouse))) {
+			if (!exit->visible && (act->isWithinSlots(inpt->mouse) || act->isWithinMenus(inpt->mouse))) {
 				inpt->lock[Input::MAIN1] = true;
 
 				// ctrl-click action bar to clear that slot
@@ -750,10 +1055,21 @@ void MenuManager::logic() {
 				}
 				// allow drag-to-rearrange action bar
 				else if (!act->isWithinMenus(inpt->mouse)) {
-					drag_power = act->checkDrag(inpt->mouse);
-					if (drag_power > 0) {
-						mouse_dragging = true;
-						drag_src = DRAG_SRC_ACTIONBAR;
+					if (inpt->touch_locked) {
+						WidgetSlot* act_slot = act->getSlotFromPosition(inpt->mouse);
+						if (act_slot) {
+							act->tablist.setCurrent(act_slot);
+							int slot_index = act->tablist.getCurrent();
+							keydrag_pos = act->getSlotPos(slot_index);
+						}
+						showActionPicker(act, inpt->mouse);
+					}
+					else {
+						drag_power = act->checkDrag(inpt->mouse);
+						if (drag_power > 0) {
+							mouse_dragging = true;
+							drag_src = DRAG_SRC_ACTIONBAR;
+						}
 					}
 				}
 
@@ -766,7 +1082,7 @@ void MenuManager::logic() {
 
 		// highlight matching inventory slots based on what we're dragging
 		if (inv->visible && (mouse_dragging || keyboard_dragging)) {
-			inv->inventory[MenuInventory::EQUIPMENT].highlightMatching(items->items[drag_stack.item].type);
+			inv->inventory[MenuInventory::EQUIPMENT].highlightMatching(drag_stack.item);
 		}
 
 		// handle dropping
@@ -807,8 +1123,8 @@ void MenuManager::logic() {
 					inv->applyEquipment();
 
 					// put an item with a power on the action bar
-					if (items->items[drag_stack.item].power != 0) {
-						act->drop(inpt->mouse, items->items[drag_stack.item].power, !MenuActionBar::REORDER);
+					if (items->isValid(drag_stack.item) && items->items[drag_stack.item]->power != 0) {
+						act->drop(inpt->mouse, items->items[drag_stack.item]->power, !MenuActionBar::REORDER);
 					}
 				}
 				else if (vendor->visible && Utils::isWithinRect(vendor->window_area, inpt->mouse)) {
@@ -821,7 +1137,9 @@ void MenuManager::logic() {
 					}
 				}
 				else if (stash->visible && Utils::isWithinRect(stash->window_area, inpt->mouse)) {
-					stash->stock.drag_prev_slot = -1;
+					for (size_t i = 0; i < stash->tabs.size(); ++i) {
+						stash->tabs[i].stock.drag_prev_slot = -1;
+					}
 					if (!stash->drop(inpt->mouse, drag_stack)) {
 						inv->itemReturn(stash->drop_stack.front());
 						stash->drop_stack.pop();
@@ -831,7 +1149,8 @@ void MenuManager::logic() {
 					// if dragging and the source was inventory, drop item to the floor
 
 					// quest items cannot be dropped
-					if (!items->items[drag_stack.item].quest_item) {
+					bool item_is_valid = items->isValid(drag_stack.item);
+					if (!item_is_valid || (item_is_valid && !items->items[drag_stack.item]->quest_item)) {
 						drop_stack.push(drag_stack);
 					}
 					else {
@@ -854,6 +1173,7 @@ void MenuManager::logic() {
 					}
 				}
 				else {
+					items->playSound(drag_stack.item);
 					vendor->itemReturn(drag_stack);
 				}
 			}
@@ -866,7 +1186,7 @@ void MenuManager::logic() {
 						stash->itemReturn(inv->drop_stack.front());
 						inv->drop_stack.pop();
 					}
-					stash->updated = true;
+					stash->tabs[stash->getTab()].updated = true;
 				}
 				else if (stash->visible && Utils::isWithinRect(stash->window_area, inpt->mouse)) {
 					if (!stash->drop(inpt->mouse,drag_stack)) {
@@ -876,7 +1196,7 @@ void MenuManager::logic() {
 				}
 				else {
 					drop_stack.push(drag_stack);
-					stash->updated = true;
+					stash->tabs[stash->getTab()].updated = true;
 				}
 			}
 
@@ -908,6 +1228,47 @@ void MenuManager::logic() {
 	if (!(mouse_dragging || keyboard_dragging)) {
 		setDragIcon(WidgetSlot::NO_ICON, WidgetSlot::NO_OVERLAY);
 	}
+
+	// auto-select tablists when using keyboard/gamepad
+	if (!inpt->usingMouse()) {
+		if (game_over->visible && !game_over->tablist.isLocked() && game_over->tablist.getCurrent() == -1) {
+			game_over->tablist.getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
+		}
+		else if (num_picker->visible && !num_picker->tablist.isLocked() && num_picker->tablist.getCurrent() == -1) {
+			num_picker->tablist.getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
+		}
+		else if (action_picker->visible && !action_picker->tablist.isLocked() && action_picker->tablist.getCurrent() == -1) {
+			action_picker->tablist.getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
+		}
+		else if (book->visible && !book->tablist.isLocked() && book->tablist.getCurrent() == -1) {
+			book->tablist.getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
+		}
+		else if (!isTabListSelected()) {
+			inv->tablist.lock();
+			pow->tablist.lock();
+			chr->tablist.lock();
+			questlog->tablist.lock();
+			stash->tablist.lock();
+			vendor->tablist.lock();
+
+			if (inv->visible) {
+				inv->tablist.unlock();
+				inv->tablist.getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
+			}
+			else if (pow->visible) {
+				pow->tablist.unlock();
+				pow->tablist.getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
+			}
+			else if (chr->visible) {
+				chr->tablist.unlock();
+				chr->tablist.getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
+			}
+			else if (questlog->visible) {
+				questlog->tablist.unlock();
+				questlog->tablist.getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
+			}
+		}
+	}
 }
 
 void MenuManager::dragAndDropWithKeyboard() {
@@ -932,48 +1293,19 @@ void MenuManager::dragAndDropWithKeyboard() {
 			WidgetSlot::CLICK_TYPE slotClick = inv_slot->checkClick();
 
 			// pick up item
-			if (slotClick == WidgetSlot::CHECKED && drag_stack.empty()) {
-				drag_stack = inv->click(src_slot);
-				if (!drag_stack.empty()) {
-					keyboard_dragging = true;
-					drag_src = DRAG_SRC_INVENTORY;
-				}
-				if (drag_stack.quantity > 1) {
-					num_picker->setValueBounds(1, drag_stack.quantity);
-					num_picker->visible = true;
-				}
+			if (slotClick == WidgetSlot::DRAG && drag_stack.empty()) {
+				showActionPicker(inv, src_slot);
 			}
 			// rearrange item
-			else if (slotClick == WidgetSlot::CHECKED && !drag_stack.empty()) {
+			else if (slotClick == WidgetSlot::DRAG && !drag_stack.empty()) {
 				inv->drop(src_slot, drag_stack);
-				inv_slot->checked = false;
 				drag_src = DRAG_SRC_NONE;
 				drag_stack.clear();
 				keyboard_dragging = false;
 				sticky_dragging = false;
 			}
-			// sell, stash, or use item
-			else if (slotClick == WidgetSlot::ACTIVATED && !drag_stack.empty()) {
-				if (vendor->visible && inv->sell(drag_stack)) {
-					vendor->setTab(ItemManager::VENDOR_SELL);
-					vendor->add(drag_stack);
-				}
-				else if (stash->visible) {
-					if (!stash->add(drag_stack, MenuStash::NO_SLOT, MenuStash::ADD_PLAY_SOUND)) {
-						inv->itemReturn(stash->drop_stack.front());
-						stash->drop_stack.pop();
-					}
-				}
-				else {
-					inv->itemReturn(drag_stack);
-					if (!vendor->visible && !stash->visible)
-						inv->activate(src_slot);
-				}
-				inv->clearHighlight();
-				drag_src = DRAG_SRC_NONE;
-				drag_stack.clear();
-				keyboard_dragging = false;
-				sticky_dragging = false;
+			else if (slotClick == WidgetSlot::ACTIVATE && drag_stack.empty()) {
+				inv->activate(src_slot);
 			}
 		}
 	}
@@ -994,84 +1326,34 @@ void MenuManager::dragAndDropWithKeyboard() {
 
 		WidgetSlot::CLICK_TYPE slotClick = vendor_slot->checkClick();
 
-		// buy item
-		if (slotClick == WidgetSlot::CHECKED && drag_stack.empty()) {
-			drag_stack = vendor->click(src_slot);
-			if (!drag_stack.empty()) {
-				keyboard_dragging = true;
-				drag_src = DRAG_SRC_VENDOR;
-				vendor->lockTabControl();
-			}
-			if (drag_stack.quantity > 1) {
-				int max_quantity = std::min(inv->getMaxPurchasable(drag_stack, vendor->getTab()), drag_stack.quantity);
-				if (max_quantity >= 1) {
-					num_picker->setValueBounds(1, max_quantity);
-					num_picker->visible = true;
-				}
-				else {
-					drag_stack.clear();
-					resetDrag();
-				}
-			}
-		}
-
-		// if we selected a single item buy it imediately
-		// otherwise, wait until we get a result from num_picker
-		if (vendor_slot->checked && !drag_stack.empty() && !num_picker->visible) {
-			if (!inv->buy(drag_stack, vendor->getTab(), !MenuInventory::IS_DRAGGING)) {
-				vendor->itemReturn(inv->drop_stack.front());
-				inv->drop_stack.pop();
-			}
-			drag_src = DRAG_SRC_NONE;
-			drag_stack.clear();
-			keyboard_dragging = false;
-			sticky_dragging = false;
-			vendor_slot->checked = false;
-			vendor->unlockTabControl();
+		// pick up item
+		if (slotClick == WidgetSlot::DRAG && drag_stack.empty()) {
+			showActionPicker(vendor, src_slot);
 		}
 	}
 
 	// stash menu
 	if (stash->visible && stash->getCurrentTabList() && drag_src != DRAG_SRC_ACTIONBAR) {
 		int slot_index = stash->getCurrentTabList()->getCurrent();
-		WidgetSlot::CLICK_TYPE slotClick = stash->stock.slots[slot_index]->checkClick();
-		Point src_slot(stash->stock.slots[slot_index]->pos.x, stash->stock.slots[slot_index]->pos.y);
+		size_t tab = stash->getTab();
+		WidgetSlot::CLICK_TYPE slotClick = stash->tabs[tab].stock.slots[slot_index]->checkClick();
+		Point src_slot(stash->tabs[tab].stock.slots[slot_index]->pos.x, stash->tabs[tab].stock.slots[slot_index]->pos.y);
 
 		// pick up item
-		if (slotClick == WidgetSlot::CHECKED && drag_stack.empty()) {
-			drag_stack = stash->click(src_slot);
-			if (!drag_stack.empty()) {
-				keyboard_dragging = true;
-				drag_src = DRAG_SRC_STASH;
-			}
-			if (drag_stack.quantity > 1) {
-				num_picker->setValueBounds(1, drag_stack.quantity);
-				num_picker->visible = true;
-			}
+		if (slotClick == WidgetSlot::DRAG && drag_stack.empty()) {
+			showActionPicker(stash, src_slot);
 		}
 		// rearrange item
-		else if (slotClick == WidgetSlot::CHECKED && !drag_stack.empty()) {
-			stash->stock.slots[slot_index]->checked = false;
+		else if (slotClick == WidgetSlot::DRAG && !drag_stack.empty()) {
 			if (!stash->drop(src_slot, drag_stack)) {
 				drop_stack.push(stash->drop_stack.front());
 				stash->drop_stack.pop();
 			}
+			inv->clearHighlight();
 			drag_src = DRAG_SRC_NONE;
 			drag_stack.clear();
 			keyboard_dragging = false;
 			sticky_dragging = false;
-		}
-		// send to inventory
-		else if (slotClick == WidgetSlot::ACTIVATED && !drag_stack.empty()) {
-			if (!inv->add(drag_stack, MenuInventory::CARRIED, ItemStorage::NO_SLOT, MenuInventory::ADD_PLAY_SOUND, MenuInventory::ADD_AUTO_EQUIP)) {
-				stash->itemReturn(inv->drop_stack.front());
-				inv->drop_stack.pop();
-			}
-			drag_src = DRAG_SRC_NONE;
-			drag_stack.clear();
-			keyboard_dragging = false;
-			sticky_dragging = false;
-			stash->updated = true;
 		}
 	}
 
@@ -1080,26 +1362,9 @@ void MenuManager::dragAndDropWithKeyboard() {
 		int slot_index = pow->getSelectedCellIndex();
 		WidgetSlot::CLICK_TYPE slotClick = pow->slots[slot_index]->checkClick();
 
-		if (slotClick == WidgetSlot::CHECKED) {
+		if (slotClick == WidgetSlot::DRAG) {
 			Point src_slot(pow->slots[slot_index]->pos.x, pow->slots[slot_index]->pos.y);
-			// check for unlock/dragging
-			drag_power = pow->click(src_slot);
-			if (drag_power > 0) {
-				keyboard_dragging = true;
-				drag_src = DRAG_SRC_POWERS;
-			}
-			else {
-				pow->slots[slot_index]->checked = false;
-			}
-		}
-		// clear power dragging if power slot was pressed twice
-		else if (slotClick == WidgetSlot::ACTIVATED) {
-			if (drag_power > 0) {
-				pow->upgradeBySlotIndex(slot_index);
-			}
-			drag_src = DRAG_SRC_NONE;
-			drag_power = 0;
-			keyboard_dragging = false;
+			showActionPicker(pow, src_slot);
 		}
 	}
 
@@ -1110,44 +1375,28 @@ void MenuManager::dragAndDropWithKeyboard() {
 		Point dest_slot = act->getSlotPos(slot_index);
 
 		// pick up power
-		if (slotClick == WidgetSlot::CHECKED && drag_stack.empty() && drag_power == 0) {
-			drag_power = act->checkDrag(dest_slot);
-			if (drag_power > 0) {
-				keyboard_dragging = true;
-				drag_src = DRAG_SRC_ACTIONBAR;
-			}
-			else {
-				act->slots[slot_index]->deactivate();
-			}
+		if (slotClick == WidgetSlot::DRAG && drag_stack.empty() && drag_power == 0) {
+			showActionPicker(act, dest_slot);
 		}
 		// drop power/item from other menu
-		else if (slotClick == WidgetSlot::CHECKED && drag_src != DRAG_SRC_ACTIONBAR && (!drag_stack.empty() || drag_power > 0)) {
+		else if (slotClick == WidgetSlot::DRAG && drag_src != DRAG_SRC_ACTIONBAR && (!drag_stack.empty() || drag_power > 0)) {
 			if (drag_src == DRAG_SRC_POWERS) {
 				act->drop(dest_slot, drag_power, !MenuActionBar::REORDER);
-				pow->slots[slot_index]->checked = false;
 			}
 			else if (drag_src == DRAG_SRC_INVENTORY) {
-				if (slot_index< inv->getEquippedCount())
-					inv->inventory[MenuInventory::EQUIPMENT].slots[slot_index]->checked = false;
-				else
-					inv->inventory[MenuInventory::CARRIED].slots[slot_index - inv->getEquippedCount()]->checked = false;
-
-				if (items->items[drag_stack.item].power != 0) {
-					act->drop(dest_slot, items->items[drag_stack.item].power, !MenuActionBar::REORDER);
+				if (items->isValid(drag_stack.item) && items->items[drag_stack.item]->power != 0) {
+					act->drop(dest_slot, items->items[drag_stack.item]->power, !MenuActionBar::REORDER);
 				}
 			}
-			act->slots[slot_index]->checked = false;
 			resetDrag();
 			inv->applyEquipment();
 		}
 		// rearrange actionbar
-		else if ((slotClick == WidgetSlot::CHECKED || slotClick == WidgetSlot::ACTIVATED) && drag_src == DRAG_SRC_ACTIONBAR && drag_power > 0) {
-			if (slotClick == WidgetSlot::CHECKED) act->slots[slot_index]->checked = false;
+		else if (slotClick == WidgetSlot::DRAG && drag_src == DRAG_SRC_ACTIONBAR && drag_power > 0) {
 			act->drop(dest_slot, drag_power, MenuActionBar::REORDER);
 			drag_src = DRAG_SRC_NONE;
 			drag_power = 0;
 			keyboard_dragging = false;
-			inpt->lock[Input::ACCEPT] = false;
 		}
 	}
 }
@@ -1166,20 +1415,21 @@ void MenuManager::resetDrag() {
 		inv->itemReturn(drag_stack);
 		inv->clearHighlight();
 	}
-	else if (drag_src == DRAG_SRC_ACTIONBAR) act->actionReturn(drag_power);
+	else if (drag_src == DRAG_SRC_ACTIONBAR) {
+		act->actionReturn(drag_power);
+	}
+
 	drag_src = DRAG_SRC_NONE;
 	drag_stack.clear();
 	drag_power = 0;
-
-	if (keyboard_dragging && drag_src == DRAG_SRC_ACTIONBAR) {
-		inpt->lock[Input::ACCEPT] = false;
-	}
 
 	setDragIcon(WidgetSlot::NO_ICON, WidgetSlot::NO_OVERLAY);
 
 	vendor->stock[ItemManager::VENDOR_BUY].drag_prev_slot = -1;
 	vendor->stock[ItemManager::VENDOR_SELL].drag_prev_slot = -1;
-	stash->stock.drag_prev_slot = -1;
+	for (size_t i = 0; i < stash->tabs.size(); ++i) {
+		stash->tabs[i].stock.drag_prev_slot = -1;
+	}
 	inv->drag_prev_src = -1;
 	inv->inventory[MenuInventory::EQUIPMENT].drag_prev_slot = -1;
 	inv->inventory[MenuInventory::CARRIED].drag_prev_slot = -1;
@@ -1194,7 +1444,7 @@ void MenuManager::render() {
 		// if the hud is disabled, only show a few necessary menus
 
 		// exit menu
-		menus[9]->render();
+		exit->render();
 
 		// dev console
 		if (settings->dev_mode)
@@ -1242,12 +1492,14 @@ void MenuManager::render() {
 
 	touch_controls->render();
 
-	if (!num_picker->visible && !mouse_dragging && !sticky_dragging) {
+	if (!num_picker->visible && !action_picker->visible && !mouse_dragging && !sticky_dragging) {
 		if (!inpt->usingMouse() || settings->touchscreen)
 			handleKeyboardTooltips();
 		else {
 			// Find tooltips depending on mouse position
 			if (!book->visible) {
+				pushMatchingItemsOf(inpt->mouse);
+
 				chr->renderTooltips(inpt->mouse);
 				vendor->renderTooltips(inpt->mouse);
 				stash->renderTooltips(inpt->mouse);
@@ -1266,7 +1518,7 @@ void MenuManager::render() {
 		if (drag_src == DRAG_SRC_INVENTORY || drag_src == DRAG_SRC_VENDOR || drag_src == DRAG_SRC_STASH)
 			setDragIconItem(drag_stack);
 		else if (drag_src == DRAG_SRC_POWERS || drag_src == DRAG_SRC_ACTIONBAR)
-			setDragIcon(powers->powers[drag_power].icon, -1);
+			setDragIcon(powers->powers[drag_power]->icon, -1);
 
 		if (settings->touchscreen && sticky_dragging)
 			renderIcon(keydrag_pos.x - eset->resolutions.icon_size/2, keydrag_pos.y - eset->resolutions.icon_size/2);
@@ -1277,7 +1529,7 @@ void MenuManager::render() {
 		if (drag_src == DRAG_SRC_INVENTORY || drag_src == DRAG_SRC_VENDOR || drag_src == DRAG_SRC_STASH)
 			setDragIconItem(drag_stack);
 		else if (drag_src == DRAG_SRC_POWERS || drag_src == DRAG_SRC_ACTIONBAR)
-			setDragIcon(powers->powers[drag_power].icon, -1);
+			setDragIcon(powers->powers[drag_power]->icon, -1);
 
 		renderIcon(keydrag_pos.x - eset->resolutions.icon_size/2, keydrag_pos.y - eset->resolutions.icon_size/2);
 	}
@@ -1292,28 +1544,45 @@ void MenuManager::handleKeyboardTooltips() {
 	if (book->visible)
 		return;
 
-	if (vendor->visible && vendor->getCurrentTabList() && vendor->getCurrentTabList() != (&vendor->tablist)) {
-		int slot_index = vendor->getCurrentTabList()->getCurrent();
+	if (vendor->visible) {
+		TabList* cur_tablist = vendor->getCurrentTabList();
+		if (cur_tablist && cur_tablist != &(vendor->tablist)) {
+			int slot_index = cur_tablist->getCurrent();
 
-		if (vendor->getTab() == ItemManager::VENDOR_BUY) {
-			keydrag_pos.x = vendor->stock[ItemManager::VENDOR_BUY].slots[slot_index]->pos.x;
-			keydrag_pos.y = vendor->stock[ItemManager::VENDOR_BUY].slots[slot_index]->pos.y;
-		}
-		else if (vendor->getTab() == ItemManager::VENDOR_SELL) {
-			keydrag_pos.x = vendor->stock[ItemManager::VENDOR_SELL].slots[slot_index]->pos.x;
-			keydrag_pos.y = vendor->stock[ItemManager::VENDOR_SELL].slots[slot_index]->pos.y;
-		}
+			if (vendor->getTab() == ItemManager::VENDOR_BUY) {
+				keydrag_pos.x = vendor->stock[ItemManager::VENDOR_BUY].slots[slot_index]->pos.x;
+				keydrag_pos.y = vendor->stock[ItemManager::VENDOR_BUY].slots[slot_index]->pos.y;
+			}
+			else if (vendor->getTab() == ItemManager::VENDOR_SELL) {
+				keydrag_pos.x = vendor->stock[ItemManager::VENDOR_SELL].slots[slot_index]->pos.x;
+				keydrag_pos.y = vendor->stock[ItemManager::VENDOR_SELL].slots[slot_index]->pos.y;
+			}
 
-		vendor->renderTooltips(keydrag_pos);
+			Point tooltip_pos = keydrag_pos;
+			tooltip_pos.x += eset->resolutions.icon_size / 2;
+			tooltip_pos.y += eset->resolutions.icon_size / 2;
+
+			pushMatchingItemsOf(tooltip_pos);
+			vendor->renderTooltips(tooltip_pos);
+		}
 	}
 
-	if (stash->visible && stash->getCurrentTabList()) {
-		int slot_index = stash->getCurrentTabList()->getCurrent();
+	if (stash->visible) {
+		TabList* cur_tablist = stash->getCurrentTabList();
+		if (cur_tablist && cur_tablist != &(stash->tablist)) {
+			int slot_index = stash->getCurrentTabList()->getCurrent();
+			size_t tab = stash->getTab();
 
-		keydrag_pos.x = stash->stock.slots[slot_index]->pos.x;
-		keydrag_pos.y = stash->stock.slots[slot_index]->pos.y;
+			keydrag_pos.x = stash->tabs[tab].stock.slots[slot_index]->pos.x;
+			keydrag_pos.y = stash->tabs[tab].stock.slots[slot_index]->pos.y;
 
-		stash->renderTooltips(keydrag_pos);
+			Point tooltip_pos = keydrag_pos;
+			tooltip_pos.x += eset->resolutions.icon_size / 2;
+			tooltip_pos.y += eset->resolutions.icon_size / 2;
+
+			pushMatchingItemsOf(tooltip_pos);
+			stash->renderTooltips(tooltip_pos);
+		}
 	}
 
 	if (pow->visible && pow->isTabListSelected()) {
@@ -1322,7 +1591,11 @@ void MenuManager::handleKeyboardTooltips() {
 		keydrag_pos.x = pow->slots[slot_index]->pos.x;
 		keydrag_pos.y = pow->slots[slot_index]->pos.y;
 
-		pow->renderTooltips(keydrag_pos);
+		Point tooltip_pos = keydrag_pos;
+		tooltip_pos.x += eset->resolutions.icon_size / 2;
+		tooltip_pos.y += eset->resolutions.icon_size / 2;
+
+		pow->renderTooltips(tooltip_pos);
 	}
 
 	if (inv->visible && inv->getCurrentTabList()) {
@@ -1342,15 +1615,24 @@ void MenuManager::handleKeyboardTooltips() {
 			keydrag_pos.y = temp_widget->pos.y;
 		}
 
-		inv->renderTooltips(keydrag_pos);
+		Point tooltip_pos = keydrag_pos;
+		tooltip_pos.x += eset->resolutions.icon_size / 2;
+		tooltip_pos.y += eset->resolutions.icon_size / 2;
+
+		pushMatchingItemsOf(tooltip_pos);
+		inv->renderTooltips(tooltip_pos);
 	}
 
-	if (act_drag_hover && act->getCurrentTabList()) {
+	if (act->getCurrentTabList()) {
 		int slot_index = act->getCurrentTabList()->getCurrent();
 
 		keydrag_pos = act->getSlotPos(slot_index);
 
-		act->renderTooltips(keydrag_pos);
+		Point tooltip_pos = keydrag_pos;
+		tooltip_pos.x += eset->resolutions.icon_size / 2;
+		tooltip_pos.y += eset->resolutions.icon_size / 2;
+
+		act->renderTooltips(tooltip_pos);
 	}
 }
 
@@ -1375,6 +1657,8 @@ void MenuManager::closeLeft() {
 	if (settings->dev_mode && devconsole->visible) {
 		devconsole->closeWindow();
 	}
+
+	defocusLeft();
 }
 
 void MenuManager::closeRight() {
@@ -1391,6 +1675,8 @@ void MenuManager::closeRight() {
 	if (settings->dev_mode && devconsole->visible) {
 		devconsole->closeWindow();
 	}
+
+	defocusRight();
 }
 
 bool MenuManager::isDragging() {
@@ -1402,13 +1688,223 @@ bool MenuManager::isNPCMenuVisible() {
 }
 
 void MenuManager::showExitMenu() {
+	if (game_over->visible)
+		return;
+
 	pause = true;
 	closeAll();
-	if (exit)
-		exit->visible = true;
+	if (exit) {
+		// handleCancel() will show the menu, but only if it is already hidden
+		// we use handleCancel() here because it will reset the menu to the "Exit" tab
+		exit->visible = false;
+		exit->handleCancel();
+	}
+}
+
+void MenuManager::pushMatchingItemsOf(const Point& hov_pos) {
+	if (!settings->item_compare_tips)
+		return;
+
+	int area;
+	ItemStack hov_stack;
+
+	if (inv->visible && Utils::isWithinRect(inv->window_area, hov_pos)) {
+		area = inv->areaOver(hov_pos);
+		if (area == MenuInventory::CARRIED)
+			hov_stack = inv->inventory[area].getItemStackAtPos(hov_pos);
+	}
+	else if (vendor->visible && Utils::isWithinRect(vendor->window_area, hov_pos)) {
+		area = vendor->getTab();
+		if (area >= 0)
+			hov_stack = vendor->stock[area].getItemStackAtPos(hov_pos);
+	}
+	else if (stash->visible && Utils::isWithinRect(stash->window_area, hov_pos)) {
+		area = static_cast<int>(stash->getTab());
+		if (area >= 0)
+			hov_stack = stash->tabs[area].stock.getItemStackAtPos(hov_pos);
+	}
+
+	// we assume that a non-empty item type means that there is a primary tooltip
+	if (items->isValid(hov_stack.item) && !items->items[hov_stack.item]->type.empty()) {
+		size_t tip_index = 1;
+
+		//get equipped items of the same type
+		for (size_t i = 0; i < inv->equipped_area.size(); i++) {
+			if (tip_index >= eset->tooltips.visible_max)
+				break; // can't show any more tooltips
+
+			if (inv->isActive(i)){
+				if (inv->slot_type[i] == items->items[hov_stack.item]->type) {
+					if (!inv->inventory[MenuInventory::EQUIPMENT].storage[i].empty()) {
+						Point match_pos(inv->equipped_area[i].x, inv->equipped_area[i].y);
+
+						TooltipData match = inv->inventory[MenuInventory::EQUIPMENT].checkTooltip(match_pos, &pc->stats, ItemManager::PLAYER_INV, !ItemManager::TOOLTIP_INPUT_HINT);
+						match.addColoredText(msg->get("Equipped"), font->getColor(FontEngine::COLOR_ITEM_FLAVOR));
+
+						tooltipm->push(match, hov_pos, TooltipData::STYLE_FLOAT, tip_index);
+						tip_index++;
+					}
+				}
+			}
+		}
+	}
+}
+
+void MenuManager::defocusLeft() {
+	chr->defocusTabLists();
+	questlog->defocusTabLists();
+	stash->defocusTabLists();
+	vendor->defocusTabLists();
+}
+
+void MenuManager::defocusRight() {
+	inv->defocusTabLists();
+	pow->defocusTabLists();
+}
+
+bool MenuManager::isTabListSelected() {
+	for (size_t i = 0; i < menus.size(); ++i) {
+		if (menus[i]->getCurrentTabList())
+			return true;
+	}
+
+	if (devconsole && devconsole->tablist.getCurrent() != -1)
+		return true;
+
+	return false;
+}
+
+void MenuManager::showActionPicker(Menu* src_menu, const Point& target) {
+	action_picker->action_list->clear();
+	action_picker_map.clear();
+
+	if (src_menu == act) {
+		PowerID slot_power = act->checkDrag(target);
+		act->actionReturn(slot_power);
+
+		if (slot_power > 0) {
+			action_src = ACTION_SRC_ACTIONBAR;
+			action_picker_target = target;
+
+			if (inpt->mode == InputState::MODE_TOUCHSCREEN) {
+				action_picker->action_list->append(msg->get("Use"), "");
+				action_picker_map[action_picker_map.size()] = ACTION_PICKER_ACTIONBAR_USE;
+			}
+
+			action_picker->action_list->append(msg->get("Move"), "");
+			action_picker_map[action_picker_map.size()] = ACTION_PICKER_ACTIONBAR_SELECT;
+
+			action_picker->action_list->append(msg->get("Clear"), "");
+			action_picker_map[action_picker_map.size()] = ACTION_PICKER_ACTIONBAR_CLEAR;
+		}
+	}
+	else if (src_menu == pow) {
+		MenuPowersClick pow_click = pow->click(target);
+
+		if (pow_click.drag > 0 || pow_click.unlock > 0) {
+			action_src = ACTION_SRC_POWERS;
+			action_picker_target = target;
+		}
+
+		if (pow_click.drag > 0) {
+			action_picker->action_list->append(msg->get("Equip"), "");
+			action_picker_map[0] = ACTION_PICKER_POWERS_SELECT;
+		}
+		if (pow_click.unlock > 0) {
+			action_picker->action_list->append(msg->get("Upgrade"), "");
+			action_picker_map[action_picker_map.size()] = ACTION_PICKER_POWERS_UPGRADE;
+		}
+	}
+	else if (src_menu == inv) {
+		ItemStack inv_click = inv->click(target);
+		if (inv_click.quantity == 1) {
+			inv->itemReturn(inv_click);
+		}
+
+		if (!inv_click.empty()) {
+			action_src = ACTION_SRC_INVENTORY;
+			action_picker_target = target;
+
+			if (vendor->visible) {
+				action_picker->action_list->append(msg->get("Sell"), "");
+				action_picker_map[action_picker_map.size()] = ACTION_PICKER_INVENTORY_SELL;
+			}
+			else if (stash->visible) {
+				action_picker->action_list->append(msg->get("Transfer"), "");
+				action_picker_map[action_picker_map.size()] = ACTION_PICKER_INVENTORY_STASH;
+			}
+
+			action_picker->action_list->append(msg->get("Move"), "");
+			action_picker_map[action_picker_map.size()] = ACTION_PICKER_INVENTORY_SELECT;
+
+			if (inv->canUseItem(target)) {
+				action_picker->action_list->append(msg->get("Use"), "");
+				action_picker_map[action_picker_map.size()] = ACTION_PICKER_INVENTORY_ACTIVATE;
+			}
+			else if (inv->canEquipItem(target)) {
+				action_picker->action_list->append(msg->get("Equip"), "");
+				action_picker_map[action_picker_map.size()] = ACTION_PICKER_INVENTORY_ACTIVATE;
+			}
+
+			action_picker->action_list->append(msg->get("Drop"), "");
+			action_picker_map[action_picker_map.size()] = ACTION_PICKER_INVENTORY_DROP;
+
+			if (!vendor->visible && eset->misc.sell_without_vendor) {
+				action_picker->action_list->append(msg->get("Sell"), "");
+				action_picker_map[action_picker_map.size()] = ACTION_PICKER_INVENTORY_SELL;
+			}
+		}
+	}
+	else if (src_menu == stash) {
+		ItemStack stash_click = stash->click(target);
+		if (stash_click.quantity == 1) {
+			stash->itemReturn(stash_click);
+		}
+
+		if (!stash_click.empty()) {
+			action_src = ACTION_SRC_STASH;
+			action_picker_target = target;
+
+			action_picker->action_list->append(msg->get("Move"), "");
+			action_picker_map[action_picker_map.size()] = ACTION_PICKER_STASH_SELECT;
+
+			action_picker->action_list->append(msg->get("Transfer"), "");
+			action_picker_map[action_picker_map.size()] = ACTION_PICKER_STASH_TRANSFER;
+		}
+	}
+	else if (src_menu == vendor) {
+		ItemStack vendor_click = vendor->click(target);
+		if (vendor_click.quantity == 1) {
+			vendor->itemReturn(vendor_click);
+		}
+
+		if (!vendor_click.empty()) {
+			action_src = ACTION_SRC_VENDOR;
+			action_picker_target = target;
+
+			action_picker->action_list->append(msg->get("Buy"), "");
+			action_picker_map[action_picker_map.size()] = ACTION_PICKER_VENDOR_BUY;
+		}
+	}
+
+	if (!action_picker_map.empty())
+		action_picker->show();
+}
+
+void MenuManager::actionPickerStartDrag() {
+	if (inpt->usingMouse()) {
+		mouse_dragging = true;
+		sticky_dragging = true;
+	}
+	else {
+		keyboard_dragging = true;
+	}
 }
 
 MenuManager::~MenuManager() {
+	for (size_t i = 0; i < resource_statbars.size(); ++i) {
+		delete resource_statbars[i];
+	}
 
 	delete hp;
 	delete mp;
@@ -1428,6 +1924,8 @@ MenuManager::~MenuManager() {
 	delete stash;
 	delete book;
 	delete num_picker;
+	delete game_over;
+	delete action_picker;
 
 	if (settings->dev_mode) {
 		delete devconsole;
