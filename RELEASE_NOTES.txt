@@ -13,6 +13,8 @@ Engine features:
 * Added 'powers_overlap_slots' to menu/actionbar.txt config.
 * Added 'background_offset' to menu/config.txt config.
 * Added 'post_hazards_skip_target' to Powers.
+* Added a game filter for the inactive mods list in the Configuration menu.
+* Added 'inactivemods_filter' to menu/config.txt config.
 
 Engine fixes:
 

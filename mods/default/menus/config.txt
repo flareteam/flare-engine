@@ -17,9 +17,10 @@ scrollpane_padding=80,40
 scrollpane_separator_color=63,63,63
 
 [mods]
-activemods=456,16,384,32
-inactivemods=136,16,64,32
+activemods=456,0,384,16
+inactivemods=136,0,64,16
 activemods_shiftup=544,128
 activemods_shiftdown=544,160
-activemods_deactivate=224,160
-inactivemods_activate=224,128
+activemods_deactivate=224,144
+inactivemods_activate=224,112
+inactivemods_filter=38,304

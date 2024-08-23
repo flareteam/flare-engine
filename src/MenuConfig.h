@@ -177,6 +177,7 @@ public:
 	void enableMods();
 	void disableMods();
 	bool setMods();
+	void filterMods();
 	std::string createModTooltip(Mod *mod);
 
 	void cleanup();
@@ -312,6 +313,7 @@ public:
 	WidgetButton               * activemods_shiftdown_btn;
 	WidgetButton               * activemods_deactivate_btn;
 	WidgetButton               * inactivemods_activate_btn;
+	WidgetHorizontalList       * inactivemods_filter_lstb;
 
 	int active_tab;
 

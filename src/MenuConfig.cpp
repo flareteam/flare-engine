@@ -47,6 +47,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SoundManager.h"
 #include "Stats.h"
 #include "TooltipManager.h"
+#include "Utils.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
 #include "Version.h"
@@ -223,6 +224,7 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	, activemods_shiftdown_btn(new WidgetButton("images/menus/buttons/down.png"))
 	, activemods_deactivate_btn(new WidgetButton(WidgetButton::DEFAULT_FILE))
 	, inactivemods_activate_btn(new WidgetButton(WidgetButton::DEFAULT_FILE))
+	, inactivemods_filter_lstb(new WidgetHorizontalList())
 
 	, active_tab(0)
 	, frame(0,0)
@@ -279,8 +281,17 @@ MenuConfig::MenuConfig (bool _is_game_state)
 			activemods_lstb->append(mods->mod_list[i].name,createModTooltip(&mods->mod_list[i]));
 	}
 
+	std::vector<std::string> mod_games;
+
 	inactivemods_lstb->multi_select = true;
 	for (unsigned int i = 0; i<mods->mod_dirs.size(); i++) {
+		Mod temp_mod = mods->loadMod(mods->mod_dirs[i]);
+		if (mods->mod_dirs[i] != mods->FALLBACK_MOD) {
+			if (std::find(mod_games.begin(), mod_games.end(), temp_mod.game) == mod_games.end()) {
+				mod_games.push_back(temp_mod.game);
+			}
+		}
+
 		bool skip_mod = false;
 		for (unsigned int j = 0; j<mods->mod_list.size(); j++) {
 			if (mods->mod_dirs[i] == mods->mod_list[j].name) {
@@ -289,11 +300,19 @@ MenuConfig::MenuConfig (bool _is_game_state)
 			}
 		}
 		if (!skip_mod && mods->mod_dirs[i] != mods->FALLBACK_MOD) {
-			Mod temp_mod = mods->loadMod(mods->mod_dirs[i]);
 			inactivemods_lstb->append(mods->mod_dirs[i],createModTooltip(&temp_mod));
 		}
 	}
 	inactivemods_lstb->sort();
+
+	std::sort(mod_games.begin(), mod_games.end());
+
+	inactivemods_filter_lstb->append("All Mods", "");
+	inactivemods_filter_lstb->append("<unknown>", "");
+	for (size_t i = 0; i < mod_games.size(); ++i) {
+		if (mod_games[i] != "")
+			inactivemods_filter_lstb->append(mod_games[i], "");
+	}
 
 	refreshJoysticks();
 
@@ -665,6 +684,12 @@ bool MenuConfig::parseKey(FileParser &infile, int &x1, int &y1, int &x2, int &y2
 		inactivemods_activate_btn->setBasePos(x1, y1, Utils::ALIGN_TOPLEFT);
 		inactivemods_activate_btn->refresh();
 	}
+	else if (infile.key == "inactivemods_filter") {
+		// @ATTR inactivemods_filter|point|Position of the game filter widget for inactive mods.
+		// TODO
+		inactivemods_filter_lstb->setBasePos(x1, y1, Utils::ALIGN_TOPLEFT);
+		inactivemods_filter_lstb->refresh();
+	}
 	else if (infile.key == "scrollpane") {
 		// @ATTR scrollpane|rectangle|Position of the keybinding scrollbox relative to the frame.
 		scrollpane.x = x1;
@@ -718,6 +743,7 @@ void MenuConfig::addChildWidgets() {
 	addChildWidget(activemods_shiftdown_btn, MODS_TAB);
 	addChildWidget(activemods_deactivate_btn, MODS_TAB);
 	addChildWidget(inactivemods_activate_btn, MODS_TAB);
+	addChildWidget(inactivemods_filter_lstb, MODS_TAB);
 }
 
 void MenuConfig::setupTabList() {
@@ -758,6 +784,7 @@ void MenuConfig::setupTabList() {
 	tablist_mods.add(activemods_deactivate_btn);
 	tablist_mods.add(activemods_shiftup_btn);
 	tablist_mods.add(activemods_shiftdown_btn);
+	tablist_mods.add(inactivemods_filter_lstb);
 	tablist_mods.lock();
 
 	tablists.clear();
@@ -1334,6 +1361,9 @@ void MenuConfig::logicMods() {
 	else if (inactivemods_activate_btn->checkClick()) {
 		enableMods();
 	}
+	else if (inactivemods_filter_lstb->checkClick()) {
+		filterMods();
+	}
 }
 
 void MenuConfig::render() {
@@ -1534,8 +1564,25 @@ void MenuConfig::enableMods() {
 }
 
 void MenuConfig::disableMods() {
+	int game_index = inactivemods_filter_lstb->getSelected();
+
 	for (int i=0; i<activemods_lstb->getSize(); i++) {
 		if (activemods_lstb->isSelected(i) && activemods_lstb->getValue(i) != mods->FALLBACK_MOD) {
+			// first, switch the filter to the matching game for this mod
+			Mod temp_mod = mods->loadMod(activemods_lstb->getValue());
+			if (temp_mod.game == "") {
+				inactivemods_filter_lstb->select(1);
+			}
+			else if (game_index != 0) {
+				for (unsigned j = 2; j < inactivemods_filter_lstb->getSize(); ++j) {
+					inactivemods_filter_lstb->select(j);
+					if (temp_mod.game == inactivemods_filter_lstb->getValue()) {
+						filterMods();
+						break;
+					}
+				}
+			}
+
 			inactivemods_lstb->append(activemods_lstb->getValue(i),activemods_lstb->getTooltip(i));
 			activemods_lstb->remove(i);
 			i--;
@@ -1565,6 +1612,27 @@ bool MenuConfig::setMods() {
 	else {
 		return false;
 	}
+}
+
+void MenuConfig::filterMods() {
+	inactivemods_lstb->clear();
+	int game_index = inactivemods_filter_lstb->getSelected();
+
+	for (unsigned int i = 0; i<mods->mod_dirs.size(); i++) {
+		bool skip_mod = false;
+		for (int j = 0; j < activemods_lstb->getSize(); j++) {
+			if (mods->mod_dirs[i] == activemods_lstb->getValue(j)) {
+				skip_mod = true;
+				break;
+			}
+		}
+		if (!skip_mod && mods->mod_dirs[i] != mods->FALLBACK_MOD) {
+			Mod temp_mod = mods->loadMod(mods->mod_dirs[i]);
+			if (game_index == 0 || (game_index == 1 && temp_mod.game == "") || (temp_mod.game == inactivemods_filter_lstb->getValue()))
+				inactivemods_lstb->append(mods->mod_dirs[i],createModTooltip(&temp_mod));
+		}
+	}
+	inactivemods_lstb->sort();
 }
 
 std::string MenuConfig::createModTooltip(Mod *mod) {

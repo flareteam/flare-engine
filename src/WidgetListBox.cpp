@@ -221,6 +221,7 @@ void WidgetListBox::remove(int index) {
  */
 void WidgetListBox::clear() {
 	items.clear();
+	cursor = 0;
 	refresh();
 }
 
