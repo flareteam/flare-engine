@@ -747,7 +747,7 @@ void Avatar::logic() {
 
 		// handle power usage
 		if (allowed_to_use_power) {
-			bool blocking = false;
+			stats.blocking = false;
 
 			for (unsigned i=0; i<action_queue.size(); i++) {
 				ActionData &action = action_queue[i];
@@ -758,89 +758,72 @@ void Avatar::logic() {
 				const Power* power = powers->powers[power_id];
 
 				if (power->type == Power::TYPE_BLOCK)
-					blocking = true;
+					stats.blocking = true;
 
-				if (power_id != 0 && (stats.cooldown.isEnd() || action.instant_item)) {
-					FPoint target = action.target;
+				FPoint target = action.target;
 
-					// check requirements
-					if ((stats.cur_state == StatBlock::ENTITY_POWER || stats.cur_state == StatBlock::ENTITY_HIT) && !action.instant_item)
-						continue;
-					if (!stats.canUsePower(power_id, !StatBlock::CAN_USE_PASSIVE))
-						continue;
-					if (!power_cooldown_timers[power_id]->isEnd())
-						continue;
-					if (!powers->hasValidTarget(power_id, &stats, target))
-						continue;
-
-					// automatically target the selected enemy with melee attacks
-					if (inpt->usingMouse() && power->type == Power::TYPE_FIXED && power->starting_pos == Power::STARTING_POS_MELEE && cursor_enemy) {
-						target = cursor_enemy->stats.pos;
-					}
-
-					// is this a power that requires changing direction?
-					if (power->face) {
-						stats.direction = Utils::calcDirection(stats.pos.x, stats.pos.y, target.x, target.y);
-					}
-
-					if (power->new_state != Power::STATE_INSTANT) {
-						current_power = power_id;
-						act_target = target;
-						attack_anim = power->attack_anim;
-					}
-
-					if (power->state_duration > 0)
-						stats.state_timer.setDuration(power->state_duration);
-
-					if (power->charge_speed != 0.0f)
-						stats.charge_speed = power->charge_speed;
-
-					stats.prevent_interrupt = power->prevent_interrupt;
-
-					for (size_t j = 0; j < power->chain_powers.size(); ++j) {
-						const ChainPower& chain_power = power->chain_powers[j];
-						if (chain_power.type == ChainPower::TYPE_PRE && Math::percentChanceF(chain_power.chance)) {
-							powers->activate(chain_power.id, &stats, stats.pos, target);
-						}
-					}
-
-					switch (power->new_state) {
-						case Power::STATE_ATTACK:	// handle attack powers
-							stats.cur_state = StatBlock::ENTITY_POWER;
-							break;
-
-						case Power::STATE_INSTANT:	// handle instant powers
-							powers->activate(power_id, &stats, stats.pos, target);
-							power_cooldown_timers[power_id]->setDuration(power->cooldown);
-							break;
-
-						default:
-							if (power->type == Power::TYPE_BLOCK) {
-								stats.cur_state = StatBlock::ENTITY_BLOCK;
-								powers->activate(power_id, &stats, stats.pos, target);
-								stats.refresh_stats = true;
-							}
-							break;
-					}
-
-					// if the player is attacking, show the attack cursor
-					attack_cursor = (
-						stats.cur_state == StatBlock::ENTITY_POWER &&
-						!power->buff && !power->buff_teleport &&
-						power->type != Power::TYPE_TRANSFORM &&
-						power->type != Power::TYPE_BLOCK &&
-						!(power->starting_pos == Power::STARTING_POS_SOURCE && power->speed == 0)
-					);
-
+				// automatically target the selected enemy with melee attacks
+				if (inpt->usingMouse() && power->type == Power::TYPE_FIXED && power->starting_pos == Power::STARTING_POS_MELEE && cursor_enemy) {
+					target = cursor_enemy->stats.pos;
 				}
+
+				// is this a power that requires changing direction?
+				if (power->face) {
+					stats.direction = Utils::calcDirection(stats.pos.x, stats.pos.y, target.x, target.y);
+				}
+
+				if (power->new_state != Power::STATE_INSTANT) {
+					current_power = power_id;
+					act_target = target;
+					attack_anim = power->attack_anim;
+				}
+
+				if (power->state_duration > 0)
+					stats.state_timer.setDuration(power->state_duration);
+
+				if (power->charge_speed != 0.0f)
+					stats.charge_speed = power->charge_speed;
+
+				stats.prevent_interrupt = power->prevent_interrupt;
+
+				for (size_t j = 0; j < power->chain_powers.size(); ++j) {
+					const ChainPower& chain_power = power->chain_powers[j];
+					if (chain_power.type == ChainPower::TYPE_PRE && Math::percentChanceF(chain_power.chance)) {
+						powers->activate(chain_power.id, &stats, stats.pos, target);
+					}
+				}
+
+				switch (power->new_state) {
+					case Power::STATE_ATTACK:	// handle attack powers
+						stats.cur_state = StatBlock::ENTITY_POWER;
+						break;
+
+					case Power::STATE_INSTANT:	// handle instant powers
+						powers->activate(power_id, &stats, stats.pos, target);
+						power_cooldown_timers[power_id]->setDuration(power->cooldown);
+						break;
+
+					default:
+						if (power->type == Power::TYPE_BLOCK) {
+							stats.cur_state = StatBlock::ENTITY_BLOCK;
+							powers->activate(power_id, &stats, stats.pos, target);
+							stats.refresh_stats = true;
+						}
+						break;
+				}
+
+				// if the player is attacking, show the attack cursor
+				attack_cursor = (
+					stats.cur_state == StatBlock::ENTITY_POWER &&
+					!power->buff && !power->buff_teleport &&
+					power->type != Power::TYPE_TRANSFORM &&
+					power->type != Power::TYPE_BLOCK &&
+					!(power->starting_pos == Power::STARTING_POS_SOURCE && power->speed == 0)
+				);
+
 			}
 
-			for (size_t i = action_queue.size(); i > 0; i--) {
-				if (action_queue[i-1].activated_from_inventory)
-					action_queue.erase(action_queue.begin()+(i-1));
-			}
-
-			stats.blocking = blocking;
+			action_queue.clear();
 		}
 
 	}

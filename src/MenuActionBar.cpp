@@ -606,10 +606,6 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 				continue;
 			}
 
-			if (!slots[i]->enabled) {
-				continue;
-			}
-
 			slot_fail_cooldown[i] = pc->power_cast_timers[action.power]->getDuration();
 
 			action.instant_item = false;
@@ -622,26 +618,15 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 				}
 			}
 
-			bool can_use_power = true;
-
-			// check if we can add this power to the action queue
-			for (size_t j=0; j<action_queue.size(); j++) {
-				if (action_queue[j].hotkey == i) {
-					// this power is already in the action queue, update its target
-					action_queue[j].target = setTarget(have_aim, power);
-					can_use_power = false;
-					break;
-				}
-				else if (!action.instant_item && !action_queue[j].instant_item) {
-					can_use_power = false;
-					break;
-				}
-			}
-			if (!can_use_power)
-				continue;
-
 			// set the target depending on how the power was triggered
 			action.target = setTarget(have_aim, power);
+
+			bool can_use_power = slots[i]->enabled &&
+				(power->new_state == Power::STATE_INSTANT || (pc->stats.cooldown.isEnd() && pc->stats.cur_state != StatBlock::ENTITY_POWER && pc->stats.cur_state != StatBlock::ENTITY_HIT)) &&
+				powers->hasValidTarget(action.power, &pc->stats, action.target);
+
+			if (!can_use_power)
+				continue;
 
 			// add it to the queue
 			action_queue.push_back(action);
