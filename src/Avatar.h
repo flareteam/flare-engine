@@ -84,6 +84,8 @@ private:
 
 	bool isDroppedToLowHp();
 
+	std::vector<PowerID> power_cooldown_ids;
+
 public:
 	enum {
 		MSG_NORMAL = 0,

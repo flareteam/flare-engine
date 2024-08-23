@@ -86,6 +86,7 @@ Avatar::Avatar()
 
 	for (size_t i = 0; i < powers->powers.size(); ++i) {
 		if (powers->isValid(i)) {
+			power_cooldown_ids.push_back(i);
 			power_cooldown_timers[i] = new Timer();
 			power_cast_timers[i] = new Timer();
 		}
@@ -835,11 +836,10 @@ void Avatar::logic() {
 	mapr->checkEvents(stats.pos);
 
 	// decrement all cooldowns
-	for (size_t i = 0; i < powers->powers.size(); ++i) {
-		if (powers->isValid(i)) {
-			power_cooldown_timers[i]->tick();
-			power_cast_timers[i]->tick();
-		}
+	for (size_t i = 0; i < power_cooldown_ids.size(); ++i) {
+		PowerID power_id = power_cooldown_ids[i];
+		power_cooldown_timers[power_id]->tick();
+		power_cast_timers[power_id]->tick();
 	}
 
 	// make the current square solid
