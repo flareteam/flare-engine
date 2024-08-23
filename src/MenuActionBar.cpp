@@ -277,7 +277,8 @@ void MenuActionBar::clear(bool skip_items) {
 		slot_activated[i] = false;
 		slot_fail_cooldown[i] = 0;
 
-		slots[i]->enabled = true;
+		if (slots[i])
+			slots[i]->enabled = true;
 	}
 
 	// clear menu notifications
