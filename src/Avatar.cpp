@@ -94,19 +94,6 @@ Avatar::Avatar()
 
 	init();
 
-	// TODO
-	// set cooldown_hit to duration of hit animation if undefined
-	if (!stats.cooldown_hit_enabled) {
-		Animation *hit_anim = animationSet->getAnimation("hit");
-		if (hit_anim) {
-			stats.cooldown_hit.setDuration(hit_anim->getDuration());
-			delete hit_anim;
-		}
-		else {
-			stats.cooldown_hit.setDuration(0);
-		}
-	}
-
 	loadLayerDefinitions();
 
 	// load foot-step definitions
