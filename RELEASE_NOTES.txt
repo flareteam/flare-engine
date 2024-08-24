@@ -45,6 +45,7 @@ Engine fixes:
 * Fixed cases where parts of WidgetSlider were being drawn outside the visible area.
 * Fixed infinite INCLUDE recursion in FileParser.
 * Fixed a crash when action bar slots weren't defined.
+* Fixed cooldowns not applying to the base power when using replace_by_effect.
 * Android: Fix 'Flare' directory not being automatically created.
 * Android: Added a dialog to direct the player to the wiki page for installing if no game data is found.
 

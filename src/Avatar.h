@@ -126,6 +126,7 @@ public:
 
 	// vars
 	PowerID current_power;
+	PowerID current_power_original;
 	FPoint act_target;
 	bool drag_walking;
 	bool newLevelNotification;

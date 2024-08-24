@@ -145,6 +145,7 @@ void Avatar::init() {
 		stats.pos.y = mapr->hero_pos.y;
 	}
 	current_power = 0;
+	current_power_original = 0;
 	newLevelNotification = false;
 
 	stats.hero = true;
@@ -602,6 +603,7 @@ void Avatar::logic() {
 						}
 						playAttackSound(attack_anim);
 						power_cast_timers[current_power]->setDuration(activeAnimation->getDuration());
+						power_cast_timers[current_power_original]->setDuration(activeAnimation->getDuration()); // for replace_by_effect
 					}
 
 					// do power
@@ -612,6 +614,7 @@ void Avatar::logic() {
 
 						powers->activate(current_power, &stats, stats.pos, act_target);
 						power_cooldown_timers[current_power]->setDuration(powers->powers[current_power]->cooldown);
+						power_cooldown_timers[current_power_original]->setDuration(powers->powers[current_power]->cooldown); // for replace_by_effect
 
 						if (!stats.state_timer.isEnd())
 							stats.hold_state = true;
@@ -775,6 +778,7 @@ void Avatar::logic() {
 
 				if (power->new_state != Power::STATE_INSTANT) {
 					current_power = power_id;
+					current_power_original = action.power;
 					act_target = target;
 					attack_anim = power->attack_anim;
 				}
