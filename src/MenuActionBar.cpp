@@ -402,7 +402,7 @@ void MenuActionBar::render() {
 	for (unsigned i = 0; i < slots_count; i++) {
 		if (!slots[i]) continue;
 
-		if (hotkeys[i] == 0 || (powers_overlap_slots && slots[i]->enabled)) {
+		if (hotkeys[i] == 0 || powers_overlap_slots) {
 			// TODO move this to WidgetSlot?
 			if (sprite_emptyslot) {
 				sprite_emptyslot->setDestFromRect(slots[i]->pos);
