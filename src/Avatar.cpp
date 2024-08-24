@@ -190,7 +190,6 @@ void Avatar::init() {
 	}
 
 	stats.animations = "animations/hero.txt";
-	loadAnimations();
 }
 
 void Avatar::handleNewMap() {

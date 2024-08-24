@@ -46,6 +46,7 @@ Engine fixes:
 * Fixed infinite INCLUDE recursion in FileParser.
 * Fixed a crash when action bar slots weren't defined.
 * Fixed cooldowns not applying to the base power when using replace_by_effect.
+* Fixed attempt to load default 'male' animations initially, even if they would be replaced by engine/hero_options.txt.
 * Android: Fix 'Flare' directory not being automatically created.
 * Android: Added a dialog to direct the player to the wiki page for installing if no game data is found.
 

@@ -571,6 +571,8 @@ void SaveLoad::loadGame() {
 	menu->stash->enableSharedTab(pc->stats.permadeath);
 
 	menu->stash->setTab(stash_tab);
+
+	pc->loadAnimations();
 }
 
 /**
