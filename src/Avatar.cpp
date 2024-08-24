@@ -60,7 +60,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 Avatar::Avatar()
 	: Entity()
-	, attack_cursor(false)
 	, mm_key(settings->mouse_move_swap ? Input::MAIN2 : Input::MAIN1)
 	, mm_is_distant(false)
 	, hero_stats(NULL)
@@ -480,7 +479,59 @@ void Avatar::logic() {
 	if (!stats.effects.stun) {
 		bool allowed_to_move;
 		bool allowed_to_turn;
-		bool allowed_to_use_power = true;
+
+		stats.blocking = false;
+
+		for (unsigned i=0; i<action_queue.size(); i++) {
+			ActionData &action = action_queue[i];
+			PowerID replaced_id = powers->checkReplaceByEffect(action.power, &stats);
+			if (replaced_id == 0)
+				continue;
+
+			Power* power = powers->powers[replaced_id];
+
+			if (power->new_state == Power::STATE_INSTANT) {
+				// instant power, so no need to switch animation state
+				FPoint target = action.target;
+				beginPower(replaced_id, &target);
+				powers->activate(replaced_id, &stats, stats.pos, target);
+				power_cooldown_timers[action.power]->setDuration(power->cooldown);
+				power_cooldown_timers[replaced_id]->setDuration(power->cooldown);
+			}
+			else if (stats.cur_state == StatBlock::ENTITY_BLOCK) {
+				// special case in order to continue blocking
+				if (power->type == Power::TYPE_BLOCK) {
+					current_power = replaced_id;
+					current_power_original = action.power;
+					act_target = action.target;
+					attack_anim = power->attack_anim;
+
+					stats.cur_state = StatBlock::ENTITY_BLOCK;
+					beginPower(replaced_id, &act_target);
+					powers->activate(replaced_id, &stats, stats.pos, act_target);
+					stats.refresh_stats = true;
+				}
+			}
+			else if (stats.cur_state == StatBlock::ENTITY_STANCE || stats.cur_state == StatBlock::ENTITY_MOVE) {
+				// this power has an animation, so prepare to switch to it
+				current_power = replaced_id;
+				current_power_original = action.power;
+				act_target = action.target;
+				attack_anim = power->attack_anim;
+
+				if (power->new_state == Power::STATE_ATTACK) {
+					stats.cur_state = StatBlock::ENTITY_POWER;
+				}
+				else if (power->type == Power::TYPE_BLOCK) {
+					stats.cur_state = StatBlock::ENTITY_BLOCK;
+					beginPower(replaced_id, &act_target);
+					powers->activate(replaced_id, &stats, stats.pos, act_target);
+					stats.refresh_stats = true;
+				}
+			}
+		}
+
+		action_queue.clear();
 
 		switch(stats.cur_state) {
 			case StatBlock::ENTITY_STANCE:
@@ -491,7 +542,6 @@ void Avatar::logic() {
 				if (settings->mouse_move) {
 					allowed_to_move = restrict_power_use && (!inpt->lock[mm_key] || drag_walking) && !lock_enemy;
 					allowed_to_turn = allowed_to_move;
-					allowed_to_use_power = true;
 
 					if ((inpt->pressing[mm_key] && inpt->pressing[Input::SHIFT]) || lock_enemy) {
 						inpt->lock[mm_key] = false;
@@ -500,12 +550,10 @@ void Avatar::logic() {
 				else if (!settings->mouse_aim) {
 					allowed_to_move = !inpt->pressing[Input::SHIFT];
 					allowed_to_turn = true;
-					allowed_to_use_power = true;
 				}
 				else {
 					allowed_to_move = true;
 					allowed_to_turn = true;
-					allowed_to_use_power = true;
 				}
 
 				// handle transitions to RUN
@@ -575,13 +623,21 @@ void Avatar::logic() {
 
 				setAnimation(attack_anim);
 
-				if (attack_cursor) {
-					curs->setCursor(CursorManager::CURSOR_ATTACK);
-				}
-
 				if (powers->isValid(current_power)) {
+					Power* power = powers->powers[current_power];
+
+					// if the player is attacking, show the attack cursor
+					if (!power->buff && !power->buff_teleport &&
+						power->type != Power::TYPE_TRANSFORM &&
+						power->type != Power::TYPE_BLOCK &&
+						!(power->starting_pos == Power::STARTING_POS_SOURCE && power->speed == 0)
+					) {
+						curs->setCursor(CursorManager::CURSOR_ATTACK);
+					}
+
 					if (activeAnimation->isFirstFrame()) {
-						float attack_speed = (stats.effects.getAttackSpeed(attack_anim) * powers->powers[current_power]->attack_speed) / 100.0f;
+						beginPower(current_power, &act_target);
+						float attack_speed = (stats.effects.getAttackSpeed(attack_anim) * power->attack_speed) / 100.0f;
 						activeAnimation->setSpeed(attack_speed);
 						for (size_t i=0; i<anims.size(); ++i) {
 							if (anims[i])
@@ -599,8 +655,8 @@ void Avatar::logic() {
 						mapr->collider.block(stats.pos.x, stats.pos.y, !MapCollision::IS_ALLY);
 
 						powers->activate(current_power, &stats, stats.pos, act_target);
-						power_cooldown_timers[current_power]->setDuration(powers->powers[current_power]->cooldown);
-						power_cooldown_timers[current_power_original]->setDuration(powers->powers[current_power]->cooldown); // for replace_by_effect
+						power_cooldown_timers[current_power]->setDuration(power->cooldown);
+						power_cooldown_timers[current_power_original]->setDuration(power->cooldown); // for replace_by_effect
 
 						if (!stats.state_timer.isEnd())
 							stats.hold_state = true;
@@ -611,7 +667,6 @@ void Avatar::logic() {
 				if ((activeAnimation->isLastFrame() && stats.state_timer.isEnd()) || activeAnimation->getName() != attack_anim) {
 					stats.cur_state = StatBlock::ENTITY_STANCE;
 					stats.cooldown.reset(Timer::BEGIN);
-					allowed_to_use_power = false;
 					stats.prevent_interrupt = false;
 					if (settings->mouse_move) {
 						drag_walking = true;
@@ -627,8 +682,6 @@ void Avatar::logic() {
 			case StatBlock::ENTITY_BLOCK:
 
 				setAnimation("block");
-
-				stats.blocking = false;
 
 				break;
 
@@ -655,8 +708,6 @@ void Avatar::logic() {
 				break;
 
 			case StatBlock::ENTITY_DEAD:
-				allowed_to_use_power = false;
-
 				if (stats.effects.triggered_death) break;
 
 				if (stats.transformed) {
@@ -734,89 +785,6 @@ void Avatar::logic() {
 			default:
 				break;
 		}
-
-		// handle power usage
-		if (allowed_to_use_power) {
-			stats.blocking = false;
-
-			for (unsigned i=0; i<action_queue.size(); i++) {
-				ActionData &action = action_queue[i];
-				PowerID power_id = powers->checkReplaceByEffect(action.power, &stats);
-				if (power_id == 0)
-					continue;
-
-				const Power* power = powers->powers[power_id];
-
-				if (power->type == Power::TYPE_BLOCK)
-					stats.blocking = true;
-
-				FPoint target = action.target;
-
-				// automatically target the selected enemy with melee attacks
-				if (inpt->usingMouse() && power->type == Power::TYPE_FIXED && power->starting_pos == Power::STARTING_POS_MELEE && cursor_enemy) {
-					target = cursor_enemy->stats.pos;
-				}
-
-				// is this a power that requires changing direction?
-				if (power->face) {
-					stats.direction = Utils::calcDirection(stats.pos.x, stats.pos.y, target.x, target.y);
-				}
-
-				if (power->new_state != Power::STATE_INSTANT) {
-					current_power = power_id;
-					current_power_original = action.power;
-					act_target = target;
-					attack_anim = power->attack_anim;
-				}
-
-				if (power->state_duration > 0)
-					stats.state_timer.setDuration(power->state_duration);
-
-				if (power->charge_speed != 0.0f)
-					stats.charge_speed = power->charge_speed;
-
-				stats.prevent_interrupt = power->prevent_interrupt;
-
-				for (size_t j = 0; j < power->chain_powers.size(); ++j) {
-					const ChainPower& chain_power = power->chain_powers[j];
-					if (chain_power.type == ChainPower::TYPE_PRE && Math::percentChanceF(chain_power.chance)) {
-						powers->activate(chain_power.id, &stats, stats.pos, target);
-					}
-				}
-
-				switch (power->new_state) {
-					case Power::STATE_ATTACK:	// handle attack powers
-						stats.cur_state = StatBlock::ENTITY_POWER;
-						break;
-
-					case Power::STATE_INSTANT:	// handle instant powers
-						powers->activate(power_id, &stats, stats.pos, target);
-						power_cooldown_timers[power_id]->setDuration(power->cooldown);
-						break;
-
-					default:
-						if (power->type == Power::TYPE_BLOCK) {
-							stats.cur_state = StatBlock::ENTITY_BLOCK;
-							powers->activate(power_id, &stats, stats.pos, target);
-							stats.refresh_stats = true;
-						}
-						break;
-				}
-
-				// if the player is attacking, show the attack cursor
-				attack_cursor = (
-					stats.cur_state == StatBlock::ENTITY_POWER &&
-					!power->buff && !power->buff_teleport &&
-					power->type != Power::TYPE_TRANSFORM &&
-					power->type != Power::TYPE_BLOCK &&
-					!(power->starting_pos == Power::STARTING_POS_SOURCE && power->speed == 0)
-				);
-
-			}
-
-			action_queue.clear();
-		}
-
 	}
 
 	// update camera
@@ -840,6 +808,41 @@ void Avatar::logic() {
 
 	if (stats.cur_state != StatBlock::ENTITY_POWER && stats.charge_speed != 0.0f)
 		stats.charge_speed = 0.0f;
+}
+
+void Avatar::beginPower(PowerID replaced_id, FPoint* target) {
+	if (!target)
+		return;
+
+	const Power* power = powers->powers[replaced_id];
+
+	if (power->type == Power::TYPE_BLOCK)
+		stats.blocking = true;
+
+	// automatically target the selected enemy with melee attacks
+	if (inpt->usingMouse() && power->type == Power::TYPE_FIXED && power->starting_pos == Power::STARTING_POS_MELEE && cursor_enemy) {
+		*target = cursor_enemy->stats.pos;
+	}
+
+	// is this a power that requires changing direction?
+	if (power->face) {
+		stats.direction = Utils::calcDirection(stats.pos.x, stats.pos.y, target->x, target->y);
+	}
+
+	if (power->state_duration > 0)
+		stats.state_timer.setDuration(power->state_duration);
+
+	if (power->charge_speed != 0.0f)
+		stats.charge_speed = power->charge_speed;
+
+	stats.prevent_interrupt = power->prevent_interrupt;
+
+	for (size_t j = 0; j < power->chain_powers.size(); ++j) {
+		const ChainPower& chain_power = power->chain_powers[j];
+		if (chain_power.type == ChainPower::TYPE_PRE && Math::percentChanceF(chain_power.chance)) {
+			powers->activate(chain_power.id, &stats, stats.pos, *target);
+		}
+	}
 }
 
 void Avatar::transform() {

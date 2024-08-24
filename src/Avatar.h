@@ -64,6 +64,7 @@ private:
 	void set_direction();
 	void transform();
 	void untransform();
+	void beginPower(PowerID power_id, FPoint* target);
 
 
 	std::vector<Step_sfx> step_def;
@@ -75,7 +76,6 @@ private:
 	bool transform_triggered;
 	std::string last_transform;
 
-	bool attack_cursor;
 
 	int mm_key; // mouse movement key
 	bool mm_is_distant;
