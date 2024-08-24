@@ -68,6 +68,7 @@ EntityBehavior::EntityBehavior(Entity *_e)
 	, move_to_safe_dist(false)
 	, turn_timer()
 	, instant_power(false)
+	, replaced_power_id(0)
 {
 	// wait when PATH_FOUND_FAIL_THRESHOLD is exceeded
 	path_found_fail_timer.setDuration(settings->max_frames_per_sec * PATH_FOUND_FAIL_WAIT_SECONDS);
@@ -385,13 +386,20 @@ void EntityBehavior::checkPower() {
 		}
 
 		if (ai_power != NULL && powers->isValid(ai_power->id)) {
-			Power* pwr = powers->powers[ai_power->id];
-			if (!los && (pwr->requires_los || pwr->requires_los_default)) {
+			PowerID replaced_id = powers->checkReplaceByEffect(ai_power->id, &e->stats);
+			if (replaced_id == 0) {
 				ai_power = NULL;
 			}
-			if (ai_power != NULL) {
-				e->stats.cur_state = StatBlock::ENTITY_POWER;
-				e->stats.activated_power = ai_power;
+			else {
+				Power* pwr = powers->powers[replaced_id];
+				if (!los && (pwr->requires_los || pwr->requires_los_default)) {
+					ai_power = NULL;
+				}
+				if (ai_power != NULL) {
+					e->stats.cur_state = StatBlock::ENTITY_POWER;
+					e->stats.activated_power = ai_power;
+					replaced_power_id = replaced_id;
+				}
 			}
 		}
 	}
@@ -681,7 +689,7 @@ void EntityBehavior::updateState() {
 	// stunned enemies can't act
 	if (e->stats.effects.stun) return;
 
-	PowerID power_id;
+	PowerID power_id, power_id_base;
 	Power* epower;
 	int power_state;
 
@@ -713,9 +721,10 @@ void EntityBehavior::updateState() {
 				break;
 			}
 
-			power_id = powers->checkReplaceByEffect(e->stats.activated_power->id, &e->stats);
+			power_id = replaced_power_id;
+			power_id_base = e->stats.activated_power->id;
 
-			if (!powers->isValid(power_id)) {
+			if (!powers->isValid(power_id) || !powers->isValid(power_id_base)) {
 				e->stats.cur_state = StatBlock::ENTITY_STANCE;
 				break;
 			}

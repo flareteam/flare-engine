@@ -75,6 +75,7 @@ protected:
 	Timer turn_timer;
 
 	bool instant_power;
+	PowerID replaced_power_id;
 
 public:
 	explicit EntityBehavior(Entity *_e);
