@@ -301,7 +301,13 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 
 			graphics = render_device->loadImage(tabs[i].background, RenderDevice::ERROR_NORMAL);
 			if (graphics) {
-				tree_surf.push_back(graphics->createSprite());
+				Sprite* tree_sprite = graphics->createSprite();
+
+				if (background && (background->getGraphicsWidth() != tree_sprite->getGraphicsWidth() || background->getGraphicsHeight() != tree_sprite->getGraphicsHeight())) {
+					tabs[i].background_is_menu_size = false;
+				}
+
+				tree_surf.push_back(tree_sprite);
 				graphics->unref();
 			}
 			else {
@@ -1505,7 +1511,7 @@ void MenuPowers::render() {
 	if (!visible) return;
 
 	Rect src;
-	Rect dest;
+	Rect dest, tab_dest;
 
 	// background
 	dest = window_area;
@@ -1513,6 +1519,11 @@ void MenuPowers::render() {
 	src.y = 0;
 	src.w = window_area.w;
 	src.h = window_area.h;
+
+	// tab background (if not menu-sized)
+	tab_dest = window_area;
+	tab_dest.x += tab_area.x;
+	tab_dest.y += tab_area.y + tab_control->getTabHeight();
 
 	setBackgroundClip(src);
 	setBackgroundDest(dest);
@@ -1527,8 +1538,13 @@ void MenuPowers::render() {
 				// power tree
 				Sprite *r = tree_surf[i];
 				if (r) {
-					r->setClipFromRect(src);
-					r->setDestFromRect(dest);
+					if (tabs[i].background_is_menu_size) {
+						r->setClipFromRect(src);
+						r->setDestFromRect(dest);
+					}
+					else {
+						r->setDestFromRect(tab_dest);
+					}
 					render_device->render(r);
 				}
 

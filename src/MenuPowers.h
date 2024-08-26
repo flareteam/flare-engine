@@ -42,10 +42,12 @@ class MenuPowersTab {
 public:
 	std::string title;
 	std::string background;
+	bool background_is_menu_size;
 
 	MenuPowersTab()
 		: title("")
-		, background("") {
+		, background("")
+		, background_is_menu_size(true) {
 	}
 };
 

@@ -49,6 +49,7 @@ Engine fixes:
 * Fixed attempt to load default 'male' animations initially, even if they would be replaced by engine/hero_options.txt.
 * Removed 1-frame delay between when the player activates a power and when they change animation state.
 * Fixed replace_by_effect changing the active AI power mid-animation.
+* Power tree backgrounds now align to the tab area if they are not the same size as the menu.
 * Android: Fix 'Flare' directory not being automatically created.
 * Android: Added a dialog to direct the player to the wiki page for installing if no game data is found.
 
