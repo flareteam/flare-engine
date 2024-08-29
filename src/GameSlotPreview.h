@@ -32,17 +32,20 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class Animation;
 class AnimationSet;
+class MenuInventory;
 class StatBlock;
 
 class GameSlotPreview {
 private:
-	void loadLayerDefinitions();
-
 	StatBlock *stats;
 	Point pos;
+	unsigned char static_direction;
+	unsigned char* direction;
 
 	std::vector<AnimationSet*> animsets; // hold the animations for all equipped items in the right order of drawing.
 	std::vector<Animation*> anims; // hold the animations for all equipped items in the right order of drawing.
+
+	std::vector<std::string> default_gfx;
 
 public:
 	GameSlotPreview();
@@ -51,10 +54,13 @@ public:
 	void setAnimation(const std::string& name);
 	void setStatBlock(StatBlock *_stats);
 	void setPos(Point _pos);
+	void setDirection(unsigned char dir);
 	void loadGraphics(std::vector<std::string> _img_gfx);
 	void logic();
 	void addRenders(std::vector<Renderable> &r);
 	void render();
+	void loadDefaultGraphics();
+	void loadGraphicsFromInventory(MenuInventory* menu_inv);
 
 	Animation *activeAnimation;
 	AnimationSet *animationSet;

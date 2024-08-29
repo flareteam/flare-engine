@@ -31,6 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EventManager.h"
 #include "FileParser.h"
 #include "FontEngine.h"
+#include "GameSlotPreview.h"
 #include "Hazard.h"
 #include "ItemManager.h"
 #include "Menu.h"
@@ -63,6 +64,8 @@ MenuInventory::MenuInventory()
 	, tap_to_activate_timer(settings->max_frames_per_sec / 3)
 	, activated_slot(-1)
 	, activated_item(0)
+	, preview(NULL)
+	, preview_enabled(false)
 	, active_equipment_set(0)
 	, max_equipment_set(0)
 	, currency(0)
@@ -150,6 +153,11 @@ MenuInventory::MenuInventory()
 			// @ATTR help|rectangle|A mouse-over area that displays some help text for inventory shortcuts.
 			else if (infile.key == "help") help_pos = Parse::toRect(infile.val);
 
+			// @ATTR preview_enabled|bool|When enabled, the player is drawn in the inventory menu as they appear in the game world. Disabled by default.
+			else if (infile.key == "preview_enabled") preview_enabled = Parse::toBool(infile.val);
+			// @ATTR preview_pos|point|Position of the preview image. The character is drawn so that this point should lie between their feet, or thereabouts.
+			else if (infile.key == "preview_pos") preview_pos = Parse::toPoint(infile.val);
+
 			else infile.error("MenuInventory: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
@@ -229,6 +237,14 @@ MenuInventory::MenuInventory()
 	if (!background)
 		setBackground("images/menus/inventory.png");
 
+	if (preview_enabled) {
+		preview = new GameSlotPreview();
+		preview->setStatBlock(&pc->stats);
+		preview->setDirection(6); // face forward
+		preview->loadDefaultGraphics();
+		preview->loadGraphicsFromInventory(this);
+	}
+
 	align();
 }
 
@@ -260,6 +276,9 @@ void MenuInventory::align() {
 
 	label_inventory.setPos(window_area.x, window_area.y);
 	label_currency.setPos(window_area.x, window_area.y);
+
+	if (preview)
+		preview->setPos(Point(window_area.x + preview_pos.x, window_area.y + preview_pos.y));
 }
 
 void MenuInventory::logic() {
@@ -376,6 +395,9 @@ void MenuInventory::logic() {
 	}
 
 	tap_to_activate_timer.tick();
+
+	if (preview)
+		preview->logic();
 }
 
 void MenuInventory::render() {
@@ -407,6 +429,9 @@ void MenuInventory::render() {
 
 	inventory[EQUIPMENT].render();
 	inventory[CARRIED].render();
+
+	if (preview)
+		preview->render();
 }
 
 int MenuInventory::areaOver(const Point& position) {
@@ -1213,6 +1238,9 @@ void MenuInventory::applyEquipment() {
 
 	// update stat display
 	pc->stats.refresh_stats = true;
+
+	if (preview)
+		preview->loadGraphicsFromInventory(this);
 }
 
 void MenuInventory::applyItemStats() {
@@ -1639,4 +1667,6 @@ MenuInventory::~MenuInventory() {
 	delete equipmentSetPrevious;
 	delete equipmentSetLabel;
 
+	if (preview)
+		delete preview;
 }

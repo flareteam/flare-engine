@@ -15,6 +15,7 @@ Engine features:
 * Added 'post_hazards_skip_target' to Powers.
 * Added a game filter for the inactive mods list in the Configuration menu.
 * Added 'inactivemods_filter' to menu/config.txt config.
+* Added 'preview_enabled' and 'preview_pos' to menus/inventory.txt config.
 
 Engine fixes:
 

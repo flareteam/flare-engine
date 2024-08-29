@@ -30,29 +30,29 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "AnimationSet.h"
 #include "CommonIncludes.h"
 #include "GameSlotPreview.h"
+#include "ItemManager.h"
 #include "FileParser.h"
+#include "MenuInventory.h"
 #include "ModManager.h"
 #include "RenderDevice.h"
 #include "SharedResources.h"
+#include "SharedGameResources.h"
 #include "StatBlock.h"
 #include "Utils.h"
+#include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
 
 GameSlotPreview::GameSlotPreview()
 	: stats(NULL)
+	, static_direction(6)
+	, direction(&static_direction)
 {
 	// load the hero's animations from hero definition file
 	anim->increaseCount("animations/hero.txt");
 	animationSet = anim->getAnimationSet("animations/hero.txt");
 	activeAnimation = animationSet->getAnimation("");
 
-	loadLayerDefinitions();
-}
-
-/**
- * Load avatar sprite layer definitions into vector.
- */
-void GameSlotPreview::loadLayerDefinitions() {
+	// load layer definitions
 	layer_def = std::vector<std::vector<unsigned> >(8, std::vector<unsigned>());
 	layer_reference_order = std::vector<std::string>();
 
@@ -98,8 +98,6 @@ void GameSlotPreview::loadLayerDefinitions() {
 void GameSlotPreview::loadGraphics(std::vector<std::string> _img_gfx) {
 	if (!stats)
 		return;
-
-	loadLayerDefinitions();
 
 	for (unsigned int i=0; i<animsets.size(); i++) {
 		if (animsets[i])
@@ -163,10 +161,12 @@ void GameSlotPreview::addRenders(std::vector<Renderable> &r) {
 	if (!stats)
 		return;
 
-	for (unsigned i = 0; i < layer_def[stats->direction].size(); ++i) {
-		unsigned index = layer_def[stats->direction][i];
-		if (anims[index]) {
-			Renderable ren = anims[index]->getCurrentFrame(stats->direction);
+	unsigned char dir = *direction;
+
+	for (unsigned i = 0; i < layer_def[dir].size(); ++i) {
+		unsigned index = layer_def[dir][i];
+		if (index < anims.size() && anims[index]) {
+			Renderable ren = anims[index]->getCurrentFrame(dir);
 			ren.prio = i+1;
 			r.push_back(ren);
 		}
@@ -175,10 +175,18 @@ void GameSlotPreview::addRenders(std::vector<Renderable> &r) {
 
 void GameSlotPreview::setStatBlock(StatBlock *_stats) {
 	stats = _stats;
+	if (stats) {
+		direction = &stats->direction;
+	}
 }
 
 void GameSlotPreview::setPos(Point _pos) {
 	pos = _pos;
+}
+
+void GameSlotPreview::setDirection(unsigned char dir) {
+	static_direction = dir;
+	direction = &static_direction;
 }
 
 void GameSlotPreview::render() {
@@ -193,6 +201,64 @@ void GameSlotPreview::render() {
 			render_device->render(r[i], dest);
 		}
 	}
+}
+
+void GameSlotPreview::loadDefaultGraphics() {
+	if (!stats) {
+		Utils::logError("GameSlotPreview: StatBlock is not set. Can't load default graphics.");
+		return;
+	}
+
+	default_gfx.clear();
+
+	// fall back to default if it exists
+	for (size_t i = 0; i < layer_reference_order.size(); ++i) {
+		bool exists = Filesystem::fileExists(mods->locate("animations/avatar/" + stats->gfx_base + "/default_" + layer_reference_order[i] + ".txt"));
+		if (exists) {
+			default_gfx.push_back("default_" + layer_reference_order[i]);
+		}
+		else if (layer_reference_order[i] == "head") {
+			default_gfx.push_back(stats->gfx_head);
+		}
+		else {
+			default_gfx.push_back("");
+		}
+	}
+
+}
+
+void GameSlotPreview::loadGraphicsFromInventory(MenuInventory* menu_inv) {
+	std::vector<std::string> preview_gfx = default_gfx;
+
+	if (items && menu_inv) {
+		size_t storage_size = static_cast<size_t>(menu_inv->inventory[MenuInventory::EQUIPMENT].getSlotNumber());
+		for (size_t i = 0; i < storage_size; ++i) {
+			ItemID item_id = menu_inv->inventory[MenuInventory::EQUIPMENT].storage[i].item;
+
+			if (item_id == 0)
+				continue;
+
+			if (!items->isValid(item_id) || !items->items[item_id]->has_name) {
+				// TODO error msg?
+				continue;
+			}
+
+			if (!menu_inv->isActive(i)) {
+				continue;
+			}
+
+			if (!layer_reference_order.empty()) {
+				std::vector<std::string>::iterator found = find(layer_reference_order.begin(), layer_reference_order.end(), items->items[item_id]->type);
+				if (found != layer_reference_order.end()) {
+					size_t preview_index = distance(layer_reference_order.begin(), found);
+					if (preview_index < preview_gfx.size())
+						preview_gfx[preview_index] = items->items[item_id]->gfx;
+				}
+			}
+		}
+	}
+
+	loadGraphics(preview_gfx);
 }
 
 GameSlotPreview::~GameSlotPreview() {

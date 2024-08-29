@@ -33,6 +33,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetLabel.h"
 
 class BonusData;
+class GameSlotPreview;
 class StatBlock;
 class WidgetButton;
 
@@ -69,6 +70,10 @@ private:
 
 	int activated_slot;
 	ItemID activated_item;
+
+	GameSlotPreview* preview;
+	bool preview_enabled;
+	Point preview_pos;
 
 public:
 	enum {
