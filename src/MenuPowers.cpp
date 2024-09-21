@@ -1525,7 +1525,7 @@ void MenuPowers::render() {
 	tab_dest.x += tab_area.x;
 	tab_dest.y += tab_area.y;
 	if (tab_control)
-		tab_area.y += tab_control->getTabHeight();
+		tab_dest.y += tab_control->getTabHeight();
 
 	setBackgroundClip(src);
 	setBackgroundDest(dest);
