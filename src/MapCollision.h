@@ -56,6 +56,8 @@ private:
 
 	FPoint collisionToMap(const Point& p);
 
+	bool has_empty_tile;
+
 public:
 	// const flags
 	static const bool IS_ALLY = true;
@@ -116,6 +118,8 @@ public:
 	int getCollideType(bool hero) {
 		return hero ? ENTITY_COLLIDE_HERO : ENTITY_COLLIDE_ALL;
 	}
+
+	bool hasEmptyTile() { return has_empty_tile; }
 
 	Map_Layer colmap;
 	Point map_size;

@@ -52,6 +52,7 @@ Engine fixes:
 * Fixed replace_by_effect changing the active AI power mid-animation.
 * Power tree backgrounds now align to the tab area if they are not the same size as the menu.
 * Fixed potential crash if a hazard was created before the map loaded.
+* Fixed infinite loop caused by trying to move an entity before the map loaded.
 * Android: Fix 'Flare' directory not being automatically created.
 * Android: Added a dialog to direct the player to the wiki page for installing if no game data is found.
 

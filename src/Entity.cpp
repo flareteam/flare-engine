@@ -201,6 +201,9 @@ void Entity::playSound(int sound_type) {
 }
 
 void Entity::move_from_offending_tile() {
+	// don't bother if there's no possible tile for a stuck entity to move to
+	if (!mapr->collider.hasEmptyTile())
+		return;
 
 	// If we got stuck on a tile, which we're not allowed to be on, move away
 	// This is just a workaround as we cannot reproduce being stuck easily nor find the

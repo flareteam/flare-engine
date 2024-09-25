@@ -46,20 +46,26 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 const float MapCollision::MIN_TILE_GAP = 0.001f;
 
 MapCollision::MapCollision()
-	: map_size(Point())
+	: has_empty_tile(false)
+	, map_size(Point())
 {
 	colmap.resize(1);
 	colmap[0].resize(1);
 }
 
 void MapCollision::setMap(const Map_Layer& _colmap, unsigned short w, unsigned short h) {
+	has_empty_tile = false;
+
 	colmap.resize(w);
 	for (unsigned i=0; i<w; ++i) {
 		colmap[i].resize(h);
 	}
 	for (unsigned i=0; i<w; i++)
-		for (unsigned j=0; j<h; j++)
+		for (unsigned j=0; j<h; j++) {
 			colmap[i][j] = _colmap[i][j];
+			if (colmap[i][j] == 0)
+				has_empty_tile = true;
+		}
 
 	map_size.x = w;
 	map_size.y = h;
