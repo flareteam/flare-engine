@@ -179,6 +179,15 @@ SoundID SDLSoundManager::load(const std::string& filename, const std::string& er
 		return 0;
 	}
 
+	/* we might be loading a sound that was previously loaded and in the midst of playing back
+	 * so we need to update the ref count to prevent unintentional unloading of our "new" sound */
+	PlaybackMapIterator play_it = playback.begin();
+	while (play_it != playback.end()) {
+		if (play_it->second.sid == sid)
+			lsnd.refCnt++;
+		++play_it;
+	}
+
 	/* instantiate and add sound to manager */
 	Sound *psnd = new Sound;
 	*psnd = lsnd;

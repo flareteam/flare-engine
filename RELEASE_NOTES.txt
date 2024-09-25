@@ -53,6 +53,7 @@ Engine fixes:
 * Power tree backgrounds now align to the tab area if they are not the same size as the menu.
 * Fixed potential crash if a hazard was created before the map loaded.
 * Fixed infinite loop caused by trying to move an entity before the map loaded.
+* Fix case where sounds may be unloaded prematurely if they were playing during certain sitations.
 * Android: Fix 'Flare' directory not being automatically created.
 * Android: Added a dialog to direct the player to the wiki page for installing if no game data is found.
 
