@@ -1381,7 +1381,7 @@ void PowerManager::initHazard(PowerID power_index, StatBlock *src_stats, const F
 		haz->pos = Utils::calcVector(origin, src_stats->direction, src_stats->melee_range);
 	}
 
-	if (haz->power->target_neighbor > 0) {
+	if (haz->power->target_neighbor > 0 && collider) {
 		haz->pos = collider->getRandomNeighbor(Point(haz->pos), haz->power->target_neighbor, haz->power->movement_type, MapCollision::ENTITY_COLLIDE_NONE);
 	}
 
@@ -1403,7 +1403,7 @@ void PowerManager::buff(PowerID power_index, StatBlock *src_stats, const FPoint&
 	// teleport to the target location
 	if (power->buff_teleport) {
 		FPoint limit_target = Utils::clampDistance(power->target_range,src_stats->pos,target);
-		if (power->target_neighbor > 0) {
+		if (power->target_neighbor > 0 && collider) {
 			FPoint new_target = collider->getRandomNeighbor(Point(limit_target), power->target_neighbor, power->movement_type, MapCollision::ENTITY_COLLIDE_ALL);
 			if (floorf(new_target.x) == floorf(limit_target.x) && floorf(new_target.y) == floorf(limit_target.y)) {
 				src_stats->teleportation = false;
@@ -1669,7 +1669,7 @@ bool PowerManager::repeater(PowerID power_index, StatBlock *src_stats, const FPo
 		location_iterator.y += speed.y;
 
 		// only travels until it hits a wall
-		if (!collider->isValidPosition(location_iterator.x, location_iterator.y, power->movement_type, MapCollision::ENTITY_COLLIDE_NONE)) {
+		if (collider && !collider->isValidPosition(location_iterator.x, location_iterator.y, power->movement_type, MapCollision::ENTITY_COLLIDE_NONE)) {
 			break; // no more hazards
 		}
 
@@ -1704,6 +1704,9 @@ bool PowerManager::repeater(PowerID power_index, StatBlock *src_stats, const FPo
  * Spawn a creature. Does not create a hazard
  */
 bool PowerManager::spawn(PowerID power_index, StatBlock *src_stats, const FPoint& origin, const FPoint& target) {
+	if (!collider)
+		return false;
+
 	Power* power = powers[power_index];
 
 	Map_Enemy espawn;
@@ -1721,7 +1724,7 @@ bool PowerManager::spawn(PowerID power_index, StatBlock *src_stats, const FPoint
 		espawn.pos = Utils::calcVector(origin, src_stats->direction, src_stats->melee_range);
 	}
 
-	if (power->target_neighbor > 0) {
+	if (power->target_neighbor > 0 && collider) {
 		espawn.pos = collider->getRandomNeighbor(Point(espawn.pos), power->target_neighbor, power->movement_type, MapCollision::ENTITY_COLLIDE_ALL);
 	}
 
@@ -1761,6 +1764,9 @@ bool PowerManager::spawn(PowerID power_index, StatBlock *src_stats, const FPoint
  * Transform into a creature. Fully replaces entity characteristics
  */
 bool PowerManager::transform(PowerID power_index, StatBlock *src_stats, const FPoint& target) {
+	if (!collider)
+		return false;
+
 	Power* power = powers[power_index];
 
 	// locking the actionbar prevents power usage until after the hero is transformed
