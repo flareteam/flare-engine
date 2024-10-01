@@ -47,7 +47,7 @@ Animation::Animation(const std::string &_name, const std::string &_type, Animati
 	, cur_frame_duration(0)
 	, cur_frame_index_f(0)
 	, max_kinds(0)
-	, additional_data(0)
+	, reverse_playback(false)
 	, times_played(0)
 	, gfx()
 	, render_offset()
@@ -127,21 +127,15 @@ void Animation::setup(unsigned short _frames, unsigned short _duration, unsigned
 
 	if (!frames.empty()) number_frames = static_cast<unsigned short>(frames.back()+1);
 
-	if (type == ANIMTYPE_PLAY_ONCE) {
-		additional_data = 0;
-	}
-	else if (type == ANIMTYPE_LOOPED) {
-		additional_data = 0;
-	}
-	else if (type == ANIMTYPE_BACK_FORTH) {
+	if (type == ANIMTYPE_BACK_FORTH) {
 		number_frames = static_cast<unsigned short>(2 * number_frames);
-		additional_data = 1;
 	}
 	cur_frame = 0;
 	cur_frame_index = 0;
 	cur_frame_index_f = 0;
 	max_kinds = _maxkinds;
 	times_played = 0;
+	reverse_playback = false;
 
 	active_frames.push_back(static_cast<unsigned short>(number_frames-1)/2);
 
@@ -197,21 +191,24 @@ void Animation::advanceFrame() {
 
 		case ANIMTYPE_BACK_FORTH:
 
-			if (additional_data == 1) {
+			if (!reverse_playback) {
 				if (cur_frame_index < last_base_index) {
 					cur_frame_index_f += speed;
 					cur_frame_index = static_cast<unsigned short>(cur_frame_index_f);
 				}
-				else
-					additional_data = -1;
+				else {
+					reverse_playback = true;
+					if (frame_count == 1)
+						times_played++;
+				}
 			}
-			else if (additional_data == -1) {
+			else if (reverse_playback) {
 				if (cur_frame_index > 0) {
 					cur_frame_index_f -= speed;
 					cur_frame_index = static_cast<unsigned short>(cur_frame_index_f);
 				}
 				else {
-					additional_data = 1;
+					reverse_playback = false;
 					times_played++;
 				}
 			}
@@ -250,7 +247,7 @@ void Animation::reset() {
 	cur_frame_index = 0;
 	cur_frame_index_f = 0;
 	times_played = 0;
-	additional_data = 1;
+	reverse_playback = false;
 	elapsed_frames = 0;
 	active_frame_triggered = false;
 }
@@ -260,7 +257,7 @@ bool Animation::syncTo(const Animation *other) {
 	cur_frame_index = other->cur_frame_index;
 	cur_frame_index_f = other->cur_frame_index_f;
 	times_played = other->times_played;
-	additional_data = other->additional_data;
+	reverse_playback = other->reverse_playback;
 	elapsed_frames = other->elapsed_frames;
 
 	if (cur_frame_index >= frames.size()) {
@@ -356,7 +353,7 @@ bool Animation::isCompleted() {
 unsigned short Animation::getLastFrameIndex(const short &frame) {
 	if (frames.empty() || frame < 0) return 0;
 
-	if (type == ANIMTYPE_BACK_FORTH && additional_data == -1) {
+	if (type == ANIMTYPE_BACK_FORTH && reverse_playback) {
 		// since the animation is advancing backwards here, the first frame index is actually the last
 		for (unsigned short i=0; i<frames.size(); i++) {
 			if (frames[i] == frame) return i;
