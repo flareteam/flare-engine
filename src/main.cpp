@@ -259,7 +259,7 @@ static void mainLoop () {
 		// delay quick frames
 		// thanks to David Gow: https://davidgow.net/handmadepenguin/ch18.html
 		if (getSecondsElapsed(prev_ticks, SDL_GetPerformanceCounter()) < seconds_per_frame) {
-			int32_t delay_ms = static_cast<int32_t>((seconds_per_frame - getSecondsElapsed(prev_ticks, SDL_GetPerformanceCounter())) * 1000.f) - 1;
+			int32_t delay_ms = static_cast<int32_t>((seconds_per_frame - getSecondsElapsed(prev_ticks, SDL_GetPerformanceCounter())) * 1000.f);
 			if (delay_ms > 0) {
 				SDL_Delay(delay_ms);
 			}
