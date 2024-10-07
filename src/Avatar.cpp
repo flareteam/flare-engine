@@ -518,6 +518,7 @@ void Avatar::logic() {
 				current_power_original = action.power;
 				act_target = action.target;
 				attack_anim = power->attack_anim;
+				resetActiveAnimation();
 
 				if (power->new_state == Power::STATE_ATTACK) {
 					stats.cur_state = StatBlock::ENTITY_POWER;
