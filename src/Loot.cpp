@@ -89,7 +89,7 @@ void Loot::loadAnimation(const std::string& _gfx) {
 }
 
 bool Loot::isFlying() {
-	return animation && !animation->isLastFrame();
+	return animation && !animation->isLastFrame() && animation->getTimesPlayed() == 0;
 }
 
 Loot::~Loot() {
