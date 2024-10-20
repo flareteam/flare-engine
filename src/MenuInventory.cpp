@@ -514,7 +514,7 @@ ItemStack MenuInventory::click(const Point& position) {
 	if (drag_prev_src > -1) {
 		item = inventory[drag_prev_src].click(position);
 
-		if (settings->touchscreen) {
+		if (inpt->usingTouchscreen()) {
 			tablist.setCurrent(inventory[drag_prev_src].current_slot);
 			tap_to_activate_timer.reset(Timer::BEGIN);
 		}
@@ -656,7 +656,7 @@ bool MenuInventory::drop(const Point& position, ItemStack stack) {
 				// NOTE: the quantity must be 1, since the number picker appears when tapping on a stack of more than 1 item
 				// NOTE: we only support activating books since equipment activation doesn't work for some reason
 				// NOTE: Consumables are usually in stacks > 1, so we ignore those as well for consistency
-				if (settings->touchscreen && !tap_to_activate_timer.isEnd() && stack.quantity == 1 && items->isValid(stack.item) && !items->items[stack.item]->book.empty()) {
+				if (inpt->usingTouchscreen() && !tap_to_activate_timer.isEnd() && stack.quantity == 1 && items->isValid(stack.item) && !items->items[stack.item]->book.empty()) {
 					activate(position);
 				}
 			}

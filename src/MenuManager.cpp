@@ -829,7 +829,7 @@ void MenuManager::logic() {
 	menus_open = (inv->visible || pow->visible || chr->visible || questlog->visible || vendor->visible || talker->visible || book->visible || console_open);
 	pause = (eset->misc.menus_pause && menus_open) || exit->visible || console_open || book->visible;
 
-	touch_controls->visible = !menus_open && !exit->visible;
+	touch_controls->visible = !menus_open && !exit->visible && inpt->usingTouchscreen();
 
 	if (pc->stats.alive) {
 
@@ -1493,7 +1493,7 @@ void MenuManager::render() {
 	touch_controls->render();
 
 	if (!num_picker->visible && !action_picker->visible && !mouse_dragging && !sticky_dragging) {
-		if (!inpt->usingMouse() || settings->touchscreen)
+		if (!inpt->usingMouse() || inpt->usingTouchscreen())
 			handleKeyboardTooltips();
 		else {
 			// Find tooltips depending on mouse position
@@ -1520,7 +1520,7 @@ void MenuManager::render() {
 		else if (drag_src == DRAG_SRC_POWERS || drag_src == DRAG_SRC_ACTIONBAR)
 			setDragIcon(powers->powers[drag_power]->icon, -1);
 
-		if (settings->touchscreen && sticky_dragging)
+		if (inpt->usingTouchscreen() && sticky_dragging)
 			renderIcon(keydrag_pos.x - eset->resolutions.icon_size/2, keydrag_pos.y - eset->resolutions.icon_size/2);
 		else
 			renderIcon(inpt->mouse.x - eset->resolutions.icon_size/2, inpt->mouse.y - eset->resolutions.icon_size/2);

@@ -1323,7 +1323,7 @@ void MapRenderer::checkNearestEvent() {
 	}
 
 	if (nearest != events.end()) {
-		if (!inpt->usingMouse() || settings->touchscreen) {
+		if (!inpt->usingMouse() || inpt->usingTouchscreen()) {
 			// new tooltip?
 			createTooltip(nearest->getComponent(EventComponent::TOOLTIP));
 			tip_pos = Utils::mapToScreen(nearest->center.x, nearest->center.y, cam.shake.x, cam.shake.y);

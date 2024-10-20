@@ -240,7 +240,7 @@ void MenuStash::logic() {
 	if (!dragging)
 		tab_control->logic();
 
-	if (settings->touchscreen && activetab != static_cast<size_t>(tab_control->getActiveTab())) {
+	if (inpt->usingTouchscreen() && activetab != static_cast<size_t>(tab_control->getActiveTab())) {
 		for (size_t i = 0; i < tabs.size(); ++i) {
 			tabs[i].tablist.defocus();
 		}
@@ -249,7 +249,7 @@ void MenuStash::logic() {
 
 	tablist.setNextTabList(&(tabs[activetab].tablist));
 
-	if (settings->touchscreen) {
+	if (inpt->usingTouchscreen()) {
 		if (tabs[activetab].tablist.getCurrent() == -1)
 			tabs[activetab].stock.current_slot = NULL;
 	}
@@ -377,7 +377,7 @@ bool MenuStash::add(ItemStack stack, int slot, bool play_sound) {
  */
 ItemStack MenuStash::click(const Point& position) {
 	ItemStack stack = tabs[activetab].stock.click(position);
-	if (settings->touchscreen) {
+	if (inpt->usingTouchscreen()) {
 		tabs[activetab].tablist.setCurrent(tabs[activetab].stock.current_slot);
 	}
 	return stack;
@@ -453,7 +453,7 @@ void MenuStash::enableSharedTab(bool permadeath) {
 }
 
 void MenuStash::setTab(size_t tab) {
-	if (settings->touchscreen && activetab != tab) {
+	if (inpt->usingTouchscreen() && activetab != tab) {
 		for (size_t i = 0; i < tabs.size(); ++i) {
 			tabs[i].tablist.defocus();
 		}

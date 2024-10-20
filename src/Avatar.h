@@ -65,6 +65,7 @@ private:
 	void transform();
 	void untransform();
 	void beginPower(PowerID power_id, FPoint* target);
+	bool checkMouseMoveEnabled();
 
 
 	std::vector<Step_sfx> step_def;

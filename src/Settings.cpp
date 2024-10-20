@@ -175,8 +175,6 @@ void Settings::loadSettings() {
 		}
 	}
 
-	loadMobileDefaults();
-
 	// Force using the software renderer if safe mode is enabled
 	if (safe_video) {
 		render_device_name = "sdl";
@@ -233,7 +231,6 @@ void Settings::loadDefaults() {
 void Settings::loadMobileDefaults() {
 	if (platform.is_mobile_device) {
 		mouse_move = false;
-		mouse_aim = false;
 		no_mouse = false;
 		enable_joystick = false;
 		hardware_cursor = true;

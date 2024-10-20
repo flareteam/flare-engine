@@ -16,6 +16,7 @@ Engine features:
 * Added a game filter for the inactive mods list in the Configuration menu.
 * Added 'inactivemods_filter' to menu/config.txt config.
 * Added 'preview_enabled' and 'preview_pos' to menus/inventory.txt config.
+* Android: Enabled use of external input devices (gamepads, keyboards, mice)
 
 Engine fixes:
 

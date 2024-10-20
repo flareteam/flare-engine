@@ -122,16 +122,10 @@ Platform::Platform()
 
 	config_interface[Platform::Interface::HARDWARE_CURSOR] = false;
 
-	config_input[Platform::Input::JOYSTICK] = false;
-	config_input[Platform::Input::MOUSE_MOVE] = false;
-	config_input[Platform::Input::MOUSE_AIM] = false;
 	config_input[Platform::Input::NO_MOUSE] = false;
-	config_input[Platform::Input::MOUSE_MOVE_SWAP] = false;
-	config_input[Platform::Input::MOUSE_MOVE_ATTACK] = false;
-	config_input[Platform::Input::JOYSTICK_DEADZONE] = false;
 	config_input[Platform::Input::TOUCH_CONTROLS] = false;
 
-	config_misc[Platform::Misc::KEYBINDS] = false;
+	config_misc[Platform::Misc::KEYBINDS] = true;
 }
 
 Platform::~Platform() {

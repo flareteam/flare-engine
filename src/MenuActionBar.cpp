@@ -511,8 +511,8 @@ void MenuActionBar::remove(const Point& mouse) {
  * add that power to the action queue
  */
 void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
-	bool enable_mm_attack = (!settings->mouse_move || inpt->pressing[Input::SHIFT] || pc->lock_enemy);
-	bool enable_main1 = (!settings->touchscreen || (!menu->menus_open && menu->touch_controls->checkAllowMain1())) && (settings->mouse_move_swap || enable_mm_attack);
+	bool enable_mm_attack = (!settings->mouse_move || inpt->pressing[Input::SHIFT] || pc->lock_enemy || inpt->usingTouchscreen());
+	bool enable_main1 = (!inpt->usingTouchscreen() || (!menu->menus_open && menu->touch_controls->checkAllowMain1())) && (settings->mouse_move_swap || enable_mm_attack);
 	bool enable_main2 = !settings->mouse_move_swap || enable_mm_attack;
 
 	// check click and hotkey actions
@@ -714,7 +714,7 @@ void MenuActionBar::set(std::vector<PowerID> power_id, bool skip_empty) {
  * Set a target depending on how a power was triggered
  */
 FPoint MenuActionBar::setTarget(bool have_aim, const Power* pow) {
-	if (have_aim && settings->mouse_aim && !settings->touchscreen) {
+	if (have_aim && settings->mouse_aim && !inpt->usingTouchscreen()) {
 		FPoint map_pos;
 		if (pow->aim_assist)
 			map_pos = Utils::screenToMap(inpt->mouse.x,  inpt->mouse.y + eset->misc.aim_assist, mapr->cam.pos.x, mapr->cam.pos.y);

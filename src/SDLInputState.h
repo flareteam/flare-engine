@@ -52,6 +52,7 @@ public:
 	std::string getAttackString();
 	int getNumJoysticks();
 	bool usingMouse();
+	bool usingTouchscreen();
 	void startTextInput();
 	void stopTextInput();
 	void setCommonStrings();

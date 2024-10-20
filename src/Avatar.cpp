@@ -256,7 +256,7 @@ bool Avatar::pressing_move() {
 	else if (stats.effects.knockback_speed != 0) {
 		return false;
 	}
-	else if (settings->mouse_move) {
+	else if (checkMouseMoveEnabled()) {
 		return inpt->pressing[mm_key] && !inpt->pressing[Input::SHIFT] && mm_is_distant;
 	}
 	else {
@@ -274,7 +274,7 @@ void Avatar::set_direction() {
 	int old_dir = stats.direction;
 
 	// handle direction changes
-	if (settings->mouse_move) {
+	if (checkMouseMoveEnabled()) {
 		if (mm_is_distant) {
 			FPoint target = Utils::screenToMap(inpt->mouse.x, inpt->mouse.y, mapr->cam.pos.x, mapr->cam.pos.y);
 			stats.direction = Utils::calcDirection(stats.pos.x, stats.pos.y, target.x, target.y);
@@ -324,7 +324,7 @@ void Avatar::set_direction() {
  */
 void Avatar::logic() {
 	bool restrict_power_use = false;
-	if (settings->mouse_move) {
+	if (checkMouseMoveEnabled()) {
 		if(inpt->pressing[mm_key] && !inpt->pressing[Input::SHIFT] && !menu->act->isWithinSlots(inpt->mouse) && !menu->act->isWithinMenus(inpt->mouse)) {
 			restrict_power_use = true;
 		}
@@ -432,7 +432,7 @@ void Avatar::logic() {
 	PowerID mm_attack_id = (settings->mouse_move_swap ? menu->act->getSlotPower(MenuActionBar::SLOT_MAIN2) : menu->act->getSlotPower(MenuActionBar::SLOT_MAIN1));
 	bool mm_can_use_power = true;
 
-	if (settings->mouse_move) {
+	if (checkMouseMoveEnabled()) {
 		if (!inpt->pressing[mm_key]) {
 			lock_enemy = NULL;
 		}
@@ -540,7 +540,7 @@ void Avatar::logic() {
 				setAnimation("stance");
 
 				// allowed to move or use powers?
-				if (settings->mouse_move) {
+				if (checkMouseMoveEnabled()) {
 					allowed_to_move = restrict_power_use && (!inpt->lock[mm_key] || drag_walking) && !lock_enemy;
 					allowed_to_turn = allowed_to_move;
 
@@ -563,7 +563,7 @@ void Avatar::logic() {
 
 				if (pressing_move() && allowed_to_move) {
 					if (move()) { // no collision
-						if (settings->mouse_move && inpt->pressing[mm_key]) {
+						if (checkMouseMoveEnabled() && inpt->pressing[mm_key]) {
 							inpt->lock[mm_key] = true;
 							drag_walking = true;
 						}
@@ -572,7 +572,7 @@ void Avatar::logic() {
 					}
 				}
 
-				if (settings->mouse_move &&  settings->mouse_move_attack && cursor_enemy && !cursor_enemy->stats.hero_ally && mm_can_use_power && powers->checkCombatRange(mm_attack_id, &stats, cursor_enemy->stats.pos)) {
+				if (checkMouseMoveEnabled() &&  settings->mouse_move_attack && cursor_enemy && !cursor_enemy->stats.hero_ally && mm_can_use_power && powers->checkCombatRange(mm_attack_id, &stats, cursor_enemy->stats.pos)) {
 					stats.cur_state = StatBlock::ENTITY_STANCE;
 					lock_enemy = cursor_enemy;
 				}
@@ -602,7 +602,7 @@ void Avatar::logic() {
 					stats.cur_state = StatBlock::ENTITY_STANCE;
 					break;
 				}
-				else if ((settings->mouse_move || !settings->mouse_aim) && inpt->pressing[Input::SHIFT]) {
+				else if ((checkMouseMoveEnabled() || !settings->mouse_aim) && inpt->pressing[Input::SHIFT]) {
 					// Shift should stop movement in some cases.
 					// With mouse_move, it allows the player to stop moving and begin attacking.
 					// With mouse_aim disabled, it allows the player to aim their attacks without having to move.
@@ -613,7 +613,7 @@ void Avatar::logic() {
 				if (activeAnimation->getName() != "run")
 					stats.cur_state = StatBlock::ENTITY_STANCE;
 
-				if (settings->mouse_move && settings->mouse_move_attack && cursor_enemy && !cursor_enemy->stats.hero_ally && mm_can_use_power && powers->checkCombatRange(mm_attack_id, &stats, cursor_enemy->stats.pos)) {
+				if (checkMouseMoveEnabled() && settings->mouse_move_attack && cursor_enemy && !cursor_enemy->stats.hero_ally && mm_can_use_power && powers->checkCombatRange(mm_attack_id, &stats, cursor_enemy->stats.pos)) {
 					stats.cur_state = StatBlock::ENTITY_STANCE;
 					lock_enemy = cursor_enemy;
 				}
@@ -669,12 +669,12 @@ void Avatar::logic() {
 					stats.cur_state = StatBlock::ENTITY_STANCE;
 					stats.cooldown.reset(Timer::BEGIN);
 					stats.prevent_interrupt = false;
-					if (settings->mouse_move) {
+					if (checkMouseMoveEnabled()) {
 						drag_walking = true;
 					}
 				}
 
-				if (settings->mouse_move && lock_enemy && !powers->checkCombatRange(mm_attack_id, &stats, lock_enemy->stats.pos)) {
+				if (checkMouseMoveEnabled() && lock_enemy && !powers->checkCombatRange(mm_attack_id, &stats, lock_enemy->stats.pos)) {
 					lock_enemy = NULL;
 				}
 
@@ -701,7 +701,7 @@ void Avatar::logic() {
 
 				if (activeAnimation->getTimesPlayed() >= 1 || activeAnimation->getName() != "hit") {
 					stats.cur_state = StatBlock::ENTITY_STANCE;
-					if (settings->mouse_move) {
+					if (checkMouseMoveEnabled()) {
 						drag_walking = true;
 					}
 				}
@@ -1059,6 +1059,10 @@ std::string Avatar::getGfxFromType(const std::string& gfx_type) {
 	}
 
 	return gfx;
+}
+
+bool Avatar::checkMouseMoveEnabled() {
+	return settings->mouse_move && !inpt->usingTouchscreen();
 }
 
 Avatar::~Avatar() {

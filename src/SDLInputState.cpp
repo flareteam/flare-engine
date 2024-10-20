@@ -632,6 +632,9 @@ void SDLInputState::handle() {
 			}
 		}
 	}
+
+	if (!usingTouchscreen())
+		touch_locked = false;
 }
 
 void SDLInputState::hideCursor() {
@@ -796,14 +799,14 @@ std::string SDLInputState::getGamepadBindingString(int key, bool get_short_strin
 std::string SDLInputState::getMovementString() {
 	std::string output = "[";
 
-	if (settings->enable_joystick) {
+	if (inpt->usingTouchscreen()) {
+		output += msg->get("Touch control D-Pad");
+	}
+	else if (settings->enable_joystick) {
 		output += getGamepadBindingString(Input::LEFT) +  "/";
 		output += getGamepadBindingString(Input::RIGHT) + "/";
 		output += getGamepadBindingString(Input::UP) + "/";
 		output += getGamepadBindingString(Input::DOWN);
-	}
-	else if (settings->touchscreen) {
-		output += msg->get("Touch control D-Pad");
 	}
 	else if (settings->mouse_move) {
 		output += (settings->mouse_move_swap ? getBindingString(Input::MAIN2) : getBindingString(Input::MAIN1));
@@ -822,7 +825,7 @@ std::string SDLInputState::getMovementString() {
 std::string SDLInputState::getAttackString() {
 	std::string output = "[";
 
-	if (settings->touchscreen) {
+	if (inpt->usingTouchscreen()) {
 		output += msg->get("Touch control buttons");
 	}
 	else {
@@ -839,6 +842,10 @@ int SDLInputState::getNumJoysticks() {
 
 bool SDLInputState::usingMouse() {
 	return !settings->no_mouse && mode != MODE_JOYSTICK;
+}
+
+bool SDLInputState::usingTouchscreen() {
+	return settings->touchscreen && mode == MODE_TOUCHSCREEN;
 }
 
 void SDLInputState::startTextInput() {

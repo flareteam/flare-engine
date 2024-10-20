@@ -151,6 +151,7 @@ public:
 	virtual std::string getAttackString() = 0;
 	virtual int getNumJoysticks() = 0;
 	virtual bool usingMouse() = 0;
+	virtual bool usingTouchscreen() = 0;
 	virtual void startTextInput() = 0;
 	virtual void stopTextInput() = 0;
 
