@@ -61,6 +61,37 @@ Engine fixes:
 
 Game updates:
 * Limited the number of "unique" items that can drop from a boss to 1 per kill.
+* Rebalanced damage types to be less reliant on weapon stats. Players start with 15-20 damage and gain 2 per level. To compensate, weapons now have 10 base damage with an additional 3 per item level.
+* Increased starting MP and MP per level by 5x. Increased starting MP regen by 5x.
+* Raised the number of power points granted per level to 2.
+* Only require the first level of any given power that's required to unlock another power/upgrade.
+* Lowered stat requirements for all active powers. Requirements start at 2 or 3 and increase by 3 for each upgrade level.
+* New item: 'Tome of Second Chances'. Used to reset the player's stat and power points. Can be purchased from Florin.
+* More gradual MP cost slopes for all active powers
+* Rebalance Warrior active powers
+	- Shield Bash: Reduced crit chance to 25%. Added 25% chance to stun for half a second. Damage starts at higher at 115% and increases 15pp per level
+	- Blood Strike: Damage starts at higher at 130% and increases 5pp per level. Bleed effect now increases 2pp per level.
+	- Warcry: Raised overall MP cost, but effect lasts longer. Starts at 30s and increases 5s per level. Flat cooldown of 10s after the effect expires.
+	- Throw Knife: Damage starts lower at 75% and increases 5pp per level. Accuracy bonus added, starting at 130% and increasing 5pp per level. Critical bonus added, starting at 40% and increasing 5pp per level.
+	- Cleave: Damage starts lower at 75%, but still increases by 15pp per level.
+	- Quake: Damage starts lower at 75% and increases 10pp per level. Knockback is now a constant 15. Stun chance is now 75% and increases 500ms per level.
+* Rebalance Ranger active powers
+	- Haste: Raised overall MP cost, but effect lasts longer. Starts at 30s and increases 5s per level. Flat cooldown of 10s after the effect expires.
+	- Piercing Shot: Damage now increases by 15pp per level.
+	- Multishot: Instead of increasing damage per level, the number of projectiles now increases per level. Level 1 starts with 2, and increases by 1 for each level. The size of the arc has been reduced, and some angle/speed variance has been added.
+	- Rapid Fire: Damage starts higher at 50% and increases 10pp per level. There is now a flat 80% accuracy modifier.
+	- Caltrops: Lifetime increased to 60 seconds. Can now hit multiple targets. Damage starts lower at 55%, but gains 10pp per level. Slow effect duration starts higher at 5s, and each level now grants an extra 500ms.
+	- Bear Trap: Lifetime increased to 60 seconds. Damage starts higher at 140%, but still increases by 15pp per level. There is now a 25% chance to inflict bleeding (5% damage-over-time for 5 seconds).
+	- Ember Shot: Damage now increases by 3pp per level. Now inflicts -75% to the targets' fire resistance.
+* Rebalance Mage active powers
+	- 800ms cooldown for Burn, Freeze, and Thunderstrike
+	- Fireball: Damage starts at 130% and increases by 15pp per level.
+	- Ice Bolt: Damage starts at 110% and increases by 10pp per level. Slow duration increases by 1s per level.
+	- Shock: Damage starts at 120% and increases by 10pp per level.
+	- Burn: Damage starts at 80% and increases by 10pp per level. Add chance to inflict fire weakness for 5s. Chance increases per level.
+	- Freeze: Increased speed and number of shards. Damage starts at 80% and increases by 10pp per level. Slow duration increases by 1s per level. Add a chance to inflict ice weakness to nearby enemies for 5s.
+	- Thunderstrike: Increased target range. Damage starts at 90% and increases by 10pp per level. Spawns 6 projectiles that have a chance to stun.
+	- Shield: Increased overall MP cost
 
 Translation updates:
 
