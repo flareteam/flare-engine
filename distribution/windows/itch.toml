@@ -1,0 +1,11 @@
+[[actions]]
+name = "play"
+path = "flare.exe"
+platform = "windows"
+
+[[actions]]
+name = "Play (32-bit)"
+path = "x86/flare.exe"
+args = ["--data-path=../"]
+platform = "windows"
+
