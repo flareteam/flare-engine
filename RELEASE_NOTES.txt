@@ -58,6 +58,7 @@ Engine fixes:
 * Fix case where sounds may be unloaded prematurely if they were playing during certain sitations.
 * Fix single-frame "back_forth" animations taking an extra frame to complete.
 * Fix not being able to pick up loot with the mouse if the loot animation was looped.
+* Fix invisible icons in Powers menu when using gamepad/touch controls.
 * Android: Fix 'Flare' directory not being automatically created.
 * Android: Added a dialog to direct the player to the wiki page for installing if no game data is found.
 

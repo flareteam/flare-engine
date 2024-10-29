@@ -1408,10 +1408,8 @@ void MenuPowers::renderPowers(int tab_num) {
 					selected_slot = getSelectedCellIndex();
 				}
 
-				if (selected_slot == static_cast<int>(i))
-					continue;
-
-				slots[i]->highlight = true;
+				if (selected_slot != static_cast<int>(i))
+					slots[i]->highlight = true;
 			}
 			else {
 				slots[i]->highlight = false;
