@@ -41,6 +41,7 @@ public:
 	void loadGame();
 	void loadClass(int index);
 	void loadStash();
+	void saveFOW();
 
 private:
 	void applyPlayerData();
