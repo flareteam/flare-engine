@@ -407,12 +407,30 @@ void Avatar::set_direction() {
 		if (eset->tileset.orientation == eset->tileset.TILESET_ORTHOGONAL && (press_up || press_down || press_left || press_right))
 			stats.direction = static_cast<unsigned char>((stats.direction == 7) ? 0 : stats.direction + 1);
 	}
+	if (settings->mouse_move) {
+		// when using mouse move, we use a longer turn delay to prevent the movement from being "jittery" with too many direction changes
+		// however, we lower this delay if the player can't reach their destination before the next direction check
+		// this keeps the player's movement smooth for most of the journey towards a given point, although there is still some jitter as they near their destination.
+		int delay_ticks = settings->max_frames_per_sec / 2;
 
-	// give direction changing a 100ms cooldown
-	// this allows the player to quickly change direction on their own without becoming overly "jittery"
-	// the cooldown can be ended by releasing the move button, but the cooldown is so fast that it doesn't matter much (maybe a speed run tactic?)
-	if (stats.direction != old_dir)
-		set_dir_timer.setDuration(settings->max_frames_per_sec / 10);
+		float real_speed = stats.speed * StatBlock::SPEED_MULTIPLIER[stats.direction] * stats.effects.speed / 100;
+		// we multiply by 0.5 here because when we don't, the player tends to turn 180 degrees for brief moments
+		int max_turn_ticks = static_cast<int>(Utils::calcDist(stats.pos, mm_target) * 0.5f / real_speed);
+		if (delay_ticks > max_turn_ticks) {
+			set_dir_timer.setDuration(max_turn_ticks);
+		}
+		else {
+			set_dir_timer.setDuration(delay_ticks);
+		}
+	}
+	else {
+		// give direction changing a 100ms cooldown
+		// this allows the player to quickly change direction on their own without becoming overly "jittery"
+		// the cooldown can be ended by releasing the move button, but the cooldown is so fast that it doesn't matter much (maybe a speed run tactic?)
+		if (stats.direction != old_dir) {
+			set_dir_timer.setDuration(settings->max_frames_per_sec / 10);
+		}
+	}
 }
 
 /**
@@ -698,9 +716,7 @@ void Avatar::logic() {
 					if (settings->mouse_move && !isNearMMtarget()) {
 						collided = true;
 					}
-					else {
-						stats.cur_state = StatBlock::ENTITY_STANCE;
-					}
+					stats.cur_state = StatBlock::ENTITY_STANCE;
 					break;
 				}
 				else if ((settings->mouse_move || !settings->mouse_aim) && inpt->pressing[Input::SHIFT]) {
