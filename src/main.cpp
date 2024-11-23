@@ -328,6 +328,7 @@ void EmscriptenMainLoop() {
 			// browsers don't have command line args, so pass default struct to init
 			init(CmdLineArgs());
 			init_finished = true;
+			emscripten_set_main_loop_timing(EM_TIMING_SETTIMEOUT, static_cast<int>(1000/settings->max_frames_per_sec));
 		}
 		return;
 	}
