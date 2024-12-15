@@ -75,6 +75,7 @@ private:
 	int fade_duration;
 	float speed;
 	int offset;
+	std::string font_id;
 };
 
 #endif

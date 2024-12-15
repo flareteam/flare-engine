@@ -64,6 +64,7 @@ CombatText::CombatText() {
 	fade_duration = 0;
 	speed = Settings::LOGIC_FPS / settings->max_frames_per_sec;
 	offset = 48; // average height of flare-game enemies, so a sensible default
+	font_id = "font_regular";
 
 	// Load config settings
 	FileParser infile;
@@ -85,6 +86,10 @@ CombatText::CombatText() {
 			else if (infile.key == "fade_duration") {
 				// @ATTR fade_duration|duration|How long the combat text will spend fading out in 'ms' or 's'.
 				fade_duration = Parse::toDuration(infile.val);
+			}
+			else if (infile.key == "font") {
+				// @ATTR font|predefined_string|The font to use for combat text.
+				font_id = infile.val;
 			}
 			else {
 				infile.error("CombatText: '%s' is not a valid key.",infile.key.c_str());
@@ -121,6 +126,7 @@ void CombatText::addString(const std::string& message, const FPoint& location, i
 	c.label->setPos(static_cast<int>(c.pos.x), static_cast<int>(c.pos.y));
 	c.label->setJustify(FontEngine::JUSTIFY_CENTER);
 	c.label->setVAlign(LabelInfo::VALIGN_BOTTOM);
+	c.label->setFont(font_id);
 	c.label->setText(c.text);
 	c.label->setColor(msg_color[c.displaytype]);
 	combat_text.push_back(c);
