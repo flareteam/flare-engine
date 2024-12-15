@@ -39,6 +39,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SoundManager.h"
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
+#include <vector>
 
 NPC::NPC(const Entity& e)
 	: Entity(e)
@@ -513,27 +514,33 @@ bool NPC::checkMovement(unsigned int dialog_node) {
 
 void NPC::moveMapEvents() {
 
-	// Update event position after NPC has moved
-	for (size_t i = 0; i < mapr->events.size(); i++)
-	{
-		if (mapr->events[i].type == filename)
-		{
-			mapr->events[i].location.x = static_cast<int>(stats.pos.x);
-			mapr->events[i].location.y = static_cast<int>(stats.pos.y);
+	std::vector<Event>::iterator it;
 
-			mapr->events[i].hotspot.x = static_cast<int>(stats.pos.x);
-			mapr->events[i].hotspot.y = static_cast<int>(stats.pos.y);
+	for (it = mapr->events.end(); it != mapr->events.begin(); ) {
+		--it;
 
-			mapr->events[i].center.x = static_cast<float>(mapr->events[i].hotspot.x) + static_cast<float>(mapr->events[i].hotspot.w)/2;
-			mapr->events[i].center.y = static_cast<float>(mapr->events[i].hotspot.y) + static_cast<float>(mapr->events[i].hotspot.h)/2;
+		if (it->type == filename) {
+			if (stats.hp > 0) {
+				// Update event position after NPC has moved
+				it->location.x = static_cast<int>(stats.pos.x);
+				it->location.y = static_cast<int>(stats.pos.y);
 
-			for (size_t ci = 0; ci < mapr->events[i].components.size(); ci++)
-			{
-				if (mapr->events[i].components[ci].type == EventComponent::NPC_HOTSPOT)
-				{
-					mapr->events[i].components[ci].data[0].Int = static_cast<int>(stats.pos.x);
-					mapr->events[i].components[ci].data[1].Int = static_cast<int>(stats.pos.y);
+				it->hotspot.x = static_cast<int>(stats.pos.x);
+				it->hotspot.y = static_cast<int>(stats.pos.y);
+
+				it->center.x = static_cast<float>(it->hotspot.x) + static_cast<float>(it->hotspot.w)/2;
+				it->center.y = static_cast<float>(it->hotspot.y) + static_cast<float>(it->hotspot.h)/2;
+
+				for (size_t ci = 0; ci < it->components.size(); ci++) {
+					if (it->components[ci].type == EventComponent::NPC_HOTSPOT) {
+						it->components[ci].data[0].Int = static_cast<int>(stats.pos.x);
+						it->components[ci].data[1].Int = static_cast<int>(stats.pos.y);
+					}
 				}
+			}
+			else {
+				// NPC is dead! Remove the map event
+				it = mapr->events.erase(it);
 			}
 		}
 	}

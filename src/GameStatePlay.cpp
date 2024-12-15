@@ -714,8 +714,9 @@ void GameStatePlay::checkNPCInteraction() {
 		bool interact_with_npc = false;
 		if (menu->talker->npc_from_map) {
 			float interact_distance = Utils::calcDist(pc->stats.pos, npcs->npcs[npc_id]->stats.pos);
+			bool npc_is_alive = !npcs->npcs[npc_id]->stats.hero_ally || npcs->npcs[npc_id]->stats.hp > 0;
 
-			if (interact_distance < eset->misc.interact_range) {
+			if (interact_distance < eset->misc.interact_range && npc_is_alive) {
 				interact_with_npc = true;
 			}
 			else {
