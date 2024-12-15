@@ -118,7 +118,7 @@ void EntityManager::handleNewMap () {
 		if (entities[i]->stats.npc)
 			continue;
 
-		if(entities[i]->stats.hero_ally && !entities[i]->stats.corpse && entities[i]->stats.cur_state != StatBlock::ENTITY_DEAD && entities[i]->stats.cur_state != StatBlock::ENTITY_CRITDEAD && entities[i]->stats.speed > 0.0f)
+		if (entities[i]->stats.hero_ally && entities[i]->stats.alive && entities[i]->stats.speed > 0)
 			allies.push(entities[i]);
 		else {
 			entities[i]->unloadSounds();

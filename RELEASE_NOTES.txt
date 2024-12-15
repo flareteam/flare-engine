@@ -61,6 +61,7 @@ Engine fixes:
 * Fix invisible icons in Powers menu when using gamepad/touch controls.
 * Fix regression that caused save_onload=false to have no effect.
 * Fix being able to talk to NPC allies after they die.
+* Prevent summons with zero base speed from teleporting with their summoner.
 * Android: Fix 'Flare' directory not being automatically created.
 * Android: Added a dialog to direct the player to the wiki page for installing if no game data is found.
 

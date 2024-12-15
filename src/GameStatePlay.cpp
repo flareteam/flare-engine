@@ -320,7 +320,7 @@ void GameStatePlay::checkTeleport() {
 		if (mapr->teleport_mapname.empty()) {
 			FPoint spawn_pos = mapr->collider.getRandomNeighbor(Point(pc->stats.pos), 1, MapCollision::MOVE_NORMAL, MapCollision::ENTITY_COLLIDE_ALL);
 			for (unsigned int i=0; i < entitym->entities.size(); i++) {
-				if(entitym->entities[i]->stats.hero_ally && entitym->entities[i]->stats.alive) {
+				if(entitym->entities[i]->stats.hero_ally && entitym->entities[i]->stats.alive && entitym->entities[i]->stats.speed > 0) {
 					mapr->collider.unblock(entitym->entities[i]->stats.pos.x, entitym->entities[i]->stats.pos.y);
 					entitym->entities[i]->stats.pos = spawn_pos;
 					mapr->collider.block(entitym->entities[i]->stats.pos.x, entitym->entities[i]->stats.pos.y, MapCollision::IS_ALLY);

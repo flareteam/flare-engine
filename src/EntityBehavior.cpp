@@ -164,7 +164,7 @@ void EntityBehavior::findTarget() {
 	hero_dist = target_dist;
 
 	// if the minion gets too far, transport it to the player pos
-	if (e->stats.hero_ally && hero_dist > ALLY_TELEPORT_DISTANCE && !e->stats.in_combat) {
+	if (e->stats.hero_ally && e->stats.speed > 0 && hero_dist > ALLY_TELEPORT_DISTANCE && !e->stats.in_combat) {
 		mapr->collider.unblock(e->stats.pos.x, e->stats.pos.y);
 		e->stats.pos.x = pc->stats.pos.x;
 		e->stats.pos.y = pc->stats.pos.y;
