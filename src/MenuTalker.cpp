@@ -561,6 +561,7 @@ void MenuTalker::addAction(const std::string& label, int node_id, bool is_vendor
 
 	actions.back().btn = new WidgetButton(WidgetButton::NO_FILE);
 	actions.back().btn->setLabel(label);
+	actions.back().btn->setTextFont(font_dialog);
 
 	if (node_id != Action::NO_NODE) {
 		actions.back().node_id = node_id;

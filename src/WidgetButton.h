@@ -66,6 +66,7 @@ public:
 	void setPos(int offset_x, int offset_y);
 	void setLabel(const std::string& s);
 	void setTextColor(int state, Color c);
+	void setTextFont(const std::string& _font);
 
 	void loadArt();
 	bool checkClick();

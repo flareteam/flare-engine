@@ -86,6 +86,10 @@ void WidgetButton::setTextColor(int state, Color c) {
 		text_color_disabled = c;
 }
 
+void WidgetButton::setTextFont(const std::string& _font) {
+	wlabel.setFont(_font);
+}
+
 void WidgetButton::loadArt() {
 	if (fileName == NO_FILE)
 		return;
