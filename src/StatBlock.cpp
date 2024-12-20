@@ -44,6 +44,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "StatBlock.h"
+#include "Stats.h"
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
 #include "XPScaling.h"
@@ -206,6 +207,8 @@ StatBlock::StatBlock()
 	resource_stats.resize(eset->resource_stats.list.size());
 	prev_max_resource_stats.resize(eset->resource_stats.list.size());
 	prev_resource_stats.resize(eset->resource_stats.list.size());
+
+	starting[Stats::HP_MAX] = 1;
 }
 
 StatBlock::~StatBlock() {
