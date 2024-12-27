@@ -18,6 +18,7 @@ Engine features:
 * Added 'preview_enabled' and 'preview_pos' to menus/inventory.txt config.
 * Added 'font' property to engine/combat_text.txt config.
 * New mouse movment behavior. Click once to move the player to a target and, if applicable, interact with it.
+* Stats on the character page are now organized by categories: Core, Offense, Defense, and Misc.
 * Android: Enabled use of external input devices (gamepads, keyboards, mice)
 
 Engine fixes:

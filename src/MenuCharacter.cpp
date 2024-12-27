@@ -303,49 +303,125 @@ void MenuCharacter::refreshStats() {
 	unsigned stat_index = 0;
 	size_t resource_offset_index = Stats::COUNT + eset->damage_types.count + eset->elements.list.size();
 
+	ss.str("");
+	ss << msg->get("Core Stats");
+	statList->set(stat_index, ss.str(), "");
+	statList->setRowHighlight(stat_index, true);
+	stat_index++;
+
 	for (int i=0; i<Stats::COUNT; ++i) {
+		if (Stats::CATEGORY[i] != Stats::CATEGORY_CORE)
+			continue;
+
 		if (!show_stat[i]) continue;
 
 		// Stats::ABS_MIN handles both min and max
 		if (i == Stats::ABS_MAX) continue;
 
-		// insert resource stats (execpt stealing) before accuracy
-		if (i == Stats::ACCURACY) {
-			for (size_t j = 0; j < eset->resource_stats.list.size(); ++j) {
-				for (size_t k = 0; k < EngineSettings::ResourceStats::STAT_STEAL; ++k) {
-					if (show_stat[resource_offset_index + (j * EngineSettings::ResourceStats::STAT_COUNT) + k]) {
-						ss.str("");
-						ss << eset->resource_stats.list[j].text[k] << ": " << Utils::floatToString(pc->stats.getResourceStat(j, k), eset->number_format.character_menu);
-						statList->set(stat_index, ss.str(), resourceStatTooltip(j, k));
-						stat_index++;
-					}
-				}
+		ss.str("");
+		ss << " " << Stats::NAME[i] << ": " << Utils::floatToString(pc->stats.get(static_cast<Stats::STAT>(i)), 2);
+		if (Stats::PERCENT[i]) ss << "%";
+		statList->set(stat_index, ss.str(), statTooltip(i));
+		stat_index++;
+	}
+
+	// insert resource stats (execpt stealing)
+	for (size_t j = 0; j < eset->resource_stats.list.size(); ++j) {
+		for (size_t k = 0; k < EngineSettings::ResourceStats::STAT_STEAL; ++k) {
+			if (show_stat[resource_offset_index + (j * EngineSettings::ResourceStats::STAT_COUNT) + k]) {
+				ss.str("");
+				ss << " " << eset->resource_stats.list[j].text[k] << ": " << Utils::floatToString(pc->stats.getResourceStat(j, k), eset->number_format.character_menu);
+				statList->set(stat_index, ss.str(), resourceStatTooltip(j, k));
+				stat_index++;
 			}
 		}
+	}
 
-		// insert damage stats before absorb min
-		if (i == Stats::ABS_MIN) {
-			for (size_t j = 0; j < eset->damage_types.list.size(); ++j) {
-				if (show_stat[Stats::COUNT + (j*2)] || show_stat[Stats::COUNT + (j*2) + 1]) {
-					float min_dmg = pc->stats.getDamageMin(j);
-					float max_dmg = pc->stats.getDamageMax(j);
+	ss.str("");
+	ss << msg->get("Offensive Stats");
+	statList->set(stat_index, ss.str(), "");
+	statList->setRowHighlight(stat_index, true);
+	stat_index++;
 
-					ss.str("");
-					ss << eset->damage_types.list[j].name << ": " << Utils::createMinMaxString(min_dmg, max_dmg, eset->number_format.character_menu);
-					statList->set(stat_index, ss.str(), damageTooltip(j));
-					stat_index++;
-				}
-			}
+	// insert damage stats
+	for (size_t j = 0; j < eset->damage_types.list.size(); ++j) {
+		if (show_stat[Stats::COUNT + (j*2)] || show_stat[Stats::COUNT + (j*2) + 1]) {
+			float min_dmg = pc->stats.getDamageMin(j);
+			float max_dmg = pc->stats.getDamageMax(j);
 
 			ss.str("");
-			ss << msg->get("Absorb") << ": " << Utils::createMinMaxString(pc->stats.get(Stats::ABS_MIN), pc->stats.get(Stats::ABS_MAX), eset->number_format.character_menu);
+			ss << " " << eset->damage_types.list[j].name << ": " << Utils::createMinMaxString(min_dmg, max_dmg, eset->number_format.character_menu);
+			statList->set(stat_index, ss.str(), damageTooltip(j));
+			stat_index++;
 		}
-		else {
-			ss.str("");
-			ss << Stats::NAME[i] << ": " << Utils::floatToString(pc->stats.get(static_cast<Stats::STAT>(i)), 2);
-			if (Stats::PERCENT[i]) ss << "%";
-		}
+	}
+	for (int i=0; i<Stats::COUNT; ++i) {
+		if (Stats::CATEGORY[i] != Stats::CATEGORY_OFFENSE)
+			continue;
 
+		if (!show_stat[i]) continue;
+
+		ss.str("");
+		ss << " " << Stats::NAME[i] << ": " << Utils::floatToString(pc->stats.get(static_cast<Stats::STAT>(i)), 2);
+		if (Stats::PERCENT[i]) ss << "%";
+		statList->set(stat_index, ss.str(), statTooltip(i));
+		stat_index++;
+	}
+
+	ss.str("");
+	ss << msg->get("Defensive Stats");
+	statList->set(stat_index, ss.str(), "");
+	statList->setRowHighlight(stat_index, true);
+	stat_index++;
+
+	ss.str("");
+	ss << " " << msg->get("Absorb") << ": " << Utils::createMinMaxString(pc->stats.get(Stats::ABS_MIN), pc->stats.get(Stats::ABS_MAX), eset->number_format.character_menu);
+	statList->set(stat_index, ss.str(), statTooltip(Stats::ABS_MIN));
+	stat_index++;
+
+	for (int i=0; i<Stats::COUNT; ++i) {
+		if (Stats::CATEGORY[i] != Stats::CATEGORY_DEFENSE)
+			continue;
+
+		if (!show_stat[i]) continue;
+
+		// absorb was already added to the list
+		if (i == Stats::ABS_MIN || i == Stats::ABS_MAX) continue;
+
+		ss.str("");
+		ss << " " << Stats::NAME[i] << ": " << Utils::floatToString(pc->stats.get(static_cast<Stats::STAT>(i)), 2);
+		if (Stats::PERCENT[i]) ss << "%";
+		statList->set(stat_index, ss.str(), statTooltip(i));
+		stat_index++;
+	}
+
+	if (show_resists) {
+		for (size_t i=0; i<eset->elements.list.size(); ++i) {
+			if (!show_stat[Stats::COUNT + eset->damage_types.count + i])
+				continue;
+
+			ss.str("");
+			ss << " " << msg->getv("Resistance (%s)", eset->elements.list[i].name.c_str()) << ": " << Utils::floatToString(pc->stats.getResist(i), eset->number_format.character_menu) << "%";
+			statList->set(stat_index, ss.str(), resistTooltip(i));
+			stat_index++;
+		}
+	}
+
+	ss.str("");
+	ss << msg->get("Miscellaneous Stats");
+	statList->set(stat_index, ss.str(), "");
+	statList->setRowHighlight(stat_index, true);
+	stat_index++;
+
+	for (int i=0; i<Stats::COUNT; ++i) {
+		if (Stats::CATEGORY[i] != Stats::CATEGORY_MISC)
+			continue;
+
+		if (!show_stat[i]) continue;
+
+		ss.str("");
+		ss << " " << Stats::NAME[i] << ": " << Utils::floatToString(pc->stats.get(static_cast<Stats::STAT>(i)), 2);
+		if (Stats::PERCENT[i]) ss << "%";
 		statList->set(stat_index, ss.str(), statTooltip(i));
 		stat_index++;
 	}
@@ -355,22 +431,10 @@ void MenuCharacter::refreshStats() {
 		for (size_t k = EngineSettings::ResourceStats::STAT_STEAL; k < EngineSettings::ResourceStats::STAT_COUNT; ++k) {
 			if (show_stat[resource_offset_index + (j * EngineSettings::ResourceStats::STAT_COUNT) + k]) {
 				ss.str("");
-				ss << eset->resource_stats.list[j].text[k] << ": " << Utils::floatToString(pc->stats.getResourceStat(j, k), eset->number_format.character_menu) << "%";
+				ss << " " << eset->resource_stats.list[j].text[k] << ": " << Utils::floatToString(pc->stats.getResourceStat(j, k), eset->number_format.character_menu) << "%";
 				statList->set(stat_index, ss.str(), resourceStatTooltip(j, k));
 				stat_index++;
 			}
-		}
-	}
-
-	if (show_resists) {
-		for (size_t i=0; i<eset->elements.list.size(); ++i) {
-			if (!show_stat[Stats::COUNT + eset->damage_types.count + i])
-				continue;
-
-			ss.str("");
-			ss << msg->getv("Resistance (%s)", eset->elements.list[i].name.c_str()) << ": " << Utils::floatToString(pc->stats.getResist(i), eset->number_format.character_menu) << "%";
-			statList->set(stat_index, ss.str(), resistTooltip(i));
-			stat_index++;
 		}
 	}
 

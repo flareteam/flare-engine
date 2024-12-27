@@ -52,10 +52,18 @@ namespace Stats {
 		COUNT
 	};
 
+	enum STAT_CATEGORY {
+		CATEGORY_CORE = 0,
+		CATEGORY_OFFENSE,
+		CATEGORY_DEFENSE,
+		CATEGORY_MISC,
+	};
+
 	extern std::string KEY[COUNT];
 	extern std::string NAME[COUNT];
 	extern std::string DESC[COUNT];
 	extern bool PERCENT[COUNT];
+	extern short CATEGORY[COUNT];
 	void init();
 }
 

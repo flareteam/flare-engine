@@ -445,11 +445,21 @@ void WidgetListBox::refresh() {
 
 		if (i+cursor < items.size()) {
 			items[i+cursor].label.setPos(rows[i].x + eset->widgets.listbox_text_margin.x, rows[i].y + (rows[i].h/2));
-			if (items[i+cursor].selected) {
-				items[i+cursor].label.setColor(font->getColor(FontEngine::COLOR_WIDGET_NORMAL));
+			if (can_select) {
+				if (items[i+cursor].selected) {
+					items[i+cursor].label.setColor(font->getColor(FontEngine::COLOR_WIDGET_NORMAL));
+				}
+				else {
+					items[i+cursor].label.setColor(font->getColor(FontEngine::COLOR_WIDGET_DISABLED));
+				}
 			}
 			else {
-				items[i+cursor].label.setColor(font->getColor(FontEngine::COLOR_WIDGET_DISABLED));
+				if (items[i+cursor].highlight) {
+					items[i+cursor].label.setColor(font->getColor(FontEngine::COLOR_WIDGET_NORMAL));
+				}
+				else {
+					items[i+cursor].label.setColor(font->getColor(FontEngine::COLOR_WIDGET_DISABLED));
+				}
 			}
 		}
 	}
@@ -568,6 +578,13 @@ void WidgetListBox::setHeight(int new_size) {
 	rows.resize(static_cast<size_t>(new_size));
 
 	refresh();
+}
+
+void WidgetListBox::setRowHighlight(unsigned index, bool highlight) {
+	if (can_select || index >= items.size())
+		return;
+
+	items[index].highlight = highlight;
 }
 
 void WidgetListBox::sort() {

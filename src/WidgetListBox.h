@@ -37,6 +37,7 @@ private:
 	public:
 		ListBoxItem()
 			: selected(false)
+			, highlight(false)
 		{}
 		~ListBoxItem() {}
 		bool operator< (const ListBoxItem& other) const {
@@ -46,6 +47,7 @@ private:
 		std::string tooltip;
 		WidgetLabel label;
 		bool selected;
+		bool highlight;
 	};
 
 	void checkTooltip(const Point& mouse);
@@ -97,6 +99,8 @@ public:
 	bool isSelected(int index);
 
 	void setHeight(int new_size);
+
+	void setRowHighlight(unsigned index, bool highlight);
 
 	Rect pos_scroll;
 	bool pressed;
