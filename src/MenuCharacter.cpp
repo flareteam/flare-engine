@@ -82,13 +82,14 @@ MenuCharacter::MenuCharacter()
 	}
 
 	show_stat.resize(Stats::COUNT + eset->damage_types.count + eset->elements.list.size() + eset->resource_stats.stat_count);
-	for (size_t i = 0; i < Stats::COUNT + eset->damage_types.count + eset->elements.list.size(); i++) {
-		show_stat[i] = true;
-	}
-
-	// some stats are hidden by default
-	for (int i = Stats::RESIST_DAMAGE_OVER_TIME; i < Stats::COUNT; ++i) {
-		show_stat[i] = false;
+	for (size_t i = 0; i < show_stat.size(); i++) {
+		if (i >= Stats::RESIST_DAMAGE_OVER_TIME && i < Stats::COUNT) {
+			// some stats are hidden by default
+			show_stat[i] = false;
+		}
+		else {
+			show_stat[i] = true;
+		}
 	}
 
 	// Upgrade buttons
@@ -368,6 +369,16 @@ void MenuCharacter::refreshStats() {
 		stat_index++;
 	}
 
+	// insert resource stealing stats after HP/MP steal
+	for (size_t j = 0; j < eset->resource_stats.list.size(); ++j) {
+		if (show_stat[resource_offset_index + (j * EngineSettings::ResourceStats::STAT_COUNT) + EngineSettings::ResourceStats::STAT_STEAL]) {
+			ss.str("");
+			ss << " " << eset->resource_stats.list[j].text[EngineSettings::ResourceStats::STAT_STEAL] << ": " << Utils::floatToString(pc->stats.getResourceStat(j, EngineSettings::ResourceStats::STAT_STEAL), eset->number_format.character_menu) << "%";
+			statList->set(stat_index, ss.str(), resourceStatTooltip(j, EngineSettings::ResourceStats::STAT_STEAL));
+			stat_index++;
+		}
+	}
+
 	ss.str("");
 	ss << msg->get("Defensive Stats");
 	statList->set(stat_index, ss.str(), "");
@@ -407,6 +418,17 @@ void MenuCharacter::refreshStats() {
 		}
 	}
 
+	// insert resource stealing stats after HP/MP steal
+	for (size_t j = 0; j < eset->resource_stats.list.size(); ++j) {
+		if (show_stat[resource_offset_index + (j * EngineSettings::ResourceStats::STAT_COUNT) + EngineSettings::ResourceStats::STAT_RESIST_STEAL]) {
+			ss.str("");
+			ss << " " << eset->resource_stats.list[j].text[EngineSettings::ResourceStats::STAT_RESIST_STEAL] << ": " << Utils::floatToString(pc->stats.getResourceStat(j, EngineSettings::ResourceStats::STAT_RESIST_STEAL), eset->number_format.character_menu) << "%";
+			statList->set(stat_index, ss.str(), resourceStatTooltip(j, EngineSettings::ResourceStats::STAT_RESIST_STEAL));
+			stat_index++;
+		}
+	}
+
+
 	ss.str("");
 	ss << msg->get("Miscellaneous Stats");
 	statList->set(stat_index, ss.str(), "");
@@ -424,18 +446,6 @@ void MenuCharacter::refreshStats() {
 		if (Stats::PERCENT[i]) ss << "%";
 		statList->set(stat_index, ss.str(), statTooltip(i));
 		stat_index++;
-	}
-
-	// insert resource stealing stats after HP/MP steal
-	for (size_t j = 0; j < eset->resource_stats.list.size(); ++j) {
-		for (size_t k = EngineSettings::ResourceStats::STAT_STEAL; k < EngineSettings::ResourceStats::STAT_COUNT; ++k) {
-			if (show_stat[resource_offset_index + (j * EngineSettings::ResourceStats::STAT_COUNT) + k]) {
-				ss.str("");
-				ss << " " << eset->resource_stats.list[j].text[k] << ": " << Utils::floatToString(pc->stats.getResourceStat(j, k), eset->number_format.character_menu) << "%";
-				statList->set(stat_index, ss.str(), resourceStatTooltip(j, k));
-				stat_index++;
-			}
-		}
 	}
 
 	// update tool tips

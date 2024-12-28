@@ -151,14 +151,14 @@ namespace Stats {
 		NAME[HP_STEAL] = msg->get("HP Steal");
 		DESC[HP_STEAL] = msg->get("Percentage of HP stolen per hit.");
 		PERCENT[HP_STEAL] = true;
-		CATEGORY[HP_STEAL] = CATEGORY_MISC;
+		CATEGORY[HP_STEAL] = CATEGORY_OFFENSE;
 
 		// @TYPE mp_steal|Percentage of MP stolen when damaging a target
 		KEY[MP_STEAL] = "mp_steal";
 		NAME[MP_STEAL] = msg->get("MP Steal");
 		DESC[MP_STEAL] = msg->get("Percentage of MP stolen per hit.");
 		PERCENT[MP_STEAL] = true;
-		CATEGORY[MP_STEAL] = CATEGORY_MISC;
+		CATEGORY[MP_STEAL] = CATEGORY_OFFENSE;
 
 		// @TYPE resist_damage_over_time|Percentage chance that damage-over-time effects will be negated
 		KEY[RESIST_DAMAGE_OVER_TIME] = "resist_damage_over_time";
