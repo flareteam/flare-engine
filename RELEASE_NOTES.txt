@@ -19,6 +19,7 @@ Engine features:
 * Added 'font' property to engine/combat_text.txt config.
 * New mouse movment behavior. Click once to move the player to a target and, if applicable, interact with it.
 * Stats on the character page are now organized by categories: Core, Offense, Defense, and Misc.
+* Speed and Attack Speed are now able to be shown in the Character menu.
 * Android: Enabled use of external input devices (gamepads, keyboards, mice)
 
 Engine fixes:

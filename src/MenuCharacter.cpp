@@ -81,7 +81,7 @@ MenuCharacter::MenuCharacter()
 		cstat[i+2].label->setText(eset->primary_stats.list[i].name);
 	}
 
-	show_stat.resize(Stats::COUNT + eset->damage_types.count + eset->elements.list.size() + eset->resource_stats.stat_count);
+	show_stat.resize(Stats::COUNT + eset->damage_types.count + eset->elements.list.size() + eset->resource_stats.stat_count + 2);
 	for (size_t i = 0; i < show_stat.size(); i++) {
 		if (i >= Stats::RESIST_DAMAGE_OVER_TIME && i < Stats::COUNT) {
 			// some stats are hidden by default
@@ -303,6 +303,7 @@ void MenuCharacter::refreshStats() {
 	// scrolling stat list
 	unsigned stat_index = 0;
 	size_t resource_offset_index = Stats::COUNT + eset->damage_types.count + eset->elements.list.size();
+	size_t speed_offset_index = resource_offset_index + eset->resource_stats.stat_count;
 
 	ss.str("");
 	ss << msg->get("Core Stats");
@@ -445,6 +446,20 @@ void MenuCharacter::refreshStats() {
 		ss << " " << Stats::NAME[i] << ": " << Utils::floatToString(pc->stats.get(static_cast<Stats::STAT>(i)), 2);
 		if (Stats::PERCENT[i]) ss << "%";
 		statList->set(stat_index, ss.str(), statTooltip(i));
+		stat_index++;
+	}
+
+    if (show_stat[speed_offset_index]) {
+		ss.str("");
+		ss << " " << msg->get("Movement Speed") << ": " << pc->stats.effects.speed << "%";
+		statList->set(stat_index, ss.str(), "");
+		stat_index++;
+	}
+
+	if (show_stat[speed_offset_index + 1]) {
+		ss.str("");
+		ss << " " << msg->get("Attack Speed") << ": " << pc->stats.effects.getAttackSpeed("") << "%";
+		statList->set(stat_index, ss.str(), "");
 		stat_index++;
 	}
 
@@ -874,6 +889,14 @@ void MenuCharacter::parseShowStat(FileParser& infile) {
 				return;
 			}
 		}
+	}
+	offset_index += eset->resource_stats.stat_count;
+
+	if (stat_name == "speed") {
+		show_stat[offset_index] = value;
+	}
+	else if (stat_name == "attack_speed") {
+		show_stat[offset_index + 1] = value;
 	}
 }
 
