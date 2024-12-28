@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-28 08:33+\n"
+"POT-Creation-Date: 2024-12-28 10:41+\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -79,43 +79,43 @@ msgstr ""
 msgid "Mental Damage Max"
 msgstr ""
 
-#: ../cutscenes/credits.txt:7
+#: ../cutscenes/credits_engine.txt:7
 msgid "Flare Engine Credits"
 msgstr ""
 
-#: ../cutscenes/credits.txt:10
+#: ../cutscenes/credits_engine.txt:10
 msgid "Lead Programmers"
 msgstr ""
 
-#: ../cutscenes/credits.txt:20
+#: ../cutscenes/credits_engine.txt:20
 msgid "Programmers"
 msgstr ""
 
-#: ../cutscenes/credits.txt:51
+#: ../cutscenes/credits_engine.txt:51
 msgid "Default Art"
 msgstr ""
 
-#: ../cutscenes/credits.txt:56
+#: ../cutscenes/credits_engine.txt:56
 msgid "Translators"
 msgstr ""
 
-#: ../cutscenes/credits.txt:137
+#: ../cutscenes/credits_engine.txt:140
 msgid "Distributors"
 msgstr ""
 
-#: ../cutscenes/credits.txt:146
+#: ../cutscenes/credits_engine.txt:149
 msgid "Special Thanks"
 msgstr ""
 
-#: ../cutscenes/credits.txt:150
+#: ../cutscenes/credits_engine.txt:153
 msgid "For giving constant feedback and testing:"
 msgstr ""
 
-#: ../cutscenes/credits.txt:152
+#: ../cutscenes/credits_engine.txt:155
 msgid "The community at OpenGameArt"
 msgstr ""
 
-#: ../cutscenes/credits.txt:156
+#: ../cutscenes/credits_engine.txt:159
 msgid "For Tiled and the Flare map exporter:"
 msgstr ""
 

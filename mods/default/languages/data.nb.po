@@ -9,10 +9,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-17 20:15+\n"
+"POT-Creation-Date: 2024-12-28 10:39+\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
 "Last-Translator: Elias Nykrem <bloodaxeNOR@protonmail.com>, 2019\n"
-"Language-Team: Norwegian Bokmål (https://www.transifex.com/flareorg/teams/84925/nb/)\n"
+"Language-Team: Norwegian Bokmål (https://app.transifex.com/flareorg/teams/84925/nb/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -83,42 +83,42 @@ msgstr "Mental Skade Min"
 msgid "Mental Damage Max"
 msgstr "Mental Skade Maks"
 
-#: ../cutscenes/credits.txt:7
+#: ../cutscenes/credits_engine.txt:7
 msgid "Flare Engine Credits"
 msgstr "Flare Engine Rulletekst"
 
-#: ../cutscenes/credits.txt:10
+#: ../cutscenes/credits_engine.txt:10
 msgid "Lead Programmers"
 msgstr "Ledende Programmerere"
 
-#: ../cutscenes/credits.txt:20
+#: ../cutscenes/credits_engine.txt:20
 msgid "Programmers"
 msgstr "Programmerere"
 
-#: ../cutscenes/credits.txt:50
+#: ../cutscenes/credits_engine.txt:51
 msgid "Default Art"
 msgstr "Standard Kunst"
 
-#: ../cutscenes/credits.txt:55
+#: ../cutscenes/credits_engine.txt:56
 msgid "Translators"
 msgstr "Oversettere"
 
-#: ../cutscenes/credits.txt:124
+#: ../cutscenes/credits_engine.txt:140
 msgid "Distributors"
 msgstr "Distributører"
 
-#: ../cutscenes/credits.txt:133
+#: ../cutscenes/credits_engine.txt:149
 msgid "Special Thanks"
 msgstr "Spesielt takk til"
 
-#: ../cutscenes/credits.txt:137
+#: ../cutscenes/credits_engine.txt:153
 msgid "For giving constant feedback and testing:"
 msgstr "For konstant testing og tilbakemelding:"
 
-#: ../cutscenes/credits.txt:139
+#: ../cutscenes/credits_engine.txt:155
 msgid "The community at OpenGameArt"
 msgstr "Fellesskapet ved OpenGameArt"
 
-#: ../cutscenes/credits.txt:143
+#: ../cutscenes/credits_engine.txt:159
 msgid "For Tiled and the Flare map exporter:"
 msgstr "Til Tiled og Flare kart eksportør:"

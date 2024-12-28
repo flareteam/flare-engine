@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-21 12:22+\n"
+"POT-Creation-Date: 2024-12-28 10:39+\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
 "Last-Translator: Ansh Mishra, 2023\n"
 "Language-Team: Hindi (India) (https://app.transifex.com/flareorg/teams/84925/hi_IN/)\n"
@@ -83,42 +83,42 @@ msgstr "मानसिक क्षति न्यूनतम"
 msgid "Mental Damage Max"
 msgstr "मानसिक क्षति अधिकतम"
 
-#: ../cutscenes/credits.txt:7
+#: ../cutscenes/credits_engine.txt:7
 msgid "Flare Engine Credits"
 msgstr "फ्लेयर इंजन श्रेय सूची"
 
-#: ../cutscenes/credits.txt:10
+#: ../cutscenes/credits_engine.txt:10
 msgid "Lead Programmers"
 msgstr "प्रमुख प्रोग्रामर"
 
-#: ../cutscenes/credits.txt:20
+#: ../cutscenes/credits_engine.txt:20
 msgid "Programmers"
 msgstr "प्रोग्रामर"
 
-#: ../cutscenes/credits.txt:51
+#: ../cutscenes/credits_engine.txt:51
 msgid "Default Art"
 msgstr "डिफ़ॉल्ट कला"
 
-#: ../cutscenes/credits.txt:56
+#: ../cutscenes/credits_engine.txt:56
 msgid "Translators"
 msgstr "अनुवादक"
 
-#: ../cutscenes/credits.txt:131
+#: ../cutscenes/credits_engine.txt:140
 msgid "Distributors"
 msgstr "वितरक"
 
-#: ../cutscenes/credits.txt:140
+#: ../cutscenes/credits_engine.txt:149
 msgid "Special Thanks"
 msgstr "विशेष धन्यवाद"
 
-#: ../cutscenes/credits.txt:144
+#: ../cutscenes/credits_engine.txt:153
 msgid "For giving constant feedback and testing:"
 msgstr "लगातार फीडबैक और परीक्षण देने के लिए:"
 
-#: ../cutscenes/credits.txt:146
+#: ../cutscenes/credits_engine.txt:155
 msgid "The community at OpenGameArt"
 msgstr "OpenGameArt पर समुदाय"
 
-#: ../cutscenes/credits.txt:150
+#: ../cutscenes/credits_engine.txt:159
 msgid "For Tiled and the Flare map exporter:"
 msgstr "टाइल और फ़्लेयर मानचित्र निर्यातक के लिए:"

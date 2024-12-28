@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-28 08:33+\n"
+"POT-Creation-Date: 2024-12-28 10:39+\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
 "Last-Translator: Benson <Benson.Dr@Gmail.com>, 2024\n"
 "Language-Team: Chinese (Taiwan) (https://app.transifex.com/flareorg/teams/84925/zh_TW/)\n"
@@ -83,42 +83,42 @@ msgstr "魔法傷害最小值"
 msgid "Mental Damage Max"
 msgstr "魔法傷害最大值"
 
-#: ../cutscenes/credits.txt:7
+#: ../cutscenes/credits_engine.txt:7
 msgid "Flare Engine Credits"
 msgstr "榮耀火炬(Flare) 遊戲引擎歸功於"
 
-#: ../cutscenes/credits.txt:10
+#: ../cutscenes/credits_engine.txt:10
 msgid "Lead Programmers"
 msgstr "首席程式設計師"
 
-#: ../cutscenes/credits.txt:20
+#: ../cutscenes/credits_engine.txt:20
 msgid "Programmers"
 msgstr "程式設計師"
 
-#: ../cutscenes/credits.txt:51
+#: ../cutscenes/credits_engine.txt:51
 msgid "Default Art"
 msgstr "預設素材"
 
-#: ../cutscenes/credits.txt:56
+#: ../cutscenes/credits_engine.txt:56
 msgid "Translators"
 msgstr "翻譯"
 
-#: ../cutscenes/credits.txt:137
+#: ../cutscenes/credits_engine.txt:140
 msgid "Distributors"
 msgstr "發行"
 
-#: ../cutscenes/credits.txt:146
+#: ../cutscenes/credits_engine.txt:149
 msgid "Special Thanks"
 msgstr "特別感謝"
 
-#: ../cutscenes/credits.txt:150
+#: ../cutscenes/credits_engine.txt:153
 msgid "For giving constant feedback and testing:"
 msgstr "給予不斷回饋和測試的:"
 
-#: ../cutscenes/credits.txt:152
+#: ../cutscenes/credits_engine.txt:155
 msgid "The community at OpenGameArt"
 msgstr "OpenGameArt 社群網站"
 
-#: ../cutscenes/credits.txt:156
+#: ../cutscenes/credits_engine.txt:159
 msgid "For Tiled and the Flare map exporter:"
 msgstr "關於平面輸出和榮耀火炬地圖導出:"
