@@ -90,7 +90,10 @@ def extract(filename):
                 test_key = stat.rstrip()
                 if test_key == "":
                     continue
+
                 if filename.endswith('cutscenes/credits.txt') and test_key not in allowed_credits_strings:
+                    continue
+                elif filename.endswith('cutscenes/credits_engine.txt') and test_key not in allowed_credits_strings:
                     continue
 
                 comment = filename + ':' + str(i)
