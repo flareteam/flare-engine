@@ -7,7 +7,7 @@
 # Ademaro <ademaro@ya.ru>, 2018
 # David Bell <ooliterplus@gmail.com>, 2021
 # Justin Jacobs <jajdorkster@gmail.com>, 2022
-# Blueberryy <igory.ygr200@gmail.com>, 2023
+# Blueberryy <igory.ygr200@gmail.com>, 2024
 # 
 #, fuzzy
 msgid ""
@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-28 10:39-0500\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: Blueberryy <igory.ygr200@gmail.com>, 2023\n"
+"Last-Translator: Blueberryy <igory.ygr200@gmail.com>, 2024\n"
 "Language-Team: Russian (https://app.transifex.com/flareorg/teams/84925/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -461,27 +461,27 @@ msgstr "Доступные очки атрибутов: %d"
 
 #: ../../../src/MenuCharacter.cpp:309
 msgid "Core Stats"
-msgstr ""
+msgstr "Основные атрибуты"
 
 #: ../../../src/MenuCharacter.cpp:343
 msgid "Offensive Stats"
-msgstr ""
+msgstr "Атрибуты атаки"
 
 #: ../../../src/MenuCharacter.cpp:384
 msgid "Defensive Stats"
-msgstr ""
+msgstr "Атрибуты защиты"
 
 #: ../../../src/MenuCharacter.cpp:434
 msgid "Miscellaneous Stats"
-msgstr ""
+msgstr "Разные атрибуты"
 
 #: ../../../src/MenuCharacter.cpp:454
 msgid "Movement Speed"
-msgstr ""
+msgstr "Скорость передвижения"
 
 #: ../../../src/MenuCharacter.cpp:461
 msgid "Attack Speed"
-msgstr ""
+msgstr "Скорость атаки"
 
 #: ../../../src/MenuCharacter.cpp:472 ../../../src/MenuStatBar.cpp:179
 #, c-format
@@ -1088,7 +1088,7 @@ msgstr "Плитка"
 
 #: ../../../src/MenuDevConsole.cpp:402
 msgid "Shortcut saved."
-msgstr ""
+msgstr "Горячая клавиша сохранена."
 
 #: ../../../src/MenuDevConsole.cpp:429
 msgid "adds a power to the action bar"
@@ -1096,7 +1096,7 @@ msgstr "добавляет способность в панель действи
 
 #: ../../../src/MenuDevConsole.cpp:430
 msgid "turns on/off the display of the FPS counter"
-msgstr "включает/выключает счётчик частоты кадров"
+msgstr "переключает счётчик частоты кадров"
 
 #: ../../../src/MenuDevConsole.cpp:431
 msgid "turns on/off all of the HUD elements"
@@ -1116,15 +1116,15 @@ msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:434
 msgid "Prints out all the map filenames located in the \"maps/\" directory."
-msgstr "Печатает все названия файлов в каталоге \"maps/\"."
+msgstr "Печатает все названия файлов в каталоге «maps/»."
 
 #: ../../../src/MenuDevConsole.cpp:435
 msgid ""
 "Prints out the active campaign statuses that match a search term. No search "
 "term will list all active statuses"
 msgstr ""
-"Выводит найденные статусы активных кампаний. Если ничего не указать, "
-"показывает все активные статусы"
+"Выводит найденные состояния активных кампаний. Если ничего не указать, "
+"показывает все активные состояния"
 
 #: ../../../src/MenuDevConsole.cpp:436
 msgid ""
@@ -1136,7 +1136,7 @@ msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:437
 msgid "Assign a console command to a shortcut key."
-msgstr ""
+msgstr "Назначение консольной команды горячей клавише."
 
 #: ../../../src/MenuDevConsole.cpp:438 ../../../src/MenuDevConsole.cpp:439
 msgid ""
@@ -1179,30 +1179,30 @@ msgstr "<id>"
 #: ../../../src/MenuDevConsole.cpp:616
 #, c-format
 msgid "3 | <%s> | %s"
-msgstr ""
+msgstr "3 | <%s> | %s"
 
 #: ../../../src/MenuDevConsole.cpp:617
 #, c-format
 msgid "2 | <%s> | %s"
-msgstr ""
+msgstr "2 | <%s> | %s"
 
 #: ../../../src/MenuDevConsole.cpp:618
 #, c-format
 msgid "1 | <%s> | %s"
-msgstr ""
+msgstr "1 | <%s> | %s"
 
 #: ../../../src/MenuDevConsole.cpp:619
 msgid "Current shortcuts:"
-msgstr ""
+msgstr "Текущие горячие клавиши:"
 
 #: ../../../src/MenuDevConsole.cpp:628
 #, c-format
 msgid "Enter the command you wish to save to slot %d."
-msgstr ""
+msgstr "Введите команду, которую вы хотите сохранить в ячейке %d."
 
 #: ../../../src/MenuDevConsole.cpp:632
 msgid "ERROR: Not a valid shortcut slot."
-msgstr ""
+msgstr "ОШИБКА: Недействительная ячейка для горячей клавиши."
 
 #: ../../../src/MenuDevConsole.cpp:646
 #, c-format
@@ -1929,15 +1929,15 @@ msgstr "Меню разработчика"
 
 #: ../../../src/SDLInputState.cpp:936
 msgid "Developer Command 1"
-msgstr ""
+msgstr "Команда разработчика 1"
 
 #: ../../../src/SDLInputState.cpp:937
 msgid "Developer Command 2"
-msgstr ""
+msgstr "Команда разработчика 2"
 
 #: ../../../src/SDLInputState.cpp:938
 msgid "Developer Command 3"
-msgstr ""
+msgstr "Команда разработчика 3"
 
 #: ../../../src/SDLInputState.cpp:939
 msgid "Ctrl"
