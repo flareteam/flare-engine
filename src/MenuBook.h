@@ -42,10 +42,7 @@ public:
 	void logic();
 	void render();
 	void closeWindow();
-
-	std::string book_name;
-	std::string last_book_name;
-	bool book_loaded;
+	void setBookFilename(const std::string& filename);
 
 private:
 	class BookImage {
@@ -94,6 +91,10 @@ private:
 			: button(NULL)
 		{}
 	};
+
+	std::string book_name;
+	std::string last_book_name;
+	bool book_loaded;
 
 	WidgetButton *closeButton;
 	std::vector<BookImage> images;

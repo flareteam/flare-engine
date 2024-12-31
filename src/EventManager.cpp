@@ -670,7 +670,7 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		e->data[0].Bool = Parse::toBool(val);
 	}
 	else if (key == "book") {
-		// @ATTR event.book|filename|Opens a book by filename.
+		// @ATTR event.book|["close", filename]|Opens a book by filename. 'close' can be used in place of the filename to close an already open book.
 		e->type = EventComponent::BOOK;
 
 		e->s = val;

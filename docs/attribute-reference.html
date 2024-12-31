@@ -664,7 +664,7 @@ code {
 
 <p><strong>event.save_game</strong> | <code>bool</code> | If true, the game is saved when the event is triggered. The respawn position is set to where the player is standing.</p>
 
-<p><strong>event.book</strong> | <code>filename</code> | Opens a book by filename.</p>
+<p><strong>event.book</strong> | <code>["close", filename]</code> | Opens a book by filename. 'close' can be used in place of the filename to close an already open book.</p>
 
 <p><strong>event.script</strong> | <code>filename</code> | Loads and executes an Event from a file.</p>
 

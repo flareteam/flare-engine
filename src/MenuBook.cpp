@@ -51,6 +51,16 @@ MenuBook::MenuBook()
 	tablist = TabList();
 }
 
+void MenuBook::setBookFilename(const std::string& filename) {
+	if (visible && (filename.empty() || filename == "close")) {
+		closeWindow();
+		snd->play(sfx_close, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
+	}
+	else {
+		book_name = filename;
+	}
+}
+
 void MenuBook::loadBook() {
 	if (last_book_name != book_name) {
 		last_book_name.clear();

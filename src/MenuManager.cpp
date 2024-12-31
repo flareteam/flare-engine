@@ -1647,8 +1647,7 @@ void MenuManager::closeLeft() {
 	questlog->visible = false;
 	exit->visible = false;
 	stash->visible = false;
-	book->closeWindow();
-	book->book_name = "";
+	book->setBookFilename("");
 	num_picker->visible = false;
 
 	talker->setNPC(NULL);
@@ -1666,8 +1665,7 @@ void MenuManager::closeRight() {
 	inv->visible = false;
 	pow->visible = false;
 	exit->visible = false;
-	book->closeWindow();
-	book->book_name = "";
+	book->setBookFilename("");
 	num_picker->visible = false;
 
 	talker->setNPC(NULL);

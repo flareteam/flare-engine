@@ -20,6 +20,7 @@ Engine features:
 * New mouse movment behavior. Click once to move the player to a target and, if applicable, interact with it.
 * Stats on the character page are now organized by categories: Core, Offense, Defense, and Misc.
 * Speed and Attack Speed are now able to be shown in the Character menu.
+* Events can now use 'book=close' to close the active book.
 * Android: Enabled use of external input devices (gamepads, keyboards, mice)
 
 Engine fixes:
