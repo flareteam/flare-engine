@@ -67,6 +67,7 @@ Engine fixes:
 * Fix being able to talk to NPC allies after they die.
 * Prevent summons with zero base speed from teleporting with their summoner.
 * The text for dialog options now respects the 'font_dialog' property in menus/talker.txt.
+* Fixed books not closing properly when trying to load another book with an invalid filename.
 * Android: Fix 'Flare' directory not being automatically created.
 * Android: Added a dialog to direct the player to the wiki page for installing if no game data is found.
 

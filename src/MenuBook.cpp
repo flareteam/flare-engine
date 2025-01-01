@@ -128,6 +128,10 @@ void MenuBook::loadBook() {
 
 		infile.close();
 	}
+	else {
+		closeWindow();
+		return;
+	}
 
 	refreshText();
 
@@ -335,6 +339,9 @@ void MenuBook::clearBook() {
 
 	delete event_close;
 	event_close = NULL;
+
+	delete background;
+	background = NULL;
 }
 
 void MenuBook::closeWindow() {
@@ -396,7 +403,7 @@ void MenuBook::logic() {
 	if (book_name.empty()) return;
 	else {
 		loadBook();
-		visible = true;
+		visible = book_loaded;
 	}
 
 	if (!visible)
