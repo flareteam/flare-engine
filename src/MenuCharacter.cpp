@@ -476,8 +476,16 @@ void MenuCharacter::refreshStats() {
 
 	for (size_t j = 2; j < cstat.size(); ++j) {
 		cstat[j].tip.clear();
-		cstat[j].tip.addText(cstat[j].label->getText());
-		cstat[j].tip.addText(msg->getv("base (%d), bonus (%d)", *(base_stats[j-2]), *(base_stats_add[j-2])));
+		ss.str("");
+		ss << cstat[j].label->getText() << " (" << *(base_stats[j-2]);
+		if (*(base_stats_add[j-2]) > 0) {
+			ss << "+";
+		}
+		if (*(base_stats_add[j-2]) != 0) {
+			ss << *(base_stats_add[j-2]);
+		}
+		ss << ")";
+		cstat[j].tip.addText(ss.str());
 
 		bool have_bonus = false;
 		size_t elements_offset = Stats::COUNT + eset->damage_types.count;
