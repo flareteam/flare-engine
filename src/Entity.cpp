@@ -587,22 +587,23 @@ bool Entity::takeHit(Hazard &h) {
 
 		// deal return damage
 		if (stats.get(Stats::RETURN_DAMAGE) > 0) {
-			if (Math::percentChanceF(h.src_stats->get(Stats::RESIST_DAMAGE_REFLECT))) {
-				comb->addString(msg->get("Resist"), stats.pos, CombatText::MSG_MISS);
-			}
-			else {
-				float dmg_return = (dmg * stats.get(Stats::RETURN_DAMAGE)) / 100.f;
-				dmg_return = eset->combat.resourceRound(dmg_return);
+			float dmg_return = (dmg * stats.get(Stats::RETURN_DAMAGE)) / 100.f;
+			dmg_return = eset->combat.resourceRound(dmg_return);
+			if (dmg_return > 0) {
+				if (Math::percentChanceF(h.src_stats->get(Stats::RESIST_DAMAGE_REFLECT))) {
+					comb->addString(msg->get("Resist"), stats.pos, CombatText::MSG_MISS);
+				}
+				else {
+					// swap the source type when dealing return damage
+					int return_source_type = Power::SOURCE_TYPE_NEUTRAL;
+					if (h.source_type == Power::SOURCE_TYPE_HERO || h.source_type == Power::SOURCE_TYPE_ALLY)
+						return_source_type = Power::SOURCE_TYPE_ENEMY;
+					else if (h.source_type == Power::SOURCE_TYPE_ENEMY)
+						return_source_type = stats.hero ? Power::SOURCE_TYPE_HERO : Power::SOURCE_TYPE_ALLY;
 
-				// swap the source type when dealing return damage
-				int return_source_type = Power::SOURCE_TYPE_NEUTRAL;
-				if (h.source_type == Power::SOURCE_TYPE_HERO || h.source_type == Power::SOURCE_TYPE_ALLY)
-					return_source_type = Power::SOURCE_TYPE_ENEMY;
-				else if (h.source_type == Power::SOURCE_TYPE_ENEMY)
-					return_source_type = stats.hero ? Power::SOURCE_TYPE_HERO : Power::SOURCE_TYPE_ALLY;
-
-				h.src_stats->takeDamage(dmg_return, !StatBlock::TAKE_DMG_CRIT, return_source_type);
-				comb->addFloat(dmg_return, h.src_stats->pos, CombatText::MSG_GIVEDMG);
+					h.src_stats->takeDamage(dmg_return, !StatBlock::TAKE_DMG_CRIT, return_source_type);
+					comb->addFloat(dmg_return, h.src_stats->pos, CombatText::MSG_GIVEDMG);
+				}
 			}
 		}
 	}
