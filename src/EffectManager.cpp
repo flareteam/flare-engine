@@ -184,20 +184,16 @@ int Effect::getTypeFromString(const std::string& type_str) {
 
 		for (size_t i=0; i<eset->damage_types.list.size(); ++i) {
 			if (type_str == eset->damage_types.list[i].min) {
-				return offset_index + static_cast<int>(i*2);
+				return offset_index + static_cast<int>(eset->damage_types.indexToMin(i));
 			}
 			else if (type_str == eset->damage_types.list[i].max) {
-				return offset_index + static_cast<int>(i*2) + 1;
+				return offset_index + static_cast<int>(eset->damage_types.indexToMax(i));
+			}
+			else if (type_str == eset->damage_types.list[i].resist) {
+				return offset_index + static_cast<int>(eset->damage_types.indexToResist(i));
 			}
 		}
 		offset_index += static_cast<int>(eset->damage_types.count);
-
-		for (size_t i=0; i<eset->elements.list.size(); ++i) {
-			if (type_str == eset->elements.list[i].resist_id) {
-				return offset_index + static_cast<int>(i);
-			}
-		}
-		offset_index += static_cast<int>(eset->elements.list.size());
 
 		for (size_t i = 0; i < eset->resource_stats.list.size(); ++i) {
 			for (size_t j = 0; j < EngineSettings::ResourceStats::STAT_COUNT; ++j) {
@@ -236,31 +232,31 @@ bool Effect::typeIsStat(int t) {
 
 bool Effect::typeIsDmgMin(int t) {
 	int offset_index = Effect::TYPE_COUNT + Stats::COUNT;
-	return t >= offset_index && t < offset_index + static_cast<int>(eset->damage_types.count) && (t - offset_index) % 2 == 0;
+	return t >= offset_index && t < offset_index + static_cast<int>(eset->damage_types.count) && (t - offset_index) % 3 == 0;
 }
 
 bool Effect::typeIsDmgMax(int t) {
 	int offset_index = Effect::TYPE_COUNT + Stats::COUNT;
-	return t >= offset_index && t < offset_index + static_cast<int>(eset->damage_types.count) && (t - offset_index) % 2 == 1;
+	return t >= offset_index && t < offset_index + static_cast<int>(eset->damage_types.count) && (t - offset_index) % 3 == 1;
 }
 
 bool Effect::typeIsResist(int t) {
-	int offset_index = Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count);
-	return t >= offset_index && t < offset_index + static_cast<int>(eset->elements.list.size());
+	int offset_index = Effect::TYPE_COUNT + Stats::COUNT;
+	return t >= offset_index && t < offset_index + static_cast<int>(eset->damage_types.count) && (t - offset_index) % 3 == 2;
 }
 
 bool Effect::typeIsResourceStat(int t) {
-	int offset_index = Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count + eset->elements.list.size());
+	int offset_index = Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count);
 	return t >= offset_index && t < offset_index + static_cast<int>(eset->resource_stats.stat_count);
 }
 
 bool Effect::typeIsResourceEffect(int t) {
-	int offset_index = Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count + eset->elements.list.size() + eset->resource_stats.stat_count);
+	int offset_index = Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count + eset->resource_stats.stat_count);
 	return t >= offset_index && t < offset_index + static_cast<int>(eset->resource_stats.effect_count);
 }
 
 bool Effect::typeIsPrimary(int t) {
-	int offset_index = Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count + eset->elements.list.size() + eset->resource_stats.stat_effect_count);
+	int offset_index = Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count + eset->resource_stats.stat_effect_count);
 	return t >= offset_index && t < offset_index + static_cast<int>(eset->primary_stats.list.size());
 }
 
@@ -273,15 +269,11 @@ int Effect::getStatFromType(int t) {
 }
 
 size_t Effect::getDmgFromType(int t) {
-	return static_cast<size_t>(t - Effect::TYPE_COUNT - Stats::COUNT) / 2;
-}
-
-size_t Effect::getResistFromType(int t) {
-	return static_cast<size_t>(t - Effect::TYPE_COUNT - Stats::COUNT) - eset->damage_types.count;
+	return static_cast<size_t>(t - Effect::TYPE_COUNT - Stats::COUNT) / 3;
 }
 
 size_t Effect::getResourceStatFromType(int t) {
-	size_t offset_index = static_cast<size_t>(t - Effect::TYPE_COUNT - Stats::COUNT) - eset->damage_types.count - eset->elements.list.size();
+	size_t offset_index = static_cast<size_t>(t - Effect::TYPE_COUNT - Stats::COUNT) - eset->damage_types.count;
 
 	if (offset_index > eset->resource_stats.stat_count) {
 		// effect-only stat (e.g. heal)
@@ -294,7 +286,7 @@ size_t Effect::getResourceStatFromType(int t) {
 }
 
 size_t Effect::getResourceStatSubIndexFromType(int t) {
-	size_t offset_index = static_cast<size_t>(t - Effect::TYPE_COUNT - Stats::COUNT) - eset->damage_types.count - eset->elements.list.size();
+	size_t offset_index = static_cast<size_t>(t - Effect::TYPE_COUNT - Stats::COUNT) - eset->damage_types.count;
 
 	if (offset_index > eset->resource_stats.stat_count) {
 		// effect-only stat (e.g. heal)
@@ -307,7 +299,7 @@ size_t Effect::getResourceStatSubIndexFromType(int t) {
 }
 
 size_t Effect::getPrimaryFromType(int t) {
-	return static_cast<size_t>(t - Effect::TYPE_COUNT - Stats::COUNT) - eset->damage_types.count - eset->elements.list.size() - eset->resource_stats.stat_effect_count;
+	return static_cast<size_t>(t - Effect::TYPE_COUNT - Stats::COUNT) - eset->damage_types.count - eset->resource_stats.stat_effect_count;
 }
 
 bool Effect::isImmunityTypeString(const std::string& type_str) {
@@ -326,7 +318,7 @@ bool Effect::isImmunityTypeString(const std::string& type_str) {
 EffectManager::EffectManager()
 	: resource_ot(eset->resource_stats.list.size(), 0)
 	, resource_ot_percent(eset->resource_stats.list.size(), 0)
-	, bonus(Stats::COUNT + eset->damage_types.count + eset->elements.list.size() + eset->resource_stats.stat_effect_count, 0)
+	, bonus(Stats::COUNT + eset->damage_types.count + eset->resource_stats.stat_effect_count, 0)
 	, bonus_multiplier(bonus.size(), 1)
 	, bonus_primary(eset->primary_stats.list.size(), 0)
 	, triggered_others(false)
@@ -375,7 +367,7 @@ void EffectManager::clearStatus() {
 void EffectManager::logic() {
 	clearStatus();
 
-	int offset_resource_effects = Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count) + static_cast<int>(eset->elements.list.size()) + static_cast<int>(eset->resource_stats.stat_count);
+	int offset_resource_effects = Effect::TYPE_COUNT + Stats::COUNT + static_cast<int>(eset->damage_types.count) + static_cast<int>(eset->resource_stats.stat_count);
 	int offset_primary_stats = offset_resource_effects + static_cast<int>(eset->resource_stats.effect_count);
 
 	for (size_t i=0; i<effect_list.size(); ++i) {
@@ -425,7 +417,7 @@ void EffectManager::logic() {
 			bonus[Stats::RESIST_MP_STEAL] += ei.magnitude;
 
 			for (size_t j = 0; j < eset->resource_stats.list.size(); ++j) {
-				size_t resist_steal_index = Stats::COUNT + eset->damage_types.count + eset->elements.list.size();
+				size_t resist_steal_index = Stats::COUNT + eset->damage_types.count;
 				resist_steal_index += (j+1) * EngineSettings::ResourceStats::STAT_RESIST_STEAL;
 				bonus[resist_steal_index] += ei.magnitude;
 			}

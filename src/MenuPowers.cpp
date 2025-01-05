@@ -1046,11 +1046,11 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 			ss << " " << eset->damage_types.list[index].name_max;
 		}
 		else if (Effect::typeIsResist(effect_type)) {
-			size_t index = Effect::getResistFromType(effect_type);
+			size_t index = Effect::getDmgFromType(effect_type);
 			if (!pwr->post_effects[i].is_multiplier) {
 				ss << "%";
 			}
-			ss << " " << msg->getv("Resistance (%s)", eset->elements.list[index].name.c_str());
+			ss << " " << msg->getv("Resistance (%s)", eset->damage_types.list[index].name.c_str());
 		}
 		else if (Effect::typeIsPrimary(effect_type)) {
 			size_t index = Effect::getPrimaryFromType(effect_type);
@@ -1267,7 +1267,7 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 		}
 		if (pwr->trait_elemental > -1) {
 			ss.str("");
-			ss << msg->getv("Elemental Damage (%s)", eset->elements.list[pwr->trait_elemental].name.c_str());
+			ss << msg->getv("Elemental Damage (%s)", eset->damage_types.list[pwr->trait_elemental].name.c_str());
 			tip_data->addColoredText(ss.str(), font->getColor(FontEngine::COLOR_MENU_BONUS));
 		}
 	}

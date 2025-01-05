@@ -654,12 +654,8 @@ int Map::addEventStatBlock(Event &evnt) {
 	EventComponent *ec_damage = evnt.getComponent(EventComponent::POWER_DAMAGE);
 	if (ec_damage) {
 		for (size_t i = 0; i < eset->damage_types.count; ++i) {
-			if (i % 2 == 0) {
-				statb->starting[Stats::COUNT + i] = ec_damage->data[0].Float; // min
-			}
-			else {
-				statb->starting[Stats::COUNT + i] = ec_damage->data[1].Float; // max
-			}
+			statb->starting[Stats::COUNT + eset->damage_types.indexToMin(i)] = ec_damage->data[0].Float; // min
+			statb->starting[Stats::COUNT + eset->damage_types.indexToMax(i)] = ec_damage->data[1].Float; // min
 		}
 	}
 

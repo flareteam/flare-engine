@@ -176,13 +176,9 @@ public:
 		else
 			return current[stat];
 	}
-	float getDamageMin(size_t dmg_type) const {
-		return current[Stats::COUNT + (dmg_type * 2)];
-	}
-	float getDamageMax(size_t dmg_type) const {
-		return std::max(current[Stats::COUNT + (dmg_type * 2)], current[Stats::COUNT + (dmg_type * 2) + 1]);
-	}
-	float getResist(size_t resist_type) const;
+	float getDamageMin(size_t dmg_type) const;
+	float getDamageMax(size_t dmg_type) const;
+	float getDamageResist(size_t dmg_type) const;
 	float getResourceStat(size_t resource_index, size_t field_offset) const;
 
 	// additional values to base stats, given by items

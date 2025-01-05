@@ -876,10 +876,7 @@ void ItemManager::parseBonus(BonusData& bdata, FileParser& infile) {
 			bdata.index = i;
 			return;
 		}
-	}
-
-	for (size_t i = 0; i < eset->elements.list.size(); ++i) {
-		if (bonus_str == eset->elements.list[i].resist_id) {
+		else if (bonus_str == eset->damage_types.list[i].resist) {
 			bdata.type = BonusData::RESIST_ELEMENT;
 			bdata.index = i;
 			return;
@@ -953,7 +950,7 @@ void ItemManager::getBonusString(std::stringstream& ss, BonusData* bdata) {
 		if (!bdata->is_multiplier)
 			ss << "%";
 
-		ss << " " << msg->getv("Resistance (%s)", eset->elements.list[bdata->index].name.c_str());
+		ss << " " << msg->getv("Resistance (%s)", eset->damage_types.list[bdata->index].name.c_str());
 	}
 	else if (bdata->type == BonusData::PRIMARY_STAT) {
 		ss << " " << eset->primary_stats.list[bdata->index].name;

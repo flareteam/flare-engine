@@ -122,20 +122,6 @@ public:
 		unsigned short resource_round_method;
 	};
 
-	class Elements {
-	public:
-		class Element {
-		public:
-			std::string id;
-			std::string resist_id;
-			std::string name;
-		};
-
-		void load();
-
-		std::vector<Element> list;
-	};
-
 	class EquipFlags {
 	public:
 		class EquipFlag {
@@ -193,6 +179,10 @@ public:
 	public:
 		class DamageType {
 		public:
+			DamageType();
+
+			bool is_elemental;
+			bool is_deprecated_element;
 			std::string id;
 			std::string name;
 			std::string name_min;
@@ -200,12 +190,16 @@ public:
 			std::string description;
 			std::string min;
 			std::string max;
+			std::string resist;
 		};
 
 		void load();
+		static size_t indexToMin(size_t list_index);
+		static size_t indexToMax(size_t list_index);
+		static size_t indexToResist(size_t list_index);
 
 		std::vector<DamageType> list;
-		size_t count; // damage_types.size() * 2, to account for min & max
+		size_t count; // damage_types.size() * 3, to account for min, max, and resist
 	};
 
 	class DeathPenalty {
@@ -358,7 +352,6 @@ public:
 	Resolutions resolutions;
 	Gameplay gameplay;
 	Combat combat;
-	Elements elements;
 	EquipFlags equip_flags;
 	PrimaryStats primary_stats;
 	HeroClasses hero_classes;

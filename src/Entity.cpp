@@ -418,10 +418,10 @@ bool Entity::takeHit(Hazard &h) {
 		dmg = Math::randBetweenF(h.power->mod_damage_value_min, h.power->mod_damage_value_max);
 
 	// apply elemental resistance
-	if (h.power->trait_elemental >= 0 && static_cast<size_t>(h.power->trait_elemental) < eset->elements.list.size()) {
+	if (h.power->trait_elemental >= 0 && static_cast<size_t>(h.power->trait_elemental) < eset->damage_types.list.size()) {
 		size_t i = h.power->trait_elemental;
 
-		float resist = stats.getResist(i);
+		float resist = stats.getDamageResist(i);
 		// resist values < 0 are weakness, and are unaffected by min/max resist setting
 		if (resist >= 0) {
 			if (resist < eset->combat.min_resist)

@@ -1330,7 +1330,7 @@ void MenuInventory::applyBonus(const BonusData* bdata) {
 		ed.id = eset->damage_types.list[bdata->index].max;
 	}
 	else if (bdata->type == BonusData::RESIST_ELEMENT) {
-		ed.id = eset->elements.list[bdata->index].resist_id;
+		ed.id = eset->damage_types.list[bdata->index].resist;
 	}
 	else if (bdata->type == BonusData::PRIMARY_STAT) {
 		ed.id = eset->primary_stats.list[bdata->index].id;

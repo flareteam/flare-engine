@@ -81,11 +81,28 @@ MenuCharacter::MenuCharacter()
 		cstat[i+2].label->setText(eset->primary_stats.list[i].name);
 	}
 
-	show_stat.resize(Stats::COUNT + eset->damage_types.count + eset->elements.list.size() + eset->resource_stats.stat_count + 2);
+	show_stat.resize(Stats::COUNT + eset->damage_types.count + eset->resource_stats.stat_count + 2);
 	for (size_t i = 0; i < show_stat.size(); i++) {
 		if (i >= Stats::RESIST_DAMAGE_OVER_TIME && i < Stats::COUNT) {
 			// some stats are hidden by default
 			show_stat[i] = false;
+		}
+		else if (i >= Stats::COUNT && i < Stats::COUNT + eset->damage_types.count) {
+			size_t damage_sub_index = i - Stats::COUNT;
+			size_t damage_index = damage_sub_index / 3;
+			size_t damage_sub_stat = damage_sub_index % 3;
+
+			if (eset->damage_types.list[damage_index].is_deprecated_element && damage_sub_stat != 2) {
+				// don't show damage for elements loaded from engine/elements.txt by default
+				show_stat[i] = false;
+			}
+			else if (!eset->damage_types.list[damage_index].is_elemental && damage_sub_stat == 2) {
+				// don't show resists for non-elemental damage types by default
+				show_stat[i] = false;
+			}
+			else {
+				show_stat[i] = true;
+			}
 		}
 		else {
 			show_stat[i] = true;
@@ -302,7 +319,7 @@ void MenuCharacter::refreshStats() {
 
 	// scrolling stat list
 	unsigned stat_index = 0;
-	size_t resource_offset_index = Stats::COUNT + eset->damage_types.count + eset->elements.list.size();
+	size_t resource_offset_index = Stats::COUNT + eset->damage_types.count;
 	size_t speed_offset_index = resource_offset_index + eset->resource_stats.stat_count;
 
 	ss.str("");
@@ -347,12 +364,20 @@ void MenuCharacter::refreshStats() {
 
 	// insert damage stats
 	for (size_t j = 0; j < eset->damage_types.list.size(); ++j) {
-		if (show_stat[Stats::COUNT + (j*2)] || show_stat[Stats::COUNT + (j*2) + 1]) {
+		if (show_stat[Stats::COUNT + eset->damage_types.indexToMin(j)] || show_stat[Stats::COUNT + eset->damage_types.indexToMax(j)]) {
 			float min_dmg = pc->stats.getDamageMin(j);
 			float max_dmg = pc->stats.getDamageMax(j);
 
 			ss.str("");
-			ss << " " << eset->damage_types.list[j].name << ": " << Utils::createMinMaxString(min_dmg, max_dmg, eset->number_format.character_menu);
+			ss << " ";
+
+			if (eset->damage_types.list[j].is_deprecated_element)
+				ss << msg->getv("Elemental Damage (%s)", eset->damage_types.list[j].name.c_str());
+			else
+				ss << eset->damage_types.list[j].name;
+
+			ss << ": " << Utils::createMinMaxString(min_dmg, max_dmg, eset->number_format.character_menu);
+
 			statList->set(stat_index, ss.str(), damageTooltip(j));
 			stat_index++;
 		}
@@ -408,14 +433,13 @@ void MenuCharacter::refreshStats() {
 	}
 
 	if (show_resists) {
-		for (size_t i=0; i<eset->elements.list.size(); ++i) {
-			if (!show_stat[Stats::COUNT + eset->damage_types.count + i])
-				continue;
-
-			ss.str("");
-			ss << " " << msg->getv("Resistance (%s)", eset->elements.list[i].name.c_str()) << ": " << Utils::floatToString(pc->stats.getResist(i), eset->number_format.character_menu) << "%";
-			statList->set(stat_index, ss.str(), resistTooltip(i));
-			stat_index++;
+		for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
+			if (show_stat[Stats::COUNT + eset->damage_types.indexToResist(i)]) {
+				ss.str("");
+				ss << " " << msg->getv("Resistance (%s)", eset->damage_types.list[i].name.c_str()) << ": " << Utils::floatToString(pc->stats.getDamageResist(i), eset->number_format.character_menu) << "%";
+				statList->set(stat_index, ss.str(), resistTooltip(i));
+				stat_index++;
+			}
 		}
 	}
 
@@ -488,8 +512,7 @@ void MenuCharacter::refreshStats() {
 		cstat[j].tip.addText(ss.str());
 
 		bool have_bonus = false;
-		size_t elements_offset = Stats::COUNT + eset->damage_types.count;
-		size_t resource_stat_offset = elements_offset + eset->elements.list.size();
+		size_t resource_stat_offset = Stats::COUNT + eset->damage_types.count;
 
 		for (int i = 0; i < Stats::COUNT; ++i) {
 			// insert resource stats (execpt stealing) before accuracy
@@ -513,7 +536,7 @@ void MenuCharacter::refreshStats() {
 			if (i == Stats::ABS_MIN) {
 				for (size_t k = 0; k < eset->damage_types.list.size(); ++k) {
 					// damage min
-					if (base_bonus[j-2]->at(Stats::COUNT + (k*2)) > 0 && show_stat[Stats::COUNT + (k*2)]) {
+					if (base_bonus[j-2]->at(Stats::COUNT + eset->damage_types.indexToMin(k)) > 0 && show_stat[Stats::COUNT + eset->damage_types.indexToMin(k)]) {
 						if (!have_bonus) {
 							cstat[j].tip.addText("\n" + msg->get("Related stats:"));
 							have_bonus = true;
@@ -521,7 +544,7 @@ void MenuCharacter::refreshStats() {
 						cstat[j].tip.addText(eset->damage_types.list[k].name_min);
 					}
 					// damage max
-					if (base_bonus[j-2]->at(Stats::COUNT + (k*2) + 1) > 0 && show_stat[Stats::COUNT + (k*2) + 1]) {
+					if (base_bonus[j-2]->at(Stats::COUNT + eset->damage_types.indexToMax(k)) > 0 && show_stat[Stats::COUNT + eset->damage_types.indexToMax(k)]) {
 						if (!have_bonus) {
 							cstat[j].tip.addText("\n" + msg->get("Related stats:"));
 							have_bonus = true;
@@ -556,13 +579,14 @@ void MenuCharacter::refreshStats() {
 			}
 		}
 
-		for (size_t i = 0; i < eset->elements.list.size(); ++i) {
-			if (base_bonus[j-2]->at(elements_offset + i) > 0 && show_stat[elements_offset + i]) {
+		// resistances
+		for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
+			if (base_bonus[j-2]->at(Stats::COUNT + eset->damage_types.indexToMin(i)) > 0 && show_stat[Stats::COUNT + eset->damage_types.indexToMin(i)]) {
 				if (!have_bonus) {
 					cstat[j].tip.addText("\n" + msg->get("Related stats:"));
 					have_bonus = true;
 				}
-				cstat[j].tip.addText(msg->getv("Resistance (%s)", eset->elements.list[i].name.c_str()));
+				cstat[j].tip.addText(msg->getv("Resistance (%s)", eset->damage_types.list[i].name.c_str()));
 			}
 		}
 	}
@@ -666,8 +690,8 @@ std::string MenuCharacter::damageTooltip(size_t dmg_type) {
 	if (!description.empty())
 		text += description;
 
-	size_t min_index = Stats::COUNT + (dmg_type * 2);
-	size_t max_index = Stats::COUNT + (dmg_type * 2) + 1;
+	size_t min_index = Stats::COUNT + eset->damage_types.indexToMin(dmg_type);
+	size_t max_index = Stats::COUNT + eset->damage_types.indexToMax(dmg_type);
 
 	tooltipCreateBonusText(min_index, max_index, &min_text, &max_text);
 
@@ -692,11 +716,9 @@ std::string MenuCharacter::damageTooltip(size_t dmg_type) {
 std::string MenuCharacter::resistTooltip(size_t resist_type) {
 	std::string text, bonus_text;
 
-	std::string& description = eset->elements.list[resist_type].name;
-	if (!description.empty())
-		text += msg->getv("Reduces the damage taken from \"%s\" elemental attacks.", description.c_str());
+	text += msg->get("Reduces damage taken from attacks of this damage type.");
 
-	size_t resist_index = Stats::COUNT + eset->damage_types.count + resist_type;
+	size_t resist_index = Stats::COUNT + eset->damage_types.indexToResist(resist_type);
 
 	tooltipCreateBonusText(resist_index, resist_index, &bonus_text, NULL);
 
@@ -716,7 +738,7 @@ std::string MenuCharacter::resourceStatTooltip(size_t resource_index, size_t sta
 	if (!description.empty())
 		text += description;
 
-	size_t offset_index = Stats::COUNT + eset->damage_types.count + eset->elements.list.size();
+	size_t offset_index = Stats::COUNT + eset->damage_types.count;
 	size_t resource_stat_index = offset_index + (resource_index * EngineSettings::ResourceStats::STAT_COUNT) + stat_index;
 
 	tooltipCreateBonusText(resource_stat_index, resource_stat_index, &bonus_text, NULL);
@@ -872,23 +894,19 @@ void MenuCharacter::parseShowStat(FileParser& infile) {
 
 	for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
 		if (stat_name == eset->damage_types.list[i].min) {
-			show_stat[offset_index + (i*2)] = value;
+			show_stat[offset_index + eset->damage_types.indexToMin(i)] = value;
 			return;
 		}
 		else if (stat_name == eset->damage_types.list[i].max) {
-			show_stat[offset_index + (i*2) + 1] = value;
+			show_stat[offset_index + eset->damage_types.indexToMax(i)] = value;
+			return;
+		}
+		else if (stat_name == eset->damage_types.list[i].resist) {
+			show_stat[offset_index + eset->damage_types.indexToResist(i)] = value;
 			return;
 		}
 	}
 	offset_index += eset->damage_types.count;
-
-	for (size_t i = 0; i < eset->elements.list.size(); ++i) {
-		if (stat_name == eset->elements.list[i].resist_id) {
-			show_stat[offset_index + i] = value;
-			return;
-		}
-	}
-	offset_index += eset->elements.list.size();
 
 	for (size_t i = 0; i < eset->resource_stats.list.size(); ++i) {
 		for (size_t j = 0; j < EngineSettings::ResourceStats::STAT_COUNT; ++j) {

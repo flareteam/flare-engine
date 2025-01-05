@@ -743,9 +743,9 @@ void PowerManager::loadPowers() {
 			power->trait_crits_impaired = Parse::toFloat(infile.val);
 		}
 		else if (infile.key == "trait_elemental") {
-			// @ATTR power.trait_elemental|predefined_string|Damage done is elemental. See engine/elements.txt
-			for (unsigned int i=0; i<eset->elements.list.size(); i++) {
-				if (infile.val == eset->elements.list[i].id) power->trait_elemental = i;
+			// @ATTR power.trait_elemental|predefined_string|Converts all damage done to a given damage type (see engine/damage_types.txt). Despite the name, this is not restricted to "elemental" damage types.
+			for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
+				if (infile.val == eset->damage_types.list[i].id) power->trait_elemental = static_cast<int>(i);
 			}
 		}
 		else if (infile.key == "target_range") {
@@ -1238,15 +1238,12 @@ bool PowerManager::isValidEffect(const std::string& type) {
 			return true;
 		else if (type == eset->damage_types.list[i].max)
 			return true;
+		else if (type == eset->damage_types.list[i].resist)
+			return true;
 	}
 
 	for (int i=0; i<Stats::COUNT; ++i) {
 		if (type == Stats::KEY[i])
-			return true;
-	}
-
-	for (unsigned i=0; i<eset->elements.list.size(); ++i) {
-		if (type == eset->elements.list[i].resist_id)
 			return true;
 	}
 

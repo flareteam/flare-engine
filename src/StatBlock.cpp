@@ -61,7 +61,7 @@ const float StatBlock::DIRECTION_DELTA_Y[8] =   { 1,  0, -1, -1, -1,  0,  1,  1}
 const float StatBlock::SPEED_MULTIPLIER[8] = { static_cast<float>(1.0/M_SQRT2), 1.0f, static_cast<float>(1.0/M_SQRT2), 1.0f, static_cast<float>(1.0/M_SQRT2), 1.0f, static_cast<float>(1.0/M_SQRT2), 1.0f};
 
 size_t StatBlock::getFullStatCount() {
-	return Stats::COUNT + eset->damage_types.count + eset->elements.list.size() + eset->resource_stats.stat_count;
+	return Stats::COUNT + eset->damage_types.count + eset->resource_stats.stat_count;
 }
 
 StatBlock::StatBlock()
@@ -253,23 +253,19 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 
 		for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
 			if (eset->damage_types.list[i].min == stat) {
-				starting[offset_index + (i*2)] = value;
+				starting[offset_index + eset->damage_types.indexToMin(i)] = value;
 				return true;
 			}
 			else if (eset->damage_types.list[i].max == stat) {
-				starting[offset_index + (i*2) + 1] = value;
+				starting[offset_index + eset->damage_types.indexToMax(i)] = value;
+				return true;
+			}
+			else if (eset->damage_types.list[i].resist == stat) {
+				starting[offset_index + eset->damage_types.indexToResist(i)] = value;
 				return true;
 			}
 		}
 		offset_index += eset->damage_types.count;
-
-		for (size_t i = 0; i < eset->elements.list.size(); ++i) {
-			if (eset->elements.list[i].resist_id == stat) {
-				starting[offset_index + i] = value;
-				return true;
-			}
-		}
-		offset_index += eset->elements.list.size();
 
 		for (size_t i = 0; i < eset->resource_stats.list.size(); ++i) {
 			for (size_t j = 0; j < EngineSettings::ResourceStats::STAT_COUNT; ++j) {
@@ -296,23 +292,19 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 
 		for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
 			if (eset->damage_types.list[i].min == stat) {
-				per_level[offset_index + (i*2)] = value;
+				per_level[offset_index + eset->damage_types.indexToMin(i)] = value;
 				return true;
 			}
 			else if (eset->damage_types.list[i].max == stat) {
-				per_level[offset_index + (i*2) + 1] = value;
+				per_level[offset_index + eset->damage_types.indexToMax(i)] = value;
+				return true;
+			}
+			else if (eset->damage_types.list[i].resist == stat) {
+				per_level[offset_index + eset->damage_types.indexToResist(i)] = value;
 				return true;
 			}
 		}
 		offset_index += eset->damage_types.count;
-
-		for (size_t i = 0; i < eset->elements.list.size(); ++i) {
-			if (eset->elements.list[i].resist_id == stat) {
-				per_level[offset_index + i] = value;
-				return true;
-			}
-		}
-		offset_index += eset->elements.list.size();
 
 		for (size_t i = 0; i < eset->resource_stats.list.size(); ++i) {
 			for (size_t j = 0; j < EngineSettings::ResourceStats::STAT_COUNT; ++j) {
@@ -346,23 +338,19 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 
 		for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
 			if (eset->damage_types.list[i].min == stat) {
-				per_primary[prim_stat_index][offset_index + (i*2)] = value;
+				per_primary[prim_stat_index][offset_index + eset->damage_types.indexToMin(i)] = value;
 				return true;
 			}
 			else if (eset->damage_types.list[i].max == stat) {
-				per_primary[prim_stat_index][offset_index + (i*2) + 1] = value;
+				per_primary[prim_stat_index][offset_index + eset->damage_types.indexToMax(i)] = value;
+				return true;
+			}
+			else if (eset->damage_types.list[i].resist == stat) {
+				per_primary[prim_stat_index][offset_index + eset->damage_types.indexToResist(i)] = value;
 				return true;
 			}
 		}
 		offset_index += eset->damage_types.count;
-
-		for (size_t i = 0; i < eset->elements.list.size(); ++i) {
-			if (eset->elements.list[i].resist_id == stat) {
-				per_primary[prim_stat_index][offset_index + i] = value;
-				return true;
-			}
-		}
-		offset_index += eset->elements.list.size();
 
 		for (size_t i = 0; i < eset->resource_stats.list.size(); ++i) {
 			for (size_t j = 0; j < EngineSettings::ResourceStats::STAT_COUNT; ++j) {
@@ -380,9 +368,9 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 
 		infile->error("StatBlock: 'vulnerable' is deprecated. Use 'stat=%s_resist,%d' instead.", element.c_str(), value);
 
-		for (unsigned int i=0; i<eset->elements.list.size(); i++) {
-			if (element == eset->elements.list[i].id) {
-				starting[Stats::COUNT + eset->damage_types.count + i] = value;
+		for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
+			if (element == eset->damage_types.list[i].id) {
+				starting[Stats::COUNT + eset->damage_types.indexToResist(i)] = value;
 				return true;
 			}
 		}
@@ -833,7 +821,7 @@ void StatBlock::load(const std::string& filename) {
 	hp = starting[Stats::HP_MAX];
 	mp = starting[Stats::MP_MAX];
 
-	size_t resource_offset_index = Stats::COUNT + eset->damage_types.count + eset->elements.list.size();
+	size_t resource_offset_index = Stats::COUNT + eset->damage_types.count;
 	for (size_t i = 0; i < resource_stats.size(); ++i) {
 		resource_stats[i] = starting[resource_offset_index + (i * EngineSettings::ResourceStats::STAT_COUNT) + EngineSettings::ResourceStats::STAT_BASE];
 	}
@@ -970,10 +958,10 @@ void StatBlock::calcBase() {
 
 	// add damage from equipment and increase to minimum amounts
 	for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
-		base[Stats::COUNT + (i*2)] += item_base_dmg[i].min;
-		base[Stats::COUNT + (i*2) + 1] += item_base_dmg[i].max;
-		base[Stats::COUNT + (i*2)] = std::max(base[Stats::COUNT + (i*2)], 0.0f);
-		base[Stats::COUNT + (i*2) + 1] = std::max(base[Stats::COUNT + (i*2) + 1], base[Stats::COUNT + (i*2)]);
+		base[Stats::COUNT + eset->damage_types.indexToMin(i)] += item_base_dmg[i].min;
+		base[Stats::COUNT + eset->damage_types.indexToMax(i)] += item_base_dmg[i].max;
+		base[Stats::COUNT + eset->damage_types.indexToMin(i)] = std::max(base[Stats::COUNT + eset->damage_types.indexToMin(i)], 0.0f);
+		base[Stats::COUNT + eset->damage_types.indexToMax(i)] = std::max(base[Stats::COUNT + eset->damage_types.indexToMax(i)], base[Stats::COUNT + eset->damage_types.indexToMin(i)]);
 	}
 
 	// add absorb from equipment and increase to minimum amounts
@@ -1021,7 +1009,7 @@ void StatBlock::applyEffects() {
 	if (hp > get(Stats::HP_MAX)) hp = get(Stats::HP_MAX);
 	if (mp > get(Stats::MP_MAX)) mp = get(Stats::MP_MAX);
 
-	size_t resource_offset_index = Stats::COUNT + eset->damage_types.count + eset->elements.list.size();
+	size_t resource_offset_index = Stats::COUNT + eset->damage_types.count;
 	for (size_t i = 0; i < resource_stats.size(); ++i) {
 		size_t current_index = resource_offset_index + (i * EngineSettings::ResourceStats::STAT_COUNT) + EngineSettings::ResourceStats::STAT_BASE;
 		current[current_index] = std::max(getResourceStat(i, EngineSettings::ResourceStats::STAT_BASE), 1.0f);
@@ -1524,12 +1512,20 @@ void StatBlock::setPowerCooldown(PowerID power_id, int power_cooldown) {
 	}
 }
 
-float StatBlock::getResist(size_t resist_type) const {
-	return current[Stats::COUNT + eset->damage_types.count + resist_type];
+float StatBlock::getDamageMin(size_t dmg_type) const {
+	return current[Stats::COUNT + eset->damage_types.indexToMin(dmg_type)];
+}
+
+float StatBlock::getDamageMax(size_t dmg_type) const {
+	return std::max(current[Stats::COUNT + eset->damage_types.indexToMin(dmg_type)], current[Stats::COUNT + eset->damage_types.indexToMax(dmg_type)]);
+}
+
+float StatBlock::getDamageResist(size_t dmg_type) const {
+	return current[Stats::COUNT + eset->damage_types.indexToResist(dmg_type)];
 }
 
 float StatBlock::getResourceStat(size_t resource_index, size_t field_offset) const {
-	size_t offset_index = Stats::COUNT + eset->damage_types.count + eset->elements.list.size();
+	size_t offset_index = Stats::COUNT + eset->damage_types.count;
 	return current[offset_index + (resource_index*4) + field_offset];
 }
 

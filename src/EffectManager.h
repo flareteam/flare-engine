@@ -74,7 +74,6 @@ public:
 	static bool typeIsEffectResist(int t);
 	static int getStatFromType(int t);
 	static size_t getDmgFromType(int t);
-	static size_t getResistFromType(int t);
 	static size_t getResourceStatFromType(int t);
 	static size_t getResourceStatSubIndexFromType(int t);
 	static size_t getPrimaryFromType(int t);

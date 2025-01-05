@@ -309,7 +309,7 @@ void SaveLoad::saveGame() {
 				else if (bonus->type == BonusData::DAMAGE_MAX)
 					outfile << eset->damage_types.list[bonus->index].max;
 				else if (bonus->type == BonusData::RESIST_ELEMENT)
-					outfile << eset->elements.list[bonus->index].resist_id;
+					outfile << eset->damage_types.list[bonus->index].resist;
 				else if (bonus->type == BonusData::PRIMARY_STAT)
 					outfile << eset->primary_stats.list[bonus->index].id;
 				else if (bonus->type == BonusData::RESOURCE_STAT)

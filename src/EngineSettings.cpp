@@ -30,13 +30,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Utils.h"
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
+#include <sstream>
 
 void EngineSettings::load() {
 	misc.load();
 	resolutions.load();
 	gameplay.load();
 	combat.load();
-	elements.load();
 	equip_flags.load();
 	primary_stats.load();
 	hero_classes.load(); // depends on primary_stats
@@ -408,46 +408,6 @@ float EngineSettings::Combat::resourceRound(const float resource_val) {
 	}
 }
 
-void EngineSettings::Elements::load() {
-	// reset to defaults
-	list.clear();
-
-	FileParser infile;
-	// @CLASS EngineSettings: Elements|Description of engine/elements.txt
-	if (infile.open("engine/elements.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
-		while (infile.next()) {
-			if (infile.new_section) {
-				if (infile.section == "element") {
-					// check if the previous element and remove it if there is no identifier
-					if (!list.empty() && list.back().id == "") {
-						list.pop_back();
-					}
-					list.resize(list.size()+1);
-				}
-			}
-
-			if (list.empty() || infile.section != "element")
-				continue;
-
-			// @ATTR element.id|string|An identifier for this element. When used as a resistance, "_resist" is appended to the id. For example, if the id is "fire", the resist id is "fire_resist".
-			if (infile.key == "id") {
-				list.back().id = infile.val;
-				list.back().resist_id = list.back().id + "_resist";
-			}
-			// @ATTR element.name|string|The displayed name of this element.
-			else if (infile.key == "name") list.back().name = msg->get(infile.val);
-
-			else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
-		}
-		infile.close();
-
-		// check if the last element and remove it if there is no identifier
-		if (!list.empty() && list.back().id == "") {
-			list.pop_back();
-		}
-	}
-}
-
 void EngineSettings::EquipFlags::load() {
 	// reset to defaults
 	list.clear();
@@ -657,10 +617,17 @@ EngineSettings::HeroClasses::HeroClass* EngineSettings::HeroClasses::getByName(c
 	return NULL;
 }
 
+EngineSettings::DamageTypes::DamageType::DamageType()
+	: is_elemental(false)
+	, is_deprecated_element(false)
+{}
+
 void EngineSettings::DamageTypes::load() {
 	// reset to defaults
 	list.clear();
 	count = 0;
+
+	std::stringstream ss;
 
 	FileParser infile;
 	// @CLASS EngineSettings: Damage Types|Description of engine/damage_types.txt
@@ -689,15 +656,62 @@ void EngineSettings::DamageTypes::load() {
 			else if (infile.key == "min") list.back().min = infile.val;
 			// @ATTR damage_type.max|string|The identifier used as a Stat type and an Effect type, for the maximum damage of this type.
 			else if (infile.key == "max") list.back().max = infile.val;
+			// @ATTR damage_type.elemental|bool|If true, this damage type will be flagged as elemental. Elemental damage will be additionally applied to Powers with non-elemental base damage.
+			else if (infile.key == "elemental") list.back().is_elemental = Parse::toBool(infile.val);
 
 			else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
 	}
-	count = list.size() * 2;
 
-	// use the IDs if the damage type doesn't have printable names
+	// For backwards-compatibility, load engine/elements.txt as damage types
+	// @CLASS EngineSettings: Elements|(Deprecated in v1.14.85, use engine/damage_types.txt instead) Description of engine/elements.txt
+	if (infile.open("engine/elements.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
+		while (infile.next()) {
+			if (infile.new_section) {
+				if (infile.section == "element") {
+					list.resize(list.size()+1);
+					list.back().is_elemental = true;
+					list.back().is_deprecated_element = true;
+				}
+			}
+
+			if (list.empty() || infile.section != "element")
+				continue;
+
+			// @ATTR element.id|string|An identifier for this element. When used as a resistance, "_resist" is appended to the id. For example, if the id is "fire", the resist id is "fire_resist".
+			if (infile.key == "id") list.back().id = infile.val;
+			// @ATTR element.name|string|The displayed name of this element.
+			else if (infile.key == "name") list.back().name = msg->get(infile.val);
+
+			else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
+		}
+		infile.close();
+	}
+
+	// Total stat count. Each damage type has 3: min, max, resist
+	count = list.size() * 3;
+
 	for (size_t i = 0; i < list.size(); ++i) {
+		// damage type has no ID, give it a generic one
+		if (list[i].id.empty()) {
+			ss.str("");
+			ss << "damage_type_" << list.size()-1;
+			list.back().id = ss.str();
+		}
+
+		// create missing IDs from the base ID if needed
+		if (list[i].min.empty()) {
+			list[i].min = "dmg_" + list[i].id + "_min";
+		}
+		if (list[i].max.empty()) {
+			list[i].max = "dmg_" + list[i].id + "_max";
+		}
+		if (list[i].resist.empty()) {
+			list[i].resist = list[i].id + "_resist";
+		}
+
+		// use the IDs if the damage type doesn't have printable names
 		if (list[i].name.empty()) {
 			list[i].name = list[i].id;
 		}
@@ -708,6 +722,18 @@ void EngineSettings::DamageTypes::load() {
 			list[i].name_max = list[i].max;
 		}
 	}
+}
+
+size_t EngineSettings::DamageTypes::indexToMin(size_t list_index) {
+	return list_index * 3;
+}
+
+size_t EngineSettings::DamageTypes::indexToMax(size_t list_index) {
+	return (list_index * 3) + 1;
+}
+
+size_t EngineSettings::DamageTypes::indexToResist(size_t list_index) {
+	return (list_index * 3) + 2;
 }
 
 void EngineSettings::DeathPenalty::load() {
