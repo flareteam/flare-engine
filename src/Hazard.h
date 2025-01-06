@@ -57,8 +57,7 @@ public:
 	bool relative_pos;
 	bool sfx_hit_played;
 
-	float dmg_min;
-	float dmg_max;
+	std::vector<FMinMax> damage;
 	float crit_chance;
 	float accuracy;
 	int source_type;

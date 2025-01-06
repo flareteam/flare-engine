@@ -408,19 +408,22 @@ bool Entity::takeHit(Hazard &h) {
 	}
 
 	// calculate base damage
-	float dmg = Math::randBetweenF(h.dmg_min, h.dmg_max);
+	float dmg = 0;
 
-	if (h.power->mod_damage_mode == Power::STAT_MODIFIER_MODE_MULTIPLY)
-		dmg = dmg * h.power->mod_damage_value_min / 100;
-	else if (h.power->mod_damage_mode == Power::STAT_MODIFIER_MODE_ADD)
-		dmg += h.power->mod_damage_value_min;
-	else if (h.power->mod_damage_mode == Power::STAT_MODIFIER_MODE_ABSOLUTE)
-		dmg = Math::randBetweenF(h.power->mod_damage_value_min, h.power->mod_damage_value_max);
+	for (size_t i = 0; i < h.damage.size(); ++i) {
+		float dmg_part = Math::randBetweenF(h.damage[i].min, h.damage[i].max);
 
-	// apply elemental resistance
-	if (h.power->trait_elemental >= 0 && static_cast<size_t>(h.power->trait_elemental) < eset->damage_types.list.size()) {
-		size_t i = h.power->trait_elemental;
+		if ((i == h.power->base_damage && h.power->converted_damage == h.damage.size()) || i == h.power->converted_damage) {
+			// power damage modifiers are only applied to the base damage (or converted damage if that applies)
+			if (h.power->mod_damage_mode == Power::STAT_MODIFIER_MODE_MULTIPLY)
+				dmg_part = dmg_part * h.power->mod_damage_value_min / 100;
+			else if (h.power->mod_damage_mode == Power::STAT_MODIFIER_MODE_ADD)
+				dmg_part += h.power->mod_damage_value_min;
+			else if (h.power->mod_damage_mode == Power::STAT_MODIFIER_MODE_ABSOLUTE)
+				dmg_part = Math::randBetweenF(h.power->mod_damage_value_min, h.power->mod_damage_value_max);
+		}
 
+		// apply resistance
 		float resist = stats.getDamageResist(i);
 		// resist values < 0 are weakness, and are unaffected by min/max resist setting
 		if (resist >= 0) {
@@ -430,7 +433,9 @@ bool Entity::takeHit(Hazard &h) {
 				resist = eset->combat.max_resist;
 		}
 
-		dmg = (dmg * (100-resist)) / 100;
+		dmg_part = (dmg_part * (100-resist)) / 100;
+
+		dmg += dmg_part;
 	}
 
 	if (!h.power->trait_armor_penetration) { // armor penetration ignores all absorption
@@ -462,13 +467,11 @@ bool Entity::takeHit(Hazard &h) {
 		if (dmg <= 0) {
 			dmg = 0;
 			if (!h.power->ignore_zero_damage) {
-				if (h.power->trait_elemental < 0) {
-					if (stats.effects.triggered_block && eset->combat.max_block < 100) dmg = 1;
-					else if (!stats.effects.triggered_block && eset->combat.max_absorb < 100) dmg = 1;
-				}
-				else {
-					if (eset->combat.max_resist < 100) dmg = 1;
-				}
+				if (stats.effects.triggered_block && eset->combat.max_block < 100)
+					dmg = 1;
+				else if (!stats.effects.triggered_block && eset->combat.max_absorb < 100)
+					dmg = 1;
+
 				if (activeAnimation->getName() == "block") {
 					playSound(Entity::SOUND_BLOCK);
 					resetActiveAnimation();

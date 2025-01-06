@@ -247,7 +247,6 @@ public:
 	int mod_crit_mode;
 	int mod_damage_mode;
 	int delay;
-	int trait_elemental; // enum. of elements
 	int transform_duration;
 	int target_neighbor;
 	int script_trigger;
@@ -274,7 +273,8 @@ public:
 	float trait_crits_impaired; // crit bonus vs. movement impaired enemies (slowed, immobilized, stunned)
 	float target_nearest;
 
-	size_t base_damage;
+	size_t base_damage; // index of eset->damage_types.list
+	size_t converted_damage; // index of eset->damage_types.list
 	size_t spawn_limit_stat;
 
 	SoundID sfx_hit;

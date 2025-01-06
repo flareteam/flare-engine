@@ -581,7 +581,7 @@ void MenuCharacter::refreshStats() {
 
 		// resistances
 		for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
-			if (base_bonus[j-2]->at(Stats::COUNT + eset->damage_types.indexToMin(i)) > 0 && show_stat[Stats::COUNT + eset->damage_types.indexToMin(i)]) {
+			if (base_bonus[j-2]->at(Stats::COUNT + eset->damage_types.indexToResist(i)) > 0 && show_stat[Stats::COUNT + eset->damage_types.indexToResist(i)]) {
 				if (!have_bonus) {
 					cstat[j].tip.addText("\n" + msg->get("Related stats:"));
 					have_bonus = true;

@@ -1265,9 +1265,9 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 			ss << msg->getv("%s%% Chance to crit slowed targets", Utils::floatToString(pwr->trait_crits_impaired, eset->number_format.power_tooltips).c_str());
 			tip_data->addColoredText(ss.str(), font->getColor(FontEngine::COLOR_MENU_BONUS));
 		}
-		if (pwr->trait_elemental > -1) {
+		if (pwr->converted_damage < eset->damage_types.list.size()) {
 			ss.str("");
-			ss << msg->getv("Elemental Damage (%s)", eset->damage_types.list[pwr->trait_elemental].name.c_str());
+			ss << msg->getv("Damage dealt as: %s", eset->damage_types.list[pwr->converted_damage].name.c_str());
 			tip_data->addColoredText(ss.str(), font->getColor(FontEngine::COLOR_MENU_BONUS));
 		}
 	}

@@ -26,6 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Animation.h"
 #include "AnimationSet.h"
 #include "AnimationManager.h"
+#include "EngineSettings.h"
 #include "Hazard.h"
 #include "MapCollision.h"
 #include "PowerManager.h"
@@ -43,8 +44,7 @@ Hazard::Hazard(MapCollision *_collider)
 	, hit_wall(false)
 	, relative_pos(false)
 	, sfx_hit_played(false)
-	, dmg_min(0)
-	, dmg_max(0)
+	, damage(eset->damage_types.list.size())
 	, crit_chance(0)
 	, accuracy(0)
 	, source_type(0)
@@ -78,8 +78,10 @@ Hazard& Hazard::operator=(const Hazard& other) {
 	relative_pos = other.relative_pos;
 	sfx_hit_played = other.sfx_hit_played;
 
-	dmg_min = other.dmg_min;
-	dmg_max = other.dmg_max;
+	damage.resize(other.damage.size());
+	for (size_t i = 0; i < damage.size(); ++i) {
+		damage[i] = other.damage[i];
+	}
 	crit_chance = other.crit_chance;
 	accuracy = other.accuracy;
 	source_type = other.source_type;

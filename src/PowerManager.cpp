@@ -125,7 +125,6 @@ Power::Power()
 	, mod_crit_mode(-1)
 	, mod_damage_mode(-1)
 	, delay(0)
-	, trait_elemental(-1)
 	, transform_duration(0)
 	, target_neighbor(0)
 	, script_trigger(-1)
@@ -153,6 +152,7 @@ Power::Power()
 	, target_nearest(0)
 
 	, base_damage(eset ? eset->damage_types.list.size() : 0)
+	, converted_damage(eset ? eset->damage_types.list.size() : 0)
 	, spawn_limit_stat(0)
 
 	, sfx_hit(0)
@@ -745,7 +745,10 @@ void PowerManager::loadPowers() {
 		else if (infile.key == "trait_elemental") {
 			// @ATTR power.trait_elemental|predefined_string|Converts all damage done to a given damage type (see engine/damage_types.txt). Despite the name, this is not restricted to "elemental" damage types.
 			for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
-				if (infile.val == eset->damage_types.list[i].id) power->trait_elemental = static_cast<int>(i);
+				if (infile.val == eset->damage_types.list[i].id) {
+					power->converted_damage = i;
+					break;
+				}
 			}
 		}
 		else if (infile.key == "target_range") {
@@ -1338,12 +1341,24 @@ void PowerManager::initHazard(PowerID power_index, StatBlock *src_stats, const F
 	haz->crit_chance = src_stats->get(Stats::CRIT);
 	haz->accuracy = src_stats->get(Stats::ACCURACY);
 
-	// If the hazard's damage isn't default (0), we are applying an item-based power mod.
-	// We don't allow equipment power mods to alter damage (mainly to preserve the base power's multiplier).
-	if (haz->dmg_max == 0 && haz->power->base_damage != eset->damage_types.list.size()) {
-		// base damage is by equipped item
-		haz->dmg_min = src_stats->getDamageMin(haz->power->base_damage);
-		haz->dmg_max = src_stats->getDamageMax(haz->power->base_damage);
+	if (haz->power->base_damage != haz->damage.size()) {
+		for (size_t i = 0; i < haz->damage.size(); ++i) {
+			if (haz->power->converted_damage != haz->damage.size()) {
+				if (i == haz->power->converted_damage || i == haz->power->base_damage) {
+					// the power's base damage is converted to a single damage type
+					// any additional damage that matches the converted type is also added
+					haz->damage[haz->power->converted_damage].min += src_stats->getDamageMin(i);
+					haz->damage[haz->power->converted_damage].max += src_stats->getDamageMax(i);
+				}
+			}
+			else if (i == haz->power->base_damage || (!eset->damage_types.list[haz->power->base_damage].is_elemental && eset->damage_types.list[i].is_elemental)) {
+				// damage is added based on the power's base damage attribute
+				// if the base damage type is non-elemental, we also do damage for all elemental types
+				// this allows us to have, for example, a sword that primarily deals melee damage with additional fire damage
+				haz->damage[i].min += src_stats->getDamageMin(i);
+				haz->damage[i].max += src_stats->getDamageMax(i);
+			}
+		}
 	}
 
 	// animation properties
