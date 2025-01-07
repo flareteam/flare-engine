@@ -21,6 +21,9 @@ Engine features:
 * Stats on the character page are now organized by categories: Core, Offense, Defense, and Misc.
 * Speed and Attack Speed are now able to be shown in the Character menu.
 * Events can now use 'book=close' to close the active book.
+* Damage Types and Elements have been combined. engine/elements.txt is still supported, but new mods should use engine/damage_types.txt.
+* Powers that deal non-elemental damage will now apply additional elemental damage based on the damage stats for said elements.
+* Power 'trait_elemental' now works with all damage types (despite the name). Any additional damage bonuses for the specified damage type will apply on top of the converted damage.
 * Android: Enabled use of external input devices (gamepads, keyboards, mice)
 
 Engine fixes:
