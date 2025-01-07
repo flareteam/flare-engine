@@ -296,16 +296,6 @@ code {
 
 <hr />
 
-<h4>EngineSettings: Elements</h4>
-
-<p>Description of engine/elements.txt</p>
-
-<p><strong>element.id</strong> | <code>string</code> | An identifier for this element. When used as a resistance, "_resist" is appended to the id. For example, if the id is "fire", the resist id is "fire_resist".</p>
-
-<p><strong>element.name</strong> | <code>string</code> | The displayed name of this element.</p>
-
-<hr />
-
 <h4>EngineSettings: Equip flags</h4>
 
 <p>Description of engine/equip_flags.txt</p>
@@ -364,15 +354,25 @@ code {
 
 <p><strong>damage_type.name</strong> | <code>string</code> | The displayed name for the value of this damage type.</p>
 
-<p><strong>damage_type.name_min</strong> | <code>string</code> | The displayed name for the minimum value of this damage type.</p>
-
-<p><strong>damage_type.name_max</strong> | <code>string</code> | The displayed name for the maximum value of this damage type.</p>
+<p><strong>damage_type.name_short</strong> | <code>string</code> | An optional, shorter displayed name for this damage type. Used for labels for 'Resist Damage' stats. If left blank, 'name' will be used instead.</p>
 
 <p><strong>damage_type.description</strong> | <code>string</code> | The description that will be displayed in the Character menu tooltips.</p>
 
 <p><strong>damage_type.min</strong> | <code>string</code> | The identifier used as a Stat type and an Effect type, for the minimum damage of this type.</p>
 
 <p><strong>damage_type.max</strong> | <code>string</code> | The identifier used as a Stat type and an Effect type, for the maximum damage of this type.</p>
+
+<p><strong>damage_type.elemental</strong> | <code>bool</code> | If true, this damage type will be flagged as elemental. Elemental damage will be additionally applied to Powers with non-elemental base damage.</p>
+
+<hr />
+
+<h4>EngineSettings: Elements</h4>
+
+<p>(Deprecated in v1.14.85, use engine/damage_types.txt instead) Description of engine/elements.txt</p>
+
+<p><strong>element.id</strong> | <code>string</code> | An identifier for this element. When used as a resistance, "_resist" is appended to the id. For example, if the id is "fire", the resist id is "fire_resist".</p>
+
+<p><strong>element.name</strong> | <code>string</code> | The displayed name of this element.</p>
 
 <hr />
 
@@ -1404,7 +1404,7 @@ code {
 
 <p><strong>unspent</strong> | <code>label</code> | Position of the label showing the number of unspent stat points.</p>
 
-<p><strong>show_resists</strong> | <code>bool</code> | Hide the elemental "Resistance" stats in the statlist if set to false.</p>
+<p><strong>show_resists</strong> | <code>bool</code> | Hide the "Resist Damage" stats in the statlist if set to false.</p>
 
 <p><strong>show_stat</strong> | <code>stat_id, bool : Stat ID, Visible</code> | Hide the matching stat ID in the statlist if set to false.</p>
 
@@ -2074,7 +2074,7 @@ code {
 
 <p><strong>power.trait_crits_impaired</strong> | <code>int</code> | Increases critical hit percentage for slowed/immobile targets</p>
 
-<p><strong>power.trait_elemental</strong> | <code>predefined_string</code> | Damage done is elemental. See engine/elements.txt</p>
+<p><strong>power.trait_elemental</strong> | <code>predefined_string</code> | Converts all damage done to a given damage type (see engine/damage_types.txt). Despite the name, this is not restricted to "elemental" damage types.</p>
 
 <p><strong>power.target_range</strong> | <code>float</code> | The distance from the caster that the power can be activated</p>
 
