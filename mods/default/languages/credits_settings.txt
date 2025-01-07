@@ -1,0 +1,40 @@
+# The credits cutscenes mostly contain names of people that we don't want to translate.
+# However, there are a few strings that we DO want translated, which we define in this file.
+#
+# Use the 'file' key to specify a cutscene file that contains credits.
+# Use the 's' key to specify a string that is allowed to be translated in any of the cutscenes.
+#
+# This file is meant to be parsed by the xgettext.py script in the flare-engine "tools" folder
+# The script will try to load it from the target languages directory.
+# If it doesn't exist, it will try to load from flare-engine's default mod (i.e., the file you're reading right now).
+
+file=cutscenes/credits.txt
+file=cutscenes/credits_engine.txt
+file=cutscenes/credits_fantasycore.txt
+file=cutscenes/credits_empyrean.txt
+file=cutscenes/credits_alpha_demo.txt
+
+s=Flare Engine Credits
+s=Lead Programmers
+s=Programmers
+s=Default Art
+s=Translators
+s=Distributors
+s=Special Thanks
+s=For giving constant feedback and testing:
+s=The community at OpenGameArt
+s=For Tiled and the Flare map exporter:
+
+s=Flare Game Credits - fantasycore
+s=Lead Visual Artists
+s=Visual Artists
+s=Composers
+s=Foley Artists
+s=Voice Actors
+
+s=Flare Game Credits - empyrean_campaign
+s=Lead Content Designers
+
+s=Flare Game Credits - alpha_demo
+s=Content Designers
+

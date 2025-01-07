@@ -1,12 +1,40 @@
 #!/bin/bash
 # Run this script in the language directory to update the pot and all *.po files
 
+SCRIPT_DIR="$(dirname $(realpath $0))"
 DO_MERGE=0
-for i in "$@"; do
-	if [ "$i" == "--do-merge" ]; then
-		DO_MERGE=1
-	fi
+LANG_DIR=""
+
+print_usage() {
+    echo "$0 [options] -l [directory]"
+    echo "options:"
+    echo "-h        show help"
+	echo "-m        merge pot files into po files"
+    echo "-l        language directory"
+}
+
+while getopts 'hml:' flag; do
+    case "${flag}" in
+        h)
+            print_usage
+            exit 0
+            ;;
+        m) DO_MERGE=1 ;;
+        l) LANG_DIR="${OPTARG}" ;;
+        *)
+            print_usage
+            exit 1
+            ;;
+    esac
 done
+
+if [ ! -d "$LANG_DIR" ]; then
+	print_usage
+	echo "Please specify a language directory with -l"
+	exit 1
+fi
+
+cd "$LANG_DIR"
 
 # For the engine
 # To generate the appropriate .pot file, you need to run the following command from the languages directory:
@@ -33,7 +61,7 @@ if [ -e data.pot ] ; then
 	echo "Generating data.pot"
 
 	# For mods:
-	./xgettext.py
+	"$SCRIPT_DIR/xgettext.py"
 
 	if [ $DO_MERGE == 1 ]; then
 		for f in $(ls data.*.po) ; do
