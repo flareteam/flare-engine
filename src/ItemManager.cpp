@@ -1199,7 +1199,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 
 			SetBonusData* bdata = &(item_set->bonus[bonus_counter]);
 
-			ss << msg->getv("%d items:", bdata->requirement) << ' ';
+			ss << "[" << bdata->requirement << "]: ";
 
 			getBonusString(ss, bdata);
 			if (bdata->requirement <= set_count)
