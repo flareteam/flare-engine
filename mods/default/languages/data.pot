@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-28 10:41+\n"
+"POT-Creation-Date: 2025-01-07 15:14+\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,44 +39,20 @@ msgstr ""
 msgid "Increases the damage done with swords and other melee weapons."
 msgstr ""
 
-#: ../engine/damage_types.txt:5
-msgid "Melee Damage Min"
-msgstr ""
-
-#: ../engine/damage_types.txt:6
-msgid "Melee Damage Max"
-msgstr ""
-
-#: ../engine/damage_types.txt:12
+#: ../engine/damage_types.txt:10
 msgid "Ranged Damage"
 msgstr ""
 
-#: ../engine/damage_types.txt:13
+#: ../engine/damage_types.txt:11
 msgid "Increases the damage done with bows and other ranged weapons."
 msgstr ""
 
-#: ../engine/damage_types.txt:14
-msgid "Ranged Damage Min"
-msgstr ""
-
-#: ../engine/damage_types.txt:15
-msgid "Ranged Damage Max"
-msgstr ""
-
-#: ../engine/damage_types.txt:21
+#: ../engine/damage_types.txt:17
 msgid "Mental Damage"
 msgstr ""
 
-#: ../engine/damage_types.txt:22
+#: ../engine/damage_types.txt:18
 msgid "Increases the damage done with staves and other mental weapons."
-msgstr ""
-
-#: ../engine/damage_types.txt:23
-msgid "Mental Damage Min"
-msgstr ""
-
-#: ../engine/damage_types.txt:24
-msgid "Mental Damage Max"
 msgstr ""
 
 #: ../cutscenes/credits_engine.txt:7
