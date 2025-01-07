@@ -185,6 +185,7 @@ public:
 			bool is_deprecated_element;
 			std::string id;
 			std::string name;
+			std::string name_short;
 			std::string name_min;
 			std::string name_max;
 			std::string name_resist;

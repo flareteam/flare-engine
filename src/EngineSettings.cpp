@@ -646,6 +646,8 @@ void EngineSettings::DamageTypes::load() {
 			if (infile.key == "id") list.back().id = infile.val;
 			// @ATTR damage_type.name|string|The displayed name for the value of this damage type.
 			else if (infile.key == "name") list.back().name = msg->get(infile.val);
+			// @ATTR damage_type.name_short|string|An optional, shorter displayed name for this damage type. Used for labels for 'Resist Damage' stats. If left blank, 'name' will be used instead.
+			else if (infile.key == "name_short") list.back().name_short = msg->get(infile.val);
 			// @ATTR damage_type.description|string|The description that will be displayed in the Character menu tooltips.
 			else if (infile.key == "description") list.back().description = msg->get(infile.val);
 			// @ATTR damage_type.min|string|The identifier used as a Stat type and an Effect type, for the minimum damage of this type.
@@ -711,6 +713,9 @@ void EngineSettings::DamageTypes::load() {
 		if (list[i].name.empty()) {
 			list[i].name = list[i].id;
 		}
+		if (list[i].name_short.empty()) {
+			list[i].name_short = list[i].name;
+		}
 		if (list[i].name_min.empty()) {
 			list[i].name_min = msg->getv("%s (Min.)", list[i].name.c_str());
 		}
@@ -718,7 +723,7 @@ void EngineSettings::DamageTypes::load() {
 			list[i].name_max = msg->getv("%s (Max.)", list[i].name.c_str());
 		}
 		if (list[i].name_resist.empty()) {
-			list[i].name_resist = msg->getv("Resist Damage (%s)", list[i].name.c_str());
+			list[i].name_resist = msg->getv("Resist Damage (%s)", list[i].name_short.c_str());
 		}
 	}
 }

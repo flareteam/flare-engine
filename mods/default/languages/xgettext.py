@@ -41,7 +41,7 @@ def extract(filename):
         'msg', 'him', 'her', 'you', 'name', 'title', 'tooltip',
         'power_desc', 'quest_text', 'description',
         'tab_title', 'currency_name', 'flavor', 'topic', 'option',
-        'caption', 'text', 'name_min', 'name_max',
+        'caption', 'text', 'name_short',
 
         # engine/resource_stats.txt
         'text_base', 'text_base_desc',
