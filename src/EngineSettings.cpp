@@ -717,6 +717,9 @@ void EngineSettings::DamageTypes::load() {
 		if (list[i].name_max.empty()) {
 			list[i].name_max = msg->getv("%s (Max.)", list[i].name.c_str());
 		}
+		if (list[i].name_resist.empty()) {
+			list[i].name_resist = msg->getv("Resist Damage (%s)", list[i].name.c_str());
+		}
 	}
 }
 

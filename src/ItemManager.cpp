@@ -950,7 +950,7 @@ void ItemManager::getBonusString(std::stringstream& ss, BonusData* bdata) {
 		if (!bdata->is_multiplier)
 			ss << "%";
 
-		ss << " " << msg->getv("Resistance (%s)", eset->damage_types.list[bdata->index].name.c_str());
+		ss << " " << eset->damage_types.list[bdata->index].name_resist;
 	}
 	else if (bdata->type == BonusData::PRIMARY_STAT) {
 		ss << " " << eset->primary_stats.list[bdata->index].name;

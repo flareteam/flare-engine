@@ -203,7 +203,7 @@ MenuCharacter::MenuCharacter()
 			// @ATTR unspent|label|Position of the label showing the number of unspent stat points.
 			else if(infile.key == "unspent") labelUnspent->setFromLabelInfo(Parse::popLabelInfo(infile.val));
 
-			// @ATTR show_resists|bool|Hide the elemental "Resistance" stats in the statlist if set to false.
+			// @ATTR show_resists|bool|Hide the "Resist Damage" stats in the statlist if set to false.
 			else if (infile.key == "show_resists") show_resists = Parse::toBool(infile.val);
 
 			// @ATTR show_stat|stat_id, bool : Stat ID, Visible|Hide the matching stat ID in the statlist if set to false.
@@ -436,7 +436,7 @@ void MenuCharacter::refreshStats() {
 		for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
 			if (show_stat[Stats::COUNT + eset->damage_types.indexToResist(i)]) {
 				ss.str("");
-				ss << " " << msg->getv("Resistance (%s)", eset->damage_types.list[i].name.c_str()) << ": " << Utils::floatToString(pc->stats.getDamageResist(i), eset->number_format.character_menu) << "%";
+				ss << " " << eset->damage_types.list[i].name_resist << ": " << Utils::floatToString(pc->stats.getDamageResist(i), eset->number_format.character_menu) << "%";
 				statList->set(stat_index, ss.str(), resistTooltip(i));
 				stat_index++;
 			}
@@ -586,7 +586,7 @@ void MenuCharacter::refreshStats() {
 					cstat[j].tip.addText("\n" + msg->get("Related stats:"));
 					have_bonus = true;
 				}
-				cstat[j].tip.addText(msg->getv("Resistance (%s)", eset->damage_types.list[i].name.c_str()));
+				cstat[j].tip.addText(eset->damage_types.list[i].name_resist);
 			}
 		}
 	}

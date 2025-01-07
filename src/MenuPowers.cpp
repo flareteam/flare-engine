@@ -1050,7 +1050,7 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 			if (!pwr->post_effects[i].is_multiplier) {
 				ss << "%";
 			}
-			ss << " " << msg->getv("Resistance (%s)", eset->damage_types.list[index].name.c_str());
+			ss << " " << eset->damage_types.list[index].name_resist;
 		}
 		else if (Effect::typeIsPrimary(effect_type)) {
 			size_t index = Effect::getPrimaryFromType(effect_type);
@@ -1104,7 +1104,7 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 			ss << msg->getv("%s%% Attack Speed", Utils::floatToString(pwr->post_effects[i].magnitude, eset->number_format.power_tooltips).c_str());
 		}
 		else if (effect_type == Effect::RESIST_ALL) {
-			ss << "+" << pwr->post_effects[i].magnitude << "% " << msg->get("Resistance to all negative effects");
+			ss << "+" << pwr->post_effects[i].magnitude << "% " << msg->get("Resist All Negative Effects");
 		}
 
 		else if (effect_type == Effect::STUN) {

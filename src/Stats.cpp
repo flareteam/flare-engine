@@ -162,56 +162,56 @@ namespace Stats {
 
 		// @TYPE resist_damage_over_time|Percentage chance that damage-over-time effects will be negated
 		KEY[RESIST_DAMAGE_OVER_TIME] = "resist_damage_over_time";
-		NAME[RESIST_DAMAGE_OVER_TIME] = msg->get("Resistance to damage-over-time");
+		NAME[RESIST_DAMAGE_OVER_TIME] = msg->get("Resist Damage-Over-Time");
 		DESC[RESIST_DAMAGE_OVER_TIME] = msg->get("Percentage chance that damage-over-time effects will be negated.");
 		PERCENT[RESIST_DAMAGE_OVER_TIME] = true;
 		CATEGORY[RESIST_DAMAGE_OVER_TIME] = CATEGORY_DEFENSE;
 
 		// @TYPE resist_slow|Percentage chance that slow effects will be negated
 		KEY[RESIST_SLOW] = "resist_slow";
-		NAME[RESIST_SLOW] = msg->get("Resistance to slow");
+		NAME[RESIST_SLOW] = msg->get("Resist Slow");
 		DESC[RESIST_SLOW] = msg->get("Percentage chance that slow effects will be negated.");
 		PERCENT[RESIST_SLOW] = true;
 		CATEGORY[RESIST_SLOW] = CATEGORY_DEFENSE;
 
 		// @TYPE resist_stun|Percentage chance that stun effects will be negated
 		KEY[RESIST_STUN] = "resist_stun";
-		NAME[RESIST_STUN] = msg->get("Resistance to stun");
+		NAME[RESIST_STUN] = msg->get("Resist Stun");
 		DESC[RESIST_STUN] = msg->get("Percentage chance that stun effects will be negated.");
 		PERCENT[RESIST_STUN] = true;
 		CATEGORY[RESIST_STUN] = CATEGORY_DEFENSE;
 
 		// @TYPE resist_knockback|Percentage chance that knockback effects will be negated
 		KEY[RESIST_KNOCKBACK] = "resist_knockback";
-		NAME[RESIST_KNOCKBACK] = msg->get("Resistance to knockback");
+		NAME[RESIST_KNOCKBACK] = msg->get("Resist Knockback");
 		DESC[RESIST_KNOCKBACK] = msg->get("Percentage chance that knockback effects will be negated.");
 		PERCENT[RESIST_KNOCKBACK] = true;
 		CATEGORY[RESIST_KNOCKBACK] = CATEGORY_DEFENSE;
 
 		// @TYPE resist_stat_debuff|Percentage chance that stat debuff effects will be negated
 		KEY[RESIST_STAT_DEBUFF] = "resist_stat_debuff";
-		NAME[RESIST_STAT_DEBUFF] = msg->get("Resistance to stat debuffs");
+		NAME[RESIST_STAT_DEBUFF] = msg->get("Resist Stat Debuffs");
 		DESC[RESIST_STAT_DEBUFF] = msg->get("Percentage chance that stat debuff effects will be negated.");
 		PERCENT[RESIST_STAT_DEBUFF] = true;
 		CATEGORY[RESIST_STAT_DEBUFF] = CATEGORY_DEFENSE;
 
 		// @TYPE resist_damage_reflect|Percentage chance that damage reflection will be negated
 		KEY[RESIST_DAMAGE_REFLECT] = "resist_damage_reflect";
-		NAME[RESIST_DAMAGE_REFLECT] = msg->get("Resistance to damage reflection");
+		NAME[RESIST_DAMAGE_REFLECT] = msg->get("Resist Damage Reflection");
 		DESC[RESIST_DAMAGE_REFLECT] = msg->get("Percentage chance that damage reflection will be negated.");
 		PERCENT[RESIST_DAMAGE_REFLECT] = true;
 		CATEGORY[RESIST_DAMAGE_REFLECT] = CATEGORY_DEFENSE;
 
 		// @TYPE resist_hp_steal|Percentage chance that HP steal will be negated
 		KEY[RESIST_HP_STEAL] = "resist_hp_steal";
-		NAME[RESIST_HP_STEAL] = msg->get("Resistance to HP steal");
+		NAME[RESIST_HP_STEAL] = msg->get("Resist HP Steal");
 		DESC[RESIST_HP_STEAL] = msg->get("Percentage chance that HP steal will be negated.");
 		PERCENT[RESIST_HP_STEAL] = true;
 		CATEGORY[RESIST_HP_STEAL] = CATEGORY_DEFENSE;
 
 		// @TYPE resist_mp_steal|Percentage chance that MP steal will be negated
 		KEY[RESIST_MP_STEAL] = "resist_mp_steal";
-		NAME[RESIST_MP_STEAL] = msg->get("Resistance to MP steal");
+		NAME[RESIST_MP_STEAL] = msg->get("Resist MP Steal");
 		DESC[RESIST_MP_STEAL] = msg->get("Percentage chance that MP steal will be negated.");
 		PERCENT[RESIST_MP_STEAL] = true;
 		CATEGORY[RESIST_MP_STEAL] = CATEGORY_DEFENSE;

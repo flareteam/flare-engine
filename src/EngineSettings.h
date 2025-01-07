@@ -187,6 +187,7 @@ public:
 			std::string name;
 			std::string name_min;
 			std::string name_max;
+			std::string name_resist;
 			std::string description;
 			std::string min;
 			std::string max;
