@@ -78,14 +78,14 @@ namespace Stats {
 
 		// @TYPE absorb_min|Minimum damage absorption
 		KEY[ABS_MIN] = "absorb_min";
-		NAME[ABS_MIN] = msg->get("Absorb Min");
+		NAME[ABS_MIN] = msg->getv("%s (Min.)", msg->get("Absorb").c_str());
 		DESC[ABS_MIN] = msg->get("Reduces the amount of damage taken.");
 		PERCENT[ABS_MIN] = false;
 		CATEGORY[ABS_MIN] = CATEGORY_DEFENSE;
 
 		// @TYPE absorb_max|Maximum damage absorption
 		KEY[ABS_MAX] = "absorb_max";
-		NAME[ABS_MAX] = msg->get("Absorb Max");
+		NAME[ABS_MAX] = msg->getv("%s (Max.)", msg->get("Absorb").c_str());
 		DESC[ABS_MAX] = msg->get("Reduces the amount of damage taken.");
 		PERCENT[ABS_MAX] = false;
 		CATEGORY[ABS_MAX] = CATEGORY_DEFENSE;

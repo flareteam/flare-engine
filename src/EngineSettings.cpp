@@ -646,10 +646,6 @@ void EngineSettings::DamageTypes::load() {
 			if (infile.key == "id") list.back().id = infile.val;
 			// @ATTR damage_type.name|string|The displayed name for the value of this damage type.
 			else if (infile.key == "name") list.back().name = msg->get(infile.val);
-			// @ATTR damage_type.name_min|string|The displayed name for the minimum value of this damage type.
-			else if (infile.key == "name_min") list.back().name_min = msg->get(infile.val);
-			// @ATTR damage_type.name_max|string|The displayed name for the maximum value of this damage type.
-			else if (infile.key == "name_max") list.back().name_max = msg->get(infile.val);
 			// @ATTR damage_type.description|string|The description that will be displayed in the Character menu tooltips.
 			else if (infile.key == "description") list.back().description = msg->get(infile.val);
 			// @ATTR damage_type.min|string|The identifier used as a Stat type and an Effect type, for the minimum damage of this type.
@@ -716,10 +712,10 @@ void EngineSettings::DamageTypes::load() {
 			list[i].name = list[i].id;
 		}
 		if (list[i].name_min.empty()) {
-			list[i].name_min = list[i].min;
+			list[i].name_min = msg->getv("%s (Min.)", list[i].name.c_str());
 		}
 		if (list[i].name_max.empty()) {
-			list[i].name_max = list[i].max;
+			list[i].name_max = msg->getv("%s (Max.)", list[i].name.c_str());
 		}
 	}
 }
