@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-28 10:39+\n"
+"POT-Creation-Date: 2025-01-07 15:14+\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
 "Last-Translator: Sato Hayato <garvash@gmail.com>, 2022\n"
 "Language-Team: Japanese (https://app.transifex.com/flareorg/teams/84925/ja/)\n"
@@ -44,45 +44,21 @@ msgstr "近接ダメージ"
 msgid "Increases the damage done with swords and other melee weapons."
 msgstr "剣などの近接武器によるダメージを増加する"
 
-#: ../engine/damage_types.txt:5
-msgid "Melee Damage Min"
-msgstr "近接ダメージの最小"
-
-#: ../engine/damage_types.txt:6
-msgid "Melee Damage Max"
-msgstr "近接ダメージの最大"
-
-#: ../engine/damage_types.txt:12
+#: ../engine/damage_types.txt:10
 msgid "Ranged Damage"
 msgstr "遠距離ダメージ"
 
-#: ../engine/damage_types.txt:13
+#: ../engine/damage_types.txt:11
 msgid "Increases the damage done with bows and other ranged weapons."
 msgstr "弓矢などの遠距離武器によるダメージを増加する"
 
-#: ../engine/damage_types.txt:14
-msgid "Ranged Damage Min"
-msgstr "遠距離ダメージの最小"
-
-#: ../engine/damage_types.txt:15
-msgid "Ranged Damage Max"
-msgstr "遠距離ダメージの最大"
-
-#: ../engine/damage_types.txt:21
+#: ../engine/damage_types.txt:17
 msgid "Mental Damage"
 msgstr "精神ダメージ"
 
-#: ../engine/damage_types.txt:22
+#: ../engine/damage_types.txt:18
 msgid "Increases the damage done with staves and other mental weapons."
 msgstr "杖などの精神武器によるダメージを増加する"
-
-#: ../engine/damage_types.txt:23
-msgid "Mental Damage Min"
-msgstr "精神ダメージの最小"
-
-#: ../engine/damage_types.txt:24
-msgid "Mental Damage Max"
-msgstr "精神ダメージの最大"
 
 #: ../cutscenes/credits_engine.txt:7
 msgid "Flare Engine Credits"

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-28 10:39-0500\n"
+"POT-Creation-Date: 2025-01-07 15:14-0500\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
 "Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2024\n"
 "Language-Team: Vietnamese (https://app.transifex.com/flareorg/teams/84925/vi/)\n"
@@ -119,30 +119,45 @@ msgstr ""
 "Kết Xuất Đồ Hoạ SDL Bằng Phần Cứng\n"
 "Bộ Kết Xuất Mặc Định, Thường Nhanh Hơn Bằng Phần Mềm."
 
+#: ../../../src/EffectManager.cpp:495 ../../../src/EffectManager.cpp:499
 #: ../../../src/EffectManager.cpp:503 ../../../src/EffectManager.cpp:507
-#: ../../../src/EffectManager.cpp:511 ../../../src/EffectManager.cpp:515
-#: ../../../src/EffectManager.cpp:519 ../../../src/Entity.cpp:551
-#: ../../../src/Entity.cpp:563 ../../../src/Entity.cpp:576
-#: ../../../src/Entity.cpp:591
+#: ../../../src/EffectManager.cpp:511 ../../../src/Entity.cpp:554
+#: ../../../src/Entity.cpp:566 ../../../src/Entity.cpp:579
+#: ../../../src/Entity.cpp:597
 msgid "Resist"
 msgstr "Kháng"
 
-#: ../../../src/EngineSettings.cpp:642
+#: ../../../src/EngineSettings.cpp:602
 msgid "Adventurer"
 msgstr "Thám Hiểm"
 
-#: ../../../src/Entity.cpp:514
+#: ../../../src/EngineSettings.cpp:720 ../../../src/Stats.cpp:81
+#, c-format
+msgid "%s (Min.)"
+msgstr ""
+
+#: ../../../src/EngineSettings.cpp:723 ../../../src/Stats.cpp:88
+#, c-format
+msgid "%s (Max.)"
+msgstr ""
+
+#: ../../../src/EngineSettings.cpp:726
+#, c-format
+msgid "Resist Damage (%s)"
+msgstr ""
+
+#: ../../../src/Entity.cpp:517
 msgid "miss"
 msgstr "Trượt"
 
-#: ../../../src/Entity.cpp:556 ../../../src/PowerManager.cpp:1515
-#: ../../../src/StatBlock.cpp:1162 ../../../src/StatBlock.cpp:1169
+#: ../../../src/Entity.cpp:559 ../../../src/PowerManager.cpp:1527
+#: ../../../src/StatBlock.cpp:1150 ../../../src/StatBlock.cpp:1157
 #, c-format
 msgid "+%s HP"
 msgstr "+%s ♥️"
 
-#: ../../../src/Entity.cpp:568 ../../../src/StatBlock.cpp:1176
-#: ../../../src/StatBlock.cpp:1183
+#: ../../../src/Entity.cpp:571 ../../../src/StatBlock.cpp:1164
+#: ../../../src/StatBlock.cpp:1171
 #, c-format
 msgid "+%s MP"
 msgstr "+%s ♦"
@@ -203,7 +218,7 @@ msgstr "Đang Mở Bản Lưu..."
 msgid "Invalid save"
 msgstr "Bản Lưu Không Hợp Lệ"
 
-#: ../../../src/GameStateLoad.cpp:824 ../../../src/ItemManager.cpp:1041
+#: ../../../src/GameStateLoad.cpp:824 ../../../src/ItemManager.cpp:1038
 #: ../../../src/MenuPowers.cpp:933 ../../../src/MenuPowers.cpp:1310
 #: ../../../src/MenuPowers.cpp:1786
 #, c-format
@@ -276,101 +291,91 @@ msgstr ""
 msgid "Unknown Item"
 msgstr "Vật Chưa Xác Định"
 
-#: ../../../src/ItemManager.cpp:925 ../../../src/MenuPowers.cpp:1101
+#: ../../../src/ItemManager.cpp:922 ../../../src/MenuPowers.cpp:1101
 #, c-format
 msgid "%s%% Speed"
 msgstr "%s%% Tốc Độ"
 
-#: ../../../src/ItemManager.cpp:929 ../../../src/MenuPowers.cpp:1104
+#: ../../../src/ItemManager.cpp:926 ../../../src/MenuPowers.cpp:1104
 #, c-format
 msgid "%s%% Attack Speed"
 msgstr "%s%% Tốc Độ Tấn Công"
 
-#: ../../../src/ItemManager.cpp:956 ../../../src/MenuCharacter.cpp:416
-#: ../../../src/MenuCharacter.cpp:557 ../../../src/MenuPowers.cpp:1053
-#, c-format
-msgid "Resistance (%s)"
-msgstr "Kháng %s"
-
-#: ../../../src/ItemManager.cpp:966
+#: ../../../src/ItemManager.cpp:963
 #, c-format
 msgid "Requires %s"
 msgstr "Cần %s"
 
-#: ../../../src/ItemManager.cpp:1024
+#: ../../../src/ItemManager.cpp:1021
 msgid "Quest Item"
 msgstr "Đồ Nhiệm Vụ"
 
-#: ../../../src/ItemManager.cpp:1054
+#: ../../../src/ItemManager.cpp:1051
 #, c-format
 msgid "Quality: %s"
 msgstr "Chất Lượng: %s"
 
-#: ../../../src/ItemManager.cpp:1073 ../../../src/MenuCharacter.cpp:390
+#: ../../../src/ItemManager.cpp:1070 ../../../src/MenuCharacter.cpp:415
+#: ../../../src/Stats.cpp:81 ../../../src/Stats.cpp:88
 msgid "Absorb"
 msgstr "Hấp Thụ"
 
-#: ../../../src/ItemManager.cpp:1124 ../../../src/MenuPowers.cpp:1297
+#: ../../../src/ItemManager.cpp:1121 ../../../src/MenuPowers.cpp:1297
 #: ../../../src/MenuPowers.cpp:1300
 #, c-format
 msgid "Requires Level %d"
 msgstr "Cần Cấp %d"
 
-#: ../../../src/ItemManager.cpp:1136 ../../../src/MenuPowers.cpp:1289
+#: ../../../src/ItemManager.cpp:1133 ../../../src/MenuPowers.cpp:1289
 #: ../../../src/MenuPowers.cpp:1291
 #, c-format
 msgid "Requires %s %d"
 msgstr "Cần %s %d"
 
-#: ../../../src/ItemManager.cpp:1147
+#: ../../../src/ItemManager.cpp:1144
 #, c-format
 msgid "Requires Class: %s"
 msgstr "Cần Thuộc Giai Cấp: %s"
 
-#: ../../../src/ItemManager.cpp:1163 ../../../src/ItemManager.cpp:1175
+#: ../../../src/ItemManager.cpp:1160 ../../../src/ItemManager.cpp:1172
 #, c-format
 msgid "Buy Price: %d %s"
 msgstr "Giá Mua: %d %s"
 
-#: ../../../src/ItemManager.cpp:1165 ../../../src/ItemManager.cpp:1177
+#: ../../../src/ItemManager.cpp:1162 ../../../src/ItemManager.cpp:1174
 #, c-format
 msgid "Buy Price: %d %s each"
 msgstr "Giá Mua Mỗi Món: %d %s"
 
-#: ../../../src/ItemManager.cpp:1185
+#: ../../../src/ItemManager.cpp:1182
 #, c-format
 msgid "Sell Price: %d %s"
 msgstr "Giá Bán: %d %s"
 
-#: ../../../src/ItemManager.cpp:1187
+#: ../../../src/ItemManager.cpp:1184
 #, c-format
 msgid "Sell Price: %d %s each"
 msgstr "Giá Bán Mỗi Món: %d %s"
 
-#: ../../../src/ItemManager.cpp:1198
+#: ../../../src/ItemManager.cpp:1195
 msgid "Set:"
 msgstr "Bộ Đồ:"
 
-#: ../../../src/ItemManager.cpp:1205
-#, c-format
-msgid "%d items:"
-msgstr "%d Vật:"
-
-#: ../../../src/ItemManager.cpp:1230 ../../../src/MenuPowers.cpp:1349
+#: ../../../src/ItemManager.cpp:1227 ../../../src/MenuPowers.cpp:1349
 msgid "Tap icon again for more options"
 msgstr "(Nhấn Tiếp Để Mở Tùy Chọn)"
 
-#: ../../../src/ItemManager.cpp:1262
+#: ../../../src/ItemManager.cpp:1259
 #, c-format
 msgid "Press [%s] to read"
 msgstr "Nhấn [%s] Để Đọc"
 
-#: ../../../src/ItemManager.cpp:1265 ../../../src/MenuPowers.cpp:1379
+#: ../../../src/ItemManager.cpp:1262 ../../../src/MenuPowers.cpp:1379
 #, c-format
 msgid "Press [%s] to use"
 msgstr "Nhấn [%s] Để Sử Dụng"
 
-#: ../../../src/ItemManager.cpp:1269 ../../../src/MenuPowers.cpp:1383
+#: ../../../src/ItemManager.cpp:1266 ../../../src/MenuPowers.cpp:1383
 #, c-format
 msgid "Press [%s] for more options"
 msgstr "Nhấn [%s] Để Mở Tùy Chọn"
@@ -446,70 +451,69 @@ msgstr "Tên"
 msgid "Level"
 msgstr "Cấp"
 
-#: ../../../src/MenuCharacter.cpp:297
+#: ../../../src/MenuCharacter.cpp:314
 #, c-format
 msgid "Available stat points: %d"
 msgstr "Điểm Chỉ Số Có Sẵn: %d"
 
-#: ../../../src/MenuCharacter.cpp:309
+#: ../../../src/MenuCharacter.cpp:326
 msgid "Core Stats"
 msgstr ""
 
-#: ../../../src/MenuCharacter.cpp:343
+#: ../../../src/MenuCharacter.cpp:360
 msgid "Offensive Stats"
 msgstr ""
 
-#: ../../../src/MenuCharacter.cpp:384
+#: ../../../src/MenuCharacter.cpp:375
+#, c-format
+msgid "Elemental Damage (%s)"
+msgstr "Sát Thương Nguyên Tố %s"
+
+#: ../../../src/MenuCharacter.cpp:409
 msgid "Defensive Stats"
 msgstr ""
 
-#: ../../../src/MenuCharacter.cpp:434
+#: ../../../src/MenuCharacter.cpp:458
 msgid "Miscellaneous Stats"
 msgstr ""
 
-#: ../../../src/MenuCharacter.cpp:454
+#: ../../../src/MenuCharacter.cpp:478
 msgid "Movement Speed"
 msgstr ""
 
-#: ../../../src/MenuCharacter.cpp:461
+#: ../../../src/MenuCharacter.cpp:485
 msgid "Attack Speed"
 msgstr ""
 
-#: ../../../src/MenuCharacter.cpp:472 ../../../src/MenuStatBar.cpp:179
+#: ../../../src/MenuCharacter.cpp:496 ../../../src/MenuStatBar.cpp:179
 #, c-format
 msgid "XP: %lu"
 msgstr "KN: %lu"
 
-#: ../../../src/MenuCharacter.cpp:474
+#: ../../../src/MenuCharacter.cpp:498
 #, c-format
 msgid "Next: %lu"
 msgstr "Tiếp: %lu"
 
-#: ../../../src/MenuCharacter.cpp:480
-#, c-format
-msgid "base (%d), bonus (%d)"
-msgstr "Gốc %d, Thêm %d"
-
-#: ../../../src/MenuCharacter.cpp:495 ../../../src/MenuCharacter.cpp:510
-#: ../../../src/MenuCharacter.cpp:518 ../../../src/MenuCharacter.cpp:529
-#: ../../../src/MenuCharacter.cpp:543 ../../../src/MenuCharacter.cpp:554
+#: ../../../src/MenuCharacter.cpp:526 ../../../src/MenuCharacter.cpp:541
+#: ../../../src/MenuCharacter.cpp:549 ../../../src/MenuCharacter.cpp:560
+#: ../../../src/MenuCharacter.cpp:574 ../../../src/MenuCharacter.cpp:586
 msgid "Related stats:"
 msgstr "Thuộc Tính Liên Quan:"
 
-#: ../../../src/MenuCharacter.cpp:579 ../../../src/MenuCharacter.cpp:583
+#: ../../../src/MenuCharacter.cpp:611 ../../../src/MenuCharacter.cpp:615
 #, c-format
 msgid "Each level grants %s."
 msgstr "Mỗi Cấp Tăng %s."
 
-#: ../../../src/MenuCharacter.cpp:595 ../../../src/MenuCharacter.cpp:602
+#: ../../../src/MenuCharacter.cpp:627 ../../../src/MenuCharacter.cpp:634
 #, c-format
 msgid "Each point of %s grants %s."
 msgstr "Mỗi Điểm Của %s Tăng %s."
 
-#: ../../../src/MenuCharacter.cpp:689
-#, c-format
-msgid "Reduces the damage taken from \"%s\" elemental attacks."
-msgstr "Giảm Sát Thương Từ Nguyên Tố %s."
+#: ../../../src/MenuCharacter.cpp:719
+msgid "Reduces damage taken from attacks of this damage type."
+msgstr ""
 
 #: ../../../src/MenuConfig.cpp:250 ../../../src/MenuConfig.cpp:1333
 msgid "Assign:"
@@ -519,7 +523,7 @@ msgstr "Gán Với:"
 msgid "New"
 msgstr "Mới"
 
-#: ../../../src/MenuConfig.cpp:252 ../../../src/MenuManager.cpp:1797
+#: ../../../src/MenuConfig.cpp:252 ../../../src/MenuManager.cpp:1795
 msgid "Clear"
 msgstr "Xoá"
 
@@ -1334,40 +1338,40 @@ msgstr "Chọn Một Hành Động:"
 msgid "This item can not be dropped."
 msgstr "Không Thể Vứt Vật Này."
 
-#: ../../../src/MenuManager.cpp:1742
+#: ../../../src/MenuManager.cpp:1740
 msgid "Equipped"
 msgstr "Đã Trang Bị"
 
-#: ../../../src/MenuManager.cpp:1790 ../../../src/MenuManager.cpp:1841
+#: ../../../src/MenuManager.cpp:1788 ../../../src/MenuManager.cpp:1839
 msgid "Use"
 msgstr "Sử Dụng"
 
-#: ../../../src/MenuManager.cpp:1794 ../../../src/MenuManager.cpp:1837
-#: ../../../src/MenuManager.cpp:1868
+#: ../../../src/MenuManager.cpp:1792 ../../../src/MenuManager.cpp:1835
+#: ../../../src/MenuManager.cpp:1866
 msgid "Move"
 msgstr "Di Chuyển"
 
-#: ../../../src/MenuManager.cpp:1810 ../../../src/MenuManager.cpp:1845
+#: ../../../src/MenuManager.cpp:1808 ../../../src/MenuManager.cpp:1843
 msgid "Equip"
 msgstr "Trang Bị"
 
-#: ../../../src/MenuManager.cpp:1814
+#: ../../../src/MenuManager.cpp:1812
 msgid "Upgrade"
 msgstr "Nâng Cấp"
 
-#: ../../../src/MenuManager.cpp:1829 ../../../src/MenuManager.cpp:1853
+#: ../../../src/MenuManager.cpp:1827 ../../../src/MenuManager.cpp:1851
 msgid "Sell"
 msgstr "Bán"
 
-#: ../../../src/MenuManager.cpp:1833 ../../../src/MenuManager.cpp:1871
+#: ../../../src/MenuManager.cpp:1831 ../../../src/MenuManager.cpp:1869
 msgid "Transfer"
 msgstr "Chuyển Đổi"
 
-#: ../../../src/MenuManager.cpp:1849
+#: ../../../src/MenuManager.cpp:1847
 msgid "Drop"
 msgstr "Vứt Bỏ"
 
-#: ../../../src/MenuManager.cpp:1885
+#: ../../../src/MenuManager.cpp:1883
 msgid "Buy"
 msgstr "Mua"
 
@@ -1454,8 +1458,8 @@ msgid "Immobilize"
 msgstr "Làm Bất Động"
 
 #: ../../../src/MenuPowers.cpp:1107
-msgid "Resistance to all negative effects"
-msgstr "Kháng Tất Cả Các Ảnh Hưởng Bất Lợi"
+msgid "Resist All Negative Effects"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1111
 msgid "Stun"
@@ -1517,8 +1521,8 @@ msgstr "%s%% Cơ Hội Bạo Kích Với Mục Tiêu Bị Làm Chậm"
 
 #: ../../../src/MenuPowers.cpp:1270
 #, c-format
-msgid "Elemental Damage (%s)"
-msgstr "Sát Thương Nguyên Tố %s"
+msgid "Damage dealt as: %s"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1279
 #, c-format
@@ -1602,16 +1606,16 @@ msgstr "Mua Lại"
 msgid "Vendor"
 msgstr "Thương Nhân"
 
-#: ../../../src/PowerManager.cpp:1499
+#: ../../../src/PowerManager.cpp:1511
 #, c-format
 msgid "+%s Shield"
 msgstr "+%s Khiên"
 
-#: ../../../src/PowerManager.cpp:1776
+#: ../../../src/PowerManager.cpp:1788
 msgid "You are already transformed, untransform first."
 msgstr "Bạn Đã Biến Đổi Rồi, Phải Biến Về Trạng Thái Ban Đầu Trước Tiên."
 
-#: ../../../src/PowerManager.cpp:1788
+#: ../../../src/PowerManager.cpp:1800
 msgid "Could not untransform at this position."
 msgstr "Không Thể Biến Về Trạng Thái Ban Đầu Ở Vị Trí Này."
 
@@ -2129,17 +2133,9 @@ msgid ""
 msgstr ""
 "Khả Năng Bị Đánh Trúng Bằng Độ Chính Xác Của Kẻ Thù Trừ Đi Khả Năng Tránh."
 
-#: ../../../src/Stats.cpp:81
-msgid "Absorb Min"
-msgstr "Hấp Thụ Cực Tiểu"
-
 #: ../../../src/Stats.cpp:82 ../../../src/Stats.cpp:89
 msgid "Reduces the amount of damage taken."
 msgstr "Giảm Sát Thương Phải Chịu."
-
-#: ../../../src/Stats.cpp:88
-msgid "Absorb Max"
-msgstr "Hấp Thụ Cực Đại"
 
 #: ../../../src/Stats.cpp:95
 msgid "Critical Hit Chance"
@@ -2224,64 +2220,64 @@ msgid "Percentage of MP stolen per hit."
 msgstr "Phần Trăm Nội Lực Lấy Được Mỗi Lượt Đánh."
 
 #: ../../../src/Stats.cpp:165
-msgid "Resistance to damage-over-time"
-msgstr "Kháng Sát Thương Theo Thời Gian"
+msgid "Resist Damage-Over-Time"
+msgstr ""
 
 #: ../../../src/Stats.cpp:166
 msgid "Percentage chance that damage-over-time effects will be negated."
 msgstr "Vô Hiệu Hóa Một Phần Các Ảnh Hưởng Sát Thương Theo Thời Gian."
 
 #: ../../../src/Stats.cpp:172
-msgid "Resistance to slow"
-msgstr "Kháng Làm Chậm"
+msgid "Resist Slow"
+msgstr ""
 
 #: ../../../src/Stats.cpp:173
 msgid "Percentage chance that slow effects will be negated."
 msgstr "Vô Hiệu Hóa Một Phần Các Ảnh Hưởng Làm Chậm."
 
 #: ../../../src/Stats.cpp:179
-msgid "Resistance to stun"
-msgstr "Kháng Làm Choáng"
+msgid "Resist Stun"
+msgstr ""
 
 #: ../../../src/Stats.cpp:180
 msgid "Percentage chance that stun effects will be negated."
 msgstr "Vô Hiệu Hóa Một Phần Các Ảnh Hưởng Làm Choáng."
 
 #: ../../../src/Stats.cpp:186
-msgid "Resistance to knockback"
-msgstr "Kháng Đẩy Lùi"
+msgid "Resist Knockback"
+msgstr ""
 
 #: ../../../src/Stats.cpp:187
 msgid "Percentage chance that knockback effects will be negated."
 msgstr "Vô Hiệu Hóa Một Phần Các Ảnh Hưởng Đẩy Lùi."
 
 #: ../../../src/Stats.cpp:193
-msgid "Resistance to stat debuffs"
-msgstr "Kháng Giảm Chỉ Số"
+msgid "Resist Stat Debuffs"
+msgstr ""
 
 #: ../../../src/Stats.cpp:194
 msgid "Percentage chance that stat debuff effects will be negated."
 msgstr "Vô Hiệu Hóa Một Phần Các Ảnh Hưởng Giảm Chỉ Số."
 
 #: ../../../src/Stats.cpp:200
-msgid "Resistance to damage reflection"
-msgstr "Kháng Phản Sát Thương"
+msgid "Resist Damage Reflection"
+msgstr ""
 
 #: ../../../src/Stats.cpp:201
 msgid "Percentage chance that damage reflection will be negated."
 msgstr "Vô Hiệu Hóa Một Phần Các Ảnh Hưởng Phản Sát Thương."
 
 #: ../../../src/Stats.cpp:207
-msgid "Resistance to HP steal"
-msgstr "Kháng Hút Sinh Lực"
+msgid "Resist HP Steal"
+msgstr ""
 
 #: ../../../src/Stats.cpp:208
 msgid "Percentage chance that HP steal will be negated."
 msgstr "Vô Hiệu Hóa Một Phần Các Ảnh Hưởng Hút Sinh Lực."
 
 #: ../../../src/Stats.cpp:214
-msgid "Resistance to MP steal"
-msgstr "Kháng Hút Nội Lực"
+msgid "Resist MP Steal"
+msgstr ""
 
 #: ../../../src/Stats.cpp:215
 msgid "Percentage chance that MP steal will be negated."

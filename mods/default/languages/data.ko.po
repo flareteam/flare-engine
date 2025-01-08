@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-28 10:39+\n"
+"POT-Creation-Date: 2025-01-07 15:14+\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
 "Last-Translator: ks k, 2022\n"
 "Language-Team: Korean (https://app.transifex.com/flareorg/teams/84925/ko/)\n"
@@ -43,45 +43,21 @@ msgstr "근거리 피해"
 msgid "Increases the damage done with swords and other melee weapons."
 msgstr "칼과 기타 근거리 무기로 입히는 피해가 높아진다."
 
-#: ../engine/damage_types.txt:5
-msgid "Melee Damage Min"
-msgstr "근거리 최소 피해"
-
-#: ../engine/damage_types.txt:6
-msgid "Melee Damage Max"
-msgstr "근거리 최대 피해"
-
-#: ../engine/damage_types.txt:12
+#: ../engine/damage_types.txt:10
 msgid "Ranged Damage"
 msgstr "원거리 피해"
 
-#: ../engine/damage_types.txt:13
+#: ../engine/damage_types.txt:11
 msgid "Increases the damage done with bows and other ranged weapons."
 msgstr "활 및 기타 원거리 무기로 입히는 피해가 높아진다."
 
-#: ../engine/damage_types.txt:14
-msgid "Ranged Damage Min"
-msgstr "원거리 최소 피해"
-
-#: ../engine/damage_types.txt:15
-msgid "Ranged Damage Max"
-msgstr "원거리 최대 피해"
-
-#: ../engine/damage_types.txt:21
+#: ../engine/damage_types.txt:17
 msgid "Mental Damage"
 msgstr "정신적 피해"
 
-#: ../engine/damage_types.txt:22
+#: ../engine/damage_types.txt:18
 msgid "Increases the damage done with staves and other mental weapons."
 msgstr "지팡이 및 기타 정신력 무기로 입히는 피해가 높아진다."
-
-#: ../engine/damage_types.txt:23
-msgid "Mental Damage Min"
-msgstr "정신적 최소 피해"
-
-#: ../engine/damage_types.txt:24
-msgid "Mental Damage Max"
-msgstr "정신적 최대 피해"
 
 #: ../cutscenes/credits_engine.txt:7
 msgid "Flare Engine Credits"
