@@ -1081,9 +1081,26 @@ void EngineSettings::XPTable::load() {
 					xp_table.resize(lvl_id);
 
 				xp_table[lvl_id - 1] = lvl_xp;
+
+				// validate that XP is greater than previous levels
+				// corrections are done after then entire table is loaded
+				for (size_t i = 0; i < lvl_id - 1; ++i) {
+					if (xp_table[lvl_id - 1] <= xp_table[i]) {
+						infile.error("EngineSettings: XP for level %u is less than previous levels.", lvl_id);
+						break;
+					}
+				}
 			}
 		}
 		infile.close();
+	}
+
+	// set invalid XP thresolds to valid values
+	for (size_t i = 1; i < xp_table.size(); ++i) {
+		if (xp_table[i] <= xp_table[i-1]) {
+			xp_table[i] = xp_table[i-1] + 1;
+			Utils::logInfo("EngineSettings: Setting XP for level %u to %lu.", i+1, xp_table[i]);
+		}
 	}
 
 	if (xp_table.empty()) {
