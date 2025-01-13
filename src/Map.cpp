@@ -159,7 +159,19 @@ int Map::load(const std::string& fname) {
 			if (infile.open(ss.str(), !FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 				while (infile.next()) {
 					if (infile.section == "layer") {
-						loadLayer(infile);
+						if (!loadLayer(infile, !EXIT_ON_FAIL)) {
+							for (size_t i = layers.size(); i > 0; i--) {
+								if (layernames[i] == "fow_fog") {
+									layernames.erase(layernames.begin() + i);
+									layers.erase(layers.begin() + i);
+								}
+								else if (layernames[i] == "fow_dark") {
+									layernames.erase(layernames.begin() + i);
+									layers.erase(layers.begin() + i);
+								}
+							}
+							break;
+						}
 					}
 				}
 				infile.close();
@@ -248,7 +260,7 @@ void Map::loadHeader(FileParser &infile) {
 	}
 }
 
-void Map::loadLayer(FileParser &infile) {
+bool Map::loadLayer(FileParser &infile, bool exit_on_fail) {
 	if (infile.key == "type") {
 		// @ATTR layer.type|string|Map layer type.
 		layers.resize(layers.size()+1);
@@ -262,9 +274,12 @@ void Map::loadLayer(FileParser &infile) {
 		// @ATTR layer.format|string|Format for map layer, must be 'dec'
 		if (infile.val != "dec") {
 			infile.error("Map: The format of a layer must be 'dec'!");
-			Utils::logErrorDialog("Map: The format of a layer must be 'dec'!");
-			mods->resetModConfig();
-			Utils::Exit(1);
+			if (exit_on_fail) {
+				Utils::logErrorDialog("Map: The format of a layer must be 'dec'!");
+				mods->resetModConfig();
+				Utils::Exit(1);
+			}
+			return false;
 		}
 	}
 	else if (infile.key == "data") {
@@ -285,8 +300,11 @@ void Map::loadLayer(FileParser &infile) {
 			}
 			if (comma_count != w) {
 				infile.error("Map: A row of layer data has a width not equal to %d.", w);
-				mods->resetModConfig();
-				Utils::Exit(1);
+				if (exit_on_fail) {
+					mods->resetModConfig();
+					Utils::Exit(1);
+				}
+				return false;
 			}
 
 			for (int i=0; i<w; i++)
@@ -296,6 +314,8 @@ void Map::loadLayer(FileParser &infile) {
 	else {
 		infile.error("Map: '%s' is not a valid key.", infile.key.c_str());
 	}
+
+	return true;
 }
 
 void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {

@@ -145,8 +145,10 @@ public:
 
 class Map {
 protected:
+	static const bool EXIT_ON_FAIL = true;
+
 	void loadHeader(FileParser &infile);
-	void loadLayer(FileParser &infile);
+	bool loadLayer(FileParser &infile, bool exit_on_fail = EXIT_ON_FAIL);
 	void loadEnemyGroup(FileParser &infile, Map_Group *group);
 	void loadNPC(FileParser &infile);
 

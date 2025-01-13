@@ -73,6 +73,7 @@ Engine fixes:
 * Fixed books not closing properly when trying to load another book with an invalid filename.
 * Fixed combat text being shown for zero damage reflect.
 * Added validation to player XP table parsing to ensure that XP thresholds are not less than those for previous levels.
+* Errors in saved fog-of-war data no longer causes a forced exit & mod reset.
 * Android: Fix 'Flare' directory not being automatically created.
 * Android: Added a dialog to direct the player to the wiki page for installing if no game data is found.
 
