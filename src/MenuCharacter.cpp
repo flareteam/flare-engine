@@ -766,7 +766,7 @@ void MenuCharacter::logic() {
 
 	if (pc->stats.hp > 0 && have_skill_points) {
 		for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
-			if (pc->stats.primary[i] < pc->stats.max_points_per_stat) {
+			if (pc->stats.primary[i] < pc->stats.max_points_per_stat && !cstat[i+2].label->isHidden()) {
 				upgradeButton[i]->enabled = true;
 				tablist.add(upgradeButton[i]);
 			}
