@@ -161,13 +161,14 @@ int Map::load(const std::string& fname) {
 					if (infile.section == "layer") {
 						if (!loadLayer(infile, !EXIT_ON_FAIL)) {
 							for (size_t i = layers.size(); i > 0; i--) {
-								if (layernames[i] == "fow_fog") {
-									layernames.erase(layernames.begin() + i);
-									layers.erase(layers.begin() + i);
+								size_t layer_index = i-1;
+								if (layernames[layer_index] == "fow_fog") {
+									layernames.erase(layernames.begin() + layer_index);
+									layers.erase(layers.begin() + layer_index);
 								}
-								else if (layernames[i] == "fow_dark") {
-									layernames.erase(layernames.begin() + i);
-									layers.erase(layers.begin() + i);
+								else if (layernames[layer_index] == "fow_dark") {
+									layernames.erase(layernames.begin() + layer_index);
+									layers.erase(layers.begin() + layer_index);
 								}
 							}
 							break;
