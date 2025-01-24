@@ -260,6 +260,21 @@ void MenuActionBar::align() {
 	}
 }
 
+void MenuActionBar::clearSlot(size_t slot) {
+	hotkeys[slot] = 0;
+	hotkeys_temp[slot] = 0;
+	hotkeys_mod[slot] = 0;
+	slot_item_count[slot] = -1;
+	locked[slot] = false;
+	slot_activated[slot] = false;
+	slot_fail_cooldown[slot] = 0;
+
+	if (slots[slot]) {
+		slots[slot]->enabled = true;
+		slots[slot]->setIcon(WidgetSlot::NO_ICON, WidgetSlot::NO_OVERLAY);
+	}
+}
+
 void MenuActionBar::clear(bool skip_items) {
 	// clear action bar
 	for (unsigned i = 0; i < slots_count; i++) {
@@ -269,16 +284,7 @@ void MenuActionBar::clear(bool skip_items) {
 			}
 		}
 
-		hotkeys[i] = 0;
-		hotkeys_temp[i] = 0;
-		hotkeys_mod[i] = 0;
-		slot_item_count[i] = -1;
-		locked[i] = false;
-		slot_activated[i] = false;
-		slot_fail_cooldown[i] = 0;
-
-		if (slots[i])
-			slots[i]->enabled = true;
+		clearSlot(i);
 	}
 
 	// clear menu notifications
@@ -386,6 +392,7 @@ void MenuActionBar::logic() {
 			// no valid power, so treat the slot as empty
 			slots[i]->enabled = true;
 			slots[i]->cooldown = 0;
+			slots[i]->setIcon(WidgetSlot::NO_ICON, WidgetSlot::NO_OVERLAY);
 		}
 
 		if (slot_fail_cooldown[i] > 0)
@@ -402,6 +409,8 @@ void MenuActionBar::render() {
 	for (unsigned i = 0; i < slots_count; i++) {
 		if (!slots[i]) continue;
 
+		slots[i]->show_disabled_overlay = (hotkeys[i] != 0);
+
 		if (hotkeys[i] == 0 || powers_overlap_slots) {
 			// TODO move this to WidgetSlot?
 			if (sprite_emptyslot) {
@@ -409,9 +418,7 @@ void MenuActionBar::render() {
 				render_device->render(sprite_emptyslot);
 			}
 		}
-		if (hotkeys[i] != 0) {
-			slots[i]->render();
-		}
+		slots[i]->render();
 	}
 
 	// render primary menu buttons
@@ -479,6 +486,10 @@ void MenuActionBar::drop(const Point& mouse, PowerID power_index, bool rearrangi
 			}
 			else if (locked[i] || prevent_changing[i]) return;
 			hotkeys[i] = power_index;
+
+			// we need to set the icon here instead of depending on logic() to do it, since MenuManager's action picker may be blocking it
+			slots[i]->setIcon(powers->powers[power_index]->icon, WidgetSlot::NO_OVERLAY);
+
 			updated = true;
 			return;
 		}
@@ -498,9 +509,10 @@ void MenuActionBar::actionReturn(PowerID power_index) {
 void MenuActionBar::remove(const Point& mouse) {
 	for (unsigned i=0; i<slots_count; i++) {
 		if (slots[i] && Utils::isWithinRect(slots[i]->pos, mouse)) {
-			if (locked[i]) return;
-			hotkeys[i] = 0;
-			updated = true;
+			if (!locked[i]) {
+				clearSlot(i);
+				updated = true;
+			}
 			return;
 		}
 	}
@@ -701,7 +713,7 @@ PowerID MenuActionBar::checkDrag(const Point& mouse) {
 
 			drag_prev_slot = i;
 			power_index = hotkeys[i];
-			hotkeys[i] = 0;
+			clearSlot(i);
 			last_mouse = mouse;
 			updated = true;
 			twostep_slot = -1;
