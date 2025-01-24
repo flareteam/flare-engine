@@ -96,6 +96,9 @@ private:
 	std::vector<unsigned short> frame_limits;
 	std::vector<unsigned short> virtual_heights;
 
+	bool keybinds_visible_equipswap;
+	std::vector<bool> keybinds_visible_actionbar;
+
 public:
 	static const bool IS_GAME_STATE = true;
 	static const bool ENABLE_SAVE_GAME = true;

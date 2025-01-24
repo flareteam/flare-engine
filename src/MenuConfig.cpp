@@ -114,6 +114,8 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	: is_game_state(_is_game_state)
 	, enable_gamestate_buttons(false)
 	, hero(NULL)
+	, keybinds_visible_equipswap(false)
+	, keybinds_visible_actionbar(10, false)
 	, child_widget()
 	, tab_control(new WidgetTabControl())
 	, ok_button(new WidgetButton(WidgetButton::DEFAULT_FILE))
@@ -476,6 +478,12 @@ void MenuConfig::init() {
 
 	for (size_t i = 0; i < keybinds_lstb.size(); ++i) {
 		cfg_tabs[KEYBINDS_TAB].setOptionWidgets(static_cast<int>(i), keybinds_lb[i], keybinds_lstb[i], inpt->binding_name[i]);
+		if (i >= Input::BAR_1 && i <= Input::BAR_0 && !keybinds_visible_actionbar[i - Input::BAR_1]) {
+			cfg_tabs[KEYBINDS_TAB].setOptionEnabled(static_cast<int>(i), false);
+		}
+		else if ((i == Input::EQUIPMENT_SWAP || i == Input::EQUIPMENT_SWAP_PREV) && !keybinds_visible_equipswap) {
+			cfg_tabs[KEYBINDS_TAB].setOptionEnabled(static_cast<int>(i), false);
+		}
 	}
 
 	// disable some options
@@ -591,6 +599,51 @@ void MenuConfig::readConfig() {
 	mouse_move_attack_cb->tooltip = msg->get("When 'Move hero using mouse' is enabled, this setting controls if the Power assigned to the movement button can be used by targeting an enemy. If this setting is disabled, it is required to use 'Shift' to access the Power assigned to the movement button.");
 	mouse_aim_cb->tooltip = msg->get("The player's attacks will be aimed in the direction of the mouse cursor when this is enabled.");
 	touch_controls_cb->tooltip = msg->get("When enabled, a virtual gamepad will be added in-game. Other interactions, such as drag-and-drop behavior, are also altered to better suit touch input.");
+
+	// some keybinds are hidden based on other configuration files
+	if (infile.open("menus/actionbar.txt", FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
+		while (infile.next()) {
+			if (infile.key == "slot") {
+				unsigned index = Parse::popFirstInt(infile.val);
+				if (index > 0 && index <= 10) {
+					keybinds_visible_actionbar[index-1] = true;
+				}
+			}
+		}
+		infile.close();
+	}
+	else {
+		// no actionbar config; show all associated keybinds
+		for (size_t i = 0; i < keybinds_visible_actionbar.size(); ++i) {
+			keybinds_visible_actionbar[i] = true;
+		}
+	}
+
+	if (infile.open("menus/inventory.txt", FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
+		while (infile.next()) {
+			if (infile.key == "set_button" || infile.key == "set_previous" || infile.key == "set_next" || infile.key == "label_equipment_set") {
+				keybinds_visible_equipswap = true;
+				break;
+			}
+			else if (infile.key == "equipment_slot") {
+				Parse::popFirstInt(infile.val);
+				Parse::popFirstInt(infile.val);
+				Parse::popFirstString(infile.val);
+				int equip_set = Parse::popFirstInt(infile.val);
+				if (equip_set > 0) {
+					keybinds_visible_equipswap = true;
+					break;
+				}
+			}
+		}
+		infile.close();
+	}
+	else {
+		// no inventory config; show all associated keybinds
+		keybinds_visible_equipswap = true;
+	}
+
+
 }
 
 bool MenuConfig::parseKeyButtons(FileParser &infile) {
