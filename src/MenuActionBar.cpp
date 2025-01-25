@@ -856,13 +856,13 @@ void MenuActionBar::addPower(const PowerID id, const PowerID target_id) {
 	}
 }
 
-Point MenuActionBar::getSlotPos(int slot) {
-	if (static_cast<unsigned>(slot) < slots.size()) {
+Point MenuActionBar::getSlotPos(size_t slot) {
+	if (slot < slots.size()) {
 		return Point(slots[slot]->pos.x, slots[slot]->pos.y);
 	}
-	else if (static_cast<unsigned>(slot) < slots.size() + MENU_COUNT) {
-		int slot_size = static_cast<int>(slots.size());
-		return Point(menus[slot - slot_size]->pos.x, menus[slot - slot_size]->pos.y);
+	else if (slot < slots.size() + MENU_COUNT) {
+		size_t menu_index = slot - slots.size();
+		return Point(menus[menu_index]->pos.x, menus[menu_index]->pos.y);
 	}
 	return Point();
 }
@@ -873,6 +873,24 @@ WidgetSlot* MenuActionBar::getSlotFromPosition(const Point& position) {
 			return slots[i];
 	}
 	return NULL;
+}
+
+size_t MenuActionBar::getCurrentSlotIndexFromTablist() {
+	int tablist_index = static_cast<size_t>(getCurrentTabList()->getCurrent());
+	Widget* current_slot = getCurrentTabList()->getWidgetByIndex(tablist_index);
+	if (!current_slot)
+		return slots.size() + MENU_COUNT;
+
+	for (size_t i = 0; i < slots.size(); ++i) {
+		if (slots[i] == current_slot)
+			return i;
+	}
+	for (size_t i = 0; i < MENU_COUNT; ++i) {
+		if (menus[i] == current_slot)
+			return i + slots.size();
+	}
+
+	return slots.size() + MENU_COUNT;
 }
 
 MenuActionBar::~MenuActionBar() {

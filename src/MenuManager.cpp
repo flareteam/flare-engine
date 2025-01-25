@@ -1059,8 +1059,7 @@ void MenuManager::logic() {
 						WidgetSlot* act_slot = act->getSlotFromPosition(inpt->mouse);
 						if (act_slot) {
 							act->tablist.setCurrent(act_slot);
-							int slot_index = act->tablist.getCurrent();
-							keydrag_pos = act->getSlotPos(slot_index);
+							keydrag_pos = Point(act_slot->pos.x, act_slot->pos.y);
 						}
 						showActionPicker(act, inpt->mouse);
 					}
@@ -1370,33 +1369,35 @@ void MenuManager::dragAndDropWithKeyboard() {
 
 	// actionbar
 	if (act->getCurrentTabList() && static_cast<unsigned>(act->getCurrentTabList()->getCurrent()) < act->slots.size()) {
-		int slot_index = act->getCurrentTabList()->getCurrent();
-		WidgetSlot::CLICK_TYPE slotClick = act->slots[slot_index]->checkClick();
-		Point dest_slot = act->getSlotPos(slot_index);
+		size_t slot_index = act->getCurrentSlotIndexFromTablist();
+		if (slot_index < act->slots.size() + MenuActionBar::MENU_COUNT && act->slots[slot_index]) {
+			WidgetSlot::CLICK_TYPE slotClick = act->slots[slot_index]->checkClick();
+			Point dest_slot = act->getSlotPos(slot_index);
 
-		// pick up power
-		if (slotClick == WidgetSlot::DRAG && drag_stack.empty() && drag_power == 0) {
-			showActionPicker(act, dest_slot);
-		}
-		// drop power/item from other menu
-		else if (slotClick == WidgetSlot::DRAG && drag_src != DRAG_SRC_ACTIONBAR && (!drag_stack.empty() || drag_power > 0)) {
-			if (drag_src == DRAG_SRC_POWERS) {
-				act->drop(dest_slot, drag_power, !MenuActionBar::REORDER);
+			// pick up power
+			if (slotClick == WidgetSlot::DRAG && drag_stack.empty() && drag_power == 0) {
+				showActionPicker(act, dest_slot);
 			}
-			else if (drag_src == DRAG_SRC_INVENTORY) {
-				if (items->isValid(drag_stack.item) && items->items[drag_stack.item]->power != 0) {
-					act->drop(dest_slot, items->items[drag_stack.item]->power, !MenuActionBar::REORDER);
+			// drop power/item from other menu
+			else if (slotClick == WidgetSlot::DRAG && drag_src != DRAG_SRC_ACTIONBAR && (!drag_stack.empty() || drag_power > 0)) {
+				if (drag_src == DRAG_SRC_POWERS) {
+					act->drop(dest_slot, drag_power, !MenuActionBar::REORDER);
 				}
+				else if (drag_src == DRAG_SRC_INVENTORY) {
+					if (items->isValid(drag_stack.item) && items->items[drag_stack.item]->power != 0) {
+						act->drop(dest_slot, items->items[drag_stack.item]->power, !MenuActionBar::REORDER);
+					}
+				}
+				resetDrag();
+				inv->applyEquipment();
 			}
-			resetDrag();
-			inv->applyEquipment();
-		}
-		// rearrange actionbar
-		else if (slotClick == WidgetSlot::DRAG && drag_src == DRAG_SRC_ACTIONBAR && drag_power > 0) {
-			act->drop(dest_slot, drag_power, MenuActionBar::REORDER);
-			drag_src = DRAG_SRC_NONE;
-			drag_power = 0;
-			keyboard_dragging = false;
+			// rearrange actionbar
+			else if (slotClick == WidgetSlot::DRAG && drag_src == DRAG_SRC_ACTIONBAR && drag_power > 0) {
+				act->drop(dest_slot, drag_power, MenuActionBar::REORDER);
+				drag_src = DRAG_SRC_NONE;
+				drag_power = 0;
+				keyboard_dragging = false;
+			}
 		}
 	}
 }
@@ -1624,15 +1625,16 @@ void MenuManager::handleKeyboardTooltips() {
 	}
 
 	if (act->getCurrentTabList()) {
-		int slot_index = act->getCurrentTabList()->getCurrent();
+		size_t slot_index = act->getCurrentSlotIndexFromTablist();
+		if (slot_index < act->slots.size() + MenuActionBar::MENU_COUNT) {
+			keydrag_pos = act->getSlotPos(slot_index);
 
-		keydrag_pos = act->getSlotPos(slot_index);
+			Point tooltip_pos = keydrag_pos;
+			tooltip_pos.x += eset->resolutions.icon_size / 2;
+			tooltip_pos.y += eset->resolutions.icon_size / 2;
 
-		Point tooltip_pos = keydrag_pos;
-		tooltip_pos.x += eset->resolutions.icon_size / 2;
-		tooltip_pos.y += eset->resolutions.icon_size / 2;
-
-		act->renderTooltips(tooltip_pos);
+			act->renderTooltips(tooltip_pos);
+		}
 	}
 }
 

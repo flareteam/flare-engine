@@ -95,7 +95,7 @@ public:
 	void set(std::vector<PowerID> power_id, bool skip_empty);
 	void clearSlot(size_t slot);
 	void clear(bool skip_items);
-	Point getSlotPos(int slot);
+	Point getSlotPos(size_t slot);
 
 	void renderTooltips(const Point& position);
 	bool isWithinSlots(const Point& mouse);
@@ -103,6 +103,7 @@ public:
 	void addPower(const PowerID id, const PowerID target_id);
 
 	WidgetSlot* getSlotFromPosition(const Point& position);
+	size_t getCurrentSlotIndexFromTablist();
 
 	unsigned slots_count;
 	std::vector<PowerID> hotkeys; // refer to power_index in PowerManager
