@@ -85,7 +85,7 @@ void WidgetLog::refresh() {
 	// Resize the scrollbox content area first
 	for (size_t i=0; i<messages.size(); i++) {
 		setFont(styles[i]);
-		Point size = font->calc_size(messages[i], content_width);
+		Point size = font->calcSizeWrapped(messages[i], content_width);
 		y += size.y+paragraph_spacing;
 
 		if (separators[i])
@@ -97,7 +97,7 @@ void WidgetLog::refresh() {
 	// Render messages into the scrollbox area
 	for (size_t i = messages.size(); i > 0; i--) {
 		setFont(styles[i-1]);
-		Point size = font->calc_size(messages[i-1], content_width);
+		Point size = font->calcSizeWrapped(messages[i-1], content_width);
 		Image* render_target = scroll_box->contents->getGraphics();
 
 		if (!separators.empty() && separators[i-1]) {

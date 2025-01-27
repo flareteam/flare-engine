@@ -128,14 +128,14 @@ int SDLFontEngine::getFontHeight() {
 /**
  * For single-line text, just calculate the width
  */
-int SDLFontEngine::calc_width(const std::string& text) {
+Point SDLFontEngine::calcSize(const std::string& text) {
 	if (!isActiveFontValid())
-		return 1;
+		return Point(1, 1);
 
 	int w, h;
 	TTF_SizeUTF8(active_font->ttfont, text.c_str(), &w, &h);
 
-	return w;
+	return Point(w, h);
 }
 
 /**
@@ -149,28 +149,28 @@ int SDLFontEngine::calc_width(const std::string& text) {
  * It ensures that this character is visible, chopping the end of the string if needed.
  */
 std::string SDLFontEngine::trimTextToWidth(const std::string& text, const int width, const bool use_ellipsis, size_t left_pos) {
-	if (width >= calc_width(text))
+	if (width >= calcSize(text).x)
 		return text;
 
 	size_t text_length = text.length();
 	size_t ret_length = text_length;
-	int total_width = (use_ellipsis ? width - calc_width("...") : width);
+	int total_width = (use_ellipsis ? width - calcSize("...").x : width);
 
 	for (size_t i=text_length; i>0; i--) {
 		if (use_ellipsis) {
-			if (total_width < calc_width(text.substr(0,ret_length)))
+			if (total_width < calcSize(text.substr(0,ret_length)).x)
 				ret_length = i;
 			else
 				break;
 		}
 		else if (left_pos < text_length - ret_length) {
-			if (total_width < calc_width(text.substr(left_pos,ret_length)))
+			if (total_width < calcSize(text.substr(left_pos,ret_length)).x)
 				ret_length = i;
 			else
 				break;
 		}
 		else {
-			if (total_width < calc_width(text.substr(text_length-ret_length)))
+			if (total_width < calcSize(text.substr(text_length-ret_length)).x)
 				ret_length = i;
 			else
 				break;

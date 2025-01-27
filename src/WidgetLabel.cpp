@@ -233,13 +233,15 @@ void WidgetLabel::recacheTextSprite() {
 	std::string temp_text = text;
 
 	font->setFont(font_style);
-	bounds.w = font->calc_width(temp_text);
-	bounds.h = font->getFontHeight();
 
-	if (max_width > 0 && bounds.w > max_width) {
+	Point p = font->calcSize(temp_text);
+	if (max_width > 0 && p.x > max_width) {
 		temp_text = font->trimTextToWidth(text, max_width, FontEngine::USE_ELLIPSIS, 0);
-		bounds.w = font->calc_width(temp_text);
+		p = font->calcSize(temp_text);
 	}
+
+	bounds.w = p.x;
+	bounds.h = std::max(p.y, font->getFontHeight());
 
 	image = render_device->createImage(bounds.w, bounds.h);
 	if (!image) return;

@@ -369,7 +369,7 @@ void MenuBook::refreshText() {
 
 		// render text to surface
 		font->setFont(text[i].font);
-		Point pSize = font->calc_size(text[i].text, text[i].size.w);
+		Point pSize = font->calcSizeWrapped(text[i].text, text[i].size.w);
 		Image *graphics = NULL;
 		if (text[i].shadow) {
 			graphics = render_device->createImage(text[i].size.w + 1, pSize.y + 1);

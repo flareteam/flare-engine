@@ -107,7 +107,7 @@ size_t FontEngine::stringToFontColor(const std::string& val) {
 /**
  * Using the given wrap width, calculate the width and height necessary to display this text
  */
-Point FontEngine::calc_size(const std::string& text_with_newlines, int width) {
+Point FontEngine::calcSizeWrapped(const std::string& text_with_newlines, int width) {
 	char newline = 10;
 
 	std::string text = text_with_newlines;
@@ -115,8 +115,8 @@ Point FontEngine::calc_size(const std::string& text_with_newlines, int width) {
 	// if this contains newlines, recurse
 	size_t check_newline = text.find_first_of(newline);
 	if (check_newline != std::string::npos) {
-		Point p1 = calc_size(text.substr(0, check_newline), width);
-		Point p2 = calc_size(text.substr(check_newline+1, text.length()), width);
+		Point p1 = calcSizeWrapped(text.substr(0, check_newline), width);
+		Point p2 = calcSizeWrapped(text.substr(check_newline+1, text.length()), width);
 		Point p3;
 
 		if (p1.x > p2.x) p3.x = p1.x;
@@ -147,13 +147,13 @@ Point FontEngine::calc_size(const std::string& text_with_newlines, int width) {
 
 		builder += next_word;
 
-		if (calc_width(builder) > width) {
+		if (calcSize(builder).x > width) {
 
 			// this word can't fit on this line, so word wrap
 			if (!builder_prev.empty()) {
 				height += getLineHeight();
-				if (calc_width(builder_prev) > max_width) {
-					max_width = calc_width(builder_prev);
+				if (calcSize(builder_prev).x > max_width) {
+					max_width = calcSize(builder_prev).x;
 				}
 			}
 
@@ -163,8 +163,8 @@ Point FontEngine::calc_size(const std::string& text_with_newlines, int width) {
 
 			if (!long_token.empty()) {
 				while (!long_token.empty()) {
-					if (calc_width(next_word) > max_width) {
-						max_width = calc_width(next_word);
+					if (calcSize(next_word).x > max_width) {
+						max_width = calcSize(next_word).x;
 					}
 					height += getLineHeight();
 
@@ -194,8 +194,8 @@ Point FontEngine::calc_size(const std::string& text_with_newlines, int width) {
 	builder = Parse::trim(builder); //removes whitespace that shouldn't be included in the size
 	if (!builder.empty())
 		height += getLineHeight();
-	if (calc_width(builder) > max_width)
-		max_width = calc_width(builder);
+	if (calcSize(builder).x > max_width)
+		max_width = calcSize(builder).x;
 
 	// handle blank lines
 	if (text_with_newlines == " ")
@@ -216,11 +216,11 @@ Rect FontEngine::position(const std::string& text, int x, int y, int justify) {
 		dest_rect.y = y;
 	}
 	else if (justify == JUSTIFY_RIGHT) {
-		dest_rect.x = x - calc_width(text);
+		dest_rect.x = x - calcSize(text).x;
 		dest_rect.y = y;
 	}
 	else if (justify == JUSTIFY_CENTER) {
-		dest_rect.x = x - calc_width(text)/2;
+		dest_rect.x = x - (calcSize(text).x / 2);
 		dest_rect.y = y;
 	}
 	else {
@@ -260,7 +260,7 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, Imag
 
 		builder += next_word;
 
-		if (calc_width(builder) > width) {
+		if (calcSize(builder).x > width) {
 			if (!builder_prev.empty()) {
 				renderInternal(builder_prev, x, cursor_y, justify, target, color);
 				cursor_y += getLineHeight();
@@ -319,7 +319,7 @@ std::string FontEngine::popTokenByWidth(std::string& text, int width) {
 		if (i < text.length() && (text[i] & 0xc0) == 0x80)
 			continue;
 
-		if (calc_width(text.substr(0, i)) > width)
+		if (calcSize(text.substr(0, i)).x > width)
 			break;
 
 		new_length = i;

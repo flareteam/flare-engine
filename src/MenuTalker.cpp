@@ -296,7 +296,7 @@ void MenuTalker::createBuffer() {
 	line = Utils::substituteVarsInString(npc->dialog[dialog_node][event_cursor].s, pc);
 
 	// render dialog text to the scrollbox buffer
-	Point line_size = font->calc_size(line,textbox->pos.w-(text_offset.x*2));
+	Point line_size = font->calcSizeWrapped(line,textbox->pos.w-(text_offset.x*2));
 	textbox->resize(textbox->pos.w, line_size.y + button_height);
 	font->setFont(font_dialog);
 	font->render(

@@ -78,7 +78,7 @@ public:
 
 	Color getColor(size_t _color);
 
-	Point calc_size(const std::string& text_with_newlines, int width);
+	Point calcSizeWrapped(const std::string& text_with_newlines, int width);
 
 	void render(const std::string& text, int x, int y, int justify, Image *target, int width, const Color& color);
 	void renderShadowed(const std::string& text, int x, int y, int justify, Image *target, int width, const Color& color);
@@ -87,7 +87,7 @@ public:
 	virtual int getFontHeight() = 0;
 
 	virtual void setFont(const std::string& _font) = 0;
-	virtual int calc_width(const std::string& text) = 0;
+	virtual Point calcSize(const std::string& text) = 0;
 	virtual std::string trimTextToWidth(const std::string& text, const int width, const bool use_ellipsis, size_t left_pos) = 0;
 
 	int cursor_y;

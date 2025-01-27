@@ -227,7 +227,7 @@ void MenuHUDLog::add(const std::string& s, int type) {
 
 		// render the log entry and store it in a buffer
 		font->setFont("font_regular");
-		Point size = font->calc_size(log_msg.back(), window_area.w - (paragraph_spacing*2));
+		Point size = font->calcSizeWrapped(log_msg.back(), window_area.w - (paragraph_spacing*2));
 		Image *graphics = render_device->createImage(size.x, size.y);
 		font->renderShadowed(log_msg.back(), 0, 0, FontEngine::JUSTIFY_LEFT, graphics, window_area.w - (paragraph_spacing*2), font->getColor(FontEngine::COLOR_MENU_NORMAL));
 		msg_buffer.push_back(graphics->createSprite());

@@ -385,7 +385,7 @@ void Scene::refreshWidgets() {
 			int caption_width = settings->view_w - static_cast<int>(settings->view_w * (cutscene_settings.caption_margins.x * 2.0f));
 			font->setFont("font_captions");
 			int padding = font->getLineHeight()/4;
-			Point caption_size = font->calc_size(caption, caption_width);
+			Point caption_size = font->calcSizeWrapped(caption, caption_width);
 			Point caption_size_padded(caption_size.x + padding*2, caption_size.y + padding*2);
 
 			if (!caption_box) {
