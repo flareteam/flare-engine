@@ -77,6 +77,7 @@ Engine fixes:
 * Primary stat upgrade buttons are now hidden in the Character menu if the cooresponding label is hidden.
 * Fixed crash in action bar when less than 12 slots were defined.
 * Fixed single-line text having the top/bottom "cut off" with certain fonts.
+* Fixed delete save dialog being shown underneath buttons on load screen.
 * Android: Fix 'Flare' directory not being automatically created.
 * Android: Added a dialog to direct the player to the wiki page for installing if no game data is found.
 

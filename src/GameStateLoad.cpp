@@ -884,14 +884,14 @@ void GameStateLoad::render() {
 	if (has_scroll_bar)
 		scrollbar->render();
 
-	// display warnings
-	if (confirm->visible) confirm->render();
-
 	// display buttons
 	button_exit->render();
 	button_new->render();
 	button_load->render();
 	button_delete->render();
+
+	// display warnings
+	if (confirm->visible) confirm->render();
 }
 
 void GameStateLoad::setSelectedSlot(int slot) {
