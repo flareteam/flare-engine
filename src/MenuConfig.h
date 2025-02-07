@@ -99,6 +99,8 @@ private:
 	bool keybinds_visible_equipswap;
 	std::vector<bool> keybinds_visible_actionbar;
 
+	bool mod_filter_unknown;
+
 public:
 	static const bool IS_GAME_STATE = true;
 	static const bool ENABLE_SAVE_GAME = true;

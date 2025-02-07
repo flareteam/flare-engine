@@ -116,6 +116,7 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	, hero(NULL)
 	, keybinds_visible_equipswap(false)
 	, keybinds_visible_actionbar(10, false)
+	, mod_filter_unknown(false)
 	, child_widget()
 	, tab_control(new WidgetTabControl())
 	, ok_button(new WidgetButton(WidgetButton::DEFAULT_FILE))
@@ -283,13 +284,25 @@ MenuConfig::MenuConfig (bool _is_game_state)
 			activemods_lstb->append(mods->mod_list[i].name,createModTooltip(&mods->mod_list[i]));
 	}
 
+	std::string active_game = "";
+	for (size_t i = mods->mod_list.size(); i > 0; i--) {
+		Mod& temp_mod = mods->mod_list[i-1];
+		if (!temp_mod.game.empty()) {
+			active_game = temp_mod.game;
+			break;
+		}
+	}
+
 	std::vector<std::string> mod_games;
 
 	inactivemods_lstb->multi_select = true;
 	for (unsigned int i = 0; i<mods->mod_dirs.size(); i++) {
 		Mod temp_mod = mods->loadMod(mods->mod_dirs[i]);
-		if (mods->mod_dirs[i] != mods->FALLBACK_MOD) {
-			if (std::find(mod_games.begin(), mod_games.end(), temp_mod.game) == mod_games.end()) {
+		if (mods->mod_dirs[i] != mods->FALLBACK_MOD && (active_game.empty() || temp_mod.game != active_game)) {
+			if (temp_mod.game.empty()) {
+				mod_filter_unknown = true;
+			}
+			else if (std::find(mod_games.begin(), mod_games.end(), temp_mod.game) == mod_games.end()) {
 				mod_games.push_back(temp_mod.game);
 			}
 		}
@@ -308,11 +321,17 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	inactivemods_lstb->sort();
 
 	std::sort(mod_games.begin(), mod_games.end());
+	if (!active_game.empty()) {
+		mod_games.insert(mod_games.begin(), active_game);
+	}
+	if (mod_filter_unknown) {
+		mod_games.push_back(msg->get("<unknown>"));
+	}
 
-	inactivemods_filter_lstb->append("All Mods", "");
-	inactivemods_filter_lstb->append("<unknown>", "");
+	inactivemods_filter_lstb->append(msg->get("All Mods"), "");
+	inactivemods_filter_lstb->append(msg->get("All Core Mods"), "");
 	for (size_t i = 0; i < mod_games.size(); ++i) {
-		if (mod_games[i] != "")
+		if (!mod_games[i].empty())
 			inactivemods_filter_lstb->append(mod_games[i], "");
 	}
 
@@ -1669,7 +1688,11 @@ bool MenuConfig::setMods() {
 
 void MenuConfig::filterMods() {
 	inactivemods_lstb->clear();
-	int game_index = inactivemods_filter_lstb->getSelected();
+	int game_index = static_cast<int>(inactivemods_filter_lstb->getSelected());
+	int unknown_game_index = static_cast<int>(inactivemods_filter_lstb->getSize());
+	if (mod_filter_unknown) {
+		unknown_game_index = static_cast<int>(inactivemods_filter_lstb->getSize()-1);
+	}
 
 	for (unsigned int i = 0; i<mods->mod_dirs.size(); i++) {
 		bool skip_mod = false;
@@ -1681,11 +1704,12 @@ void MenuConfig::filterMods() {
 		}
 		if (!skip_mod && mods->mod_dirs[i] != mods->FALLBACK_MOD) {
 			Mod temp_mod = mods->loadMod(mods->mod_dirs[i]);
-			if (game_index == 0 || (game_index == 1 && temp_mod.game == "") || (temp_mod.game == inactivemods_filter_lstb->getValue()))
+			if (game_index == 0 || (game_index == 1 && temp_mod.is_game_mod) || (game_index == unknown_game_index && temp_mod.game == "") || (temp_mod.game == inactivemods_filter_lstb->getValue()))
 				inactivemods_lstb->append(mods->mod_dirs[i],createModTooltip(&temp_mod));
 		}
 	}
 	inactivemods_lstb->sort();
+	inactivemods_lstb->refresh();
 }
 
 std::string MenuConfig::createModTooltip(Mod *mod) {
