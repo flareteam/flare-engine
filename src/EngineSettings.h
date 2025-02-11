@@ -272,6 +272,7 @@ public:
 		int selection_rect_corner_size;
 		Point colorblind_highlight_offset;
 		Point tab_padding;
+		int tab_text_padding;
 		LabelInfo slot_quantity_label;
 		Color slot_quantity_color;
 		Color slot_quantity_bg_color;

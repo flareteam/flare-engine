@@ -978,6 +978,7 @@ void EngineSettings::Widgets::load() {
 	colorblind_highlight_offset = Point(2, 2);
 
 	tab_padding = Point(8, 0);
+	tab_text_padding = 0;
 
 	slot_quantity_label = LabelInfo();
 	slot_quantity_color = font->getColor(FontEngine::COLOR_WIDGET_NORMAL);
@@ -1015,6 +1016,10 @@ void EngineSettings::Widgets::load() {
 				if (infile.key == "padding") {
 					// @ATTR tab.padding|int, int : Left/right padding, Top padding|The pixel padding around tabs. Controls how the left and right edges are drawn.
 					tab_padding = Parse::toPoint(infile.val);
+				}
+				else if (infile.key == "text_padding") {
+					// @ATTR tab.text_padding|int : Left/right padding|The padding (in pixels) on the left and right sides of the tab's text label. In contrast to 'padding', this does not affect how the tab background is drawn.
+					tab_text_padding = Parse::toInt(infile.val);
 				}
 			}
 			else if (infile.section == "slot") {

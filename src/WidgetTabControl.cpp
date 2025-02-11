@@ -150,18 +150,18 @@ void WidgetTabControl::setMainArea(int x, int y, int w) {
 
 		tabs[i].x = x_offset;
 
-		active_labels[i].setPos(tabs[i].x + eset->widgets.tab_padding.x, tabs[i].y + tabs[i].h/2 + eset->widgets.tab_padding.y);
+		active_labels[i].setPos(tabs[i].x + eset->widgets.tab_padding.x + eset->widgets.tab_text_padding, tabs[i].y + tabs[i].h/2 + eset->widgets.tab_padding.y);
 		active_labels[i].setVAlign(LabelInfo::VALIGN_CENTER);
 		active_labels[i].setText(titles[i]);
 		active_labels[i].setColor(font->getColor(FontEngine::COLOR_WIDGET_NORMAL));
 
-		inactive_labels[i].setPos(tabs[i].x + eset->widgets.tab_padding.x, tabs[i].y + tabs[i].h/2 + eset->widgets.tab_padding.y);
+		inactive_labels[i].setPos(tabs[i].x + eset->widgets.tab_padding.x + eset->widgets.tab_text_padding, tabs[i].y + tabs[i].h/2 + eset->widgets.tab_padding.y);
 		inactive_labels[i].setVAlign(LabelInfo::VALIGN_CENTER);
 		inactive_labels[i].setText(titles[i]);
 		inactive_labels[i].setColor(font->getColor(FontEngine::COLOR_WIDGET_DISABLED));
 
 		if (enabled[i]) {
-			tabs[i].w = active_labels[i].getBounds()->w + (eset->widgets.tab_padding.x * 2);
+			tabs[i].w = active_labels[i].getBounds()->w + (eset->widgets.tab_padding.x * 2) + (eset->widgets.tab_text_padding * 2);
 			tabs_area.w += tabs[i].w;
 			x_offset += tabs[i].w;
 		}
@@ -175,8 +175,8 @@ void WidgetTabControl::setMainArea(int x, int y, int w) {
 		// only one tab will be shown at a time, so center all the tabs between the buttons
 		for (size_t i = 0; i < tabs.size(); ++i) {
 			tabs[i].x = tabs_area.x + button_prev->pos.w + ((between_buttons - tabs[i].w) / 2);
-			active_labels[i].setPos(tabs[i].x + eset->widgets.tab_padding.x, tabs[i].y + tabs[i].h/2 + eset->widgets.tab_padding.y);
-			inactive_labels[i].setPos(tabs[i].x + eset->widgets.tab_padding.x, tabs[i].y + tabs[i].h/2 + eset->widgets.tab_padding.y);
+			active_labels[i].setPos(tabs[i].x + eset->widgets.tab_padding.x + eset->widgets.tab_text_padding, tabs[i].y + tabs[i].h/2 + eset->widgets.tab_padding.y);
+			inactive_labels[i].setPos(tabs[i].x + eset->widgets.tab_padding.x + eset->widgets.tab_text_padding, tabs[i].y + tabs[i].h/2 + eset->widgets.tab_padding.y);
 		}
 	}
 
