@@ -247,6 +247,13 @@ void MenuNumPicker::updateInput() {
 	input_box->setText(ss.str());
 }
 
+void MenuNumPicker::closeWindow() {
+	confirm_clicked = false;
+	cancel_clicked = false;
+	visible = false;
+	tablist.defocus();
+}
+
 MenuNumPicker::~MenuNumPicker() {
 	delete button_ok;
 	delete button_up;

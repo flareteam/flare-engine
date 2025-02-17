@@ -367,12 +367,9 @@ void MenuManager::logic() {
 		}
 		else if (num_picker->cancel_clicked) {
 			// cancel item dragging
-			drag_stack.quantity = 0;
-			drag_stack.item = 0;
+			drag_stack.clear();
+			num_picker->closeWindow();
 			resetDrag();
-			num_picker->cancel_clicked = false;
-			num_picker->visible = false;
-			num_picker->tablist.defocus();
 		}
 		else {
 			pause = true;
@@ -1644,13 +1641,17 @@ void MenuManager::closeAll() {
 }
 
 void MenuManager::closeLeft() {
+	if (num_picker->visible) {
+		drag_stack.clear();
+		num_picker->closeWindow();
+	}
+
 	resetDrag();
 	chr->visible = false;
 	questlog->visible = false;
 	exit->visible = false;
 	stash->visible = false;
 	book->setBookFilename("");
-	num_picker->visible = false;
 
 	talker->setNPC(NULL);
 	vendor->setNPC(NULL);
@@ -1663,12 +1664,16 @@ void MenuManager::closeLeft() {
 }
 
 void MenuManager::closeRight() {
+	if (num_picker->visible) {
+		drag_stack.clear();
+		num_picker->closeWindow();
+	}
+
 	resetDrag();
 	inv->visible = false;
 	pow->visible = false;
 	exit->visible = false;
 	book->setBookFilename("");
-	num_picker->visible = false;
 
 	talker->setNPC(NULL);
 

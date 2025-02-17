@@ -62,6 +62,7 @@ public:
 	void increaseValue(int val);
 	void decreaseValue(int val);
 	int getValue();
+	void closeWindow();
 
 	bool confirm_clicked;
 	bool cancel_clicked;
