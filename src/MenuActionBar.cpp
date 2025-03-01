@@ -75,6 +75,7 @@ MenuActionBar::MenuActionBar()
 		menus[i] = new WidgetSlot(WidgetSlot::NO_ICON, WidgetSlot::HIGHLIGHT_NORMAL);
 		menus[i]->setHotkey(Input::CHARACTER + i);
 		menus[i]->show_colorblind_highlight = true;
+		menus[i]->enabled = false;
 
 		// NOTE: This prevents these buttons from being clickable unless they get defined in the config file.
 		// However, it doesn't prevent them from being added to the tablist, so they can still be activated there despite being invisible
@@ -423,8 +424,10 @@ void MenuActionBar::render() {
 
 	// render primary menu buttons
 	for (unsigned i=0; i<MENU_COUNT; i++) {
-		menus[i]->highlight = (requires_attention[i] && !menus[i]->in_focus);
-		menus[i]->render();
+		if (menus[i]->enabled) {
+			menus[i]->highlight = (requires_attention[i] && menus[i]->enabled && !menus[i]->in_focus);
+			menus[i]->render();
+		}
 	}
 }
 
@@ -436,7 +439,7 @@ void MenuActionBar::renderTooltips(const Point& position) {
 
 	// menus
 	for (unsigned i = 0; i < MENU_COUNT; ++i) {
-		if (Utils::isWithinRect(menus[i]->pos, position)) {
+		if (menus[i]->enabled && Utils::isWithinRect(menus[i]->pos, position)) {
 			if (settings->colorblind && requires_attention[i])
 				tip_data.addText(menu_titles[i] + " (*)");
 			else
@@ -728,22 +731,22 @@ PowerID MenuActionBar::checkDrag(const Point& mouse) {
  * if clicking a menu, act as if the player pressed that menu's hotkey
  */
 void MenuActionBar::checkMenu(bool &menu_c, bool &menu_i, bool &menu_p, bool &menu_l) {
-	if (menus[MENU_CHARACTER]->checkClick()) {
+	if (menus[MENU_CHARACTER]->enabled && menus[MENU_CHARACTER]->checkClick()) {
 		menu_c = true;
 		menus[MENU_CHARACTER]->deactivate();
 		defocusTabLists();
 	}
-	else if (menus[MENU_INVENTORY]->checkClick()) {
+	else if (menus[MENU_INVENTORY]->enabled && menus[MENU_INVENTORY]->checkClick()) {
 		menu_i = true;
 		menus[MENU_INVENTORY]->deactivate();
 		defocusTabLists();
 	}
-	else if (menus[MENU_POWERS]->checkClick()) {
+	else if (menus[MENU_POWERS]->enabled && menus[MENU_POWERS]->checkClick()) {
 		menu_p = true;
 		menus[MENU_POWERS]->deactivate();
 		defocusTabLists();
 	}
-	else if (menus[MENU_LOG]->checkClick()) {
+	else if (menus[MENU_LOG]->enabled && menus[MENU_LOG]->checkClick()) {
 		menu_l = true;
 		menus[MENU_LOG]->deactivate();
 		defocusTabLists();
@@ -799,7 +802,7 @@ bool MenuActionBar::isWithinSlots(const Point& mouse) {
 
 bool MenuActionBar::isWithinMenus(const Point& mouse) {
 	for (unsigned i=0; i<MENU_COUNT; i++) {
-		if (Utils::isWithinRect(menus[i]->pos, mouse))
+		if (menus[i]->enabled && Utils::isWithinRect(menus[i]->pos, mouse))
 			return true;
 	}
 	return false;

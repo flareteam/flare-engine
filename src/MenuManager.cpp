@@ -173,6 +173,12 @@ MenuManager::MenuManager()
 	drag_icon->show_disabled_overlay = false;
 
 	action_picker->setTitle(msg->get("Choose an action:"));
+
+	// enabled menu buttons on actionbar
+	act->menus[MenuActionBar::MENU_CHARACTER]->enabled = chr->enabled;
+	act->menus[MenuActionBar::MENU_INVENTORY]->enabled = inv->enabled;
+	act->menus[MenuActionBar::MENU_POWERS]->enabled = pow->enabled;
+	act->menus[MenuActionBar::MENU_LOG]->enabled = questlog->enabled;
 }
 
 void MenuManager::alignAll() {
@@ -740,7 +746,7 @@ void MenuManager::logic() {
 		act->checkMenu(clicking_character, clicking_inventory, clicking_powers, clicking_log);
 
 		// inventory menu toggle
-		if ((inpt->pressing[Input::INVENTORY] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_inventory) {
+		if (menu->inv->enabled && ((inpt->pressing[Input::INVENTORY] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_inventory)) {
 			key_lock = true;
 			if (inv->visible) {
 				snd->play(inv->sfx_close, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
@@ -757,7 +763,7 @@ void MenuManager::logic() {
 		}
 
 		// powers menu toggle
-		if (((inpt->pressing[Input::POWERS] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_powers) && !pc->stats.transformed) {
+		if (menu->pow->enabled && (((inpt->pressing[Input::POWERS] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_powers) && !pc->stats.transformed)) {
 			key_lock = true;
 			if (pow->visible) {
 				snd->play(pow->sfx_close, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
@@ -773,7 +779,7 @@ void MenuManager::logic() {
 		}
 
 		// character menu toggleggle
-		if ((inpt->pressing[Input::CHARACTER] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_character) {
+		if (menu->chr->enabled && ((inpt->pressing[Input::CHARACTER] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_character)) {
 			key_lock = true;
 			if (chr->visible) {
 				snd->play(chr->sfx_close, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
@@ -791,7 +797,7 @@ void MenuManager::logic() {
 		}
 
 		// log menu toggle
-		if ((inpt->pressing[Input::LOG] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_log) {
+		if (menu->questlog->enabled && ((inpt->pressing[Input::LOG] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_log)) {
 			key_lock = true;
 			if (questlog->visible) {
 				snd->play(questlog->sfx_close, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);

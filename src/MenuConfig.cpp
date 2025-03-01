@@ -116,6 +116,7 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	, hero(NULL)
 	, keybinds_visible_equipswap(false)
 	, keybinds_visible_actionbar(10, false)
+	, keybinds_visible_menus(4, true)
 	, mod_filter_unknown(false)
 	, child_widget()
 	, tab_control(new WidgetTabControl())
@@ -503,6 +504,9 @@ void MenuConfig::init() {
 		else if ((i == Input::EQUIPMENT_SWAP || i == Input::EQUIPMENT_SWAP_PREV) && !keybinds_visible_equipswap) {
 			cfg_tabs[KEYBINDS_TAB].setOptionEnabled(static_cast<int>(i), false);
 		}
+		else if (i >= Input::CHARACTER && i <= Input::LOG && !keybinds_visible_menus[i - Input::CHARACTER]) {
+			cfg_tabs[KEYBINDS_TAB].setOptionEnabled(static_cast<int>(i), false);
+		}
 	}
 
 	// disable some options
@@ -638,11 +642,22 @@ void MenuConfig::readConfig() {
 		}
 	}
 
+	if (infile.open("menus/character.txt", FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
+		while (infile.next()) {
+			if (infile.key == "enabled") {
+				keybinds_visible_menus[0] = Parse::toBool(infile.val);
+			}
+		}
+		infile.close();
+	}
+
 	if (infile.open("menus/inventory.txt", FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
 		while (infile.next()) {
-			if (infile.key == "set_button" || infile.key == "set_previous" || infile.key == "set_next" || infile.key == "label_equipment_set") {
+			if (infile.key == "enabled") {
+				keybinds_visible_menus[1] = Parse::toBool(infile.val);
+			}
+			else if (infile.key == "set_button" || infile.key == "set_previous" || infile.key == "set_next" || infile.key == "label_equipment_set") {
 				keybinds_visible_equipswap = true;
-				break;
 			}
 			else if (infile.key == "equipment_slot") {
 				Parse::popFirstInt(infile.val);
@@ -651,17 +666,34 @@ void MenuConfig::readConfig() {
 				int equip_set = Parse::popFirstInt(infile.val);
 				if (equip_set > 0) {
 					keybinds_visible_equipswap = true;
-					break;
 				}
 			}
 		}
 		infile.close();
 	}
 	else {
-		// no inventory config; show all associated keybinds
+		// no inventory menu config; show all associated keybinds
 		keybinds_visible_equipswap = true;
+		// keybinds_visible_menus defaults to true
 	}
 
+	if (infile.open("menus/powers.txt", FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
+		while (infile.next()) {
+			if (infile.key == "enabled") {
+				keybinds_visible_menus[2] = Parse::toBool(infile.val);
+			}
+		}
+		infile.close();
+	}
+
+	if (infile.open("menus/log.txt", FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
+		while (infile.next()) {
+			if (infile.key == "enabled") {
+				keybinds_visible_menus[3] = Parse::toBool(infile.val);
+			}
+		}
+		infile.close();
+	}
 
 }
 

@@ -98,6 +98,7 @@ private:
 
 	bool keybinds_visible_equipswap;
 	std::vector<bool> keybinds_visible_actionbar;
+	std::vector<bool> keybinds_visible_menus;
 
 	bool mod_filter_unknown;
 

@@ -33,6 +33,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 Menu::Menu()
 	: visible(false)
+	, enabled(true)
 	, alignment(Utils::ALIGN_TOPLEFT)
 	, sfx_open(0)
 	, sfx_close(0)
@@ -122,6 +123,10 @@ bool Menu::parseMenuKey(const std::string &key, const std::string &val) {
 	else if (key == "background") {
 		// @ATTR background|filename|Filename of the background image for this menu.
 		setBackground(value);
+	}
+	else if (key == "enabled") {
+		// @ATTR enabled|bool|Used to toggle the ability to open this menu. Only used for Character, Inventory, Powers, and Log menus.
+		enabled = Parse::toBool(value);
 	}
 	else {
 		//not a common key

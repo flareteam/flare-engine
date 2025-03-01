@@ -43,6 +43,7 @@ public:
 	virtual void setWindowPos(int x, int y);
 
 	bool visible;
+	bool enabled;
 	Rect window_area;
 	int alignment;
 
