@@ -52,7 +52,7 @@ The following links are specific to the engine
 ## Games made with flare
 
 The official game from the Flare team, the Empyrean Campaign can be found on the [flare-game](https://github.com/flareteam/flare-game) repository.
-A collection of other mods produced by the community can be found on the the [Mods](https://flarerpg.org/mods/) page on the offical website.
+A collection of other mods produced by the community can be found on the [Mods](https://flarerpg.org/mods/) page on the official website.
 
 ## Building from Source
 
