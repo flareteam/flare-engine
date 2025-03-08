@@ -141,6 +141,7 @@ WidgetSlot::CLICK_TYPE WidgetSlot::checkClick() {
 
 WidgetSlot::CLICK_TYPE WidgetSlot::checkClick(int x, int y) {
 	if (!enabled) {
+		activated = false;
 		return NO_CLICK;
 	}
 

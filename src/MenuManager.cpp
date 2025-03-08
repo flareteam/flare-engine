@@ -1362,10 +1362,22 @@ void MenuManager::dragAndDropWithKeyboard() {
 	// powers menu
 	if (pow->visible && pow->isTabListSelected() && drag_src != DRAG_SRC_ACTIONBAR) {
 		int slot_index = pow->getSelectedCellIndex();
+		Point src_slot(pow->slots[slot_index]->pos.x, pow->slots[slot_index]->pos.y);
+
+		// save slot enable state
+		bool slot_enabled = pow->slots[slot_index]->enabled;
+
+		// temporarily enable slot if the power can be upgraded
+		if (pow->click(src_slot).unlock > 0) {
+			pow->slots[slot_index]->enabled = true;
+		}
+
 		WidgetSlot::CLICK_TYPE slotClick = pow->slots[slot_index]->checkClick();
 
+		// restore slot enable state
+		pow->slots[slot_index]->enabled = slot_enabled;
+
 		if (slotClick == WidgetSlot::DRAG) {
-			Point src_slot(pow->slots[slot_index]->pos.x, pow->slots[slot_index]->pos.y);
 			showActionPicker(pow, src_slot);
 		}
 	}
