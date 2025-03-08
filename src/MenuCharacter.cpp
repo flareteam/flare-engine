@@ -768,10 +768,12 @@ void MenuCharacter::logic() {
 		for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 			if (pc->stats.primary[i] < pc->stats.max_points_per_stat && !cstat[i+2].label->isHidden()) {
 				upgradeButton[i]->enabled = true;
+				upgradeButton[i]->tooltip = msg->getv("Upgrade Stat: %s\nUses 1 Stat Point", eset->primary_stats.list[i].name.c_str());
 				tablist.add(upgradeButton[i]);
 			}
 			else {
 				upgradeButton[i]->enabled = false;
+				upgradeButton[i]->tooltip = "";
 				tablist.remove(upgradeButton[i]);
 			}
 		}

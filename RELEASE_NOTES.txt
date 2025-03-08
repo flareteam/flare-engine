@@ -81,6 +81,7 @@ Engine fixes:
 * Fixed single-line text having the top/bottom "cut off" with certain fonts.
 * Fixed delete save dialog being shown underneath buttons on load screen.
 * Fixed bug where closing the game with the "Enter Amount" dialog open allowed for item duplication.
+* Added tooltips for stat and power upgrade buttons.
 * Android: Fix 'Flare' directory not being automatically created.
 * Android: Added a dialog to direct the player to the wiki page for installing if no game data is found.
 

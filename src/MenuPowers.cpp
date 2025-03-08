@@ -1325,7 +1325,7 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 		// Draw unlock power Tooltip
 		if (pcell->requires_point && !(std::find(pc->stats.powers_list.begin(), pc->stats.powers_list.end(), pcell->id) != pc->stats.powers_list.end())) {
 			MenuPowersCell* unlock_cell = getCellByPowerIndex(pcell->id);
-			if (show_unlock_prompt && points_left > 0 && checkUnlock(unlock_cell)) {
+			if (show_unlock_prompt && pcell->upgrade_level <= 1 && points_left > 0 && inpt->usingMouse() && checkUnlock(unlock_cell)) {
 				tip_data->addColoredText(msg->get("Click to Unlock (uses 1 Skill Point)"), font->getColor(FontEngine::COLOR_MENU_BONUS));
 			}
 			else {
@@ -1606,17 +1606,21 @@ void MenuPowers::renderTooltips(const Point& position) {
 			bool base_unlocked = checkUnlocked(tip_cell);
 
 			createTooltip(&tip_data, tip_cell, tip_cell->id, !base_unlocked, MenuPowers::TOOLTIP_LONG_MENU);
-			if (tip_cell->next) {
+			if (base_unlocked && tip_cell->next) {
 				tip_data.addText("\n" + msg->get("Next Level:"));
 				createTooltip(&tip_data, tip_cell->next, tip_cell->next->id, base_unlocked, MenuPowers::TOOLTIP_LONG_MENU);
-				createTooltipInputHint(&tip_data, !TOOLTIP_SHOW_ACTIVATE_HINT);
 			}
-			else {
-				createTooltipInputHint(&tip_data, !TOOLTIP_SHOW_ACTIVATE_HINT);
-			}
+			createTooltipInputHint(&tip_data, !TOOLTIP_SHOW_ACTIVATE_HINT);
 
 			tooltipm->push(tip_data, position, TooltipData::STYLE_FLOAT);
+
 			break;
+		}
+		else if (power_cell[i].upgrade_button) {
+			if (power_cell[i].upgrade_button->enabled)
+				power_cell[i].upgrade_button->tooltip = msg->getv("Upgrade to: %s (Level %d)\nUses 1 Skill Point", powers->powers[tip_cell->next->id]->name.c_str(), tip_cell->next->upgrade_level);
+			else
+				power_cell[i].upgrade_button->tooltip = "";
 		}
 	}
 }
