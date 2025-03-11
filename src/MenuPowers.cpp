@@ -1617,7 +1617,7 @@ void MenuPowers::renderTooltips(const Point& position) {
 			break;
 		}
 		else if (power_cell[i].upgrade_button) {
-			if (power_cell[i].upgrade_button->enabled)
+			if (power_cell[i].upgrade_button->enabled && tip_cell->next)
 				power_cell[i].upgrade_button->tooltip = msg->getv("Upgrade to: %s (Level %d)\nUses 1 Skill Point", powers->powers[tip_cell->next->id]->name.c_str(), tip_cell->next->upgrade_level);
 			else
 				power_cell[i].upgrade_button->tooltip = "";
