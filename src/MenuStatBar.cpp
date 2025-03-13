@@ -330,7 +330,13 @@ void MenuStatBar::render() {
 				label->setFont(text_pos.font_style);
 			}
 			else {
-				label->setPos(bar_dest.x + bar_pos.w/2, bar_dest.y + bar_pos.h/2);
+				if (bar) {
+					// position bar text relative to bar fill if possible
+					label->setPos(dest.x + bar_fill_size.x/2, dest.y + bar_fill_size.y/2);
+				}
+				else {
+					label->setPos(bar_dest.x + bar_pos.w/2, bar_dest.y + bar_pos.h/2);
+				}
 				label->setJustify(FontEngine::JUSTIFY_CENTER);
 				label->setVAlign(LabelInfo::VALIGN_CENTER);
 			}

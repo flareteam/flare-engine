@@ -194,7 +194,13 @@ void MenuEnemy::render() {
 		}
 		label_stats.setText(ss.str());
 
-		label_stats.setPos(window_area.x + bar_pos.x + bar_pos.w/2, window_area.y + bar_pos.y + bar_pos.h/2);
+		if (bar_hp) {
+			// position bar text relative to bar fill if possible
+			label_stats.setPos(dest.x + bar_fill_size.x/2, dest.y + bar_fill_size.y/2);
+		}
+		else {
+			label_stats.setPos(window_area.x + bar_pos.x + bar_pos.w/2, window_area.y + bar_pos.y + bar_pos.h/2);
+		}
 		label_stats.setJustify(FontEngine::JUSTIFY_CENTER);
 		label_stats.setVAlign(LabelInfo::VALIGN_CENTER);
 		label_stats.render();

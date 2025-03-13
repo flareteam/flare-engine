@@ -84,6 +84,7 @@ Engine fixes:
 * Added tooltips for stat and power upgrade buttons.
 * Fixed case where stash tabs could be switched while dragging an item.
 * The "Play Game" button on the title screen now goes directly to character creation if no saved games exist.
+* Statbars (including the enemy HP bar) now position the numeric text relative to the fill graphics.
 * Android: Fix 'Flare' directory not being automatically created.
 * Android: Added a dialog to direct the player to the wiki page for installing if no game data is found.
 
