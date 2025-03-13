@@ -603,6 +603,8 @@ void MenuManager::logic() {
 		inpt->pressing[Input::MAIN2] = false;
 	}
 
+	stash->lock_tab_control = (mouse_dragging || keyboard_dragging);
+
 	if (settings->dev_mode) {
 		devconsole->logic();
 	}

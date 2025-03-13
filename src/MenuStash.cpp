@@ -60,6 +60,7 @@ MenuStash::MenuStash()
 	, tab_control(new WidgetTabControl())
 	, activetab(0)
 	, tabs()
+	, lock_tab_control(false)
 {
 	int slots_cols = 8; // default if menus/stash.txt::stash_cols not set
 	int slots_rows = 8; // default if menus/stash.txt::slots_rows not set
@@ -227,17 +228,8 @@ void MenuStash::logic() {
 		tabs[i].tablist.logic();
 	}
 
-	// disable tab control if we're dragging something from one of the stash stocks
-	bool dragging = false;
-	if (inpt->usingMouse()) {
-		for (size_t i = 0; i < tabs.size(); ++i) {
-			if (tabs[i].stock.drag_prev_slot != -1) {
-				dragging = true;
-				break;
-			}
-		}
-	}
-	if (!dragging)
+	// disable tab control if we're dragging something
+	if (!lock_tab_control)
 		tab_control->logic();
 
 	if (inpt->usingTouchscreen() && activetab != static_cast<size_t>(tab_control->getActiveTab())) {

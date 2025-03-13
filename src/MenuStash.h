@@ -92,6 +92,8 @@ public:
 	std::vector<MenuStashTab> tabs;
 
 	std::queue<ItemStack> drop_stack;
+
+	bool lock_tab_control;
 };
 
 
