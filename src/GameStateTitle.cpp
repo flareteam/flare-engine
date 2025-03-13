@@ -24,6 +24,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "GameStateConfig.h"
 #include "GameStateCutscene.h"
 #include "GameStateLoad.h"
+#include "GameStateNew.h"
 #include "GameStateTitle.h"
 #include "InputState.h"
 #include "MenuMovementType.h"
@@ -38,6 +39,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetButton.h"
 #include "WidgetHorizontalList.h"
 #include "WidgetLabel.h"
+#include "UtilsFileSystem.h"
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
 #include "Version.h"
@@ -199,7 +201,18 @@ void GameStateTitle::logic() {
 		}
 		else if (play_clicked) {
 			showLoading();
-			setRequestedGameState(new GameStateLoad());
+
+			// if we don't have any saves, go directly to GameStateNew
+			std::vector<std::string> save_dirs;
+			Filesystem::getDirList(settings->path_user + "saves/" + eset->misc.save_prefix, save_dirs);
+			if (save_dirs.size() == 0) {
+				GameStateNew* newgame = new GameStateNew();
+				newgame->game_slot = 1;
+				setRequestedGameState(newgame);
+			}
+			else {
+				setRequestedGameState(new GameStateLoad());
+			}
 		}
 		else if (button_cfg->checkClick()) {
 			showLoading();
