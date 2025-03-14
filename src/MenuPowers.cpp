@@ -123,6 +123,7 @@ MenuPowers::MenuPowers()
 	, tab_control(NULL)
 	, tree_loaded(false)
 	, default_power_tab(-1)
+	, upgrade_button_offset(eset->resolutions.icon_size, 0)
 	, newPowerNotification(false)
 {
 
@@ -148,6 +149,8 @@ MenuPowers::MenuPowers()
 			else if (infile.key == "close") close_pos = Parse::toPoint(infile.val);
 			// @ATTR tab_area|rectangle|Position and dimensions of the tree pages.
 			else if (infile.key == "tab_area") tab_area = Parse::toRect(infile.val);
+			// @ATTR upgrade_button_offset|point|X/Y offset of the upgrade button relative to each power icon. Defaults to (ICON_SIZE, 0)
+			else if (infile.key == "upgrade_button_offset") upgrade_button_offset = Parse::toPoint(infile.val);
 
 			else infile.error("MenuPowers: '%s' is not a valid key.", infile.key.c_str());
 		}
@@ -349,7 +352,7 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 			}
 
 			if (power_cell[i].upgrade_button != NULL) {
-				power_cell[i].upgrade_button->setBasePos(power_cell[i].pos.x + eset->resolutions.icon_size, power_cell[i].pos.y, Utils::ALIGN_TOPLEFT);
+				power_cell[i].upgrade_button->setBasePos(power_cell[i].pos.x + upgrade_button_offset.x, power_cell[i].pos.y + upgrade_button_offset.y, Utils::ALIGN_TOPLEFT);
 			}
 		}
 	}

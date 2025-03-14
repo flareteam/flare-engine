@@ -155,6 +155,8 @@ private:
 
 	int default_power_tab;
 
+	Point upgrade_button_offset;
+
 	std::vector<MenuPowersCell*> recently_locked_cells;
 
 public:
