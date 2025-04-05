@@ -241,13 +241,13 @@ void MenuTalker::createActionBuffer() {
 	createActionButtons(-1);
 
 	int button_height = 0;
-	if (!actions.empty()) {
-		button_height = static_cast<int>(actions.size()) * actions[0].btn->pos.h;
+	for (size_t i = 0; i < actions.size(); ++i) {
+		button_height += actions[i].btn->pos.h;
 	}
 
 	for (size_t i = 0; i < actions.size(); ++i) {
 		actions[i].btn->pos.x = text_offset.x;
-		actions[i].btn->pos.y = (static_cast<int>(i) * actions[i].btn->pos.h);
+		actions[i].btn->pos.y = (i > 0 ? actions[i-1].btn->pos.y + actions[i-1].btn->pos.h : 0);
 		actions[i].btn->refresh();
 	}
 
@@ -272,8 +272,8 @@ void MenuTalker::createBuffer() {
 	createActionButtons(dialog_node);
 
 	int button_height = 0;
-	if (!actions.empty()) {
-		button_height = static_cast<int>(actions.size()) * actions[0].btn->pos.h;
+	for (size_t i = 0; i < actions.size(); ++i) {
+		button_height += actions[i].btn->pos.h;
 	}
 
 	std::string line;
@@ -311,7 +311,7 @@ void MenuTalker::createBuffer() {
 
 	for (size_t i = 0; i < actions.size(); ++i) {
 		actions[i].btn->pos.x = text_offset.x;
-		actions[i].btn->pos.y = line_size.y + (static_cast<int>(i) * actions[i].btn->pos.h);
+		actions[i].btn->pos.y = line_size.y + (i > 0 ? actions[i-1].btn->pos.y + actions[i-1].btn->pos.h : 0);
 		actions[i].btn->refresh();
 	}
 
