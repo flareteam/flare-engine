@@ -104,6 +104,9 @@ Power::Power()
 
 	, spawn_limit_mode(SPAWN_LIMIT_MODE_UNLIMITED)
 
+	, visual_random(0)
+	, visual_option(0)
+
 	, type(-1)
 	, icon(-1)
 	, new_state(-1)
@@ -116,8 +119,6 @@ Power::Power()
 	, requires_hpmp_state_mode(RESOURCESTATE_ANY)
 	, requires_resource_stat_state_mode(RESOURCESTATE_ALL)
 	, sfx_index(-1)
-	, visual_random(0)
-	, visual_option(0)
 	, lifespan(0)
 	, starting_pos(STARTING_POS_SOURCE)
 	, movement_type(MapCollision::MOVE_FLYING)
@@ -622,13 +623,13 @@ void PowerManager::loadPowers() {
 			// @ATTR power.directional|bool|The animation sprite sheet contains 8 directions, one per row.
 			power->directional = Parse::toBool(infile.val);
 		}
-		else if (infile.key == "visual_random") {
-			// @ATTR power.visual_random|int|The animation sprite sheet contains rows of random options
-			power->visual_random = Parse::toInt(infile.val);
-		}
 		else if (infile.key == "visual_option") {
-			// @ATTR power.visual_option|int|The animation sprite sheet containers rows of similar effects, use a specific option. If using visual_random, this serves as an offset for the lowest random index.
-			power->visual_option = Parse::toInt(infile.val);
+			// @ATTR power.visual_option|int|If the power is not directional, this option determines which direction should be used for the animation.
+			power->visual_option = static_cast<unsigned short>(Parse::toInt(infile.val));
+		}
+		else if (infile.key == "visual_random") {
+			// @ATTR power.visual_random|int|If the power is not directional, this option determines which direction should be used for the animation. The resulting direction is random in the range of (visual_option, visual_option + visual_random).
+			power->visual_random = static_cast<unsigned short>(Parse::toInt(infile.val));
 		}
 		else if (infile.key == "aim_assist") {
 			// @ATTR power.aim_assist|bool|If true, power targeting will be offset vertically by the number of pixels set with "aim_assist" in engine/misc.txt.
@@ -1367,14 +1368,14 @@ void PowerManager::initHazard(PowerID power_index, StatBlock *src_stats, const F
 	}
 
 	if (haz->power->directional) {
-		haz->animationKind = Utils::calcDirection(origin.x, origin.y, target.x, target.y);
+		haz->direction = Utils::calcDirection(origin.x, origin.y, target.x, target.y);
 	}
 	else if (haz->power->visual_random) {
-		haz->animationKind = rand() % haz->power->visual_random;
-		haz->animationKind += haz->power->visual_option;
+		haz->direction = static_cast<unsigned short>(rand()) % haz->power->visual_random;
+		haz->direction += haz->power->visual_option;
 	}
 	else if (haz->power->visual_option) {
-		haz->animationKind = haz->power->visual_option;
+		haz->direction = haz->power->visual_option;
 	}
 
 	// combat traits

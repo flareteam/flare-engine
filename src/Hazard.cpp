@@ -50,7 +50,7 @@ Hazard::Hazard(MapCollision *_collider)
 	, source_type(0)
 	, base_speed(0)
 	, lifespan(1)
-	, animationKind(0)
+	, direction(0)
 	, delay_frames(0)
 	, angle(0)
 	, src_stats(NULL)
@@ -87,7 +87,7 @@ Hazard& Hazard::operator=(const Hazard& other) {
 	source_type = other.source_type;
 	base_speed = other.base_speed;
 	lifespan = other.lifespan;
-	animationKind = other.animationKind;
+	direction = other.direction;
 	delay_frames = other.delay_frames;
 	angle = other.angle;
 
@@ -221,7 +221,7 @@ void Hazard::reflect() {
   }
 
   if (power->directional)
-	animationKind = Utils::calcDirection(pos.x, pos.y, pos.x + speed.x, pos.y + speed.y);
+	direction = Utils::calcDirection(pos.x, pos.y, pos.x + speed.x, pos.y + speed.y);
 }
 
 void Hazard::loadAnimation(const std::string &s) {
@@ -274,7 +274,7 @@ void Hazard::addEntity(Entity *ent) {
 
 void Hazard::addRenderable(std::vector<Renderable> &r, std::vector<Renderable> &r_dead) {
 	if (delay_frames == 0 && activeAnimation) {
-		Renderable re = activeAnimation->getCurrentFrame(animationKind);
+		Renderable re = activeAnimation->getCurrentFrame(direction);
 		re.map_pos.x = pos.x;
 		re.map_pos.y = pos.y;
 		re.prio = (power->on_floor ? 0 : 2);
@@ -291,5 +291,5 @@ void Hazard::setAngle(const float& _angle) {
 	speed.y = base_speed * sinf(angle);
 
 	if (power->directional)
-		animationKind = Utils::calcDirection(pos.x, pos.y, pos.x + speed.x, pos.y + speed.y);
+		direction = Utils::calcDirection(pos.x, pos.y, pos.x + speed.x, pos.y + speed.y);
 }

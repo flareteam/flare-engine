@@ -63,7 +63,7 @@ public:
 	int source_type;
 	float base_speed;
 	int lifespan; // ticks down to zero
-	int animationKind;	// either a direction or option/random
+	unsigned short direction;	// either a direction or option/random
 	int delay_frames;
 	float angle; // in radians
 

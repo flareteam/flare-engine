@@ -2030,9 +2030,9 @@ code {
 
 <p><strong>power.directional</strong> | <code>bool</code> | The animation sprite sheet contains 8 directions, one per row.</p>
 
-<p><strong>power.visual_random</strong> | <code>int</code> | The animation sprite sheet contains rows of random options</p>
+<p><strong>power.visual_option</strong> | <code>int</code> | If the power is not directional, this option determines which direction should be used for the animation.</p>
 
-<p><strong>power.visual_option</strong> | <code>int</code> | The animation sprite sheet containers rows of similar effects, use a specific option. If using visual_random, this serves as an offset for the lowest random index.</p>
+<p><strong>power.visual_random</strong> | <code>int</code> | If the power is not directional, this option determines which direction should be used for the animation. The resulting direction is random in the range of (visual_option, visual_option + visual_random).</p>
 
 <p><strong>power.aim_assist</strong> | <code>bool</code> | If true, power targeting will be offset vertically by the number of pixels set with "aim_assist" in engine/misc.txt.</p>
 

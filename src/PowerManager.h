@@ -226,6 +226,9 @@ public:
 
 	uint8_t spawn_limit_mode;
 
+	unsigned short visual_random; // sprite sheet contains rows of random options
+	unsigned short visual_option; // sprite sheet contains rows of similar effects.  use a specific option
+
 	int type; // what kind of activate() this is
 	int icon; // just the number.  The caller menu will have access to the surface.
 	int new_state; // when using this power the user (avatar/enemy) starts a new state
@@ -238,8 +241,6 @@ public:
 	int requires_hpmp_state_mode;
 	int requires_resource_stat_state_mode;
 	int sfx_index;
-	int visual_random; // sprite sheet contains rows of random options
-	int visual_option; // sprite sheet contains rows of similar effects.  use a specific option
 	int lifespan; // how long the hazard/animation lasts
 	int starting_pos; // enum. (source, target, or melee)
 	int movement_type;

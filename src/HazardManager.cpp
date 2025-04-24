@@ -78,7 +78,7 @@ void HazardManager::logic() {
 					powers->activate(chain_power.id, h[i-1]->src_stats, h[i-1]->pos, h[i-1]->pos);
 
 					if (powers->powers[chain_power.id]->directional) {
-						powers->hazards.back()->animationKind = h[i-1]->animationKind;
+						powers->hazards.back()->direction = h[i-1]->direction;
 					}
 				}
 			}
