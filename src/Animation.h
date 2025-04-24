@@ -37,51 +37,48 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class Animation {
 protected:
-	unsigned short getLastFrameIndex(const short &frame); // given a frame, gets the last index of frames that matches
-
-	const std::string name;
-	const int type;
-	AnimationMedia *sprite;
-	uint8_t blend_mode;
-	uint8_t alpha_mod;
-	Color color_mod;
-
-	unsigned short number_frames; // how many ticks this animation lasts.
-	unsigned short cur_frame;     // counts up until reaching number_frames.
-
-	unsigned short cur_frame_index; // which frame in this animation is currently being displayed? range: 0..gfx.size()-1
-	unsigned short cur_frame_duration;  // how many ticks is the current image being displayed yet? range: 0..duration[cur_frame]-1
-	float cur_frame_index_f; // more granular control over cur_frame_index
-
-	unsigned short max_kinds;
-
-	bool reverse_playback;  // only for type == BACK_FORTH
-
-	short times_played; // how often this animation was played (loop counter for type LOOPED)
-
-	// Frame data, all vectors must have the same length:
-	// These are indexed as 8*cur_frame_index + direction.
-	std::vector<std::pair<Image*, Rect> > gfx; // position on the spritesheet to be used.
-	std::vector<Point> render_offset; // "virtual point on the floor"
-	std::vector<unsigned short> frames; // a list of frames to play on each tick
-
-	std::vector<short> active_frames;	// which of the visible diffferent frames are active?
-	// This should contain indexes of the gfx vector.
-	// Assume it is sorted, one index occurs at max once.
-	bool active_frame_triggered;
-
-	unsigned short elapsed_frames; // counts the total number of frames for back-forth animations
-
-	unsigned frame_count; // the frame count as it appears in the data files (i.e. not converted to engine frames)
-
-	float speed; // how fast the animation plays
+	// animations consist of:
+	// 1. frames, as defined in the animation data files
+	// 2. sub-frames, which are generated in this class. Each is associated with a frame (more than one sub-frame can point to the same frame)
+	static const unsigned short DIRECTIONS = 8; // may change in the future, but we currently hard-code 8 directions engine-wide
 
 	enum {
 		ANIMTYPE_NONE       = 0,
 		ANIMTYPE_PLAY_ONCE  = 1, // just iterates over the images one time. it holds the final image when finished.
 		ANIMTYPE_LOOPED     = 2, // going over the images again and again.
-		ANIMTYPE_BACK_FORTH = 3  // iterate from index=0 to maxframe and back again. keeps holding the first image afterwards.
+		ANIMTYPE_BACK_FORTH = 3  // similar to looped, but alternates the playback direction
 	};
+
+	bool reverse_playback;  // only for type == BACK_FORTH
+	bool active_frame_triggered;
+
+	const uint8_t type; // see ANIMTYPE enum above
+	uint8_t blend_mode;
+	uint8_t alpha_mod;
+
+	unsigned short total_frame_count; // the total number of frames for this animation (is different from frame_count for back/forth animations)
+	unsigned short cur_frame;     // counts up until reaching total_frame_count.
+	unsigned short elapsed_frames; // counts the total number of frames for back-forth animations
+	unsigned short sub_frame; // which frame in this animation is currently being displayed? range: 0..gfx.size()-1
+	short times_played; // how often this animation was played (loop counter for type LOOPED)
+
+	unsigned frame_count; // the frame count as it appears in the data files (i.e. not converted to engine frames)
+
+	Color color_mod;
+
+	float sub_frame_f; // more granular control over sub_frame
+	float speed; // how fast the sub-frames advance
+
+	AnimationMedia *sprite;
+
+	std::vector<std::pair<Image*, Rect> > gfx; // graphics for each frame taken from the spritesheet
+	std::vector<Point> render_offset; // "virtual point on the floor"
+	std::vector<short> active_frames;	// frames that are marked as "active". Active frames are used to trigger various states (i.e power activation or hazard danger)
+	std::vector<unsigned short> sub_frames; // a list of frames to play on each tick
+
+	const std::string name;
+
+	unsigned short getLastSubFrame(const short &frame); // given a frame, gets the last sub frame that points to it
 
 public:
 	Animation(const std::string &_name, const std::string &_type, AnimationMedia *_sprite, uint8_t _blend_mode, uint8_t _alpha_mod, Color _color_mod);
@@ -94,12 +91,11 @@ public:
 	// which all belong to this animation.
 	// The render_offset is constant for all frames. The render_size is also
 	// the grid size.
-	void setupUncompressed(const Point& render_size, const Point& render_offset, unsigned short _position, unsigned short _frames, unsigned short _duration, unsigned short _maxkinds = 8);
+	void setupUncompressed(const Point& render_size, const Point& render_offset, unsigned short _position, unsigned short _frames, unsigned short _duration);
 
-	void setup(unsigned short _frames, unsigned short _duration, unsigned short _maxkinds = 8);
+	void setup(unsigned short _frames, unsigned short _duration);
 
-	// kind can be used for direction(enemies, hero) or randomness(powers)
-	bool addFrame(unsigned short index, unsigned short kind, const Rect& rect, const Point& _render_offset, const std::string &key);
+	bool addFrame(unsigned short index, unsigned short direction, const Rect& rect, const Point& _render_offset, const std::string &key);
 
 	// advance the animation one frame
 	void advanceFrame();
@@ -110,7 +106,7 @@ public:
 	bool syncTo(const Animation *other);
 
 	// return the Renderable of the current frame
-	Renderable getCurrentFrame(int direction);
+	Renderable getCurrentFrame(unsigned short direction);
 
 	bool isFirstFrame();
 	bool isLastFrame();
