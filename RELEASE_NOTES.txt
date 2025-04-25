@@ -27,6 +27,7 @@ Engine features:
 * Added 'tab.text_padding' to engine/widget_settings.txt config.
 * Added 'enabled' property to Char/Inv/Pow/Log menus for modders that wish to prevent the player from opening those menus.
 * Added 'upgrade_button_offset' property to menu/powers.txt config.
+* Added 'active_sub_frame' property to animation definitions.
 * Android: Enabled use of external input devices (gamepads, keyboards, mice)
 
 Engine fixes:

@@ -87,6 +87,7 @@ void AnimationSet::load() {
 	bool compressed_loading=false; // is reset every section to false, set by frame keyword
 	Animation *newanim = NULL;
 	std::vector<short> active_frames;
+	std::string active_sub_frame = "";
 
 	unsigned short parent_anim_frames = 0;
 
@@ -97,8 +98,10 @@ void AnimationSet::load() {
 			if (!first_section && !compressed_loading) {
 				Animation *a = new Animation(_name, type, sprite, blend_mode, alpha_mod, color_mod);
 				a->setupUncompressed(render_size, render_offset, position, frames, duration);
-				if (!active_frames.empty())
+				if (!active_frames.empty()) {
 					a->setActiveFrames(active_frames);
+					a->setActiveSubFrame(active_sub_frame);
+				}
 				active_frames.clear();
 				animations.push_back(a);
 			}
@@ -186,13 +189,22 @@ void AnimationSet::load() {
 					active_frames.erase(std::unique(active_frames.begin(), active_frames.end()), active_frames.end());
 				}
 			}
+			else if (parser.key == "active_sub_frame") {
+				// @ATTR animation.active_sub_frame|["end", "start", "all"]|Each frame of animation gets rendered for multiple "sub-frames" based on playback speed and the max_fps setting. This property controls which of these sub-frames will trigger active frames. Defaults to "end".
+				if (parser.val == "end" || parser.val == "start" || parser.val == "all")
+					active_sub_frame = parser.val;
+				else
+					parser.error("AnimationSet: '%s' is not a valid parameter for active_sub_frame.", parser.val.c_str());
+			}
 			else if (parser.key == "frame") {
 				// @ATTR animation.frame|int, int, int, int, int, int, int, int, string: Index, Direction, X, Y, Width, Height, X offset, Y offset, Image ID|A single frame of a compressed animation. The image ID may be omitted, in which case the first available image will be used.
 				if (compressed_loading == false) { // first frame statement in section
 					newanim = new Animation(_name, type, sprite, blend_mode, alpha_mod, color_mod);
 					newanim->setup(frames, duration);
-					if (!active_frames.empty())
+					if (!active_frames.empty()) {
 						newanim->setActiveFrames(active_frames);
+						newanim->setActiveSubFrame(active_sub_frame);
+					}
 					active_frames.clear();
 					animations.push_back(newanim);
 					compressed_loading = true;
@@ -230,8 +242,10 @@ void AnimationSet::load() {
 		// add final animation
 		Animation *a = new Animation(_name, type, sprite, blend_mode, alpha_mod, color_mod);
 		a->setupUncompressed(render_size, render_offset, position, frames, duration);
-		if (!active_frames.empty())
+		if (!active_frames.empty()) {
 			a->setActiveFrames(active_frames);
+			a->setActiveSubFrame(active_sub_frame);
+		}
 		active_frames.clear();
 		animations.push_back(a);
 	}

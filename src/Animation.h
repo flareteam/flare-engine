@@ -49,16 +49,22 @@ protected:
 		ANIMTYPE_BACK_FORTH = 3  // similar to looped, but alternates the playback direction
 	};
 
+	enum {
+		ACTIVE_SUBFRAME_END = 0,
+		ACTIVE_SUBFRAME_START = 1,
+		ACTIVE_SUBFRAME_ALL = 2,
+	};
+
 	bool reverse_playback;  // only for type == BACK_FORTH
 	bool active_frame_triggered;
 
 	const uint8_t type; // see ANIMTYPE enum above
+	uint8_t active_sub_frame;
 	uint8_t blend_mode;
 	uint8_t alpha_mod;
 
 	unsigned short total_frame_count; // the total number of frames for this animation (is different from frame_count for back/forth animations)
 	unsigned short cur_frame;     // counts up until reaching total_frame_count.
-	unsigned short elapsed_frames; // counts the total number of frames for back-forth animations
 	unsigned short sub_frame; // which frame in this animation is currently being displayed? range: 0..gfx.size()-1
 	short times_played; // how often this animation was played (loop counter for type LOOPED)
 
@@ -78,6 +84,7 @@ protected:
 
 	const std::string name;
 
+	unsigned short getFirstSubFrame(const short &frame); // given a frame, gets the last sub frame that points to it
 	unsigned short getLastSubFrame(const short &frame); // given a frame, gets the last sub frame that points to it
 
 public:
@@ -127,6 +134,8 @@ public:
 	// a vector of indexes of gfx passed into.
 	// if { -1 } is passed, all frames are set to active.
 	void setActiveFrames(const std::vector<short> &_active_frames);
+
+	void setActiveSubFrame(const std::string& _active_sub_frame);
 
 	bool isCompleted();
 

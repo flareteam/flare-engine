@@ -38,11 +38,11 @@ Animation::Animation(const std::string &_name, const std::string &_type, Animati
 			_type == "back_forth" ? ANIMTYPE_BACK_FORTH :
 			_type == "looped" ? ANIMTYPE_LOOPED :
 			ANIMTYPE_NONE)
+	, active_sub_frame(ACTIVE_SUBFRAME_END)
 	, blend_mode(_blend_mode)
 	, alpha_mod(_alpha_mod)
 	, total_frame_count(0)
 	, cur_frame(0)
-	, elapsed_frames(0)
 	, sub_frame(0)
 	, times_played(0)
 	, frame_count(0)
@@ -218,7 +218,6 @@ void Animation::advanceFrame() {
 	sub_frame = std::max<short>(0, sub_frame);
 	sub_frame = (sub_frame > last_base_index ? last_base_index : sub_frame);
 
-	if (cur_frame != sub_frames[sub_frame]) elapsed_frames++;
 	cur_frame = sub_frames[sub_frame];
 }
 
@@ -246,7 +245,6 @@ void Animation::reset() {
 	sub_frame_f = 0;
 	times_played = 0;
 	reverse_playback = false;
-	elapsed_frames = 0;
 	active_frame_triggered = false;
 }
 
@@ -256,7 +254,6 @@ bool Animation::syncTo(const Animation *other) {
 	sub_frame_f = other->sub_frame_f;
 	times_played = other->times_played;
 	reverse_playback = other->reverse_playback;
-	elapsed_frames = other->elapsed_frames;
 
 	if (sub_frame >= sub_frames.size()) {
 		if (sub_frames.empty()) {
@@ -302,6 +299,15 @@ void Animation::setActiveFrames(const std::vector<short> &_active_frames) {
 	}
 }
 
+void Animation::setActiveSubFrame(const std::string& _active_sub_frame) {
+	if (_active_sub_frame == "start")
+		active_sub_frame = ACTIVE_SUBFRAME_START;
+	else if (_active_sub_frame == "all")
+		active_sub_frame = ACTIVE_SUBFRAME_ALL;
+	else
+		active_sub_frame = ACTIVE_SUBFRAME_END;
+}
+
 bool Animation::isFirstFrame() {
 	return sub_frame == 0 && static_cast<float>(sub_frame) == sub_frame_f;
 }
@@ -315,21 +321,35 @@ bool Animation::isSecondLastFrame() {
 }
 
 bool Animation::isActiveFrame() {
-	if (type == ANIMTYPE_BACK_FORTH) {
-		if (std::find(active_frames.begin(), active_frames.end(), elapsed_frames) != active_frames.end())
-			return sub_frame == getLastSubFrame(cur_frame) && static_cast<float>(sub_frame) == sub_frame_f;
-	}
-	else {
-		if (std::find(active_frames.begin(), active_frames.end(), cur_frame) != active_frames.end()) {
-			if (sub_frame == getLastSubFrame(cur_frame) && static_cast<float>(sub_frame) == sub_frame_f) {
-				if (type == ANIMTYPE_PLAY_ONCE)
-					active_frame_triggered = true;
+	if (active_frames.empty())
+		return false;
 
-				return true;
-			}
+	// active frames only apply to the initial "forward" play of back/forth animations
+	if (type == ANIMTYPE_BACK_FORTH && (reverse_playback || times_played > 0))
+		return false;
+
+	if (std::find(active_frames.begin(), active_frames.end(), cur_frame) != active_frames.end()) {
+		if (active_sub_frame == ACTIVE_SUBFRAME_END && sub_frame == getLastSubFrame(cur_frame) && static_cast<float>(sub_frame) == sub_frame_f) {
+			if (type == ANIMTYPE_PLAY_ONCE)
+				active_frame_triggered = true;
+			return true;
+		}
+		else if (active_sub_frame == ACTIVE_SUBFRAME_START && sub_frame == getFirstSubFrame(cur_frame) && static_cast<float>(sub_frame) == sub_frame_f) {
+			if (type == ANIMTYPE_PLAY_ONCE)
+				active_frame_triggered = true;
+			return true;
+		}
+		else if (active_sub_frame == ACTIVE_SUBFRAME_ALL) {
+			if (type == ANIMTYPE_PLAY_ONCE)
+				active_frame_triggered = true;
+			return true;
 		}
 	}
-	return (isLastFrame() && type == ANIMTYPE_PLAY_ONCE && !active_frame_triggered && !active_frames.empty());
+	else if (type == ANIMTYPE_PLAY_ONCE && isLastFrame() && !active_frame_triggered) {
+		return true;
+	}
+
+	return false;
 }
 
 int Animation::getTimesPlayed() {
@@ -346,6 +366,26 @@ int Animation::getDuration() {
 
 bool Animation::isCompleted() {
 	return (type == ANIMTYPE_PLAY_ONCE && times_played > 0);
+}
+
+unsigned short Animation::getFirstSubFrame(const short &frame) {
+	if (sub_frames.empty() || frame < 0) return 0;
+
+	if (type == ANIMTYPE_BACK_FORTH && reverse_playback) {
+		// since the animation is advancing backwards here, the last frame index is actually the first
+		for (size_t i=sub_frames.size(); i>0; i--) {
+			if (sub_frames[i-1] == frame)
+				return static_cast<unsigned short>(i-1);
+		}
+		return static_cast<unsigned short>(sub_frames.size()-1);
+	}
+	else {
+		// normal animation
+		for (unsigned short i=0; i<sub_frames.size(); i++) {
+			if (sub_frames[i] == frame) return i;
+		}
+		return 0;
+	}
 }
 
 unsigned short Animation::getLastSubFrame(const short &frame) {

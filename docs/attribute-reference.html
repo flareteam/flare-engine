@@ -120,6 +120,8 @@ code {
 
 <p><strong>animation.active_frame</strong> | <code>[list(int), "all"]</code> | A list of frames marked as "active". Also, "all" can be used to mark all frames as active.</p>
 
+<p><strong>animation.active_sub_frame</strong> | <code>["end", "start", "all"]</code> | Each frame of animation gets rendered for multiple "sub-frames" based on playback speed and the max_fps setting. This property controls which of these sub-frames will trigger active frames. Defaults to "end".</p>
+
 <p><strong>animation.frame</strong> | <code>int, int, int, int, int, int, int, int, string : Index, Direction, X, Y, Width, Height, X offset, Y offset, Image ID</code> | A single frame of a compressed animation. The image ID may be omitted, in which case the first available image will be used.</p>
 
 <hr />
