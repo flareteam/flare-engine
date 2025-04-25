@@ -627,7 +627,7 @@ bool Entity::takeHit(Hazard &h) {
 					hazards->checkNewHazards();
 				}
 
-				powers->activate(chain_power.id, h.src_stats, stats.pos, stats.pos);
+				powers->activate(chain_power.id, h.src_stats, h.pos, stats.pos);
 
 				if (h.power->post_hazards_skip_target) {
 					// populate powers->hazards with any new hazards created by the post power
