@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="org.flare.app"
-      android:versionCode="114"
+    android:versionCode="114"
       android:versionName="1.14"
       android:installLocation="auto">
 
