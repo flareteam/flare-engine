@@ -654,7 +654,7 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 			}
 
 			// set the target depending on how the power was triggered
-			if (have_aim && settings->mouse_aim && !inpt->usingTouchscreen()) {
+			if (have_aim && settings->mouse_aim && (settings->mouse_move || !inpt->usingTouchscreen())) {
 				action.target = pc->stats.pos;
 
 				if (power->target_nearest > 0) {
