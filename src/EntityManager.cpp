@@ -39,6 +39,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
+#include "Utils.h"
 
 #include <limits>
 
@@ -405,17 +406,29 @@ void EntityManager::logic() {
 Entity* EntityManager::entityFocus(const Point& mouse, const FPoint& cam, bool alive_only) {
 	Point p;
 	Rect r;
+
+	Entity* nearest = NULL;
+	float best_distance = std::numeric_limits<float>::max();
+	FPoint mousef = FPoint(mouse);
+	FPoint render_bounds_center;
+
 	for(unsigned int i = 0; i < entities.size(); i++) {
 		if(alive_only && (entities[i]->stats.cur_state == StatBlock::ENTITY_DEAD || entities[i]->stats.cur_state == StatBlock::ENTITY_CRITDEAD)) {
 			continue;
 		}
 
-		if (Utils::isWithinRect(entities[i]->getRenderBounds(cam), mouse)) {
-			Entity *entity = entities[i];
-			return entity;
+		Rect render_bounds = entities[i]->getRenderBounds(cam);
+		if (Utils::isWithinRect(render_bounds, mouse)) {
+			render_bounds_center.x = static_cast<float>(render_bounds.x) + (static_cast<float>(render_bounds.w)/2);
+			render_bounds_center.y = static_cast<float>(render_bounds.y) + (static_cast<float>(render_bounds.h)/2);
+			float distance = Utils::calcDist(mousef, render_bounds_center);
+			if (distance < best_distance) {
+				best_distance = distance;
+				nearest = entities[i];
+			}
 		}
 	}
-	return NULL;
+	return nearest;
 }
 
 Entity* EntityManager::getNearestEntity(const FPoint& pos, bool get_corpse, float *saved_distance, float max_range) {
