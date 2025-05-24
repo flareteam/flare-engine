@@ -316,41 +316,56 @@ void SDLInputState::handle() {
 
 		switch (event.type) {
 			case SDL_MOUSEMOTION:
-				mode = MODE_KEYBOARD_AND_MOUSE;
-				mouse = scaleMouse(event.motion.x, event.motion.y);
-				curs->show_cursor = true;
+				if (mode != MODE_TOUCHSCREEN) {
+					mode = MODE_KEYBOARD_AND_MOUSE;
+					mouse = scaleMouse(event.motion.x, event.motion.y);
+					curs->show_cursor = true;
+				}
 				break;
 			case SDL_MOUSEWHEEL:
-				mode = MODE_KEYBOARD_AND_MOUSE;
-				if (event.wheel.y > 0) {
-					scroll_up = true;
-				} else if (event.wheel.y < 0) {
-					scroll_down = true;
+				if (mode != MODE_TOUCHSCREEN) {
+					mode = MODE_KEYBOARD_AND_MOUSE;
+					if (event.wheel.y > 0) {
+						scroll_up = true;
+					} else if (event.wheel.y < 0) {
+						scroll_down = true;
+					}
 				}
 				break;
 			case SDL_MOUSEBUTTONDOWN:
-				mode = MODE_KEYBOARD_AND_MOUSE;
-				mouse = scaleMouse(event.button.x, event.button.y);
-				for (int key=0; key<KEY_COUNT; key++) {
-					for (size_t i = 0; i < binding[key].size(); ++i) {
-						if (binding[key][i].type == InputBind::MOUSE && binding[key][i].bind == event.button.button) {
-							pressing[key] = true;
-							un_press[key] = false;
+				if (mode == MODE_TOUCHSCREEN) {
+					// if we're in touchscreen mode, just switch to mouse mode without triggering any inputs
+					mode = MODE_KEYBOARD_AND_MOUSE;
+					mouse = scaleMouse(event.button.x, event.button.y);
+					curs->show_cursor = true;
+				}
+				else {
+					mode = MODE_KEYBOARD_AND_MOUSE;
+					mouse = scaleMouse(event.button.x, event.button.y);
+					curs->show_cursor = true;
+					for (int key=0; key<KEY_COUNT; key++) {
+						for (size_t i = 0; i < binding[key].size(); ++i) {
+							if (binding[key][i].type == InputBind::MOUSE && binding[key][i].bind == event.button.button) {
+								pressing[key] = true;
+								un_press[key] = false;
+							}
 						}
 					}
 				}
 				break;
 			case SDL_MOUSEBUTTONUP:
-				mode = MODE_KEYBOARD_AND_MOUSE;
-				mouse = scaleMouse(event.button.x, event.button.y);
-				for (int key=0; key<KEY_COUNT; key++) {
-					for (size_t i = 0; i < binding[key].size(); ++i) {
-						if (binding[key][i].type == InputBind::MOUSE && binding[key][i].bind == event.button.button) {
-							un_press[key] = true;
+				if (mode != MODE_TOUCHSCREEN) {
+					mode = MODE_KEYBOARD_AND_MOUSE;
+					mouse = scaleMouse(event.button.x, event.button.y);
+					for (int key=0; key<KEY_COUNT; key++) {
+						for (size_t i = 0; i < binding[key].size(); ++i) {
+							if (binding[key][i].type == InputBind::MOUSE && binding[key][i].bind == event.button.button) {
+								un_press[key] = true;
+							}
 						}
 					}
+					last_button = event.button.button;
 				}
-				last_button = event.button.button;
 				break;
 			case SDL_WINDOWEVENT:
 				if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
