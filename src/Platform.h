@@ -56,19 +56,26 @@ public:
 		};
 	};
 
+	class Game {
+	public:
+		static const int COUNT = 3;
+		enum {
+			AUTO_EQUIP,
+			LOW_HP_WARNING_TYPE,
+			LOW_HP_THRESHOLD,
+		};
+	};
+
 	class Interface {
 	public:
-		static const int COUNT = 17;
+		static const int COUNT = 14;
 		enum {
 			LANGUAGE,
 			SUBTITLES,
 			COLORBLIND,
 			MINIMAP_MODE,
 			LOOT_TOOLTIPS,
-			AUTO_EQUIP,
 			ITEM_COMPARE_TIPS,
-			LOW_HP_WARNING_TYPE,
-			LOW_HP_THRESHOLD,
 			COMBAT_TEXT,
 			STATBAR_LABELS,
 			STATBAR_AUTOHIDE,
@@ -131,6 +138,7 @@ public:
 
 	std::vector<bool> config_video;
 	std::vector<bool> config_audio;
+	std::vector<bool> config_game;
 	std::vector<bool> config_interface;
 	std::vector<bool> config_input;
 	std::vector<bool> config_misc;

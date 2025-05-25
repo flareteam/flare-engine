@@ -426,6 +426,7 @@ void MenuConfig::init() {
 	tab_control->setupTab(EXIT_TAB, msg->get("Exit"), &tablist_exit);
 	tab_control->setupTab(VIDEO_TAB, msg->get("Video"), &tablist_video);
 	tab_control->setupTab(AUDIO_TAB, msg->get("Audio"), &tablist_audio);
+	tab_control->setupTab(GAME_TAB, msg->get("Game"), &tablist_game);
 	tab_control->setupTab(INTERFACE_TAB, msg->get("Interface"), &tablist_interface);
 	tab_control->setupTab(INPUT_TAB, msg->get("Input"), &tablist_input);
 	tab_control->setupTab(KEYBINDS_TAB, msg->get("Keybindings"), &tablist_keybinds);
@@ -433,10 +434,11 @@ void MenuConfig::init() {
 
 	readConfig();
 
-	cfg_tabs.resize(6);
+	cfg_tabs.resize(TAB_COUNT - 1);
 	cfg_tabs[EXIT_TAB].options.resize(4);
 	cfg_tabs[VIDEO_TAB].options.resize(Platform::Video::COUNT);
 	cfg_tabs[AUDIO_TAB].options.resize(Platform::Audio::COUNT);
+	cfg_tabs[GAME_TAB].options.resize(Platform::Game::COUNT);
 	cfg_tabs[INTERFACE_TAB].options.resize(Platform::Interface::COUNT);
 	cfg_tabs[INPUT_TAB].options.resize(Platform::Input::COUNT);
 	cfg_tabs[KEYBINDS_TAB].options.resize(inpt->KEY_COUNT_USER);
@@ -466,6 +468,10 @@ void MenuConfig::init() {
 	cfg_tabs[AUDIO_TAB].setOptionWidgets(Platform::Audio::MUSIC, music_volume_lb, music_volume_sl, msg->get("Music Volume"));
 	cfg_tabs[AUDIO_TAB].setOptionWidgets(Platform::Audio::MUTE_ON_FOCUS_LOSS, mute_on_focus_loss_lb, mute_on_focus_loss_cb, msg->get("Mute audio when window loses focus"));
 
+	cfg_tabs[GAME_TAB].setOptionWidgets(Platform::Game::AUTO_EQUIP, auto_equip_lb, auto_equip_cb, msg->get("Automatically equip items"));
+	cfg_tabs[GAME_TAB].setOptionWidgets(Platform::Game::LOW_HP_WARNING_TYPE, low_hp_warning_lb, low_hp_warning_lstb, msg->get("Low health notification"));
+	cfg_tabs[GAME_TAB].setOptionWidgets(Platform::Game::LOW_HP_THRESHOLD, low_hp_threshold_lb, low_hp_threshold_lstb, msg->get("Low health threshold"));
+
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::LANGUAGE, language_lb, language_lstb, msg->get("Language"));
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::SHOW_FPS, show_fps_lb, show_fps_cb, msg->get("Show FPS"));
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::HARDWARE_CURSOR, hardware_cursor_lb, hardware_cursor_cb, msg->get("Hardware mouse cursor"));
@@ -477,10 +483,7 @@ void MenuConfig::init() {
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::STATBAR_LABELS, statbar_labels_lb, statbar_labels_cb, msg->get("Always show stat bar labels"));
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::STATBAR_AUTOHIDE, statbar_autohide_lb, statbar_autohide_cb, msg->get("Allow stat bar auto-hiding"));
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::COMBAT_TEXT, combat_text_lb, combat_text_cb, msg->get("Show combat text"));
-	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::AUTO_EQUIP, auto_equip_lb, auto_equip_cb, msg->get("Automatically equip items"));
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::ENTITY_MARKERS, entity_markers_lb, entity_markers_cb, msg->get("Show hidden entity markers"));
-	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::LOW_HP_WARNING_TYPE, low_hp_warning_lb, low_hp_warning_lstb, msg->get("Low health notification"));
-	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::LOW_HP_THRESHOLD, low_hp_threshold_lb, low_hp_threshold_lstb, msg->get("Low health threshold"));
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::ITEM_COMPARE_TIPS, item_compare_tips_lb, item_compare_tips_cb, msg->get("Show item comparison tooltips"));
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::PAUSE_ON_FOCUS_LOSS, pause_on_focus_loss_lb, pause_on_focus_loss_cb, msg->get("Pause game when window loses focus"));
 
@@ -542,6 +545,10 @@ void MenuConfig::init() {
 		if (!platform.config_audio[i])
 			cfg_tabs[AUDIO_TAB].setOptionEnabled(i, false);
 	}
+	for (int i = 0; i < Platform::Game::COUNT; ++i) {
+		if (!platform.config_game[i])
+			cfg_tabs[GAME_TAB].setOptionEnabled(i, false);
+	}
 	for (int i = 0; i < Platform::Interface::COUNT; ++i) {
 		if (!platform.config_interface[i])
 			cfg_tabs[INTERFACE_TAB].setOptionEnabled(i, false);
@@ -561,7 +568,7 @@ void MenuConfig::init() {
 
 	// place widgets
 	for (size_t i = 0; i < cfg_tabs.size(); ++i) {
-		if (cfg_tabs[i].enabled_count == 0) {
+		if (cfg_tabs[i].enabled_count == 0 && i != GAME_TAB) {
 			tab_control->setEnabled(static_cast<unsigned>(i), false);
 		}
 
@@ -870,6 +877,10 @@ void MenuConfig::setupTabList() {
 	tablist_audio.add(cfg_tabs[AUDIO_TAB].scrollbox);
 	tablist_audio.lock();
 
+	tablist_game.setScrollType(Widget::SCROLL_VERTICAL);
+	tablist_game.add(cfg_tabs[GAME_TAB].scrollbox);
+	tablist_game.lock();
+
 	tablist_interface.setScrollType(Widget::SCROLL_VERTICAL);
 	tablist_interface.add(cfg_tabs[INTERFACE_TAB].scrollbox);
 	tablist_interface.lock();
@@ -897,6 +908,7 @@ void MenuConfig::setupTabList() {
 	tablists.push_back(&tablist_exit);
 	tablists.push_back(&tablist_video);
 	tablists.push_back(&tablist_audio);
+	tablists.push_back(&tablist_game);
 	tablists.push_back(&tablist_interface);
 	tablists.push_back(&tablist_input);
 	tablists.push_back(&tablist_keybinds);
@@ -906,6 +918,7 @@ void MenuConfig::setupTabList() {
 void MenuConfig::update() {
 	updateVideo();
 	updateAudio();
+	updateGame();
 	updateInterface();
 	updateInput();
 	updateKeybinds();
@@ -972,6 +985,14 @@ void MenuConfig::updateAudio() {
 	cfg_tabs[AUDIO_TAB].scrollbox->refresh();
 }
 
+void MenuConfig::updateGame() {
+	cfg_tabs[GAME_TAB].scrollbox->refresh();
+
+	auto_equip_cb->setChecked(settings->auto_equip);
+	low_hp_warning_lstb->select(settings->low_hp_warning_type);
+	low_hp_threshold_lstb->select((settings->low_hp_threshold/5)-1);
+}
+
 void MenuConfig::updateInterface() {
 	show_fps_cb->setChecked(settings->show_fps);
 	colorblind_cb->setChecked(settings->colorblind);
@@ -981,10 +1002,7 @@ void MenuConfig::updateInterface() {
 	statbar_labels_cb->setChecked(settings->statbar_labels);
 	statbar_autohide_cb->setChecked(settings->statbar_autohide);
 	combat_text_cb->setChecked(settings->combat_text);
-	auto_equip_cb->setChecked(settings->auto_equip);
 	entity_markers_cb->setChecked(settings->entity_markers);
-	low_hp_warning_lstb->select(settings->low_hp_warning_type);
-	low_hp_threshold_lstb->select((settings->low_hp_threshold/5)-1);
 	item_compare_tips_cb->setChecked(settings->item_compare_tips);
 	pause_on_focus_loss_cb->setChecked(settings->pause_on_focus_loss);
 
@@ -1095,6 +1113,11 @@ void MenuConfig::logic() {
 		tablist.setNextTabList(&tablist_audio);
 		tablist_main.setPrevTabList(&tablist_audio);
 		logicAudio();
+	}
+	else if (active_tab == GAME_TAB) {
+		tablist.setNextTabList(&tablist_game);
+		tablist_main.setPrevTabList(&tablist_game);
+		logicGame();
 	}
 	else if (active_tab == INTERFACE_TAB) {
 		tablist.setNextTabList(&tablist_interface);
@@ -1303,6 +1326,21 @@ void MenuConfig::logicAudio() {
 	}
 }
 
+void MenuConfig::logicGame() {
+	cfg_tabs[GAME_TAB].scrollbox->logic();
+	Point mouse = cfg_tabs[GAME_TAB].scrollbox->input_assist(inpt->mouse);
+
+	if (cfg_tabs[GAME_TAB].options[Platform::Game::AUTO_EQUIP].enabled && auto_equip_cb->checkClickAt(mouse.x, mouse.y)) {
+		settings->auto_equip = auto_equip_cb->isChecked();
+	}
+	else if (cfg_tabs[GAME_TAB].options[Platform::Game::LOW_HP_WARNING_TYPE].enabled && low_hp_warning_lstb->checkClickAt(mouse.x, mouse.y)) {
+		settings->low_hp_warning_type = (static_cast<int>(low_hp_warning_lstb->getSelected()));
+	}
+	else if (cfg_tabs[GAME_TAB].options[Platform::Game::LOW_HP_THRESHOLD].enabled && low_hp_threshold_lstb->checkClickAt(mouse.x, mouse.y)) {
+		settings->low_hp_threshold = (static_cast<int>(low_hp_threshold_lstb->getSelected())+1)*5;
+	}
+}
+
 void MenuConfig::logicInterface() {
 	cfg_tabs[INTERFACE_TAB].scrollbox->logic();
 	Point mouse = cfg_tabs[INTERFACE_TAB].scrollbox->input_assist(inpt->mouse);
@@ -1342,17 +1380,8 @@ void MenuConfig::logicInterface() {
 	else if (cfg_tabs[INTERFACE_TAB].options[Platform::Interface::COMBAT_TEXT].enabled && combat_text_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->combat_text = combat_text_cb->isChecked();
 	}
-	else if (cfg_tabs[INTERFACE_TAB].options[Platform::Interface::AUTO_EQUIP].enabled && auto_equip_cb->checkClickAt(mouse.x, mouse.y)) {
-		settings->auto_equip = auto_equip_cb->isChecked();
-	}
 	else if (cfg_tabs[INTERFACE_TAB].options[Platform::Interface::ENTITY_MARKERS].enabled && entity_markers_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->entity_markers = entity_markers_cb->isChecked();
-	}
-	else if (cfg_tabs[INTERFACE_TAB].options[Platform::Interface::LOW_HP_WARNING_TYPE].enabled && low_hp_warning_lstb->checkClickAt(mouse.x, mouse.y)) {
-		settings->low_hp_warning_type = (static_cast<int>(low_hp_warning_lstb->getSelected()));
-	}
-	else if (cfg_tabs[INTERFACE_TAB].options[Platform::Interface::LOW_HP_THRESHOLD].enabled && low_hp_threshold_lstb->checkClickAt(mouse.x, mouse.y)) {
-		settings->low_hp_threshold = (static_cast<int>(low_hp_threshold_lstb->getSelected())+1)*5;
 	}
 	else if (cfg_tabs[INTERFACE_TAB].options[Platform::Interface::ITEM_COMPARE_TIPS].enabled && item_compare_tips_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->item_compare_tips = item_compare_tips_cb->isChecked();

@@ -106,15 +106,16 @@ public:
 	static const bool IS_GAME_STATE = true;
 	static const bool ENABLE_SAVE_GAME = true;
 
-	static const short TAB_COUNT = 7;
+	static const short TAB_COUNT = 8;
 	enum {
 		EXIT_TAB = 0,
 		VIDEO_TAB = 1,
 		AUDIO_TAB = 2,
-		INTERFACE_TAB = 3,
-		INPUT_TAB = 4,
-		KEYBINDS_TAB = 5,
-		MODS_TAB = 6
+		GAME_TAB = 3,
+		INTERFACE_TAB = 4,
+		INPUT_TAB = 5,
+		KEYBINDS_TAB = 6,
+		MODS_TAB = 7
 	};
 	static const short NO_TAB = -1;
 
@@ -138,6 +139,7 @@ public:
 	void update();
 	void updateVideo();
 	void updateAudio();
+	void updateGame();
 	void updateInterface();
 	void updateInput();
 	void updateKeybinds();
@@ -149,6 +151,7 @@ public:
 	void logicExit();
 	void logicVideo();
 	void logicAudio();
+	void logicGame();
 	void logicInterface();
 	void logicInput();
 	void logicKeybinds();
@@ -199,6 +202,7 @@ public:
 	TabList tablist_exit;
 	TabList tablist_video;
 	TabList tablist_audio;
+	TabList tablist_game;
 	TabList tablist_interface;
 	TabList tablist_input;
 	TabList tablist_keybinds;
