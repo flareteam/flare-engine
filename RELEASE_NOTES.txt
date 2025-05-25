@@ -28,6 +28,7 @@ Engine features:
 * Added 'enabled' property to Char/Inv/Pow/Log menus for modders that wish to prevent the player from opening those menus.
 * Added 'upgrade_button_offset' property to menu/powers.txt config.
 * Added 'active_sub_frame' property to animation definitions.
+* Added auto-loot configuration option.
 * Android: Enabled use of external input devices (gamepads, keyboards, mice)
 
 Engine fixes:

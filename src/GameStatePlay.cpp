@@ -267,12 +267,10 @@ void GameStatePlay::checkLoot() {
 	ItemStack pickup;
 
 	// Autopickup
-	if (eset->loot.autopickup_currency) {
-		pickup = loot->checkAutoPickup(pc->stats.pos);
-		if (!pickup.empty()) {
-			menu->inv->add(pickup, MenuInventory::CARRIED, ItemStorage::NO_SLOT, MenuInventory::ADD_PLAY_SOUND, MenuInventory::ADD_AUTO_EQUIP);
-			pickup.clear();
-		}
+	pickup = loot->checkAutoPickup(pc->stats.pos);
+	if (!pickup.empty()) {
+		menu->inv->add(pickup, MenuInventory::CARRIED, ItemStorage::NO_SLOT, MenuInventory::ADD_PLAY_SOUND, MenuInventory::ADD_AUTO_EQUIP);
+		pickup.clear();
 	}
 
 	// Normal pickups

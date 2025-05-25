@@ -63,7 +63,7 @@ Settings::Settings()
 	, soft_reset(false)
 	, safe_video(false)
 {
-	config.resize(50);
+	config.resize(51);
 	setConfigDefault(0,  "move_type_dimissed",  &typeid(move_type_dimissed),  "0",            &move_type_dimissed,  "One time flag for initial movement type dialog | 0 = show dialog, 1 = no dialog");
 	setConfigDefault(1,  "fullscreen",          &typeid(fullscreen),          "0",            &fullscreen,          "Fullscreen mode | 0 = disable, 1 = enable");
 	setConfigDefault(2,  "resolution_w",        &typeid(screen_w),            "640",          &screen_w,            "Window size");
@@ -95,7 +95,7 @@ Settings::Settings()
 	setConfigDefault(28, "loot_tooltips",       &typeid(loot_tooltips),       "0",            &loot_tooltips,       "Loot tooltip mode | 0 = normal, 1 = show all, 2 = hide all");
 	setConfigDefault(29, "statbar_labels",      &typeid(statbar_labels),      "0",            &statbar_labels,      "Always show labels on HP/MP/XP bars | 0 = disable, 1 = enable");
 	setConfigDefault(30, "statbar_autohide",    &typeid(statbar_autohide),    "1",            &statbar_autohide,    "Allow the HP/MP/XP bars to auto-hide on inactivity | 0 = disable, 1 = enable");
-	setConfigDefault(31, "auto_equip",          &typeid(auto_equip),          "1",            &auto_equip,          "Automatically equip items | 0 = enable, 1 = enable");
+	setConfigDefault(31, "auto_equip",          &typeid(auto_equip),          "1",            &auto_equip,          "Automatically equip items | 0 = disable, 1 = enable");
 	setConfigDefault(32, "subtitles",           &typeid(subtitles),           "0",            &subtitles,           "Subtitles | 0 = disable, 1 = enable");
 	setConfigDefault(33, "minimap_mode",        &typeid(minimap_mode),        "0",            &minimap_mode,        "Mini-map display mode | 0 = normal, 1 = 2x zoom, 2 = hidden");
 	setConfigDefault(34, "mouse_move_swap",     &typeid(mouse_move_swap),     "0",            &mouse_move_swap,     "Use 'Main2' as the movement action when mouse_move=1 | 0 = disable, 1 = enable");
@@ -114,6 +114,7 @@ Settings::Settings()
 	setConfigDefault(47, "dev_cmd_1",           &typeid(dev_cmd_1),           "toggle_fps",    &dev_cmd_1,           "Custom developer console shortcut command");
 	setConfigDefault(48, "dev_cmd_2",           &typeid(dev_cmd_2),           "toggle_devhud", &dev_cmd_2,           "Custom developer console shortcut command");
 	setConfigDefault(49, "dev_cmd_3",           &typeid(dev_cmd_3),           "toggle_hud",    &dev_cmd_3,           "Custom developer console shortcut command");
+	setConfigDefault(50, "auto_loot",           &typeid(auto_loot),           "1",             &auto_loot,           "Automatically pick up loot | 0 = disable, 1 = enable, 2 = currency only");
 }
 
 void Settings::setConfigDefault(size_t index, const std::string& name, const std::type_info *type, const std::string& default_val, void *storage, const std::string& comment) {

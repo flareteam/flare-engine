@@ -98,6 +98,12 @@ public:
 	int joy_deadzone;
 	float touch_scale;
 
+	// Game Settings
+	bool auto_equip;
+	int auto_loot;
+	int low_hp_warning_type;
+	int low_hp_threshold;
+
 	// Interface Settings
 	bool combat_text;
 	bool show_fps;
@@ -108,12 +114,9 @@ public:
 	int loot_tooltips;
 	bool statbar_labels;
 	bool statbar_autohide;
-	bool auto_equip;
 	bool subtitles;
 	int minimap_mode;
 	bool entity_markers;
-	int low_hp_warning_type;
-	int low_hp_threshold;
 	bool item_compare_tips;
 	bool pause_on_focus_loss;
 

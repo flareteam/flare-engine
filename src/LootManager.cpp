@@ -522,11 +522,23 @@ ItemStack LootManager::checkPickup(const Point& mouse, const FPoint& cam, const 
 ItemStack LootManager::checkAutoPickup(const FPoint& hero_pos) {
 	ItemStack loot_stack;
 
+	// if auto-loot is disabled, just return an empty stack
+	if (settings->auto_loot == 0)
+		return loot_stack;
+
 	std::vector<Loot>::iterator it;
 	for (it = loot.end(); it != loot.begin(); ) {
 		--it;
 		if (!it->dropped_by_hero && Utils::calcDist(hero_pos, it->pos) < eset->loot.autopickup_range && !it->isFlying()) {
+			bool do_pickup = false;
 			if (it->stack.item == eset->misc.currency_id && eset->loot.autopickup_currency) {
+				do_pickup = true;
+			}
+			else if (settings->auto_loot == 1 && items->checkAutoPickup(it->stack.item)) {
+				do_pickup = true;
+			}
+
+			if (do_pickup) {
 				loot_stack = it->stack;
 				it = loot.erase(it);
 				return loot_stack;

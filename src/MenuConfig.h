@@ -260,6 +260,15 @@ public:
 	WidgetCheckBox             * mute_on_focus_loss_cb;
 	WidgetLabel                * mute_on_focus_loss_lb;
 
+	WidgetCheckBox             * auto_equip_cb;
+	WidgetLabel                * auto_equip_lb;
+	WidgetHorizontalList       * auto_loot_lstb;
+	WidgetLabel                * auto_loot_lb;
+	WidgetHorizontalList       * low_hp_warning_lstb;
+	WidgetLabel                * low_hp_warning_lb;
+	WidgetHorizontalList       * low_hp_threshold_lstb;
+	WidgetLabel                * low_hp_threshold_lb;
+
 	WidgetCheckBox             * show_fps_cb;
 	WidgetLabel                * show_fps_lb;
 	WidgetCheckBox             * hardware_cursor_cb;
@@ -280,14 +289,8 @@ public:
 	WidgetLabel                * statbar_autohide_lb;
 	WidgetCheckBox             * combat_text_cb;
 	WidgetLabel                * combat_text_lb;
-	WidgetCheckBox             * auto_equip_cb;
-	WidgetLabel                * auto_equip_lb;
 	WidgetCheckBox             * entity_markers_cb;
 	WidgetLabel                * entity_markers_lb;
-	WidgetHorizontalList       * low_hp_warning_lstb;
-	WidgetLabel                * low_hp_warning_lb;
-	WidgetHorizontalList       * low_hp_threshold_lstb;
-	WidgetLabel                * low_hp_threshold_lb;
 	WidgetCheckBox             * item_compare_tips_cb;
 	WidgetLabel                * item_compare_tips_lb;
 	WidgetCheckBox             * pause_on_focus_loss_cb;

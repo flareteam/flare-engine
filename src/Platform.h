@@ -58,9 +58,10 @@ public:
 
 	class Game {
 	public:
-		static const int COUNT = 3;
+		static const int COUNT = 4;
 		enum {
 			AUTO_EQUIP,
+			AUTO_LOOT,
 			LOW_HP_WARNING_TYPE,
 			LOW_HP_THRESHOLD,
 		};

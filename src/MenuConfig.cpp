@@ -166,6 +166,15 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	, mute_on_focus_loss_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
 	, mute_on_focus_loss_lb(new WidgetLabel())
 
+	, auto_equip_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
+	, auto_equip_lb(new WidgetLabel())
+	, auto_loot_lstb(new WidgetHorizontalList())
+	, auto_loot_lb(new WidgetLabel())
+	, low_hp_warning_lstb(new WidgetHorizontalList())
+	, low_hp_warning_lb(new WidgetLabel())
+	, low_hp_threshold_lstb(new WidgetHorizontalList())
+	, low_hp_threshold_lb(new WidgetLabel())
+
 	, show_fps_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
 	, show_fps_lb(new WidgetLabel())
 	, hardware_cursor_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
@@ -186,14 +195,8 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	, statbar_autohide_lb(new WidgetLabel())
 	, combat_text_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
 	, combat_text_lb(new WidgetLabel())
-	, auto_equip_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
-	, auto_equip_lb(new WidgetLabel())
 	, entity_markers_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
 	, entity_markers_lb(new WidgetLabel())
-	, low_hp_warning_lstb(new WidgetHorizontalList())
-	, low_hp_warning_lb(new WidgetLabel())
-	, low_hp_threshold_lstb(new WidgetHorizontalList())
-	, low_hp_threshold_lb(new WidgetLabel())
 	, item_compare_tips_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
 	, item_compare_tips_lb(new WidgetLabel())
 	, pause_on_focus_loss_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
@@ -356,7 +359,7 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	minimap_lstb->append(msg->get("Visible (2x zoom)"), "");
 	minimap_lstb->append(msg->get("Hidden"), "");
 
-	// set up low hp notification type combinantions
+	// set up low hp notification type combinations
 	std::string lhpw_prefix = msg->get("Controls the type of warning to be activated when the player is below the low health threshold.");
 	std::string lhpw_warning1 = msg->get("- Display a message");
 	std::string lhpw_warning2 = msg->get("- Play a sound");
@@ -377,6 +380,12 @@ MenuConfig::MenuConfig (bool _is_game_state)
 		ss << i * 5;
 		low_hp_threshold_lstb->append(ss.str() + "%", msg->get("When the player's health drops below the given threshold, the low health notifications are triggered if one or more of them is enabled."));
 	}
+
+	// set up auto-loot options
+	std::string auto_loot_desc = msg->get("When enabled, eligible loot will be picked up automatically when nearby.");
+	auto_loot_lstb->append(msg->get("Disabled"), auto_loot_desc);
+	auto_loot_lstb->append(msg->get("Enabled"), auto_loot_desc);
+	auto_loot_lstb->append(msg->get("Only currency"), auto_loot_desc);
 
 	// set up the frame limits
 	frame_limits.push_back(30);
@@ -469,6 +478,7 @@ void MenuConfig::init() {
 	cfg_tabs[AUDIO_TAB].setOptionWidgets(Platform::Audio::MUTE_ON_FOCUS_LOSS, mute_on_focus_loss_lb, mute_on_focus_loss_cb, msg->get("Mute audio when window loses focus"));
 
 	cfg_tabs[GAME_TAB].setOptionWidgets(Platform::Game::AUTO_EQUIP, auto_equip_lb, auto_equip_cb, msg->get("Automatically equip items"));
+	cfg_tabs[GAME_TAB].setOptionWidgets(Platform::Game::AUTO_LOOT, auto_loot_lb, auto_loot_lstb, msg->get("Automatically pick up loot"));
 	cfg_tabs[GAME_TAB].setOptionWidgets(Platform::Game::LOW_HP_WARNING_TYPE, low_hp_warning_lb, low_hp_warning_lstb, msg->get("Low health notification"));
 	cfg_tabs[GAME_TAB].setOptionWidgets(Platform::Game::LOW_HP_THRESHOLD, low_hp_threshold_lb, low_hp_threshold_lstb, msg->get("Low health threshold"));
 
@@ -989,6 +999,7 @@ void MenuConfig::updateGame() {
 	cfg_tabs[GAME_TAB].scrollbox->refresh();
 
 	auto_equip_cb->setChecked(settings->auto_equip);
+	auto_loot_lstb->select(settings->auto_loot);
 	low_hp_warning_lstb->select(settings->low_hp_warning_type);
 	low_hp_threshold_lstb->select((settings->low_hp_threshold/5)-1);
 }
@@ -1332,6 +1343,9 @@ void MenuConfig::logicGame() {
 
 	if (cfg_tabs[GAME_TAB].options[Platform::Game::AUTO_EQUIP].enabled && auto_equip_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->auto_equip = auto_equip_cb->isChecked();
+	}
+	else if (cfg_tabs[GAME_TAB].options[Platform::Game::AUTO_LOOT].enabled && auto_loot_lstb->checkClickAt(mouse.x, mouse.y)) {
+		settings->auto_loot = (static_cast<int>(auto_loot_lstb->getSelected()));
 	}
 	else if (cfg_tabs[GAME_TAB].options[Platform::Game::LOW_HP_WARNING_TYPE].enabled && low_hp_warning_lstb->checkClickAt(mouse.x, mouse.y)) {
 		settings->low_hp_warning_type = (static_cast<int>(low_hp_warning_lstb->getSelected()));

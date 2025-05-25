@@ -173,12 +173,15 @@ class ItemType {
 public:
 	ItemType()
 		: id("")
-		, name("") {
+		, name("")
+		, auto_pickup(false)
+	{
 	}
 	~ItemType() {}
 
 	std::string id;
 	std::string name;
+	bool auto_pickup;
 };
 
 class ItemRandomizerDef {
@@ -329,6 +332,7 @@ public:
 	TooltipData getShortTooltip(ItemStack item);
 	std::string getItemName(ItemID id);
 	std::string getItemType(const std::string& _type);
+	bool checkAutoPickup(ItemID id);
 	Color getItemColor(ItemID id);
 	int getItemIconOverlay(size_t id);
 	bool requirementsMet(const StatBlock *stats, ItemID item_id);

@@ -589,6 +589,9 @@ void ItemManager::loadTypes(const std::string& filename) {
 			// @ATTR type.name|string|Item type name.
 			else if (infile.key == "name")
 				item_types.back().name = infile.val;
+			// @ATTR type.auto_pickup|boolean|Allows items of this type to be picked up automatically.
+			else if (infile.key == "auto_pickup")
+				item_types.back().auto_pickup = Parse::toBool(infile.val);
 			else
 				infile.error("ItemManager: '%s' is not a valid key.", infile.key.c_str());
 		}
@@ -663,6 +666,16 @@ std::string ItemManager::getItemType(const std::string& _type) {
 	}
 	// If all else fails, return the original string
 	return _type;
+}
+
+bool ItemManager::checkAutoPickup(ItemID id) {
+	std::string type = items[id]->type;
+
+	for (size_t i = 0; i < item_types.size(); ++i) {
+		if (item_types[i].id == type)
+			return item_types[i].auto_pickup;
+	}
+	return false;
 }
 
 Color ItemManager::getItemColor(ItemID id) {
