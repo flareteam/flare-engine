@@ -566,41 +566,50 @@ void ItemManager::loadItems(const std::string& filename) {
  */
 void ItemManager::loadTypes(const std::string& filename) {
 	FileParser infile;
+	size_t cur_id = 0;
+	bool section_has_id = false;
 
 	// @CLASS ItemManager: Types|Definition of a item types, items/types.txt...
 	if (infile.open(filename, FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			if (infile.new_section) {
 				if (infile.section == "type") {
-					// check if the previous type and remove it if there is no identifier
-					if (!item_types.empty() && item_types.back().id == "") {
-						item_types.pop_back();
-					}
-					item_types.resize(item_types.size()+1);
+					cur_id = item_types.size();
+					section_has_id = false;
 				}
 			}
 
-			if (item_types.empty() || infile.section != "type")
+			if (infile.section != "type")
 				continue;
 
 			// @ATTR type.id|string|Item type identifier.
-			if (infile.key == "id")
-				item_types.back().id = infile.val;
+			if (infile.key == "id" && !section_has_id) {
+				for (size_t i = 0; i < item_types.size(); ++i) {
+					if (item_types[i].id == infile.val) {
+						cur_id = i;
+					}
+				}
+				if (cur_id == item_types.size()) {
+					item_types.resize(item_types.size() + 1);
+				}
+				item_types[cur_id].id = infile.val;
+				section_has_id = true;
+				continue;
+			}
+
+			if (!section_has_id)
+				continue;
+
 			// @ATTR type.name|string|Item type name.
-			else if (infile.key == "name")
-				item_types.back().name = infile.val;
+			if (infile.key == "name")
+				item_types[cur_id].name = infile.val;
 			// @ATTR type.auto_pickup|boolean|Allows items of this type to be picked up automatically.
 			else if (infile.key == "auto_pickup")
-				item_types.back().auto_pickup = Parse::toBool(infile.val);
+				item_types[cur_id].auto_pickup = Parse::toBool(infile.val);
 			else
 				infile.error("ItemManager: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
-
-		// check if the last type and remove it if there is no identifier
-		if (!item_types.empty() && item_types.back().id == "") {
-			item_types.pop_back();
-		}
 	}
 }
 
@@ -611,44 +620,53 @@ void ItemManager::loadTypes(const std::string& filename) {
  */
 void ItemManager::loadQualities(const std::string& filename) {
 	FileParser infile;
+	size_t cur_id = 0;
+	bool section_has_id = false;
 
 	// @CLASS ItemManager: Qualities|Definition of a item qualities, items/types.txt...
 	if (infile.open(filename, FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			if (infile.new_section) {
 				if (infile.section == "quality") {
-					// check if the previous quality and remove it if there is no identifier
-					if (!item_qualities.empty() && item_qualities.back().id == "") {
-						item_qualities.pop_back();
-					}
-					item_qualities.resize(item_qualities.size()+1);
+					cur_id = item_qualities.size();
+					section_has_id = false;
 				}
 			}
 
-			if (item_qualities.empty() || infile.section != "quality")
+			if (infile.section != "quality")
 				continue;
 
 			// @ATTR quality.id|string|Item quality identifier.
-			if (infile.key == "id")
-				item_qualities.back().id = infile.val;
+			if (infile.key == "id") {
+				for (size_t i = 0; i < item_qualities.size(); ++i) {
+					if (item_qualities[i].id == infile.val) {
+						cur_id = i;
+					}
+				}
+				if (cur_id == item_qualities.size()) {
+					item_qualities.resize(item_qualities.size() + 1);
+				}
+				item_qualities[cur_id].id = infile.val;
+				section_has_id = true;
+				continue;
+			}
+
+			if (!section_has_id)
+				continue;
+
 			// @ATTR quality.name|string|Item quality name.
-			else if (infile.key == "name")
-				item_qualities.back().name = infile.val;
+			if (infile.key == "name")
+				item_qualities[cur_id].name = infile.val;
 			// @ATTR quality.color|color|Item quality color.
 			else if (infile.key == "color")
-				item_qualities.back().color = Parse::toRGB(infile.val);
+				item_qualities[cur_id].color = Parse::toRGB(infile.val);
 			// @ATTR quality.overlay_icon|icon_id|The icon to be used as an overlay.
 			else if (infile.key == "overlay_icon")
-				item_qualities.back().overlay_icon = Parse::toInt(infile.val);
+				item_qualities[cur_id].overlay_icon = Parse::toInt(infile.val);
 			else
 				infile.error("ItemManager: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
-
-		// check if the last quality and remove it if there is no identifier
-		if (!item_qualities.empty() && item_qualities.back().id == "") {
-			item_qualities.pop_back();
-		}
 	}
 }
 
