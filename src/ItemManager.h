@@ -200,7 +200,7 @@ public:
 		int bonus_max;
 
 		float chance;
-		std::string quality;
+		size_t quality;
 
 		Option()
 			: level_src(LEVEL_SRC_BASE)
@@ -209,7 +209,7 @@ public:
 			, bonus_min(0)
 			, bonus_max(0)
 			, chance(100)
-			, quality("")
+			, quality(0)
 		{}
 	};
 
@@ -254,13 +254,13 @@ public:
 	SoundID sfx_id;
 	PowerID power;            // this item can be dragged to the action bar and used as a power
 	size_t type;     // equipment slot or base item type. An index into ItemManager::item_types
+	size_t quality;  // An index into ItemManager::item_qualities
 
 	ItemRandomizerDef* randomizer_def;
 
 	FMinMax base_abs;          // minimum/maximum absorb amount
 
 	std::string flavor;   // optional flavor text describing the item
-	std::string quality;  // should match an id from items/qualities.txt
 	std::string book;     // book file location
 	std::string requires_class;
 	std::string sfx;           // the item sound when it hits the floor or inventory, etc
@@ -333,6 +333,7 @@ public:
 	std::string getItemName(ItemID id);
 	size_t getItemTypeIndexByString(const std::string& _type);
 	ItemType& getItemType(size_t id);
+	size_t getItemQualityIndexByString(const std::string& _id);
 	bool checkAutoPickup(ItemID id);
 	Color getItemColor(ItemID id);
 	int getItemIconOverlay(size_t id);

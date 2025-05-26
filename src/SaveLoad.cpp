@@ -286,7 +286,9 @@ void SaveLoad::saveGame() {
 			outfile << "[item]" << std::endl;
 			outfile << "id=" << i << "," << item->parent << std::endl;
 			outfile << "level=" << item->level << std::endl;
-			outfile << "quality=" << item->quality << std::endl;
+			if (item->quality < items->item_qualities.size() && !items->item_qualities[item->quality].name.empty()) {
+				outfile << "quality=" << items->item_qualities[item->quality].id << std::endl;
+			}
 			for (size_t j = 0; j < item->bonus.size(); ++j) {
 				BonusData* bonus = &(item->bonus[j]);
 

@@ -189,10 +189,10 @@ Item::Item()
 	, sfx_id(0)
 	, power(0)
 	, type(0)
+	, quality(0)
 	, randomizer_def(NULL)
 	, base_abs()
 	, flavor("")
-	, quality("")
 	, book("")
 	, requires_class("")
 	, sfx("")
@@ -241,10 +241,10 @@ void ItemManager::loadAll() {
 
 	// load each items.txt file. Individual item IDs can be overwritten with mods.
 	this->loadTypes("items/types.txt");
+	this->loadQualities("items/qualities.txt");
 	this->loadItems("items/items.txt");
 	this->loadExtendedItems(settings->path_user + "saves/" + eset->misc.save_prefix + "/extended_items.txt");
 	this->loadSets("items/sets.txt");
-	this->loadQualities("items/qualities.txt");
 
 	if (items.empty())
 		Utils::logInfo("ItemManager: No items were found.");
@@ -325,7 +325,7 @@ void ItemManager::loadItems(const std::string& filename) {
 		}
 		else if (infile.key == "quality") {
 			// @ATTR quality|predefined_string|Item quality matching an id in items/qualities.txt
-			item->quality = infile.val;
+			item->quality = getItemQualityIndexByString(infile.val);
 		}
 		else if (infile.key == "item_type") {
 			// @ATTR item_type|predefined_string|Equipment slot matching an id in items/types.txt
@@ -703,6 +703,23 @@ ItemType& ItemManager::getItemType(size_t id) {
 	return item_types[id];
 }
 
+size_t ItemManager::getItemQualityIndexByString(const std::string& _id) {
+	std::string id = _id;
+	if (id.empty())
+		id = "<unknown>";
+
+	for (size_t i = 0; i < item_qualities.size(); ++i) {
+		if (item_qualities[i].id == _id)
+			return i;
+	}
+
+	size_t index = item_qualities.size();
+	item_qualities.resize(item_qualities.size() + 1);
+	item_qualities[index].id = id;
+
+	return index;
+}
+
 bool ItemManager::checkAutoPickup(ItemID id) {
 	return getItemType(id).auto_pickup;
 }
@@ -712,12 +729,8 @@ Color ItemManager::getItemColor(ItemID id) {
 		if (items[id]->set > 0) {
 			return item_sets[items[id]->set]->color;
 		}
-		else {
-			for (unsigned i=0; i<item_qualities.size(); ++i) {
-				if (item_qualities[i].id == items[id]->quality) {
-					return item_qualities[i].color;
-				}
-			}
+		else if (items[id]->quality < item_qualities.size()) {
+			return item_qualities[items[id]->quality].color;
 		}
 	}
 
@@ -725,10 +738,8 @@ Color ItemManager::getItemColor(ItemID id) {
 }
 
 int ItemManager::getItemIconOverlay(size_t id) {
-	for (size_t i=0; i < item_qualities.size(); ++i) {
-		if (item_qualities[i].id == items[id]->quality) {
-			return item_qualities[i].overlay_icon;
-		}
+	if (items[id]->quality < item_qualities.size()) {
+		return item_qualities[items[id]->quality].overlay_icon;
 	}
 
 	// no overlay icon
@@ -1087,14 +1098,9 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	}
 
 	// item quality text for colorblind users
-	if (settings->colorblind && !item->quality.empty()) {
+	if (settings->colorblind && item->quality < item_qualities.size() && !item_qualities[item->quality].name.empty()) {
 		color = font->getColor(FontEngine::COLOR_WIDGET_NORMAL);
-		for (size_t i=0; i<item_qualities.size(); ++i) {
-			if (item_qualities[i].id == item->quality) {
-				tip.addColoredText(msg->getv("Quality: %s", msg->get(item_qualities[i].name).c_str()), color);
-				break;
-			}
-		}
+		tip.addColoredText(msg->getv("Quality: %s", msg->get(item_qualities[item->quality].name).c_str()), color);
 	}
 
 	// damage
@@ -1476,7 +1482,7 @@ ItemRandomizerDef* ItemManager::loadRandomizerDef(const std::string& filename) {
 				}
 				else if (infile.key == "quality") {
 					// @ATTR option.quality|predefined_string|The quality ID that will be assigned to the item.
-					option->quality = infile.val;
+					option->quality = getItemQualityIndexByString(infile.val);
 				}
 				else if (infile.key == "bonus_count") {
 					// @ATTR option.bonus_count|int, int : Minimum count, Maximum count|The range used to determine the number of bonuses for the item.
@@ -1589,7 +1595,7 @@ ItemID ItemManager::getExtendedItem(ItemID item_id) {
 			size_t option_roll = static_cast<size_t>(rand()) % option_ids.size();
 			ItemRandomizerDef::Option* option = &(ird->option[option_roll]);
 			bonus_count = static_cast<size_t>(Math::randBetween(option->bonus_min, option->bonus_max));
-			if (!option->quality.empty())
+			if (option->quality < item_qualities.size() && !item_qualities[option->quality].name.empty())
 				items[extended_item]->quality = option->quality;
 
 			// set the item level
@@ -1683,7 +1689,7 @@ void ItemManager::loadExtendedItems(const std::string& filename) {
 			item->level = Parse::toInt(infile.val);
 		}
 		else if (infile.key == "quality") {
-			item->quality = infile.val;
+			item->quality = getItemQualityIndexByString(infile.val);
 		}
 		else if (infile.key == "bonus") {
 			BonusData bdata;
