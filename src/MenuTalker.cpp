@@ -245,10 +245,13 @@ void MenuTalker::createActionBuffer() {
 		button_height += actions[i].btn->pos.h;
 	}
 
+	int button_y = 0;
 	for (size_t i = 0; i < actions.size(); ++i) {
 		actions[i].btn->pos.x = text_offset.x;
-		actions[i].btn->pos.y = (i > 0 ? actions[i-1].btn->pos.y + actions[i-1].btn->pos.h : 0);
+		actions[i].btn->pos.y = button_y;
 		actions[i].btn->refresh();
+
+		button_y += actions[i].btn->pos.h;
 	}
 
 	label_name->setText(npc->name);
@@ -309,10 +312,13 @@ void MenuTalker::createBuffer() {
 		font->getColor(FontEngine::COLOR_MENU_NORMAL)
 	);
 
+	int button_y = 0;
 	for (size_t i = 0; i < actions.size(); ++i) {
 		actions[i].btn->pos.x = text_offset.x;
-		actions[i].btn->pos.y = line_size.y + (i > 0 ? actions[i-1].btn->pos.y + actions[i-1].btn->pos.h : 0);
+		actions[i].btn->pos.y = line_size.y + button_y;
 		actions[i].btn->refresh();
+
+		button_y += actions[i].btn->pos.h;
 	}
 
 	align();
