@@ -188,11 +188,11 @@ Item::Item()
 	, set(0)
 	, sfx_id(0)
 	, power(0)
+	, type(0)
 	, randomizer_def(NULL)
 	, base_abs()
 	, flavor("")
 	, quality("")
-	, type("")
 	, book("")
 	, requires_class("")
 	, sfx("")
@@ -240,9 +240,9 @@ bool ItemManager::isValidSet(ItemSetID set_id) {
 void ItemManager::loadAll() {
 
 	// load each items.txt file. Individual item IDs can be overwritten with mods.
+	this->loadTypes("items/types.txt");
 	this->loadItems("items/items.txt");
 	this->loadExtendedItems(settings->path_user + "saves/" + eset->misc.save_prefix + "/extended_items.txt");
-	this->loadTypes("items/types.txt");
 	this->loadSets("items/sets.txt");
 	this->loadQualities("items/qualities.txt");
 
@@ -329,7 +329,7 @@ void ItemManager::loadItems(const std::string& filename) {
 		}
 		else if (infile.key == "item_type") {
 			// @ATTR item_type|predefined_string|Equipment slot matching an id in items/types.txt
-			item->type = infile.val;
+			item->type = getItemTypeIndexByString(infile.val);
 		}
 		else if (infile.key == "equip_flags") {
 			// @ATTR equip_flags|list(predefined_string)|A comma separated list of flags to set when this item is equipped. See engine/equip_flags.txt.
@@ -483,7 +483,7 @@ void ItemManager::loadItems(const std::string& filename) {
 			std::string slot_type = Parse::popFirstString(infile.val);
 
 			while (slot_type != "") {
-				item->disable_slots.push_back(slot_type);
+				item->disable_slots.push_back(getItemTypeIndexByString(slot_type));
 				slot_type = Parse::popFirstString(infile.val);
 			}
 		}
@@ -677,23 +677,34 @@ std::string ItemManager::getItemName(ItemID id) {
 	return items[id]->name;
 }
 
-std::string ItemManager::getItemType(const std::string& _type) {
-	for (unsigned i=0; i<item_types.size(); ++i) {
+size_t ItemManager::getItemTypeIndexByString(const std::string& _type) {
+	std::string type = _type;
+	if (type.empty())
+		type = "<unknown>";
+
+	for (size_t i = 0; i < item_types.size(); ++i) {
 		if (item_types[i].id == _type)
-			return item_types[i].name;
+			return i;
 	}
-	// If all else fails, return the original string
-	return _type;
+
+	size_t index = item_types.size();
+	item_types.resize(item_types.size() + 1);
+	item_types[index].id = type;
+
+	return index;
+}
+
+ItemType& ItemManager::getItemType(size_t id) {
+	if (id >= item_types.size()) {
+		size_t index = getItemTypeIndexByString("");
+		return item_types[index];
+	}
+
+	return item_types[id];
 }
 
 bool ItemManager::checkAutoPickup(ItemID id) {
-	std::string type = items[id]->type;
-
-	for (size_t i = 0; i < item_types.size(); ++i) {
-		if (item_types[i].id == type)
-			return item_types[i].auto_pickup;
-	}
-	return false;
+	return getItemType(id).auto_pickup;
 }
 
 Color ItemManager::getItemColor(ItemID id) {
@@ -1070,8 +1081,9 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	}
 
 	// type
-	if (!item->type.empty()) {
-		tip.addText(msg->get(getItemType(item->type)));
+	ItemType& item_type = getItemType(item->type);
+	if (!item_type.name.empty()) {
+		tip.addText(msg->get(item_type.name));
 	}
 
 	// item quality text for colorblind users

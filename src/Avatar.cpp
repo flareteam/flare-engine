@@ -1144,10 +1144,12 @@ std::string Avatar::getGfxFromType(const std::string& gfx_type) {
 			if (!menu->inv->isActive(i))
 				continue;
 
-			if (items->isValid(equipment[i].item) && gfx_type == equipment.slot_type[i]) {
+			ItemType& equip_item_type = items->getItemType(equipment.slot_type[i]);
+
+			if (items->isValid(equipment[i].item) && gfx_type == equip_item_type.id) {
 				gfx = items->items[equipment[i].item]->gfx;
 			}
-			if (equipment.slot_type[i] == "feet") {
+			if (equip_item_type.id == "feet") {
 				feet_index = i;
 			}
 		}

@@ -43,7 +43,7 @@ protected:
 public:
 	MenuItemStorage();
 	void initGrid(int _slot_number, const Rect& _area, int nb_cols);
-	void initFromList(int _slot_number, const std::vector<Rect>& _area, const std::vector<std::string>& _slot_type);
+	void initFromList(int _slot_number, const std::vector<Rect>& _area, const std::vector<size_t>& _slot_type);
 	~MenuItemStorage();
 
 	// rendering
@@ -56,7 +56,7 @@ public:
 	void highlightClear();
 	void setPos(int x, int y);
 	ItemStack getItemStackAtPos(const Point& position);
-	std::vector<std::string> slot_type;
+	std::vector<size_t> slot_type;
 
 	int drag_prev_slot;
 	std::vector<WidgetSlot*> slots;

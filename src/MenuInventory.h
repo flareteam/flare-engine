@@ -134,7 +134,7 @@ public:
 
 	PowerID getPowerMod(PowerID meta_power);
 
-	void disableEquipmentSlot(const std::string& slot_type);
+	void disableEquipmentSlot(size_t slot_type);
 
 	bool canActivateItem(ItemID item);
 
@@ -147,7 +147,7 @@ public:
 
 	Rect carried_area;
 	std::vector<Rect> equipped_area;
-	std::vector<std::string> slot_type;
+	std::vector<size_t> slot_type;
 	std::vector<unsigned int> equipment_set;
 
 	MenuItemStorage inventory[2];

@@ -1750,7 +1750,7 @@ void MenuManager::pushMatchingItemsOf(const Point& hov_pos) {
 	}
 
 	// we assume that a non-empty item type means that there is a primary tooltip
-	if (items->isValid(hov_stack.item) && !items->items[hov_stack.item]->type.empty()) {
+	if (items->isValid(hov_stack.item) && !items->getItemType(items->items[hov_stack.item]->type).name.empty()) {
 		size_t tip_index = 1;
 
 		//get equipped items of the same type

@@ -302,7 +302,7 @@ public:
 	std::vector<ChainPower> chain_powers;
 	std::vector< std::pair<std::string, int> > remove_effects;
 	std::vector<PowerReplaceByEffect> replace_by_effect;
-	std::vector<std::string> disable_equip_slots;
+	std::vector<size_t> disable_equip_slots;
 	std::set<std::string> requires_flags; // checked against equip_flags granted from items
 
 	Power();

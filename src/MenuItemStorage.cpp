@@ -61,7 +61,7 @@ void MenuItemStorage::initGrid(int _slot_number, const Rect& _area, int _nb_cols
 	}
 }
 
-void MenuItemStorage::initFromList(int _slot_number, const std::vector<Rect>& _area, const std::vector<std::string>& _slot_type) {
+void MenuItemStorage::initFromList(int _slot_number, const std::vector<Rect>& _area, const std::vector<size_t>& _slot_type) {
 	ItemStorage::init( _slot_number);
 	for (int i = 0; i < _slot_number; i++) {
 		WidgetSlot *slot = new WidgetSlot(WidgetSlot::NO_ICON, WidgetSlot::HIGHLIGHT_NORMAL);

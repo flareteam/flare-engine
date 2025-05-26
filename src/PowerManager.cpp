@@ -1110,7 +1110,7 @@ void PowerManager::loadPowers() {
 			std::string slot_type = Parse::popFirstString(infile.val);
 
 			while (slot_type != "") {
-				power->disable_equip_slots.push_back(slot_type);
+				power->disable_equip_slots.push_back(items->getItemTypeIndexByString(slot_type));
 				slot_type = Parse::popFirstString(infile.val);
 			}
 		}

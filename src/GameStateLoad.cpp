@@ -452,7 +452,7 @@ void GameStateLoad::loadPreview(GameSlot* slot) {
 		}
 
 		if ((slot->active_equipment_set == 0 || equip_sets[i] == 0 || slot->active_equipment_set == equip_sets[i]) && !preview_layer.empty()) {
-			std::vector<std::string>::iterator found = find(preview_layer.begin(), preview_layer.end(), items->items[slot->equipped[i]]->type);
+			std::vector<std::string>::iterator found = find(preview_layer.begin(), preview_layer.end(), items->getItemType(items->items[slot->equipped[i]]->type).id);
 			if (found != preview_layer.end())
 				img_gfx[distance(preview_layer.begin(), found)] = items->items[slot->equipped[i]]->gfx;
 		}

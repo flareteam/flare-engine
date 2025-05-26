@@ -253,6 +253,7 @@ public:
 	ItemSetID set;              // item can be attached to item set
 	SoundID sfx_id;
 	PowerID power;            // this item can be dragged to the action bar and used as a power
+	size_t type;     // equipment slot or base item type. An index into ItemManager::item_types
 
 	ItemRandomizerDef* randomizer_def;
 
@@ -260,7 +261,6 @@ public:
 
 	std::string flavor;   // optional flavor text describing the item
 	std::string quality;  // should match an id from items/qualities.txt
-	std::string type;     // equipment slot or base item type
 	std::string book;     // book file location
 	std::string requires_class;
 	std::string sfx;           // the item sound when it hits the floor or inventory, etc
@@ -275,7 +275,7 @@ public:
 	std::vector<BonusData> bonus;   // stat to increase/decrease e.g. hp, accuracy, speed
 	std::vector<LootAnimation> loot_animation;// the flying loot animation for this item
 	std::vector< std::pair<PowerID, PowerID> > replace_power;        // alter powers when this item is equipped. The first PowerID is replaced with the second.
-	std::vector<std::string> disable_slots; // if this item is equipped, it will disable slots that match the types in the list
+	std::vector<size_t> disable_slots; // if this item is equipped, it will disable slots that match the types in the list
 	std::vector<LevelScaledValue> requires_stat;
 
 	LevelScaledValue requires_level;   // Player level must match or exceed this value to use item
@@ -331,7 +331,8 @@ public:
 	TooltipData getTooltip(ItemStack stack, StatBlock *stats, int context, bool input_hint);
 	TooltipData getShortTooltip(ItemStack item);
 	std::string getItemName(ItemID id);
-	std::string getItemType(const std::string& _type);
+	size_t getItemTypeIndexByString(const std::string& _type);
+	ItemType& getItemType(size_t id);
 	bool checkAutoPickup(ItemID id);
 	Color getItemColor(ItemID id);
 	int getItemIconOverlay(size_t id);

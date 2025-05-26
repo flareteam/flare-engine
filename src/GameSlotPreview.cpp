@@ -248,7 +248,7 @@ void GameSlotPreview::loadGraphicsFromInventory(MenuInventory* menu_inv) {
 			}
 
 			if (!layer_reference_order.empty()) {
-				std::vector<std::string>::iterator found = find(layer_reference_order.begin(), layer_reference_order.end(), items->items[item_id]->type);
+				std::vector<std::string>::iterator found = find(layer_reference_order.begin(), layer_reference_order.end(), items->getItemType(items->items[item_id]->type).id);
 				if (found != layer_reference_order.end()) {
 					size_t preview_index = distance(layer_reference_order.begin(), found);
 					if (preview_index < preview_gfx.size())
