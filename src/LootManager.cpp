@@ -803,21 +803,27 @@ void LootManager::checkLootComponent(EventComponent* ec, FPoint *pos, std::vecto
 		}
 	}
 
+	std::vector<ItemStack> ex_stacks;
+
 	new_loot.quantity = Math::randBetween(ec->data[LOOT_EC_QUANTITY_MIN].Int, ec->data[LOOT_EC_QUANTITY_MAX].Int);
 
 	// an item id of 0 means we should drop currency instead
 	if (ec->id == 0 || ec->id == eset->misc.currency_id) {
 		new_loot.item = eset->misc.currency_id;
 		new_loot.quantity = static_cast<int>(static_cast<float>(new_loot.quantity) * (100 + pc->stats.get(Stats::CURRENCY_FIND)) / 100);
+		ex_stacks.push_back(new_loot);
 	}
 	else {
-		new_loot.item = items->getExtendedItem(ec->id);
+		new_loot.item = ec->id;
+		items->getExtendedStacks(new_loot.item, new_loot.quantity, ex_stacks);
 	}
 
-	if (itemstack_vec)
-		itemstack_vec->push_back(new_loot);
-	else
-		addLoot(new_loot, p, !DROPPED_BY_HERO);
+	for (size_t i = 0; i < ex_stacks.size(); ++i) {
+		if (itemstack_vec)
+			itemstack_vec->push_back(ex_stacks[i]);
+		else
+			addLoot(ex_stacks[i], p, !DROPPED_BY_HERO);
+	}
 }
 
 void LootManager::removeFromEnemiesDroppingLoot(const StatBlock* sb) {

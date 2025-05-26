@@ -340,6 +340,7 @@ public:
 	bool requirementsMet(const StatBlock *stats, ItemID item_id);
 	ItemID verifyID(ItemID item_id, FileParser* infile, bool allow_zero, bool allocate);
 	ItemID getExtendedItem(ItemID item_id);
+	void getExtendedStacks(ItemID item_id, unsigned quantity, std::vector<ItemStack>& stacks);
 
 	std::vector<Item*> items;
 	std::vector<ItemType> item_types;

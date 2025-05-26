@@ -225,7 +225,12 @@ void NPC::load(const std::string& npc_id) {
 					while (infile.val != "") {
 						stack = Parse::toItemQuantityPair(Parse::popFirstString(infile.val));
 						stack.item = items->verifyID(stack.item, &infile, !ItemManager::VERIFY_ALLOW_ZERO, !ItemManager::VERIFY_ALLOCATE);
-						stock.add(stack, ItemStorage::NO_SLOT);
+
+						std::vector<ItemStack> ex_stacks;
+						items->getExtendedStacks(stack.item, stack.quantity, ex_stacks);
+						for (size_t i = 0; i < ex_stacks.size(); ++i) {
+							stock.add(ex_stacks[i], ItemStorage::NO_SLOT);
+						}
 					}
 				}
 				else if (infile.key == "status_stock") {
@@ -234,7 +239,12 @@ void NPC::load(const std::string& npc_id) {
 						while (infile.val != "") {
 							stack = Parse::toItemQuantityPair(Parse::popFirstString(infile.val));
 							stack.item = items->verifyID(stack.item, &infile, !ItemManager::VERIFY_ALLOW_ZERO, !ItemManager::VERIFY_ALLOCATE);
-							stock.add(stack, ItemStorage::NO_SLOT);
+
+							std::vector<ItemStack> ex_stacks;
+							items->getExtendedStacks(stack.item, stack.quantity, ex_stacks);
+							for (size_t i = 0; i < ex_stacks.size(); ++i) {
+								stock.add(ex_stacks[i], ItemStorage::NO_SLOT);
+							}
 						}
 					}
 				}

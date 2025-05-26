@@ -936,7 +936,11 @@ bool EventManager::executeEventInternal(Event &ev, bool skip_delay) {
 			camp->rewardCurrency(ec->data[0].Int);
 		}
 		else if (ec->type == EventComponent::REWARD_ITEM) {
-			camp->rewardItem(ItemStack(ec->id, ec->data[0].Int));
+			std::vector<ItemStack> ex_stacks;
+			items->getExtendedStacks(ec->id, ec->data[0].Int, ex_stacks);
+			for (size_t j = 0; j < ex_stacks.size(); ++j) {
+				camp->rewardItem(ex_stacks[j]);
+			}
 		}
 		else if (ec->type == EventComponent::REWARD_LOOT) {
 			std::vector<EventComponent> random_table;

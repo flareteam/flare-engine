@@ -1727,6 +1727,23 @@ void ItemManager::loadExtendedItems(const std::string& filename) {
 	Utils::logInfo("ItemManager: Extended Item IDs = %zu reserved / %zu allocated / %zu empty / %zu bytes used", extended_item_count, count_allocated, extended_item_count-count_allocated, (sizeof(Item*) * extended_item_count) + (sizeof(Item) * count_allocated));
 }
 
+void ItemManager::getExtendedStacks(ItemID item_id, unsigned quantity, std::vector<ItemStack>& stacks) {
+	ItemStack stack;
+
+	if (items[item_id]->randomizer_def) {
+		for (unsigned i = 0; i < quantity; ++i) {
+			stack.item = getExtendedItem(item_id);
+			stack.quantity = 1;
+			stacks.push_back(stack);
+		}
+	}
+	else {
+		stack.item = getExtendedItem(item_id);
+		stack.quantity = quantity;
+		stacks.push_back(stack);
+	}
+}
+
 void Item::updateLevelScaling() {
 	// set item_level for level-scaled values
 	requires_level.item_level = level;
