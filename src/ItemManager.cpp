@@ -721,7 +721,7 @@ size_t ItemManager::getItemQualityIndexByString(const std::string& _id) {
 }
 
 bool ItemManager::checkAutoPickup(ItemID id) {
-	return getItemType(id).auto_pickup;
+	return getItemType(items[id]->type).auto_pickup;
 }
 
 Color ItemManager::getItemColor(ItemID id) {
