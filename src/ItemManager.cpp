@@ -569,6 +569,9 @@ void ItemManager::loadTypes(const std::string& filename) {
 	size_t cur_id = 0;
 	bool section_has_id = false;
 
+	// blank item type at index 0
+	item_types.resize(1);
+
 	// @CLASS ItemManager: Types|Definition of a item types, items/types.txt...
 	if (infile.open(filename, FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
@@ -622,6 +625,9 @@ void ItemManager::loadQualities(const std::string& filename) {
 	FileParser infile;
 	size_t cur_id = 0;
 	bool section_has_id = false;
+
+	// blank item quality at index 0
+	item_qualities.resize(1);
 
 	// @CLASS ItemManager: Qualities|Definition of a item qualities, items/types.txt...
 	if (infile.open(filename, FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
@@ -678,10 +684,6 @@ std::string ItemManager::getItemName(ItemID id) {
 }
 
 size_t ItemManager::getItemTypeIndexByString(const std::string& _type) {
-	std::string type = _type;
-	if (type.empty())
-		type = "<unknown>";
-
 	for (size_t i = 0; i < item_types.size(); ++i) {
 		if (item_types[i].id == _type)
 			return i;
@@ -689,7 +691,7 @@ size_t ItemManager::getItemTypeIndexByString(const std::string& _type) {
 
 	size_t index = item_types.size();
 	item_types.resize(item_types.size() + 1);
-	item_types[index].id = type;
+	item_types[index].id = _type;
 
 	return index;
 }
@@ -704,10 +706,6 @@ ItemType& ItemManager::getItemType(size_t id) {
 }
 
 size_t ItemManager::getItemQualityIndexByString(const std::string& _id) {
-	std::string id = _id;
-	if (id.empty())
-		id = "<unknown>";
-
 	for (size_t i = 0; i < item_qualities.size(); ++i) {
 		if (item_qualities[i].id == _id)
 			return i;
@@ -715,7 +713,7 @@ size_t ItemManager::getItemQualityIndexByString(const std::string& _id) {
 
 	size_t index = item_qualities.size();
 	item_qualities.resize(item_qualities.size() + 1);
-	item_qualities[index].id = id;
+	item_qualities[index].id = _id;
 
 	return index;
 }
