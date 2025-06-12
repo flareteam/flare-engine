@@ -960,7 +960,7 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 	}
 	// add resource stat cost
 	for (size_t i = 0; i < pwr->requires_resource_stat.size(); ++i) {
-		if (pwr->requires_resource_stat[i] > 0) {
+		if (pwr->requires_resource_stat[i] > 0 && !eset->resource_stats.list[i].text_tooltip_cost.empty()) {
 			tip_data->addText(eset->resource_stats.list[i].text_tooltip_cost + ": " + Utils::floatToString(pwr->requires_resource_stat[i], eset->number_format.power_tooltips));
 		}
 	}
