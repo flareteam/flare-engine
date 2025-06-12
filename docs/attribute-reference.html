@@ -2020,9 +2020,9 @@ code {
 
 <p><strong>power.cooldown</strong> | <code>duration</code> | Specify the duration for cooldown of the power in 'ms' or 's'.</p>
 
-<p><strong>power.requires_hpmp_state</strong> | <code>["all", "any"], ["percent", "not_percent", "ignore"], float , ["percent", "not_percent", "ignore"], float : Mode, HP state, HP Percentage value, MP state, MP Percentage value</code> | Power can only be used when HP/MP matches the specified state. In 'all' mode, both HP and MP must meet the requirements, where as only one must in 'any' mode. To check a single stat, use 'all' mode and set the 'ignore' state for the other stat.</p>
+<p><strong>power.requires_hpmp_state</strong> | <code>["all", "any"], ["percent", "not_percent", "percent_exact", "ignore"], float , ["percent", "not_percent", "percent_exact", "ignore"], float : Mode, HP state, HP Percentage value, MP state, MP Percentage value</code> | Power can only be used when HP/MP matches the specified state. In 'all' mode, both HP and MP must meet the requirements, where as only one must in 'any' mode. To check a single stat, use 'all' mode and set the 'ignore' state for the other stat.</p>
 
-<p><strong>power.requires_resource_stat_state</strong> | <code>predefined_string, ["percent", "not_percent", "ignore"], float : Resource stat ID, State, Percentage value</code> | Power can only be used when the resource stat matches the specified state. See 'requires_resource_stat_state_mode' for combining multiple resource states and, optionally, HP/MP state.</p>
+<p><strong>power.requires_resource_stat_state</strong> | <code>predefined_string, ["percent", "not_percent", "percent_exact", "ignore"], float : Resource stat ID, State, Percentage value</code> | Power can only be used when the resource stat matches the specified state. See 'requires_resource_stat_state_mode' for combining multiple resource states and, optionally, HP/MP state.</p>
 
 <p><strong>power.requires_resource_stat_state_mode</strong> | <code>["all", "any", "any_hpmp"]</code> | Determines how required resource state is handled for multiple resources. "all" means that HP/MP state AND all resource stat states must pass. "any" means that HP/MP state must pass AND at least one resource stat state must pass. "any_hpmp" means that HP/MP state OR at least one resource stat state is required to pass.</p>
 

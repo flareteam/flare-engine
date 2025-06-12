@@ -494,7 +494,7 @@ void PowerManager::loadPowers() {
 			power->cooldown = Parse::toDuration(infile.val);
 		}
 		else if (infile.key == "requires_hpmp_state") {
-			// @ATTR power.requires_hpmp_state|["all", "any"], ["percent", "not_percent", "ignore"], float , ["percent", "not_percent", "ignore"], float: Mode, HP state, HP Percentage value, MP state, MP Percentage value|Power can only be used when HP/MP matches the specified state. In 'all' mode, both HP and MP must meet the requirements, where as only one must in 'any' mode. To check a single stat, use 'all' mode and set the 'ignore' state for the other stat.
+			// @ATTR power.requires_hpmp_state|["all", "any"], ["percent", "not_percent", "percent_exact", "ignore"], float , ["percent", "not_percent", "percent_exact", "ignore"], float: Mode, HP state, HP Percentage value, MP state, MP Percentage value|Power can only be used when HP/MP matches the specified state. In 'all' mode, both HP and MP must meet the requirements, where as only one must in 'any' mode. To check a single stat, use 'all' mode and set the 'ignore' state for the other stat.
 
 			std::string mode = Parse::popFirstString(infile.val);
 			std::string state_hp = Parse::popFirstString(infile.val);
@@ -511,6 +511,9 @@ void PowerManager::loadPowers() {
 			else if (state_hp == "not_percent") {
 				power->requires_hp_state.state = Power::RESOURCESTATE_NOT_PERCENT;
 			}
+			else if (state_hp == "percent_exact") {
+				power->requires_hp_state.state = Power::RESOURCESTATE_PERCENT_EXACT;
+			}
 			else if (state_hp == "ignore" || state_hp.empty()) {
 				power->requires_hp_state.state = Power::RESOURCESTATE_IGNORE;
 			}
@@ -523,6 +526,9 @@ void PowerManager::loadPowers() {
 			}
 			else if (state_mp == "not_percent") {
 				power->requires_mp_state.state = Power::RESOURCESTATE_NOT_PERCENT;
+			}
+			else if (state_hp == "percent_exact") {
+				power->requires_mp_state.state = Power::RESOURCESTATE_PERCENT_EXACT;
 			}
 			else if (state_mp == "ignore" || state_mp.empty()) {
 				power->requires_mp_state.state = Power::RESOURCESTATE_IGNORE;
@@ -559,7 +565,7 @@ void PowerManager::loadPowers() {
 			}
 		}
 		else if (infile.key == "requires_resource_stat_state") {
-			// @ATTR power.requires_resource_stat_state|predefined_string, ["percent", "not_percent", "ignore"], float : Resource stat ID, State, Percentage value|Power can only be used when the resource stat matches the specified state. See 'requires_resource_stat_state_mode' for combining multiple resource states and, optionally, HP/MP state.
+			// @ATTR power.requires_resource_stat_state|predefined_string, ["percent", "not_percent", "percent_exact", "ignore"], float : Resource stat ID, State, Percentage value|Power can only be used when the resource stat matches the specified state. See 'requires_resource_stat_state_mode' for combining multiple resource states and, optionally, HP/MP state.
 			std::string stat_id = Parse::popFirstString(infile.val);
 			std::string state = Parse::popFirstString(infile.val);
 			float value = Parse::popFirstFloat(infile.val);
@@ -573,6 +579,9 @@ void PowerManager::loadPowers() {
 					}
 					else if (state == "not_percent") {
 						power->requires_resource_stat_state[i].state = Power::RESOURCESTATE_NOT_PERCENT;
+					}
+					else if (state == "percent_exact") {
+						power->requires_resource_stat_state[i].state = Power::RESOURCESTATE_PERCENT_EXACT;
 					}
 					else if (state.empty() || state == "ignore") {
 						power->requires_resource_stat_state[i].state = Power::RESOURCESTATE_IGNORE;
@@ -2199,10 +2208,14 @@ bool PowerManager::checkRequiredResourceState(const Power* pow, const StatBlock 
 		hp_ok = false;
 	else if (pow->requires_hp_state.state == Power::RESOURCESTATE_NOT_PERCENT && src_stats->hp * 100 >= (src_stats->get(Stats::HP_MAX) * pow->requires_hp_state.value))
 		hp_ok = false;
+	else if (pow->requires_hp_state.state == Power::RESOURCESTATE_PERCENT_EXACT && src_stats->hp * 100 != (src_stats->get(Stats::HP_MAX) * pow->requires_hp_state.value))
+		hp_ok = false;
 
 	if (pow->requires_mp_state.state == Power::RESOURCESTATE_PERCENT && src_stats->mp * 100 < (src_stats->get(Stats::MP_MAX) * pow->requires_mp_state.value))
 		mp_ok = false;
 	else if (pow->requires_mp_state.state == Power::RESOURCESTATE_NOT_PERCENT && src_stats->mp * 100 >= (src_stats->get(Stats::MP_MAX) * pow->requires_mp_state.value))
+		mp_ok = false;
+	else if (pow->requires_mp_state.state == Power::RESOURCESTATE_PERCENT_EXACT && src_stats->mp * 100 != (src_stats->get(Stats::MP_MAX) * pow->requires_mp_state.value))
 		mp_ok = false;
 
 	bool hpmp_ok = true;
@@ -2225,6 +2238,8 @@ bool PowerManager::checkRequiredResourceState(const Power* pow, const StatBlock 
 		if (pow->requires_resource_stat_state[i].state == Power::RESOURCESTATE_PERCENT && src_stats->resource_stats[i] * 100 < resource_max * pow->requires_resource_stat_state[i].value)
 			resource_stat_fail_count++;
 		else if (pow->requires_resource_stat_state[i].state == Power::RESOURCESTATE_NOT_PERCENT && src_stats->resource_stats[i] * 100 >= resource_max * pow->requires_resource_stat_state[i].value)
+			resource_stat_fail_count++;
+		else if (pow->requires_resource_stat_state[i].state == Power::RESOURCESTATE_PERCENT_EXACT && src_stats->resource_stats[i] * 100 != resource_max * pow->requires_resource_stat_state[i].value)
 			resource_stat_fail_count++;
 	}
 
