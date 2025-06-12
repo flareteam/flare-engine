@@ -418,7 +418,7 @@ void EffectManager::logic() {
 
 			for (size_t j = 0; j < eset->resource_stats.list.size(); ++j) {
 				size_t resist_steal_index = Stats::COUNT + eset->damage_types.count;
-				resist_steal_index += (j+1) * EngineSettings::ResourceStats::STAT_RESIST_STEAL;
+				resist_steal_index += (j * EngineSettings::ResourceStats::STAT_EFFECT_COUNT) + EngineSettings::ResourceStats::STAT_RESIST_STEAL;
 				bonus[resist_steal_index] += ei.magnitude;
 			}
 		}

@@ -91,6 +91,7 @@ Engine fixes:
 * Statbars (including the enemy HP bar) now position the numeric text relative to the fill graphics.
 * Fixed the height calculation of the NPC dialog text box with several actions/topics.
 * Improved the behavior of determining which enemy health bar to show when several enemies are in close proximity.
+* Fix "resist_all" status effect causing unintended resource stat stealing.
 * Android: Fix 'Flare' directory not being automatically created.
 * Android: Added a dialog to direct the player to the wiki page for installing if no game data is found.
 
