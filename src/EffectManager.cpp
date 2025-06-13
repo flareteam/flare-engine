@@ -327,6 +327,7 @@ EffectManager::EffectManager()
 	, triggered_halfdeath(false)
 	, triggered_joincombat(false)
 	, triggered_death(false)
+	, triggered_active_power(false)
 	, refresh_stats(false) {
 	clearStatus();
 }
@@ -484,6 +485,8 @@ void EffectManager::logic() {
 				ei.animation->advanceFrame();
 		}
 	}
+
+	triggered_active_power = false;
 }
 
 void EffectManager::addEffect(StatBlock* stats, EffectDef &effect, EffectParams &params) {
@@ -663,7 +666,7 @@ void EffectManager::clearEffects() {
 	clearStatus();
 
 	// clear triggers
-	triggered_others = triggered_block = triggered_hit = triggered_halfdeath = triggered_joincombat = triggered_death = false;
+	triggered_others = triggered_block = triggered_hit = triggered_halfdeath = triggered_joincombat = triggered_death = triggered_active_power = false;
 }
 
 void EffectManager::clearNegativeEffects(int type) {

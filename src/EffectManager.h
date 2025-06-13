@@ -189,6 +189,7 @@ public:
 	bool triggered_halfdeath;
 	bool triggered_joincombat;
 	bool triggered_death;
+	bool triggered_active_power;
 
 	bool refresh_stats;
 

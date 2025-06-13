@@ -153,7 +153,8 @@ public:
 		TRIGGER_HIT = 1,
 		TRIGGER_HALFDEATH = 2,
 		TRIGGER_JOINCOMBAT = 3,
-		TRIGGER_DEATH = 4
+		TRIGGER_DEATH = 4,
+		TRIGGER_ACTIVE_POWER = 5,
 	};
 
 	enum {
@@ -224,6 +225,7 @@ public:
 	bool requires_corpse;
 	bool remove_corpse;
 	bool post_hazards_skip_target;
+	bool can_trigger_passives;
 
 	uint8_t spawn_limit_mode;
 

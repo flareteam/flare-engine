@@ -1990,7 +1990,7 @@ code {
 
 <p><strong>power.passive</strong> | <code>bool</code> | If power is unlocked when the hero or enemy spawns it will be automatically activated.</p>
 
-<p><strong>power.passive_trigger</strong> | <code>["on_block", "on_hit", "on_halfdeath", "on_joincombat", "on_death"]</code> | This will only activate a passive power under a certain condition.</p>
+<p><strong>power.passive_trigger</strong> | <code>["on_block", "on_hit", "on_halfdeath", "on_joincombat", "on_death", "on_active_power"]</code> | This will only activate a passive power under a certain condition.</p>
 
 <p><strong>power.meta_power</strong> | <code>bool</code> | If true, this power can not be used on it's own. Instead, it should be replaced via an item with a replace_power entry.</p>
 
@@ -2169,6 +2169,8 @@ code {
 <p><strong>power.disable_equip_slots</strong> | <code>list(predefined_string)</code> | Passive powers only. A comma separated list of equip slot types to disable when this power is active.</p>
 
 <p><strong>power.post_hazards_skip_target</strong> | <code>bool</code> | When this power's hazard hits a target, this property determines if hazards spawned by post_power can hit the same target.</p>
+
+<p><strong>power.can_trigger_passives</strong> | <code>bool</code> | If true, this power can trigger passive powers that have passive_trigger=on_active_power.</p>
 
 <hr />
 

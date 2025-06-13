@@ -29,7 +29,8 @@ Engine features:
 * Added 'upgrade_button_offset' property to menu/powers.txt config.
 * Added 'active_sub_frame' property to animation definitions.
 * Added auto-loot configuration option.
-* Added "percent_exact" to requires_hpmp_state and requires_resource_stat_state in Powers.
+* Added 'percent_exact' to requires_hpmp_state and requires_resource_stat_state in Powers.
+* Added 'on_active_power' to passive_trigger property and 'can_trigger_passives' property for Powers.
 * Android: Enabled use of external input devices (gamepads, keyboards, mice)
 
 Engine fixes:

@@ -101,6 +101,7 @@ Power::Power()
 	, requires_corpse(false)
 	, remove_corpse(false)
 	, post_hazards_skip_target(false)
+	, can_trigger_passives(false)
 
 	, spawn_limit_mode(SPAWN_LIMIT_MODE_UNLIMITED)
 
@@ -388,12 +389,13 @@ void PowerManager::loadPowers() {
 			power->passive = Parse::toBool(infile.val);
 		}
 		else if (infile.key == "passive_trigger") {
-			// @ATTR power.passive_trigger|["on_block", "on_hit", "on_halfdeath", "on_joincombat", "on_death"]|This will only activate a passive power under a certain condition.
+			// @ATTR power.passive_trigger|["on_block", "on_hit", "on_halfdeath", "on_joincombat", "on_death", "on_active_power"]|This will only activate a passive power under a certain condition.
 			if (infile.val == "on_block") power->passive_trigger = Power::TRIGGER_BLOCK;
 			else if (infile.val == "on_hit") power->passive_trigger = Power::TRIGGER_HIT;
 			else if (infile.val == "on_halfdeath") power->passive_trigger = Power::TRIGGER_HALFDEATH;
 			else if (infile.val == "on_joincombat") power->passive_trigger = Power::TRIGGER_JOINCOMBAT;
 			else if (infile.val == "on_death") power->passive_trigger = Power::TRIGGER_DEATH;
+			else if (infile.val == "on_active_power") power->passive_trigger = Power::TRIGGER_ACTIVE_POWER;
 			else infile.error("PowerManager: Unknown passive trigger '%s'", infile.val.c_str());
 		}
 		else if (infile.key == "meta_power") {
@@ -1126,6 +1128,10 @@ void PowerManager::loadPowers() {
 		else if (infile.key == "post_hazards_skip_target") {
 			// @ATTR power.post_hazards_skip_target|bool|When this power's hazard hits a target, this property determines if hazards spawned by post_power can hit the same target.
 			power->post_hazards_skip_target = Parse::toBool(infile.val);
+		}
+		else if (infile.key == "can_trigger_passives") {
+			// @ATTR power.can_trigger_passives|bool|If true, this power can trigger passive powers that have passive_trigger=on_active_power.
+			power->can_trigger_passives = Parse::toBool(infile.val);
 		}
 
 		else infile.error("PowerManager: '%s' is not a valid key", infile.key.c_str());
@@ -1941,6 +1947,10 @@ bool PowerManager::activate(PowerID power_index, StatBlock *src_stats, const FPo
 		}
 	}
 
+	if (!power->passive && power->can_trigger_passives) {
+		src_stats->effects.triggered_active_power = true;
+	}
+
 	// logic for different types of powers are very different.  We allow these
 	// separate functions to handle the details.
 	switch (power->type) {
@@ -2067,6 +2077,9 @@ bool PowerManager::activatePassiveByTrigger(PowerID power_id, StatBlock *src_sta
 				src_stats->effects.triggered_joincombat = true;
 		}
 		else if (trigger == Power::TRIGGER_DEATH && !src_stats->effects.triggered_death) {
+			return false;
+		}
+		else if (trigger == Power::TRIGGER_ACTIVE_POWER && !src_stats->effects.triggered_active_power) {
 			return false;
 		}
 
