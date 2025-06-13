@@ -2134,6 +2134,9 @@ void PowerManager::activateSinglePassive(StatBlock *src_stats, PowerID id) {
  */
 void PowerManager::activatePassivePostPowers(StatBlock *src_stats) {
 	for (size_t i = 0; i < src_stats->powers_passive.size(); ++i) {
+		if (!src_stats->canUsePower(src_stats->powers_passive[i], StatBlock::CAN_USE_PASSIVE))
+			continue;
+
 		Power* passive_power = powers[src_stats->powers_passive[i]];
 
 		for (size_t j = 0; j < passive_power->chain_powers.size(); ++j) {

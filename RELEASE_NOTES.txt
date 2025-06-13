@@ -94,6 +94,7 @@ Engine fixes:
 * Fixed the height calculation of the NPC dialog text box with several actions/topics.
 * Improved the behavior of determining which enemy health bar to show when several enemies are in close proximity.
 * Fix "resist_all" status effect causing unintended resource stat stealing.
+* Fix passive post powers activating even when their parent passive power is not active.
 * Android: Fix 'Flare' directory not being automatically created.
 * Android: Added a dialog to direct the player to the wiki page for installing if no game data is found.
 
