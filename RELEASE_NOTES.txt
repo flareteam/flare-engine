@@ -31,6 +31,7 @@ Engine features:
 * Added auto-loot configuration option.
 * Added 'percent_exact' to requires_hpmp_state and requires_resource_stat_state in Powers.
 * Added 'on_active_power' to passive_trigger property and 'can_trigger_passives' property for Powers.
+* Added 'passive_effects_persist' property to Powers.
 * Android: Enabled use of external input devices (gamepads, keyboards, mice)
 
 Engine fixes:

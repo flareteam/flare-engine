@@ -700,7 +700,9 @@ void MenuPowers::lockCell(MenuPowersCell* pcell) {
 		if (passive_it != pc->stats.powers_passive.end())
 			pc->stats.powers_passive.erase(passive_it);
 
-		pc->stats.effects.removeEffectPassive(pcell->id);
+		if (!powers->powers[pcell->id]->passive_effects_persist) {
+			pc->stats.effects.removeEffectPassive(pcell->id);
+		}
 		pcell->passive_on = false;
 		pc->stats.refresh_stats = true;
 	}
@@ -844,7 +846,9 @@ void MenuPowers::setUnlockedPowers() {
 				if (passive_it != pc->stats.powers_passive.end()) {
 					pc->stats.powers_passive.erase(passive_it);
 
-					pc->stats.effects.removeEffectPassive(pcell->id);
+					if (!powers->powers[pcell->id]->passive_effects_persist) {
+						pc->stats.effects.removeEffectPassive(pcell->id);
+					}
 					pcell->passive_on = false;
 					pc->stats.refresh_stats = true;
 

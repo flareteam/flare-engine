@@ -102,6 +102,7 @@ Power::Power()
 	, remove_corpse(false)
 	, post_hazards_skip_target(false)
 	, can_trigger_passives(false)
+	, passive_effects_persist(false)
 
 	, spawn_limit_mode(SPAWN_LIMIT_MODE_UNLIMITED)
 
@@ -1132,6 +1133,10 @@ void PowerManager::loadPowers() {
 		else if (infile.key == "can_trigger_passives") {
 			// @ATTR power.can_trigger_passives|bool|If true, this power can trigger passive powers that have passive_trigger=on_active_power.
 			power->can_trigger_passives = Parse::toBool(infile.val);
+		}
+		else if (infile.key == "passive_effects_persist") {
+			// @ATTR power.passive_effects_persist|bool|If true, post effects from this passive power will not be removed if the passive power is deactivated.
+			power->passive_effects_persist = Parse::toBool(infile.val);
 		}
 
 		else infile.error("PowerManager: '%s' is not a valid key", infile.key.c_str());

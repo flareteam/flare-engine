@@ -226,6 +226,7 @@ public:
 	bool remove_corpse;
 	bool post_hazards_skip_target;
 	bool can_trigger_passives;
+	bool passive_effects_persist;
 
 	uint8_t spawn_limit_mode;
 

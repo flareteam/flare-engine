@@ -1184,8 +1184,9 @@ void MenuInventory::applyEquipment() {
 	for (unsigned i=0; i<pc->stats.powers_list_items.size(); ++i) {
 		PowerID id = pc->stats.powers_list_items[i];
 		// pc->stats.hp > 0 is hack to keep on_death revive passives working
-		if (powers->powers[id]->passive && pc->stats.hp > 0)
+		if (powers->powers[id]->passive && pc->stats.hp > 0 && !powers->powers[id]->passive_effects_persist) {
 			pc->stats.effects.removeEffectPassive(id);
+		}
 	}
 	pc->stats.powers_list_items.clear();
 
