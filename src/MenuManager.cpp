@@ -836,8 +836,13 @@ void MenuManager::logic() {
 
 	touch_controls->visible = !menus_open && !exit->visible && inpt->usingTouchscreen();
 
-	if (pc->stats.alive) {
+	if (pc->stats.alive && !inpt->usingMouse()) {
+		if (inpt->pressing[Input::MAIN1]) inpt->lock[Input::MAIN1] = true;
+		if (inpt->pressing[Input::MAIN2]) inpt->lock[Input::MAIN2] = true;
 
+		dragAndDropWithKeyboard();
+	}
+	else if (pc->stats.alive) {
 		// handle right-click
 		if (!mouse_dragging && inpt->pressing[Input::MAIN2]) {
 			// exit menu
@@ -1209,8 +1214,6 @@ void MenuManager::logic() {
 			drag_src = DRAG_SRC_NONE;
 			mouse_dragging = false;
 		}
-		if (!inpt->usingMouse())
-			dragAndDropWithKeyboard();
 	}
 	else {
 		if (mouse_dragging || keyboard_dragging) {

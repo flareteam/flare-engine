@@ -153,7 +153,7 @@ ItemStack MenuItemStorage::click(const Point& position) {
 			}
 		}
 		if (!item.empty()) {
-			if (item.quantity > 1 && !inpt->pressing[Input::CTRL] && (inpt->pressing[Input::SHIFT] || !inpt->usingMouse() || inpt->mode == InputState::MODE_TOUCHSCREEN)) {
+			if (item.quantity > 1 && (!inpt->pressing[Input::CTRL] || !inpt->usingMouse()) && (inpt->pressing[Input::SHIFT] || !inpt->usingMouse() || inpt->mode == InputState::MODE_TOUCHSCREEN)) {
 				// we use an external menu to let the player pick the desired quantity
 				// we will subtract from this stack after they've made their decision
 				return item;
