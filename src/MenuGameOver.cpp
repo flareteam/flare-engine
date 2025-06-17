@@ -15,6 +15,7 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
+#include "EngineSettings.h"
 #include "FileParser.h"
 #include "FontEngine.h"
 #include "InputState.h"
@@ -70,7 +71,10 @@ MenuGameOver::MenuGameOver()
 	label.setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
 
 	button_continue->setLabel(msg->get("Continue"));
-	button_exit->setLabel(msg->get("Save & Exit"));
+	if (eset->misc.save_onexit)
+		button_exit->setLabel(msg->get("Save & Exit"));
+	else
+		button_exit->setLabel(msg->get("Exit"));
 
 	tablist.add(button_continue);
 	tablist.add(button_exit);
