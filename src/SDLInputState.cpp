@@ -279,11 +279,6 @@ void SDLInputState::initBindings() {
 
 	setBind(Input::PAUSE, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_START, NULL);
 
-	setBind(Input::AIM_RIGHT, InputBind::GAMEPAD_AXIS, (SDL_CONTROLLER_AXIS_RIGHTX*2), NULL);
-	setBind(Input::AIM_DOWN, InputBind::GAMEPAD_AXIS, (SDL_CONTROLLER_AXIS_RIGHTY*2), NULL);
-	setBind(Input::AIM_LEFT, InputBind::GAMEPAD_AXIS, (SDL_CONTROLLER_AXIS_RIGHTX*2) + 1, NULL);
-	setBind(Input::AIM_UP, InputBind::GAMEPAD_AXIS, (SDL_CONTROLLER_AXIS_RIGHTY*2) + 1, NULL);
-
 	// Not user-modifiable
 	setBind(Input::CTRL, InputBind::KEY, SDL_SCANCODE_LCTRL, NULL);
 	setBind(Input::CTRL, InputBind::KEY, SDL_SCANCODE_RCTRL, NULL);
@@ -543,6 +538,9 @@ void SDLInputState::handle() {
 
 					SDL_JoystickID joy_id = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(gamepad));
 					if (joy_id == event.jbutton.which) {
+						mouse.x = SDL_GameControllerGetAxis(gamepad, SDL_CONTROLLER_AXIS_RIGHTX) + settings->view_w_half;
+						mouse.y = SDL_GameControllerGetAxis(gamepad, SDL_CONTROLLER_AXIS_RIGHTY) + settings->view_h_half;
+
 						for (int key=0; key<KEY_COUNT; key++) {
 							for (size_t i = 0; i < binding[key].size(); ++i) {
 								int bind_axis = binding[key][i].bind / 2;
