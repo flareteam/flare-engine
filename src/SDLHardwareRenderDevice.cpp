@@ -349,6 +349,10 @@ int SDLHardwareRenderDevice::createContextInternal() {
 			SDL_SetWindowMinimumSize(window, eset->resolutions.min_screen_w, eset->resolutions.min_screen_h);
 			// setting minimum size might move the window, so set position again
 			SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+
+			// sdl2-compat doesn't set the window size with SDL_CreateWindow(), so we set it here
+			SDL_SetWindowSize(window, window_w, window_h);
+
 		}
 
 		if (window && renderer) {
