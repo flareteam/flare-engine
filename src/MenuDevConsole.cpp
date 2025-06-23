@@ -36,14 +36,17 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "NPC.h"
 #include "NPCManager.h"
 #include "PowerManager.h"
+#include "RenderDevice.h"
 #include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
+#include "Utils.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
 #include "WidgetInput.h"
 #include "WidgetLog.h"
+#include "WidgetScrollBar.h"
 
 #include <limits>
 #include <math.h>
@@ -53,63 +56,60 @@ MenuDevConsole::MenuDevConsole()
 	, first_open(false)
 	, input_scrollback_pos(0)
 	, set_shortcut_slot(0)
+	, console_height(0.4f)
+	, resize_handle(NULL)
+	, dragging_resize(false)
+	, font_name("font_regular")
+	, font_bold_name("font_bold")
+	, background_color(0, 0, 0, 200)
+	, resize_handle_color(255, 255, 255, 63)
 {
+	// dorkster: dumb work-around for the fact that I made WidgetScrollBox report dimensions without the scrollbar
+	// So we create a temporary scrollbar to get the dimensions we'll need later.
+	WidgetScrollBar* scrollbar = new WidgetScrollBar(WidgetScrollBar::DEFAULT_FILE);
+	scrollbar_w = scrollbar->getBounds().w;
+	delete scrollbar;
+
 	distance_timer.setDuration(settings->max_frames_per_sec);
 
 	button_close = new WidgetButton("images/menus/buttons/button_x.png");
 	tablist.add(button_close);
-
-	input_box = new WidgetInput("images/menus/input_console.png");
-	tablist.add(input_box);
-
-	button_confirm = new WidgetButton(WidgetButton::DEFAULT_FILE);
-	button_confirm->setLabel(msg->get("Execute"));
-	tablist.add(button_confirm);
 
 	// Load config settings
 	FileParser infile;
 	// @CLASS MenuDevConsole|Description of menus/devconsole.txt
 	if(infile.open("menus/devconsole.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while(infile.next()) {
-			if (parseMenuKey(infile.key, infile.val))
-				continue;
-
-			// @ATTR close|point|Position of the close button.
-			if(infile.key == "close") {
-				Point pos = Parse::toPoint(infile.val);
-				button_close->setBasePos(pos.x, pos.y, Utils::ALIGN_TOPLEFT);
+			// @ATTR font|predefined_string|Regular font to use. Defaults to "font_regular".
+			if (infile.key == "font") {
+				font_name = infile.val;
 			}
-			// @ATTR label_title|label|Position of the "Developer Console" label.
-			else if(infile.key == "label_title") {
-				label.setFromLabelInfo(Parse::popLabelInfo(infile.val));
+			// @ATTR font_bold|predefined_string|Regular font to use. Defaults to "font_bold".
+			else if (infile.key == "font_bold") {
+				font_bold_name = infile.val;
 			}
-			// @ATTR confirm|point|Position of the "Execute" button.
-			else if(infile.key == "confirm") {
-				Point pos = Parse::toPoint(infile.val);
-				button_confirm->setBasePos(pos.x, pos.y, Utils::ALIGN_TOPLEFT);
+			// @ATTR color_background|color, alpha|Background fill color for menu.
+			else if (infile.key == "background_color") {
+				background_color = Parse::toRGBA(infile.val);
 			}
-			// @ATTR input|point|Position of the command entry widget.
-			else if(infile.key == "input") {
-				Point pos = Parse::toPoint(infile.val);
-				input_box->setBasePos(pos.x, pos.y, Utils::ALIGN_TOPLEFT);
+			// @ATTR color_resize_handle|color, alpha|Fill color for resize handle at the bottom of the menu.
+			else if (infile.key == "resize_handle_color") {
+				resize_handle_color = Parse::toRGBA(infile.val);
 			}
-			// @ATTR history|rectangle|Position and dimensions of the command history.
-			else if(infile.key == "history") history_area = Parse::toRect(infile.val);
 
 			else infile.error("MenuDevConsole: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
 	}
 
-	label.setText(msg->get("Developer Console"));
-	label.setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
+	input_box = new WidgetInput(WidgetInput::NO_FILE);
+	input_box->setFontName(font_name);
 
-	log_history = new WidgetLog(history_area.w, history_area.h);
-	log_history->setBasePos(history_area.x, history_area.y, Utils::ALIGN_TOPLEFT);
+	tablist.add(input_box);
+
+	log_history = new WidgetLog(1,1);
+	log_history->setFontNames(font_name, font_bold_name);
 	tablist.add(log_history->getWidget());
-
-	if (!background)
-		setBackground("images/menus/dev_console.png");
 
 	align();
 	reset();
@@ -118,20 +118,52 @@ MenuDevConsole::MenuDevConsole()
 
 MenuDevConsole::~MenuDevConsole() {
 	delete button_close;
-	delete button_confirm;
 	delete input_box;
 	delete log_history;
+	delete resize_handle;
 }
 
 void MenuDevConsole::align() {
-	Menu::align();
+	window_area.x = 0;
+	window_area.y = 0;
+	window_area.w = settings->view_w;
+	window_area.h = static_cast<int>(settings->view_h * console_height);
 
+	setBackgroundColor(background_color);
+
+	button_close->setBasePos(0, 0, Utils::ALIGN_TOPRIGHT);
 	button_close->setPos(window_area.x, window_area.y);
-	button_confirm->setPos(window_area.x, window_area.y);
+
+	input_box->setBasePos(0, 0, Utils::ALIGN_TOPLEFT);
 	input_box->setPos(window_area.x, window_area.y);
+	input_box->resize(window_area.w - button_close->pos.w);
+
+	int log_y_offset = std::max(input_box->pos.h, button_close->pos.h);
+	int resize_handle_size = static_cast<int>(settings->view_h * 0.02);
+
+	log_history->setBasePos(0, log_y_offset, Utils::ALIGN_TOPLEFT);
+	log_history->resize(window_area.w - scrollbar_w, window_area.h - log_y_offset - resize_handle_size);
 	log_history->setPos(window_area.x, window_area.y);
 
-	label.setPos(window_area.x, window_area.y);
+	resize_area.x = window_area.x;
+	resize_area.y = window_area.y + window_area.h - resize_handle_size;
+	resize_area.w = window_area.w;
+	resize_area.h = resize_handle_size;
+
+	if (resize_handle && resize_handle->getGraphicsWidth() != resize_area.w) {
+		delete resize_handle;
+		resize_handle = NULL;
+	}
+
+	if (!resize_handle) {
+		Image *temp = render_device->createImage(resize_area.w, resize_area.h);
+		if (temp) {
+			temp->fillWithColor(resize_handle_color);
+			resize_handle = temp->createSprite();
+			temp->unref();
+		}
+	}
+	resize_handle->setDestFromRect(resize_area);
 }
 
 void MenuDevConsole::logic() {
@@ -174,10 +206,8 @@ void MenuDevConsole::logic() {
 			log_history->add(msg->get("Arguments with spaces should be enclosed with double quotes. Example:"), WidgetLog::MSG_NORMAL);
 			log_history->add(msg->get("Type 'help' to get a list of commands.") + ' ', WidgetLog::MSG_NORMAL);
 
-			if (label.isHidden()) {
-				log_history->setNextStyle(WidgetLog::FONT_BOLD);
-				log_history->add(msg->get("Developer Console"), WidgetLog::MSG_NORMAL);
-			}
+			log_history->setNextStyle(WidgetLog::FONT_BOLD);
+			log_history->add(msg->get("Developer Console"), WidgetLog::MSG_NORMAL);
 		}
 
 		if (!input_box->edit_mode) {
@@ -187,12 +217,17 @@ void MenuDevConsole::logic() {
 		input_box->logic();
 		log_history->logic();
 
-		if (button_close->checkClick()) {
+		if (dragging_resize && !inpt->lock[Input::MAIN1])
+			dragging_resize = false;
+
+		if (inpt->pressing[Input::CANCEL]) {
+			tablist.defocus();
 			visible = false;
 			reset();
 		}
-		else if (button_confirm->checkClick()) {
-			execute();
+		else if (button_close->checkClick()) {
+			visible = false;
+			reset();
 		}
 		else if (input_box->edit_mode && inpt->pressing[Input::ACCEPT] && !inpt->lock[Input::ACCEPT]) {
 			inpt->lock[Input::ACCEPT] = true;
@@ -219,8 +254,16 @@ void MenuDevConsole::logic() {
 				}
 			}
 		}
+		else if ((inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1] && Utils::isWithinRect(resize_area, inpt->mouse)) || dragging_resize) {
+			inpt->lock[Input::MAIN1] = true;
+			dragging_resize = true;
+			console_height = std::min(1.0f, std::max(0.25f, static_cast<float>(inpt->mouse.y) / static_cast<float>(settings->view_h)));
+			align();
+		}
 
-		if (inpt->pressing[Input::MAIN2] && !inpt->lock[Input::MAIN2]) {
+		bool mouse_in_window = Utils::isWithinRect(window_area, inpt->mouse);
+
+		if (inpt->pressing[Input::MAIN2] && !inpt->lock[Input::MAIN2] && !mouse_in_window) {
 			inpt->lock[Input::MAIN2] = true;
 			target = Utils::screenToMap(inpt->mouse.x,  inpt->mouse.y, mapr->cam.pos.x, mapr->cam.pos.y);
 
@@ -243,7 +286,7 @@ void MenuDevConsole::logic() {
 			}
 		}
 
-		if (inpt->pressing[Input::MAIN2]) {
+		if (inpt->pressing[Input::MAIN2] && !mouse_in_window) {
 			distance_timer.tick();
 
 			// print target distance from the player
@@ -341,11 +384,13 @@ void MenuDevConsole::render() {
 	// background
 	Menu::render();
 
-	label.render();
 	button_close->render();
-	button_confirm->render();
 	input_box->render();
-	log_history->render();
+
+	if (!dragging_resize)
+		log_history->render();
+
+	render_device->render(resize_handle);
 }
 
 bool MenuDevConsole::inputFocus() {

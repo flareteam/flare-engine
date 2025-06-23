@@ -69,6 +69,22 @@ void Menu::setBackgroundClip(const Rect &clip) {
 	if (background) background->setClipFromRect(clip);
 }
 
+void Menu::setBackgroundColor(const Color &color) {
+	if (background) {
+		delete background;
+		background = NULL;
+	}
+
+	// fill the background rectangle
+	Image *temp = render_device->createImage(window_area.w, window_area.h);
+	if (temp) {
+		// translucent black background
+		temp->fillWithColor(color);
+		background = temp->createSprite();
+		temp->unref();
+	}
+}
+
 void Menu::render() {
 	if (background)
 		render_device->render(background);

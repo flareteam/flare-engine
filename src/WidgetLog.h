@@ -48,6 +48,9 @@ private:
 	Color next_color;
 	int next_style;
 
+	std::string font_name;
+	std::string font_bold_name;
+
 public:
 	enum {
 		FONT_REGULAR = 0,
@@ -81,6 +84,8 @@ public:
 	void setMaxMessages(unsigned count);
 	void addSeparator();
 	bool isEmpty();
+	void resize(int w, int h);
+	void setFontNames(const std::string& _font_name, const std::string& _font_bold_name);
 };
 
 #endif

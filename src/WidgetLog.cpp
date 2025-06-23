@@ -21,6 +21,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "FontEngine.h"
+#include "MessageEngine.h"
 #include "RenderDevice.h"
 #include "SharedResources.h"
 #include "Widget.h"
@@ -34,6 +35,8 @@ WidgetLog::WidgetLog (int width, int height)
 	, updated(false)
 	, next_color(font->getColor(FontEngine::COLOR_MENU_NORMAL))
 	, next_style(FONT_REGULAR)
+	, font_name("font_regular")
+	, font_bold_name("font_bold")
 {
 	setFont(FONT_REGULAR);
 }
@@ -55,10 +58,10 @@ void WidgetLog::setPos(int offset_x, int offset_y) {
 
 void WidgetLog::setFont(int style) {
 	if (style == FONT_BOLD) {
-		font->setFont("font_bold");
+		font->setFont(font_bold_name);
 	}
 	else {
-		font->setFont("font_regular");
+		font->setFont(font_name);
 	}
 	line_height = font->getLineHeight();
 	paragraph_spacing = line_height/2;
@@ -92,7 +95,32 @@ void WidgetLog::refresh() {
 			y += paragraph_spacing+1;
 	}
 	y+=(padding*2);
+
 	scroll_box->resize(scroll_box->pos.w, y);
+
+	// HACK: Sometimes the text buffer is too big to fit in a GPU texture for SDLHardwareRenderDevice
+	// To get around this, we try to fall back to using the MAX_MESSAGES limit
+	// This isn't a great fix and needs a better solution. Multiple buffers?
+	if (!scroll_box->contents || !scroll_box->contents->getGraphics()) {
+		setMaxMessages(MAX_MESSAGES);
+		setNextColor(font->getColor(FontEngine::COLOR_MENU_PENALTY));
+		add(msg->get("ERROR: Text output too large"), MSG_UNIQUE);
+
+		y = y2 = padding;
+
+		// Resize the scrollbox content area first
+		for (size_t i=0; i<messages.size(); i++) {
+			setFont(styles[i]);
+			Point size = font->calcSizeWrapped(messages[i], content_width);
+			y += size.y+paragraph_spacing;
+
+			if (separators[i])
+				y += paragraph_spacing+1;
+		}
+		y+=(padding*2);
+
+		scroll_box->resize(scroll_box->pos.w, y);
+	}
 
 	// Render messages into the scrollbox area
 	for (size_t i = messages.size(); i > 0; i--) {
@@ -175,4 +203,27 @@ void WidgetLog::addSeparator() {
 
 bool WidgetLog::isEmpty() {
 	return messages.empty();
+}
+
+void WidgetLog::resize(int w, int h) {
+	bool do_refresh = false;
+
+	if (h > scroll_box->contents->getGraphicsHeight())
+		do_refresh = true;
+	if (w != scroll_box->pos.w)
+		do_refresh = true;
+
+	scroll_box->pos.w = w;
+	scroll_box->pos.h = h;
+
+	if (do_refresh)
+		refresh();
+
+	scroll_box->update = false;
+	scroll_box->scrollToTop();
+}
+
+void WidgetLog::setFontNames(const std::string& _font_name, const std::string& _font_bold_name) {
+	font_name = _font_name;
+	font_bold_name = _font_bold_name;
 }

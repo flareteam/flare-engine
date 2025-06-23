@@ -1498,15 +1498,13 @@ code {
 
 <p>Description of menus/devconsole.txt</p>
 
-<p><strong>close</strong> | <code>point</code> | Position of the close button.</p>
+<p><strong>font</strong> | <code>predefined_string</code> | Regular font to use. Defaults to "font_regular".</p>
 
-<p><strong>label_title</strong> | <code>label</code> | Position of the "Developer Console" label.</p>
+<p><strong>font_bold</strong> | <code>predefined_string</code> | Regular font to use. Defaults to "font_bold".</p>
 
-<p><strong>confirm</strong> | <code>point</code> | Position of the "Execute" button.</p>
+<p><strong>color_background</strong> | <code>color, alpha</code> | Background fill color for menu.</p>
 
-<p><strong>input</strong> | <code>point</code> | Position of the command entry widget.</p>
-
-<p><strong>history</strong> | <code>rectangle</code> | Position and dimensions of the command history.</p>
+<p><strong>color_resize_handle</strong> | <code>color, alpha</code> | Fill color for resize handle at the bottom of the menu.</p>
 
 <hr />
 
@@ -2171,6 +2169,8 @@ code {
 <p><strong>power.post_hazards_skip_target</strong> | <code>bool</code> | When this power's hazard hits a target, this property determines if hazards spawned by post_power can hit the same target.</p>
 
 <p><strong>power.can_trigger_passives</strong> | <code>bool</code> | If true, this power can trigger passive powers that have passive_trigger=on_active_power.</p>
+
+<p><strong>power.passive_effects_persist</strong> | <code>bool</code> | If true, post effects from this passive power will not be removed if the passive power is deactivated.</p>
 
 <hr />
 

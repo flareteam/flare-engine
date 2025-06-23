@@ -38,6 +38,7 @@ public:
 	void setBackground(const std::string& background_image);
 	void setBackgroundDest(const Rect &dest);
 	void setBackgroundClip(const Rect &clip);
+	void setBackgroundColor(const Color &color);
 	virtual void align();
 	virtual void render();
 	virtual void setWindowPos(int x, int y);

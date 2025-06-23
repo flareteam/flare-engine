@@ -29,12 +29,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetInput.h"
 
 const std::string WidgetInput::DEFAULT_FILE = "images/menus/input.png";
+const std::string WidgetInput::NO_FILE = "_NO_FILE_";
 
 WidgetInput::WidgetInput(const std::string& filename)
 	: background(NULL)
 	, enabled(true)
 	, pressed(false)
 	, cursor_pos(0)
+	, font_name("font_regular")
 	, edit_mode(false)
 	, max_length(0)
 	, only_numbers(false)
@@ -48,12 +50,15 @@ void WidgetInput::setPos(int offset_x, int offset_y) {
 	pos.y = pos_base.y + offset_y + local_frame.y - local_offset.y;
 	Utils::alignToScreenEdge(alignment, &pos);
 
-	font->setFont("font_regular");
+	font->setFont(font_name);
 	font_pos.x = pos.x + (font->getFontHeight()/2);
 	font_pos.y = pos.y + (pos.h/2) - (font->getFontHeight()/2);
 }
 
 void WidgetInput::loadGraphics(const std::string& filename) {
+	if (filename == NO_FILE)
+		return;
+
 	// load input background image
 	Image *graphics = NULL;
 	if (filename != DEFAULT_FILE) {
@@ -229,7 +234,7 @@ void WidgetInput::render() {
 		render_device->render(background);
 	}
 
-	font->setFont("font_regular");
+	font->setFont(font_name);
 
 	if (!edit_mode) {
 		font->render(trimmed_text, font_pos.x, font_pos.y, FontEngine::JUSTIFY_LEFT, NULL, 0, font->getColor(FontEngine::COLOR_WIDGET_NORMAL));
@@ -268,6 +273,46 @@ void WidgetInput::render() {
 		osk_buf.addText(trimmed_text_cursor);
 		osk_tip.render(osk_buf, Point(settings->view_w_half + pos.w/2, 0), TooltipData::STYLE_FLOAT);
 	}
+}
+
+void WidgetInput::resize(int new_width) {
+	if (background && new_width != background->getGraphicsWidth()) {
+		delete background;
+		background = NULL;
+	}
+
+	if (!background) {
+		int line_height = font->getFontHeight();
+		pos.w = new_width;
+		pos.h = static_cast<int>(line_height * 1.5);
+
+		int gfx_h = pos.h * 2;
+
+		Image *temp = render_device->createImage(pos.w, gfx_h);
+		if (temp) {
+			Color color_inactive = font->getColor(FontEngine::COLOR_WIDGET_DISABLED);
+			Color color_active = font->getColor(FontEngine::COLOR_WIDGET_NORMAL);
+
+			int pad = static_cast<int>(static_cast<float>(line_height) * 0.15f);
+
+			// temp->drawLine(pad, pad, pos.w - pad, pad, color_inactive);
+			// temp->drawLine(pad, pad, pad, pos.h - pad, color_inactive);
+			temp->drawLine(pad, pos.h - pad, pos.w - pad, pos.h - pad, color_inactive);
+			// temp->drawLine(pos.w - pad, pad, pos.w - pad, pos.h - pad, color_inactive);
+
+			// temp->drawLine(pad, pad + pos.h, pos.w - pad, pad + pos.h, color_active);
+			// temp->drawLine(pad, pad + pos.h, pad, pos.h - pad + pos.h, color_active);
+			temp->drawLine(pad, pos.h - pad + pos.h, pos.w - pad, pos.h - pad + pos.h, color_active);
+			// temp->drawLine(pos.w - pad, pad + pos.h, pos.w - pad, pos.h - pad + pos.h, color_active);
+
+			background = temp->createSprite();
+			temp->unref();
+		}
+	}
+}
+
+void WidgetInput::setFontName(const std::string& _font_name) {
+	font_name = _font_name;
 }
 
 WidgetInput::~WidgetInput() {

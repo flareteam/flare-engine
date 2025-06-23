@@ -57,8 +57,11 @@ protected:
 	TooltipData osk_buf;
 	WidgetTooltip osk_tip;
 
+	std::string font_name;
+
 public:
 	static const std::string DEFAULT_FILE;
+	static const std::string NO_FILE;
 
 	explicit WidgetInput(const std::string& filename);
 	~WidgetInput();
@@ -76,6 +79,8 @@ public:
 		cursor_pos = text.length();
 		trimText();
 	}
+	void resize(int new_width);
+	void setFontName(const std::string& _font_name);
 
 	bool edit_mode;
 	unsigned int max_length;

@@ -25,7 +25,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "Menu.h"
 #include "Utils.h"
-#include "WidgetLabel.h"
 
 class WidgetButton;
 class WidgetInput;
@@ -41,11 +40,8 @@ protected:
 	void reset();
 
 	WidgetButton *button_close;
-	WidgetButton *button_confirm;
 	WidgetInput *input_box;
 	WidgetLog *log_history;
-
-	WidgetLabel label;
 
 	Rect history_area;
 
@@ -55,6 +51,18 @@ protected:
 	std::vector<std::string> input_scrollback;
 
 	int set_shortcut_slot;
+
+	float console_height;
+	Rect resize_area;
+	Sprite* resize_handle;
+	bool dragging_resize;
+
+	int scrollbar_w;
+
+	std::string font_name;
+	std::string font_bold_name;
+	Color background_color;
+	Color resize_handle_color;
 
 public:
 	MenuDevConsole();
