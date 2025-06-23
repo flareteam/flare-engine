@@ -604,6 +604,8 @@ Image *SDLHardwareRenderDevice::createImage(int width, int height) {
 		image->surface = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, width, height);
 		if(image->surface == NULL) {
 			Utils::logError("SDLHardwareRenderDevice: SDL_CreateTexture failed: %s", SDL_GetError());
+			delete image;
+			image = NULL;
 		}
 		else {
 				SDL_SetRenderTarget(renderer, image->surface);
