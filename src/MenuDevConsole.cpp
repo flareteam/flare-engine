@@ -89,11 +89,11 @@ MenuDevConsole::MenuDevConsole()
 				font_bold_name = infile.val;
 			}
 			// @ATTR color_background|color, alpha|Background fill color for menu.
-			else if (infile.key == "background_color") {
+			else if (infile.key == "color_background") {
 				background_color = Parse::toRGBA(infile.val);
 			}
 			// @ATTR color_resize_handle|color, alpha|Fill color for resize handle at the bottom of the menu.
-			else if (infile.key == "resize_handle_color") {
+			else if (infile.key == "color_resize_handle") {
 				resize_handle_color = Parse::toRGBA(infile.val);
 			}
 
@@ -221,8 +221,9 @@ void MenuDevConsole::logic() {
 			dragging_resize = false;
 
 		if (inpt->pressing[Input::CANCEL]) {
-			tablist.defocus();
 			visible = false;
+			input_box->edit_mode = false;
+			input_box->logic();
 			reset();
 		}
 		else if (button_close->checkClick()) {
