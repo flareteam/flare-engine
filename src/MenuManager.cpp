@@ -838,7 +838,7 @@ void MenuManager::logic() {
 
 	touch_controls->visible = !menus_open && !exit->visible && inpt->usingTouchscreen();
 
-	if (pc->stats.alive && !inpt->usingMouse()) {
+	if (pc->stats.alive && !inpt->usingMouse() && menus_open) {
 		if (inpt->pressing[Input::MAIN1]) inpt->lock[Input::MAIN1] = true;
 		if (inpt->pressing[Input::MAIN2]) inpt->lock[Input::MAIN2] = true;
 
