@@ -148,6 +148,7 @@ void MenuConfirm::setTitle(const std::string& s) {
 }
 
 void MenuConfirm::show() {
+	tablist.defocus();
 	visible = true;
 	clicked_confirm = false;
 	clicked_cancel = false;
