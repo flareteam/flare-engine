@@ -17,6 +17,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 #include "GameState.h"
+#include "InputState.h"
 #include "MessageEngine.h"
 #include "RenderDevice.h"
 #include "Settings.h"
@@ -87,6 +88,7 @@ void GameState::refreshWidgets() {
 
 void GameState::setLoadingFrame() {
 	load_counter = 2;
+	inpt->reset();
 }
 
 bool GameState::isPaused() {

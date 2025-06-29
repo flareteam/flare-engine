@@ -57,6 +57,8 @@ public:
 	void stopTextInput();
 	void setCommonStrings();
 
+	void reset();
+
 private:
 	int getBindFromString(const std::string& bind, int type);
 	std::string getInputBindName(int type, int bind);

@@ -1010,6 +1010,15 @@ std::string SDLInputState::getInputBindName(int type, int bind) {
 	return "";
 }
 
+void SDLInputState::reset() {
+	for (size_t i = 0; i < KEY_COUNT; ++i) {
+		pressing[i] = false;
+		lock[i] = false;
+		un_press[i] = false;
+		press_axis[i] = false;
+	}
+}
+
 SDLInputState::~SDLInputState() {
 	if (gamepad)
 		SDL_GameControllerClose(gamepad);

@@ -157,6 +157,8 @@ public:
 
 	void enableEventLog();
 
+	virtual void reset() = 0;
+
 	bool pressing[KEY_COUNT];
 	bool lock[KEY_COUNT];
 
