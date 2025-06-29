@@ -506,7 +506,7 @@ void SDLInputState::handle() {
 					mode = MODE_JOYSTICK;
 
 					SDL_JoystickID joy_id = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(gamepad));
-					if (joy_id == event.jbutton.which) {
+					if (joy_id == event.cbutton.which) {
 						for (int key=0; key<KEY_COUNT; key++) {
 							for (size_t i = 0; i < binding[key].size(); ++i) {
 								if (binding[key][i].type == InputBind::GAMEPAD && binding[key][i].bind == event.cbutton.button) {
@@ -525,7 +525,7 @@ void SDLInputState::handle() {
 					mode = MODE_JOYSTICK;
 
 					SDL_JoystickID joy_id = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(gamepad));
-					if (joy_id == event.jbutton.which) {
+					if (joy_id == event.cbutton.which) {
 						for (int key=0; key<KEY_COUNT; key++) {
 							for (size_t i = 0; i < binding[key].size(); ++i) {
 								if (binding[key][i].type == InputBind::GAMEPAD && binding[key][i].bind == event.cbutton.button) {
@@ -542,7 +542,7 @@ void SDLInputState::handle() {
 					last_joyaxis = -1;
 
 					SDL_JoystickID joy_id = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(gamepad));
-					if (joy_id == event.jbutton.which) {
+					if (joy_id == event.caxis.which) {
 						for (int key=0; key<KEY_COUNT; key++) {
 							for (size_t i = 0; i < binding[key].size(); ++i) {
 								int bind_axis = binding[key][i].bind / 2;
@@ -564,9 +564,11 @@ void SDLInputState::handle() {
 										hideCursor();
 										pressing[key] = true;
 										un_press[key] = false;
+										press_axis[key] = true;
 									}
-									else if (pressing[key] && mode == MODE_JOYSTICK) {
+									else if (pressing[key] && mode == MODE_JOYSTICK && press_axis[key]) {
 										un_press[key] = true;
+										press_axis[key] = false;
 									}
 								}
 							}

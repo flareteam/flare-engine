@@ -188,6 +188,7 @@ protected:
 	virtual int getBindFromString(const std::string& bind, int type) = 0;
 
 	bool un_press[KEY_COUNT];
+	bool press_axis[KEY_COUNT];
 	Point current_touch;
 	bool dump_event;
 
