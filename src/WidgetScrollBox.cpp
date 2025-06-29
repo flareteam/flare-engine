@@ -326,7 +326,8 @@ bool WidgetScrollBox::getNext() {
 	if (currentChild != -1) {
 		children[currentChild]->in_focus = false;
 		currentChild = tablist.getNextRelativeIndex(TabList::WIDGET_SELECT_DOWN);
-		tablist.setCurrent(children[currentChild]);
+		if (currentChild != -1)
+			tablist.setCurrent(children[currentChild]);
 	}
 	else {
 		if (!children[0]->enable_tablist_nav) {
@@ -365,7 +366,8 @@ bool WidgetScrollBox::getPrev() {
 	if (currentChild != -1) {
 		children[currentChild]->in_focus = false;
 		currentChild = tablist.getNextRelativeIndex(TabList::WIDGET_SELECT_UP);
-		tablist.setCurrent(children[currentChild]);
+		if (currentChild != -1)
+			tablist.setCurrent(children[currentChild]);
 	}
 	else {
 		if (!children[0]->enable_tablist_nav) {
