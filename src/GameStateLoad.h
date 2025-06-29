@@ -72,6 +72,12 @@ private:
 		DELETE_CONFIRM_OPTION_YES = 1,
 	};
 
+	enum {
+		NAV_MODE_DEFAULT = 0,
+		NAV_MODE_LOAD = 1,
+		NAV_MODE_DELETE = 2,
+	};
+
 	void loadGraphics();
 	void loadPortrait(int slot);
 	std::string getMapName(const std::string& map_filename);
@@ -132,6 +138,7 @@ private:
 	int text_trim_boundary;
 	int portrait_align;
 	int gameslot_align;
+	int nav_mode;
 
 	std::vector<int> equip_sets;
 

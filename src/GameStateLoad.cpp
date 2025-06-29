@@ -81,7 +81,9 @@ GameStateLoad::GameStateLoad() : GameState()
 	, game_slot_max(4)
 	, text_trim_boundary(0)
 	, portrait_align(Utils::ALIGN_FRAME_TOPLEFT)
-	, gameslot_align(Utils::ALIGN_FRAME_TOPLEFT) {
+	, gameslot_align(Utils::ALIGN_FRAME_TOPLEFT)
+	, nav_mode(NAV_MODE_DEFAULT)
+{
 
 	if (items == NULL)
 		items = new ItemManager();
@@ -113,7 +115,6 @@ GameStateLoad::GameStateLoad() : GameState()
 
 	// Set up tab list
 	tablist = TabList();
-	tablist.setScrollType(Widget::SCROLL_HORIZONTAL);
 	tablist.add(button_exit);
 	tablist.add(button_new);
 
@@ -485,6 +486,11 @@ void GameStateLoad::logic() {
 		game_slots[i]->preview.logic();
 	}
 
+	if (inpt->usingMouse() && nav_mode != NAV_MODE_DEFAULT) {
+		nav_mode = NAV_MODE_DEFAULT;
+		updateButtons();
+	}
+
 	if (confirm->visible) {
 		confirm->logic();
 		if (confirm->clicked_confirm) {
@@ -520,21 +526,23 @@ void GameStateLoad::logic() {
 		}
 	}
 	else {
-		tablist.logic();
+		if (nav_mode == NAV_MODE_DEFAULT) {
+			tablist.logic();
 
-		if (!inpt->usingMouse() && tablist.getCurrent() == -1) {
-			if (button_load->enabled)
-				tablist.setCurrent(button_load);
-			else if (button_new->enabled)
-				tablist.setCurrent(button_new);
-			else
-				tablist.setCurrent(button_exit);
-		}
+			if (!inpt->usingMouse() && tablist.getCurrent() == -1) {
+				if (button_load->enabled)
+					tablist.setCurrent(button_load);
+				else if (button_new->enabled)
+					tablist.setCurrent(button_new);
+				else
+					tablist.setCurrent(button_exit);
+			}
 
-		if (button_exit->checkClick() || (inpt->pressing[Input::CANCEL] && !inpt->lock[Input::CANCEL])) {
-			inpt->lock[Input::CANCEL] = true;
-			showLoading();
-			setRequestedGameState(new GameStateTitle());
+			if (button_exit->checkClick() || (inpt->pressing[Input::CANCEL] && !inpt->lock[Input::CANCEL])) {
+				inpt->lock[Input::CANCEL] = true;
+				showLoading();
+				setRequestedGameState(new GameStateTitle());
+			}
 		}
 
 		if (loading_requested) {
@@ -552,11 +560,23 @@ void GameStateLoad::logic() {
 			setRequestedGameState(newgame);
 		}
 		else if (button_load->checkClick()) {
-			loading_requested = true;
+			if (!inpt->usingMouse()) {
+				nav_mode = NAV_MODE_LOAD;
+				updateButtons();
+			}
+			else {
+				loading_requested = true;
+			}
 		}
 		else if (button_delete->checkClick()) {
-			// Display pop-up to make sure save should be deleted
-			confirm->show();
+			if (!inpt->usingMouse()) {
+				nav_mode = NAV_MODE_DELETE;
+				updateButtons();
+			}
+			else {
+				// Display pop-up to make sure save should be deleted
+				confirm->show();
+			}
 		}
 		else if (game_slots.size() > 0) {
 			Rect scroll_area = slot_pos[0];
@@ -599,18 +619,40 @@ void GameStateLoad::logic() {
 				}
 			}
 
-			// Allow characters to be navigateable via up/down keys
-			if (inpt->pressing[Input::UP] && !inpt->lock[Input::UP] && selected_slot > 0) {
-				inpt->lock[Input::UP] = true;
-				setSelectedSlot(selected_slot - 1);
-				scrollToSelected();
-				updateButtons();
+			if (inpt->usingMouse() || nav_mode != NAV_MODE_DEFAULT) {
+				// Allow characters to be navigateable via up/down keys
+				if (inpt->pressing[Input::UP] && !inpt->lock[Input::UP] && selected_slot > 0) {
+					inpt->lock[Input::UP] = true;
+					setSelectedSlot(selected_slot - 1);
+					scrollToSelected();
+					updateButtons();
+				}
+				else if (inpt->pressing[Input::DOWN] && !inpt->lock[Input::DOWN] && selected_slot < static_cast<int>(game_slots.size()) - 1) {
+					inpt->lock[Input::DOWN] = true;
+					setSelectedSlot(selected_slot + 1);
+					scrollToSelected();
+					updateButtons();
+				}
 			}
-			else if (inpt->pressing[Input::DOWN] && !inpt->lock[Input::DOWN] && selected_slot < static_cast<int>(game_slots.size()) - 1) {
-				inpt->lock[Input::DOWN] = true;
-				setSelectedSlot(selected_slot + 1);
-				scrollToSelected();
-				updateButtons();
+
+			if (nav_mode != NAV_MODE_DEFAULT) {
+				if (inpt->pressing[Input::ACCEPT] && !inpt->lock[Input::ACCEPT]) {
+					inpt->pressing[Input::ACCEPT] = true;
+
+					if (nav_mode == NAV_MODE_LOAD)
+						loading_requested = true;
+					else if (nav_mode == NAV_MODE_DELETE)
+						confirm->show();
+
+					nav_mode = NAV_MODE_DEFAULT;
+					updateButtons();
+				}
+				else if (inpt->pressing[Input::CANCEL] && !inpt->lock[Input::CANCEL]) {
+					inpt->lock[Input::CANCEL] = true;
+
+					nav_mode = NAV_MODE_DEFAULT;
+					updateButtons();
+				}
 			}
 		}
 	}
@@ -632,6 +674,11 @@ void GameStateLoad::logicLoading() {
 
 void GameStateLoad::updateButtons() {
 	loadPortrait(selected_slot);
+
+	if (nav_mode == NAV_MODE_DEFAULT) {
+		button_new->enabled = true;
+		button_exit->enabled = true;
+	}
 
 	// check status of New Game button
 	if (!Filesystem::fileExists(mods->locate("maps/spawn.txt"))) {
@@ -672,9 +719,23 @@ void GameStateLoad::updateButtons() {
 		tablist.remove(button_delete);
 	}
 
+	if (nav_mode == NAV_MODE_LOAD) {
+		tablist.defocus();
+		button_delete->enabled = false;
+		button_new->enabled = false;
+		button_exit->enabled = false;
+	}
+	else if (nav_mode == NAV_MODE_DELETE) {
+		tablist.defocus();
+		button_load->enabled = false;
+		button_new->enabled = false;
+		button_exit->enabled = false;
+	}
+
 	button_new->refresh();
 	button_load->refresh();
 	button_delete->refresh();
+	button_exit->refresh();
 
 	refreshWidgets();
 }
