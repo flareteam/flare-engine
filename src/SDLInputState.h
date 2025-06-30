@@ -56,6 +56,7 @@ public:
 	void startTextInput();
 	void stopTextInput();
 	void setCommonStrings();
+	void setControllerLED(Color color);
 
 	void reset();
 

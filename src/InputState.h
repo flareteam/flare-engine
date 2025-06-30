@@ -113,6 +113,7 @@ public:
 	static const bool GET_SHORT_STRING = true;
 	static const int KEY_COUNT = Input::KEY_COUNT;
 	static const int KEY_COUNT_USER = KEY_COUNT - 6; // exclude CTRL, SHIFT, etc from keybinding menu
+	static const Color DEFAULT_CONTROLLER_LED_COLOR;
 
 	enum {
 		MODE_KEYBOARD_AND_MOUSE = 0,
@@ -156,6 +157,8 @@ public:
 	virtual void stopTextInput() = 0;
 
 	void enableEventLog();
+
+	virtual void setControllerLED(Color color) = 0;
 
 	virtual void reset() = 0;
 

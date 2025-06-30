@@ -32,6 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EventManager.h"
 #include "FogOfWar.h"
 #include "Hazard.h"
+#include "InputState.h"
 #include "MapRenderer.h"
 #include "MenuActionBar.h"
 #include "PowerManager.h"
@@ -393,13 +394,29 @@ void EntityManager::logic() {
 
 	handleSpawn();
 
+	bool pc_in_combat = false;
+
 	std::vector<Entity*>::iterator it;
 	for (it = entities.begin(); it != entities.end(); ++it) {
 		// new actions this round
 		(*it)->stats.hero_stealth = hero_stealth;
 		if (!(*it)->stats.npc) {
 			(*it)->logic();
+
+			if (!pc_in_combat && (*it)->stats.alive && !(*it)->stats.hero_ally && (*it)->stats.in_combat)
+				pc_in_combat = true;
 		}
+	}
+
+	if (pc_in_combat && !pc->stats.in_combat) {
+		// if a supported controller is connected, change the LED to red when in combat
+		Color led_color(255, 0, 0);
+		inpt->setControllerLED(led_color);
+		pc->stats.in_combat = true;
+	}
+	else if (!pc_in_combat && pc->stats.in_combat) {
+		inpt->setControllerLED(InputState::DEFAULT_CONTROLLER_LED_COLOR);
+		pc->stats.in_combat = false;
 	}
 }
 

@@ -173,6 +173,8 @@ void SDLInputState::initJoystick() {
 			}
 		}
 	}
+
+	setControllerLED(DEFAULT_CONTROLLER_LED_COLOR);
 }
 
 void SDLInputState::initBindings() {
@@ -1008,6 +1010,12 @@ std::string SDLInputState::getInputBindName(int type, int bind) {
 		return getJoystickAxisName(bind);
 	}
 	return "";
+}
+
+void SDLInputState::setControllerLED(Color color) {
+	if (gamepad && SDL_GameControllerHasLED(gamepad) == SDL_TRUE) {
+		SDL_GameControllerSetLED(gamepad, color.r, color.g, color.b);
+	}
 }
 
 void SDLInputState::reset() {

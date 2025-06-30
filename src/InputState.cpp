@@ -37,6 +37,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <math.h>
 
+const Color InputState::DEFAULT_CONTROLLER_LED_COLOR = Color(255, 200, 40);
+
 InputState::InputState(void)
 	: binding()
 	, pressing()
