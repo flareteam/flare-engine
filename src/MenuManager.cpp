@@ -838,9 +838,11 @@ void MenuManager::logic() {
 
 	touch_controls->visible = !menus_open && !exit->visible && inpt->usingTouchscreen();
 
-	if (pc->stats.alive && !inpt->usingMouse() && menus_open) {
-		if (inpt->pressing[Input::MAIN1]) inpt->lock[Input::MAIN1] = true;
-		if (inpt->pressing[Input::MAIN2]) inpt->lock[Input::MAIN2] = true;
+	if (pc->stats.alive && !inpt->usingMouse()) {
+		if (menus_open) {
+			if (inpt->pressing[Input::MAIN1]) inpt->lock[Input::MAIN1] = true;
+			if (inpt->pressing[Input::MAIN2]) inpt->lock[Input::MAIN2] = true;
+		}
 
 		dragAndDropWithKeyboard();
 	}
@@ -1393,7 +1395,14 @@ void MenuManager::dragAndDropWithKeyboard() {
 	if (act->getCurrentTabList() && static_cast<unsigned>(act->getCurrentTabList()->getCurrent()) < act->slots.size()) {
 		size_t slot_index = act->getCurrentSlotIndexFromTablist();
 		if (slot_index < act->slots.size() + MenuActionBar::MENU_COUNT && act->slots[slot_index]) {
+			// temporarily enable slot so that it can be "clicked"
+			bool slot_enabled = act->slots[slot_index]->enabled;
+			act->slots[slot_index]->enabled = true;
+
 			WidgetSlot::CLICK_TYPE slotClick = act->slots[slot_index]->checkClick();
+
+			act->slots[slot_index]->enabled = slot_enabled;
+
 			Point dest_slot = act->getSlotPos(slot_index);
 
 			// pick up power
