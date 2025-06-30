@@ -75,6 +75,7 @@ GameStateLoad::GameStateLoad() : GameState()
 	, loaded(false)
 	, delete_items(true)
 	, selected_slot(-1)
+	, last_selected_slot(-1)
 	, visible_slots(0)
 	, scroll_offset(0)
 	, has_scroll_bar(false)
@@ -527,6 +528,9 @@ void GameStateLoad::logic() {
 	}
 	else {
 		if (nav_mode == NAV_MODE_DEFAULT) {
+			if (!inpt->usingMouse() && !loading_requested)
+				setSelectedSlot(-1);
+
 			tablist.logic();
 
 			if (!inpt->usingMouse() && tablist.getCurrent() == -1) {
@@ -562,6 +566,7 @@ void GameStateLoad::logic() {
 		else if (button_load->checkClick()) {
 			if (!inpt->usingMouse()) {
 				nav_mode = NAV_MODE_LOAD;
+				setSelectedSlot(last_selected_slot);
 				updateButtons();
 			}
 			else {
@@ -571,6 +576,7 @@ void GameStateLoad::logic() {
 		else if (button_delete->checkClick()) {
 			if (!inpt->usingMouse()) {
 				nav_mode = NAV_MODE_DELETE;
+				setSelectedSlot(last_selected_slot);
 				updateButtons();
 			}
 			else {
@@ -956,6 +962,9 @@ void GameStateLoad::render() {
 }
 
 void GameStateLoad::setSelectedSlot(int slot) {
+	if (selected_slot != -1)
+		last_selected_slot = selected_slot;
+
 	if (selected_slot != -1 && static_cast<size_t>(selected_slot) < game_slots.size() && game_slots[selected_slot]) {
 		game_slots[selected_slot]->stats.direction = 6;
 		game_slots[selected_slot]->preview_turn_timer.reset(Timer::BEGIN);

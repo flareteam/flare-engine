@@ -131,6 +131,7 @@ private:
 	Rect gameslot_pos;
 
 	int selected_slot;
+	int last_selected_slot;
 	int visible_slots;
 	int scroll_offset;
 	bool has_scroll_bar;
