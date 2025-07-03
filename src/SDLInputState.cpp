@@ -1026,6 +1026,12 @@ void SDLInputState::setJoystickLED(Color color) {
 
 void SDLInputState::reset() {
 	for (size_t i = 0; i < KEY_COUNT; ++i) {
+		// HACK: movement keys are excepted from being reset, since we want player movement to continue after teleporting to a new map
+		if (i >= Input::UP && i <= Input::RIGHT) {
+			if (pressing[i] && !lock[i])
+				continue;
+		}
+
 		pressing[i] = false;
 		lock[i] = false;
 		un_press[i] = false;
