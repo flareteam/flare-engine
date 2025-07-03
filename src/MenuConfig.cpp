@@ -486,7 +486,7 @@ void MenuConfig::init() {
 
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::LANGUAGE, language_lb, language_lstb, msg->get("Language"));
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::SHOW_FPS, show_fps_lb, show_fps_cb, msg->get("Show FPS"));
-	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::HARDWARE_CURSOR, hardware_cursor_lb, hardware_cursor_cb, msg->get("Hardware mouse cursor"));
+	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::HARDWARE_CURSOR, hardware_cursor_lb, hardware_cursor_cb, msg->get("Use system mouse cursor"));
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::COLORBLIND, colorblind_lb, colorblind_cb, msg->get("Colorblind Mode"));
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::DEV_MODE, dev_mode_lb, dev_mode_cb, msg->get("Developer Mode"));
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::SUBTITLES, subtitles_lb, subtitles_cb, msg->get("Subtitles"));
