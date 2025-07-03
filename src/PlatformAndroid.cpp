@@ -118,8 +118,6 @@ Platform::Platform()
 	config_video[Platform::Video::HWSURFACE] = false;
 	config_video[Platform::Video::VSYNC] = false;
 	config_video[Platform::Video::TEXTURE_FILTER] = false;
-	config_video[Platform::Video::ENABLE_GAMMA] = false;
-	config_video[Platform::Video::GAMMA] = false;
 
 	config_interface[Platform::Interface::HARDWARE_CURSOR] = false;
 

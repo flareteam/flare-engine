@@ -30,7 +30,7 @@ public:
 
 	class Video {
 	public:
-		static const int COUNT = 11;
+		static const int COUNT = 9;
 		enum {
 			RENDERER,
 			FULLSCREEN,
@@ -39,8 +39,6 @@ public:
 			TEXTURE_FILTER,
 			DPI_SCALING,
 			PARALLAX_LAYERS,
-			ENABLE_GAMMA,
-			GAMMA,
 			MAX_RENDER_SIZE,
 			FRAME_LIMIT,
 		};

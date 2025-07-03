@@ -72,8 +72,6 @@ private:
 		std::vector<ConfigOption> options;
 	};
 
-	static const int GAMMA_MIN = 5;
-	static const int GAMMA_MAX = 15;
 	static const int TOUCH_SCALE_MIN = 75;
 	static const int TOUCH_SCALE_MAX = 125;
 
@@ -244,10 +242,6 @@ public:
 	WidgetLabel                * dpi_scaling_lb;
 	WidgetCheckBox             * parallax_layers_cb;
 	WidgetLabel                * parallax_layers_lb;
-	WidgetCheckBox             * change_gamma_cb;
-	WidgetLabel                * change_gamma_lb;
-	WidgetSlider               * gamma_sl;
-	WidgetLabel                * gamma_lb;
 	WidgetHorizontalList       * frame_limit_lstb;
 	WidgetLabel                * frame_limit_lb;
 	WidgetHorizontalList       * max_render_size_lstb;

@@ -99,6 +99,7 @@ Engine fixes:
 * Fix "resist_all" status effect causing unintended resource stat stealing.
 * Fix passive post powers activating even when their parent passive power is not active.
 * Fixed item duplication when mouse dragging an item while "Do not use mouse" is set.
+* Removed the gamma setting from the configuration UI (it can still be changed via the config file, for now)
 * Android: Fix 'Flare' directory not being automatically created.
 * Android: Added a dialog to direct the player to the wiki page for installing if no game data is found.
 

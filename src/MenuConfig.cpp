@@ -150,10 +150,6 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	, dpi_scaling_lb(new WidgetLabel())
 	, parallax_layers_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
 	, parallax_layers_lb(new WidgetLabel())
-	, change_gamma_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
-	, change_gamma_lb(new WidgetLabel())
-	, gamma_sl(new WidgetSlider(WidgetSlider::DEFAULT_FILE))
-	, gamma_lb(new WidgetLabel())
 	, frame_limit_lstb(new WidgetHorizontalList())
 	, frame_limit_lb(new WidgetLabel())
 	, max_render_size_lstb(new WidgetHorizontalList())
@@ -470,8 +466,6 @@ void MenuConfig::init() {
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::TEXTURE_FILTER, texture_filter_lb, texture_filter_cb, msg->get("Texture Filtering"));
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::DPI_SCALING, dpi_scaling_lb, dpi_scaling_cb, msg->get("DPI scaling"));
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::PARALLAX_LAYERS, parallax_layers_lb, parallax_layers_cb, msg->get("Parallax Layers"));
-	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::ENABLE_GAMMA, change_gamma_lb, change_gamma_cb, msg->get("Allow changing gamma"));
-	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::GAMMA, gamma_lb, gamma_sl, msg->get("Gamma"));
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::MAX_RENDER_SIZE, max_render_size_lb, max_render_size_lstb, msg->get("Maximum Render Size"));
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::FRAME_LIMIT, frame_limit_lb, frame_limit_lstb, msg->get("Frame Limit"));
 
@@ -631,7 +625,6 @@ void MenuConfig::readConfig() {
 	vsync_cb->tooltip = msg->get("Prevents screen tearing. Disable if you experience \"stuttering\" in windowed mode or input lag.");
 	dpi_scaling_cb->tooltip = msg->get("When enabled, this uses the screen DPI in addition to the window dimensions to scale the rendering resolution. Otherwise, only the window dimensions are used.");
 	parallax_layers_cb->tooltip = msg->get("This enables parallax (non-tile) layers. Disabling this setting can improve performance in some cases.");
-	change_gamma_cb->tooltip = msg->get("Enables the below setting that controls the screen gamma level. The behavior of the gamma setting can vary between platforms.");
 	colorblind_cb->tooltip = msg->get("Provides additional text for information that is primarily conveyed through color.");
 	statbar_autohide_cb->tooltip = msg->get("Some mods will automatically hide the stat bars when they are inactive. Disabling this option will keep them displayed at all times.");
 	auto_equip_cb->tooltip = msg->get("When enabled, empty equipment slots will be filled with applicable items when they are obtained.");
@@ -945,17 +938,6 @@ void MenuConfig::updateVideo() {
 	texture_filter_cb->setChecked(settings->texture_filter);
 	dpi_scaling_cb->setChecked(settings->dpi_scaling);
 	parallax_layers_cb->setChecked(settings->parallax_layers);
-	change_gamma_cb->setChecked(settings->change_gamma);
-
-	if (settings->change_gamma) {
-		render_device->setGamma(settings->gamma);
-	}
-	else {
-		settings->gamma = 1.0;
-		gamma_sl->enabled = false;
-		render_device->resetGamma();
-	}
-	gamma_sl->set(GAMMA_MIN, GAMMA_MAX, static_cast<int>(settings->gamma * 10.0));
 
 	refreshRenderers();
 
@@ -1285,22 +1267,6 @@ void MenuConfig::logicVideo() {
 	}
 	else if (cfg_tabs[VIDEO_TAB].options[Platform::Video::PARALLAX_LAYERS].enabled && parallax_layers_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->parallax_layers = parallax_layers_cb->isChecked();
-	}
-	else if (cfg_tabs[VIDEO_TAB].options[Platform::Video::ENABLE_GAMMA].enabled && change_gamma_cb->checkClickAt(mouse.x, mouse.y)) {
-		settings->change_gamma = change_gamma_cb->isChecked();
-		if (settings->change_gamma) {
-			gamma_sl->enabled = true;
-		}
-		else {
-			settings->gamma = 1.0;
-			gamma_sl->enabled = false;
-			gamma_sl->set(GAMMA_MIN, GAMMA_MAX, static_cast<int>(settings->gamma * 10.0));
-			render_device->resetGamma();
-		}
-	}
-	else if (cfg_tabs[VIDEO_TAB].options[Platform::Video::GAMMA].enabled && gamma_sl->checkClickAt(mouse.x, mouse.y)) {
-		settings->gamma = static_cast<float>(gamma_sl->getValue()) * 0.1f;
-		render_device->setGamma(settings->gamma);
 	}
 	else if (cfg_tabs[VIDEO_TAB].options[Platform::Video::RENDERER].enabled && renderer_lstb->checkClickAt(mouse.x, mouse.y)) {
 		new_render_device = renderer_lstb->getValue();
