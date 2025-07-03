@@ -65,7 +65,7 @@ Settings::Settings()
 {
 	config.resize(52);
 	setConfigDefault(0,  "move_type_dimissed",  &typeid(move_type_dimissed),  "0",            &move_type_dimissed,  "One time flag for initial movement type dialog | 0 = show dialog, 1 = no dialog");
-	setConfigDefault(1,  "fullscreen",          &typeid(fullscreen),          "0",            &fullscreen,          "Fullscreen mode | 0 = disable, 1 = enable");
+	setConfigDefault(1,  "fullscreen",          &typeid(fullscreen),          "1",            &fullscreen,          "Fullscreen mode | 0 = disable, 1 = enable");
 	setConfigDefault(2,  "resolution_w",        &typeid(screen_w),            "640",          &screen_w,            "Window size");
 	setConfigDefault(3,  "resolution_h",        &typeid(screen_h),            "480",          &screen_h,            "");
 	setConfigDefault(4,  "music_volume",        &typeid(music_volume),        "96",           &music_volume,        "Music and sound volume | 0 = silent, 128 = maximum");
