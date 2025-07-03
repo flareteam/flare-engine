@@ -174,7 +174,7 @@ void SDLInputState::initJoystick() {
 		}
 	}
 
-	setControllerLED(DEFAULT_CONTROLLER_LED_COLOR);
+	setJoystickLED(DEFAULT_CONTROLLER_LED_COLOR);
 }
 
 void SDLInputState::initBindings() {
@@ -1012,7 +1012,13 @@ std::string SDLInputState::getInputBindName(int type, int bind) {
 	return "";
 }
 
-void SDLInputState::setControllerLED(Color color) {
+void SDLInputState::joystickRumble(uint16_t low_freq, uint16_t high_freq, uint32_t duration) {
+	if (gamepad && settings->joystick_rumble && SDL_GameControllerHasRumble(gamepad) == SDL_TRUE) {
+		SDL_GameControllerRumble(gamepad, low_freq, high_freq, duration);
+	}
+}
+
+void SDLInputState::setJoystickLED(Color color) {
 	if (gamepad && SDL_GameControllerHasLED(gamepad) == SDL_TRUE) {
 		SDL_GameControllerSetLED(gamepad, color.r, color.g, color.b);
 	}

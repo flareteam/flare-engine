@@ -311,6 +311,8 @@ public:
 	WidgetLabel                * mouse_move_attack_lb;
 	WidgetSlider               * joystick_deadzone_sl;
 	WidgetLabel                * joystick_deadzone_lb;
+	WidgetCheckBox             * joystick_rumble_cb;
+	WidgetLabel                * joystick_rumble_lb;
 	WidgetCheckBox             * touch_controls_cb;
 	WidgetLabel                * touch_controls_lb;
 	WidgetSlider               * touch_scale_sl;

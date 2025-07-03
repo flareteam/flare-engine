@@ -33,6 +33,7 @@ Engine features:
 * Added 'on_active_power' to passive_trigger property and 'can_trigger_passives' property for Powers.
 * Added 'passive_effects_persist' property to Powers.
 * Dynamically-sized dev console with new config file.
+* Added game controller rumble option.
 * Added "in combat" LED effect for supported game controllers (i.e. Dual Shock 4).
 * Android: Enabled use of external input devices (gamepads, keyboards, mice)
 

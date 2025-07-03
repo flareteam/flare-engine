@@ -35,6 +35,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EntityBehavior.h"
 #include "Hazard.h"
 #include "HazardManager.h"
+#include "InputState.h"
 #include "MapRenderer.h"
 #include "MessageEngine.h"
 #include "PowerManager.h"
@@ -497,8 +498,10 @@ bool Entity::takeHit(Hazard &h) {
 	if (crit) {
 		// default is dmg * 2
 		dmg = (dmg * Math::randBetweenF(eset->combat.min_crit_damage, eset->combat.max_crit_damage)) / 100;
-		if(!stats.hero)
+		if (!stats.hero) {
 			mapr->cam.shake_timer.setDuration(settings->max_frames_per_sec/2);
+			inpt->joystickRumble(InputState::JOYSTICK_RUMBLE_STRENGTH, InputState::JOYSTICK_RUMBLE_STRENGTH, 500);
+		}
 	}
 	else if (is_overhit) {
 		dmg = (dmg * Math::randBetweenF(eset->combat.min_overhit_damage, eset->combat.max_overhit_damage)) / 100;

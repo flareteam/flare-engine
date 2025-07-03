@@ -65,6 +65,7 @@ Platform::Platform()
 
 	config_input[Platform::Input::JOYSTICK] = false;
 	config_input[Platform::Input::JOYSTICK_DEADZONE] = false;
+	config_input[Platform::Input::JOYSTICK_RUMBLE] = false;
 
 	config_misc[Platform::Misc::MODS] = false;
 }

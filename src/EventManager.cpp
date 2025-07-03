@@ -22,6 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EngineSettings.h"
 #include "EventManager.h"
 #include "FileParser.h"
+#include "InputState.h"
 #include "ItemManager.h"
 #include "LootManager.h"
 #include "MapRenderer.h"
@@ -33,6 +34,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MessageEngine.h"
 #include "ModManager.h"
 #include "PowerManager.h"
+#include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "SoundManager.h"
@@ -922,6 +924,7 @@ bool EventManager::executeEventInternal(Event &ev, bool skip_delay) {
 		}
 		else if (ec->type == EventComponent::SHAKYCAM) {
 			mapr->cam.shake_timer.setDuration(ec->data[0].Int);
+			inpt->joystickRumble(InputState::JOYSTICK_RUMBLE_STRENGTH, InputState::JOYSTICK_RUMBLE_STRENGTH, (ec->data[0].Int * 1000) / settings->max_frames_per_sec);
 		}
 		else if (ec->type == EventComponent::REMOVE_CURRENCY) {
 			camp->removeCurrency(ec->data[0].Int);

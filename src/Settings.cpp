@@ -63,7 +63,7 @@ Settings::Settings()
 	, soft_reset(false)
 	, safe_video(false)
 {
-	config.resize(51);
+	config.resize(52);
 	setConfigDefault(0,  "move_type_dimissed",  &typeid(move_type_dimissed),  "0",            &move_type_dimissed,  "One time flag for initial movement type dialog | 0 = show dialog, 1 = no dialog");
 	setConfigDefault(1,  "fullscreen",          &typeid(fullscreen),          "0",            &fullscreen,          "Fullscreen mode | 0 = disable, 1 = enable");
 	setConfigDefault(2,  "resolution_w",        &typeid(screen_w),            "640",          &screen_w,            "Window size");
@@ -115,6 +115,7 @@ Settings::Settings()
 	setConfigDefault(48, "dev_cmd_2",           &typeid(dev_cmd_2),           "toggle_devhud", &dev_cmd_2,           "Custom developer console shortcut command");
 	setConfigDefault(49, "dev_cmd_3",           &typeid(dev_cmd_3),           "toggle_hud",    &dev_cmd_3,           "Custom developer console shortcut command");
 	setConfigDefault(50, "auto_loot",           &typeid(auto_loot),           "1",             &auto_loot,           "Automatically pick up loot | 0 = disable, 1 = enable, 2 = currency only");
+	setConfigDefault(51, "joystick_rumble",     &typeid(joystick_rumble),     "1",            &joystick_rumble,      "Enables joystick rumble/vibrartion | 0 = disable, 1 = enable");
 }
 
 void Settings::setConfigDefault(size_t index, const std::string& name, const std::type_info *type, const std::string& default_val, void *storage, const std::string& comment) {

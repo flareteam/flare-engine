@@ -411,11 +411,11 @@ void EntityManager::logic() {
 	if (pc_in_combat && !pc->stats.in_combat) {
 		// if a supported controller is connected, change the LED to red when in combat
 		Color led_color(255, 0, 0);
-		inpt->setControllerLED(led_color);
+		inpt->setJoystickLED(led_color);
 		pc->stats.in_combat = true;
 	}
 	else if (!pc_in_combat && pc->stats.in_combat) {
-		inpt->setControllerLED(InputState::DEFAULT_CONTROLLER_LED_COLOR);
+		inpt->setJoystickLED(InputState::DEFAULT_CONTROLLER_LED_COLOR);
 		pc->stats.in_combat = false;
 	}
 }

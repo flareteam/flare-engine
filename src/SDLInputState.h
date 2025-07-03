@@ -56,7 +56,8 @@ public:
 	void startTextInput();
 	void stopTextInput();
 	void setCommonStrings();
-	void setControllerLED(Color color);
+	void joystickRumble(uint16_t low_freq, uint16_t high_freq, uint32_t duration);
+	void setJoystickLED(Color color);
 
 	void reset();
 

@@ -216,6 +216,8 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	, mouse_move_attack_lb(new WidgetLabel())
 	, joystick_deadzone_sl(new WidgetSlider(WidgetSlider::DEFAULT_FILE))
 	, joystick_deadzone_lb(new WidgetLabel())
+	, joystick_rumble_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
+	, joystick_rumble_lb(new WidgetLabel())
 	, touch_controls_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
 	, touch_controls_lb(new WidgetLabel())
 	, touch_scale_sl(new WidgetSlider(WidgetSlider::DEFAULT_FILE))
@@ -505,6 +507,7 @@ void MenuConfig::init() {
 	cfg_tabs[INPUT_TAB].setOptionWidgets(Platform::Input::MOUSE_MOVE_SWAP, mouse_move_swap_lb, mouse_move_swap_cb, msg->get("Swap mouse movement button"));
 	cfg_tabs[INPUT_TAB].setOptionWidgets(Platform::Input::MOUSE_MOVE_ATTACK, mouse_move_attack_lb, mouse_move_attack_cb, msg->get("Attack with mouse movement"));
 	cfg_tabs[INPUT_TAB].setOptionWidgets(Platform::Input::JOYSTICK_DEADZONE, joystick_deadzone_lb, joystick_deadzone_sl, msg->get("Joystick Deadzone"));
+	cfg_tabs[INPUT_TAB].setOptionWidgets(Platform::Input::JOYSTICK_RUMBLE, joystick_rumble_lb, joystick_rumble_cb, msg->get("Joystick Rumble"));
 	cfg_tabs[INPUT_TAB].setOptionWidgets(Platform::Input::TOUCH_CONTROLS, touch_controls_lb, touch_controls_cb, msg->get("Touch Controls"));
 	cfg_tabs[INPUT_TAB].setOptionWidgets(Platform::Input::TOUCH_SCALE, touch_scale_lb, touch_scale_sl, msg->get("Touch Gamepad Scaling"));
 
@@ -1031,6 +1034,7 @@ void MenuConfig::updateInput() {
 	mouse_move_cb->setChecked(settings->mouse_move);
 	mouse_move_swap_cb->setChecked(settings->mouse_move_swap);
 	mouse_move_attack_cb->setChecked(settings->mouse_move_attack);
+	joystick_rumble_cb->setChecked(settings->joystick_rumble);
 	touch_controls_cb->setChecked(settings->touchscreen);
 
 	if (settings->enable_joystick && inpt->getNumJoysticks() > 0) {
@@ -1458,6 +1462,9 @@ void MenuConfig::logicInput() {
 		inpt->joysticks_changed = true;
 		inpt->initJoystick();
 		inpt->joysticks_changed = false;
+	}
+	else if (cfg_tabs[INPUT_TAB].options[Platform::Input::JOYSTICK_RUMBLE].enabled && joystick_rumble_cb->checkClickAt(mouse.x, mouse.y)) {
+		settings->joystick_rumble = joystick_rumble_cb->isChecked();
 	}
 	else if (cfg_tabs[INPUT_TAB].options[Platform::Input::TOUCH_CONTROLS].enabled && touch_controls_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->touchscreen = touch_controls_cb->isChecked();

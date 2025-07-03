@@ -97,6 +97,7 @@ public:
 	bool no_mouse;
 	int joy_deadzone;
 	float touch_scale;
+	bool joystick_rumble;
 
 	// Game Settings
 	bool auto_equip;

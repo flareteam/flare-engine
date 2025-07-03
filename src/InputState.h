@@ -115,6 +115,8 @@ public:
 	static const int KEY_COUNT_USER = KEY_COUNT - 6; // exclude CTRL, SHIFT, etc from keybinding menu
 	static const Color DEFAULT_CONTROLLER_LED_COLOR;
 
+	static const uint16_t JOYSTICK_RUMBLE_STRENGTH = 32767;
+
 	enum {
 		MODE_KEYBOARD_AND_MOUSE = 0,
 		MODE_JOYSTICK = 1,
@@ -158,7 +160,8 @@ public:
 
 	void enableEventLog();
 
-	virtual void setControllerLED(Color color) = 0;
+	virtual void joystickRumble(uint16_t low_freq, uint16_t high_freq, uint32_t duration) = 0;
+	virtual void setJoystickLED(Color color) = 0;
 
 	virtual void reset() = 0;
 
