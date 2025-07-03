@@ -23,6 +23,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "Avatar.h"
+#include "InputState.h"
 #include "MapRenderer.h"
 #include "MenuConfig.h"
 #include "MenuConfirm.h"
@@ -96,6 +97,11 @@ void MenuExit::handleCancel() {
 	else {
 		if (!menu_config->input_confirm->visible) {
 			visible = false;
+		}
+		else {
+			// MenuManager will have locked CANCEL before calling this
+			// But we need it unlocked for the input_cofirm dialog. So unlock it here
+			inpt->lock[Input::CANCEL] = false;
 		}
 	}
 }
