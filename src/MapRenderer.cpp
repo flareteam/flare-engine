@@ -103,7 +103,7 @@ void MapRenderer::clearQueues() {
 }
 
 bool MapRenderer::enemyGroupPlaceEnemy(float x, float y, const Map_Group &g) {
-	if (collider.isValidPosition(x, y, MapCollision::MOVE_NORMAL, MapCollision::ENTITY_COLLIDE_NONE)) {
+	if (collider.isValidPosition(x, y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_TYPE_NONE)) {
 		Enemy_Level enemy_lev = enemyg->getRandomEnemy(g.category, g.levelmin, g.levelmax);
 		if (!enemy_lev.type.empty()) {
 			Map_Enemy group_member = Map_Enemy(enemy_lev.type, FPoint(x, y));
@@ -1316,8 +1316,8 @@ void MapRenderer::checkHotspots() {
 							// event is out of range, but we're clicking on it. For mouse-move, we'll set this as the desired target
 							inpt->lock[interact_key] = true;
 
-							if (!mapr->collider.isValidPosition(it->center.x, it->center.y, pc->stats.movement_type, MapCollision::ENTITY_COLLIDE_HERO)) {
-								FPoint nearby_target = mapr->collider.getRandomNeighbor(Point(it->center), 1, pc->stats.movement_type, MapCollision::ENTITY_COLLIDE_HERO);
+							if (!mapr->collider.isValidPosition(it->center.x, it->center.y, pc->stats.movement_type, MapCollision::COLLIDE_TYPE_HERO)) {
+								FPoint nearby_target = mapr->collider.getRandomNeighbor(Point(it->center), 1, pc->stats.movement_type, MapCollision::COLLIDE_TYPE_HERO);
 								pc->setDesiredMMTarget(nearby_target);
 							}
 							else {

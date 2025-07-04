@@ -788,10 +788,10 @@ void LootManager::checkLootComponent(EventComponent* ec, FPoint *pos, std::vecto
 	p.x = static_cast<float>(src.x) + 0.5f;
 	p.y = static_cast<float>(src.y) + 0.5f;
 
-	if (!mapr->collider.isValidPosition(p.x, p.y, MapCollision::MOVE_NORMAL, MapCollision::ENTITY_COLLIDE_ALL)) {
-		p = mapr->collider.getRandomNeighbor(src, eset->loot.drop_radius, MapCollision::MOVE_NORMAL, MapCollision::ENTITY_COLLIDE_ALL);
+	if (!mapr->collider.isValidPosition(p.x, p.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_TYPE_ALL_ENTITIES)) {
+		p = mapr->collider.getRandomNeighbor(src, eset->loot.drop_radius, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_TYPE_ALL_ENTITIES);
 
-		if (!mapr->collider.isValidPosition(p.x, p.y, MapCollision::MOVE_NORMAL, MapCollision::ENTITY_COLLIDE_ALL)) {
+		if (!mapr->collider.isValidPosition(p.x, p.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_TYPE_ALL_ENTITIES)) {
 			p = pc->stats.pos;
 		}
 		else {

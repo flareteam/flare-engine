@@ -237,13 +237,13 @@ bool MapCollision::isValidTile(const int& tile_x, const int& tile_y, int movemen
 	// outside the map isn't valid
 	if (isTileOutsideMap(tile_x,tile_y)) return false;
 
-	if (collide_type == ENTITY_COLLIDE_ALL) {
+	if (collide_type == COLLIDE_TYPE_ALL_ENTITIES) {
 		if (colmap[tile_x][tile_y] == BLOCKS_ENEMIES)
 			return false;
 		if (colmap[tile_x][tile_y] == BLOCKS_ENTITIES)
 			return false;
 	}
-	else if (collide_type == ENTITY_COLLIDE_HERO) {
+	else if (collide_type == COLLIDE_TYPE_HERO) {
 		if (colmap[tile_x][tile_y] == BLOCKS_ENEMIES && !eset->misc.enable_ally_collision)
 			return true;
 	}
@@ -261,7 +261,7 @@ bool MapCollision::isValidTile(const int& tile_x, const int& tile_y, int movemen
 		return true;
 
 	// normal creatures can only be in empty spaces
-	return (colmap[tile_x][tile_y] == BLOCKS_NONE);
+	return (colmap[tile_x][tile_y] == BLOCKS_NONE) || (collide_type == COLLIDE_TYPE_HAZARD && (colmap[tile_x][tile_y] == BLOCKS_ENEMIES || colmap[tile_x][tile_y] == BLOCKS_ENTITIES));
 }
 
 /**
@@ -312,7 +312,7 @@ bool MapCollision::lineCheck(const float& x1, const float& y1, const float& x2, 
 		for (int i=0; i<steps; i++) {
 			x += step_x;
 			y += step_y;
-			if (!isValidPosition(x, y, movement_type, ENTITY_COLLIDE_ALL))
+			if (!isValidPosition(x, y, movement_type, COLLIDE_TYPE_ALL_ENTITIES))
 				return false;
 		}
 	}
@@ -440,7 +440,7 @@ bool MapCollision::computePath(const FPoint& start_pos, const FPoint& end_pos, s
 			}
 
 			// if neighbour is not free of any collision, skip it
-			if (!isValidTile(neighbour.x,neighbour.y,movement_type, MapCollision::ENTITY_COLLIDE_ALL))
+			if (!isValidTile(neighbour.x,neighbour.y,movement_type, MapCollision::COLLIDE_TYPE_ALL_ENTITIES))
 				continue;
 			// if nabour is already in close, skip it
 			if(close.exists(neighbour))

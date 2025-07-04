@@ -192,7 +192,7 @@ void EntityManager::handleNewMap () {
 	}
 
 	// TODO support spawning flying enemies over pits?
-	FPoint spawn_pos = mapr->collider.getRandomNeighbor(Point(pc->stats.pos), 1, MapCollision::MOVE_NORMAL, MapCollision::ENTITY_COLLIDE_ALL);
+	FPoint spawn_pos = mapr->collider.getRandomNeighbor(Point(pc->stats.pos), 1, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_TYPE_ALL_ENTITIES);
 	while (!allies.empty()) {
 
 		Entity *e = allies.front();
@@ -331,12 +331,12 @@ void EntityManager::handleSpawn() {
 			e->stats.recalc();
 		}
 
-		if (mapr->collider.isValidPosition(espawn.pos.x, espawn.pos.y, e->stats.movement_type, MapCollision::ENTITY_COLLIDE_ALL) || !e->stats.hero_ally) {
+		if (mapr->collider.isValidPosition(espawn.pos.x, espawn.pos.y, e->stats.movement_type, MapCollision::COLLIDE_TYPE_ALL_ENTITIES) || !e->stats.hero_ally) {
 			e->stats.pos.x = espawn.pos.x;
 			e->stats.pos.y = espawn.pos.y;
 		}
 		else {
-			e->stats.pos = mapr->collider.getRandomNeighbor(Point(pc->stats.pos), 1, e->stats.movement_type, MapCollision::ENTITY_COLLIDE_ALL);
+			e->stats.pos = mapr->collider.getRandomNeighbor(Point(pc->stats.pos), 1, e->stats.movement_type, MapCollision::COLLIDE_TYPE_ALL_ENTITIES);
 		}
 
 		// special animation state for spawning entities
@@ -498,7 +498,7 @@ void EntityManager::spawn(const std::string& entity_type, const Point& target) {
 	// quick spawns start facing a random direction
 	espawn.direction = rand() % 8;
 
-	if (!mapr->collider.isValidPosition(espawn.pos.x, espawn.pos.y, MapCollision::MOVE_NORMAL, MapCollision::ENTITY_COLLIDE_NONE)) {
+	if (!mapr->collider.isValidPosition(espawn.pos.x, espawn.pos.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_TYPE_NONE)) {
 		return;
 	}
 	else {

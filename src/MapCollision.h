@@ -63,11 +63,12 @@ public:
 	static const bool IS_ALLY = true;
 	static const int DEFAULT_PATH_LIMIT = 0;
 
-	// entity collision type
+	// collision type
 	enum {
-		ENTITY_COLLIDE_ALL = 0,
-		ENTITY_COLLIDE_HERO = 1,
-		ENTITY_COLLIDE_NONE = 2
+		COLLIDE_TYPE_NONE = 0,
+		COLLIDE_TYPE_ALL_ENTITIES = 1,
+		COLLIDE_TYPE_HERO = 2,
+		COLLIDE_TYPE_HAZARD = 3
 	};
 
 	// movement options
@@ -116,7 +117,7 @@ public:
 	FPoint getRandomNeighbor(const Point& target, int range, int movement_type, int collide_type);
 
 	int getCollideType(bool hero) {
-		return hero ? ENTITY_COLLIDE_HERO : ENTITY_COLLIDE_ALL;
+		return hero ? COLLIDE_TYPE_HERO : COLLIDE_TYPE_ALL_ENTITIES;
 	}
 
 	bool hasEmptyTile() { return has_empty_tile; }

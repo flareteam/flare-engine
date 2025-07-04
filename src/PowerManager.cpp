@@ -1320,10 +1320,10 @@ bool PowerManager::hasValidTarget(PowerID power_index, StatBlock *src_stats, con
 	if (power->requires_los && !collider->lineOfSight(src_stats->pos.x, src_stats->pos.y, limit_target.x, limit_target.y))
 		return false;
 
-	if (power->requires_empty_target && !collider->isValidPosition(limit_target.x, limit_target.y, power->movement_type, MapCollision::ENTITY_COLLIDE_ALL))
+	if (power->requires_empty_target && !collider->isValidPosition(limit_target.x, limit_target.y, power->movement_type, MapCollision::COLLIDE_TYPE_ALL_ENTITIES))
 		return false;
 
-	if (power->buff_teleport && power->target_neighbor < 1 && !collider->isValidPosition(limit_target.x, limit_target.y, src_stats->movement_type, MapCollision::ENTITY_COLLIDE_ALL))
+	if (power->buff_teleport && power->target_neighbor < 1 && !collider->isValidPosition(limit_target.x, limit_target.y, src_stats->movement_type, MapCollision::COLLIDE_TYPE_ALL_ENTITIES))
 		return false;
 
 	return true;
@@ -1415,7 +1415,7 @@ void PowerManager::initHazard(PowerID power_index, StatBlock *src_stats, const F
 	}
 
 	if (haz->power->target_neighbor > 0 && collider) {
-		haz->pos = collider->getRandomNeighbor(Point(haz->pos), haz->power->target_neighbor, haz->power->movement_type, MapCollision::ENTITY_COLLIDE_NONE);
+		haz->pos = collider->getRandomNeighbor(Point(haz->pos), haz->power->target_neighbor, haz->power->movement_type, MapCollision::COLLIDE_TYPE_HAZARD);
 	}
 
 	if (haz->power->relative_pos) {
@@ -1437,7 +1437,7 @@ void PowerManager::buff(PowerID power_index, StatBlock *src_stats, const FPoint&
 	if (power->buff_teleport) {
 		FPoint limit_target = Utils::clampDistance(power->target_range,src_stats->pos,target);
 		if (power->target_neighbor > 0 && collider) {
-			FPoint new_target = collider->getRandomNeighbor(Point(limit_target), power->target_neighbor, power->movement_type, MapCollision::ENTITY_COLLIDE_ALL);
+			FPoint new_target = collider->getRandomNeighbor(Point(limit_target), power->target_neighbor, power->movement_type, MapCollision::COLLIDE_TYPE_ALL_ENTITIES);
 			if (floorf(new_target.x) == floorf(limit_target.x) && floorf(new_target.y) == floorf(limit_target.y)) {
 				src_stats->teleportation = false;
 			}
@@ -1702,7 +1702,7 @@ bool PowerManager::repeater(PowerID power_index, StatBlock *src_stats, const FPo
 		location_iterator.y += speed.y;
 
 		// only travels until it hits a wall
-		if (collider && !collider->isValidPosition(location_iterator.x, location_iterator.y, power->movement_type, MapCollision::ENTITY_COLLIDE_NONE)) {
+		if (collider && !collider->isValidPosition(location_iterator.x, location_iterator.y, power->movement_type, MapCollision::COLLIDE_TYPE_HAZARD)) {
 			break; // no more hazards
 		}
 
@@ -1758,15 +1758,15 @@ bool PowerManager::spawn(PowerID power_index, StatBlock *src_stats, const FPoint
 	}
 
 	if (power->target_neighbor > 0 && collider) {
-		espawn.pos = collider->getRandomNeighbor(Point(espawn.pos), power->target_neighbor, power->movement_type, MapCollision::ENTITY_COLLIDE_ALL);
+		espawn.pos = collider->getRandomNeighbor(Point(espawn.pos), power->target_neighbor, power->movement_type, MapCollision::COLLIDE_TYPE_ALL_ENTITIES);
 	}
 
-	if (!collider->isValidPosition(espawn.pos.x, espawn.pos.y, power->movement_type, MapCollision::ENTITY_COLLIDE_ALL)) {
+	if (!collider->isValidPosition(espawn.pos.x, espawn.pos.y, power->movement_type, MapCollision::COLLIDE_TYPE_ALL_ENTITIES)) {
 		// desired spawn point is blocked; try spawning next to the caster
-		espawn.pos = collider->getRandomNeighbor(Point(origin), 1, power->movement_type, MapCollision::ENTITY_COLLIDE_ALL);
+		espawn.pos = collider->getRandomNeighbor(Point(origin), 1, power->movement_type, MapCollision::COLLIDE_TYPE_ALL_ENTITIES);
 	}
 
-	if (!collider->isValidPosition(espawn.pos.x, espawn.pos.y, power->movement_type, MapCollision::ENTITY_COLLIDE_ALL)) {
+	if (!collider->isValidPosition(espawn.pos.x, espawn.pos.y, power->movement_type, MapCollision::COLLIDE_TYPE_ALL_ENTITIES)) {
 		// couldn't find an open spawn point next to the caster; abort spawning process
 		return false;
 	}
@@ -1813,7 +1813,7 @@ bool PowerManager::transform(PowerID power_index, StatBlock *src_stats, const FP
 	// execute untransform powers
 	if (power->spawn_type == "untransform" && src_stats->transformed) {
 		collider->unblock(src_stats->pos.x, src_stats->pos.y);
-		if (collider->isValidPosition(src_stats->pos.x, src_stats->pos.y, MapCollision::MOVE_NORMAL, MapCollision::ENTITY_COLLIDE_HERO)) {
+		if (collider->isValidPosition(src_stats->pos.x, src_stats->pos.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_TYPE_HERO)) {
 			src_stats->transform_duration = 0;
 			src_stats->transform_type = "untransform"; // untransform() is called only if type !=""
 		}

@@ -117,7 +117,7 @@ void NPCManager::handleNewMap() {
 		// npc->stock.sort();
 		npcs.push_back(npc);
 		createMapEvent(*npc, npcs.size());
-		if (!mapr->collider.isValidPosition(npc->stats.pos.x, npc->stats.pos.y, MapCollision::MOVE_NORMAL, MapCollision::ENTITY_COLLIDE_NONE))
+		if (!mapr->collider.isValidPosition(npc->stats.pos.x, npc->stats.pos.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_TYPE_NONE))
 			Utils::logInfo("NPC: Collision tile detected at NPC position (%.2f, %.2f).", npc->stats.pos.x, npc->stats.pos.y);
 	}
 
@@ -125,7 +125,7 @@ void NPCManager::handleNewMap() {
 		NPC *npc = allies.begin()->second;
 		allies.erase(allies.begin());
 
-		npc->stats.pos = mapr->collider.getRandomNeighbor(Point(pc->stats.pos), 1, npc->stats.movement_type, MapCollision::ENTITY_COLLIDE_ALL);
+		npc->stats.pos = mapr->collider.getRandomNeighbor(Point(pc->stats.pos), 1, npc->stats.movement_type, MapCollision::COLLIDE_TYPE_ALL_ENTITIES);
 		npc->stats.direction = pc->stats.direction;
 
 		npcs.push_back(npc);
