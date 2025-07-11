@@ -120,6 +120,7 @@ public:
 		float min_overhit_damage;
 		float max_overhit_damage;
 		unsigned short resource_round_method;
+		bool offscreen_enemy_encounters;
 	};
 
 	class EquipFlags {

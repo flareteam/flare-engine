@@ -35,6 +35,7 @@ Engine features:
 * Dynamically-sized dev console with new config file.
 * Added game controller rumble option.
 * Added "in combat" LED effect for supported game controllers (i.e. Dual Shock 4).
+* Added 'offscreen_enemy_encounters' property to engine/combat.txt config.
 * Android: Enabled use of external input devices (gamepads, keyboards, mice)
 
 Engine fixes:

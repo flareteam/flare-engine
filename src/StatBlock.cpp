@@ -81,7 +81,7 @@ StatBlock::StatBlock()
 	, converted(false)
 	, summoned(false)
 	, summoned_power_index(0)
-	, encountered(false)
+	, encountered(eset->combat.offscreen_enemy_encounters)
 	, target_corpse(NULL) // hero only
 	, target_nearest(NULL) // hero only
 	, target_nearest_corpse(NULL) // hero only

@@ -325,6 +325,7 @@ void EngineSettings::Combat::load() {
 	min_overhit_damage = 100;
 	max_overhit_damage = 100;
 	resource_round_method = EngineSettings::Combat::RESOURCE_ROUND_METHOD_ROUND;
+	offscreen_enemy_encounters = false;
 
 	FileParser infile;
 	// @CLASS EngineSettings: Combat|Description of engine/combat.txt
@@ -384,6 +385,10 @@ void EngineSettings::Combat::load() {
 					resource_round_method = EngineSettings::Combat::RESOURCE_ROUND_METHOD_CEIL;
 				else
 					infile.error("EngineSettings: '%s' is not a valid resource rounding method.", infile.val.c_str());
+			}
+			// @ATTR offscreen_enemy_encounters|bool|If true, enemies can enter combat even if they are off-screen. Defaults to false.
+			else if (infile.key == "offscreen_enemy_encounters") {
+				offscreen_enemy_encounters = Parse::toBool(infile.val);
 			}
 
 			else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
