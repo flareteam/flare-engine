@@ -1226,6 +1226,10 @@ void StatBlock::logic() {
 		corpse = false;
 		cur_state = ENTITY_STANCE;
 	}
+	else if (hp <= 0 && cur_state != ENTITY_DEAD && cur_state != ENTITY_CRITDEAD) {
+		// might have died from negative HP regen, so we use takeDamage() to trigger the death state
+		takeDamage(0, false, Power::SOURCE_TYPE_NEUTRAL);
+	}
 
 	// non-hero entities can have their disposition reversed
 	if (!hero && effects.convert != converted) {
