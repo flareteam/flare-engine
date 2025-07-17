@@ -47,6 +47,17 @@ void HazardManager::logic() {
 	// remove all hazards with lifespan 0.  Most hazards still display their last frame.
 	for (size_t i=h.size(); i>0; i--) {
 		if (h[i-1]->lifespan == 0) {
+			for (size_t j = 0; j < h[i-1]->power->chain_powers.size(); ++j) {
+				ChainPower& chain_power = h[i-1]->power->chain_powers[j];
+				if (chain_power.type == ChainPower::TYPE_EXPIRE && Math::percentChanceF(chain_power.chance)) {
+					powers->activate(chain_power.id, h[i-1]->src_stats, h[i-1]->pos, h[i-1]->pos);
+
+					if (powers->powers[chain_power.id]->directional) {
+						powers->hazards.back()->direction = h[i-1]->direction;
+					}
+				}
+			}
+
 			delete h[i-1];
 			h.erase(h.begin()+(i-1));
 		}

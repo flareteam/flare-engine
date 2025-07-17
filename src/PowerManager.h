@@ -88,6 +88,7 @@ public:
 		TYPE_PRE = 0,
 		TYPE_POST,
 		TYPE_WALL,
+		TYPE_EXPIRE,
 	};
 
 	PowerID id;

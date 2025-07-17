@@ -949,6 +949,19 @@ void PowerManager::loadPowers() {
 				power->chain_powers.push_back(chain_power);
 			}
 		}
+		else if (infile.key == "expire_power") {
+			// @ATTR power.expire_power|repeatable(power_id, int) : Power, Chance to cast|Trigger a power when the hazard's lifespan expires.
+			ChainPower chain_power;
+			chain_power.type = ChainPower::TYPE_EXPIRE;
+			chain_power.id = Parse::toPowerID(Parse::popFirstString(infile.val));
+			std::string chance = Parse::popFirstString(infile.val);
+			if (!chance.empty()) {
+				chain_power.chance = Parse::toFloat(chance);
+			}
+			if (chain_power.id > 0) {
+				power->chain_powers.push_back(chain_power);
+			}
+		}
 		else if (infile.key == "wall_reflect") {
 			// @ATTR power.wall_reflect|bool|Moving power will bounce off walls and keep going
 			power->wall_reflect = Parse::toBool(infile.val);
