@@ -541,7 +541,8 @@ void EffectManager::addEffect(StatBlock* stats, EffectDef &effect, EffectParams 
 		// while checking only id would be sufficient, it is a slow string compare
 		// so we check the type first, which is an int compare, before taking the slow path
 		if (ei.type == effect.type && ei.id == effect.id) {
-			if (trigger > -1 && ei.trigger == trigger)
+			// TODO Would removing this completely break backwards compatibility?
+			if (!eset->misc.passive_trigger_effect_stacking && trigger > -1 && ei.trigger == trigger)
 				return; // trigger effects can only be cast once per trigger
 
 			if (!effect.can_stack) {

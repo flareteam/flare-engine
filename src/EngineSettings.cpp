@@ -82,6 +82,7 @@ void EngineSettings::Misc::load() {
 	save_fogofwar = false;
 	mouse_move_deadzone_moving = 0.25f;
 	mouse_move_deadzone_not_moving = 0.75f;
+	passive_trigger_effect_stacking = false;
 
 	FileParser infile;
 	// @CLASS EngineSettings: Misc|Description of engine/misc.txt
@@ -188,6 +189,11 @@ void EngineSettings::Misc::load() {
 			else if (infile.key == "mouse_move_deadzone") {
 				mouse_move_deadzone_moving = Parse::popFirstFloat(infile.val);
 				mouse_move_deadzone_not_moving = Parse::popFirstFloat(infile.val);
+			}
+
+			// @ATTR passive_trigger_effect_stacking|bool|For backwards compatibility. Allows adding multiple of the same effect from a power with the same passive trigger. False by default.
+			else if (infile.key == "passive_trigger_effect_stacking") {
+				passive_trigger_effect_stacking = Parse::toBool(infile.val);
 			}
 
 			else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
