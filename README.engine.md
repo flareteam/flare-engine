@@ -111,3 +111,40 @@ In addition, there is a `mods` directory in this location, which can be used to 
 | `--load-slot`     | Loads a save slot by numerical index.
 | `--load-script`   | Execute's a script upon loading a saved game. The script path is mod-relative.
 | `--safe-video`    | Launches with the minimum video settings.
+
+
+## flare-engine Translation Status
+| Language                      | Completed
+|-------------------------------|----------------
+| Basque (eu)                   | 0%
+| Belarusian (be)               | 79%
+| Bulgarian (bg)                | 61%
+| Catlan (ca)                   | 52%
+| Chinese (zh)                  | 81%
+| Chinese (Taiwan) (zh\_TW)     | 67%
+| Czech (cs)                    | 19%
+| Dutch (nl)                    | 11%
+| Finnish (fi)                  | 84%
+| French (fr)                   | 79%
+| Gaelic, Scottish (gd)         | 91%
+| Galician (gl)                 | 26%
+| German (de)                   | 92%
+| Greek (el)                    | 26%
+| Hindi (India) (hi\_IN)        | 14%
+| Hungarian (hu)                | 53%
+| Indonesian (id)               | 91%
+| Italian (it)                  | 91%
+| Japanese (ja)                 | 45%
+| Korean (ko)                   | 90%
+| Norwegian Bokmål (nb)         | 87%
+| Polish (pl)                   | 82%
+| Portuguese (pt)               | 70%
+| Portuguese (Brazil) (pt\_BR)  | 87%
+| Russian (ru)                  | 98%
+| Slovak (sk)                   | 62%
+| Spanish (es)                  | 91%
+| Swedish (sv)                  | 91%
+| Thai (Thailand) (th\_TH)      | 52%
+| Ukrainian (uk)                | 72%
+| Vietnamese (vi)               | 78%
+
