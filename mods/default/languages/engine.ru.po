@@ -41,8 +41,7 @@ msgstr ""
 #: ../../../src/Avatar.cpp:512
 msgid "You may unlock one or more abilities through the Powers Menu."
 msgstr ""
-"Вы можете разблокировать одну или несколько способностей через меню "
-"«Способности»."
+"Вы можете открыть одну или несколько способностей через меню «Способности»."
 
 #: ../../../src/Avatar.cpp:845
 msgid "You are defeated."
@@ -529,6 +528,8 @@ msgid ""
 "Upgrade Stat: %s\n"
 "Uses 1 Stat Point"
 msgstr ""
+"Улучшить атрибут: %s\n"
+"Использует 1 очко атрибутов"
 
 #: ../../../src/MenuConfig.cpp:255 ../../../src/MenuConfig.cpp:1453
 msgid "Assign:"
@@ -564,15 +565,15 @@ msgstr "Сохранить игру"
 
 #: ../../../src/MenuConfig.cpp:330
 msgid "<unknown>"
-msgstr ""
+msgstr "<unknown>"
 
 #: ../../../src/MenuConfig.cpp:333
 msgid "All Mods"
-msgstr ""
+msgstr "Все модификации"
 
 #: ../../../src/MenuConfig.cpp:334
 msgid "All Core Mods"
-msgstr ""
+msgstr "Все основные модификации"
 
 #: ../../../src/MenuConfig.cpp:351
 msgid ""
@@ -673,14 +674,16 @@ msgstr ""
 msgid ""
 "When enabled, eligible loot will be picked up automatically when nearby."
 msgstr ""
+"Если включено, подходящая добыча будет подобрана автоматически, когда вы "
+"окажетесь поблизости."
 
 #: ../../../src/MenuConfig.cpp:385
 msgid "Enabled"
-msgstr ""
+msgstr "Включено"
 
 #: ../../../src/MenuConfig.cpp:386
 msgid "Only currency"
-msgstr ""
+msgstr "Только валюта"
 
 #: ../../../src/MenuConfig.cpp:403
 msgid "The maximum frame rate that the game will be allowed to run at."
@@ -711,7 +714,7 @@ msgstr "Аудио"
 
 #: ../../../src/MenuConfig.cpp:436
 msgid "Game"
-msgstr ""
+msgstr "Игра"
 
 #: ../../../src/MenuConfig.cpp:437
 msgid "Interface"
@@ -787,7 +790,7 @@ msgstr "Сразу надевать предметы"
 
 #: ../../../src/MenuConfig.cpp:477
 msgid "Automatically pick up loot"
-msgstr ""
+msgstr "Автоматический сбор добычи"
 
 #: ../../../src/MenuConfig.cpp:478
 msgid "Low health notification"
@@ -807,7 +810,7 @@ msgstr "Показывать частоту кадров"
 
 #: ../../../src/MenuConfig.cpp:483
 msgid "Use system mouse cursor"
-msgstr ""
+msgstr "Использовать системный курсор мыши"
 
 #: ../../../src/MenuConfig.cpp:484
 msgid "Colorblind Mode"
@@ -880,7 +883,7 @@ msgstr "Мёртвая зона геймпада"
 
 #: ../../../src/MenuConfig.cpp:504
 msgid "Joystick Rumble"
-msgstr ""
+msgstr "Вибрация геймпада"
 
 #: ../../../src/MenuConfig.cpp:505
 msgid "Touch Controls"
@@ -1564,7 +1567,7 @@ msgstr "Требуемая способность: %s"
 
 #: ../../../src/MenuPowers.cpp:1336
 msgid "Click to Unlock (uses 1 Skill Point)"
-msgstr "Щёлкните, чтобы разблокировать (за 1 очко навыка)"
+msgstr "Щёлкните, чтобы открыть (за 1 очко навыка)"
 
 #: ../../../src/MenuPowers.cpp:1340 ../../../src/MenuPowers.cpp:1342
 msgid "Requires 1 Skill Point"
@@ -1585,6 +1588,8 @@ msgid ""
 "Upgrade to: %s (Level %d)\n"
 "Uses 1 Skill Point"
 msgstr ""
+"Улучшить до: %s (%d-й уровень)\n"
+"Использует 1 очко навыка"
 
 #: ../../../src/MenuStash.cpp:79 ../../../src/MenuStash.cpp:160
 msgid "Stash"
@@ -2347,4 +2352,4 @@ msgstr "или ниже"
 
 #: ../../../src/WidgetLog.cpp:107
 msgid "ERROR: Text output too large"
-msgstr ""
+msgstr "ОШИБКА: выводится слишком большой текст"
