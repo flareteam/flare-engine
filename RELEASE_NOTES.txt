@@ -38,6 +38,7 @@ Engine features:
 * Added 'offscreen_enemy_encounters' property to engine/combat.txt config.
 * Added 'expire_power' Power property.
 * Added backwards compatiblity option 'passive_trigger_effect_stacking' to engine/misc.txt.
+* Support using gamepad during initial launch menus.
 * Android: Enabled use of external input devices (gamepads, keyboards, mice)
 
 Engine fixes:

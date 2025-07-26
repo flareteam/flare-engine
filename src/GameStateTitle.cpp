@@ -27,7 +27,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "GameStateNew.h"
 #include "GameStateTitle.h"
 #include "InputState.h"
-#include "MenuMovementType.h"
 #include "MenuConfig.h"
 #include "MenuConfirm.h"
 #include "MessageEngine.h"
@@ -150,8 +149,12 @@ GameStateTitle::GameStateTitle()
 	// NOTE The presence of the mouse move setting is used to determine if the
 	// movement type dialog is displayed. Is this adequate?
 	if (!settings->move_type_dimissed && platform.config_input[Platform::Input::MOUSE_MOVE]) {
-		menu_movement_type = new MenuMovementType();
-		menu_movement_type->visible = true;
+		menu_movement_type = new MenuConfirm();
+		menu_movement_type->setTitle(msg->get("Use mouse to move player?"));
+		menu_movement_type->action_list->append(msg->get("No"), "");
+		menu_movement_type->action_list->append(msg->get("Yes"), "");
+		menu_movement_type->show();
+		inpt->mode = InputState::MODE_JOYSTICK;
 	}
 
 }
@@ -162,13 +165,36 @@ void GameStateTitle::logic() {
 
 	snd->logic(FPoint(0,0));
 
-	if(inpt->pressing[Input::CANCEL] && !inpt->lock[Input::CANCEL]) {
-		inpt->lock[Input::CANCEL] = true;
-		exitRequested = true;
-	}
-
 	if (menu_movement_type && menu_movement_type->visible) {
 		menu_movement_type->logic();
+
+		if (menu_movement_type->clicked_confirm) {
+			if (menu_movement_type->action_list->getSelected() == PROMPT_SELECT_MOUSEMOVE_NO) {
+				settings->mouse_move = false;
+
+				menu_movement_type->visible = false;
+				menu_movement_type->clicked_confirm = false;
+
+				settings->move_type_dimissed = true;
+				settings->saveSettings();
+			} else if (menu_movement_type->action_list->getSelected() == PROMPT_SELECT_MOUSEMOVE_YES) {
+				settings->mouse_move = true;
+
+				menu_movement_type->visible = false;
+				menu_movement_type->clicked_confirm = false;
+
+				settings->move_type_dimissed = true;
+				settings->saveSettings();
+			}
+		}
+		else if (menu_movement_type->clicked_cancel) {
+			settings->mouse_move = false;
+
+			menu_movement_type->clicked_cancel = false;
+
+			settings->move_type_dimissed = true;
+			settings->saveSettings();
+		}
 	}
 	else if (prompt_select_mods && prompt_select_mods->visible) {
 		prompt_select_mods->logic();
@@ -183,11 +209,17 @@ void GameStateTitle::logic() {
 				prompt_select_mods->clicked_confirm = false;
 			} else if (prompt_select_mods->action_list->getSelected() == PROMPT_SELECT_MODS_CANCEL) {
 				prompt_select_mods->visible = false;
+				prompt_select_mods->clicked_confirm = false;
 			}
 
 		}
 	}
 	else {
+		if(inpt->pressing[Input::CANCEL] && !inpt->lock[Input::CANCEL]) {
+			inpt->lock[Input::CANCEL] = true;
+			exitRequested = true;
+		}
+
 		tablist.logic();
 
 		bool play_clicked = button_play->checkClick();
