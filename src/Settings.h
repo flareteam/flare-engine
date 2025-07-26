@@ -126,7 +126,8 @@ public:
 
 	// Misc
 	int prev_save_slot;
-	bool move_type_dimissed;
+	bool setup_language;
+	bool setup_mousemove;
 
 	// Dev console: shortcut commands
 	std::string dev_cmd_1;

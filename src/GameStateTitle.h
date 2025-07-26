@@ -46,6 +46,7 @@ private:
 	WidgetButton *button_cfg;
 	WidgetButton *button_credits;
 	WidgetLabel *label_version;
+	MenuConfirm *menu_language;
 	MenuConfirm *menu_movement_type;
 	MenuConfirm *prompt_select_mods; // Nag dialogue when core mod is not selected
 
@@ -53,6 +54,9 @@ private:
 
 	Point pos_logo;
 	int align_logo;
+
+	unsigned int language_id;
+	std::vector<std::string> language_ISO;
 
 public:
 	GameStateTitle();

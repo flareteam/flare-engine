@@ -39,6 +39,7 @@ Engine features:
 * Added 'expire_power' Power property.
 * Added backwards compatiblity option 'passive_trigger_effect_stacking' to engine/misc.txt.
 * Support using gamepad during initial launch menus.
+* Added prompt for language on first launch.
 * Android: Enabled use of external input devices (gamepads, keyboards, mice)
 
 Engine fixes:

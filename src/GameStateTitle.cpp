@@ -51,8 +51,10 @@ GameStateTitle::GameStateTitle()
 	, button_cfg(new WidgetButton(WidgetButton::DEFAULT_FILE))
 	, button_credits(new WidgetButton(WidgetButton::DEFAULT_FILE))
 	, label_version(new WidgetLabel())
+	, menu_language(NULL)
 	, menu_movement_type(NULL)
 	, align_logo(Utils::ALIGN_CENTER)
+	, language_id(0)
 	, exit_game(false)
 	, load_game(false)
 {
@@ -146,26 +148,90 @@ GameStateTitle::GameStateTitle()
 
 	render_device->setBackgroundColor(Color(0,0,0,0));
 
+	// NOTE The presence of the language setting is used to determine if the
+	// language select dialog is displayed. Is this adequate?
+	if (!settings->setup_language && platform.config_interface[Platform::Interface::LANGUAGE]) {
+		menu_language = new MenuConfirm();
+		menu_language->setTitle(msg->get("Language"));
+
+		language_ISO.clear();
+		menu_language->action_list->clear();
+
+		if (infile.open("engine/languages.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
+			int i = 0;
+			while (infile.next()) {
+				if (!infile.key.empty()) {
+					language_ISO.push_back(infile.key);
+					menu_language->action_list->append(infile.val, infile.val + " [" + infile.key + "]");
+
+					if (infile.key == settings->language) {
+						language_id = i;
+					}
+
+					i++;
+				}
+			}
+			infile.close();
+		}
+
+		// no languages found; include English by default
+		if (menu_language->action_list->getSize() == 0) {
+			language_ISO.push_back("en");
+			menu_language->action_list->append("English", "English [en]");
+			language_id = 0;
+		}
+
+		if (language_ISO.size() <= 1) {
+			settings->setup_language = true;
+		}
+	}
+
 	// NOTE The presence of the mouse move setting is used to determine if the
 	// movement type dialog is displayed. Is this adequate?
-	if (!settings->move_type_dimissed && platform.config_input[Platform::Input::MOUSE_MOVE]) {
+	if (!settings->setup_mousemove && platform.config_input[Platform::Input::MOUSE_MOVE]) {
 		menu_movement_type = new MenuConfirm();
 		menu_movement_type->setTitle(msg->get("Use mouse to move player?"));
 		menu_movement_type->action_list->append(msg->get("No"), "");
 		menu_movement_type->action_list->append(msg->get("Yes"), "");
-		menu_movement_type->show();
-		inpt->mode = InputState::MODE_JOYSTICK;
 	}
 
 }
 
 void GameStateTitle::logic() {
+	if (!settings->setup_language && !menu_language->visible) {
+		menu_language->show();
+		menu_language->action_list->select(language_id);
+	}
+	else if (!settings->setup_mousemove && !menu_movement_type->visible) {
+		menu_movement_type->show();
+	}
+
 	if (inpt->window_resized)
 		refreshWidgets();
 
 	snd->logic(FPoint(0,0));
 
-	if (menu_movement_type && menu_movement_type->visible) {
+	if (menu_language && menu_language->visible) {
+		menu_language->logic();
+
+		if (menu_language->clicked_confirm) {
+			settings->language = language_ISO[menu_language->action_list->getSelected()];
+			settings->setup_language = true;
+			settings->saveSettings();
+
+			delete msg;
+			msg = new MessageEngine();
+			setRequestedGameState(new GameStateTitle());
+		}
+		else if (menu_language->clicked_cancel) {
+			settings->setup_language = true;
+			settings->saveSettings();
+
+			menu_language->visible = false;
+			menu_language->clicked_cancel = false;
+		}
+	}
+	else if (menu_movement_type && menu_movement_type->visible) {
 		menu_movement_type->logic();
 
 		if (menu_movement_type->clicked_confirm) {
@@ -175,7 +241,7 @@ void GameStateTitle::logic() {
 				menu_movement_type->visible = false;
 				menu_movement_type->clicked_confirm = false;
 
-				settings->move_type_dimissed = true;
+				settings->setup_mousemove = true;
 				settings->saveSettings();
 			} else if (menu_movement_type->action_list->getSelected() == PROMPT_SELECT_MOUSEMOVE_YES) {
 				settings->mouse_move = true;
@@ -183,7 +249,7 @@ void GameStateTitle::logic() {
 				menu_movement_type->visible = false;
 				menu_movement_type->clicked_confirm = false;
 
-				settings->move_type_dimissed = true;
+				settings->setup_mousemove = true;
 				settings->saveSettings();
 			}
 		}
@@ -192,7 +258,7 @@ void GameStateTitle::logic() {
 
 			menu_movement_type->clicked_cancel = false;
 
-			settings->move_type_dimissed = true;
+			settings->setup_mousemove = true;
 			settings->saveSettings();
 		}
 	}
@@ -295,7 +361,13 @@ void GameStateTitle::refreshWidgets() {
 }
 
 void GameStateTitle::render() {
-	if (!menu_movement_type || !menu_movement_type->visible) {
+	if (menu_language && menu_language->visible) {
+		menu_language->render();
+	}
+	else if (menu_movement_type && menu_movement_type->visible) {
+		menu_movement_type->render();
+	}
+	else {
 		// display logo
 		render_device->render(logo);
 
@@ -309,9 +381,6 @@ void GameStateTitle::render() {
 
 		if (platform.has_exit_button)
 			button_exit->render();
-		}
-	else {
-		menu_movement_type->render();
 	}
 
 	// version number
@@ -325,6 +394,7 @@ GameStateTitle::~GameStateTitle() {
 	delete button_credits;
 	delete button_exit;
 	delete label_version;
+	delete menu_language;
 	delete menu_movement_type;
 	if (prompt_select_mods) delete prompt_select_mods;
 }
