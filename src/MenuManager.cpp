@@ -1394,7 +1394,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 	// actionbar
 	if (act->getCurrentTabList() && static_cast<unsigned>(act->getCurrentTabList()->getCurrent()) < act->slots.size()) {
 		size_t slot_index = act->getCurrentSlotIndexFromTablist();
-		if (slot_index < act->slots.size() + MenuActionBar::MENU_COUNT && act->slots[slot_index]) {
+		if (slot_index < act->slots.size() && act->slots[slot_index]) {
 			// temporarily enable slot so that it can be "clicked"
 			bool slot_enabled = act->slots[slot_index]->enabled;
 			act->slots[slot_index]->enabled = true;
