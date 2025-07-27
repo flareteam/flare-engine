@@ -40,6 +40,7 @@ Engine features:
 * Added backwards compatiblity option 'passive_trigger_effect_stacking' to engine/misc.txt.
 * Support using gamepad during initial launch menus.
 * Added prompt for language on first launch.
+* Added 'show_permadeath' option to menus/gamenew.txt config.
 * Android: Enabled use of external input devices (gamepads, keyboards, mice)
 
 Engine fixes:

@@ -55,6 +55,7 @@ GameStateNew::GameStateNew()
 	, portrait_border(NULL)
 	, show_classlist(true)
 	, show_randomize(true)
+	, show_permadeath(true)
 	, modified_name(false)
 	, delete_items(true)
 	, random_option(false)
@@ -207,6 +208,10 @@ GameStateNew::GameStateNew()
 			else if (infile.key == "show_randomize") {
 				show_randomize = Parse::toBool(infile.val);
 			}
+			// @ATTR show_permadeath|bool|Toggles the visibility of the "Permadeath?" checkbox.
+			else if (infile.key == "show_permadeath") {
+				show_permadeath = Parse::toBool(infile.val);
+			}
 			// @ATTR random_option|bool|Initially picks a random character option (aka portrait/name).
 			else if (infile.key == "random_option") {
 				random_option = Parse::toBool(infile.val);
@@ -247,10 +252,15 @@ GameStateNew::GameStateNew()
 	tablist.add(button_exit);
 	tablist.add(button_create);
 	tablist.add(input_name);
-	tablist.add(button_permadeath);
+
+	if (show_permadeath) {
+		tablist.add(button_permadeath);
+	}
+
 	if (show_randomize) {
 		tablist.add(button_randomize);
 	}
+
 	tablist.add(button_prev);
 	tablist.add(button_next);
 	if (show_classlist) {
@@ -404,7 +414,10 @@ void GameStateNew::logic() {
 
 	input_name->logic();
 
-	button_permadeath->checkClick();
+	if (show_permadeath) {
+		button_permadeath->checkClick();
+	}
+
 	if (show_classlist && class_list->checkClick()) {
 		setHeroOption(OPTION_CURRENT);
 	}
@@ -502,7 +515,9 @@ void GameStateNew::render() {
 	button_prev->render();
 	button_next->render();
 	input_name->render();
-	button_permadeath->render();
+
+	if (show_permadeath)
+		button_permadeath->render();
 
 	if (show_randomize) {
 		button_randomize->render();
@@ -530,7 +545,9 @@ void GameStateNew::render() {
 	// display labels
 	label_portrait->render();
 	label_name->render();
-	label_permadeath->render();
+
+	if (show_permadeath)
+		label_permadeath->render();
 
 	// display class list
 	if (show_classlist) {

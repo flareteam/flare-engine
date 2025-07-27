@@ -88,6 +88,7 @@ private:
 	Rect portrait_pos;
 	bool show_classlist;
 	bool show_randomize;
+	bool show_permadeath;
 	bool modified_name;
 	bool delete_items;
 	bool random_option;
