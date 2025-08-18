@@ -854,6 +854,7 @@ void EntityBehavior::updateState() {
 			break;
 
 		case StatBlock::ENTITY_CRITDEAD:
+			if (e->stats.effects.triggered_death) break;
 
 			e->setAnimation("critdie");
 			if (e->activeAnimation->isFirstFrame()) {
@@ -873,6 +874,11 @@ void EntityBehavior::updateState() {
 
 				//allow free movement over the corpse
 				mapr->collider.unblock(e->stats.pos.x, e->stats.pos.y);
+
+				// remove corpses that land on blocked tiles, such as water or pits
+				if (!mapr->collider.isValidPosition(e->stats.pos.x, e->stats.pos.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_TYPE_ALL_ENTITIES)) {
+					e->stats.corpse_timer.reset(Timer::END);
+				}
 
 				// prevent "jumping" when rendering
 				e->stats.pos.align();

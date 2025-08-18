@@ -108,6 +108,7 @@ Engine fixes:
 * Removed the gamma setting from the configuration UI (it can still be changed via the config file, for now)
 * Fixed 'ground' movement type hazards not colliding with pits and small objects.
 * Fixed entities not entering death state when negative HP regen reduced their HP to 0.
+* Fixed corpses not disappearing into pits when killed with a critical strike.
 * Android: Fix 'Flare' directory not being automatically created.
 * Android: Added a dialog to direct the player to the wiki page for installing if no game data is found.
 
