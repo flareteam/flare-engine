@@ -1703,8 +1703,10 @@ bool PowerManager::repeater(PowerID power_index, StatBlock *src_stats, const FPo
 	// calculate polar coordinates angle
 	float theta = Utils::calcTheta(origin.x, origin.y, target.x, target.y);
 
-	speed.x = power->speed * cosf(theta);
-	speed.y = power->speed * sinf(theta);
+	float repeater_speed = (power->speed * settings->max_frames_per_sec) / Settings::LOGIC_FPS;
+
+	speed.x = repeater_speed * cosf(theta);
+	speed.y = repeater_speed * sinf(theta);
 
 	location_iterator = origin;
 
