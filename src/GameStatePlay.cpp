@@ -268,13 +268,9 @@ void GameStatePlay::checkLoot() {
 
 	// Autopickup
 	pickup = loot->checkAutoPickup(pc->stats.pos);
-	if (!pickup.empty()) {
-		menu->inv->add(pickup, MenuInventory::CARRIED, ItemStorage::NO_SLOT, MenuInventory::ADD_PLAY_SOUND, MenuInventory::ADD_AUTO_EQUIP);
-		pickup.clear();
-	}
 
 	// Normal pickups
-	if (!pc->using_main1) {
+	if (pickup.empty() && !pc->using_main1) {
 		pickup = loot->checkPickup(inpt->mouse, mapr->cam.pos, pc->stats.pos);
 	}
 
