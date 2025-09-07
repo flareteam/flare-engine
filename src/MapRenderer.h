@@ -54,7 +54,7 @@ private:
 	bool enemyGroupPlaceEnemy(float x, float y, const Map_Group &g);
 	void pushEnemyGroup(Map_Group &g);
 
-	void clearQueues();
+	void clearObjects();
 
 	void drawRenderable(std::vector<Renderable>::iterator r_cursor);
 
@@ -91,6 +91,8 @@ private:
 	std::vector<std::vector<Renderable>::iterator> hidden_entities;
 
 public:
+	static const unsigned PROCGEN_CHUNK_SIZE = 32; // the size of each chunk tile when drawing the map to the dev console with drawProcgenChunkMap()
+
 	// functions
 	MapRenderer();
 	~MapRenderer();
@@ -120,6 +122,8 @@ public:
 
 	void setMapParallax(const std::string& mp_filename);
 
+	void drawProcgenChunkMap(Image* canvas);
+
 	// cam is where on the map the camera is pointing
 	Camera cam;
 
@@ -136,6 +140,7 @@ public:
 	// teleport handling
 	bool teleportation;
 	FPoint teleport_destination;
+	int teleport_destination_id;
 	std::string teleport_mapname;
 	std::string respawn_map;
 	FPoint respawn_point;

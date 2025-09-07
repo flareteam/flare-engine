@@ -24,6 +24,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "ItemManager.h"
 #include "TooltipData.h"
 
+class Animation;
 class WidgetTooltip;
 
 class Loot {

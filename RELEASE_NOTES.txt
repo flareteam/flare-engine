@@ -48,7 +48,12 @@ Engine features:
 * Added 'enable_gamepad_nav' property to menus/actionbar.txt config.
 * Added 'fade_wall_alpha' property to engine/misc.txt config.
 * Added 'cycle_menus' keybinding to quickly open Char/Inv and Log/Pow menus.
-* Added 'source_level' and 'source_stat' modes to map enemy & power 'spawn_level' properties. They take a single value as a multiplier and are intended to replace the 'level' and 'stat' modes.
+* Added 'hero_level' / 'source_level' and 'hero_stat' / 'source_stat' modes to map enemy & power 'spawn_level' properties. They take a single value as a multiplier and are intended to replace the 'level' and 'stat' modes.
+* Added 'intermap_id' property to Events.
+* Added 'power_level' and 'power_stats' properties to Events.
+* Added 'requires_tile' and 'requires_not_tile' properties to Events.
+* Added 'spawn_level' property to Events.
+* Added procedural map generation.
 * Android: Enabled use of external input devices (gamepads, keyboards, mice)
 
 Engine fixes:

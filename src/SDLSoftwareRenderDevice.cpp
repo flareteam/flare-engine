@@ -144,6 +144,15 @@ void SDLSoftwareImage::drawLine(int x0, int y0, int x1, int y1, const Color& col
 	while(x0 != x1 || y0 != y1);
 }
 
+void SDLSoftwareImage::drawFilledRect(int x, int y, int w, int h, const Color& color) {
+	SDL_Rect rect;
+	rect.x = x;
+	rect.y = y;
+	rect.w = w;
+	rect.h = h;
+
+	SDL_FillRect(surface, &rect, SDL_MapRGBA(surface->format, color.r, color.g, color.b, color.a));
+}
 
 Uint32 SDLSoftwareImage::MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
 	if (!surface) return 0;

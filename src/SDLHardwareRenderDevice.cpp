@@ -160,6 +160,20 @@ void SDLHardwareImage::drawLine(int x0, int y0, int x1, int y1, const Color& col
 	SDL_SetRenderTarget(renderer, NULL);
 }
 
+void SDLHardwareImage::drawFilledRect(int x, int y, int w, int h, const Color& color) {
+	SDL_Rect rect;
+	rect.x = x;
+	rect.y = y;
+	rect.w = w;
+	rect.h = h;
+
+	SDL_SetRenderTarget(renderer, surface);
+	SDL_SetTextureBlendMode(surface, SDL_BLENDMODE_BLEND);
+	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+	SDL_RenderFillRect(renderer, &rect);
+	SDL_SetRenderTarget(renderer, NULL);
+}
+
 
 /**
  * Creates a non-accelerated SDL_Surface as a pixel buffer

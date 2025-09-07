@@ -54,7 +54,7 @@ public:
 	void addRenders(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
 	void checkEnemiesforXP();
 	bool isCleared();
-	void spawn(const std::string& entity_type, const Point& target);
+	void spawn(const std::string& entity_type, const Point& target, EventComponent* ec_spawn_level);
 	Entity *entityFocus(const Point& mouse, const FPoint& cam, bool alive_only);
 	Entity* getNearestEntity(const FPoint& pos, bool get_corpse, float *saved_distance, float max_range);
 

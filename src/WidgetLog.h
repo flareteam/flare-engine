@@ -24,6 +24,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 
+class Image;
 class Widget;
 class WidgetScrollBox;
 
@@ -86,6 +87,7 @@ public:
 	bool isEmpty();
 	void resize(int w, int h);
 	void setFontNames(const std::string& _font_name, const std::string& _font_bold_name);
+	Image* setupDrawBuffer(int buf_h);
 };
 
 #endif

@@ -60,11 +60,14 @@ public:
 	~SpawnLevel() {}
 
 	void parse(FileParser& infile);
+	void parseString(const std::string& s);
 	void applyToStatBlock(StatBlock *src_stats, StatBlock *ratio_stats);
 };
 
 class Map_Group {
 public:
+	static const int DEFAULT_WANDER_RADIUS = 4;
+	static const int RANDOM_DIRECTION = -1;
 
 	std::string type;
 	std::string category;
@@ -76,7 +79,7 @@ public:
 	int numbermax;
 	float chance;
 	int direction;
-	std::queue<FPoint> waypoints;
+	std::vector<FPoint> waypoints;
 	int wander_radius;
 	std::vector<EventComponent> requirements;
 	std::vector<EventComponent> invincible_requirements;
@@ -92,9 +95,9 @@ public:
 		, numbermin(1)
 		, numbermax(1)
 		, chance(100.0f)
-		, direction(-1)
-		, waypoints(std::queue<FPoint>())
-		, wander_radius(4)
+		, direction(RANDOM_DIRECTION)
+		, waypoints()
+		, wander_radius(DEFAULT_WANDER_RADIUS)
 		, requirements()
 		, invincible_requirements()
 		, spawn_level() {
@@ -103,12 +106,15 @@ public:
 
 class Map_NPC {
 public:
+	static const int DEFAULT_WANDER_RADIUS = 0;
+	static const int RANDOM_DIRECTION = -1;
+
 	std::string type;
 	std::string id;
 	FPoint pos;
 	std::vector<EventComponent> requirements;
 	int direction;
-	std::queue<FPoint> waypoints;
+	std::vector<FPoint> waypoints;
 	int wander_radius;
 
 	Map_NPC()
@@ -116,9 +122,9 @@ public:
 		, id("")
 		, pos()
 		, requirements()
-		, direction(-1)
-		, waypoints(std::queue<FPoint>())
-		, wander_radius(0) {
+		, direction(RANDOM_DIRECTION)
+		, waypoints()
+		, wander_radius(DEFAULT_WANDER_RADIUS) {
 	}
 };
 
@@ -142,7 +148,7 @@ public:
 		, pos(_pos)
 		, direction(rand() % 8)
 		, waypoints(std::queue<FPoint>())
-		, wander_radius(4)
+		, wander_radius(Map_Group::DEFAULT_WANDER_RADIUS)
 		, hero_ally(false)
 		, enemy_ally(false)
 		, summon_power_index(0)
@@ -153,9 +159,52 @@ public:
 	}
 };
 
+class Chunk {
+public:
+	enum {
+		TYPE_EMPTY = 0,
+		TYPE_LINKS,
+		TYPE_NORMAL,
+		TYPE_START,
+		TYPE_END,
+		TYPE_KEY,
+		TYPE_DOOR_NORTH_SOUTH,
+		TYPE_DOOR_WEST_EAST,
+		TYPE_BRANCH,
+		TYPE_COUNT
+	};
+
+	enum {
+		LINK_NORTH = 0,
+		LINK_SOUTH,
+		LINK_WEST,
+		LINK_EAST,
+		LINK_COUNT,
+	};
+
+	int type;
+	int door_level;
+	size_t variant;
+	std::vector<Chunk*> links;
+
+	Chunk()
+		: type(TYPE_EMPTY)
+		, door_level(0)
+		, variant(0)
+		, links(4, NULL)
+	{}
+
+	bool isStraight();
+};
+
 class Map {
 protected:
 	static const bool EXIT_ON_FAIL = true;
+
+	enum {
+		PATH_MAIN = 0,
+		PATH_BRANCH
+	};
 
 	void loadHeader(FileParser &infile);
 	bool loadLayer(FileParser &infile, bool exit_on_fail = EXIT_ON_FAIL);
@@ -163,13 +212,29 @@ protected:
 	void loadNPC(FileParser &infile);
 
 	void clearLayers();
-	void clearQueues();
+	void clearEntities();
 
 	std::vector<StatBlock> statblocks;
 
 	std::string filename;
 	std::string tileset;
+
+	Chunk* procGenWalkSingle(int path_type, size_t cur_x, size_t cur_y, int walk_x, int walk_y);
+	int procGenCreatePath(int path_type, int desired_length, int* _door_count, size_t start_x, size_t start_y);
+	void procGenFillArea(const std::string& config_filename, const Rect& area);
+
+	void copyTileLayer(Map* src, size_t layer_index, size_t src_x, size_t src_y, size_t src_w, size_t src_h, size_t x_offset, size_t y_offset);
+	void copyMapObjects(Map* src, Chunk* chunk, size_t src_x, size_t src_y, size_t src_w, size_t src_h, size_t x_offset, size_t y_offset);
+
+	std::vector<Point> procgen_branch_roots;
+
+	int procgen_doors_max;
+	int procgen_door_spacing_min;
+	int procgen_branches_per_door_level_max;
+
 public:
+	static const bool LOAD_PROCGEN_CACHE = true;
+
 	Map();
 	~Map();
 	std::string getFilename() { return filename; }
@@ -177,23 +242,27 @@ public:
 	void setTileset(const std::string& tset) { tileset = tset; }
 	void removeLayer(unsigned index);
 
-	int load(const std::string& filename);
+	int load(const std::string& filename, bool load_procgen_cache = false);
 
 	std::string music_filename;
 
 	std::vector<Map_Layer> layers; // visible layers in maprenderer
 	std::vector<std::string> layernames;
+	std::vector<unsigned long> layernames_hashed;
 
 	void clearEvents();
 
 	int addEventStatBlock(Event &evnt);
 
+	std::string getProcgenFilename();
+	std::string getFOWFilename();
+
 	// enemy load handling
 	std::queue<Map_Enemy> enemies;
-	std::queue<Map_Group> enemy_groups;
+	std::vector<Map_Group> enemy_groups;
 
 	// npc load handling
-	std::queue<Map_NPC> map_npcs;
+	std::vector<Map_NPC> map_npcs;
 
 	// map events
 	std::vector<Event> events;
@@ -202,6 +271,9 @@ public:
 	// intemap_random queue
 	std::string intermap_random_filename;
 	std::queue<EventComponent> intermap_random_queue;
+
+	// procgen chunks (i.e. rooms)
+	std::vector< std::vector<Chunk> > procgen_chunks;
 
 	// vars
 	std::string title;
@@ -213,6 +285,11 @@ public:
 	Color background_color;
 	unsigned short fogofwar;
 	bool save_fogofwar;
+	bool force_spawn_pos;
+	size_t procgen_type;
+	StatusID procgen_unique_status_id;
+	std::string procgen_reset_status;
+	StatusID procgen_reset_status_id;
 
 };
 

@@ -602,11 +602,9 @@ code {
 
 <p><strong>event.tooltip</strong> | <code>string</code> | Tooltip for event</p>
 
-<p><strong>event.power_path</strong> | <code>int, int, ["hero", point] : Source X, Source Y, Destination</code> | Path that an event power will take.</p>
+<p><strong>event.intermap</strong> | <code>filename, int, int, string : Map file, X, Y, Spawn point ID</code> | Jump to specific map. X/Y (optional) can be used to specifiy the spawn position. Alternatively, use position (-1, -1) and an ID to use the location of an intermap_id event as the spawn point.</p>
 
-<p><strong>event.power_damage</strong> | <code>float, float : Min, Max</code> | Range of power damage</p>
-
-<p><strong>event.intermap</strong> | <code>filename, int, int : Map file, X, Y</code> | Jump to specific map at location specified.</p>
+<p><strong>event.intermap_id</strong> | <code>string</code> | Identifier used to specify an alternate spawn point for intermap events.</p>
 
 <p><strong>event.intermap_random</strong> | <code>filename</code> | Pick a random map from a map list file and teleport to it.</p>
 
@@ -644,6 +642,10 @@ code {
 
 <p><strong>event.requires_not_class</strong> | <code>predefined_string</code> | Event requires not this base class</p>
 
+<p><strong>event.requires_tile</strong> | <code>list(predefined_string, int, int, int) : Layer, X, Y, Tile ID</code> | Event requires tile at this layer and X/Y to match the ID</p>
+
+<p><strong>event.requires_not_tile</strong> | <code>list(predefined_string, int, int, int) : Layer, X, Y, Tile ID</code> | Event requires tile at this layer and X/Y to not match the ID</p>
+
 <p><strong>event.set_status</strong> | <code>list(string)</code> | Sets specified statuses</p>
 
 <p><strong>event.unset_status</strong> | <code>list(string)</code> | Unsets specified statuses</p>
@@ -668,7 +670,17 @@ code {
 
 <p><strong>event.power</strong> | <code>power_id</code> | Specify power coupled with event.</p>
 
+<p><strong>event.power_path</strong> | <code>int, int, ["hero", point] : Source X, Source Y, Destination</code> | Path that an event power will take.</p>
+
+<p><strong>event.power_damage</strong> | <code>float, float : Min, Max</code> | Range of power damage</p>
+
+<p><strong>event.power_stats</strong> | <code>filename</code> | Entity stat file to use for this event's power spawner.</p>
+
+<p><strong>event.power_level</strong> | <code>["default", "fixed", "source_level", "source_stat", "hero_level", "hero_stat"], float, predefined_string : Mode, Multiplier, Primary stat</code> | Level of this event's power spawner. The need for the last two parameters depends on the mode being used. The "default" mode will just use the entity's normal level and doesn't require any additional parameters. The "fixed" mode sets the multiplier as the enemy level. The level modes multiply with the target's level. The stat modes multiply by one of the target's primary stats. The stat is defined with the last parameter, which is simply the ID of the primary stat that should be used for scaling. Because the map has no level/stats of its own, the source modes use the hero's level/stats.</p>
+
 <p><strong>event.spawn</strong> | <code>list(predefined_string, int, int) : Enemy category, X, Y</code> | Spawn an enemy from this category at location</p>
+
+<p><strong>event.spawn_level</strong> | <code>["default", "fixed", "source_level", "source_stat", "hero_level", "hero_stat"], float, predefined_string : Mode, Multiplier, Primary stat</code> | Level of the spawned entities. The need for the last two parameters depends on the mode being used. The "default" mode will just use the entity's normal level and doesn't require any additional parameters. The "fixed" mode sets the multiplier as the entity level. The level modes multiply with the target's level. The stat modes multiply by one of the target's primary stats. The stat is defined with the last parameter, which is simply the ID of the primary stat that should be used for scaling. Because the map has no level/stats of its own, the source modes use the hero's level/stats.</p>
 
 <p><strong>event.stash</strong> | <code>bool</code> | If true, the Stash menu if opened.</p>
 
@@ -695,6 +707,12 @@ code {
 <p><strong>event.parallax_layers</strong> | <code>filename</code> | Filename of a parallax layers definition to load.</p>
 
 <p><strong>event.random_status</strong> | <code>repeatable(["append", "clear", "roll", "set", "unset"], list(string)) : Action, Statuses (append action only)</code> | Used to randomly pick a status from a list, and then set or unset it. Statuses are added to the list with the "append" action. The "roll" action will randomly pick from the list and set it as the current random status. The "set" and "unset" commands will function like set_status and unset_status, with the parameter being the current random status. Lastly, the "clear" action will empty the pool of random statuses. It is recommended to clear the list before you use it, as well as after you're done to prevent unintended side-effects.</p>
+
+<p><strong>event.procgen_filename</strong> | <code>filename</code> | Filename of procedural map generation rules file.</p>
+
+<p><strong>event.procgen_link</strong> | <code>["north", "south", "west", "east"]</code> | Only used in maps with the procgen_type of "links". Defines a region to be used as a link. The tiles and objects in this region will replace the matching region of the target chunk that has the specified link.</p>
+
+<p><strong>event.procgen_door_level</strong> | <code>int</code> | Event will only be active on a specific door level. For procedural generation chunks only.</p>
 
 <hr />
 
@@ -1238,6 +1256,12 @@ code {
 
 <p><strong>tileheight</strong> | <code>int</code> | Inherited from Tiled map file. Unused by engine.</p>
 
+<p><strong>procgen_type</strong> | <code>["links", "normal", "start", "end", "key", "door_north_south", "door_west_east"]</code> | Defines the type of chunk this map is when used in procedural map generation.</p>
+
+<p><strong>procgen_unique_status</strong> | <code>string</code> | Sets this campaign status once this map is placed as a chunk during procedural generation. Once the status is set, the chunk will no longer be eligible to be placed.</p>
+
+<p><strong>procgen_reset_status</strong> | <code>string</code> | If the map contains a procgen region, it will be regenerated if this campaign status is set.</p>
+
 <p><strong>layer.type</strong> | <code>string</code> | Map layer type.</p>
 
 <p><strong>layer.format</strong> | <code>string</code> | Format for map layer, must be 'dec'</p>
@@ -1290,7 +1314,7 @@ code {
 
 <p><strong>npc.type</strong> | <code>string</code> | (IGNORED BY ENGINE) The "type" field, as used by Tiled and other mapping tools.</p>
 
-<p><strong>npc.filename</strong> | <code>string</code> | Filename of an NPC definition.</p>
+<p><strong>npc.filename</strong> | <code>filename</code> | Filename of an NPC definition.</p>
 
 <p><strong>npc.location</strong> | <code>point</code> | Location of NPC</p>
 
@@ -1319,6 +1343,30 @@ code {
 <p><strong>npc.waypoints</strong> | <code>list(point)</code> | NPC waypoints; negates wander_radius</p>
 
 <p><strong>npc.wander_radius</strong> | <code>int</code> | The radius (in tiles) that an NPC will wander around randomly; negates waypoints</p>
+
+<hr />
+
+<h4>Map: Procedural generation rules</h4>
+
+<p>Description of maps/procgen_rules</p>
+
+<p><strong>settings.doors_max</strong> | <code>int</code> | Maximum number of door chunks that can be placed in this region.</p>
+
+<p><strong>settings.main_path_length_min</strong> | <code>int</code> | Minimum length of the 'main' path (start chunk to end chunk).</p>
+
+<p><strong>settings.main_path_length_max</strong> | <code>int</code> | Maximum length of the 'main' path (start chunk to end chunk).</p>
+
+<p><strong>settings.main_path_attempts_max</strong> | <code>int</code> | Maximum number of attempts to generate the main path to match the min/max constraints.</p>
+
+<p><strong>settings.branch_length_min</strong> | <code>int</code> | Minimum number of steps taken when creating a branch off the main path.</p>
+
+<p><strong>settings.branch_length_max</strong> | <code>int</code> | Maximum number of steps taken when creating a branch off the main path.</p>
+
+<p><strong>settings.branches_per_door_level_max</strong> | <code>int</code> | Maximum number of branches that can be created between each 'door level'. A door level is defined as the set of chunks between a set of 2 door chunks (start and end chunks count as doors here).</p>
+
+<p><strong>settings.door_spacing_min</strong> | <code>int</code> | The minimum number of chunk length of each door level.</p>
+
+<p><strong>chunks.filename</strong> | <code>repeatable(filename)</code> | Map chunk file.</p>
 
 <hr />
 

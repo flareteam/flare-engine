@@ -38,9 +38,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "SoundManager.h"
+#include "Utils.h"
 #include "UtilsFileSystem.h"
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
+#include <iterator>
+#include <vector>
 
 EventComponent::EventComponent()
 	: type(NONE)
@@ -218,34 +221,8 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 
 		e->s = msg->get(val);
 	}
-	else if (key == "power_path") {
-		// @ATTR event.power_path|int, int, ["hero", point] : Source X, Source Y, Destination|Path that an event power will take.
-		e->type = EventComponent::POWER_PATH;
-
-		// x,y are src, if s=="hero" we target the hero,
-		// else we'll use values in a,b as coordinates
-		e->data[0].Int = Parse::popFirstInt(val);
-		e->data[1].Int = Parse::popFirstInt(val);
-
-		e->data[4].Bool = false;
-		std::string dest = Parse::popFirstString(val);
-		if (dest == "hero") {
-			e->data[4].Bool = true;
-		}
-		else {
-			e->data[2].Int = Parse::toInt(dest);
-			e->data[3].Int = Parse::popFirstInt(val);
-		}
-	}
-	else if (key == "power_damage") {
-		// @ATTR event.power_damage|float, float : Min, Max|Range of power damage
-		e->type = EventComponent::POWER_DAMAGE;
-
-		e->data[0].Float = Parse::popFirstFloat(val);
-		e->data[1].Float = Parse::popFirstFloat(val);
-	}
 	else if (key == "intermap") {
-		// @ATTR event.intermap|filename, int, int : Map file, X, Y|Jump to specific map at location specified.
+		// @ATTR event.intermap|filename, int, int, string : Map file, X, Y, Spawn point ID|Jump to specific map. X/Y (optional) can be used to specifiy the spawn position. Alternatively, use position (-1, -1) and an ID to use the location of an intermap_id event as the spawn point.
 		e->type = EventComponent::INTERMAP;
 
 		e->s = Parse::popFirstString(val);
@@ -256,9 +233,20 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		if (!test_x.empty()) {
 			e->data[0].Int = Parse::toInt(test_x);
 			e->data[1].Int = Parse::popFirstInt(val);
+
+			std::string test_spawn_id = Parse::popFirstString(val);
+			if (!test_spawn_id.empty()) {
+				e->data[3].Int = static_cast<int>(getIntermapID(test_spawn_id));
+			}
 		}
 
 		e->data[2].Bool = false; // not a map list
+	}
+	else if (key == "intermap_id") {
+		// @ATTR event.intermap_id|string|Identifier used to specify an alternate spawn point for intermap events.
+		e->type = EventComponent::INTERMAP_ID;
+
+		e->data[0].Int = static_cast<int>(getIntermapID(val));
 	}
 	else if (key == "intermap_random") {
 		// @ATTR event.intermap_random|filename|Pick a random map from a map list file and teleport to it.
@@ -356,7 +344,8 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		// @ATTR event.requires_status|list(string)|Event requires list of statuses
 		e->type = EventComponent::REQUIRES_STATUS;
 
-		e->status = camp->registerStatus(Parse::popFirstString(val));
+		e->s = Parse::popFirstString(val);
+		e->status = camp->registerStatus(e->s);
 
 		// add repeating requires_status
 		if (evnt) {
@@ -365,6 +354,7 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 				evnt->components.push_back(EventComponent());
 				e = &evnt->components.back();
 				e->type = EventComponent::REQUIRES_STATUS;
+				e->s = repeat_val;
 				e->status = camp->registerStatus(repeat_val);
 
 				repeat_val = Parse::popFirstString(val);
@@ -375,7 +365,8 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		// @ATTR event.requires_not_status|list(string)|Event requires not list of statuses
 		e->type = EventComponent::REQUIRES_NOT_STATUS;
 
-		e->status = camp->registerStatus(Parse::popFirstString(val));
+		e->s = Parse::popFirstString(val);
+		e->status = camp->registerStatus(e->s);
 
 		// add repeating requires_not
 		if (evnt) {
@@ -384,6 +375,7 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 				evnt->components.push_back(EventComponent());
 				e = &evnt->components.back();
 				e->type = EventComponent::REQUIRES_NOT_STATUS;
+				e->s = repeat_val;
 				e->status = camp->registerStatus(repeat_val);
 
 				repeat_val = Parse::popFirstString(val);
@@ -472,11 +464,66 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 
 		e->s = Parse::popFirstString(val);
 	}
+	else if (key == "requires_tile") {
+		// @ATTR event.requires_tile|list(predefined_string, int, int, int) : Layer, X, Y, Tile ID|Event requires tile at this layer and X/Y to match the ID
+		e->type = EventComponent::REQUIRES_TILE;
+
+		e->s = Parse::popFirstString(val);
+		e->id = Utils::hashString(e->s);
+		e->data[0].Int = Parse::popFirstInt(val);
+		e->data[1].Int = Parse::popFirstInt(val);
+		e->data[2].Int = Parse::popFirstInt(val);
+
+		// add repeating tiles
+		if (evnt) {
+			std::string repeat_val = Parse::popFirstString(val);
+			while (repeat_val != "") {
+				evnt->components.push_back(EventComponent());
+				e = &evnt->components.back();
+				e->type = EventComponent::REQUIRES_TILE;
+				e->s = repeat_val;
+				e->id = Utils::hashString(e->s);
+				e->data[0].Int = Parse::popFirstInt(val);
+				e->data[1].Int = Parse::popFirstInt(val);
+				e->data[2].Int = Parse::popFirstInt(val);
+
+				repeat_val = Parse::popFirstString(val);
+			}
+		}
+	}
+	else if (key == "requires_not_tile") {
+		// @ATTR event.requires_not_tile|list(predefined_string, int, int, int) : Layer, X, Y, Tile ID|Event requires tile at this layer and X/Y to not match the ID
+		e->type = EventComponent::REQUIRES_NOT_TILE;
+
+		e->s = Parse::popFirstString(val);
+		e->id = Utils::hashString(e->s);
+		e->data[0].Int = Parse::popFirstInt(val);
+		e->data[1].Int = Parse::popFirstInt(val);
+		e->data[2].Int = Parse::popFirstInt(val);
+
+		// add repeating tiles
+		if (evnt) {
+			std::string repeat_val = Parse::popFirstString(val);
+			while (repeat_val != "") {
+				evnt->components.push_back(EventComponent());
+				e = &evnt->components.back();
+				e->type = EventComponent::REQUIRES_NOT_TILE;
+				e->s = repeat_val;
+				e->id = Utils::hashString(e->s);
+				e->data[0].Int = Parse::popFirstInt(val);
+				e->data[1].Int = Parse::popFirstInt(val);
+				e->data[2].Int = Parse::popFirstInt(val);
+
+				repeat_val = Parse::popFirstString(val);
+			}
+		}
+	}
 	else if (key == "set_status") {
 		// @ATTR event.set_status|list(string)|Sets specified statuses
 		e->type = EventComponent::SET_STATUS;
 
-		e->status = camp->registerStatus(Parse::popFirstString(val));
+		e->s = Parse::popFirstString(val);
+		e->status = camp->registerStatus(e->s);
 
 		// add repeating set_status
 		if (evnt) {
@@ -485,6 +532,7 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 				evnt->components.push_back(EventComponent());
 				e = &evnt->components.back();
 				e->type = EventComponent::SET_STATUS;
+				e->s = repeat_val;
 				e->status = camp->registerStatus(repeat_val);
 
 				repeat_val = Parse::popFirstString(val);
@@ -495,7 +543,8 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		// @ATTR event.unset_status|list(string)|Unsets specified statuses
 		e->type = EventComponent::UNSET_STATUS;
 
-		e->status = camp->registerStatus(Parse::popFirstString(val));
+		e->s = Parse::popFirstString(val);
+		e->status = camp->registerStatus(e->s);
 
 		// add repeating unset_status
 		if (evnt) {
@@ -504,6 +553,7 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 				evnt->components.push_back(EventComponent());
 				e = &evnt->components.back();
 				e->type = EventComponent::UNSET_STATUS;
+				e->s = repeat_val;
 				e->status = camp->registerStatus(repeat_val);
 
 				repeat_val = Parse::popFirstString(val);
@@ -614,6 +664,44 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		else
 			Utils::logError("EventManager: Unable to verify Power ID '%d'. PowerManager hasn't been initialized.", e->id);
 	}
+	else if (key == "power_path") {
+		// @ATTR event.power_path|int, int, ["hero", point] : Source X, Source Y, Destination|Path that an event power will take.
+		e->type = EventComponent::POWER_PATH;
+
+		// x,y are src, if s=="hero" we target the hero,
+		// else we'll use values in a,b as coordinates
+		e->data[0].Int = Parse::popFirstInt(val);
+		e->data[1].Int = Parse::popFirstInt(val);
+
+		e->data[4].Bool = false;
+		std::string dest = Parse::popFirstString(val);
+		if (dest == "hero") {
+			e->data[4].Bool = true;
+		}
+		else {
+			e->data[2].Int = Parse::toInt(dest);
+			e->data[3].Int = Parse::popFirstInt(val);
+		}
+	}
+	else if (key == "power_damage") {
+		// @ATTR event.power_damage|float, float : Min, Max|Range of power damage
+		e->type = EventComponent::POWER_DAMAGE;
+
+		e->data[0].Float = Parse::popFirstFloat(val);
+		e->data[1].Float = Parse::popFirstFloat(val);
+	}
+	else if (key == "power_stats") {
+		// @ATTR event.power_stats|filename|Entity stat file to use for this event's power spawner.
+		e->type = EventComponent::POWER_STATS;
+
+		e->s = val;
+	}
+	else if (key == "power_level") {
+		// @ATTR event.power_level|["default", "fixed", "source_level", "source_stat", "hero_level", "hero_stat"], float, predefined_string : Mode, Multiplier, Primary stat|Level of this event's power spawner. The need for the last two parameters depends on the mode being used. The "default" mode will just use the entity's normal level and doesn't require any additional parameters. The "fixed" mode sets the multiplier as the enemy level. The level modes multiply with the target's level. The stat modes multiply by one of the target's primary stats. The stat is defined with the last parameter, which is simply the ID of the primary stat that should be used for scaling. Because the map has no level/stats of its own, the source modes use the hero's level/stats.
+		e->type = EventComponent::POWER_LEVEL;
+
+		e->s = val; // will be parsed in Map::addEventStatBlock()
+	}
 	else if (key == "spawn") {
 		// @ATTR event.spawn|list(predefined_string, int, int) : Enemy category, X, Y|Spawn an enemy from this category at location
 		e->type = EventComponent::SPAWN;
@@ -637,6 +725,12 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 				repeat_val = Parse::popFirstString(val);
 			}
 		}
+	}
+	else if (key == "spawn_level") {
+		// @ATTR event.spawn_level|["default", "fixed", "source_level", "source_stat", "hero_level", "hero_stat"], float, predefined_string : Mode, Multiplier, Primary stat|Level of the spawned entities. The need for the last two parameters depends on the mode being used. The "default" mode will just use the entity's normal level and doesn't require any additional parameters. The "fixed" mode sets the multiplier as the entity level. The level modes multiply with the target's level. The stat modes multiply by one of the target's primary stats. The stat is defined with the last parameter, which is simply the ID of the primary stat that should be used for scaling. Because the map has no level/stats of its own, the source modes use the hero's level/stats.
+		e->type = EventComponent::SPAWN_LEVEL;
+
+		e->s = val; // will be parsed in EntityManager::spawn()
 	}
 	else if (key == "stash") {
 		// @ATTR event.stash|bool|If true, the Stash menu if opened.
@@ -732,7 +826,8 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		if (mode == "append") {
 			e->data[0].Int = EventComponent::RANDOM_STATUS_MODE_APPEND;
 
-			e->status = camp->registerStatus(Parse::popFirstString(val));
+			e->s = Parse::popFirstString(val);
+			e->status = camp->registerStatus(e->s);
 
 			// add repeating random_status
 			if (evnt) {
@@ -742,6 +837,7 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 					e = &evnt->components.back();
 					e->type = EventComponent::RANDOM_STATUS;
 					e->data[0].Int = EventComponent::RANDOM_STATUS_MODE_APPEND;
+					e->s = repeat_val;
 					e->status = camp->registerStatus(repeat_val);
 
 					repeat_val = Parse::popFirstString(val);
@@ -758,6 +854,38 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 			e->data[0].Int = EventComponent::RANDOM_STATUS_MODE_UNSET;
 		else
 			Utils::logError("EventManager: '%s' is not a valid random_status action.", mode.c_str());
+	}
+	else if (key == "procgen_filename") {
+		// @ATTR event.procgen_filename|filename|Filename of procedural map generation rules file.
+		e->type = EventComponent::PROCGEN_FILENAME;
+
+		e->s = val;
+	}
+	else if (key == "procgen_link") {
+		// @ATTR event.procgen_link|["north", "south", "west", "east"]|Only used in maps with the procgen_type of "links". Defines a region to be used as a link. The tiles and objects in this region will replace the matching region of the target chunk that has the specified link.
+		e->type = EventComponent::PROCGEN_LINK;
+
+		e->s = val;
+	}
+	else if (key == "procgen_door_level") {
+		// @ATTR event.procgen_door_level|int|Event will only be active on a specific door level. For procedural generation chunks only.
+		e->type = EventComponent::PROCGEN_DOOR_LEVEL;
+
+		e->data[0].Int = Parse::popFirstInt(val);
+
+		// add repeating door levels
+		if (evnt) {
+			std::string repeat_val = Parse::popFirstString(val);
+			while (repeat_val != "") {
+				evnt->components.push_back(EventComponent());
+				e = &evnt->components.back();
+				e->type = EventComponent::PROCGEN_DOOR_LEVEL;
+				e->data[0].Int = Parse::toInt(repeat_val);
+				e->s = repeat_val;
+
+				repeat_val = Parse::popFirstString(val);
+			}
+		}
 	}
 	else {
 		return false;
@@ -845,10 +973,12 @@ bool EventManager::executeEventInternal(Event &ev, bool skip_delay) {
 					// the teleport destination will be set to the map's hero_pos once the map is loaded
 					mapr->teleport_destination.x = -1;
 					mapr->teleport_destination.y = -1;
+					mapr->teleport_destination_id = ec->data[3].Int;
 				}
 				else {
 					mapr->teleport_destination.x = static_cast<float>(ec->data[0].Int) + 0.5f;
 					mapr->teleport_destination.y = static_cast<float>(ec->data[1].Int) + 0.5f;
+					mapr->teleport_destination_id = 0;
 				}
 			}
 			else {
@@ -981,7 +1111,7 @@ bool EventManager::executeEventInternal(Event &ev, bool skip_delay) {
 			Point spawn_pos;
 			spawn_pos.x = ec->data[0].Int;
 			spawn_pos.y = ec->data[1].Int;
-			entitym->spawn(ec->s, spawn_pos);
+			entitym->spawn(ec->s, spawn_pos, ev.getComponent(EventComponent::SPAWN_LEVEL));
 		}
 		else if (ec->type == EventComponent::POWER) {
 			EventComponent *ec_path = ev.getComponent(EventComponent::POWER_PATH);
@@ -1243,4 +1373,24 @@ EventComponent EventManager::getRandomMapFromFile(const std::string& fname) {
 		mapr->intermap_random_queue.pop();
 		return ec;
 	}
+}
+
+size_t EventManager::getIntermapID(const std::string& s) {
+	std::vector<std::string>::iterator it = std::find(intermap_ids.begin(), intermap_ids.end(), s);
+	if (it == intermap_ids.end()) {
+		intermap_ids.push_back(s);
+		return intermap_ids.size();
+	}
+	else {
+		// zero is reserved as blank, so offset by 1
+		return std::distance(intermap_ids.begin(), it) + 1;
+	}
+}
+
+std::string EventManager::getIntermapIDString(size_t index) {
+	// zero is reserved as blank, so offset by 1
+	if (index-1 < intermap_ids.size())
+		return intermap_ids[index-1];
+
+	return "";
 }

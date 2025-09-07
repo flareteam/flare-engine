@@ -47,6 +47,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetInput.h"
 #include "WidgetLog.h"
 #include "WidgetScrollBar.h"
+#include "WidgetScrollBox.h"
 
 #include <limits>
 #include <math.h>
@@ -472,6 +473,7 @@ void MenuDevConsole::execute() {
 	}
 
 	if (args[0] == "help") {
+		log_history->add("procgen_map - " + msg->get("For procedural maps, prints a color-coded map."), WidgetLog::MSG_UNIQUE);
 		log_history->add("add_power - " + msg->get("adds a power to the action bar"), WidgetLog::MSG_UNIQUE);
 		log_history->add("toggle_fps - " + msg->get("turns on/off the display of the FPS counter"), WidgetLog::MSG_UNIQUE);
 		log_history->add("toggle_hud - " + msg->get("turns on/off all of the HUD elements"), WidgetLog::MSG_UNIQUE);
@@ -677,6 +679,15 @@ void MenuDevConsole::execute() {
 				log_history->setNextColor(font->getColor(FontEngine::COLOR_MENU_PENALTY));
 				log_history->add(msg->get("ERROR: Not a valid shortcut slot."), WidgetLog::MSG_UNIQUE);
 			}
+		}
+	}
+	else if (args[0] == "procgen_map") {
+		if (mapr->procgen_chunks.empty()) {
+			log_history->add(msg->get("Procedural chunk maps are only available for generated maps. This map is either not a procedural map, or the chunk data is corrupt."), WidgetLog::MSG_UNIQUE);
+		}
+		else {
+			int chunk_map_h = static_cast<int>(mapr->procgen_chunks.size() * MapRenderer::PROCGEN_CHUNK_SIZE);
+			mapr->drawProcgenChunkMap(log_history->setupDrawBuffer(chunk_map_h));
 		}
 	}
 	else if (starts_with_slash || args[0] == "exec") {

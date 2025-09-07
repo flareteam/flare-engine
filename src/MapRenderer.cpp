@@ -39,6 +39,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MapRenderer.h"
 #include "MenuDevConsole.h"
 #include "MenuManager.h"
+#include "MessageEngine.h"
 #include "NPC.h"
 #include "NPCManager.h"
 #include "PowerManager.h"
@@ -68,6 +69,7 @@ MapRenderer::MapRenderer()
 	, map_change(false)
 	, teleportation(false)
 	, teleport_destination()
+	, teleport_destination_id(0)
 	, respawn_point()
 	, cutscene(false)
 	, cutscene_file("")
@@ -82,8 +84,8 @@ MapRenderer::MapRenderer()
 {
 }
 
-void MapRenderer::clearQueues() {
-	Map::clearQueues();
+void MapRenderer::clearObjects() {
+	Map::clearEntities();
 	loot.clear();
 }
 
@@ -93,14 +95,16 @@ bool MapRenderer::enemyGroupPlaceEnemy(float x, float y, const Map_Group &g) {
 		if (!enemy_lev.type.empty()) {
 			Map_Enemy group_member = Map_Enemy(enemy_lev.type, FPoint(x, y));
 
-			group_member.direction = (g.direction == -1 ? rand()%8 : g.direction);
+			group_member.direction = (g.direction == -1 ? rand() % 8 : g.direction);
 			group_member.wander_radius = g.wander_radius;
 			group_member.requirements = g.requirements;
 			group_member.invincible_requirements = g.invincible_requirements;
 
 			if (g.area.x == 1 && g.area.y == 1) {
 				// this is a single enemy
-				group_member.waypoints = g.waypoints;
+				for (size_t i = 0; i < g.waypoints.size(); ++i) {
+					group_member.waypoints.push(g.waypoints[i]);
+				}
 			}
 
 			group_member.spawn_level = g.spawn_level;
@@ -216,9 +220,8 @@ int MapRenderer::load(const std::string& fname) {
 		}
 	}
 
-	while (!enemy_groups.empty()) {
-		pushEnemyGroup(enemy_groups.front());
-		enemy_groups.pop();
+	for (size_t i = 0; i < enemy_groups.size(); ++i) {
+		pushEnemyGroup(enemy_groups[i]);
 	}
 
 	tset.load(this->tileset);
@@ -1694,11 +1697,84 @@ void MapRenderer::fadeOverlapTile(const Tile_Def& tile, const int_fast16_t x, co
 	tile.tile->alpha_mod = static_cast<uint8_t>(std::min(255, std::max(static_cast<int>(eset->misc.fade_wall_alpha), static_cast<int>(255.f * tile_dist))));
 }
 
+void MapRenderer::drawProcgenChunkMap(Image* canvas) {
+	if (!canvas || procgen_chunks.empty())
+		return;
+
+	// 1/4 size slice of a chunk
+	int q = PROCGEN_CHUNK_SIZE / 4;
+
+	Color color_grid = font->getColor(FontEngine::COLOR_WIDGET_DISABLED);
+	Color color_normal = font->getColor(FontEngine::COLOR_WIDGET_NORMAL);
+	Color color_start = Color(88,153,31);
+	Color color_end = Color(204,61,61);
+	Color color_door = Color(230,115,23);
+	Color color_key = Color(46,118,153);
+
+	// draw grid
+	canvas->drawLine(0, 0, static_cast<int>(procgen_chunks[0].size()) * PROCGEN_CHUNK_SIZE, 0, color_grid);
+	canvas->drawLine(0, 0, 0, static_cast<int>(procgen_chunks.size()) * PROCGEN_CHUNK_SIZE, color_grid);
+	for (size_t i = 0; i < procgen_chunks.size(); ++i) {
+		int y = static_cast<int>(i * PROCGEN_CHUNK_SIZE);
+		canvas->drawLine(0, y+PROCGEN_CHUNK_SIZE, static_cast<int>(procgen_chunks[i].size()) * PROCGEN_CHUNK_SIZE, y+PROCGEN_CHUNK_SIZE, color_grid);
+
+		for (size_t j = 0; j < procgen_chunks[i].size(); ++j) {
+			int x = static_cast<int>(j * PROCGEN_CHUNK_SIZE);
+			canvas->drawLine(x+PROCGEN_CHUNK_SIZE, 0, x+PROCGEN_CHUNK_SIZE, static_cast<int>(procgen_chunks.size()) * PROCGEN_CHUNK_SIZE, color_grid);
+		}
+	}
+
+	for (size_t i = 0; i < procgen_chunks.size(); ++i) {
+		int y = static_cast<int>(i * PROCGEN_CHUNK_SIZE);
+
+		for (size_t j = 0; j < procgen_chunks[i].size(); ++j) {
+			Chunk* chunk = &procgen_chunks[i][j];
+			if (chunk->type == Chunk::TYPE_EMPTY)
+				continue;
+
+			int x = static_cast<int>(j * PROCGEN_CHUNK_SIZE);
+
+			Color color = color_normal;
+			if (chunk->type == Chunk::TYPE_START)
+				color = color_start;
+			else if (chunk->type == Chunk::TYPE_END)
+				color = color_end;
+			else if (chunk->type == Chunk::TYPE_DOOR_WEST_EAST || chunk->type == Chunk::TYPE_DOOR_NORTH_SOUTH)
+				color = color_door;
+			else if (chunk->type == Chunk::TYPE_KEY)
+				color = color_key;
+
+			canvas->drawFilledRect(x + q, y + q, q*2, q*2, color);
+			if (chunk->links[Chunk::LINK_NORTH]) {
+				canvas->drawFilledRect(x + q, y, q*2, q, color);
+			}
+			if (chunk->links[Chunk::LINK_SOUTH]) {
+				canvas->drawFilledRect(x + q, y + (q*3), q*2, q, color);
+			}
+			if (chunk->links[Chunk::LINK_WEST]) {
+				canvas->drawFilledRect(x, y + q, q, q*2, color);
+			}
+			if (chunk->links[Chunk::LINK_EAST]) {
+				canvas->drawFilledRect(x + (q*3), y + q, q, q*2, color);
+			}
+		}
+	}
+
+	int legend_x = (static_cast<int>(procgen_chunks[0].size()) * PROCGEN_CHUNK_SIZE) + PROCGEN_CHUNK_SIZE;
+	int line_h = font->getLineHeight();
+
+	font->renderShadowed(msg->get("Map Legend"), legend_x, 0, FontEngine::JUSTIFY_LEFT, canvas, 0, color_normal);
+	font->renderShadowed(msg->get("Start"), legend_x, line_h, FontEngine::JUSTIFY_LEFT, canvas, 0, color_start);
+	font->renderShadowed(msg->get("End"), legend_x, line_h*2, FontEngine::JUSTIFY_LEFT, canvas, 0, color_end);
+	font->renderShadowed(msg->get("Door"), legend_x, line_h*3, FontEngine::JUSTIFY_LEFT, canvas, 0, color_door);
+	font->renderShadowed(msg->get("Key"), legend_x, line_h*4, FontEngine::JUSTIFY_LEFT, canvas, 0, color_key);
+}
+
 MapRenderer::~MapRenderer() {
 	tip_buf.clear();
 	clearLayers();
 	clearEvents();
-	clearQueues();
+	clearObjects();
 	delete tip;
 
 	/* unload sounds */

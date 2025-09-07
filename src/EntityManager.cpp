@@ -289,6 +289,10 @@ void EntityManager::handleSpawn() {
 			// apply Effects and set HP to max HP
 			e->stats.recalc();
 		}
+		else if (espawn.spawn_level.mode != SpawnLevel::MODE_DEFAULT) {
+			espawn.spawn_level.applyToStatBlock(&e->stats, NULL);
+			e->stats.recalc();
+		}
 
 		if (mapr->collider.isValidPosition(espawn.pos.x, espawn.pos.y, e->stats.movement_type, MapCollision::COLLIDE_TYPE_ALL_ENTITIES) || !e->stats.hero_ally) {
 			e->stats.pos.x = espawn.pos.x;
@@ -446,7 +450,7 @@ bool EntityManager::isCleared() {
 	return true;
 }
 
-void EntityManager::spawn(const std::string& entity_type, const Point& target) {
+void EntityManager::spawn(const std::string& entity_type, const Point& target, EventComponent* ec_spawn_level) {
 	Map_Enemy espawn;
 
 	espawn.type = entity_type;
@@ -462,6 +466,10 @@ void EntityManager::spawn(const std::string& entity_type, const Point& target) {
 	}
 	else {
 		mapr->collider.block(espawn.pos.x, espawn.pos.y, !MapCollision::IS_ALLY);
+	}
+
+	if (ec_spawn_level) {
+		espawn.spawn_level.parseString(ec_spawn_level->s);
 	}
 
 	powers->map_enemies.push(espawn);

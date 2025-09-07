@@ -327,6 +327,10 @@ void LootManager::checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos
 	// first drop any 'fixed' (0% chance) items
 	for (size_t i = loot_table.size(); i > 0; i--) {
 		ec = &loot_table[i-1];
+
+		if (ec->data[LOOT_EC_TYPE].Int == LOOT_EC_TYPE_TABLE)
+			continue;
+
 		if (ec->data[LOOT_EC_CHANCE].Float == 0) {
 			if (ec->status == 0 || (ec->status > 0 && camp->checkStatus(ec->status))) {
 				checkLootComponent(ec, pos, itemstack_vec);
@@ -339,6 +343,9 @@ void LootManager::checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos
 	float threshold = static_cast<float>(pc->stats.get(Stats::ITEM_FIND) + 100);
 	for (unsigned i = 0; i < loot_table.size(); i++) {
 		ec = &loot_table[i];
+
+		if (ec->data[LOOT_EC_TYPE].Int == LOOT_EC_TYPE_TABLE)
+			continue;
 
 		float real_chance = ec->data[LOOT_EC_CHANCE].Float;
 
@@ -607,19 +614,18 @@ void LootManager::parseLoot(std::string &val, EventComponent *e, std::vector<Eve
 	bool first_is_filename = false;
 	e->s = Parse::popFirstString(val);
 
+	// store loot_ec_type, because we may overwrite in the case of the first loot entry being a table file
+	int loot_ec_type = e->data[LOOT_EC_TYPE].Int;
+
 	if (e->s == "currency")
 		e->id = eset->misc.currency_id;
 	else if (Parse::toInt(e->s, -1) != -1)
 		e->id = items->verifyID(Parse::toItemID(e->s), NULL, !ItemManager::VERIFY_ALLOW_ZERO, !ItemManager::VERIFY_ALLOCATE);
 	else if (ec_list) {
 		// load entire loot table
-		std::string filename = e->s;
+		e->data[LOOT_EC_TYPE].Int = LOOT_EC_TYPE_TABLE;
 
-		// remove the last event component, since getLootTable() will create a new one
-		if (e == &ec_list->back())
-			ec_list->pop_back();
-
-		getLootTable(filename, ec_list);
+		getLootTable(e->s, ec_list);
 		first_is_filename = true;
 	}
 
@@ -649,6 +655,7 @@ void LootManager::parseLoot(std::string &val, EventComponent *e, std::vector<Eve
 			ec_list->push_back(EventComponent());
 			EventComponent *ec = &ec_list->at(ec_list->size()-1);
 			ec->type = EventComponent::LOOT;
+			ec->data[LOOT_EC_TYPE].Int = loot_ec_type;
 
 			ec->s = repeat_val;
 			if (ec->s == "currency")
@@ -656,8 +663,7 @@ void LootManager::parseLoot(std::string &val, EventComponent *e, std::vector<Eve
 			else if (Parse::toInt(ec->s, -1) != -1)
 				ec->id = items->verifyID(Parse::toItemID(ec->s), NULL, !ItemManager::VERIFY_ALLOW_ZERO, !ItemManager::VERIFY_ALLOCATE);
 			else {
-				// remove the last event component, since getLootTable() will create a new one
-				ec_list->pop_back();
+				ec->data[LOOT_EC_TYPE].Int = LOOT_EC_TYPE_TABLE;
 
 				getLootTable(repeat_val, ec_list);
 
@@ -701,12 +707,14 @@ void LootManager::loadLootTables() {
 				if (infile.key == "loot") {
 					ec_list->push_back(EventComponent());
 					ec = &ec_list->at(ec_list->size()-1);
+					ec->data[LOOT_EC_TYPE].Int = LOOT_EC_TYPE_TABLE_ROW;
 					parseLoot(infile.val, ec, ec_list);
 				}
 				// @ATTR status_loot|string, loot : Required status, Loot definition|Compact form of defining a loot table entry with a required campaign status.
 				else if (infile.key == "status_loot") {
 					ec_list->push_back(EventComponent());
 					ec = &ec_list->at(ec_list->size()-1);
+					ec->data[LOOT_EC_TYPE].Int = LOOT_EC_TYPE_TABLE_ROW;
 					ec->status = camp->registerStatus(Parse::popFirstString(infile.val));
 					parseLoot(infile.val, ec, ec_list);
 				}
@@ -716,6 +724,7 @@ void LootManager::loadLootTables() {
 					ec_list->push_back(EventComponent());
 					ec = &ec_list->at(ec_list->size()-1);
 					ec->type = EventComponent::LOOT;
+					ec->data[LOOT_EC_TYPE].Int = LOOT_EC_TYPE_TABLE_ROW;
 					skip_to_next = false;
 				}
 

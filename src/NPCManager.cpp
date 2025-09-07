@@ -61,7 +61,6 @@ void NPCManager::addRenders(std::vector<Renderable> &r) {
 
 void NPCManager::handleNewMap() {
 
-	Map_NPC mn;
 	ItemStack item_roll;
 
 	std::map<std::string, NPC *> allies;
@@ -79,9 +78,8 @@ void NPCManager::handleNewMap() {
 	npcs.clear();
 
 	// read the queued NPCs in the map file
-	while (!mapr->map_npcs.empty()) {
-		mn = mapr->map_npcs.front();
-		mapr->map_npcs.pop();
+	for (size_t i = 0; i < mapr->map_npcs.size(); ++i) {
+		Map_NPC &mn = mapr->map_npcs[i];
 
 		if (!camp->checkRequirementsInVector(mn.requirements))
 			continue;
@@ -112,7 +110,9 @@ void NPCManager::handleNewMap() {
 		if (mn.direction != -1)
 			npc->stats.direction = static_cast<unsigned char>(mn.direction);
 
-		npc->stats.waypoints = mn.waypoints;
+		for (size_t j = 0; j < mn.waypoints.size(); ++j) {
+			npc->stats.waypoints.push(mn.waypoints[j]);
+		}
 		npc->stats.wander = mn.wander_radius > 0;
 		npc->stats.setWanderArea(mn.wander_radius);
 

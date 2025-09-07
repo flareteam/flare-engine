@@ -29,6 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "EngineSettings.h"
 #include "EventManager.h"
+#include "MapRenderer.h"
 #include "Menu.h"
 #include "MenuManager.h"
 #include "MenuInventory.h"
@@ -306,6 +307,18 @@ bool CampaignManager::checkAllRequirements(const EventComponent& ec) {
 	else if (ec.type == EventComponent::REQUIRES_NOT_CLASS) {
 		if (pc->stats.character_class != ec.s)
 			return true;
+	}
+	else if (ec.type == EventComponent::REQUIRES_TILE) {
+		size_t index = static_cast<size_t>(distance(mapr->layernames_hashed.begin(), find(mapr->layernames_hashed.begin(), mapr->layernames_hashed.end(), ec.id)));
+		if (mapr && index < mapr->layers.size() && ec.data[0].Int >= 0 && ec.data[0].Int < mapr->w && ec.data[1].Int >= 0 && ec.data[1].Int < mapr->h)
+			if (mapr->layers[index][ec.data[0].Int][ec.data[1].Int] == static_cast<unsigned short>(ec.data[2].Int))
+				return true;
+	}
+	else if (ec.type == EventComponent::REQUIRES_NOT_TILE) {
+		size_t index = static_cast<size_t>(distance(mapr->layernames_hashed.begin(), find(mapr->layernames_hashed.begin(), mapr->layernames_hashed.end(), ec.id)));
+		if (mapr && index < mapr->layers.size() && ec.data[0].Int >= 0 && ec.data[0].Int < mapr->w && ec.data[1].Int >= 0 && ec.data[1].Int < mapr->h)
+			if (mapr->layers[index][ec.data[0].Int][ec.data[1].Int] != static_cast<unsigned short>(ec.data[2].Int))
+				return true;
 	}
 	else {
 		// Event component is not a requirement check

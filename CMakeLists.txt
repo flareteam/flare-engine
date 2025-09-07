@@ -157,9 +157,10 @@ Set (FLARE_SOURCES
 	./src/Loot.cpp
 	./src/LootManager.cpp
 	./src/Map.cpp
-	./src/MapParallax.cpp
 	./src/MapCollision.cpp
+	./src/MapParallax.cpp
 	./src/MapRenderer.cpp
+	./src/MapSaver.cpp
 	./src/Menu.cpp
 	./src/MenuActionBar.cpp
 	./src/MenuActiveEffects.cpp
@@ -273,9 +274,10 @@ Set (FLARE_HEADERS
 	./src/Loot.h
 	./src/LootManager.h
 	./src/Map.h
-	./src/MapParallax.h
 	./src/MapCollision.h
+	./src/MapParallax.h
 	./src/MapRenderer.h
+	./src/MapSaver.h
 	./src/Menu.h
 	./src/MenuActionBar.h
 	./src/MenuActiveEffects.h

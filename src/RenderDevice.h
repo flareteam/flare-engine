@@ -114,6 +114,7 @@ public:
 	virtual void fillWithColor(const Color& color) = 0;
 	virtual void drawPixel(int x, int y, const Color& color) = 0;
 	virtual void drawLine(int x0, int y0, int x1, int y1, const Color& color) = 0;
+	virtual void drawFilledRect(int x, int y, int w, int h, const Color& color) = 0;
 	virtual void beginPixelBatch();
 	virtual void beginPixelBatch(Rect& bounds);
 	virtual void endPixelBatch();

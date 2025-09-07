@@ -574,8 +574,9 @@ void Utils::createSaveDir(int slot) {
 	ss << slot;
 	Filesystem::createDir(ss.str());
 
-	ss << "/fow/";
-	Filesystem::createDir(ss.str());
+	Filesystem::createDir(ss.str() + "/fow/");
+
+	Filesystem::createDir(ss.str() + "/maps/");
 }
 
 void Utils::removeSaveDir(int slot) {

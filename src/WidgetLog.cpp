@@ -228,3 +228,15 @@ void WidgetLog::setFontNames(const std::string& _font_name, const std::string& _
 	font_name = _font_name;
 	font_bold_name = _font_bold_name;
 }
+
+Image* WidgetLog::setupDrawBuffer(int buf_h) {
+	clear();
+	resize(scroll_box->pos.w, std::max(scroll_box->pos.h, buf_h));
+	refresh();
+	updated = false;
+
+	if (scroll_box->contents)
+		return scroll_box->contents->getGraphics();
+	else
+		return NULL;
+}

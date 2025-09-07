@@ -393,6 +393,9 @@ void SaveLoad::saveGame() {
 void SaveLoad::loadGame() {
 	if (game_slot <= 0) return;
 
+	// ensure that the save folder has all its sub-folders
+	Utils::createSaveDir(game_slot);
+
 	float saved_hp = 0;
 	float saved_mp = 0;
 	int currency = 0;
@@ -738,14 +741,12 @@ void SaveLoad::loadPowerTree() {
 
 void SaveLoad::saveFOW() {
 	std::ofstream outfile;
-	std::stringstream ss;
 
 	// Save fow dark layer
 	if (mapr->fogofwar && mapr->save_fogofwar && !mapr->getFilename().empty() && fow->dark_layer_id < mapr->layernames.size()) {
-		ss.str("");
-		ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/" << game_slot << "/fow/" << Utils::hashString(mapr->getFilename()) << ".txt";
+		std::string fow_filename = mapr->getFOWFilename();
 
-		outfile.open(Filesystem::convertSlashes(ss.str()).c_str(), std::ios::out);
+		outfile.open(Filesystem::convertSlashes(fow_filename).c_str(), std::ios::out);
 
 		if (outfile.is_open()) {
 			outfile << "# " << mapr->getFilename() << std::endl;
