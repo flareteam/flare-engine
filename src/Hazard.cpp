@@ -257,8 +257,8 @@ bool Hazard::hasEntity(Entity *ent) {
 		return parent->hasEntity(ent);
 	}
 	else {
-		for(std::vector<Entity*>::iterator it = entitiesCollided.begin(); it != entitiesCollided.end(); ++it)
-			if(*it == ent) return true;
+		if (std::find(entitiesCollided.begin(), entitiesCollided.end(), ent) != entitiesCollided.end())
+			return true;
 		return false;
 	}
 }

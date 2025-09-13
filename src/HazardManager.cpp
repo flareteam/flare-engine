@@ -67,90 +67,83 @@ void HazardManager::logic() {
 
 	// handle single-frame transforms
 	for (size_t i=h.size(); i>0; i--) {
-		h[i-1]->logic();
+		size_t hindex = i-1;
+
+		h[hindex]->logic();
 
 		// remove all hazards that need to die immediately (e.g. exit the map)
-		if (h[i-1]->remove_now) {
-			delete h[i-1];
-			h.erase(h.begin()+(i-1));
+		if (h[hindex]->remove_now) {
+			delete h[hindex];
+			h.erase(h.begin()+(hindex));
 			continue;
 		}
 
 
 		// if a moving hazard hits a wall, check for an after-effect
-		if (h[i-1]->hit_wall) {
-			if (h[i-1]->power->script_trigger == Power::SCRIPT_TRIGGER_WALL) {
-				eventm->executeScript(h[i-1]->power->script, h[i-1]->pos.x, h[i-1]->pos.y);
+		if (h[hindex]->hit_wall) {
+			if (h[hindex]->power->script_trigger == Power::SCRIPT_TRIGGER_WALL) {
+				eventm->executeScript(h[hindex]->power->script, h[hindex]->pos.x, h[hindex]->pos.y);
 			}
 
-			for (size_t j = 0; j < h[i-1]->power->chain_powers.size(); ++j) {
-				ChainPower& chain_power = h[i-1]->power->chain_powers[j];
+			for (size_t j = 0; j < h[hindex]->power->chain_powers.size(); ++j) {
+				ChainPower& chain_power = h[hindex]->power->chain_powers[j];
 				if (chain_power.type == ChainPower::TYPE_WALL && Math::percentChanceF(chain_power.chance)) {
-					powers->activate(chain_power.id, h[i-1]->src_stats, h[i-1]->pos, h[i-1]->pos);
+					powers->activate(chain_power.id, h[hindex]->src_stats, h[hindex]->pos, h[hindex]->pos);
 
 					if (powers->powers[chain_power.id]->directional) {
-						powers->hazards.back()->direction = h[i-1]->direction;
+						powers->hazards.back()->direction = h[hindex]->direction;
 					}
 				}
 			}
 
 			// clear wall hit
-			h[i-1]->hit_wall = false;
+			h[hindex]->hit_wall = false;
 		}
 
-	}
+		// handle collisions
+		if (h[hindex]->isDangerousNow()) {
 
-	// handle collisions
-	for (size_t i=0; i<h.size(); i++) {
-		if (h[i]->isDangerousNow()) {
+			// process hazards that can hurt enemies & allies
+			for (size_t eindex = 0; eindex < entitym->entities.size(); eindex++) {
+				Entity *e = entitym->entities[eindex];
 
-			// process hazards that can hurt enemies
-			if (h[i]->source_type != Power::SOURCE_TYPE_ENEMY) { //hero or neutral sources
-				for (unsigned int eindex = 0; eindex < entitym->entities.size(); eindex++) {
+				// hero/ally powers can only hit allies if target_party is true
+				if (h[hindex]->source_type == Power::SOURCE_TYPE_HERO && h[hindex]->source_type == Power::SOURCE_TYPE_ALLY && e->stats.hero_ally != h[hindex]->power->target_party) {
+					continue;
+				}
 
-					// only check living enemies
-					if (entitym->entities[eindex]->stats.hp > 0 && h[i]->active && (entitym->entities[eindex]->stats.hero_ally == h[i]->power->target_party)) {
-						if (Utils::isWithinRadius(h[i]->pos, h[i]->power->radius, entitym->entities[eindex]->stats.pos)) {
-							if (!h[i]->hasEntity(entitym->entities[eindex])) {
-								// hit!
-								h[i]->addEntity(entitym->entities[eindex]);
-								hitEntity(i, entitym->entities[eindex]->takeHit(*h[i]));
-								if (!h[i]->power->beacon) {
-									last_enemy = entitym->entities[eindex];
-								}
+				// enemy hazard can't hurt other enemies
+				if (h[hindex]->source_type == Power::SOURCE_TYPE_ENEMY && !e->stats.hero_ally) {
+					continue;
+				}
+
+				// only check living enemies
+				if (e->stats.hp > 0 && h[hindex]->active) {
+					if (Utils::isWithinRadius(h[hindex]->pos, h[hindex]->power->radius, e->stats.pos)) {
+						if (!h[hindex]->hasEntity(e)) {
+							// hit!
+							h[hindex]->addEntity(e);
+							hitEntity(hindex, e->takeHit(*h[hindex]));
+							if (!h[hindex]->power->beacon) {
+								last_enemy = e;
 							}
 						}
 					}
-
 				}
+
 			}
 
 			// process hazards that can hurt the hero
-			if (h[i]->source_type != Power::SOURCE_TYPE_HERO && h[i]->source_type != Power::SOURCE_TYPE_ALLY) { //enemy or neutral sources
-				if (pc->stats.hp > 0 && h[i]->active) {
-					if (Utils::isWithinRadius(h[i]->pos, h[i]->power->radius, pc->stats.pos)) {
-						if (!h[i]->hasEntity(pc)) {
+			if (h[hindex]->source_type != Power::SOURCE_TYPE_HERO && h[hindex]->source_type != Power::SOURCE_TYPE_ALLY) { //enemy or neutral sources
+				if (pc->stats.hp > 0 && h[hindex]->active) {
+					if (Utils::isWithinRadius(h[hindex]->pos, h[hindex]->power->radius, pc->stats.pos)) {
+						if (!h[hindex]->hasEntity(pc)) {
 							// hit!
-							h[i]->addEntity(pc);
-							hitEntity(i, pc->takeHit(*h[i]));
+							h[hindex]->addEntity(pc);
+							hitEntity(hindex, pc->takeHit(*h[hindex]));
 						}
 					}
 				}
-
-				//now process allies
-				for (unsigned int eindex = 0; eindex < entitym->entities.size(); eindex++) {
-					// only check living allies
-					if (entitym->entities[eindex]->stats.hp > 0 && h[i]->active && entitym->entities[eindex]->stats.hero_ally) {
-						if (Utils::isWithinRadius(h[i]->pos, h[i]->power->radius, entitym->entities[eindex]->stats.pos)) {
-							if (!h[i]->hasEntity(entitym->entities[eindex])) {
-								// hit!
-								h[i]->addEntity(entitym->entities[eindex]);
-								hitEntity(i, entitym->entities[eindex]->takeHit(*h[i]));
-							}
-						}
-					}
-				}
-
 			}
 
 		}
