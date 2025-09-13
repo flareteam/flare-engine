@@ -725,7 +725,7 @@ void MenuInventory::activate(const Point& position) {
 
 	// run the item's script if it has one
 	if (!items->items[stack.item]->script.empty()) {
-		EventManager::executeScript(items->items[stack.item]->script, pc->stats.pos.x, pc->stats.pos.y);
+		eventm->executeScript(items->items[stack.item]->script, pc->stats.pos.x, pc->stats.pos.y);
 	}
 	// if the item is a book, open it
 	else if (!items->items[stack.item]->book.empty()) {

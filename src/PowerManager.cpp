@@ -1942,7 +1942,7 @@ bool PowerManager::activate(PowerID power_index, StatBlock *src_stats, const FPo
 		return block(power_index, src_stats);
 
 	if (power->script_trigger == Power::SCRIPT_TRIGGER_CAST) {
-		EventManager::executeScript(power->script, origin.x, origin.y);
+		eventm->executeScript(power->script, origin.x, origin.y);
 	}
 
 	// check if we need to snap the target to one of the 8 directions

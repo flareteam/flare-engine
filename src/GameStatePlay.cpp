@@ -95,6 +95,7 @@ GameStatePlay::GameStatePlay()
 		items = new ItemManager();
 
 	camp = new CampaignManager();
+	eventm = new EventManager();
 
 	loot = new LootManager();
 	powers = new PowerManager();
@@ -1113,12 +1114,15 @@ GameStatePlay::~GameStatePlay() {
 
 	delete enemyg;
 
+	delete eventm;
+
 	// NULL-ify shared game resources
 	pc = NULL;
 	menu = NULL;
 	camp = NULL;
 	enemyg = NULL;
 	entitym = NULL;
+	eventm = NULL;
 	items = NULL;
 	loot = NULL;
 	mapr = NULL;

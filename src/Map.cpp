@@ -124,7 +124,7 @@ int Map::load(const std::string& fname) {
 		else if (infile.section == "npc")
 			loadNPC(infile);
 		else if (infile.section == "event")
-			EventManager::loadEvent(infile, &events.back());
+			eventm->loadEvent(infile, &events.back());
 	}
 
 	infile.close();

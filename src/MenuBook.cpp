@@ -161,8 +161,8 @@ void MenuBook::loadBook() {
 
 	snd->play(sfx_open, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
 
-	if (event_open && EventManager::isActive(*event_open)) {
-		EventManager::executeEvent(*event_open);
+	if (event_open && eventm->isActive(*event_open)) {
+		eventm->executeEvent(*event_open);
 	}
 
 	book_loaded = true;
@@ -292,7 +292,7 @@ void MenuBook::loadBookEvent(FileParser &infile, Event& ev) {
 
 	// @ATTR event_open.${EVENT_COMPONENT}|Event components to execute when the book is opened. See the definitions in EventManager for possible attributes.
 	// @ATTR event_close.${EVENT_COMPONENT}|Event components to execute when the book is closed. See the definitions in EventManager for possible attributes.
-	if (!EventManager::loadEventComponentString(infile.key, trimmed, &ev, NULL)) {
+	if (!eventm->loadEventComponentString(infile.key, trimmed, &ev, NULL)) {
 		infile.error("MenuBook: '%s' is not a valid key.", infile.key.c_str());
 	}
 }
@@ -345,8 +345,8 @@ void MenuBook::clearBook() {
 }
 
 void MenuBook::closeWindow() {
-	if (event_close && EventManager::isActive(*event_close)) {
-		EventManager::executeEvent(*event_close);
+	if (event_close && eventm->isActive(*event_close)) {
+		eventm->executeEvent(*event_close);
 	}
 
 	clearBook();
@@ -429,7 +429,7 @@ void MenuBook::logic() {
 	refreshText();
 
 	for (size_t i = 0; i < buttons.size(); ++i) {
-		if (buttons[i].event.components.empty() || !EventManager::isActive(buttons[i].event)) {
+		if (buttons[i].event.components.empty() || !eventm->isActive(buttons[i].event)) {
 			buttons[i].button->enabled = false;
 			buttons[i].button->refresh();
 
@@ -444,7 +444,7 @@ void MenuBook::logic() {
 		}
 
 		if (buttons[i].button->checkClick()) {
-			if (EventManager::executeEvent(buttons[i].event)) {
+			if (eventm->executeEvent(buttons[i].event)) {
 				buttons[i].event = Event();
 			}
 		}

@@ -155,19 +155,19 @@ class EventManager {
 public:
 	EventManager();
 	~EventManager();
-	static void loadEvent(FileParser &infile, Event* evnt);
-	static void loadEventComponent(FileParser &infile, Event* evnt, EventComponent* ec);
-	static bool loadEventComponentString(std::string &key, std::string &val, Event* evnt, EventComponent* ec);
+	void loadEvent(FileParser &infile, Event* evnt);
+	void loadEventComponent(FileParser &infile, Event* evnt, EventComponent* ec);
+	bool loadEventComponentString(std::string &key, std::string &val, Event* evnt, EventComponent* ec);
 
-	static bool executeEvent(Event &e);
-	static bool executeDelayedEvent(Event &e);
-	static bool isActive(const Event &e);
-	static void executeScript(const std::string& filename, float x, float y);
+	bool executeEvent(Event &e);
+	bool executeDelayedEvent(Event &e);
+	bool isActive(const Event &e);
+	void executeScript(const std::string& filename, float x, float y);
 
 private:
 	static const bool SKIP_DELAY = true;
-	static bool executeEventInternal(Event &e, bool skip_delay);
-	static EventComponent getRandomMapFromFile(const std::string& fname);
+	bool executeEventInternal(Event &e, bool skip_delay);
+	EventComponent getRandomMapFromFile(const std::string& fname);
 
 };
 

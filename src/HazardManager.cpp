@@ -80,7 +80,7 @@ void HazardManager::logic() {
 		// if a moving hazard hits a wall, check for an after-effect
 		if (h[i-1]->hit_wall) {
 			if (h[i-1]->power->script_trigger == Power::SCRIPT_TRIGGER_WALL) {
-				EventManager::executeScript(h[i-1]->power->script, h[i-1]->pos.x, h[i-1]->pos.y);
+				eventm->executeScript(h[i-1]->power->script, h[i-1]->pos.x, h[i-1]->pos.y);
 			}
 
 			for (size_t j = 0; j < h[i-1]->power->chain_powers.size(); ++j) {
@@ -170,7 +170,7 @@ void HazardManager::hitEntity(size_t index, const bool hit) {
 	}
 
 	if (h[index]->power->script_trigger == Power::SCRIPT_TRIGGER_HIT) {
-		EventManager::executeScript(h[index]->power->script, h[index]->pos.x, h[index]->pos.y);
+		eventm->executeScript(h[index]->power->script, h[index]->pos.x, h[index]->pos.y);
 	}
 }
 

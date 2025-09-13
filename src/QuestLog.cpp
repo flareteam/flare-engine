@@ -99,43 +99,43 @@ void QuestLog::load(const std::string& filename) {
 		Event ev;
 		if (infile.key == "requires_status") {
 			// @ATTR quest.requires_status|list(string)|Quest requires this campaign status
-			EventManager::loadEventComponent(infile, &ev, NULL);
+			eventm->loadEventComponent(infile, &ev, NULL);
 		}
 		else if (infile.key == "requires_not_status") {
 			// @ATTR quest.requires_not_status|list(string)|Quest requires not having this campaign status.
-			EventManager::loadEventComponent(infile, &ev, NULL);
+			eventm->loadEventComponent(infile, &ev, NULL);
 		}
 		else if (infile.key == "requires_level") {
 			// @ATTR quest.requires_level|int|Quest requires hero level
-			EventManager::loadEventComponent(infile, &ev, NULL);
+			eventm->loadEventComponent(infile, &ev, NULL);
 		}
 		else if (infile.key == "requires_not_level") {
 			// @ATTR quest.requires_not_level|int|Quest requires not hero level
-			EventManager::loadEventComponent(infile, &ev, NULL);
+			eventm->loadEventComponent(infile, &ev, NULL);
 		}
 		else if (infile.key == "requires_currency") {
 			// @ATTR quest.requires_currency|int|Quest requires atleast this much currency
-			EventManager::loadEventComponent(infile, &ev, NULL);
+			eventm->loadEventComponent(infile, &ev, NULL);
 		}
 		else if (infile.key == "requires_not_currency") {
 			// @ATTR quest.requires_not_currency|int|Quest requires no more than this much currency
-			EventManager::loadEventComponent(infile, &ev, NULL);
+			eventm->loadEventComponent(infile, &ev, NULL);
 		}
 		else if (infile.key == "requires_item") {
 			// @ATTR quest.requires_item|list(item_id)|Quest requires specific item (not equipped)
-			EventManager::loadEventComponent(infile, &ev, NULL);
+			eventm->loadEventComponent(infile, &ev, NULL);
 		}
 		else if (infile.key == "requires_not_item") {
 			// @ATTR quest.requires_not_item|list(item_id)|Quest requires not having a specific item (not equipped)
-			EventManager::loadEventComponent(infile, &ev, NULL);
+			eventm->loadEventComponent(infile, &ev, NULL);
 		}
 		else if (infile.key == "requires_class") {
 			// @ATTR quest.requires_class|predefined_string|Quest requires this base class
-			EventManager::loadEventComponent(infile, &ev, NULL);
+			eventm->loadEventComponent(infile, &ev, NULL);
 		}
 		else if (infile.key == "requires_not_class") {
 			// @ATTR quest.requires_not_class|predefined_string|Quest requires not this base class
-			EventManager::loadEventComponent(infile, &ev, NULL);
+			eventm->loadEventComponent(infile, &ev, NULL);
 		}
 		else if (infile.key == "quest_text") {
 			// @ATTR quest.quest_text|string|Text that gets displayed in the Quest log when this quest is active.

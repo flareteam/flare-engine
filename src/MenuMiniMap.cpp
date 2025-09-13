@@ -567,7 +567,7 @@ void MenuMiniMap::fillEntities() {
 		if (ec_minimap && !ec_minimap->data[0].Int)
 			continue;
 
-		if (mapr->events[i].getComponent(EventComponent::NPC_HOTSPOT) && EventManager::isActive(mapr->events[i])) {
+		if (mapr->events[i].getComponent(EventComponent::NPC_HOTSPOT) && eventm->isActive(mapr->events[i])) {
 			if (mapr->fogofwar) {
 				float delta = Utils::calcDist(pc->stats.pos, mapr->events[i].center);
 				if (delta > static_cast<float>(fow->mask_radius)) {
@@ -578,7 +578,7 @@ void MenuMiniMap::fillEntities() {
 				entities.push_back(new PixelEntity(mapr->events[i].location.x, mapr->events[i].location.y, &color_npc));
 			}
 		}
-		else if ((mapr->events[i].activate_type == Event::ACTIVATE_ON_TRIGGER || mapr->events[i].activate_type == Event::ACTIVATE_ON_INTERACT) && mapr->events[i].getComponent(EventComponent::INTERMAP) && EventManager::isActive(mapr->events[i])) {
+		else if ((mapr->events[i].activate_type == Event::ACTIVATE_ON_TRIGGER || mapr->events[i].activate_type == Event::ACTIVATE_ON_INTERACT) && mapr->events[i].getComponent(EventComponent::INTERMAP) && eventm->isActive(mapr->events[i])) {
 			// TODO use location when hotspot is inappropriate?
 			Point event_pos(mapr->events[i].location.x, mapr->events[i].location.y);
 			for (int j=event_pos.x; j<event_pos.x + mapr->events[i].location.w; ++j) {

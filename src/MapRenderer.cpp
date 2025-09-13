@@ -330,7 +330,7 @@ void MapRenderer::logic(bool paused) {
 		it->delay.tick();
 
 		if (it->delay.isEnd()) {
-			EventManager::executeDelayedEvent(*it);
+			eventm->executeDelayedEvent(*it);
 			it = delayed_events.erase(it);
 		}
 	}
@@ -1076,7 +1076,7 @@ void MapRenderer::executeOnLoadEvents() {
 		settings->load_script.clear();
 
 		evnt.components.push_back(ec);
-		EventManager::executeEvent(evnt);
+		eventm->executeEvent(evnt);
 
 		return;
 	}
@@ -1088,10 +1088,10 @@ void MapRenderer::executeOnLoadEvents() {
 		--it;
 
 		// skip inactive events
-		if (!EventManager::isActive(*it)) continue;
+		if (!eventm->isActive(*it)) continue;
 
 		if ((*it).activate_type == Event::ACTIVATE_ON_LOAD) {
-			if (EventManager::executeEvent(*it))
+			if (eventm->executeEvent(*it))
 				it = events.erase(it);
 		}
 	}
@@ -1103,10 +1103,10 @@ void MapRenderer::executeOnLoadEvents() {
 		--it;
 
 		// skip inactive events
-		if (!EventManager::isActive(*it)) continue;
+		if (!eventm->isActive(*it)) continue;
 
 		if ((*it).activate_type == Event::ACTIVATE_STATIC) {
-			if (EventManager::executeEvent(*it))
+			if (eventm->executeEvent(*it))
 				it = events.erase(it);
 		}
 	}
@@ -1122,10 +1122,10 @@ void MapRenderer::executeOnMapExitEvents() {
 	for (it = events.begin(); it != events.end(); ++it) {
 
 		// skip inactive events
-		if (!EventManager::isActive(*it)) continue;
+		if (!eventm->isActive(*it)) continue;
 
 		if ((*it).activate_type == Event::ACTIVATE_ON_MAPEXIT)
-			EventManager::executeEvent(*it); // ignore repeat value
+			eventm->executeEvent(*it); // ignore repeat value
 	}
 }
 
@@ -1140,17 +1140,17 @@ void MapRenderer::checkEvents(const FPoint& loc) {
 		--it;
 
 		// skip inactive events
-		if (!EventManager::isActive(*it)) continue;
+		if (!eventm->isActive(*it)) continue;
 
 		// static events are run every frame without interaction from the player
 		if ((*it).activate_type == Event::ACTIVATE_STATIC) {
-			if (EventManager::executeEvent(*it))
+			if (eventm->executeEvent(*it))
 				it = events.erase(it);
 			continue;
 		}
 
 		if ((*it).activate_type == Event::ACTIVATE_ON_CLEAR) {
-			if (enemies_cleared && EventManager::executeEvent(*it))
+			if (enemies_cleared && eventm->executeEvent(*it))
 				it = events.erase(it);
 			continue;
 		}
@@ -1170,14 +1170,14 @@ void MapRenderer::checkEvents(const FPoint& loc) {
 			else {
 				if ((*it).getComponent(EventComponent::WAS_INSIDE_EVENT_AREA)) {
 					(*it).deleteAllComponents(EventComponent::WAS_INSIDE_EVENT_AREA);
-					if (EventManager::executeEvent(*it))
+					if (eventm->executeEvent(*it))
 						it = events.erase(it);
 				}
 			}
 		}
 		else if ((*it).activate_type == Event::ACTIVATE_ON_TRIGGER) {
 			if (inside)
-				if (EventManager::executeEvent(*it))
+				if (eventm->executeEvent(*it))
 					it = events.erase(it);
 		}
 	}
@@ -1218,7 +1218,7 @@ void MapRenderer::checkHotspots() {
 		--it;
 
 		// skip inactive events
-		if (!EventManager::isActive(*it)) continue;
+		if (!eventm->isActive(*it)) continue;
 
 		// skip events without hotspots
 		if (it->hotspot.h == 0) continue;
@@ -1301,7 +1301,7 @@ void MapRenderer::checkHotspots() {
 							pc->mm_target_object = Avatar::MM_TARGET_NONE;
 						}
 
-						if (EventManager::executeEvent(*it))
+						if (eventm->executeEvent(*it))
 							it = events.erase(it);
 					}
 					else if (settings->mouse_move) {
@@ -1348,7 +1348,7 @@ void MapRenderer::checkNearestEvent() {
 		--it;
 
 		// skip inactive events
-		if (!EventManager::isActive(*it)) continue;
+		if (!eventm->isActive(*it)) continue;
 
 		// skip events without hotspots
 		if (it->hotspot.h == 0) continue;
@@ -1381,7 +1381,7 @@ void MapRenderer::checkNearestEvent() {
 		if (inpt->pressing[Input::ACCEPT] && !inpt->lock[Input::ACCEPT]) {
 			inpt->lock[Input::ACCEPT] = true;
 
-			if(EventManager::executeEvent(*nearest))
+			if(eventm->executeEvent(*nearest))
 				events.erase(nearest);
 		}
 	}

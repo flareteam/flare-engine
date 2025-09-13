@@ -156,7 +156,7 @@ bool NPC::load(const std::string& npc_id) {
 				}
 				else {
 					Event ev;
-					EventManager::loadEventComponent(infile, &ev, NULL);
+					eventm->loadEventComponent(infile, &ev, NULL);
 
 					for (size_t i=0; i<ev.components.size(); ++i) {
 						if (ev.components[i].type != EventComponent::NONE) {
@@ -699,7 +699,7 @@ void NPC::processEvent(unsigned int dialog_node, unsigned int cursor) {
 		cursor++;
 	}
 
-	EventManager::executeEvent(ev);
+	eventm->executeEvent(ev);
 }
 
 bool NPC::isDialogType(const int &event_type) {

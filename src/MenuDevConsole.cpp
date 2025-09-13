@@ -687,14 +687,14 @@ void MenuDevConsole::execute() {
 				std::string key = Parse::popFirstString(args[i], '=');
 				std::string val = args[i];
 
-				if (!EventManager::loadEventComponentString(key, val, &evnt, NULL)) {
+				if (!eventm->loadEventComponentString(key, val, &evnt, NULL)) {
 					log_history->setNextColor(font->getColor(FontEngine::COLOR_MENU_PENALTY));
 					log_history->add(msg->getv("ERROR: '%s' is not a valid event key", key.c_str()), WidgetLog::MSG_UNIQUE);
 				}
 			}
 
-			if (EventManager::isActive(evnt)) {
-				EventManager::executeEvent(evnt);
+			if (eventm->isActive(evnt)) {
+				eventm->executeEvent(evnt);
 			}
 		}
 		else {
