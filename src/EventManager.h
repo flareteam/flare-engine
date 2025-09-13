@@ -169,6 +169,7 @@ private:
 	bool executeEventInternal(Event &e, bool skip_delay);
 	EventComponent getRandomMapFromFile(const std::string& fname);
 
+	std::map< std::string, std::queue<Event> > script_cache;
 };
 
 

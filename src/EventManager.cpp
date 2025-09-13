@@ -1118,55 +1118,63 @@ void EventManager::executeScript(const std::string& filename, float x, float y) 
 	FileParser script_file;
 	std::queue<Event> script_evnt;
 
-	if (script_file.open(filename, FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
-		while (script_file.next()) {
-			if (script_file.new_section && script_file.section == "event") {
-				Event tmp_evnt;
-				tmp_evnt.location.x = tmp_evnt.hotspot.x = static_cast<int>(x);
-				tmp_evnt.location.y = tmp_evnt.hotspot.y = static_cast<int>(y);
-				tmp_evnt.location.w = tmp_evnt.hotspot.w = 1;
-				tmp_evnt.location.h = tmp_evnt.hotspot.h = 1;
-				tmp_evnt.center.x = static_cast<float>(tmp_evnt.location.x) + 0.5f;
-				tmp_evnt.center.y = static_cast<float>(tmp_evnt.location.y) + 0.5f;
+	std::map< std::string, std::queue<Event> >::iterator cache_it = script_cache.find(filename);
 
-				script_evnt.push(tmp_evnt);
-			}
+	if (cache_it == script_cache.end()) {
+		if (script_file.open(filename, FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
+			while (script_file.next()) {
+				if (script_file.new_section && script_file.section == "event") {
+					Event tmp_evnt;
+					tmp_evnt.location.x = tmp_evnt.hotspot.x = static_cast<int>(x);
+					tmp_evnt.location.y = tmp_evnt.hotspot.y = static_cast<int>(y);
+					tmp_evnt.location.w = tmp_evnt.hotspot.w = 1;
+					tmp_evnt.location.h = tmp_evnt.hotspot.h = 1;
+					tmp_evnt.center.x = static_cast<float>(tmp_evnt.location.x) + 0.5f;
+					tmp_evnt.center.y = static_cast<float>(tmp_evnt.location.y) + 0.5f;
 
-			if (script_evnt.empty())
-				continue;
+					script_evnt.push(tmp_evnt);
+				}
 
-			if (script_file.key == "script" && Filesystem::convertSlashes(script_file.val) == Filesystem::convertSlashes(filename)) {
-				script_file.error("EventManager: Calling a script from within itself is not allowed.");
-				continue;
-			}
+				if (script_evnt.empty())
+					continue;
 
-			if (script_file.key == "delay") {
-				// 'delay' is not an EventComponent, but we allow it in scripts
-				script_evnt.back().delay.setDuration(Parse::toDuration(script_file.val));
-				script_evnt.back().delay.reset(Timer::BEGIN);
+				if (script_file.key == "script" && Filesystem::convertSlashes(script_file.val) == Filesystem::convertSlashes(filename)) {
+					script_file.error("EventManager: Calling a script from within itself is not allowed.");
+					continue;
+				}
+
+				if (script_file.key == "delay") {
+					// 'delay' is not an EventComponent, but we allow it in scripts
+					script_evnt.back().delay.setDuration(Parse::toDuration(script_file.val));
+					script_evnt.back().delay.reset(Timer::BEGIN);
+				}
+				else {
+					loadEventComponent(script_file, &script_evnt.back(), NULL);
+				}
 			}
-			else {
-				loadEventComponent(script_file, &script_evnt.back(), NULL);
-			}
+			script_file.close();
 		}
-		script_file.close();
+		script_cache[filename] = script_evnt;
+	}
+	else {
+		script_evnt = cache_it->second;
+	}
 
-		while (!script_evnt.empty()) {
-			// create StatBlocks if we need them
-			EventComponent *ec_power = script_evnt.front().getComponent(EventComponent::POWER);
-			if (ec_power) {
-				ec_power->data[0].Int = mapr->addEventStatBlock(script_evnt.front());
-			}
-
-			if (script_evnt.front().delay.getDuration() > 0) {
-				// handle delayed events
-				mapr->delayed_events.push_back(script_evnt.front());
-			}
-			else if (isActive(script_evnt.front())) {
-				executeEvent(script_evnt.front());
-			}
-			script_evnt.pop();
+	while (!script_evnt.empty()) {
+		// create StatBlocks if we need them
+		EventComponent *ec_power = script_evnt.front().getComponent(EventComponent::POWER);
+		if (ec_power) {
+			ec_power->data[0].Int = mapr->addEventStatBlock(script_evnt.front());
 		}
+
+		if (script_evnt.front().delay.getDuration() > 0) {
+			// handle delayed events
+			mapr->delayed_events.push_back(script_evnt.front());
+		}
+		else if (isActive(script_evnt.front())) {
+			executeEvent(script_evnt.front());
+		}
+		script_evnt.pop();
 	}
 }
 
