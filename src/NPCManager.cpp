@@ -101,7 +101,9 @@ void NPCManager::handleNewMap() {
 			npc = new NPC(Entity());
 		}
 
-		npc->load(mn.id);
+		if (!npc->load(mn.id)) {
+			continue;
+		}
 
 		npc->stats.pos.x = mn.pos.x;
 		npc->stats.pos.y = mn.pos.y;

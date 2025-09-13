@@ -68,7 +68,7 @@ NPC::NPC(const Entity& e)
  *
  * @param npc_id Config file for npc
  */
-void NPC::load(const std::string& npc_id) {
+bool NPC::load(const std::string& npc_id) {
 
 	FileParser infile;
 	ItemStack stack;
@@ -293,6 +293,9 @@ void NPC::load(const std::string& npc_id) {
 		}
 		infile.close();
 	}
+	else {
+		return false;
+	}
 
 	loadAnimations();
 	loadGraphics(); // TODO rename?
@@ -317,6 +320,8 @@ void NPC::load(const std::string& npc_id) {
 			Utils::logInfo("[%s] NPC: Dialog node %d does not have a topic.", full_filename.c_str(), i);
 		}
 	}
+
+	return true;
 }
 
 void NPC::loadGraphics() {

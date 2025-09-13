@@ -61,7 +61,7 @@ public:
 
 	explicit NPC(const Entity& e);
 	~NPC();
-	void load(const std::string& npc_id);
+	bool load(const std::string& npc_id);
 	void logic();
 	bool playSoundIntro();
 	void getDialogNodes(std::vector<int> &result, bool allow_responses);
