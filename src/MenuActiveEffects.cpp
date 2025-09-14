@@ -87,16 +87,17 @@ void MenuActiveEffects::logic() {
 	effect_icons.clear();
 
 	for (size_t i = 0; i < pc->stats.effects.effect_list.size(); ++i) {
-		if (pc->stats.effects.effect_list[i].icon == -1)
-			continue;
-
 		Effect &ed = pc->stats.effects.effect_list[i];
+
+		if (ed.icon == -1)
+			continue;
 
 		size_t most_recent_id = effect_icons.size()-1;
 		if(ed.group_stack){
 			if( effect_icons.size()>0
 				&& effect_icons[most_recent_id].type == ed.type
-				&& effect_icons[most_recent_id].name == ed.name){
+				&& effect_icons[most_recent_id].name == ed.name
+				&& effect_icons[most_recent_id].icon == ed.icon){
 
 				effect_icons[most_recent_id].stacks++;
 

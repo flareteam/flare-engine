@@ -113,6 +113,7 @@ Engine fixes:
 * Implemented caching for event scripts to avoid repeated loading from disk.
 * Fixed incorrect activation of passive powers on death.
 * Reduced spam of identical combat text messages.
+* Fix unintended stacking in active effects display for effects that don't have the same icon.
 * Android: Fix 'Flare' directory not being automatically created.
 * Android: Added a dialog to direct the player to the wiki page for installing if no game data is found.
 
