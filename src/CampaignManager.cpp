@@ -205,6 +205,9 @@ void CampaignManager::rewardCurrency(int amount) {
 }
 
 void CampaignManager::rewardXP(float amount, bool show_message) {
+	if (pc->block_xp_gain)
+		return;
+
 	bonus_xp += (amount * (100.0f + static_cast<float>(pc->stats.get(Stats::XP_GAIN)))) / 100.0f;
 
 	int whole_xp = static_cast<int>(bonus_xp);

@@ -90,6 +90,7 @@ Avatar::Avatar()
 	, feet_index(-1)
 	, mm_target_object(MM_TARGET_NONE)
 	, mm_target_object_pos()
+	, block_xp_gain(false)
 {
 	power_cooldown_timers.resize(powers->powers.size(), NULL);
 	power_cast_timers.resize(powers->powers.size(), NULL);
@@ -519,6 +520,9 @@ void Avatar::logic() {
 			stats.cur_state = StatBlock::ENTITY_STANCE;
 		}
 	}
+
+	// we have a window of 1 frame to check if the player leveled up when dying. Once it passes, we block gaining any additional XP.
+	block_xp_gain = (stats.hp == 0);
 
 	// assist mouse movement
 	mm_key = settings->mouse_move_swap ? Input::MAIN2 : Input::MAIN1;

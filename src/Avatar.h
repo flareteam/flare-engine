@@ -174,6 +174,7 @@ public:
 	int feet_index;
 	int mm_target_object;
 	FPoint mm_target_object_pos;
+	bool block_xp_gain;
 
 	std::vector<ActionData> action_queue;
 };
