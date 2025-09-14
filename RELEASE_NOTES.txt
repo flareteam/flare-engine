@@ -112,6 +112,7 @@ Engine fixes:
 * Fixed incorrect speed of repeater powers when using a non-60 FPS cap.
 * Implemented caching for event scripts to avoid repeated loading from disk.
 * Fixed incorrect activation of passive powers on death.
+* Reduced spam of identical combat text messages.
 * Android: Fix 'Flare' directory not being automatically created.
 * Android: Added a dialog to direct the player to the wiki page for installing if no game data is found.
 

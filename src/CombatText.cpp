@@ -114,6 +114,13 @@ void CombatText::addString(const std::string& message, const FPoint& location, i
 	if (!settings->combat_text)
 		return;
 
+	// reduce spam of identical messages
+	for (std::vector<Combat_Text_Item>::iterator it = combat_text.begin(); it != combat_text.end(); ++it) {
+		if (!it->is_number && it->displaytype == displaytype && it->lifespan <= duration && it->lifespan >= duration / 2 && message == it->text) {
+			return;
+		}
+	}
+
 	Combat_Text_Item c;
 	c.pos.x = location.x;
 	c.pos.y = location.y;
