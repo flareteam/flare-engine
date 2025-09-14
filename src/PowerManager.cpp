@@ -2074,6 +2074,21 @@ bool PowerManager::activatePassiveByTrigger(PowerID power_id, StatBlock *src_sta
 	if (power->passive) {
 		int trigger = power->passive_trigger;
 
+		// if the caster is dead, we can only activate passives that would potentially revive the player or are triggered on death
+		if (trigger != Power::TRIGGER_DEATH) {
+			if (src_stats->hp == 0) {
+				bool is_revive_passive = false;
+				for (size_t i = 0; i < power->post_effects.size(); ++i) {
+					if (Effect::getTypeFromString(power->post_effects[i].id) == Effect::REVIVE) {
+						is_revive_passive = true;
+						break;
+					}
+				}
+				if (!is_revive_passive)
+					return false;
+			}
+		}
+
 		if (trigger == -1) {
 			if (src_stats->effects.triggered_others)
 				return false;
@@ -2131,6 +2146,19 @@ void PowerManager::activateSinglePassive(StatBlock *src_stats, PowerID id) {
 	if (!power->passive) return;
 
 	if (power->passive_trigger == -1) {
+		// if the caster is dead, we can only activate passives that would potentially revive the player
+		if (src_stats->hp == 0) {
+			bool is_revive_passive = false;
+			for (size_t i = 0; i < power->post_effects.size(); ++i) {
+				if (Effect::getTypeFromString(power->post_effects[i].id) == Effect::REVIVE) {
+					is_revive_passive = true;
+					break;
+				}
+			}
+			if (!is_revive_passive)
+				return;
+		}
+
 		activate(id, src_stats, src_stats->pos, src_stats->pos);
 		src_stats->refresh_stats = true;
 		src_stats->effects.triggered_others = true;
