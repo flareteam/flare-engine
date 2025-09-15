@@ -221,7 +221,7 @@ void Settings::saveSettings() {
  */
 void Settings::loadDefaults() {
 	// HACK init defaults except video and one-time flags
-	for (size_t i = 4; i < config.size(); i++) {
+	for (size_t i = 4; i < config.size() - 2; i++) {
 		Parse::tryParseValue(*config[i].type, config[i].default_val, config[i].storage);
 	}
 
