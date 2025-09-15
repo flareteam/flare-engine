@@ -188,9 +188,7 @@ void SDLInputState::initBindings() {
 		// backslash is used due to its general proximity to Enter on both ANSI and ISO layouts
 		setBind(Input::CANCEL, InputBind::KEY, SDL_SCANCODE_BACKSLASH, NULL);
 	}
-	else {
-		setBind(Input::CANCEL, InputBind::KEY, SDL_SCANCODE_ESCAPE, NULL);
-	}
+	setBind(Input::CANCEL, InputBind::KEY, SDL_SCANCODE_ESCAPE, NULL);
 
 	setBind(Input::ACCEPT, InputBind::KEY, SDL_SCANCODE_RETURN, NULL);
 	setBind(Input::ACCEPT, InputBind::KEY, SDL_SCANCODE_SPACE, NULL);
