@@ -99,7 +99,7 @@ Settings::Settings()
 	setConfigDefault(32, "minimap_mode",        &typeid(minimap_mode),        "0",             &minimap_mode,        "Mini-map display mode | 0 = normal, 1 = 2x zoom, 2 = hidden");
 	setConfigDefault(33, "mouse_move_swap",     &typeid(mouse_move_swap),     "0",             &mouse_move_swap,     "Use 'Main2' as the movement action when mouse_move=1 | 0 = disable, 1 = enable");
 	setConfigDefault(34, "mouse_move_attack",   &typeid(mouse_move_attack),   "1",             &mouse_move_attack,   "Allow attacking with the mouse movement button if an enemy is targeted and in range | 0 = disable, 1 = enable");
-	setConfigDefault(35, "entity_markers",      &typeid(entity_markers),      "1",             &entity_markers,      "Shows a marker above entities that are hidden behind tall tiles | 0 = disable, 1 = enable");
+	setConfigDefault(35, "entity_markers",      &typeid(entity_markers),      "0",             &entity_markers,      "Shows a marker above entities that are hidden behind tall tiles | 0 = disable, 1 = enable");
 	setConfigDefault(36, "prev_save_slot",      &typeid(prev_save_slot),      "-1",            &prev_save_slot,      "Index of the last used save slot");
 	setConfigDefault(37, "low_hp_warning_type", &typeid(low_hp_warning_type), "1",             &low_hp_warning_type, "Low health warning type settings | 0 = disable, 1 = all, 2 = message & cursor, 3 = message & sound, 4 = cursor & sound , 5 = message, 6 = cursor, 7 = sound");
 	setConfigDefault(38, "low_hp_threshold",    &typeid(low_hp_threshold),    "20",            &low_hp_threshold,    "Low HP warning threshold percentage");
