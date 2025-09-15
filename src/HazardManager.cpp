@@ -108,7 +108,7 @@ void HazardManager::logic() {
 				Entity *e = entitym->entities[eindex];
 
 				// hero/ally powers can only hit allies if target_party is true
-				if (h[hindex]->source_type == Power::SOURCE_TYPE_HERO && h[hindex]->source_type == Power::SOURCE_TYPE_ALLY && e->stats.hero_ally != h[hindex]->power->target_party) {
+				if ((h[hindex]->source_type == Power::SOURCE_TYPE_HERO || h[hindex]->source_type == Power::SOURCE_TYPE_ALLY) && e->stats.hero_ally && !h[hindex]->power->target_party) {
 					continue;
 				}
 
