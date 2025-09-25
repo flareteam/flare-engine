@@ -67,13 +67,23 @@ void Animation::setupUncompressed(const Point& _render_size, const Point& _rende
 		int base_index = DIRECTIONS * i;
 		for (unsigned short dir = 0 ; dir < DIRECTIONS; dir++) {
 			// TODO handle multiple images for uncompressed animation defintions
-			gfx[base_index + dir].first = sprite->getImageFromKey("");
-			gfx[base_index + dir].second.x = _render_size.x * (_position + i);
-			gfx[base_index + dir].second.y = _render_size.y * dir;
-			gfx[base_index + dir].second.w = _render_size.x;
-			gfx[base_index + dir].second.h = _render_size.y;
-			render_offset[base_index + dir].x = _render_offset.x;
-			render_offset[base_index + dir].y = _render_offset.y;
+			unsigned f = base_index + dir;
+			gfx[f].first = sprite->getImageFromKey("");
+			gfx[f].second.x = _render_size.x * (_position + i);
+			gfx[f].second.y = _render_size.y * dir;
+			gfx[f].second.w = _render_size.x;
+			gfx[f].second.h = _render_size.y;
+			render_offset[f].x = _render_offset.x;
+			render_offset[f].y = _render_offset.y;
+
+			// not all animations have multiple directions, but we need to handle when attempting to render an animation from any direction
+			// we can try to use the rect data from the 0 direction
+			// to determine if we should do so, we check if the bottom-right corner of a rect is out-of-bounds of the image
+			if (dir > 0 && gfx[f].first) {
+				if (gfx[f].second.x + gfx[f].second.w > gfx[f].first->getWidth() || gfx[f].second.y + gfx[f].second.h > gfx[f].first->getHeight()) {
+					gfx[f].second = gfx[base_index].second;
+				}
+			}
 		}
 	}
 }
@@ -151,6 +161,19 @@ bool Animation::addFrame(unsigned short index, unsigned short direction, const R
 	gfx[i].first = sprite->getImageFromKey(key);
 	gfx[i].second = rect;
 	render_offset[i] = _render_offset;
+
+	// not all animations have multiple directions, but we need to handle when attempting to render an animation from any direction
+	// we can try to use the rect data from the 0 direction
+	if (direction == 0 && gfx[i].first) {
+		for (unsigned short dir = 1; dir < DIRECTIONS; ++dir) {
+			unsigned f = (DIRECTIONS * index) + dir;
+			if (!gfx[f].first) {
+				gfx[f].first = gfx[i].first;
+				gfx[f].second = gfx[i].second;
+				render_offset[f] = render_offset[i];
+			}
+		}
+	}
 
 	return true;
 }
