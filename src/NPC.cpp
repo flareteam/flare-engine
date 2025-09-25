@@ -61,6 +61,9 @@ NPC::NPC(const Entity& e)
 	, dialog()
 {
 	stock.init(VENDOR_MAX_STOCK);
+
+	// have NPCs face south by default
+	stats.direction = 7;
 }
 
 /**
