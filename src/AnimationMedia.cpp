@@ -21,36 +21,46 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 
 AnimationMedia::AnimationMedia()
-	: first_key("") {
+	: first_key("")
+	, first_path("") {
 }
 
 AnimationMedia::~AnimationMedia() {
 }
 
 void AnimationMedia::loadImage(const std::string& path, const std::string& key) {
-    Image* loaded_img = render_device->loadImage(path, RenderDevice::ERROR_NORMAL);
-	if (!loaded_img)
-		return;
+	render_device->pushQueuedImage(path, RenderDevice::ERROR_NORMAL);
 
 	if (sprites.find(key) == sprites.end()) {
-		sprites[key] = loaded_img;
+		sprites[key] = NULL;
+		paths[key] = path;
 	}
 	else {
-		sprites[key]->unref();
-		sprites[key] = loaded_img;
+		if (sprites[key] != NULL)
+			sprites[key]->unref();
+
+		sprites[key] = NULL;
+		paths[key] = path;
 	}
 
 	if (sprites.size() == 1) {
 		first_key = key;
+		first_path = path;
 	}
 }
 
 Image* AnimationMedia::getImageFromKey(const std::string& key) {
 	std::map<std::string, Image*>::iterator it = sprites.find(key);
 	if (it != sprites.end()) {
+		if (it->second == NULL) {
+			it->second = render_device->loadImage(paths[key], RenderDevice::ERROR_NORMAL);
+		}
 		return it->second;
 	}
 	else if (!sprites.empty()) {
+		if (sprites[first_key] == NULL) {
+			sprites[first_key] = render_device->loadImage(first_path, RenderDevice::ERROR_NORMAL);
+		}
 		return sprites[first_key];
 	}
 

@@ -128,6 +128,7 @@ public:
 	int prev_save_slot;
 	bool setup_language;
 	bool setup_mousemove;
+	bool enable_threaded_image_load;
 
 	// Dev console: shortcut commands
 	std::string dev_cmd_1;

@@ -435,3 +435,35 @@ unsigned short RenderDevice::getRefreshRate() {
 	Utils::logInfo("RenderDevice: getRefreshRate() not implemented");
 	return 0;
 }
+
+void RenderDevice::pushQueuedImage(const std::string& filename, int error_type) {
+	if (!settings->enable_threaded_image_load)
+		return;
+
+	Image* cache_test = cacheLookup(filename);
+	if (cache_test) {
+		// image already in cache. We need to decrease the ref count because the lookup would have increased it
+		cache_test->unref();
+		return;
+	}
+
+	for (size_t i = 0; i < image_queue.size(); ++i) {
+		if (image_queue[i].filename == filename) {
+			// image already in queue
+			return;
+		}
+	}
+
+	QueuedImage queued_image;
+	queued_image.filename = filename;
+	queued_image.error_type = error_type;
+
+	image_queue.push_back(queued_image);
+}
+
+void RenderDevice::cleanupQueuedImages() {
+	for (size_t i = 0; i < image_queue_cleanup.size(); ++i) {
+		image_queue_cleanup[i]->unref();
+	}
+	image_queue_cleanup.clear();
+}

@@ -41,6 +41,8 @@ public:
 	void decreaseCount(const std::string &name);
 	void increaseCount(const std::string &name);
 	void cleanUp();
+
+	void checkAnimationsInit();
 };
 
 #endif // __ANIMATION_MANAGER__

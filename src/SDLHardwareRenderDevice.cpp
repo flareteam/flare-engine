@@ -736,3 +736,52 @@ unsigned short SDLHardwareRenderDevice::getRefreshRate() {
 	return static_cast<unsigned short>(mode.refresh_rate);
 }
 
+int SDLHardwareRenderDevice::loadQueuedImage(void* data) {
+	QueuedImage* image = static_cast<QueuedImage*>(data);
+	image->surface = IMG_Load(mods->locate(image->filename).c_str());
+	return 0;
+}
+
+void SDLHardwareRenderDevice::loadQueuedImages() {
+	std::vector<SDL_Thread*> threads(image_queue.size(), NULL);
+
+	for (size_t i = 0; i < image_queue.size(); ++i) {
+		std::string thread_name = "Image queue: " + image_queue[i].filename;
+		threads[i] = SDL_CreateThread(loadQueuedImage, thread_name.c_str(), &image_queue[i]);
+	}
+
+	for (size_t i = 0; i < threads.size(); ++i) {
+		SDL_WaitThread(threads[i], NULL);
+	}
+
+	for (size_t i = 0; i < image_queue.size(); ++i) {
+		SDLHardwareImage *image = new SDLHardwareImage(this, renderer);
+		if (!image) return;
+
+		if (image_queue[i].surface) {
+			image->surface = SDL_CreateTextureFromSurface(renderer, static_cast<SDL_Surface*>(image_queue[i].surface));
+			SDL_FreeSurface(static_cast<SDL_Surface*>(image_queue[i].surface));
+			image_queue[i].surface = NULL;
+		}
+
+		if(image->surface == NULL) {
+			delete image;
+			if (image_queue[i].error_type != ERROR_NONE)
+				Utils::logError("SDLHardwareRenderDevice: Couldn't load image: '%s'. %s", image_queue[i].filename.c_str(), IMG_GetError());
+
+			if (image_queue[i].error_type == ERROR_EXIT) {
+				Utils::logErrorDialog("SDLHardwareRenderDevice: Couldn't load image: '%s'.\n%s", image_queue[i].filename.c_str(), IMG_GetError());
+				mods->resetModConfig();
+				Utils::Exit(1);
+			}
+		}
+		else {
+			// store image to cache
+			cacheStore(image_queue[i].filename, image);
+			image_queue_cleanup.push_back(static_cast<Image*>(image));
+		}
+	}
+
+	image_queue.clear();
+}
+

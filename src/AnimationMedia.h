@@ -24,7 +24,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class AnimationMedia {
 private:
 	std::map<std::string, Image*> sprites;
+	std::map<std::string, std::string> paths;
 	std::string first_key;
+	std::string first_path;
 
 public:
     AnimationMedia();

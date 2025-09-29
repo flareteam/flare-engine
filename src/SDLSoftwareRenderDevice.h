@@ -84,6 +84,8 @@ public:
 
 	Image* loadImage(const std::string& filename, int error_type);
 
+	void loadQueuedImages();
+
 protected:
 	int createContextInternal();
 	void createContextError();
@@ -91,6 +93,7 @@ protected:
 private:
 	Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 	void getWindowSize(short unsigned *screen_w, short unsigned *screen_h);
+	static int loadQueuedImage(void* data);
 
 	SDL_Surface* screen;
 	SDL_Window* window;

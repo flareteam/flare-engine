@@ -55,6 +55,13 @@ protected:
 		ACTIVE_SUBFRAME_ALL = 2,
 	};
 
+	enum {
+		ANIMATION_COMPRESSED = 0,
+		ANIMATION_UNCOMPRESSED
+	};
+
+	bool init; // image loading is deferred, so this flag is used to do some setup when calling getCurrentFrame() for the first time
+
 	bool reverse_playback;  // only for type == BACK_FORTH
 	bool active_frame_triggered;
 
@@ -62,6 +69,7 @@ protected:
 	uint8_t active_sub_frame;
 	uint8_t blend_mode;
 	uint8_t alpha_mod;
+	uint8_t format;
 
 	unsigned short total_frame_count; // the total number of frames for this animation (is different from frame_count for back/forth animations)
 	unsigned short cur_frame;     // counts up until reaching total_frame_count.
@@ -79,6 +87,8 @@ protected:
 
 	std::vector<std::pair<Image*, Rect> > gfx; // graphics for each frame taken from the spritesheet
 	std::vector<Point> render_offset; // "virtual point on the floor"
+	std::vector<std::string> keys;
+	std::vector<unsigned short> dirs;
 	std::vector<short> active_frames;	// frames that are marked as "active". Active frames are used to trigger various states (i.e power activation or hazard danger)
 	std::vector<unsigned short> sub_frames; // a list of frames to play on each tick
 
@@ -142,6 +152,8 @@ public:
 	unsigned getFrameCount() { return frame_count; }
 
 	void setSpeed(float val);
+
+	void checkInit();
 };
 
 #endif

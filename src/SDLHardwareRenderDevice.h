@@ -96,12 +96,15 @@ public:
 
 	Image* loadImage(const std::string& filename, int error_type);
 
+	void loadQueuedImages();
+
 protected:
 	int createContextInternal();
 	void createContextError();
 
 private:
 	void getWindowSize(short unsigned *screen_w, short unsigned *screen_h);
+	static int loadQueuedImage(void* data);
 
 	SDL_Window *window;
 	SDL_Renderer *renderer;

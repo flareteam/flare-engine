@@ -173,6 +173,19 @@ public:
 };
 
 
+class QueuedImage {
+public:
+	void* surface;
+	int error_type;
+	std::string filename;
+
+	QueuedImage()
+		: surface(NULL)
+		, error_type(0)
+		, filename()
+	{}
+};
+
 
 /** Provide abstract interface for FLARE engine rendering devices.
  *
@@ -236,6 +249,10 @@ public:
 
 	bool reloadGraphics();
 
+	void pushQueuedImage(const std::string& filename, int error_type);
+	virtual void loadQueuedImages() = 0;
+	void cleanupQueuedImages();
+
 protected:
 	/* Compute clipping and global position from local frame. */
 	bool localToGlobal(Sprite *r);
@@ -266,6 +283,9 @@ protected:
 
 	Rect m_clip;
 	Rect m_dest;
+
+	std::vector<QueuedImage> image_queue;
+	std::vector<Image*> image_queue_cleanup;
 
 private:
 	typedef std::map<std::string, Image *> IMAGE_CACHE_CONTAINER;

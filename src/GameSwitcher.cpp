@@ -32,6 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * - maybe full-video cutscenes
  */
 
+#include "AnimationManager.h"
 #include "CursorManager.h"
 #include "FileParser.h"
 #include "FontEngine.h"
@@ -279,6 +280,11 @@ bool GameSwitcher::isPaused() {
 }
 
 void GameSwitcher::render() {
+	render_device->loadQueuedImages();
+
+	if (anim)
+		anim->checkAnimationsInit();
+
 	// display background
 	if (background && currentState->has_background) {
 		render_device->render(background);

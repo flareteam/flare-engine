@@ -331,6 +331,7 @@ void GameStatePlay::checkTeleport() {
 			inpt->lock_all = (teleport_mapname == "maps/spawn.txt");
 			mapr->executeOnMapExitEvents();
 			showLoading();
+			render_device->cleanupQueuedImages();
 			save_load->saveFOW(); // TODO handle save_onload/save_onexit?
 			mapr->load(teleport_mapname);
 			setLoadingFrame();

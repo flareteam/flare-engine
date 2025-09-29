@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
+#include "Animation.h"
 #include "AnimationManager.h"
 #include "AnimationSet.h"
 #include "CommonIncludes.h"
@@ -24,6 +25,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 
 #include <cassert>
+#include <vector>
 
 AnimationSet *AnimationManager::getAnimationSet(const std::string& filename) {
 	std::vector<std::string>::iterator found = find(names.begin(), names.end(), filename);
@@ -97,5 +99,13 @@ void AnimationManager::cleanUp() {
 			names.erase(names.begin()+i);
 		}
 		--i;
+	}
+}
+
+void AnimationManager::checkAnimationsInit() {
+	for (size_t i = 0; i < sets.size(); ++i) {
+		for (size_t j = 0; j < sets[i]->animations.size(); ++j) {
+			sets[i]->animations[j]->checkInit();
+		}
 	}
 }

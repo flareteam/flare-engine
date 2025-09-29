@@ -62,6 +62,8 @@ GameState& GameState::operator=(const GameState& other) {
 }
 
 GameState::~GameState() {
+	render_device->cleanupQueuedImages();
+
 	if (loading_tip)
 		delete loading_tip;
 }

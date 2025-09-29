@@ -32,7 +32,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "RenderDevice.h"
 
 Animation::Animation(const std::string &_name, const std::string &_type, AnimationMedia *_sprite, uint8_t _blend_mode, uint8_t _alpha_mod, Color _color_mod)
-	: reverse_playback(false)
+	: init(false)
+	, reverse_playback(false)
 	, active_frame_triggered(false)
 	, type(	_type == "play_once" ? ANIMTYPE_PLAY_ONCE :
 			_type == "back_forth" ? ANIMTYPE_BACK_FORTH :
@@ -41,6 +42,7 @@ Animation::Animation(const std::string &_name, const std::string &_type, Animati
 	, active_sub_frame(ACTIVE_SUBFRAME_END)
 	, blend_mode(_blend_mode)
 	, alpha_mod(_alpha_mod)
+	, format(ANIMATION_COMPRESSED)
 	, total_frame_count(0)
 	, cur_frame(0)
 	, sub_frame(0)
@@ -52,6 +54,8 @@ Animation::Animation(const std::string &_name, const std::string &_type, Animati
 	, sprite(_sprite)
 	, gfx()
 	, render_offset()
+	, keys()
+	, dirs()
 	, active_frames()
 	, sub_frames()
 	, name(_name)
@@ -68,24 +72,18 @@ void Animation::setupUncompressed(const Point& _render_size, const Point& _rende
 		for (unsigned short dir = 0 ; dir < DIRECTIONS; dir++) {
 			// TODO handle multiple images for uncompressed animation defintions
 			unsigned f = base_index + dir;
-			gfx[f].first = sprite->getImageFromKey("");
 			gfx[f].second.x = _render_size.x * (_position + i);
 			gfx[f].second.y = _render_size.y * dir;
 			gfx[f].second.w = _render_size.x;
 			gfx[f].second.h = _render_size.y;
 			render_offset[f].x = _render_offset.x;
 			render_offset[f].y = _render_offset.y;
-
-			// not all animations have multiple directions, but we need to handle when attempting to render an animation from any direction
-			// we can try to use the rect data from the 0 direction
-			// to determine if we should do so, we check if the bottom-right corner of a rect is out-of-bounds of the image
-			if (dir > 0 && gfx[f].first) {
-				if (gfx[f].second.x + gfx[f].second.w > gfx[f].first->getWidth() || gfx[f].second.y + gfx[f].second.h > gfx[f].first->getHeight()) {
-					gfx[f].second = gfx[base_index].second;
-				}
-			}
+			keys[f] = "";
+			dirs[f] = dir;
 		}
 	}
+
+	format = ANIMATION_UNCOMPRESSED;
 }
 
 void Animation::setup(unsigned short _frames, unsigned short _duration) {
@@ -150,6 +148,8 @@ void Animation::setup(unsigned short _frames, unsigned short _duration) {
 	unsigned i = DIRECTIONS * _frames;
 	gfx.resize(i);
 	render_offset.resize(i);
+	keys.resize(i);
+	dirs.resize(i);
 }
 
 bool Animation::addFrame(unsigned short index, unsigned short direction, const Rect& rect, const Point& _render_offset, const std::string& key) {
@@ -158,22 +158,11 @@ bool Animation::addFrame(unsigned short index, unsigned short direction, const R
 	}
 
 	unsigned i = (DIRECTIONS * index) + direction;
-	gfx[i].first = sprite->getImageFromKey(key);
 	gfx[i].second = rect;
 	render_offset[i] = _render_offset;
-
-	// not all animations have multiple directions, but we need to handle when attempting to render an animation from any direction
-	// we can try to use the rect data from the 0 direction
-	if (direction == 0 && gfx[i].first) {
-		for (unsigned short dir = 1; dir < DIRECTIONS; ++dir) {
-			unsigned f = (DIRECTIONS * index) + dir;
-			if (!gfx[f].first) {
-				gfx[f].first = gfx[i].first;
-				gfx[f].second = gfx[i].second;
-				render_offset[f] = render_offset[i];
-			}
-		}
-	}
+	keys[i] = key;
+	dirs[i] = direction;
+	format = ANIMATION_COMPRESSED;
 
 	return true;
 }
@@ -248,6 +237,9 @@ Renderable Animation::getCurrentFrame(unsigned short direction) {
 	Renderable r;
 	if (!sub_frames.empty()) {
 		const unsigned short index = static_cast<unsigned short>(DIRECTIONS * sub_frames[sub_frame]) + direction;
+
+		checkInit();
+
 		r.src.x = gfx[index].second.x;
 		r.src.y = gfx[index].second.y;
 		r.src.w = gfx[index].second.w;
@@ -433,4 +425,46 @@ unsigned short Animation::getLastSubFrame(const short &frame) {
 
 void Animation::setSpeed(float val) {
 	speed = val / 100.0f;
+}
+
+void Animation::checkInit() {
+	if (!init) {
+		for (unsigned short i = 0 ; i < frame_count; i++) {
+			int base_index = DIRECTIONS * i;
+			for (unsigned short dir = 0 ; dir < DIRECTIONS; dir++) {
+				unsigned f = base_index + dir;
+
+				if (format == ANIMATION_COMPRESSED) {
+					gfx[f].first = sprite->getImageFromKey(keys[f]);
+
+					// not all animations have multiple directions, but we need to handle when attempting to render an animation from any direction
+					// we can try to use the rect data from the 0 direction
+					if (dir == 0 && gfx[f].first) {
+						for (unsigned short test_dir = 1; test_dir < DIRECTIONS; ++test_dir) {
+							unsigned test_index = (DIRECTIONS * i) + test_dir;
+							if (dirs[test_index] == 0) {
+								gfx[test_index].first = gfx[f].first;
+								gfx[test_index].second = gfx[f].second;
+								render_offset[test_index] = render_offset[f];
+							}
+						}
+					}
+				}
+				else if (format == ANIMATION_UNCOMPRESSED) {
+					gfx[f].first = sprite->getImageFromKey("");
+
+					// not all animations have multiple directions, but we need to handle when attempting to render an animation from any direction
+					// we can try to use the rect data from the 0 direction
+					// to determine if we should do so, we check if the bottom-right corner of a rect is out-of-bounds of the image
+					if (dir > 0 && gfx[f].first) {
+						if (gfx[f].second.x + gfx[f].second.w > gfx[f].first->getWidth() || gfx[f].second.y + gfx[f].second.h > gfx[f].first->getHeight()) {
+							gfx[f].second = gfx[base_index].second;
+						}
+					}
+				}
+			}
+		}
+
+		init = true;
+	}
 }
