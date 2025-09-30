@@ -116,6 +116,7 @@ Engine fixes:
 * Fix unintended stacking in active effects display for effects that don't have the same icon.
 * XP gain is now prevented after the initial death frame. This still allows for the player to revive if they die and level up on the same frame.
 * Fix bug where new saves were the wrong class and couldn't attack when using a controller.
+* Fixed a case where replaced powers were not being enabled when switching equipment sets.
 * Android: Fix 'Flare' directory not being automatically created.
 * Android: Added a dialog to direct the player to the wiki page for installing if no game data is found.
 

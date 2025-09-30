@@ -1772,7 +1772,7 @@ void MenuManager::pushMatchingItemsOf(const Point& hov_pos) {
 			if (tip_index >= eset->tooltips.visible_max)
 				break; // can't show any more tooltips
 
-			if (inv->isActive(i)){
+			if (inv->isEquipSlotActive(i)){
 				if (inv->slot_type[i] == items->items[hov_stack.item]->type) {
 					if (!inv->inventory[MenuInventory::EQUIPMENT].storage[i].empty()) {
 						Point match_pos(inv->equipped_area[i].x, inv->equipped_area[i].y);

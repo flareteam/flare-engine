@@ -121,7 +121,7 @@ public:
 	void applyEquipmentSet(unsigned set);
 	void applyNextEquipmentSet();
 	void applyPreviousEquipmentSet();
-	bool isActive(size_t equipped);
+	bool isEquipSlotActive(size_t equipped);
 
 	int getEquippedCount();
 	int getTotalSlotCount();

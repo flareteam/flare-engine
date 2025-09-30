@@ -1145,7 +1145,7 @@ std::string Avatar::getGfxFromType(const std::string& gfx_type) {
 		MenuItemStorage& equipment = menu->inv->inventory[MenuInventory::EQUIPMENT];
 
 		for (int i = 0; i < equipment.getSlotNumber(); i++) {
-			if (!menu->inv->isActive(i))
+			if (!menu->inv->isEquipSlotActive(i))
 				continue;
 
 			ItemType& equip_item_type = items->getItemType(equipment.slot_type[i]);
