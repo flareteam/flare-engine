@@ -124,7 +124,7 @@ In addition, there is a `mods` directory in this location, which can be used to 
 | Chinese (Taiwan) (zh\_TW)     | 67%
 | Czech (cs)                    | 19%
 | Dutch (nl)                    | 11%
-| Finnish (fi)                  | 84%
+| Finnish (fi)                  | 89%
 | French (fr)                   | 79%
 | Gaelic, Scottish (gd)         | 91%
 | Galician (gl)                 | 26%
@@ -139,8 +139,8 @@ In addition, there is a `mods` directory in this location, which can be used to 
 | Norwegian Bokmål (nb)         | 87%
 | Polish (pl)                   | 82%
 | Portuguese (pt)               | 70%
-| Portuguese (Brazil) (pt\_BR)  | 87%
-| Russian (ru)                  | 98%
+| Portuguese (Brazil) (pt\_BR)  | 100%
+| Russian (ru)                  | 100%
 | Slovak (sk)                   | 62%
 | Spanish (es)                  | 91%
 | Swedish (sv)                  | 91%

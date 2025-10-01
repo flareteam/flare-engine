@@ -7,7 +7,7 @@
 # Ademaro <ademaro@ya.ru>, 2018
 # David Bell <ooliterplus@gmail.com>, 2021
 # Justin Jacobs <jajdorkster@gmail.com>, 2022
-# berry, 2025
+# Blueberryy, 2025
 # 
 #, fuzzy
 msgid ""
@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-18 12:00-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: berry, 2025\n"
+"Last-Translator: Blueberryy, 2025\n"
 "Language-Team: Russian (https://app.transifex.com/flareorg/teams/84925/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -151,7 +151,7 @@ msgstr "%s (макс.)"
 #: ../../../src/EngineSettings.cpp:737
 #, c-format
 msgid "Resist Damage (%s)"
-msgstr "Сопротивление урону (%s)"
+msgstr "Сопр. урону (%s)"
 
 #: ../../../src/Entity.cpp:520
 msgid "miss"
@@ -1490,7 +1490,7 @@ msgstr "Удержание"
 
 #: ../../../src/MenuPowers.cpp:1114
 msgid "Resist All Negative Effects"
-msgstr "Сопротивление всем негативным эффектам"
+msgstr "Сопр. всем негат. эффектам"
 
 #: ../../../src/MenuPowers.cpp:1118
 msgid "Stun"
@@ -1535,7 +1535,7 @@ msgstr "Базовая меткость"
 
 #: ../../../src/MenuPowers.cpp:1254
 msgid "Base Critical Chance"
-msgstr "Базовый шанс критического урона"
+msgstr "Базовый шанс критич. урона"
 
 #: ../../../src/MenuPowers.cpp:1262
 msgid "Ignores Absorbtion"
@@ -2121,7 +2121,7 @@ msgstr "X360: R2"
 
 #: ../../../src/Stats.cpp:39
 msgid "Max HP"
-msgstr "Макс. здоровье"
+msgstr "Макс. запас здоровья"
 
 #: ../../../src/Stats.cpp:40
 msgid "Total amount of HP."
@@ -2129,7 +2129,7 @@ msgstr "Общее количество здоровья."
 
 #: ../../../src/Stats.cpp:46
 msgid "HP Regen"
-msgstr "Восстановление здоровья"
+msgstr "Восст. здоровья"
 
 #: ../../../src/Stats.cpp:47
 msgid "Ticks of HP regen per minute."
@@ -2145,7 +2145,7 @@ msgstr "Общее количество маны."
 
 #: ../../../src/Stats.cpp:60
 msgid "MP Regen"
-msgstr "Восстановление маны"
+msgstr "Восст. маны"
 
 #: ../../../src/Stats.cpp:61
 msgid "Ticks of MP regen per minute."
@@ -2181,7 +2181,7 @@ msgstr "Уменьшает получаемый урон."
 
 #: ../../../src/Stats.cpp:95
 msgid "Critical Hit Chance"
-msgstr "Шанс критического урона"
+msgstr "Шанс критич. урона"
 
 #: ../../../src/Stats.cpp:96
 msgid "Chance for an attack to do extra damage."
@@ -2263,7 +2263,7 @@ msgstr "Процент маны, украденной за каждый удар
 
 #: ../../../src/Stats.cpp:165
 msgid "Resist Damage-Over-Time"
-msgstr "Сопротивление периодическому урону"
+msgstr "Сопр. периодич. урону"
 
 #: ../../../src/Stats.cpp:166
 msgid "Percentage chance that damage-over-time effects will be negated."
@@ -2273,7 +2273,7 @@ msgstr ""
 
 #: ../../../src/Stats.cpp:172
 msgid "Resist Slow"
-msgstr "Сопротивление замедлению"
+msgstr "Сопр. замедлению"
 
 #: ../../../src/Stats.cpp:173
 msgid "Percentage chance that slow effects will be negated."
@@ -2281,7 +2281,7 @@ msgstr "Процентный шанс того, что эффекты замед
 
 #: ../../../src/Stats.cpp:179
 msgid "Resist Stun"
-msgstr "Сопротивление оглушению"
+msgstr "Сопр. оглушению"
 
 #: ../../../src/Stats.cpp:180
 msgid "Percentage chance that stun effects will be negated."
@@ -2289,7 +2289,7 @@ msgstr "Процентный шанс того, что эффекты оглуш
 
 #: ../../../src/Stats.cpp:186
 msgid "Resist Knockback"
-msgstr "Сопротивление отбрасыванию"
+msgstr "Сопр. отбрасыванию"
 
 #: ../../../src/Stats.cpp:187
 msgid "Percentage chance that knockback effects will be negated."
@@ -2297,7 +2297,7 @@ msgstr "Процентный шанс того, что эффекты отбра
 
 #: ../../../src/Stats.cpp:193
 msgid "Resist Stat Debuffs"
-msgstr "Сопротивление ослаблению атрибутов"
+msgstr "Сопр. ослаблению атрибутов"
 
 #: ../../../src/Stats.cpp:194
 msgid "Percentage chance that stat debuff effects will be negated."
@@ -2306,7 +2306,7 @@ msgstr ""
 
 #: ../../../src/Stats.cpp:200
 msgid "Resist Damage Reflection"
-msgstr "Сопротивление отражению урона"
+msgstr "Сопр. отражению урона"
 
 #: ../../../src/Stats.cpp:201
 msgid "Percentage chance that damage reflection will be negated."
@@ -2314,7 +2314,7 @@ msgstr "Процентный шанс того, что отражение уро
 
 #: ../../../src/Stats.cpp:207
 msgid "Resist HP Steal"
-msgstr "Сопротивление краже здоровья"
+msgstr "Сопр. краже здоровья"
 
 #: ../../../src/Stats.cpp:208
 msgid "Percentage chance that HP steal will be negated."
@@ -2322,7 +2322,7 @@ msgstr "Процентный шанс того, что кража здоровь
 
 #: ../../../src/Stats.cpp:214
 msgid "Resist MP Steal"
-msgstr "Сопротивление краже маны"
+msgstr "Сопр. краже маны"
 
 #: ../../../src/Stats.cpp:215
 msgid "Percentage chance that MP steal will be negated."

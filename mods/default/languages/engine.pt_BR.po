@@ -8,6 +8,7 @@
 # Rafael Fontenelle <rffontenelle@gmail.com>, 2021
 # Vicente Monteiro, 2022
 # Justin Jacobs <jajdorkster@gmail.com>, 2022
+# Thiago Guaryuu, 2025
 # 
 #, fuzzy
 msgid ""
@@ -16,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-18 12:00-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2022\n"
+"Last-Translator: Thiago Guaryuu, 2025\n"
 "Language-Team: Portuguese (Brazil) (https://app.transifex.com/flareorg/teams/84925/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -131,7 +132,7 @@ msgstr ""
 #: ../../../src/Entity.cpp:569 ../../../src/Entity.cpp:582
 #: ../../../src/Entity.cpp:600
 msgid "Resist"
-msgstr ""
+msgstr "Resistir"
 
 #: ../../../src/EngineSettings.cpp:613
 msgid "Adventurer"
@@ -140,17 +141,17 @@ msgstr "Aventureiro"
 #: ../../../src/EngineSettings.cpp:731 ../../../src/Stats.cpp:81
 #, c-format
 msgid "%s (Min.)"
-msgstr ""
+msgstr "%s (Mín.)"
 
 #: ../../../src/EngineSettings.cpp:734 ../../../src/Stats.cpp:88
 #, c-format
 msgid "%s (Max.)"
-msgstr ""
+msgstr "%s (Máx.)"
 
 #: ../../../src/EngineSettings.cpp:737
 #, c-format
 msgid "Resist Damage (%s)"
-msgstr ""
+msgstr "Resistir ao Dano (%s)"
 
 #: ../../../src/Entity.cpp:520
 msgid "miss"
@@ -202,7 +203,7 @@ msgstr "Selecione um espaço"
 
 #: ../../../src/GameStateLoad.cpp:112
 msgid "Delete Save"
-msgstr "Excluir"
+msgstr "Excluir Jogo Salvo"
 
 #: ../../../src/GameStateLoad.cpp:693 ../../../src/GameStateLoad.cpp:714
 msgid "Enable a story mod to continue"
@@ -233,7 +234,7 @@ msgstr "Nível %d"
 
 #: ../../../src/GameStateLoad.cpp:933
 msgid "#"
-msgstr ""
+msgstr "#"
 
 #: ../../../src/GameStateNew.cpp:66 ../../../src/GameStateTitle.cpp:138
 #: ../../../src/MenuConfig.cpp:272 ../../../src/SDLInputState.cpp:919
@@ -250,7 +251,7 @@ msgstr "Aleatória"
 
 #: ../../../src/GameStateNew.cpp:93
 msgid "Choose a Portrait"
-msgstr "Escolha um retrato"
+msgstr "Escolha um Retrato"
 
 #: ../../../src/GameStateNew.cpp:97
 msgid "Choose a Name"
@@ -291,7 +292,7 @@ msgstr "Mods"
 #: ../../../src/GameSwitcher.cpp:224
 #, c-format
 msgid "%s FPS"
-msgstr ""
+msgstr "%s QPS"
 
 #: ../../../src/ItemManager.cpp:681
 msgid "Unknown Item"
@@ -464,11 +465,11 @@ msgstr "Pontos de propriedade disponíveis: %d"
 
 #: ../../../src/MenuCharacter.cpp:326
 msgid "Core Stats"
-msgstr ""
+msgstr "Estatísticas Principais"
 
 #: ../../../src/MenuCharacter.cpp:360
 msgid "Offensive Stats"
-msgstr ""
+msgstr "Estatísticas Ofensivas"
 
 #: ../../../src/MenuCharacter.cpp:375
 #, c-format
@@ -477,19 +478,19 @@ msgstr "Dano Elemental (%s)"
 
 #: ../../../src/MenuCharacter.cpp:409
 msgid "Defensive Stats"
-msgstr ""
+msgstr "Estatísticas Defensivas"
 
 #: ../../../src/MenuCharacter.cpp:458
 msgid "Miscellaneous Stats"
-msgstr ""
+msgstr "Estatísticas Diversas"
 
 #: ../../../src/MenuCharacter.cpp:478
 msgid "Movement Speed"
-msgstr ""
+msgstr "Velocidade de Movimento"
 
 #: ../../../src/MenuCharacter.cpp:485
 msgid "Attack Speed"
-msgstr ""
+msgstr "Velocidade de Ataque"
 
 #: ../../../src/MenuCharacter.cpp:496 ../../../src/MenuStatBar.cpp:179
 #, c-format
@@ -519,7 +520,7 @@ msgstr "Cada ponto de %s concede %s."
 
 #: ../../../src/MenuCharacter.cpp:719
 msgid "Reduces damage taken from attacks of this damage type."
-msgstr ""
+msgstr "Reduz o dano recebido de ataques desse tipo de dano."
 
 #: ../../../src/MenuCharacter.cpp:771
 #, c-format
@@ -527,6 +528,8 @@ msgid ""
 "Upgrade Stat: %s\n"
 "Uses 1 Stat Point"
 msgstr ""
+"Aprimorar Estatística: %s\n"
+"Utiliza 1 Ponto de Estatística"
 
 #: ../../../src/MenuConfig.cpp:255 ../../../src/MenuConfig.cpp:1453
 msgid "Assign:"
@@ -562,15 +565,15 @@ msgstr "Salvar Jogo"
 
 #: ../../../src/MenuConfig.cpp:330
 msgid "<unknown>"
-msgstr ""
+msgstr "<unknown>"
 
 #: ../../../src/MenuConfig.cpp:333
 msgid "All Mods"
-msgstr ""
+msgstr "Todos os Mods"
 
 #: ../../../src/MenuConfig.cpp:334
 msgid "All Core Mods"
-msgstr ""
+msgstr "Todos os Mods Principais"
 
 #: ../../../src/MenuConfig.cpp:351
 msgid ""
@@ -671,14 +674,16 @@ msgstr ""
 msgid ""
 "When enabled, eligible loot will be picked up automatically when nearby."
 msgstr ""
+"Quando ativado, itens elegíveis serão pegados automaticamente quando "
+"estiverem por perto."
 
 #: ../../../src/MenuConfig.cpp:385
 msgid "Enabled"
-msgstr ""
+msgstr "Ativado"
 
 #: ../../../src/MenuConfig.cpp:386
 msgid "Only currency"
-msgstr ""
+msgstr "Apenas moeda"
 
 #: ../../../src/MenuConfig.cpp:403
 msgid "The maximum frame rate that the game will be allowed to run at."
@@ -709,7 +714,7 @@ msgstr "Áudio"
 
 #: ../../../src/MenuConfig.cpp:436
 msgid "Game"
-msgstr ""
+msgstr "Jogo"
 
 #: ../../../src/MenuConfig.cpp:437
 msgid "Interface"
@@ -749,7 +754,7 @@ msgstr "V-Sync"
 
 #: ../../../src/MenuConfig.cpp:466
 msgid "Texture Filtering"
-msgstr "Filtragem"
+msgstr "Filtragem de Textura"
 
 #: ../../../src/MenuConfig.cpp:467
 msgid "DPI scaling"
@@ -769,15 +774,15 @@ msgstr "Limite de quadros"
 
 #: ../../../src/MenuConfig.cpp:472
 msgid "Sound Volume"
-msgstr "Volume dos efeitos"
+msgstr "Volume do Som"
 
 #: ../../../src/MenuConfig.cpp:473
 msgid "Music Volume"
-msgstr "Volume das músicas"
+msgstr "Volume da Música"
 
 #: ../../../src/MenuConfig.cpp:474
 msgid "Mute audio when window loses focus"
-msgstr ""
+msgstr "Silenciar o áudio quando a janela perder o foco"
 
 #: ../../../src/MenuConfig.cpp:476
 msgid "Automatically equip items"
@@ -785,7 +790,7 @@ msgstr "Equipar itens automaticamente"
 
 #: ../../../src/MenuConfig.cpp:477
 msgid "Automatically pick up loot"
-msgstr ""
+msgstr "Automaticamente pegar itens"
 
 #: ../../../src/MenuConfig.cpp:478
 msgid "Low health notification"
@@ -805,7 +810,7 @@ msgstr "Exibir quadros por segundo"
 
 #: ../../../src/MenuConfig.cpp:483
 msgid "Use system mouse cursor"
-msgstr ""
+msgstr "Usar o cursor do mouse do sistema"
 
 #: ../../../src/MenuConfig.cpp:484
 msgid "Colorblind Mode"
@@ -845,7 +850,7 @@ msgstr "Exibir a comparação dos itens."
 
 #: ../../../src/MenuConfig.cpp:494
 msgid "Pause game when window loses focus"
-msgstr ""
+msgstr "Pausar o jogo quando a janela perder o foco"
 
 #: ../../../src/MenuConfig.cpp:497 ../../../src/MenuMovementType.cpp:94
 #: ../../../src/MenuMovementType.cpp:131
@@ -878,7 +883,7 @@ msgstr "Zona inoperante do controlador"
 
 #: ../../../src/MenuConfig.cpp:504
 msgid "Joystick Rumble"
-msgstr ""
+msgstr "Vibração do Controle"
 
 #: ../../../src/MenuConfig.cpp:505
 msgid "Touch Controls"
@@ -1027,11 +1032,11 @@ msgstr "Habilitar >>"
 
 #: ../../../src/MenuConfig.cpp:1044
 msgid "Bindings for:"
-msgstr ""
+msgstr "Mapeamentos para:"
 
 #: ../../../src/MenuConfig.cpp:1772
 msgid "Core mod"
-msgstr ""
+msgstr "Mod principal"
 
 #: ../../../src/MenuConfig.cpp:1785
 msgid "Version:"
@@ -1051,7 +1056,7 @@ msgstr "Mods necessários:"
 
 #: ../../../src/MenuConfig.cpp:1852
 msgid "Can not remove this binding."
-msgstr ""
+msgstr "Não é possível remover esse mapeamento."
 
 #: ../../../src/MenuConfig.cpp:1917 ../../../src/SDLInputState.cpp:777
 #: ../../../src/SDLInputState.cpp:802
@@ -1118,7 +1123,7 @@ msgstr "Principal"
 
 #: ../../../src/MenuDevConsole.cpp:448
 msgid "Shortcut saved."
-msgstr ""
+msgstr "Atalho salvo."
 
 #: ../../../src/MenuDevConsole.cpp:475
 msgid "adds a power to the action bar"
@@ -1166,7 +1171,7 @@ msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:483
 msgid "Assign a console command to a shortcut key."
-msgstr ""
+msgstr "Atribuir um comando de console à uma tecla de atalho."
 
 #: ../../../src/MenuDevConsole.cpp:484 ../../../src/MenuDevConsole.cpp:485
 msgid ""
@@ -1211,30 +1216,30 @@ msgstr "<id>"
 #: ../../../src/MenuDevConsole.cpp:662
 #, c-format
 msgid "3 | <%s> | %s"
-msgstr ""
+msgstr "3 | <%s> | %s"
 
 #: ../../../src/MenuDevConsole.cpp:663
 #, c-format
 msgid "2 | <%s> | %s"
-msgstr ""
+msgstr "2 | <%s> | %s"
 
 #: ../../../src/MenuDevConsole.cpp:664
 #, c-format
 msgid "1 | <%s> | %s"
-msgstr ""
+msgstr "1 | <%s> | %s"
 
 #: ../../../src/MenuDevConsole.cpp:665
 msgid "Current shortcuts:"
-msgstr ""
+msgstr "Atalhos atuais:"
 
 #: ../../../src/MenuDevConsole.cpp:674
 #, c-format
 msgid "Enter the command you wish to save to slot %d."
-msgstr ""
+msgstr "Digite o comando que você deseja salvar no espaço %d."
 
 #: ../../../src/MenuDevConsole.cpp:678
 msgid "ERROR: Not a valid shortcut slot."
-msgstr ""
+msgstr "ERRO: Não é um espaço de atalho válido."
 
 #: ../../../src/MenuDevConsole.cpp:692
 #, c-format
@@ -1243,7 +1248,7 @@ msgstr "ERRO: '%s' não é uma chave de evento válida"
 
 #: ../../../src/MenuDevConsole.cpp:702
 msgid "ERROR: Too few arguments"
-msgstr "ERROR: Poucos argumentos"
+msgstr "ERRO: Poucos argumentos"
 
 #: ../../../src/MenuDevConsole.cpp:704
 msgid "<key>=<val> <key>=<val> ..."
@@ -1352,7 +1357,7 @@ msgstr "Este item não pode ser vendido"
 #: ../../../src/MenuInventory.cpp:1369
 #, c-format
 msgid "Equipped set %d."
-msgstr ""
+msgstr "Conjunto equipado %d."
 
 #: ../../../src/MenuLog.cpp:90
 msgid "Quests"
@@ -1471,7 +1476,7 @@ msgstr "Custa %s HP"
 
 #: ../../../src/MenuPowers.cpp:973
 msgid "Cooldown:"
-msgstr "Esfriar:"
+msgstr "Espera:"
 
 #: ../../../src/MenuPowers.cpp:1087 ../../../src/MenuPowers.cpp:1090
 msgid "Damage per second"
@@ -1491,7 +1496,7 @@ msgstr "Imobilizar"
 
 #: ../../../src/MenuPowers.cpp:1114
 msgid "Resist All Negative Effects"
-msgstr ""
+msgstr "Resistir à Todos os Efeitos Negativos"
 
 #: ../../../src/MenuPowers.cpp:1118
 msgid "Stun"
@@ -1554,7 +1559,7 @@ msgstr "%s%% Chance de acerto crítico a alvos desacelerados."
 #: ../../../src/MenuPowers.cpp:1277
 #, c-format
 msgid "Damage dealt as: %s"
-msgstr ""
+msgstr "Dano causado como: %s"
 
 #: ../../../src/MenuPowers.cpp:1286
 #, c-format
@@ -1589,6 +1594,8 @@ msgid ""
 "Upgrade to: %s (Level %d)\n"
 "Uses 1 Skill Point"
 msgstr ""
+"Aprimorar para: %s (Nível %d)\n"
+"Utiliza 1 Ponto de Habilidade"
 
 #: ../../../src/MenuStash.cpp:79 ../../../src/MenuStash.cpp:160
 msgid "Stash"
@@ -1912,11 +1919,11 @@ msgstr "Principal2"
 
 #: ../../../src/SDLInputState.cpp:941
 msgid "Next Equip Set"
-msgstr ""
+msgstr "Próximo Conjunto de Equipamentos"
 
 #: ../../../src/SDLInputState.cpp:942
 msgid "Previous Equip Set"
-msgstr ""
+msgstr "Conjunto de Equipamentos Anterior"
 
 #: ../../../src/SDLInputState.cpp:943
 msgid "Mini-map Mode"
@@ -1944,7 +1951,7 @@ msgstr "Menu: Ativado"
 
 #: ../../../src/SDLInputState.cpp:949
 msgid "Pause Game"
-msgstr ""
+msgstr "Pausar Jogo"
 
 #: ../../../src/SDLInputState.cpp:950
 msgid "Aim Up"
@@ -1968,15 +1975,15 @@ msgstr "Menu do desenvolvedor"
 
 #: ../../../src/SDLInputState.cpp:955
 msgid "Developer Command 1"
-msgstr ""
+msgstr "Comando de Desenvolvedor 1"
 
 #: ../../../src/SDLInputState.cpp:956
 msgid "Developer Command 2"
-msgstr ""
+msgstr "Comando de Desenvolvedor 2"
 
 #: ../../../src/SDLInputState.cpp:957
 msgid "Developer Command 3"
-msgstr ""
+msgstr "Comando de Desenvolvedor 3"
 
 #: ../../../src/SDLInputState.cpp:958
 msgid "Ctrl"
@@ -2036,47 +2043,47 @@ msgstr "X360: Y"
 
 #: ../../../src/SDLInputState.cpp:975
 msgid "X360: Back"
-msgstr ""
+msgstr "X360: Voltar"
 
 #: ../../../src/SDLInputState.cpp:976
 msgid "X360: Guide"
-msgstr ""
+msgstr "X360: Painel"
 
 #: ../../../src/SDLInputState.cpp:977
 msgid "X360: Start"
-msgstr ""
+msgstr "X360: Iniciar"
 
 #: ../../../src/SDLInputState.cpp:978
 msgid "X360: L3"
-msgstr ""
+msgstr "X360: L3"
 
 #: ../../../src/SDLInputState.cpp:979
 msgid "X360: R3"
-msgstr ""
+msgstr "X360: R3"
 
 #: ../../../src/SDLInputState.cpp:980
 msgid "X360: L1"
-msgstr ""
+msgstr "X360: L1"
 
 #: ../../../src/SDLInputState.cpp:981
 msgid "X360: R1"
-msgstr ""
+msgstr "X360: R1"
 
 #: ../../../src/SDLInputState.cpp:982
 msgid "X360: D-Up"
-msgstr ""
+msgstr "X360: D-Cima"
 
 #: ../../../src/SDLInputState.cpp:983
 msgid "X360: D-Down"
-msgstr ""
+msgstr "X360: D-Baixo"
 
 #: ../../../src/SDLInputState.cpp:984
 msgid "X360: D-Left"
-msgstr ""
+msgstr "X360: D-Esquerda"
 
 #: ../../../src/SDLInputState.cpp:985
 msgid "X360: D-Right"
-msgstr ""
+msgstr "X360: D-Direita"
 
 #: ../../../src/SDLInputState.cpp:987
 msgid "X360: Left X+"
@@ -2128,7 +2135,7 @@ msgstr "Quantidade total de HP."
 
 #: ../../../src/Stats.cpp:46
 msgid "HP Regen"
-msgstr "HP Regenerado"
+msgstr "Regeneração de HP"
 
 #: ../../../src/Stats.cpp:47
 msgid "Ticks of HP regen per minute."
@@ -2144,7 +2151,7 @@ msgstr "Quantidade total de MP."
 
 #: ../../../src/Stats.cpp:60
 msgid "MP Regen"
-msgstr "MP Regenerado"
+msgstr "Regeneração de MP"
 
 #: ../../../src/Stats.cpp:61
 msgid "Ticks of MP regen per minute."
@@ -2164,7 +2171,7 @@ msgstr ""
 
 #: ../../../src/Stats.cpp:74
 msgid "Avoidance"
-msgstr "Desviar"
+msgstr "Desvio"
 
 #: ../../../src/Stats.cpp:75
 msgid ""
@@ -2242,7 +2249,7 @@ msgstr "Reflexão de dano"
 
 #: ../../../src/Stats.cpp:145
 msgid "Deals a percentage of damage taken back to the attacker."
-msgstr "Percentual de dano refletido para o atacante."
+msgstr "Devolve uma porcentagem do dano sofrido ao atacante."
 
 #: ../../../src/Stats.cpp:151
 msgid "HP Steal"
@@ -2262,15 +2269,16 @@ msgstr "Percentual de MP roubado por acerto."
 
 #: ../../../src/Stats.cpp:165
 msgid "Resist Damage-Over-Time"
-msgstr ""
+msgstr "Resistir ao Dano ao Longo do Tempo"
 
 #: ../../../src/Stats.cpp:166
 msgid "Percentage chance that damage-over-time effects will be negated."
 msgstr ""
+"Percentual de chance que efeitos de dano ao longo do tempo serão negados."
 
 #: ../../../src/Stats.cpp:172
 msgid "Resist Slow"
-msgstr ""
+msgstr "Resistir à Desaceleração"
 
 #: ../../../src/Stats.cpp:173
 msgid "Percentage chance that slow effects will be negated."
@@ -2278,7 +2286,7 @@ msgstr "Percentual de chance que efeitos de desaceleração sejam impedidos."
 
 #: ../../../src/Stats.cpp:179
 msgid "Resist Stun"
-msgstr ""
+msgstr "Resistir ao Atordoamento"
 
 #: ../../../src/Stats.cpp:180
 msgid "Percentage chance that stun effects will be negated."
@@ -2286,7 +2294,7 @@ msgstr "Percentual de chance que efeitos de atordoamento sejam negados."
 
 #: ../../../src/Stats.cpp:186
 msgid "Resist Knockback"
-msgstr ""
+msgstr "Resistir à Repulsão"
 
 #: ../../../src/Stats.cpp:187
 msgid "Percentage chance that knockback effects will be negated."
@@ -2294,7 +2302,7 @@ msgstr "Percentual de chance que o efeito recuo seja negado."
 
 #: ../../../src/Stats.cpp:193
 msgid "Resist Stat Debuffs"
-msgstr ""
+msgstr "Resistir à Efeitos Negativos à Estatística"
 
 #: ../../../src/Stats.cpp:194
 msgid "Percentage chance that stat debuff effects will be negated."
@@ -2302,7 +2310,7 @@ msgstr "Percentual de chance que penalidade nos atributos seja negada."
 
 #: ../../../src/Stats.cpp:200
 msgid "Resist Damage Reflection"
-msgstr ""
+msgstr "Resistir à Reflexão de Dano"
 
 #: ../../../src/Stats.cpp:201
 msgid "Percentage chance that damage reflection will be negated."
@@ -2310,7 +2318,7 @@ msgstr "Percentual de chance que a reflexão de dano seja negada."
 
 #: ../../../src/Stats.cpp:207
 msgid "Resist HP Steal"
-msgstr ""
+msgstr "Resitir ao Roubo de HP"
 
 #: ../../../src/Stats.cpp:208
 msgid "Percentage chance that HP steal will be negated."
@@ -2318,7 +2326,7 @@ msgstr "Percentual de chance que o roubo de HP seja impedido."
 
 #: ../../../src/Stats.cpp:214
 msgid "Resist MP Steal"
-msgstr ""
+msgstr "Resitir ao Roubo de MP"
 
 #: ../../../src/Stats.cpp:215
 msgid "Percentage chance that MP steal will be negated."
@@ -2348,4 +2356,4 @@ msgstr "ou mais antigo"
 
 #: ../../../src/WidgetLog.cpp:107
 msgid "ERROR: Text output too large"
-msgstr ""
+msgstr "ERRO: Saída de texto muito grande"

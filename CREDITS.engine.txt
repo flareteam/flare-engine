@@ -64,7 +64,7 @@ Translations
 (nl) Dutch by Bas Doodeman
 (pl) Polish by Paweł Puszczyński, Błażej Pęksyk, Grzegorz Szymaszek, and Marcin Serwin
 (pt) Portuguese by Rui
-(pt_BR) Brazilian Portuguese by Vicente Monteiro and Rafael Fontenelle
+(pt_BR) Brazilian Portuguese by Vicente Monteiro, Rafael Fontenelle, Thiago Guaryuu
 (ru) Russian by Sergey Basalaev, Evgen Pavlov, Ademaro, Andrey Kapitonov, David Bell, and berry
 (sk) Slovak by Miro Jánošík, MiroslavR
 (sv) Swedish by Andreas Berheim Brudin, Kevin Setterborn

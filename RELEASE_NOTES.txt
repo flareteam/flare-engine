@@ -459,7 +459,7 @@ Translation updates:
 * Norwegian (nb) update (Elias Nykrem)
 * Polish (pl) update (Błażej Pęksyk, Grzegorz Szymaszek)
 * Portuguese (pt) update (Rui)
-* Portuguese (Brazilian) (pt_BR) update (Vicente Monteiro)
+* Portuguese (Brazilian) (pt_BR) update (Vicente Monteiro, Thiago Guaryuu)
 * Russian (ru) update (Igor Polyakov)
 * Slovak (sk) update (MiroslavR)
 * Ukranian (uk) update (Sergiy Borodych)
