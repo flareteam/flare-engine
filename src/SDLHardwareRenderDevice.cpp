@@ -738,7 +738,10 @@ unsigned short SDLHardwareRenderDevice::getRefreshRate() {
 
 int SDLHardwareRenderDevice::loadQueuedImage(void* data) {
 	QueuedImage* image = static_cast<QueuedImage*>(data);
+	SDL_LockMutex(image->mutex);
 	image->surface = IMG_Load(mods->locate(image->filename).c_str());
+	SDL_CondSignal(image->loaded);
+	SDL_UnlockMutex(image->mutex);
 	return 0;
 }
 
@@ -747,16 +750,19 @@ void SDLHardwareRenderDevice::loadQueuedImages() {
 
 	for (size_t i = 0; i < image_queue.size(); ++i) {
 		std::string thread_name = "Image queue: " + image_queue[i].filename;
+		image_queue[i].mutex = SDL_CreateMutex();
+		image_queue[i].loaded = SDL_CreateCond();
 		threads[i] = SDL_CreateThread(loadQueuedImage, thread_name.c_str(), &image_queue[i]);
 	}
 
-	for (size_t i = 0; i < threads.size(); ++i) {
-		SDL_WaitThread(threads[i], NULL);
-	}
-
 	for (size_t i = 0; i < image_queue.size(); ++i) {
+		SDL_LockMutex(image_queue[i].mutex);
 		SDLHardwareImage *image = new SDLHardwareImage(this, renderer);
 		if (!image) return;
+
+		if (!image_queue[i].surface) {
+			SDL_CondWait(image_queue[i].loaded, image_queue[i].mutex);
+		}
 
 		if (image_queue[i].surface) {
 			image->surface = SDL_CreateTextureFromSurface(renderer, static_cast<SDL_Surface*>(image_queue[i].surface));
@@ -780,6 +786,17 @@ void SDLHardwareRenderDevice::loadQueuedImages() {
 			cacheStore(image_queue[i].filename, image);
 			image_queue_cleanup.push_back(static_cast<Image*>(image));
 		}
+
+		SDL_UnlockMutex(image_queue[i].mutex);
+
+		SDL_DestroyMutex(image_queue[i].mutex);
+		SDL_DestroyCond(image_queue[i].loaded);
+		image_queue[i].mutex = NULL;
+		image_queue[i].loaded = NULL;
+	}
+
+	for (size_t i = 0; i < threads.size(); ++i) {
+		SDL_WaitThread(threads[i], NULL);
 	}
 
 	image_queue.clear();

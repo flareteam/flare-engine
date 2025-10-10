@@ -178,11 +178,15 @@ public:
 	void* surface;
 	int error_type;
 	std::string filename;
+	SDL_mutex* mutex;
+	SDL_cond* loaded;
 
 	QueuedImage()
 		: surface(NULL)
 		, error_type(0)
 		, filename()
+		, mutex(NULL)
+		, loaded(NULL)
 	{}
 };
 
