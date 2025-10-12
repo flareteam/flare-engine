@@ -60,6 +60,7 @@ private:
 	bool has_scroll_bar;
 	bool any_selected;
 	bool show_tooltip_for_selected;
+	bool clicked;
 	std::vector<ListBoxItem> items;
 	std::vector<Rect> rows;
 	WidgetScrollBar *scrollbar;

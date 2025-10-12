@@ -42,6 +42,7 @@ WidgetListBox::WidgetListBox(int height, const std::string& _fileName)
 	, has_scroll_bar(false)
 	, any_selected(false)
 	, show_tooltip_for_selected(false)
+	, clicked(false)
 	, rows(std::vector<Rect>(height,Rect()))
 	, scrollbar(new WidgetScrollBar(WidgetScrollBar::DEFAULT_FILE))
 	, pos_scroll()
@@ -162,6 +163,11 @@ bool WidgetListBox::checkClickAt(int x, int y) {
 				}
 			}
 		}
+	}
+
+	if (clicked) {
+		clicked = false;
+		return true;
 	}
 
 	return false;
@@ -491,6 +497,8 @@ bool WidgetListBox::getNext() {
 				scrollDown();
 			}
 		}
+
+		clicked = true;
 	}
 	else {
 		scrollDown();
@@ -524,6 +532,8 @@ bool WidgetListBox::getPrev() {
 				scrollUp();
 			}
 		}
+
+		clicked = true;
 	}
 	else {
 		scrollUp();

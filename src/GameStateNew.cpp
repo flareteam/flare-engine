@@ -453,7 +453,6 @@ void GameStateNew::logic() {
 
 	if (button_create->checkClick()) {
 		// start the new game
-		setHeroOption(OPTION_CURRENT);
 		inpt->lock_all = true;
 		delete_items = false;
 		showLoading();
