@@ -49,6 +49,8 @@ protected:
 	int spin_increment;
 	int spin_delay;
 
+	bool can_wrap;
+
 public:
 	MenuNumPicker();
 	~MenuNumPicker();

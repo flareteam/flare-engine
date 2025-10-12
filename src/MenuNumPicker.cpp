@@ -128,7 +128,7 @@ void MenuNumPicker::align() {
 
 void MenuNumPicker::logic() {
 	if (visible) {
-		if (!input_box->edit_mode) {
+		if (!input_box->edit_mode && spin_ticks == 0) {
 			tablist.logic();
 		}
 
@@ -141,17 +141,15 @@ void MenuNumPicker::logic() {
 		else if (button_close->checkClick()) {
 			cancel_clicked = true;
 		}
-		else if (inpt->pressing[Input::ACCEPT] && !inpt->lock[Input::ACCEPT]) {
-			inpt->lock[Input::ACCEPT] = true;
-			confirm_clicked = true;
-		}
 		else if (button_ok->checkClick()) {
 			confirm_clicked = true;
 		}
-		else if (button_up->checkClick()) {
+		else if (button_up->checkClick() && spin_ticks < spin_delay) {
+			can_wrap = (value == value_max);
 			increaseValue(1);
 		}
-		else if (button_down->checkClick()) {
+		else if (button_down->checkClick() && spin_ticks < spin_delay) {
+			can_wrap = (value == value_min);
 			decreaseValue(1);
 		}
 		else {
@@ -161,6 +159,7 @@ void MenuNumPicker::logic() {
 			else {
 				spin_ticks = 0;
 				spin_increment = 1;
+				can_wrap = (value == value_max || value == value_min);
 			}
 
 			if (spin_ticks > 0 && spin_ticks % spin_delay == 0) {
@@ -218,8 +217,19 @@ void MenuNumPicker::increaseValue(int val) {
 
 	value += val;
 
-	if (value > value_max || value < value_min)
-		value = value_max;
+	if (value >= value_max) {
+		if (can_wrap) {
+			value = value_min;
+		}
+		else {
+			value = value_max;
+		}
+	}
+	else if (value <= value_min) {
+		value = value_min;
+	}
+
+	can_wrap = false;
 
 	updateInput();
 }
@@ -229,8 +239,19 @@ void MenuNumPicker::decreaseValue(int val) {
 
 	value -= val;
 
-	if (value > value_max || value < value_min)
-		value = value_min;
+	if (value <= value_min) {
+		if (can_wrap) {
+			value = value_max;
+		}
+		else {
+			value = value_min;
+		}
+	}
+	else if (value >= value_max) {
+		value = value_max;
+	}
+
+	can_wrap = false;
 
 	updateInput();
 }
