@@ -142,6 +142,7 @@ public:
 
 	bool canEquipItem(const Point& position);
 	bool canUseItem(const Point& position);
+	bool canPlaceItemOnActionbar(const Point& position);
 
 	bool equipmentContain(ItemID item, int quantity);
 

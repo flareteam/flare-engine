@@ -32,6 +32,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Utils.h"
 
 class ActionData;
+class MenuCharacter;
+class MenuInventory;
+class MenuPowers;
+class MenuLog;
 class Power;
 class StatBlock;
 class WidgetLabel;
@@ -59,6 +63,8 @@ private:
 
 	int tooltip_length;
 	bool powers_overlap_slots;
+
+	int tablist_cursor;
 
 public:
 	enum {
@@ -104,6 +110,8 @@ public:
 
 	WidgetSlot* getSlotFromPosition(const Point& position);
 	size_t getCurrentSlotIndexFromTablist();
+
+	void setupMenuButtons(MenuCharacter* chr, MenuInventory* inv, MenuPowers* pow, MenuLog* questlog);
 
 	unsigned slots_count;
 	std::vector<PowerID> hotkeys; // refer to power_index in PowerManager

@@ -1646,6 +1646,25 @@ bool MenuInventory::canUseItem(const Point& position) {
 	return canActivateItem(item_id);
 }
 
+bool MenuInventory::canPlaceItemOnActionbar(const Point& position) {
+	// clicked an item
+	int area = areaOver(position);
+	if (area == -1)
+		return false;
+
+	int slot = inventory[area].slotOver(position);
+	if (slot == -1)
+		return false;
+
+	ItemID item_id = inventory[area][slot].item;
+
+	// empty slot
+	if (inventory[area][slot].empty() || !items->isValid(item_id))
+		return false;
+
+	return (pc->stats.humanoid && items->items[item_id]->power > 0);
+}
+
 // same as ItemStorage::contain(), but accounts for active equipment set
 bool MenuInventory::equipmentContain(ItemID item, int quantity) {
 	int total_quantity = 0;

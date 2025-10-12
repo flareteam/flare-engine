@@ -175,10 +175,7 @@ MenuManager::MenuManager()
 	action_picker->setTitle(msg->get("Choose an action:"));
 
 	// enabled menu buttons on actionbar
-	act->menus[MenuActionBar::MENU_CHARACTER]->enabled = chr->enabled;
-	act->menus[MenuActionBar::MENU_INVENTORY]->enabled = inv->enabled;
-	act->menus[MenuActionBar::MENU_POWERS]->enabled = pow->enabled;
-	act->menus[MenuActionBar::MENU_LOG]->enabled = questlog->enabled;
+	act->setupMenuButtons(chr, inv, pow, questlog);
 }
 
 void MenuManager::alignAll() {
@@ -388,7 +385,7 @@ void MenuManager::logic() {
 			unsigned action = action_picker_map.at(action_picker->action_list->getSelected());
 
 			if (action_src == ACTION_SRC_INVENTORY) {
-				if (action == ACTION_PICKER_INVENTORY_SELECT || action == ACTION_PICKER_INVENTORY_DROP || action == ACTION_PICKER_INVENTORY_SELL || action == ACTION_PICKER_INVENTORY_STASH) {
+				if (action == ACTION_PICKER_INVENTORY_SELECT || action == ACTION_PICKER_INVENTORY_DROP || action == ACTION_PICKER_INVENTORY_SELL || action == ACTION_PICKER_INVENTORY_STASH || action == ACTION_PICKER_INVENTORY_ACTIONBAR) {
 					drag_stack = inv->click(action_picker_target);
 					if (!drag_stack.empty()) {
 						actionPickerStartDrag();
@@ -405,6 +402,16 @@ void MenuManager::logic() {
 						drag_post_action = DRAG_POST_ACTION_SELL;
 					else if (action == ACTION_PICKER_INVENTORY_STASH)
 						drag_post_action = DRAG_POST_ACTION_STASH;
+					else if (action == ACTION_PICKER_INVENTORY_ACTIONBAR) {
+						if (inpt->mode != InputState::MODE_TOUCHSCREEN) {
+							// move the cursor to the actionbar
+							act->tablist.unlock();
+							act->tablist.getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
+							menu->defocusLeft();
+							menu->defocusRight();
+							menu->inv->visible = false;
+						}
+					}
 				}
 				else if (action == ACTION_PICKER_INVENTORY_ACTIVATE) {
 					inv->activate(action_picker_target);
@@ -466,6 +473,7 @@ void MenuManager::logic() {
 							act->tablist.getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
 							menu->defocusLeft();
 							menu->defocusRight();
+							menu->pow->visible = false;
 						}
 					}
 				}
@@ -681,10 +689,6 @@ void MenuManager::logic() {
 			else if (settings->dev_mode && devconsole->visible) {
 				inpt->lock[Input::CANCEL] = true;
 				devconsole->closeWindow();
-			}
-			else if (act->tablist.getCurrent() != -1) {
-				inpt->lock[Input::CANCEL] = true;
-				act->tablist.defocus();
 			}
 			else if (menus_open) {
 				inpt->lock[Input::CANCEL] = true;
@@ -910,6 +914,8 @@ void MenuManager::logic() {
 			resetDrag();
 
 			for (size_t i=0; i<menus.size(); ++i) {
+				if (menus[i] == act)
+					continue;
 				if (!menus[i]->visible || !Utils::isWithinRect(menus[i]->window_area, inpt->mouse)) {
 					menus[i]->defocusTabLists();
 				}
@@ -1659,12 +1665,7 @@ void MenuManager::handleKeyboardTooltips() {
 		size_t slot_index = act->getCurrentSlotIndexFromTablist();
 		if (slot_index < act->slots.size() + MenuActionBar::MENU_COUNT) {
 			keydrag_pos = act->getSlotPos(slot_index);
-
-			Point tooltip_pos = keydrag_pos;
-			tooltip_pos.x += eset->resolutions.icon_size / 2;
-			tooltip_pos.y += eset->resolutions.icon_size / 2;
-
-			act->renderTooltips(tooltip_pos);
+			// since the actionbar tablist is always active when using a controller, don't draw tooltips. It'd be too distracting
 		}
 	}
 }
@@ -1883,6 +1884,13 @@ void MenuManager::showActionPicker(Menu* src_menu, const Point& target) {
 			else if (inv->canEquipItem(target)) {
 				action_picker->action_list->append(msg->get("Equip"), "");
 				action_picker_map[action_picker_map.size()] = ACTION_PICKER_INVENTORY_ACTIVATE;
+			}
+
+			if (!inpt->usingMouse()) {
+				if (inv->canPlaceItemOnActionbar(target)) {
+					action_picker->action_list->append(msg->get("Add to bar"), "");
+					action_picker_map[action_picker_map.size()] = ACTION_PICKER_INVENTORY_ACTIONBAR;
+				}
 			}
 
 			action_picker->action_list->append(msg->get("Drop"), "");

@@ -34,7 +34,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MapRenderer.h"
 #include "Menu.h"
 #include "MenuActionBar.h"
+#include "MenuCharacter.h"
 #include "MenuInventory.h"
+#include "MenuLog.h"
 #include "MenuManager.h"
 #include "MenuPowers.h"
 #include "MenuTouchControls.h"
@@ -59,6 +61,7 @@ MenuActionBar::MenuActionBar()
 	, sfx_unable_to_cast(0)
 	, tooltip_length(MenuPowers::TOOLTIP_LONG_MENU)
 	, powers_overlap_slots(false)
+	, tablist_cursor(-1)
 	, slots_count(0)
 	, drag_prev_slot(-1)
 	, updated(false)
@@ -68,7 +71,8 @@ MenuActionBar::MenuActionBar()
 	menu_labels.resize(MENU_COUNT);
 
 	tablist = TabList();
-	tablist.setScrollType(Widget::SCROLL_TWO_DIRECTIONS);
+	tablist.setScrollType(Widget::SCROLL_HORIZONTAL);
+	tablist.setHorizontalKeys(Input::MENU_PAGE_PREV, Input::MENU_PAGE_NEXT);
 	tablist.lock();
 
 	for (unsigned i=0; i<MENU_COUNT; i++) {
@@ -178,9 +182,7 @@ MenuActionBar::MenuActionBar()
 		infile.close();
 	}
 
-	for (unsigned i=0; i<MENU_COUNT; i++) {
-		tablist.add(menus[i]);
-	}
+	// menus are added to tablist with setupMenuButtons()
 
 	slots_count = static_cast<unsigned>(slots.size());
 
@@ -314,19 +316,48 @@ void MenuActionBar::loadGraphics() {
 
 void MenuActionBar::logic() {
 	tablist.logic();
-	if (!inpt->usingMouse() && inpt->pressing[Input::ACTIONBAR] && !inpt->lock[Input::ACTIONBAR]) {
-		inpt->lock[Input::ACTIONBAR] = true;
-		if (tablist.getCurrent() == -1) {
+	if (tablist.getCurrent() != -1) {
+		tablist_cursor = tablist.getCurrent();
+	}
+	if (!inpt->usingMouse()) {
+		if (!menu->menus_open && tablist.getCurrent() == -1) {
 			tablist.unlock();
-			if (menu->isDragging())
+			if (menu->isDragging()) {
 				tablist.getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
-			else
-				tablist.setCurrent(menus[MENU_INVENTORY]);
+			}
+			else {
+				if (tablist_cursor == -1) {
+					// try to start the cursor on a menu button
+					for (size_t i = 0; i < MENU_COUNT; ++i) {
+						if (menus[i]->enabled) {
+							tablist.setCurrent(menus[i]);
+							break;
+						}
+					}
+
+					// couldn't find a menu, try a regular slot
+					if (tablist.getCurrent() == -1)
+						tablist.getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
+
+					if (tablist.getCurrent() == -1)
+						tablist_cursor = tablist.getCurrent();
+				}
+				else {
+					tablist.setCurrent(tablist.getWidgetByIndex(tablist_cursor));
+				}
+			}
 			menu->defocusLeft();
 			menu->defocusRight();
 		}
-		else {
+		else if (menu->menus_open) {
 			tablist.defocus();
+		}
+
+		if (menu->isDragging()) {
+			tablist.setActivateKey(Input::ACCEPT);
+		}
+		else {
+			tablist.setActivateKey(Input::ACTIONBAR);
 		}
 	}
 	if (tablist.getCurrent() == -1) {
@@ -894,6 +925,22 @@ size_t MenuActionBar::getCurrentSlotIndexFromTablist() {
 	}
 
 	return slots.size() + MENU_COUNT;
+}
+
+void MenuActionBar::setupMenuButtons(MenuCharacter* chr, MenuInventory* inv, MenuPowers* pow, MenuLog* questlog) {
+	menus[MENU_CHARACTER]->enabled = chr->enabled;
+	menus[MENU_INVENTORY]->enabled = inv->enabled;
+	menus[MENU_POWERS]->enabled = pow->enabled;
+	menus[MENU_LOG]->enabled = questlog->enabled;
+
+	if (chr->enabled)
+		tablist.add(menus[MENU_CHARACTER]);
+	if (inv->enabled)
+		tablist.add(menus[MENU_INVENTORY]);
+	if (pow->enabled)
+		tablist.add(menus[MENU_POWERS]);
+	if (questlog->enabled)
+		tablist.add(menus[MENU_LOG]);
 }
 
 MenuActionBar::~MenuActionBar() {

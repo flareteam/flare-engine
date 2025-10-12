@@ -367,8 +367,54 @@ int TabList::getNextRelativeIndex(uint8_t dir) {
 		}
 	}
 
-	if (next == current)
-		return -1;
+	if (next == current) {
+		// if we're not linked to any other tablists, try wrapping from the screen edges
+		if (!next_tablist && !prev_tablist) {
+			next = current;
+			min_distance = -1;
+
+			for (size_t i=0; i<widgets.size(); ++i) {
+				if (current == static_cast<int>(i))
+					continue;
+
+				if (!widgets.at(i)->enable_tablist_nav)
+					continue;
+
+				Rect c_pos = widgets.at(current)->pos;
+				Rect& i_pos = widgets.at(i)->pos;
+
+				if (dir == WIDGET_SELECT_LEFT)
+					c_pos.x = settings->view_w;
+				else if (dir == WIDGET_SELECT_RIGHT)
+					c_pos.x = 0;
+				else if (dir == WIDGET_SELECT_UP)
+					c_pos.y = settings->view_h;
+				else if (dir == WIDGET_SELECT_DOWN)
+					c_pos.y = 0;
+
+				FPoint p1(static_cast<float>(c_pos.x), static_cast<float>(c_pos.y + c_pos.h / 2));
+				FPoint p2(static_cast<float>(i_pos.x), static_cast<float>(i_pos.y + i_pos.h / 2));
+				if (widgets.at(i)->tablist_nav_align == TabList::NAV_ALIGN_CENTER) {
+					p1.x += static_cast<float>(c_pos.w / 2);
+					p2.x += static_cast<float>(i_pos.w / 2);
+				}
+				else if (widgets.at(i)->tablist_nav_align == TabList::NAV_ALIGN_RIGHT) {
+					p1.x += static_cast<float>(c_pos.w);
+					p2.x += static_cast<float>(i_pos.w);
+				}
+
+				float dist = Utils::calcDist(p1, p2);
+
+				if (min_distance == -1 || dist < min_distance) {
+					min_distance = dist;
+					next = static_cast<int>(i);
+				}
+			}
+		}
+
+		if (next == current)
+			return -1;
+	}
 
 	return next;
 }
@@ -465,7 +511,7 @@ void TabList::logic() {
 	}
 
 	// If mouse is clicked, defocus current tabindex item
-	if (inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1] && current_is_valid() && !Utils::isWithinRect(widgets[getCurrent()]->pos, inpt->mouse)) {
+	if (inpt->usingMouse() && inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1] && current_is_valid() && !Utils::isWithinRect(widgets[getCurrent()]->pos, inpt->mouse)) {
 		defocus();
 	}
 
@@ -476,3 +522,11 @@ void TabList::logic() {
 	}
 }
 
+void TabList::setHorizontalKeys(int left_key, int right_key) {
+	MV_LEFT = left_key;
+	MV_RIGHT = right_key;
+}
+
+void TabList::setActivateKey(int activate_key) {
+	ACTIVATE = activate_key;
+}

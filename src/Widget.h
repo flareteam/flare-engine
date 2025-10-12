@@ -112,6 +112,8 @@ public:
 	void setNextTabList(TabList *tl);
 	void setScrollType(uint8_t _scrolltype);
 	bool isLocked();
+	void setHorizontalKeys(int left_key, int right_key);
+	void setActivateKey(int activate_key);
 
 	void logic();
 
