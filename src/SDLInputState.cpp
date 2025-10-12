@@ -587,6 +587,13 @@ void SDLInputState::handle() {
 				else {
 					Utils::logInfo("InputState: Joystick added.");
 					joysticks_changed = true;
+
+					// try to enable the newly added joystick
+					if (settings->joystick_device == 0) {
+						settings->enable_joystick = true;
+						settings->joystick_device = event.jdevice.which;
+					}
+
 					initJoystick();
 				}
 				break;
