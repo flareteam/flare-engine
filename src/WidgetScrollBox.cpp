@@ -46,6 +46,7 @@ WidgetScrollBox::WidgetScrollBox(int width, int height)
 
 	resize(width, height);
 	tablist.setScrollType(SCROLL_TWO_DIRECTIONS);
+	tablist.is_inner_tablist = true;
 }
 
 WidgetScrollBox::~WidgetScrollBox() {

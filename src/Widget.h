@@ -63,14 +63,16 @@ private:
 	int current;
 	int previous;
 	bool locked;
-	bool current_is_valid();
-	bool previous_is_valid();
 	uint8_t scrolltype;
 	int MV_LEFT;
 	int MV_RIGHT;
 	int ACTIVATE;
 	TabList *prev_tablist;
 	TabList *next_tablist;
+	Timer scroll_timer;
+
+	bool current_is_valid();
+	bool previous_is_valid();
 public:
 	enum {
 		WIDGET_SELECT_AUTO = 0,
@@ -118,6 +120,7 @@ public:
 	void logic();
 
 	bool enable_activate; // when disabled, Input::ACCEPT won't trigger activate()
+	bool is_inner_tablist;
 };
 
 #endif

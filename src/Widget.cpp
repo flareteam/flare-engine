@@ -74,7 +74,10 @@ TabList::TabList()
 	, ACTIVATE(Input::ACCEPT)
 	, prev_tablist(NULL)
 	, next_tablist(NULL)
-	, enable_activate(true) {
+	, enable_activate(true)
+	, is_inner_tablist(false)
+{
+	scroll_timer.setDuration(settings->max_frames_per_sec / 4);
 }
 
 TabList::~TabList() {
@@ -369,7 +372,7 @@ int TabList::getNextRelativeIndex(uint8_t dir) {
 
 	if (next == current) {
 		// if we're not linked to any other tablists, try wrapping from the screen edges
-		if (!next_tablist && !prev_tablist) {
+		if (!is_inner_tablist && !next_tablist && !prev_tablist) {
 			next = current;
 			min_distance = -1;
 
@@ -466,16 +469,18 @@ void TabList::logic() {
 		}
 
 		if (scrolltype == Widget::SCROLL_VERTICAL || scrolltype == Widget::SCROLL_TWO_DIRECTIONS) {
-			if (inpt->pressing[Input::DOWN] && !inpt->lock[Input::DOWN]) {
+			if (inpt->pressing[Input::DOWN] && (!inpt->lock[Input::DOWN] || scroll_timer.isEnd())) {
 				inpt->lock[Input::DOWN] = true;
+				scroll_timer.reset(Timer::BEGIN);
 
 				if (inner_scrolltype == Widget::SCROLL_VERTICAL)
 					getNext(GET_INNER, WIDGET_SELECT_DOWN);
 				else if (inner_scrolltype == Widget::SCROLL_HORIZONTAL)
 					getNext(!GET_INNER, WIDGET_SELECT_DOWN);
 			}
-			else if (inpt->pressing[Input::UP] && !inpt->lock[Input::UP]) {
+			else if (inpt->pressing[Input::UP] && (!inpt->lock[Input::UP] || scroll_timer.isEnd())) {
 				inpt->lock[Input::UP] = true;
+				scroll_timer.reset(Timer::BEGIN);
 
 				if (inner_scrolltype == Widget::SCROLL_VERTICAL)
 					getPrev(GET_INNER, WIDGET_SELECT_UP);
@@ -485,16 +490,18 @@ void TabList::logic() {
 		}
 
 		if (scrolltype == Widget::SCROLL_HORIZONTAL || scrolltype == Widget::SCROLL_TWO_DIRECTIONS) {
-			if (inpt->pressing[MV_LEFT] && !inpt->lock[MV_LEFT]) {
+			if (inpt->pressing[MV_LEFT] && (!inpt->lock[MV_LEFT] || scroll_timer.isEnd())) {
 				inpt->lock[MV_LEFT] = true;
+				scroll_timer.reset(Timer::BEGIN);
 
 				if (inner_scrolltype == Widget::SCROLL_VERTICAL)
 					getPrev(!GET_INNER, WIDGET_SELECT_LEFT);
 				else if (inner_scrolltype == Widget::SCROLL_HORIZONTAL)
 					getPrev(GET_INNER, WIDGET_SELECT_LEFT);
 			}
-			else if (inpt->pressing[MV_RIGHT] && !inpt->lock[MV_RIGHT]) {
+			else if (inpt->pressing[MV_RIGHT] && (!inpt->lock[MV_RIGHT] || scroll_timer.isEnd())) {
 				inpt->lock[MV_RIGHT] = true;
+				scroll_timer.reset(Timer::BEGIN);
 
 				if (inner_scrolltype == Widget::SCROLL_VERTICAL)
 					getNext(!GET_INNER, WIDGET_SELECT_RIGHT);
@@ -520,6 +527,14 @@ void TabList::logic() {
 	if (!inpt->usingTouchscreen() && current != -1 && inpt->usingMouse()) {
 		defocus();
 	}
+
+	if (is_inner_tablist)
+		scroll_timer.reset(Timer::BEGIN);
+	else
+		scroll_timer.tick();
+
+	if (!inpt->pressing[MV_LEFT] && !inpt->pressing[MV_RIGHT] && !inpt->pressing[Input::UP] && !inpt->pressing[Input::DOWN])
+		scroll_timer.reset(Timer::BEGIN);
 }
 
 void TabList::setHorizontalKeys(int left_key, int right_key) {
@@ -530,3 +545,4 @@ void TabList::setHorizontalKeys(int left_key, int right_key) {
 void TabList::setActivateKey(int activate_key) {
 	ACTIVATE = activate_key;
 }
+
