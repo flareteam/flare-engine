@@ -259,10 +259,8 @@ void SDLInputState::initBindings() {
 	setBind(Input::UP, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_DPAD_UP, NULL);
 	setBind(Input::DOWN, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_DPAD_DOWN, NULL);
 
-	setBind(Input::BAR_1, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_LEFTSTICK, NULL);
-	setBind(Input::BAR_2, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_RIGHTSTICK, NULL);
-
-	setBind(Input::INVENTORY, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_Y, NULL);
+	setBind(Input::CHARACTER, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_LEFTSTICK, NULL);
+	setBind(Input::INVENTORY, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_RIGHTSTICK, NULL);
 
 	// TODO implement input contexts so that MAIN1 doesn't interfere with MENU_PAGE_NEXT
 	// setBind(Input::MAIN1, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER, NULL);
@@ -271,7 +269,7 @@ void SDLInputState::initBindings() {
 	setBind(Input::MAIN1, InputBind::GAMEPAD_AXIS, (SDL_CONTROLLER_AXIS_TRIGGERRIGHT*2), NULL);
 	setBind(Input::MAIN2, InputBind::GAMEPAD_AXIS, (SDL_CONTROLLER_AXIS_TRIGGERLEFT*2), NULL);
 
-	setBind(Input::ACTIONBAR, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_BACK, NULL);
+	setBind(Input::ACTIONBAR, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_Y, NULL);
 
 	setBind(Input::MENU_PAGE_NEXT, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER, NULL);
 	setBind(Input::MENU_PAGE_PREV, InputBind::GAMEPAD, SDL_CONTROLLER_BUTTON_LEFTSHOULDER, NULL);
@@ -947,7 +945,7 @@ void SDLInputState::setCommonStrings() {
 	binding_name[Input::EQUIPMENT_SWAP_PREV] = msg->get("Previous Equip Set");
 	binding_name[Input::MINIMAP_MODE] = msg->get("Mini-map Mode");
 	binding_name[Input::LOOT_TOOLTIP_MODE] = msg->get("Loot Tooltip Mode");
-	binding_name[Input::ACTIONBAR] = msg->get("Action Bar");
+	binding_name[Input::ACTIONBAR] = msg->get("Action Bar Edit");
 	binding_name[Input::MENU_PAGE_NEXT] = msg->get("Menu: Next Page");
 	binding_name[Input::MENU_PAGE_PREV] = msg->get("Menu: Previous Page");
 	binding_name[Input::MENU_ACTIVATE] = msg->get("Menu: Activate");
