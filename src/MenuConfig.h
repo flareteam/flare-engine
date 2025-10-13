@@ -246,6 +246,8 @@ public:
 	WidgetLabel                * frame_limit_lb;
 	WidgetHorizontalList       * max_render_size_lstb;
 	WidgetLabel                * max_render_size_lb;
+	WidgetCheckBox             * threaded_image_load_cb;
+	WidgetLabel                * threaded_image_load_lb;
 
 	WidgetSlider               * music_volume_sl;
 	WidgetLabel                * music_volume_lb;

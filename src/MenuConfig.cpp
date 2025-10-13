@@ -154,6 +154,8 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	, frame_limit_lb(new WidgetLabel())
 	, max_render_size_lstb(new WidgetHorizontalList())
 	, max_render_size_lb(new WidgetLabel())
+	, threaded_image_load_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
+	, threaded_image_load_lb(new WidgetLabel())
 
 	, music_volume_sl(new WidgetSlider(WidgetSlider::DEFAULT_FILE))
 	, music_volume_lb(new WidgetLabel())
@@ -468,6 +470,7 @@ void MenuConfig::init() {
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::PARALLAX_LAYERS, parallax_layers_lb, parallax_layers_cb, msg->get("Parallax Layers"));
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::MAX_RENDER_SIZE, max_render_size_lb, max_render_size_lstb, msg->get("Maximum Render Size"));
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::FRAME_LIMIT, frame_limit_lb, frame_limit_lstb, msg->get("Frame Limit"));
+	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::THREADED_IMAGE_LOAD, threaded_image_load_lb, threaded_image_load_cb, msg->get("Threaded Image Loading"));
 
 	cfg_tabs[AUDIO_TAB].setOptionWidgets(Platform::Audio::SFX, sound_volume_lb, sound_volume_sl, msg->get("Sound Volume"));
 	cfg_tabs[AUDIO_TAB].setOptionWidgets(Platform::Audio::MUSIC, music_volume_lb, music_volume_sl, msg->get("Music Volume"));
@@ -625,6 +628,7 @@ void MenuConfig::readConfig() {
 	vsync_cb->tooltip = msg->get("Prevents screen tearing. Disable if you experience \"stuttering\" in windowed mode or input lag.");
 	dpi_scaling_cb->tooltip = msg->get("When enabled, this uses the screen DPI in addition to the window dimensions to scale the rendering resolution. Otherwise, only the window dimensions are used.");
 	parallax_layers_cb->tooltip = msg->get("This enables parallax (non-tile) layers. Disabling this setting can improve performance in some cases.");
+	threaded_image_load_cb->tooltip = msg->get("Use multiple CPU threads when loading some images. Try disabling this option if you experience instability during loading.");
 	colorblind_cb->tooltip = msg->get("Provides additional text for information that is primarily conveyed through color.");
 	statbar_autohide_cb->tooltip = msg->get("Some mods will automatically hide the stat bars when they are inactive. Disabling this option will keep them displayed at all times.");
 	auto_equip_cb->tooltip = msg->get("When enabled, empty equipment slots will be filled with applicable items when they are obtained.");
@@ -938,6 +942,7 @@ void MenuConfig::updateVideo() {
 	texture_filter_cb->setChecked(settings->texture_filter);
 	dpi_scaling_cb->setChecked(settings->dpi_scaling);
 	parallax_layers_cb->setChecked(settings->parallax_layers);
+	threaded_image_load_cb->setChecked(settings->enable_threaded_image_load);
 
 	refreshRenderers();
 
@@ -1283,6 +1288,9 @@ void MenuConfig::logicVideo() {
 			settings->max_render_size = virtual_heights[index-1];
 		}
 		refreshWindowSize();
+	}
+	else if (cfg_tabs[VIDEO_TAB].options[Platform::Video::THREADED_IMAGE_LOAD].enabled && threaded_image_load_cb->checkClickAt(mouse.x, mouse.y)) {
+		settings->enable_threaded_image_load = threaded_image_load_cb->isChecked();
 	}
 }
 
