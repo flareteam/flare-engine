@@ -107,6 +107,8 @@ void WidgetScrollBox::scrollTo(int amount) {
 }
 
 void WidgetScrollBox::scrollToSmooth(int amount) {
+	amount -= pos.h / 2;
+
 	cursor_target = static_cast<float>(amount);
 	if (cursor_target < 0) {
 		cursor_target = 0;
