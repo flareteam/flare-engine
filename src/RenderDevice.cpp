@@ -17,6 +17,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 #include "EngineSettings.h"
+#include "ModManager.h"
 #include "RenderDevice.h"
 #include "Settings.h"
 #include "SharedResources.h"
@@ -456,6 +457,7 @@ void RenderDevice::pushQueuedImage(const std::string& filename, int error_type) 
 
 	QueuedImage queued_image;
 	queued_image.filename = filename;
+	queued_image.loc_filename = mods->locate(filename);
 	queued_image.error_type = error_type;
 
 	image_queue.push_back(queued_image);

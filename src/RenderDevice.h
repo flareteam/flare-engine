@@ -178,6 +178,7 @@ public:
 	void* surface;
 	int error_type;
 	std::string filename;
+	std::string loc_filename;
 	SDL_mutex* mutex;
 	SDL_cond* loaded;
 
@@ -185,6 +186,7 @@ public:
 		: surface(NULL)
 		, error_type(0)
 		, filename()
+		, loc_filename()
 		, mutex(NULL)
 		, loaded(NULL)
 	{}

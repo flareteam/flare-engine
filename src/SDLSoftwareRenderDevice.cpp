@@ -719,7 +719,7 @@ unsigned short SDLSoftwareRenderDevice::getRefreshRate() {
 int SDLSoftwareRenderDevice::loadQueuedImage(void* data) {
 	QueuedImage* image = static_cast<QueuedImage*>(data);
 	SDL_LockMutex(image->mutex);
-	image->surface = IMG_Load(mods->locate(image->filename).c_str());
+	image->surface = IMG_Load(image->loc_filename.c_str());
 	SDL_CondSignal(image->loaded);
 	SDL_UnlockMutex(image->mutex);
 	return 0;
