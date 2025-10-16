@@ -213,7 +213,7 @@ bool MapCollision::isTileOutsideMap(const int& tile_x, const int& tile_y) const 
 }
 
 bool MapCollision::isOutsideMap(const float& tile_x, const float& tile_y) const {
-	return isTileOutsideMap(static_cast<int>(tile_x), static_cast<int>(tile_y));
+	return (tile_x < 0 || tile_y < 0 || tile_x >= static_cast<float>(map_size.x) || tile_y >= static_cast<float>(map_size.y));
 }
 
 /**
