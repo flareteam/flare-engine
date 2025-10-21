@@ -28,6 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "InputState.h"
 #include "RenderDevice.h"
 #include "SharedResources.h"
+#include "SoundManager.h"
 #include "TooltipManager.h"
 #include "Widget.h"
 #include "WidgetCheckBox.h"
@@ -41,6 +42,7 @@ WidgetCheckBox::WidgetCheckBox (const std::string &fname)
 	, checked(false)
 	, pressed(false)
 	, activated(false)
+	, sound_activate(0)
 {
 	Image *graphics = NULL;
 	if (fname != DEFAULT_FILE) {
@@ -56,6 +58,9 @@ WidgetCheckBox::WidgetCheckBox (const std::string &fname)
 		cb->setClip(0, 0, pos.w, pos.h);
 		graphics->unref();
 	}
+
+	if (!eset->widgets.sound_activate.empty())
+		sound_activate = snd->load(eset->widgets.sound_activate, "Widget activate");
 }
 
 void WidgetCheckBox::activate() {
@@ -65,6 +70,7 @@ void WidgetCheckBox::activate() {
 
 WidgetCheckBox::~WidgetCheckBox () {
 	delete cb;
+	snd->unload(sound_activate);
 }
 
 void WidgetCheckBox::setChecked(const bool status) {
@@ -95,6 +101,7 @@ bool WidgetCheckBox::checkClickAt(int x, int y) {
 		activated = false;
 		pressed = false;
 		setChecked(!checked);
+		snd->play(sound_activate, "widget_activate", snd->NO_POS, !snd->LOOP);
 		return true;
 	}
 

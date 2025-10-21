@@ -65,6 +65,8 @@ private:
 	std::vector<Rect> rows;
 	WidgetScrollBar *scrollbar;
 
+	SoundID sound_activate;
+
 public:
 	WidgetListBox(int height, const std::string& _fileName);
 	~WidgetListBox();

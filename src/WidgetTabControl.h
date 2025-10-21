@@ -53,6 +53,8 @@ private:
 
 	bool show_buttons;
 
+	SoundID sound_activate;
+
 public:
 
 	WidgetTabControl();

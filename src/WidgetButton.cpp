@@ -23,10 +23,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class WidgetButton
  */
 
+#include "EngineSettings.h"
 #include "FontEngine.h"
 #include "InputState.h"
 #include "RenderDevice.h"
 #include "SharedResources.h"
+#include "SoundManager.h"
 #include "TooltipManager.h"
 #include "WidgetButton.h"
 
@@ -40,6 +42,7 @@ WidgetButton::WidgetButton(const std::string& _fileName)
 	, wlabel()
 	, activated(false)
 	, label("")
+	, sound_activate(0)
 	, tooltip("")
 	, enabled(true)
 	, pressed(false)
@@ -51,6 +54,9 @@ WidgetButton::WidgetButton(const std::string& _fileName)
 	text_color_pressed = text_color_normal;
 	text_color_hover = text_color_normal;
 	text_color_disabled = font->getColor(FontEngine::COLOR_WIDGET_DISABLED);
+
+	if (!eset->widgets.sound_activate.empty())
+		sound_activate = snd->load(eset->widgets.sound_activate, "Widget activate");
 }
 
 void WidgetButton::activate() {
@@ -140,6 +146,7 @@ bool WidgetButton::checkClickAt(int x, int y) {
 	if (pressed && !inpt->lock[Input::MAIN1] && (!inpt->lock[Input::ACCEPT] || inpt->usingMouse()) && (Utils::isWithinRect(pos, mouse) || activated)) {
 		activated = false;
 		pressed = false;
+		snd->play(sound_activate, "widget_activate", snd->NO_POS, !snd->LOOP);
 		return true;
 	}
 
@@ -234,5 +241,6 @@ void WidgetButton::checkTooltip(const Point& mouse) {
 
 WidgetButton::~WidgetButton() {
 	delete buttons;
+	snd->unload(sound_activate);
 }
 

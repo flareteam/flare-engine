@@ -42,6 +42,7 @@ Engine features:
 * Added prompt for language on first launch.
 * Added 'show_permadeath' option to menus/gamenew.txt config.
 * Added 'log.padding' property to engine/widget_settings.txt config.
+* Added 'sound.activate' property to engine/widget_settings.txt config.
 * Android: Enabled use of external input devices (gamepads, keyboards, mice)
 
 Engine fixes:

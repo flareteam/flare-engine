@@ -26,6 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "InputState.h"
 #include "RenderDevice.h"
 #include "SharedResources.h"
+#include "SoundManager.h"
 #include "WidgetScrollBar.h"
 
 const std::string WidgetScrollBar::DEFAULT_FILE = "images/menus/buttons/scrollbar_default.png";
@@ -42,7 +43,9 @@ WidgetScrollBar::WidgetScrollBar(const std::string& _fileName)
 	, bg(NULL)
 	, pressed_up(false)
 	, pressed_down(false)
-	, pressed_knob(false) {
+	, pressed_knob(false)
+	, sound_activate(0)
+{
 
 	Image *graphics = NULL;
 	if (fileName != DEFAULT_FILE) {
@@ -60,6 +63,9 @@ WidgetScrollBar::WidgetScrollBar(const std::string& _fileName)
 		pos_up.w = pos_down.w  = pos_knob.w = scrollbars->getGraphicsWidth();
 		pos_up.h = pos_down.h = pos_knob.h = (scrollbars->getGraphicsHeight() / GFX_TOTAL); // height of one button; all buttons are the same size
 	}
+
+	if (!eset->widgets.sound_activate.empty())
+		sound_activate = snd->load(eset->widgets.sound_activate, "Widget activate");
 }
 
 int WidgetScrollBar::checkClick() {
@@ -85,6 +91,7 @@ int WidgetScrollBar::checkClickAt(int x, int y) {
 
 		if (inpt->pressing[Input::MAIN1]) {
 			inpt->lock[Input::MAIN1] = true;
+
 			if (in_up && !pressed_knob) {
 				pressed_up = true;
 			}
@@ -92,6 +99,9 @@ int WidgetScrollBar::checkClickAt(int x, int y) {
 				pressed_down = true;
 			}
 			else if (in_knob && !pressed_up && !pressed_down) {
+				if (!pressed_knob)
+					snd->play(sound_activate, "widget_activate", snd->NO_POS, !snd->LOOP);
+
 				pressed_knob = true;
 				dragging = true;
 			}
@@ -111,6 +121,7 @@ int WidgetScrollBar::checkClickAt(int x, int y) {
 		if (in_up) {
 			// activate upon release
 			ret = CLICK_UP;
+			snd->play(sound_activate, "widget_activate", snd->NO_POS, !snd->LOOP);
 		}
 	}
 	else if (pressed_down && !inpt->pressing[Input::MAIN1]) {
@@ -118,6 +129,7 @@ int WidgetScrollBar::checkClickAt(int x, int y) {
 		if (in_down) {
 			// activate upon release
 			ret = CLICK_DOWN;
+			snd->play(sound_activate, "widget_activate", snd->NO_POS, !snd->LOOP);
 		}
 	}
 	else if (pressed_knob && dragging) {
@@ -248,5 +260,6 @@ void WidgetScrollBar::refresh(int x, int y, int h, int val, int max) {
 WidgetScrollBar::~WidgetScrollBar() {
 	if (scrollbars) delete scrollbars;
 	if (bg) delete bg;
+	snd->unload(sound_activate);
 }
 

@@ -285,6 +285,7 @@ public:
 		int horizontal_list_text_width;
 		Color scrollbar_bg_color;
 		int log_padding;
+		std::string sound_activate;
 	};
 
 	class XPTable {

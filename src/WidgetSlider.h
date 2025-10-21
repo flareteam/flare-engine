@@ -52,6 +52,8 @@ private:
 	int minimum;
 	int maximum;
 	int value;
+
+	SoundID sound_activate;
 };
 
 #endif

@@ -48,6 +48,8 @@ private:
 	Color text_color_hover;
 	Color text_color_disabled;
 
+	SoundID sound_activate;
+
 public:
 	static const std::string DEFAULT_FILE;
 	static const std::string NO_FILE;

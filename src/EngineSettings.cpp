@@ -1007,6 +1007,8 @@ void EngineSettings::Widgets::load() {
 
 	log_padding = 4;
 
+	sound_activate = "";
+
 	FileParser infile;
 	// @CLASS EngineSettings: Widgets|Description of engine/widget_settings.txt
 	if (infile.open("engine/widget_settings.txt", FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
@@ -1084,6 +1086,10 @@ void EngineSettings::Widgets::load() {
 					// @ATTR log.padding|int|The padding in pixels of the log text area.
 					log_padding = Parse::toInt(infile.val);
 				}
+			}
+			else if (infile.section == "sound") {
+				// @ATTR sound.activate|filename|The sound effect file to play when certain widgets are activated/clicked.
+				sound_activate = infile.val;
 			}
 		}
 	}

@@ -26,6 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "InputState.h"
 #include "RenderDevice.h"
 #include "SharedResources.h"
+#include "SoundManager.h"
 #include "TooltipManager.h"
 #include "UtilsDebug.h"
 #include "Widget.h"
@@ -42,7 +43,8 @@ WidgetSlider::WidgetSlider (const std::string& fname)
 	, changed_without_mouse(false)
 	, minimum(0)
 	, maximum(0)
-	, value(0) {
+	, value(0)
+	, sound_activate(0) {
 
 	Image *graphics = NULL;
 	if (fname != DEFAULT_FILE) {
@@ -61,10 +63,14 @@ WidgetSlider::WidgetSlider (const std::string& fname)
 	}
 
 	scroll_type = SCROLL_HORIZONTAL;
+
+	if (!eset->widgets.sound_activate.empty())
+		sound_activate = snd->load(eset->widgets.sound_activate, "Widget activate");
 }
 
 WidgetSlider::~WidgetSlider () {
 	if (sl) delete sl;
+	snd->unload(sound_activate);
 }
 
 void WidgetSlider::setPos(int offset_x, int offset_y) {
@@ -88,6 +94,7 @@ bool WidgetSlider::checkClickAt(int x, int y) {
 		if (Utils::isWithinRect(pos_knob, mouse)) {
 			pressed = true;
 			inpt->lock[Input::MAIN1] = true;
+			snd->play(sound_activate, "widget_activate", snd->NO_POS, !snd->LOOP);
 			return true;
 		}
 		return false;

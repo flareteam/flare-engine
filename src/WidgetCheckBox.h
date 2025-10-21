@@ -26,6 +26,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef WIDGET_CHECKBOX_H
 #define WIDGET_CHECKBOX_H
 
+#include "Utils.h"
+
 class Widget;
 
 class WidgetCheckBox : public Widget {
@@ -51,6 +53,8 @@ private:
 	bool checked;
 	bool pressed;
 	bool activated;
+
+	SoundID sound_activate;
 };
 
 #endif

@@ -26,6 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "RenderDevice.h"
 #include "Settings.h"
 #include "SharedResources.h"
+#include "SoundManager.h"
 #include "WidgetInput.h"
 
 const std::string WidgetInput::DEFAULT_FILE = "images/menus/input.png";
@@ -37,12 +38,16 @@ WidgetInput::WidgetInput(const std::string& filename)
 	, pressed(false)
 	, cursor_pos(0)
 	, font_name("font_regular")
+	, sound_activate(0)
 	, edit_mode(false)
 	, max_length(0)
 	, only_numbers(false)
 	, accept_to_defocus(true)
 {
 	loadGraphics(filename);
+
+	if (!eset->widgets.sound_activate.empty())
+		sound_activate = snd->load(eset->widgets.sound_activate, "Widget activate");
 }
 
 void WidgetInput::setPos(int offset_x, int offset_y) {
@@ -105,6 +110,8 @@ bool WidgetInput::checkClick(const Point& mouse) {
 		pressed = false;
 
 		if (Utils::isWithinRect(pos, mouse)) {
+			snd->play(sound_activate, "widget_activate", snd->NO_POS, !snd->LOOP);
+
 			// activate upon release
 			return true;
 		}
@@ -317,5 +324,6 @@ void WidgetInput::setFontName(const std::string& _font_name) {
 
 WidgetInput::~WidgetInput() {
 	if (background) delete background;
+	snd->unload(sound_activate);
 }
 

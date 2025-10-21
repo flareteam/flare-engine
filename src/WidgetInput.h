@@ -59,6 +59,8 @@ protected:
 
 	std::string font_name;
 
+	SoundID sound_activate;
+
 public:
 	static const std::string DEFAULT_FILE;
 	static const std::string NO_FILE;

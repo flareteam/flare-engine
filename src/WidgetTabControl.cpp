@@ -21,6 +21,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "InputState.h"
 #include "RenderDevice.h"
 #include "SharedResources.h"
+#include "SoundManager.h"
 #include "WidgetButton.h"
 #include "WidgetLabel.h"
 #include "WidgetTabControl.h"
@@ -35,11 +36,15 @@ WidgetTabControl::WidgetTabControl()
 	, button_prev(new WidgetButton("images/menus/buttons/left.png"))
 	, button_next(new WidgetButton("images/menus/buttons/right.png"))
 	, show_buttons(false)
+	, sound_activate(0)
 {
 
 	loadGraphics();
 
 	scroll_type = SCROLL_HORIZONTAL;
+
+	if (!eset->widgets.sound_activate.empty())
+		sound_activate = snd->load(eset->widgets.sound_activate, "Widget activate");
 }
 
 WidgetTabControl::~WidgetTabControl() {
@@ -50,6 +55,8 @@ WidgetTabControl::~WidgetTabControl() {
 
 	delete button_prev;
 	delete button_next;
+
+	snd->unload(sound_activate);
 }
 
 /**
@@ -248,11 +255,15 @@ void WidgetTabControl::logic(int x, int y) {
 
 			if (inpt->pressing[Input::MAIN1]) {
 				inpt->lock[Input::MAIN1] = true;
+
 				dragging = true;
 
 				// Mark the clicked tab as active_tab.
 				for (unsigned i=0; i<tabs.size(); i++) {
 					if(Utils::isWithinRect(tabs[i], mouse) && enabled[i]) {
+						if (active_tab != i)
+							snd->play(sound_activate, "widget_activate", snd->NO_POS, !snd->LOOP);
+
 						active_tab = i;
 						setActiveTab(i);
 						break;

@@ -66,6 +66,8 @@ private:
 	bool pressed_down;
 	bool pressed_knob;
 
+	SoundID sound_activate;
+
 public:
 	enum {
 		CLICK_NONE = 0,

@@ -27,6 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "InputState.h"
 #include "RenderDevice.h"
 #include "SharedResources.h"
+#include "SoundManager.h"
 #include "TooltipManager.h"
 #include "WidgetLabel.h"
 #include "WidgetListBox.h"
@@ -45,13 +46,15 @@ WidgetListBox::WidgetListBox(int height, const std::string& _fileName)
 	, clicked(false)
 	, rows(std::vector<Rect>(height,Rect()))
 	, scrollbar(new WidgetScrollBar(WidgetScrollBar::DEFAULT_FILE))
+	, sound_activate(0)
 	, pos_scroll()
 	, pressed(false)
 	, multi_select(false)
 	, can_deselect(true)
 	, can_select(true)
 	, scrollbar_offset(0)
-	, disable_text_trim(false) {
+	, disable_text_trim(false)
+{
 
 	// load ListBox images
 	Image *graphics = NULL;
@@ -69,6 +72,9 @@ WidgetListBox::WidgetListBox(int height, const std::string& _fileName)
 	}
 
 	scroll_type = SCROLL_VERTICAL;
+
+	if (!eset->widgets.sound_activate.empty())
+		sound_activate = snd->load(eset->widgets.sound_activate, "Widget activate");
 }
 
 bool WidgetListBox::checkClick() {
@@ -143,6 +149,9 @@ bool WidgetListBox::checkClickAt(int x, int y) {
 			for (size_t i=0; i<rows.size(); i++) {
 				if (Utils::isWithinRect(rows[i], mouse) && i+cursor < items.size() && !items[i+cursor].value.empty()) {
 					inpt->lock[Input::MAIN1] = true;
+
+					snd->play(sound_activate, "widget_activate", snd->NO_POS, !snd->LOOP);
+
 					// deselect other options if multi-select is disabled
 					if (!multi_select) {
 						for (unsigned j=0; j<items.size(); j++) {
@@ -604,5 +613,6 @@ void WidgetListBox::sort() {
 WidgetListBox::~WidgetListBox() {
 	delete listboxs;
 	delete scrollbar;
+	snd->unload(sound_activate);
 }
 
