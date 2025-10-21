@@ -20,6 +20,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "CommonIncludes.h"
+#include "EngineSettings.h"
 #include "FontEngine.h"
 #include "MessageEngine.h"
 #include "RenderDevice.h"
@@ -30,7 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 WidgetLog::WidgetLog (int width, int height)
 	: scroll_box(new WidgetScrollBox(width, height))
-	, padding(4)
+	, padding(eset->widgets.log_padding)
 	, max_messages(MAX_MESSAGES)
 	, updated(false)
 	, next_color(font->getColor(FontEngine::COLOR_MENU_NORMAL))

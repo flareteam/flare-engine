@@ -1005,6 +1005,8 @@ void EngineSettings::Widgets::load() {
 
 	scrollbar_bg_color = Color(0,0,0,64);
 
+	log_padding = 4;
+
 	FileParser infile;
 	// @CLASS EngineSettings: Widgets|Description of engine/widget_settings.txt
 	if (infile.open("engine/widget_settings.txt", FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
@@ -1075,6 +1077,12 @@ void EngineSettings::Widgets::load() {
 				if (infile.key == "bg_color") {
 					// @ATTR scrollbar.bg_color|color, int : Color, Alpha|The background color for the entire scrollbar.
 					scrollbar_bg_color = Parse::toRGBA(infile.val);
+				}
+			}
+			else if (infile.section == "log") {
+				if (infile.key == "padding") {
+					// @ATTR log.padding|int|The padding in pixels of the log text area.
+					log_padding = Parse::toInt(infile.val);
 				}
 			}
 		}
