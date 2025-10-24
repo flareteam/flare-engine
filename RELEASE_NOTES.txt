@@ -43,6 +43,7 @@ Engine features:
 * Added 'show_permadeath' option to menus/gamenew.txt config.
 * Added 'log.padding' property to engine/widget_settings.txt config.
 * Added 'sound.activate' property to engine/widget_settings.txt config.
+* Added tooltip text for items that prevent use of other equip slots.
 * Android: Enabled use of external input devices (gamepads, keyboards, mice)
 
 Engine fixes:

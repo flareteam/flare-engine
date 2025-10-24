@@ -1095,6 +1095,15 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 		tip.addText(msg->get(item_type.name));
 	}
 
+	if (!item->disable_slots.empty()) {
+		for (size_t i = 0; i < item->disable_slots.size(); ++i) {
+			ItemType& disable_type = getItemType(item->disable_slots[i]);
+			if (!disable_type.name.empty()) {
+				tip.addColoredText(msg->getv("Prevents use of slot: %s", disable_type.name.c_str()), font->getColor(FontEngine::COLOR_ITEM_PENALTY));
+			}
+		}
+	}
+
 	// item quality text for colorblind users
 	if (settings->colorblind && item->quality < item_qualities.size() && !item_qualities[item->quality].name.empty()) {
 		color = font->getColor(FontEngine::COLOR_WIDGET_NORMAL);
