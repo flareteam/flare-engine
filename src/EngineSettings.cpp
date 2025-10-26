@@ -423,36 +423,52 @@ void EngineSettings::EquipFlags::load() {
 	// reset to defaults
 	list.clear();
 
+	EquipFlag temp;
+	EquipFlag* current = &temp;
+
 	FileParser infile;
 	// @CLASS EngineSettings: Equip flags|Description of engine/equip_flags.txt
 	if (infile.open("engine/equip_flags.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			if (infile.new_section) {
 				if (infile.section == "flag") {
-					// check if the previous flag and remove it if there is no identifier
-					if (!list.empty() && list.back().id == "") {
-						list.pop_back();
-					}
-					list.resize(list.size()+1);
+					temp = EquipFlag();
+					current = &temp;
 				}
 			}
 
-			if (list.empty() || infile.section != "flag")
+			if (infile.section != "flag")
 				continue;
 
-			// @ATTR flag.id|string|An identifier for this equip flag.
-			if (infile.key == "id") list.back().id = infile.val;
-			// @ATTR flag.name|string|The displayed name of this equip flag.
-			else if (infile.key == "name") list.back().name = infile.val;
+			// if we want to replace a list item by ID, the ID needs to be parsed first
+			// but it is not essential if we're just adding to the list, so this is simply a warning
+			if (infile.key != "id" && current->id.empty()) {
+				infile.error("EngineSettings: Expected 'id', but found '%s'.", infile.key.c_str());
+			}
+
+			if (infile.key == "id") {
+				// @ATTR flag.id|string|An identifier for this equip flag.
+				bool found_id = false;
+				for (size_t i = 0; i < list.size(); ++i) {
+					if (list[i].id == infile.val) {
+						current = &list[i];
+						found_id = true;
+					}
+				}
+				if (!found_id) {
+					list.push_back(temp);
+					current = &(list.back());
+					current->id = infile.val;
+				}
+			}
+			else if (infile.key == "name") {
+				// @ATTR flag.name|string|The displayed name of this equip flag.
+				current->name = infile.val;
+			}
 
 			else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
-
-		// check if the last flag and remove it if there is no identifier
-		if (!list.empty() && list.back().id == "") {
-			list.pop_back();
-		}
 	}
 }
 
@@ -460,36 +476,52 @@ void EngineSettings::PrimaryStats::load() {
 	// reset to defaults
 	list.clear();
 
+	PrimaryStat temp;
+	PrimaryStat* current = &temp;
+
 	FileParser infile;
 	// @CLASS EngineSettings: Primary Stats|Description of engine/primary_stats.txt
 	if (infile.open("engine/primary_stats.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			if (infile.new_section) {
 				if (infile.section == "stat") {
-					// check if the previous stat is empty and remove it if there is no identifier
-					if (!list.empty() && list.back().id == "") {
-						list.pop_back();
-					}
-					list.resize(list.size()+1);
+					temp = PrimaryStat();
+					current = &temp;
 				}
 			}
 
-			if (list.empty() || infile.section != "stat")
+			if (infile.section != "stat")
 				continue;
 
-			// @ATTR stat.id|string|An identifier for this primary stat.
-			if (infile.key == "id") list.back().id = infile.val;
-			// @ATTR stat.name|string|The displayed name of this primary stat.
-			else if (infile.key == "name") list.back().name = msg->get(infile.val);
+			// if we want to replace a list item by ID, the ID needs to be parsed first
+			// but it is not essential if we're just adding to the list, so this is simply a warning
+			if (infile.key != "id" && current->id.empty()) {
+				infile.error("EngineSettings: Expected 'id', but found '%s'.", infile.key.c_str());
+			}
+
+			if (infile.key == "id") {
+				// @ATTR stat.id|string|An identifier for this primary stat.
+				bool found_id = false;
+				for (size_t i = 0; i < list.size(); ++i) {
+					if (list[i].id == infile.val) {
+						current = &list[i];
+						found_id = true;
+					}
+				}
+				if (!found_id) {
+					list.push_back(temp);
+					current = &(list.back());
+					current->id = infile.val;
+				}
+			}
+			else if (infile.key == "name") {
+				// @ATTR stat.name|string|The displayed name of this primary stat.
+				current->name = msg->get(infile.val);
+			}
 
 			else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
-
-		// check if the last stat is empty and remove it if there is no identifier
-		if (!list.empty() && list.back().id == "") {
-			list.pop_back();
-		}
 	}
 }
 
@@ -519,93 +551,128 @@ void EngineSettings::HeroClasses::load() {
 	// reset to defaults
 	list.clear();
 
+	HeroClass temp;
+	HeroClass* current = &temp;
+
 	FileParser infile;
 	// @CLASS EngineSettings: Classes|Description of engine/classes.txt
 	if (infile.open("engine/classes.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			if (infile.new_section) {
 				if (infile.section == "class") {
-					// check if the previous class and remove it if there is no name
-					if (!list.empty() && list.back().name == "") {
-						list.pop_back();
-					}
-					list.resize(list.size()+1);
+					temp = HeroClass();
+					current = &temp;
 				}
 			}
 
-			if (list.empty() || infile.section != "class")
+			if (infile.section != "class")
 				continue;
 
-			// @ATTR name|string|The displayed name of this class.
-			if (infile.key == "name") list.back().name = infile.val;
-			// @ATTR description|string|A description of this class.
-			else if (infile.key == "description") list.back().description = infile.val;
-			// @ATTR currency|int|The amount of currency this class will start with.
-			else if (infile.key == "currency") list.back().currency = Parse::toInt(infile.val);
-			// @ATTR equipment|list(item_id)|A list of items that are equipped when starting with this class.
-			else if (infile.key == "equipment") list.back().equipment = infile.val;
-			// @ATTR carried|list(item_id)|A list of items that are placed in the normal inventorty when starting with this class.
-			else if (infile.key == "carried") list.back().carried = infile.val;
-			// @ATTR primary|predefined_string, int : Primary stat name, Default value|Class starts with this value for the specified stat.
+			// if we want to replace a list item by ID (HeroClass uses 'name' as its ID), the ID needs to be parsed first
+			// but it is not essential if we're just adding to the list, so this is simply a warning
+			if (infile.key != "name" && current->name.empty()) {
+				infile.error("EngineSettings: Expected 'name', but found '%s'.", infile.key.c_str());
+			}
+
+			if (infile.key == "name") {
+				// @ATTR name|string|The displayed name of this class.
+				bool found_id = false;
+				for (size_t i = 0; i < list.size(); ++i) {
+					if (list[i].name == infile.val) {
+						current = &list[i];
+						found_id = true;
+					}
+				}
+				if (!found_id) {
+					list.push_back(temp);
+					current = &(list.back());
+					current->name = infile.val;
+				}
+			}
+			else if (infile.key == "description") {
+				// @ATTR description|string|A description of this class.
+				current->description = infile.val;
+			}
+			else if (infile.key == "currency") {
+				// @ATTR currency|int|The amount of currency this class will start with.
+				current->currency = Parse::toInt(infile.val);
+			}
+			else if (infile.key == "equipment") {
+				// @ATTR equipment|list(item_id)|A list of items that are equipped when starting with this class.
+				current->equipment = infile.val;
+			}
+			else if (infile.key == "carried") {
+				// @ATTR carried|list(item_id)|A list of items that are placed in the normal inventorty when starting with this class.
+				current->carried = infile.val;
+			}
+
 			else if (infile.key == "primary") {
+				// @ATTR primary|predefined_string, int : Primary stat name, Default value|Class starts with this value for the specified stat.
+				current->primary.clear();
+				current->primary.resize(eset->primary_stats.list.size(), 0);
+
 				std::string prim_stat = Parse::popFirstString(infile.val);
 				size_t prim_stat_index = eset->primary_stats.getIndexByID(prim_stat);
 
 				if (prim_stat_index != eset->primary_stats.list.size()) {
-					list.back().primary[prim_stat_index] = Parse::toInt(infile.val);
+					current->primary[prim_stat_index] = Parse::toInt(infile.val);
 				}
 				else {
 					infile.error("EngineSettings: '%s' is not a valid primary stat.", prim_stat.c_str());
 				}
 			}
-
 			else if (infile.key == "actionbar") {
 				// @ATTR actionbar|list(power_id)|A list of powers to place in the action bar for the class.
+				current->hotkeys.clear();
+				current->hotkeys.resize(MenuActionBar::SLOT_MAX, 0);
+
 				for (int i=0; i<12; i++) {
-					list.back().hotkeys[i] = Parse::toPowerID(Parse::popFirstString(infile.val));
+					current->hotkeys[i] = Parse::toPowerID(Parse::popFirstString(infile.val));
 				}
 			}
 			else if (infile.key == "powers") {
 				// @ATTR powers|list(power_id)|A list of powers that are unlocked when starting this class.
+				current->powers.clear();
+
 				std::string power;
 				while ( (power = Parse::popFirstString(infile.val)) != "") {
-					list.back().powers.push_back(Parse::toPowerID(power));
+					current->powers.push_back(Parse::toPowerID(power));
 				}
 			}
 			else if (infile.key == "campaign") {
 				// @ATTR campaign|list(string)|A list of campaign statuses that are set when starting this class.
+				current->statuses.clear();
+
 				std::string status;
 				while ( (status = Parse::popFirstString(infile.val)) != "") {
-					list.back().statuses.push_back(status);
+					current->statuses.push_back(status);
 				}
 			}
 			else if (infile.key == "power_tree") {
 				// @ATTR power_tree|string|Power tree that will be loaded by MenuPowers
-				list.back().power_tree = infile.val;
+				current->power_tree = infile.val;
 			}
 			else if (infile.key == "hero_options") {
 				// @ATTR hero_options|list(int)|A list of indicies of the hero options this class can use.
+				current->options.clear();
+
 				std::string hero_option;
 				while ( (hero_option = Parse::popFirstString(infile.val)) != "") {
-					list.back().options.push_back(Parse::toInt(hero_option));
+					current->options.push_back(Parse::toInt(hero_option));
 				}
 
-				std::sort(list.back().options.begin(), list.back().options.end());
+				std::sort(current->options.begin(), current->options.end());
 			}
 			else if (infile.key == "default_power_tab") {
 				// @ATTR default_power_tab|int|Index of the tab to switch to when opening the Powers menu
-				list.back().default_power_tab = Parse::toInt(infile.val);
+				current->default_power_tab = Parse::toInt(infile.val);
 			}
 
 			else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
-
-		// check if the last class and remove it if there is no name
-		if (!list.empty() && list.back().name == "") {
-			list.pop_back();
-		}
 	}
+
 	// Make a default hero class if none were found
 	if (list.empty()) {
 		HeroClass c;
@@ -640,38 +707,64 @@ void EngineSettings::DamageTypes::load() {
 
 	std::stringstream ss;
 
+	DamageType temp;
+	DamageType* current = &temp;
+
 	FileParser infile;
 	// @CLASS EngineSettings: Damage Types|Description of engine/damage_types.txt
 	if (infile.open("engine/damage_types.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			if (infile.new_section) {
 				if (infile.section == "damage_type") {
-					list.resize(list.size()+1);
+					temp = DamageType();
+					current = &temp;
 				}
 			}
 
-			if (list.empty() || infile.section != "damage_type")
+			if (infile.section != "damage_type")
 				continue;
 
-			// @ATTR damage_type.id|string|The identifier used for Item damage_type and Power base_damage.
-			if (infile.key == "id") list.back().id = infile.val;
+			// if we want to replace a list item by ID, the ID needs to be parsed first
+			// but it is not essential if we're just adding to the list, so this is simply a warning
+			if (infile.key != "id" && current->id.empty()) {
+				infile.error("EngineSettings: Expected 'id', but found '%s'.", infile.key.c_str());
+			}
+
+			if (infile.key == "id") {
+				// @ATTR damage_type.id|string|The identifier used for Item damage_type and Power base_damage.
+				bool found_id = false;
+				for (size_t i = 0; i < list.size(); ++i) {
+					if (list[i].id == infile.val) {
+						current = &list[i];
+						found_id = true;
+					}
+				}
+				if (!found_id) {
+					list.push_back(temp);
+					current = &(list.back());
+					current->id = infile.val;
+				}
+			}
 			// @ATTR damage_type.name|string|The displayed name for the value of this damage type.
-			else if (infile.key == "name") list.back().name = msg->get(infile.val);
+			else if (infile.key == "name") current->name = msg->get(infile.val);
 			// @ATTR damage_type.name_short|string|An optional, shorter displayed name for this damage type. Used for labels for 'Resist Damage' stats. If left blank, 'name' will be used instead.
-			else if (infile.key == "name_short") list.back().name_short = msg->get(infile.val);
+			else if (infile.key == "name_short") current->name_short = msg->get(infile.val);
 			// @ATTR damage_type.description|string|The description that will be displayed in the Character menu tooltips.
-			else if (infile.key == "description") list.back().description = msg->get(infile.val);
+			else if (infile.key == "description") current->description = msg->get(infile.val);
 			// @ATTR damage_type.min|string|The identifier used as a Stat type and an Effect type, for the minimum damage of this type.
-			else if (infile.key == "min") list.back().min = infile.val;
+			else if (infile.key == "min") current->min = infile.val;
 			// @ATTR damage_type.max|string|The identifier used as a Stat type and an Effect type, for the maximum damage of this type.
-			else if (infile.key == "max") list.back().max = infile.val;
+			else if (infile.key == "max") current->max = infile.val;
 			// @ATTR damage_type.elemental|bool|If true, this damage type will be flagged as elemental. Elemental damage will be additionally applied to Powers with non-elemental base damage.
-			else if (infile.key == "elemental") list.back().is_elemental = Parse::toBool(infile.val);
+			else if (infile.key == "elemental") current->is_elemental = Parse::toBool(infile.val);
 
 			else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
 	}
+
+	temp = DamageType();
+	current = &temp;
 
 	// For backwards-compatibility, load engine/elements.txt as damage types
 	// @CLASS EngineSettings: Elements|(Deprecated in v1.14.85, use engine/damage_types.txt instead) Description of engine/elements.txt
@@ -679,19 +772,40 @@ void EngineSettings::DamageTypes::load() {
 		while (infile.next()) {
 			if (infile.new_section) {
 				if (infile.section == "element") {
-					list.resize(list.size()+1);
-					list.back().is_elemental = true;
-					list.back().is_deprecated_element = true;
+					temp = DamageType();
+					current = &temp;
+
+					current->is_elemental = true;
+					current->is_deprecated_element = true;
 				}
 			}
 
-			if (list.empty() || infile.section != "element")
+			if (infile.section != "element")
 				continue;
 
-			// @ATTR element.id|string|An identifier for this element. When used as a resistance, "_resist" is appended to the id. For example, if the id is "fire", the resist id is "fire_resist".
-			if (infile.key == "id") list.back().id = infile.val;
+			// if we want to replace a list item by ID, the ID needs to be parsed first
+			// but it is not essential if we're just adding to the list, so this is simply a warning
+			if (infile.key != "id" && current->id.empty()) {
+				infile.error("EngineSettings: Expected 'id', but found '%s'.", infile.key.c_str());
+			}
+
+			if (infile.key == "id") {
+				// @ATTR element.id|string|An identifier for this element. When used as a resistance, "_resist" is appended to the id. For example, if the id is "fire", the resist id is "fire_resist".
+				bool found_id = false;
+				for (size_t i = 0; i < list.size(); ++i) {
+					if (list[i].id == infile.val) {
+						current = &list[i];
+						found_id = true;
+					}
+				}
+				if (!found_id) {
+					list.push_back(temp);
+					current = &(list.back());
+					current->id = infile.val;
+				}
+			}
 			// @ATTR element.name|string|The displayed name of this element.
-			else if (infile.key == "name") list.back().name = msg->get(infile.val);
+			else if (infile.key == "name") current->name = msg->get(infile.val);
 
 			else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
 		}
@@ -702,13 +816,6 @@ void EngineSettings::DamageTypes::load() {
 	count = list.size() * 3;
 
 	for (size_t i = 0; i < list.size(); ++i) {
-		// damage type has no ID, give it a generic one
-		if (list[i].id.empty()) {
-			ss.str("");
-			ss << "damage_type_" << list.size()-1;
-			list.back().id = ss.str();
-		}
-
 		// create missing IDs from the base ID if needed
 		if (list[i].min.empty()) {
 			list[i].min = "dmg_" + list[i].id + "_min";
@@ -1211,6 +1318,13 @@ void EngineSettings::NumberFormat::load() {
 
 }
 
+EngineSettings::ResourceStats::ResourceStat::ResourceStat()
+	: ids(EngineSettings::ResourceStats::STAT_EFFECT_COUNT, "")
+	, text(EngineSettings::ResourceStats::STAT_COUNT, "")
+	, text_desc(EngineSettings::ResourceStats::STAT_COUNT, "")
+{
+}
+
 void EngineSettings::ResourceStats::load() {
 	// reset to defaults
 	list.clear();
@@ -1218,69 +1332,90 @@ void EngineSettings::ResourceStats::load() {
 	effect_count = 0;
 	stat_effect_count = 0;
 
+	ResourceStat temp;
+	ResourceStat* current = &temp;
+
 	FileParser infile;
 	// @CLASS EngineSettings: Resource Stats|Description of engine/resource_stats.txt
 	if (infile.open("engine/resource_stats.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			if (infile.new_section) {
 				if (infile.section == "resource_stat") {
-					list.resize(list.size()+1);
-
-					list.back().ids.resize(EngineSettings::ResourceStats::STAT_EFFECT_COUNT);
-					list.back().text.resize(EngineSettings::ResourceStats::STAT_COUNT);
-					list.back().text_desc.resize(EngineSettings::ResourceStats::STAT_COUNT);
+					temp = ResourceStat();
+					current = &temp;
 				}
 			}
 
-			if (list.empty() || infile.section != "resource_stat")
+			if (infile.section != "resource_stat")
 				continue;
 
-			// @ATTR resource_stat.stat_base|string|The identifier used for the base ("Max") stat.
-			if (infile.key == "stat_base") list.back().ids[EngineSettings::ResourceStats::STAT_BASE] = infile.val;
+			// if we want to replace a list item by ID (ResourceStat uses stat_base as its primary ID), the ID needs to be parsed first
+			// but it is not essential if we're just adding to the list, so this is simply a warning
+			if (infile.key != "stat_base" && current->ids[STAT_BASE].empty()) {
+				infile.error("EngineSettings: Expected 'id', but found '%s'.", infile.key.c_str());
+			}
+
+			// TODO check for conflicts with built-in Stats and already parsed ResourceStats
+			if (infile.key == "stat_base") {
+				// @ATTR resource_stat.stat_base|string|The identifier used for the base ("Max") stat.
+				bool found_id = false;
+				for (size_t i = 0; i < list.size(); ++i) {
+					if (list[i].ids[STAT_BASE] == infile.val) {
+						current = &list[i];
+						found_id = true;
+					}
+				}
+				if (!found_id) {
+					list.push_back(temp);
+					current = &(list.back());
+					current->ids[STAT_BASE] = infile.val;
+				}
+			}
+
 			// @ATTR resource_stat.stat_regen|string|The identifier used for the regeneration stat.
-			else if (infile.key == "stat_regen") list.back().ids[EngineSettings::ResourceStats::STAT_REGEN] = infile.val;
+			else if (infile.key == "stat_regen") current->ids[STAT_REGEN] = infile.val;
 			// @ATTR resource_stat.stat_steal|string|The identifier used for steal stat.
-			else if (infile.key == "stat_steal") list.back().ids[EngineSettings::ResourceStats::STAT_STEAL] = infile.val;
+			else if (infile.key == "stat_steal") current->ids[STAT_STEAL] = infile.val;
 			// @ATTR resource_stat.stat_resist_steal|string|The identifier used for the resistance to steal stat.
-			else if (infile.key == "stat_resist_steal") list.back().ids[EngineSettings::ResourceStats::STAT_RESIST_STEAL] = infile.val;
+			else if (infile.key == "stat_resist_steal") current->ids[STAT_RESIST_STEAL] = infile.val;
 			// @ATTR resource_stat.stat_heal|string|The identifier used for heal-over-time effects.
-			else if (infile.key == "stat_heal") list.back().ids[EngineSettings::ResourceStats::STAT_HEAL] = infile.val;
+			else if (infile.key == "stat_heal") current->ids[STAT_HEAL] = infile.val;
 			// @ATTR resource_stat.stat_heal_percent|string|The identifier used for percentage-based heal-over-time effects.
-			else if (infile.key == "stat_heal_percent") list.back().ids[EngineSettings::ResourceStats::STAT_HEAL_PERCENT] = infile.val;
+			else if (infile.key == "stat_heal_percent") current->ids[STAT_HEAL_PERCENT] = infile.val;
 
 			// @ATTR resource_stat.menu_filename|filename|The MenuStatBar definition file to use for displaying this stat.
-			else if (infile.key == "menu_filename") list.back().menu_filename = infile.val;
+			else if (infile.key == "menu_filename") current->menu_filename = infile.val;
 
 			// @ATTR resource_stat.text_base|string|The printed name of the base ("Max") stat as seen in-game.
-			else if (infile.key == "text_base") list.back().text[EngineSettings::ResourceStats::STAT_BASE] = msg->get(infile.val);
+			else if (infile.key == "text_base") current->text[STAT_BASE] = msg->get(infile.val);
 			// @ATTR resource_stat.text_base_desc|string|The printed description of the base ("Max") stat as seen in-game.
-			else if (infile.key == "text_base_desc") list.back().text_desc[EngineSettings::ResourceStats::STAT_BASE] = msg->get(infile.val);
+			else if (infile.key == "text_base_desc") current->text_desc[STAT_BASE] = msg->get(infile.val);
 
 			// @ATTR resource_stat.text_regen|string|The name of the regeneration stat as seen in-game.
-			else if (infile.key == "text_regen") list.back().text[EngineSettings::ResourceStats::STAT_REGEN] = msg->get(infile.val);
+			else if (infile.key == "text_regen") current->text[STAT_REGEN] = msg->get(infile.val);
 			// @ATTR resource_stat.text_regen_desc|string|The description of the regeneration stat as seen in-game.
-			else if (infile.key == "text_regen_desc") list.back().text_desc[EngineSettings::ResourceStats::STAT_REGEN] = msg->get(infile.val);
+			else if (infile.key == "text_regen_desc") current->text_desc[STAT_REGEN] = msg->get(infile.val);
 
 			// @ATTR resource_stat.text_steal|string|The name of the steal stat as seen in-game.
-			else if (infile.key == "text_steal") list.back().text[EngineSettings::ResourceStats::STAT_STEAL] = msg->get(infile.val);
+			else if (infile.key == "text_steal") current->text[STAT_STEAL] = msg->get(infile.val);
 			// @ATTR resource_stat.text_steal_desc|string|The description of the steal stat as seen in-game.
-			else if (infile.key == "text_steal_desc") list.back().text_desc[EngineSettings::ResourceStats::STAT_STEAL] = msg->get(infile.val);
+			else if (infile.key == "text_steal_desc") current->text_desc[STAT_STEAL] = msg->get(infile.val);
 
 			// @ATTR resource_stat.text_resist_steal|string|The name of the resistance to steal stat as seen in-game.
-			else if (infile.key == "text_resist_steal") list.back().text[EngineSettings::ResourceStats::STAT_RESIST_STEAL] = msg->get(infile.val);
+			else if (infile.key == "text_resist_steal") current->text[STAT_RESIST_STEAL] = msg->get(infile.val);
 			// @ATTR resource_stat.text_resist_steal_desc|string|The description of the resistance to steal stat as seen in-game.
-			else if (infile.key == "text_resist_steal_desc") list.back().text_desc[EngineSettings::ResourceStats::STAT_RESIST_STEAL] = msg->get(infile.val);
+			else if (infile.key == "text_resist_steal_desc") current->text_desc[STAT_RESIST_STEAL] = msg->get(infile.val);
 
 			// @ATTR resource_stat.text_combat_heal|string|The name of the stat in combat text as seen during heal-over-time.
-			else if (infile.key == "text_combat_heal") list.back().text_combat_heal = msg->get(infile.val);
+			else if (infile.key == "text_combat_heal") current->text_combat_heal = msg->get(infile.val);
 			// @ATTR resource_stat.text_log_restore|string|The text in the player's log when this stat is restored via EventManager's 'restore' property.
-			else if (infile.key == "text_log_restore") list.back().text_log_restore = msg->get(infile.val);
+			else if (infile.key == "text_log_restore") current->text_log_restore = msg->get(infile.val);
 			// @ATTR resource_stat.text_log_low|string|The text in the player's log when trying to use a Power that requires more than the available amount of this resource.
-			else if (infile.key == "text_log_low") list.back().text_log_low = msg->get(infile.val);
+			else if (infile.key == "text_log_low") current->text_log_low = msg->get(infile.val);
 			// @ATTR resource_stat.text_tooltip_heal|string|The text in Power tooltips used for heal-over-time Effects.
-			else if (infile.key == "text_tooltip_heal") list.back().text_tooltip_heal = msg->get(infile.val);
+			else if (infile.key == "text_tooltip_heal") current->text_tooltip_heal = msg->get(infile.val);
 			// @ATTR resource_stat.text_tooltip_cost|string|The text in Power tooltips that describes the casting cost of this resource.
-			else if (infile.key == "text_tooltip_cost") list.back().text_tooltip_cost = msg->get(infile.val);
+			else if (infile.key == "text_tooltip_cost") current->text_tooltip_cost = msg->get(infile.val);
 
 			else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
 		}

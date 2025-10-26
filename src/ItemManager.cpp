@@ -566,54 +566,60 @@ void ItemManager::loadItems(const std::string& filename) {
  */
 void ItemManager::loadTypes(const std::string& filename) {
 	FileParser infile;
-	size_t cur_id = 0;
-	bool section_has_id = false;
 
-	// blank item type at index 0
-	item_types.resize(1);
+	ItemType temp;
+	ItemType* current = &temp;
 
 	// @CLASS ItemManager: Types|Definition of a item types, items/types.txt...
 	if (infile.open(filename, FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			if (infile.new_section) {
 				if (infile.section == "type") {
-					cur_id = item_types.size();
-					section_has_id = false;
+					temp = ItemType();
+					current = &temp;
 				}
 			}
 
 			if (infile.section != "type")
 				continue;
 
-			// @ATTR type.id|string|Item type identifier.
-			if (infile.key == "id" && !section_has_id) {
-				for (size_t i = 0; i < item_types.size(); ++i) {
-					if (item_types[i].id == infile.val) {
-						cur_id = i;
-					}
-				}
-				if (cur_id == item_types.size()) {
-					item_types.resize(item_types.size() + 1);
-				}
-				item_types[cur_id].id = infile.val;
-				section_has_id = true;
-				continue;
+			// if we want to replace a list item by ID, the ID needs to be parsed first
+			// but it is not essential if we're just adding to the list, so this is simply a warning
+			if (infile.key != "id" && current->id.empty()) {
+				infile.error("ItemManager: Expected 'id', but found '%s'.", infile.key.c_str());
 			}
 
-			if (!section_has_id)
-				continue;
-
+			// @ATTR type.id|string|Item type identifier.
+			if (infile.key == "id") {
+				bool found_id = false;
+				for (size_t i = 0; i < item_types.size(); ++i) {
+					if (item_types[i].id == infile.val) {
+						current = &item_types[i];
+						found_id = true;
+					}
+				}
+				if (!found_id) {
+					item_types.push_back(temp);
+					current = &(item_types.back());
+					current->id = infile.val;
+				}
+			}
 			// @ATTR type.name|string|Item type name.
-			if (infile.key == "name")
-				item_types[cur_id].name = infile.val;
+			else if (infile.key == "name")
+				current->name = infile.val;
 			// @ATTR type.auto_pickup|boolean|Allows items of this type to be picked up automatically.
 			else if (infile.key == "auto_pickup")
-				item_types[cur_id].auto_pickup = Parse::toBool(infile.val);
+				current->auto_pickup = Parse::toBool(infile.val);
 			else
 				infile.error("ItemManager: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
 	}
+
+	// blank item type at index 0
+	// TODO do we need this?
+	if (item_types.empty())
+		item_types.resize(1);
 }
 
 /**
@@ -623,57 +629,64 @@ void ItemManager::loadTypes(const std::string& filename) {
  */
 void ItemManager::loadQualities(const std::string& filename) {
 	FileParser infile;
-	size_t cur_id = 0;
-	bool section_has_id = false;
 
-	// blank item quality at index 0
-	item_qualities.resize(1);
+	ItemQuality temp;
+	ItemQuality* current = &temp;
 
 	// @CLASS ItemManager: Qualities|Definition of a item qualities, items/types.txt...
 	if (infile.open(filename, FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			if (infile.new_section) {
 				if (infile.section == "quality") {
-					cur_id = item_qualities.size();
-					section_has_id = false;
+					temp = ItemQuality();
+					current = &temp;
 				}
 			}
 
 			if (infile.section != "quality")
 				continue;
 
-			// @ATTR quality.id|string|Item quality identifier.
-			if (infile.key == "id") {
-				for (size_t i = 0; i < item_qualities.size(); ++i) {
-					if (item_qualities[i].id == infile.val) {
-						cur_id = i;
-					}
-				}
-				if (cur_id == item_qualities.size()) {
-					item_qualities.resize(item_qualities.size() + 1);
-				}
-				item_qualities[cur_id].id = infile.val;
-				section_has_id = true;
-				continue;
+			// if we want to replace a list item by ID, the ID needs to be parsed first
+			// but it is not essential if we're just adding to the list, so this is simply a warning
+			if (infile.key != "id" && current->id.empty()) {
+				infile.error("ItemManager: Expected 'id', but found '%s'.", infile.key.c_str());
 			}
 
-			if (!section_has_id)
-				continue;
-
+			// @ATTR quality.id|string|Item quality identifier.
+			if (infile.key == "id") {
+				bool found_id = false;
+				for (size_t i = 0; i < item_qualities.size(); ++i) {
+					if (item_qualities[i].id == infile.val) {
+						current = &item_qualities[i];
+						found_id = true;
+					}
+				}
+				if (!found_id) {
+					item_qualities.push_back(temp);
+					current = &(item_qualities.back());
+					current->id = infile.val;
+				}
+			}
 			// @ATTR quality.name|string|Item quality name.
-			if (infile.key == "name")
-				item_qualities[cur_id].name = infile.val;
+			else if (infile.key == "name")
+				current->name = infile.val;
 			// @ATTR quality.color|color|Item quality color.
 			else if (infile.key == "color")
-				item_qualities[cur_id].color = Parse::toRGB(infile.val);
+				current->color = Parse::toRGB(infile.val);
 			// @ATTR quality.overlay_icon|icon_id|The icon to be used as an overlay.
 			else if (infile.key == "overlay_icon")
-				item_qualities[cur_id].overlay_icon = Parse::toInt(infile.val);
+				current->overlay_icon = Parse::toInt(infile.val);
 			else
 				infile.error("ItemManager: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
 	}
+
+	// blank item quality at index 0
+	// TODO do we need this?
+	if (item_qualities.empty())
+		item_qualities.resize(1);
+
 }
 
 std::string ItemManager::getItemName(ItemID id) {

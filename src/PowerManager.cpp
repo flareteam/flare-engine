@@ -201,83 +201,98 @@ void PowerManager::loadEffects() {
 	if (!infile.open("powers/effects.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL))
 		return;
 
+	EffectDef temp;
+	EffectDef* current = &temp;
+
 	while (infile.next()) {
 		if (infile.new_section) {
 			if (infile.section == "effect") {
-				// check if the previous effect and remove it if there is no identifier
-				if (!effects.empty() && effects.back().id == "") {
-					effects.pop_back();
-				}
-				effects.resize(effects.size()+1);
-				effect_animations.resize(effects.size());
+				temp = EffectDef();
+				current = &temp;
 			}
 		}
 
-		if (effects.empty() || infile.section != "effect")
+		if (infile.section != "effect")
 			continue;
+
+			// if we want to replace a list item by ID, the ID needs to be parsed first
+			// but it is not essential if we're just adding to the list, so this is simply a warning
+			if (infile.key != "id" && current->id.empty()) {
+				infile.error("PowerManager: Expected 'id', but found '%s'.", infile.key.c_str());
+			}
 
 		if (infile.key == "id") {
 			// @ATTR effect.id|string|Unique identifier for the effect definition.
-			effects.back().id = infile.val;
+			if (!infile.val.empty()) {
+				bool found_id = false;
+				for (size_t i = 0; i < effects.size(); ++i) {
+					if (effects[i].id == infile.val) {
+						current = &(effects[i]);
+						found_id = true;
+					}
+				}
+
+				if (!found_id) {
+					effects.push_back(temp);
+					effect_animations.resize(effects.size());
+					current = &(effects.back());
+					current->id = infile.val;
+				}
+			}
 		}
 		else if (infile.key == "type") {
 			// @ATTR effect.type|string|Defines the type of effect
-			effects.back().type = Effect::getTypeFromString(infile.val);
-			effects.back().is_immunity_type = Effect::isImmunityTypeString(infile.val);
-			if (effects.back().is_immunity_type) {
+			current->type = Effect::getTypeFromString(infile.val);
+			current->is_immunity_type = Effect::isImmunityTypeString(infile.val);
+			if (current->is_immunity_type) {
 				infile.error("PowerManager: '%s' is deprecated. Replace with a corresponding 'resist' effect.", infile.val.c_str());
 			}
 		}
 		else if (infile.key == "name") {
 			// @ATTR effect.name|string|A displayed name that is shown when hovering the mouse over the effect icon.
-			effects.back().name = infile.val;
+			current->name = infile.val;
 		}
 		else if (infile.key == "icon") {
 			// @ATTR effect.icon|icon_id|The icon to visually represent the effect in the status area
-			effects.back().icon = Parse::toInt(infile.val);
+			current->icon = Parse::toInt(infile.val);
 		}
 		else if (infile.key == "animation") {
 			// @ATTR effect.animation|filename|The filename of effect animation.
-			effects.back().animation = infile.val;
+			current->animation = infile.val;
 		}
 		else if (infile.key == "can_stack") {
 			// @ATTR effect.can_stack|bool|Allows multiple instances of this effect
-			effects.back().can_stack = Parse::toBool(infile.val);
+			current->can_stack = Parse::toBool(infile.val);
 		}
 		else if (infile.key == "max_stacks") {
 			// @ATTR effect.max_stacks|int|Maximum allowed instances of this effect, -1 for no limits
-			effects.back().max_stacks = Parse::toInt(infile.val);
+			current->max_stacks = Parse::toInt(infile.val);
 		}
 		else if (infile.key == "group_stack") {
 			// @ATTR effect.group_stack|bool|For effects that can stack, setting this to true will combine those effects into a single status icon.
-			effects.back().group_stack = Parse::toBool(infile.val);
+			current->group_stack = Parse::toBool(infile.val);
 		}
 		else if (infile.key == "render_above") {
 			// @ATTR effect.render_above|bool|Effect is rendered above
-			effects.back().render_above = Parse::toBool(infile.val);
+			current->render_above = Parse::toBool(infile.val);
 		}
 		else if (infile.key == "color_mod") {
 			// @ATTR effect.color_mod|color|Changes the color of the afflicted entity.
-			effects.back().color_mod = Parse::toRGB(infile.val);
+			current->color_mod = Parse::toRGB(infile.val);
 		}
 		else if (infile.key == "alpha_mod") {
 			// @ATTR effect.alpha_mod|int|Changes the alpha of the afflicted entity.
-			effects.back().alpha_mod = static_cast<uint8_t>(Parse::toInt(infile.val));
+			current->alpha_mod = static_cast<uint8_t>(Parse::toInt(infile.val));
 		}
 		else if (infile.key == "attack_speed_anim") {
 			// @ATTR effect.attack_speed_anim|string|If the type of Effect is attack_speed, this defines the attack animation that will have its speed changed.
-			effects.back().attack_speed_anim = infile.val;
+			current->attack_speed_anim = infile.val;
 		}
 		else {
 			infile.error("PowerManager: '%s' is not a valid key.", infile.key.c_str());
 		}
 	}
 	infile.close();
-
-	// check if the last effect and remove it if there is no identifier
-	if (!effects.empty() && effects.back().id == "") {
-		effects.pop_back();
-	}
 
 	// load animations
 	for (size_t i = 0; i < effects.size(); ++i) {

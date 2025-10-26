@@ -334,6 +334,8 @@ public:
 
 		class ResourceStat {
 		public:
+			ResourceStat();
+
 			std::vector<std::string> ids;
 			std::vector<std::string> text;
 			std::vector<std::string> text_desc;

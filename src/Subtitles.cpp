@@ -42,14 +42,19 @@ Subtitles::Subtitles()
 	, visible_timer()
 {
 	FileParser infile;
+
+	Subtitle temp;
+	Subtitle *current = &temp;
+
 	// @CLASS Subtitles|Description of soundfx/subtitles.txt
 	if (infile.open("soundfx/subtitles.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
 			if (infile.new_section && infile.section == "subtitle") {
-				filename.resize(filename.size()+1);
-				text.resize(text.size()+1);
+				temp = Subtitle();
+				current = &temp;
 			}
-			else if (infile.section == "style") {
+
+			if (infile.section == "style") {
 				if (infile.key == "text_pos") {
 					// @ATTR style.text_pos|label|Position and style of the subtitle text.
 					label.setFromLabelInfo(Parse::popLabelInfo(infile.val));
@@ -67,24 +72,39 @@ Subtitles::Subtitles()
 					background_color = Parse::toRGBA(infile.val);
 				}
 			}
+			else if (infile.section == "subtitle") {
+				// if we want to replace a list item by ID, the ID needs to be parsed first
+				// but it is not essential if we're just adding to the list, so this is simply a warning
+				if (infile.key != "id" && current->filename == 0) {
+					infile.error("Subtitles: Expected 'id', but found '%s'.", infile.key.c_str());
+				}
 
-			if (filename.empty() || text.empty())
-				continue;
+				if (infile.key == "id") {
+					// @ATTR subtitle.id|filename|Filename of the sound file that will trigger this subtitle.
+					unsigned long filename_hash = Utils::hashString(mods->locate(infile.val));
 
-			if (infile.key == "id") {
-				// @ATTR subtitle.id|filename|Filename of the sound file that will trigger this subtitle.
-				filename.back() = Utils::hashString(mods->locate(infile.val));
-			}
-			else if (infile.key == "text") {
-				// @ATTR subtitle.text|string|The subtitle text that will be displayed.
-				text.back() = msg->get(infile.val);
+					bool found_id = false;
+					for (size_t i = 0; i < subtitles.size(); ++i) {
+						if (subtitles[i].filename == filename_hash) {
+							current = &subtitles[i];
+							found_id = true;
+						}
+					}
+					if (!found_id) {
+						subtitles.push_back(temp);
+						current = &(subtitles.back());
+						current->filename = filename_hash;
+					}
+				}
+				else if (infile.key == "text") {
+					// @ATTR subtitle.text|string|The subtitle text that will be displayed.
+					current->text = msg->get(infile.val);
+				}
 			}
 		}
 	}
 
 	label.setColor(font->getColor(FontEngine::COLOR_MENU_NORMAL));
-
-	assert(filename.size() == text.size());
 }
 
 Subtitles::~Subtitles()
@@ -106,10 +126,10 @@ void Subtitles::setTextByID(unsigned long id) {
 		return;
 	}
 
-	for (size_t i = 0; i < filename.size(); ++i) {
-		if (filename[i] == id) {
+	for (size_t i = 0; i < subtitles.size(); ++i) {
+		if (subtitles[i].filename == id) {
 			current_id = id;
-			current_text = text[i];
+			current_text = subtitles[i].text;
 			updateLabelAndBackground();
 
 			// 1 second per 10 letters

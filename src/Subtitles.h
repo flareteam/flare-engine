@@ -36,11 +36,21 @@ public:
 	void render();
 
 private:
+	class Subtitle {
+	public:
+		unsigned long filename;
+		std::string text;
+
+		Subtitle()
+			: filename(0)
+			, text()
+		{}
+	};
+
 	void setTextByID(unsigned long id);
 	void updateLabelAndBackground();
 
-	std::vector<unsigned long> filename;
-	std::vector<std::string> text;
+	std::vector<Subtitle> subtitles;
 
 	WidgetLabel label;
 	Point label_pos;

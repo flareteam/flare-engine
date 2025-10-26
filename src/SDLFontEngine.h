@@ -29,6 +29,7 @@ public:
 	~SDLFontStyle() {};
 
 	TTF_Font *ttfont;
+	bool use_default_style;
 };
 
 /**

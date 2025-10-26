@@ -109,20 +109,39 @@ Avatar::Avatar()
 
 	// load foot-step definitions
 	// @CLASS Avatar: Step sounds|Description of items/step_sounds.txt
+	Step_sfx temp;
+	Step_sfx* current = &temp;
+
 	FileParser infile;
 	if (infile.open("items/step_sounds.txt", FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
 		while (infile.next()) {
-			if (infile.key == "id") {
-				// @ATTR id|string|An identifier name for a set of step sounds.
-				step_def.push_back(Step_sfx());
-				step_def.back().id = infile.val;
+			// if we want to replace a list item by ID, the ID needs to be parsed first
+			// but it is not essential if we're just adding to the list, so this is simply a warning
+			if (infile.key != "id" && current->id.empty()) {
+				infile.error("Avatar: Expected 'id', but found '%s'.", infile.key.c_str());
 			}
 
-			if (step_def.empty()) continue;
+			if (infile.key == "id") {
+				// @ATTR id|string|An identifier name for a set of step sounds.
+				bool found_id = false;
+				for (size_t i = 0; i < step_def.size(); ++i) {
+					if (step_def[i].id == infile.val) {
+						step_def[i] = Step_sfx();
+						current = &step_def[i];
+						current->id = infile.val;
+						found_id = true;
+					}
+				}
+				if (!found_id) {
+					step_def.push_back(temp);
+					current = &(step_def.back());
+					current->id = infile.val;
+				}
+			}
 
 			if (infile.key == "step") {
 				// @ATTR step|filename|Filename of a step sound effect.
-				step_def.back().steps.push_back(infile.val);
+				current->steps.push_back(infile.val);
 			}
 		}
 		infile.close();

@@ -29,11 +29,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "RenderDevice.h"
 #include "SharedResources.h"
 #include "Settings.h"
+#include "Utils.h"
+#include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
 
 SDLFontStyle::SDLFontStyle()
 	: FontStyle()
 	, ttfont(NULL)
+	, use_default_style(true)
 {
 }
 
@@ -49,54 +52,90 @@ SDLFontEngine::SDLFontEngine()
 		Utils::Exit(2);
 	}
 
+	SDLFontStyle temp;
+	SDLFontStyle* current = &temp;
+
 	// load the fonts
 	// @CLASS SDLFontEngine: Font settings|Description of engine/font_settings.txt
 	FileParser infile;
 	if (infile.open("engine/font_settings.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
-			if (infile.new_section && infile.section == "font") {
-				font_styles.push_back(SDLFontStyle());
-			}
-			else if (infile.section == "font_fallback") {
-				if (infile.new_section)
+			if (infile.new_section) {
+				if (infile.section == "font") {
+					temp = SDLFontStyle();
+					current = &temp;
+				}
+				else if (infile.section == "font_fallback") {
 					infile.error("FontEngine: Support for 'font_fallback' has been removed.");
-				continue;
+					continue;
+				}
 			}
 
-			SDLFontStyle *style;
-
-			if (font_styles.empty())
+			if (infile.section != "font")
 				continue;
 
-			style = &(font_styles.back());
+			// if we want to replace a list item by ID, the ID needs to be parsed first
+			// but it is not essential if we're just adding to the list, so this is simply a warning
+			if (infile.key != "id" && current->name.empty()) {
+				infile.error("SDLFontEngine: Expected 'id', but found '%s'.", infile.key.c_str());
+			}
 
 			if (infile.key == "id") {
 				// @ATTR font.id|string|An identifier used to reference this font.
-				style->name = infile.val;
+				bool found_id = false;
+				for (size_t i = 0; i < font_styles.size(); ++i) {
+					if (font_styles[i].name == infile.val) {
+						current = &font_styles[i];
+						found_id = true;
+					}
+				}
+				if (!found_id) {
+					font_styles.push_back(temp);
+					current = &(font_styles.back());
+					current->name = infile.val;
+				}
 			}
 			else if (infile.key == "style") {
 				// @ATTR font.style|repeatable(["default", predefined_string], filename, int, bool) : Language, Font file, Point size, Blending|Filename, point size, and blend mode of the font to use for this language. Language can be "default" or a 2-letter region code.
-
 				std::string lang = Parse::popFirstString(infile.val);
 
-				if ((lang == "default" && style->path == "") || lang == settings->language) {
-					style->path = Parse::popFirstString(infile.val);
-					style->ptsize = Parse::popFirstInt(infile.val);
-					style->blend = Parse::toBool(Parse::popFirstString(infile.val));
+				if ((lang == "default" && current->use_default_style) || lang == settings->language) {
+					if (lang != "default")
+						current->use_default_style = false;
 
-					style->ttfont = TTF_OpenFont(mods->locate("fonts/" + style->path).c_str(), style->ptsize);
-					if(style->ttfont == NULL) {
-						Utils::logError("FontEngine: TTF_OpenFont: %s", TTF_GetError());
-					}
-					else {
-						int lineskip = TTF_FontLineSkip(style->ttfont);
-						style->line_height = lineskip;
-						style->font_height = lineskip;
-					}
+					current->path = Parse::popFirstString(infile.val);
+					current->ptsize = Parse::popFirstInt(infile.val);
+					current->blend = Parse::toBool(Parse::popFirstString(infile.val));
 				}
 			}
 		}
 		infile.close();
+	}
+
+	// load the font files from the styles
+	for (size_t i = 0; i < font_styles.size(); ++i) {
+		SDLFontStyle* style = &font_styles[i];
+
+		std::string font_path = mods->locate(style->path);
+
+		// check inside the "fonts/" directory if we can't find our font
+		if (!Filesystem::fileExists(mods->locate(style->path))) {
+			font_path = mods->locate("fonts/" + style->path);
+			if (font_path.empty())
+				Utils::logError("FontEngine: Could not find font file: '%s'", style->path.c_str());
+		}
+
+		if (!font_path.empty()) {
+			style->ttfont = TTF_OpenFont(font_path.c_str(), style->ptsize);
+			if(style->ttfont == NULL) {
+				Utils::logError("FontEngine: TTF_OpenFont: %s", TTF_GetError());
+			}
+			else {
+				int lineskip = TTF_FontLineSkip(style->ttfont);
+				style->line_height = lineskip;
+				style->font_height = lineskip;
+			}
+		}
 	}
 
 	// Attempt to set the default active font
