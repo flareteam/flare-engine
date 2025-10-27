@@ -608,9 +608,6 @@ void EngineSettings::HeroClasses::load() {
 
 			else if (infile.key == "primary") {
 				// @ATTR primary|predefined_string, int : Primary stat name, Default value|Class starts with this value for the specified stat.
-				current->primary.clear();
-				current->primary.resize(eset->primary_stats.list.size(), 0);
-
 				std::string prim_stat = Parse::popFirstString(infile.val);
 				size_t prim_stat_index = eset->primary_stats.getIndexByID(prim_stat);
 
@@ -626,7 +623,7 @@ void EngineSettings::HeroClasses::load() {
 				current->hotkeys.clear();
 				current->hotkeys.resize(MenuActionBar::SLOT_MAX, 0);
 
-				for (int i=0; i<12; i++) {
+				for (int i=0; i < MenuActionBar::SLOT_MAX; i++) {
 					current->hotkeys[i] = Parse::toPowerID(Parse::popFirstString(infile.val));
 				}
 			}
