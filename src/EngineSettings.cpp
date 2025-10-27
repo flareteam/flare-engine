@@ -601,6 +601,25 @@ void EngineSettings::HeroClasses::load() {
 				// @ATTR equipment|list(item_id)|A list of items that are equipped when starting with this class.
 				current->equipment = infile.val;
 			}
+			else if (infile.key == "equipment_set") {
+				// @ATTR equipment_set|int, list(item_id) : Equipment set ID, Item IDs|A list of items that are equipped to the specified equipment set when starting with this class.
+				unsigned set_id = Parse::popFirstInt(infile.val);
+				if (set_id > 0) {
+					bool found_set_id = false;
+					for (size_t i = 0; i < current->equipment_sets.size(); ++i) {
+						if (current->equipment_sets[i].first == set_id) {
+							current->equipment_sets[i].second = infile.val;
+							found_set_id = true;
+						}
+					}
+					if (!found_set_id) {
+						current->equipment_sets.push_back(std::pair<unsigned, std::string>(set_id, infile.val));
+					}
+				}
+				else {
+					infile.error("EngineSettings: Equipment set ID must be greater than 0.");
+				}
+			}
 			else if (infile.key == "carried") {
 				// @ATTR carried|list(item_id)|A list of items that are placed in the normal inventorty when starting with this class.
 				current->carried = infile.val;

@@ -44,6 +44,7 @@ Engine features:
 * Added 'log.padding' property to engine/widget_settings.txt config.
 * Added 'sound.activate' property to engine/widget_settings.txt config.
 * Added tooltip text for items that prevent use of other equip slots.
+* Added 'equipment_set' property to engine/classes.txt config.
 * Android: Enabled use of external input devices (gamepads, keyboards, mice)
 
 Engine fixes:

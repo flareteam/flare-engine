@@ -169,6 +169,7 @@ public:
 			std::string power_tree;
 			int default_power_tab;
 			std::vector<int> options;
+			std::vector< std::pair<unsigned, std::string> > equipment_sets;
 		};
 
 		void load();

@@ -39,12 +39,9 @@ class WidgetButton;
 
 class MenuInventory : public Menu {
 private:
-	static const bool ONLY_EMPTY_SLOTS = true;
-
 	void loadGraphics();
 	void updateEquipment(int slot);
 	void updateEquipmentSetWidgets();
-	int getEquipSlotFromItem(ItemID item, bool only_empty_slots);
 
 	WidgetLabel label_inventory;
 	WidgetLabel label_currency;
@@ -89,6 +86,8 @@ public:
 	static const bool ADD_PLAY_SOUND = true;
 	static const bool ADD_AUTO_EQUIP = true;
 	static const bool IS_DRAGGING = true;
+
+	static const bool ONLY_EMPTY_SLOTS = true;
 
 	explicit MenuInventory();
 	~MenuInventory();
@@ -145,6 +144,8 @@ public:
 	bool canPlaceItemOnActionbar(const Point& position);
 
 	bool equipmentContain(ItemID item, int quantity);
+
+	int getEquipSlotFromItem(ItemID item, bool only_empty_slots);
 
 	Rect carried_area;
 	std::vector<Rect> equipped_area;

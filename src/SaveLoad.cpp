@@ -570,13 +570,31 @@ void SaveLoad::loadClass(int index) {
 
 	// inventory
 	menu->inv->addCurrency(hero_class.currency);
-	menu->inv->inventory[MenuInventory::EQUIPMENT].setItems(hero_class.equipment);
+
+	ItemStack stack;
+
+	std::string equipment = hero_class.equipment;
+	while (!equipment.empty()) {
+		stack = Parse::toItemQuantityPair(Parse::popFirstString(equipment));
+		int equip_slot = menu->inv->getEquipSlotFromItem(stack.item, MenuInventory::ONLY_EMPTY_SLOTS);
+		menu->inv->add(stack, MenuInventory::EQUIPMENT, equip_slot, !MenuInventory::ADD_PLAY_SOUND, !MenuInventory::ADD_AUTO_EQUIP);
+	}
+
+	for (size_t i = 0; i < hero_class.equipment_sets.size(); ++i) {
+		menu->inv->applyEquipmentSet(hero_class.equipment_sets[i].first);
+		std::string equipment_set = hero_class.equipment_sets[i].second;
+		while (!equipment_set.empty()) {
+			stack = Parse::toItemQuantityPair(Parse::popFirstString(equipment_set));
+			int equip_slot = menu->inv->getEquipSlotFromItem(stack.item, MenuInventory::ONLY_EMPTY_SLOTS);
+			menu->inv->add(stack, MenuInventory::EQUIPMENT, equip_slot, !MenuInventory::ADD_PLAY_SOUND, !MenuInventory::ADD_AUTO_EQUIP);
+		}
+
+	}
+	menu->inv->applyEquipmentSet(1);
 
 	std::string carried = hero_class.carried;
-	ItemStack stack;
-	stack.quantity = 1;
 	while (!carried.empty()) {
-		stack.item = Parse::popFirstInt(carried);
+		stack = Parse::toItemQuantityPair(Parse::popFirstString(carried));
 		menu->inv->add(stack, MenuInventory::CARRIED, ItemStorage::NO_SLOT, !MenuInventory::ADD_PLAY_SOUND, !MenuInventory::ADD_AUTO_EQUIP);
 	}
 
