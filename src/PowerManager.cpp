@@ -215,11 +215,11 @@ void PowerManager::loadEffects() {
 		if (infile.section != "effect")
 			continue;
 
-			// if we want to replace a list item by ID, the ID needs to be parsed first
-			// but it is not essential if we're just adding to the list, so this is simply a warning
-			if (infile.key != "id" && current->id.empty()) {
-				infile.error("PowerManager: Expected 'id', but found '%s'.", infile.key.c_str());
-			}
+		// if we want to replace a list item by ID, the ID needs to be parsed first
+		// but it is not essential if we're just adding to the list, so this is simply a warning
+		if (infile.key != "id" && current->id.empty()) {
+			infile.error("PowerManager: Expected 'id', but found '%s'.", infile.key.c_str());
+		}
 
 		if (infile.key == "id") {
 			// @ATTR effect.id|string|Unique identifier for the effect definition.
