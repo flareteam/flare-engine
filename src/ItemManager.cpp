@@ -570,6 +570,9 @@ void ItemManager::loadTypes(const std::string& filename) {
 	ItemType temp;
 	ItemType* current = &temp;
 
+	// blank item type at index 0
+	item_types.resize(1);
+
 	// @CLASS ItemManager: Types|Definition of a item types, items/types.txt...
 	if (infile.open(filename, FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		while (infile.next()) {
@@ -615,11 +618,6 @@ void ItemManager::loadTypes(const std::string& filename) {
 		}
 		infile.close();
 	}
-
-	// blank item type at index 0
-	// TODO do we need this?
-	if (item_types.empty())
-		item_types.resize(1);
 }
 
 /**
@@ -632,6 +630,9 @@ void ItemManager::loadQualities(const std::string& filename) {
 
 	ItemQuality temp;
 	ItemQuality* current = &temp;
+
+	// blank item quality at index 0
+	item_qualities.resize(1);
 
 	// @CLASS ItemManager: Qualities|Definition of a item qualities, items/types.txt...
 	if (infile.open(filename, FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
@@ -681,12 +682,6 @@ void ItemManager::loadQualities(const std::string& filename) {
 		}
 		infile.close();
 	}
-
-	// blank item quality at index 0
-	// TODO do we need this?
-	if (item_qualities.empty())
-		item_qualities.resize(1);
-
 }
 
 std::string ItemManager::getItemName(ItemID id) {
