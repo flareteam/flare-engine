@@ -109,7 +109,7 @@ MenuTalker::MenuTalker()
 			else if (infile.key == "topic_color_normal") topic_color_normal = Parse::toRGB(infile.val);
 			// @ATTR topic_color_hover|color|The color for topic text when highlighted.
 			else if (infile.key == "topic_color_hover") topic_color_hover = Parse::toRGB(infile.val);
-			// @ATTR topic_color_normal|color|The color for topic text when clicked.
+			// @ATTR topic_color_pressed|color|The color for topic text when clicked.
 			else if (infile.key == "topic_color_pressed") topic_color_pressed = Parse::toRGB(infile.val);
 
 			// @ATTR trade_color_normal|color|The normal color for the "Trade" text.
