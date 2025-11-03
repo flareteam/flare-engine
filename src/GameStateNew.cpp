@@ -316,14 +316,13 @@ void GameStateNew::loadOptions(const std::string& filename) {
 
 			if (static_cast<size_t>(cur_index + 1) > hero_options.size()) {
 				hero_options.resize(cur_index + 1);
+				all_options.push_back(cur_index);
 			}
 
 			hero_options[cur_index].base = Parse::popFirstString(fin.val);
 			hero_options[cur_index].head = Parse::popFirstString(fin.val);
 			hero_options[cur_index].portrait = Parse::popFirstString(fin.val);
 			hero_options[cur_index].name = msg->get(Parse::popFirstString(fin.val));
-
-			all_options.push_back(cur_index);
 		}
 	}
 	fin.close();
