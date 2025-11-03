@@ -496,28 +496,51 @@ void GameStateLoad::logic() {
 		confirm->logic();
 		if (confirm->clicked_confirm) {
 			if (confirm->action_list->getSelected() == DELETE_CONFIRM_OPTION_YES) {
-				Utils::removeSaveDir(game_slots[selected_slot]->id);
+				if (selected_slot != -1 && static_cast<size_t>(selected_slot) < game_slots.size()) {
+					Utils::removeSaveDir(game_slots[selected_slot]->id);
 
-				delete game_slots[selected_slot];
-				game_slots[selected_slot] = NULL;
-				game_slots.erase(game_slots.begin()+selected_slot);
+					delete game_slots[selected_slot];
+					game_slots[selected_slot] = NULL;
+					game_slots.erase(game_slots.begin()+selected_slot);
 
-				visible_slots = (game_slot_max > static_cast<int>(game_slots.size()) ? static_cast<int>(game_slots.size()) : game_slot_max);
+					visible_slots = (game_slot_max > static_cast<int>(game_slots.size()) ? static_cast<int>(game_slots.size()) : game_slot_max);
+					if (!game_slots.empty()) {
+						if (selected_slot > 0)
+							setSelectedSlot(selected_slot - 1);
+						else
+							setSelectedSlot(0);
+					}
+					else {
+						setSelectedSlot(-1);
+					}
+
+					while (scroll_offset + visible_slots > static_cast<int>(game_slots.size())) {
+						scroll_offset--;
+					}
+
+					scrollToSelected();
+					updateButtons();
+
+					refreshSavePaths();
+					settings->prev_save_slot = -1;
+
+				}
+				tablist.defocus();
+			}
+			else {
+				// We shouldn't end up here!
+				// But if we do, log an error and try to reset the UI
+
+				Utils::logError("GameStateLoad: Can't delete save. Index at %d is out-of-bounds.", selected_slot);
+
 				if (!game_slots.empty())
 					setSelectedSlot(0);
 				else
 					setSelectedSlot(-1);
 
-				while (scroll_offset + visible_slots > static_cast<int>(game_slots.size())) {
-					scroll_offset--;
-				}
-
 				scrollToSelected();
 				updateButtons();
-
-				refreshSavePaths();
 				settings->prev_save_slot = -1;
-
 				tablist.defocus();
 			}
 
