@@ -118,7 +118,7 @@ InputState::~InputState() {
 /**
  * Key bindings are found in config/keybindings.txt
  */
-void InputState::loadKeyBindings() {
+void InputState::loadKeyBindings(bool load_user_binds) {
 
 	FileParser infile;
 	bool opened_file = false;
@@ -126,7 +126,7 @@ void InputState::loadKeyBindings() {
 
 	// first check for mod keybinds
 	if (mods->locate("engine/default_keybindings.txt") != "") {
-		if (infile.open(settings->path_user + "saves/" + eset->misc.save_prefix + "/keybindings.txt", !FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
+		if (load_user_binds && infile.open(settings->path_user + "saves/" + eset->misc.save_prefix + "/keybindings.txt", !FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
 			opened_file = true;
 		}
 		else if (infile.open("engine/default_keybindings.txt", FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
@@ -135,7 +135,7 @@ void InputState::loadKeyBindings() {
 	}
 	else {
 		// if there are no mod keybinds, fall back to global config
-		if (infile.open(settings->path_conf + "keybindings.txt", !FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
+		if (load_user_binds && infile.open(settings->path_conf + "keybindings.txt", !FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
 			opened_file = true;
 		}
 

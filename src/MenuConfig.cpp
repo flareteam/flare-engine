@@ -1224,6 +1224,7 @@ void MenuConfig::logicDefaults() {
 			render_device->setFullscreen(settings->fullscreen);
 			eset->load();
 			inpt->initBindings();
+			inpt->loadKeyBindings(!InputState::LOAD_USER_BINDS);
 			update();
 			refreshWindowSize();
 		}

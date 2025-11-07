@@ -117,6 +117,8 @@ public:
 
 	static const uint16_t JOYSTICK_RUMBLE_STRENGTH = 32767;
 
+	static const bool LOAD_USER_BINDS = true;
+
 	enum {
 		MODE_KEYBOARD_AND_MOUSE = 0,
 		MODE_JOYSTICK = 1,
@@ -135,7 +137,7 @@ public:
 	virtual void removeBind(int action, size_t index) = 0;
 
 	virtual void initJoystick() = 0;
-	void loadKeyBindings();
+	void loadKeyBindings(bool load_user_binds = LOAD_USER_BINDS);
 	void saveKeyBindings();
 	void resetScroll();
 	void lockActionBar();
