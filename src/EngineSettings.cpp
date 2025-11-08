@@ -80,6 +80,7 @@ void EngineSettings::Misc::load() {
 	combat_aborts_npc_interact = true;
 	fogofwar = 0;
 	save_fogofwar = false;
+	mouse_move_enabled = true;
 	mouse_move_deadzone_moving = 0.25f;
 	mouse_move_deadzone_not_moving = 0.75f;
 	passive_trigger_effect_stacking = false;
@@ -184,6 +185,11 @@ void EngineSettings::Misc::load() {
 			// @ATTR save_fogofwar|bool|If true, the fog of war layer keeps track of the progress.
 			else if (infile.key == "save_fogofwar")
 				save_fogofwar = Parse::toBool(infile.val);
+
+			// @ATTR mouse_move_enabled|bool|If true, enables the use of the "Move hero using mouse" input option. Defaults to true.
+			else if (infile.key == "mouse_move_enabled") {
+				mouse_move_enabled = Parse::toBool(infile.val);
+			}
 
 			// @ATTR mouse_move_deadzone|float, float : Deadzone while moving, Deadzone while not moving|Adds a deadzone circle around the player to prevent erratic behavior when using mouse movement. Ideally, the deadzone when moving should be less than the deadzone when not moving. Defaults are 0.25 and 0.75 respectively.
 			else if (infile.key == "mouse_move_deadzone") {

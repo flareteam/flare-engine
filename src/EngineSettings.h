@@ -68,6 +68,7 @@ public:
 		bool combat_aborts_npc_interact;
 		unsigned short fogofwar;
 		bool save_fogofwar;
+		bool mouse_move_enabled;
 		float mouse_move_deadzone_moving;
 		float mouse_move_deadzone_not_moving;
 		bool passive_trigger_effect_stacking;

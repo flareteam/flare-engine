@@ -576,6 +576,13 @@ void MenuConfig::init() {
 		tab_control->setEnabled(static_cast<unsigned>(MODS_TAB), false);
 	}
 
+	// some mod-specific settings can disable options
+	if (!eset->misc.mouse_move_enabled) {
+		cfg_tabs[INPUT_TAB].setOptionEnabled(Platform::Input::MOUSE_MOVE, false);
+		cfg_tabs[INPUT_TAB].setOptionEnabled(Platform::Input::MOUSE_MOVE_SWAP, false);
+		cfg_tabs[INPUT_TAB].setOptionEnabled(Platform::Input::MOUSE_MOVE_ATTACK, false);
+	}
+
 	// place widgets
 	for (size_t i = 0; i < cfg_tabs.size(); ++i) {
 		if (cfg_tabs[i].enabled_count == 0 && i != GAME_TAB) {
@@ -1018,9 +1025,11 @@ void MenuConfig::updateInterface() {
 void MenuConfig::updateInput() {
 	mouse_aim_cb->setChecked(settings->mouse_aim);
 	no_mouse_cb->setChecked(settings->no_mouse);
-	mouse_move_cb->setChecked(settings->mouse_move);
-	mouse_move_swap_cb->setChecked(settings->mouse_move_swap);
-	mouse_move_attack_cb->setChecked(settings->mouse_move_attack);
+	if (eset->misc.mouse_move_enabled) {
+		mouse_move_cb->setChecked(settings->mouse_move);
+		mouse_move_swap_cb->setChecked(settings->mouse_move_swap);
+		mouse_move_attack_cb->setChecked(settings->mouse_move_attack);
+	}
 	joystick_rumble_cb->setChecked(settings->joystick_rumble);
 	touch_controls_cb->setChecked(settings->touchscreen);
 

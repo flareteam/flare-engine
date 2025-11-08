@@ -188,12 +188,15 @@ GameStateTitle::GameStateTitle()
 
 	// NOTE The presence of the mouse move setting is used to determine if the
 	// movement type dialog is displayed. Is this adequate?
-	if (!settings->setup_mousemove && platform.config_input[Platform::Input::MOUSE_MOVE]) {
+	if (!settings->setup_mousemove && platform.config_input[Platform::Input::MOUSE_MOVE] && eset->misc.mouse_move_enabled) {
 		menu_movement_type = new MenuConfirm();
 		menu_movement_type->setTitle(msg->get("Use mouse to move player?"));
 		menu_movement_type->action_list->append(msg->get("No"), "");
 		menu_movement_type->action_list->append(msg->get("Yes"), "");
 	}
+
+	if (!eset->misc.mouse_move_enabled)
+		settings->mouse_move = false;
 
 }
 
