@@ -201,7 +201,7 @@ GameStateTitle::GameStateTitle()
 }
 
 void GameStateTitle::logic() {
-	if (!settings->setup_language && !menu_language->visible) {
+	if (!settings->setup_language && !menu_language->visible && menu_language->action_list->getSize() > 1) {
 		menu_language->show();
 		menu_language->action_list->select(language_id);
 	}
