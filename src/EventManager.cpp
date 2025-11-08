@@ -300,13 +300,14 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		}
 	}
 	else if (key == "soundfx") {
-		// @ATTR event.soundfx|filename, int, int, bool : Sound file, X, Y, loop|Filename of a sound to play. Optionally, it can be played at a specific location and/or looped.
+		// @ATTR event.soundfx|filename, int, int, bool : Sound file, X, Y, loop|Filename of a sound to play. Optionally, it can be played at a specific location and/or looped. Note: Sounds attached to 'on_load' events will loop by default.
 		e->type = EventComponent::SOUNDFX;
 
 		e->s = Parse::popFirstString(val);
 		e->data[0].Int = -1;
 		e->data[1].Int = -1;
 		e->data[2].Bool = false;
+		e->data[3].Bool = false; // flag to determine if looping is explicitly set
 
 		std::string s = Parse::popFirstString(val);
 		if (!s.empty())
@@ -317,8 +318,10 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 			e->data[1].Int = Parse::toInt(s);
 
 		s = Parse::popFirstString(val);
-		if (!s.empty())
+		if (!s.empty()) {
 			e->data[2].Bool = Parse::toBool(s);
+			e->data[3].Bool = true;
+		}
 	}
 	else if (key == "loot") {
 		// @ATTR event.loot|list(loot)|Add loot to the event.
@@ -896,7 +899,8 @@ bool EventManager::executeEventInternal(Event &ev, bool skip_delay) {
 				pos.y = static_cast<float>(ev.location.y) + 0.5f;
 			}
 
-			if (ev.activate_type == Event::ACTIVATE_ON_LOAD || ec->data[2].Bool)
+			// loop sound if loop flag is set *or* if sound is attached to 'on_load' event and loop flag was not specified
+			if ((ev.activate_type == Event::ACTIVATE_ON_LOAD && !ec->data[3].Bool) || ec->data[2].Bool)
 				loop = true;
 
 			SoundID sid = snd->load(ec->s, "MapRenderer background soundfx");
