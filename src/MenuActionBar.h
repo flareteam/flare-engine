@@ -131,6 +131,8 @@ public:
 	int twostep_slot;
 
 	WidgetSlot* touch_slot;
+
+	bool enable_gamepad_nav;
 };
 
 #endif

@@ -1846,7 +1846,7 @@ void MenuManager::showActionPicker(Menu* src_menu, const Point& target) {
 			action_picker_target = target;
 		}
 
-		if (pow_click.drag > 0) {
+		if (pow_click.drag > 0 && (inpt->usingMouse() || act->enable_gamepad_nav)) {
 			action_picker->action_list->append(msg->get("Equip"), "");
 			action_picker_map[0] = ACTION_PICKER_POWERS_SELECT;
 		}
@@ -1886,7 +1886,7 @@ void MenuManager::showActionPicker(Menu* src_menu, const Point& target) {
 				action_picker_map[action_picker_map.size()] = ACTION_PICKER_INVENTORY_ACTIVATE;
 			}
 
-			if (!inpt->usingMouse()) {
+			if (!inpt->usingMouse() && act->enable_gamepad_nav) {
 				if (inv->canPlaceItemOnActionbar(target)) {
 					action_picker->action_list->append(msg->get("Add to bar"), "");
 					action_picker_map[action_picker_map.size()] = ACTION_PICKER_INVENTORY_ACTIONBAR;

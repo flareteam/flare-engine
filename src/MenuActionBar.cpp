@@ -66,7 +66,8 @@ MenuActionBar::MenuActionBar()
 	, drag_prev_slot(-1)
 	, updated(false)
 	, twostep_slot(-1)
-	, touch_slot(NULL) {
+	, touch_slot(NULL)
+	, enable_gamepad_nav(true) {
 
 	menu_labels.resize(MENU_COUNT);
 
@@ -175,6 +176,10 @@ MenuActionBar::MenuActionBar()
 			// @ATTR powers_overlap_slots|bool|When true, the power icon is drawn on top of the empty slot graphic for any given slot. If false, the empty slot graphic will only be drawn if there's not a power in the slot. The default value is false.
 			else if (infile.key == "powers_overlap_slots") {
 				powers_overlap_slots = Parse::toBool(infile.val);
+			}
+			// @ATTR enable_gamepad_nav|bool|When true, the actionbar can be interacted with via the next/prev/activate menu bindings. Defaults to true.
+			else if (infile.key == "enable_gamepad_nav") {
+				enable_gamepad_nav = Parse::toBool(infile.val);
 			}
 
 			else infile.error("MenuActionBar: '%s' is not a valid key.", infile.key.c_str());
@@ -319,7 +324,7 @@ void MenuActionBar::logic() {
 	if (tablist.getCurrent() != -1) {
 		tablist_cursor = tablist.getCurrent();
 	}
-	if (!inpt->usingMouse()) {
+	if (!inpt->usingMouse() && enable_gamepad_nav) {
 		if (!menu->menus_open && tablist.getCurrent() == -1) {
 			tablist.unlock();
 			if (menu->isDragging()) {
