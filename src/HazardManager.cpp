@@ -68,63 +68,64 @@ void HazardManager::logic() {
 	// handle single-frame transforms
 	for (size_t i=h.size(); i>0; i--) {
 		size_t hindex = i-1;
+		Hazard* hazard = h[hindex];
 
-		h[hindex]->logic();
+		hazard->logic();
 
 		// remove all hazards that need to die immediately (e.g. exit the map)
-		if (h[hindex]->remove_now) {
-			delete h[hindex];
+		if (hazard->remove_now) {
+			delete hazard;
 			h.erase(h.begin()+(hindex));
 			continue;
 		}
 
 
 		// if a moving hazard hits a wall, check for an after-effect
-		if (h[hindex]->hit_wall) {
-			if (h[hindex]->power->script_trigger == Power::SCRIPT_TRIGGER_WALL) {
-				eventm->executeScript(h[hindex]->power->script, h[hindex]->pos.x, h[hindex]->pos.y);
+		if (hazard->hit_wall) {
+			if (hazard->power->script_trigger == Power::SCRIPT_TRIGGER_WALL) {
+				eventm->executeScript(hazard->power->script, hazard->pos.x, hazard->pos.y);
 			}
 
-			for (size_t j = 0; j < h[hindex]->power->chain_powers.size(); ++j) {
-				ChainPower& chain_power = h[hindex]->power->chain_powers[j];
+			for (size_t j = 0; j < hazard->power->chain_powers.size(); ++j) {
+				ChainPower& chain_power = hazard->power->chain_powers[j];
 				if (chain_power.type == ChainPower::TYPE_WALL && Math::percentChanceF(chain_power.chance)) {
-					powers->activate(chain_power.id, h[hindex]->src_stats, h[hindex]->pos, h[hindex]->pos);
+					powers->activate(chain_power.id, hazard->src_stats, hazard->pos, hazard->pos);
 
 					if (powers->powers[chain_power.id]->directional) {
-						powers->hazards.back()->direction = h[hindex]->direction;
+						powers->hazards.back()->direction = hazard->direction;
 					}
 				}
 			}
 
 			// clear wall hit
-			h[hindex]->hit_wall = false;
+			hazard->hit_wall = false;
 		}
 
 		// handle collisions
-		if (h[hindex]->isDangerousNow()) {
+		if (hazard->isDangerousNow()) {
 
 			// process hazards that can hurt enemies & allies
 			for (size_t eindex = 0; eindex < entitym->entities.size(); eindex++) {
 				Entity *e = entitym->entities[eindex];
 
 				// hero/ally powers can only hit allies if target_party is true
-				if ((h[hindex]->source_type == Power::SOURCE_TYPE_HERO || h[hindex]->source_type == Power::SOURCE_TYPE_ALLY) && e->stats.hero_ally && !h[hindex]->power->target_party) {
+				if ((hazard->source_type == Power::SOURCE_TYPE_HERO || hazard->source_type == Power::SOURCE_TYPE_ALLY) && e->stats.hero_ally && !hazard->power->target_party) {
 					continue;
 				}
 
 				// enemy hazard can't hurt other enemies
-				if (h[hindex]->source_type == Power::SOURCE_TYPE_ENEMY && !e->stats.hero_ally) {
+				if (hazard->source_type == Power::SOURCE_TYPE_ENEMY && !e->stats.hero_ally) {
 					continue;
 				}
 
 				// only check living enemies
-				if (e->stats.hp > 0 && h[hindex]->active) {
-					if (Utils::isWithinRadius(h[hindex]->pos, h[hindex]->power->radius, e->stats.pos)) {
-						if (!h[hindex]->hasEntity(e)) {
+				if (e->stats.hp > 0 && hazard->active) {
+					if (Utils::isWithinRadius(hazard->pos, hazard->power->radius, e->stats.pos)) {
+						if (!hazard->hasEntity(e)) {
 							// hit!
-							h[hindex]->addEntity(e);
-							hitEntity(hindex, e->takeHit(*h[hindex]));
-							if (!h[hindex]->power->beacon) {
+							hazard->addEntity(e);
+							hitEntity(hindex, e->takeHit(*hazard));
+							if (!hazard->power->beacon) {
 								last_enemy = e;
 							}
 						}
@@ -134,13 +135,13 @@ void HazardManager::logic() {
 			}
 
 			// process hazards that can hurt the hero
-			if (h[hindex]->source_type != Power::SOURCE_TYPE_HERO && h[hindex]->source_type != Power::SOURCE_TYPE_ALLY) { //enemy or neutral sources
-				if (pc->stats.hp > 0 && h[hindex]->active) {
-					if (Utils::isWithinRadius(h[hindex]->pos, h[hindex]->power->radius, pc->stats.pos)) {
-						if (!h[hindex]->hasEntity(pc)) {
+			if (hazard->source_type != Power::SOURCE_TYPE_HERO && hazard->source_type != Power::SOURCE_TYPE_ALLY) { //enemy or neutral sources
+				if (pc->stats.hp > 0 && hazard->active) {
+					if (Utils::isWithinRadius(hazard->pos, hazard->power->radius, pc->stats.pos)) {
+						if (!hazard->hasEntity(pc)) {
 							// hit!
-							h[hindex]->addEntity(pc);
-							hitEntity(hindex, pc->takeHit(*h[hindex]));
+							hazard->addEntity(pc);
+							hitEntity(hindex, pc->takeHit(*hazard));
 						}
 					}
 				}
