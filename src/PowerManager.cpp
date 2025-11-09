@@ -1726,14 +1726,19 @@ bool PowerManager::repeater(PowerID power_index, StatBlock *src_stats, const FPo
 	location_iterator = origin;
 
 	Hazard* parent_haz = NULL;
+	bool first_hit_wall = false;
 	for (int i = 0; i < power->count; i++) {
 
 		location_iterator.x += speed.x;
 		location_iterator.y += speed.y;
 
 		// only travels until it hits a wall
+		// the i > 0 is to ensure that at least a single hazard spawns, even if it's inside a wall. This feels better in practice, especially when trying to attack enemies that are up against walls.
 		if (collider && !collider->isValidPosition(location_iterator.x, location_iterator.y, power->movement_type, MapCollision::COLLIDE_TYPE_HAZARD)) {
-			break; // no more hazards
+			if (i == 0)
+				first_hit_wall = true;
+			else
+				break; // no more hazards
 		}
 
 		Hazard *haz = new Hazard(collider);
@@ -1752,6 +1757,9 @@ bool PowerManager::repeater(PowerID power_index, StatBlock *src_stats, const FPo
 		}
 
 		hazards.push(haz);
+
+		if (first_hit_wall)
+			break;
 	}
 
 	payPowerCost(power_index, src_stats);

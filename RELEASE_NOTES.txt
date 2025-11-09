@@ -124,6 +124,7 @@ Engine fixes:
 * Fixed a case where replaced powers were not being enabled when switching equipment sets.
 * Item quantity menu now wraps around when using the increment/decrement buttons.
 * Fixed mod-specific default keybindings not loading when user resets configuration to default.
+* Fixed repeater powers having no effect if the first hazard hit a wall.
 * Android: Fix 'Flare' directory not being automatically created.
 * Android: Added a dialog to direct the player to the wiki page for installing if no game data is found.
 
