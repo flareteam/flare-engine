@@ -598,11 +598,12 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 			have_aim = true;
 		}
 		// part two of two step activation
-		else if (static_cast<unsigned>(twostep_slot) == i && inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1]) {
+		else if (static_cast<unsigned>(twostep_slot) == i && ((inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1]) || (inpt->pressing[Input::MAIN2] && !inpt->lock[Input::MAIN2]))) {
 			have_aim = true;
 			action.power = hotkeys_mod[i];
 			twostep_slot = -1;
-			inpt->lock[Input::MAIN1] = true;
+			if (inpt->pressing[Input::MAIN1]) inpt->lock[Input::MAIN1] = true;
+			if (inpt->pressing[Input::MAIN2]) inpt->lock[Input::MAIN2] = true;
 		}
 
 		// mouse/touch click
@@ -647,12 +648,12 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 			action.power = hotkeys_mod[i];
 			twostep_slot = -1;
 		}
-		else if (i==10 && inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1] && enable_main1) {
+		else if (i==10 && inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1] && enable_main1 && twostep_slot == -1) {
 			have_aim = inpt->usingMouse();
 			action.power = hotkeys_mod[10];
 			twostep_slot = -1;
 		}
-		else if (i==11 && inpt->pressing[Input::MAIN2] && !inpt->lock[Input::MAIN2] && enable_main2) {
+		else if (i==11 && inpt->pressing[Input::MAIN2] && !inpt->lock[Input::MAIN2] && enable_main2 && twostep_slot == -1) {
 			have_aim = inpt->usingMouse();
 			action.power = hotkeys_mod[11];
 			twostep_slot = -1;
