@@ -233,7 +233,7 @@ void MenuMiniMap::logic() {
 
 	if (button_config) {
 		button_config->enabled = !pc->stats.corpse;
-		if (button_config->checkClick()) {
+		if (!(pc->using_main1 || pc->using_main2) && button_config->checkClick()) {
 			clicked_config = true;
 		}
 	}

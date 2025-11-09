@@ -471,6 +471,9 @@ void MenuActionBar::render() {
  * On mouseover, show tooltip for buttons
  */
 void MenuActionBar::renderTooltips(const Point& position) {
+	if (inpt->usingMouse() && (pc->using_main1 || pc->using_main2))
+		return;
+
 	TooltipData tip_data;
 
 	// menus
@@ -603,7 +606,7 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 		}
 
 		// mouse/touch click
-		else if ((inpt->mode == InputState::MODE_TOUCHSCREEN && touch_slot == slots[i]) || (inpt->mode != InputState::MODE_TOUCHSCREEN && inpt->usingMouse() && slots[i]->checkClick() == WidgetSlot::ACTIVATE)) {
+		else if ((inpt->mode == InputState::MODE_TOUCHSCREEN && touch_slot == slots[i]) || (inpt->mode != InputState::MODE_TOUCHSCREEN && inpt->usingMouse() && !pc->using_main1 && !pc->using_main2 && slots[i]->checkClick() == WidgetSlot::ACTIVATE)) {
 			touch_slot = NULL;
 			have_aim = false;
 			slot_activated[i] = true;
@@ -644,12 +647,12 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 			action.power = hotkeys_mod[i];
 			twostep_slot = -1;
 		}
-		else if (i==10 && inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1] && !Utils::isWithinRect(window_area, inpt->mouse) && enable_main1) {
+		else if (i==10 && inpt->pressing[Input::MAIN1] && !inpt->lock[Input::MAIN1] && enable_main1) {
 			have_aim = inpt->usingMouse();
 			action.power = hotkeys_mod[10];
 			twostep_slot = -1;
 		}
-		else if (i==11 && inpt->pressing[Input::MAIN2] && !inpt->lock[Input::MAIN2] && !Utils::isWithinRect(window_area, inpt->mouse) && enable_main2) {
+		else if (i==11 && inpt->pressing[Input::MAIN2] && !inpt->lock[Input::MAIN2] && enable_main2) {
 			have_aim = inpt->usingMouse();
 			action.power = hotkeys_mod[11];
 			twostep_slot = -1;
@@ -767,6 +770,9 @@ PowerID MenuActionBar::checkDrag(const Point& mouse) {
  * if clicking a menu, act as if the player pressed that menu's hotkey
  */
 void MenuActionBar::checkMenu(bool &menu_c, bool &menu_i, bool &menu_p, bool &menu_l) {
+	if (inpt->usingMouse() && (pc->using_main1 || pc->using_main2))
+		return;
+
 	if (menus[MENU_CHARACTER]->enabled && menus[MENU_CHARACTER]->checkClick()) {
 		menu_c = true;
 		menus[MENU_CHARACTER]->deactivate();

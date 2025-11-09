@@ -594,8 +594,7 @@ void MenuManager::logic() {
 		handleKeyboardNavigation();
 
 	// Check if the mouse is within any of the visible windows. Excludes the minimap and the exit/pause menu
-	bool is_within_menus = (Utils::isWithinRect(act->window_area, inpt->mouse) ||
-	(book->visible && Utils::isWithinRect(book->window_area, inpt->mouse)) ||
+	bool is_within_menus = ((book->visible && Utils::isWithinRect(book->window_area, inpt->mouse)) ||
 	(chr->visible && Utils::isWithinRect(chr->window_area, inpt->mouse)) ||
 	(inv->visible && Utils::isWithinRect(inv->window_area, inpt->mouse)) ||
 	(vendor->visible && Utils::isWithinRect(vendor->window_area, inpt->mouse)) ||
@@ -1066,7 +1065,7 @@ void MenuManager::logic() {
 				}
 			}
 			// action bar
-			if (!exit->visible && (act->isWithinSlots(inpt->mouse) || act->isWithinMenus(inpt->mouse))) {
+			if (!exit->visible && (act->isWithinSlots(inpt->mouse) || act->isWithinMenus(inpt->mouse)) && !pc->using_main1 && !pc->using_main2) {
 				inpt->lock[Input::MAIN1] = true;
 
 				// ctrl-click action bar to clear that slot
