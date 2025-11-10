@@ -140,7 +140,7 @@ void Effect::unloadAnimation() {
 	}
 }
 
-int Effect::getTypeFromString(const std::string& type_str) {
+int Effect::getTypeFromString(const std::string& type_str, bool show_error) {
 	if (type_str.empty()) return Effect::NONE;
 
 	if (type_str == "damage") return Effect::DAMAGE;
@@ -221,7 +221,9 @@ int Effect::getTypeFromString(const std::string& type_str) {
 
 	}
 
-	Utils::logError("EffectManager: '%s' is not a valid effect type.", type_str.c_str());
+	if (show_error)
+		Utils::logError("EffectManager: '%s' is not a valid effect type.", type_str.c_str());
+
 	return Effect::NONE;
 }
 

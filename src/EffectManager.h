@@ -63,7 +63,7 @@ public:
 	void loadAnimation(const std::string &s);
 	void unloadAnimation();
 
-	static int getTypeFromString(const std::string& _type);
+	static int getTypeFromString(const std::string& _type, bool show_error = true);
 	static bool typeIsStat(int t);
 	static bool typeIsDmgMin(int t);
 	static bool typeIsDmgMax(int t);

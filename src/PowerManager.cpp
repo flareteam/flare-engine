@@ -237,6 +237,10 @@ void PowerManager::loadEffects() {
 					effect_animations.resize(effects.size());
 					current = &(effects.back());
 					current->id = infile.val;
+
+					if (Effect::getTypeFromString(current->id, false) != Effect::NONE) {
+						infile.error("PowerManager: Warning! Effect ID '%s' collides with built-in type.", current->id.c_str());
+					}
 				}
 			}
 		}
