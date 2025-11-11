@@ -30,7 +30,7 @@ public:
 
 	class Video {
 	public:
-		static const int COUNT = 10;
+		static const int COUNT = 11;
 		enum {
 			RENDERER,
 			FULLSCREEN,
@@ -42,6 +42,7 @@ public:
 			MAX_RENDER_SIZE,
 			FRAME_LIMIT,
 			THREADED_IMAGE_LOAD,
+			FADE_WALLS,
 		};
 	};
 
@@ -68,7 +69,7 @@ public:
 
 	class Interface {
 	public:
-		static const int COUNT = 14;
+		static const int COUNT = 13;
 		enum {
 			LANGUAGE,
 			SUBTITLES,
@@ -80,7 +81,6 @@ public:
 			STATBAR_LABELS,
 			STATBAR_AUTOHIDE,
 			HARDWARE_CURSOR,
-			ENTITY_MARKERS,
 			PAUSE_ON_FOCUS_LOSS,
 			SHOW_FPS,
 			DEV_MODE

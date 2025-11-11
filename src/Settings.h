@@ -80,6 +80,7 @@ public:
 	float gamma;
 	bool parallax_layers;
 	unsigned short max_render_size;
+	bool fade_walls;
 
 	// Audio Settings
 	unsigned short music_volume;

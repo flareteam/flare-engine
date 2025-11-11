@@ -84,6 +84,7 @@ void EngineSettings::Misc::load() {
 	mouse_move_deadzone_moving = 0.25f;
 	mouse_move_deadzone_not_moving = 0.75f;
 	passive_trigger_effect_stacking = false;
+	fade_wall_alpha = 63;
 
 	FileParser infile;
 	// @CLASS EngineSettings: Misc|Description of engine/misc.txt
@@ -200,6 +201,11 @@ void EngineSettings::Misc::load() {
 			// @ATTR passive_trigger_effect_stacking|bool|For backwards compatibility. Allows adding multiple of the same effect from a power with the same passive trigger. False by default.
 			else if (infile.key == "passive_trigger_effect_stacking") {
 				passive_trigger_effect_stacking = Parse::toBool(infile.val);
+			}
+
+			// @ATTR fade_wall_alpha|int|The minimum opacity which walls will be faded to when covering the player, ranging from 0-255. Use 255 to disable this feature.
+			else if (infile.key == "fade_wall_alpha") {
+				fade_wall_alpha = static_cast<uint8_t>(Parse::popFirstInt(infile.val));
 			}
 
 			else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());

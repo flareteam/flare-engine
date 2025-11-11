@@ -63,8 +63,7 @@ MapRenderer::MapRenderer()
 	, tip(new WidgetTooltip())
 	, tip_pos()
 	, show_tooltip(false)
-	, entity_hidden_normal(NULL)
-	, entity_hidden_enemy(NULL)
+	, drawn_hero(false)
 	, cam()
 	, map_change(false)
 	, teleportation(false)
@@ -81,20 +80,6 @@ MapRenderer::MapRenderer()
 	, index_objectlayer(0)
 	, is_spawn_map(false)
 {
-	// Load entity markers
-	Image *gfx = render_device->loadImage("images/menus/entity_hidden.png", RenderDevice::ERROR_NORMAL);
-	if (gfx) {
-		const int gfx_w = gfx->getWidth();
-		const int gfx_h = gfx->getHeight();
-
-		entity_hidden_normal = gfx->createSprite();
-		entity_hidden_normal->setClip(0, 0, gfx_w, gfx_h/2);
-
-		entity_hidden_enemy = gfx->createSprite();
-		entity_hidden_enemy->setClip(0, gfx_h/2, gfx_w, gfx_h/2);
-
-		gfx->unref();
-	}
 }
 
 void MapRenderer::clearQueues() {
@@ -366,8 +351,32 @@ void calculatePriosOrtho(std::vector<Renderable> &r) {
 }
 
 void MapRenderer::render(std::vector<Renderable> &r, std::vector<Renderable> &r_dead) {
+	drawn_hero = false;
 
 	map_parallax.render(cam.shake, "");
+
+	hero_bounds = Rect();
+	for (size_t i = 0; i < r.size(); ++i) {
+		if (r[i].type == Renderable::TYPE_HERO) {
+			Point p = Utils::mapToScreen(r[i].map_pos.x, r[i].map_pos.y, cam.shake.x, cam.shake.y);
+			p.x -= r[i].offset.x;
+			p.y -= r[i].offset.y;
+			Rect r_clip = r[i].src;
+
+			if (p.x < hero_bounds.x || hero_bounds.w == 0) {
+				hero_bounds.x = p.x;
+			}
+			if (p.x + r_clip.w > hero_bounds.x + hero_bounds.w || hero_bounds.w == 0) {
+				hero_bounds.w = p.x + r_clip.w - hero_bounds.x;
+			}
+			if (p.y < hero_bounds.y || hero_bounds.h == 0) {
+				hero_bounds.y = p.y;
+			}
+			if (p.y + r_clip.h > hero_bounds.y + hero_bounds.w || hero_bounds.h == 0) {
+				hero_bounds.h = p.y + r_clip.h - hero_bounds.y;
+			}
+		}
+	}
 
 	if (eset->tileset.orientation == eset->tileset.TILESET_ORTHOGONAL) {
 		calculatePriosOrtho(r);
@@ -383,8 +392,6 @@ void MapRenderer::render(std::vector<Renderable> &r, std::vector<Renderable> &r_
 		std::sort(r_dead.begin(), r_dead.end(), priocompare);
 		renderIso(r, r_dead);
 	}
-
-	drawHiddenEntityMarkers();
 }
 
 void MapRenderer::drawRenderable(std::vector<Renderable>::iterator r_cursor) {
@@ -394,6 +401,10 @@ void MapRenderer::drawRenderable(std::vector<Renderable>::iterator r_cursor) {
 		dest.x = p.x - r_cursor->offset.x;
 		dest.y = p.y - r_cursor->offset.y;
 		render_device->render(*r_cursor, dest);
+
+		if (r_cursor->type == Renderable::TYPE_HERO) {
+			drawn_hero = true;
+		}
 	}
 }
 
@@ -497,6 +508,10 @@ void MapRenderer::renderIsoLayer(const Map_Layer& layerdata, const TileSet& tile
 					if (fogofwar == FogOfWar::TYPE_TINT) {
 						tile.tile->color_mod = fow->getTileColorMod(i, j);
 					}
+						tile.tile->alpha_mod = 255;
+						if (settings->fade_walls && eset->misc.fade_wall_alpha < 255 && checkTileOverlappingHero(i, j, layerdata)) {
+							fadeOverlapTile(tile, i, j, layerdata);
+						}
 					render_device->render(tile.tile);
 				}
 			}
@@ -641,9 +656,12 @@ void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 							}
 						}
 
-						checkHiddenEntities(i, j, current_layer, r);
 						if (fogofwar == FogOfWar::TYPE_TINT) {
 							tile.tile->color_mod = fow->getTileColorMod(i, j);
+						}
+						tile.tile->alpha_mod = 255;
+						if (settings->fade_walls && eset->misc.fade_wall_alpha < 255 && checkTileOverlappingHero(i, j, current_layer)) {
+							fadeOverlapTile(tile, i, j, current_layer);
 						}
 						render_device->render(tile.tile);
 						drawn_tiles[i][j] = 1;
@@ -728,9 +746,12 @@ do_last_NE_tile:
 						dest.x = tile_SW_center.x - tile.offset.x;
 						dest.y = tile_SW_center.y - tile.offset.y;
 						tile.tile->setDestFromPoint(dest);
-						checkHiddenEntities(i, j, current_layer, r);
 						if (fogofwar == FogOfWar::TYPE_TINT) {
 							tile.tile->color_mod = fow->getTileColorMod(i, j);
+						}
+						tile.tile->alpha_mod = 255;
+						if (settings->fade_walls && eset->misc.fade_wall_alpha < 255 && checkTileOverlappingHero(i-2, j+2, current_layer)) {
+							fadeOverlapTile(tile, i-2, j+2, current_layer);
 						}
 						render_device->render(tile.tile);
 						drawn_tiles[i-2][j+2] = 1;
@@ -751,9 +772,12 @@ do_last_NE_tile:
 						dest.x = tile_NE_center.x - tile.offset.x;
 						dest.y = tile_NE_center.y - tile.offset.y;
 						tile.tile->setDestFromPoint(dest);
-						checkHiddenEntities(i, j, current_layer, r);
 						if (fogofwar == FogOfWar::TYPE_TINT) {
 							tile.tile->color_mod = fow->getTileColorMod(i, j);
+						}
+						tile.tile->alpha_mod = 255;
+						if (settings->fade_walls && eset->misc.fade_wall_alpha < 255 && checkTileOverlappingHero(i, j, current_layer)) {
+							fadeOverlapTile(tile, i, j, current_layer);
 						}
 						render_device->render(tile.tile);
 						drawn_tiles[i][j] = 1;
@@ -908,6 +932,10 @@ void MapRenderer::renderOrthoLayer(const Map_Layer& layerdata, const TileSet& ti
 						if (fogofwar == FogOfWar::TYPE_TINT) {
 							tile.tile->color_mod = fow->getTileColorMod(i, j);
 						}
+						tile.tile->alpha_mod = 255;
+						if (settings->fade_walls && eset->misc.fade_wall_alpha < 255 && checkTileOverlappingHero(i, j, layerdata)) {
+							fadeOverlapTile(tile, i, j, layerdata);
+						}
 						render_device->render(tile.tile);
 					}
 				}
@@ -1004,10 +1032,13 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 						}
 					}
 
-					checkHiddenEntities(i, j, layers[index_objectlayer], r);
 					if (!skip_tile_render) {
 						if (fogofwar == FogOfWar::TYPE_TINT) {
 							tile.tile->color_mod = fow->getTileColorMod(i, j);
+						}
+						tile.tile->alpha_mod = 255;
+						if (settings->fade_walls && eset->misc.fade_wall_alpha < 255 && checkTileOverlappingHero(i, j, layers[index_objectlayer])) {
+							fadeOverlapTile(tile, i, j, layers[index_objectlayer]);
 						}
 						render_device->render(tile.tile);
 					}
@@ -1593,131 +1624,63 @@ void MapRenderer::drawDevHUD() {
 	}
 }
 
-void MapRenderer::drawHiddenEntityMarkers() {
-	if (!settings->entity_markers)
-		return;
-
-	std::vector<std::vector<Renderable>::iterator>::iterator hero_it = hidden_entities.end();
-	Point hidden_hero_pos(0, settings->view_h);
-
-	const int marker_w = entity_hidden_normal->getGraphicsWidth();
-	const int marker_h = entity_hidden_normal->getGraphicsHeight();
-
-	for (size_t i = 0; i < hidden_entities.size(); ++i) {
-		if (!hidden_entities[i]->image)
-			continue;
-
-		if (hidden_entities[i]->type == Renderable::TYPE_NORMAL)
-			continue;
-
-		Point dest;
-		Point p = Utils::mapToScreen(hidden_entities[i]->map_pos.x, hidden_entities[i]->map_pos.y, cam.shake.x, cam.shake.y);
-		dest.x = p.x - marker_w / 2;
-		dest.y = p.y - hidden_entities[i]->offset.y - marker_h;
-
-		// only take the highest point of the hero sprite
-		if (hidden_entities[i]->type == Renderable::TYPE_HERO) {
-			if (dest.y <= hidden_hero_pos.y) {
-				hero_it = hidden_entities.begin() + i;
-				hidden_hero_pos = dest;
-			}
-			continue;
-		}
-
-		if (hidden_entities[i]->type == Renderable::TYPE_ENEMY) {
-			entity_hidden_enemy->setDestFromPoint(dest);
-			entity_hidden_enemy->alpha_mod = hidden_entities[i]->alpha_mod;
-			render_device->render(entity_hidden_enemy);
-		}
-		else if (hidden_entities[i]->type == Renderable::TYPE_ALLY) {
-			entity_hidden_normal->setDestFromPoint(dest);
-			entity_hidden_normal->alpha_mod = hidden_entities[i]->alpha_mod;
-			render_device->render(entity_hidden_normal);
-		}
-	}
-
-	if (hero_it != hidden_entities.end()) {
-		entity_hidden_normal->setDestFromPoint(hidden_hero_pos);
-		render_device->render(entity_hidden_normal);
-	}
-
-	hidden_entities.clear();
+void MapRenderer::setMapParallax(const std::string& mp_filename) {
+	map_parallax.load(mp_filename);
+	map_parallax.setMapCenter(w/2, h/2);
 }
 
-void MapRenderer::checkHiddenEntities(const int_fast16_t x, const int_fast16_t y, const Map_Layer& layerdata, std::vector<Renderable> &r) {
-	if (!settings->entity_markers)
-		return;
+bool MapRenderer::checkTileOverlappingHero(const int_fast16_t x, const int_fast16_t y, const Map_Layer& layerdata) {
+	if (!drawn_hero)
+		return false;
 
 	Rect tile_bounds;
 	Point tile_center;
 	getTileBounds(x, y, layerdata, tile_bounds, tile_center);
 
-	const int tall_threshold = eset->tileset.orientation == eset->tileset.TILESET_ISOMETRIC ? eset->tileset.tile_h * 2 : eset->tileset.tile_h;
-	if (tile_bounds.h <= tall_threshold) {
-		return;
-	}
+	// const int tall_threshold = eset->tileset.orientation == eset->tileset.TILESET_ISOMETRIC ? eset->tileset.tile_h * 2 : eset->tileset.tile_h;
+	// if (tile_bounds.h <= tall_threshold) {
+	// 	return false;
+	// }
 
-	bool hero_is_hidden = false;
+	if (Utils::isWithinRect(tile_bounds, Point(hero_bounds.x, hero_bounds.y)))
+		return true;
 
-	std::vector<Renderable>::iterator it = r.begin();
-	while (it != r.end()) {
-		if (it->type == Renderable::TYPE_NORMAL) {
-			++it;
-			continue;
-		}
+	if (Utils::isWithinRect(tile_bounds, Point(hero_bounds.x + hero_bounds.w, hero_bounds.y)))
+		return true;
 
-		const int it_x = static_cast<int>(it->map_pos.x);
-		const int it_y = static_cast<int>(it->map_pos.y);
-		if ((eset->tileset.orientation == eset->tileset.TILESET_ISOMETRIC && (x < it_x || y < it_y)) ||
-		    (eset->tileset.orientation == eset->tileset.TILESET_ORTHOGONAL && y < it_y))
-		{
-			++it;
-			continue;
-		}
+	if (Utils::isWithinRect(tile_bounds, Point(hero_bounds.x, hero_bounds.y + hero_bounds.h)))
+		return true;
 
-		bool is_hidden = false;
+	if (Utils::isWithinRect(tile_bounds, Point(hero_bounds.x + hero_bounds.w, hero_bounds.y + hero_bounds.h)))
+		return true;
 
-		if (it->type == Renderable::TYPE_HERO && hero_is_hidden) {
-			is_hidden = true;
-		}
-		else if (it->type != Renderable::TYPE_NORMAL) {
-			Point p = Utils::mapToScreen(it->map_pos.x, it->map_pos.y, cam.shake.x, cam.shake.y);
-			p.x -= it->offset.x;
-			if (Utils::isWithinRect(tile_bounds, p)) {
-				is_hidden = true;
-			}
-			else {
-				p.x += it->offset.x * 2;
-				if (Utils::isWithinRect(tile_bounds, p)) {
-					is_hidden = true;
-				}
-			}
-		}
+	if (Utils::isWithinRect(hero_bounds, Point(tile_bounds.x, tile_bounds.y)))
+		return true;
 
-		if (is_hidden) {
-			if (it->type == Renderable::TYPE_HERO)
-				hero_is_hidden = true;
+	if (Utils::isWithinRect(hero_bounds, Point(tile_bounds.x + tile_bounds.w, tile_bounds.y)))
+		return true;
 
-			bool already_hidden = false;
-			for (size_t i = 0; i < hidden_entities.size(); ++i) {
-				if (it == hidden_entities[i]) {
-					already_hidden = true;
-					break;
-				}
-			}
+	if (Utils::isWithinRect(hero_bounds, Point(tile_bounds.x, tile_bounds.y + tile_bounds.h)))
+		return true;
 
-			if (!already_hidden) {
-				hidden_entities.push_back(it);
-			}
-		}
+	if (Utils::isWithinRect(hero_bounds, Point(tile_bounds.x + tile_bounds.w, tile_bounds.y + tile_bounds.h)))
+		return true;
 
-		++it;
-	}
+	if (Utils::isWithinRect(tile_bounds, Point(hero_bounds.x + hero_bounds.w/2, hero_bounds.y + hero_bounds.h/2)))
+		return true;
+
+	if (Utils::isWithinRect(hero_bounds, Point(tile_bounds.x + tile_bounds.w/2, tile_bounds.y + tile_bounds.h/2)))
+		return true;
+
+	return false;
 }
 
-void MapRenderer::setMapParallax(const std::string& mp_filename) {
-	map_parallax.load(mp_filename);
-	map_parallax.setMapCenter(w/2, h/2);
+void MapRenderer::fadeOverlapTile(const Tile_Def& tile, const int_fast16_t x, const int_fast16_t y, const Map_Layer& layerdata) {
+	Rect tile_bounds;
+	Point tile_center;
+	getTileBounds(x, y, layerdata, tile_bounds, tile_center);
+	float tile_dist = Utils::calcDist(FPoint(hero_bounds.x + hero_bounds.w / 2, hero_bounds.y + hero_bounds.h / 2), FPoint(tile_bounds.x + tile_bounds.w/2, tile_bounds.y + tile_bounds.h / 2)) / static_cast<float>(tile.tile->getClip().h);
+	tile.tile->alpha_mod = static_cast<uint8_t>(std::min(255, std::max(63, static_cast<int>(255.f * tile_dist))));
 }
 
 MapRenderer::~MapRenderer() {
@@ -1733,8 +1696,5 @@ MapRenderer::~MapRenderer() {
 		snd->unload(sids.back());
 		sids.pop_back();
 	}
-
-	delete entity_hidden_normal;
-	delete entity_hidden_enemy;
 }
 

@@ -46,6 +46,7 @@ Engine features:
 * Added tooltip text for items that prevent use of other equip slots.
 * Added 'equipment_set' property to engine/classes.txt config.
 * Added 'enable_gamepad_nav' property to menus/actionbar.txt config.
+* Added 'fade_wall_alpha' property to engine/misc.txt config.
 * Android: Enabled use of external input devices (gamepads, keyboards, mice)
 
 Engine fixes:

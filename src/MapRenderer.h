@@ -48,6 +48,8 @@ private:
 	TooltipData tip_buf;
 	Point tip_pos;
 	bool show_tooltip;
+	bool drawn_hero;
+	Rect hero_bounds;
 
 	bool enemyGroupPlaceEnemy(float x, float y, const Map_Group &g);
 	void pushEnemyGroup(Map_Group &g);
@@ -79,16 +81,12 @@ private:
 	void drawDevCursor();
 	void drawDevHUD();
 
-	void drawHiddenEntityMarkers();
-
-	void checkHiddenEntities(const int_fast16_t x, const int_fast16_t y, const Map_Layer& layerdata, std::vector<Renderable> &r);
+	bool checkTileOverlappingHero(const int_fast16_t x, const int_fast16_t y, const Map_Layer& layerdata);
+	void fadeOverlapTile(const Tile_Def& tile, const int_fast16_t x, const int_fast16_t y, const Map_Layer& layerdata);
 
 	TileSet tset;
 
 	MapParallax map_parallax;
-
-	Sprite* entity_hidden_normal;
-	Sprite* entity_hidden_enemy;
 
 	std::vector<std::vector<Renderable>::iterator> hidden_entities;
 

@@ -248,6 +248,8 @@ public:
 	WidgetLabel                * max_render_size_lb;
 	WidgetCheckBox             * threaded_image_load_cb;
 	WidgetLabel                * threaded_image_load_lb;
+	WidgetCheckBox             * fade_walls_cb;
+	WidgetLabel                * fade_walls_lb;
 
 	WidgetSlider               * music_volume_sl;
 	WidgetLabel                * music_volume_lb;
@@ -285,8 +287,6 @@ public:
 	WidgetLabel                * statbar_autohide_lb;
 	WidgetCheckBox             * combat_text_cb;
 	WidgetLabel                * combat_text_lb;
-	WidgetCheckBox             * entity_markers_cb;
-	WidgetLabel                * entity_markers_lb;
 	WidgetCheckBox             * item_compare_tips_cb;
 	WidgetLabel                * item_compare_tips_lb;
 	WidgetCheckBox             * pause_on_focus_loss_cb;

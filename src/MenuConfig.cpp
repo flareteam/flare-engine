@@ -156,6 +156,8 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	, max_render_size_lb(new WidgetLabel())
 	, threaded_image_load_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
 	, threaded_image_load_lb(new WidgetLabel())
+	, fade_walls_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
+	, fade_walls_lb(new WidgetLabel())
 
 	, music_volume_sl(new WidgetSlider(WidgetSlider::DEFAULT_FILE))
 	, music_volume_lb(new WidgetLabel())
@@ -193,8 +195,6 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	, statbar_autohide_lb(new WidgetLabel())
 	, combat_text_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
 	, combat_text_lb(new WidgetLabel())
-	, entity_markers_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
-	, entity_markers_lb(new WidgetLabel())
 	, item_compare_tips_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
 	, item_compare_tips_lb(new WidgetLabel())
 	, pause_on_focus_loss_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
@@ -471,6 +471,7 @@ void MenuConfig::init() {
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::MAX_RENDER_SIZE, max_render_size_lb, max_render_size_lstb, msg->get("Maximum Render Size"));
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::FRAME_LIMIT, frame_limit_lb, frame_limit_lstb, msg->get("Frame Limit"));
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::THREADED_IMAGE_LOAD, threaded_image_load_lb, threaded_image_load_cb, msg->get("Threaded Image Loading"));
+	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::FADE_WALLS, fade_walls_lb, fade_walls_cb, msg->get("Show player behind walls"));
 
 	cfg_tabs[AUDIO_TAB].setOptionWidgets(Platform::Audio::SFX, sound_volume_lb, sound_volume_sl, msg->get("Sound Volume"));
 	cfg_tabs[AUDIO_TAB].setOptionWidgets(Platform::Audio::MUSIC, music_volume_lb, music_volume_sl, msg->get("Music Volume"));
@@ -492,7 +493,6 @@ void MenuConfig::init() {
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::STATBAR_LABELS, statbar_labels_lb, statbar_labels_cb, msg->get("Always show stat bar labels"));
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::STATBAR_AUTOHIDE, statbar_autohide_lb, statbar_autohide_cb, msg->get("Allow stat bar auto-hiding"));
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::COMBAT_TEXT, combat_text_lb, combat_text_cb, msg->get("Show combat text"));
-	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::ENTITY_MARKERS, entity_markers_lb, entity_markers_cb, msg->get("Show hidden entity markers"));
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::ITEM_COMPARE_TIPS, item_compare_tips_lb, item_compare_tips_cb, msg->get("Show item comparison tooltips"));
 	cfg_tabs[INTERFACE_TAB].setOptionWidgets(Platform::Interface::PAUSE_ON_FOCUS_LOSS, pause_on_focus_loss_lb, pause_on_focus_loss_cb, msg->get("Pause game when window loses focus"));
 
@@ -636,10 +636,10 @@ void MenuConfig::readConfig() {
 	dpi_scaling_cb->tooltip = msg->get("When enabled, this uses the screen DPI in addition to the window dimensions to scale the rendering resolution. Otherwise, only the window dimensions are used.");
 	parallax_layers_cb->tooltip = msg->get("This enables parallax (non-tile) layers. Disabling this setting can improve performance in some cases.");
 	threaded_image_load_cb->tooltip = msg->get("Use multiple CPU threads when loading some images. Try disabling this option if you experience instability during loading.");
+	fade_walls_cb->tooltip = msg->get("Lowers the opacity of wall tiles that are covering the player. Disabling this option may improve performace in some circumstances.");
 	colorblind_cb->tooltip = msg->get("Provides additional text for information that is primarily conveyed through color.");
 	statbar_autohide_cb->tooltip = msg->get("Some mods will automatically hide the stat bars when they are inactive. Disabling this option will keep them displayed at all times.");
 	auto_equip_cb->tooltip = msg->get("When enabled, empty equipment slots will be filled with applicable items when they are obtained.");
-	entity_markers_cb->tooltip = msg->get("Shows a marker above enemies, allies, and the player when they are obscured by tall objects.");
 	item_compare_tips_cb->tooltip = msg->get("When enabled, tooltips for equipped items of the same type are shown next to standard item tooltips.");
 	no_mouse_cb->tooltip = msg->get("This allows the game to be controlled entirely with the keyboard (or joystick).");
 	mouse_move_swap_cb->tooltip = msg->get("When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero instead of 'Main1'.");
@@ -950,6 +950,7 @@ void MenuConfig::updateVideo() {
 	dpi_scaling_cb->setChecked(settings->dpi_scaling);
 	parallax_layers_cb->setChecked(settings->parallax_layers);
 	threaded_image_load_cb->setChecked(settings->enable_threaded_image_load);
+	fade_walls_cb->setChecked(settings->fade_walls);
 
 	refreshRenderers();
 
@@ -1010,7 +1011,6 @@ void MenuConfig::updateInterface() {
 	statbar_labels_cb->setChecked(settings->statbar_labels);
 	statbar_autohide_cb->setChecked(settings->statbar_autohide);
 	combat_text_cb->setChecked(settings->combat_text);
-	entity_markers_cb->setChecked(settings->entity_markers);
 	item_compare_tips_cb->setChecked(settings->item_compare_tips);
 	pause_on_focus_loss_cb->setChecked(settings->pause_on_focus_loss);
 
@@ -1302,6 +1302,9 @@ void MenuConfig::logicVideo() {
 	else if (cfg_tabs[VIDEO_TAB].options[Platform::Video::THREADED_IMAGE_LOAD].enabled && threaded_image_load_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->enable_threaded_image_load = threaded_image_load_cb->isChecked();
 	}
+	else if (cfg_tabs[VIDEO_TAB].options[Platform::Video::FADE_WALLS].enabled && fade_walls_cb->checkClickAt(mouse.x, mouse.y)) {
+		settings->fade_walls = fade_walls_cb->isChecked();
+	}
 }
 
 void MenuConfig::logicAudio() {
@@ -1381,9 +1384,6 @@ void MenuConfig::logicInterface() {
 	}
 	else if (cfg_tabs[INTERFACE_TAB].options[Platform::Interface::COMBAT_TEXT].enabled && combat_text_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->combat_text = combat_text_cb->isChecked();
-	}
-	else if (cfg_tabs[INTERFACE_TAB].options[Platform::Interface::ENTITY_MARKERS].enabled && entity_markers_cb->checkClickAt(mouse.x, mouse.y)) {
-		settings->entity_markers = entity_markers_cb->isChecked();
 	}
 	else if (cfg_tabs[INTERFACE_TAB].options[Platform::Interface::ITEM_COMPARE_TIPS].enabled && item_compare_tips_cb->checkClickAt(mouse.x, mouse.y)) {
 		settings->item_compare_tips = item_compare_tips_cb->isChecked();
