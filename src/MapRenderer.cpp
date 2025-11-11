@@ -1680,7 +1680,7 @@ void MapRenderer::fadeOverlapTile(const Tile_Def& tile, const int_fast16_t x, co
 	Point tile_center;
 	getTileBounds(x, y, layerdata, tile_bounds, tile_center);
 	float tile_dist = Utils::calcDist(FPoint(hero_bounds.x + hero_bounds.w / 2, hero_bounds.y + hero_bounds.h / 2), FPoint(tile_bounds.x + tile_bounds.w/2, tile_bounds.y + tile_bounds.h / 2)) / static_cast<float>(tile.tile->getClip().h);
-	tile.tile->alpha_mod = static_cast<uint8_t>(std::min(255, std::max(63, static_cast<int>(255.f * tile_dist))));
+	tile.tile->alpha_mod = static_cast<uint8_t>(std::min(255, std::max(static_cast<int>(eset->misc.fade_wall_alpha), static_cast<int>(255.f * tile_dist))));
 }
 
 MapRenderer::~MapRenderer() {
