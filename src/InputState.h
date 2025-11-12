@@ -58,6 +58,7 @@ namespace Input {
 		MENU_PAGE_PREV,
 		MENU_ACTIVATE,
 		PAUSE,
+		CYCLE_MENUS,
 		AIM_UP,
 		AIM_DOWN,
 		AIM_LEFT,

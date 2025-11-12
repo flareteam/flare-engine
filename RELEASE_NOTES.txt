@@ -47,6 +47,7 @@ Engine features:
 * Added 'equipment_set' property to engine/classes.txt config.
 * Added 'enable_gamepad_nav' property to menus/actionbar.txt config.
 * Added 'fade_wall_alpha' property to engine/misc.txt config.
+* Added 'cycle_menus' keybinding to quickly open Char/Inv and Log/Pow menus.
 * Android: Enabled use of external input devices (gamepads, keyboards, mice)
 
 Engine fixes:

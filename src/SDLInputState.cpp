@@ -950,6 +950,7 @@ void SDLInputState::setCommonStrings() {
 	binding_name[Input::MENU_PAGE_PREV] = msg->get("Menu: Previous Page");
 	binding_name[Input::MENU_ACTIVATE] = msg->get("Menu: Activate");
 	binding_name[Input::PAUSE] = msg->get("Pause Game");
+	binding_name[Input::CYCLE_MENUS] = msg->get("Cycle Menus");
 	binding_name[Input::AIM_UP] = msg->get("Aim Up");
 	binding_name[Input::AIM_DOWN] = msg->get("Aim Down");
 	binding_name[Input::AIM_LEFT] = msg->get("Aim Left");

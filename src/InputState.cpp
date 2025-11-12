@@ -100,6 +100,7 @@ InputState::InputState(void)
 	config_keys[Input::MENU_PAGE_PREV] = "menu_page_prev";
 	config_keys[Input::MENU_ACTIVATE] = "menu_activate";
 	config_keys[Input::PAUSE] = "pause";
+	config_keys[Input::CYCLE_MENUS] = "cycle_menus";
 	config_keys[Input::AIM_UP] = "aim_up";
 	config_keys[Input::AIM_DOWN] = "aim_down";
 	config_keys[Input::AIM_LEFT] = "aim_left";
@@ -206,6 +207,7 @@ void InputState::loadKeyBindings(bool load_user_binds) {
 		// @ATTR default.menu_page_prev|[int, string], int : Bind, Type|Bindings for "Menu: Previous Page".
 		// @ATTR default.menu_activate|[int, string], int : Bind, Type|Bindings for "Menu: Activate".
 		// @ATTR default.pause|[int, string], int : Bind, Type|Bindings for "Pause Game".
+		// @ATTR default.cycle_menus|[int, string], int : Bind, Type|Bindings for "Cycle Menus".
 		// @ATTR default.aim_up|[int, string], int : Bind, Type|Bindings for "Aim Up".
 		// @ATTR default.aim_down|[int, string], int : Bind, Type|Bindings for "Aim Down".
 		// @ATTR default.aim_left|[int, string], int : Bind, Type|Bindings for "Aim Left".

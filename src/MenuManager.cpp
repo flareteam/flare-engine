@@ -407,9 +407,9 @@ void MenuManager::logic() {
 							// move the cursor to the actionbar
 							act->tablist.unlock();
 							act->tablist.getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
-							menu->defocusLeft();
-							menu->defocusRight();
-							menu->inv->visible = false;
+							defocusLeft();
+							defocusRight();
+							inv->visible = false;
 						}
 					}
 				}
@@ -471,9 +471,9 @@ void MenuManager::logic() {
 							// move the cursor to the actionbar
 							act->tablist.unlock();
 							act->tablist.getNext(!TabList::GET_INNER, TabList::WIDGET_SELECT_AUTO);
-							menu->defocusLeft();
-							menu->defocusRight();
-							menu->pow->visible = false;
+							defocusLeft();
+							defocusRight();
+							pow->visible = false;
 						}
 					}
 				}
@@ -752,7 +752,7 @@ void MenuManager::logic() {
 			act->checkMenu(clicking_character, clicking_inventory, clicking_powers, clicking_log);
 
 			// inventory menu toggle
-			if (menu->inv->enabled && ((inpt->pressing[Input::INVENTORY] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_inventory)) {
+			if (inv->enabled && ((inpt->pressing[Input::INVENTORY] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_inventory)) {
 				key_lock = true;
 				if (inv->visible) {
 					snd->play(inv->sfx_close, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
@@ -769,7 +769,7 @@ void MenuManager::logic() {
 			}
 
 			// powers menu toggle
-			if (menu->pow->enabled && (((inpt->pressing[Input::POWERS] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_powers) && !pc->stats.transformed)) {
+			if (pow->enabled && (((inpt->pressing[Input::POWERS] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_powers) && !pc->stats.transformed)) {
 				key_lock = true;
 				if (pow->visible) {
 					snd->play(pow->sfx_close, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
@@ -785,7 +785,7 @@ void MenuManager::logic() {
 			}
 
 			// character menu toggleggle
-			if (menu->chr->enabled && ((inpt->pressing[Input::CHARACTER] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_character)) {
+			if (chr->enabled && ((inpt->pressing[Input::CHARACTER] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_character)) {
 				key_lock = true;
 				if (chr->visible) {
 					snd->play(chr->sfx_close, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
@@ -803,7 +803,7 @@ void MenuManager::logic() {
 			}
 
 			// log menu toggle
-			if (menu->questlog->enabled && ((inpt->pressing[Input::LOG] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_log)) {
+			if (questlog->enabled && ((inpt->pressing[Input::LOG] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_log)) {
 				key_lock = true;
 				if (questlog->visible) {
 					snd->play(questlog->sfx_close, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
@@ -817,6 +817,44 @@ void MenuManager::logic() {
 					snd->play(questlog->sfx_open, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
 					// Make sure the log isn't scrolled when we open the log menu
 					inpt->resetScroll();
+				}
+			}
+
+			if (inpt->pressing[Input::CYCLE_MENUS] && !inpt->lock[Input::CYCLE_MENUS] && !mouse_dragging && !keyboard_dragging) {
+				inpt->lock[Input::CYCLE_MENUS] = true;
+
+				if (chr->enabled && !chr->visible && inv->enabled && !inv->visible && !pow->visible && !questlog->visible) {
+					closeLeft();
+					defocusRight();
+					act->requires_attention[MenuActionBar::MENU_CHARACTER] = false;
+					chr->visible = true;
+					snd->play(chr->sfx_open, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
+					// Make sure the stat list isn't scrolled when we open the character menu
+					inpt->resetScroll();
+
+					closeRight();
+					defocusLeft();
+					act->requires_attention[MenuActionBar::MENU_INVENTORY] = false;
+					inv->visible = true;
+					// snd->play(inv->sfx_open, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
+				}
+				else if (pow->enabled && !pow->visible && questlog->enabled && !questlog->visible && (chr->visible || !chr->enabled) && (inv->visible || !inv->enabled)) {
+					closeLeft();
+					defocusRight();
+					act->requires_attention[MenuActionBar::MENU_LOG] = false;
+					questlog->visible = true;
+					snd->play(questlog->sfx_open, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
+					// Make sure the log isn't scrolled when we open the log menu
+					inpt->resetScroll();
+
+					closeRight();
+					defocusLeft();
+					act->requires_attention[MenuActionBar::MENU_POWERS] = false;
+					pow->visible = true;
+					// snd->play(pow->sfx_open, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
+				}
+				else {
+					closeAll();
 				}
 			}
 		}
