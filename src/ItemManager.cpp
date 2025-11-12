@@ -381,12 +381,13 @@ void ItemManager::loadItems(const std::string& filename) {
 			if (clear_req_stat) {
 				Utils::logInfo("ItemManager: Item %zu, clearing requires_stat list.", id);
 				item->requires_stat.clear();
+				item->requires_stat.resize(eset->primary_stats.list.size());
 				clear_req_stat = false;
 			}
 
 			std::string s = Parse::popFirstString(infile.val);
 			size_t req_stat_index = eset->primary_stats.getIndexByID(s);
-			if (req_stat_index != eset->primary_stats.list.size())
+			if (req_stat_index < eset->primary_stats.list.size())
 				item->requires_stat[req_stat_index].parse(infile.val);
 			else
 				infile.error("ItemManager: '%s' is not a valid primary stat.", s.c_str());
