@@ -121,6 +121,19 @@ public:
 	bool loadRenderLayerStat(FileParser *infile);
 	bool loadAnimationSlotStat(FileParser *infile);
 
+	float get(Stats::STAT stat) const {
+		if (stat == Stats::ABS_MAX)
+			return std::max(current[stat], current[Stats::ABS_MIN]);
+		else
+			return current[stat];
+	}
+	float getDamageMin(size_t dmg_type) const;
+	float getDamageMax(size_t dmg_type) const;
+	float getDamageResist(size_t dmg_type) const;
+	float getResourceStat(size_t resource_index, size_t field_offset) const;
+
+	void checkGFXPaths();
+
 	bool alive;
 	bool corpse; // creature is dead and done animating
 	Timer corpse_timer;
@@ -169,17 +182,6 @@ public:
 	std::vector<float> current; // values after all active effects are applied
 	std::vector<float> per_level; // value increases each level after level 1
 	std::vector< std::vector<float> > per_primary;
-
-	float get(Stats::STAT stat) const {
-		if (stat == Stats::ABS_MAX)
-			return std::max(current[stat], current[Stats::ABS_MIN]);
-		else
-			return current[stat];
-	}
-	float getDamageMin(size_t dmg_type) const;
-	float getDamageMax(size_t dmg_type) const;
-	float getDamageResist(size_t dmg_type) const;
-	float getResourceStat(size_t resource_index, size_t field_offset) const;
 
 	// additional values to base stats, given by items
 	std::vector<int> primary_additional;
@@ -299,6 +301,11 @@ public:
 	std::string gfx_head; // png in /images/avatar/[base]
 	std::string gfx_portrait; // png in /images/portraits
 	std::string transform_type;
+
+	// gfx_base and gfx_head might be modified if they can't be found
+	// so save the original values from the players save file so we can write them back later
+	std::string gfx_base_original;
+	std::string gfx_head_original;
 
 	std::string animations;
 

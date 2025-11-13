@@ -460,6 +460,7 @@ void GameStateNew::logic() {
 		avatar->stats.gfx_base = hero_options[current_option].base;
 		avatar->stats.gfx_head = hero_options[current_option].head;
 		avatar->stats.gfx_portrait = hero_options[current_option].portrait;
+		avatar->stats.checkGFXPaths();
 		avatar->stats.name = input_name->getText();
 		avatar->stats.permadeath = button_permadeath->isChecked();
 		save_load->setGameSlot(game_slot);

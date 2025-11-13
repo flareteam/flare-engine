@@ -101,7 +101,21 @@ void SaveLoad::saveGame() {
 		outfile << "permadeath=" << pc->stats.permadeath << "\n";
 
 		// hero visual option
-		outfile << "option=" << pc->stats.gfx_base << "," << pc->stats.gfx_head << "," << pc->stats.gfx_portrait << "\n";
+		outfile << "option=";
+
+		if (!pc->stats.gfx_base_original.empty())
+			outfile << pc->stats.gfx_base_original;
+		else
+			outfile << pc->stats.gfx_base;
+
+		outfile << ",";
+
+		if (!pc->stats.gfx_head_original.empty())
+			outfile << pc->stats.gfx_head_original;
+		else
+			outfile << pc->stats.gfx_head;
+
+		outfile << "," << pc->stats.gfx_portrait << "\n";
 
 		// hero class
 		outfile << "class=" << pc->stats.character_class << "," << pc->stats.character_subclass << "\n";
@@ -392,6 +406,8 @@ void SaveLoad::loadGame() {
 				pc->stats.gfx_base = Parse::popFirstString(infile.val);
 				pc->stats.gfx_head = Parse::popFirstString(infile.val);
 				pc->stats.gfx_portrait = Parse::popFirstString(infile.val);
+
+				pc->stats.checkGFXPaths();
 			}
 			else if (infile.key == "class") {
 				pc->stats.character_class = Parse::popFirstString(infile.val);

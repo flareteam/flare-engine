@@ -169,6 +169,8 @@ StatBlock::StatBlock()
 	, gfx_head("head_short")
 	, gfx_portrait("")
 	, transform_type("")
+	, gfx_base_original("")
+	, gfx_head_original("")
 	, animations("")
 	, sfx_attack()
 	, sfx_step("")
@@ -1533,3 +1535,22 @@ float StatBlock::getResourceStat(size_t resource_index, size_t field_offset) con
 	return current[offset_index + (resource_index*4) + field_offset];
 }
 
+void StatBlock::checkGFXPaths() {
+	// try fallbacks if unable to find gfx_base
+	if (mods->list("animations/avatar/" + gfx_base, !ModManager::LIST_FULL_PATHS).empty()) {
+		gfx_base_original = gfx_base;
+
+		if (gfx_base.substr(0, 6) == "female")
+			gfx_base = "female";
+		else
+			gfx_base = "male";
+	}
+
+	// try fallback if unable to find gfx_head
+	if (mods->locate("animations/avatar/" + gfx_base + "/" + gfx_head + ".txt").empty()) {
+		if (!mods->locate("animations/avatar/" + gfx_base + "/head_short.txt").empty()) {
+			gfx_head_original = gfx_head;
+			gfx_head = "head_short";
+		}
+	}
+}

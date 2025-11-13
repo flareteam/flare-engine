@@ -382,6 +382,8 @@ void GameStateLoad::readGameSlots() {
 				game_slots[i]->stats.gfx_base = Parse::popFirstString(infile.val);
 				game_slots[i]->stats.gfx_head = Parse::popFirstString(infile.val);
 				game_slots[i]->stats.gfx_portrait = Parse::popFirstString(infile.val);
+
+				game_slots[i]->stats.checkGFXPaths();
 			}
 			else if (infile.key == "spawn") {
 				game_slots[i]->current_map = getMapName(Parse::popFirstString(infile.val));
