@@ -750,7 +750,7 @@ void Avatar::logic() {
 					break;
 				}
 
-				if (settings->mouse_move && inpt->pressing[mm_key]) {
+				if (settings->mouse_move && inpt->pressing[mm_key] && (drag_walking || !inpt->lock[mm_key])) {
 					drag_walking = true;
 				}
 
