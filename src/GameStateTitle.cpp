@@ -18,6 +18,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 #include "CommonIncludes.h"
+#include "DeviceList.h"
 #include "EngineSettings.h"
 #include "FileParser.h"
 #include "FontEngine.h"
@@ -224,6 +225,8 @@ void GameStateTitle::logic() {
 
 			delete msg;
 			msg = new MessageEngine();
+			delete font;
+			font = getFontEngine();
 			setRequestedGameState(new GameStateTitle());
 		}
 		else if (menu_language->clicked_cancel) {
