@@ -1129,13 +1129,6 @@ void EventManager::executeScript(const std::string& filename, float x, float y) 
 			while (script_file.next()) {
 				if (script_file.new_section && script_file.section == "event") {
 					Event tmp_evnt;
-					tmp_evnt.location.x = tmp_evnt.hotspot.x = static_cast<int>(x);
-					tmp_evnt.location.y = tmp_evnt.hotspot.y = static_cast<int>(y);
-					tmp_evnt.location.w = tmp_evnt.hotspot.w = 1;
-					tmp_evnt.location.h = tmp_evnt.hotspot.h = 1;
-					tmp_evnt.center.x = static_cast<float>(tmp_evnt.location.x) + 0.5f;
-					tmp_evnt.center.y = static_cast<float>(tmp_evnt.location.y) + 0.5f;
-
 					script_evnt.push(tmp_evnt);
 				}
 
@@ -1165,18 +1158,28 @@ void EventManager::executeScript(const std::string& filename, float x, float y) 
 	}
 
 	while (!script_evnt.empty()) {
+		Event& evnt = script_evnt.front();
+
+		// set event location from x/y
+		evnt.location.x = evnt.hotspot.x = static_cast<int>(x);
+		evnt.location.y = evnt.hotspot.y = static_cast<int>(y);
+		evnt.location.w = evnt.hotspot.w = 1;
+		evnt.location.h = evnt.hotspot.h = 1;
+		evnt.center.x = static_cast<float>(evnt.location.x) + 0.5f;
+		evnt.center.y = static_cast<float>(evnt.location.y) + 0.5f;
+
 		// create StatBlocks if we need them
-		EventComponent *ec_power = script_evnt.front().getComponent(EventComponent::POWER);
+		EventComponent *ec_power = evnt.getComponent(EventComponent::POWER);
 		if (ec_power) {
-			ec_power->data[0].Int = mapr->addEventStatBlock(script_evnt.front());
+			ec_power->data[0].Int = mapr->addEventStatBlock(evnt);
 		}
 
-		if (script_evnt.front().delay.getDuration() > 0) {
+		if (evnt.delay.getDuration() > 0) {
 			// handle delayed events
-			mapr->delayed_events.push_back(script_evnt.front());
+			mapr->delayed_events.push_back(evnt);
 		}
-		else if (isActive(script_evnt.front())) {
-			executeEvent(script_evnt.front());
+		else if (isActive(evnt)) {
+			executeEvent(evnt);
 		}
 		script_evnt.pop();
 	}
