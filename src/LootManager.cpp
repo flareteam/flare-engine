@@ -346,7 +346,12 @@ void LootManager::checkLoot(std::vector<EventComponent> &loot_table, FPoint *pos
 			real_chance = real_chance * (pc->stats.get(Stats::ITEM_FIND) + 100.f) / 100.f;
 		}
 
-		if (real_chance >= chance && (ec->status == 0 || (ec->status > 0 && camp->checkStatus(ec->status)))) {
+		bool level_check = true;
+		if (ec->data[LOOT_EC_REQUIRES_LEVEL_MIN].Int > 0 && ec->data[LOOT_EC_REQUIRES_LEVEL_MAX].Int > 0) {
+			level_check = pc->stats.level >= ec->data[LOOT_EC_REQUIRES_LEVEL_MIN].Int && pc->stats.level <= ec->data[LOOT_EC_REQUIRES_LEVEL_MAX].Int;
+		}
+
+		if (real_chance >= chance && level_check && (ec->status == 0 || (ec->status > 0 && camp->checkStatus(ec->status)))) {
 			if (real_chance <= threshold) {
 				if (real_chance != threshold) {
 					possible_ids.clear();
@@ -750,6 +755,16 @@ void LootManager::loadLootTables() {
 				else if (infile.key == "requires_status") {
 					ec->status = camp->registerStatus(Parse::popFirstString(infile.val));
 				}
+				// @ATTR loot.requires_level|int, int : Min player level, Max player level|The player's level must be in this range for the item to drop.
+				else if (infile.key == "requires_level") {
+					ec->data[LOOT_EC_REQUIRES_LEVEL_MIN].Int = std::max(Parse::popFirstInt(infile.val), 0);
+					ec->data[LOOT_EC_REQUIRES_LEVEL_MAX].Int = std::max(Parse::popFirstInt(infile.val), ec->data[LOOT_EC_REQUIRES_LEVEL_MIN].Int);
+				}
+				// @ATTR loot.quantity_per_level|int, int: Min quantity, Max quantity|Multiplied by the player level minus one and added on top of 'quantity'.
+				else if (infile.key == "quantity_per_level") {
+					ec->data[LOOT_EC_QUANTITY_PER_LEVEL_MIN].Int = std::max(Parse::popFirstInt(infile.val), 0);
+					ec->data[LOOT_EC_QUANTITY_PER_LEVEL_MAX].Int = std::max(Parse::popFirstInt(infile.val), ec->data[LOOT_EC_QUANTITY_PER_LEVEL_MIN].Int);
+				}
 			}
 		}
 
@@ -805,7 +820,10 @@ void LootManager::checkLootComponent(EventComponent* ec, FPoint *pos, std::vecto
 
 	std::vector<ItemStack> ex_stacks;
 
-	new_loot.quantity = Math::randBetween(ec->data[LOOT_EC_QUANTITY_MIN].Int, ec->data[LOOT_EC_QUANTITY_MAX].Int);
+	int quantity_min = ec->data[LOOT_EC_QUANTITY_MIN].Int + ((pc->stats.level-1) * ec->data[LOOT_EC_QUANTITY_PER_LEVEL_MIN].Int);
+	int quantity_max = ec->data[LOOT_EC_QUANTITY_MAX].Int + ((pc->stats.level-1) * ec->data[LOOT_EC_QUANTITY_PER_LEVEL_MAX].Int);
+
+	new_loot.quantity = Math::randBetween(quantity_min, quantity_max);
 
 	// an item id of 0 means we should drop currency instead
 	if (ec->id == 0 || ec->id == eset->misc.currency_id) {
