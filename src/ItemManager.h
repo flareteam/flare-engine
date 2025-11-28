@@ -60,6 +60,13 @@ public:
 	float getStep() const;
 	void randomize();
 	void parse(std::string& s);
+	void setBaseFromFloat(float f);
+};
+
+class LevelScaledMinMax {
+public:
+	LevelScaledValue min;
+	LevelScaledValue max;
 };
 
 class LootAnimation {
@@ -259,7 +266,7 @@ public:
 
 	ItemRandomizerDef* randomizer_def;
 
-	FMinMax base_abs;          // minimum/maximum absorb amount
+	LevelScaledMinMax base_abs;          // minimum/maximum absorb amount
 
 	std::string flavor;   // optional flavor text describing the item
 	std::string book;     // book file location
@@ -272,7 +279,7 @@ public:
 	std::string script;
 
 	std::vector<std::string> equip_flags;   // common values include: melee, ranged, mental, shield
-	std::vector<FMinMax> base_dmg; // minimum/maximum damage amount
+	std::vector<LevelScaledMinMax> base_dmg; // minimum/maximum damage amount
 	std::vector<BonusData> bonus;   // stat to increase/decrease e.g. hp, accuracy, speed
 	std::vector<LootAnimation> loot_animation;// the flying loot animation for this item
 	std::vector< std::pair<PowerID, PowerID> > replace_power;        // alter powers when this item is equipped. The first PowerID is replaced with the second.

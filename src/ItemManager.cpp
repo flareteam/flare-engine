@@ -174,6 +174,12 @@ void LevelScaledValue::parse(std::string& s) {
 	}
 }
 
+void LevelScaledValue::setBaseFromFloat(float f) {
+	base = f;
+	base_max = base;
+	base_step = 1;
+}
+
 Item::Item()
 	: name("")
 	, has_name(false)
@@ -358,20 +364,66 @@ void ItemManager::loadItems(const std::string& filename) {
 				infile.error("ItemManager: '%s' is not a known damage type id.", dmg_type_str.c_str());
 			}
 			else {
-				item->base_dmg[dmg_type].min = Parse::popFirstFloat(infile.val);
+				item->base_dmg[dmg_type].min.setBaseFromFloat(Parse::popFirstFloat(infile.val));
 				if (infile.val.length() > 0)
-					item->base_dmg[dmg_type].max = Parse::popFirstFloat(infile.val);
+					item->base_dmg[dmg_type].max.setBaseFromFloat(Parse::popFirstFloat(infile.val));
 				else
 					item->base_dmg[dmg_type].max = item->base_dmg[dmg_type].min;
 			}
 		}
+		else if (infile.key == "dmg_min") {
+			// @ATTR dmg_min|predefined_string, level_scaled_value : Damage type, Min|Same as the 'min' component of the 'dmg' property, but supports level-scaled syntax.
+			std::string dmg_type_str = Parse::popFirstString(infile.val);
+
+			size_t dmg_type = eset->damage_types.list.size();
+			for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
+				if (dmg_type_str == eset->damage_types.list[i].id) {
+					dmg_type = i;
+					break;
+				}
+			}
+
+			if (dmg_type == eset->damage_types.list.size()) {
+				infile.error("ItemManager: '%s' is not a known damage type id.", dmg_type_str.c_str());
+			}
+			else {
+				item->base_dmg[dmg_type].min.parse(infile.val);
+			}
+		}
+		else if (infile.key == "dmg_max") {
+			// @ATTR dmg_max|predefined_string, level_scaled_value : Damage type, Max|Same as the 'max' component of the 'dmg' property, but supports level-scaled syntax.
+			std::string dmg_type_str = Parse::popFirstString(infile.val);
+
+			size_t dmg_type = eset->damage_types.list.size();
+			for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
+				if (dmg_type_str == eset->damage_types.list[i].id) {
+					dmg_type = i;
+					break;
+				}
+			}
+
+			if (dmg_type == eset->damage_types.list.size()) {
+				infile.error("ItemManager: '%s' is not a known damage type id.", dmg_type_str.c_str());
+			}
+			else {
+				item->base_dmg[dmg_type].max.parse(infile.val);
+			}
+		}
 		else if (infile.key == "abs") {
 			// @ATTR abs|float, float : Min, Max|Defines the item absorb value, if only min is specified the absorb value is fixed.
-			item->base_abs.min = Parse::popFirstFloat(infile.val);
+			item->base_abs.min.setBaseFromFloat(Parse::popFirstFloat(infile.val));
 			if (infile.val.length() > 0)
-				item->base_abs.max = Parse::popFirstFloat(infile.val);
+				item->base_abs.max.setBaseFromFloat(Parse::popFirstFloat(infile.val));
 			else
 				item->base_abs.max = item->base_abs.min;
+		}
+		else if (infile.key == "abs_min") {
+			// @ATTR abs_min|level_scaled_value|Same as the 'min' component of the 'abs' property, but supports level-scaled syntax.
+			item->base_abs.min.parse(infile.val);
+		}
+		else if (infile.key == "abs_max") {
+			// @ATTR abs_max|level_scaled_value|Same as the 'max' component of the 'abs' property, but supports level-scaled syntax.
+			item->base_abs.max.parse(infile.val);
 		}
 		else if (infile.key == "requires_level") {
 			// @ATTR requires_level|list(level_scaled_value)|The hero's level must match or exceed this value in order to equip this item.
@@ -1122,19 +1174,19 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 
 	// damage
 	for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
-		if (item->base_dmg[i].max > 0) {
+		if (item->base_dmg[i].max.get() > 0) {
 			std::stringstream dmg_str;
 			dmg_str << eset->damage_types.list[i].name;
-			dmg_str << ": " << Utils::createMinMaxString(item->base_dmg[i].min, item->base_dmg[i].max, eset->number_format.item_tooltips);
+			dmg_str << ": " << Utils::createMinMaxString(item->base_dmg[i].min.get(), item->base_dmg[i].max.get(), eset->number_format.item_tooltips);
 			tip.addText(dmg_str.str());
 		}
 	}
 
 	// absorb
-	if (item->base_abs.max > 0) {
+	if (item->base_abs.max.get() > 0) {
 		std::stringstream abs_str;
 		abs_str << msg->get("Absorb");
-		abs_str << ": " << Utils::createMinMaxString(item->base_abs.min, item->base_abs.max, eset->number_format.item_tooltips);
+		abs_str << ": " << Utils::createMinMaxString(item->base_abs.min.get(), item->base_abs.max.get(), eset->number_format.item_tooltips);
 		tip.addText(abs_str.str());
 	}
 
@@ -1775,6 +1827,14 @@ void Item::updateLevelScaling() {
 
 	for (size_t i = 0; i < bonus.size(); ++i) {
 		bonus[i].value.item_level = level;
+	}
+
+	base_abs.min.item_level = level;
+	base_abs.max.item_level = level;
+
+	for (size_t i = 0; i < base_dmg.size(); ++i) {
+		base_dmg[i].min.item_level = level;
+		base_dmg[i].max.item_level = level;
 	}
 }
 
