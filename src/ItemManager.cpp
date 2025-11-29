@@ -1669,14 +1669,14 @@ ItemID ItemManager::getExtendedItem(ItemID item_id) {
 
 			// set the item level
 			if (option->level_src == ItemRandomizerDef::Option::LEVEL_SRC_BASE) {
-				int min = items[item_id]->level + option->level_range_min;
-				int max = items[item_id]->level + option->level_range_max;
+				int min = std::max(1, items[item_id]->level + option->level_range_min);
+				int max = std::max(min, items[item_id]->level + option->level_range_max);
 
 				items[extended_item]->level = Math::randBetween(min, max);
 			}
 			else if (option->level_src == ItemRandomizerDef::Option::LEVEL_SRC_HERO) {
-				int min = pc->stats.level + option->level_range_min;
-				int max = pc->stats.level + option->level_range_max;
+				int min = std::max(1, pc->stats.level + option->level_range_min);
+				int max = std::min(eset->xp.getMaxLevel(), std::max(min, pc->stats.level + option->level_range_max));
 
 				items[extended_item]->level = Math::randBetween(min, max);
 			}
