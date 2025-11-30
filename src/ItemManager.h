@@ -242,6 +242,7 @@ public:
 	bool has_name;        // flag that is set when the item name is parsed
 	bool book_is_readable; // whether to display "use" or "read" in the tooltip
 	bool quest_item;
+	bool is_foreign; // used to track extended items for clean up during save
 
 	int level;            // rough estimate of quality, used in the loot algorithm
 	int icon;             // icon index on small pixel sheet

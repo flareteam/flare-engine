@@ -42,6 +42,7 @@ public:
 
 	void setItems(const std::string& s);
 	void setQuantities(const std::string& s);
+	void setForeign(bool is_foreign);
 	int getSlotNumber();
 	std::string getItems();
 	std::string getQuantities();

@@ -179,6 +179,7 @@ Item::Item()
 	, has_name(false)
 	, book_is_readable(true)
 	, quest_item(false)
+	, is_foreign(true)
 	, level(0)
 	, icon(0)
 	, max_quantity(INT_MAX)
@@ -1656,6 +1657,8 @@ ItemID ItemManager::getExtendedItem(ItemID item_id) {
 		}
 
 		items[extended_item]->randomizer_def = NULL;
+
+		items[extended_item]->is_foreign = false;
 
 		return extended_item;
 	}

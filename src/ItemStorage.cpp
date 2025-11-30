@@ -77,6 +77,14 @@ void ItemStorage::setQuantities(const std::string& s) {
 	}
 }
 
+void ItemStorage::setForeign(bool is_foreign) {
+	for (int i = 0; i < slot_number; ++i) {
+		if (items->isValid(storage[i].item) && items->items[storage[i].item]->parent) {
+			items->items[storage[i].item]->is_foreign = is_foreign;
+		}
+	}
+}
+
 int ItemStorage::getSlotNumber() {
 	return slot_number;
 }

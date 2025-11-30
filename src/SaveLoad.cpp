@@ -294,7 +294,7 @@ void SaveLoad::saveGame() {
 				}
 			}
 
-			if (!item_in_storage)
+			if (!item_in_storage && !item->is_foreign)
 				continue;
 
 			outfile << "[item]" << std::endl;
@@ -434,6 +434,7 @@ void SaveLoad::loadGame() {
 			}
 			else if (infile.key == "equipped") {
 				menu->inv->inventory[MenuInventory::EQUIPMENT].setItems(infile.val);
+				menu->inv->inventory[MenuInventory::EQUIPMENT].setForeign(false);
 			}
 			else if (infile.key == "equipped_quantity") {
 				menu->inv->inventory[MenuInventory::EQUIPMENT].setQuantities(infile.val);
@@ -443,6 +444,7 @@ void SaveLoad::loadGame() {
 			}
 			else if (infile.key == "carried") {
 				menu->inv->inventory[MenuInventory::CARRIED].setItems(infile.val);
+				menu->inv->inventory[MenuInventory::EQUIPMENT].setForeign(false);
 			}
 			else if (infile.key == "carried_quantity") {
 				menu->inv->inventory[MenuInventory::CARRIED].setQuantities(infile.val);
@@ -665,6 +667,9 @@ void SaveLoad::loadStash() {
 			while (infile.next()) {
 				if (infile.key == "item") {
 					menu->stash->tabs[i].stock.setItems(infile.val);
+					if (menu->stash->tabs[i].is_private) {
+						menu->stash->tabs[i].stock.setForeign(false);
+					}
 				}
 				else if (infile.key == "quantity") {
 					menu->stash->tabs[i].stock.setQuantities(infile.val);
