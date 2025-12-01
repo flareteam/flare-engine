@@ -35,6 +35,8 @@ class TooltipData;
 
 class LevelScaledValue {
 public:
+	bool randomized;
+
 	int item_level;
 
 	float base;
@@ -61,6 +63,8 @@ public:
 	void randomize();
 	void parse(std::string& s);
 	void setBaseFromFloat(float f);
+	void clear();
+	std::string serialize(bool is_multiplier);
 };
 
 class LevelScaledMinMax {

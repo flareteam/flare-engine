@@ -300,9 +300,46 @@ void SaveLoad::saveGame() {
 			outfile << "[item]" << std::endl;
 			outfile << "id=" << i << "," << item->parent << std::endl;
 			outfile << "level=" << item->level << std::endl;
+
 			if (item->quality < items->item_qualities.size() && !items->item_qualities[item->quality].name.empty()) {
 				outfile << "quality=" << items->item_qualities[item->quality].id << std::endl;
 			}
+
+			if (item->requires_level.randomized) {
+				outfile << "requires_level=" << item->requires_level.serialize(false) << std::endl;
+			}
+
+			for (size_t j = 0; j < eset->primary_stats.list.size(); ++j) {
+				if (item->requires_stat[j].randomized) {
+					outfile << "requires_stat=" << eset->primary_stats.list[j].id << "," << item->requires_stat[j].serialize(false) << std::endl;
+				}
+			}
+
+			if (item->price.randomized) {
+				outfile << "price=" << item->price.serialize(false) << std::endl;
+			}
+
+			if (item->price_sell.randomized) {
+				outfile << "price=" << item->price_sell.serialize(false) << std::endl;
+			}
+
+			if (item->base_abs.min.randomized) {
+				outfile << "abs_min=" << item->base_abs.min.serialize(false) << std::endl;
+			}
+
+			if (item->base_abs.max.randomized) {
+				outfile << "abs_max=" << item->base_abs.max.serialize(false) << std::endl;
+			}
+
+			for (size_t j = 0; j < eset->damage_types.list.size(); ++j) {
+				if (item->base_dmg[j].min.randomized) {
+					outfile << "dmg_min=" << eset->damage_types.list[j].id << "," << item->base_dmg[j].min.serialize(false) << std::endl;
+				}
+				if (item->base_dmg[j].max.randomized) {
+					outfile << "dmg_max=" << eset->damage_types.list[j].id << "," << item->base_dmg[j].max.serialize(false) << std::endl;
+				}
+			}
+
 			for (size_t j = 0; j < item->bonus.size(); ++j) {
 				BonusData* bonus = &(item->bonus[j]);
 
@@ -335,36 +372,8 @@ void SaveLoad::saveGame() {
 				else
 					continue;
 
-				if (bonus->value.base > 0) {
-					outfile << ",base:";
-					if (bonus->is_multiplier)
-						outfile << bonus->value.base * 100 << "%";
-					else
-						outfile << bonus->value.base;
-				}
-				if (bonus->value.per_item_level > 0) {
-					outfile << ",item_level:";
-					if (bonus->is_multiplier)
-						outfile << bonus->value.per_item_level * 100 << "%";
-					else
-						outfile << bonus->value.per_item_level;
-				}
-				if (bonus->value.per_player_level > 0) {
-					outfile << ",player_level:";
-					if (bonus->is_multiplier)
-						outfile << bonus->value.per_player_level * 100 << "%";
-					else
-						outfile << bonus->value.per_player_level;
-				}
-				for (size_t k = 0; k < bonus->value.per_player_primary.size(); ++k) {
-					if (bonus->value.per_player_primary[k] > 0) {
-						outfile << "," << eset->primary_stats.list[k].id << ":";
-						if (bonus->is_multiplier)
-							outfile << bonus->value.per_player_primary[k] * 100 << "%";
-						else
-							outfile << bonus->value.per_player_primary[k];
-					}
-				}
+				outfile << "," << bonus->value.serialize(bonus->is_multiplier);
+
 				outfile << std::endl;
 			}
 			outfile << std::endl;

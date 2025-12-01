@@ -53,6 +53,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <cassert>
 #include <climits>
 #include <cstring>
+#include <sstream>
 
 bool compareItemStack(const ItemStack &stack1, const ItemStack &stack2) {
 	return stack1.item < stack2.item;
@@ -65,7 +66,8 @@ ItemStack::ItemStack(const Point& _p)
 {}
 
 LevelScaledValue::LevelScaledValue()
-	: item_level(1)
+	: randomized(false)
+	, item_level(1)
 	, base(0)
 	, base_max(0)
 	, base_step(1)
@@ -108,19 +110,31 @@ void LevelScaledValue::randomize() {
 	// TODO add a source param?
 	int step_count;
 
+	if (base != base_max)
+		randomized = true;
+
 	step_count = static_cast<int>((base_max - base) / base_step);
 	base += static_cast<float>(Math::randBetween(0, step_count)) * base_step;
 	base_max = base;
 
+	if (per_item_level != per_item_level_max)
+		randomized = true;
+
 	step_count = static_cast<int>((per_item_level_max - per_item_level) / per_item_level_step);
 	per_item_level += static_cast<float>(Math::randBetween(0, step_count)) * per_item_level_step;
 	per_item_level_max = per_item_level;
+
+	if (per_player_level != per_player_level_max)
+		randomized = true;
 
 	step_count = static_cast<int>((per_player_level_max - per_player_level) / per_player_level_step);
 	per_player_level += static_cast<float>(Math::randBetween(0, step_count)) * per_player_level_step;
 	per_player_level_max = per_player_level;
 
 	for (size_t i = 0; i < per_player_primary.size(); ++i) {
+		if (per_player_primary[i] != per_player_primary_max[i])
+			randomized = true;
+
 		step_count = static_cast<int>((per_player_primary_max[i] - per_player_primary[i]) / per_player_primary_step[i]);
 		per_player_primary[i] += static_cast<float>(Math::randBetween(0, step_count)) * per_player_primary_step[i];
 		per_player_primary_max[i] = per_player_primary[i];
@@ -128,6 +142,8 @@ void LevelScaledValue::randomize() {
 }
 
 void LevelScaledValue::parse(std::string& s) {
+	clear();
+
 	std::string section = Parse::popFirstString(s);
 
 	while (!section.empty()) {
@@ -178,6 +194,88 @@ void LevelScaledValue::setBaseFromFloat(float f) {
 	base = f;
 	base_max = base;
 	base_step = 1;
+}
+
+void LevelScaledValue::clear() {
+	randomized = false;
+
+	item_level = 1;
+
+	base = 0;
+	base_max = 0;
+	base_step = 1;
+
+	per_item_level = 0;
+	per_item_level_max = 0;
+	per_item_level_step = 1;
+
+	per_player_level = 0;
+	per_player_level_max = 0;
+	per_player_level_step = 1;
+
+	for (size_t i = 0; i < per_player_primary.size(); ++i) {
+		per_player_primary[i] = 0;
+		per_player_primary_max[i] = 0;
+		per_player_primary_step[i] = 1;
+	}
+}
+
+std::string LevelScaledValue::serialize(bool is_multiplier) {
+	std::stringstream out;
+	bool comma = false;
+
+	if (base != 0 || base_max != 0) {
+		out << "base:";
+		if (is_multiplier)
+			out << base * 100 << "%";
+		else
+			out << base;
+
+		comma = true;
+	}
+
+	if (per_item_level != 0 || per_item_level_max != 0) {
+		if (comma)
+			out << ',';
+
+		out << "item_level:";
+		if (is_multiplier)
+			out << per_item_level * 100 << "%";
+		else
+			out << per_item_level;
+
+		comma = true;
+	}
+
+	if (per_player_level != 0 || per_player_level_max != 0) {
+		if (comma)
+			out << ',';
+
+		out << "player_level:";
+		if (is_multiplier)
+			out << per_player_level * 100 << "%";
+		else
+			out << per_player_level;
+
+		comma = true;
+	}
+
+	for (size_t i = 0; i < per_player_primary.size(); ++i) {
+		if (per_player_primary[i] != 0 || per_player_primary_max[i] != 0) {
+			if (comma)
+				out << ',';
+
+			out << eset->primary_stats.list[i].id << ":";
+			if (is_multiplier)
+				out << per_player_primary[i] * 100 << "%";
+			else
+				out << per_player_primary[i];
+
+			comma = true;
+		}
+	}
+
+	return out.str();
 }
 
 Item::Item()
@@ -1687,6 +1785,22 @@ ItemID ItemManager::getExtendedItem(ItemID item_id) {
 		// so we can run updateLevelScaling() before that to avoid iterating over the bonuses twice
 		items[extended_item]->updateLevelScaling();
 
+		items[extended_item]->requires_level.randomize();
+		items[extended_item]->price.randomize();
+		items[extended_item]->price_sell.randomize();
+
+		items[extended_item]->base_abs.min.randomize();
+		items[extended_item]->base_abs.max.randomize();
+
+		for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
+			items[extended_item]->base_dmg[i].min.randomize();
+			items[extended_item]->base_dmg[i].max.randomize();
+		}
+
+		for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
+			items[extended_item]->requires_stat[i].randomize();
+		}
+
 		bonus_count = std::min(bonus_count, ird->bonus.size());
 
 		std::vector<size_t> bonus_ids(ird->bonus.size(), 0);
@@ -1761,6 +1875,59 @@ void ItemManager::loadExtendedItems(const std::string& filename) {
 		}
 		else if (infile.key == "quality") {
 			item->quality = getItemQualityIndexByString(infile.val);
+		}
+		else if (infile.key == "requires_level") {
+			item->requires_level.parse(infile.val);
+
+			// scaled values on extended items are flagged as randomized so they will be serialized when saving
+			item->requires_level.randomized = true;
+		}
+		else if (infile.key == "requires_stat") {
+			std::string stat_id = Parse::popFirstString(infile.val);
+			size_t req_stat_index = eset->primary_stats.getIndexByID(stat_id);
+
+			if (req_stat_index < eset->primary_stats.list.size()) {
+				item->requires_stat[req_stat_index].parse(infile.val);
+				item->requires_stat[req_stat_index].randomized = true;
+			}
+		}
+		else if (infile.key == "price") {
+			item->price.parse(infile.val);
+			item->price.randomized = true;
+		}
+		else if (infile.key == "price_sell") {
+			item->price_sell.parse(infile.val);
+			item->price_sell.randomized = true;
+		}
+		else if (infile.key == "abs_min") {
+			item->base_abs.min.parse(infile.val);
+			item->base_abs.min.randomized = true;
+		}
+		else if (infile.key == "abs_max") {
+			item->base_abs.max.parse(infile.val);
+			item->base_abs.max.randomized = true;
+		}
+		else if (infile.key == "dmg_min") {
+			std::string dmg_id = Parse::popFirstString(infile.val);
+
+			for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
+				if (dmg_id == eset->damage_types.list[i].id) {
+					item->base_dmg[i].min.parse(infile.val);
+					item->base_dmg[i].min.randomized = true;
+					break;
+				}
+			}
+		}
+		else if (infile.key == "dmg_max") {
+			std::string dmg_id = Parse::popFirstString(infile.val);
+
+			for (size_t i = 0; i < eset->damage_types.list.size(); ++i) {
+				if (dmg_id == eset->damage_types.list[i].id) {
+					item->base_dmg[i].max.parse(infile.val);
+					item->base_dmg[i].max.randomized = true;
+					break;
+				}
+			}
 		}
 		else if (infile.key == "bonus") {
 			BonusData bdata;
