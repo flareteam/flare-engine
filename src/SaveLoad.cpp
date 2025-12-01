@@ -444,7 +444,7 @@ void SaveLoad::loadGame() {
 			}
 			else if (infile.key == "carried") {
 				menu->inv->inventory[MenuInventory::CARRIED].setItems(infile.val);
-				menu->inv->inventory[MenuInventory::EQUIPMENT].setForeign(false);
+				menu->inv->inventory[MenuInventory::CARRIED].setForeign(false);
 			}
 			else if (infile.key == "carried_quantity") {
 				menu->inv->inventory[MenuInventory::CARRIED].setQuantities(infile.val);
