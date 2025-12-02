@@ -206,7 +206,7 @@ void GameStateTitle::logic() {
 		menu_language->show();
 		menu_language->action_list->select(language_id);
 	}
-	else if (!settings->setup_mousemove && !menu_movement_type->visible) {
+	else if (!settings->setup_mousemove && menu_movement_type && !menu_movement_type->visible) {
 		menu_movement_type->show();
 	}
 
