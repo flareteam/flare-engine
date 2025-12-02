@@ -91,7 +91,7 @@ code {
 
 <p><code>stat_id</code>, a string that can be any of the following: A base stat (e.g. <code>hp</code> or <code>avoidance</code>); A min or max damage type from <code>engine/damage_types.txt</code> (e.g. <code>dmg_melee_min</code> or <code>dmg_ment_max</code>); An elemental resistance from <code>engine/elements.txt</code>. To use an element as a resistance, <code>_resist</code> is appened to the element id (e.g. <code>fire_resist</code>)</p>
 
-<p><code>level_scaled_value</code>, a string representing a key/value pair that is delimited by a colon (':'). The first half represents the scaling method, and can be one of the following values: <code>base</code>, <code>player_level</code>, <code>item_level</code>, or a primary stat ID. The second half is the value, which is a float. For convenience, it is possible to specify only the value part to define the 'base' value (e.g. <code>price=10</code> is the same as <code>price=base:10</code>). Level scaling assumes level 1 is included in the base. So a level 5 item with <code>price=item_level:1</code> would equate to 4, not 5.</p>
+<p><code>level_scaled_value</code>, a string representing a key/value pair that is delimited by a colon (':'). The first half represents the scaling method, and can be one of the following values: <code>base</code>, <code>player_level</code>, <code>item_level</code>, or a primary stat ID. The second half is the value, which is a float. For convenience, it is possible to specify only the value part to define the 'base' value (e.g. <code>price=10</code> is the same as <code>price=base:10</code>). Level scaling assumes level 1 is included in the base. So a level 5 item with <code>price=item_level:1</code> would equate to 4, not 5. Additionally, the result can be rounded and/or clamped. To round, use <code>round:true</code>. To set the minimum to, for example, 0, use <code>min:0</code>. Likewise, <code>max:1</code> would set the maximum to 1.</p>
 <hr />
 
 <h4>AnimationSet</h4>
@@ -1066,7 +1066,15 @@ code {
 
 <p><strong>dmg</strong> | <code>predefined_string, float, float : Damage type, Min, Max</code> | Defines the item's base damage type and range. Max may be ommitted and will default to Min.</p>
 
+<p><strong>dmg_min</strong> | <code>predefined_string, level_scaled_value : Damage type, Min</code> | Same as the 'min' component of the 'dmg' property, but supports level-scaled syntax.</p>
+
+<p><strong>dmg_max</strong> | <code>predefined_string, level_scaled_value : Damage type, Max</code> | Same as the 'max' component of the 'dmg' property, but supports level-scaled syntax.</p>
+
 <p><strong>abs</strong> | <code>float, float : Min, Max</code> | Defines the item absorb value, if only min is specified the absorb value is fixed.</p>
+
+<p><strong>abs_min</strong> | <code>level_scaled_value</code> | Same as the 'min' component of the 'abs' property, but supports level-scaled syntax.</p>
+
+<p><strong>abs_max</strong> | <code>level_scaled_value</code> | Same as the 'max' component of the 'abs' property, but supports level-scaled syntax.</p>
 
 <p><strong>requires_level</strong> | <code>list(level_scaled_value)</code> | The hero's level must match or exceed this value in order to equip this item.</p>
 
@@ -1195,6 +1203,10 @@ code {
 <p><strong>loot.quantity</strong> | <code>int, int : Min quantity, Max quantity (optional)</code> | The quantity of item in the dropped loot stack.</p>
 
 <p><strong>loot.requires_status</strong> | <code>string</code> | A single campaign status that is required for the item to be able to drop.</p>
+
+<p><strong>loot.requires_level</strong> | <code>int, int : Min player level, Max player level</code> | The player's level must be in this range for the item to drop.</p>
+
+<p><strong>loot.quantity_per_level</strong> | <code>int, int : Min quantity, Max quantity</code> | Multiplied by the player level minus one and added on top of 'quantity'.</p>
 
 <hr />
 

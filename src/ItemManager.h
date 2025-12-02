@@ -36,6 +36,9 @@ class TooltipData;
 class LevelScaledValue {
 public:
 	bool randomized;
+	bool result_round;
+	bool result_min_enabled;
+	bool result_max_enabled;
 
 	int item_level;
 
@@ -50,6 +53,9 @@ public:
 	float per_player_level;
 	float per_player_level_max;
 	float per_player_level_step;
+
+	float result_min;
+	float result_max;
 
 	std::vector<float> per_player_primary;
 	std::vector<float> per_player_primary_max;

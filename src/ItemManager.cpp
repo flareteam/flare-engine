@@ -67,6 +67,9 @@ ItemStack::ItemStack(const Point& _p)
 
 LevelScaledValue::LevelScaledValue()
 	: randomized(false)
+	, result_round(false)
+	, result_min_enabled(false)
+	, result_max_enabled(false)
 	, item_level(1)
 	, base(0)
 	, base_max(0)
@@ -77,6 +80,8 @@ LevelScaledValue::LevelScaledValue()
 	, per_player_level(0)
 	, per_player_level_max(0)
 	, per_player_level_step(1)
+	, result_min(0)
+	, result_max(0)
 	, per_player_primary(eset->primary_stats.list.size(), 0)
 	, per_player_primary_max(eset->primary_stats.list.size(), 0)
 	, per_player_primary_step(eset->primary_stats.list.size(), 1)
@@ -87,15 +92,28 @@ float LevelScaledValue::get() const {
 	for (size_t i = 0; i < per_player_primary.size(); ++i) {
 		result += per_player_primary[i] * static_cast<float>(pc->stats.get_primary(i)-1);
 	}
-	return result;
+
+	if (result_max_enabled)
+		result = std::min(result, result_max);
+	if (result_min_enabled)
+		result = std::max(result, result_min);
+
+	return (result_round ? roundf(result) : result);
 }
 
+// TODO unused?
 float LevelScaledValue::getMax() const {
 	float result = base_max + (per_item_level_max * static_cast<float>(item_level-1)) + (per_player_level_max * static_cast<float>(pc->stats.level-1));
 	for (size_t i = 0; i < per_player_primary_max.size(); ++i) {
 		result += per_player_primary_max[i] * static_cast<float>(pc->stats.get_primary(i)-1);
 	}
-	return result;
+
+	if (result_max_enabled)
+		result = std::min(result, result_max);
+	if (result_min_enabled)
+		result = std::max(result, result_min);
+
+	return (result_round ? roundf(result) : result);
 }
 
 float LevelScaledValue::getStep() const {
@@ -169,6 +187,17 @@ void LevelScaledValue::parse(std::string& s) {
 				per_player_level_max = std::max(per_player_level, Parse::popFirstFloat(section, ':'));
 				std::string step_str = Parse::popFirstString(section, ':');
 				per_player_level_step = Parse::toFloat(step_str, 1);
+			}
+			else if (scale_type == "round") {
+				result_round = Parse::toBool(Parse::popFirstString(section, ':'));
+			}
+			else if (scale_type == "min") {
+				result_min = Parse::popFirstFloat(section, ':');
+				result_min_enabled = true;
+			}
+			else if (scale_type == "max") {
+				result_max = Parse::popFirstFloat(section, ':');
+				result_max_enabled = true;
 			}
 			else {
 				// player primary stats
@@ -273,6 +302,33 @@ std::string LevelScaledValue::serialize(bool is_multiplier) {
 
 			comma = true;
 		}
+	}
+
+	if (result_round) {
+		if (comma)
+			out << ',';
+
+		out << "round:true";
+
+		comma = true;
+	}
+
+	if (result_min_enabled) {
+		if (comma)
+			out << ',';
+
+		out << "min:" << result_min;
+
+		comma = true;
+	}
+
+	if (result_max_enabled) {
+		if (comma)
+			out << ',';
+
+		out << "max:" << result_max;
+
+		comma = true;
 	}
 
 	return out.str();
