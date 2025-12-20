@@ -709,6 +709,17 @@ do_last_NE_tile:
 					bool is_behind_SW = false;
 					bool is_behind_NE = false;
 
+					// HACK: the code here that determines if a Renderable is going to be behind the SW or NE tile does not account for entities that are made up of multiple Renderables
+					// this primarily affects the player, who is made up of several pieces of equipment. So we use the hero_bounds rect here to make sure our test encompasses the entire sprite
+					// HOWEVER, non-player characters also support multiple layers, so this "fix" is incomplete
+					if (r_cursor->type == Renderable::TYPE_HERO) {
+						r_cursor_left.x = hero_bounds.x;
+						r_cursor_left.y = hero_bounds.y + hero_bounds.h;
+
+						r_cursor_right.x = hero_bounds.x + hero_bounds.w;
+						r_cursor_right.y = hero_bounds.y + hero_bounds.h;
+					}
+
 					// check left of r_cursor
 					if (Utils::isWithinRect(tile_S_bounds, r_cursor_right) && Utils::isWithinRect(tile_SW_bounds, r_cursor_left)) {
 						is_behind_SW = true;
