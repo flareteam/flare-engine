@@ -52,17 +52,6 @@ jobs:
           CXX: ${{ matrix.compiler.cxx }}
         run: cmake . && make
 
-      - name: IRC notifications
-        if: github.repository_owner == 'flareteam' && steps.build.outcome != 'success'
-        continue-on-error: true
-        uses: rectalogic/notify-irc@v2
-        with:
-          server: 'irc.freegamedev.net'
-          port: 6697
-          channel: '#flarerpg'
-          nickname: 'flareteam-github'
-          message: "${{ github.repository }} (${{ github.sha }}): ${{ matrix.compiler.cxx }} build failed. ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-
       - name: Check Status
         if: steps.build.outcome != 'success'
         run: exit 1
@@ -80,18 +69,3 @@ jobs:
 
       - name: Run cppcheck
         run: cppcheck --quiet --verbose --enable=all `git ls-files src/\*.cpp`
-
-  irc_notification:
-    needs: build
-    runs-on: ubuntu-22.04
-    steps:
-      - name: IRC notifications
-        if: github.repository_owner == 'flareteam'
-        continue-on-error: true
-        uses: rectalogic/notify-irc@v2
-        with:
-          server: 'irc.freegamedev.net'
-          port: 6697
-          channel: '#flarerpg'
-          nickname: 'flareteam-github'
-          message: "${{ github.repository }} (${{ github.sha }}): Build passed. ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
