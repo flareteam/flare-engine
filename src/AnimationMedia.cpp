@@ -54,6 +54,10 @@ Image* AnimationMedia::getImageFromKey(const std::string& key) {
 	if (it != sprites.end()) {
 		if (it->second == NULL) {
 			it->second = render_device->loadImage(paths[key], RenderDevice::ERROR_NORMAL);
+			if (!it->second) {
+				sprites.erase(it);
+				return NULL;
+			}
 		}
 		return it->second;
 	}
@@ -70,7 +74,8 @@ Image* AnimationMedia::getImageFromKey(const std::string& key) {
 void AnimationMedia::unref() {
     std::map<std::string, Image*>::iterator it;
     for (it = sprites.begin(); it != sprites.end(); ++it) {
-        it->second->unref();
+		if (it->second)
+			it->second->unref();
     }
 	sprites.clear();
 }

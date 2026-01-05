@@ -720,6 +720,7 @@ int SDLSoftwareRenderDevice::loadQueuedImage(void* data) {
 	QueuedImage* image = static_cast<QueuedImage*>(data);
 	SDL_LockMutex(image->mutex);
 	image->surface = IMG_Load(image->loc_filename.c_str());
+	image->load_attempted = true;
 	SDL_CondSignal(image->loaded);
 	SDL_UnlockMutex(image->mutex);
 	return 0;
@@ -740,7 +741,7 @@ void SDLSoftwareRenderDevice::loadQueuedImages() {
 		SDLSoftwareImage *image = new SDLSoftwareImage(this);
 		if (!image) return;
 
-		if (!image_queue[i].surface) {
+		if (!image_queue[i].surface && !image_queue[i].load_attempted) {
 			SDL_CondWait(image_queue[i].loaded, image_queue[i].mutex);
 		}
 

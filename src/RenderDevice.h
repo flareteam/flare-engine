@@ -177,6 +177,7 @@ class QueuedImage {
 public:
 	void* surface;
 	int error_type;
+	bool load_attempted;
 	std::string filename;
 	std::string loc_filename;
 	SDL_mutex* mutex;
@@ -185,6 +186,7 @@ public:
 	QueuedImage()
 		: surface(NULL)
 		, error_type(0)
+		, load_attempted(false)
 		, filename()
 		, loc_filename()
 		, mutex(NULL)
