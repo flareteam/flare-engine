@@ -39,13 +39,20 @@ public:
 		MODE_LEVEL = 3
 	};
 
+	enum {
+		RATIO_SOURCE_DEFAULT = 0,
+		RATIO_SOURCE_HERO = 1,
+	};
+
 	uint8_t mode;
+	uint8_t ratio_source;
 	float ratio;
 	size_t stat;
 	bool is_legacy;
 
 	SpawnLevel()
 		: mode(MODE_DEFAULT)
+		, ratio_source(0)
 		, ratio(0)
 		, stat(0)
 		, is_legacy(false)

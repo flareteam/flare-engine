@@ -19,6 +19,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 
+#include "Avatar.h"
 #include "CampaignManager.h"
 #include "EffectManager.h"
 #include "EngineSettings.h"
@@ -45,6 +46,14 @@ void SpawnLevel::parse(FileParser &infile) {
 	else if (next == "fixed") mode = MODE_FIXED;
 	else if (next == "source_stat") mode = MODE_STAT;
 	else if (next == "source_level") mode = MODE_LEVEL;
+	else if (next == "hero_stat") {
+		mode = MODE_STAT;
+		ratio_source = RATIO_SOURCE_HERO;
+	}
+	else if (next == "hero_level") {
+		mode = MODE_LEVEL;
+		ratio_source = RATIO_SOURCE_HERO;
+	}
 	else if (next == "stat") {
 		mode = MODE_STAT;
 		is_legacy = true;
@@ -93,6 +102,10 @@ void SpawnLevel::parse(FileParser &infile) {
 void SpawnLevel::applyToStatBlock(StatBlock *src_stats, StatBlock *ratio_stats) {
 	if (!src_stats)
 		return;
+
+	if (pc && ratio_source == RATIO_SOURCE_HERO) {
+		ratio_stats = &pc->stats;
+	}
 
 	if (mode == MODE_FIXED) {
 		src_stats->level = static_cast<int>(ratio);
@@ -563,7 +576,7 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 		}
 	}
 	else if (infile.key == "spawn_level") {
-		// @ATTR enemygroup.spawn_level|["default", "fixed", "source_level", "source_stat"], float, predefined_string : Mode, Multiplier, Primary stat|The level of spawned creatures. The need for the last two parameters depends on the mode being used. The "default" mode will just use the entity's normal level and doesn't require any additional parameters. The "fixed" mode sets the multiplier as the enemy level. The "source_level" mode multiplies with the player's level. The "source_stat" mode multiplies by one of the player's primary stats. The stat is defined with the last parameter, which is simply the ID of the primary stat that should be used for scaling.
+		// @ATTR enemygroup.spawn_level|["default", "fixed", "source_level", "source_stat", "hero_level", "hero_stat"], float, predefined_string : Mode, Multiplier, Primary stat|The level of spawned creatures. The need for the last two parameters depends on the mode being used. The "default" mode will just use the entity's normal level and doesn't require any additional parameters. The "fixed" mode sets the multiplier as the enemy level. The level modes multiply with the target's level. The stat modes multiply by one of the target's primary stats. The stat is defined with the last parameter, which is simply the ID of the primary stat that should be used for scaling. Because the map has no level/stats of its own, the source modes use the hero's level/stats.
 		group->spawn_level.parse(infile);
 	}
 	else {
