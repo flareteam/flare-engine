@@ -47,7 +47,7 @@ public:
 	void setVolumeMusic(int value);
 	bool isPlayingMusic();
 
-	void logic(const FPoint& center);
+	void logic();
 	void reset();
 
 	SoundID getLastPlayedSID();
@@ -65,12 +65,9 @@ private:
 	static void channel_finished(int channel);
 	void on_channel_finished(int channel);
 
-	int SetChannelPosition(int channel, Sint16 angle, Uint8 distance);
-
 	SoundMap sounds;
 	VirtualChannelMap channels;
 	PlaybackMap playback;
-	FPoint lastPos;
 
 	Mix_Music* music;
 	std::string music_filename;

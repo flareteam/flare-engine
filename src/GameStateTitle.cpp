@@ -213,8 +213,6 @@ void GameStateTitle::logic() {
 	if (inpt->window_resized)
 		refreshWidgets();
 
-	snd->logic(FPoint(0,0));
-
 	if (menu_language && menu_language->visible) {
 		menu_language->logic();
 

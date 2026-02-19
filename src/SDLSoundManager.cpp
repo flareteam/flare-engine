@@ -23,10 +23,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  *
 **/
 
+#include "Avatar.h"
 #include "CommonIncludes.h"
 #include "EngineSettings.h"
 #include "ModManager.h"
 #include "Settings.h"
+#include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "SDLSoundManager.h"
 #include "UtilsMath.h"
@@ -71,13 +73,11 @@ SDLSoundManager::~SDLSoundManager() {
 	Mix_CloseAudio();
 }
 
-void SDLSoundManager::logic(const FPoint& center) {
+void SDLSoundManager::logic() {
 
 	PlaybackMapIterator it = playback.begin();
 	if (it == playback.end())
 		return;
-
-	lastPos = center;
 
 	std::vector<int> cleanup;
 
@@ -97,25 +97,28 @@ void SDLSoundManager::logic(const FPoint& center) {
 		}
 
 		/* control mixing playback depending on distance */
-		float v = Utils::calcDist(center, it->second.location) / static_cast<float>(eset->misc.sound_falloff);
-		if (it->second.loop) {
-			if (v < 1.0 && it->second.paused) {
-				Mix_Resume(it->first);
-				it->second.paused = false;
+		Uint8 dist = 0;
+		if (pc && eset->misc.sound_falloff > 0) {
+			float v = Utils::calcDist(pc->stats.pos, it->second.location) / static_cast<float>(eset->misc.sound_falloff);
+			if (it->second.loop) {
+				if (v < 1.0 && it->second.paused) {
+					Mix_Resume(it->first);
+					it->second.paused = false;
+				}
+				else if (v > 1.0 && !it->second.paused) {
+					Mix_Pause(it->first);
+					it->second.paused = true;
+					++it;
+					continue;
+				}
 			}
-			else if (v > 1.0 && !it->second.paused) {
-				Mix_Pause(it->first);
-				it->second.paused = true;
-				++it;
-				continue;
-			}
+
+			/* update sound mix with new distance/location to hero */
+			v = std::min<float>(std::max<float>(v, 0.0f), 1.0f);
+			dist = Uint8(255.0 * v);
 		}
 
-		/* update sound mix with new distance/location to hero */
-		v = std::min<float>(std::max<float>(v, 0.0f), 1.0f);
-		Uint8 dist = Uint8(255.0 * v);
-
-		SetChannelPosition(it->first, 0, dist);
+		Mix_SetPosition(it->first, 0, dist);
 		++it;
 	}
 
@@ -150,7 +153,7 @@ void SDLSoundManager::reset() {
 
 		++it;
 	}
-	logic(FPoint(0,0));
+	logic();
 }
 
 SoundID SDLSoundManager::load(const std::string& filename, const std::string& errormessage) {
@@ -264,13 +267,13 @@ void SDLSoundManager::play(SoundID sid, const std::string& channel, const FPoint
 
 	// precalculate mixing volume if sound has a location
 	Uint8 d = 0;
-	if (p.location.x != 0 || p.location.y != 0) {
-		float v = 255.0f * (Utils::calcDist(lastPos, p.location) / static_cast<float>(eset->misc.sound_falloff));
+	if (pc && eset->misc.sound_falloff > 0 && (p.location.x != 0 || p.location.y != 0)) {
+		float v = 255.0f * (Utils::calcDist(pc->stats.pos, p.location) / static_cast<float>(eset->misc.sound_falloff));
 		v = std::min<float>(std::max<float>(v, 0.0f), 255.0f);
 		d = Uint8(v);
 	}
 
-	SetChannelPosition(c, 0, d);
+	Mix_SetPosition(c, 0, d);
 
 	if (vcit != channels.end())
 		vcit->second = c;
@@ -302,7 +305,7 @@ void SDLSoundManager::on_channel_finished(int channel) {
 
 	pit->second.finished = true;
 
-	SetChannelPosition(channel, 0, 0);
+	Mix_SetPosition(channel, 0, 0);
 }
 
 void SDLSoundManager::channel_finished(int channel) {
@@ -366,10 +369,6 @@ void SDLSoundManager::setVolumeMusic(int value) {
 
 bool SDLSoundManager::isPlayingMusic() {
 	return (settings->audio && music && settings->music_volume > 0 && Mix_PlayingMusic());
-}
-
-int SDLSoundManager::SetChannelPosition(int channel, Sint16 angle, Uint8 distance) {
-	return Mix_SetPosition(channel, angle, distance);
 }
 
 SoundID SDLSoundManager::getLastPlayedSID() {

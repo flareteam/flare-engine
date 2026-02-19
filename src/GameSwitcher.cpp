@@ -166,6 +166,8 @@ void GameSwitcher::freeBackground() {
 }
 
 void GameSwitcher::logic() {
+	snd->logic();
+
 	// reset the mouse cursor
 	curs->logic();
 

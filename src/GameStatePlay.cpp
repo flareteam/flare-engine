@@ -880,8 +880,6 @@ void GameStatePlay::logic() {
 		loot->logic();
 		npcs->logic();
 
-		snd->logic(pc->stats.pos);
-
 		comb->logic(mapr->cam.pos);
 	}
 

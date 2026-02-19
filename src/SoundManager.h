@@ -54,7 +54,7 @@ public:
 	virtual void setVolumeMusic(int value) = 0;
 	virtual bool isPlayingMusic() = 0;
 
-	virtual void logic(const FPoint& center) = 0;
+	virtual void logic() = 0;
 	virtual void reset() = 0;
 
 	virtual SoundID getLastPlayedSID() = 0;
