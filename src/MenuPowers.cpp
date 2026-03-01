@@ -1259,7 +1259,7 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 
 		if (pwr->trait_armor_penetration) {
 			ss.str("");
-			ss << msg->get("Ignores Absorbtion");
+			ss << msg->get("Ignores Absorption");
 			tip_data->addColoredText(ss.str(), font->getColor(FontEngine::COLOR_MENU_BONUS));
 		}
 		if (pwr->trait_avoidance_ignore) {

@@ -458,7 +458,7 @@ bool Entity::takeHit(Hazard &h) {
 					absorption = (dmg * eset->combat.max_absorb) /100;
 			}
 
-			// Sometimes, the absorb limits cause absorbtion to drop to 1
+			// Sometimes, the absorb limits cause absorption to drop to 1
 			// This could be confusing to a player that has something with an absorb of 1 equipped
 			// So we round absorption up in this case
 			if (absorption == 0) absorption = 1;

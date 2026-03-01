@@ -779,7 +779,7 @@ void PowerManager::loadPowers() {
 			else infile.error("PowerManager: Unknown movement_type '%s'", infile.val.c_str());
 		}
 		else if (infile.key == "trait_armor_penetration") {
-			// @ATTR power.trait_armor_penetration|bool|Ignores the target's Absorbtion stat
+			// @ATTR power.trait_armor_penetration|bool|Ignores the target's Absorption stat
 			power->trait_armor_penetration = Parse::toBool(infile.val);
 		}
 		else if (infile.key == "trait_avoidance_ignore") {
