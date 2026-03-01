@@ -131,6 +131,8 @@ public:
 
 	bool isActiveFrame();
 
+	bool isFrame(short frame);
+
 	// in a looped animation returns how many times it's been played
 	// in a play once animation returns 1 when the animation is finished
 	int getTimesPlayed();

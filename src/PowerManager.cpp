@@ -105,9 +105,11 @@ Power::Power()
 	, passive_effects_persist(false)
 
 	, spawn_limit_mode(SPAWN_LIMIT_MODE_UNLIMITED)
+	, state_hold_mode(HOLD_ON_ACTIVE_FRAME)
 
 	, visual_random(0)
 	, visual_option(0)
+	, state_hold_frame(0)
 
 	, type(-1)
 	, icon(-1)
@@ -378,8 +380,22 @@ void PowerManager::loadPowers() {
 			}
 		}
 		else if (infile.key == "state_duration") {
-			// @ATTR power.state_duration|duration|Sets the length of time the caster is in their state animation. A time longer than the animation length will cause the animation to pause on the last frame. Times shorter than the state animation length will have no effect.
+			// @ATTR power.state_duration|duration|Sets the length of time the caster is in their state animation. A time longer than the animation length will cause the animation to pause on the frame specified by state_hold_mode (active frame if not specified). Times shorter than the state animation length will have no effect.
 			power->state_duration = Parse::toDuration(infile.val);
+		}
+		else if (infile.key == "state_hold_mode") {
+			// @ATTR power.state_hold_mode|["active_frame", "frame"], int : Mode, Frame (when using "frame" mode)|Determines which frame will be held when using state_duration.
+			std::string mode = Parse::popFirstString(infile.val);
+			if (mode == "active_frame") {
+				power->state_hold_mode = Power::HOLD_ON_ACTIVE_FRAME;
+			}
+			else if (mode == "frame") {
+				power->state_hold_mode = Power::HOLD_ON_FRAME;
+				power->state_hold_frame = static_cast<unsigned short>(Parse::popFirstInt(infile.val));
+			}
+			else {
+				infile.error("PowerManager: '%s' is not a valid state hold mode.", mode.c_str());
+			}
 		}
 		else if (infile.key == "prevent_interrupt") {
 			// @ATTR power.prevent_interrupt|bool|Prevents the caster from being interrupted by a hit when casting this power.

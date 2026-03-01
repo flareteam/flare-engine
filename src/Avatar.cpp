@@ -554,7 +554,7 @@ void Avatar::logic() {
 	using_main2 = inpt->pressing[Input::MAIN2] && !inpt->lock[Input::MAIN2];
 
 	// handle animation
-	if (!stats.effects.stun) {
+	if (!stats.effects.stun && !stats.hold_state) {
 		if (activeAnimation)
 			activeAnimation->advanceFrame();
 
@@ -788,6 +788,15 @@ void Avatar::logic() {
 						power_cast_timers[current_power_original]->setDuration(activeAnimation->getDuration()); // for replace_by_effect
 					}
 
+					if (power->state_hold_mode == Power::HOLD_ON_FRAME) {
+						if (activeAnimation->isFrame(power->state_hold_frame) && !stats.hold_state) {
+							if (!stats.state_timer.isEnd())
+								stats.hold_state = true;
+						}
+						if (stats.state_timer.isEnd())
+							stats.hold_state = false;
+					}
+
 					// do power
 					if (activeAnimation->isActiveFrame() && !stats.hold_state) {
 						// some powers check if the caster is blocking a tile
@@ -798,7 +807,7 @@ void Avatar::logic() {
 						power_cooldown_timers[current_power]->setDuration(power->cooldown);
 						power_cooldown_timers[current_power_original]->setDuration(power->cooldown); // for replace_by_effect
 
-						if (!stats.state_timer.isEnd())
+						if (power->state_hold_mode == Power::HOLD_ON_ACTIVE_FRAME && !stats.state_timer.isEnd())
 							stats.hold_state = true;
 					}
 				}

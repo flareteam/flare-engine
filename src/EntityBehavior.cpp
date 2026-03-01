@@ -694,7 +694,7 @@ void EntityBehavior::updateState() {
 	int power_state;
 
 	// continue current animations
-	if (e->activeAnimation)
+	if (e->activeAnimation && !e->stats.hold_state)
 		e->activeAnimation->advanceFrame();
 
 	for (size_t i = 0; i < e->anims.size(); ++i) {
@@ -760,6 +760,15 @@ void EntityBehavior::updateState() {
 					e->stats.charge_speed = epower->charge_speed;
 			}
 
+			if (epower->state_hold_mode == Power::HOLD_ON_FRAME) {
+				if (e->activeAnimation->isFrame(epower->state_hold_frame) && !e->stats.hold_state) {
+					if (!e->stats.state_timer.isEnd())
+						e->stats.hold_state = true;
+				}
+				if (e->stats.state_timer.isEnd())
+					e->stats.hold_state = false;
+			}
+
 			// Activate Power:
 			// if we're at the active frame of a power animation,
 			// activate the power and set the local and global cooldowns
@@ -777,7 +786,7 @@ void EntityBehavior::updateState() {
 					e->stats.half_dead_power = false;
 				}
 
-				if (!e->stats.state_timer.isEnd())
+				if (epower->state_hold_mode == Power:: HOLD_ON_ACTIVE_FRAME && !e->stats.state_timer.isEnd())
 					e->stats.hold_state = true;
 			}
 

@@ -367,6 +367,14 @@ bool Animation::isActiveFrame() {
 	return false;
 }
 
+bool Animation::isFrame(short frame) {
+	// only check the initial "forward" play of back/forth animations
+	if (type == ANIMTYPE_BACK_FORTH && (reverse_playback || times_played > 0))
+		return false;
+
+	return sub_frame == static_cast<short>(getLastSubFrame(static_cast<short>(frame)));
+}
+
 int Animation::getTimesPlayed() {
 	return times_played;
 }

@@ -183,6 +183,11 @@ public:
 		SCRIPT_TRIGGER_WALL = 2
 	};
 
+	enum {
+		HOLD_ON_ACTIVE_FRAME = 0,
+		HOLD_ON_FRAME
+	};
+
 	bool prevent_interrupt; // prevents hits from interrupting the casting state
 	bool face; // does the user turn to face the mouse cursor when using this power?
 	bool beacon; //true if it's just an ememy calling its allies
@@ -230,9 +235,11 @@ public:
 	bool passive_effects_persist;
 
 	uint8_t spawn_limit_mode;
+	uint8_t state_hold_mode;
 
 	unsigned short visual_random; // sprite sheet contains rows of random options
 	unsigned short visual_option; // sprite sheet contains rows of similar effects.  use a specific option
+	unsigned short state_hold_frame;
 
 	int type; // what kind of activate() this is
 	int icon; // just the number.  The caller menu will have access to the surface.

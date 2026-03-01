@@ -54,6 +54,7 @@ Engine features:
 * Added 'requires_tile' and 'requires_not_tile' properties to Events.
 * Added 'spawn_level' property to Events.
 * Added procedural map generation.
+* Added 'state_hold_mode' property to Powers.
 * Android: Enabled use of external input devices (gamepads, keyboards, mice)
 
 Engine fixes:
