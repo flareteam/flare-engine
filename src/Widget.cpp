@@ -20,6 +20,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "InputState.h"
 #include "SharedResources.h"
 #include "Settings.h"
+#include "Utils.h"
 #include "Widget.h"
 
 Widget::Widget()
@@ -362,7 +363,13 @@ int TabList::getNextRelativeIndex(uint8_t dir) {
 		else if (dir == WIDGET_SELECT_DOWN && p1.y >= p2.y)
 			continue;
 
-		float dist = Utils::calcDist(p1, p2);
+		float dist = 0;
+		float base_dist = Utils::calcDist(p1, p2);
+		float weight = 1.5;
+		if (dir == WIDGET_SELECT_RIGHT || dir == WIDGET_SELECT_LEFT)
+			dist = base_dist + (fabs(fabs(p1.y) - fabs(p2.y)) * weight);
+		else if (dir == WIDGET_SELECT_UP || dir == WIDGET_SELECT_DOWN)
+			dist = base_dist + (fabs(fabs(p1.x) - fabs(p2.x)) * weight);
 
 		if (min_distance == -1 || dist < min_distance) {
 			min_distance = dist;
