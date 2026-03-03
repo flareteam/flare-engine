@@ -44,6 +44,9 @@ private:
 	void refreshBackground();
 	void freeBackground();
 
+	void refreshBackgroundFrame();
+	void freeBackgroundFrame();
+
 	GameState *currentState;
 
 	WidgetLabel *label_fps;
@@ -56,6 +59,8 @@ private:
 	std::string background_filename;
 	std::vector<std::string> background_list;
 
+	Sprite *background_frame;
+
 	Timer fps_update;
 	float last_fps;
 
@@ -66,6 +71,7 @@ public:
 
 	void loadMusic();
 	void loadBackgroundImage();
+	void loadBackgroundFrameImage();
 	void loadFPS();
 	bool isLoadingFrame();
 	bool isPaused();

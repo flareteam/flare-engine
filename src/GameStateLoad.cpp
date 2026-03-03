@@ -66,8 +66,8 @@ GameSlot::~GameSlot() {
 }
 
 GameStateLoad::GameStateLoad() : GameState()
-	, background(NULL)
-	, selection(NULL)
+	, slots_background(NULL)
+	, slots_selection(NULL)
 	, portrait_border(NULL)
 	, portrait(NULL)
 	, loading_requested(false)
@@ -205,6 +205,10 @@ GameStateLoad::GameStateLoad() : GameState()
 			else if (infile.key == "text_trim_boundary") {
 				text_trim_boundary = Parse::toInt(infile.val);
 			}
+			// @ATTR show_frame_background|bool|If true, the frame background image is drawn behind the menu.
+			else if (infile.key == "show_frame_background") {
+				has_frame_background = Parse::toBool(infile.val);
+			}
 			else {
 				infile.error("GameStateLoad: '%s' is not a valid key.", infile.key.c_str());
 			}
@@ -272,13 +276,13 @@ void GameStateLoad::loadGraphics() {
 
 	graphics = render_device->loadImage("images/menus/game_slots.png", RenderDevice::ERROR_NORMAL);
 	if (graphics) {
-		background = graphics->createSprite();
+		slots_background = graphics->createSprite();
 		graphics->unref();
 	}
 
 	graphics = render_device->loadImage("images/menus/game_slot_select.png", RenderDevice::ERROR_NORMAL);
 	if (graphics) {
-		selection = graphics->createSprite();
+		slots_selection = graphics->createSprite();
 		graphics->unref();
 	}
 
@@ -872,7 +876,7 @@ void GameStateLoad::render() {
 		int off_slot = slot+scroll_offset;
 
 		// slot background
-		if (background) {
+		if (slots_background) {
 			src.x = 0;
 			src.y = (off_slot % 4) * gameslot_pos.h;
 			dest.w = dest.h = 0;
@@ -882,11 +886,11 @@ void GameStateLoad::render() {
 			dest.x = slot_pos[slot].x;
 			dest.y = slot_pos[slot].y;
 
-			background->setClipFromRect(src);
-			background->setDestFromRect(dest);
-			render_device->render(background);
+			slots_background->setClipFromRect(src);
+			slots_background->setDestFromRect(dest);
+			render_device->render(slots_background);
 		}
-		Point slot_dest = background->getDest();
+		Point slot_dest = slots_background->getDest();
 
 		if (!game_slots[off_slot]) {
 			WidgetLabel slot_error;
@@ -971,9 +975,9 @@ void GameStateLoad::render() {
 	}
 
 	// display selection
-	if (selected_slot >= scroll_offset && selected_slot < visible_slots+scroll_offset && selection != NULL) {
-		selection->setDestFromRect(slot_pos[selected_slot-scroll_offset]);
-		render_device->render(selection);
+	if (selected_slot >= scroll_offset && selected_slot < visible_slots+scroll_offset && slots_selection != NULL) {
+		slots_selection->setDestFromRect(slot_pos[selected_slot-scroll_offset]);
+		render_device->render(slots_selection);
 	}
 
 	if (has_scroll_bar)
@@ -1022,10 +1026,10 @@ void GameStateLoad::refreshSavePaths() {
 }
 
 GameStateLoad::~GameStateLoad() {
-	if (background)
-		delete background;
-	if (selection)
-		delete selection;
+	if (slots_background)
+		delete slots_background;
+	if (slots_selection)
+		delete slots_selection;
 	if (portrait_border)
 		delete portrait_border;
 	if (portrait)

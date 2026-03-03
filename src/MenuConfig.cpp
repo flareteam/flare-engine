@@ -253,6 +253,7 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	, clicked_pause_continue(false)
 	, clicked_pause_exit(false)
 	, clicked_pause_save(false)
+	, show_frame_background(false)
 {
 	input_confirm->setTitle(msg->get("Assign:"));
 	input_confirm->action_list->append(msg->get("New"), "");
@@ -744,6 +745,10 @@ bool MenuConfig::parseKeyButtons(FileParser &infile) {
 		int y = Parse::popFirstInt(infile.val);
 		int a = Parse::toAlignment(Parse::popFirstString(infile.val));
 		cancel_button->setBasePos(x, y, a);
+	}
+	else if (infile.key == "show_frame_background") {
+		// @ATTR show_frame_background|bool|If true, the frame background image is drawn behind the menu. Not used in the pause menu.
+		show_frame_background = Parse::toBool(infile.val);
 	}
 	else {
 		return false;

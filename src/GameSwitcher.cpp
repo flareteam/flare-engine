@@ -54,6 +54,7 @@ GameSwitcher::GameSwitcher()
 	: background(NULL)
 	, background_image(NULL)
 	, background_filename("")
+	, background_frame(NULL)
 	, fps_update()
 	, last_fps(0)
 {
@@ -80,6 +81,9 @@ GameSwitcher::GameSwitcher()
 
 	if (currentState->has_background)
 		loadBackgroundImage();
+
+	if (currentState->has_frame_background)
+		loadBackgroundFrameImage();
 }
 
 void GameSwitcher::loadMusic() {
@@ -165,6 +169,28 @@ void GameSwitcher::freeBackground() {
 	background_filename = "";
 }
 
+void GameSwitcher::loadBackgroundFrameImage() {
+	if (background_frame)
+		return;
+
+	Image *gfx = render_device->loadImage("images/menus/frame_background.png", RenderDevice::ERROR_NORMAL);
+	if (gfx) {
+		background_frame = gfx->createSprite();
+		gfx->unref();
+	}
+	refreshBackgroundFrame();
+}
+
+void GameSwitcher::refreshBackgroundFrame() {
+	if (background_frame) {
+		Rect dest;
+		dest.w = background_frame->getGraphics()->getWidth();
+		dest.h = background_frame->getGraphics()->getHeight();
+		Utils::alignToScreenEdge(Utils::ALIGN_FRAME_TOPLEFT, &dest);
+		background_frame->setDestFromRect(dest);
+	}
+}
+
 void GameSwitcher::logic() {
 	snd->logic();
 
@@ -197,11 +223,21 @@ void GameSwitcher::logic() {
 			loadBackgroundImage();
 		else
 			freeBackground();
+
+		// if this game state shows a frame background image, load it here
+		if (currentState->has_frame_background) {
+			loadBackgroundFrameImage();
+		}
+		else {
+			delete background_frame;
+			background_frame = NULL;
+		}
 	}
 
 	// resize background image when window is resized
 	if ((inpt->window_resized || currentState->force_refresh_background) && currentState->has_background) {
 		refreshBackground();
+		refreshBackgroundFrame();
 		currentState->force_refresh_background = false;
 	}
 
@@ -292,6 +328,10 @@ void GameSwitcher::render() {
 		render_device->render(background);
 	}
 
+	if (background_frame && currentState->has_frame_background) {
+		render_device->render(background_frame);
+	}
+
 	currentState->render();
 	tooltipm->render();
 	curs->render();
@@ -308,5 +348,6 @@ GameSwitcher::~GameSwitcher() {
 	snd->unloadMusic();
 	freeBackground();
 	background_list.clear();
+	delete background_frame;
 }
 

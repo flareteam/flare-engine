@@ -106,8 +106,8 @@ private:
 
 	MenuConfirm *confirm;
 
-	Sprite *background;
-	Sprite *selection;
+	Sprite *slots_background;
+	Sprite *slots_selection;
 	Sprite *portrait_border;
 	Sprite *portrait;
 	std::vector<Rect> slot_pos;

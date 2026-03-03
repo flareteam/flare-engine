@@ -45,6 +45,7 @@ public:
 
 	bool hasMusic;
 	bool has_background;
+	bool has_frame_background;
 	bool reload_music;
 	bool reload_backgrounds;
 	bool force_refresh_background;

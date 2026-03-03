@@ -48,6 +48,7 @@ GameStateConfig::GameStateConfig ()
 	: GameState()
 	, menu_config(new MenuConfig(MenuConfig::IS_GAME_STATE))
 {
+	has_frame_background = menu_config->show_frame_background;
 
 	// don't save settings if we close the game while in this menu
 	save_settings_on_exit = false;

@@ -26,6 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 GameState::GameState()
 	: hasMusic(false)
 	, has_background(true)
+	, has_frame_background(false)
 	, reload_music(false)
 	, reload_backgrounds(false)
 	, force_refresh_background(false)

@@ -236,6 +236,10 @@ GameStateNew::GameStateNew()
 			else if (infile.key == "random_class") {
 				random_class = Parse::toBool(infile.val);
 			}
+			// @ATTR show_frame_background|bool|If true, the frame background image is drawn behind the menu.
+			else if (infile.key == "show_frame_background") {
+				has_frame_background = Parse::toBool(infile.val);
+			}
 			else {
 				infile.error("GameStateNew: '%s' is not a valid key.", infile.key.c_str());
 			}

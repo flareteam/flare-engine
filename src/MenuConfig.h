@@ -361,6 +361,7 @@ public:
 	bool clicked_pause_continue;
 	bool clicked_pause_exit;
 	bool clicked_pause_save;
+	bool show_frame_background;
 };
 
 #endif
