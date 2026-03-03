@@ -529,6 +529,9 @@ void GameStateLoad::logic() {
 				}
 				tablist.defocus();
 			}
+			else if (confirm->action_list->getSelected() == DELETE_CONFIRM_OPTION_NO) {
+				// do nothing, since the window will be closed anyway
+			}
 			else {
 				// We shouldn't end up here!
 				// But if we do, log an error and try to reset the UI
