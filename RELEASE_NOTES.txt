@@ -55,6 +55,7 @@ Engine features:
 * Added 'spawn_level' property to Events.
 * Added procedural map generation.
 * Added 'state_hold_mode' property to Powers.
+* Added 'class_tip' and 'show_class_tip' properties to new game menu config.
 * Android: Enabled use of external input devices (gamepads, keyboards, mice)
 
 Engine fixes:

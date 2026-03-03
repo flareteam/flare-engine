@@ -41,19 +41,23 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
+#include "Utils.h"
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
 #include "WidgetCheckBox.h"
 #include "WidgetInput.h"
 #include "WidgetLabel.h"
 #include "WidgetListBox.h"
+#include "WidgetTooltip.h"
 
 GameStateNew::GameStateNew()
 	: GameState()
 	, current_option(0)
 	, portrait_image(NULL)
 	, portrait_border(NULL)
+	, class_tip_align(Utils::ALIGN_FRAME_TOPLEFT)
 	, show_classlist(true)
+	, show_class_tip(false)
 	, show_randomize(true)
 	, show_permadeath(true)
 	, modified_name(false)
@@ -88,6 +92,8 @@ GameStateNew::GameStateNew()
 
 	class_list = new WidgetListBox(12, WidgetListBox::DEFAULT_FILE);
 	class_list->can_deselect = false;
+
+	class_tip = new WidgetTooltip();
 
 	// set up labels
 	label_portrait = new WidgetLabel();
@@ -204,6 +210,16 @@ GameStateNew::GameStateNew()
 			else if (infile.key == "show_classlist") {
 				show_classlist = Parse::toBool(infile.val);
 			}
+			// @ATTR class_tip|int, int, alignment : X, Y, Alignment|Position of the class description tooltip.
+			else if (infile.key == "class_tip") {
+				class_tip_pos.x = Parse::popFirstInt(infile.val);
+				class_tip_pos.y = Parse::popFirstInt(infile.val);
+				class_tip_align = Parse::toAlignment(Parse::popFirstString(infile.val), Utils::ALIGN_FRAME_TOPLEFT);
+			}
+			// @ATTR show_class_tip|bool|When true, shows a persistent tooltip with the description of the selected class. Defaults to false.
+			else if (infile.key == "show_class_tip") {
+				show_class_tip = Parse::toBool(infile.val);
+			}
 			// @ATTR show_randomize|bool|Toggles the visibility of the "Randomize" button.
 			else if (infile.key == "show_randomize") {
 				show_randomize = Parse::toBool(infile.val);
@@ -229,7 +245,10 @@ GameStateNew::GameStateNew()
 
 	// set up class list
 	for (unsigned i = 0; i < eset->hero_classes.list.size(); i++) {
-		class_list->append(msg->get(eset->hero_classes.list[i].name), getClassTooltip(i));
+		if (show_class_tip)
+			class_list->append(msg->get(eset->hero_classes.list[i].name), "");
+		else
+			class_list->append(msg->get(eset->hero_classes.list[i].name), getClassTooltip(i));
 	}
 
 	if (!eset->hero_classes.list.empty()) {
@@ -238,6 +257,11 @@ GameStateNew::GameStateNew()
 			class_index = static_cast<int>(rand() % eset->hero_classes.list.size());
 
 		class_list->select(class_index);
+
+		if (show_class_tip) {
+			class_tip_data.clear();
+			class_tip_data.addText(getClassTooltip(class_index));
+		}
 	}
 
 	loadGraphics();
@@ -339,7 +363,7 @@ void GameStateNew::loadOptions(const std::string& filename) {
  *
  * @param default_name The name we want to use for the hero
  */
-void GameStateNew:: setName(const std::string& default_name) {
+void GameStateNew::setName(const std::string& default_name) {
 	if (input_name->getText() == "" || !modified_name) {
 		input_name->setText(default_name);
 		modified_name = false;
@@ -419,6 +443,11 @@ void GameStateNew::logic() {
 
 	if (show_classlist && class_list->checkClick()) {
 		setHeroOption(OPTION_CURRENT);
+
+		if (show_class_tip) {
+			class_tip_data.clear();
+			class_tip_data.addText(getClassTooltip(class_list->getSelected()));
+		}
 	}
 
 	// require character name
@@ -481,6 +510,11 @@ void GameStateNew::logic() {
 		if (!eset->hero_classes.list.empty()) {
 			int class_index = static_cast<int>(rand() % eset->hero_classes.list.size());
 			class_list->select(class_index);
+
+			if (show_class_tip) {
+				class_tip_data.clear();
+				class_tip_data.addText(getClassTooltip(class_index));
+			}
 		}
 		setHeroOption(OPTION_RANDOM);
 	}
@@ -553,11 +587,21 @@ void GameStateNew::render() {
 	if (show_classlist) {
 		label_classlist->render();
 		class_list->render();
+
+		if (show_class_tip && !class_tip_data.isEmpty()) {
+			class_tip->prerender(class_tip_data, Point(class_tip_pos.x, class_tip_pos.y), TooltipData::STYLE_ABSOLUTE);
+			Rect temp = class_tip->bounds;
+			Utils::alignToScreenEdge(Utils::ALIGN_FRAME_TOPLEFT, &temp);
+			class_tip->render(class_tip_data, Point(temp.x, temp.y), TooltipData::STYLE_ABSOLUTE);
+		}
 	}
 
 }
 
 std::string GameStateNew::getClassTooltip(int index) {
+	if (static_cast<size_t>(index) >= eset->hero_classes.list.size())
+		return "";
+
 	std::string tooltip;
 	if (eset->hero_classes.list[index].description != "") tooltip += msg->get(eset->hero_classes.list[index].description);
 	return tooltip;
@@ -587,4 +631,5 @@ GameStateNew::~GameStateNew() {
 	delete label_permadeath;
 	delete label_classlist;
 	delete class_list;
+	delete class_tip;
 }

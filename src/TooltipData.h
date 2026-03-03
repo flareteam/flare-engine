@@ -38,7 +38,8 @@ class TooltipData {
 public:
 	enum {
 		STYLE_FLOAT = 0,
-		STYLE_TOPLABEL = 1
+		STYLE_TOPLABEL,
+		STYLE_ABSOLUTE
 	};
 
 	std::vector<std::string> lines;

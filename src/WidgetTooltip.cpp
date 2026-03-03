@@ -114,6 +114,10 @@ Point WidgetTooltip::calcPosition(uint8_t style, const Point& pos, const Point& 
 		if (tip_pos.y < 0)
 			tip_pos.y = 0;
 	}
+	else if (style == TooltipData::STYLE_ABSOLUTE) {
+		tip_pos.x = pos.x;
+		tip_pos.y = pos.y;
+	}
 
 	return tip_pos;
 }

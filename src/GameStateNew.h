@@ -36,6 +36,7 @@ class WidgetCheckBox;
 class WidgetInput;
 class WidgetLabel;
 class WidgetListBox;
+class WidgetTooltip;
 
 class HeroOption {
 public:
@@ -82,17 +83,23 @@ private:
 	WidgetLabel *label_permadeath;
 	WidgetLabel *label_classlist;
 	WidgetListBox *class_list;
+	WidgetTooltip *class_tip;
 
 	TabList tablist;
 
 	Rect portrait_pos;
+	Point class_tip_pos;
+	int class_tip_align;
 	bool show_classlist;
+	bool show_class_tip;
 	bool show_randomize;
 	bool show_permadeath;
 	bool modified_name;
 	bool delete_items;
 	bool random_option;
 	bool random_class;
+
+	TooltipData class_tip_data;
 
 	std::vector<int> all_options;
 
