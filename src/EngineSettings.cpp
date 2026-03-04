@@ -773,19 +773,34 @@ void EngineSettings::DamageTypes::load() {
 					current->id = infile.val;
 				}
 			}
-			// @ATTR damage_type.name|string|The displayed name for the value of this damage type.
-			else if (infile.key == "name") current->name = msg->get(infile.val);
-			// @ATTR damage_type.name_short|string|An optional, shorter displayed name for this damage type. Used for labels for 'Resist Damage' stats. If left blank, 'name' will be used instead.
-			else if (infile.key == "name_short") current->name_short = msg->get(infile.val);
-			// @ATTR damage_type.description|string|The description that will be displayed in the Character menu tooltips.
-			else if (infile.key == "description") current->description = msg->get(infile.val);
-			// @ATTR damage_type.min|string|The identifier used as a Stat type and an Effect type, for the minimum damage of this type.
-			else if (infile.key == "min") current->min = infile.val;
-			// @ATTR damage_type.max|string|The identifier used as a Stat type and an Effect type, for the maximum damage of this type.
-			else if (infile.key == "max") current->max = infile.val;
-			// @ATTR damage_type.elemental|bool|If true, this damage type will be flagged as elemental. Elemental damage will be additionally applied to Powers with non-elemental base damage.
-			else if (infile.key == "elemental") current->is_elemental = Parse::toBool(infile.val);
-
+			else if (infile.key == "name") {
+				// @ATTR damage_type.name|string|The displayed name for the value of this damage type.
+				current->name = msg->get(infile.val);
+			}
+			else if (infile.key == "name_short") {
+				// @ATTR damage_type.name_short|string|An optional, shorter displayed name for this damage type. Used for labels for 'Resist Damage' stats. If left blank, 'name' will be used instead.
+				current->name_short = msg->get(infile.val);
+			}
+			else if (infile.key == "description") {
+				// @ATTR damage_type.description|string|The description that will be displayed in the Character menu tooltips.
+				current->description = msg->get(infile.val);
+			}
+			else if (infile.key == "min") {
+				// @ATTR damage_type.min|string|The identifier used as a Stat type and an Effect type, for the minimum damage of this type. If not defined, the ID is wrapped with 'dmg_' and '_min' (ex: 'fire' creates 'dmg_fire_min').
+				current->min = infile.val;
+			}
+			else if (infile.key == "max") {
+				// @ATTR damage_type.max|string|The identifier used as a Stat type and an Effect type, for the maximum damage of this type. If not defined, the ID is wrapped with 'dmg_' and '_max' (ex: 'fire' creates 'dmg_fire_max').
+				current->max = infile.val;
+			}
+			else if (infile.key == "resist") {
+				// @ATTR damage_type.resist|string|The identifier used as a Stat type and an Effect type, for the resistance to this type. If not defined, '_resist' is appended to the ID (ex: 'fire' creates 'fire_resist').
+				current->resist = infile.val;
+			}
+			else if (infile.key == "elemental") {
+				// @ATTR damage_type.elemental|bool|If true, this damage type will be flagged as elemental. Elemental damage will be additionally applied to Powers with non-elemental base damage.
+				current->is_elemental = Parse::toBool(infile.val);
+			}
 			else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();

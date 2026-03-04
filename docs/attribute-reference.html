@@ -370,9 +370,11 @@ code {
 
 <p><strong>damage_type.description</strong> | <code>string</code> | The description that will be displayed in the Character menu tooltips.</p>
 
-<p><strong>damage_type.min</strong> | <code>string</code> | The identifier used as a Stat type and an Effect type, for the minimum damage of this type.</p>
+<p><strong>damage_type.min</strong> | <code>string</code> | The identifier used as a Stat type and an Effect type, for the minimum damage of this type. If not defined, the ID is wrapped with 'dmg_' and '_min' (ex: 'fire' creates 'dmg_fire_min').</p>
 
-<p><strong>damage_type.max</strong> | <code>string</code> | The identifier used as a Stat type and an Effect type, for the maximum damage of this type.</p>
+<p><strong>damage_type.max</strong> | <code>string</code> | The identifier used as a Stat type and an Effect type, for the maximum damage of this type. If not defined, the ID is wrapped with 'dmg_' and '_max' (ex: 'fire' creates 'dmg_fire_max').</p>
+
+<p><strong>damage_type.resist</strong> | <code>string</code> | The identifier used as a Stat type and an Effect type, for the resistance to this type. If not defined, '_resist' is appended to the ID (ex: 'fire' creates 'fire_resist').</p>
 
 <p><strong>damage_type.elemental</strong> | <code>bool</code> | If true, this damage type will be flagged as elemental. Elemental damage will be additionally applied to Powers with non-elemental base damage.</p>
 
