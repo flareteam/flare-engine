@@ -1375,11 +1375,8 @@ bool StatBlock::summonLimitReached(PowerID power_id) const {
 	}
 	else if (spawn_power->spawn_limit_mode == Power::SPAWN_LIMIT_MODE_STAT) {
 		int stat_val = 1;
-		for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
-			if (spawn_power->spawn_limit_stat == i) {
-				stat_val = get_primary(i);
-				break;
-			}
+		if (spawn_power->spawn_limit_stat < eset->primary_stats.list.size()) {
+			stat_val = get_primary(spawn_power->spawn_limit_stat);
 		}
 		max_summons = static_cast<int>(spawn_power->spawn_limit_count * (static_cast<float>(stat_val) / spawn_power->spawn_limit_ratio));
 	}

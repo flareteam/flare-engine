@@ -1279,6 +1279,16 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 		}
 	}
 
+	if (pwr->spawn_limit_count > 0) {
+		int spawn_limit = static_cast<int>(pwr->spawn_limit_count);
+		if (pwr->spawn_limit_mode == Power::SPAWN_LIMIT_MODE_STAT) {
+			if (pwr->spawn_limit_stat < eset->primary_stats.list.size()) {
+				spawn_limit = static_cast<int>(pwr->spawn_limit_count * (static_cast<float>(pc->stats.get_primary(pwr->spawn_limit_stat)) / pwr->spawn_limit_ratio));
+			}
+		}
+		tip_data->addColoredText(msg->getv("Spawn limit: %d", spawn_limit), font->getColor(FontEngine::COLOR_MENU_BONUS));
+	}
+
 	std::set<std::string>::iterator it;
 	for (it = pwr->requires_flags.begin(); it != pwr->requires_flags.end(); ++it) {
 		for (size_t i = 0; i < eset->equip_flags.list.size(); ++i) {
