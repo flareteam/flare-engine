@@ -1279,7 +1279,7 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 		}
 	}
 
-	if (pwr->spawn_limit_count > 0) {
+	if (pwr->spawn_limit_count > 0 && !pwr->spawn_type.empty()) {
 		int spawn_limit = static_cast<int>(pwr->spawn_limit_count);
 		if (pwr->spawn_limit_mode == Power::SPAWN_LIMIT_MODE_STAT) {
 			if (pwr->spawn_limit_stat < eset->primary_stats.list.size()) {
