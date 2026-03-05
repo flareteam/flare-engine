@@ -830,52 +830,65 @@ void MenuPowers::setUnlockedPowers() {
 	recently_locked_cells.clear();
 
 	for (size_t i = 0; i < power_cell.size(); ++i) {
-		// handle passive powers
 		MenuPowersCell* current_pcell = power_cell[i].getCurrent();
-		if (!current_pcell->is_unlocked)
-			continue;
 
-		MenuPowersCell* bonus_pcell = power_cell[i].getBonusCurrent(current_pcell);
+		// handle passive powers
+		if (current_pcell->is_unlocked) {
+			MenuPowersCell* bonus_pcell = power_cell[i].getBonusCurrent(current_pcell);
 
-		for (size_t j = 0; j < power_cell[i].cells.size(); ++j) {
-			MenuPowersCell* pcell = &power_cell[i].cells[j];
+			for (size_t j = 0; j < power_cell[i].cells.size(); ++j) {
+				MenuPowersCell* pcell = &power_cell[i].cells[j];
 
-			if (pcell != bonus_pcell || (pcell->passive_on && powers->powers[pcell->id]->passive && (!checkRequirements(current_pcell) || (!pcell->is_unlocked && !isBonusCell(pcell))))) {
-				// passive power is activated, but does not meet requirements, so remove it
-				std::vector<PowerID>::iterator passive_it = std::find(pc->stats.powers_passive.begin(), pc->stats.powers_passive.end(), pcell->id);
-				if (passive_it != pc->stats.powers_passive.end()) {
-					pc->stats.powers_passive.erase(passive_it);
+				if (pcell != bonus_pcell || (pcell->passive_on && powers->powers[pcell->id]->passive && (!checkRequirements(current_pcell) || (!pcell->is_unlocked && !isBonusCell(pcell))))) {
+					// passive power is activated, but does not meet requirements, so remove it
+					std::vector<PowerID>::iterator passive_it = std::find(pc->stats.powers_passive.begin(), pc->stats.powers_passive.end(), pcell->id);
+					if (passive_it != pc->stats.powers_passive.end()) {
+						pc->stats.powers_passive.erase(passive_it);
 
-					if (!powers->powers[pcell->id]->passive_effects_persist) {
-						pc->stats.effects.removeEffectPassive(pcell->id);
+						if (!powers->powers[pcell->id]->passive_effects_persist) {
+							pc->stats.effects.removeEffectPassive(pcell->id);
+						}
+						pcell->passive_on = false;
+						pc->stats.refresh_stats = true;
+
+						// passive powers can lock equipment slots, so update equipment here
+						menu->inv->applyEquipment();
 					}
-					pcell->passive_on = false;
-					pc->stats.refresh_stats = true;
+				}
+				else if (pcell == bonus_pcell && !pcell->passive_on && powers->powers[pcell->id]->passive && checkRequirements(current_pcell)) {
+					// passive power has not been activated, so activate it here
+					std::vector<PowerID>::iterator passive_it = std::find(pc->stats.powers_passive.begin(), pc->stats.powers_passive.end(), pcell->id);
+					if (passive_it == pc->stats.powers_passive.end()) {
+						pc->stats.powers_passive.push_back(pcell->id);
 
-					// passive powers can lock equipment slots, so update equipment here
-					menu->inv->applyEquipment();
+						pcell->passive_on = true;
+						// for passives without special triggers, we need to trigger them here
+						if (pc->stats.effects.triggered_others)
+							powers->activateSinglePassive(&pc->stats, pcell->id);
+
+						// passive powers can lock equipment slots, so update equipment here
+						menu->inv->applyEquipment();
+					}
+				}
+
+				if (!powers->powers[pcell->id]->spawn_type.empty()) {
+					pc->stats.updateSummonPowerIDs(pcell->id, bonus_pcell->id);
 				}
 			}
-			else if (pcell == bonus_pcell && !pcell->passive_on && powers->powers[pcell->id]->passive && checkRequirements(current_pcell)) {
-				// passive power has not been activated, so activate it here
-				std::vector<PowerID>::iterator passive_it = std::find(pc->stats.powers_passive.begin(), pc->stats.powers_passive.end(), pcell->id);
-				if (passive_it == pc->stats.powers_passive.end()) {
-					pc->stats.powers_passive.push_back(pcell->id);
 
-					pcell->passive_on = true;
-					// for passives without special triggers, we need to trigger them here
-					if (pc->stats.effects.triggered_others)
-						powers->activateSinglePassive(&pc->stats, pcell->id);
-
-					// passive powers can lock equipment slots, so update equipment here
-					menu->inv->applyEquipment();
-				}
+			// update the action bar for powers upgraded via item bonuses
+			if (current_pcell != bonus_pcell) {
+				menu->act->addPower(bonus_pcell->id, current_pcell->id);
 			}
 		}
+		else {
+			for (size_t j = 0; j < power_cell[i].cells.size(); ++j) {
+				MenuPowersCell* pcell = &power_cell[i].cells[j];
 
-		// update the action bar for powers upgraded via item bonuses
-		if (current_pcell != bonus_pcell) {
-			menu->act->addPower(bonus_pcell->id, current_pcell->id);
+				if (!powers->powers[pcell->id]->spawn_type.empty()) {
+					pc->stats.updateSummonPowerIDs(pcell->id, 0);
+				}
+			}
 		}
 	}
 }

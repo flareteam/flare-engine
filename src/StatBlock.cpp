@@ -214,7 +214,17 @@ StatBlock::StatBlock()
 }
 
 StatBlock::~StatBlock() {
-	removeFromSummons();
+	if(summoner != NULL && !summoner->summons.empty()) {
+		std::vector<StatBlock*>::iterator parent_ref = std::find(summoner->summons.begin(), summoner->summons.end(), this);
+
+		if(parent_ref != summoner->summons.end())
+			summoner->summons.erase(parent_ref);
+
+		summoner = NULL;
+	}
+
+	removeSummons();
+
 	if (loot)
 		loot->removeFromEnemiesDroppingLoot(this);
 }
@@ -1347,20 +1357,6 @@ void StatBlock::removeSummons() {
 	summons.clear();
 }
 
-void StatBlock::removeFromSummons() {
-
-	if(summoner != NULL && !summoner->summons.empty()) {
-		std::vector<StatBlock*>::iterator parent_ref = std::find(summoner->summons.begin(), summoner->summons.end(), this);
-
-		if(parent_ref != summoner->summons.end())
-			summoner->summons.erase(parent_ref);
-
-		summoner = NULL;
-	}
-
-	removeSummons();
-}
-
 bool StatBlock::summonLimitReached(PowerID power_id) const {
 	if (!powers->isValid(power_id))
 		return true;
@@ -1392,13 +1388,46 @@ bool StatBlock::summonLimitReached(PowerID power_id) const {
 	//find out how many there are currently
 	int qty_summons = 0;
 
-	for (unsigned int i=0; i < summons.size(); i++) {
+	for (size_t i=0; i < summons.size(); i++) {
 		if (summons[i]->summoned_power_index == power_id && summons[i]->cur_state != ENTITY_DEAD && summons[i]->cur_state != ENTITY_CRITDEAD) {
 			qty_summons++;
 		}
 	}
 
 	return qty_summons >= max_summons;
+}
+
+void StatBlock::updateSummonPowerIDs(PowerID old_id, PowerID new_id) {
+	Power* old_pwr = powers->powers[old_id];
+
+	if (old_pwr->spawn_type.empty())
+		return;
+
+	bool matching_spawn_types = false;
+	if (new_id != 0) {
+		Power* new_pwr = powers->powers[new_id];
+		matching_spawn_types = (old_pwr->spawn_type == new_pwr->spawn_type);
+	}
+
+	for (size_t i = 0; i < summons.size(); ++i) {
+		if (summons[i]->summoned_power_index == old_id) {
+			if (matching_spawn_types) {
+				summons[i]->summoned_power_index = new_id;
+			}
+			else {
+				summons[i]->takeDamage(summons[i]->get(Stats::HP_MAX), !StatBlock::TAKE_DMG_CRIT, Power::SOURCE_TYPE_NEUTRAL);
+				summons[i]->removeSummons();
+				summons[i]->summoner = NULL;
+			}
+		}
+	}
+
+	if (!matching_spawn_types) {
+		for (size_t i = summons.size(); i > 0; i--) {
+			if (summons[i-1]->summoner == NULL)
+				summons.erase(summons.begin() + i - 1);
+		}
+	}
 }
 
 void StatBlock::setWanderArea(int r) {

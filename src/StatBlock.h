@@ -107,8 +107,8 @@ public:
 	void calcBase();
 	void logic();
 	void removeSummons();
-	void removeFromSummons();
 	bool summonLimitReached(PowerID power_id) const;
+	void updateSummonPowerIDs(PowerID old_id, PowerID new_id);
 	void setWanderArea(int r);
 	void loadHeroSFX();
 	std::string getShortClass();
