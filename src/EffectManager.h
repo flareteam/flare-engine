@@ -99,6 +99,7 @@ public:
 	uint8_t alpha_mod;
 	std::string attack_speed_anim;
 	bool is_multiplier;
+	bool ignore_resist;
 };
 
 class EffectDef {
@@ -117,6 +118,7 @@ public:
 	Color color_mod;
 	uint8_t alpha_mod;
 	std::string attack_speed_anim;
+	bool ignore_resist;
 
 	bool is_immunity_type; // handling of deprecated types
 };

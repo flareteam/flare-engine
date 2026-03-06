@@ -294,6 +294,10 @@ void PowerManager::loadEffects() {
 			// @ATTR effect.attack_speed_anim|string|If the type of Effect is attack_speed, this defines the attack animation that will have its speed changed.
 			current->attack_speed_anim = infile.val;
 		}
+		else if (infile.key == "ignore_resist") {
+			// @ATTR effect.ignore_resist|bool|If true, this effect will ignore the target's effect resistance stats (not to be confused with elemental/damage type resistances).
+			current->ignore_resist = Parse::toBool(infile.val);
+		}
 		else {
 			infile.error("PowerManager: '%s' is not a valid key.", infile.key.c_str());
 		}

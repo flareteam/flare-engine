@@ -48,6 +48,7 @@ EffectDef::EffectDef()
 	, color_mod(255, 255, 255)
 	, alpha_mod(255)
 	, attack_speed_anim("")
+	, ignore_resist(false)
 	, is_immunity_type(false) {
 }
 
@@ -79,7 +80,8 @@ Effect::Effect()
 	, color_mod(Color(255,255,255).encodeRGBA())
 	, alpha_mod(255)
 	, attack_speed_anim("")
-	, is_multiplier(false) {
+	, is_multiplier(false)
+	, ignore_resist(false) {
 }
 
 Effect::Effect(const Effect& other) {
@@ -114,6 +116,7 @@ Effect& Effect::operator=(const Effect& other) {
 	alpha_mod = other.alpha_mod;
 	attack_speed_anim = other.attack_speed_anim;
 	is_multiplier = other.is_multiplier;
+	ignore_resist = other.ignore_resist;
 
 	return *this;
 }
@@ -495,7 +498,7 @@ void EffectManager::addEffect(StatBlock* stats, EffectDef &effect, EffectParams 
 	refresh_stats = true;
 
 	// if we're already immune, don't add negative effects
-	if (stats) {
+	if (stats && !effect.ignore_resist) {
 		if ((effect.type == Effect::DAMAGE || effect.type == Effect::DAMAGE_PERCENT) && Math::percentChanceF(stats->get(Stats::RESIST_DAMAGE_OVER_TIME))) {
 			comb->addString(msg->get("Resist"), stats->pos, CombatText::MSG_MISS);
 			return;
@@ -598,6 +601,7 @@ void EffectManager::addEffect(StatBlock* stats, EffectDef &effect, EffectParams 
 	e.color_mod = effect.color_mod.encodeRGBA();
 	e.alpha_mod = effect.alpha_mod;
 	e.attack_speed_anim = effect.attack_speed_anim;
+	e.ignore_resist = effect.ignore_resist;
 
 	if (!effect.animation.empty()) {
 		e.loadAnimation(effect.animation);
@@ -681,6 +685,10 @@ void EffectManager::clearNegativeEffects(int type) {
 
 	for (size_t i = effect_list.size(); i > 0; i--) {
 		size_t ei = i-1;
+
+		if (effect_list[ei].ignore_resist)
+			continue;
+
 		if (remove_damage && effect_list[ei].type == Effect::DAMAGE)
 			removeEffect(ei);
 		else if (remove_damage && effect_list[ei].type == Effect::DAMAGE_PERCENT)
