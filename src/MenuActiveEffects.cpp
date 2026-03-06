@@ -40,6 +40,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
 #include "WidgetLabel.h"
+#include <sstream>
 
 MenuActiveEffects::MenuActiveEffects()
 	: timer(NULL)
@@ -93,19 +94,19 @@ void MenuActiveEffects::logic() {
 			continue;
 
 		size_t most_recent_id = effect_icons.size()-1;
-		if(ed.group_stack){
-			if( effect_icons.size()>0
+		if (ed.group_stack){
+			if ( effect_icons.size() > 0
 				&& effect_icons[most_recent_id].type == ed.type
 				&& effect_icons[most_recent_id].name == ed.name
 				&& effect_icons[most_recent_id].icon == ed.icon){
 
 				effect_icons[most_recent_id].stacks++;
 
-				if(ed.type == Effect::SHIELD){
+				if (ed.type == Effect::SHIELD){
 					//Shields stacks in momment of addition, we never have to reach that
-				}else if (ed.type == Effect::HEAL){
+				} else if (ed.type == Effect::HEAL){
 					//No special behavior
-				}else{
+				} else{
 					if (ed.timer.getCurrent() < static_cast<unsigned>(effect_icons[most_recent_id].current)){
 						if (ed.timer.getDuration() > 0)
 							effect_icons[most_recent_id].overlay.y = (eset->resolutions.icon_size * ed.timer.getCurrent()) / ed.timer.getDuration();
@@ -116,13 +117,15 @@ void MenuActiveEffects::logic() {
 					}
 				}
 
-				if(!effect_icons[most_recent_id].stacksLabel){
+				if (!effect_icons[most_recent_id].stacksLabel){
 					effect_icons[most_recent_id].stacksLabel = new WidgetLabel();
 					effect_icons[most_recent_id].stacksLabel->setPos(effect_icons[most_recent_id].pos.x, effect_icons[most_recent_id].pos.y);
 					effect_icons[most_recent_id].stacksLabel->setMaxWidth(eset->resolutions.icon_size);
 				}
 
-				effect_icons[most_recent_id].stacksLabel->setText(msg->getv("x%d", effect_icons[most_recent_id].stacks));
+				std::stringstream ss;
+				ss << "×" << effect_icons[most_recent_id].stacks;
+				effect_icons[most_recent_id].stacksLabel->setText(ss.str());
 
 				continue;
 			}
@@ -205,13 +208,20 @@ void MenuActiveEffects::renderTooltips(const Point& position) {
 
 	for (size_t i = 0; i < effect_icons.size(); ++i) {
 		if (Utils::isWithinRect(effect_icons[i].pos, position)) {
-			if (!effect_icons[i].name.empty())
-				tip_data.addText(msg->get(effect_icons[i].name));
+			std::stringstream ss;
+			if (!effect_icons[i].name.empty()) {
+				ss << msg->get(effect_icons[i].name);
+				if (effect_icons[i].type != Effect::SHIELD && effect_icons[i].stacks > 1) {
+					ss << " " << "(×" << effect_icons[i].stacks << ")";
+
+				}
+				tip_data.addText(ss.str());
+			}
 
 			if (effect_icons[i].type == Effect::HEAL)
 				continue;
 
-			std::stringstream ss;
+			ss.str("");
 			if (effect_icons[i].type == Effect::SHIELD) {
 				ss << "(" << effect_icons[i].current << "/" << effect_icons[i].max << ")";
 				tip_data.addText(ss.str());
@@ -219,12 +229,6 @@ void MenuActiveEffects::renderTooltips(const Point& position) {
 			else if (effect_icons[i].max > 0) {
 				ss << msg->get("Remaining:") << " " << Utils::getDurationString(effect_icons[i].current, eset->number_format.durations);
 				tip_data.addText(ss.str());
-			}
-
-			if(effect_icons[i].type != Effect::SHIELD){
-				if(effect_icons[i].stacks > 1){
-					tip_data.addText(msg->getv("x%d stacks", effect_icons[i].stacks));
-				}
 			}
 
 			break;
