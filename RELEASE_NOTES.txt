@@ -174,6 +174,26 @@ Game updates:
 	- Freeze: Increased speed and number of shards. Damage starts at 80% and increases by 10pp per level. Slow duration increases by 1s per level. Add a chance to inflict ice weakness to nearby enemies for 5s.
 	- Thunderstrike: Increased target range. Damage starts at 90% and increases by 10pp per level. Spawns 6 projectiles that have a chance to stun.
 	- Shield: Increased overall MP cost
+* Rebalanced passive powers:
+	- Stone Wall: Initial HP bonus raised from 25 to 100. Each level now grants 50 instead of 25.
+	- Wolf's Eye: Crit chance per level decreased from 3pp to 2pp. Accuracy per level raised from 10pp to 15pp.
+	- Energy Flow: Initial MP regen bonus raised from 15 to 75. Each level now grants 50 instead of 15.
+* New Warrior powers:
+    - Vampirism: Grants a temporary buff to the HP Steal stat
+    - Rupture: Creates a fissure that debuffs avoidance, absorb, and poise.
+    - Enchanted Blade (passive): Bonus dark damage
+* New Ranger powers:
+    - Charged Shot: Slower firing, but more damage and knockback. Can immobilize and has a chance of a crit on slowed targets.
+    - Poison Shot: Shoots a weak arrow that makes a poison cloud on impact. Damage over time is weak, but long lasting.
+    - Scavenger (passive): Bonus gold and item find
+* New Magician powers:
+    - Mystic Blast: Dark damage projectile. Applies increased dark resistance in exchange for a weakness to other elemental damage on the target. Can stack 3 times.
+    - Summon Skeleton: Summon up to 5 skeletons (number of skeletons is based on power level). Each skeleton summoned reduces the player's MP pool.
+    - Barrier (passive): Bonus elemental resistance
+* New procedurally generated dungeon: Iron Labyrinth
+* New item rarity: Mastite. These are powerful items with randomized stat bonuses.
+
+
 
 Translation updates:
 
