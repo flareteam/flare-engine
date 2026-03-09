@@ -5,7 +5,14 @@ import sys
 if __name__ == '__main__':
 	if len(sys.argv) > 1:
 		filename = sys.argv[1]
-		print("## flare-engine Translation Status")
+
+		project_name = ''
+		if 'flare-engine' in filename:
+			project_name = 'flare-engine'
+		elif 'flare-game' in filename:
+			project_name = 'flare-game'
+
+		print("## " + project_name + " Translation Status")
 		print("| Language                      | Completed")
 		print("|-------------------------------|----------------")
 		with open(filename, 'r') as file:
