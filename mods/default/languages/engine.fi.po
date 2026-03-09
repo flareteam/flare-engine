@@ -5,7 +5,7 @@
 # 
 # Translators:
 # Justin Jacobs <jajdorkster@gmail.com>, 2022
-# Jaakko Muilu, 2025
+# Jaakko Muilu, 2026
 # 
 #, fuzzy
 msgid ""
@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-18 12:00-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: Jaakko Muilu, 2025\n"
+"Last-Translator: Jaakko Muilu, 2026\n"
 "Language-Team: Finnish (https://app.transifex.com/flareorg/teams/84925/fi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -29,7 +29,7 @@ msgstr "Terveytesi on alhainen!"
 #: ../../../src/Avatar.cpp:506
 #, c-format
 msgid "Congratulations, you have reached level %d!"
-msgstr "Onnittelut, olet päässyt tasolle %d!"
+msgstr "Onnittelut, pääsit tasolle %d!"
 
 #: ../../../src/Avatar.cpp:508
 msgid "You may increase one or more attributes through the Character Menu."
@@ -108,9 +108,9 @@ msgid ""
 "\n"
 "Often slower, but less likely to have issues."
 msgstr ""
-"SDL software renderer\n"
+"SDL-ohjelmistorenderöijä\n"
 "\n"
-"Usein hitaampi, mutta vähemmän altis ongelmille."
+"Usein hitaampi mutta vähemmän altis ongelmille."
 
 #: ../../../src/DeviceList.cpp:59
 msgid ""
@@ -118,7 +118,7 @@ msgid ""
 "\n"
 "The default renderer that is often faster than the SDL software renderer."
 msgstr ""
-"SDL hardware renderer\n"
+"SDL-laitteistorenderöijä\n"
 "\n"
 "Oletusrenderöijä, joka on usein nopeampi kuin SDL-ohjelmistorenderöijä."
 
@@ -175,7 +175,7 @@ msgstr "Ladataan..."
 
 #: ../../../src/GameStateLoad.cpp:96
 msgid "Delete this save?"
-msgstr "Poistetaanko tallennus?"
+msgstr "Poista tämä tallennus?"
 
 #: ../../../src/GameStateLoad.cpp:97 ../../../src/MenuConfig.cpp:260
 msgid "No"
@@ -366,7 +366,7 @@ msgstr "Setti:"
 
 #: ../../../src/ItemManager.cpp:1274 ../../../src/MenuPowers.cpp:1356
 msgid "Tap icon again for more options"
-msgstr "Napauta ikonia taas lisävalintoja varten"
+msgstr "Napauta ikonia uudelleen lisävalintoja varten"
 
 #: ../../../src/ItemManager.cpp:1306
 #, c-format
@@ -461,7 +461,7 @@ msgstr "Statsipisteitä käytettävissä: %d"
 
 #: ../../../src/MenuCharacter.cpp:326
 msgid "Core Stats"
-msgstr ""
+msgstr "Ydinstatiikka"
 
 #: ../../../src/MenuCharacter.cpp:360
 msgid "Offensive Stats"
@@ -576,8 +576,8 @@ msgid ""
 "Show all loot tooltips, except for those that would be obscured by the "
 "player or an enemy. Temporarily show all loot tooltips with 'Alt'."
 msgstr ""
-"Näytä saaliin vihjetekstit, paitsi ne, joita pelaaja tai vihollinen peittää."
-" Näytä kaiken saaliin vihjetekstit tilapäisesti Alt-näppäimellä."
+"Näytä kaikki saaliin vihjetekstit, paitsi ne, joita pelaaja tai vihollinen "
+"peittää. Näytä kaikki saaliin vihjetekstit tilapäisesti Alt-näppäimellä."
 
 #: ../../../src/MenuConfig.cpp:352
 msgid "Show all"
@@ -587,7 +587,7 @@ msgstr "Näytä kaikki"
 msgid ""
 "Always show loot tooltips. Temporarily hide all loot tooltips with 'Alt'."
 msgstr ""
-"Näytä aina saaliin vihjetekstit. Piilota kaiken saaliin vihjetekstit "
+"Näytä aina saaliin vihjetekstit. Piilota kaikki saaliin vihjetekstit "
 "tilapäisesti Alt-näppäimellä."
 
 #: ../../../src/MenuConfig.cpp:353
@@ -596,7 +596,7 @@ msgid ""
 "the mouse cursor. Temporarily show all loot tooltips with 'Alt'."
 msgstr ""
 "Piilota aina saaliin vihjetekstit, paitsi kun osoitin on saaliin päällä. "
-"Näytä kaiken saaliin vihjetekstit tilapäisesti Alt-näppäimellä."
+"Näytä kaikki saaliin vihjetekstit tilapäisesti Alt-näppäimellä."
 
 #: ../../../src/MenuConfig.cpp:356
 msgid "Visible"
@@ -611,8 +611,7 @@ msgid ""
 "Controls the type of warning to be activated when the player is below the "
 "low health threshold."
 msgstr ""
-"Säätää varoitusta, joka aktivoidaan pelaajan terveyden ollessa kynnysarvon "
-"alapuolella."
+"Säätää varoitusta, joka aktivoidaan pelaajan terveyden alittaessa alarajan."
 
 #: ../../../src/MenuConfig.cpp:362
 msgid "- Display a message"
@@ -663,8 +662,8 @@ msgid ""
 "When the player's health drops below the given threshold, the low health "
 "notifications are triggered if one or more of them is enabled."
 msgstr ""
-"Kun pelaajan terveys laskee annetun kynnysarvon alapuolelle, alhaisen "
-"terveyden ilmoitukset käynnistyvät, jos yksi tai useampi niistä on käytössä."
+"Kun pelaajan terveys alittaa annetun alarajan, alhaisen terveyden "
+"ilmoitukset alkavat, mikäli yksi tai useampi niistä on käytössä."
 
 #: ../../../src/MenuConfig.cpp:383
 msgid ""
@@ -683,7 +682,7 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:403
 msgid "The maximum frame rate that the game will be allowed to run at."
-msgstr "Maksimi kehystaajuus, jolla peli voi toimia."
+msgstr "Enimmäiskehystaajuus, jolla peli voi toimia."
 
 #: ../../../src/MenuConfig.cpp:407
 msgid ""
@@ -778,7 +777,7 @@ msgstr "Musiikin voimakkuus"
 
 #: ../../../src/MenuConfig.cpp:474
 msgid "Mute audio when window loses focus"
-msgstr "Mykistä äänet kun ikkuna ei ole kohdistettuna "
+msgstr "Mykistä äänet, kun ikkuna ei ole keskitettynä"
 
 #: ../../../src/MenuConfig.cpp:476
 msgid "Automatically equip items"
@@ -794,7 +793,7 @@ msgstr "Alhaisen terveyden ilmoitus"
 
 #: ../../../src/MenuConfig.cpp:479
 msgid "Low health threshold"
-msgstr "Alhaisen terveyden kynnysarvo"
+msgstr "Alhaisen terveyden alaraja"
 
 #: ../../../src/MenuConfig.cpp:481
 msgid "Language"
@@ -822,7 +821,7 @@ msgstr "Tekstitykset"
 
 #: ../../../src/MenuConfig.cpp:488
 msgid "Mini-map mode"
-msgstr "Minikarttatila"
+msgstr "Pienoiskarttatila"
 
 #: ../../../src/MenuConfig.cpp:489
 msgid "Always show stat bar labels"
@@ -846,7 +845,7 @@ msgstr "Näytä esinevertailun vihjetekstit"
 
 #: ../../../src/MenuConfig.cpp:494
 msgid "Pause game when window loses focus"
-msgstr "Tauota peli kun ikkuna ei ole kohdistettuna"
+msgstr "Tauota peli, kun ikkuna ei ole keskitettynä"
 
 #: ../../../src/MenuConfig.cpp:497 ../../../src/MenuMovementType.cpp:94
 #: ../../../src/MenuMovementType.cpp:131
@@ -952,8 +951,8 @@ msgid ""
 "Shows a marker above enemies, allies, and the player when they are obscured "
 "by tall objects."
 msgstr ""
-"Näyttää merkin vihollisten, liittolaisten ja pelaajan yllä, kun ne ovat "
-"korkeiden objektien peitossa."
+"Näyttää merkin vihollisten, liittolaisten ja pelaajan yllä, kun korkeat "
+"objektit peittävät ne."
 
 #: ../../../src/MenuConfig.cpp:632
 msgid ""
@@ -968,8 +967,7 @@ msgid ""
 "This allows the game to be controlled entirely with the keyboard (or "
 "joystick)."
 msgstr ""
-"Tämä mahdollistaa pelin ohjaamisen kokonaan näppäimistöllä (tai "
-"peliohjaimella)."
+"Tämä sallii pelin ohjaamisen kokonaan näppäimistöllä (tai peliohjaimella)."
 
 #: ../../../src/MenuConfig.cpp:634
 msgid ""
@@ -1121,7 +1119,7 @@ msgstr "Tiili"
 
 #: ../../../src/MenuDevConsole.cpp:448
 msgid "Shortcut saved."
-msgstr ""
+msgstr "Pikanäppäin tallennettu."
 
 #: ../../../src/MenuDevConsole.cpp:475
 msgid "adds a power to the action bar"
@@ -1171,7 +1169,7 @@ msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:483
 msgid "Assign a console command to a shortcut key."
-msgstr ""
+msgstr "Määritä konsolikomento pikanäppäimelle."
 
 #: ../../../src/MenuDevConsole.cpp:484 ../../../src/MenuDevConsole.cpp:485
 msgid ""
@@ -1201,7 +1199,7 @@ msgstr "FPS-laskin vaihdettu"
 
 #: ../../../src/MenuDevConsole.cpp:652
 msgid "ERROR: Incorrect number of arguments"
-msgstr "VIRHE: Virheellinen argumenttien määrä"
+msgstr "VIRHE: Väärä argumenttien määrä"
 
 #: ../../../src/MenuDevConsole.cpp:654 ../../../src/MenuDevConsole.cpp:667
 #: ../../../src/MenuDevConsole.cpp:704
@@ -1234,7 +1232,7 @@ msgstr ""
 #: ../../../src/MenuDevConsole.cpp:674
 #, c-format
 msgid "Enter the command you wish to save to slot %d."
-msgstr ""
+msgstr "Kirjoita komento, jonka haluat tallentaa paikkaan %d."
 
 #: ../../../src/MenuDevConsole.cpp:678
 msgid "ERROR: Not a valid shortcut slot."
@@ -1858,7 +1856,7 @@ msgstr "(tuntematon)"
 
 #: ../../../src/SDLInputState.cpp:822
 msgid "Touch control D-Pad"
-msgstr "Kosketusohjausken suuntapainikkeet"
+msgstr "Kosketusohjauksen suuntapainikkeet"
 
 #: ../../../src/SDLInputState.cpp:848
 msgid "Touch control buttons"
@@ -1926,7 +1924,7 @@ msgstr "Edellinen varustesetti"
 
 #: ../../../src/SDLInputState.cpp:943
 msgid "Mini-map Mode"
-msgstr "Minikartan tila"
+msgstr "Pienoiskartan tila"
 
 #: ../../../src/SDLInputState.cpp:944
 msgid "Loot Tooltip Mode"
@@ -2273,7 +2271,7 @@ msgstr "Vastustus vahingolle ajan myötä"
 #: ../../../src/Stats.cpp:166
 msgid "Percentage chance that damage-over-time effects will be negated."
 msgstr ""
-"Prosenttimahdollisuus, että vahinkovaikutukset ajan myötä mitätöidään."
+"Prosenttimahdollisuus, että ajan mittaan aiheutuvat vahingot kumotaan."
 
 #: ../../../src/Stats.cpp:172
 msgid "Resist Slow"
@@ -2281,7 +2279,7 @@ msgstr "Vastustus hidastukselle"
 
 #: ../../../src/Stats.cpp:173
 msgid "Percentage chance that slow effects will be negated."
-msgstr "Prosenttimahdollisuus, että hidastusvaikutukset mitätöidään."
+msgstr "Prosenttimahdollisuus, että hidastusvaikutukset kumotaan."
 
 #: ../../../src/Stats.cpp:179
 msgid "Resist Stun"
@@ -2289,7 +2287,7 @@ msgstr "Vastustus tyrmäykselle"
 
 #: ../../../src/Stats.cpp:180
 msgid "Percentage chance that stun effects will be negated."
-msgstr "Prosenttimahdollisuus, että tyrmäysvaikutukset mitätöidään."
+msgstr "Prosenttimahdollisuus, että tyrmäysvaikutukset kumotaan."
 
 #: ../../../src/Stats.cpp:186
 msgid "Resist Knockback"
@@ -2297,7 +2295,7 @@ msgstr "Vastustus sysäykselle"
 
 #: ../../../src/Stats.cpp:187
 msgid "Percentage chance that knockback effects will be negated."
-msgstr "Prosenttimahdollisuus, että sysäysvaikutukset mitätöidään."
+msgstr "Prosenttimahdollisuus, että sysäysvaikutukset kumotaan."
 
 #: ../../../src/Stats.cpp:193
 msgid "Resist Stat Debuffs"
@@ -2305,7 +2303,7 @@ msgstr "Vastustus statsiheikennyksille"
 
 #: ../../../src/Stats.cpp:194
 msgid "Percentage chance that stat debuff effects will be negated."
-msgstr "Prosenttimahdollisuus, että statsiheikennys mitätöidään."
+msgstr "Prosenttimahdollisuus, että statsiheikennys kumotaan."
 
 #: ../../../src/Stats.cpp:200
 msgid "Resist Damage Reflection"
@@ -2313,7 +2311,7 @@ msgstr "Vastustus vahingon heijastukselle"
 
 #: ../../../src/Stats.cpp:201
 msgid "Percentage chance that damage reflection will be negated."
-msgstr "Prosenttimahdollisuus, että vahingon heijastus mitätöidään."
+msgstr "Prosenttimahdollisuus, että vahingon heijastus kumotaan."
 
 #: ../../../src/Stats.cpp:207
 msgid "Resist HP Steal"
@@ -2321,7 +2319,7 @@ msgstr "Vastustus OP-riistolle"
 
 #: ../../../src/Stats.cpp:208
 msgid "Percentage chance that HP steal will be negated."
-msgstr "Prosenttimahdollisuus, että OP-riisto mitätöidään."
+msgstr "Prosenttimahdollisuus, että OP-riisto kumotaan."
 
 #: ../../../src/Stats.cpp:214
 msgid "Resist MP Steal"
@@ -2329,7 +2327,7 @@ msgstr "Vastustus MP-riistolle"
 
 #: ../../../src/Stats.cpp:215
 msgid "Percentage chance that MP steal will be negated."
-msgstr "Prosenttimahdollisuus, että MP-riisto mitätöidään."
+msgstr "Prosenttimahdollisuus, että MP-riisto kumotaan."
 
 #: ../../../src/Utils.cpp:375
 msgid "k"
@@ -2355,4 +2353,4 @@ msgstr "tai vanhempi"
 
 #: ../../../src/WidgetLog.cpp:107
 msgid "ERROR: Text output too large"
-msgstr ""
+msgstr "VIRHE: Tekstitulostus liian suuri"
