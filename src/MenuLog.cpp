@@ -39,7 +39,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 MenuLog::MenuLog() {
 	visible = false;
 
-	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
+	closeButton = new WidgetButton(WidgetButton::CLOSE_FILE);
 
 	// Load config settings
 	FileParser infile;

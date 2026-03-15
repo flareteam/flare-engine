@@ -32,7 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 MenuConfirm::MenuConfirm()
 	: Menu()
-	, button_close(new WidgetButton("images/menus/buttons/button_x.png"))
+	, button_close(new WidgetButton(WidgetButton::CLOSE_FILE))
 	, action_list(new WidgetHorizontalList())
 	, clicked_confirm(false)
 	, clicked_cancel(false)

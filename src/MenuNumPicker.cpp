@@ -48,10 +48,10 @@ MenuNumPicker::MenuNumPicker()
 	button_ok = new WidgetButton(WidgetButton::DEFAULT_FILE);
 	button_ok->setLabel(msg->get("OK"));
 
-	button_up = new WidgetButton("images/menus/buttons/up.png");
-	button_down = new WidgetButton("images/menus/buttons/down.png");
+	button_up = new WidgetButton(WidgetButton::DIR_UP_FILE);
+	button_down = new WidgetButton(WidgetButton::DIR_DOWN_FILE);
 
-	button_close = new WidgetButton("images/menus/buttons/button_x.png");
+	button_close = new WidgetButton(WidgetButton::CLOSE_FILE);
 
 	input_box = new WidgetInput(WidgetInput::DEFAULT_FILE);
 	input_box->only_numbers = true;

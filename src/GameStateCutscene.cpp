@@ -51,9 +51,9 @@ Scene::Scene(const CutsceneSettings& _settings, short _cutscene_type)
 	, art_scale_type(CUTSCENE_SCALE_NONE)
 	, sid(-1)
 	, caption_box(NULL)
-	, button_prev(new WidgetButton("images/menus/buttons/left.png"))
-	, button_next(new WidgetButton("images/menus/buttons/right.png"))
-	, button_close(new WidgetButton("images/menus/buttons/button_x.png"))
+	, button_prev(new WidgetButton(WidgetButton::DIR_LEFT_FILE))
+	, button_next(new WidgetButton(WidgetButton::DIR_RIGHT_FILE))
+	, button_close(new WidgetButton(WidgetButton::CLOSE_FILE))
 	, button_advance(NULL)
 	, vscroll_offset(0)
 	, vscroll_y(0)
@@ -82,9 +82,9 @@ Scene& Scene::operator=(const Scene& other) {
 	art_scale_type = other.art_scale_type;
 	sid = other.sid;
 	caption_box = NULL;
-	button_prev = new WidgetButton("images/menus/buttons/left.png");
-	button_next = new WidgetButton("images/menus/buttons/right.png");
-	button_close = new WidgetButton("images/menus/buttons/button_x.png");
+	button_prev = new WidgetButton(WidgetButton::DIR_LEFT_FILE);
+	button_next = new WidgetButton(WidgetButton::DIR_RIGHT_FILE);
+	button_close = new WidgetButton(WidgetButton::CLOSE_FILE);
 	button_advance = NULL;
 	vscroll_offset = other.vscroll_offset;
 	vscroll_y = other.vscroll_y;

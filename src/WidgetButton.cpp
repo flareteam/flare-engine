@@ -35,6 +35,15 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 const std::string WidgetButton::DEFAULT_FILE = "images/menus/buttons/button_default.png";
 const std::string WidgetButton::NO_FILE = "_NO_FILE_";
 
+const std::string WidgetButton::CLOSE_FILE = "images/menus/buttons/button_x.png";
+const std::string WidgetButton::DIR_LEFT_FILE = "images/menus/buttons/left.png";
+const std::string WidgetButton::DIR_RIGHT_FILE = "images/menus/buttons/right.png";
+const std::string WidgetButton::DIR_UP_FILE = "images/menus/buttons/up.png";
+const std::string WidgetButton::DIR_DOWN_FILE = "images/menus/buttons/down.png";
+const std::string WidgetButton::UPGRADE_STAT_FILE = "images/menus/buttons/upgrade.png";
+const std::string WidgetButton::UPGRADE_POWER_FILE = "images/menus/buttons/button_plus.png";
+const std::string WidgetButton::CONFIG_MENU_FILE = "images/menus/buttons/button_config.png";
+
 WidgetButton::WidgetButton(const std::string& _fileName)
 	: Widget()
 	, fileName(_fileName)

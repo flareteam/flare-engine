@@ -68,8 +68,8 @@ MenuTalker::MenuTalker()
 	, trade_color_hover(font->getColor(FontEngine::COLOR_WIDGET_NORMAL))
 	, trade_color_pressed(font->getColor(FontEngine::COLOR_WIDGET_DISABLED))
 	, npc(NULL)
-	, advanceButton(new WidgetButton("images/menus/buttons/right.png"))
-	, closeButton(new WidgetButton("images/menus/buttons/button_x.png"))
+	, advanceButton(new WidgetButton(WidgetButton::DIR_RIGHT_FILE))
+	, closeButton(new WidgetButton(WidgetButton::CLOSE_FILE))
 	, npc_from_map(true)
 {
 	// Load config settings

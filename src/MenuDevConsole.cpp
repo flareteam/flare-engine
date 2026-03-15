@@ -73,7 +73,7 @@ MenuDevConsole::MenuDevConsole()
 
 	distance_timer.setDuration(settings->max_frames_per_sec);
 
-	button_close = new WidgetButton("images/menus/buttons/button_x.png");
+	button_close = new WidgetButton(WidgetButton::CLOSE_FILE);
 	tablist.add(button_close);
 
 	// Load config settings

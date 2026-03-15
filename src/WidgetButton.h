@@ -53,6 +53,14 @@ private:
 public:
 	static const std::string DEFAULT_FILE;
 	static const std::string NO_FILE;
+	static const std::string CLOSE_FILE;
+	static const std::string DIR_LEFT_FILE;
+	static const std::string DIR_RIGHT_FILE;
+	static const std::string DIR_UP_FILE;
+	static const std::string DIR_DOWN_FILE;
+	static const std::string UPGRADE_STAT_FILE;
+	static const std::string UPGRADE_POWER_FILE;
+	static const std::string CONFIG_MENU_FILE;
 
 	enum {
 		BUTTON_NORMAL = 0,

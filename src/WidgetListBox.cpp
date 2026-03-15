@@ -34,6 +34,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetScrollBar.h"
 
 const std::string WidgetListBox::DEFAULT_FILE = "images/menus/buttons/listbox_default.png";
+const std::string WidgetListBox::CHAR_MENU_FILE = "images/menus/buttons/listbox_char.png";
 
 WidgetListBox::WidgetListBox(int height, const std::string& _fileName)
 	: Widget()

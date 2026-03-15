@@ -42,7 +42,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetListBox.h"
 
 MenuCharacter::MenuCharacter()
-	: closeButton(new WidgetButton("images/menus/buttons/button_x.png"))
+	: closeButton(new WidgetButton(WidgetButton::CLOSE_FILE))
 	, labelCharacter(new WidgetLabel())
 	, labelUnspent(new WidgetLabel())
 	, skill_points(0)
@@ -115,7 +115,7 @@ MenuCharacter::MenuCharacter()
 
 	for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 		primary_up[i] = false;
-		upgradeButton[i] = new WidgetButton("images/menus/buttons/upgrade.png");
+		upgradeButton[i] = new WidgetButton(WidgetButton::UPGRADE_STAT_FILE);
 		upgradeButton[i]->enabled = false;
 	}
 
@@ -222,7 +222,7 @@ MenuCharacter::MenuCharacter()
 	}
 
 	// stat list
-	statList = new WidgetListBox(statlist_rows, "images/menus/buttons/listbox_char.png");
+	statList = new WidgetListBox(statlist_rows, WidgetListBox::CHAR_MENU_FILE);
 	tablist.add(statList);
 	statList->can_select = false;
 	statList->scrollbar_offset = statlist_scrollbar_offset;

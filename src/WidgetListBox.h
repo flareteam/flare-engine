@@ -73,6 +73,7 @@ public:
 	void setPos(int offset_x, int offset_y);
 
 	static const std::string DEFAULT_FILE;
+	static const std::string CHAR_MENU_FILE;
 
 	bool checkClick();
 	bool checkClickAt(int x, int y);

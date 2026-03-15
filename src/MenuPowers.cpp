@@ -127,7 +127,7 @@ MenuPowers::MenuPowers()
 	, newPowerNotification(false)
 {
 
-	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
+	closeButton = new WidgetButton(WidgetButton::CLOSE_FILE);
 
 	// Read powers data from config file
 	FileParser infile;
@@ -481,7 +481,7 @@ void MenuPowers::loadPower(FileParser &infile) {
 		if (cell_group.cells.size() > 1) {
 			cell_group.cells[0].upgrade_level = 1;
 			if (!cell_group.upgrade_button)
-				cell_group.upgrade_button = new WidgetButton("images/menus/buttons/button_plus.png");
+				cell_group.upgrade_button = new WidgetButton(WidgetButton::UPGRADE_POWER_FILE);
 		}
 	}
 	else if (infile.key == "visible") {

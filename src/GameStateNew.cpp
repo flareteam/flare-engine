@@ -75,8 +75,8 @@ GameStateNew::GameStateNew()
 	button_create->enabled = false;
 	button_create->refresh();
 
-	button_prev = new WidgetButton("images/menus/buttons/left.png");
-	button_next = new WidgetButton("images/menus/buttons/right.png");
+	button_prev = new WidgetButton(WidgetButton::DIR_LEFT_FILE);
+	button_next = new WidgetButton(WidgetButton::DIR_RIGHT_FILE);
 
 	button_randomize = new WidgetButton(WidgetButton::DEFAULT_FILE);
 	button_randomize->setLabel(msg->get("Randomize"));

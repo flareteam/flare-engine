@@ -122,7 +122,7 @@ MenuMiniMap::MenuMiniMap()
 			// @ATTR button_config|point|Position of the 'Configuration' button. The button will be hidden if not defined.
 			else if (infile.key == "button_config") {
 				if (!button_config) {
-					button_config = new WidgetButton("images/menus/buttons/button_config.png");
+					button_config = new WidgetButton(WidgetButton::CONFIG_MENU_FILE);
 				}
 				Point p = Parse::toPoint(infile.val);
 				button_config->setBasePos(p.x, p.y, Utils::ALIGN_TOPLEFT);

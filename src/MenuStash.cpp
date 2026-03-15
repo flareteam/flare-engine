@@ -56,7 +56,7 @@ MenuStashTab::~MenuStashTab() {
 
 MenuStash::MenuStash()
 	: Menu()
-	, closeButton(new WidgetButton("images/menus/buttons/button_x.png"))
+	, closeButton(new WidgetButton(WidgetButton::CLOSE_FILE))
 	, tab_control(new WidgetTabControl())
 	, activetab(0)
 	, tabs()

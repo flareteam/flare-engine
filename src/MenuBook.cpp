@@ -44,7 +44,7 @@ MenuBook::MenuBook()
 	: book_name("")
 	, last_book_name("")
 	, book_loaded(false)
-	, closeButton(new WidgetButton("images/menus/buttons/button_x.png"))
+	, closeButton(new WidgetButton(WidgetButton::CLOSE_FILE))
 	, event_open(NULL)
 	, event_close(NULL)
 {
