@@ -144,17 +144,51 @@ void MenuBook::loadBook() {
 			images.erase(images.begin() + i);
 	}
 
+	BookButton *button_left = NULL;
+	BookButton *button_right = NULL;
+	bool button_left_enable = true;
+	bool button_right_enable = true;
+
 	for (size_t i = 0; i < buttons.size(); ++i) {
 		if (buttons[i].image.empty())
 			buttons[i].button = new WidgetButton(WidgetButton::DEFAULT_FILE);
 		else
 			buttons[i].button = new WidgetButton(buttons[i].image);
 
+		// we want left/right inputs to map to left/right buttons
+		// this should only happen when buttons have an event that loads another book (i.e. multi-page book)
+		// if there's multiple of the same button, we disable this behavior, since we don't know which one to use
+		if (buttons[i].image == WidgetButton::DIR_LEFT_FILE && button_left_enable) {
+			if (button_left) {
+				button_left = NULL;
+				button_left_enable = false;
+			}
+			else if (buttons[i].event.getComponent(EventComponent::BOOK) != NULL) {
+				button_left = &buttons[i];
+			}
+		}
+		if (buttons[i].image == WidgetButton::DIR_RIGHT_FILE && button_right_enable) {
+			if (button_right) {
+				button_right = NULL;
+				button_right_enable = false;
+			}
+			else if (buttons[i].event.getComponent(EventComponent::BOOK) != NULL) {
+				button_right = &buttons[i];
+			}
+		}
+
 		buttons[i].button->setBasePos(buttons[i].dest.x, buttons[i].dest.y, Utils::ALIGN_TOPLEFT);
 		buttons[i].button->setLabel(msg->get(buttons[i].label));
 		buttons[i].button->refresh();
 
 		tablist.add(buttons[i].button);
+	}
+
+	if (button_left) {
+		button_left->enable_nav_left = true;
+	}
+	if (button_right) {
+		button_right->enable_nav_right = true;
 	}
 
 	align();
@@ -444,6 +478,18 @@ void MenuBook::logic() {
 		}
 
 		if (buttons[i].button->checkClick()) {
+			if (eventm->executeEvent(buttons[i].event)) {
+				buttons[i].event = Event();
+			}
+		}
+		else if (inpt->usingMouse() && buttons[i].button->enabled && buttons[i].enable_nav_left && inpt->pressing[Input::LEFT] && !inpt->lock[Input::LEFT]) {
+			inpt->lock[Input::LEFT] = true;
+			if (eventm->executeEvent(buttons[i].event)) {
+				buttons[i].event = Event();
+			}
+		}
+		else if (inpt->usingMouse() && buttons[i].button->enabled && buttons[i].enable_nav_right && inpt->pressing[Input::RIGHT] && !inpt->lock[Input::RIGHT]) {
+			inpt->lock[Input::RIGHT] = true;
 			if (eventm->executeEvent(buttons[i].event)) {
 				buttons[i].event = Event();
 			}

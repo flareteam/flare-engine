@@ -86,9 +86,13 @@ private:
 		std::string image;
 		std::string label;
 		Event event;
+		bool enable_nav_left;
+		bool enable_nav_right;
 
 		BookButton()
 			: button(NULL)
+			, enable_nav_left(false)
+			, enable_nav_right(false)
 		{}
 	};
 
