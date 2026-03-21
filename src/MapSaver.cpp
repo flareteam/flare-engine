@@ -441,6 +441,17 @@ void MapSaver::writeEvents(std::ofstream& map_file) {
 			map_file << "cooldown=" << value << suffix << std::endl;
 		}
 
+		if (event.delay.getDuration() > 0) {
+			std::string suffix = "ms";
+			int value = static_cast<int>(1000.f * static_cast<float>(event.delay.getDuration()) / settings->max_frames_per_sec);
+			if (value % 1000 == 0)
+			{
+				value = event.delay.getDuration() / settings->max_frames_per_sec;
+				suffix = "s";
+			}
+			map_file << "delay=" << value << suffix << std::endl;
+		}
+
 		Rect reachable_from = event.reachable_from;
 		if (reachable_from.x != 0 && reachable_from.y != 0 && reachable_from.w != 0 && reachable_from.h != 0) {
 			map_file << "reachable_from=" << reachable_from.x << "," << reachable_from.y << "," << reachable_from.w << "," << reachable_from.h << std::endl;
