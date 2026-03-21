@@ -1548,6 +1548,10 @@ void Map::copyMapObjects(Map* src, Chunk* chunk, size_t src_x, size_t src_y, siz
 				ec->data[0].Int += static_cast<int>(x_offset);
 				ec->data[1].Int += static_cast<int>(y_offset);
 			}
+			else if (ec->type == EventComponent::MAPMOD_TOGGLE) {
+				ec->data[0].Int += static_cast<int>(x_offset);
+				ec->data[1].Int += static_cast<int>(y_offset);
+			}
 			else if (ec->type == EventComponent::SOUNDFX) {
 				// make sure we handle sounds that aren't positional
 				if (!(ec->data[0].Int == -1 && ec->data[1].Int == -1) && !(ec->data[0].Int == 0 && ec->data[1].Int == 0)) {

@@ -36,6 +36,7 @@ MapSaver::MapSaver(Map *_map) : map(_map) {
 	EVENT_COMPONENT_NAME[EventComponent::INTERMAP_ID] = "intermap_id";
 	EVENT_COMPONENT_NAME[EventComponent::INTRAMAP] = "intramap";
 	EVENT_COMPONENT_NAME[EventComponent::MAPMOD] = "mapmod";
+	EVENT_COMPONENT_NAME[EventComponent::MAPMOD_TOGGLE] = "mapmod_toggle";
 	EVENT_COMPONENT_NAME[EventComponent::SOUNDFX] = "soundfx";
 	EVENT_COMPONENT_NAME[EventComponent::LOOT] = "loot"; // HALF-IMPLEMENTED
 	EVENT_COMPONENT_NAME[EventComponent::LOOT_COUNT] = "loot_count";
@@ -516,6 +517,9 @@ void MapSaver::writeEventComponents(std::ofstream &map_file, int eventID) {
 		}
 		else if (e.type == EventComponent::MAPMOD) {
 			map_file << e.s << "," << e.data[0].Int << "," << e.data[1].Int << "," << e.data[2].Int << std::endl;
+		}
+		else if (e.type == EventComponent::MAPMOD_TOGGLE) {
+			map_file << e.s << "," << e.data[0].Int << "," << e.data[1].Int << "," << e.data[2].Int << "," << e.data[3].Int << std::endl;
 		}
 		else if (e.type == EventComponent::SOUNDFX) {
 			map_file << e.s;

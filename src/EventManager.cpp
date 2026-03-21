@@ -287,6 +287,33 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 			}
 		}
 	}
+	else if (key == "mapmod_toggle") {
+		// @ATTR event.mapmod_toggle|list(predefined_string, int, int, int, int) : Layer, X, Y, Tile ID A, Tile ID B|Same as mapmod, except this will alternate between two tile IDs.
+		e->type = EventComponent::MAPMOD_TOGGLE;
+
+		e->s = Parse::popFirstString(val);
+		e->data[0].Int = Parse::popFirstInt(val);
+		e->data[1].Int = Parse::popFirstInt(val);
+		e->data[2].Int = Parse::popFirstInt(val);
+		e->data[3].Int = Parse::popFirstInt(val);
+
+		// add repeating mapmods
+		if (evnt) {
+			std::string repeat_val = Parse::popFirstString(val);
+			while (repeat_val != "") {
+				evnt->components.push_back(EventComponent());
+				e = &evnt->components.back();
+				e->type = EventComponent::MAPMOD_TOGGLE;
+				e->s = repeat_val;
+				e->data[0].Int = Parse::popFirstInt(val);
+				e->data[1].Int = Parse::popFirstInt(val);
+				e->data[2].Int = Parse::popFirstInt(val);
+				e->data[3].Int = Parse::popFirstInt(val);
+
+				repeat_val = Parse::popFirstString(val);
+			}
+		}
+	}
 	else if (key == "soundfx") {
 		// @ATTR event.soundfx|filename, int, int, bool : Sound file, X, Y, loop|Filename of a sound to play. Optionally, it can be played at a specific location and/or looped. Note: Sounds attached to 'on_load' events will loop by default.
 		e->type = EventComponent::SOUNDFX;
@@ -994,24 +1021,70 @@ bool EventManager::executeEventInternal(Event &ev, bool skip_delay) {
 			mapr->teleport_destination.y = static_cast<float>(ec->data[1].Int) + 0.5f;
 		}
 		else if (ec->type == EventComponent::MAPMOD) {
+			int tile_x = ec->data[0].Int;
+			int tile_y = ec->data[1].Int;
+			unsigned short tile_id = static_cast<unsigned short>(ec->data[2].Int);
+
 			if (ec->s == "collision") {
-				if (ec->data[0].Int >= 0 && ec->data[0].Int < mapr->w && ec->data[1].Int >= 0 && ec->data[1].Int < mapr->h) {
-					mapr->collider.colmap[ec->data[0].Int][ec->data[1].Int] = static_cast<unsigned short>(ec->data[2].Int);
+				if (tile_x >= 0 && tile_x < mapr->w && tile_y >= 0 && tile_y < mapr->h) {
+					mapr->collider.colmap[tile_x][tile_y] = tile_id;
 					mapr->map_change = true;
 				}
 				else
-					Utils::logError("EventManager: Mapmod at position (%d, %d) is out of bounds 0-255.", ec->data[0].Int, ec->data[1].Int);
+					Utils::logError("EventManager: Mapmod at position (%d, %d) is out of bounds 0-255.", tile_x, tile_y);
 			}
 			else {
 				size_t index = static_cast<size_t>(distance(mapr->layernames.begin(), find(mapr->layernames.begin(), mapr->layernames.end(), ec->s)));
-				if (!mapr->isValidTile(ec->data[2].Int))
-					Utils::logError("EventManager: Mapmod at position (%d, %d) contains invalid tile id (%d).", ec->data[0].Int, ec->data[1].Int, ec->data[2].Int);
+				if (!mapr->isValidTile(tile_id))
+					Utils::logError("EventManager: Mapmod at position (%d, %d) contains invalid tile id (%d).", tile_x, tile_y, tile_id);
 				else if (index >= mapr->layers.size())
-					Utils::logError("EventManager: Mapmod at position (%d, %d) is on an invalid layer.", ec->data[0].Int, ec->data[1].Int);
-				else if (ec->data[0].Int >= 0 && ec->data[0].Int < mapr->w && ec->data[1].Int >= 0 && ec->data[1].Int < mapr->h)
-					mapr->layers[index][ec->data[0].Int][ec->data[1].Int] = static_cast<unsigned short>(ec->data[2].Int);
+					Utils::logError("EventManager: Mapmod at position (%d, %d) is on an invalid layer.", tile_x, tile_y);
+				else if (tile_x >= 0 && tile_x < mapr->w && tile_y >= 0 && tile_y < mapr->h)
+					mapr->layers[index][tile_x][tile_y] = tile_id;
 				else
-					Utils::logError("EventManager: Mapmod at position (%d, %d) is out of bounds 0-255.", ec->data[0].Int, ec->data[1].Int);
+					Utils::logError("EventManager: Mapmod at position (%d, %d) is out of bounds 0-255.", tile_x, tile_y);
+			}
+		}
+		else if (ec->type == EventComponent::MAPMOD_TOGGLE) {
+			int tile_x = ec->data[0].Int;
+			int tile_y = ec->data[1].Int;
+			unsigned short tile_a = static_cast<unsigned short>(ec->data[2].Int);
+			unsigned short tile_b = static_cast<unsigned short>(ec->data[3].Int);
+
+			if (ec->s == "collision") {
+				if (tile_x >= 0 && tile_x < mapr->w && tile_y >= 0 && tile_y < mapr->h) {
+					unsigned short &map_tile = mapr->collider.colmap[tile_x][tile_y];
+					if (map_tile == tile_a) {
+						map_tile = tile_b;
+						mapr->map_change = true;
+					}
+					else if (map_tile == tile_b) {
+						map_tile = tile_a;
+						mapr->map_change = true;
+					}
+				}
+				else
+					Utils::logError("EventManager: Mapmod at position (%d, %d) is out of bounds 0-255.", tile_x, tile_y);
+			}
+			else {
+				size_t index = static_cast<size_t>(distance(mapr->layernames.begin(), find(mapr->layernames.begin(), mapr->layernames.end(), ec->s)));
+				if (!mapr->isValidTile(tile_a))
+					Utils::logError("EventManager: Mapmod at position (%d, %d) contains invalid tile id (%d).", tile_x, tile_y, tile_a);
+				else if (!mapr->isValidTile(tile_b))
+					Utils::logError("EventManager: Mapmod at position (%d, %d) contains invalid tile id (%d).", tile_x, tile_y, tile_b);
+				else if (index >= mapr->layers.size())
+					Utils::logError("EventManager: Mapmod at position (%d, %d) is on an invalid layer.", tile_x, tile_y);
+				else if (tile_x >= 0 && tile_x < mapr->w && tile_y >= 0 && tile_y < mapr->h) {
+					unsigned short &map_tile = mapr->layers[index][tile_x][tile_y];
+					if (map_tile == tile_a) {
+						map_tile = tile_b;
+					}
+					else if (map_tile == tile_b) {
+						map_tile = tile_a;
+					}
+				}
+				else
+					Utils::logError("EventManager: Mapmod at position (%d, %d) is out of bounds 0-255.", tile_x, tile_y);
 			}
 		}
 		else if (ec->type == EventComponent::SOUNDFX) {

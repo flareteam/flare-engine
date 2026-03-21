@@ -58,6 +58,7 @@ Engine features:
 * Added 'class_tip' and 'show_class_tip' properties to new game menu config.
 * Added 'show_frame_background' property to configuration, new game, and load game menu configs.
 * Added 'ignore_resist' property to powers/effects.txt config.
+* Added 'mapmod_toggle' property to Events.
 * Support navigating "multi-page" books with left/right inputs when possible.
 * Android: Enabled use of external input devices (gamepads, keyboards, mice)
 

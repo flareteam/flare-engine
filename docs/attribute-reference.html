@@ -614,6 +614,8 @@ code {
 
 <p><strong>event.mapmod</strong> | <code>list(predefined_string, int, int, int) : Layer, X, Y, Tile ID</code> | Modify map tiles</p>
 
+<p><strong>event.mapmod_toggle</strong> | <code>list(predefined_string, int, int, int, int) : Layer, X, Y, Tile ID A, Tile ID B</code> | Same as mapmod, except this will alternate between two tile IDs.</p>
+
 <p><strong>event.soundfx</strong> | <code>filename, int, int, bool : Sound file, X, Y, loop</code> | Filename of a sound to play. Optionally, it can be played at a specific location and/or looped. Note: Sounds attached to 'on_load' events will loop by default.</p>
 
 <p><strong>event.loot</strong> | <code>list(loot)</code> | Add loot to the event.</p>
@@ -2025,6 +2027,8 @@ code {
 <p><strong>effect.alpha_mod</strong> | <code>int</code> | Changes the alpha of the afflicted entity.</p>
 
 <p><strong>effect.attack_speed_anim</strong> | <code>string</code> | If the type of Effect is attack_speed, this defines the attack animation that will have its speed changed.</p>
+
+<p><strong>effect.ignore_resist</strong> | <code>bool</code> | If true, this effect will ignore the target's effect resistance stats (not to be confused with elemental/damage type resistances).</p>
 
 <hr />
 
