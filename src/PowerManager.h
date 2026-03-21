@@ -335,7 +335,7 @@ private:
 
 	void initHazard(PowerID power_index, StatBlock *src_stats, const FPoint& origin, const FPoint& target, Hazard *haz);
 	void buff(PowerID power_index, StatBlock *src_stats, const FPoint& origin, const FPoint& target);
-	void playSound(PowerID power_index);
+	void playSound(PowerID power_index, const FPoint& sound_pos);
 
 	bool fixed(PowerID power_index, StatBlock *src_stats, const FPoint& origin, const FPoint& target);
 	bool missile(PowerID power_index, StatBlock *src_stats, const FPoint& origin, const FPoint& target);

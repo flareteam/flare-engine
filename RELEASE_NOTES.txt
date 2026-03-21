@@ -141,6 +141,7 @@ Engine fixes:
 * Fixed repeater powers having no effect if the first hazard hit a wall.
 * Attempt to fall back to default values if base/head graphics don't exist for a hero option.
 * Fixed incorrect max summon limits when a power was unlocked/locked.
+* Fixed volume of power and entity sounds not being attenuated based on distance.
 * Android: Fix 'Flare' directory not being automatically created.
 * Android: Added a dialog to direct the player to the wiki page for installing if no game data is found.
 

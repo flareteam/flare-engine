@@ -1512,9 +1512,9 @@ void PowerManager::buff(PowerID power_index, StatBlock *src_stats, const FPoint&
  * Play the sound effect for this power
  * Equipped items may have unique sounds
  */
-void PowerManager::playSound(PowerID power_index) {
+void PowerManager::playSound(PowerID power_index, const FPoint& sound_pos) {
 	if (powers[power_index]->sfx_index != -1)
-		snd->play(sfx[powers[power_index]->sfx_index], snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
+		snd->play(sfx[powers[power_index]->sfx_index], snd->DEFAULT_CHANNEL, sound_pos, !snd->LOOP);
 }
 
 bool PowerManager::effect(StatBlock *target_stats, StatBlock *caster_stats, PowerID power_index, int source_type) {
@@ -1633,7 +1633,10 @@ bool PowerManager::fixed(PowerID power_index, StatBlock *src_stats, const FPoint
 	buff(power_index, src_stats, origin, target);
 
 	// If there's a sound effect, play it here
-	playSound(power_index);
+	if (!hazards.empty())
+		playSound(power_index, hazards.back()->pos);
+	else
+		playSound(power_index, origin);
 
 	payPowerCost(power_index, src_stats);
 	return true;
@@ -1699,7 +1702,11 @@ bool PowerManager::missile(PowerID power_index, StatBlock *src_stats, const FPoi
 
 	payPowerCost(power_index, src_stats);
 
-	playSound(power_index);
+	if (!hazards.empty())
+		playSound(power_index, hazards.back()->pos);
+	else
+		playSound(power_index, origin);
+
 	return true;
 }
 
@@ -1763,7 +1770,10 @@ bool PowerManager::repeater(PowerID power_index, StatBlock *src_stats, const FPo
 
 	payPowerCost(power_index, src_stats);
 
-	playSound(power_index);
+	if (!hazards.empty())
+		playSound(power_index, hazards.back()->pos);
+	else
+		playSound(power_index, origin);
 
 	return true;
 
@@ -1825,7 +1835,7 @@ bool PowerManager::spawn(PowerID power_index, StatBlock *src_stats, const FPoint
 	payPowerCost(power_index, src_stats);
 
 	// If there's a sound effect, play it here
-	playSound(power_index);
+	playSound(power_index, espawn.pos);
 
 	return true;
 }
@@ -1883,7 +1893,7 @@ bool PowerManager::transform(PowerID power_index, StatBlock *src_stats, const FP
 	src_stats->untransform_on_hit = power->untransform_on_hit;
 
 	// If there's a sound effect, play it here
-	playSound(power_index);
+	playSound(power_index, src_stats->pos);
 
 	payPowerCost(power_index, src_stats);
 
@@ -1910,7 +1920,7 @@ bool PowerManager::block(PowerID power_index, StatBlock *src_stats) {
 	effect(src_stats, src_stats, power_index, Power::SOURCE_TYPE_HERO);
 
 	// If there's a sound effect, play it here
-	playSound(power_index);
+	playSound(power_index, src_stats->pos);
 
 	payPowerCost(power_index, src_stats);
 

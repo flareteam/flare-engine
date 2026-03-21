@@ -159,7 +159,7 @@ void HazardManager::hitEntity(size_t index, const bool hit) {
 		if (!h[index]->power->complete_animation) h[index]->lifespan = 0;
 	}
 	if (h[index]->power->sfx_hit_enable && !h[index]->sfx_hit_played) {
-		snd->play(h[index]->power->sfx_hit, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
+		snd->play(h[index]->power->sfx_hit, snd->DEFAULT_CHANNEL, h[index]->pos, !snd->LOOP);
 		h[index]->sfx_hit_played = true;
 	}
 
