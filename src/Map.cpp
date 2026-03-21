@@ -1539,6 +1539,10 @@ void Map::copyMapObjects(Map* src, Chunk* chunk, size_t src_x, size_t src_y, siz
 			else if (ec->type == EventComponent::POWER_PATH) {
 				ec->data[0].Int += static_cast<int>(x_offset);
 				ec->data[1].Int += static_cast<int>(y_offset);
+				if (!ec->data[4].Bool) {
+					ec->data[2].Int += static_cast<int>(x_offset);
+					ec->data[3].Int += static_cast<int>(y_offset);
+				}
 			}
 			else if (ec->type == EventComponent::INTRAMAP) {
 				ec->data[0].Int += static_cast<int>(x_offset);
