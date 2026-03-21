@@ -619,6 +619,12 @@ bool Entity::takeHit(Hazard &h) {
 	}
 
 	if (dmg > 0 || h.power->ignore_zero_damage) {
+		if (!stats.hero_ally) {
+			// flag the enemy as encountered so we can start running it's state logic
+			// this fixes the problem where an enemy would die off screen, but wouldn't enter their dying animation until the player approached them
+			stats.encountered = true;
+		}
+
 		// remove effect by ID
 		stats.effects.removeEffectID(h.power->remove_effects);
 
