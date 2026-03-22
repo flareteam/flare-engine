@@ -191,7 +191,7 @@ public:
 		: type(TYPE_EMPTY)
 		, door_level(0)
 		, variant(0)
-		, links(4, NULL)
+		, links(4, static_cast<Chunk*>(NULL))
 	{}
 
 	bool isStraight();
