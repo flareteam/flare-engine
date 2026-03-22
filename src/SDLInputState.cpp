@@ -1012,15 +1012,19 @@ std::string SDLInputState::getInputBindName(int type, int bind) {
 }
 
 void SDLInputState::joystickRumble(uint16_t low_freq, uint16_t high_freq, uint32_t duration) {
+#if SDL_VERSION_ATLEAST(2, 0, 18)
 	if (gamepad && mode == MODE_JOYSTICK && settings->joystick_rumble && SDL_GameControllerHasRumble(gamepad) == SDL_TRUE) {
 		SDL_GameControllerRumble(gamepad, low_freq, high_freq, duration);
 	}
+#endif
 }
 
 void SDLInputState::setJoystickLED(Color color) {
+#if SDL_VERSION_ATLEAST(2, 0, 14)
 	if (gamepad && mode == MODE_JOYSTICK && SDL_GameControllerHasLED(gamepad) == SDL_TRUE) {
 		SDL_GameControllerSetLED(gamepad, color.r, color.g, color.b);
 	}
+#endif
 }
 
 void SDLInputState::reset() {
