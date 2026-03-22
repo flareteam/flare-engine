@@ -8,6 +8,7 @@
 /build/
 /build-debug/
 /build-release/
+/build-steamrt/
 /config/
 /saves/
 # ignore also vim swap files
