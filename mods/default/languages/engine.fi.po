@@ -293,7 +293,7 @@ msgstr "Kieli"
 
 #: ../../../src/GameStateTitle.cpp:194
 msgid "Use mouse to move player?"
-msgstr ""
+msgstr "Liikuta pelaajaa hiirellä?"
 
 #: ../../../src/GameSwitcher.cpp:263
 #, c-format
@@ -326,7 +326,7 @@ msgstr "Tehtäväesine"
 #: ../../../src/ItemManager.cpp:1318
 #, c-format
 msgid "Prevents use of slot: %s"
-msgstr ""
+msgstr "Estää käyttää paikaa: %s"
 
 #: ../../../src/ItemManager.cpp:1326
 #, c-format
@@ -423,20 +423,20 @@ msgstr ""
 
 #: ../../../src/MapRenderer.cpp:1767
 msgid "Start"
-msgstr ""
+msgstr "Alku"
 
 #: ../../../src/MapRenderer.cpp:1768 ../../../src/SDLInputState.cpp:679
 #: ../../../src/SDLInputState.cpp:709
 msgid "End"
-msgstr ""
+msgstr "Loppu"
 
 #: ../../../src/MapRenderer.cpp:1769
 msgid "Door"
-msgstr ""
+msgstr "Ovi"
 
 #: ../../../src/MapRenderer.cpp:1770
 msgid "Key"
-msgstr ""
+msgstr "Avain"
 
 #: ../../../src/MenuActionBar.cpp:92 ../../../src/MenuCharacter.cpp:54
 #: ../../../src/SDLInputState.cpp:933
@@ -704,7 +704,7 @@ msgstr "Otettu käyttöön"
 
 #: ../../../src/MenuConfig.cpp:389
 msgid "Only currency"
-msgstr ""
+msgstr "Vain valuutta"
 
 #: ../../../src/MenuConfig.cpp:406
 msgid "The maximum frame rate that the game will be allowed to run at."
@@ -799,7 +799,7 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:475
 msgid "Show player behind walls"
-msgstr ""
+msgstr "Näytä pelaaja seinien takaa"
 
 #: ../../../src/MenuConfig.cpp:477
 msgid "Sound Volume"
@@ -958,6 +958,9 @@ msgid ""
 "Lowers the opacity of wall tiles that are covering the player. Disabling "
 "this option may improve performace in some circumstances."
 msgstr ""
+"Alentaa läpinäkyvyyttä seinätiileillä, jotka peittävät pelaajan. Tämän "
+"valinnan poistaminen käytöstä voi parantaa suorituskykyä joissakin "
+"tapauksissa."
 
 #: ../../../src/MenuConfig.cpp:641
 msgid ""
@@ -1260,7 +1263,7 @@ msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:667
 msgid "Current shortcuts:"
-msgstr ""
+msgstr "Nykyiset näppäinoikotiet:"
 
 #: ../../../src/MenuDevConsole.cpp:676
 #, c-format
@@ -1442,7 +1445,7 @@ msgstr "Siirrä"
 
 #: ../../../src/MenuManager.cpp:1928
 msgid "Add to bar"
-msgstr ""
+msgstr "Lisää palkkiin"
 
 #: ../../../src/MenuManager.cpp:1933
 msgid "Drop"
@@ -1541,7 +1544,7 @@ msgstr "Kriittinen perusmahdollisuus"
 
 #: ../../../src/MenuPowers.cpp:1275
 msgid "Ignores Absorption"
-msgstr ""
+msgstr "Ohittaa vaimennuksen"
 
 #: ../../../src/MenuPowers.cpp:1280
 msgid "Ignores Avoidance"
@@ -1952,7 +1955,7 @@ msgstr "Saaliin vihjetekstin tila"
 
 #: ../../../src/SDLInputState.cpp:943
 msgid "Action Bar Edit"
-msgstr ""
+msgstr "Toimintapalkin muokkaus"
 
 #: ../../../src/SDLInputState.cpp:944
 msgid "Menu: Next Page"
@@ -1972,7 +1975,7 @@ msgstr "Tauota peli"
 
 #: ../../../src/SDLInputState.cpp:948
 msgid "Cycle Menus"
-msgstr ""
+msgstr "Selaa valikoita"
 
 #: ../../../src/SDLInputState.cpp:949
 msgid "Aim Up"
