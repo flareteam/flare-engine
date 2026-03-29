@@ -38,6 +38,7 @@ Platform platform;
 
 namespace PlatformAndroid {
 	std::string getPackageName();
+	void getExternalFilesDirs(std::vector<std::string> &paths);
 	int isExitEvent(void *userdata, SDL_Event* event);
 	void dialogInstallHint();
 };
@@ -59,6 +60,38 @@ std::string PlatformAndroid::getPackageName()
 	env->DeleteLocalRef(clazz);
 
 	return result;
+}
+
+void PlatformAndroid::getExternalFilesDirs(std::vector<std::string> &paths) {
+	JNIEnv* env = (JNIEnv*)SDL_AndroidGetJNIEnv();
+	jobject activity = (jobject)SDL_AndroidGetActivity();
+
+	jstring type = nullptr;
+	jobject dirs_array = env->CallObjectMethod(activity, env->GetMethodID(env->GetObjectClass(activity), "getExternalFilesDirs", "(Ljava/lang/String;)[Ljava/io/File;"), type);
+
+	if (dirs_array) {
+		jsize len = env->GetArrayLength((jarray)dirs_array);
+		for (jsize i = 0; i < len; ++i) {
+			jobject file_obj = env->GetObjectArrayElement((jobjectArray)dirs_array, i);
+			if (file_obj) {
+				jstring path_string = (jstring)env->CallObjectMethod(file_obj, env->GetMethodID(env->GetObjectClass(file_obj), "getAbsolutePath", "()Ljava/lang/String;"));
+
+				if (path_string) {
+					const char* path_chars = env->GetStringUTFChars(path_string, NULL);
+					std::string split_str = std::string(path_chars);
+					size_t split_pos = split_str.find("/Android/data");
+					if (split_pos != std::string::npos) {
+						split_str = split_str.substr(0, split_pos);
+					}
+					paths.push_back(split_str);
+					env->ReleaseStringUTFChars(path_string, path_chars);
+					env->DeleteLocalRef(path_string);
+				}
+				env->DeleteLocalRef(file_obj);
+			}
+		}
+		env->DeleteLocalRef(dirs_array);
+	}
 }
 
 int PlatformAndroid::isExitEvent(void* userdata, SDL_Event* event) {
@@ -157,6 +190,16 @@ void Platform::setPaths() {
 	externalSDList.push_back("/mnt/extSdCard");
 	externalSDList.push_back("/storage/extSdCard");
 	externalSDList.push_back("/mnt/m_external_sd");
+
+	std::vector<std::string> sd_cards;
+	PlatformAndroid::getExternalFilesDirs(sd_cards);
+
+	for (size_t i = 0; i < sd_cards.size(); ++i) {
+		if (std::find(internalSDList.begin(), internalSDList.end(), sd_cards[i]) != internalSDList.end())
+			continue;
+
+		externalSDList.push_back(sd_cards[i]);
+	}
 
 	if (SDL_AndroidGetExternalStorageState() != 0) {
 		settings->path_data = std::string(SDL_AndroidGetExternalStoragePath());
