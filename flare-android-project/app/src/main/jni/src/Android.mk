@@ -58,6 +58,7 @@ LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c \
 	../../../../../../src/MapParallax.cpp \
 	../../../../../../src/MapCollision.cpp \
 	../../../../../../src/MapRenderer.cpp \
+	../../../../../../src/MapSaver.cpp \
 	../../../../../../src/Menu.cpp \
 	../../../../../../src/MenuActionBar.cpp \
 	../../../../../../src/MenuActiveEffects.cpp \
