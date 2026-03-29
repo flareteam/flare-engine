@@ -3,7 +3,7 @@ import org.gradle.internal.os.OperatingSystem;
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
     // Each version of the Android Gradle Plugin now has a default version of the build tools
     //buildToolsVersion '29.0.2'
 
@@ -19,7 +19,7 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
         }
     }
     namespace 'org.flare.app'
