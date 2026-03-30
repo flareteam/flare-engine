@@ -46,13 +46,19 @@ public:
 	bool target_src;
 	bool is_multiplier;
 
+	// cache so we don't need to look up EffectDef or call Effect::getTypeFromString() as often
+	int effect_type;
+	EffectDef* effect_ptr;
+
 	PostEffect()
 		: id("")
 		, magnitude(0)
 		, duration(0)
 		, chance(100)
 		, target_src(false)
-		, is_multiplier(false) {
+		, is_multiplier(false)
+		, effect_type(0)
+		, effect_ptr(NULL) {
 	}
 };
 

@@ -928,19 +928,19 @@ void PowerManager::loadPowers() {
 					pe.chance = Parse::toFloat(chance);
 				}
 
-				int pe_type;
 				bool is_immunity_type = false;
-				EffectDef* effect_def = getEffectDef(pe.id);
-				if (effect_def) {
-					pe_type = effect_def->type;
-					is_immunity_type = effect_def->is_immunity_type;
+				pe.effect_ptr = getEffectDef(pe.id);
+
+				if (pe.effect_ptr) {
+					pe.effect_type = pe.effect_ptr->type;
+					is_immunity_type = pe.effect_ptr->is_immunity_type;
 				}
 				else {
-					pe_type = Effect::getTypeFromString(pe.id);
+					pe.effect_type = Effect::getTypeFromString(pe.id);
 					is_immunity_type = Effect::isImmunityTypeString(pe.id);
 				}
 
-				if (is_immunity_type && (pe_type == Effect::RESIST_ALL || Effect::typeIsEffectResist(pe_type))) {
+				if (is_immunity_type && (pe.effect_type == Effect::RESIST_ALL || Effect::typeIsEffectResist(pe.effect_type))) {
 					infile.error("PowerManager: Post effect '%s' matches a deprecated type. Converting to a resistance with 100 magnitude.", pe.id.c_str());
 					pe.magnitude = 100;
 				}
@@ -1529,7 +1529,7 @@ bool PowerManager::effect(StatBlock *target_stats, StatBlock *caster_stats, Powe
 			continue;
 
 		EffectDef effect_data;
-		EffectDef* effect_ptr = getEffectDef(pe.id);
+		EffectDef* effect_ptr = pwr->post_effects[i].effect_ptr;
 
 		float magnitude = pe.magnitude;
 		int duration = pe.duration;
@@ -1588,7 +1588,7 @@ bool PowerManager::effect(StatBlock *target_stats, StatBlock *caster_stats, Powe
 		else {
 			// all other effects
 			effect_data.id = pe.id;
-			effect_data.type = Effect::getTypeFromString(pe.id);
+			effect_data.type = pe.effect_type;
 		}
 
 		EffectParams effect_params;
@@ -2111,7 +2111,7 @@ bool PowerManager::activatePassiveByTrigger(PowerID power_id, StatBlock *src_sta
 			if (src_stats->hp == 0) {
 				bool is_revive_passive = false;
 				for (size_t i = 0; i < power->post_effects.size(); ++i) {
-					if (Effect::getTypeFromString(power->post_effects[i].id) == Effect::REVIVE) {
+					if (power->post_effects[i].effect_type == Effect::REVIVE) {
 						is_revive_passive = true;
 						break;
 					}
@@ -2182,7 +2182,7 @@ void PowerManager::activateSinglePassive(StatBlock *src_stats, PowerID id) {
 		if (src_stats->hp == 0) {
 			bool is_revive_passive = false;
 			for (size_t i = 0; i < power->post_effects.size(); ++i) {
-				if (Effect::getTypeFromString(power->post_effects[i].id) == Effect::REVIVE) {
+				if (power->post_effects[i].effect_type == Effect::REVIVE) {
 					is_revive_passive = true;
 					break;
 				}

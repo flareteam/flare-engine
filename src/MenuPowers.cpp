@@ -1025,15 +1025,9 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 
 	for (size_t i=0; i<pwr->post_effects.size(); ++i) {
 		std::stringstream ss;
-		EffectDef* effect_ptr = powers->getEffectDef(pwr->post_effects[i].id);
 
-		int effect_type = Effect::NONE;
-		if (effect_ptr) {
-			effect_type = effect_ptr->type;
-		}
-		else {
-			effect_type = Effect::getTypeFromString(pwr->post_effects[i].id);
-		}
+		EffectDef* effect_ptr = pwr->post_effects[i].effect_ptr;
+		int effect_type = pwr->post_effects[i].effect_type;
 
 		if (Effect::typeIsStat(effect_type) ||
 		    Effect::typeIsDmgMin(effect_type) ||
