@@ -803,6 +803,9 @@ void MenuPowers::setUnlockedPowers() {
 					lockCell(&power_cell[i].cells[j]);
 					did_cell_lock = true;
 
+					if (power_cell[i].current_cell > 1)
+						power_cell[i].current_cell = j;
+
 					// We're going to recursively call setUnlockedPowers() at this point.
 					// We save a list of powers locked here so that we don't unlock them again in this cycle,
 					// which would result in an infinite loop.

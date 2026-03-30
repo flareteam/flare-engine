@@ -856,6 +856,16 @@ bool MenuActionBar::isWithinMenus(const Point& mouse) {
  * So a target_id of 0 will place the power in an empty slot, if available
  */
 void MenuActionBar::addPower(const PowerID id, const PowerID target_id) {
+	if (id == 0 && target_id != 0) {
+		// clear all slots that match target_id
+		for (unsigned i = 0; i < 12; ++i) {
+			if (hotkeys[i] == target_id && !prevent_changing[i]) {
+				clearSlot(i);
+				updated = true;
+			}
+		}
+	}
+
 	if (!powers->isValid(id))
 		return;
 
