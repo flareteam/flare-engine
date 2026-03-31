@@ -55,8 +55,8 @@ elif [ ${FLARE_DEPS_SRC} == "homebrew" ]; then
   LIB=${DST}/lib
   mkdir ${LIB}
   # SDL2
-  cp /usr/local/opt/sdl2/COPYING.txt ${LIB}/SDL2-COPYING.txt
-  cp /usr/local/opt/sdl2/README.txt ${LIB}/SDL2-README.txt
+  cp /usr/local/opt/sdl2/LICENSE.txt ${LIB}/SDL2-LICENSE.txt
+  cp /usr/local/opt/sdl2/README.md ${LIB}/SDL2-README.md
   cp /usr/local/opt/sdl2/lib/libSDL2-2.0.0.dylib ${LIB}
   cp /usr/local/opt/sdl2_image/lib/libSDL2_image-2.0.0.dylib ${LIB}
   cp /usr/local/opt/sdl2_mixer/lib/libSDL2_mixer-2.0.0.dylib ${LIB}
