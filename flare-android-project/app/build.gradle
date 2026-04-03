@@ -1,4 +1,4 @@
-import org.gradle.internal.os.OperatingSystem;
+import org.gradle.internal.os.OperatingSystem
 
 apply plugin: 'com.android.application'
 
@@ -26,7 +26,7 @@ android {
 }
 
 // call regular ndk-build script from app directory
-task ndkBuild(type: Exec) {
+tasks.register('ndkBuild', Exec) {
     if (OperatingSystem.current().isWindows()) {
         commandLine 'ndk-build.cmd', '-C', file('src/main').absolutePath, '-j', Runtime.runtime.availableProcessors()
     } else {
@@ -34,7 +34,7 @@ task ndkBuild(type: Exec) {
     }
 }
 
-task ndkClean(type: Exec) {
+tasks.register('ndkClean', Exec) {
     if (OperatingSystem.current().isWindows()) {
         commandLine 'ndk-build.cmd', '-C', file('src/main').absolutePath, 'clean'
     } else {
@@ -42,7 +42,7 @@ task ndkClean(type: Exec) {
     }
 }
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     compileTask -> compileTask.dependsOn ndkBuild
 }
 
