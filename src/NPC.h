@@ -31,6 +31,9 @@ class EventComponent;
 
 class NPC : public Entity {
 private:
+	typedef std::vector<int> Dialogs;
+	typedef std::map<std::string, Dialogs > DialogGroups;
+
 	enum {
 		VOX_INTRO = 0,
 		VOX_QUEST = 1,

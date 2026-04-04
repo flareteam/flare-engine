@@ -143,6 +143,7 @@ Engine fixes:
 * Fixed incorrect max summon limits when a power was unlocked/locked.
 * Fixed volume of power and entity sounds not being attenuated based on distance.
 * Fixed off-screen enemies not realizing they were dead until the player got close enough.
+* Fixed divide-by-zero crash when using NPC dialog groups.
 * Android: Fix 'Flare' directory not being automatically created.
 * Android: Added a dialog to direct the player to the wiki page for installing if no game data is found.
 

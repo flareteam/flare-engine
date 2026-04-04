@@ -120,7 +120,7 @@ bool NPC::load(const std::string& npc_id) {
 					e.s = msg->get(infile.val);
 				}
 				else if (infile.key == "group") {
-					// @ATTR dialog.group|string|Dialog group.
+					// @ATTR dialog.group|string|Adds this dialog node to the specified group and skips adding it to the dialog tree. For each group, one dialog node is selected at random and added to the dialog tree.
 					e.type = EventComponent::NPC_DIALOG_GROUP;
 					e.s = infile.val;
 				}
@@ -403,26 +403,28 @@ void NPC::getDialogNodes(std::vector<int> &result, bool allow_responses) {
 		return;
 
 	std::string group;
-	typedef std::vector<int> Dialogs;
-	typedef std::map<std::string, Dialogs > DialogGroups;
 	DialogGroups groups;
 
-	for (size_t i=dialog.size(); i>0; i--) {
+	for (size_t i = dialog.size(); i > 0; i--) {
 		bool is_available = true;
 		bool is_grouped = false;
-		for (size_t j=0; j<dialog[i-1].size(); j++) {
-			if (dialog[i-1][j].type == EventComponent::NPC_DIALOG_GROUP) {
+		size_t dindex = i-1;
+
+		for (size_t j=0; j < dialog[dindex].size(); j++) {
+			const EventComponent &ec = dialog[dindex][j];
+
+			if (ec.type == EventComponent::NPC_DIALOG_GROUP) {
 				is_grouped = true;
-				group = dialog[i-1][j].s;
+				group = ec.s;
 			}
-			else if (dialog[i-1][j].type == EventComponent::NPC_DIALOG_RESPONSE_ONLY) {
-				if (dialog[i-1][j].data[0].Bool && !allow_responses) {
+			else if (ec.type == EventComponent::NPC_DIALOG_RESPONSE_ONLY) {
+				if (ec.data[0].Bool && !allow_responses) {
 					is_available = false;
 					break;
 				}
 			}
 			else {
-				if (camp->checkAllRequirements(dialog[i-1][j]))
+				if (camp->checkAllRequirements(ec))
 					continue;
 
 				is_available = false;
@@ -432,16 +434,16 @@ void NPC::getDialogNodes(std::vector<int> &result, bool allow_responses) {
 
 		if (is_available) {
 			if (!is_grouped) {
-				result.push_back(static_cast<int>(i-1));
+				result.push_back(static_cast<int>(dindex));
 			}
 			else {
 				DialogGroups::iterator it;
 				it = groups.find(group);
 				if (it == groups.end()) {
-					groups.insert(DialogGroups::value_type(group, Dialogs()));
+					groups.insert(DialogGroups::value_type(group, Dialogs(1, static_cast<int>(dindex))));
 				}
 				else
-					it->second.push_back(static_cast<int>(i-1));
+					it->second.push_back(static_cast<int>(dindex));
 
 			}
 		}
@@ -453,10 +455,10 @@ void NPC::getDialogNodes(std::vector<int> &result, bool allow_responses) {
 	if (it == groups.end())
 		return;
 
-	while (it != groups.end()) {
+	while (it != groups.end() && !it->second.empty()) {
 		/* roll a dialog for this group and add to result */
 		int di = it->second[rand() % it->second.size()];
-		result.push_back(di);
+		result.insert(result.begin(), di);
 		++it;
 	}
 }
