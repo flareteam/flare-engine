@@ -167,6 +167,7 @@ void MenuHUDLog::render() {
  */
 void MenuHUDLog::renderOverlay() {
 	if (msg_buffer.empty() || hide_overlay || !enable_overlay) {
+		click_to_dismiss = false;
 		return;
 	}
 
