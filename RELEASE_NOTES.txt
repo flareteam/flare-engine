@@ -144,6 +144,7 @@ Engine fixes:
 * Fixed volume of power and entity sounds not being attenuated based on distance.
 * Fixed off-screen enemies not realizing they were dead until the player got close enough.
 * Fixed divide-by-zero crash when using NPC dialog groups.
+* Fixed HUD log blocking clicks when an overlayed message expires due to time.
 * Android: Fix 'Flare' directory not being automatically created.
 * Android: Added a dialog to direct the player to the wiki page for installing if no game data is found.
 

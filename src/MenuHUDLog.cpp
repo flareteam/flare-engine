@@ -115,11 +115,12 @@ void MenuHUDLog::logic() {
  * New messages appear on the screen for a brief time
  */
 void MenuHUDLog::render() {
+	click_to_dismiss = false;
+
 	if (msg_buffer.empty()) {
 		return;
 	}
 
-	click_to_dismiss = false;
 	hide_overlay = true;
 
 	Rect dest;
