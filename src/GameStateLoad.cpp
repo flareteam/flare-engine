@@ -32,6 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "InputState.h"
 #include "ItemManager.h"
 #include "MenuConfirm.h"
+#include "MenuStash.h"
 #include "MessageEngine.h"
 #include "ModManager.h"
 #include "RenderDevice.h"
@@ -232,6 +233,63 @@ GameStateLoad::GameStateLoad() : GameState()
 		infile.close();
 	}
 
+	// We need to read the stash menu config in order to get the paths to private stashes
+	if (infile.open("menus/stash.txt", FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
+		while(infile.next()) {
+			if (infile.new_section) {
+				if (infile.section == "tab") {
+					std::stringstream id_str, name_str, filename_str;
+
+					// default tab settings
+					id_str << "Stash " << stash_tabs.size();
+					name_str << msg->get("Stash") << " " << stash_tabs.size();
+					filename_str << "stash_tab_" << stash_tabs.size() << ".txt";
+
+					stash_tabs.push_back(MenuStashTab(id_str.str(), name_str.str(), filename_str.str(), MenuStashTab::IS_PRIVATE));
+				}
+			}
+
+			if (infile.section == "tab") {
+				// don't load any settings for the "Private" and "Shared" tabs
+				if (stash_tabs.back().is_legacy)
+					continue;
+
+				if (infile.key == "name") {
+					std::string name_str = infile.val;
+					stash_tabs.back().id = name_str;
+					stash_tabs.back().name = msg->get(name_str);
+
+					if (name_str == "Private") {
+						stash_tabs.back().filename = "stash_HC.txt";
+						stash_tabs.back().is_private = true;
+						stash_tabs.back().is_legacy = true;
+					}
+					else if (name_str == "Shared") {
+						stash_tabs.back().filename = "stash.txt";
+						stash_tabs.back().is_private = false;
+						stash_tabs.back().is_legacy = true;
+					}
+					else {
+						// generate a filename
+						std::stringstream ss;
+						ss << std::hex << "stash_" << Utils::hashString(name_str) << ".txt";
+						stash_tabs.back().filename = ss.str();
+					}
+				}
+				else if (infile.key == "is_private") {
+					stash_tabs.back().is_private = Parse::toBool(infile.val);
+				}
+			}
+		}
+		infile.close();
+	}
+
+	if (stash_tabs.empty()) {
+		stash_tabs.push_back(MenuStashTab("Private", msg->get("Private"), "stash_HC.txt", MenuStashTab::IS_PRIVATE));
+		// no need to add "Shared" tab, since we're only checking private stashes for extended items
+	}
+
+
 	// prevent text from overflowing on the right edge of game slots
 	if (text_trim_boundary == 0 || text_trim_boundary > gameslot_pos.w)
 		text_trim_boundary = gameslot_pos.w;
@@ -371,6 +429,19 @@ void GameStateLoad::readGameSlots() {
 				while (repeat_val != "") {
 					ItemID item_id = items->verifyID(Parse::toItemID(repeat_val), &infile, ItemManager::VERIFY_ALLOW_ZERO, ItemManager::VERIFY_ALLOCATE);
 					game_slots[i]->equipped.push_back(item_id);
+					if (item_id != 0 && items->items[item_id]->parent) {
+						game_slots[i]->extended_items.push_back(item_id);
+					}
+					repeat_val = Parse::popFirstString(infile.val);
+				}
+			}
+			else if (infile.key == "carried") {
+				std::string repeat_val = Parse::popFirstString(infile.val);
+				while (repeat_val != "") {
+					ItemID item_id = items->verifyID(Parse::toItemID(repeat_val), &infile, ItemManager::VERIFY_ALLOW_ZERO, ItemManager::VERIFY_ALLOCATE);
+					if (item_id != 0 && items->items[item_id]->parent) {
+						game_slots[i]->extended_items.push_back(item_id);
+					}
 					repeat_val = Parse::popFirstString(infile.val);
 				}
 			}
@@ -400,6 +471,30 @@ void GameStateLoad::readGameSlots() {
 			}
 		}
 		infile.close();
+
+		// search private stashes for extended items
+		for (size_t j = 0; j < stash_tabs.size(); ++j) {
+			if (!stash_tabs[j].is_private)
+				continue;
+
+			std::string stash_filename = save_root + save_dirs[i] + "/" + stash_tabs[j].filename;
+
+			if (!infile.open(stash_filename, !FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) continue;
+
+			while (infile.next()) {
+				if (infile.key == "item") {
+					std::string repeat_val = Parse::popFirstString(infile.val);
+					while (repeat_val != "") {
+						ItemID item_id = items->verifyID(Parse::toItemID(repeat_val), &infile, ItemManager::VERIFY_ALLOW_ZERO, ItemManager::VERIFY_ALLOCATE);
+						if (item_id != 0 && items->items[item_id]->parent) {
+							game_slots[i]->extended_items.push_back(item_id);
+						}
+						repeat_val = Parse::popFirstString(infile.val);
+					}
+				}
+			}
+			infile.close();
+		}
 
 		game_slots[i]->stats.recalc();
 		game_slots[i]->stats.direction = 6;
@@ -503,6 +598,15 @@ void GameStateLoad::logic() {
 		if (confirm->clicked_confirm) {
 			if (confirm->action_list->getSelected() == DELETE_CONFIRM_OPTION_YES) {
 				if (selected_slot != -1 && static_cast<size_t>(selected_slot) < game_slots.size()) {
+					// mark extended items associated with *only* this save as not foreign
+					// then save the extended items data for *only* foreign items
+					// this will effectively clean up extended item IDs that were being used by this save file
+					for (size_t i = 0; i < game_slots[selected_slot]->extended_items.size(); ++i) {
+						ItemID item_id = game_slots[selected_slot]->extended_items[i];
+						items->items[item_id]->is_foreign = false;
+					}
+					save_load->saveExtendedItems(!SaveLoad::SAVE_STORAGE_ITEMS);
+
 					Utils::removeSaveDir(game_slots[selected_slot]->id);
 
 					delete game_slots[selected_slot];

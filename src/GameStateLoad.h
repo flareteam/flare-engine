@@ -38,6 +38,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class ItemManager;
 class MenuConfirm;
+class MenuStashTab;
 class WidgetButton;
 class WidgetLabel;
 class WidgetScrollBar;
@@ -51,6 +52,7 @@ public:
 	unsigned long time_played;
 
 	std::vector<ItemID> equipped;
+	std::vector<ItemID> extended_items;
 	int active_equipment_set;
 	GameSlotPreview preview;
 	Timer preview_turn_timer;
@@ -142,6 +144,8 @@ private:
 	int nav_mode;
 
 	std::vector<int> equip_sets;
+
+	std::vector<MenuStashTab> stash_tabs;
 
 public:
 	GameStateLoad();

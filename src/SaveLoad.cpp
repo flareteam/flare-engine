@@ -265,10 +265,20 @@ void SaveLoad::saveGame() {
 	// save fog-of-war layers
 	saveFOW();
 
+	saveExtendedItems(SAVE_STORAGE_ITEMS);
+	settings->prev_save_slot = game_slot-1;
+
+	// display a log message saying that we saved the game
+	menu->questlog->add(msg->get("Game saved."), MenuLog::TYPE_MESSAGES, WidgetLog::MSG_NORMAL);
+	menu->hudlog->add(msg->get("Game saved."), MenuHUDLog::MSG_NORMAL);
+}
+
+void SaveLoad::saveExtendedItems(bool save_storage_items) {
 	// Save extended Items
-	ss.str("");
+	std::stringstream ss;
 	ss << settings->path_user << "saves/" << eset->misc.save_prefix << "/extended_items.txt";
 
+	std::ofstream outfile;
 	outfile.open(Filesystem::convertSlashes(ss.str()).c_str(), std::ios::out);
 
 	if (outfile.is_open()) {
@@ -279,17 +289,19 @@ void SaveLoad::saveGame() {
 				continue;
 
 			bool item_in_storage = false;
-			if (menu->inv->inventory[MenuInventory::EQUIPMENT].contain(i, 1)) {
-				item_in_storage = true;
-			}
-			else if (menu->inv->inventory[MenuInventory::CARRIED].contain(i, 1)) {
-				item_in_storage = true;
-			}
-			else {
-				for (size_t j = 0; j < menu->stash->tabs.size(); ++j) {
-					if (menu->stash->tabs[j].stock.contain(i, 1)) {
-						item_in_storage = true;
-						break;
+			if (save_storage_items && menu) {
+				if (menu->inv && menu->inv->inventory[MenuInventory::EQUIPMENT].contain(i, 1)) {
+					item_in_storage = true;
+				}
+				else if (menu->inv && menu->inv->inventory[MenuInventory::CARRIED].contain(i, 1)) {
+					item_in_storage = true;
+				}
+				else if (menu->stash) {
+					for (size_t j = 0; j < menu->stash->tabs.size(); ++j) {
+						if (menu->stash->tabs[j].stock.contain(i, 1)) {
+							item_in_storage = true;
+							break;
+						}
 					}
 				}
 			}
@@ -380,11 +392,6 @@ void SaveLoad::saveGame() {
 		}
 	}
 
-	settings->prev_save_slot = game_slot-1;
-
-	// display a log message saying that we saved the game
-	menu->questlog->add(msg->get("Game saved."), MenuLog::TYPE_MESSAGES, WidgetLog::MSG_NORMAL);
-	menu->hudlog->add(msg->get("Game saved."), MenuHUDLog::MSG_NORMAL);
 }
 
 /**

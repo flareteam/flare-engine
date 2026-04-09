@@ -27,6 +27,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class SaveLoad {
 public:
+	const static bool SAVE_STORAGE_ITEMS = true;
+
 	SaveLoad();
 	~SaveLoad();
 
@@ -42,6 +44,7 @@ public:
 	void loadClass(int index);
 	void loadStash();
 	void saveFOW();
+	void saveExtendedItems(bool save_storage_items);
 
 private:
 	void applyPlayerData();
