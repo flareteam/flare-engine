@@ -309,7 +309,8 @@ void MenuTalker::createBuffer() {
 		FontEngine::JUSTIFY_LEFT,
 		textbox->contents->getGraphics(),
 		text_pos.w - text_offset.x*2,
-		font->getColor(FontEngine::COLOR_MENU_NORMAL)
+		font->getColor(FontEngine::COLOR_MENU_NORMAL),
+		!FontEngine::SHADOW_OFFSET
 	);
 
 	int button_y = 0;

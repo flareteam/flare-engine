@@ -234,10 +234,10 @@ Rect FontEngine::position(const std::string& text, int x, int y, int justify) {
 /**
  * Word wrap to width
  */
-void FontEngine::render(const std::string& text, int x, int y, int justify, Image *target, int width, const Color& color) {
+void FontEngine::render(const std::string& text, int x, int y, int justify, Image *target, int width, const Color& color, bool shadow) {
 	if (width == 0) {
 		// a width of 0 means we won't try to wrap text
-		renderInternal(text, x, y, justify, target, color);
+		renderInternal(text, x, y, justify, target, color, shadow);
 		return;
 	}
 
@@ -262,7 +262,7 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, Imag
 
 		if (calcSize(builder).x > width) {
 			if (!builder_prev.empty()) {
-				renderInternal(builder_prev, x, cursor_y, justify, target, color);
+				renderInternal(builder_prev, x, cursor_y, justify, target, color, shadow);
 				cursor_y += getLineHeight();
 			}
 			builder = "";
@@ -271,7 +271,7 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, Imag
 
 			if (!long_token.empty()) {
 				while (!long_token.empty()) {
-					renderInternal(next_word, x, cursor_y, justify, target, color);
+					renderInternal(next_word, x, cursor_y, justify, target, color, shadow);
 					cursor_y += getLineHeight();
 
 					next_word = long_token;
@@ -297,14 +297,14 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, Imag
 			break;
 	}
 
-	renderInternal(builder, x, cursor_y, justify, target, color);
+	renderInternal(builder, x, cursor_y, justify, target, color, shadow);
 	cursor_y += getLineHeight();
 
 }
 
 void FontEngine::renderShadowed(const std::string& text, int x, int y, int justify, Image *target, int width, const Color& color) {
-	render(text, x+1, y+1, justify, target, width, getColor(COLOR_BLACK));
-	render(text, x, y, justify, target, width, color);
+	render(text, x, y, justify, target, width, getColor(COLOR_BLACK), FontEngine::SHADOW_OFFSET);
+	render(text, x, y, justify, target, width, color, !FontEngine::SHADOW_OFFSET);
 }
 
 /*

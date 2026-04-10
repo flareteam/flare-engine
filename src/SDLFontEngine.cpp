@@ -38,6 +38,8 @@ SDLFontStyle::SDLFontStyle()
 	, ttfont(NULL)
 	, use_default_style(true)
 {
+	shadow_offset.x = 1;
+	shadow_offset.y = 1;
 }
 
 SDLFontEngine::SDLFontEngine()
@@ -96,7 +98,7 @@ SDLFontEngine::SDLFontEngine()
 				}
 			}
 			else if (infile.key == "style") {
-				// @ATTR font.style|repeatable(["default", predefined_string], filename, int, bool) : Language, Font file, Point size, Blending|Filename, point size, and blend mode of the font to use for this language. Language can be "default" or a 2-letter region code.
+				// @ATTR font.style|repeatable(["default", predefined_string], filename, int, bool, int, int) : Language, Font file, Point size, Blending, Shadow offset X, Shadow offset Y|Filename, point size, blend mode, and (optionally) shadow offset of the font to use for this language. Language can be "default" or a 2-letter region code.
 				std::string lang = Parse::popFirstString(infile.val);
 
 				if ((lang == "default" && current->use_default_style) || lang == settings->language) {
@@ -106,6 +108,14 @@ SDLFontEngine::SDLFontEngine()
 					current->path = Parse::popFirstString(infile.val);
 					current->ptsize = Parse::popFirstInt(infile.val);
 					current->blend = Parse::toBool(Parse::popFirstString(infile.val));
+
+					std::string shadow_off_x = Parse::popFirstString(infile.val);
+					std::string shadow_off_y = Parse::popFirstString(infile.val);
+
+					if (!shadow_off_x.empty() && !shadow_off_y.empty()) {
+						current->shadow_offset.x = Parse::toInt(shadow_off_x);
+						current->shadow_offset.y = Parse::toInt(shadow_off_y);
+					}
 				}
 			}
 		}
@@ -263,13 +273,17 @@ void SDLFontEngine::setFont(const std::string& _font) {
  * Render the given text at (x,y) on the target image.
  * Justify is left, right, or center
  */
-void SDLFontEngine::renderInternal(const std::string& text, int x, int y, int justify, Image *target, const Color& color) {
+void SDLFontEngine::renderInternal(const std::string& text, int x, int y, int justify, Image *target, const Color& color, bool shadow) {
 	if (!isActiveFontValid() || text.empty())
 		return;
 
 	Image *graphics;
 
-	Rect dest_rect = position(text, x, y, justify);
+	Rect dest_rect;
+	if (shadow)
+		dest_rect = position(text, x + active_font->shadow_offset.x, y + active_font->shadow_offset.y, justify);
+	else
+		dest_rect = position(text, x, y, justify);
 
 	// Render text into target
 	// We render the same thing twice because blending with itself produces visually clearer text, especially on noisy backgrounds

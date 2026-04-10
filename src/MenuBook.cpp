@@ -420,9 +420,9 @@ void MenuBook::refreshText() {
 				x_offset = text[i].size.w;
 
 			if (text[i].shadow) {
-				font->render(text[i].text, x_offset + 1, 1, text[i].justify, graphics, text[i].size.w, font->getColor(FontEngine::COLOR_BLACK));
+				font->render(text[i].text, x_offset, 0, text[i].justify, graphics, text[i].size.w, font->getColor(FontEngine::COLOR_BLACK), FontEngine::SHADOW_OFFSET);
 			}
-			font->render(text[i].text, x_offset, 0, text[i].justify, graphics, text[i].size.w, text[i].color);
+			font->render(text[i].text, x_offset, 0, text[i].justify, graphics, text[i].size.w, text[i].color, !FontEngine::SHADOW_OFFSET);
 			text[i].sprite = graphics->createSprite();
 			graphics->unref();
 		}

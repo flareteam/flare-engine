@@ -32,6 +32,7 @@ public:
 	bool blend;
 	int line_height;
 	int font_height;
+	Point shadow_offset;
 
 	FontStyle();
 	virtual ~FontStyle() {};
@@ -73,6 +74,8 @@ public:
 	static const size_t COLOR_COUNT = 17;
 
 	static const bool USE_ELLIPSIS = true;
+	static const bool SHADOW_OFFSET = true;
+
 	FontEngine();
 	virtual ~FontEngine() {};
 
@@ -80,7 +83,7 @@ public:
 
 	Point calcSizeWrapped(const std::string& text_with_newlines, int width);
 
-	void render(const std::string& text, int x, int y, int justify, Image *target, int width, const Color& color);
+	void render(const std::string& text, int x, int y, int justify, Image *target, int width, const Color& color, bool shadow);
 	void renderShadowed(const std::string& text, int x, int y, int justify, Image *target, int width, const Color& color);
 
 	virtual int getLineHeight() = 0;
@@ -95,7 +98,7 @@ public:
 protected:
 	size_t stringToFontColor(const std::string& val);
 	Rect position(const std::string& text, int x, int y, int justify);
-	virtual void renderInternal(const std::string& text, int x, int y, int justify, Image *target, const Color& color) = 0;
+	virtual void renderInternal(const std::string& text, int x, int y, int justify, Image *target, const Color& color, bool shadow) = 0;
 	std::string popTokenByWidth(std::string& text, int width);
 	std::string getNextToken(const std::string& s, size_t& cursor, char separator);
 

@@ -47,7 +47,7 @@ private:
 	SDLFontStyle *active_font;
 
 protected:
-	void renderInternal(const std::string& text, int x, int y, int justify, Image *target, const Color& color);
+	void renderInternal(const std::string& text, int x, int y, int justify, Image *target, const Color& color, bool shadow);
 
 public:
 	SDLFontEngine();

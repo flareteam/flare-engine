@@ -244,7 +244,7 @@ void WidgetInput::render() {
 	font->setFont(font_name);
 
 	if (!edit_mode) {
-		font->render(trimmed_text, font_pos.x, font_pos.y, FontEngine::JUSTIFY_LEFT, NULL, 0, font->getColor(FontEngine::COLOR_WIDGET_NORMAL));
+		font->render(trimmed_text, font_pos.x, font_pos.y, FontEngine::JUSTIFY_LEFT, NULL, 0, font->getColor(FontEngine::COLOR_WIDGET_NORMAL), !FontEngine::SHADOW_OFFSET);
 	}
 	else {
 		font->renderShadowed(trimmed_text_cursor, font_pos.x, font_pos.y, FontEngine::JUSTIFY_LEFT, NULL, 0, font->getColor(FontEngine::COLOR_WIDGET_NORMAL));
