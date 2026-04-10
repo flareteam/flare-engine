@@ -38,8 +38,6 @@ SDLFontStyle::SDLFontStyle()
 	, ttfont(NULL)
 	, use_default_style(true)
 {
-	shadow_offset.x = 1;
-	shadow_offset.y = 1;
 }
 
 SDLFontEngine::SDLFontEngine()
@@ -98,7 +96,7 @@ SDLFontEngine::SDLFontEngine()
 				}
 			}
 			else if (infile.key == "style") {
-				// @ATTR font.style|repeatable(["default", predefined_string], filename, int, bool, int, int) : Language, Font file, Point size, Blending, Shadow offset X, Shadow offset Y|Filename, point size, blend mode, and (optionally) shadow offset of the font to use for this language. Language can be "default" or a 2-letter region code.
+				// @ATTR font.style|repeatable(["default", predefined_string], filename, int, bool, bool, bool, bool, int, int) : Language, Font file, Point size, Blending, Bold, Italic, Underline, Shadow offset X, Shadow offset Y|Filename, point size, blend mode, style (optional), and shadow offset (optional) of the font to use for this language. Language can be "default" or a 2-letter region code.
 				std::string lang = Parse::popFirstString(infile.val);
 
 				if ((lang == "default" && current->use_default_style) || lang == settings->language) {
@@ -108,6 +106,23 @@ SDLFontEngine::SDLFontEngine()
 					current->path = Parse::popFirstString(infile.val);
 					current->ptsize = Parse::popFirstInt(infile.val);
 					current->blend = Parse::toBool(Parse::popFirstString(infile.val));
+
+					current->bold = false;
+					current->italic = false;
+					current->underline = false;
+					current->shadow_offset.x = 1;
+					current->shadow_offset.y = 1;
+
+					std::string bold_str = Parse::popFirstString(infile.val);
+					std::string italic_str = Parse::popFirstString(infile.val);
+					std::string underline_str = Parse::popFirstString(infile.val);
+
+					if (!bold_str.empty())
+						current->bold = Parse::toBool(bold_str);
+					if (!italic_str.empty())
+						current->italic = Parse::toBool(italic_str);
+					if (!underline_str.empty())
+						current->underline = Parse::toBool(underline_str);
 
 					std::string shadow_off_x = Parse::popFirstString(infile.val);
 					std::string shadow_off_y = Parse::popFirstString(infile.val);
@@ -144,6 +159,12 @@ SDLFontEngine::SDLFontEngine()
 				int lineskip = TTF_FontLineSkip(style->ttfont);
 				style->line_height = lineskip;
 				style->font_height = lineskip;
+
+				int ttf_style = TTF_STYLE_NORMAL;
+				if (style->bold) ttf_style |= TTF_STYLE_BOLD;
+				if (style->italic) ttf_style |= TTF_STYLE_ITALIC;
+				if (style->underline) ttf_style |= TTF_STYLE_UNDERLINE;
+				TTF_SetFontStyle(style->ttfont, ttf_style);
 			}
 		}
 	}

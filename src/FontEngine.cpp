@@ -33,7 +33,11 @@ FontStyle::FontStyle()
 	, ptsize(0)
 	, blend(true)
 	, line_height(0)
-	, font_height(0) {
+	, font_height(0)
+	, bold(false)
+	, italic(false)
+	, underline(false)
+	, shadow_offset(1, 1) {
 }
 
 FontEngine::FontEngine()

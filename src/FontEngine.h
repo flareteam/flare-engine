@@ -32,6 +32,9 @@ public:
 	bool blend;
 	int line_height;
 	int font_height;
+	bool bold;
+	bool italic;
+	bool underline;
 	Point shadow_offset;
 
 	FontStyle();
