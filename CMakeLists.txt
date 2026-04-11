@@ -180,6 +180,7 @@ Set (FLARE_SOURCES
 	./src/MenuMiniMap.cpp
 	./src/MenuNumPicker.cpp
 	./src/MenuPowers.cpp
+	./src/MenuRegionTitle.cpp
 	./src/MenuStash.cpp
 	./src/MenuStatBar.cpp
 	./src/MenuTalker.cpp
@@ -297,6 +298,7 @@ Set (FLARE_HEADERS
 	./src/MenuMiniMap.h
 	./src/MenuNumPicker.h
 	./src/MenuPowers.h
+	./src/MenuRegionTitle.h
 	./src/MenuStash.h
 	./src/MenuStatBar.h
 	./src/MenuTalker.h

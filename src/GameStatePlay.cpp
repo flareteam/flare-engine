@@ -59,6 +59,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuManager.h"
 #include "MenuMiniMap.h"
 #include "MenuPowers.h"
+#include "MenuRegionTitle.h"
 #include "MenuStash.h"
 #include "MenuTalker.h"
 #include "MenuVendor.h"
@@ -1048,6 +1049,7 @@ void GameStatePlay::render() {
 	}
 	menu->mini->setMapTitle(mapr->title);
 	menu->mini->render(pc->stats.pos);
+	menu->region_title->setTitle(mapr->title);
 	menu->render();
 
 	// render combat text last - this should make it obvious you're being

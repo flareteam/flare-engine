@@ -44,6 +44,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuMiniMap.h"
 #include "MenuNumPicker.h"
 #include "MenuPowers.h"
+#include "MenuRegionTitle.h"
 #include "MenuStash.h"
 #include "MenuStatBar.h"
 #include "MenuTalker.h"
@@ -101,6 +102,7 @@ MenuManager::MenuManager()
 	, stash(NULL)
 	, game_over(NULL)
 	, action_picker(NULL)
+	, region_title(NULL)
 	, devconsole(NULL)
 	, touch_controls(NULL)
 	, subtitles(NULL)
@@ -127,6 +129,7 @@ MenuManager::MenuManager()
 	num_picker = new MenuNumPicker();
 	game_over = new MenuGameOver();
 	action_picker = new MenuConfirm();
+	region_title = new MenuRegionTitle();
 
 	resource_statbars.resize(eset->resource_stats.list.size());
 	for (size_t i = 0; i < resource_statbars.size(); ++i) {
@@ -156,6 +159,7 @@ MenuManager::MenuManager()
 	menus.push_back(num_picker);
 	menus.push_back(game_over);
 	menus.push_back(action_picker);
+	menus.push_back(region_title);
 
 	if (settings->dev_mode) {
 		devconsole = new MenuDevConsole();
@@ -635,6 +639,7 @@ void MenuManager::logic() {
 	talker->logic();
 	stash->logic();
 	game_over->logic();
+	region_title->logic();
 
 	touch_controls->logic();
 
@@ -2010,6 +2015,7 @@ MenuManager::~MenuManager() {
 	delete num_picker;
 	delete game_over;
 	delete action_picker;
+	delete region_title;
 
 	if (settings->dev_mode) {
 		delete devconsole;

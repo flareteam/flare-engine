@@ -44,6 +44,7 @@ class MenuLog;
 class MenuMiniMap;
 class MenuNumPicker;
 class MenuPowers;
+class MenuRegionTitle;
 class MenuStash;
 class MenuStatBar;
 class MenuTalker;
@@ -182,6 +183,7 @@ public:
 	MenuStash *stash;
 	MenuGameOver *game_over;
 	MenuConfirm *action_picker;
+	MenuRegionTitle *region_title;
 
 	MenuDevConsole *devconsole;
 	MenuTouchControls *touch_controls;

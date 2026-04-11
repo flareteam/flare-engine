@@ -78,6 +78,7 @@ LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c \
 	../../../../../../src/MenuMiniMap.cpp \
 	../../../../../../src/MenuNumPicker.cpp \
 	../../../../../../src/MenuPowers.cpp \
+	../../../../../../src/MenuRegionTitle.cpp \
 	../../../../../../src/MenuStash.cpp \
 	../../../../../../src/MenuStatBar.cpp \
 	../../../../../../src/MenuTalker.cpp \
