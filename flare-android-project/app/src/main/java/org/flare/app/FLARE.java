@@ -44,7 +44,7 @@ public class FLARE extends SDLActivity {
         return new String[] {
                 "SDL2",
                 "SDL2_image",
-                "mpg123",
+                //"mpg123",
                 "SDL2_mixer",
                 //"SDL2_net",
                 "SDL2_ttf",
