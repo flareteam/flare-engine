@@ -146,20 +146,20 @@ MenuManager::MenuManager()
 	menus.push_back(hudlog);
 	menus.push_back(act);
 	menus.push_back(enemy);
-	menus.push_back(vendor);
-	menus.push_back(talker);
-	menus.push_back(exit);
 	menus.push_back(mini);
+	menus.push_back(region_title);
 	menus.push_back(chr);
 	menus.push_back(inv);
 	menus.push_back(pow);
 	menus.push_back(questlog);
 	menus.push_back(stash);
+	menus.push_back(vendor);
+	menus.push_back(talker);
 	menus.push_back(book);
 	menus.push_back(num_picker);
 	menus.push_back(game_over);
 	menus.push_back(action_picker);
-	menus.push_back(region_title);
+	menus.push_back(exit);
 
 	if (settings->dev_mode) {
 		devconsole = new MenuDevConsole();
@@ -639,7 +639,9 @@ void MenuManager::logic() {
 	talker->logic();
 	stash->logic();
 	game_over->logic();
-	region_title->logic();
+
+	if (!pause)
+		region_title->logic();
 
 	touch_controls->logic();
 
