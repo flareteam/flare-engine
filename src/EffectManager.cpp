@@ -551,6 +551,12 @@ void EffectManager::addEffect(StatBlock* stats, EffectDef &effect, EffectParams 
 				return; // trigger effects can only be cast once per trigger
 
 			if (!effect.can_stack) {
+				if (static_cast<unsigned>(params.duration) < ei.timer.getCurrent() && params.magnitude == ei.magnitude_max) {
+					// Duration is shorter than time remaining for existing effect with same magnitude, so don't bother adding this one
+					// TODO What if the new effect has a *different* magnitude? Maybe it makes sense to always replace the old one in those cases.
+					return;
+				}
+
 				removeEffect(i-1);
 			}
 			else{
