@@ -1144,21 +1144,21 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 				continue;
 
 			if (pwr->mod_damage_mode == Power::STAT_MODIFIER_MODE_MULTIPLY) {
-				float magnitude = pc->stats.getDamageMax(pwr->base_damage) * pwr->mod_damage_value_min / 100;
+				float magnitude = eset->combat.resourceRound(pc->stats.getDamageMax(pwr->base_damage) * pwr->mod_damage_value_min / 100);
 				ss << Utils::floatToString(magnitude, eset->number_format.power_tooltips);
 			}
 			else if (pwr->mod_damage_mode == Power::STAT_MODIFIER_MODE_ADD) {
-				float magnitude = pc->stats.getDamageMax(pwr->base_damage) + pwr->mod_damage_value_min;
+				float magnitude = eset->combat.resourceRound(pc->stats.getDamageMax(pwr->base_damage) + pwr->mod_damage_value_min);
 				ss << Utils::floatToString(magnitude, eset->number_format.power_tooltips);
 			}
 			else if (pwr->mod_damage_mode == Power::STAT_MODIFIER_MODE_ABSOLUTE) {
 				if (pwr->mod_damage_value_max == 0 || pwr->mod_damage_value_min == pwr->mod_damage_value_max)
-					ss << Utils::floatToString(pwr->mod_damage_value_min, eset->number_format.power_tooltips);
+					ss << Utils::floatToString(eset->combat.resourceRound(pwr->mod_damage_value_min), eset->number_format.power_tooltips);
 				else
-					ss << Utils::floatToString(pwr->mod_damage_value_min, eset->number_format.power_tooltips) << "-" << Utils::floatToString(pwr->mod_damage_value_max, eset->number_format.power_tooltips);
+					ss << Utils::floatToString(eset->combat.resourceRound(pwr->mod_damage_value_min), eset->number_format.power_tooltips) << "-" << Utils::floatToString(eset->combat.resourceRound(pwr->mod_damage_value_max), eset->number_format.power_tooltips);
 			}
 			else {
-				ss << Utils::floatToString(pc->stats.getDamageMax(pwr->base_damage), eset->number_format.power_tooltips);
+				ss << Utils::floatToString(eset->combat.resourceRound(pc->stats.getDamageMax(pwr->base_damage)), eset->number_format.power_tooltips);
 			}
 
 			ss << " " << msg->get("Magical Shield");

@@ -1556,6 +1556,7 @@ bool PowerManager::effect(StatBlock *target_stats, StatBlock *caster_stats, Powe
 				else
 					magnitude = caster_stats->getDamageMax(pwr->base_damage);
 
+				magnitude = eset->combat.resourceRound(magnitude);
 				comb->addString(msg->getv("+%s Shield", Utils::floatToString(magnitude, eset->number_format.combat_text).c_str()), dest_stats->pos, CombatText::MSG_BUFF);
 			}
 			else if (effect_data.type == Effect::HEAL) {
