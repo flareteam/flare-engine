@@ -347,18 +347,16 @@ void SDLInputState::handle() {
 				}
 				break;
 			case SDL_MOUSEBUTTONUP:
-				if (mode != MODE_TOUCHSCREEN) {
-					mode = MODE_KEYBOARD_AND_MOUSE;
-					mouse = scaleMouse(event.button.x, event.button.y);
-					for (int key=0; key<KEY_COUNT; key++) {
-						for (size_t i = 0; i < binding[key].size(); ++i) {
-							if (binding[key][i].type == InputBind::MOUSE && binding[key][i].bind == event.button.button) {
-								un_press[key] = true;
-							}
+				mouse = scaleMouse(event.button.x, event.button.y);
+				curs->show_cursor = true;
+				for (int key=0; key<KEY_COUNT; key++) {
+					for (size_t i = 0; i < binding[key].size(); ++i) {
+						if (binding[key][i].type == InputBind::MOUSE && binding[key][i].bind == event.button.button) {
+							un_press[key] = true;
 						}
 					}
-					last_button = event.button.button;
 				}
+				last_button = event.button.button;
 				break;
 			case SDL_WINDOWEVENT:
 				if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
@@ -441,7 +439,6 @@ void SDLInputState::handle() {
 				break;
 			case SDL_FINGERUP:
 				if (settings->touchscreen) {
-					mode = MODE_TOUCHSCREEN;
 					// MAIN1 might have been set to un-press from a SDL_MOUSEBUTTONUP event
 					un_press[Input::MAIN1] = false;
 
