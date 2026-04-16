@@ -158,6 +158,8 @@ Platform::Platform()
 	config_input[Platform::Input::TOUCH_CONTROLS] = false;
 
 	config_misc[Platform::Misc::KEYBINDS] = true;
+
+	SDL_SetHintWithPriority(SDL_HINT_ORIENTATIONS, "LandscapeLeft LandscapeRight", SDL_HINT_OVERRIDE);
 }
 
 Platform::~Platform() {
