@@ -61,10 +61,24 @@ Point WidgetTooltip::calcPosition(uint8_t style, const Point& pos, const Point& 
 	// (usually used for tooltips which are long and we don't want them to overflow
 	//  off the end of the screen)
 	else if (style == TooltipData::STYLE_FLOAT) {
+		// get the "root" tooltip so we can see if there's more empty space on the left or right
+		// this helps us determine where child tooltips should go
+		WidgetTooltip* root = this;
+		while (root != NULL) {
+			if (root->parent)
+				root = root->parent;
+			else
+				break;
+		}
+
 		// upper left
 		if (pos.x < settings->view_w_half && pos.y < settings->view_h_half) {
-			if (parent)
-				tip_pos.x = parent->bounds.x + parent->bounds.w;
+			if (parent) {
+				if (root && root->bounds.x > settings->view_w - (root->bounds.x + root->bounds.w))
+					tip_pos.x = parent->bounds.x - size.x;
+				else
+					tip_pos.x = parent->bounds.x + parent->bounds.w;
+			}
 			else
 				tip_pos.x = pos.x + eset->tooltips.offset;
 
@@ -72,8 +86,12 @@ Point WidgetTooltip::calcPosition(uint8_t style, const Point& pos, const Point& 
 		}
 		// upper right
 		else if (pos.x >= settings->view_w_half && pos.y < settings->view_h_half) {
-			if (parent)
-				tip_pos.x = parent->bounds.x - size.x;
+			if (parent) {
+				if (root && root->bounds.x < settings->view_w - (root->bounds.x + root->bounds.w))
+					tip_pos.x = parent->bounds.x + parent->bounds.w;
+				else
+					tip_pos.x = parent->bounds.x - size.x;
+			}
 			else
 				tip_pos.x = pos.x - eset->tooltips.offset - size.x;
 
@@ -81,8 +99,12 @@ Point WidgetTooltip::calcPosition(uint8_t style, const Point& pos, const Point& 
 		}
 		// lower left
 		else if (pos.x < settings->view_w_half && pos.y >= settings->view_h_half) {
-			if (parent)
-				tip_pos.x = parent->bounds.x + parent->bounds.w;
+			if (parent) {
+				if (root && root->bounds.x > settings->view_w - (root->bounds.x + root->bounds.w))
+					tip_pos.x = parent->bounds.x - size.x;
+				else
+					tip_pos.x = parent->bounds.x + parent->bounds.w;
+			}
 			else
 				tip_pos.x = pos.x + eset->tooltips.offset;
 
@@ -90,8 +112,12 @@ Point WidgetTooltip::calcPosition(uint8_t style, const Point& pos, const Point& 
 		}
 		// lower right
 		else if (pos.x >= settings->view_w_half && pos.y >= settings->view_h_half) {
-			if (parent)
-				tip_pos.x = parent->bounds.x - size.x;
+			if (parent) {
+				if (root && root->bounds.x < settings->view_w - (root->bounds.x + root->bounds.w))
+					tip_pos.x = parent->bounds.x + parent->bounds.w;
+				else
+					tip_pos.x = parent->bounds.x - size.x;
+			}
 			else
 				tip_pos.x = pos.x - eset->tooltips.offset - size.x;
 
@@ -113,6 +139,18 @@ Point WidgetTooltip::calcPosition(uint8_t style, const Point& pos, const Point& 
 
 		if (tip_pos.y < 0)
 			tip_pos.y = 0;
+
+		// try clamping x offset to middle of screen. This prevents most cases where child tips would go offscreen
+		if (pos.x < settings->view_w_half && !parent && tip_pos.x + size.x > settings->view_w_half) {
+			Rect test_rect(settings->view_w_half - size.x, tip_pos.y, size.x, size.y);
+			if (!Utils::isWithinRect(test_rect, pos))
+				tip_pos.x -= (tip_pos.x + size.x - settings->view_w_half);
+		}
+		else if (pos.x >= settings->view_w_half && !parent && tip_pos.x < settings->view_w_half) {
+			Rect test_rect(settings->view_w_half, tip_pos.y, size.x, size.y);
+			if (!Utils::isWithinRect(test_rect, pos))
+				tip_pos.x += (settings->view_w_half - tip_pos.x);
+		}
 	}
 	else if (style == TooltipData::STYLE_ABSOLUTE) {
 		tip_pos.x = pos.x;
