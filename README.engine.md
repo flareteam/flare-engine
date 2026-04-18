@@ -120,11 +120,11 @@ In addition, there is a `mods` directory in this location, which can be used to 
 | Belarusian (be)               | 76%
 | Bulgarian (bg)                | 59%
 | Catalan (ca)                  | 51%
-| Chinese (zh)                  | 79%
+| Chinese (zh)                  | 100%
 | Chinese (Taiwan) (zh\_TW)     | 66%
 | Czech (cs)                    | 19%
 | Dutch (nl)                    | 11%
-| Finnish (fi)                  | 87%
+| Finnish (fi)                  | 90%
 | French (fr)                   | 76%
 | Gaelic (Scottish) (gd)        | 88%
 | Galician (gl)                 | 26%
@@ -140,7 +140,7 @@ In addition, there is a `mods` directory in this location, which can be used to 
 | Polish (pl)                   | 79%
 | Portuguese (pt)               | 69%
 | Portuguese (Brazil) (pt\_BR)  | 97%
-| Russian (ru)                  | 97%
+| Russian (ru)                  | 100%
 | Slovak (sk)                   | 66%
 | Spanish (es)                  | 88%
 | Swedish (sv)                  | 88%
