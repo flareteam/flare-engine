@@ -1811,23 +1811,37 @@ void MenuManager::pushMatchingItemsOf(const Point& hov_pos) {
 	// we assume that a non-empty item type means that there is a primary tooltip
 	if (items->isValid(hov_stack.item) && !items->getItemType(items->items[hov_stack.item]->type).name.empty()) {
 		size_t tip_index = 1;
+		std::vector<ItemID> matching_ids;
 
-		//get equipped items of the same type
 		for (size_t i = 0; i < inv->equipped_area.size(); i++) {
-			if (tip_index >= eset->tooltips.visible_max)
-				break; // can't show any more tooltips
+			if (inv->isEquipSlotActive(i) && !inv->inventory[MenuInventory::EQUIPMENT].storage[i].empty() && inv->slot_type[i] == items->items[hov_stack.item]->type) {
+				matching_ids.push_back(inv->inventory[MenuInventory::EQUIPMENT].storage[i].item);
+			}
+		}
 
-			if (inv->isEquipSlotActive(i)){
-				if (inv->slot_type[i] == items->items[hov_stack.item]->type) {
-					if (!inv->inventory[MenuInventory::EQUIPMENT].storage[i].empty()) {
-						Point match_pos(inv->equipped_area[i].x, inv->equipped_area[i].y);
+		if (matching_ids.size() + 1 > eset->tooltips.visible_max) {
+			TooltipData match;
+			match.addColoredText(msg->get("Equipped") + ": " + items->getItemType(items->items[hov_stack.item]->type).name, font->getColor(FontEngine::COLOR_ITEM_FLAVOR));
+			for (size_t i = 0; i < matching_ids.size(); ++i) {
+				match.addText(items->getItemName(matching_ids[i]));
+			}
 
-						TooltipData match = inv->inventory[MenuInventory::EQUIPMENT].checkTooltip(match_pos, &pc->stats, ItemManager::PLAYER_INV, !ItemManager::TOOLTIP_INPUT_HINT);
-						match.addColoredText(msg->get("Equipped"), font->getColor(FontEngine::COLOR_ITEM_FLAVOR));
+			tooltipm->push(match, hov_pos, TooltipData::STYLE_FLOAT, tip_index);
+		}
+		else {
+			//get equipped items of the same type
+			for (size_t i = 0; i < inv->equipped_area.size(); i++) {
+				if (tip_index >= eset->tooltips.visible_max)
+					break; // can't show any more tooltips
 
-						tooltipm->push(match, hov_pos, TooltipData::STYLE_FLOAT, tip_index);
-						tip_index++;
-					}
+				if (inv->isEquipSlotActive(i) && !inv->inventory[MenuInventory::EQUIPMENT].storage[i].empty() && inv->slot_type[i] == items->items[hov_stack.item]->type) {
+					Point match_pos(inv->equipped_area[i].x, inv->equipped_area[i].y);
+
+					TooltipData match = inv->inventory[MenuInventory::EQUIPMENT].checkTooltip(match_pos, &pc->stats, ItemManager::PLAYER_INV, !ItemManager::TOOLTIP_INPUT_HINT);
+					match.addColoredText(msg->get("Equipped"), font->getColor(FontEngine::COLOR_ITEM_FLAVOR));
+
+					tooltipm->push(match, hov_pos, TooltipData::STYLE_FLOAT, tip_index);
+					tip_index++;
 				}
 			}
 		}
