@@ -1295,11 +1295,6 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 		return tip;
 	}
 
-	// flavor text
-	if (!item->flavor.empty()) {
-		tip.addColoredText(Utils::substituteVarsInString(item->flavor, pc), font->getColor(FontEngine::COLOR_ITEM_FLAVOR));
-	}
-
 	// level
 	if (item->level != 0) {
 		tip.addText(msg->getv("Level %d", item->level));
@@ -1414,6 +1409,11 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 			color = font->getColor(FontEngine::COLOR_WIDGET_NORMAL);
 
 		tip.addColoredText(msg->getv("Requires Class: %s", msg->get(item->requires_class).c_str()), color);
+	}
+
+	// flavor text
+	if (!item->flavor.empty()) {
+		tip.addColoredText(Utils::substituteVarsInString(item->flavor, pc), font->getColor(FontEngine::COLOR_ITEM_FLAVOR));
 	}
 
 	// buy or sell price
