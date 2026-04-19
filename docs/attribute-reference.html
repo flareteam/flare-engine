@@ -2222,11 +2222,13 @@ code {
 
 <p><strong>power.spawn_type</strong> | <code>predefined_string</code> | For non-transform powers, an enemy is spawned from this category. For transform powers, the caster will transform into a creature from this category.</p>
 
-<p><strong>power.target_neighbor</strong> | <code>int</code> | Target is changed to an adjacent tile within a radius.</p>
-
 <p><strong>power.spawn_limit</strong> | <code>["unlimited", "fixed", "stat"], int, float, predefined_string : Mode, Entity Level, Ratio, Primary stat</code> | The maximum number of creatures that can be spawned and alive from this power. The need for the last three parameters depends on the mode being used. The "unlimited" mode requires no parameters and will remove any spawn limit requirements. The "fixed" mode takes one parameter as the spawn limit. The "stat" mode also requires the ratio and primary stat ID as parameters. The ratio adjusts the scaling of the spawn limit. For example, spawn_limit=stat,1,2,physical will set the spawn limit to 1/2 the summoner's Physical stat.</p>
 
 <p><strong>power.spawn_level</strong> | <code>["default", "fixed", "source_level", "source_stat", "hero_level", "hero_stat"], float, predefined_string : Mode, Multiplier, Primary stat</code> | The level of spawned creatures. The need for the last two parameters depends on the mode being used. The "default" mode will just use the entity's normal level and doesn't require any additional parameters. The "fixed" mode sets the multiplier as the enemy level. The level modes multiply with the target's level. The stat modes multiply by one of the target's primary stats. The stat is defined with the last parameter, which is simply the ID of the primary stat that should be used for scaling.</p>
+
+<p><strong>power.spawn_requires_unlocked_power</strong> | <code>boolean</code> | Defaults to true. When set to false, spawns won't be killed when the spawning power is locked.</p>
+
+<p><strong>power.target_neighbor</strong> | <code>int</code> | Target is changed to an adjacent tile within a radius.</p>
 
 <p><strong>power.target_party</strong> | <code>bool</code> | Hazard will only affect party members.</p>
 

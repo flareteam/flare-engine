@@ -239,6 +239,7 @@ public:
 	bool post_hazards_skip_target;
 	bool can_trigger_passives;
 	bool passive_effects_persist;
+	bool spawn_requires_unlocked_power;
 
 	uint8_t spawn_limit_mode;
 	uint8_t state_hold_mode;

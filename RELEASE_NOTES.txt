@@ -61,6 +61,7 @@ Engine features:
 * Added 'mapmod_toggle' property to Events.
 * Added cinematic map title display, configured via menus/region_title.txt.
 * Support navigating "multi-page" books with left/right inputs when possible.
+* Added 'spawn_requires_unlocked_power' property to Powers.
 * Android: Enabled use of external input devices (gamepads, keyboards, mice)
 
 Engine fixes:

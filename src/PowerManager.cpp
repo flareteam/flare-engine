@@ -103,6 +103,7 @@ Power::Power()
 	, post_hazards_skip_target(false)
 	, can_trigger_passives(false)
 	, passive_effects_persist(false)
+	, spawn_requires_unlocked_power(true)
 
 	, spawn_limit_mode(SPAWN_LIMIT_MODE_UNLIMITED)
 	, state_hold_mode(HOLD_ON_ACTIVE_FRAME)
@@ -1011,10 +1012,6 @@ void PowerManager::loadPowers() {
 			// @ATTR power.spawn_type|predefined_string|For non-transform powers, an enemy is spawned from this category. For transform powers, the caster will transform into a creature from this category.
 			power->spawn_type = infile.val;
 		}
-		else if (infile.key == "target_neighbor") {
-			// @ATTR power.target_neighbor|int|Target is changed to an adjacent tile within a radius.
-			power->target_neighbor = Parse::toInt(infile.val);
-		}
 		else if (infile.key == "spawn_limit") {
 			// @ATTR power.spawn_limit|["unlimited", "fixed", "stat"], int, float, predefined_string : Mode, Entity Level, Ratio, Primary stat|The maximum number of creatures that can be spawned and alive from this power. The need for the last three parameters depends on the mode being used. The "unlimited" mode requires no parameters and will remove any spawn limit requirements. The "fixed" mode takes one parameter as the spawn limit. The "stat" mode also requires the ratio and primary stat ID as parameters. The ratio adjusts the scaling of the spawn limit. For example, spawn_limit=stat,1,2,physical will set the spawn limit to 1/2 the summoner's Physical stat.
 			std::string mode = Parse::popFirstString(infile.val);
@@ -1044,6 +1041,14 @@ void PowerManager::loadPowers() {
 		else if (infile.key == "spawn_level") {
 			// @ATTR power.spawn_level|["default", "fixed", "source_level", "source_stat", "hero_level", "hero_stat"], float, predefined_string : Mode, Multiplier, Primary stat|The level of spawned creatures. The need for the last two parameters depends on the mode being used. The "default" mode will just use the entity's normal level and doesn't require any additional parameters. The "fixed" mode sets the multiplier as the enemy level. The level modes multiply with the target's level. The stat modes multiply by one of the target's primary stats. The stat is defined with the last parameter, which is simply the ID of the primary stat that should be used for scaling.
 			power->spawn_level.parse(infile);
+		}
+		else if (infile.key == "spawn_requires_unlocked_power") {
+			// @ATTR power.spawn_requires_unlocked_power|boolean|Defaults to true. When set to false, spawns won't be killed when the spawning power is locked.
+			power->spawn_requires_unlocked_power = Parse::toBool(infile.val);
+		}
+		else if (infile.key == "target_neighbor") {
+			// @ATTR power.target_neighbor|int|Target is changed to an adjacent tile within a radius.
+			power->target_neighbor = Parse::toInt(infile.val);
 		}
 		else if (infile.key == "target_party") {
 			// @ATTR power.target_party|bool|Hazard will only affect party members.

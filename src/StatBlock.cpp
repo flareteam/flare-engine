@@ -1415,9 +1415,11 @@ void StatBlock::updateSummonPowerIDs(PowerID old_id, PowerID new_id) {
 				summons[i]->summoned_power_index = new_id;
 			}
 			else {
-				summons[i]->takeDamage(summons[i]->get(Stats::HP_MAX), !StatBlock::TAKE_DMG_CRIT, Power::SOURCE_TYPE_NEUTRAL);
-				summons[i]->removeSummons();
-				summons[i]->summoner = NULL;
+				if (old_pwr->spawn_requires_unlocked_power) {
+					summons[i]->takeDamage(summons[i]->get(Stats::HP_MAX), !StatBlock::TAKE_DMG_CRIT, Power::SOURCE_TYPE_NEUTRAL);
+					summons[i]->removeSummons();
+					summons[i]->summoner = NULL;
+				}
 			}
 		}
 	}
