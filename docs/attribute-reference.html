@@ -1158,6 +1158,8 @@ code {
 
 <p>Definition of a item types, items/types.txt...</p>
 
+<p><strong>settings.sort_order</strong> | <code>list(predefined_string)</code> | Defines the order to be used when sorting items by type.</p>
+
 <p><strong>type.id</strong> | <code>string</code> | Item type identifier.</p>
 
 <p><strong>type.name</strong> | <code>string</code> | Item type name.</p>
@@ -1169,6 +1171,8 @@ code {
 <h4>ItemManager: Qualities</h4>
 
 <p>Definition of a item qualities, items/types.txt...</p>
+
+<p><strong>settings.sort_order</strong> | <code>list(predefined_string)</code> | Defines the order to be used when sorting items by quality.</p>
 
 <p><strong>quality.id</strong> | <code>string</code> | Item quality identifier.</p>
 
@@ -1674,6 +1678,10 @@ code {
 
 <p><strong>preview_pos</strong> | <code>point</code> | Position of the preview image. The character is drawn so that this point should lie between their feet, or thereabouts.</p>
 
+<p><strong>sort_enabled</strong> | <code>bool</code> | Enables the button for sorting carried items. Defaults to false. The button image is expected to be located at 'images/menus/buttons/button_sort.png'.</p>
+
+<p><strong>sort_pos</strong> | <code>point</code> | Position of the sort button.</p>
+
 <hr />
 
 <h4>MenuLog</h4>
@@ -1845,6 +1853,10 @@ code {
 <p><strong>label_title</strong> | <code>label</code> | Position of the "Stash" label.</p>
 
 <p><strong>currency</strong> | <code>label</code> | Position of the label displaying the amount of currency stored in the stash.</p>
+
+<p><strong>sort_enabled</strong> | <code>bool</code> | Enables the button for sorting items in the active stash tab. Defaults to false. The button image is expected to be located at 'images/menus/buttons/button_sort.png'.</p>
+
+<p><strong>sort_pos</strong> | <code>point</code> | Position of the sort button.</p>
 
 <p><strong>tab.name</strong> | <code>["Private", "Shared", string]</code> | The displayed name of this tab. It is also used to determine the filename of the stash file that the engine will create. 'Private' and 'Shared' will use their legacy filenames for compatibility.</p>
 

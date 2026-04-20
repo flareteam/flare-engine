@@ -21,16 +21,21 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "CommonIncludes.h"
+#include "EngineSettings.h"
 #include "ItemManager.h"
 #include "ItemStorage.h"
-#include "UtilsParsing.h"
+#include "MessageEngine.h"
 #include "SharedGameResources.h"
+#include "SharedResources.h"
+#include "UtilsParsing.h"
 
 #include <limits.h>
 
 ItemStorage::ItemStorage()
 	: slot_number(0)
+	, next_sort_mode(SORT_NONE + 1)
 	, storage(NULL)
+	, sort_tooltip(NULL)
 {}
 
 void ItemStorage::init(int _slot_number) {
@@ -130,6 +135,9 @@ void ItemStorage::clear() {
  */
 ItemStack ItemStorage::add( ItemStack stack, int slot) {
 	if (!stack.empty() && items->isValid(stack.item)) {
+		next_sort_mode = SORT_NONE + 1;
+		refreshSortTooltip();
+
 		int max_quantity = items->items[stack.item]->max_quantity;
 		if (slot > -1) {
 			// a slot is specified
@@ -185,6 +193,9 @@ ItemStack ItemStorage::add( ItemStack stack, int slot) {
  * @param slot Slot number
  */
 void ItemStorage::subtract(int slot, int quantity) {
+	next_sort_mode = SORT_NONE + 1;
+	refreshSortTooltip();
+
 	storage[slot].quantity -= quantity;
 	if (storage[slot].quantity <= 0) {
 		storage[slot].clear();
@@ -199,6 +210,9 @@ bool ItemStorage::remove(ItemID item, int quantity) {
 		return false;
 
 	const int lowest_quantity = INT_MAX;
+
+	next_sort_mode = SORT_NONE + 1;
+	refreshSortTooltip();
 
 	while (quantity > 0) {
 		int lowest_slot = -1;
@@ -227,17 +241,161 @@ bool ItemStorage::remove(ItemID item, int quantity) {
 	return true;
 }
 
-int compareItemStack (const void *a, const void *b) {
+// used for sorting an array of ItemStack via qsort
+// not to be confused with ItemManager::compareItemStack(), which is meant for C++ std::sort
+int ItemStorage::compareItemStack (const void *a, const void *b) {
+	int currency_compare = compareCurrencyItemStack(a, b);
+	if (currency_compare != 0)
+		return currency_compare;
+
 	const ItemStack *i1 = static_cast<const ItemStack*>(a);
 	const ItemStack *i2 = static_cast<const ItemStack*>(b);
+
 	if ((*i1) > (*i2))
 		return 1;
 	else
 		return -1;
 }
 
-void ItemStorage::sort() {
-	qsort(storage, slot_number, sizeof(ItemStack), compareItemStack);
+int ItemStorage::compareItemStackByType (const void *a, const void *b) {
+	const ItemStack *i1 = static_cast<const ItemStack*>(a);
+	const ItemStack *i2 = static_cast<const ItemStack*>(b);
+	if (items && i1->item != 0 && i2->item != 0) {
+		int currency_compare = compareCurrencyItemStack(a, b);
+		if (currency_compare != 0)
+			return currency_compare;
+
+		Item* item_a = items->items[i1->item];
+		Item* item_b = items->items[i2->item];
+
+		if (item_a->type == 0 && item_b->type != 0)
+			return 1;
+		else if (item_a->type != 0 && item_b->type == 0)
+			return -1;
+		else if (item_a->type > item_b->type)
+			return 1;
+		else if (item_a->type == item_b->type && item_a->icon > item_b->icon)
+			return 1;
+		else if (item_a->type == item_b->type && item_a->icon == item_b->icon && i1->quantity < i2->quantity)
+			return 1;
+		else if (item_a->type == item_b->type && item_a->icon == item_b->icon && i1->quantity == i2->quantity)
+			return compareItemStack(a, b);
+		else
+			return -1;
+	}
+	return compareItemStack(a, b);
+}
+
+int ItemStorage::compareItemStackBySellPrice (const void *a, const void *b) {
+	const ItemStack *i1 = static_cast<const ItemStack*>(a);
+	const ItemStack *i2 = static_cast<const ItemStack*>(b);
+	if (items && i1->item != 0 && i2->item != 0) {
+		int currency_compare = compareCurrencyItemStack(a, b);
+		if (currency_compare != 0)
+			return currency_compare;
+
+		Item* item_a = items->items[i1->item];
+		Item* item_b = items->items[i2->item];
+
+		int price_a = item_a->getSellPrice(ItemManager::DEFAULT_SELL_PRICE);
+		int price_b = item_b->getSellPrice(ItemManager::DEFAULT_SELL_PRICE);
+		if (price_a < price_b)
+			return 1;
+		else if (price_a == price_b)
+			return compareItemStackByType(a, b);
+		else
+			return -1;
+	}
+	return compareItemStackByType(a, b);
+}
+
+int ItemStorage::compareItemStackByQuality (const void *a, const void *b) {
+	const ItemStack *i1 = static_cast<const ItemStack*>(a);
+	const ItemStack *i2 = static_cast<const ItemStack*>(b);
+	if (items && i1->item != 0 && i2->item != 0) {
+		int currency_compare = compareCurrencyItemStack(a, b);
+		if (currency_compare != 0)
+			return currency_compare;
+
+		Item* item_a = items->items[i1->item];
+		Item* item_b = items->items[i2->item];
+
+		if (item_a->quality > item_b->quality)
+			return 1;
+		else if (item_a->quality == item_b->quality)
+			return compareItemStackByType(a, b);
+		else
+			return -1;
+	}
+	return compareItemStackByType(a, b);
+}
+
+int ItemStorage::compareItemStackByLevel (const void *a, const void *b) {
+	const ItemStack *i1 = static_cast<const ItemStack*>(a);
+	const ItemStack *i2 = static_cast<const ItemStack*>(b);
+	if (items && i1->item != 0 && i2->item != 0) {
+		int currency_compare = compareCurrencyItemStack(a, b);
+		if (currency_compare != 0)
+			return currency_compare;
+
+		Item* item_a = items->items[i1->item];
+		Item* item_b = items->items[i2->item];
+
+		if (item_a->level == 0 && item_b->level != 0)
+			return 1;
+		else if (item_a->level != 0 && item_b->level == 0)
+			return -1;
+		else if (item_a->level > item_b->level)
+			return -1;
+		else if (item_a->level == item_b->level)
+			return compareItemStackByType(a, b);
+		else
+			return 1;
+	}
+	return compareItemStackByType(a, b);
+}
+
+int ItemStorage::compareCurrencyItemStack(const void *a, const void *b) {
+	const ItemStack *i1 = static_cast<const ItemStack*>(a);
+	const ItemStack *i2 = static_cast<const ItemStack*>(b);
+
+	if (eset) {
+		if (i1->item == eset->misc.currency_id && i2->item != eset->misc.currency_id)
+			return -1;
+		else if (i1->item != eset->misc.currency_id && i2->item == eset->misc.currency_id)
+			return 1;
+		else if (i1->item == eset->misc.currency_id && i2->item == eset->misc.currency_id)
+			return (i1->quantity < i2->quantity);
+	}
+
+	return 0;
+}
+
+void ItemStorage::sort(int mode) {
+	if (mode == SORT_ID)
+		qsort(storage, slot_number, sizeof(ItemStack), ItemStorage::compareItemStack);
+	else if (mode == SORT_TYPE)
+		qsort(storage, slot_number, sizeof(ItemStack), ItemStorage::compareItemStackByType);
+	else if (mode == SORT_SELL_PRICE)
+		qsort(storage, slot_number, sizeof(ItemStack), ItemStorage::compareItemStackBySellPrice);
+	else if (mode == SORT_QUALITY)
+		qsort(storage, slot_number, sizeof(ItemStack), ItemStorage::compareItemStackByQuality);
+	else if (mode == SORT_LEVEL)
+		qsort(storage, slot_number, sizeof(ItemStack), ItemStorage::compareItemStackByLevel);
+
+	// anything else is treated as SORT_NONE and no sorting is done
+
+	refreshSortTooltip();
+}
+
+void ItemStorage::sortNext() {
+	sort(next_sort_mode);
+
+	next_sort_mode++;
+	if (next_sort_mode == SORT_ID)
+		next_sort_mode = SORT_NONE + 1;
+
+	refreshSortTooltip();
 }
 
 bool ItemStorage::full(ItemStack stack) {
@@ -315,6 +473,20 @@ bool ItemStorage::empty() {
 	}
 
 	return true;
+}
+
+void ItemStorage::refreshSortTooltip() {
+	if (!sort_tooltip)
+		return;
+
+	if (next_sort_mode == SORT_TYPE)
+		(*sort_tooltip) = msg->get("Sort by: Type");
+	else if (next_sort_mode == SORT_QUALITY)
+		(*sort_tooltip) = msg->get("Sort by: Quality");
+	else if (next_sort_mode == SORT_LEVEL)
+		(*sort_tooltip) = msg->get("Sort by: Level");
+	else if (next_sort_mode == SORT_SELL_PRICE)
+		(*sort_tooltip) = msg->get("Sort by: Sell Price");
 }
 
 ItemStorage::~ItemStorage() {

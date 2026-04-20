@@ -43,6 +43,7 @@ const std::string WidgetButton::DIR_DOWN_FILE = "images/menus/buttons/down.png";
 const std::string WidgetButton::UPGRADE_STAT_FILE = "images/menus/buttons/upgrade.png";
 const std::string WidgetButton::UPGRADE_POWER_FILE = "images/menus/buttons/button_plus.png";
 const std::string WidgetButton::CONFIG_MENU_FILE = "images/menus/buttons/button_config.png";
+const std::string WidgetButton::SORT_ITEMS_FILE = "images/menus/buttons/button_sort.png";
 
 WidgetButton::WidgetButton(const std::string& _fileName)
 	: Widget()

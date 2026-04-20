@@ -310,10 +310,13 @@ bool NPC::load(const std::string& npc_id) {
 	for (unsigned i=0; i<rand_count; ++i) {
 		loot->checkLoot(random_table, NULL, &rand_itemstacks);
 	}
-	std::sort(rand_itemstacks.begin(), rand_itemstacks.end(), compareItemStack);
+	std::sort(rand_itemstacks.begin(), rand_itemstacks.end(), ItemManager::compareItemStack);
 	for (size_t i=0; i<rand_itemstacks.size(); ++i) {
 		stock.add(rand_itemstacks[i], ItemStorage::NO_SLOT);
 	}
+
+	// TODO get sort mode from config
+	stock.sort(ItemStorage::SORT_NONE);
 
 	// warn if dialog nodes lack a topic
 	std::string full_filename = mods->locate(npc_id);

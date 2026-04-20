@@ -56,9 +56,11 @@ MenuStashTab::~MenuStashTab() {
 
 MenuStash::MenuStash()
 	: Menu()
-	, closeButton(new WidgetButton(WidgetButton::CLOSE_FILE))
+	, button_close(new WidgetButton(WidgetButton::CLOSE_FILE))
+	, button_sort(NULL)
 	, tab_control(new WidgetTabControl())
 	, activetab(0)
+	, sort_enabled(false)
 	, tabs()
 	, lock_tab_control(false)
 {
@@ -90,7 +92,7 @@ MenuStash::MenuStash()
 				// @ATTR close|point|Position of the close button.
 				if (infile.key == "close") {
 					Point pos = Parse::toPoint(infile.val);
-					closeButton->setBasePos(pos.x, pos.y, Utils::ALIGN_TOPLEFT);
+					button_close->setBasePos(pos.x, pos.y, Utils::ALIGN_TOPLEFT);
 				}
 				// @ATTR slots_area|point|Position of the top-left slot.
 				else if (infile.key == "slots_area") {
@@ -112,6 +114,14 @@ MenuStash::MenuStash()
 				// @ATTR currency|label|Position of the label displaying the amount of currency stored in the stash.
 				else if (infile.key == "currency") {
 					label_currency.setFromLabelInfo(Parse::popLabelInfo(infile.val));
+				}
+				// @ATTR sort_enabled|bool|Enables the button for sorting items in the active stash tab. Defaults to false. The button image is expected to be located at 'images/menus/buttons/button_sort.png'.
+				else if (infile.key == "sort_enabled") {
+					sort_enabled = Parse::toBool(infile.val);
+				}
+				// @ATTR sort_pos|point|Position of the sort button.
+				else if (infile.key == "sort_pos") {
+					sort_pos = Parse::toPoint(infile.val);
 				}
 				else {
 					infile.error("MenuStash: '%s' is not a valid key.", infile.key.c_str());
@@ -198,6 +208,20 @@ MenuStash::MenuStash()
 	if (!background)
 		setBackground("images/menus/stash.png");
 
+	if (sort_enabled) {
+		button_sort = new WidgetButton(WidgetButton::SORT_ITEMS_FILE);
+
+		if (button_sort) {
+			button_sort->setBasePos(sort_pos.x, sort_pos.y, Utils::ALIGN_TOPLEFT);
+			for (size_t i = 0; i < tabs.size(); ++i) {
+				tabs[i].stock.sort_tooltip = &button_sort->tooltip;
+			}
+			if (!tabs.empty()) {
+				tabs[0].stock.refreshSortTooltip();
+			}
+		}
+	}
+
 	align();
 }
 
@@ -210,7 +234,7 @@ void MenuStash::align() {
 
 	tab_control->setMainArea(tabs_area.x, tabs_area.y - tab_control->getTabHeight(), tabs_area.w);
 
-	closeButton->setPos(window_area.x, window_area.y);
+	button_close->setPos(window_area.x, window_area.y);
 
 	for (size_t i = 0; i < tabs.size(); ++i) {
 		tabs[i].stock.setPos(window_area.x, window_area.y);
@@ -218,10 +242,16 @@ void MenuStash::align() {
 
 	label_title.setPos(window_area.x, window_area.y);
 	label_currency.setPos(window_area.x, window_area.y);
+
+	if (button_sort) {
+		button_sort->setPos(window_area.x, window_area.y);
+	}
 }
 
 void MenuStash::logic() {
 	if (!visible) return;
+
+	size_t prevtab = tab_control->getActiveTab();
 
 	tablist.logic();
 	for (size_t i = 0; i < tabs.size(); ++i) {
@@ -246,9 +276,20 @@ void MenuStash::logic() {
 			tabs[activetab].stock.current_slot = NULL;
 	}
 
-	if (closeButton->checkClick()) {
+	if (button_close->checkClick()) {
 		visible = false;
 		snd->play(sfx_close, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
+	}
+
+	if (button_sort) {
+		if (prevtab != activetab) {
+			tabs[activetab].stock.refreshSortTooltip();
+		}
+
+		if (button_sort->checkClick()) {
+			tabs[activetab].stock.sortNext();
+			tabs[activetab].updated = true;
+		}
 	}
 }
 
@@ -259,7 +300,7 @@ void MenuStash::render() {
 	Menu::render();
 
 	// close button
-	closeButton->render();
+	button_close->render();
 
 	// text overlay
 	label_title.render();
@@ -272,6 +313,10 @@ void MenuStash::render() {
 
 	// show stock
 	tabs[activetab].stock.render();
+
+	if (button_sort) {
+		button_sort->render();
+	}
 }
 
 /**
@@ -498,7 +543,8 @@ void MenuStash::defocusTabLists() {
 }
 
 MenuStash::~MenuStash() {
-	delete closeButton;
+	delete button_close;
+	delete button_sort;
 	delete tab_control;
 }
 

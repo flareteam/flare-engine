@@ -48,12 +48,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SoundManager.h"
 #include "StatBlock.h"
 #include "TooltipManager.h"
+#include "Utils.h"
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
 #include "WidgetSlot.h"
 
 MenuInventory::MenuInventory()
-	: closeButton(new WidgetButton(WidgetButton::CLOSE_FILE))
+	: button_close(new WidgetButton(WidgetButton::CLOSE_FILE))
+	, button_sort(NULL)
 	, equipmentSetPrevious(NULL)
 	, equipmentSetNext(NULL)
 	, equipmentSetLabel(NULL)
@@ -66,6 +68,7 @@ MenuInventory::MenuInventory()
 	, activated_item(0)
 	, preview(NULL)
 	, preview_enabled(false)
+	, sort_enabled(false)
 	, active_equipment_set(0)
 	, max_equipment_set(0)
 	, currency(0)
@@ -93,7 +96,7 @@ MenuInventory::MenuInventory()
 			// @ATTR close|point|Position of the close button.
 			if(infile.key == "close") {
 				Point pos = Parse::toPoint(infile.val);
-				closeButton->setBasePos(pos.x, pos.y, Utils::ALIGN_TOPLEFT);
+				button_close->setBasePos(pos.x, pos.y, Utils::ALIGN_TOPLEFT);
 			}
 			// @ATTR set_button|int, int, int, filename : ID, Widget X, Widget Y, Image file|Set number, position and image filename for an equipment swap set button.
 			else if(infile.key == "set_button") {
@@ -157,6 +160,11 @@ MenuInventory::MenuInventory()
 			else if (infile.key == "preview_enabled") preview_enabled = Parse::toBool(infile.val);
 			// @ATTR preview_pos|point|Position of the preview image. The character is drawn so that this point should lie between their feet, or thereabouts.
 			else if (infile.key == "preview_pos") preview_pos = Parse::toPoint(infile.val);
+
+			// @ATTR sort_enabled|bool|Enables the button for sorting carried items. Defaults to false. The button image is expected to be located at 'images/menus/buttons/button_sort.png'.
+			else if (infile.key == "sort_enabled") sort_enabled = Parse::toBool(infile.val);
+			// @ATTR sort_pos|point|Position of the sort button.
+			else if (infile.key == "sort_pos") sort_pos = Parse::toPoint(infile.val);
 
 			else infile.error("MenuInventory: '%s' is not a valid key.", infile.key.c_str());
 		}
@@ -245,6 +253,18 @@ MenuInventory::MenuInventory()
 		preview->loadGraphicsFromInventory(this);
 	}
 
+	if (sort_enabled) {
+		button_sort = new WidgetButton(WidgetButton::SORT_ITEMS_FILE);
+
+		if (button_sort) {
+			button_sort->setBasePos(sort_pos.x, sort_pos.y, Utils::ALIGN_TOPLEFT);
+			tablist.add(button_sort);
+
+			inventory[CARRIED].sort_tooltip = &button_sort->tooltip;
+			inventory[CARRIED].refreshSortTooltip();
+		}
+	}
+
 	align();
 }
 
@@ -262,7 +282,7 @@ void MenuInventory::align() {
 	inventory[EQUIPMENT].setPos(window_area.x, window_area.y);
 	inventory[CARRIED].setPos(window_area.x, window_area.y);
 
-	closeButton->setPos(window_area.x, window_area.y);
+	button_close->setPos(window_area.x, window_area.y);
 
 	if (!equipmentSetButton.empty()) {
 		for (size_t i=0; i<equipmentSetButton.size(); i++) {
@@ -279,6 +299,9 @@ void MenuInventory::align() {
 
 	if (preview)
 		preview->setPos(Point(window_area.x + preview_pos.x, window_area.y + preview_pos.y));
+
+	if (button_sort)
+		button_sort->setPos(window_area.x, window_area.y);
 }
 
 void MenuInventory::logic() {
@@ -345,7 +368,7 @@ void MenuInventory::logic() {
 		tablist.logic();
 
 		// check close button
-		if (closeButton->checkClick()) {
+		if (button_close->checkClick()) {
 			visible = false;
 			snd->play(sfx_close, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
 		}
@@ -377,6 +400,10 @@ void MenuInventory::logic() {
 				applyEquipment();
 			}
 		}
+
+		if (button_sort && button_sort->checkClick()) {
+			inventory[CARRIED].sortNext();
+		}
 	}
 
 	if (max_equipment_set > 0) {
@@ -407,7 +434,7 @@ void MenuInventory::render() {
 	Menu::render();
 
 	// close button
-	closeButton->render();
+	button_close->render();
 
 	// equipment set buttons
 	if (!equipmentSetButton.empty()) {
@@ -432,6 +459,9 @@ void MenuInventory::render() {
 
 	if (preview)
 		preview->render();
+
+	if (button_sort)
+		button_sort->render();
 }
 
 int MenuInventory::areaOver(const Point& position) {
@@ -1682,7 +1712,8 @@ bool MenuInventory::equipmentContain(ItemID item, int quantity) {
 }
 
 MenuInventory::~MenuInventory() {
-	delete closeButton;
+	delete button_close;
+	delete button_sort;
 	for (size_t i=0; i<equipmentSetButton.size(); i++) {
 		delete equipmentSetButton[i];
 	}

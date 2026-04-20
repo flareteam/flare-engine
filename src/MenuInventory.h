@@ -45,7 +45,8 @@ private:
 
 	WidgetLabel label_inventory;
 	WidgetLabel label_currency;
-	WidgetButton *closeButton;
+	WidgetButton *button_close;
+	WidgetButton *button_sort;
 
 	// equipment swap buttons
 	std::vector<WidgetButton*> equipmentSetButton;
@@ -71,6 +72,9 @@ private:
 	GameSlotPreview* preview;
 	bool preview_enabled;
 	Point preview_pos;
+
+	bool sort_enabled;
+	Point sort_pos;
 
 public:
 	enum {

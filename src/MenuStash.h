@@ -52,12 +52,16 @@ public:
 
 class MenuStash : public Menu {
 private:
-	WidgetButton *closeButton;
+	WidgetButton *button_close;
+	WidgetButton *button_sort;
 	WidgetTabControl *tab_control;
 	WidgetLabel label_title;
 	WidgetLabel label_currency;
 
 	size_t activetab;
+
+	bool sort_enabled;
+	Point sort_pos;
 
 public:
 	static const int NO_SLOT = -1;

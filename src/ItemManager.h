@@ -341,6 +341,8 @@ public:
 	static const bool VERIFY_ALLOW_ZERO = true;
 	static const bool VERIFY_ALLOCATE = true;
 
+	static bool compareItemStack(const ItemStack &stack1, const ItemStack &stack2);
+
 	ItemManager();
 	~ItemManager();
 	bool isValid(ItemID item_id);

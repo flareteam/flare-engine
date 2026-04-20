@@ -45,6 +45,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "StatBlock.h"
 #include "Stats.h"
 #include "TooltipData.h"
+#include "Utils.h"
 #include "UtilsFileSystem.h"
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
@@ -54,10 +55,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <climits>
 #include <cstring>
 #include <sstream>
-
-bool compareItemStack(const ItemStack &stack1, const ItemStack &stack2) {
-	return stack1.item < stack2.item;
-}
 
 ItemStack::ItemStack(const Point& _p)
 	: item(_p.x)
@@ -778,6 +775,8 @@ void ItemManager::loadTypes(const std::string& filename) {
 	ItemType temp;
 	ItemType* current = &temp;
 
+	std::vector<std::string> sort_order;
+
 	// blank item type at index 0
 	item_types.resize(1);
 
@@ -788,6 +787,19 @@ void ItemManager::loadTypes(const std::string& filename) {
 				if (infile.section == "type") {
 					temp = ItemType();
 					current = &temp;
+				}
+			}
+
+			if (infile.section == "settings") {
+				// @ATTR settings.sort_order|list(predefined_string)|Defines the order to be used when sorting items by type.
+				if (infile.key == "sort_order") {
+					sort_order.clear();
+
+					std::string id = Parse::popFirstString(infile.val);
+					while (!id.empty()) {
+						sort_order.push_back(id);
+						id = Parse::popFirstString(infile.val);
+					}
 				}
 			}
 
@@ -826,6 +838,31 @@ void ItemManager::loadTypes(const std::string& filename) {
 		}
 		infile.close();
 	}
+
+	if (!sort_order.empty()) {
+		std::vector<ItemType> item_types_unsorted = item_types;
+		item_types.clear();
+		item_types.reserve(item_types_unsorted.size());
+		item_types.resize(1);
+
+		for (size_t i = 0; i < sort_order.size(); ++i) {
+			for (size_t j = 0; j < item_types_unsorted.size(); ++j) {
+				if (sort_order[i] == item_types_unsorted[j].id) {
+					item_types.push_back(item_types_unsorted[j]);
+					break;
+				}
+			}
+		}
+
+		// if the sort order list is incomplete, we need to take the remaining item types and put them at the end or the list
+		if (item_types.size() != item_types_unsorted.size()) {
+			for (size_t i = 1; i < item_types_unsorted.size(); ++i) {
+				if (std::find(sort_order.begin(), sort_order.end(), item_types_unsorted[i].id) == sort_order.end()) {
+					item_types.push_back(item_types_unsorted[i]);
+				}
+			}
+		}
+	}
 }
 
 /**
@@ -839,6 +876,8 @@ void ItemManager::loadQualities(const std::string& filename) {
 	ItemQuality temp;
 	ItemQuality* current = &temp;
 
+	std::vector<std::string> sort_order;
+
 	// blank item quality at index 0
 	item_qualities.resize(1);
 
@@ -849,6 +888,19 @@ void ItemManager::loadQualities(const std::string& filename) {
 				if (infile.section == "quality") {
 					temp = ItemQuality();
 					current = &temp;
+				}
+			}
+
+			if (infile.section == "settings") {
+				// @ATTR settings.sort_order|list(predefined_string)|Defines the order to be used when sorting items by quality.
+				if (infile.key == "sort_order") {
+					sort_order.clear();
+
+					std::string id = Parse::popFirstString(infile.val);
+					while (!id.empty()) {
+						sort_order.push_back(id);
+						id = Parse::popFirstString(infile.val);
+					}
 				}
 			}
 
@@ -889,6 +941,31 @@ void ItemManager::loadQualities(const std::string& filename) {
 				infile.error("ItemManager: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
+	}
+
+	if (!sort_order.empty()) {
+		std::vector<ItemQuality> item_qualities_unsorted = item_qualities;
+		item_qualities.clear();
+		item_qualities.reserve(item_qualities_unsorted.size());
+		item_qualities.resize(1);
+
+		for (size_t i = 0; i < sort_order.size(); ++i) {
+			for (size_t j = 0; j < item_qualities_unsorted.size(); ++j) {
+				if (sort_order[i] == item_qualities_unsorted[j].id) {
+					item_qualities.push_back(item_qualities_unsorted[j]);
+					break;
+				}
+			}
+		}
+
+		// if the sort order list is incomplete, we need to take the remaining item qualities and put them at the end or the list
+		if (item_qualities.size() != item_qualities_unsorted.size()) {
+			for (size_t i = 1; i < item_qualities_unsorted.size(); ++i) {
+				if (std::find(sort_order.begin(), sort_order.end(), item_qualities_unsorted[i].id) == sort_order.end()) {
+					item_qualities.push_back(item_qualities_unsorted[i]);
+				}
+			}
+		}
 	}
 }
 
@@ -1581,9 +1658,17 @@ bool ItemStack::operator > (const ItemStack &param) const {
 		// Make the empty slots the last while sorting
 		return false;
 	}
+	else if (item == 0 && param.item == 0) {
+		return false;
+	}
+	else if (item == param.item) {
+		return quantity > param.quantity;
+	}
 	else {
 		return item > param.item;
 	}
+
+	return false;
 }
 
 /**
@@ -2059,6 +2144,15 @@ void Item::updateLevelScaling() {
 		base_dmg[i].min.item_level = level;
 		base_dmg[i].max.item_level = level;
 	}
+}
+
+// used for sorting ItemStack objects in a C++ container via std::sort
+// not to be confused with ItemStorage::compareItemStack(), which is intended for the C standard library's qsort
+bool ItemManager::compareItemStack(const ItemStack &stack1, const ItemStack &stack2) {
+	if (stack1.item == stack2.item)
+		return stack1.quantity < stack2.quantity;
+	else
+		return stack1.item < stack2.item;
 }
 
 // Bonus documentation

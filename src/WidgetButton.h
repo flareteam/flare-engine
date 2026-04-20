@@ -61,6 +61,7 @@ public:
 	static const std::string UPGRADE_STAT_FILE;
 	static const std::string UPGRADE_POWER_FILE;
 	static const std::string CONFIG_MENU_FILE;
+	static const std::string SORT_ITEMS_FILE;
 
 	enum {
 		BUTTON_NORMAL = 0,
