@@ -192,6 +192,7 @@ public:
 		: id("")
 		, name("")
 		, auto_pickup(false)
+		, auto_actionbar(false)
 	{
 	}
 	~ItemType() {}
@@ -199,6 +200,7 @@ public:
 	std::string id;
 	std::string name;
 	bool auto_pickup;
+	bool auto_actionbar;
 };
 
 class ItemRandomizerDef {

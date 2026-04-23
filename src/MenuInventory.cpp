@@ -979,7 +979,7 @@ bool MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound, bo
 	}
 
 	// if this item has a power, place it on the action bar if possible
-	if (success && items->getItemType(items->items[stack.item]->type).id == "consumable" && items->items[stack.item]->power > 0) {
+	if (success && items->getItemType(items->items[stack.item]->type).auto_actionbar && items->items[stack.item]->power > 0) {
 		menu_act->addPower(items->items[stack.item]->power, 0);
 	}
 

@@ -825,6 +825,11 @@ void ItemManager::loadTypes(const std::string& filename) {
 					item_types.push_back(temp);
 					current = &(item_types.back());
 					current->id = infile.val;
+
+					// for legacy purposes, an item type with the ID of "consumable" automatically get added to the actionbar by default
+					if (current->id == "consumable") {
+						current->auto_actionbar = true;
+					}
 				}
 			}
 			// @ATTR type.name|string|Item type name.
@@ -833,6 +838,9 @@ void ItemManager::loadTypes(const std::string& filename) {
 			// @ATTR type.auto_pickup|boolean|Allows items of this type to be picked up automatically.
 			else if (infile.key == "auto_pickup")
 				current->auto_pickup = Parse::toBool(infile.val);
+			// @ATTR type.auto_actionbar|boolean|Flags items of this type to be automatically added to the actionbar (if the item has a power) when obtained. Defaults to false, except if the 'id' of this type is 'consumable'.
+			else if (infile.key == "auto_actionbar")
+				current->auto_actionbar = Parse::toBool(infile.val);
 			else
 				infile.error("ItemManager: '%s' is not a valid key.", infile.key.c_str());
 		}

@@ -62,6 +62,7 @@ Engine features:
 * Added cinematic map title display, configured via menus/region_title.txt.
 * Support navigating "multi-page" books with left/right inputs when possible.
 * Added 'spawn_requires_unlocked_power' property to Powers.
+* Added 'auto_actionbar' property to items/types.txt config
 * Added optional sort button to inventory and stash for sorting by type, quality, level, and sell price.
 * Android: Enabled use of external input devices (gamepads, keyboards, mice)
 
