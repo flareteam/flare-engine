@@ -150,6 +150,7 @@ Engine fixes:
 * Fixed divide-by-zero crash when using NPC dialog groups.
 * Fixed HUD log blocking clicks when an overlayed message expires due to time.
 * Non-stacking effects of the same magnitude are now ignored if the duration is shorter than the time remaining on the existing effect.
+* Fixed power 'speed_variance' behavior being dependent on max FPS.
 * Android: Fix 'Flare' directory not being automatically created.
 * Android: Added a dialog to direct the player to the wiki page for installing if no game data is found.
 

@@ -1693,6 +1693,7 @@ bool PowerManager::missile(PowerID power_index, StatBlock *src_stats, const FPoi
 		if (power->speed_variance != 0) {
 			const float var = power->speed_variance;
 			speed_var = ((var * 2.0f * static_cast<float>(rand())) / static_cast<float>(RAND_MAX)) - var;
+			speed_var *= Settings::LOGIC_FPS / static_cast<float>(settings->max_frames_per_sec);
 		}
 
 		// set speed and angle
