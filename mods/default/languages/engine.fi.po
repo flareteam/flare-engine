@@ -419,7 +419,7 @@ msgstr "Näytä kaikki"
 
 #: ../../../src/MapRenderer.cpp:1766
 msgid "Map Legend"
-msgstr ""
+msgstr "Karttalegenda"
 
 #: ../../../src/MapRenderer.cpp:1767
 msgid "Start"
