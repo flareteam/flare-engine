@@ -1,7 +1,6 @@
 #! /usr/bin/python
 import os
 import datetime
-import codecs   # proper UTF8 handling with files
 
 keys = []
 comments = []
@@ -67,7 +66,7 @@ def parse_credits_settings(filename):
 	if filename == default_credits_settings:
 		print('Using default credits settings: ' + filename)
 
-	infile = codecs.open(filename, encoding='UTF-8', mode='r')
+	infile = open(filename, encoding='UTF-8', mode='r')
 
 	for line in infile:
 		if line.startswith('s'):
@@ -83,7 +82,7 @@ def extract(filename):
 	if not os.path.exists(filename):
 		return
 
-	infile = codecs.open(filename, encoding='UTF-8', mode='r')
+	infile = open(filename, encoding='UTF-8', mode='r')
 
 	is_credits_file = False
 	for credits_file in credits_files:
@@ -139,7 +138,7 @@ def remove_duplicates():
 
 # this writes the list of keys to a gettext .po file
 def save(filename):
-	outfile = codecs.open('data.pot', encoding='UTF-8', mode='w')
+	outfile = open('data.pot', encoding='UTF-8', mode='w')
 	outfile.write(header.format(now=now.strftime('%Y-%m-%d %H:%M+%z')))
 	remove_duplicates()
 	for line_c,line in zip(comments,keys):
