@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-09 14:33+\n"
+"POT-Creation-Date: 2026-04-24 08:42+\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -75,23 +75,23 @@ msgstr ""
 msgid "Translators"
 msgstr ""
 
-#: ../cutscenes/credits_engine.txt:141
+#: ../cutscenes/credits_engine.txt:142
 msgid "Distributors"
 msgstr ""
 
-#: ../cutscenes/credits_engine.txt:150
+#: ../cutscenes/credits_engine.txt:151
 msgid "Special Thanks"
 msgstr ""
 
-#: ../cutscenes/credits_engine.txt:154
+#: ../cutscenes/credits_engine.txt:155
 msgid "For giving constant feedback and testing:"
 msgstr ""
 
-#: ../cutscenes/credits_engine.txt:156
+#: ../cutscenes/credits_engine.txt:157
 msgid "The community at OpenGameArt"
 msgstr ""
 
-#: ../cutscenes/credits_engine.txt:160
+#: ../cutscenes/credits_engine.txt:161
 msgid "For Tiled and the Flare map exporter:"
 msgstr ""
 

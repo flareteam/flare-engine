@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-06 12:44-0500\n"
+"POT-Creation-Date: 2026-04-23 12:01-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
 "Last-Translator: Marcin Serwin, 2022\n"
 "Language-Team: Polish (https://app.transifex.com/flareorg/teams/84925/pl/)\n"
@@ -154,7 +154,7 @@ msgstr ""
 msgid "miss"
 msgstr "pudło"
 
-#: ../../../src/Entity.cpp:563 ../../../src/PowerManager.cpp:1575
+#: ../../../src/Entity.cpp:563 ../../../src/PowerManager.cpp:1581
 #: ../../../src/StatBlock.cpp:1162 ../../../src/StatBlock.cpp:1169
 #, c-format
 msgid "+%s HP"
@@ -166,7 +166,7 @@ msgstr "+%s PŻ"
 msgid "+%s MP"
 msgstr "+%s PM"
 
-#: ../../../src/EventManager.cpp:986
+#: ../../../src/EventManager.cpp:1013
 msgid "Unknown destination"
 msgstr "Cel nieznany"
 
@@ -174,69 +174,79 @@ msgstr "Cel nieznany"
 msgid "Loading..."
 msgstr "Wczytywanie..."
 
-#: ../../../src/GameStateLoad.cpp:96
+#: ../../../src/GameStateLoad.cpp:97
 msgid "Delete this save?"
 msgstr "Usunąć ten zapis?"
 
-#: ../../../src/GameStateLoad.cpp:97 ../../../src/GameStateTitle.cpp:195
+#: ../../../src/GameStateLoad.cpp:98 ../../../src/GameStateTitle.cpp:195
 #: ../../../src/MenuConfig.cpp:263
 msgid "No"
 msgstr "Nie"
 
-#: ../../../src/GameStateLoad.cpp:98 ../../../src/GameStateTitle.cpp:196
+#: ../../../src/GameStateLoad.cpp:99 ../../../src/GameStateTitle.cpp:196
 #: ../../../src/MenuConfig.cpp:264
 msgid "Yes"
 msgstr "Tak"
 
-#: ../../../src/GameStateLoad.cpp:101
+#: ../../../src/GameStateLoad.cpp:102
 msgid "Exit to Title"
 msgstr "Wyjdź do Menu"
 
-#: ../../../src/GameStateLoad.cpp:104
+#: ../../../src/GameStateLoad.cpp:105
 msgid "New Game"
 msgstr "Nowa Gra"
 
-#: ../../../src/GameStateLoad.cpp:108 ../../../src/GameStateLoad.cpp:752
+#: ../../../src/GameStateLoad.cpp:109 ../../../src/GameStateLoad.cpp:856
 msgid "Choose a Slot"
 msgstr "Wybierz stan gry"
 
-#: ../../../src/GameStateLoad.cpp:112
+#: ../../../src/GameStateLoad.cpp:113
 msgid "Delete Save"
 msgstr "Usuń zapis"
 
-#: ../../../src/GameStateLoad.cpp:725 ../../../src/GameStateLoad.cpp:746
+#: ../../../src/GameStateLoad.cpp:245 ../../../src/MenuStash.cpp:81
+#: ../../../src/MenuStash.cpp:170
+msgid "Stash"
+msgstr "Skrytka"
+
+#: ../../../src/GameStateLoad.cpp:288 ../../../src/MenuStash.cpp:181
+#: ../../../src/MenuStash.cpp:195
+msgid "Private"
+msgstr "Prywatna"
+
+#: ../../../src/GameStateLoad.cpp:829 ../../../src/GameStateLoad.cpp:850
 msgid "Enable a story mod to continue"
 msgstr "Włącz mod fabularny, by kontynuować"
 
-#: ../../../src/GameStateLoad.cpp:741
+#: ../../../src/GameStateLoad.cpp:845
 msgid "Load Game"
 msgstr "Wczytaj Grę"
 
-#: ../../../src/GameStateLoad.cpp:863
+#: ../../../src/GameStateLoad.cpp:967
 msgid "Entering game world..."
 msgstr "Wkraczanie do świata gry..."
 
-#: ../../../src/GameStateLoad.cpp:866
+#: ../../../src/GameStateLoad.cpp:970
 msgid "Loading saved game..."
 msgstr "Wczytywanie stanu gry..."
 
-#: ../../../src/GameStateLoad.cpp:899
+#: ../../../src/GameStateLoad.cpp:1003
 msgid "Invalid save"
 msgstr "Nieprawidłowy zapis"
 
-#: ../../../src/GameStateLoad.cpp:923 ../../../src/ItemManager.cpp:1305
-#: ../../../src/MenuPowers.cpp:953 ../../../src/MenuPowers.cpp:1340
-#: ../../../src/MenuPowers.cpp:1820
+#: ../../../src/GameStateLoad.cpp:1027 ../../../src/ItemManager.cpp:1385
+#: ../../../src/MenuPowers.cpp:956 ../../../src/MenuPowers.cpp:1337
+#: ../../../src/MenuPowers.cpp:1817
 #, c-format
 msgid "Level %d"
 msgstr "Poziom %d"
 
-#: ../../../src/GameStateLoad.cpp:965
+#: ../../../src/GameStateLoad.cpp:1069
 msgid "#"
 msgstr ""
 
 #: ../../../src/GameStateNew.cpp:71 ../../../src/GameStateTitle.cpp:140
-#: ../../../src/MenuConfig.cpp:275 ../../../src/SDLInputState.cpp:917
+#: ../../../src/MenuConfig.cpp:275 ../../../src/SDLInputState.cpp:914
 msgid "Cancel"
 msgstr "Anuluj"
 
@@ -301,102 +311,118 @@ msgstr ""
 msgid "%s FPS"
 msgstr ""
 
-#: ../../../src/ItemManager.cpp:897
+#: ../../../src/ItemManager.cpp:982
 msgid "Unknown Item"
 msgstr "Nieznany przedmiot"
 
-#: ../../../src/ItemManager.cpp:1189 ../../../src/MenuPowers.cpp:1121
+#: ../../../src/ItemManager.cpp:1274 ../../../src/MenuPowers.cpp:1118
 #, c-format
 msgid "%s%% Speed"
 msgstr "%s%% Szybkość Ruchu"
 
-#: ../../../src/ItemManager.cpp:1193 ../../../src/MenuPowers.cpp:1124
+#: ../../../src/ItemManager.cpp:1278 ../../../src/MenuPowers.cpp:1121
 #, c-format
 msgid "%s%% Attack Speed"
 msgstr "%s%% Szybkość Ataku"
 
-#: ../../../src/ItemManager.cpp:1230
+#: ../../../src/ItemManager.cpp:1315
 #, c-format
 msgid "Requires %s"
 msgstr "Wymaga %s"
 
-#: ../../../src/ItemManager.cpp:1288
+#: ../../../src/ItemManager.cpp:1373
 msgid "Quest Item"
 msgstr "Przedmiot związany z zadaniem"
 
-#: ../../../src/ItemManager.cpp:1318
+#: ../../../src/ItemManager.cpp:1398
 #, c-format
 msgid "Prevents use of slot: %s"
 msgstr ""
 
-#: ../../../src/ItemManager.cpp:1326
+#: ../../../src/ItemManager.cpp:1406
 #, c-format
 msgid "Quality: %s"
 msgstr "Jakość: %s"
 
-#: ../../../src/ItemManager.cpp:1342 ../../../src/MenuCharacter.cpp:415
+#: ../../../src/ItemManager.cpp:1422 ../../../src/MenuCharacter.cpp:415
 #: ../../../src/Stats.cpp:81 ../../../src/Stats.cpp:88
 msgid "Absorb"
 msgstr "Absorbcja"
 
-#: ../../../src/ItemManager.cpp:1393 ../../../src/MenuPowers.cpp:1327
-#: ../../../src/MenuPowers.cpp:1330
+#: ../../../src/ItemManager.cpp:1473 ../../../src/MenuPowers.cpp:1324
+#: ../../../src/MenuPowers.cpp:1327
 #, c-format
 msgid "Requires Level %d"
 msgstr "Wymaga %d poziomu"
 
-#: ../../../src/ItemManager.cpp:1405 ../../../src/MenuPowers.cpp:1319
-#: ../../../src/MenuPowers.cpp:1321
+#: ../../../src/ItemManager.cpp:1485 ../../../src/MenuPowers.cpp:1316
+#: ../../../src/MenuPowers.cpp:1318
 #, c-format
 msgid "Requires %s %d"
 msgstr "Wymaga: %s %d"
 
-#: ../../../src/ItemManager.cpp:1416
+#: ../../../src/ItemManager.cpp:1496
 #, c-format
 msgid "Requires Class: %s"
 msgstr "Wymagana Klasa: %s"
 
-#: ../../../src/ItemManager.cpp:1432 ../../../src/ItemManager.cpp:1444
+#: ../../../src/ItemManager.cpp:1517 ../../../src/ItemManager.cpp:1529
 #, c-format
 msgid "Buy Price: %d %s"
 msgstr "Cena kupna: %d %s"
 
-#: ../../../src/ItemManager.cpp:1434 ../../../src/ItemManager.cpp:1446
+#: ../../../src/ItemManager.cpp:1519 ../../../src/ItemManager.cpp:1531
 #, c-format
 msgid "Buy Price: %d %s each"
 msgstr "Cena kupna: %d %s za sztukę"
 
-#: ../../../src/ItemManager.cpp:1454
+#: ../../../src/ItemManager.cpp:1539
 #, c-format
 msgid "Sell Price: %d %s"
 msgstr "Wartość sprzedaży: %d %s"
 
-#: ../../../src/ItemManager.cpp:1456
+#: ../../../src/ItemManager.cpp:1541
 #, c-format
 msgid "Sell Price: %d %s each"
 msgstr "Wartość sprzedaży: %d %s za sztukę"
 
-#: ../../../src/ItemManager.cpp:1467
+#: ../../../src/ItemManager.cpp:1552
 msgid "Set:"
 msgstr "Zestaw:"
 
-#: ../../../src/ItemManager.cpp:1499 ../../../src/MenuPowers.cpp:1379
+#: ../../../src/ItemManager.cpp:1584 ../../../src/MenuPowers.cpp:1376
 msgid "Tap icon again for more options"
 msgstr "Kliknij ikonę jeszcze raz by zobaczyć więcej opcji"
 
-#: ../../../src/ItemManager.cpp:1531
+#: ../../../src/ItemManager.cpp:1616
 #, c-format
 msgid "Press [%s] to read"
 msgstr "Wciśnij [%s] aby przeczytać"
 
-#: ../../../src/ItemManager.cpp:1534 ../../../src/MenuPowers.cpp:1409
+#: ../../../src/ItemManager.cpp:1619 ../../../src/MenuPowers.cpp:1406
 #, c-format
 msgid "Press [%s] to use"
 msgstr "Wciśnij [%s] aby użyć"
 
-#: ../../../src/ItemManager.cpp:1538 ../../../src/MenuPowers.cpp:1413
+#: ../../../src/ItemManager.cpp:1623 ../../../src/MenuPowers.cpp:1410
 #, c-format
 msgid "Press [%s] for more options"
+msgstr ""
+
+#: ../../../src/ItemStorage.cpp:483
+msgid "Sort by: Type"
+msgstr ""
+
+#: ../../../src/ItemStorage.cpp:485
+msgid "Sort by: Quality"
+msgstr ""
+
+#: ../../../src/ItemStorage.cpp:487
+msgid "Sort by: Level"
+msgstr ""
+
+#: ../../../src/ItemStorage.cpp:489
+msgid "Sort by: Sell Price"
 msgstr ""
 
 #: ../../../src/LootManager.cpp:107 ../../../src/LootManager.cpp:109
@@ -426,8 +452,8 @@ msgstr ""
 msgid "Start"
 msgstr ""
 
-#: ../../../src/MapRenderer.cpp:1768 ../../../src/SDLInputState.cpp:679
-#: ../../../src/SDLInputState.cpp:709
+#: ../../../src/MapRenderer.cpp:1768 ../../../src/SDLInputState.cpp:676
+#: ../../../src/SDLInputState.cpp:706
 msgid "End"
 msgstr "End"
 
@@ -440,22 +466,22 @@ msgid "Key"
 msgstr ""
 
 #: ../../../src/MenuActionBar.cpp:92 ../../../src/MenuCharacter.cpp:54
-#: ../../../src/SDLInputState.cpp:933
+#: ../../../src/SDLInputState.cpp:930
 msgid "Character"
 msgstr "Postać"
 
-#: ../../../src/MenuActionBar.cpp:93 ../../../src/MenuInventory.cpp:172
-#: ../../../src/MenuVendor.cpp:58 ../../../src/SDLInputState.cpp:934
+#: ../../../src/MenuActionBar.cpp:93 ../../../src/MenuInventory.cpp:180
+#: ../../../src/MenuVendor.cpp:58 ../../../src/SDLInputState.cpp:931
 msgid "Inventory"
 msgstr "Ekwipunek"
 
 #: ../../../src/MenuActionBar.cpp:94 ../../../src/MenuPowers.cpp:160
-#: ../../../src/SDLInputState.cpp:935
+#: ../../../src/SDLInputState.cpp:932
 msgid "Powers"
 msgstr "Moce"
 
 #: ../../../src/MenuActionBar.cpp:95 ../../../src/MenuLog.cpp:72
-#: ../../../src/SDLInputState.cpp:936
+#: ../../../src/SDLInputState.cpp:933
 msgid "Log"
 msgstr "Dziennik"
 
@@ -560,7 +586,7 @@ msgstr "Przypisz:"
 msgid "New"
 msgstr "Nowe"
 
-#: ../../../src/MenuConfig.cpp:260 ../../../src/MenuManager.cpp:1874
+#: ../../../src/MenuConfig.cpp:260 ../../../src/MenuManager.cpp:1895
 msgid "Clear"
 msgstr "Wyczyść"
 
@@ -1083,8 +1109,8 @@ msgstr "Wymaga modów:"
 msgid "Can not remove this binding."
 msgstr ""
 
-#: ../../../src/MenuConfig.cpp:1940 ../../../src/SDLInputState.cpp:775
-#: ../../../src/SDLInputState.cpp:800
+#: ../../../src/MenuConfig.cpp:1940 ../../../src/SDLInputState.cpp:772
+#: ../../../src/SDLInputState.cpp:797
 msgid "(none)"
 msgstr "(brak)"
 
@@ -1313,82 +1339,82 @@ msgstr "Zniszczony"
 msgid "Game Over"
 msgstr "Koniec Gry"
 
-#: ../../../src/MenuInventory.cpp:294
+#: ../../../src/MenuInventory.cpp:317
 #, c-format
 msgid "Lost %s%% of %s."
 msgstr "Utracono %s%% %s."
 
-#: ../../../src/MenuInventory.cpp:301
+#: ../../../src/MenuInventory.cpp:324
 #, c-format
 msgid "Lost %s%% of total XP."
 msgstr "Utracono %s%% PD."
 
-#: ../../../src/MenuInventory.cpp:306
+#: ../../../src/MenuInventory.cpp:329
 #, c-format
 msgid "Lost %s%% of current level XP."
 msgstr "Utracono %s%% PD z obecnego poziomu doświadczenia."
 
-#: ../../../src/MenuInventory.cpp:332
+#: ../../../src/MenuInventory.cpp:355
 #, c-format
 msgid "Lost %s."
 msgstr "Utracono %s."
 
-#: ../../../src/MenuInventory.cpp:426 ../../../src/MenuStash.cpp:267
+#: ../../../src/MenuInventory.cpp:453 ../../../src/MenuStash.cpp:308
 #, c-format
 msgid "%d %s"
 msgstr "%d %s"
 
-#: ../../../src/MenuInventory.cpp:472
+#: ../../../src/MenuInventory.cpp:502
 msgid "Pick up item(s):"
 msgstr "Podnieś przedmiot(y):"
 
-#: ../../../src/MenuInventory.cpp:473
+#: ../../../src/MenuInventory.cpp:503
 msgid "Use or equip item:"
 msgstr "Użyj bądź załóż przedmiot:"
 
-#: ../../../src/MenuInventory.cpp:474
+#: ../../../src/MenuInventory.cpp:504
 #, c-format
 msgid "%s modifiers"
 msgstr "Modyfikatory dla %s:"
 
-#: ../../../src/MenuInventory.cpp:475
+#: ../../../src/MenuInventory.cpp:505
 msgid "Select a quantity of item:"
 msgstr "Rozdziel przedmioty:"
 
-#: ../../../src/MenuInventory.cpp:478
+#: ../../../src/MenuInventory.cpp:508
 msgid "Stash item stack:"
 msgstr "Ilość przedmiotów w skrytce:"
 
-#: ../../../src/MenuInventory.cpp:480
+#: ../../../src/MenuInventory.cpp:510
 msgid "Sell item stack:"
 msgstr "Sprzedaj przedmiot:"
 
-#: ../../../src/MenuInventory.cpp:758
+#: ../../../src/MenuInventory.cpp:788
 msgid "You don't have enough of the required item."
 msgstr "Nie masz wystarczająco wymaganych przedmiotów."
 
-#: ../../../src/MenuInventory.cpp:770
+#: ../../../src/MenuInventory.cpp:800
 msgid "You can't use this item right now."
 msgstr "Nie możesz użyć tego przedmiotu w tej chwili."
 
-#: ../../../src/MenuInventory.cpp:795
+#: ../../../src/MenuInventory.cpp:825
 msgid "This item can only be used from the action bar."
 msgstr "Ten przedmiot może być użyty jedynie z paska akcji."
 
-#: ../../../src/MenuInventory.cpp:916
+#: ../../../src/MenuInventory.cpp:946
 msgid "Inventory is full."
 msgstr "Ekwipunek jest pełny."
 
-#: ../../../src/MenuInventory.cpp:1044
+#: ../../../src/MenuInventory.cpp:1074
 #, c-format
 msgid "Not enough %s."
 msgstr "Za mało %s."
 
-#: ../../../src/MenuInventory.cpp:1064 ../../../src/MenuInventory.cpp:1071
+#: ../../../src/MenuInventory.cpp:1094 ../../../src/MenuInventory.cpp:1101
 msgid "This item can not be sold."
 msgstr "Tego przedmiotu nie można sprzedać."
 
-#: ../../../src/MenuInventory.cpp:1369
+#: ../../../src/MenuInventory.cpp:1399
 #, c-format
 msgid "Equipped set %d."
 msgstr ""
@@ -1401,52 +1427,52 @@ msgstr "Zadania"
 msgid "Notes"
 msgstr "Notatki"
 
-#: ../../../src/MenuManager.cpp:175
+#: ../../../src/MenuManager.cpp:179
 msgid "Choose an action:"
 msgstr ""
 
-#: ../../../src/MenuManager.cpp:535 ../../../src/MenuManager.cpp:1213
+#: ../../../src/MenuManager.cpp:539 ../../../src/MenuManager.cpp:1220
 msgid "This item can not be dropped."
 msgstr "Tego przedmiotu nie można upuścić."
 
-#: ../../../src/MenuManager.cpp:1819
+#: ../../../src/MenuManager.cpp:1824 ../../../src/MenuManager.cpp:1841
 msgid "Equipped"
 msgstr "Założony"
 
-#: ../../../src/MenuManager.cpp:1867 ../../../src/MenuManager.cpp:1918
+#: ../../../src/MenuManager.cpp:1888 ../../../src/MenuManager.cpp:1939
 msgid "Use"
 msgstr "Użyj"
 
-#: ../../../src/MenuManager.cpp:1871 ../../../src/MenuManager.cpp:1914
-#: ../../../src/MenuManager.cpp:1952
+#: ../../../src/MenuManager.cpp:1892 ../../../src/MenuManager.cpp:1935
+#: ../../../src/MenuManager.cpp:1973
 msgid "Move"
 msgstr "Przesuń"
 
-#: ../../../src/MenuManager.cpp:1887 ../../../src/MenuManager.cpp:1922
+#: ../../../src/MenuManager.cpp:1908 ../../../src/MenuManager.cpp:1943
 msgid "Equip"
 msgstr "Załóż"
 
-#: ../../../src/MenuManager.cpp:1891
+#: ../../../src/MenuManager.cpp:1912
 msgid "Upgrade"
 msgstr "Ulepsz"
 
-#: ../../../src/MenuManager.cpp:1906 ../../../src/MenuManager.cpp:1937
+#: ../../../src/MenuManager.cpp:1927 ../../../src/MenuManager.cpp:1958
 msgid "Sell"
 msgstr "Sprzedaj"
 
-#: ../../../src/MenuManager.cpp:1910 ../../../src/MenuManager.cpp:1955
+#: ../../../src/MenuManager.cpp:1931 ../../../src/MenuManager.cpp:1976
 msgid "Transfer"
 msgstr "Przenieś"
 
-#: ../../../src/MenuManager.cpp:1928
+#: ../../../src/MenuManager.cpp:1949
 msgid "Add to bar"
 msgstr ""
 
-#: ../../../src/MenuManager.cpp:1933
+#: ../../../src/MenuManager.cpp:1954
 msgid "Drop"
 msgstr "Upuść"
 
-#: ../../../src/MenuManager.cpp:1969
+#: ../../../src/MenuManager.cpp:1990
 msgid "Buy"
 msgstr "Kup"
 
@@ -1454,175 +1480,167 @@ msgstr "Kup"
 msgid "Enter amount:"
 msgstr "Podaj ilość:"
 
-#: ../../../src/MenuPowers.cpp:965
+#: ../../../src/MenuPowers.cpp:968
 msgid "Passive"
 msgstr "Pasywna"
 
-#: ../../../src/MenuPowers.cpp:972
+#: ../../../src/MenuPowers.cpp:975
 #, c-format
 msgid "Costs %s MP"
 msgstr "Koszt: %s PM"
 
-#: ../../../src/MenuPowers.cpp:976
+#: ../../../src/MenuPowers.cpp:979
 #, c-format
 msgid "Costs %s HP"
 msgstr "Koszt: %s PŻ"
 
-#: ../../../src/MenuPowers.cpp:986
+#: ../../../src/MenuPowers.cpp:989
 msgid "Cooldown:"
 msgstr "Odnowienie:"
 
-#: ../../../src/MenuPowers.cpp:1100 ../../../src/MenuPowers.cpp:1103
+#: ../../../src/MenuPowers.cpp:1097 ../../../src/MenuPowers.cpp:1100
 msgid "Damage per second"
 msgstr "Obrażenia na sekundę"
 
-#: ../../../src/MenuPowers.cpp:1106 ../../../src/MenuPowers.cpp:1109
+#: ../../../src/MenuPowers.cpp:1103 ../../../src/MenuPowers.cpp:1106
 msgid "HP per second"
 msgstr "PŻ na sekundę"
 
-#: ../../../src/MenuPowers.cpp:1112 ../../../src/MenuPowers.cpp:1115
+#: ../../../src/MenuPowers.cpp:1109 ../../../src/MenuPowers.cpp:1112
 msgid "MP per second"
 msgstr "PM na sekundę"
 
-#: ../../../src/MenuPowers.cpp:1119
+#: ../../../src/MenuPowers.cpp:1116
 msgid "Immobilize"
 msgstr "Unieruchomienie"
 
-#: ../../../src/MenuPowers.cpp:1127
+#: ../../../src/MenuPowers.cpp:1124
 msgid "Resist All Negative Effects"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:1131
+#: ../../../src/MenuPowers.cpp:1128
 msgid "Stun"
 msgstr "Ogłuszenie"
 
-#: ../../../src/MenuPowers.cpp:1134
+#: ../../../src/MenuPowers.cpp:1131
 msgid "Automatic revive on death"
 msgstr "Automatyczne ożywienie po śmierci"
 
-#: ../../../src/MenuPowers.cpp:1137
+#: ../../../src/MenuPowers.cpp:1134
 msgid "Convert"
 msgstr "Nawrócenie"
 
-#: ../../../src/MenuPowers.cpp:1140
+#: ../../../src/MenuPowers.cpp:1137
 msgid "Fear"
 msgstr "Strach"
 
-#: ../../../src/MenuPowers.cpp:1143
+#: ../../../src/MenuPowers.cpp:1140
 msgid "Lifespan"
 msgstr "Żywotność"
 
-#: ../../../src/MenuPowers.cpp:1167
+#: ../../../src/MenuPowers.cpp:1164
 msgid "Magical Shield"
 msgstr "Magiczna Tarcza"
 
-#: ../../../src/MenuPowers.cpp:1196
+#: ../../../src/MenuPowers.cpp:1193
 msgid "Healing"
 msgstr "Leczenie"
 
-#: ../../../src/MenuPowers.cpp:1199
+#: ../../../src/MenuPowers.cpp:1196
 msgid "Knockback"
 msgstr "Odrzucenie"
 
-#: ../../../src/MenuPowers.cpp:1223
+#: ../../../src/MenuPowers.cpp:1220
 #, c-format
 msgid "%s%% chance"
 msgstr "%s%% szansy"
 
-#: ../../../src/MenuPowers.cpp:1247
+#: ../../../src/MenuPowers.cpp:1244
 msgid "Base Accuracy"
 msgstr "Bazowa celność"
 
-#: ../../../src/MenuPowers.cpp:1267
+#: ../../../src/MenuPowers.cpp:1264
 msgid "Base Critical Chance"
 msgstr "Bazowa Szansa na Trafienie Krytyczne"
 
-#: ../../../src/MenuPowers.cpp:1275
+#: ../../../src/MenuPowers.cpp:1272
 msgid "Ignores Absorption"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:1280
+#: ../../../src/MenuPowers.cpp:1277
 msgid "Ignores Avoidance"
 msgstr "Ignoruje szansę na unik"
 
-#: ../../../src/MenuPowers.cpp:1285
+#: ../../../src/MenuPowers.cpp:1282
 #, c-format
 msgid "%s%% Chance to crit slowed targets"
 msgstr "%s%% Szansa na trafienie krytyczne spowolnionych celów"
 
-#: ../../../src/MenuPowers.cpp:1290
+#: ../../../src/MenuPowers.cpp:1287
 #, c-format
 msgid "Damage dealt as: %s"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:1302
+#: ../../../src/MenuPowers.cpp:1299
 #, c-format
 msgid "Spawn limit: %d"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:1309
+#: ../../../src/MenuPowers.cpp:1306
 #, c-format
 msgid "Requires a %s"
 msgstr "Wymaga %s"
 
-#: ../../../src/MenuPowers.cpp:1347 ../../../src/MenuPowers.cpp:1350
+#: ../../../src/MenuPowers.cpp:1344 ../../../src/MenuPowers.cpp:1347
 #, c-format
 msgid "Requires Power: %s"
 msgstr "Wymagana Moc: %s"
 
-#: ../../../src/MenuPowers.cpp:1359
+#: ../../../src/MenuPowers.cpp:1356
 msgid "Click to Unlock (uses 1 Skill Point)"
 msgstr "Kliknij by odblokować (potrzebuje 1 Punktu Umiejętności)"
 
-#: ../../../src/MenuPowers.cpp:1363 ../../../src/MenuPowers.cpp:1365
+#: ../../../src/MenuPowers.cpp:1360 ../../../src/MenuPowers.cpp:1362
 msgid "Requires 1 Skill Point"
 msgstr "Wymaga 1 Punktu Umiejętności"
 
-#: ../../../src/MenuPowers.cpp:1608
+#: ../../../src/MenuPowers.cpp:1605
 #, c-format
 msgid "Available skill points: %d"
 msgstr "Dostępne punkty umiejętności: %d"
 
-#: ../../../src/MenuPowers.cpp:1640
+#: ../../../src/MenuPowers.cpp:1637
 msgid "Next Level:"
 msgstr "Następny poziom:"
 
-#: ../../../src/MenuPowers.cpp:1651
+#: ../../../src/MenuPowers.cpp:1648
 #, c-format
 msgid ""
 "Upgrade to: %s (Level %d)\n"
 "Uses 1 Skill Point"
 msgstr ""
 
-#: ../../../src/MenuStash.cpp:79 ../../../src/MenuStash.cpp:160
-msgid "Stash"
-msgstr "Skrytka"
-
-#: ../../../src/MenuStash.cpp:171 ../../../src/MenuStash.cpp:185
-msgid "Private"
-msgstr "Prywatna"
-
-#: ../../../src/MenuStash.cpp:172
+#: ../../../src/MenuStash.cpp:182
 msgid "Shared"
 msgstr "Współdzielona"
 
-#: ../../../src/MenuStash.cpp:335
+#: ../../../src/MenuStash.cpp:380
 msgid "This item can not be stored in the stash."
 msgstr "Ten przedmiot nie może zostać umieszczony w skrytce."
 
-#: ../../../src/MenuStash.cpp:340
+#: ../../../src/MenuStash.cpp:385
 msgid "This item can not be stored in the private stash."
 msgstr "Ten przedmiot nie może zostać umieszczony w prywatnej skrytce."
 
-#: ../../../src/MenuStash.cpp:345
+#: ../../../src/MenuStash.cpp:390
 msgid "This item can not be stored in the shared stash."
 msgstr "Ten przedmiot nie może zostać umieszczony we współdzielonej skrytce."
 
-#: ../../../src/MenuStash.cpp:355
+#: ../../../src/MenuStash.cpp:400
 msgid "Stash is full."
 msgstr "Skrytka jest pełna."
 
-#: ../../../src/MenuStash.cpp:413
+#: ../../../src/MenuStash.cpp:458
 #, c-format
 msgid "Can not store item in stash: %s"
 msgstr "Nie można umieścić przedmiotu w skrytce: %s"
@@ -1632,12 +1650,12 @@ msgstr "Nie można umieścić przedmiotu w skrytce: %s"
 msgid "XP: %lu/%lu"
 msgstr "PD: %lu/%lu"
 
-#: ../../../src/MenuTalker.cpp:474
+#: ../../../src/MenuTalker.cpp:475
 #, c-format
 msgid "<dialog node %d>"
 msgstr "<wierzchołek dialogu %d>"
 
-#: ../../../src/MenuTalker.cpp:482
+#: ../../../src/MenuTalker.cpp:483
 msgid "Trade"
 msgstr "Handel"
 
@@ -1649,16 +1667,16 @@ msgstr "Odkup"
 msgid "Vendor"
 msgstr "Sprzedawca"
 
-#: ../../../src/PowerManager.cpp:1559
+#: ../../../src/PowerManager.cpp:1565
 #, c-format
 msgid "+%s Shield"
 msgstr "+%s Osłony"
 
-#: ../../../src/PowerManager.cpp:1846
+#: ../../../src/PowerManager.cpp:1862
 msgid "You are already transformed, untransform first."
 msgstr "Już jesteś po transformacji, wpierw cofnij transformację."
 
-#: ../../../src/PowerManager.cpp:1858
+#: ../../../src/PowerManager.cpp:1874
 msgid "Could not untransform at this position."
 msgstr "Nie można cofnąć transformacji w tym miejscu."
 
@@ -1666,7 +1684,7 @@ msgstr "Nie można cofnąć transformacji w tym miejscu."
 msgid "Completed Quests"
 msgstr "Ukończone zadania"
 
-#: ../../../src/SaveLoad.cpp:386 ../../../src/SaveLoad.cpp:387
+#: ../../../src/SaveLoad.cpp:272 ../../../src/SaveLoad.cpp:273
 msgid "Game saved."
 msgstr "Gra zapisana."
 
@@ -1680,465 +1698,465 @@ msgstr "Nie można przypisać: %s"
 msgid "'%s' is no longer bound to:"
 msgstr "'%s' już nie jest przypisany do:"
 
-#: ../../../src/SDLInputState.cpp:675
+#: ../../../src/SDLInputState.cpp:672
 msgid "BkSp"
 msgstr "BkSp"
 
-#: ../../../src/SDLInputState.cpp:676
+#: ../../../src/SDLInputState.cpp:673
 msgid "Caps"
 msgstr "Caps"
 
-#: ../../../src/SDLInputState.cpp:677
+#: ../../../src/SDLInputState.cpp:674
 msgid "Del"
 msgstr "Del"
 
-#: ../../../src/SDLInputState.cpp:678 ../../../src/SDLInputState.cpp:708
-#: ../../../src/SDLInputState.cpp:920
+#: ../../../src/SDLInputState.cpp:675 ../../../src/SDLInputState.cpp:705
+#: ../../../src/SDLInputState.cpp:917
 msgid "Down"
 msgstr "Dół"
 
-#: ../../../src/SDLInputState.cpp:680
+#: ../../../src/SDLInputState.cpp:677
 msgid "Esc"
 msgstr "Esc"
 
-#: ../../../src/SDLInputState.cpp:681 ../../../src/SDLInputState.cpp:711
+#: ../../../src/SDLInputState.cpp:678 ../../../src/SDLInputState.cpp:708
 msgid "Home"
 msgstr "Home"
 
-#: ../../../src/SDLInputState.cpp:682
+#: ../../../src/SDLInputState.cpp:679
 msgid "Ins"
 msgstr "Ins"
 
-#: ../../../src/SDLInputState.cpp:683
+#: ../../../src/SDLInputState.cpp:680
 msgid "LAlt"
 msgstr "LAlt"
 
-#: ../../../src/SDLInputState.cpp:684
+#: ../../../src/SDLInputState.cpp:681
 msgid "LCtrl"
 msgstr "LCtrl"
 
-#: ../../../src/SDLInputState.cpp:685 ../../../src/SDLInputState.cpp:715
-#: ../../../src/SDLInputState.cpp:921
+#: ../../../src/SDLInputState.cpp:682 ../../../src/SDLInputState.cpp:712
+#: ../../../src/SDLInputState.cpp:918
 msgid "Left"
 msgstr "Lewo"
 
-#: ../../../src/SDLInputState.cpp:686
+#: ../../../src/SDLInputState.cpp:683
 msgid "LShft"
 msgstr "LShft"
 
-#: ../../../src/SDLInputState.cpp:687
+#: ../../../src/SDLInputState.cpp:684
 msgid "Num"
 msgstr "Num"
 
-#: ../../../src/SDLInputState.cpp:688
+#: ../../../src/SDLInputState.cpp:685
 msgid "PgDn"
 msgstr "PgDn"
 
-#: ../../../src/SDLInputState.cpp:689
+#: ../../../src/SDLInputState.cpp:686
 msgid "PgUp"
 msgstr "PgUp"
 
-#: ../../../src/SDLInputState.cpp:690 ../../../src/SDLInputState.cpp:720
+#: ../../../src/SDLInputState.cpp:687 ../../../src/SDLInputState.cpp:717
 msgid "Pause"
 msgstr "Pause"
 
-#: ../../../src/SDLInputState.cpp:691
+#: ../../../src/SDLInputState.cpp:688
 msgid "Print"
 msgstr "Print"
 
-#: ../../../src/SDLInputState.cpp:692
+#: ../../../src/SDLInputState.cpp:689
 msgid "RAlt"
 msgstr "RAlt"
 
-#: ../../../src/SDLInputState.cpp:693
+#: ../../../src/SDLInputState.cpp:690
 msgid "RCtrl"
 msgstr "RCtrl"
 
-#: ../../../src/SDLInputState.cpp:694
+#: ../../../src/SDLInputState.cpp:691
 msgid "Ret"
 msgstr "Ret"
 
-#: ../../../src/SDLInputState.cpp:695 ../../../src/SDLInputState.cpp:725
-#: ../../../src/SDLInputState.cpp:922
+#: ../../../src/SDLInputState.cpp:692 ../../../src/SDLInputState.cpp:722
+#: ../../../src/SDLInputState.cpp:919
 msgid "Right"
 msgstr "Prawo"
 
-#: ../../../src/SDLInputState.cpp:696
+#: ../../../src/SDLInputState.cpp:693
 msgid "RShft"
 msgstr "RShft"
 
-#: ../../../src/SDLInputState.cpp:697
+#: ../../../src/SDLInputState.cpp:694
 msgid "SLock"
 msgstr "SLock"
 
-#: ../../../src/SDLInputState.cpp:698
+#: ../../../src/SDLInputState.cpp:695
 msgid "Spc"
 msgstr "Spc"
 
-#: ../../../src/SDLInputState.cpp:699 ../../../src/SDLInputState.cpp:729
+#: ../../../src/SDLInputState.cpp:696 ../../../src/SDLInputState.cpp:726
 msgid "Tab"
 msgstr "Tab"
 
-#: ../../../src/SDLInputState.cpp:700 ../../../src/SDLInputState.cpp:730
-#: ../../../src/SDLInputState.cpp:919
+#: ../../../src/SDLInputState.cpp:697 ../../../src/SDLInputState.cpp:727
+#: ../../../src/SDLInputState.cpp:916
 msgid "Up"
 msgstr "Góra"
 
-#: ../../../src/SDLInputState.cpp:705
+#: ../../../src/SDLInputState.cpp:702
 msgid "Backspace"
 msgstr "Backspace"
 
-#: ../../../src/SDLInputState.cpp:706
+#: ../../../src/SDLInputState.cpp:703
 msgid "CapsLock"
 msgstr "CapsLock"
 
-#: ../../../src/SDLInputState.cpp:707 ../../../src/SDLInputState.cpp:960
+#: ../../../src/SDLInputState.cpp:704 ../../../src/SDLInputState.cpp:957
 msgid "Delete"
 msgstr "Delete"
 
-#: ../../../src/SDLInputState.cpp:710
+#: ../../../src/SDLInputState.cpp:707
 msgid "Escape"
 msgstr "Escape"
 
-#: ../../../src/SDLInputState.cpp:712
+#: ../../../src/SDLInputState.cpp:709
 msgid "Insert"
 msgstr "Insert"
 
-#: ../../../src/SDLInputState.cpp:713
+#: ../../../src/SDLInputState.cpp:710
 msgid "Left Alt"
 msgstr "Lewy Alt"
 
-#: ../../../src/SDLInputState.cpp:714
+#: ../../../src/SDLInputState.cpp:711
 msgid "Left Ctrl"
 msgstr "Lewy Ctrl"
 
-#: ../../../src/SDLInputState.cpp:716
+#: ../../../src/SDLInputState.cpp:713
 msgid "Left Shift"
 msgstr "Lewy Shift"
 
-#: ../../../src/SDLInputState.cpp:717
+#: ../../../src/SDLInputState.cpp:714
 msgid "NumLock"
 msgstr "NumLock"
 
-#: ../../../src/SDLInputState.cpp:718
+#: ../../../src/SDLInputState.cpp:715
 msgid "PageDown"
 msgstr "PageDown"
 
-#: ../../../src/SDLInputState.cpp:719
+#: ../../../src/SDLInputState.cpp:716
 msgid "PageUp"
 msgstr "PageUp"
 
-#: ../../../src/SDLInputState.cpp:721
+#: ../../../src/SDLInputState.cpp:718
 msgid "PrintScreen"
 msgstr "PrintScreen"
 
-#: ../../../src/SDLInputState.cpp:722
+#: ../../../src/SDLInputState.cpp:719
 msgid "Right Alt"
 msgstr "Prawy Alt"
 
-#: ../../../src/SDLInputState.cpp:723
+#: ../../../src/SDLInputState.cpp:720
 msgid "Right Ctrl"
 msgstr "Prawy Ctrl"
 
-#: ../../../src/SDLInputState.cpp:724
+#: ../../../src/SDLInputState.cpp:721
 msgid "Return"
 msgstr "Return"
 
-#: ../../../src/SDLInputState.cpp:726
+#: ../../../src/SDLInputState.cpp:723
 msgid "Right Shift"
 msgstr "Prawy Shift"
 
-#: ../../../src/SDLInputState.cpp:727
+#: ../../../src/SDLInputState.cpp:724
 msgid "ScrollLock"
 msgstr "ScrollLock"
 
-#: ../../../src/SDLInputState.cpp:728
+#: ../../../src/SDLInputState.cpp:725
 msgid "Space"
 msgstr "Space"
 
-#: ../../../src/SDLInputState.cpp:740
+#: ../../../src/SDLInputState.cpp:737
 #, c-format
 msgid "M%d"
 msgstr "M%d"
 
-#: ../../../src/SDLInputState.cpp:746
+#: ../../../src/SDLInputState.cpp:743
 #, c-format
 msgid "Mouse %d"
 msgstr "Przycisk myszy %d"
 
-#: ../../../src/SDLInputState.cpp:755 ../../../src/SDLInputState.cpp:764
+#: ../../../src/SDLInputState.cpp:752 ../../../src/SDLInputState.cpp:761
 msgid "(unknown)"
 msgstr "(nieznany)"
 
-#: ../../../src/SDLInputState.cpp:820
+#: ../../../src/SDLInputState.cpp:817
 msgid "Touch control D-Pad"
 msgstr "Dotykowy krzyżak ruchu"
 
-#: ../../../src/SDLInputState.cpp:846
+#: ../../../src/SDLInputState.cpp:843
 msgid "Touch control buttons"
 msgstr "Dotykowe przyciski akcji"
 
-#: ../../../src/SDLInputState.cpp:918
+#: ../../../src/SDLInputState.cpp:915
 msgid "Accept"
 msgstr "Akceptuj"
 
-#: ../../../src/SDLInputState.cpp:923
+#: ../../../src/SDLInputState.cpp:920
 msgid "Bar1"
 msgstr "Pas1"
 
-#: ../../../src/SDLInputState.cpp:924
+#: ../../../src/SDLInputState.cpp:921
 msgid "Bar2"
 msgstr "Pas2"
 
-#: ../../../src/SDLInputState.cpp:925
+#: ../../../src/SDLInputState.cpp:922
 msgid "Bar3"
 msgstr "Pas3"
 
-#: ../../../src/SDLInputState.cpp:926
+#: ../../../src/SDLInputState.cpp:923
 msgid "Bar4"
 msgstr "Pas4"
 
-#: ../../../src/SDLInputState.cpp:927
+#: ../../../src/SDLInputState.cpp:924
 msgid "Bar5"
 msgstr "Pas5"
 
-#: ../../../src/SDLInputState.cpp:928
+#: ../../../src/SDLInputState.cpp:925
 msgid "Bar6"
 msgstr "Pas6"
 
-#: ../../../src/SDLInputState.cpp:929
+#: ../../../src/SDLInputState.cpp:926
 msgid "Bar7"
 msgstr "Pas7"
 
-#: ../../../src/SDLInputState.cpp:930
+#: ../../../src/SDLInputState.cpp:927
 msgid "Bar8"
 msgstr "Pas8"
 
-#: ../../../src/SDLInputState.cpp:931
+#: ../../../src/SDLInputState.cpp:928
 msgid "Bar9"
 msgstr "Pas9"
 
-#: ../../../src/SDLInputState.cpp:932
+#: ../../../src/SDLInputState.cpp:929
 msgid "Bar0"
 msgstr "Pas0"
 
-#: ../../../src/SDLInputState.cpp:937
+#: ../../../src/SDLInputState.cpp:934
 msgid "Main1"
 msgstr "Główny1"
 
-#: ../../../src/SDLInputState.cpp:938
+#: ../../../src/SDLInputState.cpp:935
 msgid "Main2"
 msgstr "Główny2"
 
-#: ../../../src/SDLInputState.cpp:939
+#: ../../../src/SDLInputState.cpp:936
 msgid "Next Equip Set"
 msgstr "Następny zestaw ekwipunku"
 
-#: ../../../src/SDLInputState.cpp:940
+#: ../../../src/SDLInputState.cpp:937
 msgid "Previous Equip Set"
 msgstr "Poprzedni"
 
-#: ../../../src/SDLInputState.cpp:941
+#: ../../../src/SDLInputState.cpp:938
 msgid "Mini-map Mode"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:942
+#: ../../../src/SDLInputState.cpp:939
 msgid "Loot Tooltip Mode"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:943
+#: ../../../src/SDLInputState.cpp:940
 msgid "Action Bar Edit"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:944
+#: ../../../src/SDLInputState.cpp:941
 msgid "Menu: Next Page"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:945
+#: ../../../src/SDLInputState.cpp:942
 msgid "Menu: Previous Page"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:946
+#: ../../../src/SDLInputState.cpp:943
 msgid "Menu: Activate"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:947
+#: ../../../src/SDLInputState.cpp:944
 msgid "Pause Game"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:948
+#: ../../../src/SDLInputState.cpp:945
 msgid "Cycle Menus"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:949
+#: ../../../src/SDLInputState.cpp:946
 msgid "Aim Up"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:950
+#: ../../../src/SDLInputState.cpp:947
 msgid "Aim Down"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:951
+#: ../../../src/SDLInputState.cpp:948
 msgid "Aim Left"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:952
+#: ../../../src/SDLInputState.cpp:949
 msgid "Aim Right"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:953
+#: ../../../src/SDLInputState.cpp:950
 msgid "Developer Menu"
 msgstr "Menu deweloperskie"
 
-#: ../../../src/SDLInputState.cpp:954
+#: ../../../src/SDLInputState.cpp:951
 msgid "Developer Command 1"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:955
+#: ../../../src/SDLInputState.cpp:952
 msgid "Developer Command 2"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:956
+#: ../../../src/SDLInputState.cpp:953
 msgid "Developer Command 3"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:957
+#: ../../../src/SDLInputState.cpp:954
 msgid "Ctrl"
 msgstr "Ctrl"
 
-#: ../../../src/SDLInputState.cpp:958
+#: ../../../src/SDLInputState.cpp:955
 msgid "Shift"
 msgstr "Shift"
 
-#: ../../../src/SDLInputState.cpp:959
+#: ../../../src/SDLInputState.cpp:956
 msgid "Alt"
 msgstr "Alt"
 
-#: ../../../src/SDLInputState.cpp:962
+#: ../../../src/SDLInputState.cpp:959
 msgid "Left Mouse"
 msgstr "Lewy przycisk myszy"
 
-#: ../../../src/SDLInputState.cpp:963
+#: ../../../src/SDLInputState.cpp:960
 msgid "Middle Mouse"
 msgstr "Środkowy przycisk myszy"
 
-#: ../../../src/SDLInputState.cpp:964
+#: ../../../src/SDLInputState.cpp:961
 msgid "Right Mouse"
 msgstr "Prawy przycisk myszy"
 
-#: ../../../src/SDLInputState.cpp:965
+#: ../../../src/SDLInputState.cpp:962
 msgid "Wheel Up"
 msgstr "Kółko w górę"
 
-#: ../../../src/SDLInputState.cpp:966
+#: ../../../src/SDLInputState.cpp:963
 msgid "Wheel Down"
 msgstr "Kółko w dół"
 
-#: ../../../src/SDLInputState.cpp:967
+#: ../../../src/SDLInputState.cpp:964
 msgid "Mouse X1"
 msgstr "Przycisk myszy X1"
 
-#: ../../../src/SDLInputState.cpp:968
+#: ../../../src/SDLInputState.cpp:965
 msgid "Mouse X2"
 msgstr "Przycisk myszy X2"
 
-#: ../../../src/SDLInputState.cpp:970
+#: ../../../src/SDLInputState.cpp:967
 msgid "X360: A"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:971
+#: ../../../src/SDLInputState.cpp:968
 msgid "X360: B"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:972
+#: ../../../src/SDLInputState.cpp:969
 msgid "X360: X"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:973
+#: ../../../src/SDLInputState.cpp:970
 msgid "X360: Y"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:974
+#: ../../../src/SDLInputState.cpp:971
 msgid "X360: Back"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:975
+#: ../../../src/SDLInputState.cpp:972
 msgid "X360: Guide"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:976
+#: ../../../src/SDLInputState.cpp:973
 msgid "X360: Start"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:977
+#: ../../../src/SDLInputState.cpp:974
 msgid "X360: L3"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:978
+#: ../../../src/SDLInputState.cpp:975
 msgid "X360: R3"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:979
+#: ../../../src/SDLInputState.cpp:976
 msgid "X360: L1"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:980
+#: ../../../src/SDLInputState.cpp:977
 msgid "X360: R1"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:981
+#: ../../../src/SDLInputState.cpp:978
 msgid "X360: D-Up"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:982
+#: ../../../src/SDLInputState.cpp:979
 msgid "X360: D-Down"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:983
+#: ../../../src/SDLInputState.cpp:980
 msgid "X360: D-Left"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:984
+#: ../../../src/SDLInputState.cpp:981
 msgid "X360: D-Right"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:986
+#: ../../../src/SDLInputState.cpp:983
 msgid "X360: Left X+"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:987
+#: ../../../src/SDLInputState.cpp:984
 msgid "X360: Left X-"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:988
+#: ../../../src/SDLInputState.cpp:985
 msgid "X360: Left Y+"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:989
+#: ../../../src/SDLInputState.cpp:986
 msgid "X360: Left Y-"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:990
+#: ../../../src/SDLInputState.cpp:987
 msgid "X360: Right X+"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:991
+#: ../../../src/SDLInputState.cpp:988
 msgid "X360: Right X-"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:992
+#: ../../../src/SDLInputState.cpp:989
 msgid "X360: Right Y+"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:993
+#: ../../../src/SDLInputState.cpp:990
 msgid "X360: Right Y-"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:994
+#: ../../../src/SDLInputState.cpp:991
 msgid "X360: L2"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:995
+#: ../../../src/SDLInputState.cpp:992
 msgid "X360: R2"
 msgstr ""
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-23 08:30+\n"
+"POT-Creation-Date: 2026-04-24 08:42+\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
 "Language-Team: Dutch (https://app.transifex.com/flareorg/teams/84925/nl/)\n"
 "MIME-Version: 1.0\n"
@@ -75,22 +75,22 @@ msgstr ""
 msgid "Translators"
 msgstr ""
 
-#: ../cutscenes/credits_engine.txt:140
+#: ../cutscenes/credits_engine.txt:142
 msgid "Distributors"
 msgstr ""
 
-#: ../cutscenes/credits_engine.txt:149
+#: ../cutscenes/credits_engine.txt:151
 msgid "Special Thanks"
 msgstr ""
 
-#: ../cutscenes/credits_engine.txt:153
+#: ../cutscenes/credits_engine.txt:155
 msgid "For giving constant feedback and testing:"
 msgstr ""
 
-#: ../cutscenes/credits_engine.txt:155
+#: ../cutscenes/credits_engine.txt:157
 msgid "The community at OpenGameArt"
 msgstr ""
 
-#: ../cutscenes/credits_engine.txt:159
+#: ../cutscenes/credits_engine.txt:161
 msgid "For Tiled and the Flare map exporter:"
 msgstr ""

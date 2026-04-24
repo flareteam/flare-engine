@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-06 12:44-0500\n"
+"POT-Creation-Date: 2026-04-23 12:01-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
 "Last-Translator: Justin Jacobs <jajdorkster@gmail.com>, 2024\n"
 "Language-Team: Vietnamese (https://app.transifex.com/flareorg/teams/84925/vi/)\n"
@@ -150,7 +150,7 @@ msgstr ""
 msgid "miss"
 msgstr "Trượt"
 
-#: ../../../src/Entity.cpp:563 ../../../src/PowerManager.cpp:1575
+#: ../../../src/Entity.cpp:563 ../../../src/PowerManager.cpp:1581
 #: ../../../src/StatBlock.cpp:1162 ../../../src/StatBlock.cpp:1169
 #, c-format
 msgid "+%s HP"
@@ -162,7 +162,7 @@ msgstr "+%s ♥️"
 msgid "+%s MP"
 msgstr "+%s ♦"
 
-#: ../../../src/EventManager.cpp:986
+#: ../../../src/EventManager.cpp:1013
 msgid "Unknown destination"
 msgstr "Điểm Đến Chưa Xác Định"
 
@@ -170,69 +170,79 @@ msgstr "Điểm Đến Chưa Xác Định"
 msgid "Loading..."
 msgstr "Đang Tải..."
 
-#: ../../../src/GameStateLoad.cpp:96
+#: ../../../src/GameStateLoad.cpp:97
 msgid "Delete this save?"
 msgstr "Xoá Bản Lưu Này?"
 
-#: ../../../src/GameStateLoad.cpp:97 ../../../src/GameStateTitle.cpp:195
+#: ../../../src/GameStateLoad.cpp:98 ../../../src/GameStateTitle.cpp:195
 #: ../../../src/MenuConfig.cpp:263
 msgid "No"
 msgstr "Không"
 
-#: ../../../src/GameStateLoad.cpp:98 ../../../src/GameStateTitle.cpp:196
+#: ../../../src/GameStateLoad.cpp:99 ../../../src/GameStateTitle.cpp:196
 #: ../../../src/MenuConfig.cpp:264
 msgid "Yes"
 msgstr "Có"
 
-#: ../../../src/GameStateLoad.cpp:101
+#: ../../../src/GameStateLoad.cpp:102
 msgid "Exit to Title"
 msgstr "Thoát Ra"
 
-#: ../../../src/GameStateLoad.cpp:104
+#: ../../../src/GameStateLoad.cpp:105
 msgid "New Game"
 msgstr "Trò Chơi Mới"
 
-#: ../../../src/GameStateLoad.cpp:108 ../../../src/GameStateLoad.cpp:752
+#: ../../../src/GameStateLoad.cpp:109 ../../../src/GameStateLoad.cpp:856
 msgid "Choose a Slot"
 msgstr "Chọn Một Ô"
 
-#: ../../../src/GameStateLoad.cpp:112
+#: ../../../src/GameStateLoad.cpp:113
 msgid "Delete Save"
 msgstr "Xoá Bản Lưu"
 
-#: ../../../src/GameStateLoad.cpp:725 ../../../src/GameStateLoad.cpp:746
+#: ../../../src/GameStateLoad.cpp:245 ../../../src/MenuStash.cpp:81
+#: ../../../src/MenuStash.cpp:170
+msgid "Stash"
+msgstr "Kho Đồ"
+
+#: ../../../src/GameStateLoad.cpp:288 ../../../src/MenuStash.cpp:181
+#: ../../../src/MenuStash.cpp:195
+msgid "Private"
+msgstr "Riêng Tư"
+
+#: ../../../src/GameStateLoad.cpp:829 ../../../src/GameStateLoad.cpp:850
 msgid "Enable a story mod to continue"
 msgstr "Chọn Một Trò Chơi Cốt Truyện Để Tiếp Tục"
 
-#: ../../../src/GameStateLoad.cpp:741
+#: ../../../src/GameStateLoad.cpp:845
 msgid "Load Game"
 msgstr "Mở Bản Lưu"
 
-#: ../../../src/GameStateLoad.cpp:863
+#: ../../../src/GameStateLoad.cpp:967
 msgid "Entering game world..."
 msgstr "Đang Tiến Vào Thế Giới Trò Chơi..."
 
-#: ../../../src/GameStateLoad.cpp:866
+#: ../../../src/GameStateLoad.cpp:970
 msgid "Loading saved game..."
 msgstr "Đang Mở Bản Lưu..."
 
-#: ../../../src/GameStateLoad.cpp:899
+#: ../../../src/GameStateLoad.cpp:1003
 msgid "Invalid save"
 msgstr "Bản Lưu Không Hợp Lệ"
 
-#: ../../../src/GameStateLoad.cpp:923 ../../../src/ItemManager.cpp:1305
-#: ../../../src/MenuPowers.cpp:953 ../../../src/MenuPowers.cpp:1340
-#: ../../../src/MenuPowers.cpp:1820
+#: ../../../src/GameStateLoad.cpp:1027 ../../../src/ItemManager.cpp:1385
+#: ../../../src/MenuPowers.cpp:956 ../../../src/MenuPowers.cpp:1337
+#: ../../../src/MenuPowers.cpp:1817
 #, c-format
 msgid "Level %d"
 msgstr "Cấp %d"
 
-#: ../../../src/GameStateLoad.cpp:965
+#: ../../../src/GameStateLoad.cpp:1069
 msgid "#"
 msgstr ""
 
 #: ../../../src/GameStateNew.cpp:71 ../../../src/GameStateTitle.cpp:140
-#: ../../../src/MenuConfig.cpp:275 ../../../src/SDLInputState.cpp:917
+#: ../../../src/MenuConfig.cpp:275 ../../../src/SDLInputState.cpp:914
 msgid "Cancel"
 msgstr "Hủy Bỏ"
 
@@ -297,103 +307,119 @@ msgstr ""
 msgid "%s FPS"
 msgstr ""
 
-#: ../../../src/ItemManager.cpp:897
+#: ../../../src/ItemManager.cpp:982
 msgid "Unknown Item"
 msgstr "Vật Chưa Xác Định"
 
-#: ../../../src/ItemManager.cpp:1189 ../../../src/MenuPowers.cpp:1121
+#: ../../../src/ItemManager.cpp:1274 ../../../src/MenuPowers.cpp:1118
 #, c-format
 msgid "%s%% Speed"
 msgstr "%s%% Tốc Độ"
 
-#: ../../../src/ItemManager.cpp:1193 ../../../src/MenuPowers.cpp:1124
+#: ../../../src/ItemManager.cpp:1278 ../../../src/MenuPowers.cpp:1121
 #, c-format
 msgid "%s%% Attack Speed"
 msgstr "%s%% Tốc Độ Tấn Công"
 
-#: ../../../src/ItemManager.cpp:1230
+#: ../../../src/ItemManager.cpp:1315
 #, c-format
 msgid "Requires %s"
 msgstr "Cần %s"
 
-#: ../../../src/ItemManager.cpp:1288
+#: ../../../src/ItemManager.cpp:1373
 msgid "Quest Item"
 msgstr "Đồ Nhiệm Vụ"
 
-#: ../../../src/ItemManager.cpp:1318
+#: ../../../src/ItemManager.cpp:1398
 #, c-format
 msgid "Prevents use of slot: %s"
 msgstr ""
 
-#: ../../../src/ItemManager.cpp:1326
+#: ../../../src/ItemManager.cpp:1406
 #, c-format
 msgid "Quality: %s"
 msgstr "Chất Lượng: %s"
 
-#: ../../../src/ItemManager.cpp:1342 ../../../src/MenuCharacter.cpp:415
+#: ../../../src/ItemManager.cpp:1422 ../../../src/MenuCharacter.cpp:415
 #: ../../../src/Stats.cpp:81 ../../../src/Stats.cpp:88
 msgid "Absorb"
 msgstr "Hấp Thụ"
 
-#: ../../../src/ItemManager.cpp:1393 ../../../src/MenuPowers.cpp:1327
-#: ../../../src/MenuPowers.cpp:1330
+#: ../../../src/ItemManager.cpp:1473 ../../../src/MenuPowers.cpp:1324
+#: ../../../src/MenuPowers.cpp:1327
 #, c-format
 msgid "Requires Level %d"
 msgstr "Cần Cấp %d"
 
-#: ../../../src/ItemManager.cpp:1405 ../../../src/MenuPowers.cpp:1319
-#: ../../../src/MenuPowers.cpp:1321
+#: ../../../src/ItemManager.cpp:1485 ../../../src/MenuPowers.cpp:1316
+#: ../../../src/MenuPowers.cpp:1318
 #, c-format
 msgid "Requires %s %d"
 msgstr "Cần %s %d"
 
-#: ../../../src/ItemManager.cpp:1416
+#: ../../../src/ItemManager.cpp:1496
 #, c-format
 msgid "Requires Class: %s"
 msgstr "Cần Thuộc Giai Cấp: %s"
 
-#: ../../../src/ItemManager.cpp:1432 ../../../src/ItemManager.cpp:1444
+#: ../../../src/ItemManager.cpp:1517 ../../../src/ItemManager.cpp:1529
 #, c-format
 msgid "Buy Price: %d %s"
 msgstr "Giá Mua: %d %s"
 
-#: ../../../src/ItemManager.cpp:1434 ../../../src/ItemManager.cpp:1446
+#: ../../../src/ItemManager.cpp:1519 ../../../src/ItemManager.cpp:1531
 #, c-format
 msgid "Buy Price: %d %s each"
 msgstr "Giá Mua Mỗi Món: %d %s"
 
-#: ../../../src/ItemManager.cpp:1454
+#: ../../../src/ItemManager.cpp:1539
 #, c-format
 msgid "Sell Price: %d %s"
 msgstr "Giá Bán: %d %s"
 
-#: ../../../src/ItemManager.cpp:1456
+#: ../../../src/ItemManager.cpp:1541
 #, c-format
 msgid "Sell Price: %d %s each"
 msgstr "Giá Bán Mỗi Món: %d %s"
 
-#: ../../../src/ItemManager.cpp:1467
+#: ../../../src/ItemManager.cpp:1552
 msgid "Set:"
 msgstr "Bộ Đồ:"
 
-#: ../../../src/ItemManager.cpp:1499 ../../../src/MenuPowers.cpp:1379
+#: ../../../src/ItemManager.cpp:1584 ../../../src/MenuPowers.cpp:1376
 msgid "Tap icon again for more options"
 msgstr "(Nhấn Tiếp Để Mở Tùy Chọn)"
 
-#: ../../../src/ItemManager.cpp:1531
+#: ../../../src/ItemManager.cpp:1616
 #, c-format
 msgid "Press [%s] to read"
 msgstr "Nhấn [%s] Để Đọc"
 
-#: ../../../src/ItemManager.cpp:1534 ../../../src/MenuPowers.cpp:1409
+#: ../../../src/ItemManager.cpp:1619 ../../../src/MenuPowers.cpp:1406
 #, c-format
 msgid "Press [%s] to use"
 msgstr "Nhấn [%s] Để Sử Dụng"
 
-#: ../../../src/ItemManager.cpp:1538 ../../../src/MenuPowers.cpp:1413
+#: ../../../src/ItemManager.cpp:1623 ../../../src/MenuPowers.cpp:1410
 #, c-format
 msgid "Press [%s] for more options"
 msgstr "Nhấn [%s] Để Mở Tùy Chọn"
+
+#: ../../../src/ItemStorage.cpp:483
+msgid "Sort by: Type"
+msgstr ""
+
+#: ../../../src/ItemStorage.cpp:485
+msgid "Sort by: Quality"
+msgstr ""
+
+#: ../../../src/ItemStorage.cpp:487
+msgid "Sort by: Level"
+msgstr ""
+
+#: ../../../src/ItemStorage.cpp:489
+msgid "Sort by: Sell Price"
+msgstr ""
 
 #: ../../../src/LootManager.cpp:107 ../../../src/LootManager.cpp:109
 #: ../../../src/LootManager.cpp:111 ../../../src/MenuConfig.cpp:492
@@ -422,8 +448,8 @@ msgstr ""
 msgid "Start"
 msgstr ""
 
-#: ../../../src/MapRenderer.cpp:1768 ../../../src/SDLInputState.cpp:679
-#: ../../../src/SDLInputState.cpp:709
+#: ../../../src/MapRenderer.cpp:1768 ../../../src/SDLInputState.cpp:676
+#: ../../../src/SDLInputState.cpp:706
 msgid "End"
 msgstr ""
 
@@ -436,22 +462,22 @@ msgid "Key"
 msgstr ""
 
 #: ../../../src/MenuActionBar.cpp:92 ../../../src/MenuCharacter.cpp:54
-#: ../../../src/SDLInputState.cpp:933
+#: ../../../src/SDLInputState.cpp:930
 msgid "Character"
 msgstr "Nhân Vật"
 
-#: ../../../src/MenuActionBar.cpp:93 ../../../src/MenuInventory.cpp:172
-#: ../../../src/MenuVendor.cpp:58 ../../../src/SDLInputState.cpp:934
+#: ../../../src/MenuActionBar.cpp:93 ../../../src/MenuInventory.cpp:180
+#: ../../../src/MenuVendor.cpp:58 ../../../src/SDLInputState.cpp:931
 msgid "Inventory"
 msgstr "Hành Trang"
 
 #: ../../../src/MenuActionBar.cpp:94 ../../../src/MenuPowers.cpp:160
-#: ../../../src/SDLInputState.cpp:935
+#: ../../../src/SDLInputState.cpp:932
 msgid "Powers"
 msgstr "Sức Mạnh"
 
 #: ../../../src/MenuActionBar.cpp:95 ../../../src/MenuLog.cpp:72
-#: ../../../src/SDLInputState.cpp:936
+#: ../../../src/SDLInputState.cpp:933
 msgid "Log"
 msgstr "Nhật Kí"
 
@@ -556,7 +582,7 @@ msgstr "Gán Với:"
 msgid "New"
 msgstr "Mới"
 
-#: ../../../src/MenuConfig.cpp:260 ../../../src/MenuManager.cpp:1874
+#: ../../../src/MenuConfig.cpp:260 ../../../src/MenuManager.cpp:1895
 msgid "Clear"
 msgstr "Xoá"
 
@@ -1073,8 +1099,8 @@ msgstr "Cần Trò Chơi:"
 msgid "Can not remove this binding."
 msgstr "Không Thể Loại Bỏ Ràng Buộc Này."
 
-#: ../../../src/MenuConfig.cpp:1940 ../../../src/SDLInputState.cpp:775
-#: ../../../src/SDLInputState.cpp:800
+#: ../../../src/MenuConfig.cpp:1940 ../../../src/SDLInputState.cpp:772
+#: ../../../src/SDLInputState.cpp:797
 msgid "(none)"
 msgstr "(Không)"
 
@@ -1304,82 +1330,82 @@ msgstr "Đã Hủy"
 msgid "Game Over"
 msgstr "Trò Chơi Kết Thúc"
 
-#: ../../../src/MenuInventory.cpp:294
+#: ../../../src/MenuInventory.cpp:317
 #, c-format
 msgid "Lost %s%% of %s."
 msgstr "Mất %s%% Của %s."
 
-#: ../../../src/MenuInventory.cpp:301
+#: ../../../src/MenuInventory.cpp:324
 #, c-format
 msgid "Lost %s%% of total XP."
 msgstr "Mất %s%% Tổng Kinh Nghiệm."
 
-#: ../../../src/MenuInventory.cpp:306
+#: ../../../src/MenuInventory.cpp:329
 #, c-format
 msgid "Lost %s%% of current level XP."
 msgstr "Mất %s%% Kinh Nghiệm Cấp Hiện Tại."
 
-#: ../../../src/MenuInventory.cpp:332
+#: ../../../src/MenuInventory.cpp:355
 #, c-format
 msgid "Lost %s."
 msgstr "Mất %s."
 
-#: ../../../src/MenuInventory.cpp:426 ../../../src/MenuStash.cpp:267
+#: ../../../src/MenuInventory.cpp:453 ../../../src/MenuStash.cpp:308
 #, c-format
 msgid "%d %s"
 msgstr ""
 
-#: ../../../src/MenuInventory.cpp:472
+#: ../../../src/MenuInventory.cpp:502
 msgid "Pick up item(s):"
 msgstr "Nhặt Vật:"
 
-#: ../../../src/MenuInventory.cpp:473
+#: ../../../src/MenuInventory.cpp:503
 msgid "Use or equip item:"
 msgstr "Sử Dụng Hoặc Trang Bị Đồ:"
 
-#: ../../../src/MenuInventory.cpp:474
+#: ../../../src/MenuInventory.cpp:504
 #, c-format
 msgid "%s modifiers"
 msgstr "Các Phím Chức Năng Kết Hợp Với %s:"
 
-#: ../../../src/MenuInventory.cpp:475
+#: ../../../src/MenuInventory.cpp:505
 msgid "Select a quantity of item:"
 msgstr "Chọn Số Lượng Đồ:"
 
-#: ../../../src/MenuInventory.cpp:478
+#: ../../../src/MenuInventory.cpp:508
 msgid "Stash item stack:"
 msgstr "Cất Chồng Đồ:"
 
-#: ../../../src/MenuInventory.cpp:480
+#: ../../../src/MenuInventory.cpp:510
 msgid "Sell item stack:"
 msgstr "Bán Chồng Đồ:"
 
-#: ../../../src/MenuInventory.cpp:758
+#: ../../../src/MenuInventory.cpp:788
 msgid "You don't have enough of the required item."
 msgstr "Bạn Không Đủ Số Đồ Vật Cần."
 
-#: ../../../src/MenuInventory.cpp:770
+#: ../../../src/MenuInventory.cpp:800
 msgid "You can't use this item right now."
 msgstr "Bạn Không Thể Dùng Vật Này Bây Giờ."
 
-#: ../../../src/MenuInventory.cpp:795
+#: ../../../src/MenuInventory.cpp:825
 msgid "This item can only be used from the action bar."
 msgstr "Vật Này Chỉ Có Thể Được Dùng Ở Thanh Hành Động."
 
-#: ../../../src/MenuInventory.cpp:916
+#: ../../../src/MenuInventory.cpp:946
 msgid "Inventory is full."
 msgstr "Hành Trang Đã Đầy."
 
-#: ../../../src/MenuInventory.cpp:1044
+#: ../../../src/MenuInventory.cpp:1074
 #, c-format
 msgid "Not enough %s."
 msgstr "Không Đủ %s."
 
-#: ../../../src/MenuInventory.cpp:1064 ../../../src/MenuInventory.cpp:1071
+#: ../../../src/MenuInventory.cpp:1094 ../../../src/MenuInventory.cpp:1101
 msgid "This item can not be sold."
 msgstr "Không Thể Bán Vật Này."
 
-#: ../../../src/MenuInventory.cpp:1369
+#: ../../../src/MenuInventory.cpp:1399
 #, c-format
 msgid "Equipped set %d."
 msgstr "Bộ Đã Trang Bị %d."
@@ -1392,52 +1418,52 @@ msgstr "Nhiệm Vụ"
 msgid "Notes"
 msgstr "Ghi Chú"
 
-#: ../../../src/MenuManager.cpp:175
+#: ../../../src/MenuManager.cpp:179
 msgid "Choose an action:"
 msgstr "Chọn Một Hành Động:"
 
-#: ../../../src/MenuManager.cpp:535 ../../../src/MenuManager.cpp:1213
+#: ../../../src/MenuManager.cpp:539 ../../../src/MenuManager.cpp:1220
 msgid "This item can not be dropped."
 msgstr "Không Thể Vứt Vật Này."
 
-#: ../../../src/MenuManager.cpp:1819
+#: ../../../src/MenuManager.cpp:1824 ../../../src/MenuManager.cpp:1841
 msgid "Equipped"
 msgstr "Đã Trang Bị"
 
-#: ../../../src/MenuManager.cpp:1867 ../../../src/MenuManager.cpp:1918
+#: ../../../src/MenuManager.cpp:1888 ../../../src/MenuManager.cpp:1939
 msgid "Use"
 msgstr "Sử Dụng"
 
-#: ../../../src/MenuManager.cpp:1871 ../../../src/MenuManager.cpp:1914
-#: ../../../src/MenuManager.cpp:1952
+#: ../../../src/MenuManager.cpp:1892 ../../../src/MenuManager.cpp:1935
+#: ../../../src/MenuManager.cpp:1973
 msgid "Move"
 msgstr "Di Chuyển"
 
-#: ../../../src/MenuManager.cpp:1887 ../../../src/MenuManager.cpp:1922
+#: ../../../src/MenuManager.cpp:1908 ../../../src/MenuManager.cpp:1943
 msgid "Equip"
 msgstr "Trang Bị"
 
-#: ../../../src/MenuManager.cpp:1891
+#: ../../../src/MenuManager.cpp:1912
 msgid "Upgrade"
 msgstr "Nâng Cấp"
 
-#: ../../../src/MenuManager.cpp:1906 ../../../src/MenuManager.cpp:1937
+#: ../../../src/MenuManager.cpp:1927 ../../../src/MenuManager.cpp:1958
 msgid "Sell"
 msgstr "Bán"
 
-#: ../../../src/MenuManager.cpp:1910 ../../../src/MenuManager.cpp:1955
+#: ../../../src/MenuManager.cpp:1931 ../../../src/MenuManager.cpp:1976
 msgid "Transfer"
 msgstr "Chuyển Đổi"
 
-#: ../../../src/MenuManager.cpp:1928
+#: ../../../src/MenuManager.cpp:1949
 msgid "Add to bar"
 msgstr ""
 
-#: ../../../src/MenuManager.cpp:1933
+#: ../../../src/MenuManager.cpp:1954
 msgid "Drop"
 msgstr "Vứt Bỏ"
 
-#: ../../../src/MenuManager.cpp:1969
+#: ../../../src/MenuManager.cpp:1990
 msgid "Buy"
 msgstr "Mua"
 
@@ -1445,175 +1471,167 @@ msgstr "Mua"
 msgid "Enter amount:"
 msgstr "Nhập Số Lượng:"
 
-#: ../../../src/MenuPowers.cpp:965
+#: ../../../src/MenuPowers.cpp:968
 msgid "Passive"
 msgstr "Thụ Động"
 
-#: ../../../src/MenuPowers.cpp:972
+#: ../../../src/MenuPowers.cpp:975
 #, c-format
 msgid "Costs %s MP"
 msgstr "Tốn %s Điểm Nội Lực"
 
-#: ../../../src/MenuPowers.cpp:976
+#: ../../../src/MenuPowers.cpp:979
 #, c-format
 msgid "Costs %s HP"
 msgstr "Tốn %s Điểm Sinh Lực"
 
-#: ../../../src/MenuPowers.cpp:986
+#: ../../../src/MenuPowers.cpp:989
 msgid "Cooldown:"
 msgstr "Hồi Chiêu:"
 
-#: ../../../src/MenuPowers.cpp:1100 ../../../src/MenuPowers.cpp:1103
+#: ../../../src/MenuPowers.cpp:1097 ../../../src/MenuPowers.cpp:1100
 msgid "Damage per second"
 msgstr "Sát Thương Mỗi Giây"
 
-#: ../../../src/MenuPowers.cpp:1106 ../../../src/MenuPowers.cpp:1109
+#: ../../../src/MenuPowers.cpp:1103 ../../../src/MenuPowers.cpp:1106
 msgid "HP per second"
 msgstr "Điểm Sinh Lực Mỗi Giây"
 
-#: ../../../src/MenuPowers.cpp:1112 ../../../src/MenuPowers.cpp:1115
+#: ../../../src/MenuPowers.cpp:1109 ../../../src/MenuPowers.cpp:1112
 msgid "MP per second"
 msgstr "Điểm Nội Lực Mỗi Giây"
 
-#: ../../../src/MenuPowers.cpp:1119
+#: ../../../src/MenuPowers.cpp:1116
 msgid "Immobilize"
 msgstr "Làm Bất Động"
 
-#: ../../../src/MenuPowers.cpp:1127
+#: ../../../src/MenuPowers.cpp:1124
 msgid "Resist All Negative Effects"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:1131
+#: ../../../src/MenuPowers.cpp:1128
 msgid "Stun"
 msgstr "Làm Bất Động"
 
-#: ../../../src/MenuPowers.cpp:1134
+#: ../../../src/MenuPowers.cpp:1131
 msgid "Automatic revive on death"
 msgstr "Tự Động Hồi Sinh"
 
-#: ../../../src/MenuPowers.cpp:1137
+#: ../../../src/MenuPowers.cpp:1134
 msgid "Convert"
 msgstr "Biến Đổi"
 
-#: ../../../src/MenuPowers.cpp:1140
+#: ../../../src/MenuPowers.cpp:1137
 msgid "Fear"
 msgstr "Sợ Hãi"
 
-#: ../../../src/MenuPowers.cpp:1143
+#: ../../../src/MenuPowers.cpp:1140
 msgid "Lifespan"
 msgstr "Vòng Đời"
 
-#: ../../../src/MenuPowers.cpp:1167
+#: ../../../src/MenuPowers.cpp:1164
 msgid "Magical Shield"
 msgstr "Kết Giới"
 
-#: ../../../src/MenuPowers.cpp:1196
+#: ../../../src/MenuPowers.cpp:1193
 msgid "Healing"
 msgstr "Hồi Sức"
 
-#: ../../../src/MenuPowers.cpp:1199
+#: ../../../src/MenuPowers.cpp:1196
 msgid "Knockback"
 msgstr "Đẩy Lại"
 
-#: ../../../src/MenuPowers.cpp:1223
+#: ../../../src/MenuPowers.cpp:1220
 #, c-format
 msgid "%s%% chance"
 msgstr "%s%% Cơ Hội"
 
-#: ../../../src/MenuPowers.cpp:1247
+#: ../../../src/MenuPowers.cpp:1244
 msgid "Base Accuracy"
 msgstr "Độ Chính Xác Gốc"
 
-#: ../../../src/MenuPowers.cpp:1267
+#: ../../../src/MenuPowers.cpp:1264
 msgid "Base Critical Chance"
 msgstr "Cơ Hội Bạo Kích Gốc"
 
-#: ../../../src/MenuPowers.cpp:1275
+#: ../../../src/MenuPowers.cpp:1272
 msgid "Ignores Absorption"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:1280
+#: ../../../src/MenuPowers.cpp:1277
 msgid "Ignores Avoidance"
 msgstr "Bỏ Qua Khả Năng Tránh Đòn"
 
-#: ../../../src/MenuPowers.cpp:1285
+#: ../../../src/MenuPowers.cpp:1282
 #, c-format
 msgid "%s%% Chance to crit slowed targets"
 msgstr "%s%% Cơ Hội Bạo Kích Với Mục Tiêu Bị Làm Chậm"
 
-#: ../../../src/MenuPowers.cpp:1290
+#: ../../../src/MenuPowers.cpp:1287
 #, c-format
 msgid "Damage dealt as: %s"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:1302
+#: ../../../src/MenuPowers.cpp:1299
 #, c-format
 msgid "Spawn limit: %d"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:1309
+#: ../../../src/MenuPowers.cpp:1306
 #, c-format
 msgid "Requires a %s"
 msgstr "Cần %s"
 
-#: ../../../src/MenuPowers.cpp:1347 ../../../src/MenuPowers.cpp:1350
+#: ../../../src/MenuPowers.cpp:1344 ../../../src/MenuPowers.cpp:1347
 #, c-format
 msgid "Requires Power: %s"
 msgstr "Cần %s"
 
-#: ../../../src/MenuPowers.cpp:1359
+#: ../../../src/MenuPowers.cpp:1356
 msgid "Click to Unlock (uses 1 Skill Point)"
 msgstr "Nhấn Để Mở Khoá (Dùng 1 Điểm Kĩ Năng)"
 
-#: ../../../src/MenuPowers.cpp:1363 ../../../src/MenuPowers.cpp:1365
+#: ../../../src/MenuPowers.cpp:1360 ../../../src/MenuPowers.cpp:1362
 msgid "Requires 1 Skill Point"
 msgstr "Cần 1 Điểm Kĩ Năng"
 
-#: ../../../src/MenuPowers.cpp:1608
+#: ../../../src/MenuPowers.cpp:1605
 #, c-format
 msgid "Available skill points: %d"
 msgstr "Điểm Kĩ Năng Có Sẵn: %d"
 
-#: ../../../src/MenuPowers.cpp:1640
+#: ../../../src/MenuPowers.cpp:1637
 msgid "Next Level:"
 msgstr "Cấp Tiếp:"
 
-#: ../../../src/MenuPowers.cpp:1651
+#: ../../../src/MenuPowers.cpp:1648
 #, c-format
 msgid ""
 "Upgrade to: %s (Level %d)\n"
 "Uses 1 Skill Point"
 msgstr ""
 
-#: ../../../src/MenuStash.cpp:79 ../../../src/MenuStash.cpp:160
-msgid "Stash"
-msgstr "Kho Đồ"
-
-#: ../../../src/MenuStash.cpp:171 ../../../src/MenuStash.cpp:185
-msgid "Private"
-msgstr "Riêng Tư"
-
-#: ../../../src/MenuStash.cpp:172
+#: ../../../src/MenuStash.cpp:182
 msgid "Shared"
 msgstr "Chia Sẻ"
 
-#: ../../../src/MenuStash.cpp:335
+#: ../../../src/MenuStash.cpp:380
 msgid "This item can not be stored in the stash."
 msgstr "Vật Phẩm Này Không Thể Lưu Trữ Trong Kho Đồ."
 
-#: ../../../src/MenuStash.cpp:340
+#: ../../../src/MenuStash.cpp:385
 msgid "This item can not be stored in the private stash."
 msgstr "Vật Phẩm Này Không Thể Lưu Trữ Trong Kho Đồ Riêng Tư."
 
-#: ../../../src/MenuStash.cpp:345
+#: ../../../src/MenuStash.cpp:390
 msgid "This item can not be stored in the shared stash."
 msgstr "Vật Phẩm Này Không Thể Lưu Trữ Trong Kho Đồ Chia Sẻ."
 
-#: ../../../src/MenuStash.cpp:355
+#: ../../../src/MenuStash.cpp:400
 msgid "Stash is full."
 msgstr "Kho Đồ Đã Đầy."
 
-#: ../../../src/MenuStash.cpp:413
+#: ../../../src/MenuStash.cpp:458
 #, c-format
 msgid "Can not store item in stash: %s"
 msgstr "Không Thể Lưu Trữ Vật Phẩm Trong Kho Đồ: %s"
@@ -1623,12 +1641,12 @@ msgstr "Không Thể Lưu Trữ Vật Phẩm Trong Kho Đồ: %s"
 msgid "XP: %lu/%lu"
 msgstr "KN: %lu/%lu"
 
-#: ../../../src/MenuTalker.cpp:474
+#: ../../../src/MenuTalker.cpp:475
 #, c-format
 msgid "<dialog node %d>"
 msgstr ""
 
-#: ../../../src/MenuTalker.cpp:482
+#: ../../../src/MenuTalker.cpp:483
 msgid "Trade"
 msgstr "TRAO ĐỔI"
 
@@ -1640,16 +1658,16 @@ msgstr "Mua Lại"
 msgid "Vendor"
 msgstr "Thương Nhân"
 
-#: ../../../src/PowerManager.cpp:1559
+#: ../../../src/PowerManager.cpp:1565
 #, c-format
 msgid "+%s Shield"
 msgstr "+%s Khiên"
 
-#: ../../../src/PowerManager.cpp:1846
+#: ../../../src/PowerManager.cpp:1862
 msgid "You are already transformed, untransform first."
 msgstr "Bạn Đã Biến Đổi Rồi, Phải Biến Về Trạng Thái Ban Đầu Trước Tiên."
 
-#: ../../../src/PowerManager.cpp:1858
+#: ../../../src/PowerManager.cpp:1874
 msgid "Could not untransform at this position."
 msgstr "Không Thể Biến Về Trạng Thái Ban Đầu Ở Vị Trí Này."
 
@@ -1657,7 +1675,7 @@ msgstr "Không Thể Biến Về Trạng Thái Ban Đầu Ở Vị Trí Này."
 msgid "Completed Quests"
 msgstr "Nhiệm Vụ Đã Hoàn Thành"
 
-#: ../../../src/SaveLoad.cpp:386 ../../../src/SaveLoad.cpp:387
+#: ../../../src/SaveLoad.cpp:272 ../../../src/SaveLoad.cpp:273
 msgid "Game saved."
 msgstr "Đã Lưu Trò Chơi."
 
@@ -1671,465 +1689,465 @@ msgstr "Không Thể Ràng Buộc: %s"
 msgid "'%s' is no longer bound to:"
 msgstr "[%s] Không Còn Được Gán Với:"
 
-#: ../../../src/SDLInputState.cpp:675
+#: ../../../src/SDLInputState.cpp:672
 msgid "BkSp"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:676
+#: ../../../src/SDLInputState.cpp:673
 msgid "Caps"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:677
+#: ../../../src/SDLInputState.cpp:674
 msgid "Del"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:678 ../../../src/SDLInputState.cpp:708
-#: ../../../src/SDLInputState.cpp:920
+#: ../../../src/SDLInputState.cpp:675 ../../../src/SDLInputState.cpp:705
+#: ../../../src/SDLInputState.cpp:917
 msgid "Down"
 msgstr "Xuống"
 
-#: ../../../src/SDLInputState.cpp:680
+#: ../../../src/SDLInputState.cpp:677
 msgid "Esc"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:681 ../../../src/SDLInputState.cpp:711
+#: ../../../src/SDLInputState.cpp:678 ../../../src/SDLInputState.cpp:708
 msgid "Home"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:682
+#: ../../../src/SDLInputState.cpp:679
 msgid "Ins"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:683
+#: ../../../src/SDLInputState.cpp:680
 msgid "LAlt"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:684
+#: ../../../src/SDLInputState.cpp:681
 msgid "LCtrl"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:685 ../../../src/SDLInputState.cpp:715
-#: ../../../src/SDLInputState.cpp:921
+#: ../../../src/SDLInputState.cpp:682 ../../../src/SDLInputState.cpp:712
+#: ../../../src/SDLInputState.cpp:918
 msgid "Left"
 msgstr "Trái"
 
-#: ../../../src/SDLInputState.cpp:686
+#: ../../../src/SDLInputState.cpp:683
 msgid "LShft"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:687
+#: ../../../src/SDLInputState.cpp:684
 msgid "Num"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:688
+#: ../../../src/SDLInputState.cpp:685
 msgid "PgDn"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:689
+#: ../../../src/SDLInputState.cpp:686
 msgid "PgUp"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:690 ../../../src/SDLInputState.cpp:720
+#: ../../../src/SDLInputState.cpp:687 ../../../src/SDLInputState.cpp:717
 msgid "Pause"
 msgstr "Tạm Dừng"
 
-#: ../../../src/SDLInputState.cpp:691
+#: ../../../src/SDLInputState.cpp:688
 msgid "Print"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:692
+#: ../../../src/SDLInputState.cpp:689
 msgid "RAlt"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:693
+#: ../../../src/SDLInputState.cpp:690
 msgid "RCtrl"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:694
+#: ../../../src/SDLInputState.cpp:691
 msgid "Ret"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:695 ../../../src/SDLInputState.cpp:725
-#: ../../../src/SDLInputState.cpp:922
+#: ../../../src/SDLInputState.cpp:692 ../../../src/SDLInputState.cpp:722
+#: ../../../src/SDLInputState.cpp:919
 msgid "Right"
 msgstr "Phải"
 
-#: ../../../src/SDLInputState.cpp:696
+#: ../../../src/SDLInputState.cpp:693
 msgid "RShft"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:697
+#: ../../../src/SDLInputState.cpp:694
 msgid "SLock"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:698
+#: ../../../src/SDLInputState.cpp:695
 msgid "Spc"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:699 ../../../src/SDLInputState.cpp:729
+#: ../../../src/SDLInputState.cpp:696 ../../../src/SDLInputState.cpp:726
 msgid "Tab"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:700 ../../../src/SDLInputState.cpp:730
-#: ../../../src/SDLInputState.cpp:919
+#: ../../../src/SDLInputState.cpp:697 ../../../src/SDLInputState.cpp:727
+#: ../../../src/SDLInputState.cpp:916
 msgid "Up"
 msgstr "Lên"
 
-#: ../../../src/SDLInputState.cpp:705
+#: ../../../src/SDLInputState.cpp:702
 msgid "Backspace"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:706
+#: ../../../src/SDLInputState.cpp:703
 msgid "CapsLock"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:707 ../../../src/SDLInputState.cpp:960
+#: ../../../src/SDLInputState.cpp:704 ../../../src/SDLInputState.cpp:957
 msgid "Delete"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:710
+#: ../../../src/SDLInputState.cpp:707
 msgid "Escape"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:712
+#: ../../../src/SDLInputState.cpp:709
 msgid "Insert"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:713
+#: ../../../src/SDLInputState.cpp:710
 msgid "Left Alt"
 msgstr "Alt Trái"
 
-#: ../../../src/SDLInputState.cpp:714
+#: ../../../src/SDLInputState.cpp:711
 msgid "Left Ctrl"
 msgstr "Ctrl Trái"
 
-#: ../../../src/SDLInputState.cpp:716
+#: ../../../src/SDLInputState.cpp:713
 msgid "Left Shift"
 msgstr "Shift Trái"
 
-#: ../../../src/SDLInputState.cpp:717
+#: ../../../src/SDLInputState.cpp:714
 msgid "NumLock"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:718
+#: ../../../src/SDLInputState.cpp:715
 msgid "PageDown"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:719
+#: ../../../src/SDLInputState.cpp:716
 msgid "PageUp"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:721
+#: ../../../src/SDLInputState.cpp:718
 msgid "PrintScreen"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:722
+#: ../../../src/SDLInputState.cpp:719
 msgid "Right Alt"
 msgstr "Alt Phải"
 
-#: ../../../src/SDLInputState.cpp:723
+#: ../../../src/SDLInputState.cpp:720
 msgid "Right Ctrl"
 msgstr "Ctrl Phải"
 
-#: ../../../src/SDLInputState.cpp:724
+#: ../../../src/SDLInputState.cpp:721
 msgid "Return"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:726
+#: ../../../src/SDLInputState.cpp:723
 msgid "Right Shift"
 msgstr "Shift Phải"
 
-#: ../../../src/SDLInputState.cpp:727
+#: ../../../src/SDLInputState.cpp:724
 msgid "ScrollLock"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:728
+#: ../../../src/SDLInputState.cpp:725
 msgid "Space"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:740
+#: ../../../src/SDLInputState.cpp:737
 #, c-format
 msgid "M%d"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:746
+#: ../../../src/SDLInputState.cpp:743
 #, c-format
 msgid "Mouse %d"
 msgstr "Chuột %d"
 
-#: ../../../src/SDLInputState.cpp:755 ../../../src/SDLInputState.cpp:764
+#: ../../../src/SDLInputState.cpp:752 ../../../src/SDLInputState.cpp:761
 msgid "(unknown)"
 msgstr "(Không Xác Định)"
 
-#: ../../../src/SDLInputState.cpp:820
+#: ../../../src/SDLInputState.cpp:817
 msgid "Touch control D-Pad"
 msgstr "Bàn Điều Khiển Di Chuyển Cảm Ứng"
 
-#: ../../../src/SDLInputState.cpp:846
+#: ../../../src/SDLInputState.cpp:843
 msgid "Touch control buttons"
 msgstr "Bộ Nút Điều Khiển Cảm Ứng"
 
-#: ../../../src/SDLInputState.cpp:918
+#: ../../../src/SDLInputState.cpp:915
 msgid "Accept"
 msgstr "Đồng Ý"
 
-#: ../../../src/SDLInputState.cpp:923
+#: ../../../src/SDLInputState.cpp:920
 msgid "Bar1"
 msgstr "Thanh 1"
 
-#: ../../../src/SDLInputState.cpp:924
+#: ../../../src/SDLInputState.cpp:921
 msgid "Bar2"
 msgstr "Thanh 2"
 
-#: ../../../src/SDLInputState.cpp:925
+#: ../../../src/SDLInputState.cpp:922
 msgid "Bar3"
 msgstr "Thanh 3"
 
-#: ../../../src/SDLInputState.cpp:926
+#: ../../../src/SDLInputState.cpp:923
 msgid "Bar4"
 msgstr "Thanh 4"
 
-#: ../../../src/SDLInputState.cpp:927
+#: ../../../src/SDLInputState.cpp:924
 msgid "Bar5"
 msgstr "Thanh 5"
 
-#: ../../../src/SDLInputState.cpp:928
+#: ../../../src/SDLInputState.cpp:925
 msgid "Bar6"
 msgstr "Thanh 6"
 
-#: ../../../src/SDLInputState.cpp:929
+#: ../../../src/SDLInputState.cpp:926
 msgid "Bar7"
 msgstr "Thanh 7"
 
-#: ../../../src/SDLInputState.cpp:930
+#: ../../../src/SDLInputState.cpp:927
 msgid "Bar8"
 msgstr "Thanh 8"
 
-#: ../../../src/SDLInputState.cpp:931
+#: ../../../src/SDLInputState.cpp:928
 msgid "Bar9"
 msgstr "Thanh 9"
 
-#: ../../../src/SDLInputState.cpp:932
+#: ../../../src/SDLInputState.cpp:929
 msgid "Bar0"
 msgstr "Thanh 0"
 
-#: ../../../src/SDLInputState.cpp:937
+#: ../../../src/SDLInputState.cpp:934
 msgid "Main1"
 msgstr "Chủ Đạo 1"
 
-#: ../../../src/SDLInputState.cpp:938
+#: ../../../src/SDLInputState.cpp:935
 msgid "Main2"
 msgstr "Chủ Đạo 2"
 
-#: ../../../src/SDLInputState.cpp:939
+#: ../../../src/SDLInputState.cpp:936
 msgid "Next Equip Set"
 msgstr "Bộ Trang Bị Tiếp Theo"
 
-#: ../../../src/SDLInputState.cpp:940
+#: ../../../src/SDLInputState.cpp:937
 msgid "Previous Equip Set"
 msgstr "Bộ Trang Bị Trước Đó"
 
-#: ../../../src/SDLInputState.cpp:941
+#: ../../../src/SDLInputState.cpp:938
 msgid "Mini-map Mode"
 msgstr "Chế Độ Bản Đồ Thu Nhỏ"
 
-#: ../../../src/SDLInputState.cpp:942
+#: ../../../src/SDLInputState.cpp:939
 msgid "Loot Tooltip Mode"
 msgstr "Chế Độ Hiện Tên Lợi Phẩm"
 
-#: ../../../src/SDLInputState.cpp:943
+#: ../../../src/SDLInputState.cpp:940
 msgid "Action Bar Edit"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:944
+#: ../../../src/SDLInputState.cpp:941
 msgid "Menu: Next Page"
 msgstr "Danh Mục: Trang Tiếp Theo"
 
-#: ../../../src/SDLInputState.cpp:945
+#: ../../../src/SDLInputState.cpp:942
 msgid "Menu: Previous Page"
 msgstr "Danh Mục: Trang Trước Đó"
 
-#: ../../../src/SDLInputState.cpp:946
+#: ../../../src/SDLInputState.cpp:943
 msgid "Menu: Activate"
 msgstr "Danh Mục: Kích Hoạt"
 
-#: ../../../src/SDLInputState.cpp:947
+#: ../../../src/SDLInputState.cpp:944
 msgid "Pause Game"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:948
+#: ../../../src/SDLInputState.cpp:945
 msgid "Cycle Menus"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:949
+#: ../../../src/SDLInputState.cpp:946
 msgid "Aim Up"
 msgstr "Nhắm Trên"
 
-#: ../../../src/SDLInputState.cpp:950
+#: ../../../src/SDLInputState.cpp:947
 msgid "Aim Down"
 msgstr "Nhắm Dưới"
 
-#: ../../../src/SDLInputState.cpp:951
+#: ../../../src/SDLInputState.cpp:948
 msgid "Aim Left"
 msgstr "Nhắm Trái"
 
-#: ../../../src/SDLInputState.cpp:952
+#: ../../../src/SDLInputState.cpp:949
 msgid "Aim Right"
 msgstr "Nhắm Phải"
 
-#: ../../../src/SDLInputState.cpp:953
+#: ../../../src/SDLInputState.cpp:950
 msgid "Developer Menu"
 msgstr "Danh Mục Của Nhà Phát Triển"
 
-#: ../../../src/SDLInputState.cpp:954
+#: ../../../src/SDLInputState.cpp:951
 msgid "Developer Command 1"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:955
+#: ../../../src/SDLInputState.cpp:952
 msgid "Developer Command 2"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:956
+#: ../../../src/SDLInputState.cpp:953
 msgid "Developer Command 3"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:957
+#: ../../../src/SDLInputState.cpp:954
 msgid "Ctrl"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:958
+#: ../../../src/SDLInputState.cpp:955
 msgid "Shift"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:959
+#: ../../../src/SDLInputState.cpp:956
 msgid "Alt"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:962
+#: ../../../src/SDLInputState.cpp:959
 msgid "Left Mouse"
 msgstr "Chuột Trái"
 
-#: ../../../src/SDLInputState.cpp:963
+#: ../../../src/SDLInputState.cpp:960
 msgid "Middle Mouse"
 msgstr "Chuột Giữa"
 
-#: ../../../src/SDLInputState.cpp:964
+#: ../../../src/SDLInputState.cpp:961
 msgid "Right Mouse"
 msgstr "Chuột Phải"
 
-#: ../../../src/SDLInputState.cpp:965
+#: ../../../src/SDLInputState.cpp:962
 msgid "Wheel Up"
 msgstr "Lăn Lên"
 
-#: ../../../src/SDLInputState.cpp:966
+#: ../../../src/SDLInputState.cpp:963
 msgid "Wheel Down"
 msgstr "Lăn Xuống"
 
-#: ../../../src/SDLInputState.cpp:967
+#: ../../../src/SDLInputState.cpp:964
 msgid "Mouse X1"
 msgstr "Phím X1 Chuột"
 
-#: ../../../src/SDLInputState.cpp:968
+#: ../../../src/SDLInputState.cpp:965
 msgid "Mouse X2"
 msgstr "Phím X2 Chuột"
 
-#: ../../../src/SDLInputState.cpp:970
+#: ../../../src/SDLInputState.cpp:967
 msgid "X360: A"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:971
+#: ../../../src/SDLInputState.cpp:968
 msgid "X360: B"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:972
+#: ../../../src/SDLInputState.cpp:969
 msgid "X360: X"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:973
+#: ../../../src/SDLInputState.cpp:970
 msgid "X360: Y"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:974
+#: ../../../src/SDLInputState.cpp:971
 msgid "X360: Back"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:975
+#: ../../../src/SDLInputState.cpp:972
 msgid "X360: Guide"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:976
+#: ../../../src/SDLInputState.cpp:973
 msgid "X360: Start"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:977
+#: ../../../src/SDLInputState.cpp:974
 msgid "X360: L3"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:978
+#: ../../../src/SDLInputState.cpp:975
 msgid "X360: R3"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:979
+#: ../../../src/SDLInputState.cpp:976
 msgid "X360: L1"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:980
+#: ../../../src/SDLInputState.cpp:977
 msgid "X360: R1"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:981
+#: ../../../src/SDLInputState.cpp:978
 msgid "X360: D-Up"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:982
+#: ../../../src/SDLInputState.cpp:979
 msgid "X360: D-Down"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:983
+#: ../../../src/SDLInputState.cpp:980
 msgid "X360: D-Left"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:984
+#: ../../../src/SDLInputState.cpp:981
 msgid "X360: D-Right"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:986
+#: ../../../src/SDLInputState.cpp:983
 msgid "X360: Left X+"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:987
+#: ../../../src/SDLInputState.cpp:984
 msgid "X360: Left X-"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:988
+#: ../../../src/SDLInputState.cpp:985
 msgid "X360: Left Y+"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:989
+#: ../../../src/SDLInputState.cpp:986
 msgid "X360: Left Y-"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:990
+#: ../../../src/SDLInputState.cpp:987
 msgid "X360: Right X+"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:991
+#: ../../../src/SDLInputState.cpp:988
 msgid "X360: Right X-"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:992
+#: ../../../src/SDLInputState.cpp:989
 msgid "X360: Right Y+"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:993
+#: ../../../src/SDLInputState.cpp:990
 msgid "X360: Right Y-"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:994
+#: ../../../src/SDLInputState.cpp:991
 msgid "X360: L2"
 msgstr ""
 
-#: ../../../src/SDLInputState.cpp:995
+#: ../../../src/SDLInputState.cpp:992
 msgid "X360: R2"
 msgstr ""
 

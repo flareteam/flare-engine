@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-23 08:30+\n"
+"POT-Creation-Date: 2026-04-24 08:42+\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
 "Last-Translator: leø <leoboudet@orne-libre.fr>, 2020\n"
 "Language-Team: French (https://app.transifex.com/flareorg/teams/84925/fr/)\n"
@@ -82,22 +82,22 @@ msgstr "Illustrateurs"
 msgid "Translators"
 msgstr "Traducteurs"
 
-#: ../cutscenes/credits_engine.txt:140
+#: ../cutscenes/credits_engine.txt:142
 msgid "Distributors"
 msgstr "Distributeurs"
 
-#: ../cutscenes/credits_engine.txt:149
+#: ../cutscenes/credits_engine.txt:151
 msgid "Special Thanks"
 msgstr "Remerciements spéciaux"
 
-#: ../cutscenes/credits_engine.txt:153
+#: ../cutscenes/credits_engine.txt:155
 msgid "For giving constant feedback and testing:"
 msgstr "Pour constamment donner leur avis et tester :"
 
-#: ../cutscenes/credits_engine.txt:155
+#: ../cutscenes/credits_engine.txt:157
 msgid "The community at OpenGameArt"
 msgstr "La communauté OpenGameArt"
 
-#: ../cutscenes/credits_engine.txt:159
+#: ../cutscenes/credits_engine.txt:161
 msgid "For Tiled and the Flare map exporter:"
 msgstr "Pour Tiled et l'exportateur de carte de Flare :"
