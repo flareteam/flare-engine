@@ -45,10 +45,12 @@ public:
 		SORT_LEVEL,
 		SORT_SELL_PRICE,
 		SORT_ID, // not used in sortNext(), must be explicitly selected with sort()
+		SORT_BUY_PRICE,
 	};
 
 	static int compareItemStack(const void *a, const void *b);
 	static int compareItemStackByType (const void *a, const void *b);
+	static int compareItemStackByBuyPrice (const void *a, const void *b);
 	static int compareItemStackBySellPrice (const void *a, const void *b);
 	static int compareItemStackByQuality (const void *a, const void *b);
 	static int compareItemStackByLevel (const void *a, const void *b);

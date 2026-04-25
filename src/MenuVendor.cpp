@@ -51,6 +51,7 @@ MenuVendor::MenuVendor()
 	, slots_cols(1)
 	, slots_rows(1)
 	, activetab(ItemManager::VENDOR_BUY)
+	, sort_stock_buy(ItemStorage::SORT_NONE)
 	, tip (new WidgetTooltip())
 	, npc(NULL)
 	, buyback_stock()
@@ -87,6 +88,21 @@ MenuVendor::MenuVendor()
 			// @ATTR label_title|label|The position of the text that displays the NPC's name.
 			else if (infile.key == "label_title") {
 				label_vendor.setFromLabelInfo(Parse::popLabelInfo(infile.val));
+			}
+			// @ATTR sort_stock_buy|["none", "type", "quality", "level", "price", "id"]|Sorts all vendors' "Buy" stock by the given metric.
+			else if (infile.key == "sort_stock_buy") {
+				if (infile.val == "none")
+					sort_stock_buy = ItemStorage::SORT_NONE;
+				else if (infile.val == "type")
+					sort_stock_buy = ItemStorage::SORT_TYPE;
+				else if (infile.val == "quality")
+					sort_stock_buy = ItemStorage::SORT_QUALITY;
+				else if (infile.val == "level")
+					sort_stock_buy = ItemStorage::SORT_LEVEL;
+				else if (infile.val == "price")
+					sort_stock_buy = ItemStorage::SORT_BUY_PRICE;
+				else if (infile.val == "id")
+					sort_stock_buy = ItemStorage::SORT_ID;
 			}
 			else {
 				infile.error("MenuVendor: '%s' is not a valid key.", infile.key.c_str());
@@ -237,7 +253,7 @@ void MenuVendor::add(ItemStack stack) {
 	// Remove the first item stack to make room
 	if (stock[ItemManager::VENDOR_SELL].full(stack)) {
 		stock[ItemManager::VENDOR_SELL][0].clear();
-		sort(ItemManager::VENDOR_SELL);
+		moveEmptySlotsToEnd(ItemManager::VENDOR_SELL);
 	}
 	items->playSound(stack.item);
 	stock[ItemManager::VENDOR_SELL].add(stack, ItemStorage::NO_SLOT);
@@ -268,7 +284,7 @@ void MenuVendor::saveInventory() {
 
 }
 
-void MenuVendor::sort(int type) {
+void MenuVendor::moveEmptySlotsToEnd(int type) {
 	for (unsigned i=0; i<VENDOR_SLOTS; i++) {
 		ItemStack temp = stock[type][i];
 		stock[type][i].clear();
@@ -304,8 +320,10 @@ void MenuVendor::setNPC(NPC* _npc) {
 	}
 	npc->reset_buyback = false;
 
-	sort(ItemManager::VENDOR_BUY);
-	sort(ItemManager::VENDOR_SELL);
+	moveEmptySlotsToEnd(ItemManager::VENDOR_BUY);
+	moveEmptySlotsToEnd(ItemManager::VENDOR_SELL);
+
+	stock[ItemManager::VENDOR_BUY].sort(sort_stock_buy);
 
 	if (!visible) {
 		visible = true;

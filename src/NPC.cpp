@@ -315,9 +315,6 @@ bool NPC::load(const std::string& npc_id) {
 		stock.add(rand_itemstacks[i], ItemStorage::NO_SLOT);
 	}
 
-	// TODO get sort mode from config
-	stock.sort(ItemStorage::SORT_NONE);
-
 	// warn if dialog nodes lack a topic
 	std::string full_filename = mods->locate(npc_id);
 	for (size_t i=0; i<dialog.size(); ++i) {

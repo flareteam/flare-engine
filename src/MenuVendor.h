@@ -47,6 +47,7 @@ private:
 	int slots_cols;
 	int slots_rows;
 	int activetab;
+	int sort_stock_buy;
 
 	WidgetTooltip* tip;
 
@@ -70,7 +71,7 @@ public:
 	void add(ItemStack stack);
 	void renderTooltips(const Point& position);
 	void saveInventory();
-	void sort(int type);
+	void moveEmptySlotsToEnd(int type);
 	void setNPC(NPC* _npc);
 	void removeFromPrevSlot(int quantity);
 	void lockTabControl();
