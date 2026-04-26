@@ -2,163 +2,203 @@ Flare v1.15
 
 Engine features:
 
-* Add wander_radius and waypoints support for map NPCs
-* Add scaling based on item level/player level/primary stats to several Item attributes, such as 'bonus' and 'price'.
-* Add 'loot_drops_max' property to Items for limiting the number of drops in a single loot event.
-* Horizontal list widgets can now display 2 or fewer options at once
-* Added support for more than one of each chain power (pre_power/post_power/wall_power) to be attached to a single power.
-* Added randomized items. Items can now be spawned with random level, quality, and bonus attributes.
-* Added 'default_zoom_level' property to menu/minimap.txt config.
-* Added support for developer mode command shortcuts.
-* Added 'powers_overlap_slots' to menu/actionbar.txt config.
-* Added 'background_offset' to menu/config.txt config.
-* Added 'post_hazards_skip_target' to Powers.
-* Added a game filter for the inactive mods list in the Configuration menu.
-* Added 'inactivemods_filter' to menu/config.txt config.
-* Added 'preview_enabled' and 'preview_pos' to menus/inventory.txt config.
-* Added 'font' property to engine/combat_text.txt config.
-* New mouse movment behavior. Click once to move the player to a target and, if applicable, interact with it.
-* Stats on the character page are now organized by categories: Core, Offense, Defense, and Misc.
-* Speed and Attack Speed are now able to be shown in the Character menu.
-* Events can now use 'book=close' to close the active book.
-* Damage Types and Elements have been combined. engine/elements.txt is still supported, but new mods should use engine/damage_types.txt.
-* Powers that deal non-elemental damage will now apply additional elemental damage based on the damage stats for said elements.
-* Power 'trait_elemental' now works with all damage types (despite the name). Any additional damage bonuses for the specified damage type will apply on top of the converted damage.
-* Added 'tab.text_padding' to engine/widget_settings.txt config.
-* Added 'enabled' property to Char/Inv/Pow/Log menus for modders that wish to prevent the player from opening those menus.
-* Added 'upgrade_button_offset' property to menu/powers.txt config.
-* Added 'active_sub_frame' property to animation definitions.
-* Added auto-loot configuration option.
-* Added 'percent_exact' to requires_hpmp_state and requires_resource_stat_state in Powers.
-* Added 'on_active_power' to passive_trigger property and 'can_trigger_passives' property for Powers.
-* Added 'passive_effects_persist' property to Powers.
-* Dynamically-sized dev console with new config file.
-* Added game controller rumble option.
-* Added "in combat" LED effect for supported game controllers (i.e. Dual Shock 4).
-* Added 'offscreen_enemy_encounters' property to engine/combat.txt config.
-* Added 'expire_power' Power property.
-* Added backwards compatiblity option 'passive_trigger_effect_stacking' to engine/misc.txt.
-* Support using gamepad during initial launch menus.
-* Added prompt for language on first launch.
-* Added 'show_permadeath' option to menus/gamenew.txt config.
-* Added 'log.padding' property to engine/widget_settings.txt config.
-* Added 'sound.activate' property to engine/widget_settings.txt config.
-* Added tooltip text for items that prevent use of other equip slots.
-* Added 'equipment_set' property to engine/classes.txt config.
-* Added 'enable_gamepad_nav' property to menus/actionbar.txt config.
-* Added 'fade_wall_alpha' property to engine/misc.txt config.
-* Added 'cycle_menus' keybinding to quickly open Char/Inv and Log/Pow menus.
-* Added 'hero_level' / 'source_level' and 'hero_stat' / 'source_stat' modes to map enemy & power 'spawn_level' properties. They take a single value as a multiplier and are intended to replace the 'level' and 'stat' modes.
-* Added 'intermap_id' property to Events.
-* Added 'power_level' and 'power_stats' properties to Events.
-* Added 'requires_tile' and 'requires_not_tile' properties to Events.
-* Added 'spawn_level' property to Events.
-* Added procedural map generation.
-* Added 'state_hold_mode' property to Powers.
-* Added 'class_tip' and 'show_class_tip' properties to new game menu config.
-* Added 'show_frame_background' property to configuration, new game, and load game menu configs.
-* Added 'ignore_resist' property to powers/effects.txt config.
-* Added 'mapmod_toggle' property to Events.
-* Added cinematic map title display, configured via menus/region_title.txt.
-* Support navigating "multi-page" books with left/right inputs when possible.
-* Added 'spawn_requires_unlocked_power' property to Powers.
-* Added 'auto_actionbar' property to items/types.txt config.
-* Added 'sort_stock_buy' property to menus/vendor.txt config.
-* Added optional sort button to inventory and stash for sorting by type, quality, level, and sell price.
-* Android: Enabled use of external input devices (gamepads, keyboards, mice)
+* Events
+	- Events can now use 'book=close' to close the active book.
+	- Added 'intermap_id' property to Events.
+	- Added 'power_level' and 'power_stats' properties to Events.
+	- Added 'requires_tile' and 'requires_not_tile' properties to Events.
+	- Added 'spawn_level' property to Events.
+	- Added 'class_tip' and 'show_class_tip' properties to new game menu config.
+	- Added 'show_frame_background' property to configuration, new game, and load game menu configs.
+	- Added 'mapmod_toggle' property to Events.
+
+* Items
+	- Add scaling based on item level/player level/primary stats to several Item attributes, such as 'bonus' and 'price'.
+	- Add 'loot_drops_max' property to Items for limiting the number of drops in a single loot event.
+	- Added randomized items. Items can now be spawned with random level, quality, and bonus attributes.
+	- Added 'auto_actionbar' property to items/types.txt config.
+
+
+* Powers
+	- Added support for more than one of each chain power (pre_power/post_power/wall_power) to be attached to a single power.
+	- Added 'post_hazards_skip_target' to Powers.
+	- Powers that deal non-elemental damage will now apply additional elemental damage based on the damage stats for said elements.
+	- Power 'trait_elemental' now works with all damage types (despite the name). Any additional damage bonuses for the specified damage type will apply on top of the converted damage.
+	- Added 'percent_exact' to requires_hpmp_state and requires_resource_stat_state in Powers.
+	- Added 'on_active_power' to passive_trigger property and 'can_trigger_passives' property for Powers.
+	- Added 'passive_effects_persist' property to Powers.
+	- Added 'expire_power' Power property.
+	- Added 'hero_level' / 'source_level' and 'hero_stat' / 'source_stat' modes to map enemy & power 'spawn_level' properties. They take a single value as a multiplier and are intended to replace the 'level' and 'stat' modes.
+	- Added 'state_hold_mode' property to Powers.
+	- Added 'ignore_resist' property to powers/effects.txt config.
+	- Added 'spawn_requires_unlocked_power' property to Powers.
+
+* Maps
+	- Added procedural map generation.
+	- Add wander_radius and waypoints support for map NPCs
+
+* UI
+	- Horizontal list widgets can now display 2 or fewer options at once
+	- Added 'default_zoom_level' property to menu/minimap.txt config.
+	- Added support for developer mode command shortcuts.
+	- Added 'powers_overlap_slots' to menu/actionbar.txt config.
+	- Added 'background_offset' to menu/config.txt config.
+	- Added a game filter for the inactive mods list in the Configuration menu.
+	- Added 'inactivemods_filter' to menu/config.txt config.
+	- Added 'preview_enabled' and 'preview_pos' to menus/inventory.txt config.
+	- Added 'font' property to engine/combat_text.txt config.
+	- Stats on the character page are now organized by categories: Core, Offense, Defense, and Misc.
+	- Speed and Attack Speed are now able to be shown in the Character menu.
+	- Added 'tab.text_padding' to engine/widget_settings.txt config.
+	- Added 'enabled' property to Char/Inv/Pow/Log menus for modders that wish to prevent the player from opening those menus.
+	- Added 'upgrade_button_offset' property to menu/powers.txt config.
+	- Added auto-loot configuration option.
+	- Dynamically-sized dev console with new config file.
+	- Added prompt for language on first launch.
+	- Added 'show_permadeath' option to menus/gamenew.txt config.
+	- Added 'log.padding' property to engine/widget_settings.txt config.
+	- Added 'sound.activate' property to engine/widget_settings.txt config.
+	- Added tooltip text for items that prevent use of other equip slots.
+	- Added 'enable_gamepad_nav' property to menus/actionbar.txt config.
+	- Added cinematic map title display, configured via menus/region_title.txt.
+	- Added 'sort_stock_buy' property to menus/vendor.txt config.
+	- Added optional sort button to inventory and stash for sorting by type, quality, level, and sell price.
+	- Added tooltips for stat and power upgrade buttons.
+	- The "Play Game" button on the title screen now goes directly to character creation if no saved games exist.
+
+* Input
+	- New mouse movment behavior. Click once to move the player to a target and, if applicable, interact with it.
+	- Added game controller rumble option.
+	- Added "in combat" LED effect for supported game controllers (i.e. Dual Shock 4).
+	- Support using gamepad during initial launch menus.
+	- Added 'cycle_menus' keybinding to quickly open Char/Inv and Log/Pow menus.
+	- Support navigating "multi-page" books with left/right inputs when possible.
+	- Android: Enabled use of external input devices (gamepads, keyboards, mice)
+
+* Misc
+	- Damage Types and Elements have been combined. engine/elements.txt is still supported, but new mods should use engine/damage_types.txt.
+	- Added 'offscreen_enemy_encounters' property to engine/combat.txt config.
+	- Added backwards compatiblity option 'passive_trigger_effect_stacking' to engine/misc.txt.
+	- Added 'equipment_set' property to engine/classes.txt config.
+	- Added 'fade_wall_alpha' property to engine/misc.txt config.
+	- Added 'active_sub_frame' property to animation definitions.
+
 
 Engine fixes:
 
-* Fixed equipment not being visible on the load game menu in cases where an item is shared across multiple equipment sets.
-* Fix potential crash in WidgetTabControl when trying to set an active tab when there is no tab already active.
-* Fix unintended file appending when loading mod metadata
-* Fix potential crash when tileset image can't be loaded.
-* Fix bonuses to primary stats being incorrectly assigned when arbitrary resource stats are used.
-* Fix leaked effect animations when an effect's animation property was redefined.
-* Fix invalid memory access when consuming a corpse after a map change
-* Fix crash when a book has a blank text item
-* Fix memory leak from dropped loot
-* Fix memory leak when a power's animation property was redefined.
-* Display min/max damage and absorb stats on single lines in the Character menu
-* Show power base damage type in tooltips if no damage modifier is set
-* Fix input state not being correctly reset after using a gamepad analog control
-* Increase default audio playback samplerate to 44100Hz from 22050Hz. This can now be adjusted in the user's settings.txt file.
-* Fix leaked animation when Power entire power was redefined.
-* Fix power.target_neighbor not using the starting_pos as the origin point.
-* Fixed crash in Power tooltips when base_damage was not defined.
-* Fix incorrect power level being shown in the action bar tooltips for upgraded powers.
-* Fixed behavior of target_neighbor when a Power wasn't using 'starting_pos=source'.
-* Fixed Power target validity not respecting the 'movement_type' property.
-* Fixed a case where tooltip graphics showed an incorrect right border when the text area was too wide.
-* A fallback language is now selected when the desired language is not available in engine/languages.txt.
-* Fixed the origin point of post powers in some cases that would have them incorrectly use the caster's position otherwise.
-* Fixed the direction of moving powers when the origin and target are the same point.
-* Fixed cases where parts of WidgetSlider were being drawn outside the visible area.
-* Fixed infinite INCLUDE recursion in FileParser.
-* Fixed a crash when action bar slots weren't defined.
-* Fixed cooldowns not applying to the base power when using replace_by_effect.
-* Fixed attempt to load default 'male' animations initially, even if they would be replaced by engine/hero_options.txt.
-* Removed 1-frame delay between when the player activates a power and when they change animation state.
-* Fixed replace_by_effect changing the active AI power mid-animation.
-* Power tree backgrounds now align to the tab area if they are not the same size as the menu.
-* Fixed potential crash if a hazard was created before the map loaded.
-* Fixed infinite loop caused by trying to move an entity before the map loaded.
-* Fix case where sounds may be unloaded prematurely if they were playing during certain sitations.
-* Fix single-frame "back_forth" animations taking an extra frame to complete.
-* Fix not being able to pick up loot with the mouse if the loot animation was looped.
-* Fix invisible icons in Powers menu when using gamepad/touch controls.
-* Fix regression that caused save_onload=false to have no effect.
-* Fix being able to talk to NPC allies after they die.
-* Prevent summons with zero base speed from teleporting with their summoner.
-* The text for dialog options now respects the 'font_dialog' property in menus/talker.txt.
-* Fixed books not closing properly when trying to load another book with an invalid filename.
-* Fixed combat text being shown for zero damage reflect.
-* Added validation to player XP table parsing to ensure that XP thresholds are not less than those for previous levels.
-* Errors in saved fog-of-war data no longer causes a forced exit & mod reset.
-* Primary stat upgrade buttons are now hidden in the Character menu if the cooresponding label is hidden.
-* Fixed crash in action bar when less than 12 slots were defined.
-* Fixed single-line text having the top/bottom "cut off" with certain fonts.
-* Fixed delete save dialog being shown underneath buttons on load screen.
-* Fixed bug where closing the game with the "Enter Amount" dialog open allowed for item duplication.
-* Added tooltips for stat and power upgrade buttons.
-* Fixed case where stash tabs could be switched while dragging an item.
-* The "Play Game" button on the title screen now goes directly to character creation if no saved games exist.
-* Statbars (including the enemy HP bar) now position the numeric text relative to the fill graphics.
-* Fixed the height calculation of the NPC dialog text box with several actions/topics.
-* Improved the behavior of determining which enemy health bar to show when several enemies are in close proximity.
-* Fix "resist_all" status effect causing unintended resource stat stealing.
-* Fix passive post powers activating even when their parent passive power is not active.
-* Fixed item duplication when mouse dragging an item while "Do not use mouse" is set.
-* Removed the gamma setting from the configuration UI (it can still be changed via the config file, for now)
-* Fixed 'ground' movement type hazards not colliding with pits and small objects.
-* Fixed entities not entering death state when negative HP regen reduced their HP to 0.
-* Fixed corpses not disappearing into pits when killed with a critical strike.
-* Fixed incorrect speed of repeater powers when using a non-60 FPS cap.
-* Implemented caching for event scripts to avoid repeated loading from disk.
-* Fixed incorrect activation of passive powers on death.
-* Reduced spam of identical combat text messages.
-* Fix unintended stacking in active effects display for effects that don't have the same icon.
-* XP gain is now prevented after the initial death frame. This still allows for the player to revive if they die and level up on the same frame.
-* Fix bug where new saves were the wrong class and couldn't attack when using a controller.
-* Fixed a case where replaced powers were not being enabled when switching equipment sets.
-* Item quantity menu now wraps around when using the increment/decrement buttons.
-* Fixed mod-specific default keybindings not loading when user resets configuration to default.
-* Fixed repeater powers having no effect if the first hazard hit a wall.
-* Attempt to fall back to default values if base/head graphics don't exist for a hero option.
-* Fixed incorrect max summon limits when a power was unlocked/locked.
-* Fixed volume of power and entity sounds not being attenuated based on distance.
-* Fixed off-screen enemies not realizing they were dead until the player got close enough.
-* Fixed divide-by-zero crash when using NPC dialog groups.
-* Fixed HUD log blocking clicks when an overlayed message expires due to time.
-* Non-stacking effects of the same magnitude are now ignored if the duration is shorter than the time remaining on the existing effect.
-* Fixed power 'speed_variance' behavior being dependent on max FPS.
-* Android: Fix 'Flare' directory not being automatically created.
-* Android: Added a dialog to direct the player to the wiki page for installing if no game data is found.
+* Crashes & Memory Issues
+	- Fix potential crash in WidgetTabControl when trying to set an active tab when there is no tab already active.
+	- Fix potential crash when tileset image can't be loaded.
+	- Fix leaked effect animations when an effect's animation property was redefined.
+	- Fix invalid memory access when consuming a corpse after a map change
+	- Fix crash when a book has a blank text item
+	- Fix memory leak from dropped loot
+	- Fix memory leak when a power's animation property was redefined.
+	- Fix leaked animation when Power entire power was redefined.
+	- Fixed crash in Power tooltips when base_damage was not defined.
+	- Fixed infinite INCLUDE recursion in FileParser.
+	- Fixed a crash when action bar slots weren't defined.
+	- Fixed potential crash if a hazard was created before the map loaded.
+	- Fixed infinite loop caused by trying to move an entity before the map loaded.
+	- Fixed crash in action bar when less than 12 slots were defined.
+	- Fixed divide-by-zero crash when using NPC dialog groups.
+
+* Exploits
+	- Fixed bug where closing the game with the "Enter Amount" dialog open allowed for item duplication.
+	- Fixed item duplication when mouse dragging an item while "Do not use mouse" is set.
+
+* Gameplay
+	- Fix bonuses to primary stats being incorrectly assigned when arbitrary resource stats are used.
+	- Fix power.target_neighbor not using the starting_pos as the origin point.
+	- Fixed behavior of target_neighbor when a Power wasn't using 'starting_pos=source'.
+	- Fixed Power target validity not respecting the 'movement_type' property.
+	- Fixed the origin point of post powers in some cases that would have them incorrectly use the caster's position otherwise.
+	- Fixed the direction of moving powers when the origin and target are the same point.
+	- Fixed cooldowns not applying to the base power when using replace_by_effect.
+	- Fixed replace_by_effect changing the active AI power mid-animation.
+	- Fix regression that caused save_onload=false to have no effect.
+	- Fix being able to talk to NPC allies after they die.
+	- Prevent summons with zero base speed from teleporting with their summoner.
+	- Added validation to player XP table parsing to ensure that XP thresholds are not less than those for previous levels.
+	- Fix "resist_all" status effect causing unintended resource stat stealing.
+	- Fix passive post powers activating even when their parent passive power is not active.
+	- Fixed 'ground' movement type hazards not colliding with pits and small objects.
+	- Fixed entities not entering death state when negative HP regen reduced their HP to 0.
+	- Fixed corpses not disappearing into pits when killed with a critical strike.
+	- Fixed incorrect speed of repeater powers when using a non-60 FPS cap.
+	- Fixed incorrect activation of passive powers on death.
+	- Fix unintended stacking in active effects display for effects that don't have the same icon.
+	- XP gain is now prevented after the initial death frame. This still allows for the player to revive if they die and level up on the same frame.
+	- Fix bug where new saves were the wrong class and couldn't attack when using a controller.
+	- Fixed repeater powers having no effect if the first hazard hit a wall.
+	- Fixed incorrect max summon limits when a power was unlocked/locked.
+	- Fixed off-screen enemies not realizing they were dead until the player got close enough.
+	- Non-stacking effects of the same magnitude are now ignored if the duration is shorter than the time remaining on the existing effect.
+	- Fixed power 'speed_variance' behavior being dependent on max FPS.
+
+* UI
+	- Fixed equipment not being visible on the load game menu in cases where an item is shared across multiple equipment sets.
+	- Display min/max damage and absorb stats on single lines in the Character menu
+	- Show power base damage type in tooltips if no damage modifier is set
+	- Fix incorrect power level being shown in the action bar tooltips for upgraded powers.
+	- Fixed a case where tooltip graphics showed an incorrect right border when the text area was too wide.
+	- A fallback language is now selected when the desired language is not available in engine/languages.txt.
+	- Fixed cases where parts of WidgetSlider were being drawn outside the visible area.
+	- Power tree backgrounds now align to the tab area if they are not the same size as the menu.
+	- Fix not being able to pick up loot with the mouse if the loot animation was looped.
+	- Fix invisible icons in Powers menu when using gamepad/touch controls.
+	- The text for dialog options now respects the 'font_dialog' property in menus/talker.txt.
+	- Fixed books not closing properly when trying to load another book with an invalid filename.
+	- Fixed combat text being shown for zero damage reflect.
+	- Primary stat upgrade buttons are now hidden in the Character menu if the cooresponding label is hidden.
+	- Fixed single-line text having the top/bottom "cut off" with certain fonts.
+	- Fixed delete save dialog being shown underneath buttons on load screen.
+	- Fixed case where stash tabs could be switched while dragging an item.
+	- Statbars (including the enemy HP bar) now position the numeric text relative to the fill graphics.
+	- Improved the behavior of determining which enemy health bar to show when several enemies are in close proximity.
+	- Fixed the height calculation of the NPC dialog text box with several actions/topics.
+	- Removed the gamma setting from the configuration UI (it can still be changed via the config file, for now)
+	- Reduced spam of identical combat text messages.
+	- Fixed a case where replaced powers were not being enabled when switching equipment sets.
+	- Item quantity menu now wraps around when using the increment/decrement buttons.
+	- Fixed HUD log blocking clicks when an overlayed message expires due to time.
+	- Android: Added a dialog to direct the player to the wiki page for installing if no game data is found.
+
+* Animations
+	- Fixed attempt to load default 'male' animations initially, even if they would be replaced by engine/hero_options.txt.
+	- Removed 1-frame delay between when the player activates a power and when they change animation state.
+	- Fix single-frame "back_forth" animations taking an extra frame to complete.
+	- Attempt to fall back to default values if base/head graphics don't exist for a hero option.
+
+* Sound
+	- Increase default audio playback samplerate to 44100Hz from 22050Hz. This can now be adjusted in the user's settings.txt file.
+	- Fix case where sounds may be unloaded prematurely if they were playing during certain sitations.
+	- Fixed volume of power and entity sounds not being attenuated based on distance.
+
+* Input
+	- Fix input state not being correctly reset after using a gamepad analog control
+	- Fixed mod-specific default keybindings not loading when user resets configuration to default.
+
+* Performance
+	- Implemented caching for event scripts to avoid repeated loading from disk.
+	- Added threaded image loading to speed up load times. Can be turned off in the Video options if there are any issues.
+
+* System
+	- Fix unintended file appending when loading mod metadata
+	- Errors in saved fog-of-war data no longer causes a forced exit & mod reset.
+	- Android: Fix 'Flare' directory not being automatically created.
 
 Game updates:
+* New, higher resolution art work:
+	- Map tilesets (including new "Ruins" tileset)
+	- Character, enemy, and NPC animations
+	- Power animations
+	- User interface
 * Limited the number of "unique" items that can drop from a boss to 1 per kill.
 * Rebalanced damage types to be less reliant on weapon stats. Players start with 15-20 damage and gain 2 per level. To compensate, weapons now have 10 base damage with an additional 3 per item level.
 * Increased starting MP and MP per level by 5x. Increased starting MP regen by 5x.
+* Changed MP regen per level to 1 and MP regen per Mental to 3.
+* Changed starting damage for Melee/Ranged/Mental to 15-20, with an additional 2-2 per level.
 * Raised the number of power points granted per level to 2.
 * Only require the first level of any given power that's required to unlock another power/upgrade.
 * Lowered stat requirements for all active powers. Requirements start at 2 or 3 and increase by 3 for each upgrade level.
@@ -193,17 +233,17 @@ Game updates:
 	- Wolf's Eye: Crit chance per level decreased from 3pp to 2pp. Accuracy per level raised from 10pp to 15pp.
 	- Energy Flow: Initial MP regen bonus raised from 15 to 75. Each level now grants 50 instead of 15.
 * New Warrior powers:
-    - Vampirism: Grants a temporary buff to the HP Steal stat
-    - Rupture: Creates a fissure that debuffs avoidance, absorb, and poise.
-    - Enchanted Blade (passive): Bonus dark damage
+	- Vampirism: Grants a temporary buff to the HP Steal stat
+	- Rupture: Creates a fissure that debuffs avoidance, absorb, and poise.
+	- Enchanted Blade (passive): Bonus dark damage
 * New Ranger powers:
-    - Charged Shot: Slower firing, but more damage and knockback. Can immobilize and has a chance of a crit on slowed targets.
-    - Poison Shot: Shoots a weak arrow that makes a poison cloud on impact. Damage over time is weak, but long lasting.
-    - Scavenger (passive): Bonus gold and item find
+	- Charged Shot: Slower firing, but more damage and knockback. Can immobilize and has a chance of a crit on slowed targets.
+	- Poison Shot: Shoots a weak arrow that makes a poison cloud on impact. Damage over time is weak, but long lasting.
+	- Scavenger (passive): Bonus gold and item find
 * New Magician powers:
-    - Mystic Blast: Dark damage projectile. Applies increased dark resistance in exchange for a weakness to other elemental damage on the target. Can stack 3 times.
-    - Summon Skeleton: Summon up to 5 skeletons (number of skeletons is based on power level). Each skeleton summoned reduces the player's MP pool.
-    - Barrier (passive): Bonus elemental resistance
+	- Mystic Blast: Dark damage projectile. Applies increased dark resistance in exchange for a weakness to other elemental damage on the target. Can stack 3 times.
+	- Summon Skeleton: Summon up to 5 skeletons (number of skeletons is based on power level). Each skeleton summoned reduces the player's MP pool.
+	- Barrier (passive): Bonus elemental resistance
 * New procedurally generated dungeon: Iron Labyrinth
 * New item rarity: Mastite. These are powerful items with randomized stat bonuses.
 
