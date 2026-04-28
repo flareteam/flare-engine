@@ -738,13 +738,13 @@ void LootManager::loadLootTables() {
 					if (ec->s == "currency")
 						ec->id = eset->misc.currency_id;
 					else if (Parse::toInt(ec->s, -1) != -1)
-						ec->id = Parse::toItemID(ec->s);
+						ec->id = items->verifyID(Parse::toItemID(ec->s), NULL, !ItemManager::VERIFY_ALLOW_ZERO, !ItemManager::VERIFY_ALLOCATE);
 					else {
 						skip_to_next = true;
 						infile.error("LootManager: Invalid item id for loot.");
 					}
 
-					if (!skip_to_next) {
+					if (!skip_to_next && items->isValid(ec->id)) {
 						ec->data[LOOT_EC_MAX_DROPS].Int = items->items[ec->id]->loot_drops_max;
 					}
 				}
