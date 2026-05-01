@@ -1069,13 +1069,18 @@ int Map::procGenCreatePath(int path_type, int desired_length, int* _door_count, 
 
 	while (steps >= 0) {
 		int link = rand() % Chunk::LINK_COUNT;
+
 		Chunk* prev = current;
 
 		int link_rotate = Chunk::LINK_COUNT;
+		int rotate_dir = Math::percentChance(50) ? 1 : -1;
 		while (current->links[link] && link_rotate > 0) {
-			link++;
+			link += rotate_dir;
 			if (link >= Chunk::LINK_COUNT) {
 				link = 0;
+			}
+			else if (link < 0) {
+				link = Chunk::LINK_COUNT-1;
 			}
 			link_rotate--;
 		}
@@ -1117,7 +1122,7 @@ int Map::procGenCreatePath(int path_type, int desired_length, int* _door_count, 
 					path_length++;
 				}
 				break;
-			case Chunk::LINK_WEST:
+			case Chunk::LINK_EAST:
 				current = procGenWalkSingle(path_type, cur_x, cur_y, 1, 0);
 				if (current != prev) {
 					prev->links[Chunk::LINK_EAST] = current;
@@ -1128,7 +1133,7 @@ int Map::procGenCreatePath(int path_type, int desired_length, int* _door_count, 
 					path_length++;
 				}
 				break;
-			case Chunk::LINK_EAST:
+			case Chunk::LINK_WEST:
 				current = procGenWalkSingle(path_type, cur_x, cur_y, -1, 0);
 				if (current != prev) {
 					prev->links[Chunk::LINK_WEST] = current;
