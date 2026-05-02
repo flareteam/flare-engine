@@ -971,6 +971,7 @@ bool EventManager::executeEventInternal(Event &ev, bool skip_delay) {
 	}
 
 	EventComponent *ec;
+	MapRenderer::MapLoot *map_loot = NULL;
 
 	for (unsigned i = 0; i < ev.components.size(); ++i) {
 		ec = &ev.components[i];
@@ -1113,18 +1114,23 @@ bool EventManager::executeEventInternal(Event &ev, bool skip_delay) {
 		}
 		else if (ec->type == EventComponent::LOOT) {
 			EventComponent *ec_lootcount = ev.getComponent(EventComponent::LOOT_COUNT);
+			Point loot_count;
 			if (ec_lootcount) {
-				mapr->loot_count.x = ec_lootcount->data[0].Int;
-				mapr->loot_count.y = ec_lootcount->data[1].Int;
-			}
-			else {
-				mapr->loot_count.x = 0;
-				mapr->loot_count.y = 0;
+				loot_count.x = ec_lootcount->data[0].Int;
+				loot_count.y = ec_lootcount->data[1].Int;
 			}
 
-			ec->data[0].Int = ev.hotspot.x; // LOOT_EC_POSX
-			ec->data[1].Int = ev.hotspot.y; // LOOT_EC_POSY
-			mapr->loot.push_back(*ec);
+			ec->data[LootManager::LOOT_EC_POSX].Int = ev.hotspot.x;
+			ec->data[LootManager::LOOT_EC_POSY].Int = ev.hotspot.y;
+
+			if (!map_loot) {
+				mapr->loot.resize(mapr->loot.size()+1);
+				map_loot = &mapr->loot.back();
+			}
+			if (map_loot) {
+				map_loot->first.push_back(*ec);
+				map_loot->second = loot_count;
+			}
 		}
 		else if (ec->type == EventComponent::MSG) {
 			pc->logMsg(ec->s, Avatar::MSG_UNIQUE);

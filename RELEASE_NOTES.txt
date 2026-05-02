@@ -135,6 +135,7 @@ Engine fixes:
 	- Fixed off-screen enemies not realizing they were dead until the player got close enough.
 	- Non-stacking effects of the same magnitude are now ignored if the duration is shorter than the time remaining on the existing effect.
 	- Fixed power 'speed_variance' behavior being dependent on max FPS.
+	- Fixed 'event.loot_count' not working correctly when used in multiple events during the same frame.
 
 * UI
 	- Fixed equipment not being visible on the load game menu in cases where an item is shared across multiple equipment sets.

@@ -293,23 +293,22 @@ void LootManager::checkEnemiesForLoot() {
  * As map events occur, some might have a component named "loot"
  */
 void LootManager::checkMapForLoot() {
-	if (!mapr->loot.empty()) {
+	for (size_t i = 0; i < mapr->loot.size(); ++i) {
 		unsigned drops;
-		if (mapr->loot_count.y != 0) {
-			drops = Math::randBetween(mapr->loot_count.x, mapr->loot_count.y);
+		if (mapr->loot[i].second.y != 0) {
+			drops = Math::randBetween(mapr->loot[i].second.x, mapr->loot[i].second.y);
 		}
 		else {
 			drops = Math::randBetween(1, eset->loot.drop_max);
 		}
 
-		for (unsigned i=0; i<drops; ++i) {
-			checkLoot(mapr->loot, NULL, NULL);
+		while (drops > 0) {
+			checkLoot(mapr->loot[i].first, NULL, NULL);
+			drops--;
 		}
-
-		mapr->loot.clear();
-		mapr->loot_count.x = 0;
-		mapr->loot_count.y = 0;
 	}
+
+	mapr->loot.clear();
 }
 
 void LootManager::addEnemyLoot(StatBlock *e) {

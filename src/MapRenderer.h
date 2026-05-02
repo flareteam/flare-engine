@@ -91,6 +91,8 @@ private:
 	std::vector<std::vector<Renderable>::iterator> hidden_entities;
 
 public:
+	typedef std::pair< std::vector<EventComponent>, Point> MapLoot;
+
 	static const unsigned PROCGEN_CHUNK_SIZE = 32; // the size of each chunk tile when drawing the map to the dev console with drawProcgenChunkMap()
 
 	// functions
@@ -134,8 +136,7 @@ public:
 	MapCollision collider;
 
 	// event-created loot or items
-	std::vector<EventComponent> loot;
-	Point loot_count;
+	std::vector<MapLoot> loot;
 
 	// teleport handling
 	bool teleportation;
