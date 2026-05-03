@@ -204,6 +204,7 @@ Game updates:
 * Only require the first level of any given power that's required to unlock another power/upgrade.
 * Lowered stat requirements for all active powers. Requirements start at 2 or 3 and increase by 3 for each upgrade level.
 * New item: 'Tome of Second Chances'. Used to reset the player's stat and power points. Can be purchased from Florin.
+* Wooden figurines now grant +15 to their respective primary stats instead of a damage/absorb bonus.
 * More gradual MP cost slopes for all active powers
 * Rebalance Warrior active powers
 	- Shield Bash: Reduced crit chance to 25%. Added 25% chance to stun for half a second. Damage starts at higher at 115% and increases 15pp per level
