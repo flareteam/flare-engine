@@ -1501,7 +1501,7 @@ msgstr "Kustannus: %s OP:tä"
 
 #: ../../../src/MenuPowers.cpp:989
 msgid "Cooldown:"
-msgstr "Palautumisaika:"
+msgstr "Latautumisaika:"
 
 #: ../../../src/MenuPowers.cpp:1097 ../../../src/MenuPowers.cpp:1100
 msgid "Damage per second"

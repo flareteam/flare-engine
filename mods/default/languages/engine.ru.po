@@ -414,19 +414,19 @@ msgstr "Нажмите [%s] для дополнительных опций"
 
 #: ../../../src/ItemStorage.cpp:483
 msgid "Sort by: Type"
-msgstr ""
+msgstr "Упорядочить по: тип"
 
 #: ../../../src/ItemStorage.cpp:485
 msgid "Sort by: Quality"
-msgstr ""
+msgstr "Упорядочить по: качество"
 
 #: ../../../src/ItemStorage.cpp:487
 msgid "Sort by: Level"
-msgstr ""
+msgstr "Упорядочить по: уровень"
 
 #: ../../../src/ItemStorage.cpp:489
 msgid "Sort by: Sell Price"
-msgstr ""
+msgstr "Упорядочить по: цена продажи"
 
 #: ../../../src/LootManager.cpp:107 ../../../src/LootManager.cpp:109
 #: ../../../src/LootManager.cpp:111 ../../../src/MenuConfig.cpp:492
