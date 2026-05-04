@@ -56,9 +56,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <limits>
 
 LootManager::LootManager()
-	: sfx_loot(snd->load(eset->loot.sfx_loot, "LootManager dropping loot"))
+	: sfx_loot(0)
 	, sfx_loot_channel("loot")
 {
+	if (!eset->loot.sfx_loot.empty()) {
+		sfx_loot = snd->load(eset->loot.sfx_loot, "LootManager dropping loot");
+	}
+
 	loadGraphics();
 	loadLootTables();
 }
