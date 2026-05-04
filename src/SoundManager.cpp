@@ -20,7 +20,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "SoundManager.h"
+#include "Utils.h"
 
 const std::string SoundManager::DEFAULT_CHANNEL = "__global__";
 const FPoint SoundManager::NO_POS = FPoint(0, 0);
 
+SoundManager::SoundManager() {
+}
+
+SoundManager::~SoundManager() {
+	Utils::logInfo("Cleaning up: SoundManager");
+}

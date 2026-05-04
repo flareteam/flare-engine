@@ -584,4 +584,5 @@ void ModManager::resetModConfig() {
 }
 
 ModManager::~ModManager() {
+	Utils::logInfo("Cleaning up: ModManager");
 }

@@ -103,6 +103,8 @@ CombatText::CombatText() {
 }
 
 CombatText::~CombatText() {
+	Utils::logInfo("Cleaning up: CombatText");
+
 	// delete all messages
 	while (combat_text.size() > 0) {
 		delete combat_text.begin()->label;

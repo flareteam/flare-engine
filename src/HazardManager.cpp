@@ -205,6 +205,8 @@ void HazardManager::addRenders(std::vector<Renderable> &r, std::vector<Renderabl
 }
 
 HazardManager::~HazardManager() {
+	Utils::logInfo("Cleaning up: HazardManager");
+
 	for (unsigned int i = 0; i < h.size(); i++)
 		delete h[i];
 	// h.clear(); not needed in destructor

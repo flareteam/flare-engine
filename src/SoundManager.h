@@ -37,7 +37,8 @@ public:
 	static const bool LOOP = true;
 	static const bool CLEANUP = true;
 
-	virtual ~SoundManager() {};
+	SoundManager();
+	virtual ~SoundManager();
 
 	virtual SoundID load(const std::string& filename, const std::string& errormessage) = 0;
 	virtual void unload(SoundID) = 0;

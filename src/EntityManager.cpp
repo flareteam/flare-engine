@@ -501,6 +501,8 @@ void EntityManager::addRenders(std::vector<Renderable> &r, std::vector<Renderabl
 }
 
 EntityManager::~EntityManager() {
+	Utils::logInfo("Cleaning up: EntityManager");
+
 	for (unsigned int i=0; i < entities.size(); i++) {
 		if (entities[i]->stats.npc)
 			continue;

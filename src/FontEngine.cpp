@@ -79,6 +79,10 @@ FontEngine::FontEngine()
 
 }
 
+FontEngine::~FontEngine() {
+	Utils::logInfo("Cleaning up: FontEngine");
+}
+
 Color FontEngine::getColor(size_t color_id) {
 	if (color_id < font_colors.size())
 		return font_colors[color_id];

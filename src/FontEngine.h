@@ -80,7 +80,7 @@ public:
 	static const bool SHADOW_OFFSET = true;
 
 	FontEngine();
-	virtual ~FontEngine() {};
+	virtual ~FontEngine();
 
 	Color getColor(size_t _color);
 

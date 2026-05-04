@@ -70,6 +70,7 @@ EnemyGroupManager::EnemyGroupManager() {
 }
 
 EnemyGroupManager::~EnemyGroupManager() {
+	Utils::logInfo("Cleaning up: EnemyGroupManager");
 }
 
 Enemy_Level EnemyGroupManager::getRandomEnemy(const std::string& category, int minlevel, int maxlevel) const {

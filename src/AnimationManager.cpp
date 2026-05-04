@@ -49,6 +49,8 @@ AnimationManager::AnimationManager() {
 }
 
 AnimationManager::~AnimationManager() {
+	Utils::logInfo("Cleaning up: AnimationManager");
+
 	cleanUp();
 // NDEBUG is used by posix to disable assertions, so use the same MACRO.
 #ifndef NDEBUG

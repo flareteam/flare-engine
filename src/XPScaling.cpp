@@ -42,6 +42,7 @@ XPScaling::XPScaling() {
 }
 
 XPScaling::~XPScaling() {
+	Utils::logInfo("Cleaning up: XPScaling");
 }
 
 XPScalingTableID XPScaling::load(const std::string& filename) {

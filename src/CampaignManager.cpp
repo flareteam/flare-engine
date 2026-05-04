@@ -375,4 +375,5 @@ void CampaignManager::randomStatusUnset() {
 }
 
 CampaignManager::~CampaignManager() {
+	Utils::logInfo("Cleaning up: CampaignManager");
 }

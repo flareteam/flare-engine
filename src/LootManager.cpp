@@ -865,6 +865,8 @@ void LootManager::removeFromEnemiesDroppingLoot(const StatBlock* sb) {
 }
 
 LootManager::~LootManager() {
+	Utils::logInfo("Cleaning up: LootManager");
+
 	// remove all items in the item database
 	for (size_t i = 0; i < animations.size(); ++i) {
 		if (!animations[i])

@@ -2400,6 +2400,8 @@ bool PowerManager::checkPowerCost(const Power* pow, const StatBlock *src_stats) 
 }
 
 PowerManager::~PowerManager() {
+	Utils::logInfo("Cleaning up: PowerManager");
+
 	for (size_t i = 0; i < powers.size(); ++i) {
 		if (!powers[i])
 			continue;

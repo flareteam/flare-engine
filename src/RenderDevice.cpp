@@ -177,6 +177,7 @@ RenderDevice::RenderDevice()
 }
 
 RenderDevice::~RenderDevice() {
+	Utils::logInfo("Cleaning up: RenderDevice");
 }
 
 int RenderDevice::createContext() {

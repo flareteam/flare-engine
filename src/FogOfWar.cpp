@@ -390,5 +390,7 @@ void FogOfWar::loadDefMask(FileParser &infile) {
 }
 
 FogOfWar::~FogOfWar() {
+	Utils::logInfo("Cleaning up: FogOfWar");
+
 	delete[] def_mask;
 }

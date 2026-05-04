@@ -66,6 +66,8 @@ IconManager::IconManager()
 }
 
 IconManager::~IconManager() {
+	Utils::logInfo("Cleaning up: IconManager");
+
 	for (size_t i = 0; i < icon_sets.size(); ++i) {
 		delete icon_sets[i].gfx;
 	}

@@ -39,6 +39,7 @@ private:
 	std::string unescape(const std::string& _val);
 public:
 	MessageEngine();
+	~MessageEngine();
 	std::string get(const std::string& key);
 	std::string getv(const std::string key, ...);
 };

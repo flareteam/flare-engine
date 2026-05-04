@@ -28,6 +28,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class EngineSettings {
 public:
+	EngineSettings();
+	~EngineSettings();
+
 	void load();
 
 	class Misc {

@@ -45,6 +45,8 @@ TooltipManager::TooltipManager()
 }
 
 TooltipManager::~TooltipManager() {
+	Utils::logInfo("Cleaning up: TooltipManager");
+
 	for (size_t i = 0; i < tip.size(); ++i) {
 		delete tip[i];
 	}

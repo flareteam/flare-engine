@@ -1210,6 +1210,8 @@ void Avatar::setDesiredMMTarget(FPoint& target) {
 }
 
 Avatar::~Avatar() {
+	Utils::logInfo("Cleaning up: Avatar");
+
 	delete charmed_stats;
 	delete hero_stats;
 

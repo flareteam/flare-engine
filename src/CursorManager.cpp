@@ -125,6 +125,8 @@ CursorManager::CursorManager()
 }
 
 CursorManager::~CursorManager() {
+	Utils::logInfo("Cleaning up: CursorManager");
+
 	if (cursor_normal) delete cursor_normal;
 	if (cursor_interact) delete cursor_interact;
 	if (cursor_talk) delete cursor_talk;

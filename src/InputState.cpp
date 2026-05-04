@@ -112,6 +112,8 @@ InputState::InputState(void)
 }
 
 InputState::~InputState() {
+	Utils::logInfo("Cleaning up: InputState");
+
 	delete file_version;
 	delete file_version_min;
 }

@@ -2007,6 +2007,8 @@ void MenuManager::actionPickerStartDrag() {
 }
 
 MenuManager::~MenuManager() {
+	Utils::logInfo("Cleaning up: MenuManager");
+
 	for (size_t i = 0; i < resource_statbars.size(); ++i) {
 		delete resource_statbars[i];
 	}

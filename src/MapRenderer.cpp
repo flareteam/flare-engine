@@ -1771,6 +1771,8 @@ void MapRenderer::drawProcgenChunkMap(Image* canvas) {
 }
 
 MapRenderer::~MapRenderer() {
+	Utils::logInfo("Cleaning up: MapRenderer");
+
 	tip_buf.clear();
 	clearLayers();
 	clearEvents();

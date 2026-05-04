@@ -98,6 +98,10 @@ MessageEngine::MessageEngine() {
 	}
 }
 
+MessageEngine::~MessageEngine() {
+	Utils::logInfo("Cleaning up: MessageEngine");
+}
+
 /**
  * This get() function is maintained for the purpose of strings that don't expect C/printf-style formatting.
  * We have allowed strings in mod data to not require the escaping of '%', so we can't pass such strings to getv() without issues.

@@ -66,6 +66,7 @@ SaveLoad::SaveLoad()
 }
 
 SaveLoad::~SaveLoad() {
+	Utils::logInfo("Cleaning up: SaveLoad");
 }
 
 /**

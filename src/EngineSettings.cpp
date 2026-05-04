@@ -32,6 +32,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include <sstream>
 
+EngineSettings::EngineSettings() {
+}
+
+EngineSettings::~EngineSettings() {
+	Utils::logInfo("Cleaning up: EngineSettings");
+}
+
 void EngineSettings::load() {
 	misc.load();
 	resolutions.load();

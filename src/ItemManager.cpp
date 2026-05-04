@@ -373,6 +373,8 @@ ItemManager::ItemManager()
 }
 
 ItemManager::~ItemManager() {
+	Utils::logInfo("Cleaning up: ItemManager");
+
 	for (size_t i = 0; i < items.size(); ++i) {
 		delete items[i];
 	}

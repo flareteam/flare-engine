@@ -259,6 +259,8 @@ Entity* NPCManager::getNearestNPC(const FPoint& pos, bool get_corpse) {
 }
 
 NPCManager::~NPCManager() {
+	Utils::logInfo("Cleaning up: NPCManager");
+
 	for (unsigned i=0; i<npcs.size(); i++) {
 		delete npcs[i];
 	}

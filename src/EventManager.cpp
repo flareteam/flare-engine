@@ -102,6 +102,7 @@ EventManager::EventManager() {
 }
 
 EventManager::~EventManager() {
+	Utils::logInfo("Cleaning up: EventManager");
 }
 
 void EventManager::loadEvent(FileParser &infile, Event* evnt) {
