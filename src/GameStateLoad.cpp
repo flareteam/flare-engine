@@ -593,6 +593,15 @@ void GameStateLoad::logic() {
 		updateButtons();
 	}
 
+	if (selected_slot == -1 || static_cast<size_t>(selected_slot) >= game_slots.size()) {
+		if (last_selected_slot != -1)
+			setSelectedSlot(last_selected_slot);
+		else
+			setSelectedSlot(0);
+
+		updateButtons();
+	}
+
 	if (confirm->visible) {
 		confirm->logic();
 		if (confirm->clicked_confirm) {
@@ -829,7 +838,7 @@ void GameStateLoad::updateButtons() {
 		button_new->tooltip = msg->get("Enable a story mod to continue");
 	}
 
-	if (selected_slot >= 0 && game_slots[selected_slot]) {
+	if (selected_slot >= 0 && static_cast<size_t>(selected_slot) < game_slots.size() && game_slots[selected_slot]) {
 		// slot selected: we can load/delete
 		if (button_load->enabled == false) {
 			button_load->enabled = true;
