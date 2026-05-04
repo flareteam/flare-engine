@@ -2109,7 +2109,7 @@ void ItemManager::loadExtendedItems(const std::string& filename) {
 	}
 	size_t extended_item_count = items.size() - eset->loot.extended_items_offset;
 	if (items.size() > eset->loot.extended_items_offset)
-		extended_item_count = 0;
+		extended_item_count = count_allocated;
 
 	Utils::logInfo("ItemManager: Extended Item IDs = %zu reserved / %zu allocated / %zu empty / %zu bytes used", extended_item_count, count_allocated, extended_item_count-count_allocated, (sizeof(Item*) * extended_item_count) + (sizeof(Item) * count_allocated));
 }
