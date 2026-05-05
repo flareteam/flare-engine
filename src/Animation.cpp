@@ -145,11 +145,29 @@ void Animation::setup(unsigned short _frames, unsigned short _duration) {
 
 	active_frames.push_back(static_cast<unsigned short>(total_frame_count-1)/2);
 
-	unsigned i = DIRECTIONS * _frames;
-	gfx.resize(i);
-	render_offset.resize(i);
-	keys.resize(i);
-	dirs.resize(i);
+	unsigned dir_frames = DIRECTIONS * _frames;
+	gfx.resize(dir_frames);
+	render_offset.resize(dir_frames);
+	keys.resize(dir_frames);
+	dirs.resize(dir_frames);
+
+	sub_frames_first.resize(total_frame_count, 0);
+	sub_frames_last.resize(total_frame_count, static_cast<unsigned short>(sub_frames.size()-1));
+
+	for (size_t i = 0; i < total_frame_count; ++i) {
+		for (size_t j = 0; j < sub_frames.size(); ++j) {
+			if (sub_frames[j] == i) {
+				sub_frames_first[i] = static_cast<unsigned short>(j);
+				break;
+			}
+		}
+		for (size_t j = sub_frames.size(); j > 0; j--) {
+			if (sub_frames[j-1] == i) {
+				sub_frames_last[i] = static_cast<unsigned short>(j-1);
+				break;
+			}
+		}
+	}
 }
 
 bool Animation::addFrame(unsigned short index, unsigned short direction, const Rect& rect, const Point& _render_offset, const std::string& key) {
@@ -392,42 +410,28 @@ bool Animation::isCompleted() {
 }
 
 unsigned short Animation::getFirstSubFrame(const short &frame) {
-	if (sub_frames.empty() || frame < 0) return 0;
+	if (sub_frames.empty() || frame < 0 || static_cast<size_t>(frame) >= sub_frames_first.size()) return 0;
 
 	if (type == ANIMTYPE_BACK_FORTH && reverse_playback) {
 		// since the animation is advancing backwards here, the last frame index is actually the first
-		for (size_t i=sub_frames.size(); i>0; i--) {
-			if (sub_frames[i-1] == frame)
-				return static_cast<unsigned short>(i-1);
-		}
-		return static_cast<unsigned short>(sub_frames.size()-1);
+		return sub_frames_last[frame];
 	}
 	else {
 		// normal animation
-		for (unsigned short i=0; i<sub_frames.size(); i++) {
-			if (sub_frames[i] == frame) return i;
-		}
-		return 0;
+		return sub_frames_first[frame];
 	}
 }
 
 unsigned short Animation::getLastSubFrame(const short &frame) {
-	if (sub_frames.empty() || frame < 0) return 0;
+	if (sub_frames.empty() || frame < 0 || static_cast<size_t>(frame) >= sub_frames_first.size()) return 0;
 
 	if (type == ANIMTYPE_BACK_FORTH && reverse_playback) {
 		// since the animation is advancing backwards here, the first frame index is actually the last
-		for (unsigned short i=0; i<sub_frames.size(); i++) {
-			if (sub_frames[i] == frame) return i;
-		}
-		return 0;
+		return sub_frames_first[frame];
 	}
 	else {
 		// normal animation
-		for (size_t i=sub_frames.size(); i>0; i--) {
-			if (sub_frames[i-1] == frame)
-				return static_cast<unsigned short>(i-1);
-		}
-		return static_cast<unsigned short>(sub_frames.size()-1);
+		return sub_frames_last[frame];
 	}
 }
 

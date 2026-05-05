@@ -91,6 +91,8 @@ protected:
 	std::vector<unsigned short> dirs;
 	std::vector<short> active_frames;	// frames that are marked as "active". Active frames are used to trigger various states (i.e power activation or hazard danger)
 	std::vector<unsigned short> sub_frames; // a list of frames to play on each tick
+	std::vector<unsigned short> sub_frames_first;
+	std::vector<unsigned short> sub_frames_last;
 
 	const std::string name;
 
