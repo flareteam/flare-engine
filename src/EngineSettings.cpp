@@ -30,7 +30,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Utils.h"
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
+#include <iterator>
 #include <sstream>
+#include <vector>
 
 EngineSettings::EngineSettings() {
 }
@@ -489,6 +491,22 @@ void EngineSettings::EquipFlags::load() {
 		}
 		infile.close();
 	}
+}
+
+size_t EngineSettings::EquipFlags::getIndex(const std::string& flag) {
+	for (size_t i = 0; i < list.size(); ++i) {
+		if (list[i].id == flag)
+			return i;
+	}
+
+	// not in list, create new flag
+	Utils::logInfo("EngineSettings: Adding unknown equip flag, '%s'.", flag.c_str());
+
+	EquipFlag ef;
+	ef.id = flag;
+	list.push_back(ef);
+
+	return list.size() - 1;
 }
 
 void EngineSettings::PrimaryStats::load() {

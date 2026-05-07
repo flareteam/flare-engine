@@ -1299,13 +1299,11 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 		tip_data->addColoredText(msg->getv("Spawn limit: %d", spawn_limit), font->getColor(FontEngine::COLOR_MENU_BONUS));
 	}
 
-	std::set<std::string>::iterator it;
+	std::set<size_t>::iterator it;
 	for (it = pwr->requires_flags.begin(); it != pwr->requires_flags.end(); ++it) {
-		for (size_t i = 0; i < eset->equip_flags.list.size(); ++i) {
-			if ((*it) == eset->equip_flags.list[i].id) {
-				tip_data->addText(msg->getv("Requires a %s", msg->get(eset->equip_flags.list[i].name).c_str()));
-			}
-		}
+		std::string &required_flag = eset->equip_flags.list[(*it)].name;
+		if (!required_flag.empty())
+			tip_data->addText(msg->getv("Requires a %s", msg->get(required_flag).c_str()));
 	}
 
 	if (pcell) {

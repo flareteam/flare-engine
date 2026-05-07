@@ -213,7 +213,7 @@ public:
 	float speed;
 	float charge_speed;
 
-	std::set<std::string> equip_flags;
+	std::set<size_t> equip_flags;
 
 	// buff and debuff stats
 	int transform_duration;

@@ -290,7 +290,7 @@ public:
 	std::string stepfx;        // sound effect played when walking (armors only)
 	std::string script;
 
-	std::vector<std::string> equip_flags;   // common values include: melee, ranged, mental, shield
+	std::vector<size_t> equip_flags;   // common values include: melee, ranged, mental, shield
 	std::vector<LevelScaledMinMax> base_dmg; // minimum/maximum damage amount
 	std::vector<BonusData> bonus;   // stat to increase/decrease e.g. hp, accuracy, speed
 	std::vector<LootAnimation> loot_animation;// the flying loot animation for this item

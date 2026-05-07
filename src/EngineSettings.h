@@ -138,6 +138,7 @@ public:
 		};
 
 		void load();
+		size_t getIndex(const std::string& flag);
 
 		std::vector<EquipFlag> list;
 	};

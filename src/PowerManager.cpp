@@ -454,7 +454,7 @@ void PowerManager::loadPowers() {
 			std::string flag = Parse::popFirstString(infile.val);
 
 			while (flag != "") {
-				power->requires_flags.insert(flag);
+				power->requires_flags.insert(eset->equip_flags.getIndex(flag));
 				flag = Parse::popFirstString(infile.val);
 			}
 		}

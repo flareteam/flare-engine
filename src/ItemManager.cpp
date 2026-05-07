@@ -497,7 +497,7 @@ void ItemManager::loadItems(const std::string& filename) {
 			std::string flag = Parse::popFirstString(infile.val);
 
 			while (flag != "") {
-				item->equip_flags.push_back(flag);
+				item->equip_flags.push_back(eset->equip_flags.getIndex(flag));
 				flag = Parse::popFirstString(infile.val);
 			}
 		}
