@@ -60,6 +60,7 @@ class MenuActiveEffects : public Menu {
 private:
 	Sprite *timer;
 	bool is_vertical;
+	bool wrap_before;
 	std::vector<EffectIcon> effect_icons;
 
 public:

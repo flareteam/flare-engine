@@ -33,6 +33,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "ModManager.h"
 #include "MessageEngine.h"
 #include "RenderDevice.h"
+#include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "StatBlock.h"
@@ -57,6 +58,10 @@ MenuActiveEffects::MenuActiveEffects()
 			// @ATTR vertical|bool|True is vertical orientation; False is horizontal orientation.
 			if(infile.key == "vertical") {
 				is_vertical = Parse::toBool(infile.val);
+			}
+			// @ATTR wrap_before|bool|Determines where to place icons when they need to wrap to fit on the screen. The default is false, which will place icons from top to bottom (or left to right if using the vertical orientation).
+			else if (infile.key == "wrap_before") {
+				wrap_before = Parse::toBool(infile.val);
 			}
 			else {
 				infile.error("MenuActiveEffects: '%s' is not a valid key.", infile.key.c_str());
@@ -86,6 +91,18 @@ void MenuActiveEffects::logic() {
 	}
 
 	effect_icons.clear();
+
+	size_t icons_per_row = 1;
+	if (!is_vertical) {
+		icons_per_row = (settings->view_w - window_area.x) / eset->resolutions.icon_size;
+	}
+	else {
+		icons_per_row = (settings->view_h - window_area.y) / eset->resolutions.icon_size;
+	}
+	if (icons_per_row < 1) {
+		icons_per_row = 1;
+	}
+	int wrap_dir = (wrap_before ? -1 : 1);
 
 	for (size_t i = 0; i < pc->stats.effects.effect_list.size(); ++i) {
 		Effect &ed = pc->stats.effects.effect_list[i];
@@ -139,12 +156,12 @@ void MenuActiveEffects::logic() {
 
 		// icon position
 		if (!is_vertical) {
-			ei.pos.x = window_area.x + (static_cast<int>(effect_icons.size()) * eset->resolutions.icon_size);
-			ei.pos.y = window_area.y;
+			ei.pos.x = window_area.x + (static_cast<int>(effect_icons.size() % icons_per_row) * eset->resolutions.icon_size);
+			ei.pos.y = window_area.y + (wrap_dir * (static_cast<int>(effect_icons.size() / icons_per_row) * eset->resolutions.icon_size));
 		}
 		else {
-			ei.pos.x = window_area.x;
-			ei.pos.y = window_area.y + (static_cast<int>(effect_icons.size()) * eset->resolutions.icon_size);
+			ei.pos.x = window_area.x + (wrap_dir * (static_cast<int>(effect_icons.size() / icons_per_row) * eset->resolutions.icon_size));
+			ei.pos.y = window_area.y + (static_cast<int>(effect_icons.size() % icons_per_row) * eset->resolutions.icon_size);
 		}
 		ei.pos.w = ei.pos.h = eset->resolutions.icon_size;
 

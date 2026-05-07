@@ -65,6 +65,7 @@ Engine features:
 	- Added optional sort button to inventory and stash for sorting by type, quality, level, and sell price.
 	- Added tooltips for stat and power upgrade buttons.
 	- The "Play Game" button on the title screen now goes directly to character creation if no saved games exist.
+	- Added 'wrap_before' property to menus/activeeffects.txt config.
 
 * Input
 	- New mouse movment behavior. Click once to move the player to a target and, if applicable, interact with it.
