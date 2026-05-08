@@ -40,7 +40,7 @@ emcc \
 	-s SDL2_IMAGE_FORMATS='["png"]' \
 	-s USE_SDL_TTF=2 \
 	-s USE_SDL_MIXER=2 \
-	-s "EXTRA_EXPORTED_RUNTIME_METHODS=['print']" \
+	-s "EXPORTED_RUNTIME_METHODS=['print']" \
 	-lidbfs.js \
 	--preload-file mods \
 	--use-preload-cache \
