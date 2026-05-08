@@ -168,8 +168,8 @@ void Platform::FSCommit() {
 
 void Platform::setScreenSize() {
 	// can't change window size dynamically with Emscripten, so default to 16:9 aspect ratio
-	settings->screen_w = 854;
-	settings->screen_h = 480;
+	settings->screen_w = 1920;
+	settings->screen_h = 1080;
 	settings->fullscreen = false;
 }
 
