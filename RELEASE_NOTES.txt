@@ -191,6 +191,7 @@ Engine fixes:
 	- Android: Fix 'Flare' directory not being automatically created.
 
 Game updates:
+
 * New, higher resolution art work:
 	- Map tilesets (including new "Ruins" tileset)
 	- Character, enemy, and NPC animations
