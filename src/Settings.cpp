@@ -161,6 +161,7 @@ void Settings::loadSettings() {
 	}
 
 	if (!found_settings) {
+		loadMobileDefaults();
 		saveSettings();
 	}
 	else {

@@ -1,4 +1,12 @@
-Flare v1.15
+Flare v1.16
+
+Engine fixes:
+
+- Android: Fixed default mobile settings not being loaded on first launch.
+
+
+
+Flare v1.15 (https://flarerpg.org/2026/05/03/flare-1-15/)
 
 Engine features:
 
