@@ -52,7 +52,7 @@ msgstr "传送已过期。你已回到了一个安全的地方。"
 #: ../../../src/CampaignManager.cpp:155
 #, c-format
 msgid "%d %s removed."
-msgstr "%d个%s已移除。"
+msgstr "%d%s已移除。"
 
 #: ../../../src/CampaignManager.cpp:174
 #, c-format
@@ -130,7 +130,7 @@ msgstr ""
 #: ../../../src/Entity.cpp:571 ../../../src/Entity.cpp:586
 #: ../../../src/Entity.cpp:604
 msgid "Resist"
-msgstr "抵抗"
+msgstr "抗性"
 
 #: ../../../src/EngineSettings.cpp:708
 msgid "Adventurer"
@@ -149,7 +149,7 @@ msgstr "%s（最大）"
 #: ../../../src/EngineSettings.cpp:887
 #, c-format
 msgid "Resist Damage (%s)"
-msgstr "抵抗伤害（%s）"
+msgstr "抗性（%s）"
 
 #: ../../../src/Entity.cpp:520
 msgid "miss"
@@ -213,7 +213,7 @@ msgstr "储物柜"
 #: ../../../src/GameStateLoad.cpp:288 ../../../src/MenuStash.cpp:181
 #: ../../../src/MenuStash.cpp:195
 msgid "Private"
-msgstr "隐私"
+msgstr "私人"
 
 #: ../../../src/GameStateLoad.cpp:829 ../../../src/GameStateLoad.cpp:850
 msgid "Enable a story mod to continue"
@@ -343,7 +343,7 @@ msgstr "阻止使用槽位：%s"
 #: ../../../src/ItemManager.cpp:1406
 #, c-format
 msgid "Quality: %s"
-msgstr "质量：%s"
+msgstr "品质：%s"
 
 #: ../../../src/ItemManager.cpp:1422 ../../../src/MenuCharacter.cpp:415
 #: ../../../src/Stats.cpp:81 ../../../src/Stats.cpp:88
@@ -375,7 +375,7 @@ msgstr "购买价格：%d %s"
 #: ../../../src/ItemManager.cpp:1519 ../../../src/ItemManager.cpp:1531
 #, c-format
 msgid "Buy Price: %d %s each"
-msgstr "购买单价：%d 每个%s"
+msgstr "购买单价：%d %s每个"
 
 #: ../../../src/ItemManager.cpp:1539
 #, c-format
@@ -385,7 +385,7 @@ msgstr "出售价格：%d %s"
 #: ../../../src/ItemManager.cpp:1541
 #, c-format
 msgid "Sell Price: %d %s each"
-msgstr "出售单价：%d 每个%s"
+msgstr "出售单价：%d %s每个"
 
 #: ../../../src/ItemManager.cpp:1552
 msgid "Set:"
@@ -412,19 +412,19 @@ msgstr "按下[%s]键以查看更多选项"
 
 #: ../../../src/ItemStorage.cpp:483
 msgid "Sort by: Type"
-msgstr ""
+msgstr "排序方式：类型"
 
 #: ../../../src/ItemStorage.cpp:485
 msgid "Sort by: Quality"
-msgstr ""
+msgstr "排序方式：品质"
 
 #: ../../../src/ItemStorage.cpp:487
 msgid "Sort by: Level"
-msgstr ""
+msgstr "排序方式：等级"
 
 #: ../../../src/ItemStorage.cpp:489
 msgid "Sort by: Sell Price"
-msgstr ""
+msgstr "排序方式：售价"
 
 #: ../../../src/LootManager.cpp:107 ../../../src/LootManager.cpp:109
 #: ../../../src/LootManager.cpp:111 ../../../src/MenuConfig.cpp:492
@@ -511,7 +511,7 @@ msgstr "等级"
 #: ../../../src/MenuCharacter.cpp:314
 #, c-format
 msgid "Available stat points: %d"
-msgstr "可用状态点：%d"
+msgstr "可用属性点：%d"
 
 #: ../../../src/MenuCharacter.cpp:326
 msgid "Core Stats"
@@ -732,7 +732,7 @@ msgid ""
 "The render size refers to the height in pixels of the surface used to draw "
 "the game. Mods define the allowed render sizes, but this option allows "
 "overriding the maximum size."
-msgstr "指游戏界面高度的像素值。"
+msgstr "渲染尺寸是指用于绘制游戏画面的表面像素高度。模组定义了允许的渲染尺寸，但此选项允许覆盖最大尺寸。"
 
 #: ../../../src/MenuConfig.cpp:436 ../../../src/MenuConfig.cpp:1957
 #: ../../../src/MenuGameOver.cpp:77 ../../../src/MenuGameOver.cpp:121
@@ -968,7 +968,7 @@ msgstr "降低覆盖玩家的墙壁瓦片的透明度。禁用此选项可能会
 msgid ""
 "Provides additional text for information that is primarily conveyed through "
 "color."
-msgstr "提供从颜色传递的额外的文字信息。"
+msgstr "为主要通过颜色传达的信息提供补充文字说明。"
 
 #: ../../../src/MenuConfig.cpp:642
 msgid ""
@@ -1461,11 +1461,11 @@ msgstr "每秒MP"
 
 #: ../../../src/MenuPowers.cpp:1116
 msgid "Immobilize"
-msgstr "固定"
+msgstr "定身"
 
 #: ../../../src/MenuPowers.cpp:1124
 msgid "Resist All Negative Effects"
-msgstr "抵抗所有负面效果"
+msgstr "免疫所有负面效果"
 
 #: ../../../src/MenuPowers.cpp:1128
 msgid "Stun"
@@ -1651,11 +1651,11 @@ msgstr "‘%s’不再绑定到："
 
 #: ../../../src/SDLInputState.cpp:672
 msgid "BkSp"
-msgstr "回格键"
+msgstr "退格键"
 
 #: ../../../src/SDLInputState.cpp:673
 msgid "Caps"
-msgstr "大写锁定"
+msgstr "大写锁定键"
 
 #: ../../../src/SDLInputState.cpp:674
 msgid "Del"
@@ -1668,7 +1668,7 @@ msgstr "下"
 
 #: ../../../src/SDLInputState.cpp:677
 msgid "Esc"
-msgstr "退出键"
+msgstr "Esc"
 
 #: ../../../src/SDLInputState.cpp:678 ../../../src/SDLInputState.cpp:708
 msgid "Home"
@@ -1742,7 +1742,7 @@ msgstr "ScrLock"
 
 #: ../../../src/SDLInputState.cpp:695
 msgid "Spc"
-msgstr "Spc"
+msgstr "空格键"
 
 #: ../../../src/SDLInputState.cpp:696 ../../../src/SDLInputState.cpp:726
 msgid "Tab"
@@ -1755,15 +1755,15 @@ msgstr "上"
 
 #: ../../../src/SDLInputState.cpp:702
 msgid "Backspace"
-msgstr "Backspace"
+msgstr "退格键"
 
 #: ../../../src/SDLInputState.cpp:703
 msgid "CapsLock"
-msgstr "CapsLock"
+msgstr "大写锁定键"
 
 #: ../../../src/SDLInputState.cpp:704 ../../../src/SDLInputState.cpp:957
 msgid "Delete"
-msgstr "Delete"
+msgstr "删除键"
 
 #: ../../../src/SDLInputState.cpp:707
 msgid "Escape"
@@ -1823,7 +1823,7 @@ msgstr "ScrollLock"
 
 #: ../../../src/SDLInputState.cpp:725
 msgid "Space"
-msgstr "Space"
+msgstr "空格键"
 
 #: ../../../src/SDLInputState.cpp:737
 #, c-format
@@ -2299,19 +2299,19 @@ msgstr "伤害反射被抵消的百分比几率。"
 
 #: ../../../src/Stats.cpp:207
 msgid "Resist HP Steal"
-msgstr "抵抗生命值窃取"
+msgstr "抵抗HP窃取"
 
 #: ../../../src/Stats.cpp:208
 msgid "Percentage chance that HP steal will be negated."
-msgstr "生命值窃取被抵消的百分比几率。"
+msgstr "HP窃取被抵消的百分比几率。"
 
 #: ../../../src/Stats.cpp:214
 msgid "Resist MP Steal"
-msgstr "抵抗法力值窃取"
+msgstr "抵抗MP窃取"
 
 #: ../../../src/Stats.cpp:215
 msgid "Percentage chance that MP steal will be negated."
-msgstr "法力值窃取被抵消的百分比几率。"
+msgstr "MP窃取被抵消的百分比几率。"
 
 #: ../../../src/Utils.cpp:375
 msgid "k"

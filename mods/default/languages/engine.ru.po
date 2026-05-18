@@ -312,7 +312,7 @@ msgstr "Использовать мышь для перемещения игро
 #: ../../../src/GameSwitcher.cpp:263
 #, c-format
 msgid "%s FPS"
-msgstr "Частота кадров: %s"
+msgstr "%s К/С"
 
 #: ../../../src/ItemManager.cpp:982
 msgid "Unknown Item"

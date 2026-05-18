@@ -11,6 +11,11 @@ Engine fixes:
 - Android: Fixed default mobile settings not being loaded on first launch.
 
 
+Translation updates:
+
+* Russian (ru) update (berry)
+* Chinese (Taiwan) (zh_TW) by Li Yang
+
 
 Flare v1.15 (https://flarerpg.org/2026/05/03/flare-1-15/)
 
