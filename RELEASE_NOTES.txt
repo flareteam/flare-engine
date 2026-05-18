@@ -1,5 +1,11 @@
 Flare v1.16
 
+Engine features:
+
+* Powers
+	- Added 'meta_power_provides_tooltip' property to Powers.
+
+
 Engine fixes:
 
 - Android: Fixed default mobile settings not being loaded on first launch.

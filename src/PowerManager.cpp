@@ -63,6 +63,7 @@ Power::Power()
 	, beacon(false)
 	, passive(false)
 	, meta_power(false)
+	, meta_power_provides_tooltip(true)
 	, no_actionbar(false)
 	, sacrifice(false)
 	, requires_los(false)
@@ -442,6 +443,10 @@ void PowerManager::loadPowers() {
 		else if (infile.key == "meta_power") {
 			// @ATTR power.meta_power|bool|If true, this power can not be used on it's own. Instead, it should be replaced via an item with a replace_power entry.
 			power->meta_power = Parse::toBool(infile.val);
+		}
+		else if (infile.key == "meta_power_provides_tooltip") {
+			// @ATTR power.meta_power_provides_tooltip|bool|If this power is a meta power and is replaced, this flag being true will cause the actionbar to use this meta power for its tooltip. Defaults to true.
+			power->meta_power_provides_tooltip = Parse::toBool(infile.val);
 		}
 		else if (infile.key == "no_actionbar") {
 			// @ATTR power.no_actionbar|bool|If true, this power is prevented from being placed on the actionbar.

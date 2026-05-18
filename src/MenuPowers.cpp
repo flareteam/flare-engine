@@ -924,7 +924,7 @@ void MenuPowers::createTooltipFromActionBar(TooltipData* tip_data, unsigned slot
 		MenuPowersCell* test_pcell = getCellByPowerIndex(test_pindex);
 
 		// non-modded power found in the menu; use it instead
-		if (test_pcell) {
+		if (test_pcell && powers->powers[test_pindex]->meta_power_provides_tooltip) {
 			pindex = test_pindex;
 			pcell = test_pcell;
 		}

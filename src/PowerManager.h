@@ -199,6 +199,7 @@ public:
 	bool beacon; //true if it's just an ememy calling its allies
 	bool passive; // if unlocked when the user spawns, automatically cast it
 	bool meta_power; // this power can't be used on its own and must be replaced via equipment
+	bool meta_power_provides_tooltip;
 	bool no_actionbar; // prevents this power from being placed on the actionbar
 	bool sacrifice;
 	bool requires_los; // line of sight
