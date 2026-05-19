@@ -60,7 +60,7 @@ AnimationSet::AnimationSet(const std::string &animationname)
 	, animations() {
 	sprite = new AnimationMedia();
 	defaultAnimation = new Animation("default", "play_once", sprite, Renderable::BLEND_NORMAL, 255, Color(255,255,255));
-	defaultAnimation->setupUncompressed(Point(), Point(), 0, 1, 0);
+	defaultAnimation->setupUncompressed(Point(), Point(), 0, 1, 0, "");
 }
 
 void AnimationSet::load() {
@@ -88,6 +88,7 @@ void AnimationSet::load() {
 	Animation *newanim = NULL;
 	std::vector<short> active_frames;
 	std::string active_sub_frame = "";
+	std::string image_id = "";
 
 	unsigned short parent_anim_frames = 0;
 
@@ -97,7 +98,7 @@ void AnimationSet::load() {
 		if (parser.new_section) {
 			if (!first_section && !compressed_loading) {
 				Animation *a = new Animation(_name, type, sprite, blend_mode, alpha_mod, color_mod);
-				a->setupUncompressed(render_size, render_offset, position, frames, duration);
+				a->setupUncompressed(render_size, render_offset, position, frames, duration, image_id);
 				if (!active_frames.empty()) {
 					a->setActiveFrames(active_frames);
 					a->setActiveSubFrame(active_sub_frame);
@@ -196,6 +197,10 @@ void AnimationSet::load() {
 				else
 					parser.error("AnimationSet: '%s' is not a valid parameter for active_sub_frame.", parser.val.c_str());
 			}
+			else if (parser.key == "image") {
+				// @ATTR animation.image|predefined_string|Uncompressed animations only. Sets the image to be used by its ID. For compressed animations, use the last parameter of the 'frame' property instead.
+				image_id = parser.val;
+			}
 			else if (parser.key == "frame") {
 				// @ATTR animation.frame|int, int, int, int, int, int, int, int, string: Index, Direction, X, Y, Width, Height, X offset, Y offset, Image ID|A single frame of a compressed animation. The image ID may be omitted, in which case the first available image will be used.
 				if (compressed_loading == false) { // first frame statement in section
@@ -241,7 +246,7 @@ void AnimationSet::load() {
 	if (!compressed_loading) {
 		// add final animation
 		Animation *a = new Animation(_name, type, sprite, blend_mode, alpha_mod, color_mod);
-		a->setupUncompressed(render_size, render_offset, position, frames, duration);
+		a->setupUncompressed(render_size, render_offset, position, frames, duration, image_id);
 		if (!active_frames.empty()) {
 			a->setActiveFrames(active_frames);
 			a->setActiveSubFrame(active_sub_frame);

@@ -64,13 +64,12 @@ Animation::Animation(const std::string &_name, const std::string &_type, Animati
 		Utils::logError("Animation: Type %s is unknown", _type.c_str());
 }
 
-void Animation::setupUncompressed(const Point& _render_size, const Point& _render_offset, unsigned short _position, unsigned short _frames, unsigned short _duration) {
+void Animation::setupUncompressed(const Point& _render_size, const Point& _render_offset, unsigned short _position, unsigned short _frames, unsigned short _duration, const std::string& key) {
 	setup(_frames, _duration);
 
 	for (unsigned short i = 0 ; i < _frames; i++) {
 		int base_index = DIRECTIONS * i;
 		for (unsigned short dir = 0 ; dir < DIRECTIONS; dir++) {
-			// TODO handle multiple images for uncompressed animation defintions
 			unsigned f = base_index + dir;
 			gfx[f].second.x = _render_size.x * (_position + i);
 			gfx[f].second.y = _render_size.y * dir;
@@ -78,7 +77,7 @@ void Animation::setupUncompressed(const Point& _render_size, const Point& _rende
 			gfx[f].second.h = _render_size.y;
 			render_offset[f].x = _render_offset.x;
 			render_offset[f].y = _render_offset.y;
-			keys[f] = "";
+			keys[f] = key;
 			dirs[f] = dir;
 		}
 	}
@@ -463,7 +462,7 @@ void Animation::checkInit() {
 					}
 				}
 				else if (format == ANIMATION_UNCOMPRESSED) {
-					gfx[f].first = sprite->getImageFromKey("");
+					gfx[f].first = sprite->getImageFromKey(keys[f]);
 
 					// not all animations have multiple directions, but we need to handle when attempting to render an animation from any direction
 					// we can try to use the rect data from the 0 direction

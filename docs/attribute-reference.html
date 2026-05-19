@@ -122,6 +122,8 @@ code {
 
 <p><strong>animation.active_sub_frame</strong> | <code>["end", "start", "all"]</code> | Each frame of animation gets rendered for multiple "sub-frames" based on playback speed and the max_fps setting. This property controls which of these sub-frames will trigger active frames. Defaults to "end".</p>
 
+<p><strong>animation.image</strong> | <code>predefined_string</code> | Uncompressed animations only. Sets the image to be used by its ID. For compressed animations, use the last parameter of the 'frame' property instead.</p>
+
 <p><strong>animation.frame</strong> | <code>int, int, int, int, int, int, int, int, string : Index, Direction, X, Y, Width, Height, X offset, Y offset, Image ID</code> | A single frame of a compressed animation. The image ID may be omitted, in which case the first available image will be used.</p>
 
 <hr />

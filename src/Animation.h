@@ -110,7 +110,7 @@ public:
 	// which all belong to this animation.
 	// The render_offset is constant for all frames. The render_size is also
 	// the grid size.
-	void setupUncompressed(const Point& render_size, const Point& render_offset, unsigned short _position, unsigned short _frames, unsigned short _duration);
+	void setupUncompressed(const Point& render_size, const Point& render_offset, unsigned short _position, unsigned short _frames, unsigned short _duration, const std::string& key);
 
 	void setup(unsigned short _frames, unsigned short _duration);
 
