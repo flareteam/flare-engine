@@ -10,7 +10,11 @@ Engine features:
 
 Engine fixes:
 
-- Android: Fixed default mobile settings not being loaded on first launch.
+* Inventory
+	- Fixed bug where player could change equipment mid-attack. Trying to switch equipment while attacking now simply resets the player to the 'stance' state.
+
+* System
+	- Android: Fixed default mobile settings not being loaded on first launch.
 
 
 Translation updates:
