@@ -46,4 +46,14 @@ tasks.withType(JavaCompile).configureEach {
     compileTask -> compileTask.dependsOn ndkBuild
 }
 
+tasks.withType(com.android.build.gradle.tasks.MergeSourceSetFolders) { task ->
+    task.dependsOn ndkBuild
+}
+
+tasks.whenTaskAdded { task ->
+    if (task.name.startsWith('merge') && task.name.endsWith('JniLibFolders')) {
+        task.dependsOn ndkBuild
+    }
+}
+
 clean.dependsOn 'ndkClean'
