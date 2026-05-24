@@ -233,6 +233,7 @@ void EntityBehavior::findTarget() {
 		if (ai_power != NULL) {
 			e->stats.cur_state = StatBlock::ENTITY_POWER;
 			e->stats.activated_power = ai_power;
+			replaced_power_id = powers->checkReplaceByEffect(ai_power->id, &e->stats);
 		}
 
 		e->stats.join_combat = false;
