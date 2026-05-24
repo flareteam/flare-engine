@@ -449,7 +449,7 @@ void EntityBehavior::checkMove() {
 	// We then cap the turn delay the time at the number of frames we calculated for tile traversal.
 	// There may be other solutions to this problem, such as having the enemy pause when they reach a path point,
 	// but I was unable to get anything else working as cleanly/bug-free as this.
-	int max_turn_ticks = static_cast<int>(1.f / real_speed);
+	int max_turn_ticks = (real_speed == 0) ? e->stats.turn_delay : static_cast<int>(1.f / real_speed);
 	if (e->stats.turn_delay > max_turn_ticks) {
 		turn_timer.setDuration(max_turn_ticks);
 	}

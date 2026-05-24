@@ -10,6 +10,9 @@ Engine features:
 
 Engine fixes:
 
+* Enemies, allies, and NPCs
+	- Fixed turn delay not working when entity speed was 0. This was a potential divide-by-zero crash as well!
+
 * Inventory
 	- Fixed bug where player could change equipment mid-attack. Trying to switch equipment while attacking now simply resets the player to the 'stance' state.
 
