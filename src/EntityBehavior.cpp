@@ -399,6 +399,12 @@ void EntityBehavior::checkPower() {
 					e->stats.cur_state = StatBlock::ENTITY_POWER;
 					e->stats.activated_power = ai_power;
 					replaced_power_id = replaced_id;
+
+					// we might already be in the animation used by this power,
+					// so we reset the animation here to keep us from getting stuck on the last frame
+					if (pwr->new_state != Power::STATE_INSTANT) {
+						e->resetActiveAnimation();
+					}
 				}
 			}
 		}

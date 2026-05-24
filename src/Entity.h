@@ -40,7 +40,6 @@ protected:
 	Image *sprites;
 
 	void move_from_offending_tile();
-	void resetActiveAnimation();
 	uint8_t getRenderableType();
 
 public:
@@ -80,6 +79,7 @@ public:
 	SoundID sound_levelup;
 	SoundID sound_lowhp;
 
+	void resetActiveAnimation();
 	void setAnimation(const std::string& animation);
 	Animation *activeAnimation;
 	AnimationSet *animationSet;
