@@ -614,6 +614,11 @@ void MenuMiniMap::fillEntities() {
 				}
 			}
 		}
+		else if (e->stats.corpse_has_collision) {
+			if (Utils::calcDist(pc->stats.pos, FPoint(e->stats.pos.x, e->stats.pos.y)) <= visible_radius) {
+				entities.push_back(new PixelEntity(static_cast<int>(e->stats.pos.x), static_cast<int>(e->stats.pos.y), &color_obst));
+			}
+		}
 	}
 }
 

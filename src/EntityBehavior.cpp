@@ -861,7 +861,9 @@ void EntityBehavior::updateState() {
 				e->stats.corpse = true;
 
 				//allow free movement over the corpse
-				mapr->collider.unblock(e->stats.pos.x, e->stats.pos.y);
+				if (!e->stats.corpse_has_collision) {
+					mapr->collider.unblock(e->stats.pos.x, e->stats.pos.y);
+				}
 
 				// remove corpses that land on blocked tiles, such as water or pits
 				if (!mapr->collider.isValidPosition(e->stats.pos.x, e->stats.pos.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_TYPE_ALL_ENTITIES)) {
@@ -894,7 +896,9 @@ void EntityBehavior::updateState() {
 				e->stats.corpse = true;
 
 				//allow free movement over the corpse
-				mapr->collider.unblock(e->stats.pos.x, e->stats.pos.y);
+				if (!e->stats.corpse_has_collision) {
+					mapr->collider.unblock(e->stats.pos.x, e->stats.pos.y);
+				}
 
 				// remove corpses that land on blocked tiles, such as water or pits
 				if (!mapr->collider.isValidPosition(e->stats.pos.x, e->stats.pos.y, MapCollision::MOVE_NORMAL, MapCollision::COLLIDE_TYPE_ALL_ENTITIES)) {

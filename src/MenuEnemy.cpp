@@ -123,7 +123,9 @@ void MenuEnemy::logic() {
 
 void MenuEnemy::render() {
 	if (enemy == NULL) return;
-	if (enemy->stats.corpse && enemy->stats.corpse_timer.isEnd()) return;
+
+	if (enemy->stats.corpse && enemy->stats.corpse_timer.isEnd() && enemy->stats.corpse_has_timeout)
+		return;
 
 	Rect src, dest;
 	src.w = bar_pos.w;

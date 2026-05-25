@@ -491,8 +491,8 @@ void EntityManager::addRenders(std::vector<Renderable> &r, std::vector<Renderabl
 		}
 
 		bool dead = (*it)->stats.corpse;
-		if (!dead || !(*it)->stats.corpse_timer.isEnd()) {
-			if (dead)
+		if (!dead || !(*it)->stats.corpse_timer.isEnd() || !(*it)->stats.corpse_has_timeout) {
+			if (dead && (*it)->stats.corpse_render_below)
 				(*it)->addRenders(r_dead);
 			else
 				(*it)->addRenders(r);

@@ -136,6 +136,9 @@ public:
 
 	bool alive;
 	bool corpse; // creature is dead and done animating
+	bool corpse_has_collision;
+	bool corpse_has_timeout;
+	bool corpse_render_below;
 	Timer corpse_timer;
 	bool hero; // else, enemy or other
 	bool hero_ally;

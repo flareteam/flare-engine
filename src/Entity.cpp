@@ -867,7 +867,7 @@ void Entity::addRenders(std::vector<Renderable> &r) {
 				stats.effects.getCurrentAlpha(ren.alpha_mod);
 
 				// fade out corpses
-				if (!stats.hero && stats.corpse) {
+				if (!stats.hero && stats.corpse && stats.corpse_has_timeout) {
 					unsigned fade_time = (eset->misc.corpse_timeout > settings->max_frames_per_sec) ? settings->max_frames_per_sec : eset->misc.corpse_timeout;
 					if (fade_time != 0 && stats.corpse_timer.getCurrent() <= fade_time) {
 						ren.alpha_mod = static_cast<uint8_t>(static_cast<float>(stats.corpse_timer.getCurrent()) * (ren.alpha_mod / static_cast<float>(fade_time)));
@@ -891,7 +891,7 @@ void Entity::addRenders(std::vector<Renderable> &r) {
 		stats.effects.getCurrentAlpha(ren.alpha_mod);
 
 		// fade out corpses
-		if (!stats.hero && stats.corpse) {
+		if (!stats.hero && stats.corpse && stats.corpse_has_timeout) {
 			unsigned fade_time = (eset->misc.corpse_timeout > settings->max_frames_per_sec) ? settings->max_frames_per_sec : eset->misc.corpse_timeout;
 			if (fade_time != 0 && stats.corpse_timer.getCurrent() <= fade_time) {
 				ren.alpha_mod = static_cast<uint8_t>(static_cast<float>(stats.corpse_timer.getCurrent()) * (ren.alpha_mod / static_cast<float>(fade_time)));

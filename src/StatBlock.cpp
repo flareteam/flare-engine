@@ -68,6 +68,9 @@ StatBlock::StatBlock()
 	: statsLoaded(false)
 	, alive(true)
 	, corpse(false)
+	, corpse_has_collision(false)
+	, corpse_has_timeout(true)
+	, corpse_render_below(true)
 	, corpse_timer()
 	, hero(false)
 	, hero_ally(false)
@@ -824,6 +827,15 @@ void StatBlock::load(const std::string& filename) {
 		// we check for them here so that we don't get an error saying they are invalid
 		else if (infile.key == "rarity") ; // but do nothing
 
+		// @ATTR corpse_has_collision|bool|If true, the entity will have collision after it dies. Defaults to false.
+		else if (infile.key == "corpse_has_collision") corpse_has_collision = Parse::toBool(infile.val);
+
+		// @ATTR corpse_has_timeout|bool|If true, the entity's corpse will fade out after the corpse_timeout elapses (see EngineSettings: Misc). Defaults to true.
+		else if (infile.key == "corpse_has_timeout") corpse_has_timeout = Parse::toBool(infile.val);
+
+		// @ATTR corpse_render_below|bool|If true, the entity's corpse will be rendered on the bottom-most layer. Defaults to true.
+		else if (infile.key == "corpse_render_below") corpse_render_below = Parse::toBool(infile.val);
+
 		else if (!valid) {
 			infile.error("StatBlock: '%s' is not a valid key.", infile.key.c_str());
 		}
@@ -903,7 +915,8 @@ void StatBlock::takeDamage(float dmg, bool crit, int source_type) {
 			else
 				cur_state = StatBlock::ENTITY_DEAD;
 
-			mapr->collider.unblock(pos.x, pos.y);
+			if (!corpse_has_collision)
+				mapr->collider.unblock(pos.x, pos.y);
 		}
 
 	}
