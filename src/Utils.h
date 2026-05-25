@@ -50,6 +50,7 @@ public:
 	Point();
 	Point(int _x, int _y);
 	explicit Point(const FPoint& _fp);
+	bool operator==(const Point& other);
 };
 
 class FPoint {
@@ -57,6 +58,7 @@ public:
 	float x, y;
 	FPoint();
 	FPoint(float _x, float _y);
+	bool operator==(const FPoint& other);
 	explicit FPoint(Point _p);
 	FPoint(int _x, int _y);
 	void align();

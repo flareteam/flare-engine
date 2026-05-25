@@ -64,6 +64,11 @@ Point::Point(const FPoint& _fp)
 	, y(static_cast<int>(_fp.y))
 {}
 
+bool Point::operator==(const Point& other) {
+	return x == other.x && y == other.y;
+}
+
+
 /**
  * FPoint: A floating point version of Point
  */
@@ -86,6 +91,10 @@ FPoint::FPoint(int _x, int _y)
 	: x(static_cast<float>(_x))
 	, y(static_cast<float>(_y))
 {}
+
+bool FPoint::operator==(const FPoint& other) {
+	return x == other.x && y == other.y;
+}
 
 void FPoint::align() {
 	// this rounds the float values to the nearest multiple of 1/(2^4)

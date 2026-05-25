@@ -63,6 +63,7 @@ protected:
 	int chance_calc_path;
 	int path_found_fails;
 	Timer path_found_fail_timer;
+	bool warp_to_hero;
 
 	float target_dist;
 	float hero_dist;

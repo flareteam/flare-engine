@@ -14,6 +14,7 @@ Engine fixes:
 	- Fixed turn delay not working when entity speed was 0. This was a potential divide-by-zero crash as well!
 	- Fixed a case where entities wouldn't reset their attack animation after the first use when using the same animation continuously.
 	- Fixed on_join_combat powers not being activated.
+	- Allies that were blocked off from reaching the player will now teleport to the player's location.
 
 * Inventory
 	- Fixed bug where player could change equipment mid-attack. Trying to switch equipment while attacking now simply resets the player to the 'stance' state.

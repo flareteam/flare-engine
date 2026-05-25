@@ -60,6 +60,7 @@ EntityBehavior::EntityBehavior(Entity *_e)
 	, chance_calc_path(0)
 	, path_found_fails(0)
 	, path_found_fail_timer()
+	, warp_to_hero(false)
 	, target_dist(0)
 	, hero_dist(0)
 	, pursue_pos(-1, -1)
@@ -164,12 +165,13 @@ void EntityBehavior::findTarget() {
 	hero_dist = target_dist;
 
 	// if the minion gets too far, transport it to the player pos
-	if (e->stats.hero_ally && e->stats.speed > 0 && hero_dist > ALLY_TELEPORT_DISTANCE && !e->stats.in_combat) {
+	if (e->stats.hero_ally && e->stats.speed > 0 && (warp_to_hero || hero_dist > ALLY_TELEPORT_DISTANCE) && !e->stats.in_combat) {
 		mapr->collider.unblock(e->stats.pos.x, e->stats.pos.y);
 		e->stats.pos.x = pc->stats.pos.x;
 		e->stats.pos.y = pc->stats.pos.y;
 		mapr->collider.block(e->stats.pos.x, e->stats.pos.y, MapCollision::IS_ALLY);
 		hero_dist = 0;
+		warp_to_hero = false;
 	}
 
 	// AI can target other AI
@@ -540,6 +542,9 @@ void EntityBehavior::checkMove() {
 					// if distance to node is lower than a tile size, the node is going to be passed and can be removed
 					if (Utils::calcDist(e->stats.pos, pursue_pos) <= 1.f)
 						path.pop_back();
+				}
+				else if (e->stats.hero_ally && pursue_pos == pc->stats.pos) {
+					warp_to_hero = true;
 				}
 			}
 			else {
