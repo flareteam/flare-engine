@@ -19,6 +19,7 @@ Engine fixes:
 	- Fixed bug where player could change equipment mid-attack. Trying to switch equipment while attacking now simply resets the player to the 'stance' state.
 
 * System
+	- Fixed bug where window could be resized in a way in which menus wouldn't fit on screen.
 	- Android: Fixed default mobile settings not being loaded on first launch.
 
 

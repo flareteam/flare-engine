@@ -361,8 +361,9 @@ void RenderDevice::windowResizeInternal() {
 	settings->view_w = static_cast<unsigned short>(static_cast<float>(settings->screen_w) * settings->view_scaling);
 
 	// letterbox if too tall
-	if (settings->view_w < eset->resolutions.min_screen_w) {
-		settings->view_w = eset->resolutions.min_screen_w;
+	short unsigned min_screen_w = std::max(eset->resolutions.min_screen_w, eset->resolutions.frame_w);
+	if (settings->view_w < min_screen_w) {
+		settings->view_w = min_screen_w;
 		settings->view_scaling = static_cast<float>(settings->view_w) / static_cast<float>(settings->screen_w);
 	}
 
