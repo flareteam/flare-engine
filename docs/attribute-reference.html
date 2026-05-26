@@ -2172,7 +2172,7 @@ code {
 
 <p><strong>power.base_damage</strong> | <code>predefined_string : Damage type ID</code> | Determines which damage stat will be used to calculate damage.</p>
 
-<p><strong>power.starting_pos</strong> | <code>["source", "target", "melee"]</code> | Start position for hazard</p>
+<p><strong>power.starting_pos</strong> | <code>["source", "target", "melee"]</code> | Start position for hazard. Note that for legacy reasons, using 'melee' will also set the value of lock_target_to_direction to true.</p>
 
 <p><strong>power.relative_pos</strong> | <code>bool</code> | Hazard will move relative to the caster's position.</p>
 

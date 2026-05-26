@@ -9,6 +9,7 @@ Engine features:
 
 * Powers
 	- Added 'meta_power_provides_tooltip' property to Powers.
+	- Powers that have 'melee' as a starting position now respect the value of lock_direction_to_target.
 
 * Animations
 	- Add support for multiple images to uncompressed animations with AnimationSet property, 'animation.image'.

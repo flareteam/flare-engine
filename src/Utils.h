@@ -173,7 +173,7 @@ namespace Utils {
 
 	std::string substituteVarsInString(const std::string &_s, Avatar* avatar);
 
-	FPoint clampDistance(float range, const FPoint& src, const FPoint& target);
+	FPoint clampDistance(float range_min, float range_max, const FPoint& src, const FPoint& target);
 
 	bool rectsOverlap(const Rect &a, const Rect &b);
 

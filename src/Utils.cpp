@@ -721,18 +721,24 @@ std::string Utils::substituteVarsInString(const std::string &_s, Avatar* avatar)
 /**
  * Keep two points within a certain range
  */
-FPoint Utils::clampDistance(float range, const FPoint& src, const FPoint& target) {
+FPoint Utils::clampDistance(float range_min, float range_max, const FPoint& src, const FPoint& target) {
 	FPoint limit_target = target;
 
-	if (range > 0) {
-		if (src.x+range < target.x)
-			limit_target.x = src.x+range;
-		if (src.x-range > target.x)
-			limit_target.x = src.x-range;
-		if (src.y+range < target.y)
-			limit_target.y = src.y+range;
-		if (src.y-range > target.y)
-			limit_target.y = src.y-range;
+	if (range_min > 0 || range_max > 0) {
+		if (range_min > range_max)
+			range_max = range_min;
+
+		float dist = sqrtf(powf(target.x - src.x, 2.f) + powf(target.y - src.y, 2.f));
+		if (dist < range_min) {
+			float ratio = range_min / dist;
+			limit_target.x = src.x + (ratio * (target.x - src.x));
+			limit_target.y = src.y + (ratio * (target.y - src.y));
+		}
+		else if (dist > range_max) {
+			float ratio = range_max / dist;
+			limit_target.x = src.x + (ratio * (target.x - src.x));
+			limit_target.y = src.y + (ratio * (target.y - src.y));
+		}
 	}
 
 	return limit_target;

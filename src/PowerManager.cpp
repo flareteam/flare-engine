@@ -751,10 +751,13 @@ void PowerManager::loadPowers() {
 			}
 		}
 		else if (infile.key == "starting_pos") {
-			// @ATTR power.starting_pos|["source", "target", "melee"]|Start position for hazard
+			// @ATTR power.starting_pos|["source", "target", "melee"]|Start position for hazard. Note that for legacy reasons, using 'melee' will also set the value of lock_target_to_direction to true.
 			if (infile.val == "source")      power->starting_pos = Power::STARTING_POS_SOURCE;
 			else if (infile.val == "target") power->starting_pos = Power::STARTING_POS_TARGET;
-			else if (infile.val == "melee")  power->starting_pos = Power::STARTING_POS_MELEE;
+			else if (infile.val == "melee")  {
+				power->starting_pos = Power::STARTING_POS_MELEE;
+				power->lock_target_to_direction = true;
+			}
 			else infile.error("PowerManager: Unknown starting_pos '%s'", infile.val.c_str());
 		}
 		else if (infile.key == "relative_pos") {
@@ -1352,7 +1355,7 @@ bool PowerManager::hasValidTarget(PowerID power_index, StatBlock *src_stats, con
 
 	Power* power = powers[power_index];
 
-	FPoint limit_target = Utils::clampDistance(power->target_range, src_stats->pos, target);
+	FPoint limit_target = Utils::clampDistance(0, power->target_range, src_stats->pos, target);
 
 	if (power->requires_los && !collider->lineOfSight(src_stats->pos.x, src_stats->pos.y, limit_target.x, limit_target.y))
 		return false;
@@ -1445,10 +1448,10 @@ void PowerManager::initHazard(PowerID power_index, StatBlock *src_stats, const F
 		haz->pos = origin;
 	}
 	else if (haz->power->starting_pos == Power::STARTING_POS_TARGET) {
-		haz->pos = Utils::clampDistance(haz->power->target_range, origin, target);
+		haz->pos = Utils::clampDistance(0, haz->power->target_range, origin, target);
 	}
 	else if (haz->power->starting_pos == Power::STARTING_POS_MELEE) {
-		haz->pos = Utils::calcVector(origin, src_stats->direction, src_stats->melee_range);
+		haz->pos = Utils::clampDistance(src_stats->melee_range, src_stats->melee_range, origin, target);
 	}
 
 	if (haz->power->target_neighbor > 0 && collider) {
@@ -1472,7 +1475,7 @@ void PowerManager::buff(PowerID power_index, StatBlock *src_stats, const FPoint&
 
 	// teleport to the target location
 	if (power->buff_teleport) {
-		FPoint limit_target = Utils::clampDistance(power->target_range,src_stats->pos,target);
+		FPoint limit_target = Utils::clampDistance(0, power->target_range, src_stats->pos, target);
 		if (power->target_neighbor > 0 && collider) {
 			FPoint new_target = collider->getRandomNeighbor(Point(limit_target), power->target_neighbor, power->movement_type, MapCollision::COLLIDE_TYPE_ALL_ENTITIES);
 			if (floorf(new_target.x) == floorf(limit_target.x) && floorf(new_target.y) == floorf(limit_target.y)) {
