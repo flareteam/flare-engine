@@ -6,6 +6,7 @@ Engine features:
 	- Added 'corpse_has_collision' property to StatBlock.
 	- Added 'corpse_has_timeout' property to StatBlock.
 	- Added 'corpse_render_below' property to StatBlock.
+	- Added 'cooldown_los' property to StatBlock.
 
 * Powers
 	- Added 'meta_power_provides_tooltip' property to Powers.

@@ -158,6 +158,7 @@ StatBlock::StatBlock()
 	, flee_timer(settings->max_frames_per_sec) // enemy only
 	, flee_cooldown_timer(settings->max_frames_per_sec) // enemy only
 	, perfect_accuracy(false)
+	, cooldown_los()
 	, teleportation(false)
 	, teleport_destination()
 	, currency(0)
@@ -836,6 +837,9 @@ void StatBlock::load(const std::string& filename) {
 		// @ATTR corpse_render_below|bool|If true, the entity's corpse will be rendered on the bottom-most layer. Defaults to true.
 		else if (infile.key == "corpse_render_below") corpse_render_below = Parse::toBool(infile.val);
 
+		// @ATTR cooldown_los|duration|If line-of-sight is broken for this amount of time, the entity will exit the combat state.
+		else if (infile.key == "cooldown_los") cooldown_los.setDuration(Parse::toDuration(infile.val));
+
 		else if (!valid) {
 			infile.error("StatBlock: '%s' is not a valid key.", infile.key.c_str());
 		}
@@ -1099,6 +1103,7 @@ void StatBlock::logic() {
 
 	// handle cooldowns
 	cooldown.tick(); // global cooldown
+	cooldown_los.tick();
 
 	for (size_t i=0; i<powers_ai.size(); ++i) { // NPC/enemy powerslot cooldown
 		powers_ai[i].cooldown.tick();

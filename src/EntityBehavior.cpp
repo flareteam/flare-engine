@@ -202,6 +202,9 @@ void EntityBehavior::findTarget() {
 	else
 		los = false;
 
+	if (los)
+		e->stats.cooldown_los.reset(Timer::BEGIN);
+
 	// aggressive enemies are always in combat
 	if (!e->stats.in_combat && e->stats.combat_style == StatBlock::COMBAT_AGGRESSIVE) {
 		e->stats.join_combat = true;
@@ -243,7 +246,10 @@ void EntityBehavior::findTarget() {
 
 	// exit combat if target got too far away
 	if (e->stats.combat_style != StatBlock::COMBAT_AGGRESSIVE) {
-		if (target_dist > e->stats.threat_range_far && !e->stats.join_combat)
+		if (target_dist > e->stats.threat_range_far)
+			e->stats.in_combat = false;
+
+		if (e->stats.cooldown_los.getDuration() > 0 && e->stats.cooldown_los.isEnd())
 			e->stats.in_combat = false;
 	}
 

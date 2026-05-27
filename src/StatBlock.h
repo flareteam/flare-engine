@@ -277,6 +277,7 @@ public:
 	Timer flee_timer;
 	Timer flee_cooldown_timer;
 	bool perfect_accuracy; // prevents misses & overhits; used for Event powers
+	Timer cooldown_los;
 
 	std::vector<EventComponent> loot_table;
 	Point loot_count;
