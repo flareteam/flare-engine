@@ -159,6 +159,7 @@ StatBlock::StatBlock()
 	, flee_cooldown_timer(settings->max_frames_per_sec) // enemy only
 	, perfect_accuracy(false)
 	, cooldown_los()
+	, resting_hp_regen_seconds(5.f)
 	, teleportation(false)
 	, teleport_destination()
 	, currency(0)
@@ -840,6 +841,12 @@ void StatBlock::load(const std::string& filename) {
 		// @ATTR cooldown_los|duration|If line-of-sight is broken for this amount of time, the entity will exit the combat state.
 		else if (infile.key == "cooldown_los") cooldown_los.setDuration(Parse::toDuration(infile.val));
 
+		// @ATTR resting_hp_regen_time|duration|When not in combat, this is how much time it will take to regenerate HP from zero to max. Default is 5 seconds. Set to 0 to disable resting HP regen.
+		else if (infile.key == "resting_hp_regen_time") {
+			float t = static_cast<float>(Parse::toDuration(infile.val));
+			resting_hp_regen_seconds = t / settings->max_frames_per_sec;
+		}
+
 		else if (!valid) {
 			infile.error("StatBlock: '%s' is not a valid key.", infile.key.c_str());
 		}
@@ -1113,8 +1120,10 @@ void StatBlock::logic() {
 	if (hp <= get(Stats::HP_MAX) && hp > 0) {
 		float hp_regen_per_frame;
 		if (!in_combat && !hero_ally && !hero && pc->stats.alive) {
-			// enemies heal rapidly (full heal in 5 seconds) while not in combat
-			hp_regen_per_frame = get(Stats::HP_MAX) / 5.f / settings->max_frames_per_sec;
+			if (resting_hp_regen_seconds > 0) {
+				// enemies heal rapidly (full heal in 5 seconds) while not in combat
+				hp_regen_per_frame = get(Stats::HP_MAX) / resting_hp_regen_seconds / settings->max_frames_per_sec;
+			}
 		}
 		else {
 			hp_regen_per_frame = get(Stats::HP_REGEN) / 60.f / settings->max_frames_per_sec;

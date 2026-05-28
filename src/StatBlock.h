@@ -278,6 +278,7 @@ public:
 	Timer flee_cooldown_timer;
 	bool perfect_accuracy; // prevents misses & overhits; used for Event powers
 	Timer cooldown_los;
+	float resting_hp_regen_seconds;
 
 	std::vector<EventComponent> loot_table;
 	Point loot_count;
