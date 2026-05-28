@@ -959,7 +959,8 @@ void Avatar::beginPower(PowerID replaced_id, FPoint* target) {
 		stats.blocking = true;
 
 	// automatically target the selected enemy with melee attacks
-	if (inpt->usingMouse() && power->type == Power::TYPE_FIXED && power->starting_pos == Power::STARTING_POS_MELEE && cursor_enemy) {
+	bool is_melee = (power->starting_pos == Power::STARTING_POS_MELEE || power->starting_pos == Power::STARTING_POS_MELEE_UNLOCKED);
+	if (inpt->usingMouse() && power->type == Power::TYPE_FIXED && is_melee && cursor_enemy) {
 		*target = cursor_enemy->stats.pos;
 	}
 

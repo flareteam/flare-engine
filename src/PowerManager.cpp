@@ -751,13 +751,11 @@ void PowerManager::loadPowers() {
 			}
 		}
 		else if (infile.key == "starting_pos") {
-			// @ATTR power.starting_pos|["source", "target", "melee"]|Start position for hazard. Note that for legacy reasons, using 'melee' will also set the value of lock_target_to_direction to true.
+			// @ATTR power.starting_pos|["source", "target", "melee", "melee_unlocked"]|Start position for hazard.
 			if (infile.val == "source")      power->starting_pos = Power::STARTING_POS_SOURCE;
 			else if (infile.val == "target") power->starting_pos = Power::STARTING_POS_TARGET;
-			else if (infile.val == "melee")  {
-				power->starting_pos = Power::STARTING_POS_MELEE;
-				power->lock_target_to_direction = true;
-			}
+			else if (infile.val == "melee")  power->starting_pos = Power::STARTING_POS_MELEE;
+			else if (infile.val == "melee_unlocked")  power->starting_pos = Power::STARTING_POS_MELEE_UNLOCKED;
 			else infile.error("PowerManager: Unknown starting_pos '%s'", infile.val.c_str());
 		}
 		else if (infile.key == "relative_pos") {
@@ -1451,6 +1449,9 @@ void PowerManager::initHazard(PowerID power_index, StatBlock *src_stats, const F
 		haz->pos = Utils::clampDistance(0, haz->power->target_range, origin, target);
 	}
 	else if (haz->power->starting_pos == Power::STARTING_POS_MELEE) {
+		haz->pos = Utils::calcVector(origin, src_stats->direction, src_stats->melee_range);
+	}
+	else if (haz->power->starting_pos == Power::STARTING_POS_MELEE_UNLOCKED) {
 		haz->pos = Utils::clampDistance(src_stats->melee_range, src_stats->melee_range, origin, target);
 	}
 
@@ -1817,6 +1818,9 @@ bool PowerManager::spawn(PowerID power_index, StatBlock *src_stats, const FPoint
 	}
 	else if (power->starting_pos == Power::STARTING_POS_MELEE) {
 		espawn.pos = Utils::calcVector(origin, src_stats->direction, src_stats->melee_range);
+	}
+	else if (power->starting_pos == Power::STARTING_POS_MELEE_UNLOCKED) {
+		espawn.pos = Utils::clampDistance(src_stats->melee_range, src_stats->melee_range, origin, target);
 	}
 
 	if (power->target_neighbor > 0 && collider) {
@@ -2381,7 +2385,7 @@ bool PowerManager::checkCombatRange(PowerID power_index, StatBlock* src_stats, F
 	float combat_range = pow->combat_range;
 	float target_range = pow->target_range + (pow->radius / 2.f);
 
-	if (pow->starting_pos == Power::STARTING_POS_MELEE) {
+	if (pow->starting_pos == Power::STARTING_POS_MELEE || pow->starting_pos == Power::STARTING_POS_MELEE_UNLOCKED) {
 		combat_range += src_stats->melee_range;
 	}
 
