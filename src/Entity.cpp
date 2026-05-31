@@ -289,16 +289,16 @@ void Entity::move_from_offending_tile() {
  * @return Returns false if wall collision, otherwise true.
  */
 bool Entity::move() {
-
-	move_from_offending_tile();
-
 	if (stats.effects.knockback_speed != 0)
 		return false;
 
-	if (stats.effects.stun || stats.effects.speed == 0) return false;
+	if (stats.effects.stun || stats.effects.speed == 0)
+		return false;
 
 	if (stats.charge_speed != 0.0f)
 		return false;
+
+	move_from_offending_tile();
 
 	float speed = stats.speed * StatBlock::SPEED_MULTIPLIER[stats.direction] * stats.effects.speed / 100;
 	float dx = speed * StatBlock::DIRECTION_DELTA_X[stats.direction];

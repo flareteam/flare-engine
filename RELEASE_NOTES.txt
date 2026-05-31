@@ -29,6 +29,7 @@ Engine fixes:
 
 * System
 	- Fixed bug where window could be resized in a way in which menus wouldn't fit on screen.
+	- Fixed bug where charge_speed / knockback could cause tiles to become blocked.
 	- Android: Fixed default mobile settings not being loaded on first launch.
 
 
