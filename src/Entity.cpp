@@ -669,24 +669,20 @@ bool Entity::takeHit(Hazard &h) {
 		if (stats.cooldown_hit.isEnd())
 			playSound(Entity::SOUND_HIT);
 
-		// if this hit caused a debuff, activate an on_debuff power
-		if (!was_debuffed && stats.effects.isDebuffed()) {
-			StatBlock::AIPower* ai_power = stats.getAIPower(StatBlock::AI_POWER_DEBUFF);
-			if (ai_power != NULL) {
-				stats.cur_state = StatBlock::ENTITY_POWER;
-				stats.activated_power = ai_power;
-				stats.cooldown.reset(Timer::END); // ignore global cooldown
-				return true;
+		if (behavior) {
+			// if this hit caused a debuff, activate an on_debuff power
+			if (!was_debuffed && stats.effects.isDebuffed()) {
+				StatBlock::AIPower* ai_power = stats.getAIPower(StatBlock::AI_POWER_DEBUFF);
+				if (ai_power != NULL) {
+					stats.ai_debuff_power = ai_power;
+				}
 			}
-		}
 
-		// roll to see if the enemy's ON_HIT power is casted
-		StatBlock::AIPower* ai_power = stats.getAIPower(StatBlock::AI_POWER_HIT);
-		if (ai_power != NULL) {
-			stats.cur_state = StatBlock::ENTITY_POWER;
-			stats.activated_power = ai_power;
-			stats.cooldown.reset(Timer::END); // ignore global cooldown
-			return true;
+			// roll to see if the enemy's ON_HIT power is casted
+			StatBlock::AIPower* ai_power = stats.getAIPower(StatBlock::AI_POWER_HIT);
+			if (ai_power != NULL) {
+				stats.ai_hit_power = ai_power;
+			}
 		}
 
 		// don't go through a hit animation if stunned or successfully poised

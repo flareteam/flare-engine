@@ -355,6 +355,9 @@ public:
 	std::map<std::string, std::string> animation_slots;
 
 	bool critdie_enabled;
+
+	AIPower* ai_debuff_power;
+	AIPower* ai_hit_power;
 };
 
 #endif

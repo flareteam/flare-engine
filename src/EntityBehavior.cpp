@@ -696,6 +696,40 @@ void EntityBehavior::checkMoveStateMove() {
 	}
 }
 
+void EntityBehavior::checkOnStatePower(StatBlock::AIPower** on_state_power) {
+	if (!on_state_power || !(*on_state_power))
+		return;
+
+	StatBlock::AIPower* ai_power = *on_state_power;
+	PowerID replaced_id = powers->checkReplaceByEffect(ai_power->id, &e->stats);
+
+	if (replaced_id != 0) {
+		Power* pwr = powers->powers[replaced_id];
+		if (pwr->new_state == Power::STATE_INSTANT) {
+			powers->activate(replaced_id, &e->stats, e->stats.pos, pursue_pos);
+		}
+		else if (e->stats.cur_state == StatBlock::ENTITY_POWER) {
+			// non-instant hit powers can only activate if the entity is not already using a power (and only one at a time)
+			*on_state_power = NULL;
+			return;
+		}
+
+		if (pwr->new_state != Power::STATE_INSTANT) {
+			e->stats.cur_state = Power::STATE_ATTACK;
+			e->stats.activated_power = ai_power;
+			replaced_power_id = replaced_id;
+		}
+
+		// set cooldown for all ai powers with the same power id
+		for (size_t i = 0; i < e->stats.powers_ai.size(); ++i) {
+			if (ai_power->id == e->stats.powers_ai[i].id) {
+				e->stats.powers_ai[i].cooldown.setDuration(pwr->cooldown);
+			}
+		}
+	}
+
+	*on_state_power = NULL;
+}
 
 /**
  * Perform miscellaneous state-based actions.
@@ -706,6 +740,9 @@ void EntityBehavior::updateState() {
 
 	// stunned enemies can't act
 	if (e->stats.effects.stun) return;
+
+	checkOnStatePower(&e->stats.ai_debuff_power);
+	checkOnStatePower(&e->stats.ai_hit_power);
 
 	PowerID power_id, power_id_base;
 	Power* epower;

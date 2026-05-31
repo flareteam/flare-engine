@@ -30,6 +30,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef ENTITY_BEHAVIOR_H
 #define ENTITY_BEHAVIOR_H
 
+#include "StatBlock.h"
+#include <queue>
+
 class Entity;
 
 class EntityBehavior {
@@ -46,6 +49,7 @@ private:
 	void checkMove();
 	void checkMoveStateStance();
 	void checkMoveStateMove();
+	void checkOnStatePower(StatBlock::AIPower** on_state_power);
 	void updateState();
 	FPoint getWanderPoint();
 

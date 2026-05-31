@@ -199,6 +199,8 @@ StatBlock::StatBlock()
 	, layer_def(8, std::vector<unsigned>())
 	, animation_slots()
 	, critdie_enabled(false)
+	, ai_debuff_power(NULL)
+	, ai_hit_power(NULL)
 {
 	primary.resize(eset->primary_stats.list.size(), 0);
 	primary_starting.resize(eset->primary_stats.list.size(), 0);
