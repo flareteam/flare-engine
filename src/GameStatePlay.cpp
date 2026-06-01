@@ -200,7 +200,7 @@ void GameStatePlay::checkEnemyFocus() {
 	else if (inpt->usingMouse()) {
 		// if we're using a mouse and we didn't select an enemy, try selecting a dead one instead
 		Entity *temp_enemy = entitym->entityFocus(inpt->mouse, mapr->cam.pos, !EntityManager::IS_ALIVE);
-		if (temp_enemy) {
+		if (temp_enemy && !temp_enemy->stats.suppress_hp) {
 			pc->stats.target_corpse = &(temp_enemy->stats);
 			menu->enemy->enemy = temp_enemy;
 			menu->enemy->timeout.reset(Timer::BEGIN);
