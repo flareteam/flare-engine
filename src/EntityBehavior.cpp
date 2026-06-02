@@ -892,7 +892,7 @@ void EntityBehavior::updateState() {
 				e->playSound(Entity::SOUND_DIE);
 				e->stats.corpse_timer.setDuration(eset->misc.corpse_timeout);
 			}
-			if (e->activeAnimation->isSecondLastFrame()) {
+			if ((e->activeAnimation->default_active_frames && e->activeAnimation->isSecondLastFrame()) || (!e->activeAnimation->default_active_frames && e->activeAnimation->isActiveFrame())) {
 				StatBlock::AIPower* ai_power = e->stats.getAIPower(StatBlock::AI_POWER_DEATH);
 				if (ai_power != NULL)
 					powers->activate(ai_power->id, &e->stats, e->stats.pos, e->stats.pos);
@@ -927,7 +927,7 @@ void EntityBehavior::updateState() {
 				e->playSound(Entity::SOUND_CRITDIE);
 				e->stats.corpse_timer.setDuration(eset->misc.corpse_timeout);
 			}
-			if (e->activeAnimation->isSecondLastFrame()) {
+			if ((e->activeAnimation->default_active_frames && e->activeAnimation->isSecondLastFrame()) || (!e->activeAnimation->default_active_frames && e->activeAnimation->isActiveFrame())) {
 				StatBlock::AIPower* ai_power = e->stats.getAIPower(StatBlock::AI_POWER_DEATH);
 				if (ai_power != NULL)
 					powers->activate(ai_power->id, &e->stats, e->stats.pos, e->stats.pos);

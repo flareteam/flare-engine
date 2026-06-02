@@ -28,6 +28,7 @@ Engine fixes:
 	- Allies that were blocked off from reaching the player will now teleport to the player's location.
 	- Fixed on_hit and on_debuff powers not triggering when entity was in certain states.
 	- Fixed dead enemy HP bar not being hidden with suppress_hp=true.
+	- Activation of on_death powers can now happen on the enemy death animation's active frame(s).
 
 * Inventory
 	- Fixed bug where player could change equipment mid-attack. Trying to switch equipment while attacking now simply resets the player to the 'stance' state.

@@ -158,6 +158,8 @@ public:
 	void setSpeed(float val);
 
 	void checkInit();
+
+	bool default_active_frames;
 };
 
 #endif

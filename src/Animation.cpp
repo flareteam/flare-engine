@@ -59,6 +59,7 @@ Animation::Animation(const std::string &_name, const std::string &_type, Animati
 	, active_frames()
 	, sub_frames()
 	, name(_name)
+	, default_active_frames(true)
 {
 	if (type == ANIMTYPE_NONE)
 		Utils::logError("Animation: Type %s is unknown", _type.c_str());
@@ -306,6 +307,9 @@ bool Animation::syncTo(const Animation *other) {
 }
 
 void Animation::setActiveFrames(const std::vector<short> &_active_frames) {
+	if (!_active_frames.empty())
+		default_active_frames = false;
+
 	if (_active_frames.size() == 1 && _active_frames[0] == -1) {
 		active_frames.clear();
 		for (unsigned short i = 0; i < total_frame_count; ++i)
