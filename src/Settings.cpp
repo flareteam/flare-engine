@@ -63,7 +63,7 @@ Settings::Settings()
 	, soft_reset(false)
 	, safe_video(false)
 {
-	config.resize(54);
+	config.resize(55);
 	setConfigDefault(0,  "fullscreen",          &typeid(fullscreen),          "1",             &fullscreen,          "Fullscreen mode | 0 = disable, 1 = enable");
 	setConfigDefault(1,  "resolution_w",        &typeid(screen_w),            "640",           &screen_w,            "Window size");
 	setConfigDefault(2,  "resolution_h",        &typeid(screen_h),            "480",           &screen_h,            "");
@@ -103,21 +103,22 @@ Settings::Settings()
 	setConfigDefault(36, "low_hp_warning_type", &typeid(low_hp_warning_type), "1",             &low_hp_warning_type, "Low health warning type settings | 0 = disable, 1 = all, 2 = message & cursor, 3 = message & sound, 4 = cursor & sound , 5 = message, 6 = cursor, 7 = sound");
 	setConfigDefault(37, "low_hp_threshold",    &typeid(low_hp_threshold),    "20",            &low_hp_threshold,    "Low HP warning threshold percentage");
 	setConfigDefault(38, "item_compare_tips",   &typeid(item_compare_tips),   "1",             &item_compare_tips,   "Show comparison tooltips for equipped items of the same type | 0 = disable, 1 = enable");
-	setConfigDefault(39, "max_render_size",     &typeid(max_render_size),     "0",             &max_render_size,     "Overrides the maximum height (in pixels) of the internal render surface | 0 = ignore this setting");
-	setConfigDefault(40, "touch_controls",      &typeid(touchscreen),         "0",             &touchscreen,         "Enables touch screen controls | 0 = disable, 1 = enable");
-	setConfigDefault(41, "touch_scale",         &typeid(touch_scale),         "1.0",           &touch_scale,         "Factor used to scale the touch controls | 1.0 = 100 percent scale");
-	setConfigDefault(42, "mute_on_focus_loss",  &typeid(mute_on_focus_loss),  "1",             &mute_on_focus_loss,  "Mute game audio when the game window loses focus | 0 = disable, 1 = enable");
-	setConfigDefault(43, "pause_on_focus_loss", &typeid(pause_on_focus_loss), "1",             &pause_on_focus_loss, "Pause game when the game window loses focus | 0 = disable, 1 = enable");
-	setConfigDefault(44, "audio_freq",          &typeid(audio_freq),          "44100",         &audio_freq,          "Audio playback frequency in Hz. Default is 44100");
-	setConfigDefault(45, "dev_cmd_1",           &typeid(dev_cmd_1),           "toggle_fps",    &dev_cmd_1,           "Custom developer console shortcut command");
-	setConfigDefault(46, "dev_cmd_2",           &typeid(dev_cmd_2),           "toggle_devhud", &dev_cmd_2,           "Custom developer console shortcut command");
-	setConfigDefault(47, "dev_cmd_3",           &typeid(dev_cmd_3),           "toggle_hud",    &dev_cmd_3,           "Custom developer console shortcut command");
-	setConfigDefault(48, "auto_loot",           &typeid(auto_loot),           "1",             &auto_loot,           "Automatically pick up loot | 0 = disable, 1 = enable, 2 = currency only");
-	setConfigDefault(49, "joystick_rumble",     &typeid(joystick_rumble),     "1",             &joystick_rumble,     "Enables joystick rumble/vibrartion | 0 = disable, 1 = enable");
-	setConfigDefault(50, "enable_threaded_image_load",     &typeid(enable_threaded_image_load),     "1",             &enable_threaded_image_load,     "Enables multi-threaded image loading. Try disabling to reduce memory usage or fix instability.");
-	setConfigDefault(51, "fade_walls",          &typeid(fade_walls),          "1",             &fade_walls,          "Lowers the opacity of walls that are covering the player. 0 = disable, 1 = enable");
-	setConfigDefault(52, "setup_language",      &typeid(setup_language),      "0",             &setup_language,      "(First-time-launch setup) Language | 0 = show dialog, 1 = no dialog");
-	setConfigDefault(53, "setup_mousemove",     &typeid(setup_mousemove),     "0",             &setup_mousemove,     "(First-time-launch setup) Mouse movement | 0 = show dialog, 1 = no dialog");
+	setConfigDefault(39, "min_render_size",     &typeid(min_render_size),     "0",             &min_render_size,     "Overrides the minimum height (in pixels) of the internal render surface | 0 = ignore this setting");
+	setConfigDefault(40, "max_render_size",     &typeid(max_render_size),     "0",             &max_render_size,     "Overrides the maximum height (in pixels) of the internal render surface | 0 = ignore this setting");
+	setConfigDefault(41, "touch_controls",      &typeid(touchscreen),         "0",             &touchscreen,         "Enables touch screen controls | 0 = disable, 1 = enable");
+	setConfigDefault(42, "touch_scale",         &typeid(touch_scale),         "1.0",           &touch_scale,         "Factor used to scale the touch controls | 1.0 = 100 percent scale");
+	setConfigDefault(43, "mute_on_focus_loss",  &typeid(mute_on_focus_loss),  "1",             &mute_on_focus_loss,  "Mute game audio when the game window loses focus | 0 = disable, 1 = enable");
+	setConfigDefault(44, "pause_on_focus_loss", &typeid(pause_on_focus_loss), "1",             &pause_on_focus_loss, "Pause game when the game window loses focus | 0 = disable, 1 = enable");
+	setConfigDefault(45, "audio_freq",          &typeid(audio_freq),          "44100",         &audio_freq,          "Audio playback frequency in Hz. Default is 44100");
+	setConfigDefault(46, "dev_cmd_1",           &typeid(dev_cmd_1),           "toggle_fps",    &dev_cmd_1,           "Custom developer console shortcut command");
+	setConfigDefault(47, "dev_cmd_2",           &typeid(dev_cmd_2),           "toggle_devhud", &dev_cmd_2,           "Custom developer console shortcut command");
+	setConfigDefault(48, "dev_cmd_3",           &typeid(dev_cmd_3),           "toggle_hud",    &dev_cmd_3,           "Custom developer console shortcut command");
+	setConfigDefault(49, "auto_loot",           &typeid(auto_loot),           "1",             &auto_loot,           "Automatically pick up loot | 0 = disable, 1 = enable, 2 = currency only");
+	setConfigDefault(50, "joystick_rumble",     &typeid(joystick_rumble),     "1",             &joystick_rumble,     "Enables joystick rumble/vibrartion | 0 = disable, 1 = enable");
+	setConfigDefault(51, "enable_threaded_image_load",     &typeid(enable_threaded_image_load),     "1",             &enable_threaded_image_load,     "Enables multi-threaded image loading. Try disabling to reduce memory usage or fix instability.");
+	setConfigDefault(52, "fade_walls",          &typeid(fade_walls),          "1",             &fade_walls,          "Lowers the opacity of walls that are covering the player. 0 = disable, 1 = enable");
+	setConfigDefault(53, "setup_language",      &typeid(setup_language),      "0",             &setup_language,      "(First-time-launch setup) Language | 0 = show dialog, 1 = no dialog");
+	setConfigDefault(54, "setup_mousemove",     &typeid(setup_mousemove),     "0",             &setup_mousemove,     "(First-time-launch setup) Mouse movement | 0 = show dialog, 1 = no dialog");
 }
 
 void Settings::setConfigDefault(size_t index, const std::string& name, const std::type_info *type, const std::string& default_val, void *storage, const std::string& comment) {

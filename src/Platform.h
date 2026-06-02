@@ -30,7 +30,6 @@ public:
 
 	class Video {
 	public:
-		static const int COUNT = 11;
 		enum {
 			RENDERER,
 			FULLSCREEN,
@@ -39,37 +38,38 @@ public:
 			TEXTURE_FILTER,
 			DPI_SCALING,
 			PARALLAX_LAYERS,
+			MIN_RENDER_SIZE,
 			MAX_RENDER_SIZE,
 			FRAME_LIMIT,
 			THREADED_IMAGE_LOAD,
 			FADE_WALLS,
+			COUNT
 		};
 	};
 
 	class Audio {
 	public:
-		static const int COUNT = 3;
 		enum {
 			SFX,
 			MUSIC,
 			MUTE_ON_FOCUS_LOSS,
+			COUNT
 		};
 	};
 
 	class Game {
 	public:
-		static const int COUNT = 4;
 		enum {
 			AUTO_EQUIP,
 			AUTO_LOOT,
 			LOW_HP_WARNING_TYPE,
 			LOW_HP_THRESHOLD,
+			COUNT
 		};
 	};
 
 	class Interface {
 	public:
-		static const int COUNT = 13;
 		enum {
 			LANGUAGE,
 			SUBTITLES,
@@ -83,13 +83,13 @@ public:
 			HARDWARE_CURSOR,
 			PAUSE_ON_FOCUS_LOSS,
 			SHOW_FPS,
-			DEV_MODE
+			DEV_MODE,
+			COUNT
 		};
 	};
 
 	class Input {
 	public:
-		static const int COUNT = 10;
 		enum {
 			MOUSE_MOVE,
 			MOUSE_MOVE_SWAP,
@@ -100,16 +100,17 @@ public:
 			JOYSTICK_DEADZONE,
 			JOYSTICK_RUMBLE,
 			TOUCH_CONTROLS,
-			TOUCH_SCALE
+			TOUCH_SCALE,
+			COUNT
 		};
 	};
 
 	class Misc {
 	public:
-		static const int COUNT = 2;
 		enum {
 			KEYBINDS,
-			MODS
+			MODS,
+			COUNT
 		};
 	};
 

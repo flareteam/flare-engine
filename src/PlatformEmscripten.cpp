@@ -58,6 +58,7 @@ Platform::Platform()
 	config_video[Platform::Video::VSYNC] = false;
 	config_video[Platform::Video::TEXTURE_FILTER] = false;
 	config_video[Platform::Video::DPI_SCALING] = false;
+	config_video[Platform::Video::MIN_RENDER_SIZE] = false;
 	config_video[Platform::Video::MAX_RENDER_SIZE] = false;
 	config_video[Platform::Video::FRAME_LIMIT] = false;
 

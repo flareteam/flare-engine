@@ -244,6 +244,8 @@ public:
 	WidgetLabel                * parallax_layers_lb;
 	WidgetHorizontalList       * frame_limit_lstb;
 	WidgetLabel                * frame_limit_lb;
+	WidgetHorizontalList       * min_render_size_lstb;
+	WidgetLabel                * min_render_size_lb;
 	WidgetHorizontalList       * max_render_size_lstb;
 	WidgetLabel                * max_render_size_lb;
 	WidgetCheckBox             * threaded_image_load_cb;

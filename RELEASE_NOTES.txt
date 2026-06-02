@@ -16,6 +16,9 @@ Engine features:
 * Animations
 	- Add support for multiple images to uncompressed animations with AnimationSet property, 'animation.image'.
 
+* System
+	- Add "Minimum Render Size" video setting.
+
 Engine fixes:
 
 * Enemies, allies, and NPCs

@@ -152,6 +152,8 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	, parallax_layers_lb(new WidgetLabel())
 	, frame_limit_lstb(new WidgetHorizontalList())
 	, frame_limit_lb(new WidgetLabel())
+	, min_render_size_lstb(new WidgetHorizontalList())
+	, min_render_size_lb(new WidgetLabel())
 	, max_render_size_lstb(new WidgetHorizontalList())
 	, max_render_size_lb(new WidgetLabel())
 	, threaded_image_load_cb(new WidgetCheckBox(WidgetCheckBox::DEFAULT_FILE))
@@ -407,9 +409,17 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	}
 
 	// set up render resolutions
+	std::string min_render_size_tooltip = msg->get("The render size refers to the height in pixels of the surface used to draw the game. Mods define the allowed render sizes, but this option allows overriding the minimum size.");
+	min_render_size_lstb->append(msg->get("Default"), min_render_size_tooltip);
+
 	std::string max_render_size_tooltip = msg->get("The render size refers to the height in pixels of the surface used to draw the game. Mods define the allowed render sizes, but this option allows overriding the maximum size.");
 	max_render_size_lstb->append(msg->get("Default"), max_render_size_tooltip);
+
 	virtual_heights = eset->resolutions.virtual_heights;
+
+	if (settings->min_render_size > 0 && std::find(virtual_heights.begin(), virtual_heights.end(), settings->min_render_size) == virtual_heights.end())
+		virtual_heights.push_back(settings->min_render_size);
+
 	if (settings->max_render_size > 0 && std::find(virtual_heights.begin(), virtual_heights.end(), settings->max_render_size) == virtual_heights.end())
 		virtual_heights.push_back(settings->max_render_size);
 
@@ -417,6 +427,7 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	for (size_t i = 0; i < virtual_heights.size(); ++i) {
 		std::stringstream ss;
 		ss << virtual_heights[i];
+		min_render_size_lstb->append(ss.str(), min_render_size_tooltip);
 		max_render_size_lstb->append(ss.str(), max_render_size_tooltip);
 	}
 
@@ -469,6 +480,7 @@ void MenuConfig::init() {
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::TEXTURE_FILTER, texture_filter_lb, texture_filter_cb, msg->get("Texture Filtering"));
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::DPI_SCALING, dpi_scaling_lb, dpi_scaling_cb, msg->get("DPI scaling"));
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::PARALLAX_LAYERS, parallax_layers_lb, parallax_layers_cb, msg->get("Parallax Layers"));
+	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::MIN_RENDER_SIZE, min_render_size_lb, min_render_size_lstb, msg->get("Minimum Render Size"));
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::MAX_RENDER_SIZE, max_render_size_lb, max_render_size_lstb, msg->get("Maximum Render Size"));
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::FRAME_LIMIT, frame_limit_lb, frame_limit_lstb, msg->get("Frame Limit"));
 	cfg_tabs[VIDEO_TAB].setOptionWidgets(Platform::Video::THREADED_IMAGE_LOAD, threaded_image_load_lb, threaded_image_load_cb, msg->get("Threaded Image Loading"));
@@ -966,6 +978,18 @@ void MenuConfig::updateVideo() {
 		}
 	}
 
+	if (settings->min_render_size == 0) {
+		min_render_size_lstb->select(0);
+	}
+	else {
+		for (size_t i = 0; i < virtual_heights.size(); ++i) {
+			if (virtual_heights[i] == settings->min_render_size) {
+				min_render_size_lstb->select(static_cast<int>(i+1));
+				break;
+			}
+		}
+	}
+
 	if (settings->max_render_size == 0) {
 		max_render_size_lstb->select(0);
 	}
@@ -977,6 +1001,7 @@ void MenuConfig::updateVideo() {
 			}
 		}
 	}
+
 	refreshWindowSize();
 
 	cfg_tabs[VIDEO_TAB].scrollbox->refresh();
@@ -1294,6 +1319,20 @@ void MenuConfig::logicVideo() {
 	else if (cfg_tabs[VIDEO_TAB].options[Platform::Video::FRAME_LIMIT].enabled && frame_limit_lstb->checkClickAt(mouse.x, mouse.y)) {
 		// handled in setFrameLimit(), which GameStateConfig::logicAccept() calls
 	}
+	else if (cfg_tabs[VIDEO_TAB].options[Platform::Video::MIN_RENDER_SIZE].enabled && min_render_size_lstb->checkClickAt(mouse.x, mouse.y)) {
+		int index = min_render_size_lstb->getSelected();
+		if (index == 0) {
+			settings->min_render_size = 0;
+		}
+		else {
+			settings->min_render_size = virtual_heights[index-1];
+			if (settings->max_render_size < settings->min_render_size) {
+				settings->max_render_size = 0;
+				max_render_size_lstb->select(0);
+			}
+		}
+		refreshWindowSize();
+	}
 	else if (cfg_tabs[VIDEO_TAB].options[Platform::Video::MAX_RENDER_SIZE].enabled && max_render_size_lstb->checkClickAt(mouse.x, mouse.y)) {
 		int index = max_render_size_lstb->getSelected();
 		if (index == 0) {
@@ -1301,6 +1340,10 @@ void MenuConfig::logicVideo() {
 		}
 		else {
 			settings->max_render_size = virtual_heights[index-1];
+			if (settings->max_render_size < settings->min_render_size) {
+				settings->min_render_size = 0;
+				min_render_size_lstb->select(0);
+			}
 		}
 		refreshWindowSize();
 	}

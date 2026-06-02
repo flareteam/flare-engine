@@ -79,6 +79,7 @@ public:
 	bool change_gamma;
 	float gamma;
 	bool parallax_layers;
+	unsigned short min_render_size;
 	unsigned short max_render_size;
 	bool fade_walls;
 
