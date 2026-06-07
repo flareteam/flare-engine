@@ -76,6 +76,7 @@ public:
 		float mouse_move_deadzone_not_moving;
 		bool passive_trigger_effect_stacking;
 		uint8_t fade_wall_alpha;
+		float raycast_resolution;
 	};
 
 	class Resolutions {

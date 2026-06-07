@@ -94,6 +94,7 @@ void EngineSettings::Misc::load() {
 	mouse_move_deadzone_not_moving = 0.75f;
 	passive_trigger_effect_stacking = false;
 	fade_wall_alpha = 63;
+	raycast_resolution = 0.1f;
 
 	FileParser infile;
 	// @CLASS EngineSettings: Misc|Description of engine/misc.txt
@@ -215,6 +216,15 @@ void EngineSettings::Misc::load() {
 			// @ATTR fade_wall_alpha|int|The minimum opacity which walls will be faded to when covering the player, ranging from 0-255. Use 255 to disable this feature.
 			else if (infile.key == "fade_wall_alpha") {
 				fade_wall_alpha = static_cast<uint8_t>(Parse::popFirstInt(infile.val));
+			}
+
+			// @ATTR raycast_resolution|float|Determines the number of steps used when testing line-of-sight and line-of-movement. A smaller value equates to more accurate results at the cost of performance. Defaults to 0.1.
+			else if (infile.key == "raycast_resolution") {
+				raycast_resolution = Parse::toFloat(infile.val);
+				if (raycast_resolution <= 0) {
+					raycast_resolution = 0.1f;
+					infile.error("EngineSettings: raycast_resolution must be greater than 0.");
+				}
 			}
 
 			else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());

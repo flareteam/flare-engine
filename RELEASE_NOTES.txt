@@ -18,6 +18,7 @@ Engine features:
 
 * System
 	- Add "Minimum Render Size" video setting.
+	- Added 'raycast_resolution' property to engine/misc.txt config.
 
 Engine fixes:
 

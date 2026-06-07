@@ -47,6 +47,8 @@ const float MapCollision::MIN_TILE_GAP = 0.001f;
 
 MapCollision::MapCollision()
 	: has_empty_tile(false)
+	, raycast_resolution(eset->misc.raycast_resolution)
+	, raycast_resolution_recip(1.f / eset->misc.raycast_resolution)
 	, map_size(Point())
 {
 	colmap.resize(1);
@@ -284,7 +286,7 @@ bool MapCollision::lineCheck(const float& x1, const float& y1, const float& x2, 
 	float dy = static_cast<float>(fabs(y2 - y1));
 	float step_x;
 	float step_y;
-	int steps = static_cast<int>(std::max(dx, dy));
+	int steps = static_cast<int>(std::max(1.f, std::max(dx, dy) * raycast_resolution_recip));
 
 
 	if (dx > dy) {
@@ -298,6 +300,9 @@ bool MapCollision::lineCheck(const float& x1, const float& y1, const float& x2, 
 	// fix signs
 	if (x1 > x2) step_x = -step_x;
 	if (y1 > y2) step_y = -step_y;
+
+	step_x *= raycast_resolution;
+	step_y *= raycast_resolution;
 
 
 	if (check_type == CHECK_SIGHT) {

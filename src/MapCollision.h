@@ -58,6 +58,9 @@ private:
 
 	bool has_empty_tile;
 
+	float raycast_resolution;
+	float raycast_resolution_recip;
+
 public:
 	// const flags
 	static const bool IS_ALLY = true;
