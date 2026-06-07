@@ -77,7 +77,7 @@ public:
 	public:
 		int type;
 		PowerID id;
-		int chance;
+		float chance;
 		Timer cooldown;
 
 		AIPower()

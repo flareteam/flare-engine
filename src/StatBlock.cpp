@@ -731,7 +731,7 @@ void StatBlock::load(const std::string& filename) {
 		else if (infile.key == "chance_flee") chance_flee = fnum;
 
 		else if (infile.key == "power") {
-			// @ATTR power|["melee", "ranged", "beacon", "on_hit", "on_death", "on_half_dead", "on_join_combat", "on_debuff"], power_id, int : State, Power, Chance|A power that has a chance of being triggered in a certain state.
+			// @ATTR power|["melee", "ranged", "beacon", "on_hit", "on_death", "on_half_dead", "on_join_combat", "on_debuff"], power_id, float : State, Power, Chance|A power that has a chance of being triggered in a certain state.
 			AIPower ai_power;
 
 			std::string ai_type = Parse::popFirstString(infile.val);
@@ -742,7 +742,7 @@ void StatBlock::load(const std::string& filename) {
 			if (ai_power.id == 0)
 				continue; // verifyID() will print our error message
 
-			ai_power.chance = Parse::popFirstInt(infile.val);
+			ai_power.chance = Parse::popFirstFloat(infile.val);
 
 			if (ai_type == "melee") ai_power.type = AI_POWER_MELEE;
 			else if (ai_type == "ranged") ai_power.type = AI_POWER_RANGED;
@@ -1499,13 +1499,12 @@ void StatBlock::addXP(int amount) {
 
 StatBlock::AIPower* StatBlock::getAIPower(int ai_type) {
 	std::vector<size_t> possible_ids;
-	int chance = rand() % 100;
 
 	for (size_t i=0; i<powers_ai.size(); ++i) {
 		if (ai_type != powers_ai[i].type)
 			continue;
 
-		if (chance > powers_ai[i].chance)
+		if (!Math::percentChanceF(powers_ai[i].chance))
 			continue;
 
 		if (!powers_ai[i].cooldown.isEnd())
