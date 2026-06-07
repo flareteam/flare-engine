@@ -30,6 +30,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EventManager.h"
 #include "Hazard.h"
 #include "HazardManager.h"
+#include "MapRenderer.h"
 #include "PowerManager.h"
 #include "RenderDevice.h"
 #include "SharedGameResources.h"
@@ -200,6 +201,9 @@ void HazardManager::handleNewMap() {
  */
 void HazardManager::addRenders(std::vector<Renderable> &r, std::vector<Renderable> &r_dead) {
 	for (unsigned int i=0; i<h.size(); i++) {
+		if (mapr && mapr->collider.isOutsideMap(h[i]->pos.x, h[i]->pos.y))
+			continue;
+
 		h[i]->addRenderable(r, r_dead);
 	}
 }

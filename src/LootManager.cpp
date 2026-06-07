@@ -593,6 +593,9 @@ ItemStack LootManager::checkNearestPickup(const FPoint& hero_pos) {
 void LootManager::addRenders(std::vector<Renderable> &ren, std::vector<Renderable> &ren_dead) {
 	std::vector<Loot>::iterator it;
 	for (it = loot.begin(); it != loot.end(); ++it) {
+		if (mapr && mapr->collider.isOutsideMap(it->pos.x, it->pos.y))
+			continue;
+
 		if (mapr->fogofwar > FogOfWar::TYPE_MINIMAP) {
 			float delta = Utils::calcDist(pc->stats.pos, it->pos);
 			if (delta > fow->mask_radius-1.0) {

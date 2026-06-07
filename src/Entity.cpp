@@ -851,6 +851,9 @@ Rect Entity::getRenderBounds(const FPoint& cam) const {
 }
 
 void Entity::addRenders(std::vector<Renderable> &r) {
+	if (mapr && mapr->collider.isOutsideMap(stats.pos.x, stats.pos.y))
+		return;
+
 	if (!stats.layer_reference_order.empty()) {
 		for (unsigned i = 0; i < stats.layer_def[stats.direction].size(); ++i) {
 			unsigned index = stats.layer_def[stats.direction][i];
