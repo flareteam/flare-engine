@@ -32,8 +32,9 @@ Engine fixes:
 	- Activation of on_death powers can now happen on the enemy death animation's active frame(s).
 	- Enemy/ally power chance is now a float, just like chance_pursue and chance_flee.
 
-* Inventory
+* UI
 	- Fixed bug where player could change equipment mid-attack. Trying to switch equipment while attacking now simply resets the player to the 'stance' state.
+	- Fixed bug where an item wouldn't be returned to a vendor if the player moved away while dragging an item.
 
 * System
 	- Fixed bug where window could be resized in a way in which menus wouldn't fit on screen.

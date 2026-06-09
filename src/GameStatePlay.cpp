@@ -1065,6 +1065,7 @@ bool GameStatePlay::isPaused() {
 void GameStatePlay::resetNPC() {
 	npc_id = -1;
 	menu->talker->npc_from_map = true;
+	menu->resetDrag();
 	menu->vendor->setNPC(NULL);
 	menu->talker->setNPC(NULL);
 }
