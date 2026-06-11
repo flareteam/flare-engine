@@ -55,15 +55,21 @@ NPC::NPC(const Entity& e)
 	, vendor(false)
 	, reset_buyback(true)
 	, stock()
+	, craft_stock()
 	, vendor_ratio_buy(0)
 	, vendor_ratio_sell(0)
 	, vendor_ratio_sell_old(0)
 	, dialog()
 {
 	stock.init(VENDOR_MAX_STOCK);
+	craft_stock.init(VENDOR_MAX_STOCK);
 
 	// have NPCs face south by default
 	stats.direction = 7;
+
+	vendor_tab_enabled[ItemManager::VENDOR_BUY] = true;
+	vendor_tab_enabled[ItemManager::VENDOR_SELL] = true;
+	vendor_tab_enabled[ItemManager::VENDOR_CRAFT] = false;
 }
 
 /**
@@ -81,6 +87,7 @@ bool NPC::load(const std::string& npc_id) {
 	// @CLASS NPC|Description of NPCs in npcs/
 	if (infile.open(npc_id, FileParser::MOD_FILE, FileParser::ERROR_NORMAL)) {
 		bool clear_random_table = true;
+		bool clear_craft_random_table = true;
 
 		while (infile.next()) {
 			if (infile.section == "stats") {
@@ -178,6 +185,7 @@ bool NPC::load(const std::string& npc_id) {
 				if (infile.new_section) {
 					// APPENDed file
 					clear_random_table = true;
+					clear_craft_random_table = true;
 				}
 
 				if (infile.key == "name") {
@@ -289,6 +297,67 @@ bool NPC::load(const std::string& npc_id) {
 					loadSound(infile.val, VOX_INTRO);
 				}
 
+				else if (infile.key == "craft_constant_stock") {
+					// @ATTR npc.craft_constant_stock|repeatable(list(item_id))|A list of items this vendor can craft.
+					while (infile.val != "") {
+						stack = Parse::toItemQuantityPair(Parse::popFirstString(infile.val));
+						stack.item = items->verifyID(stack.item, &infile, !ItemManager::VERIFY_ALLOW_ZERO, !ItemManager::VERIFY_ALLOCATE);
+						stack.quantity = 1;
+
+						std::vector<ItemStack> ex_stacks;
+						items->getExtendedStacks(stack.item, stack.quantity, ex_stacks);
+						for (size_t i = 0; i < ex_stacks.size(); ++i) {
+							craft_stock.add(ex_stacks[i], ItemStorage::NO_SLOT);
+						}
+					}
+				}
+				else if (infile.key == "craft_status_stock") {
+					// @ATTR npc.craft_status_stock|repeatable(string, list(item_id)) : Required status, Item(s)|A list of items this vendor can craft if the required status is met.
+					if (camp->checkStatus(camp->registerStatus(Parse::popFirstString(infile.val)))) {
+						while (infile.val != "") {
+							stack = Parse::toItemQuantityPair(Parse::popFirstString(infile.val));
+							stack.item = items->verifyID(stack.item, &infile, !ItemManager::VERIFY_ALLOW_ZERO, !ItemManager::VERIFY_ALLOCATE);
+							stack.quantity = 1;
+
+							std::vector<ItemStack> ex_stacks;
+							items->getExtendedStacks(stack.item, stack.quantity, ex_stacks);
+							for (size_t i = 0; i < ex_stacks.size(); ++i) {
+								craft_stock.add(ex_stacks[i], ItemStorage::NO_SLOT);
+							}
+						}
+					}
+				}
+				else if (infile.key == "craft_random_stock") {
+					// @ATTR npc.craft_random_stock|list(loot)|Use a loot table to add random items to the Craft stock; either a filename or an inline definition.
+					if (clear_craft_random_table) {
+						craft_random_table.clear();
+						clear_craft_random_table = false;
+					}
+
+					craft_random_table.push_back(EventComponent());
+					loot->parseLoot(infile.val, &craft_random_table.back(), &craft_random_table);
+				}
+				else if (infile.key == "craft_random_stock_count") {
+					// @ATTR npc.craft_random_stock_count|int, int : Min, Max|Sets the minimum (and optionally, the maximum) amount of random items this npc can have in their Craft stock.
+					craft_random_table_count.x = Parse::popFirstInt(infile.val);
+					craft_random_table_count.y = Parse::popFirstInt(infile.val);
+					if (craft_random_table_count.x != 0 || craft_random_table_count.y != 0) {
+						craft_random_table_count.x = std::max(craft_random_table_count.x, 1);
+						craft_random_table_count.y = std::max(craft_random_table_count.y, craft_random_table_count.x);
+					}
+				}
+
+				else if (infile.key == "vendor_tab_enabled") {
+					// @ATTR npc.vendor_tab_enabled|repeatable(["buy", "sell", "craft"], bool) : Tab, Enabled|Sets the enabled state of the specified vendor tab for this NPC. The "buy" and "sell" tabs are enabled by default.
+					std::string tab = Parse::popFirstString(infile.val);
+					bool enabled = Parse::toBool(Parse::popFirstString(infile.val));
+
+					if (tab == "buy") vendor_tab_enabled[ItemManager::VENDOR_BUY] = enabled;
+					else if (tab == "sell") vendor_tab_enabled[ItemManager::VENDOR_SELL] = enabled;
+					else if (tab == "craft") vendor_tab_enabled[ItemManager::VENDOR_CRAFT] = enabled;
+					else infile.error("NPC: '%s' is not a valid vendor tab.", tab.c_str());
+				}
+
 				else {
 					infile.error("NPC: '%s' is not a valid key.", infile.key.c_str());
 				}
@@ -313,6 +382,27 @@ bool NPC::load(const std::string& npc_id) {
 	std::sort(rand_itemstacks.begin(), rand_itemstacks.end(), ItemManager::compareItemStack);
 	for (size_t i=0; i<rand_itemstacks.size(); ++i) {
 		stock.add(rand_itemstacks[i], ItemStorage::NO_SLOT);
+	}
+
+	rand_count = Math::randBetween(craft_random_table_count.x, craft_random_table_count.y);
+
+	rand_itemstacks.clear();
+	for (unsigned i=0; i<rand_count; ++i) {
+		loot->checkLoot(craft_random_table, NULL, &rand_itemstacks);
+	}
+	std::sort(rand_itemstacks.begin(), rand_itemstacks.end(), ItemManager::compareItemStack);
+	for (size_t i=0; i<rand_itemstacks.size(); ++i) {
+		craft_stock.add(rand_itemstacks[i], ItemStorage::NO_SLOT);
+	}
+
+	// if no vendor tabs are enabled, fall back to the defaults
+	bool vendor_tabs = false;
+	for (size_t i = 0; i < 3; ++i) {
+		vendor_tabs = vendor_tabs || vendor_tab_enabled[i];
+	}
+	if (!vendor_tabs) {
+		vendor_tab_enabled[ItemManager::VENDOR_BUY] = true;
+		vendor_tab_enabled[ItemManager::VENDOR_SELL] = true;
 	}
 
 	// warn if dialog nodes lack a topic

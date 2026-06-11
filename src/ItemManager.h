@@ -297,6 +297,7 @@ public:
 	std::vector< std::pair<PowerID, PowerID> > replace_power;        // alter powers when this item is equipped. The first PowerID is replaced with the second.
 	std::vector<size_t> disable_slots; // if this item is equipped, it will disable slots that match the types in the list
 	std::vector<LevelScaledValue> requires_stat;
+	std::vector<ItemStack> crafting_items;
 
 	LevelScaledValue requires_level;   // Player level must match or exceed this value to use item
 	LevelScaledValue price;            // if price = 0 the item cannot be sold
@@ -304,6 +305,7 @@ public:
 
 	int getPrice(bool use_vendor_ratio);
 	int getSellPrice(bool is_new_buyback);
+	int getCraftCount();
 
 	void updateLevelScaling();
 
@@ -334,7 +336,8 @@ public:
 	enum {
 		VENDOR_BUY = 0,
 		VENDOR_SELL = 1,
-		PLAYER_INV = 2
+		VENDOR_CRAFT = 2,
+		PLAYER_INV = 3,
 	};
 
 	static const bool USE_VENDOR_RATIO = true;

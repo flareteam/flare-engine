@@ -1051,12 +1051,27 @@ bool MenuInventory::buy(ItemStack stack, int tab, bool dragging) {
 	if (!items->isValid(stack.item))
 		return false;
 
-	int value_each;
-	if (tab == ItemManager::VENDOR_BUY) value_each = items->items[stack.item]->getPrice(ItemManager::USE_VENDOR_RATIO);
-	else value_each = items->items[stack.item]->getSellPrice(stack.can_buyback);
+	Item* item = items->items[stack.item];
 
-	int count = value_each * stack.quantity;
-	if( inventory[CARRIED].count(eset->misc.currency_id) >= count) {
+	bool can_afford = false;
+	int count = 0;
+
+	if (tab == ItemManager::VENDOR_CRAFT) {
+		count = item->getCraftCount();
+		can_afford = (count > 0);
+	}
+	else {
+		int value_each = 0;
+		if (tab == ItemManager::VENDOR_BUY)
+			value_each = item->getPrice(ItemManager::USE_VENDOR_RATIO);
+		else if (tab == ItemManager::VENDOR_SELL)
+			value_each = item->getSellPrice(stack.can_buyback);
+
+		count = value_each * stack.quantity;
+		can_afford = (inventory[CARRIED].count(eset->misc.currency_id) >= count);
+	}
+
+	if (can_afford) {
 		stack.can_buyback = false;
 
 		if (dragging) {
@@ -1066,12 +1081,24 @@ bool MenuInventory::buy(ItemStack stack, int tab, bool dragging) {
 			add(stack, CARRIED, ItemStorage::NO_SLOT, ADD_PLAY_SOUND, ADD_AUTO_EQUIP);
 		}
 
-		removeCurrency(count);
-		items->playSound(eset->misc.currency_id);
+		if (tab == ItemManager::VENDOR_CRAFT) {
+			for (size_t i = 0; i < item->crafting_items.size(); ++i) {
+				remove(item->crafting_items[i].item, item->crafting_items[i].quantity * stack.quantity);
+			}
+		}
+		else {
+			removeCurrency(count);
+			items->playSound(eset->misc.currency_id);
+		}
+
 		return true;
 	}
 	else {
-		pc->logMsg(msg->getv("Not enough %s.", eset->loot.currency.c_str()), Avatar::MSG_NORMAL);
+		if (tab == ItemManager::VENDOR_CRAFT)
+			pc->logMsg(msg->get("You do not have the required items to craft."), Avatar::MSG_NORMAL);
+		else
+			pc->logMsg(msg->getv("Not enough %s.", eset->loot.currency.c_str()), Avatar::MSG_NORMAL);
+
 		drop_stack.push(stack);
 		return false;
 	}
@@ -1559,6 +1586,8 @@ int MenuInventory::getMaxPurchasable(ItemStack item, int vendor_tab) {
 		return currency / items->items[item.item]->getPrice(ItemManager::USE_VENDOR_RATIO);
 	else if (vendor_tab == ItemManager::VENDOR_SELL)
 		return currency / items->items[item.item]->getSellPrice(item.can_buyback);
+	else if (vendor_tab == ItemManager::VENDOR_CRAFT)
+		return items->items[item.item]->getCraftCount();
 	else
 		return 0;
 }

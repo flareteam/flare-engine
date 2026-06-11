@@ -222,8 +222,9 @@ void MenuManager::handleKeyboardNavigation() {
 	for (size_t i = 0; i < stash->tabs.size(); ++i) {
 		stash->tabs[i].tablist.setNextTabList(NULL);
 	}
-	vendor->tablist_buy.setNextTabList(NULL);
-	vendor->tablist_sell.setNextTabList(NULL);
+	for (int i = 0; i < MenuVendor::TAB_COUNT; ++i) {
+		vendor->tablist_tabs[i].setNextTabList(NULL);
+	}
 	chr->tablist.setNextTabList(NULL);
 	questlog->setNextTabList(NULL);
 	inv->tablist.setPrevTabList(NULL);
@@ -250,8 +251,9 @@ void MenuManager::handleKeyboardNavigation() {
 			for (size_t i = 0; i < stash->tabs.size(); ++i) {
 				stash->tabs[i].tablist.setNextTabList(&inv->tablist);
 			}
-			vendor->tablist_buy.setNextTabList(&inv->tablist);
-			vendor->tablist_sell.setNextTabList(&inv->tablist);
+			for (int i = 0; i < MenuVendor::TAB_COUNT; ++i) {
+				vendor->tablist_tabs[i].setNextTabList(&inv->tablist);
+			}
 			chr->tablist.setNextTabList(&inv->tablist);
 			questlog->setNextTabList(&inv->tablist);
 
@@ -272,8 +274,9 @@ void MenuManager::handleKeyboardNavigation() {
 			for (size_t i = 0; i < stash->tabs.size(); ++i) {
 				stash->tabs[i].tablist.setNextTabList(&pow->tablist);
 			}
-			vendor->tablist_buy.setNextTabList(&pow->tablist);
-			vendor->tablist_sell.setNextTabList(&pow->tablist);
+			for (int i = 0; i < MenuVendor::TAB_COUNT; ++i) {
+				vendor->tablist_tabs[i].setNextTabList(&pow->tablist);
+			}
 			chr->tablist.setNextTabList(&pow->tablist);
 			questlog->setNextTabList(&pow->tablist);
 
@@ -296,8 +299,9 @@ void MenuManager::handleKeyboardNavigation() {
 	}
 	if (!vendor->visible) {
 		vendor->tablist.lock();
-		vendor->tablist_buy.lock();
-		vendor->tablist_sell.lock();
+		for (int i = 0; i < MenuVendor::TAB_COUNT; ++i) {
+			vendor->tablist_tabs[i].lock();
+		}
 	}
 
 	// inventory always starts unlocked
@@ -445,8 +449,11 @@ void MenuManager::logic() {
 						drag_src = DRAG_SRC_VENDOR;
 						vendor->lockTabControl();
 					}
-					if (drag_stack.quantity > 1) {
-						int max_quantity = std::min(inv->getMaxPurchasable(drag_stack, vendor->getTab()), drag_stack.quantity);
+					if (drag_stack.quantity > 1 || vendor->getTab() == ItemManager::VENDOR_CRAFT) {
+						int max_quantity = inv->getMaxPurchasable(drag_stack, vendor->getTab());
+						if (vendor->getTab() != ItemManager::VENDOR_CRAFT)
+							max_quantity = std::min(max_quantity, drag_stack.quantity);
+
 						if (max_quantity >= 1) {
 							num_picker->setValueBounds(1, max_quantity);
 							num_picker->visible = true;
@@ -561,7 +568,7 @@ void MenuManager::logic() {
 			vendor->resetDrag();
 		}
 		else if (drag_post_action == DRAG_POST_ACTION_SELL) {
-			if (inv->sell(drag_stack)) {
+			if (vendor->sell_enabled && inv->sell(drag_stack)) {
 				if (vendor->visible) {
 					vendor->setTab(ItemManager::VENDOR_SELL);
 					vendor->add(drag_stack);
@@ -977,7 +984,7 @@ void MenuManager::logic() {
 
 			if (vendor->visible && Utils::isWithinRect(vendor->window_area,inpt->mouse)) {
 				inpt->lock[Input::MAIN1] = true;
-				if (inpt->pressing[Input::CTRL]) {
+				if (inpt->pressing[Input::CTRL] && vendor->getTab() != ItemManager::VENDOR_CRAFT) {
 					// buy item from a vendor
 					stack = vendor->click(inpt->mouse);
 					if (!inv->buy(stack, vendor->getTab(), !MenuInventory::IS_DRAGGING)) {
@@ -996,8 +1003,11 @@ void MenuManager::logic() {
 							mouse_dragging = true;
 							drag_src = DRAG_SRC_VENDOR;
 						}
-						if (drag_stack.quantity > 1 && inpt->pressing[Input::SHIFT]) {
-							int max_quantity = std::min(inv->getMaxPurchasable(drag_stack, vendor->getTab()), drag_stack.quantity);
+						if ((drag_stack.quantity > 1 && inpt->pressing[Input::SHIFT]) || vendor->getTab() == ItemManager::VENDOR_CRAFT) {
+							int max_quantity = inv->getMaxPurchasable(drag_stack, vendor->getTab());
+							if (vendor->getTab() != ItemManager::VENDOR_CRAFT)
+								max_quantity = std::min(max_quantity, drag_stack.quantity);
+
 							if (max_quantity >= 1) {
 								num_picker->setValueBounds(1, max_quantity);
 								num_picker->visible = true;
@@ -1058,7 +1068,7 @@ void MenuManager::logic() {
 					}
 					else {
 						// The vendor could have a limited amount of currency in the future. It will be tested here.
-						if ((eset->misc.sell_without_vendor || vendor->visible) && inv->sell(stack)) {
+						if ((eset->misc.sell_without_vendor || (vendor->visible && vendor->sell_enabled)) && inv->sell(stack)) {
 							if (vendor->visible) {
 								vendor->setTab(ItemManager::VENDOR_SELL);
 								vendor->add(stack);
@@ -1191,7 +1201,7 @@ void MenuManager::logic() {
 					}
 				}
 				else if (vendor->visible && Utils::isWithinRect(vendor->window_area, inpt->mouse)) {
-					if (inv->sell( drag_stack)) {
+					if (vendor->sell_enabled && inv->sell( drag_stack)) {
 						vendor->setTab(ItemManager::VENDOR_SELL);
 						vendor->add( drag_stack);
 					}
@@ -1377,10 +1387,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 		Point src_slot;
 		WidgetSlot * vendor_slot;
 
-		if (vendor->getTab() == ItemManager::VENDOR_SELL)
-			vendor_slot = vendor->stock[ItemManager::VENDOR_SELL].slots[slot_index];
-		else
-			vendor_slot = vendor->stock[ItemManager::VENDOR_BUY].slots[slot_index];
+		vendor_slot = vendor->stock[vendor->getTab()].slots[slot_index];
 
 		src_slot.x = vendor_slot->pos.x;
 		src_slot.y = vendor_slot->pos.y;
@@ -1631,14 +1638,8 @@ void MenuManager::handleKeyboardTooltips() {
 		if (cur_tablist && cur_tablist != &(vendor->tablist)) {
 			int slot_index = cur_tablist->getCurrent();
 
-			if (vendor->getTab() == ItemManager::VENDOR_BUY) {
-				keydrag_pos.x = vendor->stock[ItemManager::VENDOR_BUY].slots[slot_index]->pos.x;
-				keydrag_pos.y = vendor->stock[ItemManager::VENDOR_BUY].slots[slot_index]->pos.y;
-			}
-			else if (vendor->getTab() == ItemManager::VENDOR_SELL) {
-				keydrag_pos.x = vendor->stock[ItemManager::VENDOR_SELL].slots[slot_index]->pos.x;
-				keydrag_pos.y = vendor->stock[ItemManager::VENDOR_SELL].slots[slot_index]->pos.y;
-			}
+			keydrag_pos.x = vendor->stock[vendor->getTab()].slots[slot_index]->pos.x;
+			keydrag_pos.y = vendor->stock[vendor->getTab()].slots[slot_index]->pos.y;
 
 			Point tooltip_pos = keydrag_pos;
 			tooltip_pos.x += eset->resolutions.icon_size / 2;

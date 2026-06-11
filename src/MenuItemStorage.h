@@ -61,6 +61,9 @@ public:
 	int drag_prev_slot;
 	std::vector<WidgetSlot*> slots;
 	WidgetSlot *current_slot;
+
+	bool max_quantity_is_one;
+	bool click_subtracts_item;
 };
 
 #endif

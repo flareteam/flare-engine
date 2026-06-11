@@ -2,12 +2,18 @@ Flare v1.16
 
 Engine features:
 
+* Items
+	- Added 'crafting_items' property to Items.
+
 * Enemies, allies, and NPCs
 	- Added 'corpse_has_collision' property to StatBlock.
 	- Added 'corpse_has_timeout' property to StatBlock.
 	- Added 'corpse_render_below' property to StatBlock.
 	- Added 'cooldown_los' property to StatBlock.
 	- Added 'resting_hp_regen_time' property to StatBlock.
+	- Added optional Craft tab to vendor NPCs.
+	- Added several properties to set the stock of the NPC vendor Craft tab.
+	- Added 'vendor_tab_enabled' property to NPCs.
 
 * Powers
 	- Added 'meta_power_provides_tooltip' property to Powers.
@@ -15,6 +21,9 @@ Engine features:
 
 * Animations
 	- Add support for multiple images to uncompressed animations with AnimationSet property, 'animation.image'.
+
+* UI
+	- Added 'sort_stock_craft' property to menus/vendor.txt config.
 
 * System
 	- Add "Minimum Render Size" video setting.

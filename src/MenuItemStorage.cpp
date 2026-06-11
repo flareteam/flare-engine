@@ -40,6 +40,8 @@ MenuItemStorage::MenuItemStorage()
 	, drag_prev_slot(-1)
 	, slots()
 	, current_slot(NULL)
+	, max_quantity_is_one(false)
+	, click_subtracts_item(true)
 {
 }
 
@@ -87,7 +89,10 @@ void MenuItemStorage::render() {
 	for (int i=0; i<slot_number; i++) {
 		if (items->isValid(storage[i].item)) {
 			slots[i]->setIcon(items->items[storage[i].item]->icon, items->getItemIconOverlay(storage[i].item));
-			slots[i]->setAmount(storage[i].quantity, items->items[storage[i].item]->max_quantity);
+			if (max_quantity_is_one)
+				slots[i]->setAmount(1, 1);
+			else
+				slots[i]->setAmount(storage[i].quantity, items->items[storage[i].item]->max_quantity);
 		}
 		else {
 			slots[i]->setIcon(WidgetSlot::NO_ICON, WidgetSlot::NO_OVERLAY);
@@ -158,6 +163,10 @@ ItemStack MenuItemStorage::click(const Point& position) {
 				// we will subtract from this stack after they've made their decision
 				return item;
 			}
+			else if (!click_subtracts_item) {
+				return item;
+			}
+
 			subtract( drag_prev_slot, item.quantity);
 		}
 		// item will be cleared if item.empty() == true

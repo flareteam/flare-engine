@@ -1156,6 +1156,8 @@ code {
 
 <p><strong>randomizer_def</strong> | <code>filename</code> | Randomizer definition file for this item. See "ItemManager: Randomizer Definition".</p>
 
+<p><strong>crafting_items</strong> | <code>repeatable(list(item_id))</code> | A list of items that are required to craft this item from within the vendor menu. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.</p>
+
 <hr />
 
 <h4>ItemManager: Types</h4>
@@ -1948,6 +1950,8 @@ code {
 
 <p><strong>sort_stock_buy</strong> | <code>["none", "type", "quality", "level", "price", "id"]</code> | Sorts all vendors' "Buy" stock by the given metric.</p>
 
+<p><strong>sort_stock_craft</strong> | <code>["none", "type", "quality", "level", "price", "id"]</code> | Sorts all vendors' "Craft" stock by the given metric.</p>
+
 <hr />
 
 <h4>ModManager</h4>
@@ -2033,6 +2037,16 @@ code {
 <p><strong>npc.vendor_ratio_sell_old</strong> | <code>float</code> | NPC-specific version of vendor_ratio_sell_old from engine/loot.txt. Uses the global setting when set to 0.</p>
 
 <p><strong>npc.vox_intro</strong> | <code>repeatable(filename)</code> | Filename of a sound file to play when initially interacting with the NPC.</p>
+
+<p><strong>npc.craft_constant_stock</strong> | <code>repeatable(list(item_id))</code> | A list of items this vendor can craft.</p>
+
+<p><strong>npc.craft_status_stock</strong> | <code>repeatable(string, list(item_id)) : Required status, Item(s)</code> | A list of items this vendor can craft if the required status is met.</p>
+
+<p><strong>npc.craft_random_stock</strong> | <code>list(loot)</code> | Use a loot table to add random items to the Craft stock; either a filename or an inline definition.</p>
+
+<p><strong>npc.craft_random_stock_count</strong> | <code>int, int : Min, Max</code> | Sets the minimum (and optionally, the maximum) amount of random items this npc can have in their Craft stock.</p>
+
+<p><strong>npc.vendor_tab_enabled</strong> | <code>repeatable(["buy", "sell", "craft"], bool) : Tab, Enabled</code> | Sets the enabled state of the specified vendor tab for this NPC. The "buy" and "sell" tabs are enabled by default.</p>
 
 <hr />
 

@@ -52,12 +52,15 @@ MenuVendor::MenuVendor()
 	, slots_rows(1)
 	, activetab(ItemManager::VENDOR_BUY)
 	, sort_stock_buy(ItemStorage::SORT_NONE)
+	, sort_stock_craft(ItemStorage::SORT_NONE)
 	, tip (new WidgetTooltip())
 	, npc(NULL)
 	, buyback_stock()
+	, sell_enabled(true)
 {
-	tabControl->setupTab(ItemManager::VENDOR_BUY, msg->get("Inventory"), &tablist_buy);
-	tabControl->setupTab(ItemManager::VENDOR_SELL, msg->get("Buyback"), &tablist_sell);
+	tabControl->setupTab(ItemManager::VENDOR_BUY, msg->get("Inventory"), &tablist_tabs[ItemManager::VENDOR_BUY]);
+	tabControl->setupTab(ItemManager::VENDOR_SELL, msg->get("Buyback"), &tablist_tabs[ItemManager::VENDOR_SELL]);
+	tabControl->setupTab(ItemManager::VENDOR_CRAFT, msg->get("Craft"), &tablist_tabs[ItemManager::VENDOR_CRAFT]);
 
 	// Load config settings
 	FileParser infile;
@@ -104,6 +107,21 @@ MenuVendor::MenuVendor()
 				else if (infile.val == "id")
 					sort_stock_buy = ItemStorage::SORT_ID;
 			}
+			// @ATTR sort_stock_craft|["none", "type", "quality", "level", "price", "id"]|Sorts all vendors' "Craft" stock by the given metric.
+			else if (infile.key == "sort_stock_craft") {
+				if (infile.val == "none")
+					sort_stock_craft = ItemStorage::SORT_NONE;
+				else if (infile.val == "type")
+					sort_stock_craft = ItemStorage::SORT_TYPE;
+				else if (infile.val == "quality")
+					sort_stock_craft = ItemStorage::SORT_QUALITY;
+				else if (infile.val == "level")
+					sort_stock_craft = ItemStorage::SORT_LEVEL;
+				else if (infile.val == "price")
+					sort_stock_craft = ItemStorage::SORT_BUY_PRICE;
+				else if (infile.val == "id")
+					sort_stock_craft = ItemStorage::SORT_ID;
+			}
 			else {
 				infile.error("MenuVendor: '%s' is not a valid key.", infile.key.c_str());
 			}
@@ -117,20 +135,23 @@ MenuVendor::MenuVendor()
 	slots_area.w = slots_cols * eset->resolutions.icon_size;
 	slots_area.h = slots_rows * eset->resolutions.icon_size;
 
-	stock[ItemManager::VENDOR_BUY].initGrid(VENDOR_SLOTS, slots_area, slots_cols);
-	stock[ItemManager::VENDOR_SELL].initGrid(VENDOR_SLOTS, slots_area, slots_cols);
+	for (int i = 0; i < TAB_COUNT; ++i) {
+		stock[i].initGrid(VENDOR_SLOTS, slots_area, slots_cols);
+		tablist_tabs[i].lock();
 
-	tablist.setNextTabList(&tablist_buy);
+		for (unsigned j = 0; j < VENDOR_SLOTS; ++j) {
+			tablist_tabs[i].add(stock[i].slots[j]);
+		}
 
-	tablist_buy.lock();
-	tablist_sell.lock();
-
-	for (unsigned i = 0; i < VENDOR_SLOTS; i++) {
-		tablist_buy.add(stock[ItemManager::VENDOR_BUY].slots[i]);
 	}
-	for (unsigned i = 0; i < VENDOR_SLOTS; i++) {
-		tablist_sell.add(stock[ItemManager::VENDOR_SELL].slots[i]);
-	}
+
+	// since we never subtract items from the craft tab, we set the max quantity to 1 in order to hide the quantity display on the icons
+	stock[ItemManager::VENDOR_CRAFT].max_quantity_is_one = true;
+
+	// we need to behave like we're holding Shift without actually doing so
+	stock[ItemManager::VENDOR_CRAFT].click_subtracts_item = false;
+
+	tablist.setNextTabList(&tablist_tabs[ItemManager::VENDOR_BUY]);
 
 	if (!background)
 		setBackground("images/menus/vendor.png");
@@ -153,40 +174,43 @@ void MenuVendor::align() {
 
 	stock[ItemManager::VENDOR_BUY].setPos(window_area.x, window_area.y);
 	stock[ItemManager::VENDOR_SELL].setPos(window_area.x, window_area.y);
+	stock[ItemManager::VENDOR_CRAFT].setPos(window_area.x, window_area.y);
 }
 
 void MenuVendor::logic() {
 	if (!visible) return;
 
 	tablist.logic();
-	tablist_buy.logic();
-	tablist_sell.logic();
+	for (int i = 0; i < TAB_COUNT; ++i) {
+		tablist_tabs[i].logic();
+	}
 
-	if (stock[ItemManager::VENDOR_BUY].drag_prev_slot == -1 && stock[ItemManager::VENDOR_SELL].drag_prev_slot == -1)
+	if (stock[ItemManager::VENDOR_BUY].drag_prev_slot == -1 && stock[ItemManager::VENDOR_SELL].drag_prev_slot == -1 && stock[ItemManager::VENDOR_CRAFT].drag_prev_slot == -1)
 		tabControl->logic();
 
 	if (inpt->usingTouchscreen() && activetab != tabControl->getActiveTab()) {
-		tablist_buy.defocus();
-		tablist_sell.defocus();
+		for (int i = 0; i < TAB_COUNT; ++i) {
+			tablist_tabs[i].defocus();
+		}
 	}
 	activetab = tabControl->getActiveTab();
 
-	if (activetab == ItemManager::VENDOR_BUY) {
-		tablist_buy.unlock();
-		tablist_sell.lock();
-		tablist.setNextTabList(&tablist_buy);
-	}
-	else if (activetab == ItemManager::VENDOR_SELL) {
-		tablist_buy.lock();
-		tablist_sell.unlock();
-		tablist.setNextTabList(&tablist_sell);
+	for (int i = 0; i < TAB_COUNT; ++i) {
+		if (activetab == i) {
+			tablist_tabs[i].unlock();
+			tablist.setNextTabList(&tablist_tabs[i]);
+		}
+		else {
+			tablist_tabs[i].lock();
+		}
 	}
 
 	if (inpt->usingTouchscreen()) {
-		if (activetab == ItemManager::VENDOR_BUY && tablist_buy.getCurrent() == -1)
-			stock[ItemManager::VENDOR_BUY].current_slot = NULL;
-		else if (activetab == ItemManager::VENDOR_SELL && tablist_sell.getCurrent() == -1)
-			stock[ItemManager::VENDOR_SELL].current_slot = NULL;
+		for (int i = 0; i < TAB_COUNT; ++i) {
+			if (activetab == i && tablist_tabs[i].getCurrent() == -1) {
+				stock[i].current_slot = NULL;
+			}
+		}
 	}
 
 	if (closeButton->checkClick()) {
@@ -197,8 +221,9 @@ void MenuVendor::logic() {
 
 void MenuVendor::setTab(int tab) {
 	if (inpt->usingTouchscreen() && activetab != tab) {
-		tablist_buy.defocus();
-		tablist_sell.defocus();
+		for (int i = 0; i < TAB_COUNT; ++i) {
+			tablist_tabs[i].defocus();
+		}
 	}
 	tabControl->setActiveTab(tab);
 	activetab = tab;
@@ -231,10 +256,11 @@ ItemStack MenuVendor::click(const Point& position) {
 	ItemStack stack = stock[activetab].click(position);
 	saveInventory();
 	if (inpt->usingTouchscreen()) {
-		if (activetab == ItemManager::VENDOR_BUY)
-			tablist_buy.setCurrent(stock[activetab].current_slot);
-		else if (activetab == ItemManager::VENDOR_SELL)
-			tablist_sell.setCurrent(stock[activetab].current_slot);
+		for (int i = 0; i < TAB_COUNT; ++i) {
+			if (activetab == i) {
+				tablist_tabs[i].setCurrent(stock[i].current_slot);
+			}
+		}
 	}
 	return stack;
 }
@@ -243,6 +269,11 @@ ItemStack MenuVendor::click(const Point& position) {
  * Cancel the dragging initiated by the clic()
  */
 void MenuVendor::itemReturn(ItemStack stack) {
+	if (activetab == ItemManager::VENDOR_CRAFT) {
+		resetDrag();
+		return;
+	}
+
 	stock[activetab].itemReturn(stack);
 	saveInventory();
 }
@@ -264,8 +295,7 @@ void MenuVendor::renderTooltips(const Point& position) {
 	if (!visible || !Utils::isWithinRect(window_area, position))
 		return;
 
-	int vendor_view = (activetab == ItemManager::VENDOR_BUY) ? ItemManager::VENDOR_BUY : ItemManager::VENDOR_SELL;
-	TooltipData tip_data = stock[activetab].checkTooltip(position, &pc->stats, vendor_view, ItemManager::TOOLTIP_INPUT_HINT);
+	TooltipData tip_data = stock[activetab].checkTooltip(position, &pc->stats, activetab, ItemManager::TOOLTIP_INPUT_HINT);
 	tooltipm->push(tip_data, position, TooltipData::STYLE_FLOAT);
 }
 
@@ -275,13 +305,16 @@ void MenuVendor::renderTooltips(const Point& position) {
  * the player leaves this map)
  */
 void MenuVendor::saveInventory() {
-	for (unsigned i=0; i<VENDOR_SLOTS; i++) {
-		if (npc) {
+	if (npc) {
+		for (unsigned i=0; i<VENDOR_SLOTS; i++) {
 			npc->stock[i] = stock[ItemManager::VENDOR_BUY][i];
 			buyback_stock[npc->filename][i] = stock[ItemManager::VENDOR_SELL][i];
+			npc->craft_stock[i] = stock[ItemManager::VENDOR_CRAFT][i];
 		}
 	}
-
+	else {
+		Utils::logError("MenuVendor: saveInventory() failed, unknown NPC.");
+	}
 }
 
 void MenuVendor::moveEmptySlotsToEnd(int type) {
@@ -303,8 +336,6 @@ void MenuVendor::setNPC(NPC* _npc) {
 
 	label_vendor.setText(msg->get("Vendor") + " - " + npc->name);
 
-	setTab(ItemManager::VENDOR_BUY);
-
 	buyback_stock[npc->filename].init(NPC::VENDOR_MAX_STOCK);
 
 	for (unsigned i=0; i<VENDOR_SLOTS; i++) {
@@ -317,22 +348,44 @@ void MenuVendor::setNPC(NPC* _npc) {
 				buyback_stock[npc->filename][i].clear();
 		}
 		stock[ItemManager::VENDOR_SELL][i] = buyback_stock[npc->filename][i];
+
+		stock[ItemManager::VENDOR_CRAFT][i] = npc->craft_stock[i];
+		stock[ItemManager::VENDOR_CRAFT][i].quantity = 1;
 	}
 	npc->reset_buyback = false;
 
-	moveEmptySlotsToEnd(ItemManager::VENDOR_BUY);
-	moveEmptySlotsToEnd(ItemManager::VENDOR_SELL);
+	for (int i = 0; i < TAB_COUNT; ++i) {
+		moveEmptySlotsToEnd(i);
+		tabControl->setEnabled(i, npc->vendor_tab_enabled[i]);
+	}
+
+	sell_enabled = npc->vendor_tab_enabled[ItemManager::VENDOR_SELL];
+
+	for (int i = 0; i < TAB_COUNT; ++i) {
+		if (npc->vendor_tab_enabled[i]) {
+			setTab(i);
+			break;
+		}
+	}
 
 	stock[ItemManager::VENDOR_BUY].sort(sort_stock_buy);
+	stock[ItemManager::VENDOR_CRAFT].sort(sort_stock_craft);
 
 	if (!visible) {
 		visible = true;
 		snd->play(sfx_open, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
 		npc->playSoundIntro();
 	}
+
+	align();
 }
 
 void MenuVendor::removeFromPrevSlot(int quantity) {
+	if (activetab == ItemManager::VENDOR_CRAFT) {
+		resetDrag();
+		return;
+	}
+
 	int drag_prev_slot = stock[activetab].drag_prev_slot;
 	if (drag_prev_slot > -1) {
 		stock[activetab].subtract(drag_prev_slot, quantity);
@@ -341,23 +394,25 @@ void MenuVendor::removeFromPrevSlot(int quantity) {
 }
 
 void MenuVendor::lockTabControl() {
-	tablist_buy.setPrevTabList(NULL);
-	tablist_sell.setPrevTabList(NULL);
+	for (int i = 0; i < TAB_COUNT; ++i) {
+		tablist_tabs[i].setPrevTabList(NULL);
+	}
 }
 
 void MenuVendor::unlockTabControl() {
-	tablist_buy.setPrevTabList(&tablist);
-	tablist_sell.setPrevTabList(&tablist);
+	for (int i = 0; i < TAB_COUNT; ++i) {
+		tablist_tabs[i].setPrevTabList(&tablist);
+	}
 }
 
 TabList* MenuVendor::getCurrentTabList() {
 	if (tablist.getCurrent() != -1)
 		return (&tablist);
-	else if (tablist_buy.getCurrent() != -1) {
-		return (&tablist_buy);
-	}
-	else if (tablist_sell.getCurrent() != -1) {
-		return (&tablist_sell);
+
+	for (int i = 0; i < TAB_COUNT; ++i) {
+		if (tablist_tabs[i].getCurrent() != -1) {
+			return (&tablist_tabs[i]);
+		}
 	}
 
 	return NULL;
@@ -365,13 +420,15 @@ TabList* MenuVendor::getCurrentTabList() {
 
 void MenuVendor::defocusTabLists() {
 	tablist.defocus();
-	tablist_buy.defocus();
-	tablist_sell.defocus();
+	for (int i = 0; i < TAB_COUNT; ++i) {
+		tablist_tabs[i].defocus();
+	}
 }
 
 void MenuVendor::resetDrag() {
-	stock[ItemManager::VENDOR_BUY].drag_prev_slot = -1;
-	stock[ItemManager::VENDOR_SELL].drag_prev_slot = -1;
+	for (int i = 0; i < TAB_COUNT; ++i) {
+		stock[i].drag_prev_slot = -1;
+	}
 }
 
 MenuVendor::~MenuVendor() {

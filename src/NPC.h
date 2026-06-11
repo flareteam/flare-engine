@@ -49,6 +49,9 @@ private:
 	std::vector<EventComponent> random_table;
 	Point random_table_count;
 
+	std::vector<EventComponent> craft_random_table;
+	Point craft_random_table_count;
+
 	std::vector<StatusID> vendor_requires_status;
 	std::vector<StatusID> vendor_requires_not_status;
 
@@ -91,8 +94,10 @@ public:
 
 	// vendor info
 	bool vendor;
+	bool vendor_tab_enabled[3];
 	bool reset_buyback;
 	ItemStorage stock;
+	ItemStorage craft_stock;
 	float vendor_ratio_buy;
 	float vendor_ratio_sell;
 	float vendor_ratio_sell_old;

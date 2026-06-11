@@ -25,6 +25,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "Avatar.h"
+#include "CampaignManager.h"
 #include "CommonIncludes.h"
 #include "EngineSettings.h"
 #include "FileParser.h"
@@ -727,6 +728,16 @@ void ItemManager::loadItems(const std::string& filename) {
 		else if (infile.key == "randomizer_def") {
 			// @ATTR randomizer_def|filename|Randomizer definition file for this item. See "ItemManager: Randomizer Definition".
 			item->randomizer_def = loadRandomizerDef(infile.val);
+		}
+		else if (infile.key == "crafting_items") {
+			// @ATTR crafting_items|repeatable(list(item_id))|A list of items that are required to craft this item from within the vendor menu. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.
+			item->crafting_items.clear();
+			ItemStack stack;
+			while (infile.val != "") {
+				stack = Parse::toItemQuantityPair(Parse::popFirstString(infile.val));
+				if (!stack.empty())
+					item->crafting_items.push_back(stack);
+			}
 		}
 		else {
 			infile.error("ItemManager: '%s' is not a valid key.", infile.key.c_str());
@@ -1532,6 +1543,26 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 			else
 				tip.addColoredText(msg->getv("Buy Price: %d %s each", price_per_unit, eset->loot.currency.c_str()), color);
 		}
+		else if (context == VENDOR_CRAFT) {
+			if (!item->crafting_items.empty()) {
+				tip.addColoredText("\n" + msg->get("Crafting requires:"), currency_color);
+			}
+			for (size_t i = 0; i < item->crafting_items.size(); ++i) {
+				ItemStack &craft_stack = item->crafting_items[i];
+				ss.str("");
+				if (craft_stack.quantity == 1)
+					ss << getItemName(craft_stack.item);
+				else
+					ss << getItemName(craft_stack.item) << " (" << craft_stack.quantity << ")";
+
+				if (!camp || (camp && camp->checkItem(craft_stack)))
+					color = currency_color;
+				else
+					color = font->getColor(FontEngine::COLOR_REQUIREMENTS_NOT_MET);
+
+				tip.addColoredText(ss.str(), color);
+			}
+		}
 		else if (context == PLAYER_INV) {
 			price_per_unit = item->getSellPrice(DEFAULT_SELL_PRICE);
 			if (price_per_unit == 0)
@@ -1746,6 +1777,22 @@ int Item::getSellPrice(bool is_new_buyback) {
 	}
 
 	return std::max(new_price, 1);
+}
+
+int Item::getCraftCount() {
+	int craft_count = INT_MAX;
+
+	if (crafting_items.empty())
+		return 0;
+
+	for (size_t i = 0; i < crafting_items.size(); ++i) {
+		ItemStack &stack = crafting_items[i];
+		int item_count = menu->inv->inventory[MenuInventory::CARRIED].count(stack.item);
+		item_count += menu->inv->inventory[MenuInventory::EQUIPMENT].count(stack.item);
+		craft_count = std::min(craft_count, item_count / stack.quantity);
+	}
+
+	return craft_count;
 }
 
 ItemID ItemManager::verifyID(ItemID item_id, FileParser* infile, bool allow_zero, bool allocate) {

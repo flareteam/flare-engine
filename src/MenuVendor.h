@@ -48,17 +48,16 @@ private:
 	int slots_rows;
 	int activetab;
 	int sort_stock_buy;
+	int sort_stock_craft;
 
 	WidgetTooltip* tip;
 
 public:
+	static const int TAB_COUNT = 3;
+
 	explicit MenuVendor();
 	~MenuVendor();
 	void align();
-
-	NPC *npc;
-	std::map<std::string, ItemStorage> buyback_stock;
-	MenuItemStorage stock[2]; // items the vendor currently has in stock
 
 	void logic();
 	void setTab(int tab);
@@ -77,14 +76,19 @@ public:
 	void lockTabControl();
 	void unlockTabControl();
 
-	Rect slots_area;
-
-	TabList tablist_buy;
-	TabList tablist_sell;
-
 	TabList* getCurrentTabList();
 	void defocusTabLists();
 	void resetDrag();
+
+	NPC *npc;
+	std::map<std::string, ItemStorage> buyback_stock;
+	MenuItemStorage stock[TAB_COUNT]; // items the vendor currently has in stock
+
+	Rect slots_area;
+
+	TabList tablist_tabs[TAB_COUNT];
+
+	bool sell_enabled;
 };
 
 
