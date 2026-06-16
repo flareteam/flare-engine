@@ -1176,6 +1176,16 @@ void PowerManager::loadPowers() {
 			// @ATTR power.passive_effects_persist|bool|If true, post effects from this passive power will not be removed if the passive power is deactivated.
 			power->passive_effects_persist = Parse::toBool(infile.val);
 		}
+		else if (infile.key == "dispel") {
+			// @ATTR power.displel|list(power_id)|Removes any colliding hazards that match the specified Power IDs. Works best with multitarget=true.
+			power->dispel_power_ids.clear();
+			std::string dispel_id = Parse::popFirstString(infile.val);
+
+			while (dispel_id != "") {
+				power->dispel_power_ids.push_back(Parse::toPowerID(dispel_id));
+				dispel_id = Parse::popFirstString(infile.val);
+			}
+		}
 
 		else infile.error("PowerManager: '%s' is not a valid key", infile.key.c_str());
 	}

@@ -36,6 +36,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "SoundManager.h"
+#include "Utils.h"
 #include "UtilsMath.h"
 
 HazardManager::HazardManager()
@@ -148,6 +149,25 @@ void HazardManager::logic() {
 				}
 			}
 
+			// dispel hazards can remove other hazards by ID
+			for (size_t j = 0; j < hazard->power->dispel_power_ids.size(); ++j) {
+				PowerID dispel_id = hazard->power->dispel_power_ids[j];
+
+				for (size_t k = 0; k < h.size(); ++k) {
+					if (dispel_id != h[k]->power_index)
+						continue;
+
+					if (hazard->source_type == Power::SOURCE_TYPE_NEUTRAL ||
+						(hazard->source_type == Power::SOURCE_TYPE_ENEMY && h[k]->source_type != Power::SOURCE_TYPE_ENEMY) ||
+						(hazard->source_type != Power::SOURCE_TYPE_ENEMY && h[k]->source_type == Power::SOURCE_TYPE_ENEMY))
+					{
+						if (Utils::isWithinRadius(hazard->pos, hazard->power->radius, h[k]->pos)) {
+							h[k]->lifespan = 0;
+							// h[k]->remove_now = true;
+						}
+					}
+				}
+			}
 		}
 	}
 }

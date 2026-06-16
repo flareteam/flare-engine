@@ -324,6 +324,7 @@ public:
 	std::vector< std::pair<std::string, int> > remove_effects;
 	std::vector<PowerReplaceByEffect> replace_by_effect;
 	std::vector<size_t> disable_equip_slots;
+	std::vector<PowerID> dispel_power_ids;
 	std::set<size_t> requires_flags; // checked against equip_flags granted from items
 
 	Power();

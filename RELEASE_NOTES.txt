@@ -18,6 +18,7 @@ Engine features:
 * Powers
 	- Added 'meta_power_provides_tooltip' property to Powers.
 	- Added 'melee_unlocked' as a possible value for 'starting_pos'.
+	- Added 'dispel' property to Powers.
 
 * Animations
 	- Add support for multiple images to uncompressed animations with AnimationSet property, 'animation.image'.
