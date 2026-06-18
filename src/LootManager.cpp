@@ -121,7 +121,7 @@ void LootManager::logic() {
 		// animate flying loot
 		if (it->animation) {
 			it->animation->advanceFrame();
-			if (!it->on_ground && it->animation->isSecondLastFrame()) {
+			if (!it->on_ground && ((it->animation->default_active_frames && it->animation->isSecondLastFrame()) || (!it->animation->default_active_frames && it->animation->isActiveFrame()))) {
 				it->on_ground = true;
 			}
 		}

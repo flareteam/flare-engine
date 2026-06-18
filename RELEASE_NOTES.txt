@@ -32,6 +32,9 @@ Engine features:
 
 Engine fixes:
 
+* Items
+	- Support using 'active_frame' for loot animations to set when the loot is considered to be on the ground.
+
 * Enemies, allies, and NPCs
 	- Fixed turn delay not working when entity speed was 0. This was a potential divide-by-zero crash as well!
 	- Fixed a case where entities wouldn't reset their attack animation after the first use when using the same animation continuously.
