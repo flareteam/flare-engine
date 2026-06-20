@@ -705,6 +705,22 @@ void MenuManager::logic() {
 			}
 			else if (menus_open) {
 				inpt->lock[Input::CANCEL] = true;
+
+				// play *one* close sound effect
+				if (chr->visible) {
+					snd->play(chr->sfx_close, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
+				}
+				else if (questlog->visible) {
+					snd->play(questlog->sfx_close, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
+				}
+				else {
+					if (inv->visible) {
+						snd->play(inv->sfx_close, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
+					}
+					else if (pow->visible) {
+						snd->play(pow->sfx_close, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
+					}
+				}
 				closeAll();
 			}
 			else if (!game_over->visible && (inpt->mode != InputState::MODE_JOYSTICK || exit->visible)) {
