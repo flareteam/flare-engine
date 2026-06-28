@@ -26,6 +26,7 @@ Engine features:
 * UI
 	- Added 'sort_stock_craft' property to menus/vendor.txt config.
 	- Fixed enemy HP menu target being incorrectly set to enemies with faded-out corpses.
+	- Added 'timeout' property to menus/enemy.txt config.
 
 * System
 	- Add "Minimum Render Size" video setting.

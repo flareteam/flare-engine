@@ -79,6 +79,10 @@ MenuEnemy::MenuEnemy()
 			else if (infile.key == "bar_gfx") {
 				bar_gfx = infile.val;
 			}
+			// @ATTR timeout|duration|The amount of time before the menu disappears when no enemy is targeted. Defaults to 10 seconds.
+			else if (infile.key == "timeout") {
+				timeout.setDuration(Parse::toDuration(infile.val));
+			}
 			else {
 				infile.error("MenuEnemy: '%s' is not a valid key.", infile.key.c_str());
 			}
