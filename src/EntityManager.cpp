@@ -393,8 +393,11 @@ Entity* EntityManager::entityFocus(const Point& mouse, const FPoint& cam, bool a
 	FPoint render_bounds_center;
 
 	for(unsigned int i = 0; i < entities.size(); i++) {
-		if(alive_only && (entities[i]->stats.cur_state == StatBlock::ENTITY_DEAD || entities[i]->stats.cur_state == StatBlock::ENTITY_CRITDEAD)) {
-			continue;
+		if (entities[i]->stats.cur_state == StatBlock::ENTITY_DEAD || entities[i]->stats.cur_state == StatBlock::ENTITY_CRITDEAD) {
+			if (alive_only)
+				continue;
+			else if (entities[i]->stats.corpse && entities[i]->stats.corpse_timer.isEnd() && entities[i]->stats.corpse_has_timeout)
+				continue;
 		}
 
 		Rect render_bounds = entities[i]->getRenderBounds(cam);
