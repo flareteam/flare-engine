@@ -60,6 +60,9 @@ Engine fixes:
 	- Fixed a rendering bug that occured when trying to render objects outside of the map.
 	- Android: Fixed default mobile settings not being loaded on first launch.
 
+Game updates:
+
+* Fixed missing collision in Iron Labyrinth's "warp room".
 
 Translation updates:
 
