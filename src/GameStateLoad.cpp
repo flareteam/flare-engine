@@ -989,6 +989,7 @@ void GameStateLoad::render() {
 		int off_slot = slot+scroll_offset;
 
 		// slot background
+		Point slot_dest;
 		if (slots_background) {
 			src.x = 0;
 			src.y = (off_slot % 4) * gameslot_pos.h;
@@ -1002,8 +1003,9 @@ void GameStateLoad::render() {
 			slots_background->setClipFromRect(src);
 			slots_background->setDestFromRect(dest);
 			render_device->render(slots_background);
+
+			slot_dest = slots_background->getDest();
 		}
-		Point slot_dest = slots_background->getDest();
 
 		if (!game_slots[off_slot]) {
 			WidgetLabel slot_error;
