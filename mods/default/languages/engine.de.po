@@ -2,27 +2,28 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 # Translators:
 # a287ca4390ac1060252ff7344e07cfb3_ddf63c0 <12d9bb92f00a9c2841133eeaac7a25bb_727560>, 2019
 # Wuzzy <Wuzzy@disroot.org>, 2020
 # Justin Jacobs <jajdorkster@gmail.com>, 2022
 # Iwan Gabovitch, 2023
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-23 12:01-0400\n"
-"PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: Iwan Gabovitch, 2023\n"
+"PO-Revision-Date: 2026-07-04 23:15+0200\n"
+"Last-Translator: Wuzzy <Wuzzy@disroot.org>\n"
 "Language-Team: German (https://app.transifex.com/flareorg/teams/84925/de/)\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.9\n"
 
 #: ../../../src/Avatar.cpp:496
 msgid "Your health is low!"
@@ -142,17 +143,17 @@ msgstr "Abenteurer"
 #: ../../../src/EngineSettings.cpp:881 ../../../src/Stats.cpp:81
 #, c-format
 msgid "%s (Min.)"
-msgstr ""
+msgstr "%s (Min.)"
 
 #: ../../../src/EngineSettings.cpp:884 ../../../src/Stats.cpp:88
 #, c-format
 msgid "%s (Max.)"
-msgstr ""
+msgstr "%s (Max.)"
 
 #: ../../../src/EngineSettings.cpp:887
 #, c-format
 msgid "Resist Damage (%s)"
-msgstr ""
+msgstr "Schadenswiderstand (%s)"
 
 #: ../../../src/Entity.cpp:520
 msgid "miss"
@@ -308,7 +309,7 @@ msgstr "Sprache"
 
 #: ../../../src/GameStateTitle.cpp:194
 msgid "Use mouse to move player?"
-msgstr ""
+msgstr "Maus benutzen, um Spieler zu bewegen?"
 
 #: ../../../src/GameSwitcher.cpp:263
 #, c-format
@@ -341,7 +342,7 @@ msgstr "Aufgabengegenstand"
 #: ../../../src/ItemManager.cpp:1398
 #, c-format
 msgid "Prevents use of slot: %s"
-msgstr ""
+msgstr "Verhindert Benutzung von Platz: %s"
 
 #: ../../../src/ItemManager.cpp:1406
 #, c-format
@@ -415,19 +416,19 @@ msgstr "Drücke [%s] für weitere Optionen"
 
 #: ../../../src/ItemStorage.cpp:483
 msgid "Sort by: Type"
-msgstr ""
+msgstr "Sortieren nach: Typ"
 
 #: ../../../src/ItemStorage.cpp:485
 msgid "Sort by: Quality"
-msgstr ""
+msgstr "Sortieren nach: Qualität"
 
 #: ../../../src/ItemStorage.cpp:487
 msgid "Sort by: Level"
-msgstr ""
+msgstr "Sortieren nach: Stufe"
 
 #: ../../../src/ItemStorage.cpp:489
 msgid "Sort by: Sell Price"
-msgstr ""
+msgstr "Sortieren nach: Verkaufspreis"
 
 #: ../../../src/LootManager.cpp:107 ../../../src/LootManager.cpp:109
 #: ../../../src/LootManager.cpp:111 ../../../src/MenuConfig.cpp:492
@@ -450,11 +451,11 @@ msgstr "Alles anzeigen"
 
 #: ../../../src/MapRenderer.cpp:1766
 msgid "Map Legend"
-msgstr ""
+msgstr "Kartenlegende"
 
 #: ../../../src/MapRenderer.cpp:1767
 msgid "Start"
-msgstr ""
+msgstr "Start"
 
 #: ../../../src/MapRenderer.cpp:1768 ../../../src/SDLInputState.cpp:676
 #: ../../../src/SDLInputState.cpp:706
@@ -463,11 +464,11 @@ msgstr "Ende"
 
 #: ../../../src/MapRenderer.cpp:1769
 msgid "Door"
-msgstr ""
+msgstr "Tür"
 
 #: ../../../src/MapRenderer.cpp:1770
 msgid "Key"
-msgstr ""
+msgstr "Schlüssel"
 
 #: ../../../src/MenuActionBar.cpp:92 ../../../src/MenuCharacter.cpp:54
 #: ../../../src/SDLInputState.cpp:930
@@ -518,11 +519,11 @@ msgstr "Verfügbare Wertepunkte: %d"
 
 #: ../../../src/MenuCharacter.cpp:326
 msgid "Core Stats"
-msgstr ""
+msgstr "Hauptwerte"
 
 #: ../../../src/MenuCharacter.cpp:360
 msgid "Offensive Stats"
-msgstr ""
+msgstr "Offensivwerte"
 
 #: ../../../src/MenuCharacter.cpp:375
 #, c-format
@@ -531,19 +532,19 @@ msgstr "Elementarschaden (%s)"
 
 #: ../../../src/MenuCharacter.cpp:409
 msgid "Defensive Stats"
-msgstr ""
+msgstr "Defensivwerte"
 
 #: ../../../src/MenuCharacter.cpp:458
 msgid "Miscellaneous Stats"
-msgstr ""
+msgstr "Sonstige Werte"
 
 #: ../../../src/MenuCharacter.cpp:478
 msgid "Movement Speed"
-msgstr ""
+msgstr "Bewegungsgeschwindigkeit"
 
 #: ../../../src/MenuCharacter.cpp:485
 msgid "Attack Speed"
-msgstr ""
+msgstr "Angriffsgeschwindigkeit"
 
 #: ../../../src/MenuCharacter.cpp:496 ../../../src/MenuStatBar.cpp:179
 #, c-format
@@ -574,6 +575,7 @@ msgstr "Jeder Punkt %s gewährt %s."
 #: ../../../src/MenuCharacter.cpp:719
 msgid "Reduces damage taken from attacks of this damage type."
 msgstr ""
+"Reduziert Schaden, der von Angriffen dieses Schadenstyps erhalten wird."
 
 #: ../../../src/MenuCharacter.cpp:771
 #, c-format
@@ -581,6 +583,8 @@ msgid ""
 "Upgrade Stat: %s\n"
 "Uses 1 Stat Point"
 msgstr ""
+"Wert aufwerten: %s\n"
+"Verwendet einen Wertepunkt"
 
 #: ../../../src/MenuConfig.cpp:258 ../../../src/MenuConfig.cpp:1476
 msgid "Assign:"
@@ -616,15 +620,15 @@ msgstr "Spiel speichern"
 
 #: ../../../src/MenuConfig.cpp:333
 msgid "<unknown>"
-msgstr ""
+msgstr "<unbekannt>"
 
 #: ../../../src/MenuConfig.cpp:336
 msgid "All Mods"
-msgstr ""
+msgstr "Alle Mods"
 
 #: ../../../src/MenuConfig.cpp:337
 msgid "All Core Mods"
-msgstr ""
+msgstr "Alle Hauptmods"
 
 #: ../../../src/MenuConfig.cpp:354
 msgid ""
@@ -724,14 +728,15 @@ msgstr ""
 msgid ""
 "When enabled, eligible loot will be picked up automatically when nearby."
 msgstr ""
+"Falls aktiviert, wird geeignete Beute in der Nähe automatisch aufgesammelt."
 
 #: ../../../src/MenuConfig.cpp:388
 msgid "Enabled"
-msgstr ""
+msgstr "Aktiviert"
 
 #: ../../../src/MenuConfig.cpp:389
 msgid "Only currency"
-msgstr ""
+msgstr "Nur Währung"
 
 #: ../../../src/MenuConfig.cpp:406
 msgid "The maximum frame rate that the game will be allowed to run at."
@@ -743,9 +748,9 @@ msgid ""
 "the game. Mods define the allowed render sizes, but this option allows "
 "overriding the maximum size."
 msgstr ""
-"Mit Rendergröße ist gemeint: Die Höhe (in Pixel) der Oberfläche, auf der das"
-" Spiel gezeichnet wird. Mods definieren die zulässigen Rendergrößen, aber "
-"mit dieser Option kann man ein Limit setzen."
+"Mit Rendergröße ist gemeint: Die Höhe (in Pixel) der Oberfläche, auf der "
+"das Spiel gezeichnet wird. Mods definieren die zulässigen Rendergrößen, "
+"aber mit dieser Option kann man ein Limit setzen."
 
 #: ../../../src/MenuConfig.cpp:436 ../../../src/MenuConfig.cpp:1957
 #: ../../../src/MenuGameOver.cpp:77 ../../../src/MenuGameOver.cpp:121
@@ -762,7 +767,7 @@ msgstr "Ton"
 
 #: ../../../src/MenuConfig.cpp:439
 msgid "Game"
-msgstr ""
+msgstr "Spiel"
 
 #: ../../../src/MenuConfig.cpp:440
 msgid "Interface"
@@ -822,11 +827,11 @@ msgstr "Bildfrequenz-Limit"
 
 #: ../../../src/MenuConfig.cpp:474
 msgid "Threaded Image Loading"
-msgstr ""
+msgstr "Gethreadetes Bildladen"
 
 #: ../../../src/MenuConfig.cpp:475
 msgid "Show player behind walls"
-msgstr ""
+msgstr "Spieler hinter Wänden anzeigen"
 
 #: ../../../src/MenuConfig.cpp:477
 msgid "Sound Volume"
@@ -838,7 +843,7 @@ msgstr "Musiklautstärke"
 
 #: ../../../src/MenuConfig.cpp:479
 msgid "Mute audio when window loses focus"
-msgstr "Schaltet den Ton stumm, wenn das Fenster den Fokus verliert"
+msgstr "Ton stummschalten, wenn das Fenster den Fokus verliert"
 
 #: ../../../src/MenuConfig.cpp:481
 msgid "Automatically equip items"
@@ -846,7 +851,7 @@ msgstr "Automatisch ausrüsten"
 
 #: ../../../src/MenuConfig.cpp:482
 msgid "Automatically pick up loot"
-msgstr ""
+msgstr "Beute automatisch aufsammeln"
 
 #: ../../../src/MenuConfig.cpp:483
 msgid "Low health notification"
@@ -862,7 +867,7 @@ msgstr "Framerate anzeigen"
 
 #: ../../../src/MenuConfig.cpp:488
 msgid "Use system mouse cursor"
-msgstr ""
+msgstr "Systemmauszeiger benutzen"
 
 #: ../../../src/MenuConfig.cpp:489
 msgid "Colorblind Mode"
@@ -930,7 +935,7 @@ msgstr "Joystick-Todeszone"
 
 #: ../../../src/MenuConfig.cpp:508
 msgid "Joystick Rumble"
-msgstr ""
+msgstr "Joystick-Vibration"
 
 #: ../../../src/MenuConfig.cpp:509
 msgid "Touch Controls"
@@ -938,7 +943,7 @@ msgstr "Touch-Steuerung"
 
 #: ../../../src/MenuConfig.cpp:510
 msgid "Touch Gamepad Scaling"
-msgstr "Touch-Controller Skalierung"
+msgstr "Touch-Controller-Skalierung"
 
 #: ../../../src/MenuConfig.cpp:635
 msgid ""
@@ -959,12 +964,12 @@ msgstr ""
 #: ../../../src/MenuConfig.cpp:637
 msgid ""
 "When enabled, this uses the screen DPI in addition to the window dimensions "
-"to scale the rendering resolution. Otherwise, only the window dimensions are"
-" used."
+"to scale the rendering resolution. Otherwise, only the window dimensions "
+"are used."
 msgstr ""
-"Falls aktiviert, wird dies die Bildschirm-DPI zusätzlich zu der Fenstergröße"
-" anwenden, um die zum Zeichnen benutzte Auflösung zu skalieren. Ansonsten "
-"wird nur die Fenstergröße verwendet."
+"Falls aktiviert, wird dies die Bildschirm-DPI zusätzlich zu der "
+"Fenstergröße anwenden, um die zum Zeichnen benutzte Auflösung zu skalieren. "
+"Ansonsten wird nur die Fenstergröße verwendet."
 
 #: ../../../src/MenuConfig.cpp:638
 msgid ""
@@ -976,15 +981,20 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:639
 msgid ""
-"Use multiple CPU threads when loading some images. Try disabling this option"
-" if you experience instability during loading."
+"Use multiple CPU threads when loading some images. Try disabling this "
+"option if you experience instability during loading."
 msgstr ""
+"Mehrere CPU-Threads beim Laden einiger Bilder verwenden. Versuche, diese "
+"Option zu deaktivieren, falls du beim Laden auf Instabilitäten stößt."
 
 #: ../../../src/MenuConfig.cpp:640
 msgid ""
 "Lowers the opacity of wall tiles that are covering the player. Disabling "
 "this option may improve performace in some circumstances."
 msgstr ""
+"Verringert die Undurchsichtigkeit von Mauer-/Wandkacheln, welche den "
+"Spieler verdecken. Wenn diese Option deaktiviert wird, kann sich das ggf. "
+"positiv auf die Performanz auswirken."
 
 #: ../../../src/MenuConfig.cpp:641
 msgid ""
@@ -1012,8 +1022,8 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:644
 msgid ""
-"When enabled, tooltips for equipped items of the same type are shown next to"
-" standard item tooltips."
+"When enabled, tooltips for equipped items of the same type are shown next "
+"to standard item tooltips."
 msgstr ""
 "Wenn aktiviert, werden Hinweise für ausgerüstete Gegenstände der gleichen "
 "Art neben den Standard-Hinweisen für Gegenstände angezeigt."
@@ -1026,8 +1036,8 @@ msgstr "Erlaubt Steuerung des gesamten Spiels mit Tastatur (oder Joystick)."
 
 #: ../../../src/MenuConfig.cpp:646
 msgid ""
-"When 'Move hero using mouse' is enabled, this setting controls if 'Main1' or"
-" 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
+"When 'Move hero using mouse' is enabled, this setting controls if 'Main1' "
+"or 'Main2' is used to move the hero. If enabled, 'Main2' will move the hero "
 "instead of 'Main1'."
 msgstr ""
 "Wenn „Maus steuert Bewegung“ aktiviert ist, legt diese Einstellung fest, ob "
@@ -1049,8 +1059,8 @@ msgstr ""
 
 #: ../../../src/MenuConfig.cpp:648
 msgid ""
-"The player's attacks will be aimed in the direction of the mouse cursor when"
-" this is enabled."
+"The player's attacks will be aimed in the direction of the mouse cursor "
+"when this is enabled."
 msgstr ""
 "Wenn aktiviert, greift der Spieler in die Richtung des Mauszeigers an."
 
@@ -1085,7 +1095,7 @@ msgstr "Belegungen für:"
 
 #: ../../../src/MenuConfig.cpp:1795
 msgid "Core mod"
-msgstr "Kern-Mod"
+msgstr "Hauptmod"
 
 #: ../../../src/MenuConfig.cpp:1808
 msgid "Version:"
@@ -1110,11 +1120,11 @@ msgstr "Diese Belegung kann nicht entfernt werden."
 #: ../../../src/MenuConfig.cpp:1940 ../../../src/SDLInputState.cpp:772
 #: ../../../src/SDLInputState.cpp:797
 msgid "(none)"
-msgstr "(keine)"
+msgstr "(keiner)"
 
 #: ../../../src/MenuConfig.cpp:1957 ../../../src/MenuGameOver.cpp:75
 msgid "Save & Exit"
-msgstr "Beenden"
+msgstr "Speichern u. Ende"
 
 #: ../../../src/MenuDevConsole.cpp:202
 #, c-format
@@ -1174,11 +1184,12 @@ msgstr "Kachel"
 
 #: ../../../src/MenuDevConsole.cpp:449
 msgid "Shortcut saved."
-msgstr ""
+msgstr "Tastenkürzel gespeichert."
 
 #: ../../../src/MenuDevConsole.cpp:476
 msgid "For procedural maps, prints a color-coded map."
 msgstr ""
+"Für prozedurale Karten wird eine farblich gekennzeichnete Karte gezeichnet."
 
 #: ../../../src/MenuDevConsole.cpp:477
 msgid "adds a power to the action bar"
@@ -1221,12 +1232,12 @@ msgid ""
 "Prints a list of items that match a search term. No search term will list "
 "all items"
 msgstr ""
-"Gibt eine Liste an Gegenständen, die auf einen Suchbegriff passen, aus. Ohne"
-" Suchbegriff werden alle Gegenstände aufgelistet"
+"Gibt eine Liste an Gegenständen, die auf einen Suchbegriff passen, aus. "
+"Ohne Suchbegriff werden alle Gegenstände aufgelistet"
 
 #: ../../../src/MenuDevConsole.cpp:485
 msgid "Assign a console command to a shortcut key."
-msgstr ""
+msgstr "Einen Konsolenbefehl zu einem Tastenkürzel zuweisen."
 
 #: ../../../src/MenuDevConsole.cpp:486 ../../../src/MenuDevConsole.cpp:487
 msgid ""
@@ -1271,36 +1282,39 @@ msgstr "<ID>"
 #: ../../../src/MenuDevConsole.cpp:664
 #, c-format
 msgid "3 | <%s> | %s"
-msgstr ""
+msgstr "3 | <%s> | %s"
 
 #: ../../../src/MenuDevConsole.cpp:665
 #, c-format
 msgid "2 | <%s> | %s"
-msgstr ""
+msgstr "2 | <%s> | %s"
 
 #: ../../../src/MenuDevConsole.cpp:666
 #, c-format
 msgid "1 | <%s> | %s"
-msgstr ""
+msgstr "1 | <%s> | %s"
 
 #: ../../../src/MenuDevConsole.cpp:667
 msgid "Current shortcuts:"
-msgstr ""
+msgstr "Aktuelle Tastenkürzel:"
 
 #: ../../../src/MenuDevConsole.cpp:676
 #, c-format
 msgid "Enter the command you wish to save to slot %d."
-msgstr ""
+msgstr "Gib den Befehl ein, den du auf Platz %d gespeichert haben willst."
 
 #: ../../../src/MenuDevConsole.cpp:680
 msgid "ERROR: Not a valid shortcut slot."
-msgstr ""
+msgstr "FEHLER: Kein gültiger Tastenkürzelplatz."
 
 #: ../../../src/MenuDevConsole.cpp:686
 msgid ""
 "Procedural chunk maps are only available for generated maps. This map is "
 "either not a procedural map, or the chunk data is corrupt."
 msgstr ""
+"Prozedurale Chunk-Karten sind nur für erzeugte Karten verfügbar. Diese "
+"Karte ist entweder keine prozedurale Karte, oder die Chunkdaten sind "
+"beschädigt."
 
 #: ../../../src/MenuDevConsole.cpp:703
 #, c-format
@@ -1376,7 +1390,7 @@ msgstr "Ausrüsten:"
 #: ../../../src/MenuInventory.cpp:504
 #, c-format
 msgid "%s modifiers"
-msgstr "Tastenkombinationen mit %s:"
+msgstr "Tastenkombinationen mit %s"
 
 #: ../../../src/MenuInventory.cpp:505
 msgid "Select a quantity of item:"
@@ -1467,7 +1481,7 @@ msgstr "Übertragen"
 
 #: ../../../src/MenuManager.cpp:1949
 msgid "Add to bar"
-msgstr ""
+msgstr "Zur Leiste hinzufügen"
 
 #: ../../../src/MenuManager.cpp:1954
 msgid "Drop"
@@ -1517,7 +1531,7 @@ msgstr "Erstarren"
 
 #: ../../../src/MenuPowers.cpp:1124
 msgid "Resist All Negative Effects"
-msgstr ""
+msgstr "Allen negativen Effekten widerstehen"
 
 #: ../../../src/MenuPowers.cpp:1128
 msgid "Stun"
@@ -1566,7 +1580,7 @@ msgstr "Basis-Chance für krit. Treffer"
 
 #: ../../../src/MenuPowers.cpp:1272
 msgid "Ignores Absorption"
-msgstr ""
+msgstr "Ignoriert Absorption"
 
 #: ../../../src/MenuPowers.cpp:1277
 msgid "Ignores Avoidance"
@@ -1580,12 +1594,12 @@ msgstr "%s%% Wahrsch. für krit. verlangsamte Ziele"
 #: ../../../src/MenuPowers.cpp:1287
 #, c-format
 msgid "Damage dealt as: %s"
-msgstr ""
+msgstr "Schaden ausgeteilt als: %s"
 
 #: ../../../src/MenuPowers.cpp:1299
 #, c-format
 msgid "Spawn limit: %d"
-msgstr ""
+msgstr "Spawn-Begrenzung: %d"
 
 #: ../../../src/MenuPowers.cpp:1306
 #, c-format
@@ -1620,6 +1634,8 @@ msgid ""
 "Upgrade to: %s (Level %d)\n"
 "Uses 1 Skill Point"
 msgstr ""
+"Aufwerten auf: %s (Stufe %d)\n"
+"Benutzt 1 Fertigkeitspunkt"
 
 #: ../../../src/MenuStash.cpp:182
 msgid "Shared"
@@ -1968,7 +1984,7 @@ msgstr "Beute-Hinweismodus"
 
 #: ../../../src/SDLInputState.cpp:940
 msgid "Action Bar Edit"
-msgstr ""
+msgstr "Aktionsleistenbearbeitung"
 
 #: ../../../src/SDLInputState.cpp:941
 msgid "Menu: Next Page"
@@ -1988,7 +2004,7 @@ msgstr "Spiel pausieren"
 
 #: ../../../src/SDLInputState.cpp:945
 msgid "Cycle Menus"
-msgstr ""
+msgstr "Durch Menüs wechseln"
 
 #: ../../../src/SDLInputState.cpp:946
 msgid "Aim Up"
@@ -2012,15 +2028,15 @@ msgstr "Entwicklermenü"
 
 #: ../../../src/SDLInputState.cpp:951
 msgid "Developer Command 1"
-msgstr ""
+msgstr "Entwicklerbefehl 1"
 
 #: ../../../src/SDLInputState.cpp:952
 msgid "Developer Command 2"
-msgstr ""
+msgstr "Entwicklerbefehl 2"
 
 #: ../../../src/SDLInputState.cpp:953
 msgid "Developer Command 3"
-msgstr ""
+msgstr "Entwicklerbefehl 3"
 
 #: ../../../src/SDLInputState.cpp:954
 msgid "Ctrl"
@@ -2309,7 +2325,7 @@ msgstr "Prozent an MP, die bei Treffern gestohlen werden."
 
 #: ../../../src/Stats.cpp:165
 msgid "Resist Damage-Over-Time"
-msgstr ""
+msgstr "Schaden über der Zeit widerstehen"
 
 #: ../../../src/Stats.cpp:166
 msgid "Percentage chance that damage-over-time effects will be negated."
@@ -2318,7 +2334,7 @@ msgstr ""
 
 #: ../../../src/Stats.cpp:172
 msgid "Resist Slow"
-msgstr ""
+msgstr "Verlangsamung widerstehen"
 
 #: ../../../src/Stats.cpp:173
 msgid "Percentage chance that slow effects will be negated."
@@ -2327,7 +2343,7 @@ msgstr ""
 
 #: ../../../src/Stats.cpp:179
 msgid "Resist Stun"
-msgstr ""
+msgstr "Betäubung widerstehen"
 
 #: ../../../src/Stats.cpp:180
 msgid "Percentage chance that stun effects will be negated."
@@ -2335,7 +2351,7 @@ msgstr "Prozentuale Wahrscheinlichkeit, dass Schockeffekte negiert werden."
 
 #: ../../../src/Stats.cpp:186
 msgid "Resist Knockback"
-msgstr ""
+msgstr "Rückschlag widerstehen"
 
 #: ../../../src/Stats.cpp:187
 msgid "Percentage chance that knockback effects will be negated."
@@ -2344,7 +2360,7 @@ msgstr ""
 
 #: ../../../src/Stats.cpp:193
 msgid "Resist Stat Debuffs"
-msgstr ""
+msgstr "Wertverringerungen widerstehen"
 
 #: ../../../src/Stats.cpp:194
 msgid "Percentage chance that stat debuff effects will be negated."
@@ -2353,7 +2369,7 @@ msgstr ""
 
 #: ../../../src/Stats.cpp:200
 msgid "Resist Damage Reflection"
-msgstr ""
+msgstr "Schadensreflektion widerstehen"
 
 #: ../../../src/Stats.cpp:201
 msgid "Percentage chance that damage reflection will be negated."
@@ -2361,7 +2377,7 @@ msgstr "Prozentuale Wahrscheinlichkeit, dass Schadensreflektion negiert wird."
 
 #: ../../../src/Stats.cpp:207
 msgid "Resist HP Steal"
-msgstr ""
+msgstr "TP-Stehlen widerstehen"
 
 #: ../../../src/Stats.cpp:208
 msgid "Percentage chance that HP steal will be negated."
@@ -2369,7 +2385,7 @@ msgstr "Prozentuale Wahrscheinlichkeit, dass TP-Stehlen negiert wird."
 
 #: ../../../src/Stats.cpp:214
 msgid "Resist MP Steal"
-msgstr ""
+msgstr "MP-Stehlen widerstehen"
 
 #: ../../../src/Stats.cpp:215
 msgid "Percentage chance that MP steal will be negated."
@@ -2399,4 +2415,4 @@ msgstr "oder älter"
 
 #: ../../../src/WidgetLog.cpp:108
 msgid "ERROR: Text output too large"
-msgstr ""
+msgstr "FEHLER: Textausgabe ist zu groß"

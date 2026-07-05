@@ -67,6 +67,7 @@ Game updates:
 
 Translation updates:
 
+* German (de) update (Wuzzy2)
 * Finnish (fi) update (Jaakko Muilu)
 * Portuguese (Brazilian) (pt_BR) update (João Francisco Gauze Carrer)
 * Russian (ru) update (berry)
