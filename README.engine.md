@@ -119,32 +119,32 @@ In addition, there is a `mods` directory in this location, which can be used to 
 | Basque (eu)                   | 0%
 | Belarusian (be)               | 76%
 | Bulgarian (bg)                | 59%
-| Catalan (ca)                  | 51%
+| Catalan (ca)                  | 50%
 | Chinese (zh)                  | 100%
-| Chinese (Taiwan) (zh\_TW)     | 66%
+| Chinese (Taiwan) (zh\_TW)     | 65%
 | Czech (cs)                    | 19%
 | Dutch (nl)                    | 11%
 | Finnish (fi)                  | 90%
 | French (fr)                   | 76%
 | Gaelic (Scottish) (gd)        | 88%
 | Galician (gl)                 | 26%
-| German (de)                   | 89%
+| German (de)                   | 100%
 | Greek (el)                    | 26%
 | Hindi (India) (hi\_IN)        | 14%
 | Hungarian (hu)                | 52%
-| Indonesian (id)               | 88%
-| Italian (it)                  | 88%
+| Indonesian (id)               | 87%
+| Italian (it)                  | 87%
 | Japanese (ja)                 | 44%
 | Korean (ko)                   | 87%
-| Norwegian Bokmål (nb)         | 84%
-| Polish (pl)                   | 79%
-| Portuguese (pt)               | 69%
-| Portuguese (Brazil) (pt\_BR)  | 97%
+| Norwegian Bokmål (nb)         | 83%
+| Polish (pl)                   | 78%
+| Portuguese (pt)               | 68%
+| Portuguese (Brazil) (pt\_BR)  | 96%
 | Russian (ru)                  | 100%
 | Slovak (sk)                   | 66%
 | Spanish (es)                  | 88%
 | Swedish (sv)                  | 88%
-| Thai (Thailand) (th\_TH)      | 50%
+| Thai (Thailand) (th\_TH)      | 49%
 | Ukrainian (uk)                | 70%
-| Vietnamese (vi)               | 76%
+| Vietnamese (vi)               | 75%
 
