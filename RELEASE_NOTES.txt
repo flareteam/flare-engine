@@ -59,6 +59,7 @@ Engine fixes:
 	- Fixed bug where window could be resized in a way in which menus wouldn't fit on screen.
 	- Fixed bug where charge_speed / knockback could cause tiles to become blocked.
 	- Fixed a rendering bug that occured when trying to render objects outside of the map.
+	- Fixed mod-specific keybinds being over-written when changing mods.
 	- Android: Fixed default mobile settings not being loaded on first launch.
 
 Game updates:

@@ -84,6 +84,8 @@ void GameStateConfig::logicAccept() {
 	std::string new_render_device = menu_config->getRenderDevice();
 	bool frame_limit_changed = menu_config->setFrameLimit();
 
+	inpt->saveKeyBindings();
+
 	if (menu_config->setMods()) {
 		snd->unloadMusic();
 		reload_music = true;
@@ -94,7 +96,10 @@ void GameStateConfig::logicAccept() {
 	}
 	delete msg;
 	msg = new MessageEngine();
-	inpt->saveKeyBindings();
+
+	// if mods changed, we may need to use a different set of keybinds, so reload them here
+	inpt->loadKeyBindings(InputState::LOAD_USER_BINDS);
+
 	inpt->setCommonStrings();
 	eset->load();
 	Stats::init();
