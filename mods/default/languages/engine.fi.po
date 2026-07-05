@@ -410,19 +410,19 @@ msgstr "Paina [%s] lisävalintoja varten"
 
 #: ../../../src/ItemStorage.cpp:483
 msgid "Sort by: Type"
-msgstr ""
+msgstr "Lajittele: tyyppi"
 
 #: ../../../src/ItemStorage.cpp:485
 msgid "Sort by: Quality"
-msgstr ""
+msgstr "Lajittele: laatu"
 
 #: ../../../src/ItemStorage.cpp:487
 msgid "Sort by: Level"
-msgstr ""
+msgstr "Lajittele: taso"
 
 #: ../../../src/ItemStorage.cpp:489
 msgid "Sort by: Sell Price"
-msgstr ""
+msgstr "Lajittele: myyntihinta"
 
 #: ../../../src/LootManager.cpp:107 ../../../src/LootManager.cpp:109
 #: ../../../src/LootManager.cpp:111 ../../../src/MenuConfig.cpp:492
@@ -1181,7 +1181,7 @@ msgstr "Pikanäppäin tallennettu."
 
 #: ../../../src/MenuDevConsole.cpp:476
 msgid "For procedural maps, prints a color-coded map."
-msgstr ""
+msgstr "Tulostaa värikoodatun kartan proseduraalisia karttoja varten."
 
 #: ../../../src/MenuDevConsole.cpp:477
 msgid "adds a power to the action bar"
@@ -1589,7 +1589,7 @@ msgstr "Vahinkoa tehty: %s"
 #: ../../../src/MenuPowers.cpp:1299
 #, c-format
 msgid "Spawn limit: %d"
-msgstr ""
+msgstr "Luomisraja: %d"
 
 #: ../../../src/MenuPowers.cpp:1306
 #, c-format

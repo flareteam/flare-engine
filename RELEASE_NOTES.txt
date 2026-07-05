@@ -67,6 +67,8 @@ Game updates:
 
 Translation updates:
 
+* Finnish (fi) update (Jaakko Muilu)
+* Portuguese (Brazilian) (pt_BR) update (João Francisco Gauze Carrer)
 * Russian (ru) update (berry)
 * Chinese (Taiwan) (zh_TW) by Li Yang
 
