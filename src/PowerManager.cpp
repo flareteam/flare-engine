@@ -1177,7 +1177,7 @@ void PowerManager::loadPowers() {
 			power->passive_effects_persist = Parse::toBool(infile.val);
 		}
 		else if (infile.key == "dispel") {
-			// @ATTR power.displel|list(power_id)|Removes any colliding hazards that match the specified Power IDs. Works best with multitarget=true.
+			// @ATTR power.dispel|list(power_id)|Removes any colliding hazards that match the specified Power IDs. Works best with multitarget=true.
 			power->dispel_power_ids.clear();
 			std::string dispel_id = Parse::popFirstString(infile.val);
 
