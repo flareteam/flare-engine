@@ -44,6 +44,9 @@ triggers = [
 	'text_resist_steal', 'text_resist_steal_desc',
 	'text_combat_heal', 'text_log_restore', 'text_log_low',
 	'text_tooltip_heal', 'text_tooltip_cost',
+
+	# menus/powers.txt
+	'tooltip_text_shield', 'tooltip_text_heal',
 ]
 
 plain_text = [

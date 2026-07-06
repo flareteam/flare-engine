@@ -159,6 +159,9 @@ private:
 
 	std::vector<MenuPowersCell*> recently_locked_cells;
 
+	std::string tooltip_text_shield;
+	std::string tooltip_text_heal;
+
 public:
 	enum {
 		TOOLTIP_SHORT = 0,

@@ -124,6 +124,8 @@ MenuPowers::MenuPowers()
 	, tree_loaded(false)
 	, default_power_tab(-1)
 	, upgrade_button_offset(eset->resolutions.icon_size, 0)
+	, tooltip_text_shield(msg->get("Magical Shield"))
+	, tooltip_text_heal(msg->get("Healing"))
 	, newPowerNotification(false)
 {
 
@@ -138,19 +140,32 @@ MenuPowers::MenuPowers()
 				continue;
 
 			// @ATTR label_title|label|Position of the "Powers" text.
-			if (infile.key == "label_title") {
+			if (infile.key == "label_title")
 				label_powers->setFromLabelInfo(Parse::popLabelInfo(infile.val));
-			}
+
 			// @ATTR unspent_points|label|Position of the text that displays the amount of unused power points.
-			else if (infile.key == "unspent_points") {
+			else if (infile.key == "unspent_points")
 				label_unspent->setFromLabelInfo(Parse::popLabelInfo(infile.val));
-			}
+
 			// @ATTR close|point|Position of the close button.
-			else if (infile.key == "close") close_pos = Parse::toPoint(infile.val);
+			else if (infile.key == "close")
+				close_pos = Parse::toPoint(infile.val);
+
 			// @ATTR tab_area|rectangle|Position and dimensions of the tree pages.
-			else if (infile.key == "tab_area") tab_area = Parse::toRect(infile.val);
+			else if (infile.key == "tab_area")
+				tab_area = Parse::toRect(infile.val);
+
 			// @ATTR upgrade_button_offset|point|X/Y offset of the upgrade button relative to each power icon. Defaults to (ICON_SIZE, 0)
-			else if (infile.key == "upgrade_button_offset") upgrade_button_offset = Parse::toPoint(infile.val);
+			else if (infile.key == "upgrade_button_offset")
+				upgrade_button_offset = Parse::toPoint(infile.val);
+
+			// @ATTR tooltip_text_shield|string|Text to use in place of "Magical Shield".
+			else if (infile.key == "tooltip_text_shield")
+				tooltip_text_shield = msg->get(infile.val);
+
+			// @ATTR tooltip_text_heal|string|Text to use in place of "Healing".
+			else if (infile.key == "tooltip_text_heal")
+				tooltip_text_heal = msg->get(infile.val);
 
 			else infile.error("MenuPowers: '%s' is not a valid key.", infile.key.c_str());
 		}
@@ -1161,7 +1176,7 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 				ss << Utils::floatToString(eset->combat.resourceRound(pc->stats.getDamageMax(pwr->base_damage)), eset->number_format.power_tooltips);
 			}
 
-			ss << " " << msg->get("Magical Shield");
+			ss << " " << tooltip_text_shield;
 		}
 		else if (effect_type == Effect::HEAL) {
 			if (pwr->base_damage == eset->damage_types.list.size())
@@ -1190,7 +1205,7 @@ void MenuPowers::createTooltip(TooltipData* tip_data, MenuPowersCell* pcell, Pow
 				ss << Utils::floatToString(mag_min, eset->number_format.power_tooltips) << "-" << Utils::floatToString(mag_max, eset->number_format.power_tooltips);
 			}
 
-			ss << " " << msg->get("Healing");
+			ss << " " << tooltip_text_heal;
 		}
 		else if (effect_type == Effect::KNOCKBACK) {
 			ss << Utils::floatToString(pwr->post_effects[i].magnitude, eset->number_format.power_tooltips) << " " << msg->get("Knockback");
