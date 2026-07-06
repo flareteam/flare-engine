@@ -41,6 +41,8 @@ public:
 	int current;
 	int max;
 	int stacks;
+	int timer_current;
+	int timer_max;
 	Rect pos;
 	Rect overlay;
 	std::string name;
@@ -52,6 +54,8 @@ public:
 		, current(0)
 		, max(0)
 		, stacks(0)
+		, timer_current(0)
+		, timer_max(0)
 		, stacksLabel(NULL)
 	{}
 };

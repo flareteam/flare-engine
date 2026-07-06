@@ -111,38 +111,40 @@ void MenuActiveEffects::logic() {
 			continue;
 
 		size_t most_recent_id = effect_icons.size()-1;
-		if (ed.group_stack){
-			if ( effect_icons.size() > 0
-				&& effect_icons[most_recent_id].type == ed.type
-				&& effect_icons[most_recent_id].name == ed.name
-				&& effect_icons[most_recent_id].icon == ed.icon){
 
-				effect_icons[most_recent_id].stacks++;
+		if (ed.group_stack && effect_icons.size() > 0) {
+			EffectIcon& eicon = effect_icons[most_recent_id];
+			if (eicon.type == ed.type && eicon.name == ed.name && eicon.icon == ed.icon) {
+
+				eicon.stacks++;
+
+				eicon.timer_current = ed.timer.getCurrent();
+				eicon.timer_max = ed.timer.getDuration();
 
 				if (ed.type == Effect::SHIELD){
 					//Shields stacks in momment of addition, we never have to reach that
 				} else if (ed.type == Effect::HEAL){
 					//No special behavior
 				} else{
-					if (ed.timer.getCurrent() < static_cast<unsigned>(effect_icons[most_recent_id].current)){
+					if (ed.timer.getCurrent() < static_cast<unsigned>(eicon.current)){
 						if (ed.timer.getDuration() > 0)
-							effect_icons[most_recent_id].overlay.y = (eset->resolutions.icon_size * ed.timer.getCurrent()) / ed.timer.getDuration();
+							eicon.overlay.y = (eset->resolutions.icon_size * ed.timer.getCurrent()) / ed.timer.getDuration();
 						else
-							effect_icons[most_recent_id].overlay.y = eset->resolutions.icon_size;
-						effect_icons[most_recent_id].current = ed.timer.getCurrent();
-						effect_icons[most_recent_id].max = ed.timer.getDuration();
+							eicon.overlay.y = eset->resolutions.icon_size;
+						eicon.current = eicon.timer_current;
+						eicon.max = eicon.timer_max;
 					}
 				}
 
-				if (!effect_icons[most_recent_id].stacksLabel){
-					effect_icons[most_recent_id].stacksLabel = new WidgetLabel();
-					effect_icons[most_recent_id].stacksLabel->setPos(effect_icons[most_recent_id].pos.x, effect_icons[most_recent_id].pos.y);
-					effect_icons[most_recent_id].stacksLabel->setMaxWidth(eset->resolutions.icon_size);
+				if (!eicon.stacksLabel){
+					eicon.stacksLabel = new WidgetLabel();
+					eicon.stacksLabel->setPos(eicon.pos.x, eicon.pos.y);
+					eicon.stacksLabel->setMaxWidth(eset->resolutions.icon_size);
 				}
 
 				std::stringstream ss;
-				ss << "×" << effect_icons[most_recent_id].stacks;
-				effect_icons[most_recent_id].stacksLabel->setText(ss.str());
+				ss << "×" << eicon.stacks;
+				eicon.stacksLabel->setText(ss.str());
 
 				continue;
 			}
@@ -169,6 +171,9 @@ void MenuActiveEffects::logic() {
 		ei.overlay.x = 0;
 		ei.overlay.w = eset->resolutions.icon_size;
 
+		ei.timer_current = ed.timer.getCurrent();
+		ei.timer_max = ed.timer.getDuration();
+
 		if (ed.type == Effect::SHIELD) {
 			ei.overlay.y = static_cast<int>((eset->resolutions.icon_size * ed.magnitude) / ed.magnitude_max);
 			ei.current = static_cast<int>(ed.magnitude);
@@ -183,8 +188,8 @@ void MenuActiveEffects::logic() {
 				ei.overlay.y = (eset->resolutions.icon_size * ed.timer.getCurrent()) / ed.timer.getDuration();
 			else
 				ei.overlay.y = eset->resolutions.icon_size;
-			ei.current = ed.timer.getCurrent();
-			ei.max = ed.timer.getDuration();
+			ei.current = ei.timer_current;
+			ei.max = ei.timer_max;
 		}
 		ei.overlay.h = eset->resolutions.icon_size - ei.overlay.y;
 
@@ -238,13 +243,14 @@ void MenuActiveEffects::renderTooltips(const Point& position) {
 			if (effect_icons[i].type == Effect::HEAL)
 				continue;
 
-			ss.str("");
 			if (effect_icons[i].type == Effect::SHIELD) {
+				ss.str("");
 				ss << "(" << effect_icons[i].current << "/" << effect_icons[i].max << ")";
 				tip_data.addText(ss.str());
 			}
-			else if (effect_icons[i].max > 0) {
-				ss << msg->get("Remaining:") << " " << Utils::getDurationString(effect_icons[i].current, eset->number_format.durations);
+			if (effect_icons[i].max > 0 && effect_icons[i].timer_max > 0) {
+				ss.str("");
+				ss << msg->get("Remaining:") << " " << Utils::getDurationString(effect_icons[i].timer_current, eset->number_format.durations);
 				tip_data.addText(ss.str());
 			}
 
