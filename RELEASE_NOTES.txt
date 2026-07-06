@@ -28,6 +28,7 @@ Engine features:
 	- Fixed enemy HP menu target being incorrectly set to enemies with faded-out corpses.
 	- Added 'timeout' property to menus/enemy.txt config.
 	- Added support for renaming "Magical Shield" and "Healing" in power tooltips to menus/powers.txt config.
+	- Fixed healing power tooltip showing min and max amount when both are equal.
 
 * System
 	- Add "Minimum Render Size" video setting.
