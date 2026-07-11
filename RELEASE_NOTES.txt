@@ -34,6 +34,7 @@ Engine features:
 * System
 	- Add "Minimum Render Size" video setting.
 	- Added 'raycast_resolution' property to engine/misc.txt config.
+	- Melee-range targeting assist has been extended to work with all targeted powers. Targeting assist can be bypassed by holding Shift while attacking.
 
 Engine fixes:
 
