@@ -15,7 +15,7 @@ if you do not wish to [install Flare system-wide](#install_system_wide).
 ```sh
 git clone https://github.com/flareteam/flare-engine.git # clone the latest source code
 git clone https://github.com/flareteam/flare-game.git # and game data
-# remember your dependancies(see below)
+# remember your dependencies (see below)
 cd flare-engine
 cmake .
 make # build the executable
@@ -43,8 +43,8 @@ To build Flare you need the [2.0 Development Libraries for SDL][libsdl]:
 SDL\_image, SDL\_mixer, and SDL\_ttf, with the equivalent [2.0 Runtime Libraries][runtimesdl] to run the game;
 or follow the steps below for your Operating System of choice.
 
-[libsdl]: http://www.libsdl.org/download-2.0.php
-[runtimesdl]: http://www.libsdl.org/download-2.0.php
+[libsdl]: https://www.libsdl.org/download-2.0.php
+[runtimesdl]: https://www.libsdl.org/download-2.0.php
 
 ### Arch Linux
 
@@ -101,7 +101,7 @@ Installing dependencies using [Homebrew]:
 brew install cmake libvorbis sdl2 sdl2_image sdl2_mixer sdl2_ttf
 ```
 
-[Homebrew]: http://brew.sh/
+[Homebrew]: https://brew.sh/
 
 ### Windows
 

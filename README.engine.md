@@ -13,7 +13,7 @@ The Flare engine, which is purely a runtime, is written in C++.
 
 Flare uses simple file formats (INI-style config files) for most of the game data,
 allowing anyone to easily modify game contents. Open formats are preferred (png, ogg).
-For creating maps, we also support [Tiled](http://www.mapeditor.org/) with the Flare plugin.
+For creating maps, we support [Tiled](https://www.mapeditor.org/) with the [Flare Tiled Tools](https://github.com/flareteam/flare-tiled-tools).
 
 Originally the first game to be developed using this engine was part of this
 repository. As the engine became mature, the game content was moved to an
@@ -44,7 +44,7 @@ The GNU Unifont font is released under GPL v2, with the exception that embedding
 
 The following links are specific to the engine
 
-* [Homepage](http://flarerpg.org)
+* [Homepage](https://flarerpg.org)
 * [Source](https://github.com/flareteam/flare-engine)
 * [Forums](https://github.com/flareteam/flare-game/discussions)
 * Email     clintbellanger@gmail.com
