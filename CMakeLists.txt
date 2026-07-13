@@ -44,7 +44,7 @@ add_compile_options(
 )
 
 # Not supported by CMake 3.12!
-# Travis uses this version so we have to stick to modifying the strings...
+# Not supported by CMake < 3.13, so we have to stick to modifying the strings...
 # add_link_options(
 # 	"$<$<CONFIG:DEBUG>:-pg>"
 # )
