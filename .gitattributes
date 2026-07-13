@@ -7,7 +7,6 @@
 astyle_flare.sh export-ignore
 
 # related to coding and testing
-.travis.yml export-ignore
 qt.xml export-ignore
 
 # do not export the language recreation script
