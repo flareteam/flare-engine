@@ -93,7 +93,7 @@ There is also a flare build at the [openSUSE games repo][suse_repo].
 
 [suse_repo]: https://software.opensuse.org/package/flare
 
-### OS X
+### macOS
 
 Installing dependencies using [Homebrew]:
 
