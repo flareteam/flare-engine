@@ -62,7 +62,7 @@ Flare uses SDL2, SDL2\_image, SDL2\_mixer, and SDL2\_ttf. Please see the [INSTAL
 
 Settings are stored in one of these places:
 
-### Linux/Mac OS X/Unix
+### Linux/macOS/Unix
     $XDG_CONFIG_HOME/flare/
     $HOME/.config/flare/
     ./config
@@ -81,7 +81,7 @@ The settings files are created the first time you run Flare.
 
 Save files are stored in one of these places:
 
-### Linux/Mac OS X/Unix
+### Linux/macOS/Unix
     $XDG_DATA_HOME/flare/
     $HOME/.local/share/flare/
     ./userdata
