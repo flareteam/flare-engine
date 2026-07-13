@@ -25,7 +25,7 @@ is all combined I have to reject the entire thing.
 
 ## Cross-platform considerations
 
-To the best of our ability, we want the code to work on Windows, OSX, Linux and more.
+To the best of our ability, we want the code to work on Windows, macOS, Linux and more.
 We try to isolate platform-specific code and use C preprocessor directives when necessary.
 
 ## OOP as a last resort
