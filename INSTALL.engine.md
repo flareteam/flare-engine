@@ -196,7 +196,7 @@ g++ -I /usr/include/SDL src/*.cpp -o flare -lSDL2 -lSDL2_image -lSDL2_mixer -lSD
 g++ -I C:\MinGW\include\SDL src\*.cpp -o flare.exe -lmingw32 -lSDLmain -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf
 ```
 
-[MinGW]: http://www.mingw.org/
+[MinGW]: https://www.mingw-w64.org/
 
 ## Optimizing your build
 

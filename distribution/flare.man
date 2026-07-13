@@ -51,4 +51,4 @@ The game data is stored in
 \fB$HOME\fR/.local/share/flare/
 
 .SH AVAILABILITY
-For more information about the FLARE engine, visit http://flarerpg.org
+For more information about the FLARE engine, visit https://flarerpg.org
