@@ -35,6 +35,8 @@ Engine features:
 	- Add "Minimum Render Size" video setting.
 	- Added 'raycast_resolution' property to engine/misc.txt config.
 	- Melee-range targeting assist has been extended to work with all targeted powers. Targeting assist can be bypassed by holding Shift while attacking.
+	- Support saving and clearing the value of the --data-path command line flag with --save-data-path and --clear-data-path.
+	- Better stand-alone game support through game.txt file. When used, user settings get stored in a game-specific directory, and the Mods configuration page is filtered to match the current game.
 
 Engine fixes:
 

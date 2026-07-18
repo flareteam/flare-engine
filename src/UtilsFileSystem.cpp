@@ -172,7 +172,7 @@ bool Filesystem::removeDirRecursive(const std::string &dir) {
 /**
  * Convert from string to filesystem path string in an os-independent fashion
  */
-std::string Filesystem::convertSlashes(const std::string& _path) {
+std::string Filesystem::convertSlashes(const std::string& _path, bool keep_trailing_slash) {
 	std::string path = _path;
 
 #ifdef _WIN32
@@ -189,7 +189,10 @@ std::string Filesystem::convertSlashes(const std::string& _path) {
 		}
 	}
 
-	return removeTrailingSlash(path);
+	if (!keep_trailing_slash)
+		return removeTrailingSlash(path);
+	else
+		return path;
 }
 
 bool Filesystem::renameFile(const std::string &_oldfile, const std::string &_newfile) {
@@ -218,4 +221,11 @@ std::string Filesystem::removeTrailingSlash(const std::string& path) {
 	// no trailing slash found
 	else
 		return path;
+}
+
+std::string Filesystem::getFullPath(const std::string &path) {
+	char* full_path = realpath(path.c_str(), NULL);
+	std::string ret(full_path);
+	free(full_path);
+	return ret;
 }

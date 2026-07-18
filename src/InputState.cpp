@@ -125,12 +125,17 @@ void InputState::loadKeyBindings(bool load_user_binds) {
 
 	FileParser infile;
 	bool opened_file = false;
+	bool cleanup_path_user = false;
 	*file_version = VersionInfo::MIN;
 
 	// first check for mod keybinds
 	if (mods->locate("engine/default_keybindings.txt") != "") {
-		if (load_user_binds && infile.open(settings->path_user + "saves/" + eset->misc.save_prefix + "/keybindings.txt", !FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
+		if (load_user_binds && settings->game.empty() && infile.open(settings->path_user + "saves/" + eset->misc.save_prefix + "/keybindings.txt", !FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
 			opened_file = true;
+		}
+		else if (load_user_binds && !settings->game.empty() && infile.open(settings->path_conf + "keybindings.txt", !FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
+			opened_file = true;
+			cleanup_path_user = true;
 		}
 		else if (infile.open("engine/default_keybindings.txt", FileParser::MOD_FILE, FileParser::ERROR_NONE)) {
 			opened_file = true;
@@ -142,6 +147,10 @@ void InputState::loadKeyBindings(bool load_user_binds) {
 			opened_file = true;
 		}
 
+		cleanup_path_user = true;
+	}
+
+	if (cleanup_path_user) {
 		// clean up mod keybinds if engine/default_keybindings.txt is not present
 		if (Filesystem::fileExists(settings->path_user + "saves/" + eset->misc.save_prefix + "/keybindings.txt")) {
 			Utils::logInfo("InputState: Found unexpected save prefix keybinding file. Removing it now.");
@@ -249,8 +258,13 @@ void InputState::loadKeyBindings(bool load_user_binds) {
 void InputState::saveKeyBindings() {
 	std::string out_path;
 	if (mods->locate("engine/default_keybindings.txt") != "") {
-		Filesystem::createDir(settings->path_user + "saves/" + eset->misc.save_prefix);
-		out_path = settings->path_user + "saves/" + eset->misc.save_prefix + "/keybindings.txt";
+		if (settings->game.empty()) {
+			Filesystem::createDir(settings->path_user + "saves/" + eset->misc.save_prefix);
+			out_path = settings->path_user + "saves/" + eset->misc.save_prefix + "/keybindings.txt";
+		}
+		else {
+			out_path = settings->path_conf + "keybindings.txt";
+		}
 	}
 	else {
 		out_path = settings->path_conf + "keybindings.txt";

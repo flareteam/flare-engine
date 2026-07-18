@@ -84,6 +84,12 @@ static void init(const CmdLineArgs& cmd_line_args) {
 	 */
 	platform.setPaths();
 
+	// It's *important* that setCustomPathData() runs before setGame() because:
+	// 1. We want PATH_CONF to be at the base level if we have to save the custom data path
+	// 2. We want to use the custom data path in setGame() when looking for game.txt
+	settings->setCustomPathData();
+	settings->setGame();
+
 	Utils::lockFileCheck();
 
 	Utils::createLogFile();
@@ -360,28 +366,12 @@ int main(int argc, char *argv[]) {
 		}
 		else if (arg == "data-path") {
 			settings->custom_path_data = parseArgValue(arg_full);
-
-			// Expand leading tilde as home directory
-			if (settings->custom_path_data == "~") {
-				settings->custom_path_data = std::string(getenv("HOME")) + "/";
-			}
-			else if (settings->custom_path_data.substr(0,2) == "~/") {
-				std::string path_end = settings->custom_path_data.substr(2);
-				settings->custom_path_data = std::string(getenv("HOME")) + "/" + path_end;
-			}
-
-			if (!settings->custom_path_data.empty()) {
-				settings->custom_path_data = Filesystem::removeTrailingSlash(settings->custom_path_data);
-			}
-
-			if (Filesystem::pathExists(settings->custom_path_data)) {
-				Utils::logInfo("Custom data path: \"%s\"", settings->custom_path_data.c_str());
-				settings->custom_path_data += "/";
-			}
-			else {
-				Utils::logError("Invalid custom data path: \"%s\"", settings->custom_path_data.c_str());
-				settings->custom_path_data.clear();
-			}
+		}
+		else if (arg == "save-data-path") {
+			settings->custom_path_data_save = true;
+		}
+		else if (arg == "clear-data-path") {
+			settings->custom_path_data_clear = true;
 		}
 		else if (arg == "version") {
 			Utils::logInfo("%s", VersionInfo::createVersionStringFull().c_str());
@@ -413,6 +403,8 @@ int main(int argc, char *argv[]) {
 --help                   Prints this message.\n\
 --version                Prints the release version.\n\
 --data-path=<PATH>       Specifies an exact path to look for mod data.\n\
+--save-data-path         Saves the path specified with --data-path to the user's config.\n\
+--clear-data-path        Removes a saved data-path from the user's config.\n\
 --debug-event            Prints verbose hardware input information.\n\
 --renderer=<RENDERER>    Specifies the rendering backend to use.\n\
                          The default is 'sdl'.\n\

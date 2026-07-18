@@ -306,11 +306,13 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	for (unsigned int i = 0; i<mods->mod_dirs.size(); i++) {
 		Mod temp_mod = mods->loadMod(mods->mod_dirs[i]);
 		if (mods->mod_dirs[i] != mods->FALLBACK_MOD && (active_game.empty() || temp_mod.game != active_game)) {
-			if (temp_mod.game.empty()) {
-				mod_filter_unknown = true;
-			}
-			else if (std::find(mod_games.begin(), mod_games.end(), temp_mod.game) == mod_games.end()) {
-				mod_games.push_back(temp_mod.game);
+			if (temp_mod.game == mods->FALLBACK_GAME || settings->game.empty() || (!settings->game.empty() && settings->game == temp_mod.game)) {
+				if (temp_mod.game.empty()) {
+					mod_filter_unknown = true;
+				}
+				else if (std::find(mod_games.begin(), mod_games.end(), temp_mod.game) == mod_games.end()) {
+					mod_games.push_back(temp_mod.game);
+				}
 			}
 		}
 
@@ -326,6 +328,7 @@ MenuConfig::MenuConfig (bool _is_game_state)
 		}
 	}
 	inactivemods_lstb->sort();
+	filterMods();
 
 	std::sort(mod_games.begin(), mod_games.end());
 	if (!active_game.empty()) {
@@ -1818,8 +1821,15 @@ void MenuConfig::filterMods() {
 		}
 		if (!skip_mod && mods->mod_dirs[i] != mods->FALLBACK_MOD) {
 			Mod temp_mod = mods->loadMod(mods->mod_dirs[i]);
-			if (game_index == 0 || (game_index == 1 && temp_mod.is_game_mod) || (game_index == unknown_game_index && temp_mod.game == "") || (temp_mod.game == inactivemods_filter_lstb->getValue()))
+
+			bool game_matches = (settings->game.empty() || (!settings->game.empty() && settings->game == temp_mod.game) || temp_mod.game == mods->FALLBACK_GAME);
+			bool index_is_all = (game_index == 0 || (game_index == 1 && temp_mod.is_game_mod));
+			bool index_and_game_unknown = (game_index == unknown_game_index && temp_mod.game.empty());
+			bool index_and_game_match = (temp_mod.game == inactivemods_filter_lstb->getValue());
+
+			if (game_matches && (index_is_all || index_and_game_unknown || index_and_game_match)) {
 				inactivemods_lstb->append(mods->mod_dirs[i],createModTooltip(&temp_mod));
+			}
 		}
 	}
 	inactivemods_lstb->sort();

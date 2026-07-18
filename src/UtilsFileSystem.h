@@ -28,6 +28,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <string>
 
 namespace Filesystem {
+	static const bool KEEP_TRAILING_SLASH = true;
+
 	bool pathExists(const std::string &path);
 	void createDir(const std::string &path);
 	bool fileExists(const std::string &filename);
@@ -40,11 +42,13 @@ namespace Filesystem {
 	bool removeDir(const std::string &dir);
 	bool removeDirRecursive(const std::string &dir);
 
-	std::string convertSlashes(const std::string& _path);
+	std::string convertSlashes(const std::string& _path, bool keep_trailing_slash = false);
 
 	bool renameFile(const std::string &_oldfile, const std::string &_newfile);
 
 	std::string removeTrailingSlash(const std::string& path);
+
+	std::string getFullPath(const std::string &path);
 }
 
 

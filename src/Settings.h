@@ -65,6 +65,8 @@ public:
 	void loadDefaults();
 	void updateScreenVars();
 	void logSettings();
+	void setCustomPathData();
+	void setGame();
 
 	// Video Settings
 	bool fullscreen;
@@ -147,6 +149,9 @@ public:
 	std::string path_user; // important per-user data (saves)
 	std::string path_data; // common game data
 	std::string custom_path_data; // user-defined replacement for PATH_DATA
+	bool custom_path_data_clear;
+	bool custom_path_data_save;
+	std::string game; // if set, a sub-dir will be used in PATH_CONF. The config menu's mod list will also be filtered to match.
 
 	// Command-line settings
 	std::string load_slot;

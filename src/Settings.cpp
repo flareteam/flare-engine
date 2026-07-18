@@ -23,6 +23,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include <cstring>
+#include <fstream>
 #include <typeinfo>
 #include <cmath>
 #include <iomanip>
@@ -48,6 +49,9 @@ Settings::Settings()
 	, path_user("")
 	, path_data("")
 	, custom_path_data("")
+	, custom_path_data_clear(false)
+	, custom_path_data_save(false)
+	, game("")
 	, load_slot("")
 	, load_script("")
 	, view_w(0)
@@ -262,6 +266,120 @@ void Settings::logSettings() {
 	for (size_t i = 0; i < config.size(); ++i) {
 		Utils::logInfo("Settings: %s=%s", config[i].name.c_str(), configValueToString(*config[i].type, config[i].storage).c_str());
 	}
+}
+
+void Settings::setCustomPathData() {
+	std::string custom_data_path_file = Filesystem::convertSlashes(path_conf + "custom_data_path.txt");
+
+	if (custom_path_data_clear) {
+		if (Filesystem::pathExists(custom_data_path_file)) {
+			Utils::logInfo("Settings: Removing custom data path file: %s", custom_data_path_file.c_str());
+			Filesystem::removeFile(custom_data_path_file);
+		}
+	}
+
+	bool write_file = false;
+
+	if (custom_path_data.empty()) {
+		// --data-path command line flag not used, so try loading the saved custom_path_data from config
+
+		std::ifstream infile;
+		std::string line;
+
+		infile.open(custom_data_path_file.c_str(), std::ios::in);
+		while (infile.good()) {
+			line = Parse::getLine(infile);
+
+			if (Parse::skipLine(line))
+				continue;
+
+			std::string trimmed_line = Parse::trim(line);
+
+			if (!trimmed_line.empty()) {
+				custom_path_data = trimmed_line;
+				break;
+			}
+		}
+		infile.close();
+		infile.clear();
+	}
+	else if (custom_path_data_save) {
+		write_file = true;
+	}
+
+	if (custom_path_data.empty()) {
+		// no custom_path_data in config, either
+		return;
+	}
+
+	// Expand leading tilde as home directory
+	if (custom_path_data == "~") {
+		custom_path_data = std::string(getenv("HOME")) + "/";
+	}
+	else if (custom_path_data.substr(0,2) == "~/") {
+		std::string path_end = custom_path_data.substr(2);
+		custom_path_data = std::string(getenv("HOME")) + "/" + path_end;
+	}
+
+	if (!custom_path_data.empty()) {
+		// ensure the path has a trailing slash
+		custom_path_data = Filesystem::removeTrailingSlash(custom_path_data);
+		custom_path_data = Filesystem::convertSlashes(custom_path_data + "/", Filesystem::KEEP_TRAILING_SLASH);
+	}
+
+	if (Filesystem::pathExists(custom_path_data)) {
+		Utils::logInfo("Custom data path: \"%s\"", custom_path_data.c_str());
+		path_data = custom_path_data;
+
+		if (write_file) {
+			// save the custom path to PATH_CONF/custom_data_path.txt
+
+			Utils::logInfo("Settings: Saving custom data path file: %s", custom_data_path_file.c_str());
+
+			std::ofstream outfile;
+			outfile.open(custom_data_path_file.c_str(), std::ios::out);
+			if (outfile.is_open()) {
+				outfile << Filesystem::getFullPath(custom_path_data) << std::endl;
+			}
+
+			if (outfile.bad()) {
+				Utils::logError("Settings: Unable to save the custom data path. No write access or disk is full!");
+			}
+
+			outfile.close();
+			outfile.clear();
+
+			platform.FSCommit();
+		}
+	}
+	else {
+		Utils::logError("Invalid custom data path: \"%s\"", custom_path_data.c_str());
+		custom_path_data.clear();
+	}
+}
+
+void Settings::setGame() {
+	std::ifstream infile;
+	std::string line;
+
+	infile.open(Filesystem::convertSlashes(path_data + "mods/game.txt").c_str(), std::ios::in);
+	while (infile.good()) {
+		line = Parse::getLine(infile);
+
+		if (Parse::skipLine(line))
+			continue;
+
+		std::string trimmed_line = Parse::trim(line);
+
+		if (!trimmed_line.empty()) {
+			game = trimmed_line;
+			path_conf = Filesystem::convertSlashes(path_conf + game + "/", Filesystem::KEEP_TRAILING_SLASH);
+			Filesystem::createDir(path_conf);
+			break;
+		}
+	}
+	infile.close();
+	infile.clear();
 }
 
 std::string Settings::configValueToString(const std::type_info &type, void *storage) {

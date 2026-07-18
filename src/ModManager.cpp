@@ -159,6 +159,7 @@ ModManager::ModManager(const std::vector<std::string> *_cmd_line_mods)
  */
 void ModManager::loadModList() {
 	bool found_any_mod = false;
+	bool loaded_defaults = false;
 
 	// Add the fallback mod by default
 	// Note: if a default mod is not found in mod_dirs, the game will exit
@@ -184,6 +185,9 @@ void ModManager::loadModList() {
 		if (!infile.is_open()) {
 			Utils::logError("ModManager: Error during loadModList() -- couldn't open mods.txt, to be located at:");
 			Utils::logError("%s\n%s\n", place1.c_str(), place2.c_str());
+		}
+		else {
+			loaded_defaults = true;
 		}
 
 		while (infile.good()) {
@@ -228,6 +232,10 @@ void ModManager::loadModList() {
                   correctly. Expected to find the data in the $XDG_DATA_DIRS path, in \
 				  /usr/local/share/flare/mods, or in the same folder as the executable. \
 				  Try placing the mods folder in one of these locations.");
+	}
+
+	if (loaded_defaults) {
+		saveMods();
 	}
 }
 

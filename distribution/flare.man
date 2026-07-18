@@ -22,6 +22,10 @@ Prints a description of command line flags.
 Prints the release version.
 .IP "\fB\-\-data-path=\fIpath\fP"
 Specifies an exact path to look for mod data.
+.IP "\fB\-\-save-data-path\fP"
+Saves the path specified with --data-path to the user's config.
+.IP "\fB\-\-clear-data-path\fP"
+Removes a saved data-path from the user's config.
 .IP "\fB\-\-debug-event\fP"
 Prints verbose hardware input information.
 .IP "\fB\-\-renderer=\fIrenderer\fP"
