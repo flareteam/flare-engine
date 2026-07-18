@@ -57,6 +57,7 @@ Engine fixes:
 	- Fixed bug where player could change equipment mid-attack. Trying to switch equipment while attacking now simply resets the player to the 'stance' state.
 	- Fixed bug where an item wouldn't be returned to a vendor if the player moved away while dragging an item.
 	- Fixed crash when unable to load save slot background image in the save selection menu.
+	- Fixed being able to swap equipment sets while paused.
 
 * Sound
 	- Fix menu close sound effect not playing when closing Char/Inv/Pow/Log menu with the Cancel key.
