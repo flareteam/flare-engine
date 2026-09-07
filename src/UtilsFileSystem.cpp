@@ -32,6 +32,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <errno.h>
 #include <stdlib.h>
 
+#ifdef _WIN32
+#define realpath(N, R) _fullpath((R), (N), _MAX_PATH)
+#endif
+
 /**
  * Check to see if a directory/folder exists
  */
