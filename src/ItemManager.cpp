@@ -1556,7 +1556,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 					ss << getItemName(craft_stack.item) << " (" << craft_stack.quantity << ")";
 
 				if (!camp || (camp && camp->checkItem(craft_stack)))
-					color = currency_color;
+					color = getItemColor(craft_stack.item);
 				else
 					color = font->getColor(FontEngine::COLOR_REQUIREMENTS_NOT_MET);
 
