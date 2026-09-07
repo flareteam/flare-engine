@@ -1403,6 +1403,14 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 
 	Color color = getItemColor(stack.item);
 
+	bool hide_random_properties = false;
+	if (menu && menu->vendor && menu->vendor->npc && item->parent) {
+		if (context == VENDOR_BUY && menu->vendor->npc->vendor_gamble_buy)
+			hide_random_properties = true;
+		else if (context == VENDOR_CRAFT && menu->vendor->npc->vendor_gamble_craft)
+			hide_random_properties = true;
+	}
+
 	// name
 	std::stringstream ss;
 	if (stack.quantity == 1)
@@ -1454,7 +1462,13 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 		if (item->base_dmg[i].max.get() > 0) {
 			std::stringstream dmg_str;
 			dmg_str << eset->damage_types.list[i].name;
-			dmg_str << ": " << Utils::createMinMaxString(item->base_dmg[i].min.get(), item->base_dmg[i].max.get(), eset->number_format.item_tooltips);
+			dmg_str << ": ";
+
+			if (hide_random_properties)
+				dmg_str << "?";
+			else
+				dmg_str << Utils::createMinMaxString(item->base_dmg[i].min.get(), item->base_dmg[i].max.get(), eset->number_format.item_tooltips);
+
 			tip.addText(dmg_str.str());
 		}
 	}
@@ -1463,7 +1477,13 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	if (item->base_abs.max.get() > 0) {
 		std::stringstream abs_str;
 		abs_str << msg->get("Absorb");
-		abs_str << ": " << Utils::createMinMaxString(item->base_abs.min.get(), item->base_abs.max.get(), eset->number_format.item_tooltips);
+		abs_str << ": ";
+
+		if (hide_random_properties)
+			abs_str << "?";
+		else
+			abs_str << Utils::createMinMaxString(item->base_abs.min.get(), item->base_abs.max.get(), eset->number_format.item_tooltips);
+
 		tip.addText(abs_str.str());
 	}
 
@@ -1495,7 +1515,12 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 				color = font->getColor(FontEngine::COLOR_ITEM_PENALTY);
 		}
 
-		getBonusString(ss, bdata);
+		if (hide_random_properties) {
+			ss << msg->get("Unknown Property");
+		}
+		else {
+			getBonusString(ss, bdata);
+		}
 		tip.addColoredText(ss.str(), color);
 		bonus_counter++;
 	}

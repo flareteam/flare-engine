@@ -59,6 +59,8 @@ NPC::NPC(const Entity& e)
 	, vendor_ratio_buy(0)
 	, vendor_ratio_sell(0)
 	, vendor_ratio_sell_old(0)
+	, vendor_gamble_buy(false)
+	, vendor_gamble_craft(false)
 	, dialog()
 {
 	stock.init(VENDOR_MAX_STOCK);
@@ -356,6 +358,15 @@ bool NPC::load(const std::string& npc_id) {
 					else if (tab == "sell") vendor_tab_enabled[ItemManager::VENDOR_SELL] = enabled;
 					else if (tab == "craft") vendor_tab_enabled[ItemManager::VENDOR_CRAFT] = enabled;
 					else infile.error("NPC: '%s' is not a valid vendor tab.", tab.c_str());
+				}
+
+				else if (infile.key == "vendor_gamble_buy") {
+					// @ATTR npc.vendor_gamble_buy|boolean|If true (the default is false), the damage, absorb and bonuses for randomized items on the Buy tab will be hidden until purchase.
+					vendor_gamble_buy = Parse::toBool(infile.val);
+				}
+				else if (infile.key == "vendor_gamble_craft") {
+					// @ATTR npc.vendor_gamble_craft|boolean|If true (the default is false), the damage, absorb and bonuses for randomized items on the Craft tab will be hidden until purchase.
+					vendor_gamble_craft = Parse::toBool(infile.val);
 				}
 
 				else {
