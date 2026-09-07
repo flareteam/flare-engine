@@ -808,11 +808,12 @@ void StatBlock::load(const std::string& filename) {
 			flee_range = fnum;
 			flee_range_defined = true;
 		}
-		// @ATTR combat_style|["default", "aggressive", "passive"]|How the creature will enter combat. Default is within range of the hero; Aggressive is always in combat; Passive must be attacked to enter combat.
+		// @ATTR combat_style|["default", "aggressive", "passive", "disabled"]|How the creature will enter combat. Default is within range of the hero; Aggressive is always in combat; Passive must be attacked to enter combat. If the entity should never enter combat, set this to "disabled".
 		else if (infile.key == "combat_style") {
 			if (infile.val == "default") combat_style = COMBAT_DEFAULT;
 			else if (infile.val == "aggressive") combat_style = COMBAT_AGGRESSIVE;
 			else if (infile.val == "passive") combat_style = COMBAT_PASSIVE;
+			else if (infile.val == "disabled") combat_style = COMBAT_DISABLED;
 			else infile.error("StatBlock: Unknown combat style '%s'", infile.val.c_str());
 		}
 

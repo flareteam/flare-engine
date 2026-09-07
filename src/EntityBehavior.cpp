@@ -196,6 +196,14 @@ void EntityBehavior::findTarget() {
 		}
 	}
 
+	// if the entity can't move and is not allowed to entry combat, don't target anything
+	if (e->stats.speed == 0 && e->stats.combat_style == StatBlock::COMBAT_DISABLED) {
+		target_stats = NULL;
+		target_dist = 0;
+		hero_dist = 0;
+		e->stats.in_combat = false;
+	}
+
 	// check line-of-sight
 	if (target_stats && target_dist < e->stats.threat_range && pc->stats.alive)
 		los = mapr->collider.lineOfSight(e->stats.pos.x, e->stats.pos.y, target_stats->pos.x, target_stats->pos.y);
@@ -217,7 +225,7 @@ void EntityBehavior::findTarget() {
 	else if (target_stats && &pc->stats != target_stats)
 		close_to_target = target_dist < e->stats.threat_range;
 
-	if (e->stats.alive && !e->stats.in_combat && los && close_to_target && e->stats.combat_style != StatBlock::COMBAT_PASSIVE) {
+	if (e->stats.alive && !e->stats.in_combat && los && close_to_target && e->stats.combat_style < StatBlock::COMBAT_PASSIVE) {
 		e->stats.join_combat = true;
 	}
 

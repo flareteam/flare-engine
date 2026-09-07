@@ -70,7 +70,8 @@ public:
 	enum CombatStyle {
 		COMBAT_DEFAULT = 0,
 		COMBAT_AGGRESSIVE = 1,
-		COMBAT_PASSIVE = 2
+		COMBAT_PASSIVE = 2,
+		COMBAT_DISABLED = 3
 	};
 
 	class AIPower {

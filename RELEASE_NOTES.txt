@@ -17,6 +17,7 @@ Engine features:
 	- Added optional Craft tab to vendor NPCs.
 	- Added several properties to set the stock of the NPC vendor Craft tab.
 	- Added 'vendor_tab_enabled' property to NPCs.
+	- Added 'disabled' option to 'combat_style' StatBlock property.
 
 * Powers
 	- Added 'meta_power_provides_tooltip' property to Powers.

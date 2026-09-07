@@ -358,7 +358,7 @@ bool Entity::takeHit(Hazard &h) {
 	}
 
 	//if the target is an enemy and they are not already in combat, activate a beacon to draw other enemies into battle
-	if (!stats.in_combat && !stats.hero && !stats.hero_ally && !h.power->no_aggro) {
+	if (!stats.in_combat && !stats.hero && !stats.hero_ally && !h.power->no_aggro && stats.combat_style != StatBlock::COMBAT_DISABLED) {
 		stats.join_combat = true;
 	}
 
