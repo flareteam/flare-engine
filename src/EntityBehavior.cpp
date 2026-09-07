@@ -247,22 +247,23 @@ void EntityBehavior::findTarget() {
 
 		e->stats.join_combat = false;
 	}
+	else {
+		// exit combat if target got too far away
+		if (e->stats.combat_style != StatBlock::COMBAT_AGGRESSIVE) {
+			if (target_dist > e->stats.threat_range_far)
+				e->stats.in_combat = false;
 
-	// exit combat if target got too far away
-	if (e->stats.combat_style != StatBlock::COMBAT_AGGRESSIVE) {
-		if (target_dist > e->stats.threat_range_far)
-			e->stats.in_combat = false;
+			if (e->stats.cooldown_los.getDuration() > 0 && e->stats.cooldown_los.isEnd())
+				e->stats.in_combat = false;
+		}
 
-		if (e->stats.cooldown_los.getDuration() > 0 && e->stats.cooldown_los.isEnd())
+		// exit combat if ally is targeting player
+		if (e->stats.hero_ally && target_stats == &pc->stats)
 			e->stats.in_combat = false;
 	}
 
 	// exit combat if either party is dead
 	if (!e->stats.alive || !pc->stats.alive || (target_stats && !target_stats->alive))
-		e->stats.in_combat = false;
-
-	// exit combat if ally is targeting player
-	if (e->stats.hero_ally && target_stats == &pc->stats)
 		e->stats.in_combat = false;
 
 	if (target_stats)
